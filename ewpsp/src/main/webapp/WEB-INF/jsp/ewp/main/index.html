@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <title>EWP Services Portal</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/custom.css">
+  <link rel="stylesheet" href="../css/main.css"><!-- 메인페이지용 -->
+  <script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../js/highcharts.js"></script><!-- 하이차트용 -->
+  <!-- 하이차트 데이타 추출용 -->
+  <script type="text/javascript" src="../js/modules/data.js"></script>
+  <script type="text/javascript" src="../js/modules/exporting.js"></script>
+  <script type="text/javascript" src="../js/modules/export-data.js"></script>  
+  <!-- //하이타트 데이타 추출용 -->    
+  <script type="text/javascript" src="../js/jquery.rwdImageMaps.min.js"></script><!-- 지도 이미지맵용 -->
+  <script type="text/javascript" src="../js/jquery-ui.js"></script><!-- 팝업 레이어용 -->
+</head>
+<body>
+
+<header>
+	<div class="w100p clear">
+		<h1><a href="#"><img src="../img/logo.png" alt="EWP Services Portal"></a></h1>     
+	    <ul class="notice clear">
+	      <li><span>(ALGORITHM)</span> 데이터 업데이트  2017-09-04 14:23:05</li>
+	      <li><span>(LOCAL-EMS)</span> 데이터 업데이트  2017-09-04 14:23:05</li>
+	    </ul>
+	    <ul class="gnb clear">
+	    	<li>
+	    		<select name="" id="" class="sel">
+	    			<option value="">군관리 : 129 SITES</option>
+	    		</select>
+	    	</li>
+	    	<li class="config"><a href="/hptest_sub?returnPage=/sub/sub_31.html"><img src="../img/icon_config.png" alt="설정"></a></li>
+	    	<li class="log"><a href="#">ADMIN님</a></li>
+	    	<li><a href="#">로그아웃</a></li>
+	    </ul>
+    </div>
+</header>
+
+
+
+
+
+
+
+
+<div class="container-fluid clear">
+	<div class="local_left">
+		<div class="l_map">
+			<h2>
+				군별 사용량
+				<span><em class="ff_opens">AM 10:00</em> 기준</span>
+			</h2>
+			<div class="map">
+				<img src="../img/local_map_all.png" alt="map" name="local" width="500" height="700" usemap="#local_map_all" id="local" border="0" />
+				<!-- 이미지맵 시작 -->
+				<map name="local_map_all" id="local_map_all">
+				  <area href="javascript:local('Busan')" alt="Busan" onclick="pop('Busan');"  shape="poly" coords="380,425,368,431,354,442,349,450,355,463,370,462,384,447,394,429,397,419,382,422"  onfocus='this.blur()' />
+				  <area href="javascript:local('Chungbuk')" alt="Chungbuk" onclick="pop('Chungbuk');"  shape="poly" coords="320,205,318,212,313,216,311,222,307,229,307,235,302,238,295,237,290,233,285,233,280,237,275,236,270,242,267,247,263,253,257,252,252,255,255,259,253,262,247,261,246,264,243,268,248,272,251,277,252,287,250,292,251,296,247,300,250,307,255,308,262,312,262,320,260,328,259,333,252,339,244,339,236,340,232,336,229,331,224,327,223,319,220,312,213,313,212,305,214,296,216,291,211,285,205,284,201,278,197,272,192,266,191,258,193,252,196,246,203,248,202,241,199,236,194,231,193,225,200,220,206,214,212,209,217,210,221,205,227,200,233,194,236,192,242,198,250,196,257,193,256,186,263,186,264,192,269,191,275,187,281,184,289,186,291,192,293,197,298,198,309,200,320,205"  onfocus='this.blur()' />
+				  <area href="javascript:local('Chungnam')" alt="Chungnam" onclick="pop('Chungnam');"  shape="poly" coords="68,249,73,237,81,230,87,222,94,217,106,211,118,211,129,218,138,223,141,233,149,233,158,227,167,224,179,223,187,228,196,238,200,247,193,250,190,258,190,266,195,273,199,279,195,287,189,290,188,297,186,303,189,310,189,315,195,318,199,314,207,320,213,314,220,315,222,324,222,327,226,332,230,336,225,340,221,342,216,338,215,343,210,345,205,343,205,338,200,342,198,336,198,329,192,327,187,331,173,334,160,324,151,325,146,333,131,344,123,338,110,328,85,300,68,250"  onfocus='this.blur()' />
+				  <area href="javascript:local('Daegu')" alt="Daegu" onclick="pop('Daegu');"  shape="poly" coords="309,344,315,353,319,351,318,343,334,339,340,340,340,348,343,357,337,361,334,370,335,376,329,379,325,376,320,379,317,386,310,389,304,386,301,379,307,380,305,376,304,370,314,368,306,358,307,345"  onfocus='this.blur()' />
+				  <area href="javascript:local('Daejeon')" alt="Daejeon" onclick="pop('Daejeon');"  shape="poly" coords="199,280,197,286,193,290,190,294,188,300,188,305,190,312,194,316,197,314,198,309,201,313,206,316,211,312,212,301,215,294,215,290,211,289,209,285,204,286,202,280"  onfocus='this.blur()' />
+				  <area href="javascript:local('Gangwon')" alt="Gangwon" onclick="pop('Gangwon');"  shape="poly" coords="298,8,291,13,291,26,284,38,270,47,250,46,238,44,220,46,204,48,189,47,175,49,174,55,178,63,184,67,192,64,195,75,205,75,208,87,221,93,223,104,216,111,215,124,218,135,228,135,242,145,241,156,238,174,236,190,242,196,254,193,259,185,264,187,270,189,280,184,288,185,295,189,298,197,309,200,321,203,335,211,348,205,357,207,375,201,388,206,396,198,399,185,368,127,337,85,322,61,299,9" onfocus='this.blur()' />
+				  <area href="javascript:local('Gwangju')" alt="Gwangju" onclick="pop('Gwangju');"  shape="poly" coords="134,438,142,441,148,440,155,443,159,446,162,449,160,457,155,461,150,460,143,462,136,463,127,458,123,453,125,446,132,439"  onfocus='this.blur()' />
+				  <area href="javascript:local('Gyeongnam')" alt="Gyeongnam" onclick="pop('Gyeongnam');"  shape="poly" coords="251,357,243,363,235,371,229,373,226,389,224,397,228,410,227,418,223,431,225,442,235,458,240,474,246,500,253,507,268,508,294,517,322,513,337,492,354,464,349,448,362,434,378,425,388,418,381,409,366,401,368,392,361,388,353,393,343,398,330,398,323,393,318,389,310,391,303,392,293,387,282,387,285,380,280,373,268,363,255,356"  onfocus='this.blur()' />
+				  <area href="javascript:local('Jeju')" alt="Jeju" onclick="pop('Jeju');"  shape="poly" coords="112,648,101,652,88,655,79,663,73,675,78,688,90,690,113,686,133,682,146,676,154,663,155,648,140,645,114,646"  onfocus='this.blur()' />
+				  <area href="javascript:local('Jeonbuk')" alt="Jeonbuk" onclick="pop('Jeonbuk');"  shape="poly" coords="101,412,107,416,109,426,115,431,128,427,134,420,140,412,149,414,155,420,163,413,166,421,166,429,177,431,191,433,205,429,212,424,223,430,225,417,223,407,222,398,225,381,230,369,241,363,250,353,251,346,250,339,238,342,230,340,221,344,209,346,200,345,197,342,194,332,189,332,178,336,170,335,162,331,153,327,147,336,135,345,122,344,115,344,97,354,91,364,100,407"  onfocus='this.blur()' />
+				  <area href="javascript:local('Jeonnam')" alt="Jeonnam" onclick="pop('Jeonnam');"  shape="poly" coords="86,438,97,421,98,414,107,418,108,427,114,431,131,428,137,418,143,414,154,421,162,415,163,421,164,427,170,431,187,434,199,431,213,427,218,432,224,443,233,460,240,473,241,485,238,510,244,538,212,576,179,593,132,599,87,600,54,563,38,516,48,489,63,453,88,440,107,448,122,455,132,462,142,463,153,461,161,459,162,452,162,444,155,440,149,436,143,438,134,436,127,439,121,446,121,453"  onfocus='this.blur()' />
+				  <area href="javascript:local('Kyungbuk')" alt="Kyungbuk" onclick="pop('Kyungbuk');"  shape="poly" coords="420,332,414,340,408,342,403,337,406,329,403,313,403,298,407,289,406,265,409,259,412,253,406,240,403,227,405,219,405,208,397,199,388,210,380,206,373,205,362,207,353,209,347,208,338,214,323,207,320,216,312,227,310,236,305,240,295,240,287,236,277,241,270,246,270,253,259,260,256,263,247,268,254,278,255,289,252,299,251,305,259,308,263,317,264,327,260,335,253,340,255,352,258,356,270,363,286,374,287,382,293,387,304,389,299,383,300,380,307,381,306,376,304,371,307,368,311,365,306,359,305,351,308,344,317,351,319,343,331,338,341,339,342,345,344,352,343,356,338,362,336,369,338,376,332,380,327,380,322,380,320,386,328,392,338,393,347,393,357,388,367,386,375,381,382,378,393,378,397,385,404,382,409,383,416,364,420,344,422,335"  onfocus='this.blur()' />
+				  <area href="javascript:local('Gyeonggi')" alt="Gyeonggi" onclick="pop('Gyeonggi');"  shape="poly" coords="156,61,167,53,173,62,182,72,188,68,191,75,200,77,204,85,210,91,220,96,218,105,213,108,213,118,209,125,216,136,229,141,239,146,238,158,236,182,232,193,224,197,216,207,209,207,201,215,190,223,181,220,172,220,162,222,151,226,142,218,133,212,127,201,124,194,125,185,135,182,128,176,138,165,141,157,136,148,147,159,157,162,167,163,175,161,180,155,182,149,183,144,180,140,173,136,164,133,154,129,146,133,146,138,139,136,137,142,130,134,123,137,117,138,114,127,113,118,126,116,127,102,127,94,144,80" onfocus='this.blur()' />
+				  <area href="javascript:local('Seoul')" alt="Seoul" onclick="pop('Seoul');"  shape="poly" coords="138,143,142,141,147,144,149,140,150,133,157,134,163,136,168,137,172,140,173,145,178,144,177,148,176,153,174,158,168,160,160,159,152,159,149,155,144,154,140,148,138,145"  onfocus='this.blur()' />
+				  <area href="javascript:local('Ulsan')" alt="Ulsan" onclick="pop('Ulsan');"  shape="poly" coords="409,395,407,391,409,385,404,384,400,386,395,386,391,382,386,379,380,381,375,382,374,388,369,390,369,397,370,401,375,403,382,409,388,414,393,419,401,417,406,410,409,401,409,396"  onfocus='this.blur()' />
+				  <area href="javascript:local('Ulleungdo')" alt="Ulleungdo" onclick="pop('Ulleungdo');"  shape="poly" coords="459,146,448,149,449,156,456,159,462,156,461,146"  onfocus='this.blur()' />
+				  <area href="javascript:local('Incheon')" alt="Incheon" onclick="pop('Incheon');"  shape="poly" coords="81,112,92,114,100,109,110,118,110,136,118,142,129,138,135,144,134,153,136,161,129,167,123,175,121,187,115,193,99,193,87,200,64,211,57,217,51,203,66,182,89,180,103,179,96,170,92,158,83,138,71,129"  onfocus='this.blur()' />
+				</map>
+				<script>
+					/* 지역별 이미지 표시 */
+					function local(str) {
+						$("#local").attr("src","../img/local_map_"+str+".png");
+					}
+				</script>
+				<!-- 이미지맵 끝 -->	
+				<!-- 지도 오버시 정보 팝업 { -->
+				<div class="pop_local_info" style="display:none;">
+				    <ul>
+				    	<li>비상 <span>0</span></li>
+				    	<li>주의 <span>2</span></li>
+				    </ul>
+				    <dl>
+				    	<dt><em class="local_name">울산</em> <span>(19)</span></dt>
+				    	<dd>사용량 <span>10,000kwh</span></dd>
+				    	<dd>충전량 <span>10,000kwh</span></dd>
+				    	<dd>방전량 <span>10,000kwh</span></dd>
+				    </dl>
+				    <span class="pop_close"><a href="javascript:pop_close();">ｘ</a></span>
+				</div>
+				<!-- } 지도 오버시 정보 팝업 -->  							
+			</div>
+		</div>
+		<div class="l_table">
+			<div class="tab_menu">
+				<ul>
+					<li class="on"><a href="#;">오늘</a></li>
+					<li><a href="#;">이번 주</a></li>
+					<li><a href="#;">이번 달</a></li>
+				</ul>
+				<ol>
+					<li>
+						<div class="dropdown">
+						  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">지역별
+						  <span class="caret"></span></button>
+						  <ul class="dropdown-menu">
+						    <li class="on"><a href="#">지역별</a></li>
+						    <li><a href="#">그룹별</a></li>
+						  </ul>
+						</div>
+					</li>
+					<li>
+						<div class="dropdown">
+						  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">전체지역
+						  <span class="caret"></span></button>
+						  <ul class="dropdown-menu">
+						    <li class="on"><a href="#">전체지역</a></li>
+						    <li><a href="#">서울</a></li>
+						    <li><a href="#">경기</a></li>
+						    <li><a href="#">인천</a></li>
+						    <li><a href="#">강원</a></li>
+						    <li><a href="#">충북</a></li>
+						    <li><a href="#">충남</a></li>
+						    <li><a href="#">대전</a></li>
+						    <li><a href="#">경북</a></li>
+						    <li><a href="#">대구</a></li>
+						    <li><a href="#">경남</a></li>
+						    <li><a href="#">울산</a></li>
+						    <li><a href="#">부산</a></li>
+						    <li><a href="#">울릉도</a></li>
+						    <li><a href="#">전북</a></li>
+						    <li><a href="#">광주</a></li>
+						    <li><a href="#">전남</a></li>
+						    <li><a href="#">제주</a></li>
+						  </ul>
+						</div>
+					</li>
+				</ol>
+			</div>
+			<div class="tab_conts loading">
+				<table id="table">
+				    <thead>
+				      <tr>
+				        <th>업체명</th>
+				        <th><img src="../img/icon_th1.png" alt=""> 사용</th>
+				        <th><img src="../img/icon_th2.png" alt=""> 충전</th>
+				        <th><img src="../img/icon_th3.png" alt=""> 방전</th>
+				        <th><img src="../img/icon_th4.png" alt=""> 수익</th>
+				      </tr>
+				    </thead>
+				    <tbody>
+				      <tr>
+				        <td><a href="/hptest_sub?returnPage=/html/sub/sub_02.html">1. 롯데정밀화학</a></td>
+				        <td>1,100</td>
+				        <td>500</td>
+				        <td>700</td>
+				        <td>-</td>
+				      </tr>
+				      <tr>
+				        <td><a href="../sub/sub_02.html">2. 한국프랜지</a></td>
+				        <td>1,100</td>
+				        <td>500</td>
+				        <td>700</td>
+				        <td>-</td>
+				      </tr>
+				      <tr>
+				        <td><a href="../sub/sub_02.html">3. 제일화성</a></td>
+				        <td>1,100</td>
+				        <td>500</td>
+				        <td>700</td>
+				        <td>-</td>
+				      </tr>
+				      <tr>
+				        <td><a href="../sub/sub_02.html">4. 한국제지</a></td>
+				        <td>1,100</td>
+				        <td>500</td>
+				        <td>700</td>
+				        <td>-</td>
+				      </tr>
+				      <tr>
+				        <td><a href="../sub/sub_02.html">5. 문수경기장</a></td>
+				        <td>1,100</td>
+				        <td>500</td>
+				        <td>700</td>
+				        <td>-</td>
+				      </tr>
+				      <tr>
+				        <td><a href="../sub/sub_02.html">6. 태광석유화학</a></td>
+				        <td>1,100</td>
+				        <td>500</td>
+				        <td>700</td>
+				        <td>-</td>
+				      </tr>
+				      <tr>
+				        <td><a href="../sub/sub_02.html">7. SNF KOREA</a></td>
+				        <td>1,100</td>
+				        <td>500</td>
+				        <td>700</td>
+				        <td>-</td>
+				      </tr>
+				    </tbody>
+				</table>
+				<div class="paging clear">
+					<a href="#;" class="prev fl">PREV</a>
+					<span><strong>1</strong> / 3</span>
+					<a href="#;" class="next fr">NEXT</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="local_right">
+		<div class="chart_wrap">
+			<ul class="chart_menu">
+				<li class="on"><a href="#;"><img src="../img/icon_th1.png" alt=""> 사용</a></li>
+				<li><a href="#;"><img src="../img/icon_th2.png" alt=""> 충전</a></li>
+				<li><a href="#;"><img src="../img/icon_th3.png" alt=""> 방전</a></li>
+				<li><a href="#;"><img src="../img/icon_th4.png" alt=""> 수익</a></li>
+			</ul>
+			<div class="chart_conts">
+				<h2>사용량 순위<span><em class="ff_opens">AM 10:00</em> 기준</span></h2>
+				<div class="inchart">
+					<div id="chart1" style="min-height:420px"></div>
+					<script language="JavaScript"> 
+					$(function () { 
+						var myChart = Highcharts.chart('chart1', {
+
+						    /* 테이블에서 데이터 불러오기 */
+						    data: {
+							        table: 'u_datatable' 
+							},
+
+						    /* 차트종류 및 스타일 */
+						    chart: {
+						    	marginBottom: 100,
+						    	backgroundColor: 'transparent',
+						        type: 'bar'
+						    },
+
+						    navigation: {
+								buttonOptions: {
+									enabled: false /* 메뉴 안보이기 */
+								}
+							},
+
+						    /* 제목 / 부제목 */
+						    title: {
+						        text: ''
+						    },
+						    subtitle: {
+						        text: ''
+						    },
+
+						    /* X축 / Y 축 */
+						    xAxis: {
+						        labels: {
+						        	align: 'left',
+            						reserveSpace: true,
+						            style: {
+						                color: '#ffffff',
+						                fontSize: '16px'
+						            }
+						        },
+						        title: {
+						            text: null
+						        }
+						    },
+						    yAxis: {
+						    	gridLineWidth: 0, /* 기준선 grid 안보이기 */
+						        min: 0,
+						        title: {
+						            text: '',
+						            align: 'high'
+						        },
+						        labels: {
+						            overflow: 'justify',
+						            style: {
+						                color: '#ffffff',
+						                fontSize: '12px'
+						            }
+						        }
+						    },
+
+						    /* 툴팁 */
+						    tooltip: {
+						        valueSuffix: ' kwh'
+						    },
+
+						    /* 막대 */
+						    plotOptions: {
+						        bar: {
+						            dataLabels: {
+						                enabled: true,
+						                inside: true, /* 막대 안으로 라벨 수치 넣기 */
+						                format: '{y} kwh', /* 단위 넣기 */
+						                color: '#ffffff'
+						            }
+						        },
+						        series: {
+						            borderWidth: 0
+						        }
+						    },
+
+						    /* 범례 */
+						    legend: {
+						        /* layout: 'vertical', 수직정렬 */
+						        align: 'left',
+						        verticalAlign: 'top',
+						        width: 260,
+						        x: 0, /* 위치 조정 */
+						        y: 350, /* 위치 조정 */
+						        floating: true,
+						        borderWidth: 0,
+						        backgroundColor: 'transparent',
+						        shadow: false,
+						        itemStyle: {
+						            color: '#ffffff',
+						            fontSize: '16px',
+						            fontWeight: 400
+						        },
+						        itemHoverStyle: {
+						            color: '#ffffff'
+						        },
+						        labelFormatter: function () {
+						            return this.name + ' kwh'; /* 텍스트 추가하기 */
+						        }
+						    },
+						    credits: {
+						        enabled: false
+						    },
+
+						    /* 표 데이터 */
+						    series: [{
+						        color: '#fee374' /* 누적 */
+						    }, {
+						        color: '#b0b0b3' /* 예상 */
+						    }]
+						});
+					});
+					</script>
+				</div>
+				<!-- 데이터 추출용 테이블 -->
+				<div class="hidden_table" style="display:none">
+					<table id="u_datatable">
+					    <thead>
+					        <tr>
+					            <th></th>
+					            <th>누적</th>
+					            <th>예상</th>
+					        </tr>
+					    </thead>
+					    <tbody>
+					        <tr>
+					            <th>한국제지</th>
+					            <td>50</td>
+					            <td>100</td>
+					        </tr>
+					        <tr>
+					            <th>문수경기장</th>
+					            <td>90</td>
+					            <td>100</td>
+					        </tr>
+					        <tr>
+					            <th>태광석유화학</th>
+					            <td>70</td>
+					            <td>90</td>
+					        </tr>
+					        <tr>
+					            <th>한국제지</th>
+					            <td>30</td>
+					            <td>40</td>
+					        </tr>
+					        <tr>
+					            <th>문수경기장</th>
+					            <td>100</td>
+					            <td>92</td>
+					        </tr>
+					    </tbody>
+					</table>
+				</div>
+				<div class="paging clear">
+					<a href="#;" class="prev fl">PREV</a>
+					<span><strong>1</strong> / 2</span>
+					<a href="#;" class="next fr">NEXT</a>
+				</div>
+			</div>
+		</div>
+		<div class="alert_wrap">
+			<dl class="alert_info clear">
+				<dt>알람</dt>
+				<dd>
+					금일 발생 <span>3</span>
+				</dd>
+				<dd>
+					금일 미확인 <span>0</span>
+				</dd>
+			</dl>
+			<ul>
+				<li>비상 <span>0</span></li>
+				<li>주의 <span>2</span></li>
+			</ul>
+			<div class="info_1mth">
+				<dl>
+					<dt>최근 한달간 비율</dt>
+					<dd>
+						<ol>
+							<li>3 info </li>
+							<li>1 warning <span>33<em>%</em></span></li>
+							<li>2 alert <span>66<em>%</em></span></li>
+						</ol>
+					</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+/* 지도 정보 팝업 열기 */
+function pop(target) {
+	var target = target;
+	$(".pop_local_info").hide();
+	$(".pop_local_info").css({'left':'initial','right':'5%','bottom':'initial','top':'5%'});
+    if(target == "Seoul") {$(".pop_local_info .local_name").text("서울");}
+    if(target == "Gyeonggi") {$(".pop_local_info .local_name").text("경기");}
+    if(target == "Incheon") {$(".pop_local_info .local_name").text("인천");}
+    if(target == "Gangwon") {
+    	$(".pop_local_info").css({'left':'initial','right':'5%','bottom':'20%','top':'initial'});
+    	$(".pop_local_info .local_name").text("강원");
+    }
+    if(target == "Chungbuk") {
+    	$(".pop_local_info").css({'left':'initial','right':'5%','bottom':'20%','top':'initial'});
+    	$(".pop_local_info .local_name").text("충북");
+    }
+    if(target == "Daejeon") {$(".pop_local_info .local_name").text("대전");}
+    if(target == "Chungnam") {$(".pop_local_info .local_name").text("충남");}
+    if(target == "Kyungbuk") {
+    	$(".pop_local_info").css({'left':'5%','right':'initial','bottom':'initial','top':'5%'});
+    	$(".pop_local_info .local_name").text("경북");
+    }
+    if(target == "Daegu") {$(".pop_local_info .local_name").text("대구");}
+    if(target == "Ulsan") {$(".pop_local_info .local_name").text("울산");}
+    if(target == "Ulleungdo") {
+    	$(".pop_local_info").css({'left':'5%','right':'initial','bottom':'initial','top':'5%'});
+    	$(".pop_local_info .local_name").text("울릉도");
+    }
+    if(target == "Gyeongnam") {$(".pop_local_info .local_name").text("경남");}
+    if(target == "Busan") {$(".pop_local_info .local_name").text("부산");}
+    if(target == "Jeonbuk") {$(".pop_local_info .local_name").text("전북");}
+    if(target == "Gwangju") {$(".pop_local_info .local_name").text("광주");}
+    if(target == "Jeonnam") {$(".pop_local_info .local_name").text("전남");}
+    if(target == "Jeju") {
+    	$(".pop_local_info").css({'left':'initial','right':'5%','bottom':'20%','top':'initial'});
+    	$(".pop_local_info .local_name").text("제주");
+    }
+    $(".pop_local_info").fadeIn().draggable();
+};
+
+/* 지도 정보 팝업 닫기 */
+function pop_close() {
+    $(".pop_local_info").hide();
+};
+
+// 20초마다 지역별 지도 반복
+var done = false;
+var area_idx = 0;
+var area_array = [ "Seoul", "Gyeonggi", "Incheon", "Gangwon", "Chungbuk", "Daejeon", "Chungnam", "Kyungbuk", "Daegu", "Ulsan", "Ulleungdo", "Gyeongnam", "Busan", "Jeonbuk", "Gwangju", "Jeonnam", "Jeju" ];
+
+function readArea() {
+//    console.log("readArea");
+   if (done) return;
+   if(area_idx == area_array.length) {area_idx = 0;}
+   pop(area_array[area_idx]);
+   local(area_array[area_idx]);
+   area_idx++;
+   setTimeout(readArea, 2000);
+}
+readArea()
+
+// 지도 클릭시 멈춤
+$('map[name="local_map_all"').click(function(e) {
+     setTimeout(function(){ done = true; }, 500);
+});
+
+/* 이미지맵 처리 */
+$(document).ready(function(e) {
+    $('img[usemap]').rwdImageMaps();
+});
+
+/* 오늘/이번주/이번달 텝메뉴 */
+$( function () {
+	$('.tab_menu>ul a').click(function(){     
+		var indexNo = $(".tab_menu>ul").find("a").index(this);	
+       $('.tab_menu>ul li').removeClass("on");
+       $(this).parent().addClass("on");            
+   });   
+});
+
+/* 사용/충전/방전/수익 텝메뉴 */
+$( function () {
+	$('.chart_menu a').click(function(){     
+		var indexNo = $(".chart_menu").find("a").index(this);	
+       $('.chart_menu li').removeClass("on");
+       $(this).parent().addClass("on");            
+   });   
+});
+
+/* 테이블 로딩화면 지우기 */
+$(document).ready(function(){
+    $('.tab_conts').removeClass('loading');
+});
+
+</script>
+
+
+
+
+
+
+
+<footer>
+	<div class="w100p">
+		<div class="copyright ff_opens">© Encored Technologies, INC. All Rights Reserved.</div>
+	</div>
+</footer>
+
+</body>
+</html>

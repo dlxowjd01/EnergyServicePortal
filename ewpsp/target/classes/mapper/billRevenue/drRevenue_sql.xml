@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="drRevenue">
+	<select id="getUsageRealList" resultType="hashMap">
+		select 
+			site_id, std_timestamp, sum(usg_val) as usg_val
+		from (
+		
+				select 
+					usg_idx, site_id, device_id, std_timestamp, std_date, usg_val, reg_date, mod_date
+				from tb_usage
+				where 1=1
+				and site_id = 'c64b328b'
+				and std_date between str_to_date('20180820000000','%Y%m%d%H%i%s') and str_to_date('20180820235959','%Y%m%d%H%i%s')
+		
+		) a
+		where 1=1
+		group by site_id, std_timestamp
+	</select>
+	
+	<select id="getUsageFutureList" resultType="hashMap">
+		select 
+			site_id, std_timestamp, sum(pre_usg_val) as pre_usg_val
+		from (
+		
+				select 
+					pre_usg_idx, site_id, device_id, std_timestamp, std_date, pre_usg_val, reg_date, mod_date
+				from tb_predict_usage
+				where 1=1
+				and site_id = 'c64b328b'
+				and std_date between str_to_date('20180820000000','%Y%m%d%H%i%s') and str_to_date('20180820235959','%Y%m%d%H%i%s')
+		
+		) a
+		where 1=1
+		group by site_id, std_timestamp
+	</select>
+	
+</mapper>

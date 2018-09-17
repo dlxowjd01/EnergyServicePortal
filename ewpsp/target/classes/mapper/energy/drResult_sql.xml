@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="drResult">
+	<select id="getDRResultList" parameterType="hashMap" resultType="hashMap">
+		/* dr 감축량 조회 */
+		select 
+			dr_rst_idx, site_id, start_timestamp, start_date, end_timestamp, end_date, 
+			cbl_amt, act_amt, contract_power,goal_power, reward_amt, reg_date, mod_date
+			, cbl_amt-act_amt as reduce_amt
+		from tb_dr_result
+		where 1=1
+		and site_id = #{siteId }
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
+		and start_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+		</if>
+		order by start_timestamp
+	</select>
+	
+</mapper>

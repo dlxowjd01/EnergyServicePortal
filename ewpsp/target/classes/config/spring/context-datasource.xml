@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+
+	<!-- MariaDB --><!-- 개발서버(현재 망가져서 재설치중) -->
+    <!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.mariadb.jdbc.Driver"/>
+        <property name="url" value="jdbc:mariadb://13.209.107.48/ewpsp"/>
+        <property name="username" value="root"/>
+        <property name="password" value="dlszhdjem_ewp"/>
+    </bean> -->
+
+	<!-- MySQL --><!-- 개발db -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <!-- <property name="url" value="jdbc:log4jdbc:mysql://121.124.127.173/ewpsp?serverTimezone=UTC"/> -->
+        <property name="url" value="jdbc:mysql://121.124.127.173/ewpsp"/>
+        <property name="username" value="root"/>
+        <property name="password" value="#xnrpej0920#"/>
+    </bean>
+    <!-- <bean id="dataSourceSpied" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"> 
+        <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"/>
+        <property name="url" value="jdbc:mysql://121.124.127.173/ewpsp?serverTimezone=UTC"/>
+        <property name="username" value="root"/>
+        <property name="password" value="#xnrpej0920#"/>
+    </bean>
+    <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource"> 
+		<constructor-arg ref="dataSourceSpied" /> 
+		<property name="logFormatter"> 
+			<bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter"> 
+			<property name="loggingType" value="MULTI_LINE" /> 
+			<property name="sqlPrefix" value="SQL : "/> 
+			</bean> 
+		</property> 
+	</bean> -->
+    <!-- <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://121.124.127.173/ewpsp?serverTimezone=UTC"/>
+        <property name="username" value="root"/>
+        <property name="password" value="#xnrpej0920#"/>
+    </bean> -->
+
+	<!-- Oracle -->
+    <!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
+        <property name="username" value="아이디"/>
+        <property name="password" value="비밀번호"/>
+    </bean> -->
+
+
+
+</beans>

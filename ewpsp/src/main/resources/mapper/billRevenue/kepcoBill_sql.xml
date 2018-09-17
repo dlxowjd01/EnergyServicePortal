@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kepcoBill">
+	<select id="getKepcoBillList" parameterType="hashMap" resultType="hashMap">
+		select 
+			bill_idx, site_id, bill_yearm, meter_read_day, plan_type, plan_name, contract_power, svc_sdate, svc_edate, 
+			base_rate, consume_rate, off_peak_rate, mid_peak_rate, max_peak_rate, pwr_factor_rate, tot_elec_rate, 
+			elec_fund, val_add_tax, tot_amt_bill, peak_pwr_demand, usg, off_peak_usg, mid_peak_usg, max_peak_usg, lead_pwr_factor, lag_pwr_factor, 
+			demand_chg_reduct, energy_chg_reduct, reg_date
+		from tb_bill
+		where 1=1
+		and site_id = #{siteId }
+		and bill_yearm between #{selTermFrom } and #{selTermTo }
+		order by bill_yearm
+	</select>
+	
+	<select id="getKepcoBillList_test" parameterType="hashMap" resultType="hashMap">
+		select 
+			site_id, std_timestamp, 
+			sum(base_rate) as base_rate, sum(pwr_factor_rate) as pwr_factor_rate, 
+			sum(tot_elec_rate) as consume_rate, sum(elec_fund) as elec_fund,
+			 sum(val_add_tax) as val_add_tax, sum(tot_elec_rate) as tot_elec_rate, sum(tot_amt_bill) as tot_amt_bill
+		from (
+				select 
+					usg_idx, site_id, device_id, std_timestamp, std_date, usg_val as base_rate, usg_val+3400000 as pwr_factor_rate
+					, usg_val+(3400000*2) as consume_rate, usg_val+(3400000*3) as elec_fund
+					, usg_val+(3400000*4) as val_add_tax, usg_val+(3400000*5) as tot_elec_rate, usg_val+(3400000*6) as tot_amt_bill
+				from tb_usage
+				where 1=1
+				and site_id = #{siteId }
+				<!-- and std_date between str_to_date('20180820000000','%Y%m%d%H%i%s') and str_to_date('20180820235959','%Y%m%d%H%i%s') -->
+				and std_date between str_to_date('20180820000000','%Y%m%d%H%i%s') and str_to_date('20180820025959','%Y%m%d%H%i%s')
+		) a
+		where 1=1
+		group by site_id, std_timestamp
+	</select>
+	
+</mapper>

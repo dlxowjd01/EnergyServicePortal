@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:p="http://www.springframework.org/schema/p"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xsi:schemaLocation="http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+
+		<!-- 서블릿 컨테이너의 디폴트 서블릿 위임 핸들러 -->
+		<!-- Handler Mapping에 해당하는 URL이 없으면 default-servlet으로 처리하겠다 는 의미 -->
+		<!-- ex) css, js, image파일 등 -->
+		<mvc:annotation-driven />
+		<mvc:default-servlet-handler />
+
+		<!-- 빈 설정을 어노테이션 기반으로 하겠다는 설정태그 -->
+        <context:annotation-config />
+        <!-- 스캐닝 할 기준 패키지 -->
+        <context:component-scan base-package="kr.co.ewp.ewpsp"/>
+        
+        <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	        <property name="prefix" value="/WEB-INF/jsp/" />
+	        <property name="suffix" value=".jsp" />
+	    </bean>
+	    
+	    <bean id="sessionCheckInterceptor" class="kr.co.ewp.ewpsp.common.SessionCheckInterceptor" />
+<!--         <interceptors>
+	        <interceptor>
+	            <mapping path="/board/register"/>
+	            <mapping path="/board/modify"/>
+	            <mapping path="/board/delete"/>
+	            <ref bean="sessionCheckInterceptor"/>
+	        </interceptor>
+	    </interceptors> -->
+	    
+	    <mvc:interceptors>
+	    	<mvc:interceptor>
+	    		<mvc:mapping path=""/>
+	    		<!-- <mvc:mapping path="/peak"/> -->
+	    		<mvc:exclude-mapping path="/**"/><!-- interceptor 안거침 -->
+	    		<ref bean="sessionCheckInterceptor" />
+	    	</mvc:interceptor>
+	    </mvc:interceptors>
+
+</beans>

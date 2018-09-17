@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kepcoMngSet">
+	<select id="getSiteSetDetail" parameterType="hashMap" resultType="hashMap">
+		/* 한전 계약 및 전력관리 정보 조회 */
+		select 
+			site_set_idx, site_id, /*charge_type, */plan_type, plan_name, contract_power, meter_read_day, 
+			charge_yearm, charge_power, charge_rate, goal_power, smp_rate, rec_rate, rec_weight, 
+			del_yn, reg_uid, reg_date, mod_uid, mod_date 
+		from tb_site_set
+		where 1=1
+		and site_id = #{siteId }
+	</select>
+	
+	<update id="updateSiteSet" parameterType="hashMap">
+		/* 한전 계약 및 전력관리 정보 수정 */
+		update tb_site_set
+		set 
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(chargeType)">
+			charge_type    = #{chargeType } ,   /* 요금구분(1:일반용-고압A,2:일반용-고압B) */
+			</if> 
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(planType)">
+			plan_type      = #{planType } ,   /* 요금제구분(general_A1_low_voltage_A 외. bill_api.pdf 참조요망) */
+			</if> 
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(planName)">
+			plan_name      = #{planName } ,   /*요금제(일반용 전력 (갑)I 저압전력 외. bill_api.pdf 참조요망)  */
+			</if> 
+			contract_power = #{contractPower } ,   /* 계약전력(단위:KW) */
+			meter_read_day = #{meterReadDay } ,   /* 검침일(단위:일) */
+			charge_yearm   = #{chargeYearm } ,   /* 요금적용기준년월(형식:YYYYMM) */
+			charge_power   = #{chargePower } ,   /* 요금적용전력(단위:KW) */
+			charge_rate    = #{chargeRate } ,   /* 요금적용전력대비(단위:%) */
+			goal_power     = #{goalPower } ,   /* 목표전력(단위:KW) */
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(smpRate)">
+			smp_rate       = #{smpRate } ,   /* SMP단가(System Marginal Price)(단위:원) */
+			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(recTate)"> 
+			rec_rate       = #{recTate } ,    /* REC단가(단위:원) */
+			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(recWeight)">
+			rec_weight     = #{recWeight } ,    /* REC가중치 */
+			</if>
+			mod_uid        = #{modUid }, 
+			mod_date       = now() 
+		where 1=1
+		and site_set_idx = #{siteSetIdx }
+		and site_id = #{siteId }
+	</update>
+	
+</mapper>

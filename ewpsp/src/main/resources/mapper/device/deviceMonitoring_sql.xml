@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="deviceMonitoring">
+	<select id="getDeviceIOEList" parameterType="hashMap" resultType="hashMap">
+		select * from (
+			select 
+				@rownum := @rownum + 1 as rnum,
+				page_tb.*
+			from (
+					select 
+						device_ioe_idx, site_id, device_id, device_name, device_reg_id, serial_no, inst_type, inst_purpose, data_period, data_cnt, 
+						ct_capacity, ct_capacity_list, pw_capacity, ch_cnt, ch_purpose, provider, 
+						vr_device_id, vr_device_grp_id, vr_owner_id, vr_action, vr_stat, vr_mod_date, vr_error, 
+						tm_voltage, tm_pulse, tm_ct_ratio, tm_pt_tatio, 
+						network_conf, options, create_timestamp, create_date, upload_timestamp, upload_date, device_stat, reg_date
+					from tb_device_ioe
+					where 1=1
+					and (device_id, reg_date) in (
+						select 
+							device_id, max(reg_date) reg_date 
+						from tb_device_ioe
+						group by device_id
+					)
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+					and site_id = #{siteId }
+					</if>
+					order by device_id
+			) page_tb
+			,  ( select @rownum := 0 ) r
+		) f_tb
+		limit #{startNum }, #{pageRowCnt }
+	</select>
+	
+	<select id="getDeviceIOEListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+		select 
+			count(*) as listCnt 
+		from (
+			select 
+				@rownum := @rownum + 1 as rnum,
+				page_tb.*
+			from (
+					select 
+						device_ioe_idx, site_id, device_id, device_name, device_reg_id, serial_no, inst_type, inst_purpose, data_period, data_cnt, 
+						ct_capacity, ct_capacity_list, pw_capacity, ch_cnt, ch_purpose, provider, 
+						vr_device_id, vr_device_grp_id, vr_owner_id, vr_action, vr_stat, vr_mod_date, vr_error, 
+						tm_voltage, tm_pulse, tm_ct_ratio, tm_pt_tatio, 
+						network_conf, options, create_timestamp, create_date, upload_timestamp, upload_date, device_stat, reg_date
+					from tb_device_ioe
+					where 1=1
+					and (device_id, reg_date) in (
+						select 
+							device_id, max(reg_date) reg_date 
+						from tb_device_ioe
+						group by device_id
+					)
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+					and site_id = #{siteId }
+					</if>
+					order by device_id
+			) page_tb
+			,  ( select @rownum := 0 ) r
+		) f_tb
+		<!-- limit #{startNum }, #{pageRowCnt } -->
+	</select>
+	
+	<select id="getDeviceIOEDetail" parameterType="hashMap" resultType="hashMap">
+		select 
+			a.device_ioe_idx, a.site_id, a.device_id, a.device_name, a.upload_timestamp, a.upload_date, a.device_stat
+			, site.site_name, b.device_grp_name
+		from (
+				select 
+					device_ioe_idx, site_id, device_id, device_name, device_reg_id, serial_no, inst_type, inst_purpose, data_period, data_cnt, 
+					ct_capacity, ct_capacity_list, pw_capacity, ch_cnt, ch_purpose, provider, 
+					vr_device_id, vr_device_grp_id, vr_owner_id, vr_action, vr_stat, vr_mod_date, vr_error, 
+					tm_voltage, tm_pulse, tm_ct_ratio, tm_pt_tatio, 
+					network_conf, options, create_timestamp, create_date, upload_timestamp, upload_date, device_stat, reg_date
+				from tb_device_ioe
+				where 1=1
+				and (device_id, reg_date) in (
+					select 
+						device_id, max(reg_date) reg_date 
+					from tb_device_ioe
+					group by device_id
+				)
+		) a, tb_site site, (
+				select 
+					device_id, device.site_id, device.user_idx, device_name, device.device_grp_idx, device_type, inst_type
+					, device_grp_name
+				from tb_device device
+				left outer join tb_device_group deviceGroup
+				on device.device_grp_idx = deviceGroup.device_grp_idx
+		) b
+		where a.site_id = site.site_id
+		and a.device_id = b.device_id
+		and device_ioe_idx = #{deviceIoeIdx }
+	</select>
+	
+	<select id="getDevicePCSList" parameterType="hashMap" resultType="hashMap">
+		select * from (
+			select 
+				@rownum := @rownum + 1 as rnum,
+				page_tb.*
+			from (
+					select 
+						device_pcs_idx, site_id, device_id, device_name, device_stat, alarm_msg, 
+						ac_voltage, ac_power, ac_current, ac_freq, ac_set_power, ac_pf, 
+						dc_voltage, dc_power, dc_current, dc_freq, dc_set_power, dc_pf, std_date, reg_date
+					from tb_device_pcs
+					where 1=1
+					and (device_id, reg_date) in (
+						select 
+							device_id, max(reg_date) reg_date 
+						from tb_device_pcs
+						group by device_id
+					)
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+					and site_id = #{siteId }
+					</if>
+					order by device_id
+			) page_tb
+			,  ( select @rownum := 0 ) r
+		) f_tb
+		limit #{startNum }, #{pageRowCnt }
+	</select>
+	
+	<select id="getDevicePCSListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+		select 
+			count(*) as listCnt 
+		from (
+			select 
+				@rownum := @rownum + 1 as rnum,
+				page_tb.*
+			from (
+					select 
+						device_pcs_idx, site_id, device_id, device_name, device_stat, alarm_msg, 
+						ac_voltage, ac_power, ac_current, ac_freq, ac_set_power, ac_pf, 
+						dc_voltage, dc_power, dc_current, dc_freq, dc_set_power, dc_pf, std_date, reg_date
+					from tb_device_pcs
+					where 1=1
+					and (device_id, reg_date) in (
+						select 
+							device_id, max(reg_date) reg_date 
+						from tb_device_pcs
+						group by device_id
+					)
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+					and site_id = #{siteId }
+					</if>
+					order by device_id
+			) page_tb
+			,  ( select @rownum := 0 ) r
+		) f_tb
+		<!-- limit #{startNum }, #{pageRowCnt } -->
+	</select>
+	
+	<select id="getDevicePCSDetail" parameterType="hashMap" resultType="hashMap">
+		select 
+			a.device_pcs_idx, a.site_id, a.device_id, a.device_name, a.std_date, a.device_stat, a.alarm_msg, 
+			a.ac_voltage, a.ac_power, a.ac_current, a.ac_freq, a.ac_set_power, a.ac_pf, 
+			a.dc_voltage, a.dc_power, a.dc_current, a.dc_freq, a.dc_set_power, a.dc_pf
+			, site.site_name, b.device_grp_name
+		from (
+				select 
+					device_pcs_idx, site_id, device_id, device_name, device_stat, alarm_msg, 
+					ac_voltage, ac_power, ac_current, ac_freq, ac_set_power, ac_pf, 
+					dc_voltage, dc_power, dc_current, dc_freq, dc_set_power, dc_pf, std_date, reg_date
+				from tb_device_pcs
+				where 1=1
+				and (device_id, reg_date) in (
+					select 
+						device_id, max(reg_date) reg_date 
+					from tb_device_pcs
+					group by device_id
+				)
+		) a, tb_site site, (
+				select 
+					device_id, device.site_id, device.user_idx, device_name, device.device_grp_idx, device_type, inst_type
+					, device_grp_name
+				from tb_device device
+				left outer join tb_device_group deviceGroup
+				on device.device_grp_idx = deviceGroup.device_grp_idx
+		) b
+		where a.site_id = site.site_id
+		and a.device_id = b.device_id
+		and device_pcs_idx = #{devicePcsIdx }
+	</select>
+	
+	<select id="getDeviceBMSList" parameterType="hashMap" resultType="hashMap">
+		select * from (
+			select 
+				@rownum := @rownum + 1 as rnum,
+				page_tb.*
+			from (
+					select 
+						device_bms_idx, site_id, device_id, device_name, device_stat, 
+						sys_soc, curr_soc, sys_soh, sys_voltage, sys_current, dod, std_date, reg_date
+					from tb_device_bms
+					where 1=1
+					and (device_id, reg_date) in (
+						select 
+							device_id, max(reg_date) reg_date 
+						from tb_device_bms
+						group by device_id
+					)
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+					and site_id = #{siteId }
+					</if>
+					order by device_id
+			) page_tb
+			,  ( select @rownum := 0 ) r
+		) f_tb
+		limit #{startNum }, #{pageRowCnt }
+	</select>
+	
+	<select id="getDeviceBMSListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+		select 
+			count(*) as listCnt 
+		from (
+			select 
+				@rownum := @rownum + 1 as rnum,
+				page_tb.*
+			from (
+					select 
+						device_bms_idx, site_id, device_id, device_name, device_stat, 
+						sys_soc, curr_soc, sys_soh, sys_voltage, sys_current, dod, std_date, reg_date
+					from tb_device_bms
+					where 1=1
+					and (device_id, reg_date) in (
+						select 
+							device_id, max(reg_date) reg_date 
+						from tb_device_bms
+						group by device_id
+					)
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+					and site_id = #{siteId }
+					</if>
+					order by device_id
+			) page_tb
+			,  ( select @rownum := 0 ) r
+		) f_tb
+		<!-- limit #{startNum }, #{pageRowCnt } -->
+	</select>
+	
+	<select id="getDeviceBMSDetail" parameterType="hashMap" resultType="hashMap">
+		select 
+			a.device_bms_idx, a.site_id, a.device_id, a.device_name, a.std_date, a.device_stat, 
+			a.sys_soc, a.curr_soc, a.sys_soh, a.sys_soh, a.sys_voltage, a.sys_current, a.dod
+			, site.site_name, b.device_grp_name
+		from (
+				select 
+					device_bms_idx, site_id, device_id, device_name, device_stat, 
+					sys_soc, curr_soc, sys_soh, sys_voltage, sys_current, dod, std_date, reg_date
+				from tb_device_bms
+				where 1=1
+				and (device_id, reg_date) in (
+					select 
+						device_id, max(reg_date) reg_date 
+					from tb_device_bms
+					group by device_id
+				)
+		) a, tb_site site, (
+				select 
+					device_id, device.site_id, device.user_idx, device_name, device.device_grp_idx, device_type, inst_type
+					, device_grp_name
+				from tb_device device
+				left outer join tb_device_group deviceGroup
+				on device.device_grp_idx = deviceGroup.device_grp_idx
+		) b
+		where a.site_id = site.site_id
+		and a.device_id = b.device_id
+		and device_bms_idx = #{deviceBmsIdx }
+	</select>
+	
+	<select id="getDevicePVList" parameterType="hashMap" resultType="hashMap">
+		select * from (
+			select 
+				@rownum := @rownum + 1 as rnum,
+				page_tb.*
+			from (
+					select 
+						device_pv_idx, site_id, device_id, device_name, device_stat, alarm_msg, temp, tot_power, std_date, reg_date
+					from tb_device_pv
+					where 1=1
+					and (device_id, reg_date) in (
+						select 
+							device_id, max(reg_date) reg_date 
+						from tb_device_pv
+						group by device_id
+					)
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+					and site_id = #{siteId }
+					</if>
+					order by device_id
+			) page_tb
+			,  ( select @rownum := 0 ) r
+		) f_tb
+		limit #{startNum }, #{pageRowCnt }
+	</select>
+	
+	<select id="getDevicePVListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+		select 
+			count(*) as listCnt 
+		from (
+			select 
+				@rownum := @rownum + 1 as rnum,
+				page_tb.*
+			from (
+					select 
+						device_pv_idx, site_id, device_id, device_name, device_stat, alarm_msg, temp, tot_power, std_date, reg_date
+					from tb_device_pv
+					where 1=1
+					and (device_id, reg_date) in (
+						select 
+							device_id, max(reg_date) reg_date 
+						from tb_device_pv
+						group by device_id
+					)
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+					and site_id = #{siteId }
+					</if>
+					order by device_id
+			) page_tb
+			,  ( select @rownum := 0 ) r
+		) f_tb
+		<!-- limit #{startNum }, #{pageRowCnt } -->
+	</select>
+	
+	<select id="getDevicePVDetail" parameterType="hashMap" resultType="hashMap">
+		select 
+			a.device_pv_idx, a.site_id, a.device_id, a.device_name, a.std_date, a.device_stat, a.alarm_msg, 
+			a.temp, a.tot_power
+			, site.site_name, b.device_grp_name
+		from (
+				select 
+					device_pv_idx, site_id, device_id, device_name, device_stat, alarm_msg, temp, tot_power, std_date, reg_date
+				from tb_device_pv
+				where 1=1
+				and (device_id, reg_date) in (
+					select 
+						device_id, max(reg_date) reg_date 
+					from tb_device_pv
+					group by device_id
+				)
+		) a, tb_site site, (
+				select 
+					device_id, device.site_id, device.user_idx, device_name, device.device_grp_idx, device_type, inst_type
+					, device_grp_name
+				from tb_device device
+				left outer join tb_device_group deviceGroup
+				on device.device_grp_idx = deviceGroup.device_grp_idx
+		) b
+		where a.site_id = site.site_id
+		and a.device_id = b.device_id
+		and device_pv_idx = #{devicePvIdx }
+	</select>
+	
+	<select id="getDeviceList" parameterType="hashMap" resultType="hashMap">
+		select 
+			device_id, site_id, user_idx, device_name, device_grp_idx, 
+			device_type, inst_type, del_yn, reg_uid, reg_date, mod_uid, mod_date
+		from tb_device
+		where site_id = #{siteId }
+	</select>
+	
+	<select id="getDevice" parameterType="string" resultType="hashMap">
+		select 
+			device_id, site_id, user_idx, device_name, device_grp_idx, 
+			device_type, inst_type, del_yn, reg_uid, reg_date, mod_uid, mod_date
+		from tb_device
+		where device_id = #{deviceId}
+	</select>
+	
+</mapper>

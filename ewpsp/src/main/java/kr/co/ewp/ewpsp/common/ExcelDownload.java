@@ -1,0 +1,166 @@
+package kr.co.ewp.ewpsp.common;
+
+import java.io.OutputStream;
+import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Iterator;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.xssf.streaming.SXSSFCell;
+import org.apache.poi.xssf.streaming.SXSSFRow;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import kr.co.ewp.ewpsp.web.UsageController;
+
+public class ExcelDownload {
+
+	private static final Logger logger = LoggerFactory.getLogger(UsageController.class);
+
+	private HttpServletResponse response;
+	private SXSSFWorkbook workbook;
+	private SXSSFSheet sheet;
+	
+	private boolean isStarted = false; // 엑셀다운 시작여부
+	private int rowNum = 1; // row순서
+	private String excel_title = ""; // 엑셀명
+	private String col_tb = ""; // 테이블조회컬럼
+	private String col_nm = ""; // 엑셀 헤더 제목(한글)
+	
+	public ExcelDownload(HttpServletResponse response, HashMap param) {
+		init();
+		this.response = response;
+		
+		// 메모리에 100개의 행을 누적 후 행의 수가 100개를 넘을 시 디스크에 기록한다.
+		workbook = new SXSSFWorkbook(100);
+		sheet = workbook.createSheet();
+		
+		this.excel_title = (String) param.get("excel_title");
+		this.col_tb = (String) param.get("COL_TB");
+		this.col_nm = (String) param.get("COL_NM");
+	}
+	
+	public void handleRow(Object resultContext) {
+		HashMap excelMap = (HashMap) resultContext;
+		if(!isStarted) {
+			open(excelMap);
+			isStarted = true;
+		}
+		
+		// 현재 처리중인 행번호(0부터 시작)
+		SXSSFRow row = sheet.createRow(rowNum);
+		SXSSFCell cell = null;
+		int cellNum = 0; // 몇번째 셀인지
+		
+		if(rowNum == 1) { // 맨 처음일때
+			/*
+			 * 현재 데이터를 쓰는 라인이 두번째인지 아닌지를 판단(두번째라인부터 비교시작)
+			 * 두번째인 경우 첫번째라인에 헤더를 만들고 두번째라인에 데이터를 쓴다
+			 * 세번째라인부터는 데이터만 쓴다
+			*/
+			writeHeader(cellNum); // 헤더만들기
+			cellNum = 0;
+		}
+		writeCell(excelMap, row, cell, cellNum); // 헤더 바로 아랫줄부터 데이터 쓰기
+		
+		rowNum++;
+	}
+	
+	// 초기화
+	public void init() {
+		this.response = null;
+		this.workbook = null;
+		this.sheet = null;
+		this.isStarted = false;
+		this.rowNum= 1;
+		this.excel_title = "";
+		this.col_tb = "";
+		this.col_nm = "";
+	}
+
+	// 헤더 생성
+	public void writeHeader(int cellNum) {
+		SXSSFRow header = sheet.createRow(rowNum-1);
+		SXSSFCell headerCell = null;
+		String [] col_nms = this.col_nm.split("\\|");
+		for (int i = 0; i < col_nms.length; i++) {
+			String col_nm = col_nms[i];
+			headerCell = header.createCell(cellNum);
+			headerCell.setCellValue(col_nm);
+			cellNum++;
+		}
+	}
+	
+	// 데이터라인 생성
+	public void writeCell(HashMap excelMap, SXSSFRow row, SXSSFCell cell, int cellNum) {
+		Iterator<String> paramKeys = excelMap.keySet().iterator();
+		while (paramKeys.hasNext()) {
+			String name = paramKeys.next();
+//			logger.debug("rownum : "+rowNum+", cell name : "+name+", "+excelMap.get(name)+", "+cellNum);
+			cell = row.createCell(cellNum);
+			if("REG_DTM".equals(name)) {
+				cell.setCellValue((Timestamp)excelMap.get(name));
+			} else {
+				cell.setCellValue((String)excelMap.get(name));
+			}
+			cellNum++;
+		}
+//		logger.debug("==================sdf=======================");
+	}
+
+	// 엑셀 다운로드 시작 시 실행함수
+	public void open(HashMap resultObject) {
+		logger.debug("엑셀다운로드 시작");
+		String excelName = "";
+		try {
+			excelName = new String ( excel_title.getBytes("KSC5601"), "8859_1");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		response.setContentType("Application/Msexcel");
+		response.setHeader("Set-Cookie", "fileDonwload=true; path=/");
+		response.setHeader("Content-Disposition",  String.format("attachment; filename=\""+excelName+".xlsx\""));
+	}
+	
+	// 엑셀 다운로드 종료함수
+	public void close() {
+		try {
+//			SXSSFSheet sheet2 = workbook.createSheet();
+//			SXSSFSheet sheet3 = workbook.createSheet();
+			logger.debug("엑셀다운로드 끗");
+			workbook.write(response.getOutputStream());
+			workbook.dispose();
+			
+			// 엑셀 다운로드 요청을 처리하는 곳에서 응답 헤더에 fileDownloadToken 쿠키를 넣어줌.(로딩바 처리)
+//			Cookie cookie = new Cookie("fileDownloadToken", "TRUE");
+//			response.addCookie(new Cookie("fileDownloadToken", "TRUE"));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setHeader("Content-Type",  "tet/heml; charset=utf-8");
+			response.setHeader("Set-Cookie", "fileDonwload=false; path=/");
+			response.setHeader("Cache-Control", "no-cache, no-store, nust-revalidate");
+			OutputStream out = null;
+			try {
+				out = response.getOutputStream();
+				byte[] data = new String("엑셀 다운로드에 실패했습니다. \n 관리자에게 문의하세요.").getBytes();
+				out.write(data, 0, data.length);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			if(workbook != null) {
+				try {
+					workbook.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+}
