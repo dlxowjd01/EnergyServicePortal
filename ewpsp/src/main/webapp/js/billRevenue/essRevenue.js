@@ -3,11 +3,12 @@
 		var endDay = new Date();
 		firstDay.setYear(firstDay.getFullYear()-1);
 		firstDay = new Date(firstDay.setMonth(firstDay.getMonth()+1));
-		$dtpk1 = $("#datepicker1");
-		$dtpk2 = $("#datepicker2");
-		console.log(firstDay.format("yyyyMM")+", "+endDay.format("yyyyMM"));
 		$("#selTermFrom").val( firstDay.format("yyyyMM") );
 		$("#selTermTo").val( endDay.format("yyyyMM") );
+		$("#datepicker3").val( firstDay.format("yyyy-MM") );
+		$("#datepicker4").val( endDay.format("yyyy-MM") );
+		SelTerm = "billSelectMM";
+		$("#selTerm").val(SelTerm);
 		
 		var formData = $("#schForm").serializeObject();
 		getDBData(formData);

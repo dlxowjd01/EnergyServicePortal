@@ -3,10 +3,12 @@
 		var endDay = new Date();
 		firstDay = new Date(firstDay.getFullYear()-1, firstDay.getMonth()+1, 1, 0, 0, 0);
 		endDay = new Date(endDay.getFullYear(), endDay.getMonth()+1, 0, 23, 59, 59);
-//		$("#selTermFrom").val( firstDay.format("yyyyMMddHHmmss") );
-//		$("#selTermTo").val( endDay.format("yyyyMMddHHmmss") );
-		$("#selTermFrom").val( new Date( "2017-09-01"+" 00:00:00" ).format("yyyyMMddHHmmss") );
-		$("#selTermTo").val( new Date( "2018-08-31"+" 23:59:59" ).format("yyyyMMddHHmmss") );
+		$("#selTermFrom").val( firstDay.format("yyyyMMddHHmmss") );
+		$("#selTermTo").val( endDay.format("yyyyMMddHHmmss") );
+//		$("#selTermFrom").val( new Date( "2017-09-01"+" 00:00:00" ).format("yyyyMMddHHmmss") );
+//		$("#selTermTo").val( new Date( "2018-08-31"+" 23:59:59" ).format("yyyyMMddHHmmss") );
+		$("#datepicker3").val( firstDay.format("yyyy-MM") );
+		$("#datepicker4").val( endDay.format("yyyy-MM") );
 		
 		getDBData();
 	});
@@ -66,8 +68,7 @@
 			
 		} else {
 			for(var i=0; i<netGenValList.length; i++) {
-				console.log("dddd  "+new Date(Number(netGenValList[i].std_timestamp)).format("yyyyMMddHHmmss"));
-				var yyyyMM = new Date(Number(netGenValList[i].std_timestamp)).format("yyyyMM");
+				var yyyyMM = new Date( convertDateUTC(netGenValList[i].std_timestamp) ).format("yyyyMM");
 				var netGenVal = String(netGenValList[i].net_gen_val);
 				var smpDeal   = String(smpDealList[i].smp_deal);
 				var smpPrice  = String(smpPriceList[i].smp_price);

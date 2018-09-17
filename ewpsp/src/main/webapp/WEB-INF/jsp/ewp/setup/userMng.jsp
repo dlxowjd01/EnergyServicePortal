@@ -25,7 +25,7 @@
 					<div class="col-lg-12">
 						<div class="indiv">
 							<div class="set_top clear">
-								<a href="#" class="adduser_btn fr" id="insertFormBtn"><i class="glyphicon glyphicon-user"></i> 사용자 추가하기</a>
+								<a href="#;" class="adduser_btn fr" id="insertFormBtn"><i class="glyphicon glyphicon-user"></i> 사용자 추가하기</a>
 							</div>
 							<div class="s_table">
 								<table>

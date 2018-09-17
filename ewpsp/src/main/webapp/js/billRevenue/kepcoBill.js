@@ -3,11 +3,12 @@
 		var endDay = new Date();
 		firstDay.setYear(firstDay.getFullYear()-1);
 		firstDay = new Date(firstDay.setMonth(firstDay.getMonth()+1));
-		$dtpk1 = $("#datepicker1");
-		$dtpk2 = $("#datepicker2");
-		console.log(firstDay.format("yyyyMM")+", "+endDay.format("yyyyMM"));
 		$("#selTermFrom").val( firstDay.format("yyyyMM") );
 		$("#selTermTo").val( endDay.format("yyyyMM") );
+		$("#datepicker3").val( firstDay.format("yyyy-MM") );
+		$("#datepicker4").val( endDay.format("yyyy-MM") );
+		SelTerm = "billSelectMM";
+		$("#selTerm").val(SelTerm);
 		
 		var formData = $("#schForm").serializeObject();
 		getDBData(formData);
@@ -146,7 +147,7 @@
 				dt_str4_totalVal = dt_str4_totalVal+ reTotElecRate;
 				dt_str5_totalVal = dt_str5_totalVal+ reElecFund;
 				dt_str6_totalVal = dt_str6_totalVal+ reValAddTax;
-				dt_str7_totalVal = dt_str6_totalVal+ reTotAmtBill;
+				dt_str7_totalVal = dt_str7_totalVal+ reTotAmtBill;
 				if(dt_col_cnt == 12) {
 					dt_str += "<td>"+  dt_str_totalVal  +"</td>"; // 기본요금(기본요금)
 					dt_str2 += "<td>"+ dt_str2_totalVal +"</td>"; // 역률(역률요금)
@@ -181,7 +182,55 @@
 					dt_str6_totalVal = 0;
 					dt_str7_totalVal = 0;
 				} else {
-					dt_col_cnt++;
+					if( (i+1) == kepcoBillList.length ) { // 조회한 목록이 라인을 다 못채울 때
+//						var headerDate1 = convertDataTableHeaderDate(tm, 1);
+						var final_dt_str_head = dt_str_head;
+						for(a=0; a<(12-dt_col_cnt); a++) {
+							dt_str_head += "<th></th>";
+							dt_str += "<td></td>";
+							dt_str2 += "<td></td>";
+							dt_str3 += "<td></td>";
+							dt_str4 += "<td></td>";
+							dt_str5 += "<td></td>";
+							dt_str6 += "<td></td>";
+							dt_str7 += "<td></td>";
+						}
+						dt_str += "<td>"+  dt_str_totalVal  +"</td>"; // 기본요금(기본요금)
+						dt_str2 += "<td>"+ dt_str2_totalVal +"</td>"; // 역률(역률요금)
+						dt_str3 += "<td>"+ dt_str3_totalVal +"</td>"; // 사용요금(전력량요금)
+						dt_str4 += "<td>"+ dt_str4_totalVal +"</td>"; // 전기요금합계(전기요금계)
+						dt_str5 += "<td>"+ dt_str5_totalVal +"</td>"; // 전력기금(전력산업기반기금)
+						dt_str6 += "<td>"+ dt_str6_totalVal +"</td>"; // 부가세(부가가치세)
+						dt_str7 += "<td>"+ dt_str7_totalVal +"</td>"; // 청구금액(당월요금계)
+						kepcoBill_head_pc[dt_row_cnt-1] = dt_str_head;
+						kepcoBill_data_pc[dt_row_cnt-1] = dt_str;
+						kepcoBill_data_pc2[dt_row_cnt-1] = dt_str2;
+						kepcoBill_data_pc3[dt_row_cnt-1] = dt_str3;
+						kepcoBill_data_pc4[dt_row_cnt-1] = dt_str4;
+						kepcoBill_data_pc5[dt_row_cnt-1] = dt_str5;
+						kepcoBill_data_pc6[dt_row_cnt-1] = dt_str6;
+						kepcoBill_data_pc7[dt_row_cnt-1] = dt_str7;
+						dt_row_cnt++;
+						dt_col_cnt = 1;
+						dt_str_head = "";
+						dt_str  = ""; 
+						dt_str2 = ""; 
+						dt_str3 = ""; 
+						dt_str4 = ""; 
+						dt_str5 = ""; 
+						dt_str6 = ""; 
+						dt_str7 = ""; 
+						dt_str_totalVal =  0;
+						dt_str2_totalVal = 0;
+						dt_str3_totalVal = 0;
+						dt_str4_totalVal = 0;
+						dt_str5_totalVal = 0;
+						dt_str6_totalVal = 0;
+						dt_str7_totalVal = 0;
+					} else {
+						dt_col_cnt++;
+					}
+//					dt_col_cnt++;
 				}
 				
 			}

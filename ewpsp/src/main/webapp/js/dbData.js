@@ -349,6 +349,25 @@ function getDeviceList(formData) {
 
 
 
+// 알람 조회
+function getAlarmList(formData) {
+	$.ajax({
+		url : "/getAlarmList",
+//		url : "/getKepcoBillList_test",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			console.log("알람 조회");
+			callback_getAlarmList(result);
+		}
+	});
+}
+
+
+
+
+
 // 한전 요금 조회
 function getKepcoBillList(formData) {
 	$.ajax({
@@ -454,12 +473,14 @@ function getCmpyList() {
 }
 
 // 그룹 목록 조회
-function getGroupList() {
+function getGroupList(selPageNum) {
 	$.ajax({
 		url : "/getGroupList",
 		type : 'post',
 		async : false, // 동기로 처리해줌
-//		data : formData,
+		data : {
+			selPageNum : selPageNum
+		},
 		success: function(result) {
 			callback_getGroupList(result);
 		}
@@ -467,14 +488,46 @@ function getGroupList() {
 }
 
 // 사이트 목록 조회
-function getSiteList() {
+function getSiteList(selPageNum) {
 	$.ajax({
 		url : "/getSiteList",
 		type : 'post',
 		async : false, // 동기로 처리해줌
-//		data : formData,
+		data : {
+			selPageNum : selPageNum
+		},
 		success: function(result) {
 			callback_getSiteList(result);
+		}
+	});
+}
+
+//그룹 목록(팝업) 조회
+function getGroupPopupList() {
+	$.ajax({
+		url : "/getGroupPopupList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+//		data : {
+//			selPageNum : selPageNum
+//		},
+		success: function(result) {
+			callback_getGroupPopupList(result);
+		}
+	});
+}
+
+//사이트 목록(팝업) 조회
+function getSitePopupList(siteGrpIdx) {
+	$.ajax({
+		url : "/getSitePopupList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : {
+			siteGrpIdx : siteGrpIdx
+		},
+		success: function(result) {
+			callback_getSitePopupList(result);
 		}
 	});
 }

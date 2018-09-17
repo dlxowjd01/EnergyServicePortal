@@ -89,7 +89,7 @@
 									<h2 class="ntit fl">그룹 현황</h2>
 									<ul class="fr">
 										<!-- <li><a href="javascript:popupOpen('dgroup');" class="default_btn"><i class="glyphicon glyphicon-th-list"></i> 그룹 관리</a></li> -->
-										<li><a href="#" class="default_btn" id="grpMngFormBtn"><i class="glyphicon glyphicon-th-list"></i> 그룹 관리</a></li>
+										<li><a href="#;" class="default_btn" id="grpMngFormBtn"><i class="glyphicon glyphicon-th-list"></i> 그룹 관리</a></li>
 									</ul>								
 								</div>
 								<div class="s_table">
@@ -154,7 +154,7 @@
 								<div class="set_top clear">
 									<h2 class="ntit fl">사이트 현황</h2>
 									<ul class="fr">
-										<li><a href="#" class="default_btn" id="insertSiteFormBtn"><i class="glyphicon glyphicon-plus"></i> 사이트 등록</a></li>
+										<li><a href="#;" class="default_btn" id="insertSiteFormBtn"><i class="glyphicon glyphicon-plus"></i> 사이트 등록</a></li>
 									</ul>								
 								</div>
 								<div class="s_table">
@@ -277,7 +277,7 @@
 				        <li><a href="#">....</a></li>
 				    </ul>
 				</div>
-				<a href="#" class="default_btn fr" id="insertGrpFormBtn"><i class="glyphicon glyphicon-plus"></i> 그룹 추가하기</a>
+				<a href="#;" class="default_btn fr" id="insertGrpFormBtn"><i class="glyphicon glyphicon-plus"></i> 그룹 추가하기</a>
 			</div>
 			<div class="group_wrap clear">
 				<div class="inside_site fl">

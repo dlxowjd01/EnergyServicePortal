@@ -97,8 +97,8 @@
 								</form>
 							</div>
 							<div class="btn_center">
-								<a href="#" class="confirm_btn">확인</a>
-								<a href="#" class="cancel_btn">취소</a>
+								<a href="#;" class="confirm_btn">확인</a>
+								<a href="#;" class="cancel_btn">취소</a>
 							</div>
 						</div>
 					</div>

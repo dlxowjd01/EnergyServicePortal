@@ -14,15 +14,14 @@ function changeSelTerm(gubun) {
 	var $selTermBox = $("#selTermBox");
 	var $selPeriod = $("#selPeriod");
 	var today = new Date();
-//	var firstDay = new Date();
-//	var endDay = new Date();
-	var firstDay = new Date(2018, 7, 31, 0, 0, 0);
-	var endDay = new Date(2018, 7, 31, 23, 59, 59);
+	var firstDay = new Date();
+	var endDay = new Date();
+//	var firstDay = new Date(2018, 7, 31, 0, 0, 0);
+//	var endDay = new Date(2018, 7, 31, 23, 59, 59);
 //	console.log("시작전 : "+firstDay+", "+endDay);
 	if(gubun == '15min') { // 15분(현재 안나옴)
-		firstDay = new Date(firstDay.setMinutes(firstDay.getMinutes() - 15));// new Date().setHours(firstDay.getMinutes()-1);
+		firstDay = new Date(firstDay.setMinutes(firstDay.getMinutes() - 14));// new Date().setHours(firstDay.getMinutes()-1);
 //		endDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), today.getHours(), today.getMinutes(), today.getSeconds());
-		
 		$selTermBox.empty().append("15분").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("1분").append( $('<span class="caret" />') );
 		$("#sp_15min").hide();
@@ -33,13 +32,9 @@ function changeSelTerm(gubun) {
 		
 		$("#selPeriodVal").val('1min');
 	} else if(gubun == '30min') { // 30분
-		firstDay = new Date(firstDay.setMinutes(firstDay.getMinutes() - 30));// new Date().setHours(firstDay.getHours()-1);
-		endDay = new Date(2018, 7, 31, 0, 0, 0);
-		endDay = new Date(endDay.setMinutes(endDay.getMinutes() - 1));
+		firstDay = new Date(firstDay.setMinutes(firstDay.getMinutes() - 29));// new Date().setHours(firstDay.getHours()-1);
+//		endDay = new Date(endDay.setMinutes(endDay.getMinutes() - 1));
 //		endDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), today.getHours(), today.getMinutes(), today.getSeconds());
-//		firstDay = new Date(2018, 7, 20, 0, 0, 0);
-//		endDay = new Date(2018, 7, 20, 0, 29, 59);
-		
 		$selTermBox.empty().append("30분").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("15분").append( $('<span class="caret" />') );
 		$("#sp_30min").hide();
@@ -49,12 +44,10 @@ function changeSelTerm(gubun) {
 		
 		$("#selPeriodVal").val('15min');
 	} else if(gubun == 'hour') { // 1시간
-		firstDay = new Date(firstDay.setHours(firstDay.getHours() - 1));// new Date().setHours(firstDay.getHours()-1);
-		endDay = new Date(2018, 7, 31, 0, 0, 0);
-		endDay = new Date(endDay.setMinutes(endDay.getMinutes() - 1));
+//		firstDay = new Date(firstDay.setHours(firstDay.getHours() - 1));// new Date().setHours(firstDay.getHours()-1);
+		firstDay = new Date(firstDay.setMinutes(firstDay.getMinutes() - 59));// new Date().setHours(firstDay.getHours()-1);
+//		endDay = new Date(endDay.setMinutes(endDay.getMinutes() - 1));
 //		endDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), today.getHours(), today.getMinutes(), today.getSeconds());
-//		firstDay = new Date(2018, 7, 20, 0, 0, 0);
-//		endDay = new Date(2018, 7, 20, 0, 59, 59);
 		
 		$selTermBox.empty().append("1시간").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("15분").append( $('<span class="caret" />') );
@@ -66,8 +59,6 @@ function changeSelTerm(gubun) {
 	} else if(gubun == 'day') { // 오늘
 		firstDay = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), 0, 0, 0);
 		endDay = new Date(endDay.getFullYear(), endDay.getMonth(), endDay.getDate(), 23, 59, 59);
-//		firstDay = new Date(2018, 7, 20, 0, 0, 0);
-//		endDay = new Date(2018, 7, 20, 23, 59, 59);
 		
 		$selTermBox.empty().append("1일(오늘)").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("1시간").append( $('<span class="caret" />') );
@@ -78,9 +69,7 @@ function changeSelTerm(gubun) {
 	} else if(gubun == 'week') { // 1주
 		firstDay = new Date(firstDay.setDate(firstDay.getDate() - 6));
 //		endDay = new Date(endDay.getFullYear(), endDay.getMonth(), endDay.getDate(), endDay.getHours(), endDay.getMinutes(), endDay.getSeconds());
-//		firstDay = new Date(2018, 7, 16, 0, 0, 0);
-//		endDay = new Date(2018, 7, 22, 23, 59, 59);
-//		console.log("week2 : "+firstDay+", "+endDay);
+		
 		$selTermBox.empty().append("1주").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("1시간").append( $('<span class="caret" />') );
 		$("#sp_1month").hide();
@@ -128,11 +117,6 @@ function changeSelTerm(gubun) {
 		$("#datepicker5").attr("disabled", false).val( d.format("yyyy-MM-dd") );
 	}
 	
-//	today = new Date('2018-08-17');
-//	firstDay = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-//	endDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
-//	console.log("firstDay : "+firstDay+", endDay : "+endDay);
-//	endDay = endDay.getTime();
 	firstDay = (firstDay == "") ? "" : firstDay.format("yyyyMMddHHmmss");
 	endDay = (endDay == "") ? "" : endDay.format("yyyyMMddHHmmss");
 	console.log("firstDay : "+firstDay+", endDay : "+endDay);
@@ -161,11 +145,11 @@ function changePeriod(param) {
 }
 
 var btwnDt = 0;
+var realTimeRefresh = null;
 $(function () { 
 	$("#datepicker1, #datepicker2").change(function () {
 		$dt1 = $("#datepicker1");
 		$dt2 = $("#datepicker2");
-//		console.log($dt1.val()+", "+$dt2.val());
 		
 		if( ($dt1.val() != "" && $dt1.val() != null) && ($dt2.val() != "" && $dt2.val() != null) ) {
 			if(new Date($dt1.val()).getTime() > new Date($dt2.val()).getTime()) {
@@ -179,12 +163,34 @@ $(function () {
 		
 	});
 	
-	/// 여기까지함 dr실적현황 날짜 수정하기!!!
 	$("#datepicker5").change(function () {
 		$dt5 = $("#datepicker5");
 		$("#selTermFrom").val( ($dt5.val() == "") ? "" : new Date( $dt5.val()+" 00:00:00" ).format("yyyyMMddHHmmss") );
 		$("#selTermTo").val( ($dt5.val() == "") ? "" : new Date( $dt5.val()+" 23:59:59" ).format("yyyyMMddHHmmss") );
 		$("#dtCnt").val(  dateDiff($dt5.val()+" 00:00:00", $dt5.val()+" 23:59:59")+1  );
+		
+	});
+	
+	$("#check1").click(function () {
+		var flag = $("#check1").prop("checked") ;
+		console.log("flag : "+flag);
+		if(flag) {
+			changeSelTerm('day');
+			getCollect_sch_condition();
+			
+			if(realTimeRefresh == null) { // 1분 간격
+				realTimeRefresh = setInterval(function(){
+					changeSelTerm('day');
+					getCollect_sch_condition();
+				},5000); // 1000 = 1초, 5000 = 5초
+			} else {
+				alert("이미 실시간 자동갱신이 실행중입니다.");
+			}
+			
+		} else {
+			clearInterval(realTimeRefresh);
+			realTimeRefresh = null;
+		}
 		
 	});
 });
@@ -200,8 +206,8 @@ function getCollect_sch_condition() {
 	
 	$dtpk1 = $("#datepicker1");
 	$dtpk2 = $("#datepicker2");
-//	$dtpk3 = $("#datepicker3");
-//	$dtpk4 = $("#datepicker4");
+	$dtpk3 = $("#datepicker3");
+	$dtpk4 = $("#datepicker4");
 	$dtpk5 = $("#datepicker5");
 	$("#dtCnt").val("");
 	if(SelTerm == "other") {
@@ -213,21 +219,15 @@ function getCollect_sch_condition() {
 		$("#selTermTo").val( ($dtpk5.val() == "") ? "" : new Date( $dtpk5.val()+" 23:59:59" ).format("yyyyMMddHHmmss") );
 		$("#dtCnt").val(  dateDiff($dtpk5.val()+" 00:00:00", $dtpk5.val()+" 23:59:59")+1  );
 		
-//	} else if(SelTerm == "billSelectMM") { // 요금/수익 화면 전체의 기간설정검색
-////		var firstDay = new Date($dtpk1.val());
-////		var endDay = new Date($dtpk1.val());
-////		console.log(firstDay.format("yyyyMM")+", "+endDay.format("yyyyMM"));
-////		$("#selTermFrom").val( firstDay.format("yyyyMM") );
-////		$("#selTermTo").val( endDay.format("yyyyMM") );
-//		$("#selTermFrom").val( replaceAll($dtpk3.val(), "-", "") );
-//		$("#selTermTo").val( replaceAll($dtpk4.val(), "-", "") );
+	} else if(SelTerm == "billSelectMM") { // 요금/수익 화면 전체의 기간설정검색
+		$("#selTermFrom").val( replaceAll($dtpk3.val(), "-", "") );
+		$("#selTermTo").val( replaceAll($dtpk4.val(), "-", "") );
 	}
 //	if(dtcnt == 1) $("#selTerm").val("day");
 //	else if(dtcnt >= 7 && dtcnt <=31) $("#selTerm").val("month");
 //	else if(dtcnt > 31) $("#selTerm").val("year");
 //	
 	var formData = $("#schForm").serializeObject();
-//	console.log(formData.selTerm+", "+formData.datepicker1+", "+formData.datepicker2+", "+formData.selTermFrom+", "+formData.selTermTo);
 //	formValidationChk();
 
 	var today = new Date();
@@ -313,7 +313,7 @@ function convertDataTableHeaderDate(_convertDt, type) {
 		}
 		
 	}
-//	console.log("헤더날짜는? "+headerDate)
+	
 	return headerDate;
 }
 
@@ -363,7 +363,6 @@ function unit_format(usage, id, unitGbn) {
 var tickInterval = 60 * 60 * 1000;
 function setTickInterval() {
 	var periodd = $("#selPeriodVal").val(); // 데이터조회간격
-//	console.log("  periodd       "+SelTerm+", "+periodd);
 	
 	myChart.xAxis[0].options.labels.style.fontSize = '16px';
 	
@@ -407,7 +406,6 @@ var dt_col = 0; // 1행의 최대 칸 수
 var dt_row = 0; // 테이블갯수
 function setDataTableColRowCnt() {
 	var periodd = $("#selPeriodVal").val(); // 데이터조회간격
-//	console.log("  periodd       "+SelTerm+", "+periodd);
 	
 	var col_cnt = 0;
 	var row_cnt = 1;
