@@ -1,4 +1,15 @@
+/**
+ * class name : DeviceGroupController
+ * description : 장치그룹 현황 화면 controller
+ * version : 1.0
+ * author : 이우람
+ */
+
 package kr.co.ewp.ewpsp.web;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.ewp.ewpsp.service.DeviceGroupService;
 
@@ -21,71 +34,33 @@ public class DeviceGroupController {
 
 	@RequestMapping("/deviceGroup")
 	public String main(Model model, HttpServletRequest request) {
-		logger.debug("/deviceGroup "+request.getParameter("deviceGbn"));
-		
-		model.addAttribute("deviceGbn", request.getParameter("deviceGbn"));
+		logger.debug("/deviceGroup");
 		
 		return "ewp/device/deviceGroup";
 	}
 
-//	@RequestMapping("/getDeviceIOEList")
-//	public @ResponseBody Map<String, Object> getDeviceIOEList(@RequestParam HashMap param) throws Exception {
-//		logger.debug("/getDeviceIOEList");
-//		logger.debug("param ::::: "+param.toString());
-//		
-//		List list = deviceGroupService.getDeviceIOEList(param);
-//		
-//		Map<String, Object> resultMap = new HashMap<String, Object>();
-//		resultMap.put("list", list);
-//		return resultMap;
-//	}
-//
-//	@RequestMapping("/getDeviceIOEDetail")
-//	public @ResponseBody Map<String, Object> getDeviceIOEDetail(@RequestParam HashMap param) throws Exception {
-//		logger.debug("/getDeviceIOEDetail");
-//		logger.debug("param ::::: "+param.toString());
-//		
-//		Map result = deviceGroupService.getDeviceIOEDetail(param);
-//		
-//		Map<String, Object> resultMap = new HashMap<String, Object>();
-//		resultMap.put("detail", result);
-//		return resultMap;
-//	}
-//	
-//	@RequestMapping("/getDevicePCSList")
-//	public @ResponseBody Map<String, Object> getDevicePCSList(@RequestParam HashMap param) throws Exception {
-//		logger.debug("/getDevicePCSList");
-//		logger.debug("param ::::: "+param.toString());
-//		
-//		List list = deviceGroupService.getDevicePCSList(param);
-//		
-//		Map<String, Object> resultMap = new HashMap<String, Object>();
-//		resultMap.put("list", list);
-//		return resultMap;
-//	}
-//	
-//	@RequestMapping("/getDeviceBMSList")
-//	public @ResponseBody Map<String, Object> getDeviceBMSList(@RequestParam HashMap param) throws Exception {
-//		logger.debug("/getDeviceBMSList");
-//		logger.debug("param ::::: "+param.toString());
-//		
-//		List list = deviceGroupService.getDeviceBMSList(param);
-//		
-//		Map<String, Object> resultMap = new HashMap<String, Object>();
-//		resultMap.put("list", list);
-//		return resultMap;
-//	}
-//	
-//	@RequestMapping("/getDevicePVList")
-//	public @ResponseBody Map<String, Object> getDevicePVList(@RequestParam HashMap param) throws Exception {
-//		logger.debug("/getDevicePVList");
-//		logger.debug("param ::::: "+param.toString());
-//		
-//		List list = deviceGroupService.getDevicePVList(param);
-//		
-//		Map<String, Object> resultMap = new HashMap<String, Object>();
-//		resultMap.put("list", list);
-//		return resultMap;
-//	}
+	@RequestMapping("/getDeviceGroupList")
+	public @ResponseBody Map<String, Object> getDeviceGroupList(@RequestParam HashMap param) throws Exception {
+		logger.debug("/getDeviceGroupList");
+		logger.debug("param ::::: "+param.toString());
+		
+		List list = deviceGroupService.getDeviceGroupList(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("list", list);
+		return resultMap;
+	}
+	
+	@RequestMapping("/getDvInDeviceGroupList")
+	public @ResponseBody Map<String, Object> getDvInDeviceGroupList(@RequestParam HashMap param) throws Exception {
+		logger.debug("/getDvInDeviceGroupList");
+		logger.debug("param ::::: "+param.toString());
+		
+		List list = deviceGroupService.getDvInDeviceGroupList(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("list", list);
+		return resultMap;
+	}
 
 }

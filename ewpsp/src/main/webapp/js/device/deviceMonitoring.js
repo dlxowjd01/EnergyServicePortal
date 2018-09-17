@@ -1,7 +1,5 @@
 	var device_data_pc = new Array(); // 실제 사용량 표 데이터
 	function getDBData(deviceGbn) {
-//		var siteId = "f23ac0b6";
-		var siteId = "17094385";
 		if(deviceGbn == "IOE") getDeviceIOEList(1); // 장치목록 조회(IOE)
 		else if(deviceGbn == "PCS") getDevicePCSList(1); // 장치목록 조회(PCS)
 		else if(deviceGbn == "BMS") getDeviceBMSList(1); // 장치목록 조회(BMS)

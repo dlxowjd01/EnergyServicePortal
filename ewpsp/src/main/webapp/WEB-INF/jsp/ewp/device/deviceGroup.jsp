@@ -6,15 +6,8 @@
 <jsp:include page="../include/common_static.jsp" />
 <jsp:include page="../include/sub_static.jsp" />
 <script type="text/javascript">
-	var deviceGbn = "${deviceGbn }";
-// 	$(document).ready(function() {
-// 		// js파일에서는 동작을 안함
-// 		$(".tab_menu").find("li").removeClass("active");
-// 		$(".tab_menu").find("#tab_${deviceGbn }").addClass("active").trigger('click');
-// 		getDBData(deviceGbn);
-// 	});
 </script>
-<!-- <script src="../js/device/deviceMonitoring.js" type="text/javascript"></script> -->
+<script src="../js/device/deviceGroup.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -211,6 +204,7 @@
 		<div class="lbody mt30">
 
 			<div class="set_tbl">
+				<form id="deviceForm" name="deviceForm">
 				<table>
 					<colgroup>
 						<col width="200">
@@ -220,34 +214,40 @@
 						<tr>
 							<th><span>배치사이트</span></th>
 							<td>
-								<select name="" id="" class="sel" style="width:100%">
+								<select name="siteId" id="siteId" class="sel" style="width:100%">
 									
 								</select>
 							</td>
 						</tr>
 						<tr>
 							<th><span>장치명</span></th>
-							<td><input type="text" class="input" style="width:100%"></td>
+							<td><input type="text" id="deviceName" name="deviceName" class="input" style="width:100%"></td>
 						</tr>
 						<tr>
 							<th><span>장치ID</span></th>
-							<td><input type="text" class="input" style="width:100%"></td>
+							<td><input type="text" id="deviceId" name="deviceId" class="input" style="width:100%"></td>
 						</tr>
 						<tr>
 							<th><span>장치타입</span></th>
 							<td>
-								<select name="" id="" class="sel" style="width:100%">
-									
+								<select name="deviceType" id="deviceType" class="sel" style="width:100%">
+									<option value="1">PCS</option>
+									<option value="2">BMS</option>
+									<option value="3">PV</option>
+									<option value="4">부하측정기기</option>
+									<option value="5">PV모니터링기기</option>
+									<option value="6">ESS모니터링기기</option>
 								</select>
 							</td>
 						</tr>
 					</tbody>			
 				</table>
+				</form>
 			</div>
 
 		</div>
 		<div class="btn_center">
-			<a href="#;" class="default_btn w80">확인</a>
+			<a href="#;" class="default_btn w80" id="">확인</a>
 			<a href="#;" class="cancel_btn w80">취소</a>
 		</div>
     </div>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="deviceGroup">
+
+	<select id="getDeviceGroupList" parameterType="hashMap" resultType="hashMap">
+		select 
+			device_grp_idx, site_id, user_idx, device_grp_name, del_yn, reg_uid, reg_date, mod_uid, mod_date 
+		from tb_device_group
+		where 1=1
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+		and site_id = #{siteId }
+		</if>
+	</select>
+	
+	<select id="getDvInDeviceGroupList" parameterType="hashMap" resultType="hashMap">
+		select 
+			device_id, site_id, user_idx, device_name, device_grp_idx, device_type, inst_type, del_yn, reg_uid, reg_date, mod_uid, mod_date 
+		from tb_device
+		where 1=1 
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(deviceGrpIdx)">
+		and device_grp_idx =  #{deviceGrpIdx }
+		</if>
+	</select>
+	
+</mapper>

@@ -16,28 +16,12 @@ public class DeviceGroupServiceImpl implements DeviceGroupService{
 	@Resource(name="deviceGroupDao")
 	private DeviceGroupDao deviceGroupDao;
 
-	public List getDeviceIOEList(HashMap param) throws Exception {
-		return deviceGroupDao.getDeviceIOEList(param);
+	public List getDeviceGroupList(HashMap param) throws Exception {
+		return deviceGroupDao.getDeviceGroupList(param);
 	}
-
-	public Map getDeviceIOEDetail(HashMap param) throws Exception {
-		return deviceGroupDao.getDeviceIOEDetail(param);
-	}
-
-	public List getDevicePCSList(HashMap param) throws Exception {
-		return deviceGroupDao.getDevicePCSList(param);
-	}
-
-	public List getDeviceBMSList(HashMap param) throws Exception {
-		return deviceGroupDao.getDeviceBMSList(param);
-	}
-
-	public List getDevicePVList(HashMap param) throws Exception {
-		return deviceGroupDao.getDevicePVList(param);
-	}
-
-	public List getDeviceList(HashMap param) throws Exception {
-		return deviceGroupDao.getDeviceList(param);
+	
+	public List getDvInDeviceGroupList(HashMap param) throws Exception {
+		return deviceGroupDao.getDvInDeviceGroupList(param);
 	}
 	
 }

@@ -345,6 +345,36 @@ function getDeviceList(formData) {
 	});
 }
 
+// 장치그룹목록 조회
+function getDeviceGroupList() {
+	$.ajax({
+		url : "/getDeviceGroupList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+//		data : formData,
+		success: function(result) {
+			console.log("장치목록 조회");
+			callback_getDeviceGroupList(result);
+		}
+	});
+}
+
+// 장치그룹내 장치목록 조회
+function getDvInDeviceGroupList(deviceGrpIdx) {
+	$.ajax({
+		url : "/getDvInDeviceGroupList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : {
+			deviceGrpIdx : deviceGrpIdx
+		},
+		success: function(result) {
+			console.log("장치목록 조회");
+			callback_getDvInDeviceGroupList(result);
+		}
+	});
+}
+
 
 
 
