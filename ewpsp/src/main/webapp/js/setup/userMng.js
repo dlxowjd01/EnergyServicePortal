@@ -2,8 +2,8 @@
 		getDBData();
 	});
 	
-	function getDBData(deviceGbn) {
-		getUserList(); // 사용자 목록 조회
+	function getDBData() {
+		getUserList(1); // 사용자 목록 조회
 	}
 	
 	// 사용자 목록 조회
@@ -33,6 +33,9 @@
 						)
 				);
 			}
+
+			var pagingMap = result.pagingMap;
+			makePageNums2(pagingMap, "User");
 			
 		}
 		

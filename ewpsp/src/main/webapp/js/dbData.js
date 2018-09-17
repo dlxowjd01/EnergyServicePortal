@@ -663,12 +663,14 @@ function deleteSite(siteId) {
 }
 
 // 사용자 목록 조회
-function getUserList() {
+function getUserList(selPageNum) {
 	$.ajax({
 		url : "/getUserList",
 		type : 'post',
 		async : false, // 동기로 처리해줌
-//		data : formData,
+		data : {
+			selPageNum : selPageNum
+		},
 		success: function(result) {
 			callback_getUserList(result);
 		}

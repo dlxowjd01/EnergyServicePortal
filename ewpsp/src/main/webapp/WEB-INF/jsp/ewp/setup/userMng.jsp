@@ -77,7 +77,7 @@
 									</tbody>
 								</table>
 							</div>	
-							<div class="paging clear">
+							<div class="paging clear" id="UserPaging">
 								<a href="#;" class="prev">PREV</a>
 								<span><strong>1</strong> / 3</span>
 								<a href="#;" class="next">NEXT</a>
