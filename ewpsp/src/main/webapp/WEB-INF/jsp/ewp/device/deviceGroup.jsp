@@ -204,7 +204,8 @@
 		<div class="lbody mt30">
 
 			<div class="set_tbl">
-				<form id="deviceForm" name="deviceForm">
+				<form id="insertDeviceForm" name="insertDeviceForm">
+				<input type="hidden" name="deviceGrpIdx" id="deviceGrpIdx" class="input" value="">
 				<table>
 					<colgroup>
 						<col width="200">
@@ -247,8 +248,8 @@
 
 		</div>
 		<div class="btn_center">
-			<a href="#;" class="default_btn w80" id="">확인</a>
-			<a href="#;" class="cancel_btn w80">취소</a>
+			<a href="#;" class="default_btn w80" id="confirmDeviceBtn">확인</a>
+			<a href="#;" class="cancel_btn w80" id="cancelDeviceBtn">취소</a>
 		</div>
     </div>
     <!-- ###### Popup End ###### -->  

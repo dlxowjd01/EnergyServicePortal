@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.ewp.ewpsp.dao.DeviceGroupDao;
 
@@ -22,6 +23,11 @@ public class DeviceGroupServiceImpl implements DeviceGroupService{
 	
 	public List getDvInDeviceGroupList(HashMap param) throws Exception {
 		return deviceGroupDao.getDvInDeviceGroupList(param);
+	}
+
+	@Transactional
+	public int insertDevice(HashMap param) throws Exception {
+		return deviceGroupDao.insertDevice(param);
 	}
 	
 }

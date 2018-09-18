@@ -23,5 +23,9 @@ public class DeviceGroupDao {
 		List resultList = sqlSession.selectList("deviceGroup.getDvInDeviceGroupList", param);
 		return resultList;
 	}
+
+	public int insertDevice(HashMap param) {
+		return sqlSession.update("deviceGroup.insertDevice", param);
+	}
 	
 }

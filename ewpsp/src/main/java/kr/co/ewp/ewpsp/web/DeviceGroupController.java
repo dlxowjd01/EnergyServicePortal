@@ -39,6 +39,12 @@ public class DeviceGroupController {
 		return "ewp/device/deviceGroup";
 	}
 
+	/**
+	 * 장치그룹목록 조회
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("/getDeviceGroupList")
 	public @ResponseBody Map<String, Object> getDeviceGroupList(@RequestParam HashMap param) throws Exception {
 		logger.debug("/getDeviceGroupList");
@@ -51,6 +57,12 @@ public class DeviceGroupController {
 		return resultMap;
 	}
 	
+	/**
+	 * 장치그룹내 장치목록 조회
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("/getDvInDeviceGroupList")
 	public @ResponseBody Map<String, Object> getDvInDeviceGroupList(@RequestParam HashMap param) throws Exception {
 		logger.debug("/getDvInDeviceGroupList");
@@ -60,6 +72,27 @@ public class DeviceGroupController {
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("list", list);
+		return resultMap;
+	}
+
+	/**
+	 * 장치 등록
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/insertDevice")
+	public @ResponseBody Map<String, Object> insertDevice(@RequestParam HashMap param) throws Exception {
+		logger.debug("/insertGroup");
+		logger.debug("param ::::: "+param.toString());
+		param.put("regUid", "test7654");
+//		param.put("siteId", "17094385");
+		param.put("userIdx", "1");
+		
+		int resultCnt = deviceGroupService.insertDevice(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("resultCnt", resultCnt);
 		return resultMap;
 	}
 

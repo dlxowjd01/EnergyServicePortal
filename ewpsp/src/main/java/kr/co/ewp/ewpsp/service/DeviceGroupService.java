@@ -10,4 +10,6 @@ public interface DeviceGroupService {
 	
 	List getDvInDeviceGroupList(HashMap param) throws Exception;
 
+	int insertDevice(HashMap param) throws Exception;
+
 }
