@@ -120,6 +120,26 @@ $(function(){
     });
 });
 
+/* 선택이동 ToggleClass */
+$(function(){
+    $(".multi_select a,").click(function() {
+        $(this).toggleClass("on");
+        return false;
+    });
+});
+
+/* 테이블 리스트 선택 효과 */
+$(function(){
+    $(".s_table tbody tr, .chart_table tbody tr, .tbl_box tbody tr, .default_tbl tbody tr").click(function() {
+        $(".s_table tbody tr").removeClass("click");
+        $(".chart_table tbody tr").removeClass("click");
+        $(".tbl_box tbody tr").removeClass("click");
+        $(".default_tbl tbody tr").removeClass("click");
+        $(this).addClass("click");
+        return false;
+    });
+});
+
 
 
 

@@ -913,6 +913,9 @@ h2.ntit span.time {
 .chart_table table.dr_use tbody tr:nth-child(2n) td:first-child {border-radius:200px 0 0 200px;}
 .chart_table table.dr_use tbody tr:nth-child(2n) td:last-child {border-radius:0 200px 200px 0;}
 
+.chart_table tbody tr.click th,
+.chart_table tbody tr.click td {color:#438fd7;}
+
 
 /* 데이터용 테이블 */
 .chart_table2 {display:none;}
@@ -1275,6 +1278,11 @@ a.detail_view {
 .c_tbl_wrap .default_tbl tbody tr:nth-child(2n) td:first-child {border-radius:200px 0 0 200px;}
 .c_tbl_wrap .default_tbl tbody tr:nth-child(2n) td:last-child {border-radius:0 200px 200px 0;}
 
+.default_tbl tbody tr.click th,
+.default_tbl tbody tr.click td,
+.tbl_box tbody tr.click th,
+.tbl_box tbody tr.click td {color:#438fd7 !important;}
+
 /* 반응형 미디어 쿼리 */
 @media all and (max-width:1200px) {
 
@@ -1383,16 +1391,18 @@ a.detail_view {
 .company_list table td a {color:#3d4250;}
 
 /* 그룹 관리 팝업 */
-.dgroup h2.ntit {font-size:14px;}
+.dgroup .dgrp_top {margin-bottom:20px;}
+.dgroup .dgrp_top h2.ntit {font-size:14px; margin-right:10px;}
 .group_wrap .inside_site,
 .group_wrap .all_site {width:45%;}
 .group_wrap .cross_btn {width:10%; height:396px; text-align:center; vertical-align:middle;}
 .group_wrap .cross_btn > * {position:relative; margin:5px 0; top:50%; transform:translateY(-50%);}
 .group_wrap .inbox {padding:20px 20px 20px 20px; border:solid 1px #ccc; border-radius:4px; background:#fff;}
 .group_wrap .multi_select {display:block; width:100%; height:320px !important; padding-right:20px; overflow-y:auto;}
-.group_wrap .multi_select li {border-radius:200px;}
+.group_wrap .multi_select li {border-radius:200px; overflow:hidden;}
 .group_wrap .multi_select li:nth-child(odd) {background:#f4f6f8;}
 .group_wrap .multi_select li a {display:block; padding:0 20px; height:36px; line-height:36px; font-size:14px; color:#444a59;}
+.group_wrap .multi_select li a.on {color:#438fd7; font-weight:bold;}
 
 /* 신규 그룹 등록 팝업 */
 .dgroup_add {border:solid 1px #ccc;}
@@ -1413,6 +1423,9 @@ a.detail_view {
 .s_table table tbody tr:nth-child(2n) td {background:#f4f6f8}
 .s_table table tbody tr:nth-child(2n) td:first-child {border-radius:200px 0 0 200px;}
 .s_table table tbody tr:nth-child(2n) td:last-child {border-radius:0 200px 200px 0;}
+
+.s_table table tbody tr.click th,
+.s_table table tbody tr.click td {color:#438fd7;}
 
 .s_table .default_btn {height:30px; line-height:30px; min-width:40px; padding:0 10px; font-size:12px; font-weight:normal; background:#438fd7}
 .s_table .cancel_btn {height:30px; line-height:30px; min-width:40px; padding:0 10px; font-size:12px; font-weight:normal; background:#a1a4ac}

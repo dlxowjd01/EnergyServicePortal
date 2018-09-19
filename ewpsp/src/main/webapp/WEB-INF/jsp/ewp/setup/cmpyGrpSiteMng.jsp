@@ -265,7 +265,7 @@
         </div>
 		<div class="lbody mt30">
 
-			<div class="set_top clear">
+			<div class="dgrp_top clear">
 				<h2 class="ntit fl">그룹명</h2>
 				<div class="dropdown fl" id="grpSelectBox">
 				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selGrpBox">롯데 정밀 화학
