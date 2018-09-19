@@ -20,8 +20,25 @@
 			device_id, site_id, user_idx, device_name, device_grp_idx, device_type, inst_type, del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_device
 		where 1=1 
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+		and site_id =  #{siteId }
+		</if>
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(deviceGrpIdx)">
 		and device_grp_idx =  #{deviceGrpIdx }
+		</if>
+	</select>
+	
+	<select id="getAllDvInSiteList" parameterType="hashMap" resultType="hashMap">
+		/* 장치목록(사이트 전체 장치 중 특정 장치그룹 제외) 조회 */
+		select 
+			device_id, site_id, user_idx, device_name, device_grp_idx, device_type, inst_type, del_yn, reg_uid, reg_date, mod_uid, mod_date 
+		from tb_device
+		where 1=1
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+		and site_id =  #{siteId }
+		</if> 
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(deviceGrpIdx)">
+		and device_grp_idx !=  #{deviceGrpIdx }
 		</if>
 	</select>
 	

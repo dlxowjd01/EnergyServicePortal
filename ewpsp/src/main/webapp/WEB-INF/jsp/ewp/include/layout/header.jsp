@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 			<nav class="clear">
 				<button type="button" class="category">카테고리</button>
-				<div class="nav_brand"><a href="#;"><img src="../img/logo.png">EWP</a></div>
+				<div class="nav_brand"><a href="#;">EWP</a></div>
 				<div class="site dropdown">
 					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 						군관리: 129 Sites<span class="caret"></span>

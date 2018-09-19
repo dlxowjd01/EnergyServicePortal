@@ -74,6 +74,26 @@ public class DeviceGroupController {
 		resultMap.put("list", list);
 		return resultMap;
 	}
+	
+	/**
+	 * 장치그룹내 장치목록(팝업) 조회
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getDvInDeviceGroupPopupList")
+	public @ResponseBody Map<String, Object> getDvInDeviceGroupPopupList(@RequestParam HashMap param) throws Exception {
+		logger.debug("/getDvInDeviceGroupList");
+		logger.debug("param ::::: "+param.toString());
+		
+		List dvInDeviceGrouplist = deviceGroupService.getDvInDeviceGroupList(param);
+		List allDvInSiteList = deviceGroupService.getAllDvInSiteList(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("dvInDeviceGrouplist", dvInDeviceGrouplist);
+		resultMap.put("allDvInSiteList", allDvInSiteList);
+		return resultMap;
+	}
 
 	/**
 	 * 장치 등록

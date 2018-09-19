@@ -149,7 +149,8 @@ public class CmpyGrpSiteMngController {
 		logger.debug("/getGroupPopupList");
 		logger.debug("param ::::: "+param.toString());
 		
-		List list = cmpyGrpSiteMngService.getGroupPopupList(param);
+//		List list = cmpyGrpSiteMngService.getGroupPopupList(param);
+		List list = cmpyGrpSiteMngService.getGroupList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("list", list);

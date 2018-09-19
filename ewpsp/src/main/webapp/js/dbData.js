@@ -375,6 +375,23 @@ function getDvInDeviceGroupList(deviceGrpIdx) {
 	});
 }
 
+// 장치그룹내 장치목록(팝업) 조회
+function getDvInDeviceGroupPopupList(siteId, deviceGrpIdx) {
+	$.ajax({
+		url : "/getDvInDeviceGroupPopupList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : {
+			siteId : siteId,
+			deviceGrpIdx : deviceGrpIdx
+		},
+		success: function(result) {
+			console.log("장치그룹내 장치목록(팝업) 조회");
+			callback_getDvInDeviceGroupPopupList(result);
+		}
+	});
+}
+
 // 장지 등록
 function insertDevice(formData) {
 	$.ajax({

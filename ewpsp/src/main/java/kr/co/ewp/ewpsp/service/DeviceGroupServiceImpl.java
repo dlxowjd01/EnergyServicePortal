@@ -24,6 +24,10 @@ public class DeviceGroupServiceImpl implements DeviceGroupService{
 	public List getDvInDeviceGroupList(HashMap param) throws Exception {
 		return deviceGroupDao.getDvInDeviceGroupList(param);
 	}
+	
+	public List getAllDvInSiteList(HashMap param) throws Exception {
+		return deviceGroupDao.getAllDvInSiteList(param);
+	}
 
 	@Transactional
 	public int insertDevice(HashMap param) throws Exception {

@@ -2,6 +2,7 @@
 		getDBData();
 	});
 	
+	var popupYn = "N";
 	function getDBData() {
 		getDeviceGroupList();
 		
@@ -11,52 +12,69 @@
 	function callback_getDeviceGroupList(result) {
 		var deviceGroupList = result.list;
 		
-		$div = $(".dg_wrap");
-		$div.empty();
-		if(deviceGroupList == null || deviceGroupList.length < 1) {
-			$div.append( '<h2 class="dtit">조회된 데이터가 없습니다.</h2>' );
-		} else {
-			for(var i=0; i<deviceGroupList.length; i++) {
-				$div.append( '<h2 class="dtit">'+deviceGroupList[i].device_grp_name+'</h2>' );
-				getDvInDeviceGroupList(deviceGroupList[i].device_grp_idx);
-				
-				$('.dsec').last().append(
-						$('<div class="fr clear" />').append(
-								$('<dl class="aler fl" />').append(
-										'<dt><span>ALERT</span> <em>0</em></dt>'+
-										'<dd><p></p></dd>'
-								)
-						).append(
-								$('<dl class="warn fr" />').append(
-										'<dt><span>WARNNING</span> <em>1</em></dt>'+
-										'<dd><p>PCS_1</p></dd>'
-								)
-						)
-				)
+		if(popupYn == "N") {
+			$div = $(".dg_wrap");
+			$div.empty();
+			if(deviceGroupList == null || deviceGroupList.length < 1) {
+				$div.append( '<h2 class="dtit">조회된 데이터가 없습니다.</h2>' );
+			} else {
+				for(var i=0; i<deviceGroupList.length; i++) {
+					$div.append( '<h2 class="dtit">'+deviceGroupList[i].device_grp_name+'</h2>' );
+					getDvInDeviceGroupList(deviceGroupList[i].device_grp_idx);
+					
+					$('.dsec').last().append(
+							$('<div class="fr clear" />').append(
+									$('<dl class="aler fl" />').append(
+											'<dt><span>ALERT</span> <em>0</em></dt>'+
+											'<dd><p></p></dd>'
+									)
+							).append(
+									$('<dl class="warn fr" />').append(
+											'<dt><span>WARNNING</span> <em>1</em></dt>'+
+											'<dd><p>PCS_1</p></dd>'
+									)
+							)
+					)
+					
+				}
 				
 			}
 			
+		    $('.dsec .device').bxSlider({
+		        mode:'horizontal',
+		        pager:false,
+		        slideWidth: 130,
+		        slideMargin: 20,
+		        minSlides: 1,
+		        maxSlides: 8,
+		        moveSlides: 1,
+		        pause: 4000,
+		        auto:false,
+		        controls: true,
+		        infiniteLoop: false
+		    });
+			
+		} else if(popupYn == "Y") {
+
+			$insideSite = $("#insideDeviceGrp");
+			$insideSite.find("ul").empty();
+			if(deviceGroupList == null || deviceGroupList.length < 1) {
+//				$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
+			} else {
+				for(var i=0; i<deviceGroupList.length; i++) {
+					$insideSite.find("ul").append(
+							$("<li />").append('<a href="javascript:changeSelDeviceGrp(\''+deviceGroupList[i].device_grp_idx+'\');">'+deviceGroupList[i].device_grp_name+'</a>')
+					);
+					
+				}
+				
+			}
 		}
-		
-	    $('.dsec .device').bxSlider({
-	        mode:'horizontal',
-	        pager:false,
-	        slideWidth: 130,
-	        slideMargin: 20,
-	        minSlides: 1,
-	        maxSlides: 8,
-	        moveSlides: 1,
-	        pause: 4000,
-	        auto:false,
-	        controls: true,
-	        infiniteLoop: false
-	    });
 		
 	}
 	
 	function callback_getDvInDeviceGroupList(result) {
 		var deviceList = result.list;
-		console.log("deviceList : "+deviceList);
 
 		var addHtml = "";
 		if(deviceList == null || deviceList.length < 1) {
@@ -77,7 +95,6 @@
 				addHtml += '<span class="dname">'+deviceList[i].device_name+'</span>';
 				addHtml += '<span class="dmemo">'+""+'</span>';
 				addHtml += '</li>';
-				console.log("addHtml : "+addHtml);
 			}
 			
 		}
@@ -117,11 +134,12 @@
 
 	var insUpdFlag = 0; // 1:insertForm, 2:updateForm, 0:reset
 	$( function () {
-//		$("#grpMngFormBtn").click(function(){
-////			getGroupPopupList();
-////			getSitePopupList(3);
-//			popupOpen('dgroup');
-//		});
+		
+		$("#grpMngFormBtn").click(function(){
+//			getGroupPopupList();
+			getSitePopupList("");
+			popupOpen('dgdevice');
+		});
 		
 //		$("#insertGrpFormBtn").click(function(){
 //			insUpdFlag = 1;
@@ -174,6 +192,75 @@
 			popupClose('ddevice');
 		});
 	});
+
+	function callback_getSitePopupList(result) {
+		var grpSiteList = result.grpSiteList;
+		var allSiteList = result.allSiteList;
+		
+		$insideSite = $("#insideSite");
+		$insideSite.find("ul").empty();
+		if(grpSiteList == null || grpSiteList.length < 1) {
+//			$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
+		} else {
+			for(var i=0; i<grpSiteList.length; i++) {
+				$insideSite.find("ul").append(
+						$("<li />").append('<a href="javascript:changeSelSite(\''+grpSiteList[i].site_id+'\');">'+grpSiteList[i].site_name+'</a>')
+				);
+				
+			}
+			
+		}
+		
+	}
+
+	function changeSelSite(siteId) {
+		popupYn = "Y";
+		$("#selSiteId").val(siteId);
+		getDeviceGroupList(siteId);
+	}
+	
+	function changeSelDeviceGrp(deviceGrpIdx) {
+		$("#selDvGrpIdx").val(deviceGrpIdx)
+		
+		var selSiteId = $("#selSiteId").val();
+		var selDvGrpIdx = $("#selDvGrpIdx").val();
+		
+		getDvInDeviceGroupPopupList(selSiteId, selDvGrpIdx);
+	}
+	
+	function callback_getDvInDeviceGroupPopupList(result) {
+		var grpSiteList = result.dvInDeviceGrouplist;
+		var allSiteList = result.allDvInSiteList;
+		
+		$insideSite = $(".inside_site");
+		$insideSite.find("ul").empty();
+		if(grpSiteList == null || grpSiteList.length < 1) {
+//			$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
+		} else {
+			for(var i=0; i<grpSiteList.length; i++) {
+				$insideSite.find("ul").append(
+						$("<li />").append('<a href="javascript:changeSelGrp(\''+grpSiteList[i].device_id+'\');">'+grpSiteList[i].device_name+'</a>')
+				);
+				
+			}
+			
+		}
+		
+		$allSite = $(".all_site");
+		$allSite.find("ul").empty();
+		if(allSiteList == null || allSiteList.length < 1) {
+//			$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
+		} else {
+			for(var i=0; i<allSiteList.length; i++) {
+				$allSite.find("ul").append(
+						$("<li />").append('<a href="javascript:changeSelGrp(\''+allSiteList[i].device_id+'\');">'+allSiteList[i].device_name+'</a>')
+				);
+				
+			}
+			
+		}
+		
+	}
 	
 	function callback_insertDevice(result) {
 		var resultCnt = result.resultCnt;

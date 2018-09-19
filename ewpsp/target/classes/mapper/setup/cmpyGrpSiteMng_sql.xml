@@ -29,10 +29,13 @@
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)"> 
 		limit #{startNum }, #{pageRowCnt }
+		</if>
 	</select>
 	
 	<select id="getGroupListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+		/* 그룹 목록 건수 조회 */
 		select 
 			count(*) as listCnt 
 		from (
@@ -48,7 +51,6 @@
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
-		<!-- limit #{startNum }, #{pageRowCnt } -->
 	</select>
 	
 	<select id="getSiteList" parameterType="hashMap" resultType="hashMap">
@@ -67,10 +69,13 @@
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)">
 		limit #{startNum }, #{pageRowCnt }
+		</if>
 	</select>
 	
 	<select id="getSiteListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+		/* 사이트 목록 건수 조회 */
 		select 
 			count(*) as listCnt 
 		from (
@@ -87,17 +92,16 @@
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
-		<!-- limit #{startNum }, #{pageRowCnt } -->
 	</select>
 	
-	<select id="getGroupPopupList" parameterType="hashMap" resultType="hashMap">
+<!-- 	<select id="getGroupPopupList" parameterType="hashMap" resultType="hashMap">
 		/* 그룹 목록(팝업) 조회 */
 		select 
 			site_grp_idx, user_idx, site_grp_id, site_grp_name, del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_site_group
 		where del_yn = 'N'
 		order by reg_date
-	</select>
+	</select> -->
 	
 	<select id="getGrpSiteList" parameterType="hashMap" resultType="hashMap">
 		/* 사이트 목록(그룹 내) 조회 */
@@ -106,7 +110,9 @@
 			local_ems_addr, local_ems_key, del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_site
 		where del_yn = 'N'
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)"> 
 		and site_grp_idx = #{siteGrpIdx }
+		</if>
 		order by reg_date
 	</select>
 	
