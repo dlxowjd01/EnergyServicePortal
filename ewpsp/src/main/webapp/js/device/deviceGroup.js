@@ -4,7 +4,7 @@
 	
 	var popupYn = "N";
 	function getDBData() {
-		getDeviceGroupList();
+//		getDeviceGroupList();
 		
 	}
 	
@@ -108,72 +108,105 @@
 	}
 	
 	function insertDeviceForm(deviceGrpIdx) {
-		insUpdFlag = 1;
+		siteViewFlag = 1;
 		$("#insertDeviceForm").find("#deviceGrpIdx").val( deviceGrpIdx );
 		getSitePopupList("");
 		popupOpen('ddevice');
 	}
 
 	function callback_getSitePopupList(result) {
-//		var grpSiteList = result.grpSiteList;
+		var grpSiteList = result.grpSiteList;
 		var allSiteList = result.allSiteList;
 		
-		$siteIdSelBox = $("#siteId");
-		$siteIdSelBox.empty();
-		if(allSiteList == null || allSiteList.length < 1) {
-			
-		} else {
-			for(var i=0; i<allSiteList.length; i++) {
-				$siteIdSelBox.append('<option value="'+allSiteList[i].site_id+'">'+allSiteList[i].site_name+'</option>')
+		if(siteViewFlag == 1) {
+			$siteIdSelBox = $("#siteId");
+			$siteIdSelBox.empty();
+			if(allSiteList == null || allSiteList.length < 1) {
+				
+			} else {
+				for(var i=0; i<allSiteList.length; i++) {
+					$siteIdSelBox.append('<option value="'+allSiteList[i].site_id+'">'+allSiteList[i].site_name+'</option>')
+					
+				}
 				
 			}
 			
+		} else if(siteViewFlag == 2) {
+			$insideSite = $("#insideSite");
+			$insideSite.find("ul").empty();
+			if(grpSiteList == null || grpSiteList.length < 1) {
+//				$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
+			} else {
+				for(var i=0; i<grpSiteList.length; i++) {
+					$insideSite.find("ul").append(
+							$("<li />").append('<a href="javascript:changeSelSite(\''+grpSiteList[i].site_id+'\');">'+grpSiteList[i].site_name+'</a>')
+					);
+					
+				}
+				
+			}
+			
+		} else if(siteViewFlag == 3) {
+			$insideSite = $("#insideSite2");
+			$insideSite.find("ul").empty();
+			if(grpSiteList == null || grpSiteList.length < 1) {
+//				$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
+			} else {
+				for(var i=0; i<grpSiteList.length; i++) {
+					$insideSite.find("ul").append(
+							$("<li />").append('<a href="javascript:changeSelSite(\''+grpSiteList[i].site_id+'\');">'+grpSiteList[i].site_name+'</a>')
+					);
+					
+				}
+				
+			}
 		}
 		
 	}
 
-	var insUpdFlag = 0; // 1:insertForm, 2:updateForm, 0:reset
+	var siteViewFlag = 0; // 1:신규장치등록, 2:장치그룹관리, 3:장치그룹편집
 	$( function () {
 		
 		$("#grpMngFormBtn").click(function(){
-//			getGroupPopupList();
+			siteViewFlag = 2;
 			getSitePopupList("");
 			popupOpen('dgdevice');
 		});
 		
-//		$("#insertGrpFormBtn").click(function(){
-//			insUpdFlag = 1;
-//			popupOpen('dgroup_add');
-//		});
+		$("#editDvGrpFormBtn").click(function(){
+			siteViewFlag = 3;
+			getSitePopupList("");
+			popupOpen('dgdevice_edit');
+		});
 //		
 ////		$("#insertSiteFormBtn").click(function(){
-////			insUpdFlag = 1;
+////			siteViewFlag = 1;
 ////			popupOpen('ddevice');
 ////		});
 		
 //		$("#confirmGrpBtn").click(function(){
 //			var formData = $("#groupForm").serializeObject();
 //			if(confirm("그룹을 저장하시겠습니까?")) {
-//				if(insUpdFlag ==  1) insertGroup(formData);
-//				else if(insUpdFlag ==  2)  updateGroup(formData);
+//				if(siteViewFlag ==  1) insertGroup(formData);
+//				else if(siteViewFlag ==  2)  updateGroup(formData);
 //			}
 //		});
 		
 		$("#confirmDeviceBtn").click(function(){
 			var formData = $("#insertDeviceForm").serializeObject();
 			if(confirm("장치를 저장하시겠습니까?")) {
-				if(insUpdFlag ==  1) insertDevice(formData);
-				else if(insUpdFlag ==  2)  updateDevice(formData);
+				if(siteViewFlag ==  1) insertDevice(formData);
+				else if(siteViewFlag ==  2)  updateDevice(formData);
 			}
 		});
 		
 //		$("#cancelGrpBtn").click(function(){
 //			popupClose('dgroup_add');
-//			if(insUpdFlag == 2) {
+//			if(siteViewFlag == 2) {
 //				$('#mask').hide();
 //			}
 //			
-//			insUpdFlag = 0;
+//			siteViewFlag = 0;
 //			$('#groupForm').each(function() {
 //				this.reset();
 //			});
@@ -183,7 +216,7 @@
 //		});
 		
 		$("#cancelDeviceBtn").click(function(){
-			insUpdFlag = 0;
+			siteViewFlag = 0;
 			$('#insertDeviceForm').each(function() {
 				this.reset();
 			});
@@ -193,25 +226,25 @@
 		});
 	});
 
-	function callback_getSitePopupList(result) {
-		var grpSiteList = result.grpSiteList;
-		var allSiteList = result.allSiteList;
-		
-		$insideSite = $("#insideSite");
-		$insideSite.find("ul").empty();
-		if(grpSiteList == null || grpSiteList.length < 1) {
-//			$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
-		} else {
-			for(var i=0; i<grpSiteList.length; i++) {
-				$insideSite.find("ul").append(
-						$("<li />").append('<a href="javascript:changeSelSite(\''+grpSiteList[i].site_id+'\');">'+grpSiteList[i].site_name+'</a>')
-				);
-				
-			}
-			
-		}
-		
-	}
+//	function callback_getSitePopupList(result) {
+//		var grpSiteList = result.grpSiteList;
+//		var allSiteList = result.allSiteList;
+//		
+//		$insideSite = $("#insideSite");
+//		$insideSite.find("ul").empty();
+//		if(grpSiteList == null || grpSiteList.length < 1) {
+////			$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
+//		} else {
+//			for(var i=0; i<grpSiteList.length; i++) {
+//				$insideSite.find("ul").append(
+//						$("<li />").append('<a href="javascript:changeSelSite(\''+grpSiteList[i].site_id+'\');">'+grpSiteList[i].site_name+'</a>')
+//				);
+//				
+//			}
+//			
+//		}
+//		
+//	}
 
 	function changeSelSite(siteId) {
 		popupYn = "Y";
@@ -260,6 +293,10 @@
 			
 		}
 		
+	    $(".multi_select a,").click(function() {
+	        $(this).toggleClass("on");
+	        return false;
+	    });
 	}
 	
 	function callback_insertDevice(result) {
