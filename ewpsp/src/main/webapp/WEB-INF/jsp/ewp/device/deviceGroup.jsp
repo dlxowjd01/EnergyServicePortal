@@ -268,9 +268,9 @@
 				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">사이트 선택
 				    <span class="caret"></span></button>
 				    <ul class="dropdown-menu">
-				        <li class="on"><a href="#">롯데_PCS_01</a></li>
+				        <!-- <li class="on"><a href="#">롯데_PCS_01</a></li>
 				        <li><a href="#">롯데_PCS_02</a></li>
-				        <li><a href="#">롯데_PCS_03</a></li>
+				        <li><a href="#">롯데_PCS_03</a></li> -->
 				    </ul>
 				</div>
 				<h2 class="ntit fl">장치 그룹</h2>
@@ -278,12 +278,12 @@
 				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">장치그룹 선택
 				    <span class="caret"></span></button>
 				    <ul class="dropdown-menu">
-				        <li class="on"><a href="#">롯데_장치그룹_01</a></li>
+				        <!-- <li class="on"><a href="#">롯데_장치그룹_01</a></li>
 				        <li><a href="#">...</a></li>
-				        <li><a href="#">...</a></li>
+				        <li><a href="#">...</a></li> -->
 				    </ul>
 				</div>
-				<a href="javascript:popupOpen('dgdevice_edit');" class="default_btn fr"><i class="glyphicon glyphicon-edit"></i> 장치그룹편집</a>
+				<a href="#;" class="default_btn fr" id="editDvGrpFormBtn"><i class="glyphicon glyphicon-edit"></i> 장치그룹편집</a>
 				<input type="hidden" id="selSiteId" name="selSiteId">
 				<input type="hidden" id="selDvGrpIdx" name="selDvGrpIdx">
 			</div>
@@ -292,9 +292,9 @@
 					<h2 class="ntit">그룹에 포함된 장치</h2>
 					<div class="inbox">
 						<ul class="multi_select">
-							<li><a href="#;">롯데_PCS_01</a></li>
+							<!-- <li><a href="#;">롯데_PCS_01</a></li>
 							<li><a href="#;">롯데_PCS_02</a></li>
-							<li><a href="#;">롯데_PCS_03</a></li>
+							<li><a href="#;">롯데_PCS_03</a></li> -->
 						</ul>
 					</div>
 				</div>
@@ -306,7 +306,7 @@
 					<h2 class="ntit">사이트 내 장치</h2>
 					<div class="inbox">
 						<ul class="multi_select">
-							<li><a href="#;">롯데_PCS_01</a></li>
+							<!-- <li><a href="#;">롯데_PCS_01</a></li>
 							<li><a href="#;">롯데_PCS_02</a></li>
 							<li><a href="#;">롯데_PCS_03</a></li>
 							<li><a href="#;">롯데_PCS_04</a></li>
@@ -314,7 +314,7 @@
 							<li><a href="#;">롯데_PCS_06</a></li>
 							<li><a href="#;">롯데_PCS_07</a></li>
 							<li><a href="#;">롯데_PCS_08</a></li>
-							<li><a href="#;">롯데_PCS_09</a></li>
+							<li><a href="#;">롯데_PCS_09</a></li> -->
 						</ul>
 					</div>
 				</div>
@@ -337,13 +337,13 @@
 		<div class="lbody mt30">
 			<div class="clear">
 				<h2 class="ntit fl">사이트</h2>
-				<div class="dropdown fl ml20">
+				<div class="dropdown fl ml20" id="insideSite2">
 				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">롯데 정밀 화학
 				    <span class="caret"></span></button>
 				    <ul class="dropdown-menu">
-				        <li class="on"><a href="#">롯데 정밀 화학</a></li>
+				        <!-- <li class="on"><a href="#">롯데 정밀 화학</a></li>
 				        <li><a href="#">...</a></li>
-				        <li><a href="#">...</a></li>
+				        <li><a href="#">...</a></li> -->
 				    </ul>
 				</div>
 			</div>
