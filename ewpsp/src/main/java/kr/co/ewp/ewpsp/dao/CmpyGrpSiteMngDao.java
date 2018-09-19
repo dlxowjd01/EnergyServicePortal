@@ -18,6 +18,10 @@ public class CmpyGrpSiteMngDao {
 		List resultList = sqlSession.selectList("cmpyGrpSiteMng.getCmpyList", param);
 		return resultList;
 	}
+
+	public int getCmpyListCnt(HashMap param) {
+		return sqlSession.selectOne("cmpyGrpSiteMng.getCmpyListCnt", param);
+	}
 	
 	public List getGroupList(HashMap param) {
 		List resultList = sqlSession.selectList("cmpyGrpSiteMng.getGroupList", param);
@@ -52,6 +56,11 @@ public class CmpyGrpSiteMngDao {
 		return resultList;
 	}
 
+	public Map getCmpyDetail(HashMap param) {
+		Map result = sqlSession.selectOne("cmpyGrpSiteMng.getCmpyDetail", param);
+		return result;
+	}
+	
 	public Map getGroupDetail(HashMap param) {
 		Map result = sqlSession.selectOne("cmpyGrpSiteMng.getGroupDetail", param);
 		return result;
@@ -62,6 +71,10 @@ public class CmpyGrpSiteMngDao {
 		return result;
 	}
 	
+	public int insertCmpy(HashMap param) {
+		return sqlSession.update("cmpyGrpSiteMng.insertCmpy", param);
+	}
+	
 	public int insertGroup(HashMap param) {
 		return sqlSession.update("cmpyGrpSiteMng.insertGroup", param);
 	}
@@ -70,12 +83,20 @@ public class CmpyGrpSiteMngDao {
 		return sqlSession.update("cmpyGrpSiteMng.insertSite", param);
 	}
 	
+	public int updateCmpy(HashMap param) {
+		return sqlSession.update("cmpyGrpSiteMng.updateCmpy", param);
+	}
+	
 	public int updateGroup(HashMap param) {
 		return sqlSession.update("cmpyGrpSiteMng.updateGroup", param);
 	}
 	
 	public int updateSite(HashMap param) {
 		return sqlSession.update("cmpyGrpSiteMng.updateSite", param);
+	}
+	
+	public int deleteCmpy(HashMap param) {
+		return sqlSession.update("cmpyGrpSiteMng.deleteCmpy", param);
 	}
 	
 	public int deleteGroup(HashMap param) {

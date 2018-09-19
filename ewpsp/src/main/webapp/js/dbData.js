@@ -524,12 +524,14 @@ function updateSiteSet(formData) {
 }
 
 // 회사 목록 조회
-function getCmpyList() {
+function getCmpyList(selPageNum) {
 	$.ajax({
 		url : "/getCmpyList",
 		type : 'post',
 		async : false, // 동기로 처리해줌
-//		data : formData,
+		data : {
+			selPageNum : selPageNum
+		},
 		success: function(result) {
 			callback_getCmpyList(result);
 		}
@@ -596,6 +598,21 @@ function getSitePopupList(siteGrpIdx) {
 	});
 }
 
+//회사 한건 조회
+function getCmpyDetail(siteGrpIdx) {
+	$.ajax({
+		url : "/getCmpyDetail",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : {
+			siteGrpIdx : siteGrpIdx
+		},
+		success: function(result) {
+			callback_getCmpyDetail(result);
+		}
+	});
+}
+
 //그룹 한건 조회
 function getGroupDetail(siteGrpIdx) {
 	$.ajax({
@@ -622,6 +639,22 @@ function getSiteDetail(siteId) {
 		},
 		success: function(result) {
 			callback_getSiteDetail(result);
+		}
+	});
+}
+
+// 회사 등록
+function insertCmpy(formData) {
+	$.ajax({
+		url : "/insertCmpy",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_insertCmpy(result);
+		},
+		error:function(request,status,error){
+			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
 		}
 	});
 }
@@ -658,6 +691,22 @@ function insertSite(formData) {
 	});
 }
 
+// 회사 수정
+function updateCmpy(formData) {
+	$.ajax({
+		url : "/updateCmpy",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_updateCmpy(result);
+		},
+		error:function(request,status,error){
+			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+		}
+	});
+}
+
 // 그룹 수정
 function updateGroup(formData) {
 	$.ajax({
@@ -683,6 +732,24 @@ function updateSite(formData) {
 		data : formData,
 		success: function(result) {
 			callback_updateSite(result);
+		},
+		error:function(request,status,error){
+			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+		}
+	});
+}
+
+// 회사 삭제
+function deleteCmpy(siteGrpIdx) {
+	$.ajax({
+		url : "/deleteCmpy",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : {
+			siteGrpIdx : siteGrpIdx
+		},
+		success: function(result) {
+			callback_deleteCmpy(result);
 		},
 		error:function(request,status,error){
 			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");

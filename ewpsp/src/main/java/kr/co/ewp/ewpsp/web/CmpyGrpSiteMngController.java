@@ -48,11 +48,34 @@ public class CmpyGrpSiteMngController {
 	public @ResponseBody Map<String, Object> getCmpyList(@RequestParam HashMap param) throws Exception {
 		logger.debug("/getCmpyList");
 		logger.debug("param ::::: "+param.toString());
+
+		int selPageNum = Integer.parseInt((String) param.get("selPageNum"));
+		int pageRowCnt = 5;
+		int startNum = pageRowCnt*(selPageNum-1);
+		
+		param.put("siteId", "17094385");
+		param.put("startNum", startNum);
+		param.put("pageRowCnt", pageRowCnt);
 		
 		List list = cmpyGrpSiteMngService.getCmpyList(param);
+		int listCnt = cmpyGrpSiteMngService.getCmpyListCnt(param);
+		int totalPageCnt = 0;
+		if(listCnt > 0) {
+			totalPageCnt = listCnt / pageRowCnt;
+			if(listCnt % pageRowCnt > 0) {
+				totalPageCnt++;
+			}
+		}
+		
+		Map<String, Object> pagingMap = new HashMap<String, Object>();
+		pagingMap.put("pageRowCnt", pageRowCnt); // 한 페이지 당 보여줄 데이터 수
+		pagingMap.put("selPageNum", selPageNum); // 선택한 페이지번호
+		pagingMap.put("listCnt", listCnt); // 전체 데이터 수
+		pagingMap.put("totalPageCnt", totalPageCnt); // 전체 페이지 수
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("list", list);
+		resultMap.put("pagingMap", pagingMap);
 		return resultMap;
 	}
 	
@@ -180,6 +203,25 @@ public class CmpyGrpSiteMngController {
 	}
 
 	/**
+	 * 회사 한건 조회
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getCmpyDetail")
+	public @ResponseBody Map<String, Object> getCmpyDetail(@RequestParam HashMap param) throws Exception {
+		logger.debug("/getCmpyDetail");
+		logger.debug("param ::::: "+param.toString());
+		
+		Map result = cmpyGrpSiteMngService.getCmpyDetail(param);
+		logger.debug("result.toString() : "+result.toString());
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("detail", result);
+		return resultMap;
+	}
+	
+	/**
 	 * 그룹 한건 조회
 	 * @param param
 	 * @return
@@ -218,6 +260,24 @@ public class CmpyGrpSiteMngController {
 	}
 	
 	/**
+	 * 회사 등록
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/insertCmpy")
+	public @ResponseBody Map<String, Object> insertCmpy(@RequestParam HashMap param) throws Exception {
+		logger.debug("/insertCmpy");
+		logger.debug("param ::::: "+param.toString());
+		
+		int resultCnt = cmpyGrpSiteMngService.insertCmpy(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("resultCnt", resultCnt);
+		return resultMap;
+	}
+	
+	/**
 	 * 그룹 등록
 	 * @param param
 	 * @return
@@ -247,6 +307,24 @@ public class CmpyGrpSiteMngController {
 		logger.debug("param ::::: "+param.toString());
 		
 		int resultCnt = cmpyGrpSiteMngService.insertSite(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("resultCnt", resultCnt);
+		return resultMap;
+	}
+	
+	/**
+	 * 회사 수정
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/updateCmpy")
+	public @ResponseBody Map<String, Object> updateCmpy(@RequestParam HashMap param) throws Exception {
+		logger.debug("/updateCmpy");
+		logger.debug("param ::::: "+param.toString());
+		
+		int resultCnt = cmpyGrpSiteMngService.updateCmpy(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("resultCnt", resultCnt);
@@ -301,6 +379,24 @@ public class CmpyGrpSiteMngController {
 		logger.debug("param ::::: "+param.toString());
 		
 		int resultCnt = cmpyGrpSiteMngService.deleteGroup(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("resultCnt", resultCnt);
+		return resultMap;
+	}
+	
+	/**
+	 * 회사 삭제
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/deleteCmpy")
+	public @ResponseBody Map<String, Object> deleteCmpy(@RequestParam HashMap param) throws Exception {
+		logger.debug("/deleteCmpy");
+		logger.debug("param ::::: "+param.toString());
+		
+		int resultCnt = cmpyGrpSiteMngService.deleteCmpy(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("resultCnt", resultCnt);

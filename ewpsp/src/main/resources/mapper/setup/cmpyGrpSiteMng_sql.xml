@@ -4,14 +4,39 @@
 <mapper namespace="cmpyGrpSiteMng">
 	<select id="getCmpyList" parameterType="hashMap" resultType="hashMap">
 		/* 회사 목록 조회 */
+		select * from (
+			select 
+				@rownum := @rownum + 1 as rnum,
+				page_tb.*
+			from (
+				select 
+					site_id as co_idx, user_idx as co_id, site_name as co_name, 
+					del_yn, reg_uid, reg_date, mod_uid, mod_date 
+				from tb_site
+			) page_tb
+			,  ( select @rownum := 0 ) r
+		) f_tb
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)"> 
+		limit #{startNum }, #{pageRowCnt }
+		</if>
+	</select>
+	
+	<select id="getCmpyListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+		/* 회사 목록 건수 조회 */
 		select 
-			user_idx, user_id, user_pw, user_type, main_user_idx, main_user_yn, auth_type, lang_type, 
-			co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, 
-			del_yn, reg_uid, reg_date, mod_uid, mod_date 
-		from tb_user
-		where del_yn = 'N'
-		and user_type = '2'
-		<!-- 페이징처리 필요 -->
+			count(*) as listCnt 
+		from (
+			select 
+				@rownum := @rownum + 1 as rnum,
+				page_tb.*
+			from (
+					select 
+						site_id as co_idx, user_idx as co_id, site_name as co_name, 
+						del_yn, reg_uid, reg_date, mod_uid, mod_date 
+					from tb_site
+			) page_tb
+			,  ( select @rownum := 0 ) r
+		) f_tb
 	</select>
 	
 	<select id="getGroupList" parameterType="hashMap" resultType="hashMap">
@@ -130,6 +155,15 @@
 		order by reg_date
 	</select>
 	
+	<select id="getCmpyDetail" parameterType="hashMap" resultType="hashMap">
+		/* 회사 한건 조회 */
+		select 
+			co_idx, co_id, site_grp_id, co_name, del_yn, reg_uid, reg_date, mod_uid, mod_date 
+		from tb_company
+		where del_yn = 'N'
+		and co_idx = #{coIdx }
+	</select>
+	
 	<select id="getGroupDetail" parameterType="hashMap" resultType="hashMap">
 		/* 그룹 한건 조회 */
 		select 
@@ -137,7 +171,6 @@
 		from tb_site_group
 		where del_yn = 'N'
 		and site_grp_idx = #{siteGrpIdx }
-		<!-- 페이징처리 필요 -->
 	</select>
 	
 	<select id="getSiteDetail" parameterType="hashMap" resultType="hashMap">
@@ -148,8 +181,27 @@
 		from tb_site
 		where del_yn = 'N'
 		and site_id = #{siteId }
-		<!-- 페이징처리 필요 -->
 	</select>
+	
+	<insert id="insertCmpy" parameterType="hashMap">
+		/* 회사 등록 */
+		insert into tb_company (
+			co_idx,   /* 회사식별자 */
+			co_name,   /* 회사명 */
+			co_id,   /* 회사ID */
+			del_yn, 
+			reg_uid, 
+			reg_date
+		)
+		values (
+			<!-- #{co_idx }, --> 
+			#{coName }, 
+			#{coId }, 
+			'N', 
+			#{regUid }, 
+			now()
+		)
+	</insert>
 	
 	<insert id="insertGroup" parameterType="hashMap">
 		/* 그룹 등록 */
@@ -203,6 +255,22 @@
 		)
 	</insert>
 	
+	<update id="updateCmpy" parameterType="hashMap">
+		/* 회사 정보 수정 */
+		update tb_company
+		set 
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpId)"> 
+		    co_name = #{coName },   /* 회사명 */
+		    </if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpName)"> 
+		    co_id = #{coId },   /* 회사ID */
+		    </if>
+		    mod_uid       = #{modUid }, 
+		    mod_date      = now()
+		where 1=1
+		and co_idx = #{coIdx }
+	</update>
+	
 	<update id="updateGroup" parameterType="hashMap">
 		/* 그룹 정보 수정 */
 		update tb_site_group
@@ -246,6 +314,17 @@
 			mod_date       =now() 
 		where 1=1
 		and site_id = #{siteId }
+	</update>
+	
+	<update id="deleteCmpy" parameterType="hashMap">
+		/* 회사 삭제 */
+		update tb_company
+		set 
+		    del_yn        = 'Y', 
+		    mod_uid       = #{modUid }, 
+		    mod_date      = now()
+		where 1=1
+		and co_idx = #{coIdx }
 	</update>
 	
 	<update id="deleteGroup" parameterType="hashMap">

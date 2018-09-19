@@ -7,6 +7,8 @@ import java.util.Map;
 public interface CmpyGrpSiteMngService {
 	
 	List getCmpyList(HashMap param) throws Exception;
+
+	int getCmpyListCnt(HashMap param) throws Exception;
 	
 	List getGroupList(HashMap param) throws Exception;
 
@@ -22,17 +24,25 @@ public interface CmpyGrpSiteMngService {
 	
 	List getAllSiteList(HashMap param) throws Exception;
 
+	Map getCmpyDetail(HashMap param) throws Exception;
+	
 	Map getGroupDetail(HashMap param) throws Exception;
 
 	Map getSiteDetail(HashMap param) throws Exception;
+	
+	int insertCmpy(HashMap param) throws Exception;
 	
 	int insertGroup(HashMap param) throws Exception;
 	
 	int insertSite(HashMap param) throws Exception;
 	
+	int updateCmpy(HashMap param) throws Exception;
+	
 	int updateGroup(HashMap param) throws Exception;
 	
 	int updateSite(HashMap param) throws Exception;
+	
+	int deleteCmpy(HashMap param) throws Exception;
 	
 	int deleteGroup(HashMap param) throws Exception;
 	

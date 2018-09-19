@@ -28,7 +28,7 @@
 								<div class="set_top clear">
 									<h2 class="ntit fl">회사 현황</h2>
 									<ul class="fr">
-										<li><a href="javascript:popupOpen('dcompany');" class="default_btn"><i class="glyphicon glyphicon-plus"></i> 회사 등록</a></li>
+										<li><a href="#;" class="default_btn" id="insertCmpyFormBtn"><i class="glyphicon glyphicon-plus"></i> 회사 등록</a></li>
 									</ul>								
 								</div>
 								<div class="s_table">
@@ -78,7 +78,7 @@
 										</tbody>
 									</table>
 								</div>	
-								<div class="paging clear">
+								<div class="paging clear" id="CmpyPaging">
 									<a href="#;" class="prev">PREV</a>
 									<span><strong>1</strong> / 3</span>
 									<a href="#;" class="next">NEXT</a>
@@ -231,6 +231,7 @@
 		<div class="lbody mt30">
 
 			<div class="set_tbl clear">
+				<form id="cmpyForm" name="cmpyForm">
 				<table>
 					<colgroup>
 						<col width="100">
@@ -239,20 +240,21 @@
 					<tbody>
 						<tr>
 							<th><span>회사명</span></th>
-							<td><input type="text" class="input" style="width:100%"></td>
+							<td><input type="text" name="coName" id="coName" class="input" style="width:100%"></td>
 						</tr>
 						<tr>
 							<th><span>회사ID</span></th>
-							<td><input type="text" class="input" style="width:100%"></td>
+							<td><input type="text" name="coId" id="coId" class="input" style="width:100%"></td>
 						</tr>
 					</tbody>			
 				</table>
+				</form>
 			</div>
 
 		</div>
 		<div class="btn_center">
-			<a href="#;" class="default_btn w80">확인</a>
-			<a href="#;" class="cancel_btn w80">취소</a>
+			<a href="#;" class="default_btn w80" id="confirmCmpyBtn">확인</a>
+			<a href="#;" class="cancel_btn w80" id="cancelCmpyBtn">취소</a>
 		</div>
     </div>
     <!-- ###### Popup End ###### -->

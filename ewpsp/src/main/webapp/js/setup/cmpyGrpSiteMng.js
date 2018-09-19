@@ -3,37 +3,40 @@
 	});
 	
 	function getDBData() {
-//		getCmpyList(siteId); // 회사 목록 조회
+		getCmpyList(1); // 회사 목록 조회
 		getGroupList(1); // 그룹 목록 조회
 		getSiteList(1); // 사이트 목록 조회
 	}
 	
 	// 회사 목록 조회
-	function callback_getDeviceIOEList(result) {
-//		var ioeList = result.list;
-//		
-//		var strHtml = "";
-//		$tbody = $("#cmpyTbody");
-//		$$tbody.empty();
-//		if(ioeList == null || ioeList.length < 1) {
-//			strHtml += '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>';
-//			$$tbody.append( strHtml );
-//		} else {
-//			for(var i=0; i<ioeList.length; i++) {
-//				var device_stat = (ioeList[i].device_stat == 1) ? "connect" : "disconnect";
-//				$$tbody.append(
-//						$('<tr />').append( $("<td />").append( (i+1) )
-//						).append( $("<td />").append( ioeList[i].site_id )
-//						).append( $("<td />").append( ioeList[i].device_name )
-//						).append( $("<td />").append( ioeList[i].device_id )
-//						).append( $("<td />").append( device_stat )
-//						).append( $("<td />").append( ioeList[i].upload_timestamp )
-//						).append( $("<td />").append( '<a href="#;" onclick="getDeviceIOEDetail(\''+ioeList[i].device_ioe_idx+'\');" class="detail_view">상세보기</a>' )
-//						)
-//				);
-//			}
-//			
-//		}
+	function callback_getCmpyList(result) {
+		var cmpyList = result.list;
+		
+		var strHtml = "";
+		$tbody = $("#cmpyTbody");
+		$tbody.empty();
+		if(cmpyList == null || cmpyList.length < 1) {
+			$tbody.append( '<tr><td colspan="5">조회된 데이터가 없습니다.</td><tr>' );
+		} else {
+			for(var i=0; i<cmpyList.length; i++) {
+				var device_stat = (cmpyList[i].device_stat == 1) ? "connect" : "disconnect";
+				$tbody.append(
+						$('<tr />').append( $("<td />").append( cmpyList[i].rnum ) // no
+						).append( $("<td />").append( cmpyList[i].co_name ) // 회사명
+						).append( $("<td />").append( cmpyList[i].co_id ) // 회사id
+						).append( // 관리
+								$("<td />").append(
+										'<a href="#" onclick="updateCmpyForm(\''+cmpyList[i].co_idx+'\');" class="default_btn">수정</a>'+
+										'<a href="#" onclick="deleteCmpyYn(\''+cmpyList[i].co_idx+'\');" class="cancel_btn">삭제</a>'
+								)
+						)
+				);
+			}
+			
+			var pagingMap = result.pagingMap;
+			makePageNums2(pagingMap, "Cmpy");
+			
+		}
 		
 	}
 	
@@ -113,6 +116,11 @@
 			popupOpen('dgroup');
 		});
 		
+		$("#insertCmpyFormBtn").click(function(){
+			insUpdFlag = 1;
+			popupOpen('dcompany');
+		});
+		
 		$("#insertGrpFormBtn").click(function(){
 			insUpdFlag = 1;
 			popupOpen('dgroup_add');
@@ -121,6 +129,14 @@
 		$("#insertSiteFormBtn").click(function(){
 			insUpdFlag = 1;
 			popupOpen('dsite');
+		});
+		
+		$("#confirmCmpyBtn").click(function(){
+			var formData = $("#cmpyForm").serializeObject();
+			if(confirm("그룹을 저장하시겠습니까?")) {
+				if(insUpdFlag ==  1) insertCmpy(formData);
+				else if(insUpdFlag ==  2)  updateCmpy(formData);
+			}
 		});
 		
 		$("#confirmGrpBtn").click(function(){
@@ -138,6 +154,15 @@
 				else if(insUpdFlag ==  2)  updateSite(formData);
 			}
 		});
+
+		$("#cancelCmpyBtn").click(function(){
+			insUpdFlag = 0;
+			$('#cmpyForm').each(function() {
+				this.reset();
+			});
+			
+			popupClose('dcompany');
+		});
 		
 		$("#cancelGrpBtn").click(function(){
 			popupClose('dgroup_add');
@@ -149,9 +174,8 @@
 			$('#groupForm').each(function() {
 				this.reset();
 			});
-			$("#userIdx").val( "1" );
 			
-//			popupClose('dgroup_add');
+			$("#userIdx").val( "1" );
 		});
 		
 		$("#cancelSiteBtn").click(function(){
@@ -164,6 +188,63 @@
 			popupClose('dsite');
 		});
 	});
+
+	function callback_insertCmpy(result) {
+		var resultCnt = result.resultCnt;
+		if(resultCnt > 0) {
+			alert("저장되었습니다.");
+			location.reload();
+		} else {
+			alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
+		}
+	}
+
+	function updateCmpyForm(siteId) {
+		insUpdFlag = 2;
+		getCmpyDetail(siteId);
+	}
+
+	// 사이트 한건 조회
+	function callback_getCmpyDetail(result) {
+		var cmpyDetail = result.detail;
+		
+		if(siteDetail == null) {
+			alert("조회된 데이터가 없습니다.");
+//			location.href = "/siteMain";
+		} else {
+			$("#coName").val( siteDetail.user_idx );
+			$("#coId").val( siteDetail.site_name );
+			
+			popupOpen('dcompany');
+		}
+		
+	}
+
+	function callback_updateCmpy(result) {
+		var resultCnt = result.resultCnt;
+		if(resultCnt > 0) {
+			alert("저장되었습니다.");
+			location.reload();
+		} else {
+			alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
+		}
+	}
+	
+	function deleteCmpyYn(siteId) {
+		if(confirm("삭제하시겠습니까?")) {
+			deleteCmpy(siteId);
+		}
+	}
+
+	function callback_deleteCmpy(result) {
+		var resultCnt = result.resultCnt;
+		if(resultCnt > 0) {
+			alert("삭제되었습니다.");
+			location.reload();
+		} else {
+			alert("삭제에 실패하였습니다. \n 관리자에게 문의하세요.");
+		}
+	}
 	
 	function callback_getGroupPopupList(result) {
 		var groupList = result.list;
@@ -235,9 +316,7 @@
 	}
 	
 	function updateGroupForm(siteGrpIdx) {
-		// 2018.09.05 설정 중 그룹 한건 조회하는것(수정확인때문에)까지 하다가 다른일 함..
 		insUpdFlag = 2;
-//		alert("야");
 		getGroupDetail(siteGrpIdx);
 	}
 

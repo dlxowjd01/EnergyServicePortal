@@ -20,6 +20,10 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 	public List getCmpyList(HashMap param) throws Exception {
 		return cmpyGrpSiteMngDao.getCmpyList(param);
 	}
+
+	public int getCmpyListCnt(HashMap param) throws Exception {
+		return cmpyGrpSiteMngDao.getCmpyListCnt(param);
+	}
 	
 	public List getGroupList(HashMap param) throws Exception {
 		return cmpyGrpSiteMngDao.getGroupList(param);
@@ -49,12 +53,21 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 		return cmpyGrpSiteMngDao.getAllSiteList(param);
 	}
 
+	public Map getCmpyDetail(HashMap param) throws Exception {
+		return cmpyGrpSiteMngDao.getCmpyDetail(param);
+	}
+	
 	public Map getGroupDetail(HashMap param) throws Exception {
 		return cmpyGrpSiteMngDao.getGroupDetail(param);
 	}
 
 	public Map getSiteDetail(HashMap param) throws Exception {
 		return cmpyGrpSiteMngDao.getSiteDetail(param);
+	}
+	
+	@Transactional
+	public int insertCmpy(HashMap param) throws Exception {
+		return cmpyGrpSiteMngDao.insertCmpy(param);
 	}
 	
 	@Transactional
@@ -68,6 +81,11 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 	}
 	
 	@Transactional
+	public int updateCmpy(HashMap param) throws Exception {
+		return cmpyGrpSiteMngDao.updateCmpy(param);
+	}
+	
+	@Transactional
 	public int updateGroup(HashMap param) throws Exception {
 		return cmpyGrpSiteMngDao.updateGroup(param);
 	}
@@ -77,6 +95,12 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 		return cmpyGrpSiteMngDao.updateSite(param);
 	}
 	
+	@Transactional
+	public int deleteCmpy(HashMap param) throws Exception {
+		return cmpyGrpSiteMngDao.deleteCmpy(param);
+	}
+	
+	@Transactional
 	public int deleteGroup(HashMap param) throws Exception {
 		return cmpyGrpSiteMngDao.deleteGroup(param);
 	}
