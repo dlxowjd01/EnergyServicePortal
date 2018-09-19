@@ -9,10 +9,11 @@
 				@rownum := @rownum + 1 as rnum,
 				page_tb.*
 			from (
-				select 
-					site_id as co_idx, user_idx as co_id, site_name as co_name, 
-					del_yn, reg_uid, reg_date, mod_uid, mod_date 
-				from tb_site
+					select 
+						<!-- site_id as co_idx, user_idx as co_id, site_name as co_name, 
+						del_yn, reg_uid, reg_date, mod_uid, mod_date  -->
+						co_idx, co_id, site_grp_id, co_name, del_yn, reg_uid, reg_date, mod_uid, mod_date 
+					from tb_company<!-- tb_site -->
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
@@ -31,9 +32,10 @@
 				page_tb.*
 			from (
 					select 
-						site_id as co_idx, user_idx as co_id, site_name as co_name, 
-						del_yn, reg_uid, reg_date, mod_uid, mod_date 
-					from tb_site
+						<!-- site_id as co_idx, user_idx as co_id, site_name as co_name, 
+						del_yn, reg_uid, reg_date, mod_uid, mod_date  -->
+						co_idx, co_id, site_grp_id, co_name, del_yn, reg_uid, reg_date, mod_uid, mod_date 
+					from tb_company<!-- tb_site -->
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
@@ -86,11 +88,14 @@
 				page_tb.*
 			from (
 					select 
-						site_id, user_idx, site_name, site_grp_idx, area_type, `time_zone`, 
-						local_ems_addr, local_ems_key, del_yn, reg_uid, reg_date, mod_uid, mod_date 
-					from tb_site
-					where del_yn = 'N'
-					order by reg_date
+						a.site_id, a.user_idx, a.site_name, a.site_grp_idx, a.area_type, a.`time_zone`, 
+						a.local_ems_addr, a.local_ems_key, a.del_yn, a.reg_uid, a.reg_date, a.mod_uid, a.mod_date 
+						, b.site_grp_name
+					from tb_site a, tb_site_group b
+					where 1=1
+					and a.site_grp_idx = b.site_grp_idx
+					and a.del_yn = 'N'
+					order by a.reg_date
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
@@ -109,11 +114,14 @@
 				page_tb.*
 			from (
 					select 
-						site_id, user_idx, site_name, site_grp_idx, area_type, `time_zone`, 
-						local_ems_addr, local_ems_key, del_yn, reg_uid, reg_date, mod_uid, mod_date 
-					from tb_site
-					where del_yn = 'N'
-					order by reg_date
+						a.site_id, a.user_idx, a.site_name, a.site_grp_idx, a.area_type, a.`time_zone`, 
+						a.local_ems_addr, a.local_ems_key, a.del_yn, a.reg_uid, a.reg_date, a.mod_uid, a.mod_date 
+						, b.site_grp_name
+					from tb_site a, tb_site_group b
+					where 1=1
+					and a.site_grp_idx = b.site_grp_idx
+					and a.del_yn = 'N'
+					order by a.reg_date
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb

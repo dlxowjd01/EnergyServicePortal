@@ -162,6 +162,25 @@ public class CmpyGrpSiteMngController {
 	}
 
 	/**
+	 * 회사 목록(팝업) 조회
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getCmpyPopupList")
+	public @ResponseBody Map<String, Object> getCmpyPopupList(@RequestParam HashMap param) throws Exception {
+		logger.debug("/getCmpyPopupList");
+		logger.debug("param ::::: "+param.toString());
+		
+//		List list = cmpyGrpSiteMngService.getGroupPopupList(param);
+		List list = cmpyGrpSiteMngService.getCmpyList(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("list", list);
+		return resultMap;
+	}
+	
+	/**
 	 * 그룹 목록(팝업) 조회
 	 * @param param
 	 * @return

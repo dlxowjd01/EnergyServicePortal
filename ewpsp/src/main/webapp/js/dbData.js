@@ -568,6 +568,21 @@ function getSiteList(selPageNum) {
 	});
 }
 
+//회사 목록(팝업) 조회
+function getCmpyPopupList() {
+	$.ajax({
+		url : "/getCmpyPopupList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+//		data : {
+//			selPageNum : selPageNum
+//		},
+		success: function(result) {
+			callback_getCmpyPopupList(result);
+		}
+	});
+}
+
 //그룹 목록(팝업) 조회
 function getGroupPopupList() {
 	$.ajax({

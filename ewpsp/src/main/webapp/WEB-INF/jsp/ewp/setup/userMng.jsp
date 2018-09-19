@@ -119,7 +119,7 @@
 						<tr>
 							<th><span>회사</span></th>
 							<td>
-								<select name="" id="" class="sel" style="width:100%">
+								<select name="coIdx" id="coIdx" class="sel" style="width:100%">
 									
 								</select>
 							</td>
@@ -127,7 +127,7 @@
 						<tr>
 							<th><span>그룹</span></th>
 							<td>
-								<select name="" id="" class="sel" style="width:100%">
+								<select name="siteGrpIdx" id="siteGrpIdx" class="sel" style="width:100%">
 									
 								</select>
 							</td>

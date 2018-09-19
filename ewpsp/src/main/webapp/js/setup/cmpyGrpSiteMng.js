@@ -3,7 +3,7 @@
 	});
 	
 	function getDBData() {
-		getCmpyList(1); // 회사 목록 조회
+//		getCmpyList(1); // 회사 목록 조회(회사table 생성 시 주석 해제)
 		getGroupList(1); // 그룹 목록 조회
 		getSiteList(1); // 사이트 목록 조회
 	}
@@ -26,8 +26,8 @@
 						).append( $("<td />").append( cmpyList[i].co_id ) // 회사id
 						).append( // 관리
 								$("<td />").append(
-										'<a href="#" onclick="updateCmpyForm(\''+cmpyList[i].co_idx+'\');" class="default_btn">수정</a>'+
-										'<a href="#" onclick="deleteCmpyYn(\''+cmpyList[i].co_idx+'\');" class="cancel_btn">삭제</a>'
+										'<a href="#;" onclick="updateCmpyForm(\''+cmpyList[i].co_idx+'\');" class="default_btn">수정</a>'+
+										'<a href="#;" onclick="deleteCmpyYn(\''+cmpyList[i].co_idx+'\');" class="cancel_btn">삭제</a>'
 								)
 						)
 				);
@@ -58,8 +58,8 @@
 						).append( $("<td />").append( grpList[i].cmpy_nm ) // 고객사
 						).append( // 관리
 								$("<td />").append(
-										'<a href="#" onclick="updateGroupForm(\''+grpList[i].site_grp_idx+'\');" class="default_btn">수정</a>'+
-										'<a href="#" onclick="deleteGroupYn(\''+grpList[i].site_grp_idx+'\');" class="cancel_btn">삭제</a>'
+										'<a href="#;" onclick="updateGroupForm(\''+grpList[i].site_grp_idx+'\');" class="default_btn">수정</a>'+
+										'<a href="#;" onclick="deleteGroupYn(\''+grpList[i].site_grp_idx+'\');" class="cancel_btn">삭제</a>'
 								)
 						)
 				);
@@ -94,8 +94,8 @@
 						).append( $("<td />").append( siteList[i].device_list ) // 등록장치
 						).append( // 관리
 								$("<td />").append(
-										'<a href="#" onclick="updateSiteForm(\''+siteList[i].site_id+'\');" class="default_btn">수정</a>'+
-										'<a href="#" onclick="deleteSiteYn(\''+siteList[i].site_id+'\');" class="cancel_btn">삭제</a>'
+										'<a href="#;" onclick="updateSiteForm(\''+siteList[i].site_id+'\');" class="default_btn">수정</a>'+
+										'<a href="#;" onclick="deleteSiteYn(\''+siteList[i].site_id+'\');" class="cancel_btn">삭제</a>'
 								)
 						)
 				);
@@ -128,6 +128,31 @@
 		
 		$("#insertSiteFormBtn").click(function(){
 			insUpdFlag = 1;
+			
+			$('#siteForm').each(function() {
+				this.reset();
+			});
+			$("#userIdx").val( "1" );
+			
+			$.ajax({
+				url : "/getGroupPopupList",
+				type : 'post',
+				async : false, // 동기로 처리해줌
+				data : {
+					selPageNum : ""
+				},
+				success: function(result) {
+					var list = result.list;
+					
+					$siteIdSelBox = $("#siteForm").find("#siteGrpIdx");
+					$siteIdSelBox.empty();
+					for(var i=0; i<list.length; i++) {
+						$siteIdSelBox.append('<option value="'+list[i].site_grp_idx+'">'+list[i].site_grp_name+'</option>');
+						
+					}
+				}
+			});
+			
 			popupOpen('dsite');
 		});
 		
@@ -204,7 +229,7 @@
 		getCmpyDetail(siteId);
 	}
 
-	// 사이트 한건 조회
+	// 회사 한건 조회
 	function callback_getCmpyDetail(result) {
 		var cmpyDetail = result.detail;
 		
@@ -328,10 +353,10 @@
 			alert("조회된 데이터가 없습니다.");
 //			location.href = "/siteMain";
 		} else {
-			$("#siteGrpIdx").val( groupDetail.site_grp_idx );
-			$("#userIdx").val( groupDetail.user_idx );
-			$("#siteGrpName").val( groupDetail.site_grp_name );
-			$("#siteGrpId").val( groupDetail.site_grp_id );
+			$("#groupForm").find("#siteGrpIdx").val( groupDetail.site_grp_idx );
+			$("#groupForm").find("#userIdx").val( groupDetail.user_idx );
+			$("#groupForm").find("#siteGrpName").val( groupDetail.site_grp_name );
+			$("#groupForm").find("#siteGrpId").val( groupDetail.site_grp_id );
 			
 			popupOpen('dgroup_add');
 //			$('#mask').hide();
@@ -395,12 +420,31 @@
 			alert("조회된 데이터가 없습니다.");
 //			location.href = "/siteMain";
 		} else {
-			$("#userIdx").val( siteDetail.user_idx );
-			$("#siteName").val( siteDetail.site_name );
-			$("#siteId").val( siteDetail.site_id );
-			$("#siteGrpIdx").val( siteDetail.site_grp_idx );
-			$("#localEmsAddr").val( siteDetail.local_ems_addr );
-			$("#localEmsKey").val( siteDetail.local_ems_key );
+			$("#siteForm").find("#userIdx").val( siteDetail.user_idx );
+			$("#siteForm").find("#siteName").val( siteDetail.site_name );
+			$("#siteForm").find("#siteId").val( siteDetail.site_id );
+			$("#siteForm").find("#localEmsAddr").val( siteDetail.local_ems_addr );
+			$("#siteForm").find("#localEmsKey").val( siteDetail.local_ems_key );
+			
+			$.ajax({
+				url : "/getGroupPopupList",
+				type : 'post',
+				async : false, // 동기로 처리해줌
+				data : {
+					selPageNum : ""
+				},
+				success: function(result) {
+					var list = result.list;
+					
+					$siteIdSelBox = $("#siteForm").find("#siteGrpIdx");
+					$siteIdSelBox.empty();
+					for(var i=0; i<list.length; i++) {
+						$siteIdSelBox.append('<option value="'+list[i].site_grp_idx+'">'+list[i].site_grp_name+'</option>');
+						
+					}
+				}
+			});
+			$("#siteForm").find("#siteGrpIdx").val( siteDetail.site_grp_idx );
 			
 			popupOpen('dsite');
 		}

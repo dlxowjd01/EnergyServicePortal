@@ -45,6 +45,33 @@
 	$( function () {
 		$("#insertFormBtn").click(function(){
 			insUpdFlag = 1;
+			
+			$('form').each(function() {
+				this.reset();
+			});
+			$("#mainUserYn").val( "N" );
+			$("#mainUserIdx").val( "1" );
+
+//			// 회사목록(회사table 생성 시 주석 해제)
+//			$.ajax({
+//				url : "/getCmpyPopupList",
+//				type : 'post',
+//				async : false, // 동기로 처리해줌
+//				data : {
+//					selPageNum : ""
+//				},
+//				success: function(result) {
+//					var list = result.list;
+//					
+//					$siteIdSelBox = $("#userForm").find("#coIdx");
+//					$siteIdSelBox.empty();
+//					for(var i=0; i<list.length; i++) {
+//						$siteIdSelBox.append('<option value="'+list[i].co_idx+'">'+list[i].co_name+'</option>');
+//						
+//					}
+//				}
+//			});
+			
 			popupOpen('duser');
 		});
 		
@@ -97,6 +124,27 @@
 			$("#userId").val( userDetail.user_id );
 			$("#authType").val( userDetail.auth_type );
 			$("#note").val( userDetail.note );
+
+//			// 회사목록(회사table 생성 시 주석 해제)
+//			$.ajax({
+//				url : "/getCmpyPopupList",
+//				type : 'post',
+//				async : false, // 동기로 처리해줌
+//				data : {
+//					selPageNum : ""
+//				},
+//				success: function(result) {
+//					var list = result.list;
+//					
+//					$siteIdSelBox = $("#userForm").find("#coIdx");
+//					$siteIdSelBox.empty();
+//					for(var i=0; i<list.length; i++) {
+//						$siteIdSelBox.append('<option value="'+list[i].co_idx+'">'+list[i].co_name+'</option>');
+//						
+//					}
+//				}
+//			});
+//			$("#userForm").find("#coIdx").val( userDetail.co_idx );
 			
 			popupOpen('duser');
 		}
