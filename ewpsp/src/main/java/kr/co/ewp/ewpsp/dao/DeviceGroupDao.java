@@ -14,34 +14,23 @@ public class DeviceGroupDao {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 
-	public List getDeviceIOEList(HashMap param) {
-		List resultList = sqlSession.selectList("deviceGroup.getDeviceIOEList", param);
+	public List getDeviceGroupList(HashMap param) {
+		List resultList = sqlSession.selectList("deviceGroup.getDeviceGroupList", param);
+		return resultList;
+	}
+	
+	public List getDvInDeviceGroupList(HashMap param) {
+		List resultList = sqlSession.selectList("deviceGroup.getDvInDeviceGroupList", param);
+		return resultList;
+	}
+	
+	public List getAllDvInSiteList(HashMap param) {
+		List resultList = sqlSession.selectList("deviceGroup.getAllDvInSiteList", param);
 		return resultList;
 	}
 
-	public Map getDeviceIOEDetail(HashMap param) {
-		Map result = sqlSession.selectOne("deviceGroup.getDeviceIOEDetail", param);
-		return result;
-	}
-	
-	public List getDevicePCSList(HashMap param) {
-		List resultList = sqlSession.selectList("deviceGroup.getDevicePCSList", param);
-		return resultList;
-	}
-	
-	public List getDeviceBMSList(HashMap param) {
-		List resultList = sqlSession.selectList("deviceGroup.getDeviceBMSList", param);
-		return resultList;
-	}
-	
-	public List getDevicePVList(HashMap param) {
-		List resultList = sqlSession.selectList("deviceGroup.getDevicePVList", param);
-		return resultList;
-	}
-
-	public List getDeviceList(HashMap param) {
-		List resultList = sqlSession.selectList("deviceGroup.getDeviceList", param);
-		return resultList;
+	public int insertDevice(HashMap param) {
+		return sqlSession.update("deviceGroup.insertDevice", param);
 	}
 	
 }

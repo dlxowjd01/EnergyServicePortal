@@ -347,10 +347,10 @@
 					$div.append( $('<li />') );
 				} else {
 					var strHtml = "";
-					if(deviceList[i].device_id == 1) strHtml = '<li class="ioe" />'; 
-					else if(deviceList[i].device_id == 4) strHtml = '<li class="pcs" />'; 
-					else if(deviceList[i].device_id == 5) strHtml = '<li class="bms" />'; 
-					else if(deviceList[i].device_id == 6) strHtml = '<li class="pv" />';
+					if(deviceList[i].device_type == 4) strHtml = '<li class="ioe" />'; 
+					else if(deviceList[i].device_type == 1) strHtml = '<li class="pcs" />'; 
+					else if(deviceList[i].device_type == 2) strHtml = '<li class="bms" />'; 
+					else if(deviceList[i].device_type == 3) strHtml = '<li class="pv" />';
 					else strHtml = '<li class="ioe" />';
 					$div.append(
 							$(strHtml).append(

@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.ewp.ewpsp.dao.DeviceGroupDao;
 
@@ -16,28 +17,21 @@ public class DeviceGroupServiceImpl implements DeviceGroupService{
 	@Resource(name="deviceGroupDao")
 	private DeviceGroupDao deviceGroupDao;
 
-	public List getDeviceIOEList(HashMap param) throws Exception {
-		return deviceGroupDao.getDeviceIOEList(param);
+	public List getDeviceGroupList(HashMap param) throws Exception {
+		return deviceGroupDao.getDeviceGroupList(param);
+	}
+	
+	public List getDvInDeviceGroupList(HashMap param) throws Exception {
+		return deviceGroupDao.getDvInDeviceGroupList(param);
+	}
+	
+	public List getAllDvInSiteList(HashMap param) throws Exception {
+		return deviceGroupDao.getAllDvInSiteList(param);
 	}
 
-	public Map getDeviceIOEDetail(HashMap param) throws Exception {
-		return deviceGroupDao.getDeviceIOEDetail(param);
-	}
-
-	public List getDevicePCSList(HashMap param) throws Exception {
-		return deviceGroupDao.getDevicePCSList(param);
-	}
-
-	public List getDeviceBMSList(HashMap param) throws Exception {
-		return deviceGroupDao.getDeviceBMSList(param);
-	}
-
-	public List getDevicePVList(HashMap param) throws Exception {
-		return deviceGroupDao.getDevicePVList(param);
-	}
-
-	public List getDeviceList(HashMap param) throws Exception {
-		return deviceGroupDao.getDeviceList(param);
+	@Transactional
+	public int insertDevice(HashMap param) throws Exception {
+		return deviceGroupDao.insertDevice(param);
 	}
 	
 }

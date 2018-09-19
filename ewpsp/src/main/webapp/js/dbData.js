@@ -345,6 +345,70 @@ function getDeviceList(formData) {
 	});
 }
 
+// 장치그룹목록 조회
+function getDeviceGroupList() {
+	$.ajax({
+		url : "/getDeviceGroupList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+//		data : formData,
+		success: function(result) {
+			console.log("장치목록 조회");
+			callback_getDeviceGroupList(result);
+		}
+	});
+}
+
+// 장치그룹내 장치목록 조회
+function getDvInDeviceGroupList(deviceGrpIdx) {
+	$.ajax({
+		url : "/getDvInDeviceGroupList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : {
+			deviceGrpIdx : deviceGrpIdx
+		},
+		success: function(result) {
+			console.log("장치목록 조회");
+			callback_getDvInDeviceGroupList(result);
+		}
+	});
+}
+
+// 장치그룹내 장치목록(팝업) 조회
+function getDvInDeviceGroupPopupList(siteId, deviceGrpIdx) {
+	$.ajax({
+		url : "/getDvInDeviceGroupPopupList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : {
+			siteId : siteId,
+			deviceGrpIdx : deviceGrpIdx
+		},
+		success: function(result) {
+			console.log("장치그룹내 장치목록(팝업) 조회");
+			callback_getDvInDeviceGroupPopupList(result);
+		}
+	});
+}
+
+// 장지 등록
+function insertDevice(formData) {
+	$.ajax({
+		url : "/insertDevice",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			console.log("장지 등록");
+			callback_insertDevice(result);
+		},
+		error:function(request,status,error){
+			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+		}
+	});
+}
+
 
 
 

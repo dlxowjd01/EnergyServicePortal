@@ -6,15 +6,8 @@
 <jsp:include page="../include/common_static.jsp" />
 <jsp:include page="../include/sub_static.jsp" />
 <script type="text/javascript">
-	var deviceGbn = "${deviceGbn }";
-// 	$(document).ready(function() {
-// 		// js파일에서는 동작을 안함
-// 		$(".tab_menu").find("li").removeClass("active");
-// 		$(".tab_menu").find("#tab_${deviceGbn }").addClass("active").trigger('click');
-// 		getDBData(deviceGbn);
-// 	});
 </script>
-<!-- <script src="../js/device/deviceMonitoring.js" type="text/javascript"></script> -->
+<script src="../js/device/deviceGroup.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -40,7 +33,7 @@
 								<h2 class="ntit fl">제일 화성</h2>
 								<div class="clear fr">
 									<ul class="fl">
-										<li><a href="javascript:popupOpen('dgdevice');" class="default_btn"><i class="glyphicon glyphicon-th-list"></i> 장치그룹관리</a></li>
+										<li><a href="#;" class="default_btn" id="grpMngFormBtn"><i class="glyphicon glyphicon-th-list"></i> 장치그룹관리</a></li>
 									</ul>
 								</div>
 							</div>
@@ -211,6 +204,8 @@
 		<div class="lbody mt30">
 
 			<div class="set_tbl">
+				<form id="insertDeviceForm" name="insertDeviceForm">
+				<input type="hidden" name="deviceGrpIdx" id="deviceGrpIdx" class="input" value="">
 				<table>
 					<colgroup>
 						<col width="200">
@@ -220,35 +215,41 @@
 						<tr>
 							<th><span>배치사이트</span></th>
 							<td>
-								<select name="" id="" class="sel" style="width:100%">
+								<select name="siteId" id="siteId" class="sel" style="width:100%">
 									
 								</select>
 							</td>
 						</tr>
 						<tr>
 							<th><span>장치명</span></th>
-							<td><input type="text" class="input" style="width:100%"></td>
+							<td><input type="text" id="deviceName" name="deviceName" class="input" style="width:100%"></td>
 						</tr>
 						<tr>
 							<th><span>장치ID</span></th>
-							<td><input type="text" class="input" style="width:100%"></td>
+							<td><input type="text" id="deviceId" name="deviceId" class="input" style="width:100%"></td>
 						</tr>
 						<tr>
 							<th><span>장치타입</span></th>
 							<td>
-								<select name="" id="" class="sel" style="width:100%">
-									
+								<select name="deviceType" id="deviceType" class="sel" style="width:100%">
+									<option value="1">PCS</option>
+									<option value="2">BMS</option>
+									<option value="3">PV</option>
+									<option value="4">부하측정기기</option>
+									<option value="5">PV모니터링기기</option>
+									<option value="6">ESS모니터링기기</option>
 								</select>
 							</td>
 						</tr>
 					</tbody>			
 				</table>
+				</form>
 			</div>
 
 		</div>
 		<div class="btn_center">
-			<a href="#;" class="default_btn w80">확인</a>
-			<a href="#;" class="cancel_btn w80">취소</a>
+			<a href="#;" class="default_btn w80" id="confirmDeviceBtn">확인</a>
+			<a href="#;" class="cancel_btn w80" id="cancelDeviceBtn">취소</a>
 		</div>
     </div>
     <!-- ###### Popup End ###### -->  
@@ -263,8 +264,8 @@
 
 			<div class="set_top clear">
 				<h2 class="ntit fl">사이트</h2>
-				<div class="dropdown fl">
-				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">롯데_PCS_01
+				<div class="dropdown fl" id="insideSite">
+				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">사이트 선택
 				    <span class="caret"></span></button>
 				    <ul class="dropdown-menu">
 				        <li class="on"><a href="#">롯데_PCS_01</a></li>
@@ -273,8 +274,8 @@
 				    </ul>
 				</div>
 				<h2 class="ntit fl">장치 그룹</h2>
-				<div class="dropdown fl">
-				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">롯데_장치그룹_01
+				<div class="dropdown fl" id="insideDeviceGrp">
+				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">장치그룹 선택
 				    <span class="caret"></span></button>
 				    <ul class="dropdown-menu">
 				        <li class="on"><a href="#">롯데_장치그룹_01</a></li>
@@ -283,6 +284,8 @@
 				    </ul>
 				</div>
 				<a href="javascript:popupOpen('dgdevice_edit');" class="default_btn fr"><i class="glyphicon glyphicon-edit"></i> 장치그룹편집</a>
+				<input type="hidden" id="selSiteId" name="selSiteId">
+				<input type="hidden" id="selDvGrpIdx" name="selDvGrpIdx">
 			</div>
 			<div class="group_wrap clear">
 				<div class="inside_site fl">
