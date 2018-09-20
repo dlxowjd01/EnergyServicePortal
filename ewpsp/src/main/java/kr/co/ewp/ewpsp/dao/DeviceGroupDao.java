@@ -33,4 +33,8 @@ public class DeviceGroupDao {
 		return sqlSession.update("deviceGroup.insertDevice", param);
 	}
 	
+	public int updateDevice(HashMap param) {
+		return sqlSession.update("deviceGroup.updateDevice", param);
+	}
+	
 }

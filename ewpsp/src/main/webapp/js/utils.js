@@ -264,6 +264,29 @@ $(function() {
 		};
 	};
 	
+	
+	
+
+	function chkHasClass(e) {
+		if($(e).hasClass('on')) {
+			alert("야");
+		} else {
+			alert("호");
+		}
+	}
+	// 리스트박스 왼쪽 목록의 데이터 오른쪽으로 이동
+	$("#moveRight").click(function(){
+		var item = $(".inside_site").find("ul").find("li").find(".on").parent();
+		$('.all_site').find("ul").append(item);
+	});
+	
+	// 리스트박스 오른쪽 목록의 데이터 왼쪽으로 이동
+	$("#moveLeft").click(function(){
+		var item = $(".all_site").find("ul").find("li").find(".on").parent();
+		$('.inside_site').find("ul").append(item);
+	});
+	
+	
 
 });
 
@@ -296,7 +319,7 @@ jQuery.fn.serializeObject = function() {
 // all_tot_cnt : 총 페이지갯수
 // page_row_cnt : 한번에 보여질 데이터 수
 // page_page_cnt : 한번에 보여질 페이지 수
-// gubun
+// 수정이 필요한데 현재 사용하지 않기 때문에 수정 안함
 function makePageNums1(selectedPageNum, all_tot_cnt, page_row_cnt, page_page_cnt, gubun) {
 	var gubunStr = gubun.charAt(0).toUpperCase() + gubun.slice(1);
 	$('#' + gubun + 'Paging').empty();
@@ -358,3 +381,5 @@ function makePageNums2(pagingMap, gubun) {
 		$paging.append( $('<a href="#" class="next" />').append("NEXT") );
 	}
 }
+
+

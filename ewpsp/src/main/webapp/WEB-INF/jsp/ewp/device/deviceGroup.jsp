@@ -199,7 +199,7 @@
     <div id="layerbox" class="ddevice" style="min-width:600px;">
         <div class="stit">
         	<h2>신규 장치 등록</h2>        	
-			<a href="javascript:popupClose('ddevice');">닫기</a>
+			<a href="#;" id="cancelDeviceBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
 
@@ -258,7 +258,7 @@
     <div id="layerbox" class="dgdevice" style="min-width:800px;">
         <div class="stit">
         	<h2>장치 그룹 추가/제거</h2>        	
-			<a href="javascript:popupClose('dgdevice');">닫기</a>
+			<a href="javascript:popupClose('dgdevice');" id="cancelDvInDbGrpBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
 
@@ -284,10 +284,13 @@
 				    </ul>
 				</div>
 				<a href="#;" class="default_btn fr" id="editDvGrpFormBtn"><i class="glyphicon glyphicon-edit"></i> 장치그룹편집</a>
-				<input type="hidden" id="selSiteId" name="selSiteId">
-				<input type="hidden" id="selDvGrpIdx" name="selDvGrpIdx">
 			</div>
 			<div class="group_wrap clear">
+				<form id="editDvInDvGrpForm" name="editDvInDvGrpForm">
+				<input type="hidden" id="selSiteId" name="selSiteId">
+				<input type="hidden" id="selDvGrpIdx" name="selDvGrpIdx">
+				<input type="hidden" id="nowDeviceIds" name="nowDeviceIds">
+				<input type="hidden" id="newDeviceIds" name="newDeviceIds">
 				<div class="inside_site fl">
 					<h2 class="ntit">그룹에 포함된 장치</h2>
 					<div class="inbox">
@@ -298,9 +301,10 @@
 						</ul>
 					</div>
 				</div>
+				</form>
 				<div class="cross_btn fl">
-					<div><a href="#;"><img src="../img/btn_cross_left.png" alt="<"></a></div>
-					<div><a href="#;"><img src="../img/btn_cross_right.png" alt=">"></a></div>
+					<div><a href="#;" id="moveLeft"><img src="../img/btn_cross_left.png" alt="<"></a></div>
+					<div><a href="#;" id="moveRight"><img src="../img/btn_cross_right.png" alt=">"></a></div>
 				</div>
 				<div class="all_site fl">
 					<h2 class="ntit">사이트 내 장치</h2>
@@ -322,8 +326,8 @@
 
 		</div>
 		<div class="btn_center">
-			<a href="#;" class="default_btn w80">적용</a>
-			<a href="#;" class="cancel_btn w80">취소</a>
+			<a href="#;" class="default_btn w80" id="confirmDvInDbGrpBtn">적용</a>
+			<a href="#;" class="cancel_btn w80" id="cancelDvInDbGrpBtn">취소</a>
 		</div>
     </div>
     <!-- ###### Popup End ###### -->  
@@ -332,13 +336,13 @@
     <div id="layerbox" class="dgdevice_edit" style="min-width:600px;">
         <div class="stit">
         	<h2>장치 그룹 편집</h2>        	
-			<a href="javascript:popupClose('dgdevice_edit');">닫기</a>
+			<a href="#;" id="cancelDvGrpBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
 			<div class="clear">
 				<h2 class="ntit fl">사이트</h2>
 				<div class="dropdown fl ml20" id="insideSite2">
-				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">롯데 정밀 화학
+				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">사이트 선택
 				    <span class="caret"></span></button>
 				    <ul class="dropdown-menu">
 				        <!-- <li class="on"><a href="#">롯데 정밀 화학</a></li>
@@ -348,6 +352,8 @@
 				</div>
 			</div>
 			<h2 class="ctit mt20">전체 장치그룹</h2>
+			<form id="editDvGrpForm" name="editDvGrpForm">
+			<input type="hidden" id="delDvGrp" name="delDvGrp">
 			<div class="company_list mt10">				
 				<table>
 					<colgroup>
@@ -362,8 +368,11 @@
 							<th>삭제</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="dvGrpTbody">
 						<tr>
+							<td colspan="3">사이트를 선택해주세요</td>
+						</tr>
+						<!-- <tr>
 							<td>1</td>
 							<td>롯데_장치그룹_01</td>
 							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
@@ -382,7 +391,7 @@
 							<td>4</td>
 							<td>롯데_장치그룹_04</td>
 							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr>
+						</tr> -->
 					</tbody>
 				</table>
 			</div>
@@ -405,11 +414,12 @@
 					<input type="submit" value="추가하기" class="submit">
 				</div>
 			</div>
+			</form>
 
 		</div>
 		<div class="btn_center">
-			<a href="#;" class="default_btn w80">확인</a>
-			<a href="#;" class="cancel_btn w80">취소</a>
+			<a href="#;" class="default_btn w80" id="confirmDvGrpBtn">확인</a>
+			<a href="#;" class="cancel_btn w80" id="cancelDvGrpBtn">취소</a>
 		</div>
     </div>
     <!-- ###### Popup End ###### --> 

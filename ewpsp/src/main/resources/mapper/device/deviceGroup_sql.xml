@@ -69,4 +69,28 @@
 		)
 	</insert>
 	
+	<update id="updateDevice" parameterType="hashMap">
+		/* 장치 수정 */
+		update tb_device
+		set 
+		    <!-- site_id        = #{site_id }, 
+		    user_idx       = #{user_idx },  -->
+		    <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(deviceName)"> 
+		    device_name    = #{deviceName }, 
+		    </if>
+		    <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(deviceGrpIdx)"> 
+		    device_grp_idx = #{deviceGrpIdx }, 
+		    </if>
+		    <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(deviceType)"> 
+		    device_type    = #{deviceType }, 
+		    </if>
+		    <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(instType)"> 
+		    inst_type      = #{instType }, 
+		    </if>
+		    mod_uid        = #{modUid }, 
+		    mod_date       = now()
+		where 1=1
+		and device_id = #{deviceId }
+	</update>
+	
 </mapper>

@@ -346,12 +346,14 @@ function getDeviceList(formData) {
 }
 
 // 장치그룹목록 조회
-function getDeviceGroupList() {
+function getDeviceGroupList(siteId) {
 	$.ajax({
 		url : "/getDeviceGroupList",
 		type : 'post',
 		async : false, // 동기로 처리해줌
-//		data : formData,
+		data : {
+			siteId : siteId
+		},
 		success: function(result) {
 			console.log("장치목록 조회");
 			callback_getDeviceGroupList(result);
