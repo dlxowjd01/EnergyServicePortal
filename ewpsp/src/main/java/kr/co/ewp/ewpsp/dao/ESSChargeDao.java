@@ -14,12 +14,12 @@ public class ESSChargeDao {
 	private SqlSessionTemplate sqlSession;
 	
 	public List getESSChargeRealList(HashMap param) {
-		List resultList = sqlSession.selectList("essCharge.getESSChargeRealList");
+		List resultList = sqlSession.selectList("essCharge.getESSChargeRealList", param);
 		return resultList;
 	}
 
 	public List getESSChargeFutureList(HashMap param) {
-		List resultList = sqlSession.selectList("essCharge.getESSChargeFutureList");
+		List resultList = sqlSession.selectList("essCharge.getESSChargeFutureList", param);
 		return resultList;
 	}
 

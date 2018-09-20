@@ -1,12 +1,12 @@
 package kr.co.ewp.ewpsp.service;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 public interface ESSChargeService {
 
-	List getESSChargeRealList(HashMap param) throws Exception;
+	Map getESSChargeRealList(HashMap param) throws Exception;
 
-	List getESSChargeFutureList(HashMap param) throws Exception;
+	Map getESSChargeFutureList(HashMap param) throws Exception;
 
 }

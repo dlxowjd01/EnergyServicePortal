@@ -35,10 +35,10 @@ public class ESSChargeController {
 		logger.debug("/getESSChargeRealList");
 		logger.debug("param ::::: "+param.toString());
 		
-		List list = essChargeService.getESSChargeRealList(param);
+		Map result = essChargeService.getESSChargeRealList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", list);
+		resultMap.put("resultListMap", result);
 		return resultMap;
 	}
 	
@@ -47,10 +47,10 @@ public class ESSChargeController {
 		logger.debug("/getESSChargeFutureList");
 		logger.debug("param ::::: "+param.toString());
 		
-		List list = essChargeService.getESSChargeFutureList(param);
+		Map result = essChargeService.getESSChargeFutureList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", list);
+		resultMap.put("resultListMap", result);
 		return resultMap;
 	}
 }

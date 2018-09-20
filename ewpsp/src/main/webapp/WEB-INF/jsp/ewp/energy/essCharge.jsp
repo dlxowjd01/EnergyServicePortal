@@ -5,7 +5,7 @@
 <head>
 <jsp:include page="../include/common_static.jsp" />
 <jsp:include page="../include/sub_static.jsp" />
-<!-- <script src="../js/energy/essCharge.js" type="text/javascript"></script> -->
+<script src="../js/energy/essCharge.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -28,19 +28,19 @@
 							<ul class="chart_total">
 								<li class="es1">
 									<div class="ctit es1"><span>충전량</span></div>
-									<div class="cval"><span>14,976</span>kWh</div>
+									<div class="cval" id="pastChgTot"><span>14,976</span>kWh</div>
 								</li>
 								<li class="es2">
 									<div class="ctit es2"><span>충전 계획</span></div>
-									<div class="cval"><span>20,976</span>kWh</div>
+									<div class="cval" id="pastDischgTot"><span>20,976</span>kWh</div>
 								</li>
 								<li class="es3">
 									<div class="ctit es3"><span>방전량</span></div>
-									<div class="cval"><span>20,976</span>kWh</div>
+									<div class="cval" id="fetureChgTot"><span>20,976</span>kWh</div>
 								</li>
 								<li class="es4">
 									<div class="ctit es4"><span>방전 계획</span></div>
-									<div class="cval"><span>20,976</span>kWh</div>
+									<div class="cval" id="fetureDischgTot"><span>20,976</span>kWh</div>
 								</li>
 							</ul>
 						</div>
@@ -57,11 +57,11 @@
 								</div>
 								<div id="chart2"></div>
 								<script language="JavaScript"> 
-								$(function () { 
+// 								$(function () { 
 									var myChart = Highcharts.chart('chart2', {
-										data: {
-									        table: 'datatable' /* 테이블에서 데이터 불러오기 */
-									    },
+// 										data: {
+// 									        table: 'datatable' /* 테이블에서 데이터 불러오기 */
+// 									    },
 
 										chart: {
 											marginLeft:80,
@@ -85,6 +85,17 @@
 									    },
 
 										xAxis: {
+											type: 'datetime', // 08.20 이우람 추가
+											dateTimeLabelFormats: { // 08.20 이우람 추가
+												millisecond: '%H:%M:%S.%L',
+											    second: '%H:%M:%S',
+									            minute: '%H:%M',
+									            hour: '%H',
+									            day: '%m.%d ',
+									            week: '%m.%e',
+									            month: '%y/%m',
+									            year: '%Y'
+									        },
 											labels: {
 												align: 'center',
 												style: {
@@ -106,6 +117,7 @@
 									                 text: ''
 									            }
 									        }]
+											, crosshair: true // 08.22 이우람 추가
 										},
 
 										yAxis: {
@@ -241,33 +253,59 @@
 									        }]
 									    }
 
-									},
-									/* 차트 변경 */
-							        function (myChart) {
-							            $('.chart_change_column').click(function () {
-							                $(this).hide();
-							                $('.chart_change_line').show();
-							                myChart.series[1].update({
-							                    type: "column"
-							                });
-							                myChart.series[3].update({
-							                    type: "column"
-							                });
+// 									},
+// 									/* 차트 변경 */
+// 							        function (myChart) {
+// 							            $('.chart_change_column').click(function () {
+// 							                $(this).hide();
+// 							                $('.chart_change_line').show();
+// 							                myChart.series[1].update({
+// 							                    type: "column"
+// 							                });
+// 							                myChart.series[3].update({
+// 							                    type: "column"
+// 							                });
 
-							            });
-							            $('.chart_change_line').click(function () {
-							            	$(this).hide();
-							            	$('.chart_change_column').show();
-							                myChart.series[1].update({
-							                    type: "line"
-							                });
-							                myChart.series[3].update({
-							                    type: "line"
-							                });
+// 							            });
+// 							            $('.chart_change_line').click(function () {
+// 							            	$(this).hide();
+// 							            	$('.chart_change_column').show();
+// 							                myChart.series[1].update({
+// 							                    type: "line"
+// 							                });
+// 							                myChart.series[3].update({
+// 							                    type: "line"
+// 							                });
 
-							            });
+// 							            });
 							        });
-								});
+// 								});
+
+								/* 차트 변경 */
+						        $(function () {
+						        	$('.chart_change_column').click(function () {
+						                $(this).hide();
+						                $('.chart_change_line').show();
+						                myChart.series[1].update({
+						                    type: "column"
+						                });
+						                myChart.series[3].update({
+						                    type: "column"
+						                });
+
+						            });
+						            $('.chart_change_line').click(function () {
+						            	$(this).hide();
+						            	$('.chart_change_column').show();
+						                myChart.series[1].update({
+						                    type: "line"
+						                });
+						                myChart.series[3].update({
+						                    type: "line"
+						                });
+
+						            });
+						        });
 								</script>
 							</div>	
 						</div>
@@ -284,7 +322,7 @@
 								</ul>
 							</div>
 							<div class="tbl_wrap">
-								<div class="fold_div">
+								<div class="fold_div" id="pc_use_dataDiv">
 									<!-- PC 버전용 테이블 -->
 									<div class="chart_table">			
 										<table class="pc_use">

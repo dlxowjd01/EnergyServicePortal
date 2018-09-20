@@ -31,7 +31,6 @@
 	var pvRevenueList2;
 	var pvRevenueList3;
 	function callback_getPVRevenueList(result) {
-		var pvRevenueList = result.list;
 		var resultListMap = result.resultListMap;
 		
 		var netGenValList = resultListMap.netGenValList;
@@ -84,7 +83,7 @@
 				
 				if(netGenVal == null || netGenVal == "" || netGenVal == "null") reNetGenVal = null;
 				else reNetGenVal = Math.round( Number(netGenVal) );
-				if(smpDeal == null || smpDeal == "" || smpDeal == "null") reNetGenVal = null;
+				if(smpDeal == null || smpDeal == "" || smpDeal == "null") reSmpDeal = null;
 				else reSmpDeal   = Math.round( Number(smpDeal) );
 				if(smpPrice == null || smpPrice == "" || smpPrice == "null") reSmpPrice = null;
 				else {
