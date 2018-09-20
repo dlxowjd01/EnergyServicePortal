@@ -15,18 +15,17 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->	
-    <script src="../js/jquery-1.9.1.min.js"></script>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/jquery-ui.js"></script>
     <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/common.js"></script>
     <script src="../js/highcharts.js"></script>
     <!-- 하이차트 데이타 추출용 -->
     <script src="../js/modules/data.js"></script>
     <script src="../js/modules/exporting.js"></script>
     <script src="../js/modules/export-data.js"></script>  
     <!-- //하이타트 데이타 추출용 -->
-    <script src="../js/jquery.min.js" type="text/javascript"></script> 
-    <script src="../js/jquery-ui.min.js" type="text/javascript"></script> <!-- datapicker용 --> 
     <script src="../js/sectionDisplay.js"></script> <!-- 텝메뉴 용 -->
+    <script src="../js/common.js"></script>
 <script src="../js/comm_sch_chartData.js" type="text/javascript"></script>
 <script src="../js/utils.js"></script>
 <script src="../js/dbData.js" type="text/javascript"></script>

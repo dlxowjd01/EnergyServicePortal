@@ -4,7 +4,7 @@
 	
 	var popupYn = "N";
 	function getDBData() {
-//		getDeviceGroupList();
+		getDeviceGroupList();
 		
 	}
 	

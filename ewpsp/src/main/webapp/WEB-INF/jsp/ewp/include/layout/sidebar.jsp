@@ -53,6 +53,7 @@ $(document).ready(function() {
 							<li><a href="/essRevenue">ESS 수익 조회</a></li>
 							<li><a href="/drRevenue">DR 수익 조회</a></li>
 							<li><a href="/pvRevenue">PV 수익 조회</a></li>
+							<li><a href="javascript:popupOpen('totaldprint');">통합 명세서</a></li>
 						</ul>
 					</div>
 				</li>
@@ -70,7 +71,7 @@ $(document).ready(function() {
 						</ul>
 					</div>
 				</li>
-				<li class="smn8"><a href="#">로그아웃</a></li>
+				<li class="smn8"><a href="#;" class="LoginBtn">로그아웃</a></li>
 			</ol>
 		</div>
 		<!-- 모바일용 카테고리 { -->
