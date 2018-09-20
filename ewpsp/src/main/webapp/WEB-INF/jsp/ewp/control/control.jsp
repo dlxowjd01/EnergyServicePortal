@@ -33,6 +33,7 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="indiv control clear">
+
 							<div class="chart_top clear">
 								<h2 class="ntit fl">알림현황</h2>
 								<div class="dropdown fl">
@@ -189,7 +190,11 @@
 										</table>
 									</div>
 								</div>
-							</div>									
+							</div>
+							<div class="clear mt30">
+								<a href="javascript:popupOpen('rpeople');" class="fr default_btn"><i class="glyphicon glyphicon-phone"></i> 알람전송 관리</a>
+							</div>
+
 						</div>
 					</div>
 				</div>
@@ -201,59 +206,121 @@
 
 
 
-    <!-- ###### 신규장치 등록/수정 Popup Start ###### -->
-    <div id="layerbox" class="ddevice" style="min-width:600px;">
+    <!-- ###### 알람전송 관리 Popup Start ###### -->
+    <div id="layerbox" class="rpeople" style="min-width:600px;">
         <div class="stit">
-        	<h2>신규 장치 등록</h2>        	
-			<a href="javascript:popupClose('ddevice');">닫기</a>
+        	<h2>알람전송 관리</h2>        	
+			<a href="javascript:popupClose('rpeople');">닫기</a>
         </div>
 		<div class="lbody mt30">
-
-			<div class="set_tbl">
+			<h2 class="ctit mt20">알람 수신자</h2>
+			<div class="company_list mt10">				
 				<table>
 					<colgroup>
-						<col width="200">
+						<col width="50">
 						<col>
+						<col>
+						<col width="50">
 					</colgroup>
+					<thead>
+						<tr>
+							<th>No</th>
+							<th>이름</th>
+							<th>연락처</th>
+							<th>삭제</th>
+						</tr>
+					</thead>
 					<tbody>
 						<tr>
-							<th><span>배치사이트</span></th>
-							<td>
-								<select name="" id="" class="sel" style="width:100%">
-									
-								</select>
-							</td>
+							<td>1</td>
+							<td>홍길동</td>
+							<td>010-1234-1234</td>
+							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
 						</tr>
 						<tr>
-							<th><span>장치명</span></th>
-							<td><input type="text" class="input" style="width:100%"></td>
+							<td>2</td>
+							<td>홍길동</td>
+							<td>010-1234-1234</td>
+							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
 						</tr>
 						<tr>
-							<th><span>장치ID</span></th>
-							<td><input type="text" class="input" style="width:100%"></td>
+							<td>3</td>
+							<td>홍길동</td>
+							<td>010-1234-1234</td>
+							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
 						</tr>
 						<tr>
-							<th><span>장치타입</span></th>
-							<td>
-								<select name="" id="" class="sel" style="width:100%">
-									
-								</select>
-							</td>
+							<td>4</td>
+							<td>홍길동</td>
+							<td>010-1234-1234</td>
+							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
 						</tr>
-					</tbody>			
+						<tr>
+							<td>1</td>
+							<td>홍길동</td>
+							<td>010-1234-1234</td>
+							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
+						</tr>
+						<tr>
+							<td>2</td>
+							<td>홍길동</td>
+							<td>010-1234-1234</td>
+							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
+						</tr>
+						<tr>
+							<td>3</td>
+							<td>홍길동</td>
+							<td>010-1234-1234</td>
+							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
+						</tr>
+						<tr>
+							<td>4</td>
+							<td>홍길동</td>
+							<td>010-1234-1234</td>
+							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
+						</tr>
+					</tbody>
 				</table>
+			</div>
+			<div class="set_tbl mt10 clear">
+				<div class="fl" style="width:calc(100% - 120px);">
+					<table>
+						<colgroup>
+							<col width="150">
+							<col>
+						</colgroup>
+						<tbody>
+							<tr>
+								<th><span>이름</span></th>
+								<td>
+									<select name="" id="" class="sel" style="width:100%;">
+										<option value="">홍길동</option>
+										<option value="">홍길동</option>
+										<option value="">홍길동</option>
+										<option value="">홍길동</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th><span>연락처</span></th>
+								<td><input type="text" class="input" style="width:100%"></td>
+							</tr>
+						</tbody>			
+					</table>
+				</div>
+				<div class="fr">
+					<input type="submit" value="추가하기" class="submit">
+				</div>
 			</div>
 
 		</div>
-		<div class="btn_center">
-			<a href="#;" class="default_btn w80">확인</a>
-			<a href="#;" class="cancel_btn w80">취소</a>
-		</div>
     </div>
-    <!-- ###### Popup End ###### -->    
+    <!-- ###### Popup End ###### --> 
+
 
     <!-- 레이어 팝업 배경 -->
     <div id="mask"></div>
+
 
 
 

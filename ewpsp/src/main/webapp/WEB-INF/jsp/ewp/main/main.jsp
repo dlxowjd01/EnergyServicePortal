@@ -329,6 +329,8 @@
 					<div class="col-lg-4">
 						<div class="row">
 							<div class="col-sm-12">
+
+								<!-- 지역별 사용량 //-->
 								<div class="indiv gmain_map">
 									<div class="chart_top clear">
 										<h2 class="ntit">군별사용량</h2>
@@ -388,6 +390,8 @@
 										</div>
 									</div>
 								</div>
+								<!-- // 지역별 사용량 -->
+
 							</div>
 						</div>
 					</div>

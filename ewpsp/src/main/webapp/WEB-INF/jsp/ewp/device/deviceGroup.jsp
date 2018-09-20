@@ -262,7 +262,7 @@
         </div>
 		<div class="lbody mt30">
 
-			<div class="set_top clear">
+			<div class="dgset_top clear">
 				<h2 class="ntit fl">사이트</h2>
 				<div class="dropdown fl" id="insideSite">
 				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">사이트 선택
