@@ -1,4 +1,5 @@
-	$(document).ready(function() {
+
+$(document).ready(function() {
 		getDBData();
 	});
 	
@@ -110,15 +111,38 @@
 
 	var insUpdFlag = 0; // 1:insertForm, 2:updateForm, 0:reset
 	$( function () {
-		$("#grpMngFormBtn").click(function(){
-//			getGroupPopupList();
-//			getSitePopupList(3);
-			popupOpen('dgroup');
-		});
-		
 		$("#insertCmpyFormBtn").click(function(){
 			insUpdFlag = 1;
 			popupOpen('dcompany');
+		});
+		
+		$("#grpMngFormBtn").click(function(){
+			getGroupPopupList();
+			popupOpen('dgroup');
+		});
+
+		$("#confirmSiteInSiteGrpBtn").click(function(){
+			if(confirm("저장하시겠습니까?")) {
+				var inputs = $(".inside_site input[name=siteIds]");
+				var values = "";
+				$.each(inputs, function (index, value) {
+					values = values+$(value).val()+",";
+				});
+				$("#newSiteIds").val(values.slice(0, -1));
+				var formData = $("#editSiteInSiteGrpForm").serializeObject();
+				saveSiteInSiteGrp(formData);
+			}
+		});
+
+		$("#cancelSiteInSiteGrpBtn, #cancelSiteInSiteGrpBtnX").click(function(){
+			popupClose('dgroup');
+			
+			$('#editSiteInSiteGrpForm').each(function() {
+				this.reset();
+			});
+			$(".inside_site").find("ul").empty();
+			$('.all_site').find("ul").empty();
+			
 		});
 		
 		$("#insertGrpFormBtn").click(function(){
@@ -158,7 +182,7 @@
 		
 		$("#confirmCmpyBtn").click(function(){
 			var formData = $("#cmpyForm").serializeObject();
-			if(confirm("그룹을 저장하시겠습니까?")) {
+			if(confirm("회사를 저장하시겠습니까?")) {
 				if(insUpdFlag ==  1) insertCmpy(formData);
 				else if(insUpdFlag ==  2)  updateCmpy(formData);
 			}
@@ -275,12 +299,12 @@
 		var groupList = result.list;
 		
 		$selectBox = $("#grpSelectBox");
-		$selectBox.find("button").empty();
+//		$selectBox.find("button").empty();
 		$selectBox.find("ul").empty();
 		if(groupList == null || groupList.length < 1) {
 //			$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
 		} else {
-			$selectBox.find("button").append("aa").append( $('<span class="caret" />') );
+//			$selectBox.find("button").append("aa").append( $('<span class="caret" />') );
 			for(var i=0; i<groupList.length; i++) {
 				$selectBox.find("ul").append(
 						$("<li />").append('<a href="javascript:changeSelGrp(\''+groupList[i].site_grp_idx+'\');">'+groupList[i].site_grp_name+'</a>')
@@ -293,6 +317,8 @@
 	}
 	
 	function changeSelGrp(siteGrpIdx) {
+		$("#selSiteGrpIdx").val(siteGrpIdx)
+		
 		getSitePopupList(siteGrpIdx);
 	}
 	
@@ -305,12 +331,17 @@
 		if(grpSiteList == null || grpSiteList.length < 1) {
 //			$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
 		} else {
+			var sites = "";
 			for(var i=0; i<grpSiteList.length; i++) {
+				sites = sites+grpSiteList[i].site_id+",";
 				$insideSite.find("ul").append(
-						$("<li />").append('<a href="javascript:changeSelGrp(\''+grpSiteList[i].site_id+'\');">'+grpSiteList[i].site_name+'</a>')
+						$("<li />").append('<a href="#;">'+grpSiteList[i].site_name+'</a>').append(
+								'<input type="hidden" name="siteIds" value="'+grpSiteList[i].site_id+'">'
+						)
 				);
 				
 			}
+			$("#nowSiteIds").val(sites.slice(0, -1));
 			
 		}
 		
@@ -321,13 +352,47 @@
 		} else {
 			for(var i=0; i<allSiteList.length; i++) {
 				$allSite.find("ul").append(
-						$("<li />").append('<a href="javascript:changeSelGrp(\''+allSiteList[i].site_id+'\');">'+allSiteList[i].site_name+'</a>')
+						$("<li />").append('<a href="#;">'+allSiteList[i].site_name+'</a>').append(
+								'<input type="hidden" name="siteIds" value="'+allSiteList[i].site_id+'">'
+						)
 				);
 				
 			}
 			
 		}
+
+	    $(".multi_select a").click(function() {
+	        $(this).toggleClass("on");
+	        return false;
+	    });
 		
+	}
+
+	function saveSiteInSiteGrp(formData) {
+		$.ajax({
+			url : "/saveSiteInSiteGrp",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+			data : formData,
+			success: function(result) {
+				var resultCnt = result.resultCnt;
+				var changeYn = result.changeYn;
+				
+				if(changeYn == "N") {
+					alert("저장되었습니다.");
+					location.reload();
+					
+				} else if(changeYn == "Y") {
+//					if(resultCnt > 0) {
+						alert("저장되었습니다.");
+						location.reload();
+//					} else {
+//						alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
+//					}
+				}
+				
+			}
+		});
 	}
 
 	function callback_insertGroup(result) {

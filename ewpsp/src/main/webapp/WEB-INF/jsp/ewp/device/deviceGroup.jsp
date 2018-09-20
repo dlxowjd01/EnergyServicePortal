@@ -258,7 +258,7 @@
     <div id="layerbox" class="dgdevice" style="min-width:800px;">
         <div class="stit">
         	<h2>장치 그룹 추가/제거</h2>        	
-			<a href="javascript:popupClose('dgdevice');" id="cancelDvInDbGrpBtnX">닫기</a>
+			<a href="#;" id="cancelDvInDbGrpBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
 

@@ -7,6 +7,7 @@
 
 package kr.co.ewp.ewpsp.web;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -275,6 +276,85 @@ public class CmpyGrpSiteMngController {
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
+		return resultMap;
+	}
+
+	/**
+	 * 사이트그룹 내 사이트 추가/제거
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/saveSiteInSiteGrp")
+	public @ResponseBody Map<String, Object> saveSiteInSiteGrp(@RequestParam HashMap param) throws Exception {
+		logger.debug("/saveSiteInSiteGrp");
+		logger.debug("param ::::: "+param.toString());
+		
+		String selSiteGrpIdx = (String) param.get("selSiteGrpIdx"); // 그룹 목록
+		String nowSiteIds = (String) param.get("nowSiteIds"); // 기존 그룹내 사이트목록
+		String newSiteIds = (String) param.get("newSiteIds"); // 변경할 그룹내 사이트목록
+		String nowSiteIds_arr[] = null; // 기존 그룹내 사이트목록
+		String newSiteIds_arr[] = null; // 변경할 그룹내 사이트목록 
+		if(nowSiteIds != null && !"".equals(nowSiteIds)) {
+			nowSiteIds_arr = nowSiteIds.split(",");
+		}
+		if(newSiteIds != null && !"".equals(newSiteIds)) {
+			newSiteIds_arr = newSiteIds.split(",");
+		}
+		
+		// 기존목록과 변경목록이 동일한지 확인 -> 동일하면 변경사항 없음
+		String changeYn = "Y";
+		if(nowSiteIds_arr.length == newSiteIds_arr.length) {
+			Arrays.sort(nowSiteIds_arr); // 기존목록 정렬
+			Arrays.sort(newSiteIds_arr); // 변경목록 정렬
+			
+			changeYn = ( Arrays.equals(nowSiteIds_arr, newSiteIds_arr) ) ? "N" : "Y"; 
+		}
+		
+		if("Y".equals(changeYn)) {
+			// 로직 : 기존목록과 변경된목록을 비교한다.
+			// 기존에 존재하고 변경된 목록에 미존재 : 그룹에저 제외됨
+			// 기존에도 존재하고 변경된 목록에도 존재 : 변동없음
+			// 기존에 미존재하고 변경된 목록에 존재 : 그룹에 새로 추가됨
+			// 기존목록이 있는데 변경된 목록이 null일 경우 : 그룹에서 전부 제외됨
+			// 기존목록이 null인데 변경된 목록이 존재 : 빈 그룹에 새로 추가됨
+			int addCnt = 0;
+			int delCnt = 0;
+			if(nowSiteIds_arr.length > 0) { // 기존목록의 데이터를 변동된목록에 존재하는지 확인
+				for (int i = 0; i < nowSiteIds_arr.length; i++) {
+					String str = nowSiteIds_arr[i];
+					boolean res = Arrays.asList(newSiteIds_arr).contains(str);
+					if(!res) { // 기존에 존재하고 변경된 목록에 미존재 : 그룹에저 제외됨
+						HashMap dvMap = new HashMap<String, Object>();
+						dvMap.put("siteId", str);
+						dvMap.put("siteGrpIdx", 0);
+						dvMap.put("modUid", "tttt");
+						int cnt = cmpyGrpSiteMngService.updateSite(dvMap);
+						addCnt = addCnt + cnt;
+					}
+				}
+			}
+			if(newSiteIds_arr.length > 0) { // 변동된목록의 데이터를 기존목록에 존재하는지 확인
+				for (int i = 0; i < newSiteIds_arr.length; i++) {
+					String str = newSiteIds_arr[i];
+					boolean res = Arrays.asList(nowSiteIds_arr).contains(str);
+					if(!res) { // 기존에 미존재하고 변경된 목록에 존재 : 그룹에 새로 추가됨
+						HashMap dvMap = new HashMap<String, Object>();
+						dvMap.put("siteId", str);
+						dvMap.put("siteGrpIdx", selSiteGrpIdx);
+						dvMap.put("modUid", "tttt");
+						int cnt = cmpyGrpSiteMngService.updateSite(dvMap);
+						delCnt = addCnt + cnt;
+					}
+				}
+			}
+			
+		}
+		
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("resultCnt", 0);
+		resultMap.put("changeYn", changeYn);
 		return resultMap;
 	}
 	

@@ -263,7 +263,7 @@
     <div id="layerbox" class="dgroup" style="min-width:800px;">
         <div class="stit">
         	<h2>그룹 관리</h2>        	
-			<a href="javascript:popupClose('dgroup');">닫기</a>
+			<a href="#;" id="cancelSiteInSiteGrpBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
 
@@ -282,25 +282,31 @@
 				<a href="#;" class="default_btn fr" id="insertGrpFormBtn"><i class="glyphicon glyphicon-plus"></i> 그룹 추가하기</a>
 			</div>
 			<div class="group_wrap clear">
+				<form id="editSiteInSiteGrpForm" name="editSiteInSiteGrpForm">
+				<!-- <input type="hidden" id="selSiteId" name="selSiteId"> -->
+				<input type="hidden" id="selSiteGrpIdx" name="selSiteGrpIdx">
+				<input type="hidden" id="nowSiteIds" name="nowSiteIds">
+				<input type="hidden" id="newSiteIds" name="newSiteIds">
 				<div class="inside_site fl">
 					<h2 class="ntit">그룹 내 사이트</h2>
 					<div class="inbox">
 						<ul class="multi_select">
-							<li><a href="#;">롯데_Site_01</a></li>
+							<!-- <li><a href="#;">롯데_Site_01</a></li>
 							<li><a href="#;">롯데_Site_02</a></li>
-							<li><a href="#;">롯데_Site_03</a></li>
+							<li><a href="#;">롯데_Site_03</a></li> -->
 						</ul>
 					</div>
 				</div>
+				</form>
 				<div class="cross_btn fl">
-					<div><a href="#;"><img src="../img/btn_cross_left.png" alt="<"></a></div>
-					<div><a href="#;"><img src="../img/btn_cross_right.png" alt=">"></a></div>
+					<div><a href="#;" id="moveLeft"><img src="../img/btn_cross_left.png" alt="<"></a></div>
+					<div><a href="#;" id="moveRight"><img src="../img/btn_cross_right.png" alt=">"></a></div>
 				</div>
 				<div class="all_site fl">
 					<h2 class="ntit">전체 사이트</h2>
 					<div class="inbox">
 						<ul class="multi_select">
-							<li><a href="#;">롯데_Site_01</a></li>
+							<!-- <li><a href="#;">롯데_Site_01</a></li>
 							<li><a href="#;">롯데_Site_02</a></li>
 							<li><a href="#;">롯데_Site_03</a></li>
 							<li><a href="#;">롯데_Site_04</a></li>
@@ -308,7 +314,7 @@
 							<li><a href="#;">롯데_Site_06</a></li>
 							<li><a href="#;">롯데_Site_07</a></li>
 							<li><a href="#;">롯데_Site_08</a></li>
-							<li><a href="#;">롯데_Site_09</a></li>
+							<li><a href="#;">롯데_Site_09</a></li> -->
 						</ul>
 					</div>
 				</div>
@@ -316,8 +322,8 @@
 
 		</div>
 		<div class="btn_center">
-			<a href="#;" class="default_btn w80">확인</a>
-			<a href="#;" class="cancel_btn w80">취소</a>
+			<a href="#;" class="default_btn w80" id="confirmSiteInSiteGrpBtn">확인</a>
+			<a href="#;" class="cancel_btn w80" id="cancelSiteInSiteGrpBtn">취소</a>
 		</div>
     </div>
     <!-- ###### Popup End ###### -->    
