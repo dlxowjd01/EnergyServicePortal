@@ -71,6 +71,9 @@
 												</thead>
 												<tbody id="ioeTbody">
 													<tr>
+														<td colspan="6">조회된 데이터가 없습니다.</td>
+													</tr>
+													<!-- <tr>
 														<td>1</td>
 														<td>10037202</td>
 														<td>IOE(총량)</td>
@@ -96,7 +99,7 @@
 														<td>DISCONNECTED</td>
 														<td>2018-06-15  2:39:01 PM</td>
 														<td><a href="#;" onclick="popupOpen('dview_ioe')" class="detail_view">상세보기</a></td>
-													</tr>
+													</tr> -->
 												</tbody>
 											</table>				
 										</div>
@@ -127,6 +130,9 @@
 												</thead>
 												<tbody id="pcsTbody">
 													<tr>
+														<td colspan="8">조회된 데이터가 없습니다.</td>
+													</tr>
+													<!-- <tr>
 														<td>1</td>
 														<td>10037202</td>
 														<td>PCS_01</td>
@@ -147,7 +153,7 @@
 														<td>AC over current R-phase</td>
 														<td>2018-06-15  2:39:01 PM</td>
 														<td><a href="#;" onclick="popupOpen('dview_pcs')" class="detail_view">상세보기</a></td>
-													</tr>
+													</tr> -->
 												</tbody>
 											</table>				
 										</div>
@@ -178,6 +184,9 @@
 												</thead>
 												<tbody id="bmsTbody">
 													<tr>
+														<td colspan="8">조회된 데이터가 없습니다.</td>
+													</tr>
+													<!-- <tr>
 														<td>1</td>
 														<td>10037202</td>
 														<td>BMS_01</td>
@@ -198,7 +207,7 @@
 														<td>Over cell Voltage</td>
 														<td>2018-06-15  2:39:01 PM</td>
 														<td><a href="#;" onclick="popupOpen('dview_bms')" class="detail_view">상세보기</a></td>
-													</tr>
+													</tr> -->
 												</tbody>
 											</table>				
 										</div>
@@ -229,6 +238,9 @@
 												</thead>
 												<tbody id="pvTbody">
 													<tr>
+														<td colspan="8">조회된 데이터가 없습니다.</td>
+													</tr>
+													<!-- <tr>
 														<td>1</td>
 														<td>10037202</td>
 														<td>PV_01</td>
@@ -249,7 +261,7 @@
 														<td>Bulk UV</td>
 														<td>2018-06-15  2:39:01 PM</td>
 														<td><a href="#;" onclick="popupOpen('dview_pv')" class="detail_view">상세보기</a></td>
-													</tr>
+													</tr> -->
 												</tbody>
 											</table>				
 										</div>

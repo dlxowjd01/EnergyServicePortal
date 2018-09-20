@@ -17,6 +17,7 @@
 		$tbody.empty();
 		if(ioeList == null || ioeList.length < 1) {
 			$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
+			$('#DeviceIOEPaging').empty();
 		} else {
 			for(var i=0; i<ioeList.length; i++) {
 				var device_stat = (ioeList[i].device_stat == 1) ? "connect" : "disconnect";
@@ -88,6 +89,7 @@
 		$tbody.empty();
 		if(pcsList == null || pcsList.length < 1) {
 			$tbody.append( '<tr><td colspan="8">조회된 데이터가 없습니다.</td><tr>' );
+			$('#DevicePCSPaging').empty();
 		} else {
 			for(var i=0; i<pcsList.length; i++) {
 				var device_stat = (pcsList[i].device_stat == 1) ? "connect" : "disconnect";
@@ -209,6 +211,7 @@
 		$tbody.empty();
 		if(bmsList == null || bmsList.length < 1) {
 			$tbody.append( '<tr><td colspan="8">조회된 데이터가 없습니다.</td><tr>' );
+			$('#DeviceBMSPaging').empty();
 		} else {
 			for(var i=0; i<bmsList.length; i++) {
 				var device_stat = (bmsList[i].device_stat == 1) ? "connect" : "disconnect";
@@ -316,6 +319,7 @@
 		$tbody.empty();
 		if(pvList == null || pvList.length < 1) {
 			$tbody.append( '<tr><td colspan="8">조회된 데이터가 없습니다.</td><tr>' );
+			$('#DevicePVPaging').empty();
 		} else {
 			for(var i=0; i<pvList.length; i++) {
 				var device_stat = (pvList[i].device_stat == 1) ? "connect" : "disconnect";

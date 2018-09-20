@@ -10,10 +10,9 @@
 				page_tb.*
 			from (
 					select 
-						<!-- site_id as co_idx, user_idx as co_id, site_name as co_name, 
-						del_yn, reg_uid, reg_date, mod_uid, mod_date  -->
-						co_idx, co_id, site_grp_id, co_name, del_yn, reg_uid, reg_date, mod_uid, mod_date 
-					from tb_company<!-- tb_site -->
+						comp_idx, user_idx, comp_id, comp_name, del_yn, reg_uid, reg_date, mod_uid, mod_date
+					from tb_company
+					where del_yn = 'N'
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
@@ -32,10 +31,9 @@
 				page_tb.*
 			from (
 					select 
-						<!-- site_id as co_idx, user_idx as co_id, site_name as co_name, 
-						del_yn, reg_uid, reg_date, mod_uid, mod_date  -->
-						co_idx, co_id, site_grp_id, co_name, del_yn, reg_uid, reg_date, mod_uid, mod_date 
-					from tb_company<!-- tb_site -->
+						comp_idx, user_idx, comp_id, comp_name, del_yn, reg_uid, reg_date, mod_uid, mod_date
+					from tb_company
+					where del_yn = 'N'
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
@@ -158,7 +156,7 @@
 		where del_yn = 'N'
 		and user_idx = #{userIdx }
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)"> 
-		and site_grp_idx != #{siteGrpIdx }
+		and (site_grp_idx != #{siteGrpIdx } or site_grp_idx is null)
 		</if>
 		order by reg_date
 	</select>
@@ -166,10 +164,10 @@
 	<select id="getCmpyDetail" parameterType="hashMap" resultType="hashMap">
 		/* 회사 한건 조회 */
 		select 
-			co_idx, co_id, site_grp_id, co_name, del_yn, reg_uid, reg_date, mod_uid, mod_date 
+			comp_idx, user_idx, comp_id, comp_name, del_yn, reg_uid, reg_date, mod_uid, mod_date
 		from tb_company
 		where del_yn = 'N'
-		and co_idx = #{coIdx }
+		and comp_idx = #{compIdx }
 	</select>
 	
 	<select id="getGroupDetail" parameterType="hashMap" resultType="hashMap">
@@ -194,17 +192,19 @@
 	<insert id="insertCmpy" parameterType="hashMap">
 		/* 회사 등록 */
 		insert into tb_company (
-			co_idx,   /* 회사식별자 */
-			co_name,   /* 회사명 */
-			co_id,   /* 회사ID */
+			<!-- comp_idx,   /* 회사식별자 */ -->
+			user_idx, /* 사용자식별자 */
+			comp_name,   /* 회사명 */
+			comp_id,   /* 회사ID */
 			del_yn, 
 			reg_uid, 
 			reg_date
 		)
 		values (
-			<!-- #{co_idx }, --> 
-			#{coName }, 
-			#{coId }, 
+			<!-- #{comp_idx }, --> 
+			#{userIdx }, 
+			#{compName }, 
+			#{compId }, 
 			'N', 
 			#{regUid }, 
 			now()
@@ -267,16 +267,16 @@
 		/* 회사 정보 수정 */
 		update tb_company
 		set 
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpId)"> 
-		    co_name = #{coName },   /* 회사명 */
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compName)"> 
+		    comp_name = #{compName },   /* 회사명 */
 		    </if>
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpName)"> 
-		    co_id = #{coId },   /* 회사ID */
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compId)"> 
+		    comp_id = #{compId },   /* 회사ID */
 		    </if>
 		    mod_uid       = #{modUid }, 
 		    mod_date      = now()
 		where 1=1
-		and co_idx = #{coIdx }
+		and comp_idx = #{compIdx }
 	</update>
 	
 	<update id="updateGroup" parameterType="hashMap">
@@ -332,7 +332,7 @@
 		    mod_uid       = #{modUid }, 
 		    mod_date      = now()
 		where 1=1
-		and co_idx = #{coIdx }
+		and comp_idx = #{compIdx }
 	</update>
 	
 	<update id="deleteGroup" parameterType="hashMap">

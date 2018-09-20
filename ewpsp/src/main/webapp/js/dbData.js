@@ -616,13 +616,13 @@ function getSitePopupList(siteGrpIdx) {
 }
 
 //회사 한건 조회
-function getCmpyDetail(siteGrpIdx) {
+function getCmpyDetail(compIdx) {
 	$.ajax({
 		url : "/getCmpyDetail",
 		type : 'post',
 		async : false, // 동기로 처리해줌
 		data : {
-			siteGrpIdx : siteGrpIdx
+			compIdx : compIdx
 		},
 		success: function(result) {
 			callback_getCmpyDetail(result);
@@ -757,13 +757,13 @@ function updateSite(formData) {
 }
 
 // 회사 삭제
-function deleteCmpy(siteGrpIdx) {
+function deleteCmpy(compIdx) {
 	$.ajax({
 		url : "/deleteCmpy",
 		type : 'post',
 		async : false, // 동기로 처리해줌
 		data : {
-			siteGrpIdx : siteGrpIdx
+			compIdx : compIdx
 		},
 		success: function(result) {
 			callback_deleteCmpy(result);

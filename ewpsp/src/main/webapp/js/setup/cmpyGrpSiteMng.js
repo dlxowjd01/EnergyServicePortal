@@ -4,7 +4,7 @@ $(document).ready(function() {
 	});
 	
 	function getDBData() {
-//		getCmpyList(1); // 회사 목록 조회(회사table 생성 시 주석 해제)
+		getCmpyList(1); // 회사 목록 조회(회사table 생성 시 주석 해제)
 		getGroupList(1); // 그룹 목록 조회
 		getSiteList(1); // 사이트 목록 조회
 	}
@@ -18,17 +18,18 @@ $(document).ready(function() {
 		$tbody.empty();
 		if(cmpyList == null || cmpyList.length < 1) {
 			$tbody.append( '<tr><td colspan="5">조회된 데이터가 없습니다.</td><tr>' );
+			$('#CmpyPaging').empty();
 		} else {
 			for(var i=0; i<cmpyList.length; i++) {
 				var device_stat = (cmpyList[i].device_stat == 1) ? "connect" : "disconnect";
 				$tbody.append(
 						$('<tr />').append( $("<td />").append( cmpyList[i].rnum ) // no
-						).append( $("<td />").append( cmpyList[i].co_name ) // 회사명
-						).append( $("<td />").append( cmpyList[i].co_id ) // 회사id
+						).append( $("<td />").append( cmpyList[i].comp_name ) // 회사명
+						).append( $("<td />").append( cmpyList[i].comp_id ) // 회사id
 						).append( // 관리
 								$("<td />").append(
-										'<a href="#;" onclick="updateCmpyForm(\''+cmpyList[i].co_idx+'\');" class="default_btn">수정</a>'+
-										'<a href="#;" onclick="deleteCmpyYn(\''+cmpyList[i].co_idx+'\');" class="cancel_btn">삭제</a>'
+										'<a href="#;" onclick="updateCmpyForm(\''+cmpyList[i].comp_idx+'\');" class="default_btn">수정</a>'+
+										'<a href="#;" onclick="deleteCmpyYn(\''+cmpyList[i].comp_idx+'\');" class="cancel_btn">삭제</a>'
 								)
 						)
 				);
@@ -49,6 +50,7 @@ $(document).ready(function() {
 		$tbody.empty();
 		if(grpList == null || grpList.length < 1) {
 			$tbody.append( '<tr><td colspan="5">조회된 데이터가 없습니다.</td><tr>' );
+			$('#GroupPaging').empty();
 		} else {
 			for(var i=0; i<grpList.length; i++) {
 				var device_stat = (grpList[i].device_stat == 1) ? "connect" : "disconnect";
@@ -77,12 +79,11 @@ $(document).ready(function() {
 	function callback_getSiteList(result) {
 		var siteList = result.list;
 		
-		var strHtml = "";
 		$tbody = $("#siteTbody");
 		$tbody.empty();
 		if(siteList == null || siteList.length < 1) {
-			strHtml += '<tr><td colspan="7">조회된 데이터가 없습니다.</td><tr>';
-			$tbody.append( strHtml );
+			$tbody.append( '<tr><td colspan="7">조회된 데이터가 없습니다.</td><tr>' );
+			$('#SitePaging').empty();
 		} else {
 			for(var i=0; i<siteList.length; i++) {
 				var device_stat = (siteList[i].device_stat == 1) ? "connect" : "disconnect";
@@ -248,21 +249,22 @@ $(document).ready(function() {
 		}
 	}
 
-	function updateCmpyForm(siteId) {
+	function updateCmpyForm(compIdx) {
 		insUpdFlag = 2;
-		getCmpyDetail(siteId);
+		getCmpyDetail(compIdx);
 	}
 
 	// 회사 한건 조회
 	function callback_getCmpyDetail(result) {
 		var cmpyDetail = result.detail;
 		
-		if(siteDetail == null) {
+		if(cmpyDetail == null) {
 			alert("조회된 데이터가 없습니다.");
 //			location.href = "/siteMain";
 		} else {
-			$("#coName").val( siteDetail.user_idx );
-			$("#coId").val( siteDetail.site_name );
+			$("#compIdx").val( cmpyDetail.comp_idx );
+			$("#compName").val( cmpyDetail.comp_name );
+			$("#compId").val( cmpyDetail.comp_id );
 			
 			popupOpen('dcompany');
 		}
@@ -279,9 +281,9 @@ $(document).ready(function() {
 		}
 	}
 	
-	function deleteCmpyYn(siteId) {
+	function deleteCmpyYn(compIdx) {
 		if(confirm("삭제하시겠습니까?")) {
-			deleteCmpy(siteId);
+			deleteCmpy(compIdx);
 		}
 	}
 

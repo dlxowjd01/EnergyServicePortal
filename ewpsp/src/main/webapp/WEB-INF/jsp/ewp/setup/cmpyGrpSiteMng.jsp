@@ -49,6 +49,9 @@
 										</thead>
 										<tbody id="cmpyTbody">
 											<tr>
+												<td colspan="4">조회된 데이터가 없습니다.</td>
+											</tr>
+											<!-- <tr>
 												<td>1</td>
 												<td>제일화성</td>
 												<td>10037202</td>
@@ -74,7 +77,7 @@
 													<a href="#;" class="default_btn">수정</a>
 													<a href="#;" class="cancel_btn">삭제</a>
 												</td>
-											</tr>
+											</tr> -->
 										</tbody>
 									</table>
 								</div>	
@@ -112,6 +115,9 @@
 										</thead>
 										<tbody id="grpTbody">
 											<tr>
+												<td colspan="5">조회된 데이터가 없습니다.</td>
+											</tr>
+											<!-- <tr>
 												<td>1</td>
 												<td>제일화성_1</td>
 												<td>200372021</td>
@@ -140,7 +146,7 @@
 													<a href="#;" class="default_btn">수정</a>
 													<a href="#;" class="cancel_btn">삭제</a>
 												</td>
-											</tr>
+											</tr> -->
 										</tbody>
 									</table>
 								</div>	
@@ -181,6 +187,9 @@
 										</thead>
 										<tbody id="siteTbody">
 											<tr>
+												<td colspan="7">조회된 데이터가 없습니다.</td>
+											</tr>
+											<!-- <tr>
 												<td>1</td>
 												<td>제일화성</td>
 												<td>10037202</td>
@@ -203,7 +212,7 @@
 													<a href="#;" class="default_btn">수정</a>
 													<a href="#;" class="cancel_btn">삭제</a>
 												</td>
-											</tr>
+											</tr> -->
 										</tbody>
 									</table>
 								</div>	
@@ -232,6 +241,7 @@
 
 			<div class="set_tbl clear">
 				<form id="cmpyForm" name="cmpyForm">
+				<input type="hidden" name="compIdx" id="compIdx" class="input" value="">
 				<table>
 					<colgroup>
 						<col width="100">
@@ -240,11 +250,11 @@
 					<tbody>
 						<tr>
 							<th><span>회사명</span></th>
-							<td><input type="text" name="coName" id="coName" class="input" style="width:100%"></td>
+							<td><input type="text" name="compName" id="compName" class="input" style="width:100%"></td>
 						</tr>
 						<tr>
 							<th><span>회사ID</span></th>
-							<td><input type="text" name="coId" id="coId" class="input" style="width:100%"></td>
+							<td><input type="text" name="compId" id="compId" class="input" style="width:100%"></td>
 						</tr>
 					</tbody>			
 				</table>

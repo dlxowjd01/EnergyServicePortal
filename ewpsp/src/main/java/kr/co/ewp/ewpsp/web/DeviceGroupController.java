@@ -119,32 +119,11 @@ public class DeviceGroupController {
 		if(newDeviceIds != null && !"".equals(newDeviceIds)) {
 			newDeviceIds_arr = newDeviceIds.split(",");
 		}
-		System.out.println("nowDeviceIds : "+nowDeviceIds);
-		System.out.println("newDeviceIds : "+newDeviceIds);
 		
 		// 기존목록과 변경목록이 동일한지 확인 -> 동일하면 변경사항 없음
 		String changeYn = "Y";
-		if(nowDeviceIds_arr.length == newDeviceIds_arr.length) {
-			Arrays.sort(nowDeviceIds_arr); // 기존목록 정렬
-			Arrays.sort(newDeviceIds_arr); // 변경목록 정렬
-			
-			System.out.println("Arrays.equals(nowDeviceIds_arr, newDeviceIds_arr) : "+Arrays.equals(nowDeviceIds_arr, newDeviceIds_arr));
-			changeYn = ( Arrays.equals(nowDeviceIds_arr, newDeviceIds_arr) ) ? "N" : "Y"; 
-//			int equalCnt = 0;
-//			for (int i = 0; i < nowDeviceIds_arr.length; i++) {
-//				System.out.println(nowDeviceIds_arr[i]+", "+newDeviceIds_arr[i]);
-//				if(nowDeviceIds_arr[i] == newDeviceIds_arr[i]) {
-//					System.out.println("여기와");
-//					equalCnt++;
-//				}
-//			}
-//			System.out.println(equalCnt);
-//			if(equalCnt == nowDeviceIds_arr.length) {
-//				logger.debug("변동사항 없음");
-//				changeYn = "N";
-//			}
-		}
-		System.out.println("changeYn : "+changeYn);
+		changeYn = ( Arrays.equals(nowDeviceIds_arr, newDeviceIds_arr) ) ? "N" : "Y"; 
+		
 		if("Y".equals(changeYn)) {
 			// 로직 : 기존장치목록과 변경된장치목록을 비교한다.
 			// 기존장치에 존재하고 변경된 장치목록에 미존재 : 그룹에저 제외됨
@@ -154,32 +133,58 @@ public class DeviceGroupController {
 			// 기존장치목록이 null인데 변경된 장치목록이 존재 : 빈 그룹에 새로 추가됨
 			int addCnt = 0;
 			int delCnt = 0;
-			if(nowDeviceIds_arr.length > 0) { // 기존장치목록의 데이터를 변동된장치목록에 존재하는지 확인
-				for (int i = 0; i < nowDeviceIds_arr.length; i++) {
-					String str = nowDeviceIds_arr[i];
-					boolean res = Arrays.asList(newDeviceIds_arr).contains(str);
-					if(!res) { // 기존장치에 존재하고 변경된 장치목록에 미존재 : 그룹에저 제외됨
-						HashMap dvMap = new HashMap<String, Object>();
-						dvMap.put("deviceId", str);
-						dvMap.put("deviceGrpIdx", 0);
-						dvMap.put("modUid", "tttt");
-						int cnt = deviceGroupService.updateDevice(dvMap);
-						addCnt = addCnt + cnt;
+			if(nowDeviceIds_arr != null) {
+				if(nowDeviceIds_arr.length > 0) { // 기존장치목록의 데이터를 변동된장치목록에 존재하는지 확인
+					for (int i = 0; i < nowDeviceIds_arr.length; i++) {
+						String str = nowDeviceIds_arr[i];
+						boolean res = false;
+						if(newDeviceIds_arr != null) Arrays.asList(newDeviceIds_arr).contains(str);
+						if(!res) { // 기존장치에 존재하고 변경된 장치목록에 미존재 : 그룹에저 제외됨
+							HashMap dvMap = new HashMap<String, Object>();
+							dvMap.put("deviceId", str);
+							dvMap.put("deviceGrpIdx", 0);
+							dvMap.put("modUid", "tttt");
+							int cnt = deviceGroupService.updateDevice(dvMap);
+							delCnt = delCnt + cnt;
+						}
 					}
 				}
-			}
-			if(newDeviceIds_arr.length > 0) { // 변동된장치목록의 데이터를 기존장치목록에 존재하는지 확인
+				
+			} else {
 				for (int i = 0; i < newDeviceIds_arr.length; i++) {
-					String str = newDeviceIds_arr[i];
-					boolean res = Arrays.asList(nowDeviceIds_arr).contains(str);
-					if(!res) { // 기존장치에 미존재하고 변경된 장치목록에 존재 : 그룹에 새로 추가됨
-						HashMap dvMap = new HashMap<String, Object>();
-						dvMap.put("deviceId", str);
-						dvMap.put("deviceGrpIdx", selDvGrpIdx);
-						dvMap.put("modUid", "tttt");
-						int cnt = deviceGroupService.updateDevice(dvMap);
-						delCnt = addCnt + cnt;
+					HashMap dvMap = new HashMap<String, Object>();
+					dvMap.put("deviceId", newDeviceIds_arr[i]);
+					dvMap.put("deviceGrpIdx", selDvGrpIdx);
+					dvMap.put("modUid", "tttt");
+					int cnt = deviceGroupService.updateDevice(dvMap);
+					addCnt = addCnt + cnt;
+				}
+			}
+			
+			if(newDeviceIds_arr != null) {
+				if(newDeviceIds_arr.length > 0) { // 변동된장치목록의 데이터를 기존장치목록에 존재하는지 확인
+					for (int i = 0; i < newDeviceIds_arr.length; i++) {
+						String str = newDeviceIds_arr[i];
+						boolean res = false;
+						if(nowDeviceIds_arr != null) Arrays.asList(nowDeviceIds_arr).contains(str);
+						if(!res) { // 기존장치에 미존재하고 변경된 장치목록에 존재 : 그룹에 새로 추가됨
+							HashMap dvMap = new HashMap<String, Object>();
+							dvMap.put("deviceId", str);
+							dvMap.put("deviceGrpIdx", selDvGrpIdx);
+							dvMap.put("modUid", "tttt");
+							int cnt = deviceGroupService.updateDevice(dvMap);
+							addCnt = addCnt + cnt;
+						}
 					}
+				}
+			} else {
+				for (int i = 0; i < nowDeviceIds_arr.length; i++) {
+					HashMap dvMap = new HashMap<String, Object>();
+					dvMap.put("deviceId", nowDeviceIds_arr[i]);
+					dvMap.put("deviceGrpIdx", 0);
+					dvMap.put("modUid", "tttt");
+					int cnt = deviceGroupService.updateDevice(dvMap);
+					delCnt = delCnt + cnt;
 				}
 			}
 			
