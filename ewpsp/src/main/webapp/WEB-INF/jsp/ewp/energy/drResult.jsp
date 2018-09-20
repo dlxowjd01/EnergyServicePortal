@@ -32,7 +32,7 @@
 								</li>
 								<li>
 									<div class="ctit"><span>감축량</span></div>
-									<div class="cval" id="totalReduceAmt"><span>20,976</span>kWh</div>
+									<div class="cval" id="totalReduceAmt"><span>0</span>kWh</div>
 								</li>
 							</ul>
 						</div>

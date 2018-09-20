@@ -28,19 +28,19 @@
 							<ul class="chart_total">
 								<li class="es1">
 									<div class="ctit es1"><span>충전량</span></div>
-									<div class="cval" id="pastChgTot"><span>14,976</span>kWh</div>
+									<div class="cval" id="pastChgTot"><span>0</span>kWh</div>
 								</li>
 								<li class="es2">
 									<div class="ctit es2"><span>충전 계획</span></div>
-									<div class="cval" id="pastDischgTot"><span>20,976</span>kWh</div>
+									<div class="cval" id="pastDischgTot"><span>0</span>kWh</div>
 								</li>
 								<li class="es3">
 									<div class="ctit es3"><span>방전량</span></div>
-									<div class="cval" id="fetureChgTot"><span>20,976</span>kWh</div>
+									<div class="cval" id="fetureChgTot"><span>0</span>kWh</div>
 								</li>
 								<li class="es4">
 									<div class="ctit es4"><span>방전 계획</span></div>
-									<div class="cval" id="fetureDischgTot"><span>20,976</span>kWh</div>
+									<div class="cval" id="fetureDischgTot"><span>0</span>kWh</div>
 								</li>
 							</ul>
 						</div>

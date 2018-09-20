@@ -28,19 +28,19 @@
 							<ul class="chart_total">
 								<li class="ctt1">
 									<div class="ctit ctt1"><span>기본요금</span></div>
-									<div class="cval" id="kepcoBillTot1"><span>14,976</span>won</div>
+									<div class="cval" id="kepcoBillTot1"><span>0</span>won</div>
 								</li>
 								<li class="ctt2">
 									<div class="ctit ctt2"><span>사용요금(역률적용)</span></div>
-									<div class="cval" id="kepcoBillTot2"><span>20,976</span>won</div>
+									<div class="cval" id="kepcoBillTot2"><span>0</span>won</div>
 								</li>
 								<li class="ctt3">
 									<div class="ctit ctt3"><span>전력산업기반기금</span></div>
-									<div class="cval" id="kepcoBillTot3"><span>20,976</span>won</div>
+									<div class="cval" id="kepcoBillTot3"><span>0</span>won</div>
 								</li>
 								<li class="ctt4">
 									<div class="ctit ctt4"><span>부가세</span></div>
-									<div class="cval" id="kepcoBillTot4"><span>20,976</span>won</div>
+									<div class="cval" id="kepcoBillTot4"><span>0</span>won</div>
 								</li>
 							</ul>
 						</div>

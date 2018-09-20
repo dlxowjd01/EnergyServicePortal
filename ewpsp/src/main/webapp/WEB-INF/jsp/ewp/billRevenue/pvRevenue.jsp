@@ -28,15 +28,15 @@
 							<ul class="chart_total">
 								<li class="ctt1">
 									<div class="ctit ctt1"><span>총 수익</span></div>
-									<div class="cval" id="pvRevenueTot1"><span>14,976</span>won</div>
+									<div class="cval" id="pvRevenueTot1"><span>0</span>won</div>
 								</li>
 								<li class="ctt2">
 									<div class="ctit ctt2"><span>SMP 수익</span></div>
-									<div class="cval" id="pvRevenueTot2"><span>20,976</span>won</div>
+									<div class="cval" id="pvRevenueTot2"><span>0</span>won</div>
 								</li>
 								<li class="ctt3">
 									<div class="ctit ctt3"><span>REC 수익</span></div>
-									<div class="cval" id="pvRevenueTot3"><span>20,976</span>won</div>
+									<div class="cval" id="pvRevenueTot3"><span>0</span>won</div>
 								</li>
 							</ul>
 						</div>

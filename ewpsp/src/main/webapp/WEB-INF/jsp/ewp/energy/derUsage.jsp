@@ -28,15 +28,15 @@
 							<ul class="chart_total">
 								<li class="pk1">
 									<div class="ctit pk1"><span>한전 사용량</span></div>
-									<div class="cval" id="usageTotal"><span>14,976</span>kWh</div>
+									<div class="cval" id="usageTotal"><span>0</span>kWh</div>
 								</li>
 								<li class="pk2">
 									<div class="ctit pk2"><span>ESS 사용량</span></div>
-									<div class="cval" id="essUsageTotal"><span>20,976</span>kWh</div>
+									<div class="cval" id="essUsageTotal"><span>0</span>kWh</div>
 								</li>
 								<li class="pk3">
 									<div class="ctit pk3"><span>PV 사용량</span></div>
-									<div class="cval" id="pvUsageTotal"><span>20,976</span>kWh</div>
+									<div class="cval" id="pvUsageTotal"><span>0</span>kWh</div>
 								</li>
 							</ul>
 						</div>

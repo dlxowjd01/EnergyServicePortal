@@ -31,15 +31,15 @@
 								<li class="pk1">
 									<div class="ctit pk1"><span>최대 피크 전력</span></div>
 									<div class="pktime"><span>2018-08-12 11:41:26</span></div>
-									<div class="cval" id="pastPeakListTot"><span>14,976</span>kW</div>
+									<div class="cval" id="pastPeakListTot"><span>0</span>kW</div>
 								</li>
 								<li class="pk2">
 									<div class="ctit pk2"><span>한전 계약 전력</span></div>
-									<div class="cval" id="contractPowerListTot"><span>20,976</span>kW</div>
+									<div class="cval" id="contractPowerListTot"><span>0</span>kW</div>
 								</li>
 								<li class="pk3">
 									<div class="ctit pk3"><span>요금 적용 전력</span></div>
-									<div class="cval" id="chargePowerListTot"><span>20,976</span>kW</div>
+									<div class="cval" id="chargePowerListTot"><span>0</span>kW</div>
 								</li>
 							</ul>
 						</div>

@@ -28,11 +28,11 @@
 							<ul class="chart_total">
 								<li class="ct1">
 									<div class="ctit ct1"><span>고객 정산금액</span></div>
-									<div class="cval" id="essRevenueTot1"><span>14,976</span>won</div>
+									<div class="cval" id="essRevenueTot1"><span>0</span>won</div>
 								</li>
 								<li>
 									<div class="ctit"><span>실적 할인금액</span></div>
-									<div class="cval" id="essRevenueTot2"><span>20,976</span>won</div>
+									<div class="cval" id="essRevenueTot2"><span>0</span>won</div>
 								</li>
 							</ul>
 						</div>
