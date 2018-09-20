@@ -270,6 +270,10 @@
 	function changeSelSite(siteId) {
 		popupYn = "Y";
 		$("#selSiteId").val(siteId);
+		
+		$(".inside_site").find("ul").empty();
+		$(".all_site").find("ul").empty();
+		
 		getDeviceGroupList(siteId);
 	}
 	
@@ -321,7 +325,7 @@
 			
 		}
 		
-	    $(".multi_select a,").click(function() {
+	    $(".multi_select a").click(function() {
 	        $(this).toggleClass("on");
 	        return false;
 	    });
