@@ -108,7 +108,7 @@ public class DeviceGroupController {
 		logger.debug("/saveDvInDvGrp");
 		logger.debug("param ::::: "+param.toString());
 		
-		String selDvGrpIdx = (String) param.get("selDvGrpIdx"); // 그룹 목록
+		String selDvGrpIdx = (String) param.get("selDvGrpIdx"); // 추가할 그룹id
 		String nowDeviceIds = (String) param.get("nowDeviceIds"); // 기존 그룹내 장치목록
 		String newDeviceIds = (String) param.get("newDeviceIds"); // 변경할 그룹내 장치목록
 		String nowDeviceIds_arr[] = null; // 기존 그룹내 장치목록
@@ -138,8 +138,8 @@ public class DeviceGroupController {
 					for (int i = 0; i < nowDeviceIds_arr.length; i++) {
 						String str = nowDeviceIds_arr[i];
 						boolean res = false;
-						if(newDeviceIds_arr != null) Arrays.asList(newDeviceIds_arr).contains(str);
-						if(!res) { // 기존장치에 존재하고 변경된 장치목록에 미존재 : 그룹에저 제외됨
+						if(newDeviceIds_arr != null) res = Arrays.asList(newDeviceIds_arr).contains(str);
+						if(!res) { // 기존장치에 존재하고 변경된 장치목록에 미존재 : 그룹에서 제외됨
 							HashMap dvMap = new HashMap<String, Object>();
 							dvMap.put("deviceId", str);
 							dvMap.put("deviceGrpIdx", 0);
@@ -166,7 +166,7 @@ public class DeviceGroupController {
 					for (int i = 0; i < newDeviceIds_arr.length; i++) {
 						String str = newDeviceIds_arr[i];
 						boolean res = false;
-						if(nowDeviceIds_arr != null) Arrays.asList(nowDeviceIds_arr).contains(str);
+						if(nowDeviceIds_arr != null) res = Arrays.asList(nowDeviceIds_arr).contains(str);
 						if(!res) { // 기존장치에 미존재하고 변경된 장치목록에 존재 : 그룹에 새로 추가됨
 							HashMap dvMap = new HashMap<String, Object>();
 							dvMap.put("deviceId", str);
@@ -189,6 +189,86 @@ public class DeviceGroupController {
 			}
 			
 		}
+		
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("resultCnt", 0);
+		resultMap.put("changeYn", changeYn);
+		return resultMap;
+	}
+	
+	/**
+	 * 사이트 내 장치그룹 추가/제거
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/saveDvGrp")
+	public @ResponseBody Map<String, Object> saveDvGrp(@RequestParam HashMap param) throws Exception {
+		logger.debug("/saveDvGrp");
+		logger.debug("param ::::: "+param.toString());
+
+		String selectSiteId = (String) param.get("selectSiteId"); // 추가할 그룹id
+		String nowDvGrpIds = (String) param.get("nowDvGrpIds"); // 기존 사이트내 장치그룹목록
+		String newDvGrpIds = (String) param.get("newDvGrpIds"); // 변경할 사이트내 장치그룹목록
+		String newDvGrpNms = (String) param.get("newDvGrpNms"); // 새로 추가될 사이트내 장치그룹목록
+		String nowDvGrpIds_arr[] = null; // 기존 그룹내 장치목록
+		String newDvGrpIds_arr[] = null; // 변경할 그룹내 장치목록 
+		String newDvGrpNms_arr[] = null; // 새로 추가될 사이트내 장치그룹목록 
+		if(nowDvGrpIds != null && !"".equals(nowDvGrpIds)) {
+			nowDvGrpIds_arr = nowDvGrpIds.split(",");
+		}
+		if(newDvGrpIds != null && !"".equals(newDvGrpIds)) {
+			newDvGrpIds_arr = newDvGrpIds.split(",");
+		}
+		if(newDvGrpNms != null && !"".equals(newDvGrpNms)) {
+			newDvGrpNms_arr = newDvGrpNms.split(",");
+		}
+		
+		// 기존목록과 변경목록이 동일한지 확인 -> 동일하면 변경사항 없음(삭제된그룹이 없음, 추가와는 별개)
+		String changeYn = "Y";
+		changeYn = ( Arrays.equals(nowDvGrpIds_arr, newDvGrpIds_arr) ) ? "N" : "Y"; 
+		
+		if("Y".equals(changeYn)) {
+			// 로직 : 기존장치목록과 변경된장치목록을 비교한다.
+			// 기존에 존재하고 변경된 목록에 미존재 : 그룹에저 제외됨
+			// 기존에도 존재하고 변경된 목록에도 존재 : 변동없음
+			int delCnt = 0;
+			if(nowDvGrpIds_arr != null) {
+				if(nowDvGrpIds_arr.length > 0) { // 기존장치목록의 데이터를 변동된장치목록에 존재하는지 확인
+					for (int i = 0; i < nowDvGrpIds_arr.length; i++) {
+						String str = nowDvGrpIds_arr[i];
+						boolean res = false;
+						if(newDvGrpIds_arr != null) res = Arrays.asList(newDvGrpIds_arr).contains(str);
+						if(!res) { // 기존장치에 존재하고 변경된 장치목록에 미존재 : 그룹에서 제외됨
+							HashMap dvMap = new HashMap<String, Object>();
+							dvMap.put("deviceGrpIdx", str);
+//							dvMap.put("deviceGrpIdx", 0);
+							dvMap.put("modUid", "tttt");
+							int cnt = deviceGroupService.deleteDeviceGroup(dvMap);
+							delCnt = delCnt + cnt;
+						}
+					}
+				}
+				
+			}
+			
+		}
+		
+		// 신규그룹 추가
+		int addCnt = 0;
+		if(newDvGrpNms_arr != null) {
+			for (int i = 0; i < newDvGrpNms_arr.length; i++) {
+				HashMap dvMap = new HashMap<String, Object>();
+				dvMap.put("deviceGrpName", newDvGrpNms_arr[i]);
+				dvMap.put("siteId", selectSiteId);
+				dvMap.put("userIdx", 1);
+				dvMap.put("regUid", "tttt");
+				int cnt = deviceGroupService.insertDeviceGroup(dvMap);
+				addCnt = addCnt + cnt;
+			}
+		}
+		
 		
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();

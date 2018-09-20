@@ -9,6 +9,7 @@
 			device_grp_idx, site_id, user_idx, device_grp_name, del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_device_group
 		where 1=1
+		and del_yn = 'N'
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 		and site_id = #{siteId }
 		</if>
@@ -19,7 +20,8 @@
 		select 
 			device_id, site_id, user_idx, device_name, device_grp_idx, device_type, inst_type, del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_device
-		where 1=1 
+		where 1=1
+		and del_yn = 'N' 
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 		and site_id =  #{siteId }
 		</if>
@@ -34,13 +36,46 @@
 			device_id, site_id, user_idx, device_name, device_grp_idx, device_type, inst_type, del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_device
 		where 1=1
+		and del_yn = 'N'
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 		and site_id =  #{siteId }
 		</if> 
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(deviceGrpIdx)">
-		and device_grp_idx !=  #{deviceGrpIdx }
+		and (device_grp_idx !=  #{deviceGrpIdx } or device_grp_idx is null)
 		</if>
 	</select>
+	
+	<update id="deleteDeviceGroup" parameterType="hashMap">
+		/* 장치그룹 삭제 */
+		update tb_device_group
+		set 
+		    del_yn        = 'Y', 
+		    mod_uid       = #{modUid }, 
+		    mod_date      = now()
+		where 1=1
+		and device_grp_idx = #{deviceGrpIdx }
+	</update>
+	
+	<insert id="insertDeviceGroup" parameterType="hashMap">
+		/* 장치그룹 등록 */
+		insert into tb_device_group (
+	        <!-- device_grp_idx, -->
+	        site_id,
+	        user_idx,
+	        device_grp_name,
+	        del_yn,
+	        reg_uid,
+	        reg_date
+	    ) values (
+	        <!-- #{device_grp_idx }, -->
+	        #{siteId },
+	        #{userIdx },
+	        #{deviceGrpName },
+	        'N',
+	        #{regUid },
+	        now()
+	    )
+	</insert>
 	
 	<insert id="insertDevice" parameterType="hashMap">
 		/* 장치 등록 */

@@ -29,6 +29,14 @@ public class DeviceGroupDao {
 		return resultList;
 	}
 
+	public int deleteDeviceGroup(HashMap param) {
+		return sqlSession.update("deviceGroup.deleteDeviceGroup", param);
+	}
+	
+	public int insertDeviceGroup(HashMap param) {
+		return sqlSession.update("deviceGroup.insertDeviceGroup", param);
+	}
+	
 	public int insertDevice(HashMap param) {
 		return sqlSession.update("deviceGroup.insertDevice", param);
 	}

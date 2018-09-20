@@ -30,6 +30,16 @@ public class DeviceGroupServiceImpl implements DeviceGroupService{
 	}
 
 	@Transactional
+	public int deleteDeviceGroup(HashMap param) throws Exception {
+		return deviceGroupDao.deleteDeviceGroup(param);
+	}
+	
+	@Transactional
+	public int insertDeviceGroup(HashMap param) throws Exception {
+		return deviceGroupDao.insertDeviceGroup(param);
+	}
+	
+	@Transactional
 	public int insertDevice(HashMap param) throws Exception {
 		return deviceGroupDao.insertDevice(param);
 	}

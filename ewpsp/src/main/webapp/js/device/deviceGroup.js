@@ -76,17 +76,22 @@
 				if(deviceGroupList == null || deviceGroupList.length < 1) {
 					$tbody.append( '<tr><td colspan="3">조회된 데이터가 없습니다.</td><tr>' );
 				} else {
+					var dvGrps = "";
 					for(var i=0; i<deviceGroupList.length; i++) {
-						var device_stat = (deviceGroupList[i].device_stat == 1) ? "connect" : "disconnect";
+						$("#selectSiteId").val(deviceGroupList[i].site_id);
+						dvGrps = dvGrps+deviceGroupList[i].device_grp_idx+",";
 						$tbody.append(
-								$('<tr />').append( $("<td />").append( (i+1) )
-								).append( $("<td />").append( deviceGroupList[i].device_grp_name )
+								$('<tr />').append( 
+										$("<td />").append( (i+1) )
+								).append( $("<td />").append( 
+										deviceGroupList[i].device_grp_name+'<input type="hidden" name="dvGrpIds" value="'+deviceGroupList[i].device_grp_idx+'">' 
+										)
 								).append(
-//										$("<td />").append( '<a href="#;" onclick="getDeviceIOEDetail(\''+deviceGroupList[i].device_ioe_idx+'\');" class="detail_view">상세보기</a>' )
-										$("<td />").append( '<a href="#;" onclick=""><i class="glyphicon glyphicon-remove"></i></a>' )
+										$("<td />").append( '<a href="#;" onclick="deleteLine(this);"><i class="glyphicon glyphicon-remove"></i></a>' )
 								)
 						);
 					}
+					$("#nowDvGrpIds").val(dvGrps.slice(0, -1));
 					
 				}
 				
@@ -224,11 +229,47 @@
 			}
 		});
 		
+		$("#addDvGrpTbodyBtn").click(function(){
+			if($("#selectSiteId").val() == null || $("#selectSiteId").val() == "") {
+				alert("장치그룹을 추가할 사이트를 선택해주세요");
+				return;
+			}
+			if($("#deviceGrpName").val() == null || $("#deviceGrpName").val() == "") {
+				alert("장치그룹명을 입력해주세요");
+				return;
+			}
+			
+			var deviceGrpName = $("#deviceGrpName").val();
+			$("#dvGrpTbody").prepend(
+					$('<tr />').append( 
+							$("<td />").append(  )
+					).append( $("<td />").append( deviceGrpName+'<input type="hidden" name="dvGrpNms" value="'+deviceGrpName+'">' )
+					).append(
+							$("<td />").append( '<a href="#;" onclick="deleteLine(this);"><i class="glyphicon glyphicon-remove"></i></a>' )
+					)
+			);
+			$("#deviceGrpName").val("");
+		});
+		
 		$("#confirmDvGrpBtn").click(function(){
-			var formData = $("#groupForm").serializeObject();
+			var formData = $("#editDvGrpForm").serializeObject();
 			if(confirm("장치그룹을 저장하시겠습니까?")) {
-//				if(siteViewFlag ==  1) insertGroup(formData);
-//				else if(siteViewFlag ==  2)  updateGroup(formData);
+				var inputs1 = $("#editDvGrpForm input[name=dvGrpIds]");
+				var values = "";
+				$.each(inputs1, function (index, value) {
+					values = values+$(value).val()+",";
+				});
+				$("#newDvGrpIds").val(values.slice(0, -1));
+				
+				var inputs2 = $("#editDvGrpForm input[name=dvGrpNms]");
+				var values2 = "";
+				$.each(inputs2, function (index, value) {
+					values2 = values2+$(value).val()+",";
+				});
+				$("#newDvGrpNms").val(values2.slice(0, -1));
+				
+				var formData = $("#editDvGrpForm").serializeObject();
+				saveDvGrp(formData);
 			}
 		});
 		
@@ -327,6 +368,13 @@
 	    });
 	}
 	
+	function deleteLine(obj) {
+	    var tr = $(obj).parent().parent();
+	 
+	    //라인 삭제
+	    tr.remove();
+	}
+	
 	function saveDvInDvGrp(formData) {
 		$.ajax({
 			url : "/saveDvInDvGrp",
@@ -345,6 +393,33 @@
 //					if(resultCnt > 0) {
 						alert("저장되었습니다.");
 						location.reload();
+//					} else {
+//						alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
+//					}
+				}
+				
+			}
+		});
+	}
+	
+	function saveDvGrp(formData) {
+		$.ajax({
+			url : "/saveDvGrp",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+			data : formData,
+			success: function(result) {
+				var resultCnt = result.resultCnt;
+				var changeYn = result.changeYn;
+				
+				if(changeYn == "N") {
+					alert("저장되었습니다.");
+					location.reload();
+					
+				} else if(changeYn == "Y") {
+//					if(resultCnt > 0) {
+					alert("저장되었습니다.");
+					location.reload();
 //					} else {
 //						alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
 //					}

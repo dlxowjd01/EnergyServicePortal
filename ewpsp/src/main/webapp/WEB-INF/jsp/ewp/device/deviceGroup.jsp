@@ -353,7 +353,10 @@
 			</div>
 			<h2 class="ctit mt20">전체 장치그룹</h2>
 			<form id="editDvGrpForm" name="editDvGrpForm">
-			<input type="hidden" id="delDvGrp" name="delDvGrp">
+			<input type="hidden" id="selectSiteId" name="selectSiteId">
+			<input type="hidden" id="nowDvGrpIds" name="nowDvGrpIds">
+			<input type="hidden" id="newDvGrpIds" name="newDvGrpIds">
+			<input type="hidden" id="newDvGrpNms" name="newDvGrpNms">
 			<div class="company_list mt10">				
 				<table>
 					<colgroup>
@@ -405,13 +408,13 @@
 						<tbody>
 							<tr>
 								<th><span>장치그룹명</span></th>
-								<td><input type="text" class="input" style="width:100%"></td>
+								<td><input type="text" id="deviceGrpName" name="deviceGrpName" class="input" style="width:100%"></td>
 							</tr>
 						</tbody>			
 					</table>
 				</div>
 				<div class="fr">
-					<input type="submit" value="추가하기" class="submit">
+					<input type="button" id="addDvGrpTbodyBtn" value="추가하기" class="submit">
 				</div>
 			</div>
 			</form>
