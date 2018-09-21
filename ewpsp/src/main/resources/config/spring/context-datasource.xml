@@ -8,21 +8,21 @@
 
 
 	<!-- MariaDB -->
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="org.mariadb.jdbc.Driver"/>
         <property name="url" value="jdbc:mariadb://13.209.107.48/ewpsp"/>
         <property name="username" value="root"/>
         <property name="password" value="dlszhdjem_ewp"/>
-    </bean>
+    </bean> -->
 
 	<!-- MySQL --><!-- 개발db -->
         <!-- <property name="url" value="jdbc:log4jdbc:mysql://121.124.127.173/ewpsp?serverTimezone=UTC"/> -->
-    <!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
         <property name="url" value="jdbc:mysql://121.124.127.173/ewpsp"/>
         <property name="username" value="root"/>
         <property name="password" value="#xnrpej0920#"/>
-    </bean> -->
+    </bean>
 
 	<!-- Oracle -->
     <!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
