@@ -34,25 +34,9 @@
 					<div class="col-lg-12">
 						<div class="indiv control clear">
 
-							<div class="chart_top clear">
-								<h2 class="ntit fl">알림현황</h2>
-								<div class="dropdown fl">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">1일(오늘)
-									<span class="caret"></span></button>
-									<ul class="dropdown-menu">
-										<li class="on"><a href="#">1일(오늘)</a></li>
-										<li><a href="#">1주(이번주)</a></li>
-										<li><a href="#">1월(이번달)</a></li>
-										<li><a href="#">1년(올해)</a></li>
-									</ul>
-								</div>	
-								<div class="sel_calendar fr">
-									<input type="text" id="datepicker1" class="sel" value="">
-									<span>-</span>
-									<input type="text" id="datepicker2" class="sel" value="">
-									<button type="submit">조회</button>
-								</div>						
-							</div>
+							<jsp:include page="../include/engy_monitoring_search.jsp">
+								<jsp:param value="control" name="schGbn"/>
+							</jsp:include>
 							<div class="c_board">
 								<ul>
 									<li class="ioe">
