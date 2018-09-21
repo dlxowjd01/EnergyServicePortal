@@ -27,6 +27,19 @@ import kr.co.ewp.ewpsp.service.UsageService;
 public class LoginController {
 
 	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+
+	@RequestMapping("/login")
+	public String login(Model model) {
+		logger.debug("/login");
+		
+		return "ewp/login/login";
+	}
 	
+	@RequestMapping("/logout")
+	public String logout(Model model) {
+		logger.debug("/logout");
+		
+		return "redirect:/login";
+	}
 	
 }

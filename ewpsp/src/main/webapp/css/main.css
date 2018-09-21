@@ -1028,6 +1028,7 @@ h2.ntit {color:#fff;}
 
 }
 @media all and (max-width:481px) {
+	.gmain_group {min-height:initial;}
 	.group_wrap {min-height:initial; display:none !important;}
 	.group_info h2 {font-size:22px;}
 	.group_info div ul:first-child {padding-right:12px;}

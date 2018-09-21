@@ -37,9 +37,6 @@ $(document).ready(function() {
 							<li><a href="/deviceMonitoring?deviceGbn=PCS">PCS 통신상태</a></li>
 							<li><a href="/deviceMonitoring?deviceGbn=BMS">BMS 통신상태</a></li>
 							<li><a href="/deviceMonitoring?deviceGbn=PV">PV 통신상태</a></li>
-							<!-- <li><a href="/deviceMonitoring?deviceGbn=PCS">PCS 운전상태</a></li>
-							<li><a href="/deviceMonitoring?deviceGbn=BMS">BMS 운전상태</a></li>
-							<li><a href="/deviceMonitoring?deviceGbn=PV">PV 운전상태</a></li> -->
 							<li><a href="/deviceGroup">장치 그룹 현황</a></li>
 						</ul>
 					</div>
@@ -71,7 +68,7 @@ $(document).ready(function() {
 						</ul>
 					</div>
 				</li>
-				<li class="smn8"><a href="#;" class="LoginBtn">로그아웃</a></li>
+				<li class="smn8"><a href="/logout" class="LoginBtn">로그아웃</a></li>
 			</ol>
 		</div>
 		<!-- 모바일용 카테고리 { -->
@@ -126,7 +123,7 @@ $(document).ready(function() {
 							<li><a href="/userMng">사용자관리</a></li>
 						</ul>
 					</li>
-					<li class="gmn8"><a href="#;">로그아웃</a></li>
+					<li class="gmn8"><a href="/logout">로그아웃</a></li>
 				</ol>
 			</div>
 		</div>
