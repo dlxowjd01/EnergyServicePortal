@@ -26,39 +26,39 @@ public class TestController {
 
 	@RequestMapping("/hptest")
 	public String hptest() {
-		System.out.println("ÀÏ´Ü ¿©±ä ¿Í¾ßÁö");
+		System.out.println("/hptest");
 //		enertalkAPI_test();
 		return "ewp/main/main.jsp";
 	}
 	
 	@RequestMapping(value="/hptest_sub", method = RequestMethod.GET)
 	public String hptest_sub(@RequestParam HashMap param, @RequestParam String returnPage, Model model) {
-		System.out.println("ÀÏ´Ü ¿©±ä ¿Í¾ßÁö");
+		System.out.println("/hptest_sub");
 		model.addAttribute("param", param);
-		System.out.println("paramÀº? : "+param.toString());
+		System.out.println("param : "+param.toString());
 //		enertalkAPI_test();
 		return "ewp"+returnPage;
 	}
 	
 	@RequestMapping(value="/hptest_include", method = RequestMethod.POST)
 	public String hptest_include(@RequestParam HashMap param, @RequestParam String returnPage, Model model) {
-		System.out.println("ÀÏ´Ü ¿©±ä ¿Í¾ßÁö");
+		System.out.println("/hptest_include");
 		model.addAttribute("param", param);
-		System.out.println("paramÀº? : "+param.toString());
+		System.out.println("param : "+param.toString());
 //		enertalkAPI_test();
 		return "ewp"+returnPage;
 	}
 	
 	@RequestMapping("/hello")
 	public String hello() {
-		System.out.println("¿©±â¿ÀÁö?");
+		System.out.println("ì—¬ê¸°ì˜¤ì§€?");
 //		enertalkAPI_test();
 		return "test/hello";
 	}
 	
 	@RequestMapping("/pdfTest")
 	public String pdfTest() {
-		System.out.println("¿©±â¿ÀÁö????");
+		System.out.println("ì—¬ê¸°ì˜¤ì§€????");
 		return "test/pdfTest";
 	}
 	
@@ -69,16 +69,16 @@ public class TestController {
 	@RequestMapping(value = "/excelDownloadTest")
     public void excelDownloadTest(@RequestParam HashMap param, Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response) throws Exception {
 
-		System.out.println("¾ßÈ£!  "+param.get("aa"));
+		System.out.println("ì•¼í˜¸!  "+param.get("aa"));
 		String queryId = "opbcMngDao.getOpbcApprListExcelDownload";
-		String excel_title = "Å×½ºÆ® ¿¢¼¿_"+System.currentTimeMillis();
+		String excel_title = "í…ŒìŠ¤íŠ¸ ì—‘ì…€_"+System.currentTimeMillis();
 		param.put("queryId", queryId);
 		param.put("excel_title", excel_title);
 		
 		String res = excelDonwload(param, response);
 		System.out.println("res = "+res);
 //		if("end".equals(res)) {
-//			// ¿¢¼¿ ´Ù¿î·Îµå ¿äÃ»À» Ã³¸®ÇÏ´Â °÷¿¡¼­ ÀÀ´ä Çì´õ¿¡ fileDownloadToken ÄíÅ°¸¦ ³Ö¾îÁÜ.
+//			// ì—‘ì…€ ë‹¤ìš´ë¡œë“œ ìš”ì²­ì„ ì²˜ë¦¬í•˜ëŠ” ê³³ì—ì„œ ì‘ë‹µ í—¤ë”ì— fileDownloadToken ì¿ í‚¤ë¥¼ ë„£ì–´ì¤Œ.
 ////		Cookie cookie = new Cookie("fileDownloadToken", "TRUE");
 //			response.addCookie(new Cookie("fileDownloadToken", "TRUE"));
 //			
@@ -88,7 +88,7 @@ public class TestController {
 	
 	public String excelDonwload(HashMap param, HttpServletResponse response)throws Exception {
 		
-		System.out.println("¿¢¼¿´Ù¿î·Îµå Á÷Àü...");
+		System.out.println("ì—‘ì…€ë‹¤ìš´ë¡œë“œ ì§ì „...");
 		String res = "";
 		
 		ExcelDownload ed = null;
@@ -96,23 +96,23 @@ public class TestController {
 			ed = new ExcelDownload(response, param);
 			
 			for (int i = 0; i < 50000; i++) {
-				LinkedHashMap map = new LinkedHashMap(); // hashmapÀÎµ¥ ¼ø¼­°¡ÀÖÀ½
-				map.put("aaaaaaa", "Ã¹¹øÂ°ÄÃ·³ "+(i+1));
-				map.put("bbbbbbb", "µÎ¹øÂ°ÄÃ·³ "+(i+1));
-				map.put("ccccccc", "¼¼¹øÂ°ÄÃ·³ "+(i+1));
-				map.put("dddd", "³×¹øÂ°ÄÃ·³ "+(i+1));
-				map.put("eeee", "´Ù¼¸¹øÂ°ÄÃ·³ "+(i+1));
-				map.put("ffffff", "¿©¼¸¹øÂ°ÄÃ·³ "+(i+1));
-				map.put("gggg", "ÀÏ°ö¹øÂ°ÄÃ·³ "+(i+1));
-				map.put("hhhhhhhh", "¿©´ü¹øÂ°ÄÃ·³ "+(i+1));
-				map.put("iiiiii", "¾ÆÈ©¹øÂ°ÄÃ·³ "+(i+1));
-				map.put("jjj", "¿­¹øÂ°ÄÃ·³ "+(i+1));
-				map.put("kkkkk", "¿­ÇÑ¹øÂ°ÄÃ·³ "+(i+1));
-				map.put("lllll", "¿­µÎ¹øÂ°ÄÃ·³ "+(i+1));
-				map.put("mmmmmmm", "¿­¼¼¹øÂ°ÄÃ·³ "+(i+1));
-				map.put("nn", "¿­³×¹øÂ°ÄÃ·³ "+(i+1));
+				LinkedHashMap map = new LinkedHashMap(); // hashmapì¸ë° ìˆœì„œê°€ìˆìŒ
+				map.put("aaaaaaa", "ì²«ë²ˆì§¸ì»¬ëŸ¼ "+(i+1));
+				map.put("bbbbbbb", "ë‘ë²ˆì§¸ì»¬ëŸ¼ "+(i+1));
+				map.put("ccccccc", "ì„¸ë²ˆì§¸ì»¬ëŸ¼ "+(i+1));
+				map.put("dddd", "ë„¤ë²ˆì§¸ì»¬ëŸ¼ "+(i+1));
+				map.put("eeee", "ë‹¤ì„¯ë²ˆì§¸ì»¬ëŸ¼ "+(i+1));
+				map.put("ffffff", "ì—¬ì„¯ë²ˆì§¸ì»¬ëŸ¼ "+(i+1));
+				map.put("gggg", "ì¼ê³±ë²ˆì§¸ì»¬ëŸ¼ "+(i+1));
+				map.put("hhhhhhhh", "ì—¬ëŸë²ˆì§¸ì»¬ëŸ¼ "+(i+1));
+				map.put("iiiiii", "ì•„í™‰ë²ˆì§¸ì»¬ëŸ¼ "+(i+1));
+				map.put("jjj", "ì—´ë²ˆì§¸ì»¬ëŸ¼ "+(i+1));
+				map.put("kkkkk", "ì—´í•œë²ˆì§¸ì»¬ëŸ¼ "+(i+1));
+				map.put("lllll", "ì—´ë‘ë²ˆì§¸ì»¬ëŸ¼ "+(i+1));
+				map.put("mmmmmmm", "ì—´ì„¸ë²ˆì§¸ì»¬ëŸ¼ "+(i+1));
+				map.put("nn", "ì—´ë„¤ë²ˆì§¸ì»¬ëŸ¼ "+(i+1));
 				
-				System.out.println(i+"¹øÂ° map : "+map.toString());
+				System.out.println(i+"ë²ˆì§¸ map : "+map.toString());
 				ed.handleRow(map);
 			}
 			res = res+",1";
@@ -136,7 +136,7 @@ public class TestController {
 	
 	
 	public void enertalkAPI_test() {
-		String ServerKey = "Wlhkd1pHVjJRR2hyYVhSekxtTnZMbXR5WDBWWFVDRHNoSnpydVlUc2lxVHRqNnp0ZzRnPQ=="; // ¼­¹öÅ°
+		String ServerKey = "Wlhkd1pHVjJRR2hyYVhSekxtTnZMbXR5WDBWWFVDRHNoSnpydVlUc2lxVHRqNnp0ZzRnPQ=="; // ì„œë²„í‚¤
 		String siteId = "17094385";
 		String apiURL = "https://api2.enertalk.com/sites/:siteId/usages/periodic";
 		String start = "1533135600000";
@@ -146,9 +146,9 @@ public class TestController {
 		String urlParam = "?start="+start+"&end="+end+"&timeType="+timeType+"&period="+period;
 		
 		try {
-			System.out.println("api url Å×½ºÆ® ½ÃÀÛ");
+			System.out.println("api url í…ŒìŠ¤íŠ¸ ì‹œì‘");
 			URL url = new URL(  apiURL.replace(":siteId", siteId) + urlParam  );
-			System.out.println("urlÀº? "+apiURL.replace(":siteId", siteId) + urlParam);
+			System.out.println("urlì€? "+apiURL.replace(":siteId", siteId) + urlParam);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
 			con.setRequestProperty("authorization", "Basic " + ServerKey);
@@ -158,16 +158,16 @@ public class TestController {
 			
 			int resCode = con.getResponseCode();
 			BufferedReader br;
-			if(resCode == 200) { // Á¤»ó È£Ãâ
+			if(resCode == 200) { // ì •ìƒ í˜¸ì¶œ
 				br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			} else { // ¿¡·¯ ¹ß»ı
+			} else { // ì—ëŸ¬ ë°œìƒ
 				br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
 			}
 			
 			String inputLine;
 			StringBuffer response = new StringBuffer();
 			while ((inputLine = br.readLine()) != null) {
-				System.out.println("whileÀ» ¸î¹øµ¹±î?");
+				System.out.println("whileì„ ëª‡ë²ˆëŒê¹Œ?");
 				response.append(inputLine);
 			}
 			br.close();
