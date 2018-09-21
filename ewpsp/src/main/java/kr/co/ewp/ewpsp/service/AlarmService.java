@@ -7,7 +7,7 @@ import java.util.Map;
 public interface AlarmService {
   public int addAlarm(Map<String, Object> parameter) throws Exception;
 
-	List getAlarmList(HashMap param) throws Exception;
+	List getMainAlarmList(HashMap param) throws Exception;
 	
-	List getAlarmTypeCntList(HashMap param) throws Exception;
+	List getMainAlarmTypeCntList(HashMap param) throws Exception;
 }

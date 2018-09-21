@@ -75,7 +75,7 @@ public class DERUsageController {
 		} else if(pvUsageList != null && pvUsageList.size() > 0) {
 			loopCntList = pvUsageList;
 		}
-		System.out.println("loopCntList : "+loopCntList+", "+loopCntList.toString());
+		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("kepcoUsageList", kepcoUsageList);
 		resultMap.put("essUsageList", essUsageList);

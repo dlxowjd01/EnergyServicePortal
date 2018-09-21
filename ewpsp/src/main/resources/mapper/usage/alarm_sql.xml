@@ -33,7 +33,7 @@
     </selectKey>
 	</insert>
 	
-	<select id="getAlarmList" parameterType="hashMap" resultType="hashMap">
+	<select id="getMainAlarmList" parameterType="hashMap" resultType="hashMap">
 		/* 알람 목록 조회 */
 		select 
 			alarm_idx, site_id, device_id, device_type, std_date, alarm_type, alarm_msg, 
@@ -50,7 +50,7 @@
 		order std_date
 	</select>
 	
-	<select id="getAlarmTypeCntList" parameterType="hashMap" resultType="hashMap">
+	<select id="getMainAlarmTypeCntList" parameterType="hashMap" resultType="hashMap">
 		/* 알람 타입건수 조회 */
 		select 
 			count(if(alarm_type=1, alarm_type, null)) as alert_cnt, 

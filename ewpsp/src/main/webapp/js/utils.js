@@ -356,7 +356,6 @@ function makePageNums1(selectedPageNum, all_tot_cnt, page_row_cnt, page_page_cnt
 //모양 : < 8/10 >
 function makePageNums2(pagingMap, gubun) {
 	var gubunStr = gubun.charAt(0).toUpperCase() + gubun.slice(1);
-	console.log("gubunStr : "+gubunStr);
 	
 	var selPageNum = pagingMap.selPageNum; // 선택한 페이지번호
 //	var listCnt = pagingMap.listCnt; // 전체 데이터 수
@@ -368,7 +367,7 @@ function makePageNums2(pagingMap, gubun) {
 	if (selPageNum > 1) {
 		$paging.append( $('<a href="javascript:get'+gubun+'List('+(selPageNum-1)+')" class="prev" />').append("PREV") );
 	} else {
-		$paging.append( $('<a href="#" class="prev" />').append("PREV") );
+		$paging.append( $('<a href="#;" class="prev" />').append("PREV") );
 	} 
 	
 	$paging.append(
@@ -378,7 +377,7 @@ function makePageNums2(pagingMap, gubun) {
 	if (selPageNum < totalPageCnt) {
 		$paging.append( $('<a href="javascript:get'+gubun+'List('+(selPageNum+1)+')" class="next" />').append("NEXT") );
 	} else {
-		$paging.append( $('<a href="#" class="next" />').append("NEXT") );
+		$paging.append( $('<a href="#;" class="next" />').append("NEXT") );
 	}
 }
 

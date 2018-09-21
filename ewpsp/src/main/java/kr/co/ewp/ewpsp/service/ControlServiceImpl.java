@@ -1,0 +1,32 @@
+package kr.co.ewp.ewpsp.service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import kr.co.ewp.ewpsp.dao.ControlDao;
+
+@Service("controlService")
+public class ControlServiceImpl implements ControlService{
+
+	@Resource(name="controlDao")
+	private ControlDao controlDao;
+
+	public Map getDeviceAlarmCnt(HashMap param) throws Exception {
+		return controlDao.getDeviceAlarmCnt(param);
+	}
+	
+	public List getAlarmList(HashMap param) throws Exception {
+		return controlDao.getAlarmList(param);
+	}
+	
+	public int getAlarmListCnt(HashMap param) throws Exception {
+		return controlDao.getAlarmListCnt(param);
+	}
+	
+}

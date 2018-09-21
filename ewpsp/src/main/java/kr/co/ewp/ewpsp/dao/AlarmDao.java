@@ -18,13 +18,13 @@ public class AlarmDao {
     return sqlSession.insert("alarm.insertAlarm", parameter);
   }
 
-	public List getAlarmList(HashMap param) {
-		List resultList = sqlSession.selectList("alarm.getAlarmList", param);
+	public List getMainAlarmList(HashMap param) {
+		List resultList = sqlSession.selectList("alarm.getMainAlarmList", param);
 		return resultList;
 	}
 	
-	public List getAlarmTypeCntList(HashMap param) {
-		List resultList = sqlSession.selectList("alarm.getAlarmTypeCntList", param);
+	public List getMainAlarmTypeCntList(HashMap param) {
+		List resultList = sqlSession.selectList("alarm.getMainAlarmTypeCntList", param);
 		return resultList;
 	}
 

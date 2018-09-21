@@ -20,11 +20,11 @@ public class AlarmServiceImpl implements AlarmService {
     return alarmDao.insertAlaram(parameter);
   }
 
-	public List getAlarmList(HashMap param) throws Exception {
-		return alarmDao.getAlarmList(param);
+	public List getMainAlarmList(HashMap param) throws Exception {
+		return alarmDao.getMainAlarmList(param);
 	}
 	
-	public List getAlarmTypeCntList(HashMap param) throws Exception {
-		return alarmDao.getAlarmTypeCntList(param);
+	public List getMainAlarmTypeCntList(HashMap param) throws Exception {
+		return alarmDao.getMainAlarmTypeCntList(param);
 	}
 }

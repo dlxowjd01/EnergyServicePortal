@@ -6,7 +6,7 @@
 <jsp:include page="../include/common_static.jsp" />
 <jsp:include page="../include/sub_static.jsp" />
 <script type="text/javascript">
-	var deviceGbn = "${deviceGbn }";
+// 	var deviceGbn = "${deviceGbn }";
 // 	$(document).ready(function() {
 // 		// js파일에서는 동작을 안함
 // 		$(".tab_menu").find("li").removeClass("active");
@@ -14,7 +14,7 @@
 // 		getDBData(deviceGbn);
 // 	});
 </script>
-<!-- <script src="../js/device/deviceMonitoring.js" type="text/javascript"></script> -->
+<script src="../js/control/control.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -43,37 +43,37 @@
 										<div class="fl">
 											IOE(건)
 										</div>
-										<div class="fr"><span>0</span></div>
+										<div class="fr"><span id="ioeAlarmCnt">0</span></div>
 									</li>
 									<li class="pcs">
 										<div class="fl">
 											PCS(건)
 										</div>
-										<div class="fr"><span>1</span></div>
+										<div class="fr"><span id="pcsAlarmCnt">0</span></div>
 									</li>
 									<li class="bms">
 										<div class="fl">
 											BMS(건)
 										</div>
-										<div class="fr"><span>1</span></div>
+										<div class="fr"><span id="bmsAlarmCnt">0</span></div>
 									</li>
 									<li class="pv">
 										<div class="fl">
 											PV(건)
 										</div>
-										<div class="fr"><span>0</span></div>
+										<div class="fr"><span id="pvAlarmCnt">0</span></div>
 									</li>
 									<li class="etc">
 										<div class="fl">
 											기타(건)
 										</div>
-										<div class="fr"><span>0</span></div>
+										<div class="fr"><span id="etcAlarmCnt">0</span></div>
 									</li>
 								</ul>
 							</div>
 							<div class="c_tbl_wrap">
 								<div class="a_alarm default_tbl">
-									<h2>비상 알람 현황 (<span>2</span>)</h2>
+									<h2>비상 알람 현황 (<span id="warnAlarmCnt">2</span>)</h2>
 									<div class="tbl_box">
 										<table>
 											<colgroup>
@@ -98,7 +98,7 @@
 													<th>조치여부</th>
 												</tr>
 											</thead>
-											<tbody>
+											<tbody id="warnAlarmTbody">
 												<tr>
 													<td>BMS</td>
 													<td>BMS_1</td>
@@ -122,9 +122,14 @@
 											</tbody>
 										</table>
 									</div>
+									<div class="paging clear" id="WarningAlarmPaging">
+										<a href="#;" class="prev">PREV</a>
+										<span><strong>1</strong> / 3</span>
+										<a href="#;" class="next">NEXT</a>
+									</div>						
 								</div>
 								<div class="n_alarm default_tbl">
-									<h2>주의 알람 현황 (<span>3</span>)</h2>
+									<h2>주의 알람 현황 (<span id="alertAlarmCnt">3</span>)</h2>
 									<div class="tbl_box">
 										<table>
 											<colgroup>
@@ -149,7 +154,7 @@
 													<th>조치여부</th>
 												</tr>
 											</thead>
-											<tbody>
+											<tbody id="alertAlarmTbody">
 												<tr>
 													<td>BMS</td>
 													<td>BMS_1</td>
@@ -173,6 +178,11 @@
 											</tbody>
 										</table>
 									</div>
+									<div class="paging clear" id="AlertAlarmPaging">
+										<a href="#;" class="prev">PREV</a>
+										<span><strong>1</strong> / 3</span>
+										<a href="#;" class="next">NEXT</a>
+									</div>						
 								</div>
 							</div>
 							<div class="clear mt30">

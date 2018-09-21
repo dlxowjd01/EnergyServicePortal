@@ -48,8 +48,8 @@ public class SiteMainController {
 		logger.debug("param ::::: "+param.toString());
 		param.put("alarmCfmYn", "N");
 		
-		List alarmList = alarmService.getAlarmList(param);
-		List alarmTypeCntList = alarmService.getAlarmTypeCntList(param);
+		List alarmList = alarmService.getMainAlarmList(param);
+		List alarmTypeCntList = alarmService.getMainAlarmTypeCntList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("alarmList", alarmList);
