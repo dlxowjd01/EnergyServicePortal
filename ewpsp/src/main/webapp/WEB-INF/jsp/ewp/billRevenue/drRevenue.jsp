@@ -28,11 +28,11 @@
 							<ul class="chart_total">
 								<li class="ct1">
 									<div class="ctit ct1"><span>총 정산금액</span></div>
-									<div class="cval"><span>14,976</span>won</div>
+									<div class="cval" id="drRevenueTot1"><span>14,976</span>won</div>
 								</li>
 								<li>
 									<div class="ctit"><span>고객 할인금액</span></div>
-									<div class="cval"><span>20,976</span>won</div>
+									<div class="cval" id="drRevenueTot2"><span>20,976</span>won</div>
 								</li>
 							</ul>
 						</div>
@@ -45,11 +45,11 @@
 							<div class="inchart">
 								<div id="chart2"></div>
 								<script language="JavaScript"> 
-								$(function () { 
+// 								$(function () { 
 									var myChart = Highcharts.chart('chart2', {
-										data: {
-									        table: 'datatable' /* 테이블에서 데이터 불러오기 */
-									    },
+// 										data: {
+// 									        table: 'datatable' /* 테이블에서 데이터 불러오기 */
+// 									    },
 
 										chart: {
 											marginLeft:80,
@@ -73,6 +73,17 @@
 									    },
 									    
 										xAxis: {
+											type: 'datetime', // 08.20 이우람 추가
+											dateTimeLabelFormats: { // 08.20 이우람 추가
+												millisecond: '%H:%M:%S.%L',
+											    second: '%H:%M:%S',
+									            minute: '%H:%M',
+									            hour: '%H',
+									            day: '%m.%d ',
+									            week: '%m.%e',
+									            month: '%y/%m',
+									            year: '%Y'
+									        },
 											labels: {
 												align: 'center',
 												style: {
@@ -208,7 +219,7 @@
 									    }
 
 									});
-								});
+// 								});
 								</script>
 							</div>	
 						</div>
@@ -229,7 +240,7 @@
 								<div class="fold_div">
 									<!-- PC 버전용 테이블 -->
 									<div class="chart_table">			
-										<table class="pc_use">
+										<table class="pc_use" id="pc_use_dataTable">
 											<thead>
 												<tr>
 													<th>2018-08</th>
@@ -412,7 +423,7 @@
 											</tbody>
 										</table>	
 									</div>
-									<div class="chart_table">			
+									<!-- <div class="chart_table">			
 										<table class="pc_use">
 											<thead>
 												<tr>
@@ -595,7 +606,7 @@
 												</tr>												
 											</tbody>
 										</table>	
-									</div>									
+									</div>									 -->
 									<!-- 데이터 추출용 -->
 									<div class="chart_table2" style="display:none;">			
 										<table id="datatable">

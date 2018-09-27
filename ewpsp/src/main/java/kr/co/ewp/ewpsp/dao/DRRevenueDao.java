@@ -1,5 +1,6 @@
 package kr.co.ewp.ewpsp.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -12,8 +13,8 @@ public class DRRevenueDao {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-	public List getUsageRealList() {
-		List resultList = sqlSession.selectList("drRevenue.getUsageRealList");
+	public List getDRRevenueList(HashMap param) {
+		List resultList = sqlSession.selectList("drRevenue.getDRRevenueList", param);
 		return resultList;
 	}
 

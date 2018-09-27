@@ -419,7 +419,6 @@ function insertDevice(formData) {
 function getAlarmList(formData) {
 	$.ajax({
 		url : "/getAlarmList",
-//		url : "/getKepcoBillList_test",
 		type : 'post',
 		async : false, // 동기로 처리해줌
 		data : formData,
@@ -438,7 +437,6 @@ function getAlarmList(formData) {
 function getKepcoBillList(formData) {
 	$.ajax({
 		url : "/getKepcoBillList",
-//		url : "/getKepcoBillList_test",
 		type : 'post',
 		async : false, // 동기로 처리해줌
 		data : formData,
@@ -453,7 +451,6 @@ function getKepcoBillList(formData) {
 function getESSRevenueList(formData) {
 	$.ajax({
 		url : "/getESSRevenueList",
-//		url : "/getESSRevenueList_test",
 		type : 'post',
 		async : false, // 동기로 처리해줌
 		data : formData,
@@ -464,11 +461,24 @@ function getESSRevenueList(formData) {
 	});
 }
 
+// DR 수익 조회
+function getDRRevenueList(formData) {
+	$.ajax({
+		url : "/getDRRevenueList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			console.log("DR 수익 조회");
+			callback_getDRRevenueList(result);
+		}
+	});
+}
+
 // PV 수익 조회
 function getPVRevenueList(formData) {
 	$.ajax({
 		url : "/getPVRevenueList",
-//		url : "/getPVRevenueList_test",
 		type : 'post',
 		async : false, // 동기로 처리해줌
 		data : formData,

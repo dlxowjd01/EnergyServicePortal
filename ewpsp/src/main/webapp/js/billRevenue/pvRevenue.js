@@ -21,6 +21,16 @@
 	var pvRevenue_data_pc5 = new Array(); //  표 데이터
 	var pvRevenue_data_pc6 = new Array(); //  표 데이터
 	function getDBData() {
+		pvRevenue_head_pc.length = 0;
+		pvRevenue_data_pc.length = 0;
+		pvRevenue_data_pc2.length = 0;
+		pvRevenue_data_pc3.length = 0;
+		pvRevenue_data_pc4.length = 0;
+		pvRevenue_data_pc5.length = 0;
+		pvRevenue_data_pc6.length = 0;
+		pvRevenueList1 = null;
+		pvRevenueList2 = null;
+		pvRevenueList3 = null;
 		var formData = $("#schForm").serializeObject();
 		getPVRevenueList(formData); // 실제사용량 조회
 		drawData(); // 차트 및 표 그리기
