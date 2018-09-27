@@ -23,14 +23,18 @@
 	var kepcoBill_data_pc6 = new Array(); //  표 데이터
 	var kepcoBill_data_pc7 = new Array(); //  표 데이터
 	function getDBData(formData) {
-		kepcoBill_head_pc.length =  0;
-		kepcoBill_data_pc.length =  0;
+		kepcoBill_head_pc.length = 0;
+		kepcoBill_data_pc.length = 0;
 		kepcoBill_data_pc2.length = 0;
 		kepcoBill_data_pc3.length = 0;
 		kepcoBill_data_pc4.length = 0;
 		kepcoBill_data_pc5.length = 0;
 		kepcoBill_data_pc6.length = 0;
 		kepcoBill_data_pc7.length = 0;
+		kepcoBillList1 = null;
+		kepcoBillList2 = null;
+		kepcoBillList3 = null;
+		kepcoBillList4 = null;
 //		var formData = $("#schForm").serializeObject();
 		getKepcoBillList(formData); // 실제사용량 조회
 		drawData(); // 차트 및 표 그리기
@@ -230,7 +234,7 @@
 					} else {
 						dt_col_cnt++;
 					}
-//					dt_col_cnt++;
+					
 				}
 				
 			}
@@ -287,8 +291,7 @@
 	
 	// 표(테이블) 그리기
 	function drawData_table() {
-		// pc버전 테이블
-		// 조회기간에 따라 테이블이 여러개 나올 수 있으므로 for문으로 돌려야 한다..(내일해내일)
+		// 조회기간에 따라 테이블이 여러개 나올 수 있으므로 for문으로 돌려야 한다
 		$table = $("#pc_use_dataTable");
 		$table.empty().append(
 				$("<thead/>").append( $("<tr/>").append( "<th></th>"+kepcoBill_head_pc[0]+"<th>합계</th>" ) ) // thead

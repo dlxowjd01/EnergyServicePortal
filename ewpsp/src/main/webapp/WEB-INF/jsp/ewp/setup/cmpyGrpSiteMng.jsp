@@ -365,6 +365,15 @@
 							<th><span>그룹ID</span></th>
 							<td><input type="text" name="siteGrpId" id="siteGrpId" class="input" style="width:100%"></td>
 						</tr>
+						<tr>
+							<th><span>그룹 이미지</span></th>
+							<td>
+								<span class="control-fileupload">
+						            <label for="file">Choose a file :</label>
+						            <input type="file" id="file">
+						        </span>
+							</td>
+						</tr>
 					</tbody>			
 				</table>
 				</form>

@@ -2,24 +2,41 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="drRevenue">
-	<select id="getUsageRealList" resultType="hashMap">
-		select 
-			site_id, std_timestamp, sum(usg_val) as usg_val
+	<select id="getDRRevenueList" parameterType="hashMap" resultType="hashMap">
+		/* DR 수익 조회 */
+		select
+			site_id, std_yearm, 
+			5 as reduct_cnt_hour, /* 감축 횟수-시간(회-hr) */
+			sum(reduct_cap) as reduct_cap, /* 감축이행용량 */
+			sum(reduct_amt) as reduct_amt, /* 감축인정용량 */
+			avg(reduct_cap_per) as reduct_cap_per, 
+			sum(cap_amt) as cap_amt, 
+			sum(reduct_reward_amt) as reduct_reward_amt, 
+			sum(total_reward_amt) as total_reward_amt, 
+			sum(csm_reward_amt) as csm_reward_amt, 
+			sum(ewp_reward_amt) as ewp_reward_amt, 
+			avg(profit_ratio) as profit_ratio /* 수익비율(%) : 필수 중개인-고객 계약시 정해짐 (FIX) */
 		from (
-		
-				select 
-					usg_idx, site_id, device_id, std_timestamp, std_date, usg_val, reg_date, mod_date
-				from tb_usage
-				where 1=1
-				and site_id = 'c64b328b'
-				and std_date between str_to_date('20180820000000','%Y%m%d%H%i%s') and str_to_date('20180820235959','%Y%m%d%H%i%s')
-		
+			SELECT 
+				dr_revn_idx, site_id, std_yearm, std_timestamp, std_date, reduct_cap, basic_price, max_reduct_ratio, min_reduct_ratio, profit_ratio, 
+				tot_pay, basic_pay, reduct_stimestamp, reduct_etimestamp, reduct_sdate, reduct_edate, cbl_amt, act_amt, reduct_amt, smp, reg_date, mod_date ,
+				( reduct_amt/reduct_cap )*100 as reduct_cap_per, /* 감축이행율 = (감축인정용량/감축이행용량) * 100 */
+				( reduct_amt*reduct_cap ) as cap_amt, /* 용량정산금 = (감축인정용량 * 기본용량요금) */
+				123 as reduct_reward_amt, /* 감축정산금 = 감축인정용량 * 시간 * 실적정산금(or 실적요금. 90원/kwh) */
+				( ( reduct_amt/reduct_cap )*100 )+(123) as total_reward_amt, /* 실적총정산금액 = 용량정산금 + 감축정산금 */
+				567 as csm_reward_amt, /* 고객정산금액 : KPX에서 동서발전에 100% 지급. 동서발전(or 인코어드 같은 중개업체)에서 수수료 제외하고 나머지 고객에게 지급 */
+				33 as ewp_reward_amt /* ewp 정산금액 */
+			FROM tb_dr_revenue
+			where 1=1
+			and site_id = #{siteId }
+			and std_yearm between #{selTermFrom } and #{selTermTo }
+			<!-- and site_id = '17094385'
+			and std_yearm between '201801' and '201809' -->
 		) a
-		where 1=1
-		group by site_id, std_timestamp
+		group by site_id, std_yearm
 	</select>
 	
-	<select id="getUsageFutureList" resultType="hashMap">
+	<select id="getUsageFutureList" parameterType="hashMap" resultType="hashMap">
 		select 
 			site_id, std_timestamp, sum(pre_usg_val) as pre_usg_val
 		from (

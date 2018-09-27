@@ -28,6 +28,21 @@
 	var essRevenue_data_pc11 = new Array(); //  표 데이터
 	var essRevenue_data_pc12 = new Array(); //  표 데이터
 	function getDBData(formData) {
+		essRevenue_head_pc.length = 0;
+		essRevenue_data_pc.length = 0;
+		essRevenue_data_pc2.length = 0; 
+		essRevenue_data_pc3.length = 0; 
+		essRevenue_data_pc4.length = 0; 
+		essRevenue_data_pc5.length = 0; 
+		essRevenue_data_pc6.length = 0; 
+		essRevenue_data_pc7.length = 0; 
+		essRevenue_data_pc8.length = 0; 
+		essRevenue_data_pc9.length = 0; 
+		essRevenue_data_pc10.length = 0;
+		essRevenue_data_pc11.length = 0;
+		essRevenue_data_pc12.length = 0;
+		essRevenueList1 = null;
+		essRevenueList2 = null;
 		getESSRevenueList(formData); // 실제사용량 조회
 		drawData(); // 차트 및 표 그리기
 	}

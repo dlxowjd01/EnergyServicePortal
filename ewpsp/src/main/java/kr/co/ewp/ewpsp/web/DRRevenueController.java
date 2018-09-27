@@ -41,7 +41,7 @@ public class DRRevenueController {
 		logger.debug("/getDRRevenueList");
 		logger.debug("param ::::: "+param.toString());
 		
-		List list = drRevenueService.getUsageRealList();
+		List list = drRevenueService.getDRRevenueList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("list", list);
