@@ -36,18 +36,25 @@
 				page_tb.*
 			from (
 					select
-						alarm_idx, site_id, device_id, device_type, std_date, alarm_type, alarm_msg, 
-						alarm_cfm_yn, alarm_cfm_date, alarm_cfm_uid, alarm_note, reg_date, mod_date
-					from tb_alarm
-					where 1=1
+						a.alarm_idx, a.site_id, a.device_id, b.device_name, a.device_type, 
+						case a.device_type when 1 then 'PCS'
+							when 2 then 'BMS'
+							when 3 then 'PV'
+							when 4 then '부하측정기기'
+							when 5 then 'PV모니터링기기'
+							else 'ESS모니터링기기' end as device_type_nm,
+						a.std_date, a.alarm_type, a.alarm_msg, 
+						a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_note, a.reg_date, a.mod_date
+					from tb_alarm a, tb_device b
+					where a.device_id = b.device_id
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
-					and site_id = #{siteId }
+					and a.site_id = #{siteId }
 					</if>
-					and device_type = #{alarmType }
+					and a.alarm_type = #{alarmType }
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
-					and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+					and a.std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
 					</if>
-					order by std_date
+					order by a.std_date
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
@@ -64,18 +71,25 @@
 				page_tb.*
 			from (
 					select
-						alarm_idx, site_id, device_id, device_type, std_date, alarm_type, alarm_msg, 
-						alarm_cfm_yn, alarm_cfm_date, alarm_cfm_uid, alarm_note, reg_date, mod_date
-					from tb_alarm
-					where 1=1
+						a.alarm_idx, a.site_id, a.device_id, b.device_name, a.device_type, 
+						case a.device_type when 1 then 'PCS'
+							when 2 then 'BMS'
+							when 3 then 'PV'
+							when 4 then '부하측정기기'
+							when 5 then 'PV모니터링기기'
+							else 'ESS모니터링기기' end as device_type_nm,
+						a.std_date, a.alarm_type, a.alarm_msg, 
+						a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_note, a.reg_date, a.mod_date
+					from tb_alarm a, tb_device b
+					where a.device_id = b.device_id
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
-					and site_id = #{siteId }
+					and a.site_id = #{siteId }
 					</if>
-					and device_type = #{alarmType }
+					and a.alarm_type = #{alarmType }
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
-					and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+					and a.std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
 					</if>
-					order by std_date
+					order by a.std_date
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb

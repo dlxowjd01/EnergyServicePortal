@@ -95,13 +95,14 @@
 			$('#WarningAlarmPaging').empty();
 		} else {
 			for(var i=0; i<warnAlarmList.length; i++) {
-				var device_stat = (warnAlarmList[i].device_stat == 1) ? "connect" : "disconnect";
+				var alarm_type = (warnAlarmList[i].alarm_type == 1) ? "비상" : "주의";
+				var tm = new Date( convertDateUTC(warnAlarmList[i].std_date) );
 				$tbody.append(
-						$('<tr />').append( $("<td />").append( warnAlarmList[i].device_type ) // 장치타입
-						).append( $("<td />").append( warnAlarmList[i].device_type ) // 장치명
+						$('<tr />').append( $("<td />").append( warnAlarmList[i].device_type_nm ) // 장치타입
+						).append( $("<td />").append( warnAlarmList[i].device_name ) // 장치명
 						).append( $("<td />").append( warnAlarmList[i].device_id ) // 장치ID
-						).append( $("<td />").append( warnAlarmList[i].std_date ) // 알람시간
-						).append( $("<td />").append( warnAlarmList[i].alarm_type ) // 알람타입
+						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") ) // 알람시간
+						).append( $("<td />").append( alarm_type ) // 알람타입
 						).append( $("<td />").append( warnAlarmList[i].alarm_msg ) // 알람메세지
 						).append( $("<td />").append( warnAlarmList[i].comp_id ) // 알람상태(뭘 의미하는거지??)
 						).append( // 조치여부
@@ -151,13 +152,14 @@
 			$('#AlertAlarmPaging').empty();
 		} else {
 			for(var i=0; i<alertAlarmList.length; i++) {
-				var device_stat = (alertAlarmList[i].device_stat == 1) ? "connect" : "disconnect";
+				var alarm_type = (alertAlarmList[i].alarm_type == 1) ? "비상" : "주의";
+				var tm = new Date( convertDateUTC(alertAlarmList[i].std_date) );
 				$tbody.append(
-						$('<tr />').append( $("<td />").append( alertAlarmList[i].device_type ) // 장치타입
-						).append( $("<td />").append( alertAlarmList[i].device_type ) // 장치명
+						$('<tr />').append( $("<td />").append( alertAlarmList[i].device_type_nm ) // 장치타입
+						).append( $("<td />").append( alertAlarmList[i].device_name ) // 장치명
 						).append( $("<td />").append( alertAlarmList[i].device_id ) // 장치ID
-						).append( $("<td />").append( alertAlarmList[i].std_date ) // 알람시간
-						).append( $("<td />").append( alertAlarmList[i].alarm_type ) // 알람타입
+						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") ) // 알람시간
+						).append( $("<td />").append( alarm_type ) // 알람타입
 						).append( $("<td />").append( alertAlarmList[i].alarm_msg ) // 알람메세지
 						).append( $("<td />").append( alertAlarmList[i].comp_id ) // 알람상태(뭘 의미하는거지??)
 						).append( // 조치여부
