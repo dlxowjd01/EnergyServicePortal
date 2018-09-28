@@ -27,6 +27,87 @@
 			getDBData();
 		});
 		
+		$("#smsSendMngBtn").click(function(){
+			
+			$.ajax({
+				url : "/getSmsAddresseeList",
+				type : 'post',
+				async : false, // 동기로 처리해줌
+//				data : {
+//					selPageNum : ""
+//				},
+				success: function(result) {
+					var addresseeList = result.list;
+					
+					$tbody = $("#smsSendMngTbody");
+					$tbody.empty();
+					if(addresseeList == null || addresseeList.length < 1) {
+						$tbody.append( '<tr><td colspan="4">조회된 데이터가 없습니다.</td><tr>' );
+					} else {
+						for(var i=0; i<addresseeList.length; i++) {
+							$tbody.append(
+									$('<tr />').append(
+											$("<td />").append( (i+1) )
+									).append( $("<td />").append( addresseeList[i].addressee_name )
+									).append(
+											$("<td />").append( addresseeList[i].mobile )
+									).append(
+											$("<td />").append( '<a href="#;" onclick="deleteAddresseeYn(\''+addresseeList[i].sms_user_idx+'\');"><i class="glyphicon glyphicon-remove"></i></a>' )
+									)
+							);
+						}
+						
+					}
+				}
+			});
+
+			$("#selAddresseeName option:eq(0)").prop("selected", true);
+			
+			popupOpen('rpeople');
+		});
+		
+		$('#selAddresseeName').change(function(){
+			var addressee = $(this).val();
+			if(addressee == "etc") {
+				$('#addresseeName').show();
+				$('#addresseeName').val("");
+			} else {
+				$('#addresseeName').hide();
+				$('#addresseeName').val(addressee);
+			}
+		});
+
+		$("#insertSmsBtn").click(function(){
+			var addressee = $('#addresseeName').val();
+			if(addressee == "" || addressee == null) {
+				alert("이름을 입력해주세요");
+				return ;
+			}
+			
+			if($('#mobile').val() == "" || $('#mobile').val() == null) {
+				alert("연락처를 입력해주세요");
+				return ;
+			}
+			
+			if(confirm("저장하시겠습니까?")) {
+				var formData = $("#insertSmsForm").serializeObject();
+				insertAddressee(formData);
+			}
+		});
+
+		$("#cancelSmsSendMngBtnX").click(function(){
+			popupClose('rpeople');
+			
+			$('#insertSmsForm').each(function() {
+				this.reset();
+			});
+			
+			$('#addresseeName').val("");
+			$('#addresseeName').hide();
+			$("#smsSendMngTbody").empty().append( '<tr><td colspan="4">조회된 데이터가 없습니다.</td><tr>' );
+			
+		});
+		
 	});
 	
 	function getDBData() {
@@ -180,5 +261,47 @@
 		
 		
 	}
-	
+
+	function insertAddressee(formData) {
+		$.ajax({
+			url : "/insertAddressee",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+			data : formData,
+			success: function(result) {
+				var resultCnt = result.resultCnt;
+				if(resultCnt > 0) {
+					alert("저장되었습니다.");
+					location.reload();
+				} else {
+					alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
+				}
+			}
+		});
+	}
+
+	function deleteAddresseeYn(smsUserIdx) {
+		if(confirm("삭제하시겠습니까?")) {
+			$.ajax({
+				url : "/deleteAddressee",
+				type : 'post',
+				async : false, // 동기로 처리해줌
+				data : {
+					smsUserIdx : smsUserIdx
+				},
+				success: function(result) {
+					var resultCnt = result.resultCnt;
+					if(resultCnt > 0) {
+						alert("삭제되었습니다.");
+						location.reload();
+					} else {
+						alert("삭제에 실패하였습니다. \n 관리자에게 문의하세요.");
+					}
+				},
+				error:function(request,status,error){
+					alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+				}
+			});
+		}
+	}
 	

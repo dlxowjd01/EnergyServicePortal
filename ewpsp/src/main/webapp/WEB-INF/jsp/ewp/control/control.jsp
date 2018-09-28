@@ -99,7 +99,8 @@
 												</tr>
 											</thead>
 											<tbody id="warnAlarmTbody">
-												<tr>
+												<tr><td colspan="8">조회된 데이터가 없습니다.</td><tr>
+												<!-- <tr>
 													<td>BMS</td>
 													<td>BMS_1</td>
 													<td>12001</td>
@@ -118,7 +119,7 @@
 													<td>Over cell Voltage</td>
 													<td>발생</td>
 													<td>미조치</td>
-												</tr>
+												</tr> -->
 											</tbody>
 										</table>
 									</div>
@@ -155,7 +156,8 @@
 												</tr>
 											</thead>
 											<tbody id="alertAlarmTbody">
-												<tr>
+												<tr><td colspan="8">조회된 데이터가 없습니다.</td><tr>
+												<!-- <tr>
 													<td>BMS</td>
 													<td>BMS_1</td>
 													<td>12001</td>
@@ -174,7 +176,7 @@
 													<td>Over cell Voltage</td>
 													<td>발생</td>
 													<td>미조치</td>
-												</tr>
+												</tr> -->
 											</tbody>
 										</table>
 									</div>
@@ -186,7 +188,7 @@
 								</div>
 							</div>
 							<div class="clear mt30">
-								<a href="javascript:popupOpen('rpeople');" class="fr default_btn"><i class="glyphicon glyphicon-phone"></i> 알람전송 관리</a>
+								<a href="javascript:popupOpen('rpeople');" class="fr default_btn" id="smsSendMngBtn"><i class="glyphicon glyphicon-phone"></i> 알람전송 관리</a>
 							</div>
 
 						</div>
@@ -204,7 +206,7 @@
     <div id="layerbox" class="rpeople" style="min-width:600px;">
         <div class="stit">
         	<h2>알람전송 관리</h2>        	
-			<a href="javascript:popupClose('rpeople');">닫기</a>
+			<a href="#;" id="cancelSmsSendMngBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
 			<h2 class="ctit mt20">알람 수신자</h2>
@@ -224,8 +226,11 @@
 							<th>삭제</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="smsSendMngTbody">
 						<tr>
+							<td colspan="4">사이트를 선택해주세요</td>
+						</tr>
+						<!-- <tr>
 							<td>1</td>
 							<td>홍길동</td>
 							<td>010-1234-1234</td>
@@ -272,12 +277,13 @@
 							<td>홍길동</td>
 							<td>010-1234-1234</td>
 							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr>
+						</tr> -->
 					</tbody>
 				</table>
 			</div>
 			<div class="set_tbl mt10 clear">
 				<div class="fl" style="width:calc(100% - 120px);">
+					<form id="insertSmsForm" name="insertSmsForm">
 					<table>
 						<colgroup>
 							<col width="150">
@@ -287,23 +293,27 @@
 							<tr>
 								<th><span>이름</span></th>
 								<td>
-									<select name="" id="" class="sel" style="width:100%;">
-										<option value="">홍길동</option>
-										<option value="">홍길동</option>
-										<option value="">홍길동</option>
-										<option value="">홍길동</option>
-									</select>
+									<select name="selAddresseeName" id="selAddresseeName" class="sel" style="width:100%;">
+										<option value="">--선택--</option>
+										<option value="홍길동">홍길동</option>
+										<option value="김철수">김철수</option>
+										<option value="이영희">이영희</option>
+										<option value="가나다">가나다</option>
+										<option value="etc">직접입력</option>
+									</select><br>
+									<input type="text" id="addresseeName" name="addresseeName" class="input" style="width:100%; display: none;">
 								</td>
 							</tr>
 							<tr>
 								<th><span>연락처</span></th>
-								<td><input type="text" class="input" style="width:100%"></td>
+								<td><input type="text" id="mobile" name="mobile" class="input" style="width:100%"></td>
 							</tr>
 						</tbody>			
 					</table>
+					</form>
 				</div>
 				<div class="fr">
-					<input type="submit" value="추가하기" class="submit">
+					<input type="button" value="추가하기" class="submit" id="insertSmsBtn">
 				</div>
 			</div>
 

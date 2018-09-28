@@ -27,5 +27,18 @@ public class ControlDao {
 	public int getAlarmListCnt(HashMap param) {
 		return sqlSession.selectOne("control.getAlarmListCnt", param);
 	}
+
+	public List getSmsAddresseeList(HashMap param) {
+		List resultList = sqlSession.selectList("control.getSmsAddresseeList", param);
+		return resultList;
+	}
+
+	public int insertAddressee(HashMap param) {
+		return sqlSession.insert("control.insertAddressee", param);
+	}
+
+	public int deleteAddressee(HashMap param) {
+		return sqlSession.update("control.deleteAddressee", param);
+	}
 	
 }

@@ -136,4 +136,44 @@ public class ControlController {
 		return resultMap;
 	}
 
+	@RequestMapping("/getSmsAddresseeList")
+	public @ResponseBody Map<String, Object> getSmsAddresseeList(@RequestParam HashMap param) throws Exception {
+		logger.debug("/getSmsAddresseeList");
+		logger.debug("param ::::: "+param.toString());
+		
+		param.put("siteId", "17094385");
+		
+		List list = controlService.getSmsAddresseeList(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("list", list);
+		return resultMap;
+	}
+	
+	@RequestMapping("/insertAddressee")
+	public @ResponseBody Map<String, Object> insertAddressee(@RequestParam HashMap param) throws Exception {
+		logger.debug("/insertAddressee");
+		logger.debug("param ::::: "+param.toString());
+		
+		param.put("siteId", "17094385");
+		
+		int resultCnt = controlService.insertAddressee(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("resultCnt", resultCnt);
+		return resultMap;
+	}
+
+	@RequestMapping("/deleteAddressee")
+	public @ResponseBody Map<String, Object> deleteAddressee(@RequestParam HashMap param) throws Exception {
+		logger.debug("/deleteAddressee");
+		logger.debug("param ::::: "+param.toString());
+		
+		int resultCnt = controlService.deleteAddressee(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("resultCnt", resultCnt);
+		return resultMap;
+	}
+
 }

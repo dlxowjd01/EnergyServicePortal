@@ -28,5 +28,19 @@ public class ControlServiceImpl implements ControlService{
 	public int getAlarmListCnt(HashMap param) throws Exception {
 		return controlDao.getAlarmListCnt(param);
 	}
+
+	public List getSmsAddresseeList(HashMap param) throws Exception {
+		return controlDao.getSmsAddresseeList(param);
+	}
+
+	@Transactional
+	public int insertAddressee(HashMap param) throws Exception {
+		return controlDao.insertAddressee(param);
+	}
+
+	@Transactional
+	public int deleteAddressee(HashMap param) throws Exception {
+		return controlDao.deleteAddressee(param);
+	}
 	
 }
