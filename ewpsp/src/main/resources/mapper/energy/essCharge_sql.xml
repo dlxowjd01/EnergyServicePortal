@@ -48,4 +48,44 @@
 		order by std_timestamp
 	</select>
 	
+	<select id="getESSChargeSum" parameterType="hashMap" resultType="hashMap">
+		/* ess 충방전량 합계 조회 */
+		select 
+			sum(chg_val_sum) as chg_val_sum, 
+			sum(dischg_val_sum) as dischg_val_sum, 
+			sum(ess_revenue_sum) as ess_revenue_sum
+		from (
+			select 
+				ifnull( sum(chg_val), 0) as chg_val_sum, ifnull( sum(dischg_val), 0) as dischg_val_sum, 0 as ess_revenue_sum
+			from tb_ess_charge
+			where 1=1
+			<if test='substringIdx.equals("dd")'>
+			and date_format(std_date,'%Y%m%d') = left(#{selTermFrom }, 8)
+			</if>
+			<if test='substringIdx.equals("MM")'>
+			and date_format(std_date,'%Y%m') = left(#{selTermFrom }, 6)
+			</if>
+			<if test='substringIdx.equals("yyyy")'>
+			and date_format(std_date,'%Y') = left(#{selTermFrom }, 4)
+			</if>
+			
+			union
+			
+			select 
+				0 as chg_val_sum, 0 as dischg_val_sum,
+				ifnull( sum(ess_chg_incen+ess_dischg_incen), 0 ) as ess_revenue_sum
+			from tb_bill
+			where 1=1
+			<if test='substringIdx.equals("dd")'>
+			and bill_yearm = left(#{selTermFrom }, 8)
+			</if>
+			<if test='substringIdx.equals("MM")'>
+			and bill_yearm = left(#{selTermFrom }, 6)
+			</if>
+			<if test='substringIdx.equals("yyyy")'>
+			and left(bill_yearm, 4) = left(#{selTermFrom }, 4)
+			</if>
+		) a
+	</select>
+	
 </mapper>

@@ -7,7 +7,7 @@
 	$(document).ready(function() {
 		formData = getSiteMainSchCollection();
 		
-//		fn_cycle_10sec();
+		fn_cycle_10sec();
 		fn_cycle_1min();
 		fn_cycle_15min();
 		
@@ -18,16 +18,16 @@
 	
 	// 자동 새로고침(실시간 모니터링)
 	function realTime_monitoring_start() {
-//		monitoring_cycle_10sec_start();
+		monitoring_cycle_10sec_start();
 		monitoring_cycle_1min_start();
 		monitoring_cycle_15min_start();
 	}
 	
 	function monitoring_cycle_10sec_start() {
-		if(monitoring_cycle_10sec == null) { // 1분 간격
+		if(monitoring_cycle_10sec == null) { // 10초 간격
 			monitoring_cycle_10sec = setInterval(function(){
 				fn_cycle_10sec();
-			},5000); // 1000 = 1초, 5000 = 5초
+			}, (1000*10)); // 1000 = 1초, 5000 = 5초
 		} else {
 			alert("이미 모니터링이 실행중입니다.");
 		}
@@ -37,7 +37,7 @@
 		if(monitoring_cycle_1min == null) { // 1분 간격
 			monitoring_cycle_1min = setInterval(function(){
 				fn_cycle_1min();
-			},5000); // 1000 = 1초, 5000 = 5초
+			}, (1000*60)); // 1000 = 1초, 5000 = 5초
 		} else {
 			alert("이미 모니터링이 실행중입니다.");
 		}
@@ -47,7 +47,7 @@
 		if(monitoring_cycle_15min == null) { // 15분 간격
 			monitoring_cycle_15min = setInterval(function(){
 				fn_cycle_15min();
-			},10000); // 1000 = 1초, 10000 = 10초
+			}, (1000*60*15)); // 1000 = 1초, 10000 = 10초
 		} else {
 			alert("이미 모니터링이 실행중입니다.");
 		}
@@ -69,15 +69,13 @@
 	}
 	
 	function fn_cycle_10sec() {
-		getAlarmList(formData);
+		getAlarmList(formData); // 알람 조회
 	}
 	
 	function fn_cycle_1min() {
 		getSiteSetDetail();
-		getPeakRealList(formData); // 피크조회
-//		getContractPowerList(formData); // 한전계약전력 조회
-//		getChargePowerList(formData); // 요금적용전력 조회
-		drawData_chart_peak();
+		getPeakRealList(formData); // 피크전력현황 조회
+		drawData_chart_peak(); // 피크전력현황 차트그리기
 		
 		var today = new Date();
 		update_updtDataTime(today, "updtTimePeak");
@@ -85,9 +83,16 @@
 	}
 	
 	function fn_cycle_15min() {
-		getRevenueList(formData); // 수익조회
+		getESSChargeRealList(formData); // 실제충방전량 조회
+		getESSChargeFutureList(formData); // 예측충방전량 조회
+		drawData_chart_charge(); // 충방전량 차트그리기
+		getESSChargeSum(formData); // ess 충방전량 합계 조회
 		
-		getDeviceList(formData); // 장치조회
+		getDERUsageList(formData); // 사용량구성 조회
+		
+		getDeviceList(formData); // 장치현황 조회
+		
+		getRevenueList(formData); // 수익현황 조회
 		
 		var today = new Date();
 		update_updtDataTime(today, "updtTimeRevenue");
@@ -96,13 +101,13 @@
 	
 	function getSiteMainSchCollection() {
 		var today = new Date();
-//		firstDay = today.getFullYear()+(today.getMonth()+1)+today.getDate()+"000000";
-//		endDay = today.getFullYear()+(today.getMonth()+1)+today.getDate()+"235959";
-		var firstDay = '20180831000000';//new Date(2018, 7, 23, 0, 0, 0);
-		var endDay = '20180831235959';//new Date(2018, 7, 23, 23, 59, 59);
+		firstDay = today.format("yyyyMMdd")+"000000";
+		endDay = today.format("yyyyMMdd")+"235959";
+//		var firstDay = '20180831000000';//new Date(2018, 7, 23, 0, 0, 0);
+//		var endDay = '20180831235959';//new Date(2018, 7, 23, 23, 59, 59);
 		$("#selTermFrom").val(firstDay);
 		$("#selTermTo").val(endDay);
-//		console.log($("#selTermFrom").val()+", "+$("#selTermTo").val()+", "+$("#selTerm").val()+", "+$("#selPeriodVal").val());
+//		
 		var formData = $("#schForm").serializeObject();
 //		{
 //				selTerm : "day",
@@ -111,18 +116,362 @@
 //				selTermTo : endDay, 
 //				siteId : "c64b328b"
 //		};
-//		console.log("formData : "+formData+", "+formData.siteId);
+		
 		return formData;
 	}
 	
 	function callback_getAlarmList(result) {
+		var dvTpAlarmDetail = result.detail;
 		var alarmList = result.alarmList;
-		var alarmTypeCntList = result.alarmTypeCntList;
 		
-		$("#todayTotalAlarmCnt").val(alarmTypeCntList.alert_cnt+alarmTypeCntList.warning_cnt);
-		$("#todayAlarmCnt").val(alarmTypeCntList.alert_cnt);
-		$("#todayWarninfCnt").val(alarmTypeCntList.warning_cnt);
-		//   09.14 여기까지 하다가 중단
+		$("#todayTotalAlarmCnt").val(dvTpAlarmDetail.total_cnt);
+		$("#todayAlarmCnt").val(dvTpAlarmDetail.alert_cnt);
+		$("#todayWarninfCnt").val(dvTpAlarmDetail.warning_cnt);
+		if(dvTpAlarmDetail.notCfm_cnt == 0) {
+			$(".no").find('span').hide();
+		} else {
+			$(".no").find('span').show();
+			$(".no").empty().append( '<span>'+dvTpAlarmDetail.notCfm_cnt+'</span>');
+		}
+		
+		$div = $(".alarm_notice");
+		$div.find("ul").empty();
+		if(alarmList == null || alarmList.length < 1) {
+			$div.find("ul").append( $('<li />').append( $('<a href="#;" />').append("조회된 데이터가 없습니다.") ) );
+		} else {
+			for(var i=0; i<alarmList.length; i++) {
+				var tm = new Date( convertDateUTC(alarmList[i].std_date) );
+				
+				$div.find("ul").append( 
+						$('<li />').append( $('<a href="#;" />').append("조회된 데이터가 없습니다.") 
+						).append( $('<span />').append( tm.format("yyyy-MM-dd HH:mm:ss") ) ) 
+				);
+				
+			}
+			
+		}
+		
+	}
+	
+	// 실제 충방전량 조회
+	var pastChgList;
+	var pastDischgList;
+	function callback_getESSChargeRealList(result) {
+		var resultListMap = result.resultListMap;
+		
+		var chgList = resultListMap.chgList;
+		var dischgList = resultListMap.dischgList;
+		
+		// 데이터 셋팅
+		var dataSet = []; // chartData를 위한 변수
+		var dataSet2 = []; // chartData를 위한 변수
+		var totalDataSet = 0; // 전체 누적합
+		var totalDataSet2 = 0; // 전체 누적합
+		if(chgList != null && chgList.length > 0) {
+			for(var i=0; i<chgList.length; i++) {
+				var chgVal = String(chgList[i].chg_val);
+				var dischgVal   = String(dischgList[i].dischg_val);
+				var reChgVal = 0; 
+				var reDischgVal   = 0; 
+				
+				if(chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
+				else {
+					reChgVal = Math.round( Number(chgVal) );
+					totalDataSet = totalDataSet+reChgVal;
+				}
+				if(dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
+				else {
+					reDischgVal   = Math.round( Number(dischgVal) );
+					totalDataSet2 = totalDataSet2+reDischgVal;
+				}
+				
+				var tm = new Date( convertDateUTC(chgList[i].std_timestamp) );
+				// 차트데이터 셋팅
+				dataSet.push( [setChartDateUTC(chgList[i].std_timestamp), reChgVal] );
+				dataSet2.push( [setChartDateUTC(chgList[i].std_timestamp), reDischgVal] );
+				
+			}
+			
+		}
+		pastChgList = dataSet;
+		pastDischgList = dataSet2;
+		
+		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
+//		unit_format(String(totalDataSet), "pastChgTot", "Wh");
+//		unit_format(String(totalDataSet2), "pastDischgTot", "Wh");
+	}
+	
+	// 예측 충방전량
+	var fetureChgList;
+	var fetureDischgList;
+	function callback_getESSChargeFutureList(result) {
+		var resultListMap = result.resultListMap;
+		
+		var chgList = resultListMap.chgList;
+		var dischgList = resultListMap.dischgList;
+		
+		// 데이터 셋팅
+		var dataSet = []; // chartData를 위한 변수
+		var dataSet2 = []; // chartData를 위한 변수
+		var totalDataSet = 0; // 전체 누적합
+		var totalDataSet2 = 0; // 전체 누적합
+		if(chgList != null && chgList.length > 0) {
+			for(var i=0; i<chgList.length; i++) {
+				var chgVal = String(chgList[i].chg_val);
+				var dischgVal   = String(dischgList[i].dischg_val);
+				var reChgVal = 0; 
+				var reDischgVal   = 0; 
+				
+				if(chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
+				else {
+					reChgVal = Math.round( Number(chgVal) );
+					totalDataSet = totalDataSet+reChgVal;
+				}
+				if(dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
+				else {
+					reDischgVal   = Math.round( Number(dischgVal) );
+					totalDataSet2 = totalDataSet2+reDischgVal;
+				}
+				
+				var tm = new Date( convertDateUTC(chgList[i].std_timestamp) );
+				// 차트데이터 셋팅
+				dataSet.push( [setChartDateUTC(chgList[i].std_timestamp), reChgVal] );
+				dataSet2.push( [setChartDateUTC(chgList[i].std_timestamp), reDischgVal] );
+				
+			}
+			
+		}
+		fetureChgList = dataSet;
+		fetureDischgList = dataSet2;
+		
+	}
+	
+	// 차트 그리기
+	function drawData_chart_charge() {
+		if( pastChgList.length < 1 && pastDischgList.length <1 && fetureChgList.length < 1 && fetureDischgList.length < 1 ) {
+			$(".charge").find(".no-data").css("display", "");
+			$(".charge").find(".inchart").css("display", "none");
+			$(".charge").find(".chart_footer").css("display", "none");
+		} else {
+			$(".charge").find(".no-data").css("display", "none");
+			$(".charge").find(".inchart").css("display", "");
+			$(".charge").find(".chart_footer").css("display", "");
+		}
+		
+		var seriesLength = chargeChart.series.length;
+		for(var i = seriesLength - 1; i > -1; i--) {
+				chargeChart.series[i].remove();
+		}
+		
+		chargeChart.addSeries({
+			type: 'column',
+	        name: '충전량',
+	        color: '#438fd7',
+			data: pastChgList
+		}, false);
+		
+		chargeChart.addSeries({
+			type: 'line',
+	        name: '충전 계획',
+	        color: '#13af67',
+	        dashStyle: 'ShortDash',
+			data: pastDischgList
+		}, false);
+		
+		chargeChart.addSeries({
+			type: 'column',
+	        name: '방전량',
+	        color: '#f75c4a',
+			data: fetureChgList
+		}, false);
+		
+		chargeChart.addSeries({
+			type: 'line',
+	        name: '방전 계획',
+	        color: '#84848f',
+	        dashStyle: 'ShortDash',
+			data: fetureDischgList
+		}, false);
+		
+//		setTickInterval();
+		chargeChart.xAxis[0].options.tickInterval = 2 * 60 * 60 * 1000;
+		chargeChart.xAxis[0].options.labels.style.fontSize = '12px';
+		
+		chargeChart.redraw(); // 차트 데이터를 다시 그린다
+	}
+	
+	function getESSChargeSum(formData) {
+		$.ajax({
+			url : "/getESSChargeSum",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+			data : formData,
+			success: function(result) {
+				var resultListMap = result.resultListMap;
+				
+				var todaySum = resultListMap.todaySum;
+				var monthSum = resultListMap.monthSum;
+				var yearSum = resultListMap.yearSum;
+				
+				$("#todayCrg").empty().append( numberComma(todaySum.chg_val_sum)+" kWh" );
+				$("#todayDiscrg").empty().append( numberComma(todaySum.dischg_val_sum)+" kWh" );
+				$("#todayRevenue").empty().append( numberComma(todaySum.ess_revenue_sum) );
+				$("#monthCrg").empty().append( numberComma(monthSum.chg_val_sum)+" kWh" );
+				$("#monthDiscrg").empty().append( numberComma(monthSum.dischg_val_sum)+" kWh" );
+				$("#monthRevenue").empty().append( numberComma(monthSum.ess_revenue_sum) );
+				$("#yearCrg").empty().append( numberComma(yearSum.chg_val_sum)+" kWh" );
+				$("#yearDiscrg").empty().append( numberComma(yearSum.dischg_val_sum)+" kWh" );
+				$("#yearRevenue").empty().append( numberComma(yearSum.ess_revenue_sum) );
+				
+				$("#socTodayCrg").empty().append( numberComma(todaySum.chg_val_sum) ).append('<em>kWh</em>');
+				$("#socTodayDiscrg").empty().append( numberComma(todaySum.dischg_val_sum) ).append('<em>kWh</em>');
+	   		}
+		});
+	}
+	
+	var pastUsageList; // 한전 사용량
+	var essUsageList; // ess 사용량
+	var pvUsageList; // pv 사용량 사용량
+	function callback_getDERUsageList(result) {
+		var kepcoUsageList = result.kepcoUsageList;
+		var essUsgList = result.essUsageList;
+		var pvUsgList = result.pvUsageList;
+		var loopCntList = result.loopCntList; // for문 loop list
+//		var periodd = $("#selPeriodVal").val(); // 데이터조회간격
+		
+		// 데이터 셋팅
+		var dataSet = []; // chartData를 위한 변수
+		var dataSet2 = []; // chartData를 위한 변수
+		var dataSet3 = []; // chartData를 위한 변수
+		var totalDataSet = 0; // 전체 누적합
+		var totalDataSet2 = 0;
+		var totalDataSet3 = 0;
+		var nowUsage = 0;
+		
+		if( kepcoUsageList.length < 1 && essUsgList.length <1 && pvUsgList.length < 1 ) {
+			$(".der").find(".no-data").css("display", "");
+			$(".der").find(".inchart").css("display", "none");
+			$(".der").find(".chart_footer").css("display", "none");
+		} else {
+			$(".der").find(".no-data").css("display", "none");
+			$(".der").find(".inchart").css("display", "");
+			$(".der").find(".chart_footer").css("display", "");
+		}
+		
+		var seriesLength = derChart.series.length;
+		for(var i = seriesLength - 1; i > -1; i--) {
+			derChart.series[i].remove();
+		}
+		
+		// 한전사용량, ess사용량, pv사용량 중 하나라도 데이터가 존재할 때
+		if( !( kepcoUsageList.length < 1 && essUsgList.length <1 && pvUsgList.length < 1 ) ) {
+//			if(usageList.length > 0) {
+				for(var i=0; i<loopCntList.length; i++) {
+					var kepcoUsage = null;
+					var essUsage = null;
+					var pvUsage = null;
+					var reKepcoUsage = 0;
+					var reEssUsage = 0;
+					var rePvUsage = 0;
+					
+					if(kepcoUsageList.length > 0) { // 한전사용량
+						kepcoUsage = String(kepcoUsageList[i].usg_val);
+						if(kepcoUsage == null || kepcoUsage == "" || kepcoUsage == "null") reKepcoUsage = null;
+						else {
+							if(kepcoUsage.length < 7) reKepcoUsage = Number(     kepcoUsage     ); // 나중에 수정 요망
+							else reKepcoUsage = Number(     kepcoUsage.substring( 0, kepcoUsage.length-6 )     );
+							totalDataSet = totalDataSet+Number(kepcoUsage);
+						}
+						
+					} else reKepcoUsage = null;
+					
+					if(essUsgList.length > 0) { // ESS 사용량
+						essUsage = String(essUsgList[i].usg_val);
+						if(essUsage == null || essUsage == "" || essUsage == "null") reEssUsage = null;
+						else {
+							if(essUsage.length < 7) reEssUsage = Number(     essUsage     ); // 나중에 수정 요망
+							else reEssUsage = Number(     essUsage.substring( 0, essUsage.length-6 )     );
+							totalDataSet2 = totalDataSet2+Number(essUsage);
+						}
+					} else reEssUsage = null;
+					
+					if(pvUsgList.length > 0) { // PV 사용량
+						pvUsage = String(pvUsgList[i].usg_val);
+						if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
+						else {
+							if(pvUsage.length < 7) rePvUsage = Number(     pvUsage     ); // 나중에 수정 요망
+							else rePvUsage = Number(     pvUsage.substring( 0, pvUsage.length-6 )     );
+							totalDataSet3 = totalDataSet3+Number(pvUsage);
+						}
+					} else rePvUsage = null;
+					
+					var tm = new Date( convertDateUTC(loopCntList[i].std_timestamp) );
+					// 차트데이터 셋팅
+					dataSet.push([setChartDateUTC(loopCntList[i].std_timestamp) , reKepcoUsage]);
+					dataSet2.push([setChartDateUTC(loopCntList[i].std_timestamp) , reEssUsage]);
+					dataSet3.push([setChartDateUTC(loopCntList[i].std_timestamp) , rePvUsage]);
+					
+					if( (i+1) == loopCntList.length ) {
+						if(reKepcoUsage != null) {
+							nowUsage = reKepcoUsage;
+						}
+					}
+					
+				}
+				pastUsageList = dataSet;
+				essUsageList = dataSet2;
+				pvUsageList = dataSet3;
+				
+				if(kepcoUsageList.length > 0) {
+					derChart.addSeries({
+						index:3,
+						fillOpacity: 1,
+						name: '실제 사용량',
+						color: '#3d4250',
+						lineColor: '#438fd7', /* 한전 사용량 */
+						data: pastUsageList
+					}, false);
+					
+				}
+				
+				if(essUsgList.length > 0) {
+					derChart.addSeries({
+						index: 2,
+						fillOpacity: 0.5,
+						name: 'ESS 사용량',
+						color: '#13af67', /* ESS 사용량 */
+						data: essUsageList
+					}, false);
+					
+				}
+				
+				if(pvUsgList.length > 0) {
+					derChart.addSeries({
+						index: 1,
+						fillOpacity: 0.5,
+						name: 'PV 사용량',
+						color: '#f75c4a', /* PV 사용량 */
+						data: pvUsageList
+					}, false);
+					
+				}
+				
+//			}
+			
+		}
+		
+		derChart.xAxis[0].options.tickInterval = 2 * 60 * 60 * 1000;
+		derChart.xAxis[0].options.labels.style.fontSize = '12px';
+		
+		derChart.redraw(); // 차트 데이터를 다시 그린다
+		
+		var total = totalDataSet+totalDataSet2+totalDataSet3;
+		$("#nowUsage").empty().append(nowUsage+"kWh");
+		console.log("(totalDataSet/total)*100 : "+(totalDataSet/total));
+		$("#kepcoPer").empty().append( ( (totalDataSet == 0) ? 0 : ( (totalDataSet/total)*100 ).toFixed(2) )+"%" );
+		$("#essPer").empty().append( ( (totalDataSet2 == 0) ? 0 : ( (totalDataSet2/total)*100 ).toFixed(2) )+"%" );
+		$("#pvPer").empty().append( ( (totalDataSet3 == 0) ? 0 : ( (totalDataSet3/total)*100 ).toFixed(2) )+"%" );
+		
 	}
 	
 	var contractPower;
@@ -135,6 +484,8 @@
 
 	// 피크 전력
 	var pastPeakList;
+	var contractPowerList;
+	var chargePowerList;
 	function callback_getPeakRealList(result) {
 		var peakList = result.list;
 		
@@ -157,15 +508,9 @@
 				
 //				var tm = new Date(peakList[i].std_timestamp);
 				// 차트데이터 셋팅
-				dataSet.push([
-					Number(peakList[i].std_timestamp), totUsage
-				]);
-				dataSet2.push([
-					Number(peakList[i].std_timestamp), contractPower
-				]);
-				dataSet3.push([
-					Number(peakList[i].std_timestamp), chargePower
-				]);
+				dataSet.push([Number(peakList[i].std_timestamp), totUsage]);
+				dataSet2.push([Number(peakList[i].std_timestamp), contractPower]);
+				dataSet3.push([Number(peakList[i].std_timestamp), chargePower]);
 				
 			}
 			
@@ -175,41 +520,16 @@
 		chargePowerList = dataSet3;
 	}
 	
-	
-
-	// 한전계약전력
-	var contractPowerList;
-	function callback_getContractPowerList(result) {
-		var peakList = result.list;
-		var dataSet = []; // chartData를 위한 변수
-		for(var i=0; i<peakList.length; i++) {
-			// 차트데이터 셋팅
-			dataSet.push([ Number(peakList[i].std_timestamp), 40000 ]);
-			
-		}
-		contractPowerList = dataSet;
-	}
-	
-	// 요금적용전력
-	var chargePowerList;
-	function callback_getChargePowerList(result) {
-		var peakList = result.list;
-		var dataSet = []; // chartData를 위한 변수
-		for(var i=0; i<peakList.length; i++) {
-			dataSet.push([ peakList[i].std_timestamp, 30000 ]);
-			
-		}
-		chargePowerList = dataSet;
-	}
-
 	// 차트 그리기
 	function drawData_chart_peak() {
 		if(pastPeakList.length < 1) {
 			$(".peak").find(".no-data").css("display", "");
 			$(".peak").find(".inchart").css("display", "none");
+			$(".peak").find(".chart_notice").css("display", "none");
 		} else {
 			$(".peak").find(".no-data").css("display", "none");
 			$(".peak").find(".inchart").css("display", "");
+			$(".peak").find(".chart_notice").css("display", "");
 		}
 		
 		var seriesLength = peakChart.series.length;
@@ -335,7 +655,6 @@
 	
 	function callback_getDeviceList(result) {
 		var deviceList = result.deviceList;
-//		console.log("deviceList : "+deviceList);
 		
 		if(deviceList == null || deviceList.length < 1) {
 			

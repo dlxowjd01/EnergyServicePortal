@@ -31,7 +31,7 @@
 		var essUsgList = result.essUsageList;
 		var pvUsgList = result.pvUsageList;
 		var loopCntList = result.loopCntList; // for문 loop list
-		var periodd = $("#selPeriodVal").val(); // 데이터조회간격
+//		var periodd = $("#selPeriodVal").val(); // 데이터조회간격
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -72,6 +72,7 @@
 						}
 						
 					} else reKepcoUsage = null;
+					
 					if(essUsgList.length > 0) { // ESS 사용량
 						essUsage = String(essUsgList[i].usg_val);
 						if(essUsage == null || essUsage == "" || essUsage == "null") reEssUsage = null;
@@ -82,6 +83,7 @@
 							totalDataSet2 = totalDataSet2+Number(essUsage);
 						}
 					} else reEssUsage = null;
+					
 					if(pvUsgList.length > 0) { // PV 사용량
 						pvUsage = String(pvUsgList[i].usg_val);
 						if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;

@@ -1,3 +1,10 @@
+/**
+ * class name : SiteMainController
+ * description : 사이트메인 화면 controller
+ * version : 1.0
+ * author : 이우람
+ */
+
 package kr.co.ewp.ewpsp.web;
 
 import java.util.HashMap;
@@ -15,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.ewp.ewpsp.service.AlarmService;
+import kr.co.ewp.ewpsp.service.ControlService;
 import kr.co.ewp.ewpsp.service.DeviceMonitoringService;
+import kr.co.ewp.ewpsp.service.ESSChargeService;
 import kr.co.ewp.ewpsp.service.ESSRevenueService;
 import kr.co.ewp.ewpsp.service.PVRevenueService;
 
@@ -23,6 +32,12 @@ import kr.co.ewp.ewpsp.service.PVRevenueService;
 public class SiteMainController {
 
 	private static final Logger logger = LoggerFactory.getLogger(SiteMainController.class);
+
+	@Resource(name="controlService")
+	private ControlService controlService;
+
+	@Resource(name="essChargeService")
+	private ESSChargeService essChargeService;
 
 	@Resource(name="essRevenueService")
 	private ESSRevenueService essRevenueService;
@@ -39,6 +54,7 @@ public class SiteMainController {
 	@RequestMapping("/siteMain")
 	public String siteMain() {
 		logger.debug("/siteMain");
+		
 		return "ewp/main/siteMain";
 	}
 
@@ -46,14 +62,26 @@ public class SiteMainController {
 	public @ResponseBody Map<String, Object> getAlarmList(@RequestParam HashMap param) throws Exception {
 		logger.debug("/getAlarmList");
 		logger.debug("param ::::: "+param.toString());
-		param.put("alarmCfmYn", "N");
+//		param.put("alarmCfmYn", "N");
 		
-		List alarmList = alarmService.getMainAlarmList(param);
-		List alarmTypeCntList = alarmService.getMainAlarmTypeCntList(param);
+		Map result = controlService.getDeviceAlarmCnt(param); // 장치별 알람건수
+		List alarmList = alarmService.getMainAlarmList(param); // 최근 알람 목록 조회(3건)
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("detail", result);
 		resultMap.put("alarmList", alarmList);
-		resultMap.put("alarmTypeCntList", alarmTypeCntList);
+		return resultMap;
+	}
+	
+	@RequestMapping("/getESSChargeSum")
+	public @ResponseBody Map<String, Object> getESSChargeSum(@RequestParam HashMap param) throws Exception {
+		logger.debug("/getESSChargeSum");
+		logger.debug("param ::::: "+param.toString());
+		
+		Map result = essChargeService.getESSChargeSum(param); // 장치별 알람건수
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("resultListMap", result);
 		return resultMap;
 	}
 	

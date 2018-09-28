@@ -1,3 +1,10 @@
+/**
+ * class name : DERUsageController
+ * description : 사용량구성 화면 controller
+ * version : 1.0
+ * author : 이우람
+ */
+
 package kr.co.ewp.ewpsp.web;
 
 import java.util.HashMap;

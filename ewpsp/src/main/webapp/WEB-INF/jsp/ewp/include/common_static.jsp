@@ -28,5 +28,5 @@
     <script src="../js/common.js"></script>
 <script src="../js/comm_sch_chartData.js" type="text/javascript"></script>
 <script src="../js/utils.js"></script>
-<script src="../js/commonDbData.js" type="text/javascript"></script>
+<script src="../js/dbData.js" type="text/javascript"></script>
 
