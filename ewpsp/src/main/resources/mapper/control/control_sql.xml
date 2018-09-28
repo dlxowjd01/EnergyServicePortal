@@ -6,12 +6,16 @@
 	<select id="getDeviceAlarmCnt" parameterType="hashMap" resultType="hashMap">
 		/* 장치구분별 알람건수 조회 */
 		select 
-			count( case when device_type = '1' then 1 end ) as cnt_pcs,
-			count( case when device_type = '2' then 1 end ) as cnt_bms,
-			count( case when device_type = '3' then 1 end ) as cnt_pv,
-			count( case when device_type = '4' then 1 end ) as cnt_ioe,
+			count( case when device_type = '1' then 1 end ) as pcs_cnt, /* PCS 건수 */
+			count( case when device_type = '2' then 1 end ) as bms_cnt, /* BMS 건수 */
+			count( case when device_type = '3' then 1 end ) as pv_cnt, /* PV 건수 */
+			count( case when device_type = '4' then 1 end ) as ioe_cnt, /* IOE 건수 */
 			<!-- count( case when device_type = '5' then 1 end ) as cnt_mnt, -->
-			count( case when device_type not in ('1', '2', '3', '4') then 1 end ) as cnt_etc
+			count( case when device_type not in ('1', '2', '3', '4') then 1 end ) as etc_cnt, /* 기타 건수 */
+			count( case when alarm_type = '1' then 1 end ) as warning_cnt, /* 비상 건수 */
+			count( case when alarm_type = '2' then 1 end ) as alert_cnt, /* 주의 건수 */
+			count( case when alarm_cfm_yn = 'N' then 1 end ) as notCfm_cnt, /* 미확인 건수 */
+			count(*) as total_cnt /* 총 건수 */
 		from (
 				select
 					alarm_idx, site_id, device_id, device_type, std_date, alarm_type, alarm_msg, 
@@ -22,7 +26,6 @@
 				and site_id = #{siteId }
 				</if>
 				<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
-				<!-- and std_date between str_to_date('20180818000000','%Y%m%d%H%i%s') and str_to_date('20180820235959','%Y%m%d%H%i%s') -->
 				and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
 				</if>
 		) a

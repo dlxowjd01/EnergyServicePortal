@@ -39,8 +39,8 @@
 									<div class="chart_top clear">
 										<h2 class="ntit fl">알람</h2>
 										<div class="fr today_alarm">
-											<div class="total">금일발생 <span id="todayTotalAlarmCnt">614</span></div>
-											<div class="no"><span>2</span></div>
+											<div class="total">금일발생 <span id="todayTotalAlarmCnt">0</span></div>
+											<div class="no"><span style="display: none;">0</span></div>
 										</div>
 									</div>
 									<!-- no-data { -->
@@ -50,10 +50,10 @@
 									<!-- } no-data -->	
 									<div class="alarm_stat mt10 clear">
 										<div class="a_alert clear">
-											<span>ALERT</span> <em id="todayAlarmCnt">128</em>
+											<span>ALERT</span> <em id="todayAlarmCnt">0</em>
 										</div>
 										<div class="a_warning clear">
-											<span>WARNING</span> <em id="todayWarninfCnt">486</em>
+											<span>WARNING</span> <em id="todayWarninfCnt">0</em>
 										</div>
 									</div>
 									<div class="alarm_notice">
@@ -88,7 +88,7 @@
 										<span>SOC 정보를 가져올 수 없습니다.</span>
 									</div>
 									<!-- } no-data -->
-									<!-- <div class="soc mt15 clear">
+									<div class="soc mt15 clear">
 										<div class="batt_wrap fl">
 											<div class="battery"><span style="width:85.4%;">잔량</span></div>
 											<div class="battery_per"><span>85.4<em>%</em></span></div>
@@ -107,7 +107,7 @@
 												</dd>
 											</dl>
 										</div>
-									</div> -->
+									</div>
 								</div>
 							</div>
 						</div>
@@ -119,25 +119,25 @@
 										<div class="time fr">2018-08-12 11:41:26</div>
 									</div>
 									<!-- no-data { -->
-									<div class="no-data">
+									<div class="no-data" style="display: none;">
 										<span>사용량 구성 정보를 가져올 수 없습니다.</span>
 									</div>
 									<!-- } no-data -->	
-									<!-- <div class="inchart">
+									<div class="inchart">
 										<div id="der_chart" style="height:220px;"></div>
 										<script language="JavaScript"> 
-										$(function () { 
+// 										$(function () { 
 											var derChart = Highcharts.chart('der_chart', {
-												data: {
-											        table: 'der_datatable' /* 테이블에서 데이터 불러오기 */
-											    },
+// 												data: {
+// 											        table: 'der_datatable' /* 테이블에서 데이터 불러오기 */
+// 											    },
 
 												chart: {
 													marginTop:50,
 													marginLeft:50,
 													marginRight:0,
 													backgroundColor: 'transparent',
-													type: 'line'
+													type: 'area'
 												},
 
 												navigation: {
@@ -155,6 +155,17 @@
 											    },
 
 												xAxis: {
+													type: 'datetime', // 08.20 이우람 추가
+													dateTimeLabelFormats: { // 08.20 이우람 추가
+														millisecond: '%H:%M:%S.%L',
+													    second: '%H:%M:%S',
+											            minute: '%H:%M',
+											            hour: '%H',
+											            day: '%m.%d ',
+											            week: '%m.%e',
+											            month: '%y/%m',
+											            year: '%Y'
+											        },
 													labels: {
 														align: 'center',
 														y:27, /* 그래프와 거리 */
@@ -170,6 +181,7 @@
 												},
 
 												yAxis: {
+													gridZIndex: 4, // 09.10 이우람 추가
 													gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 												    min: 0, /* 최소값 지정 */
 												    title: {
@@ -225,6 +237,9 @@
 											            label: {
 											                connectorAllowed: false
 											            },
+											            marker: {
+															enabled: false
+														}, // 09.11 이우람 추가
 											            borderWidth: 0 /* 보더 0 */
 											        },
 											        line: {
@@ -289,9 +304,9 @@
 												}
 
 											});
-										});
+// 										});
 										</script>
-										데이터 추출용
+										<!-- 데이터 추출용 -->
 										<div class="chart_table2" style="display:none;">			
 											<table id="der_datatable">
 											    <thead>
@@ -453,12 +468,12 @@
 									</div>
 									<div class="chart_footer">
 										<ul class="clear">
-											<li>현재 사용량 <span>900kWh</span></li>
-											<li>한전 <span>81%</span></li>
-											<li>ESS <span>10%</span></li>
-											<li>PV <span>9%</span></li>
+											<li>현재 사용량 <span id="nowUsage">900kWh</span></li>
+											<li>한전 <span id="kepcoPer">0%</span></li>
+											<li>ESS <span id="essPer">0%</span></li>
+											<li>PV <span id="pvPer">0%</span></li>
 										</ul>
-									</div> -->
+									</div>
 								</div>
 							</div>
 						</div>				
@@ -1183,7 +1198,7 @@
 										<span>충/방전량 정보를 가져올 수 없습니다.</span>
 									</div>
 									<!-- } no-data -->								
-									<!-- <div class="inchart">
+									<div class="inchart">
 										<div id="charge_chart" style="height:226px;"></div>
 										<script language="JavaScript"> 
 										$(function () { 
@@ -1362,7 +1377,7 @@
 											});
 										});
 										</script>
-										데이터 추출용
+										<!-- 데이터 추출용 -->
 										<div class="chart_table2" style="display:none;">			
 											<table id="charge_datatable">
 											    <thead>
@@ -1580,7 +1595,7 @@
 												</tbody>
 											</table>
 										</div>
-									</div>									 -->
+									</div>									
 								</div>
 							</div>
 						</div>

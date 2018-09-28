@@ -137,11 +137,11 @@
 		var dvTpAlarmDetail = result.detail;
 		
 		if(dvTpAlarmDetail != null) {
-			$("#ioeAlarmCnt").empty().append( dvTpAlarmDetail.cnt_ioe );
-			$("#pcsAlarmCnt").empty().append( dvTpAlarmDetail.cnt_pcs );
-			$("#bmsAlarmCnt").empty().append( dvTpAlarmDetail.cnt_bms );
-			$("#pvAlarmCnt").empty().append( dvTpAlarmDetail.cnt_pv );
-			$("#etcAlarmCnt").empty().append( dvTpAlarmDetail.cnt_etc );
+			$("#ioeAlarmCnt").empty().append( dvTpAlarmDetail.ioe_cnt );
+			$("#pcsAlarmCnt").empty().append( dvTpAlarmDetail.pcs_cnt );
+			$("#bmsAlarmCnt").empty().append( dvTpAlarmDetail.bms_cnt );
+			$("#pvAlarmCnt").empty().append( dvTpAlarmDetail.pv_cnt );
+			$("#etcAlarmCnt").empty().append( dvTpAlarmDetail.etc_cnt );
 			
 		}
 		
@@ -172,7 +172,7 @@
 		$tbody = $("#warnAlarmTbody");
 		$tbody.empty();
 		if(warnAlarmList == null || warnAlarmList.length < 1) {
-			$tbody.append( '<tr><td colspan="8">조회된 데이터가 없습니다.</td><tr>' );
+			$tbody.append( '<tr><td colspan="8">조회된 데이터가 없습니다.</td></tr>' );
 			$('#WarningAlarmPaging').empty();
 		} else {
 			for(var i=0; i<warnAlarmList.length; i++) {
