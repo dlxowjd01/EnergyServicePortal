@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.ewp.ewpsp.service.AlarmService;
 import kr.co.ewp.ewpsp.service.ControlService;
 import kr.co.ewp.ewpsp.service.DeviceMonitoringService;
+import kr.co.ewp.ewpsp.service.ESSChargeService;
 import kr.co.ewp.ewpsp.service.ESSRevenueService;
 import kr.co.ewp.ewpsp.service.PVRevenueService;
 
@@ -34,6 +35,9 @@ public class SiteMainController {
 
 	@Resource(name="controlService")
 	private ControlService controlService;
+
+	@Resource(name="essChargeService")
+	private ESSChargeService essChargeService;
 
 	@Resource(name="essRevenueService")
 	private ESSRevenueService essRevenueService;
@@ -66,6 +70,18 @@ public class SiteMainController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
 		resultMap.put("alarmList", alarmList);
+		return resultMap;
+	}
+	
+	@RequestMapping("/getESSChargeSum")
+	public @ResponseBody Map<String, Object> getESSChargeSum(@RequestParam HashMap param) throws Exception {
+		logger.debug("/getESSChargeSum");
+		logger.debug("param ::::: "+param.toString());
+		
+		Map result = essChargeService.getESSChargeSum(param); // 장치별 알람건수
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("resultListMap", result);
 		return resultMap;
 	}
 	

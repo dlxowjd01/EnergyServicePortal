@@ -38,7 +38,7 @@
 		var dt_str2 = "";
 		var dt_str_totalVal = 0; // 테이블 라인별 누적합
 		var dt_str2_totalVal = 0; // 테이블 라인별 누적합
-		if(chgList.length > 0) {
+		if(chgList != null && chgList.length > 0) {
 			for(var i=0; i<chgList.length; i++) {
 				var chgVal = String(chgList[i].chg_val);
 				var dischgVal   = String(dischgList[i].dischg_val);
@@ -139,7 +139,7 @@
 		var dt_str2 = "";
 		var dt_str_totalVal = 0; // 테이블 라인별 누적합
 		var dt_str2_totalVal = 0; // 테이블 라인별 누적합
-		if(chgList.length > 0) {
+		if(chgList != null && chgList.length > 0) {
 			for(var i=0; i<chgList.length; i++) {
 				var chgVal = String(chgList[i].chg_val);
 				var dischgVal   = String(dischgList[i].dischg_val);

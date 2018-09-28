@@ -21,6 +21,13 @@ public class PVRevenueServiceImpl implements PVRevenueService {
 		List list = pvRevenueDao.getPVRevenueList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
+			resultMap.put("netGenValList", null);
+			resultMap.put("smpDealList", null);
+			resultMap.put("smpPriceList", null);
+			resultMap.put("recDealList", null);
+			resultMap.put("recPriceList", null);
+			resultMap.put("totPriceList", null);
+			
 			return resultMap;
 		} else {
 			List netGenValList = CommonEnergyFn.periodSet(param, list, "std_timestamp", "net_gen_val", 1); // 총 발전량

@@ -84,7 +84,7 @@
 										<div class="time fr">2018-08-12 11:41:26</div>
 									</div>
 									<!-- no-data { -->
-									<div class="no-data">
+									<div class="no-data" style="display: none;">
 										<span>SOC 정보를 가져올 수 없습니다.</span>
 									</div>
 									<!-- } no-data -->
@@ -95,13 +95,13 @@
 										</div>
 										<div class="charge_dis fr">
 											<dl>
-												<dt>오늘 충전량 <span>1,350.5<em>kWh</em></span></dt>
+												<dt>오늘 충전량 <span id="socTodayCrg">1,350.5<em>kWh</em></span></dt>
 												<dd>
 													<div class="today_charge"><span style="width:80%;">충전량</span></div>
 												</dd>
 											</dl>
 											<dl>
-												<dt>오늘 방전량 <span>1,124.7<em>kWh</em></span> </dt>
+												<dt>오늘 방전량 <span id="socTodayDiscrg">1,124.7<em>kWh</em></span> </dt>
 												<dd>
 													<div class="today_discharge"><span style="width:70%;">방전량</span></div>
 												</dd>
@@ -1194,18 +1194,18 @@
 										<div class="time fr">2018-08-12 11:41:26</div>
 									</div>
 									<!-- no-data { -->
-									<div class="no-data">
+									<div class="no-data" style="display:none;">
 										<span>충/방전량 정보를 가져올 수 없습니다.</span>
 									</div>
 									<!-- } no-data -->								
 									<div class="inchart">
 										<div id="charge_chart" style="height:226px;"></div>
 										<script language="JavaScript"> 
-										$(function () { 
+// 										$(function () { 
 											var chargeChart = Highcharts.chart('charge_chart', {
-												data: {
-											        table: 'charge_datatable' /* 테이블에서 데이터 불러오기 */
-											    },
+// 												data: {
+// 											        table: 'charge_datatable' /* 테이블에서 데이터 불러오기 */
+// 											    },
 
 												chart: {
 													marginTop:50,
@@ -1230,6 +1230,17 @@
 											    },
 
 												xAxis: {
+													type: 'datetime', // 08.20 이우람 추가
+													dateTimeLabelFormats: { // 08.20 이우람 추가
+														millisecond: '%H:%M:%S.%L',
+													    second: '%H:%M:%S',
+											            minute: '%H:%M',
+											            hour: '%H',
+											            day: '%m.%d ',
+											            week: '%m.%e',
+											            month: '%y/%m',
+											            year: '%Y'
+											        },
 													labels: {
 														align: 'center',
 														y:27, /* 그래프와 거리 */
@@ -1375,7 +1386,7 @@
 												}
 
 											});
-										});
+// 										});
 										</script>
 										<!-- 데이터 추출용 -->
 										<div class="chart_table2" style="display:none;">			
@@ -1576,21 +1587,21 @@
 												<tbody>
 													<tr>
 														<th>TODAY</th>
-														<td>1,350.5 kWh</td>
-														<td>850.5 kWh</td>
-														<td>2.1</td>
+														<td id="todayCrg">1,350.5 kWh</td>
+														<td id="todayDiscrg">850.5 kWh</td>
+														<td id="todayRevenue">2.1</td>
 													</tr>
 													<tr>
 														<th>THIS MONTH</th>
-														<td>8.9 MWh</td>
-														<td>12.1 MWh</td>
-														<td>64.9</td>
+														<td id="monthCrg">8.9 MWh</td>
+														<td id="monthDiscrg">12.1 MWh</td>
+														<td id="monthRevenue">64.9</td>
 													</tr>
 													<tr>
 														<th>THIS YEAR</th>
-														<td>58.9 MWh</td>
-														<td>192.1 MWh</td>
-														<td>464.9</td>
+														<td id="yearCrg">58.9 MWh</td>
+														<td id="yearDiscrg">192.1 MWh</td>
+														<td id="yearRevenue">464.9</td>
 													</tr>
 												</tbody>
 											</table>
