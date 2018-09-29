@@ -1,0 +1,11 @@
+package kr.co.ewp.ewpsp.service;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public interface LoginService {
+
+	public Map getUserDetail(HashMap param) throws Exception;
+
+	public int insertUser(HashMap param) throws Exception;
+}

@@ -4,6 +4,7 @@
 <html>
 <head>
 <jsp:include page="../include/common_static.jsp" />
+<script src="../js/login/login.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -61,13 +62,13 @@
 			<div id="container" class="login">
 
 				<div class="loginForm">
-					<form>
+					<form id="loginForm" name="loginForm" action="/loginUser" method="post">
 						<div class="lf_body">
 							<div class="lftit">
 				                <h1>LOGIN</h1>
 				            </div>
-						    <div class="mt10"><input type="text" name="user" class="lfinp" placeholder="아이디(email)"></div>
-						  	<div class="mt15"><input type="password" name="pass" class="lfinp" placeholder="비밀번호"></div>
+						    <div class="mt10"><input type="text" name="userId" class="lfinp" placeholder="아이디"></div>
+						  	<div class="mt15"><input type="password" name="userPw" class="lfinp" placeholder="비밀번호"></div>
 						    <div class="mt30"><a href="#" class="findpassBtn">비밀번호 찾기</a></div>
 						</div>
 						<div class="lf_bottom">
@@ -103,8 +104,8 @@
 	                <h1>LOGIN</h1>
 	            </div>
 			    <form>
-			  	    <input type="text" name="user" placeholder="아이디(email)">
-			  	    <input type="password" name="pass" placeholder="비밀번호">
+			  	    <input type="text" name="userId" placeholder="아이디">
+			  	    <input type="password" name="userPw" placeholder="비밀번호">
 			  	    <input type="submit" name="login" class="login loginmodal-submit" value="Login">
 			    </form>
 				
@@ -138,7 +139,7 @@
 	                <h1>FIND</h1>
 	            </div>
 			    <form>
-			  	    <input type="text" name="user" placeholder="Email">
+			  	    <input type="text" name="user" placeholder="아이디">
 			  	    <input type="text" name="name" placeholder="이름">
 			  	    <input type="submit" name="findpass" class="login loginmodal-submit" value="Find Password">
 			    </form>
