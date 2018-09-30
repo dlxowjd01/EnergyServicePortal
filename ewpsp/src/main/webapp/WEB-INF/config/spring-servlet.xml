@@ -46,6 +46,31 @@
 	    		<mvc:exclude-mapping path="/**"/><!-- interceptor 안거침 -->
 	    		<ref bean="sessionCheckInterceptor" />
 	    	</mvc:interceptor>
+	    	<mvc:interceptor>
+	    		<mvc:mapping path="/siteMain"/>
+	    		<mvc:mapping path="/usage"/>
+	    		<mvc:mapping path="/peak"/>
+	    		<mvc:mapping path="/essCharge"/>
+	    		<mvc:mapping path="/pvGen"/>
+	    		<mvc:mapping path="/drResult"/>
+	    		<mvc:mapping path="/derUsage"/>
+	    		<mvc:mapping path="/deviceMonitoring"/>
+	    		<mvc:mapping path="/deviceGroup"/>
+	    		<mvc:mapping path="/control"/>
+	    		<mvc:mapping path="/kepcoBill"/>
+	    		<mvc:mapping path="/essRevenue"/>
+	    		<mvc:mapping path="/drRevenue"/>
+	    		<mvc:mapping path="/pvRevenue"/>
+	    		<mvc:mapping path="/main"/>
+	    		<mvc:mapping path="/kepcoMngSet"/>
+	    		<mvc:mapping path="/cmpyGrpSiteMng"/>
+	    		<mvc:mapping path="/userMng"/>
+
+	    		<mvc:exclude-mapping path="/login"/>
+	    		<mvc:exclude-mapping path="/loginUser"/>
+	    		<mvc:exclude-mapping path="/logout"/>
+	    		<bean class="kr.co.ewp.ewpsp.common.PreLoadInterceptor" />
+	    	</mvc:interceptor>
 	    </mvc:interceptors>
 
 </beans>

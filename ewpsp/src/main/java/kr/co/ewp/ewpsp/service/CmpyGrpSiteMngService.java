@@ -18,6 +18,8 @@ public interface CmpyGrpSiteMngService {
 
 	int getSiteListCnt(HashMap param) throws Exception;
 
+	List getUserSiteList(HashMap param) throws Exception;
+
 	List getGroupPopupList(HashMap param) throws Exception;
 	
 	List getGrpSiteList(HashMap param) throws Exception;

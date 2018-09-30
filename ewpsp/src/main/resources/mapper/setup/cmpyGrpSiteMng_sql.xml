@@ -125,6 +125,16 @@
 		) f_tb
 	</select>
 	
+	<select id="getUserSiteList" parameterType="hashMap" resultType="hashMap">
+		/* 사용자별 사이트 목록 조회 */
+		select
+			site_id, site_name, site_grp_idx
+		from tb_site
+		where del_yn = 'N'
+		and user_idx = #{userIdx}
+		order by site_name
+	</select>
+	
 <!-- 	<select id="getGroupPopupList" parameterType="hashMap" resultType="hashMap">
 		/* 그룹 목록(팝업) 조회 */
 		select 

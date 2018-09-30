@@ -41,6 +41,17 @@ public class CmpyGrpSiteMngDao {
 		return sqlSession.selectOne("cmpyGrpSiteMng.getSiteListCnt", param);
 	}
 
+	/**
+	 * 화면 상단의 사용자별 사이트 목록 조회 (군관리)
+	 * @author greatman
+	 * @param param
+	 * @return
+	 */
+	public List getUserSiteList(HashMap param) {
+		List resultList = sqlSession.selectList("cmpyGrpSiteMng.getUserSiteList", param);
+		return resultList;
+	}
+
 	public List getGroupPopupList(HashMap param) {
 		List resultList = sqlSession.selectList("cmpyGrpSiteMng.getGroupPopupList", param);
 		return resultList;

@@ -78,7 +78,8 @@
 	</logger>
  
     <!-- Root Logger -->
-    <root level="debug">
+    <root level="error">
+        <priority value="off"/>
         <appender-ref ref="console" />
     </root>
      
