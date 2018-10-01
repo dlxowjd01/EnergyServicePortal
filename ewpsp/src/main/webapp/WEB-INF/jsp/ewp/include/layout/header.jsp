@@ -7,21 +7,21 @@
 				<div class="nav_brand"><a href="#;">EWP</a></div>
 				<div class="site dropdown">
 					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-						군관리: ${fn:length(userSiteList)} Sites<span class="caret"></span>
+						<em id="selUserSite">군관리: ${fn:length(userSiteList)} Sites</em><span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu">
-						<li class="on"><a href="#">군관리: ${fn:length(userSiteList)} Sites</a></li>
+						<li class="on"><a href="#;" onclick="changeUserSite(this, '')">군관리: ${fn:length(userSiteList)} Sites</a></li>
 						<c:forEach var="item" items="${userSiteList }">
-							<li><a href="javascript:changeUserSite('${item.site_id }')">${item.site_name }</a></li>
+							<li><a href="#;" onclick="changeUserSite(this, '${item.site_id }')">${item.site_name }</a></li>
 						</c:forEach>
 					</ul>
 				</div>
 				<ul class="nav_right">
-					<li id="currTime">
-						<span>CURRENT TIME</span> <!-- 2018-07-27 17:10:05 -->
+					<li>
+						<span>CURRENT TIME</span> <em id="currTime">${nowTime}<!-- 2018-07-27 17:10:05 --></em>
 					</li>
-					<li id="dataTime">
-						<span>DATA BASE TIME</span> <!-- 2018-07-27 17:01:02 -->
+					<li>
+						<span>DATA BASE TIME</span> <em id="dataTime">${nowTime}<!-- 2018-07-27 17:01:02 --></em>
 					</li>
 					<li class="member clear">
 						<div class="fl"><img src="../img/member_pic.jpg" alt=""></div>
@@ -56,8 +56,10 @@ $(function() {
 });
 
 // 상단의 사이트 변경 시 실행
-function changeUserSite(siteId) {
+function changeUserSite(elmt, siteId) {
 	userSiteId = siteId;
+	$('#selUserSite').text($(elmt).text());
+
 	// 화면 갱신 함수 호출 (함수명은 표준에 맞게 바꿔주세요.)
 	if (typeof updateUserSite == 'function'){
 		updateUserSite();
@@ -66,22 +68,16 @@ function changeUserSite(siteId) {
 
 // 현재 시간 갱신
 function refreshCurrTime() {
-	var currLi = $('#currTime');
-	var currSpan = '<span>CURRENT TIME</span> ';
+	var currEm = $('#currTime');
 	var now = new Date();
-
-	currLi.html(currSpan);
-	currLi.append(now.format('yyyy-MM-dd HH:mm:ss'));
+	currEm.text(now.format('yyyy-MM-dd HH:mm:ss'));
 }
 
 // 데이터 조회 시간 갱신
 function refreshDataTime() {
-	var dataLi = $('#dataTime');
-	var dataSpan = '<span>DATA BASE TIME</span> ';
+	var dataEm = $('#dataTime');
 	var now = new Date();
-
-	dataLi.html(dataSpan);
-	dataLi.append(now.format('yyyy-MM-dd HH:mm:ss'));
+	dataEm.text(now.format('yyyy-MM-dd HH:mm:ss'));
 }
 /*
 // 화면에서 구현해 주세요.
