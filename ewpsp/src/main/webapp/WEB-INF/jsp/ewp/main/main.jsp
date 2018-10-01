@@ -5,7 +5,7 @@
 <head>
 <jsp:include page="../include/common_static.jsp" />
 <jsp:include page="../include/sub_static.jsp" />
-<!-- <script src="../js/energy/usage.js" type="text/javascript"></script> -->
+<script src="../js/main/main.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -21,6 +21,13 @@
 		<div id="page-wrapper">
 			<jsp:include page="../include/layout/header.jsp" />
 			<div id="container">
+				<form id="schForm" name="schForm">
+					<input type="hidden" id="selTermFrom" name="selTermFrom">
+					<input type="hidden" id="selTermTo" name="selTermTo">
+					<input type="hidden" id="selTerm" name="selTerm" value="day">
+					<input type="hidden" id="selPeriodVal" name="selPeriodVal" value="hour">
+					<input type="hidden" id="siteId" name="siteId" value="17094385">
+				</form>
 				<div class="row">
 					<div class="col-lg-4">
 						<div class="row">
@@ -29,23 +36,25 @@
 									<div class="chart_top clear">
 										<h2 class="ntit">알람</h2>
 										<div class="fr today_alarm">
-											<div class="total">금일발생 <span>614</span></div>
-											<div class="no"><span>2</span></div>
+											<div class="total">금일발생 <span id="todayTotalAlarmCnt">0</span></div>
+											<div class="no"><span style="display:none">0</span></div>
 										</div>
 									</div>
 									<div class="alarm_stat mt20 clear">
 										<div class="a_alert clear">
 											<span>ALERT</span><br/>
-											<em>128</em>
+											<em id="todayAlarmCnt">0</em>
 										</div>
 										<div class="a_warning clear">
 											<span>WARNING</span><br/>
-											<em>486</em>
+											<em id="todayWarningCnt">0</em>
 										</div>
 									</div>
 									<div class="alarm_notice">
 										<h2>최근 알람</h2>
 										<ul>
+											<li><a href="#;">조회중입니다.</a></li>
+<!-- 
 											<li>
 												<a href="#;">랙 전압 불균형이 감지되었습니다. 신속한 처리요망. 메시지가 길면 절삭처리 됩니다. 메시지가 길면 절삭처리 됩니다.</a>
 												<span>2018-08-12 11:41:26</span>
@@ -58,6 +67,7 @@
 												<a href="#;">랙 전압 불균형이 감지되었습니다. 신속한 처리요망.</a>
 												<span>2018-08-12 11:41:26</span>
 											</li>
+ -->
 										</ul>
 									</div>
 								</div>
@@ -331,7 +341,7 @@
 							<div class="col-sm-12">
 
 								<!-- 지역별 사용량 //-->
-								<div class="indiv gmain_map">
+								<div id="mapUsage" class="indiv gmain_map">
 									<div class="chart_top clear">
 										<h2 class="ntit">군별사용량</h2>
 										<a href="#;" class="default_btn fr all_map_view"><span>전체지도보기</span></a>
@@ -392,6 +402,31 @@
 								</div>
 								<!-- // 지역별 사용량 -->
 
+								<!-- 그룹별 사용량 //-->
+								<div id="groupUsage" class="indiv gmain_group" style="display:none">
+									<div class="chart_top clear">
+										<h2 class="ntit">그룹별사용량</h2>
+									</div>
+									<div class="group_wrap">
+										<img src="" onError="this.src='../img/group_dimg.png';" alt="그룹이미지" />
+									</div>
+									<!-- 그룹별 정보 -->
+									<div class="group_info">
+										<h2 class="group_name">그룹명</h2>
+										<div class="clear">
+											<ul>
+												<li><strong>사용량</strong> <span>564</span> <em>MWh</em></li>
+												<li><strong>발전량</strong> <span>328</span> <em>MWh</em></li>
+											</ul>
+											<ul>
+												<li><strong>충•방전량</strong> <span>183</span> <em>MWh</em></li>
+												<li><strong>수익</strong> <span>99,000</span> <em>won</em></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<!-- //그룹별 사용량 -->
+
 							</div>
 						</div>
 					</div>
@@ -408,37 +443,37 @@
 										<ol>
 											<li>
 												<div class="dropdown">
-												  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">지역별
+												  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><em id="selMapGroup">지역별</em>
 												  <span class="caret"></span></button>
 												  <ul class="dropdown-menu">
-												    <li class="on"><a href="#">지역별</a></li>
-												    <li><a href="#">그룹별</a></li>
+												    <li class="on"><a href="#;" onclick="changeMapGroup(this)">지역별</a></li>
+												    <li><a href="#;" onclick="changeMapGroup(this)">그룹별</a></li>
 												  </ul>
 												</div>
 											</li>
 											<li>
 												<div class="dropdown">
-												  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">전체지역
+												  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><em id="selAllArea">전체지역</em>
 												  <span class="caret"></span></button>
 												  <ul class="dropdown-menu">
-												    <li class="on"><a href="#">전체지역</a></li>
-												    <li><a href="#;">서울</a></li>
-												    <li><a href="#;">경기</a></li>
-												    <li><a href="#;">인천</a></li>
-												    <li><a href="#;">강원</a></li>
-												    <li><a href="#;">충북</a></li>
-												    <li><a href="#;">충남</a></li>
-												    <li><a href="#;">대전</a></li>
-												    <li><a href="#;">경북</a></li>
-												    <li><a href="#;">대구</a></li>
-												    <li><a href="#;">경남</a></li>
-												    <li><a href="#;">울산</a></li>
-												    <li><a href="#;">부산</a></li>
-												    <li><a href="#;">울릉도</a></li>
-												    <li><a href="#;">전북</a></li>
-												    <li><a href="#;">광주</a></li>
-												    <li><a href="#;">전남</a></li>
-												    <li><a href="#;">제주</a></li>
+												    <li class="on"><a href="#;" onclick="changeAllArea(this)">전체지역</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this)">서울</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this)">경기</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this)">인천</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this)">강원</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this)">충북</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this)">충남</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this)">대전</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this)">경북</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this)">대구</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this)">경남</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this)">울산</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this)">부산</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this)">울릉도</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this)">전북</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this)">광주</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this)">전남</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this)">제주</a></li>
 												  </ul>
 												</div>
 											</li>
