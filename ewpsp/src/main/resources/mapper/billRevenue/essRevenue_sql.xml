@@ -3,6 +3,7 @@
 
 <mapper namespace="essRevenue">
 	<select id="getESSRevenueList" parameterType="hashMap" resultType="hashMap">
+		/* ESS 수익 조회 */
 		select 
 			bill_idx, site_id, bill_yearm, meter_read_day, plan_type, plan_name, 
 			23 as ess_bdayIn_month, ess_dischg_off_peak, ess_dischg_mid_peak, ess_dischg_max_peak,

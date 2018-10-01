@@ -847,14 +847,19 @@
 										<h2 class="ntit fl">수익현황</h2>
 										<div class="time fr" id="updtTimeRevenue">2018-08-12 11:41:26</div>
 									</div>
+									<!-- no-data { -->
+									<div class="no-data" style="display: none;">
+										<span>수익현황 정보를 가져올 수 없습니다.</span>
+									</div>
+									<!-- } no-data -->										
 									<div class="inchart">
 										<div id="income_chart" style="height:252px;"></div>
 										<script language="JavaScript"> 
-										$(function () { 
+// 										$(function () { 
 											var incomeChart = Highcharts.chart('income_chart', {
-												data: {
-											        table: 'income_datatable' /* 테이블에서 데이터 불러오기 */
-											    },
+// 												data: {
+// 											        table: 'income_datatable' /* 테이블에서 데이터 불러오기 */
+// 											    },
 
 												chart: {
 													marginTop:50,
@@ -879,6 +884,17 @@
 											    },
 
 												xAxis: {
+													type: 'datetime', // 08.20 이우람 추가
+													dateTimeLabelFormats: { // 08.20 이우람 추가
+														millisecond: '%H:%M:%S.%L',
+													    second: '%H:%M:%S',
+											            minute: '%H:%M',
+											            hour: '%H',
+											            day: '%m.%d ',
+											            week: '%m.%e',
+											            month: '%y/%m',
+											            year: '%Y'
+											        },
 													labels: {
 														align: 'center',
 														y:27, /* 그래프와 거리 */
@@ -1016,7 +1032,7 @@
 												}
 
 											});
-										});
+// 										});
 										</script>
 										<!-- 데이터 추출용 -->
 										<div class="chart_table2" style="display:none;">			
@@ -1180,7 +1196,7 @@
 									</div>
 									<div class="chart_footer">
 										<ul class="clear">
-											<li>전체수익 <span>120,000 won</span></li>
+											<li>전체수익 <span id="totalRv">120,000 won</span></li>
 										</ul>
 									</div>									
 								</div>

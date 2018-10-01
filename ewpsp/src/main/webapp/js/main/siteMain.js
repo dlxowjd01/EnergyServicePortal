@@ -275,14 +275,14 @@
 	        name: '충전 계획',
 	        color: '#13af67',
 	        dashStyle: 'ShortDash',
-			data: pastDischgList
+			data: fetureChgList
 		}, false);
 		
 		chargeChart.addSeries({
 			type: 'column',
 	        name: '방전량',
 	        color: '#f75c4a',
-			data: fetureChgList
+			data: pastDischgList
 		}, false);
 		
 		chargeChart.addSeries({
@@ -294,7 +294,7 @@
 		}, false);
 		
 //		setTickInterval();
-		chargeChart.xAxis[0].options.tickInterval = 2 * 60 * 60 * 1000;
+		chargeChart.xAxis[0].options.tickInterval = /*24 **/ 60 * 60 * 1000;
 		chargeChart.xAxis[0].options.labels.style.fontSize = '12px';
 		
 		chargeChart.redraw(); // 차트 데이터를 다시 그린다
@@ -460,7 +460,7 @@
 			
 		}
 		
-		derChart.xAxis[0].options.tickInterval = 2 * 60 * 60 * 1000;
+		derChart.xAxis[0].options.tickInterval = /*24 **/ 60 * 60 * 1000;
 		derChart.xAxis[0].options.labels.style.fontSize = '12px';
 		
 		derChart.redraw(); // 차트 데이터를 다시 그린다
@@ -557,7 +557,7 @@
 		}, false);
 		
 //		setTickInterval();
-		peakChart.xAxis[0].options.tickInterval = 2 * 60 * 60 * 1000;
+		peakChart.xAxis[0].options.tickInterval = /*24 **/ 60 * 60 * 1000;
 		peakChart.xAxis[0].options.labels.style.fontSize = '12px';
 		
 		peakChart.redraw(); // 차트 데이터를 다시 그린다
@@ -611,46 +611,203 @@
 			$(".chart_notice").empty().append("지금은 <strong>요금적용전력</strong> 갱신구간 입니다. "+"<span>"+timeTermStr+"</span>");
 	}
 	
+	var essRevenueList;
+	var pvRevenueList;
+	var drRevenueList;
 	function callback_getRevenueList(result) {
-		var essRevenueList = result.essRevenueList;
-		var pvRevenueList = result.pvRevenueList;
+		var essRvList = result.essRevenueList;
+		var pvRvList = result.pvRevenueList;
+		var drRvList = result.drRevenueList;
+		var loopCntList = result.loopCntList; // for문 loop list
+		var loopGbn = result.loopGbn; // for문 loop 구분
+//		var periodd = $("#selPeriodVal").val(); // 데이터조회간격
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
 		var dataSet2 = []; // chartData를 위한 변수
 		var dataSet3 = []; // chartData를 위한 변수
-		var totDataSet = 0;
-		var totDataSet2 = 0;
-		var totDataSet3 = 0;
-		var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
-		var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
-//		console.log("pvRevenueList.length : "+pvRevenueList.length);
-		if(pvRevenueList.length < 1) {
-			
+		var totalDataSet = 0; // 전체 누적합
+		var totalDataSet2 = 0;
+		var totalDataSet3 = 0;
+		var nowUsage = 0;
+		
+		if( essRvList.length < 1 && pvRvList.length <1 && drRvList.length < 1 ) {
+			$(".income").find(".no-data").css("display", "");
+			$(".income").find(".inchart").css("display", "none");
+			$(".income").find(".chart_footer").css("display", "none");
 		} else {
-			for(var i=0; i<pvRevenueList.length; i++) {
-				var tm = new Date(pvRevenueList[i].std_timestamp);
-				// 차트데이터 셋팅
-				dataSet.push( [pvRevenueList[i].std_timestamp, pvRevenueList[i].tot_price] );
-				dataSet2.push( [pvRevenueList[i].std_timestamp, pvRevenueList[i].smp_price] );
-				dataSet3.push( [pvRevenueList[i].std_timestamp, pvRevenueList[i].rec_price] );
-				totDataSet = totDataSet+Number(pvRevenueList[i].tot_price);
-				totDataSet2 = totDataSet2+Number(String(pvRevenueList[i].smp_price));
-				totDataSet3 = totDataSet3+Number(String(pvRevenueList[i].rec_price));
-				
-			}
-			pvRevenueList1 = dataSet;
-			pvRevenueList2 = dataSet2;
-			pvRevenueList3 = dataSet3;
-			
-			// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-			unit_format(String(totDataSet), "pvRevenueTot1", "won");
-			unit_format(String(totDataSet2), "pvRevenueTot2", "won");
-			unit_format(String(totDataSet3), "pvRevenueTot3", "won");
+			$(".income").find(".no-data").css("display", "none");
+			$(".income").find(".inchart").css("display", "");
+			$(".income").find(".chart_footer").css("display", "");
 		}
 		
+		var seriesLength = incomeChart.series.length;
+		for(var i = seriesLength - 1; i > -1; i--) {
+			incomeChart.series[i].remove();
+		}
+		
+		// 한전사용량, ess사용량, pv사용량 중 하나라도 데이터가 존재할 때
+		if( !( essRvList.length < 1 && pvRvList.length <1 && drRvList.length < 1 ) ) {
+//			if(usageList.length > 0) {
+				for(var i=0; i<loopCntList.length; i++) {
+					var essRevenue = null;
+					var pvRevenue = null;
+					var drRevenue = null;
+					var reEssRevenue = 0;
+					var rePvRevenue = 0;
+					var reDrRevenue = 0;
+					
+					if(essRvList != null && essRvList.length > 0) { // 한전사용량
+						essRevenue = String(essRvList[i].peak_rate);
+						if(essRevenue == null || essRevenue == "" || essRevenue == "null") reEssRevenue = null;
+						else {
+//							if(essRevenue.length < 7) reEssRevenue = Number(     essRevenue     ); // 나중에 수정 요망
+//							else reEssRevenue = Number(     essRevenue.substring( 0, essRevenue.length-6 )     );
+							reEssRevenue = Number(     essRevenue     ); // 나중에 수정 요망
+							totalDataSet = totalDataSet+Number(essRevenue);
+						}
+						
+					} else reEssRevenue = null;
+					
+					if(pvRvList != null && pvRvList.length > 0) { // ESS 사용량
+						pvRevenue = String(pvRvList[i].tot_price);
+						if(pvRevenue == null || pvRevenue == "" || pvRevenue == "null") rePvRevenue = null;
+						else {
+//							if(pvRevenue.length < 7) rePvRevenue = Number(     pvRevenue     ); // 나중에 수정 요망
+//							else rePvRevenue = Number(     pvRevenue.substring( 0, pvRevenue.length-6 )     );
+							rePvRevenue = Number(     pvRevenue     ); // 나중에 수정 요망
+							totalDataSet2 = totalDataSet2+Number(pvRevenue);
+						}
+					} else rePvRevenue = null;
+					
+					if(drRvList != null && drRvList.length > 0) { // PV 사용량
+						drRevenue = String(drRvList[i].total_reward_amt);
+						if(drRevenue == null || drRevenue == "" || drRevenue == "null") reDrRevenue = null;
+						else {
+//							if(drRevenue.length < 7) reDrRevenue = Number(     drRevenue     ); // 나중에 수정 요망
+//							else reDrRevenue = Number(     drRevenue.substring( 0, drRevenue.length-6 )     );
+							reDrRevenue = Number(     drRevenue     ); // 나중에 수정 요망
+							totalDataSet3 = totalDataSet3+Number(drRevenue);
+						}
+					} else reDrRevenue = null;
+					
+					var stdDt = "";
+					var yyyyMM = "";
+					if(loopGbn == "ess") {
+						yyyyMM = loopCntList[i].bill_yearm;
+						stdDt = Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1);
+					} else if(loopGbn == "pv") {
+						stdDt = loopCntList[i].std_timestamp;
+					} else if(loopGbn == "dr") {
+						yyyyMM = loopCntList[i].std_yearm;
+						stdDt = Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1);
+					}
+					
+					var tm = new Date( convertDateUTC(loopCntList[i].std_timestamp) );
+					// 차트데이터 셋팅
+//					dataSet.push([setChartDateUTC(loopCntList[i].std_timestamp) , reEssRevenue]);
+//					dataSet2.push([setChartDateUTC(loopCntList[i].std_timestamp) , rePvRevenue]);
+//					dataSet3.push([setChartDateUTC(loopCntList[i].std_timestamp) , reDrRevenue]);
+					dataSet.push([setChartDateUTC(stdDt) , reEssRevenue]);
+					dataSet2.push([setChartDateUTC(stdDt) , rePvRevenue]);
+					dataSet3.push([setChartDateUTC(stdDt) , reDrRevenue]);
+					
+					if( (i+1) == loopCntList.length ) {
+						if(reEssRevenue != null) {
+							nowUsage = reEssRevenue;
+						}
+					}
+					
+				}
+				essRevenueList = dataSet;
+				pvRevenueList = dataSet2;
+				drRevenueList = dataSet3;
+				
+				if(essRvList != null && essRvList.length > 0) {
+					incomeChart.addSeries({
+						name: 'ESS 수익',
+						color: '#438fd7', /* ESS 수익 */
+						data: essRevenueList
+					}, false);
+					
+				}
+				
+				if(pvRvList != null && pvRvList.length > 0) {
+					incomeChart.addSeries({
+						name: 'PV 수익',
+						color: '#13af67', /* PV 수익 */
+						data: pvRevenueList
+					}, false);
+					
+				}
+				
+				if(drRvList != null && drRvList.length > 0) {
+					incomeChart.addSeries({
+						name: 'DR 수익',
+						color: '#f75c4a', /* DR 수익 */
+						data: drRevenueList
+					}, false);
+					
+				}
+				
+//			}
+			
+		}
+		
+		incomeChart.xAxis[0].options.tickInterval = 30 * 24 * 60 * 60 * 1000;
+		incomeChart.xAxis[0].options.labels.style.fontSize = '12px';
+		
+		incomeChart.redraw(); // 차트 데이터를 다시 그린다
+		console.log(totalDataSet+", "+totalDataSet2+", "+totalDataSet3);
+		var total = totalDataSet+totalDataSet2+totalDataSet3;
+		$("#totalRv").empty().append(numberComma(total)+" won");
+//		console.log("(totalDataSet/total)*100 : "+(totalDataSet/total));
+//		$("#kepcoPer").empty().append( ( (totalDataSet == 0) ? 0 : ( (totalDataSet/total)*100 ).toFixed(2) )+"%" );
+//		$("#essPer").empty().append( ( (totalDataSet2 == 0) ? 0 : ( (totalDataSet2/total)*100 ).toFixed(2) )+"%" );
+//		$("#pvPer").empty().append( ( (totalDataSet3 == 0) ? 0 : ( (totalDataSet3/total)*100 ).toFixed(2) )+"%" );
 		
 		
+		
+		
+//		var essRevenueList = result.essRevenueList;
+//		var pvRevenueList = result.pvRevenueList;
+//		
+//		// 데이터 셋팅
+//		var dataSet = []; // chartData를 위한 변수
+//		var dataSet2 = []; // chartData를 위한 변수
+//		var dataSet3 = []; // chartData를 위한 변수
+//		var totDataSet = 0;
+//		var totDataSet2 = 0;
+//		var totDataSet3 = 0;
+//		var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
+//		var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
+////		console.log("pvRevenueList.length : "+pvRevenueList.length);
+//		if(pvRevenueList.length < 1) {
+//			
+//		} else {
+//			for(var i=0; i<pvRevenueList.length; i++) {
+//				var tm = new Date(pvRevenueList[i].std_timestamp);
+//				// 차트데이터 셋팅
+//				dataSet.push( [pvRevenueList[i].std_timestamp, pvRevenueList[i].tot_price] );
+//				dataSet2.push( [pvRevenueList[i].std_timestamp, pvRevenueList[i].smp_price] );
+//				dataSet3.push( [pvRevenueList[i].std_timestamp, pvRevenueList[i].rec_price] );
+//				totDataSet = totDataSet+Number(pvRevenueList[i].tot_price);
+//				totDataSet2 = totDataSet2+Number(String(pvRevenueList[i].smp_price));
+//				totDataSet3 = totDataSet3+Number(String(pvRevenueList[i].rec_price));
+//				
+//			}
+//			pvRevenueList1 = dataSet;
+//			pvRevenueList2 = dataSet2;
+//			pvRevenueList3 = dataSet3;
+//			
+//			// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
+//			unit_format(String(totDataSet), "pvRevenueTot1", "won");
+//			unit_format(String(totDataSet2), "pvRevenueTot2", "won");
+//			unit_format(String(totDataSet3), "pvRevenueTot3", "won");
+//		}
+//		
+//		
+//		
 	}
 	
 	function callback_getDeviceList(result) {

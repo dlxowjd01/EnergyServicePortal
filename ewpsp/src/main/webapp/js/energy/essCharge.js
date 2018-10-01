@@ -238,14 +238,14 @@
 	        name: '충전 계획',
 	        color: '#13af67',
 	        dashStyle: 'ShortDash',
-			data: pastDischgList
+			data: fetureChgList
 		}, false);
 		
 		myChart.addSeries({
 			type: 'column',
 	        name: '방전량',
 	        color: '#f75c4a',
-			data: fetureChgList
+			data: pastDischgList
 		}, false);
 		
 		myChart.addSeries({

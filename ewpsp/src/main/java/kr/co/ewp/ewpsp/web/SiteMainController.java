@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.ewp.ewpsp.service.AlarmService;
 import kr.co.ewp.ewpsp.service.ControlService;
+import kr.co.ewp.ewpsp.service.DRRevenueService;
 import kr.co.ewp.ewpsp.service.DeviceMonitoringService;
 import kr.co.ewp.ewpsp.service.ESSChargeService;
 import kr.co.ewp.ewpsp.service.ESSRevenueService;
@@ -44,6 +45,9 @@ public class SiteMainController {
 
 	@Resource(name="pvRevenueService")
 	private PVRevenueService pvRevenueService;
+
+	@Resource(name="drRevenueService")
+	private DRRevenueService drRevenueService;
 
 	@Resource(name="deviceMonitoringService")
 	private DeviceMonitoringService deviceMonitoringService;
@@ -103,12 +107,41 @@ public class SiteMainController {
 		logger.debug("/getRevenueList");
 		logger.debug("param ::::: "+param.toString());
 		
-		List essRevenueList = essRevenueService.getESSRevenueList_test(param);
-		List pvRevenueList = pvRevenueService.getPVRevenueList_test(param);
+		String selTermFrom = (String) param.get("selTermFrom");
+		String selTermTo = (String) param.get("selTermTo");
+		System.out.println("날짜는!!!  :  "+selTermFrom+", "+selTermTo);
+		
+//		List pvRevenueList = pvRevenueService.getPVRevenueList_test(param);
+		param.put("selPeriodVal", "month");
+		Map result = pvRevenueService.getPVRevenueList(param);
+		List totPriceList = (List) result.get("totPriceList");
+		
+		param.put("selTermFrom", selTermFrom.substring(0, 6));
+		param.put("selTermTo", selTermTo.substring(0, 6));
+		System.out.println("날짜는222!!!  :  "+selTermFrom.substring(0, 6)+", "+selTermTo.substring(0, 6));
+		
+		List essRevenueList = essRevenueService.getESSRevenueList(param);
+		List drRevenueList = drRevenueService.getDRRevenueList(param);
+
+		List loopCntList = null;
+		String loopGbn = "";
+		if(essRevenueList != null && essRevenueList.size() > 0) {
+			loopCntList = essRevenueList;
+			loopGbn = "ess";
+		} else if(totPriceList != null && totPriceList.size() > 0) {
+			loopCntList = totPriceList;
+			loopGbn = "pv";
+		} else if(drRevenueList != null && drRevenueList.size() > 0) {
+			loopCntList = drRevenueList;
+			loopGbn = "dr";
+		}
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("essRevenueList", essRevenueList);
-		resultMap.put("pvRevenueList", pvRevenueList);
+		resultMap.put("pvRevenueList", totPriceList);
+		resultMap.put("drRevenueList", drRevenueList);
+		resultMap.put("loopCntList", loopCntList);
+		resultMap.put("loopGbn", loopGbn);
 		return resultMap;
 	}
 	

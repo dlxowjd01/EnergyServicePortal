@@ -62,8 +62,8 @@ public class ESSChargeServiceImpl implements ESSChargeService {
 			
 			return resultMap;
 		} else {
-			List chgList = CommonEnergyFn.periodSet(param, list, "std_timestamp", "chg_val", 2);
-			List dischgList = CommonEnergyFn.periodSet(param, list, "std_timestamp", "dischg_val", 2);
+			List chgList = CommonEnergyFn.periodSet(param, list, "std_timestamp", "chg_val", 1);
+			List dischgList = CommonEnergyFn.periodSet(param, list, "std_timestamp", "dischg_val", 1);
 			
 			resultMap.put("chgList", chgList);
 			resultMap.put("dischgList", dischgList);
