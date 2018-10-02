@@ -66,9 +66,6 @@
 	    		<mvc:mapping path="/cmpyGrpSiteMng"/>
 	    		<mvc:mapping path="/userMng"/>
 
-	    		<mvc:exclude-mapping path="/login"/>
-	    		<mvc:exclude-mapping path="/loginUser"/>
-	    		<mvc:exclude-mapping path="/logout"/>
 	    		<bean class="kr.co.ewp.ewpsp.common.PreLoadInterceptor" />
 	    	</mvc:interceptor>
 	    </mvc:interceptors>

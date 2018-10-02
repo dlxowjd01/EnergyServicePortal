@@ -981,7 +981,7 @@ h2.ntit {color:#fff;}
 /* 군관리 그룹별 사용량 */
 .gmain_group {min-height:845px;/* 높이값 고정 */ }
 .group_wrap {position:relative; margin-top:20px; text-align:center; min-height:522px;}
-.group_wrap img {max-width:60%; height:auto;}
+.group_wrap img {position:relative; top:50%; transform:translateY(-50%); max-width:100%; height:auto;}
 .group_info h2 {padding:15px 0 20px; font-size:36px; color:#fff; font-weight:normal; text-align:center;}
 .group_info div.clear {border-top:solid 1px #515562;}
 .group_info div ul {float:left; width:50%; font-size:0;}
@@ -1004,7 +1004,6 @@ h2.ntit {color:#fff;}
 /* 반응형 미디어 쿼리 */
 @media all and (min-width:3000px) {
 	.group_wrap {margin-top:30px; height:866px;}
-	.group_wrap img {max-width:100%; height:auto;}
 	.group_info {margin-bottom:20px;}
 	.group_info h2 {padding:22px 0 30px; font-size:54px;}
 	.group_info div ul:first-child {padding-right:30px;}
@@ -1019,7 +1018,6 @@ h2.ntit {color:#fff;}
 }
 @media all and (min-width:1200px) and (max-width:2999px){
 	.group_wrap {height:522px;}
-	.group_wrap img {max-width:initial; width:auto; height:100%;}
 }
 @media all and (max-width:992px) {
 

@@ -1,5 +1,7 @@
 package kr.co.ewp.ewpsp.common;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 		userInfo = (Map) session.getAttribute("userInfo");
 //		logger.debug("userInfo:{}", userInfo);
 
+		// 상단 사이트 목록 조회
 		if(userInfo != null && CommonUtils.isNotEmpty(userInfo.get("user_idx"))) {
 
 			HashMap param = new HashMap<String, Object>();
@@ -40,6 +43,9 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			request.setAttribute("userSiteList", userSiteList);
 			logger.debug("userSiteList:{}", userSiteList);
 		}
+
+		// 상단 시간 초기값
+		request.setAttribute("nowTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
 		return super.preHandle(request, response, handler);
 	}
