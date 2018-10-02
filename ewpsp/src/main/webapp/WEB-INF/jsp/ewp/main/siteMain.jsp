@@ -90,8 +90,8 @@
 									<!-- } no-data -->
 									<div class="soc mt15 clear">
 										<div class="batt_wrap fl">
-											<div class="battery"><span style="width:85.4%;">잔량</span></div>
-											<div class="battery_per"><span>85.4<em>%</em></span></div>
+											<div class="battery"><span>잔량</span></div>
+											<div class="battery_per"></div>
 										</div>
 										<div class="charge_dis fr">
 											<dl>

@@ -88,6 +88,8 @@
 		drawData_chart_charge(); // 충방전량 차트그리기
 		getESSChargeSum(formData); // ess 충방전량 합계 조회
 		
+		getSoc(formData); // soc 잔량 조회
+		
 		getDERUsageList(formData); // 사용량구성 조회
 		
 		getDeviceList(formData); // 장치현황 조회
@@ -204,6 +206,8 @@
 	// 예측 충방전량
 	var fetureChgList;
 	var fetureDischgList;
+	var totalFetureChg;
+	var totalFetureDischg;
 	function callback_getESSChargeFutureList(result) {
 		var resultListMap = result.resultListMap;
 		
@@ -243,6 +247,8 @@
 		}
 		fetureChgList = dataSet;
 		fetureDischgList = dataSet2;
+		totalFetureChg = totalDataSet;
+		totalFetureDischg = totalDataSet2;
 		
 	}
 	
@@ -325,6 +331,22 @@
 				
 				$("#socTodayCrg").empty().append( numberComma(todaySum.chg_val_sum) ).append('<em>kWh</em>');
 				$("#socTodayDiscrg").empty().append( numberComma(todaySum.dischg_val_sum) ).append('<em>kWh</em>');
+				
+			}
+		});
+	}
+	
+	function getSoc(formData) {
+		$.ajax({
+			url : "/getSoc",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+			data : formData,
+			success: function(result) {
+				var finalSoc = result.finalSoc;
+				
+				$(".battery").find("span").css("width", finalSoc+"%");
+				$(".battery_per").empty().append('<span>'+finalSoc+'<em>%</em></span>');
 	   		}
 		});
 	}
