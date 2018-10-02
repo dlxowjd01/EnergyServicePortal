@@ -59,7 +59,8 @@ public class PMGrowApiUtil {
 		  logger.debug("result "+resultBody);
 		  returnSoc = JsonUtil.toObject(resultBody, Soc.class);
 	  } catch (Exception e) {
-		  e.printStackTrace();
+//		  e.printStackTrace();
+		  logger.error("error is : "+e.toString());
 	  } finally {
 		  logger.debug("PMGrowApiUtil.getSoc end");
 		  return returnSoc;

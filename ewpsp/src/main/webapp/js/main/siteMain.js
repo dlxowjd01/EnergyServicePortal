@@ -389,7 +389,7 @@
 					var reEssUsage = 0;
 					var rePvUsage = 0;
 					
-					if(kepcoUsageList.length > 0) { // 한전사용량
+					if(kepcoUsageList != null && kepcoUsageList.length > 0 && kepcoUsageList.length > i) { // 한전사용량
 						kepcoUsage = String(kepcoUsageList[i].usg_val);
 						if(kepcoUsage == null || kepcoUsage == "" || kepcoUsage == "null") reKepcoUsage = null;
 						else {
@@ -400,7 +400,7 @@
 						
 					} else reKepcoUsage = null;
 					
-					if(essUsgList.length > 0) { // ESS 사용량
+					if(essUsgList != null && essUsgList.length > 0 && essUsgList.length > i) { // ESS 사용량
 						essUsage = String(essUsgList[i].usg_val);
 						if(essUsage == null || essUsage == "" || essUsage == "null") reEssUsage = null;
 						else {
@@ -410,7 +410,7 @@
 						}
 					} else reEssUsage = null;
 					
-					if(pvUsgList.length > 0) { // PV 사용량
+					if(pvUsgList != null && pvUsgList.length > 0 && pvUsgList.length > i) { // PV 사용량
 						pvUsage = String(pvUsgList[i].gen_val);
 						if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
 						else {
@@ -660,7 +660,7 @@
 			incomeChart.series[i].remove();
 		}
 		
-		// 한전사용량, ess사용량, pv사용량 중 하나라도 데이터가 존재할 때
+		// ess 수익, pv 수익, dr 수익 중 하나라도 데이터가 존재할 때
 		if( !( essRvList.length < 1 && pvRvList.length <1 && drRvList.length < 1 ) ) {
 //			if(usageList.length > 0) {
 				for(var i=0; i<loopCntList.length; i++) {
@@ -671,35 +671,29 @@
 					var rePvRevenue = 0;
 					var reDrRevenue = 0;
 					
-					if(essRvList != null && essRvList.length > 0) { // 한전사용량
+					if(essRvList != null && essRvList.length > 0 && essRvList.length > i) { // ess 수익
 						essRevenue = String(essRvList[i].peak_rate);
 						if(essRevenue == null || essRevenue == "" || essRevenue == "null") reEssRevenue = null;
 						else {
-//							if(essRevenue.length < 7) reEssRevenue = Number(     essRevenue     ); // 나중에 수정 요망
-//							else reEssRevenue = Number(     essRevenue.substring( 0, essRevenue.length-6 )     );
 							reEssRevenue = Number(     essRevenue     ); // 나중에 수정 요망
 							totalDataSet = totalDataSet+Number(essRevenue);
 						}
 						
 					} else reEssRevenue = null;
 					
-					if(pvRvList != null && pvRvList.length > 0) { // ESS 사용량
+					if(pvRvList != null && pvRvList.length > 0 && pvRvList.length > i) { // pv 수익
 						pvRevenue = String(pvRvList[i].tot_price);
 						if(pvRevenue == null || pvRevenue == "" || pvRevenue == "null") rePvRevenue = null;
 						else {
-//							if(pvRevenue.length < 7) rePvRevenue = Number(     pvRevenue     ); // 나중에 수정 요망
-//							else rePvRevenue = Number(     pvRevenue.substring( 0, pvRevenue.length-6 )     );
 							rePvRevenue = Number(     pvRevenue     ); // 나중에 수정 요망
 							totalDataSet2 = totalDataSet2+Number(pvRevenue);
 						}
 					} else rePvRevenue = null;
 					
-					if(drRvList != null && drRvList.length > 0) { // PV 사용량
+					if(drRvList != null && drRvList.length > 0 && drRvList.length > i) { // dr 수익
 						drRevenue = String(drRvList[i].total_reward_amt);
 						if(drRevenue == null || drRevenue == "" || drRevenue == "null") reDrRevenue = null;
 						else {
-//							if(drRevenue.length < 7) reDrRevenue = Number(     drRevenue     ); // 나중에 수정 요망
-//							else reDrRevenue = Number(     drRevenue.substring( 0, drRevenue.length-6 )     );
 							reDrRevenue = Number(     drRevenue     ); // 나중에 수정 요망
 							totalDataSet3 = totalDataSet3+Number(drRevenue);
 						}

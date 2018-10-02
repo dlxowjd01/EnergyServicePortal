@@ -61,7 +61,7 @@
 					var reEssUsage = 0;
 					var rePvUsage = 0;
 					
-					if(kepcoUsageList.length > 0) { // 한전사용량
+					if(kepcoUsageList != null && kepcoUsageList.length > 0 && kepcoUsageList.length > i) { // 한전사용량
 						kepcoUsage = String(kepcoUsageList[i].usg_val);
 						if(kepcoUsage == null || kepcoUsage == "" || kepcoUsage == "null") reKepcoUsage = null;
 						else {
@@ -73,7 +73,7 @@
 						
 					} else reKepcoUsage = null;
 					
-					if(essUsgList.length > 0) { // ESS 사용량
+					if(essUsgList != null && essUsgList.length > 0 && essUsgList.length > i) { // ESS 사용량
 						essUsage = String(essUsgList[i].usg_val);
 						if(essUsage == null || essUsage == "" || essUsage == "null") reEssUsage = null;
 						else {
@@ -84,7 +84,7 @@
 						}
 					} else reEssUsage = null;
 					
-					if(pvUsgList.length > 0) { // PV 사용량
+					if(pvUsgList != null && pvUsgList.length > 0 && pvUsgList.length > i) { // PV 사용량
 						pvUsage = String(pvUsgList[i].gen_val);
 						if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
 						else {
