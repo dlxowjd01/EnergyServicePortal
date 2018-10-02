@@ -109,7 +109,6 @@ public class SiteMainController {
 		
 		String selTermFrom = (String) param.get("selTermFrom");
 		String selTermTo = (String) param.get("selTermTo");
-		System.out.println("날짜는!!!  :  "+selTermFrom+", "+selTermTo);
 		
 //		List pvRevenueList = pvRevenueService.getPVRevenueList_test(param);
 		param.put("selPeriodVal", "month");
@@ -118,7 +117,6 @@ public class SiteMainController {
 		
 		param.put("selTermFrom", selTermFrom.substring(0, 6));
 		param.put("selTermTo", selTermTo.substring(0, 6));
-		System.out.println("날짜는222!!!  :  "+selTermFrom.substring(0, 6)+", "+selTermTo.substring(0, 6));
 		
 		List essRevenueList = essRevenueService.getESSRevenueList(param);
 		List drRevenueList = drRevenueService.getDRRevenueList(param);

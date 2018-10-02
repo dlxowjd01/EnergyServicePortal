@@ -111,13 +111,6 @@
 		$("#selTermTo").val(endDay);
 //		
 		var formData = $("#schForm").serializeObject();
-//		{
-//				selTerm : "day",
-//				selPeriodVal : "15min",
-//				selTermFrom : firstDay,
-//				selTermTo : endDay, 
-//				siteId : "c64b328b"
-//		};
 		
 		return formData;
 	}
@@ -418,7 +411,7 @@
 					} else reEssUsage = null;
 					
 					if(pvUsgList.length > 0) { // PV 사용량
-						pvUsage = String(pvUsgList[i].usg_val);
+						pvUsage = String(pvUsgList[i].gen_val);
 						if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
 						else {
 							if(pvUsage.length < 7) rePvUsage = Number(     pvUsage     ); // 나중에 수정 요망
@@ -489,7 +482,7 @@
 		
 		var total = totalDataSet+totalDataSet2+totalDataSet3;
 		$("#nowUsage").empty().append(nowUsage+"kWh");
-		console.log("(totalDataSet/total)*100 : "+(totalDataSet/total));
+		
 		$("#kepcoPer").empty().append( ( (totalDataSet == 0) ? 0 : ( (totalDataSet/total)*100 ).toFixed(2) )+"%" );
 		$("#essPer").empty().append( ( (totalDataSet2 == 0) ? 0 : ( (totalDataSet2/total)*100 ).toFixed(2) )+"%" );
 		$("#pvPer").empty().append( ( (totalDataSet3 == 0) ? 0 : ( (totalDataSet3/total)*100 ).toFixed(2) )+"%" );
@@ -591,7 +584,7 @@
 		
 		var chkHour = today.getHours();
 		var timeTermStr = "";
-		console.log("holidayYn : "+holidayYn+", "+chkSeason+", "+chkHour);
+		
 		if(!holidayYn) {
 			if(chkSeason == 1 || chkSeason == 3) {
 				// 중간부하시간대
@@ -626,7 +619,6 @@
 				
 			}
 		}
-		console.log("timeTermStr : "+timeTermStr);
 		
 		$(".chart_notice").empty();
 		if(timeTermStr != "") 
@@ -780,56 +772,10 @@
 		incomeChart.xAxis[0].options.labels.style.fontSize = '12px';
 		
 		incomeChart.redraw(); // 차트 데이터를 다시 그린다
-		console.log(totalDataSet+", "+totalDataSet2+", "+totalDataSet3);
+		
 		var total = totalDataSet+totalDataSet2+totalDataSet3;
 		$("#totalRv").empty().append(numberComma(total)+" won");
-//		console.log("(totalDataSet/total)*100 : "+(totalDataSet/total));
-//		$("#kepcoPer").empty().append( ( (totalDataSet == 0) ? 0 : ( (totalDataSet/total)*100 ).toFixed(2) )+"%" );
-//		$("#essPer").empty().append( ( (totalDataSet2 == 0) ? 0 : ( (totalDataSet2/total)*100 ).toFixed(2) )+"%" );
-//		$("#pvPer").empty().append( ( (totalDataSet3 == 0) ? 0 : ( (totalDataSet3/total)*100 ).toFixed(2) )+"%" );
 		
-		
-		
-		
-//		var essRevenueList = result.essRevenueList;
-//		var pvRevenueList = result.pvRevenueList;
-//		
-//		// 데이터 셋팅
-//		var dataSet = []; // chartData를 위한 변수
-//		var dataSet2 = []; // chartData를 위한 변수
-//		var dataSet3 = []; // chartData를 위한 변수
-//		var totDataSet = 0;
-//		var totDataSet2 = 0;
-//		var totDataSet3 = 0;
-//		var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
-//		var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
-////		console.log("pvRevenueList.length : "+pvRevenueList.length);
-//		if(pvRevenueList.length < 1) {
-//			
-//		} else {
-//			for(var i=0; i<pvRevenueList.length; i++) {
-//				var tm = new Date(pvRevenueList[i].std_timestamp);
-//				// 차트데이터 셋팅
-//				dataSet.push( [pvRevenueList[i].std_timestamp, pvRevenueList[i].tot_price] );
-//				dataSet2.push( [pvRevenueList[i].std_timestamp, pvRevenueList[i].smp_price] );
-//				dataSet3.push( [pvRevenueList[i].std_timestamp, pvRevenueList[i].rec_price] );
-//				totDataSet = totDataSet+Number(pvRevenueList[i].tot_price);
-//				totDataSet2 = totDataSet2+Number(String(pvRevenueList[i].smp_price));
-//				totDataSet3 = totDataSet3+Number(String(pvRevenueList[i].rec_price));
-//				
-//			}
-//			pvRevenueList1 = dataSet;
-//			pvRevenueList2 = dataSet2;
-//			pvRevenueList3 = dataSet3;
-//			
-//			// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-//			unit_format(String(totDataSet), "pvRevenueTot1", "won");
-//			unit_format(String(totDataSet2), "pvRevenueTot2", "won");
-//			unit_format(String(totDataSet3), "pvRevenueTot3", "won");
-//		}
-//		
-//		
-//		
 	}
 	
 	function callback_getDeviceList(result) {

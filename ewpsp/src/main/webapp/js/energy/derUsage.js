@@ -85,7 +85,7 @@
 					} else reEssUsage = null;
 					
 					if(pvUsgList.length > 0) { // PV 사용량
-						pvUsage = String(pvUsgList[i].usg_val);
+						pvUsage = String(pvUsgList[i].gen_val);
 						if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
 						else {
 //							rePvUsage = Math.round( Number(pvUsage) );
@@ -216,9 +216,9 @@
 		unit_format(String(totalDataSet3), "pvUsageTotal", "Wh");
 		
 		var total = totalDataSet+totalDataSet2+totalDataSet3;
-		$("#kepcoPer").empty().append("한전 사용").append( $("<span />").append( (  (totalDataSet/total)*100  ).toFixed(2)+"%" ) );
-		$("#essPer").empty().append("ESS 사용").append( $("<span />").append( (  (totalDataSet2/total)*100  ).toFixed(2)+"%" ) );
-		$("#pvPer").empty().append("PV 사용").append( $("<span />").append( (  (totalDataSet3/total)*100  ).toFixed(2)+"%" ) );
+		$("#kepcoPer").empty().append("한전 사용").append( $("<span />").append( ( (totalDataSet == 0) ? 0 : ( (totalDataSet/total)*100 ).toFixed(2) )+"%" ) );
+		$("#essPer").empty().append("ESS 사용").append( $("<span />").append( ( (totalDataSet2 == 0) ? 0 : ( (totalDataSet2/total)*100 ).toFixed(2) )+"%" ) );
+		$("#pvPer").empty().append("PV 사용").append( $("<span />").append( ( (totalDataSet3 == 0) ? 0 : ( (totalDataSet3/total)*100 ).toFixed(2) )+"%" ) );
 		
 	}
 	

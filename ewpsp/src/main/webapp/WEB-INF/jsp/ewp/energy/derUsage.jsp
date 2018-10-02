@@ -294,9 +294,9 @@
 							<div class="tbl_top clear">
 								<h2 class="ntit fl">사용량 구성 도표</h2>
 								<ul class="fr">
-									<li><div class="hl_tot_per" id="kepcoPer">한전 사용 <span>81%</span></div></li>
-									<li><div class="tot_per" id="essPer">ESS 사용 <span>10%</span></div></li>
-									<li><div class="tot_per" id="pvPer">PV 사용 <span>9%</span></div></li>
+									<li><div class="hl_tot_per" id="kepcoPer">한전 사용 <span>0%</span></div></li>
+									<li><div class="tot_per" id="essPer">ESS 사용 <span>0%</span></div></li>
+									<li><div class="tot_per" id="pvPer">PV 사용 <span>0%</span></div></li>
 									<li><a href="#;" class="save_btn">데이터저장</a></li>
 									<li><a href="#;" class="fold_btn">표접기</a></li>
 								</ul>
@@ -304,7 +304,7 @@
 							<div class="tbl_wrap">
 								<div class="fold_div" id="pc_use_dataDiv">
 									<!-- PC 버전용 테이블 -->
-									<div class="chart_table">			
+									<!-- <div class="chart_table">			
 										<table class="pc_use">
 											<thead>
 												<tr>
@@ -543,7 +543,7 @@
 												</tr>
 											</tbody>
 										</table>	
-									</div>									
+									</div>									 -->
 									<!-- 데이터 추출용 -->
 									<div class="chart_table2" style="display:none;">			
 										<table id="datatable">

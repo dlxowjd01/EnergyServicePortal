@@ -119,7 +119,7 @@ function changeSelTerm(gubun) {
 	
 	firstDay = (firstDay == "") ? "" : firstDay.format("yyyyMMddHHmmss");
 	endDay = (endDay == "") ? "" : endDay.format("yyyyMMddHHmmss");
-	console.log("firstDay : "+firstDay+", endDay : "+endDay);
+//	console.log("firstDay : "+firstDay+", endDay : "+endDay);
 
 	$("#selTermFrom").val(firstDay);
 	$("#selTermTo").val(endDay);
@@ -158,7 +158,7 @@ $(function () {
 				return;
 			}
 			btwnDt = dateDiff($dt1.val(), $dt2.val());
-			console.log($dt1.val()+'는 '+$dt2.val()+'로 부터 ' + dateDiff($dt1.val(), $dt2.val()) + '일 전입니다.');
+//			console.log($dt1.val()+'는 '+$dt2.val()+'로 부터 ' + dateDiff($dt1.val(), $dt2.val()) + '일 전입니다.');
 		}
 		
 	});
@@ -173,7 +173,7 @@ $(function () {
 	
 	$("#check1").click(function () {
 		var flag = $("#check1").prop("checked") ;
-		console.log("flag : "+flag);
+//		console.log("flag : "+flag);
 		if(flag) {
 			changeSelTerm('day');
 			getCollect_sch_condition();
@@ -321,7 +321,7 @@ function convertDataTableHeaderDate(_convertDt, type) {
 function unit_format(usage, id, unitGbn) {
 	var format_usage;
 	var unit;
-	console.log("usage "+usage);
+	
 	if(unitGbn == "won") {
 		format_usage = numberComma( usage );
 		unit = "won";
@@ -478,6 +478,6 @@ function setDataTableColRowCnt() {
 	}
 	dt_col = col_cnt;
 	dt_row = row_cnt;
-	console.log("col : "+col_cnt+", row : "+row_cnt);
+//	console.log("col : "+col_cnt+", row : "+row_cnt);
 }
 

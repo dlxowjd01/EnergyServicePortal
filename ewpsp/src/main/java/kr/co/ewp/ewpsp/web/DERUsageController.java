@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.ewp.ewpsp.service.DERUsageService;
+import kr.co.ewp.ewpsp.service.PVGenService;
 import kr.co.ewp.ewpsp.service.UsageService;
 
 @Controller
@@ -33,6 +34,9 @@ public class DERUsageController {
 
 	@Resource(name="usageService")
 	private UsageService usageService;
+
+	@Resource(name="pvGenService")
+	private PVGenService pvGenService;
 
 	@RequestMapping("/derUsage")
 	public String main() {
@@ -72,7 +76,8 @@ public class DERUsageController {
 		
 		List kepcoUsageList = usageService.getUsageRealList(param); // 한전 사용량
 		List essUsageList = derUsageService.getESSUsageList(param);// ESS 사용량
-		List pvUsageList = derUsageService.getPVUsageList(param); // PV 사용량
+//		List pvUsageList = derUsageService.getPVUsageList(param); // PV 사용량
+		List pvUsageList = pvGenService.getPVGenRealList(param); // PV 사용량
 		
 		List loopCntList = null;
 		if(kepcoUsageList != null && kepcoUsageList.size() > 0) {
