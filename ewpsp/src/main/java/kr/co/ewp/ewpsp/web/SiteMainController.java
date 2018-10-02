@@ -82,7 +82,7 @@ public class SiteMainController {
 		logger.debug("/getESSChargeSum");
 		logger.debug("param ::::: "+param.toString());
 		
-		Map result = essChargeService.getESSChargeSum(param); // 장치별 알람건수
+		Map result = essChargeService.getESSChargeSum(param); // ess 충방전량 합계 조회
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("resultListMap", result);
