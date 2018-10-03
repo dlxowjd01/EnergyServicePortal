@@ -29,7 +29,6 @@
 	        <property name="suffix" value=".jsp" />
 	    </bean>
 	    
-	    <bean id="sessionCheckInterceptor" class="kr.co.ewp.ewpsp.common.SessionCheckInterceptor" />
 <!--         <interceptors>
 	        <interceptor>
 	            <mapping path="/board/register"/>
@@ -41,10 +40,10 @@
 	    
 	    <mvc:interceptors>
 	    	<mvc:interceptor>
-	    		<mvc:mapping path=""/>
-	    		<!-- <mvc:mapping path="/peak"/> -->
-	    		<mvc:exclude-mapping path="/**"/><!-- interceptor 안거침 -->
-	    		<ref bean="sessionCheckInterceptor" />
+	    		<mvc:mapping path="/main"/>
+	    		<mvc:mapping path="/peak"/>
+	    		<!-- <mvc:exclude-mapping path="/**"/> interceptor 안거침 -->
+	    		<bean class="kr.co.ewp.ewpsp.common.SessionCheckInterceptor" />
 	    	</mvc:interceptor>
 	    	<mvc:interceptor>
 	    		<mvc:mapping path="/siteMain"/>

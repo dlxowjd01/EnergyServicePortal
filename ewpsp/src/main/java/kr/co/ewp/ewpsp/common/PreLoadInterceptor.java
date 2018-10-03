@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import kr.co.ewp.ewpsp.common.util.CommonUtils;
 import kr.co.ewp.ewpsp.common.util.UserUtil;
 import kr.co.ewp.ewpsp.service.CmpyGrpSiteMngService;
 
@@ -27,12 +26,12 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
+		logger.debug("++++++++++++++++PreLoadInterceptor++++++++++++++++");
 		Map userInfo = UserUtil.getUserInfo(request);
 //		logger.debug("userInfo:{}", userInfo);
 
 		// 상단 사이트 목록 조회
-		if(userInfo != null && CommonUtils.isNotEmpty(userInfo.get("user_idx"))) {
+		if(userInfo != null) {
 
 			HashMap param = new HashMap<String, Object>();
 			param.put("userIdx", userInfo.get("user_idx"));

@@ -1,6 +1,5 @@
 package kr.co.ewp.ewpsp.common.util;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,10 +11,6 @@ public class UserUtil {
 
 	public static Map getUserInfo(HttpSession session) {
 		Map userInfo = (Map)session.getAttribute(UserUtil.USER_SESSION_ID);
-		if (userInfo == null) {
-			userInfo = new HashMap();
-		}
-
 		return userInfo;
 	}
 

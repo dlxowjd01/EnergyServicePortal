@@ -47,6 +47,9 @@ public class MainController {
 		int startNum = pageRowCnt*(selPageNum-1);
 
 		Map userInfo = UserUtil.getUserInfo(session);
+		if (userInfo == null) {
+			userInfo = new HashMap();
+		}
 		logger.debug("userInfo : {}", userInfo);
 
 		Integer userIdx = (Integer)userInfo.get("user_idx");
