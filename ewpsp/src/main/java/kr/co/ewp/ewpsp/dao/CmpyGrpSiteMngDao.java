@@ -68,6 +68,27 @@ public class CmpyGrpSiteMngDao {
 	}
 
 	/**
+	 * 군관리메인의 사이트 사용량 순위 목록 조회
+	 * @author greatman
+	 * @param param
+	 * @return
+	 */
+	public List getGMainSiteRankingList(HashMap param) {
+		List resultList = sqlSession.selectList("cmpyGrpSiteMng.getGMainSiteRankingList", param);
+		return resultList;
+	}
+
+	/**
+	 * 군관리메인의 사이트 사용량 순위 목록 갯수
+	 * @author greatman
+	 * @param param
+	 * @return
+	 */
+	public int getGMainSiteRankingListCnt(HashMap param) {
+		return sqlSession.selectOne("cmpyGrpSiteMng.getGMainSiteRankingListCnt", param);
+	}
+
+	/**
 	 * 군관리메인의 사이트 목록 조회
 	 * @author greatman
 	 * @param param
@@ -103,6 +124,17 @@ public class CmpyGrpSiteMngDao {
 		return result;
 	}
 	
+	/**
+	 * 군관리메인의 사이트 사용량 총합계 조회
+	 * @author greatman
+	 * @param param
+	 * @return
+	 */
+	public Map getGMainSiteTotalDetail(HashMap param) {
+		Map result = sqlSession.selectOne("cmpyGrpSiteMng.getGMainSiteTotalDetail", param);
+		return result;
+	}
+
 	public int insertCmpy(HashMap param) {
 		return sqlSession.update("cmpyGrpSiteMng.insertCmpy", param);
 	}

@@ -2,14 +2,11 @@ var formData = null;
 
 function fn_cycle() {
 	formData = getSiteMainSchCollection();
-//	getAlarmList(formData); // 알람 조회
-	getGMainSiteList(1);	// 사이트 목록 조회
-//	getPeakRealList(formData); // 피크전력현황 조회
-//	drawData_chart_peak(); // 피크전력현황 차트그리기
 
-//	var today = new Date();
-//	update_updtDataTime(today, "updtTimePeak");
-//	chargePowerStrDisplayYn(today);
+//	getAlarmList(formData); // 알람 조회
+	getGMainSiteRankingList(1); // 사이트 사용량 순위 목록 조회
+	getGMainSiteTotalDetail(formData); // 사이트 사용량 총합계 조회
+	getGMainSiteList(1); // 사이트 목록 조회
 }
 
 function getSiteMainSchCollection() {
@@ -33,11 +30,13 @@ function getSiteMainSchCollection() {
 	if (areaType.length == 1) {
 		areaType = '0' + areaType;
 	}
+	$('#areaType').val(areaType);
+
 	if ($('#allArea').val() == '') {
-		$('#areaType').val(areaType);
+		$('#areaType2').val(areaType);
 	} else {
 		// 지역필터가 선택되면 필터값으로 가져온다. (확정된게 아님)
-		$('#areaType').val($('#allArea').val());
+		$('#areaType2').val($('#allArea').val());
 	}
 
 	var formData = $("#schForm").serializeObject();
@@ -85,15 +84,113 @@ function callback_getAlarmList(result) {
 	
 }
 
+function callback_getGMainSiteRankingList(result) {
+	var siteList = result.list;
+
+	var $tbody = $('#siteRankingTbody');
+	$tbody.empty();
+
+	if (siteList == null || siteList.length < 1) {
+		$('#GMainSiteRankingPaging').empty();
+	} else {
+		for (var i = 0; i < 5; i++) {
+			if (i < siteList.length) {
+				if (oldRankType == 0) {
+					$tbody.append(
+						$('<tr />')
+							.append($('<th />').append(siteList[i].site_name))
+							.append($('<td />').append(siteList[i].usage))
+							.append($('<td />').append(siteList[i].usage_plan))
+					);
+				} else if (oldRankType == 1) {
+					$tbody.append(
+						$('<tr />')
+							.append($('<th />').append(siteList[i].site_name))
+							.append($('<td />').append(siteList[i].charge))
+							.append($('<td />').append(siteList[i].charge_plan))
+						);
+				} else if (oldRankType == 2) {
+					$tbody.append(
+						$('<tr />')
+							.append($('<th />').append(siteList[i].site_name))
+							.append($('<td />').append(siteList[i].gen))
+							.append($('<td />').append(0))
+						);
+				} else if (oldRankType == 3) {
+					$tbody.append(
+						$('<tr />')
+							.append($('<th />').append(siteList[i].site_name))
+							.append($('<td />').append(siteList[i].reward))
+							.append($('<td />').append(0))
+						);
+				}
+			} else {
+				$tbody.append(
+						$('<tr />')
+							.append($('<th />').append('-'))
+							.append($('<td />').append(0))
+							.append($('<td />').append(0))
+					);
+			}
+		}
+
+		var pagingMap = result.pagingMap;
+		makePageNums2(pagingMap, "GMainSiteRanking");
+	}
+
+	if (myChart != null) {
+		myChart.update({data:{table: 'gdatatable1'}});
+	}
+}
+
+function callback_getGMainSiteTotalDetail(result) {
+	var usage = result.detail;
+//	console.log(usage);
+	if (usage != null) {
+		if (usage.usage > 1000) {
+			$('.detailUsage').text(numberComma(Math.floor(usage.usage / 1000)));
+			$('.detailUsageUnit').text('MWh');
+		} else {
+			$('.detailUsage').text(numberComma(usage.usage));
+			$('.detailUsageUnit').text('kWh');
+		}
+		if (usage.gen > 1000) {
+			$('.detailGen').text(numberComma(Math.floor(usage.gen / 1000)));
+			$('.detailGenUnit').text('MWh');
+		} else {
+			$('.detailGen').text(numberComma(usage.gen));
+			$('.detailGenUnit').text('kWh');
+		}
+		if (usage.charge > 1000) {
+			$('.detailCharge').text(numberComma(Math.floor(usage.charge / 1000)));
+			$('.detailChargeUnit').text('MWh');
+		} else {
+			$('.detailCharge').text(numberComma(usage.charge));
+			$('.detailChargeUnit').text('kWh');
+		}
+
+		$('.detailReward').text(numberComma(usage.reward));
+	} else {
+		$('.detailUsage').text('0');
+		$('.detailGen').text('0');
+		$('.detailCharge').text('0');
+		$('.detailReward').text('0');
+
+		$('.detailUsageUnit').text('MWh');
+		$('.detailGenUnit').text('MWh');
+		$('.detailChargeUnit').text('MWh');
+	}
+}
+
 function callback_getGMainSiteList(result) {
 	var siteList = result.list;
-	
+
 	var $tbody = $('#siteTbody');
 	$tbody.empty();
 
 	if (siteList == null || siteList.length < 1) {
-		$tbody.append( '<tr><td colspan="7">조회된 데이터가 없습니다.</td><tr>');
-		$('#SitePaging').empty();
+		$tbody.append('<tr><td colspan="7">조회된 데이터가 없습니다.</td><tr>');
+		$('#GMainSitePaging').empty();
 	} else {
 		for (var i = 0; i < siteList.length; i++) {
 			var eq1Cls = siteList[i].ioe > 0 ? ' on' : '';
@@ -102,7 +199,7 @@ function callback_getGMainSiteList(result) {
 			var eq4Cls = siteList[i].pv > 0 ? ' on' : '';
 			$tbody.append(
 				$('<tr class="dbclickopen" />')
-					.append($('<td />').append(siteList[i].rnum))	// no
+					.append($('<td />').append(siteList[i].rnum)) // no
 					.append($('<td />')
 						.append($('<div class="cname" />')
 							.append('<a href="/siteMain?siteId=' + siteList[i].site_id + '">' + siteList[i].site_name + '</a>')
@@ -126,6 +223,20 @@ function callback_getGMainSiteList(result) {
 		var pagingMap = result.pagingMap;
 		makePageNums2(pagingMap, "GMainSite");
 	}
+}
+
+var oldRankType = 0;
+function changeRanking(tabIdx) {
+	// html 이동
+	$('.tblDisplay > div:eq(' + oldRankType + ')').empty();
+	$('.tblDisplay > div:eq(' + (tabIdx - 1) + ')').empty().append(chartDiv);
+	// 차트 초기화
+	initChart();
+
+	oldRankType = tabIdx - 1;
+
+	$('#rankType').val(tabIdx + 2);
+	fn_cycle();
 }
 
 function changeTerm(term) {

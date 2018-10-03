@@ -26,6 +26,10 @@ public interface CmpyGrpSiteMngService {
 
 	List getUserSiteList(HashMap param) throws Exception;
 
+	List getGMainSiteRankingList(HashMap param) throws Exception;
+
+	int getGMainSiteRankingListCnt(HashMap param) throws Exception;
+
 	List getGMainSiteList(HashMap param) throws Exception;
 
 	int getGMainSiteListCnt(HashMap param) throws Exception;
@@ -36,6 +40,8 @@ public interface CmpyGrpSiteMngService {
 
 	Map getSiteDetail(HashMap param) throws Exception;
 	
+	Map getGMainSiteTotalDetail(HashMap param) throws Exception;
+
 	int insertCmpy(HashMap param) throws Exception;
 	
 	int insertGroup(HashMap param) throws Exception;

@@ -47,8 +47,7 @@
 
 <script type="text/javascript">
 $(function() {
-	// 매초 갱신
-	setInterval(refreshCurrTime, 1000);
+	refreshCurrTime();
 	refreshDataTime();
 });
 
@@ -57,6 +56,7 @@ function refreshCurrTime() {
 	var currEm = $('#currTime');
 	var now = new Date();
 	currEm.text(now.format('yyyy-MM-dd HH:mm:ss'));
+	setTimeout(refreshCurrTime, 1000); // 매초 갱신
 }
 
 // 데이터 조회 시간 갱신

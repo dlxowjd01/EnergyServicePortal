@@ -902,7 +902,34 @@ function deleteUser(userIdx) {
 
 //===== 군관리메인 조회 start (greatman) =====
 
-//사용자 목록 조회
+// 군관리 사이트 사용량 순위
+function getGMainSiteRankingList(selPageNum) {
+	formData['selPageNum'] = selPageNum;
+	$.ajax({
+		url : "/getGMainSiteRankingList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_getGMainSiteRankingList(result);
+		}
+	});
+}
+
+// 군관리 사이트 사용량 총합계 조회
+function getGMainSiteTotalDetail(formData) {
+	$.ajax({
+		url : "/getGMainSiteTotalDetail",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_getGMainSiteTotalDetail(result);
+		}
+	});
+}
+
+// 군관리 사이트 목록 조회
 function getGMainSiteList(selPageNum) {
 	formData['selPageNum'] = selPageNum;
 	$.ajax({
