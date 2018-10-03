@@ -9,13 +9,13 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import kr.co.ewp.ewpsp.common.util.CommonUtils;
+import kr.co.ewp.ewpsp.common.util.UserUtil;
 import kr.co.ewp.ewpsp.service.CmpyGrpSiteMngService;
 
 public class PreLoadInterceptor extends HandlerInterceptorAdapter {
@@ -28,9 +28,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-		HttpSession session = request.getSession();
-		Map userInfo = new HashMap<String, Object>();
-		userInfo = (Map) session.getAttribute("userInfo");
+		Map userInfo = UserUtil.getUserInfo(request);
 //		logger.debug("userInfo:{}", userInfo);
 
 		// 상단 사이트 목록 조회

@@ -1,19 +1,82 @@
 package kr.co.ewp.ewpsp.web;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import kr.co.ewp.ewpsp.common.util.UserUtil;
+import kr.co.ewp.ewpsp.service.CmpyGrpSiteMngService;
 
 @Controller
 public class MainController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
+	@Resource(name="cmpyGrpSiteMngService")
+	private CmpyGrpSiteMngService cmpyGrpSiteMngService;
+
 	@RequestMapping("/main")
 	public String main() {
 		logger.debug("/main");
 		return "ewp/main/main";
 	}
-	
+
+	/**
+	 * 군관리메인 사이트 목록 조회
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getGMainSiteList")
+	public @ResponseBody Map<String, Object> getGMainSiteList(HttpSession session, @RequestParam HashMap param) throws Exception {
+		logger.debug("/getGMainSiteList");
+		logger.debug("param : {}", param.toString());
+
+		int selPageNum = Integer.parseInt((String) param.get("selPageNum"));
+		int pageRowCnt = 10;
+		int startNum = pageRowCnt*(selPageNum-1);
+
+		Map userInfo = UserUtil.getUserInfo(session);
+		logger.debug("userInfo : {}", userInfo);
+
+		Integer userIdx = (Integer)userInfo.get("user_idx");
+		if (userIdx == null) {
+			userIdx = -1;
+		}
+
+		param.put("userIdx", userIdx);
+		param.put("startNum", startNum);
+		param.put("pageRowCnt", pageRowCnt);
+
+		List list = cmpyGrpSiteMngService.getGMainSiteList(param);
+		int listCnt = cmpyGrpSiteMngService.getGMainSiteListCnt(param);
+		int totalPageCnt = 0;
+		if(listCnt > 0) {
+			totalPageCnt = listCnt / pageRowCnt;
+			if(listCnt % pageRowCnt > 0) {
+				totalPageCnt++;
+			}
+		}
+
+		Map<String, Object> pagingMap = new HashMap<String, Object>();
+		pagingMap.put("pageRowCnt", pageRowCnt); // 한 페이지 당 보여줄 데이터 수
+		pagingMap.put("selPageNum", selPageNum); // 선택한 페이지번호
+		pagingMap.put("listCnt", listCnt); // 전체 데이터 수
+		pagingMap.put("totalPageCnt", totalPageCnt); // 전체 페이지 수
+
+		Map resultMap = new HashMap();
+		resultMap.put("list", list);
+		resultMap.put("pagingMap", pagingMap);
+		return resultMap;
+	}
 }

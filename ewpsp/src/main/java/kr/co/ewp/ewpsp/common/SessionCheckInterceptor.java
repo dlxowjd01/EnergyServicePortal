@@ -10,6 +10,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import kr.co.ewp.ewpsp.common.util.UserUtil;
+
 public class SessionCheckInterceptor extends HandlerInterceptorAdapter {
 	
 	// controller보다 먼저 수행
@@ -19,11 +21,11 @@ public class SessionCheckInterceptor extends HandlerInterceptorAdapter {
 		System.out.println("++++++++++++++++SessionCheckInterceptor start++++++++++++++++");
 //		HttpSession session = request.getSession();
 //		Map userInfo = new HashMap<String, Object>();
-//		userInfo = (Map) session.getAttribute("userInfo");
+//		userInfo = (Map) session.getAttribute(UserUtil.USER_SESSION_ID);
 //		if(userInfo == null) {
 //			Map user = new HashMap<String, Object>();
 //			user.put("", "");
-//			session.setAttribute("userInfo", user);
+//			session.setAttribute(UserUtil.USER_SESSION_ID, user);
 //			response.sendRedirect("/siteMain");
 //			return false; // 더이상 controller로 안감
 //		} else {

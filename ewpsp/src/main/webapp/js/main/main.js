@@ -1,63 +1,43 @@
-// 모니터링 변수 : setInterval()를 변수에 저장하면 나중에 clearInterval()를 이용해 중지시킬 수 있다
-var monitoring_cycle_10sec = null;
-var monitoring_cycle_1min = null;
-var monitoring_cycle_15min = null;
 var formData = null;
 
-$(function() {
+function fn_cycle() {
 	formData = getSiteMainSchCollection();
+//	getAlarmList(formData); // 알람 조회
+	getGMainSiteList(1);	// 사이트 목록 조회
+//	getPeakRealList(formData); // 피크전력현황 조회
+//	drawData_chart_peak(); // 피크전력현황 차트그리기
 
-	realTime_monitoring_start();
-});
-
-// 사이트ID 변경 처리
-function updateUserSite() {
-	realTime_monitoring_restart();
-}
-
-// 자동 새로고침(실시간 모니터링)
-function realTime_monitoring_start() {
-	monitoring_cycle_10sec_start();
-//	monitoring_cycle_1min_start();
-//	monitoring_cycle_15min_start();
-}
-
-function realTime_monitoring_restart() {
-	monitoring_cycle_10sec_end();
-//	monitoring_cycle_1min_end();
-//	monitoring_cycle_15min_end();
-	realTime_monitoring_start();
-}
-
-function monitoring_cycle_10sec_start() {
-	if(monitoring_cycle_10sec == null) { // 10초 간격
-		fn_cycle_10sec();	// 바로 한번 시작한다.
-		monitoring_cycle_10sec = setInterval(function(){
-			fn_cycle_10sec();
-		}, (1000*10));
-	} else {
-		alert("이미 모니터링이 실행중입니다.");
-	}
-}
-
-function monitoring_cycle_10sec_end() {
-	clearInterval(monitoring_cycle_10sec);
-	monitoring_cycle_10sec = null;
-}
-
-function fn_cycle_10sec() {
-	getAlarmList(formData); // 알람 조회
+//	var today = new Date();
+//	update_updtDataTime(today, "updtTimePeak");
+//	chargePowerStrDisplayYn(today);
 }
 
 function getSiteMainSchCollection() {
+	// 기간 필터
 	var today = new Date();
-	firstDay = today.format("yyyyMMdd")+"000000";
-	endDay = today.format("yyyyMMdd")+"235959";
-
+	var selTerm = $('#selTerm').val();
+	endDay = today.format("yyyyMMdd") + "235959";
+	if (selTerm == 'day') {
+		// Nothing
+	} else if (selTerm == 'week') {
+		today.setDate(today.getDate() - today.getDay());
+	} else if (selTerm == 'month') {
+		today.setDate(1);
+	}
+	firstDay = today.format("yyyyMMdd") + "000000";
 	$("#selTermFrom").val(firstDay);
 	$("#selTermTo").val(endDay);
-	if (userSiteId != '') {
-		$('#siteId').val(userSiteId);
+
+	// 지역 필터
+	var areaType = (area_idx + 1).toString();
+	if (areaType.length == 1) {
+		areaType = '0' + areaType;
+	}
+	if ($('#allArea').val() == '') {
+		$('#areaType').val(areaType);
+	} else {
+		// 지역필터가 선택되면 필터값으로 가져온다. (확정된게 아님)
+		$('#areaType').val($('#allArea').val());
 	}
 
 	var formData = $("#schForm").serializeObject();
@@ -105,6 +85,54 @@ function callback_getAlarmList(result) {
 	
 }
 
+function callback_getGMainSiteList(result) {
+	var siteList = result.list;
+	
+	var $tbody = $('#siteTbody');
+	$tbody.empty();
+
+	if (siteList == null || siteList.length < 1) {
+		$tbody.append( '<tr><td colspan="7">조회된 데이터가 없습니다.</td><tr>');
+		$('#SitePaging').empty();
+	} else {
+		for (var i = 0; i < siteList.length; i++) {
+			var eq1Cls = siteList[i].ioe > 0 ? ' on' : '';
+			var eq2Cls = siteList[i].pcs > 0 ? ' on' : '';
+			var eq3Cls = siteList[i].bms > 0 ? ' on' : '';
+			var eq4Cls = siteList[i].pv > 0 ? ' on' : '';
+			$tbody.append(
+				$('<tr class="dbclickopen" />')
+					.append($('<td />').append(siteList[i].rnum))	// no
+					.append($('<td />')
+						.append($('<div class="cname" />')
+							.append('<a href="/siteMain?siteId=' + siteList[i].site_id + '">' + siteList[i].site_name + '</a>')
+						)
+					)
+					.append($('<td />')
+						.append($('<div class="eq_icon" />')
+							.append('<span class="eq1' + eq1Cls + '">장치1</span>')
+							.append('<span class="eq2' + eq2Cls + '">장치2</span>')
+							.append('<span class="eq3' + eq3Cls + '">장치3</span>')
+							.append('<span class="eq4' + eq4Cls + '">장치4</span>')
+						)
+					)
+					.append($('<td />').append(numberComma(siteList[i].usage)))
+					.append($('<td />').append(numberComma(siteList[i].charge)))
+					.append($('<td />').append(numberComma(siteList[i].gen)))
+					.append($('<td />').append(numberComma(siteList[i].reward)))
+			);
+		}
+
+		var pagingMap = result.pagingMap;
+		makePageNums2(pagingMap, "GMainSite");
+	}
+}
+
+function changeTerm(term) {
+	$('#selTerm').val(term);
+	fn_cycle();
+}
+
 function changeMapGroup(aElmt) {
 	var text = changeLiClass(aElmt);
 	$('#selMapGroup').text(text);
@@ -112,14 +140,20 @@ function changeMapGroup(aElmt) {
 	if (text == '지역별') {
 		$('#mapUsage').show();
 		$('#groupUsage').hide();
+		$('#mapGroup').val('map');
 	} else if (text == '그룹별') {
 		$('#mapUsage').hide();
 		$('#groupUsage').show();
+		$('#mapGroup').val('group');
 	}
+	fn_cycle();
 }
 
-function changeAllArea(aElmt) {
-	$('#selAllArea').text(changeLiClass(aElmt));
+function changeAllArea(aElmt, areaType) {
+	var text = changeLiClass(aElmt);
+	$('#selAllArea').text(text);
+	$('#allArea').val(areaType);
+	fn_cycle();
 }
 
 // 선택된 li에 class='on'을 붙이고 텍스트를 얻어온다.

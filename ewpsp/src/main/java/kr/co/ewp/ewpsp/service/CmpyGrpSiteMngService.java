@@ -18,13 +18,17 @@ public interface CmpyGrpSiteMngService {
 
 	int getSiteListCnt(HashMap param) throws Exception;
 
-	List getUserSiteList(HashMap param) throws Exception;
-
 	List getGroupPopupList(HashMap param) throws Exception;
 	
 	List getGrpSiteList(HashMap param) throws Exception;
 	
 	List getAllSiteList(HashMap param) throws Exception;
+
+	List getUserSiteList(HashMap param) throws Exception;
+
+	List getGMainSiteList(HashMap param) throws Exception;
+
+	int getGMainSiteListCnt(HashMap param) throws Exception;
 
 	Map getCmpyDetail(HashMap param) throws Exception;
 	

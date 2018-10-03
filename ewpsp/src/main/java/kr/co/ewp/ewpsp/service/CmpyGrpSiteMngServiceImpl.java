@@ -41,10 +41,6 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 		return cmpyGrpSiteMngDao.getSiteListCnt(param);
 	}
 
-	public List getUserSiteList(HashMap param) throws Exception {
-		return cmpyGrpSiteMngDao.getUserSiteList(param);
-	}
-
 	public List getGroupPopupList(HashMap param) throws Exception {
 		return cmpyGrpSiteMngDao.getGroupPopupList(param);
 	}
@@ -55,6 +51,18 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 	
 	public List getAllSiteList(HashMap param) throws Exception {
 		return cmpyGrpSiteMngDao.getAllSiteList(param);
+	}
+
+	public List getUserSiteList(HashMap param) throws Exception {
+		return cmpyGrpSiteMngDao.getUserSiteList(param);
+	}
+
+	public List getGMainSiteList(HashMap param) throws Exception {
+		return cmpyGrpSiteMngDao.getGMainSiteList(param);
+	}
+
+	public int getGMainSiteListCnt(HashMap param) throws Exception {
+		return cmpyGrpSiteMngDao.getGMainSiteListCnt(param);
 	}
 
 	public Map getCmpyDetail(HashMap param) throws Exception {

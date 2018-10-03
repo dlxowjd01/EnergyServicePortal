@@ -900,6 +900,24 @@ function deleteUser(userIdx) {
 	});
 }
 
+//===== 군관리메인 조회 start (greatman) =====
+
+//사용자 목록 조회
+function getGMainSiteList(selPageNum) {
+	formData['selPageNum'] = selPageNum;
+	$.ajax({
+		url : "/getGMainSiteList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_getGMainSiteList(result);
+		}
+	});
+}
+
+//===== 군관리메인 조회 end (greatman) =====
+
 //================================================================================================
 //====================================db(API data)조회 end==========================================
 //================================================================================================

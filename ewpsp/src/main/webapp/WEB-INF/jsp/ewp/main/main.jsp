@@ -22,11 +22,12 @@
 			<jsp:include page="../include/layout/header.jsp" />
 			<div id="container">
 				<form id="schForm" name="schForm">
-					<input type="hidden" id="selTermFrom" name="selTermFrom">
-					<input type="hidden" id="selTermTo" name="selTermTo">
-					<input type="hidden" id="selTerm" name="selTerm" value="day">
-					<input type="hidden" id="selPeriodVal" name="selPeriodVal" value="hour">
-					<input type="hidden" id="siteId" name="siteId" value="17094385">
+					<input type="hidden" id="selTermFrom" name="selTermFrom" />
+					<input type="hidden" id="selTermTo" name="selTermTo" />
+					<input type="hidden" id="selTerm" name="selTerm" value="day" />
+					<input type="hidden" id="areaType" name="areaType" value="" />
+					<input type="hidden" id="mapGroup" name="mapGroup" value="map" />
+					<input type="hidden" id="allArea" name="allArea" value="" />
 				</form>
 				<div class="row">
 					<div class="col-lg-4">
@@ -436,9 +437,9 @@
 								<div class="indiv gmain_table">
 									<div class="term_menu clear">
 										<ul>
-											<li class="on"><a href="#;">오늘</a></li>
-											<li><a href="#;">이번주</a></li>
-											<li><a href="#;">이번달</a></li>
+											<li class="on"><a href="javascript:changeTerm('day')">오늘</a></li>
+											<li><a href="javascript:changeTerm('week')">이번주</a></li>
+											<li><a href="javascript:changeTerm('month')">이번달</a></li>
 										</ul>
 										<ol>
 											<li>
@@ -457,23 +458,24 @@
 												  <span class="caret"></span></button>
 												  <ul class="dropdown-menu">
 												    <li class="on"><a href="#;" onclick="changeAllArea(this)">전체지역</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this)">서울</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this)">경기</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this)">인천</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this)">강원</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this)">충북</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this)">충남</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this)">대전</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this)">경북</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this)">대구</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this)">경남</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this)">울산</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this)">부산</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this)">울릉도</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this)">전북</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this)">광주</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this)">전남</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this)">제주</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '01')">서울</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '02')">부산</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '03')">대구</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '04')">인천</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '05')">광주</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '06')">대전</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '07')">울산</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '08')">세종</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '09')">경기</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '10')">강원</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '11')">충북</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '12')">충남</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '13')">전북</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '14')">전남</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '15')">경북</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '16')">경남</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '17')">제주</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, '18')">울릉도</a></li>
 												  </ul>
 												</div>
 											</li>
@@ -501,7 +503,11 @@
 										        <th>수익</th>
 										      </tr>
 										    </thead>
-										    <tbody>
+										    <tbody id="siteTbody">
+										      <tr class="dbclickopen">
+												<td colspan="7">데이터 조회중입니다.</td>
+											</tr>
+<!-- 
 										      <tr class="dbclickopen">
 										        <td>1</td>
 										        <td>
@@ -682,12 +688,13 @@
 										        <td>700</td>
 										        <td>200</td>
 										      </tr>
+ -->
 										    </tbody>
 										</table>
 									</div>
-									<div class="paging clear">
+									<div class="paging clear" id="GMainSitePaging">
 										<a href="#;" class="prev">PREV</a>
-										<span><strong>1</strong> / 3</span>
+										<span><strong>1</strong> / 1</span>
 										<a href="#;" class="next">NEXT</a>
 									</div>
 								</div>
@@ -702,94 +709,119 @@
 
 
 <script type="text/javascript">
-/* 이미지맵 처리 */
-$(document).ready(function(e) {
-    $('img[usemap]').rwdImageMaps();
-});
+/* 5초마다 지도/정보 변경 */
+var done = false;
+// area_type = area_idx + 1
+var area_idx = 0;
+// site의 area_type 구분정의표 참조 (01:서울, 02:부산... 17:제주)
+var area_array = [
+	"Seoul",		// 01
+	"Busan",		// 02
+	"Daegu",
+	"Incheon",
+	"Gwangju",
+	"Daejeon",
+	"Ulsan",
+	"Sejong",		// 08 (이미지 없음)
+	"Gyeonggi",		// 09
+	"Gangwon",
+	"Chungbuk",
+	"Chungnam",
+	"Jeonbuk",
+	"Jeonnam",
+	"Kyungbuk",
+	"Gyeongnam",	// 16
+	"Jeju",			// 17
+	"Ulleungdo"		// 18 (코드값 없음)
+];
 
-/* 지역별 상세지도/정보 표시 */
-function local_detail(lname) {
-	$("#local_detail").attr("src","../img/local_map_"+lname+"_detail.png");
-    if(lname == "Seoul") {$(".detailmap .local_name").text("서울");}
-    if(lname == "Gyeonggi") {$(".detailmap .local_name").text("경기");}
-    if(lname == "Incheon") {$(".detailmap .local_name").text("인천");}
-    if(lname == "Gangwon") {$(".detailmap .local_name").text("강원");}
-    if(lname == "Chungbuk") {$(".detailmap .local_name").text("충북");}
-    if(lname == "Daejeon") {$(".detailmap .local_name").text("대전");}
-    if(lname == "Chungnam") {$(".detailmap .local_name").text("충남");}
-    if(lname == "Kyungbuk") {$(".detailmap .local_name").text("경북");}
-    if(lname == "Daegu") {$(".detailmap .local_name").text("대구");}
-    if(lname == "Ulsan") {$(".detailmap .local_name").text("울산");}
-    if(lname == "Ulleungdo") {$(".detailmap .local_name").text("울릉도");}
-    if(lname == "Gyeongnam") {$(".detailmap .local_name").text("경남");}
-    if(lname == "Busan") {$(".detailmap .local_name").text("부산");}
-    if(lname == "Jeonbuk") {$(".detailmap .local_name").text("전북");}
-    if(lname == "Gwangju") {$(".detailmap .local_name").text("광주");}
-    if(lname == "Jeonnam") {$(".detailmap .local_name").text("전남");}	
-    if(lname == "Jeju") {$(".detailmap .local_name").text("제주");}
-}
-
-/* 상세지도/정보 보기 */
 $(function() {
+	/* 이미지맵 처리 */
+	$('img[usemap]').rwdImageMaps();
+
+	/* 상세지도/정보 보기 */
 	$("#local_map_all").click(function(){
 		$(".map_wrap").hide();
 		$(".allmap").hide();
 		$(".map_wrap_detail").show();
 		$(".detailmap").show();
 		$(".all_map_view").show();
+		done = true;
 	});
-});	
 
-/* 전체지도/정보 보기 */
-$(function() {
+	/* 전체지도/정보 보기 */
 	$(".all_map_view").click(function(){
 		$(this).hide();
 		$(".map_wrap").show();
 		$(".allmap").show();
 		$(".map_wrap_detail").hide();
-		$(".detailmap").hide();		
+		$(".detailmap").hide();
+		done = false;
+		setTimeout(readArea, 5000); // 다시 시작
 	});
-});	
 
-/* 20초마다 지도/정보 변경 */
-var done = false;
-var area_idx = 0;
-var area_array = [ "Seoul", "Gyeonggi", "Incheon", "Gangwon", "Chungbuk", "Daejeon", "Chungnam", "Kyungbuk", "Daegu", "Ulsan", "Ulleungdo", "Gyeongnam", "Busan", "Jeonbuk", "Gwangju", "Jeonnam", "Jeju" ];
+	readArea();
+});
+
+/* 지역별 상세지도/정보 표시 */
+function local_detail(lname) {
+	$("#local_detail").attr("src", "../img/local_map_" + lname + "_detail.png");
+	if (lname == "Seoul") {$(".detailmap .local_name").text("서울");}
+	if (lname == "Gyeonggi") {$(".detailmap .local_name").text("경기");}
+	if (lname == "Incheon") {$(".detailmap .local_name").text("인천");}
+	if (lname == "Gangwon") {$(".detailmap .local_name").text("강원");}
+	if (lname == "Chungbuk") {$(".detailmap .local_name").text("충북");}
+	if (lname == "Daejeon") {$(".detailmap .local_name").text("대전");}
+	if (lname == "Chungnam") {$(".detailmap .local_name").text("충남");}
+	if (lname == "Kyungbuk") {$(".detailmap .local_name").text("경북");}
+	if (lname == "Daegu") {$(".detailmap .local_name").text("대구");}
+	if (lname == "Ulsan") {$(".detailmap .local_name").text("울산");}
+	if (lname == "Sejong") {$(".detailmap .local_name").text("세종");}
+	if (lname == "Gyeongnam") {$(".detailmap .local_name").text("경남");}
+	if (lname == "Busan") {$(".detailmap .local_name").text("부산");}
+	if (lname == "Jeonbuk") {$(".detailmap .local_name").text("전북");}
+	if (lname == "Gwangju") {$(".detailmap .local_name").text("광주");}
+	if (lname == "Jeonnam") {$(".detailmap .local_name").text("전남");}	
+	if (lname == "Jeju") {$(".detailmap .local_name").text("제주");}
+	if (lname == "Ulleungdo") {$(".detailmap .local_name").text("울릉도");}
+}
 
 function readArea() {
-   console.log("readArea");
-   if (done) return;
-   if(area_idx == area_array.length) {area_idx = 0;}
+	if (done) return;
+	if (area_idx == area_array.length) {area_idx = 0;}
+	console.log(area_array[area_idx]);
 
-   /* 전체지도/정보 변경 */
-   $("#local").attr("src","../img/local_map_"+area_array[area_idx]+".png");
-    if(area_array[area_idx] == "Seoul") {$(".allmap .local_name").text("서울");}
-    if(area_array[area_idx] == "Gyeonggi") {$(".allmap .local_name").text("경기");}
-    if(area_array[area_idx] == "Incheon") {$(".allmap .local_name").text("인천");}
-    if(area_array[area_idx] == "Gangwon") {$(".allmap .local_name").text("강원");}
-    if(area_array[area_idx] == "Chungbuk") {$(".allmap .local_name").text("충북");}
-    if(area_array[area_idx] == "Daejeon") {$(".allmap .local_name").text("대전");}
-    if(area_array[area_idx] == "Chungnam") {$(".allmap .local_name").text("충남");}
-    if(area_array[area_idx] == "Kyungbuk") {$(".allmap .local_name").text("경북");}
-    if(area_array[area_idx] == "Daegu") {$(".allmap .local_name").text("대구");}
-    if(area_array[area_idx] == "Ulsan") {$(".allmap .local_name").text("울산");}
-    if(area_array[area_idx] == "Ulleungdo") {$(".allmap .local_name").text("울릉도");}
-    if(area_array[area_idx] == "Gyeongnam") {$(".allmap .local_name").text("경남");}
-    if(area_array[area_idx] == "Busan") {$(".allmap .local_name").text("부산");}
-    if(area_array[area_idx] == "Jeonbuk") {$(".allmap .local_name").text("전북");}
-    if(area_array[area_idx] == "Gwangju") {$(".allmap .local_name").text("광주");}
-    if(area_array[area_idx] == "Jeonnam") {$(".allmap .local_name").text("전남");}	
-    if(area_array[area_idx] == "Jeju") {$(".allmap .local_name").text("제주");}
+	/* 전체지도/정보 변경 */
+	$("#local").attr("src", "../img/local_map_" + area_array[area_idx] + ".png");
+	if (area_array[area_idx] == "Seoul") {$(".allmap .local_name").text("서울");}
+	if (area_array[area_idx] == "Busan") {$(".allmap .local_name").text("부산");}
+	if (area_array[area_idx] == "Daegu") {$(".allmap .local_name").text("대구");}
+	if (area_array[area_idx] == "Incheon") {$(".allmap .local_name").text("인천");}
+	if (area_array[area_idx] == "Gwangju") {$(".allmap .local_name").text("광주");}
+	if (area_array[area_idx] == "Daejeon") {$(".allmap .local_name").text("대전");}
+	if (area_array[area_idx] == "Ulsan") {$(".allmap .local_name").text("울산");}
+	if (area_array[area_idx] == "Sejong") {$(".allmap .local_name").text("세종");}
+	if (area_array[area_idx] == "Gyeonggi") {$(".allmap .local_name").text("경기");}
+	if (area_array[area_idx] == "Gangwon") {$(".allmap .local_name").text("강원");}
+	if (area_array[area_idx] == "Chungbuk") {$(".allmap .local_name").text("충북");}
+	if (area_array[area_idx] == "Chungnam") {$(".allmap .local_name").text("충남");}
+	if (area_array[area_idx] == "Jeonbuk") {$(".allmap .local_name").text("전북");}
+	if (area_array[area_idx] == "Jeonnam") {$(".allmap .local_name").text("전남");}
+	if (area_array[area_idx] == "Kyungbuk") {$(".allmap .local_name").text("경북");}
+	if (area_array[area_idx] == "Gyeongnam") {$(".allmap .local_name").text("경남");}
+	if (area_array[area_idx] == "Jeju") {$(".allmap .local_name").text("제주");}
+	if (area_array[area_idx] == "Ulleungdo") {$(".allmap .local_name").text("울릉도");}
 
-   /* 상세지도/정보 변경 */
-   local_detail(area_array[area_idx]);
+	/* 상세지도/정보 변경 */
+	local_detail(area_array[area_idx]);
 
-   area_idx++;
-   setTimeout(readArea, 3000); /* 3초 간격 */
+	/* 데이터 조회 */
+	fn_cycle();
+
+	area_idx++;
+	if (area_idx == 7) { area_idx++ } // 세종(08)은 아직 이미지가 없으므로 스킵
+	setTimeout(readArea, 5000); /* 5초 간격 */
 }
-readArea();
-
-
 </script>
 
 

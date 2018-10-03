@@ -125,16 +125,6 @@
 		) f_tb
 	</select>
 	
-	<select id="getUserSiteList" parameterType="hashMap" resultType="hashMap">
-		/* 사용자별 사이트 목록 조회 */
-		select
-			site_id, site_name, site_grp_idx
-		from tb_site
-		where del_yn = 'N'
-		and user_idx = #{userIdx}
-		order by site_name
-	</select>
-	
 <!-- 	<select id="getGroupPopupList" parameterType="hashMap" resultType="hashMap">
 		/* 그룹 목록(팝업) 조회 */
 		select 
@@ -170,6 +160,77 @@
 		</if>
 		order by reg_date
 	</select>
+	
+	<!-- greatman start -->
+	<select id="getUserSiteList" parameterType="hashMap" resultType="hashMap">
+		/* 상단 사이트 목록 조회 */
+		select
+			site_id, site_name, site_grp_idx
+		from tb_site
+		where del_yn = 'N'
+		and user_idx = #{userIdx}
+		order by site_name
+	</select>
+	
+	<select id="getGMainSiteList" parameterType="hashMap" resultType="hashMap">
+		/* 군관리메인 사이트 목록 조회 */
+		select * from (
+			select 
+				@rownum := @rownum + 1 as rnum,
+				page_tb.*
+			from (
+					select 
+						a.site_id, a.site_name, 
+
+						(select count(reg_date) from tb_device_ioe where site_id = a.site_id) ioe,
+						(select count(reg_date) from tb_device_pcs where site_id = a.site_id) pcs,
+						(select count(reg_date) from tb_device_bms where site_id = a.site_id) bms,
+						(select count(reg_date) from tb_device_pv where site_id = a.site_id) pv,
+
+						(select truncate(ifnull(sum(usg_val), 0) / 1000000, 0) from tb_usage where site_id = a.site_id and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) "usage",
+						(select ifnull(sum(chg_val), 0) + ifnull(sum(dischg_val), 0) from tb_ess_charge where site_id = a.site_id and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) charge,
+						(select ifnull(sum(gen_val), 0) from tb_pv_gen where site_id = a.site_id and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) gen,
+
+						(
+							(select ifnull(sum(off_peak_rate + mid_peak_rate + max_peak_rate), 0) from tb_bill where site_id = a.site_id and bill_yearm between #{selTermFrom } and #{selTermTo }) +
+							(select ifnull(sum(tot_price), 0) from tb_gen_revenue where site_id = a.site_id and gen_type = '1' and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) +
+							(select ifnull(sum(((reduct_amt / reduct_cap) * 100) + 123), 0) from tb_dr_revenue where site_id = a.site_id and std_yearm between #{selTermFrom } and #{selTermTo })
+						) reward
+					from tb_site a
+					where 1=1
+					and a.del_yn = 'N'
+					and a.user_idx = #{userIdx}
+					and a.area_type = #{areaType}
+					order by a.site_name
+			) page_tb
+			,  ( select @rownum := 0 ) r
+		) f_tb
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)">
+		limit #{startNum }, #{pageRowCnt }
+		</if>
+	</select>
+	
+	<select id="getGMainSiteListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+		/* 군관리메인 사이트 목록 건수 조회 */
+		select 
+			count(*) as listCnt 
+		from (
+			select 
+				@rownum := @rownum + 1 as rnum,
+				page_tb.*
+			from (
+					select 
+						site_id, site_name 
+					from tb_site
+					where 1=1
+					and del_yn = 'N'
+					and user_idx = #{userIdx}
+					and area_type = #{areaType}
+			) page_tb
+			,  ( select @rownum := 0 ) r
+		) f_tb
+	</select>
+	<!-- greatman end -->
 	
 	<select id="getCmpyDetail" parameterType="hashMap" resultType="hashMap">
 		/* 회사 한건 조회 */

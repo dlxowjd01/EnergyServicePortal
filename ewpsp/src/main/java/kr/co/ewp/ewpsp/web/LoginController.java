@@ -19,9 +19,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.ewp.ewpsp.common.util.CommonUtils;
+import kr.co.ewp.ewpsp.common.util.UserUtil;
 import kr.co.ewp.ewpsp.service.LoginService;
 
 @Controller
@@ -43,7 +43,7 @@ public class LoginController {
 	public String logout(HttpSession session, Model model) {
 		logger.debug("/logout");
 		
-		session.removeAttribute("userInfo");
+		session.removeAttribute(UserUtil.USER_SESSION_ID);
 		
 		return "redirect:/login";
 	}
@@ -51,13 +51,13 @@ public class LoginController {
 	@RequestMapping("/loginUser")
 	public String loginUser(HttpSession session, @RequestParam HashMap param) throws Exception {
 		logger.debug("/loginUser");
-		logger.debug("param ::::: "+param.toString());
-		
+		logger.debug("param : {}", param);
+
 		Map result = loginService.getUserDetail(param);
-		logger.debug("result : "+result);
-		
+		logger.debug("result : {}", result);
+
 		if (result != null && CommonUtils.isEmpty(result.get("userIdx"))) {
-			session.setAttribute("userInfo", result);
+			session.setAttribute(UserUtil.USER_SESSION_ID, result);
 			return "redirect:/siteMain";
 		} else {
 			return "ewp/login/login";
