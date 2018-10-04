@@ -231,13 +231,13 @@
 							<div class="tbl_top clear">
 								<h2 class="ntit fl">ESS 수익 도표</h2>
 								<ul class="fr">
-									<li><a href="#;" class="save_btn">데이터저장</a></li>
+									<li><a href="#;" class="save_btn" onclick="excelDownload('ESS수익조회', event);">데이터저장</a></li>
 									<li><a href="javascript:popupOpen('dprint');" class="default_btn">명세서 확인하기</a></li>
 									<li><a href="#;" class="fold_btn">표접기</a></li>
 								</ul>
 							</div>
 							<div class="tbl_wrap">
-								<div class="fold_div">
+								<div class="fold_div" id="pc_use_dataDiv">
 									<!-- PC 버전용 테이블 -->
 									<div class="chart_table">			
 										<table class="pc_use" id="pc_use_dataTable">

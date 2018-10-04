@@ -224,3 +224,20 @@
 			}
 		}
 	}
+	
+
+//	function excelDownload() {
+//		var col_kor = "";
+//		col_kor = "사이트id|날짜|사용량";
+//		console.log("aa");
+//		var formData = $("#schForm").serialize();
+//		
+//		// 엑셀 다운로드
+//		$.download('/excelDownload',
+//				formData
+////				"aa="+$("#aa").val()
+//				+"&COL_NM="+col_kor
+//				,'post' );
+//	}
+
+

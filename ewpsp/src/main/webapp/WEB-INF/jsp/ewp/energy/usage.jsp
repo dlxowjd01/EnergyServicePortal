@@ -291,7 +291,7 @@
 							<div class="tbl_top clear">
 								<h2 class="ntit fl">사용량 도표</h2>
 								<ul class="fr">
-									<li><a href="#;" class="save_btn">데이터저장</a></li>
+									<li><a href="#;" class="save_btn" onclick="excelDownload('사용량현황', event);">데이터저장</a></li>
 									<li><a href="#;" class="fold_btn">표접기</a></li>
 								</ul>
 							</div>

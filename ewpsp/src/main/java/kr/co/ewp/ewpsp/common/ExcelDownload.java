@@ -1,7 +1,10 @@
 package kr.co.ewp.ewpsp.common;
 
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -101,10 +104,19 @@ public class ExcelDownload {
 			String name = paramKeys.next();
 //			logger.debug("rownum : "+rowNum+", cell name : "+name+", "+excelMap.get(name)+", "+cellNum);
 			cell = row.createCell(cellNum);
-			if("REG_DTM".equals(name)) {
+			if("reg_date".equals(name) || "std_date".equals(name)) {
 				cell.setCellValue((Timestamp)excelMap.get(name));
+			} else if("std_timestamp".equals(name)) {
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String str = sdf.format( new Date( ((Timestamp)excelMap.get(name)).getTime() ) );
+				cell.setCellValue( str );
 			} else {
-				cell.setCellValue((String)excelMap.get(name));
+				if(excelMap.get(name) instanceof BigDecimal) {
+					cell.setCellValue( ((BigDecimal)excelMap.get(name)).toString() );
+				} else {
+					cell.setCellValue((String)excelMap.get(name));
+				}
+				
 			}
 			cellNum++;
 		}

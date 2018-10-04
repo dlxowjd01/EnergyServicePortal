@@ -3,6 +3,7 @@
 
 <mapper namespace="kepcoBill">
 	<select id="getKepcoBillList" parameterType="hashMap" resultType="hashMap">
+		/* 한전 요금 수익 조회 */
 		select 
 			bill_idx, site_id, bill_yearm, meter_read_day, plan_type, plan_name, contract_power, svc_sdate, svc_edate, 
 			base_rate, consume_rate, off_peak_rate, mid_peak_rate, max_peak_rate, pwr_factor_rate, tot_elec_rate, 
