@@ -263,22 +263,6 @@ $(function() {
 			
 		};
 	};
-	
-	
-	
-	// 리스트박스 왼쪽 목록의 데이터 오른쪽으로 이동
-	$("#moveRight").click(function(){
-		var item = $(".inside_site").find("ul").find("li").find(".on").parent();
-		$('.all_site').find("ul").append(item);
-	});
-	
-	// 리스트박스 오른쪽 목록의 데이터 왼쪽으로 이동
-	$("#moveLeft").click(function(){
-		var item = $(".all_site").find("ul").find("li").find(".on").parent();
-		$('.inside_site').find("ul").append(item);
-	});
-	
-	
 
 });
 
@@ -378,6 +362,8 @@ jQuery.fn.serializeObject = function() {
     return obj;
 };
 
+
+
 // 페이징처리
 // 모양 : < 1  2  3  4  5  6  7  [8]  9  10 >
 // selectedPageNum : 선택한 페이지번호
@@ -445,5 +431,62 @@ function makePageNums2(pagingMap, gubun) {
 		$paging.append( $('<a href="#;" class="next" />').append("NEXT") );
 	}
 }
+
+
+$(function () {
+	// pdf 저장
+	$("#pdfDownBtn").click(function() {
+		var c = document.getElementById("statement");
+		html2canvas(c, {
+			onrendered : function(canvas){
+				document.getElementById("imgResult").src = canvas.toDataURL();   // 이미지를 보여주고 싶으면 이런식으로 치환해버림 됨
+				
+				// 캔버스를 이미지로 변환
+			    var imgData = canvas.toDataURL('image/png', 1);
+//				    var imgData = canvas.toDataURL('image/jpeg', 1.0);
+			     
+			    var imgWidth = 210; // 이미지 가로 길이(mm) A4 기준
+			    var pageHeight = imgWidth * 1.414;  // 출력 페이지 세로 길이 계산 A4 기준
+			    var imgHeight = canvas.height * imgWidth / canvas.width;
+			    var heightLeft = imgHeight;
+			     
+			        var doc = new jsPDF('p', 'mm');
+			        var position = 0;
+			         
+			        // 첫 페이지 출력
+			        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+			        heightLeft -= pageHeight;
+			         
+			        // 한 페이지 이상일 경우 루프 돌면서 출력
+			        while (heightLeft >= 20) {
+			          position = heightLeft - imgHeight;
+			          doc.addPage();
+			          doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+			          heightLeft -= pageHeight;
+			        }
+			        
+			 
+			        // 파일 저장
+			        doc.save('명세서._'+new Date().getTime()+'.pdf');
+			}
+		});
+	});
+	
+	
+
+	// 리스트박스 왼쪽 목록의 데이터 오른쪽으로 이동
+	$("#moveRight").click(function(){
+		var item = $(".inside_site").find("ul").find("li").find(".on").parent();
+		$('.all_site').find("ul").append(item);
+	});
+	
+	// 리스트박스 오른쪽 목록의 데이터 왼쪽으로 이동
+	$("#moveLeft").click(function(){
+		var item = $(".all_site").find("ul").find("li").find(".on").parent();
+		$('.inside_site').find("ul").append(item);
+	});
+	
+});
+
 
 

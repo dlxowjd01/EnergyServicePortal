@@ -348,7 +348,7 @@
 		<div class="lbody mt30">
 
 			<div class="set_tbl">
-				<form id="groupForm" name="groupForm">
+				<form id="groupForm" name="groupForm" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="siteGrpIdx" id="siteGrpIdx" class="input" value="">
 				<input type="hidden" name="userIdx" id="userIdx" class="input" value="1">
 				<table>
@@ -370,7 +370,7 @@
 							<td>
 								<span class="control-fileupload">
 						            <label for="file">Choose a file :</label>
-						            <input type="file" id="file">
+						            <input type="file" id="siteGrpImg" name="siteGrpImg">
 						        </span>
 							</td>
 						</tr>

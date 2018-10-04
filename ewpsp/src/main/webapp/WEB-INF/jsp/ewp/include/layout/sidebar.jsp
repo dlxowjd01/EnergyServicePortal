@@ -63,7 +63,7 @@ $(document).ready(function() {
 					<div class="sub_layer">
 						<ul>
 							<li><a href="/kepcoMngSet">한전관리설정</a></li>
-							<li><a href="/cmpyGrpSiteMng">회사/그룹/사이트</a></li>
+							<li><a href="/cmpyGrpSiteMng">그룹/사이트</a></li>
 							<li><a href="/userMng">사용자관리</a></li>
 						</ul>
 					</div>
@@ -119,7 +119,7 @@ $(document).ready(function() {
 					<li class="gmn7"><a href="#;">설정</a>
 						<ul>
 							<li><a href="/kepcoMngSet">한전관리설정</a></li>
-							<li><a href="/cmpyGrpSiteMng">회사/그룹/사이트</a></li>
+							<li><a href="/cmpyGrpSiteMng">그룹/사이트</a></li>
 							<li><a href="/userMng">사용자관리</a></li>
 						</ul>
 					</li>

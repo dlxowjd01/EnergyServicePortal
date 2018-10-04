@@ -642,7 +642,7 @@
         <div class="ltit">      	
 			<a href="javascript:popupClose('dprint');">닫기</a>
         </div>
-		<div class="lbody mt30">
+		<div class="lbody mt30" id="statement">
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
 					<td colspan="2" style="border:solid 1px #111;text-align:center;padding:15px;font-size:20px;font-weight:600;">
@@ -818,9 +818,10 @@
 			</div>
 		</div>
 		<div class="lbutton mt40">
-			<a href="#;" class="lbtn_pdf"><span>PDF로 저장</span></a>
+			<a href="#;" class="lbtn_pdf" id="pdfDownBtn"><span>PDF로 저장</span></a>
 			<a href="#;" class="lbtn_print"><span>인쇄</span></a>
 		</div>
+		<img id="imgResult" src="" style="display: none;">
     </div>
     <!-- ###### Popup End ###### -->
 

@@ -10,11 +10,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
 <title>Insert title here</title>
-<script src="/static/js/jquery-1.9.1.min.js"></script>
-<script src="/static/js/pdf/html2canvas.js"></script>
+<script src="../js/jquery-1.9.1.min.js"></script>
+<script src="../js/pdf/html2canvas.js"></script>
 <!-- <script src="/js/pdf/canvas2image.js"></script> -->
-<script src="/static/js/pdf/jspdf.min.js"></script>
-<script src="/static/js/common_util.js"></script>
+<script src="../js/pdf/jspdf.min.js"></script>
+<!-- <script src="../js/common_util.js"></script> -->
 <script type="text/javascript">
 	$(function () {
 		$("#pdfDown1Btn").click(function() {

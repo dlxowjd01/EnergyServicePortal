@@ -148,6 +148,7 @@ $(document).ready(function() {
 		
 		$("#insertGrpFormBtn").click(function(){
 			insUpdFlag = 1;
+			$(".dgroup_add").find('h2').empty().append("신규 그룹 등록");
 			popupOpen('dgroup_add');
 		});
 		
@@ -226,6 +227,7 @@ $(document).ready(function() {
 			});
 			
 			$("#userIdx").val( "1" );
+//			$(".control-fileupload").empty().append('<label for="file">Choose a file :</label><input type="file" id="siteGrpImg" name="siteGrpImg">');
 		});
 		
 		$("#cancelSiteBtn").click(function(){
@@ -420,6 +422,7 @@ $(document).ready(function() {
 			alert("조회된 데이터가 없습니다.");
 //			location.href = "/siteMain";
 		} else {
+			$(".dgroup_add").find('h2').empty().append("그룹 수정");
 			$("#groupForm").find("#siteGrpIdx").val( groupDetail.site_grp_idx );
 			$("#groupForm").find("#userIdx").val( groupDetail.user_idx );
 			$("#groupForm").find("#siteGrpName").val( groupDetail.site_grp_name );

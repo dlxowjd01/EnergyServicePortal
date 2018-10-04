@@ -95,13 +95,13 @@
 										</div>
 										<div class="charge_dis fr">
 											<dl>
-												<dt>오늘 충전량 <span id="socTodayCrg">1,350.5<em>kWh</em></span></dt>
+												<dt>오늘 충전량 <span id="socTodayCrg">0<em>kWh</em></span></dt>
 												<dd>
 													<div class="today_charge"><span style="width:80%;">충전량</span></div>
 												</dd>
 											</dl>
 											<dl>
-												<dt>오늘 방전량 <span id="socTodayDiscrg">1,124.7<em>kWh</em></span> </dt>
+												<dt>오늘 방전량 <span id="socTodayDiscrg">0<em>kWh</em></span> </dt>
 												<dd>
 													<div class="today_discharge"><span style="width:70%;">방전량</span></div>
 												</dd>

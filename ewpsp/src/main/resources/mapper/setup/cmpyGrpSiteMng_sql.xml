@@ -47,7 +47,7 @@
 				page_tb.*
 			from (
 					select 
-						site_grp_idx, user_idx, site_grp_id, site_grp_name, del_yn, reg_uid, reg_date, mod_uid, mod_date 
+						site_grp_idx, user_idx, site_grp_id, site_grp_name, site_grp_img_path, site_grp_img_sname, site_grp_img_rname, del_yn, reg_uid, reg_date, mod_uid, mod_date 
 					from tb_site_group
 					where del_yn = 'N'
 					order by reg_date
@@ -299,7 +299,7 @@
 	<select id="getGroupDetail" parameterType="hashMap" resultType="hashMap">
 		/* 그룹 한건 조회 */
 		select 
-			site_grp_idx, user_idx, site_grp_id, site_grp_name, del_yn, reg_uid, reg_date, mod_uid, mod_date 
+			site_grp_idx, user_idx, site_grp_id, site_grp_name, site_grp_img_path, site_grp_img_sname, site_grp_img_rname, del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_site_group
 		where del_yn = 'N'
 		and site_grp_idx = #{siteGrpIdx }
@@ -371,6 +371,15 @@
 			user_idx,   /* 사용자식별자 */
 			site_grp_id,   /* 사이트그룹ID */
 			site_grp_name,   /* 사이트그룹명 */
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpImgPath)"> 
+			site_grp_img_path,   /* 사이트그룹 이미지경로 */
+			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpImgSname)">
+			site_grp_img_sname,   /* 사이트그룹 저장이미지명 */
+			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpImgRname)"> 
+			site_grp_img_rname,   /* 사이트그룹 실제이미지명 */
+			</if>
 			del_yn, 
 			reg_uid, 
 			reg_date
@@ -380,6 +389,15 @@
 			#{userIdx }, 
 			#{siteGrpId }, 
 			#{siteGrpName }, 
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpImgPath)"> 
+		    #{siteGrpImgPath },   /* 사이트그룹 이미지경로 */
+		    </if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpImgSname)"> 
+		    #{siteGrpImgSname },   /* 사이트그룹 저장이미지명 */
+		    </if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpImgRname)"> 
+		    #{siteGrpImgRname },   /* 사이트그룹 실제이미지명 */
+		    </if>
 			'N', 
 			#{regUid }, 
 			now()
@@ -444,6 +462,15 @@
 		    </if>
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpName)"> 
 		    site_grp_name = #{siteGrpName },   /* 사이트그룹명 */
+		    </if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpImgPath)"> 
+		    site_grp_img_path = #{siteGrpImgPath },   /* 사이트그룹 이미지경로 */
+		    </if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpImgSname)"> 
+		    site_grp_img_sname = #{siteGrpImgSname },   /* 사이트그룹 저장이미지명 */
+		    </if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpImgRname)"> 
+		    site_grp_img_rname = #{siteGrpImgRname },   /* 사이트그룹 실제이미지명 */
 		    </if>
 		    mod_uid       = #{modUid }, 
 		    mod_date      = now()
