@@ -247,17 +247,18 @@ public class CommonEnergyFn {
 						incStartDt = String.valueOf(  cal.getTime().getTime()  );
 						
 					} else {
+						Map<String, Object> calculMap = new HashMap<String, Object>();
 						nullCnt++; // 더하지 않고 null count를 올린다..
 						if(chkCnt == 1) {
 							stdTimestamp = new Timestamp( Long.parseLong(incStartDt) );
 						} else if(chkCnt == calculCnt) {
-							map.put(timestampStr, stdTimestamp);
-							if(nullCnt == chkCnt) map.put(calculValStr, null); // 더한게 모두 null일 경우 
-							else map.put(calculValStr, calculNum);
+							calculMap.put(timestampStr, stdTimestamp);
+							if(nullCnt == chkCnt) calculMap.put(calculValStr, null); // 더한게 모두 null일 경우 
+							else calculMap.put(calculValStr, calculNum);
 							chkCnt = 0;
 							nullCnt = 0;
 							calculNum = new BigDecimal(0);
-							frsList.add(map);
+							frsList.add(calculMap);
 						}
 						
 						Calendar cal = Calendar.getInstance();
