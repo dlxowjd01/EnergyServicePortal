@@ -239,7 +239,7 @@
 							<div class="tbl_top clear">
 								<h2 class="ntit fl">DR 실적 도표</h2>
 								<ul class="fr">
-									<li><a href="#;" class="save_btn">데이터저장</a></li>
+									<li><a href="#;" class="save_btn" onclick="excelDownload('DR실적', event, 'drResult');">데이터저장</a></li>
 								</ul>
 							</div>
 							<div class="tbl_wrap">
@@ -283,115 +283,6 @@
 											</tbody>
 										</table>	
 									</div>							
-									<!-- 데이터 추출용 -->
-									<div class="chart_table2" style="display:none;">			
-										<table id="datatable">
-										    <thead>
-										        <tr>
-										            <th>2018-08</th>
-										            <th>실제 사용량</th>
-										        </tr>
-										    </thead>
-										    <tbody>
-										        <tr>
-										            <th>1</th>
-										            <td>200</td>
-										        </tr>
-										        <tr>
-										            <th>2</th>
-										            <td>400</td>
-										        </tr>
-										        <tr>
-										            <th>3</th>
-										            <td>300</td>
-										        </tr>
-										        <tr>
-										            <th>4</th>
-										            <td>650</td>
-										        </tr>
-										        <tr>
-										            <th>5</th>
-										            <td>480</td>
-										        </tr>
-										        <tr>
-										            <th>6</th>
-										            <td>1000</td>
-										        </tr>
-										        <tr>
-										            <th>7</th>
-										            <td>500</td>
-										        </tr>
-										        <tr>
-										            <th>8</th>
-										            <td>700</td>
-										        </tr>
-										        <tr>
-										            <th>9</th>
-										            <td>620</td>
-										        </tr>
-										        <tr>
-										            <th>10</th>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>11</th>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>12</th>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>13</th>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>14</th>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>15</th>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>16</th>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>17</th>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>18</th>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>19</th>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>20</th>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>21</th>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>22</th>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>23</th>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>24</th>
-										            <td></td>
-										        </tr>
-										    </tbody>
-										</table>			
-									</div>
 								</div>
 							</div>
 						</div>

@@ -251,7 +251,7 @@
 							<div class="tbl_top clear">
 								<h2 class="ntit fl">피크 전력 도표</h2>
 								<ul class="fr">
-									<li><a href="#;" class="save_btn">데이터저장</a></li>
+									<li><a href="#;" class="save_btn" onclick="excelDownload('피크전력', event);">데이터저장</a></li>
 									<li><a href="#;" class="fold_btn">표접기</a></li>
 								</ul>
 							</div>
@@ -426,111 +426,6 @@
 											</tbody>
 										</table>	
 									</div>									
-									<!-- 데이터 추출용 -->
-									<div class="chart_table2" style="display:none;">			
-										<table id="datatable">
-										    <thead>
-										        <tr>
-										            <th>2018-08</th>
-										            <th>피크 전력</th>
-										            <th>한진 계약 전력</th>
-										            <th>요금 적용 전력</th>
-										        </tr>
-										    </thead>
-										    <tbody>
-										        <tr>
-										            <th>1</th>
-										            <td>0</td>
-										            <td>2000</td>
-										            <td>500</td>
-										        </tr>
-										        <tr>
-										            <th>2</th>
-										            <td>150</td>
-										            <td>2000</td>
-										            <td>500</td>
-										        </tr>
-										        <tr>
-										            <th>3</th>
-										            <td>10</td>
-										            <td>2000</td>
-										            <td>500</td>
-										        </tr>
-										        <tr>
-										            <th>4</th>
-										            <td>210</td>
-										            <td>2000</td>
-										            <td>500</td>
-										        </tr>
-										        <tr>
-										            <th>5</th>
-										            <td>125</td>
-										            <td>2000</td>
-										            <td>500</td>
-										        </tr>
-										        <tr>
-										            <th>6</th>
-										            <td>50</td>
-										            <td>2000</td>
-										            <td>500</td>
-										        </tr>
-										        <tr>
-										            <th>7</th>
-										            <td>30</td>
-										            <td>2000</td>
-										            <td>500</td>
-										        </tr>
-										        <tr>
-										            <th>8</th>
-										            <td>50</td>
-										            <td>2000</td>
-										            <td>500</td>
-										        </tr>
-										        <tr>
-										            <th>9</th>
-										            <td>125</td>
-										            <td>2000</td>
-										            <td>500</td>
-										        </tr>
-										        <tr>
-										            <th>10</th>
-										            <td></td>
-										            <td>2000</td>
-										            <td>500</td>
-										        </tr>
-										        <tr>
-										            <th>11</th>
-										            <td></td>
-										            <td>2000</td>
-										            <td>500</td>
-										        </tr>
-										        <tr>
-										            <th>12</th>
-										            <td></td>
-										            <td>2000</td>
-										            <td>500</td>
-										        </tr>
-										        <tr>
-										            <th>13</th>
-										            <td></td>
-										            <td>2000</td>
-										            <td>500</td>
-										        </tr>
-										        <tr>
-										            <th>14</th>
-										            <td></td>
-										            <td>2000</td>
-										            <td>500</td>
-										        </tr>
-										        <tr>
-										            <th>15</th>
-										            <td></td>
-										            <td>2000</td>
-										            <td>500</td>
-										        </tr>
-										    </tbody>
-										</table>			
-									</div>
 								</div>
 							</div>
 						</div>

@@ -286,7 +286,7 @@
 							<div class="tbl_top clear">
 								<h2 class="ntit fl">PV 발전량 도표</h2>
 								<ul class="fr">
-									<li><a href="#;" class="save_btn">데이터저장</a></li>
+									<li><a href="#;" class="save_btn" onclick="excelDownload('PV발전량', event);">데이터저장</a></li>
 									<li><a href="#;" class="fold_btn">표접기</a></li>
 								</ul>
 							</div>
@@ -477,140 +477,6 @@
 											</tbody>
 										</table>	
 									</div>									
-									<!-- 데이터 추출용 -->
-									<div class="chart_table2" style="display:none;">			
-										<table id="datatable">
-										    <thead>
-										        <tr>
-										            <th>2018-08</th>
-										            <th>실제 발전량</th>
-										            <th>예측 발전량</th>
-										        </tr>
-										    </thead>
-										    <tbody>
-										        <tr>
-										            <th>1</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>2</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>3</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>4</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>5</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>6</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>7</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>8</th>
-										            <td>50</td>
-										            <td>100</td>
-										        </tr>
-										        <tr>
-										            <th>9</th>
-										            <td>100</td>
-										            <td>200</td>
-										        </tr>
-										        <tr>
-										            <th>10</th>
-										            <td>200</td>
-										            <td>400</td>
-										        </tr>
-										        <tr>
-										            <th>11</th>
-										            <td>400</td>
-										            <td>1000</td>
-										        </tr>
-										        <tr>
-										            <th>12</th>
-										            <td>500</td>
-										            <td>900</td>
-										        </tr>
-										        <tr>
-										            <th>13</th>
-										            <td>400</td>
-										            <td>800</td>
-										        </tr>
-										        <tr>
-										            <th>14</th>
-										            <td>300</td>
-										            <td>700</td>
-										        </tr>
-										        <tr>
-										            <th>15</th>
-										            <td>200</td>
-										            <td>500</td>
-										        </tr>
-										        <tr>
-										            <th>16</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>17</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>18</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>19</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>20</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>21</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>22</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>23</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>24</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										    </tbody>
-										</table>			
-									</div>
 								</div>
 							</div>
 						</div>

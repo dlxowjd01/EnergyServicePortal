@@ -266,14 +266,6 @@ $(function() {
 	
 	
 	
-
-	function chkHasClass(e) {
-		if($(e).hasClass('on')) {
-			alert("야");
-		} else {
-			alert("호");
-		}
-	}
 	// 리스트박스 왼쪽 목록의 데이터 오른쪽으로 이동
 	$("#moveRight").click(function(){
 		var item = $(".inside_site").find("ul").find("li").find(".on").parent();
@@ -289,6 +281,79 @@ $(function() {
 	
 
 });
+
+
+
+
+var tableToExcel = (function () {
+    var uri = 'data:application/vnd.ms-excel;base64,'
+        , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body>{table}</body></html>'
+        , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+        , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+    return function (table, name, e) {
+        if (!table.nodeType) table = document.getElementById(table)
+        var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+        var blob = new Blob([format(template, ctx)]);
+        var blobURL = window.URL.createObjectURL(blob);
+
+        if (ifIE()) {
+            csvData = table.innerHTML;
+            if (window.navigator.msSaveBlob) {
+                var blob = new Blob([format(template, ctx)], {
+                    type: "text/html"
+                });
+                var downTmsp = (new Date()).format("yyyyMMddHHmmss");
+                navigator.msSaveBlob(blob, '' + name + '_' + downTmsp + '.xls');
+            }
+        }
+        else {
+        	var a = document.createElement('a');
+        	a.href = uri + base64(format(template, ctx))
+        	var downTmsp = (new Date()).format("yyyyMMddHHmmss");
+        	a.download = name+'_'+downTmsp+'.xls';
+        	a.click();
+        	e.preventDefault();
+        }
+    }
+})()
+
+function ifIE() {
+    var isIE11 = navigator.userAgent.indexOf(".NET CLR") > -1;
+    var isIE11orLess = isIE11 || navigator.appVersion.indexOf("MSIE") != -1;
+    return isIE11orLess;
+}
+
+function excelDownload(excelName, e, gbn) {
+	$val = $("#pc_use_dataDiv").find('tbody');
+	var cnt = 0;
+	if(gbn == "drResult") {
+		$td = $val.find('tr:eq(0)').find('td');
+		var tdCnt = $td.length;
+		console.log(tdCnt+"??");
+		cnt = ((tdCnt-1) == 1) ? 0 : 1;
+	} else {
+		cnt = $val.length;
+	}
+	console.log(cnt+"!!!");
+	
+	if(cnt < 1) {
+		alert("다운받을 데이터가 없습니다.");
+	} else {
+		if(confirm("엑셀로 저장하시겠습니까?")) {
+			tableToExcel('pc_use_dataDiv', excelName, e);
+		}
+	}
+}
+
+function downloadExcelPopup(targetId) {
+	var excelHtml = $("#pc_use_dataDiv").html();
+	window.open("/htmlToExcel?excelHtml="+excelHtml, "", "height=100,width=100,top=100,left=200");
+//	window.open("data:application/vnd.ms-excel;filename='test.xls',"+encodeURIComponent(excelHtml), "", "height=100,width=100,top=100,left=200");
+}
+
+
+
+
 
 //////////////////////////////////////////////기타//////////////////////////////////////////////
 
