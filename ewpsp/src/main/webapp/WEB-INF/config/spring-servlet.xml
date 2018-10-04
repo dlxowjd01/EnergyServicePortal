@@ -40,9 +40,9 @@
 	    
 	    <mvc:interceptors>
 	    	<mvc:interceptor>
-	    		<mvc:mapping path="/main"/>
-	    		<mvc:mapping path="/peak"/>
-	    		<!-- <mvc:exclude-mapping path="/**"/> interceptor 안거침 -->
+	    		<mvc:mapping path="/*"/>
+	    		<mvc:exclude-mapping path="/login*"/>
+	    		<mvc:exclude-mapping path="/logout"/>
 	    		<bean class="kr.co.ewp.ewpsp.common.SessionCheckInterceptor" />
 	    	</mvc:interceptor>
 	    	<mvc:interceptor>

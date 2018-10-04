@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script>
 $(document).ready(function() {
 	var linkGbn = "${param.linkGbn }";
@@ -56,18 +57,24 @@ $(document).ready(function() {
 				</li>
 			</ul>
 			<ol>
+				<c:if test="${userInfo.auth_type ne '4'}">
+				<c:if test="${userInfo.auth_type eq '1' or userInfo.auth_type eq '2'}">
 				<!-- <li class="smn6"><a href="/main">군관리<br/>메인</a></li> -->
 				<li class="smn6"><a href="/main">군관리<br/>메인</a></li>
+				</c:if>
 				<li class="smn7">
 					<a href="#;">설정</a>
 					<div class="sub_layer">
 						<ul>
 							<li><a href="/kepcoMngSet">한전관리설정</a></li>
+							<c:if test="${userInfo.auth_type ne '3'}">
 							<li><a href="/cmpyGrpSiteMng">그룹/사이트</a></li>
+							</c:if>
 							<li><a href="/userMng">사용자관리</a></li>
 						</ul>
 					</div>
 				</li>
+				</c:if>
 				<li class="smn8"><a href="/logout" class="LoginBtn">로그아웃</a></li>
 			</ol>
 		</div>
@@ -115,14 +122,20 @@ $(document).ready(function() {
 					</li>
 				</ul>
 				<ol>
+					<c:if test="${userInfo.auth_type ne '4'}">
+					<c:if test="${userInfo.auth_type eq '1' or userInfo.auth_type eq '2'}">
 					<li class="gmn6"><a href="/main">군관리 메인</a></li>
+					</c:if>
 					<li class="gmn7"><a href="#;">설정</a>
 						<ul>
 							<li><a href="/kepcoMngSet">한전관리설정</a></li>
+							<c:if test="${userInfo.auth_type ne '3'}">
 							<li><a href="/cmpyGrpSiteMng">그룹/사이트</a></li>
+							</c:if>
 							<li><a href="/userMng">사용자관리</a></li>
 						</ul>
 					</li>
+					</c:if>
 					<li class="gmn8"><a href="/logout">로그아웃</a></li>
 				</ol>
 			</div>

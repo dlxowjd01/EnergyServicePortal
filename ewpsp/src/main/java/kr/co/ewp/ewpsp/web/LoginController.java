@@ -56,9 +56,18 @@ public class LoginController {
 		Map result = loginService.getUserDetail(param);
 		logger.debug("result : {}", result);
 
-		if (result != null && CommonUtils.isEmpty(result.get("userIdx"))) {
+		if (result != null && CommonUtils.isNotEmpty(result.get("user_idx"))) {
 			session.setAttribute(UserUtil.USER_SESSION_ID, result);
-			return "redirect:/siteMain";
+
+			String authType = (String)result.get("auth_type");
+
+			if (authType == null) {
+				return "ewp/login/login";
+			} else if (authType.equals("1") || authType.equals("2")) {
+				return "redirect:/main";
+			} else {
+				return "redirect:/siteMain";
+			}
 		} else {
 			return "ewp/login/login";
 		}
