@@ -11,7 +11,6 @@ function getUsageRealList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("실제 사용량 조회");
 			callback_getUsageRealList(result);
    		}
 	});
@@ -25,7 +24,6 @@ function getUsageFutureList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("예측 사용량 조회");
 			callback_getUsageFutureList(result);
 		}
 	});
@@ -39,7 +37,6 @@ function getPeakRealList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("피크 전력 조회");
 			callback_getPeakRealList(result);
 		}
 	});
@@ -53,7 +50,6 @@ function getContractPowerList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("한전계약전력 조회");
 			callback_getContractPowerList(result);
 		}
 	});
@@ -67,7 +63,6 @@ function getChargePowerList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("요금적용전력 조회");
 			callback_getChargePowerList(result);
 		}
 	});
@@ -81,8 +76,9 @@ function getESSChargeRealList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("ess 충방전량 조회");
 			callback_getESSChargeRealList(result);
+		}, error:function(request,status,error){
+			error_getESSChargeRealList(request, status, error);
 		}
 	});
 }
@@ -95,8 +91,9 @@ function getESSChargeFutureList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("ess 예측 충방전량 조회");
 			callback_getESSChargeFutureList(result);
+		}, error:function(request,status,error){
+			error_getESSChargeFutureList(request, status, error);
 		}
 	});
 }
@@ -109,7 +106,6 @@ function getPVGenRealList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("PV 실제 발전량 조회");
 			callback_getPVGenRealList(result);
 		}
 	});
@@ -123,7 +119,6 @@ function getPVGenFutureList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("PV 예측 발전량 조회");
 			callback_getPVGenFutureList(result);
 		}
 	});
@@ -137,7 +132,6 @@ function getDRResultList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("DR 실적 조회");
 			callback_getDRResultList(result);
 		}
 	});
@@ -151,7 +145,6 @@ function getESSUsageList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("ess 사용량 조회");
 			callback_getESSUsageList(result);
 		}
 	});
@@ -165,7 +158,6 @@ function getPVUsageList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("pv 사용량 조회");
 			callback_getPVUsageList(result);
 		}
 	});
@@ -179,7 +171,6 @@ function getPVUsageList(formData) {
 //		async : false, // 동기로 처리해줌
 //		data : formData,
 //		success: function(result) {
-//			console.log("pv 사용량 조회");
 //			callback_getPVUsageList(result);
 //		}
 //	});
@@ -193,7 +184,6 @@ function getDERUsageList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("사용량 구성 조회");
 			callback_getDERUsageList(result);
 		}
 	});
@@ -213,7 +203,6 @@ function getDeviceIOEList(selPageNum) {
 			selPageNum : selPageNum
 		},
 		success: function(result) {
-			console.log("장치목록 조회(IOE)");
 			callback_getDeviceIOEList(result);
 		}
 	});
@@ -229,7 +218,6 @@ function getDeviceIOEDetail(deviceIoeIdx) {
 			deviceIoeIdx : deviceIoeIdx
 		},
 		success: function(result) {
-			console.log("장치 상세 조회(IOE)");
 			callback_getDeviceIOEDetail(result);
 		}
 	});
@@ -245,7 +233,6 @@ function getDevicePCSList(selPageNum) {
 			selPageNum : selPageNum
 		},
 		success: function(result) {
-			console.log("장치목록 조회(PCS)");
 			callback_getDevicePCSList(result);
 		}
 	});
@@ -261,7 +248,6 @@ function getDevicePCSDetail(devicePcsIdx) {
 			devicePcsIdx : devicePcsIdx
 		},
 		success: function(result) {
-			console.log("장치 상세 조회(PCS)");
 			callback_getDevicePCSDetail(result);
 		}
 	});
@@ -277,7 +263,6 @@ function getDeviceBMSList(selPageNum) {
 			selPageNum : selPageNum
 		},
 		success: function(result) {
-			console.log("장치목록 조회(BMS)");
 			callback_getDeviceBMSList(result);
 		}
 	});
@@ -293,7 +278,6 @@ function getDeviceBMSDetail(deviceBmsIdx) {
 			deviceBmsIdx : deviceBmsIdx
 		},
 		success: function(result) {
-			console.log("장치 상세 조회(BMS)");
 			callback_getDeviceBMSDetail(result);
 		}
 	});
@@ -309,7 +293,6 @@ function getDevicePVList(selPageNum) {
 			selPageNum : selPageNum
 		},
 		success: function(result) {
-			console.log("장치목록 조회(PV)");
 			callback_getDevicePVList(result);
 		}
 	});
@@ -325,7 +308,6 @@ function getDevicePVDetail(devicePvIdx) {
 			devicePvIdx : devicePvIdx
 		},
 		success: function(result) {
-			console.log("장치 상세 조회(PV)");
 			callback_getDevicePVDetail(result);
 		}
 	});
@@ -339,7 +321,6 @@ function getDeviceList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("장치목록 조회");
 			callback_getDeviceList(result);
 		}
 	});
@@ -355,7 +336,6 @@ function getDeviceGroupList(siteId) {
 			siteId : siteId
 		},
 		success: function(result) {
-			console.log("장치목록 조회");
 			callback_getDeviceGroupList(result);
 		}
 	});
@@ -371,7 +351,6 @@ function getDvInDeviceGroupList(deviceGrpIdx) {
 			deviceGrpIdx : deviceGrpIdx
 		},
 		success: function(result) {
-			console.log("장치목록 조회");
 			callback_getDvInDeviceGroupList(result);
 		}
 	});
@@ -388,7 +367,6 @@ function getDvInDeviceGroupPopupList(siteId, deviceGrpIdx) {
 			deviceGrpIdx : deviceGrpIdx
 		},
 		success: function(result) {
-			console.log("장치그룹내 장치목록(팝업) 조회");
 			callback_getDvInDeviceGroupPopupList(result);
 		}
 	});
@@ -402,7 +380,6 @@ function insertDevice(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("장지 등록");
 			callback_insertDevice(result);
 		},
 		error:function(request,status,error){
@@ -423,7 +400,6 @@ function getAlarmList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("알람 조회");
 			callback_getAlarmList(result);
 		}
 	});
@@ -441,7 +417,6 @@ function getKepcoBillList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("한전 요금 조회");
 			callback_getKepcoBillList(result);
 		}
 	});
@@ -455,7 +430,6 @@ function getESSRevenueList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("ESS 수익 조회");
 			callback_getESSRevenueList(result);
 		}
 	});
@@ -469,7 +443,6 @@ function getDRRevenueList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("DR 수익 조회");
 			callback_getDRRevenueList(result);
 		}
 	});
@@ -483,7 +456,6 @@ function getPVRevenueList(formData) {
 		async : false, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
-			console.log("PV 수익 조회");
 			callback_getPVRevenueList(result);
 		}
 	});

@@ -245,17 +245,29 @@
 		
 	}
 	
+	function error_getESSChargeRealList(request, status, error) {
+		$(".charge").find(".no-data").css("display", "");
+		$(".charge").find(".inchart").css("display", "none");
+		$(".charge").find(".chart_footer").css("display", "none");
+	}
+	
+	function error_getESSChargeFutureList(request, status, error) {
+		$(".charge").find(".no-data").css("display", "");
+		$(".charge").find(".inchart").css("display", "none");
+		$(".charge").find(".chart_footer").css("display", "none");
+	}
+	
 	// 차트 그리기
 	function drawData_chart_charge() {
-		if( pastChgList.length < 1 && pastDischgList.length <1 && fetureChgList.length < 1 && fetureDischgList.length < 1 ) {
-			$(".charge").find(".no-data").css("display", "");
-			$(".charge").find(".inchart").css("display", "none");
-			$(".charge").find(".chart_footer").css("display", "none");
-		} else {
-			$(".charge").find(".no-data").css("display", "none");
-			$(".charge").find(".inchart").css("display", "");
-			$(".charge").find(".chart_footer").css("display", "");
-		}
+//		if( pastChgList.length < 1 && pastDischgList.length <1 && fetureChgList.length < 1 && fetureDischgList.length < 1 ) {
+//			$(".charge").find(".no-data").css("display", "");
+//			$(".charge").find(".inchart").css("display", "none");
+//			$(".charge").find(".chart_footer").css("display", "none");
+//		} else {
+//			$(".charge").find(".no-data").css("display", "none");
+//			$(".charge").find(".inchart").css("display", "");
+//			$(".charge").find(".chart_footer").css("display", "");
+//		}
 		
 		var seriesLength = chargeChart.series.length;
 		for(var i = seriesLength - 1; i > -1; i--) {
@@ -322,8 +334,25 @@
 				$("#yearDiscrg").empty().append( numberComma(yearSum.dischg_val_sum)+" kWh" );
 				$("#yearRevenue").empty().append( numberComma(yearSum.ess_revenue_sum) );
 				
-				$("#socTodayCrg").empty().append( numberComma(todaySum.chg_val_sum) ).append('<em>kWh</em>');
-				$("#socTodayDiscrg").empty().append( numberComma(todaySum.dischg_val_sum) ).append('<em>kWh</em>');
+				var chgValSum = Number(todaySum.chg_val_sum);
+				var dischgValSum = Number(todaySum.dischg_val_sum);
+				if(totalFetureChg == 0 && chgValSum == 0) {
+					chgVal = 0;
+				} else if(totalFetureChg == 0 && chgValSum > 0) {
+					chgVal = 100;
+				} else {
+					chgVal = ((numOfTotal_per(totalFetureChg, chgValSum)) >= 100) ? 100 : numOfTotal_per(totalFetureChg, chgValSum);
+				}
+				if(totalFetureDischg == 0 && dischgValSum == 0) {
+					dischgVal = 0;
+				} else if(totalFetureDischg == 0 && dischgValSum > 0) {
+					dischgVal = 100;
+				} else {
+					dischgVal = ((numOfTotal_per(totalFetureDischg, dischgValSum)) >= 100) ? 100 : numOfTotal_per(totalFetureDischg, dischgValSum);
+				}
+				
+				$("#socTodayCrg").empty().append( numberComma(chgVal) ).append('<em>kWh</em>');
+				$("#socTodayDiscrg").empty().append( numberComma(dischgVal) ).append('<em>kWh</em>');
 				
 			}
 		});

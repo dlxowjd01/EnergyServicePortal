@@ -59,7 +59,7 @@
 									<div class="alarm_notice">
 										<h2>최근 알람</h2>
 										<ul>
-											<li>
+											<!-- <li>
 												<a href="#;">랙 전압 불균형이 감지되었습니다. 신속한 처리요망. 메시지가 길면 절삭처리 됩니다. 메시지가 길면 절삭처리 됩니다.</a>
 												<span>2018-08-12 11:41:26</span>
 											</li>
@@ -70,7 +70,7 @@
 											<li>
 												<a href="#;">랙 전압 불균형이 감지되었습니다. 신속한 처리요망.</a>
 												<span>2018-08-12 11:41:26</span>
-											</li>
+											</li> -->
 										</ul>
 									</div>
 								</div>
@@ -97,13 +97,13 @@
 											<dl>
 												<dt>오늘 충전량 <span id="socTodayCrg">0<em>kWh</em></span></dt>
 												<dd>
-													<div class="today_charge"><span style="width:80%;">충전량</span></div>
+													<div class="today_charge"><span style="width:0%;">충전량</span></div>
 												</dd>
 											</dl>
 											<dl>
 												<dt>오늘 방전량 <span id="socTodayDiscrg">0<em>kWh</em></span> </dt>
 												<dd>
-													<div class="today_discharge"><span style="width:70%;">방전량</span></div>
+													<div class="today_discharge"><span style="width:0%;">방전량</span></div>
 												</dd>
 											</dl>
 										</div>
@@ -307,7 +307,7 @@
 // 										});
 										</script>
 										<!-- 데이터 추출용 -->
-										<div class="chart_table2" style="display:none;">			
+										<!-- <div class="chart_table2" style="display:none;">			
 											<table id="der_datatable">
 											    <thead>
 											        <tr>
@@ -464,11 +464,11 @@
 											        </tr>
 											    </tbody>
 											</table>			
-										</div>										
+										</div>										 -->
 									</div>
 									<div class="chart_footer">
 										<ul class="clear">
-											<li>현재 사용량 <span id="nowUsage">900kWh</span></li>
+											<li>현재 사용량 <span id="nowUsage">0kWh</span></li>
 											<li>한전 <span id="kepcoPer">0%</span></li>
 											<li>ESS <span id="essPer">0%</span></li>
 											<li>PV <span id="pvPer">0%</span></li>
@@ -673,7 +673,7 @@
 // 										});
 										</script>
 										<!-- 데이터 추출용 -->
-										<div class="chart_table2" style="display:none;">			
+										<!-- <div class="chart_table2" style="display:none;">			
 											<table id="peak_datatable">
 											    <thead>
 											        <tr>
@@ -776,7 +776,7 @@
 											        </tr>
 											    </tbody>
 											</table>			
-										</div>									
+										</div>									 -->
 									</div>									
 								</div>
 							</div>
@@ -789,7 +789,7 @@
 										<div class="time fr" id="updtTimeDevice">2018-08-12 11:41:26</div>
 									</div>
 									<ul class="device clear" id="deviceList">
-										<li class="pcs">
+										<!-- <li class="pcs">
 											<a href="#;"></a>
 											<span class="dname">PCS_1</span>
 											<span class="dmemo">텍스트 정보 텍스트 정보 텍스트 정보 텍스트 정보</span>
@@ -828,7 +828,7 @@
 											<a href="#;"></a>
 											<span class="dname">PV_1</span>
 											<span class="dmemo">텍스트 정보</span>
-										</li>
+										</li> -->
 									</ul>
 									<div class="paging clear">
 										<a href="#;" class="prev">PREV</a>
@@ -1035,7 +1035,7 @@
 // 										});
 										</script>
 										<!-- 데이터 추출용 -->
-										<div class="chart_table2" style="display:none;">			
+										<!-- <div class="chart_table2" style="display:none;">			
 											<table id="income_datatable">
 											    <thead>
 											        <tr>
@@ -1192,11 +1192,11 @@
 											        </tr>
 											    </tbody>
 											</table>			
-										</div>										
+										</div>										 -->
 									</div>
 									<div class="chart_footer">
 										<ul class="clear">
-											<li>전체수익 <span id="totalRv">120,000 won</span></li>
+											<li>전체수익 <span id="totalRv">0 won</span></li>
 										</ul>
 									</div>									
 								</div>
@@ -1405,7 +1405,7 @@
 // 										});
 										</script>
 										<!-- 데이터 추출용 -->
-										<div class="chart_table2" style="display:none;">			
+										<!-- <div class="chart_table2" style="display:none;">			
 											<table id="charge_datatable">
 											    <thead>
 											        <tr>
@@ -1587,7 +1587,7 @@
 											        </tr>
 											    </tbody>
 											</table>			
-										</div>						
+										</div>						 -->
 									</div>
 									<div class="chart_footer">
 										<div class="chart_table">
@@ -1603,21 +1603,21 @@
 												<tbody>
 													<tr>
 														<th>TODAY</th>
-														<td id="todayCrg">1,350.5 kWh</td>
-														<td id="todayDiscrg">850.5 kWh</td>
-														<td id="todayRevenue">2.1</td>
+														<td id="todayCrg">0 kWh</td>
+														<td id="todayDiscrg">0 kWh</td>
+														<td id="todayRevenue">0</td>
 													</tr>
 													<tr>
 														<th>THIS MONTH</th>
-														<td id="monthCrg">8.9 MWh</td>
-														<td id="monthDiscrg">12.1 MWh</td>
-														<td id="monthRevenue">64.9</td>
+														<td id="monthCrg">0 MWh</td>
+														<td id="monthDiscrg">0 MWh</td>
+														<td id="monthRevenue">0</td>
 													</tr>
 													<tr>
 														<th>THIS YEAR</th>
-														<td id="yearCrg">58.9 MWh</td>
-														<td id="yearDiscrg">192.1 MWh</td>
-														<td id="yearRevenue">464.9</td>
+														<td id="yearCrg">0 MWh</td>
+														<td id="yearDiscrg">0 MWh</td>
+														<td id="yearRevenue">0</td>
 													</tr>
 												</tbody>
 											</table>
