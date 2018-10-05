@@ -98,7 +98,7 @@ public class SiteMainController {
 		int pageRowCnt = 8;
 		int startNum = pageRowCnt*(selPageNum-1);
 		
-		param.put("siteId", "");
+//		param.put("siteId", "");
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
 		
