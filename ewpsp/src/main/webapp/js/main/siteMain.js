@@ -5,6 +5,7 @@
 	var formData = null;
 	
 	$(document).ready(function() {
+		$("#selPageNum").val(1);
 		formData = getSiteMainSchCollection();
 		
 		fn_cycle_10sec();
@@ -92,7 +93,7 @@
 		
 		getDERUsageList(formData); // 사용량구성 조회
 		
-		getDeviceList(formData); // 장치현황 조회
+		getDeviceList(1); // 장치현황 조회
 		
 		getRevenueList(formData); // 수익현황 조회
 		
@@ -109,7 +110,7 @@
 //		var endDay = '20180831235959';//new Date(2018, 7, 23, 23, 59, 59);
 		$("#selTermFrom").val(firstDay);
 		$("#selTermTo").val(endDay);
-//		
+		
 		var formData = $("#schForm").serializeObject();
 		
 		return formData;
@@ -804,9 +805,7 @@
 	function callback_getDeviceList(result) {
 		var deviceList = result.deviceList;
 		
-		if(deviceList == null || deviceList.length < 1) {
-			
-		} else {
+		if(deviceList != null && deviceList.length > 0) {
 			$div = $("#deviceList");
 			$div.empty();
 			for(var i=0; i<8; i++) {
@@ -814,18 +813,27 @@
 					$div.append( $('<li />') );
 				} else {
 					var strHtml = "";
-					if(deviceList[i].device_type == 4) strHtml = '<li class="ioe" />'; 
-					else if(deviceList[i].device_type == 1) strHtml = '<li class="pcs" />'; 
-					else if(deviceList[i].device_type == 2) strHtml = '<li class="bms" />'; 
-					else if(deviceList[i].device_type == 3) strHtml = '<li class="pv" />';
-					else strHtml = '<li class="ioe" />';
+					var memo = "";
+					if(deviceList[i].device_type == 4) {
+						strHtml = '<li class="ioe" />'; 
+						memo = (deviceList[i].device_stat == 1) ? "connect" : "disconnect";
+					} else if(deviceList[i].device_type == 1) {
+						strHtml = '<li class="pcs" />'; 
+						memo = Number(deviceList[i].ac_power)+Number(deviceList[i].dc_power);
+					} else if(deviceList[i].device_type == 2) {
+						strHtml = '<li class="bms" />';
+						memo = deviceList[i].sys_soc+" %";
+					} else if(deviceList[i].device_type == 3) {
+						strHtml = '<li class="pv" />';
+						memo = deviceList[i].tot_power;
+					} else {
+						strHtml = '<li class="ioe" />';
+						memo = (deviceList[i].device_stat == 1) ? "connect" : "disconnect";
+					}
 					$div.append(
-							$(strHtml).append(
-									$('<a href="#">')
-							).append(
-									$('<span class="dname" />').append( deviceList[i].device_name )
-							).append(
-									$('<span class="dmemo" />').append( "" )
+							$(strHtml).append( $('<a href="#">')
+							).append( $('<span class="dname" />').append( deviceList[i].device_name )
+							).append( $('<span class="dmemo" />').append( memo )
 							)
 //							.append( $('<span class="dname" />').append(  deviceList[i].device_name ) )
 //							).append( $('<span class="dmemo" />').append(  deviceList[i].device_name ) )
@@ -833,6 +841,9 @@
 					
 				}
 			}
+
+			var pagingMap = result.pagingMap;
+			makePageNums2(pagingMap, "Device");
 			
 		}
 	}

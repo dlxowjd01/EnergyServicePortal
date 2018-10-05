@@ -93,12 +93,34 @@ public class SiteMainController {
 	public @ResponseBody Map<String, Object> getDeviceIOEList(@RequestParam HashMap param) throws Exception {
 		logger.debug("/getDeviceList");
 		logger.debug("param ::::: "+param.toString());
+
+		int selPageNum = Integer.parseInt((String) param.get("selPageNum"));
+		int pageRowCnt = 8;
+		int startNum = pageRowCnt*(selPageNum-1);
+		
+		param.put("siteId", "");
+		param.put("startNum", startNum);
+		param.put("pageRowCnt", pageRowCnt);
 		
 		List deviceList = deviceMonitoringService.getDeviceList(param);
-		logger.debug("deviceList : "+deviceList.toString());
+		int listCnt = deviceMonitoringService.getDeviceListCnt(param);
+		int totalPageCnt = 0;
+		if(listCnt > 0) {
+			totalPageCnt = listCnt / pageRowCnt;
+			if(listCnt % pageRowCnt > 0) {
+				totalPageCnt++;
+			}
+		}
+		
+		Map<String, Object> pagingMap = new HashMap<String, Object>();
+		pagingMap.put("pageRowCnt", pageRowCnt); // 한 페이지 당 보여줄 데이터 수
+		pagingMap.put("selPageNum", selPageNum); // 선택한 페이지번호
+		pagingMap.put("listCnt", listCnt); // 전체 데이터 수
+		pagingMap.put("totalPageCnt", totalPageCnt); // 전체 페이지 수
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("deviceList", deviceList);
+		resultMap.put("pagingMap", pagingMap);
 		return resultMap;
 	}
 	

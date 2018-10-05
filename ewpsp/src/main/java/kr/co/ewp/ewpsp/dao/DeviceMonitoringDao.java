@@ -74,6 +74,10 @@ public class DeviceMonitoringDao {
 		List resultList = sqlSession.selectList("deviceMonitoring.getDeviceList", param);
 		return resultList;
 	}
+
+	public int getDeviceListCnt(HashMap param) {
+		return sqlSession.selectOne("deviceMonitoring.getDeviceListCnt", param);
+	}
 	
 	public HashMap<String, String> getDevice(String deviceId) {
 	  return sqlSession.selectOne("deviceMonitoring.getDevice", deviceId);

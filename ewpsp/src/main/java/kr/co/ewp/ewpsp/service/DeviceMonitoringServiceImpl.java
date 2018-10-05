@@ -67,6 +67,10 @@ public class DeviceMonitoringServiceImpl implements DeviceMonitoringService{
 	public List getDeviceList(HashMap param) throws Exception {
 		return deviceMonitoringDao.getDeviceList(param);
 	}
+
+	public int getDeviceListCnt(HashMap param) throws Exception {
+		return deviceMonitoringDao.getDeviceListCnt(param);
+	}
 	
 	public Map<String, String> getDevice(String deviceId) throws Exception {
 	  return deviceMonitoringDao.getDevice(deviceId);

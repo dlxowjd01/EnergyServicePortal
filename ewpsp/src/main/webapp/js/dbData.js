@@ -314,12 +314,14 @@ function getDevicePVDetail(devicePvIdx) {
 }
 
 // 장치목록 조회(메인화면)
-function getDeviceList(formData) {
+function getDeviceList(selPageNum) {
+	$("#selPageNum").val(selPageNum);
+	var form = getSiteMainSchCollection();
 	$.ajax({
 		url : "/getDeviceList",
 		type : 'post',
 		async : false, // 동기로 처리해줌
-		data : formData,
+		data : form,
 		success: function(result) {
 			callback_getDeviceList(result);
 		}

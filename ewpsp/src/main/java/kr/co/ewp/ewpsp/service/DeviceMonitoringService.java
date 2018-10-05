@@ -31,6 +31,8 @@ public interface DeviceMonitoringService {
 	Map getDevicePVDetail(HashMap param) throws Exception;
 
 	List getDeviceList(HashMap param) throws Exception;
+
+	int getDeviceListCnt(HashMap param) throws Exception;
 	
 	Map<String, String> getDevice(String deviceId) throws Exception;
 }
