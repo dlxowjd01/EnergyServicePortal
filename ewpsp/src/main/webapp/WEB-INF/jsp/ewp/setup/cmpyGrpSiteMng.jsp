@@ -351,6 +351,7 @@
 				<form id="groupForm" name="groupForm" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="siteGrpIdx" id="siteGrpIdx" class="input" value="">
 				<input type="hidden" name="userIdx" id="userIdx" class="input" value="1">
+				<input type="hidden" name="fileChangeYn" id="fileChangeYn" class="input" value="N">
 				<table>
 					<colgroup>
 						<col width="100">
@@ -369,7 +370,7 @@
 							<th><span>그룹 이미지</span></th>
 							<td>
 								<span class="control-fileupload">
-						            <label for="file">Choose a file :</label>
+						            <label for="file" id="fileNameTag">Choose a file :</label>
 						            <input type="file" id="siteGrpImg" name="siteGrpImg">
 						        </span>
 							</td>

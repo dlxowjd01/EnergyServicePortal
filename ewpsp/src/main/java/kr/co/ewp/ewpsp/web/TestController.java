@@ -1,28 +1,44 @@
 package kr.co.ewp.ewpsp.web;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import kr.co.ewp.ewpsp.common.ExcelDownload;
+import kr.co.ewp.ewpsp.common.util.ContextPropertiesUtil;
 
 @Controller
 public class TestController {
 	
+
+//	@Resource(name="prop")
+//	private ContextPropertiesUtil properties;
+//	@Value("${ccccc.ddd}")
+//	private String testStr3;
+//	@Value("${globals.driverClassName}")
+//	private String testStr4;
 
 	@RequestMapping("/hptest")
 	public String hptest() {
@@ -52,6 +68,15 @@ public class TestController {
 	@RequestMapping("/hello")
 	public String hello() {
 		System.out.println("여기오지?");
+		
+//		String testStr1 = properties.get("test");
+//		String testStr2 = properties.get("bbbbb");
+//		String testStr3 = properties.get("ccccc.ddd");
+//		String testStr4 = properties.get("Globals.DriverClassName");
+//		String testStr5 = properties.get("Globals.Password");
+//		System.out.println("프로퍼티 값은? >> "+testStr1+", "+testStr2+", "+testStr3+", "+testStr4+", "+testStr5);
+//		System.out.println("프로퍼티 값은? >> "+testStr3+", "+testStr4);
+		
 //		enertalkAPI_test();
 		return "test/hello";
 	}
@@ -176,6 +201,56 @@ public class TestController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+
+	@RequestMapping("/fileUpload_test")
+	public @ResponseBody Map<String, Object> getUsageRealList(@RequestParam HashMap param, MultipartHttpServletRequest multipart) throws Exception {
+		System.out.println("/fileUpload_test");
+		System.out.println("param ::::: "+param.toString());
+		System.out.println("multipart : "+multipart.toString());
+//		List list = usageService.getUsageRealList(param);
+		
+		System.out.println("bbb : " + multipart.getParameter("bbb")); // 파리미터 가져오기..
+		System.out.println("ccc : " + multipart.getParameter("ccc")); // 파리미터 가져오기..
+		
+		 // 저장 경로 설정
+//        String root = multipart.getSession().getServletContext().getRealPath("/");
+        String root = "d:\\fileUploadTest\\test";
+        String path = root+"/resources/upload/";
+         
+        String newFileName = ""; // 업로드 되는 파일명
+         
+        File dir = new File(path);
+        System.out.println("폴더경로 존재여부 : "+!dir.isDirectory()+", "+!dir.exists());
+        if(!dir.exists() ||!dir.isDirectory()){
+        	System.out.println("여긴와?");
+//            dir.mkdir();
+            dir.mkdirs();
+        }
+         
+        Iterator<String> files = multipart.getFileNames();
+        while(files.hasNext()){
+            String uploadFile = files.next();
+                         
+            MultipartFile mFile = multipart.getFile(uploadFile);
+            String fileName = mFile.getOriginalFilename();
+            System.out.println("실제 파일 이름 : " +fileName);
+            newFileName = System.currentTimeMillis()+"."
+                    +fileName.substring(fileName.lastIndexOf(".")+1);
+             
+            try {
+                mFile.transferTo(new File(path+newFileName));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+		
+		
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+//		resultMap.put("list", list);
+		return resultMap;
 	}
 
 }

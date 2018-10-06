@@ -54,6 +54,55 @@ public class CommonUtils {
 	 * @param multiRequest
 	 * @return
 	 */
+//	public static HashMap<String, Object> fileUpload(MultipartHttpServletRequest multiRequest, HttpSession session) {
+//		logger.debug("function fileUpload");
+//		if (isEmpty(file)) {
+//			return null;
+//		}
+//		
+//		String orginFileName = file.getOriginalFilename();
+//		String storePath = "/ewpsp/imgTest/";
+//		String savePath = filePathBlackList(storePath);
+//		File saveFolder = new File(savePath);
+//		String saveOriginPath = filePathBlackList(storePath+"/originals/");
+//		File saveOriginFolder = new File(saveOriginPath);
+//
+//		if (!saveFolder.exists() || saveFolder.isFile()) {
+//			saveFolder.mkdirs();
+//		}
+//		if (!saveOriginFolder.exists() || saveOriginFolder.isFile()) {
+//			saveOriginFolder.mkdirs();
+//		}
+//		
+//		int index = orginFileName.lastIndexOf(".");
+//		// String fileName = orginFileName.substring(0, index);
+//		String fileExt = orginFileName.substring(index + 1);
+//		String newName = getRandomText(10, 7) + "_" + CommonUtils.convertDateFormat(new Date(), "yyyyMMddHHmmssSSS") + "." + fileExt;
+//		String newOriName = getRandomText(10, 7) + "_" + CommonUtils.convertDateFormat(new Date(), "yyyyMMddHHmmssSSS") + "." + fileExt;
+//		long size = file.getSize();
+//		String originFilePath = saveOriginPath + newOriName; // 원본파일 저장할 폴더
+//		String filePath = savePath + "/" + newName; // 변환된 파일 저장할 폴더
+//		
+//		file.transferTo(new File(filePath));
+//		
+//		File f = new File(filePath);
+//		// 파일 존재 여부 판단
+//		if (f.isFile()) {
+//		  logger.debug(filePath + " OK 파일 있습니다.");
+//		}
+//		else {
+//			logger.debug(filePath + " 그런 파일 없습니다.");
+//		}
+//		
+//		HashMap<String, String> map = new HashMap<String, String>();
+//		map.put("savePath", savePath);
+//		map.put("rName", orginFileName);
+//		map.put("sName", newName);
+//		map.put("fileSize", String.valueOf(size));
+//		map.put("fileExt", fileExt);
+//		logger.debug("file map : "+map.toString());
+//		return fileInfoList;
+//	}
 //	public static List<HashMap<String, Object>> fileUpload(MultipartHttpServletRequest multiRequest, HttpSession session) {
 //		logger.debug("function fileUpload");
 //		List fileInfoList = new ArrayList<HashMap<String, Object>>();
@@ -131,6 +180,24 @@ public class CommonUtils {
 //		logger.debug("file map : "+map.toString());
 //		return map;
 //	}
+	
+	public static void deleteFile(String file_path, String file_name) {
+		File f = new File(file_path+file_name);
+		File f_origin = new File(file_path+"originals/"+file_name);
+
+		if(f.delete()){
+			logger.info("파일삭제 완료");
+		}else{
+			logger.info("파일삭제 실패");
+		}
+		
+		if(f_origin.delete()){
+			logger.info("원본파일삭제 완료");
+		}else{
+			logger.info("원본파일삭제 실패");
+		}
+		
+	}
 	
 	private static String filePathBlackList(String value) {
 		String returnValue = value;
