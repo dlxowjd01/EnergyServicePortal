@@ -662,11 +662,14 @@ function insertCmpy(formData) {
 
 // 그룹 등록
 function insertGroup(formData) {
+	var form = new FormData($("#groupForm")[0]);
 	$.ajax({
 		url : "/insertGroup",
 		type : 'post',
-		async : false, // 동기로 처리해줌
-		data : formData,
+		processData : false,
+		contentType : false,
+//		async : false, // 동기로 처리해줌
+		data : form,
 		success: function(result) {
 			callback_insertGroup(result);
 		},
@@ -710,11 +713,14 @@ function updateCmpy(formData) {
 
 // 그룹 수정
 function updateGroup(formData) {
+	var form = new FormData($("#groupForm")[0]);
 	$.ajax({
 		url : "/updateGroup",
 		type : 'post',
-		async : false, // 동기로 처리해줌
-		data : formData,
+		processData : false,
+		contentType : false,
+//		async : false, // 동기로 처리해줌
+		data : form,
 		success: function(result) {
 			callback_updateGroup(result);
 		},

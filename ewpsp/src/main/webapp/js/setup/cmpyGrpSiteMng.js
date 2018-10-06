@@ -198,6 +198,10 @@ $(document).ready(function() {
 			}
 		});
 		
+		$("#siteGrpImg").change(function() {
+	        $("#fileChangeYn").val("Y");
+	    });
+		
 		$("#confirmSiteBtn").click(function(){
 			var formData = $("#siteForm").serializeObject();
 			if(confirm("사이트를 저장하시겠습니까?")) {
@@ -427,6 +431,9 @@ $(document).ready(function() {
 			$("#groupForm").find("#userIdx").val( groupDetail.user_idx );
 			$("#groupForm").find("#siteGrpName").val( groupDetail.site_grp_name );
 			$("#groupForm").find("#siteGrpId").val( groupDetail.site_grp_id );
+			$("#groupForm").find("#fileNameTag").empty().append( groupDetail.site_grp_img_rname );
+			
+			$("#groupForm").find("#fileChangeYn").val( "N" );
 			
 			popupOpen('dgroup_add');
 //			$('#mask').hide();
