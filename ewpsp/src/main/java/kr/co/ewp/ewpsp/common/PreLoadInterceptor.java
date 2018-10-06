@@ -32,9 +32,17 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 		// 상단 사이트 목록 조회
 		if(userInfo != null) {
+			Integer userIdx = (Integer)userInfo.get("user_idx");
+			String authType = (String)userInfo.get("auth_type");
+			if (userIdx == null) {
+				userIdx = -1; // userIdx가 빈값일 경우 검색이 안되게 한다.
+			}
 
 			HashMap param = new HashMap<String, Object>();
-			param.put("userIdx", userInfo.get("user_idx"));
+			// 권한이 없거나 시스템관리자가 아니면 사용자가 권한이 있는 목록만 검색한다.
+			if (authType == null || (!authType.equals("1") && !authType.equals("2"))) {
+				param.put("userIdx", userIdx);
+			}
 
 			List userSiteList = cmpyGrpSiteMngService.getUserSiteList(param);
 			request.setAttribute("userSiteList", userSiteList);

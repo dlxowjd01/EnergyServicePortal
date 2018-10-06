@@ -23,13 +23,11 @@
 			<div id="container">
 				<form id="schForm" name="schForm">
 					<input type="hidden" id="areaType" name="areaType" value="" />
-					<input type="hidden" id="areaType2" name="areaType2" value="" />
-					<input type="hidden" id="rankType" name="rankType" value="" />
+					<input type="hidden" id="rankType" name="rankType" value="3" />
 					<input type="hidden" id="selTermFrom" name="selTermFrom" />
 					<input type="hidden" id="selTermTo" name="selTermTo" />
 					<input type="hidden" id="selTerm" name="selTerm" value="day" />
 					<input type="hidden" id="mapGroup" name="mapGroup" value="map" />
-					<input type="hidden" id="allArea" name="allArea" value="" />
 				</form>
 				<div class="row">
 					<div class="col-lg-4">
@@ -91,9 +89,9 @@
 											<div class="gchart_top clear">
 												<h2>사용량 순위</h2>
 												<ul>
-													<li>AM 10:00 기준</li>
-													<li><span class="bul1">누적 - 0.00 kWh</span></li>
-													<li><span class="bul2">예상 - 0.00 kWh</span></li>
+													<li id="rankTime"><!-- AM 10:00 기준 --></li>
+													<li id="rankTotal"><!-- <span class="bul1">누적 - 0.00 kWh</span> --></li>
+													<li id="rankPlan"><!-- <span class="bul2">예상 - 0.00 kWh</span> --></li>
 												</ul>
 											</div>
 											<div class="inchart">
@@ -235,19 +233,19 @@
 										<h2 class="ntit">그룹별사용량</h2>
 									</div>
 									<div class="group_wrap">
-										<img src="" onError="this.src='../img/group_dimg.png';" alt="그룹이미지" />
+										<img id="grpImg" src="" onError="this.src='../img/group_dimg.png';" alt="그룹이미지" />
 									</div>
 									<!-- 그룹별 정보 -->
 									<div class="group_info">
 										<h2 class="group_name">그룹명</h2>
 										<div class="clear">
 											<ul>
-												<li><strong>사용량</strong> <span>564</span> <em>MWh</em></li>
-												<li><strong>발전량</strong> <span>328</span> <em>MWh</em></li>
+												<li><strong>사용량</strong> <span class="detailUsage">564</span> <em class="detailUsageUnit">MWh</em></li>
+												<li><strong>발전량</strong> <span class="detailGen">328</span> <em class="detailGenUnit">MWh</em></li>
 											</ul>
 											<ul>
-												<li><strong>충•방전량</strong> <span>183</span> <em>MWh</em></li>
-												<li><strong>수익</strong> <span>99,000</span> <em>won</em></li>
+												<li><strong>충•방전량</strong> <span class="detailCharge">183</span> <em class="detailChargeUnit">MWh</em></li>
+												<li><strong>수익</strong> <span class="detailReward">99,000</span> <em class="detailRewardUnit">won</em></li>
 											</ul>
 										</div>
 									</div>
@@ -280,28 +278,28 @@
 											</li>
 											<li>
 												<div class="dropdown">
-												  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><em id="selAllArea">전체지역</em>
+												  <button id="allAreaDiv" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><em id="selAllArea">전체지역</em>
 												  <span class="caret"></span></button>
 												  <ul class="dropdown-menu">
-												    <li class="on"><a href="#;" onclick="changeAllArea(this)">전체지역</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '01')">서울</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '02')">부산</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '03')">대구</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '04')">인천</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '05')">광주</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '06')">대전</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '07')">울산</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '08')">세종</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '09')">경기</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '10')">강원</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '11')">충북</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '12')">충남</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '13')">전북</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '14')">전남</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '15')">경북</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '16')">경남</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '17')">제주</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, '18')">울릉도</a></li>
+												    <li class="on"><a href="#;" onclick="changeAllArea(this, 'All', 0)">전체지역</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Seoul', 1)">서울</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Busan', 2)">부산</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Daegu', 3)">대구</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Incheon', 4)">인천</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Gwangju', 5)">광주</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Daejeon', 6)">대전</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Ulsan', 7)">울산</a></li>
+												    <li style="display:none"><a href="#;" onclick="changeAllArea(this, 'Sejong', 8)">세종</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Gyeonggi', 9)">경기</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Gangwon', 10)">강원</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Chungbuk', 11)">충북</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Chungnam', 12)">충남</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Jeonbuk', 13)">전북</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Jeonnam', 14)">전남</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Kyungbuk', 15)">경북</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Gyeongnam', 16)">경남</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Jeju', 17)">제주</a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Ulleungdo', 18)">울릉도</a></li>
 												  </ul>
 												</div>
 											</li>
@@ -722,10 +720,11 @@ function initChart() {
 </script>
 <script type="text/javascript">
 /* 5초마다 지도/정보 변경 */
-var monitoring_cycle_5sec = null;
-var done = false;
+var monitoring_cycle_5sec = null; // 지도 변경 스레드ID
+var allMapFlag = true; // 전체지도 여부
+var done = false; // 스레드 작동 여부
 // area_type = area_idx + 1
-var area_idx = 0;
+var area_idx = 0; // 지도 array 인덱스
 // site의 area_type 구분정의표 참조 (01:서울, 02:부산... 17:제주)
 var area_array = [
 	"Seoul",		// 01
@@ -753,32 +752,41 @@ $(function() {
 	$('img[usemap]').rwdImageMaps();
 
 	/* 상세지도/정보 보기 */
-	$("#local_map_all").click(function(){
-		$(".map_wrap").hide();
-		$(".allmap").hide();
-		$(".map_wrap_detail").show();
-		$(".detailmap").show();
-		$(".all_map_view").show();
-
-		done = true;
-		clearTimeout(monitoring_cycle_5sec);
-		monitoring_cycle_5sec = null;
-	});
+	$("#local_map_all").click(changeLocalMap);
 
 	/* 전체지도/정보 보기 */
-	$(".all_map_view").click(function(){
-		$(this).hide();
-		$(".map_wrap").show();
-		$(".allmap").show();
-		$(".map_wrap_detail").hide();
-		$(".detailmap").hide();
-
-		done = false;
-		readArea(); // 다시 시작
+	$(".all_map_view").click(function() {
+		changeAllMap();
+		$('#selAllArea').text('전체지역');
 	});
 
 	readArea();
 });
+
+function changeLocalMap() {
+	$(".map_wrap").hide();
+	$(".allmap").hide();
+	$(".map_wrap_detail").show();
+	$(".detailmap").show();
+	$(".all_map_view").show();
+
+	allMapFlag = false;
+	done = true;
+	clearTimeout(monitoring_cycle_5sec);
+	monitoring_cycle_5sec = null;
+}
+
+function changeAllMap() {
+	$(".all_map_view").hide();
+	$(".map_wrap").show();
+	$(".allmap").show();
+	$(".map_wrap_detail").hide();
+	$(".detailmap").hide();
+
+	allMapFlag = true;
+	done = false;
+	readArea(); // 다시 시작
+}
 
 /* 지역별 상세지도/정보 표시 */
 function local_detail(lname, area_type) {

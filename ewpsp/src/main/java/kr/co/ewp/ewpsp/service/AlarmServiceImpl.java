@@ -24,6 +24,10 @@ public class AlarmServiceImpl implements AlarmService {
 		return alarmDao.getMainAlarmList(param);
 	}
 	
+	public List getGMainAlarmList(HashMap param) throws Exception {
+		return alarmDao.getGMainAlarmList(param);
+	}
+
 	public List getMainAlarmTypeCntList(HashMap param) throws Exception {
 		return alarmDao.getMainAlarmTypeCntList(param);
 	}

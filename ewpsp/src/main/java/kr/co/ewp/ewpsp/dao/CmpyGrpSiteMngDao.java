@@ -125,6 +125,17 @@ public class CmpyGrpSiteMngDao {
 	}
 	
 	/**
+	 * 군관리메인의 사이트 사용량 순위 누적/예상 총합
+	 * @author greatman
+	 * @param param
+	 * @return
+	 */
+	public Map getGMainSiteRankingTotalDetail(HashMap param) {
+		Map result = sqlSession.selectOne("cmpyGrpSiteMng.getGMainSiteRankingTotalDetail", param);
+		return result;
+	}
+
+	/**
 	 * 군관리메인의 사이트 사용량 총합계 조회
 	 * @author greatman
 	 * @param param

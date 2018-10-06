@@ -3,10 +3,14 @@ var formData = null;
 function fn_cycle() {
 	formData = getSiteMainSchCollection();
 
-//	getAlarmList(formData); // 알람 조회
+	getGMainAlarmList(formData); // 알람 조회
+	getGMainSiteRankingTotalDetail(); // 사이트 사용량 순위 누적/예상 총합
 	getGMainSiteRankingList(1); // 사이트 사용량 순위 목록 조회
 	getGMainSiteTotalDetail(formData); // 사이트 사용량 총합계 조회
 	getGMainSiteList(1); // 사이트 목록 조회
+
+	// 콤보박스 변경 (상세정보 타이틀을 가져온다)
+	$('#selAllArea').text($('.local_name:eq(1)').text());
 }
 
 function getSiteMainSchCollection() {
@@ -32,13 +36,6 @@ function getSiteMainSchCollection() {
 	}
 	$('#areaType').val(areaType);
 
-	if ($('#allArea').val() == '') {
-		$('#areaType2').val(areaType);
-	} else {
-		// 지역필터가 선택되면 필터값으로 가져온다. (확정된게 아님)
-		$('#areaType2').val($('#allArea').val());
-	}
-
 	var formData = $("#schForm").serializeObject();
 //	{
 //			selTerm : "day",
@@ -51,7 +48,7 @@ function getSiteMainSchCollection() {
 	return formData;
 }
 
-function callback_getAlarmList(result) {
+function callback_getGMainAlarmList(result) {
 	var dvTpAlarmDetail = result.detail;
 	var alarmList = result.alarmList;
 	
@@ -82,6 +79,60 @@ function callback_getAlarmList(result) {
 		
 	}
 	
+}
+
+function callback_getGMainSiteRankingTotalDetail(result) {
+	var total = result.detail;
+	var now = new Date();
+
+	$('#rankTime').text(now.format('a/p hh:mm') + ' 기준');
+//	console.log(total);
+
+	if (total != null) {
+		$('#rankTotal').html('<span class="bul1" />');
+		if (oldRankType == 0) {
+			if (total.usage > 1000) {
+				$('#rankTotal > span').text('누적 - ' + numberComma(Math.floor(total.usage / 1000)) + 'MWh');
+			} else {
+				$('#rankTotal > span').text('누적 - ' + numberComma(total.usage) + 'kWh');
+			}
+			$('#rankPlan').html('<span class="bul2" />');
+			if (total.usage_plan > 1000) {
+				$('#rankPlan > span').text('예상 - ' + numberComma(Math.floor(total.usage_plan / 1000)) + 'MWh');
+			} else {
+				$('#rankPlan > span').text('예상 - ' + numberComma(total.usage_plan) + 'kWh');
+			}
+		} else if (oldRankType == 1) {
+			if (total.charge > 1000) {
+				$('#rankTotal > span').text('누적 - ' + numberComma(Math.floor(total.charge / 1000)) + 'MWh');
+			} else {
+				$('#rankTotal > span').text('누적 - ' + numberComma(total.charge) + 'kWh');
+			}
+			$('#rankPlan').html('<span class="bul2" />');
+			if (total.charge_plan > 1000) {
+				$('#rankPlan > span').text('예상 - ' + numberComma(Math.floor(total.charge_plan / 1000)) + 'MWh');
+			} else {
+				$('#rankPlan > span').text('예상 - ' + numberComma(total.charge_plan) + 'kWh');
+			}
+		} else if (oldRankType == 2) {
+			if (total.gen > 1000) {
+				$('#rankTotal > span').text('누적 - ' + numberComma(Math.floor(total.gen / 1000)) + 'MWh');
+			} else {
+				$('#rankTotal > span').text('누적 - ' + numberComma(total.gen) + 'kWh');
+			}
+			$('#rankPlan').text('');
+		} else if (oldRankType == 3) {
+			if (total.reward > 1000) {
+				$('#rankTotal > span').text('누적 - ' + numberComma(Math.floor(total.reward / 1000)) + 'MWh');
+			} else {
+				$('#rankTotal > span').text('누적 - ' + numberComma(total.reward) + 'kWh');
+			}
+			$('#rankPlan').text('');
+		}
+	} else {
+		$('#rankTotal').html('<span class="bul1">0kWh</span>');
+		$('#rankPlan').html('<span class="bul2">0kWh</span>');
+	}
 }
 
 function callback_getGMainSiteRankingList(result) {
@@ -144,32 +195,32 @@ function callback_getGMainSiteRankingList(result) {
 }
 
 function callback_getGMainSiteTotalDetail(result) {
-	var usage = result.detail;
+	var total = result.detail;
 //	console.log(usage);
-	if (usage != null) {
-		if (usage.usage > 1000) {
-			$('.detailUsage').text(numberComma(Math.floor(usage.usage / 1000)));
+	if (total != null) {
+		if (total.usage > 1000) {
+			$('.detailUsage').text(numberComma(Math.floor(total.usage / 1000)));
 			$('.detailUsageUnit').text('MWh');
 		} else {
-			$('.detailUsage').text(numberComma(usage.usage));
+			$('.detailUsage').text(numberComma(total.usage));
 			$('.detailUsageUnit').text('kWh');
 		}
-		if (usage.gen > 1000) {
-			$('.detailGen').text(numberComma(Math.floor(usage.gen / 1000)));
+		if (total.gen > 1000) {
+			$('.detailGen').text(numberComma(Math.floor(total.gen / 1000)));
 			$('.detailGenUnit').text('MWh');
 		} else {
-			$('.detailGen').text(numberComma(usage.gen));
+			$('.detailGen').text(numberComma(total.gen));
 			$('.detailGenUnit').text('kWh');
 		}
-		if (usage.charge > 1000) {
-			$('.detailCharge').text(numberComma(Math.floor(usage.charge / 1000)));
+		if (total.charge > 1000) {
+			$('.detailCharge').text(numberComma(Math.floor(total.charge / 1000)));
 			$('.detailChargeUnit').text('MWh');
 		} else {
-			$('.detailCharge').text(numberComma(usage.charge));
+			$('.detailCharge').text(numberComma(total.charge));
 			$('.detailChargeUnit').text('kWh');
 		}
 
-		$('.detailReward').text(numberComma(usage.reward));
+		$('.detailReward').text(numberComma(total.reward));
 	} else {
 		$('.detailUsage').text('0');
 		$('.detailGen').text('0');
@@ -192,11 +243,15 @@ function callback_getGMainSiteList(result) {
 		$tbody.append('<tr><td colspan="7">조회된 데이터가 없습니다.</td><tr>');
 		$('#GMainSitePaging').empty();
 	} else {
+		var imgSrc = '';
+		var grpName = '';
+
 		for (var i = 0; i < siteList.length; i++) {
 			var eq1Cls = siteList[i].ioe > 0 ? ' on' : '';
 			var eq2Cls = siteList[i].pcs > 0 ? ' on' : '';
 			var eq3Cls = siteList[i].bms > 0 ? ' on' : '';
 			var eq4Cls = siteList[i].pv > 0 ? ' on' : '';
+
 			$tbody.append(
 				$('<tr class="dbclickopen" />')
 					.append($('<td />').append(siteList[i].rnum)) // no
@@ -218,6 +273,18 @@ function callback_getGMainSiteList(result) {
 					.append($('<td />').append(numberComma(siteList[i].gen)))
 					.append($('<td />').append(numberComma(siteList[i].reward)))
 			);
+
+			if ($('#mapGroup').val() == 'group' && i == 0) {
+				if (siteList[i].site_grp_img_sname != null && siteList[i].site_grp_img_sname != '') {
+					imgSrc = siteList[i].site_grp_img_path + siteList[i].site_grp_img_sname;
+				}
+				grpName = siteList[i].site_grp_name;
+			}
+		}
+
+		if ($('#mapGroup').val() == 'group' && grpName != '') {
+			$('#grpImg').attr('src', imgSrc);
+			$('.group_name').text(grpName);
 		}
 
 		var pagingMap = result.pagingMap;
@@ -236,7 +303,9 @@ function changeRanking(tabIdx) {
 	oldRankType = tabIdx - 1;
 
 	$('#rankType').val(tabIdx + 2);
-	fn_cycle();
+
+	getGMainSiteRankingTotalDetail(); // 사이트 사용량 순위 누적/예상 총합
+	getGMainSiteRankingList(1); // 사이트 사용량 순위 목록 조회
 }
 
 function changeTerm(term) {
@@ -252,19 +321,38 @@ function changeMapGroup(aElmt) {
 		$('#mapUsage').show();
 		$('#groupUsage').hide();
 		$('#mapGroup').val('map');
+		$('#allAreaDiv').prop('disabled', false);
+
+		if (allMapFlag) {
+			changeAllMap();
+		} else {
+			changeLocalMap();
+		}
 	} else if (text == '그룹별') {
 		$('#mapUsage').hide();
 		$('#groupUsage').show();
 		$('#mapGroup').val('group');
+		$('#allAreaDiv').prop('disabled', true);
+
+		done = true;
+		clearTimeout(monitoring_cycle_5sec);
+		monitoring_cycle_5sec = null;
 	}
 	fn_cycle();
 }
 
-function changeAllArea(aElmt, areaType) {
+// 콤보박스 이름을 바꾸고 지도 클릭함수를 호출한다.
+function changeAllArea(aElmt, lname, areaType) {
 	var text = changeLiClass(aElmt);
 	$('#selAllArea').text(text);
-	$('#allArea').val(areaType);
-	fn_cycle();
+
+	area_idx = areaType;
+	if (areaType == 0) {
+		changeAllMap();
+	} else {
+		local_detail(lname, areaType);
+		changeLocalMap();
+	}
 }
 
 // 선택된 li에 class='on'을 붙이고 텍스트를 얻어온다.

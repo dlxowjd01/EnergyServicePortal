@@ -23,6 +23,11 @@ public class AlarmDao {
 		return resultList;
 	}
 	
+	public List getGMainAlarmList(HashMap param) {
+		List resultList = sqlSession.selectList("alarm.getGMainAlarmList", param);
+		return resultList;
+	}
+
 	public List getMainAlarmTypeCntList(HashMap param) {
 		List resultList = sqlSession.selectList("alarm.getMainAlarmTypeCntList", param);
 		return resultList;

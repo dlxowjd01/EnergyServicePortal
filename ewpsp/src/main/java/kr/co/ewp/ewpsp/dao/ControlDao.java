@@ -19,6 +19,11 @@ public class ControlDao {
 		return result;
 	}
 	
+	public Map getGMainDeviceAlarmCnt(HashMap param) {
+		Map result = sqlSession.selectOne("control.getGMainDeviceAlarmCnt", param);
+		return result;
+	}
+	
 	public List getAlarmList(HashMap param) {
 		List resultList = sqlSession.selectList("control.getAlarmList", param);
 		return resultList;

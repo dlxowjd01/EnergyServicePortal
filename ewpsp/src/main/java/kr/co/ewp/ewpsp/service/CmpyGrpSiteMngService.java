@@ -40,6 +40,8 @@ public interface CmpyGrpSiteMngService {
 
 	Map getSiteDetail(HashMap param) throws Exception;
 	
+	Map getGMainSiteRankingTotalDetail(HashMap param) throws Exception;
+
 	Map getGMainSiteTotalDetail(HashMap param) throws Exception;
 
 	int insertCmpy(HashMap param) throws Exception;

@@ -9,18 +9,27 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.ewp.ewpsp.common.util.UserUtil;
+import kr.co.ewp.ewpsp.service.AlarmService;
 import kr.co.ewp.ewpsp.service.CmpyGrpSiteMngService;
+import kr.co.ewp.ewpsp.service.ControlService;
 
 @Controller
 public class MainController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
+
+	@Autowired
+	private AlarmService alarmService;
+
+	@Resource(name="controlService")
+	private ControlService controlService;
 
 	@Resource(name="cmpyGrpSiteMngService")
 	private CmpyGrpSiteMngService cmpyGrpSiteMngService;
@@ -29,6 +38,65 @@ public class MainController {
 	public String main() {
 		logger.debug("/main");
 		return "ewp/main/main";
+	}
+
+	/**
+	 * 군관리메인 알람 조회
+	 * @author greatman
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getGMainAlarmList")
+	public @ResponseBody Map<String, Object> getGMainAlarmList(@RequestParam HashMap param) throws Exception {
+		logger.debug("/getGMainAlarmList");
+		logger.debug("param : {}", param);
+//		param.put("alarmCfmYn", "N");
+
+		Map result = controlService.getGMainDeviceAlarmCnt(param); // 장치별 알람건수
+		List alarmList = alarmService.getGMainAlarmList(param); // 최근 알람 목록 조회(3건)
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("detail", result);
+		resultMap.put("alarmList", alarmList);
+		return resultMap;
+	}
+
+	/**
+	 * 군관리메인 사이트 사용량 총합계 조회
+	 * @author greatman
+	 * @param session
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getGMainSiteRankingTotalDetail")
+	public @ResponseBody Map<String, Object> getGMainSiteRankingTotalDetail(HttpSession session, @RequestParam HashMap param) throws Exception {
+		logger.debug("/getGMainSiteRankingTotal");
+		logger.debug("param : {}", param);
+
+		Map userInfo = UserUtil.getUserInfo(session);
+		if (userInfo == null) {
+			userInfo = new HashMap();
+		}
+		logger.debug("userInfo : {}", userInfo);
+
+		Integer userIdx = (Integer)userInfo.get("user_idx");
+		String authType = (String)userInfo.get("auth_type");
+		if (userIdx == null) {
+			userIdx = -1;
+		}
+
+		if (authType == null || (!authType.equals("1") && !authType.equals("2"))) {
+			param.put("userIdx", userIdx);
+		}
+
+		Map result = cmpyGrpSiteMngService.getGMainSiteRankingTotalDetail(param);
+		logger.debug("result : {}" + result);
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("detail", result);
+		return resultMap;
 	}
 
 	/**
@@ -55,11 +123,14 @@ public class MainController {
 		logger.debug("userInfo : {}", userInfo);
 
 		Integer userIdx = (Integer)userInfo.get("user_idx");
+		String authType = (String)userInfo.get("auth_type");
 		if (userIdx == null) {
 			userIdx = -1;
 		}
 
-		param.put("userIdx", userIdx);
+		if (authType == null || (!authType.equals("1") && !authType.equals("2"))) {
+			param.put("userIdx", userIdx);
+		}
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
 
@@ -105,11 +176,14 @@ public class MainController {
 		logger.debug("userInfo : {}", userInfo);
 
 		Integer userIdx = (Integer)userInfo.get("user_idx");
+		String authType = (String)userInfo.get("auth_type");
 		if (userIdx == null) {
 			userIdx = -1;
 		}
 
-		param.put("userIdx", userIdx);
+		if (authType == null || (!authType.equals("1") && !authType.equals("2"))) {
+			param.put("userIdx", userIdx);
+		}
 
 		Map result = cmpyGrpSiteMngService.getGMainSiteTotalDetail(param);
 		logger.debug("result : {}" + result);
@@ -143,11 +217,14 @@ public class MainController {
 		logger.debug("userInfo : {}", userInfo);
 
 		Integer userIdx = (Integer)userInfo.get("user_idx");
+		String authType = (String)userInfo.get("auth_type");
 		if (userIdx == null) {
 			userIdx = -1;
 		}
 
-		param.put("userIdx", userIdx);
+		if (authType == null || (!authType.equals("1") && !authType.equals("2"))) {
+			param.put("userIdx", userIdx);
+		}
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
 
