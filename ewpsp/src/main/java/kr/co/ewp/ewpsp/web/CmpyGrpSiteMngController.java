@@ -7,21 +7,30 @@
 
 package kr.co.ewp.ewpsp.web;
 
+import java.io.File;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import kr.co.ewp.ewpsp.common.util.CommonUtils;
+import kr.co.ewp.ewpsp.common.util.ContextPropertiesUtil;
 import kr.co.ewp.ewpsp.service.CmpyGrpSiteMngService;
 
 @Controller
@@ -31,6 +40,12 @@ public class CmpyGrpSiteMngController {
 	
 	@Resource(name="cmpyGrpSiteMngService")
 	private CmpyGrpSiteMngService cmpyGrpSiteMngService;
+	
+//	@Resource(name="prop")
+//	private ContextPropertiesUtil properties;
+	@Value("${globals.fileUpload.rootPath}")
+	private String fileUploadRootPath;;
+	
 	
 	@RequestMapping("/cmpyGrpSiteMng")
 	public String cmpyGrpSiteMng(Model model) {
@@ -253,7 +268,6 @@ public class CmpyGrpSiteMngController {
 		logger.debug("param ::::: "+param.toString());
 		
 		Map result = cmpyGrpSiteMngService.getGroupDetail(param);
-		logger.debug("result.toString() : "+result.toString());
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
@@ -408,9 +422,43 @@ public class CmpyGrpSiteMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/insertGroup")
-	public @ResponseBody Map<String, Object> insertGroup(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> insertGroup(@RequestParam HashMap param, MultipartHttpServletRequest multipart, HttpSession session) throws Exception {
 		logger.debug("/insertGroup");
 		logger.debug("param ::::: "+param.toString());
+		
+		String siteGrpName = multipart.getParameter("siteGrpName");
+		String siteGrpId = multipart.getParameter("siteGrpId");
+//		String siteGrpIdx = multipart.getParameter("siteGrpIdx");
+		String userIdx = multipart.getParameter("userIdx");
+		
+		String root = fileUploadRootPath;
+		String path = "/upload/";
+		
+		String fileName = "";
+		String newFileName = ""; // 업로드 되는 파일명
+		 
+		File dir = new File(root+path);
+		if(!dir.exists() ||!dir.isDirectory()){
+			dir.mkdirs();
+		}
+		 
+		Iterator<String> files = multipart.getFileNames();
+		while(files.hasNext()){
+			String uploadFile = files.next();
+			
+			MultipartFile mFile = multipart.getFile(uploadFile);
+			fileName = mFile.getOriginalFilename();
+			newFileName = CommonUtils.getRandomText(10, 7) + "_" + CommonUtils.convertDateFormat(new Date(), "yyyyMMddHHmmssSSS")+"."+fileName.substring(fileName.lastIndexOf(".")+1);
+			
+			if(!"".equals(fileName)) { // 업로드할 파일이 존재할 경우
+				mFile.transferTo(new File(root+path+newFileName));
+				param.put("siteGrpImgPath", path);
+				param.put("siteGrpImgSname", newFileName);
+				param.put("siteGrpImgRname", fileName);
+			}
+			
+		}
+//		HashMap<String, Object> m = CommonUtils.fileUpload(multipart, session);
 		
 		int resultCnt = cmpyGrpSiteMngService.insertGroup(param);
 		
@@ -462,9 +510,57 @@ public class CmpyGrpSiteMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/updateGroup")
-	public @ResponseBody Map<String, Object> updateGroup(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> updateGroup(@RequestParam HashMap param, MultipartHttpServletRequest multipart, HttpSession session) throws Exception {
 		logger.debug("/updateGroup");
 		logger.debug("param ::::: "+param.toString());
+		
+		String siteGrpName = multipart.getParameter("siteGrpName");
+		String siteGrpId = multipart.getParameter("siteGrpId");
+//		String siteGrpIdx = multipart.getParameter("siteGrpIdx");
+		String userIdx = multipart.getParameter("userIdx");
+		String fileChangeYn = multipart.getParameter("fileChangeYn");
+		
+		if("Y".equals(fileChangeYn)) {
+			String root = fileUploadRootPath;
+			String path = "/upload/";
+			
+			String fileName = "";
+			String newFileName = ""; // 업로드 되는 파일명
+			
+			File dir = new File(root+path);
+			if(!dir.exists() ||!dir.isDirectory()){
+				dir.mkdirs();
+			}
+			
+			Iterator<String> files = multipart.getFileNames();
+			while(files.hasNext()){
+				String uploadFile = files.next();
+				
+				MultipartFile mFile = multipart.getFile(uploadFile);
+				fileName = mFile.getOriginalFilename();
+				newFileName = CommonUtils.getRandomText(10, 7) + "_" + CommonUtils.convertDateFormat(new Date(), "yyyyMMddHHmmssSSS")+"."+fileName.substring(fileName.lastIndexOf(".")+1);
+				
+				if(!"".equals(fileName)) { // 업로드할 파일이 존재할 경우
+					System.out.println(root+path+newFileName);
+					
+					Map result = cmpyGrpSiteMngService.getGroupDetail(param);
+					String past_path = (String) result.get("site_grp_img_path");
+					String past_saveName = (String) result.get("site_grp_img_sname");
+					
+					if(!"".equals(path)) {
+						CommonUtils.deleteFile(root+past_path, past_saveName); // 그룹이미지 파일 삭제 
+					}
+					
+					mFile.transferTo(new File(root+path+newFileName));
+					param.put("siteGrpImgPath", path);
+					param.put("siteGrpImgSname", newFileName);
+					param.put("siteGrpImgRname", fileName);
+				}
+				
+			}
+//			HashMap<String, Object> m = CommonUtils.fileUpload(multipart, session);
+			
+		}
 		
 		int resultCnt = cmpyGrpSiteMngService.updateGroup(param);
 		
@@ -502,7 +598,15 @@ public class CmpyGrpSiteMngController {
 		logger.debug("/deleteGroup");
 		logger.debug("param ::::: "+param.toString());
 		
+//		Map result = cmpyGrpSiteMngService.getGroupDetail(param);
+//		String path = (String) result.get("site_grp_img_path");
+//		String saveName = (String) result.get("site_grp_img_sname");
+		
 		int resultCnt = cmpyGrpSiteMngService.deleteGroup(param);
+//		if(resultCnt > 0 && !"".equals(path)) {
+//			String root = "d:\\fileUploadTest\\test";
+//			CommonUtils.deleteFile(root+path, saveName); // 그룹이미지 파일 삭제 
+//		}
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("resultCnt", resultCnt);

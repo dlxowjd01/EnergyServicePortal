@@ -14,6 +14,7 @@
 <script src="../js/pdf/html2canvas.js"></script>
 <script src="../js/pdf/jspdf.min.js"></script>
 <script src="../js/utils.js"></script>
+<script src="../js/jquery.form.min.js"></script>
 <script type="text/javascript">
 	$(function () {
 		$("#pdfDownBtn").click(function() {
@@ -39,7 +40,9 @@
 			
 		});
 		
-		
+		$("#uploadFile2").change(function() {
+	        alert('changed!');
+	    });
 		
 	});
 
@@ -55,6 +58,25 @@
 				,'post' );
 	}
 	
+	function fileUpload() {
+		var formData = new FormData($("#uploadForm")[0]);
+		console.log("formData : "+formData);
+        $.ajax({
+            type : 'post',
+            url : '/fileUpload_test',
+            data : formData,
+            processData : false,
+            contentType : false,
+            success : function(html) {
+                alert("파일 업로드하였습니다.");
+            },
+            error : function(error) {
+                alert("파일 업로드에 실패하였습니다.");
+                console.log(error);
+                console.log(error.status);
+            }
+        });
+	}
 </script>
 </head>
 <body>
@@ -63,6 +85,14 @@
 	<!-- <span id="excelDownTest">여기 눌러서 엑셀다운로드 테스트</span> -->
 	<a id="excelDownTest">여기 눌러서 엑셀다운로드 테스트</a><br><br><br>
 	<input type="text" id="aa" name="aa" value="">
+	<br><br><br>
+	<form id="uploadForm" name="uploadForm" enctype="multipart/form-data">
+	<input type="file" id="uploadFile1" name="uploadFile1">
+	<input type="file" id="uploadFile2" name="uploadFile2">
+	<input type="text" id="bbb" name="bbb" value="">
+	<input type="text" id="ccc" name="ccc" value="">
+	<br><input type="button" onclick="fileUpload();" value="파일업로드">
+	</form>
 	<br><br><br>
 	<button id="pdfPop">pdf화면출력테스트(팝업)</button>
 	<br><br><br>

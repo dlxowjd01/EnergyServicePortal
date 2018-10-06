@@ -68,5 +68,18 @@
 	    		<bean class="kr.co.ewp.ewpsp.common.PreLoadInterceptor" />
 	    	</mvc:interceptor>
 	    </mvc:interceptors>
+	    
+	    <!-- properties 설정 -->
+	    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	        <property name="locations">
+	            <list>    
+	                <value>classpath:properties/**/*.properties</value>
+	            </list>
+	        </property>
+	    </bean>
+	    <!-- <context:property-placeholder location="classpath:properties/**/*.properties" /> --> 
+	    <!-- <bean id="prop" class="kr.co.ewp.ewpsp.common.util.ContextPropertiesUtil">
+	    	<property name="propFile" value="classpath:properties/globals.properties"></property>
+	    </bean> -->
 
 </beans>
