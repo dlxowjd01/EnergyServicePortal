@@ -436,12 +436,12 @@ public class CmpyGrpSiteMngController {
 		
 		String fileName = "";
 		String newFileName = ""; // 업로드 되는 파일명
-		 
+		
 		File dir = new File(root+path);
 		if(!dir.exists() ||!dir.isDirectory()){
 			dir.mkdirs();
 		}
-		 
+		
 		Iterator<String> files = multipart.getFileNames();
 		while(files.hasNext()){
 			String uploadFile = files.next();
@@ -451,12 +451,17 @@ public class CmpyGrpSiteMngController {
 			newFileName = CommonUtils.getRandomText(10, 7) + "_" + CommonUtils.convertDateFormat(new Date(), "yyyyMMddHHmmssSSS")+"."+fileName.substring(fileName.lastIndexOf(".")+1);
 			
 			if(!"".equals(fileName)) { // 업로드할 파일이 존재할 경우
-				mFile.transferTo(new File(root+path+newFileName));
+				try {
+					mFile.transferTo(new File(root+path+newFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
 				param.put("siteGrpImgPath", path);
 				param.put("siteGrpImgSname", newFileName);
 				param.put("siteGrpImgRname", fileName);
 			}
-			
+			System.out.println("aaaaa     13");
 		}
 //		HashMap<String, Object> m = CommonUtils.fileUpload(multipart, session);
 		
