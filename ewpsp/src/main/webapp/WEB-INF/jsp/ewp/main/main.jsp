@@ -28,6 +28,7 @@
 					<input type="hidden" id="selTermTo" name="selTermTo" />
 					<input type="hidden" id="selTerm" name="selTerm" value="day" />
 					<input type="hidden" id="mapGroup" name="mapGroup" value="map" />
+					<input type="hidden" id="grpIdx" name="grpIdx" value="" />
 				</form>
 				<div class="row">
 					<div class="col-lg-4">
@@ -280,7 +281,7 @@
 												<div class="dropdown">
 												  <button id="allAreaDiv" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><em id="selAllArea">전체지역</em>
 												  <span class="caret"></span></button>
-												  <ul class="dropdown-menu">
+												  <ul id="selAreaList" class="dropdown-menu">
 												    <li class="on"><a href="#;" onclick="changeAllArea(this, 'All', 0)">전체지역</a></li>
 												    <li><a href="#;" onclick="changeAllArea(this, 'Seoul', 1)">서울</a></li>
 												    <li><a href="#;" onclick="changeAllArea(this, 'Busan', 2)">부산</a></li>
@@ -746,6 +747,8 @@ var area_array = [
 	"Jeju",			// 17
 	"Ulleungdo"		// 18 (코드값 없음)
 ];
+// 지역필터 html을 저장
+var areaListHtml = '';
 
 $(function() {
 	/* 이미지맵 처리 */
@@ -759,6 +762,8 @@ $(function() {
 		changeAllMap();
 		$('#selAllArea').text('전체지역');
 	});
+
+	areaListHtml = $('#selAreaList').html();
 
 	readArea();
 });

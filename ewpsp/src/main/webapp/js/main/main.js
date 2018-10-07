@@ -9,8 +9,10 @@ function fn_cycle() {
 	getGMainSiteTotalDetail(formData); // 사이트 사용량 총합계 조회
 	getGMainSiteList(1); // 사이트 목록 조회
 
-	// 콤보박스 변경 (상세정보 타이틀을 가져온다)
-	$('#selAllArea').text($('.local_name:eq(1)').text());
+	// 콤보박스 변경 (지역별 상태일 경우만 상세정보 타이틀(지역명)을 가져온다)
+	if ($('#mapGroup').val() == 'map') {
+		$('#selAllArea').text($('.local_name:eq(1)').text());
+	}
 }
 
 function getSiteMainSchCollection() {
@@ -51,7 +53,7 @@ function getSiteMainSchCollection() {
 function callback_getGMainAlarmList(result) {
 	var dvTpAlarmDetail = result.detail;
 	var alarmList = result.alarmList;
-	
+
 	$("#todayTotalAlarmCnt").val(dvTpAlarmDetail.total_cnt);
 	$("#todayAlarmCnt").val(dvTpAlarmDetail.alert_cnt);
 	$("#todayWarningCnt").val(dvTpAlarmDetail.warning_cnt);
@@ -61,7 +63,7 @@ function callback_getGMainAlarmList(result) {
 		$(".no").find('span').show();
 		$(".no").empty().append( '<span>'+dvTpAlarmDetail.notCfm_cnt+'</span>');
 	}
-	
+
 	$div = $(".alarm_notice");
 	$div.find("ul").empty();
 	if(alarmList == null || alarmList.length < 1) {
@@ -69,16 +71,13 @@ function callback_getGMainAlarmList(result) {
 	} else {
 		for(var i=0; i<alarmList.length; i++) {
 			var tm = new Date( convertDateUTC(alarmList[i].std_date) );
-			
+
 			$div.find("ul").append( 
 					$('<li />').append( $('<a href="#;" />').append("조회된 데이터가 없습니다.") 
 					).append( $('<span />').append( tm.format("yyyy-MM-dd HH:mm:ss") ) ) 
 			);
-			
 		}
-		
 	}
-	
 }
 
 function callback_getGMainSiteRankingTotalDetail(result) {
@@ -253,11 +252,11 @@ function callback_getGMainSiteList(result) {
 			var eq4Cls = siteList[i].pv > 0 ? ' on' : '';
 
 			$tbody.append(
-				$('<tr class="dbclickopen" />')
+				$('<tr class="dbclickopen" onclick="activateSite(this, \'' + siteList[i].site_id + '\')" ondblclick="goSiteMain(\'' + siteList[i].site_id + '\')" />')
 					.append($('<td />').append(siteList[i].rnum)) // no
 					.append($('<td />')
 						.append($('<div class="cname" />')
-							.append('<a href="/siteMain?siteId=' + siteList[i].site_id + '">' + siteList[i].site_name + '</a>')
+							.append('<a href="#none">' + siteList[i].site_name + '</a>')
 						)
 					)
 					.append($('<td />')
@@ -292,6 +291,33 @@ function callback_getGMainSiteList(result) {
 	}
 }
 
+// 사이트 목록 클릭 시 활성화
+function activateSite(elmt, siteId) {
+	$('.dbclickopen').removeClass('click');
+	$(elmt).addClass('click');
+	$('#smainLink').attr('href', '/siteMain?siteId=' + siteId)
+}
+
+// 사이트 목록 더블클릭 시 사이트메인으로 이동
+function goSiteMain(siteId) {
+	location.href = '/siteMain?siteId=' + siteId;
+}
+
+var groupListHtml = '';
+function callback_getGMainGroupList(result) {
+	var groupList = result.list;
+
+	groupListHtml = '<li class="on"><a href="#;" onclick="changeGroup(this, \'All\')">전체그룹</a></li>';
+	for (var i = 0; i < groupList.length; i++) {
+		var li = '<li>'
+			.concat('<a href="#;" onclick="changeGroup(this, \'' + groupList[i].site_grp_idx + '\')">')
+			.concat(groupList[i].site_grp_name)
+			.concat('</a>');
+		groupListHtml = groupListHtml.concat(li);
+	}
+	$('#selAreaList').html(groupListHtml);
+}
+
 var oldRankType = 0;
 function changeRanking(tabIdx) {
 	// html 이동
@@ -321,7 +347,9 @@ function changeMapGroup(aElmt) {
 		$('#mapUsage').show();
 		$('#groupUsage').hide();
 		$('#mapGroup').val('map');
-		$('#allAreaDiv').prop('disabled', false);
+
+		$('#selAllArea').text('전체지역');
+		$('#selAreaList').html(areaListHtml);
 
 		if (allMapFlag) {
 			changeAllMap();
@@ -332,7 +360,13 @@ function changeMapGroup(aElmt) {
 		$('#mapUsage').hide();
 		$('#groupUsage').show();
 		$('#mapGroup').val('group');
-		$('#allAreaDiv').prop('disabled', true);
+
+		$('#selAllArea').text('전체그룹');
+		if (groupListHtml == '') {
+			getGMainGroupList(formData);
+		} else {
+			$('#selAreaList').html(groupListHtml);
+		}
 
 		done = true;
 		clearTimeout(monitoring_cycle_5sec);
@@ -353,6 +387,19 @@ function changeAllArea(aElmt, lname, areaType) {
 		local_detail(lname, areaType);
 		changeLocalMap();
 	}
+}
+
+// 콤보박스 이름을 바꾸고 그룹별로 다시 조회한다.
+function changeGroup(aElmt, grpIdx) {
+	var text = changeLiClass(aElmt);
+	$('#selAllArea').text(text);
+
+	if (areaType == 0) {
+		$('#grpIdx').val('');
+	} else {
+		$('#grpIdx').val(grpIdx);
+	}
+	fn_cycle();
 }
 
 // 선택된 li에 class='on'을 붙이고 텍스트를 얻어온다.

@@ -949,6 +949,19 @@ function getGMainSiteList(selPageNum) {
 	});
 }
 
+// 군관리 사이트그룹 목록 조회
+function getGMainGroupList(selPageNum) {
+	$.ajax({
+		url : "/getGMainGroupList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_getGMainGroupList(result);
+		}
+	});
+}
+
 //===== 군관리메인 조회 end (greatman) =====
 
 //================================================================================================

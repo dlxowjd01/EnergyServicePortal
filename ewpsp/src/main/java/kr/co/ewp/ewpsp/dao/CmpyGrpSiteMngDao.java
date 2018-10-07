@@ -109,6 +109,17 @@ public class CmpyGrpSiteMngDao {
 		return sqlSession.selectOne("cmpyGrpSiteMng.getGMainSiteListCnt", param);
 	}
 
+	/**
+	 * 군관리메인의 사이트그룹 목록 조회
+	 * @author greatman
+	 * @param param
+	 * @return
+	 */
+	public List getGMainGroupList(HashMap param) {
+		List resultList = sqlSession.selectList("cmpyGrpSiteMng.getGMainGroupList", param);
+		return resultList;
+	}
+
 	public Map getCmpyDetail(HashMap param) {
 		Map result = sqlSession.selectOne("cmpyGrpSiteMng.getCmpyDetail", param);
 		return result;

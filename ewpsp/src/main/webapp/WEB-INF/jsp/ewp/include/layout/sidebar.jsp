@@ -16,7 +16,14 @@ $(document).ready(function() {
 </script>
 		<div id="sidebar">
 			<ul>
+				<c:choose>
+				<c:when test="${userInfo.auth_type ne '5'}">
+				<li class="smn1"><a id="smainLink" href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.')">메인</a></li>
+				</c:when>
+				<c:otherwise>
 				<li class="smn1"><a href="/siteMain">메인</a></li>
+				</c:otherwise>
+				</c:choose>
 				<li class="smn2">
 					<a href="/usage">에너지<br/>정보조회</a>
 					<div class="sub_layer">
@@ -57,7 +64,7 @@ $(document).ready(function() {
 				</li>
 			</ul>
 			<ol>
-				<c:if test="${userInfo.auth_type ne '4'}">
+				<c:if test="${userInfo.auth_type ne '5'}">
 				<c:if test="${userInfo.auth_type eq '1' or userInfo.auth_type eq '2'}">
 				<!-- <li class="smn6"><a href="/main">군관리<br/>메인</a></li> -->
 				<li class="smn6"><a href="/main">군관리<br/>메인</a></li>
@@ -67,7 +74,7 @@ $(document).ready(function() {
 					<div class="sub_layer">
 						<ul>
 							<li><a href="/kepcoMngSet">한전관리설정</a></li>
-							<c:if test="${userInfo.auth_type ne '3'}">
+							<c:if test="${userInfo.auth_type ne '4'}">
 							<li><a href="/cmpyGrpSiteMng">그룹/사이트</a></li>
 							</c:if>
 							<li><a href="/userMng">사용자관리</a></li>
@@ -88,7 +95,14 @@ $(document).ready(function() {
 			</div>
 			<div class="g_menu w100">
 				<ul>
+					<c:choose>
+					<c:when test="${userInfo.auth_type ne '5'}">
+					<li class="gmn1"><a id="smainLink" href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.')">메인</a></li>
+					</c:when>
+					<c:otherwise>
 					<li class="gmn1"><a href="/siteMain">메인</a></li>
+					</c:otherwise>
+					</c:choose>
 					<li class="gmn2"><a href="#;">에너지 정보조회</a>
 						<ul>
 							<li><a href="/usage">사용량 현황</a></li>

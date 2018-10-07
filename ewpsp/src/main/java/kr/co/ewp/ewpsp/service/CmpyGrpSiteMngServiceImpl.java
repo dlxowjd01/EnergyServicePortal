@@ -73,6 +73,10 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 		return cmpyGrpSiteMngDao.getGMainSiteListCnt(param);
 	}
 
+	public List getGMainGroupList(HashMap param) throws Exception {
+		return cmpyGrpSiteMngDao.getGMainGroupList(param);
+	}
+
 	public Map getCmpyDetail(HashMap param) throws Exception {
 		return cmpyGrpSiteMngDao.getCmpyDetail(param);
 	}

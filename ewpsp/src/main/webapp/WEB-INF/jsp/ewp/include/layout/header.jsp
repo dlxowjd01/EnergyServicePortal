@@ -20,9 +20,6 @@
 					<li>
 						<span>CURRENT TIME</span> <em id="currTime">${nowTime}<!-- 2018-07-27 17:10:05 --></em>
 					</li>
-					<li>
-						<span>DATA BASE TIME</span> <em id="dataTime">${nowTime}<!-- 2018-07-27 17:01:02 --></em>
-					</li>
 					<li class="member clear">
 						<div class="fl"><img src="../img/member_pic.jpg" alt=""></div>
 						<div class="fr">
@@ -48,7 +45,6 @@
 <script type="text/javascript">
 $(function() {
 	refreshCurrTime();
-	refreshDataTime();
 });
 
 // 현재 시간 갱신
@@ -57,12 +53,5 @@ function refreshCurrTime() {
 	var now = new Date();
 	currEm.text(now.format('yyyy-MM-dd HH:mm:ss'));
 	setTimeout(refreshCurrTime, 1000); // 매초 갱신
-}
-
-// 데이터 조회 시간 갱신
-function refreshDataTime() {
-	var dataEm = $('#dataTime');
-	var now = new Date();
-	dataEm.text(now.format('yyyy-MM-dd HH:mm:ss'));
 }
 </script>

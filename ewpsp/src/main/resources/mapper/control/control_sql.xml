@@ -129,6 +129,9 @@
 				and b.area_type = #{areaType}
 				</when>
 				<otherwise>
+				<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(grpIdx)">
+				and c.site_grp_idx = #{grpIdx}
+				</if>
 				<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userIdx)">
 				and c.user_idx = #{userIdx}
 				</if>

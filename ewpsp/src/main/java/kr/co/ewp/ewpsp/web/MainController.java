@@ -43,15 +43,32 @@ public class MainController {
 	/**
 	 * 군관리메인 알람 조회
 	 * @author greatman
+	 * @param session
 	 * @param param
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping("/getGMainAlarmList")
-	public @ResponseBody Map<String, Object> getGMainAlarmList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getGMainAlarmList(HttpSession session, @RequestParam HashMap param) throws Exception {
 		logger.debug("/getGMainAlarmList");
 		logger.debug("param : {}", param);
 //		param.put("alarmCfmYn", "N");
+
+		Map userInfo = UserUtil.getUserInfo(session);
+		if (userInfo == null) {
+			userInfo = new HashMap();
+		}
+		logger.debug("userInfo : {}", userInfo);
+
+		Integer userIdx = (Integer)userInfo.get("user_idx");
+		String authType = (String)userInfo.get("auth_type");
+		if (userIdx == null) {
+			userIdx = -1;
+		}
+
+		if (authType == null || (!authType.equals("1") && !authType.equals("2"))) {
+			param.put("userIdx", userIdx);
+		}
 
 		Map result = controlService.getGMainDeviceAlarmCnt(param); // 장치별 알람건수
 		List alarmList = alarmService.getGMainAlarmList(param); // 최근 알람 목록 조회(3건)
@@ -247,6 +264,42 @@ public class MainController {
 		Map resultMap = new HashMap();
 		resultMap.put("list", list);
 		resultMap.put("pagingMap", pagingMap);
+		return resultMap;
+	}
+
+	/**
+	 * 군관리메인 사이트그룹 목록 조회
+	 * @author greatman
+	 * @param session
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getGMainGroupList")
+	public @ResponseBody Map<String, Object> getGMainGroupList(HttpSession session, @RequestParam HashMap param) throws Exception {
+		logger.debug("/getGMainGroupList");
+		logger.debug("param : {}", param);
+
+		Map userInfo = UserUtil.getUserInfo(session);
+		if (userInfo == null) {
+			userInfo = new HashMap();
+		}
+		logger.debug("userInfo : {}", userInfo);
+
+		Integer userIdx = (Integer)userInfo.get("user_idx");
+		String authType = (String)userInfo.get("auth_type");
+		if (userIdx == null) {
+			userIdx = -1;
+		}
+
+		if (authType == null || (!authType.equals("1") && !authType.equals("2"))) {
+			param.put("userIdx", userIdx);
+		}
+
+		List list = cmpyGrpSiteMngService.getGMainGroupList(param);
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("list", list);
 		return resultMap;
 	}
 }
