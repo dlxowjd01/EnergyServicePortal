@@ -1,4 +1,5 @@
-	var device_data_pc = new Array(); // 실제 사용량 표 데이터
+	var excelCnt = 0;
+	var selectDeviceGbn = "";
 	function getDBData(deviceGbn) {
 		if(deviceGbn == "IOE") getDeviceIOEList(1); // 장치목록 조회(IOE)
 		else if(deviceGbn == "PCS") getDevicePCSList(1); // 장치목록 조회(PCS)
@@ -21,13 +22,14 @@
 		} else {
 			for(var i=0; i<ioeList.length; i++) {
 				var device_stat = (ioeList[i].device_stat == 1) ? "connect" : "disconnect";
+				var tm = new Date( convertDateUTC(ioeList[i].upload_timestamp) );
 				$tbody.append(
 						$('<tr />').append( $("<td />").append( ioeList[i].rnum )
 						).append( $("<td />").append( ioeList[i].site_id )
 						).append( $("<td />").append( ioeList[i].device_name )
 						).append( $("<td />").append( ioeList[i].device_id )
 						).append( $("<td />").append( device_stat )
-						).append( $("<td />").append( ioeList[i].upload_timestamp )
+						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
 								$("<td />").append( '<a href="#;" onclick="getDeviceIOEDetail(\''+ioeList[i].device_ioe_idx+'\');" class="detail_view">상세보기</a>' )
 						)
@@ -36,6 +38,9 @@
 			
 			var pagingMap = result.pagingMap;
 			makePageNums2(pagingMap, "DeviceIOE");
+			
+			excelCnt = ioeList.length;
+			selectDeviceGbn = "IOE";
 			
 		}
 		
@@ -93,6 +98,7 @@
 		} else {
 			for(var i=0; i<pcsList.length; i++) {
 				var device_stat = (pcsList[i].device_stat == 1) ? "connect" : "disconnect";
+				var tm = new Date( convertDateUTC(pcsList[i].std_date) );
 				$tbody.append(
 						$('<tr />').append( $("<td />").append( pcsList[i].rnum )
 						).append( $("<td />").append( pcsList[i].site_id )
@@ -101,7 +107,7 @@
 						).append( $("<td />").append( device_stat )
 						).append( $("<td />").append( "" )
 						).append( $("<td />").append( pcsList[i].alarm_msg )
-						).append( $("<td />").append( pcsList[i].std_date )
+						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
 								$("<td />").append( '<a href="#;" onclick="getDevicePCSDetail(\''+pcsList[i].device_pcs_idx+'\');" class="detail_view">상세보기</a>' )
 						)
@@ -110,6 +116,9 @@
 			
 			var pagingMap = result.pagingMap;
 			makePageNums2(pagingMap, "DevicePCS");
+			
+			excelCnt = pcsList.length;
+			selectDeviceGbn = "PCS";
 			
 		}
 		
@@ -215,6 +224,7 @@
 		} else {
 			for(var i=0; i<bmsList.length; i++) {
 				var device_stat = (bmsList[i].device_stat == 1) ? "connect" : "disconnect";
+				var tm = new Date( convertDateUTC(bmsList[i].std_date) );
 				$tbody.append(
 						$('<tr />').append( $("<td />").append( bmsList[i].rnum )
 						).append( $("<td />").append( bmsList[i].site_id )
@@ -223,7 +233,7 @@
 						).append( $("<td />").append( bmsList[i].device_stat )
 						).append( $("<td />").append( "" )
 						).append( $("<td />").append( "" )
-						).append( $("<td />").append( bmsList[i].std_date )
+						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
 								$("<td />").append( '<a href="#;" onclick="getDeviceBMSDetail(\''+bmsList[i].device_bms_idx+'\');" class="detail_view">상세보기</a>' )
 						)
@@ -232,6 +242,9 @@
 			
 			var pagingMap = result.pagingMap;
 			makePageNums2(pagingMap, "DeviceBMS");
+			
+			excelCnt = bmsList.length;
+			selectDeviceGbn = "BMS";
 			
 		}
 		
@@ -323,6 +336,7 @@
 		} else {
 			for(var i=0; i<pvList.length; i++) {
 				var device_stat = (pvList[i].device_stat == 1) ? "connect" : "disconnect";
+				var tm = new Date( convertDateUTC(pvList[i].std_date) );
 				$tbody.append(
 						$('<tr />').append( $("<td />").append( pvList[i].rnum )
 						).append( $("<td />").append( pvList[i].site_id )
@@ -331,7 +345,7 @@
 						).append( $("<td />").append( pvList[i].device_stat )
 						).append( $("<td />").append( pvList[i].temp )
 						).append( $("<td />").append( pvList[i].alarm_msg )
-						).append( $("<td />").append( pvList[i].std_date )
+						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
 								$("<td />").append( '<a href="#;" onclick="getDevicePVDetail(\''+pvList[i].device_pv_idx+'\');" class="detail_view">상세보기</a>' )
 						)
@@ -340,6 +354,9 @@
 			
 			var pagingMap = result.pagingMap;
 			makePageNums2(pagingMap, "DevicePV");
+			
+			excelCnt = pvList.length;
+			selectDeviceGbn = "PV";
 			
 		}
 		

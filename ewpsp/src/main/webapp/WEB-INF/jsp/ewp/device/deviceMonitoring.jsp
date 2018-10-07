@@ -46,14 +46,14 @@
 										<li id="tab_PV"><a href="javascript:getDevicePVList(1);">PV</a></li>									
 									</ul>
 									<ul class="button_area fl">
-										<li><a href="#;" class="save_btn">데이터저장</a></li>
+										<li><a href="#;" class="save_btn" onclick="deviceExcelDownload('장치모니터링', event, 'device');">데이터저장</a></li>
 									</ul>
 								</div>
 							</div>
 							<div class="table_info">
 								<ul class="tblDisplay">
 									<li>
-										<div class="default_tbl">
+										<div class="default_tbl" id="deviceIOEDiv">
 											<table>
 												<colgroup>
 													<col width="100"><col><col><col><col><col><col width="100">
@@ -73,33 +73,6 @@
 													<tr>
 														<td colspan="6">조회된 데이터가 없습니다.</td>
 													</tr>
-													<!-- <tr>
-														<td>1</td>
-														<td>10037202</td>
-														<td>IOE(총량)</td>
-														<td>41331</td>
-														<td>NORMAL</td>
-														<td>2018-06-15  2:39:01 PM</td>
-														<td><a href="#;" onclick="popupOpen('dview_ioe')" class="detail_view">상세보기</a></td>
-													</tr>
-													<tr>
-														<td>2</td>
-														<td>10037202</td>
-														<td>ESS(충방전)</td>
-														<td>41332</td>
-														<td>NORMAL</td>
-														<td>2018-06-15  2:39:01 PM</td>
-														<td><a href="#;" onclick="popupOpen('dview_ioe')" class="detail_view">상세보기</a></td>
-													</tr>
-													<tr>
-														<td>3</td>
-														<td>10037202</td>
-														<td>소내전력</td>
-														<td>41333</td>
-														<td>DISCONNECTED</td>
-														<td>2018-06-15  2:39:01 PM</td>
-														<td><a href="#;" onclick="popupOpen('dview_ioe')" class="detail_view">상세보기</a></td>
-													</tr> -->
 												</tbody>
 											</table>				
 										</div>
@@ -110,7 +83,7 @@
 										</div>	
 									</li>
 									<li>
-										<div class="default_tbl">
+										<div class="default_tbl" id="devicePCSDiv">
 											<table>
 												<colgroup>
 													<col width="100"><col><col><col><col><col><col><col><col width="100">
@@ -132,28 +105,6 @@
 													<tr>
 														<td colspan="8">조회된 데이터가 없습니다.</td>
 													</tr>
-													<!-- <tr>
-														<td>1</td>
-														<td>10037202</td>
-														<td>PCS_01</td>
-														<td>41331</td>
-														<td>RUN</td>
-														<td>Charge</td>
-														<td>-</td>
-														<td>2018-06-15  2:39:01 PM</td>
-														<td><a href="#;" onclick="popupOpen('dview_pcs')" class="detail_view">상세보기</a></td>
-													</tr>
-													<tr>
-														<td>2</td>
-														<td>10037202</td>
-														<td>PCS_01</td>
-														<td>41331</td>
-														<td>STOP</td>
-														<td>-</td>
-														<td>AC over current R-phase</td>
-														<td>2018-06-15  2:39:01 PM</td>
-														<td><a href="#;" onclick="popupOpen('dview_pcs')" class="detail_view">상세보기</a></td>
-													</tr> -->
 												</tbody>
 											</table>				
 										</div>
@@ -164,7 +115,7 @@
 										</div>	
 									</li>
 									<li>
-										<div class="default_tbl">
+										<div class="default_tbl" id="deviceBMSDiv">
 											<table>
 												<colgroup>
 													<col width="100"><col><col><col><col><col><col><col><col width="100">
@@ -186,28 +137,6 @@
 													<tr>
 														<td colspan="8">조회된 데이터가 없습니다.</td>
 													</tr>
-													<!-- <tr>
-														<td>1</td>
-														<td>10037202</td>
-														<td>BMS_01</td>
-														<td>41331</td>
-														<td>RUN</td>
-														<td>Charge</td>
-														<td>-</td>
-														<td>2018-06-15  2:39:01 PM</td>
-														<td><a href="#;" onclick="popupOpen('dview_bms')" class="detail_view">상세보기</a></td>
-													</tr>
-													<tr>
-														<td>2</td>
-														<td>10037202</td>
-														<td>BMS_02</td>
-														<td>41331</td>
-														<td>FAULT</td>
-														<td>-</td>
-														<td>Over cell Voltage</td>
-														<td>2018-06-15  2:39:01 PM</td>
-														<td><a href="#;" onclick="popupOpen('dview_bms')" class="detail_view">상세보기</a></td>
-													</tr> -->
 												</tbody>
 											</table>				
 										</div>
@@ -218,7 +147,7 @@
 										</div>	
 									</li>
 									<li>
-										<div class="default_tbl">
+										<div class="default_tbl" id="devicePVDiv">
 											<table>
 												<colgroup>
 													<col width="100"><col><col><col><col><col><col><col><col width="100">
@@ -240,28 +169,6 @@
 													<tr>
 														<td colspan="8">조회된 데이터가 없습니다.</td>
 													</tr>
-													<!-- <tr>
-														<td>1</td>
-														<td>10037202</td>
-														<td>PV_01</td>
-														<td>41331</td>
-														<td>RUN</td>
-														<td>51℃</td>
-														<td>-</td>
-														<td>2018-06-15  2:39:01 PM</td>
-														<td><a href="#;" onclick="popupOpen('dview_pv')" class="detail_view">상세보기</a></td>
-													</tr>
-													<tr>
-														<td>2</td>
-														<td>10037202</td>
-														<td>PV_02</td>
-														<td>41331</td>
-														<td>FAULT</td>
-														<td>-</td>
-														<td>Bulk UV</td>
-														<td>2018-06-15  2:39:01 PM</td>
-														<td><a href="#;" onclick="popupOpen('dview_pv')" class="detail_view">상세보기</a></td>
-													</tr> -->
 												</tbody>
 											</table>				
 										</div>

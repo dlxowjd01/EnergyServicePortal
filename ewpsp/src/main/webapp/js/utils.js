@@ -329,6 +329,23 @@ function excelDownload(excelName, e, gbn) {
 	}
 }
 
+function deviceExcelDownload(excelName, e, gbn) {
+	$val = $("#pc_use_dataDiv").find('tbody');
+	var cnt = 0;
+	
+	var tdCnt = excelCnt;
+	cnt = (tdCnt == 0) ? 0 : tdCnt;
+	
+	if(cnt < 1) {
+		alert("다운받을 데이터가 없습니다.");
+	} else {
+		if(confirm("엑셀로 저장하시겠습니까?")) {
+			var divId = "device"+selectDeviceGbn+"Div";
+			tableToExcel(divId, excelName, e);
+		}
+	}
+}
+
 function downloadExcelPopup(targetId) {
 	var excelHtml = $("#pc_use_dataDiv").html();
 	window.open("/htmlToExcel?excelHtml="+excelHtml, "", "height=100,width=100,top=100,left=200");
