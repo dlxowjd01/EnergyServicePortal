@@ -17,7 +17,7 @@ $(document).ready(function() {
 		<div id="sidebar">
 			<ul>
 				<c:choose>
-				<c:when test="${userInfo.auth_type ne '5'}">
+				<c:when test="${not empty userInfo and userInfo.auth_type ne '5'}">
 				<li class="smn1"><a id="smainLink" href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.')">메인</a></li>
 				</c:when>
 				<c:otherwise>
@@ -96,7 +96,7 @@ $(document).ready(function() {
 			<div class="g_menu w100">
 				<ul>
 					<c:choose>
-					<c:when test="${userInfo.auth_type ne '5'}">
+					<c:when test="${not empty userInfo and userInfo.auth_type ne '5'}">
 					<li class="gmn1"><a id="smainLink" href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.')">메인</a></li>
 					</c:when>
 					<c:otherwise>
