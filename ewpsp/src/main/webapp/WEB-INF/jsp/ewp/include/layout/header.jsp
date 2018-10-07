@@ -2,23 +2,31 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<script type="text/javascript">
+var selViewSiteName = "";
+</script>
 			<nav class="clear">
 				<button type="button" class="category">카테고리</button>
 				<div class="nav_brand"><a href="#;">EWP</a></div>
 				<div class="site dropdown">
-					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selSiteBox">
 						군관리: ${fn:length(userSiteList)} Sites<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu">
-						<li class="on"><a href="/siteMain?siteId=${item.site_id }">군관리: ${fn:length(userSiteList)} Sites</a></li>
+						<%-- <li class="on"><a href="/siteMain?siteId=${item.site_id }">군관리: ${fn:length(userSiteList)} Sites</a></li> --%>
 						<c:forEach var="item" items="${userSiteList }">
 							<li><a href="/siteMain?siteId=${item.site_id }">${item.site_name }</a></li>
+							<c:if test="${item.site_id eq selViewSiteId }">
+								<script>
+								selViewSiteName = "${item.site_name }";
+								</script>
+							</c:if>
 						</c:forEach>
 					</ul>
 				</div>
 				<ul class="nav_right">
 					<li>
-						<span>CURRENT TIME</span> <em id="currTime">${nowTime}<!-- 2018-07-27 17:10:05 --></em>
+						<span>CURRENT TIME/${selViewSiteId }</span> <em id="currTime">${nowTime}<!-- 2018-07-27 17:10:05 --></em>
 					</li>
 					<li>
 						<span>DATA BASE TIME</span> <em id="dataTime">${nowTime}<!-- 2018-07-27 17:01:02 --></em>
@@ -49,6 +57,10 @@
 $(function() {
 	refreshCurrTime();
 	refreshDataTime();
+	
+	if(selViewSiteName != "") {
+		$("#selSiteBox").empty().append("군관리: "+selViewSiteName).append( $('<span class="caret" />') );
+	}
 });
 
 // 현재 시간 갱신

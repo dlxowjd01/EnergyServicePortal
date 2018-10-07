@@ -451,7 +451,9 @@
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)">
 		limit #{startNum }, #{pageRowCnt }
+		</if>
 	</select>
 	
 	<select id="getDeviceListCnt" parameterType="hashMap" resultType="java.lang.Integer">

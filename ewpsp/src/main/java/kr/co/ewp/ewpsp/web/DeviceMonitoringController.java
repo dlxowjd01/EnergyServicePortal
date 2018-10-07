@@ -35,7 +35,7 @@ public class DeviceMonitoringController {
 	}
 
 	@RequestMapping("/getDeviceIOEList")
-	public @ResponseBody Map<String, Object> getDeviceIOEList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getDeviceIOEList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getDeviceIOEList");
 		logger.debug("param ::::: "+param.toString());
 
@@ -43,7 +43,7 @@ public class DeviceMonitoringController {
 		int pageRowCnt = 5;
 		int startNum = pageRowCnt*(selPageNum-1);
 		
-		param.put("siteId", "17094385");
+		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
 		
@@ -82,7 +82,7 @@ public class DeviceMonitoringController {
 	}
 	
 	@RequestMapping("/getDevicePCSList")
-	public @ResponseBody Map<String, Object> getDevicePCSList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getDevicePCSList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getDevicePCSList");
 		logger.debug("param ::::: "+param.toString());
 
@@ -90,7 +90,7 @@ public class DeviceMonitoringController {
 		int pageRowCnt = 5;
 		int startNum = pageRowCnt*(selPageNum-1);
 		
-		param.put("siteId", "17094385");
+		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
 		
@@ -129,7 +129,7 @@ public class DeviceMonitoringController {
 	}
 	
 	@RequestMapping("/getDeviceBMSList")
-	public @ResponseBody Map<String, Object> getDeviceBMSList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getDeviceBMSList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getDeviceBMSList");
 		logger.debug("param ::::: "+param.toString());
 
@@ -137,7 +137,7 @@ public class DeviceMonitoringController {
 		int pageRowCnt = 5;
 		int startNum = pageRowCnt*(selPageNum-1);
 		
-		param.put("siteId", "17094385");
+		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
 		
@@ -176,7 +176,7 @@ public class DeviceMonitoringController {
 	}
 	
 	@RequestMapping("/getDevicePVList")
-	public @ResponseBody Map<String, Object> getDevicePVList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getDevicePVList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getDevicePVList");
 		logger.debug("param ::::: "+param.toString());
 		
@@ -184,7 +184,7 @@ public class DeviceMonitoringController {
 		int pageRowCnt = 5;
 		int startNum = pageRowCnt*(selPageNum-1);
 		
-		param.put("siteId", "17094385");
+		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
 		

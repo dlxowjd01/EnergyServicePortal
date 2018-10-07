@@ -29,7 +29,7 @@
 				<input type="hidden" id="selTermTo" name="selTermTo">
 				<input type="hidden" id="selTerm" name="selTerm" value="day">
 				<input type="hidden" id="selPeriodVal" name="selPeriodVal" value="hour">
-				<input type="hidden" id="siteId" name="siteId" value="17094385">
+				<input type="hidden" id="siteId" name="siteId" value="${selViewSiteId }">
 				<input type="hidden" id="selPageNum" name="selPageNum" value="">
 				</form>
 				<div class="row">

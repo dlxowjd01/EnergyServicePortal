@@ -7,7 +7,7 @@
 		/* 사용자 한건 조회 */
 		select 
 			user_idx, user_id, user_type, main_user_idx, main_user_yn, auth_type, lang_type, 
-			co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, 
+			co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, site_id, 
 			del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_user
 		where user_id = #{userId }
@@ -34,6 +34,9 @@
 			psn_mobile,   /* 담당자휴대폰번호 */
 			psn_email,   /* 담당자이메일주소 */
 			note,   /* 비고 */
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+			site_id, /* 사이트ID */
+			</if>
 			del_yn, 
 			reg_uid, 
 			reg_date
@@ -56,6 +59,9 @@
 			#{psnMobile }, 
 			#{psnEmail }, 
 			#{note }, 
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+			#{siteId }, 
+			</if>
 			'N', 
 			#{reg_uid }, 
 			now()

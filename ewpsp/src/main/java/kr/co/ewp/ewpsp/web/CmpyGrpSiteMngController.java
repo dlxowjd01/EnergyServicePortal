@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -61,7 +62,7 @@ public class CmpyGrpSiteMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/getCmpyList")
-	public @ResponseBody Map<String, Object> getCmpyList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getCmpyList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getCmpyList");
 		logger.debug("param ::::: "+param.toString());
 
@@ -69,7 +70,7 @@ public class CmpyGrpSiteMngController {
 		int pageRowCnt = 5;
 		int startNum = pageRowCnt*(selPageNum-1);
 		
-		param.put("siteId", "17094385");
+		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
 		
@@ -102,7 +103,7 @@ public class CmpyGrpSiteMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/getGroupList")
-	public @ResponseBody Map<String, Object> getGroupList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getGroupList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getGroupList");
 		logger.debug("param ::::: "+param.toString());
 
@@ -110,7 +111,7 @@ public class CmpyGrpSiteMngController {
 		int pageRowCnt = 5;
 		int startNum = pageRowCnt*(selPageNum-1);
 		
-		param.put("siteId", "17094385");
+		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
 		
@@ -143,7 +144,7 @@ public class CmpyGrpSiteMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/getSiteList")
-	public @ResponseBody Map<String, Object> getSiteList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getSiteList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getSiteList");
 		logger.debug("param ::::: "+param.toString());
 
@@ -151,7 +152,7 @@ public class CmpyGrpSiteMngController {
 		int pageRowCnt = 5;
 		int startNum = pageRowCnt*(selPageNum-1);
 		
-		param.put("siteId", "17094385");
+		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
 		
