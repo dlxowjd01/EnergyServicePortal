@@ -122,7 +122,7 @@
 								</div>
 								</c:otherwise>
 							</c:choose>
-							<input type="hidden" id="siteId" name="siteId" value="17094385">
+							<input type="hidden" id="siteId" name="siteId" value="${selViewSiteId }">
 							<input type="hidden" id="dtCnt" name="dtCnt">
 							
 							<input type="hidden" id="selTermFrom" name="selTermFrom">

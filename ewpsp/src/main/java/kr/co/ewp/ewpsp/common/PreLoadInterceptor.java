@@ -48,6 +48,15 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			request.setAttribute("userSiteList", userSiteList);
 			logger.debug("userSiteList:{}", userSiteList);
 		}
+		
+		String siteId = request.getParameter("siteId");
+		if(siteId != null) {
+			request.getSession().setAttribute("selViewSiteId", siteId);
+		}
+		String selViewSiteId = (String) request.getSession().getAttribute("selViewSiteId");
+		if(selViewSiteId != null) {
+			request.setAttribute("selViewSiteId", selViewSiteId);
+		}
 
 		// 상단 시간 초기값
 		request.setAttribute("nowTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));

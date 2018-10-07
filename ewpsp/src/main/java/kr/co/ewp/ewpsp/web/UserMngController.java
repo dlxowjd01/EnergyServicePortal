@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,7 @@ public class UserMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/getUserList")
-	public @ResponseBody Map<String, Object> getUserList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getUserList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getUserList");
 		logger.debug("param ::::: "+param.toString());
 
@@ -53,7 +54,7 @@ public class UserMngController {
 		int pageRowCnt = 5;
 		int startNum = pageRowCnt*(selPageNum-1);
 		
-		param.put("siteId", "17094385");
+		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
 		

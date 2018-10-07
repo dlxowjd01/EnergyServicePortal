@@ -137,11 +137,11 @@ public class ControlController {
 	}
 
 	@RequestMapping("/getSmsAddresseeList")
-	public @ResponseBody Map<String, Object> getSmsAddresseeList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getSmsAddresseeList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getSmsAddresseeList");
 		logger.debug("param ::::: "+param.toString());
 		
-		param.put("siteId", "17094385");
+		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
 		
 		List list = controlService.getSmsAddresseeList(param);
 		
@@ -151,11 +151,11 @@ public class ControlController {
 	}
 	
 	@RequestMapping("/insertAddressee")
-	public @ResponseBody Map<String, Object> insertAddressee(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> insertAddressee(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/insertAddressee");
 		logger.debug("param ::::: "+param.toString());
 		
-		param.put("siteId", "17094385");
+		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
 		
 		int resultCnt = controlService.insertAddressee(param);
 		

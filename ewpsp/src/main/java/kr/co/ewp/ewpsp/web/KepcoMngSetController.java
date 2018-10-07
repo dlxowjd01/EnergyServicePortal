@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,9 +45,9 @@ public class KepcoMngSetController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/getSiteSetDetail")
-	public @ResponseBody Map<String, Object> getSiteSetDetail(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getSiteSetDetail(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getSiteSetDetail");
-		param.put("siteId", "17094385");
+		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
 		logger.debug("param ::::: "+param.toString());
 		
 		Map result = kepcoMngSetService.getSiteSetDetail(param);
