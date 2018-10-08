@@ -46,6 +46,7 @@
 										<li id="tab_PV"><a href="javascript:getDevicePVList(1);">PV</a></li>									
 									</ul>
 									<ul class="button_area fl">
+										<!-- <li><a href="#;" class="save_btn">데이터저장</a></li> -->
 										<li><a href="#;" class="save_btn" onclick="deviceExcelDownload('장치모니터링', event, 'device');">데이터저장</a></li>
 									</ul>
 								</div>

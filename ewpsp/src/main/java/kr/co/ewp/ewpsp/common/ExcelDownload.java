@@ -10,6 +10,7 @@ import java.util.Iterator;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.xssf.streaming.SXSSFCell;
 import org.apache.poi.xssf.streaming.SXSSFRow;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
@@ -105,14 +106,30 @@ public class ExcelDownload {
 //			logger.debug("rownum : "+rowNum+", cell name : "+name+", "+excelMap.get(name)+", "+cellNum);
 			cell = row.createCell(cellNum);
 			if("reg_date".equals(name) || "std_date".equals(name)) {
-				cell.setCellValue((Timestamp)excelMap.get(name));
-			} else if("std_timestamp".equals(name)) {
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String str = sdf.format( new Date( ((Timestamp)excelMap.get(name)).getTime() ) );
+				cell.setCellValue( str );
+			} else if("rnum".equals(name)) {
+				if(excelMap.get(name) instanceof Double) {
+					double val = (Double) excelMap.get(name);
+					int reVal = (int) val;
+					cell.setCellValue( Integer.toString(reVal) );
+				} else if(excelMap.get(name) instanceof Long) {
+					long val = (Long) excelMap.get(name);
+					int reVal = (int) val;
+					cell.setCellValue( Integer.toString(reVal) );
+				} else {
+					cell.setCellValue((String)excelMap.get(name));
+				}
+			} else if(name.contains("_timestamp")) {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				String str = sdf.format( new Date( ((Timestamp)excelMap.get(name)).getTime() ) );
 				cell.setCellValue( str );
 			} else {
 				if(excelMap.get(name) instanceof BigDecimal) {
 					cell.setCellValue( ((BigDecimal)excelMap.get(name)).toString() );
+				} else if(excelMap.get(name) instanceof Integer) {
+					cell.setCellValue( Integer.toString((Integer) excelMap.get(name)) );
 				} else {
 					cell.setCellValue((String)excelMap.get(name));
 				}
@@ -121,6 +138,14 @@ public class ExcelDownload {
 			cellNum++;
 		}
 //		logger.debug("==================sdf=======================");
+	}
+	
+	// 헤더 스타일
+	public void headerStyle(SXSSFCell cell) {
+		CellStyle headerStyle = workbook.createCellStyle();
+//		headerStyle.setAlignment();
+		
+		cell.setCellStyle(headerStyle);
 	}
 
 	// 엑셀 다운로드 시작 시 실행함수
@@ -135,7 +160,7 @@ public class ExcelDownload {
 		
 		response.setContentType("Application/Msexcel");
 		response.setHeader("Set-Cookie", "fileDonwload=true; path=/");
-		response.setHeader("Content-Disposition",  String.format("attachment; filename=\""+excelName+".xlsx\""));
+		response.setHeader("Content-Disposition",  String.format("attachment; filename=\""+excelName+".xls\""));
 	}
 	
 	// 엑셀 다운로드 종료함수

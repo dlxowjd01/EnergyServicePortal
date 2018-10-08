@@ -340,8 +340,14 @@ function deviceExcelDownload(excelName, e, gbn) {
 		alert("다운받을 데이터가 없습니다.");
 	} else {
 		if(confirm("엑셀로 저장하시겠습니까?")) {
-			var divId = "device"+selectDeviceGbn+"Div";
-			tableToExcel(divId, excelName, e);
+//			var divId = "device"+selectDeviceGbn+"Div";
+//			tableToExcel(divId, excelName, e);
+			
+			// 엑셀 다운로드
+			$.download('/excelDownload',
+					"gbn="+selectDeviceGbn
+//					+"&COL_NM="+col_kor
+					,'post' );
 		}
 	}
 }

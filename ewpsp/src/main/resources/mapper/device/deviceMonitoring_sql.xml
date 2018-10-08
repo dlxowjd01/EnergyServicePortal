@@ -2,8 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="deviceMonitoring">
-	<select id="getDeviceIOEList" parameterType="hashMap" resultType="hashMap">
-		select * from (
+	<select id="getDeviceIOEList" parameterType="hashMap" resultType="java.util.LinkedHashMap">
+		select
+			rnum, site_id, device_name, device_id, device_stat_name, upload_timestamp
+		from (
 			select 
 				@rownum := @rownum + 1 as rnum,
 				page_tb.*
@@ -14,6 +16,8 @@
 						vr_device_id, vr_device_grp_id, vr_owner_id, vr_action, vr_stat, vr_mod_date, vr_error, 
 						tm_voltage, tm_pulse, tm_ct_ratio, tm_pt_tatio, 
 						network_conf, options, create_timestamp, create_date, upload_timestamp, upload_date, device_stat, reg_date
+						, case device_stat when 1 then 'connect' 
+							else 'disconnect' end as device_stat_name
 					from tb_device_ioe
 					where 1=1
 					and (device_id, reg_date) in (
@@ -29,7 +33,9 @@
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)">
 		limit #{startNum }, #{pageRowCnt }
+		</if>
 	</select>
 	
 	<select id="getDeviceIOEListCnt" parameterType="hashMap" resultType="java.lang.Integer">
@@ -96,8 +102,10 @@
 		and device_ioe_idx = #{deviceIoeIdx }
 	</select>
 	
-	<select id="getDevicePCSList" parameterType="hashMap" resultType="hashMap">
-		select * from (
+	<select id="getDevicePCSList" parameterType="hashMap" resultType="java.util.LinkedHashMap">
+		select 
+			rnum, site_id, device_name, device_id, device_stat_name, cd_status, alarm_msg, std_date
+		from (
 			select 
 				@rownum := @rownum + 1 as rnum,
 				page_tb.*
@@ -106,6 +114,10 @@
 						device_pcs_idx, site_id, device_id, device_name, device_stat, alarm_msg, 
 						ac_voltage, ac_power, ac_current, ac_freq, ac_set_power, ac_pf, 
 						dc_voltage, dc_power, dc_current, dc_freq, dc_set_power, dc_pf, std_date, reg_date
+						, case device_stat when 1 then 'Schedule' 
+							when 2 then 'Command' 
+							else 'disconnect' end as device_stat_name
+						, "" as cd_status
 					from tb_device_pcs
 					where 1=1
 					and (device_id, reg_date) in (
@@ -121,7 +133,9 @@
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)">
 		limit #{startNum }, #{pageRowCnt }
+		</if>
 	</select>
 	
 	<select id="getDevicePCSListCnt" parameterType="hashMap" resultType="java.lang.Integer">
@@ -186,8 +200,10 @@
 		and device_pcs_idx = #{devicePcsIdx }
 	</select>
 	
-	<select id="getDeviceBMSList" parameterType="hashMap" resultType="hashMap">
-		select * from (
+	<select id="getDeviceBMSList" parameterType="hashMap" resultType="java.util.LinkedHashMap">
+		select 
+			rnum, site_id, device_name, device_id, device_stat_name, cd_status, alarm_msg, std_date
+		from (
 			select 
 				@rownum := @rownum + 1 as rnum,
 				page_tb.*
@@ -195,6 +211,14 @@
 					select 
 						device_bms_idx, site_id, device_id, device_name, device_stat, 
 						sys_soc, curr_soc, sys_soh, sys_voltage, sys_current, dod, std_date, reg_date
+						, case device_stat when 0 then 'Idle' 
+							when 1 then 'Charge' 
+							when 2 then 'Discharge' 
+							when 3 then 'MainS/W on/off' 
+							when 4 then 'Off-line' 
+							when 5 then 'Ready' 
+							else 'disconnect' end as device_stat_name
+						, "" as cd_status, "" as alarm_msg
 					from tb_device_bms
 					where 1=1
 					and (device_id, reg_date) in (
@@ -210,7 +234,9 @@
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)">
 		limit #{startNum }, #{pageRowCnt }
+		</if>
 	</select>
 	
 	<select id="getDeviceBMSListCnt" parameterType="hashMap" resultType="java.lang.Integer">
@@ -272,14 +298,19 @@
 		and device_bms_idx = #{deviceBmsIdx }
 	</select>
 	
-	<select id="getDevicePVList" parameterType="hashMap" resultType="hashMap">
-		select * from (
+	<select id="getDevicePVList" parameterType="hashMap" resultType="java.util.LinkedHashMap">
+		select 
+			rnum, site_id, device_name, device_id, device_stat_name, temp, alarm_msg, std_date
+		from (
 			select 
 				@rownum := @rownum + 1 as rnum,
 				page_tb.*
 			from (
 					select 
 						device_pv_idx, site_id, device_id, device_name, device_stat, alarm_msg, temp, tot_power, std_date, reg_date
+						, case device_stat when 0 then 'Stop' 
+							when 1 then 'Run' 
+							else 'disconnect' end as device_stat_name
 					from tb_device_pv
 					where 1=1
 					and (device_id, reg_date) in (
@@ -295,7 +326,9 @@
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)">
 		limit #{startNum }, #{pageRowCnt }
+		</if>
 	</select>
 	
 	<select id="getDevicePVListCnt" parameterType="hashMap" resultType="java.lang.Integer">
