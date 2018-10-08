@@ -104,38 +104,41 @@ public class ExcelDownload {
 		while (paramKeys.hasNext()) {
 			String name = paramKeys.next();
 //			logger.debug("rownum : "+rowNum+", cell name : "+name+", "+excelMap.get(name)+", "+cellNum);
-			cell = row.createCell(cellNum);
-			if("reg_date".equals(name) || "std_date".equals(name)) {
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String str = sdf.format( new Date( ((Timestamp)excelMap.get(name)).getTime() ) );
-				cell.setCellValue( str );
-			} else if("rnum".equals(name)) {
-				if(excelMap.get(name) instanceof Double) {
-					double val = (Double) excelMap.get(name);
-					int reVal = (int) val;
-					cell.setCellValue( Integer.toString(reVal) );
-				} else if(excelMap.get(name) instanceof Long) {
-					long val = (Long) excelMap.get(name);
-					int reVal = (int) val;
-					cell.setCellValue( Integer.toString(reVal) );
+			if(!name.contains("_idx")) {
+				cell = row.createCell(cellNum);
+				if("reg_date".equals(name) || "std_date".equals(name)) {
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String str = sdf.format( new Date( ((Timestamp)excelMap.get(name)).getTime() ) );
+					cell.setCellValue( str );
+				} else if("rnum".equals(name)) {
+					if(excelMap.get(name) instanceof Double) {
+						double val = (Double) excelMap.get(name);
+						int reVal = (int) val;
+						cell.setCellValue( Integer.toString(reVal) );
+					} else if(excelMap.get(name) instanceof Long) {
+						long val = (Long) excelMap.get(name);
+						int reVal = (int) val;
+						cell.setCellValue( Integer.toString(reVal) );
+					} else {
+						cell.setCellValue((String)excelMap.get(name));
+					}
+				} else if(name.contains("_timestamp")) {
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String str = sdf.format( new Date( ((Timestamp)excelMap.get(name)).getTime() ) );
+					cell.setCellValue( str );
 				} else {
-					cell.setCellValue((String)excelMap.get(name));
+					if(excelMap.get(name) instanceof BigDecimal) {
+						cell.setCellValue( ((BigDecimal)excelMap.get(name)).toString() );
+					} else if(excelMap.get(name) instanceof Integer) {
+						cell.setCellValue( Integer.toString((Integer) excelMap.get(name)) );
+					} else {
+						cell.setCellValue((String)excelMap.get(name));
+					}
+					
 				}
-			} else if(name.contains("_timestamp")) {
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String str = sdf.format( new Date( ((Timestamp)excelMap.get(name)).getTime() ) );
-				cell.setCellValue( str );
-			} else {
-				if(excelMap.get(name) instanceof BigDecimal) {
-					cell.setCellValue( ((BigDecimal)excelMap.get(name)).toString() );
-				} else if(excelMap.get(name) instanceof Integer) {
-					cell.setCellValue( Integer.toString((Integer) excelMap.get(name)) );
-				} else {
-					cell.setCellValue((String)excelMap.get(name));
-				}
-				
+				cellNum++;
 			}
-			cellNum++;
+			
 		}
 //		logger.debug("==================sdf=======================");
 	}

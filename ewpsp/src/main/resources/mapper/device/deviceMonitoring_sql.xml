@@ -4,7 +4,7 @@
 <mapper namespace="deviceMonitoring">
 	<select id="getDeviceIOEList" parameterType="hashMap" resultType="java.util.LinkedHashMap">
 		select
-			rnum, site_id, device_name, device_id, device_stat_name, upload_timestamp
+			rnum, device_ioe_idx, site_id, device_name, device_id, device_stat_name, upload_timestamp
 		from (
 			select 
 				@rownum := @rownum + 1 as rnum,
@@ -104,7 +104,7 @@
 	
 	<select id="getDevicePCSList" parameterType="hashMap" resultType="java.util.LinkedHashMap">
 		select 
-			rnum, site_id, device_name, device_id, device_stat_name, cd_status, alarm_msg, std_date
+			rnum, device_pcs_idx, site_id, device_name, device_id, device_stat_name, cd_status, alarm_msg, std_date
 		from (
 			select 
 				@rownum := @rownum + 1 as rnum,
@@ -202,7 +202,7 @@
 	
 	<select id="getDeviceBMSList" parameterType="hashMap" resultType="java.util.LinkedHashMap">
 		select 
-			rnum, site_id, device_name, device_id, device_stat_name, cd_status, alarm_msg, std_date
+			rnum, device_bms_idx, site_id, device_name, device_id, device_stat_name, cd_status, alarm_msg, std_date
 		from (
 			select 
 				@rownum := @rownum + 1 as rnum,
@@ -300,7 +300,7 @@
 	
 	<select id="getDevicePVList" parameterType="hashMap" resultType="java.util.LinkedHashMap">
 		select 
-			rnum, site_id, device_name, device_id, device_stat_name, temp, alarm_msg, std_date
+			rnum, device_pv_idx, site_id, device_name, device_id, device_stat_name, temp, alarm_msg, std_date
 		from (
 			select 
 				@rownum := @rownum + 1 as rnum,
