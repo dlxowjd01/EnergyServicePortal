@@ -176,7 +176,7 @@
 					myChart.addSeries({
 						index:3,
 						fillOpacity: 1,
-						name: '실제 사용량',
+						name: '한전 사용량',
 						color: '#FFFFFF',
 						lineColor: '#438fd7', /* 한전 사용량 */
 						data: pastUsageList

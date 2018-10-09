@@ -51,36 +51,12 @@
 									</thead>
 									<tbody id="userTbody">
 										<tr>
-											<td>ID</td>
-											<td>등급</td>
-											<td>회사명</td>
-											<td>그룹</td>
-											<td>설명</td>
-											<td>2018-06-15 14:39:01</td>
-											<td>
-												<a href="#;" class="default_btn">수정</a>
-												<a href="#;" class="cancel_btn">삭제</a>
-											</td>
-										</tr>
-										<tr>
-											<td>ID</td>
-											<td>등급</td>
-											<td>회사명</td>
-											<td>그룹</td>
-											<td>설명</td>
-											<td>2018-06-15 14:39:01</td>
-											<td>
-												<a href="#;" class="default_btn">수정</a>
-												<a href="#;" class="cancel_btn">삭제</a>
-											</td>
+											<td colspan="7">조회된 데이터가 없습니다.</td>
 										</tr>
 									</tbody>
 								</table>
 							</div>	
 							<div class="paging clear" id="UserPaging">
-								<a href="#;" class="prev">PREV</a>
-								<span><strong>1</strong> / 3</span>
-								<a href="#;" class="next">NEXT</a>
 							</div>						
 						</div>
 					</div>

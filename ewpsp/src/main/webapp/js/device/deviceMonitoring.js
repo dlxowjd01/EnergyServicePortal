@@ -186,10 +186,10 @@
 											$("<thead />").append( 
 													$("<tr />").append( $("<th />").append("전압(V)") 
 													).append( $("<th />").append("전력(kW)")
-													).append( $("<th />").append("주파수(Hz)")
-													).append( $("<th />").append("전류(A)")
-													).append( $("<th />").append("역률(PF)")
-													).append( $("<th />").append("전력설정치(kWh)")
+													).append( $("<th />").append("운전상태")
+													).append( $("<th />").append("운전모드")
+													).append( $("<th />").append("충전량")
+													).append( $("<th />").append("방전량")
 													) 
 											) 
 									).append(
@@ -259,7 +259,7 @@
 		} else {
 			$(".dview_bms").empty().append(
 					$('<div class="ltit" />').append(
-							$('<h2 />').append( $('<span class="ioe" />') ).append( bmsDetail.device_name ).append(
+							$('<h2 />').append( $('<span class="bms" />') ).append( bmsDetail.device_name ).append(
 									$('<p />').append( (new Date()).format("yyyy-MM-dd HH:mm:ss") )	
 							).append( '<a href="javascript:popupClose(\'dview_bms\');">닫기</a>' )
 					)
@@ -371,7 +371,7 @@
 		} else {
 			$(".dview_pv").empty().append(
 					$('<div class="ltit" />').append(
-							$('<h2 />').append( $('<span class="ioe" />') ).append( pvDetail.device_name ).append(
+							$('<h2 />').append( $('<span class="bms" />') ).append( pvDetail.device_name ).append(
 									$('<p />').append( (new Date()).format("yyyy-MM-dd HH:mm:ss") )	
 							).append( '<a href="javascript:popupClose(\'dview_pv\');">닫기</a>' )
 					)
@@ -407,11 +407,11 @@
 											) 
 									).append(
 											$('<tbody />').append( 
-													$('<tr />').append( $("<td />").append(pvDetail.temp) 
-													).append( $("<td />").append("") 
-													).append( $("<td />").append("") 
-													).append( $("<td />").append(pvDetail.tot_power)
-													).append( $("<td />").append("") // c-rate
+													$('<tr />').append( $("<td />").append(pvDetail.temp+"℃") 
+													).append( $("<td />").append(""+"kWh") 
+													).append( $("<td />").append(""+"W/m²") 
+													).append( $("<td />").append(pvDetail.tot_power+"kWh")
+													).append( $("<td />").append(""+"W/m²") // c-rate
 													)  
 											)
 									)

@@ -38,151 +38,6 @@
 								</div>
 							</div>
 							<div class="dg_wrap">
-
-								<!-- 1 -->
-								<h2 class="dtit">별관_1</h2>
-								<div class="dsec clear">
-									<div class="fl">
-										<ul class="device clear">
-											<li class="pcs">
-												<a href="#;"></a>
-												<span class="dname">PCS_1</span>
-												<span class="dmemo">텍스트 정보 텍스트 정보 텍스트 정보 텍스트 정보</span>
-											</li>
-											<li class="pcs alert">
-												<a href="#;"></a>
-												<span class="dname">PCS_2</span>
-												<span class="dmemo">텍스트 정보</span>
-											</li>
-											<li class="bms">
-												<a href="#;"></a>
-												<span class="dname">BMS_1</span>
-												<span class="dmemo">텍스트 정보</span>
-											</li>
-											<li class="ioe">
-												<a href="#;"></a>
-												<span class="dname">IOE_1</span>
-												<span class="dmemo">텍스트 정보</span>
-											</li>
-											<li class="pv">
-												<a href="#;"></a>
-												<span class="dname">PV_1</span>
-												<span class="dmemo">텍스트 정보</span>
-											</li>
-											<li class="pcs">
-												<a href="#;"></a>
-												<span class="dname">PCS_2</span>
-												<span class="dmemo">텍스트 정보</span>
-											</li>
-											<li class="bms">
-												<a href="#;"></a>
-												<span class="dname">BMS_1</span>
-												<span class="dmemo">텍스트 정보</span>
-											</li>
-											<li class="ioe">
-												<a href="#;"></a>
-												<span class="dname">IOE_1</span>
-												<span class="dmemo">텍스트 정보</span>
-											</li>
-											<li class="pv">
-												<a href="#;"></a>
-												<span class="dname">PV_1</span>
-												<span class="dmemo">텍스트 정보</span>
-											</li>											
-										</ul>										
-										<!-- 장치 추가 버튼 { -->
-										<div class="new_add">
-											<a href="javascript:popupOpen('ddevice');"><i class="glyphicon glyphicon-plus"></i></a>
-										</div>
-										<!-- } 장치 추가 버튼 -->										
-									</div>
-									<div class="fr clear">
-										<dl class="aler fl">
-											<dt><span>ALERT</span> <em>1</em></dt>
-											<dd>
-												<p>PCS_2</p>
-											</dd>
-										</dl>
-										<dl class="warn fr">
-											<dt><span>WARNNING</span> <em>2</em></dt>
-											<dd>
-												<p>PV_1</p>
-												<p>IOE_1</p>
-											</dd>
-										</dl>
-									</div>
-								</div>
-								<!-- 2 -->
-								<h2 class="dtit">별관_2</h2>
-								<div class="dsec clear">
-									<div class="fl">
-										<ul class="device clear">
-											<li class="pcs">
-												<a href="#;"></a>
-												<span class="dname">PCS_1</span>
-												<span class="dmemo">텍스트 정보 텍스트 정보 텍스트 정보 텍스트 정보</span>
-											</li>
-											<li class="pcs">
-												<a href="#;"></a>
-												<span class="dname">PCS_2</span>
-												<span class="dmemo">텍스트 정보</span>
-											</li>
-											<li class="bms">
-												<a href="#;"></a>
-												<span class="dname">BMS_1</span>
-												<span class="dmemo">텍스트 정보</span>
-											</li>
-										</ul>
-										<!-- 장치 추가 버튼 { -->
-										<div class="new_add">
-											<a href="javascript:popupOpen('ddevice');"><i class="glyphicon glyphicon-plus"></i></a>
-										</div>
-										<!-- } 장치 추가 버튼 -->	
-									</div>
-									<div class="fr clear">
-										<dl class="aler fl">
-											<dt><span>ALERT</span> <em>0</em></dt>
-											<dd>
-												<p></p>
-											</dd>
-										</dl>
-										<dl class="warn fr">
-											<dt><span>WARNNING</span> <em>1</em></dt>
-											<dd>
-												<p>PCS_1</p>
-											</dd>
-										</dl>
-									</div>
-								</div>
-								<!-- 3 -->
-								<h2 class="dtit">별관_3</h2>
-								<div class="dsec clear">
-									<div class="fl">
-										<ul class="device clear">
-											
-										</ul>
-										<!-- 장치 추가 버튼 { -->
-										<div class="new_add">
-											<a href="javascript:popupOpen('ddevice');"><i class="glyphicon glyphicon-plus"></i></a>
-										</div>
-										<!-- } 장치 추가 버튼 -->	
-									</div>
-									<div class="fr clear">
-										<dl class="aler fl">
-											<dt><span>ALERT</span> <em>0</em></dt>
-											<dd>
-												<p></p>
-											</dd>
-										</dl>
-										<dl class="warn fr">
-											<dt><span>WARNNING</span> <em>0</em></dt>
-											<dd>
-												<p></p>
-											</dd>
-										</dl>
-									</div>
-								</div>
-
 							</div>
 						</div>
 					</div>
@@ -268,9 +123,6 @@
 				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">사이트 선택
 				    <span class="caret"></span></button>
 				    <ul class="dropdown-menu">
-				        <!-- <li class="on"><a href="#">롯데_PCS_01</a></li>
-				        <li><a href="#">롯데_PCS_02</a></li>
-				        <li><a href="#">롯데_PCS_03</a></li> -->
 				    </ul>
 				</div>
 				<h2 class="ntit fl">장치 그룹</h2>
@@ -278,9 +130,6 @@
 				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">장치그룹 선택
 				    <span class="caret"></span></button>
 				    <ul class="dropdown-menu">
-				        <!-- <li class="on"><a href="#">롯데_장치그룹_01</a></li>
-				        <li><a href="#">...</a></li>
-				        <li><a href="#">...</a></li> -->
 				    </ul>
 				</div>
 				<a href="#;" class="default_btn fr" id="editDvGrpFormBtn"><i class="glyphicon glyphicon-edit"></i> 장치그룹편집</a>
@@ -295,9 +144,6 @@
 					<h2 class="ntit">그룹에 포함된 장치</h2>
 					<div class="inbox">
 						<ul class="multi_select">
-							<!-- <li><a href="#;">롯데_PCS_01</a></li>
-							<li><a href="#;">롯데_PCS_02</a></li>
-							<li><a href="#;">롯데_PCS_03</a></li> -->
 						</ul>
 					</div>
 				</div>
@@ -310,15 +156,6 @@
 					<h2 class="ntit">사이트 내 장치</h2>
 					<div class="inbox">
 						<ul class="multi_select">
-							<!-- <li><a href="#;">롯데_PCS_01</a></li>
-							<li><a href="#;">롯데_PCS_02</a></li>
-							<li><a href="#;">롯데_PCS_03</a></li>
-							<li><a href="#;">롯데_PCS_04</a></li>
-							<li><a href="#;">롯데_PCS_05</a></li>
-							<li><a href="#;">롯데_PCS_06</a></li>
-							<li><a href="#;">롯데_PCS_07</a></li>
-							<li><a href="#;">롯데_PCS_08</a></li>
-							<li><a href="#;">롯데_PCS_09</a></li> -->
 						</ul>
 					</div>
 				</div>
@@ -345,9 +182,6 @@
 				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">사이트 선택
 				    <span class="caret"></span></button>
 				    <ul class="dropdown-menu">
-				        <!-- <li class="on"><a href="#">롯데 정밀 화학</a></li>
-				        <li><a href="#">...</a></li>
-				        <li><a href="#">...</a></li> -->
 				    </ul>
 				</div>
 			</div>
@@ -375,26 +209,6 @@
 						<tr>
 							<td colspan="3">사이트를 선택해주세요</td>
 						</tr>
-						<!-- <tr>
-							<td>1</td>
-							<td>롯데_장치그룹_01</td>
-							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>롯데_장치그룹_02</td>
-							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>롯데_장치그룹_03</td>
-							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr>
-						<tr>
-							<td>4</td>
-							<td>롯데_장치그룹_04</td>
-							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr> -->
 					</tbody>
 				</table>
 			</div>

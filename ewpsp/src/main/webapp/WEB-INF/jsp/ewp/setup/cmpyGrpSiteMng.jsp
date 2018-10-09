@@ -51,47 +51,16 @@
 											<tr>
 												<td colspan="4">조회된 데이터가 없습니다.</td>
 											</tr>
-											<!-- <tr>
-												<td>1</td>
-												<td>제일화성</td>
-												<td>10037202</td>
-												<td>
-													<a href="#;" class="default_btn">수정</a>
-													<a href="#;" class="cancel_btn">삭제</a>
-												</td>
-											</tr>
-											<tr>
-												<td>2</td>
-												<td>롯데 정밀 화학</td>
-												<td>10037203</td>
-												<td>
-													<a href="#;" class="default_btn">수정</a>
-													<a href="#;" class="cancel_btn">삭제</a>
-												</td>
-											</tr>
-											<tr>
-												<td>3</td>
-												<td>문수경기장</td>
-												<td>10037204</td>
-												<td>
-													<a href="#;" class="default_btn">수정</a>
-													<a href="#;" class="cancel_btn">삭제</a>
-												</td>
-											</tr> -->
 										</tbody>
 									</table>
 								</div>	
 								<div class="paging clear" id="CmpyPaging">
-									<a href="#;" class="prev">PREV</a>
-									<span><strong>1</strong> / 3</span>
-									<a href="#;" class="next">NEXT</a>
 								</div>	
 							</div>								
 							<div class="section" id="grpDiv">
 								<div class="set_top clear">
 									<h2 class="ntit fl">그룹 현황</h2>
 									<ul class="fr">
-										<!-- <li><a href="javascript:popupOpen('dgroup');" class="default_btn"><i class="glyphicon glyphicon-th-list"></i> 그룹 관리</a></li> -->
 										<li><a href="#;" class="default_btn" id="grpMngFormBtn"><i class="glyphicon glyphicon-th-list"></i> 그룹 관리</a></li>
 									</ul>								
 								</div>
@@ -117,43 +86,10 @@
 											<tr>
 												<td colspan="5">조회된 데이터가 없습니다.</td>
 											</tr>
-											<!-- <tr>
-												<td>1</td>
-												<td>제일화성_1</td>
-												<td>200372021</td>
-												<td>제일화성</td>
-												<td>
-													<a href="#;" class="default_btn">수정</a>
-													<a href="#;" class="cancel_btn">삭제</a>
-												</td>
-											</tr>
-											<tr>
-												<td>2</td>
-												<td>제일화성_2</td>
-												<td>200372021</td>
-												<td>제일화성</td>
-												<td>
-													<a href="#;" class="default_btn">수정</a>
-													<a href="#;" class="cancel_btn">삭제</a>
-												</td>
-											</tr>
-											<tr>
-												<td>3</td>
-												<td>제일화성_3</td>
-												<td>200372021</td>
-												<td>제일화성</td>
-												<td>
-													<a href="#;" class="default_btn">수정</a>
-													<a href="#;" class="cancel_btn">삭제</a>
-												</td>
-											</tr> -->
 										</tbody>
 									</table>
 								</div>	
 								<div class="paging clear" id="GroupPaging">
-									<a href="#;" class="prev">PREV</a>
-									<span><strong>1</strong> / 3</span>
-									<a href="#;" class="next">NEXT</a>
 								</div>	
 							</div>								
 							<div class="section" id="siteDiv">
@@ -189,37 +125,10 @@
 											<tr>
 												<td colspan="7">조회된 데이터가 없습니다.</td>
 											</tr>
-											<!-- <tr>
-												<td>1</td>
-												<td>제일화성</td>
-												<td>10037202</td>
-												<td>그룹_1</td>
-												<td></td>
-												<td>PCS_1 PCS_2 BMS_1 BMS_2</td>
-												<td>
-													<a href="#;" class="default_btn">수정</a>
-													<a href="#;" class="cancel_btn">삭제</a>
-												</td>
-											</tr>
-											<tr>
-												<td>2</td>
-												<td>제일화성</td>
-												<td>10037202</td>
-												<td>그룹_1</td>
-												<td></td>
-												<td>PCS_3 PCS_4 BMS_3 BMS_4</td>
-												<td>
-													<a href="#;" class="default_btn">수정</a>
-													<a href="#;" class="cancel_btn">삭제</a>
-												</td>
-											</tr> -->
 										</tbody>
 									</table>
 								</div>	
 								<div class="paging clear" id="SitePaging">
-									<a href="#;" class="prev">PREV</a>
-									<span><strong>1</strong> / 3</span>
-									<a href="#;" class="next">NEXT</a>
 								</div>	
 							</div>				
 						</div>
@@ -283,10 +192,6 @@
 				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selGrpBox">롯데 정밀 화학
 				    <span class="caret"></span></button>
 				    <ul class="dropdown-menu">
-				        <li class="on"><a href="#">롯데 정밀 화학</a></li>
-				        <li><a href="#">....</a></li>
-				        <li><a href="#">....</a></li>
-				        <li><a href="#">....</a></li>
 				    </ul>
 				</div>
 				<a href="#;" class="default_btn fr" id="insertGrpFormBtn"><i class="glyphicon glyphicon-plus"></i> 그룹 추가하기</a>
@@ -301,9 +206,6 @@
 					<h2 class="ntit">그룹 내 사이트</h2>
 					<div class="inbox">
 						<ul class="multi_select">
-							<!-- <li><a href="#;">롯데_Site_01</a></li>
-							<li><a href="#;">롯데_Site_02</a></li>
-							<li><a href="#;">롯데_Site_03</a></li> -->
 						</ul>
 					</div>
 				</div>
@@ -316,15 +218,6 @@
 					<h2 class="ntit">전체 사이트</h2>
 					<div class="inbox">
 						<ul class="multi_select">
-							<!-- <li><a href="#;">롯데_Site_01</a></li>
-							<li><a href="#;">롯데_Site_02</a></li>
-							<li><a href="#;">롯데_Site_03</a></li>
-							<li><a href="#;">롯데_Site_04</a></li>
-							<li><a href="#;">롯데_Site_05</a></li>
-							<li><a href="#;">롯데_Site_06</a></li>
-							<li><a href="#;">롯데_Site_07</a></li>
-							<li><a href="#;">롯데_Site_08</a></li>
-							<li><a href="#;">롯데_Site_09</a></li> -->
 						</ul>
 					</div>
 				</div>

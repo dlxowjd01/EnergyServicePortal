@@ -46,7 +46,6 @@
 										<li id="tab_PV"><a href="javascript:getDevicePVList(1);">PV</a></li>									
 									</ul>
 									<ul class="button_area fl">
-										<!-- <li><a href="#;" class="save_btn">데이터저장</a></li> -->
 										<li><a href="#;" class="save_btn" onclick="deviceExcelDownload('장치모니터링', event, 'device');">데이터저장</a></li>
 									</ul>
 								</div>
@@ -78,9 +77,6 @@
 											</table>				
 										</div>
 										<div class="paging clear" id="DeviceIOEPaging">
-											<a href="#;" class="prev">PREV</a>
-											<span><strong>1</strong> / 3</span>
-											<a href="#;" class="next">NEXT</a>
 										</div>	
 									</li>
 									<li>
@@ -110,9 +106,6 @@
 											</table>				
 										</div>
 										<div class="paging clear" id="DevicePCSPaging">
-											<a href="#;" class="prev">PREV</a>
-											<span><strong>1</strong> / 3</span>
-											<a href="#;" class="next">NEXT</a>
 										</div>	
 									</li>
 									<li>
@@ -142,9 +135,6 @@
 											</table>				
 										</div>
 										<div class="paging clear" id="DeviceBMSPaging">
-											<a href="#;" class="prev">PREV</a>
-											<span><strong>1</strong> / 3</span>
-											<a href="#;" class="next">NEXT</a>
 										</div>	
 									</li>
 									<li>
@@ -174,9 +164,6 @@
 											</table>				
 										</div>
 										<div class="paging clear" id="DevicePVPaging">
-											<a href="#;" class="prev">PREV</a>
-											<span><strong>1</strong> / 3</span>
-											<a href="#;" class="next">NEXT</a>
 										</div>	
 									</li>
 								</ul>
@@ -198,38 +185,36 @@
         <div class="ltit">
         	<h2>
         		<span class="ioe"></span>
-        		IOE_1
-        		<p>2018-08-12 11:41:26</p>
+        		<p></p>
         	</h2>        	
 			<a href="javascript:popupClose('dview_ioe');">닫기</a>
         </div>
         <div class="ltop">
         	<dl>
         		<dt>Device ID</dt>
-				<dd>41331</dd>
+				<dd></dd>
         	</dl>
         	<dl>
         		<dt>Device Group</dt>
-				<dd>별관_1</dd>
+				<dd>_1</dd>
         	</dl>
         	<dl>
         		<dt>Site Name</dt>
-				<dd>제일화성</dd>
+				<dd></dd>
         	</dl>
         	<dl>
         		<dt>Site ID</dt>
-				<dd>10037202</dd>
+				<dd></dd>
         	</dl>
         </div>
         <div class="lbody">
 	        <div class="lstat mt20">
 	        	<div class="dt">연결상태</div>
-	        	<div class="dd"><span class="run">Connected</span></div>
+	        	<div class="dd"><span class="run"></span></div>
 	        </div>
 	        <div class="lstat">
 	        	<div class="dt">알람 메시지</div>
 	        	<div class="dd">
-					랙 전압 불균형이 감지되었습니다. 신속한 처리를 해주시길 바랍니다.
 	        	</div>
 	        </div>
         </div>
@@ -240,38 +225,36 @@
         <div class="ltit">
         	<h2>
         		<span class="pcs"></span>
-        		PCS_1
-        		<p>2018-08-12 11:41:26</p>
+        		<p></p>
         	</h2>        	
 			<a href="javascript:popupClose('dview_pcs');">닫기</a>
         </div>
         <div class="ltop">
         	<dl>
         		<dt>Device ID</dt>
-				<dd>41331</dd>
+				<dd></dd>
         	</dl>
         	<dl>
         		<dt>Device Group</dt>
-				<dd>별관_1</dd>
+				<dd>_1</dd>
         	</dl>
         	<dl>
         		<dt>Site Name</dt>
-				<dd>제일화성</dd>
+				<dd></dd>
         	</dl>
         	<dl>
         		<dt>Site ID</dt>
-				<dd>10037202</dd>
+				<dd></dd>
         	</dl>
         </div>
         <div class="lbody">
 	        <div class="lstat mt20">
 	        	<div class="dt">운전상태</div>
-	        	<div class="dd"><span class="run">Run</span></div>
+	        	<div class="dd"><span class="run"></span></div>
 	        </div>
 	        <div class="lstat">
 	        	<div class="dt">알람 메시지</div>
 	        	<div class="dd">
-					랙 전압 불균형이 감지되었습니다. 신속한 처리를 해주시길 바랍니다.
 	        	</div>
 	        </div>	        
 	        <h2 class="tbl_tit">AC 출력</h2>
@@ -289,12 +272,12 @@
 	        		</thead>
 	        		<tbody>
 	        			<tr>
-	        				<td>366.2</td>
-	        				<td>59.7</td>
-	        				<td>59.7</td>
-	        				<td>1.1</td>
-	        				<td>1.0</td>
-	        				<td>486.0</td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
 	        			</tr>
 	        		</tbody>
 	        	</table>
@@ -306,20 +289,20 @@
 	        			<tr>
 	        				<th>전압(V)</th>
 	        				<th>전력(kW)</th>
-	        				<th>주파수(Hz)</th>
-	        				<th>전류(A)</th>
-	        				<th>역률(PF)</th>
-	        				<th>전력설정치(kWh)</th>
+	        				<th>운전상태</th>
+	        				<th>운전모드</th>
+	        				<th>충전량</th>
+	        				<th>방전량</th>
 	        			</tr>
 	        		</thead>
 	        		<tbody>
 	        			<tr>
-	        				<td>366.2</td>
-	        				<td>59.7</td>
-	        				<td>59.7</td>
-	        				<td>1.1</td>
-	        				<td>1.0</td>
-	        				<td>486.0</td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
 	        			</tr>
 	        		</tbody>
 	        	</table>
@@ -332,41 +315,39 @@
         <div class="ltit">
         	<h2>
         		<span class="bms"></span>
-        		BMS_1
-        		<p>2018-08-12 11:41:26</p>
+        		<p></p>
         	</h2>        	
 			<a href="javascript:popupClose('dview_bms');">닫기</a>
         </div>
         <div class="ltop">
         	<dl>
         		<dt>Device ID</dt>
-				<dd>41331</dd>
+				<dd></dd>
         	</dl>
         	<dl>
         		<dt>Device Group</dt>
-				<dd>별관_1</dd>
+				<dd>_1</dd>
         	</dl>
         	<dl>
         		<dt>Site Name</dt>
-				<dd>제일화성</dd>
+				<dd></dd>
         	</dl>
         	<dl>
         		<dt>Site ID</dt>
-				<dd>10037202</dd>
+				<dd></dd>
         	</dl>
         </div>
         <div class="lbody">
 	        <div class="lstat mt20">
 	        	<div class="dt">운전상태</div>
-	        	<div class="dd"><span class="run">Run</span></div>
+	        	<div class="dd"><span class="run"></span></div>
 	        </div>
 	        <div class="lstat">
 	        	<div class="dt">알람 메시지</div>
 	        	<div class="dd">
-					랙 전압 불균형이 감지되었습니다. 신속한 처리를 해주시길 바랍니다.
 	        	</div>
 	        </div>		        
-	        <h2 class="tbl_tit">충/방전 상태: <span style="color:#438fd7;font-weight:normal;">충전중</span></h2>
+	        <h2 class="tbl_tit">충/방전 상태: <span style="color:#438fd7;font-weight:normal;"></span></h2>
 	        <div class="ltbl">        	
 	        	<table>
 	        		<thead>
@@ -384,15 +365,15 @@
 	        		</thead>
 	        		<tbody>
 	        			<tr>
-	        				<td>80.0</td>
-	        				<td>90.0</td>
-	        				<td>59.7</td>
-	        				<td>50.0</td>
-	        				<td>10.0</td>
-	        				<td>384.0</td>
-	        				<td>1.6</td>
-	        				<td>80.0</td>
-	        				<td>33.0</td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
 	        			</tr>
 	        		</tbody>
 	        	</table>
@@ -405,38 +386,36 @@
         <div class="ltit">
         	<h2>
         		<span class="bms"></span>
-        		PV_1
-        		<p>2018-08-12 11:41:26</p>
+        		<p></p>
         	</h2>        	
 			<a href="javascript:popupClose('dview_pv');">닫기</a>
         </div>
         <div class="ltop">
         	<dl>
         		<dt>Device ID</dt>
-				<dd>41331</dd>
+				<dd></dd>
         	</dl>
         	<dl>
         		<dt>Device Group</dt>
-				<dd>별관_1</dd>
+				<dd>_1</dd>
         	</dl>
         	<dl>
         		<dt>Site Name</dt>
-				<dd>제일화성</dd>
+				<dd></dd>
         	</dl>
         	<dl>
         		<dt>Site ID</dt>
-				<dd>10037202</dd>
+				<dd></dd>
         	</dl>
         </div>
         <div class="lbody">
 	        <div class="lstat mt20">
 	        	<div class="dt">PV 상태</div>
-	        	<div class="dd"><span class="run">Run</span></div>
+	        	<div class="dd"><span class="run"></span></div>
 	        </div>
 	        <div class="lstat">
 	        	<div class="dt">알람 메시지</div>
 	        	<div class="dd">
-					랙 전압 불균형이 감지되었습니다. 신속한 처리를 해주시길 바랍니다.
 	        	</div>
 	        </div>		        
 	        <div class="ltbl mt30">        	
@@ -452,11 +431,11 @@
 	        		</thead>
 	        		<tbody>
 	        			<tr>
-	        				<td>51℃</td>
-	        				<td>600 kWh</td>
-	        				<td>251 W/m²</td>
-	        				<td>580 kWh</td>
-	        				<td>206 W/m²</td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
 	        			</tr>
 	        		</tbody>
 	        	</table>

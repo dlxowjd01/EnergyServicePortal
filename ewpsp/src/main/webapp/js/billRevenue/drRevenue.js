@@ -284,13 +284,13 @@
 		}
 		
 		myChart.addSeries({
-			name: '고객 정산금액',
+			name: '총 정산금액',
 			color: '#438fd7', /* 총 정산금액 */
 			data: drRevenueList1
 		}, false);
 		
 		myChart.addSeries({
-			name: '실적 할인금액',
+			name: '고객 할인금액',
 			color: '#84848f', /* 고객 할인금액 */
 			data: drRevenueList2
 		}, false);

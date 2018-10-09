@@ -193,7 +193,7 @@
 		$div.empty(); // 초기화
 		if(real_data_pc.length < 1) {
 			$div.prepend(
-					$('<div class="chart_table" />').append(
+					$('<div class="chart_table" />').append( // pc_use_dataTable
 							$('<table class="pc_use" />').append(
 									$("<thead/>").append( $("<tr/>").append(  
 											"<th width='33%'></th><td width='34%'>조회된 데이터가 없습니다</td><th width='33%'></th>" ) 

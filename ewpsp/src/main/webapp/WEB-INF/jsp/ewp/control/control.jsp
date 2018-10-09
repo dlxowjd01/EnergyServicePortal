@@ -73,7 +73,7 @@
 							</div>
 							<div class="c_tbl_wrap">
 								<div class="a_alarm default_tbl">
-									<h2>비상 알람 현황 (<span id="warnAlarmCnt">2</span>)</h2>
+									<h2>비상 알람 현황 (<span id="warnAlarmCnt">0</span>)</h2>
 									<div class="tbl_box">
 										<table>
 											<colgroup>
@@ -100,37 +100,14 @@
 											</thead>
 											<tbody id="warnAlarmTbody">
 												<tr><td colspan="8">조회된 데이터가 없습니다.</td><tr>
-												<!-- <tr>
-													<td>BMS</td>
-													<td>BMS_1</td>
-													<td>12001</td>
-													<td>2018.07.15 16:01:02</td>
-													<td>FALU</td>
-													<td>Over cell Voltage</td>
-													<td>발생</td>
-													<td>미조치</td>
-												</tr>
-												<tr>
-													<td>BMS</td>
-													<td>BMS_1</td>
-													<td>12001</td>
-													<td>2018.07.15 16:01:02</td>
-													<td>FALU</td>
-													<td>Over cell Voltage</td>
-													<td>발생</td>
-													<td>미조치</td>
-												</tr> -->
 											</tbody>
 										</table>
 									</div>
 									<div class="paging clear" id="WarningAlarmPaging">
-										<a href="#;" class="prev">PREV</a>
-										<span><strong>1</strong> / 3</span>
-										<a href="#;" class="next">NEXT</a>
 									</div>						
 								</div>
 								<div class="n_alarm default_tbl">
-									<h2>주의 알람 현황 (<span id="alertAlarmCnt">3</span>)</h2>
+									<h2>주의 알람 현황 (<span id="alertAlarmCnt">0</span>)</h2>
 									<div class="tbl_box">
 										<table>
 											<colgroup>
@@ -157,33 +134,10 @@
 											</thead>
 											<tbody id="alertAlarmTbody">
 												<tr><td colspan="8">조회된 데이터가 없습니다.</td><tr>
-												<!-- <tr>
-													<td>BMS</td>
-													<td>BMS_1</td>
-													<td>12001</td>
-													<td>2018.07.15 16:01:02</td>
-													<td>FALU</td>
-													<td>Over cell Voltage</td>
-													<td>발생</td>
-													<td>미조치</td>
-												</tr>
-												<tr>
-													<td>BMS</td>
-													<td>BMS_1</td>
-													<td>12001</td>
-													<td>2018.07.15 16:01:02</td>
-													<td>FALU</td>
-													<td>Over cell Voltage</td>
-													<td>발생</td>
-													<td>미조치</td>
-												</tr> -->
 											</tbody>
 										</table>
 									</div>
 									<div class="paging clear" id="AlertAlarmPaging">
-										<a href="#;" class="prev">PREV</a>
-										<span><strong>1</strong> / 3</span>
-										<a href="#;" class="next">NEXT</a>
 									</div>						
 								</div>
 							</div>
@@ -230,54 +184,6 @@
 						<tr>
 							<td colspan="4">사이트를 선택해주세요</td>
 						</tr>
-						<!-- <tr>
-							<td>1</td>
-							<td>홍길동</td>
-							<td>010-1234-1234</td>
-							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>홍길동</td>
-							<td>010-1234-1234</td>
-							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>홍길동</td>
-							<td>010-1234-1234</td>
-							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr>
-						<tr>
-							<td>4</td>
-							<td>홍길동</td>
-							<td>010-1234-1234</td>
-							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr>
-						<tr>
-							<td>1</td>
-							<td>홍길동</td>
-							<td>010-1234-1234</td>
-							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>홍길동</td>
-							<td>010-1234-1234</td>
-							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>홍길동</td>
-							<td>010-1234-1234</td>
-							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr>
-						<tr>
-							<td>4</td>
-							<td>홍길동</td>
-							<td>010-1234-1234</td>
-							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr> -->
 					</tbody>
 				</table>
 			</div>

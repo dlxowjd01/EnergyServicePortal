@@ -261,24 +261,7 @@
 											</thead>
 											<tbody id="drResultTbody">
 												<tr>
-													<td>2016-01-14</td>
-													<td>16:00 ~ 17:00</td>
-													<td>750</td>
-													<td>5,000</td>
-													<td>4,000</td>
-													<td>1,000</td>
-													<td>4,250</td>
-													<td>106.25%</td>
-												</tr>
-												<tr>
-													<td>2016-01-14</td>
-													<td>17:00 ~ 18:00</td>
-													<td>800</td>
-													<td>5,500</td>
-													<td>4,000</td>
-													<td>1,500</td>
-													<td>4,700</td>
-													<td>117.50%</td>
+													<td colspan="8">조회된 데이터가 없습니다.</td>
 												</tr>
 											</tbody>
 										</table>	

@@ -516,9 +516,6 @@
 									<ul class="device clear" id="deviceList">
 									</ul>
 									<div class="paging clear" id="DevicePaging">
-										<a href="#;" class="prev">PREV</a>
-										<span><strong>1</strong> / 3</span>
-										<a href="#;" class="next">NEXT</a>
 									</div>
 								</div>
 							</div>
