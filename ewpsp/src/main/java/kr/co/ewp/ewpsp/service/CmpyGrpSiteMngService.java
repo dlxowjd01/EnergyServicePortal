@@ -24,6 +24,8 @@ public interface CmpyGrpSiteMngService {
 	
 	List getAllSiteList(HashMap param) throws Exception;
 
+	List getUserGroupList(HashMap param) throws Exception;
+
 	List getUserSiteList(HashMap param) throws Exception;
 
 	List getGMainSiteRankingList(HashMap param) throws Exception;

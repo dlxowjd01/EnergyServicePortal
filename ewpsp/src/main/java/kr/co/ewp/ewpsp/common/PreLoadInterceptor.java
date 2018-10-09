@@ -44,9 +44,11 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				param.put("userIdx", userIdx);
 			}
 
+			List userGroupList = cmpyGrpSiteMngService.getUserGroupList(param);
 			List userSiteList = cmpyGrpSiteMngService.getUserSiteList(param);
+			request.setAttribute("userGroupList", userGroupList);
 			request.setAttribute("userSiteList", userSiteList);
-			logger.debug("userSiteList:{}", userSiteList);
+			logger.debug("userGroupList:{}", userGroupList);
 		}
 		
 		String siteId = (request.getParameter("siteId") != null && !"".equals(request.getParameter("siteId"))) ? request.getParameter("siteId") : (String) request.getSession().getAttribute("selViewSiteId");

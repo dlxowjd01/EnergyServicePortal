@@ -68,8 +68,17 @@ body {
 .dropdown .btn .caret {background:url('../img/m_select_down.png') no-repeat 0 0;}
 
 
-
-
+/* 상단 검색 
+-----------------------------------------------*/
+.site .input-group {
+	border:solid 2px #565d6a;
+}
+.site .input-group .form-control {
+	color:#fff;
+}
+.site .input-group .btn .caret {
+	background:url('../img/m_select_down.png') no-repeat 0 0;
+}
 
 
 
@@ -88,7 +97,7 @@ nav .category {
 
 /* 반응형 미디어 쿼리 */
 @media all and (min-width:3000px) {
-	nav .nav_brand a {background:url('../img/main_logo_4k.png') no-repeat 0 0; background-size:90px 25px;}	
+	nav .nav_brand a {background:url('../img/main_logo_4k.png') no-repeat 0 0; background-size:259px 60px;}	
 }
 @media all and (min-width:1700px) {
 	

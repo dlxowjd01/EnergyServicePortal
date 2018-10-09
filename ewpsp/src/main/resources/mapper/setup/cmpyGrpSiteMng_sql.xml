@@ -162,6 +162,18 @@
 	</select>
 	
 	<!-- greatman list begin -->
+	<select id="getUserGroupList" parameterType="hashMap" resultType="hashMap">
+		/* 상단 사이트그룹 목록 조회 */
+		select
+			site_grp_idx, user_idx, site_grp_id, site_grp_name
+		from tb_site_group
+		where del_yn = 'N'
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userIdx)">
+		and user_idx = #{userIdx}
+		</if>
+		order by site_grp_name
+	</select>
+
 	<select id="getUserSiteList" parameterType="hashMap" resultType="hashMap">
 		/* 상단 사이트 목록 조회 */
 		select
@@ -175,7 +187,7 @@
 		</if>
 		order by a.site_name
 	</select>
-	
+
 	<select id="getGMainSiteRankingList" parameterType="hashMap" resultType="hashMap">
 		/* 군관리메인 사이트 사용량 순위 목록 조회 */
 		select * from (

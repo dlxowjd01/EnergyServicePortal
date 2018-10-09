@@ -53,6 +53,10 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 		return cmpyGrpSiteMngDao.getAllSiteList(param);
 	}
 
+	public List getUserGroupList(HashMap param) throws Exception {
+		return cmpyGrpSiteMngDao.getUserGroupList(param);
+	}
+
 	public List getUserSiteList(HashMap param) throws Exception {
 		return cmpyGrpSiteMngDao.getUserSiteList(param);
 	}

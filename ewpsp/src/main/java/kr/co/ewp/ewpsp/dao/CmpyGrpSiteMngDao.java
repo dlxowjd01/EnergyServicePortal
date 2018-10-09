@@ -57,6 +57,17 @@ public class CmpyGrpSiteMngDao {
 	}
 
 	/**
+	 * 화면 상단의 사이트그룹 목록 조회
+	 * @author greatman
+	 * @param param
+	 * @return
+	 */
+	public List getUserGroupList(HashMap param) {
+		List resultList = sqlSession.selectList("cmpyGrpSiteMng.getUserGroupList", param);
+		return resultList;
+	}
+
+	/**
 	 * 화면 상단의 사이트 목록 조회
 	 * @author greatman
 	 * @param param

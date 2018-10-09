@@ -340,13 +340,13 @@ nav .category {
 	width:24px; height:17px; background:url('../img/category.png') no-repeat center center;
 	background-size:100%;
 }
-nav .nav_brand {float:left; margin-top:32px;}
+nav .nav_brand {float:left; margin-top:20px;}
 nav .nav_brand a {
-	display:inline-block; width:60px; height:17px; background:url('../img/logo.png') no-repeat 0 0;
+	display:inline-block; width:173px; height:40px; background:url('../img/logo.png') no-repeat 0 0;
 	vertical-align:top; font-size:0;
 }
 nav .site {float:left; margin:20px 0 0 40px;}
-nav .site.dropdown .btn {height:42px; position:relative;}
+nav .site.form-group .btn {height:38px; position:relative;}
 nav .nav_right {float:right; margin-top:20px; font-size:0; text-align:left;}
 nav .nav_right li {
 	display:inline-block; font-family:'Roboto', sans-serif; font-size:10px; font-weight:400; color:#3d4250;
@@ -363,10 +363,17 @@ nav .nav_right li.member .fr span {font-size:13px; color:#3d4250; font-weight:50
 /* 반응형 미디어 쿼리 */
 @media all and (min-width:3000px) {
 	nav {margin:0 0 15px; min-height:120px;}
-	nav .nav_brand {margin-top:48px;}
-	nav .nav_brand a {width:90px; height:25px; background:url('../img/logo_4k.png') no-repeat 0 0; background-size:90px 25px;}	
+	nav .nav_brand {margin-top:30px;}
+	nav .nav_brand a {width:259px; height:60px; background:url('../img/logo_4k.png') no-repeat 0 0; background-size:259px 60px;}	
 	nav .site {margin:30px 0 0 60px;}
-	nav .site.dropdown .btn {height:63px;}
+	nav .site.form-group {width:300px; height:60px;}
+	nav .site.form-group .input-group {width:300px;}
+	nav .site.form-group .dropdown-menu {min-width:300px;}
+	nav .site.form-group .form-control {height:56px; font-size:18px;}
+	nav .site.form-group .btn {height:56px;}
+	nav .site .dropdown-menu > li > a {padding:5px 12px; font-size:18px;}
+	nav .site .dropdown-menu > li > ul {margin-bottom:8px;}
+	nav .site .dropdown-menu > li > ul li a {display:block; padding:7px 24px; font-size:16px; color:#777;}	
 	nav .nav_right {margin-top:30px;}
 	nav .nav_right li {font-size:15px; letter-spacing:1.5px;}
 	nav .nav_right li + li {margin-left:30px;}
@@ -503,76 +510,33 @@ footer .copyright {font-family:'Roboto', sans-serif; font-size:10px; font-weight
 
 .btn-block {display:block !important; width:100% !important;}
 
-/* input [type = file]
------------------------------------------------ */
-input[type=file] {
-    display: block !important;
-    right: 1px;
-    top: 1px;
-    height: 34px;
-    opacity: 0;
-    width: 100%;
-    background: none;
-    position: absolute;
-    overflow: hidden;
-    z-index: 2;
+/* 상단 검색 
+-----------------------------------------------*/
+.site .input-group {
+	width:150px; height:42px; border:solid 2px #9ba3aa; border-radius:200px; background:transparent; 
+	display:table; margin:0 auto;
 }
-
-.control-fileupload {
-    display: block;
-    border: 1px solid #d6d7d6;
-    background: #FFF;
-    border-radius: 4px;
-    width: 100%;
-    height: 36px;
-    line-height: 36px;
-    padding: 0px 10px 2px 10px;
-    overflow: hidden;
-    position: relative;
-
+.site .input-group .form-control {
+	border:0; height:38px; background-color:transparent; color:#333841;
+	border-radius:200px 0 0 200px; z-index:2; outline-style:none;
 }
-/* File upload button */
-.control-fileupload:before {
-    padding: 4px 12px;
-    margin-bottom: 0;
-    font-size: 14px;
-    color: #333333;
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-    vertical-align: middle;
-    cursor: pointer;
-    background-color: #f5f5f5;
-    background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
-    background-repeat: repeat-x;
-    border: 1px solid #cccccc;
-    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-    border-bottom-color: #b3b3b3;
-    border-radius: 4px;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-    transition: color 0.2s ease;
-    content: 'Browse';
-    display: block;
-    position: absolute;
-    z-index: 1;
-    top: 2px;
-    right: 2px;
-    line-height: 20px;
-    text-align: center;
+.site .input-group .btn {
+	background-color:transparent; border:0; border-radius:200px; outline-style:none;
 }
-.control-fileupload label {
-    line-height: 34px;
-    color: #999999;
-    font-size: 14px;
-    font-weight: normal;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    position: relative;
-    z-index: 1;
-    margin-right: 90px;
-    margin-bottom: 0px;
-    cursor: text;
+.site .input-group .btn .caret {
+	position:absolute; top:50%; transform:translateY(-50%); right:15px;
+	width:12px; height:7px; 
+	background:url('../img/select_down.png') no-repeat 0 0; border:0;
 }
-
+.site .open > .dropdown-toggle.btn-default:hover, 
+.site .open > .dropdown-toggle.btn-default:focus, 
+.site .open > .dropdown-toggle.btn-default.focus {
+	background-color:transparent; border:0;
+}
+.site .dropdown-menu {width:auto; min-width:150px; left:initial; right:0;}
+.site .dropdown-menu > li > a {padding:3px 10px; font-size:15px;}
+.site .dropdown-menu > li > ul {margin-bottom:5px;}
+.site .dropdown-menu > li > ul li a {display:block; padding:5px 20px; font-size:14px; color:#777;}
 
 
 /****** LOGIN MODAL ******/
@@ -1369,11 +1333,27 @@ a.detail_view {
 
 
 /* 명세서 확인 및 출력 레이어 팝업 */
+/* 버튼 */
+.dprint .lbutton {
+	width:100%; text-align:left; font-size:0; margin:-10px 0 20px; 
+	padding-bottom:20px; border-bottom:solid 1px #ccc;
+}
+.dprint .lbutton a {
+	display:inline-block; height:36px; line-height:34px; background:#666; border-radius:200px; padding:0 20px;
+	font-size:13px; color:#fff; font-weight:600;
+}
+.dprint .lbutton a + a {margin-left:10px;}
+.dprint .lbutton a span {display:inline-block; padding-left:22px;}
+.dprint .lbutton a.lbtn_pdf {background:#666;}
+.dprint .lbutton a.lbtn_pdf span {background: url('../img/icon_data.png') no-repeat 0 center;}
+.dprint .lbutton a.lbtn_print {background:#438fd7;}
+.dprint .lbutton a.lbtn_print span {background:url('../img/icon_print.png') no-repeat 0 center;}
+
 .dprint .ltit a {
-	top:-15px !important; width:20px !important; height:20px !important; overflow:hidden;
+	top:-5px !important; width:20px !important; height:20px !important; overflow:hidden;
 	background:url('../img/layer_close.png') no-repeat center center !important;
 }
-.dprint .lbody {min-width:800px; min-height:500px;}
+.dprint .lbody {clear:both; min-width:800px; min-height:500px;}
 
 /* 테이블 설정 */
 .dprint .lbody td {vertical-align:middle;}
@@ -1399,28 +1379,36 @@ a.detail_view {
 .dprint .lbody table.noline th,
 .dprint .lbody table.noline td {border:0; padding:3px 10px 3px 0;}
 
+/* 명세서내 차트 */
+.dprint .inchart {margin-top:10px; padding:5px; border:solid 1px #ccc; border-top:solid 1px #111;}
 
-/* 하단 버튼 */
-.dprint .lbutton {text-align:right; font-size:0;}
-.dprint .lbutton a {
-	display:inline-block; height:36px; line-height:34px; background:#666; border-radius:200px; padding:0 20px;
-	font-size:13px; color:#fff; font-weight:600;
-}
-.dprint .lbutton a + a {margin-left:10px;}
-.dprint .lbutton a span {display:inline-block; padding-left:22px;}
-.dprint .lbutton a.lbtn_pdf {background:#666;}
-.dprint .lbutton a.lbtn_pdf span {background: url('../img/icon_data.png') no-repeat 0 center;}
-.dprint .lbutton a.lbtn_print {background:#438fd7;}
-.dprint .lbutton a.lbtn_print span {background:url('../img/icon_print.png') no-repeat 0 center;}
+
 
 
 /* 통합 명세서 */
 /* 명세서 확인 및 출력 레이어 팝업 */
-.totaldprint .ltit a {
-	top:-15px !important; width:20px !important; height:20px !important; overflow:hidden;
+/* 버튼 */
+.totaldprint .lbutton {
+	width:100%; text-align:left; font-size:0; margin:-10px 0 20px; 
+	padding-bottom:20px; border-bottom:solid 1px #ccc;
+}
+.totaldprint .lbutton a {
+	display:inline-block; height:36px; line-height:34px; background:#666; border-radius:200px; padding:0 20px;
+	font-size:13px; color:#fff; font-weight:600;
+}
+.totaldprint .lbutton a + a {margin-left:10px;}
+.totaldprint .lbutton a span {display:inline-block; padding-left:22px;}
+.totaldprint .lbutton a.lbtn_pdf {background:#666;}
+.totaldprint .lbutton a.lbtn_pdf span {background: url('../img/icon_data.png') no-repeat 0 center;}
+.totaldprint .lbutton a.lbtn_print {background:#438fd7;}
+.totaldprint .lbutton a.lbtn_print span {background:url('../img/icon_print.png') no-repeat 0 center;}
+
+.totaldprint .ltit a.lclose {
+	top:-5px !important; width:20px !important; height:20px !important; overflow:hidden;
 	background:url('../img/layer_close.png') no-repeat center center !important;
 }
-.totaldprint .lbody {min-width:800px; min-height:500px;}
+
+.totaldprint .lbody {clear:both; min-width:800px; min-height:500px;}
 
 /* 테이블 설정 */
 .totaldprint .lbody td {vertical-align:middle;}
@@ -1447,18 +1435,6 @@ a.detail_view {
 .totaldprint .lbody table.noline td {border:0; padding:3px 10px 3px 0;}
 
 
-/* 하단 버튼 */
-.totaldprint .lbutton {text-align:right; font-size:0;}
-.totaldprint .lbutton a {
-	display:inline-block; height:36px; line-height:34px; background:#666; border-radius:200px; padding:0 20px;
-	font-size:13px; color:#fff; font-weight:600;
-}
-.totaldprint .lbutton a + a {margin-left:10px;}
-.totaldprint .lbutton a span {display:inline-block; padding-left:22px;}
-.totaldprint .lbutton a.lbtn_pdf {background:#666;}
-.totaldprint .lbutton a.lbtn_pdf span {background: url('../img/icon_data.png') no-repeat 0 center;}
-.totaldprint .lbutton a.lbtn_print {background:#438fd7;}
-.totaldprint .lbutton a.lbtn_print span {background:url('../img/icon_print.png') no-repeat 0 center;}
 
 
 
