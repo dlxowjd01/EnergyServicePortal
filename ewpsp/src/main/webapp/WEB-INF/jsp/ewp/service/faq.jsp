@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -26,88 +27,44 @@
 						<div class="indiv faq">
 							<div class="search_box">
 								<div class="infield">
-									<input type="text" placeholder="궁금하신 점을 검색해 보세요.">
+									<input type="text" id="search" name="search" placeholder="궁금하신 점을 검색해 보세요.">
 									<input type="image" src="../img/search.png">
 								</div>
 							</div>
 							<div class="faq_table mt30">
 								<div class="cate">
 									<a href="#;" class="on">전체</a>
-									<a href="#;">서비스관련</a>
-									<a href="#;">기타</a>
-									<a href="#;">로그인/회원</a>
-									<a href="#;">오류발견</a>
+									<c:forEach var="item" items="${faqCateList}">
+									<a href="#;" onclick="changeFAQCate(this, '${item.faq_cate_idx}')">${item.faq_cate_name}</a>
+									</c:forEach>
 								</div>
 								<ul class="faq_list mt15">
+									<c:forEach var="item" items="${faqList}">
 									<li>
 										<a href="#;" class="question">
-											<span class="gubun">로그인/회원</span>
+											<span class="gubun">${item.faq_cate_name }</span>
 											<span class="sbj">
-												본인 확인제를 관리, 감독하는 기관은 어디인가요?
+												${item.question }
 											</span>
 										</a>
 										<div class="answer">
-								            본인 확인제를 관리, 감독하는 기관은<br/>
-											정보통신부에서 게시판 이용자의 본인확인제에 대한 전반적인 사항에 대해 관리 및 감독을 수행합니다.
+								            ${item.answer }
 											<div class="edit_btn mt15 fr">
+												<c:if test="${not empty userInfo and (userInfo.auth_type eq '1' or  userInfo.auth_type eq '2')}">
 												<a href="#;"><i class="glyphicon glyphicon-edit"></i></a>
 												<a href="#;"><i class="glyphicon glyphicon-remove"></i></a>
+												</c:if>
 											</div>
 								        </div>
 									</li>
-									<li>
-										<a href="#;" class="question">
-											<span class="gubun">서비스관련</span>
-											<span class="sbj">
-												본인 확인제를 관리, 감독하는 기관은 어디인가요?
-											</span>
-										</a>
-										<div class="answer">
-								            본인 확인제를 관리, 감독하는 기관은<br/>
-											정보통신부에서 게시판 이용자의 본인확인제에 대한 전반적인 사항에 대해 관리 및 감독을 수행합니다.
-											<div class="edit_btn mt15 fr">
-												<a href="#;"><i class="glyphicon glyphicon-edit"></i></a>
-												<a href="#;"><i class="glyphicon glyphicon-remove"></i></a>
-											</div>
-								        </div>
-									</li>
-									<li>
-										<a href="#;" class="question">
-											<span class="gubun">기타</span>
-											<span class="sbj">
-												본인 확인제를 관리, 감독하는 기관은 어디인가요?
-											</span>
-										</a>
-										<div class="answer">
-								            본인 확인제를 관리, 감독하는 기관은<br/>
-											정보통신부에서 게시판 이용자의 본인확인제에 대한 전반적인 사항에 대해 관리 및 감독을 수행합니다.
-											<div class="edit_btn mt15 fr">
-												<a href="#;"><i class="glyphicon glyphicon-edit"></i></a>
-												<a href="#;"><i class="glyphicon glyphicon-remove"></i></a>
-											</div>
-								        </div>
-									</li>
-									<li>
-										<a href="#;" class="question">
-											<span class="gubun">오류발견</span>
-											<span class="sbj">
-												본인 확인제를 관리, 감독하는 기관은 어디인가요?
-											</span>
-										</a>
-										<div class="answer">
-								            본인 확인제를 관리, 감독하는 기관은<br/>
-											정보통신부에서 게시판 이용자의 본인확인제에 대한 전반적인 사항에 대해 관리 및 감독을 수행합니다.
-											<div class="edit_btn mt15 fr">
-												<a href="#;"><i class="glyphicon glyphicon-edit"></i></a>
-												<a href="#;"><i class="glyphicon glyphicon-remove"></i></a>
-											</div>
-								        </div>
-									</li>
+									</c:forEach>
 								</ul>
 							</div>
+							<c:if test="${not empty userInfo and (userInfo.auth_type eq '1' or  userInfo.auth_type eq '2')}">
 							<div class="faq_bottom mt30 clear">
 								<a href="javascript:popupOpen('faqedit');" class="default_btn fr"><i class="glyphicon glyphicon-plus"></i> 글쓰기</a>
 							</div>
+							</c:if>
 						</div>
 					</div>
 				</div>
@@ -136,12 +93,11 @@
 						<tr>
 							<th><span>카테고리</span></th>
 							<td class="clear">
-								<select name="" id="" class="sel">
+								<select name="faqCateName" id="faqCateName" class="sel">
 									<option value="">선택</option>
-									<option value="">서비스관련</option>
-									<option value="">기타</option>
-									<option value="">로그인/회원</option>
-									<option value="">오류관련</option>
+									<c:forEach var="item" items="${faqCateList}">
+									<option value="${item.faq_cate_idx}">${item.faq_cate_name }</option>
+									</c:forEach>
 								</select>
 								<a href="javascript:popupOpen('category_edit');" class="default_btn fr"><i class="glyphicon glyphicon-edit"></i> 카테고리 편집</a>
 							</td>
