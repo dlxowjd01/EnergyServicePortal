@@ -24,8 +24,8 @@
 	var chargePower;
 	function callback_getSiteSetDetail(result) {
 		var siteSetDetail = result.detail;
-		contractPower = siteSetDetail.contract_power;
-		chargePower = siteSetDetail.charge_power;
+		contractPower = (siteSetDetail == null) ? null : siteSetDetail.contract_power;
+		chargePower = (siteSetDetail == null) ? null : siteSetDetail.charge_power;
 	}
 	
 	// 피크 전력
@@ -85,8 +85,8 @@
 				dt_str_head += "<th>"+headerDate2+"</th>"
 				if(peakVal == null || peakVal == "" || peakVal == "null") dt_str += "<td>"+" "+"</td>"; 
 				else dt_str += "<td>"+ rePeakVal+"</td>";
-				dt_str2 += "<td>"+ contractPower+"</td>";
-				dt_str3 += "<td>"+ chargePower+"</td>";
+				dt_str2 += "<td>"+ ( (contractPower == null) ? "" : contractPower    )+"</td>";
+				dt_str3 += "<td>"+ ( (chargePower == null) ? "" : chargePower    )+"</td>";
 				dt_str_totalVal = dt_str_totalVal+ rePeakVal;
 				dt_str2_totalVal = dt_str2_totalVal+ contractPower;
 				dt_str3_totalVal = dt_str3_totalVal+ chargePower;

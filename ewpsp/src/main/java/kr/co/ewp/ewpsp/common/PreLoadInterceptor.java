@@ -49,13 +49,15 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			logger.debug("userSiteList:{}", userSiteList);
 		}
 		
-		String siteId = request.getParameter("siteId");
+		String siteId = (request.getParameter("siteId") != null && !"".equals(request.getParameter("siteId"))) ? request.getParameter("siteId") : (String) request.getSession().getAttribute("selViewSiteId");
 		if(siteId != null) {
+			HashMap param = new HashMap<String, Object>();
+			param.put("siteId", siteId);
+			Map result = cmpyGrpSiteMngService.getSiteDetail(param);
 			request.getSession().setAttribute("selViewSiteId", siteId);
-		}
-		String selViewSiteId = (String) request.getSession().getAttribute("selViewSiteId");
-		if(selViewSiteId != null) {
-			request.setAttribute("selViewSiteId", selViewSiteId);
+			request.getSession().setAttribute("selViewSite", result);
+			request.setAttribute("selViewSiteId", siteId);
+			request.setAttribute("selViewSite", result);
 		}
 
 		// 상단 시간 초기값

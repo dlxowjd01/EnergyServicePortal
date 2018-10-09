@@ -21,7 +21,7 @@
 			<div id="container">
 				<div class="row">
 					<div class="col-lg-12">
-						<h1 class="page-header">롯데정밀화학</h1>
+						<h1 class="page-header">${selViewSite.site_name }</h1>
 					</div>
 				</div>
 				<form id="schForm" name="schForm">

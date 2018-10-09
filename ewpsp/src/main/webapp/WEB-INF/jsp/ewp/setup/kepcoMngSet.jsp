@@ -25,7 +25,7 @@
 					<div class="col-lg-12">
 						<div class="indiv">
 							<div class="set_top clear">
-								<h2 class="ntit fl">제일 화성</h2>
+								<h2 class="ntit fl">${selViewSite.site_name }</h2>
 							</div>
 							<div class="set_tbl">
 								<form id="siteSetForm" name="siteSetForm">

@@ -9,7 +9,7 @@
 							<c:choose>
 								<c:when test="${param.schGbn eq 'energy_drResult' }"> <!-- DR 실적 조회 -->
 								<div class="chart_top clear">
-									<h2 class="ntit fl">롯데정밀화학</h2>
+									<h2 class="ntit fl">${selViewSite.site_name }</h2>
 									<div class="term fl clear">
 										<div class="dropdown fl">
 										  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selTermBox">1일(날짜선택)
@@ -73,7 +73,7 @@
 								</c:when>
 								<c:otherwise><!-- 그 외 -->
 								<div class="chart_top clear">
-									<h2 class="ntit fl">롯데정밀화학</h2>
+									<h2 class="ntit fl">${selViewSite.site_name }</h2>
 									<c:if test="${param.schGbn eq 'energy' }">
 									<div class="term fl clear">
 										<div class="dropdown fl">

@@ -247,19 +247,19 @@ $(function() {
 			5. 응답 헤더에 쿠키가 포함되어 있어 파일다운로드가 시작되면 화면에서는 뭔가를 끈다.
 			6. 파일 다운로드가 시작된다. !!
 			*/
-//			$("#ajaxLoading").show(); // 로딩바 보여주기
-			// 0.5 초마다 fileDownloadToken 라는 쿠키가 있는지 체크합니다.
-			// 해당 쿠키가 있으면 spin을 끄고 fileDownloadToken 쿠키를 지운 후 Interval 을 종료 합니다.
-			FILEDOWNLOAD_INTERVAL = setInterval(function() {
-				if ($.cookie("fileDownloadToken") != null) { 
-					$.cookie('fileDownloadToken', null, {
-						expires : 0,
-						path : location.pathname
-					});
-					clearInterval(FILEDOWNLOAD_INTERVAL);
-//					$("#ajaxLoading").hide(); // 로딩바 숨기기
-				}
-			}, 500);
+////			$("#ajaxLoading").show(); // 로딩바 보여주기
+//			// 0.5 초마다 fileDownloadToken 라는 쿠키가 있는지 체크합니다.
+//			// 해당 쿠키가 있으면 spin을 끄고 fileDownloadToken 쿠키를 지운 후 Interval 을 종료 합니다.
+//			FILEDOWNLOAD_INTERVAL = setInterval(function() {
+//				if ($.cookie("fileDownloadToken") != null) { 
+//					$.cookie('fileDownloadToken', null, {
+//						expires : 0,
+//						path : location.pathname
+//					});
+//					clearInterval(FILEDOWNLOAD_INTERVAL);
+////					$("#ajaxLoading").hide(); // 로딩바 숨기기
+//				}
+//			}, 500);
 			
 		};
 	};

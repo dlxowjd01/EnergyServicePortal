@@ -287,7 +287,6 @@ public class CmpyGrpSiteMngController {
 		logger.debug("param ::::: "+param.toString());
 		
 		Map result = cmpyGrpSiteMngService.getSiteDetail(param);
-		logger.debug("result.toString() : "+result.toString());
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);

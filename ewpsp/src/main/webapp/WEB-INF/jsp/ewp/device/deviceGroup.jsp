@@ -30,7 +30,7 @@
 					<div class="col-lg-12">
 						<div class="indiv device_group clear">
 							<div class="dg_top clear">
-								<h2 class="ntit fl">제일 화성</h2>
+								<h2 class="ntit fl">${selViewSite.site_name }</h2>
 								<div class="clear fr">
 									<ul class="fl">
 										<li><a href="#;" class="default_btn" id="grpMngFormBtn"><i class="glyphicon glyphicon-th-list"></i> 장치그룹관리</a></li>

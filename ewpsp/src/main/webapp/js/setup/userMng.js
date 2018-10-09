@@ -18,13 +18,14 @@
 			$tbody.append( strHtml );
 		} else {
 			for(var i=0; i<userList.length; i++) {
+				var tm = new Date( convertDateUTC(userList[i].reg_date) );
 				$tbody.append(
 						$('<tr />').append( $("<td />").append( userList[i].user_id ) // id
 						).append( $("<td />").append( userList[i].auth_type ) // 권한등급
 						).append( $("<td />").append( userList[i].co_name ) // 회사명
 						).append( $("<td />").append( userList[i].user_idx ) // 그룹
 						).append( $("<td />").append( userList[i].note ) // 설명
-						).append( $("<td />").append( userList[i].reg_date ) // 등록일자
+						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") ) // 등록일자
 						).append(
 								$("<td />").append(
 										'<a href="#" onclick="updateUserForm(\''+userList[i].user_idx+'\');" class="default_btn">수정</a>'+

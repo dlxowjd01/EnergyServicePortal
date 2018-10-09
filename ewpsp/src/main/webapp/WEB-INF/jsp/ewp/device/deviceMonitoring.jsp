@@ -34,7 +34,7 @@
 					<div class="col-lg-12">
 						<div class="indiv page-device clear">
 							<div class="chart_top clear">
-								<h2 class="ntit fl">제일화성</h2>
+								<h2 class="ntit fl">${selViewSite.site_name }</h2>
 								<div class="time fr" id="updtTime">2018-08-12 11:41:26</div>
 							</div>
 							<div class="tbl_top mt20 clear">
