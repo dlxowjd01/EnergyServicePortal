@@ -109,6 +109,14 @@
 							</td>
 						</tr>
 						<tr>
+							<th><span>사이트</span></th>
+							<td>
+								<select name="siteId" id="siteId" class="sel" style="width:100%">
+									<option value=""></option>
+								</select>
+							</td>
+						</tr>
+						<tr>
 							<th><span>권한</span></th>
 							<td>
 								<select name="authType" id="authType" class="sel" style="width:100%">

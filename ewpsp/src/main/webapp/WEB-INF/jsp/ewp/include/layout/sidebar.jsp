@@ -75,7 +75,7 @@ $(document).ready(function() {
 						<ul>
 							<li><a href="/kepcoMngSet">한전관리설정</a></li>
 							<c:if test="${userInfo.auth_type ne '4'}">
-							<li><a href="/cmpyGrpSiteMng">그룹/사이트</a></li>
+							<li><a href="/cmpyGrpSiteMng">그룹/사이트 관리</a></li>
 							</c:if>
 							<li><a href="/userMng">사용자관리</a></li>
 						</ul>
@@ -119,9 +119,6 @@ $(document).ready(function() {
 							<li><a href="/deviceMonitoring?deviceGbn=IOE">PCS 통신상태</a></li>
 							<li><a href="/deviceMonitoring?deviceGbn=IOE">BMS 통신상태</a></li>
 							<li><a href="/deviceMonitoring?deviceGbn=IOE">PV 통신상태</a></li>
-							<!-- <li><a href="/deviceMonitoring?deviceGbn=PCS">PCS 운전상태</a></li>
-							<li><a href="/deviceMonitoring?deviceGbn=BMS">BMS 운전상태</a></li>
-							<li><a href="/deviceMonitoring?deviceGbn=PV">PV 운전상태</a></li> -->
 							<li><a href="/deviceGroup">장치 그룹 현황</a></li>
 						</ul>
 					</li>
@@ -140,11 +137,11 @@ $(document).ready(function() {
 					<c:if test="${userInfo.auth_type eq '1' or userInfo.auth_type eq '2'}">
 					<li class="gmn6"><a href="/main">군관리 메인</a></li>
 					</c:if>
-					<li class="gmn7"><a href="#;">설정</a>
+					<li class="gmn7"><a href="/cmpyGrpSiteMng">설정</a>
 						<ul>
 							<li><a href="/kepcoMngSet">한전관리설정</a></li>
 							<c:if test="${userInfo.auth_type ne '4'}">
-							<li><a href="/cmpyGrpSiteMng">그룹/사이트</a></li>
+							<li><a href="/cmpyGrpSiteMng">그룹/사이트 관리</a></li>
 							</c:if>
 							<li><a href="/userMng">사용자관리</a></li>
 						</ul>

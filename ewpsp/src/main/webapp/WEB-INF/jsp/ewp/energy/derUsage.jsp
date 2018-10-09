@@ -48,7 +48,7 @@
 							</jsp:include>
 							<div class="inchart">
 								<div class="chart_type">
-									<a href="#;" class="chart_change_column">그래프변경</a>
+									<!-- <a href="#;" class="chart_change_column">그래프변경</a> -->
 									<a href="#;" class="chart_change_line" style="display:none;">그래프변경</a>
 								</div>
 								<div id="chart2"></div>

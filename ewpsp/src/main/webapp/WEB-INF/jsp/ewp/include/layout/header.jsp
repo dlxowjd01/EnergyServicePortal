@@ -53,6 +53,30 @@ var selViewSiteName = "";
 								</script>
 							</c:if>
 						</c:forEach>
+						<!-- <li data-value="1">
+                        	<a href="#">그룹1</a>
+                        	<ul>
+                        		<li data-value="1-1"><a href="#">사이트1</a></li>
+                        		<li data-value="1-2"><a href="#">사이트2</a></li>
+                        		<li data-value="1-3"><a href="#">사이트3</a></li>
+                        	</ul>
+                        </li>
+                        <li data-value="2">
+                        	<a href="#">그룹2</a>
+                        	<ul>
+                        		<li data-value="2-1"><a href="#">사이트1</a></li>
+                        		<li data-value="2-2"><a href="#">사이트2</a></li>
+                        		<li data-value="2-3"><a href="#">사이트3</a></li>
+                        	</ul>
+                        </li>
+                        <li data-value="3">
+                        	<a href="#">그룹3</a>
+                        	<ul>
+                        		<li data-value="3-1"><a href="#">사이트1</a></li>
+                        		<li data-value="3-2"><a href="#">사이트2</a></li>
+                        		<li data-value="3-3"><a href="#">사이트3</a></li>
+                        	</ul>
+                        </li> -->
 					</ul>
 				</div>
 --%>

@@ -455,296 +455,6 @@
 											</tbody>
 										</table>	
 									</div>
-									<!-- <div class="chart_table">			
-										<table class="pc_use">
-											<thead>
-												<tr>
-													<th>2018-08</th>
-													<th>1월</th>
-													<th>2월</th>
-													<th>3월</th>
-													<th>4월</th>
-													<th>5월</th>
-													<th>6월</th>
-													<th>7월</th>
-													<th>8월</th>
-													<th>9월</th>
-													<th>10월</th>
-													<th>11월</th>
-													<th>12월</th>
-													<th>합계</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<th><div class="ctit wht"><span>평일 일수 (d)</span></div></th>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th><div class="ctit wht"><span>경부하충전량 (kWh)</span></div></th>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th><div class="ctit wht"><span>중간부하충전량 (kWh)</span></div></th>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th><div class="ctit wht"><span>최대부하충전량 (kWh)</span></div></th>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th><div class="ctit wht"><span>경부하방전량 (kWh)</span></div></th>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th><div class="ctit wht"><span>중간부하방전량 (kWh)</span></div></th>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th><div class="ctit wht"><span>최대부하방전량 (kWh)</span></div></th>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th><div class="ctit wht"><span>예상 할인금액 (won)</span></div></th>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th><div class="ctit"><span>실적 할인금액 (won)</span></div></th>
-													<td>1,000,000</td>
-													<td>1,000,000</td>
-													<td>1,000,000</td>
-													<td>1,000,000</td>
-													<td>1,000,000</td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th><div class="ctit ct1"><span>고객 정산금액 (won)</span></div></th>
-													<td>200,000</td>
-													<td>200,000</td>
-													<td>200,000</td>
-													<td>200,000</td>
-													<td>200,000</td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th><div class="ctit wht"><span>EWP 정산금액 (won)</span></div></th>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th><div class="ctit wht"><span>정산비율 (%)</span></div></th>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-											</tbody>
-										</table>	
-									</div>									 -->
-									<!-- 데이터 추출용 -->
-									<div class="chart_table2" style="display:none;">			
-										<table id="datatable">
-										    <thead>
-										        <tr>
-										            <th>2018-08</th>
-										            <th>고객 정산금액</th>
-										            <th>실적 할인금액	</th>
-										        </tr>
-										    </thead>
-										    <tbody>
-										        <tr>
-										            <th>1월</th>
-										            <td>200000</td>
-										            <td>1000000</td>
-										        </tr>
-										        <tr>
-										            <th>2월</th>
-										            <td>200000</td>
-										            <td>1000000</td>
-										        </tr>
-										        <tr>
-										            <th>3월</th>
-										            <td>200000</td>
-										            <td>1000000</td>
-										        </tr>
-										        <tr>
-										            <th>4월</th>
-										            <td>200000</td>
-										            <td>1000000</td>
-										        </tr>
-										        <tr>
-										            <th>5월</th>
-										            <td>200000</td>
-										            <td>1000000</td>
-										        </tr>
-										        <tr>
-										            <th>6월</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>7월</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>8월</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>9월</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>10월</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>11월</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>12월</th>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										    </tbody>
-										</table>			
-									</div>
 								</div>
 							</div>
 						</div>
@@ -759,8 +469,12 @@
 
 
     <!-- ###### 명세서 확인 및 출력 Popup Start ###### -->
-    <div id="layerbox" class="dprint" style="margin-top:300px;">
-        <div class="ltit">      	
+    <div id="layerbox" class="dprint clear" style="margin-top:300px;">
+    	<div class="lbutton fl">
+			<a href="#;" class="lbtn_pdf"><span>PDF로 저장</span></a>
+			<a href="#;" class="lbtn_print"><span>인쇄</span></a>
+		</div>
+        <div class="ltit fr">      	
 			<a href="javascript:popupClose('dprint');">닫기</a>
         </div>
 		<div class="lbody mt30">
@@ -969,13 +683,79 @@
 			<div class="clear" style="margin-top:20px">
 				<div class="fl" style="width:56%">
 					<h2>5. 전기요금 절감효과</h2>
-					<div style="margin-top:10px;">
-						<!-- 차트영역 -->
+					<div class="inchart">
+						<div id="ly_chart_ess" style="max-width:445px;height:190px"></div>
+						<script language="JavaScript"> 
+						$(function () { 
+							Highcharts.setOptions({
+						        lang: {
+						            decimalPoint: '.',
+						            thousandsSep: ','
+						        }
+						    });
+							var myChart = Highcharts.chart('ly_chart_ess', {
+							    chart: {
+							    	marginTop:0,
+									marginBottom:10,
+							        plotBackgroundColor: null,
+							        plotBorderWidth: null,
+							        plotShadow: false,
+							        backgroundColor: 'transparent',
+							        type: 'pie'
+							    },
+							    navigation: {
+									buttonOptions: {
+									  enabled: false /* 메뉴 안보이기 */
+									  }
+								},
+							    title: {
+							        text: ''
+							    },
+							    tooltip: {
+							        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+							    },
+							    plotOptions: {
+							        pie: {
+							            allowPointSelect: true,
+							            cursor: 'pointer',
+							            dataLabels: {
+							                enabled: true,
+							                format: '<b>{point.name}</b> : {point.y:,.0f} <br/> {point.percentage:.1f} %',
+							                style: {
+							                    color: '#3d4250'
+							                }
+							            }
+							        }
+							    },
+							    credits: {
+									enabled: false
+								},
+							    series: [{
+							        name: '전기요금 절감효과',
+							        colorByPoint: true,
+							        data: [{
+							            name: '②',
+							            y: 3188076
+							        }, {
+							            name: '③',
+							            y: 2227088
+							        }, {
+							            name: '④',
+							            y: 25331670
+							        }]
+							    }]
+							});
+						});
+						</script>						
 					</div>
 				</div>
 				<div class="fr" style="width:42%">
 					<h2>6. 납입처</h2>
 					<table class="tbl" style="margin-top:10px;">
+						<colgroup>
+							<col width="40%">
+							<col width="60%">
+						</colgroup>
 						<tbody>
 							<tr>
 								<th>은행명</th>
@@ -1002,10 +782,6 @@
 				</div>
 			</div>
 
-		</div>
-		<div class="lbutton mt40">
-			<a href="#;" class="lbtn_pdf"><span>PDF로 저장</span></a>
-			<a href="#;" class="lbtn_print"><span>인쇄</span></a>
 		</div>
     </div>
     <!-- ###### Popup End ###### -->
