@@ -437,8 +437,12 @@
 
 
     <!-- ###### 명세서 확인 및 출력 Popup Start ###### -->
-    <div id="layerbox" class="dprint" style="margin-top:50px;">
-        <div class="ltit">      	
+    <div id="layerbox" class="dprint clear" style="margin-top:250px;">
+    	<div class="lbutton fl">
+			<a href="#;" class="lbtn_pdf"><span>PDF로 저장</span></a>
+			<a href="#;" class="lbtn_print"><span>인쇄</span></a>
+		</div>
+        <div class="ltit fr">      	
 			<a href="javascript:popupClose('dprint');">닫기</a>
         </div>
 		<div class="lbody mt30">
@@ -595,10 +599,221 @@
 			</div>
 
 		</div>
-		<div class="lbutton mt40">
-			<a href="#;" class="lbtn_pdf"><span>PDF로 저장</span></a>
-			<a href="#;" class="lbtn_print"><span>인쇄</span></a>
+		<h2 style="margin-top:20px">5. 최근 6개월 수익 내역</h2>
+		<div class="inchart">
+			<div id="ly_chart_dr" style="max-width:800px;height:300px;"></div>
+			<script language="JavaScript"> 
+			$(function () { 
+				var myChart = Highcharts.chart('ly_chart_dr', {
+					data: {
+				        table: 'ly_datatable_dr' /* 테이블에서 데이터 불러오기 */
+				    },
+
+					chart: {
+						marginLeft:80,
+						marginRight:0,
+						backgroundColor: 'transparent',
+						type: 'column'
+					},
+
+					navigation: {
+						buttonOptions: {
+						  enabled: false /* 메뉴 안보이기 */
+						  }
+					},
+
+				    title: {
+				        text: ''
+				    },
+
+				    subtitle: {
+				        text: ''
+				    },
+				    
+					xAxis: {
+						labels: {
+							align: 'center',
+							style: {
+								color: '#3d4250',
+								fontSize: '13px'
+							}
+						},
+						tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
+						title: {
+							text: null
+							}
+					},
+
+					yAxis: {
+						gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
+					    title: {
+					    	text: 'won',
+					    	align: 'low',
+					    	rotation: 0, /* 타이틀 기울기 */
+					        y:25, /* 타이틀 위치 조정 */
+					        x:25, /* 타이틀 위치 조정 */
+					        style: {
+					            color: '#3d4250',
+					            fontSize: '13px'
+					        }
+					    },
+					    labels: {
+					        overflow: 'justify',
+					        x:-20, /* 그래프와의 거리 조정 */
+					        style: {
+					            color: '#3d4250',
+					            fontSize: '13px'
+					        }
+					    }
+					},	
+
+				    /* 범례 */
+					legend: {
+						enabled: true,
+						align:'right',
+						verticalAlign:'top',									
+						itemStyle: {
+					        color: '#3d4250',
+					        fontSize: '13px',
+					        fontWeight: 400
+					    },
+					    itemHoverStyle: {
+					        color: '' /* 마우스 오버시 색 */
+					    },
+					    symbolPadding:3, /* 심볼 - 텍스트간 거리 */
+					    symbolHeight:8 /* 심볼 크기 */
+					},
+
+					/* 툴팁 */
+					tooltip: {
+						    formatter: function() {
+				                return  '<b>' + this.series.name + '</b><br/>' + this.x + '월<br/><span style="color:#438fd7">' + this.y + ' won</span>';
+				            }
+					},
+
+					/* 옵션 */
+					plotOptions: {
+				        series: {
+				            label: {
+				                connectorAllowed: false
+				            },
+				            borderWidth: 0 /* 보더 0 */
+				        },
+				        line: {
+						    marker: {
+						         enabled: false /* 마커 안보이기 */
+						    }
+						},
+						column: {
+							  stacking: '' /*위로 쌓이는 막대  ,normal */
+						}
+				    },
+
+				    /* 출처 */
+				    credits: {
+						enabled: false
+					},
+
+				    /* 그래프 스타일 */
+				    series: [{
+				        color: '#438fd7' /* 총 정산금액 */
+				    },{
+				        color: '#84848f' /* 고객 할인금액 */
+				    }],
+
+				    /* 반응형 */
+				    responsive: {
+				        rules: [{
+				            condition: {
+				                maxWidth: 414 /* 차트 사이즈 */								                
+				            },
+				            chartOptions: {
+				            	chart: {
+				            		marginLeft:80,
+				            		marginTop:30
+								},
+								xAxis: {
+									labels: {
+										style: {
+								            fontSize: '13px'
+								        }
+									}
+								},
+								yAxis: {
+									title: {
+										style: {
+								            fontSize: '13px'
+								        }
+									},
+									labels: {
+										x:-10, /* 그래프와의 거리 조정 */
+								        style: {
+								            fontSize: '13px'
+								        }
+									}
+								},
+				                legend: {									                    
+				                    layout: 'horizontal',
+				                    verticalAlign: 'bottom',
+				                    align:'center',
+				                    x:0,
+				                    itemStyle: {
+							        	fontSize: '13px'
+							    	}
+				                }
+				            }
+				        }]
+				    }
+
+				});
+			});
+			</script>
 		</div>
+		<!-- 데이터 추출용 -->
+		<div class="lychart_table" style="display:none;">			
+			<table id="ly_datatable_dr">
+			    <thead>
+			        <tr>
+			            <th>2018-08</th>
+			            <th>총 정산금액</th>
+			            <th>고객 할인금액	</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        <tr>
+			            <th>1월</th>
+			            <td>1000000</td>
+			            <td>800000</td>
+			        </tr>
+			        <tr>
+			            <th>2월</th>
+			            <td>1000000</td>
+			            <td>800000</td>
+			        </tr>
+			        <tr>
+			            <th>3월</th>
+			            <td>1000000</td>
+			            <td>800000</td>
+			        </tr>
+			        <tr>
+			            <th>4월</th>
+			            <td>1000000</td>
+			            <td>800000</td>
+			        </tr>
+			        <tr>
+			            <th>5월</th>
+			            <td>1000000</td>
+			            <td>800000</td>
+			        </tr>
+			        <tr>
+			            <th>6월</th>
+			            <td></td>
+			            <td></td>
+			        </tr>
+			    </tbody>
+			</table>			
+		</div>
+
     </div>
     <!-- ###### Popup End ###### -->
 

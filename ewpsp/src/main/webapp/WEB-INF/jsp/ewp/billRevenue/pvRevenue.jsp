@@ -365,213 +365,6 @@
 											</tbody>
 										</table>	
 									</div>
-									<!-- <div class="chart_table">			
-										<table class="pc_use">
-											<thead>
-												<tr>
-													<th>2018-08</th>
-													<th>1월</th>
-													<th>2월</th>
-													<th>3월</th>
-													<th>4월</th>
-													<th>5월</th>
-													<th>6월</th>
-													<th>7월</th>
-													<th>8월</th>
-													<th>9월</th>
-													<th>10월</th>
-													<th>11월</th>
-													<th>12월</th>
-													<th>합계</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<th><div class="ctit wht"><span>총 발전량</span></div></th>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th><div class="ctit wht"><span>SMP 거래량</span></div></th>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>												
-												<tr>
-													<th><div class="ctit pk2"><span>SMP 수익</span></div></th>
-													<td>800,000</td>
-													<td>800,000</td>
-													<td>800,000</td>
-													<td>800,000</td>
-													<td>800,000</td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>												
-												<tr>
-													<th><div class="ctit wht"><span>REC 거래량</span></div></th>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th><div class="ctit pk3"><span>REC 수익</span></div></th>
-													<td>400,000</td>
-													<td>400,000</td>
-													<td>400,000</td>
-													<td>400,000</td>
-													<td>400,000</td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th><div class="ctit pk1"><span>총 수익</span></div></th>
-													<td>1,000,000</td>
-													<td>1,000,000</td>
-													<td>1,000,000</td>
-													<td>1,000,000</td>
-													<td>1,000,000</td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-											</tbody>
-										</table>	
-									</div>									 -->
-									<!-- 데이터 추출용 -->
-									<div class="chart_table2" style="display:none;">			
-										<table id="datatable">
-										    <thead>
-										        <tr>
-										            <th>2018-08</th>
-										            <th>총 수익</th>
-										            <th>SMP 수익	</th>
-										            <th>REC 수익</th>
-										        </tr>
-										    </thead>
-										    <tbody>
-										        <tr>
-										            <th>1월</th>
-										            <td>1000000</td>
-										            <td>800000</td>
-										            <td>400000</td>
-										        </tr>
-										        <tr>
-										            <th>2월</th>
-										            <td>1000000</td>
-										            <td>800000</td>
-										            <td>400000</td>
-										        </tr>
-										        <tr>
-										            <th>3월</th>
-										            <td>1000000</td>
-										            <td>800000</td>
-										            <td>400000</td>
-										        </tr>
-										        <tr>
-										            <th>4월</th>
-										            <td>1000000</td>
-										            <td>800000</td>
-										            <td>400000</td>
-										        </tr>
-										        <tr>
-										            <th>5월</th>
-										            <td>1000000</td>
-										            <td>800000</td>
-										            <td>400000</td>
-										        </tr>
-										        <tr>
-										            <th>6월</th>
-										            <td></td>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>7월</th>
-										            <td></td>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>8월</th>
-										            <td></td>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>9월</th>
-										            <td></td>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>10월</th>
-										            <td></td>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>11월</th>
-										            <td></td>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										        <tr>
-										            <th>12월</th>
-										            <td></td>
-										            <td></td>
-										            <td></td>
-										        </tr>
-										    </tbody>
-										</table>			
-									</div>
 								</div>
 							</div>
 						</div>
@@ -586,8 +379,12 @@
 
 
     <!-- ###### 명세서 확인 및 출력 Popup Start ###### -->
-    <div id="layerbox" class="dprint" style="margin-top:150px;">
-        <div class="ltit">      	
+    <div id="layerbox" class="dprint clear" style="margin-top:200px;">
+    	<div class="lbutton fl">
+			<a href="#;" class="lbtn_pdf"><span>PDF로 저장</span></a>
+			<a href="#;" class="lbtn_print"><span>인쇄</span></a>
+		</div>
+        <div class="ltit fr">      	
 			<a href="javascript:popupClose('dprint');">닫기</a>
         </div>
 		<div class="lbody mt30">
@@ -743,40 +540,105 @@
 				</tbody>
 			</table>
 
-			<h2 style="margin-top:20px;">4. 납입 정보</h2>
-			<table class="tbl" style="margin-top:10px;">
-				<colgroup>
-					<col width="25%">
-					<col width="25%">
-					<col width="25%">
-					<col width="25%">
-				</colgroup>
-				<tbody>
-					<tr>
-						<th>청구 금액</th>
-						<td>5,058,900</td>
-						<th>예금주</th>
-						<td>한국동서발전㈜</td>
-					</tr>
-					<tr>
-						<th>은행명</th>
-						<td>우리은행</td>
-						<th>납입금액</th>
-						<td>30,439,360</td>
-					</tr>
-					<tr>
-						<th>계좌번호</th>
-						<td>1005 – 802 - 498030</td>
-						<th>납기일</th>
-						<td>2018-06-24</td>
-					</tr>
-				</tbody>
-			</table>
+			<div class="clear" style="margin-top:20px">
+				<div class="fl" style="width:56%">
+					<h2>4. 수익구성</h2>
+					<div class="inchart">
+						<div id="ly_chart_pv" style="max-width:440px;height:190px"></div>
+						<script language="JavaScript"> 
+						$(function () { 
+						    Highcharts.setOptions({
+						        lang: {
+						            decimalPoint: '.',
+						            thousandsSep: ','
+						        }
+						    });
+							var myChart = Highcharts.chart('ly_chart_pv', {
+							    chart: {
+							    	marginTop:0,
+									marginBottom:0,
+							        plotBackgroundColor: null,
+							        plotBorderWidth: null,
+							        plotShadow: false,
+							        backgroundColor: 'transparent',
+							        type: 'pie'
+							    },
+							    navigation: {
+									buttonOptions: {
+									  enabled: false /* 메뉴 안보이기 */
+									  }
+								},
+							    title: {
+							        text: ''
+							    },
+							    tooltip: {
+							        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+							    },
+							    plotOptions: {
+							        pie: {
+							            allowPointSelect: true,
+							            cursor: 'pointer',
+							            dataLabels: {
+							                enabled: true,
+							                format: '<b>{point.name}</b> <br/> {point.y:,.0f} <br/> {point.percentage:.1f} %',
+							                style: {
+							                    color: '#3d4250'
+							                }
+							            }
+							        }
+							    },
+							    credits: {
+									enabled: false
+								},
+							    series: [{
+							        name: '수익구성',
+							        colorByPoint: true,
+							        data: [{
+							            name: '① REC 수익',
+							            y: 3188076
+							        }, {
+							            name: '② SMP 수익',
+							            y: 2227088
+							        }]
+							    }]
+							});
+						});
+						</script>						
+					</div>
+				</div>
+				<div class="fr" style="width:42%">
+					<h2>5. 납입처</h2>
+					<table class="tbl" style="margin-top:10px;">
+						<colgroup>
+							<col width="40%">
+							<col width="60%">
+						</colgroup>
+						<tbody>
+							<tr>
+								<th>은행명</th>
+								<td>우리은행</td>
+							<tr>
+							<tr>
+								<th>계좌번호</th>
+								<td>1005 – 802 - 498030</td>
+							</tr>
+							<tr>
+								<th>예금주</th>
+								<td>한국동서발전㈜</td>
+							</tr>
+							<tr>
+								<th>납입금액</th>
+								<td>30,439,360</td>
+							</tr>
+							<tr>
+								<th>납기일</th>
+								<td>2018-06-24</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 
-		</div>
-		<div class="lbutton mt40">
-			<a href="#;" class="lbtn_pdf"><span>PDF로 저장</span></a>
-			<a href="#;" class="lbtn_print"><span>인쇄</span></a>
 		</div>
     </div>
     <!-- ###### Popup End ###### -->

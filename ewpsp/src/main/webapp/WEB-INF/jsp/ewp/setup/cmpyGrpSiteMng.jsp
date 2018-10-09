@@ -18,7 +18,7 @@
 			<div id="container">
 				<div class="row">
 					<div class="col-lg-12">
-						<h1 class="page-header">회사/그룹/사이트 관리</h1>
+						<h1 class="page-header">그룹/사이트 관리</h1>
 					</div>
 				</div>
 				<div class="row">
@@ -261,11 +261,11 @@
 						</tr>
 						<tr>
 							<th><span>그룹 이미지</span></th>
-							<td>
-								<span class="control-fileupload">
+							<td><input type="file" id="siteGrpImg" name="siteGrpImg">
+								<!-- <span class="control-fileupload">
 						            <label for="file" id="fileNameTag">Choose a file :</label>
 						            <input type="file" id="siteGrpImg" name="siteGrpImg">
-						        </span>
+						        </span> -->
 							</td>
 						</tr>
 					</tbody>			
@@ -305,6 +305,14 @@
 						<tr>
 							<th><span>사이트ID</span></th>
 							<td><input type="text" name="siteId" id="siteId" class="input" style="width:100%"></td>
+						</tr>
+						<tr>
+							<th><span>지역</span></th>
+							<td>
+								<select name="" id="" class="sel" style="width:100%">
+									<option value=""></option>
+								</select>
+							</td>
 						</tr>
 						<tr>
 							<th><span>그룹</span></th>
