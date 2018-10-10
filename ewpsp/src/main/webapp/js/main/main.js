@@ -394,7 +394,7 @@ function changeGroup(aElmt, grpIdx) {
 	var text = changeLiClass(aElmt);
 	$('#selAllArea').text(text);
 
-	if (areaType == 0) {
+	if (grpIdx == 'All') {
 		$('#grpIdx').val('');
 	} else {
 		$('#grpIdx').val(grpIdx);
