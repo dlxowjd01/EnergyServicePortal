@@ -25,6 +25,7 @@
 			main_user_yn,   /* 주사용자여부(Y:예,N:아니오) */
 			auth_type,   /* 권한구분(1:포털관리자,2:그룹관리자,3:사이트관리자,4:사이트이용자) */
 			lang_type,   /* 언어구분(1:한국어,2:영어,3:일본어) */
+			comp_idx, /* 회사식별자 */
 			co_name,   /* 고객사명 */
 			co_tel,   /* 회사전화번호 */
 			co_email,   /* 회사이메일주소 */
@@ -34,6 +35,7 @@
 			psn_mobile,   /* 담당자휴대폰번호 */
 			psn_email,   /* 담당자이메일주소 */
 			note,   /* 비고 */
+			site_grp_idx, /* 사이트그룹식별자 */
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 			site_id, /* 사이트ID */
 			</if>
@@ -50,6 +52,7 @@
 			#{mainUserYn }, 
 			#{authType }, 
 			#{langType }, 
+			#{compIdx }, 
 			#{coName }, 
 			#{coTel }, 
 			#{coEmail }, 
@@ -59,11 +62,12 @@
 			#{psnMobile }, 
 			#{psnEmail }, 
 			#{note }, 
+			#{siteGrpIdx }, 
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 			#{siteId }, 
 			</if>
 			'N', 
-			#{reg_uid }, 
+			#{regUid }, 
 			now()
 		)
 	</insert>

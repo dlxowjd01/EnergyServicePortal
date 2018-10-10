@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.net.URLCodec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +24,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.inject.internal.util.Maps;
 
+import kr.co.ewp.ewpsp.common.util.AES256Util;
+import kr.co.ewp.ewpsp.common.util.CommonUtils;
 import kr.co.ewp.ewpsp.common.util.PMGrowApiUtil;
+import kr.co.ewp.ewpsp.common.util.UserUtil;
 import kr.co.ewp.ewpsp.model.Soc;
 import kr.co.ewp.ewpsp.service.AlarmService;
 import kr.co.ewp.ewpsp.service.CmpyGrpSiteMngService;
 import kr.co.ewp.ewpsp.service.DeviceMonitoringService;
+import kr.co.ewp.ewpsp.service.LoginService;
 
 @Controller
 public class ApiController {
 
-	private static final Logger logger = LoggerFactory.getLogger(UsageController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ApiController.class);
 	
   @Autowired
   private AlarmService alarmService;
@@ -41,6 +46,9 @@ public class ApiController {
 
 	@Resource(name="cmpyGrpSiteMngService")
 	private CmpyGrpSiteMngService cmpyGrpSiteMngService;
+
+	@Resource(name="loginService")
+	private LoginService loginService;
 
   @RequestMapping(value = { "/openapi/alarm" }, method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
   public void getPrototype(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap, //
@@ -117,5 +125,34 @@ public class ApiController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("finalSoc", finalSoc);
 		return resultMap;
+	}
+
+	@RequestMapping("/openapi/loginUser")
+	public @ResponseBody Integer loginUser(HttpSession session, String userId, String userPw) throws Exception {
+		logger.debug("/openapi/loginUser");
+		logger.debug("userId : {}, userPw : {}", userId, userPw);
+
+		String key = "aes256-ewpsp-key";
+		AES256Util aes256 = new AES256Util(key);
+		URLCodec codec = new URLCodec();
+
+//		String userPwEnc = codec.encode(aes256.aesEncode(userPw));
+		String userPwDec = aes256.aesDecode(codec.decode(userPw));
+
+		HashMap<String, String> param = new HashMap<String, String>();
+		param.put("userId", userId);
+		param.put("userPw", userPwDec);
+
+		Map result = loginService.getUserDetail(param);
+		logger.debug("result : {}", result);
+
+		if (result != null && CommonUtils.isNotEmpty(result.get("user_idx"))) {
+			session.setAttribute(UserUtil.USER_SESSION_ID, result);
+
+			Integer userIdx = (Integer)result.get("user_idx");
+			return userIdx;
+		} else {
+			return -1;
+		}
 	}
 }

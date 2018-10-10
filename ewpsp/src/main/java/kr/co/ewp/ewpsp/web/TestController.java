@@ -8,15 +8,13 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.commons.codec.net.URLCodec;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import kr.co.ewp.ewpsp.common.ExcelDownload;
-import kr.co.ewp.ewpsp.common.util.ContextPropertiesUtil;
+import kr.co.ewp.ewpsp.common.util.AES256Util;
 
 @Controller
 public class TestController {
@@ -253,4 +251,15 @@ public class TestController {
 		return resultMap;
 	}
 
+	@RequestMapping("/test/aesEncode")
+	public @ResponseBody String aesEncodeTest(String text) throws Exception {
+		String key = "aes256-ewpsp-key";
+		AES256Util aes256 = new AES256Util(key);
+		URLCodec codec = new URLCodec();
+
+		String textEnc = codec.encode(aes256.aesEncode(text));
+//		String textDec = aes256.aesDecode(codec.decode(text));
+
+		return textEnc;
+	}
 }
