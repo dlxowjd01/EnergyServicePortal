@@ -62,6 +62,14 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			request.setAttribute("selViewSite", result);
 		}
 
+		// 군관리 메인은 세션의 사이트ID를 지운다.
+		if (request.getRequestURI() != null && request.getRequestURI().startsWith("/main")) {
+			request.getSession().removeAttribute("selViewSiteId");
+			request.getSession().removeAttribute("selViewSite");
+			request.removeAttribute("selViewSiteId");
+			request.removeAttribute("selViewSite");
+		}
+
 		// 상단 시간 초기값
 		request.setAttribute("nowTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 

@@ -46,6 +46,7 @@
 	    		<mvc:exclude-mapping path="/logout"/>
 	    		<mvc:exclude-mapping path="/openapi/loginUser"/>
 	    		<mvc:exclude-mapping path="/faq"/>
+	    		<mvc:exclude-mapping path="/getFAQList"/>
 	    		<bean class="kr.co.ewp.ewpsp.common.SessionCheckInterceptor" />
 	    	</mvc:interceptor>
 	    	<mvc:interceptor>
@@ -67,6 +68,7 @@
 	    		<mvc:mapping path="/kepcoMngSet"/>
 	    		<mvc:mapping path="/cmpyGrpSiteMng"/>
 	    		<mvc:mapping path="/userMng"/>
+	    		<mvc:mapping path="/faq"/>
 
 	    		<bean class="kr.co.ewp.ewpsp.common.PreLoadInterceptor" />
 	    	</mvc:interceptor>

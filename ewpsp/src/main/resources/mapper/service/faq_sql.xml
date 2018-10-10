@@ -8,7 +8,7 @@
 		select 
 			faq_cate_idx, faq_cate_name
 		from tb_faq_category
-		order by faq_cate_step
+		order by faq_cate_idx
 	</select>
 
 	<select id="getFAQList" parameterType="hashMap" resultType="hashMap">
@@ -27,6 +27,40 @@
 		order by a.reg_date desc
 	</select>
 
+	<select id="getFAQCateDetail" parameterType="hashMap" resultType="hashMap">
+		/* FAQ 카테고리 한건 조회 */
+		select
+			faq_cate_idx, faq_cate_name
+		from tb_faq_category
+		where 1=1
+		and faq_cate_idx = #{faqCateIdx}
+	</select>
+
+	<select id="getFAQDetail" parameterType="hashMap" resultType="hashMap">
+		/* FAQ 한건 조회 */
+		select
+			faq_idx, faq_cate_idx, question, replace(answer, '&lt;br/>', '\\n') answer
+		from tb_faq
+		where del_yn = 'N'
+		and faq_idx = #{faqIdx}
+	</select>
+
+	<insert id="insertFAQCate" parameterType="hashMap">
+		/* FAQ 카테고리 등록 */
+		insert into tb_faq_category (
+			<!-- faq_cate_idx,   /* 카테고리식별자 */ -->
+			faq_cate_name,   /* 카테고리명 */
+			reg_uid,   /* 등록자ID */
+			reg_date   /* 등록일시 */
+		)
+		values (
+			<!-- #{faqCateIdx },  -->
+			#{faqCateName }, 
+			#{regUid }, 
+			now()
+		)
+	</insert>
+
 	<insert id="insertFAQ" parameterType="hashMap">
 		/* FAQ 등록 */
 		insert into tb_faq (
@@ -44,23 +78,40 @@
 			#{question }, 
 			#{answer }, 
 			'N', 
-			#{reg_uid }, 
+			#{regUid }, 
 			now()
 		)
 	</insert>
 
-	<update id="updateFAQ" parameterType="hashMap">
-		/* FAQ 수정 */
-		update tb_sms_user
+	<update id="updateFAQCate" parameterType="hashMap">
+		/* FAQ 카테고리 수정 */
+		update tb_faq_category
 		set 
-		    faq_cate_idx  = #{faqCateIdx},
-		    question      = #{question},
-		    answer        = #{answer},
+		    faq_cate_name = #{faqCateName},
 		    mod_uid       = #{modUid }, 
 		    mod_date      = now()
 		where 1=1
-		and faq_idx = #{faqIdx }
+		and faq_cate_idx = #{faqCateIdx}
 	</update>
+
+	<update id="updateFAQ" parameterType="hashMap">
+		/* FAQ 수정 */
+		update tb_faq
+		set 
+		    faq_cate_idx  = #{faqCateIdx},
+		    question      = #{question},
+		    answer        = replace(#{answer}, '\\n', '&lt;br/>'),
+		    mod_uid       = #{modUid }, 
+		    mod_date      = now()
+		where 1=1
+		and faq_idx = #{faqIdx}
+	</update>
+
+	<delete id="deleteFAQCate" parameterType="hashMap">
+		/* FAQ 카테고리 삭제 */
+		delete from tb_faq_category
+		where faq_cate_idx = #{faqCateIdx }
+	</delete>
 
 	<update id="deleteFAQ" parameterType="hashMap">
 		/* FAQ 삭제 */

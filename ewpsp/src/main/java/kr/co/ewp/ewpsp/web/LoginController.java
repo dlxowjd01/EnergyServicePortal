@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.ewp.ewpsp.common.util.CommonUtils;
 import kr.co.ewp.ewpsp.common.util.UserUtil;
@@ -35,16 +36,13 @@ public class LoginController {
 	@RequestMapping("/login")
 	public String login(Model model) {
 		logger.debug("/login");
-
 		return "ewp/login/login";
 	}
 
 	@RequestMapping("/logout")
 	public String logout(HttpSession session, Model model) {
 		logger.debug("/logout");
-
 		session.removeAttribute(UserUtil.USER_SESSION_ID);
-
 		return "redirect:/login";
 	}
 
@@ -77,6 +75,10 @@ public class LoginController {
 			model.addAttribute("msg", "일치하는 회원 정보가 없습니다.");
 			return "ewp/login/login";
 		}
+	}
 
+	@RequestMapping("/getUserInfo")
+	public @ResponseBody Map getUserInfo(HttpSession session) {
+		return UserUtil.getUserInfo(session);
 	}
 }

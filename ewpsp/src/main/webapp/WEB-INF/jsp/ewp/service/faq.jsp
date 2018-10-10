@@ -6,7 +6,7 @@
 <head>
 <jsp:include page="../include/common_static.jsp" />
 <jsp:include page="../include/sub_static.jsp" />
-<!-- <script src="../js/setup/kepcoMngSet.js" type="text/javascript"></script> -->
+<script src="../js/service/faq.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -27,42 +27,43 @@
 						<div class="indiv faq">
 							<div class="search_box">
 								<div class="infield">
-									<input type="text" id="search" name="search" placeholder="궁금하신 점을 검색해 보세요.">
-									<input type="image" src="../img/search.png">
+									<form id="schForm" name="schForm">
+										<input type="text" id="search" name="search" placeholder="궁금하신 점을 검색해 보세요.">
+										<input type="image" src="../img/search.png" onclick="getDBData(); return false;">
+									</form>
 								</div>
 							</div>
 							<div class="faq_table mt30">
-								<div class="cate">
-									<a href="#;" class="on">전체</a>
+								<div class="cate" id="cateList">
+									<a href="#;" onclick="changeFAQCate(this, '')" class="on">전체</a>
 									<c:forEach var="item" items="${faqCateList}">
 									<a href="#;" onclick="changeFAQCate(this, '${item.faq_cate_idx}')">${item.faq_cate_name}</a>
 									</c:forEach>
 								</div>
-								<ul class="faq_list mt15">
-									<c:forEach var="item" items="${faqList}">
+								<ul class="faq_list mt15" id="faqList">
+<!--
 									<li>
 										<a href="#;" class="question">
-											<span class="gubun">${item.faq_cate_name }</span>
+											<span class="gubun">로그인/회원</span>
 											<span class="sbj">
-												${item.question }
+												본인 확인제를 관리, 감독하는 기관은 어디인가요?
 											</span>
 										</a>
 										<div class="answer">
-								            ${item.answer }
+								            본인 확인제를 관리, 감독하는 기관은<br/>
+											정보통신부에서 게시판 이용자의 본인확인제에 대한 전반적인 사항에 대해 관리 및 감독을 수행합니다.
 											<div class="edit_btn mt15 fr">
-												<c:if test="${not empty userInfo and (userInfo.auth_type eq '1' or  userInfo.auth_type eq '2')}">
 												<a href="#;"><i class="glyphicon glyphicon-edit"></i></a>
 												<a href="#;"><i class="glyphicon glyphicon-remove"></i></a>
-												</c:if>
 											</div>
 								        </div>
 									</li>
-									</c:forEach>
+-->
 								</ul>
 							</div>
-							<c:if test="${not empty userInfo and (userInfo.auth_type eq '1' or  userInfo.auth_type eq '2')}">
+							<c:if test="${not empty userInfo and userInfo.auth_type eq '1'}">
 							<div class="faq_bottom mt30 clear">
-								<a href="javascript:popupOpen('faqedit');" class="default_btn fr"><i class="glyphicon glyphicon-plus"></i> 글쓰기</a>
+								<a href="#;" class="default_btn fr" id="insertFAQFormBtn"><i class="glyphicon glyphicon-plus"></i> 글쓰기</a>
 							</div>
 							</c:if>
 						</div>
@@ -84,6 +85,8 @@
         </div>
 		<div class="lbody mt30">
 			<div class="set_tbl">
+				<form id="faqForm" name="faqForm">
+				<input type="hidden" id="faqIdx" name="faqIdx" />
 				<table>
 					<colgroup>
 						<col width="100">
@@ -93,32 +96,30 @@
 						<tr>
 							<th><span>카테고리</span></th>
 							<td class="clear">
-								<select name="faqCateName" id="faqCateName" class="sel">
+								<select name="faqCateIdx" id="faqCateIdx" class="sel">
 									<option value="">선택</option>
-									<c:forEach var="item" items="${faqCateList}">
-									<option value="${item.faq_cate_idx}">${item.faq_cate_name }</option>
-									</c:forEach>
 								</select>
-								<a href="javascript:popupOpen('category_edit');" class="default_btn fr"><i class="glyphicon glyphicon-edit"></i> 카테고리 편집</a>
+								<a href="#;" class="default_btn fr" id="insertFAQCateFormBtn"><i class="glyphicon glyphicon-edit"></i> 카테고리 편집</a>
 							</td>
 						</tr>
 						<tr>
 							<th><span>질문</span></th>
-							<td><input type="text" class="input" style="width:100%"></td>
+							<td><input type="text" id="question" name="question" class="input" style="width:100%"></td>
 						</tr>
 						<tr>
 							<th><span>답변</span></th>
 							<td>
-								<textarea name="" id="" style="width:100%" class="textarea" rows="10"></textarea>
+								<textarea id="answer" name="answer" style="width:100%" class="textarea" rows="10"></textarea>
 							</td>
 						</tr>
 					</tbody>			
 				</table>
+				</form>
 			</div>
 		</div>
 		<div class="btn_center">
-			<a href="#;" class="default_btn w80">확인</a>
-			<a href="#;" class="cancel_btn w80">취소</a>
+			<a href="#;" class="default_btn w80" id="confirmFAQBtn">확인</a>
+			<a href="#;" class="cancel_btn w80" id="cancelFAQBtn">취소</a>
 		</div>
     </div>
     <!-- ###### Popup End ###### -->
@@ -145,31 +146,20 @@
 							<th>삭제</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="faqCateTBody">
+<!--
 						<tr>
 							<td>1</td>
 							<td>서비스관련</td>
 							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
 						</tr>
-						<tr>
-							<td>2</td>
-							<td>기타</td>
-							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>로그인/회원</td>
-							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr>
-						<tr>
-							<td>4</td>
-							<td>오류관련</td>
-							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr>
+-->
 					</tbody>
 				</table>
 			</div>
 			<div class="set_tbl mt10 clear">
+				<form id="faqCateForm" name="faqCateForm">
+				<input type="hidden" id="faqCateIdx" name="faqCateIdx" />
 				<div class="fl" style="width:calc(100% - 120px);">
 					<table>
 						<colgroup>
@@ -179,20 +169,21 @@
 						<tbody>
 							<tr>
 								<th><span>카테고리명</span></th>
-								<td><input type="text" class="input" style="width:100%"></td>
+								<td><input type="text" id="faqCateName" name="faqCateName" class="input" style="width:100%"></td>
 							</tr>
 						</tbody>			
 					</table>
 				</div>
 				<div class="fr">
-					<input type="submit" value="추가하기" class="submit">
+					<input type="submit" id="confirmFAQCateBtn" value="추가하기" class="submit" onclick="return false">
 				</div>
+				</form>
 			</div>
 
 		</div>
 		<div class="btn_center">
-			<a href="#;" class="default_btn w80">확인</a>
-			<a href="#;" class="cancel_btn w80">취소</a>
+			<!-- <a href="#;" class="default_btn w80" id="cancelFAQCateBtn">확인</a> -->
+			<a href="#;" class="cancel_btn w80" id="cancelFAQCateBtn">취소</a>
 		</div>
     </div>
     <!-- ###### Popup End ###### --> 

@@ -880,7 +880,7 @@ function deleteUser(userIdx) {
 	});
 }
 
-//===== 군관리메인 조회 start (greatman) =====
+//===== 군관리메인 조회 begin (greatman) =====
 
 // 군관리 알람 조회
 function getGMainAlarmList(formData) {
@@ -950,7 +950,7 @@ function getGMainSiteList(selPageNum) {
 }
 
 // 군관리 사이트그룹 목록 조회
-function getGMainGroupList(selPageNum) {
+function getGMainGroupList(formData) {
 	$.ajax({
 		url : "/getGMainGroupList",
 		type : 'post',
@@ -963,6 +963,165 @@ function getGMainGroupList(selPageNum) {
 }
 
 //===== 군관리메인 조회 end (greatman) =====
+
+//===== FAQ 조회 begin (greatman) =====
+
+// FAQ 목록 조회
+function getFAQList(formData) {
+	$.ajax({
+		url : "/getFAQList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_getFAQList(result);
+		}
+	});
+}
+
+// FAQ 카테고리 한건 조회
+function getFAQCateDetail(faqCateIdx) {
+	$.ajax({
+		url : "/getFAQCateDetail",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : {
+			faqCateIdx : faqCateIdx
+		},
+		success: function(result) {
+			callback_getFAQCateDetail(result);
+		}
+	});
+}
+
+// FAQ 한건 조회
+function getFAQDetail(faqIdx) {
+	$.ajax({
+		url : "/getFAQDetail",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : {
+			faqIdx : faqIdx
+		},
+		success: function(result) {
+			callback_getFAQDetail(result);
+		}
+	});
+}
+
+// FAQ 카테고리 등록
+function insertFAQCate(formData) {
+	$.ajax({
+		url : "/insertFAQCate",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_insertFAQCate(result);
+		},
+		error:function(request,status,error){
+			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+		}
+	});
+}
+
+// FAQ 등록
+function insertFAQ(formData) {
+	$.ajax({
+		url : "/insertFAQ",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_insertFAQ(result);
+		},
+		error:function(request,status,error){
+			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+		}
+	});
+}
+
+// FAQ 카테고리 수정
+function updateFAQCate(formData) {
+	$.ajax({
+		url : "/updateFAQCate",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_updateFAQCate(result);
+		},
+		error:function(request,status,error){
+			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+		}
+	});
+}
+
+// FAQ 수정
+function updateFAQ(formData) {
+	$.ajax({
+		url : "/updateFAQ",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_updateFAQ(result);
+		},
+		error:function(request,status,error){
+			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+		}
+	});
+}
+
+// FAQ 카테고리 삭제
+function deleteFAQCate(faqCateIdx) {
+	$.ajax({
+		url : "/deleteFAQCate",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : {
+			faqCateIdx : faqCateIdx
+		},
+		success: function(result) {
+			callback_deleteFAQCate(result);
+		},
+		error:function(request,status,error){
+			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+		}
+	});
+}
+
+// FAQ 삭제
+function deleteFAQ(faqIdx) {
+	$.ajax({
+		url : "/deleteFAQ",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : {
+			faqIdx : faqIdx
+		},
+		success: function(result) {
+			callback_deleteFAQ(result);
+		},
+		error:function(request,status,error){
+			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+		}
+	});
+}
+
+//===== FAQ 조회 end (greatman) =====
+
+// 세션 userInfo 조회
+function getUserInfo(fn) {
+	$.ajax({
+		url : "/getUserInfo",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		success: function(result) {
+			fn(result);
+		}
+	});
+}
 
 //================================================================================================
 //====================================db(API data)조회 end==========================================
