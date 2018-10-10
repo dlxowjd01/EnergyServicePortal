@@ -125,14 +125,26 @@
 		) f_tb
 	</select>
 	
-<!-- 	<select id="getGroupPopupList" parameterType="hashMap" resultType="hashMap">
-		/* 그룹 목록(팝업) 조회 */
+	<select id="getGroupPopupList" parameterType="hashMap" resultType="hashMap">
+		/* 회사 내 그룹 목록(팝업) 조회 */
 		select 
-			site_grp_idx, user_idx, site_grp_id, site_grp_name, del_yn, reg_uid, reg_date, mod_uid, mod_date 
-		from tb_site_group
-		where del_yn = 'N'
-		order by reg_date
-	</select> -->
+			c.site_grp_idx, c.user_idx, c.site_grp_id, c.site_grp_name, c.site_grp_img_path, c.site_grp_img_sname, c.site_grp_img_rname, 
+			d.comp_idx, d.comp_id, d.comp_name
+		from tb_site_group c, (
+			select 
+				a.user_idx, a.user_id, a.user_type, a.main_user_idx, a.main_user_yn, a.auth_type, a.lang_type, a.comp_idx, 
+				b.comp_id, b.comp_name
+			from tb_user a
+			left outer join tb_company b
+			on a.comp_idx = b.comp_idx
+			where a.del_yn = 'N'
+			and b.del_yn = 'N'
+		) d
+		where c.user_idx = d.user_idx
+		and c.del_yn = 'N'
+		and d.comp_idx = #{compIdx }
+		order by c.site_grp_name
+	</select>
 	
 	<select id="getGrpSiteList" parameterType="hashMap" resultType="hashMap">
 		/* 사이트 목록(그룹 내) 조회 */

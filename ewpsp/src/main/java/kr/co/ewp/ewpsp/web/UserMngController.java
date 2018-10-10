@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.ewp.ewpsp.common.util.UserUtil;
 import kr.co.ewp.ewpsp.service.UserMngService;
 
 @Controller
@@ -106,9 +107,12 @@ public class UserMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/insertUser")
-	public @ResponseBody Map<String, Object> insertUser(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> insertUser(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/insertUser");
 		logger.debug("param ::::: "+param.toString());
+		
+		Map userInfo = UserUtil.getUserInfo(request);
+		param.put("regUid", userInfo.get("user_id"));
 		
 		int resultCnt = userMngService.insertUser(param);
 		
@@ -124,10 +128,12 @@ public class UserMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/updateUser")
-	public @ResponseBody Map<String, Object> updateUser(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> updateUser(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/updateUser");
-		param.put("modUid", "test7654");
 		logger.debug("param ::::: "+param.toString());
+
+		Map userInfo = UserUtil.getUserInfo(request);
+		param.put("modUid", userInfo.get("user_id"));
 		
 		int resultCnt = userMngService.updateUser(param);
 		
