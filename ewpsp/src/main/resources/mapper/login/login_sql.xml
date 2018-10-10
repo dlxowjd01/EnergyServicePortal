@@ -6,8 +6,8 @@
 	<select id="getUserDetail" parameterType="hashMap" resultType="hashMap">
 		/* 사용자 한건 조회 */
 		select 
-			user_idx, user_id, user_type, main_user_idx, main_user_yn, auth_type, lang_type,
-			comp_idx, co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, site_grp_idx, site_id, 
+			user_idx, user_id, user_type, main_user_idx, main_user_yn, auth_type, lang_type, 
+			comp_idx, co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, site_grp_idx, site_id,
 			del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_user
 		where user_id = #{userId }
@@ -36,7 +36,9 @@
 			psn_email,   /* 담당자이메일주소 */
 			note,   /* 비고 */
 			site_grp_idx, /* 사이트그룹식별자 */
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 			site_id, /* 사이트ID */
+			</if>
 			del_yn, 
 			reg_uid, 
 			reg_date
@@ -61,7 +63,9 @@
 			#{psnEmail }, 
 			#{note }, 
 			#{siteGrpIdx }, 
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 			#{siteId }, 
+			</if>
 			'N', 
 			#{regUid }, 
 			now()

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.ewp.ewpsp.common.util.UserUtil;
 import kr.co.ewp.ewpsp.service.KepcoMngSetService;
 
 @Controller
@@ -64,9 +65,12 @@ public class KepcoMngSetController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/updateSiteSet")
-	public @ResponseBody Map<String, Object> updateSiteSet(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> updateSiteSet(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/updateSiteSet");
 		logger.debug("param ::::: "+param.toString());
+
+		Map userInfo = UserUtil.getUserInfo(request);
+		param.put("modUid", userInfo.get("user_id"));
 		
 		int resultCnt = kepcoMngSetService.updateSiteSet(param);
 		

@@ -25,7 +25,7 @@
 							when 2 then '영어'
 							when 3 then '일본어'
 							else '' end as lang_type_name,
-							comp_idx, co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, site_grp_idx, site_id
+							comp_idx, co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, site_grp_idx, site_id,
 							del_yn, reg_uid, reg_date, mod_uid, mod_date 
 						from tb_user
 						where del_yn = 'N'
@@ -33,6 +33,19 @@
 					on a.comp_idx = b.comp_idx
 					left outer join tb_site_group c
 					on a.site_grp_idx = c.site_grp_idx
+					where 1=1
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and b.comp_idx = #{compIdx }
+					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and c.site_grp_idx = #{siteGrpIdx }
+					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+					and a.site_id = #{siteId }
+					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userIdx)">
+					and a.user_idx = #{userIdx }
+					</if>
 					order by a.reg_date
 			) page_tb
 			,  ( select @rownum := 0 ) r
@@ -72,6 +85,19 @@
 					on a.comp_idx = b.comp_idx
 					left outer join tb_site_group c
 					on a.site_grp_idx = c.site_grp_idx
+					where 1=1
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and b.comp_idx = #{compIdx }
+					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and c.site_grp_idx = #{siteGrpIdx }
+					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+					and a.site_id = #{siteId }
+					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userIdx)">
+					and a.user_idx = #{userIdx }
+					</if>
 					<!-- order by a.reg_date -->
 			) page_tb
 			,  ( select @rownum := 0 ) r

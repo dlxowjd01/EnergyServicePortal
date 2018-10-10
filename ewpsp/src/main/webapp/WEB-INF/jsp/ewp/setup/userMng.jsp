@@ -73,7 +73,7 @@
     <div id="layerbox" class="duser" style="min-width:600px;">
         <div class="stit">
         	<h2>신규 사용자 등록</h2>        	
-			<a href="javascript:popupClose('duser');" id="cancelBtnX">닫기</a>
+			<a href="#;" id="cancelBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
 

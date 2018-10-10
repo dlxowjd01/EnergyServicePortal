@@ -32,6 +32,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import kr.co.ewp.ewpsp.common.util.CommonUtils;
 import kr.co.ewp.ewpsp.common.util.ContextPropertiesUtil;
+import kr.co.ewp.ewpsp.common.util.UserUtil;
 import kr.co.ewp.ewpsp.service.CmpyGrpSiteMngService;
 
 @Controller
@@ -189,7 +190,6 @@ public class CmpyGrpSiteMngController {
 		logger.debug("/getCmpyPopupList");
 		logger.debug("param ::::: "+param.toString());
 		
-//		List list = cmpyGrpSiteMngService.getGroupPopupList(param);
 		List list = cmpyGrpSiteMngService.getCmpyList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -204,12 +204,24 @@ public class CmpyGrpSiteMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/getGroupPopupList")
-	public @ResponseBody Map<String, Object> getGroupPopupList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getGroupPopupList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getGroupPopupList");
 		logger.debug("param ::::: "+param.toString());
 		
+		String compIdx = (String) param.get("compIdx");
+		if("".equals(compIdx) || compIdx == null) {
+			Map userInfo = UserUtil.getUserInfo(request);
+			String authType = (String)userInfo.get("auth_type");
+			if("1".equals(authType)) { // 포털관리자
+				
+			} else if("2".equals(authType) || "3".equals(authType)) { // 고객사관리자 || 그룹관리자
+				param.put("compIdx", userInfo.get("comp_idx"));
+			} else if("4".equals(authType) || "5".equals(authType)) { // 사이트관리자 || 사이트이용자
+				param.put("siteGrpIdx", userInfo.get("site_grp_idx"));
+			}
+		}
+		
 		List list = cmpyGrpSiteMngService.getGroupPopupList(param);
-//		List list = cmpyGrpSiteMngService.getGroupList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("list", list);
@@ -300,9 +312,11 @@ public class CmpyGrpSiteMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/saveSiteInSiteGrp")
-	public @ResponseBody Map<String, Object> saveSiteInSiteGrp(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> saveSiteInSiteGrp(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/saveSiteInSiteGrp");
 		logger.debug("param ::::: "+param.toString());
+
+		Map userInfo = UserUtil.getUserInfo(request);
 		
 		String selSiteGrpIdx = (String) param.get("selSiteGrpIdx"); // 그룹 목록
 		String nowSiteIds = (String) param.get("nowSiteIds"); // 기존 그룹내 사이트목록
@@ -339,7 +353,7 @@ public class CmpyGrpSiteMngController {
 							HashMap dvMap = new HashMap<String, Object>();
 							dvMap.put("siteId", str);
 							dvMap.put("siteGrpIdx", 0);
-							dvMap.put("modUid", "tttt");
+							dvMap.put("modUid", userInfo.get("user_id"));
 							int cnt = cmpyGrpSiteMngService.updateSite(dvMap);
 							delCnt = delCnt + cnt;
 						}
@@ -351,7 +365,7 @@ public class CmpyGrpSiteMngController {
 					HashMap dvMap = new HashMap<String, Object>();
 					dvMap.put("siteId", newSiteIds_arr[i]);
 					dvMap.put("siteGrpIdx", selSiteGrpIdx);
-					dvMap.put("modUid", "tttt");
+					dvMap.put("modUid", userInfo.get("user_id"));
 					int cnt = cmpyGrpSiteMngService.updateSite(dvMap);
 					addCnt = addCnt + cnt;
 				}
@@ -367,7 +381,7 @@ public class CmpyGrpSiteMngController {
 							HashMap dvMap = new HashMap<String, Object>();
 							dvMap.put("siteId", str);
 							dvMap.put("siteGrpIdx", selSiteGrpIdx);
-							dvMap.put("modUid", "tttt");
+							dvMap.put("modUid", userInfo.get("user_id"));
 							int cnt = cmpyGrpSiteMngService.updateSite(dvMap);
 							addCnt = addCnt + cnt;
 						}
@@ -379,7 +393,7 @@ public class CmpyGrpSiteMngController {
 					HashMap dvMap = new HashMap<String, Object>();
 					dvMap.put("siteId", nowSiteIds_arr[i]);
 					dvMap.put("siteGrpIdx", 0);
-					dvMap.put("modUid", "tttt");
+					dvMap.put("modUid", userInfo.get("user_id"));
 					int cnt = cmpyGrpSiteMngService.updateSite(dvMap);
 					delCnt = delCnt + cnt;
 				}
@@ -387,7 +401,6 @@ public class CmpyGrpSiteMngController {
 			
 			
 		}
-		
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("resultCnt", 0);
@@ -402,11 +415,13 @@ public class CmpyGrpSiteMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/insertCmpy")
-	public @ResponseBody Map<String, Object> insertCmpy(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> insertCmpy(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/insertCmpy");
 		logger.debug("param ::::: "+param.toString());
-		
-		param.put("userIdx", "1");
+
+		Map userInfo = UserUtil.getUserInfo(request);
+		param.put("regUid", userInfo.get("user_id"));
+		param.put("userIdx", userInfo.get("user_idx"));
 		
 		int resultCnt = cmpyGrpSiteMngService.insertCmpy(param);
 		
@@ -425,6 +440,9 @@ public class CmpyGrpSiteMngController {
 	public @ResponseBody Map<String, Object> insertGroup(@RequestParam HashMap param, MultipartHttpServletRequest multipart, HttpSession session) throws Exception {
 		logger.debug("/insertGroup");
 		logger.debug("param ::::: "+param.toString());
+
+		Map userInfo = UserUtil.getUserInfo(multipart.getSession());
+		param.put("modUid", userInfo.get("user_id"));
 		
 		String siteGrpName = multipart.getParameter("siteGrpName");
 		String siteGrpId = multipart.getParameter("siteGrpId");
@@ -461,7 +479,7 @@ public class CmpyGrpSiteMngController {
 				param.put("siteGrpImgSname", newFileName);
 				param.put("siteGrpImgRname", fileName);
 			}
-			System.out.println("aaaaa     13");
+			
 		}
 //		HashMap<String, Object> m = CommonUtils.fileUpload(multipart, session);
 		
@@ -479,9 +497,12 @@ public class CmpyGrpSiteMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/insertSite")
-	public @ResponseBody Map<String, Object> insertSite(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> insertSite(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/insertSite");
 		logger.debug("param ::::: "+param.toString());
+
+		Map userInfo = UserUtil.getUserInfo(request);
+		param.put("regUid", userInfo.get("user_id"));
 		
 		int resultCnt = cmpyGrpSiteMngService.insertSite(param);
 		
@@ -497,9 +518,12 @@ public class CmpyGrpSiteMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/updateCmpy")
-	public @ResponseBody Map<String, Object> updateCmpy(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> updateCmpy(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/updateCmpy");
 		logger.debug("param ::::: "+param.toString());
+
+		Map userInfo = UserUtil.getUserInfo(request);
+		param.put("modUid", userInfo.get("user_id"));
 		
 		int resultCnt = cmpyGrpSiteMngService.updateCmpy(param);
 		
@@ -518,6 +542,9 @@ public class CmpyGrpSiteMngController {
 	public @ResponseBody Map<String, Object> updateGroup(@RequestParam HashMap param, MultipartHttpServletRequest multipart, HttpSession session) throws Exception {
 		logger.debug("/updateGroup");
 		logger.debug("param ::::: "+param.toString());
+
+		Map userInfo = UserUtil.getUserInfo(multipart.getSession());
+		param.put("modUid", userInfo.get("user_id"));
 		
 		String siteGrpName = multipart.getParameter("siteGrpName");
 		String siteGrpId = multipart.getParameter("siteGrpId");
@@ -581,9 +608,12 @@ public class CmpyGrpSiteMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/updateSite")
-	public @ResponseBody Map<String, Object> updateSite(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> updateSite(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/updateSite");
 		logger.debug("param ::::: "+param.toString());
+
+		Map userInfo = UserUtil.getUserInfo(request);
+		param.put("modUid", userInfo.get("user_id"));
 		
 		int resultCnt = cmpyGrpSiteMngService.updateSite(param);
 		
@@ -599,9 +629,12 @@ public class CmpyGrpSiteMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/deleteGroup")
-	public @ResponseBody Map<String, Object> deleteGroup(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> deleteGroup(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/deleteGroup");
 		logger.debug("param ::::: "+param.toString());
+
+		Map userInfo = UserUtil.getUserInfo(request);
+		param.put("modUid", userInfo.get("user_id"));
 		
 //		Map result = cmpyGrpSiteMngService.getGroupDetail(param);
 //		String path = (String) result.get("site_grp_img_path");
@@ -625,9 +658,12 @@ public class CmpyGrpSiteMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/deleteCmpy")
-	public @ResponseBody Map<String, Object> deleteCmpy(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> deleteCmpy(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/deleteCmpy");
 		logger.debug("param ::::: "+param.toString());
+
+		Map userInfo = UserUtil.getUserInfo(request);
+		param.put("modUid", userInfo.get("user_id"));
 		
 		int resultCnt = cmpyGrpSiteMngService.deleteCmpy(param);
 		
@@ -643,9 +679,12 @@ public class CmpyGrpSiteMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/deleteSite")
-	public @ResponseBody Map<String, Object> deleteSite(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> deleteSite(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/deleteSite");
 		logger.debug("param ::::: "+param.toString());
+
+		Map userInfo = UserUtil.getUserInfo(request);
+		param.put("modUid", userInfo.get("user_id"));
 		
 		int resultCnt = cmpyGrpSiteMngService.deleteSite(param);
 		
