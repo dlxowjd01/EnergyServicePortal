@@ -50,12 +50,28 @@ public class UserMngController {
 	public @ResponseBody Map<String, Object> getUserList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getUserList");
 		logger.debug("param ::::: "+param.toString());
+		
+		Map userInfo = UserUtil.getUserInfo(request);
+		String authType = (String)userInfo.get("auth_type");
+		System.out.println("authType : "+authType);
+		if("1".equals(authType)) { // 포털관리자
+			
+		} else if("2".equals(authType)) { // 고객사관리자
+			param.put("compIdx", userInfo.get("comp_idx"));
+		} else if("3".equals(authType)) { // 그룹관리자
+			param.put("siteGrpIdx", userInfo.get("site_grp_idx"));
+		} else if("4".equals(authType)) { // 사이트관리자
+//			param.put("siteId", userInfo.get("site_id"));
+			param.put("userIdx", userInfo.get("user_idx"));
+		} else if("5".equals(authType)) { // 사이트이용자
+			param.put("userIdx", userInfo.get("user_idx"));
+		}
 
 		int selPageNum = Integer.parseInt((String) param.get("selPageNum"));
 		int pageRowCnt = 5;
 		int startNum = pageRowCnt*(selPageNum-1);
 		
-		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
+//		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
 		
@@ -149,10 +165,12 @@ public class UserMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/deleteUser")
-	public @ResponseBody Map<String, Object> deleteUser(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> deleteUser(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/deleteUser");
-		param.put("modUid", "test765");
 		logger.debug("param ::::: "+param.toString());
+
+		Map userInfo = UserUtil.getUserInfo(request);
+		param.put("modUid", userInfo.get("user_id"));
 		
 		int resultCnt = userMngService.deleteUser(param);
 		

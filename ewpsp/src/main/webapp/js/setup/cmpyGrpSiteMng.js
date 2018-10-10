@@ -129,7 +129,8 @@ $(document).ready(function() {
 				$.each(inputs, function (index, value) {
 					values = values+$(value).val()+",";
 				});
-				$("#newSiteIds").val(values.slice(0, -1));
+				$("#newSiteIds").val("");
+				$("#newSiteIds").val( (values == "") ? "" : values.slice(0, -1) );
 				var formData = $("#editSiteInSiteGrpForm").serializeObject();
 				saveSiteInSiteGrp(formData);
 			}
@@ -143,6 +144,8 @@ $(document).ready(function() {
 			});
 			$(".inside_site").find("ul").empty();
 			$('.all_site').find("ul").empty();
+			$("#selGrpBox").empty().append("---그룹선택---").append( $('<span class="caret" />') );
+			$("#grpSelectBox").find("ul").empty();
 			
 		});
 		
@@ -164,14 +167,15 @@ $(document).ready(function() {
 				url : "/getGroupPopupList",
 				type : 'post',
 				async : false, // 동기로 처리해줌
-				data : {
-					selPageNum : ""
-				},
+//				data : {
+//					selPageNum : ""
+//				},
 				success: function(result) {
 					var list = result.list;
 					
 					$siteIdSelBox = $("#siteForm").find("#siteGrpIdx");
 					$siteIdSelBox.empty();
+					$siteIdSelBox.append('<option value="">---그룹선택---</option>');
 					for(var i=0; i<list.length; i++) {
 						$siteIdSelBox.append('<option value="'+list[i].site_grp_idx+'">'+list[i].site_grp_name+'</option>');
 						
@@ -234,8 +238,9 @@ $(document).ready(function() {
 //			$(".control-fileupload").empty().append('<label for="file">Choose a file :</label><input type="file" id="siteGrpImg" name="siteGrpImg">');
 		});
 		
-		$("#cancelSiteBtn").click(function(){
+		$("#cancelSiteBtn, #cancelSiteBtnX").click(function(){
 			insUpdFlag = 0;
+			$("#siteForm").find("#siteId").attr("readonly", false);
 			$('#siteForm').each(function() {
 				this.reset();
 			});
@@ -307,15 +312,13 @@ $(document).ready(function() {
 		var groupList = result.list;
 		
 		$selectBox = $("#grpSelectBox");
-//		$selectBox.find("button").empty();
 		$selectBox.find("ul").empty();
 		if(groupList == null || groupList.length < 1) {
 //			$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
 		} else {
-//			$selectBox.find("button").append("aa").append( $('<span class="caret" />') );
 			for(var i=0; i<groupList.length; i++) {
 				$selectBox.find("ul").append(
-						$("<li />").append('<a href="javascript:changeSelGrp(\''+groupList[i].site_grp_idx+'\');">'+groupList[i].site_grp_name+'</a>')
+						$("<li />").append('<a href="javascript:changeSelGrp(\''+groupList[i].site_grp_idx+'\', \''+groupList[i].site_grp_name+'\');">'+groupList[i].site_grp_name+'</a>')
 				);
 				
 			}
@@ -324,8 +327,9 @@ $(document).ready(function() {
 		
 	}
 	
-	function changeSelGrp(siteGrpIdx) {
-		$("#selSiteGrpIdx").val(siteGrpIdx)
+	function changeSelGrp(siteGrpIdx, siteGrpName) {
+		$("#selSiteGrpIdx").val(siteGrpIdx);
+		$("#selGrpBox").empty().append(siteGrpName).append( $('<span class="caret" />') );
 		
 		getSitePopupList(siteGrpIdx);
 	}
@@ -336,10 +340,10 @@ $(document).ready(function() {
 		
 		$insideSite = $(".inside_site");
 		$insideSite.find("ul").empty();
+		var sites = "";
 		if(grpSiteList == null || grpSiteList.length < 1) {
 //			$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
 		} else {
-			var sites = "";
 			for(var i=0; i<grpSiteList.length; i++) {
 				sites = sites+grpSiteList[i].site_id+",";
 				$insideSite.find("ul").append(
@@ -349,9 +353,10 @@ $(document).ready(function() {
 				);
 				
 			}
-			$("#nowSiteIds").val(sites.slice(0, -1));
 			
 		}
+		$("#nowSiteIds").val("");
+		$("#nowSiteIds").val( (sites == "") ? "" : sites.slice(0, -1) );
 		
 		$allSite = $(".all_site");
 		$allSite.find("ul").empty();
@@ -497,12 +502,6 @@ $(document).ready(function() {
 			alert("조회된 데이터가 없습니다.");
 //			location.href = "/siteMain";
 		} else {
-			$("#siteForm").find("#userIdx").val( siteDetail.user_idx );
-			$("#siteForm").find("#siteName").val( siteDetail.site_name );
-			$("#siteForm").find("#siteId").val( siteDetail.site_id );
-			$("#siteForm").find("#localEmsAddr").val( siteDetail.local_ems_addr );
-			$("#siteForm").find("#localEmsKey").val( siteDetail.local_ems_key );
-			
 			$.ajax({
 				url : "/getGroupPopupList",
 				type : 'post',
@@ -515,13 +514,22 @@ $(document).ready(function() {
 					
 					$siteIdSelBox = $("#siteForm").find("#siteGrpIdx");
 					$siteIdSelBox.empty();
+					$siteIdSelBox.append('<option value="">---그룹선택---</option>');
 					for(var i=0; i<list.length; i++) {
 						$siteIdSelBox.append('<option value="'+list[i].site_grp_idx+'">'+list[i].site_grp_name+'</option>');
 						
 					}
 				}
 			});
+			
 			$("#siteForm").find("#siteGrpIdx").val( siteDetail.site_grp_idx );
+			$("#siteForm").find("#userIdx").val( siteDetail.user_idx );
+			$("#siteForm").find("#siteName").val( siteDetail.site_name );
+			$("#siteForm").find("#siteId").val( siteDetail.site_id );
+			$("#siteForm").find("#siteId").attr("readonly", true);
+			$("#siteForm").find("#areaType").val( siteDetail.area_type );
+			$("#siteForm").find("#localEmsAddr").val( siteDetail.local_ems_addr );
+			$("#siteForm").find("#localEmsKey").val( siteDetail.local_ems_key );
 			
 			popupOpen('dsite');
 		}

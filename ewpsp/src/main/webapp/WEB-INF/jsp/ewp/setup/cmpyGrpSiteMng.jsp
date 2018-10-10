@@ -189,7 +189,7 @@
 			<div class="dgrp_top clear">
 				<h2 class="ntit fl">그룹명</h2>
 				<div class="dropdown fl" id="grpSelectBox">
-				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selGrpBox">롯데 정밀 화학
+				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selGrpBox">---그룹선택---
 				    <span class="caret"></span></button>
 				    <ul class="dropdown-menu">
 				    </ul>
@@ -235,7 +235,6 @@
     <div id="layerbox" class="dgroup_add" style="min-width:600px;">
         <div class="stit">
         	<h2>신규 그룹 등록</h2>        	
-			<!-- <a href="javascript:popupClose('dgroup_add');">닫기</a> -->
 			<a href="javascript:popupColseChk();">닫기</a>
         </div>
 		<div class="lbody mt30">
@@ -285,7 +284,7 @@
     <div id="layerbox" class="dsite" style="min-width:600px;">
         <div class="stit">
         	<h2>신규 사이트 등록</h2>        	
-			<a href="javascript:popupClose('dsite');">닫기</a>
+			<a href="#;" id="cancelSiteBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
 
@@ -309,8 +308,25 @@
 						<tr>
 							<th><span>지역</span></th>
 							<td>
-								<select name="" id="" class="sel" style="width:100%">
-									<option value=""></option>
+								<select name="areaType" id="areaType" class="sel" style="width:100%">
+									<option value="">---지역선택---</option>
+									<option value="01">서울</option>
+									<option value="02">부산</option>
+									<option value="03">대구</option>
+									<option value="04">인천</option>
+									<option value="05">광주</option>
+									<option value="06">대전</option>
+									<option value="07">울산</option>
+									<option value="08">세종</option>
+									<option value="09">경기</option>
+									<option value="10">강원</option>
+									<option value="11">충북</option>
+									<option value="12">충남</option>
+									<option value="13">전북</option>
+									<option value="14">전남</option>
+									<option value="15">경북</option>
+									<option value="16">경남</option>
+									<option value="17">제주</option>
 								</select>
 							</td>
 						</tr>
@@ -318,7 +334,6 @@
 							<th><span>그룹</span></th>
 							<td>
 								<select name="siteGrpIdx" id="siteGrpIdx" class="sel" style="width:100%">
-									
 								</select>
 							</td>
 						</tr>
