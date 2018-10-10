@@ -35,19 +35,19 @@ public class LoginController {
 	@RequestMapping("/login")
 	public String login(Model model) {
 		logger.debug("/login");
-		
+
 		return "ewp/login/login";
 	}
-	
+
 	@RequestMapping("/logout")
 	public String logout(HttpSession session, Model model) {
 		logger.debug("/logout");
-		
+
 		session.removeAttribute(UserUtil.USER_SESSION_ID);
-		
+
 		return "redirect:/login";
 	}
-	
+
 	@RequestMapping("/loginUser")
 	public String loginUser(HttpSession session, @RequestParam HashMap param) throws Exception {
 		logger.debug("/loginUser");
