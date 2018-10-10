@@ -49,7 +49,7 @@ public class LoginController {
 	}
 
 	@RequestMapping("/loginUser")
-	public String loginUser(HttpSession session, @RequestParam HashMap param) throws Exception {
+	public String loginUser(HttpSession session, Model model, @RequestParam HashMap param) throws Exception {
 		logger.debug("/loginUser");
 		logger.debug("param : {}", param);
 
@@ -57,18 +57,24 @@ public class LoginController {
 		logger.debug("result : {}", result);
 
 		if (result != null && CommonUtils.isNotEmpty(result.get("user_idx"))) {
-			session.setAttribute(UserUtil.USER_SESSION_ID, result);
-
 			String authType = (String)result.get("auth_type");
+			String siteId = (String)result.get("site_id");
 
 			if (authType == null) {
+				model.addAttribute("msg", "권한 정보가 없습니다.");
 				return "ewp/login/login";
 			} else if (authType.equals("1") || authType.equals("2")) {
+				session.setAttribute(UserUtil.USER_SESSION_ID, result);
 				return "redirect:/main";
+			} else if (siteId != null && !siteId.isEmpty()) {
+				session.setAttribute(UserUtil.USER_SESSION_ID, result);
+				return "redirect:/siteMain?siteId=" + siteId;
 			} else {
-				return "redirect:/siteMain";
+				model.addAttribute("msg", "사이트ID 정보가 없습니다.");
+				return "ewp/login/login";
 			}
 		} else {
+			model.addAttribute("msg", "일치하는 회원 정보가 없습니다.");
 			return "ewp/login/login";
 		}
 

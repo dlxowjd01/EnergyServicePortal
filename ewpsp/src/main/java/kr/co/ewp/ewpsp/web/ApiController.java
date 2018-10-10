@@ -37,7 +37,7 @@ import kr.co.ewp.ewpsp.service.LoginService;
 @Controller
 public class ApiController {
 
-	private static final Logger logger = LoggerFactory.getLogger(UsageController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ApiController.class);
 	
   @Autowired
   private AlarmService alarmService;
@@ -128,13 +128,16 @@ public class ApiController {
 	}
 
 	@RequestMapping("/openapi/loginUser")
-	public @ResponseBody int loginUser(HttpSession session, String userId, String userPw) throws Exception {
+	public @ResponseBody Integer loginUser(HttpSession session, String userId, String userPw) throws Exception {
+		logger.debug("/openapi/loginUser");
+		logger.debug("userId : {}, userPw : {}", userId, userPw);
+
 		String key = "aes256-ewpsp-key";
 		AES256Util aes256 = new AES256Util(key);
 		URLCodec codec = new URLCodec();
 
+//		String userPwEnc = codec.encode(aes256.aesEncode(userPw));
 		String userPwDec = aes256.aesDecode(codec.decode(userPw));
-//		String textEnc = codec.encode(aes256.aesEncode(userPw));
 
 		HashMap<String, String> param = new HashMap<String, String>();
 		param.put("userId", userId);
@@ -145,7 +148,9 @@ public class ApiController {
 
 		if (result != null && CommonUtils.isNotEmpty(result.get("user_idx"))) {
 			session.setAttribute(UserUtil.USER_SESSION_ID, result);
-			return (Integer)result.get("user_idx");
+
+			Integer userIdx = (Integer)result.get("user_idx");
+			return userIdx;
 		} else {
 			return -1;
 		}

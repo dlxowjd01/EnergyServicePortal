@@ -6,8 +6,8 @@
 	<select id="getUserDetail" parameterType="hashMap" resultType="hashMap">
 		/* 사용자 한건 조회 */
 		select 
-			user_idx, user_id, user_type, main_user_idx, main_user_yn, auth_type, lang_type, 
-			co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, site_id, 
+			user_idx, user_id, user_type, main_user_idx, main_user_yn, auth_type, lang_type,
+			comp_idx, co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, site_grp_idx, site_id, 
 			del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_user
 		where user_id = #{userId }
@@ -25,6 +25,7 @@
 			main_user_yn,   /* 주사용자여부(Y:예,N:아니오) */
 			auth_type,   /* 권한구분(1:포털관리자,2:그룹관리자,3:사이트관리자,4:사이트이용자) */
 			lang_type,   /* 언어구분(1:한국어,2:영어,3:일본어) */
+			comp_idx, /* 회사식별자 */
 			co_name,   /* 고객사명 */
 			co_tel,   /* 회사전화번호 */
 			co_email,   /* 회사이메일주소 */
@@ -34,9 +35,8 @@
 			psn_mobile,   /* 담당자휴대폰번호 */
 			psn_email,   /* 담당자이메일주소 */
 			note,   /* 비고 */
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+			site_grp_idx, /* 사이트그룹식별자 */
 			site_id, /* 사이트ID */
-			</if>
 			del_yn, 
 			reg_uid, 
 			reg_date
@@ -50,6 +50,7 @@
 			#{mainUserYn }, 
 			#{authType }, 
 			#{langType }, 
+			#{compIdx }, 
 			#{coName }, 
 			#{coTel }, 
 			#{coEmail }, 
@@ -59,11 +60,10 @@
 			#{psnMobile }, 
 			#{psnEmail }, 
 			#{note }, 
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+			#{siteGrpIdx }, 
 			#{siteId }, 
-			</if>
 			'N', 
-			#{reg_uid }, 
+			#{regUid }, 
 			now()
 		)
 	</insert>
