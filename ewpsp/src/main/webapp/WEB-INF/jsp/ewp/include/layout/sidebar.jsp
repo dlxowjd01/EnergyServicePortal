@@ -15,6 +15,7 @@ $(document).ready(function() {
 });
 </script>
 		<div id="sidebar">
+			<c:if test="${not empty userInfo}">
 			<ul>
 				<c:choose>
 				<c:when test="${not empty userInfo and userInfo.auth_type ne '5'}">
@@ -84,6 +85,7 @@ $(document).ready(function() {
 				</c:if>
 				<li class="smn8"><a href="/logout" class="LoginBtn">로그아웃</a></li>
 			</ol>
+			</c:if>
 		</div>
 		<!-- 모바일용 카테고리 { -->
 		<div id="gnb">
@@ -94,6 +96,7 @@ $(document).ready(function() {
 				</div>				
 			</div>
 			<div class="g_menu w100">
+				<c:if test="${not empty userInfo}">
 				<ul>
 					<c:choose>
 					<c:when test="${not empty userInfo and userInfo.auth_type ne '5'}">
@@ -149,6 +152,7 @@ $(document).ready(function() {
 					</c:if>
 					<li class="gmn8"><a href="/logout">로그아웃</a></li>
 				</ol>
+				</c:if>
 			</div>
 		</div>
 		<!-- } 모바일용 카테고리 -->		
