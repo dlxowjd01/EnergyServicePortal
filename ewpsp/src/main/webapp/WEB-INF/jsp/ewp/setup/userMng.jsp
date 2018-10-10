@@ -73,15 +73,17 @@
     <div id="layerbox" class="duser" style="min-width:600px;">
         <div class="stit">
         	<h2>신규 사용자 등록</h2>        	
-			<a href="javascript:popupClose('duser');">닫기</a>
+			<a href="javascript:popupClose('duser');" id="cancelBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
 
 			<div class="set_tbl">
 				<form id="userForm" name="userForm">
 				<input type="hidden" name="mainUserYn" id="mainUserYn" class="input" value="N">
-				<input type="hidden" name="mainUserIdx" id="mainUserIdx" class="input" value="1">
+				<input type="hidden" name="mainUserIdx" id="mainUserIdx" class="input" value="">
 				<input type="hidden" name="userIdx" id="userIdx" class="input" value="">
+				<input type="hidden" name=userType id="userType" class="input" value="">
+				<input type="hidden" name=langType id="langType" class="input" value="1">
 				<table>
 					<colgroup>
 						<col width="150">
@@ -93,9 +95,22 @@
 							<td><input type="text" name="userId" id="userId" class="input" style="width:100%"></td>
 						</tr>
 						<tr>
+							<th><span>권한</span></th>
+							<td>
+								<select name="authType" id="authType" class="sel" style="width:100%">
+									<option value="">---권한선택---</option>
+									<option value="1">서비스 포털 관리자</option>
+									<option value="2">고객사 관리자</option>
+									<option value="3">그룹 관리자</option>
+									<option value="4">사이트 관리자</option>
+									<option value="5">사이트 이용자</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
 							<th><span>회사</span></th>
 							<td>
-								<select name="coIdx" id="coIdx" class="sel" style="width:100%">
+								<select name="compIdx" id="compIdx" class="sel" style="width:100%">
 									
 								</select>
 							</td>
@@ -112,19 +127,6 @@
 							<th><span>사이트</span></th>
 							<td>
 								<select name="siteId" id="siteId" class="sel" style="width:100%">
-									<option value=""></option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<th><span>권한</span></th>
-							<td>
-								<select name="authType" id="authType" class="sel" style="width:100%">
-									<option value="1">서비스 포털 관리자</option>
-									<option value="2">고객사 관리자</option>
-									<option value="3">그룹 관리자</option>
-									<option value="4">사이트 관리자</option>
-									<option value="5">사이트 이용자</option>
 								</select>
 							</td>
 						</tr>

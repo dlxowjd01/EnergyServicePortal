@@ -198,7 +198,7 @@ public class CmpyGrpSiteMngController {
 	}
 	
 	/**
-	 * 그룹 목록(팝업) 조회
+	 * 회사 내 그룹 목록(팝업) 조회
 	 * @param param
 	 * @return
 	 * @throws Exception
@@ -208,8 +208,8 @@ public class CmpyGrpSiteMngController {
 		logger.debug("/getGroupPopupList");
 		logger.debug("param ::::: "+param.toString());
 		
-//		List list = cmpyGrpSiteMngService.getGroupPopupList(param);
-		List list = cmpyGrpSiteMngService.getGroupList(param);
+		List list = cmpyGrpSiteMngService.getGroupPopupList(param);
+//		List list = cmpyGrpSiteMngService.getGroupList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("list", list);
