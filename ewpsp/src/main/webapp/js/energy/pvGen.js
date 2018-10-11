@@ -65,12 +65,13 @@
 				dt_str = "";
 				dt_str_totVal = 0;
 			} else {
-				if(SelTerm == "day" && dt_col_cnt == pvGenList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
-					var headerDate1 = convertDataTableHeaderDate(tm, 1);
-					var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
+				if((i+1) == pvGenList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
 					for(a=0; a<(dt_col-dt_col_cnt); a++) {
+						dt_str_head += "<th></th>";
 						dt_str += "<td></td>";
 					}
+					var headerDate1 = convertDataTableHeaderDate(tm, 1);
+					var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
 					dt_str += "<td>"+dt_str_totVal+"</td>";
 					pv_head_pc[dt_row_cnt-1] = final_dt_str_head;
 					real_data_pc[dt_row_cnt-1] = dt_str;
@@ -132,7 +133,7 @@
 				dt_str = "";
 				dt_str_totVal = 0;
 			} else {
-				if(SelTerm == "day" && dt_col_cnt == pvGenList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
+				if((i+1) == pvGenList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
 					for(a=0; a<(dt_col-dt_col_cnt); a++) {
 						dt_str += "<td></td>";
 					}

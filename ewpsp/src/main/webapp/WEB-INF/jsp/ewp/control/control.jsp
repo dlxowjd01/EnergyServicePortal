@@ -242,7 +242,7 @@
 							</tr>
 							<tr>
 								<th><span>연락처</span></th>
-								<td><input type="text" id="mobile" name="mobile" class="input" style="width:100%"></td>
+								<td><input type="text" id="mobile" name="mobile" class="input" style="width:100%" onkeydown="return onlyNumber(event);" onkeyup="removeChar(event);" maxlength="11"></td>
 							</tr>
 						</tbody>			
 					</table>

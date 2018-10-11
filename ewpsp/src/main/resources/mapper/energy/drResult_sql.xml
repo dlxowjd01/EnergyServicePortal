@@ -6,8 +6,9 @@
 		/* dr 감축량 조회 */
 		select 
 			dr_rst_idx, site_id, start_timestamp, start_date, end_timestamp, end_date, 
-			cbl_amt, act_amt, contract_power,goal_power, reward_amt, reg_date, mod_date
-			, cbl_amt-act_amt as reduce_amt
+			cbl_amt, act_amt, (cbl_amt-goal_power) as cbl_power, /* 계약용량*/
+			contract_power, goal_power, reward_amt, reg_date, mod_date
+			, (cbl_amt-act_amt) as reduce_amt, (cbl_amt-act_amt)/(cbl_amt-goal_power) as fulfill_per /* 이행률 */
 		from tb_dr_result
 		where 1=1
 		and site_id = #{siteId }

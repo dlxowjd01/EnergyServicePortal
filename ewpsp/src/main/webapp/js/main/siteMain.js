@@ -702,7 +702,7 @@
 					var reDrRevenue = 0;
 					
 					if(essRvList != null && essRvList.length > 0 && essRvList.length > i) { // ess 수익
-						essRevenue = String(essRvList[i].peak_rate);
+						essRevenue = String(essRvList[i].ess_incen);
 						if(essRevenue == null || essRevenue == "" || essRevenue == "null") reEssRevenue = null;
 						else {
 							reEssRevenue = Number(     essRevenue     ); // 나중에 수정 요망
@@ -815,7 +815,7 @@
 					var strHtml = "";
 					var memo = "";
 					if(deviceList[i].device_type == 4) {
-						strHtml = '<li class="ioe" />'; 
+						strHtml = (deviceList[i].device_stat == 1) ? '<li class="ioe" />' : '<li class="ioe alert" />'; 
 						memo = (deviceList[i].device_stat == 1) ? "connect" : "disconnect";
 					} else if(deviceList[i].device_type == 1) {
 						strHtml = '<li class="pcs" />'; 
@@ -827,7 +827,7 @@
 						strHtml = '<li class="pv" />';
 						memo = deviceList[i].tot_power;
 					} else {
-						strHtml = '<li class="ioe" />';
+						strHtml = (deviceList[i].device_stat == 1) ? '<li class="ioe" />' : '<li class="ioe alert" />'; 
 						memo = (deviceList[i].device_stat == 1) ? "connect" : "disconnect";
 					}
 					$div.append(
@@ -835,8 +835,6 @@
 							).append( $('<span class="dname" />').append( deviceList[i].device_name )
 							).append( $('<span class="dmemo" />').append( memo )
 							)
-//							.append( $('<span class="dname" />').append(  deviceList[i].device_name ) )
-//							).append( $('<span class="dmemo" />').append(  deviceList[i].device_name ) )
 					);
 					
 				}

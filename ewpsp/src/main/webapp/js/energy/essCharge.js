@@ -84,13 +84,14 @@
 					dt_str_totalVal =  0;
 					dt_str2_totalVal = 0;
 				} else {
-					if(SelTerm == "day" && dt_col_cnt == chgList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
-						var headerDate1 = convertDataTableHeaderDate(tm, 1);
-						var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
+					if((i+1) == chgList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
 						for(a=0; a<(dt_col-dt_col_cnt); a++) {
+							dt_str_head += "<th></th>";
 							dt_str += "<td></td>";
 							dt_str2 += "<td></td>";
 						}
+						var headerDate1 = convertDataTableHeaderDate(tm, 1);
+						var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
 						dt_str += "<td>"+dt_str_totalVal+"</td>";
 						dt_str2 += "<td>"+dt_str2_totalVal+"</td>";
 						ess_head_pc[dt_row_cnt-1] = final_dt_str_head;
@@ -164,40 +165,31 @@
 
 				// 표데이터 셋팅
 				var headerDate2 = convertDataTableHeaderDate(tm, 2);
-//				dt_str_head += "<th>"+headerDate2+"</th>"
 				dt_str += "<td>"+  ( (reChgVal == null) ? "" : reChgVal ) +"</td>"; // 충전량
 				dt_str2 += "<td>"+ ( (reDischgVal == null) ? "" : reDischgVal    ) +"</td>"; // 방전량
 				dt_str_totalVal = dt_str_totalVal+ reChgVal;
 				dt_str2_totalVal = dt_str2_totalVal+ reDischgVal;
 				if(dt_col_cnt == dt_col) {
-//					var headerDate1 = convertDataTableHeaderDate(tm, 1);
-//					var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
 					dt_str += "<td>"+  dt_str_totalVal  +"</td>"; // 충전량
 					dt_str2 += "<td>"+ dt_str2_totalVal +"</td>"; // 방전량
-//					ess_head_pc[dt_row_cnt-1] = final_dt_str_head;
 					fetureChg_data_pc[dt_row_cnt-1] = dt_str;
 					fetureDischg_data_pc[dt_row_cnt-1] = dt_str2;
 					dt_row_cnt++;
 					dt_col_cnt = 1;
-//					dt_str_head = "";
 					dt_str  = ""; 
 					dt_str2 = ""; 
 					dt_str_totalVal =  0;
 					dt_str2_totalVal = 0;
 				} else {
-					if(SelTerm == "day" && dt_col_cnt == chgList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
-//						var headerDate1 = convertDataTableHeaderDate(tm, 1);
-//						var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
+					if((i+1) == chgList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
 						for(a=0; a<(dt_col-dt_col_cnt); a++) {
 							dt_str += "<td></td>";
 							dt_str2 += "<td></td>";
 						}
 						dt_str += "<td>"+dt_str_totalVal+"</td>";
 						dt_str2 += "<td>"+dt_str2_totalVal+"</td>";
-//						ess_head_pc[dt_row_cnt-1] = final_dt_str_head;
 						fetureChg_data_pc[dt_row_cnt-1] = dt_str;
 						fetureDischg_data_pc[dt_row_cnt-1] = dt_str2;
-//						dt_str_head = "";
 						dt_str = "";
 						dt_str2 = "";
 						dt_str_totalVal = 0;

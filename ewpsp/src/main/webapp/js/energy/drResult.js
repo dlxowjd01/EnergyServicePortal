@@ -107,10 +107,10 @@
 						).append( $("<td />").append( drStartDate.format("HH:mm")+" ~ "+drEndDate.format("HH:mm") ) // 감축시간대
 						).append( $("<td />").append( drList[i].act_amt ) // 사용량
 						).append( $("<td />").append( drList[i].cbl_amt ) // 고객기준부하
-						).append( $("<td />").append( "" ) // 계약용량
+						).append( $("<td />").append( drList[i].cbl_power ) // 계약용량
 						).append( $("<td />").append( drList[i].goal_power ) // 목표사용량
 						).append( $("<td />").append( drList[i].reduce_amt ) // 감축량
-						).append( $("<td />").append( "" ) // 이행률
+						).append( $("<td />").append( drList[i].fulfill_per ) // 이행률
 						)
 				);
 				console.log("drList[i].reduce_amt : "+drList[i].reduce_amt);

@@ -68,15 +68,12 @@
 				
 				// 차트데이터 셋팅
 				dataSet.push([ //peakList[i].std_timestamp
-//					Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())
 					setChartDateUTC(peakList[i].std_timestamp)
 					, rePeakVal ]);
 				dataSet2.push([ //Number(peakList[i].std_timestamp)
-//					Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())
 					setChartDateUTC(peakList[i].std_timestamp)
 					, contractPower ]);
 				dataSet3.push([ //Number(peakList[i].std_timestamp)
-//					Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())
 					setChartDateUTC(peakList[i].std_timestamp)
 					, chargePower ]);
 				
@@ -110,14 +107,15 @@
 					dt_str2_totalVal = 0;
 					dt_str3_totalVal = 0;
 				} else {
-					if(SelTerm == "day" && dt_col_cnt == peakList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
-						var headerDate1 = convertDataTableHeaderDate(tm, 1);
-						var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
+					if((i+1) == peakList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
 						for(a=0; a<(dt_col-dt_col_cnt); a++) {
+							dt_str_head += "<th></th>";
 							dt_str += "<td></td>";
 							dt_str2 += "<td></td>";
 							dt_str3 += "<td></td>";
 						}
+						var headerDate1 = convertDataTableHeaderDate(tm, 1);
+						var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
 						dt_str += "<td>"+dt_str_totalVal+"</td>";
 						dt_str2 += "<td>"+dt_str2_totalVal+"</td>";
 						dt_str3 += "<td>"+dt_str3_totalVal+"</td>";

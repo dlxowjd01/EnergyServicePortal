@@ -38,6 +38,24 @@ function numMinusPer(num, per) {
 	return num*( 1-per/100 )
 }
 
+// 숫자만 입력되도록 처리
+function onlyNumber(event){
+	event = event || window.event;
+	var keyID = (event.which) ? event.which : event.keyCode;
+	if ( (keyID >= 48 && keyID <= 57) || (keyID >= 96 && keyID <= 105) || keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 ) 
+		return;
+	else
+		return false;
+}
+function removeChar(event) {
+	event = event || window.event;
+	var keyID = (event.which) ? event.which : event.keyCode;
+	if ( keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 ) 
+		return;
+	else
+		event.target.value = event.target.value.replace(/[^0-9]/g, "");
+}
+
 //////////////////////////////////////////////날짜관련//////////////////////////////////////////////
 
 // 날짜에 utc 적용여부
@@ -498,7 +516,8 @@ $(function () {
 	// 프린트
 	$(".lbtn_print").click(function() {
 //		if(confirm("인쇄하시겠습니까?")) {
-//			$(".lbody").printThis();
+////			$(".lbody").printThis();
+//			$(".lbody").printElement({ printMode: 'popup' });
 //		}
 	});
 	
