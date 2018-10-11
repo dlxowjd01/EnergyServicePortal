@@ -17,6 +17,7 @@
     <![endif]-->	
     <script src="../js/jquery.min.js"></script>
     <script src="../js/jquery-ui.js"></script>
+    <script src="../js/jquery-ui-1.12.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/highcharts.js"></script>
     <!-- 하이차트 데이타 추출용 -->
