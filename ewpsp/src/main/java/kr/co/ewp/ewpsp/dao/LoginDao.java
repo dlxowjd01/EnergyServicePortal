@@ -18,6 +18,11 @@ public class LoginDao {
 		return result;
 	}
 
+	public Map checkUserId(HashMap param) {
+		Map result = sqlSession.selectOne("login.checkUserId", param);
+		return result;
+	}
+
 	public int insertUser(HashMap param) {
 		return sqlSession.update("login.insertUser", param);
 	}

@@ -109,7 +109,6 @@ public class MainController {
 		}
 
 		Map result = cmpyGrpSiteMngService.getGMainSiteRankingTotalDetail(param);
-		logger.debug("result : {}" + result);
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
@@ -203,7 +202,6 @@ public class MainController {
 		}
 
 		Map result = cmpyGrpSiteMngService.getGMainSiteTotalDetail(param);
-		logger.debug("result : {}" + result);
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);

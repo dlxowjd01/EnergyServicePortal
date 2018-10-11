@@ -68,7 +68,7 @@ alert('${msg}');
 			<div id="container" class="login">
 
 				<div class="loginForm">
-					<form id="loginForm" name="loginForm" action="/loginUser" method="post">
+					<form id="loginForm" name="loginForm" action="/loginUser" method="post" onsubmit="return checkLogin(this)">
 						<div class="lf_body">
 							<div class="lftit">
 				                <h1>LOGIN</h1>
@@ -112,9 +112,9 @@ alert('${msg}');
 	                <button type="button" class="close" data-dismiss="modal">&times;</button>
 	                <h1>LOGIN</h1>
 	            </div>
-			    <form>
-			  	    <input type="text" name="userId" placeholder="아이디(email)">
-			  	    <input type="password" name="userPw" placeholder="비밀번호">
+			    <form id="loginForm2" name="loginForm2" action="/loginUser" method="post" onsubmit="return checkLogin(this)">
+			  	    <input type="text" name="userId" placeholder="ID">
+			  	    <input type="password" name="userPw" placeholder="PASSWORD">
 			  	    <input type="submit" name="login" class="login loginmodal-submit" value="Login">
 			    </form>
 				
@@ -320,7 +320,7 @@ alert('${msg}');
 
 								<div class="etcText fr mt5">
 									<span class="checkbox">
-										<input type="checkbox" id="checkbox01" class="styled" name="" />
+										<input type="checkbox" id="checkbox01" class="styled" name="agree01" />
 										<label for="checkbox01">동의합니다</label>
 									</span>
 								</div>
@@ -351,7 +351,7 @@ alert('${msg}');
 
 								<div class="etcText fr mt5">
 									<span class="checkbox">
-										<input type="checkbox" id="checkbox02" class="styled" name="" />
+										<input type="checkbox" id="checkbox02" class="styled" name="agree02" />
 										<label for="checkbox02">동의합니다</label>
 									</span>
 								</div>
@@ -386,6 +386,9 @@ alert('${msg}');
 	<script>
 	$(function(){ 
 		$(".joinnextBtn").click(function(){
+			if (!checkAgree()) {
+				return;
+			}
 			$("#joinModal").modal("hide");
 			$("#join2Modal").modal("show");
 		});	  
@@ -403,6 +406,9 @@ alert('${msg}');
 	                <button type="button" class="close" data-dismiss="modal">&times;</button>
 	                <h4><i class="glyphicon glyphicon-user"></i> JOIN</h4>
 	            </div>
+	            <form id="joinForm" name="joinForm">
+	            <input type="hidden" id="psnEmail" name="psnEmail" />
+	            <input type="hidden" id="psnMobile" name="psnMobile" />
 	            <div class="modal-body" style="padding:20px 30px;">
 					
 					<div id="joinStep02" class="rowBox joinBox joinStep02">			
@@ -422,9 +428,9 @@ alert('${msg}');
 											<th>아이디</th>
 											<td>
 												<div class="inputGroup">
-													<input type="text" id="" class="inp fl" style="width:78%;" />
+													<input type="text" id="userId" name="userId" class="inp fl" style="width:78%;" maxlength="20" />
 													<span class="inline center fl" style="width:2%;" >&nbsp;</span>
-													<button type="button" class="btnstyle middle white fl" style="width:20%; white-space:nowrap; vertical-align:top; overflow:hidden;">중복확인</button>	
+													<button type="button" class="btnstyle middle white fl" style="width:20%; white-space:nowrap; vertical-align:top; overflow:hidden;" id="duplicateBtn">중복확인</button>	
 												</div>
 												<span class="helpCont">아이디를 입력하세요</span>
 											</td>
@@ -432,21 +438,21 @@ alert('${msg}');
 										<tr>
 											<th>비밀번호</th>
 											<td>
-												<input type="text" id="input02" class="inp" style="width:100%;" />
+												<input type="password" id="userPw" name="userPw" class="inp" style="width:100%;" maxlength="100" />
 												<span class="helpCont">비밀번호를 입력하세요</span>
 											</td>
 										</tr>
 										<tr>
 											<th>비밀번호확인</th>
 											<td>
-												<input type="text" id="input03" class="inp" style="width:100%;" />
+												<input type="password" id="userPw2" class="inp" style="width:100%;" maxlength="100" />
 												<span class="helpCont">비밀번호를 입력하세요</span>
 											</td>
 										</tr>
 										<tr>
 											<th>이름</th>
 											<td>
-												<input type="text" id="input04" class="inp" style="width:100%;" />
+												<input type="text" id="psnName" name="psnName" class="inp" style="width:100%;" />
 												<span class="helpCont">이름을 입력하세요</span>
 											</td>
 										</tr>
@@ -454,15 +460,17 @@ alert('${msg}');
 											<th>이메일 주소</th>
 											<td>
 												<div class="inputGroup">
-													<input type="text" id="input05" class="inp fl" style="width:60%;" />
+													<input type="text" id="email1" class="inp fl" style="width:60%;" maxlength="25" />
 													<span class="inline center fl" style="width:5%;" >@</span>
-													<select class="inp fl" style="width:35%;">
-														<option>=선택=</option>
-														<option>naver.com</option>
-														<option>daum.net</option>
-														<option>nate.com</option>
-														<option>직접입력</option>
+													<select id="email2" class="inp fl" style="width:35%;">
+														<option value="">=선택=</option>
+														<option value="naver.com">naver.com</option>
+														<option value="hanmail.net">hanmail.net</option>
+														<option value="nate.com">nate.com</option>
+														<option value="gmail.com">gmail.com</option>
+														<option value="manual">직접입력</option>
 													<select>								
+													<input type="text" id="email3" class="inp fl" style="width:35%; display:none;" maxlength="25" />
 												</div>
 												<span class="helpCont">email을 입력하세요</span>
 											</td>
@@ -471,12 +479,13 @@ alert('${msg}');
 											<th>휴대폰 번호</th>
 											<td>
 												<div class="inputGroup">
-													<input type="text" id="input06" class="inp fl" style="width:30%;" />
+													<input type="text" id="mobile1" name="mobile1" class="inp fl" style="width:30%;" maxlength="3" />
 													<span class="inline center fl"  style="width:5%;">-</span>
-													<input type="text" id="input07" class="inp fl" style="width:30%;" />
+													<input type="text" id="mobile2" name="mobile2" class="inp fl" style="width:30%;" maxlength="4" />
 													<span class="inline center fl"  style="width:5%;">-</span>
-													<input type="text" id="input08" class="inp fl" style="width:30%;" />
+													<input type="text" id="mobile3" name="mobile3" class="inp fl" style="width:30%;" maxlength="4" />
 												</div>
+												<span class="helpCont">휴대폰번호를 입력해 주세요</span>
 												<span class="helpCont">숫자를 입력해 주세요</span>
 											</td>
 										</tr>
@@ -495,16 +504,23 @@ alert('${msg}');
 	            		<button type="submit" class="join2nextBtn default_btn w80" data-dismiss="modal">확인</button>
 	            	</div>	                
 	            </div>
+	            </form>
 	        </div>
 	    </div>
 	</div>
 	<script>
 	$(function(){ 
 		$(".join2nextBtn").click(function(){
-			$("#join2Modal").modal("hide");
-			$("#join3Modal").modal("show");
+			checkJoin();
+			return false;
+//			$("#join2Modal").modal("hide");
+//			$("#join3Modal").modal("show");
 		});	  
 	});
+	function join2next() {
+		$("#join2Modal").modal("hide");
+		$("#join3Modal").modal("show");
+	}
 	</script>	
 	<!-- //회원가입 step02 // 정보입력 -->	
 
@@ -532,7 +548,7 @@ alert('${msg}');
 	            </div>
 	            <div class="modal-footer">
 	            	<div style="padding:5px 0;text-align:center;">
-	            		<a href="../main/login.html" class="default_btn w80">로그인</a>
+	            		<a href="/login" class="default_btn w80">로그인</a>
 	            	</div>	                
 	            </div>
 	        </div>

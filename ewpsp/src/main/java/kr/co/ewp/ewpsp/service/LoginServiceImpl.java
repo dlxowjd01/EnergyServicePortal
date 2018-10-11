@@ -19,6 +19,10 @@ public class LoginServiceImpl implements LoginService {
 		return loginDao.getUserDetail(param);
 	}
 
+	public Map checkUserId(HashMap param) throws Exception {
+		return loginDao.checkUserId(param);
+	}
+
 	public int insertUser(HashMap param) throws Exception {
 		return loginDao.insertUser(param);
 	}

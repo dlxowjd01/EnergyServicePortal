@@ -43,6 +43,8 @@
 	    		<mvc:mapping path="/*"/>
 	    		<mvc:exclude-mapping path="/login"/>
 	    		<mvc:exclude-mapping path="/loginUser"/>
+	    		<mvc:exclude-mapping path="/checkUserId"/>
+	    		<mvc:exclude-mapping path="/joinUser"/>
 	    		<mvc:exclude-mapping path="/logout"/>
 	    		<mvc:exclude-mapping path="/openapi/loginUser"/>
 	    		<mvc:exclude-mapping path="/faq"/>

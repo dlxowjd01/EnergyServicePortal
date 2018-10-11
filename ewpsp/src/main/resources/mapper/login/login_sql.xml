@@ -13,61 +13,77 @@
 		where user_id = #{userId }
 		and user_pw = #{userPw }
 	</select>
-	
+
+	<select id="checkUserId" parameterType="hashMap" resultType="hashMap">
+		/* 아이디 중복 조회 */
+		select 
+			user_idx, user_id
+		from tb_user
+		where user_id = #{userId }
+	</select>
+
 	<insert id="insertUser" parameterType="hashMap">
 		/* 사용자 등록 */
 		insert into tb_user (
 			<!-- user_idx,   /* 사용자식별자 */ -->
 			user_id,   /* 아이디 */
-			<!-- user_pw,   /* 패스워드 */ -->
+			user_pw,
 			user_type,   /* 사용자구분(1:동서발전,2:고객사) */
 			main_user_idx,   /* 주사용자식별자 */
 			main_user_yn,   /* 주사용자여부(Y:예,N:아니오) */
-			auth_type,   /* 권한구분(1:포털관리자,2:그룹관리자,3:사이트관리자,4:사이트이용자) */
+			auth_type,   /* 권한구분(1:포털관리자,2:고객사관리자,3:그룹관리자,4:사이트관리자,5:사이트이용자) */
 			lang_type,   /* 언어구분(1:한국어,2:영어,3:일본어) */
+<!--
 			comp_idx, /* 회사식별자 */
 			co_name,   /* 고객사명 */
 			co_tel,   /* 회사전화번호 */
 			co_email,   /* 회사이메일주소 */
+-->
 			psn_name,   /* 담당자명 */
+<!--
 			psn_dept,   /* 담당자부서 */
 			psn_tel,   /* 담당자전화번호 */
+-->
 			psn_mobile,   /* 담당자휴대폰번호 */
 			psn_email,   /* 담당자이메일주소 */
+<!--
 			note,   /* 비고 */
 			site_grp_idx, /* 사이트그룹식별자 */
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 			site_id, /* 사이트ID */
-			</if>
+-->
 			del_yn, 
 			reg_uid, 
 			reg_date
 		)
 		values (
 			<!-- #{user_idx },  -->
-			#{userId }, 
-			<!-- #{userPw }, --> 
-			#{userType }, 
-			#{mainUserIdx }, 
-			#{mainUserYn }, 
-			#{authType }, 
-			#{langType }, 
+			#{userId },
+			#{userPw },
+			'2',
+			'1', 
+			'N', 
+			'5', 
+			'1', 
+<!--
 			#{compIdx }, 
 			#{coName }, 
 			#{coTel }, 
 			#{coEmail }, 
+-->
 			#{psnName }, 
+<!--
 			#{psnDept }, 
 			#{psnTel }, 
+-->
 			#{psnMobile }, 
 			#{psnEmail }, 
+<!--
 			#{note }, 
 			#{siteGrpIdx }, 
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 			#{siteId }, 
-			</if>
+-->
 			'N', 
-			#{regUid }, 
+			#{userId }, 
 			now()
 		)
 	</insert>

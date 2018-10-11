@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import kr.co.ewp.ewpsp.common.util.UserUtil;
@@ -28,12 +27,4 @@ public class SessionCheckInterceptor extends HandlerInterceptorAdapter {
 			return super.preHandle(request, response, handler); // true
 		}
 	}
-
-	// controller 수행 후 화면에 보여지기 직전에 수행
-	@Override
-	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-		logger.debug("++++++++++++++++SessionCheckInterceptor end++++++++++++++++");
-		super.postHandle(request, response, handler, modelAndView);
-	}
-
 }
