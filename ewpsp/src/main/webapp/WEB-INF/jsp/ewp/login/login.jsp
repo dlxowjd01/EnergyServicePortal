@@ -132,12 +132,13 @@ alert('${msg}');
 		});	
 		// FIND ID
 		$(".findidBtn").click(function(){
-//			findForm.reset();
+			findForm.reset();
 			$("#loginModal").modal("hide");
 			$("#findidModal").modal("show");
 		});	 
 		// FIND PASS
 		$(".findpassBtn").click(function(){
+			findPwForm.reset();
 			$("#loginModal").modal("hide");
 			$("#findpassModal").modal("show");
 		});	 
