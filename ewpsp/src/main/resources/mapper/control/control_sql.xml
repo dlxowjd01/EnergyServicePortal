@@ -19,7 +19,7 @@
 		from (
 				select
 					alarm_idx, site_id, device_id, device_type, std_date, alarm_type, alarm_msg, 
-					alarm_cfm_yn, alarm_cfm_date, alarm_cfm_uid, alarm_note, reg_date, mod_date
+					alarm_cfm_yn, alarm_cfm_date, alarm_cfm_uid, alarm_act_yn, alarm_note, reg_date, mod_date
 				from tb_alarm
 				where 1=1
 				<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
@@ -47,7 +47,7 @@
 							when 5 then 'PV모니터링기기'
 							else 'ESS모니터링기기' end as device_type_nm,
 						a.std_date, a.alarm_type, a.alarm_msg, 
-						a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_note, a.reg_date, a.mod_date
+						a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_act_yn, a.alarm_note, a.reg_date, a.mod_date
 					from tb_alarm a, tb_device b
 					where a.device_id = b.device_id
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
@@ -82,7 +82,7 @@
 							when 5 then 'PV모니터링기기'
 							else 'ESS모니터링기기' end as device_type_nm,
 						a.std_date, a.alarm_type, a.alarm_msg, 
-						a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_note, a.reg_date, a.mod_date
+						a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_act_yn, a.alarm_note, a.reg_date, a.mod_date
 					from tb_alarm a, tb_device b
 					where a.device_id = b.device_id
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
@@ -116,7 +116,7 @@
 		from (
 				select
 					a.alarm_idx, a.site_id, a.device_id, a.device_type, a.std_date, a.alarm_type, a.alarm_msg,
-					a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_note, a.reg_date, a.mod_date
+					a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_act_yn, a.alarm_note, a.reg_date, a.mod_date
 				from tb_alarm a, tb_site b, tb_site_group c
 				where 1=1
 				and a.site_id = b.site_id

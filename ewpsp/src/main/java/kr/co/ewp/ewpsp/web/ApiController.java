@@ -64,6 +64,7 @@ public class ApiController {
       parameter.put("alarmCfmYn", "N");
       parameter.put("alarmCfmDate", null);
       parameter.put("alarmCfmUid", "");
+      parameter.put("alarmActYn", "N");
       parameter.put("alarmNote", "");
       alarmService.addAlarm(parameter);
       response.setContentType("text/html; charset=UTF-8");

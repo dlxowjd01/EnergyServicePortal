@@ -495,6 +495,13 @@ $(function () {
 		});
 	});
 	
+	// 프린트
+	$(".lbtn_print").click(function() {
+//		if(confirm("인쇄하시겠습니까?")) {
+//			$(".lbody").printThis();
+//		}
+	});
+	
 	
 
 	// 리스트박스 왼쪽 목록의 데이터 오른쪽으로 이동

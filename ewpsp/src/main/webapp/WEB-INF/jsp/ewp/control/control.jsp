@@ -92,10 +92,10 @@
 													<th>장치명</th>
 													<th>장치ID</th>
 													<th>알람시간</th>
-													<th>알람타입</th>
 													<th>알람메세지</th>
 													<th>알람상태</th>
 													<th>조치여부</th>
+													<th>조치내용</th>
 												</tr>
 											</thead>
 											<tbody id="warnAlarmTbody">
@@ -126,10 +126,10 @@
 													<th>장치명</th>
 													<th>장치ID</th>
 													<th>알람시간</th>
-													<th>알람타입</th>
 													<th>알람메세지</th>
 													<th>알람상태</th>
 													<th>조치여부</th>
+													<th>조치내용</th>
 												</tr>
 											</thead>
 											<tbody id="alertAlarmTbody">
@@ -154,7 +154,46 @@
 	</div>
 
 
+    <!-- ###### 조치여부/내용 관리 Popup Start ###### -->
+    <div id="layerbox" class="rmanage" style="min-width:600px;">
+        <div class="stit">
+        	<h2>조치여부/내용 관리</h2>        	
+			<a href="javascript:popupClose('rmanage');">닫기</a>
+        </div>
+		<div class="lbody mt30">
+			<h2 class="ctit">BMS_1(12001)<!-- 장치명(장치ID) --></h2>
+			<div class="set_tbl mt10 clear">				
+				<div class="fl" style="width:calc(100% - 120px);">
+					<table>
+						<colgroup>
+							<col width="100">
+							<col>
+						</colgroup>
+						<tbody>
+							<tr>
+								<th><span>조치여부</span></th>
+								<td>
+									<select name="" id="" class="sel" style="width:100%;">
+										<option value="">조치</option>
+										<option value="">미조치</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th><span>조치내용</span></th>
+								<td><input type="text" class="input" style="width:100%"></td>
+							</tr>
+						</tbody>			
+					</table>
+				</div>
+				<div class="fr">
+					<input type="submit" value="적용하기" class="submit">
+				</div>
+			</div>
 
+		</div>
+    </div>
+    <!-- ###### Popup End ###### --> 
 
     <!-- ###### 알람전송 관리 Popup Start ###### -->
     <div id="layerbox" class="rpeople" style="min-width:600px;">
