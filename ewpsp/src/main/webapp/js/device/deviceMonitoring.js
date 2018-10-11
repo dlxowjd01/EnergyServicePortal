@@ -170,12 +170,12 @@
 											) 
 									).append(
 											$('<tbody />').append( 
-													$('<tr />').append( $("<td />").append(pcsDetail.ac_voltage) 
-													).append( $("<td />").append(pcsDetail.ac_power)
-													).append( $("<td />").append(pcsDetail.ac_freq)
-													).append( $("<td />").append(pcsDetail.ac_current)
-													).append( $("<td />").append(pcsDetail.ac_pf)
-													).append( $("<td />").append(pcsDetail.ac_set_power)
+													$('<tr />').append( $("<td />").append(  (pcsDetail.ac_voltage == "" || pcsDetail.ac_voltage == null) ? "-" : pcsDetail.ac_voltage  ) 
+													).append( $("<td />").append(  (pcsDetail.ac_power == "" || pcsDetail.ac_power == null) ? "-" : pcsDetail.ac_power  )
+													).append( $("<td />").append(  (pcsDetail.ac_freq == "" || pcsDetail.ac_freq == null) ? "-" : pcsDetail.ac_freq  )
+													).append( $("<td />").append(  (pcsDetail.ac_current == "" || pcsDetail.ac_current == null) ? "-" : pcsDetail.ac_current  )
+													).append( $("<td />").append(  (pcsDetail.ac_pf == "" || pcsDetail.ac_pf == null) ? "-" : pcsDetail.ac_pf  )
+													).append( $("<td />").append(  (pcsDetail.ac_set_power == "" || pcsDetail.ac_set_power == null) ? "-" : pcsDetail.ac_set_power  )
 													)  
 											)
 									)
@@ -195,11 +195,11 @@
 									).append(
 											$('<tbody />').append( 
 													$('<tr />').append( $("<td />").append(pcsDetail.dc_voltage) 
-													).append( $("<td />").append(pcsDetail.dc_power)
-													).append( $("<td />").append(pcsDetail.dc_freq)
-													).append( $("<td />").append(pcsDetail.dc_current)
-													).append( $("<td />").append(pcsDetail.dc_pf)
-													).append( $("<td />").append(pcsDetail.dc_set_power)
+													).append( $("<td />").append(  (pcsDetail.dc_power == "" || pcsDetail.dc_power == null) ? "-" : pcsDetail.dc_power  )
+													).append( $("<td />").append(  (pcsDetail.dc_freq == "" || pcsDetail.dc_freq == null) ? "-" : pcsDetail.dc_freq  )
+													).append( $("<td />").append(  (pcsDetail.dc_current == "" || pcsDetail.dc_current == null) ? "-" : pcsDetail.dc_current  )
+													).append( $("<td />").append(  (pcsDetail.dc_pf == "" || pcsDetail.dc_pf == null) ? "-" : pcsDetail.dc_pf  )
+													).append( $("<td />").append(  (pcsDetail.dc_set_power == "" || pcsDetail.dc_set_power == null) ? "-" : pcsDetail.dc_set_power  )
 													)  
 											)
 									)
@@ -304,14 +304,14 @@
 									).append(
 											$('<tbody />').append( 
 													$('<tr />').append( $("<td />").append(bmsDetail.sys_soc) // soc
-													).append( $("<td />").append("") // soc 최대??
-													).append( $("<td />").append(bmsDetail.sys_soh) // soh
-													).append( $("<td />").append(bmsDetail.curr_soc) // soc 현재
-													).append( $("<td />").append("") // soc 최소??
-													).append( $("<td />").append(bmsDetail.sys_voltage) // 출력전압
-													).append( $("<td />").append(bmsDetail.sys_current) // 출력전류
-													).append( $("<td />").append(bmsDetail.dod) // dod
-													).append( $("<td />").append("") // c-rate
+													).append( $("<td />").append("-") // soc 최대??
+													).append( $("<td />").append(  (bmsDetail.sys_soh == "" || bmsDetail.sys_soh == null) ? "-" : bmsDetail.sys_soh  ) // soh
+													).append( $("<td />").append(  (bmsDetail.curr_soc == "" || bmsDetail.curr_soc == null) ? "-" : bmsDetail.curr_soc  ) // soc 현재
+													).append( $("<td />").append("-") // soc 최소??
+													).append( $("<td />").append(  (bmsDetail.sys_voltage == "" || bmsDetail.sys_voltage == null) ? "-" : bmsDetail.sys_voltage  ) // 출력전압
+													).append( $("<td />").append(  (bmsDetail.sys_current == "" || bmsDetail.sys_current == null) ? "-" : bmsDetail.sys_current  ) // 출력전류
+													).append( $("<td />").append(  (bmsDetail.dod == "" || bmsDetail.dod == null) ? "-" : bmsDetail.dod  ) // dod
+													).append( $("<td />").append("-") // c-rate
 													)  
 											)
 									)
@@ -407,11 +407,11 @@
 											) 
 									).append(
 											$('<tbody />').append( 
-													$('<tr />').append( $("<td />").append(pvDetail.temp+"℃") 
-													).append( $("<td />").append(""+"kWh") 
-													).append( $("<td />").append(""+"W/m²") 
-													).append( $("<td />").append(pvDetail.tot_power+"kWh")
-													).append( $("<td />").append(""+"W/m²") // c-rate
+													$('<tr />').append( $("<td />").append(  (pvDetail.temp == "" || pvDetail.temp == null) ? "-" : pvDetail.temp+"℃"  ) 
+													).append( $("<td />").append("-"/*+"kWh"*/) 
+													).append( $("<td />").append("-"/*+"W/m²"*/) 
+													).append( $("<td />").append(  (pvDetail.tot_power == "" || pvDetail.tot_power == null) ? "-" : pvDetail.tot_power+"kWh"  )
+													).append( $("<td />").append("-"/*+"W/m²"*/) // c-rate
 													)  
 											)
 									)

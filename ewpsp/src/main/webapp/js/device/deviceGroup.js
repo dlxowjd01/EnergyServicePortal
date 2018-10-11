@@ -208,7 +208,7 @@
 		});
 		
 		$("#cancelDvGrpBtn, #cancelDvGrpBtnX").click(function(){
-//			siteViewFlag = 1;
+			siteViewFlag = 2;
 			$('#editDvGrpForm').each(function() {
 				this.reset();
 			});
@@ -306,10 +306,14 @@
 
 	function changeSelSite(siteId) {
 		popupYn = "Y";
-		$("#selSiteId").val(siteId);
-		
-		$(".inside_site").find("ul").empty();
-		$(".all_site").find("ul").empty();
+		if(siteViewFlag == 2) {
+			$("#selSiteId").val(siteId);
+			$(".inside_site").find("ul").empty();
+			$(".all_site").find("ul").empty();	
+			
+		} else if(siteViewFlag == 3) {
+			$("#editDvGrpForm").find("#selectSiteId").val( siteId );
+		}
 		
 		getDeviceGroupList(siteId);
 	}
