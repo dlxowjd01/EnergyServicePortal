@@ -36,6 +36,10 @@ public class ControlServiceImpl implements ControlService{
 	public List getSmsAddresseeList(HashMap param) throws Exception {
 		return controlDao.getSmsAddresseeList(param);
 	}
+	
+	public List getInsertAddresseeNameList(HashMap param) throws Exception {
+		return controlDao.getInsertAddresseeNameList(param);
+	}
 
 	@Transactional
 	public int insertAddressee(HashMap param) throws Exception {

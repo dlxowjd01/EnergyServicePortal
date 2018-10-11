@@ -15,6 +15,8 @@ public interface ControlService {
 	int getAlarmListCnt(HashMap param) throws Exception;
 
 	List getSmsAddresseeList(HashMap param) throws Exception;
+	
+	List getInsertAddresseeNameList(HashMap param) throws Exception;
 
 	int insertAddressee(HashMap param) throws Exception;
 

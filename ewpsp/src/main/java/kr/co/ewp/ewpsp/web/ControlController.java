@@ -136,6 +136,13 @@ public class ControlController {
 		return resultMap;
 	}
 
+	/**
+	 * 알람 수신자 목록 조회
+	 * @param param
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("/getSmsAddresseeList")
 	public @ResponseBody Map<String, Object> getSmsAddresseeList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getSmsAddresseeList");
@@ -150,6 +157,34 @@ public class ControlController {
 		return resultMap;
 	}
 	
+	/**
+	 * 알람 수신자 등록가능 이름 목록 조회
+	 * @param param
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getInsertAddresseeNameList")
+	public @ResponseBody Map<String, Object> getInsertAddresseeNameList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
+		logger.debug("/getInsertAddresseeNameList");
+		logger.debug("param ::::: "+param.toString());
+		
+		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
+		
+		List list = controlService.getInsertAddresseeNameList(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("list", list);
+		return resultMap;
+	}
+	
+	/**
+	 * 알람 수신자 등록
+	 * @param param
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("/insertAddressee")
 	public @ResponseBody Map<String, Object> insertAddressee(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/insertAddressee");
@@ -164,6 +199,12 @@ public class ControlController {
 		return resultMap;
 	}
 
+	/**
+	 * 알람 수신자 삭제
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("/deleteAddressee")
 	public @ResponseBody Map<String, Object> deleteAddressee(@RequestParam HashMap param) throws Exception {
 		logger.debug("/deleteAddressee");

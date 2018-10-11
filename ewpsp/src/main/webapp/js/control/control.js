@@ -28,40 +28,8 @@
 		});
 		
 		$("#smsSendMngBtn").click(function(){
-			
-			$.ajax({
-				url : "/getSmsAddresseeList",
-				type : 'post',
-				async : false, // 동기로 처리해줌
-//				data : {
-//					selPageNum : ""
-//				},
-				success: function(result) {
-					var addresseeList = result.list;
-					
-					$tbody = $("#smsSendMngTbody");
-					$tbody.empty();
-					if(addresseeList == null || addresseeList.length < 1) {
-						$tbody.append( '<tr><td colspan="4">조회된 데이터가 없습니다.</td><tr>' );
-					} else {
-						for(var i=0; i<addresseeList.length; i++) {
-							$tbody.append(
-									$('<tr />').append(
-											$("<td />").append( (i+1) )
-									).append( $("<td />").append( addresseeList[i].addressee_name )
-									).append(
-											$("<td />").append( addresseeList[i].mobile )
-									).append(
-											$("<td />").append( '<a href="#;" onclick="deleteAddresseeYn(\''+addresseeList[i].sms_user_idx+'\');"><i class="glyphicon glyphicon-remove"></i></a>' )
-									)
-							);
-						}
-						
-					}
-				}
-			});
-
-			$("#selAddresseeName option:eq(0)").prop("selected", true);
+			getSmsAddresseeList(); // 알람 수신자 목록 조회
+			getInsertAddresseeNameList(); // 알람 수신자 등록가능 이름 목록 조회
 			
 			popupOpen('rpeople');
 		});
@@ -269,6 +237,69 @@
 			$("#alertAlarmCnt").empty().append(pagingMap.listCnt);
 		}
 		
+	}
+	
+	// 알람 수신자 목록 조회
+	function getSmsAddresseeList() {
+		$.ajax({
+			url : "/getSmsAddresseeList",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+//			data : {
+//				selPageNum : ""
+//			},
+			success: function(result) {
+				var addresseeList = result.list;
+				
+				$tbody = $("#smsSendMngTbody");
+				$tbody.empty();
+				if(addresseeList == null || addresseeList.length < 1) {
+					$tbody.append( '<tr><td colspan="4">조회된 데이터가 없습니다.</td><tr>' );
+				} else {
+					for(var i=0; i<addresseeList.length; i++) {
+						$tbody.append(
+								$('<tr />').append(
+										$("<td />").append( (i+1) )
+								).append( $("<td />").append( addresseeList[i].addressee_name )
+								).append(
+										$("<td />").append( addresseeList[i].mobile )
+								).append(
+										$("<td />").append( '<a href="#;" onclick="deleteAddresseeYn(\''+addresseeList[i].sms_user_idx+'\');"><i class="glyphicon glyphicon-remove"></i></a>' )
+								)
+						);
+					}
+					
+				}
+			}
+		});
+		
+	}
+	
+	// 알람 수신자 등록가능 이름 목록 조회
+	function getInsertAddresseeNameList() {
+		$.ajax({
+			url : "/getInsertAddresseeNameList",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+//			data : {
+//				selPageNum : ""
+//			},
+			success: function(result) {
+				var list = result.list;
+				
+				$selectBox = $("#selAddresseeName");
+				$selectBox.empty();
+				$selectBox.append('<option value="">---이름선택---</option>');
+				for(var i=0; i<list.length; i++) {
+					var name = (list[i].psn_name == null || list[i].psn_name == "") ? "" : list[i].psn_name;
+					$selectBox.append('<option value="'+name+'">'+name+'</option>');
+				}
+				$selectBox.append('<option value="etc">직접입력</option>');
+					
+			}
+		});
+
+		$("#selAddresseeName option:eq(0)").prop("selected", true);
 		
 	}
 
@@ -282,7 +313,14 @@
 				var resultCnt = result.resultCnt;
 				if(resultCnt > 0) {
 					alert("저장되었습니다.");
-					location.reload();
+					
+					$('#addresseeName').val("");
+					$('#addresseeName').hide();
+					getSmsAddresseeList(); // 알람 수신자 목록 조회
+					getInsertAddresseeNameList(); // 알람 수신자 등록가능 이름 목록 조회
+					
+					$("#mobile").val("");
+					
 				} else {
 					alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
 				}
@@ -303,7 +341,14 @@
 					var resultCnt = result.resultCnt;
 					if(resultCnt > 0) {
 						alert("삭제되었습니다.");
-						location.reload();
+
+						$('#addresseeName').val("");
+						$('#addresseeName').hide();
+						getSmsAddresseeList(); // 알람 수신자 목록 조회
+						getInsertAddresseeNameList(); // 알람 수신자 등록가능 이름 목록 조회
+						
+						$("#mobile").val("");
+						
 					} else {
 						alert("삭제에 실패하였습니다. \n 관리자에게 문의하세요.");
 					}

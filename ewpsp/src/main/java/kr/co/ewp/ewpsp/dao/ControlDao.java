@@ -37,6 +37,11 @@ public class ControlDao {
 		List resultList = sqlSession.selectList("control.getSmsAddresseeList", param);
 		return resultList;
 	}
+	
+	public List getInsertAddresseeNameList(HashMap param) {
+		List resultList = sqlSession.selectList("control.getInsertAddresseeNameList", param);
+		return resultList;
+	}
 
 	public int insertAddressee(HashMap param) {
 		return sqlSession.insert("control.insertAddressee", param);

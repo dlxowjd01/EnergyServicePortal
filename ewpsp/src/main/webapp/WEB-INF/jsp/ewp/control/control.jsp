@@ -4,16 +4,7 @@
 <html>
 <head>
 <jsp:include page="../include/common_static.jsp" />
-<jsp:include page="../include/sub_static.jsp" />
-<script type="text/javascript">
-// 	var deviceGbn = "${deviceGbn }";
-// 	$(document).ready(function() {
-// 		// js파일에서는 동작을 안함
-// 		$(".tab_menu").find("li").removeClass("active");
-// 		$(".tab_menu").find("#tab_${deviceGbn }").addClass("active").trigger('click');
-// 		getDBData(deviceGbn);
-// 	});
-</script>
+<%-- <jsp:include page="../include/sub_static.jsp" /> --%>
 <script src="../js/control/control.js" type="text/javascript"></script>
 </head>
 <body>
