@@ -41,7 +41,7 @@ alert('${msg}');
 	.lftit h1 {font-size:34px; line-height:1; font-family:'Roboto', sans-serif; color:#222; text-align:center; font-weight:500;}
 	.lf_body .lfinp {border:0; border-bottom:solid 1px #333; width:100%; height:50px; line-height:50px;}
 	.lf_body input:focus {border:0; border-bottom:solid 1px #333; outline-style:none;}
-	.lf_body .findpassBtn {
+	.lf_body .arrbtn {
 		display:inline-block; padding-right:30px; background:url('../img/login_arr.gif') no-repeat right center;
 		font-size:14px; color:#777;
 	}
@@ -75,7 +75,10 @@ alert('${msg}');
 				            </div>
 						    <div class="mt10"><input type="text" name="userId" class="lfinp" placeholder="아이디"></div>
 						  	<div class="mt15"><input type="password" name="userPw" class="lfinp" placeholder="비밀번호"></div>
-						    <div class="mt30"><a href="#" class="findpassBtn">비밀번호 찾기</a></div>
+						    <div class="mt30">
+						    	<a href="#" class="findidBtn arrbtn">아이디 찾기</a>
+						    	<a href="#" class="findpassBtn arrbtn ml30">비밀번호 찾기</a>
+						    </div>
 						</div>
 						<div class="lf_bottom">
 							<a href="#;" class="joinBtn">회원가입</a>
@@ -110,7 +113,7 @@ alert('${msg}');
 	                <h1>LOGIN</h1>
 	            </div>
 			    <form>
-			  	    <input type="text" name="userId" placeholder="아이디">
+			  	    <input type="text" name="userId" placeholder="아이디(email)">
 			  	    <input type="password" name="userPw" placeholder="비밀번호">
 			  	    <input type="submit" name="login" class="login loginmodal-submit" value="Login">
 			    </form>
@@ -126,7 +129,13 @@ alert('${msg}');
 		$(".joinBtn").click(function(){
 			$("#loginModal").modal("hide");
 			$("#joinModal").modal("show");
+		});	
+		// FIND ID
+		$(".findidBtn").click(function(){
+			$("#loginModal").modal("hide");
+			$("#findidModal").modal("show");
 		});	 
+		// FIND PASS
 		$(".findpassBtn").click(function(){
 			$("#loginModal").modal("hide");
 			$("#findpassModal").modal("show");
@@ -136,18 +145,155 @@ alert('${msg}');
 	<!-- 로그인 modal // -->
 
 
+	<!-- 아이디찾기 modal // -->
+	<div class="modal fade" id="findidModal" tabindex="-1" role="dialog" aria-labelledby="findidModal" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+			<div class="loginmodal-container">
+				<div class="modal-header" style="padding:0 0 15px; margin:0 0 15px">
+	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+	                <h1>FIND ID</h1>
+	            </div>
+			    <form>
+			    <div class="modal-body">
+			  	    <div class="md_tbl">
+			  	    	<table>
+			  	    		<colgroup>
+			  	    			<col width="100">
+			  	    			<col>
+			  	    		</colgroup>
+			  	    		<tbody>
+			  	    			<tr>
+			  	    				<th>이름</th>
+			  	    				<td><input type="text" name="name" placeholder=""></td>
+			  	    			</tr>
+			  	    			<tr>
+			  	    				<th>이동통신사</th>
+			  	    				<td>
+			  	    					<div class="form-check">
+			  	    						<label class="form-check-label">
+										        <input type="radio" class="form-check-input" name="optradio"> SKT
+										    </label>
+										    <label class="form-check-label">
+										        <input type="radio" class="form-check-input" name="optradio"> KTF
+										    </label>
+										    <label class="form-check-label">
+										        <input type="radio" class="form-check-input" name="optradio"> LG U+
+										    </label>
+										</div>
+			  	    				</td>
+			  	    			</tr>
+			  	    			<tr>
+			  	    				<th>휴대폰번호</th>
+			  	    				<td>
+			  	    					<div class="inputGroup">
+			  	    						<select class="inp fl" style="width:22%;">
+												<option>선택</option>
+												<option>010</option>
+												<option>011</option>
+												<option>016</option>
+												<option>017</option>
+												<option>019</option>
+											<select>
+											<span class="inline center fl mt10" style="width:2%;" > - </span>
+											<input type="text" id="" class="inp fl" maxlength="4" style="width:22%;" />
+											<span class="inline center fl mt10" style="width:2%;" > - </span>
+											<input type="text" id="" class="inp fl" maxlength="4" style="width:22%;" />
+											<span class="inline center fl" style="width:2%;" > &nbsp; </span>
+											<button type="button" class="btnstyle middle white fl" style="width:28%; white-space:nowrap; vertical-align:top; overflow:hidden;">인증번호 받기</button>	
+										</div>
+			  	    				</td>
+			  	    			</tr>
+			  	    			<tr>
+			  	    				<th>인증번호</th>
+			  	    				<td>
+			  	    					<input type="text" name="name" placeholder="">
+			  	    				</td>
+			  	    			</tr>
+			  	    		</tbody>
+			  	    	</table>
+			  	    </div>
+			  	    <div class="mt20"><input type="submit" name="findpass" class="login loginmodal-submit" value="확인"></div>
+			  	</div>
+			    </form>
+			</div>
+		</div>
+	</div>
+	<!-- 아이디찾기 modal // -->	
+
+
 	<!-- 비번찾기 modal // -->
 	<div class="modal fade" id="findpassModal" tabindex="-1" role="dialog" aria-labelledby="findpassModal" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
 			<div class="loginmodal-container">
 				<div class="modal-header" style="padding:0 0 15px; margin:0 0 15px">
 	                <button type="button" class="close" data-dismiss="modal">&times;</button>
-	                <h1>FIND</h1>
+	                <h1>FIND PASS</h1>
 	            </div>
 			    <form>
-			  	    <input type="text" name="user" placeholder="아이디">
-			  	    <input type="text" name="name" placeholder="이름">
-			  	    <input type="submit" name="findpass" class="login loginmodal-submit" value="Find Password">
+			    <div class="modal-body">
+			  	    <div class="md_tbl">
+			  	    	<table>
+			  	    		<colgroup>
+			  	    			<col width="100">
+			  	    			<col>
+			  	    		</colgroup>
+			  	    		<tbody>
+			  	    			<tr>
+			  	    				<th>이름</th>
+			  	    				<td><input type="text" name="name" placeholder=""></td>
+			  	    			</tr>
+			  	    			<tr>
+			  	    				<th>ID</th>
+			  	    				<td><input type="text" name="name" placeholder=""></td>
+			  	    			</tr>
+			  	    			<tr>
+			  	    				<th>이동통신사</th>
+			  	    				<td>
+			  	    					<div class="form-check">
+			  	    						<label class="form-check-label">
+										        <input type="radio" class="form-check-input" name="optradio"> SKT
+										    </label>
+										    <label class="form-check-label">
+										        <input type="radio" class="form-check-input" name="optradio"> KTF
+										    </label>
+										    <label class="form-check-label">
+										        <input type="radio" class="form-check-input" name="optradio"> LG U+
+										    </label>
+										</div>
+			  	    				</td>
+			  	    			</tr>
+			  	    			<tr>
+			  	    				<th>휴대폰번호</th>
+			  	    				<td>
+			  	    					<div class="inputGroup">
+			  	    						<select class="inp fl" style="width:22%;">
+												<option>선택</option>
+												<option>010</option>
+												<option>011</option>
+												<option>016</option>
+												<option>017</option>
+												<option>019</option>
+											<select>
+											<span class="inline center fl mt10" style="width:2%;" > - </span>
+											<input type="text" id="" class="inp fl" maxlength="4" style="width:22%;" />
+											<span class="inline center fl mt10" style="width:2%;" > - </span>
+											<input type="text" id="" class="inp fl" maxlength="4" style="width:22%;" />
+											<span class="inline center fl" style="width:2%;" > &nbsp; </span>
+											<button type="button" class="btnstyle middle white fl" style="width:28%; white-space:nowrap; vertical-align:top; overflow:hidden;">인증번호 받기</button>	
+										</div>
+			  	    				</td>
+			  	    			</tr>
+			  	    			<tr>
+			  	    				<th>인증번호</th>
+			  	    				<td>
+			  	    					<input type="text" name="name" placeholder="">
+			  	    				</td>
+			  	    			</tr>
+			  	    		</tbody>
+			  	    	</table>
+			  	    </div>
+			  	    <div class="mt20"><input type="submit" name="findpass" class="login loginmodal-submit" value="확인"></div>
+			  	</div>
 			    </form>
 			</div>
 		</div>
@@ -273,24 +419,16 @@ alert('${msg}');
 									</colgroup>
 									<tbody>
 										<tr>
-											<th>이메일 주소</th>
+											<th>아이디</th>
 											<td>
 												<div class="inputGroup">
-													<input type="text" id="input05" class="inp fl" style="width:40%;" />
-													<span class="inline center fl" style="width:5%;" >@</span>
-													<select class="inp fl" style="width:33%;">
-														<option>=선택=</option>
-														<option>naver.com</option>
-														<option>daum.net</option>
-														<option>nate.com</option>
-														<option>직접입력</option>
-													<select>	
+													<input type="text" id="" class="inp fl" style="width:78%;" />
 													<span class="inline center fl" style="width:2%;" >&nbsp;</span>
-													<button type="button" class="btnstyle middle white fl" style="width:20%; white-space:nowrap; vertical-align:top; overflow:hidden;">중복검색</button>										
+													<button type="button" class="btnstyle middle white fl" style="width:20%; white-space:nowrap; vertical-align:top; overflow:hidden;">중복확인</button>	
 												</div>
-												<span class="helpCont">email을 입력하세요</span>
+												<span class="helpCont">아이디를 입력하세요</span>
 											</td>
-										</tr>
+										</tr>										
 										<tr>
 											<th>비밀번호</th>
 											<td>
@@ -311,9 +449,26 @@ alert('${msg}');
 												<input type="text" id="input04" class="inp" style="width:100%;" />
 												<span class="helpCont">이름을 입력하세요</span>
 											</td>
+										</tr>
+										<tr>
+											<th>이메일 주소</th>
+											<td>
+												<div class="inputGroup">
+													<input type="text" id="input05" class="inp fl" style="width:60%;" />
+													<span class="inline center fl" style="width:5%;" >@</span>
+													<select class="inp fl" style="width:35%;">
+														<option>=선택=</option>
+														<option>naver.com</option>
+														<option>daum.net</option>
+														<option>nate.com</option>
+														<option>직접입력</option>
+													<select>								
+												</div>
+												<span class="helpCont">email을 입력하세요</span>
+											</td>
 										</tr>										
 										<tr>
-											<th>연락처</th>
+											<th>휴대폰 번호</th>
 											<td>
 												<div class="inputGroup">
 													<input type="text" id="input06" class="inp fl" style="width:30%;" />

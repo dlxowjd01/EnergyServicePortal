@@ -176,22 +176,27 @@
 			$('#WarningAlarmPaging').empty();
 		} else {
 			for(var i=0; i<warnAlarmList.length; i++) {
-				var alarm_type = (warnAlarmList[i].alarm_type == 1) ? "비상" : "주의";
 				var tm = new Date( convertDateUTC(warnAlarmList[i].std_date) );
+				var alarmActYn = (warnAlarmList[i].alarm_act_yn == "") ? "N" : warnAlarmList[i].alarm_act_yn;
+				var strHtml = "";
+				if(alarmActYn == "N") {
+					strHtml += '<a href="#;" onclick="popupOpen(\'rmanage\')" class="w80 cancel_btn">미조치</a>';
+				} else {
+					strHtml += '<a href="#;" onclick="popupOpen(\'rmanage\')" class="w80 default_btn">조치</a>';
+				}
+				var alarmCfmYn = (warnAlarmList[i].alarm_cfm_yn == "Y") ? "확인" : "미확인";
+				
 				$tbody.append(
 						$('<tr />').append( $("<td />").append( warnAlarmList[i].device_type_nm ) // 장치타입
 						).append( $("<td />").append( warnAlarmList[i].device_name ) // 장치명
 						).append( $("<td />").append( warnAlarmList[i].device_id ) // 장치ID
 						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") ) // 알람시간
-						).append( $("<td />").append( alarm_type ) // 알람타입
 						).append( $("<td />").append( warnAlarmList[i].alarm_msg ) // 알람메세지
-						).append( $("<td />").append( warnAlarmList[i].comp_id ) // 알람상태(뭘 의미하는거지??)
+						).append( $("<td />").append( alarmCfmYn ) // 알람상태(뭘 의미하는거지??)
 						).append( // 조치여부
-								$("<td />").append(
-//										'<a href="#;" onclick="updateCmpyForm(\''+warnAlarmList[i].comp_idx+'\');" class="default_btn">수정</a>'+
-//										'<a href="#;" onclick="deleteCmpyYn(\''+warnAlarmList[i].comp_idx+'\');" class="cancel_btn">삭제</a>'
-										'미조치'
-								)
+								$("<td />").append( strHtml )
+						).append( // 조치내용
+								$("<td />").append( warnAlarmList[i].alarm_note )
 						)
 				);
 			}
@@ -233,22 +238,27 @@
 			$('#AlertAlarmPaging').empty();
 		} else {
 			for(var i=0; i<alertAlarmList.length; i++) {
-				var alarm_type = (alertAlarmList[i].alarm_type == 1) ? "비상" : "주의";
 				var tm = new Date( convertDateUTC(alertAlarmList[i].std_date) );
+				var alarmActYn = (alertAlarmList[i].alarm_act_yn == "") ? "N" : alertAlarmList[i].alarm_act_yn;
+				var strHtml = "";
+				if(alarmActYn == "N") {
+					strHtml += '<a href="#;" onclick="popupOpen(\'rmanage\')" class="w80 cancel_btn">미조치</a>';
+				} else {
+					strHtml += '<a href="#;" onclick="popupOpen(\'rmanage\')" class="w80 default_btn">조치</a>';
+				}
+				var alarmCfmYn = (alertAlarmList[i].alarm_cfm_yn == "Y") ? "확인" : "미확인";
+				
 				$tbody.append(
 						$('<tr />').append( $("<td />").append( alertAlarmList[i].device_type_nm ) // 장치타입
 						).append( $("<td />").append( alertAlarmList[i].device_name ) // 장치명
 						).append( $("<td />").append( alertAlarmList[i].device_id ) // 장치ID
 						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") ) // 알람시간
-						).append( $("<td />").append( alarm_type ) // 알람타입
 						).append( $("<td />").append( alertAlarmList[i].alarm_msg ) // 알람메세지
-						).append( $("<td />").append( alertAlarmList[i].comp_id ) // 알람상태(뭘 의미하는거지??)
+						).append( $("<td />").append( alarmCfmYn ) // 알람상태(뭘 의미하는거지??)
 						).append( // 조치여부
-								$("<td />").append(
-//										'<a href="#;" onclick="updateCmpyForm(\''+alertAlarmList[i].comp_idx+'\');" class="default_btn">수정</a>'+
-//										'<a href="#;" onclick="deleteCmpyYn(\''+alertAlarmList[i].comp_idx+'\');" class="cancel_btn">삭제</a>'
-										'미조치'
-								)
+								$("<td />").append( strHtml )
+						).append( // 조치내용
+								$("<td />").append( alertAlarmList[i].alarm_note )
 						)
 				);
 			}

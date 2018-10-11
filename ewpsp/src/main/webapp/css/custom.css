@@ -506,7 +506,7 @@ footer .copyright {font-family:'Roboto', sans-serif; font-size:10px; font-weight
 	width:12px; height:7px; background:url('../img/select_down.png') no-repeat 0 0; border:0;
 }
 
-.dropdown-menu {width:100%; min-width:initial;}
+.dropdown-menu {width:auto; min-width:100%;}
 
 .btn-block {display:block !important; width:100% !important;}
 
@@ -542,7 +542,7 @@ footer .copyright {font-family:'Roboto', sans-serif; font-size:10px; font-weight
 /****** LOGIN MODAL ******/
 .loginmodal-container {
   padding: 30px;
-  max-width: 350px;
+  max-width: 520px;
   width: 100% !important;
   background-color: #F7F7F7;
   margin: 0 auto;
@@ -633,6 +633,18 @@ footer .copyright {font-family:'Roboto', sans-serif; font-size:10px; font-weight
 .login-help{
   font-size: 13px;
 }
+
+.loginmodal-container .form-check label {margin-right:10px; cursor:pointer;}
+
+.md_tbl table {width:100%;}
+.md_tbl table th {height:50px; vertical-align:middle; font-size:14px; color:#666; font-weight:600; text-align:left;}
+.md_tbl table td {height:50px; vertical-align:middle; font-size:14px; color:#666; font-weight:400; text-align:left;}
+
+.md_tbl .inp {height:44px; line-height:44px;}
+.md_tbl .btnstyle.middle {padding:0; text-align:center; height:44px; line-height:44px;}
+
+
+
 
 /****** JOIN MODAL ******/
 .etcText .checkbox {margin:0;}
@@ -1621,6 +1633,14 @@ a.detail_view {
 .rpeople {border:solid 1px #ccc;}
 .rpeople .submit {
 	display:inline-block; width:100px; height:86px; line-height:76px; border:0; outline-style:none;
+	background:#3d4250; color:#fff; font-size:13px; border-radius:4px; font-weight:600;
+	margin-top:9px;
+}
+
+/* 조치여부/내용 관리 팝업 */
+.rmanage {border:solid 1px #ccc;}
+.rmanage .submit {
+	display:inline-block; width:100px; height:80px; line-height:76px; border:0; outline-style:none;
 	background:#3d4250; color:#fff; font-size:13px; border-radius:4px; font-weight:600;
 	margin-top:9px;
 }
