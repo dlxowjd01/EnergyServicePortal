@@ -82,6 +82,30 @@ public class LoginController {
 		return UserUtil.getUserInfo(session);
 	}
 
+	@RequestMapping("/findUserId")
+	public @ResponseBody Map<String, Object> findUserId(@RequestParam HashMap param) throws Exception {
+		logger.debug("/findUserId");
+		logger.debug("param : {}", param);
+
+		Map result = loginService.findUserId(param);
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("detail", result);
+		return resultMap;
+	}
+
+	@RequestMapping("/findUserPw")
+	public @ResponseBody Map<String, Object> findUserPw(@RequestParam HashMap param) throws Exception {
+		logger.debug("/findUserPw");
+		logger.debug("param : {}", param);
+
+		Map result = loginService.findUserPw(param);
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("detail", result);
+		return resultMap;
+	}
+
 	@RequestMapping("/checkUserId")
 	public @ResponseBody Map<String, Object> checkUserId(@RequestParam HashMap param) throws Exception {
 		logger.debug("/checkUserId");

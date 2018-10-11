@@ -132,6 +132,7 @@ alert('${msg}');
 		});	
 		// FIND ID
 		$(".findidBtn").click(function(){
+//			findForm.reset();
 			$("#loginModal").modal("hide");
 			$("#findidModal").modal("show");
 		});	 
@@ -153,7 +154,8 @@ alert('${msg}');
 	                <button type="button" class="close" data-dismiss="modal">&times;</button>
 	                <h1>FIND ID</h1>
 	            </div>
-			    <form>
+			    <form id="findForm" name="findForm">
+			    <input type="hidden" id="findPsnMobile" name="psnMobile" />
 			    <div class="modal-body">
 			  	    <div class="md_tbl">
 			  	    	<table>
@@ -164,20 +166,20 @@ alert('${msg}');
 			  	    		<tbody>
 			  	    			<tr>
 			  	    				<th>이름</th>
-			  	    				<td><input type="text" name="name" placeholder=""></td>
+			  	    				<td><input type="text" id="findPsnName" name="psnName" placeholder=""></td>
 			  	    			</tr>
 			  	    			<tr>
 			  	    				<th>이동통신사</th>
 			  	    				<td>
 			  	    					<div class="form-check">
 			  	    						<label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="optradio"> SKT
+										        <input type="radio" class="form-check-input" name="mobileType"> SKT
 										    </label>
 										    <label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="optradio"> KTF
+										        <input type="radio" class="form-check-input" name="mobileType"> KTF
 										    </label>
 										    <label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="optradio"> LG U+
+										        <input type="radio" class="form-check-input" name="mobileType"> LG U+
 										    </label>
 										</div>
 			  	    				</td>
@@ -186,33 +188,33 @@ alert('${msg}');
 			  	    				<th>휴대폰번호</th>
 			  	    				<td>
 			  	    					<div class="inputGroup">
-			  	    						<select class="inp fl" style="width:22%;">
-												<option>선택</option>
-												<option>010</option>
-												<option>011</option>
-												<option>016</option>
-												<option>017</option>
-												<option>019</option>
+			  	    						<select id="findMobile1" class="inp fl" style="width:22%;">
+												<option value="">선택</option>
+												<option value="010">010</option>
+												<option value="011">011</option>
+												<option value="016">016</option>
+												<option value="017">017</option>
+												<option value="019">019</option>
 											<select>
 											<span class="inline center fl mt10" style="width:2%;" > - </span>
-											<input type="text" id="" class="inp fl" maxlength="4" style="width:22%;" />
+											<input type="text" id="findMobile2" class="inp fl" maxlength="4" style="width:22%;" />
 											<span class="inline center fl mt10" style="width:2%;" > - </span>
-											<input type="text" id="" class="inp fl" maxlength="4" style="width:22%;" />
+											<input type="text" id="findMobile3" class="inp fl" maxlength="4" style="width:22%;" />
 											<span class="inline center fl" style="width:2%;" > &nbsp; </span>
-											<button type="button" class="btnstyle middle white fl" style="width:28%; white-space:nowrap; vertical-align:top; overflow:hidden;">인증번호 받기</button>	
+											<button type="button" class="btnstyle middle white fl" style="width:28%; white-space:nowrap; vertical-align:top; overflow:hidden;" id="findAuthCodeBtn">인증번호 받기</button>	
 										</div>
 			  	    				</td>
 			  	    			</tr>
 			  	    			<tr>
 			  	    				<th>인증번호</th>
 			  	    				<td>
-			  	    					<input type="text" name="name" placeholder="">
+			  	    					<input type="text" id="findAuthCode" name="authCode" placeholder="">
 			  	    				</td>
 			  	    			</tr>
 			  	    		</tbody>
 			  	    	</table>
 			  	    </div>
-			  	    <div class="mt20"><input type="submit" name="findpass" class="login loginmodal-submit" value="확인"></div>
+			  	    <div class="mt20"><input type="submit" name="findpass" class="login loginmodal-submit" value="확인" id="findBtn"></div>
 			  	</div>
 			    </form>
 			</div>
@@ -229,7 +231,8 @@ alert('${msg}');
 	                <button type="button" class="close" data-dismiss="modal">&times;</button>
 	                <h1>FIND PASS</h1>
 	            </div>
-			    <form>
+			    <form id="findPwForm" name="findPwForm">
+			    <input type="hidden" id="findPwPsnMobile" name="psnMobile" />
 			    <div class="modal-body">
 			  	    <div class="md_tbl">
 			  	    	<table>
@@ -240,24 +243,24 @@ alert('${msg}');
 			  	    		<tbody>
 			  	    			<tr>
 			  	    				<th>이름</th>
-			  	    				<td><input type="text" name="name" placeholder=""></td>
+			  	    				<td><input type="text" id="findPwPsnName" name="psnName" placeholder=""></td>
 			  	    			</tr>
 			  	    			<tr>
 			  	    				<th>ID</th>
-			  	    				<td><input type="text" name="name" placeholder=""></td>
+			  	    				<td><input type="text" id="findPwUserId" name="userId" placeholder=""></td>
 			  	    			</tr>
 			  	    			<tr>
 			  	    				<th>이동통신사</th>
 			  	    				<td>
 			  	    					<div class="form-check">
 			  	    						<label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="optradio"> SKT
+										        <input type="radio" class="form-check-input" name="mobileType"> SKT
 										    </label>
 										    <label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="optradio"> KTF
+										        <input type="radio" class="form-check-input" name="mobileType"> KTF
 										    </label>
 										    <label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="optradio"> LG U+
+										        <input type="radio" class="form-check-input" name="mobileType"> LG U+
 										    </label>
 										</div>
 			  	    				</td>
@@ -266,33 +269,33 @@ alert('${msg}');
 			  	    				<th>휴대폰번호</th>
 			  	    				<td>
 			  	    					<div class="inputGroup">
-			  	    						<select class="inp fl" style="width:22%;">
-												<option>선택</option>
-												<option>010</option>
-												<option>011</option>
-												<option>016</option>
-												<option>017</option>
-												<option>019</option>
+			  	    						<select id="findPwMobile1" class="inp fl" style="width:22%;">
+												<option value="">선택</option>
+												<option value="010">010</option>
+												<option value="011">011</option>
+												<option value="016">016</option>
+												<option value="017">017</option>
+												<option value="019">019</option>
 											<select>
 											<span class="inline center fl mt10" style="width:2%;" > - </span>
-											<input type="text" id="" class="inp fl" maxlength="4" style="width:22%;" />
+											<input type="text" id="findPwMobile2" class="inp fl" maxlength="4" style="width:22%;" />
 											<span class="inline center fl mt10" style="width:2%;" > - </span>
-											<input type="text" id="" class="inp fl" maxlength="4" style="width:22%;" />
+											<input type="text" id="findPwMobile3" class="inp fl" maxlength="4" style="width:22%;" />
 											<span class="inline center fl" style="width:2%;" > &nbsp; </span>
-											<button type="button" class="btnstyle middle white fl" style="width:28%; white-space:nowrap; vertical-align:top; overflow:hidden;">인증번호 받기</button>	
+											<button type="button" class="btnstyle middle white fl" style="width:28%; white-space:nowrap; vertical-align:top; overflow:hidden;" id="findPwAuthCodeBtn">인증번호 받기</button>	
 										</div>
 			  	    				</td>
 			  	    			</tr>
 			  	    			<tr>
 			  	    				<th>인증번호</th>
 			  	    				<td>
-			  	    					<input type="text" name="name" placeholder="">
+			  	    					<input type="text" id="findPwAuthCode" name="authCode" placeholder="">
 			  	    				</td>
 			  	    			</tr>
 			  	    		</tbody>
 			  	    	</table>
 			  	    </div>
-			  	    <div class="mt20"><input type="submit" name="findpass" class="login loginmodal-submit" value="확인"></div>
+			  	    <div class="mt20"><input type="submit" name="findpass" class="login loginmodal-submit" value="확인" id="findPwBtn"></div>
 			  	</div>
 			    </form>
 			</div>
@@ -320,8 +323,8 @@ alert('${msg}');
 
 								<div class="etcText fr mt5">
 									<span class="checkbox">
-										<input type="checkbox" id="checkbox01" class="styled" name="agree01" />
-										<label for="checkbox01">동의합니다</label>
+										<input type="checkbox" id="agree01" class="styled" />
+										<label for="agree01">동의합니다</label>
 									</span>
 								</div>
 							</div>
@@ -351,8 +354,8 @@ alert('${msg}');
 
 								<div class="etcText fr mt5">
 									<span class="checkbox">
-										<input type="checkbox" id="checkbox02" class="styled" name="agree02" />
-										<label for="checkbox02">동의합니다</label>
+										<input type="checkbox" id="agree02" class="styled" />
+										<label for="agree02">동의합니다</label>
 									</span>
 								</div>
 							</div>
@@ -387,7 +390,7 @@ alert('${msg}');
 	$(function(){ 
 		$(".joinnextBtn").click(function(){
 			if (!checkAgree()) {
-				return;
+				return false;
 			}
 			$("#joinModal").modal("hide");
 			$("#join2Modal").modal("show");
@@ -407,8 +410,8 @@ alert('${msg}');
 	                <h4><i class="glyphicon glyphicon-user"></i> JOIN</h4>
 	            </div>
 	            <form id="joinForm" name="joinForm">
-	            <input type="hidden" id="psnEmail" name="psnEmail" />
-	            <input type="hidden" id="psnMobile" name="psnMobile" />
+	            <input type="hidden" id="joinPsnEmail" name="psnEmail" />
+	            <input type="hidden" id="joinPsnMobile" name="psnMobile" />
 	            <div class="modal-body" style="padding:20px 30px;">
 					
 					<div id="joinStep02" class="rowBox joinBox joinStep02">			
@@ -428,7 +431,7 @@ alert('${msg}');
 											<th>아이디</th>
 											<td>
 												<div class="inputGroup">
-													<input type="text" id="userId" name="userId" class="inp fl" style="width:78%;" maxlength="20" />
+													<input type="text" id="joinUserId" name="userId" class="inp fl" style="width:78%;" maxlength="20" />
 													<span class="inline center fl" style="width:2%;" >&nbsp;</span>
 													<button type="button" class="btnstyle middle white fl" style="width:20%; white-space:nowrap; vertical-align:top; overflow:hidden;" id="duplicateBtn">중복확인</button>	
 												</div>
@@ -438,21 +441,21 @@ alert('${msg}');
 										<tr>
 											<th>비밀번호</th>
 											<td>
-												<input type="password" id="userPw" name="userPw" class="inp" style="width:100%;" maxlength="100" />
+												<input type="password" id="joinUserPw" name="userPw" class="inp" style="width:100%;" maxlength="100" />
 												<span class="helpCont">비밀번호를 입력하세요</span>
 											</td>
 										</tr>
 										<tr>
 											<th>비밀번호확인</th>
 											<td>
-												<input type="password" id="userPw2" class="inp" style="width:100%;" maxlength="100" />
+												<input type="password" id="joinUserPw2" class="inp" style="width:100%;" maxlength="100" />
 												<span class="helpCont">비밀번호를 입력하세요</span>
 											</td>
 										</tr>
 										<tr>
 											<th>이름</th>
 											<td>
-												<input type="text" id="psnName" name="psnName" class="inp" style="width:100%;" />
+												<input type="text" id="joinPsnName" name="psnName" class="inp" style="width:100%;" />
 												<span class="helpCont">이름을 입력하세요</span>
 											</td>
 										</tr>
@@ -460,9 +463,9 @@ alert('${msg}');
 											<th>이메일 주소</th>
 											<td>
 												<div class="inputGroup">
-													<input type="text" id="email1" class="inp fl" style="width:60%;" maxlength="25" />
+													<input type="text" id="joinEmail1" class="inp fl" style="width:60%;" maxlength="25" />
 													<span class="inline center fl" style="width:5%;" >@</span>
-													<select id="email2" class="inp fl" style="width:35%;">
+													<select id="joinEmail2" class="inp fl" style="width:35%;">
 														<option value="">=선택=</option>
 														<option value="naver.com">naver.com</option>
 														<option value="hanmail.net">hanmail.net</option>
@@ -470,7 +473,7 @@ alert('${msg}');
 														<option value="gmail.com">gmail.com</option>
 														<option value="manual">직접입력</option>
 													<select>								
-													<input type="text" id="email3" class="inp fl" style="width:35%; display:none;" maxlength="25" />
+													<input type="text" id="joinEmail3" class="inp fl" style="width:35%; display:none;" maxlength="25" />
 												</div>
 												<span class="helpCont">email을 입력하세요</span>
 											</td>
@@ -479,11 +482,11 @@ alert('${msg}');
 											<th>휴대폰 번호</th>
 											<td>
 												<div class="inputGroup">
-													<input type="text" id="mobile1" name="mobile1" class="inp fl" style="width:30%;" maxlength="3" />
+													<input type="text" id="joinMobile1" class="inp fl" style="width:30%;" maxlength="3" />
 													<span class="inline center fl"  style="width:5%;">-</span>
-													<input type="text" id="mobile2" name="mobile2" class="inp fl" style="width:30%;" maxlength="4" />
+													<input type="text" id="joinMobile2" class="inp fl" style="width:30%;" maxlength="4" />
 													<span class="inline center fl"  style="width:5%;">-</span>
-													<input type="text" id="mobile3" name="mobile3" class="inp fl" style="width:30%;" maxlength="4" />
+													<input type="text" id="joinMobile3" class="inp fl" style="width:30%;" maxlength="4" />
 												</div>
 												<span class="helpCont">휴대폰번호를 입력해 주세요</span>
 												<span class="helpCont">숫자를 입력해 주세요</span>

@@ -14,6 +14,25 @@
 		and user_pw = #{userPw }
 	</select>
 
+	<select id="findUserId" parameterType="hashMap" resultType="hashMap">
+		/* 아이디 찾기 */
+		select 
+			user_id
+		from tb_user
+		where psn_name = #{psnName}
+		and psn_mobile = #{psnMobile}
+	</select>
+
+	<select id="findUserPw" parameterType="hashMap" resultType="hashMap">
+		/* 아이디 찾기 */
+		select 
+			user_pw
+		from tb_user
+		where user_id = #{userId}
+		and psn_name = #{psnName}
+		and psn_mobile = #{psnMobile}
+	</select>
+
 	<select id="checkUserId" parameterType="hashMap" resultType="hashMap">
 		/* 아이디 중복 조회 */
 		select 
