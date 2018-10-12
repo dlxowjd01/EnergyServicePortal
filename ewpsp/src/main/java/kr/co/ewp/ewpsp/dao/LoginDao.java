@@ -18,6 +18,16 @@ public class LoginDao {
 		return result;
 	}
 
+	public Map findUserId(HashMap param) {
+		Map result = sqlSession.selectOne("login.findUserId", param);
+		return result;
+	}
+
+	public Map findUserPw(HashMap param) {
+		Map result = sqlSession.selectOne("login.findUserPw", param);
+		return result;
+	}
+
 	public Map checkUserId(HashMap param) {
 		Map result = sqlSession.selectOne("login.checkUserId", param);
 		return result;
