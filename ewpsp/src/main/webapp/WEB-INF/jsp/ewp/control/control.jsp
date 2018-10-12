@@ -242,7 +242,7 @@
 							</tr>
 							<tr>
 								<th><span>연락처</span></th>
-								<td><input type="text" id="mobile" name="mobile" class="input" style="width:100%" placeholder="'-'를 제외한 연락처 입력" maxlength="11"></td>
+								<td><input type="text" id="mobile" name="mobile" class="input" style="width:100%" placeholder="'-'를 제외한 연락처 입력" maxlength="11" onkeydown="onlyNum(event);"></td>
 							</tr>
 						</tbody>			
 					</table>

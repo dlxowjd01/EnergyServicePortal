@@ -286,3 +286,8 @@ $(document).ready(function(e){
         return false;
     });
 });
+
+function selectBoxTextApply(obj) {
+	var txt = $(obj).text();
+	$(obj).parent().parent().parent().find('button').empty().append(txt).append( $('<span class="caret" />') );
+}

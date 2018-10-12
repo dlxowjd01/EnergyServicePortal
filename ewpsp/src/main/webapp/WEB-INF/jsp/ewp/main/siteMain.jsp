@@ -245,10 +245,13 @@
 
 												/* 그래프 스타일 */
 											    series: [{
-											        color: '#438fd7' /* 한전 사용량 */
+											    	name: '한전 사용량',
+											    	color: '#438fd7' /* 한전 사용량 */
 											    },{
+											    	name: 'ESS 사용량',
 											        color: '#13af67' /* ESS 사용량 */
 											    },{
+											    	name: 'PV 사용량',
 											        color: '#f75c4a' /* PV 사용량 */
 											    }],
 
@@ -451,12 +454,15 @@
 
 												/* 그래프 스타일 */
 											    series: [{
-											        color: '#438fd7', /* 최대 피크 전력 */
+											        name: '최대 피크 전력',
+											    	color: '#438fd7', /* 최대 피크 전력 */
 											        type: 'column'
 											    },{
-											        color: '#13af67' /* 한전 계약 전력 */
+											    	name: '한전 계약 전력',
+											    	color: '#13af67' /* 한전 계약 전력 */
 											    },{
-											        color: '#f75c4a' /* 요금 적용 전력 */
+											    	name: '요금 적용 전력',
+											    	color: '#f75c4a' /* 요금 적용 전력 */
 											    }],
 
 											    /* 반응형 */
@@ -513,6 +519,11 @@
 										<h2 class="ntit fl" ondblclick="javascript:location.href='/deviceMonitoring?deviceGbn=IOE'" style="cursor: pointer;">장치현황</h2>
 										<div class="time fr" id="updtTimeDevice">2018-08-12 11:41:26</div>
 									</div>
+									<!-- no-data { -->
+									<div class="no-data" style="display: none;">
+										<span>장치현황 정보를 가져올 수 없습니다.</span>
+									</div>
+									<!-- } no-data -->	
 									<ul class="device clear" id="deviceList">
 									</ul>
 									<div class="paging clear" id="DevicePaging">
@@ -666,10 +677,13 @@
 
 												/* 그래프 스타일 */
 											    series: [{
-											        color: '#438fd7' /* ESS 수익 */
+											    	name: 'ESS 수익',
+											    	color: '#438fd7' /* ESS 수익 */
 											    },{
+											    	name: 'DR 수익',
 											        color: '#13af67' /* DR 수익 */
 											    },{
+											    	name: 'PV 수익',
 											        color: '#f75c4a' /* PV 수익 */
 											    }],
 

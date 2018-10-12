@@ -38,7 +38,30 @@ function numMinusPer(num, per) {
 	return num*( 1-per/100 )
 }
 
-
+// 숫자만 입력받는 함수
+//function onlyNum(obj) {
+//	var inputVal = $(obj).val();
+//    $(obj).val(inputVal.replace(/[^0-9]/gi,''));
+//}
+//function onlyNum(event) {
+//	if (event.keyCode >= 48 && event.keyCode <= 57) { //숫자키만 입력
+//        return true;
+//    } else {
+//        event.returnValue = false;
+//    }
+//}
+function onlyNum(event) {
+	var code = event.keyCode;
+	if (code > 47 && code < 58) { // 숫자 허용
+		return;
+	}
+	if (code === 9 || code === 36 || code === 35 || code === 37 || 
+			code === 39 || code === 8 || code === 46) { // 특수문자 허용
+		return;
+	}
+	
+	event.preventDefault();
+}
 
 //////////////////////////////////////////////날짜관련//////////////////////////////////////////////
 
