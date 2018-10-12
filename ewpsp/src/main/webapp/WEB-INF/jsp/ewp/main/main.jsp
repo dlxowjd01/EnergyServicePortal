@@ -320,7 +320,7 @@
 										    <thead>
 										      <tr>
 										      	<th>번호</th>
-										        <th>업체명</th>
+										        <th>사이트</th>
 										        <th>장치현황</th>
 										        <th>사용</th>
 										        <th>충•방전</th>
