@@ -601,7 +601,7 @@
 		</div>
 		<h2 style="margin-top:20px">5. 최근 6개월 수익 내역</h2>
 		<div class="inchart">
-			<div id="ly_chart_dr" style="max-width:800px;height:300px;"></div>
+			<div id="ly_chart_dr" style="max-width:800px;height:250px;"></div>
 			<script language="JavaScript"> 
 			$(function () { 
 				var myChart = Highcharts.chart('ly_chart_dr', {

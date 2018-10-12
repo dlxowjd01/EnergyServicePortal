@@ -684,7 +684,7 @@
 				<div class="fl" style="width:56%">
 					<h2>5. 전기요금 절감효과</h2>
 					<div class="inchart">
-						<div id="ly_chart_ess" style="max-width:445px;height:190px"></div>
+						<div id="ly_chart_ess" style="max-width:445px;height:169px"></div>
 						<script language="JavaScript"> 
 						$(function () { 
 							Highcharts.setOptions({

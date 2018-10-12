@@ -1372,7 +1372,7 @@ a.detail_view {
 .dprint .lbody table.tbl {width:100%; border-top:solid 1px #111; border-left:solid 1px #ccc;}
 .dprint .lbody table.tbl th,
 .dprint .lbody table.tbl td {
-	padding:10px 15px; font-size:13px; border-bottom:solid 1px #ccc; border-right:solid 1px #ccc;
+	padding:8px 15px; font-size:13px; border-bottom:solid 1px #ccc; border-right:solid 1px #ccc;
 	line-height:1.5;
 }
 .dprint .lbody table.tbl th {background:#eaeaea;}
@@ -1384,7 +1384,7 @@ a.detail_view {
 
 /* 전기 요금 청구서 */
 .dprint .e_bill th,
-.dprint .e_bill td {padding:12px 15px !important;}
+.dprint .e_bill td {padding:10px 15px !important;}
 
 /* 스타일 없는 내부 테이블 */
 .dprint .lbody table.noline {margin-top:-3px;}
@@ -1427,7 +1427,7 @@ a.detail_view {
 .totaldprint .lbody table.tbl {width:100%; border-top:solid 1px #111; border-left:solid 1px #ccc;}
 .totaldprint .lbody table.tbl th,
 .totaldprint .lbody table.tbl td {
-	padding:10px 15px; font-size:13px; border-bottom:solid 1px #ccc; border-right:solid 1px #ccc;
+	padding:8px 15px; font-size:13px; border-bottom:solid 1px #ccc; border-right:solid 1px #ccc;
 	line-height:1.5;
 }
 .totaldprint .lbody table.tbl th {background:#eaeaea;}
@@ -1439,7 +1439,7 @@ a.detail_view {
 
 /* 전기 요금 청구서 */
 .totaldprint .e_bill th,
-.totaldprint .e_bill td {padding:12px 15px !important;}
+.totaldprint .e_bill td {padding:10px 15px !important;}
 
 /* 스타일 없는 내부 테이블 */
 .totaldprint .lbody table.noline {margin-top:-3px;}

@@ -586,7 +586,7 @@
 			</div>
 			<h2 style="margin-top:20px">최근 6개월 청구 내역</h2>
 			<div class="inchart">
-				<div id="ly_chart_hj" style="max-width:800px;height:300px"></div>
+				<div id="ly_chart_hj" style="max-width:800px;height:250px"></div>
 				<script language="JavaScript"> 
 				$(function () { 
 					var myChart = Highcharts.chart('ly_chart_hj', {

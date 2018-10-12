@@ -544,7 +544,7 @@
 				<div class="fl" style="width:56%">
 					<h2>4. 수익구성</h2>
 					<div class="inchart">
-						<div id="ly_chart_pv" style="max-width:440px;height:190px"></div>
+						<div id="ly_chart_pv" style="max-width:440px;height:168px"></div>
 						<script language="JavaScript"> 
 						$(function () { 
 						    Highcharts.setOptions({
