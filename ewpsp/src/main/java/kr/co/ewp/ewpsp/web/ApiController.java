@@ -156,4 +156,30 @@ public class ApiController {
 			return -1;
 		}
 	}
+
+	@RequestMapping("/openapi/getUser")
+	public @ResponseBody Map<String, Object> getUserDetail(String userId, String userPw) throws Exception {
+		logger.debug("/openapi/getUser");
+		logger.debug("userId : {}, userPw : {}", userId, userPw);
+
+		String key = "aes256-ewpsp-key";
+		AES256Util aes256 = new AES256Util(key);
+		URLCodec codec = new URLCodec();
+
+//		String userPwEnc = codec.encode(aes256.aesEncode(userPw));
+		String userPwDec = aes256.aesDecode(codec.decode(userPw));
+
+		HashMap<String, String> param = new HashMap<String, String>();
+		param.put("userId", userId);
+		param.put("userPw", userPwDec);
+
+		Map result = loginService.getUserDetail(param);
+		logger.debug("result : {}", result);
+
+		if (result != null && CommonUtils.isNotEmpty(result.get("user_idx"))) {
+			result.put("userPw", userPw);
+		}
+
+		return result;
+	}
 }
