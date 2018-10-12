@@ -260,15 +260,15 @@
 	
 	// 차트 그리기
 	function drawData_chart_charge() {
-//		if( pastChgList.length < 1 && pastDischgList.length <1 && fetureChgList.length < 1 && fetureDischgList.length < 1 ) {
-//			$(".charge").find(".no-data").css("display", "");
-//			$(".charge").find(".inchart").css("display", "none");
-//			$(".charge").find(".chart_footer").css("display", "none");
-//		} else {
-//			$(".charge").find(".no-data").css("display", "none");
-//			$(".charge").find(".inchart").css("display", "");
-//			$(".charge").find(".chart_footer").css("display", "");
-//		}
+		if( pastChgList.length < 1 && pastDischgList.length <1 && fetureChgList.length < 1 && fetureDischgList.length < 1 ) {
+			$(".charge").find(".no-data").css("display", "");
+			$(".charge").find(".inchart").css("display", "none");
+			$(".charge").find(".chart_footer").css("display", "none");
+		} else {
+			$(".charge").find(".no-data").css("display", "none");
+			$(".charge").find(".inchart").css("display", "");
+			$(".charge").find(".chart_footer").css("display", "");
+		}
 		
 		var seriesLength = chargeChart.series.length;
 		for(var i = seriesLength - 1; i > -1; i--) {
@@ -368,10 +368,19 @@
 			success: function(result) {
 				var finalSoc = result.finalSoc;
 				
-				$(".battery").find("span").css("width", finalSoc+"%");
-				$(".battery_per").empty().append('<span>'+finalSoc+'<em>%</em></span>');
+				if(finalSoc == 0) {
+					$(".smain_soc").find(".no-data").css("display", "");
+					$(".smain_soc").find(".soc").css("display", "none");
+				} else {
+					$(".smain_soc").find(".no-data").css("display", "none");
+					$(".smain_soc").find(".soc").css("display", "");
+					$(".battery").find("span").css("width", finalSoc+"%");
+					$(".battery_per").empty().append('<span>'+finalSoc+'<em>%</em></span>');
+				}
+				
 	   		}
 		});
+		
 	}
 	
 	var pastUsageList; // 한전 사용량
@@ -467,7 +476,7 @@
 				essUsageList = dataSet2;
 				pvUsageList = dataSet3;
 				
-				if(kepcoUsageList.length > 0) {
+//				if(kepcoUsageList.length > 0) {
 					derChart.addSeries({
 						index:3,
 						fillOpacity: 1,
@@ -477,9 +486,9 @@
 						data: pastUsageList
 					}, false);
 					
-				}
+//				}
 				
-				if(essUsgList.length > 0) {
+//				if(essUsgList.length > 0) {
 					derChart.addSeries({
 						index: 2,
 						fillOpacity: 0.5,
@@ -488,9 +497,9 @@
 						data: essUsageList
 					}, false);
 					
-				}
+//				}
 				
-				if(pvUsgList.length > 0) {
+//				if(pvUsgList.length > 0) {
 					derChart.addSeries({
 						index: 1,
 						fillOpacity: 0.5,
@@ -499,7 +508,7 @@
 						data: pvUsageList
 					}, false);
 					
-				}
+//				}
 				
 //			}
 			
@@ -761,32 +770,32 @@
 				pvRevenueList = dataSet2;
 				drRevenueList = dataSet3;
 				
-				if(essRvList != null && essRvList.length > 0) {
+//				if(essRvList != null && essRvList.length > 0) {
 					incomeChart.addSeries({
 						name: 'ESS 수익',
 						color: '#438fd7', /* ESS 수익 */
 						data: essRevenueList
 					}, false);
 					
-				}
+//				}
 				
-				if(pvRvList != null && pvRvList.length > 0) {
+//				if(pvRvList != null && pvRvList.length > 0) {
 					incomeChart.addSeries({
 						name: 'PV 수익',
 						color: '#13af67', /* PV 수익 */
 						data: pvRevenueList
 					}, false);
 					
-				}
+//				}
 				
-				if(drRvList != null && drRvList.length > 0) {
+//				if(drRvList != null && drRvList.length > 0) {
 					incomeChart.addSeries({
 						name: 'DR 수익',
 						color: '#f75c4a', /* DR 수익 */
 						data: drRevenueList
 					}, false);
 					
-				}
+//				}
 				
 //			}
 			
@@ -804,6 +813,16 @@
 	
 	function callback_getDeviceList(result) {
 		var deviceList = result.deviceList;
+
+		if( deviceList.length < 1 || deviceList == null ) {
+			$(".smain_device").find(".no-data").css("display", "");
+			$(".smain_device").find(".device").css("display", "none");
+			$(".smain_device").find(".paging").css("display", "none");
+		} else {
+			$(".smain_device").find(".no-data").css("display", "none");
+			$(".smain_device").find(".device").css("display", "");
+			$(".smain_device").find(".paging").css("display", "");
+		}
 		
 		if(deviceList != null && deviceList.length > 0) {
 			$div = $("#deviceList");
@@ -822,7 +841,7 @@
 						memo = Number(deviceList[i].ac_power)+Number(deviceList[i].dc_power);
 					} else if(deviceList[i].device_type == 2) {
 						strHtml = '<li class="bms" />';
-						memo = deviceList[i].sys_soc+" %";
+						memo = (deviceList[i].sys_soc == null || deviceList[i].sys_soc == "" || deviceList[i].sys_soc == "null") ? "" : deviceList[i].sys_soc+" %";
 					} else if(deviceList[i].device_type == 3) {
 						strHtml = '<li class="pv" />';
 						memo = deviceList[i].tot_power;

@@ -18,13 +18,15 @@ $(document).ready(function() {
 			<c:if test="${not empty userInfo}">
 			<ul>
 				<c:choose>
-				<c:when test="${not empty userInfo and userInfo.auth_type ne '5'}">
-				<li class="smn1"><a id="smainLink" href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.')">메인</a></li>
+				<c:when test="${not empty userInfo and empty selViewSiteId}">
+				<li class="smn1"><a id="smainLink" href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');">메인</a></li>
+				<li class="smn2"><a href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');">에너지<br/>정보조회</a></li>
+				<li class="smn3"><a href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');">장치<br/>모니터링</a></li>
+				<li class="smn4"><a href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');">상황관제</a></li>
+				<li class="smn5"><a href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');">요금/수익</a></li>
 				</c:when>
 				<c:otherwise>
 				<li class="smn1"><a href="/siteMain">메인</a></li>
-				</c:otherwise>
-				</c:choose>
 				<li class="smn2">
 					<a href="/usage">에너지<br/>정보조회</a>
 					<div class="sub_layer">
@@ -63,6 +65,8 @@ $(document).ready(function() {
 						</ul>
 					</div>
 				</li>
+				</c:otherwise>
+				</c:choose>	
 			</ul>
 			<ol>
 				<c:if test="${userInfo.auth_type ne '5'}">
@@ -99,13 +103,15 @@ $(document).ready(function() {
 				<c:if test="${not empty userInfo}">
 				<ul>
 					<c:choose>
-					<c:when test="${not empty userInfo and userInfo.auth_type ne '5'}">
-					<li class="gmn1"><a id="smainLink" href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.')">메인</a></li>
+					<c:when test="${not empty userInfo and empty selViewSiteId}">
+					<li class="gmn1"><a id="smainLink" href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');">메인</a></li>
+					<li class="gmn2"><a href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');">에너지 정보조회</a></li>
+					<li class="gmn3"><a href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');">장치 모니터링</a></li>
+					<li class="gmn4"><a href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');">상황관제</a></li>
+					<li class="gmn5"><a href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');">요금/수익</a></li>
 					</c:when>
 					<c:otherwise>
 					<li class="gmn1"><a href="/siteMain">메인</a></li>
-					</c:otherwise>
-					</c:choose>
 					<li class="gmn2"><a href="#;">에너지 정보조회</a>
 						<ul>
 							<li><a href="/usage">사용량 현황</a></li>
@@ -134,6 +140,8 @@ $(document).ready(function() {
 							<li><a href="/pvRevenue">PV 수익 조회</a></li>
 						</ul>
 					</li>
+					</c:otherwise>
+					</c:choose>
 				</ul>
 				<ol>
 					<c:if test="${userInfo.auth_type ne '5'}">

@@ -63,7 +63,7 @@
 				} else {
 					for(var i=0; i<deviceGroupList.length; i++) {
 						$insideSite.find("ul").append(
-								$("<li />").append('<a href="javascript:changeSelDeviceGrp(\''+deviceGroupList[i].device_grp_idx+'\');">'+deviceGroupList[i].device_grp_name+'</a>')
+								$("<li />").append('<a href="#;" onclick="selectBoxTextApply(this);changeSelDeviceGrp(\''+deviceGroupList[i].device_grp_idx+'\');">'+deviceGroupList[i].device_grp_name+'</a>')
 						);
 						
 					}
@@ -167,7 +167,7 @@
 			} else {
 				for(var i=0; i<grpSiteList.length; i++) {
 					$insideSite.find("ul").append(
-							$("<li />").append('<a href="javascript:changeSelSite(\''+grpSiteList[i].site_id+'\');">'+grpSiteList[i].site_name+'</a>')
+							$("<li />").append('<a href="#;" onclick="selectBoxTextApply(this);changeSelSite(\''+grpSiteList[i].site_id+'\');">'+grpSiteList[i].site_name+'</a>')
 					);
 					
 				}
@@ -182,7 +182,7 @@
 			} else {
 				for(var i=0; i<grpSiteList.length; i++) {
 					$insideSite.find("ul").append(
-							$("<li />").append('<a href="javascript:changeSelSite(\''+grpSiteList[i].site_id+'\');">'+grpSiteList[i].site_name+'</a>')
+							$("<li />").append('<a href="#;" onclick="selectBoxTextApply(this);changeSelSite(\''+grpSiteList[i].site_id+'\');">'+grpSiteList[i].site_name+'</a>')
 					);
 					
 				}
@@ -213,6 +213,7 @@
 				this.reset();
 			});
 			$("#dvGrpTbody").empty().append('<tr><td colspan="3">사이트를 선택해주세요</td></tr>');
+			$('#insideSite2').find("button").empty().append("사이트 선택").append( $('<span class="caret" />') );
 			popupClose('dgdevice_edit');
 		});
 		
@@ -290,6 +291,8 @@
 			});
 			$(".inside_site").find("ul").empty();
 			$('.all_site').find("ul").empty();
+			$('#insideSite').find("button").empty().append("사이트 선택").append( $('<span class="caret" />') );
+			$('#insideDeviceGrp').find("button").empty().append("장치그룹 선택").append( $('<span class="caret" />') );
 			
 		});
 		
