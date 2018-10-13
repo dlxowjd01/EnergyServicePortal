@@ -66,7 +66,7 @@ function onlyNum(event) {
 //////////////////////////////////////////////날짜관련//////////////////////////////////////////////
 
 // 날짜에 utc 적용여부
-var localYn="N"; // 개발서버인 경우 N으로 변경
+var localYn="Y"; // 개발서버인 경우 N으로 변경
 function convertDateUTC(_dateTimestamp) {
 	if(localYn == "Y") {
 		return _dateTimestamp;
@@ -525,7 +525,8 @@ $(function () {
 		if(confirm("인쇄하시겠습니까?")) {
 //			window.print();
 //			$(".lbody").printThis();
-			$(".lbody").printElement({ printMode: 'popup' });
+//			$(".lbody").printElement({ printMode: 'popup' });
+			print($(".lbody").html());
 		}
 	});
 	
@@ -544,6 +545,29 @@ $(function () {
 	});
 	
 });
+
+function print(printArea)
+{
+		win = window.open(); 
+		self.focus(); 
+		win.document.open();
+		
+		/*
+			1. div 안의 모든 태그들을 innerHTML을 사용하여 매개변수로 받는다.
+			2. window.open() 을 사용하여 새 팝업창을 띄운다.
+			3. 열린 새 팝업창에 기본 <html><head><body>를 추가한다.
+			4. <body> 안에 매개변수로 받은 printArea를 추가한다.
+			5. window.print() 로 인쇄
+			6. 인쇄 확인이 되면 팝업창은 자동으로 window.close()를 호출하여 닫힘
+		*/
+		win.document.write('<html><head><title></title>');
+		win.document.write('</haed><body>');
+		win.document.write(printArea);
+ 		win.document.write('</body></html>');
+		win.document.close();
+		win.print();
+		win.close();
+}
 
 
 

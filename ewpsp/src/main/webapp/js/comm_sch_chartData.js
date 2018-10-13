@@ -18,6 +18,8 @@ function changeSelTerm(gubun) {
 	var endDay = new Date();
 //	var firstDay = new Date(2018, 7, 31, 0, 0, 0);
 //	var endDay = new Date(2018, 7, 31, 23, 59, 59);
+//	var firstDay = new Date(2018, 8, 23, 13, 45, 37);
+//	var endDay = new Date(2018, 8, 23, 13, 45, 37);
 //	console.log("시작전 : "+firstDay+", "+endDay);
 	if(gubun == '15min') { // 15분(현재 안나옴)
 		firstDay = new Date(firstDay.setMinutes(firstDay.getMinutes() - 14));// new Date().setHours(firstDay.getMinutes()-1);
@@ -365,6 +367,7 @@ function setTickInterval() {
 	var periodd = $("#selPeriodVal").val(); // 데이터조회간격
 	
 	myChart.xAxis[0].options.labels.style.fontSize = '16px';
+	var startEndTickFlag = false;
 	
 	// 24 * 60 * 60 * 1000 = 1일
 	// 7 * 24 * 60 * 60 * 1000 = 일주일
@@ -387,18 +390,23 @@ function setTickInterval() {
 		
 	} else if(SelTerm === 'week') {
 		tickInterval = 24 * 60 * 60 * 1000;
+		startEndTickFlag = true;
 		
 	} else if(SelTerm == 'month') {
 		tickInterval = 24 * 60 * 60 * 1000;
 		myChart.xAxis[0].options.labels.style.fontSize = '14px';
+		startEndTickFlag = true;
 		
 	} else if(SelTerm == 'year') {
 		tickInterval = 30 * 24 * 3600 * 1000;
+		startEndTickFlag = true;
 	} else if(SelTerm == "other") {
 		
 	}
 	
 	myChart.xAxis[0].options.tickInterval = tickInterval;
+	myChart.xAxis[0].options.startOnTick = startEndTickFlag;
+	myChart.xAxis[0].options.endOnTick = startEndTickFlag;
 }
 
 // 표 데이터 1행의 최대칸수 및 테이블갯수
