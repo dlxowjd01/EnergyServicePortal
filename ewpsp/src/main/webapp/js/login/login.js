@@ -78,8 +78,8 @@ function test() {
 }
 
 function checkLogin() {
-	var userId = form.find('#loginUserId');
-	var userPw = form.find('#loginUserPw');
+	var userId = $('#loginUserId');
+	var userPw = $('#loginUserPw');
 
 	if (userId.val() == '') {
 		alert('아이디를 입력하세요.');

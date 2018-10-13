@@ -68,7 +68,7 @@ public class LoginController {
 				session.setAttribute(UserUtil.USER_SESSION_ID, result);
 				return "redirect:/siteMain?siteId=" + siteId;
 			} else {
-				model.addAttribute("msg", "사이트ID 정보가 없습니다.");
+				model.addAttribute("msg", "등록이 되지 않은 사용자입니다.\n관리자에게 문의하세요.");
 				return "ewp/login/login";
 			}
 		} else {
