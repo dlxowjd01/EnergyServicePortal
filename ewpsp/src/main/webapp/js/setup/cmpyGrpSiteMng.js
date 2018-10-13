@@ -1,12 +1,27 @@
 
-$(document).ready(function() {
+	$(document).ready(function() {
+		getUserInfo(setUserInfo);
 		getDBData();
 	});
 	
+	var userInfo = null;
+	function setUserInfo(result) {
+		userInfo = result;
+	}
+	
 	function getDBData() {
-		getCmpyList(1); // 회사 목록 조회(회사table 생성 시 주석 해제)
-		getGroupList(1); // 그룹 목록 조회
-		getSiteList(1); // 사이트 목록 조회
+		var authType = userInfo.auth_type;
+		console.log("로그인권한 : "+authType);
+		if(authType == '1') {
+			getCmpyList(1); // 회사 목록 조회(회사table 생성 시 주석 해제)
+		} 
+		if(authType == '1' || authType == '2') {
+			getGroupList(1); // 그룹 목록 조회
+		}
+		if(authType == '1' || authType == '2' || authType == '3') {
+			getSiteList(1); // 사이트 목록 조회
+		}
+		
 	}
 	
 	// 회사 목록 조회
@@ -58,7 +73,7 @@ $(document).ready(function() {
 						$('<tr />').append( $("<td />").append( grpList[i].rnum ) // no
 						).append( $("<td />").append( grpList[i].site_grp_name ) // 그룹명
 						).append( $("<td />").append( grpList[i].site_grp_id ) // 그룹id(내일 생성해야함)
-						).append( $("<td />").append( grpList[i].cmpy_nm ) // 고객사
+						).append( $("<td />").append( grpList[i].comp_name ) // 고객사
 						).append( // 관리
 								$("<td />").append(
 										'<a href="#;" onclick="updateGroupForm(\''+grpList[i].site_grp_idx+'\');" class="default_btn">수정</a>'+
@@ -93,7 +108,7 @@ $(document).ready(function() {
 						).append( $("<td />").append( siteList[i].site_id ) // 사이트id
 						).append( $("<td />").append( siteList[i].site_grp_name ) // 그룹
 						).append( $("<td />").append( siteList[i].local_ems_addr ) // local ems 주소
-						).append( $("<td />").append( siteList[i].device_list ) // 등록장치
+						).append( $("<td />").append( siteList[i].device_type_nms ) // 등록장치
 						).append( // 관리
 								$("<td />").append(
 										'<a href="#;" onclick="updateSiteForm(\''+siteList[i].site_id+'\');" class="default_btn">수정</a>'+
@@ -153,36 +168,20 @@ $(document).ready(function() {
 		$("#insertGrpFormBtn").click(function(){
 			insUpdFlag = 1;
 			$(".dgroup_add").find('h2').empty().append("신규 그룹 등록");
+			cmpyPopupFlag = 1;
+			getCmpyPopupList(); // 회사목록 조회
 			popupOpen('dgroup_add');
 		});
 		
 		$("#insertSiteFormBtn").click(function(){
 			insUpdFlag = 1;
 			$(".dsite").find('h2').empty().append("신규 사이트 등록");
+			cmpyPopupFlag = 2;
+			getCmpyPopupList(); // 회사목록 조회
 			$('#siteForm').each(function() {
 				this.reset();
 			});
 			$("#userIdx").val( "1" );
-			
-			$.ajax({
-				url : "/getGroupPopupList",
-				type : 'post',
-				async : false, // 동기로 처리해줌
-//				data : {
-//					selPageNum : ""
-//				},
-				success: function(result) {
-					var list = result.list;
-					
-					$siteIdSelBox = $("#siteForm").find("#siteGrpIdx");
-					$siteIdSelBox.empty();
-					$siteIdSelBox.append('<option value="">---그룹선택---</option>');
-					for(var i=0; i<list.length; i++) {
-						$siteIdSelBox.append('<option value="'+list[i].site_grp_idx+'">'+list[i].site_grp_name+'</option>');
-						
-					}
-				}
-			});
 			
 			popupOpen('dsite');
 		});
@@ -224,12 +223,13 @@ $(document).ready(function() {
 			popupClose('dcompany');
 		});
 		
-		$("#cancelGrpBtn").click(function(){
+		$("#cancelGrpBtn, #cancelGrpBtnX").click(function(){
 			popupClose('dgroup_add');
 			if(insUpdFlag == 2) {
 				$('#mask').hide();
 			}
 			
+			cmpyPopupFlag = 0;
 			insUpdFlag = 0;
 			$('#groupForm').each(function() {
 				this.reset();
@@ -240,6 +240,7 @@ $(document).ready(function() {
 		});
 		
 		$("#cancelSiteBtn, #cancelSiteBtnX").click(function(){
+			cmpyPopupFlag = 0;
 			insUpdFlag = 0;
 			$("#siteForm").find("#siteId").attr("readonly", false);
 			$('#siteForm').each(function() {
@@ -410,6 +411,37 @@ $(document).ready(function() {
 		});
 	}
 
+	var cmpyPopupFlag = 0; // 1:groupForm, 2:siteForm, 0:reset 
+	function getCmpyPopupList() {
+		$.ajax({
+			url : "/getCmpyPopupList",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+//			data : {
+//				selPageNum : ""
+//			},
+			success: function(result) {
+				var list = result.list;
+				
+				if(cmpyPopupFlag == 1) $siteIdSelBox = $("#groupForm").find("#compIdx");
+				else if(cmpyPopupFlag == 2) $siteIdSelBox = $("#siteForm").find("#compIdx");
+				$siteIdSelBox.empty();
+				$siteIdSelBox.append('<option value="">---회사선택---</option>');
+				for(var i=0; i<list.length; i++) {
+					$siteIdSelBox.append('<option value="'+list[i].comp_idx+'">'+list[i].comp_name+'</option>');
+					
+				}
+			}
+		});
+	}
+	
+	function changeCmpy() {
+//		if(cmpyPopupFlag == 1) $siteIdSelBox = $("#groupForm").find("#compIdx");
+//		else if(cmpyPopupFlag == 2) $siteIdSelBox = $("#siteForm").find("#compIdx");
+		var selCmpyIdx = $("#siteForm").find("#compIdx").val();
+		getGrpPopupList(selCmpyIdx); // 그룹목록 조회
+	}
+
 	function callback_insertGroup(result) {
 		var resultCnt = result.resultCnt;
 		if(resultCnt > 0) {
@@ -422,6 +454,8 @@ $(document).ready(function() {
 	
 	function updateGroupForm(siteGrpIdx) {
 		insUpdFlag = 2;
+		cmpyPopupFlag = 1;
+		getCmpyPopupList(); // 회사목록 조회
 		getGroupDetail(siteGrpIdx);
 	}
 
@@ -436,6 +470,7 @@ $(document).ready(function() {
 			$(".dgroup_add").find('h2').empty().append("그룹 수정");
 			$("#groupForm").find("#siteGrpIdx").val( groupDetail.site_grp_idx );
 			$("#groupForm").find("#userIdx").val( groupDetail.user_idx );
+			$("#groupForm").find("#compIdx").val( groupDetail.comp_idx );
 			$("#groupForm").find("#siteGrpName").val( groupDetail.site_grp_name );
 			$("#groupForm").find("#siteGrpId").val( groupDetail.site_grp_id );
 			$("#groupForm").find("#fileNameTag").empty().append( groupDetail.site_grp_img_rname );
@@ -481,6 +516,28 @@ $(document).ready(function() {
 		}
 	}
 
+	function getGrpPopupList(compIdx) {
+		$.ajax({
+			url : "/getGroupPopupList",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+			data : {
+				compIdx : compIdx
+			},
+			success: function(result) {
+				var list = result.list;
+				
+				$siteIdSelBox = $("#siteForm").find("#siteGrpIdx");
+				$siteIdSelBox.empty();
+				$siteIdSelBox.append('<option value="">---그룹선택---</option>');
+				for(var i=0; i<list.length; i++) {
+					$siteIdSelBox.append('<option value="'+list[i].site_grp_idx+'">'+list[i].site_grp_name+'</option>');
+					
+				}
+			}
+		});
+	}
+
 	function callback_insertSite(result) {
 		var resultCnt = result.resultCnt;
 		if(resultCnt > 0) {
@@ -493,6 +550,8 @@ $(document).ready(function() {
 
 	function updateSiteForm(siteId) {
 		insUpdFlag = 2;
+		cmpyPopupFlag = 2;
+		getCmpyPopupList(); // 회사목록 조회
 		$(".dsite").find('h2').empty().append("사이트 수정");
 		getSiteDetail(siteId);
 	}
@@ -505,31 +564,14 @@ $(document).ready(function() {
 			alert("조회된 데이터가 없습니다.");
 //			location.href = "/siteMain";
 		} else {
-			$.ajax({
-				url : "/getGroupPopupList",
-				type : 'post',
-				async : false, // 동기로 처리해줌
-				data : {
-					selPageNum : ""
-				},
-				success: function(result) {
-					var list = result.list;
-					
-					$siteIdSelBox = $("#siteForm").find("#siteGrpIdx");
-					$siteIdSelBox.empty();
-					$siteIdSelBox.append('<option value="">---그룹선택---</option>');
-					for(var i=0; i<list.length; i++) {
-						$siteIdSelBox.append('<option value="'+list[i].site_grp_idx+'">'+list[i].site_grp_name+'</option>');
-						
-					}
-				}
-			});
+			getGrpPopupList(siteDetail.comp_idx);
 			
 			$("#siteForm").find("#siteGrpIdx").val( siteDetail.site_grp_idx );
 			$("#siteForm").find("#userIdx").val( siteDetail.user_idx );
 			$("#siteForm").find("#siteName").val( siteDetail.site_name );
 			$("#siteForm").find("#siteId").val( siteDetail.site_id );
 			$("#siteForm").find("#siteId").attr("readonly", true);
+			$("#siteForm").find("#compIdx").val( siteDetail.comp_idx );
 			$("#siteForm").find("#areaType").val( siteDetail.area_type );
 			$("#siteForm").find("#localEmsAddr").val( siteDetail.local_ems_addr );
 			$("#siteForm").find("#localEmsKey").val( siteDetail.local_ems_key );
