@@ -53,7 +53,6 @@ public class UserMngController {
 		
 		Map userInfo = UserUtil.getUserInfo(request);
 		String authType = (String)userInfo.get("auth_type");
-		System.out.println("authType : "+authType);
 		if("1".equals(authType)) { // 포털관리자
 			
 		} else if("2".equals(authType)) { // 고객사관리자
@@ -61,8 +60,7 @@ public class UserMngController {
 		} else if("3".equals(authType)) { // 그룹관리자
 			param.put("siteGrpIdx", userInfo.get("site_grp_idx"));
 		} else if("4".equals(authType)) { // 사이트관리자
-//			param.put("siteId", userInfo.get("site_id"));
-			param.put("userIdx", userInfo.get("user_idx"));
+			param.put("siteId", userInfo.get("site_id"));
 		} else if("5".equals(authType)) { // 사이트이용자
 			param.put("userIdx", userInfo.get("user_idx"));
 		}

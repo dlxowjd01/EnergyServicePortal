@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -24,6 +25,7 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="indiv">
+							<c:if test="${userInfo.auth_type eq '1'}">
 							<div class="section" id="cmpyDiv">
 								<div class="set_top clear">
 									<h2 class="ntit fl">회사 현황</h2>
@@ -57,6 +59,8 @@
 								<div class="paging clear" id="CmpyPaging">
 								</div>	
 							</div>								
+							</c:if>
+							<c:if test="${userInfo.auth_type eq '1' or userInfo.auth_type eq '2'}">
 							<div class="section" id="grpDiv">
 								<div class="set_top clear">
 									<h2 class="ntit fl">그룹 현황</h2>
@@ -92,6 +96,8 @@
 								<div class="paging clear" id="GroupPaging">
 								</div>	
 							</div>								
+							</c:if>
+							<c:if test="${userInfo.auth_type eq '1' or userInfo.auth_type eq '2' or userInfo.auth_type eq '3'}">
 							<div class="section" id="siteDiv">
 								<div class="set_top clear">
 									<h2 class="ntit fl">사이트 현황</h2>
@@ -131,6 +137,7 @@
 								<div class="paging clear" id="SitePaging">
 								</div>	
 							</div>				
+							</c:if>
 						</div>
 					</div>
 				</div>
@@ -235,14 +242,14 @@
     <div id="layerbox" class="dgroup_add" style="min-width:600px;">
         <div class="stit">
         	<h2>신규 그룹 등록</h2>        	
-			<a href="javascript:popupColseChk();">닫기</a>
+			<a href="#;" id="cancelGrpBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
 
 			<div class="set_tbl">
 				<form id="groupForm" name="groupForm" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="siteGrpIdx" id="siteGrpIdx" class="input" value="">
-				<input type="hidden" name="userIdx" id="userIdx" class="input" value="1">
+				<input type="hidden" name="userIdx" id="userIdx" class="input" value="">
 				<input type="hidden" name="fileChangeYn" id="fileChangeYn" class="input" value="N">
 				<table>
 					<colgroup>
@@ -250,6 +257,13 @@
 						<col>
 					</colgroup>
 					<tbody>
+						<tr>
+							<th><span>회사</span></th>
+							<td>
+								<select name="compIdx" id="compIdx" class="sel" style="width:100%">
+								</select>
+							</td>
+						</tr>
 						<tr>
 							<th><span>그룹명</span></th>
 							<td><input type="text" name="siteGrpName" id="siteGrpName" class="input" style="width:100%"></td>
@@ -290,13 +304,14 @@
 
 			<div class="set_tbl">
 				<form id="siteForm" name="siteForm">
-				<input type="hidden" name="userIdx" id="userIdx" class="input" value="1">
+				<input type="hidden" name="userIdx" id="userIdx" class="input" value="">
 				<table>
 					<colgroup>
 						<col width="200">
 						<col>
 					</colgroup>
 					<tbody>
+						</tr>
 						<tr>
 							<th><span>사이트명</span></th>
 							<td><input type="text" name="siteName" id="siteName" class="input" style="width:100%"></td>
@@ -305,6 +320,12 @@
 							<th><span>사이트ID</span></th>
 							<td><input type="text" name="siteId" id="siteId" class="input" style="width:100%"></td>
 						</tr>
+						<tr>
+							<th><span>회사</span></th>
+							<td>
+								<select name="compIdx" id="compIdx" class="sel" style="width:100%" onchange="changeCmpy();">
+								</select>
+							</td>
 						<tr>
 							<th><span>지역</span></th>
 							<td>

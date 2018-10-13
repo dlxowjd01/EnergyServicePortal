@@ -33,6 +33,8 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 		// 상단 사이트 목록 조회
 		if(userInfo != null) {
 			Integer userIdx = (Integer)userInfo.get("user_idx");
+			Integer compIdx = (Integer)userInfo.get("comp_idx");
+			Integer siteGrpIdx = (Integer)userInfo.get("site_grp_idx");
 			String authType = (String)userInfo.get("auth_type");
 			if (userIdx == null) {
 				userIdx = -1; // userIdx가 빈값일 경우 검색이 안되게 한다.
@@ -40,8 +42,14 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 			HashMap param = new HashMap<String, Object>();
 			// 권한이 없거나 시스템관리자가 아니면 사용자가 권한이 있는 목록만 검색한다.
-			if (authType == null || (!authType.equals("1") && !authType.equals("2"))) {
+			if (authType == null || (!authType.equals("1") && !authType.equals("2") && !authType.equals("3"))) {
 				param.put("userIdx", userIdx);
+			}
+			if(authType.equals("2")) {
+				param.put("compIdx", compIdx);
+			}
+			if(authType.equals("3")) {
+				param.put("siteGrpIdx", siteGrpIdx);
 			}
 
 			List userGroupList = cmpyGrpSiteMngService.getUserGroupList(param);

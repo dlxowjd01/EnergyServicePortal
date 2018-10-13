@@ -108,11 +108,21 @@ public class CmpyGrpSiteMngController {
 		logger.debug("/getGroupList");
 		logger.debug("param ::::: "+param.toString());
 
+		Map userInfo = UserUtil.getUserInfo(request);
+		String authType = (String)userInfo.get("auth_type");
+		if("1".equals(authType)) { // 포털관리자
+			
+		} else if("2".equals(authType)) { // 고객사관리자
+			param.put("compIdx", userInfo.get("comp_idx"));
+		} else if("3".equals(authType) || "4".equals(authType) || "5".equals(authType)) { // 그룹관리자 || 사이트관리자 || 사이트이용자
+			param.put("siteGrpIdx", userInfo.get("site_grp_idx"));
+		}
+
 		int selPageNum = Integer.parseInt((String) param.get("selPageNum"));
 		int pageRowCnt = 5;
 		int startNum = pageRowCnt*(selPageNum-1);
 		
-		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
+//		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
 		
@@ -149,11 +159,23 @@ public class CmpyGrpSiteMngController {
 		logger.debug("/getSiteList");
 		logger.debug("param ::::: "+param.toString());
 
+		Map userInfo = UserUtil.getUserInfo(request);
+		String authType = (String)userInfo.get("auth_type");
+		if("1".equals(authType)) { // 포털관리자
+			
+		} else if("2".equals(authType)) { // 고객사관리자
+			param.put("compIdx", userInfo.get("comp_idx"));
+		} else if("3".equals(authType)) { // 그룹관리자
+			param.put("siteGrpIdx", userInfo.get("site_grp_idx"));
+		} else if("4".equals(authType) || "5".equals(authType)) { // 사이트관리자 || 사이트이용자
+			param.put("siteId", userInfo.get("site_id"));
+		}
+
 		int selPageNum = Integer.parseInt((String) param.get("selPageNum"));
 		int pageRowCnt = 5;
 		int startNum = pageRowCnt*(selPageNum-1);
 		
-		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
+//		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
 		
@@ -186,10 +208,20 @@ public class CmpyGrpSiteMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/getCmpyPopupList")
-	public @ResponseBody Map<String, Object> getCmpyPopupList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getCmpyPopupList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getCmpyPopupList");
 		logger.debug("param ::::: "+param.toString());
 		
+		Map userInfo = UserUtil.getUserInfo(request);
+		String authType = (String)userInfo.get("auth_type");
+		if("1".equals(authType)) { // 포털관리자
+			
+		} else if("2".equals(authType) || "3".equals(authType) || "4".equals(authType) || "5".equals(authType)) { // 고객사관리자 || 그룹관리자 || 사이트관리자 || 사이트이용자
+			param.put("compIdx", userInfo.get("comp_idx"));
+//		} else if("4".equals(authType) || "5".equals(authType)) { // 사이트관리자 || 사이트이용자
+//			param.put("siteGrpIdx", userInfo.get("site_grp_idx"));
+		}
+		System.out.println("param ::::: "+param.toString());
 		List list = cmpyGrpSiteMngService.getCmpyList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -442,12 +474,13 @@ public class CmpyGrpSiteMngController {
 		logger.debug("param ::::: "+param.toString());
 
 		Map userInfo = UserUtil.getUserInfo(multipart.getSession());
-		param.put("modUid", userInfo.get("user_id"));
+		param.put("regUid", userInfo.get("user_id"));
 		
 		String siteGrpName = multipart.getParameter("siteGrpName");
 		String siteGrpId = multipart.getParameter("siteGrpId");
 //		String siteGrpIdx = multipart.getParameter("siteGrpIdx");
-		String userIdx = multipart.getParameter("userIdx");
+//		String userIdx = multipart.getParameter("userIdx");
+		Integer userIdx = (userInfo.get("user_idx") == null) ? null : (Integer) userInfo.get("user_idx");
 		
 		String root = fileUploadRootPath;
 		String path = "/upload/";
@@ -503,6 +536,8 @@ public class CmpyGrpSiteMngController {
 
 		Map userInfo = UserUtil.getUserInfo(request);
 		param.put("regUid", userInfo.get("user_id"));
+		Integer userIdx = (userInfo.get("user_idx") == null) ? null : (Integer) userInfo.get("user_idx");
+		param.put("userIdx", userInfo.get("user_idx"));
 		
 		int resultCnt = cmpyGrpSiteMngService.insertSite(param);
 		

@@ -5,6 +5,7 @@ import java.lang.reflect.Array;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -222,6 +223,23 @@ public class CommonUtils {
 	public static String convertDateFormat(Date input, String format) throws Exception{
 		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
 		return dateFormat.format(input);
+	}
+	
+	/**
+	 * 원하는 날짜 생성
+	 * @param year
+	 * @param month
+	 * @param date
+	 * @param hour
+	 * @param minute
+	 * @param second
+	 * @return
+	 */
+	public static Date getDate(int year, int month, int date, int hour, int minute, int second) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(year, month-1, date, hour, minute, second);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
 	}
 
 	/**

@@ -61,7 +61,7 @@ public class LoginController {
 			if (authType == null) {
 				model.addAttribute("msg", "권한 정보가 없습니다.");
 				return "ewp/login/login";
-			} else if (authType.equals("1") || authType.equals("2")) {
+			} else if (authType.equals("1") || authType.equals("2") || authType.equals("3")) {
 				session.setAttribute(UserUtil.USER_SESSION_ID, result);
 				return "redirect:/main";
 			} else if (siteId != null && !siteId.isEmpty()) {
