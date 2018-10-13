@@ -149,6 +149,9 @@ public class MainController {
 		}
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
+		if (param.get("rankType") instanceof String) {
+			param.put("rankType", Integer.parseInt((String)param.get("rankType")));
+		}
 
 		List list = cmpyGrpSiteMngService.getGMainSiteRankingList(param);
 		int listCnt = cmpyGrpSiteMngService.getGMainSiteRankingListCnt(param);

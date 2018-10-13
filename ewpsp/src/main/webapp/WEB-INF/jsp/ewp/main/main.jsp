@@ -23,7 +23,7 @@
 			<div id="container">
 				<form id="schForm" name="schForm">
 					<input type="hidden" id="areaType" name="areaType" value="" />
-					<input type="hidden" id="rankType" name="rankType" value="3" />
+					<input type="hidden" id="rankType" name="rankType" value="4" />
 					<input type="hidden" id="selTermFrom" name="selTermFrom" />
 					<input type="hidden" id="selTermTo" name="selTermTo" />
 					<input type="hidden" id="selTerm" name="selTerm" value="day" />
@@ -79,10 +79,10 @@
 							<div class="col-sm-12">
 								<div class="indiv gmain_chart">
 									<ul class="gtab_menu">
-										<li class="active"><a href="javascript:changeRanking(1)">사용</a></li>
-										<li><a href="javascript:changeRanking(2)">충•방전</a></li>
-										<li><a href="javascript:changeRanking(3)">발전</a></li>
-										<li><a href="javascript:changeRanking(4)">수익</a></li>									
+										<li class="active"><a href="javascript:changeRanking(0)">사용</a></li>
+										<li><a href="javascript:changeRanking(1)">충•방전</a></li>
+										<li><a href="javascript:changeRanking(2)">발전</a></li>
+										<li><a href="javascript:changeRanking(3)">수익</a></li>									
 									</ul>
 									<div class="tblDisplay">
 										<!-- 사용 -->

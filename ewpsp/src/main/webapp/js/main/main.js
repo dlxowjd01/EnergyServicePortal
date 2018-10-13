@@ -6,7 +6,9 @@ function fn_cycle() {
 	getGMainAlarmList(formData); // 알람 조회
 	getGMainSiteRankingTotalDetail(); // 사이트 사용량 순위 누적/예상 총합
 	getGMainSiteRankingList(1); // 사이트 사용량 순위 목록 조회
-	getGMainSiteTotalDetail(formData); // 사이트 사용량 총합계 조회
+	if ($('#mapGroup').val() == 'map' || $('#grpIdx').val() != '') {
+		getGMainSiteTotalDetail(formData); // 사이트 사용량 총합계 조회
+	}
 	getGMainSiteList(1); // 사이트 목록 조회
 
 	// 콤보박스 변경 (지역별 상태일 경우만 상세정보 타이틀(지역명)을 가져온다)
@@ -143,7 +145,7 @@ function callback_getGMainSiteRankingList(result) {
 	if (siteList == null || siteList.length < 1) {
 		$('#GMainSiteRankingPaging').empty();
 	} else {
-		for (var i = 0; i < 5; i++) {
+		for (var i = 0; i < siteList.length; i++) {
 			if (i < siteList.length) {
 				if (oldRankType == 0) {
 					$tbody.append(
@@ -174,13 +176,6 @@ function callback_getGMainSiteRankingList(result) {
 							.append($('<td />').append(0))
 						);
 				}
-			} else {
-				$tbody.append(
-						$('<tr />')
-							.append($('<th />').append('-'))
-							.append($('<td />').append(0))
-							.append($('<td />').append(0))
-					);
 			}
 		}
 
@@ -195,8 +190,18 @@ function callback_getGMainSiteRankingList(result) {
 
 function callback_getGMainSiteTotalDetail(result) {
 	var total = result.detail;
-//	console.log(usage);
-	if (total != null) {
+//	console.log(total);
+
+	if ($('#mapGroup').val() == 'group') {
+		var imgSrc = '/img/group_dimg.png';
+		if (total.site_grp_img_path != null && total.site_grp_img_sname != null) {
+			imgSrc = total.site_grp_img_path + total.site_grp_img_sname;
+		}
+		$('#grpImg').attr('src', imgSrc);
+		$('.group_name').text(total.site_grp_name);
+	}
+
+	if (total != null && total.usage != null) {
 		if (total.usage > 1000) {
 			$('.detailUsage').text(numberComma(Math.floor(total.usage / 1000)));
 			$('.detailUsageUnit').text('MWh');
@@ -252,7 +257,7 @@ function callback_getGMainSiteList(result) {
 			var eq4Cls = siteList[i].pv > 0 ? ' on' : '';
 
 			$tbody.append(
-				$('<tr class="dbclickopen" onclick="activateSite(this, \'' + siteList[i].site_id + '\')" ondblclick="goSiteMain(\'' + siteList[i].site_id + '\')" />')
+				$('<tr class="dbclickopen" onclick="activateSite(this, \'' + siteList[i].site_id + '\', \'' + siteList[i].site_grp_idx + '\')" ondblclick="goSiteMain(\'' + siteList[i].site_id + '\')" />')
 					.append($('<td />').append(siteList[i].rnum)) // no
 					.append($('<td />')
 						.append($('<div class="cname" />')
@@ -273,17 +278,11 @@ function callback_getGMainSiteList(result) {
 					.append($('<td />').append(numberComma(siteList[i].reward)))
 			);
 
-			if ($('#mapGroup').val() == 'group' && i == 0) {
-				if (siteList[i].site_grp_img_sname != null && siteList[i].site_grp_img_sname != '') {
-					imgSrc = siteList[i].site_grp_img_path + siteList[i].site_grp_img_sname;
-				}
-				grpName = siteList[i].site_grp_name;
+			if ($('#mapGroup').val() == 'group' && $('#grpIdx').val() == '' && i == 0) {
+				$('#grpIdx').val(siteList[i].site_grp_idx);
+				formData.grpIdx = siteList[i].site_grp_idx;
+				getGMainSiteTotalDetail(formData);
 			}
-		}
-
-		if ($('#mapGroup').val() == 'group' && grpName != '') {
-			$('#grpImg').attr('src', imgSrc);
-			$('.group_name').text(grpName);
 		}
 
 		var pagingMap = result.pagingMap;
@@ -292,10 +291,15 @@ function callback_getGMainSiteList(result) {
 }
 
 // 사이트 목록 클릭 시 활성화
-function activateSite(elmt, siteId) {
+function activateSite(elmt, siteId, grpIdx) {
 	$('.dbclickopen').removeClass('click');
 	$(elmt).addClass('click');
-	$('#smainLink').attr('href', '/siteMain?siteId=' + siteId)
+
+	$('#smainLink').attr('href', '/siteMain?siteId=' + siteId);
+
+	$('#grpIdx').val(grpIdx);
+	formData.grpIdx = grpIdx;
+	getGMainSiteTotalDetail(formData);
 }
 
 // 사이트 목록 더블클릭 시 사이트메인으로 이동
@@ -322,13 +326,13 @@ var oldRankType = 0;
 function changeRanking(tabIdx) {
 	// html 이동
 	$('.tblDisplay > div:eq(' + oldRankType + ')').empty();
-	$('.tblDisplay > div:eq(' + (tabIdx - 1) + ')').empty().append(chartDiv);
+	$('.tblDisplay > div:eq(' + tabIdx + ')').empty().append(chartDiv);
 	// 차트 초기화
 	initChart();
 
-	oldRankType = tabIdx - 1;
+	oldRankType = tabIdx;
 
-	$('#rankType').val(tabIdx + 2);
+	$('#rankType').val(tabIdx + 4);
 
 	getGMainSiteRankingTotalDetail(); // 사이트 사용량 순위 누적/예상 총합
 	getGMainSiteRankingList(1); // 사이트 사용량 순위 목록 조회
@@ -360,6 +364,7 @@ function changeMapGroup(aElmt) {
 		$('#mapUsage').hide();
 		$('#groupUsage').show();
 		$('#mapGroup').val('group');
+		$('#grpIdx').val('');
 
 		$('#selAllArea').text('전체그룹');
 		if (groupListHtml == '') {

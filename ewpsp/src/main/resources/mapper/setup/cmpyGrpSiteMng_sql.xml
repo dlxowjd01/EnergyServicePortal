@@ -254,9 +254,9 @@
 					</if>
 					</otherwise>
 					</choose>
-					order by #{rankType}
 			) page_tb
 			,  ( select @rownum := 0 ) r
+			order by #{rankType} desc
 		) f_tb
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)">
 		limit #{startNum }, #{pageRowCnt }
@@ -307,7 +307,7 @@
 				page_tb.*
 			from (
 					select
-						a.site_id, a.site_name, b.site_grp_id, b.site_grp_name, b.site_grp_img_path, b.site_grp_img_sname,
+						a.site_id, a.site_name, b.site_grp_idx,
 
 						(select count(reg_date) from tb_device_ioe where site_id = a.site_id) ioe,
 						(select count(reg_date) from tb_device_pcs where site_id = a.site_id) pcs,
@@ -361,7 +361,7 @@
 				page_tb.*
 			from (
 					select
-						a.site_id, a.site_name, b.site_grp_id, b.site_grp_name, b.site_grp_img_path, b.site_grp_img_sname
+						a.site_id, a.site_name, b.site_grp_idx
 					from tb_site a, tb_site_group b
 					where 1=1
 					and a.site_grp_idx = b.site_grp_idx
@@ -477,6 +477,8 @@
 	<select id="getGMainSiteTotalDetail" parameterType="hashMap" resultType="hashMap">
 		/* 군관리메인 사이트 사용량 총합계 조회 */
 		select
+			site_grp_name, site_grp_img_path, site_grp_img_sname,
+
 			sum(usages) "usage",
 			sum(charge) charge,
 			sum(gen) gen,
@@ -484,6 +486,8 @@
 		from
 		(
 			select
+				b.site_grp_name, b.site_grp_img_path, b.site_grp_img_sname,
+
 				(select truncate(ifnull(sum(usg_val), 0) / 1000000, 0) from tb_usage where site_id = a.site_id and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) usages,
 				(select ifnull(sum(chg_val), 0) + ifnull(sum(dischg_val), 0) from tb_ess_charge where site_id = a.site_id and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) charge,
 				(select ifnull(sum(gen_val), 0) from tb_pv_gen where site_id = a.site_id and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) gen,
