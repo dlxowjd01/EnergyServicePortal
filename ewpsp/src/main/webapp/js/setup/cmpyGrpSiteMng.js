@@ -114,6 +114,7 @@ $(document).ready(function() {
 	$( function () {
 		$("#insertCmpyFormBtn").click(function(){
 			insUpdFlag = 1;
+			$(".dcompany").find('h2').empty().append("신규 회사 등록");
 			popupOpen('dcompany');
 		});
 		
@@ -157,7 +158,7 @@ $(document).ready(function() {
 		
 		$("#insertSiteFormBtn").click(function(){
 			insUpdFlag = 1;
-			
+			$(".dsite").find('h2').empty().append("신규 사이트 등록");
 			$('#siteForm').each(function() {
 				this.reset();
 			});
@@ -214,7 +215,7 @@ $(document).ready(function() {
 			}
 		});
 
-		$("#cancelCmpyBtn").click(function(){
+		$("#cancelCmpyBtn, #cancelCmpyBtnX").click(function(){
 			insUpdFlag = 0;
 			$('#cmpyForm').each(function() {
 				this.reset();
@@ -262,6 +263,7 @@ $(document).ready(function() {
 
 	function updateCmpyForm(compIdx) {
 		insUpdFlag = 2;
+		$(".dcompany").find('h2').empty().append("회사 수정");
 		getCmpyDetail(compIdx);
 	}
 
@@ -491,6 +493,7 @@ $(document).ready(function() {
 
 	function updateSiteForm(siteId) {
 		insUpdFlag = 2;
+		$(".dsite").find('h2').empty().append("사이트 수정");
 		getSiteDetail(siteId);
 	}
 

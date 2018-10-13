@@ -144,7 +144,7 @@
     <div id="layerbox" class="dcompany" style="min-width:600px;">
         <div class="stit">
         	<h2>신규 회사 등록</h2>        	
-			<a href="javascript:popupClose('dcompany');">닫기</a>
+			<a href="#;" id="cancelCmpyBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
 

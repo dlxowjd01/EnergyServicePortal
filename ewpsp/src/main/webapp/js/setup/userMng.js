@@ -46,6 +46,7 @@
 	$( function () {
 		$("#insertFormBtn").click(function(){
 			insUpdFlag = 1;
+			$(".duser").find('h2').empty().append("사용자 추가하기");
 			
 			$('form').each(function() {
 				this.reset();
@@ -208,6 +209,7 @@
 	
 	function updateUserForm(userIdx) {
 		insUpdFlag = 2;
+		$(".duser").find('h2').empty().append("사용자 수정하기");
 		getUserDetail(userIdx);
 	}
 
