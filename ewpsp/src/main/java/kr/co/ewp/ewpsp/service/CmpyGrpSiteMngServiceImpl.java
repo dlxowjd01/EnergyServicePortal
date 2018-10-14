@@ -10,12 +10,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.ewp.ewpsp.dao.CmpyGrpSiteMngDao;
+import kr.co.ewp.ewpsp.dao.KepcoMngSetDao;
 
 @Service("cmpyGrpSiteMngService")
 public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 
 	@Resource(name="cmpyGrpSiteMngDao")
 	private CmpyGrpSiteMngDao cmpyGrpSiteMngDao;
+
+	@Resource(name="kepcoMngSetDao")
+	private KepcoMngSetDao kepcoMngSetDao;
 
 	public List getCmpyList(HashMap param) throws Exception {
 		return cmpyGrpSiteMngDao.getCmpyList(param);
@@ -113,7 +117,11 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 	
 	@Transactional
 	public int insertSite(HashMap param) throws Exception {
-		return cmpyGrpSiteMngDao.insertSite(param);
+		int cnt = cmpyGrpSiteMngDao.insertSite(param);
+		int cnt2 = 0;
+		if(cnt > 0) cnt2 = kepcoMngSetDao.insertSiteSet(param);
+		
+		return cnt;
 	}
 	
 	@Transactional

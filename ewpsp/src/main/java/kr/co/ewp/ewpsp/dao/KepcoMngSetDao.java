@@ -19,6 +19,11 @@ public class KepcoMngSetDao {
 		return result;
 	}
 	
+	public int insertSiteSet(HashMap param) {
+		int result = sqlSession.update("kepcoMngSet.insertSiteSet", param);
+		return result;
+	}
+	
 	public int updateSiteSet(HashMap param) {
 		int result = sqlSession.update("kepcoMngSet.updateSiteSet", param);
 		return result;

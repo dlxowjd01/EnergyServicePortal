@@ -13,6 +13,47 @@
 		and site_id = #{siteId }
 	</select>
 	
+	<insert id="insertSiteSet" parameterType="hashMap">
+		/* 한전 계약 및 전력관리 정보 등록 */
+		insert into tb_site_set (
+		        <!-- site_set_idx,     /* 사이트설정식별자 */ -->
+		        site_id,          /* 사이트ID */
+		        plan_type,        /* 요금제구분(general_A1_low_voltage_A 외. bill_api.pdf 참조요망) */
+		        plan_name,        /* 요금제(일반용 전력 (갑)I 저압전력 외. bill_api.pdf 참조요망) */
+		        contract_power,   /* 계약전력(단위:kW) */
+		        meter_read_day,   /* 검침일(단위:일) */
+		        charge_yearm,     /* 요금적용기준년월(형식:YYYYMM) */
+		        charge_power,     /* 요금적용전력(단위:kW) */
+		        charge_rate,      /* 요금적용전력대비(단위:%) */
+		        goal_power,       /* 목표전력(단위:kW) */
+		        smp_rate,         /* SMP단가(System Marginal Price)(단위:원) */
+		        rec_rate,         /* REC단가(단위:원) */
+		        rec_weight,       /* REC가중치 */
+		        profit_ratio,     /* 수익배분 비율 */
+		        del_yn,
+		        reg_uid,
+		        reg_date
+		    ) values (
+		        <!-- #{siteSetIdx }, -->
+		        #{siteId },
+		        #{planType },
+		        #{planName },
+		        #{contractPower },
+		        #{meterReadDay },
+		        #{chargeYearm },
+		        #{chargePower },
+		        #{chargeRate },
+		        #{goalPower },
+		        #{smpRate },
+		        #{recRate },
+		        #{recWeight },
+		        #{profitRatio },
+		        'N',
+		        #{regUid },
+		        now()
+		    )
+	</insert>
+	
 	<update id="updateSiteSet" parameterType="hashMap">
 		/* 한전 계약 및 전력관리 정보 수정 */
 		update tb_site_set
