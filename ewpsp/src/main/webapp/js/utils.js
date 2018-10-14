@@ -52,7 +52,7 @@ function numMinusPer(num, per) {
 //}
 function onlyNum(event) {
 	var code = event.keyCode;
-	if (code > 47 && code < 58) { // 숫자 허용
+	if ( (code > 47 && code < 58) || (code > 95 && code < 106) ) { // 숫자 허용
 		return;
 	}
 	if (code === 9 || code === 36 || code === 35 || code === 37 || 
