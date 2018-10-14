@@ -536,12 +536,14 @@ $(function () {
 	$("#moveRight").click(function(){
 		var item = $(".inside_site").find("ul").find("li").find(".on").parent();
 		$('.all_site').find("ul").append(item);
+		$('.all_site').find("ul").find("li").find(".on").removeClass("on");
 	});
 	
 	// 리스트박스 오른쪽 목록의 데이터 왼쪽으로 이동
 	$("#moveLeft").click(function(){
 		var item = $(".all_site").find("ul").find("li").find(".on").parent();
 		$('.inside_site').find("ul").append(item);
+		$('.inside_site').find("ul").find("li").find(".on").removeClass("on");
 	});
 	
 });
