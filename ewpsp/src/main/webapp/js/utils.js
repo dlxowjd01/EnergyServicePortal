@@ -52,7 +52,7 @@ function numMinusPer(num, per) {
 //}
 function onlyNum(event) {
 	var code = event.keyCode;
-	if (code > 47 && code < 58) { // 숫자 허용
+	if ( (code > 47 && code < 58) || (code > 95 && code < 106) ) { // 숫자 허용
 		return;
 	}
 	if (code === 9 || code === 36 || code === 35 || code === 37 || 
@@ -536,12 +536,14 @@ $(function () {
 	$("#moveRight").click(function(){
 		var item = $(".inside_site").find("ul").find("li").find(".on").parent();
 		$('.all_site').find("ul").append(item);
+		$('.all_site').find("ul").find("li").find(".on").removeClass("on");
 	});
 	
 	// 리스트박스 오른쪽 목록의 데이터 왼쪽으로 이동
 	$("#moveLeft").click(function(){
 		var item = $(".all_site").find("ul").find("li").find(".on").parent();
 		$('.inside_site').find("ul").append(item);
+		$('.inside_site').find("ul").find("li").find(".on").removeClass("on");
 	});
 	
 });
