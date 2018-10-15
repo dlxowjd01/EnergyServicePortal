@@ -89,7 +89,7 @@ var selViewSiteName = "";
 						<div class="fr">
 							<span>
 								<c:choose>
-									<c:when test="${not empty userInfo and not empty userInfo.co_name}">${userInfo.co_name}</c:when>
+									<c:when test="${not empty userInfo and not empty userInfo.psn_name}">${userInfo.psn_name}</c:when>
 									<c:otherwise>Not logined</c:otherwise>
 								</c:choose>
 							</span><br/>

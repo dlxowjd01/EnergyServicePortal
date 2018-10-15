@@ -41,8 +41,11 @@ $(function() {
 	$('#joinEmail2').change(function() {
 		var val = $(this).val();
 		if (val == 'manual') {
-			$('#joinEmail2').hide();
+			$('#joinEmail1').css('width', '30%');
 			$('#joinEmail3').show();
+		} else {
+			$('#joinEmail1').css('width', '60%');
+			$('#joinEmail3').hide();
 		}
 	});
 

@@ -466,6 +466,7 @@ alert('${msg}');
 												<div class="inputGroup">
 													<input type="text" id="joinEmail1" class="inp fl" style="width:60%;" maxlength="25" />
 													<span class="inline center fl" style="width:5%;" >@</span>
+													<input type="text" id="joinEmail3" class="inp fl" style="width:27%; margin-right:10px; display:none;" maxlength="25" />
 													<select id="joinEmail2" class="inp fl" style="width:35%;">
 														<option value="">=선택=</option>
 														<option value="naver.com">naver.com</option>
@@ -474,7 +475,6 @@ alert('${msg}');
 														<option value="gmail.com">gmail.com</option>
 														<option value="manual">직접입력</option>
 													<select>								
-													<input type="text" id="joinEmail3" class="inp fl" style="width:35%; display:none;" maxlength="25" />
 												</div>
 												<span class="helpCont">email을 입력하세요</span>
 											</td>
