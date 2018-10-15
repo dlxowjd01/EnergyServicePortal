@@ -6,9 +6,7 @@ function fn_cycle() {
 	getGMainAlarmList(formData); // 알람 조회
 	getGMainSiteRankingTotalDetail(); // 사이트 사용량 순위 누적/예상 총합
 	getGMainSiteRankingList(1); // 사이트 사용량 순위 목록 조회
-	if ($('#mapGroup').val() == 'map' || $('#grpIdx').val() != '') {
-		getGMainSiteTotalDetail(formData); // 사이트 사용량 총합계 조회
-	}
+	getGMainSiteTotalDetail(formData); // 사이트 사용량 총합계 조회
 	getGMainSiteList(1); // 사이트 목록 조회
 
 	// 콤보박스 변경 (지역별 상태일 경우만 상세정보 타이틀(지역명)을 가져온다)
@@ -194,11 +192,16 @@ function callback_getGMainSiteTotalDetail(result) {
 
 	if ($('#mapGroup').val() == 'group') {
 		var imgSrc = '/img/group_dimg.png';
-		if (total.site_grp_img_path != null && total.site_grp_img_sname != null) {
-			imgSrc = total.site_grp_img_path + total.site_grp_img_sname;
+		if ($('#grpIdx').val() != '') {
+			if (total.site_grp_img_path != null && total.site_grp_img_sname != null) {
+				imgSrc = total.site_grp_img_path + total.site_grp_img_sname;
+			}
+			$('#grpImg').attr('src', imgSrc);
+			$('.group_name').text(total.site_grp_name);
+		} else {
+			$('#grpImg').attr('src', imgSrc);
+			$('.group_name').text('전체그룹');
 		}
-		$('#grpImg').attr('src', imgSrc);
-		$('.group_name').text(total.site_grp_name);
 	}
 
 	if (total != null && total.usage != null) {
@@ -277,12 +280,6 @@ function callback_getGMainSiteList(result) {
 					.append($('<td />').append(numberComma(siteList[i].gen)))
 					.append($('<td />').append(numberComma(siteList[i].reward)))
 			);
-
-			if ($('#mapGroup').val() == 'group' && $('#grpIdx').val() == '' && i == 0) {
-				$('#grpIdx').val(siteList[i].site_grp_idx);
-				formData.grpIdx = siteList[i].site_grp_idx;
-				getGMainSiteTotalDetail(formData);
-			}
 		}
 
 		var pagingMap = result.pagingMap;
