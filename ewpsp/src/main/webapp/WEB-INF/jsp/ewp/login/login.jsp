@@ -73,8 +73,8 @@ alert('${msg}');
 							<div class="lftit">
 				                <h1>LOGIN</h1>
 				            </div>
-						    <div class="mt10"><input type="text" name="userId" class="lfinp" placeholder="아이디"></div>
-						  	<div class="mt15"><input type="password" name="userPw" class="lfinp" placeholder="비밀번호"></div>
+						    <div class="mt10"><input type="text" id="loginUserId" name="userId" class="lfinp" placeholder="아이디"></div>
+						  	<div class="mt15"><input type="password" id="loginUserPw" name="userPw" class="lfinp" placeholder="비밀번호"></div>
 						    <div class="mt30">
 						    	<a href="#" class="findidBtn arrbtn">아이디 찾기</a>
 						    	<a href="#" class="findpassBtn arrbtn ml30">비밀번호 찾기</a>

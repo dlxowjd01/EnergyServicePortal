@@ -54,12 +54,14 @@ public class LoginController {
 		Map result = loginService.getUserDetail(param);
 		logger.debug("result : {}", result);
 
+//		session.setMaxInactiveInterval(24 * 60 * 60); // web.xml 에 추가함
+
 		if (result != null && CommonUtils.isNotEmpty(result.get("user_idx"))) {
 			String authType = (String)result.get("auth_type");
 			String siteId = (String)result.get("site_id");
 
 			if (authType == null) {
-				model.addAttribute("msg", "권한 정보가 없습니다.");
+				model.addAttribute("msg", "아이디가 없거나 비밀번호가 맞지 않습니다.");
 				return "ewp/login/login";
 			} else if (authType.equals("1") || authType.equals("2") || authType.equals("3")) {
 				session.setAttribute(UserUtil.USER_SESSION_ID, result);
@@ -68,11 +70,11 @@ public class LoginController {
 				session.setAttribute(UserUtil.USER_SESSION_ID, result);
 				return "redirect:/siteMain?siteId=" + siteId;
 			} else {
-				model.addAttribute("msg", "등록이 되지 않은 사용자입니다.\n관리자에게 문의하세요.");
+				model.addAttribute("msg", "등록이 되지 않은 사용자입니다.\\n관리자에게 문의하세요.");
 				return "ewp/login/login";
 			}
 		} else {
-			model.addAttribute("msg", "일치하는 회원 정보가 없습니다.");
+			model.addAttribute("msg", "아이디가 없거나 비밀번호가 맞지 않습니다.");
 			return "ewp/login/login";
 		}
 	}
