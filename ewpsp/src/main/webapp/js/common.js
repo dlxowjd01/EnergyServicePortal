@@ -14,9 +14,9 @@ $(function() {
         dayNamesMin: ['일','월','화','수','목','금','토'],
         showMonthAfterYear: true,
         yearSuffix: '년'
-        ,changeYear:true,
-        yearRange: "2005:2025"
-        ,changeMonth:true
+//        ,changeYear:true,
+//        yearRange: "2005:2025"
+//        ,changeMonth:true
     });
     $( "#datepicker3, #datepicker4" ).datepicker({
     	showOn: "both", 
@@ -32,9 +32,9 @@ $(function() {
     	dayNamesMin: ['일','월','화','수','목','금','토'],
     	showMonthAfterYear: true,
     	yearSuffix: '년'
-		,changeYear:true,
-        yearRange: "2005:2025"
-        ,changeMonth:true
+//		,changeYear:true,
+//        yearRange: "2005:2025"
+//        ,changeMonth:true
     });
 });
 
@@ -131,6 +131,20 @@ $(function(){
     $(".multi_select a").click(function() {
         $(this).toggleClass("on");
         return false;
+    });
+});
+
+/* 장치 그룹 현황 ToggleClass */
+$(function(){
+    $(".device li").click(function() {
+        $(this).toggleClass("on");
+        var del_num = $(this).parent('.device').children('.on').length;
+        //alert(del_num);
+        if(del_num > 0) {
+            $(this).parent().parent().parent().siblings('.device_del').show();
+        } else {
+            $(this).parent().parent().parent().siblings('.device_del').hide();
+        }
     });
 });
 

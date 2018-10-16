@@ -105,7 +105,7 @@
 						).append( $("<td />").append( pcsList[i].device_name )
 						).append( $("<td />").append( pcsList[i].device_id )
 						).append( $("<td />").append( pcsList[i].device_stat_name )
-						).append( $("<td />").append( pcsList[i].cd_status )
+//						).append( $("<td />").append( pcsList[i].cd_status )
 						).append( $("<td />").append( pcsList[i].alarm_msg )
 						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
@@ -231,7 +231,7 @@
 						).append( $("<td />").append( bmsList[i].device_name )
 						).append( $("<td />").append( bmsList[i].device_id )
 						).append( $("<td />").append( bmsList[i].device_stat_name )
-						).append( $("<td />").append( bmsList[i].cd_status )
+//						).append( $("<td />").append( bmsList[i].cd_status )
 						).append( $("<td />").append( bmsList[i].alarm_msg )
 						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
