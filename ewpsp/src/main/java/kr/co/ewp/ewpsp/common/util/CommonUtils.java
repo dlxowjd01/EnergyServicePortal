@@ -220,7 +220,7 @@ public class CommonUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String convertDateFormat(Date input, String format) throws Exception{
+	public static String convertDateFormat(Date input, String format) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
 		return dateFormat.format(input);
 	}

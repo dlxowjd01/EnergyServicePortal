@@ -26,6 +26,8 @@
     <script src="../js/modules/export-data.js"></script>  
     <!-- //하이타트 데이타 추출용 -->
     <script src="../js/sectionDisplay.js"></script> <!-- 텝메뉴 용 -->
+    <!-- 인쇄 미리보기용 -->
+    <script src="../js/printPreview.js"></script>    
     <script src="../js/common.js"></script>
 <script src="../js/comm_sch_chartData.js" type="text/javascript"></script>
 <script src="../js/utils.js"></script>

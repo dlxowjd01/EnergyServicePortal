@@ -47,6 +47,7 @@ public class UsageController {
 		logger.debug("param ::::: "+param.toString());
 		
 		List list = usageService.getUsageRealList(param);
+		System.out.println("  ㅎㅎㅎ "+list.toString());
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("list", list);

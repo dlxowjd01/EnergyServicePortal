@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import com.mysql.fabric.xmlrpc.base.Data;
 
 import kr.co.ewp.ewpsp.common.ExcelDownload;
 import kr.co.ewp.ewpsp.common.util.AES256Util;
@@ -66,7 +70,7 @@ public class TestController {
 	@RequestMapping("/hello")
 	public String hello() {
 		System.out.println("여기오지?");
-		
+		enertalkAPI_test();
 //		String testStr1 = properties.get("test");
 //		String testStr2 = properties.get("bbbbb");
 //		String testStr3 = properties.get("ccccc.ddd");
@@ -161,17 +165,22 @@ public class TestController {
 	public void enertalkAPI_test() {
 		String ServerKey = "Wlhkd1pHVjJRR2hyYVhSekxtTnZMbXR5WDBWWFVDRHNoSnpydVlUc2lxVHRqNnp0ZzRnPQ=="; // 서버키
 		String siteId = "17094385";
-		String apiURL = "https://api2.enertalk.com/sites/:siteId/usages/periodic";
+		String deviceId = "a8324a51";
+//		String apiURL = "https://api2.enertalk.com/sites/:siteId/usages/periodic";
+		String apiURL = "https://api2.enertalk.com/devices/:deviceId/usages/periodic";
 		String start = "1533135600000";
 		String end = "1533221999000";
 		String timeType = "past";
 		String period = "hour";
 		String urlParam = "?start="+start+"&end="+end+"&timeType="+timeType+"&period="+period;
+		System.out.println("조회기간 : "+new Date(Long.parseLong(start))+", "+new Timestamp((Long.parseLong(start)))+", "+new Date(Long.parseLong(end))+", "+new Timestamp((Long.parseLong(end))) );
 		
 		try {
 			System.out.println("api url 테스트 시작");
-			URL url = new URL(  apiURL.replace(":siteId", siteId) + urlParam  );
-			System.out.println("url은? "+apiURL.replace(":siteId", siteId) + urlParam);
+//			URL url = new URL(  apiURL.replace(":siteId", siteId) + urlParam  );
+//			System.out.println("url은? "+apiURL.replace(":siteId", siteId) + urlParam);
+			URL url = new URL(  apiURL.replace(":deviceId", deviceId) + urlParam  );
+			System.out.println("url은? "+apiURL.replace(":deviceId", deviceId) + urlParam);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
 			con.setRequestProperty("authorization", "Basic " + ServerKey);

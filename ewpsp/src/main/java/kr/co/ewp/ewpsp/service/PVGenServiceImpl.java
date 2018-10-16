@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import kr.co.ewp.ewpsp.common.energy.CommonEnergyFn;
+import kr.co.ewp.ewpsp.common.energy.PeriodDataSetting;
 import kr.co.ewp.ewpsp.dao.PVGenDao;
 
 @Service("pvGenService")
@@ -21,7 +22,7 @@ public class PVGenServiceImpl implements PVGenService {
 		if(list == null || list.size() == 0) {
 			return list;
 		} else {
-			List resultList = CommonEnergyFn.periodSet(param, list, "std_date", "gen_val", 1);
+			List resultList = PeriodDataSetting.dataSetting(param, list, "std_date", "gen_val", 1);
 			return resultList;
 		}
 	}
@@ -31,7 +32,7 @@ public class PVGenServiceImpl implements PVGenService {
 		if(list == null || list.size() == 0) {
 			return list;
 		} else {
-			List resultList = CommonEnergyFn.periodSet(param, list, "std_date", "gen_val", 1);
+			List resultList = PeriodDataSetting.dataSetting(param, list, "std_date", "gen_val", 1);
 			return resultList;
 		}
 	}
