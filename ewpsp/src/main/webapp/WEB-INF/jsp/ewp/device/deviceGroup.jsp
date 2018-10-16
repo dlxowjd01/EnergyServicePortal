@@ -68,7 +68,7 @@
 					</colgroup>
 					<tbody>
 						<tr>
-							<th><span>배치사이트</span></th>
+							<th><span>사이트</span></th>
 							<td>
 								<select name="siteId" id="siteId" class="sel" style="width:100%">
 									

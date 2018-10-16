@@ -90,10 +90,19 @@
 
 
     <!-- ###### 통합 명세서 Popup Start ###### -->
-    <div id="layerbox" class="totaldprint clear" style="margin:250px 0 50px;">
+    <script type="text/javascript">
+        $(function(){
+            $("#btnPrint").printPreview({
+                obj2print:'#layerbox',
+                width:'880',
+                style:'<style>body {background:none !important;} #layerbox {top:0 !important;left:0 !important; margin:0 !important; border-radius:0;} .totaldprint .lbutton {display:none !important;} #layerbox .ltit, #layerbox .stit {display:none !important;} .totaldprint .lbody {margin-top:0 !important;}</style>'
+            });
+        });
+    </script>
+    <div id="layerbox" class="totaldprint clear" style="margin:250px 0 50px;width:880px;">
     	<div class="lbutton fl">
 			<a href="#;" class="lbtn_pdf"><span>PDF로 저장</span></a>
-			<a href="#;" class="lbtn_print"><span>인쇄</span></a>
+			<a href="#;" id="btnPrint" class="lbtn_print"><span>인쇄</span></a>
 		</div>  
         <div class="ltit fr">
 			<a href="javascript:popupClose('totaldprint');" class="lclose">닫기</a>
@@ -359,3 +368,116 @@
 
     <!-- 레이어 팝업 배경 -->
     <div id="mask"></div>
+
+
+	<!-- 정보수정 // -->
+	<div class="modal fade" id="modifyModal" tabindex="-1" role="dialog" aria-labelledby="modifyModal" aria-hidden="true">
+	    <div class="modal-dialog modal-md">
+	        <!-- Modal content-->
+	        <div class="modal-content">
+	            <div class="modal-header" style="padding:25px 30px;">
+	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+	                <h4><i class="glyphicon glyphicon-user"></i> MODIFY</h4>
+	            </div>
+	            <div class="modal-body" style="padding:20px 30px;">
+					
+					<div class="rowBox joinBox">			
+						
+						<div class="unit clear">
+							<div class="unit_tit">
+								<span class="sTit">사용자 정보</span>
+							</div>
+							<div class="unit_cont lineBox">
+								<table class="tableStyle formStyle left">
+									<colgroup>
+										<col style="width:20%;">
+										<col style="width:*;">
+									</colgroup>
+									<tbody>
+										<tr>
+											<th>아이디</th>
+											<td align="left">
+												gildong
+											</td>
+										</tr>
+										<tr>
+											<th>이름</th>
+											<td align="left">
+												홍길동
+											</td>
+										</tr>										
+										<tr>
+											<th>비밀번호</th>
+											<td>
+												<input type="text" id="input02" class="inp" style="width:100%;" />
+												<span class="helpCont">비밀번호를 입력하세요</span>
+											</td>
+										</tr>
+										<tr>
+											<th>비밀번호확인</th>
+											<td>
+												<input type="text" id="input03" class="inp" style="width:100%;" />
+												<span class="helpCont">비밀번호를 입력하세요</span>
+											</td>
+										</tr>
+										
+										<tr>
+											<th>이메일 주소</th>
+											<td>
+												<div class="inputGroup">
+													<input type="text" id="input05" class="inp fl" style="width:60%;" value="kildong" />
+													<span class="inline center fl" style="width:5%;" >@</span>
+													<select class="inp fl" style="width:35%;">
+														<option selected="selected">naver.com</option>
+														<option>naver.com</option>
+														<option>daum.net</option>
+														<option>nate.com</option>
+														<option>직접입력</option>
+													<select>								
+												</div>
+												<span class="helpCont">email을 입력하세요</span>
+											</td>
+										</tr>										
+										<tr>
+											<th>휴대폰 번호</th>
+											<td>
+												<div class="inputGroup">
+													<input type="text" id="input06" class="inp fl" style="width:30%;" value="010" />
+													<span class="inline center fl"  style="width:5%;">-</span>
+													<input type="text" id="input07" class="inp fl" style="width:30%;" value="3333" />
+													<span class="inline center fl"  style="width:5%;">-</span>
+													<input type="text" id="input08" class="inp fl" style="width:30%;" value="5555" />
+												</div>
+												<span class="helpCont">숫자를 입력해 주세요</span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+					</div>
+
+					
+	            </div>
+	            <div class="modal-footer">
+	            	<div style="padding:5px 20px;text-align:center;">
+	            		<button type="button" class="memberout_btn w80 fl">탈퇴</button>
+	            		<button type="button" class="cancel_btn w80" data-dismiss="modal">취소</button>
+	            		<button type="submit" class="default_btn w80" data-dismiss="modal">확인</button>
+	            	</div>	                
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<script>
+	$(function(){ 
+		$(".myinfo").click(function(){
+			$("#modifyModal").modal("show");
+		});	  
+	});
+	</script>	
+	<!-- //정보수정 -->
+
+
+

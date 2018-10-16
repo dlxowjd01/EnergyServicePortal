@@ -379,10 +379,19 @@
 
 
     <!-- ###### 명세서 확인 및 출력 Popup Start ###### -->
-    <div id="layerbox" class="dprint clear" style="margin-top:200px;">
+    <script type="text/javascript">
+        $(function(){
+            $("#btnPrint").printPreview({
+                obj2print:'#layerbox',
+                width:'880',
+                style:'<style>body {background:none !important;} #layerbox {top:0 !important;left:0 !important; margin:0 !important; border-radius:0;} .dprint .lbutton {display:none !important;} #layerbox .ltit {display:none !important;} #layerbox .stit {display:none !important;} .dprint .lbody {margin-top:0 !important;}</style>'
+            });
+        });
+    </script>    
+    <div id="layerbox" class="dprint clear" style="margin-top:200px;width:880px;">
     	<div class="lbutton fl">
 			<a href="#;" class="lbtn_pdf"><span>PDF로 저장</span></a>
-			<a href="#;" class="lbtn_print"><span>인쇄</span></a>
+			<a href="#;" id="btnPrint" class="lbtn_print"><span>인쇄</span></a>
 		</div>
         <div class="ltit fr">      	
 			<a href="javascript:popupClose('dprint');">닫기</a>

@@ -85,6 +85,8 @@ body {
 
 /* 페이지 상단 */
 nav .nav_brand a {background:url('../img/main_logo.png') no-repeat 0 0;}
+/* ewp 로고 */
+nav .nav_brand.ewp a {background:url('../img/main_logo_ewp.png') no-repeat 0 0;}
 nav .nav_right li {color:#fff;}
 nav .nav_right li span {color:#8e95a1;}
 nav .nav_right li.member .fr {color:#8e95a1;}
@@ -98,6 +100,8 @@ nav .category {
 /* 반응형 미디어 쿼리 */
 @media all and (min-width:3000px) {
 	nav .nav_brand a {background:url('../img/main_logo_4k.png') no-repeat 0 0; background-size:259px 60px;}	
+	/* ewp 로고 */
+	nav .nav_brand.ewp a {background:url('../img/main_logo_4k_ewp.png') no-repeat 0 0; background-size:90px 25px;}
 }
 @media all and (min-width:1700px) {
 	

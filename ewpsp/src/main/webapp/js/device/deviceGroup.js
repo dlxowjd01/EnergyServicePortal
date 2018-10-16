@@ -53,6 +53,17 @@
 		        controls: true,
 		        infiniteLoop: false
 		    });
+		    
+		    $(".device li").click(function() {
+		        $(this).toggleClass("on");
+		        var del_num = $(this).parent('.device').children('.on').length;
+		        //alert(del_num);
+		        if(del_num > 0) {
+		            $(this).parent().parent().parent().siblings('.device_del').show();
+		        } else {
+		            $(this).parent().parent().parent().siblings('.device_del').hide();
+		        }
+		    });
 			
 		} else if(popupYn == "Y") {
 			if(siteViewFlag == 2) {
@@ -130,6 +141,8 @@
 		$(".dg_wrap").append( $('<div class="dsec clear" />').append(
 				$('<div class="fl" />').append( $('<ul class="device clear" />').append(addHtml) ).append(
 						$('<div class="new_add" />').append( '<a href="javascript:insertDeviceForm(\''+deviceGroupIdx+'\');"><i class="glyphicon glyphicon-plus"></i></a>' )
+				).append(
+						$('<div class="device_del" />').append( '<a href="#;"><i class="glyphicon glyphicon-remove-circle"></i><em>삭제</em></a>' )
 				)
 		) )
 		

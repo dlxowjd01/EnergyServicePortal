@@ -521,14 +521,14 @@ $(function () {
 	});
 	
 	// 프린트
-	$(".lbtn_print").click(function() {
-		if(confirm("인쇄하시겠습니까?")) {
-//			window.print();
-//			$(".lbody").printThis();
-//			$(".lbody").printElement({ printMode: 'popup' });
-			print($(".lbody").html());
-		}
-	});
+//	$(".lbtn_print").click(function() {
+//		if(confirm("인쇄하시겠습니까?")) {
+////			window.print();
+////			$(".lbody").printThis();
+////			$(".lbody").printElement({ printMode: 'popup' });
+//			print($(".lbody").html());
+//		}
+//	});
 	
 	
 

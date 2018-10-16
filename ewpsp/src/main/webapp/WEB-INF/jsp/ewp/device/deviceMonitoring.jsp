@@ -52,11 +52,18 @@
 							</div>
 							<div class="table_info">
 								<ul class="tblDisplay">
+									<!-- IOE -->
 									<li>
 										<div class="default_tbl" id="deviceIOEDiv">
 											<table>
 												<colgroup>
-													<col width="100"><col><col><col><col><col><col width="100">
+													<col width="100">
+													<col>
+													<col>
+													<col>
+													<col>
+													<col>
+													<col width="100">
 												</colgroup>
 												<thead>
 													<tr>
@@ -79,11 +86,19 @@
 										<div class="paging clear" id="DeviceIOEPaging">
 										</div>	
 									</li>
+									<!-- PCS -->
 									<li>
 										<div class="default_tbl" id="devicePCSDiv">
 											<table>
 												<colgroup>
-													<col width="100"><col><col><col><col><col><col><col><col width="100">
+													<col width="100">
+													<col>
+													<col>
+													<col>
+													<col>
+													<col>
+													<col>
+													<col width="100">
 												</colgroup>
 												<thead>
 													<tr>
@@ -92,7 +107,6 @@
 														<th>Device Name</th>
 														<th>Device ID</th>
 														<th>PCS Status</th>
-														<th>C/D Status</th>
 														<th>PCS Message</th>
 														<th>Status Time</th>
 														<th>View</th>
@@ -108,11 +122,19 @@
 										<div class="paging clear" id="DevicePCSPaging">
 										</div>	
 									</li>
+									<!-- BMS -->
 									<li>
 										<div class="default_tbl" id="deviceBMSDiv">
 											<table>
 												<colgroup>
-													<col width="100"><col><col><col><col><col><col><col><col width="100">
+													<col width="100">
+													<col>
+													<col>
+													<col>
+													<col>
+													<col>
+													<col>
+													<col width="100">
 												</colgroup>
 												<thead>
 													<tr>
@@ -121,7 +143,6 @@
 														<th>Device Name</th>
 														<th>Device ID</th>
 														<th>BMS Status</th>
-														<th>C/D Status</th>
 														<th>BMS Message</th>
 														<th>Status Time</th>
 														<th>View</th>
@@ -137,11 +158,20 @@
 										<div class="paging clear" id="DeviceBMSPaging">
 										</div>	
 									</li>
+									<!-- PV -->
 									<li>
 										<div class="default_tbl" id="devicePVDiv">
 											<table>
 												<colgroup>
-													<col width="100"><col><col><col><col><col><col><col><col width="100">
+													<col width="100">
+													<col>
+													<col>
+													<col>
+													<col>
+													<col>
+													<col>
+													<col>
+													<col width="100">
 												</colgroup>
 												<thead>
 													<tr>
@@ -288,9 +318,9 @@
 	        		<thead>
 	        			<tr>
 	        				<th>전압(V)</th>
-	        				<th>전력(kW)</th>
+	        				<th>전류(A)</th>
 	        				<th>운전상태</th>
-	        				<th>운전모드</th>
+	        				<th>운전모드</th>	        				
 	        				<th>충전량</th>
 	        				<th>방전량</th>
 	        			</tr>

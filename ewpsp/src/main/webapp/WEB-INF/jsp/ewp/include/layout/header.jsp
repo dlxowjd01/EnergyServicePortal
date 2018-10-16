@@ -87,7 +87,7 @@ var selViewSiteName = "";
 					<li class="member clear">
 						<div class="fl"><img src="../img/m_member_pic.png" alt=""></div>
 						<div class="fr">
-							<span>
+							<span class="myinfo">
 								<c:choose>
 									<c:when test="${not empty userInfo and not empty userInfo.co_name}">${userInfo.co_name}</c:when>
 									<c:otherwise>Not logined</c:otherwise>

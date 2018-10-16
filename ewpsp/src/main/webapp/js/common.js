@@ -134,6 +134,20 @@ $(function(){
     });
 });
 
+/* 장치 그룹 현황 ToggleClass */
+$(function(){
+    $(".device li").click(function() {
+        $(this).toggleClass("on");
+        var del_num = $(this).parent('.device').children('.on').length;
+        //alert(del_num);
+        if(del_num > 0) {
+            $(this).parent().parent().parent().siblings('.device_del').show();
+        } else {
+            $(this).parent().parent().parent().siblings('.device_del').hide();
+        }
+    });
+});
+
 /* 테이블 리스트 선택 효과 */
 $(function(){
     $(".s_table tbody tr, .chart_table tbody tr, .tbl_box tbody tr, .default_tbl tbody tr").click(function() {
