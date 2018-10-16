@@ -34,4 +34,12 @@ public class LoginServiceImpl implements LoginService {
 	public int insertUser(HashMap param) throws Exception {
 		return loginDao.insertUser(param);
 	}
+
+	public int updateUser(HashMap param) throws Exception {
+		return loginDao.updateUser(param);
+	}
+
+	public int deleteUser(HashMap param) throws Exception {
+		return loginDao.deleteUser(param);
+	}
 }

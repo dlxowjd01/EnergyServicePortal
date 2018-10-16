@@ -36,4 +36,12 @@ public class LoginDao {
 	public int insertUser(HashMap param) {
 		return sqlSession.update("login.insertUser", param);
 	}
+
+	public int updateUser(HashMap param) {
+		return sqlSession.update("login.updateUser", param);
+	}
+
+	public int deleteUser(HashMap param) {
+		return sqlSession.update("login.deleteUser", param);
+	}
 }

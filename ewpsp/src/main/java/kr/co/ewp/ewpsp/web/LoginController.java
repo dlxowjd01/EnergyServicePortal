@@ -132,5 +132,42 @@ public class LoginController {
 		return resultMap;
 	}
 
+	@RequestMapping("/modifyUser")
+	public @ResponseBody Map<String, Object> modifyUser(HttpSession session, @RequestParam HashMap param) throws Exception {
+		logger.debug("/modifyUser");
+		logger.debug("param : {}", param);
 
+		Map userInfo = UserUtil.getUserInfo(session);
+		param.put("userIdx", userInfo.get("user_idx"));
+		param.put("modUid", userInfo.get("user_id"));
+
+		int resultCnt = loginService.updateUser(param);
+
+		// 현재 로그인 된 세션의 정보도 수정해 준다.
+		userInfo.put("psn_email", param.get("psnEmail"));
+		userInfo.put("psn_mobile", param.get("psnMobile"));
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("resultCnt", resultCnt);
+		return resultMap;
+	}
+
+	@RequestMapping("/removeUser")
+	public @ResponseBody Map<String, Object> removeUser(HttpSession session, @RequestParam HashMap param) throws Exception {
+		logger.debug("/removeUser");
+		logger.debug("param : {}", param);
+
+		Map userInfo = UserUtil.getUserInfo(session);
+		param.put("userIdx", userInfo.get("user_idx"));
+		param.put("modUid", userInfo.get("user_id"));
+
+		int resultCnt = loginService.deleteUser(param);
+
+		// 현재 세션을 끊는다.
+		session.removeAttribute(UserUtil.USER_SESSION_ID);
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("resultCnt", resultCnt);
+		return resultMap;
+	}
 }

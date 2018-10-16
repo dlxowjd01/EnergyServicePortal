@@ -96,9 +96,10 @@ var selViewSiteName = "";
 							<c:choose>
 								<c:when test="${empty userInfo}">No Permission</c:when>
 								<c:when test="${userInfo.auth_type eq '1'}">Portal Administrator</c:when>
-								<c:when test="${userInfo.auth_type eq '2'}">Group Administrator</c:when>
-								<c:when test="${userInfo.auth_type eq '3'}">Site Administrator</c:when>
-								<c:when test="${userInfo.auth_type eq '4'}">Site User</c:when>
+								<c:when test="${userInfo.auth_type eq '2'}">Customer Administrator</c:when>
+								<c:when test="${userInfo.auth_type eq '3'}">Group Administrator</c:when>
+								<c:when test="${userInfo.auth_type eq '4'}">Site Administrator</c:when>
+								<c:when test="${userInfo.auth_type eq '5'}">Site User</c:when>
 								<c:otherwise>No Permission</c:otherwise>
 							</c:choose>
 						</div>
