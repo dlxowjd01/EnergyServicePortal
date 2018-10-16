@@ -5,4 +5,3 @@
 <!-- <script src="../js/print/printThis.js"></script> -->
 <script src="../js/print/jquery.printElement.js"></script>
 <script src="../js/print/jquery.mb.browser.js"></script>
-<script src="../js/printPreview.js"></script>    

@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import kr.co.ewp.ewpsp.common.energy.CommonEnergyFn;
+import kr.co.ewp.ewpsp.common.energy.PeriodDataSetting;
 import kr.co.ewp.ewpsp.dao.ESSChargeDao;
 
 @Service("essChargeService")
@@ -43,8 +44,8 @@ public class ESSChargeServiceImpl implements ESSChargeService {
 			
 			return resultMap;
 		} else {
-			List chgList = CommonEnergyFn.periodSet(param, list, "std_timestamp", "chg_val", 1);
-			List dischgList = CommonEnergyFn.periodSet(param, list, "std_timestamp", "dischg_val", 1);
+			List chgList = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "chg_val", 1);
+			List dischgList = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "dischg_val", 1);
 			
 			resultMap.put("chgList", chgList);
 			resultMap.put("dischgList", dischgList);
@@ -62,8 +63,8 @@ public class ESSChargeServiceImpl implements ESSChargeService {
 			
 			return resultMap;
 		} else {
-			List chgList = CommonEnergyFn.periodSet(param, list, "std_timestamp", "chg_val", 1);
-			List dischgList = CommonEnergyFn.periodSet(param, list, "std_timestamp", "dischg_val", 1);
+			List chgList = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "chg_val", 1);
+			List dischgList = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "dischg_val", 1);
 			
 			resultMap.put("chgList", chgList);
 			resultMap.put("dischgList", dischgList);

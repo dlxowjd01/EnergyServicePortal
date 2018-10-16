@@ -30,7 +30,7 @@
 		var dt_str_head = "";
 		var dt_str = "";
 		var dt_str_totVal = 0; // 테이블 라인별 누적합
-		if(usageList.length > 0) {
+		if(usageList != null && usageList.length > 0) {
 			for(var i=0; i<usageList.length; i++) {
 				var usage = String(usageList[i].usg_val);
 				var substr_usage = 0;
@@ -107,7 +107,7 @@
 		var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
 		var dt_str = "";
 		var dt_str_totVal = 0; // 테이블 라인별 누적합
-		if(usageList.length > 0) {
+		if(usageList != null && usageList.length > 0) {
 			for(var i=0; i<usageList.length; i++) {
 				var usage = String(usageList[i].pre_usg_val);
 				var substr_usage = 0;
@@ -184,6 +184,14 @@
 		setTickInterval();
 		
 		myChart.redraw(); // 차트 데이터를 다시 그린다
+		
+//		if(pastUsageList.length == 0 && fetureUsageList.length == 0) {
+//			$(".usage_chart").find("#inchart_nodata").css("display", "");
+//			$(".usage_chart").find("#inchart_data").css("display", "none");
+//		} else {
+//			$(".usage_chart").find("#inchart_nodata").css("display", "none");
+//			$(".usage_chart").find("#inchart_data").css("display", "");
+//		}
 	}
 	
 	// 표(테이블) 그리기
