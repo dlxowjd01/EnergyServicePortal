@@ -137,6 +137,7 @@ $(function() {
 		},
 		_renderMenu: function(ul, items) {
 			var that = this, currentCategory = "";
+			ul.addClass('c_style');
 			$.each( items, function(index, item) {
 				var li;
 				if (item.category != currentCategory) {
@@ -154,8 +155,13 @@ $(function() {
 	$('#selSiteBox').catcomplete({
 		source: data,
 		select: function(event, ui) {
-			console.log(event);
+			event.preventDefault();
+			$('#selSiteBox').val(ui.item.label);
 			location.href = '/siteMain?siteId=' + ui.item.value;
+		},
+		focus: function(event, ui) {
+			event.preventDefault();
+			$('#selSiteBox').val(ui.item.label);
 		}
 	});
 	

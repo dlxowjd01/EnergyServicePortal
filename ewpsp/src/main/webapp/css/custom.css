@@ -124,6 +124,8 @@ select {
 	border:solid 2px #9ba3aa; border-radius:4px; outline-style:none; vertical-align:middle;
 }
 
+
+
 /* 달력 이미지 */
 .ui-datepicker-trigger {display:none !important;}
 
@@ -366,6 +368,14 @@ nav .nav_right li.member .fl img {vertical-align:middle;}
 nav .nav_right li.member .fr {margin-left:10px; font-size:11px; color:#aeb3bb; font-weight:400; line-height:1.5;}
 nav .nav_right li.member .fr span {cursor:pointer; font-size:13px; color:#3d4250; font-weight:500;}
 
+
+/* custom stye */
+.c_style {width:auto; min-width:150px;}
+.c_style > li {padding:3px 10px; font-size:15px; color:#3d4250; font-weight:400;}
+.c_style > li > ul {margin-bottom:5px;}
+.c_style > li > ul li {padding:5px 20px; font-size:14px; color:#777;}
+
+
 /* 반응형 미디어 쿼리 */
 @media all and (min-width:3000px) {
 	nav {margin:0 0 15px; min-height:120px;}
@@ -542,10 +552,20 @@ footer .copyright {font-family:'Roboto', sans-serif; font-size:10px; font-weight
 .site .open > .dropdown-toggle.btn-default.focus {
 	background-color:transparent; border:0;
 }
-.site .dropdown-menu {width:auto; min-width:150px; left:initial; right:0;}
+.site .dropdown-menu {width:auto; min-width:150px; left:inherit; right:0;}
 .site .dropdown-menu > li > a {padding:3px 10px; font-size:15px;}
 .site .dropdown-menu > li > ul {margin-bottom:5px;}
 .site .dropdown-menu > li > ul li a {display:block; padding:5px 20px; font-size:14px; color:#777;}
+
+.site input:-webkit-autofill,
+.site input:-webkit-autofill:hover,
+.site input:-webkit-autofill:focus,
+.site input:-webkit-autofill:active {
+	transition: background-color 5000s ease-in-out 0s;
+	-webkit-transition: background-color 9999s ease-out;
+	-webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+	-webkit-text-fill-color: #fff !important;
+}
 
 
 /****** LOGIN MODAL ******/
