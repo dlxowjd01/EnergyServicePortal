@@ -410,14 +410,14 @@
 										<tr>
 											<th>비밀번호</th>
 											<td>
-												<input type="text" id="modUserPw" name="userPw" class="inp" style="width:100%;" />
+												<input type="password" id="modUserPw" name="userPw" class="inp" style="width:100%;" />
 												<span class="helpCont">비밀번호를 입력하세요</span>
 											</td>
 										</tr>
 										<tr>
 											<th>비밀번호확인</th>
 											<td>
-												<input type="text" id="modUserPw2" class="inp" style="width:100%;" />
+												<input type="password" id="modUserPw2" class="inp" style="width:100%;" />
 												<span class="helpCont">비밀번호확인이 일치하지 않습니다</span>
 											</td>
 										</tr>
@@ -487,7 +487,6 @@
 	$(function() {
 		$("#modifyUserBtn").click(function(){
 			checkModify();
-			$("#modifyModal").modal("hide");
 			return false;
 		});
 
@@ -513,6 +512,9 @@
 		$('#modUserId').text(result.user_id);
 		$('#modPsnName').text(result.psn_name);
 
+		$('#modUserPw').val('');
+		$('#modUserPw2').val('');
+
 		var email = result.psn_email;
 		if (email != null && email.indexOf('@') != -1) {
 			var emails = email.split('@');
@@ -527,6 +529,8 @@
 			$('#modMobile2').val(mobiles[1]);
 			$('#modMobile3').val(mobiles[2]);
 		}
+
+		$('.helpCont').hide();
 	}
 
 	function checkModify() {
