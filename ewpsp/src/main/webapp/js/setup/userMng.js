@@ -209,7 +209,7 @@
 	
 	function updateUserForm(userIdx) {
 		insUpdFlag = 2;
-		$(".duser").find('h2').empty().append("사용자 수정하기");
+		$(".duser").find('h2').empty().append("사용자 정보 수정");
 		getUserDetail(userIdx);
 	}
 
