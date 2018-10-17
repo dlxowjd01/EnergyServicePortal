@@ -103,7 +103,6 @@ function chkHoliday(_date) {
 	var chkDate = _date instanceof Date ? _date : new Date(_date);
 	var week = ['일', '월', '화', '수', '목', '금', '토'];
 	var dayOfWeek = week[chkDate.getDay()];
-	console.log(dayOfWeek+", "+chkDate.getDay());
 	
 	var holiday = [
 		// 2018
@@ -338,12 +337,10 @@ function excelDownload(excelName, e, gbn) {
 	if(gbn == "drResult") {
 		$td = $val.find('tr:eq(0)').find('td');
 		var tdCnt = $td.length;
-		console.log(tdCnt+"??");
 		cnt = ((tdCnt-1) == 1) ? 0 : 1;
 	} else {
 		cnt = $val.length;
 	}
-	console.log(cnt+"!!!");
 	
 	if(cnt < 1) {
 		alert("다운받을 데이터가 없습니다.");

@@ -16,8 +16,8 @@ function changeSelTerm(gubun) {
 	var today = new Date();
 	var firstDay = new Date();
 	var endDay = new Date();
-//	var firstDay = new Date(2018, 7, 31, 0, 0, 0);
-//	var endDay = new Date(2018, 7, 31, 23, 59, 59);
+//	var firstDay = new Date(2018, 7, 31, 13, 45, 37);
+//	var endDay = new Date(2018, 7, 31, 13, 45, 37);
 //	var firstDay = new Date(2018, 8, 23, 13, 45, 37);
 //	var endDay = new Date(2018, 8, 23, 13, 45, 37);
 //	console.log("시작전 : "+firstDay+", "+endDay);
@@ -69,7 +69,7 @@ function changeSelTerm(gubun) {
 		
 		$("#selPeriodVal").val('hour');
 	} else if(gubun == 'week') { // 1주
-		firstDay = new Date(firstDay.setDate(firstDay.getDate() - 6));
+		firstDay = new Date(firstDay.setDate(firstDay.getDate() - 7));
 //		endDay = new Date(endDay.getFullYear(), endDay.getMonth(), endDay.getDate(), endDay.getHours(), endDay.getMinutes(), endDay.getSeconds());
 		
 		$selTermBox.empty().append("1주").append( $('<span class="caret" />') );
@@ -79,7 +79,7 @@ function changeSelTerm(gubun) {
 		$("#selPeriodVal").val('hour');
 	} else if(gubun == 'month') { // 1달
 		firstDay.setMonth(firstDay.getMonth()-1);
-		firstDay = new Date(firstDay.setDate(firstDay.getDate()+1));
+//		firstDay = new Date(firstDay.setDate(firstDay.getDate()+1));
 //		endDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), today.getHours(), today.getMinutes(), today.getSeconds());
 		
 		$selTermBox.empty().append("1월").append( $('<span class="caret" />') );
@@ -89,7 +89,7 @@ function changeSelTerm(gubun) {
 		$("#selPeriodVal").val('day');
 	} else if(gubun == 'year') { // 1년
 		firstDay.setYear(firstDay.getFullYear()-1);
-		firstDay = new Date(firstDay.setDate(firstDay.getDate()+1));
+//		firstDay = new Date(firstDay.setMonth(firstDay.getMonth()+1));
 //		endDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), today.getHours(), today.getMinutes(), today.getSeconds());
 		
 		$selTermBox.empty().append("1년").append( $('<span class="caret" />') );
@@ -405,8 +405,8 @@ function setTickInterval() {
 	}
 	
 	myChart.xAxis[0].options.tickInterval = tickInterval;
-	myChart.xAxis[0].options.startOnTick = startEndTickFlag;
-	myChart.xAxis[0].options.endOnTick = startEndTickFlag;
+//	myChart.xAxis[0].options.startOnTick = startEndTickFlag;
+//	myChart.xAxis[0].options.endOnTick = startEndTickFlag;
 }
 
 // 표 데이터 1행의 최대칸수 및 테이블갯수

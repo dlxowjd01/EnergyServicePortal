@@ -75,7 +75,8 @@
 	
 	function fn_cycle_1min() {
 		getSiteSetDetail();
-		getPeakRealList(formData); // 피크전력현황 조회
+		getPeak(formData);
+//		getPeakRealList(formData); // 피크전력현황 조회
 		drawData_chart_peak(); // 피크전력현황 차트그리기
 		
 		var today = new Date();
@@ -527,6 +528,38 @@
 		$("#pvPer").empty().append( ( (totalDataSet3 == 0) ? 0 : ( (totalDataSet3/total)*100 ).toFixed(2) )+"%" );
 		
 	}
+
+	var peakDataSet = []; // chartData를 위한 변수
+	function getPeak(formData) {
+		$.ajax({
+			url : "/getPeak",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+			data : formData,
+			success: function(result) {
+				var totalUsage = result.totalUsage;
+				var stdDate = result.stdDate;
+				var startDate = result.startDate;
+				
+				
+				// 데이터 셋팅
+				var dt = new Date(startDate);
+				var dt2 = new Date(stdDate);
+				console.log(peakDataSet.length+", "+dt.getMinutes());
+				if( peakDataSet.length == 0 || (dt2.getMinutes() == 0 || dt2.getMinutes() == 15 || dt2.getMinutes() == 30 || dt2.getMinutes() == 45) ) {
+					peakDataSet = [];
+					for(var i=0; i<15; i++) {
+						peakDataSet.push([Number(dt), null]);
+						dt = new Date(dt.setMinutes(dt.getMinutes() + 1));
+					}
+				}
+				
+				peakDataSet.push([Number(stdDate), totalUsage]);
+				
+			}
+		});
+		
+	}
 	
 	var contractPower;
 	var chargePower;
@@ -576,7 +609,7 @@
 	
 	// 차트 그리기
 	function drawData_chart_peak() {
-		if(pastPeakList.length < 1) {
+		if(peakDataSet.length < 1) {
 			$(".peak").find(".no-data").css("display", "");
 			$(".peak").find(".inchart").css("display", "none");
 			$(".peak").find(".chart_notice").css("display", "none");
@@ -590,32 +623,124 @@
 		for(var i = seriesLength - 1; i > -1; i--) {
 				peakChart.series[i].remove();
 		}
+		peakChart.yAxis[0].removePlotLine('contract-power');
+		peakChart.yAxis[0].removePlotLine('charge-power');
 		
 		peakChart.addSeries({
-			name: '피크 전력',
-			color: '#438fd7', /* 피크 전력 */
+			name: '최대 피크 전력',
+			color: '#438fd7', /* 최대 피크 전력 */
 			type: 'column',
-			data: pastPeakList
+			data: peakDataSet
 		}, false);
 		
-		peakChart.addSeries({
-			name: '한전 계약 전력',
-			color: '#13af67', /* 한전 계약 전력 */
-			data: contractPowerList
-		}, false);
+		peakChart.yAxis[0].addPlotLine({
+		          color: '#13af67',
+		          width: 1, 
+		          value: contractPower,
+		          label: {
+		            text: '한전 계약 전력',
+		            style: {
+	                    color: '13af67',
+	                    fontWeight: 'bold'
+	                },
+	                zIndex: 4
+		          }, id: 'contract-power'
+		  });
 		
-		peakChart.addSeries({
-			name: '요금 적용 전력',
-			color: '#f75c4a', /* 요금 적용 전력 */
-			data: chargePowerList
-		}, false);
+		peakChart.yAxis[0].addPlotLine({
+		          color: '#f75c4a',
+		          width: 1, 
+		          value: chargePower,
+		          label: {
+		            text: '요금 적용 전력',
+		            style: {
+	                    color: 'f75c4a',
+	                    fontWeight: 'bold'
+	                },
+                    align: 'right',
+                    x: -10,
+	                zIndex: 4
+		          }, id: 'charge-power'
+		  });
 		
-//		setTickInterval();
-		peakChart.xAxis[0].options.tickInterval = /*24 **/ 60 * 60 * 1000;
+		peakChart.xAxis[0].options.tickInterval = 60 * 1000;
 		peakChart.xAxis[0].options.labels.style.fontSize = '12px';
 		
 		peakChart.redraw(); // 차트 데이터를 다시 그린다
 	}
+//	function drawData_chart_peak() {
+//		if(pastPeakList.length < 1) {
+//			$(".peak").find(".no-data").css("display", "");
+//			$(".peak").find(".inchart").css("display", "none");
+//			$(".peak").find(".chart_notice").css("display", "none");
+//		} else {
+//			$(".peak").find(".no-data").css("display", "none");
+//			$(".peak").find(".inchart").css("display", "");
+//			$(".peak").find(".chart_notice").css("display", "");
+//		}
+//		
+//		var seriesLength = peakChart.series.length;
+//		for(var i = seriesLength - 1; i > -1; i--) {
+//			peakChart.series[i].remove();
+//		}
+//		peakChart.yAxis[0].removePlotLine('contract-power');
+//		peakChart.yAxis[0].removePlotLine('charge-power');
+//		console.log(pastPeakList);
+//		peakChart.addSeries({
+//			name: '피크 전력',
+//			color: '#438fd7', /* 피크 전력 */
+//			type: 'column',
+//			data: pastPeakList
+//		}, false);
+//		
+////		peakChart.addSeries({
+////			name: '한전 계약 전력',
+////			color: '#13af67', /* 한전 계약 전력 */
+////			data: contractPowerList
+////		}, false);
+////		console.log(contractPower);
+//		peakChart.yAxis[0].addPlotLine({
+//			color: '#13af67',
+//			width: 1, 
+//			value: contractPower,
+//			label: {
+//				text: '한전 계약 전력',
+//				style: {
+//					color: '13af67',
+//					fontWeight: 'bold'
+//				},
+//				zIndex: 4
+//			}, id: 'contract-power'
+//		});
+//		
+////		peakChart.addSeries({
+////			name: '요금 적용 전력',
+////			color: '#f75c4a', /* 요금 적용 전력 */
+////			data: chargePowerList
+////		}, false);
+//		peakChart.yAxis[0].addPlotLine({
+//			color: '#f75c4a',
+//			width: 1, 
+//			value: chargePower,
+//			label: {
+//				text: '요금 적용 전력',
+//				style: {
+//					color: 'f75c4a',
+//					fontWeight: 'bold'
+//				},
+//				align: 'right',
+//				x: -10,
+//				zIndex: 4
+//			}, id: 'charge-power'
+//		});
+//		
+////		setTickInterval();
+////		peakChart.xAxis[0].options.tickInterval = /*24 **/ 60 * 60 * 1000;
+//		peakChart.xAxis[0].options.tickInterval = 60 * 1000;
+//		peakChart.xAxis[0].options.labels.style.fontSize = '12px';
+//		
+//		peakChart.redraw(); // 차트 데이터를 다시 그린다
+//	}
 	
 	function chargePowerStrDisplayYn(today) {
 		var holidayYn = chkHoliday(today); // 공휴일여부 체크(true:공휴일, false:평일or토요일)

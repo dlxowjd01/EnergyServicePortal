@@ -1,6 +1,7 @@
 package kr.co.ewp.ewpsp.web;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +27,15 @@ import com.google.inject.internal.util.Maps;
 
 import kr.co.ewp.ewpsp.common.util.AES256Util;
 import kr.co.ewp.ewpsp.common.util.CommonUtils;
+import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil;
+import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.Period;
+import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.TimeType;
+import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.UsageType;
 import kr.co.ewp.ewpsp.common.util.PMGrowApiUtil;
 import kr.co.ewp.ewpsp.common.util.UserUtil;
 import kr.co.ewp.ewpsp.model.Soc;
+import kr.co.ewp.ewpsp.model.UsageItemModel;
+import kr.co.ewp.ewpsp.model.UsageModel;
 import kr.co.ewp.ewpsp.service.AlarmService;
 import kr.co.ewp.ewpsp.service.CmpyGrpSiteMngService;
 import kr.co.ewp.ewpsp.service.DeviceMonitoringService;
@@ -127,6 +134,103 @@ public class ApiController {
 		resultMap.put("finalSoc", finalSoc);
 		return resultMap;
 	}
+	
+	@RequestMapping("/getPeak")
+	public @ResponseBody Map<String, Object> getPeak(@RequestParam HashMap param) throws Exception {
+		logger.debug("/getPeak");
+		logger.debug("param ::::: "+param.toString());
+		
+		Date today = new Date();
+		String dfs1 [] = CommonUtils.convertDateFormat(today, "yyyy-MM-dd").split("-");
+		String dfs2 [] = CommonUtils.convertDateFormat(today, "HH:mm").split(":");
+		
+		Date startDate;
+		if(Integer.parseInt(dfs2[1]) >= 0 && Integer.parseInt(dfs2[1]) <15) {
+			startDate = CommonUtils.getDate(Integer.valueOf(dfs1[0]), Integer.valueOf(dfs1[1]), Integer.valueOf(dfs1[2]), Integer.valueOf(dfs2[0]), 0, 0);
+		} else if(Integer.parseInt(dfs2[1]) >= 15 && Integer.parseInt(dfs2[1]) <30) {
+			startDate = CommonUtils.getDate(Integer.valueOf(dfs1[0]), Integer.valueOf(dfs1[1]), Integer.valueOf(dfs1[2]), Integer.valueOf(dfs2[0]), 15, 0);
+		} else if(Integer.parseInt(dfs2[1]) >= 30 && Integer.parseInt(dfs2[1]) <45) {
+			startDate = CommonUtils.getDate(Integer.valueOf(dfs1[0]), Integer.valueOf(dfs1[1]), Integer.valueOf(dfs1[2]), Integer.valueOf(dfs2[0]), 30, 0);
+		} else {
+			startDate = CommonUtils.getDate(Integer.valueOf(dfs1[0]), Integer.valueOf(dfs1[1]), Integer.valueOf(dfs1[2]), Integer.valueOf(dfs2[0]), 45, 0);
+		}
+		Date endDate = today;
+		logger.debug("피크 검색날짜 ===> "+CommonUtils.convertDateFormat(startDate, "yyyy-MM-dd HH:mm:ss")+", "+CommonUtils.convertDateFormat(endDate, "yyyy-MM-dd HH:mm:ss"));
+		
+		int totalUsage = 0;
+		int usageCnt = 0;
+		
+		List deviceList = deviceMonitoringService.getDeviceList(param);
+		if(deviceList != null && deviceList.size() > 0) {
+			for (int i = 0; i < deviceList.size(); i++) {
+				Map<String, Object> devices = new HashMap<String, Object>();
+				devices = (Map<String, Object>) deviceList.get(i);
+				String deviceId = (String) devices.get("device_id");
+				
+				UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(deviceId, Period._15min, startDate, endDate, TimeType.past, UsageType.positiveEnergy);
+				if(usageModel != null) {
+					if(usageModel.getItems() != null) {
+						for (UsageItemModel item : usageModel.getItems()) {
+							Integer usageVal = item.getUsage().intValue();
+							if(usageVal != null) totalUsage = totalUsage+usageVal;
+							
+						}
+						
+					}
+					usageCnt = usageCnt+1;
+					
+				}
+				
+			}
+		}
+		
+		Date stdDate = CommonUtils.getDate(Integer.valueOf(dfs1[0]), Integer.valueOf(dfs1[1]), Integer.valueOf(dfs1[2]), Integer.valueOf(dfs2[0]), Integer.valueOf(dfs2[1]), 0);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("stdDate", stdDate);
+		resultMap.put("startDate", startDate);
+		resultMap.put("totalUsage", totalUsage);
+		return resultMap;
+	}
+//	public @ResponseBody Map<String, Object> getPeak(@RequestParam HashMap param) throws Exception {
+//		logger.debug("/getPeak");
+//		logger.debug("param ::::: "+param.toString());
+//		
+//		String df = CommonUtils.convertDateFormat(new Date(), "yyyy-MM-dd");
+//		String dfs [] = df.split("-");
+//		
+//		Date startDate = CommonUtils.getDate(Integer.valueOf(dfs[0]), Integer.valueOf(dfs[1]), Integer.valueOf(dfs[2]), 0, 0, 0);
+//		Date endDate = new Date();
+//		
+//		int totalUsage = 0;
+//		int usageCnt = 0;
+//		
+//		List deviceList = deviceMonitoringService.getDeviceList(param);
+//		if(deviceList != null && deviceList.size() > 0) {
+//			for (int i = 0; i < deviceList.size(); i++) {
+//				Map<String, Object> devices = new HashMap<String, Object>();
+//				devices = (Map<String, Object>) deviceList.get(i);
+//				String deviceId = (String) devices.get("device_id");
+//				
+//				UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(deviceId, Period._15min, startDate, endDate, TimeType.past, UsageType.positiveEnergy);
+////				EnertalkApiUtil.getDevice(deviceId);
+////				System.out.println("결과는 : "+ ((usageModel == null) ? null : usageModel.toString()));
+//				if(usageModel != null) {
+//					for (UsageItemModel item : usageModel.getItems()) {
+//						Integer usageVal = item.getUsage().intValue();
+//						if(usageVal != null) totalUsage = totalUsage+usageVal;
+//					}
+//					usageCnt = usageCnt+1;
+//					
+//				}
+//				
+//			}
+//		}
+//		
+//		Map<String, Object> resultMap = new HashMap<String, Object>();
+//		resultMap.put("totalUsage", totalUsage);
+//		return resultMap;
+//	}
 
 	@RequestMapping("/openapi/loginUser")
 	public @ResponseBody Integer loginUser(HttpSession session, String userId, String userPw) throws Exception {
