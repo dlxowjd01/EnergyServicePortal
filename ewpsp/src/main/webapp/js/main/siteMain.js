@@ -541,7 +541,6 @@
 				var stdDate = result.stdDate;
 				var startDate = result.startDate;
 				
-				
 				// 데이터 셋팅
 				var dt = new Date(startDate);
 				var dt2 = new Date(stdDate);
@@ -553,8 +552,11 @@
 						dt = new Date(dt.setMinutes(dt.getMinutes() + 1));
 					}
 				}
+				var map = convertUnitFormat(totalUsage, "mWh", 8);
+				var formatNum = map.get("formatNum");
+				var unit = map.get("unit");
 				
-				peakDataSet.push([Number(stdDate), totalUsage]);
+				peakDataSet.push([Number(stdDate), formatNum]);
 				
 			}
 		});

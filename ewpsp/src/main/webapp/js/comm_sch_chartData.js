@@ -321,44 +321,11 @@ function convertDataTableHeaderDate(_convertDt, type) {
 
 // 총 합계(사용량, 발전량, 충전량, 방전량 등등)
 function unit_format(usage, id, unitGbn) {
-	var format_usage;
-	var unit;
+	var map = convertUnitFormat(usage, unitGbn, usage.length);
+	var formatNum = map.get("formatNum");
+	var unit = map.get("unit");
 	
-	if(unitGbn == "won") {
-		format_usage = numberComma( usage );
-		unit = "won";
-	} else if(unitGbn == "Wh") {
-		if(usage.length > 9) {
-			format_usage = numberComma( usage.substring( 0, usage.length-9 ) );
-			unit = "MWh";
-		} else if(usage.length > 6) {
-			format_usage = numberComma( usage.substring( 0, usage.length-6 ) );
-			unit = "kWh";
-		} else if(usage.length > 3) {
-			format_usage = numberComma( usage.substring( 0, usage.length-3 ) );
-			unit = "Wh";
-		} else {
-			format_usage = numberComma( usage );
-			unit = "mWh";
-		} 
-	} else if(unitGbn == "kW"){
-		if(usage.length > 9) {
-			format_usage = numberComma( usage.substring( 0, usage.length-9 ) );
-			unit = "TW";
-		} else if(usage.length > 6) {
-			format_usage = numberComma( usage.substring( 0, usage.length-6 ) );
-			unit = "GW";
-		} else if(usage.length > 3) {
-			format_usage = numberComma( usage.substring( 0, usage.length-3 ) );
-			unit = "MW";
-		} else {
-			format_usage = numberComma( usage );
-			unit = "kW";
-		}
-	}
-	if(format_usage == "NaN") format_usage = "0"
-		
-	$("#"+id).empty().append( $("<span/>").append(format_usage) ).append(unit);
+	$("#"+id).empty().append( $("<span/>").append( numberComma( formatNum ) ) ).append(unit);
 }
 
 // 차트 x축 틱 갯수 지정

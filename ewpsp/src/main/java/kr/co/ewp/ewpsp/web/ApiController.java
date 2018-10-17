@@ -111,17 +111,12 @@ public class ApiController {
 				Map<String, Object> devices = new HashMap<String, Object>();
 				devices = (Map<String, Object>) deviceList.get(i);
 				String deviceId = (String) devices.get("device_id");
-//				String deviceId = "a8324a51"; // (String) devices.get("device_id");
-				
-//				Random rd = new Random();
-//				int soc = rd.nextInt(101); // 0~100 사이의 정수랜덤값을 추출한다.(테스트용)
 				Soc resSoc = PMGrowApiUtil.getSoc(host, deviceId);
 				if(resSoc != null) {
 					int soc = Integer.parseInt(resSoc.getSoc());
 					totalSoc = totalSoc+soc;
 					socCnt = socCnt+1;
 				}
-				
 			}
 		}
 		
@@ -175,12 +170,10 @@ public class ApiController {
 							if(usageVal != null) totalUsage = totalUsage+usageVal;
 							
 						}
-						
 					}
 					usageCnt = usageCnt+1;
 					
 				}
-				
 			}
 		}
 		
@@ -192,45 +185,6 @@ public class ApiController {
 		resultMap.put("totalUsage", totalUsage);
 		return resultMap;
 	}
-//	public @ResponseBody Map<String, Object> getPeak(@RequestParam HashMap param) throws Exception {
-//		logger.debug("/getPeak");
-//		logger.debug("param ::::: "+param.toString());
-//		
-//		String df = CommonUtils.convertDateFormat(new Date(), "yyyy-MM-dd");
-//		String dfs [] = df.split("-");
-//		
-//		Date startDate = CommonUtils.getDate(Integer.valueOf(dfs[0]), Integer.valueOf(dfs[1]), Integer.valueOf(dfs[2]), 0, 0, 0);
-//		Date endDate = new Date();
-//		
-//		int totalUsage = 0;
-//		int usageCnt = 0;
-//		
-//		List deviceList = deviceMonitoringService.getDeviceList(param);
-//		if(deviceList != null && deviceList.size() > 0) {
-//			for (int i = 0; i < deviceList.size(); i++) {
-//				Map<String, Object> devices = new HashMap<String, Object>();
-//				devices = (Map<String, Object>) deviceList.get(i);
-//				String deviceId = (String) devices.get("device_id");
-//				
-//				UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(deviceId, Period._15min, startDate, endDate, TimeType.past, UsageType.positiveEnergy);
-////				EnertalkApiUtil.getDevice(deviceId);
-////				System.out.println("결과는 : "+ ((usageModel == null) ? null : usageModel.toString()));
-//				if(usageModel != null) {
-//					for (UsageItemModel item : usageModel.getItems()) {
-//						Integer usageVal = item.getUsage().intValue();
-//						if(usageVal != null) totalUsage = totalUsage+usageVal;
-//					}
-//					usageCnt = usageCnt+1;
-//					
-//				}
-//				
-//			}
-//		}
-//		
-//		Map<String, Object> resultMap = new HashMap<String, Object>();
-//		resultMap.put("totalUsage", totalUsage);
-//		return resultMap;
-//	}
 
 	@RequestMapping("/openapi/loginUser")
 	public @ResponseBody Integer loginUser(HttpSession session, String userId, String userPw) throws Exception {

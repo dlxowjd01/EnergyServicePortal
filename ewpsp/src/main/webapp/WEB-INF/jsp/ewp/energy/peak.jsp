@@ -160,7 +160,8 @@
 										/* 툴팁 */
 										tooltip: {
 											    formatter: function() {
-									                return  '<b>' + this.series.name + '</b><br/>' + this.x + '<br/><span style="color:#438fd7">' + this.y + ' kW</span>';
+									                return  '<b>' + this.series.name + '</b><br/>' + Highcharts.dateFormat('%Y-%m-%d %H:%M:%S ', new Date(this.x)) 
+									                	+ '<br/><span style="color:#438fd7">' + this.y + ' kW</span>';
 									            }
 										},
 

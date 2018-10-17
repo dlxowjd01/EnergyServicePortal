@@ -14,6 +14,66 @@ function numberComma(num) {
 	return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+// 숫자 단위 변경
+function convertUnitFormat(num, unitGbn, len) {
+	var formatNum;
+	var unit;
+	var divNum = 0;
+	
+	if(unitGbn == "won") {
+		formatNum = numberComma( num );
+		unit = "won";
+		
+	} else {
+		if(len <= 3) {
+			if(unitGbn == "mWh") unit = "mWh";
+			if(unitGbn == "Wh") unit = "Wh";
+			if(unitGbn == "kWh") unit = "kWh";
+			if(unitGbn == "W") unit = "W";
+			if(unitGbn == "kW") unit = "kW";
+			
+		} else if(len <= 6) {
+			divNum = 1000;
+			if(unitGbn == "mWh") unit = "Wh";
+			if(unitGbn == "Wh") unit = "kWh";
+			if(unitGbn == "kWh") unit = "MWh";
+			if(unitGbn == "W") unit = "kW";
+			if(unitGbn == "kW") unit = "MW";
+			
+		} else if(len <= 9) {
+			divNum = 1000 * 1000;
+			if(unitGbn == "mWh") unit = "kWh";
+			if(unitGbn == "Wh") unit = "MWh";
+			if(unitGbn == "kWh") unit = "GWh";
+			if(unitGbn == "W") unit = "MW";
+			if(unitGbn == "kW") unit = "GW";
+			
+		} else if(len <= 12) {
+			divNum = 1000 * 1000 * 1000;
+			if(unitGbn == "mWh") unit = "MWh";
+			if(unitGbn == "Wh") unit = "GWh";
+			if(unitGbn == "kWh") unit = "TWh";
+			if(unitGbn == "W") unit = "GW";
+			if(unitGbn == "kW") unit = "TW";
+		}
+
+		if(len <= 3) {
+			formatNum = num;
+		} else {
+			formatNum = Math.round( Number(num)/divNum );
+		}
+		
+	}
+	
+	if(formatNum == "NaN") formatNum = "0";
+	
+	var map = new Map();
+	map.put("formatNum", formatNum);
+	map.put("unit", unit);
+	
+	return map;
+}
+
 // 전체값에서 일부값은 몇퍼센트?
 // 일부값 / 전체값 * 100
 function numOfTotal_per(totalNum, num) {
@@ -39,20 +99,9 @@ function numMinusPer(num, per) {
 }
 
 // 숫자만 입력받는 함수
-//function onlyNum(obj) {
-//	var inputVal = $(obj).val();
-//    $(obj).val(inputVal.replace(/[^0-9]/gi,''));
-//}
-//function onlyNum(event) {
-//	if (event.keyCode >= 48 && event.keyCode <= 57) { //숫자키만 입력
-//        return true;
-//    } else {
-//        event.returnValue = false;
-//    }
-//}
 function onlyNum(event) {
 	var code = event.keyCode;
-	if ( (code > 47 && code < 58) || (code > 95 && code < 106) ) { // 숫자 허용
+	if ( (code > 47 && code < 58) || (code > 95 && code < 106) ) { // 숫자 허용(오른쪽키패트 포함)
 		return;
 	}
 	if (code === 9 || code === 36 || code === 35 || code === 37 || 
@@ -406,6 +455,49 @@ jQuery.fn.serializeObject = function() {
  
     return obj;
 };
+
+// ============ Map 구조 구현============
+// var map = new Map();
+// map.put("name","사과");
+// map.get("name");
+function Map() {
+	this.elements = {};
+	this.length = 0;
+}
+
+Map.prototype.put = function(key,value) {
+	this.length++;
+	this.elements[key] = value;
+}
+
+Map.prototype.get = function(key) {
+	return this.elements[key];
+}
+
+Map.prototype.remove = function(key) {
+	this.elements[key] = undefined;
+}
+
+// ============ List 구조 구현============
+// var list = new List();
+// list.add("사과");
+// list.get(0);
+function List() {
+	this.elements = {};
+	this.idx = 0;
+	this.length = 0;
+}
+
+List.prototype.add = function(element) {
+	this.length++;
+	this.elements[this.idx++] = element;
+};
+
+List.prototype.get = function(idx) {
+	return this.elements[idx];
+};
+
+
 
 
 
