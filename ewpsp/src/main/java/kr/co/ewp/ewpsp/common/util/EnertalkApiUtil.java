@@ -75,7 +75,7 @@ public class EnertalkApiUtil {
 		  url.append("&usageType=").append(usageType);
 		  url.append("&period=").append(period);
 		  url.append("&start=").append(start.getTime());
-		  url.append("&end=").append(end.getTime());
+//		  url.append("&end=").append(end.getTime());
 		  
 		  URL reUrl = new URL(  url.toString()  );
 		  logger.debug("enertalk api URL : "+ url);

@@ -173,7 +173,7 @@ public class ApiController {
 						for (UsageItemModel item : usageModel.getItems()) {
 							Integer usageVal = item.getUsage().intValue();
 							if(usageVal != null) totalUsage = totalUsage+usageVal;
-							System.out.println("usageVal : "+usageVal);
+							
 						}
 						
 					}
@@ -184,7 +184,10 @@ public class ApiController {
 			}
 		}
 		
+		Date stdDate = CommonUtils.getDate(Integer.valueOf(dfs1[0]), Integer.valueOf(dfs1[1]), Integer.valueOf(dfs1[2]), Integer.valueOf(dfs2[0]), Integer.valueOf(dfs2[1]), 0);
+		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("stdDate", stdDate);
 		resultMap.put("startDate", startDate);
 		resultMap.put("totalUsage", totalUsage);
 		return resultMap;
