@@ -216,7 +216,8 @@
 												/* 툴팁 */
 												tooltip: {
 													    formatter: function() {
-											                return  '<b>' + this.series.name + '</b><br/>' + this.x + '<br/><span style="color:#438fd7">' + this.y + ' kwh</span>';
+											                return  '<b>' + this.series.name + '</b><br/>' + Highcharts.dateFormat('%Y-%m-%d %H:%M:%S ', new Date(this.x)) 
+											                	+ '<br/><span style="color:#438fd7">' + this.y + ' kwh</span>';
 											            }
 												},
 
@@ -428,7 +429,8 @@
 												/* 툴팁 */
 												tooltip: {
 													    formatter: function() {
-											                return  '<b>' + this.series.name + '</b><br/>' + this.x + '<br/><span style="color:#438fd7">' + this.y + ' kW</span>';
+											                return  '<b>' + this.series.name + '</b><br/>' + Highcharts.dateFormat('%Y-%m-%d %H:%M:%S ', new Date(this.x)) 
+											                	+ '<br/><span style="color:#438fd7">' + this.y + ' kW</span>';
 											            }
 												},
 
@@ -648,7 +650,8 @@
 												/* 툴팁 */
 												tooltip: {
 													    formatter: function() {
-											                return  '<b>' + this.series.name + '</b><br/>' + this.x + '<br/><span style="color:#438fd7">' + this.y + ' won</span>';
+											                return  '<b>' + this.series.name + '</b><br/>' + Highcharts.dateFormat('%Y-%m-%d %H:%M:%S ', new Date(this.x)) 
+											                	+ '<br/><span style="color:#438fd7">' + this.y + ' won</span>';
 											            }
 												},
 
@@ -853,7 +856,8 @@
 												/* 툴팁 */
 												tooltip: {
 													    formatter: function() {
-											                return  '<b>' + this.series.name + '</b><br/>' + this.x + '<br/><span style="color:#438fd7">' + this.y + ' kWh</span>';
+											                return  '<b>' + this.series.name + '</b><br/>' + Highcharts.dateFormat('%Y-%m-%d %H:%M:%S ', new Date(this.x)) 
+											                	+ '<br/><span style="color:#438fd7">' + this.y + ' kWh</span>';
 											            }
 												},
 

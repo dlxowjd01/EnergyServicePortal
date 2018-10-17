@@ -144,7 +144,8 @@
 										/* 툴팁 */
 										tooltip: {
 											    formatter: function() {
-									                return  '<b>' + this.series.name + '</b><br/>' + this.x + '월<br/><span style="color:#438fd7">' + this.y + ' won</span>';
+									                return  '<b>' + this.series.name + '</b><br/>' + Highcharts.dateFormat('%Y-%m ', new Date(this.x)) 
+									                	+ '월<br/><span style="color:#438fd7">' + this.y + ' won</span>';
 									            }
 										},
 

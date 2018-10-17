@@ -14,9 +14,6 @@ $(function() {
         dayNamesMin: ['일','월','화','수','목','금','토'],
         showMonthAfterYear: true,
         yearSuffix: '년'
-//        ,changeYear:true,
-//        yearRange: "2005:2025"
-//        ,changeMonth:true
     });
     $( "#datepicker3, #datepicker4" ).datepicker({
     	showOn: "both", 
@@ -32,9 +29,6 @@ $(function() {
     	dayNamesMin: ['일','월','화','수','목','금','토'],
     	showMonthAfterYear: true,
     	yearSuffix: '년'
-//		,changeYear:true,
-//        yearRange: "2005:2025"
-//        ,changeMonth:true
     });
 });
 

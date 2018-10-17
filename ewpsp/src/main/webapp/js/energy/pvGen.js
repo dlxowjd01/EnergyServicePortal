@@ -87,7 +87,7 @@
 		pastPVGenList = dataSet;
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-		unit_format(String(totUsage), "pastPvGenTot", "Wh");
+		unit_format(String(totUsage), "pastPvGenTot", "kWh");
 	}
 	
 	// PV 예측 발전량
@@ -151,7 +151,7 @@
 //		feture_data_pc[dt_row_cnt-1] = dt_str;
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-		unit_format(String(totUsage), "feturePvGenTot", "Wh");
+		unit_format(String(totUsage), "feturePvGenTot", "kWh");
 	}
 	
 	// 차트 그리기
