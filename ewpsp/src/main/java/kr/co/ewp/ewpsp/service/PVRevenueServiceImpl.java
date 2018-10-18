@@ -22,38 +22,38 @@ public class PVRevenueServiceImpl implements PVRevenueService {
 		List list = pvRevenueDao.getPVRevenueList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
-			resultMap.put("netGenValList", null);
-			resultMap.put("smpDealList", null);
-			resultMap.put("smpPriceList", null);
-			resultMap.put("recDealList", null);
-			resultMap.put("recPriceList", null);
-			resultMap.put("totPriceList", null);
+			resultMap.put("netGenValMap", null);
+			resultMap.put("smpDealMap", null);
+			resultMap.put("smpPriceMap", null);
+			resultMap.put("recDealMap", null);
+			resultMap.put("recPriceMap", null);
+			resultMap.put("totPriceMap", null);
 			
 			return resultMap;
 		} else {
-			List netGenValList = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "net_gen_val", 1); // 총 발전량
-			List smpDealList = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "smp_deal", 1); // SMP 거래량
-			List smpPriceList = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "smp_price", 1); // SMP 수익
-			List recDealList = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "rec_deal", 1); // REC 거래량
-			List recPriceList = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "rec_price", 1); // REC 수익
-			List totPriceList = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "tot_price", 1); //총 수익
+			Map<String, Object> map1 = new HashMap<String, Object>();
+			Map<String, Object> map2 = new HashMap<String, Object>();
+			Map<String, Object> map3 = new HashMap<String, Object>();
+			Map<String, Object> map4 = new HashMap<String, Object>();
+			Map<String, Object> map5 = new HashMap<String, Object>();
+			Map<String, Object> map6 = new HashMap<String, Object>();
+			map1 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "net_gen_val", 1); // 총 발전량
+			map2 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "smp_deal", 1); // SMP 거래량
+			map3 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "smp_price", 1); // SMP 수익
+			map4 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "rec_deal", 1); // REC 거래량
+			map5 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "rec_price", 1); // REC 수익
+			map6 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "tot_price", 1); //총 수익
 			
-			resultMap.put("netGenValList", netGenValList);
-			resultMap.put("smpDealList", smpDealList);
-			resultMap.put("smpPriceList", smpPriceList);
-			resultMap.put("recDealList", recDealList);
-			resultMap.put("recPriceList", recPriceList);
-			resultMap.put("totPriceList", totPriceList);
+			resultMap.put("netGenValMap", map1);
+			resultMap.put("smpDealMap", map2);
+			resultMap.put("smpPriceMap", map3);
+			resultMap.put("recDealMap", map4);
+			resultMap.put("recPriceMap", map5);
+			resultMap.put("totPriceMap", map6);
 			
 			return resultMap;
 		}
 		
 	}
-
-	public List getPVRevenueList_test(HashMap param) throws Exception {
-		return pvRevenueDao.getPVRevenueList_test(param);
-	}
-	
-	
 	
 }

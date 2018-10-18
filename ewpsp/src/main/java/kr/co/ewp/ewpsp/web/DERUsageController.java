@@ -50,22 +50,11 @@ public class DERUsageController {
 		logger.debug("/getESSUsageList");
 		logger.debug("param ::::: "+param.toString());
 		
-		List list = derUsageService.getESSUsageList(param);
+		Map list = derUsageService.getESSUsageList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", list);
-		return resultMap;
-	}
-	
-	@RequestMapping("/getPVUsageList")
-	public @ResponseBody Map<String, Object> getPVUsageList(@RequestParam HashMap param) throws Exception {
-		logger.debug("/getPVUsageList");
-		logger.debug("param ::::: "+param.toString());
-		
-		List list = derUsageService.getPVUsageList(param);
-		
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", list);
+		resultMap.put("sheetList", list.get("sheetList"));
+		resultMap.put("chartList", list.get("chartList"));
 		return resultMap;
 	}
 	
@@ -74,25 +63,29 @@ public class DERUsageController {
 		logger.debug("/getDERUsageList");
 		logger.debug("param ::::: "+param.toString());
 		
-		List kepcoUsageList = usageService.getUsageRealList(param); // 한전 사용량
-		List essUsageList = derUsageService.getESSUsageList(param);// ESS 사용량
+		Map kepcoUsageList = usageService.getUsageRealList(param); // 한전 사용량
+		Map essUsageList = derUsageService.getESSUsageList(param);// ESS 사용량
 //		List pvUsageList = derUsageService.getPVUsageList(param); // PV 사용량
-		List pvUsageList = pvGenService.getPVGenRealList(param); // PV 사용량
+		Map pvUsageList = pvGenService.getPVGenRealList(param); // PV 사용량
 		
 		List loopCntList = null;
 		if(kepcoUsageList != null && kepcoUsageList.size() > 0) {
-			loopCntList = kepcoUsageList;
+			loopCntList = (List) kepcoUsageList.get("sheetList");
 		} else if(essUsageList != null && essUsageList.size() > 0) {
-			loopCntList = essUsageList;
+			loopCntList = (List) essUsageList.get("sheetList");
 		} else if(pvUsageList != null && pvUsageList.size() > 0) {
-			loopCntList = pvUsageList;
+			loopCntList = (List) pvUsageList.get("sheetList");
 		}
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("kepcoUsageList", kepcoUsageList);
-		resultMap.put("essUsageList", essUsageList);
-		resultMap.put("pvUsageList", pvUsageList);
+		resultMap.put("kepcoUsageSheetList", kepcoUsageList.get("sheetList"));
+		resultMap.put("kepcoUsageChartList", kepcoUsageList.get("chartList"));
+		resultMap.put("essUsageListSheetList", essUsageList.get("sheetList"));
+		resultMap.put("essUsageListChartList", essUsageList.get("chartList"));
+		resultMap.put("pvUsageListSheetList", pvUsageList.get("sheetList"));
+		resultMap.put("pvUsageListChartList", pvUsageList.get("chartList"));
 		resultMap.put("loopCntList", loopCntList);
+		
 		return resultMap;
 	}
 	

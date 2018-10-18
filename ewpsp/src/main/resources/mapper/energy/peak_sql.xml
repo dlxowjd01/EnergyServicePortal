@@ -25,48 +25,4 @@
 		order by std_timestamp
 	</select>
 	
-	<select id="getContractPowerList" parameterType="hashMap" resultType="hashMap">
-		select 
-			site_id, std_timestamp, sum(peak_val) as peak_val
-		from (
-			select 
-				peak_idx, site_id, std_timestamp, std_date, 3000 as peak_val, peak_timestamp, peak_date, reg_date, mod_date
-			from tb_peak
-			where 1=1
-			and site_id = #{siteId }
-			<!-- and std_date between str_to_date('20180823000000','%Y%m%d%H%i%s') and str_to_date('20180823235959','%Y%m%d%H%i%s') -->
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
-			and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
-			</if>
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(schTermFrom)">
-			and std_date between str_to_date(#{schTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{schTermTo },'%Y%m%d%H%i%s')
-			</if>
-		) a
-		where 1=1
-		group by site_id, std_timestamp
-		order by std_timestamp
-	</select>
-	
-	<select id="getChargePowerList" parameterType="hashMap" resultType="hashMap">
-		select 
-			site_id, std_timestamp, sum(peak_val) as peak_val
-		from (
-			select 
-				peak_idx, site_id, std_timestamp, std_date, 2000 as peak_val, peak_timestamp, peak_date, reg_date, mod_date
-			from tb_peak
-			where 1=1
-			and site_id = #{siteId }
-			<!-- and std_date between str_to_date('20180823000000','%Y%m%d%H%i%s') and str_to_date('20180823235959','%Y%m%d%H%i%s') -->
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
-			and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
-			</if>
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(schTermFrom)">
-			and std_date between str_to_date(#{schTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{schTermTo },'%Y%m%d%H%i%s')
-			</if>
-		) a
-		where 1=1
-		group by site_id, std_timestamp
-		order by std_timestamp
-	</select>
-	
 </mapper>

@@ -30,9 +30,6 @@ public class DRRevenueController {
 	public String main(Model model) {
 		logger.debug("/drRevenue");
 		
-//		List list = drRevenueService.usageList();
-//		model.addAttribute("list", list);
-		
 		return "ewp/billRevenue/drRevenue";
 	}
 	
@@ -47,17 +44,5 @@ public class DRRevenueController {
 		resultMap.put("list", list);
 		return resultMap;
 	}
-	
-//	@RequestMapping("/getUsageFutureList")
-//	public @ResponseBody Map<String, Object> getUsageFutureList(@RequestParam HashMap param) throws Exception {
-//		logger.debug("/getUsageFutureList");
-//		logger.debug("param ::::: "+param.toString());
-//		
-//		List list = drRevenueService.getUsageFutureList();
-//		
-//		Map<String, Object> resultMap = new HashMap<String, Object>();
-//		resultMap.put("list", list);
-//		return resultMap;
-//	}
 	
 }

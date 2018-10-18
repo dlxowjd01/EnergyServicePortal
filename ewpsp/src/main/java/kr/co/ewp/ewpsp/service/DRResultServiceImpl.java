@@ -19,6 +19,4 @@ public class DRResultServiceImpl implements DRResultService {
 		return drResultDao.getDRResultList(param);
 	}
 	
-	
-	
 }

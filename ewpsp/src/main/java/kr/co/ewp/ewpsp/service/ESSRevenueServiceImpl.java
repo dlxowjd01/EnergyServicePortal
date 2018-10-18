@@ -18,11 +18,5 @@ public class ESSRevenueServiceImpl implements ESSRevenueService {
 	public List getESSRevenueList(HashMap param) throws Exception {
 		return essRevenueDao.getESSRevenueList(param);
 	}
-
-	public List getESSRevenueList_test(HashMap param) throws Exception {
-		return essRevenueDao.getESSRevenueList_test(param);
-	}
-	
-	
 	
 }

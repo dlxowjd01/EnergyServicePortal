@@ -18,9 +18,4 @@ public class DRRevenueDao {
 		return resultList;
 	}
 
-	public List getUsageFutureList() {
-		List resultList = sqlSession.selectList("drRevenue.getUsageFutureList");
-		return resultList;
-	}
-
 }

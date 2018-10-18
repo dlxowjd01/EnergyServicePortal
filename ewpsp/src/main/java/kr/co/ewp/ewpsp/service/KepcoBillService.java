@@ -7,6 +7,4 @@ public interface KepcoBillService {
 
 	List getKepcoBillList(HashMap param) throws Exception;
 
-	List getKepcoBillList_test(HashMap param) throws Exception;
-
 }

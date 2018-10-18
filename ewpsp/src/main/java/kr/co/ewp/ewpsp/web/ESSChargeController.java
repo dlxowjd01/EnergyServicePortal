@@ -1,3 +1,10 @@
+/**
+ * class name : ESSChargeController
+ * description : 충방전량 화면 controller
+ * version : 1.0
+ * author : 이우람
+ */
+
 package kr.co.ewp.ewpsp.web;
 
 import java.util.HashMap;
@@ -38,7 +45,10 @@ public class ESSChargeController {
 		Map result = essChargeService.getESSChargeRealList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("resultListMap", result);
+		resultMap.put("chgSheetList", ((Map) result.get("chgMap")).get("sheetList") );
+		resultMap.put("chgChartList", ((Map) result.get("chgMap")).get("chartList") );
+		resultMap.put("dischgSheetList", ((Map) result.get("dischgMap")).get("sheetList") );
+		resultMap.put("dischgChartList", ((Map) result.get("dischgMap")).get("chartList") );
 		return resultMap;
 	}
 	
@@ -50,7 +60,10 @@ public class ESSChargeController {
 		Map result = essChargeService.getESSChargeFutureList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("resultListMap", result);
+		resultMap.put("chgSheetList", ((Map) result.get("chgMap")).get("sheetList") );
+		resultMap.put("chgChartList", ((Map) result.get("chgMap")).get("chartList") );
+		resultMap.put("dischgSheetList", ((Map) result.get("dischgMap")).get("sheetList") );
+		resultMap.put("dischgChartList", ((Map) result.get("dischgMap")).get("chartList") );
 		return resultMap;
 	}
 }

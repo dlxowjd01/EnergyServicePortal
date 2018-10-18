@@ -35,9 +35,6 @@ public class UsageController {
 	public String usage(Model model) {
 		logger.debug("/usage");
 		
-//		List list = usageService.usageList();
-//		model.addAttribute("list", list);
-		
 		return "ewp/energy/usage";
 	}
 	
@@ -46,11 +43,11 @@ public class UsageController {
 		logger.debug("/getUsageRealList");
 		logger.debug("param ::::: "+param.toString());
 		
-		List list = usageService.getUsageRealList(param);
-		System.out.println("  ㅎㅎㅎ "+list.toString());
+		Map list = usageService.getUsageRealList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", list);
+		resultMap.put("sheetList", list.get("sheetList"));
+		resultMap.put("chartList", list.get("chartList"));
 		return resultMap;
 	}
 	
@@ -59,10 +56,11 @@ public class UsageController {
 		logger.debug("/getUsageFutureList");
 		logger.debug("param ::::: "+param.toString());
 		
-		List list = usageService.getUsageFutureList(param);
+		Map list = usageService.getUsageFutureList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", list);
+		resultMap.put("sheetList", list.get("sheetList"));
+		resultMap.put("chartList", list.get("chartList"));
 		return resultMap;
 	}
 	

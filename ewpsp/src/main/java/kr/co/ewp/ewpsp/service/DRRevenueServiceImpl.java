@@ -18,11 +18,5 @@ public class DRRevenueServiceImpl implements DRRevenueService {
 	public List getDRRevenueList(HashMap param) throws Exception {
 		return drRevenueDao.getDRRevenueList(param);
 	}
-
-	public List getUsageFutureList() throws Exception {
-		return drRevenueDao.getUsageFutureList();
-	}
-	
-	
 	
 }

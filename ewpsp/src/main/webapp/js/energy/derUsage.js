@@ -27,11 +27,13 @@
 	var essUsageList; // ess 사용량
 	var pvUsageList; // pv 사용량 사용량
 	function callback_getDERUsageList(result) {
-		var kepcoUsageList = result.kepcoUsageList;
-		var essUsgList = result.essUsageList;
-		var pvUsgList = result.pvUsageList;
+		var kepcoUsageSheetList  = result.kepcoUsageSheetList;
+		var kepcoUsageChartList  = result.kepcoUsageChartList;
+		var essUsageListSheetList = result.essUsageListSheetList;
+		var essUsageListChartList = result.essUsageListChartList;
+		var pvUsageListSheetList = result.pvUsageListSheetList;
+		var pvUsageListChartList = result.pvUsageListChartList;
 		var loopCntList = result.loopCntList; // for문 loop list
-//		var periodd = $("#selPeriodVal").val(); // 데이터조회간격
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -51,86 +53,94 @@
 		var dt_str3_totalVal = 0; // 테이블 라인별 누적합
 		
 		// 한전사용량, ess사용량, pv사용량 중 하나라도 데이터가 존재할 때
-		if( !( kepcoUsageList.length < 1 && essUsgList.length <1 && pvUsgList.length < 1 ) ) {
-//			if(usageList.length > 0) {
-				for(var i=0; i<loopCntList.length; i++) {
-					var kepcoUsage = null;
-					var essUsage = null;
-					var pvUsage = null;
-					var reKepcoUsage = 0;
-					var reEssUsage = 0;
-					var rePvUsage = 0;
+		// 표데이터 셋팅
+		if( !( kepcoUsageSheetList.length < 1 && essUsageListSheetList.length <1 && pvUsageListSheetList.length < 1 ) ) {
+			for(var i=0; i<loopCntList.length; i++) {
+				var kepcoUsage = null;
+				var essUsage = null;
+				var pvUsage = null;
+				var reKepcoUsage = 0;
+				var reEssUsage = 0;
+				var rePvUsage = 0;
+				
+				if(kepcoUsageChartList != null && kepcoUsageChartList.length > 0 && kepcoUsageChartList.length > i) { // 한전사용량
+					kepcoUsage = String(kepcoUsageChartList[i].usg_val);
+					if(kepcoUsage == null || kepcoUsage == "" || kepcoUsage == "null") reKepcoUsage = null;
+					else {
+						var map = convertUnitFormat(kepcoUsage, "mWh", 8);
+						reKepcoUsage = Number( map.get("formatNum") );
+						totalDataSet = totalDataSet+Number(kepcoUsage);
+					}
 					
-					if(kepcoUsageList != null && kepcoUsageList.length > 0 && kepcoUsageList.length > i) { // 한전사용량
-						kepcoUsage = String(kepcoUsageList[i].usg_val);
-						if(kepcoUsage == null || kepcoUsage == "" || kepcoUsage == "null") reKepcoUsage = null;
-						else {
-//							reKepcoUsage = Math.round( Number(kepcoUsage) );
-							if(kepcoUsage.length < 7) reKepcoUsage = Number(     kepcoUsage     ); // 나중에 수정 요망
-							else reKepcoUsage = Number(     kepcoUsage.substring( 0, kepcoUsage.length-6 )     );
-							totalDataSet = totalDataSet+Number(kepcoUsage);
-						}
-						
-					} else reKepcoUsage = null;
-					
-					if(essUsgList != null && essUsgList.length > 0 && essUsgList.length > i) { // ESS 사용량
-						essUsage = String(essUsgList[i].usg_val);
-						if(essUsage == null || essUsage == "" || essUsage == "null") reEssUsage = null;
-						else {
-//							reEssUsage = Math.round( Number(essUsage) );
-							if(essUsage.length < 7) reEssUsage = Number(     essUsage     ); // 나중에 수정 요망
-							else reEssUsage = Number(     essUsage.substring( 0, essUsage.length-6 )     );
-							totalDataSet2 = totalDataSet2+Number(essUsage);
-						}
-					} else reEssUsage = null;
-					
-					if(pvUsgList != null && pvUsgList.length > 0 && pvUsgList.length > i) { // PV 사용량
-						pvUsage = String(pvUsgList[i].gen_val);
-						if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
-						else {
-//							rePvUsage = Math.round( Number(pvUsage) );
-							if(pvUsage.length < 7) rePvUsage = Number(     pvUsage     ); // 나중에 수정 요망
-							else rePvUsage = Number(     pvUsage.substring( 0, pvUsage.length-6 )     );
-							totalDataSet3 = totalDataSet3+Number(pvUsage);
-						}
-					} else rePvUsage = null;
-					
-					var tm = new Date( convertDateUTC(loopCntList[i].std_timestamp) );
-					// 차트데이터 셋팅
-					dataSet.push([ // Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())
-						setChartDateUTC(loopCntList[i].std_timestamp) , reKepcoUsage
-					]);
-					dataSet2.push([ // Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())
-						setChartDateUTC(loopCntList[i].std_timestamp) , reEssUsage
-					]);
-					dataSet3.push([ // Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())
-						setChartDateUTC(loopCntList[i].std_timestamp) , rePvUsage
-					]);
-					
-					// 표데이터 셋팅
-					var headerDate2 = convertDataTableHeaderDate(tm, 2);
-					dt_str_head += "<th>"+headerDate2+"</th>"
-//					if(kepcoUsage == null || kepcoUsage == "" || kepcoUsage == "null") dt_str += "<td>"+" "+"</td>"; 
-//					else dt_str += "<td>"+reKepcoUsage+"</td>";
-					dt_str += "<td>"+  ( (reKepcoUsage == null) ? "" : reKepcoUsage ) +"</td>"; // 총 발전량
-					dt_str2 += "<td>"+ ( (reEssUsage == null) ? "" : reEssUsage    ) +"</td>"; // SMP 거래량
-					dt_str3 += "<td>"+ ( (rePvUsage == null) ? "" : rePvUsage   ) +"</td>"; // SMP 수익
-					
-					dt_str_totalVal = dt_str_totalVal+reKepcoUsage;
-					dt_str2_totalVal = dt_str2_totalVal+ reEssUsage;
-					dt_str3_totalVal = dt_str3_totalVal+ rePvUsage;
-					if(dt_col_cnt == dt_col) {
+				} else reKepcoUsage = null;
+				
+				if(essUsageListChartList != null && essUsageListChartList.length > 0 && essUsageListChartList.length > i) { // ESS 사용량
+					essUsage = String(essUsageListChartList[i].usg_val);
+					if(essUsage == null || essUsage == "" || essUsage == "null") reEssUsage = null;
+					else {
+						var map = convertUnitFormat(essUsage, "kWh", 1);
+						reEssUsage = Number( map.get("formatNum") );
+						totalDataSet2 = totalDataSet2+Number(essUsage);
+					}
+				} else reEssUsage = null;
+				
+				if(pvUsageListChartList != null && pvUsageListChartList.length > 0 && pvUsageListChartList.length > i) { // PV 사용량
+					pvUsage = String(pvUsageListChartList[i].gen_val);
+					if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
+					else {
+						var map = convertUnitFormat(pvUsage, "kWh", 1);
+						rePvUsage = Number( map.get("formatNum") );
+						totalDataSet3 = totalDataSet3+Number(pvUsage);
+					}
+				} else rePvUsage = null;
+				
+				var tm = new Date( convertDateUTC(loopCntList[i].std_timestamp) );
+				
+				// 표데이터 셋팅
+				var headerDate2 = convertDataTableHeaderDate(tm, 2);
+				dt_str_head += "<th>"+headerDate2+"</th>"
+				dt_str += "<td>"+  ( (reKepcoUsage == null) ? "" : reKepcoUsage ) +"</td>"; // 총 발전량
+				dt_str2 += "<td>"+ ( (reEssUsage == null) ? "" : reEssUsage    ) +"</td>"; // SMP 거래량
+				dt_str3 += "<td>"+ ( (rePvUsage == null) ? "" : rePvUsage   ) +"</td>"; // SMP 수익
+				
+				dt_str_totalVal = dt_str_totalVal+reKepcoUsage;
+				dt_str2_totalVal = dt_str2_totalVal+ reEssUsage;
+				dt_str3_totalVal = dt_str3_totalVal+ rePvUsage;
+				if(dt_col_cnt == dt_col) {
+					var headerDate1 = convertDataTableHeaderDate(tm, 1);
+					var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
+					dt_str += "<td>"+dt_str_totalVal+"</td>";
+					dt_str2 += "<td>"+dt_str2_totalVal+"</td>";
+					dt_str3 += "<td>"+dt_str3_totalVal+"</td>";
+					usage_head_pc[dt_row_cnt-1] = final_dt_str_head;
+					real_data_pc[dt_row_cnt-1] = dt_str;
+					ess_data_pc[dt_row_cnt-1] = dt_str2;
+					pv_data_pc[dt_row_cnt-1] = dt_str3;
+					dt_row_cnt++;
+					dt_col_cnt = 1;
+					dt_str_head = "";
+					dt_str = "";
+					dt_str2 = "";
+					dt_str3 = "";
+					dt_str_totalVal = 0;
+					dt_str2_totalVal = 0;
+					dt_str3_totalVal = 0;
+				} else {
+					if( (i+1) == loopCntList.length ) { // 조회한 목록이 라인을 다 못채울 때
 						var headerDate1 = convertDataTableHeaderDate(tm, 1);
 						var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
+						for(a=0; a<(dt_col-dt_col_cnt); a++) {
+							dt_str += "<td></td>";
+							dt_str2 += "<td></td>";
+							dt_str3 += "<td></td>";
+						}
 						dt_str += "<td>"+dt_str_totalVal+"</td>";
-						dt_str2 += "<td>"+dt_str2_totalVal+"</td>";
-						dt_str3 += "<td>"+dt_str3_totalVal+"</td>";
+						dt_str2 += "<td>"+dt_str_totalVal+"</td>";
+						dt_str3 += "<td>"+dt_str_totalVal+"</td>";
 						usage_head_pc[dt_row_cnt-1] = final_dt_str_head;
 						real_data_pc[dt_row_cnt-1] = dt_str;
 						ess_data_pc[dt_row_cnt-1] = dt_str2;
 						pv_data_pc[dt_row_cnt-1] = dt_str3;
-						dt_row_cnt++;
-						dt_col_cnt = 1;
 						dt_str_head = "";
 						dt_str = "";
 						dt_str2 = "";
@@ -139,81 +149,107 @@
 						dt_str2_totalVal = 0;
 						dt_str3_totalVal = 0;
 					} else {
-//						if( (i+1) == kepcoUsageList.length ) { // 조회한 목록이 라인을 다 못채울 때
-						if( (i+1) == loopCntList.length ) { // 조회한 목록이 라인을 다 못채울 때
-							var headerDate1 = convertDataTableHeaderDate(tm, 1);
-							var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
-							for(a=0; a<(dt_col-dt_col_cnt); a++) {
-								dt_str += "<td></td>";
-								dt_str2 += "<td></td>";
-								dt_str3 += "<td></td>";
-							}
-							dt_str += "<td>"+dt_str_totalVal+"</td>";
-							dt_str2 += "<td>"+dt_str_totalVal+"</td>";
-							dt_str3 += "<td>"+dt_str_totalVal+"</td>";
-							usage_head_pc[dt_row_cnt-1] = final_dt_str_head;
-							real_data_pc[dt_row_cnt-1] = dt_str;
-							ess_data_pc[dt_row_cnt-1] = dt_str2;
-							pv_data_pc[dt_row_cnt-1] = dt_str3;
-							dt_str_head = "";
-							dt_str = "";
-							dt_str2 = "";
-							dt_str3 = "";
-							dt_str_totalVal = 0;
-							dt_str2_totalVal = 0;
-							dt_str3_totalVal = 0;
-						} else {
-							dt_col_cnt++;
-						}
+						dt_col_cnt++;
+					}
+				}
+				
+			}
+			
+		}
+		
+		// 한전사용량, ess사용량, pv사용량 중 하나라도 데이터가 존재할 때
+		// 차트데이터 셋팅
+		if( !( kepcoUsageChartList.length < 1 && essUsageListChartList.length <1 && pvUsageListChartList.length < 1 ) ) {
+			for(var i=0; i<loopCntList.length; i++) {
+				var kepcoUsage = null;
+				var essUsage = null;
+				var pvUsage = null;
+				var reKepcoUsage = 0;
+				var reEssUsage = 0;
+				var rePvUsage = 0;
+				
+				if(kepcoUsageChartList != null && kepcoUsageChartList.length > 0 && kepcoUsageChartList.length > i) { // 한전사용량
+					kepcoUsage = String(kepcoUsageChartList[i].usg_val);
+					if(kepcoUsage == null || kepcoUsage == "" || kepcoUsage == "null") reKepcoUsage = null;
+					else {
+						var map = convertUnitFormat(kepcoUsage, "mWh", 8);
+						reKepcoUsage = Number( map.get("formatNum") );
+						totalDataSet = totalDataSet+Number(kepcoUsage);
 					}
 					
-				}
-				pastUsageList = dataSet;
-				essUsageList = dataSet2;
-				pvUsageList = dataSet3;
+				} else reKepcoUsage = null;
 				
-				if(kepcoUsageList.length > 0) {
-					myChart.addSeries({
-						index:3,
-						fillOpacity: 1,
-						name: '한전 사용량',
-						color: '#FFFFFF',
-						lineColor: '#438fd7', /* 한전 사용량 */
-						data: pastUsageList
-					}, false);
-					
-				}
+				if(essUsageListChartList != null && essUsageListChartList.length > 0 && essUsageListChartList.length > i) { // ESS 사용량
+					essUsage = String(essUsageListChartList[i].usg_val);
+					if(essUsage == null || essUsage == "" || essUsage == "null") reEssUsage = null;
+					else {
+						var map = convertUnitFormat(essUsage, "kWh", 1);
+						reEssUsage = Number( map.get("formatNum") );
+						totalDataSet2 = totalDataSet2+Number(essUsage);
+					}
+				} else reEssUsage = null;
 				
-				if(essUsgList.length > 0) {
-					myChart.addSeries({
-						index: 2,
-						fillOpacity: 0.5,
-						name: 'ESS 사용량',
-						color: '#13af67', /* ESS 사용량 */
-						data: essUsageList
-					}, false);
-					
-				}
+				if(pvUsageListChartList != null && pvUsageListChartList.length > 0 && pvUsageListChartList.length > i) { // PV 사용량
+					pvUsage = String(pvUsageListChartList[i].gen_val);
+					if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
+					else {
+						var map = convertUnitFormat(pvUsage, "kWh", 1);
+						rePvUsage = Number( map.get("formatNum") );
+						totalDataSet3 = totalDataSet3+Number(pvUsage);
+					}
+				} else rePvUsage = null;
 				
-				if(pvUsgList.length > 0) {
-					myChart.addSeries({
-						index: 1,
-						fillOpacity: 0.5,
-						name: 'PV 사용량',
-						color: '#f75c4a', /* PV 사용량 */
-						data: pvUsageList
-					}, false);
-					
-				}
+				var tm = new Date( convertDateUTC(loopCntList[i].std_timestamp) );
+				// 차트데이터 셋팅
+				dataSet.push([ setChartDateUTC(loopCntList[i].std_timestamp) , reKepcoUsage ]);
+				dataSet2.push([ setChartDateUTC(loopCntList[i].std_timestamp) , reEssUsage ]);
+				dataSet3.push([ setChartDateUTC(loopCntList[i].std_timestamp) , rePvUsage ]);
 				
-//			}
+			}
+			pastUsageList = dataSet;
+			essUsageList = dataSet2;
+			pvUsageList = dataSet3;
+			
+			if(kepcoUsageChartList.length > 0) {
+				myChart.addSeries({
+					index:3,
+					fillOpacity: 1,
+					name: '한전 사용량',
+					color: '#FFFFFF',
+					lineColor: '#438fd7', /* 한전 사용량 */
+					data: pastUsageList
+				}, false);
+				
+			}
+			
+			if(essUsageListChartList.length > 0) {
+				myChart.addSeries({
+					index: 2,
+					fillOpacity: 0.5,
+					name: 'ESS 사용량',
+					color: '#13af67', /* ESS 사용량 */
+					data: essUsageList
+				}, false);
+				
+			}
+			
+			if(pvUsageListChartList.length > 0) {
+				myChart.addSeries({
+					index: 1,
+					fillOpacity: 0.5,
+					name: 'PV 사용량',
+					color: '#f75c4a', /* PV 사용량 */
+					data: pvUsageList
+				}, false);
+				
+			}
 			
 		}
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-		unit_format(String(totalDataSet), "usageTotal", "Wh");
-		unit_format(String(totalDataSet2), "essUsageTotal", "Wh");
-		unit_format(String(totalDataSet3), "pvUsageTotal", "Wh");
+		unit_format(String(totalDataSet), "usageTotal", "mWh");
+		unit_format(String(totalDataSet2), "essUsageTotal", "kWh");
+		unit_format(String(totalDataSet3), "pvUsageTotal", "kWh");
 		
 		var total = totalDataSet+totalDataSet2+totalDataSet3;
 		$("#kepcoPer").empty().append("한전 사용").append( $("<span />").append( ( (totalDataSet == 0) ? 0 : ( (totalDataSet/total)*100 ).toFixed(2) )+"%" ) );

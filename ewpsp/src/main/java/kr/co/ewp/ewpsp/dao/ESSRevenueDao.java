@@ -18,9 +18,4 @@ public class ESSRevenueDao {
 		return resultList;
 	}
 
-	public List getESSRevenueList_test(HashMap param) {
-		List resultList = sqlSession.selectList("essRevenue.getESSRevenueList_test", param);
-		return resultList;
-	}
-
 }

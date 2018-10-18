@@ -8,6 +8,4 @@ public interface PVRevenueService {
 
 	Map getPVRevenueList(HashMap param) throws Exception;
 
-	List getPVRevenueList_test(HashMap param) throws Exception;
-
 }

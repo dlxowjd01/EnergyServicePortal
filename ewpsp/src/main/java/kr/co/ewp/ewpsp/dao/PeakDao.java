@@ -18,14 +18,4 @@ public class PeakDao {
 		return resultList;
 	}
 
-	public List getContractPowerList(HashMap param) {
-		List resultList = sqlSession.selectList("peak.getContractPowerList", param);
-		return resultList;
-	}
-	
-	public List getChargePowerList(HashMap param) {
-		List resultList = sqlSession.selectList("peak.getChargePowerList", param);
-		return resultList;
-	}
-
 }

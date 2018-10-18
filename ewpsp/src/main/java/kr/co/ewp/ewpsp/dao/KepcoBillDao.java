@@ -18,9 +18,4 @@ public class KepcoBillDao {
 		return resultList;
 	}
 
-	public List getKepcoBillList_test(HashMap param) {
-		List resultList = sqlSession.selectList("kepcoBill.getKepcoBillList_test", param);
-		return resultList;
-	}
-
 }

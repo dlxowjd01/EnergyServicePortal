@@ -41,14 +41,18 @@
 	var pvRevenueList2;
 	var pvRevenueList3;
 	function callback_getPVRevenueList(result) {
-		var resultListMap = result.resultListMap;
-		
-		var netGenValList = resultListMap.netGenValList;
-		var smpDealList =   resultListMap.smpDealList;
-		var smpPriceList =  resultListMap.smpPriceList;
-		var recDealList =   resultListMap.recDealList;
-		var recPriceList =  resultListMap.recPriceList;
-		var totPriceList =  resultListMap.totPriceList;
+		var netGenValSheetList = result.netGenValSheetList;
+		var netGenValChartList = result.netGenValChartList;
+		var smpDealSheetList   = result.smpDealSheetList  ;
+		var smpDealChartList   = result.smpDealChartList  ;
+		var smpPriceSheetList  = result.smpPriceSheetList ;
+		var smpPriceChartList  = result.smpPriceChartList ;
+		var recDealSheetList   = result.recDealSheetList  ;
+		var recDealChartList   = result.recDealChartList  ;
+		var recPriceSheetList  = result.recPriceSheetList ;
+		var recPriceChartList  = result.recPriceChartList ;
+		var totPriceSheetList  = result.totPriceSheetList ;
+		var totPriceChartList  = result.totPriceChartList ;
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -73,17 +77,16 @@
 		var dt_str5_totalVal = 0; // 테이블 라인별 누적합
 		var dt_str6_totalVal = 0; // 테이블 라인별 누적합
 		
-		if(netGenValList.length < 1) {
-			
-		} else {
-			for(var i=0; i<netGenValList.length; i++) {
-				var yyyyMM = new Date( convertDateUTC(netGenValList[i].std_timestamp) ).format("yyyyMM");
-				var netGenVal = String(netGenValList[i].net_gen_val);
-				var smpDeal   = String(smpDealList[i].smp_deal);
-				var smpPrice  = String(smpPriceList[i].smp_price);
-				var recDeal   = String(recDealList[i].rec_deal);
-				var recPrice  = String(recPriceList[i].rec_price);
-				var totPrice  = String(totPriceList[i].tot_price);
+		// 표데이터 셋팅
+		if(netGenValSheetList.length > 0) {
+			for(var i=0; i<netGenValSheetList.length; i++) {
+				var yyyyMM = new Date( convertDateUTC(netGenValSheetList[i].std_timestamp) ).format("yyyyMM");
+				var netGenVal = String(netGenValSheetList[i].net_gen_val);
+				var smpDeal   = String(smpDealSheetList[i].smp_deal);
+				var smpPrice  = String(smpPriceSheetList[i].smp_price);
+				var recDeal   = String(recDealSheetList[i].rec_deal);
+				var recPrice  = String(recPriceSheetList[i].rec_price);
+				var totPrice  = String(totPriceSheetList[i].tot_price);
 				var reNetGenVal = 0; 
 				var reSmpDeal   = 0; 
 				var reSmpPrice  = 0; 
@@ -112,11 +115,6 @@
 					reTotPrice  = Math.round( Number(totPrice) );
 					totDataSet = totDataSet+reTotPrice;
 				}
-				
-				// 차트데이터 셋팅
-				dataSet.push( [netGenValList[i].std_timestamp, reTotPrice] );
-				dataSet2.push( [netGenValList[i].std_timestamp, reSmpPrice] );
-				dataSet3.push( [netGenValList[i].std_timestamp, reRecPrice] );
 
 				// 표데이터 셋팅
 				dt_str_head += "<th>"+yyyyMM.substring(0, 4)+"-"+yyyyMM.substring(4, 6)+"</th>"
@@ -163,6 +161,61 @@
 				} else {
 					dt_col_cnt++;
 				}
+				
+			}
+			pvRevenueList1 = dataSet;
+			pvRevenueList2 = dataSet2;
+			pvRevenueList3 = dataSet3;
+			
+			// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
+			unit_format(String(totDataSet), "pvRevenueTot1", "won");
+			unit_format(String(totDataSet2), "pvRevenueTot2", "won");
+			unit_format(String(totDataSet3), "pvRevenueTot3", "won");
+		}
+		
+		// 차트데이터 셋팅
+		if(netGenValChartList.length > 0) {
+			for(var i=0; i<netGenValChartList.length; i++) {
+				var yyyyMM = new Date( convertDateUTC(netGenValChartList[i].std_timestamp) ).format("yyyyMM");
+//				var netGenVal = String(netGenValChartList[i].net_gen_val);
+//				var smpDeal   = String(smpDealChartList[i].smp_deal);
+				var smpPrice  = String(smpPriceChartList[i].smp_price);
+//				var recDeal   = String(recDealChartList[i].rec_deal);
+				var recPrice  = String(recPriceChartList[i].rec_price);
+				var totPrice  = String(totPriceChartList[i].tot_price);
+//				var reNetGenVal = 0; 
+//				var reSmpDeal   = 0; 
+				var reSmpPrice  = 0; 
+//				var reRecDeal   = 0; 
+				var reRecPrice  = 0; 
+				var reTotPrice  = 0; 
+				
+//				if(netGenVal == null || netGenVal == "" || netGenVal == "null") reNetGenVal = null;
+//				else reNetGenVal = Math.round( Number(netGenVal) );
+//				if(smpDeal == null || smpDeal == "" || smpDeal == "null") reSmpDeal = null;
+//				else reSmpDeal   = Math.round( Number(smpDeal) );
+				if(smpPrice == null || smpPrice == "" || smpPrice == "null") reSmpPrice = null;
+				else {
+					reSmpPrice  = Math.round( Number(smpPrice) );
+					totDataSet2 = totDataSet2+reSmpPrice;
+				}
+//				if(recDeal == null || recDeal == "" || recDeal == "null") reRecDeal = null;
+//				else reRecDeal   = Math.round( Number(recDeal) );
+				if(recPrice == null || recPrice == "" || recPrice == "null") reRecPrice = null;
+				else {
+					reRecPrice  = Math.round( Number(recPrice) );
+					totDataSet3 = totDataSet3+reRecPrice;
+				}
+				if(totPrice == null || totPrice == "" || totPrice == "null") reTotPrice = null;
+				else {
+					reTotPrice  = Math.round( Number(totPrice) );
+					totDataSet = totDataSet+reTotPrice;
+				}
+				
+				// 차트데이터 셋팅
+				dataSet.push( [netGenValChartList[i].std_timestamp, reTotPrice] );
+				dataSet2.push( [netGenValChartList[i].std_timestamp, reSmpPrice] );
+				dataSet3.push( [netGenValChartList[i].std_timestamp, reRecPrice] );
 				
 			}
 			pvRevenueList1 = dataSet;

@@ -18,11 +18,5 @@ public class KepcoBillServiceImpl implements KepcoBillService {
 	public List getKepcoBillList(HashMap param) throws Exception {
 		return kepcoBillDao.getKepcoBillList(param);
 	}
-
-	public List getKepcoBillList_test(HashMap param) throws Exception {
-		return kepcoBillDao.getKepcoBillList_test(param);
-	}
-	
-	
 	
 }

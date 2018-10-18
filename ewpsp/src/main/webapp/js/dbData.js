@@ -41,32 +41,32 @@ function getPeakRealList(formData) {
 		}
 	});
 }
-
-// 한전계약전력 조회
-function getContractPowerList(formData) {
-	$.ajax({
-		url : "/getContractPowerList",
-		type : 'post',
-		async : false, // 동기로 처리해줌
-		data : formData,
-		success: function(result) {
-			callback_getContractPowerList(result);
-		}
-	});
-}
-
-// 요금적용전력 조회
-function getChargePowerList(formData) {
-	$.ajax({
-		url : "/getChargePowerList",
-		type : 'post',
-		async : false, // 동기로 처리해줌
-		data : formData,
-		success: function(result) {
-			callback_getChargePowerList(result);
-		}
-	});
-}
+//
+//// 한전계약전력 조회
+//function getContractPowerList(formData) {
+//	$.ajax({
+//		url : "/getContractPowerList",
+//		type : 'post',
+//		async : false, // 동기로 처리해줌
+//		data : formData,
+//		success: function(result) {
+//			callback_getContractPowerList(result);
+//		}
+//	});
+//}
+//
+//// 요금적용전력 조회
+//function getChargePowerList(formData) {
+//	$.ajax({
+//		url : "/getChargePowerList",
+//		type : 'post',
+//		async : false, // 동기로 처리해줌
+//		data : formData,
+//		success: function(result) {
+//			callback_getChargePowerList(result);
+//		}
+//	});
+//}
 
 // ess 충방전량 조회
 function getESSChargeRealList(formData) {

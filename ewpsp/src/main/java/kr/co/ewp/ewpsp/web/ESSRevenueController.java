@@ -28,9 +28,6 @@ public class ESSRevenueController {
 	public String main(Model model) {
 		logger.debug("/essRevenue");
 		
-//		List list = essRevenueService.usageList();
-//		model.addAttribute("list", list);
-		
 		return "ewp/billRevenue/essRevenue";
 	}
 	
@@ -40,18 +37,6 @@ public class ESSRevenueController {
 		logger.debug("param ::::: "+param.toString());
 		
 		List list = essRevenueService.getESSRevenueList(param);
-		
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", list);
-		return resultMap;
-	}
-	
-	@RequestMapping("/getESSRevenueList_test")
-	public @ResponseBody Map<String, Object> getESSRevenueList_test(@RequestParam HashMap param) throws Exception {
-		logger.debug("/getESSRevenueList_test");
-		logger.debug("param ::::: "+param.toString());
-		
-		List list = essRevenueService.getESSRevenueList_test(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("list", list);

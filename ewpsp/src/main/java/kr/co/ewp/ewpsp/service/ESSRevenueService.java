@@ -7,6 +7,4 @@ public interface ESSRevenueService {
 
 	List getESSRevenueList(HashMap param) throws Exception;
 
-	List getESSRevenueList_test(HashMap param) throws Exception;
-
 }

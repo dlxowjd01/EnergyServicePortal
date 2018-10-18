@@ -15,8 +15,6 @@
 		setDataTableColRowCnt(); // 1행의 최대 칸 수 및 테이블갯수
 		getSiteSetDetail();
 		getPeakRealList(formData); // 피크 전력 조회
-//		getContractPowerList(formData); // 한전계약전력 조회
-//		getChargePowerList(formData); // 요금적용전력 조회
 		drawData(); // 차트 및 표 그리기
 	}
 	
@@ -27,11 +25,16 @@
 		contractPower = (siteSetDetail == null) ? null : siteSetDetail.contract_power;
 		chargePower = (siteSetDetail == null) ? null : siteSetDetail.charge_power;
 	}
-	
+
+	// 한전계약전력
+	var contractPowerList;
+	// 요금적용전력
+	var chargePowerList;
 	// 피크 전력
 	var pastPeakList;
 	function callback_getPeakRealList(result) {
-		var peakList = result.list;
+		var sheetList = result.sheetList;
+		var chartList = result.chartList;
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -48,11 +51,13 @@
 		var dt_str_totalVal = 0; // 테이블 라인별 누적합
 		var dt_str2_totalVal = 0; // 테이블 라인별 누적합
 		var dt_str3_totalVal = 0; // 테이블 라인별 누적합
-		if(peakList.length > 0) {
-			for(var i=0; i<peakList.length; i++) {
-				var peakVal = String(peakList[i].peak_val);
+		
+		// 표데이터 셋팅
+		if(sheetList != null && sheetList.length > 0) {
+			for(var i=0; i<sheetList.length; i++) {
+				var peakVal = String(sheetList[i].peak_val);
 				var rePeakVal = 0;
-				var tm = new Date( convertDateUTC(peakList[i].std_timestamp) );
+				var tm = new Date( convertDateUTC(sheetList[i].std_timestamp) );
 				
 				if(peakVal == null || peakVal == "" || peakVal == "null") {
 					rePeakVal = null;
@@ -66,18 +71,6 @@
 					}
 				}
 				
-				// 차트데이터 셋팅
-				dataSet.push([ //peakList[i].std_timestamp
-					setChartDateUTC(peakList[i].std_timestamp)
-					, rePeakVal ]);
-				dataSet2.push([ //Number(peakList[i].std_timestamp)
-					setChartDateUTC(peakList[i].std_timestamp)
-					, contractPower ]);
-				dataSet3.push([ //Number(peakList[i].std_timestamp)
-					setChartDateUTC(peakList[i].std_timestamp)
-					, chargePower ]);
-				
-				// 표데이터 셋팅
 				var headerDate2 = convertDataTableHeaderDate(tm, 2);
 				dt_str_head += "<th>"+headerDate2+"</th>"
 				if(peakVal == null || peakVal == "" || peakVal == "null") dt_str += "<td>"+" "+"</td>"; 
@@ -107,7 +100,7 @@
 					dt_str2_totalVal = 0;
 					dt_str3_totalVal = 0;
 				} else {
-					if((i+1) == peakList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
+					if((i+1) == sheetList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
 						for(a=0; a<(dt_col-dt_col_cnt); a++) {
 							dt_str_head += "<th></th>";
 							dt_str += "<td></td>";
@@ -138,6 +131,34 @@
 			}
 			
 		}
+
+		// 차트데이터 셋팅
+		if(chartList != null && chartList.length > 0) {
+			for(var i=0; i<chartList.length; i++) {
+				var peakVal = String(chartList[i].peak_val);
+				var rePeakVal = 0;
+				var tm = new Date( convertDateUTC(chartList[i].std_timestamp) );
+				
+				if(peakVal == null || peakVal == "" || peakVal == "null") {
+					rePeakVal = null;
+				} else {
+					if(peakVal.indexOf(".")>-1) rePeakVal = Math.round( Number(peakVal) );
+					else rePeakVal = Number(peakVal);
+					
+					if(maxPeakVal < rePeakVal) {
+						maxPeakVal = rePeakVal; // 최대 피크전력 구하기
+						maxPeakTmstp = tm.format("yyyy-MM-dd HH:mm:ss");
+					}
+				}
+				
+				// 차트데이터 셋팅
+				dataSet.push([ setChartDateUTC(chartList[i].std_timestamp), rePeakVal ]);
+				dataSet2.push([ setChartDateUTC(chartList[i].std_timestamp), contractPower ]);
+				dataSet3.push([ setChartDateUTC(chartList[i].std_timestamp) , chargePower ]);
+				
+			}
+			
+		}
 		pastPeakList = dataSet;
 		contractPowerList = dataSet2;
 		chargePowerList = dataSet3;
@@ -148,139 +169,6 @@
 		unit_format(String( Math.round( Number(maxPeakVal) ) ), "pastPeakListTot", "kW");
 		unit_format(String( Math.round( Number(contractPower) ) ), "contractPowerListTot", "kW");
 		unit_format(String( Math.round( Number(chargePower) ) ), "chargePowerListTot", "kW");
-	}
-	
-	// 한전계약전력
-	var contractPowerList;
-	function callback_getContractPowerList(result) {
-		var peakList = result.list;
-		
-		// 데이터 셋팅
-		var dataSet = []; // chartData를 위한 변수
-		var totUsage = 0; // 전체 누적합
-		var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
-		var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
-		var dt_str = "";
-		var dt_str_totalVal = 0; // 테이블 라인별 누적합
-		if(peakList.length > 0) {
-			for(var i=0; i<peakList.length; i++) {
-				var peakVal = String(peakList[i].peak_val);
-				var rePeakVal = 0;
-				if(peakVal == null || peakVal == "" || peakVal == "null") {
-					rePeakVal = null;
-				} else {
-					if(peakVal.indexOf(".")>-1) rePeakVal = Math.round( Number(peakVal) );
-					else rePeakVal = Number(peakVal);
-					totUsage = totUsage+Number(peakVal);
-					var a = peakVal.length;
-					var c = totUsage.length;
-					var b = 0;
-				}
-				
-				var tm = new Date(peakList[i].std_timestamp);
-				// 차트데이터 셋팅
-				dataSet.push([
-//				Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds()), 3000
-					peakList[i].std_timestamp, rePeakVal
-				]);
-				
-				// 표데이터 셋팅
-				if(peakVal == null || peakVal == "" || peakVal == "null") dt_str += "<td>"+" "+"</td>"; 
-				else dt_str += "<td>"+rePeakVal+"</td>";
-				dt_str_totalVal = dt_str_totalVal+rePeakVal;
-				if(dt_col_cnt == dt_col) {
-					dt_str += "<td>"+dt_str_totalVal+"</td>";
-					ctpPw_data_pc[dt_row_cnt-1] = dt_str;
-					dt_row_cnt++;
-					dt_col_cnt = 1;
-					dt_str = "";
-					dt_str_totalVal = 0;
-				} else {
-					if(SelTerm == "day" && dt_col_cnt == peakList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
-						for(a=0; a<(dt_col-dt_col_cnt); a++) {
-							dt_str += "<td></td>";
-						}
-						dt_str += "<td>"+dt_str_totalVal+"</td>";
-						ctpPw_data_pc[dt_row_cnt-1] = dt_str;
-						dt_str = "";
-						dt_str_totalVal = 0;
-					} else {
-						dt_col_cnt++;
-					}
-				}
-				
-			}
-			
-		}
-		contractPowerList = dataSet;
-		
-		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-		unit_format(String(totUsage), "contractPowerListTot", "kW");
-	}
-	
-	// 요금적용전력
-	var chargePowerList;
-	function callback_getChargePowerList(result) {
-		var peakList = result.list;
-		
-		// 데이터 셋팅
-		var dataSet = []; // chartData를 위한 변수
-		var totUsage = 0; // 전체 누적합
-		var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
-		var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
-		var dt_str = "";
-		var dt_str_totalVal = 0; // 테이블 라인별 누적합
-		if(peakList.length > 0) {
-			for(var i=0; i<peakList.length; i++) {
-				var peakVal = String(peakList[i].peak_val);
-				var rePeakVal = 0;
-				if(peakVal == null || peakVal == "" || peakVal == "null") {
-					rePeakVal = null;
-				} else {
-					if(peakVal.indexOf(".")>-1) rePeakVal = Math.round( Number(peakVal) );
-					else rePeakVal = Number(peakVal);
-					totUsage = totUsage+Number(peakVal);
-				}
-				
-				var tm = new Date(peakList[i].std_timestamp);
-				// 차트데이터 셋팅
-				dataSet.push([
-//				Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds()), 2000
-					peakList[i].std_timestamp, rePeakVal
-				]);
-				
-				// 표데이터 셋팅
-				if(peakVal == null || peakVal == "" || peakVal == "null") dt_str += "<td>"+" "+"</td>"; 
-				else dt_str += "<td>"+rePeakVal+"</td>";
-				dt_str_totalVal = dt_str_totalVal+rePeakVal;
-				if(dt_col_cnt == dt_col) {
-					dt_str += "<td>"+dt_str_totalVal+"</td>";
-					cgtPw_data_pc[dt_row_cnt-1] = dt_str;
-					dt_row_cnt++;
-					dt_col_cnt = 1;
-					dt_str = "";
-					dt_str_totalVal = 0;
-				} else {
-					if(SelTerm == "day" && dt_col_cnt == peakList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
-						for(a=0; a<(dt_col-dt_col_cnt); a++) {
-							dt_str += "<td></td>";
-						}
-						dt_str += "<td>"+dt_str_totalVal+"</td>";
-						cgtPw_data_pc[dt_row_cnt-1] = dt_str;
-						dt_str = "";
-						dt_str_totalVal = 0;
-					} else {
-						dt_col_cnt++;
-					}
-				}
-				
-			}
-			
-		}
-		chargePowerList = dataSet;
-		
-		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-		unit_format(String(totUsage), "chargePowerListTot", "kW");
 	}
 	
 	// 차트 그리기

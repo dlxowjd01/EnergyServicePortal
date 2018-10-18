@@ -22,23 +22,25 @@ public class UsageServiceImpl implements UsageService {
 	@Resource(name="usageDao")
 	private UsageDao usageDao;
 
-	public List getUsageRealList(HashMap param) throws Exception {
+	public Map getUsageRealList(HashMap param) throws Exception {
 		List list = usageDao.getUsageRealList(param);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
-			return list;
+			return resultMap;
 		} else {
-			List resultList = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "usg_val", 1);
-			return resultList;
+			resultMap = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "usg_val", 1);
+			return resultMap;
 		}
 	}
 
-	public List getUsageFutureList(HashMap param) throws Exception {
+	public Map getUsageFutureList(HashMap param) throws Exception {
 		List list = usageDao.getUsageFutureList(param);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
-			return list;
+			return resultMap;
 		} else {
-			List resultList = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "pre_usg_val", 2);
-			return resultList;
+			resultMap = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "pre_usg_val", 2);
+			return resultMap;
 		}
 	}
 	
