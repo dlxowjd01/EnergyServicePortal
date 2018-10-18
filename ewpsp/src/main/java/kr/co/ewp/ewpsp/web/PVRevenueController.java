@@ -1,3 +1,10 @@
+/**
+ * class name : PVRevenueController
+ * description : PV 요금 수익 화면 controller
+ * version : 1.0
+ * author : 이우람
+ */
+
 package kr.co.ewp.ewpsp.web;
 
 import java.util.HashMap;
@@ -29,9 +36,6 @@ public class PVRevenueController {
 	public String main(Model model) {
 		logger.debug("/pvRevenue");
 		
-//		List list = usageService.usageList();
-//		model.addAttribute("list", list);
-		
 		return "ewp/billRevenue/pvRevenue";
 	}
 	
@@ -45,19 +49,19 @@ public class PVRevenueController {
 		Map result = pvRevenueService.getPVRevenueList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("resultListMap", result);
-		return resultMap;
-	}
-	
-	@RequestMapping("/getPVRevenueList_test")
-	public @ResponseBody Map<String, Object> getPVRevenueList_test(@RequestParam HashMap param) throws Exception {
-		logger.debug("/getPVRevenueList_test");
-		logger.debug("param ::::: "+param.toString());
-		
-		List list = pvRevenueService.getPVRevenueList_test(param);
-		
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", list);
+//		resultMap.put("resultListMap", result);
+		resultMap.put("netGenValSheetList", ((Map) result.get("netGenValMap")).get("sheetList") );
+		resultMap.put("netGenValChartList", ((Map) result.get("netGenValMap")).get("chartList") );
+		resultMap.put("smpDealSheetList", ((Map) result.get("smpDealMap")).get("sheetList") );
+		resultMap.put("smpDealChartList", ((Map) result.get("smpDealMap")).get("chartList") );
+		resultMap.put("smpPriceSheetList", ((Map) result.get("smpPriceMap")).get("sheetList") );
+		resultMap.put("smpPriceChartList", ((Map) result.get("smpPriceMap")).get("chartList") );
+		resultMap.put("recDealSheetList", ((Map) result.get("recDealMap")).get("sheetList") );
+		resultMap.put("recDealChartList", ((Map) result.get("recDealMap")).get("chartList") );
+		resultMap.put("recPriceSheetList", ((Map) result.get("recPriceMap")).get("sheetList") );
+		resultMap.put("recPriceChartList", ((Map) result.get("recPriceMap")).get("chartList") );
+		resultMap.put("totPriceSheetList", ((Map) result.get("totPriceMap")).get("sheetList") );
+		resultMap.put("totPriceChartList", ((Map) result.get("totPriceMap")).get("chartList") );
 		return resultMap;
 	}
 	

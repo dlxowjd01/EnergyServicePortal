@@ -7,6 +7,4 @@ public interface DRRevenueService {
 
 	List getDRRevenueList(HashMap param) throws Exception;
 
-	List getUsageFutureList() throws Exception;
-
 }

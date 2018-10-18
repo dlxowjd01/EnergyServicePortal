@@ -20,6 +20,10 @@ function convertUnitFormat(num, unitGbn, len) {
 	var unit;
 	var divNum = 0;
 	
+	if(len == null) {
+		len = num.length;
+	}
+	
 	if(unitGbn == "won") {
 		formatNum = numberComma( num );
 		unit = "won";
@@ -55,6 +59,13 @@ function convertUnitFormat(num, unitGbn, len) {
 			if(unitGbn == "kWh") unit = "TWh";
 			if(unitGbn == "W") unit = "GW";
 			if(unitGbn == "kW") unit = "TW";
+		} else {
+			divNum = 1000 * 1000 * 1000 * 1000;
+			if(unitGbn == "mWh") unit = "GWh";
+			if(unitGbn == "Wh") unit = "TWh";
+			if(unitGbn == "kWh") unit = "PWh";
+			if(unitGbn == "W") unit = "TW";
+			if(unitGbn == "kW") unit = "PW";
 		}
 
 		if(len <= 3) {

@@ -44,11 +44,13 @@ public class ESSChargeServiceImpl implements ESSChargeService {
 			
 			return resultMap;
 		} else {
-			List chgList = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "chg_val", 1);
-			List dischgList = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "dischg_val", 1);
-			
-			resultMap.put("chgList", chgList);
-			resultMap.put("dischgList", dischgList);
+			Map<String, Object> chgMap = new HashMap<String, Object>();
+			Map<String, Object> dischgMap = new HashMap<String, Object>();
+			chgMap = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "chg_val", 1);
+			dischgMap = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "dischg_val", 1);
+
+			resultMap.put("chgMap", chgMap);
+			resultMap.put("dischgMap", dischgMap);
 			
 			return resultMap;
 		}
@@ -63,11 +65,13 @@ public class ESSChargeServiceImpl implements ESSChargeService {
 			
 			return resultMap;
 		} else {
-			List chgList = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "chg_val", 1);
-			List dischgList = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "dischg_val", 1);
-			
-			resultMap.put("chgList", chgList);
-			resultMap.put("dischgList", dischgList);
+			Map<String, Object> chgMap = new HashMap<String, Object>();
+			Map<String, Object> dischgMap = new HashMap<String, Object>();
+			chgMap = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "chg_val", 1);
+			dischgMap = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "dischg_val", 1);
+
+			resultMap.put("chgMap", chgMap);
+			resultMap.put("dischgMap", dischgMap);
 			
 			return resultMap;
 		}

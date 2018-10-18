@@ -35,7 +35,8 @@
 	var timeSlotCblAmtList;
 	var timeSlotGoalPowerList;
 	function callback_getUsageRealList(result) {
-		var usageList = result.list;
+		var sheetList = result.sheetList;
+		var chartList = result.chartList;
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -46,37 +47,25 @@
 		var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
 		var dt_str = "";
 		var dt_str_totVal = 0; // 테이블 라인별 누적합
-		if(usageList.length > 0) {
-			for(var i=0; i<usageList.length; i++) {
-				var usage = String(usageList[i].usg_val);
-				var substr_usage = 0;
+		if(chartList != null && chartList.length > 0) {
+			for(var i=0; i<chartList.length; i++) {
+				var usage = String(chartList[i].usg_val);
+				var reUsage = 0;
 				if(usage == null || usage == "" || usage == "null") {
-					substr_usage = null;
+					reUsage = null;
 				} else {
-					if(usage.length < 7) substr_usage = Number(     usage     ); // 나중에 수정 요망
-					else substr_usage = Number(     usage.substring( 0, usage.length-6 )     );
+					var map = convertUnitFormat(usage, "mWh", 8);
+					reUsage = Number( map.get("formatNum") );
 					totUsage = totUsage+Number(usage);
 				}
 				
-				var tm = new Date( convertDateUTC(usageList[i].std_timestamp) );
+				var tm = new Date( convertDateUTC(chartList[i].std_timestamp) );
 				// 차트데이터 셋팅
-				dataSet.push([ //Number(usageList[i].std_timestamp)
-//					Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())
-					setChartDateUTC(usageList[i].std_timestamp)
-					, substr_usage
-				]);
+				dataSet.push([ setChartDateUTC(chartList[i].std_timestamp), reUsage ]);
 				
 				if( tm.getHours()>=$("#cblAmtHourFrom").val() && tm.getHours()<=$("#cblAmtHourTo").val() ) {
-					dataSet2.push([ //Number(usageList[i].std_timestamp)
-//						Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())
-						setChartDateUTC(usageList[i].std_timestamp)
-						, cblAmt
-					]);
-					dataSet3.push([ //Number(usageList[i].std_timestamp)
-//						Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())
-						setChartDateUTC(usageList[i].std_timestamp)
-						, goalPower
-						]);
+					dataSet2.push([ setChartDateUTC(chartList[i].std_timestamp), cblAmt ]);
+					dataSet3.push([ setChartDateUTC(chartList[i].std_timestamp), goalPower ]);
 				}
 				
 			}

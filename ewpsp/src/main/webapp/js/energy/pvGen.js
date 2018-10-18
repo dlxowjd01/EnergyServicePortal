@@ -19,139 +19,189 @@
 	// PV 실제 발전량
 	var pastPVGenList;
 	function callback_getPVGenRealList(result) {
-		var pvGenList = result.list;
+		var sheetList = result.sheetList;
+		var chartList = result.chartList;
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
-		var totUsage = 0; // 전체 누적합
+		var totalUsage = 0; // 전체 누적합
 		var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
 		var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
 		var dt_str_head = "";
 		var dt_str = "";
-		var dt_str_totVal = 0; // 테이블 라인별 누적합
-		for(var i=0; i<pvGenList.length; i++) {
-			var usage = String(pvGenList[i].gen_val);
-			var substr_usage = 0;
-			if(usage == null || usage == "" || usage == "null") {
-				substr_usage = null;
-			} else {
-				if(usage.length < 7) substr_usage = Number(     usage     ); // 나중에 수정 요망
-				else substr_usage = Number(     usage.substring( 0, usage.length-6 )     );
-				totUsage = totUsage+Number(usage);
-			}
-			
-			var tm = new Date(pvGenList[i].std_date);
-			// 차트데이터 셋팅
-			dataSet.push([ //Number(pvGenList[i].std_date)
-				Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())
-				, substr_usage
-			]);
-			
-			// 표데이터 셋팅
-			var headerDate2 = convertDataTableHeaderDate(tm, 2);
-			dt_str_head += "<th>"+headerDate2+"</th>"
-			if(usage == null || usage == "" || usage == "null") dt_str += "<td>"+" "+"</td>"; 
-			else dt_str += "<td>"+substr_usage+"</td>";
-			dt_str_totVal = dt_str_totVal+substr_usage;
-			if(dt_col_cnt == dt_col) {
-				var headerDate1 = convertDataTableHeaderDate(tm, 1);
-				var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
-				dt_str += "<td>"+dt_str_totVal+"</td>";
-				pv_head_pc[dt_row_cnt-1] = final_dt_str_head;
-				real_data_pc[dt_row_cnt-1] = dt_str;
-				dt_row_cnt++;
-				dt_col_cnt = 1;
-				dt_str_head = "";
-				dt_str = "";
-				dt_str_totVal = 0;
-			} else {
-				if((i+1) == pvGenList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
-					for(a=0; a<(dt_col-dt_col_cnt); a++) {
-						dt_str_head += "<th></th>";
-						dt_str += "<td></td>";
-					}
+		var dt_str_totalVal = 0; // 테이블 라인별 누적합
+		console.log(sheetList);
+		
+		// 표데이터 셋팅
+		if(sheetList != null && sheetList.length > 0) {
+			for(var i=0; i<sheetList.length; i++) {
+				var usage = String(sheetList[i].gen_val);
+				var reUsage = 0;
+				if(usage == null || usage == "" || usage == "null") {
+					reUsage = null;
+				} else {
+					var map = convertUnitFormat(usage, "kWh", 1);
+					reUsage = Number( map.get("formatNum") );
+					totalUsage = totalUsage+Number(usage);
+				}
+				
+				var tm = new Date(sheetList[i].std_date);
+				console.log(reUsage);
+				
+				// 표데이터 셋팅
+				var headerDate2 = convertDataTableHeaderDate(tm, 2);
+				dt_str_head += "<th>"+headerDate2+"</th>"
+				if(usage == null || usage == "" || usage == "null") dt_str += "<td>"+" "+"</td>"; 
+				else dt_str += "<td>"+reUsage+"</td>";
+				dt_str_totalVal = dt_str_totalVal+reUsage;
+				if(dt_col_cnt == dt_col) {
 					var headerDate1 = convertDataTableHeaderDate(tm, 1);
 					var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
-					dt_str += "<td>"+dt_str_totVal+"</td>";
+					dt_str += "<td>"+dt_str_totalVal+"</td>";
 					pv_head_pc[dt_row_cnt-1] = final_dt_str_head;
 					real_data_pc[dt_row_cnt-1] = dt_str;
+					dt_row_cnt++;
+					dt_col_cnt = 1;
 					dt_str_head = "";
 					dt_str = "";
-					dt_str_totVal = 0;
+					dt_str_totalVal = 0;
 				} else {
-					dt_col_cnt++;
+					if((i+1) == sheetList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
+						for(a=0; a<(dt_col-dt_col_cnt); a++) {
+							dt_str_head += "<th></th>";
+							dt_str += "<td></td>";
+						}
+						var headerDate1 = convertDataTableHeaderDate(tm, 1);
+						var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
+						dt_str += "<td>"+dt_str_totalVal+"</td>";
+						pv_head_pc[dt_row_cnt-1] = final_dt_str_head;
+						real_data_pc[dt_row_cnt-1] = dt_str;
+						dt_str_head = "";
+						dt_str = "";
+						dt_str_totalVal = 0;
+					} else {
+						dt_col_cnt++;
+					}
 				}
+				
+			}
+			
+		}
+		
+		// 차트데이터 셋팅
+		if(chartList != null && chartList.length > 0) {
+			for(var i=0; i<chartList.length; i++) {
+				var usage = String(chartList[i].gen_val);
+				var reUsage = 0;
+				if(usage == null || usage == "" || usage == "null") {
+					reUsage = null;
+				} else {
+					var map = convertUnitFormat(usage, "kWh", 1);
+					reUsage = Number( map.get("formatNum") );
+					totalUsage = totalUsage+Number(usage);
+				}
+				
+				var tm = new Date(chartList[i].std_date);
+				// 차트데이터 셋팅
+				dataSet.push([
+					Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())
+					, reUsage
+					]);
+				
+				
 			}
 			
 		}
 		pastPVGenList = dataSet;
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-		unit_format(String(totUsage), "pastPvGenTot", "kWh");
+		unit_format(String(totalUsage), "pastPvGenTot", "kWh");
 	}
 	
 	// PV 예측 발전량
 	var feturePVGenList;
 	function callback_getPVGenFutureList(result) {
-		var pvGenList = result.list;
+		var sheetList = result.sheetList;
+		var chartList = result.chartList;
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
-		var totUsage = 0; // 전체 누적합
+		var totalUsage = 0; // 전체 누적합
 		var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
 		var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
 		var dt_str = "";
-		var dt_str_totVal = 0; // 테이블 라인별 누적합
-		for(var i=0; i<pvGenList.length; i++) {
-			var usage = String(pvGenList[i].gen_val);
-			var substr_usage = 0;
-			var substr_usage = 0;
-			if(usage == null || usage == "" || usage == "null") {
-				substr_usage = null;
-			} else {
-				if(usage.length < 7) substr_usage = Number(     usage     ); // 나중에 수정 요망
-				else substr_usage = Number(     usage.substring( 0, usage.length-6 )     );
-				totUsage = totUsage+Number(usage);
-			}
-			var tm = new Date(pvGenList[i].std_date);
-			// 차트데이터 셋팅
-			dataSet.push([ //Number(pvGenList[i].std_date)
-				Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())
-//				pvGenList[i].std_timestamp, substr_usage
-				, substr_usage
-			]);
-			
-			// 표데이터 셋팅
-			if(usage == null || usage == "" || usage == "null") dt_str += "<td>"+" "+"</td>"; 
-			else dt_str += "<td>"+substr_usage+"</td>";
-			dt_str_totVal = dt_str_totVal+substr_usage;
-			if(dt_col_cnt == dt_col) {
-				dt_str += "<td>"+dt_str_totVal+"</td>";
-				feture_data_pc[dt_row_cnt-1] = dt_str;
-				dt_row_cnt++;
-				dt_col_cnt = 1;
-				dt_str = "";
-				dt_str_totVal = 0;
-			} else {
-				if((i+1) == pvGenList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
-					for(a=0; a<(dt_col-dt_col_cnt); a++) {
-						dt_str += "<td></td>";
-					}
-					dt_str += "<td>"+dt_str_totVal+"</td>";
-					feture_data_pc[dt_row_cnt-1] = dt_str;
-					dt_str = "";
-					dt_str_totVal = 0;
+		var dt_str_totalVal = 0; // 테이블 라인별 누적합
+		
+		// 표데이터 셋팅
+		if(sheetList != null && sheetList.length > 0) {
+			for(var i=0; i<sheetList.length; i++) {
+				var usage = String(sheetList[i].gen_val);
+				var reUsage = 0;
+				if(usage == null || usage == "" || usage == "null") {
+					reUsage = null;
 				} else {
-					dt_col_cnt++;
+					var map = convertUnitFormat(usage, "kWh", 1);
+					reUsage = Number( map.get("formatNum") );
+					totalUsage = totalUsage+Number(usage);
 				}
+				var tm = new Date(sheetList[i].std_date);
+				
+				// 표데이터 셋팅
+				if(usage == null || usage == "" || usage == "null") dt_str += "<td>"+" "+"</td>"; 
+				else dt_str += "<td>"+reUsage+"</td>";
+				dt_str_totalVal = dt_str_totalVal+reUsage;
+				if(dt_col_cnt == dt_col) {
+					dt_str += "<td>"+dt_str_totalVal+"</td>";
+					feture_data_pc[dt_row_cnt-1] = dt_str;
+					dt_row_cnt++;
+					dt_col_cnt = 1;
+					dt_str = "";
+					dt_str_totalVal = 0;
+				} else {
+					if((i+1) == sheetList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
+						for(a=0; a<(dt_col-dt_col_cnt); a++) {
+							dt_str += "<td></td>";
+						}
+						dt_str += "<td>"+dt_str_totalVal+"</td>";
+						feture_data_pc[dt_row_cnt-1] = dt_str;
+						dt_str = "";
+						dt_str_totalVal = 0;
+					} else {
+						dt_col_cnt++;
+					}
+				}
+				
+			}
+			
+		}
+		
+		// 차트데이터 셋팅
+		if(chartList != null && chartList.length > 0) {
+			for(var i=0; i<chartList.length; i++) {
+				var usage = String(chartList[i].gen_val);
+				var reUsage = 0;
+				var reUsage = 0;
+				if(usage == null || usage == "" || usage == "null") {
+					reUsage = null;
+				} else {
+					var map = convertUnitFormat(usage, "kWh", 1);
+					reUsage = Number( map.get("formatNum") );
+					totalUsage = totalUsage+Number(usage);
+				}
+				var tm = new Date(chartList[i].std_date);
+				// 차트데이터 셋팅
+				dataSet.push([ 
+					Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())
+					, reUsage
+					]);
+				
 			}
 			
 		}
 		feturePVGenList = dataSet;
-//		feture_data_pc[dt_row_cnt-1] = dt_str;
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-		unit_format(String(totUsage), "feturePvGenTot", "kWh");
+		unit_format(String(totalUsage), "feturePvGenTot", "kWh");
 	}
 	
 	// 차트 그리기

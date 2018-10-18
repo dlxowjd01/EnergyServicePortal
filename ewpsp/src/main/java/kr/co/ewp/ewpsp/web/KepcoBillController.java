@@ -28,9 +28,6 @@ public class KepcoBillController {
 	public String main(Model model) {
 		logger.debug("/kepcoBill");
 		
-//		List list = kepcoBillService.usageList();
-//		model.addAttribute("list", list);
-		
 		return "ewp/billRevenue/kepcoBill";
 	}
 	
@@ -40,19 +37,6 @@ public class KepcoBillController {
 		logger.debug("param ::::: "+param.toString());
 		
 		List list = kepcoBillService.getKepcoBillList(param);
-		
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", list);
-		return resultMap;
-	}
-	
-	@RequestMapping("/getKepcoBillList_test")
-	public @ResponseBody Map<String, Object> getKepcoBillList_test(@RequestParam HashMap param) throws Exception {
-		logger.debug("/getKepcoBillList_test");
-		logger.debug("param ::::: "+param.toString());
-		logger.debug("zzzzz    :"+param.get("siteId"));
-		
-		List list = kepcoBillService.getKepcoBillList_test(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("list", list);

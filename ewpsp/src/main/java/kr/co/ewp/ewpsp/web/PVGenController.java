@@ -1,3 +1,10 @@
+/**
+ * class name : PVGenController
+ * description : PV 발전량 조회 화면 controller
+ * version : 1.0
+ * author : 이우람
+ */
+
 package kr.co.ewp.ewpsp.web;
 
 import java.util.HashMap;
@@ -34,10 +41,11 @@ public class PVGenController {
 		logger.debug("/getPVGenRealList");
 		logger.debug("param ::::: "+param.toString());
 		
-		List list = pvGenService.getPVGenRealList(param);
+		Map list = pvGenService.getPVGenRealList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", list);
+		resultMap.put("sheetList", list.get("sheetList"));
+		resultMap.put("chartList", list.get("chartList"));
 		return resultMap;
 	}
 	
@@ -46,10 +54,11 @@ public class PVGenController {
 		logger.debug("/getPVGenFutureList");
 		logger.debug("param ::::: "+param.toString());
 		
-		List list = pvGenService.getPVGenFutureList(param);
+		Map list = pvGenService.getPVGenFutureList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", list);
+		resultMap.put("sheetList", list.get("sheetList"));
+		resultMap.put("chartList", list.get("chartList"));
 		return resultMap;
 	}
 }

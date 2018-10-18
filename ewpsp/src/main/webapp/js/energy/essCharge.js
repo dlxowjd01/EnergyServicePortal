@@ -23,8 +23,10 @@
 	function callback_getESSChargeRealList(result) {
 		var resultListMap = result.resultListMap;
 		
-		var chgList = resultListMap.chgList;
-		var dischgList = resultListMap.dischgList;
+		var chgSheetList = result.chgSheetList;
+		var chgChartList = result.chgChartList;
+		var dischgSheetList = result.dischgSheetList;
+		var dischgChartList = result.dischgChartList;
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -38,10 +40,12 @@
 		var dt_str2 = "";
 		var dt_str_totalVal = 0; // 테이블 라인별 누적합
 		var dt_str2_totalVal = 0; // 테이블 라인별 누적합
-		if(chgList != null && chgList.length > 0) {
-			for(var i=0; i<chgList.length; i++) {
-				var chgVal = String(chgList[i].chg_val);
-				var dischgVal   = String(dischgList[i].dischg_val);
+		
+		// 표데이터 셋팅
+		if(chgSheetList != null && chgSheetList.length > 0) {
+			for(var i=0; i<chgSheetList.length; i++) {
+				var chgVal = String(chgSheetList[i].chg_val);
+				var dischgVal   = String(dischgSheetList[i].dischg_val);
 				var reChgVal = 0; 
 				var reDischgVal   = 0; 
 				
@@ -56,10 +60,7 @@
 					totalDataSet2 = totalDataSet2+reDischgVal;
 				}
 				
-				var tm = new Date( convertDateUTC(chgList[i].std_timestamp) );
-				// 차트데이터 셋팅
-				dataSet.push( [setChartDateUTC(chgList[i].std_timestamp), reChgVal] );
-				dataSet2.push( [setChartDateUTC(chgList[i].std_timestamp), reDischgVal] );
+				var tm = new Date( convertDateUTC(chgSheetList[i].std_timestamp) );
 
 				// 표데이터 셋팅
 				var headerDate2 = convertDataTableHeaderDate(tm, 2);
@@ -84,7 +85,7 @@
 					dt_str_totalVal =  0;
 					dt_str2_totalVal = 0;
 				} else {
-					if((i+1) == chgList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
+					if((i+1) == chgSheetList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
 						for(a=0; a<(dt_col-dt_col_cnt); a++) {
 							dt_str_head += "<th></th>";
 							dt_str += "<td></td>";
@@ -111,39 +112,12 @@
 			}
 			
 		}
-		pastChgList = dataSet;
-		pastDischgList = dataSet2;
 		
-		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-		unit_format(String(totalDataSet), "pastChgTot", "Wh");
-		unit_format(String(totalDataSet2), "pastDischgTot", "Wh");
-	}
-	
-	// 예측 충방전량
-	var fetureChgList;
-	var fetureDischgList;
-	function callback_getESSChargeFutureList(result) {
-		var resultListMap = result.resultListMap;
-		
-		var chgList = resultListMap.chgList;
-		var dischgList = resultListMap.dischgList;
-		
-		// 데이터 셋팅
-		var dataSet = []; // chartData를 위한 변수
-		var dataSet2 = []; // chartData를 위한 변수
-		var totalDataSet = 0; // 전체 누적합
-		var totalDataSet2 = 0; // 전체 누적합
-		var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
-		var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
-//		var dt_str_head = "";
-		var dt_str = "";
-		var dt_str2 = "";
-		var dt_str_totalVal = 0; // 테이블 라인별 누적합
-		var dt_str2_totalVal = 0; // 테이블 라인별 누적합
-		if(chgList != null && chgList.length > 0) {
-			for(var i=0; i<chgList.length; i++) {
-				var chgVal = String(chgList[i].chg_val);
-				var dischgVal   = String(dischgList[i].dischg_val);
+		// 차트데이터 셋팅
+		if(chgChartList != null && chgChartList.length > 0) {
+			for(var i=0; i<chgChartList.length; i++) {
+				var chgVal = String(chgChartList[i].chg_val);
+				var dischgVal   = String(dischgChartList[i].dischg_val);
 				var reChgVal = 0; 
 				var reDischgVal   = 0; 
 				
@@ -158,10 +132,66 @@
 					totalDataSet2 = totalDataSet2+reDischgVal;
 				}
 				
-				var tm = new Date( convertDateUTC(chgList[i].std_timestamp) );
+				var tm = new Date( convertDateUTC(chgChartList[i].std_timestamp) );
 				// 차트데이터 셋팅
-				dataSet.push( [setChartDateUTC(chgList[i].std_timestamp), reChgVal] );
-				dataSet2.push( [setChartDateUTC(chgList[i].std_timestamp), reDischgVal] );
+				dataSet.push( [setChartDateUTC(chgChartList[i].std_timestamp), reChgVal] );
+				dataSet2.push( [setChartDateUTC(chgChartList[i].std_timestamp), reDischgVal] );
+				
+			}
+			
+		}
+		pastChgList = dataSet;
+		pastDischgList = dataSet2;
+		
+		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
+		unit_format(String(totalDataSet), "pastChgTot", "Wh");
+		unit_format(String(totalDataSet2), "pastDischgTot", "Wh");
+	}
+	
+	// 예측 충방전량
+	var fetureChgList;
+	var fetureDischgList;
+	function callback_getESSChargeFutureList(result) {
+		var resultListMap = result.resultListMap;
+
+		var chgSheetList = result.chgSheetList;
+		var chgChartList = result.chgChartList;
+		var dischgSheetList = result.dischgSheetList;
+		var dischgChartList = result.dischgChartList;
+		
+		// 데이터 셋팅
+		var dataSet = []; // chartData를 위한 변수
+		var dataSet2 = []; // chartData를 위한 변수
+		var totalDataSet = 0; // 전체 누적합
+		var totalDataSet2 = 0; // 전체 누적합
+		var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
+		var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
+//		var dt_str_head = "";
+		var dt_str = "";
+		var dt_str2 = "";
+		var dt_str_totalVal = 0; // 테이블 라인별 누적합
+		var dt_str2_totalVal = 0; // 테이블 라인별 누적합
+		
+		// 표데이터 셋팅
+		if(chgSheetList != null && chgSheetList.length > 0) {
+			for(var i=0; i<chgSheetList.length; i++) {
+				var chgVal = String(chgSheetList[i].chg_val);
+				var dischgVal   = String(dischgSheetList[i].dischg_val);
+				var reChgVal = 0; 
+				var reDischgVal   = 0; 
+				
+				if(chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
+				else {
+					reChgVal = Math.round( Number(chgVal) );
+					totalDataSet = totalDataSet+reChgVal;
+				}
+				if(dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
+				else {
+					reDischgVal   = Math.round( Number(dischgVal) );
+					totalDataSet2 = totalDataSet2+reDischgVal;
+				}
+				
+				var tm = new Date( convertDateUTC(chgSheetList[i].std_timestamp) );
 
 				// 표데이터 셋팅
 				var headerDate2 = convertDataTableHeaderDate(tm, 2);
@@ -181,7 +211,7 @@
 					dt_str_totalVal =  0;
 					dt_str2_totalVal = 0;
 				} else {
-					if((i+1) == chgList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
+					if((i+1) == chgSheetList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
 						for(a=0; a<(dt_col-dt_col_cnt); a++) {
 							dt_str += "<td></td>";
 							dt_str2 += "<td></td>";
@@ -199,6 +229,33 @@
 					}
 					
 				}
+				
+			}
+			
+		}
+		// 차트데이터 셋팅
+		if(chgChartList != null && chgChartList.length > 0) {
+			for(var i=0; i<chgChartList.length; i++) {
+				var chgVal = String(chgChartList[i].chg_val);
+				var dischgVal   = String(dischgChartList[i].dischg_val);
+				var reChgVal = 0; 
+				var reDischgVal   = 0; 
+				
+				if(chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
+				else {
+					reChgVal = Math.round( Number(chgVal) );
+					totalDataSet = totalDataSet+reChgVal;
+				}
+				if(dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
+				else {
+					reDischgVal   = Math.round( Number(dischgVal) );
+					totalDataSet2 = totalDataSet2+reDischgVal;
+				}
+				
+				var tm = new Date( convertDateUTC(chgChartList[i].std_timestamp) );
+				// 차트데이터 셋팅
+				dataSet.push( [setChartDateUTC(chgChartList[i].std_timestamp), reChgVal] );
+				dataSet2.push( [setChartDateUTC(chgChartList[i].std_timestamp), reDischgVal] );
 				
 			}
 			

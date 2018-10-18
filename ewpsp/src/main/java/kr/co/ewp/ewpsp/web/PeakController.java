@@ -1,3 +1,10 @@
+/**
+ * class name : PeakController
+ * description : 피크전력 현황 화면 controller
+ * version : 1.0
+ * author : 이우람
+ */
+
 package kr.co.ewp.ewpsp.web;
 
 import java.util.HashMap;
@@ -34,34 +41,12 @@ public class PeakController {
 		logger.debug("/getPeakRealList");
 		logger.debug("param ::::: "+param.toString());
 		
-		List list = peakService.getPeakRealList(param);
+		Map list = peakService.getPeakRealList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", list);
+		resultMap.put("sheetList", list.get("sheetList"));
+		resultMap.put("chartList", list.get("chartList"));
 		return resultMap;
 	}
 	
-	@RequestMapping("/getContractPowerList")
-	public @ResponseBody Map<String, Object> getContractPowerList(@RequestParam HashMap param) throws Exception {
-		logger.debug("/getPeakFutureList");
-		logger.debug("param ::::: "+param.toString());
-		
-		List list = peakService.getContractPowerList(param);
-		
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", list);
-		return resultMap;
-	}
-	
-	@RequestMapping("/getChargePowerList")
-	public @ResponseBody Map<String, Object> getChargePowerList(@RequestParam HashMap param) throws Exception {
-		logger.debug("/getPeakFutureList");
-		logger.debug("param ::::: "+param.toString());
-		
-		List list = peakService.getChargePowerList(param);
-		
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", list);
-		return resultMap;
-	}
 }

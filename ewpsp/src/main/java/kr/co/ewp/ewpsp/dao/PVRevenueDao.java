@@ -18,9 +18,4 @@ public class PVRevenueDao {
 		return resultList;
 	}
 
-	public List getPVRevenueList_test(HashMap param) {
-		List resultList = sqlSession.selectList("pvRevenue.getPVRevenueList_test", param);
-		return resultList;
-	}
-
 }

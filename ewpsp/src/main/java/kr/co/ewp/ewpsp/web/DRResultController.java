@@ -1,3 +1,10 @@
+/**
+ * class name : DRResultController
+ * description : DR 실적 조회 화면 controller
+ * version : 1.0
+ * author : 이우람
+ */
+
 package kr.co.ewp.ewpsp.web;
 
 import java.util.HashMap;

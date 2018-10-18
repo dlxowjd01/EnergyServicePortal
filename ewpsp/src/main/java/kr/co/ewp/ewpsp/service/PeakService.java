@@ -2,13 +2,10 @@ package kr.co.ewp.ewpsp.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface PeakService {
 
-	List getPeakRealList(HashMap param) throws Exception;
-
-	List getContractPowerList(HashMap param) throws Exception;
-	
-	List getChargePowerList(HashMap param) throws Exception;
+	Map getPeakRealList(HashMap param) throws Exception;
 
 }
