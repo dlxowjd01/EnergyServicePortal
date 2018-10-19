@@ -380,6 +380,7 @@
 	                <h4><i class="glyphicon glyphicon-user"></i> MODIFY</h4>
 	            </div>
 	            <form id="modifyUserForm" name="modifyUserForm">
+	            <input type="hidden" id="modUserIdx" name="userIdx" />
 	            <input type="hidden" id="modPsnEmail" name="psnEmail" />
 	            <input type="hidden" id="modPsnMobile" name="psnMobile" />
 	            <div class="modal-body" style="padding:20px 30px;">
@@ -509,6 +510,7 @@
 	});
 
 	function setModifyUserInfo(result) {
+		$('#modUserIdx').val(result.user_idx);
 		$('#modUserId').text(result.user_id);
 		$('#modPsnName').text(result.psn_name);
 
@@ -585,6 +587,10 @@
 				var resultCnt = result.resultCnt;
 				if(resultCnt > 0) {
 					alert('회원정보가 수정되었습니다.');
+
+					// Local EMS 회원 연계
+					changeEMSUserDB($("#modUserIdx").val());
+
 					$("#modifyModal").modal("hide");
 				} else {
 					alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
@@ -604,6 +610,10 @@
 				var resultCnt = result.resultCnt;
 				if(resultCnt > 0) {
 					alert('탈퇴처리 되었습니다.');
+
+					// Local EMS 회원 연계
+					changeEMSUserDB($("#modUserIdx").val());
+
 					location.href = '/login';
 				} else {
 					alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");

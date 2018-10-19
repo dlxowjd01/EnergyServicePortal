@@ -51,6 +51,7 @@
 	    		<mvc:exclude-mapping path="/logout"/>
 	    		<mvc:exclude-mapping path="/faq"/>
 	    		<mvc:exclude-mapping path="/getFAQList"/>
+	    		<mvc:exclude-mapping path="/getUserDetail"/>
 	    		<mvc:exclude-mapping path="/openapi/loginUser"/>
 	    		<mvc:exclude-mapping path="/openapi/getUser"/>
 	    		<bean class="kr.co.ewp.ewpsp.common.SessionCheckInterceptor" />
