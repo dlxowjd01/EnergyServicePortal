@@ -159,7 +159,7 @@
 			</div>
 			<div class="set_tbl mt10 clear">
 				<form id="faqCateForm" name="faqCateForm">
-				<input type="hidden" id="faqCateIdx" name="faqCateIdx" />
+				<input type="hidden" id="faqCateIdx2" name="faqCateIdx" />
 				<div class="fl" style="width:calc(100% - 120px);">
 					<table>
 						<colgroup>

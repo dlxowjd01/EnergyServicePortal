@@ -30,6 +30,7 @@ import com.mysql.fabric.xmlrpc.base.Data;
 
 import kr.co.ewp.ewpsp.common.ExcelDownload;
 import kr.co.ewp.ewpsp.common.util.AES256Util;
+import kr.co.ewp.ewpsp.common.util.UserUtil;
 
 @Controller
 public class TestController {
@@ -260,14 +261,17 @@ public class TestController {
 		return resultMap;
 	}
 
-	@RequestMapping("/test/aesEncode")
-	public @ResponseBody String aesEncodeTest(String text) throws Exception {
-		String key = "aes256-ewpsp-key";
-		AES256Util aes256 = new AES256Util(key);
-		URLCodec codec = new URLCodec();
+	@RequestMapping("/test/aesEnc")
+	public @ResponseBody String aesEncTest(String text) throws Exception {
+		String textEnc = UserUtil.encAES256(text);
+//		String textDec = UserUtil.decAES256(text);
 
-		String textEnc = codec.encode(aes256.aesEncode(text));
-//		String textDec = aes256.aesDecode(codec.decode(text));
+		return textEnc;
+	}
+
+	@RequestMapping("/test/shaEnc")
+	public @ResponseBody String shaEncTest(String text) throws Exception {
+		String textEnc = UserUtil.encSHA256(text);
 
 		return textEnc;
 	}

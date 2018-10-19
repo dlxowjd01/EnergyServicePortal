@@ -92,7 +92,7 @@ $( function () {
 			success: function(result) {
 				var list = result.list;
 
-				$faqCateIdxSelBox = $("#faqForm").find("#faqCateIdx");
+				$faqCateIdxSelBox = $("#faqCateIdx");
 				$faqCateIdxSelBox.children('option').not(':eq(0)').remove();
 				for(var i=0; i<list.length; i++) {
 					$faqCateIdxSelBox.append('<option value="' + list[i].faq_cate_idx+'">' + list[i].faq_cate_name + '</option>');
@@ -158,9 +158,9 @@ function callback_getFAQDetail(result) {
 	if(faqDetail == null) {
 		alert("조회된 데이터가 없습니다.");
 	} else {
-		$("#faqForm").find("#faqIdx").val(faqDetail.faq_idx);
-		$("#faqForm").find("#question").val(faqDetail.question);
-		$("#faqForm").find("#answer").val(faqDetail.answer);
+		$("#faqIdx").val(faqDetail.faq_idx);
+		$("#question").val(faqDetail.question);
+		$("#answer").val(faqDetail.answer);
 
 		$.ajax({
 			url : "/getFAQCateList",
@@ -169,14 +169,14 @@ function callback_getFAQDetail(result) {
 			success: function(result) {
 				var list = result.list;
 
-				$faqCateIdxSelBox = $("#faqForm").find("#faqCateIdx");
+				$faqCateIdxSelBox = $("#faqCateIdx");
 				$faqCateIdxSelBox.children('option').not(':eq(0)').remove();
 				for(var i=0; i<list.length; i++) {
 					$faqCateIdxSelBox.append('<option value="' + list[i].faq_cate_idx+'">' + list[i].faq_cate_name + '</option>');
 				}
 			}
 		});
-		$("#faqForm").find("#faqCateIdx").val(faqDetail.faq_cate_idx);
+		$("#faqCateIdx").val(faqDetail.faq_cate_idx);
 
 		popupOpen('faqedit');
 	}
@@ -288,8 +288,8 @@ function callback_getFAQCateDetail(result) {
 	if(faqCateDetail == null) {
 		alert("조회된 데이터가 없습니다.");
 	} else {
-		$("#faqCateForm").find("#faqCateIdx").val(faqCateDetail.faq_cate_idx);
-		$("#faqCateForm").find("#faqCateName").val(faqCateDetail.faq_cate_name);
+		$("#faqCateIdx2").val(faqCateDetail.faq_cate_idx);
+		$("#faqCateName").val(faqCateDetail.faq_cate_name);
 
 		popupOpen('category_edit');
 	}

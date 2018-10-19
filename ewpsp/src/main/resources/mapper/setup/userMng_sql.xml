@@ -175,7 +175,7 @@
 		update tb_user
 		set 
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userPw)">
-			user_pw       = #{userPw },   /* 패스워드 */
+			user_pw       = sha2(#{userPw }, 256),   /* 패스워드 */
 			</if> 
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userType)"> 
 			user_type     = #{userType },   /* 사용자구분(1:동서발전,2:고객사) */

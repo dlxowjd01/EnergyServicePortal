@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.codec.net.URLCodec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.inject.internal.util.Maps;
 
-import kr.co.ewp.ewpsp.common.util.AES256Util;
 import kr.co.ewp.ewpsp.common.util.CommonUtils;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.Period;
@@ -191,12 +189,8 @@ public class ApiController {
 		logger.debug("/openapi/loginUser");
 		logger.debug("userId : {}, userPw : {}", userId, userPw);
 
-		String key = "aes256-ewpsp-key";
-		AES256Util aes256 = new AES256Util(key);
-		URLCodec codec = new URLCodec();
-
-//		String userPwEnc = codec.encode(aes256.aesEncode(userPw));
-		String userPwDec = aes256.aesDecode(codec.decode(userPw));
+//		String userPwEnc = UserUtil.encAES256(userPw);
+		String userPwDec = UserUtil.decAES256(userPw);
 
 		HashMap<String, String> param = new HashMap<String, String>();
 		param.put("userId", userId);
@@ -220,12 +214,8 @@ public class ApiController {
 		logger.debug("/openapi/getUser");
 		logger.debug("userId : {}, userPw : {}", userId, userPw);
 
-		String key = "aes256-ewpsp-key";
-		AES256Util aes256 = new AES256Util(key);
-		URLCodec codec = new URLCodec();
-
-//		String userPwEnc = codec.encode(aes256.aesEncode(userPw));
-		String userPwDec = aes256.aesDecode(codec.decode(userPw));
+//		String userPwEnc = UserUtil.encAES256(userPw);
+		String userPwDec = UserUtil.decAES256(userPw);
 
 		HashMap<String, String> param = new HashMap<String, String>();
 		param.put("userId", userId);
@@ -235,7 +225,7 @@ public class ApiController {
 		logger.debug("result : {}", result);
 
 		if (result != null && CommonUtils.isNotEmpty(result.get("user_idx"))) {
-			result.put("userPw", userPw);
+			result.put("user_pw", userPw);
 		}
 
 		return result;

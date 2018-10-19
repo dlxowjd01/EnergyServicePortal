@@ -12,7 +12,7 @@
 		from tb_user
 		where del_yn = 'N'
 		and user_id = #{userId }
-		and user_pw = #{userPw }
+		and user_pw = sha2(#{userPw }, 256)
 	</select>
 
 	<select id="findUserId" parameterType="hashMap" resultType="hashMap">
@@ -81,7 +81,7 @@
 		values (
 			<!-- #{user_idx },  -->
 			#{userId },
-			#{userPw },
+			sha2(#{userPw }, 256),
 			'2',
 			'1', 
 			'N', 
@@ -116,7 +116,7 @@
 		update tb_user
 		set 
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userPw)">
-			user_pw       = #{userPw },   /* 패스워드 */
+			user_pw       = sha2(#{userPw }, 256),   /* 패스워드 */
 			</if> 
 			psn_mobile    = #{psnMobile },   /* 담당자휴대폰번호 */
 			psn_email     = #{psnEmail },   /* 담당자이메일주소 */
