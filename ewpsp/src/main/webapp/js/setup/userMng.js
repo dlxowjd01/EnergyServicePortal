@@ -201,6 +201,10 @@
 		var resultCnt = result.resultCnt;
 		if(resultCnt > 0) {
 			alert("저장되었습니다.");
+
+			// 마지막에 추가된 사용자 조회 (Local EMS 연동)
+			getLastUserDetail($('#userId').val());
+
 			location.reload();
 		} else {
 			alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
@@ -272,10 +276,19 @@
 		
 	}
 
+	// 마지막에 추가된 사용자 한건 조회
+	function callback_getLastUserDetail(result) {
+		changeEMSUser(result);
+	}
+
 	function callback_updateUser(result) {
 		var resultCnt = result.resultCnt;
 		if(resultCnt > 0) {
 			alert("저장되었습니다.");
+
+			// Local EMS 회원 연계
+			changeEMSUserDB($("#userIdx").val());
+
 			location.reload();
 		} else {
 			alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
@@ -284,6 +297,7 @@
 	
 	function deleteUserYn(userIdx) {
 		if(confirm("삭제하시겠습니까?")) {
+			$("#userIdx").val(userIdx);
 			deleteUser(userIdx);
 		}
 	}
@@ -292,6 +306,10 @@
 		var resultCnt = result.resultCnt;
 		if(resultCnt > 0) {
 			alert("삭제되었습니다.");
+
+			// Local EMS 회원 연계
+			changeEMSUserDB($("#userIdx").val());
+
 			location.reload();
 		} else {
 			alert("삭제에 실패하였습니다. \n 관리자에게 문의하세요.");

@@ -115,6 +115,25 @@ public class UserMngController {
 	}
 
 	/**
+	 * 마지막에 추가한 사용자 한건 조회
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getLastUserDetail")
+	public @ResponseBody Map<String, Object> getLastUserDetail(@RequestParam HashMap param) throws Exception {
+		logger.debug("/getUserDetail");
+		logger.debug("param ::::: "+param.toString());
+		
+		Map result = userMngService.getLastUserDetail(param);
+		logger.debug("result.toString() : "+result.toString());
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("detail", result);
+		return resultMap;
+	}
+
+	/**
 	 * 사용자 등록
 	 * @param param
 	 * @return

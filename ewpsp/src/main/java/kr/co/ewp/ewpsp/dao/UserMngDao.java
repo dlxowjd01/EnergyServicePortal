@@ -28,6 +28,11 @@ public class UserMngDao {
 		return result;
 	}
 
+	public Map getLastUserDetail(HashMap param) {
+		Map result = sqlSession.selectOne("userMng.getLastUserDetail", param);
+		return result;
+	}
+
 	public int insertUser(HashMap param) {
 		return sqlSession.update("userMng.insertUser", param);
 	}

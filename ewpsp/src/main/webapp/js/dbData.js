@@ -830,6 +830,21 @@ function getUserDetail(userIdx) {
 	});
 }
 
+// 마지막에 추가된 사용자 한건 조회
+function getLastUserDetail(userId) {
+	$.ajax({
+		url : "/getLastUserDetail",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : {
+			userId : userId
+		},
+		success: function(result) {
+			callback_getLastUserDetail(result);
+		}
+	});
+}
+
 // 사용자 등록
 function insertUser(formData) {
 	$.ajax({

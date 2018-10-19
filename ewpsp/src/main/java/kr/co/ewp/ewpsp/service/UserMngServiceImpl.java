@@ -30,6 +30,10 @@ public class UserMngServiceImpl implements UserMngService {
 		return userMngDao.getUserDetail(param);
 	}
 
+	public Map getLastUserDetail(HashMap param) throws Exception {
+		return userMngDao.getLastUserDetail(param);
+	}
+
 	@Transactional
 	public int insertUser(HashMap param) throws Exception {
 		return userMngDao.insertUser(param);

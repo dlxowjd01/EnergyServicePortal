@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -184,6 +185,7 @@ public class ApiController {
 		return resultMap;
 	}
 
+	@CrossOrigin("*")
 	@RequestMapping("/openapi/loginUser")
 	public @ResponseBody Integer loginUser(HttpSession session, String userId, String userPw) throws Exception {
 		logger.debug("/openapi/loginUser");
@@ -209,19 +211,17 @@ public class ApiController {
 		}
 	}
 
+	@CrossOrigin("*")
 	@RequestMapping("/openapi/getUser")
 	public @ResponseBody Map<String, Object> getUserDetail(String userId, String userPw) throws Exception {
 		logger.debug("/openapi/getUser");
 		logger.debug("userId : {}, userPw : {}", userId, userPw);
 
-//		String userPwEnc = UserUtil.encAES256(userPw);
-		String userPwDec = UserUtil.decAES256(userPw);
-
 		HashMap<String, String> param = new HashMap<String, String>();
 		param.put("userId", userId);
-		param.put("userPw", userPwDec);
+		param.put("userPw", userPw);
 
-		Map result = loginService.getUserDetail(param);
+		Map result = loginService.getUserDetailPlain(param);
 		logger.debug("result : {}", result);
 
 		return result;

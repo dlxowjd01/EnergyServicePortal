@@ -15,6 +15,18 @@
 		and user_pw = sha2(#{userPw }, 256)
 	</select>
 
+	<select id="getUserDetailPlain" parameterType="hashMap" resultType="hashMap">
+		/* 사용자 한건 조회 */
+		select 
+			user_idx, user_id, user_pw, user_type, main_user_idx, main_user_yn, auth_type, lang_type, 
+			comp_idx, co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, site_grp_idx, site_id,
+			del_yn, reg_uid, reg_date, mod_uid, mod_date 
+		from tb_user
+		where del_yn = 'N'
+		and user_id = #{userId }
+		and user_pw = #{userPw }
+	</select>
+
 	<select id="findUserId" parameterType="hashMap" resultType="hashMap">
 		/* 아이디 찾기 */
 		select 

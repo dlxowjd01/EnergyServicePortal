@@ -7,6 +7,8 @@ public interface LoginService {
 
 	public Map getUserDetail(HashMap param) throws Exception;
 
+	public Map getUserDetailPlain(HashMap param) throws Exception;
+
 	public Map findUserId(HashMap param) throws Exception;
 
 	public Map findUserPw(HashMap param) throws Exception;

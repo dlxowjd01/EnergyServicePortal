@@ -12,6 +12,8 @@ public interface UserMngService {
 
 	Map getUserDetail(HashMap param) throws Exception;
 	
+	Map getLastUserDetail(HashMap param) throws Exception;
+	
 	int insertUser(HashMap param) throws Exception;
 	
 	int updateUser(HashMap param) throws Exception;
