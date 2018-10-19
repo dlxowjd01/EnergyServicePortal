@@ -39,6 +39,10 @@ public class LoginServiceImpl implements LoginService {
 		return loginDao.updateUser(param);
 	}
 
+	public int updateUserPw(HashMap param) throws Exception {
+		return loginDao.updateUserPw(param);
+	}
+
 	public int deleteUser(HashMap param) throws Exception {
 		return loginDao.deleteUser(param);
 	}

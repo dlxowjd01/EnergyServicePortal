@@ -9,11 +9,11 @@ package kr.co.ewp.ewpsp.web;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.codec.net.URLCodec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.co.ewp.ewpsp.common.util.AES256Util;
 import kr.co.ewp.ewpsp.common.util.CommonUtils;
+import kr.co.ewp.ewpsp.common.util.StringUtil;
 import kr.co.ewp.ewpsp.common.util.UserUtil;
 import kr.co.ewp.ewpsp.service.LoginService;
 
@@ -66,11 +66,9 @@ public class LoginController {
 				model.addAttribute("msg", "등록이 되지 않은 사용자입니다.\\n관리자에게 문의하세요.");
 				return "ewp/login/login";
 			} else if (authType.equals("1") || authType.equals("2") || authType.equals("3")) {
-				result.put("user_pw", UserUtil.encAES256((String)param.get("userPw")));
 				session.setAttribute(UserUtil.USER_SESSION_ID, result);
 				return "redirect:/main";
 			} else if (siteId != null && !siteId.isEmpty()) {
-				result.put("user_pw", UserUtil.encAES256((String)param.get("userPw")));
 				session.setAttribute(UserUtil.USER_SESSION_ID, result);
 				return "redirect:/siteMain?siteId=" + siteId;
 			} else {
@@ -105,7 +103,20 @@ public class LoginController {
 		logger.debug("/findUserPw");
 		logger.debug("param : {}", param);
 
+		String userPw = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 8);
+
 		Map result = loginService.findUserPw(param);
+
+		if (result != null && StringUtil.isNotEmpty((String)result.get("user_pw"))) {
+			param.put("userPw", userPw);
+
+			int resultCnt = loginService.updateUserPw(param);
+			if (resultCnt > 0) {
+				result.put("user_pw", userPw);
+			} else {
+				result.remove("user_pw");
+			}
+		}
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);

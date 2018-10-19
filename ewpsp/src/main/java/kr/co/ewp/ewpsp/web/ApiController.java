@@ -224,10 +224,6 @@ public class ApiController {
 		Map result = loginService.getUserDetail(param);
 		logger.debug("result : {}", result);
 
-		if (result != null && CommonUtils.isNotEmpty(result.get("user_idx"))) {
-			result.put("user_pw", userPw);
-		}
-
 		return result;
 	}
 }

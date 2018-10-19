@@ -17,5 +17,7 @@ public interface LoginService {
 
 	public int updateUser(HashMap param) throws Exception;
 
+	public int updateUserPw(HashMap param) throws Exception;
+
 	public int deleteUser(HashMap param) throws Exception;
 }

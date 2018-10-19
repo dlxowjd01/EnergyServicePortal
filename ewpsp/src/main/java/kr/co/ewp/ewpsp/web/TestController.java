@@ -264,9 +264,15 @@ public class TestController {
 	@RequestMapping("/test/aesEnc")
 	public @ResponseBody String aesEncTest(String text) throws Exception {
 		String textEnc = UserUtil.encAES256(text);
-//		String textDec = UserUtil.decAES256(text);
 
 		return textEnc;
+	}
+
+	@RequestMapping("/test/aesDec")
+	public @ResponseBody String aesDecTest(String text) throws Exception {
+		String textDec = UserUtil.decAES256(text);
+
+		return textDec;
 	}
 
 	@RequestMapping("/test/shaEnc")

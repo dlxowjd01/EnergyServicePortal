@@ -41,6 +41,10 @@ public class LoginDao {
 		return sqlSession.update("login.updateUser", param);
 	}
 
+	public int updateUserPw(HashMap param) {
+		return sqlSession.update("login.updateUserPw", param);
+	}
+
 	public int deleteUser(HashMap param) {
 		return sqlSession.update("login.deleteUser", param);
 	}
