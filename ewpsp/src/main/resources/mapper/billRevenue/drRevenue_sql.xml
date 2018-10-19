@@ -30,27 +30,8 @@
 			where 1=1
 			and site_id = #{siteId }
 			and std_yearm between #{selTermFrom } and #{selTermTo }
-			<!-- and site_id = '17094385'
-			and std_yearm between '201801' and '201809' -->
 		) a
 		group by site_id, std_yearm
-	</select>
-	
-	<select id="getUsageFutureList" parameterType="hashMap" resultType="hashMap">
-		select 
-			site_id, std_timestamp, sum(pre_usg_val) as pre_usg_val
-		from (
-		
-				select 
-					pre_usg_idx, site_id, device_id, std_timestamp, std_date, pre_usg_val, reg_date, mod_date
-				from tb_predict_usage
-				where 1=1
-				and site_id = 'c64b328b'
-				and std_date between str_to_date('20180820000000','%Y%m%d%H%i%s') and str_to_date('20180820235959','%Y%m%d%H%i%s')
-		
-		) a
-		where 1=1
-		group by site_id, std_timestamp
 	</select>
 	
 </mapper>

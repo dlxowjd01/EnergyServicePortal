@@ -17,25 +17,4 @@
 		order by std_date
 	</select>
 	
-	<select id="getPVRevenueList_test" parameterType="hashMap" resultType="hashMap">
-		select 
-			site_id, std_timestamp, 
-			sum(net_gen_val) as net_gen_val, sum(smp_deal) as smp_deal, 
-			sum(smp_price) as smp_price, sum(rec_deal) as rec_deal,
-			 sum(rec_price) as rec_price, sum(tot_price) as tot_price
-		from (
-				select 
-					usg_idx, site_id, device_id, std_timestamp, std_date, usg_val as net_gen_val, usg_val+3400000 as smp_deal, 
-					usg_val+(3400000*2) as smp_price, usg_val+(3400000*3) as rec_deal
-					, usg_val+(3400000*4) as rec_price, usg_val+(3400000*5) as tot_price
-				from tb_usage
-				where 1=1
-				and site_id = 'c64b328b'
-				<!-- and std_date between str_to_date('20180820000000','%Y%m%d%H%i%s') and str_to_date('20180820235959','%Y%m%d%H%i%s') -->
-				and std_date between str_to_date('20180820000000','%Y%m%d%H%i%s') and str_to_date('20180820025959','%Y%m%d%H%i%s')
-		) a
-		where 1=1
-		group by site_id, std_timestamp
-	</select>
-	
 </mapper>
