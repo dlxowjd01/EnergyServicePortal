@@ -107,7 +107,7 @@ public class DataPeriodCalculate {
 						long divideNum = 0;//Long.parseLong(String.valueOf(map.get(calculValStr)));
 						
 						if(map.get(calculValStr) instanceof Double) {
-							divideNum =  Math.round( (double) map.get(calculValStr) );
+							divideNum =  Math.round( (Double) map.get(calculValStr) );
 						} else {
 							divideNum = Long.parseLong(String.valueOf(map.get(calculValStr)));
 						}
@@ -205,7 +205,7 @@ public class DataPeriodCalculate {
 //				calculNum = calculNum.add(  new BigDecimal(  String.valueOf(map.get(calculValStr))  )  );
 //				System.out.println("자료형 확인 : "+ (map.get(calculValStr)).getClass().getName() );
 				if(map.get(calculValStr) instanceof Double) {
-					calculNum = calculNum + Math.round( (double) map.get(calculValStr) );
+					calculNum = calculNum + Math.round( (Double) map.get(calculValStr) );
 				} else if(map.get(calculValStr) instanceof Float) {
 					calculNum = calculNum + Math.round( (Float) map.get(calculValStr) );
 				} else {
