@@ -22,10 +22,10 @@
 				tot_pay, basic_pay, reduct_stimestamp, reduct_etimestamp, reduct_sdate, reduct_edate, cbl_amt, act_amt, reduct_amt, smp, reg_date, mod_date ,
 				( reduct_amt/reduct_cap )*100 as reduct_cap_per, /* 감축이행율 = (감축인정용량/감축이행용량) * 100 */
 				( reduct_amt*reduct_cap ) as cap_amt, /* 용량정산금 = (감축인정용량 * 기본용량요금) */
-				123 as reduct_reward_amt, /* 감축정산금 = 감축인정용량 * 시간 * 실적정산금(or 실적요금. 90원/kwh) */
+				123 as reduct_reward_amt, /* 감축정산금 = 감축인정용량 * 시간 * 실적정산금(or 실적요금. 90원/kwh)(현재 임의의 숫자를 넣어 진행) */
 				( ( reduct_amt/reduct_cap )*100 )+(123) as total_reward_amt, /* 실적총정산금액 = 용량정산금 + 감축정산금 */
-				567 as csm_reward_amt, /* 고객정산금액 : KPX에서 동서발전에 100% 지급. 동서발전(or 인코어드 같은 중개업체)에서 수수료 제외하고 나머지 고객에게 지급 */
-				33 as ewp_reward_amt /* ewp 정산금액 */
+				567 as csm_reward_amt, /* 고객정산금액 : KPX에서 동서발전에 100% 지급. 동서발전(or 인코어드 같은 중개업체)에서 수수료 제외하고 나머지 고객에게 지급(현재 임의의 숫자를 넣어 진행) */
+				33 as ewp_reward_amt /* ewp 정산금액(현재 임의의 숫자를 넣어 진행) */
 			FROM tb_dr_revenue
 			where 1=1
 			and site_id = #{siteId }
