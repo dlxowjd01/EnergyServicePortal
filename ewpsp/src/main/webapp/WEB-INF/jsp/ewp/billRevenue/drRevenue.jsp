@@ -440,17 +440,17 @@
     <!-- ###### 명세서 확인 및 출력 Popup Start ###### -->
     <script type="text/javascript">
         $(function(){
-            $("#btnPrint").printPreview({
-                obj2print:'#layerbox',
+            $("#drRevenueBtnPrint").printPreview({
+                obj2print:'.drRevenueStatement',
                 width:'880',
                style:'<style>body {background:none !important;} #layerbox {top:0 !important;left:0 !important; margin:0 !important; border-radius:0;} .dprint .lbutton {display:none !important;} #layerbox .ltit {display:none !important;} #layerbox .stit {display:none !important;} .dprint .lbody {margin-top:0 !important;}</style>'
             });
         });
     </script>    
-    <div id="layerbox" class="dprint clear" style="margin-top:250px;width:880px;">
+    <div id="layerbox" class="dprint clear drRevenueStatement" style="margin-top:250px;width:880px;">
     	<div class="lbutton fl">
 			<a href="#;" class="lbtn_pdf"><span>PDF로 저장</span></a>
-			<a href="#;" id="btnPrint" class="lbtn_print"><span>인쇄</span></a>
+			<a href="#;" id="drRevenueBtnPrint" class="lbtn_print"><span>인쇄</span></a>
 		</div>
         <div class="ltit fr">      	
 			<a href="javascript:popupClose('dprint');">닫기</a>
@@ -469,7 +469,7 @@
 				</tr>
 				<tr>
 					<td colspan="2" height="60" align="right" style="font-size:16px;font-weight:600;">
-						이번 달 청구 금액은 <strong style="color:#438fd7">220,000</strong>원 입니다
+						이번 달 청구 금액은 <span class="dp_total">220,000</span>원 입니다
 						<p style="padding-top:10px;font-size:12px;font-weight:normal;">(수익배분기간 : 2018-01-01 ~ 2018-12-31)</p>
 					</td>
 				</tr>
