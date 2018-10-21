@@ -191,14 +191,11 @@ public class ApiController {
 		logger.debug("/openapi/loginUser");
 		logger.debug("userId : {}, userPw : {}", userId, userPw);
 
-//		String userPwEnc = UserUtil.encAES256(userPw);
-		String userPwDec = UserUtil.decAES256(userPw);
-
 		HashMap<String, String> param = new HashMap<String, String>();
 		param.put("userId", userId);
-		param.put("userPw", userPwDec);
+		param.put("userPw", userPw);
 
-		Map result = loginService.getUserDetail(param);
+		Map result = loginService.getUserDetailPlain(param);
 		logger.debug("result : {}", result);
 
 		if (result != null && CommonUtils.isNotEmpty(result.get("user_idx"))) {

@@ -9,6 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
+@Deprecated
 public class AES256Util {
 
 	private String iv;
