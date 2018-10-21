@@ -8,6 +8,8 @@ public interface KepcoMngSetService {
 
 	Map getSiteSetDetail(HashMap param) throws Exception;
 	
+	List getPlanType(HashMap param) throws Exception;
+	
 	int updateSiteSet(HashMap param) throws Exception;
 
 }

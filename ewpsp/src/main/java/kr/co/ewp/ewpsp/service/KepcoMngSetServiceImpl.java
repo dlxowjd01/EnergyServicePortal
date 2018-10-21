@@ -1,6 +1,7 @@
 package kr.co.ewp.ewpsp.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -18,6 +19,10 @@ public class KepcoMngSetServiceImpl implements KepcoMngSetService {
 
 	public Map getSiteSetDetail(HashMap param) throws Exception {
 		return kepcoMngSetDao.getSiteSetDetail(param);
+	}
+
+	public List getPlanType(HashMap param) throws Exception {
+		return kepcoMngSetDao.getPlanType(param);
 	}
 	
 	@Transactional

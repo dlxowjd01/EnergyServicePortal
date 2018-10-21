@@ -25,9 +25,9 @@
 				var tm = new Date( convertDateUTC(ioeList[i].upload_timestamp) );
 				$tbody.append(
 						$('<tr />').append( $("<td />").append( ioeList[i].rnum )
-						).append( $("<td />").append( ioeList[i].site_id )
 						).append( $("<td />").append( ioeList[i].device_name )
 						).append( $("<td />").append( ioeList[i].device_id )
+						).append( $("<td />").append( ioeList[i].device_type_nm )
 						).append( $("<td />").append( ioeList[i].device_stat_name )
 						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
@@ -71,7 +71,11 @@
 					)
 			).append(
 					$('<div class="lbody" />').append(
-							$('<div class="lstat mt20" />').append( $('<div class="dt" />').append("연결상태") ).append(
+							$('<div class="lstat mt20" />').append( $('<div class="dt" />').append("장치타입") ).append(
+									$('<div class="dd" />').append( "" )
+							)
+					).append(
+							$('<div class="lstat" />').append( $('<div class="dt" />').append("연결상태") ).append(
 									$('<div class="dd" />').append( $('<span class="run" />').append( ((ioeDetail.device_stat == 1) ? "connect" : "disconnect") ) )
 							)
 					).append(
@@ -101,11 +105,10 @@
 				var tm = new Date( convertDateUTC(pcsList[i].std_date) );
 				$tbody.append(
 						$('<tr />').append( $("<td />").append( pcsList[i].rnum )
-						).append( $("<td />").append( pcsList[i].site_id )
 						).append( $("<td />").append( pcsList[i].device_name )
 						).append( $("<td />").append( pcsList[i].device_id )
+						).append( $("<td />").append( pcsList[i].device_type_nm )
 						).append( $("<td />").append( pcsList[i].device_stat_name )
-//						).append( $("<td />").append( pcsList[i].cd_status )
 						).append( $("<td />").append( pcsList[i].alarm_msg )
 						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
@@ -149,7 +152,11 @@
 					)
 			).append(
 					$('<div class="lbody" />').append(
-							$('<div class="lstat mt20" />').append( $('<div class="dt" />').append("운전상태") ).append(
+							$('<div class="lstat mt20" />').append( $('<div class="dt" />').append("장치타입") ).append(
+									$('<div class="dd" />').append( $('<span class="run" />').append("") )
+							)
+					).append(
+							$('<div class="lstat" />').append( $('<div class="dt" />').append("운전상태") ).append(
 									$('<div class="dd" />').append( $('<span class="run" />').append( ((pcsDetail.device_stat == 1) ? "connect" : "disconnect") ) )
 							)
 					).append(
@@ -196,10 +203,10 @@
 											$('<tbody />').append( 
 													$('<tr />').append( $("<td />").append(pcsDetail.dc_voltage) 
 													).append( $("<td />").append(  (pcsDetail.dc_power == "" || pcsDetail.dc_power == null) ? "-" : pcsDetail.dc_power  )
-													).append( $("<td />").append(  (pcsDetail.dc_freq == "" || pcsDetail.dc_freq == null) ? "-" : pcsDetail.dc_freq  )
-													).append( $("<td />").append(  (pcsDetail.dc_current == "" || pcsDetail.dc_current == null) ? "-" : pcsDetail.dc_current  )
-													).append( $("<td />").append(  (pcsDetail.dc_pf == "" || pcsDetail.dc_pf == null) ? "-" : pcsDetail.dc_pf  )
-													).append( $("<td />").append(  (pcsDetail.dc_set_power == "" || pcsDetail.dc_set_power == null) ? "-" : pcsDetail.dc_set_power  )
+													).append( $("<td />").append(  (pcsDetail.pcs_status == "" || pcsDetail.pcs_status == null) ? "-" : pcsDetail.pcs_status  )
+													).append( $("<td />").append(  (pcsDetail.pcs_command == "" || pcsDetail.pcs_command == null) ? "-" : pcsDetail.pcs_command  )
+													).append( $("<td />").append(  (pcsDetail.today_c_energy == "" || pcsDetail.today_c_energy == null) ? "-" : pcsDetail.today_c_energy  )
+													).append( $("<td />").append(  (pcsDetail.today_d_energy == "" || pcsDetail.today_d_energy == null) ? "-" : pcsDetail.today_d_energy  )
 													)  
 											)
 									)
@@ -227,11 +234,10 @@
 				var tm = new Date( convertDateUTC(bmsList[i].std_date) );
 				$tbody.append(
 						$('<tr />').append( $("<td />").append( bmsList[i].rnum )
-						).append( $("<td />").append( bmsList[i].site_id )
 						).append( $("<td />").append( bmsList[i].device_name )
 						).append( $("<td />").append( bmsList[i].device_id )
+						).append( $("<td />").append( bmsList[i].device_type_nm )
 						).append( $("<td />").append( bmsList[i].device_stat_name )
-//						).append( $("<td />").append( bmsList[i].cd_status )
 						).append( $("<td />").append( bmsList[i].alarm_msg )
 						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
@@ -275,7 +281,11 @@
 					)
 			).append(
 					$('<div class="lbody" />').append(
-							$('<div class="lstat mt20" />').append( $('<div class="dt" />').append("운전상태") ).append(
+							$('<div class="lstat mt20" />').append( $('<div class="dt" />').append("장치타입") ).append(
+									$('<div class="dd" />').append( $('<span class="run" />').append("") )
+							)
+					).append(
+							$('<div class="lstat" />').append( $('<div class="dt" />').append("운전상태") ).append(
 									$('<div class="dd" />').append( $('<span class="run" />').append( ((bmsDetail.device_stat == 1) ? "connect" : "disconnect") ) )
 							)
 					).append(
@@ -339,9 +349,9 @@
 				var tm = new Date( convertDateUTC(pvList[i].std_date) );
 				$tbody.append(
 						$('<tr />').append( $("<td />").append( pvList[i].rnum )
-						).append( $("<td />").append( pvList[i].site_id )
 						).append( $("<td />").append( pvList[i].device_name )
 						).append( $("<td />").append( pvList[i].device_id )
+						).append( $("<td />").append( pvList[i].device_type_nm )
 						).append( $("<td />").append( pvList[i].device_stat_name )
 						).append( $("<td />").append( pvList[i].temp )
 						).append( $("<td />").append( pvList[i].alarm_msg )
@@ -387,7 +397,11 @@
 					)
 			).append(
 					$('<div class="lbody" />').append(
-							$('<div class="lstat mt20" />').append( $('<div class="dt" />').append("pv 상태") ).append(
+							$('<div class="lstat mt20" />').append( $('<div class="dt" />').append("장치타입") ).append(
+									$('<div class="dd" />').append( $('<span class="run" />').append("") )
+							)
+					).append(
+							$('<div class="lstat" />').append( $('<div class="dt" />').append("PV 상태") ).append(
 									$('<div class="dd" />').append( $('<span class="run" />').append( ((pvDetail.device_stat == 1) ? "connect" : "disconnect") ) )
 							)
 					).append(

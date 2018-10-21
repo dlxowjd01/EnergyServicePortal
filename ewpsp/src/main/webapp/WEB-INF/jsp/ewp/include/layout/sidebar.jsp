@@ -78,7 +78,14 @@ $(document).ready(function() {
 					<a href="#;">설정</a>
 					<div class="sub_layer">
 						<ul>
+							<c:choose>
+							<c:when test="${not empty userInfo and empty selViewSiteId}">
+							<li><a href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');">한전관리설정</a></li>
+							</c:when>
+							<c:otherwise>
 							<li><a href="/kepcoMngSet">한전관리설정</a></li>
+							</c:otherwise>
+				</c:choose>	
 							<c:if test="${userInfo.auth_type ne '4'}">
 							<li><a href="/cmpyGrpSiteMng">그룹/사이트 관리</a></li>
 							</c:if>

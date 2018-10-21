@@ -8,6 +8,7 @@
 package kr.co.ewp.ewpsp.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -55,6 +56,24 @@ public class KepcoMngSetController {
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
+		return resultMap;
+	}
+	
+	/**
+	 * 한전 계약 및 전력관리 정보 조회
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getPlanType")
+	public @ResponseBody Map<String, Object> getPlanType(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
+		logger.debug("/getPlanType");
+		logger.debug("param ::::: "+param.toString());
+		
+		List list = kepcoMngSetService.getPlanType(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("list", list);
 		return resultMap;
 	}
 	

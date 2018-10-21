@@ -18,6 +18,11 @@ public class KepcoMngSetDao {
 		Map result = sqlSession.selectOne("kepcoMngSet.getSiteSetDetail", param);
 		return result;
 	}
+
+	public List getPlanType(HashMap param) {
+		List resultList = sqlSession.selectList("kepcoMngSet.getPlanType", param);
+		return resultList;
+	}
 	
 	public int insertSiteSet(HashMap param) {
 		int result = sqlSession.update("kepcoMngSet.insertSiteSet", param);

@@ -68,9 +68,9 @@
 												<thead>
 													<tr>
 														<th>No.</th>
-														<th>Site ID</th>
 														<th>Device Name</th>
 														<th>Device ID</th>
+														<th>Device Type</th>
 														<th>Status</th>
 														<th>Status Time</th>
 														<th>View</th>
@@ -103,9 +103,9 @@
 												<thead>
 													<tr>
 														<th>No.</th>
-														<th>Site ID</th>
 														<th>Device Name</th>
 														<th>Device ID</th>
+														<th>Device Type</th>
 														<th>PCS Status</th>
 														<th>PCS Message</th>
 														<th>Status Time</th>
@@ -139,9 +139,9 @@
 												<thead>
 													<tr>
 														<th>No.</th>
-														<th>Site ID</th>
 														<th>Device Name</th>
 														<th>Device ID</th>
+														<th>Device Type</th>
 														<th>BMS Status</th>
 														<th>BMS Message</th>
 														<th>Status Time</th>
@@ -176,9 +176,9 @@
 												<thead>
 													<tr>
 														<th>No.</th>
-														<th>Site ID</th>
 														<th>Device Name</th>
 														<th>Device ID</th>
+														<th>Device Type</th>
 														<th>PV Status</th>
 														<th>Temperature</th>
 														<th>PV Message</th>
@@ -238,7 +238,11 @@
         	</dl>
         </div>
         <div class="lbody">
-	        <div class="lstat mt20">
+        	<div class="lstat mt20">
+	        	<div class="dt">장치타입</div>
+	        	<div class="dd">test</div>
+	        </div>
+	        <div class="lstat">
 	        	<div class="dt">연결상태</div>
 	        	<div class="dd"><span class="run"></span></div>
 	        </div>
@@ -279,6 +283,10 @@
         </div>
         <div class="lbody">
 	        <div class="lstat mt20">
+	        	<div class="dt">장치타입</div>
+	        	<div class="dd">test</div>
+	        </div>        	
+	        <div class="lstat">
 	        	<div class="dt">운전상태</div>
 	        	<div class="dd"><span class="run"></span></div>
 	        </div>
@@ -369,6 +377,10 @@
         </div>
         <div class="lbody">
 	        <div class="lstat mt20">
+	        	<div class="dt">장치타입</div>
+	        	<div class="dd">test</div>
+	        </div>        	
+	        <div class="lstat">
 	        	<div class="dt">운전상태</div>
 	        	<div class="dd"><span class="run"></span></div>
 	        </div>
@@ -440,6 +452,10 @@
         </div>
         <div class="lbody">
 	        <div class="lstat mt20">
+	        	<div class="dt">장치타입</div>
+	        	<div class="dd">test</div>
+	        </div>        	
+	        <div class="lstat">
 	        	<div class="dt">PV 상태</div>
 	        	<div class="dd"><span class="run"></span></div>
 	        </div>
