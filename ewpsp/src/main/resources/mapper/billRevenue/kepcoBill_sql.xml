@@ -9,16 +9,15 @@
 			sum(base_rate) as base_rate, sum(consume_rate) as consume_rate, sum(pwr_factor_rate) as pwr_factor_rate, 
 			sum(tot_elec_rate) as tot_elec_rate, sum(elec_fund) as elec_fund, sum(val_add_tax) as val_add_tax, sum(tot_amt_bill) as tot_amt_bill
 		from (
-				select 
-					bill_idx, site_id, bill_yearm, meter_read_day, plan_type, plan_name, contract_power, svc_sdate, svc_edate, 
-					base_rate, consume_rate, off_peak_rate, mid_peak_rate, max_peak_rate, pwr_factor_rate, tot_elec_rate, 
-					elec_fund, val_add_tax, tot_amt_bill, peak_pwr_demand, usg, off_peak_usg, mid_peak_usg, max_peak_usg, lead_pwr_factor, lag_pwr_factor, 
-					demand_chg_reduct, energy_chg_reduct, reg_date
-				from tb_bill
-				where 1=1
-				and site_id = #{siteId }
-				and bill_yearm between #{selTermFrom } and #{selTermTo }
-				
+			select 
+				bill_idx, site_id, bill_yearm, meter_read_day, plan_type, plan_name, contract_power, svc_sdate, svc_edate, 
+				base_rate, consume_rate, off_peak_rate, mid_peak_rate, max_peak_rate, pwr_factor_rate, tot_elec_rate, 
+				elec_fund, val_add_tax, tot_amt_bill, peak_pwr_demand, usg, off_peak_usg, mid_peak_usg, max_peak_usg, lead_pwr_factor, lag_pwr_factor, 
+				demand_chg_reduct, energy_chg_reduct, reg_date
+			from tb_bill
+			where 1=1
+			and site_id = #{siteId }
+			and bill_yearm between #{selTermFrom } and #{selTermTo }
 		) a
 		group by site_id, bill_yearm
 		order by bill_yearm
