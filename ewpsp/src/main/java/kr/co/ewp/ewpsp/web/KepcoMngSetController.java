@@ -60,7 +60,7 @@ public class KepcoMngSetController {
 	}
 	
 	/**
-	 * 한전 계약 및 전력관리 정보 조회
+	 * 요금제 조회
 	 * @param param
 	 * @return
 	 * @throws Exception

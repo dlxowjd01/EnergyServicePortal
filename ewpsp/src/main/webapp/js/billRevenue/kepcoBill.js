@@ -46,7 +46,13 @@
 	var kepcoBillList3;
 	var kepcoBillList4;
 	function callback_getKepcoBillList(result) {
-		var kepcoBillList = result.list;
+		var sheetList = result.sheetList;
+		var chartList = result.chartList;
+		var start = $("#selTermFrom").val();
+		var end = $("#selTermTo").val();
+		var sheetStartDt = start.substring(0, 4)+"01";
+		var sheetEndDt = end.substring(0, 4)+"12";
+		
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -59,6 +65,7 @@
 		var totUsage4 = 0;
 		var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
 		var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
+		dt_row = (Number(end.substring(0, 4))-Number(start.substring(0, 4)) )+1;
 		var dt_str_head = "";
 		var dt_str = "";
 		var dt_str2 = "";
@@ -75,18 +82,16 @@
 		var dt_str6_totalVal = 0; // 테이블 라인별 누적합
 		var dt_str7_totalVal = 0; // 테이블 라인별 누적합
 		
-		if(kepcoBillList.length < 1) {
-			
-		} else {
-			for(var i=0; i<kepcoBillList.length; i++) {
-				var yyyyMM = kepcoBillList[i].bill_yearm;
-				var baseRate = String(kepcoBillList[i].base_rate);
-				var pwrFactorRate   = String(kepcoBillList[i].pwr_factor_rate);
-				var consumeRate  = String(kepcoBillList[i].consume_rate);
-				var totElecRate   = String(kepcoBillList[i].tot_elec_rate);
-				var elecFund  = String(kepcoBillList[i].elec_fund);
-				var valAddTax  = String(kepcoBillList[i].val_add_tax);
-				var totAmtBill  = String(kepcoBillList[i].tot_amt_bill);
+		if(sheetList.length > 0) {
+			for(var i=0; i<sheetList.length; i++) {
+				var yyyyMM = sheetList[i].bill_yearm;
+				var baseRate = String(sheetList[i].base_rate);
+				var pwrFactorRate   = String(sheetList[i].pwr_factor_rate);
+				var consumeRate  = String(sheetList[i].consume_rate);
+				var totElecRate   = String(sheetList[i].tot_elec_rate);
+				var elecFund  = String(sheetList[i].elec_fund);
+				var valAddTax  = String(sheetList[i].val_add_tax);
+				var totAmtBill  = String(sheetList[i].tot_amt_bill);
 				var reBaseRate = 0; 
 				var rePwrFactorRate = 0; 
 				var reConsumeRate = 0; 
@@ -98,46 +103,39 @@
 				if(baseRate == null || baseRate == "" || baseRate == "null") reBaseRate = null;
 				else {
 					reBaseRate = Math.round( Number(baseRate) );
-					totUsage = totUsage+Number(kepcoBillList[i].base_rate);
+					totUsage = totUsage+Number(sheetList[i].base_rate);
 				}
 				if(pwrFactorRate == null || pwrFactorRate == "" || pwrFactorRate == "null") rePwrFactorRate = null;
 				else rePwrFactorRate = Math.round( Number(pwrFactorRate) );
 				if(consumeRate == null || consumeRate == "" || consumeRate == "null") reConsumeRate = null;
 				else {
 					reConsumeRate = Math.round( Number(consumeRate) );
-					totUsage2 = totUsage2+Number(String(kepcoBillList[i].consume_rate));
+					totUsage2 = totUsage2+Number(String(sheetList[i].consume_rate));
 				}
 				if(totElecRate == null || totElecRate == "" || totElecRate == "null") reTotElecRate = null;
 				else reTotElecRate = Math.round( Number(totElecRate) );
 				if(elecFund == null || elecFund == "" || elecFund == "null") reElecFund = null;
 				else {
 					reElecFund = Math.round( Number(elecFund) );
-					totUsage3 = totUsage3+Number(String(kepcoBillList[i].elec_fund));
+					totUsage3 = totUsage3+Number(String(sheetList[i].elec_fund));
 				}
 				if(valAddTax == null || valAddTax == "" || valAddTax == "null") reValAddTax = null;
 				else {
 					reValAddTax = Math.round( Number(valAddTax) );
-					totUsage4 = totUsage4+Number(String(kepcoBillList[i].val_add_tax));
+					totUsage4 = totUsage4+Number(String(sheetList[i].val_add_tax));
 				}
 				if(totAmtBill == null || totAmtBill == "" || totAmtBill == "null") reTotAmtBill = null;
 				else reTotAmtBill = Math.round( Number(totAmtBill) );
 				
 				// 차트데이터 셋팅
-				dataSet.push( [//kepcoBillList[i].bill_yearm,
-					Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1),
-					kepcoBillList[i].base_rate] );
-				dataSet2.push( [//kepcoBillList[i].bill_yearm, 
-					Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1),
-					kepcoBillList[i].consume_rate] ); // 역률적용된 사용요금은 다시 확인해야함
-				dataSet3.push( [//kepcoBillList[i].bill_yearm, 
-					Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1),
-					kepcoBillList[i].elec_fund] );
-				dataSet4.push( [//kepcoBillList[i].bill_yearm, 
-					Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1),
-					kepcoBillList[i].val_add_tax] );
+				dataSet.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), sheetList[i].base_rate] );
+				dataSet2.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), sheetList[i].consume_rate] ); // 역률적용된 사용요금은 다시 확인해야함
+				dataSet3.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), sheetList[i].elec_fund] );
+				dataSet4.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), sheetList[i].val_add_tax] );
+				
 
 				// 표데이터 셋팅
-				dt_str_head += "<th>"+yyyyMM.substring(0, 4)+"-"+yyyyMM.substring(4, 6)+"</th>"
+				dt_str_head += "<th>"+yyyyMM.substring(0, 4)+"-"+yyyyMM.substring(4, 6)+"</th>";
 				dt_str += "<td>"+  ( (reBaseRate == null) ? "" : reBaseRate    ) +"</td>"; // 기본요금(기본요금)
 				dt_str2 += "<td>"+ ( (rePwrFactorRate == null) ? "" : rePwrFactorRate    ) +"</td>"; // 역률(역률요금)
 				dt_str3 += "<td>"+ ( (reConsumeRate == null) ? "" : reConsumeRate    ) +"</td>"; // 사용요금(전력량요금)
@@ -186,7 +184,7 @@
 					dt_str6_totalVal = 0;
 					dt_str7_totalVal = 0;
 				} else {
-					if( (i+1) == kepcoBillList.length ) { // 조회한 목록이 라인을 다 못채울 때
+					if( (i+1) == sheetList.length ) { // 조회한 목록이 라인을 다 못채울 때
 //						var headerDate1 = convertDataTableHeaderDate(tm, 1);
 						var final_dt_str_head = dt_str_head;
 						for(a=0; a<(12-dt_col_cnt); a++) {
@@ -291,51 +289,60 @@
 	
 	// 표(테이블) 그리기
 	function drawData_table() {
+		// pc버전 테이블
 		// 조회기간에 따라 테이블이 여러개 나올 수 있으므로 for문으로 돌려야 한다
-		$table = $("#pc_use_dataTable");
-		$table.empty().append(
-				$("<thead/>").append( $("<tr/>").append( "<th></th>"+kepcoBill_head_pc[0]+"<th>합계</th>" ) ) // thead
-		);
+		$div = $("#pc_use_dataDiv");
+		$div.empty(); // 초기화
 		if(kepcoBill_data_pc.length < 1) {
-			$table.append(
-					$("<tbody/>").append( // tbody
-							$("<tr/>").append( // 기본요금
-									'<th colspan="14">조회된 데이터가 없습니다.</th>'
+			$div.prepend(
+					$('<div class="chart_table" />').append( // pc_use_dataTable
+							$('<table class="pc_use" />').append(
+									$("<thead/>").append( $("<tr/>").append(  
+											"<th width='33%'></th><td width='34%'>조회된 데이터가 없습니다</td><th width='33%'></th>" ) 
+									) // thead
 							)
 					)
 			);
 		} else {
-			$table.append(
-					$("<tbody/>").append( // tbody
-							$("<tr/>").append( // 기본요금
-									'<th><div class="ctit ctt1"><span>기본요금</span></div></th>'+kepcoBill_data_pc[0]
-							)
-					).append(
-							$("<tr/>").append( // 역률
-									'<th><div class="ctit wht"><span>역률</span></div></th>'+ kepcoBill_data_pc2[0] 
-							)
-					).append(
-							$("<tr/>").append( // 사용요금
-									'<th><div class="ctit ctt2"><span>사용요금</span></div></th>'+ kepcoBill_data_pc3[0] 
-							)
-					).append(
-							$("<tr/>").append( // 전기요금합계
-									'<th><div class="ctit wht"><span>전기요금합계</span></div></th>'+ kepcoBill_data_pc4[0] 
-							)
-					).append(
-							$("<tr/>").append( // 전력산업기반기금
-									'<th><div class="ctit ctt3"><span>전력산업기반기금</span></div></th>'+ kepcoBill_data_pc5[0] 
-							)
-					).append(
-							$("<tr/>").append( // 부가세
-									'<th><div class="ctit ctt4"><span>부가세</span></div></th>'+ kepcoBill_data_pc6[0] 
-							)
-					).append(
-							$("<tr/>").append( // 청구요금
-									'<th><div class="ctit wht"><span>청구요금</span></div></th>'+ kepcoBill_data_pc7[0] 
-							)
-					)
-			);
+			for(var i=dt_row-1; i>-1; i--) {
+				$div.prepend(
+						$('<div class="chart_table" />').append(
+								$('<table class="pc_use" />').append(
+										$("<thead/>").append( $("<tr/>").append( "<th></th>"+kepcoBill_head_pc[i]+"<th>합계</th>" ) ) // thead
+								).append(
+										$("<tbody/>").append( // tbody
+												$("<tr/>").append( // 기본요금
+														'<th><div class="ctit ctt1"><span>기본요금</span></div></th>'+kepcoBill_data_pc[i]
+												)
+										).append(
+												$("<tr/>").append( // 역률
+														'<th><div class="ctit wht"><span>역률</span></div></th>'+ kepcoBill_data_pc2[i] 
+												)
+										).append(
+												$("<tr/>").append( // 사용요금
+														'<th><div class="ctit ctt2"><span>사용요금</span></div></th>'+ kepcoBill_data_pc3[i] 
+												)
+										).append(
+												$("<tr/>").append( // 전기요금합계
+														'<th><div class="ctit wht"><span>전기요금합계</span></div></th>'+ kepcoBill_data_pc4[i] 
+												)
+										).append(
+												$("<tr/>").append( // 전력산업기반기금
+														'<th><div class="ctit ctt3"><span>전력산업기반기금</span></div></th>'+ kepcoBill_data_pc5[i] 
+												)
+										).append(
+												$("<tr/>").append( // 부가세
+														'<th><div class="ctit ctt4"><span>부가세</span></div></th>'+ kepcoBill_data_pc6[i] 
+												)
+										).append(
+												$("<tr/>").append( // 청구요금
+														'<th><div class="ctit wht"><span>청구요금</span></div></th>'+ kepcoBill_data_pc7[i] 
+												)
+										)
+								) 
+						)
+				);
+				
+			}
 		}
-		
 	}
