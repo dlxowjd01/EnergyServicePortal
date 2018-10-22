@@ -2,9 +2,10 @@ package kr.co.ewp.ewpsp.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface ESSRevenueService {
 
-	List getESSRevenueList(HashMap param) throws Exception;
+	Map getESSRevenueList(HashMap param) throws Exception;
 
 }

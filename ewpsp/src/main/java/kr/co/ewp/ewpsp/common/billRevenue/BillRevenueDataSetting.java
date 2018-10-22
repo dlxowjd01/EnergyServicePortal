@@ -41,16 +41,20 @@ public class BillRevenueDataSetting {
 		String selTermFrom = getConvertStartEndTmsp( term, period, (String) param.get("selTermFrom") , "1"); // 검색시작일(표영역)
 		String selTermTo = getConvertStartEndTmsp( term, period, (String) param.get("selTermTo") , "2"); // 검색종료일(표영역)
 		
-		System.out.println(selTermFrom+", "+selTermTo+", "+term+", "+period+", "+startDate+", "+endDate);
+//		System.out.println(selTermFrom+", "+selTermTo+", "+term+", "+period+", "+startDate+", "+endDate);
 		
 		// 날짜리스트 생성
 		List sheetDateList = getDateList(selTermFrom, selTermTo, term, period, timestampStr); // 표영역
+		List chartDateList = getDateList(startDate, endDate, term, period, timestampStr); // 그래프영역
 		
 		// 날짜리스트+데이터조합 매칭
 		List sheetList = matchingLists(sheetDateList, dataList, timestampStr); // 표영역
-		System.out.println("sheetList     ======>   "+sheetList.toString());
+		List chartList = matchingLists(chartDateList, dataList, timestampStr); // 그래프영역
+//		System.out.println("sheetList     ======>   "+sheetList.toString());
+//		System.out.println("chartList     ======>   "+chartList.toString());
 		
 		map.put("sheetList", sheetList);
+		map.put("chartList", chartList);
 		
 		return map;
 	}
@@ -109,7 +113,7 @@ public class BillRevenueDataSetting {
 			}
 		}
 		
-		System.out.println("날짜리스트는 => "+dateList.toString());
+//		System.out.println("날짜리스트는 => "+dateList.toString());
 		
 		return dateList;
 	}
@@ -154,7 +158,7 @@ public class BillRevenueDataSetting {
 				}
 				
 			}
-			System.out.println(nullMap.get(timestampStr)+", "+str1);
+			
 			if(!flag) {
 				Map<String, Object> newDataMap = new HashMap<String, Object>();
 				Iterator<String> paramKeys = nullMap.keySet().iterator();
@@ -163,10 +167,8 @@ public class BillRevenueDataSetting {
 					newDataMap.put(name, null);
 				}
 				newDataMap.put(timestampStr, str1);
-				System.out.println("ggg  "+newDataMap.get(timestampStr)+", "+str1);
 				finalDataList.add(newDataMap);
 			}
-			System.out.println("         "+finalDataList.toString());
 			
 		}
 		

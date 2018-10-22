@@ -38,10 +38,11 @@ public class DRRevenueController {
 		logger.debug("/getDRRevenueList");
 		logger.debug("param ::::: "+param.toString());
 		
-		List list = drRevenueService.getDRRevenueList(param);
+		Map list = drRevenueService.getDRRevenueList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", list);
+		resultMap.put("sheetList", list.get("sheetList"));
+		resultMap.put("chartList", list.get("chartList"));
 		return resultMap;
 	}
 	
