@@ -63,7 +63,7 @@ alert('${msg}');
 	<div id="wrapper">
 		<div id="page-wrapper">
 			<nav class="clear">
-				<div class="nav_brand ewp"><a href="/">EWP</a></div>
+				<div class="nav_brand ewp"><a href="/">EWP</a></div> 
 			</nav>
 			<div id="container" class="login">
 
