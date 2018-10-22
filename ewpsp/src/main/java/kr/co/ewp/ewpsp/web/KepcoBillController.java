@@ -36,10 +36,11 @@ public class KepcoBillController {
 		logger.debug("/getKepcoBillList");
 		logger.debug("param ::::: "+param.toString());
 		
-		List list = kepcoBillService.getKepcoBillList(param);
+		Map list = kepcoBillService.getKepcoBillList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("list", list);
+		resultMap.put("sheetList", list.get("sheetList"));
+		resultMap.put("chartList", list.get("chartList"));
 		return resultMap;
 	}
 	
