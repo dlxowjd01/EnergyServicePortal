@@ -53,7 +53,6 @@
 		var sheetStartDt = start.substring(0, 4)+"01";
 		var sheetEndDt = end.substring(0, 4)+"12";
 		
-		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
 		var dataSet2 = []; // chartData를 위한 변수
@@ -82,6 +81,7 @@
 		var dt_str6_totalVal = 0; // 테이블 라인별 누적합
 		var dt_str7_totalVal = 0; // 테이블 라인별 누적합
 		
+		// 표데이터 셋팅
 		if(sheetList.length > 0) {
 			for(var i=0; i<sheetList.length; i++) {
 				var yyyyMM = sheetList[i].bill_yearm;
@@ -126,13 +126,6 @@
 				}
 				if(totAmtBill == null || totAmtBill == "" || totAmtBill == "null") reTotAmtBill = null;
 				else reTotAmtBill = Math.round( Number(totAmtBill) );
-				
-				// 차트데이터 셋팅
-				dataSet.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), sheetList[i].base_rate] );
-				dataSet2.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), sheetList[i].consume_rate] ); // 역률적용된 사용요금은 다시 확인해야함
-				dataSet3.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), sheetList[i].elec_fund] );
-				dataSet4.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), sheetList[i].val_add_tax] );
-				
 
 				// 표데이터 셋팅
 				dt_str_head += "<th>"+yyyyMM.substring(0, 4)+"-"+yyyyMM.substring(4, 6)+"</th>";
@@ -234,6 +227,62 @@
 					}
 					
 				}
+				
+			}
+			
+		}
+		
+		// 차트데이터 셋팅
+		if(chartList.length > 0) {
+			for(var i=0; i<chartList.length; i++) {
+				var yyyyMM = chartList[i].bill_yearm;
+				var baseRate = String(chartList[i].base_rate);
+				var pwrFactorRate   = String(chartList[i].pwr_factor_rate);
+				var consumeRate  = String(chartList[i].consume_rate);
+				var totElecRate   = String(chartList[i].tot_elec_rate);
+				var elecFund  = String(chartList[i].elec_fund);
+				var valAddTax  = String(chartList[i].val_add_tax);
+				var totAmtBill  = String(chartList[i].tot_amt_bill);
+				var reBaseRate = 0; 
+				var rePwrFactorRate = 0; 
+				var reConsumeRate = 0; 
+				var reTotElecRate = 0; 
+				var reElecFund = 0; 
+				var reValAddTax = 0; 
+				var reTotAmtBill = 0; 
+				
+				if(baseRate == null || baseRate == "" || baseRate == "null") reBaseRate = null;
+				else {
+					reBaseRate = Math.round( Number(baseRate) );
+					totUsage = totUsage+Number(chartList[i].base_rate);
+				}
+				if(pwrFactorRate == null || pwrFactorRate == "" || pwrFactorRate == "null") rePwrFactorRate = null;
+				else rePwrFactorRate = Math.round( Number(pwrFactorRate) );
+				if(consumeRate == null || consumeRate == "" || consumeRate == "null") reConsumeRate = null;
+				else {
+					reConsumeRate = Math.round( Number(consumeRate) );
+					totUsage2 = totUsage2+Number(String(chartList[i].consume_rate));
+				}
+				if(totElecRate == null || totElecRate == "" || totElecRate == "null") reTotElecRate = null;
+				else reTotElecRate = Math.round( Number(totElecRate) );
+				if(elecFund == null || elecFund == "" || elecFund == "null") reElecFund = null;
+				else {
+					reElecFund = Math.round( Number(elecFund) );
+					totUsage3 = totUsage3+Number(String(chartList[i].elec_fund));
+				}
+				if(valAddTax == null || valAddTax == "" || valAddTax == "null") reValAddTax = null;
+				else {
+					reValAddTax = Math.round( Number(valAddTax) );
+					totUsage4 = totUsage4+Number(String(chartList[i].val_add_tax));
+				}
+				if(totAmtBill == null || totAmtBill == "" || totAmtBill == "null") reTotAmtBill = null;
+				else reTotAmtBill = Math.round( Number(totAmtBill) );
+				
+				// 차트데이터 셋팅
+				dataSet.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].base_rate] );
+				dataSet2.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].consume_rate] ); // 역률적용된 사용요금은 다시 확인해야함
+				dataSet3.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].elec_fund] );
+				dataSet4.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].val_add_tax] );
 				
 			}
 			kepcoBillList1 = dataSet;
