@@ -25,6 +25,7 @@ public class UserUtil {
 		return UserUtil.getUserInfo(request.getSession());
 	}
 
+	@Deprecated()
 	public static String encAES256(String userPw) throws UnsupportedEncodingException, EncoderException {
 
 		String key = "aes256-ewpsp-key";
@@ -34,6 +35,7 @@ public class UserUtil {
 		return codec.encode(aes256.aesEncode(userPw));
 	}
 
+	@Deprecated
 	public static String decAES256(String userPw) throws UnsupportedEncodingException, DecoderException {
 
 		String key = "aes256-ewpsp-key";

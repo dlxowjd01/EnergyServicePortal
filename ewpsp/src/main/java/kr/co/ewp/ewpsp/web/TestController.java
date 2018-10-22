@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.codec.net.URLCodec;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,10 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.mysql.fabric.xmlrpc.base.Data;
-
 import kr.co.ewp.ewpsp.common.ExcelDownload;
-import kr.co.ewp.ewpsp.common.util.AES256Util;
 import kr.co.ewp.ewpsp.common.util.UserUtil;
 
 @Controller
@@ -259,20 +255,6 @@ public class TestController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 //		resultMap.put("list", list);
 		return resultMap;
-	}
-
-	@RequestMapping("/test/aesEnc")
-	public @ResponseBody String aesEncTest(String text) throws Exception {
-		String textEnc = UserUtil.encAES256(text);
-
-		return textEnc;
-	}
-
-	@RequestMapping("/test/aesDec")
-	public @ResponseBody String aesDecTest(String text) throws Exception {
-		String textDec = UserUtil.decAES256(text);
-
-		return textDec;
 	}
 
 	@RequestMapping("/test/shaEnc")
