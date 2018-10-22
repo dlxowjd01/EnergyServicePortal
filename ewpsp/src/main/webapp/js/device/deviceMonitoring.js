@@ -104,7 +104,7 @@
 			for(var i=0; i<pcsList.length; i++) {
 				var tm = new Date( convertDateUTC(pcsList[i].std_date) );
 				$tbody.append(
-						$('<tr />').append( $("<td />").append( pcsList[i].rnum )
+						$('<tr ondblclick="goLEMSPage(\'/lems/setting/pcs\')" />').append( $("<td />").append( pcsList[i].rnum )
 						).append( $("<td />").append( pcsList[i].device_name )
 						).append( $("<td />").append( pcsList[i].device_id )
 						).append( $("<td />").append( pcsList[i].device_type_nm )
@@ -233,7 +233,7 @@
 			for(var i=0; i<bmsList.length; i++) {
 				var tm = new Date( convertDateUTC(bmsList[i].std_date) );
 				$tbody.append(
-						$('<tr />').append( $("<td />").append( bmsList[i].rnum )
+						$('<tr ondblclick="goLEMSPage(\'/lems/setting/bat\')" />').append( $("<td />").append( bmsList[i].rnum )
 						).append( $("<td />").append( bmsList[i].device_name )
 						).append( $("<td />").append( bmsList[i].device_id )
 						).append( $("<td />").append( bmsList[i].device_type_nm )
@@ -348,7 +348,7 @@
 			for(var i=0; i<pvList.length; i++) {
 				var tm = new Date( convertDateUTC(pvList[i].std_date) );
 				$tbody.append(
-						$('<tr />').append( $("<td />").append( pvList[i].rnum )
+						$('<tr ondblclick="goLEMSPage(\'/lems/setting/pv\')" />').append( $("<td />").append( pvList[i].rnum )
 						).append( $("<td />").append( pvList[i].device_name )
 						).append( $("<td />").append( pvList[i].device_id )
 						).append( $("<td />").append( pvList[i].device_type_nm )

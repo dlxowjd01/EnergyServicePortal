@@ -1,15 +1,18 @@
 // Local EMS 연계
 
-function goLEMSPage(userId, userPw, redirectUrl) {
-	$.post('https://13.125.50.136/lems/sso/login', {
-		userId: userId,
-		userPw: userPw,
-		redirectUrl: redirectUrl
-	}, function(result) {
-		console.log(result);
-	});
+var lemsUrl = null;
+function goLEMSPage(redirectUrl) {
+	lemsUrl = redirectUrl;
+	getUserInfo(callback_goLEMSPage);
 }
 
+function callback_goLEMSPage(result) {
+	var urlEnc = encodeURIComponent('https://13.125.50.136' + lemsUrl);
+	window.open('https://13.125.50.136/lems/sso/login?userId=' + result.user_id + '&userPw=' + result.user_pw + '&redirectUrl=' + urlEnc);
+	lemsUrl = null;
+}
+
+/* 아직 쓰는 곳 없음. */
 function changeEMSUserSession() {
 	getUserInfo(changeEMSUser);
 }

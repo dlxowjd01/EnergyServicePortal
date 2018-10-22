@@ -124,9 +124,9 @@
 				if(i == 0) deviceGroupIdx = deviceList[i].device_grp_idx;
 				var strHtml = ""
 				if(deviceList[i].device_type == 4) strHtml = '<li class="ioe">'; 
-				else if(deviceList[i].device_type == 1) strHtml = '<li class="pcs">'; 
-				else if(deviceList[i].device_type == 2) strHtml = '<li class="bms">'; 
-				else if(deviceList[i].device_type == 3) strHtml = '<li class="pv">';
+				else if(deviceList[i].device_type == 1) strHtml = '<li class="pcs" ondblclick="goLEMSPage(\'/lems/setting/pcs\')">'; 
+				else if(deviceList[i].device_type == 2) strHtml = '<li class="bms" ondblclick="goLEMSPage(\'/lems/setting/bat\')">'; 
+				else if(deviceList[i].device_type == 3) strHtml = '<li class="pv" ondblclick="goLEMSPage(\'/lems/setting/pv\')">';
 				else strHtml = '<li class="ioe">';
 				
 				addHtml += strHtml;
