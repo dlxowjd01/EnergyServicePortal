@@ -32,10 +32,20 @@ function changeEMSUserDB(userIdx) {
 }
 
 function changeEMSUser(userInfo) {
-	console.log(JSON.stringify(userInfo));
-	$.post('https://13.125.50.136/lems/sso/user/sync', userInfo,
-		function(result) {
-			console.log(result);
+//	console.log(JSON.stringify(userInfo));
+	$.ajax({
+		url: 'https://13.125.50.136/lems/sso/user/sync',
+		type: 'post',
+		data: JSON.stringify(userInfo.detail),
+		contentType: 'application/json',
+		dataType: 'json',
+		success: function(result) {
+//			console.log(result.rslt);
+			if (result == null || result.rslt != '1') {
+				alert('Local EMS 연동에 오류가 발생했습니다.\n 관리자에게 문의하세요.');
+			} else {
+				console.log('Local EMS Ok.');
+			}
 		}
-	);
+	});
 }
