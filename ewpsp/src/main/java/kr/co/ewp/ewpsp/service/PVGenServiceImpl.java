@@ -21,6 +21,9 @@ public class PVGenServiceImpl implements PVGenService {
 		List list = pvGenDao.getPVGenRealList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
+			resultMap.put("sheetList", null);
+			resultMap.put("chartList", null);
+			
 			return resultMap;
 		} else {
 			resultMap = PeriodDataSetting.dataSetting(param, list, "std_date", "gen_val", 1);
@@ -32,6 +35,9 @@ public class PVGenServiceImpl implements PVGenService {
 		List list = pvGenDao.getPVGenFutureList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
+			resultMap.put("sheetList", null);
+			resultMap.put("chartList", null);
+			
 			return resultMap;
 		} else {
 			resultMap = PeriodDataSetting.dataSetting(param, list, "std_date", "gen_val", 1);

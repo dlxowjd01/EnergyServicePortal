@@ -21,6 +21,9 @@ public class PeakServiceImpl implements PeakService {
 		List list = peakDao.getPeakRealList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
+			resultMap.put("sheetList", null);
+			resultMap.put("chartList", null);
+			
 			return resultMap;
 		} else {
 			resultMap = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "peak_val", 1);

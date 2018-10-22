@@ -54,7 +54,7 @@
 		
 		// 한전사용량, ess사용량, pv사용량 중 하나라도 데이터가 존재할 때
 		// 표데이터 셋팅
-		if( !( kepcoUsageSheetList.length < 1 && essUsageListSheetList.length <1 && pvUsageListSheetList.length < 1 ) ) {
+		if( !( kepcoUsageSheetList == null && essUsageListSheetList == null && pvUsageListSheetList == null ) ) {
 			for(var i=0; i<loopCntList.length; i++) {
 				var kepcoUsage = null;
 				var essUsage = null;
@@ -159,7 +159,7 @@
 		
 		// 한전사용량, ess사용량, pv사용량 중 하나라도 데이터가 존재할 때
 		// 차트데이터 셋팅
-		if( !( kepcoUsageChartList.length < 1 && essUsageListChartList.length <1 && pvUsageListChartList.length < 1 ) ) {
+		if( !( kepcoUsageChartList == null && essUsageListChartList == null && pvUsageListChartList == null ) ) {
 			for(var i=0; i<loopCntList.length; i++) {
 				var kepcoUsage = null;
 				var essUsage = null;

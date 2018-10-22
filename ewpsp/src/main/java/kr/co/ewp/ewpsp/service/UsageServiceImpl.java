@@ -21,6 +21,9 @@ public class UsageServiceImpl implements UsageService {
 		List list = usageDao.getUsageRealList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
+			resultMap.put("sheetList", null);
+			resultMap.put("chartList", null);
+			
 			return resultMap;
 		} else {
 			resultMap = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "usg_val", 1);
@@ -32,6 +35,9 @@ public class UsageServiceImpl implements UsageService {
 		List list = usageDao.getUsageFutureList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
+			resultMap.put("sheetList", null);
+			resultMap.put("chartList", null);
+			
 			return resultMap;
 		} else {
 			resultMap = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "pre_usg_val", 2);

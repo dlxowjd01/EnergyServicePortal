@@ -38,8 +38,15 @@ public class ESSChargeServiceImpl implements ESSChargeService {
 		List list = essChargeDao.getESSChargeRealList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
-			resultMap.put("chgList", null);
-			resultMap.put("dischgList", null);
+			Map<String, Object> chgMap = new HashMap<String, Object>();
+			chgMap.put("sheetList", null);
+			chgMap.put("chartList", null);
+			Map<String, Object> dischgMap = new HashMap<String, Object>();
+			dischgMap.put("sheetList", null);
+			dischgMap.put("chartList", null);
+			
+			resultMap.put("chgMap", chgMap);
+			resultMap.put("dischgMap", dischgMap);
 			
 			return resultMap;
 		} else {
@@ -59,8 +66,15 @@ public class ESSChargeServiceImpl implements ESSChargeService {
 		List list = essChargeDao.getESSChargeFutureList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
-			resultMap.put("chgList", null);
-			resultMap.put("dischgList", null);
+			Map<String, Object> chgMap = new HashMap<String, Object>();
+			chgMap.put("sheetList", null);
+			chgMap.put("chartList", null);
+			Map<String, Object> dischgMap = new HashMap<String, Object>();
+			dischgMap.put("sheetList", null);
+			dischgMap.put("chartList", null);
+			
+			resultMap.put("chgMap", chgMap);
+			resultMap.put("dischgMap", dischgMap);
 			
 			return resultMap;
 		} else {

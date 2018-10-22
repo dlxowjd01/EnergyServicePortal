@@ -21,6 +21,9 @@ public class DERUsageServiceImpl implements DERUsageService {
 		List list = derUsageDao.getESSUsageList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
+			resultMap.put("sheetList", null);
+			resultMap.put("chartList", null);
+			
 			return resultMap;
 		} else {
 			resultMap = PeriodDataSetting.dataSetting(param, list, "std_date", "usg_val", 1);

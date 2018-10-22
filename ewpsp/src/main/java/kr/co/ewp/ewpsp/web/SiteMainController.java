@@ -142,8 +142,8 @@ public class SiteMainController {
 		param.put("selTermFrom", selTermFrom.substring(0, 6));
 		param.put("selTermTo", selTermTo.substring(0, 6));
 		
-		List essRevenueList = essRevenueService.getESSRevenueList(param);
-		List drRevenueList = drRevenueService.getDRRevenueList(param);
+		List essRevenueList = null;//essRevenueService.getESSRevenueList(param);
+		List drRevenueList = null;//drRevenueService.getDRRevenueList(param);
 
 		List loopCntList = null;
 		String loopGbn = "";

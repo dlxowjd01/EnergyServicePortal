@@ -156,18 +156,18 @@
 	function callback_getESSChargeRealList(result) {
 		var resultListMap = result.resultListMap;
 		
-		var chgList = resultListMap.chgList;
-		var dischgList = resultListMap.dischgList;
+		var chgChartList = result.chgChartList;
+		var dischgChartList = result.dischgChartList;
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
 		var dataSet2 = []; // chartData를 위한 변수
 		var totalDataSet = 0; // 전체 누적합
 		var totalDataSet2 = 0; // 전체 누적합
-		if(chgList != null && chgList.length > 0) {
-			for(var i=0; i<chgList.length; i++) {
-				var chgVal = String(chgList[i].chg_val);
-				var dischgVal   = String(dischgList[i].dischg_val);
+		if(chgChartList != null && chgChartList.length > 0) {
+			for(var i=0; i<chgChartList.length; i++) {
+				var chgVal = String(chgChartList[i].chg_val);
+				var dischgVal   = String(dischgChartList[i].dischg_val);
 				var reChgVal = 0; 
 				var reDischgVal   = 0; 
 				
@@ -182,10 +182,10 @@
 					totalDataSet2 = totalDataSet2+reDischgVal;
 				}
 				
-				var tm = new Date( convertDateUTC(chgList[i].std_timestamp) );
+				var tm = new Date( convertDateUTC(chgChartList[i].std_timestamp) );
 				// 차트데이터 셋팅
-				dataSet.push( [setChartDateUTC(chgList[i].std_timestamp), reChgVal] );
-				dataSet2.push( [setChartDateUTC(chgList[i].std_timestamp), reDischgVal] );
+				dataSet.push( [setChartDateUTC(chgChartList[i].std_timestamp), reChgVal] );
+				dataSet2.push( [setChartDateUTC(chgChartList[i].std_timestamp), reDischgVal] );
 				
 			}
 			
@@ -193,9 +193,6 @@
 		pastChgList = dataSet;
 		pastDischgList = dataSet2;
 		
-		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-//		unit_format(String(totalDataSet), "pastChgTot", "Wh");
-//		unit_format(String(totalDataSet2), "pastDischgTot", "Wh");
 	}
 	
 	// 예측 충방전량
@@ -206,18 +203,18 @@
 	function callback_getESSChargeFutureList(result) {
 		var resultListMap = result.resultListMap;
 		
-		var chgList = resultListMap.chgList;
-		var dischgList = resultListMap.dischgList;
+		var chgChartList = result.chgChartList;
+		var dischgChartList = result.dischgChartList;
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
 		var dataSet2 = []; // chartData를 위한 변수
 		var totalDataSet = 0; // 전체 누적합
 		var totalDataSet2 = 0; // 전체 누적합
-		if(chgList != null && chgList.length > 0) {
-			for(var i=0; i<chgList.length; i++) {
-				var chgVal = String(chgList[i].chg_val);
-				var dischgVal   = String(dischgList[i].dischg_val);
+		if(chgChartList != null && chgChartList.length > 0) {
+			for(var i=0; i<chgChartList.length; i++) {
+				var chgVal = String(chgChartList[i].chg_val);
+				var dischgVal   = String(dischgChartList[i].dischg_val);
 				var reChgVal = 0; 
 				var reDischgVal   = 0; 
 				
@@ -232,10 +229,10 @@
 					totalDataSet2 = totalDataSet2+reDischgVal;
 				}
 				
-				var tm = new Date( convertDateUTC(chgList[i].std_timestamp) );
+				var tm = new Date( convertDateUTC(chgChartList[i].std_timestamp) );
 				// 차트데이터 셋팅
-				dataSet.push( [setChartDateUTC(chgList[i].std_timestamp), reChgVal] );
-				dataSet2.push( [setChartDateUTC(chgList[i].std_timestamp), reDischgVal] );
+				dataSet.push( [setChartDateUTC(chgChartList[i].std_timestamp), reChgVal] );
+				dataSet2.push( [setChartDateUTC(chgChartList[i].std_timestamp), reDischgVal] );
 				
 			}
 			
@@ -388,11 +385,10 @@
 	var essUsageList; // ess 사용량
 	var pvUsageList; // pv 사용량 사용량
 	function callback_getDERUsageList(result) {
-		var kepcoUsageList = result.kepcoUsageList;
-		var essUsgList = result.essUsageList;
-		var pvUsgList = result.pvUsageList;
+		var kepcoUsageChartList  = result.kepcoUsageChartList;
+		var essUsageListChartList = result.essUsageListChartList;
+		var pvUsageListChartList = result.pvUsageListChartList;
 		var loopCntList = result.loopCntList; // for문 loop list
-//		var periodd = $("#selPeriodVal").val(); // 데이터조회간격
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -403,7 +399,7 @@
 		var totalDataSet3 = 0;
 		var nowUsage = 0;
 		
-		if( kepcoUsageList.length < 1 && essUsgList.length <1 && pvUsgList.length < 1 ) {
+		if( kepcoUsageChartList == null && essUsageListChartList == null && pvUsageListChartList == null ) {
 			$(".der").find(".no-data").css("display", "");
 			$(".der").find(".inchart").css("display", "none");
 			$(".der").find(".chart_footer").css("display", "none");
@@ -419,7 +415,7 @@
 		}
 		
 		// 한전사용량, ess사용량, pv사용량 중 하나라도 데이터가 존재할 때
-		if( !( kepcoUsageList.length < 1 && essUsgList.length <1 && pvUsgList.length < 1 ) ) {
+		if( !( kepcoUsageChartList == null && essUsageListChartList == null && pvUsageListChartList == null ) ) {
 //			if(usageList.length > 0) {
 				for(var i=0; i<loopCntList.length; i++) {
 					var kepcoUsage = null;
@@ -429,8 +425,8 @@
 					var reEssUsage = 0;
 					var rePvUsage = 0;
 					
-					if(kepcoUsageList != null && kepcoUsageList.length > 0 && kepcoUsageList.length > i) { // 한전사용량
-						kepcoUsage = String(kepcoUsageList[i].usg_val);
+					if(kepcoUsageChartList != null && kepcoUsageChartList.length > 0 && kepcoUsageChartList.length > i) { // 한전사용량
+						kepcoUsage = String(kepcoUsageChartList[i].usg_val);
 						if(kepcoUsage == null || kepcoUsage == "" || kepcoUsage == "null") reKepcoUsage = null;
 						else {
 							if(kepcoUsage.length < 7) reKepcoUsage = Number(     kepcoUsage     ); // 나중에 수정 요망
@@ -440,8 +436,8 @@
 						
 					} else reKepcoUsage = null;
 					
-					if(essUsgList != null && essUsgList.length > 0 && essUsgList.length > i) { // ESS 사용량
-						essUsage = String(essUsgList[i].usg_val);
+					if(essUsageListChartList != null && essUsageListChartList.length > 0 && essUsageListChartList.length > i) { // ESS 사용량
+						essUsage = String(essUsageListChartList[i].usg_val);
 						if(essUsage == null || essUsage == "" || essUsage == "null") reEssUsage = null;
 						else {
 							if(essUsage.length < 7) reEssUsage = Number(     essUsage     ); // 나중에 수정 요망
@@ -450,8 +446,8 @@
 						}
 					} else reEssUsage = null;
 					
-					if(pvUsgList != null && pvUsgList.length > 0 && pvUsgList.length > i) { // PV 사용량
-						pvUsage = String(pvUsgList[i].gen_val);
+					if(pvUsageListChartList != null && pvUsageListChartList.length > 0 && pvUsageListChartList.length > i) { // PV 사용량
+						pvUsage = String(pvUsageListChartList[i].gen_val);
 						if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
 						else {
 							if(pvUsage.length < 7) rePvUsage = Number(     pvUsage     ); // 나중에 수정 요망
@@ -477,7 +473,7 @@
 				essUsageList = dataSet2;
 				pvUsageList = dataSet3;
 				
-//				if(kepcoUsageList.length > 0) {
+//				if(kepcoUsageChartList.length > 0) {
 					derChart.addSeries({
 						index:3,
 						fillOpacity: 1,
@@ -489,7 +485,7 @@
 					
 //				}
 				
-//				if(essUsgList.length > 0) {
+//				if(essUsageListChartList.length > 0) {
 					derChart.addSeries({
 						index: 2,
 						fillOpacity: 0.5,
@@ -500,7 +496,7 @@
 					
 //				}
 				
-//				if(pvUsgList.length > 0) {
+//				if(pvUsageListChartList.length > 0) {
 					derChart.addSeries({
 						index: 1,
 						fillOpacity: 0.5,
@@ -670,79 +666,6 @@
 		
 		peakChart.redraw(); // 차트 데이터를 다시 그린다
 	}
-//	function drawData_chart_peak() {
-//		if(pastPeakList.length < 1) {
-//			$(".peak").find(".no-data").css("display", "");
-//			$(".peak").find(".inchart").css("display", "none");
-//			$(".peak").find(".chart_notice").css("display", "none");
-//		} else {
-//			$(".peak").find(".no-data").css("display", "none");
-//			$(".peak").find(".inchart").css("display", "");
-//			$(".peak").find(".chart_notice").css("display", "");
-//		}
-//		
-//		var seriesLength = peakChart.series.length;
-//		for(var i = seriesLength - 1; i > -1; i--) {
-//			peakChart.series[i].remove();
-//		}
-//		peakChart.yAxis[0].removePlotLine('contract-power');
-//		peakChart.yAxis[0].removePlotLine('charge-power');
-//		console.log(pastPeakList);
-//		peakChart.addSeries({
-//			name: '피크 전력',
-//			color: '#438fd7', /* 피크 전력 */
-//			type: 'column',
-//			data: pastPeakList
-//		}, false);
-//		
-////		peakChart.addSeries({
-////			name: '한전 계약 전력',
-////			color: '#13af67', /* 한전 계약 전력 */
-////			data: contractPowerList
-////		}, false);
-////		console.log(contractPower);
-//		peakChart.yAxis[0].addPlotLine({
-//			color: '#13af67',
-//			width: 1, 
-//			value: contractPower,
-//			label: {
-//				text: '한전 계약 전력',
-//				style: {
-//					color: '13af67',
-//					fontWeight: 'bold'
-//				},
-//				zIndex: 4
-//			}, id: 'contract-power'
-//		});
-//		
-////		peakChart.addSeries({
-////			name: '요금 적용 전력',
-////			color: '#f75c4a', /* 요금 적용 전력 */
-////			data: chargePowerList
-////		}, false);
-//		peakChart.yAxis[0].addPlotLine({
-//			color: '#f75c4a',
-//			width: 1, 
-//			value: chargePower,
-//			label: {
-//				text: '요금 적용 전력',
-//				style: {
-//					color: 'f75c4a',
-//					fontWeight: 'bold'
-//				},
-//				align: 'right',
-//				x: -10,
-//				zIndex: 4
-//			}, id: 'charge-power'
-//		});
-//		
-////		setTickInterval();
-////		peakChart.xAxis[0].options.tickInterval = /*24 **/ 60 * 60 * 1000;
-//		peakChart.xAxis[0].options.tickInterval = 60 * 1000;
-//		peakChart.xAxis[0].options.labels.style.fontSize = '12px';
-//		
-//		peakChart.redraw(); // 차트 데이터를 다시 그린다
-//	}
 	
 	function chargePowerStrDisplayYn(today) {
 		var holidayYn = chkHoliday(today); // 공휴일여부 체크(true:공휴일, false:평일or토요일)
@@ -879,9 +802,6 @@
 					
 					var tm = new Date( convertDateUTC(loopCntList[i].std_timestamp) );
 					// 차트데이터 셋팅
-//					dataSet.push([setChartDateUTC(loopCntList[i].std_timestamp) , reEssRevenue]);
-//					dataSet2.push([setChartDateUTC(loopCntList[i].std_timestamp) , rePvRevenue]);
-//					dataSet3.push([setChartDateUTC(loopCntList[i].std_timestamp) , reDrRevenue]);
 					dataSet.push([setChartDateUTC(stdDt) , reEssRevenue]);
 					dataSet2.push([setChartDateUTC(stdDt) , rePvRevenue]);
 					dataSet3.push([setChartDateUTC(stdDt) , reDrRevenue]);
