@@ -47,7 +47,12 @@
 	var drRevenueList1;
 	var drRevenueList2;
 	function callback_getDRRevenueList(result) {
-		var drRevenueList = result.list;
+		var sheetList = result.sheetList;
+		var chartList = result.chartList;
+		var start = $("#selTermFrom").val();
+		var end = $("#selTermTo").val();
+		var sheetStartDt = start.substring(0, 4)+"01";
+		var sheetEndDt = end.substring(0, 4)+"12";
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -56,6 +61,7 @@
 		var totDataSet2 = 0;
 		var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
 		var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
+		dt_row = (Number(end.substring(0, 4))-Number(start.substring(0, 4)) )+1;
 		var dt_str_head = "";
 		var dt_str = "";
 		var dt_str2 = "";
@@ -78,19 +84,20 @@
 		var dt_str9_totalVal = 0; // 테이블 라인별 누적합
 		var dt_str10_totalVal = 0; // 테이블 라인별 누적합
 		
-		if(drRevenueList.length > 0) {
-			for(var i=0; i<drRevenueList.length; i++) {
-				var yyyyMM = drRevenueList[i].std_yearm;
-				var reductCntHour  = String(drRevenueList[i].reduct_cnt_hour)   ;
-				var reductCap  = String(drRevenueList[i].reduct_cap)   ;
-				var reductAmt  = String(drRevenueList[i].reduct_amt);
-				var reductCapPer  = String(drRevenueList[i].reduct_cap_per);
-				var capAmt  = String(drRevenueList[i].cap_amt);
-				var reductRewardAmt  = String(drRevenueList[i].reduct_reward_amt)   ;
-				var totalRewardAmt  = String(drRevenueList[i].total_reward_amt)   ;
-				var csmRewardAmt  = String(drRevenueList[i].csm_reward_amt)   ;
-				var ewpRewardAmt  = String(drRevenueList[i].ewp_reward_amt)   ;
-				var profitRatio  = String(drRevenueList[i].profit_ratio)      ;
+		// 표데이터 셋팅
+		if(sheetList.length > 0) {
+			for(var i=0; i<sheetList.length; i++) {
+				var yyyyMM = sheetList[i].std_yearm;
+				var reductCntHour  = String(sheetList[i].reduct_cnt_hour)   ;
+				var reductCap  = String(sheetList[i].reduct_cap)   ;
+				var reductAmt  = String(sheetList[i].reduct_amt);
+				var reductCapPer  = String(sheetList[i].reduct_cap_per);
+				var capAmt  = String(sheetList[i].cap_amt);
+				var reductRewardAmt  = String(sheetList[i].reduct_reward_amt)   ;
+				var totalRewardAmt  = String(sheetList[i].total_reward_amt)   ;
+				var csmRewardAmt  = String(sheetList[i].csm_reward_amt)   ;
+				var ewpRewardAmt  = String(sheetList[i].ewp_reward_amt)   ;
+				var profitRatio  = String(sheetList[i].profit_ratio)      ;
 				var reReductCntHour = 0;
 				var reReductCap = 0;
 				var reReductAmt = 0;
@@ -117,21 +124,17 @@
 				if(totalRewardAmt == null || totalRewardAmt == "" || totalRewardAmt == "null") reTotalRewardAmt = null;
 				else {
 					reTotalRewardAmt = Math.round( Number(totalRewardAmt) );
-					totDataSet = totDataSet+Number(drRevenueList[i].total_reward_amt);
+					totDataSet = totDataSet+Number(sheetList[i].total_reward_amt);
 				}
 				if(csmRewardAmt == null || csmRewardAmt == "" || csmRewardAmt == "null") reCsmRewardAmt = null;
 				else {
 					reCsmRewardAmt = Math.round( Number(csmRewardAmt) );
-					totDataSet2 = totDataSet2+Number(String(drRevenueList[i].csm_reward_amt));
+					totDataSet2 = totDataSet2+Number(String(sheetList[i].csm_reward_amt));
 				}
 				if(ewpRewardAmt == null || ewpRewardAmt == "" || ewpRewardAmt == "null") reEwpRewardAmt = null;
 				else reEwpRewardAmt = Math.round( Number(ewpRewardAmt) );
 				if(profitRatio == null || profitRatio == "" || profitRatio == "null") reProfitRatio = null;
 				else reProfitRatio = Math.round( Number(profitRatio) );
-				
-				// 차트데이터 셋팅
-				dataSet.push( [Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), drRevenueList[i].total_reward_amt] );
-				dataSet2.push( [Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), drRevenueList[i].csm_reward_amt] );
 
 				// 표데이터 셋팅
 				dt_str_head += "<th>"+yyyyMM.substring(0, 4)+"-"+yyyyMM.substring(4, 6)+"</th>"
@@ -179,6 +182,7 @@
 					drRevenue_data_pc10[dt_row_cnt-1] = dt_str10;
 					dt_row_cnt++;
 					dt_col_cnt = 1;
+					dt_str_head = "";
 					dt_str = "";
 					dt_str2 = "";
 					dt_str3 = "";
@@ -200,7 +204,7 @@
 					dt_str9_totalVal = 0; 
 					dt_str10_totalVal = 0;
 				} else {
-					if( (i+1) == drRevenueList.length ) { // 조회한 목록이 라인을 다 못채울 때
+					if( (i+1) == sheetList.length ) { // 조회한 목록이 라인을 다 못채울 때
 //						var headerDate1 = convertDataTableHeaderDate(tm, 1);
 						var final_dt_str_head = dt_str_head;
 						for(a=0; a<(12-dt_col_cnt); a++) {
@@ -239,6 +243,7 @@
 						drRevenue_data_pc10[dt_row_cnt-1] = dt_str10;
 						dt_row_cnt++;
 						dt_col_cnt = 1;
+						dt_str_head = "";
 						dt_str = "";
 						dt_str2 = "";
 						dt_str3 = "";
@@ -264,6 +269,67 @@
 					}
 					
 				}
+				
+			}
+			
+		}
+		
+		// 차트데이터 셋팅
+		if(chartList.length > 0) {
+			for(var i=0; i<chartList.length; i++) {
+				var yyyyMM = chartList[i].std_yearm;
+				console.log(yyyyMM);
+				var reductCntHour  = String(chartList[i].reduct_cnt_hour)   ;
+				var reductCap  = String(chartList[i].reduct_cap)   ;
+				var reductAmt  = String(chartList[i].reduct_amt);
+				var reductCapPer  = String(chartList[i].reduct_cap_per);
+				var capAmt  = String(chartList[i].cap_amt);
+				var reductRewardAmt  = String(chartList[i].reduct_reward_amt)   ;
+				var totalRewardAmt  = String(chartList[i].total_reward_amt)   ;
+				var csmRewardAmt  = String(chartList[i].csm_reward_amt)   ;
+				var ewpRewardAmt  = String(chartList[i].ewp_reward_amt)   ;
+				var profitRatio  = String(chartList[i].profit_ratio)      ;
+				var reReductCntHour = 0;
+				var reReductCap = 0;
+				var reReductAmt = 0;
+				var reReductCapPer = 0;
+				var reCapAmt = 0;
+				var reReductRewardAmt = 0;
+				var reTotalRewardAmt = 0;
+				var reCsmRewardAmt = 0;
+				var reEwpRewardAmt = 0;
+				var reProfitRatio = 0;
+				
+				if(reductCntHour == null || reductCntHour == "" || reductCntHour == "null") reReductCntHour = null;
+				else reReductCntHour = Math.round( Number(reductCntHour) );
+				if(reductCap == null || reductCap == "" || reductCap == "null") reReductCap = null;
+				else reReductCap = Math.round( Number(reductCap) );
+				if(reductAmt == null || reductAmt == "" || reductAmt == "null") reReductAmt = null;
+				else reReductAmt = Math.round( Number(reductAmt) );
+				if(reductCapPer == null || reductCapPer == "" || reductCapPer == "null") reReductCapPer = null;
+				else reReductCapPer = Math.round( Number(reductCapPer) );
+				if(capAmt == null || capAmt == "" || capAmt == "null") reCapAmt = null;
+				else reCapAmt = Math.round( Number(capAmt) );
+				if(reductRewardAmt == null || reductRewardAmt == "" || reductRewardAmt == "null") reReductRewardAmt = null;
+				else reReductRewardAmt = Math.round( Number(reductRewardAmt) );
+				if(totalRewardAmt == null || totalRewardAmt == "" || totalRewardAmt == "null") reTotalRewardAmt = null;
+				else {
+					reTotalRewardAmt = Math.round( Number(totalRewardAmt) );
+					totDataSet = totDataSet+Number(chartList[i].total_reward_amt);
+				}
+				if(csmRewardAmt == null || csmRewardAmt == "" || csmRewardAmt == "null") reCsmRewardAmt = null;
+				else {
+					reCsmRewardAmt = Math.round( Number(csmRewardAmt) );
+					totDataSet2 = totDataSet2+Number(String(chartList[i].csm_reward_amt));
+				}
+				if(ewpRewardAmt == null || ewpRewardAmt == "" || ewpRewardAmt == "null") reEwpRewardAmt = null;
+				else reEwpRewardAmt = Math.round( Number(ewpRewardAmt) );
+				if(profitRatio == null || profitRatio == "" || profitRatio == "null") reProfitRatio = null;
+				else reProfitRatio = Math.round( Number(profitRatio) );
+				
+				// 차트데이터 셋팅
+				dataSet.push( [Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].total_reward_amt] );
+				dataSet2.push( [Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].csm_reward_amt] );
 				
 			}
 			drRevenueList1 = dataSet;
@@ -303,63 +369,73 @@
 	
 	// 표(테이블) 그리기
 	function drawData_table() {
+		// pc버전 테이블
 		// 조회기간에 따라 테이블이 여러개 나올 수 있으므로 for문으로 돌려야 한다
-		$table = $("#pc_use_dataTable");
-		$table.empty().append(
-				$("<thead/>").append( $("<tr/>").append( "<th></th>"+drRevenue_head_pc[0]+"<th>합계</th>" ) ) // thead
-		);
+		$div = $("#pc_use_dataDiv");
+		$div.empty(); // 초기화
 		if(drRevenue_data_pc.length < 1) {
-			$table.append(
-					$("<tbody/>").append( // tbody
-							$("<tr/>").append( // 기본요금
-									'<th colspan="14">조회된 데이터가 없습니다.</th>'
+			$div.prepend(
+					$('<div class="chart_table" />').append( // pc_use_dataTable
+							$('<table class="pc_use" />').append(
+									$("<thead/>").append( $("<tr/>").append(  
+											"<th width='33%'></th><td width='34%'>조회된 데이터가 없습니다</td><th width='33%'></th>" ) 
+									) // thead
 							)
 					)
 			);
 		} else {
-			$table.append(
-					$("<tbody/>").append( // tbody
-							$("<tr/>").append(
-									'<th><div class="ctit wht"><span>감축 횟수-시간 (회-hr)</span></div></th>'+ drRevenue_data_pc[0] 
-							)
-					).append(
-							$("<tr/>").append(
-									'<th><div class="ctit wht"><span>감축이행용량 (kWh)</span></div></th>'+ drRevenue_data_pc2[0] 
-							)
-					).append(
-							$("<tr/>").append(
-									'<th><div class="ctit wht"><span>감축인정용량 (kWh)</span></div></th>'+ drRevenue_data_pc3[0] 
-							)
-					).append(
-							$("<tr/>").append(
-									'<th><div class="ctit wht"><span>감축이행율 (%)</span></div></th>'+ drRevenue_data_pc4[0] 
-							)
-					).append(
-							$("<tr/>").append(
-									'<th><div class="ctit wht"><span>용량정산금 (won)</span></div></th>'+ drRevenue_data_pc5[0] 
-							)
-					).append(
-							$("<tr/>").append(
-									'<th><div class="ctit wht"><span>감축정산금 (won)</span></div></th>'+ drRevenue_data_pc6[0] 
-							)
-					).append(
-							$("<tr/>").append(
-									'<th><div class="ctit ct1"><span>총 정산금액</span></div></th>'+ drRevenue_data_pc7[0] 
-							)
-					).append(
-							$("<tr/>").append(
-									'<th><div class="ctit"><span>고객 할인금액</span></div></th>'+ drRevenue_data_pc8[0] 
-							)
-					).append(
-							$("<tr/>").append(
-									'<th><div class="ctit wht"><span>EWP 정산금액 (won)</span></div></th>'+ drRevenue_data_pc9[0] 
-							)
-					).append(
-							$("<tr/>").append(
-									'<th><div class="ctit wht"><span>수익비율 (%)</span></div></th>'+drRevenue_data_pc10[0]
-							)
-					)
-			);
+			for(var i=dt_row-1; i>-1; i--) {
+				$div.prepend(
+						$('<div class="chart_table" />').append(
+								$('<table class="pc_use" />').append(
+										$("<thead/>").append( $("<tr/>").append( "<th></th>"+drRevenue_head_pc[i]+"<th>합계</th>" ) ) // thead
+								).append(
+										$("<tbody/>").append( // tbody
+												$("<tr/>").append(
+														'<th><div class="ctit wht"><span>감축 횟수-시간 (회-hr)</span></div></th>'+ drRevenue_data_pc[i] 
+												)
+										).append(
+												$("<tr/>").append(
+														'<th><div class="ctit wht"><span>감축이행용량 (kWh)</span></div></th>'+ drRevenue_data_pc2[i] 
+												)
+										).append(
+												$("<tr/>").append(
+														'<th><div class="ctit wht"><span>감축인정용량 (kWh)</span></div></th>'+ drRevenue_data_pc3[i] 
+												)
+										).append(
+												$("<tr/>").append(
+														'<th><div class="ctit wht"><span>감축이행율 (%)</span></div></th>'+ drRevenue_data_pc4[i] 
+												)
+										).append(
+												$("<tr/>").append(
+														'<th><div class="ctit wht"><span>용량정산금 (won)</span></div></th>'+ drRevenue_data_pc5[i] 
+												)
+										).append(
+												$("<tr/>").append(
+														'<th><div class="ctit wht"><span>감축정산금 (won)</span></div></th>'+ drRevenue_data_pc6[i] 
+												)
+										).append(
+												$("<tr/>").append(
+														'<th><div class="ctit ct1"><span>총 정산금액</span></div></th>'+ drRevenue_data_pc7[i] 
+												)
+										).append(
+												$("<tr/>").append(
+														'<th><div class="ctit"><span>고객 할인금액</span></div></th>'+ drRevenue_data_pc8[i] 
+												)
+										).append(
+												$("<tr/>").append(
+														'<th><div class="ctit wht"><span>EWP 정산금액 (won)</span></div></th>'+ drRevenue_data_pc9[i] 
+												)
+										).append(
+												$("<tr/>").append(
+														'<th><div class="ctit wht"><span>수익비율 (%)</span></div></th>'+drRevenue_data_pc10[i]
+												)
+										)
+								) 
+						)
+				);
+				
+			}
 		}
 		
 	}

@@ -23,7 +23,7 @@ public class KepcoBillServiceImpl implements KepcoBillService {
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = BillRevenueDataSetting.dataSetting(param, list, "bill_yearm");
-		resultMap.put("chartList", list);
+//		resultMap.put("chartList", list);
 		
 		return resultMap;
 	}
