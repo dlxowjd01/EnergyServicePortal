@@ -36,12 +36,16 @@ public class BillRevenueDataSetting {
 		
 		String term = (String) param.get("selTerm"); // 조회기간
 		String period = (String) param.get("selPeriodVal"); // 데이터조회간격
-		String startDate = (String) param.get("selTermFrom"); //getStartEndTimestamp((String) param.get("selTermFrom"), "1"); // 검색시작일(그래프영역)
-		String endDate = (String) param.get("selTermTo"); // getStartEndTimestamp((String) param.get("selTermTo"), "2"); // 검색종료일(그래프영역)
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(   (new Date()).getTime()   );
+		cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+		String mm = CommonUtils.convertDateFormat(new Timestamp(cal.getTime().getTime()), "dd");
+		String startDate = ("day".equals(period)) ? ((String) param.get("selTermFrom")+"01") : (String) param.get("selTermFrom"); //getStartEndTimestamp((String) param.get("selTermFrom"), "1"); // 검색시작일(그래프영역)
+		String endDate = ("day".equals(period)) ? ((String) param.get("selTermTo")+mm) : (String) param.get("selTermTo"); // getStartEndTimestamp((String) param.get("selTermTo"), "2"); // 검색종료일(그래프영역)
 		String selTermFrom = getConvertStartEndTmsp( term, period, (String) param.get("selTermFrom") , "1"); // 검색시작일(표영역)
 		String selTermTo = getConvertStartEndTmsp( term, period, (String) param.get("selTermTo") , "2"); // 검색종료일(표영역)
 		
-//		System.out.println(selTermFrom+", "+selTermTo+", "+term+", "+period+", "+startDate+", "+endDate);
+		logger.debug(selTermFrom+", "+selTermTo+", "+term+", "+period+", "+startDate+", "+endDate);
 		
 		// 날짜리스트 생성
 		List sheetDateList = getDateList(selTermFrom, selTermTo, term, period, timestampStr); // 표영역
@@ -50,8 +54,8 @@ public class BillRevenueDataSetting {
 		// 날짜리스트+데이터조합 매칭
 		List sheetList = matchingLists(sheetDateList, dataList, timestampStr); // 표영역
 		List chartList = matchingLists(chartDateList, dataList, timestampStr); // 그래프영역
-//		System.out.println("sheetList     ======>   "+sheetList.toString());
-//		System.out.println("chartList     ======>   "+chartList.toString());
+		logger.debug("sheetList     ======>   "+sheetList.toString());
+		logger.debug("chartList     ======>   "+chartList.toString());
 		
 		map.put("sheetList", sheetList);
 		map.put("chartList", chartList);
@@ -68,11 +72,20 @@ public class BillRevenueDataSetting {
 	public static String getConvertStartEndTmsp(String term, String period, String timestamp, String flag) {
 		String yyyy = timestamp.substring(0, 4);
 		String yyyyMM = "";
+		Date dt = CommonUtils.getDate(Integer.parseInt(yyyy), Integer.parseInt(timestamp.substring(4, 6)), 1, 0, 0, 0);
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(   dt.getTime()   );
 		
 		if("1".equals(flag)) {
-			yyyyMM = yyyy+"01";
+			if("day".equals(period)) yyyyMM = timestamp+"01"; // yyyyMMdd
+			else yyyyMM = yyyy+"01";
 		} else if("2".equals(flag)) {
-			yyyyMM = yyyy+"12";
+			if("day".equals(period)) {
+				cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+				Date newDt = new Timestamp(cal.getTime().getTime());
+				yyyyMM = CommonUtils.convertDateFormat(newDt, "yyyyMMdd");
+			}
+			else yyyyMM = yyyy+"12";
 		}
 		
 		return yyyyMM;
@@ -91,29 +104,48 @@ public class BillRevenueDataSetting {
 	 */
 	public static List getDateList(String selTermFrom, String selTermTo, String term, String period, String timestampStr) {
 		List dateList = new ArrayList();
+//		logger.debug("시작/종료일자     "+selTermFrom+", "+selTermTo);
 		
-		String tmsp = selTermFrom;
-		int cnt = 0;
-		String yyyy = tmsp.substring(0, 4);
-		String mm = tmsp.substring(4, 6);
-		
-		while(Integer.parseInt(yyyy+mm) <= Integer.parseInt(selTermTo)) {
-//			System.out.println(tmsp+", "+yyyy+mm+", "+selTermTo);
-			Map<String, Object> dateMap = new HashMap<String, Object>();
-			dateMap.put(timestampStr, yyyy+mm);
-//			dateMap.put(calculValStr, "");
-			dateList.add(dateMap);
-			cnt++;
-			
-			String mm2 = Integer.toString(Integer.parseInt(mm)+1);
-			mm = ( mm2.length() == 1) ? "0"+mm2 : mm2; 
-			if(Integer.parseInt(mm) == 13) {
-				mm = "01";
-				yyyy = Integer.toString(Integer.parseInt(yyyy)+1);
+		if("day".equals(period)) {
+			String tmsp = selTermFrom;
+			int cnt = 0;
+			String yyyy = tmsp.substring(0, 4);
+			String mm = tmsp.substring(4, 6);
+			String dd = tmsp.substring(6, 8);
+//			
+			while(Integer.parseInt(yyyy+mm+dd) <= Integer.parseInt(selTermTo)) {
+				Map<String, Object> dateMap = new HashMap<String, Object>();
+				dateMap.put(timestampStr, yyyy+mm+dd);
+				dateList.add(dateMap);
+				cnt++;
+				
+				String dd2 = Integer.toString(Integer.parseInt(dd)+1);
+				dd = ( dd2.length() == 1) ? "0"+dd2 : dd2; 
 			}
+			
+		} else {
+			String tmsp = selTermFrom;
+			int cnt = 0;
+			String yyyy = tmsp.substring(0, 4);
+			String mm = tmsp.substring(4, 6);
+			
+			while(Integer.parseInt(yyyy+mm) <= Integer.parseInt(selTermTo)) {
+				Map<String, Object> dateMap = new HashMap<String, Object>();
+				dateMap.put(timestampStr, yyyy+mm);
+				dateList.add(dateMap);
+				cnt++;
+				
+				String mm2 = Integer.toString(Integer.parseInt(mm)+1);
+				mm = ( mm2.length() == 1) ? "0"+mm2 : mm2; 
+				if(Integer.parseInt(mm) == 13) {
+					mm = "01";
+					yyyy = Integer.toString(Integer.parseInt(yyyy)+1);
+				}
+			}
+			
 		}
 		
-//		System.out.println("날짜리스트는 => "+dateList.toString());
+//		logger.debug("날짜리스트는 => "+dateList.toString());
 		
 		return dateList;
 	}
@@ -128,7 +160,7 @@ public class BillRevenueDataSetting {
 	 */
 	private static List matchingLists(List dateList, List reDataList, String timestampStr) {
 		List finalDataList = new ArrayList();
-//		System.out.println("사이즈는? "+dateList.size()+", "+reDataList.size());
+//		logger.debug("사이즈는? "+dateList.size()+", "+reDataList.size());
 		Map<String, Object> dtMap = (Map<String, Object>) reDataList.get(0);
 		Map<String, Object> nullMap = new HashMap<String, Object>();
 		Iterator<String> keys = dtMap.keySet().iterator();
@@ -171,6 +203,7 @@ public class BillRevenueDataSetting {
 			}
 			
 		}
+//		logger.debug("datatList     ======>   "+reDataList.toString());
 		
 		return finalDataList;
 	}

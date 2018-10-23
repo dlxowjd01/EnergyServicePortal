@@ -5,8 +5,8 @@
 	<select id="getDRRevenueList" parameterType="hashMap" resultType="hashMap">
 		/* DR 수익 조회 */
 		select
-			site_id, std_yearm, 
-			5 as reduct_cnt_hour, /* 감축 횟수-시간(회-hr) */
+			site_id, std_yearm, date_format(reduct_sdate,'%Y%m%d') as reduct_sdate, 
+			count(*) as reduct_cnt_hour, /* 감축 횟수-시간(회-hr) */
 			sum(reduct_cap) as reduct_cap, /* 감축이행용량 */
 			sum(reduct_amt) as reduct_amt, /* 감축인정용량 */
 			avg(reduct_cap_per) as reduct_cap_per, 
@@ -32,6 +32,9 @@
 			and std_yearm between #{selTermFrom } and #{selTermTo }
 		) a
 		group by site_id, std_yearm
+		<if test='@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selPeriodVal) and selPeriodVal.equals("day")'>
+		, date_format(reduct_sdate,'%Y%m%d')
+		</if>
 	</select>
 	
 </mapper>

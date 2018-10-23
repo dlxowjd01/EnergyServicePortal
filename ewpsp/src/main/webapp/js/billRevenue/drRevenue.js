@@ -278,7 +278,6 @@
 		if(chartList.length > 0) {
 			for(var i=0; i<chartList.length; i++) {
 				var yyyyMM = chartList[i].std_yearm;
-				console.log(yyyyMM);
 				var reductCntHour  = String(chartList[i].reduct_cnt_hour)   ;
 				var reductCap  = String(chartList[i].reduct_cap)   ;
 				var reductAmt  = String(chartList[i].reduct_amt);
