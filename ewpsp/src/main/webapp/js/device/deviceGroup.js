@@ -162,11 +162,9 @@
 		if(siteViewFlag == 1) {
 			$siteIdSelBox = $("#siteId");
 			$siteIdSelBox.empty();
-			if(allSiteList == null || allSiteList.length < 1) {
-				
-			} else {
-				for(var i=0; i<allSiteList.length; i++) {
-					$siteIdSelBox.append('<option value="'+allSiteList[i].site_id+'">'+allSiteList[i].site_name+'</option>')
+			if(grpSiteList != null && grpSiteList.length > 0) {
+				for(var i=0; i<grpSiteList.length; i++) {
+					$siteIdSelBox.append('<option value="'+grpSiteList[i].site_id+'">'+grpSiteList[i].site_name+'</option>')
 					
 				}
 				
@@ -175,9 +173,7 @@
 		} else if(siteViewFlag == 2) {
 			$insideSite = $("#insideSite");
 			$insideSite.find("ul").empty();
-			if(grpSiteList == null || grpSiteList.length < 1) {
-//				$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
-			} else {
+			if(grpSiteList != null && grpSiteList.length > 0) {
 				for(var i=0; i<grpSiteList.length; i++) {
 					$insideSite.find("ul").append(
 							$("<li />").append('<a href="#;" onclick="selectBoxTextApply(this);changeSelSite(\''+grpSiteList[i].site_id+'\');">'+grpSiteList[i].site_name+'</a>')
@@ -190,9 +186,7 @@
 		} else if(siteViewFlag == 3) {
 			$insideSite = $("#insideSite2");
 			$insideSite.find("ul").empty();
-			if(grpSiteList == null || grpSiteList.length < 1) {
-//				$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
-			} else {
+			if(grpSiteList != null && grpSiteList.length > 0) {
 				for(var i=0; i<grpSiteList.length; i++) {
 					$insideSite.find("ul").append(
 							$("<li />").append('<a href="#;" onclick="selectBoxTextApply(this);changeSelSite(\''+grpSiteList[i].site_id+'\');">'+grpSiteList[i].site_name+'</a>')
