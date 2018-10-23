@@ -553,4 +553,27 @@ public final class DateUtil {
     cal.set(Calendar.DATE, 1);
     return cal.getTime();
   }
+
+  public static void truncateHms(Calendar calendar) {
+    calendar.set(Calendar.HOUR, 0);
+    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.SECOND, 0);
+    calendar.set(Calendar.MILLISECOND, 0);
+  }
+
+  public static void fullHms(Calendar calendar) {
+    calendar.set(Calendar.HOUR, 23);
+    calendar.set(Calendar.MINUTE, 59);
+    calendar.set(Calendar.SECOND, 59);
+    calendar.set(Calendar.MILLISECOND, 999);
+  }
+
+  public static void truncateHms(Date date) {
+    Calendar calendar = DateUtil.getCalendar(date);
+    calendar.set(Calendar.HOUR, 0);
+    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.SECOND, 0);
+    calendar.set(Calendar.MILLISECOND, 0);
+    date.setTime(calendar.getTimeInMillis());
+  }
 }

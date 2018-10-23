@@ -734,7 +734,7 @@
 		var totalDataSet3 = 0;
 		var nowUsage = 0;
 		
-		if( essRvList.length < 1 && pvRvList.length <1 && drRvList.length < 1 ) {
+		if( essRvList == null && pvRvList == null && drRvList == null ) {
 			$(".income").find(".no-data").css("display", "");
 			$(".income").find(".inchart").css("display", "none");
 			$(".income").find(".chart_footer").css("display", "none");
@@ -750,7 +750,7 @@
 		}
 		
 		// ess 수익, pv 수익, dr 수익 중 하나라도 데이터가 존재할 때
-		if( !( essRvList.length < 1 && pvRvList.length <1 && drRvList.length < 1 ) ) {
+		if( !( essRvList == null && pvRvList == null && drRvList == null ) ) {
 //			if(usageList.length > 0) {
 				for(var i=0; i<loopCntList.length; i++) {
 					var essRevenue = null;
@@ -761,11 +761,16 @@
 					var reDrRevenue = 0;
 					
 					if(essRvList != null && essRvList.length > 0 && essRvList.length > i) { // ess 수익
-						essRevenue = String(essRvList[i].ess_incen);
-						if(essRevenue == null || essRevenue == "" || essRevenue == "null") reEssRevenue = null;
+//						essRevenue = String(essRvList[i].ess_incen);
+						var essRevenue1 = ( String(essRvList[i].ess_chg_incen) == null ) ? null : String(essRvList[i].ess_chg_incen);
+						var essRevenue2 = ( String(essRvList[i].ess_dischg_incen) == null ) ? null : String(essRvList[i].ess_dischg_incen);
+						if( (essRevenue1 == null || essRevenue1 == "" || essRevenue1 == "null") && 
+								(essRevenue2 == null || essRevenue2 == "" || essRevenue2 == "null") ) reEssRevenue = null;
 						else {
-							reEssRevenue = Number(     essRevenue     ); // 나중에 수정 요망
-							totalDataSet = totalDataSet+Number(essRevenue);
+							var _essRevenue1 = ( essRevenue1 == null ) ? 0 : Number(essRevenue1);
+							var _essRevenue2 = ( essRevenue2 == null ) ? 0 : Number(essRevenue2);
+							reEssRevenue = _essRevenue1+_essRevenue2;
+							totalDataSet = totalDataSet+(_essRevenue1+_essRevenue2);
 						}
 						
 					} else reEssRevenue = null;
@@ -848,8 +853,8 @@
 			
 		}
 		
-		incomeChart.xAxis[0].options.tickInterval = 30 * 24 * 60 * 60 * 1000;
-		incomeChart.xAxis[0].options.labels.style.fontSize = '12px';
+		incomeChart.xAxis[0].options.tickInterval = 24 * 60 * 60 * 1000;
+		incomeChart.xAxis[0].options.labels.style.fontSize = '6px';
 		
 		incomeChart.redraw(); // 차트 데이터를 다시 그린다
 		
