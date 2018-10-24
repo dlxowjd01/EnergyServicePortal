@@ -252,7 +252,7 @@
 					device_pcs_idx, site_id, device_id, device_name, device_stat, alarm_msg, 
 					ac_voltage, ac_power, ac_current, ac_freq, ac_set_power, ac_pf, 
 					dc_voltage, dc_power, dc_current, dc_freq, dc_set_power, dc_pf, std_date, reg_date
-					, pcs_status, pcsStatus, remote_mode, pcs_command, today_d_energy, today_c_energy, total_d_energy, total_c_energe 
+					, pcs_status, remote_mode, pcs_command, today_d_energy, today_c_energy, total_d_energy, total_c_energe 
 				from tb_device_pcs
 				where 1=1
 				and (device_id, reg_date) in (

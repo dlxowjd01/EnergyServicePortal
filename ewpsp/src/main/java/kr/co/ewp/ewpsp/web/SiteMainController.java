@@ -384,7 +384,6 @@ public class SiteMainController {
 	              peakHistory.add(new PeakHistoryModel(DateUtil.dateToString(new Date(peak.getBasetime().get(i)), "yyyy-MM"), peak.getkW().get(i)));
 	            }
 	            peakHistory.sort(new Comparator<PeakHistoryModel>() {
-	              @Override
 	              public int compare(PeakHistoryModel o1, PeakHistoryModel o2) {
 	                return o1.getMonth().compareTo(o2.getMonth());
 	              }
