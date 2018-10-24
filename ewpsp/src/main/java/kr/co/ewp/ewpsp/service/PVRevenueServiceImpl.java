@@ -36,11 +36,14 @@ public class PVRevenueServiceImpl implements PVRevenueService {
 			Map<String, Object> map4 = new HashMap<String, Object>();
 			Map<String, Object> map5 = new HashMap<String, Object>();
 			Map<String, Object> map6 = new HashMap<String, Object>();
-			map1 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "net_gen_val", 1); // 총 발전량
-			map2 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "smp_deal", 1); // SMP 거래량
-			map3 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "smp_price", 1); // SMP 수익
-			map4 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "rec_deal", 1); // REC 거래량
-			map5 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "rec_price", 1); // REC 수익
+			
+			if(!"day".equals((String) param.get("selPeriodVal"))) {
+				map1 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "net_gen_val", 1); // 총 발전량
+				map2 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "smp_deal", 1); // SMP 거래량
+				map3 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "smp_price", 1); // SMP 수익
+				map4 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "rec_deal", 1); // REC 거래량
+				map5 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "rec_price", 1); // REC 수익
+			}
 			map6 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "tot_price", 1); //총 수익
 			
 			resultMap.put("netGenValMap", map1);

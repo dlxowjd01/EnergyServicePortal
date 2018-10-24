@@ -30,7 +30,7 @@ public class PeriodDataSetting {
 	 * @return
 	 */
 	public static Map dataSetting(HashMap param, List dataList, String timestampStr, String calculValStr, int flag) {
-		logger.debug("PeriodDataSetting.dataSetting()");
+		logger.debug("PeriodDataSetting.dataSetting()+"+timestampStr+", "+calculValStr);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -40,8 +40,6 @@ public class PeriodDataSetting {
 		Timestamp endDate = getStartEndTimestamp((String) param.get("selTermTo"), "2"); // 검색종료일(그래프영역)
 		Timestamp selTermFrom = getConvertStartEndTmsp( term, period, (String) param.get("selTermFrom") , "1"); // 검색시작일(표영역)
 		Timestamp selTermTo = getConvertStartEndTmsp( term, period, (String) param.get("selTermTo") , "2"); // 검색종료일(표영역)
-		
-//		System.out.println(selTermFrom+", "+selTermTo+", "+term+", "+period+", "+startDate+", "+endDate);
 		
 		// 날짜리스트 생성
 		List sheetDateList = getDateList(selTermFrom, selTermTo, term, period, timestampStr, calculValStr); // 표영역
@@ -54,8 +52,8 @@ public class PeriodDataSetting {
 		// 날짜리스트+데이터조합 매칭
 		List sheetList = matchingLists(sheetDateList, sheetReDataList, timestampStr, calculValStr); // 표영역
 		List chartList = matchingLists(chartDateList, chartReDataList, timestampStr, calculValStr); // 그래프영역
-//		System.out.println("sheetList     ======>   "+sheetList.toString());
-//		System.out.println("chartList     ======>   "+chartList.toString());
+		logger.debug("sheetList     ======>   "+sheetList.toString());
+		logger.debug("chartList     ======>   "+chartList.toString());
 		
 		map.put("sheetList", sheetList);
 		map.put("chartList", chartList);
@@ -198,8 +196,6 @@ public class PeriodDataSetting {
 			tmsp = new Timestamp(cal.getTime().getTime());
 		}
 		
-//		System.out.println("날짜리스트는 => "+dateList.toString());
-		
 		return dateList;
 	}
 
@@ -213,7 +209,6 @@ public class PeriodDataSetting {
 	 */
 	private static List matchingLists(List dateList, List reDataList, String timestampStr, String calculValStr) {
 		List finalDataList = new ArrayList();
-//		System.out.println("사이즈는? "+dateList.size()+", "+reDataList.size());
 		
 		for(int i=0; i<dateList.size(); i++) {
 			Map<String, Object> dateMap = (Map<String, Object>) dateList.get(i);
@@ -226,7 +221,6 @@ public class PeriodDataSetting {
 				newDataMap.put(name, dateMap.get(name));
 				if(name.equals(calculValStr)) newDataMap.put(calculValStr, dataMap.get(name)); 
 			}
-			
 			finalDataList.add(newDataMap);
 			
 		}

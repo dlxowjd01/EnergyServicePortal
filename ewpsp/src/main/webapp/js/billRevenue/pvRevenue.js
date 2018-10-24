@@ -78,7 +78,7 @@
 		var dt_str6_totalVal = 0; // 테이블 라인별 누적합
 		
 		// 표데이터 셋팅
-		if(netGenValSheetList.length > 0) {
+		if(netGenValSheetList != null && netGenValSheetList.length > 0) {
 			for(var i=0; i<netGenValSheetList.length; i++) {
 				var yyyyMM = new Date( convertDateUTC(netGenValSheetList[i].std_timestamp) ).format("yyyyMM");
 				var netGenVal = String(netGenValSheetList[i].net_gen_val);
@@ -174,7 +174,7 @@
 		}
 		
 		// 차트데이터 셋팅
-		if(netGenValChartList.length > 0) {
+		if(netGenValChartList != null && netGenValChartList.length > 0) {
 			for(var i=0; i<netGenValChartList.length; i++) {
 				var yyyyMM = new Date( convertDateUTC(netGenValChartList[i].std_timestamp) ).format("yyyyMM");
 //				var netGenVal = String(netGenValChartList[i].net_gen_val);

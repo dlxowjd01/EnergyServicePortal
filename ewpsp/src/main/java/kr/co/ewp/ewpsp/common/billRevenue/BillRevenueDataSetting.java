@@ -30,7 +30,7 @@ public class BillRevenueDataSetting {
 	 * @return
 	 */
 	public static Map dataSetting(HashMap param, List dataList, String timestampStr) {
-		logger.debug("PeriodDataSetting.dataSetting()");
+		logger.debug("BillRevenueDataSetting.dataSetting()+"+timestampStr);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -40,12 +40,10 @@ public class BillRevenueDataSetting {
 		cal.setTimeInMillis(   (new Date()).getTime()   );
 		cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
 		String mm = CommonUtils.convertDateFormat(new Timestamp(cal.getTime().getTime()), "dd");
-		String startDate = ("day".equals(period)) ? ((String) param.get("selTermFrom")+"01") : (String) param.get("selTermFrom"); //getStartEndTimestamp((String) param.get("selTermFrom"), "1"); // 검색시작일(그래프영역)
-		String endDate = ("day".equals(period)) ? ((String) param.get("selTermTo")+mm) : (String) param.get("selTermTo"); // getStartEndTimestamp((String) param.get("selTermTo"), "2"); // 검색종료일(그래프영역)
+		String startDate = ("day".equals(period)) ? ((String) param.get("selTermFrom")+"01") : (String) param.get("selTermFrom");  // 검색시작일(그래프영역)
+		String endDate = ("day".equals(period)) ? ((String) param.get("selTermTo")+mm) : (String) param.get("selTermTo"); // 검색종료일(그래프영역)
 		String selTermFrom = getConvertStartEndTmsp( term, period, (String) param.get("selTermFrom") , "1"); // 검색시작일(표영역)
 		String selTermTo = getConvertStartEndTmsp( term, period, (String) param.get("selTermTo") , "2"); // 검색종료일(표영역)
-		
-		logger.debug(selTermFrom+", "+selTermTo+", "+term+", "+period+", "+startDate+", "+endDate);
 		
 		// 날짜리스트 생성
 		List sheetDateList = getDateList(selTermFrom, selTermTo, term, period, timestampStr); // 표영역
@@ -104,7 +102,6 @@ public class BillRevenueDataSetting {
 	 */
 	public static List getDateList(String selTermFrom, String selTermTo, String term, String period, String timestampStr) {
 		List dateList = new ArrayList();
-//		logger.debug("시작/종료일자     "+selTermFrom+", "+selTermTo);
 		
 		if("day".equals(period)) {
 			String tmsp = selTermFrom;
@@ -145,8 +142,6 @@ public class BillRevenueDataSetting {
 			
 		}
 		
-//		logger.debug("날짜리스트는 => "+dateList.toString());
-		
 		return dateList;
 	}
 
@@ -160,7 +155,7 @@ public class BillRevenueDataSetting {
 	 */
 	private static List matchingLists(List dateList, List reDataList, String timestampStr) {
 		List finalDataList = new ArrayList();
-//		logger.debug("사이즈는? "+dateList.size()+", "+reDataList.size());
+		
 		Map<String, Object> dtMap = (Map<String, Object>) reDataList.get(0);
 		Map<String, Object> nullMap = new HashMap<String, Object>();
 		Iterator<String> keys = dtMap.keySet().iterator();
@@ -168,7 +163,6 @@ public class BillRevenueDataSetting {
 			String name = keys.next();
 			nullMap.put(name, null);
 		}
-		
 		
 		for(int i=0; i<dateList.size(); i++) {
 			Map<String, Object> dateMap = (Map<String, Object>) dateList.get(i);
@@ -203,7 +197,6 @@ public class BillRevenueDataSetting {
 			}
 			
 		}
-//		logger.debug("datatList     ======>   "+reDataList.toString());
 		
 		return finalDataList;
 	}

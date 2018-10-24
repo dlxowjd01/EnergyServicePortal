@@ -31,7 +31,6 @@ public class DataPeriodCalculate {
 	 */
 	public static List periodCalculate(List resultList, Timestamp selTermFrom, Timestamp selTermTo, 
 			String term, String period, String timestampStr, String calculValStr, int flag) {
-		logger.debug("DataPeriodCalculate.periodCalculate()");
 		List newList = new ArrayList();
 		Timestamp endListDt = null;
 		
@@ -55,7 +54,6 @@ public class DataPeriodCalculate {
 		
 		// 마무리
 		List newList2 = finishPeriodCalculate(newList,  term, period, selTermTo, timestampStr, calculValStr, endListDt);
-//		System.out.println("마지막점검 : "+newList.size()+", "+newList.toString());
 		
 		return newList;
 	}
@@ -97,14 +95,7 @@ public class DataPeriodCalculate {
 						calculMap.put(timestampStr, strTm);
 						
 					} else if(name.equals(calculValStr)) {
-//						BigDecimal divideNum = new BigDecimal(  String.valueOf(map.get(calculValStr))  );
-//						if( divideNum.compareTo(BigDecimal.ZERO) == 0 ) { // compareTo :::: -1은 작다, 0은 같다, 1은 크다
-//							calculMap.put(calculValStr, 0);
-//						} else {
-//							BigDecimal devNum = divideNum.divide( new BigDecimal(4), 2, BigDecimal.ROUND_UP); // calculCnt로 나누기, 반올림해서 소수점 둘째자리까지 보여준다.
-//							calculMap.put(calculValStr, devNum); // calculCnt로 나눈 값
-//						}
-						long divideNum = 0;//Long.parseLong(String.valueOf(map.get(calculValStr)));
+						long divideNum = 0;
 						
 						if(map.get(calculValStr) instanceof Double) {
 							divideNum =  Math.round( (Double) map.get(calculValStr) );
@@ -112,7 +103,7 @@ public class DataPeriodCalculate {
 							divideNum = Long.parseLong(String.valueOf(map.get(calculValStr)));
 						}
 						
-						if( divideNum == 0 ) { // compareTo :::: -1은 작다, 0은 같다, 1은 크다
+						if( divideNum == 0 ) {
 							calculMap.put(calculValStr, 0);
 						} else {
 							long devNum = divideNum/4;
@@ -145,12 +136,10 @@ public class DataPeriodCalculate {
 	private static Map<String, Object> dataCombination(List dataList, Timestamp selTermFrom, Timestamp selTermTo, String term,
 			String period, String timestampStr, String calculValStr, int flag, int calculCnt) {
 		List newList = new ArrayList();
-		logger.debug("function dataCombination()");
 		
 		int nullCnt = 0;
 		int chkCnt = 1;
 		Timestamp stdTimestamp = null;
-//		BigDecimal calculNum = new BigDecimal(0);
 		long calculNum = 0;
 		Timestamp incStartDt = selTermFrom;
 		Timestamp endListDt = null;
@@ -182,7 +171,6 @@ public class DataPeriodCalculate {
 						}
 						chkCnt = 0;
 						nullCnt = 0;
-//						calculNum = new BigDecimal(0);
 						calculNum = 0;
 						newList.add(calculMap);
 						
@@ -202,8 +190,7 @@ public class DataPeriodCalculate {
 			}
 			
 			if(map.get(calculValStr) != null) {
-//				calculNum = calculNum.add(  new BigDecimal(  String.valueOf(map.get(calculValStr))  )  );
-//				System.out.println("자료형 확인 : "+ (map.get(calculValStr)).getClass().getName() );
+//				자료형 확인 : (map.get(calculValStr)).getClass().getName()
 				if(map.get(calculValStr) instanceof Double) {
 					calculNum = calculNum + Math.round( (Double) map.get(calculValStr) );
 				} else if(map.get(calculValStr) instanceof Float) {
@@ -230,7 +217,6 @@ public class DataPeriodCalculate {
 				}
 				chkCnt = 0;
 				nullCnt = 0;
-//				calculNum = new BigDecimal(0);
 				calculNum = 0;
 				newList.add(calculMap);
 				endListDt = stdTimestamp;
@@ -252,21 +238,6 @@ public class DataPeriodCalculate {
 		
 		return dataMap;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	private static List finishPeriodCalculate(List newList, String term, String period, Timestamp selTermTo, String timestampStr, String calculValStr, Timestamp endListDt) {
 		List list = newList;
@@ -285,8 +256,6 @@ public class DataPeriodCalculate {
 			else if("month".equals(period)) cal.add(Calendar.MONTH, 1);
 			
 			tmsp = new Timestamp(cal.getTime().getTime());
-			
-			
 			while(tmsp.getTime() <= selTermTo.getTime()) {
 				Map<String, Object> dateMap = new HashMap<String, Object>();
 				dateMap.put(timestampStr, tmsp);
@@ -304,7 +273,6 @@ public class DataPeriodCalculate {
 				else if("month".equals(period)) cal2.add(Calendar.MONTH, 1);
 				
 				tmsp = new Timestamp(cal2.getTime().getTime());
-				
 			}
 			
 		}
@@ -320,8 +288,6 @@ public class DataPeriodCalculate {
 	 * @return
 	 */
 	public static int sumCntSet(String term, String period, int flag) {
-		logger.debug("function sumCntSet()");
-		
 		// 실제의 경우 데이터간격의 최소단위가 15분이므로 조회 시 데이터간격이 30분 이상이면 합을 구한다
 		int sumCntPast = 0;
 		
