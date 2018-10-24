@@ -161,6 +161,9 @@ public class LoginController {
 		// 현재 로그인 된 세션의 정보도 수정해 준다.
 		userInfo.put("psn_email", param.get("psnEmail"));
 		userInfo.put("psn_mobile", param.get("psnMobile"));
+		if (param.get("userPw") != null && StringUtil.isNotEmpty((String)param.get("userPw"))) {
+			userInfo.put("user_pw", UserUtil.encSHA256((String)param.get("userPw")));
+		}
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("resultCnt", resultCnt);
