@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.ewp.ewpsp.common.util.UserUtil;
+import kr.co.ewp.ewpsp.service.CmpyGrpSiteMngService;
 import kr.co.ewp.ewpsp.service.DeviceGroupService;
 
 @Controller
@@ -33,6 +35,9 @@ public class DeviceGroupController {
 
 	@Resource(name="deviceGroupService")
 	private DeviceGroupService deviceGroupService;
+
+	@Resource(name="cmpyGrpSiteMngService")
+	private CmpyGrpSiteMngService cmpyGrpSiteMngService;
 
 	@RequestMapping("/deviceGroup")
 	public String main(Model model, HttpServletRequest request) {
@@ -48,10 +53,11 @@ public class DeviceGroupController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/getDeviceGroupList")
-	public @ResponseBody Map<String, Object> getDeviceGroupList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getDeviceGroupList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getDeviceGroupList");
 		logger.debug("param ::::: "+param.toString());
 		
+		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
 		List list = deviceGroupService.getDeviceGroupList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -297,5 +303,40 @@ public class DeviceGroupController {
 		resultMap.put("resultCnt", resultCnt);
 		return resultMap;
 	}
+
+	/**
+	 * 사이트 목록(팝업) 조회
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getDeviceGrpSitePopupList")
+	public @ResponseBody Map<String, Object> getDeviceGrpSitePopupList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
+		logger.debug("/getDeviceGrpSitePopupList");
+		logger.debug("param ::::: "+param.toString());
+
+		Map userInfo = UserUtil.getUserInfo(request);
+		String authType = (String)userInfo.get("auth_type");
+		if("1".equals(authType)) { // 포털관리자
+			param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
+		} else if("2".equals(authType)) { // 고객사관리자
+			param.put("compIdx", userInfo.get("comp_idx"));
+		} else if("3".equals(authType)) { // 그룹관리자
+			param.put("siteGrpIdx", userInfo.get("site_grp_idx"));
+		} else if("4".equals(authType) || ("5".equals(authType))) { // 사이트관리자 || 사이트이용자
+			param.put("siteId", userInfo.get("site_id"));
+//		} else if("5".equals(authType)) { // 사이트이용자
+//			param.put("userIdx", userInfo.get("user_idx"));
+		}
+		
+		List grpSiteList = cmpyGrpSiteMngService.getGrpSiteList(param);
+		List allSiteList = cmpyGrpSiteMngService.getAllSiteList(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("grpSiteList", grpSiteList);
+		resultMap.put("allSiteList", allSiteList);
+		return resultMap;
+	}
+	
 
 }

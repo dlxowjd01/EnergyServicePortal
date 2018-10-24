@@ -236,26 +236,37 @@
 	</select>
 	
 	<select id="getGrpSiteList" parameterType="hashMap" resultType="hashMap">
-		/* 사이트 목록(그룹 내) 조회 */
+		/* 사이트 목록(사이트그룹 내) 조회 */
 		select 
 			site_id, user_idx, site_name, site_grp_idx, area_type, `time_zone`, 
 			local_ems_addr, local_ems_key, comp_idx, del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_site
 		where del_yn = 'N'
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
+		and comp_idx = #{compIdx}
+		</if>
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)"> 
 		and site_grp_idx = #{siteGrpIdx }
+		</if>
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)"> 
+		and site_id = #{siteId }
 		</if>
 		order by reg_date
 	</select>
 	
 	<select id="getAllSiteList" parameterType="hashMap" resultType="hashMap">
-		/* 사이트 목록(고객사 전체중 특정그룹 제외) 조회 */
+		/* 사이트 목록(고객사 전체중 특정사이트그룹 제외) 조회 */
 		select 
 			site_id, user_idx, site_name, site_grp_idx, area_type, `time_zone`, 
 			local_ems_addr, local_ems_key, comp_idx, del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_site
 		where del_yn = 'N'
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
+		and comp_idx = #{compIdx}
+		</if>
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userIdx)"> 
 		and user_idx = #{userIdx }
+		</if>
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)"> 
 		and (site_grp_idx != #{siteGrpIdx } or site_grp_idx is null)
 		</if>

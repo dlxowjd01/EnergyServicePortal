@@ -267,11 +267,25 @@ public class CmpyGrpSiteMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/getSitePopupList")
-	public @ResponseBody Map<String, Object> getSitePopupList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getSitePopupList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getSitePopupList");
 		logger.debug("param ::::: "+param.toString());
 		
-		param.put("userIdx", "1");
+//		param.put("userIdx", "1");
+
+		Map userInfo = UserUtil.getUserInfo(request);
+		String authType = (String)userInfo.get("auth_type");
+		if("1".equals(authType)) { // 포털관리자
+			
+		} else if("2".equals(authType)) { // 고객사관리자
+			param.put("compIdx", userInfo.get("comp_idx"));
+		} else if("3".equals(authType)) { // 그룹관리자
+			param.put("siteGrpIdx", userInfo.get("site_grp_idx"));
+		} else if("4".equals(authType) || ("5".equals(authType))) { // 사이트관리자 || 사이트이용자
+			param.put("siteId", userInfo.get("site_id"));
+//		} else if("5".equals(authType)) { // 사이트이용자
+//			param.put("userIdx", userInfo.get("user_idx"));
+		}
 		
 		List grpSiteList = cmpyGrpSiteMngService.getGrpSiteList(param);
 		List allSiteList = cmpyGrpSiteMngService.getAllSiteList(param);

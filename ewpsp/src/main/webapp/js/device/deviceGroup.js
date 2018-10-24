@@ -151,11 +151,26 @@
 	function insertDeviceForm(deviceGrpIdx) {
 		siteViewFlag = 1;
 		$("#insertDeviceForm").find("#deviceGrpIdx").val( deviceGrpIdx );
-		getSitePopupList("");
+		getDeviceGrpSitePopupList("");
 		popupOpen('ddevice');
 	}
 
-	function callback_getSitePopupList(result) {
+	//사이트 목록(팝업) 조회
+	function getDeviceGrpSitePopupList(siteGrpIdx) {
+		$.ajax({
+			url : "/getDeviceGrpSitePopupList",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+			data : {
+				siteGrpIdx : siteGrpIdx
+			},
+			success: function(result) {
+				callback_getDeviceGrpSitePopupList(result);
+			}
+		});
+	}
+
+	function callback_getDeviceGrpSitePopupList(result) {
 		var grpSiteList = result.grpSiteList;
 		var allSiteList = result.allSiteList;
 		
@@ -204,13 +219,13 @@
 		
 		$("#grpMngFormBtn").click(function(){
 			siteViewFlag = 2;
-			getSitePopupList("");
+			getDeviceGrpSitePopupList("");
 			popupOpen('dgdevice');
 		});
 		
 		$("#editDvGrpFormBtn").click(function(){
 			siteViewFlag = 3;
-			getSitePopupList("");
+			getDeviceGrpSitePopupList("");
 			popupOpen('dgdevice_edit');
 		});
 		
