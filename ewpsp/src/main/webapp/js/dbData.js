@@ -209,13 +209,13 @@ function getDeviceIOEList(selPageNum) {
 }
 
 // 장치 상세 조회(IOE)
-function getDeviceIOEDetail(deviceIoeIdx) {
+function getDeviceIOEDetail(deviceId) {
 	$.ajax({
 		url : "/getDeviceIOEDetail",
 		type : 'post',
 		async : false, // 동기로 처리해줌
 		data : {
-			deviceIoeIdx : deviceIoeIdx
+			deviceId : deviceId
 		},
 		success: function(result) {
 			callback_getDeviceIOEDetail(result);
@@ -239,13 +239,13 @@ function getDevicePCSList(selPageNum) {
 }
 
 //장치 상세 조회(PCS)
-function getDevicePCSDetail(devicePcsIdx) {
+function getDevicePCSDetail(deviceId) {
 	$.ajax({
 		url : "/getDevicePCSDetail",
 		type : 'post',
 		async : false, // 동기로 처리해줌
 		data : {
-			devicePcsIdx : devicePcsIdx
+			deviceId : deviceId
 		},
 		success: function(result) {
 			callback_getDevicePCSDetail(result);
@@ -269,13 +269,13 @@ function getDeviceBMSList(selPageNum) {
 }
 
 //장치 상세 조회(BMS)
-function getDeviceBMSDetail(deviceBmsIdx) {
+function getDeviceBMSDetail(deviceId) {
 	$.ajax({
 		url : "/getDeviceBMSDetail",
 		type : 'post',
 		async : false, // 동기로 처리해줌
 		data : {
-			deviceBmsIdx : deviceBmsIdx
+			deviceId : deviceId
 		},
 		success: function(result) {
 			callback_getDeviceBMSDetail(result);
@@ -299,13 +299,13 @@ function getDevicePVList(selPageNum) {
 }
 
 //장치 상세 조회(PV)
-function getDevicePVDetail(devicePvIdx) {
+function getDevicePVDetail(deviceId) {
 	$.ajax({
 		url : "/getDevicePVDetail",
 		type : 'post',
 		async : false, // 동기로 처리해줌
 		data : {
-			devicePvIdx : devicePvIdx
+			deviceId : deviceId
 		},
 		success: function(result) {
 			callback_getDevicePVDetail(result);

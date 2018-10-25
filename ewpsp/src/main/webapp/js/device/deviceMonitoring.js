@@ -31,7 +31,7 @@
 						).append( $("<td />").append( ioeList[i].device_stat_name )
 						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
-								$("<td />").append( '<a href="#;" onclick="getDeviceIOEDetail(\''+ioeList[i].device_ioe_idx+'\');" class="detail_view">상세보기</a>' )
+								$("<td />").append( '<a href="#;" onclick="getDeviceIOEDetail(\''+ioeList[i].device_id+'\');" class="detail_view">상세보기</a>' )
 						)
 				);
 			}
@@ -72,7 +72,7 @@
 			).append(
 					$('<div class="lbody" />').append(
 							$('<div class="lstat mt20" />').append( $('<div class="dt" />').append("장치타입") ).append(
-									$('<div class="dd" />').append( "" )
+									$('<div class="dd" />').append( ioeDetail.device_type_nm )
 							)
 					).append(
 							$('<div class="lstat" />').append( $('<div class="dt" />').append("연결상태") ).append(
@@ -112,7 +112,7 @@
 						).append( $("<td />").append( pcsList[i].alarm_msg )
 						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
-								$("<td />").append( '<a href="#;" onclick="getDevicePCSDetail(\''+pcsList[i].device_pcs_idx+'\');" class="detail_view">상세보기</a>' )
+								$("<td />").append( '<a href="#;" onclick="getDevicePCSDetail(\''+pcsList[i].device_id+'\');" class="detail_view">상세보기</a>' )
 						)
 				);
 			}
@@ -153,7 +153,7 @@
 			).append(
 					$('<div class="lbody" />').append(
 							$('<div class="lstat mt20" />').append( $('<div class="dt" />').append("장치타입") ).append(
-									$('<div class="dd" />').append( $('<span class="run" />').append("") )
+									$('<div class="dd" />').append( $('<span class="run" />').append(pcsDetail.device_type_nm) )
 							)
 					).append(
 							$('<div class="lstat" />').append( $('<div class="dt" />').append("운전상태") ).append(
@@ -203,8 +203,8 @@
 											$('<tbody />').append( 
 													$('<tr />').append( $("<td />").append(pcsDetail.dc_voltage) 
 													).append( $("<td />").append(  (pcsDetail.dc_power == "" || pcsDetail.dc_power == null) ? "-" : pcsDetail.dc_power  )
-													).append( $("<td />").append(  (pcsDetail.pcs_status == "" || pcsDetail.pcs_status == null) ? "-" : pcsDetail.pcs_status  )
-													).append( $("<td />").append(  (pcsDetail.pcs_command == "" || pcsDetail.pcs_command == null) ? "-" : pcsDetail.pcs_command  )
+													).append( $("<td />").append(  (pcsDetail.pcs_status == "" || pcsDetail.pcs_status == null) ? "-" : pcsDetail.pcs_status_nm  )
+													).append( $("<td />").append(  (pcsDetail.pcs_command == "" || pcsDetail.pcs_command == null) ? "-" : pcsDetail.pcs_command_nm  )
 													).append( $("<td />").append(  (pcsDetail.today_c_energy == "" || pcsDetail.today_c_energy == null) ? "-" : pcsDetail.today_c_energy  )
 													).append( $("<td />").append(  (pcsDetail.today_d_energy == "" || pcsDetail.today_d_energy == null) ? "-" : pcsDetail.today_d_energy  )
 													)  
@@ -241,7 +241,7 @@
 						).append( $("<td />").append( bmsList[i].alarm_msg )
 						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
-								$("<td />").append( '<a href="#;" onclick="getDeviceBMSDetail(\''+bmsList[i].device_bms_idx+'\');" class="detail_view">상세보기</a>' )
+								$("<td />").append( '<a href="#;" onclick="getDeviceBMSDetail(\''+bmsList[i].device_id+'\');" class="detail_view">상세보기</a>' )
 						)
 				);
 			}
@@ -282,7 +282,7 @@
 			).append(
 					$('<div class="lbody" />').append(
 							$('<div class="lstat mt20" />').append( $('<div class="dt" />').append("장치타입") ).append(
-									$('<div class="dd" />').append( $('<span class="run" />').append("") )
+									$('<div class="dd" />').append( $('<span class="run" />').append(bmsDetail.device_type_nm) )
 							)
 					).append(
 							$('<div class="lstat" />').append( $('<div class="dt" />').append("운전상태") ).append(
@@ -357,7 +357,7 @@
 						).append( $("<td />").append( pvList[i].alarm_msg )
 						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
-								$("<td />").append( '<a href="#;" onclick="getDevicePVDetail(\''+pvList[i].device_pv_idx+'\');" class="detail_view">상세보기</a>' )
+								$("<td />").append( '<a href="#;" onclick="getDevicePVDetail(\''+pvList[i].device_id+'\');" class="detail_view">상세보기</a>' )
 						)
 				);
 			}
@@ -398,7 +398,7 @@
 			).append(
 					$('<div class="lbody" />').append(
 							$('<div class="lstat mt20" />').append( $('<div class="dt" />').append("장치타입") ).append(
-									$('<div class="dd" />').append( $('<span class="run" />').append("") )
+									$('<div class="dd" />').append( $('<span class="run" />').append(pvDetail.device_type_nm) )
 							)
 					).append(
 							$('<div class="lstat" />').append( $('<div class="dt" />').append("PV 상태") ).append(
