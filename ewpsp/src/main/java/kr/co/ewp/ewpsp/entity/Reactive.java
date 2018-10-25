@@ -11,7 +11,8 @@ public class Reactive {
   private String deviceId;// 장치id
   private Date stdTimestamp;// 기준타임스탬프
   private Date stdDate;// 기준일시
-  private Integer rctvVal;// 무효전력량(단위:mvarh)
+  private Integer rctvVal;// positive 방향 무효전력량(단위:mvarh)
+  private Integer negRctvVal;// negative 방향 무효전력량(단위:mvarh)
   private Date regDate;// 등록일시
   private Date modDate;// 최종수정일시
 
@@ -106,7 +107,7 @@ public class Reactive {
   }
 
   /**
-   * 무효전력량(단위:mvarh) 조회
+   * positive 방향 무효전력량(단위:mvarh) 조회
    * 
    * @return rctvVal
    */
@@ -115,7 +116,7 @@ public class Reactive {
   }
 
   /**
-   * 무효전력량(단위:mvarh) 설정
+   * positive 방향 무효전력량(단위:mvarh) 설정
    * 
    * @return rctvVal
    */
@@ -124,6 +125,24 @@ public class Reactive {
   }
 
   /**
+   * negative 방향 무효전력량(단위:mvarh) 조회
+   * 
+ * @return the negRctvVal
+ */
+public Integer getNegRctvVal() {
+	return negRctvVal;
+}
+
+/**
+ * negative 방향 무효전력량(단위:mvarh) 설정
+ * 
+ * @param negRctvVal the negRctvVal to set
+ */
+public void setNegRctvVal(Integer negRctvVal) {
+	this.negRctvVal = negRctvVal;
+}
+
+/**
    * 등록일시 조회
    * 
    * @return regDate

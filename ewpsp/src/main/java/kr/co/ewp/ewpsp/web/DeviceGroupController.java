@@ -110,10 +110,11 @@ public class DeviceGroupController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/saveDvInDvGrp")
-	public @ResponseBody Map<String, Object> saveDvInDvGrp(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> saveDvInDvGrp(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/saveDvInDvGrp");
 		logger.debug("param ::::: "+param.toString());
 		
+		Map userInfo = UserUtil.getUserInfo(request);
 		String selDvGrpIdx = (String) param.get("selDvGrpIdx"); // 추가할 그룹id
 		String nowDeviceIds = (String) param.get("nowDeviceIds"); // 기존 그룹내 장치목록
 		String newDeviceIds = (String) param.get("newDeviceIds"); // 변경할 그룹내 장치목록
@@ -149,7 +150,7 @@ public class DeviceGroupController {
 							HashMap dvMap = new HashMap<String, Object>();
 							dvMap.put("deviceId", str);
 							dvMap.put("deviceGrpIdx", 0);
-							dvMap.put("modUid", "tttt");
+							param.put("modUid", userInfo.get("user_id"));
 							int cnt = deviceGroupService.updateDevice(dvMap);
 							delCnt = delCnt + cnt;
 						}
@@ -161,7 +162,7 @@ public class DeviceGroupController {
 					HashMap dvMap = new HashMap<String, Object>();
 					dvMap.put("deviceId", newDeviceIds_arr[i]);
 					dvMap.put("deviceGrpIdx", selDvGrpIdx);
-					dvMap.put("modUid", "tttt");
+					param.put("modUid", userInfo.get("user_id"));
 					int cnt = deviceGroupService.updateDevice(dvMap);
 					addCnt = addCnt + cnt;
 				}
@@ -177,7 +178,7 @@ public class DeviceGroupController {
 							HashMap dvMap = new HashMap<String, Object>();
 							dvMap.put("deviceId", str);
 							dvMap.put("deviceGrpIdx", selDvGrpIdx);
-							dvMap.put("modUid", "tttt");
+							param.put("modUid", userInfo.get("user_id"));
 							int cnt = deviceGroupService.updateDevice(dvMap);
 							addCnt = addCnt + cnt;
 						}
@@ -188,7 +189,7 @@ public class DeviceGroupController {
 					HashMap dvMap = new HashMap<String, Object>();
 					dvMap.put("deviceId", nowDeviceIds_arr[i]);
 					dvMap.put("deviceGrpIdx", 0);
-					dvMap.put("modUid", "tttt");
+					param.put("modUid", userInfo.get("user_id"));
 					int cnt = deviceGroupService.updateDevice(dvMap);
 					delCnt = delCnt + cnt;
 				}
@@ -210,10 +211,11 @@ public class DeviceGroupController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/saveDvGrp")
-	public @ResponseBody Map<String, Object> saveDvGrp(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> saveDvGrp(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/saveDvGrp");
 		logger.debug("param ::::: "+param.toString());
 
+		Map userInfo = UserUtil.getUserInfo(request);
 		String selectSiteId = (String) param.get("selectSiteId"); // 추가할 그룹id
 		String nowDvGrpIds = (String) param.get("nowDvGrpIds"); // 기존 사이트내 장치그룹목록
 		String newDvGrpIds = (String) param.get("newDvGrpIds"); // 변경할 사이트내 장치그룹목록
@@ -250,7 +252,7 @@ public class DeviceGroupController {
 							HashMap dvMap = new HashMap<String, Object>();
 							dvMap.put("deviceGrpIdx", str);
 //							dvMap.put("deviceGrpIdx", 0);
-							dvMap.put("modUid", "tttt");
+							param.put("modUid", userInfo.get("user_id"));
 							int cnt = deviceGroupService.deleteDeviceGroup(dvMap);
 							delCnt = delCnt + cnt;
 						}
@@ -269,7 +271,7 @@ public class DeviceGroupController {
 				dvMap.put("deviceGrpName", newDvGrpNms_arr[i]);
 				dvMap.put("siteId", selectSiteId);
 				dvMap.put("userIdx", 1);
-				dvMap.put("regUid", "tttt");
+				dvMap.put("regUid", userInfo.get("user_id"));
 				int cnt = deviceGroupService.insertDeviceGroup(dvMap);
 				addCnt = addCnt + cnt;
 			}
@@ -290,12 +292,12 @@ public class DeviceGroupController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/insertDevice")
-	public @ResponseBody Map<String, Object> insertDevice(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> insertDevice(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/insertGroup");
 		logger.debug("param ::::: "+param.toString());
-		param.put("regUid", "test7654");
-//		param.put("siteId", "17094385");
-		param.put("userIdx", "1");
+		Map userInfo = UserUtil.getUserInfo(request);
+		param.put("regUid", userInfo.get("user_id"));
+		param.put("userIdx", userInfo.get("user_idx"));
 		
 		int resultCnt = deviceGroupService.insertDevice(param);
 		

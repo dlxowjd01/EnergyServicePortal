@@ -19,12 +19,16 @@ public class DRRevenueServiceImpl implements DRRevenueService {
 
 	public Map getDRRevenueList(HashMap param) throws Exception {
 		List list = drRevenueDao.getDRRevenueList(param);
-		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		if("day".equals((String) param.get("selPeriodVal"))) {
-			resultMap = BillRevenueDataSetting.dataSetting(param, list, "reduct_sdate");
+		if(list == null || list.size() == 0) {
+			
 		} else {
-			resultMap = BillRevenueDataSetting.dataSetting(param, list, "std_yearm");
+			if("day".equals((String) param.get("selPeriodVal"))) {
+				resultMap = BillRevenueDataSetting.dataSetting(param, list, "reduct_sdate");
+			} else {
+				resultMap = BillRevenueDataSetting.dataSetting(param, list, "std_yearm");
+			}
+			
 		}
 		
 		return resultMap;

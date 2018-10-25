@@ -353,7 +353,7 @@ function getDvInDeviceGroupList(deviceGrpIdx) {
 			deviceGrpIdx : deviceGrpIdx
 		},
 		success: function(result) {
-			callback_getDvInDeviceGroupList(result);
+			callback_getDvInDeviceGroupList(result, deviceGrpIdx);
 		}
 	});
 }

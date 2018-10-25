@@ -189,7 +189,7 @@ public class SiteMainController {
 		logger.debug("                                   param ::::: "+param.toString());
 		Map result = pvRevenueService.getPVRevenueList(param);
 		Map totPriceMap = (Map) result.get("totPriceMap");
-		List totPriceList = (List) totPriceMap.get("chartList");
+		List totPriceList = (totPriceMap == null) ? null : (List) totPriceMap.get("chartList");
 		
 		// ess 수익 조회
 		String siteId = (String) param.get("siteId");
@@ -384,7 +384,6 @@ public class SiteMainController {
 	              peakHistory.add(new PeakHistoryModel(DateUtil.dateToString(new Date(peak.getBasetime().get(i)), "yyyy-MM"), peak.getkW().get(i)));
 	            }
 	            peakHistory.sort(new Comparator<PeakHistoryModel>() {
-	              @Override
 	              public int compare(PeakHistoryModel o1, PeakHistoryModel o2) {
 	                return o1.getMonth().compareTo(o2.getMonth());
 	              }
@@ -408,18 +407,24 @@ public class SiteMainController {
 	          billRequest.setEnergy(energy);
 	        }
 	        {// reactive
-	          ReactiveModel reactive = new ReactiveModel();
+	          ReactiveModel posReactive = new ReactiveModel();
+	          ReactiveModel negReactive = new ReactiveModel();
 	          List<Long> timestamp = Lists.newArrayList();
-	          List<Float> kWh = Lists.newArrayList();
+	          List<Float> poskWh = Lists.newArrayList();
+	          List<Float> negkWh = Lists.newArrayList();
 //	          List<Reactive> reactiveList = usageService.getReactiveListBySiteId(_siteId, beginDate, endDate);
 	          List<Reactive> reactiveList = apiService.getReactiveListBySiteId(_siteId, beginDate, endDate); // 10.23 변경중
 	          for (Reactive re : reactiveList) {
 	            timestamp.add(re.getStdTimestamp().getTime());
-	            kWh.add(re.getRctvVal() / 1000000f);
+	            poskWh.add(re.getRctvVal() / 1000000f);
+	            negkWh.add(re.getNegRctvVal() / 1000000f);
 	          }
-	          reactive.setkVarh(kWh);
-	          reactive.setTimestamp(timestamp);
-	          billRequest.setReactive(reactive);
+	          posReactive.setkVarh(poskWh);
+	          posReactive.setTimestamp(timestamp);
+	          billRequest.setReactive(posReactive);
+	          negReactive.setkVarh(negkWh);
+	          negReactive.setTimestamp(timestamp);
+	          billRequest.setReactiveNeg(negReactive);
 	        }
 	        {// ess
 	          EssModel ess = new EssModel();
@@ -435,7 +440,7 @@ public class SiteMainController {
 	          ess.setTimestamp(timestamp);
 	          billRequest.setEss(ess);
 	        }
-	        if (billRequest.getEnergy().getTimestamp().size() == 0 && billRequest.getReactive().getTimestamp().size() == 0 && billRequest.getEss().getTimestamp().size() == 0) {
+	        if (billRequest.getEnergy().getTimestamp().size() == 0 && billRequest.getReactive().getTimestamp().size() == 0 && billRequest.getReactiveNeg().getTimestamp().size() == 0 && billRequest.getEss().getTimestamp().size() == 0) {
 	          continue;
 	        }
 	        BillResponseModel response = EncoredApiUtil.getBill(billRequest);
