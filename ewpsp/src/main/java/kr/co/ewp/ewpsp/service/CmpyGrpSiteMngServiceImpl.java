@@ -1,5 +1,6 @@
 package kr.co.ewp.ewpsp.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,9 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mysql.fabric.xmlrpc.base.Data;
+
+import kr.co.ewp.ewpsp.common.util.CommonUtils;
 import kr.co.ewp.ewpsp.dao.CmpyGrpSiteMngDao;
 import kr.co.ewp.ewpsp.dao.KepcoMngSetDao;
 
@@ -118,8 +122,20 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 	@Transactional
 	public int insertSite(HashMap param) throws Exception {
 		int cnt = cmpyGrpSiteMngDao.insertSite(param);
+		
+		HashMap param2 = new HashMap();
+		param2.put("siteId", param.get("siteId"));
+		param2.put("userIdx", param.get("userIdx"));
+		param2.put("contractPower", 0);
+		param2.put("meterReadDay", 30);
+		param2.put("chargeYearmd", CommonUtils.convertDateFormat(new Date(), "yyyyMMdd"));
+		param2.put("chargePower", 0);
+		param2.put("chargeRate", 90);
+		param2.put("goalPower", 0);
+		param2.put("regUid", param.get("regUid"));
+		
 		int cnt2 = 0;
-		if(cnt > 0) cnt2 = kepcoMngSetDao.insertSiteSet(param);
+		if(cnt > 0) cnt2 = kepcoMngSetDao.insertSiteSet(param2);
 		
 		return cnt;
 	}

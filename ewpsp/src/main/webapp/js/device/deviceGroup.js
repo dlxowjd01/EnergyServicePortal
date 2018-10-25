@@ -112,16 +112,16 @@
 		
 	}
 	
-	function callback_getDvInDeviceGroupList(result) {
+	function callback_getDvInDeviceGroupList(result, deviceGrpIdx) {
 		var deviceList = result.list;
 
 		var addHtml = "";
 		if(deviceList == null || deviceList.length < 1) {
 			addHtml += "조회된 데이터가 없습니다.";
 		} else {
-			var deviceGroupIdx = "";
+//			var deviceGroupIdx = "";
 			for(var i=0; i<deviceList.length; i++) {
-				if(i == 0) deviceGroupIdx = deviceList[i].device_grp_idx;
+//				if(i == 0) deviceGroupIdx = deviceList[i].device_grp_idx;
 				var strHtml = ""
 				if(deviceList[i].device_type == 4) strHtml = '<li class="ioe">'; 
 				else if(deviceList[i].device_type == 1) strHtml = '<li class="pcs" ondblclick="goLEMSPage(\'/lems/setting/pcs\')">'; 
@@ -140,7 +140,7 @@
 		
 		$(".dg_wrap").append( $('<div class="dsec clear" />').append(
 				$('<div class="fl" />').append( $('<ul class="device clear" />').append(addHtml) ).append(
-						$('<div class="new_add" />').append( '<a href="javascript:insertDeviceForm(\''+deviceGroupIdx+'\');"><i class="glyphicon glyphicon-plus"></i></a>' )
+						$('<div class="new_add" />').append( '<a href="javascript:insertDeviceForm(\''+deviceGrpIdx+'\');"><i class="glyphicon glyphicon-plus"></i></a>' )
 				).append(
 						$('<div class="device_del" />').append( '<a href="#;"><i class="glyphicon glyphicon-remove-circle"></i><em>삭제</em></a>' )
 				)

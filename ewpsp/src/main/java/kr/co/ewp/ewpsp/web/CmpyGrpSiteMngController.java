@@ -550,7 +550,7 @@ public class CmpyGrpSiteMngController {
 
 		Map userInfo = UserUtil.getUserInfo(request);
 		param.put("regUid", userInfo.get("user_id"));
-		Integer userIdx = (userInfo.get("user_idx") == null) ? null : (Integer) userInfo.get("user_idx");
+//		Integer userIdx = (userInfo.get("user_idx") == null) ? null : (Integer) userInfo.get("user_idx");
 		param.put("userIdx", userInfo.get("user_idx"));
 		
 		int resultCnt = cmpyGrpSiteMngService.insertSite(param);
