@@ -93,6 +93,8 @@
 									<option value="4">부하측정기기</option>
 									<option value="5">PV모니터링기기</option>
 									<option value="6">ESS모니터링기기</option>
+									<option value="7">iSmart</option>
+									<option value="8">총량기기</option>
 								</select>
 							</td>
 						</tr>
