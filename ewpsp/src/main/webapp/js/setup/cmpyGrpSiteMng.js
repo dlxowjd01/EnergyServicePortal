@@ -187,6 +187,15 @@
 		});
 		
 		$("#confirmCmpyBtn").click(function(){
+			if($("#cmpyForm").find("#compName").val() == "") {
+				$("#cmpyForm").find("#compName").focus();
+				return;
+			}
+			if($("#cmpyForm").find("#compId").val() == "") {
+				$("#cmpyForm").find("#compId").focus();
+				return;
+			}
+			
 			var formData = $("#cmpyForm").serializeObject();
 			if(confirm("회사를 저장하시겠습니까?")) {
 				if(insUpdFlag ==  1) insertCmpy(formData);
@@ -195,6 +204,19 @@
 		});
 		
 		$("#confirmGrpBtn").click(function(){
+			if($("#groupForm").find("#selCompIdx1").val() == "") {
+				$("#groupForm").find("#selCompIdx1").focus();
+				return;
+			}
+			if($("#groupForm").find("#siteGrpName").val() == "") {
+				$("#groupForm").find("#siteGrpName").focus();
+				return;
+			}
+			if($("#groupForm").find("#siteGrpId").val() == "") {
+				$("#groupForm").find("#siteGrpId").focus();
+				return;
+			}
+			
 			var formData = $("#groupForm").serializeObject();
 			if(confirm("그룹을 저장하시겠습니까?")) {
 				if(insUpdFlag ==  1) insertGroup(formData);
@@ -207,6 +229,35 @@
 	    });
 		
 		$("#confirmSiteBtn").click(function(){
+			if($("#siteForm").find("#siteName").val() == "") {
+				$("#siteForm").find("#siteName").focus();
+				return;
+			}
+			if($("#siteForm").find("#siteId").val() == "") {
+				$("#siteForm").find("#siteId").focus();
+				return;
+			}
+			if($("#siteForm").find("#selCompIdx2").val() == "") {
+				$("#siteForm").find("#selCompIdx2").focus();
+				return;
+			}
+			if($("#siteForm").find("#areaType").val() == "") {
+				$("#siteForm").find("#areaType").focus();
+				return;
+			}
+			if($("#siteForm").find("#selSiteGrpIdx2").val() == "") {
+				$("#siteForm").find("#selSiteGrpIdx2").focus();
+				return;
+			}
+			if($("#siteForm").find("#localEmsAddr").val() == "") {
+				$("#siteForm").find("#localEmsAddr").focus();
+				return;
+			}
+			if($("#siteForm").find("#localEmsKey").val() == "") {
+				$("#siteForm").find("#localEmsKey").focus();
+				return;
+			}
+			
 			var formData = $("#siteForm").serializeObject();
 			if(confirm("사이트를 저장하시겠습니까?")) {
 				if(insUpdFlag ==  1) insertSite(formData);
@@ -331,7 +382,7 @@
 	}
 	
 	function changeSelGrp(siteGrpIdx, siteGrpName) {
-		$("#selSiteGrpIdx").val(siteGrpIdx);
+		$("#selSiteGrpIdx1").val(siteGrpIdx);
 		$("#selGrpBox").empty().append(siteGrpName).append( $('<span class="caret" />') );
 		
 		getSitePopupList(siteGrpIdx);
@@ -423,8 +474,8 @@
 			success: function(result) {
 				var list = result.list;
 				
-				if(cmpyPopupFlag == 1) $siteIdSelBox = $("#groupForm").find("#compIdx");
-				else if(cmpyPopupFlag == 2) $siteIdSelBox = $("#siteForm").find("#compIdx");
+				if(cmpyPopupFlag == 1) $siteIdSelBox = $("#groupForm").find("#selCompIdx1");
+				else if(cmpyPopupFlag == 2) $siteIdSelBox = $("#siteForm").find("#selCompIdx2");
 				$siteIdSelBox.empty();
 				$siteIdSelBox.append('<option value="">---회사선택---</option>');
 				for(var i=0; i<list.length; i++) {
@@ -438,17 +489,24 @@
 	function changeCmpy() {
 //		if(cmpyPopupFlag == 1) $siteIdSelBox = $("#groupForm").find("#compIdx");
 //		else if(cmpyPopupFlag == 2) $siteIdSelBox = $("#siteForm").find("#compIdx");
-		var selCmpyIdx = $("#siteForm").find("#compIdx").val();
+		var selCmpyIdx = $("#siteForm").find("#selCompIdx2").val();
 		getGrpPopupList(selCmpyIdx); // 그룹목록 조회
 	}
 
 	function callback_insertGroup(result) {
 		var resultCnt = result.resultCnt;
-		if(resultCnt > 0) {
-			alert("저장되었습니다.");
-			location.reload();
+		var resultMsg = result.resultMsg;
+		var resultCode = result.resultCode;
+		
+		if(resultCode == 0) {
+			if(resultCnt > 0) {
+				alert("저장되었습니다.");
+				location.reload();
+			} else {
+				alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
+			}
 		} else {
-			alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
+			alert(resultMsg);
 		}
 	}
 	
@@ -469,8 +527,8 @@
 		} else {
 			$(".dgroup_add").find('h2').empty().append("그룹 수정");
 			$("#groupForm").find("#siteGrpIdx").val( groupDetail.site_grp_idx );
-			$("#groupForm").find("#userIdx").val( groupDetail.user_idx );
-			$("#groupForm").find("#compIdx").val( groupDetail.comp_idx );
+			$("#groupForm").find("#userIdx1").val( groupDetail.user_idx );
+			$("#groupForm").find("#selCompIdx1").val( groupDetail.comp_idx );
 			$("#groupForm").find("#siteGrpName").val( groupDetail.site_grp_name );
 			$("#groupForm").find("#siteGrpId").val( groupDetail.site_grp_id );
 			$("#groupForm").find("#fileNameTag").empty().append( groupDetail.site_grp_img_rname );
@@ -527,7 +585,7 @@
 			success: function(result) {
 				var list = result.list;
 				
-				$siteIdSelBox = $("#siteForm").find("#siteGrpIdx");
+				$siteIdSelBox = $("#siteForm").find("#selSiteGrpIdx2");
 				$siteIdSelBox.empty();
 				$siteIdSelBox.append('<option value="">---그룹선택---</option>');
 				for(var i=0; i<list.length; i++) {
@@ -566,12 +624,12 @@
 		} else {
 			getGrpPopupList(siteDetail.comp_idx);
 			
-			$("#siteForm").find("#siteGrpIdx").val( siteDetail.site_grp_idx );
-			$("#siteForm").find("#userIdx").val( siteDetail.user_idx );
+			$("#siteForm").find("#selSiteGrpIdx2").val( siteDetail.site_grp_idx );
+			$("#siteForm").find("#userIdx2").val( siteDetail.user_idx );
 			$("#siteForm").find("#siteName").val( siteDetail.site_name );
 			$("#siteForm").find("#siteId").val( siteDetail.site_id );
 			$("#siteForm").find("#siteId").attr("readonly", true);
-			$("#siteForm").find("#compIdx").val( siteDetail.comp_idx );
+			$("#siteForm").find("#selCompIdx2").val( siteDetail.comp_idx );
 			$("#siteForm").find("#areaType").val( siteDetail.area_type );
 			$("#siteForm").find("#localEmsAddr").val( siteDetail.local_ems_addr );
 			$("#siteForm").find("#localEmsKey").val( siteDetail.local_ems_key );

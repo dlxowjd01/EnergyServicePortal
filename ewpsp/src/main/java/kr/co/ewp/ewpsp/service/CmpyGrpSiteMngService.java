@@ -42,6 +42,8 @@ public interface CmpyGrpSiteMngService {
 	
 	Map getGroupDetail(HashMap param) throws Exception;
 
+	int getSiteGroupIdChk(HashMap param) throws Exception;
+
 	Map getSiteDetail(HashMap param) throws Exception;
 	
 	Map getGMainSiteRankingTotalDetail(HashMap param) throws Exception;

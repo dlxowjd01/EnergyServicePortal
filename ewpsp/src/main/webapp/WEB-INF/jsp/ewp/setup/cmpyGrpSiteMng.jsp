@@ -166,11 +166,11 @@
 					<tbody>
 						<tr>
 							<th><span>회사명</span></th>
-							<td><input type="text" name="compName" id="compName" class="input" style="width:100%"></td>
+							<td><input type="text" name="compName" id="compName" class="input" style="width:100%" maxlength="20"></td>
 						</tr>
 						<tr>
 							<th><span>회사ID</span></th>
-							<td><input type="text" name="compId" id="compId" class="input" style="width:100%"></td>
+							<td><input type="text" name="compId" id="compId" class="input" style="width:100%" maxlength="50"></td>
 						</tr>
 					</tbody>			
 				</table>
@@ -206,7 +206,7 @@
 			<div class="group_wrap clear">
 				<form id="editSiteInSiteGrpForm" name="editSiteInSiteGrpForm">
 				<!-- <input type="hidden" id="selSiteId" name="selSiteId"> -->
-				<input type="hidden" id="selSiteGrpIdx" name="selSiteGrpIdx">
+				<input type="hidden" id="selSiteGrpIdx1" name="selSiteGrpIdx1">
 				<input type="hidden" id="nowSiteIds" name="nowSiteIds">
 				<input type="hidden" id="newSiteIds" name="newSiteIds">
 				<div class="inside_site fl">
@@ -249,7 +249,7 @@
 			<div class="set_tbl">
 				<form id="groupForm" name="groupForm" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="siteGrpIdx" id="siteGrpIdx" class="input" value="">
-				<input type="hidden" name="userIdx" id="userIdx" class="input" value="">
+				<input type="hidden" name="userIdx1" id="userIdx1" class="input" value="">
 				<input type="hidden" name="fileChangeYn" id="fileChangeYn" class="input" value="N">
 				<table>
 					<colgroup>
@@ -260,17 +260,17 @@
 						<tr>
 							<th><span>회사</span></th>
 							<td>
-								<select name="compIdx" id="compIdx" class="sel" style="width:100%">
+								<select name="selCompIdx1" id="selCompIdx1" class="sel" style="width:100%">
 								</select>
 							</td>
 						</tr>
 						<tr>
 							<th><span>그룹명</span></th>
-							<td><input type="text" name="siteGrpName" id="siteGrpName" class="input" style="width:100%"></td>
+							<td><input type="text" name="siteGrpName" id="siteGrpName" class="input" style="width:100%" maxlength="50" ></td>
 						</tr>
 						<tr>
 							<th><span>그룹ID</span></th>
-							<td><input type="text" name="siteGrpId" id="siteGrpId" class="input" style="width:100%"></td>
+							<td><input type="text" name="siteGrpId" id="siteGrpId" class="input" style="width:100%" maxlength="20" ></td>
 						</tr>
 						<tr>
 							<th><span>그룹 이미지</span></th>
@@ -304,7 +304,7 @@
 
 			<div class="set_tbl">
 				<form id="siteForm" name="siteForm">
-				<input type="hidden" name="userIdx" id="userIdx" class="input" value="">
+				<input type="hidden" name="userIdx2" id="userIdx2" class="input" value="">
 				<table>
 					<colgroup>
 						<col width="200">
@@ -314,16 +314,16 @@
 						</tr>
 						<tr>
 							<th><span>사이트명</span></th>
-							<td><input type="text" name="siteName" id="siteName" class="input" style="width:100%"></td>
+							<td><input type="text" name="siteName" id="siteName" class="input" style="width:100%" maxlength="50"></td>
 						</tr>
 						<tr>
 							<th><span>사이트ID</span></th>
-							<td><input type="text" name="siteId" id="siteId" class="input" style="width:100%"></td>
+							<td><input type="text" name="siteId" id="siteId" class="input" style="width:100%" maxlength="20"></td>
 						</tr>
 						<tr>
 							<th><span>회사</span></th>
 							<td>
-								<select name="compIdx" id="compIdx" class="sel" style="width:100%" onchange="changeCmpy();">
+								<select name="selCompIdx2" id="selCompIdx2" class="sel" style="width:100%" onchange="changeCmpy();">
 								</select>
 							</td>
 						<tr>
@@ -354,17 +354,17 @@
 						<tr>
 							<th><span>그룹</span></th>
 							<td>
-								<select name="siteGrpIdx" id="siteGrpIdx" class="sel" style="width:100%">
+								<select name="selSiteGrpIdx2" id="selSiteGrpIdx2" class="sel" style="width:100%">
 								</select>
 							</td>
 						</tr>
 						<tr>
 							<th><span>Local EMS 주소</span></th>
-							<td><input type="text" name="localEmsAddr" id="localEmsAddr" class="input" style="width:100%"></td>
+							<td><input type="text" name="localEmsAddr" id="localEmsAddr" class="input" style="width:100%" maxlength="50"></td>
 						</tr>
 						<tr>
 							<th><span>Local EMS 암호키</span></th>
-							<td><input type="text" name="localEmsKey" id="localEmsKey" class="input" style="width:100%"></td>
+							<td><input type="text" name="localEmsKey" id="localEmsKey" class="input" style="width:100%" maxlength="50"></td>
 						</tr>
 					</tbody>			
 				</table>

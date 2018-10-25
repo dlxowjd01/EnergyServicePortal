@@ -92,6 +92,10 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 	public Map getCmpyDetail(HashMap param) throws Exception {
 		return cmpyGrpSiteMngDao.getCmpyDetail(param);
 	}
+
+	public int getSiteGroupIdChk(HashMap param) throws Exception {
+		return cmpyGrpSiteMngDao.getSiteGroupIdChk(param);
+	}
 	
 	public Map getGroupDetail(HashMap param) throws Exception {
 		return cmpyGrpSiteMngDao.getGroupDetail(param);
@@ -116,11 +120,16 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 	
 	@Transactional
 	public int insertGroup(HashMap param) throws Exception {
+		param.put("userIdx", param.get("userIdx1"));
+		param.put("compIdx", param.get("selCompIdx1"));
 		return cmpyGrpSiteMngDao.insertGroup(param);
 	}
 	
 	@Transactional
 	public int insertSite(HashMap param) throws Exception {
+		param.put("userIdx", param.get("userIdx2"));
+		param.put("compIdx", param.get("selCompIdx2"));
+		param.put("siteGrpIdx", param.get("selSiteGrpIdx2"));
 		int cnt = cmpyGrpSiteMngDao.insertSite(param);
 		
 		HashMap param2 = new HashMap();

@@ -486,9 +486,19 @@ public class CmpyGrpSiteMngController {
 	public @ResponseBody Map<String, Object> insertGroup(@RequestParam HashMap param, MultipartHttpServletRequest multipart, HttpSession session) throws Exception {
 		logger.debug("/insertGroup");
 		logger.debug("param ::::: "+param.toString());
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		int cnt = cmpyGrpSiteMngService.getSiteGroupIdChk(param);
+		if(cnt > 0) {
+			resultMap.put("resultCode", 1);
+			resultMap.put("resultMsg", "입력하신 그룹 ID가 존재합니다. \n다른 ID를 입력해주세요.");
+			return resultMap;
+		}
 
 		Map userInfo = UserUtil.getUserInfo(multipart.getSession());
 		param.put("regUid", userInfo.get("user_id"));
+		param.put("userIdx1", userInfo.get("user_idx"));
 		
 		String siteGrpName = multipart.getParameter("siteGrpName");
 		String siteGrpId = multipart.getParameter("siteGrpId");
@@ -532,8 +542,9 @@ public class CmpyGrpSiteMngController {
 		
 		int resultCnt = cmpyGrpSiteMngService.insertGroup(param);
 		
-		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("resultCnt", resultCnt);
+		resultMap.put("resultMsg", "");
+		resultMap.put("resultCode", 0);
 		return resultMap;
 	}
 	
@@ -551,7 +562,7 @@ public class CmpyGrpSiteMngController {
 		Map userInfo = UserUtil.getUserInfo(request);
 		param.put("regUid", userInfo.get("user_id"));
 //		Integer userIdx = (userInfo.get("user_idx") == null) ? null : (Integer) userInfo.get("user_idx");
-		param.put("userIdx", userInfo.get("user_idx"));
+		param.put("userIdx2", userInfo.get("user_idx"));
 		
 		int resultCnt = cmpyGrpSiteMngService.insertSite(param);
 		

@@ -135,6 +135,10 @@ public class CmpyGrpSiteMngDao {
 		Map result = sqlSession.selectOne("cmpyGrpSiteMng.getCmpyDetail", param);
 		return result;
 	}
+
+	public int getSiteGroupIdChk(HashMap param) {
+		return sqlSession.selectOne("cmpyGrpSiteMng.getSiteGroupIdChk", param);
+	}
 	
 	public Map getGroupDetail(HashMap param) {
 		Map result = sqlSession.selectOne("cmpyGrpSiteMng.getGroupDetail", param);

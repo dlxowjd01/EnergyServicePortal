@@ -517,6 +517,15 @@
 		and site_grp_idx = #{siteGrpIdx }
 	</select>
 	
+	<select id="getSiteGroupIdChk" parameterType="hashMap" resultType="java.lang.Integer">
+		/* 그룹ID 중복여부 체크 */
+		select 
+			count(*) as cnt 
+		from tb_site_group
+		where del_yn = 'N'
+		and site_grp_id = #{siteGrpId }
+	</select>
+	
 	<select id="getSiteDetail" parameterType="hashMap" resultType="hashMap">
 		/* 사이트 한건 조회 */
 		select 
