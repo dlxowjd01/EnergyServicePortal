@@ -48,6 +48,8 @@
 		var dt_str = "";
 		var dt_str_totVal = 0; // 테이블 라인별 누적합
 		if(chartList != null && chartList.length > 0) {
+			$(".dr_chart").find(".inchart-nodata").css("display", "none");
+			$(".dr_chart").find(".inchart").css("display", "");
 			for(var i=0; i<chartList.length; i++) {
 				var usage = String(chartList[i].usg_val);
 				var reUsage = 0;
@@ -70,12 +72,15 @@
 				
 			}
 			
+		} else {
+			$(".dr_chart").find(".inchart-nodata").css("display", "");
+			$(".dr_chart").find(".inchart").css("display", "none");
 		}
 		pastUsageList = dataSet;
 		timeSlotCblAmtList = dataSet2;
 		timeSlotGoalPowerList = dataSet3;
 		
-		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
+		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)		
 		unit_format(String(totUsage), "pastUseTot", "Wh");
 	}
 	
@@ -86,7 +91,7 @@
 		$tbody = $("#drResultTbody");
 		$tbody.empty();
 		if(drList == null || drList.length < 1) {
-			$tbody.append( '<tr><td colspan="8">조회된 데이터가 없습니다.</td><tr>' );
+			$tbody.append( '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>' );
 		} else {
 			for(var i=0; i<drList.length; i++) {
 				var drStartDate = new Date( convertDateUTC(drList[i].start_timestamp) );

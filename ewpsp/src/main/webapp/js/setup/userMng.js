@@ -14,20 +14,20 @@
 		$tbody = $("#userTbody");
 		$tbody.empty();
 		if(userList == null || userList.length < 1) {
-			strHtml += '<tr><td colspan="7">조회된 데이터가 없습니다.</td><tr>';
+			strHtml += '<tr><td colspan="7">조회 결과가 없습니다.</td><tr>';
 			$tbody.append( strHtml );
 		} else {
 			for(var i=0; i<userList.length; i++) {
 				var tm = new Date( convertDateUTC(userList[i].reg_date) );
 				$tbody.append(
-						$('<tr />').append( $("<td />").append( userList[i].user_id ) // id
-						).append( $("<td />").append( userList[i].auth_type_name ) // 권한등급
-						).append( $("<td />").append( userList[i].comp_name ) // 회사명
-						).append( $("<td />").append( userList[i].site_grp_name ) // 그룹
-						).append( $("<td />").append( userList[i].note ) // 설명
-						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") ) // 등록일자
+						$('<tr />').append( $('<td />').append( userList[i].user_id ) // id
+						).append( $('<td />').append( userList[i].auth_type_name ) // 권한등급
+						).append( $('<td />').append( userList[i].comp_name ) // 회사명
+						).append( $('<td />').append( userList[i].site_grp_name ) // 그룹
+						).append( $('<td class="ellipsis mxw500" />').append( userList[i].note ) // 설명
+						).append( $('<td />').append( tm.format("yyyy-MM-dd HH:mm:ss") ) // 등록일자
 						).append(
-								$("<td />").append(
+								$('<td />').append(
 										'<a href="#" onclick="updateUserForm(\''+userList[i].user_idx+'\');" class="default_btn">수정</a>'+
 										'<a href="#" onclick="deleteUserYn(\''+userList[i].user_idx+'\');" class="cancel_btn">삭제</a>'
 								)
@@ -222,7 +222,7 @@
 		var userDetail = result.detail;
 		
 		if(userDetail == null) {
-			alert("조회된 데이터가 없습니다.");
+			alert("조회 결과가 없습니다.");
 //			location.href = "/siteMain";
 		} else {
 			var authType = userDetail.auth_type;

@@ -67,13 +67,13 @@ function callback_getGMainAlarmList(result) {
 	$div = $(".alarm_notice");
 	$div.find("ul").empty();
 	if(alarmList == null || alarmList.length < 1) {
-		$div.find("ul").append( $('<li />').append( $('<a href="#;" />').append("조회된 데이터가 없습니다.") ) );
+		$div.find("ul").append( $('<li />').append( $('<a href="#;" />').append("조회 결과가 없습니다.") ) );
 	} else {
 		for(var i=0; i<alarmList.length; i++) {
 			var tm = new Date( convertDateUTC(alarmList[i].std_date) );
 
 			$div.find("ul").append( 
-					$('<li />').append( $('<a href="#;" />').append("조회된 데이터가 없습니다.") 
+					$('<li />').append( $('<a href="#;" />').append("조회 결과가 없습니다.") 
 					).append( $('<span />').append( tm.format("yyyy-MM-dd HH:mm:ss") ) ) 
 			);
 		}
@@ -247,7 +247,7 @@ function callback_getGMainSiteList(result) {
 	$tbody.empty();
 
 	if (siteList == null || siteList.length < 1) {
-		$tbody.append('<tr><td colspan="7">조회된 데이터가 없습니다.</td><tr>');
+		$tbody.append('<tr><td colspan="7">조회 결과가 없습니다.</td><tr>');
 		$('#GMainSitePaging').empty();
 	} else {
 		var imgSrc = '';

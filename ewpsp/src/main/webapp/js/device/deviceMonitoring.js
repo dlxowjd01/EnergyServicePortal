@@ -17,7 +17,7 @@
 		$tbody = $("#ioeTbody");
 		$tbody.empty();
 		if(ioeList == null || ioeList.length < 1) {
-			$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
+			$tbody.append( '<tr><td colspan="6">조회 결과가 없습니다.</td><tr>' );
 			$('#DeviceIOEPaging').empty();
 			excelCnt = 0;
 		} else {
@@ -51,7 +51,7 @@
 		var ioeDetail = result.detail;
 		
 		if(ioeDetail == null) {
-			alert("조회된 데이터가 없습니다.");
+			alert("조회 결과가 없습니다.");
 		} else {
 			$(".dview_ioe").empty().append(
 					$('<div class="ltit" />').append(
@@ -83,6 +83,26 @@
 									$('<div class="dd" />').append( $('<span class="run" />').append("") )
 							)
 					)
+			).append(
+					$('<div class="ltbl mt30" />').append( 
+							$('<table />').append( 
+									$("<thead />").append( 
+											$("<tr />").append( $("<th />").append("전압(v)") 
+											).append( $("<th />").append("전력(kW)")
+											).append( $("<th />").append("유효전력(kW)")
+											).append( $("<th />").append("무효전력(kW)")
+											) 
+									) 
+							).append(
+									$('<tbody />').append( 
+											$('<tr />').append( $("<td />").append(ioeDetail.sys_soc) // soc
+											).append( $("<td />").append(  (ioeDetail.sys_soh == "" || ioeDetail.sys_soh == null) ? "-" : ioeDetail.sys_soh  ) // soh
+											).append( $("<td />").append(  (ioeDetail.curr_soc == "" || ioeDetail.curr_soc == null) ? "-" : ioeDetail.curr_soc  ) // soc 현재
+											).append( $("<td />").append(  (ioeDetail.sys_voltage == "" || ioeDetail.sys_voltage == null) ? "-" : ioeDetail.sys_voltage  ) // 출력전압
+											)  
+									)
+							)
+					)
 			);
 			
 			popupOpen('dview_ioe');
@@ -97,7 +117,7 @@
 		$tbody = $("#pcsTbody");
 		$tbody.empty();
 		if(pcsList == null || pcsList.length < 1) {
-			$tbody.append( '<tr><td colspan="8">조회된 데이터가 없습니다.</td><tr>' );
+			$tbody.append( '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>' );
 			$('#DevicePCSPaging').empty();
 			excelCnt = 0;
 		} else {
@@ -105,12 +125,12 @@
 				var tm = new Date( convertDateUTC(pcsList[i].std_date) );
 				$tbody.append(
 						$('<tr ondblclick="goLEMSPage(\'/lems/setting/pcs\')" />').append( $("<td />").append( pcsList[i].rnum )
-						).append( $("<td />").append( pcsList[i].device_name )
-						).append( $("<td />").append( pcsList[i].device_id )
-						).append( $("<td />").append( pcsList[i].device_type_nm )
-						).append( $("<td />").append( pcsList[i].device_stat_name )
-						).append( $("<td />").append( pcsList[i].alarm_msg )
-						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
+						).append( $('<td />').append( pcsList[i].device_name )
+						).append( $('<td />').append( pcsList[i].device_id )
+						).append( $('<td />').append( pcsList[i].device_type_nm )
+						).append( $('<td />').append( pcsList[i].device_stat_name )
+						).append( $('<td class="ellipsis mxw400" />').append( pcsList[i].alarm_msg )
+						).append( $('<td />').append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
 								$("<td />").append( '<a href="#;" onclick="getDevicePCSDetail(\''+pcsList[i].device_id+'\');" class="detail_view">상세보기</a>' )
 						)
@@ -132,7 +152,7 @@
 		var pcsDetail = result.detail;
 		
 		if(pcsDetail == null) {
-			alert("조회된 데이터가 없습니다.");
+			alert("조회 결과가 없습니다.");
 		} else {
 			$(".dview_pcs").empty().append(
 					$('<div class="ltit" />').append(
@@ -192,7 +212,7 @@
 									$('<table />').append( 
 											$("<thead />").append( 
 													$("<tr />").append( $("<th />").append("전압(V)") 
-													).append( $("<th />").append("전력(kW)")
+													).append( $("<th />").append("전류(A)")
 													).append( $("<th />").append("운전상태")
 													).append( $("<th />").append("운전모드")
 													).append( $("<th />").append("충전량")
@@ -203,8 +223,8 @@
 											$('<tbody />').append( 
 													$('<tr />').append( $("<td />").append(pcsDetail.dc_voltage) 
 													).append( $("<td />").append(  (pcsDetail.dc_power == "" || pcsDetail.dc_power == null) ? "-" : pcsDetail.dc_power  )
-													).append( $("<td />").append(  (pcsDetail.pcs_status == "" || pcsDetail.pcs_status == null) ? "-" : pcsDetail.pcs_status_nm  )
-													).append( $("<td />").append(  (pcsDetail.pcs_command == "" || pcsDetail.pcs_command == null) ? "-" : pcsDetail.pcs_command_nm  )
+													).append( $("<td />").append(  (pcsDetail.pcs_status_nm == "" || pcsDetail.pcs_status_nm == null) ? "-" : pcsDetail.pcs_status_nm  )
+													).append( $("<td />").append(  (pcsDetail.pcs_command_nm == "" || pcsDetail.pcs_command_nm == null) ? "-" : pcsDetail.pcs_command_nm  )
 													).append( $("<td />").append(  (pcsDetail.today_c_energy == "" || pcsDetail.today_c_energy == null) ? "-" : pcsDetail.today_c_energy  )
 													).append( $("<td />").append(  (pcsDetail.today_d_energy == "" || pcsDetail.today_d_energy == null) ? "-" : pcsDetail.today_d_energy  )
 													)  
@@ -226,7 +246,7 @@
 		$tbody = $("#bmsTbody");
 		$tbody.empty();
 		if(bmsList == null || bmsList.length < 1) {
-			$tbody.append( '<tr><td colspan="8">조회된 데이터가 없습니다.</td><tr>' );
+			$tbody.append( '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>' );
 			$('#DeviceBMSPaging').empty();
 			excelCnt = 0;
 		} else {
@@ -234,12 +254,12 @@
 				var tm = new Date( convertDateUTC(bmsList[i].std_date) );
 				$tbody.append(
 						$('<tr ondblclick="goLEMSPage(\'/lems/setting/bat\')" />').append( $("<td />").append( bmsList[i].rnum )
-						).append( $("<td />").append( bmsList[i].device_name )
-						).append( $("<td />").append( bmsList[i].device_id )
-						).append( $("<td />").append( bmsList[i].device_type_nm )
-						).append( $("<td />").append( bmsList[i].device_stat_name )
-						).append( $("<td />").append( bmsList[i].alarm_msg )
-						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
+						).append( $('<td />').append( bmsList[i].device_name )
+						).append( $('<td />').append( bmsList[i].device_id )
+						).append( $('<td />').append( bmsList[i].device_type_nm )
+						).append( $('<td />').append( bmsList[i].device_stat_name )
+						).append( $('<td class="ellipsis mxw400" />').append( bmsList[i].alarm_msg )
+						).append( $('<td />').append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
 								$("<td />").append( '<a href="#;" onclick="getDeviceBMSDetail(\''+bmsList[i].device_id+'\');" class="detail_view">상세보기</a>' )
 						)
@@ -261,7 +281,7 @@
 		var bmsDetail = result.detail;
 		
 		if(bmsDetail == null) {
-			alert("조회된 데이터가 없습니다.");
+			alert("조회 결과가 없습니다.");
 		} else {
 			$(".dview_bms").empty().append(
 					$('<div class="ltit" />').append(
@@ -301,27 +321,21 @@
 									$('<table />').append( 
 											$("<thead />").append( 
 													$("<tr />").append( $("<th />").append("SOC(%)") 
-													).append( $("<th />").append("SOC 최대(kWh)")
 													).append( $("<th />").append("SOH(%)")
 													).append( $("<th />").append("SOC 현재(kWh)")
-													).append( $("<th />").append("SOC 최소(kWh)")
 													).append( $("<th />").append("출력 전압(V)")
 													).append( $("<th />").append("출력 전류(V)")
 													).append( $("<th />").append("Dod(%)")
-													).append( $("<th />").append("C-rate(C)")
 													) 
 											) 
 									).append(
 											$('<tbody />').append( 
 													$('<tr />').append( $("<td />").append(bmsDetail.sys_soc) // soc
-													).append( $("<td />").append("-") // soc 최대??
 													).append( $("<td />").append(  (bmsDetail.sys_soh == "" || bmsDetail.sys_soh == null) ? "-" : bmsDetail.sys_soh  ) // soh
 													).append( $("<td />").append(  (bmsDetail.curr_soc == "" || bmsDetail.curr_soc == null) ? "-" : bmsDetail.curr_soc  ) // soc 현재
-													).append( $("<td />").append("-") // soc 최소??
 													).append( $("<td />").append(  (bmsDetail.sys_voltage == "" || bmsDetail.sys_voltage == null) ? "-" : bmsDetail.sys_voltage  ) // 출력전압
 													).append( $("<td />").append(  (bmsDetail.sys_current == "" || bmsDetail.sys_current == null) ? "-" : bmsDetail.sys_current  ) // 출력전류
 													).append( $("<td />").append(  (bmsDetail.dod == "" || bmsDetail.dod == null) ? "-" : bmsDetail.dod  ) // dod
-													).append( $("<td />").append("-") // c-rate
 													)  
 											)
 									)
@@ -341,7 +355,7 @@
 		$tbody = $("#pvTbody");
 		$tbody.empty();
 		if(pvList == null || pvList.length < 1) {
-			$tbody.append( '<tr><td colspan="8">조회된 데이터가 없습니다.</td><tr>' );
+			$tbody.append( '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>' );
 			$('#DevicePVPaging').empty();
 			excelCnt = 0;
 		} else {
@@ -349,13 +363,13 @@
 				var tm = new Date( convertDateUTC(pvList[i].std_date) );
 				$tbody.append(
 						$('<tr ondblclick="goLEMSPage(\'/lems/setting/pv\')" />').append( $("<td />").append( pvList[i].rnum )
-						).append( $("<td />").append( pvList[i].device_name )
-						).append( $("<td />").append( pvList[i].device_id )
-						).append( $("<td />").append( pvList[i].device_type_nm )
-						).append( $("<td />").append( pvList[i].device_stat_name )
-						).append( $("<td />").append( pvList[i].temp )
-						).append( $("<td />").append( pvList[i].alarm_msg )
-						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
+						).append( $('<td />').append( pvList[i].device_name )
+						).append( $('<td />').append( pvList[i].device_id )
+						).append( $('<td />').append( pvList[i].device_type_nm )
+						).append( $('<td />').append( pvList[i].device_stat_name )
+						).append( $('<td />').append( pvList[i].temp )
+						).append( $('<td class="ellipsis mxw400" />').append( pvList[i].alarm_msg )
+						).append( $('<td />').append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
 								$("<td />").append( '<a href="#;" onclick="getDevicePVDetail(\''+pvList[i].device_id+'\');" class="detail_view">상세보기</a>' )
 						)
@@ -377,7 +391,7 @@
 		var pvDetail = result.detail;
 		
 		if(pvDetail == null) {
-			alert("조회된 데이터가 없습니다.");
+			alert("조회 결과가 없습니다.");
 		} else {
 			$(".dview_pv").empty().append(
 					$('<div class="ltit" />').append(
@@ -414,18 +428,16 @@
 											$("<thead />").append( 
 													$("<tr />").append( $("<th />").append("온도") 
 													).append( $("<th />").append("오늘 예측 발전량")
-													).append( $("<th />").append("수평 일사량")
+													).append( $("<th />").append("실제 발전량")
 													).append( $("<th />").append("오늘 누적 발전량")
-													).append( $("<th />").append("경사 일사량")
 													) 
 											) 
 									).append(
 											$('<tbody />').append( 
 													$('<tr />').append( $("<td />").append(  (pvDetail.temp == "" || pvDetail.temp == null) ? "-" : pvDetail.temp+"℃"  ) 
 													).append( $("<td />").append("-"/*+"kWh"*/) 
-													).append( $("<td />").append("-"/*+"W/m²"*/) 
+													).append( $("<td />").append("-"/*+"kWh"*/) 
 													).append( $("<td />").append(  (pvDetail.tot_power == "" || pvDetail.tot_power == null) ? "-" : pvDetail.tot_power+"kWh"  )
-													).append( $("<td />").append("-"/*+"W/m²"*/) // c-rate
 													)  
 											)
 									)

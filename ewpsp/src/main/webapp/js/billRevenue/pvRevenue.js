@@ -271,14 +271,18 @@
 				$("<thead/>").append( $("<tr/>").append( "<th></th>"+pvRevenue_head_pc[0]+"<th>합계</th>" ) ) // thead
 		);
 		if(pvRevenue_data_pc.length < 1) {
+			$(".income_pv_chart").find(".inchart-nodata").css("display", "");
+			$(".income_pv_chart").find(".inchart").css("display", "none");
 			$table.append(
 					$("<tbody/>").append( // tbody
 							$("<tr/>").append( // 기본요금
-									'<th colspan="14">조회된 데이터가 없습니다.</th>'
+									'<th colspan="14">조회 결과가 없습니다.</th>'
 							)
 					)
 			);
 		} else {
+			$(".income_pv_chart").find(".inchart-nodata").css("display", "none");
+			$(".income_pv_chart").find(".inchart").css("display", "");
 			$table.append(
 					$("<tbody/>").append( // tbody
 							$("<tr/>").append( // 평일 일수 (d)

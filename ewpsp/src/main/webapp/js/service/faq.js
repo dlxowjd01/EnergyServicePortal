@@ -156,7 +156,7 @@ function callback_getFAQDetail(result) {
 	var faqDetail = result.detail;
 
 	if(faqDetail == null) {
-		alert("조회된 데이터가 없습니다.");
+		alert("조회 결과가 없습니다.");
 	} else {
 		$("#faqIdx").val(faqDetail.faq_idx);
 		$("#question").val(faqDetail.question);
@@ -286,7 +286,7 @@ function callback_getFAQCateDetail(result) {
 	var faqCateDetail = result.detail;
 
 	if(faqCateDetail == null) {
-		alert("조회된 데이터가 없습니다.");
+		alert("조회 결과가 없습니다.");
 	} else {
 		$("#faqCateIdx2").val(faqCateDetail.faq_cate_idx);
 		$("#faqCateName").val(faqCateDetail.faq_cate_name);

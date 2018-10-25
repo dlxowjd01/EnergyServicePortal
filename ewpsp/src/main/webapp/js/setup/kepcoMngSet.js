@@ -11,7 +11,7 @@
 		var siteSetDetail = result.detail;
 		
 		if(siteSetDetail == null) {
-			alert("조회된 데이터가 없습니다.");
+			alert("조회 결과가 없습니다.");
 //			location.href = "/siteMain";
 		} else {
 			getPlanType('', '', '', 1);

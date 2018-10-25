@@ -8,14 +8,17 @@
 		$("#selPageNum").val(1);
 		formData = getSiteMainSchCollection();
 		
-		fn_cycle_10sec();
-		fn_cycle_1min();
-		fn_cycle_15min();
+		showHideLoadingBar('show');
+		setTimeout(function(){
+			fn_cycle_10sec();
+			fn_cycle_1min();
+			fn_cycle_15min();
+			showHideLoadingBar('hide');
+		}, (1000*1));
 		
 		realTime_monitoring_start();
 		
 	});
-	
 	
 	// 자동 새로고침(실시간 모니터링)
 	function realTime_monitoring_start() {
@@ -134,13 +137,13 @@
 		$div = $(".alarm_notice");
 		$div.find("ul").empty();
 		if(alarmList == null || alarmList.length < 1) {
-			$div.find("ul").append( $('<li />').append( $('<a href="#;" />').append("조회된 데이터가 없습니다.") ) );
+			$div.find("ul").append( $('<li />').append( $('<a href="#;" />').append("조회 결과가 없습니다.") ) );
 		} else {
 			for(var i=0; i<alarmList.length; i++) {
 				var tm = new Date( convertDateUTC(alarmList[i].std_date) );
 				
 				$div.find("ul").append( 
-						$('<li />').append( $('<a href="#;" />').append("조회된 데이터가 없습니다.") 
+						$('<li />').append( $('<a href="#;" />').append("조회 결과가 없습니다.") 
 						).append( $('<span />').append( tm.format("yyyy-MM-dd HH:mm:ss") ) ) 
 				);
 				

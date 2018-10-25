@@ -46,6 +46,9 @@
 							<jsp:include page="../include/engy_monitoring_search.jsp">
 								<jsp:param value="billRevenue" name="schGbn"/>
 							</jsp:include>
+							<div class="inchart-nodata" style="display: none;">
+								<span>조회 결과가 없습니다.</span>
+							</div>
 							<div class="inchart">
 								<div id="chart2"></div>
 								<script language="JavaScript"> 
@@ -245,127 +248,6 @@
 							</div>
 							<div class="tbl_wrap">
 								<div class="fold_div" id="pc_use_dataDiv">
-									<!-- PC 버전용 테이블 -->
-									<div class="chart_table">			
-										<table class="pc_use" id="pc_use_dataTable">
-											<thead>
-												<tr>
-													<th>2018-08</th>
-													<th>1월</th>
-													<th>2월</th>
-													<th>3월</th>
-													<th>4월</th>
-													<th>5월</th>
-													<th>6월</th>
-													<th>7월</th>
-													<th>8월</th>
-													<th>9월</th>
-													<th>10월</th>
-													<th>11월</th>
-													<th>12월</th>
-													<th>합계</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<th><div class="ctit wht"><span>총 발전량</span></div></th>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th><div class="ctit wht"><span>SMP 거래량</span></div></th>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>												
-												<tr>
-													<th><div class="ctit pk2"><span>SMP 수익</span></div></th>
-													<td>800,000</td>
-													<td>800,000</td>
-													<td>800,000</td>
-													<td>800,000</td>
-													<td>800,000</td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>												
-												<tr>
-													<th><div class="ctit wht"><span>REC 거래량</span></div></th>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th><div class="ctit pk3"><span>REC 수익</span></div></th>
-													<td>400,000</td>
-													<td>400,000</td>
-													<td>400,000</td>
-													<td>400,000</td>
-													<td>400,000</td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th><div class="ctit pk1"><span>총 수익</span></div></th>
-													<td>1,000,000</td>
-													<td>1,000,000</td>
-													<td>1,000,000</td>
-													<td>1,000,000</td>
-													<td>1,000,000</td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-											</tbody>
-										</table>	
-									</div>
 								</div>
 							</div>
 						</div>
@@ -653,8 +535,6 @@
     </div>
     <!-- ###### Popup End ###### -->
 
-    <!-- 레이어 팝업 배경 -->
-    <div id="mask"></div>
 
 
 

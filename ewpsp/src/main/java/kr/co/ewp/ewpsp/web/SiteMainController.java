@@ -194,17 +194,19 @@ public class SiteMainController {
 		// ess 수익 조회
 		String siteId = (String) param.get("siteId");
 //		List essRevenueList = null;//essRevenueService.getESSRevenueList(param); // api로 변경
-		List essRevenueLists = bill01(siteId, start, end);
+		List<List<Bill>> essRevenueLists = bill01(siteId, start, end);
 		List<Bill> essRevenueList = null;
-		if(essRevenueLists != null) {
+		if(essRevenueLists != null && essRevenueLists.size() > 0) {
 			essRevenueList = (List<Bill>) essRevenueLists.get(0);
+			if(essRevenueList == null || essRevenueList.size() < 1) {
+				essRevenueList = null;
+			}
 		}
 		
 		// dr 수익 조회
 		param.put("selTermFrom", selTermFrom.substring(0, 6));
 		param.put("selTermTo", selTermTo.substring(0, 6));
 		param.put("selPeriodVal", "day");
-		System.out.println("param ::::::               "+param.toString());
 		Map drRevenueMap = drRevenueService.getDRRevenueList(param);
 		List drRevenueList = (List) drRevenueMap.get("chartList");
 
@@ -242,9 +244,9 @@ public class SiteMainController {
 	   * @param prettyLog
 	   * @throws ParseException
 	   */
-	  public List bill01(String siteId, Date begin, Date end) throws Exception {
+	  public List<List<Bill>> bill01(String siteId, Date begin, Date end) throws Exception {
 		  logger.debug("요금/수익 > 한전요금조회 > 요금");
-		List resultList = Lists.newArrayList();
+		List<List<Bill>> resultList = Lists.newArrayList();
 	    List<Site> siteList = getSiteList(siteId);
 	    if (end == null) {
 	      end = new Date();
@@ -491,6 +493,7 @@ public class SiteMainController {
 	      resultCnt++;
 	    }
 	    logger.debug("RESULT_CNT  "+ resultCnt);
+	    
 	    return resultList;
 	  }
 	

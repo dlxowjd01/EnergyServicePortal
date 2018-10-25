@@ -250,6 +250,26 @@
 	        	<div class="dt">알람 메시지</div>
 	        	<div class="dd">
 	        	</div>
+	        </div>        
+	        <div class="ltbl mt30">        	
+	        	<table>
+	        		<thead>
+	        			<tr>
+	        				<th>전압(v)</th>
+	        				<th>전력(kW)</th>
+	        				<th>유효전력(kW)</th>
+	        				<th>무효전력(kW)</th>
+	        			</tr>
+	        		</thead>
+	        		<tbody>
+	        			<tr>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
+	        				<td></td>
+	        			</tr>
+	        		</tbody>
+	        	</table>
 	        </div>
         </div>
     </div>
@@ -394,22 +414,16 @@
 	        	<table>
 	        		<thead>
 	        			<tr>
-	        				<th>SOC(%)</th>
-	        				<th>SOC 최대(kWh)</th>
+	        				<th>SOC(%)</th>	        				
 	        				<th>SOH(%)</th>
-	        				<th>SOC 현재(kWh)</th>
-	        				<th>SOC 최소(kWh)</th>
+	        				<th>SOC 현재(kWh)</th>	        				
 	        				<th>출력 전압(V)</th>
 	        				<th>출력 전류(V)</th>
-	        				<th>Dod(%)</th>
-	        				<th>C-rate(C)</th>
+	        				<th>Dod(%)</th>	        				
 	        			</tr>
 	        		</thead>
 	        		<tbody>
 	        			<tr>
-	        				<td></td>
-	        				<td></td>
-	        				<td></td>
 	        				<td></td>
 	        				<td></td>
 	        				<td></td>
@@ -470,14 +484,12 @@
 	        			<tr>
 	        				<th>온도</th>
 	        				<th>오늘 예측 발전량</th>
-	        				<th>수평 일사량</th>
+	        				<th>실제 발전량</th>
 	        				<th>오늘 누적 발전량</th>
-	        				<th>경사 일사량</th>
 	        			</tr>
 	        		</thead>
 	        		<tbody>
 	        			<tr>
-	        				<td></td>
 	        				<td></td>
 	        				<td></td>
 	        				<td></td>
@@ -490,8 +502,6 @@
     </div>       
     <!-- ###### Popup End ###### -->
 
-    <!-- 레이어 팝업 배경 -->
-    <div id="mask"></div>
 
 
 

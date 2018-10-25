@@ -42,6 +42,9 @@
 							<jsp:include page="../include/engy_monitoring_search.jsp">
 								<jsp:param value="energy_drResult" name="schGbn"/>
 							</jsp:include>
+							<div class="inchart-nodata" style="display: none;">
+								<span>조회 결과가 없습니다.</span>
+							</div>
 							<div class="inchart">
 								<div id="chart2"></div>
 								<script language="JavaScript"> 

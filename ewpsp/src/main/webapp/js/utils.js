@@ -7,6 +7,67 @@ function replaceAll(str, searchStr, replaceStr) {
     return str.split(searchStr).join(replaceStr);
 }
 
+/**
+ * 바이트 문자 입력가능 문자수 체크
+ * @param id : tag id 
+ * @param title : tag title
+ * @param maxLength : 최대 입력가능 수 (byte)
+ * @returns {Boolean}
+ */
+function maxLengthCheck(id, title, maxLength, event){
+     var obj = $("#"+id);
+     console.log(obj+", "+obj.val())
+     if(maxLength == null) {
+         maxLength = obj.attr("maxLength") != null ? obj.attr("maxLength") : 1000;
+     }
+     console.log(Number(byteCheck(obj))+", "+Number(byteCheck(maxLength)));
+     if(Number(byteCheck(obj)) > Number(maxLength)) {
+//         alert(title + "이(가) 입력가능문자수를 초과하였습니다.\n(영문, 숫자, 일반 특수문자 : " + maxLength + " / 한글, 한자, 기타 특수문자 : " + parseInt(maxLength/2, 10) + ").");
+         obj.focus();
+         event.preventDefault();
+//         return false;
+     } else {
+         return ;
+    }
+}
+
+/**
+ * 바이트수 반환  
+ * @param el : tag jquery object
+ * @returns {Number}
+ */
+function byteCheck(el){
+    var codeByte = 0;
+    for (var idx = 0; idx < el.val().length; idx++) {
+        var oneChar = escape(el.val().charAt(idx));
+        if ( oneChar.length == 1 ) {
+            codeByte ++;
+        } else if (oneChar.indexOf("%u") != -1) {
+            codeByte += 2;
+        } else if (oneChar.indexOf("%") != -1) {
+            codeByte ++;
+        }
+    }
+    return codeByte;
+}
+
+// 영문&숫자만 입력받는 함수
+function onlyEngNum(event) {
+	var code = event.keyCode;
+	if ((code >= 65 && code <= 90) || (code >= 97 && code <= 122)) { // 영문
+		return;
+	}
+	if ( (code > 47 && code < 58) || (code > 95 && code < 106) ) { // 숫자 허용(오른쪽키패트 포함)
+		return;
+	}
+	if (code === 9 || code === 36 || code === 35 || code === 37 || 
+			code === 39 || code === 8 || code === 46) { // 특수문자 허용
+		return;
+	}
+	
+	event.preventDefault();
+}
+
 //////////////////////////////////////////////숫자관련//////////////////////////////////////////////
 
 // 숫자 콤마 붙이기
@@ -672,4 +733,14 @@ function print(printArea)
 }
 
 
+function showHideLoadingBar(txt) {
+	if(txt == "show") {
+		$("#mask").fadeTo("slow", 0.5);
+		$("#mask").append('<div class="loading"></div>');
+	}
+	if(txt == "hide") {
+		$('#mask').hide();
+		$('#mask').empty();
+	}
+}
 

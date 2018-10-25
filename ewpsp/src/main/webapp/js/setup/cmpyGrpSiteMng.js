@@ -32,7 +32,7 @@
 		$tbody = $("#cmpyTbody");
 		$tbody.empty();
 		if(cmpyList == null || cmpyList.length < 1) {
-			$tbody.append( '<tr><td colspan="5">조회된 데이터가 없습니다.</td><tr>' );
+			$tbody.append( '<tr><td colspan="5">조회 결과가 없습니다.</td><tr>' );
 			$('#CmpyPaging').empty();
 		} else {
 			for(var i=0; i<cmpyList.length; i++) {
@@ -64,7 +64,7 @@
 		$tbody = $("#grpTbody");
 		$tbody.empty();
 		if(grpList == null || grpList.length < 1) {
-			$tbody.append( '<tr><td colspan="5">조회된 데이터가 없습니다.</td><tr>' );
+			$tbody.append( '<tr><td colspan="5">조회 결과가 없습니다.</td><tr>' );
 			$('#GroupPaging').empty();
 		} else {
 			for(var i=0; i<grpList.length; i++) {
@@ -97,7 +97,7 @@
 		$tbody = $("#siteTbody");
 		$tbody.empty();
 		if(siteList == null || siteList.length < 1) {
-			$tbody.append( '<tr><td colspan="7">조회된 데이터가 없습니다.</td><tr>' );
+			$tbody.append( '<tr><td colspan="7">조회 결과가 없습니다.</td><tr>' );
 			$('#SitePaging').empty();
 		} else {
 			for(var i=0; i<siteList.length; i++) {
@@ -324,7 +324,7 @@
 		var cmpyDetail = result.detail;
 		
 		if(cmpyDetail == null) {
-			alert("조회된 데이터가 없습니다.");
+			alert("조회 결과가 없습니다.");
 //			location.href = "/siteMain";
 		} else {
 			$("#compIdx").val( cmpyDetail.comp_idx );
@@ -368,7 +368,7 @@
 		$selectBox = $("#grpSelectBox");
 		$selectBox.find("ul").empty();
 		if(groupList == null || groupList.length < 1) {
-//			$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
+//			$tbody.append( '<tr><td colspan="6">조회 결과가 없습니다.</td><tr>' );
 		} else {
 			for(var i=0; i<groupList.length; i++) {
 				$selectBox.find("ul").append(
@@ -396,7 +396,7 @@
 		$insideSite.find("ul").empty();
 		var sites = "";
 		if(grpSiteList == null || grpSiteList.length < 1) {
-//			$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
+//			$tbody.append( '<tr><td colspan="6">조회 결과가 없습니다.</td><tr>' );
 		} else {
 			for(var i=0; i<grpSiteList.length; i++) {
 				sites = sites+grpSiteList[i].site_id+",";
@@ -415,7 +415,7 @@
 		$allSite = $(".all_site");
 		$allSite.find("ul").empty();
 		if(allSiteList == null || allSiteList.length < 1) {
-//			$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
+//			$tbody.append( '<tr><td colspan="6">조회 결과가 없습니다.</td><tr>' );
 		} else {
 			for(var i=0; i<allSiteList.length; i++) {
 				$allSite.find("ul").append(
@@ -522,7 +522,7 @@
 		var groupDetail = result.detail;
 		
 		if(groupDetail == null) {
-			alert("조회된 데이터가 없습니다.");
+			alert("조회 결과가 없습니다.");
 //			location.href = "/siteMain";
 		} else {
 			$(".dgroup_add").find('h2').empty().append("그룹 수정");
@@ -619,7 +619,7 @@
 		var siteDetail = result.detail;
 		
 		if(siteDetail == null) {
-			alert("조회된 데이터가 없습니다.");
+			alert("조회 결과가 없습니다.");
 //			location.href = "/siteMain";
 		} else {
 			getGrpPopupList(siteDetail.comp_idx);

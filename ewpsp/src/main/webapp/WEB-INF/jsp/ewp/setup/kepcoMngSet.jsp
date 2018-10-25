@@ -40,26 +40,69 @@
 									</colgroup>
 									<tbody>
 										<tr>
-											<th><span>건물 요금</span></th>
+											<th><span>고객명</span></th>
 											<td>
-												<span>구분1</span>
+												<input type="text" class="input" value="테스트" disabled="disabled">
+											</td>
+											<th><span>고객 번호</span></th>
+											<td>
+												<input type="text" class="input" value="10-0000-000110">
+											</td>
+										</tr>
+										<tr>
+											<th><span>전기사용 장소</span></th>
+											<td colspan="3">
+												<input type="text" class="input" style="width:100%" value="울산광역시 울주군 원산로 40">
+											</td>
+										</tr>
+										<tr>
+											<th><span>계약 종별</span></th>
+											<td colspan="3">
+												<span><strong>구분1</strong></span>
 												<select name="planType" id="planType" class="sel">
 													<option value="">일반용</option>
 												</select>
-												<span class="ml20">구분2</span>
+												<span class="ml20"><strong>구분2</strong></span>
 												<select name="planType2" id="planType2" class="sel">
 													<option value="">전력(갑) II</option>
 												</select>
-												<span class="ml20">구분3</span>
+												<span class="ml20"><strong>구분3</strong></span>
 												<select name="planType3" id="planType3" class="sel">
 													<option value="">고압C 선택 III</option>
 												</select>
 											</td>
 										</tr>
 										<tr>
+											<th><span>계량기 번호</span></th>
+											<td>
+												<input type="text" class="input" value="LG15 0123456">
+											</td>
+											<th><span>계량기 배수</span></th>
+											<td>
+												<input type="text" class="input" value="1">
+											</td>
+										</tr>
+										<tr>
 											<th><span>계약 전력</span></th>
 											<td>
 												<input type="text" name="contractPower" id="contractPower" class="input" value=""> kW
+											</td>
+											<th><span>목표 전력</span></th>
+											<td>
+												<input type="text" name="goalPower" id="goalPower" class="input" value=""> kW
+											</td>
+										</tr>
+										<tr>
+											<th><span>요금적용 전력</span></th>
+											<td>
+												<!-- 달력 스크립트 -->
+												<input type="text" id="datepicker1" class="sel" value="" style="width:130px;">
+												<input type="hidden" id="chargeYearmd" name="chargeYearmd">
+												<input type="text" name="chargePower" id="chargePower" class="input" value=""> kW
+											</td>
+											<th><span>요금적용 전력대비</span></th>
+											<td>
+												<input type="text" name="chargeRate" id="chargeRate" class="input" value=""> %
 											</td>
 										</tr>
 										<tr>
@@ -74,28 +117,9 @@
 													<option value="25">25일</option>
 													<option value="30">30일</option>
 												</select>
-											</td>
-										</tr>
-										<tr>
-											<th><span>요금적용 전력</span></th>
+											</td>											
+											<th><span>수익배분 비율</span></th>
 											<td>
-												<!-- 달력 스크립트 -->
-												<input type="text" id="datepicker1" class="sel" value="" style="width:130px;">
-												<input type="hidden" id="chargeYearmd" name="chargeYearmd">
-												<input type="text" name="chargePower" id="chargePower" class="input" value=""> kW
-											</td>
-										</tr>
-										<tr>
-											<th><span>목표 전력</span></th>
-											<td>
-												<input type="text" name="goalPower" id="goalPower" class="input" value=""> kW
-											</td>
-										</tr>
-										<tr>
-											<th><span>요금적용 전력대비</span></th>
-											<td style="padding-right:20px">
-												<input type="text" name="chargeRate" id="chargeRate" class="input" value=""> %
-												<span style="padding-left:20px">수익배분 비율</span>
 												<input type="text" name="profitRatio" id="profitRatio" class="input" value="90"> %
 											</td>
 										</tr>

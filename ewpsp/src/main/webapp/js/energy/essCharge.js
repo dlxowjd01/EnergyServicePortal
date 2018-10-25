@@ -317,16 +317,20 @@
 		$div = $("#pc_use_dataDiv");
 		$div.empty(); // 초기화
 		if(realChg_data_pc.length < 1) {
+			$(".ess_chart").find(".inchart-nodata").css("display", "");
+			$(".ess_chart").find(".inchart").css("display", "none");
 			$div.prepend(
 					$('<div class="chart_table" />').append(
 							$('<table class="pc_use" />').append(
 									$("<thead/>").append( $("<tr/>").append(  
-											"<th width='33%'></th><td width='34%'>조회된 데이터가 없습니다</td><th width='33%'></th>" ) 
+											"<th width='33%'></th><td width='34%'>조회 결과가 없습니다.</td><th width='33%'></th>" ) 
 									) // thead
 							)
 					)
 			);
 		} else {
+			$(".ess_chart").find(".inchart-nodata").css("display", "none");
+			$(".ess_chart").find(".inchart").css("display", "");
 			for(var i=dt_row-1; i>-1; i--) {
 				$div.prepend(
 						$('<div class="chart_table" />').append(

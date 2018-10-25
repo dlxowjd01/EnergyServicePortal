@@ -861,8 +861,6 @@ function readArea() {
 </script>
 
 
-<!-- 레이어 팝업 배경 -->
-<div id="mask"></div>
 
 
 

@@ -50,6 +50,9 @@
 							<jsp:include page="../include/engy_monitoring_search.jsp">
 								<jsp:param value="billRevenue" name="schGbn"/>
 							</jsp:include>
+							<div class="inchart-nodata" style="display: none;">
+								<span>조회 결과가 없습니다.</span>
+							</div>
 							<div class="inchart">
 								<div id="chart2"></div>
 								<script language="JavaScript"> 
@@ -298,125 +301,97 @@
 					<td colspan="2" height="40" align="right" style="font-size:16px;font-weight:600;">이번 달 청구 금액은 <span class="dp_total">2,220,000</span>원 입니다</td>
 				</tr>
 			</table>
-			<table class="tbl" style="margin-top:10px;">
+			<h2 class="mt20">청구 상세내역</h2>
+			<table class="tbl" style="margin-top:10px">
+				<colgroup>
+					<col width="30%">
+					<col>
+				</colgroup>
 				<tbody>
 					<tr>
-						<th>전기사용장소</th>
-						<td>울산광역시 울주군 온산읍 원산로 40</td>
+						<th>기본요금</th>
+						<td align="right">10,000</td>
 					</tr>
 					<tr>
-						<th>고객번호</th>
-						<td>10 0000 0001</td>
+						<th>전력량요금</th>
+						<td align="right">2,000,000</td>
 					</tr>
 					<tr>
-						<th>청구금액</th>
-						<td>2,220,000원</td>
+						<th>전기요금계</th>
+						<td align="right">2,010,000</td>
 					</tr>
 					<tr>
-						<th>납기일</th>
-						<td>2018년 08월 15일</td>
+						<th>부가가치세</th>
+						<td align="right">200,000</td>
 					</tr>
 					<tr>
-						<th>고객전용지정계좌<br/>(예금주 : 한국전력공사)</th>
-						<td>
-							<table class="noline">
-								<tr>
-									<td>우리은행</td>
-									<td>100-100000-10-100</td>
-									<td>신한은행</td>
-									<td>100-100000-10-100</td>
-								</tr>
-								<tr>
-									<td>국민은행</td>
-									<td>100-100000-10-100</td>
-									<td>농협</td>
-									<td>100-100000-10-100</td>
-								</tr>
-								<tr>
-									<td>하나은행</td>
-									<td>100-100000-10-100</td>
-									<td>기업은행</td>
-									<td>100-100000-10-100</td>
-								</tr>
-								<tr>
-									<td>외환은행</td>
-									<td>100-100000-10-100</td>
-									<td>우 체 국</td>
-									<td>100-100000-10-100</td>
-								</tr>
-								<tr>
-									<td>씨티은행</td>
-									<td>100-100000-10-100</td>
-									<td></td>
-									<td></td>
-								</tr>
-							</table>
-						</td>
+						<th>전력기금</th>
+						<td align="right">10,006</td>
+					</tr>
+					<tr>
+						<th>원단위절사</th>
+						<td align="right">-6</td>
+					</tr>
+					<tr>
+						<th>당월요금계</th>
+						<td align="right">2,220,000</td>
 					</tr>
 				</tbody>
+				<tfoot>
+					<tr>
+						<th>청구금액</th>
+						<td align="right">2,220,000</td>
+					</tr>
+				</tfoot>
 			</table>
-			<p style="font-size:12px;padding:10px 0;">※ 위 계좌번호는 고객님께서 입금할 수 있는 전용 지정계좌입니다. (끝자리 원단위 입금불가)</p>
 			<div class="clear" style="margin-top:20px;">
-				<div class="fl" style="width:49%">
-					<h2>청구금액</h2>
-					<table class="tbl e_bill" style="margin-top:10px">
+				<div class="fl" style="width:39%">
+					<h2>납입 정보</h2>
+					<table class="tbl" style="margin-top:10px">
 						<tbody>
 							<tr>
-								<th>기본요금</th>
-								<td align="right">10,000</td>
+								<th>은행명</th>
+								<td>우리은행</td>
 							</tr>
 							<tr>
-								<th>전력량요금</th>
-								<td align="right">2,000,000</td>
+								<th>계좌번호</th>
+								<td>1005-802-498030</td>
 							</tr>
 							<tr>
-								<th>전기요금계</th>
-								<td align="right">2,010,000</td>
+								<th>예금주</th>
+								<td>한국동서발전(주)</td>
 							</tr>
 							<tr>
-								<th>부가가치세</th>
-								<td align="right">200,000</td>
+								<th>납입금액</th>
+								<td>2,220,000원</td>
 							</tr>
 							<tr>
-								<th>전력기금</th>
-								<td align="right">10,006</td>
-							</tr>
-							<tr>
-								<th>원단위절사</th>
-								<td align="right">-6</td>
-							</tr>
-							<tr>
-								<th>당월요금계</th>
-								<td align="right">2,220,000</td>
-							</tr>
-							<tr>
-								<th>미납요금</th>
-								<td align="right">0</td>
+								<th>납기일</th>
+								<td>2018년 08월 15일</td>
 							</tr>
 						</tbody>
-						<tfoot>
-							<tr>
-								<th>청구금액</th>
-								<td align="right">2,220,000</td>
-							</tr>
-						</tfoot>
 					</table>
 				</div>
-				<div class="fr" style="width:49%">
-					<h2>고객사항</h2>
+				<div class="fr" style="width:59%">
+					<h2>고객 사항</h2>
 					<table class="tbl" style="margin-top:10px">
 						<colgroup>
 							<col width="40%"><col>
 						</colgroup>
 						<tbody>
 							<tr>
+								<th>고객번호</th>
+								<td>10 0000 0001</td>
+							</tr>
+							<tr>
+								<th>주소</th>
+								<td>울산광역시 울주군 온산읍 원산로 40</td>
+							</tr>
+							<tr>
 								<th>전기사용 계약종별</th>
 								<td>산업용(을) 고압B 선택 III</td>
 							</tr>
-							<tr>
-								<th>주거구분</th>
-								<td>비주거용</td>
-							</tr>
+							
 							<tr>
 								<th>정기검침일</th>
 								<td>25</td>
@@ -432,26 +407,6 @@
 							<tr>
 								<th>계약전력</th>
 								<td>3</td>
-							</tr>
-							<tr>
-								<th>가구수</th>
-								<td>1</td>
-							</tr>
-						</tbody>
-					</table>
-					<h2 style="margin-top:10px">미납내역</h2>
-					<table class="tbl" style="margin-top:9px">
-						<colgroup>
-							<col width="40%"><col>
-						</colgroup>							
-						<tbody>
-							<tr>
-								<th>미납월</th>
-								<th>금액</th>
-							</tr>
-							<tr>
-								<td></td>
-								<td>미납요금 없음</td>
 							</tr>
 						</tbody>
 					</table>
@@ -694,8 +649,6 @@
     </div>
     <!-- ###### Popup End ###### -->
 
-    <!-- 레이어 팝업 배경 -->
-    <div id="mask"></div>
 
 
 

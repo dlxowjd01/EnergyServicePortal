@@ -72,7 +72,7 @@
 			
 			$('#addresseeName').val("");
 			$('#addresseeName').hide();
-			$("#smsSendMngTbody").empty().append( '<tr><td colspan="4">조회된 데이터가 없습니다.</td><tr>' );
+			$("#smsSendMngTbody").empty().append( '<tr><td colspan="4">조회 결과가 없습니다.</td><tr>' );
 			
 		});
 		
@@ -140,7 +140,7 @@
 		$tbody = $("#warnAlarmTbody");
 		$tbody.empty();
 		if(warnAlarmList == null || warnAlarmList.length < 1) {
-			$tbody.append( '<tr><td colspan="8">조회된 데이터가 없습니다.</td></tr>' );
+			$tbody.append( '<tr><td colspan="8">조회 결과가 없습니다.</td></tr>' );
 			$('#WarningAlarmPaging').empty();
 		} else {
 			for(var i=0; i<warnAlarmList.length; i++) {
@@ -155,16 +155,16 @@
 				var alarmCfmYn = (warnAlarmList[i].alarm_cfm_yn == "Y") ? "확인" : "미확인";
 				
 				$tbody.append(
-						$('<tr />').append( $("<td />").append( warnAlarmList[i].device_type_nm ) // 장치타입
-						).append( $("<td />").append( warnAlarmList[i].device_name ) // 장치명
-						).append( $("<td />").append( warnAlarmList[i].device_id ) // 장치ID
-						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") ) // 알람시간
-						).append( $("<td />").append( warnAlarmList[i].alarm_msg ) // 알람메세지
-						).append( $("<td />").append( alarmCfmYn ) // 알람상태(뭘 의미하는거지??)
+						$('<tr />').append( $('<td />').append( warnAlarmList[i].device_type_nm ) // 장치타입
+						).append( $('<td />').append( warnAlarmList[i].device_name ) // 장치명
+						).append( $('<td />').append( warnAlarmList[i].device_id ) // 장치ID
+						).append( $('<td />').append( tm.format("yyyy-MM-dd HH:mm:ss") ) // 알람시간
+						).append( $('<td />').append( warnAlarmList[i].alarm_msg ) // 알람메세지
+						).append( $('<td />').append( alarmCfmYn ) // 알람상태(뭘 의미하는거지??)
 						).append( // 조치여부
-								$("<td />").append( strHtml )
+								$('<td />').append( strHtml )
 						).append( // 조치내용
-								$("<td />").append( warnAlarmList[i].alarm_note )
+								$('<td class="ellipsis mxw200" />').append( warnAlarmList[i].alarm_note )
 						)
 				);
 			}
@@ -202,7 +202,7 @@
 		$tbody = $("#alertAlarmTbody");
 		$tbody.empty();
 		if(alertAlarmList == null || alertAlarmList.length < 1) {
-			$tbody.append( '<tr><td colspan="8">조회된 데이터가 없습니다.</td><tr>' );
+			$tbody.append( '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>' );
 			$('#AlertAlarmPaging').empty();
 		} else {
 			for(var i=0; i<alertAlarmList.length; i++) {
@@ -217,16 +217,16 @@
 				var alarmCfmYn = (alertAlarmList[i].alarm_cfm_yn == "Y") ? "확인" : "미확인";
 				
 				$tbody.append(
-						$('<tr />').append( $("<td />").append( alertAlarmList[i].device_type_nm ) // 장치타입
-						).append( $("<td />").append( alertAlarmList[i].device_name ) // 장치명
-						).append( $("<td />").append( alertAlarmList[i].device_id ) // 장치ID
-						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") ) // 알람시간
-						).append( $("<td />").append( alertAlarmList[i].alarm_msg ) // 알람메세지
-						).append( $("<td />").append( alarmCfmYn ) // 알람상태(뭘 의미하는거지??)
+						$('<tr />').append( $('<td />').append( alertAlarmList[i].device_type_nm ) // 장치타입
+						).append( $('<td />').append( alertAlarmList[i].device_name ) // 장치명
+						).append( $('<td />').append( alertAlarmList[i].device_id ) // 장치ID
+						).append( $('<td />').append( tm.format("yyyy-MM-dd HH:mm:ss") ) // 알람시간
+						).append( $('<td />').append( alertAlarmList[i].alarm_msg ) // 알람메세지
+						).append( $('<td />').append( alarmCfmYn ) // 알람상태(뭘 의미하는거지??)
 						).append( // 조치여부
-								$("<td />").append( strHtml )
+								$('<td />').append( strHtml )
 						).append( // 조치내용
-								$("<td />").append( alertAlarmList[i].alarm_note )
+								$('<td class="ellipsis mxw200" />').append( alertAlarmList[i].alarm_note )
 						)
 				);
 			}
@@ -254,7 +254,7 @@
 				$tbody = $("#smsSendMngTbody");
 				$tbody.empty();
 				if(addresseeList == null || addresseeList.length < 1) {
-					$tbody.append( '<tr><td colspan="4">조회된 데이터가 없습니다.</td><tr>' );
+					$tbody.append( '<tr><td colspan="4">조회 결과가 없습니다.</td><tr>' );
 				} else {
 					for(var i=0; i<addresseeList.length; i++) {
 						$tbody.append(

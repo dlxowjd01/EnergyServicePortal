@@ -16,7 +16,7 @@
 			$div = $(".dg_wrap");
 			$div.empty();
 			if(deviceGroupList == null || deviceGroupList.length < 1) {
-				$div.append( '<h2 class="dtit">조회된 데이터가 없습니다.</h2>' );
+				$div.append( '<h2 class="dtit">조회 결과가 없습니다.</h2>' );
 			} else {
 				for(var i=0; i<deviceGroupList.length; i++) {
 					$div.append( '<h2 class="dtit">'+deviceGroupList[i].device_grp_name+'</h2>' );
@@ -70,7 +70,7 @@
 				$insideSite = $("#insideDeviceGrp");
 				$insideSite.find("ul").empty();
 				if(deviceGroupList == null || deviceGroupList.length < 1) {
-//					$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
+//					$tbody.append( '<tr><td colspan="6">조회 결과가 없습니다.</td><tr>' );
 				} else {
 					for(var i=0; i<deviceGroupList.length; i++) {
 						$insideSite.find("ul").append(
@@ -85,7 +85,7 @@
 				$tbody = $("#dvGrpTbody");
 				$tbody.empty();
 				if(deviceGroupList == null || deviceGroupList.length < 1) {
-					$tbody.append( '<tr><td colspan="3">조회된 데이터가 없습니다.</td><tr>' );
+					$tbody.append( '<tr><td colspan="3">조회 결과가 없습니다.</td><tr>' );
 				} else {
 					var dvGrps = "";
 					for(var i=0; i<deviceGroupList.length; i++) {
@@ -117,7 +117,7 @@
 
 		var addHtml = "";
 		if(deviceList == null || deviceList.length < 1) {
-			addHtml += "조회된 데이터가 없습니다.";
+			addHtml += "조회 결과가 없습니다.";
 		} else {
 //			var deviceGroupIdx = "";
 			for(var i=0; i<deviceList.length; i++) {
@@ -359,7 +359,7 @@
 		$insideSite = $(".inside_site");
 		$insideSite.find("ul").empty();
 		if(grpSiteList == null || grpSiteList.length < 1) {
-//			$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
+//			$tbody.append( '<tr><td colspan="6">조회 결과가 없습니다.</td><tr>' );
 		} else {
 			var devices = "";
 			for(var i=0; i<grpSiteList.length; i++) {
@@ -378,7 +378,7 @@
 		$allSite = $(".all_site");
 		$allSite.find("ul").empty();
 		if(allSiteList == null || allSiteList.length < 1) {
-//			$tbody.append( '<tr><td colspan="6">조회된 데이터가 없습니다.</td><tr>' );
+//			$tbody.append( '<tr><td colspan="6">조회 결과가 없습니다.</td><tr>' );
 		} else {
 			for(var i=0; i<allSiteList.length; i++) {
 				$allSite.find("ul").append(
