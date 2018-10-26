@@ -128,4 +128,18 @@
 		and device_id = #{deviceId }
 	</update>
 	
+	<update id="deleteDevice" parameterType="hashMap">
+		/* 장치 삭제 */
+		update tb_device
+		set 
+		    del_yn        = 'Y', 
+		    mod_uid       = #{modUid }, 
+		    mod_date      = now()
+		where 1=1
+		<!-- <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+		and site_id = #{siteId }
+		</if> -->
+		and device_id = #{deviceId }
+	</update>
+	
 </mapper>

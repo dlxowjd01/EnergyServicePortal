@@ -2,7 +2,6 @@ package kr.co.ewp.ewpsp.dao;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,35 +13,39 @@ public class DeviceGroupDao {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 
-	public List getDeviceGroupList(HashMap param) {
-		List resultList = sqlSession.selectList("deviceGroup.getDeviceGroupList", param);
+	public List<HashMap<String, Object>> getDeviceGroupList(HashMap<String, Object> param) {
+		List<HashMap<String, Object>> resultList = sqlSession.selectList("deviceGroup.getDeviceGroupList", param);
 		return resultList;
 	}
 	
-	public List getDvInDeviceGroupList(HashMap param) {
-		List resultList = sqlSession.selectList("deviceGroup.getDvInDeviceGroupList", param);
+	public List<HashMap<String, Object>> getDvInDeviceGroupList(HashMap<String, Object> param) {
+		List<HashMap<String, Object>> resultList = sqlSession.selectList("deviceGroup.getDvInDeviceGroupList", param);
 		return resultList;
 	}
 	
-	public List getAllDvInSiteList(HashMap param) {
-		List resultList = sqlSession.selectList("deviceGroup.getAllDvInSiteList", param);
+	public List<HashMap<String, Object>> getAllDvInSiteList(HashMap<String, Object> param) {
+		List<HashMap<String, Object>> resultList = sqlSession.selectList("deviceGroup.getAllDvInSiteList", param);
 		return resultList;
 	}
 
-	public int deleteDeviceGroup(HashMap param) {
+	public int deleteDeviceGroup(HashMap<String, Object> param) {
 		return sqlSession.update("deviceGroup.deleteDeviceGroup", param);
 	}
 	
-	public int insertDeviceGroup(HashMap param) {
+	public int insertDeviceGroup(HashMap<String, Object> param) {
 		return sqlSession.update("deviceGroup.insertDeviceGroup", param);
 	}
 	
-	public int insertDevice(HashMap param) {
+	public int insertDevice(HashMap<String, Object> param) {
 		return sqlSession.update("deviceGroup.insertDevice", param);
 	}
 	
-	public int updateDevice(HashMap param) {
+	public int updateDevice(HashMap<String, Object> param) {
 		return sqlSession.update("deviceGroup.updateDevice", param);
+	}
+	
+	public int deleteDevice(HashMap<String, Object> param) {
+		return sqlSession.update("deviceGroup.deleteDevice", param);
 	}
 	
 }

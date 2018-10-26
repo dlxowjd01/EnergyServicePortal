@@ -650,7 +650,7 @@
 	}
 	
 	function deleteSiteYn(siteId) {
-		if(confirm("삭제하시겠습니까?")) {
+		if(confirm("사이트에 등록된 장치도 같이 삭제됩니다. \n삭제하시겠습니까?")) {
 			deleteSite(siteId);
 		}
 	}

@@ -19,5 +19,7 @@ public interface DeviceGroupService {
 	int insertDevice(HashMap param) throws Exception;
 	
 	int updateDevice(HashMap param) throws Exception;
+	
+	int deleteDevice(HashMap param) throws Exception;
 
 }

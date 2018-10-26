@@ -49,4 +49,9 @@ public class DeviceGroupServiceImpl implements DeviceGroupService{
 		return deviceGroupDao.updateDevice(param);
 	}
 	
+	@Transactional
+	public int deleteDevice(HashMap param) throws Exception {
+		return deviceGroupDao.deleteDevice(param);
+	}
+	
 }

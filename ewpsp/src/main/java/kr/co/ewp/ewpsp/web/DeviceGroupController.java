@@ -293,11 +293,32 @@ public class DeviceGroupController {
 	 */
 	@RequestMapping("/insertDevice")
 	public @ResponseBody Map<String, Object> insertDevice(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
-		logger.debug("/insertGroup");
+		logger.debug("/insertDevice");
 		logger.debug("param ::::: "+param.toString());
+		
 		Map userInfo = UserUtil.getUserInfo(request);
 		param.put("regUid", userInfo.get("user_id"));
 		param.put("userIdx", userInfo.get("user_idx"));
+		
+		int resultCnt = deviceGroupService.insertDevice(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("resultCnt", resultCnt);
+		return resultMap;
+	}
+	
+	/**
+	 * 장치 삭제
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/deleteDevice")
+	public @ResponseBody Map<String, Object> deleteDevice(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
+		logger.debug("/deleteDevice");
+		logger.debug("param ::::: "+param.toString());
+		Map userInfo = UserUtil.getUserInfo(request);
+		param.put("modUid", userInfo.get("user_id"));
 		
 		int resultCnt = deviceGroupService.insertDevice(param);
 		

@@ -10,10 +10,9 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mysql.fabric.xmlrpc.base.Data;
-
 import kr.co.ewp.ewpsp.common.util.CommonUtils;
 import kr.co.ewp.ewpsp.dao.CmpyGrpSiteMngDao;
+import kr.co.ewp.ewpsp.dao.DeviceGroupDao;
 import kr.co.ewp.ewpsp.dao.KepcoMngSetDao;
 
 @Service("cmpyGrpSiteMngService")
@@ -24,6 +23,9 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 
 	@Resource(name="kepcoMngSetDao")
 	private KepcoMngSetDao kepcoMngSetDao;
+
+	@Resource(name="deviceGroupDao")
+	private DeviceGroupDao deviceGroupDao;
 
 	public List getCmpyList(HashMap param) throws Exception {
 		return cmpyGrpSiteMngDao.getCmpyList(param);
@@ -176,7 +178,20 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 	
 	@Transactional
 	public int deleteSite(HashMap param) throws Exception {
-		return cmpyGrpSiteMngDao.deleteSite(param);
+		int delSitecnt = cmpyGrpSiteMngDao.deleteSite(param);
+		List<HashMap<String, Object>> deviceList = deviceGroupDao.getDvInDeviceGroupList(param);
+		int delDvCnt = 0;
+		if(delSitecnt > 0) {
+			for (HashMap<String, Object> map : deviceList) {
+				HashMap<String, Object> param2 = new HashMap<String, Object>();
+				param2.put("deviceId", map.get("device_id"));
+				int cnt = deviceGroupDao.deleteDevice(param2);
+				delDvCnt = delDvCnt+cnt;
+			}
+		}
+		
+		int resultCnt = (delDvCnt == deviceList.size()) ? delSitecnt : 0;
+		return resultCnt;
 	}
 	
 }
