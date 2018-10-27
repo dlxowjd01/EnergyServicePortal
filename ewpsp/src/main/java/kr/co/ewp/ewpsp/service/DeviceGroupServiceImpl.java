@@ -25,8 +25,16 @@ public class DeviceGroupServiceImpl implements DeviceGroupService{
 		return deviceGroupDao.getDvInDeviceGroupList(param);
 	}
 	
+	public List getDeviceGrpAlarmList(HashMap param) throws Exception {
+		return deviceGroupDao.getDeviceGrpAlarmList(param);
+	}
+	
 	public List getAllDvInSiteList(HashMap param) throws Exception {
 		return deviceGroupDao.getAllDvInSiteList(param);
+	}
+	
+	public List getDeviceNotInGroupList(HashMap param) throws Exception {
+		return deviceGroupDao.getDeviceNotInGroupList(param);
 	}
 
 	@Transactional

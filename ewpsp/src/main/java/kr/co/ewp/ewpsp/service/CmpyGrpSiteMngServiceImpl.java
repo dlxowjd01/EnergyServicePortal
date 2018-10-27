@@ -179,18 +179,36 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 	@Transactional
 	public int deleteSite(HashMap param) throws Exception {
 		int delSitecnt = cmpyGrpSiteMngDao.deleteSite(param);
+		
+		// 장치삭제
 		List<HashMap<String, Object>> deviceList = deviceGroupDao.getDvInDeviceGroupList(param);
 		int delDvCnt = 0;
 		if(delSitecnt > 0) {
 			for (HashMap<String, Object> map : deviceList) {
 				HashMap<String, Object> param2 = new HashMap<String, Object>();
 				param2.put("deviceId", map.get("device_id"));
+				param2.put("siteId", map.get("site_id"));
+				param2.put("devicetype", map.get("device_type"));
+				param2.put("modUid", param.get("modUid"));
 				int cnt = deviceGroupDao.deleteDevice(param2);
 				delDvCnt = delDvCnt+cnt;
 			}
 		}
 		
-		int resultCnt = (delDvCnt == deviceList.size()) ? delSitecnt : 0;
+		// 장치그룹 삭제
+		List<HashMap<String, Object>> deviceGrpList = deviceGroupDao.getDeviceGroupList(param);
+		int delDvGrpCnt = 0;
+		if(delSitecnt > 0) {
+			for (HashMap<String, Object> map : deviceGrpList) {
+				HashMap<String, Object> param2 = new HashMap<String, Object>();
+				param2.put("deviceGrpIdx", map.get("device_grp_idx"));
+				param2.put("modUid", param.get("modUid"));
+				int cnt = deviceGroupDao.deleteDevice(param2);
+				delDvGrpCnt = delDvGrpCnt+cnt;
+			}
+		}
+		
+		int resultCnt = (delDvCnt == deviceList.size() && delDvGrpCnt == deviceGrpList.size()) ? delSitecnt : 0;
 		return resultCnt;
 	}
 	

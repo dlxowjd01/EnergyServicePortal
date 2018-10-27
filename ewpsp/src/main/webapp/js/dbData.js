@@ -209,13 +209,15 @@ function getDeviceIOEList(selPageNum) {
 }
 
 // 장치 상세 조회(IOE)
-function getDeviceIOEDetail(deviceId) {
+function getDeviceIOEDetail(siteId, deviceId, deviceType) {
 	$.ajax({
 		url : "/getDeviceIOEDetail",
 		type : 'post',
 		async : false, // 동기로 처리해줌
 		data : {
-			deviceId : deviceId
+			siteId : siteId,
+			deviceId : deviceId,
+			deviceType : deviceType
 		},
 		success: function(result) {
 			callback_getDeviceIOEDetail(result);
@@ -239,13 +241,15 @@ function getDevicePCSList(selPageNum) {
 }
 
 //장치 상세 조회(PCS)
-function getDevicePCSDetail(deviceId) {
+function getDevicePCSDetail(siteId, deviceId, deviceType) {
 	$.ajax({
 		url : "/getDevicePCSDetail",
 		type : 'post',
 		async : false, // 동기로 처리해줌
 		data : {
-			deviceId : deviceId
+			siteId : siteId,
+			deviceId : deviceId,
+			deviceType : deviceType
 		},
 		success: function(result) {
 			callback_getDevicePCSDetail(result);
@@ -269,13 +273,15 @@ function getDeviceBMSList(selPageNum) {
 }
 
 //장치 상세 조회(BMS)
-function getDeviceBMSDetail(deviceId) {
+function getDeviceBMSDetail(siteId, deviceId, deviceType) {
 	$.ajax({
 		url : "/getDeviceBMSDetail",
 		type : 'post',
 		async : false, // 동기로 처리해줌
 		data : {
-			deviceId : deviceId
+			siteId : siteId,
+			deviceId : deviceId,
+			deviceType : deviceType
 		},
 		success: function(result) {
 			callback_getDeviceBMSDetail(result);
@@ -299,13 +305,15 @@ function getDevicePVList(selPageNum) {
 }
 
 //장치 상세 조회(PV)
-function getDevicePVDetail(deviceId) {
+function getDevicePVDetail(siteId, deviceId, deviceType) {
 	$.ajax({
 		url : "/getDevicePVDetail",
 		type : 'post',
 		async : false, // 동기로 처리해줌
 		data : {
-			deviceId : deviceId
+			siteId : siteId,
+			deviceId : deviceId,
+			deviceType : deviceType
 		},
 		success: function(result) {
 			callback_getDevicePVDetail(result);
@@ -329,14 +337,14 @@ function getDeviceList(selPageNum) {
 }
 
 // 장치그룹목록 조회
-function getDeviceGroupList(siteId) {
+function getDeviceGroupList() {
 	$.ajax({
 		url : "/getDeviceGroupList",
 		type : 'post',
 		async : false, // 동기로 처리해줌
-		data : {
-			siteId : siteId
-		},
+//		data : {
+//			siteId : siteId
+//		},
 		success: function(result) {
 			callback_getDeviceGroupList(result);
 		}

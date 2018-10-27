@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.ewp.ewpsp.dao.ApiDao;
+import kr.co.ewp.ewpsp.entity.EssCharge;
 import kr.co.ewp.ewpsp.entity.EssUsage;
 import kr.co.ewp.ewpsp.entity.Reactive;
 import kr.co.ewp.ewpsp.entity.Site;
@@ -32,6 +33,10 @@ public class ApiServiceImpl implements ApiService {
 
 	public List<EssUsage> getEssUsageListBySiteId(String siteId, Date beginDate, Date endDate) throws Exception {
 		return apiDao.getEssUsageListBySiteId(siteId, beginDate, endDate);
+	}
+	
+	public List<EssCharge> getEssChargeListBySiteId(String siteId, Date beginDate, Date endDate) throws Exception {
+		return apiDao.getEssChargeListBySiteId(siteId, beginDate, endDate);
 	}
 
 	public Site getSite(String siteId) throws Exception {

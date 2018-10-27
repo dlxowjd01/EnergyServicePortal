@@ -84,6 +84,29 @@ public class DeviceGroupController {
 	}
 	
 	/**
+	 * 장치그룹내 장치들의 알람(미조치건) 조회
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getDeviceGrpAlarmList")
+	public @ResponseBody Map<String, Object> getDeviceGrpAlarmList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
+		logger.debug("/getDeviceGrpAlarmList");
+		logger.debug("param ::::: "+param.toString());
+		
+		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
+		param.put("alarmType", 1);
+		List warningList = deviceGroupService.getDeviceGrpAlarmList(param);
+		param.put("alarmType", 2);
+		List alertList = deviceGroupService.getDeviceGrpAlarmList(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("warningList", warningList);
+		resultMap.put("alertList", alertList);
+		return resultMap;
+	}
+	
+	/**
 	 * 장치그룹내 장치목록(팝업) 조회
 	 * @param param
 	 * @return
@@ -100,6 +123,25 @@ public class DeviceGroupController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("dvInDeviceGrouplist", dvInDeviceGrouplist);
 		resultMap.put("allDvInSiteList", allDvInSiteList);
+		return resultMap;
+	}
+	
+	/**
+	 * 장치목록(사이트 전체 장치 중 장치그룹에 속하지 않은 장치) 조회
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getDeviceNotInGroupList")
+	public @ResponseBody Map<String, Object> getDeviceNotInGroupList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
+		logger.debug("/getDeviceNotInGroupList");
+		logger.debug("param ::::: "+param.toString());
+		
+		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
+		List deviceNotInGrouplist = deviceGroupService.getDeviceNotInGroupList(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("list", deviceNotInGrouplist);
 		return resultMap;
 	}
 
@@ -299,6 +341,12 @@ public class DeviceGroupController {
 		Map userInfo = UserUtil.getUserInfo(request);
 		param.put("regUid", userInfo.get("user_id"));
 		param.put("userIdx", userInfo.get("user_idx"));
+		
+		if("1".equals(param.get("deviceType")) || "2".equals(param.get("deviceType")) || "3".equals(param.get("deviceType"))) {
+			param.put("instType", 2); // localEMS
+		} else {
+			param.put("instType", 1); // enertalk
+		}
 		
 		int resultCnt = deviceGroupService.insertDevice(param);
 		

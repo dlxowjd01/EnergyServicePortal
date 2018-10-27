@@ -23,8 +23,18 @@ public class DeviceGroupDao {
 		return resultList;
 	}
 	
+	public List<HashMap<String, Object>> getDeviceGrpAlarmList(HashMap<String, Object> param) {
+		List<HashMap<String, Object>> resultList = sqlSession.selectList("deviceGroup.getDeviceGrpAlarmList", param);
+		return resultList;
+	}
+	
 	public List<HashMap<String, Object>> getAllDvInSiteList(HashMap<String, Object> param) {
 		List<HashMap<String, Object>> resultList = sqlSession.selectList("deviceGroup.getAllDvInSiteList", param);
+		return resultList;
+	}
+	
+	public List<HashMap<String, Object>> getDeviceNotInGroupList(HashMap<String, Object> param) {
+		List<HashMap<String, Object>> resultList = sqlSession.selectList("deviceGroup.getDeviceNotInGroupList", param);
 		return resultList;
 	}
 

@@ -8,6 +8,7 @@
         <result property="stdTimestamp" column="std_timestamp" javaType="Date"></result><!--기준타임스탬프-->
         <result property="stdDate" column="std_date" javaType="Date"></result><!--기준일시-->
         <result property="rctvVal" column="rctv_val" javaType="Integer"></result><!--무효전력량(단위:mVarh)-->
+        <result property="negRctvVal" column="neg_rctv_val" javaType="Integer"></result><!--무효전력량(단위:mVarh)-->
         <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
         <result property="modDate" column="mod_date" javaType="Date"></result><!--최종수정일시-->
     </resultMap>
@@ -19,6 +20,7 @@
                std_timestamp,
                std_date,
                rctv_val,
+               neg_rctv_val,
                reg_date
              ) VALUES (
                #{entity.siteId},
@@ -26,6 +28,7 @@
                #{entity.stdTimestamp},
                #{entity.stdDate},
                #{entity.rctvVal},
+               #{entity.negRctvVal},
                NOW())
         <selectKey resultType="Long" keyProperty="entity.rctvIdx">
             SELECT LAST_INSERT_ID()
@@ -40,6 +43,9 @@
                </if>
                <if test="entity.rctvVal != null">
                rctv_val = #{entity.rctvVal},
+               </if>
+               <if test="entity.negRctvVal != null">
+               neg_rctv_val = #{entity.negRctvVal},
                </if>
                mod_date = NOW(),
                </set>
@@ -58,6 +64,7 @@
                std_timestamp,
                std_date,
                rctv_val,
+               neg_rctv_val,
                reg_date,
                mod_date
           FROM tb_reactive
@@ -71,6 +78,7 @@
                std_timestamp,
                std_date,
                rctv_val,
+               neg_rctv_val,
                reg_date,
                mod_date
           FROM tb_reactive
@@ -93,6 +101,7 @@
                std_timestamp,
                std_date,
                rctv_val,
+               neg_rctv_val,
                reg_date,
                mod_date
           FROM tb_reactive
@@ -109,6 +118,7 @@
                std_timestamp,
                std_date,
                rctv_val,
+               neg_rctv_val,
                reg_date,
                mod_date
           FROM tb_reactive
@@ -121,7 +131,8 @@
         SELECT site_id,
                std_timestamp,
                std_date,
-               SUM(rctv_val) rctv_val
+               SUM(rctv_val) rctv_val,
+               SUM(neg_rctv_val) neg_rctv_val
           FROM tb_reactive
          WHERE site_id = #{siteId}
            AND std_timestamp BETWEEN #{begin} AND #{end}

@@ -4,7 +4,51 @@
 	
 	var popupYn = "N";
 	function getDBData() {
+		getDeviceNotInGroupList();
 		getDeviceGroupList();
+		
+		$('.dsec .device').bxSlider({
+	        mode:'horizontal',
+	        pager:false,
+	        slideWidth: 130,
+	        slideMargin: 20,
+	        minSlides: 1,
+	        maxSlides: 8,
+	        moveSlides: 1,
+	        pause: 4000,
+	        auto:false,
+	        controls: true,
+	        infiniteLoop: false
+	    });
+		
+		$(".device li").click(function() {
+	        $(this).toggleClass("on");
+	        var del_num = $(this).parent('.device').children('.on').length;
+	        
+	        if(del_num > 0) {
+	            $(this).parent().parent().parent().siblings('.device_del').show();
+	        } else {
+	            $(this).parent().parent().parent().siblings('.device_del').hide();
+	        }
+	    });
+	}
+	
+	// 장치그룹에 속하지 않은 장치목록 조회
+	function getDeviceNotInGroupList() {
+		$.ajax({
+			url : "/getDeviceNotInGroupList",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+//			data : formData,
+			success: function(result) {
+				$div = $(".dg_wrap");
+				$div.empty();
+				$div.append( '<h2 class="dtit">그룹 없음</h2>' );
+				callback_getDvInDeviceGroupList(result, 0);
+				
+				getDeviceGrpAlarmList(0);
+	   		}
+		});
 		
 	}
 	
@@ -14,7 +58,7 @@
 		
 		if(popupYn == "N") {
 			$div = $(".dg_wrap");
-			$div.empty();
+//			$div.empty();
 			if(deviceGroupList == null || deviceGroupList.length < 1) {
 				$div.append( '<h2 class="dtit">조회 결과가 없습니다.</h2>' );
 			} else {
@@ -22,48 +66,9 @@
 					$div.append( '<h2 class="dtit">'+deviceGroupList[i].device_grp_name+'</h2>' );
 					getDvInDeviceGroupList(deviceGroupList[i].device_grp_idx);
 					
-					$('.dsec').last().append(
-							$('<div class="fr clear" />').append(
-									$('<dl class="aler fl" />').append(
-											'<dt><span>ALERT</span> <em>0</em></dt>'+
-											'<dd><p></p></dd>'
-									)
-							).append(
-									$('<dl class="warn fr" />').append(
-											'<dt><span>WARNNING</span> <em>1</em></dt>'+
-											'<dd><p>PCS_1</p></dd>'
-									)
-							)
-					)
-					
+					getDeviceGrpAlarmList(deviceGroupList[i].device_grp_idx);
 				}
-				
 			}
-			
-		    $('.dsec .device').bxSlider({
-		        mode:'horizontal',
-		        pager:false,
-		        slideWidth: 130,
-		        slideMargin: 20,
-		        minSlides: 1,
-		        maxSlides: 8,
-		        moveSlides: 1,
-		        pause: 4000,
-		        auto:false,
-		        controls: true,
-		        infiniteLoop: false
-		    });
-		    
-		    $(".device li").click(function() {
-		        $(this).toggleClass("on");
-		        var del_num = $(this).parent('.device').children('.on').length;
-		        //alert(del_num);
-		        if(del_num > 0) {
-		            $(this).parent().parent().parent().siblings('.device_del').show();
-		        } else {
-		            $(this).parent().parent().parent().siblings('.device_del').hide();
-		        }
-		    });
 			
 		} else if(popupYn == "Y") {
 			if(siteViewFlag == 2) {
@@ -76,9 +81,7 @@
 						$insideSite.find("ul").append(
 								$("<li />").append('<a href="#;" onclick="selectBoxTextApply(this);changeSelDeviceGrp(\''+deviceGroupList[i].device_grp_idx+'\');">'+deviceGroupList[i].device_grp_name+'</a>')
 						);
-						
 					}
-					
 				}
 				
 			} else if(siteViewFlag == 3) {
@@ -92,18 +95,16 @@
 						$("#selectSiteId").val(deviceGroupList[i].site_id);
 						dvGrps = dvGrps+deviceGroupList[i].device_grp_idx+",";
 						$tbody.append(
-								$('<tr />').append( 
-										$("<td />").append( (i+1) )
+								$('<tr />').append(  $("<td />").append( (i+1) )
 								).append( $("<td />").append( 
 										deviceGroupList[i].device_grp_name+'<input type="hidden" name="dvGrpIds" value="'+deviceGroupList[i].device_grp_idx+'">' 
-										)
+								)
 								).append(
 										$("<td />").append( '<a href="#;" onclick="deleteLine(this);"><i class="glyphicon glyphicon-remove"></i></a>' )
 								)
 						);
 					}
 					$("#nowDvGrpIds").val(dvGrps.slice(0, -1));
-					
 				}
 				
 			}
@@ -119,9 +120,7 @@
 		if(deviceList == null || deviceList.length < 1) {
 			addHtml += "조회 결과가 없습니다.";
 		} else {
-//			var deviceGroupIdx = "";
 			for(var i=0; i<deviceList.length; i++) {
-//				if(i == 0) deviceGroupIdx = deviceList[i].device_grp_idx;
 				var strHtml = ""
 				if(deviceList[i].device_type == 4) strHtml = '<li class="ioe">'; 
 				else if(deviceList[i].device_type == 1) strHtml = '<li class="pcs" ondblclick="goLEMSPage(\'/lems/setting/pcs\')">'; 
@@ -146,6 +145,46 @@
 				)
 		) )
 		
+	}
+	
+	function getDeviceGrpAlarmList(deviceGrpIdx) {
+		$.ajax({
+			url : "/getDeviceGrpAlarmList",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+			data : {
+				deviceGrpIdx : deviceGrpIdx
+			},
+			success: function(result) {
+				var warningList = result.warningList;
+				var alertList = result.alertList;
+				console.log(warningList);
+				var warningCnt = 0;
+				var alertCnt = 0;
+				var warningStr = "";
+				var alertStr = "";
+				if(warningList != null && warningList.length > 0) {
+					for(var i=0; i<warningList.length; i++) {
+						warningStr += "<p>"+warningList[i].device_name+"</p>";
+						warningCnt = warningCnt+warningList[i].cnt;
+					}
+				}
+				if(alertList != null && alertList.length > 0) {
+					for(var i=0; i<alertList.length; i++) {
+						alertStr += "<p>"+alertList[i].device_name+"</p>";
+						alertCnt = alertCnt+alertList[i].cnt;
+					}
+				}
+				
+				$('.dsec').last().append(
+						$('<div class="fr clear" />').append( $('<dl class="aler fl" />').append(
+								'<dt><span>ALERT</span> <em>'+alertCnt+'</em></dt><dd>'+alertStr+'</dd>' )
+						).append( $('<dl class="warn fr" />').append(
+								'<dt><span>WARNNING</span> <em>'+warningCnt+'</em></dt><dd>'+warningStr+'</dd>' )
+						)
+				)
+			}
+		});
 	}
 	
 	function insertDeviceForm(deviceGrpIdx) {

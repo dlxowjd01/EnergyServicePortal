@@ -10,7 +10,11 @@ public interface DeviceGroupService {
 	
 	List getDvInDeviceGroupList(HashMap param) throws Exception;
 	
+	List getDeviceGrpAlarmList(HashMap param) throws Exception;
+	
 	List getAllDvInSiteList(HashMap param) throws Exception;
+	
+	List getDeviceNotInGroupList(HashMap param) throws Exception;
 
 	int deleteDeviceGroup(HashMap param) throws Exception;
 	

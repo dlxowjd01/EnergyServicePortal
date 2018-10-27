@@ -30,6 +30,26 @@
 		</if>
 	</select>
 	
+	<select id="getDeviceGrpAlarmList" parameterType="hashMap" resultType="hashMap">
+		/* 장치그룹내 장치들의 알람(미조치건) 조회 */
+		select 
+			b.site_id, b.device_id, b.device_type, a.alarm_type, a.cnt, b.device_name
+		from (
+			select 
+				site_id, device_id, device_type, alarm_type, count(*) as cnt
+			from tb_alarm
+			where 1=1
+			and alarm_act_yn = 'N'
+			and alarm_type = #{alarmType }
+			group by site_id, device_id, device_type, alarm_type
+		) a left outer join tb_device b
+		on a.site_id = b.site_id
+		and a.device_id = b.device_id
+		and a.device_type = b.device_type
+		where b.site_id = #{siteId }
+		and b.device_grp_idx = #{deviceGrpIdx }
+	</select>
+	
 	<select id="getAllDvInSiteList" parameterType="hashMap" resultType="hashMap">
 		/* 장치목록(사이트 전체 장치 중 특정 장치그룹 제외) 조회 */
 		select 
@@ -43,6 +63,17 @@
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(deviceGrpIdx)">
 		and (device_grp_idx !=  #{deviceGrpIdx } or device_grp_idx is null)
 		</if>
+	</select>
+	
+	<select id="getDeviceNotInGroupList" parameterType="hashMap" resultType="hashMap">
+		/* 장치목록(사이트 전체 장치 중 장치그룹에 속하지 않은 장치) 조회 */
+		select 
+			device_id, site_id, user_idx, device_name, device_grp_idx, device_type, inst_type, del_yn, reg_uid, reg_date, mod_uid, mod_date 
+		from tb_device
+		where 1=1
+		and del_yn = 'N'
+		and site_id =  #{siteId }
+		and (device_grp_idx is null or device_grp_idx = 0)
 	</select>
 	
 	<update id="deleteDeviceGroup" parameterType="hashMap">
@@ -136,10 +167,9 @@
 		    mod_uid       = #{modUid }, 
 		    mod_date      = now()
 		where 1=1
-		<!-- <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 		and site_id = #{siteId }
-		</if> -->
 		and device_id = #{deviceId }
+		and device_type = #{deviceType }
 	</update>
 	
 </mapper>

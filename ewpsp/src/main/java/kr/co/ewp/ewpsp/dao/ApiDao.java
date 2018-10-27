@@ -9,6 +9,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import kr.co.ewp.ewpsp.entity.EssCharge;
 import kr.co.ewp.ewpsp.entity.EssUsage;
 import kr.co.ewp.ewpsp.entity.Reactive;
 import kr.co.ewp.ewpsp.entity.Site;
@@ -50,6 +51,15 @@ public class ApiDao {
 		param.put("beginDate", begin);
 		param.put("endDate", end);
 		List<EssUsage> resultList = sqlSession.selectList("kr.co.ewp.api.dao.EssUsageDao.selectEssUsageListBySiteId", param);
+		return resultList;
+	}
+	
+	public List<EssCharge> getEssChargeListBySiteId(String siteId, Date begin, Date end) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("siteId", siteId);
+		param.put("beginDate", begin);
+		param.put("endDate", end);
+		List<EssCharge> resultList = sqlSession.selectList("kr.co.ewp.api.dao.EssChargeDao.selectEssChargeListBySiteId", param);
 		return resultList;
 	}
 
