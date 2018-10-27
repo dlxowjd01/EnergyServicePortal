@@ -104,7 +104,7 @@ public class ExcelDownload {
 		while (paramKeys.hasNext()) {
 			String name = paramKeys.next();
 //			logger.debug("rownum : "+rowNum+", cell name : "+name+", "+excelMap.get(name)+", "+cellNum);
-			if(!name.contains("_idx")) {
+			if( !(name.contains("_idx") || name.contains("device_type") || name.contains("inst_type") || name.contains("site_id")) ) {
 				cell = row.createCell(cellNum);
 				if("reg_date".equals(name) || "std_date".equals(name)) {
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

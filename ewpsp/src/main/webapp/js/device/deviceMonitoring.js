@@ -31,7 +31,7 @@
 						).append( $("<td />").append( ioeList[i].device_stat_name )
 						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
-								$("<td />").append( '<a href="#;" onclick="getDeviceIOEDetail(\''+ioeList[i].device_id+'\');" class="detail_view">상세보기</a>' )
+								$("<td />").append( '<a href="#;" onclick="getDeviceIOEDetail(\''+ioeList[i].site_id+"\', \'"+ioeList[i].device_id+"\', \'"+ioeList[i].device_type+'\');" class="detail_view">상세보기</a>' )
 						)
 				);
 			}
@@ -95,10 +95,10 @@
 									) 
 							).append(
 									$('<tbody />').append( 
-											$('<tr />').append( $("<td />").append(ioeDetail.sys_soc) // soc
-											).append( $("<td />").append(  (ioeDetail.sys_soh == "" || ioeDetail.sys_soh == null) ? "-" : ioeDetail.sys_soh  ) // soh
-											).append( $("<td />").append(  (ioeDetail.curr_soc == "" || ioeDetail.curr_soc == null) ? "-" : ioeDetail.curr_soc  ) // soc 현재
-											).append( $("<td />").append(  (ioeDetail.sys_voltage == "" || ioeDetail.sys_voltage == null) ? "-" : ioeDetail.sys_voltage  ) // 출력전압
+											$('<tr />').append( $("<td />").append(  (ioeDetail.voltage == "" || ioeDetail.voltage == null) ? "-" : ioeDetail.voltage  ) 
+											).append( $("<td />").append(  (ioeDetail.activePower == "" || ioeDetail.activePower == null) ? "-" : ioeDetail.activePower  ) 
+											).append( $("<td />").append(  (ioeDetail.energy == "" || ioeDetail.energy == null) ? "-" : ioeDetail.energy  ) 
+											).append( $("<td />").append(  (ioeDetail.energyReactive == "" || ioeDetail.energyReactive == null) ? "-" : ioeDetail.energyReactive  ) 
 											)  
 									)
 							)
@@ -132,7 +132,7 @@
 						).append( $('<td class="ellipsis mxw400" />').append( pcsList[i].alarm_msg )
 						).append( $('<td />').append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
-								$("<td />").append( '<a href="#;" onclick="getDevicePCSDetail(\''+pcsList[i].device_id+'\');" class="detail_view">상세보기</a>' )
+								$("<td />").append( '<a href="#;" onclick="getDevicePCSDetail(\''+pcsList[i].site_id+"\', \'"+pcsList[i].device_id+"\', \'"+pcsList[i].device_type+'\');" class="detail_view">상세보기</a>' )
 						)
 				);
 			}
@@ -261,7 +261,7 @@
 						).append( $('<td class="ellipsis mxw400" />').append( bmsList[i].alarm_msg )
 						).append( $('<td />').append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
-								$("<td />").append( '<a href="#;" onclick="getDeviceBMSDetail(\''+bmsList[i].device_id+'\');" class="detail_view">상세보기</a>' )
+								$("<td />").append( '<a href="#;" onclick="getDeviceBMSDetail(\''+bmsList[i].site_id+"\', \'"+bmsList[i].device_id+"\', \'"+bmsList[i].device_type+'\');" class="detail_view">상세보기</a>' )
 						)
 				);
 			}
@@ -371,7 +371,7 @@
 						).append( $('<td class="ellipsis mxw400" />').append( pvList[i].alarm_msg )
 						).append( $('<td />').append( tm.format("yyyy-MM-dd HH:mm:ss") )
 						).append(
-								$("<td />").append( '<a href="#;" onclick="getDevicePVDetail(\''+pvList[i].device_id+'\');" class="detail_view">상세보기</a>' )
+								$("<td />").append( '<a href="#;" onclick="getDevicePVDetail(\''+pvList[i].site_id+"\', \'"+pvList[i].device_id+"\', \'"+pvList[i].device_type+'\');" class="detail_view">상세보기</a>' )
 						)
 				);
 			}

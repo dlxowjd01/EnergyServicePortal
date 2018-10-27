@@ -32,9 +32,10 @@ import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.TimeType;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.UsageType;
 import kr.co.ewp.ewpsp.common.util.PMGrowApiUtil;
 import kr.co.ewp.ewpsp.common.util.UserUtil;
-import kr.co.ewp.ewpsp.model.Soc;
+import kr.co.ewp.ewpsp.model.SocModel;
 import kr.co.ewp.ewpsp.model.UsageItemModel;
 import kr.co.ewp.ewpsp.model.UsageModel;
+import kr.co.ewp.ewpsp.model.UsageRealtimeModel;
 import kr.co.ewp.ewpsp.service.AlarmService;
 import kr.co.ewp.ewpsp.service.CmpyGrpSiteMngService;
 import kr.co.ewp.ewpsp.service.DeviceMonitoringService;
@@ -110,7 +111,7 @@ public class ApiController {
 				Map<String, Object> devices = new HashMap<String, Object>();
 				devices = (Map<String, Object>) deviceList.get(i);
 				String deviceId = (String) devices.get("device_id");
-				Soc resSoc = PMGrowApiUtil.getSoc(host, deviceId);
+				SocModel resSoc = PMGrowApiUtil.getSoc(host, deviceId);
 				if(resSoc != null) {
 					int soc = Integer.parseInt(resSoc.getSoc());
 					totalSoc = totalSoc+soc;
@@ -223,4 +224,10 @@ public class ApiController {
 
 		return result;
 	}
+	
+	public UsageRealtimeModel getDeviceRealTimeTest(String deviceId) {
+		UsageRealtimeModel usageRealtime = EnertalkApiUtil.getDeviceRealTime(deviceId);
+		return usageRealtime;
+	}
+	
 }

@@ -5,14 +5,14 @@
 	<select id="getDeviceIOEList" parameterType="hashMap" resultType="java.util.LinkedHashMap">
 		select
 			rnum, device_ioe_idx, device_name, device_id, concat('(', inst_type_nm, ')', device_type_nm) as device_type_nm, 
-			device_stat_name, upload_timestamp
+			device_type, site_id, device_stat_name, upload_timestamp
 		from (
 			select 
 				@rownum := @rownum + 1 as rnum,
 				page_tb.*
 			from (
 					select 
-						a.device_id, a.device_name, 
+						a.device_id, a.device_name, a.site_id, a.device_type, 
 						case a.device_type when 1 then 'PCS'
 							when 2 then 'BMS'
 							when 3 then 'PV'
@@ -69,7 +69,7 @@
 				page_tb.*
 			from (
 					select 
-						a.device_id, a.device_name, 
+						a.device_id, a.device_name, a.site_id, a.device_type, 
 						case a.device_type when 1 then 'PCS'
 							when 2 then 'BMS'
 							when 3 then 'PV'
@@ -122,7 +122,8 @@
 			, b.upload_timestamp, b.upload_date, b.device_stat, b.device_ioe_idx
 		from (
 				select 
-					device_id, device.site_id, device.user_idx, device_name, device.device_grp_idx, device_type, inst_type, 
+					device.device_id, device.site_id, device.user_idx, device.device_name, device.device_grp_idx, 
+					device.device_type, device.inst_type, 
 					case device_type when 1 then 'PCS'
 						when 2 then 'BMS'
 						when 3 then 'PV'
@@ -159,20 +160,22 @@
 		on a.device_id = b.device_id
 		, tb_site site
 		where a.site_id = site.site_id
+		and a.site_id = #{siteId }
 		and a.device_id = #{deviceId }
+		and a.device_type = #{deviceType }
 	</select>
 	
 	<select id="getDevicePCSList" parameterType="hashMap" resultType="java.util.LinkedHashMap">
 		select 
 			rnum, device_pcs_idx, device_name, device_id, concat('(', inst_type_nm, ')', device_type_nm) as device_type_nm, 
-			device_stat_name, cd_status, alarm_msg, std_date
+			device_type, site_id, device_stat_name, cd_status, alarm_msg, std_date
 		from (
 			select 
 				@rownum := @rownum + 1 as rnum,
 				page_tb.*
 			from (
 					select 
-						a.device_id, a.device_name, 
+						a.device_id, a.device_name, a.site_id, a.device_type, 
 						case a.device_type when 1 then 'PCS'
 							when 2 then 'BMS'
 							when 3 then 'PV'
@@ -230,7 +233,7 @@
 				page_tb.*
 			from (
 					select 
-						a.device_id, a.device_name, 
+						a.device_id, a.device_name, a.site_id, a.device_type, 
 						case a.device_type when 1 then 'PCS'
 							when 2 then 'BMS'
 							when 3 then 'PV'
@@ -331,20 +334,22 @@
 		on a.device_id = b.device_id
 		, tb_site site
 		where a.site_id = site.site_id
+		and a.site_id = #{siteId }
 		and a.device_id = #{deviceId }
+		and a.device_type = #{deviceType }
 	</select>
 	
 	<select id="getDeviceBMSList" parameterType="hashMap" resultType="java.util.LinkedHashMap">
 		select 
 			rnum, device_bms_idx, device_name, device_id, concat('(', inst_type_nm, ')', device_type_nm) as device_type_nm, 
-			device_stat_name, cd_status, alarm_msg, std_date
+			device_type, site_id, device_stat_name, cd_status, alarm_msg, std_date
 		from (
 			select 
 				@rownum := @rownum + 1 as rnum,
 				page_tb.*
 			from (
 					select 
-						a.device_id, a.device_name, 
+						a.device_id, a.device_name, a.site_id, a.device_type, 
 						case a.device_type when 1 then 'PCS'
 							when 2 then 'BMS'
 							when 3 then 'PV'
@@ -405,7 +410,7 @@
 				page_tb.*
 			from (
 					select 
-						a.device_id, a.device_name, 
+						a.device_id, a.device_name, a.site_id, a.device_type, 
 						case a.device_type when 1 then 'PCS'
 							when 2 then 'BMS'
 							when 3 then 'PV'
@@ -506,20 +511,22 @@
 		on a.device_id = b.device_id
 		, tb_site site
 		where a.site_id = site.site_id
+		and a.site_id = #{siteId }
 		and a.device_id = #{deviceId }
+		and a.device_type = #{deviceType }
 	</select>
 	
 	<select id="getDevicePVList" parameterType="hashMap" resultType="java.util.LinkedHashMap">
 		select 
 			rnum, device_pv_idx, device_name, device_id, concat('(', inst_type_nm, ')', device_type_nm) as device_type_nm, 
-			device_stat_name, temp, alarm_msg, std_date
+			device_type, site_id, device_stat_name, temp, alarm_msg, std_date
 		from (
 			select 
 				@rownum := @rownum + 1 as rnum,
 				page_tb.*
 			from (
 					select 
-						a.device_id, a.device_name, 
+						a.device_id, a.device_name, a.site_id, a.device_type, 
 						case a.device_type when 1 then 'PCS'
 							when 2 then 'BMS'
 							when 3 then 'PV'
@@ -574,7 +581,7 @@
 				page_tb.*
 			from (
 					select 
-						a.device_id, a.device_name, 
+						a.device_id, a.device_name, a.site_id, device_type,
 						case a.device_type when 1 then 'PCS'
 							when 2 then 'BMS'
 							when 3 then 'PV'
@@ -664,7 +671,9 @@
 		on a.device_id = b.device_id
 		, tb_site site
 		where a.site_id = site.site_id
+		and a.site_id = #{siteId }
 		and a.device_id = #{deviceId }
+		and a.device_type = #{deviceType }
 	</select>
 	
 	<select id="getDeviceList" parameterType="hashMap" resultType="hashMap">

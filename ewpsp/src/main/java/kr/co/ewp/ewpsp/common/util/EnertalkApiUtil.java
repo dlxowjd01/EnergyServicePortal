@@ -5,20 +5,18 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import kr.co.ewp.ewpsp.common.config.Constants;
 //import kr.co.ewp.api.model.DeviceModel;
 //import kr.co.ewp.api.model.DrPaymentModel;
 //import kr.co.ewp.api.model.DrRequestTarget;
 import kr.co.ewp.ewpsp.model.UsageModel;
+import kr.co.ewp.ewpsp.model.UsageRealtimeModel;
 
 public class EnertalkApiUtil {
 	
@@ -42,29 +40,6 @@ public class EnertalkApiUtil {
 
   private static final String API_URL = Constants.ENERTALK_API_URL;
 
-//  public static UsageModel getUsagePeriodicByDeviceId(String deviceId, Period period, Date start, Date end, TimeType timeType, UsageType usageType, PrettyLog prettyLog) {
-//    prettyLog.start("EnertalkApiUtil.getUsageByDeviceId", "ERROR");
-//    String resultBody = null;
-//    try {
-//      StringBuffer url = new StringBuffer(API_URL + "/devices/").append(deviceId).append("/usages/periodic");
-//      url.append("?timeType=").append(timeType);
-//      url.append("&usageType=").append(usageType);
-//      url.append("&period=").append(period);
-//      url.append("&start=").append(start.getTime());
-//      url.append("&end=").append(end.getTime());
-//      prettyLog.append("URL", url);
-//      HttpHeaders headers = getHeaders();
-//      resultBody = HttpUtil.get(url.toString(), headers);
-//      return JsonUtil.toObject(resultBody, UsageModel.class);
-//    } catch (Exception e) {
-//      prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
-//      throw e;
-//    } finally {
-//      prettyLog.append("RESULT", resultBody);
-//      prettyLog.stop();
-//    }
-//  }
-  
   public static UsageModel getUsagePeriodicByDeviceId(String deviceId, Period period, Date start, Date end, TimeType timeType, UsageType usageType) {
 	  logger.debug("EnertalkApiUtil.getUsageByDeviceId");
 	  String resultBody = null;
@@ -114,152 +89,42 @@ public class EnertalkApiUtil {
 		  return returnUsage;
 	  }
   }
-//  public static UsageModel getUsagePeriodicByDeviceId(String deviceId, Period period, Date start, Date end, TimeType timeType, UsageType usageType) {
-//	  logger.debug("EnertalkApiUtil.getUsageByDeviceId");
-//	  String resultBody = null;
-//	  UsageModel returnUsage = null;
-//	  try {
-//		  StringBuffer url = new StringBuffer(API_URL + "/devices/").append(deviceId).append("/usages/periodic");
-//		  url.append("?timeType=").append(timeType);
-//		  url.append("&usageType=").append(usageType);
-//		  url.append("&period=").append(period);
-//		  url.append("&start=").append(start.getTime());
-//		  url.append("&end=").append(end.getTime());
-//		  
-//		  logger.debug("enertalk api URL : "+ url);
-//		  HttpHeaders headers = getHeaders();
-//		  resultBody = HttpUtil.get(url.toString(), headers);
-//		  logger.debug("result "+resultBody);
-//		  return JsonUtil.toObject(resultBody, UsageModel.class);
-//	  } catch (Exception e) {
-////		  e.printStackTrace();
-//		  logger.error("error is : "+e.toString());
-//	  } finally {
-//		  logger.debug("EnertalkApiUtil.getUsageByDeviceId end");
-//		  return returnUsage;
-//	  }
-//  }
-
-  public static void getDevice(String deviceId) {
-	  logger.debug("EnertalkApiUtil.getDevice");
-    String resultBody = null;
-    try {
-      String url = API_URL + "/devices/:deviceId".replace(":deviceId", deviceId);
-      logger.debug("enertalk api URL : "+ url);
-      HttpHeaders headers = getHeaders();
-      resultBody = HttpUtil.get(url, headers);
-      logger.debug("결과!!===> "+resultBody);
-//      return JsonUtil.toObject(resultBody, DeviceModel.class);
-    } catch (Exception e) {
-    	e.printStackTrace();
-		logger.error("error is : "+e.toString());
-    } finally {
-    	logger.debug("EnertalkApiUtil.getDevice end");
-    }
+  
+  public static UsageRealtimeModel getDeviceRealTime(String deviceId) {
+	  logger.debug("EnertalkApiUtil.getUsageByDeviceId");
+	  System.out.println("                                  deviceId    "+deviceId);
+	  String resultBody = null;
+	  UsageRealtimeModel usageRealtime = null;
+	  try {
+		  String url = API_URL + "/devices/:deviceId/usages/realtime".replace(":deviceId", deviceId);
+		  logger.debug("URL", url);
+		  HttpHeaders headers = getHeaders();
+		  resultBody = HttpUtil.get(url, headers);
+		  System.out.println("         resultBody는      "+resultBody);
+		  usageRealtime = JsonUtil.toObject(resultBody, UsageRealtimeModel.class);
+	  } catch (Exception e) {
+		  logger.error("error is : "+e.toString());
+	  } finally {
+		  logger.debug("EnertalkApiUtil.getDeviceRealTime end");
+		  return usageRealtime;
+	  }
   }
 
-//  public static UsageModel getUsagePeriodicBySiteId(String siteId, Period period, Date start, Date end, TimeType timeType, UsageType usageType, PrettyLog prettyLog) {
-//    prettyLog.start("EnertalkApiUtil.getUsagePeriodicBySiteId", "ERROR");
-//    String resultBody = null;
-//    try {
-//      StringBuffer url = new StringBuffer(API_URL + "/sites/").append(siteId).append("/usages/periodic");
-//      url.append("?timeType=").append(timeType);
-//      url.append("&usageType=").append(usageType);
-//      url.append("&period=").append(period);
-//      url.append("&start=").append(start.getTime());
-//      url.append("&end=").append(end.getTime());
-//      prettyLog.append("URL", url);
-//      HttpHeaders headers = getHeaders();
-//      resultBody = HttpUtil.get(url.toString(), headers);
-//      return JsonUtil.toObject(resultBody, UsageModel.class);
-//    } catch (Exception e) {
-//      prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
-//      prettyLog.append("RESULT", resultBody);
-//      throw e;
-//    } finally {
-//      prettyLog.stop();
-//    }
-//  }
-//
-//  public static List<DeviceModel> getDevices(String siteId, PrettyLog prettyLog) {
-//    String resultBody = null;
-//    prettyLog.start("EnertalkApiUtil.getDevices", "ERROR");
-//    try {
-//      String url = API_URL + "/sites/:siteId/devices".replace(":siteId", siteId);
-//      prettyLog.append("URL", url);
-//      HttpHeaders headers = getHeaders();
-//      resultBody = HttpUtil.get(url, headers);
-//      return JsonUtil.toObject(resultBody, new TypeReference<List<DeviceModel>>() {
-//      });
-//    } catch (Exception e) {
-//      prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
-//      throw e;
-//    } finally {
-//      prettyLog.append("RESULT", resultBody);
-//      prettyLog.stop();
-//    }
-//  }
-//
-//  public static DeviceModel getDevice(String deviceId, PrettyLog prettyLog) {
-//    prettyLog.start("EnertalkApiUtil.getDevice", "ERROR");
+//  public static void getDevice(String deviceId) {
+//	  logger.debug("EnertalkApiUtil.getDevice");
 //    String resultBody = null;
 //    try {
 //      String url = API_URL + "/devices/:deviceId".replace(":deviceId", deviceId);
-//      prettyLog.append("URL", url);
+//      logger.debug("enertalk api URL : "+ url);
 //      HttpHeaders headers = getHeaders();
 //      resultBody = HttpUtil.get(url, headers);
-//      return JsonUtil.toObject(resultBody, DeviceModel.class);
+//      logger.debug("결과!!===> "+resultBody);
+////      return JsonUtil.toObject(resultBody, DeviceModel.class);
 //    } catch (Exception e) {
-//      prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
-//      prettyLog.append("RESULT", resultBody);
-//      throw e;
+//    	e.printStackTrace();
+//		logger.error("error is : "+e.toString());
 //    } finally {
-//      prettyLog.stop();
-//    }
-//  }
-//
-//  public static List<DrRequestTarget> getDrRequest(String siteId, int offset, int limit, PrettyLog prettyLog) {
-//    prettyLog.start("EnertalkApiUtil.getDrRequest", "ERROR");
-//    String resultBody = null;
-//    try {
-//      StringBuffer url = new StringBuffer(API_URL + "/dr/requests");
-//      url.append("?siteId=").append(siteId);
-//      url.append("&offset=").append(offset);
-//      url.append("&limit=").append(limit);
-//      prettyLog.append("URL", url);
-//      HttpHeaders headers = getHeaders();
-//      resultBody = HttpUtil.get(url.toString(), headers);
-//      return JsonUtil.toObject(resultBody, new TypeReference<List<DrRequestTarget>>() {
-//      });
-//    } catch (Exception e) {
-//      prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
-//      throw e;
-//    } finally {
-//      prettyLog.append("RESULT", resultBody);
-//      prettyLog.stop();
-//    }
-//  }
-//
-//  public static List<DrPaymentModel> getDrPayments(String siteId, String beginMonth, String endMonth, PrettyLog prettyLog) {
-//    prettyLog.start("EnertalkApiUtil.getDrPayments", "ERROR");
-//    String resultBody = null;
-//    try {
-//      // FIXME : getDrPayments 이것만 host가 다른데 임시야?
-//      // StringBuffer url = new StringBuffer(API_URL + "/dr/sites/:siteId/payments".replace(":siteId", siteId));
-//      StringBuffer url = new StringBuffer("https://dr-hk-tmp.enertalk.com" + "/dr/sites/:siteId/payments".replace(":siteId", siteId));
-//      url.append("?startMonth=").append(beginMonth);
-//      url.append("&endMonth=").append(endMonth);
-//      prettyLog.append("URL", url);
-//      HttpHeaders headers = getHeaders();
-//      resultBody = HttpUtil.get(url.toString(), headers);
-//      return JsonUtil.toObject(resultBody, new TypeReference<List<DrPaymentModel>>() {
-//      });
-//    } catch (Exception e) {
-//      prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
-//      throw e;
-//    } finally {
-//      prettyLog.append("RESULT", resultBody);
-//      prettyLog.stop();
+//    	logger.debug("EnertalkApiUtil.getDevice end");
 //    }
 //  }
 

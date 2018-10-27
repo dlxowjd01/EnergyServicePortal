@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.ewp.ewpsp.model.UsageRealtimeModel;
 import kr.co.ewp.ewpsp.service.DeviceMonitoringService;
 
 @Controller
@@ -75,6 +76,12 @@ public class DeviceMonitoringController {
 		logger.debug("param ::::: "+param.toString());
 		
 		Map result = deviceMonitoringService.getDeviceIOEDetail(param);
+		ApiController api = new ApiController();
+		UsageRealtimeModel usageRealtime = api.getDeviceRealTimeTest((String) param.get("deviceId"));
+		result.put("voltage", (usageRealtime == null) ? null : usageRealtime.getVoltage());
+		result.put("activePower", (usageRealtime == null) ? null : usageRealtime.getActivePower());
+		result.put("energy", (usageRealtime == null) ? null : usageRealtime.getPositiveEnergy()+usageRealtime.getNegativeEnergy());
+		result.put("energyReactive", (usageRealtime == null) ? null : usageRealtime.getPositiveEnergyReactive()+usageRealtime.getNegativeEnergyReactive());
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);

@@ -1,6 +1,6 @@
 package kr.co.ewp.ewpsp.model;
 
-public class Soc {
+public class SocModel {
 	private String equipmentId;//
 	private String retriveTime;// YYYYMMDD
 	private String soc;//
