@@ -35,14 +35,15 @@ import kr.co.ewp.ewpsp.common.util.EncoredApiUtil;
 import kr.co.ewp.ewpsp.common.util.EncoredApiUtil.Period;
 import kr.co.ewp.ewpsp.common.util.ValidateUtil;
 import kr.co.ewp.ewpsp.entity.Bill;
+import kr.co.ewp.ewpsp.entity.EssCharge;
 import kr.co.ewp.ewpsp.entity.EssUsage;
 import kr.co.ewp.ewpsp.entity.Reactive;
 import kr.co.ewp.ewpsp.entity.Site;
 import kr.co.ewp.ewpsp.entity.SiteSet;
 import kr.co.ewp.ewpsp.entity.Usage;
+import kr.co.ewp.ewpsp.model.BillItemModel;
 import kr.co.ewp.ewpsp.model.BillRequestModel;
 import kr.co.ewp.ewpsp.model.BillResponseModel;
-import kr.co.ewp.ewpsp.model.BillResponseModel.Item;
 import kr.co.ewp.ewpsp.model.EnergyModel;
 import kr.co.ewp.ewpsp.model.EssModel;
 import kr.co.ewp.ewpsp.model.PeakHistoryModel;
@@ -257,7 +258,6 @@ public class SiteMainController {
 	    int resultCnt = 0;
 	    for (Site site : siteList) {
 	      String _siteId = site.getSiteId();
-//	      SiteSet siteSet = siteService.getSiteSet(_siteId);
 	      SiteSet siteSet = apiService.getSiteSet(_siteId); // 10.23 변경중
 	      if (siteSet == null) {
 	        logger.debug("WARN  ///  "+ _siteId + " SiteSet is null");
@@ -270,71 +270,69 @@ public class SiteMainController {
 	      Date _end = null;
 	      Integer lastDate = null;
 	      if (begin == null) {
-	        Calendar calendar = DateUtil.getCalendar();
-	        calendar.add(Calendar.MONTH, -2);
-	        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));// 2달전 마지막날
-	        lastDate = Integer.parseInt(DateUtil.dateToString(calendar, "dd"));
-	        calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
-	        calendar.add(Calendar.DATE, 1);
-	        DateUtil.truncateHms(calendar);
-	        _begin = calendar.getTime();// 오늘기준 2달전 검침일 다음날
+	  		Calendar cal = Calendar.getInstance();
+	  		cal.setTimeInMillis(   (new Date()).getTime()   );
+//	  		cal.set(2018, 8-1, 1, 0, 0, 0);
+	  		cal.set(Calendar.DATE, 1);
+	  		DateUtil.truncateHms(cal);
+	  		_begin = cal.getTime();
 	      } else {
-	        Calendar calendar = DateUtil.getCalendar(begin);
-	        calendar.add(Calendar.MONTH, -1);
-	        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));// 1달전 마지막날
-	        lastDate = Integer.parseInt(DateUtil.dateToString(calendar, "dd"));
-	        calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
-	        calendar.add(Calendar.DATE, 1);
-	        DateUtil.truncateHms(calendar);
-	        _begin = calendar.getTime();// 시작일 기준 1달전 검침일 다음날
+	    	  Calendar cal = Calendar.getInstance();
+		  		cal.setTimeInMillis(   begin.getTime()   );
+//		  		cal.set(2018, 8-1, 1, 0, 0, 0);
+		  		cal.set(Calendar.DATE, 1);
+		  		DateUtil.truncateHms(cal);
+		  		_begin = cal.getTime();
 	      }
 	      if (end == null) {
-	        Calendar calendar = DateUtil.getCalendar();
-	        calendar.add(Calendar.MONTH, 1);
-	        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
-	        lastDate = Integer.parseInt(DateUtil.dateToString(calendar, "dd"));
-	        calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
-	        DateUtil.truncateHms(calendar);
-	        _end = calendar.getTime();// 다음달 검침일
+	    	Calendar cal2 = Calendar.getInstance();
+	  		cal2.setTimeInMillis(   (new Date()).getTime()   );
+//	  		cal2.set(2018, 8-1, 31, 23, 59, 59);
+	  		cal2.set(Calendar.DATE, cal2.getActualMaximum(Calendar.DAY_OF_MONTH));
+	  		cal2.set(Calendar.HOUR, 23);
+	  	    cal2.set(Calendar.MINUTE, 45);
+	  	    cal2.set(Calendar.SECOND, 00);
+	  		_end = cal2.getTime();
 	      } else {
-	        Calendar calendar = DateUtil.getCalendar(end);
-	        calendar.add(Calendar.MONTH, 1);
-	        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));// 1달전 마지막날
-	        lastDate = Integer.parseInt(DateUtil.dateToString(calendar, "dd"));
-	        calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
-	        DateUtil.truncateHms(calendar);
-	        _end = calendar.getTime();// 종료일 기준 다음달 검침일
+	    	  Calendar cal2 = Calendar.getInstance();
+		  		cal2.setTimeInMillis(   end.getTime()   );
+//		  		cal2.set(2018, 8-1, 31, 23, 59, 59);
+		  		cal2.set(Calendar.DATE, cal2.getActualMaximum(Calendar.DAY_OF_MONTH));
+		  		cal2.set(Calendar.HOUR, 23);
+		  	    cal2.set(Calendar.MINUTE, 45);
+		  	    cal2.set(Calendar.SECOND, 00);
+		  		_end = cal2.getTime();
 	      }
 
-	      Date beginDate = null;
-	      Date endDate = null;
+	      Date beginDate = _begin;
+	      Date endDate = _end;
 	      List<Bill> billList = Lists.newArrayList();
-	      while (true) {
-	        if (beginDate == null) {
-	          beginDate = _begin;
-	        } else {
-	          Calendar calendar = DateUtil.getCalendar(beginDate);
-	          calendar.add(Calendar.MONTH, 1);
-	          calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));//
-	          lastDate = Integer.parseInt(DateUtil.dateToString(calendar, "dd"));
-	          calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
-	          calendar.add(Calendar.DATE, 1);
-	          DateUtil.truncateHms(calendar);
-	          beginDate = calendar.getTime();// 다음달 검침일 다음날
-	        }
-	        {
-	          Calendar calendar = DateUtil.getCalendar(beginDate);
-	          calendar.add(Calendar.MONTH, 1);
-	          calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));//
-	          lastDate = Integer.parseInt(DateUtil.dateToString(calendar, "dd"));
-	          calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
-	          DateUtil.truncateHms(calendar);
-	          endDate = calendar.getTime();// 다다음달 검침날
-
-	          if (_end.getTime() < endDate.getTime()) {
-	            break;
-	          }
-	        }
+//	      while (true) {
+//	        if (beginDate == null) {
+//	          beginDate = _begin;
+//	        } else {
+//	          Calendar calendar = DateUtil.getCalendar(beginDate);
+//	          calendar.add(Calendar.MONTH, 1);
+//	          calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));//
+//	          lastDate = Integer.parseInt(DateUtil.dateToString(calendar, "dd"));
+//	          calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
+//	          calendar.add(Calendar.DATE, 1);
+//	          DateUtil.truncateHms(calendar);
+//	          beginDate = calendar.getTime();// 다음달 검침일 다음날
+//	        }
+//	        {
+//	          Calendar calendar = DateUtil.getCalendar(beginDate);
+//	          calendar.add(Calendar.MONTH, 1);
+//	          calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));//
+//	          lastDate = Integer.parseInt(DateUtil.dateToString(calendar, "dd"));
+//	          calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
+//	          DateUtil.truncateHms(calendar);
+//	          endDate = calendar.getTime();// 다다음달 검침날
+//
+//	          if (_end.getTime() < endDate.getTime()) {
+//	            break;
+//	          }
+//	        }
 
 	        BillRequestModel billRequest = new BillRequestModel();
 	        billRequest.setMeterDay(meterDay);
@@ -360,7 +358,6 @@ public class SiteMainController {
 	          logger.debug("BEGIN = "+ strBeginDate);
 	          logger.debug("END = "+ strEndDate);
 	          logger.info("bill01,{},{},{}", _siteId, strBeginDate, strEndDate);
-//	          List<Usage> usageList = usageService.getUsageListBySiteId(_siteId, __begin, __end);
 	          List<Usage> usageList = apiService.getUsageListBySiteId(_siteId, __begin, __end); // 10.23 변경중
 	          if (usageList.size() > 0) {
 	            PeakRequestModel peakRequest = new PeakRequestModel();
@@ -398,7 +395,6 @@ public class SiteMainController {
 	          EnergyModel energy = new EnergyModel();
 	          List<Long> timestamp = Lists.newArrayList();
 	          List<Float> kWh = Lists.newArrayList();
-//	          List<Usage> usageList = usageService.getUsageListBySiteId(_siteId, beginDate, endDate);
 	          List<Usage> usageList = apiService.getUsageListBySiteId(_siteId, beginDate, endDate); // 10.23 변경중
 	          for (Usage usage : usageList) {
 	            timestamp.add(usage.getStdTimestamp().getTime());
@@ -414,7 +410,6 @@ public class SiteMainController {
 	          List<Long> timestamp = Lists.newArrayList();
 	          List<Float> poskWh = Lists.newArrayList();
 	          List<Float> negkWh = Lists.newArrayList();
-//	          List<Reactive> reactiveList = usageService.getReactiveListBySiteId(_siteId, beginDate, endDate);
 	          List<Reactive> reactiveList = apiService.getReactiveListBySiteId(_siteId, beginDate, endDate); // 10.23 변경중
 	          for (Reactive re : reactiveList) {
 	            timestamp.add(re.getStdTimestamp().getTime());
@@ -423,7 +418,7 @@ public class SiteMainController {
 	          }
 	          posReactive.setkVarh(poskWh);
 	          posReactive.setTimestamp(timestamp);
-	          billRequest.setReactive(posReactive);
+	          billRequest.setReactivePos(posReactive);
 	          negReactive.setkVarh(negkWh);
 	          negReactive.setTimestamp(timestamp);
 	          billRequest.setReactiveNeg(negReactive);
@@ -432,62 +427,75 @@ public class SiteMainController {
 	          EssModel ess = new EssModel();
 	          List<Long> timestamp = Lists.newArrayList();
 	          List<Float> kWh = Lists.newArrayList();
-//	          List<EssUsage> essUsageList = essService.getEssUsageListBySiteId(_siteId, beginDate, endDate);
-	          List<EssUsage> essUsageList = apiService.getEssUsageListBySiteId(_siteId, beginDate, endDate); // 10.23 변경중
-	          for (EssUsage essUsage : essUsageList) {
-	            timestamp.add(essUsage.getStdDate().getTime());
-	            kWh.add(new Float(essUsage.getUsgVal()));
+	          EssModel ess2 = new EssModel();
+	          List<Float> kWh2 = Lists.newArrayList();
+	          List<EssCharge> esschargeList = apiService.getEssChargeListBySiteId(_siteId, beginDate, endDate); // 10.23 변경중
+//	          List<Usage> usageList = apiService.getUsageListBySiteId(_siteId, beginDate, endDate); // 10.23 변경중
+	          for (EssCharge essCharge : esschargeList) {
+	        	  timestamp.add(essCharge.getStdDate().getTime());
+	        	  kWh.add(new Float(essCharge.getChgVal()));
+	        	  kWh2.add(new Float(essCharge.getDischgVal()));
 	          }
+//	          for (Usage usage : usageList) {
+//	            timestamp.add(usage.getStdTimestamp().getTime());
+//	            kWh.add(usage.getUsgVal() / 1000000f);
+//	            kWh2.add(new Float(usage.getUsgVal()));
+//	          }
 	          ess.setkWh(kWh);
 	          ess.setTimestamp(timestamp);
 	          billRequest.setEss(ess);
+	          ess2.setkWh(kWh2);
+	          ess2.setTimestamp(timestamp);
+	          billRequest.setEssDischarging(ess2);
 	        }
-	        if (billRequest.getEnergy().getTimestamp().size() == 0 && billRequest.getReactive().getTimestamp().size() == 0 && billRequest.getReactiveNeg().getTimestamp().size() == 0 && billRequest.getEss().getTimestamp().size() == 0) {
+	        if (billRequest.getEnergy().getTimestamp().size() == 0 && billRequest.getReactivePos().getTimestamp().size() == 0 && billRequest.getReactiveNeg().getTimestamp().size() == 0 && billRequest.getEss().getTimestamp().size() == 0) {
 	          continue;
 	        }
 	        BillResponseModel response = EncoredApiUtil.getBill(billRequest);
 	        logger.debug("ITEM_SIZE "+ ((response == null) ? null : response.getItems().size()));
 	        if(response != null) {
-	        	for (Item item : response.getItems()) {
+	        	for (BillItemModel item : response.getItems()) {
 	        		Bill bill = new Bill();
 	        		bill.setBaseRate(item.getBaseRate().intValue());
 	        		bill.setBillYearm(item.getBillOfTheMonth().replaceAll("-", ""));
-	        		bill.setConsumeRate(item.getElectricityConsumptionRate().intValue());
+//	        		bill.setConsumeRate(item.getElectricityConsumptionRate().intValue());
 	        		bill.setContractPower(siteSet.getContractPower().intValue());
-	        		bill.setDemandChgReduct(item.getDemandChargeReduction().intValue());
-	        		bill.setElecFund(item.getElectricityFund().intValue());
-	        		bill.setEnergyChgReduct(item.getEnergyChargeReduction().intValue());
-	        		bill.setEssChgIncen(item.getEssChargingIncentive().intValue());
-	        		bill.setEssChgMaxPeak(item.getEssChargingingInMaxPeak().floatValue());
-	        		bill.setEssChgMidPeak(item.getEssChargingingInMidPeak().floatValue());
-	        		bill.setEssChgOffPeak(item.getEssChargingingInOffPeak().floatValue());
-	        		bill.setEssDischgIncen(item.getEssDischargingIncentive().intValue());
-	        		bill.setEssDischgMaxPeak(item.getEssDischargingInMaxPeak().floatValue());
-	        		bill.setEssDischgMidPeak(item.getEssDischargingInMidPeak().floatValue());
-	        		bill.setEssDischgOffPeak(item.getEssDischargingInOffPeak().floatValue());
-	        		bill.setLagPwrFactor(item.getLaggingPowerFactor().intValue());
-	        		bill.setLeadPwrFactor(item.getLeadingPowerFactor().intValue());
-	        		bill.setMaxPeakRate(item.getOnPeakRate().intValue());
-	        		bill.setMaxPeakUsg(item.getOnPeakEnergyUsage().floatValue());
-	        		bill.setMeterReadDay(meterDay.intValue());
-	        		bill.setMidPeakRate(item.getMidPeakRate().intValue());
-	        		bill.setOffPeakRate(item.getOffPeakRate().intValue());
-	        		bill.setOffPeakUsg(item.getOffPeakEnergyUsage().floatValue());
-	        		bill.setPeakPwrDemand(item.getPeakPowerDemand().floatValue());
+//	        		bill.setDemandChgReduct(item.getDemandChargeReduction().intValue());
+//	        		bill.setElecFund(item.getElectricityFund().intValue());
+//	        		bill.setEnergyChgReduct(item.getEnergyChargeReduction().intValue());
+	        		bill.setEssChgIncen(item.getEssChargingIncentive().intValue()); // ESS충전요금할인
+//	        		bill.setEssChgMaxPeak(item.getEssChargingingInMaxPeak().floatValue());
+//	        		bill.setEssChgMidPeak(item.getEssChargingingInMidPeak().floatValue());
+//	        		bill.setEssChgOffPeak(item.getEssChargingingInOffPeak().floatValue());
+	        		bill.setEssDischgIncen(item.getEssDischargingIncentive().intValue()); // ESS방전요금할인
+//	        		bill.setEssDischgMaxPeak(item.getEssDischargingInMaxPeak().floatValue());
+//	        		bill.setEssDischgMidPeak(item.getEssDischargingInMidPeak().floatValue());
+//	        		bill.setEssDischgOffPeak(item.getEssDischargingInOffPeak().floatValue());
+//	        		bill.setLagPwrFactor(item.getLaggingPowerFactor().intValue());
+//	        		bill.setLeadPwrFactor(item.getLeadingPowerFactor().intValue());
+//	        		bill.setMaxPeakRate(item.getOnPeakRate().intValue());
+//	        		bill.setMaxPeakUsg(item.getOnPeakEnergyUsage().floatValue());
+//	        		bill.setMeterReadDay(meterDay.intValue());
+//	        		bill.setMidPeakRate(item.getMidPeakRate().intValue());
+//	        		bill.setOffPeakRate(item.getOffPeakRate().intValue());
+//	        		bill.setOffPeakUsg(item.getOffPeakEnergyUsage().floatValue());
+//	        		bill.setPeakPwrDemand(item.getPeakPowerDemand().floatValue());
 	        		bill.setPlanName(siteSet.getPlanName());
 	        		bill.setPlanType(siteSet.getPlanType());
-	        		bill.setPwrFactorRate(item.getPowerFactorRate().intValue());
+//	        		bill.setPwrFactorRate(item.getPowerFactorRate().intValue());
 	        		bill.setSiteId(_siteId);
-	        		bill.setSvcEdate(DateUtil.longToString(item.getServicePeriodTo(), "yyyyMMdd"));
-	        		bill.setSvcSdate(DateUtil.longToString(item.getServicePeriodFrom(), "yyyyMMdd"));
-	        		bill.setTotAmtBill(item.getTotalAmountBilled().intValue());
-	        		bill.setTotElecRate(item.getTotalElectricityRate().intValue());
-	        		bill.setUsg(item.getEnergyUsage().floatValue());
-	        		bill.setValAddTax(item.getValueAddedTax().intValue());
+	        		bill.setSvcEdate(CommonUtils.convertDateFormat(new Date(item.getServicePeriodTo()), "yyyyMMdd"));
+	        		bill.setSvcSdate(CommonUtils.convertDateFormat(new Date(item.getServicePeriodFrom()), "yyyyMMdd"));
+//	        		bill.setSvcEdate(DateUtil.longToString(item.getServicePeriodTo(), "yyyyMMdd"));
+//	        		bill.setSvcSdate(DateUtil.longToString(item.getServicePeriodFrom(), "yyyyMMdd"));
+//	        		bill.setTotAmtBill(item.getTotalAmountBilled().intValue());
+//	        		bill.setTotElecRate(item.getTotalElectricityRate().intValue());
+//	        		bill.setUsg(item.getEnergyUsage().floatValue());
+//	        		bill.setValAddTax(item.getValueAddedTax().intValue());
 	        		billList.add(bill);
 	        	}
 	        }
-	      }
+//	      }
 //	      resultCnt += billService.addOrModBillList(billList, null);
 	      resultList.add(billList); // 10.23 변경중
 	      resultCnt++;

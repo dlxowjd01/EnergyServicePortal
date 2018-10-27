@@ -14,9 +14,10 @@ public class BillRequestModel {
   private Float kWh;// kWh 100 전력량
   private List<PeakHistoryModel> peakHistory;// 과거 1년 월별최대 수요
   private EnergyModel energy; // power List of timestamp and kWh 전력
-  private ReactiveModel reactive;// List of timestamp and kVarh 무효 전력(positive 방향)
+  private ReactiveModel reactivePos;// List of timestamp and kVarh 무효 전력(positive 방향)
   private ReactiveModel reactiveNeg;// List of timestamp and kVarh 무효 전력(negative 방향)
   private EssModel ess;// List of timestamp and kWh output power of ess
+  private EssModel essDischarging;// List of timestamp and kWh output power of ess
 
   public Period getPeriod() {
     return period;
@@ -82,13 +83,13 @@ public class BillRequestModel {
     this.energy = energy;
   }
 
-  public ReactiveModel getReactive() {
-    return reactive;
-  }
+public ReactiveModel getReactivePos() {
+	return reactivePos;
+}
 
-  public void setReactive(ReactiveModel reactive) {
-    this.reactive = reactive;
-  }
+public void setReactivePos(ReactiveModel reactivePos) {
+	this.reactivePos = reactivePos;
+}
 
 public ReactiveModel getReactiveNeg() {
 	return reactiveNeg;
@@ -105,5 +106,22 @@ public EssModel getEss() {
   public void setEss(EssModel ess) {
     this.ess = ess;
   }
+
+public EssModel getEssDischarging() {
+	return essDischarging;
+}
+
+public void setEssDischarging(EssModel essDischarging) {
+	this.essDischarging = essDischarging;
+}
+
+@Override
+public String toString() {
+	return "BillRequestModel [period=" + period + ", meterDay=" + meterDay + ", planName=" + planName + ", contElec="
+			+ contElec + ", timestamp=" + timestamp + ", kWh=" + kWh + ", peakHistory=" + peakHistory + ", energy="
+			+ energy + ", reactivePos=" + reactivePos + ", reactiveNeg=" + reactiveNeg + ", ess=" + ess
+			+ ", essDischarging=" + essDischarging + "]";
+}
+
 
 }

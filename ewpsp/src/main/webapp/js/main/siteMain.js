@@ -9,13 +9,15 @@
 		formData = getSiteMainSchCollection();
 		
 		showHideLoadingBar('show');
-		setTimeout(function(){
+		var myTimer = setTimeout(function(){
 			fn_cycle_10sec();
 			fn_cycle_1min();
 			fn_cycle_15min();
 			showHideLoadingBar('hide');
-		}, (1000*1));
+		}, (1000));
 		
+		clearTimeout(myTimer);
+
 		realTime_monitoring_start();
 		
 	});
@@ -765,8 +767,8 @@
 					
 					if(essRvList != null && essRvList.length > 0 && essRvList.length > i) { // ess 수익
 //						essRevenue = String(essRvList[i].ess_incen);
-						var essRevenue1 = ( String(essRvList[i].ess_chg_incen) == null ) ? null : String(essRvList[i].ess_chg_incen);
-						var essRevenue2 = ( String(essRvList[i].ess_dischg_incen) == null ) ? null : String(essRvList[i].ess_dischg_incen);
+						var essRevenue1 = ( String(essRvList[i].ess_chg_incen) == null ) ? null : String(essRvList[i].essChgIncen);
+						var essRevenue2 = ( String(essRvList[i].ess_dischg_incen) == null ) ? null : String(essRvList[i].essDischgIncen);
 						if( (essRevenue1 == null || essRevenue1 == "" || essRevenue1 == "null") && 
 								(essRevenue2 == null || essRevenue2 == "" || essRevenue2 == "null") ) reEssRevenue = null;
 						else {
@@ -799,7 +801,9 @@
 					var stdDt = "";
 					var yyyyMM = "";
 					if(loopGbn == "ess") {
-						yyyyMM = loopCntList[i].bill_yearm;
+//						yyyyMM = loopCntList[i].bill_yearm;
+//						stdDt = Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1);
+						yyyyMM = loopCntList[i].svcSdate;
 						stdDt = Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1);
 					} else if(loopGbn == "pv") {
 						stdDt = loopCntList[i].std_timestamp;

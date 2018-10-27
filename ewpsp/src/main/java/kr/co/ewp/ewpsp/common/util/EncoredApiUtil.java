@@ -71,22 +71,20 @@ public class EncoredApiUtil {
   }
 
   public static BillResponseModel getBill(BillRequestModel billRequest) {
-	  System.out.println("EncoredApiUtil.getBill");// EncoredApiUtil.getBill
+	  logger.debug("EncoredApiUtil.getBill");// EncoredApiUtil.getBill
     String resultBody = null;
     BillResponseModel returnModel = null;
     try {
       String url = API_URL + "/bill";
       HttpHeaders headers = new HttpHeaders();
-      System.out.println("encored api URL : "+ url);
+      logger.debug("encored api URL : "+ url);
       headers.set("content-type", "application/json");
       resultBody = HttpUtil.post(url, headers, JsonUtil.toJson(billRequest));
-      System.out.println("result "+resultBody);
       returnModel = JsonUtil.toObject(resultBody, BillResponseModel.class);
     } catch (Exception e) {
-//    	e.printStackTrace();
     	logger.error("error is : "+e.toString());
     } finally {
-    	System.out.println("RESULT  "+ resultBody);
+    	logger.debug("RESULT  "+ resultBody);
     	return returnModel;
     }
   }
