@@ -338,6 +338,15 @@ public class DeviceGroupController {
 		logger.debug("/insertDevice");
 		logger.debug("param ::::: "+param.toString());
 		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+
+		int cnt = deviceGroupService.getDeviceChk(param);
+		if(cnt > 0) {
+			resultMap.put("resultCode", 1);
+			resultMap.put("resultMsg", "입력하신 장치가 이미 존재합니다. \n다시 입력해주세요.");
+			return resultMap;
+		}
+		
 		Map userInfo = UserUtil.getUserInfo(request);
 		param.put("regUid", userInfo.get("user_id"));
 		param.put("userIdx", userInfo.get("user_idx"));
@@ -350,8 +359,9 @@ public class DeviceGroupController {
 		
 		int resultCnt = deviceGroupService.insertDevice(param);
 		
-		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("resultCnt", resultCnt);
+		resultMap.put("resultMsg", "");
+		resultMap.put("resultCode", 0);
 		return resultMap;
 	}
 	

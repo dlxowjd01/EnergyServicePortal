@@ -173,15 +173,15 @@ public class CmpyGrpSiteMngDao {
 	}
 
 	public int insertCmpy(HashMap param) {
-		return sqlSession.update("cmpyGrpSiteMng.insertCmpy", param);
+		return sqlSession.insert("cmpyGrpSiteMng.insertCmpy", param);
 	}
 	
 	public int insertGroup(HashMap param) {
-		return sqlSession.update("cmpyGrpSiteMng.insertGroup", param);
+		return sqlSession.insert("cmpyGrpSiteMng.insertGroup", param);
 	}
 	
 	public int insertSite(HashMap param) {
-		return sqlSession.update("cmpyGrpSiteMng.insertSite", param);
+		return sqlSession.insert("cmpyGrpSiteMng.insertSite", param);
 	}
 	
 	public int updateCmpy(HashMap param) {

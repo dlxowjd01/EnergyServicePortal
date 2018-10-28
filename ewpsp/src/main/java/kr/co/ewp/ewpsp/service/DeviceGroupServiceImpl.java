@@ -47,6 +47,10 @@ public class DeviceGroupServiceImpl implements DeviceGroupService{
 		return deviceGroupDao.insertDeviceGroup(param);
 	}
 	
+	public int getDeviceChk(HashMap param) throws Exception {
+		return deviceGroupDao.getDeviceChk(param);
+	}
+	
 	@Transactional
 	public int insertDevice(HashMap param) throws Exception {
 		return deviceGroupDao.insertDevice(param);

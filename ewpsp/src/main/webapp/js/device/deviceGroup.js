@@ -543,10 +543,17 @@
 	
 	function callback_insertDevice(result) {
 		var resultCnt = result.resultCnt;
-		if(resultCnt > 0) {
-			alert("저장되었습니다.");
-			location.reload();
+		var resultMsg = result.resultMsg;
+		var resultCode = result.resultCode;
+		
+		if(resultCode == 0) {
+			if(resultCnt > 0) {
+				alert("저장되었습니다.");
+				location.reload();
+			} else {
+				alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
+			}
 		} else {
-			alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
+			alert(resultMsg);
 		}
 	}

@@ -522,7 +522,7 @@
 		select 
 			count(*) as cnt 
 		from tb_site_group
-		where del_yn = 'N'
+		where 1=1
 		and site_grp_id = #{siteGrpId }
 	</select>
 	
@@ -828,11 +828,7 @@
 	
 	<update id="deleteSite" parameterType="hashMap">
 		/* 사이트 삭제 */
-		update tb_site
-		set 
-		    del_yn        = 'Y', 
-		    mod_uid       = #{modUid }, 
-		    mod_date      = now()
+		delete from tb_site
 		where 1=1
 		and site_id = #{siteId }
 	</update>

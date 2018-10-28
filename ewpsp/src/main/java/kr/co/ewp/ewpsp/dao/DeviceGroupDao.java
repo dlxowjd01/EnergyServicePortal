@@ -39,15 +39,19 @@ public class DeviceGroupDao {
 	}
 
 	public int deleteDeviceGroup(HashMap<String, Object> param) {
-		return sqlSession.update("deviceGroup.deleteDeviceGroup", param);
+		return sqlSession.delete("deviceGroup.deleteDeviceGroup", param);
 	}
 	
 	public int insertDeviceGroup(HashMap<String, Object> param) {
-		return sqlSession.update("deviceGroup.insertDeviceGroup", param);
+		return sqlSession.insert("deviceGroup.insertDeviceGroup", param);
+	}
+	
+	public int getDeviceChk(HashMap<String, Object> param) {
+		return sqlSession.selectOne("deviceGroup.getDeviceChk", param);
 	}
 	
 	public int insertDevice(HashMap<String, Object> param) {
-		return sqlSession.update("deviceGroup.insertDevice", param);
+		return sqlSession.insert("deviceGroup.insertDevice", param);
 	}
 	
 	public int updateDevice(HashMap<String, Object> param) {
@@ -55,7 +59,7 @@ public class DeviceGroupDao {
 	}
 	
 	public int deleteDevice(HashMap<String, Object> param) {
-		return sqlSession.update("deviceGroup.deleteDevice", param);
+		return sqlSession.delete("deviceGroup.deleteDevice", param);
 	}
 	
 }

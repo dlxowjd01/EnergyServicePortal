@@ -76,16 +76,12 @@
 		and (device_grp_idx is null or device_grp_idx = 0)
 	</select>
 	
-	<update id="deleteDeviceGroup" parameterType="hashMap">
+	<delete id="deleteDeviceGroup" parameterType="hashMap">
 		/* 장치그룹 삭제 */
-		update tb_device_group
-		set 
-		    del_yn        = 'Y', 
-		    mod_uid       = #{modUid }, 
-		    mod_date      = now()
+		delete from tb_device_group
 		where 1=1
 		and device_grp_idx = #{deviceGrpIdx }
-	</update>
+	</delete>
 	
 	<insert id="insertDeviceGroup" parameterType="hashMap">
 		/* 장치그룹 등록 */
@@ -107,6 +103,17 @@
 	        now()
 	    )
 	</insert>
+	
+	<select id="getDeviceChk" parameterType="hashMap" resultType="java.lang.Integer">
+		/* 장치 중복여부 체크 */
+		select 
+			count(*) as cnt 
+		from tb_device
+		where 1=1
+		and site_id = #{siteId }
+		and device_id = #{deviceId }
+		and device_type = #{deviceType }
+	</select>
 	
 	<insert id="insertDevice" parameterType="hashMap">
 		/* 장치 등록 */
@@ -156,20 +163,18 @@
 		    mod_uid        = #{modUid }, 
 		    mod_date       = now()
 		where 1=1
-		and device_id = #{deviceId }
-	</update>
-	
-	<update id="deleteDevice" parameterType="hashMap">
-		/* 장치 삭제 */
-		update tb_device
-		set 
-		    del_yn        = 'Y', 
-		    mod_uid       = #{modUid }, 
-		    mod_date      = now()
-		where 1=1
 		and site_id = #{siteId }
 		and device_id = #{deviceId }
 		and device_type = #{deviceType }
 	</update>
+	
+	<delete id="deleteDevice" parameterType="hashMap">
+		/* 장치 삭제 */
+		delete from tb_device
+		where 1=1
+		and site_id = #{siteId }
+		and device_id = #{deviceId }
+		and device_type = #{deviceType }
+	</delete>
 	
 </mapper>
