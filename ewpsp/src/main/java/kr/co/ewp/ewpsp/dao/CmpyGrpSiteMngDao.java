@@ -204,6 +204,10 @@ public class CmpyGrpSiteMngDao {
 		return sqlSession.update("cmpyGrpSiteMng.deleteGroup", param);
 	}
 	
+	public int deleteSiteSet(HashMap param) {
+		return sqlSession.update("cmpyGrpSiteMng.deleteSiteSet", param);
+	}
+	
 	public int deleteSite(HashMap param) {
 		return sqlSession.update("cmpyGrpSiteMng.deleteSite", param);
 	}

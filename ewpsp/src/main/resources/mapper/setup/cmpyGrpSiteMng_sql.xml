@@ -826,6 +826,13 @@
 		and site_grp_idx = #{siteGrpIdx }
 	</update>
 	
+	<update id="deleteSiteSet" parameterType="hashMap">
+		/* 사이트설정 삭제 */
+		delete from tb_site_set
+		where 1=1
+		and site_id = #{siteId }
+	</update>
+	
 	<update id="deleteSite" parameterType="hashMap">
 		/* 사이트 삭제 */
 		delete from tb_site

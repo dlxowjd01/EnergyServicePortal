@@ -178,12 +178,10 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 	
 	@Transactional
 	public int deleteSite(HashMap param) throws Exception {
-		int delSitecnt = cmpyGrpSiteMngDao.deleteSite(param);
-		
 		// 장치삭제
 		List<HashMap<String, Object>> deviceList = deviceGroupDao.getDvInDeviceGroupList(param);
 		int delDvCnt = 0;
-		if(delSitecnt > 0) {
+		if(deviceList.size() > 0) {
 			for (HashMap<String, Object> map : deviceList) {
 				HashMap<String, Object> param2 = new HashMap<String, Object>();
 				param2.put("deviceId", map.get("device_id"));
@@ -198,7 +196,7 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 		// 장치그룹 삭제
 		List<HashMap<String, Object>> deviceGrpList = deviceGroupDao.getDeviceGroupList(param);
 		int delDvGrpCnt = 0;
-		if(delSitecnt > 0) {
+		if(deviceGrpList.size() > 0) {
 			for (HashMap<String, Object> map : deviceGrpList) {
 				HashMap<String, Object> param2 = new HashMap<String, Object>();
 				param2.put("deviceGrpIdx", map.get("device_grp_idx"));
@@ -208,7 +206,10 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 			}
 		}
 		
-		int resultCnt = (delDvCnt == deviceList.size() && delDvGrpCnt == deviceGrpList.size()) ? delSitecnt : 0;
+		int delSiteSetCnt = cmpyGrpSiteMngDao.deleteSiteSet(param);
+		int delSiteCnt = cmpyGrpSiteMngDao.deleteSite(param);
+		
+		int resultCnt = (delDvCnt == deviceList.size() && delDvGrpCnt == deviceGrpList.size()) ? delSiteCnt : 0;
 		return resultCnt;
 	}
 	
