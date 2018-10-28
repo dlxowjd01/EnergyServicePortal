@@ -129,7 +129,8 @@
 				else strHtml = '<li class="ioe">';
 				
 				addHtml += strHtml;
-				addHtml += '<a href="#"></a>';
+				addHtml += '<a href="#;" onclick="addDelDvs(\''+deviceList[i].site_id+'\', \''+deviceList[i].device_id+'\', \''+deviceList[i].device_type+'\', this);"></a>';
+				addHtml += '<input type="hidden" name="delDevice_'+deviceGrpIdx+'">';
 				addHtml += '<span class="dname">'+deviceList[i].device_name+'</span>';
 				addHtml += '<span class="dmemo">'+""+'</span>';
 				addHtml += '</li>';
@@ -141,7 +142,9 @@
 				$('<div class="fl" />').append( $('<ul class="device clear" />').append(addHtml) ).append(
 						$('<div class="new_add" />').append( '<a href="javascript:insertDeviceForm(\''+deviceGrpIdx+'\');"><i class="glyphicon glyphicon-plus"></i></a>' )
 				).append(
-						$('<div class="device_del" />').append( '<a href="#;"><i class="glyphicon glyphicon-remove-circle"></i><em>삭제</em></a>' )
+						$('<div class="device_del" />').append( 
+								'<a href="#;" onclick="deleteDeviceInGrp(\''+deviceGrpIdx+'\');"><i class="glyphicon glyphicon-remove-circle"></i><em>삭제</em></a>' 
+						).append('<input type="hidden" id="delDevices_'+deviceGrpIdx+'" name="delDevices_'+deviceGrpIdx+'">')
 				)
 		) )
 		
@@ -158,7 +161,7 @@
 			success: function(result) {
 				var warningList = result.warningList;
 				var alertList = result.alertList;
-				console.log(warningList);
+				
 				var warningCnt = 0;
 				var alertCnt = 0;
 				var warningStr = "";
@@ -192,6 +195,47 @@
 		$("#insertDeviceForm").find("#deviceGrpIdx").val( deviceGrpIdx );
 		getDeviceGrpSitePopupList("");
 		popupOpen('ddevice');
+	}
+	
+	function addDelDvs(siteId, deviceId, deviceType, obj) {
+		if($(obj).parent().hasClass('on') === true) {
+			$(obj).siblings('input').val("");
+		} else {
+			$(obj).siblings('input').val(siteId+"|"+deviceId+"|"+deviceType);
+		}
+	}
+	
+	function deleteDeviceInGrp(deviceGrpIdx) {
+		var inputs = $("input[name=delDevice_"+deviceGrpIdx+"]");
+		var values = "";
+		$.each(inputs, function (index, value) {
+			if($(value).val() != null && $(value).val() != "") {
+				values = values+$(value).val()+",";
+			}
+		});
+		$("#delDevices_"+deviceGrpIdx).val(values.slice(0, -1));
+		console.log($("#delDevices_"+deviceGrpIdx).val());
+		
+		if(confirm("선택한 장치들을 삭제하시겠습니까?")) {
+			$.ajax({
+				url : "/deleteDevices",
+				type : 'post',
+				async : false, // 동기로 처리해줌
+				data : {
+					delDevices : $("#delDevices_"+deviceGrpIdx).val()
+				},
+				success: function(result) {
+					var resultCnt = result.resultCnt;
+					if(resultCnt > 0) {
+						alert("삭제되었습니다.");
+						location.reload();
+					} else {
+						alert("삭제에 실패하였습니다. \n 관리자에게 문의하세요.");
+					}
+				}
+			});
+		}
+		
 	}
 
 	//사이트 목록(팝업) 조회

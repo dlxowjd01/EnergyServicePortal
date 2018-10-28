@@ -9,14 +9,14 @@
 		formData = getSiteMainSchCollection();
 		
 		showHideLoadingBar('show');
-		var myTimer = setTimeout(function(){
+//		var myTimer = setTimeout(function(){
 			fn_cycle_10sec();
 			fn_cycle_1min();
 			fn_cycle_15min();
 			showHideLoadingBar('hide');
-		}, (1000));
+//		}, (1000));
 		
-		clearTimeout(myTimer);
+//		clearTimeout(myTimer);
 
 		realTime_monitoring_start();
 		
@@ -804,12 +804,12 @@
 //						yyyyMM = loopCntList[i].bill_yearm;
 //						stdDt = Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1);
 						yyyyMM = loopCntList[i].svcSdate;
-						stdDt = Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1);
+						stdDt = Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, yyyyMM.substring(6, 8));
 					} else if(loopGbn == "pv") {
 						stdDt = loopCntList[i].std_timestamp;
 					} else if(loopGbn == "dr") {
-						yyyyMM = loopCntList[i].std_yearm;
-						stdDt = Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1);
+						yyyyMM = loopCntList[i].reduct_sdate;
+						stdDt = Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, yyyyMM.substring(6, 8));
 					}
 					
 					var tm = new Date( convertDateUTC(loopCntList[i].std_timestamp) );

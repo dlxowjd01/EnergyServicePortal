@@ -188,7 +188,7 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 				HashMap<String, Object> param2 = new HashMap<String, Object>();
 				param2.put("deviceId", map.get("device_id"));
 				param2.put("siteId", map.get("site_id"));
-				param2.put("devicetype", map.get("device_type"));
+				param2.put("deviceType", map.get("device_type"));
 				param2.put("modUid", param.get("modUid"));
 				int cnt = deviceGroupDao.deleteDevice(param2);
 				delDvCnt = delDvCnt+cnt;

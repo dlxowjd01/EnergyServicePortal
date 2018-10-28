@@ -114,7 +114,7 @@ public class DeviceGroupController {
 	 */
 	@RequestMapping("/getDvInDeviceGroupPopupList")
 	public @ResponseBody Map<String, Object> getDvInDeviceGroupPopupList(@RequestParam HashMap param) throws Exception {
-		logger.debug("/getDvInDeviceGroupList");
+		logger.debug("/getDvInDeviceGroupPopupList");
 		logger.debug("param ::::: "+param.toString());
 		
 		List dvInDeviceGrouplist = deviceGroupService.getDvInDeviceGroupList(param);
@@ -361,15 +361,34 @@ public class DeviceGroupController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/deleteDevice")
-	public @ResponseBody Map<String, Object> deleteDevice(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
-		logger.debug("/deleteDevice");
+	@RequestMapping("/deleteDevices")
+	public @ResponseBody Map<String, Object> deleteDevices(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
+		logger.debug("/deleteDevices");
 		logger.debug("param ::::: "+param.toString());
 		Map userInfo = UserUtil.getUserInfo(request);
-		param.put("modUid", userInfo.get("user_id"));
 		
-		int resultCnt = deviceGroupService.insertDevice(param);
+		String delDevices = (String) param.get("delDevices"); // 기존 그룹내 장치목록
+		String delDevices_arr[] = null; // 기존 그룹내 장치목록
+		if(delDevices != null && !"".equals(delDevices)) {
+			delDevices_arr = delDevices.split(",");
+		}
 		
+		int delCnt = 0;
+		if(delDevices_arr.length > 0) { // 기존장치목록의 데이터를 변동된장치목록에 존재하는지 확인
+			for (int i = 0; i < delDevices_arr.length; i++) {
+				String str = delDevices_arr[i];
+				String delDv[] = str.split("\\|");
+				HashMap dvMap = new HashMap<String, Object>();
+				dvMap.put("siteId", delDv[0]);
+				dvMap.put("deviceId", delDv[1]);
+				dvMap.put("deviceType", delDv[2]);
+				dvMap.put("modUid", userInfo.get("user_id"));
+				int cnt = deviceGroupService.deleteDevice(dvMap);
+				delCnt = delCnt + cnt;
+			}
+		}
+		
+		int resultCnt = (delCnt == delDevices_arr.length) ? delCnt : 0;
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("resultCnt", resultCnt);
 		return resultMap;
