@@ -36,9 +36,12 @@ function changeEMSUser(userInfo) {
 	$.ajax({
 		url: 'https://13.125.50.136/lems/sso/user/sync',
 		type: 'post',
-		data: JSON.stringify(userInfo.detail),
 		contentType: 'application/json',
 		dataType: 'json',
+		headers: {
+			Authorization: 'Basic bG9jYWwtZW1zOmxvY2FsLWVtcw=='
+		},
+		data: JSON.stringify(userInfo.detail),
 		success: function(result) {
 //			console.log(result.rslt);
 			if (result == null || result.rslt != '1') {
