@@ -47,7 +47,7 @@ public class PeriodDataSetting {
 		
 		// 데이터조합
 		List sheetReDataList = DataPeriodCalculate.periodCalculate(dataList, selTermFrom, selTermTo, term, period, timestampStr, calculValStr, flag); // 표영역
-		List chartReDataList = DataPeriodCalculate.periodCalculate(dataList, selTermFrom, selTermTo, term, period, timestampStr, calculValStr, flag); // 그래프영역
+		List chartReDataList = DataPeriodCalculate.periodCalculate(dataList, startDate, endDate, term, period, timestampStr, calculValStr, flag); // 그래프영역
 		
 		// 날짜리스트+데이터조합 매칭
 		List sheetList = matchingLists(sheetDateList, sheetReDataList, timestampStr, calculValStr); // 표영역
