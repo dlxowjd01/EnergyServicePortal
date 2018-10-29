@@ -16,11 +16,11 @@ function replaceAll(str, searchStr, replaceStr) {
  */
 function maxLengthCheck(id, title, maxLength, event){
      var obj = $("#"+id);
-     console.log(obj+", "+obj.val())
+//     console.log(obj+", "+obj.val());
      if(maxLength == null) {
          maxLength = obj.attr("maxLength") != null ? obj.attr("maxLength") : 1000;
      }
-     console.log(Number(byteCheck(obj))+", "+Number(byteCheck(maxLength)));
+//     console.log(Number(byteCheck(obj))+", "+Number(byteCheck(maxLength)));
      if(Number(byteCheck(obj)) > Number(maxLength)) {
 //         alert(title + "이(가) 입력가능문자수를 초과하였습니다.\n(영문, 숫자, 일반 특수문자 : " + maxLength + " / 한글, 한자, 기타 특수문자 : " + parseInt(maxLength/2, 10) + ").");
          obj.focus();

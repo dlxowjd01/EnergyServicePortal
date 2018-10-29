@@ -106,7 +106,6 @@
 		}
 		pastUsageList = dataSet;
 		
-		console.log("총사용량  "+totalUsage);
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
 		unit_format(String(totalUsage), "pastUseTot", "mWh");
 	}

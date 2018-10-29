@@ -55,7 +55,7 @@ public class DataPeriodCalculate {
 		// 마무리
 		List newList2 = finishPeriodCalculate(newList,  term, period, selTermTo, timestampStr, calculValStr, endListDt);
 		
-		return newList;
+		return newList2;
 	}
 
 	/**
