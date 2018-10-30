@@ -102,7 +102,7 @@ $(document).ready(function() {
 		<div id="gnb">
 			<div class="g_top">
 				<div class="w100">
-					<h1 class="g_logo"><a href="#;"><img src="../img/main_logo.png" class="로고"></a></h1>
+					<h1 class="g_logo"><a href="#;"><img src="../img/main_logo_ewp.png" class="로고"></a></h1>
 					<a href="#;" class="category_close"><img src="../img/gnb_close.png" width="17" alt="닫기"></a>
 				</div>				
 			</div>
