@@ -42,8 +42,8 @@ public class PeriodDataSetting {
 		Timestamp selTermTo = getConvertStartEndTmsp( term, period, (String) param.get("selTermTo") , "2"); // 검색종료일(표영역)
 		
 		// 날짜리스트 생성
-		List sheetDateList = getDateList(selTermFrom, selTermTo, term, period, timestampStr, calculValStr); // 표영역
-		List chartDateList = getDateList(startDate, endDate, term, period, timestampStr, calculValStr); // 그래프영역
+		List sheetDateList = getDateList(selTermFrom, selTermTo, term, period, timestampStr, calculValStr, "sheet"); // 표영역
+		List chartDateList = getDateList(startDate, endDate, term, period, timestampStr, calculValStr, "chart"); // 그래프영역
 		
 		// 데이터조합
 		List sheetReDataList = DataPeriodCalculate.periodCalculate(dataList, selTermFrom, selTermTo, term, period, timestampStr, calculValStr, flag); // 표영역
@@ -74,21 +74,13 @@ public class PeriodDataSetting {
 		if(dt.getMinutes() == 0) {
 			dt.setMinutes(0);
 		} else if(dt.getMinutes()> 0 && dt.getMinutes() < 15) {
-			if("1".equals(flag)) dt.setMinutes(15);
-			else if("2".equals(flag)) dt.setMinutes(0);
+			dt.setMinutes(0);
 		} else if(dt.getMinutes() < 30) {
-			if("1".equals(flag)) dt.setMinutes(30);
-			else if("2".equals(flag)) dt.setMinutes(15);
+			dt.setMinutes(15);
 		} else if(dt.getMinutes() < 45) {
-			if("1".equals(flag)) dt.setMinutes(45);
-			else if("2".equals(flag)) dt.setMinutes(30);
+			dt.setMinutes(30);
 		} else if(dt.getMinutes() <60) {
-			if("1".equals(flag)) {
-				dt.setMinutes(0);
-				dt.setSeconds(0);
-				dt.setHours(dt.getHours()+1);
-			}
-			else if("2".equals(flag)) dt.setMinutes(45);
+			dt.setMinutes(45);
 		}
 		dt.setSeconds(0);
 		
@@ -169,9 +161,10 @@ public class PeriodDataSetting {
 	 * @param period
 	 * @param timestampStr 
 	 * @param calculValStr 
+	 * @param string 
 	 * @return
 	 */
-	public static List getDateList(Timestamp selTermFrom, Timestamp selTermTo, String term, String period, String timestampStr, String calculValStr) {
+	public static List getDateList(Timestamp selTermFrom, Timestamp selTermTo, String term, String period, String timestampStr, String calculValStr, String gbn) {
 		List dateList = new ArrayList();
 		
 		Timestamp tmsp = selTermFrom;
@@ -191,7 +184,15 @@ public class PeriodDataSetting {
 			else if("30min".equals(period)) cal.add(Calendar.MINUTE, 30);
 			else if("hour".equals(period)) cal.add(Calendar.HOUR, 1);
 			else if("day".equals(period)) cal.add(Calendar.DATE, 1);
-			else if("month".equals(period)) cal.add(Calendar.MONTH, 1);
+			else if("month".equals(period)) {
+				if("sheet".equals(gbn)) {
+					cal.add(Calendar.MONTH, 1);
+					cal.set(Calendar.DATE, 1);
+				} else {
+					cal.add(Calendar.MONTH, 1);
+				}
+				
+			}
 			
 			tmsp = new Timestamp(cal.getTime().getTime());
 		}

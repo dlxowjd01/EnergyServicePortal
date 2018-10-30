@@ -155,27 +155,59 @@ public class DataPeriodCalculate {
 					if(chkCnt == 1) {
 						stdTimestamp = incStartDt;
 					}
-					if(chkCnt == calculCnt || i+1 == dataList.size()) { // 정해진 횟수만큼 더했거나 마지막데이터일 때
-						Map<String, Object> calculMap = new HashMap<String, Object>();
-						Iterator<String> paramKeys = map.keySet().iterator();
-						while (paramKeys.hasNext()) {
-							String name = paramKeys.next();
-							calculMap.put(name, map.get(name));
-							if(name.equals(timestampStr)) {
-								calculMap.put(timestampStr, stdTimestamp);
+					
+					if("month".equals(period)) {
+						Calendar compareCal = Calendar.getInstance();
+						compareCal.setTimeInMillis(   incStartDt.getTime()   );
+						compareCal.add(Calendar.MINUTE, 15);
+						int next = new Timestamp(compareCal.getTime().getTime()).getMonth();
+						int now = incStartDt.getMonth();
+						if(now != next || i+1 == dataList.size()) { // 다음날짜가 달이 바뀌거나 마지막데이터일 때
+							Map<String, Object> calculMap = new HashMap<String, Object>();
+							Iterator<String> paramKeys = map.keySet().iterator();
+							while (paramKeys.hasNext()) {
+								String name = paramKeys.next();
+								calculMap.put(name, map.get(name));
+								if(name.equals(timestampStr)) {
+									calculMap.put(timestampStr, stdTimestamp);
+								}
+								else if(name.equals(calculValStr)) {
+									if(nullCnt == chkCnt) calculMap.put(calculValStr, null); // 더한게 모두 null일 경우 
+									else calculMap.put(calculValStr, calculNum);
+								}
 							}
-							else if(name.equals(calculValStr)) {
-								if(nullCnt == chkCnt) calculMap.put(calculValStr, null); // 더한게 모두 null일 경우 
-								else calculMap.put(calculValStr, calculNum);
-							}
+							chkCnt = 0;
+							nullCnt = 0;
+							calculNum = 0;
+							newList.add(calculMap);
+							
+							endListDt = stdTimestamp;
+							
 						}
-						chkCnt = 0;
-						nullCnt = 0;
-						calculNum = 0;
-						newList.add(calculMap);
 						
-						endListDt = stdTimestamp;
-						
+					} else {
+						if(chkCnt == calculCnt || i+1 == dataList.size()) { // 정해진 횟수만큼 더했거나 마지막데이터일 때
+							Map<String, Object> calculMap = new HashMap<String, Object>();
+							Iterator<String> paramKeys = map.keySet().iterator();
+							while (paramKeys.hasNext()) {
+								String name = paramKeys.next();
+								calculMap.put(name, map.get(name));
+								if(name.equals(timestampStr)) {
+									calculMap.put(timestampStr, stdTimestamp);
+								}
+								else if(name.equals(calculValStr)) {
+									if(nullCnt == chkCnt) calculMap.put(calculValStr, null); // 더한게 모두 null일 경우 
+									else calculMap.put(calculValStr, calculNum);
+								}
+							}
+							chkCnt = 0;
+							nullCnt = 0;
+							calculNum = 0;
+							newList.add(calculMap);
+							
+							endListDt = stdTimestamp;
+							
+						}
 					}
 					
 					Calendar cal = Calendar.getInstance();
@@ -203,26 +235,55 @@ public class DataPeriodCalculate {
 			if(chkCnt == 1) {
 				stdTimestamp = incStartDt;
 			}
-			if(chkCnt == calculCnt || i+1 == dataList.size()) { // 정해진 횟수만큼 더했거나 마지막데이터일 때
-				Map<String, Object> calculMap = new HashMap<String, Object>();
-				Iterator<String> paramKeys = map.keySet().iterator();
-				while (paramKeys.hasNext()) {
-					String name = paramKeys.next();
-					calculMap.put(name, map.get(name));
-					if(name.equals(timestampStr)) calculMap.put(timestampStr, stdTimestamp);
-					else if(name.equals(calculValStr)) {
-						if(nullCnt == chkCnt) calculMap.put(calculValStr, null); // 더한게 모두 null일 경우 
-						else calculMap.put(calculValStr, calculNum);
+			
+			if("month".equals(period)) {
+				Calendar compareCal = Calendar.getInstance();
+				compareCal.setTimeInMillis(   incStartDt.getTime()   );
+				compareCal.add(Calendar.MINUTE, 15);
+				int next = new Timestamp(compareCal.getTime().getTime()).getMonth();
+				int now = incStartDt.getMonth();
+				if(now != next || i+1 == dataList.size()) { // 다음날짜가 달이 바뀌거나 마지막데이터일 때
+					Map<String, Object> calculMap = new HashMap<String, Object>();
+					Iterator<String> paramKeys = map.keySet().iterator();
+					while (paramKeys.hasNext()) {
+						String name = paramKeys.next();
+						calculMap.put(name, map.get(name));
+						if(name.equals(timestampStr)) calculMap.put(timestampStr, stdTimestamp);
+						else if(name.equals(calculValStr)) {
+							if(nullCnt == chkCnt) calculMap.put(calculValStr, null); // 더한게 모두 null일 경우 
+							else calculMap.put(calculValStr, calculNum);
+						}
 					}
+					chkCnt = 0;
+					nullCnt = 0;
+					calculNum = 0;
+					newList.add(calculMap);
+					endListDt = stdTimestamp;
+					
 				}
-				chkCnt = 0;
-				nullCnt = 0;
-				calculNum = 0;
-				newList.add(calculMap);
-				endListDt = stdTimestamp;
 				
+			} else {
+				if(chkCnt == calculCnt || i+1 == dataList.size()) { // 정해진 횟수만큼 더했거나 마지막데이터일 때
+					Map<String, Object> calculMap = new HashMap<String, Object>();
+					Iterator<String> paramKeys = map.keySet().iterator();
+					while (paramKeys.hasNext()) {
+						String name = paramKeys.next();
+						calculMap.put(name, map.get(name));
+						if(name.equals(timestampStr)) calculMap.put(timestampStr, stdTimestamp);
+						else if(name.equals(calculValStr)) {
+							if(nullCnt == chkCnt) calculMap.put(calculValStr, null); // 더한게 모두 null일 경우 
+							else calculMap.put(calculValStr, calculNum);
+						}
+					}
+					chkCnt = 0;
+					nullCnt = 0;
+					calculNum = 0;
+					newList.add(calculMap);
+					endListDt = stdTimestamp;
+					
+				}
 			}
-
+			
 			Calendar cal = Calendar.getInstance();
 			cal.setTimeInMillis(   incStartDt.getTime()   );
 			cal.add(Calendar.MINUTE, 15);
