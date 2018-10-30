@@ -159,11 +159,6 @@ public class ApiController {
 		}
 		Date endDate = CommonUtils.getDate(Integer.valueOf(dfs1[0]), Integer.valueOf(dfs1[1]), Integer.valueOf(dfs1[2]), Integer.valueOf(dfs2[0]), Integer.valueOf(dfs2[1]), Integer.valueOf(dfs2[2]));
 		System.out.println("피크 검색날짜 ===> "+CommonUtils.convertDateFormat(startDate, "yyyy-MM-dd HH:mm:ss")+", "+CommonUtils.convertDateFormat(endDate, "yyyy-MM-dd HH:mm:ss"));
-//		System.out.println(DateUtil.dateToString(startDate, "yyyy-MM-dd HH:mm")+"    ,     "+DateUtil.dateToString(endDate, "yyyy-MM-dd HH:mm"));
-//		System.out.println(startDate+", "+endDate+", "+DateUtil.getDate(endDate.getTime())+", "+new Date()+"                   "+CommonUtils.getDate(endDate.getYear(), endDate.getMonth()-1, endDate.getDate(), endDate.getHours(), endDate.getMinutes(), endDate.getSeconds()));
-//		Timestamp t1 = new Timestamp(Long.parseLong("1540899000000"));
-//		Timestamp t2 = new Timestamp(Long.parseLong("1540899000000"));
-//		System.out.println("                  "+t1+"       "+t2 );
 		
 		int totalUsage = 0;
 		int usageCnt = 0;
@@ -191,10 +186,12 @@ public class ApiController {
 		}
 		
 		Date stdDate = CommonUtils.getDate(Integer.valueOf(dfs1[0]), Integer.valueOf(dfs1[1]), Integer.valueOf(dfs1[2]), Integer.valueOf(dfs2[0]), Integer.valueOf(dfs2[1]), 0);
-		
+		new Timestamp(startDate.getTime());
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("stdDate", stdDate);
-		resultMap.put("startDate", startDate);
+//		resultMap.put("stdDate", stdDate);
+//		resultMap.put("startDate", startDate);
+		resultMap.put("stdDate", new Timestamp(stdDate.getTime()));
+		resultMap.put("startDate", new Timestamp(startDate.getTime()));
 		resultMap.put("totalUsage", totalUsage);
 		return resultMap;
 	}
