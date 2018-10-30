@@ -545,11 +545,13 @@
 				// 데이터 셋팅
 				var dt = new Date(startDate);
 				var dt2 = new Date(stdDate);
+				console.log(stdDate+", "+startDate);
+				console.log(moment(stdDate)+", "+moment(startDate));
 				
 				if( peakDataSet.length == 0 || (dt2.getMinutes() == 0 || dt2.getMinutes() == 15 || dt2.getMinutes() == 30 || dt2.getMinutes() == 45) ) {
 					peakDataSet = [];
 					for(var i=0; i<15; i++) {
-						peakDataSet.push([ (Number(dt)), null]);
+						peakDataSet.push([ setChartDateUTC(Number(dt)), null]);
 						dt = new Date(dt.setMinutes(dt.getMinutes() + 1));
 					}
 				}
@@ -557,7 +559,7 @@
 				var formatNum = map.get("formatNum");
 				var unit = map.get("unit");
 				
-				peakDataSet.push([ (Number(dt2)), formatNum]);
+				peakDataSet.push([ setChartDateUTC(Number(dt2)), formatNum]);
 				
 			}
 		});

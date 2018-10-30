@@ -1,6 +1,7 @@
 package kr.co.ewp.ewpsp.web;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -136,9 +137,15 @@ public class ApiController {
 		logger.debug("/getPeak");
 		logger.debug("param ::::: "+param.toString());
 		
-		Date today = DateUtil.getDate();
-		String dfs1 [] = DateUtil.dateToString(today, "yyyy-MM-dd").split("-");
-		String dfs2 [] = DateUtil.dateToString(today, "HH:mm").split(":");
+		Date today = new Date();
+		System.out.println("현재 날짜 시간은?   "+CommonUtils.convertDateFormat(today, "yyyy-MM-dd HH:mm:ss"));
+		String dfs1 [] = CommonUtils.convertDateFormat(today, "yyyy-MM-dd").split("-");
+		String dfs2 [] = CommonUtils.convertDateFormat(today, "HH:mm").split(":");
+//		Date today = DateUtil.getDate();
+//		String dfs1 [] = DateUtil.dateToString(today, "yyyy-MM-dd").split("-");
+//		String dfs2 [] = DateUtil.dateToString(today, "HH:mm:ss").split(":");
+//		System.out.println("현재시간!  "+today);
+//		System.out.println("현재시간!  "+dfs1[0]+dfs1[1]+dfs1[2]+"             "+dfs2[0]+dfs2[1]);
 		
 		Date startDate;
 		if(Integer.parseInt(dfs2[1]) >= 0 && Integer.parseInt(dfs2[1]) <15) {
@@ -150,8 +157,13 @@ public class ApiController {
 		} else {
 			startDate = CommonUtils.getDate(Integer.valueOf(dfs1[0]), Integer.valueOf(dfs1[1]), Integer.valueOf(dfs1[2]), Integer.valueOf(dfs2[0]), 45, 0);
 		}
-		Date endDate = today;
-		logger.debug("피크 검색날짜 ===> "+CommonUtils.convertDateFormat(startDate, "yyyy-MM-dd HH:mm:ss")+", "+CommonUtils.convertDateFormat(endDate, "yyyy-MM-dd HH:mm:ss"));
+		Date endDate = CommonUtils.getDate(Integer.valueOf(dfs1[0]), Integer.valueOf(dfs1[1]), Integer.valueOf(dfs1[2]), Integer.valueOf(dfs2[0]), Integer.valueOf(dfs2[1]), Integer.valueOf(dfs2[2]));
+		System.out.println("피크 검색날짜 ===> "+CommonUtils.convertDateFormat(startDate, "yyyy-MM-dd HH:mm:ss")+", "+CommonUtils.convertDateFormat(endDate, "yyyy-MM-dd HH:mm:ss"));
+//		System.out.println(DateUtil.dateToString(startDate, "yyyy-MM-dd HH:mm")+"    ,     "+DateUtil.dateToString(endDate, "yyyy-MM-dd HH:mm"));
+//		System.out.println(startDate+", "+endDate+", "+DateUtil.getDate(endDate.getTime())+", "+new Date()+"                   "+CommonUtils.getDate(endDate.getYear(), endDate.getMonth()-1, endDate.getDate(), endDate.getHours(), endDate.getMinutes(), endDate.getSeconds()));
+//		Timestamp t1 = new Timestamp(Long.parseLong("1540899000000"));
+//		Timestamp t2 = new Timestamp(Long.parseLong("1540899000000"));
+//		System.out.println("                  "+t1+"       "+t2 );
 		
 		int totalUsage = 0;
 		int usageCnt = 0;
