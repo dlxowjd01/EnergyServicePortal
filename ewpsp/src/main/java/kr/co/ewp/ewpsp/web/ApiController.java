@@ -140,7 +140,7 @@ public class ApiController {
 		Date today = new Date();
 		System.out.println("현재 날짜 시간은?   "+CommonUtils.convertDateFormat(today, "yyyy-MM-dd HH:mm:ss"));
 		String dfs1 [] = CommonUtils.convertDateFormat(today, "yyyy-MM-dd").split("-");
-		String dfs2 [] = CommonUtils.convertDateFormat(today, "HH:mm").split(":");
+		String dfs2 [] = CommonUtils.convertDateFormat(today, "HH:mm:ss").split(":");
 //		Date today = DateUtil.getDate();
 //		String dfs1 [] = DateUtil.dateToString(today, "yyyy-MM-dd").split("-");
 //		String dfs2 [] = DateUtil.dateToString(today, "HH:mm:ss").split(":");
