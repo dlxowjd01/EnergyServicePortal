@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.inject.internal.util.Maps;
 
 import kr.co.ewp.ewpsp.common.util.CommonUtils;
+import kr.co.ewp.ewpsp.common.util.DateUtil;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.Period;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.TimeType;
@@ -135,9 +136,13 @@ public class ApiController {
 		logger.debug("/getPeak");
 		logger.debug("param ::::: "+param.toString());
 		
-		Date today = new Date();
+//		Date today = new Date();
+		Date today = DateUtil.getDate();
+		System.out.println("현재 날짜 시간은?   "+CommonUtils.convertDateFormat(today, "yyyy-MM-dd HH:mm:ss"));
 		String dfs1 [] = CommonUtils.convertDateFormat(today, "yyyy-MM-dd").split("-");
 		String dfs2 [] = CommonUtils.convertDateFormat(today, "HH:mm").split(":");
+//		String dfs1 [] = DateUtil.dateToString(today, "yyyy-MM-dd").split("-");
+//		String dfs2 [] = DateUtil.dateToString(today, "HH:mm").split(":");
 		
 		Date startDate;
 		if(Integer.parseInt(dfs2[1]) >= 0 && Integer.parseInt(dfs2[1]) <15) {
