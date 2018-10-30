@@ -34,4 +34,6 @@
 <script src="../js/dbData.js" type="text/javascript"></script>
 <script src="../js/lems.js" type="text/javascript"></script>
 <script src="../js/jquery.form.min.js"></script>
+<script src="../js/moment.js"></script>
+<script src="../js/moment-timezone.js"></script>
 
