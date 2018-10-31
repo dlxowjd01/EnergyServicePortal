@@ -249,14 +249,6 @@
 				$("#siteForm").find("#selSiteGrpIdx2").focus();
 				return;
 			}
-			if($("#siteForm").find("#localEmsAddr").val() == "") {
-				$("#siteForm").find("#localEmsAddr").focus();
-				return;
-			}
-			if($("#siteForm").find("#localEmsKey").val() == "") {
-				$("#siteForm").find("#localEmsKey").focus();
-				return;
-			}
 			
 			var formData = $("#siteForm").serializeObject();
 			if(confirm("사이트를 저장하시겠습니까?")) {
