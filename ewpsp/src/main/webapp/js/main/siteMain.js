@@ -918,7 +918,7 @@
 						memo = (deviceList[i].device_stat == 1) ? "connect" : "disconnect";
 					}
 					$div.append(
-							$(strHtml).append( $('<a href="#" ondbclick="getDeviceDetail(\''+deviceList[i].site_id+"\', \'"+deviceList[i].device_id+"\', \'"+deviceList[i].device_type+'\')">')
+							$(strHtml).append( $('<a href="#;" ondbclick="getDeviceDetail(\''+deviceList[i].site_id+"\', \'"+deviceList[i].device_id+"\', \'"+deviceList[i].device_type+'\')">')
 							).append( $('<span class="dname" />').append( deviceList[i].device_name )
 							).append( $('<span class="dmemo" />').append( memo )
 							)
