@@ -123,7 +123,10 @@
 								when 3 then 'PV'
 								when 4 then '부하측정기기'
 								when 5 then 'PV모니터링기기'
-								else 'ESS모니터링기기' end as device_type_nm
+								when 6 then 'ESS모니터링기기'
+								when 7 then 'iSmart'
+								when 8 then '총량기기'
+								else '' end as device_type_nm
 						from tb_device
 						group by site_id, device_type
 						) a
@@ -138,7 +141,7 @@
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)"> 
 					and a.site_grp_idx = #{siteGrpIdx }
 					</if>
-					order by a.reg_date
+					order by a.reg_date desc
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
@@ -173,7 +176,10 @@
 								when 3 then 'PV'
 								when 4 then '부하측정기기'
 								when 5 then 'PV모니터링기기'
-								else 'ESS모니터링기기' end as device_type_nm
+								when 6 then 'ESS모니터링기기'
+								when 7 then 'iSmart'
+								when 8 then '총량기기'
+								else '' end as device_type_nm
 						from tb_device
 						group by site_id, device_type
 						) a

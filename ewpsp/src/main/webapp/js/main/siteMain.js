@@ -558,6 +558,16 @@
 				
 				peakDataSet.push([ Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate(), dt2.getHours(), dt2.getMinutes(), dt2.getSeconds()), formatNum]);
 				
+				if(totalUsage == 0 || totalUsage == null) {
+					$(".peak").find(".no-data").css("display", "");
+					$(".peak").find(".inchart").css("display", "none");
+					$(".peak").find(".chart_notice").css("display", "none");
+				} else {
+					$(".peak").find(".no-data").css("display", "none");
+					$(".peak").find(".inchart").css("display", "");
+					$(".peak").find(".chart_notice").css("display", "");
+				}
+				
 			}
 		});
 		
