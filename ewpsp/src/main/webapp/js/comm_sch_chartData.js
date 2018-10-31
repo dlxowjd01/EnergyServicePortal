@@ -163,10 +163,10 @@ function getCollect_sch_condition() {
 	$dtpk5 = $("#datepicker5");
 	$("#dtCnt").val("");
 	
-//	var firstDay = new Date();
-//	var endDay = new Date();
-	var firstDay = new Date(2018, 7, 31, 13, 45, 37); // 2018-08-31 13:45:37
-	var endDay = new Date(2018, 7, 31, 13, 45, 37);
+	var firstDay = new Date();
+	var endDay = new Date();
+//	var firstDay = new Date(2018, 7, 31, 13, 45, 37); // 2018-08-31 13:45:37
+//	var endDay = new Date(2018, 7, 31, 13, 45, 37);
 //	var firstDay = new Date(2018, 8, 23, 13, 45, 37);
 //	var endDay = new Date(2018, 8, 23, 13, 45, 37);
 	if(SelTerm == '15min') { // 15분(현재 안나옴)
