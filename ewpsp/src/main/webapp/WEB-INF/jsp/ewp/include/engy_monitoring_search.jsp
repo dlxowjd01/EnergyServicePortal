@@ -51,12 +51,12 @@
 								<div class="chart_top clear">
 									<h2 class="ntit fl">알림현황</h2>
 									<div class="dropdown fl">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selTermBox">1일(오늘)
+										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selTermBox">1일
 										<span class="caret"></span></button>
 										<ul class="dropdown-menu">
 											<li class="on"><a href="#" onclick="changeSelTerm('30min'); ">30분</a></li>
 											<li><a href="#" onclick="changeSelTerm('hour');">1시간</a></li>
-											<li><a href="#" onclick="changeSelTerm('day');">1일(오늘)</a></li>
+											<li><a href="#" onclick="changeSelTerm('day');">1일</a></li>
 											<li><a href="#" onclick="changeSelTerm('week');">1주</a></li>
 											<li><a href="#" onclick="changeSelTerm('month');">1월</a></li>
 											<li><a href="#" onclick="changeSelTerm('year');">1년</a></li>
@@ -77,12 +77,12 @@
 									<c:if test="${param.schGbn eq 'energy' }">
 									<div class="term fl clear">
 										<div class="dropdown fl">
-										  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selTermBox">1일(오늘)
+										  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selTermBox">1일
 										  <span class="caret"></span></button>
 										  <ul class="dropdown-menu">
 										    <li class="on"><a href="#" onclick="changeSelTerm('30min'); ">30분</a></li>
 										    <li><a href="#" onclick="changeSelTerm('hour');">1시간</a></li>
-										    <li><a href="#" onclick="changeSelTerm('day');">1일(오늘)</a></li>
+										    <li><a href="#" onclick="changeSelTerm('day');">1일</a></li>
 										    <li><a href="#" onclick="changeSelTerm('week');">1주</a></li>
 										    <li><a href="#" onclick="changeSelTerm('month');">1월</a></li>
 										    <li><a href="#" onclick="changeSelTerm('year');">1년</a></li>
