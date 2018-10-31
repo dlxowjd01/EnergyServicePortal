@@ -41,7 +41,7 @@ function changeSelTerm(gubun) {
 		
 		$("#selPeriodVal").val('15min');
 	} else if(gubun == 'day') { // 오늘
-		$selTermBox.empty().append("1일(오늘)").append( $('<span class="caret" />') );
+		$selTermBox.empty().append("1일").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("1시간").append( $('<span class="caret" />') );
 		$("#sp_1day").hide();
 		$("#sp_1month").hide();
