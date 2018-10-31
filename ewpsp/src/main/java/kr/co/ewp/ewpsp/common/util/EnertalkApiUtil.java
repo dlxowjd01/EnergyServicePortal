@@ -78,7 +78,7 @@ public class EnertalkApiUtil {
 		  
 			resultBody = response.toString();
 		  
-		  logger.debug("result "+resultBody);
+		  System.out.println("result "+resultBody);
 		  returnUsage = JsonUtil.toObject(resultBody, UsageModel.class);
 		  return returnUsage;
 	  } catch (Exception e) {
