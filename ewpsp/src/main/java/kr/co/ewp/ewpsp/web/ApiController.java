@@ -186,12 +186,10 @@ public class ApiController {
 		}
 		
 		Date stdDate = CommonUtils.getDate(Integer.valueOf(dfs1[0]), Integer.valueOf(dfs1[1]), Integer.valueOf(dfs1[2]), Integer.valueOf(dfs2[0]), Integer.valueOf(dfs2[1]), 0);
-		new Timestamp(startDate.getTime());
+		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-//		resultMap.put("stdDate", stdDate);
-//		resultMap.put("startDate", startDate);
-		resultMap.put("stdDate", new Timestamp(stdDate.getTime()));
-		resultMap.put("startDate", new Timestamp(startDate.getTime()));
+		resultMap.put("stdDate", stdDate);
+		resultMap.put("startDate", startDate);
 		resultMap.put("totalUsage", totalUsage);
 		return resultMap;
 	}
@@ -235,6 +233,11 @@ public class ApiController {
 		return result;
 	}
 	
+	/**
+	 * IOE장치 실시간 상세정보
+	 * @param deviceId
+	 * @return
+	 */
 	public UsageRealtimeModel getDeviceRealTimeTest(String deviceId) {
 		UsageRealtimeModel usageRealtime = EnertalkApiUtil.getDeviceRealTime(deviceId);
 		return usageRealtime;
