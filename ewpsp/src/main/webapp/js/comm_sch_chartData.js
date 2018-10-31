@@ -252,12 +252,12 @@ function update_updtDataTime(now, id) {
 
 // 차트에 대입할 날짜(x축) 세팅
 function setChartDateUTC(_dateTimestamp) {
-	if(localYn == "Y") {
+//	if(localYn == "Y") {
 		var tm = new Date(_dateTimestamp);
 		return Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds());
-	} else if(localYn == "N") {
-		return _dateTimestamp;
-	}
+//	} else if(localYn == "N") {
+//		return _dateTimestamp;
+//	}
 	
 }
 

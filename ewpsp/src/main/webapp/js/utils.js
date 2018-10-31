@@ -189,13 +189,13 @@ function onlyNum(event) {
 // 날짜에 utc 적용여부
 var localYn="N"; // 개발서버인 경우 N으로 변경
 function convertDateUTC(_dateTimestamp) {
-	if(localYn == "Y") {
-		return _dateTimestamp;
-	} else if(localYn == "N") {
+//	if(localYn == "Y") {
+//		return _dateTimestamp;
+//	} else if(localYn == "N") {
 		var tm = new Date(_dateTimestamp);
 		var cvrtDt = new Date(tm.getUTCFullYear(), tm.getUTCMonth(), tm.getUTCDate(), tm.getUTCHours(), tm.getUTCMinutes(), tm.getUTCSeconds()).getTime()
 		return cvrtDt;
-	}
+//	}
 	
 }
 
