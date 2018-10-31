@@ -654,6 +654,7 @@ public class CmpyGrpSiteMngController {
 			
 		}
 		
+		param.put("compIdx", param.get("selCompIdx1"));
 		int resultCnt = cmpyGrpSiteMngService.updateGroup(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -674,6 +675,8 @@ public class CmpyGrpSiteMngController {
 
 		Map userInfo = UserUtil.getUserInfo(request);
 		param.put("modUid", userInfo.get("user_id"));
+		param.put("siteGrpIdx", param.get("selSiteGrpIdx2"));
+		param.put("compIdx", param.get("selCompIdx2"));
 		
 		int resultCnt = cmpyGrpSiteMngService.updateSite(param);
 		

@@ -103,14 +103,14 @@
 			for(var i=0; i<siteList.length; i++) {
 				var device_stat = (siteList[i].device_stat == 1) ? "connect" : "disconnect";
 				$tbody.append(
-						$('<tr />').append( $("<td />").append( siteList[i].rnum ) // no
-						).append( $("<td />").append( siteList[i].site_name ) // 사이트명
-						).append( $("<td />").append( siteList[i].site_id ) // 사이트id
-						).append( $("<td />").append( siteList[i].site_grp_name ) // 그룹
-						).append( $("<td />").append( siteList[i].local_ems_addr ) // local ems 주소
-						).append( $("<td />").append( siteList[i].device_type_nms ) // 등록장치
+						$('<tr />').append( $('<td />').append( siteList[i].rnum ) // no
+						).append( $('<td />').append( siteList[i].site_name ) // 사이트명
+						).append( $('<td />').append( siteList[i].site_id ) // 사이트id
+						).append( $('<td />').append( siteList[i].site_grp_name ) // 그룹
+						).append( $('<td />').append( siteList[i].local_ems_addr ) // local ems 주소
+						).append( $('<td class="ellipsis mxw500" />').append( siteList[i].device_type_nms ) // 등록장치
 						).append( // 관리
-								$("<td />").append(
+								$('<td />').append(
 										'<a href="#;" onclick="updateSiteForm(\''+siteList[i].site_id+'\');" class="default_btn">수정</a>'+
 										'<a href="#;" onclick="deleteSiteYn(\''+siteList[i].site_id+'\');" class="cancel_btn">삭제</a>'
 								)
