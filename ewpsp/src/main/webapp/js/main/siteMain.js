@@ -548,7 +548,7 @@
 				if( peakDataSet.length == 0 || (dt2.getMinutes() == 0 || dt2.getMinutes() == 15 || dt2.getMinutes() == 30 || dt2.getMinutes() == 45) ) {
 					peakDataSet = [];
 					for(var i=0; i<15; i++) {
-						peakDataSet.push([ setChartDateUTC(Number(dt)), null]);
+						peakDataSet.push([ Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds()), null]);
 						dt = new Date(dt.setMinutes(dt.getMinutes() + 1));
 					}
 				}
@@ -556,7 +556,7 @@
 				var formatNum = map.get("formatNum");
 				var unit = map.get("unit");
 				
-				peakDataSet.push([ setChartDateUTC(Number(stdDate)), formatNum]);
+				peakDataSet.push([ Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate(), dt2.getHours(), dt2.getMinutes(), dt2.getSeconds()), formatNum]);
 				
 			}
 		});
