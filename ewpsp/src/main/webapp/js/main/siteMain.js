@@ -891,7 +891,7 @@
 				} else {
 					var strHtml = "";
 					var memo = "";
-					if(deviceList[i].device_type == 4) {
+					if(deviceList[i].device_type == 4 || deviceList[i].device_type == 6 || deviceList[i].device_type == 7 || deviceList[i].device_type == 8) {
 						strHtml = (deviceList[i].device_stat == 1) ? '<li class="ioe" />' : '<li class="ioe alert" />'; 
 						memo = (deviceList[i].device_stat == 1) ? "connect" : "disconnect";
 					} else if(deviceList[i].device_type == 1) {
@@ -900,7 +900,7 @@
 					} else if(deviceList[i].device_type == 2) {
 						strHtml = '<li class="bms" />';
 						memo = (deviceList[i].sys_soc == null || deviceList[i].sys_soc == "" || deviceList[i].sys_soc == "null") ? "" : deviceList[i].sys_soc+" %";
-					} else if(deviceList[i].device_type == 3) {
+					} else if(deviceList[i].device_type == 3 || deviceList[i].device_type == 5) {
 						strHtml = '<li class="pv" />';
 						memo = deviceList[i].tot_power;
 					} else {
@@ -908,7 +908,7 @@
 						memo = (deviceList[i].device_stat == 1) ? "connect" : "disconnect";
 					}
 					$div.append(
-							$(strHtml).append( $('<a href="#">')
+							$(strHtml).append( $('<a href="#" ondbclick="getDeviceDetail(\''+deviceList[i].site_id+"\', \'"+deviceList[i].device_id+"\', \'"+deviceList[i].device_type+'\')">')
 							).append( $('<span class="dname" />').append( deviceList[i].device_name )
 							).append( $('<span class="dmemo" />').append( memo )
 							)
@@ -920,6 +920,20 @@
 			var pagingMap = result.pagingMap;
 			makePageNums2(pagingMap, "Device");
 			
+		}
+	}
+	
+	function getDeviceDetail(siteId, deviceId, deviceType) {
+		if(deviceType == 4 || deviceType == 6 || deviceType == 7 || deviceType == 8) {
+			getDeviceIOEDetail(siteId, deviceId, deviceType);
+		} else if(deviceType == 1) {
+			getDevicePCSDetail(siteId, deviceId, deviceType);
+		} else if(deviceType == 2) {
+			getDeviceBMSDetail(siteId, deviceId, deviceType);
+		} else if(deviceType == 3 || deviceType == 5) {
+			getDevicePVDetail(siteId, deviceId, deviceType)
+		} else {
+			getDeviceIOEDetail(siteId, deviceId, deviceType);
 		}
 	}
 	

@@ -53,13 +53,13 @@ public class EnertalkApiUtil {
 //		  url.append("&end=").append(end.getTime());
 		  
 		  URL reUrl = new URL(  url.toString()  );
-		  logger.debug("enertalk api URL : "+ url);
+		  System.out.println("enertalk api URL : "+ url);
 			HttpURLConnection con = (HttpURLConnection) reUrl.openConnection();
 			con.setRequestMethod("GET");
 			con.setRequestProperty("authorization", "Basic " + Constants.ENERTALK_API_AUTH);
 			con.setDoOutput(true);
 			Map headerFields = con.getHeaderFields();
-			System.out.println("header fields are : "+headerFields);
+			logger.debug("header fields are : "+headerFields);
 			
 			int resCode = con.getResponseCode();
 			BufferedReader br;
