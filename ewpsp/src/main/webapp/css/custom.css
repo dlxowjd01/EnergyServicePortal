@@ -358,7 +358,7 @@ nav .category {
 }
 nav .nav_brand {float:left; margin-top:20px;}
 nav .nav_brand a {
-	display:inline-block; width:173px; height:40px; background:url('../img/logo.png') no-repeat 0 0;
+	display:inline-block; width:173px; height:40px; background:url('../img/logo.png') no-repeat 50% 50%;
 	vertical-align:top; font-size:0;
 }
 /* ewp 로고 */
