@@ -141,11 +141,6 @@ public class ApiController {
 		System.out.println("현재 날짜 시간은?   "+CommonUtils.convertDateFormat(today, "yyyy-MM-dd HH:mm:ss"));
 		String dfs1 [] = CommonUtils.convertDateFormat(today, "yyyy-MM-dd").split("-");
 		String dfs2 [] = CommonUtils.convertDateFormat(today, "HH:mm:ss").split(":");
-//		Date today = DateUtil.getDate();
-//		String dfs1 [] = DateUtil.dateToString(today, "yyyy-MM-dd").split("-");
-//		String dfs2 [] = DateUtil.dateToString(today, "HH:mm:ss").split(":");
-//		System.out.println("현재시간!  "+today);
-//		System.out.println("현재시간!  "+dfs1[0]+dfs1[1]+dfs1[2]+"             "+dfs2[0]+dfs2[1]);
 		
 		Date startDate;
 		if(Integer.parseInt(dfs2[1]) >= 0 && Integer.parseInt(dfs2[1]) <15) {

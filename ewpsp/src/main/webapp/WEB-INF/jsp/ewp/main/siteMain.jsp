@@ -6,6 +6,7 @@
 <jsp:include page="../include/common_static.jsp" />
 <jsp:include page="../include/sub_static.jsp" />
 <script src="../js/main/siteMain.js" type="text/javascript"></script>
+<script src="../js/device/deviceDetailPopup.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -991,7 +992,8 @@
 	</div>
 
 
-
+<jsp:include page="../include/popup/deviceDetailPopup.jsp" />
+<jsp:include page="../include/popup/serviceInfo.jsp" />
 
 
 
