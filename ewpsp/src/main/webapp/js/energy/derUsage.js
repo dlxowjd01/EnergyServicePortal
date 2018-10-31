@@ -33,7 +33,8 @@
 		var essUsageListChartList = result.essUsageListChartList;
 		var pvUsageListSheetList = result.pvUsageListSheetList;
 		var pvUsageListChartList = result.pvUsageListChartList;
-		var loopCntList = result.loopCntList; // for문 loop list
+		var loopCntSheetList = result.loopCntSheetList; // for문 loop list
+		var loopCntChartList = result.loopCntChartList; // for문 loop list
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -55,7 +56,9 @@
 		// 한전사용량, ess사용량, pv사용량 중 하나라도 데이터가 존재할 때
 		// 표데이터 셋팅
 		if( !( kepcoUsageSheetList == null && essUsageListSheetList == null && pvUsageListSheetList == null ) ) {
-			for(var i=0; i<loopCntList.length; i++) {
+			console.log("loopCntSheetList.length "+loopCntSheetList.length);
+			console.log("loopCntSheetList "+loopCntSheetList);
+			for(var i=0; i<loopCntSheetList.length; i++) {
 				var kepcoUsage = null;
 				var essUsage = null;
 				var pvUsage = null;
@@ -94,7 +97,7 @@
 					}
 				} else rePvUsage = null;
 				
-				var tm = new Date( convertDateUTC(loopCntList[i].std_timestamp) );
+				var tm = new Date( convertDateUTC(loopCntSheetList[i].std_timestamp) );
 				
 				// 표데이터 셋팅
 				var headerDate2 = convertDataTableHeaderDate(tm, 2);
@@ -126,7 +129,7 @@
 					dt_str2_totalVal = 0;
 					dt_str3_totalVal = 0;
 				} else {
-					if( (i+1) == loopCntList.length ) { // 조회한 목록이 라인을 다 못채울 때
+					if( (i+1) == loopCntSheetList.length ) { // 조회한 목록이 라인을 다 못채울 때
 						var headerDate1 = convertDataTableHeaderDate(tm, 1);
 						var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
 						for(a=0; a<(dt_col-dt_col_cnt); a++) {
@@ -160,7 +163,7 @@
 		// 한전사용량, ess사용량, pv사용량 중 하나라도 데이터가 존재할 때
 		// 차트데이터 셋팅
 		if( !( kepcoUsageChartList == null && essUsageListChartList == null && pvUsageListChartList == null ) ) {
-			for(var i=0; i<loopCntList.length; i++) {
+			for(var i=0; i<loopCntChartList.length; i++) {
 				var kepcoUsage = null;
 				var essUsage = null;
 				var pvUsage = null;
@@ -199,18 +202,19 @@
 					}
 				} else rePvUsage = null;
 				
-				var tm = new Date( convertDateUTC(loopCntList[i].std_timestamp) );
+				var tm = new Date( convertDateUTC(loopCntChartList[i].std_timestamp) );
 				// 차트데이터 셋팅
-				dataSet.push([ setChartDateUTC(loopCntList[i].std_timestamp) , reKepcoUsage ]);
-				dataSet2.push([ setChartDateUTC(loopCntList[i].std_timestamp) , reEssUsage ]);
-				dataSet3.push([ setChartDateUTC(loopCntList[i].std_timestamp) , rePvUsage ]);
+				dataSet.push([ setChartDateUTC(loopCntChartList[i].std_timestamp) , reKepcoUsage ]);
+				dataSet2.push([ setChartDateUTC(loopCntChartList[i].std_timestamp) , reEssUsage ]);
+				dataSet3.push([ setChartDateUTC(loopCntChartList[i].std_timestamp) , rePvUsage ]);
 				
 			}
 			pastUsageList = dataSet;
 			essUsageList = dataSet2;
 			pvUsageList = dataSet3;
+			console.log("zzz "+i);
 			
-			if(kepcoUsageChartList.length > 0) {
+			if(kepcoUsageChartList != null && kepcoUsageChartList.length > 0) {
 				myChart.addSeries({
 					index:3,
 					fillOpacity: 1,
@@ -222,7 +226,7 @@
 				
 			}
 			
-			if(essUsageListChartList.length > 0) {
+			if(essUsageListChartList != null && essUsageListChartList.length > 0) {
 				myChart.addSeries({
 					index: 2,
 					fillOpacity: 0.5,
@@ -233,7 +237,7 @@
 				
 			}
 			
-			if(pvUsageListChartList.length > 0) {
+			if(pvUsageListChartList != null && pvUsageListChartList.length > 0) {
 				myChart.addSeries({
 					index: 1,
 					fillOpacity: 0.5,

@@ -13,16 +13,7 @@ function changeSelTerm(gubun) {
 	$("#datepicker1, #datepicker2, #datepicker5").val("").attr("disabled", true);
 	var $selTermBox = $("#selTermBox");
 	var $selPeriod = $("#selPeriod");
-	var today = new Date();
-	var firstDay = new Date();
-	var endDay = new Date();
-//	var firstDay = new Date(2018, 7, 31, 13, 45, 37); // 2018-08-31 13:45:37
-//	var endDay = new Date(2018, 7, 31, 13, 45, 37);
-//	var firstDay = new Date(2018, 8, 23, 13, 45, 37);
-//	var endDay = new Date(2018, 8, 23, 13, 45, 37);
-//	console.log("시작전 : "+firstDay+", "+endDay);
 	if(gubun == '15min') { // 15분(현재 안나옴)
-		firstDay = new Date(firstDay.setMinutes(firstDay.getMinutes() - 15));// new Date().setHours(firstDay.getMinutes()-1);
 		$selTermBox.empty().append("15분").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("1분").append( $('<span class="caret" />') );
 		$("#sp_15min").hide();
@@ -33,7 +24,6 @@ function changeSelTerm(gubun) {
 		
 		$("#selPeriodVal").val('1min');
 	} else if(gubun == '30min') { // 30분
-		firstDay = new Date(firstDay.setMinutes(firstDay.getMinutes() - 30));// new Date().setHours(firstDay.getHours()-1);
 		$selTermBox.empty().append("30분").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("15분").append( $('<span class="caret" />') );
 		$("#sp_30min").hide();
@@ -43,9 +33,6 @@ function changeSelTerm(gubun) {
 		
 		$("#selPeriodVal").val('15min');
 	} else if(gubun == 'hour') { // 1시간
-		firstDay = new Date(firstDay.setHours(firstDay.getHours() - 1));// new Date().setHours(firstDay.getHours()-1);
-//		firstDay = new Date(firstDay.setMinutes(firstDay.getMinutes() - 59));// new Date().setHours(firstDay.getHours()-1);
-		
 		$selTermBox.empty().append("1시간").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("15분").append( $('<span class="caret" />') );
 		$("#sp_1hour").hide();
@@ -54,9 +41,6 @@ function changeSelTerm(gubun) {
 		
 		$("#selPeriodVal").val('15min');
 	} else if(gubun == 'day') { // 오늘
-		firstDay = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), 0, 0, 0);
-		endDay = new Date(endDay.getFullYear(), endDay.getMonth(), endDay.getDate(), 23, 59, 59);
-		
 		$selTermBox.empty().append("1일(오늘)").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("1시간").append( $('<span class="caret" />') );
 		$("#sp_1day").hide();
@@ -64,34 +48,20 @@ function changeSelTerm(gubun) {
 		
 		$("#selPeriodVal").val('hour');
 	} else if(gubun == 'week') { // 1주
-		firstDay = new Date(firstDay.setDate(firstDay.getDate() - 7));
-		
 		$selTermBox.empty().append("1주").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("1시간").append( $('<span class="caret" />') );
 		$("#sp_1month").hide();
 		
 		$("#selPeriodVal").val('hour');
 	} else if(gubun == 'month') { // 1달
-//		firstDay.setMonth(firstDay.getMonth()-1);
-		firstDay = new Date(firstDay.setDate(firstDay.getDate()-30));
-		
 		$selTermBox.empty().append("1월").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("1일").append( $('<span class="caret" />') );
 		$("#sp_1month").hide();
 		
 		$("#selPeriodVal").val('day');
 	} else if(gubun == 'year') { // 1년
-//		firstDay.setYear(firstDay.getFullYear()-1);
-//		firstDay = new Date(firstDay.setMonth(firstDay.getMonth()+1));
-		firstDay = new Date(firstDay.setDate(firstDay.getDate()-365));
-		
 		$selTermBox.empty().append("1년").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("1월").append( $('<span class="caret" />') );
-//		$("#sp_1min").hide();
-//		$("#sp_15min").hide();
-//		$("#sp_30min").hide();
-//		$("#sp_1hour").hide();
-//		$("#sp_1day").hide();
 		
 		$("#selPeriodVal").val('month');
 	} else if(gubun == 'other') { // 에너지모니터링 화면 전체의 기간설정검색
@@ -112,12 +82,6 @@ function changeSelTerm(gubun) {
 		$("#datepicker5").attr("disabled", false).val( d.format("yyyy-MM-dd") );
 	}
 	
-	firstDay = (firstDay == "") ? "" : firstDay.format("yyyyMMddHHmmss");
-	endDay = (endDay == "") ? "" : endDay.format("yyyyMMddHHmmss");
-//	console.log("firstDay : "+firstDay+", endDay : "+endDay);
-
-	$("#selTermFrom").val(firstDay);
-	$("#selTermTo").val(endDay);
 	SelTerm = gubun;
 }
 
@@ -192,38 +156,68 @@ $(function () {
 
 //db조회 검색조건 모으기
 function getCollect_sch_condition() {
-//	var period = $("#selPeriodVal").val(); // 데이터조회간격
-//	var siteId = $("#site-ids").val(); // 조회할 사이트 id
-//	var start = $("#selTermFrom").val(); // 검색시작일시(selectbox)
-//	var end = $("#selTermTo").val(); // 검색종료일시(selectbox)
-//	var dtpk_from = $("#datepicker1").val(); // 검색시작일(input)
-//	var dtpk_to = $("#datepicker2").val(); // 검색종료일(input)
-	
 	$dtpk1 = $("#datepicker1");
 	$dtpk2 = $("#datepicker2");
 	$dtpk3 = $("#datepicker3");
 	$dtpk4 = $("#datepicker4");
 	$dtpk5 = $("#datepicker5");
 	$("#dtCnt").val("");
-	if(SelTerm == "other") {
-		$("#selTermFrom").val( ($dtpk1.val() == "") ? "" : new Date( $dtpk1.val()+" 00:00:00" ).format("yyyyMMddHHmmss") );
-		$("#selTermTo").val( ($dtpk2.val() == "") ? "" : new Date( $dtpk2.val()+" 23:59:59" ).format("yyyyMMddHHmmss") );
+	
+//	var firstDay = new Date();
+//	var endDay = new Date();
+	var firstDay = new Date(2018, 7, 31, 13, 45, 37); // 2018-08-31 13:45:37
+	var endDay = new Date(2018, 7, 31, 13, 45, 37);
+//	var firstDay = new Date(2018, 8, 23, 13, 45, 37);
+//	var endDay = new Date(2018, 8, 23, 13, 45, 37);
+	if(SelTerm == '15min') { // 15분(현재 안나옴)
+		firstDay = new Date(firstDay.setMinutes(firstDay.getMinutes() - 15));
+	} else if(SelTerm == '30min') { // 30분
+		firstDay = new Date(firstDay.setMinutes(firstDay.getMinutes() - 30));
+	} else if(SelTerm == 'hour') { // 1시간
+		firstDay = new Date(firstDay.setHours(firstDay.getHours() - 1));
+	} else if(SelTerm == 'day') { // 오늘
+		firstDay = new Date(firstDay.setDate(firstDay.getDate() - 1));
+	} else if(SelTerm == 'week') { // 1주
+		firstDay = new Date(firstDay.setDate(firstDay.getDate() - 7));
+	} else if(SelTerm == 'month') { // 1달
+		firstDay = new Date(firstDay.setDate(firstDay.getDate()-30));
+	} else if(SelTerm == 'year') { // 1년
+		firstDay = new Date(firstDay.setDate(firstDay.getDate()-365));
+	} else if(SelTerm == 'other') { // 에너지모니터링 화면 전체의 기간설정검색
+		console.log("$dtpk1.val()   "+$dtpk1.val()+", "+$dtpk2.val());
+		firstDay = new Date( $dtpk1.val()+" 00:00:00" );
+		endDay = new Date( $dtpk2.val()+" 23:59:59" );
 		$("#dtCnt").val(  dateDiff($dtpk1.val()+" 00:00:00", $dtpk2.val()+" 23:59:59")+1  );
-	} else if(SelTerm == "selectDay") { // dr실적 날짜선택
-		$("#selTermFrom").val( ($dtpk5.val() == "") ? "" : new Date( $dtpk5.val()+" 00:00:00" ).format("yyyyMMddHHmmss") );
-		$("#selTermTo").val( ($dtpk5.val() == "") ? "" : new Date( $dtpk5.val()+" 23:59:59" ).format("yyyyMMddHHmmss") );
+	} else if(SelTerm == 'drday') { // 에너지모니터링 dr실적조회의 오늘날짜
+		firstDay = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), 0, 0, 0);
+		endDay = new Date(endDay.getFullYear(), endDay.getMonth(), endDay.getDate(), 23, 59, 59);
+		firstDat = new Date(firstDay.setMinutes(firstDay.getMinutes() + (new Date()).getTimezoneOffset()));
+		endDay = new Date(endDay.setMinutes(endDay.getMinutes() + (new Date()).getTimezoneOffset()));
+	} else if(SelTerm == 'selectDay') { // 에너지모니터링 dr실적조회의 날짜검색
+		firstDay = new Date( $dtpk5.val()+" 00:00:00" );
+		endDay = new Date( $dtpk5.val()+" 23:59:59" );
 		$("#dtCnt").val(  dateDiff($dtpk5.val()+" 00:00:00", $dtpk5.val()+" 23:59:59")+1  );
-		
 	} else if(SelTerm == "billSelectMM") { // 요금/수익 화면 전체의 기간설정검색
+		console.log($dtpk3.val()+", "+$dtpk4.val());
 		$("#selTermFrom").val( replaceAll($dtpk3.val(), "-", "") );
 		$("#selTermTo").val( replaceAll($dtpk4.val(), "-", "") );
 	}
+	
+	if(SelTerm != "billSelectMM") {
+		firstDay = (firstDay == "") ? "" : firstDay.format("yyyyMMddHHmmss");
+		endDay = (endDay == "") ? "" : endDay.format("yyyyMMddHHmmss");
+		$("#selTermFrom").val(firstDay);
+		$("#selTermTo").val(endDay);
+	}
+	
+	
 //	if(dtcnt == 1) $("#selTerm").val("day");
 //	else if(dtcnt >= 7 && dtcnt <=31) $("#selTerm").val("month");
 //	else if(dtcnt > 31) $("#selTerm").val("year");
 //	
 	var formData = $("#schForm").serializeObject();
 //	formValidationChk();
+	console.log(formData);
 
 	var today = new Date();
 	getDBData(formData); // DB 데이터 조회(각 화면마다 존재)
@@ -253,10 +247,10 @@ function update_updtDataTime(now, id) {
 // 차트에 대입할 날짜(x축) 세팅
 function setChartDateUTC(_dateTimestamp) {
 //	if(localYn == "Y") {
-		var tm = new Date(_dateTimestamp);
-		return Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds());
+//		var tm = new Date(_dateTimestamp);
+//		return Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds());
 //	} else if(localYn == "N") {
-//		return _dateTimestamp;
+		return _dateTimestamp;
 //	}
 	
 }
@@ -398,6 +392,7 @@ function setDataTableColRowCnt() {
 		}  else if(periodd == 'hour') {
 			col_cnt = 24;
 		}
+		if(chk != "000000") row_cnt = row_cnt+1;
 		
 	} else if(SelTerm === 'week') {
 		if(periodd == '15min') {

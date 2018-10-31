@@ -193,7 +193,7 @@ function convertDateUTC(_dateTimestamp) {
 //		return _dateTimestamp;
 //	} else if(localYn == "N") {
 		var tm = new Date(_dateTimestamp);
-		var cvrtDt = new Date(tm.getUTCFullYear(), tm.getUTCMonth(), tm.getUTCDate(), tm.getUTCHours(), tm.getUTCMinutes(), tm.getUTCSeconds()).getTime()
+		var cvrtDt = new Date(tm.getUTCFullYear(), tm.getUTCMonth(), tm.getUTCDate(), tm.getUTCHours(), tm.getUTCMinutes(), tm.getUTCSeconds()).getTime();
 		return cvrtDt;
 //	}
 	
@@ -332,72 +332,24 @@ function dateDiff(_date1, _date2) {
 	return diff;
 }
 
-//서버 현재시간 가져오기 (format : yyyyMMddHHmm) 
-function serverToday(){ 
-  var xmlHttp; 
-  //분기하지 않으면 IE에서만 작동된다. 
-  if (window.XMLHttpRequest) { // IE 7.0 이상, 크롬, 파이어폭스일 경우 분기 
-    xmlHttp = new XMLHttpRequest(); 
-    xmlHttp.open('HEAD',window.location.href.toString(),false);
-    xmlHttp.setRequestHeader("Content-Type", "text/html"); 
-    xmlHttp.send(''); 
-  }else if (window.ActiveXObject) { 
-    xmlHttp = new ActiveXObject('Msxml2.XMLHTTP');
-    xmlHttp.open('HEAD',window.location.href.toString(),false);
-    xmlHttp.setRequestHeader("Content-Type", "text/html"); 
-    xmlHttp.send(''); 
-  } 
-  var st = xmlHttp.getResponseHeader("Date");
-  var curDate = new Date(st); 
-  var curDateFmt; var year = curDate.getFullYear(); 
-  var month = curDate.getMonth()+1; 
-  var day = curDate.getDate(); 
-  var hours = curDate.getHours(); 
-  var minutes = curDate.getMinutes(); 
-  if(parseInt(month) < 10){ 
-    month = 0 + "" + month; 
-  } 
-  if(parseInt(day) < 10){ 
-    day = 0 + "" + day; 
-  } 
-  if(parseInt(hours) < 10){ 
-    hours = 0 + "" + hours; 
-  } if(parseInt(minutes) < 10){ 
-    minutes = 0 + "" + minutes; 
-  } 
-//  curDateFmt = parseInt(year + "" + month + "" + day + "" + hours + "" + minutes); 
-  curDateFmt = year + "-" + month + "-" + day + " " + hours + ":" + minutes; 
-  return curDateFmt; 
-}
-
 var xmlHttp;
-function srvTime() {
-    try {
-        //FF, Opera, Safari, Chrome
-        xmlHttp = new XMLHttpRequest();
-    }
-    catch (err1) {
-        //IE
-        try {
-            xmlHttp = new ActiveXObject('Msxml2.XMLHTTP');
-        }
-        catch (err2) {
-            try {
-                xmlHttp = new ActiveXObject('Microsoft.XMLHTTP');
-            }
-            catch (eerr3) {
-                //AJAX not supported, use CPU time.
-                alert("AJAX not supported");
-            }
-        }
-    }
-    xmlHttp.open('HEAD', window.location.href.toString(), false);
-    xmlHttp.setRequestHeader("Content-Type", "text/html");
-    xmlHttp.send('');
-    return xmlHttp.getResponseHeader("Date");
+function serverTime() {
+	if(window.XMLHttpRequest) { // 분기하지 않으면 IE에서만 작동함
+		xmlHttp = new XMLHttpRequest(); // IE 7.0 이상, 크롬, 파이어폭스 등
+		xmlHttp.open('HEAD',window.location.href.toString(),false);
+		xmlHttp.setRequestHeader("Content-Type", "text/html");
+		xmlHttp.send('');
+		return xmlHttp.getResponseHeader("Date");
+	} else if (window.ActiveXObject) {
+		xmlHttp = new ActiveXObject('Msxml2.XMLHTTP');
+		xmlHttp.open('HEAD',window.location.href.toString(),false);
+		xmlHttp.setRequestHeader("Content-Type", "text/html");
+		xmlHttp.send('');
+		return xmlHttp.getResponseHeader("Date");
+	}
 }
-var st = srvTime();
-var date123 = new Date(st);
+var st = serverTime();
+var serverToday = new Date(st);
 
 //날짜포멧 변경
 Date.prototype.format = function(f) {

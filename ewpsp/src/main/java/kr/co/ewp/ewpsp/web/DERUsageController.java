@@ -68,14 +68,20 @@ public class DERUsageController {
 //		List pvUsageList = derUsageService.getPVUsageList(param); // PV 사용량
 		Map pvUsageList = pvGenService.getPVGenRealList(param); // PV 사용량
 		
-		List loopCntList = null;
+		List loopCntSheetList = null;
+		List loopCntChartList = null;
 		if(kepcoUsageList != null && kepcoUsageList.size() > 0) {
-			loopCntList = (List) kepcoUsageList.get("sheetList");
+			loopCntSheetList = (List) kepcoUsageList.get("sheetList");
+			loopCntChartList = (List) kepcoUsageList.get("chartList");
 		} else if(essUsageList != null && essUsageList.size() > 0) {
-			loopCntList = (List) essUsageList.get("sheetList");
+			loopCntSheetList = (List) essUsageList.get("sheetList");
+			loopCntChartList = (List) essUsageList.get("chartList");
 		} else if(pvUsageList != null && pvUsageList.size() > 0) {
-			loopCntList = (List) pvUsageList.get("sheetList");
+			loopCntSheetList = (List) pvUsageList.get("sheetList");
+			loopCntChartList = (List) pvUsageList.get("chartList");
 		}
+		System.out.println("loopCntSheetList   "+loopCntSheetList);
+		System.out.println("loopCntChartList          "+loopCntChartList);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("kepcoUsageSheetList", kepcoUsageList.get("sheetList"));
@@ -84,7 +90,8 @@ public class DERUsageController {
 		resultMap.put("essUsageListChartList", essUsageList.get("chartList"));
 		resultMap.put("pvUsageListSheetList", pvUsageList.get("sheetList"));
 		resultMap.put("pvUsageListChartList", pvUsageList.get("chartList"));
-		resultMap.put("loopCntList", loopCntList);
+		resultMap.put("loopCntSheetList", loopCntSheetList);
+		resultMap.put("loopCntChartList", loopCntChartList);
 		
 		return resultMap;
 	}

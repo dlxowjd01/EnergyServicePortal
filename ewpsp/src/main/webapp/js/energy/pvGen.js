@@ -45,8 +45,8 @@
 					totalUsage = totalUsage+Number(usage);
 				}
 				
-				var tm = new Date(sheetList[i].std_date);
-				console.log(reUsage);
+//				var tm = new Date(sheetList[i].std_date);
+				var tm = new Date( convertDateUTC(sheetList[i].std_date) );
 				
 				// 표데이터 셋팅
 				var headerDate2 = convertDataTableHeaderDate(tm, 2);
@@ -104,7 +104,8 @@
 				var tm = new Date(chartList[i].std_date);
 				// 차트데이터 셋팅
 				dataSet.push([
-					Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())
+//					Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())
+					setChartDateUTC(chartList[i].std_date)
 					, reUsage
 					]);
 				
@@ -144,7 +145,8 @@
 					reUsage = Number( map.get("formatNum") );
 					totalUsage = totalUsage+Number(usage);
 				}
-				var tm = new Date(sheetList[i].std_date);
+//				var tm = new Date(sheetList[i].std_date);
+				var tm = new Date( convertDateUTC(sheetList[i].std_date) );
 				
 				// 표데이터 셋팅
 				if(usage == null || usage == "" || usage == "null") dt_str += "<td>"+" "+"</td>"; 
@@ -191,7 +193,8 @@
 				var tm = new Date(chartList[i].std_date);
 				// 차트데이터 셋팅
 				dataSet.push([ 
-					Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())
+//					Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())
+					setChartDateUTC(chartList[i].std_date)
 					, reUsage
 					]);
 				

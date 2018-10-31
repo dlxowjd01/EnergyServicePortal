@@ -15,7 +15,7 @@
 										  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selTermBox">1일(날짜선택)
 										  <span class="caret"></span></button>
 										  <ul class="dropdown-menu">
-										    <li class="on"><a href="#" onclick="changeSelTerm('day');">1일(오늘)</a></li>
+										    <li class="on"><a href="#" onclick="changeSelTerm('drday');">1일(오늘)</a></li>
 										    <li><a href="#" onclick="changeSelTerm('selectDay');">1일(날짜선택)</a></li>
 										  </ul>
 										</div>
