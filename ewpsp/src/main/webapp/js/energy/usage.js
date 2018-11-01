@@ -22,6 +22,8 @@
 		var sheetList = result.sheetList;
 		var chartList = result.chartList;
 		var periodd = $("#selPeriodVal").val(); // 데이터조회간격
+//		console.log("  sheetList        ", sheetList);
+//		console.log("  chartList        ", chartList);
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -98,8 +100,12 @@
 					totalUsage = totalUsage+Number(usage);
 				}
 				
-				var tm = new Date( convertDateUTC(chartList[i].std_timestamp) );
+//				var tm = new Date(chartList[i].std_timestamp);
+//				console.log("  그래프시간   @@@@@     ", chartList[i].std_timestamp, ",       ", Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds()));
+//				console.log("  그래프시간   #####     ", tm, ",       ", new Date(Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())));
+//				var tm = new Date( convertDateUTC(chartList[i].std_timestamp) );
 				dataSet.push([ setChartDateUTC(chartList[i].std_timestamp), reUsage ]);
+//				dataSet.push([ new Date(Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())).getTime(), reUsage ]);
 				
 			}
 			
@@ -181,12 +187,11 @@
 					totalUsage = totalUsage+Number(usage);
 				}
 				
-				var tm = new Date( convertDateUTC(chartList[i].std_timestamp) );
+//				var tm = new Date(chartList[i].std_timestamp);
+//				var tm = new Date( convertDateUTC(chartList[i].std_timestamp) );
 				// 차트데이터 셋팅
-				dataSet.push([ 
-					setChartDateUTC(chartList[i].std_timestamp)
-					, reUsage
-				]);
+				dataSet.push([ setChartDateUTC(chartList[i].std_timestamp), reUsage ]);
+//				dataSet.push([ new Date(Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())).getTime(), reUsage ]);
 				
 			}
 			

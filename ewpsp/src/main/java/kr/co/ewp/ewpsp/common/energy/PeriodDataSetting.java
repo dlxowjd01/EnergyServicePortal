@@ -52,8 +52,8 @@ public class PeriodDataSetting {
 		// 날짜리스트+데이터조합 매칭
 		List sheetList = matchingLists(sheetDateList, sheetReDataList, timestampStr, calculValStr); // 표영역
 		List chartList = matchingLists(chartDateList, chartReDataList, timestampStr, calculValStr); // 그래프영역
-		logger.debug("sheetList     ======>   "+sheetList.toString());
-		logger.debug("chartList     ======>   "+chartList.toString());
+		System.out.println("sheetList     "+sheetList.size()+"======>   "+sheetList.toString());
+		System.out.println("chartList     "+chartList.size()+"======>   "+chartList.toString());
 		
 		map.put("sheetList", sheetList);
 		map.put("chartList", chartList);

@@ -15,6 +15,9 @@ public class UsageDao {
 	
 	public List getUsageRealList(HashMap param) {
 		List resultList = sqlSession.selectList("usage.getUsageRealList", param);
+		if(resultList != null) {
+			System.out.println("        "+resultList.size()+", "+resultList.toString());
+		}
 		return resultList;
 	}
 

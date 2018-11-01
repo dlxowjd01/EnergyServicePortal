@@ -16,9 +16,6 @@
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
 			and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
 			</if>
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(schTermFrom)">
-			and std_date between str_to_date(#{schTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{schTermTo },'%Y%m%d%H%i%s')
-			</if>
 		) a
 		where 1=1
 		group by site_id, std_date
@@ -38,9 +35,6 @@
 			<!-- and std_date between str_to_date('20180820000000','%Y%m%d%H%i%s') and str_to_date('20180820235959','%Y%m%d%H%i%s') -->
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
 			and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
-			</if>
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(schTermFrom)">
-			and std_date between str_to_date(#{schTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{schTermTo },'%Y%m%d%H%i%s')
 			</if>
 		) a
 		where 1=1
