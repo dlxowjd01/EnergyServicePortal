@@ -95,8 +95,7 @@ public class ApiController {
       e.printStackTrace();
       response.setContentType("text/html; charset=UTF-8");
       try {
-        response.getWriter().print("-1:" + e.getCause());
-        response.getWriter().print("-1:" + e.getMessage());
+        response.getWriter().print("-1");
       } catch (IOException e1) {
         e1.printStackTrace();
       }

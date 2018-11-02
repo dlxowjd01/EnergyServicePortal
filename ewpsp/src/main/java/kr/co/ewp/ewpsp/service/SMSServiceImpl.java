@@ -85,7 +85,7 @@ alarm_msg
 			body.add("M5", alarmMsg);
 			logger.debug("request body: {}", body);
 
-			HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(body, headers);
+			HttpEntity entity = new HttpEntity(body, headers);
 			String responseBody = restTemplate.postForObject(url, entity, String.class);
 			logger.debug("response body: {}", responseBody);
 		}
