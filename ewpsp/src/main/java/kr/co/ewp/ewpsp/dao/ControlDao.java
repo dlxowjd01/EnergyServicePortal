@@ -33,6 +33,11 @@ public class ControlDao {
 		return sqlSession.selectOne("control.getAlarmListCnt", param);
 	}
 
+	public List getSmsUserList(HashMap param) {
+		List resultList = sqlSession.selectList("control.getSmsUserList", param);
+		return resultList;
+	}
+
 	public List getSmsAddresseeList(HashMap param) {
 		List resultList = sqlSession.selectList("control.getSmsAddresseeList", param);
 		return resultList;

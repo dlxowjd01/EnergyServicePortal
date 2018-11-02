@@ -142,6 +142,16 @@
 				</if>
 		) f_tb
 	</select>
+
+	<select id="getSmsUserList" parameterType="hashMap" resultType="hashMap">
+		/* 알람 SMS수신자 목록 조회 */
+		select 
+			a.sms_user_idx, a.site_id, b.site_name, a.name as user_name, replace(mobile, '-', '') as mobile
+		from tb_sms_user a, tb_site b
+		where a.site_id = b.site_id
+		and a.del_yn = 'N'
+		and a.site_id = #{siteId }
+	</select>
 	<!-- greatman end -->
 
 	<select id="getSmsAddresseeList" parameterType="hashMap" resultType="hashMap">

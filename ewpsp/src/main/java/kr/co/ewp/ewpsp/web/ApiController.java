@@ -1,7 +1,6 @@
 package kr.co.ewp.ewpsp.web;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.inject.internal.util.Maps;
 
 import kr.co.ewp.ewpsp.common.util.CommonUtils;
-import kr.co.ewp.ewpsp.common.util.DateUtil;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.Period;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.TimeType;
@@ -42,6 +40,7 @@ import kr.co.ewp.ewpsp.service.AlarmService;
 import kr.co.ewp.ewpsp.service.CmpyGrpSiteMngService;
 import kr.co.ewp.ewpsp.service.DeviceMonitoringService;
 import kr.co.ewp.ewpsp.service.LoginService;
+import kr.co.ewp.ewpsp.service.SMSService;
 
 @Controller
 public class ApiController {
@@ -55,6 +54,9 @@ public class ApiController {
 
 	@Resource(name="cmpyGrpSiteMngService")
 	private CmpyGrpSiteMngService cmpyGrpSiteMngService;
+
+	@Resource(name="smsService")
+	private SMSService smsService;
 
 	@Resource(name="loginService")
 	private LoginService loginService;
@@ -86,6 +88,9 @@ public class ApiController {
       alarmService.addAlarm(parameter);
       response.setContentType("text/html; charset=UTF-8");
       response.getWriter().print("0");
+      
+      // SMS 전송 (한재종)
+      smsService.sendAlarmMessage(siteId, deviceId, device.get("device_name"), alarmTime, alarmType, alarmMsg);
     } catch (Exception e) {
       e.printStackTrace();
       response.setContentType("text/html; charset=UTF-8");

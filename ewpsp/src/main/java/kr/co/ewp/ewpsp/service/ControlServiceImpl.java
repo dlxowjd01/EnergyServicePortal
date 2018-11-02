@@ -33,6 +33,10 @@ public class ControlServiceImpl implements ControlService{
 		return controlDao.getAlarmListCnt(param);
 	}
 
+	public List getSmsUserList(HashMap param) throws Exception {
+		return controlDao.getSmsUserList(param);
+	}
+
 	public List getSmsAddresseeList(HashMap param) throws Exception {
 		return controlDao.getSmsAddresseeList(param);
 	}

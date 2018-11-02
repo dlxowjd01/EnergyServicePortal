@@ -21,14 +21,14 @@
            #{siteId},
            #{deviceId},
            #{deviceType},
-           select STR_TO_DATE(#{stdDate}, "%Y%m%d%H%i%s"),
+           STR_TO_DATE(#{stdDate}, "%Y%m%d%H%i%s"),
            #{alarmType},
            #{alarmMsg},
            #{alarmCfmYn},
            #{alarmCfmDate},
            #{alarmCfmUid},
-           #{alarmNote},
            #{alarmActYn},
+           #{alarmNote},
            NOW())
     <selectKey resultType="Long" keyProperty="alarmIdx">
         SELECT LAST_INSERT_ID()
