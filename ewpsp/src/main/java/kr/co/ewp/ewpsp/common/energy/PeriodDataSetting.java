@@ -154,6 +154,15 @@ public class PeriodDataSetting {
 				setHms(cal, 23, 59, 59, 999);
 			}
 			
+		} else if("billSelectMM_pv".equals(term)) { // 요금수익 pv 수익 조회 
+			if("1".equals(flag)) {	
+				cal.set(Calendar.DATE, 1);
+				setHms(cal, 0, 0, 0, 0);
+			} else if("2".equals(flag)) {
+				cal.set(Calendar.DATE, Calendar.DAY_OF_MONTH);
+				setHms(cal, 23, 59, 59, 999);
+			}
+			
 		}
 		
 //		Timestamp tmsp_test = new Timestamp(cal.getTime().getTime());
@@ -244,6 +253,17 @@ public class PeriodDataSetting {
 			if("1".equals(flag)) {	
 				setHms(cal, 0, 0, 0, 0);
 			} else if("2".equals(flag)) {
+				setHms(cal, 23, 59, 59, 999);
+			}
+			
+		} else if("billSelectMM_pv".equals(term)) { // 요금수익 pv 수익 조회 
+			if("1".equals(flag)) {	
+				cal.set(Calendar.MONTH, 0);
+				cal.set(Calendar.DATE, 1);
+				setHms(cal, 0, 0, 0, 0);
+			} else if("2".equals(flag)) {
+				cal.set(Calendar.MONTH, 11);
+				cal.set(Calendar.DATE, Calendar.DAY_OF_MONTH);
 				setHms(cal, 23, 59, 59, 999);
 			}
 			

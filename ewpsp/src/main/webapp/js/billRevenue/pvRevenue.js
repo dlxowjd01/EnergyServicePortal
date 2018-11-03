@@ -3,12 +3,21 @@
 		var endDay = new Date();
 		firstDay = new Date(firstDay.getFullYear()-1, firstDay.getMonth()+1, 1, 0, 0, 0);
 		endDay = new Date(endDay.getFullYear(), endDay.getMonth()+1, 0, 23, 59, 59);
+		
+		schStartTime = new Date(firstDay.getTime());
+		schEndTime = new Date(endDay.getTime());
+		
+		var queryStart = new Date(firstDay.setMinutes(firstDay.getMinutes() + (new Date()).getTimezoneOffset()));
+		var queryEnd = new Date(endDay.setMinutes(endDay.getMinutes() + (new Date()).getTimezoneOffset()));
+		
 		$("#selTermFrom").val( firstDay.format("yyyyMMddHHmmss") );
 		$("#selTermTo").val( endDay.format("yyyyMMddHHmmss") );
-//		$("#selTermFrom").val( new Date( "2017-09-01"+" 00:00:00" ).format("yyyyMMddHHmmss") );
-//		$("#selTermTo").val( new Date( "2018-08-31"+" 23:59:59" ).format("yyyyMMddHHmmss") );
 		$("#datepicker3").val( firstDay.format("yyyy-MM") );
 		$("#datepicker4").val( endDay.format("yyyy-MM") );
+		
+		SelTerm = "billSelectMM_pv";
+		$("#selTerm").val(SelTerm);
+		$("#selPeriodVal").val('month');
 		
 		getDBData();
 	});
@@ -53,6 +62,9 @@
 		var recPriceChartList  = result.recPriceChartList ;
 		var totPriceSheetList  = result.totPriceSheetList ;
 		var totPriceChartList  = result.totPriceChartList ;
+		var periodd = $("#selPeriodVal").val(); // 데이터조회간격
+		var start = $("#selTermFrom").val();
+		var end = $("#selTermTo").val();
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -63,6 +75,7 @@
 		var totDataSet3 = 0;
 		var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
 		var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
+		dt_row = (Number(end.substring(0, 4))-Number(start.substring(0, 4)) )+1;
 		var dt_str_head = "";
 		var dt_str = "";
 		var dt_str2 = "";
@@ -78,58 +91,80 @@
 		var dt_str6_totalVal = 0; // 테이블 라인별 누적합
 		
 		// 표데이터 셋팅
+		var start = new Date(schStartTime.getTime());
+		var end = new Date(schEndTime.getTime());
+		console.log(start, end);
 		if(netGenValSheetList != null && netGenValSheetList.length > 0) {
+			var s = start;
+			var e = end;
+			setHms(s, e);
+			if(periodd == 'month') {
+				s.setMonth(0);
+				s.setDate(1);
+				s.setHours(0)
+				s.setMinutes(0);
+				s.setSeconds(0);
+			}
 			for(var i=0; i<netGenValSheetList.length; i++) {
-				var yyyyMM = new Date( convertDateUTC(netGenValSheetList[i].std_timestamp) ).format("yyyyMM");
-				var netGenVal = String(netGenValSheetList[i].net_gen_val);
-				var smpDeal   = String(smpDealSheetList[i].smp_deal);
-				var smpPrice  = String(smpPriceSheetList[i].smp_price);
-				var recDeal   = String(recDealSheetList[i].rec_deal);
-				var recPrice  = String(recPriceSheetList[i].rec_price);
-				var totPrice  = String(totPriceSheetList[i].tot_price);
-				var reNetGenVal = 0; 
-				var reSmpDeal   = 0; 
-				var reSmpPrice  = 0; 
-				var reRecDeal   = 0; 
-				var reRecPrice  = 0; 
-				var reTotPrice  = 0; 
-				
-				if(netGenVal == null || netGenVal == "" || netGenVal == "null") reNetGenVal = null;
-				else reNetGenVal = Math.round( Number(netGenVal) );
-				if(smpDeal == null || smpDeal == "" || smpDeal == "null") reSmpDeal = null;
-				else reSmpDeal   = Math.round( Number(smpDeal) );
-				if(smpPrice == null || smpPrice == "" || smpPrice == "null") reSmpPrice = null;
-				else {
-					reSmpPrice  = Math.round( Number(smpPrice) );
-					totDataSet2 = totDataSet2+reSmpPrice;
-				}
-				if(recDeal == null || recDeal == "" || recDeal == "null") reRecDeal = null;
-				else reRecDeal   = Math.round( Number(recDeal) );
-				if(recPrice == null || recPrice == "" || recPrice == "null") reRecPrice = null;
-				else {
-					reRecPrice  = Math.round( Number(recPrice) );
-					totDataSet3 = totDataSet3+reRecPrice;
-				}
-				if(totPrice == null || totPrice == "" || totPrice == "null") reTotPrice = null;
-				else {
-					reTotPrice  = Math.round( Number(totPrice) );
-					totDataSet = totDataSet+reTotPrice;
-				}
-
-				// 표데이터 셋팅
+				var yyyyMM = s.format("yyyyMM");
 				dt_str_head += "<th>"+yyyyMM.substring(0, 4)+"-"+yyyyMM.substring(4, 6)+"</th>"
+				
+				var reNetGenVal = null;
+				var reSmpDeal   = null;
+				var reSmpPrice  = null;
+				var reRecDeal   = null;
+				var reRecPrice  = null;
+				var reTotPrice  = null;
+				for(var j=0; j<netGenValSheetList.length; j++) {
+					if(s.getTime() == new Date(netGenValSheetList[j].std_timestamp).getTime()) {
+						var netGenVal = String(netGenValSheetList[j].net_gen_val);
+						var smpDeal   = String(smpDealSheetList[j].smp_deal);
+						var smpPrice  = String(smpPriceSheetList[j].smp_price);
+						var recDeal   = String(recDealSheetList[j].rec_deal);
+						var recPrice  = String(recPriceSheetList[j].rec_price);
+						var totPrice  = String(totPriceSheetList[j].tot_price);
+						
+						if(netGenVal == null || netGenVal == "" || netGenVal == "null") reNetGenVal = null;
+						else {
+							reNetGenVal = Math.round( Number(netGenVal) );
+							dt_str_totalVal = dt_str_totalVal+ reNetGenVal;
+						}
+						if(smpDeal == null || smpDeal == "" || smpDeal == "null") reSmpDeal = null;
+						else {
+							reSmpDeal   = Math.round( Number(smpDeal) );
+							dt_str2_totalVal = dt_str2_totalVal+ reSmpDeal;
+						}
+						if(smpPrice == null || smpPrice == "" || smpPrice == "null") reSmpPrice = null;
+						else {
+							reSmpPrice  = Math.round( Number(smpPrice) );
+							dt_str3_totalVal = dt_str3_totalVal+ reSmpPrice;
+						}
+						if(recDeal == null || recDeal == "" || recDeal == "null") reRecDeal = null;
+						else {
+							reRecDeal   = Math.round( Number(recDeal) );
+							dt_str4_totalVal = dt_str4_totalVal+ reRecDeal;
+						}
+						if(recPrice == null || recPrice == "" || recPrice == "null") reRecPrice = null;
+						else {
+							reRecPrice  = Math.round( Number(recPrice) );
+							dt_str5_totalVal = dt_str5_totalVal+ reRecPrice;
+						}
+						if(totPrice == null || totPrice == "" || totPrice == "null") reTotPrice = null;
+						else {
+							reTotPrice  = Math.round( Number(totPrice) );
+							dt_str6_totalVal = dt_str6_totalVal+ reTotPrice;
+						}
+						
+						break;
+					}
+				}
 				dt_str += "<td>"+  ( (reNetGenVal == null) ? "" : reNetGenVal ) +"</td>"; // 총 발전량
 				dt_str2 += "<td>"+ ( (reSmpPrice == null) ? "" : reSmpDeal    ) +"</td>"; // SMP 거래량
 				dt_str3 += "<td>"+ ( (reSmpPrice == null) ? "" : reSmpPrice   ) +"</td>"; // SMP 수익
 				dt_str4 += "<td>"+ ( (reRecDeal == null) ? "" : reRecDeal     ) +"</td>"; // REC 거래량
 				dt_str5 += "<td>"+ ( (reRecPrice == null) ? "" : reRecPrice   ) +"</td>"; // REC 수익
 				dt_str6 += "<td>"+ ( (reTotPrice == null) ? "" : reTotPrice   ) +"</td>"; //총 수익
-				dt_str_totalVal = dt_str_totalVal+ reNetGenVal;
-				dt_str2_totalVal = dt_str2_totalVal+ reSmpDeal;
-				dt_str3_totalVal = dt_str3_totalVal+ reSmpPrice;
-				dt_str4_totalVal = dt_str4_totalVal+ reRecDeal;
-				dt_str5_totalVal = dt_str5_totalVal+ reRecPrice;
-				dt_str6_totalVal = dt_str6_totalVal+ reTotPrice;
+				
 				if(dt_col_cnt == 12) {
 					dt_str += "<td>"+  dt_str_totalVal  +"</td>"; // 총 발전량
 					dt_str2 += "<td>"+ dt_str2_totalVal +"</td>"; // SMP 거래량
@@ -144,14 +179,15 @@
 					pvRevenue_data_pc4[dt_row_cnt-1] = dt_str4;
 					pvRevenue_data_pc5[dt_row_cnt-1] = dt_str5;
 					pvRevenue_data_pc6[dt_row_cnt-1] = dt_str6;
-					dt_row_cnt++;
-					dt_col_cnt = 1;
 					dt_str  = ""; 
 					dt_str2 = ""; 
 					dt_str3 = ""; 
 					dt_str4 = ""; 
 					dt_str5 = ""; 
 					dt_str6 = ""; 
+					dt_row_cnt++;
+					dt_col_cnt = 1;
+					dt_str_head = 0;
 					dt_str_totalVal =  0;
 					dt_str2_totalVal = 0;
 					dt_str3_totalVal = 0;
@@ -161,6 +197,8 @@
 				} else {
 					dt_col_cnt++;
 				}
+
+				s = incrementTime(s);
 				
 			}
 			pvRevenueList1 = dataSet;
@@ -263,53 +301,61 @@
 	
 	// 표(테이블) 그리기
 	function drawData_table() {
-		
 		// pc버전 테이블
 		// 조회기간에 따라 테이블이 여러개 나올 수 있으므로 for문으로 돌려야 한다..(내일해내일)
-		$table = $("#pc_use_dataTable");
-		$table.empty().append(
-				$("<thead/>").append( $("<tr/>").append( "<th></th>"+pvRevenue_head_pc[0]+"<th>합계</th>" ) ) // thead
-		);
+		$div = $("#pc_use_dataDiv");
+		$div.empty(); // 초기화
 		if(pvRevenue_data_pc.length < 1) {
 			$(".income_pv_chart").find(".inchart-nodata").css("display", "");
 			$(".income_pv_chart").find(".inchart").css("display", "none");
-			$table.append(
-					$("<tbody/>").append( // tbody
-							$("<tr/>").append( // 기본요금
-									'<th colspan="14">조회 결과가 없습니다.</th>'
+			$div.prepend(
+					$('<div class="chart_table" />').append( // pc_use_dataTable
+							$('<table class="pc_use" />').append(
+									$("<thead/>").append( $("<tr/>").append(  
+											"<th width='33%'></th><td width='34%'>조회 결과가 없습니다.</td><th width='33%'></th>" ) 
+									) // thead
 							)
 					)
 			);
 		} else {
 			$(".income_pv_chart").find(".inchart-nodata").css("display", "none");
 			$(".income_pv_chart").find(".inchart").css("display", "");
-			$table.append(
-					$("<tbody/>").append( // tbody
-							$("<tr/>").append( // 평일 일수 (d)
-									'<th><div class="ctit wht"><span>총 발전량</span></div></th>'+ pvRevenue_data_pc[0] 
-							)
-					).append(
-							$("<tr/>").append( // 경부하충전량 (kWh)
-									'<th><div class="ctit wht"><span>SMP 거래량</span></div></th>'+ pvRevenue_data_pc2[0] 
-							)
-					).append(
-							$("<tr/>").append( // 중간부하충전량 (kWh)
-									'<th><div class="ctit pk2"><span>SMP 수익</span></div></th>'+ pvRevenue_data_pc3[0] 
-							)
-					).append(
-							$("<tr/>").append( // 최대부하충전량 (kWh)
-									'<th><div class="ctit wht"><span>REC 거래량</span></div></th>'+ pvRevenue_data_pc4[0] 
-							)
-					).append(
-							$("<tr/>").append( // 경부하방전량 (kWh)
-									'<th><div class="ctit pk3"><span>REC 수익</span></div></th>'+ pvRevenue_data_pc5[0] 
-							)
-					).append(
-							$("<tr/>").append( // 경부하방전량 (kWh)
-									'<th><div class="ctit pk1"><span>총 수익</span></div></th>'+ pvRevenue_data_pc6[0] 
-							)
-					)
-			);
+			for(var i=dt_row-1; i>-1; i--) {
+				$div.prepend(
+						$('<div class="chart_table" />').append(
+								$('<table class="pc_use" />').append(
+										$("<thead/>").append( $("<tr/>").append( "<th></th>"+pvRevenue_head_pc[i]+"<th>합계</th>" ) ) // thead
+								).append(
+										$("<tbody/>").append( // tbody
+												$("<tr/>").append( // 평일 일수 (d)
+														'<th><div class="ctit wht"><span>총 발전량</span></div></th>'+ pvRevenue_data_pc[i] 
+												)
+										).append(
+												$("<tr/>").append( // 경부하충전량 (kWh)
+														'<th><div class="ctit wht"><span>SMP 거래량</span></div></th>'+ pvRevenue_data_pc2[i] 
+												)
+										).append(
+												$("<tr/>").append( // 중간부하충전량 (kWh)
+														'<th><div class="ctit pk2"><span>SMP 수익</span></div></th>'+ pvRevenue_data_pc3[i] 
+												)
+										).append(
+												$("<tr/>").append( // 최대부하충전량 (kWh)
+														'<th><div class="ctit wht"><span>REC 거래량</span></div></th>'+ pvRevenue_data_pc4[i] 
+												)
+										).append(
+												$("<tr/>").append( // 경부하방전량 (kWh)
+														'<th><div class="ctit pk3"><span>REC 수익</span></div></th>'+ pvRevenue_data_pc5[i] 
+												)
+										).append(
+												$("<tr/>").append( // 경부하방전량 (kWh)
+														'<th><div class="ctit pk1"><span>총 수익</span></div></th>'+ pvRevenue_data_pc6[i] 
+												)
+										)
+								) 
+						)
+				);
+				
+			}
 		}
 		
 	}

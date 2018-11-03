@@ -113,7 +113,6 @@ $(function () {
 	
 	$("#check1").click(function () {
 		var flag = $("#check1").prop("checked") ;
-//		console.log("flag : "+flag);
 		if(flag) {
 			changeSelTerm('day');
 			getCollect_sch_condition();
@@ -135,7 +134,7 @@ $(function () {
 	});
 });
 
-//db조회 검색조건 모으기
+// 에너지모니터링 db조회 검색조건 모으기
 var schStartTime;
 var schEndTime;
 function getCollect_sch_condition() {
@@ -176,7 +175,6 @@ function getCollect_sch_condition() {
 		startTime = new Date(firstDay.setDate(firstDay.getDate()-365));
 		endTime = new Date();
 	} else if(SelTerm == 'other') { // 에너지모니터링 화면 전체의 기간설정검색
-		console.log("$dtpk1.val()   "+$dtpk1.val()+", "+$dtpk2.val());
 		startTime = new Date( $dtpk1.val()+" 00:00:00" );
 		endTime = new Date( $dtpk2.val()+" 23:59:59" );
 		$("#dtCnt").val(  dateDiff($dtpk1.val()+" 00:00:00", $dtpk2.val()+" 23:59:59")+1  );
@@ -187,111 +185,37 @@ function getCollect_sch_condition() {
 		startTime = new Date( $dtpk5.val()+" 00:00:00" );
 		endTime = new Date( $dtpk5.val()+" 23:59:59" );
 		$("#dtCnt").val(  dateDiff($dtpk5.val()+" 00:00:00", $dtpk5.val()+" 23:59:59")+1  );
-	} else if(SelTerm == "billSelectMM") { // 요금/수익 화면 전체의 기간설정검색
-		console.log($dtpk3.val()+", "+$dtpk4.val());
+	} else if(SelTerm == "billSelectMM") { // 요금/수익 화면 전체의(PV수익조회 제외) 기간설정검색
 		$("#selTermFrom").val( replaceAll($dtpk3.val(), "-", "") );
 		$("#selTermTo").val( replaceAll($dtpk4.val(), "-", "") );
+	} else if(SelTerm == "billSelectMM_pv") { // 요금/수익 PV 수익 조회 화면의 기간설정검색
+		startTime = new Date( $dtpk3.val()+"-01 00:00:00" );
+		var edDt = new Date( $dtpk4.val()+"-01 23:59:59" );
+		endTime = new Date( edDt.getFullYear(), edDt.getMonth()+1, 0, 23, 59, 59 );
+		$("#selTermFrom").val( firstDay.format("yyyyMMddHHmmss") );
+		$("#selTermTo").val( endDay.format("yyyyMMddHHmmss") );
 	}
 	
 	if(SelTerm != "billSelectMM") {
-		console.log("startTime  ", startTime, ", ", endTime);
 		schStartTime = new Date(startTime.getTime());
 		schEndTime = new Date(endTime.getTime());
 		
 		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
 		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
-		console.log(queryStart+", "+queryEnd);
 		
 		queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
 		queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
 		$("#selTermFrom").val(queryStart);
 		$("#selTermTo").val(queryEnd);
 		
-		console.log("검색일자    "+$("#selTermFrom").val()+", "+$("#selTermTo").val());
 	}
 	
+	console.log("검색일자    "+$("#selTermFrom").val()+", "+$("#selTermTo").val());
 	
-//	if(dtcnt == 1) $("#selTerm").val("day");
-//	else if(dtcnt >= 7 && dtcnt <=31) $("#selTerm").val("month");
-//	else if(dtcnt > 31) $("#selTerm").val("year");
-//	
 	var formData = $("#schForm").serializeObject();
 //	formValidationChk();
 	console.log(formData);
 
-	var today = new Date();
-	getDBData(formData); // DB 데이터 조회(각 화면마다 존재)
-	update_updtDataTime(today, "updtTime"); // 검색시간(차트 새로고침시간) 업데이트
-}
-
-function getCollect_sch_condition_bill() {
-	$dtpk3 = $("#datepicker3");
-	$dtpk4 = $("#datepicker4");
-	$("#dtCnt").val("");
-	
-	var firstDay = new Date();
-	var endDay = new Date();
-	var startTime;
-	var endTime;
-	if(SelTerm == '15min') { // 15분(현재 안나옴)
-		startTime = new Date(firstDay.setMinutes(firstDay.getMinutes() - 15));
-		endTime = new Date();
-	} else if(SelTerm == '30min') { // 30분
-		startTime = new Date(firstDay.setMinutes(firstDay.getMinutes() - 30));
-		endTime = new Date();
-	} else if(SelTerm == 'hour') { // 1시간
-		startTime = new Date(firstDay.setHours(firstDay.getHours() - 1));
-		endTime = new Date();
-	} else if(SelTerm == 'day') { // 오늘
-		startTime = new Date(firstDay.setDate(firstDay.getDate() - 1));
-		endTime = new Date();
-	} else if(SelTerm == 'week') { // 1주
-		startTime = new Date(firstDay.setDate(firstDay.getDate() - 7));
-		endTime = new Date();
-	} else if(SelTerm == 'month') { // 1달
-		startTime = new Date(firstDay.setDate(firstDay.getDate()-30));
-		endTime = new Date();
-	} else if(SelTerm == 'year') { // 1년
-		startTime = new Date(firstDay.setDate(firstDay.getDate()-365));
-		endTime = new Date();
-	} else if(SelTerm == 'other') { // 에너지모니터링 화면 전체의 기간설정검색
-		console.log("$dtpk1.val()   "+$dtpk1.val()+", "+$dtpk2.val());
-		startTime = new Date( $dtpk1.val()+" 00:00:00" );
-		endTime = new Date( $dtpk2.val()+" 23:59:59" );
-		$("#dtCnt").val(  dateDiff($dtpk1.val()+" 00:00:00", $dtpk2.val()+" 23:59:59")+1  );
-	} else if(SelTerm == 'drday') { // 에너지모니터링 dr실적조회의 오늘날짜
-		startTime = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), 0, 0, 0);
-		endTime = new Date(endDay.getFullYear(), endDay.getMonth(), endDay.getDate(), 23, 59, 59);
-	} else if(SelTerm == 'selectDay') { // 에너지모니터링 dr실적조회의 날짜검색
-		startTime = new Date( $dtpk5.val()+" 00:00:00" );
-		endTime = new Date( $dtpk5.val()+" 23:59:59" );
-		$("#dtCnt").val(  dateDiff($dtpk5.val()+" 00:00:00", $dtpk5.val()+" 23:59:59")+1  );
-	} else if(SelTerm == "billSelectMM") { // 요금/수익 화면 전체의 기간설정검색
-		console.log($dtpk3.val()+", "+$dtpk4.val());
-		$("#selTermFrom").val( replaceAll($dtpk3.val(), "-", "") );
-		$("#selTermTo").val( replaceAll($dtpk4.val(), "-", "") );
-	}
-	
-	if(SelTerm != "billSelectMM") {
-		console.log("startTime  ", startTime, ", ", endTime);
-		schStartTime = new Date(startTime.getTime());
-		schEndTime = new Date(endTime.getTime());
-		
-		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
-		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
-		console.log(queryStart+", "+queryEnd);
-		
-		queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
-		queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
-		$("#selTermFrom").val(queryStart);
-		$("#selTermTo").val(queryEnd);
-		
-		console.log("검색일자    "+$("#selTermFrom").val()+", "+$("#selTermTo").val());
-	}
-	
-	var formData = $("#schForm").serializeObject();
-	console.log(formData);
-	
 	var today = new Date();
 	getDBData(formData); // DB 데이터 조회(각 화면마다 존재)
 	update_updtDataTime(today, "updtTime"); // 검색시간(차트 새로고침시간) 업데이트

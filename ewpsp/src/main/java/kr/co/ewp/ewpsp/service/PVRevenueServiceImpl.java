@@ -22,12 +22,32 @@ public class PVRevenueServiceImpl implements PVRevenueService {
 		List list = pvRevenueDao.getPVRevenueList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
-			resultMap.put("netGenValMap", null);
-			resultMap.put("smpDealMap", null);
-			resultMap.put("smpPriceMap", null);
-			resultMap.put("recDealMap", null);
-			resultMap.put("recPriceMap", null);
-			resultMap.put("totPriceMap", null);
+			Map<String, Object> netGenValMap = new HashMap<String, Object>();
+			netGenValMap.put("sheetList", null);
+			netGenValMap.put("chartList", null);
+			Map<String, Object> smpDealMap = new HashMap<String, Object>();
+			smpDealMap.put("sheetList", null);
+			smpDealMap.put("chartList", null);
+			Map<String, Object> smpPriceMap = new HashMap<String, Object>();
+			smpPriceMap.put("sheetList", null);
+			smpPriceMap.put("chartList", null);
+			Map<String, Object> recDealMap = new HashMap<String, Object>();
+			recDealMap.put("sheetList", null);
+			recDealMap.put("chartList", null);
+			Map<String, Object> recPriceMap = new HashMap<String, Object>();
+			recPriceMap.put("sheetList", null);
+			recPriceMap.put("chartList", null);
+			Map<String, Object> totPriceMap = new HashMap<String, Object>();
+			totPriceMap.put("sheetList", null);
+			totPriceMap.put("chartList", null);
+			
+			
+			resultMap.put("netGenValMap", netGenValMap);
+			resultMap.put("smpDealMap", smpDealMap);
+			resultMap.put("smpPriceMap", smpPriceMap);
+			resultMap.put("recDealMap", recDealMap);
+			resultMap.put("recPriceMap", recPriceMap);
+			resultMap.put("totPriceMap", totPriceMap);
 			
 			return resultMap;
 		} else {

@@ -258,13 +258,6 @@ public class DataPeriodCalculate {
 			if("month".equals(period)) {
 				boolean changeMonthYn = changeMonthYn(incStartDt);
 				
-				
-//				Calendar compareCal = Calendar.getInstance();
-//				compareCal.setTimeInMillis(   incStartDt.getTime()   );
-//				compareCal.add(Calendar.MINUTE, 15);
-//				int next = new Timestamp(compareCal.getTime().getTime()).getMonth();
-//				int now = incStartDt.getMonth();
-//				System.out.println("데이터없는 달비교   "+now+", "+next+"                 "+new Timestamp(compareCal.getTime().getTime())+", "+incStartDt);
 				Calendar compareCal = Calendar.getInstance();
 				compareCal.setTimeInMillis(   incStartDt.getTime()   );
 				compareCal.add(Calendar.MINUTE, Integer.parseInt(offset)*(-1)); // 로컬시간으로 변경
