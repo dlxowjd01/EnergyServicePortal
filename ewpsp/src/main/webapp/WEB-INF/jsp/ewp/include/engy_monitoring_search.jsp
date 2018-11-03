@@ -15,16 +15,16 @@
 										  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selTermBox">1일(날짜선택)
 										  <span class="caret"></span></button>
 										  <ul class="dropdown-menu">
-										    <li class="on"><a href="#" onclick="changeSelTerm('drday');">1일(오늘)</a></li>
-										    <li><a href="#" onclick="changeSelTerm('selectDay');">1일(날짜선택)</a></li>
+										    <li class="on"><a href="#" onclick="selectBoxTextApply(this);changeSelTerm('drday');">1일(오늘)</a></li>
+										    <li><a href="#" onclick="selectBoxTextApply(this);changeSelTerm('selectDay');">1일(날짜선택)</a></li>
 										  </ul>
 										</div>
 										<div class="dropdown fl">
 										  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selPeriod">15분
 										  <span class="caret"></span></button>
 										  <ul class="dropdown-menu">
-										    <li class="on" id="sp_15min" onclick="changePeriod('15min');"><a href="#">15분</a></li>
-										    <li id="sp_1hour" onclick="changePeriod('hour');"><a href="#">1시간</a></li>
+										    <li class="on" id="sp_15min"><a href="#" onclick="selectBoxTextApply(this);changePeriod('15min');">15분</a></li>
+										    <li id="sp_1hour"><a href="#" onclick="selectBoxTextApply(this);changePeriod('hour');">1시간</a></li>
 										  </ul>
 										</div>
 									</div>
@@ -54,13 +54,13 @@
 										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selTermBox">1일(오늘)
 										<span class="caret"></span></button>
 										<ul class="dropdown-menu">
-											<li class="on"><a href="#" onclick="changeSelTerm('30min'); ">30분</a></li>
-											<li><a href="#" onclick="changeSelTerm('hour');">1시간</a></li>
-											<li><a href="#" onclick="changeSelTerm('day');">1일(오늘)</a></li>
-											<li><a href="#" onclick="changeSelTerm('week');">1주</a></li>
-											<li><a href="#" onclick="changeSelTerm('month');">1월</a></li>
-											<li><a href="#" onclick="changeSelTerm('year');">1년</a></li>
-											<li><a href="#" onclick="changeSelTerm('other');">기간설정</a></li>
+											<li class="on"><a href="#" onclick="selectBoxTextApply(this);changeSelTerm('30min'); ">30분</a></li>
+											<li><a href="#" onclick="selectBoxTextApply(this);changeSelTerm('hour');">1시간</a></li>
+											<li><a href="#" onclick="selectBoxTextApply(this);changeSelTerm('day');">1일(오늘)</a></li>
+											<li><a href="#" onclick="selectBoxTextApply(this);changeSelTerm('week');">1주</a></li>
+											<li><a href="#" onclick="selectBoxTextApply(this);changeSelTerm('month');">1월</a></li>
+											<li><a href="#" onclick="selectBoxTextApply(this);changeSelTerm('year');">1년</a></li>
+											<li><a href="#" onclick="selectBoxTextApply(this);changeSelTerm('other');">기간설정</a></li>
 										</ul>
 									</div>	
 									<div class="sel_calendar fr">
@@ -80,24 +80,24 @@
 										  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selTermBox">1일(오늘)
 										  <span class="caret"></span></button>
 										  <ul class="dropdown-menu">
-										    <li class="on"><a href="#" onclick="changeSelTerm('30min'); ">30분</a></li>
-										    <li><a href="#" onclick="changeSelTerm('hour');">1시간</a></li>
-										    <li><a href="#" onclick="changeSelTerm('day');">1일(오늘)</a></li>
-										    <li><a href="#" onclick="changeSelTerm('week');">1주</a></li>
-										    <li><a href="#" onclick="changeSelTerm('month');">1월</a></li>
-										    <li><a href="#" onclick="changeSelTerm('year');">1년</a></li>
-										    <li><a href="#" onclick="changeSelTerm('other');">기간설정</a></li>
+										    <li class="on"><a href="#" onclick="selectBoxTextApply(this);changeSelTerm('30min'); ">30분</a></li>
+										    <li><a href="#" onclick="selectBoxTextApply(this);changeSelTerm('hour');">1시간</a></li>
+										    <li><a href="#" onclick="selectBoxTextApply(this);changeSelTerm('day');">1일</a></li>
+										    <li><a href="#" onclick="selectBoxTextApply(this);changeSelTerm('week');">1주</a></li>
+										    <li><a href="#" onclick="selectBoxTextApply(this);changeSelTerm('month');">1월</a></li>
+										    <li><a href="#" onclick="selectBoxTextApply(this);changeSelTerm('year');">1년</a></li>
+										    <li><a href="#" onclick="selectBoxTextApply(this);changeSelTerm('other');">기간설정</a></li>
 										  </ul>
 										</div>
 										<div class="dropdown fl">
 										  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selPeriod">1시간
 										  <span class="caret"></span></button>
 										  <ul class="dropdown-menu">
-										    <li class="on" id="sp_15min" onclick="changePeriod('15min');"><a href="#">15분</a></li>
-										    <li id="sp_30min" onclick="changePeriod('30min');"><a href="#">30분</a></li>
-										    <li id="sp_1hour" onclick="changePeriod('hour');"><a href="#">1시간</a></li>
-										    <li id="sp_1day" onclick="changePeriod('day');"><a href="#">1일</a></li>
-										    <li id="sp_1month" onclick="changePeriod('month');"><a href="#">1월</a></li>
+										    <li class="on" id="sp_15min"><a href="#" onclick="selectBoxTextApply(this);changePeriod('15min');">15분</a></li>
+										    <li id="sp_30min"><a href="#" onclick="selectBoxTextApply(this);changePeriod('30min');">30분</a></li>
+										    <li id="sp_1hour"><a href="#" onclick="selectBoxTextApply(this);changePeriod('hour');">1시간</a></li>
+										    <li id="sp_1day"><a href="#" onclick="selectBoxTextApply(this);changePeriod('day');">1일</a></li>
+										    <li id="sp_1month"><a href="#" onclick="selectBoxTextApply(this);changePeriod('month');">1월</a></li>
 										  </ul>
 										</div>
 									</div>
@@ -115,7 +115,7 @@
 										<input type="text" id="datepicker3" name="datepicker3" class="sel" value="">
 										<span>-</span>
 										<input type="text" id="datepicker4" name="datepicker4" class="sel" value="">
-										<button type="button" id="searchBtn" onclick="getCollect_sch_condition();">조회</button>
+										<button type="button" id="searchBtn" onclick="getCollect_sch_condition_bill();">조회</button>
 									</div>
 									</c:if>
 									<div class="time fr" id="updtTime">2018-08-12 11:41:26</div>

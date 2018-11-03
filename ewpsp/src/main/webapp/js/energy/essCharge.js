@@ -27,6 +27,7 @@
 		var chgChartList = result.chgChartList;
 		var dischgSheetList = result.dischgSheetList;
 		var dischgChartList = result.dischgChartList;
+		var periodd = $("#selPeriodVal").val(); // 데이터조회간격
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -42,72 +43,91 @@
 		var dt_str2_totalVal = 0; // 테이블 라인별 누적합
 		
 		// 표데이터 셋팅
+		var start = new Date(schStartTime.getTime());
+		var end = new Date(schEndTime.getTime());
 		if(chgSheetList != null && chgSheetList.length > 0) {
+			var s = start;
+			var e = end;
+			setHms(s, e);
+			if(periodd == 'month') {
+				s.setDate(1);
+				s.setHours(0)
+				s.setMinutes(0);
+				s.setSeconds(0);
+			}
 			for(var i=0; i<chgSheetList.length; i++) {
-				var chgVal = String(chgSheetList[i].chg_val);
-				var dischgVal   = String(dischgSheetList[i].dischg_val);
-				var reChgVal = 0; 
-				var reDischgVal   = 0; 
-				
-				if(chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
-				else {
-					reChgVal = Math.round( Number(chgVal) );
-					totalDataSet = totalDataSet+reChgVal;
-				}
-				if(dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
-				else {
-					reDischgVal   = Math.round( Number(dischgVal) );
-					totalDataSet2 = totalDataSet2+reDischgVal;
-				}
-				
-				var tm = new Date( convertDateUTC(chgSheetList[i].std_timestamp) );
+				dt_str_head += "<th>"+convertDataTableHeaderDate(s, 2)+"</th>";
 
-				// 표데이터 셋팅
-				var headerDate2 = convertDataTableHeaderDate(tm, 2);
-				dt_str_head += "<th>"+headerDate2+"</th>"
+				var reChgVal = null; 
+				var reDischgVal   = null; 
+				for(var j=0; j<chgSheetList.length; j++) {
+					if(s.getTime() == new Date(chgSheetList[j].std_timestamp).getTime()) {
+						var chgVal = String(chgSheetList[j].chg_val);
+						var dischgVal   = String(dischgSheetList[j].dischg_val);
+						
+						if(chgVal == null || chgVal == "" || chgVal == "null") {
+							reChgVal = null;
+						} else {
+							var map = convertUnitFormat(chgVal, "kWh", 1);
+							reChgVal = Number( map.get("formatNum") );
+							dt_str_totalVal = dt_str_totalVal+reChgVal;
+						}
+						
+						if(dischgVal == null || dischgVal == "" || dischgVal == "null") {
+							reDischgVal = null;
+						} else {
+							var map = convertUnitFormat(dischgVal, "kWh", 1);
+							reDischgVal = Number( map.get("formatNum") );
+							dt_str2_totalVal = dt_str2_totalVal+ reDischgVal;
+						}
+						
+						break;
+					}
+				}
 				dt_str += "<td>"+  ( (reChgVal == null) ? "" : reChgVal ) +"</td>"; // 충전량
 				dt_str2 += "<td>"+ ( (reDischgVal == null) ? "" : reDischgVal    ) +"</td>"; // 방전량
-				dt_str_totalVal = dt_str_totalVal+ reChgVal;
-				dt_str2_totalVal = dt_str2_totalVal+ reDischgVal;
+
 				if(dt_col_cnt == dt_col) {
-					var headerDate1 = convertDataTableHeaderDate(tm, 1);
-					var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
+					var final_dt_str_head = "<th>"+convertDataTableHeaderDate(s, 1)+"</th>"+dt_str_head;
 					dt_str += "<td>"+  dt_str_totalVal  +"</td>"; // 충전량
 					dt_str2 += "<td>"+ dt_str2_totalVal +"</td>"; // 방전량
 					ess_head_pc[dt_row_cnt-1] = final_dt_str_head;
 					realChg_data_pc[dt_row_cnt-1] = dt_str;
 					realDischg_data_pc[dt_row_cnt-1] = dt_str2;
-					dt_row_cnt++;
-					dt_col_cnt = 1;
 					dt_str_head = "";
 					dt_str  = ""; 
 					dt_str2 = ""; 
+					dt_row_cnt++;
+					dt_col_cnt = 1;
 					dt_str_totalVal =  0;
 					dt_str2_totalVal = 0;
 				} else {
-					if((i+1) == chgSheetList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
+					if((i+1) == chgSheetList.length) { // 루프 다 돌고 조회한 목록이 라인을 다 못채울 때
 						for(a=0; a<(dt_col-dt_col_cnt); a++) {
 							dt_str_head += "<th></th>";
 							dt_str += "<td></td>";
 							dt_str2 += "<td></td>";
 						}
-						var headerDate1 = convertDataTableHeaderDate(tm, 1);
-						var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
-						dt_str += "<td>"+dt_str_totalVal+"</td>";
-						dt_str2 += "<td>"+dt_str2_totalVal+"</td>";
+						var final_dt_str_head = "<th>"+convertDataTableHeaderDate(s, 1)+"</th>"+dt_str_head;
+						dt_str += "<td>"+  dt_str_totalVal  +"</td>"; // 충전량
+						dt_str2 += "<td>"+ dt_str2_totalVal +"</td>"; // 방전량
 						ess_head_pc[dt_row_cnt-1] = final_dt_str_head;
 						realChg_data_pc[dt_row_cnt-1] = dt_str;
 						realDischg_data_pc[dt_row_cnt-1] = dt_str2;
 						dt_str_head = "";
-						dt_str = "";
-						dt_str2 = "";
-						dt_str_totalVal = 0;
+						dt_str  = ""; 
+						dt_str2 = ""; 
+//						dt_row_cnt++;
+//						dt_col_cnt = 1;
+						dt_str_totalVal =  0;
 						dt_str2_totalVal = 0;
 					} else {
 						dt_col_cnt++;
 					}
 					
 				}
+
+				s = incrementTime(s);
 				
 			}
 			
@@ -132,7 +152,7 @@
 					totalDataSet2 = totalDataSet2+reDischgVal;
 				}
 				
-				var tm = new Date( convertDateUTC(chgChartList[i].std_timestamp) );
+//				var tm = new Date( convertDateUTC(chgChartList[i].std_timestamp) );
 				// 차트데이터 셋팅
 				dataSet.push( [setChartDateUTC(chgChartList[i].std_timestamp), reChgVal] );
 				dataSet2.push( [setChartDateUTC(chgChartList[i].std_timestamp), reDischgVal] );
@@ -158,6 +178,7 @@
 		var chgChartList = result.chgChartList;
 		var dischgSheetList = result.dischgSheetList;
 		var dischgChartList = result.dischgChartList;
+		var periodd = $("#selPeriodVal").val(); // 데이터조회간격
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -173,41 +194,58 @@
 		var dt_str2_totalVal = 0; // 테이블 라인별 누적합
 		
 		// 표데이터 셋팅
+		var start = new Date(schStartTime.getTime());
+		var end = new Date(schEndTime.getTime());
 		if(chgSheetList != null && chgSheetList.length > 0) {
+			var s = start;
+			var e = end;
+			setHms(s, e);
+			if(periodd == 'month') {
+				s.setDate(1);
+				s.setHours(0)
+				s.setMinutes(0);
+				s.setSeconds(0);
+			}
 			for(var i=0; i<chgSheetList.length; i++) {
-				var chgVal = String(chgSheetList[i].chg_val);
-				var dischgVal   = String(dischgSheetList[i].dischg_val);
-				var reChgVal = 0; 
-				var reDischgVal   = 0; 
 				
-				if(chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
-				else {
-					reChgVal = Math.round( Number(chgVal) );
-					totalDataSet = totalDataSet+reChgVal;
+				var reChgVal = null; 
+				var reDischgVal   = null; 
+				for(var j=0; j<chgSheetList.length; j++) {
+					if(s.getTime() == new Date(chgSheetList[j].std_timestamp).getTime()) {
+						var chgVal = String(chgSheetList[j].chg_val);
+						var dischgVal   = String(dischgSheetList[j].dischg_val);
+						
+						if(chgVal == null || chgVal == "" || chgVal == "null") {
+							reChgVal = null;
+						} else {
+							var map = convertUnitFormat(chgVal, "kWh", 1);
+							reChgVal = Number( map.get("formatNum") );
+							dt_str_totalVal = dt_str_totalVal+reChgVal;
+						}
+						
+						if(dischgVal == null || dischgVal == "" || dischgVal == "null") {
+							reDischgVal = null;
+						} else {
+							var map = convertUnitFormat(dischgVal, "kWh", 1);
+							reDischgVal = Number( map.get("formatNum") );
+							dt_str2_totalVal = dt_str2_totalVal+ reDischgVal;
+						}
+						
+						break;
+					}
 				}
-				if(dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
-				else {
-					reDischgVal   = Math.round( Number(dischgVal) );
-					totalDataSet2 = totalDataSet2+reDischgVal;
-				}
-				
-				var tm = new Date( convertDateUTC(chgSheetList[i].std_timestamp) );
-
-				// 표데이터 셋팅
-				var headerDate2 = convertDataTableHeaderDate(tm, 2);
 				dt_str += "<td>"+  ( (reChgVal == null) ? "" : reChgVal ) +"</td>"; // 충전량
 				dt_str2 += "<td>"+ ( (reDischgVal == null) ? "" : reDischgVal    ) +"</td>"; // 방전량
-				dt_str_totalVal = dt_str_totalVal+ reChgVal;
-				dt_str2_totalVal = dt_str2_totalVal+ reDischgVal;
+				
 				if(dt_col_cnt == dt_col) {
 					dt_str += "<td>"+  dt_str_totalVal  +"</td>"; // 충전량
 					dt_str2 += "<td>"+ dt_str2_totalVal +"</td>"; // 방전량
 					fetureChg_data_pc[dt_row_cnt-1] = dt_str;
 					fetureDischg_data_pc[dt_row_cnt-1] = dt_str2;
-					dt_row_cnt++;
-					dt_col_cnt = 1;
 					dt_str  = ""; 
 					dt_str2 = ""; 
+					dt_row_cnt++;
+					dt_col_cnt = 1;
 					dt_str_totalVal =  0;
 					dt_str2_totalVal = 0;
 				} else {
@@ -216,8 +254,8 @@
 							dt_str += "<td></td>";
 							dt_str2 += "<td></td>";
 						}
-						dt_str += "<td>"+dt_str_totalVal+"</td>";
-						dt_str2 += "<td>"+dt_str2_totalVal+"</td>";
+						dt_str += "<td>"+  dt_str_totalVal  +"</td>"; // 충전량
+						dt_str2 += "<td>"+ dt_str2_totalVal +"</td>"; // 방전량
 						fetureChg_data_pc[dt_row_cnt-1] = dt_str;
 						fetureDischg_data_pc[dt_row_cnt-1] = dt_str2;
 						dt_str = "";
@@ -229,6 +267,8 @@
 					}
 					
 				}
+
+				s = incrementTime(s);
 				
 			}
 			

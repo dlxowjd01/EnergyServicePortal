@@ -35,6 +35,7 @@
 	function callback_getPeakRealList(result) {
 		var sheetList = result.sheetList;
 		var chartList = result.chartList;
+		var periodd = $("#selPeriodVal").val(); // 데이터조회간격
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -53,36 +54,51 @@
 		var dt_str3_totalVal = 0; // 테이블 라인별 누적합
 		
 		// 표데이터 셋팅
+		var start = new Date(schStartTime.getTime());
+		var end = new Date(schEndTime.getTime());
 		if(sheetList != null && sheetList.length > 0) {
+			var s = start;
+			var e = end;
+			setHms(s, e);
+			if(periodd == 'month') {
+				s.setDate(1);
+				s.setHours(0)
+				s.setMinutes(0);
+				s.setSeconds(0);
+			}
 			for(var i=0; i<sheetList.length; i++) {
-				var peakVal = String(sheetList[i].peak_val);
-				var rePeakVal = 0;
-				var tm = new Date( convertDateUTC(sheetList[i].std_timestamp) );
-				
-				if(peakVal == null || peakVal == "" || peakVal == "null") {
-					rePeakVal = null;
-				} else {
-					if(peakVal.indexOf(".")>-1) rePeakVal = Math.round( Number(peakVal) );
-					else rePeakVal = Number(peakVal);
-					
-					if(maxPeakVal < rePeakVal) {
-						maxPeakVal = rePeakVal; // 최대 피크전력 구하기
-						maxPeakTmstp = tm.format("yyyy-MM-dd HH:mm:ss");
+				dt_str_head += "<th>"+convertDataTableHeaderDate(s, 2)+"</th>"
+
+				var rePeakVal = null;
+				for(var j=0; j<sheetList.length; j++) {
+					if(s.getTime() == new Date(sheetList[j].std_timestamp).getTime()) {
+						var peakVal = String(sheetList[j].peak_val);
+						if(peakVal == null || peakVal == "" || peakVal == "null") {
+							rePeakVal = null;
+						} else {
+							if(peakVal.indexOf(".")>-1) rePeakVal = Math.round( Number(peakVal) );
+							else rePeakVal = Number(peakVal);
+							
+							if(maxPeakVal < rePeakVal) {
+								maxPeakVal = rePeakVal; // 최대 피크전력 구하기
+								maxPeakTmstp = s.format("yyyy-MM-dd HH:mm:ss");
+							}
+						}
+						
+						break;
 					}
 				}
-				
-				var headerDate2 = convertDataTableHeaderDate(tm, 2);
-				dt_str_head += "<th>"+headerDate2+"</th>"
-				if(peakVal == null || peakVal == "" || peakVal == "null") dt_str += "<td>"+" "+"</td>"; 
-				else dt_str += "<td>"+ rePeakVal+"</td>";
+				dt_str += "<td>"+  ( (rePeakVal == null) ? "" : rePeakVal ) +"</td>";
 				dt_str2 += "<td>"+ ( (contractPower == null) ? "" : contractPower    )+"</td>";
 				dt_str3 += "<td>"+ ( (chargePower == null) ? "" : chargePower    )+"</td>";
 				dt_str_totalVal = dt_str_totalVal+ rePeakVal;
 				dt_str2_totalVal = dt_str2_totalVal+ contractPower;
 				dt_str3_totalVal = dt_str3_totalVal+ chargePower;
+				
+				
+				
 				if(dt_col_cnt == dt_col) {
-					var headerDate1 = convertDataTableHeaderDate(tm, 1);
-					var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
+					var final_dt_str_head = "<th>"+convertDataTableHeaderDate(s, 1)+"</th>"+dt_str_head;
 					dt_str += "<td>"+dt_str_totalVal+"</td>";
 					dt_str2 += "<td>"+dt_str2_totalVal+"</td>";
 					dt_str3 += "<td>"+dt_str3_totalVal+"</td>";
@@ -90,25 +106,24 @@
 					peak_data_pc[dt_row_cnt-1] = dt_str;
 					ctpPw_data_pc[dt_row_cnt-1] = dt_str2;
 					cgtPw_data_pc[dt_row_cnt-1] = dt_str3;
-					dt_row_cnt++;
-					dt_col_cnt = 1;
 					dt_str_head = "";
 					dt_str = "";
 					dt_str2 = "";
 					dt_str3 = "";
+					dt_row_cnt++;
+					dt_col_cnt = 1;
 					dt_str_totalVal = 0;
 					dt_str2_totalVal = 0;
 					dt_str3_totalVal = 0;
 				} else {
-					if((i+1) == sheetList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
+					if((i+1) == sheetList.length) { // 루프 다 돌고 조회한 목록이 라인을 다 못채울 때
 						for(a=0; a<(dt_col-dt_col_cnt); a++) {
 							dt_str_head += "<th></th>";
 							dt_str += "<td></td>";
 							dt_str2 += "<td></td>";
 							dt_str3 += "<td></td>";
 						}
-						var headerDate1 = convertDataTableHeaderDate(tm, 1);
-						var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
+						var final_dt_str_head = "<th>"+convertDataTableHeaderDate(s, 1)+"</th>"+dt_str_head;
 						dt_str += "<td>"+dt_str_totalVal+"</td>";
 						dt_str2 += "<td>"+dt_str2_totalVal+"</td>";
 						dt_str3 += "<td>"+dt_str3_totalVal+"</td>";
@@ -120,6 +135,8 @@
 						dt_str = "";
 						dt_str2 = "";
 						dt_str3 = "";
+//						dt_row_cnt++;
+//						dt_col_cnt = 1;
 						dt_str_totalVal = 0;
 						dt_str2_totalVal = 0;
 						dt_str3_totalVal = 0;
@@ -127,6 +144,8 @@
 						dt_col_cnt++;
 					}
 				}
+
+				s = incrementTime(s);
 				
 			}
 			

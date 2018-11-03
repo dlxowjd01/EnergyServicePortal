@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -158,7 +159,7 @@ public class SiteMainController {
 	}
 	
 	@RequestMapping("/getRevenueList")
-	public @ResponseBody Map<String, Object> getRevenueList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getRevenueList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getRevenueList");
 		logger.debug("param ::::: "+param.toString());
 		
@@ -188,7 +189,7 @@ public class SiteMainController {
 		param.put("selTerm", "month");
 		param.put("selPeriodVal", "day");
 		logger.debug("                                   param ::::: "+param.toString());
-		Map result = pvRevenueService.getPVRevenueList(param);
+		Map result = pvRevenueService.getPVRevenueList(param, request);
 		Map totPriceMap = (Map) result.get("totPriceMap");
 		List totPriceList = (totPriceMap == null) ? null : (List) totPriceMap.get("chartList");
 		

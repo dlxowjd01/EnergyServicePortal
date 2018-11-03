@@ -22,8 +22,6 @@
 		var sheetList = result.sheetList;
 		var chartList = result.chartList;
 		var periodd = $("#selPeriodVal").val(); // 데이터조회간격
-//		console.log("  sheetList        ", sheetList);
-//		console.log("  chartList        ", chartList);
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -35,53 +33,69 @@
 		var dt_str_totalVal = 0; // 테이블 라인별 누적합
 		
 		// 표데이터 셋팅
+		var start = new Date(schStartTime.getTime());
+		var end = new Date(schEndTime.getTime());
 		if(sheetList != null && sheetList.length > 0) {
+			var s = start;
+			var e = end;
+			setHms(s, e);
+			if(periodd == 'month') {
+				s.setDate(1);
+				s.setHours(0)
+				s.setMinutes(0);
+				s.setSeconds(0);
+			}
 			for(var i=0; i<sheetList.length; i++) {
-				var usage = String(sheetList[i].usg_val);
-				var reUsage = 0;
-				if(usage == null || usage == "" || usage == "null") {
-					reUsage = null;
-				} else {
-					var map = convertUnitFormat(usage, "mWh", 8);
-					reUsage = Number( map.get("formatNum") );
+				dt_str_head += "<th>"+convertDataTableHeaderDate(s, 2)+"</th>";
+				
+				var reUsage = null;
+				for(var j=0; j<sheetList.length; j++) {
+					if(s.getTime() == new Date(sheetList[j].std_timestamp).getTime()) {
+						var usage = String(sheetList[j].usg_val);
+						if(usage == null || usage == "" || usage == "null") {
+							reUsage = null;
+						} else {
+							var map = convertUnitFormat(usage, "mWh", 8);
+							reUsage = Number( map.get("formatNum") );
+							dt_str_totalVal = dt_str_totalVal+reUsage;
+						}
+						
+						break;
+					}
 				}
+				dt_str += "<td>"+  ( (reUsage == null) ? "" : reUsage ) +"</td>";
 				
-				var tm = new Date( convertDateUTC(sheetList[i].std_timestamp) );
-				
-				var headerDate2 = convertDataTableHeaderDate(tm, 2);
-				dt_str_head += "<th>"+headerDate2+"</th>"
-				if(usage == null || usage == "" || usage == "null") dt_str += "<td>"+" "+"</td>"; 
-				else dt_str += "<td>"+reUsage+"</td>";
-				dt_str_totalVal = dt_str_totalVal+reUsage;
 				if(dt_col_cnt == dt_col) {
-					var headerDate1 = convertDataTableHeaderDate(tm, 1);
-					var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
+					var final_dt_str_head = "<th>"+convertDataTableHeaderDate(s, 1)+"</th>"+dt_str_head;
 					dt_str += "<td>"+dt_str_totalVal+"</td>";
 					usage_head_pc[dt_row_cnt-1] = final_dt_str_head;
 					real_data_pc[dt_row_cnt-1] = dt_str;
-					dt_row_cnt++;
-					dt_col_cnt = 1;
 					dt_str_head = "";
 					dt_str = "";
+					dt_row_cnt++;
+					dt_col_cnt = 1;
 					dt_str_totalVal = 0;
 				} else {
-					if( (i+1) == sheetList.length ) { // 조회한 목록이 라인을 다 못채울 때
+					if((i+1) == sheetList.length) { // 루프 다 돌고 조회한 목록이 라인을 다 못채울 때
 						for(a=0; a<(dt_col-dt_col_cnt); a++) {
 							dt_str_head += "<th></th>";
 							dt_str += "<td></td>";
 						}
-						var headerDate1 = convertDataTableHeaderDate(tm, 1);
-						var final_dt_str_head = "<th>"+headerDate1+"</th>"+dt_str_head;
+						var final_dt_str_head = "<th>"+convertDataTableHeaderDate(s, 1)+"</th>"+dt_str_head;
 						dt_str += "<td>"+dt_str_totalVal+"</td>";
 						usage_head_pc[dt_row_cnt-1] = final_dt_str_head;
 						real_data_pc[dt_row_cnt-1] = dt_str;
 						dt_str_head = "";
 						dt_str = "";
+//						dt_row_cnt++;
+//						dt_col_cnt = 1;
 						dt_str_totalVal = 0;
 					} else {
 						dt_col_cnt++;
 					}
 				}
+				
+				s = incrementTime(s);
 				
 			}
 			
@@ -100,12 +114,8 @@
 					totalUsage = totalUsage+Number(usage);
 				}
 				
-//				var tm = new Date(chartList[i].std_timestamp);
-//				console.log("  그래프시간   @@@@@     ", chartList[i].std_timestamp, ",       ", Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds()));
-//				console.log("  그래프시간   #####     ", tm, ",       ", new Date(Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())));
 //				var tm = new Date( convertDateUTC(chartList[i].std_timestamp) );
 				dataSet.push([ setChartDateUTC(chartList[i].std_timestamp), reUsage ]);
-//				dataSet.push([ new Date(Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())).getTime(), reUsage ]);
 				
 			}
 			
@@ -121,6 +131,7 @@
 	function callback_getUsageFutureList(result) {
 		var sheetList = result.sheetList;
 		var chartList = result.chartList;
+		var periodd = $("#selPeriodVal").val(); // 데이터조회간격
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -131,44 +142,62 @@
 		var dt_str_totalVal = 0; // 테이블 라인별 누적합
 		
 		// 표데이터 셋팅
+		var start = new Date(schStartTime.getTime());
+		var end = new Date(schEndTime.getTime());
 		if(sheetList != null && sheetList.length > 0) {
+			var s = start;
+			var e = end;
+			setHms(s, e);
+			if(periodd == 'month') {
+				s.setDate(1);
+				s.setHours(0)
+				s.setMinutes(0);
+				s.setSeconds(0);
+			}
 			for(var i=0; i<sheetList.length; i++) {
-				var usage = String(sheetList[i].pre_usg_val);
-				var reUsage = 0;
-				if(usage == null || usage == "" || usage == "null") {
-					reUsage = null;
-				} else {
-					var map = convertUnitFormat(usage, "mWh", 8);
-					reUsage = Number( map.get("formatNum") );
-//					totalUsage = totalUsage+Number(usage);
+
+				var reUsage = null;
+				for(var j=0; j<sheetList.length; j++) {
+					if(s.getTime() == new Date(sheetList[j].std_timestamp).getTime()) {
+						var usage = String(sheetList[j].pre_usg_val);
+						if(usage == null || usage == "" || usage == "null") {
+							reUsage = null;
+						} else {
+							var map = convertUnitFormat(usage, "mWh", 8);
+							reUsage = Number( map.get("formatNum") );
+							dt_str_totalVal = dt_str_totalVal+reUsage;
+						}
+						
+						break;
+					}
 				}
+				dt_str += "<td>"+  ( (reUsage == null) ? "" : reUsage ) +"</td>";
 				
-				var tm = new Date( convertDateUTC(sheetList[i].std_timestamp) );
-				
-				// 표데이터 셋팅
-				if(usage == null || usage == "" || usage == "null") dt_str += "<td>"+" "+"</td>"; 
-				else dt_str += "<td>"+reUsage+"</td>";
-				dt_str_totalVal = dt_str_totalVal+reUsage;
 				if(dt_col_cnt == dt_col) {
 					dt_str += "<td>"+dt_str_totalVal+"</td>";
 					feture_data_pc[dt_row_cnt-1] = dt_str;
+					dt_str = "";
 					dt_row_cnt++;
 					dt_col_cnt = 1;
-					dt_str = "";
 					dt_str_totalVal = 0;
 				} else {
-					if( (i+1) == sheetList.length ) { // 조회한 목록이 라인을 다 못채울 때
+					if((i+1) == sheetList.length) { // 루프 다 돌고 조회한 목록이 라인을 다 못채울 때
 						for(a=0; a<(dt_col-dt_col_cnt); a++) {
 							dt_str += "<td></td>";
 						}
 						dt_str += "<td>"+dt_str_totalVal+"</td>";
 						feture_data_pc[dt_row_cnt-1] = dt_str;
+//						dt_str_head = "";
 						dt_str = "";
+//						dt_row_cnt++;
+//						dt_col_cnt = 1;
 						dt_str_totalVal = 0;
 					} else {
 						dt_col_cnt++;
 					}
 				}
+				
+				s = incrementTime(s);
 				
 			}
 			
@@ -187,11 +216,8 @@
 					totalUsage = totalUsage+Number(usage);
 				}
 				
-//				var tm = new Date(chartList[i].std_timestamp);
-//				var tm = new Date( convertDateUTC(chartList[i].std_timestamp) );
 				// 차트데이터 셋팅
 				dataSet.push([ setChartDateUTC(chartList[i].std_timestamp), reUsage ]);
-//				dataSet.push([ new Date(Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds())).getTime(), reUsage ]);
 				
 			}
 			
@@ -223,16 +249,8 @@
 		}, false);
 		
 		setTickInterval();
-		
 		myChart.redraw(); // 차트 데이터를 다시 그린다
 		
-//		if(pastUsageList.length == 0 && fetureUsageList.length == 0) {
-//			$(".usage_chart").find("#inchart_nodata").css("display", "");
-//			$(".usage_chart").find("#inchart_data").css("display", "none");
-//		} else {
-//			$(".usage_chart").find("#inchart_nodata").css("display", "none");
-//			$(".usage_chart").find("#inchart_data").css("display", "");
-//		}
 	}
 	
 	// 표(테이블) 그리기

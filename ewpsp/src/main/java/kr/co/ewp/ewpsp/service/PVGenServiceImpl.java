@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class PVGenServiceImpl implements PVGenService {
 	@Resource(name="pvGenDao")
 	private PVGenDao pvGenDao;
 
-	public Map getPVGenRealList(HashMap param) throws Exception {
+	public Map getPVGenRealList(HashMap param, HttpServletRequest request) throws Exception {
 		List list = pvGenDao.getPVGenRealList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
@@ -26,12 +27,12 @@ public class PVGenServiceImpl implements PVGenService {
 			
 			return resultMap;
 		} else {
-			resultMap = PeriodDataSetting.dataSetting(param, list, "std_date", "gen_val", 1);
+			resultMap = PeriodDataSetting.dataSetting(request, param, list, "std_date", "gen_val", 1);
 			return resultMap;
 		}
 	}
 
-	public Map getPVGenFutureList(HashMap param) throws Exception {
+	public Map getPVGenFutureList(HashMap param, HttpServletRequest request) throws Exception {
 		List list = pvGenDao.getPVGenFutureList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
@@ -40,7 +41,7 @@ public class PVGenServiceImpl implements PVGenService {
 			
 			return resultMap;
 		} else {
-			resultMap = PeriodDataSetting.dataSetting(param, list, "std_date", "gen_val", 1);
+			resultMap = PeriodDataSetting.dataSetting(request, param, list, "std_date", "gen_val", 1);
 			return resultMap;
 		}
 	}

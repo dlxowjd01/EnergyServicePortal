@@ -36,4 +36,15 @@
 <script src="../js/jquery.form.min.js"></script>
 <script src="../js/moment.js"></script>
 <script src="../js/moment-timezone.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		setTimeZoneInCookie();
+	});
+	
+    function setTimeZoneInCookie() {
+        var _myDate = new Date();
+        var _offset = _myDate.getTimezoneOffset();
+        document.cookie = "TIMEZONE_COOKIE=" + _offset; //Cookie name with value
+    }
+</script>
 

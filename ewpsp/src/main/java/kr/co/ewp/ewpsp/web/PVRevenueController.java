@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,13 +41,13 @@ public class PVRevenueController {
 	}
 	
 	@RequestMapping("/getPVRevenueList")
-	public @ResponseBody Map<String, Object> getPVRevenueList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getPVRevenueList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getPVRevenueList");
 		logger.debug("param ::::: "+param.toString());
 		
 		param.put("selPeriodVal", "month");
 		
-		Map result = pvRevenueService.getPVRevenueList(param);
+		Map result = pvRevenueService.getPVRevenueList(param, request);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 //		resultMap.put("resultListMap", result);

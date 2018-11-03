@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,7 @@ public class ESSChargeServiceImpl implements ESSChargeService {
 		
 	}
 
-	public Map getESSChargeRealList(HashMap param) throws Exception {
+	public Map getESSChargeRealList(HashMap param, HttpServletRequest request) throws Exception {
 		List list = essChargeDao.getESSChargeRealList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
@@ -52,8 +53,8 @@ public class ESSChargeServiceImpl implements ESSChargeService {
 		} else {
 			Map<String, Object> chgMap = new HashMap<String, Object>();
 			Map<String, Object> dischgMap = new HashMap<String, Object>();
-			chgMap = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "chg_val", 1);
-			dischgMap = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "dischg_val", 1);
+			chgMap = PeriodDataSetting.dataSetting(request, param, list, "std_timestamp", "chg_val", 1);
+			dischgMap = PeriodDataSetting.dataSetting(request, param, list, "std_timestamp", "dischg_val", 1);
 
 			resultMap.put("chgMap", chgMap);
 			resultMap.put("dischgMap", dischgMap);
@@ -62,7 +63,7 @@ public class ESSChargeServiceImpl implements ESSChargeService {
 		}
 	}
 
-	public Map getESSChargeFutureList(HashMap param) throws Exception {
+	public Map getESSChargeFutureList(HashMap param, HttpServletRequest request) throws Exception {
 		List list = essChargeDao.getESSChargeFutureList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
@@ -80,8 +81,8 @@ public class ESSChargeServiceImpl implements ESSChargeService {
 		} else {
 			Map<String, Object> chgMap = new HashMap<String, Object>();
 			Map<String, Object> dischgMap = new HashMap<String, Object>();
-			chgMap = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "chg_val", 1);
-			dischgMap = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "dischg_val", 1);
+			chgMap = PeriodDataSetting.dataSetting(request, param, list, "std_timestamp", "chg_val", 1);
+			dischgMap = PeriodDataSetting.dataSetting(request, param, list, "std_timestamp", "dischg_val", 1);
 
 			resultMap.put("chgMap", chgMap);
 			resultMap.put("dischgMap", dischgMap);

@@ -14,7 +14,6 @@ function changeSelTerm(gubun) {
 	var $selTermBox = $("#selTermBox");
 	var $selPeriod = $("#selPeriod");
 	if(gubun == '15min') { // 15분(현재 안나옴)
-		$selTermBox.empty().append("15분").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("1분").append( $('<span class="caret" />') );
 		$("#sp_15min").hide();
 		$("#sp_30min").hide();
@@ -24,7 +23,6 @@ function changeSelTerm(gubun) {
 		
 		$("#selPeriodVal").val('1min');
 	} else if(gubun == '30min') { // 30분
-		$selTermBox.empty().append("30분").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("15분").append( $('<span class="caret" />') );
 		$("#sp_30min").hide();
 		$("#sp_1hour").hide();
@@ -33,7 +31,6 @@ function changeSelTerm(gubun) {
 		
 		$("#selPeriodVal").val('15min');
 	} else if(gubun == 'hour') { // 1시간
-		$selTermBox.empty().append("1시간").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("15분").append( $('<span class="caret" />') );
 		$("#sp_1hour").hide();
 		$("#sp_1day").hide();
@@ -41,45 +38,42 @@ function changeSelTerm(gubun) {
 		
 		$("#selPeriodVal").val('15min');
 	} else if(gubun == 'day') { // 오늘
-		$selTermBox.empty().append("1일(오늘)").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("1시간").append( $('<span class="caret" />') );
 		$("#sp_1day").hide();
 		$("#sp_1month").hide();
 		
 		$("#selPeriodVal").val('hour');
 	} else if(gubun == 'week') { // 1주
-		$selTermBox.empty().append("1주").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("1시간").append( $('<span class="caret" />') );
 		$("#sp_1month").hide();
 		
 		$("#selPeriodVal").val('hour');
 	} else if(gubun == 'month') { // 1달
-		$selTermBox.empty().append("1월").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("1일").append( $('<span class="caret" />') );
 		$("#sp_1month").hide();
 		
 		$("#selPeriodVal").val('day');
 	} else if(gubun == 'year') { // 1년
-		$selTermBox.empty().append("1년").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("1월").append( $('<span class="caret" />') );
 		
 		$("#selPeriodVal").val('month');
 	} else if(gubun == 'other') { // 에너지모니터링 화면 전체의 기간설정검색
-		$selTermBox.empty().append("기간설정").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("1시간").append( $('<span class="caret" />') );
 		$("#sp_1day").hide();
 		$("#sp_1month").hide();
-		firstDay = "";
-		endDay = "";
+		
 		var d = new Date();
 		$("#datepicker1, #datepicker2").attr("disabled", false).val( d.format("yyyy-MM-dd") );
+		$("#selPeriodVal").val('hour');
+	} else if(gubun == 'drday') { // 에너지모니터링 dr실적조회의 오늘날짜
+		$("#selPeriodVal").val('hour');
 	} else if(gubun == 'selectDay') { // 에너지모니터링 dr실적조회의 날짜검색
-		$selTermBox.empty().append("1일(날짜선택)").append( $('<span class="caret" />') );
 		$selPeriod.empty().append("1시간").append( $('<span class="caret" />') );
 		firstDay = "";
 		endDay = "";
 		var d = new Date();
 		$("#datepicker5").attr("disabled", false).val( d.format("yyyy-MM-dd") );
+		$("#selPeriodVal").val('hour');
 	}
 	
 	SelTerm = gubun;
@@ -88,19 +82,6 @@ function changeSelTerm(gubun) {
 // 데이터조회간격 선택
 function changePeriod(param) {
 	$("#selPeriodVal").val(param);
-	if(param == '1min') {
-		$("#selPeriod").empty().append("1분").append( $('<span class="caret" />') );
-	} else if(param == '15min') {
-		$("#selPeriod").empty().append("15분").append( $('<span class="caret" />') );
-	} else if(param == '30min') {
-		$("#selPeriod").empty().append("30분").append( $('<span class="caret" />') );
-	} else if(param == 'hour') {
-		$("#selPeriod").empty().append("1시간").append( $('<span class="caret" />') );
-	} else if(param == 'day') {
-		$("#selPeriod").empty().append("1일").append( $('<span class="caret" />') );
-	} else if(param == 'month') {
-		$("#selPeriod").empty().append("1월").append( $('<span class="caret" />') );
-	}
 }
 
 var btwnDt = 0;
@@ -155,6 +136,8 @@ $(function () {
 });
 
 //db조회 검색조건 모으기
+var schStartTime;
+var schEndTime;
 function getCollect_sch_condition() {
 	$dtpk1 = $("#datepicker1");
 	$dtpk2 = $("#datepicker2");
@@ -198,12 +181,8 @@ function getCollect_sch_condition() {
 		endTime = new Date( $dtpk2.val()+" 23:59:59" );
 		$("#dtCnt").val(  dateDiff($dtpk1.val()+" 00:00:00", $dtpk2.val()+" 23:59:59")+1  );
 	} else if(SelTerm == 'drday') { // 에너지모니터링 dr실적조회의 오늘날짜
-//		var startDt = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), 0, 0, 0);
-//		var endDt = new Date(endDay.getFullYear(), endDay.getMonth(), endDay.getDate(), 23, 59, 59);
-//		startTime = new Date(startDt.setMinutes(startDt.getMinutes() + (new Date()).getTimezoneOffset()));
-//		endTime = new Date(endDt.setMinutes(endDt.getMinutes() + (new Date()).getTimezoneOffset()));
 		startTime = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), 0, 0, 0);
-		endTime = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 23, 59, 59);
+		endTime = new Date(endDay.getFullYear(), endDay.getMonth(), endDay.getDate(), 23, 59, 59);
 	} else if(SelTerm == 'selectDay') { // 에너지모니터링 dr실적조회의 날짜검색
 		startTime = new Date( $dtpk5.val()+" 00:00:00" );
 		endTime = new Date( $dtpk5.val()+" 23:59:59" );
@@ -214,11 +193,15 @@ function getCollect_sch_condition() {
 		$("#selTermTo").val( replaceAll($dtpk4.val(), "-", "") );
 	}
 	
-	var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
-	var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
-	console.log(queryStart+", "+queryEnd);
-	
 	if(SelTerm != "billSelectMM") {
+		console.log("startTime  ", startTime, ", ", endTime);
+		schStartTime = new Date(startTime.getTime());
+		schEndTime = new Date(endTime.getTime());
+		
+		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
+		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
+		console.log(queryStart+", "+queryEnd);
+		
 		queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
 		queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
 		$("#selTermFrom").val(queryStart);
@@ -236,6 +219,79 @@ function getCollect_sch_condition() {
 //	formValidationChk();
 	console.log(formData);
 
+	var today = new Date();
+	getDBData(formData); // DB 데이터 조회(각 화면마다 존재)
+	update_updtDataTime(today, "updtTime"); // 검색시간(차트 새로고침시간) 업데이트
+}
+
+function getCollect_sch_condition_bill() {
+	$dtpk3 = $("#datepicker3");
+	$dtpk4 = $("#datepicker4");
+	$("#dtCnt").val("");
+	
+	var firstDay = new Date();
+	var endDay = new Date();
+	var startTime;
+	var endTime;
+	if(SelTerm == '15min') { // 15분(현재 안나옴)
+		startTime = new Date(firstDay.setMinutes(firstDay.getMinutes() - 15));
+		endTime = new Date();
+	} else if(SelTerm == '30min') { // 30분
+		startTime = new Date(firstDay.setMinutes(firstDay.getMinutes() - 30));
+		endTime = new Date();
+	} else if(SelTerm == 'hour') { // 1시간
+		startTime = new Date(firstDay.setHours(firstDay.getHours() - 1));
+		endTime = new Date();
+	} else if(SelTerm == 'day') { // 오늘
+		startTime = new Date(firstDay.setDate(firstDay.getDate() - 1));
+		endTime = new Date();
+	} else if(SelTerm == 'week') { // 1주
+		startTime = new Date(firstDay.setDate(firstDay.getDate() - 7));
+		endTime = new Date();
+	} else if(SelTerm == 'month') { // 1달
+		startTime = new Date(firstDay.setDate(firstDay.getDate()-30));
+		endTime = new Date();
+	} else if(SelTerm == 'year') { // 1년
+		startTime = new Date(firstDay.setDate(firstDay.getDate()-365));
+		endTime = new Date();
+	} else if(SelTerm == 'other') { // 에너지모니터링 화면 전체의 기간설정검색
+		console.log("$dtpk1.val()   "+$dtpk1.val()+", "+$dtpk2.val());
+		startTime = new Date( $dtpk1.val()+" 00:00:00" );
+		endTime = new Date( $dtpk2.val()+" 23:59:59" );
+		$("#dtCnt").val(  dateDiff($dtpk1.val()+" 00:00:00", $dtpk2.val()+" 23:59:59")+1  );
+	} else if(SelTerm == 'drday') { // 에너지모니터링 dr실적조회의 오늘날짜
+		startTime = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), 0, 0, 0);
+		endTime = new Date(endDay.getFullYear(), endDay.getMonth(), endDay.getDate(), 23, 59, 59);
+	} else if(SelTerm == 'selectDay') { // 에너지모니터링 dr실적조회의 날짜검색
+		startTime = new Date( $dtpk5.val()+" 00:00:00" );
+		endTime = new Date( $dtpk5.val()+" 23:59:59" );
+		$("#dtCnt").val(  dateDiff($dtpk5.val()+" 00:00:00", $dtpk5.val()+" 23:59:59")+1  );
+	} else if(SelTerm == "billSelectMM") { // 요금/수익 화면 전체의 기간설정검색
+		console.log($dtpk3.val()+", "+$dtpk4.val());
+		$("#selTermFrom").val( replaceAll($dtpk3.val(), "-", "") );
+		$("#selTermTo").val( replaceAll($dtpk4.val(), "-", "") );
+	}
+	
+	if(SelTerm != "billSelectMM") {
+		console.log("startTime  ", startTime, ", ", endTime);
+		schStartTime = new Date(startTime.getTime());
+		schEndTime = new Date(endTime.getTime());
+		
+		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
+		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
+		console.log(queryStart+", "+queryEnd);
+		
+		queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
+		queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
+		$("#selTermFrom").val(queryStart);
+		$("#selTermTo").val(queryEnd);
+		
+		console.log("검색일자    "+$("#selTermFrom").val()+", "+$("#selTermTo").val());
+	}
+	
+	var formData = $("#schForm").serializeObject();
+	console.log(formData);
+	
 	var today = new Date();
 	getDBData(formData); // DB 데이터 조회(각 화면마다 존재)
 	update_updtDataTime(today, "updtTime"); // 검색시간(차트 새로고침시간) 업데이트
@@ -270,6 +326,56 @@ function setChartDateUTC(_dateTimestamp) {
 //		return _dateTimestamp;
 //	}
 	
+}
+
+function setHms(start, end) {
+	start.setHours(0)
+	start.setMinutes(0);
+	start.setSeconds(0);
+	start.setMilliseconds(0);
+	end.setHours(23);
+	end.setMinutes(59);
+	end.setSeconds(59);
+	end.setMilliseconds(999);
+}
+
+function incrementTime(_time) {
+	var periodd = $("#selPeriodVal").val(); // 데이터조회간격
+	if(periodd == 'month') {
+		_time.setDate(1);
+		_time.setHours(0)
+		_time.setMinutes(0);
+		_time.setSeconds(0);
+		
+		_time = new Date(_time.setMonth( _time.getMonth()+1 ));
+		return _time;
+		
+	} else {
+		var loopSumCnt = calculateCnt();
+		var plusMinute = 15*loopSumCnt;
+		var __time = new Date(_time.setMinutes(  _time.getMinutes()+plusMinute    ));
+		return __time;
+		
+	}
+	
+}
+
+function calculateCnt() {
+	var periodd = $("#selPeriodVal").val(); // 데이터조회간격
+	var cnt = 0;
+	if(periodd == '15min') {
+		cnt = 1;
+	} else if(periodd == '30min') {
+		cnt = 2;
+	}  else if(periodd == 'hour') {
+		cnt = 4;
+	} else if(periodd == 'day') {
+		cnt = 96;
+	} else if(periodd == 'month') {
+		cnt = 96*30;
+	}
+	
+	return cnt;
 }
 
 // 표 영역의 헤더 날짜형식 변환

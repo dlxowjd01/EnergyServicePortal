@@ -199,6 +199,12 @@ function convertDateUTC(_dateTimestamp) {
 	
 }
 
+// date.getTime()
+function dateFormat_getTime(_date) {
+	return _date.getTime();
+	
+}
+
 // 계절 구분
 // 봄 : 3월 1일~5월 31일
 // 여름 : 6월 1일~8월 31일

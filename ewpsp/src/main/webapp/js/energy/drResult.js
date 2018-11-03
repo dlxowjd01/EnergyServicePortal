@@ -1,5 +1,5 @@
 	$(document).ready(function() {
-		changeSelTerm('day'); // 화면 첫 로딩 시 검색조건 셋팅
+		changeSelTerm('drday'); // 화면 첫 로딩 시 검색조건 셋팅
 		getCollect_sch_condition(); // 검색조건 모으기
 		
 	});
@@ -61,10 +61,11 @@
 					totUsage = totUsage+Number(usage);
 				}
 				
-				var tm = new Date( convertDateUTC(chartList[i].std_timestamp) );
+//				var tm = new Date( convertDateUTC(chartList[i].std_timestamp) );
 				// 차트데이터 셋팅
 				dataSet.push([ setChartDateUTC(chartList[i].std_timestamp), reUsage ]);
 				
+				var tm = new Date( setChartDateUTC(chartList[i].std_timestamp) );
 				if( tm.getHours()>=$("#cblAmtHourFrom").val() && tm.getHours()<=$("#cblAmtHourTo").val() ) {
 					dataSet2.push([ setChartDateUTC(chartList[i].std_timestamp), cblAmt ]);
 					dataSet3.push([ setChartDateUTC(chartList[i].std_timestamp), goalPower ]);

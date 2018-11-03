@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,11 +47,11 @@ public class DERUsageController {
 	}
 
 	@RequestMapping("/getESSUsageList")
-	public @ResponseBody Map<String, Object> getESSUsageList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getESSUsageList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getESSUsageList");
 		logger.debug("param ::::: "+param.toString());
 		
-		Map list = derUsageService.getESSUsageList(param);
+		Map list = derUsageService.getESSUsageList(param, request);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("sheetList", list.get("sheetList"));
@@ -59,14 +60,14 @@ public class DERUsageController {
 	}
 	
 	@RequestMapping("/getDERUsageList")
-	public @ResponseBody Map<String, Object> getDERUsageList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getDERUsageList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getDERUsageList");
 		logger.debug("param ::::: "+param.toString());
 		
-		Map kepcoUsageList = usageService.getUsageRealList(param); // 한전 사용량
-		Map essUsageList = derUsageService.getESSUsageList(param);// ESS 사용량
+		Map kepcoUsageList = usageService.getUsageRealList(param, request); // 한전 사용량
+		Map essUsageList = derUsageService.getESSUsageList(param, request);// ESS 사용량
 //		List pvUsageList = derUsageService.getPVUsageList(param); // PV 사용량
-		Map pvUsageList = pvGenService.getPVGenRealList(param); // PV 사용량
+		Map pvUsageList = pvGenService.getPVGenRealList(param, request); // PV 사용량
 		
 		List loopCntSheetList = null;
 		List loopCntChartList = null;
