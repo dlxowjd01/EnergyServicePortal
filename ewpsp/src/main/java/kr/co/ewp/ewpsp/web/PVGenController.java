@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,11 +38,11 @@ public class PVGenController {
 	}
 
 	@RequestMapping("/getPVGenRealList")
-	public @ResponseBody Map<String, Object> getPVGenRealList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getPVGenRealList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getPVGenRealList");
 		logger.debug("param ::::: "+param.toString());
 		
-		Map list = pvGenService.getPVGenRealList(param);
+		Map list = pvGenService.getPVGenRealList(param, request);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("sheetList", list.get("sheetList"));
@@ -50,11 +51,11 @@ public class PVGenController {
 	}
 	
 	@RequestMapping("/getPVGenFutureList")
-	public @ResponseBody Map<String, Object> getPVGenFutureList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getPVGenFutureList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getPVGenFutureList");
 		logger.debug("param ::::: "+param.toString());
 		
-		Map list = pvGenService.getPVGenFutureList(param);
+		Map list = pvGenService.getPVGenFutureList(param, request);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("sheetList", list.get("sheetList"));

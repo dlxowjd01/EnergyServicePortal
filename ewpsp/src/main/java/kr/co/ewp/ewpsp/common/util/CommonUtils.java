@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -291,6 +293,20 @@ public class CommonUtils {
         //logger.info("Hex format : " + sb.toString());
 
         return sb.toString();
+	}
+	
+	public static String getTimeOffset(HttpServletRequest request){
+		Cookie[] cookies = request.getCookies();
+		String timeOffset=null;
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("TIMEZONE_COOKIE")) {
+					timeOffset=cookie.getValue();
+					break;
+				}
+			}
+		}
+		return timeOffset;
 	}
 
 }

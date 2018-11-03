@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,11 +40,11 @@ public class UsageController {
 	}
 	
 	@RequestMapping("/getUsageRealList")
-	public @ResponseBody Map<String, Object> getUsageRealList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getUsageRealList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getUsageRealList");
 		logger.debug("param ::::: "+param.toString());
 		
-		Map list = usageService.getUsageRealList(param);
+		Map list = usageService.getUsageRealList(param, request);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("sheetList", list.get("sheetList"));
@@ -52,11 +53,11 @@ public class UsageController {
 	}
 	
 	@RequestMapping("/getUsageFutureList")
-	public @ResponseBody Map<String, Object> getUsageFutureList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getUsageFutureList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getUsageFutureList");
 		logger.debug("param ::::: "+param.toString());
 		
-		Map list = usageService.getUsageFutureList(param);
+		Map list = usageService.getUsageFutureList(param, request);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("sheetList", list.get("sheetList"));

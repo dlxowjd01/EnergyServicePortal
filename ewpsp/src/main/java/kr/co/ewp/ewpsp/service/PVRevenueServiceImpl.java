@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class PVRevenueServiceImpl implements PVRevenueService {
 	@Resource(name="pvRevenueDao")
 	private PVRevenueDao pvRevenueDao;
 
-	public Map getPVRevenueList(HashMap param) throws Exception {
+	public Map getPVRevenueList(HashMap param, HttpServletRequest request) throws Exception {
 		List list = pvRevenueDao.getPVRevenueList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
@@ -38,13 +39,13 @@ public class PVRevenueServiceImpl implements PVRevenueService {
 			Map<String, Object> map6 = new HashMap<String, Object>();
 			
 			if(!"day".equals((String) param.get("selPeriodVal"))) {
-				map1 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "net_gen_val", 1); // 총 발전량
-				map2 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "smp_deal", 1); // SMP 거래량
-				map3 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "smp_price", 1); // SMP 수익
-				map4 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "rec_deal", 1); // REC 거래량
-				map5 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "rec_price", 1); // REC 수익
+				map1 = PeriodDataSetting.dataSetting(request, param, list, "std_timestamp", "net_gen_val", 1); // 총 발전량
+				map2 = PeriodDataSetting.dataSetting(request, param, list, "std_timestamp", "smp_deal", 1); // SMP 거래량
+				map3 = PeriodDataSetting.dataSetting(request, param, list, "std_timestamp", "smp_price", 1); // SMP 수익
+				map4 = PeriodDataSetting.dataSetting(request, param, list, "std_timestamp", "rec_deal", 1); // REC 거래량
+				map5 = PeriodDataSetting.dataSetting(request, param, list, "std_timestamp", "rec_price", 1); // REC 수익
 			}
-			map6 = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "tot_price", 1); //총 수익
+			map6 = PeriodDataSetting.dataSetting(request, param, list, "std_timestamp", "tot_price", 1); //총 수익
 			
 			resultMap.put("netGenValMap", map1);
 			resultMap.put("smpDealMap", map2);

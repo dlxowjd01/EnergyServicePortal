@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class DERUsageServiceImpl implements DERUsageService {
 	@Resource(name="derUsageDao")
 	private DERUsageDao derUsageDao;
 
-	public Map getESSUsageList(HashMap param) throws Exception {
+	public Map getESSUsageList(HashMap param, HttpServletRequest request) throws Exception {
 		List list = derUsageDao.getESSUsageList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
@@ -26,7 +27,7 @@ public class DERUsageServiceImpl implements DERUsageService {
 			
 			return resultMap;
 		} else {
-			resultMap = PeriodDataSetting.dataSetting(param, list, "std_date", "usg_val", 1);
+			resultMap = PeriodDataSetting.dataSetting(request, param, list, "std_date", "usg_val", 1);
 			return resultMap;
 		}
 	}

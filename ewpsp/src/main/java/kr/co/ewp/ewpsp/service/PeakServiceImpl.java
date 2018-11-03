@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class PeakServiceImpl implements PeakService {
 	@Resource(name="peakDao")
 	private PeakDao peakDao;
 
-	public Map getPeakRealList(HashMap param) throws Exception {
+	public Map getPeakRealList(HashMap param, HttpServletRequest request) throws Exception {
 		List list = peakDao.getPeakRealList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
@@ -26,7 +27,7 @@ public class PeakServiceImpl implements PeakService {
 			
 			return resultMap;
 		} else {
-			resultMap = PeriodDataSetting.dataSetting(param, list, "std_timestamp", "peak_val", 1);
+			resultMap = PeriodDataSetting.dataSetting(request, param, list, "std_timestamp", "peak_val", 1);
 			return resultMap;
 		}
 	}

@@ -10,12 +10,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import kr.co.ewp.ewpsp.common.util.CommonUtils;
 
 public class DataPeriodCalculate {
 
 	private static final Logger logger = LoggerFactory.getLogger(PeriodDataSetting.class);
+	
+	private static String offset = "";
 
 	/**
 	 * 그래프영역 데이터조합
@@ -29,10 +35,11 @@ public class DataPeriodCalculate {
 	 * @param flag
 	 * @return
 	 */
-	public static List periodCalculate(List resultList, Timestamp selTermFrom, Timestamp selTermTo, 
+	public static List periodCalculate(HttpServletRequest request, List resultList, Timestamp selTermFrom, Timestamp selTermTo, 
 			String term, String period, String timestampStr, String calculValStr, int flag) {
 		List newList = new ArrayList();
 		Timestamp endListDt = null;
+		offset = CommonUtils.getTimeOffset(request);
 		
 		int calculCnt = sumCntSet(term, period, flag); // for문 루프 횟수 구하기
 		
@@ -157,12 +164,24 @@ public class DataPeriodCalculate {
 					}
 					
 					if("month".equals(period)) {
+						boolean changeMonthYn = changeMonthYn(incStartDt);
+						
+						
+//						Calendar compareCal = Calendar.getInstance();
+//						compareCal.setTimeInMillis(   incStartDt.getTime()   );
+//						compareCal.add(Calendar.MINUTE, 15);
+//						int next = new Timestamp(compareCal.getTime().getTime()).getMonth();
+//						int now = incStartDt.getMonth();
+//						System.out.println("데이터없는 달비교   "+now+", "+next+"                 "+new Timestamp(compareCal.getTime().getTime())+", "+incStartDt);
 						Calendar compareCal = Calendar.getInstance();
 						compareCal.setTimeInMillis(   incStartDt.getTime()   );
+						compareCal.add(Calendar.MINUTE, Integer.parseInt(offset)*(-1)); // 로컬시간으로 변경
 						compareCal.add(Calendar.MINUTE, 15);
-						int next = new Timestamp(compareCal.getTime().getTime()).getMonth();
-						int now = incStartDt.getMonth();
-						if(now != next || i+1 == dataList.size()) { // 다음날짜가 달이 바뀌거나 마지막데이터일 때
+						
+//						if(now != next || i+1 == dataList.size()) {
+						if(changeMonthYn == true || i+1 == dataList.size()) {
+							// 다음날짜가 달이 바뀌거나 마지막데이터일 때
+							System.out.println("바뀌었지?   "+new Timestamp(compareCal.getTime().getTime())+", "+incStartDt);
 							Map<String, Object> calculMap = new HashMap<String, Object>();
 							Iterator<String> paramKeys = map.keySet().iterator();
 							while (paramKeys.hasNext()) {
@@ -237,12 +256,23 @@ public class DataPeriodCalculate {
 			}
 			
 			if("month".equals(period)) {
+				boolean changeMonthYn = changeMonthYn(incStartDt);
+				
+				
+//				Calendar compareCal = Calendar.getInstance();
+//				compareCal.setTimeInMillis(   incStartDt.getTime()   );
+//				compareCal.add(Calendar.MINUTE, 15);
+//				int next = new Timestamp(compareCal.getTime().getTime()).getMonth();
+//				int now = incStartDt.getMonth();
+//				System.out.println("데이터없는 달비교   "+now+", "+next+"                 "+new Timestamp(compareCal.getTime().getTime())+", "+incStartDt);
 				Calendar compareCal = Calendar.getInstance();
 				compareCal.setTimeInMillis(   incStartDt.getTime()   );
+				compareCal.add(Calendar.MINUTE, Integer.parseInt(offset)*(-1)); // 로컬시간으로 변경
 				compareCal.add(Calendar.MINUTE, 15);
-				int next = new Timestamp(compareCal.getTime().getTime()).getMonth();
-				int now = incStartDt.getMonth();
-				if(now != next || i+1 == dataList.size()) { // 다음날짜가 달이 바뀌거나 마지막데이터일 때
+				
+//				if(now != next || i+1 == dataList.size()) {
+				if(changeMonthYn == true || i+1 == dataList.size()) {
+					System.out.println("바뀌었구나..  "+new Timestamp(compareCal.getTime().getTime())+", "+incStartDt);
 					Map<String, Object> calculMap = new HashMap<String, Object>();
 					Iterator<String> paramKeys = map.keySet().iterator();
 					while (paramKeys.hasNext()) {
@@ -366,6 +396,25 @@ public class DataPeriodCalculate {
 		
 		return sumCntPast;
 		
+	}
+	
+	public static boolean changeMonthYn(Timestamp incStartDt) {
+		boolean flag = false;
+		
+		Calendar compareCal = Calendar.getInstance();
+		compareCal.setTimeInMillis(   incStartDt.getTime()   );
+		compareCal.add(Calendar.MINUTE, Integer.parseInt(offset)*(-1)); // 로컬시간으로 변경
+		
+		int now = compareCal.get(Calendar.MONTH);
+		
+		compareCal.add(Calendar.MINUTE, 15);
+		int next = compareCal.get(Calendar.MONTH);
+		
+		if(now != next) {
+			flag = true;
+		}
+		
+		return flag;
 	}
 	
 }
