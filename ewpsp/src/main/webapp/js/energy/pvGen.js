@@ -3,6 +3,10 @@
 		getCollect_sch_condition();
 	});
 	
+	function searchData() {
+		getCollect_sch_condition(); // 검색조건 모으기
+	}
+	
 	var pv_head_pc = new Array(); // 실제 사용량 표 데이터
 	var real_data_pc = new Array(); // 실제 발전량 표 데이터
 	var feture_data_pc = new Array(); //  예측 발전량 표 데이터
@@ -46,7 +50,6 @@
 				s.setSeconds(0);
 			}
 			for(var i=0; i<sheetList.length; i++) {
-				console.log(s, s.format("yyyy-MM-dd HH:mm:ss"), (new Date(sheetList[i].std_date)).format("yyyy-MM-dd HH:mm:ss"));
 				dt_str_head += "<th>"+convertDataTableHeaderDate(s, 2)+"</th>";
 				
 				var reUsage = null;
@@ -144,11 +147,6 @@
 		var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
 		var dt_str = "";
 		var dt_str_totalVal = 0; // 테이블 라인별 누적합
-		console.log("");
-		console.log("");
-		console.log("");
-		console.log("");
-		console.log("");
 		
 		// 표데이터 셋팅
 		var start = new Date(schStartTime.getTime());
@@ -164,7 +162,6 @@
 				s.setSeconds(0);
 			}
 			for(var i=0; i<sheetList.length; i++) {
-				console.log(s, s.format("yyyy-MM-dd HH:mm:ss"), (new Date(sheetList[i].std_date)).format("yyyy-MM-dd HH:mm:ss"));
 				
 				var reUsage = null;
 				for(var j=0; j<sheetList.length; j++) {

@@ -21,6 +21,10 @@
 		
 		getDBData();
 	});
+
+	function searchData() {
+		getCollect_sch_condition(); // 검색조건 모으기
+	}
 	
 	var pvRevenue_head_pc = new Array(); //  표 데이터(헤더)
 	var pvRevenue_data_pc = new Array(); //  표 데이터

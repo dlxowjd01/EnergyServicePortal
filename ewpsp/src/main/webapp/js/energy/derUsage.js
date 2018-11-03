@@ -3,6 +3,10 @@
 		getCollect_sch_condition();
 	});
 	
+	function searchData() {
+		getCollect_sch_condition(); // 검색조건 모으기
+	}
+	
 	var usage_head_pc = new Array(); // 표 영역 헤더
 	var real_data_pc = new Array(); // 한전 사용량 표 데이터
 	var ess_data_pc = new Array(); //  ess 사용량 표 데이터

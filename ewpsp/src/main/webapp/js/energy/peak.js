@@ -3,6 +3,10 @@
 		getCollect_sch_condition();
 	});
 	
+	function searchData() {
+		getCollect_sch_condition(); // 검색조건 모으기
+	}
+	
 	var peak_head_pc = new Array(); // 실제 사용량 표 데이터
 	var peak_data_pc = new Array(); // 피크 전력 표 데이터
 	var ctpPw_data_pc = new Array(); //  한전계약전력 표 데이터

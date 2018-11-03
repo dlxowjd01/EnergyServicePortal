@@ -35,10 +35,10 @@
 									</div>
 									<div class="search_opt fl">
 										<span>기준부하 시간설정</span>
-										<input type="text" class="input" id="cblAmtHourFrom" name="cblAmtHourFrom" maxlength="2" value="10" style="width:60px;"> 
+										<input type="text" class="input" id="cblAmtHourFrom" name="cblAmtHourFrom" maxlength="2" value="10" style="width:60px;" onkeydown="onlyNum(event);"> 
 										<span> ~ </span>
-										<input type="text" class="input" id="cblAmtHourTo" name="cblAmtHourTo" maxlength="2" value="14" style="width:60px;">
-										<button type="button" id="searchBtn" onclick="getCollect_sch_condition();">조회</button>
+										<input type="text" class="input" id="cblAmtHourTo" name="cblAmtHourTo" maxlength="2" value="13" style="width:60px;" onkeydown="onlyNum(event);">
+										<button type="button" id="searchBtn" onclick="searchData();">조회</button>
 									</div>
 									<div class="checkbox fl">
 					                    <input id="check1" type="checkbox" class="styled" >
@@ -106,7 +106,7 @@
 										<input type="text" id="datepicker1" name="datepicker1" class="sel" value="">
 										<span>-</span>
 										<input type="text" id="datepicker2" name="datepicker2" class="sel" value="">
-										<button type="button" id="searchBtn" onclick="getCollect_sch_condition();">조회</button>
+										<button type="button" id="searchBtn" onclick="searchData();">조회</button>
 									</div>
 									</c:if>
 									<c:if test="${param.schGbn eq 'billRevenue' }">
@@ -115,7 +115,7 @@
 										<input type="text" id="datepicker3" name="datepicker3" class="sel" value="">
 										<span>-</span>
 										<input type="text" id="datepicker4" name="datepicker4" class="sel" value="">
-										<button type="button" id="searchBtn" onclick="getCollect_sch_condition();">조회</button>
+										<button type="button" id="searchBtn" onclick="searchData();">조회</button>
 									</div>
 									</c:if>
 									<div class="time fr" id="updtTime">2018-08-12 11:41:26</div>

@@ -13,6 +13,10 @@
 		var formData = $("#schForm").serializeObject();
 		getDBData(formData);
 	});
+
+	function searchData() {
+		getCollect_sch_condition(); // 검색조건 모으기
+	}
 	
 	var drRevenue_head_pc = new Array(); //  표 데이터(헤더)
 	var drRevenue_data_pc = new Array(); //  표 데이터

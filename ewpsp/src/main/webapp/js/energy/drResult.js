@@ -1,8 +1,47 @@
 	$(document).ready(function() {
 		changeSelTerm('drday'); // 화면 첫 로딩 시 검색조건 셋팅
 		getCollect_sch_condition(); // 검색조건 모으기
-		
+
+		$("#check1").click(function () {
+			var flag = $("#check1").prop("checked") ;
+			if(flag) {
+				changeSelTerm('drday');
+				getCollect_sch_condition();
+				
+				if(realTimeRefresh == null) { // 1분 간격
+					realTimeRefresh = setInterval(function(){
+						changeSelTerm('day');
+						getCollect_sch_condition();
+					},5000); // 1000 = 1초, 5000 = 5초
+				} else {
+					alert("이미 실시간 자동갱신이 실행중입니다.");
+				}
+				
+			} else {
+				clearInterval(realTimeRefresh);
+				realTimeRefresh = null;
+			}
+			
+		});
 	});
+	
+	function searchData() {
+		var cblAmtHourFrom = $("#cblAmtHourFrom").val();
+		var cblAmtHourTo = $("#cblAmtHourTo").val();
+		var cblAmtGapTime = Number(cblAmtHourTo)-Number(cblAmtHourFrom);
+		
+		if( cblAmtGapTime < 0) {
+			alert("조회할수 없는 시간대입니다.");
+			return;
+		} else if( cblAmtGapTime > 3) {
+			alert("최대 4시간까지 조회 가능합니다.");
+			return;
+		} else {
+			
+		}
+		
+		getCollect_sch_condition(); // 검색조건 모으기
+	}
 	
 	var real_data_pc = new Array(); // 실제 사용량 표 데이터
 	function getDBData(formData) {
@@ -85,6 +124,7 @@
 		unit_format(String(totUsage), "pastUseTot", "Wh");
 	}
 	
+	// 표 데이터
 	function callback_getDRResultList(result) {
 		var drList = result.list;
 		var totalReduceAmt = 0; // 전체 누적합

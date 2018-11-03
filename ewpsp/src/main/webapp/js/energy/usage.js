@@ -3,6 +3,10 @@
 		getCollect_sch_condition();
 	});
 	
+	function searchData() {
+		getCollect_sch_condition(); // 검색조건 모으기
+	}
+	
 	var usage_head_pc = new Array(); // 실제 사용량 표 데이터
 	var real_data_pc = new Array(); // 실제 사용량 표 데이터
 	var feture_data_pc = new Array(); //  예측 사용량 표 데이터

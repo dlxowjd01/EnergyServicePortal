@@ -3,6 +3,10 @@
 		getCollect_sch_condition();
 	});
 	
+	function searchData() {
+		getCollect_sch_condition(); // 검색조건 모으기
+	}
+	
 	var ess_head_pc = new Array(); // 실제 사용량 표 데이터
 	var realChg_data_pc = new Array(); // 실제 충전량 표 데이터
 	var realDischg_data_pc = new Array(); // 실제 방전량 표 데이터
