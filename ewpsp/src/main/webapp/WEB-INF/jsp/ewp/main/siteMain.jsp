@@ -993,7 +993,7 @@
 
 
 <jsp:include page="../include/popup/deviceDetailPopup.jsp" />
-<jsp:include page="../include/popup/serviceInfo.jsp" />
+<%-- <jsp:include page="../include/popup/serviceInfo.jsp" /> --%>
 
 
 
