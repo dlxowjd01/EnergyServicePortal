@@ -105,7 +105,8 @@
 				dataSet.push([ setChartDateUTC(chartList[i].std_timestamp), reUsage ]);
 				
 				var tm = new Date( setChartDateUTC(chartList[i].std_timestamp) );
-				if( tm.getHours()>=$("#cblAmtHourFrom").val() && tm.getHours()<=$("#cblAmtHourTo").val() ) {
+				var hour = new Date(sheetList[i].std_timestamp).getHours();
+				if( hour>=$("#cblAmtHourFrom").val() && hour<=$("#cblAmtHourTo").val() ) {
 					dataSet2.push([ setChartDateUTC(chartList[i].std_timestamp), cblAmt ]);
 					dataSet3.push([ setChartDateUTC(chartList[i].std_timestamp), goalPower ]);
 				}
