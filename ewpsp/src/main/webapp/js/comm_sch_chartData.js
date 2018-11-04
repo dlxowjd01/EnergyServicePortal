@@ -387,7 +387,7 @@ function setTickInterval() {
 	
 	myChart.xAxis[0].options.tickInterval = tickInterval;
 //	myChart.xAxis[0].options.startOnTick = startEndTickFlag;
-	myChart.xAxis[0].options.endOnTick = startEndTickFlag;
+//	myChart.xAxis[0].options.endOnTick = startEndTickFlag;
 }
 
 // 표 데이터 1행의 최대칸수 및 테이블갯수
