@@ -5,7 +5,8 @@
 	<select id="getSiteSetDetail" parameterType="hashMap" resultType="hashMap">
 		/* 한전 계약 및 전력관리 정보 조회 */
 		select 
-			site_set_idx, site_id, /*charge_type, */plan_type, plan_type2, plan_type3, plan_name, contract_power, meter_read_day, 
+			site_set_idx, site_id, cust_num, use_elec_addr, meter_num, meter_sf, 
+			/*charge_type, */plan_type, plan_type2, plan_type3, plan_name, contract_power, meter_read_day, 
 			charge_yearmd, charge_power, charge_rate, goal_power, smp_rate, rec_rate, rec_weight, 
 			del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_site_set
@@ -44,6 +45,10 @@
 		insert into tb_site_set (
 		        <!-- site_set_idx,     /* 사이트설정식별자 */ -->
 		        site_id,          /* 사이트ID */
+		        cust_num,         /* 고객 번호 */
+		        use_elec_addr,       /* 전기사용 장소 */
+		        meter_num,         /* 계량기 번호 */
+		        meter_sf,          /* 계량기 배수 */
 		        plan_type,        /* 요금제구분(general_A1_low_voltage_A 외. bill_api.pdf 참조요망) */
 		        plan_type2,        /* 요금제구분(general_A1_low_voltage_A 외. bill_api.pdf 참조요망) */
 		        plan_type3,        /* 요금제구분(general_A1_low_voltage_A 외. bill_api.pdf 참조요망) */
@@ -64,6 +69,10 @@
 		    ) values (
 		        <!-- #{siteSetIdx }, -->
 		        #{siteId },
+		        #{custNum }, 
+		        #{useElecAddr }, 
+		        #{meterNum }, 
+		        #{meterSf }, 
 		        #{planType },
 		        #{planType2 },
 		        #{planType3 },
@@ -88,6 +97,15 @@
 		/* 한전 계약 및 전력관리 정보 수정 */
 		update tb_site_set
 		set 
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(custNum)">
+			cust_num      = #{custNum } ,   /* 고객 번호 */
+			</if> <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(useElecAddr)">
+			use_elec_addr      = #{useElecAddr } ,   /* 전기사용 장소 */
+			</if> <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(meterNum)">
+			meter_num      = #{meterNum } ,   /* 계량기 번호 */
+			</if> <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(meterSf)">
+			meter_sf      = #{meterSf } ,   /* 계량기 배수 */
+			</if> 
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(chargeType)">
 			charge_type    = #{chargeType } ,   /* 요금구분(1:일반용-고압A,2:일반용-고압B) */
 			</if> 

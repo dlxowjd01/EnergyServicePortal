@@ -42,17 +42,17 @@
 										<tr>
 											<th><span>고객명</span></th>
 											<td>
-												<input type="text" class="input" value="테스트" disabled="disabled">
+												<input type="text" name="" id="" class="input" value="${selViewSite.site_name }" disabled="disabled">
 											</td>
 											<th><span>고객 번호</span></th>
 											<td>
-												<input type="text" class="input" value="10-0000-000110">
+												<input type="text" name="custNum" id="custNum" class="input" value="" maxlength="20">
 											</td>
 										</tr>
 										<tr>
 											<th><span>전기사용 장소</span></th>
 											<td colspan="3">
-												<input type="text" class="input" style="width:100%" value="울산광역시 울주군 원산로 40">
+												<input type="text" name="useElecAddr" id="useElecAddr" class="input" style="width:100%" value="" maxlength="120">
 											</td>
 										</tr>
 										<tr>
@@ -75,21 +75,21 @@
 										<tr>
 											<th><span>계량기 번호</span></th>
 											<td>
-												<input type="text" class="input" value="LG15 0123456">
+												<input type="text" name="meterNum" id="meterNum" class="input" value="" maxlength="20">
 											</td>
 											<th><span>계량기 배수</span></th>
 											<td>
-												<input type="text" class="input" value="1">
+												<input type="text" name="meterSf" id="meterSf" class="input" value="" maxlength="11" onkeydown="onlyNum(event);">
 											</td>
 										</tr>
 										<tr>
 											<th><span>계약 전력</span></th>
 											<td>
-												<input type="text" name="contractPower" id="contractPower" class="input" value=""> kW
+												<input type="text" name="contractPower" id="contractPower" class="input" value="" maxlength="11" onkeydown="onlyNum(event);"> kW
 											</td>
 											<th><span>목표 전력</span></th>
 											<td>
-												<input type="text" name="goalPower" id="goalPower" class="input" value=""> kW
+												<input type="text" name="goalPower" id="goalPower" class="input" value="" maxlength="11" onkeydown="onlyNum(event);"> kW
 											</td>
 										</tr>
 										<tr>
@@ -98,11 +98,11 @@
 												<!-- 달력 스크립트 -->
 												<input type="text" id="datepicker1" class="sel" value="" style="width:130px;">
 												<input type="hidden" id="chargeYearmd" name="chargeYearmd">
-												<input type="text" name="chargePower" id="chargePower" class="input" value=""> kW
+												<input type="text" name="chargePower" id="chargePower" class="input" maxlength="11" value=""> kW
 											</td>
 											<th><span>요금적용 전력대비</span></th>
 											<td>
-												<input type="text" name="chargeRate" id="chargeRate" class="input" value=""> %
+												<input type="text" name="chargeRate" id="chargeRate" class="input" value="" maxlength="2" onkeydown="onlyNum(event);"> %
 											</td>
 										</tr>
 										<tr>
@@ -120,7 +120,7 @@
 											</td>											
 											<th><span>수익배분 비율</span></th>
 											<td>
-												<input type="text" name="profitRatio" id="profitRatio" class="input" value="90"> %
+												<input type="text" name="profitRatio" id="profitRatio" class="input" value="" maxlength="2" onkeydown="onlyNum(event);"> %
 											</td>
 										</tr>
 									</tbody>

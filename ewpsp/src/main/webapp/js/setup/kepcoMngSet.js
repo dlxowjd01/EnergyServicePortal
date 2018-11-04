@@ -14,6 +14,10 @@
 			alert("조회 결과가 없습니다.");
 //			location.href = "/siteMain";
 		} else {
+			$("#custNum").val( siteSetDetail.cust_num );
+			$("#useElecAddr").val( siteSetDetail.use_elec_addr );
+			$("#meterNum").val( siteSetDetail.meter_num );
+			$("#meterSf").val( siteSetDetail.meter_sf );
 			getPlanType('', '', '', 1);
 			getPlanType(siteSetDetail.plan_type, '', '', 2);
 			getPlanType(siteSetDetail.plan_type, siteSetDetail.plan_type2, '', 3);
