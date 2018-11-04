@@ -328,6 +328,17 @@ function unit_format(usage, id, unitGbn) {
 	var formatNum = map.get("formatNum");
 	var unit = map.get("unit");
 	
+	formatNum = checkNumLen(formatNum);
+	
+	$("#"+id).empty().append( $("<span/>").append( numberComma( formatNum ) ) ).append(unit);
+}
+
+// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
+function unit_format_bill(usage, id, unitGbn, billGbn) {
+	var map = convertUnitFormat(usage, unitGbn, usage.length);
+	var formatNum = map.get("formatNum");
+	var unit = map.get("unit");
+	
 	$("#"+id).empty().append( $("<span/>").append( numberComma( formatNum ) ) ).append(unit);
 }
 

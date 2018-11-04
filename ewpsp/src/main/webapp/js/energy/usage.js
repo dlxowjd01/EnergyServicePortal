@@ -60,7 +60,7 @@
 							reUsage = null;
 						} else {
 							var map = convertUnitFormat(usage, "mWh", 8);
-							reUsage = Number( map.get("formatNum") );
+							reUsage = Math.round( Number(map.get("formatNum")) );
 							dt_str_totalVal = dt_str_totalVal+reUsage;
 						}
 						
@@ -114,7 +114,7 @@
 					reUsage = null;
 				} else {
 					var map = convertUnitFormat(usage, "mWh", 8);
-					reUsage = Number( map.get("formatNum") );
+					reUsage = Math.round( Number(map.get("formatNum")) );
 					totalUsage = totalUsage+Number(usage);
 				}
 				
@@ -168,7 +168,7 @@
 							reUsage = null;
 						} else {
 							var map = convertUnitFormat(usage, "mWh", 8);
-							reUsage = Number( map.get("formatNum") );
+							reUsage = Math.round( Number(map.get("formatNum")) );
 							dt_str_totalVal = dt_str_totalVal+reUsage;
 						}
 						
@@ -216,7 +216,7 @@
 					reUsage = null;
 				} else {
 					var map = convertUnitFormat(usage, "mWh", 8);
-					reUsage = Number( map.get("formatNum") );
+					reUsage = Math.round( Number(map.get("formatNum")) );
 					totalUsage = totalUsage+Number(usage);
 				}
 				

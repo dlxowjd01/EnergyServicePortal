@@ -385,8 +385,8 @@
 			essRevenueList2 = dataSet2;
 			
 			// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-			unit_format(String(totDataSet), "essRevenueTot1", "won");
-			unit_format(String(totDataSet2), "essRevenueTot2", "won");
+			unit_format_bill(String(totDataSet), "essRevenueTot1", "won", "ess");
+			unit_format_bill(String(totDataSet2), "essRevenueTot2", "won", "ess");
 		}
 		
 	}

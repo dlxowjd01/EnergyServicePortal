@@ -96,7 +96,7 @@
 					reUsage = null;
 				} else {
 					var map = convertUnitFormat(usage, "mWh", 8);
-					reUsage = Number( map.get("formatNum") );
+					reUsage = Math.round( Number(map.get("formatNum")) );
 					totUsage = totUsage+Number(usage);
 				}
 				

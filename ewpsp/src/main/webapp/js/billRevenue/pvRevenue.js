@@ -265,9 +265,9 @@
 			pvRevenueList3 = dataSet3;
 			
 			// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-			unit_format(String(totDataSet), "pvRevenueTot1", "won");
-			unit_format(String(totDataSet2), "pvRevenueTot2", "won");
-			unit_format(String(totDataSet3), "pvRevenueTot3", "won");
+			unit_format_bill(String(totDataSet), "pvRevenueTot1", "won", "pv");
+			unit_format_bill(String(totDataSet2), "pvRevenueTot2", "won", "pv");
+			unit_format_bill(String(totDataSet3), "pvRevenueTot3", "won", "pv");
 		}
 		
 	}

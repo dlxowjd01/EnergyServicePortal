@@ -295,10 +295,10 @@
 			kepcoBillList4 = dataSet4;
 			
 			// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-			unit_format(String(totUsage), "kepcoBillTot1", "won");
-			unit_format(String(totUsage2), "kepcoBillTot2", "won");
-			unit_format(String(totUsage3), "kepcoBillTot3", "won");
-			unit_format(String(totUsage4), "kepcoBillTot4", "won");
+			unit_format_bill(String(totUsage), "kepcoBillTot1", "won", "kepco");
+			unit_format_bill(String(totUsage2), "kepcoBillTot2", "won", "kepco");
+			unit_format_bill(String(totUsage3), "kepcoBillTot3", "won", "kepco");
+			unit_format_bill(String(totUsage4), "kepcoBillTot4", "won", "kepco");
 		}
 		
 	}

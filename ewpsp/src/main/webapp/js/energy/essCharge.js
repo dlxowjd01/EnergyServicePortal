@@ -73,7 +73,7 @@
 							reChgVal = null;
 						} else {
 							var map = convertUnitFormat(chgVal, "kWh", 1);
-							reChgVal = Number( map.get("formatNum") );
+							reChgVal = Math.round( Number(map.get("formatNum")) );
 							dt_str_totalVal = dt_str_totalVal+reChgVal;
 						}
 						
@@ -81,7 +81,7 @@
 							reDischgVal = null;
 						} else {
 							var map = convertUnitFormat(dischgVal, "kWh", 1);
-							reDischgVal = Number( map.get("formatNum") );
+							reDischgVal = Math.round( Number(map.get("formatNum")) );
 							dt_str2_totalVal = dt_str2_totalVal+ reDischgVal;
 						}
 						
@@ -223,7 +223,7 @@
 							reChgVal = null;
 						} else {
 							var map = convertUnitFormat(chgVal, "kWh", 1);
-							reChgVal = Number( map.get("formatNum") );
+							reChgVal = Math.round( Number(map.get("formatNum")) );
 							dt_str_totalVal = dt_str_totalVal+reChgVal;
 						}
 						
@@ -231,7 +231,7 @@
 							reDischgVal = null;
 						} else {
 							var map = convertUnitFormat(dischgVal, "kWh", 1);
-							reDischgVal = Number( map.get("formatNum") );
+							reDischgVal = Math.round( Number(map.get("formatNum")) );
 							dt_str2_totalVal = dt_str2_totalVal+ reDischgVal;
 						}
 						

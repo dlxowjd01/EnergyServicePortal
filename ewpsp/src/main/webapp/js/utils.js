@@ -82,7 +82,8 @@ function convertUnitFormat(num, unitGbn, len) {
 	var divNum = 0;
 	
 	if(len == null) {
-		len = num.length;
+		var str = num.toString();
+		len = str.length;
 	}
 	
 	if(unitGbn == "won") {
@@ -132,7 +133,7 @@ function convertUnitFormat(num, unitGbn, len) {
 		if(len <= 3) {
 			formatNum = num;
 		} else {
-			formatNum = Math.round( Number(num)/divNum );
+			formatNum = Number(num)/divNum;
 		}
 		
 	}
@@ -144,6 +145,33 @@ function convertUnitFormat(num, unitGbn, len) {
 	map.put("unit", unit);
 	
 	return map;
+}
+
+// 3자리 숫자를 맞춘다..
+// 123 => 123
+// 12 => 12.0
+// 1 => 1.00
+function checkNumLen(num) {
+	var chkNum = Math.floor(num);
+	chkNum = chkNum.toString();
+	
+	var reNum;
+	
+	if( chkNum.length == 1 ) {
+		reNum = toFixedNum(num, 2);
+	} else if( chkNum.length == 2 ) {
+		reNum = toFixedNum(num, 1);
+	} else if( chkNum.length == 3 ) {
+		reNum = toFixedNum(num, 0);
+	}
+	
+	return reNum;
+}
+
+// 소수점 fix자리 반올림
+function toFixedNum(num, fix) {
+	var no = Number(num);
+	return no.toFixed(fix);
 }
 
 // 전체값에서 일부값은 몇퍼센트?
@@ -338,6 +366,7 @@ function dateDiff(_date1, _date2) {
 	return diff;
 }
 
+// 서버의 시간대를 가져온다
 var xmlHttp;
 function serverTime() {
 	if(window.XMLHttpRequest) { // 분기하지 않으면 IE에서만 작동함
@@ -355,7 +384,7 @@ function serverTime() {
 	}
 }
 var st = serverTime();
-var serverToday = new Date(st);
+var serverToday = new Date(st); // 서버시간
 
 //날짜포멧 변경
 Date.prototype.format = function(f) {

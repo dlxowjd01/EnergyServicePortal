@@ -89,7 +89,7 @@
 							if(kepcoUsage == null || kepcoUsage == "" || kepcoUsage == "null") reKepcoUsage = null;
 							else {
 								var map = convertUnitFormat(kepcoUsage, "mWh", 8);
-								reKepcoUsage = Number( map.get("formatNum") );
+								reKepcoUsage = Math.round( Number(map.get("formatNum")) );
 								dt_str_totalVal = dt_str_totalVal+reKepcoUsage;
 							}
 							
@@ -100,7 +100,7 @@
 							if(essUsage == null || essUsage == "" || essUsage == "null") reEssUsage = null;
 							else {
 								var map = convertUnitFormat(essUsage, "kWh", 1);
-								reEssUsage = Number( map.get("formatNum") );
+								reEssUsage = Math.round( Number(map.get("formatNum")) );
 								dt_str2_totalVal = dt_str2_totalVal+ reEssUsage;
 							}
 						} else reEssUsage = null;
@@ -110,7 +110,7 @@
 							if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
 							else {
 								var map = convertUnitFormat(pvUsage, "kWh", 1);
-								rePvUsage = Number( map.get("formatNum") );
+								rePvUsage = Math.round( Number(map.get("formatNum")) );
 								dt_str3_totalVal = dt_str3_totalVal+ rePvUsage;
 							}
 						} else rePvUsage = null;
@@ -191,7 +191,7 @@
 					if(kepcoUsage == null || kepcoUsage == "" || kepcoUsage == "null") reKepcoUsage = null;
 					else {
 						var map = convertUnitFormat(kepcoUsage, "mWh", 8);
-						reKepcoUsage = Number( map.get("formatNum") );
+						reKepcoUsage = Math.round( Number(map.get("formatNum")) );
 						totalDataSet = totalDataSet+Number(kepcoUsage);
 					}
 					
@@ -202,7 +202,7 @@
 					if(essUsage == null || essUsage == "" || essUsage == "null") reEssUsage = null;
 					else {
 						var map = convertUnitFormat(essUsage, "kWh", 1);
-						reEssUsage = Number( map.get("formatNum") );
+						reEssUsage = Math.round( Number(map.get("formatNum")) );
 						totalDataSet2 = totalDataSet2+Number(essUsage);
 					}
 				} else reEssUsage = null;
@@ -212,7 +212,7 @@
 					if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
 					else {
 						var map = convertUnitFormat(pvUsage, "kWh", 1);
-						rePvUsage = Number( map.get("formatNum") );
+						rePvUsage = Math.round( Number(map.get("formatNum")) );
 						totalDataSet3 = totalDataSet3+Number(pvUsage);
 					}
 				} else rePvUsage = null;

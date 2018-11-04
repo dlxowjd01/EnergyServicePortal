@@ -339,8 +339,8 @@
 			drRevenueList2 = dataSet2;
 			
 			// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-			unit_format(String(totDataSet), "drRevenueTot1", "won");
-			unit_format(String(totDataSet2), "drRevenueTot2", "won");
+			unit_format_bill(String(totDataSet), "drRevenueTot1", "won", "dr");
+			unit_format_bill(String(totDataSet2), "drRevenueTot2", "won", "dr");
 		}
 		
 	}
