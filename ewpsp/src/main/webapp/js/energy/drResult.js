@@ -122,7 +122,7 @@
 		timeSlotGoalPowerList = dataSet3;
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)		
-		unit_format(String(totUsage), "pastUseTot", "Wh");
+		unit_format(String(totUsage), "pastUseTot", "mWh");
 	}
 	
 	// 표 데이터
