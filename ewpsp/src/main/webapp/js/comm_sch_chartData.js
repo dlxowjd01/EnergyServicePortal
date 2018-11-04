@@ -402,12 +402,14 @@ function setDataTableColRowCnt() {
 	
 	if(SelTerm == '30min') {
 		col_cnt = 2;
+		if(chk != "000000") row_cnt = row_cnt+1;
 	} else if(SelTerm == 'hour') {
 		if(periodd == '15min') {
 			col_cnt = 4;
 		} else if(periodd == '30min') {
 			col_cnt = 2;
 		}
+		if(chk != "000000") row_cnt = row_cnt+1;
 		
 	} else if(SelTerm == 'day') {
 		if(periodd == '15min') {

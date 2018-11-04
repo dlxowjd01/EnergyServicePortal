@@ -46,8 +46,6 @@ public class PeriodDataSetting {
 		Timestamp endDate = getStartEndTimestamp(term, period, (String) param.get("selTermTo"), "2"); // 검색종료일(그래프영역)
 		Timestamp selTermFrom = getConvertStartEndTmsp(term, period, (String) param.get("selTermFrom") , "1"); // 검색시작일(표영역)
 		Timestamp selTermTo = getConvertStartEndTmsp(term, period, (String) param.get("selTermTo") , "2"); // 검색종료일(표영역)
-		System.out.println(startDate+", "+endDate);
-		System.out.println(selTermFrom+", "+selTermTo);
 		
 		// 날짜리스트 생성
 		List sheetDateList = getDateList(selTermFrom, selTermTo, term, period, timestampStr, calculValStr, "sheet"); // 표영역
@@ -60,9 +58,8 @@ public class PeriodDataSetting {
 		// 날짜리스트+데이터조합 매칭
 		List sheetList = matchingLists(sheetDateList, sheetReDataList, timestampStr, calculValStr); // 표영역
 		List chartList = matchingLists(chartDateList, chartReDataList, timestampStr, calculValStr); // 그래프영역
-		System.out.println();
-		System.out.println("sheetList     "+sheetList.size()+"======>   "+sheetList.toString());
-		System.out.println("chartList     "+chartList.size()+"======>   "+chartList.toString());
+		logger.debug("sheetList     "+sheetList.size()+"======>   "+sheetList.toString());
+		logger.debug("chartList     "+chartList.size()+"======>   "+chartList.toString());
 		
 		map.put("sheetList", sheetList);
 		map.put("chartList", chartList);
@@ -165,12 +162,8 @@ public class PeriodDataSetting {
 			
 		}
 		
-//		Timestamp tmsp_test = new Timestamp(cal.getTime().getTime());
-//		System.out.println("그래프 시간차이는 ???      "+Integer.parseInt(offset)+", "+Integer.parseInt(offset)*(-1)+", "+tmsp_test);
-//		
 		cal.add(Calendar.MINUTE, Integer.parseInt(offset));
 		Timestamp tmsp = new Timestamp(cal.getTime().getTime());
-		System.out.println("그래프 시간차이 적용결과? ???      "+offset+", "+tmsp);
 		return tmsp;
 	}
 
@@ -269,12 +262,8 @@ public class PeriodDataSetting {
 			
 		}
 
-//		Timestamp tmsp_test = new Timestamp(cal.getTime().getTime());
-//		System.out.println("표 시간차이는 ???      "+Integer.parseInt(offset)+", "+Integer.parseInt(offset)*(-1)+", "+tmsp_test);
-//		
 		cal.add(Calendar.MINUTE, Integer.parseInt(offset));
 		Timestamp tmsp = new Timestamp(cal.getTime().getTime());
-		System.out.println("표 시간차이 적용결과? ???      "+offset+", "+tmsp);
 		return tmsp;
 		
 	}
@@ -341,9 +330,6 @@ public class PeriodDataSetting {
 	 */
 	private static List matchingLists(List dateList, List reDataList, String timestampStr, String calculValStr) {
 		List finalDataList = new ArrayList();
-		System.out.println("사이즈  "+dateList.size()+", "+reDataList.size());
-		System.out.println(dateList.toString());
-		System.out.println(reDataList.toString());
 		
 		for(int i=0; i<dateList.size(); i++) {
 			Map<String, Object> dateMap = (Map<String, Object>) dateList.get(i);
@@ -376,7 +362,6 @@ public class PeriodDataSetting {
 		cal.add(Calendar.MINUTE, Integer.parseInt(offset)*(-1)); // 로컬시간으로 변경
 		
 		Timestamp tmsp = new Timestamp(cal.getTime().getTime());
-		System.out.println("바뀐 시간은?   "+tmsp);
 		
 		return cal;
 	}
