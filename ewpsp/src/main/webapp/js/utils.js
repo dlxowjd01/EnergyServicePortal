@@ -549,12 +549,6 @@ function deviceExcelDownload(excelName, e, gbn) {
 	}
 }
 
-function downloadExcelPopup(targetId) {
-	var excelHtml = $("#pc_use_dataDiv").html();
-	window.open("/htmlToExcel?excelHtml="+excelHtml, "", "height=100,width=100,top=100,left=200");
-//	window.open("data:application/vnd.ms-excel;filename='test.xls',"+encodeURIComponent(excelHtml), "", "height=100,width=100,top=100,left=200");
-}
-
 
 
 
