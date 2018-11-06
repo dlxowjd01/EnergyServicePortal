@@ -364,7 +364,7 @@ public class CmpyGrpSiteMngController {
 
 		Map userInfo = UserUtil.getUserInfo(request);
 		
-		String selSiteGrpIdx = (String) param.get("selSiteGrpIdx"); // 그룹 목록
+		String selSiteGrpIdx = (String) param.get("selSiteGrpIdx1"); // 그룹 목록
 		String nowSiteIds = (String) param.get("nowSiteIds"); // 기존 그룹내 사이트목록
 		String newSiteIds = (String) param.get("newSiteIds"); // 변경할 그룹내 사이트목록
 		String nowSiteIds_arr[] = null; // 기존 그룹내 사이트목록

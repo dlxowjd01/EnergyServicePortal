@@ -166,13 +166,6 @@ public class DataPeriodCalculate {
 					if("month".equals(period)) {
 						boolean changeMonthYn = changeMonthYn(incStartDt);
 						
-						
-//						Calendar compareCal = Calendar.getInstance();
-//						compareCal.setTimeInMillis(   incStartDt.getTime()   );
-//						compareCal.add(Calendar.MINUTE, 15);
-//						int next = new Timestamp(compareCal.getTime().getTime()).getMonth();
-//						int now = incStartDt.getMonth();
-//						System.out.println("데이터없는 달비교   "+now+", "+next+"                 "+new Timestamp(compareCal.getTime().getTime())+", "+incStartDt);
 						Calendar compareCal = Calendar.getInstance();
 						compareCal.setTimeInMillis(   incStartDt.getTime()   );
 						compareCal.add(Calendar.MINUTE, Integer.parseInt(offset)*(-1)); // 로컬시간으로 변경
@@ -181,7 +174,6 @@ public class DataPeriodCalculate {
 //						if(now != next || i+1 == dataList.size()) {
 						if(changeMonthYn == true || i+1 == dataList.size()) {
 							// 다음날짜가 달이 바뀌거나 마지막데이터일 때
-							System.out.println("바뀌었지?   "+new Timestamp(compareCal.getTime().getTime())+", "+incStartDt);
 							Map<String, Object> calculMap = new HashMap<String, Object>();
 							Iterator<String> paramKeys = map.keySet().iterator();
 							while (paramKeys.hasNext()) {
@@ -265,7 +257,6 @@ public class DataPeriodCalculate {
 				
 //				if(now != next || i+1 == dataList.size()) {
 				if(changeMonthYn == true || i+1 == dataList.size()) {
-					System.out.println("바뀌었구나..  "+new Timestamp(compareCal.getTime().getTime())+", "+incStartDt);
 					Map<String, Object> calculMap = new HashMap<String, Object>();
 					Iterator<String> paramKeys = map.keySet().iterator();
 					while (paramKeys.hasNext()) {

@@ -20,7 +20,7 @@
 										  </ul>
 										</div>
 										<div class="dropdown fl">
-										  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selPeriod">15분
+										  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selPeriod">1시간
 										  <span class="caret"></span></button>
 										  <ul class="dropdown-menu">
 										    <li class="on" id="sp_15min"><a href="#" onclick="selectBoxTextApply(this);changePeriod('15min');">15분</a></li>

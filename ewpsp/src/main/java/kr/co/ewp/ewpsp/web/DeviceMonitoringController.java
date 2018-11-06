@@ -77,7 +77,7 @@ public class DeviceMonitoringController {
 		
 		Map result = deviceMonitoringService.getDeviceIOEDetail(param);
 		ApiController api = new ApiController();
-		UsageRealtimeModel usageRealtime = api.getDeviceRealTimeTest((String) param.get("deviceId"));
+		UsageRealtimeModel usageRealtime = api.getDeviceRealTime((String) param.get("deviceId"));
 		result.put("voltage", (usageRealtime == null) ? null : usageRealtime.getVoltage());
 		result.put("activePower", (usageRealtime == null) ? null : usageRealtime.getActivePower());
 		result.put("energy", (usageRealtime == null) ? null : usageRealtime.getPositiveEnergy()+usageRealtime.getNegativeEnergy());
