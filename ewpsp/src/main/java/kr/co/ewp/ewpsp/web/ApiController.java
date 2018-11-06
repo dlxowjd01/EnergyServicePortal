@@ -32,6 +32,7 @@ import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.TimeType;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.UsageType;
 import kr.co.ewp.ewpsp.common.util.PMGrowApiUtil;
 import kr.co.ewp.ewpsp.common.util.UserUtil;
+import kr.co.ewp.ewpsp.model.DrRequestTarget;
 import kr.co.ewp.ewpsp.model.SocModel;
 import kr.co.ewp.ewpsp.model.UsageItemModel;
 import kr.co.ewp.ewpsp.model.UsageModel;
@@ -238,7 +239,7 @@ public class ApiController {
 	 * @param deviceId
 	 * @return
 	 */
-	public UsageRealtimeModel getDeviceRealTimeTest(String deviceId) {
+	public UsageRealtimeModel getDeviceRealTime(String deviceId) {
 		UsageRealtimeModel usageRealtime = EnertalkApiUtil.getDeviceRealTime(deviceId);
 		return usageRealtime;
 	}

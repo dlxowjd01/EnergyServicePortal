@@ -6,7 +6,7 @@
 	<meta name="format-detection" content="telephone=no" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-	<title>동서발전Service Portal</title>
+	<title>동서발전 Service Portal</title>
 	<link href="../css/bootstrap.css" rel="stylesheet">
 	<link href="../css/font-awesome.min.css" rel="stylesheet">
 	<link href="../css/custom.css" rel="stylesheet">
