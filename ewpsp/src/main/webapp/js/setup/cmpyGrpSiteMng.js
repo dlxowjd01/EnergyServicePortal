@@ -11,7 +11,6 @@
 	
 	function getDBData() {
 		var authType = userInfo.auth_type;
-		console.log("로그인권한 : "+authType);
 		if(authType == '1') {
 			getCmpyList(1); // 회사 목록 조회(회사table 생성 시 주석 해제)
 		} 
