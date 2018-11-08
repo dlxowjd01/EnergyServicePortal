@@ -18,4 +18,17 @@
 		order by start_timestamp
 	</select>
 	
+	<select id="getCbl" parameterType="hashMap" resultType="hashMap">
+		/* 기준부하 조회 */
+		select 
+			cbl_idx, site_id, start_timestamp, start_date, end_timestamp, end_date, cbl, cml, reg_date, mod_date 
+		from tb_cbl
+		where 1=1
+		and site_id = #{siteId }
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(cblStartFrom)">
+		and start_date = str_to_date(#{cblStartFrom },'%Y%m%d%H%i%s')
+		</if>
+		order by start_timestamp
+	</select>
+	
 </mapper>

@@ -221,7 +221,7 @@ public class CmpyGrpSiteMngController {
 //		} else if("4".equals(authType) || "5".equals(authType)) { // 사이트관리자 || 사이트이용자
 //			param.put("siteGrpIdx", userInfo.get("site_grp_idx"));
 		}
-		System.out.println("param ::::: "+param.toString());
+		
 		List list = cmpyGrpSiteMngService.getCmpyList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -633,7 +633,6 @@ public class CmpyGrpSiteMngController {
 				newFileName = CommonUtils.getRandomText(10, 7) + "_" + CommonUtils.convertDateFormat(new Date(), "yyyyMMddHHmmssSSS")+"."+fileName.substring(fileName.lastIndexOf(".")+1);
 				
 				if(!"".equals(fileName)) { // 업로드할 파일이 존재할 경우
-					System.out.println(root+path+newFileName);
 					
 					Map result = cmpyGrpSiteMngService.getGroupDetail(param);
 					String past_path = (String) result.get("site_grp_img_path");

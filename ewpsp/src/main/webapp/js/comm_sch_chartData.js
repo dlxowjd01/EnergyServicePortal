@@ -124,10 +124,8 @@ function getCollect_sch_condition() {
 	
 	var firstDay = new Date();
 	var endDay = new Date();
-//	var firstDay = new Date(2018, 7, 31, 13, 45, 37); // 2018-08-31 13:45:37
-//	var endDay = new Date(2018, 7, 31, 13, 45, 37);
-//	var firstDay = new Date(2018, 8, 23, 13, 45, 37);
-//	var endDay = new Date(2018, 8, 23, 13, 45, 37);
+//	var firstDay = new Date(2018, 9, 10, 13, 45, 37); 
+//	var endDay = new Date(2018, 9, 10, 13, 45, 37);
 	var startTime;
 	var endTime;
 	if(SelTerm == '15min') { // 15분(현재 안나옴)
@@ -203,20 +201,43 @@ function drawData() {
 	drawData_table(); // 표(테이블) 그리기
 }
 
-//차트 새로고침시간 업데이트
+// 그래프 새로고침시간 업데이트
 function update_updtDataTime(now, id) {
 	$("#"+id).empty().append(now.format("yyyy-MM-dd HH:mm:ss"));
 }
 
-// 차트에 대입할 날짜(x축) 세팅
+// 그래프에 대입할 날짜(x축) 세팅
 function setChartDateUTC(_dateTimestamp) {
-//	if(localYn == "Y") {
+	if(localYn == "Y") {
+		var tm = new Date(_dateTimestamp);
+		var offset = (new Date()).getTimezoneOffset()*2*(-1);
+		var date = new Date(tm.setMinutes(tm.getMinutes() + offset));
+		return date.getTime();
+	} else if(localYn == "N") {
 		var tm = new Date(_dateTimestamp);
 		return new Date( Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds()) ).getTime();
-//	} else if(localYn == "N") {
-//		return _dateTimestamp;
-//	}
-	
+	}
+}
+//function setChartDateUTC(_dateTimestamp) {
+////	if(localYn == "Y") {
+//	var tm = new Date(_dateTimestamp);
+//	return new Date( Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds()) ).getTime();
+////	} else if(localYn == "N") {
+////		return _dateTimestamp;
+////	}
+//}
+
+
+// 표에 대입할 날짜 세팅
+function setSheetDateUTC(_dateTimestamp) {
+	if(localYn == "Y") {
+		var tm = new Date(_dateTimestamp);
+		var offset = (new Date()).getTimezoneOffset()*(-1);
+		var date = new Date(tm.setMinutes(tm.getMinutes() + offset));
+		return date.getTime();
+	} else if(localYn == "N") {
+		return new Date(_dateTimestamp).getTime();
+	}
 }
 
 function setHms(start, end) {

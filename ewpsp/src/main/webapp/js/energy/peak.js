@@ -75,7 +75,7 @@
 
 				var rePeakVal = null;
 				for(var j=0; j<sheetList.length; j++) {
-					if(s.getTime() == new Date(sheetList[j].std_timestamp).getTime()) {
+					if(s.getTime() == setSheetDateUTC(sheetList[j].std_timestamp)) {
 						var peakVal = String(sheetList[j].peak_val);
 						if(peakVal == null || peakVal == "" || peakVal == "null") {
 							rePeakVal = null;
@@ -160,7 +160,7 @@
 			for(var i=0; i<chartList.length; i++) {
 				var peakVal = String(chartList[i].peak_val);
 				var rePeakVal = 0;
-				var tm = new Date( convertDateUTC(chartList[i].std_timestamp) );
+				var tm = new Date( setSheetDateUTC(chartList[i].std_timestamp) );
 				
 				if(peakVal == null || peakVal == "" || peakVal == "null") {
 					rePeakVal = null;

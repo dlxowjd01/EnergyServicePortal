@@ -32,6 +32,7 @@ import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.TimeType;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.UsageType;
 import kr.co.ewp.ewpsp.common.util.PMGrowApiUtil;
 import kr.co.ewp.ewpsp.common.util.UserUtil;
+import kr.co.ewp.ewpsp.model.DrRequestTarget;
 import kr.co.ewp.ewpsp.model.SocModel;
 import kr.co.ewp.ewpsp.model.UsageItemModel;
 import kr.co.ewp.ewpsp.model.UsageModel;
@@ -143,7 +144,6 @@ public class ApiController {
 		logger.debug("param ::::: "+param.toString());
 		
 		Date today = new Date();
-		System.out.println("현재 날짜 시간은?   "+CommonUtils.convertDateFormat(today, "yyyy-MM-dd HH:mm:ss"));
 		String dfs1 [] = CommonUtils.convertDateFormat(today, "yyyy-MM-dd").split("-");
 		String dfs2 [] = CommonUtils.convertDateFormat(today, "HH:mm:ss").split(":");
 		
@@ -158,7 +158,7 @@ public class ApiController {
 			startDate = CommonUtils.getDate(Integer.valueOf(dfs1[0]), Integer.valueOf(dfs1[1]), Integer.valueOf(dfs1[2]), Integer.valueOf(dfs2[0]), 45, 0);
 		}
 		Date endDate = CommonUtils.getDate(Integer.valueOf(dfs1[0]), Integer.valueOf(dfs1[1]), Integer.valueOf(dfs1[2]), Integer.valueOf(dfs2[0]), Integer.valueOf(dfs2[1]), Integer.valueOf(dfs2[2]));
-		System.out.println("피크 검색날짜 ===> "+CommonUtils.convertDateFormat(startDate, "yyyy-MM-dd HH:mm:ss")+", "+CommonUtils.convertDateFormat(endDate, "yyyy-MM-dd HH:mm:ss"));
+		logger.debug("피크 검색날짜 ===> "+CommonUtils.convertDateFormat(startDate, "yyyy-MM-dd HH:mm:ss")+", "+CommonUtils.convertDateFormat(endDate, "yyyy-MM-dd HH:mm:ss"));
 		
 		int totalUsage = 0;
 		int usageCnt = 0;
@@ -231,6 +231,11 @@ public class ApiController {
 		logger.debug("result : {}", result);
 
 		return result;
+	}
+
+	public List<DrRequestTarget> getDrRequest(String siteId, Date start, Date end) {
+		List<DrRequestTarget> resultList = EnertalkApiUtil.getDrRequest(siteId, start, end, 0, 50);
+		return resultList;
 	}
 	
 	/**

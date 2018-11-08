@@ -53,8 +53,19 @@ public class DataPeriodCalculate {
 			list = resultList;
 		}
 		
+		String energyGbn = (String) request.getAttribute("energyGbn");
+		
 		// 조회한 목록의 길이만큼 for문을 돌리면서 데이터를 조합하여 새로운 list에 넣는다
-		dataMap = dataCombination(list, selTermFrom, selTermTo, term, period, timestampStr, calculValStr, flag, calculCnt);
+		if("peak".equals(energyGbn)) {
+			// 30분은 15분 최대 데이터 * 2
+			// 1시간은 15분 최대 데이터 * 4
+			// 1일 이상은 1시간 피크 * 24 * 일 개수
+			dataMap = dataCombinationPeak(list, selTermFrom, selTermTo, term, period, timestampStr, calculValStr, flag, calculCnt);
+		} else {
+			// 지정된 횟수만큼 데이터를 합한다
+			// 월은 횟수가 아닌 날짜대로 더한다
+			dataMap = dataCombination(list, selTermFrom, selTermTo, term, period, timestampStr, calculValStr, flag, calculCnt);
+		}
 		
 		newList = (List) dataMap.get("newList");
 		endListDt = (Timestamp) dataMap.get("endListDt");
@@ -304,6 +315,232 @@ public class DataPeriodCalculate {
 			incStartDt = new Timestamp(cal.getTime().getTime());
 			
 			chkCnt++;
+			
+		}
+		
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		dataMap.put("newList", newList);
+		dataMap.put("endListDt", endListDt);
+		
+		return dataMap;
+	}
+	
+	/**
+	 * 조회한 목록의 길이만큼 for문을 돌리면서 데이터를 조합하여 새로운 list에 넣는다(peak)
+	 * @param dataList
+	 * @param selTermFrom
+	 * @param selTermTo
+	 * @param term
+	 * @param period
+	 * @param timestampStr
+	 * @param calculValStr
+	 * @param flag
+	 * @param calculCnt
+	 * @return
+	 */
+	private static Map<String, Object> dataCombinationPeak(List dataList, Timestamp selTermFrom, Timestamp selTermTo, String term,
+			String period, String timestampStr, String calculValStr, int flag, int calculCnt) {
+		List newList = new ArrayList();
+		
+		int nullCnt = 0;
+		int chkCnt = 1;
+		Timestamp stdTimestamp = null;
+		long calculNum = 0;
+		Timestamp incStartDt = selTermFrom;
+		Timestamp endListDt = null;
+		int peakLoopCnt = 0;
+		if(calculCnt == 1) {
+			peakLoopCnt = 1;
+		} else if(calculCnt == 2) {
+			peakLoopCnt = 2;
+		} else {
+			peakLoopCnt = 4;
+		}
+		int peakChkCnt = 1;
+		long peakCalculNum = 0;
+		
+		for(int i=0; i<dataList.size(); i++) {
+			Map<String, Object> map = (Map<String, Object>) dataList.get(i);
+			Timestamp tmp = null;
+			tmp = ((Timestamp) map.get(timestampStr));
+			
+			if( !incStartDt.equals(tmp) ) { // db에서 조회가 안됐을 때 그 시간대의 값을 null로 만든다
+				while( incStartDt.getTime() < tmp.getTime() ) {
+					nullCnt++; // 더하지 않고 null count를 올린다..
+					if(chkCnt == 1) {
+						stdTimestamp = incStartDt;
+						peakCalculNum = 0;
+					}
+					
+					if( peakChkCnt == peakLoopCnt || peakChkCnt == 4 ) {
+						calculNum = calculNum + (peakCalculNum * peakLoopCnt);
+						peakChkCnt = 0;
+//						System.out.println("더한값 NULL       "+stdTimestamp+"   "+peakCalculNum+" * "+peakLoopCnt+" = "+(peakCalculNum * peakLoopCnt)+" ===>"+calculNum);
+					}
+					
+					if("month".equals(period)) {
+						boolean changeMonthYn = changeMonthYn(incStartDt);
+						
+						Calendar compareCal = Calendar.getInstance();
+						compareCal.setTimeInMillis(   incStartDt.getTime()   );
+						compareCal.add(Calendar.MINUTE, Integer.parseInt(offset)*(-1)); // 로컬시간으로 변경
+						compareCal.add(Calendar.MINUTE, 15);
+						
+//						if(now != next || i+1 == dataList.size()) {
+						if(changeMonthYn == true || i+1 == dataList.size()) {
+							// 다음날짜가 달이 바뀌거나 마지막데이터일 때
+							Map<String, Object> calculMap = new HashMap<String, Object>();
+							Iterator<String> paramKeys = map.keySet().iterator();
+							while (paramKeys.hasNext()) {
+								String name = paramKeys.next();
+								calculMap.put(name, map.get(name));
+								if(name.equals(timestampStr)) {
+									calculMap.put(timestampStr, stdTimestamp);
+								}
+								else if(name.equals(calculValStr)) {
+									if(nullCnt == chkCnt) calculMap.put(calculValStr, null); // 더한게 모두 null일 경우 
+									else calculMap.put(calculValStr, calculNum);
+								}
+							}
+							chkCnt = 0;
+							nullCnt = 0;
+							calculNum = 0;
+							newList.add(calculMap);
+							
+							endListDt = stdTimestamp;
+							
+						}
+						
+					} else {
+						if(chkCnt == calculCnt || i+1 == dataList.size()) { // 정해진 횟수만큼 더했거나 마지막데이터일 때
+							Map<String, Object> calculMap = new HashMap<String, Object>();
+							Iterator<String> paramKeys = map.keySet().iterator();
+							while (paramKeys.hasNext()) {
+								String name = paramKeys.next();
+								calculMap.put(name, map.get(name));
+								if(name.equals(timestampStr)) {
+									calculMap.put(timestampStr, stdTimestamp);
+								}
+								else if(name.equals(calculValStr)) {
+									if(nullCnt == chkCnt) calculMap.put(calculValStr, null); // 더한게 모두 null일 경우 
+									else calculMap.put(calculValStr, calculNum);
+								}
+							}
+							chkCnt = 0;
+							nullCnt = 0;
+							calculNum = 0;
+							newList.add(calculMap);
+							
+							endListDt = stdTimestamp;
+							
+						}
+					}
+					
+					Calendar cal = Calendar.getInstance();
+					cal.setTimeInMillis(   incStartDt.getTime()   );
+					cal.add(Calendar.MINUTE, 15);
+					incStartDt = new Timestamp(cal.getTime().getTime());
+					
+					chkCnt++;
+					peakChkCnt++;
+					
+				}
+				
+			}
+			
+			
+			
+			long peak = 0;
+			if(map.get(calculValStr) != null) {
+//				자료형 확인 : (map.get(calculValStr)).getClass().getName()
+				if(map.get(calculValStr) instanceof Double) {
+					peak = Math.round( (Double) map.get(calculValStr) );
+				} else if(map.get(calculValStr) instanceof Float) {
+					peak = Math.round( (Float) map.get(calculValStr) );
+				} else {
+					peak = Long.parseLong(String.valueOf(map.get(calculValStr)));
+				}
+			}
+			
+			if(peakChkCnt == 1) {
+				peakCalculNum = peak;
+				
+			} else {
+				if(peakCalculNum < peak) {
+					peakCalculNum = peak;
+				}
+				
+			}
+
+			if( peakChkCnt == peakLoopCnt || peakChkCnt == 4 ) {
+				calculNum = calculNum + (peakCalculNum * peakLoopCnt);
+				peakChkCnt = 0;
+//				System.out.println("더한값        "+stdTimestamp+"   "+peakCalculNum+" * "+peakLoopCnt+" = "+(peakCalculNum * peakLoopCnt)+" ===>"+calculNum);
+			}
+			
+			
+			if(chkCnt == 1) {
+				stdTimestamp = incStartDt;
+			}
+			
+			if("month".equals(period)) {
+				boolean changeMonthYn = changeMonthYn(incStartDt);
+				
+				Calendar compareCal = Calendar.getInstance();
+				compareCal.setTimeInMillis(   incStartDt.getTime()   );
+				compareCal.add(Calendar.MINUTE, Integer.parseInt(offset)*(-1)); // 로컬시간으로 변경
+				compareCal.add(Calendar.MINUTE, 15);
+				
+//				if(now != next || i+1 == dataList.size()) {
+				if(changeMonthYn == true || i+1 == dataList.size()) {
+					Map<String, Object> calculMap = new HashMap<String, Object>();
+					Iterator<String> paramKeys = map.keySet().iterator();
+					while (paramKeys.hasNext()) {
+						String name = paramKeys.next();
+						calculMap.put(name, map.get(name));
+						if(name.equals(timestampStr)) calculMap.put(timestampStr, stdTimestamp);
+						else if(name.equals(calculValStr)) {
+							if(nullCnt == chkCnt) calculMap.put(calculValStr, null); // 더한게 모두 null일 경우 
+							else calculMap.put(calculValStr, calculNum);
+						}
+					}
+					chkCnt = 0;
+					nullCnt = 0;
+					calculNum = 0;
+					newList.add(calculMap);
+					endListDt = stdTimestamp;
+					
+				}
+				
+			} else {
+				if(chkCnt == calculCnt || i+1 == dataList.size()) { // 정해진 횟수만큼 더했거나 마지막데이터일 때
+					Map<String, Object> calculMap = new HashMap<String, Object>();
+					Iterator<String> paramKeys = map.keySet().iterator();
+					while (paramKeys.hasNext()) {
+						String name = paramKeys.next();
+						calculMap.put(name, map.get(name));
+						if(name.equals(timestampStr)) calculMap.put(timestampStr, stdTimestamp);
+						else if(name.equals(calculValStr)) {
+							if(nullCnt == chkCnt) calculMap.put(calculValStr, null); // 더한게 모두 null일 경우 
+							else calculMap.put(calculValStr, calculNum);
+						}
+					}
+					chkCnt = 0;
+					nullCnt = 0;
+					calculNum = 0;
+					newList.add(calculMap);
+					endListDt = stdTimestamp;
+					
+				}
+			}
+			
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeInMillis(   incStartDt.getTime()   );
+			cal.add(Calendar.MINUTE, 15);
+			incStartDt = new Timestamp(cal.getTime().getTime());
+			
+			chkCnt++;
+			peakChkCnt++;
 			
 		}
 		

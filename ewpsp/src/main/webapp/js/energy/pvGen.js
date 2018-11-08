@@ -54,7 +54,7 @@
 				
 				var reUsage = null;
 				for(var j=0; j<sheetList.length; j++) {
-					if(s.getTime() == new Date(sheetList[j].std_date).getTime()) {
+					if(s.getTime() == setSheetDateUTC(sheetList[j].std_date)) {
 						var usage = String(sheetList[j].gen_val);
 						if(usage == null || usage == "" || usage == "null") {
 							reUsage = null;
@@ -119,7 +119,6 @@
 					totalUsage = totalUsage+Number(usage);
 				}
 				
-				var tm = new Date(chartList[i].std_date);
 				// 차트데이터 셋팅
 				dataSet.push([ setChartDateUTC(chartList[i].std_date), reUsage ]);
 				
@@ -165,7 +164,7 @@
 				
 				var reUsage = null;
 				for(var j=0; j<sheetList.length; j++) {
-					if(s.getTime() == new Date(sheetList[j].std_date).getTime()) {
+					if(s.getTime() == setSheetDateUTC(sheetList[j].std_date)) {
 						var usage = String(sheetList[j].gen_val);
 						if(usage == null || usage == "" || usage == "null") {
 							reUsage = null;
@@ -224,7 +223,6 @@
 					reUsage = Math.round( Number(map.get("formatNum")) );
 					totalUsage = totalUsage+Number(usage);
 				}
-				var tm = new Date(chartList[i].std_date);
 				// 차트데이터 셋팅
 				dataSet.push([ setChartDateUTC(chartList[i].std_date), reUsage ]);
 				

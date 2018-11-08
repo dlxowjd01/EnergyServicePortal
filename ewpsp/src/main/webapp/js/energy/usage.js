@@ -54,7 +54,7 @@
 				
 				var reUsage = null;
 				for(var j=0; j<sheetList.length; j++) {
-					if(s.getTime() == new Date(sheetList[j].std_timestamp).getTime()) {
+					if(s.getTime() == setSheetDateUTC(sheetList[j].std_timestamp)) {
 						var usage = String(sheetList[j].usg_val);
 						if(usage == null || usage == "" || usage == "null") {
 							reUsage = null;
@@ -118,7 +118,6 @@
 					totalUsage = totalUsage+Number(usage);
 				}
 				
-//				var tm = new Date( convertDateUTC(chartList[i].std_timestamp) );
 				dataSet.push([ setChartDateUTC(chartList[i].std_timestamp), reUsage ]);
 				
 			}
@@ -162,7 +161,7 @@
 
 				var reUsage = null;
 				for(var j=0; j<sheetList.length; j++) {
-					if(s.getTime() == new Date(sheetList[j].std_timestamp).getTime()) {
+					if(s.getTime() == setSheetDateUTC(sheetList[j].std_timestamp)) {
 						var usage = String(sheetList[j].pre_usg_val);
 						if(usage == null || usage == "" || usage == "null") {
 							reUsage = null;

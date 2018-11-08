@@ -27,6 +27,7 @@ public class PeakServiceImpl implements PeakService {
 			
 			return resultMap;
 		} else {
+			request.setAttribute("energyGbn", "peak");
 			resultMap = PeriodDataSetting.dataSetting(request, param, list, "std_timestamp", "peak_val", 1);
 			return resultMap;
 		}

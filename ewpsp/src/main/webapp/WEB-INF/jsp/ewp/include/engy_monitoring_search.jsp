@@ -12,7 +12,7 @@
 									<h2 class="ntit fl">${selViewSite.site_name }</h2>
 									<div class="term fl clear">
 										<div class="dropdown fl">
-										  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selTermBox">1일(날짜선택)
+										  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selTermBox">1일(오늘)
 										  <span class="caret"></span></button>
 										  <ul class="dropdown-menu">
 										    <li class="on"><a href="#" onclick="selectBoxTextApply(this);changeSelTerm('drday');">1일(오늘)</a></li>
@@ -38,6 +38,8 @@
 										<input type="text" class="input" id="cblAmtHourFrom" name="cblAmtHourFrom" maxlength="2" value="10" style="width:60px;" onkeydown="onlyNum(event);"> 
 										<span> ~ </span>
 										<input type="text" class="input" id="cblAmtHourTo" name="cblAmtHourTo" maxlength="2" value="13" style="width:60px;" onkeydown="onlyNum(event);">
+										<input type="hidden" id="cblAmtFrom" name="cblAmtFrom">
+										<input type="hidden" id="cblAmtTo" name="cblAmtTo">
 										<button type="button" id="searchBtn" onclick="searchData();">조회</button>
 									</div>
 									<div class="checkbox fl">

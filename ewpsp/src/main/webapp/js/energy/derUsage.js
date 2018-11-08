@@ -82,8 +82,7 @@
 				var reEssUsage = null;
 				var rePvUsage = null;
 				for(var j=0; j<loopCntSheetList.length; j++) {
-					if(s.getTime() == new Date(loopCntSheetList[j].std_timestamp).getTime()) {
-						
+					if(s.getTime() == setSheetDateUTC(loopCntSheetList[j].std_timestamp)) {
 						if(kepcoUsageSheetList != null && kepcoUsageSheetList.length > 0 && kepcoUsageSheetList.length > i) { // 한전사용량
 							kepcoUsage = String(kepcoUsageSheetList[i].usg_val);
 							if(kepcoUsage == null || kepcoUsage == "" || kepcoUsage == "null") reKepcoUsage = null;
@@ -217,7 +216,6 @@
 					}
 				} else rePvUsage = null;
 				
-				var tm = new Date( convertDateUTC(loopCntChartList[i].std_timestamp) );
 				// 차트데이터 셋팅
 				dataSet.push([ setChartDateUTC(loopCntChartList[i].std_timestamp) , reKepcoUsage ]);
 				dataSet2.push([ setChartDateUTC(loopCntChartList[i].std_timestamp) , reEssUsage ]);

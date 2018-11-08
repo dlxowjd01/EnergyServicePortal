@@ -65,7 +65,8 @@
 				var reChgVal = null; 
 				var reDischgVal   = null; 
 				for(var j=0; j<chgSheetList.length; j++) {
-					if(s.getTime() == new Date(chgSheetList[j].std_timestamp).getTime()) {
+					if(s.getTime() == setSheetDateUTC(chgSheetList[j].std_timestamp)) {
+//					if(s.getTime() == new Date(chgSheetList[j].std_timestamp).getTime()) {
 						var chgVal = String(chgSheetList[j].chg_val);
 						var dischgVal   = String(dischgSheetList[j].dischg_val);
 						
@@ -156,7 +157,6 @@
 					totalDataSet2 = totalDataSet2+reDischgVal;
 				}
 				
-//				var tm = new Date( convertDateUTC(chgChartList[i].std_timestamp) );
 				// 차트데이터 셋팅
 				dataSet.push( [setChartDateUTC(chgChartList[i].std_timestamp), reChgVal] );
 				dataSet2.push( [setChartDateUTC(chgChartList[i].std_timestamp), reDischgVal] );
@@ -215,7 +215,8 @@
 				var reChgVal = null; 
 				var reDischgVal   = null; 
 				for(var j=0; j<chgSheetList.length; j++) {
-					if(s.getTime() == new Date(chgSheetList[j].std_timestamp).getTime()) {
+					if(s.getTime() == setSheetDateUTC(chgSheetList[j].std_timestamp)) {
+//					if(s.getTime() == new Date(chgSheetList[j].std_timestamp).getTime()) {
 						var chgVal = String(chgSheetList[j].chg_val);
 						var dischgVal   = String(dischgSheetList[j].dischg_val);
 						
@@ -296,7 +297,6 @@
 					totalDataSet2 = totalDataSet2+reDischgVal;
 				}
 				
-				var tm = new Date( convertDateUTC(chgChartList[i].std_timestamp) );
 				// 차트데이터 셋팅
 				dataSet.push( [setChartDateUTC(chgChartList[i].std_timestamp), reChgVal] );
 				dataSet2.push( [setChartDateUTC(chgChartList[i].std_timestamp), reDischgVal] );

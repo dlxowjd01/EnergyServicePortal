@@ -81,8 +81,6 @@ public class DERUsageController {
 			loopCntSheetList = (List) pvUsageList.get("sheetList");
 			loopCntChartList = (List) pvUsageList.get("chartList");
 		}
-		System.out.println("loopCntSheetList   "+loopCntSheetList);
-		System.out.println("loopCntChartList          "+loopCntChartList);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("kepcoUsageSheetList", kepcoUsageList.get("sheetList"));
