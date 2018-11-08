@@ -1,7 +1,9 @@
 	$(document).ready(function() {
 		getSiteSetDetail();
+		cblSet();
 		
-		changeSelTerm('drday'); // 화면 첫 로딩 시 검색조건 셋팅
+		 // 화면 첫 로딩 시 검색조건 셋팅
+		changeSelTerm('drday');
 		cblTimeSetiing();
 		getCollect_sch_condition(); // 검색조건 모으기
 
@@ -9,8 +11,10 @@
 		$("#check1").click(function () {
 			var flag = $("#check1").prop("checked") ;
 			if(flag) {
+				$("#selTermBox").empty().append("1일(오늘)").append( $('<span class="caret" />') );
 				changeSelTerm('drday');
 				realTimeRefreshFn();
+				searchDisableChange(true);
 				
 				if(realTimeRefresh == null) { // 1분 간격
 					realTimeRefresh = setInterval(function(){
@@ -23,10 +27,27 @@
 			} else {
 				clearInterval(realTimeRefresh);
 				realTimeRefresh = null;
+				searchDisableChange(false);
 			}
 			
 		});
 	});
+
+	var cblAmt; // 기준부하
+	var goalPower; // 목표사용량=기준부하-계약용량(한전계약전력)
+	var contractPower;
+	function callback_getSiteSetDetail(result) {
+		var siteSetDetail = result.detail;
+		contractPower = siteSetDetail.contract_power;
+//		chargePower = siteSetDetail.charge_power;
+	}
+	
+	function cblSet() {
+		var now = new Date();
+		var hour = now.getHours();
+		$("#cblAmtHourFrom").val(hour+2);
+		$("#cblAmtHourTo").val(hour+2+2);
+	}
 	
 	// 기준부하세팅
 	function cblTimeSetiing() {
@@ -109,6 +130,7 @@
 		$("#selTermFrom").val(queryStart);
 		$("#selTermTo").val(queryEnd);
 		
+		cblSet();
 		cblTimeSetiing();
 		
 		var formData = $("#schForm").serializeObject();
@@ -134,14 +156,13 @@
 		
 	}
 	
-	var cblAmt; // 기준부하
-	var goalPower; // 목표사용량=기준부하-계약용량(한전계약전력)
-	var contractPower;
-//	function getCblAmt() {
-//		getSiteSetDetail();
-//		cblAmt = 18000;
-//		goalPower = cblAmt-contractPower;
-//	}
+	function searchDisableChange(flag) {
+		$("#selTermBox").prop("disabled", flag);
+		$("#selPeriod").prop("disabled", flag);
+		$("#datepicker5").prop("disabled", flag);
+		$("#cblAmtHourFrom").prop("readonly", flag);
+		$("#cblAmtHourTo").prop("readonly", flag);
+	}
 	
 	var dbCblList;
 	function getCbl(formData) {
@@ -157,11 +178,6 @@
 		});
 	}
 	
-	function callback_getSiteSetDetail(result) {
-		var siteSetDetail = result.detail;
-		contractPower = siteSetDetail.contract_power;
-//		chargePower = siteSetDetail.charge_power;
-	}
 
 	// 검색결과 그래프 데이터
 	var pastUsageList;
