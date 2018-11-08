@@ -5,13 +5,18 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import kr.co.ewp.ewpsp.common.config.Constants;
+import kr.co.ewp.ewpsp.model.CblResponseModel;
+import kr.co.ewp.ewpsp.model.DrRequestTarget;
 import kr.co.ewp.ewpsp.model.UsageModel;
 import kr.co.ewp.ewpsp.model.UsageRealtimeModel;
 
@@ -50,7 +55,7 @@ public class EnertalkApiUtil {
 //		  url.append("&end=").append(end.getTime());
 		  
 		  URL reUrl = new URL(  url.toString()  );
-		  System.out.println("enertalk api URL : "+ url);
+		  logger.debug("enertalk api URL : "+ url);
 			HttpURLConnection con = (HttpURLConnection) reUrl.openConnection();
 			con.setRequestMethod("GET");
 			con.setRequestProperty("authorization", "Basic " + Constants.ENERTALK_API_AUTH);
@@ -75,7 +80,7 @@ public class EnertalkApiUtil {
 		  
 			resultBody = response.toString();
 		  
-		  System.out.println("result "+resultBody);
+			logger.debug("result "+resultBody);
 		  returnUsage = JsonUtil.toObject(resultBody, UsageModel.class);
 	  } catch (Exception e) {
 //		  e.printStackTrace();
@@ -99,7 +104,7 @@ public class EnertalkApiUtil {
 //		  url.append("&end=").append(end.getTime());
 		  
 		  URL reUrl = new URL(  url.toString()  );
-		  System.out.println("enertalk api URL : "+ url);
+		  logger.debug("enertalk api URL : "+ url);
 		  HttpURLConnection con = (HttpURLConnection) reUrl.openConnection();
 		  con.setRequestMethod("GET");
 		  con.setRequestProperty("authorization", "Basic " + Constants.ENERTALK_API_AUTH);
@@ -124,7 +129,7 @@ public class EnertalkApiUtil {
 		  
 		  resultBody = response.toString();
 		  
-		  System.out.println("result "+resultBody);
+		  logger.debug("result "+resultBody);
 		  returnUsage = JsonUtil.toObject(resultBody, UsageModel.class);
 		  return returnUsage;
 	  } catch (Exception e) {
@@ -155,103 +160,54 @@ public class EnertalkApiUtil {
 	  }
   }
 
-//  public static List<DrRequestTarget> getDrRequest(String siteId, Date start, Date end, int offset, int limit) {
-//	  logger.debug("EnertalkApiUtil.getDrRequest");
-//    String resultBody = null;
-//    List<DrRequestTarget> DrRequest = null;
-//    try {
-//      StringBuffer url = new StringBuffer(API_URL + "/dr/requests");
-//      url.append("?siteId=").append(siteId);
-//      url.append("&startAfter=").append(start.getTime());
-//      url.append("&startBefore=").append(end.getTime());
-//      url.append("&offset=").append(offset);
-//      url.append("&limit=").append(limit);
-//      System.out.println("URL  "+ url);
-//      HttpHeaders headers = getHeaders();
-//      resultBody = HttpUtil.get(url.toString(), headers);
-//      System.out.println("         resultBody는      "+resultBody);
-//      DrRequest = JsonUtil.toObject(resultBody, new TypeReference<List<DrRequestTarget>>() {
-//      });
-//    } catch (Exception e) {
-//    	System.out.println("error is : "+e.toString());
-//    } finally {
-//    	System.out.println("EnertalkApiUtil.getDrRequest end");
-//		  return DrRequest;
-//    }
-//  }
-//
-////  public static CblResponseModel getCBL(String siteId, Date start, Date end) {
-////	  logger.debug("EnertalkApiUtil.getCBL", "ERROR");
-////	  String resultBody = null;
-////	  CblResponseModel getCBL = null;
-////	  try {
-////		  StringBuffer url = new StringBuffer(API_URL + "/admin/dr/sites/:siteId/cbl".replace(":siteId", siteId));
-////		  url.append("?start=").append(start.getTime());
-////		  url.append("&end=").append(end.getTime());
-////		  url.append("&method=").append("max4of5");
-////		  
-////		  URL reUrl = new URL(  url.toString()  );
-////		  System.out.println("enertalk api URL : "+ url);
-////			HttpURLConnection con = (HttpURLConnection) reUrl.openConnection();
-////			con.setRequestMethod("GET");
-////			con.setRequestProperty("authorization", "Basic " + Constants.ENERTALK_API_AUTH);
-////			con.setDoOutput(true);
-////			Map headerFields = con.getHeaderFields();
-////			System.out.println("header fields are : "+headerFields);
-////			
-////			int resCode = con.getResponseCode();
-////			BufferedReader br;
-////			if(resCode == 200) { // 정상 호출
-////				System.out.println("우후훗");
-////				br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-////			} else { // 에러 발생
-////				System.out.println("엥?  "+resCode);
-//////				br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-////				br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-////			}
-////			
-////			String inputLine;
-////			StringBuffer response = new StringBuffer();
-////			while ((inputLine = br.readLine()) != null) {
-////				response.append(inputLine);
-////			}
-////			br.close();
-////		  
-////			resultBody = response.toString();
-////		  
-////		  System.out.println("result "+resultBody);
-////		  getCBL = JsonUtil.toObject(resultBody, CblResponseModel.class);
-////	  } catch (Exception e) {
-////		  System.out.println("error is : "+e.toString());
-////		  e.printStackTrace();
-////	  } finally {
-////		  System.out.println("EnertalkApiUtil.getCBL end");
-////		  return getCBL;
-////	  }
-////  }
-//  public static CblResponseModel getCBL(String siteId, Date start, Date end) {
-//	  logger.debug("EnertalkApiUtil.getCBLㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", "ERROR");
-//	  String resultBody = null;
-//	  CblResponseModel getCBL = null;
-//	  try {
-//		  // FIXME : getDrPayments 이것만 host가 다른데 임시야?
-//		  StringBuffer url = new StringBuffer(API_URL + "/admin/dr/sites/:siteId/cbl".replace(":siteId", siteId));
-//		  url.append("?start=").append(start.getTime());
-//		  url.append("&end=").append(end.getTime());
-//		  url.append("&method=").append("max4of5");
-//		  System.out.println("URL   "+ url);
-//		  HttpHeaders headers = getHeaders();
-//		  resultBody = HttpUtil.get(url.toString(), headers);
-//		  System.out.println("result "+resultBody);
-//		  getCBL = JsonUtil.toObject(resultBody, CblResponseModel.class);
-//	  } catch (Exception e) {
-//		  System.out.println("error is : "+e.toString());
+  public static List<DrRequestTarget> getDrRequest(String siteId, Date start, Date end, int offset, int limit) {
+	  logger.debug("EnertalkApiUtil.getDrRequest");
+    String resultBody = null;
+    List<DrRequestTarget> DrRequest = null;
+    try {
+      StringBuffer url = new StringBuffer(API_URL + "/dr/requests");
+      url.append("?siteId=").append(siteId);
+      url.append("&startAfter=").append(start.getTime());
+      url.append("&startBefore=").append(end.getTime());
+      url.append("&offset=").append(offset);
+      url.append("&limit=").append(limit);
+      logger.debug("URL  "+ url);
+      HttpHeaders headers = getHeaders();
+      resultBody = HttpUtil.get(url.toString(), headers);
+      logger.error("         resultBody는      "+resultBody);
+      DrRequest = JsonUtil.toObject(resultBody, new TypeReference<List<DrRequestTarget>>() {
+      });
+    } catch (Exception e) {
+    	logger.error("error is : "+e.toString());
+    } finally {
+    	logger.debug("EnertalkApiUtil.getDrRequest end");
+		  return DrRequest;
+    }
+  }
+
+  public static CblResponseModel getCBL(String siteId, Date start, Date end) {
+	  logger.debug("EnertalkApiUtil.getCBL", "ERROR");
+	  String resultBody = null;
+	  CblResponseModel getCBL = null;
+	  try {
+		  // FIXME : getDrPayments 이것만 host가 다른데 임시야?
+		  StringBuffer url = new StringBuffer(API_URL + "/admin/dr/sites/:siteId/cbl".replace(":siteId", siteId));
+		  url.append("?start=").append(start.getTime());
+		  url.append("&end=").append(end.getTime());
+		  url.append("&method=").append("max4of5");
+		  logger.debug("URL   "+ url);
+		  HttpHeaders headers = getHeaders();
+		  resultBody = HttpUtil.get(url.toString(), headers);
+		  logger.debug("result "+resultBody);
+		  getCBL = JsonUtil.toObject(resultBody, CblResponseModel.class);
+	  } catch (Exception e) {
+		  logger.error("error is : "+e.toString());
 //		  e.printStackTrace();
-//	  } finally {
-//		  System.out.println("EnertalkApiUtil.getCBL end");
-//		  return getCBL;
-//	  }
-//  }
+	  } finally {
+		  logger.debug("EnertalkApiUtil.getCBL end");
+		  return getCBL;
+	  }
+  }
 
 //  public static void getDevice(String deviceId) {
 //	  logger.debug("EnertalkApiUtil.getDevice");
