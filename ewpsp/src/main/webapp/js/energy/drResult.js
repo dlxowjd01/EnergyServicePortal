@@ -252,8 +252,12 @@
 		pastUsageList = dataSet;
 		timeSlotCblAmtList1 = dataSet2_1;
 		timeSlotCblAmtList2 = dataSet2_2;
+		timeSlotCblAmtList3 = dataSet2_3;
+		timeSlotCblAmtList4 = dataSet2_4;
 		timeSlotGoalPowerList1 = dataSet3_1;
 		timeSlotGoalPowerList2 = dataSet3_2;
+		timeSlotGoalPowerList3 = dataSet3_3;
+		timeSlotGoalPowerList4 = dataSet3_4;
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)		
 		unit_format(String(totUsage), "pastUseTot", "mWh");

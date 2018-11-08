@@ -37,7 +37,7 @@
 										<span>기준부하 시간설정</span>
 										<input type="text" class="input" id="cblAmtHourFrom" name="cblAmtHourFrom" maxlength="2" value="10" style="width:60px;" onkeydown="onlyNum(event);"> 
 										<span> ~ </span>
-										<input type="text" class="input" id="cblAmtHourTo" name="cblAmtHourTo" maxlength="2" value="13" style="width:60px;" onkeydown="onlyNum(event);">
+										<input type="text" class="input" id="cblAmtHourTo" name="cblAmtHourTo" maxlength="2" value="14" style="width:60px;" onkeydown="onlyNum(event);">
 										<input type="hidden" id="cblAmtFrom" name="cblAmtFrom">
 										<input type="hidden" id="cblAmtTo" name="cblAmtTo">
 										<button type="button" id="searchBtn" onclick="searchData();">조회</button>
