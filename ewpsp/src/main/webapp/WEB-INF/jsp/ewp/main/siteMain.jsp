@@ -28,7 +28,7 @@
 				<form id="schForm" name="schForm">
 				<input type="hidden" id="selTermFrom" name="selTermFrom">
 				<input type="hidden" id="selTermTo" name="selTermTo">
-				<input type="hidden" id="selTerm" name="selTerm" value="day">
+				<input type="hidden" id="selTerm" name="selTerm" value="today">
 				<input type="hidden" id="selPeriodVal" name="selPeriodVal" value="hour">
 				<input type="hidden" id="siteId" name="siteId" value="${selViewSiteId }">
 				<input type="hidden" id="selPageNum" name="selPageNum" value="">
@@ -164,10 +164,11 @@
 															fontSize: '12px'
 														}
 													},
-													tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
+// 													tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
 													title: {
 														text: null
 													}
+													, endOnTick: true // 11.09 이우람 추가
 												},
 
 												yAxis: {
