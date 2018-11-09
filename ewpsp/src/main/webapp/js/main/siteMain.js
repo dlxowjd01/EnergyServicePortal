@@ -109,16 +109,28 @@
 	}
 	
 	function getSiteMainSchCollection() {
-		var today = new Date();
-		firstDay = today.format("yyyyMMdd")+"000000";
-		endDay = today.format("yyyyMMdd")+"235959";
-//		var firstDay = '20180831000000';//new Date(2018, 7, 23, 0, 0, 0);
-//		var endDay = '20180831235959';//new Date(2018, 7, 23, 23, 59, 59);
-		$("#selTermFrom").val(firstDay);
-		$("#selTermTo").val(endDay);
+//		var today = new Date();
+//		firstDay = today.format("yyyyMMdd")+"000000";
+//		endDay = today.format("yyyyMMdd")+"235959";
+////		var firstDay = '20180831000000';//new Date(2018, 7, 23, 0, 0, 0);
+////		var endDay = '20180831235959';//new Date(2018, 7, 23, 23, 59, 59);
+//		$("#selTermFrom").val(firstDay);
+//		$("#selTermTo").val(endDay);
+		var firstDay = new Date();
+		var endDay = new Date();
+		var startTime;
+		var endTime;
+		startTime = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), 0, 0, 0);
+		endTime = new Date(endDay.getFullYear(), endDay.getMonth(), endDay.getDate(), 23, 59, 59);
+		
+		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
+		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
+		queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
+		queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
+		$("#selTermFrom").val(queryStart);
+		$("#selTermTo").val(queryEnd);
 		
 		var formData = $("#schForm").serializeObject();
-		
 		return formData;
 	}
 	
@@ -393,7 +405,7 @@
 		var kepcoUsageChartList  = result.kepcoUsageChartList;
 		var essUsageListChartList = result.essUsageListChartList;
 		var pvUsageListChartList = result.pvUsageListChartList;
-		var loopCntList = result.loopCntList; // for문 loop list
+		var loopCntChartList = result.loopCntChartList; // for문 loop list
 		
 		// 데이터 셋팅
 		var dataSet = []; // chartData를 위한 변수
@@ -421,8 +433,8 @@
 		
 		// 한전사용량, ess사용량, pv사용량 중 하나라도 데이터가 존재할 때
 		if( !( kepcoUsageChartList == null && essUsageListChartList == null && pvUsageListChartList == null ) ) {
-//			if(usageList.length > 0) {
-				for(var i=0; i<loopCntList.length; i++) {
+//			if(loopCntChartList.length > 0) {
+				for(var i=0; i<loopCntChartList.length; i++) {
 					var kepcoUsage = null;
 					var essUsage = null;
 					var pvUsage = null;
@@ -461,13 +473,13 @@
 						}
 					} else rePvUsage = null;
 					
-					var tm = new Date( convertDateUTC(loopCntList[i].std_timestamp) );
+					var tm = new Date( convertDateUTC(loopCntChartList[i].std_timestamp) );
 					// 차트데이터 셋팅
-					dataSet.push([setChartDateUTC(loopCntList[i].std_timestamp) , reKepcoUsage]);
-					dataSet2.push([setChartDateUTC(loopCntList[i].std_timestamp) , reEssUsage]);
-					dataSet3.push([setChartDateUTC(loopCntList[i].std_timestamp) , rePvUsage]);
+					dataSet.push([setChartDateUTC(loopCntChartList[i].std_timestamp) , reKepcoUsage]);
+					dataSet2.push([setChartDateUTC(loopCntChartList[i].std_timestamp) , reEssUsage]);
+					dataSet3.push([setChartDateUTC(loopCntChartList[i].std_timestamp) , rePvUsage]);
 					
-					if( (i+1) == loopCntList.length ) {
+					if( (i+1) == loopCntChartList.length ) {
 						if(reKepcoUsage != null) {
 							nowUsage = reKepcoUsage;
 						}
@@ -482,7 +494,7 @@
 					derChart.addSeries({
 						index:3,
 						fillOpacity: 1,
-						name: '실제 사용량',
+						name: '한전 사용량',
 						color: '#3d4250',
 						lineColor: '#438fd7', /* 한전 사용량 */
 						data: pastUsageList

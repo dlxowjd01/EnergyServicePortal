@@ -144,7 +144,7 @@ public class PeriodDataSetting {
 				setHms(cal, 23, 59, 59, 999);
 			}
 			
-		} else if("drday".equals(term)) { // 에너지모니터링 dr실적조회의 오늘날짜
+		} else if("drday".equals(term) || "today".equals(term)) { // 에너지모니터링 dr실적조회의 오늘날짜
 			if("1".equals(flag)) {	
 				setHms(cal, 0, 0, 0, 0);
 			} else if("2".equals(flag)) {
