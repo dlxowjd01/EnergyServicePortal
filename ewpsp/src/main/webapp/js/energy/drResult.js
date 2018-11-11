@@ -142,6 +142,7 @@
 		cblTimeSetiing();
 		
 		var formData = $("#schForm").serializeObject();
+		console.log("실시간  ", formData);
 		
 		searchDRApi(formData);
 	}
@@ -246,23 +247,23 @@
 							dataSet2_1.push([ setChartDateUTC(next), cbl ]);
 							dataSet3_1.push([ setChartDateUTC(next), cbl - contractPower ]);
 						} else if(i == 1) {
-							dataSet2_2.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
-							dataSet3_2.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - contractPower ]);
 							if(i+1 != dbCblList.length) {
+								dataSet2_2.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
+								dataSet3_2.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - contractPower ]);
 								dataSet2_2.push([ setChartDateUTC(next), cbl ]);
 								dataSet3_2.push([ setChartDateUTC(next), cbl - contractPower ]);
 							}
 						} else if(i == 2) {
-							dataSet2_3.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
-							dataSet3_3.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - contractPower ]);
 							if(i+1 != dbCblList.length) {
+								dataSet2_3.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
+								dataSet3_3.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - contractPower ]);
 								dataSet2_3.push([ setChartDateUTC(next), cbl ]);
 								dataSet3_3.push([ setChartDateUTC(next), cbl - contractPower ]);
 							}
 						} else if(i == 3) {
-							dataSet2_4.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
-							dataSet3_4.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - contractPower ]);
 							if(i+1 != dbCblList.length) {
+								dataSet2_4.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
+								dataSet3_4.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - contractPower ]);
 								dataSet2_4.push([ setChartDateUTC(next), cbl ]);
 								dataSet3_4.push([ setChartDateUTC(next), cbl - contractPower ]);
 							}
@@ -510,6 +511,7 @@
 			if(cblList != null) {
 				for(var i=0; i<cblList.length; i++) {
 					var hour = new Date(setSheetDateUTC(cblList[i].start)).getHours();
+					console.log("날짜   ",new Date(setSheetDateUTC(cblList[i].start)));
 					
 					if(hour != 12) {
 						var next = cblList[i].start+(1000 * 3600);
@@ -522,23 +524,23 @@
 							dataSet2_1.push([ setChartDateUTC(next), cbl ]);
 							dataSet3_1.push([ setChartDateUTC(next), cbl - contractPower ]);
 						} else if(i == 1) {
-							dataSet2_2.push([ setChartDateUTC(cblList[i].start), cbl ]);
-							dataSet3_2.push([ setChartDateUTC(cblList[i].start), cbl - contractPower ]);
 							if(i+1 != cblList.length) {
+								dataSet2_2.push([ setChartDateUTC(cblList[i].start), cbl ]);
+								dataSet3_2.push([ setChartDateUTC(cblList[i].start), cbl - contractPower ]);
 								dataSet2_2.push([ setChartDateUTC(next), cbl ]);
 								dataSet3_2.push([ setChartDateUTC(next), cbl - contractPower ]);
 							}
 						} else if(i == 2) {
-							dataSet2_3.push([ setChartDateUTC(cblList[i].start), cbl ]);
-							dataSet3_3.push([ setChartDateUTC(cblList[i].start), cbl - contractPower ]);
 							if(i+1 != cblList.length) {
+								dataSet2_3.push([ setChartDateUTC(cblList[i].start), cbl ]);
+								dataSet3_3.push([ setChartDateUTC(cblList[i].start), cbl - contractPower ]);
 								dataSet2_3.push([ setChartDateUTC(next), cbl ]);
 								dataSet3_3.push([ setChartDateUTC(next), cbl - contractPower ]);
 							}
 						} else if(i == 3) {
-							dataSet2_4.push([ setChartDateUTC(cblList[i].start), cbl ]);
-							dataSet3_4.push([ setChartDateUTC(cblList[i].start), cbl - contractPower ]);
 							if(i+1 != cblList.length) {
+								dataSet2_4.push([ setChartDateUTC(cblList[i].start), cbl ]);
+								dataSet3_4.push([ setChartDateUTC(cblList[i].start), cbl - contractPower ]);
 								dataSet2_4.push([ setChartDateUTC(next), cbl ]);
 								dataSet3_4.push([ setChartDateUTC(next), cbl - contractPower ]);
 							}
