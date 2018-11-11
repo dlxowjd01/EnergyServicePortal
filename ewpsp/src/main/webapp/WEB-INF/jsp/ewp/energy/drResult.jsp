@@ -113,7 +113,7 @@
 
 										yAxis: {
 											gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-										    min: 0, /* 최소값 지정 */
+// 										    min: 0, /* 최소값 지정 */
 										    title: {
 										    	text: '(kWh)',
 										    	align: 'low',

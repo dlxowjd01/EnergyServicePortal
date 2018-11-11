@@ -16,6 +16,8 @@
 				$("#selPeriodVal").val('5min');
 				realTimeRefreshFn();
 				searchDisableChange(true);
+//				myChart.yAxis[0].options.title.text = "(kW)";
+				myChart.yAxis[0].setTitle({ text: "(kW)" });
 				
 				if(realTimeRefresh == null) { // 1분 간격
 					realTimeRefresh = setInterval(function(){
@@ -27,9 +29,12 @@
 				
 	        } else{
 	        	$("#selPeriod").empty().append("hour").append( $('<span class="caret" />') );
+	        	$("#selPeriodVal").val('hour');
 				clearInterval(realTimeRefresh);
 				realTimeRefresh = null;
 				searchDisableChange(false);
+//				myChart.yAxis[0].options.title.text = "(kWh)";
+				
 	        }
 	    });
 	});
@@ -46,8 +51,8 @@
 	function cblSet() {
 		var now = new Date();
 		var hour = now.getHours();
-		$("#cblAmtHourFrom").val(hour+2);
-		$("#cblAmtHourTo").val(hour+2+2);
+		$("#cblAmtHourFrom").val(hour+1);
+		$("#cblAmtHourTo").val(hour+1+2);
 	}
 	
 	// 기준부하세팅
@@ -94,6 +99,7 @@
 		
 		cblTimeSetiing();
 		getCollect_sch_condition(); // 검색조건 모으기
+		myChart.yAxis[0].setTitle({ text: "(kWh)" });
 	}
 
 	var real_data_pc = new Array(); // 실제 사용량 표 데이터
@@ -310,7 +316,6 @@
 						).append( $("<td />").append( drList[i].fulfill_per ) // 이행률
 						)
 				);
-				console.log("drList[i].reduce_amt : "+drList[i].reduce_amt);
 				totalReduceAmt = totalReduceAmt+Number( String(drList[i].reduce_amt) );
 			}
 			
@@ -399,7 +404,7 @@
 				color: '#438fd7',
 				type: 'area',
 				fillOpacity: 0.3,
-				marker: { enabled: false },
+//				marker: { enabled: false },
 				data: timeSlotGoalPowerList1
 			}, false);
 		}
@@ -416,7 +421,7 @@
 				color: '#438fd7',
 				type: 'area',
 				fillOpacity: 0.3,
-				marker: { enabled: false },
+//				marker: { enabled: false },
 				linkedTo: linkedTo, // 전의 series와 하나로 연결한다
 				data: timeSlotGoalPowerList2
 			}, false);
@@ -435,7 +440,7 @@
 				color: '#438fd7',
 				type: 'area',
 				fillOpacity: 0.3,
-				marker: { enabled: false },
+//				marker: { enabled: false },
 				linkedTo: linkedTo, // 전의 series와 하나로 연결한다
 				data: timeSlotGoalPowerList3
 			}, false);
@@ -455,7 +460,7 @@
 				color: '#438fd7',
 				type: 'area',
 				fillOpacity: 0.3,
-				marker: { enabled: false },
+//				marker: { enabled: false },
 				linkedTo: linkedTo, // 전의 series와 하나로 연결한다
 				data: timeSlotGoalPowerList4
 			}, false);
@@ -492,7 +497,7 @@
 				if(usage == null || usage == "" || usage == "null") {
 					reUsage = null;
 				} else {
-					var map = convertUnitFormat(usage, "mWh", 8);
+					var map = convertUnitFormat(usage*12, "mW", 8);
 					reUsage = Math.round( Number(map.get("formatNum")) );
 					totUsage = totUsage+Number(usage);
 				}
@@ -508,7 +513,7 @@
 					
 					if(hour != 12) {
 						var next = cblList[i].start+(1000 * 3600);
-						var map = convertUnitFormat(cblList[i].cbl*12, "mWh", 8);
+						var map = convertUnitFormat(cblList[i].cbl, "mWh", 8);
 						cbl = Math.round( Number(map.get("formatNum")) );
 						
 						if(i == 0) {
