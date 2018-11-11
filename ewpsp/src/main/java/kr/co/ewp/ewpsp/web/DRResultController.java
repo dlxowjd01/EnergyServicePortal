@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.ewp.ewpsp.common.util.DateUtil;
 import kr.co.ewp.ewpsp.common.energy.PeriodDataSetting;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.Period;
@@ -161,7 +162,8 @@ public class DRResultController {
 		}
 		
 		// 사용량 api 조회
-		UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicBySiteId(siteId, Period._15min, start, end, TimeType.past, UsageType.positiveEnergy);
+//		UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicBySiteId(siteId, Period._15min, start, end, TimeType.past, UsageType.positiveEnergy);
+		UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicBySiteId5Min(siteId, start, end);
 		List usageList = new ArrayList();
 		Map<String, Object> usageMap = new HashMap<String, Object>();
 		if(usageModel.getItems() != null) {
@@ -177,6 +179,7 @@ public class DRResultController {
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("chartList", usageMap.get("chartList"));
+//		resultMap.put("chartList", usageList);
 		resultMap.put("cblList", cblList);
 		resultMap.put("drResultList", drResultList);
 		return resultMap;

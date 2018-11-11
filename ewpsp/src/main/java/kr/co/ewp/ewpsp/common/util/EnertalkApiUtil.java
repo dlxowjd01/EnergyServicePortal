@@ -208,6 +208,28 @@ public class EnertalkApiUtil {
 		  return getCBL;
 	  }
   }
+  
+  public static UsageModel getUsagePeriodicBySiteId5Min(String siteId, Date start, Date end) {
+	  logger.debug("EnertalkApiUtil.getUsagePeriodicBySiteId5Min");
+	  String resultBody = null;
+	  UsageModel returnUsage = null;
+	  try {
+		  StringBuffer url = new StringBuffer("https://s3semotj1l.execute-api.ap-northeast-2.amazonaws.com" + "/dr-staging/sites/").append(siteId).append("/usages/periodic");
+		  url.append("?start=").append(start.getTime());
+		  url.append("&end=").append(end.getTime());
+		  logger.debug("URL   "+ url);
+		  HttpHeaders headers = getHeaders();
+		  resultBody = HttpUtil.get(url.toString(), headers);
+		  logger.debug("result "+resultBody);
+		  returnUsage = JsonUtil.toObject(resultBody, UsageModel.class);
+	  } catch (Exception e) {
+		  logger.error("error is : "+e.toString());
+//		  e.printStackTrace();
+	  } finally {
+		  logger.debug("EnertalkApiUtil.getUsagePeriodicBySiteId5Min end");
+		  return returnUsage;
+	  }
+  }
 
 //  public static void getDevice(String deviceId) {
 //	  logger.debug("EnertalkApiUtil.getDevice");

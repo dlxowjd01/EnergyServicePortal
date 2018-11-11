@@ -37,6 +37,7 @@ public class DataPeriodCalculate {
 	 */
 	public static List periodCalculate(HttpServletRequest request, List resultList, Timestamp selTermFrom, Timestamp selTermTo, 
 			String term, String period, String timestampStr, String calculValStr, int flag) {
+		logger.debug("DataPeriodCalculate.periodCalculate()");
 		List newList = new ArrayList();
 		Timestamp endListDt = null;
 		offset = CommonUtils.getTimeOffset(request);
@@ -234,7 +235,8 @@ public class DataPeriodCalculate {
 					
 					Calendar cal = Calendar.getInstance();
 					cal.setTimeInMillis(   incStartDt.getTime()   );
-					cal.add(Calendar.MINUTE, 15);
+					if("5min".equals(period)) cal.add(Calendar.MINUTE, 5);
+					else cal.add(Calendar.MINUTE, 15);
 					incStartDt = new Timestamp(cal.getTime().getTime());
 					
 					chkCnt++;
@@ -311,7 +313,8 @@ public class DataPeriodCalculate {
 			
 			Calendar cal = Calendar.getInstance();
 			cal.setTimeInMillis(   incStartDt.getTime()   );
-			cal.add(Calendar.MINUTE, 15);
+			if("5min".equals(period)) cal.add(Calendar.MINUTE, 5);
+			else cal.add(Calendar.MINUTE, 15);
 			incStartDt = new Timestamp(cal.getTime().getTime());
 			
 			chkCnt++;
@@ -561,7 +564,8 @@ public class DataPeriodCalculate {
 			Calendar cal = Calendar.getInstance();
 			cal.setTimeInMillis(   tmsp.getTime()   );
 			
-			if("15min".equals(period)) cal.add(Calendar.MINUTE, 15);
+			if("5min".equals(period)) cal.add(Calendar.MINUTE, 5);
+			else if("15min".equals(period)) cal.add(Calendar.MINUTE, 15);
 			else if("30min".equals(period)) cal.add(Calendar.MINUTE, 30);
 			else if("hour".equals(period)) cal.add(Calendar.HOUR, 1);
 			else if("day".equals(period)) cal.add(Calendar.DATE, 1);
@@ -578,7 +582,8 @@ public class DataPeriodCalculate {
 				Calendar cal2 = Calendar.getInstance();
 				cal2.setTimeInMillis(   tmsp.getTime()   );
 				
-				if("15min".equals(period)) cal2.add(Calendar.MINUTE, 15);
+				if("5min".equals(period)) cal2.add(Calendar.MINUTE, 5);
+				else if("15min".equals(period)) cal2.add(Calendar.MINUTE, 15);
 				else if("30min".equals(period)) cal2.add(Calendar.MINUTE, 30);
 				else if("hour".equals(period)) cal2.add(Calendar.HOUR, 1);
 				else if("day".equals(period)) cal2.add(Calendar.DATE, 1);
@@ -603,7 +608,7 @@ public class DataPeriodCalculate {
 		// 실제의 경우 데이터간격의 최소단위가 15분이므로 조회 시 데이터간격이 30분 이상이면 합을 구한다
 		int sumCntPast = 0;
 		
-		if("15min".equals(period)) {
+		if("15min".equals(period) || "5min".equals(period)) {
 			sumCntPast = 1;
 		} else if("30min".equals(period)) {
 			sumCntPast = 2;

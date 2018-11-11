@@ -295,7 +295,8 @@ public class PeriodDataSetting {
 			Calendar cal = Calendar.getInstance();
 			cal.setTimeInMillis(   tmsp.getTime()   );
 			
-			if("15min".equals(period)) cal.add(Calendar.MINUTE, 15);
+			if("5min".equals(period)) cal.add(Calendar.MINUTE, 5);
+			else if("15min".equals(period)) cal.add(Calendar.MINUTE, 15);
 			else if("30min".equals(period)) cal.add(Calendar.MINUTE, 30);
 			else if("hour".equals(period)) cal.add(Calendar.HOUR, 1);
 			else if("day".equals(period)) cal.add(Calendar.DATE, 1);

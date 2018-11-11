@@ -8,11 +8,12 @@
 		getCollect_sch_condition(); // 검색조건 모으기
 
 		// 실시간 갱신
-		$("#check1").click(function () {
-			var flag = $("#check1").prop("checked") ;
-			if(flag) {
-				$("#selTermBox").empty().append("1일(오늘)").append( $('<span class="caret" />') );
+		$("#check1").change(function(){
+	        if($("#check1").is(":checked")){
+	        	$("#selTermBox").empty().append("1일(오늘)").append( $('<span class="caret" />') );
 				changeSelTerm('drday');
+				$("#selPeriod").empty().append("5min").append( $('<span class="caret" />') );
+				$("#selPeriodVal").val('5min');
 				realTimeRefreshFn();
 				searchDisableChange(true);
 				
@@ -24,13 +25,13 @@
 					alert("이미 실시간 자동갱신이 실행중입니다.");
 				}
 				
-			} else {
+	        } else{
+	        	$("#selPeriod").empty().append("hour").append( $('<span class="caret" />') );
 				clearInterval(realTimeRefresh);
 				realTimeRefresh = null;
 				searchDisableChange(false);
-			}
-			
-		});
+	        }
+	    });
 	});
 
 	var cblAmt; // 기준부하
@@ -163,6 +164,7 @@
 		$("#datepicker5").prop("disabled", flag);
 		$("#cblAmtHourFrom").prop("readonly", flag);
 		$("#cblAmtHourTo").prop("readonly", flag);
+		$("#searchBtn").prop("disabled", flag);
 	}
 	
 	var dbCblList;
