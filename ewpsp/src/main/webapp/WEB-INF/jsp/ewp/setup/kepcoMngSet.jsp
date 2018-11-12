@@ -87,9 +87,10 @@
 											<td>
 												<input type="text" name="contractPower" id="contractPower" class="input" value="" maxlength="11" onkeydown="onlyNum(event);"> kW
 											</td>
-											<th><span>목표 전력</span></th>
+											<th><span>감축 용량</span></th>
 											<td>
-												<input type="text" name="goalPower" id="goalPower" class="input" value="" maxlength="11" onkeydown="onlyNum(event);"> kW
+												<!-- <input type="text" name="goalPower" id="goalPower" class="input" value="" maxlength="11" onkeydown="onlyNum(event);"> kW -->
+												<input type="text" name="reduceAmt" id="reduceAmt" class="input" value="" maxlength="11" onkeydown="onlyNum(event);"> kW
 											</td>
 										</tr>
 										<tr>

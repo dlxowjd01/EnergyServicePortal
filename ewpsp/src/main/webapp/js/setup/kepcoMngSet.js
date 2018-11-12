@@ -30,7 +30,8 @@
 			var ymd = siteSetDetail.charge_yearmd;
 			$("#datepicker1").val( (ymd == "") ? "" : ymd.substring(0, 4)+"-"+ymd.substring(4, 6)+"-"+ymd.substring(6, 8) );
 			$("#chargePower").val( siteSetDetail.charge_power );
-			$("#goalPower").val( siteSetDetail.goal_power );
+//			$("#goalPower").val( siteSetDetail.goal_power );
+			$("#reduceAmt").val( siteSetDetail.reduce_amt );
 			$("#chargeRate").val( siteSetDetail.charge_rate );
 			$("#siteSetIdx").val( siteSetDetail.site_set_idx );
 			$("#siteId").val( siteSetDetail.site_id );
