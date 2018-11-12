@@ -7,7 +7,7 @@
 		select 
 			site_set_idx, site_id, cust_num, use_elec_addr, meter_num, meter_sf, 
 			/*charge_type, */plan_type, plan_type2, plan_type3, plan_name, contract_power, meter_read_day, 
-			charge_yearmd, charge_power, charge_rate, goal_power, smp_rate, rec_rate, rec_weight, 
+			charge_yearmd, charge_power, charge_rate, goal_power, reduce_amt, smp_rate, rec_rate, rec_weight, 
 			del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_site_set
 		where 1=1
@@ -59,6 +59,7 @@
 		        charge_power,     /* 요금적용전력(단위:kW) */
 		        charge_rate,      /* 요금적용전력대비(단위:%) */
 		        goal_power,       /* 목표전력(단위:kW) */
+		        reduce_amt,       /* 감축용량(단위:kW) */
 		        smp_rate,         /* SMP단가(System Marginal Price)(단위:원) */
 		        rec_rate,         /* REC단가(단위:원) */
 		        rec_weight,       /* REC가중치 */
@@ -83,6 +84,7 @@
 		        #{chargePower },
 		        #{chargeRate },
 		        #{goalPower },
+		        #{reduceAmt },
 		        #{smpRate },
 		        #{recRate },
 		        #{recWeight },
@@ -127,6 +129,9 @@
 			charge_power   = #{chargePower } ,   /* 요금적용전력(단위:KW) */
 			charge_rate    = #{chargeRate } ,   /* 요금적용전력대비(단위:%) */
 			goal_power     = #{goalPower } ,   /* 목표전력(단위:KW) */
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(reduceAmt)">
+			reduce_amt     = #{reduceAmt } ,   /* 감축용량(단위:KW) */
+			</if>
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(smpRate)">
 			smp_rate       = #{smpRate } ,   /* SMP단가(System Marginal Price)(단위:원) */
 			</if>

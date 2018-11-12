@@ -16,6 +16,8 @@
 				$("#selPeriodVal").val('5min');
 				realTimeRefreshFn();
 				searchDisableChange(true);
+//				myChart.yAxis[0].options.title.text = "(kW)";
+				myChart.yAxis[0].setTitle({ text: "(kW)" });
 				
 				if(realTimeRefresh == null) { // 1분 간격
 					realTimeRefresh = setInterval(function(){
@@ -27,27 +29,32 @@
 				
 	        } else{
 	        	$("#selPeriod").empty().append("hour").append( $('<span class="caret" />') );
+	        	$("#selPeriodVal").val('hour');
 				clearInterval(realTimeRefresh);
 				realTimeRefresh = null;
 				searchDisableChange(false);
+//				myChart.yAxis[0].options.title.text = "(kWh)";
+				
 	        }
 	    });
 	});
 
 	var cblAmt; // 기준부하
-	var goalPower; // 목표사용량=기준부하-계약용량(한전계약전력)
+	var goalPower; // 목표사용량=기준부하-계약용량
 	var contractPower;
+	var reduceAmt;
 	function callback_getSiteSetDetail(result) {
 		var siteSetDetail = result.detail;
-		contractPower = siteSetDetail.contract_power;
+//		contractPower = siteSetDetail.contract_power;
 //		chargePower = siteSetDetail.charge_power;
+		reduceAmt = siteSetDetail.reduce_amt;
 	}
 	
 	function cblSet() {
 		var now = new Date();
 		var hour = now.getHours();
-		$("#cblAmtHourFrom").val(hour+2);
-		$("#cblAmtHourTo").val(hour+2+2);
+		$("#cblAmtHourFrom").val(hour);
+		$("#cblAmtHourTo").val(hour+2);
 	}
 	
 	// 기준부하세팅
@@ -94,6 +101,7 @@
 		
 		cblTimeSetiing();
 		getCollect_sch_condition(); // 검색조건 모으기
+		myChart.yAxis[0].setTitle({ text: "(kWh)" });
 	}
 
 	var real_data_pc = new Array(); // 실제 사용량 표 데이터
@@ -136,6 +144,7 @@
 		cblTimeSetiing();
 		
 		var formData = $("#schForm").serializeObject();
+		console.log("실시간  ", formData);
 		
 		searchDRApi(formData);
 	}
@@ -236,29 +245,29 @@
 						
 						if(i == 0) {
 							dataSet2_1.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
-							dataSet3_1.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - contractPower ]);
+							dataSet3_1.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - reduceAmt ]);
 							dataSet2_1.push([ setChartDateUTC(next), cbl ]);
-							dataSet3_1.push([ setChartDateUTC(next), cbl - contractPower ]);
+							dataSet3_1.push([ setChartDateUTC(next), cbl - reduceAmt ]);
 						} else if(i == 1) {
-							dataSet2_2.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
-							dataSet3_2.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - contractPower ]);
 							if(i+1 != dbCblList.length) {
+								dataSet2_2.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
+								dataSet3_2.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - reduceAmt ]);
 								dataSet2_2.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_2.push([ setChartDateUTC(next), cbl - contractPower ]);
+								dataSet3_2.push([ setChartDateUTC(next), cbl - reduceAmt ]);
 							}
 						} else if(i == 2) {
-							dataSet2_3.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
-							dataSet3_3.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - contractPower ]);
 							if(i+1 != dbCblList.length) {
+								dataSet2_3.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
+								dataSet3_3.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - reduceAmt ]);
 								dataSet2_3.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_3.push([ setChartDateUTC(next), cbl - contractPower ]);
+								dataSet3_3.push([ setChartDateUTC(next), cbl - reduceAmt ]);
 							}
 						} else if(i == 3) {
-							dataSet2_4.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
-							dataSet3_4.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - contractPower ]);
 							if(i+1 != dbCblList.length) {
+								dataSet2_4.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
+								dataSet3_4.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - reduceAmt ]);
 								dataSet2_4.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_4.push([ setChartDateUTC(next), cbl - contractPower ]);
+								dataSet3_4.push([ setChartDateUTC(next), cbl - reduceAmt ]);
 							}
 						}
 					}
@@ -310,7 +319,6 @@
 						).append( $("<td />").append( drList[i].fulfill_per ) // 이행률
 						)
 				);
-				console.log("drList[i].reduce_amt : "+drList[i].reduce_amt);
 				totalReduceAmt = totalReduceAmt+Number( String(drList[i].reduce_amt) );
 			}
 			
@@ -399,7 +407,7 @@
 				color: '#438fd7',
 				type: 'area',
 				fillOpacity: 0.3,
-				marker: { enabled: false },
+//				marker: { enabled: false },
 				data: timeSlotGoalPowerList1
 			}, false);
 		}
@@ -416,7 +424,7 @@
 				color: '#438fd7',
 				type: 'area',
 				fillOpacity: 0.3,
-				marker: { enabled: false },
+//				marker: { enabled: false },
 				linkedTo: linkedTo, // 전의 series와 하나로 연결한다
 				data: timeSlotGoalPowerList2
 			}, false);
@@ -435,7 +443,7 @@
 				color: '#438fd7',
 				type: 'area',
 				fillOpacity: 0.3,
-				marker: { enabled: false },
+//				marker: { enabled: false },
 				linkedTo: linkedTo, // 전의 series와 하나로 연결한다
 				data: timeSlotGoalPowerList3
 			}, false);
@@ -455,7 +463,7 @@
 				color: '#438fd7',
 				type: 'area',
 				fillOpacity: 0.3,
-				marker: { enabled: false },
+//				marker: { enabled: false },
 				linkedTo: linkedTo, // 전의 series와 하나로 연결한다
 				data: timeSlotGoalPowerList4
 			}, false);
@@ -492,7 +500,7 @@
 				if(usage == null || usage == "" || usage == "null") {
 					reUsage = null;
 				} else {
-					var map = convertUnitFormat(usage, "mWh", 8);
+					var map = convertUnitFormat(usage*12, "mW", 8);
 					reUsage = Math.round( Number(map.get("formatNum")) );
 					totUsage = totUsage+Number(usage);
 				}
@@ -505,37 +513,38 @@
 			if(cblList != null) {
 				for(var i=0; i<cblList.length; i++) {
 					var hour = new Date(setSheetDateUTC(cblList[i].start)).getHours();
+					console.log("날짜   ",new Date(setSheetDateUTC(cblList[i].start)));
 					
 					if(hour != 12) {
 						var next = cblList[i].start+(1000 * 3600);
-						var map = convertUnitFormat(cblList[i].cbl*12, "mWh", 8);
+						var map = convertUnitFormat(cblList[i].cbl, "mWh", 8);
 						cbl = Math.round( Number(map.get("formatNum")) );
 						
 						if(i == 0) {
 							dataSet2_1.push([ setChartDateUTC(cblList[i].start), cbl ]);
-							dataSet3_1.push([ setChartDateUTC(cblList[i].start), cbl - contractPower ]);
+							dataSet3_1.push([ setChartDateUTC(cblList[i].start), cbl - reduceAmt ]);
 							dataSet2_1.push([ setChartDateUTC(next), cbl ]);
-							dataSet3_1.push([ setChartDateUTC(next), cbl - contractPower ]);
+							dataSet3_1.push([ setChartDateUTC(next), cbl - reduceAmt ]);
 						} else if(i == 1) {
-							dataSet2_2.push([ setChartDateUTC(cblList[i].start), cbl ]);
-							dataSet3_2.push([ setChartDateUTC(cblList[i].start), cbl - contractPower ]);
 							if(i+1 != cblList.length) {
+								dataSet2_2.push([ setChartDateUTC(cblList[i].start), cbl ]);
+								dataSet3_2.push([ setChartDateUTC(cblList[i].start), cbl - reduceAmt ]);
 								dataSet2_2.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_2.push([ setChartDateUTC(next), cbl - contractPower ]);
+								dataSet3_2.push([ setChartDateUTC(next), cbl - reduceAmt ]);
 							}
 						} else if(i == 2) {
-							dataSet2_3.push([ setChartDateUTC(cblList[i].start), cbl ]);
-							dataSet3_3.push([ setChartDateUTC(cblList[i].start), cbl - contractPower ]);
 							if(i+1 != cblList.length) {
+								dataSet2_3.push([ setChartDateUTC(cblList[i].start), cbl ]);
+								dataSet3_3.push([ setChartDateUTC(cblList[i].start), cbl - reduceAmt ]);
 								dataSet2_3.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_3.push([ setChartDateUTC(next), cbl - contractPower ]);
+								dataSet3_3.push([ setChartDateUTC(next), cbl - reduceAmt ]);
 							}
 						} else if(i == 3) {
-							dataSet2_4.push([ setChartDateUTC(cblList[i].start), cbl ]);
-							dataSet3_4.push([ setChartDateUTC(cblList[i].start), cbl - contractPower ]);
 							if(i+1 != cblList.length) {
+								dataSet2_4.push([ setChartDateUTC(cblList[i].start), cbl ]);
+								dataSet3_4.push([ setChartDateUTC(cblList[i].start), cbl - reduceAmt ]);
 								dataSet2_4.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_4.push([ setChartDateUTC(next), cbl - contractPower ]);
+								dataSet3_4.push([ setChartDateUTC(next), cbl - reduceAmt ]);
 							}
 						}
 					}
