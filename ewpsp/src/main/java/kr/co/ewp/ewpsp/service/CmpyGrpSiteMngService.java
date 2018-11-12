@@ -32,6 +32,8 @@ public interface CmpyGrpSiteMngService {
 
 	int getGMainSiteRankingListCnt(HashMap param) throws Exception;
 
+	List getGMainAreaSiteCntList(HashMap param) throws Exception;
+
 	List getGMainSiteList(HashMap param) throws Exception;
 
 	int getGMainSiteListCnt(HashMap param) throws Exception;

@@ -958,6 +958,19 @@ function getGMainSiteTotalDetail(formData) {
 	});
 }
 
+// 군관리메인 지역별 사이트 건수 목록 조회
+function getGMainAreaSiteCntList(formData) {
+	$.ajax({
+		url : "/getGMainAreaSiteCntList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_getGMainAreaSiteCntList(result);
+		}
+	});
+}
+
 // 군관리 사이트 목록 조회
 function getGMainSiteList(selPageNum) {
 	formData['selPageNum'] = selPageNum;

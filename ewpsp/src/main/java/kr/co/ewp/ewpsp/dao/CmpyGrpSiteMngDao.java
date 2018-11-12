@@ -100,6 +100,17 @@ public class CmpyGrpSiteMngDao {
 	}
 
 	/**
+	 * 군관리메인 지역별 사이트 건수 목록 조회
+	 * @author greatman
+	 * @param param
+	 * @return
+	 */
+	public List getGMainAreaSiteCntList(HashMap param) {
+		List resultList = sqlSession.selectList("cmpyGrpSiteMng.getGMainAreaSiteCntList", param);
+		return resultList;
+	}
+
+	/**
 	 * 군관리메인의 사이트 목록 조회
 	 * @author greatman
 	 * @param param

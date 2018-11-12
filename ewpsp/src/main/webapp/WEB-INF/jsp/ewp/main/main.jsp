@@ -747,6 +747,7 @@ var area_array = [
 	"Jeju",			// 17
 	"Ulleungdo"		// 18 (코드값 없음)
 ];
+var area_cnt_map = {};
 // 지역필터 html을 저장
 var areaListHtml = '';
 
@@ -765,8 +766,20 @@ $(function() {
 
 	areaListHtml = $('#selAreaList').html();
 
-	readArea();
+	// 지역에 사이트가 존재할 경우만 보여주기 위해 카운트 조회
+	getGMainAreaSiteCntList();
 });
+
+function callback_getGMainAreaSiteCntList(result) {
+	var areaCntList = result.list;
+
+	for (var i = 0; i < areaCntList.length; i++) {
+		area_cnt_map[areaCntList[i].area_type] = areaCntList[i].cnt;
+	}
+	console.log(area_cnt_map);
+
+	readArea();
+}
 
 function changeLocalMap() {
 	$(".map_wrap").hide();
@@ -855,8 +868,28 @@ function readArea() {
 	local_detail(area_array[area_idx]);
 
 	area_idx++;
-	if (area_idx == 7) { area_idx++ } // 세종(08)은 아직 이미지가 없으므로 스킵
+//	if (area_idx == 7) { area_idx++ } // 세종(08)은 아직 이미지가 없으므로 스킵
+
+	// 지역에 사이트가 존재할 경우만 보여줌
+	var cnt = 0;
+	var maxCnt = 18; console.log(numToString(area_idx + 1));
+	while (area_cnt_map[numToString(area_idx + 1)] == null && cnt++ < maxCnt) {
+		if (++area_idx > 17) {
+			area_idx = 0;
+		}
+	}
+	console.log(area_idx);
+
 	monitoring_cycle_5sec = setTimeout(readArea, 5000); /* 5초 간격 */
+}
+
+function numToString(num) {
+	if (num < 10) {
+		return '0' + num;
+	} else {
+		return num.toString();
+	}
+
 }
 </script>
 

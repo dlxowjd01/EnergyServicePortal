@@ -404,6 +404,20 @@
 		) f_tb
 	</select>
 	
+	<select id="getGMainAreaSiteCntList" parameterType="hashMap" resultType="hashMap">
+		/* 군관리메인 지역별 사이트 건수 목록 조회 */
+		select
+			a.area_type, count(*) cnt
+		from tb_site a, tb_site_group b
+		where 1=1
+		and a.site_grp_idx = b.site_grp_idx
+		and a.del_yn = 'N'
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userIdx)">
+		and a.user_idx = #{userIdx}
+		</if>
+		group by a.area_type
+	</select>
+
 	<select id="getGMainSiteList" parameterType="hashMap" resultType="hashMap">
 		/* 군관리메인 사이트 목록 조회 */
 		select * from (

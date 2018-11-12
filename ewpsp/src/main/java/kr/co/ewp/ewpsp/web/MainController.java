@@ -212,6 +212,42 @@ public class MainController {
 	}
 
 	/**
+	 * 군관리메인 지역별 사이트 건수 목록 조회
+	 * @author greatman
+	 * @param session
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getGMainAreaSiteCntList")
+	public @ResponseBody Map<String, Object> getGMainAreaSiteCntList(HttpSession session, @RequestParam HashMap param) throws Exception {
+		logger.debug("/getGMainAreaSiteCntList");
+		logger.debug("param : {}", param);
+
+		Map userInfo = UserUtil.getUserInfo(session);
+		if (userInfo == null) {
+			userInfo = new HashMap();
+		}
+		logger.debug("userInfo : {}", userInfo);
+
+		Integer userIdx = (Integer)userInfo.get("user_idx");
+		String authType = (String)userInfo.get("auth_type");
+		if (userIdx == null) {
+			userIdx = -1;
+		}
+
+		if (authType == null || (!authType.equals("1") && !authType.equals("2"))) {
+			param.put("userIdx", userIdx);
+		}
+
+		List list = cmpyGrpSiteMngService.getGMainAreaSiteCntList(param);
+
+		Map resultMap = new HashMap();
+		resultMap.put("list", list);
+		return resultMap;
+	}
+
+	/**
 	 * 군관리메인 사이트 목록 조회
 	 * @author greatman
 	 * @param session
