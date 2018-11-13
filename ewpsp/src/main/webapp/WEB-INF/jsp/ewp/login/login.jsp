@@ -578,7 +578,7 @@ alert('${msg}');
 						
 						<!-- 동서발전 서비스 ? -->
 						<div class="sec">							
-							<h2 class="sTit">1. 한국 동서발전 서비스?</h2>
+							<h2 class="sTit">1. 신재생에너지 서비스포털 서비스</h2>
 							<div class="sec_cont">
 								<p><strong>전력의 생산/변환/소비 등에 대한 모니터링이 가능한 통합관리 시스템</strong></p>
 								<div class="mt5"><img src="../img/service_img.jpg" alt=""></div>

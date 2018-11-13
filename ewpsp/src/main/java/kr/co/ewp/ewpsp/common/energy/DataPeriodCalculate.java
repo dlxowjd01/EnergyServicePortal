@@ -375,11 +375,11 @@ public class DataPeriodCalculate {
 						peakCalculNum = 0;
 					}
 					
-					if( peakChkCnt == peakLoopCnt || peakChkCnt == 4 ) {
-						calculNum = calculNum + (peakCalculNum * peakLoopCnt);
-						peakChkCnt = 0;
-//						System.out.println("더한값 NULL       "+stdTimestamp+"   "+peakCalculNum+" * "+peakLoopCnt+" = "+(peakCalculNum * peakLoopCnt)+" ===>"+calculNum);
-					}
+//					if( peakChkCnt == peakLoopCnt || peakChkCnt == 4 ) {
+//						calculNum = calculNum + (peakCalculNum * peakLoopCnt);
+//						peakChkCnt = 0;
+////						System.out.println("더한값 NULL       "+stdTimestamp+"   "+peakCalculNum+" * "+peakLoopCnt+" = "+(peakCalculNum * peakLoopCnt)+" ===>"+calculNum);
+//					}
 					
 					if("month".equals(period)) {
 						boolean changeMonthYn = changeMonthYn(incStartDt);
@@ -466,20 +466,25 @@ public class DataPeriodCalculate {
 			}
 			
 			if(peakChkCnt == 1) {
-				peakCalculNum = peak;
-				
+				calculNum = peak;
 			} else {
-				if(peakCalculNum < peak) {
-					peakCalculNum = peak;
+				if(calculNum < peak) {
+					calculNum = peak;
 				}
-				
 			}
+//			if(peakChkCnt == 1) {
+//				peakCalculNum = peak;
+//			} else {
+//				if(peakCalculNum < peak) {
+//					peakCalculNum = peak;
+//				}
+//			}
 
-			if( peakChkCnt == peakLoopCnt || peakChkCnt == 4 ) {
-				calculNum = calculNum + (peakCalculNum * peakLoopCnt);
-				peakChkCnt = 0;
-//				System.out.println("더한값        "+stdTimestamp+"   "+peakCalculNum+" * "+peakLoopCnt+" = "+(peakCalculNum * peakLoopCnt)+" ===>"+calculNum);
-			}
+//			if( peakChkCnt == peakLoopCnt || peakChkCnt == 4 ) {
+//				calculNum = calculNum + (peakCalculNum * peakLoopCnt);
+//				peakChkCnt = 0;
+////				System.out.println("더한값        "+stdTimestamp+"   "+peakCalculNum+" * "+peakLoopCnt+" = "+(peakCalculNum * peakLoopCnt)+" ===>"+calculNum);
+//			}
 			
 			
 			if(chkCnt == 1) {
