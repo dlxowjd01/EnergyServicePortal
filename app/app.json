@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "servicePortalApp",
-    "description": "This project is really great.",
-    "slug": "servicePortalApp",
-    "privacy": "unlisted",
+    "name": "ServicePortalApp",
+    "description": "EWP service portal mobile app",
+    "slug": "ServicePortalApp",
+    "privacy": "public",
     "sdkVersion": "30.0.0",
     "platforms": ["ios", "android"],
-    "version": "0.1.0",
+    "version": "0.1.1",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/common/logo_icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/common/logo_splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -21,7 +21,12 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.encoredtech.derms",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.encoredtech.derms",
+      "versionCode" : 3
     }
   }
 }

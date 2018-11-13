@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 2034,
+  "expoServerNgrokUrl": "https://54-tb6.youduk-encored.app.exp.direct",
+  "packagerNgrokUrl": "https://packager.54-tb6.youduk-encored.app.exp.direct",
+  "ngrokPid": 2050
 }
