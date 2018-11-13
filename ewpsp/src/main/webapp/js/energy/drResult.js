@@ -12,7 +12,7 @@
 	        if($("#check1").is(":checked")){
 	        	$("#selTermBox").empty().append("1일(오늘)").append( $('<span class="caret" />') );
 				changeSelTerm('drday');
-				$("#selPeriod").empty().append("5min").append( $('<span class="caret" />') );
+				$("#selPeriod").empty().append("5분").append( $('<span class="caret" />') );
 				$("#selPeriodVal").val('5min');
 				realTimeRefreshFn();
 				searchDisableChange(true);
@@ -28,7 +28,7 @@
 				}
 				
 	        } else{
-	        	$("#selPeriod").empty().append("hour").append( $('<span class="caret" />') );
+	        	$("#selPeriod").empty().append("1시간").append( $('<span class="caret" />') );
 	        	$("#selPeriodVal").val('hour');
 				clearInterval(realTimeRefresh);
 				realTimeRefresh = null;
@@ -79,7 +79,6 @@
 		
 		queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
 		queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
-		console.log(queryStart+", "+queryEnd);
 		
 		$("#cblAmtFrom").val(queryStart);
 		$("#cblAmtTo").val(queryEnd);
@@ -237,10 +236,11 @@
 			if(dbCblList != null) {
 				for(var i=0; i<dbCblList.length; i++) {
 					var hour = new Date(setSheetDateUTC(dbCblList[i].start_timestamp)).getHours();
+					console.log("db날짜   ",new Date(setSheetDateUTC(dbCblList[i].start_timestamp)), "   ", dbCblList[i].cbl);
 					
 					if(hour != 12) {
 						var next = dbCblList[i].start_timestamp+(1000 * 3600);
-						var map = convertUnitFormat(dbCblList[i].cbl*12, "mWh", 8);
+						var map = convertUnitFormat(dbCblList[i].cbl, "mWh", 8);
 						cbl = Math.round( Number(map.get("formatNum")) );
 						
 						if(i == 0) {
@@ -345,7 +345,7 @@
 		if(timeSlotCblAmtList1 != null && timeSlotCblAmtList1.length > 0) {
 			myChart.addSeries({
 				name: '기준부하',
-				color: '#438fd7',
+				color: '#f75c4a',
 				data: timeSlotCblAmtList1
 			}, false);
 		}
@@ -359,7 +359,7 @@
 			}
 			myChart.addSeries({
 				name: '기준부하',
-				color: '#438fd7',
+				color: '#f75c4a',
 				linkedTo: linkedTo, // 전의 series와 하나로 연결한다
 				data: timeSlotCblAmtList2
 			}, false);
@@ -376,7 +376,7 @@
 			}
 			myChart.addSeries({
 				name: '기준부하',
-				color: '#438fd7',
+				color: '#f75c4a',
 				linkedTo: linkedTo, // 전의 series와 하나로 연결한다
 				data: timeSlotCblAmtList3
 			}, false);
@@ -394,7 +394,7 @@
 			}
 			myChart.addSeries({
 				name: '기준부하',
-				color: '#438fd7',
+				color: '#f75c4a',
 				linkedTo: linkedTo, // 전의 series와 하나로 연결한다
 				data: timeSlotCblAmtList4
 			}, false);
@@ -404,9 +404,9 @@
 		if(timeSlotGoalPowerList1 != null && timeSlotGoalPowerList1.length > 0) {
 			myChart.addSeries({
 				name: '목표사용량',
-				color: '#438fd7',
+				color: '#13af67',
 				type: 'area',
-				fillOpacity: 0.3,
+				fillOpacity: 0.1,
 //				marker: { enabled: false },
 				data: timeSlotGoalPowerList1
 			}, false);
@@ -421,9 +421,9 @@
 			}
 			myChart.addSeries({
 				name: '목표사용량',
-				color: '#438fd7',
+				color: '#13af67',
 				type: 'area',
-				fillOpacity: 0.3,
+				fillOpacity: 0.1,
 //				marker: { enabled: false },
 				linkedTo: linkedTo, // 전의 series와 하나로 연결한다
 				data: timeSlotGoalPowerList2
@@ -440,9 +440,9 @@
 			}
 			myChart.addSeries({
 				name: '목표사용량',
-				color: '#438fd7',
+				color: '#13af67',
 				type: 'area',
-				fillOpacity: 0.3,
+				fillOpacity: 0.1,
 //				marker: { enabled: false },
 				linkedTo: linkedTo, // 전의 series와 하나로 연결한다
 				data: timeSlotGoalPowerList3
@@ -460,9 +460,9 @@
 			}
 			myChart.addSeries({
 				name: '목표사용량',
-				color: '#438fd7',
+				color: '#13af67',
 				type: 'area',
-				fillOpacity: 0.3,
+				fillOpacity: 0.1,
 //				marker: { enabled: false },
 				linkedTo: linkedTo, // 전의 series와 하나로 연결한다
 				data: timeSlotGoalPowerList4
@@ -513,7 +513,7 @@
 			if(cblList != null) {
 				for(var i=0; i<cblList.length; i++) {
 					var hour = new Date(setSheetDateUTC(cblList[i].start)).getHours();
-					console.log("날짜   ",new Date(setSheetDateUTC(cblList[i].start)));
+					console.log("실시간날짜   ",new Date(setSheetDateUTC(cblList[i].start)), new Date(setSheetDateUTC(cblList[i].end)), "   ", cblList[i].cbl);
 					
 					if(hour != 12) {
 						var next = cblList[i].start+(1000 * 3600);

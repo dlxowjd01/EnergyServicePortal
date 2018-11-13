@@ -139,7 +139,9 @@ public class DRResultController {
 			Calendar cblCal = Calendar.getInstance();
 			cblCal.setTimeInMillis(   cblTp.getTime()   );
 			Date cblStart = cblCal.getTime();
-			cblCal.add(Calendar.HOUR, 1);
+//			cblCal.add(Calendar.HOUR, 1);
+			cblCal.add(Calendar.MINUTE, 59);
+			cblCal.add(Calendar.SECOND, 59);
 			Date cblEnd = cblCal.getTime();
 			CblResponseModel cbl = EnertalkApiUtil.getCBL(siteId, cblStart, cblEnd);
 			if(cbl != null) {
