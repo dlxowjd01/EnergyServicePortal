@@ -20,9 +20,13 @@ public class KepcoBillServiceImpl implements KepcoBillService {
 
 	public Map getKepcoBillList(HashMap param) throws Exception {
 		List list = kepcoBillDao.getKepcoBillList(param);
-		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = BillRevenueDataSetting.dataSetting(param, list, "bill_yearm");
+		if(list == null || list.size() == 0) {
+			resultMap.put("sheetList", null);
+			resultMap.put("sheetList", null);
+		} else {
+			resultMap = BillRevenueDataSetting.dataSetting(param, list, "bill_yearm");
+		}
 		
 		return resultMap;
 	}

@@ -19,9 +19,13 @@ public class ESSRevenueServiceImpl implements ESSRevenueService {
 
 	public Map getESSRevenueList(HashMap param) throws Exception {
 		List list = essRevenueDao.getESSRevenueList(param);
-		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = BillRevenueDataSetting.dataSetting(param, list, "bill_yearm");
+		if(list == null || list.size() == 0) {
+			resultMap.put("sheetList", null);
+			resultMap.put("sheetList", null);
+		} else {
+			resultMap = BillRevenueDataSetting.dataSetting(param, list, "bill_yearm");
+		}
 		
 		return resultMap;
 	}

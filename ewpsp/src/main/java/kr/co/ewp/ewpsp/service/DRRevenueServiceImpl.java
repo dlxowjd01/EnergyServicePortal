@@ -21,7 +21,8 @@ public class DRRevenueServiceImpl implements DRRevenueService {
 		List list = drRevenueDao.getDRRevenueList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(list == null || list.size() == 0) {
-			
+			resultMap.put("sheetList", null);
+			resultMap.put("sheetList", null);
 		} else {
 			if("day".equals((String) param.get("selPeriodVal"))) {
 				resultMap = BillRevenueDataSetting.dataSetting(param, list, "reduct_sdate");

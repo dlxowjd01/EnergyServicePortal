@@ -102,6 +102,22 @@ $(function () {
 		
 	});
 	
+	$("#datepicker3, #datepicker4").change(function () {
+		$dt3 = $("#datepicker3");
+		$dt4 = $("#datepicker4");
+		
+		if( ($dt3.val() != "" && $dt3.val() != null) && ($dt4.val() != "" && $dt4.val() != null) ) {
+			if(new Date($dt3.val()).getTime() > new Date($dt4.val()).getTime()) {
+				alert("시작월이 종료월보다 클 수 없습니다.");
+				$(this).val("");
+				return;
+			}
+			btwnDt = dateDiff($dt3.val(), $dt4.val());
+//			console.log($dt3.val()+'는 '+$dt4.val()+'로 부터 ' + dateDiff($dt3.val(), $dt4.val()) + '일 전입니다.');
+		}
+		
+	});
+	
 	$("#datepicker5").change(function () {
 		$dt5 = $("#datepicker5");
 		$("#selTermFrom").val( ($dt5.val() == "") ? "" : new Date( $dt5.val()+" 00:00:00" ).format("yyyyMMddHHmmss") );

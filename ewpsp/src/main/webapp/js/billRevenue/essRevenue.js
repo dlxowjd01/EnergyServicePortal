@@ -97,7 +97,7 @@
 		var dt_str12_totalVal = 0; // 테이블 라인별 누적합
 		
 		// 표데이터 셋팅
-		if(sheetList.length > 0) {
+		if(sheetList != null && sheetList.length > 0) {
 			for(var i=0; i<sheetList.length; i++) {
 				var yyyyMM = sheetList[i].bill_yearm;
 				var essBdayInMonth  = String(sheetList[i].ess_bdayIn_month)   ;
@@ -317,7 +317,7 @@
 		}
 		
 		
-		if(chartList.length > 0) {
+		if(chartList != null && chartList.length > 0) {
 			for(var i=0; i<chartList.length; i++) {
 				var yyyyMM = chartList[i].bill_yearm;
 				var essBdayInMonth  = String(chartList[i].ess_bdayIn_month)   ;

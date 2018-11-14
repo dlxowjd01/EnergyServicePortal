@@ -89,7 +89,7 @@
 		var dt_str10_totalVal = 0; // 테이블 라인별 누적합
 		
 		// 표데이터 셋팅
-		if(sheetList.length > 0) {
+		if(sheetList != null && sheetList.length > 0) {
 			for(var i=0; i<sheetList.length; i++) {
 				var yyyyMM = sheetList[i].std_yearm;
 				var reductCntHour  = String(sheetList[i].reduct_cnt_hour)   ;
@@ -279,7 +279,7 @@
 		}
 		
 		// 차트데이터 셋팅
-		if(chartList.length > 0) {
+		if(chartList != null && chartList.length > 0) {
 			for(var i=0; i<chartList.length; i++) {
 				var yyyyMM = chartList[i].std_yearm;
 				var reductCntHour  = String(chartList[i].reduct_cnt_hour)   ;
