@@ -118,7 +118,7 @@
 	<select id="getDeviceIOEDetail" parameterType="hashMap" resultType="hashMap">
 		select 
 			a.device_id, a.site_id, a.device_name, site.site_name, a.device_grp_name, 
-			concat('(', a.inst_type_nm, ')', a.device_type_nm) as device_type_nm
+			a.device_type, concat('(', a.inst_type_nm, ')', a.device_type_nm) as device_type_nm
 			, b.upload_timestamp, b.upload_date, b.device_stat, b.device_ioe_idx
 		from (
 				select 
@@ -283,7 +283,7 @@
 	<select id="getDevicePCSDetail" parameterType="hashMap" resultType="hashMap">
 		select 
 			a.device_id, a.site_id, a.device_name, site.site_name, a.device_grp_name, 
-			concat('(', a.inst_type_nm, ')', a.device_type_nm) as device_type_nm
+			a.device_type, concat('(', a.inst_type_nm, ')', a.device_type_nm) as device_type_nm
 			, b.device_pcs_idx, b.std_date, b.device_stat, b.alarm_msg, 
 			b.ac_voltage, b.ac_power, b.ac_current, b.ac_freq, b.ac_set_power, b.ac_pf, 
 			b.dc_voltage, b.dc_power, b.dc_current, b.dc_freq, b.dc_set_power, b.dc_pf,
@@ -463,7 +463,7 @@
 	<select id="getDeviceBMSDetail" parameterType="hashMap" resultType="hashMap">
 		select 
 			a.device_id, a.site_id, a.device_name, site.site_name, a.device_grp_name, 
-			concat('(', a.inst_type_nm, ')', a.device_type_nm) as device_type_nm
+			a.device_type, concat('(', a.inst_type_nm, ')', a.device_type_nm) as device_type_nm
 			, b.device_bms_idx, b.std_date, b.device_stat, b.device_stat_nm, 
 			b.sys_soc, b.curr_soc, b.sys_soh, b.sys_soh, b.sys_voltage, b.sys_current, b.dod
 		from (
@@ -628,7 +628,7 @@
 	<select id="getDevicePVDetail" parameterType="hashMap" resultType="hashMap">
 		select 
 			a.device_id, a.site_id, a.device_name, site.site_name, a.device_grp_name, 
-			concat('(', a.inst_type_nm, ')', a.device_type_nm) as device_type_nm
+			a.device_type, concat('(', a.inst_type_nm, ')', a.device_type_nm) as device_type_nm
 			, b.device_pv_idx, b.std_date, b.device_stat, b.device_stat_nm, 
 			b.alarm_msg, b.temp, b.tot_power
 		from (

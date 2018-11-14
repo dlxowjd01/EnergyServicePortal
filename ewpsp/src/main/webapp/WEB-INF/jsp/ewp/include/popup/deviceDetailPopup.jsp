@@ -8,7 +8,7 @@
         		<span class="ioe"></span>
         		<p></p>
         	</h2>        	
-			<a href="javascript:popupClose('dview_ioe');">닫기</a>
+			<a href="#;" id="closeIOEDetailBtnX">닫기</a>
         </div>
         <div class="ltop">
         	<dl>
@@ -31,7 +31,7 @@
         <div class="lbody">
         	<div class="lstat mt20">
 	        	<div class="dt">장치타입</div>
-	        	<div class="dd">test</div>
+	        	<div class="dd"></div>
 	        </div>
 	        <div class="lstat">
 	        	<div class="dt">연결상태</div>
@@ -72,7 +72,7 @@
         		<span class="pcs"></span>
         		<p></p>
         	</h2>        	
-			<a href="javascript:popupClose('dview_pcs');">닫기</a>
+			<a href="#;" id="closePCSDetailBtnX">닫기</a>
         </div>
         <div class="ltop">
         	<dl>
@@ -166,7 +166,7 @@
         		<span class="bms"></span>
         		<p></p>
         	</h2>        	
-			<a href="javascript:popupClose('dview_bms');">닫기</a>
+			<a href="#;" id="closeBMSDetailBtnX">닫기</a>
         </div>
         <div class="ltop">
         	<dl>
@@ -235,7 +235,7 @@
         		<span class="bms"></span>
         		<p></p>
         	</h2>        	
-			<a href="javascript:popupClose('dview_pv');">닫기</a>
+			<a href="#;" id="closePVDetailBtnX">닫기</a>
         </div>
         <div class="ltop">
         	<dl>

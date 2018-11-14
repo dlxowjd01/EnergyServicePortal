@@ -1,3 +1,8 @@
+	var deviceDetailRealTime = null;
+	function realtimeStop() {
+		clearInterval(deviceDetailRealTime);
+		deviceDetailRealTime = null;
+	}
 	
 	// 장치 상세 조회(IOE)
 	function callback_getDeviceIOEDetail(result) {
@@ -8,8 +13,32 @@
 		} else {
 			drawIOEDetail(result);
 			popupOpen('dview_ioe');
+			
+			if(deviceDetailRealTime == null) { // 10초 간격
+				deviceDetailRealTime = setInterval(function(){
+					getDvIOEDetailRealTime(siteId, deviceId, deviceType)
+				}, (1000*10)); // 1000 = 1초, 5000 = 5초
+			} else {
+				alert("이미 모니터링이 실행중입니다.");
+			}
 		}
 		
+	}
+	
+	function getDvIOEDetailRealTime(siteId, deviceId, deviceType) {
+		$.ajax({
+			url : "/getDeviceIOEDetail",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+			data : {
+				siteId : siteId,
+				deviceId : deviceId,
+				deviceType : deviceType
+			},
+			success: function(result) {
+				drawIOEDetail(result);
+			}
+		});
 	}
 	
 	function drawIOEDetail(result) {
@@ -20,7 +49,7 @@
 					$('<div class="ltit" />').append(
 							$('<h2 />').append( $('<span class="ioe" />') ).append( ioeDetail.device_name ).append(
 									$('<p />').append( (new Date()).format("yyyy-MM-dd HH:mm:ss") )	
-							).append( '<a href="javascript:popupClose(\'dview_ioe\');">닫기</a>' )
+							).append( '<a href="#;" id="closeIOEDetailBtnX" onclick="stopRealTime(\'ioe\');">닫기</a>' )
 					)
 			).append(
 					$('<div class="ltop" />').append(
@@ -81,8 +110,32 @@
 		} else {
 			drawPCSDetail(result);
 			popupOpen('dview_pcs');
+
+			if(deviceDetailRealTime == null) { // 10초 간격
+				deviceDetailRealTime = setInterval(function(){
+					getDvPCSDetailRealTime(pcsDetail.site_id, pcsDetail.device_id, pcsDetail.device_type);
+				}, (1000*10)); // 1000 = 1초, 5000 = 5초
+			} else {
+				alert("이미 모니터링이 실행중입니다.");
+			}
 		}
 		
+	}
+
+	function getDvPCSDetailRealTime(siteId, deviceId, deviceType) {
+		$.ajax({
+			url : "/getDevicePCSDetail",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+			data : {
+				siteId : siteId,
+				deviceId : deviceId,
+				deviceType : deviceType
+			},
+			success: function(result) {
+				drawPCSDetail(result);
+			}
+		});
 	}
 	
 	function drawPCSDetail(result) {
@@ -93,7 +146,7 @@
 					$('<div class="ltit" />').append(
 							$('<h2 />').append( $('<span class="pcs" />') ).append( pcsDetail.device_name ).append(
 									$('<p />').append( (new Date()).format("yyyy-MM-dd HH:mm:ss") )	
-							).append( '<a href="javascript:popupClose(\'dview_pcs\');">닫기</a>' )
+							).append( '<a href="#;" id="closePCSDetailBtnX" onclick="stopRealTime(\'pcs\');">닫기</a>' )
 					)
 			).append(
 					$('<div class="ltop" />').append(
@@ -182,8 +235,32 @@
 		} else {
 			drawBMSDetail(result);
 			popupOpen('dview_bms');
+
+			if(deviceDetailRealTime == null) { // 10초 간격
+				deviceDetailRealTime = setInterval(function(){
+					getDvBMSDetailRealTime(bmsDetail.site_id, bmsDetail.device_id, bmsDetail.device_type);
+				}, (1000*10)); // 1000 = 1초, 5000 = 5초
+			} else {
+				alert("이미 모니터링이 실행중입니다.");
+			}
 		}
 		
+	}
+
+	function getDvBMSDetailRealTime(siteId, deviceId, deviceType) {
+		$.ajax({
+			url : "/getDeviceBMSDetail",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+			data : {
+				siteId : siteId,
+				deviceId : deviceId,
+				deviceType : deviceType
+			},
+			success: function(result) {
+				drawBMSDetail(result);
+			}
+		});
 	}
 	
 	function drawBMSDetail(result) {
@@ -194,7 +271,7 @@
 					$('<div class="ltit" />').append(
 							$('<h2 />').append( $('<span class="bms" />') ).append( bmsDetail.device_name ).append(
 									$('<p />').append( (new Date()).format("yyyy-MM-dd HH:mm:ss") )	
-							).append( '<a href="javascript:popupClose(\'dview_bms\');">닫기</a>' )
+							).append( '<a href="#;" id="closeBMSDetailBtnX" onclick="stopRealTime(\'bms\');">닫기</a>' )
 					)
 			).append(
 					$('<div class="ltop" />').append(
@@ -263,8 +340,32 @@
 		} else {
 			drawPVDetail(result);
 			popupOpen('dview_pv');
+
+			if(deviceDetailRealTime == null) { // 10초 간격
+				deviceDetailRealTime = setInterval(function(){
+					getDvPVDetailRealTime(pvDetail.site_id, pvDetail.device_id, pvDetail.device_type);
+				}, (1000*10)); // 1000 = 1초, 5000 = 5초
+			} else {
+				alert("이미 모니터링이 실행중입니다.");
+			}
 		}
 		
+	}
+
+	function getDvPVDetailRealTime(siteId, deviceId, deviceType) {
+		$.ajax({
+			url : "/getDevicePVDetail",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+			data : {
+				siteId : siteId,
+				deviceId : deviceId,
+				deviceType : deviceType
+			},
+			success: function(result) {
+				drawPVDetail(result);
+			}
+		});
 	}
 	
 	function drawPVDetail(result) {
@@ -275,7 +376,7 @@
 					$('<div class="ltit" />').append(
 							$('<h2 />').append( $('<span class="bms" />') ).append( pvDetail.device_name ).append(
 									$('<p />').append( (new Date()).format("yyyy-MM-dd HH:mm:ss") )	
-							).append( '<a href="javascript:popupClose(\'dview_pv\');">닫기</a>' )
+							).append( '<a href="#;" id="closePVDetailBtnX" onclick="stopRealTime(\'pv\');">닫기</a>' )
 					)
 			).append(
 					$('<div class="ltop" />').append(
@@ -325,5 +426,18 @@
 			
 		}
 		
+	}
+	
+	function stopRealTime(deviceGbn) {
+		realtimeStop();
+		if(deviceGbn == "ioe") {
+			popupClose('dview_ioe');
+		} else if(deviceGbn == "pcs") {
+			popupClose('dview_pcs');
+		} else if(deviceGbn == "bms") {
+			popupClose('dview_bms');
+		} else if(deviceGbn == "pv") {
+			popupClose('dview_pv');
+		}
 	}
 	
