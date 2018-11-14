@@ -16,7 +16,7 @@
 			
 			if(deviceDetailRealTime == null) { // 10초 간격
 				deviceDetailRealTime = setInterval(function(){
-					getDvIOEDetailRealTime(siteId, deviceId, deviceType)
+					getDvIOEDetailRealTime(ioeDetail.site_id, ioeDetail.device_id, ioeDetail.device_type)
 				}, (1000*10)); // 1000 = 1초, 5000 = 5초
 			} else {
 				alert("이미 모니터링이 실행중입니다.");
