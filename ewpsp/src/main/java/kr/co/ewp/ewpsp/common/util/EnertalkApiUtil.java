@@ -16,6 +16,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import kr.co.ewp.ewpsp.common.config.Constants;
 import kr.co.ewp.ewpsp.model.CblResponseModel;
+import kr.co.ewp.ewpsp.model.DeviceModel;
 import kr.co.ewp.ewpsp.model.DrRequestTarget;
 import kr.co.ewp.ewpsp.model.UsageModel;
 import kr.co.ewp.ewpsp.model.UsageRealtimeModel;
@@ -231,23 +232,25 @@ public class EnertalkApiUtil {
 	  }
   }
 
-//  public static void getDevice(String deviceId) {
-//	  logger.debug("EnertalkApiUtil.getDevice");
-//    String resultBody = null;
-//    try {
-//      String url = API_URL + "/devices/:deviceId".replace(":deviceId", deviceId);
-//      logger.debug("enertalk api URL : "+ url);
-//      HttpHeaders headers = getHeaders();
-//      resultBody = HttpUtil.get(url, headers);
-//      logger.debug("결과!!===> "+resultBody);
-////      return JsonUtil.toObject(resultBody, DeviceModel.class);
-//    } catch (Exception e) {
-//    	e.printStackTrace();
-//		logger.error("error is : "+e.toString());
-//    } finally {
-//    	logger.debug("EnertalkApiUtil.getDevice end");
-//    }
-//  }
+  public static DeviceModel getDevice(String deviceId) {
+	  logger.debug("EnertalkApiUtil.getDevice");
+    String resultBody = null;
+    DeviceModel returnUsage = null;
+    try {
+      String url = API_URL + "/devices/:deviceId".replace(":deviceId", deviceId);
+      logger.debug("enertalk api URL : "+ url);
+      HttpHeaders headers = getHeaders();
+      resultBody = HttpUtil.get(url, headers);
+      logger.debug("result "+resultBody);
+      returnUsage = JsonUtil.toObject(resultBody, DeviceModel.class);
+    } catch (Exception e) {
+    	e.printStackTrace();
+		logger.error("error is : "+e.toString());
+    } finally {
+    	logger.debug("EnertalkApiUtil.getDevice end");
+    	return returnUsage;
+    }
+  }
 
   private static HttpHeaders getHeaders() {
     HttpHeaders headers = new HttpHeaders();

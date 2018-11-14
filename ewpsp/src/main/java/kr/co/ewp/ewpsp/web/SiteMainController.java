@@ -8,6 +8,7 @@
 package kr.co.ewp.ewpsp.web;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
@@ -34,6 +35,8 @@ import kr.co.ewp.ewpsp.common.util.CommonUtils;
 import kr.co.ewp.ewpsp.common.util.DateUtil;
 import kr.co.ewp.ewpsp.common.util.EncoredApiUtil;
 import kr.co.ewp.ewpsp.common.util.EncoredApiUtil.Period;
+import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil;
+import kr.co.ewp.ewpsp.common.util.PMGrowApiUtil;
 import kr.co.ewp.ewpsp.common.util.ValidateUtil;
 import kr.co.ewp.ewpsp.entity.Bill;
 import kr.co.ewp.ewpsp.entity.EssCharge;
@@ -45,11 +48,15 @@ import kr.co.ewp.ewpsp.entity.Usage;
 import kr.co.ewp.ewpsp.model.BillItemModel;
 import kr.co.ewp.ewpsp.model.BillRequestModel;
 import kr.co.ewp.ewpsp.model.BillResponseModel;
+import kr.co.ewp.ewpsp.model.BmsEquipmentModel;
+import kr.co.ewp.ewpsp.model.DeviceModel;
 import kr.co.ewp.ewpsp.model.EnergyModel;
 import kr.co.ewp.ewpsp.model.EssModel;
+import kr.co.ewp.ewpsp.model.PcsEquipmentModel;
 import kr.co.ewp.ewpsp.model.PeakHistoryModel;
 import kr.co.ewp.ewpsp.model.PeakRequestModel;
 import kr.co.ewp.ewpsp.model.PeakResponseModel;
+import kr.co.ewp.ewpsp.model.PvEquipmentModel;
 import kr.co.ewp.ewpsp.model.ReactiveModel;
 import kr.co.ewp.ewpsp.service.AlarmService;
 import kr.co.ewp.ewpsp.service.ApiService;
@@ -124,7 +131,7 @@ public class SiteMainController {
 	}
 	
 	@RequestMapping("/getDeviceList")
-	public @ResponseBody Map<String, Object> getDeviceIOEList(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getDeviceList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getDeviceList");
 		logger.debug("param ::::: "+param.toString());
 
@@ -132,11 +139,56 @@ public class SiteMainController {
 		int pageRowCnt = 8;
 		int startNum = pageRowCnt*(selPageNum-1);
 		
-//		param.put("siteId", "");
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
 		
 		List deviceList = deviceMonitoringService.getDeviceList(param);
+		List newDeviceList = new ArrayList();
+		if(deviceList != null && deviceList.size() > 0) {
+			Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
+			String host = (String) siteDetail.get("local_ems_addr");
+			for(int i=0; i<deviceList.size(); i++) {
+				Map<String, Object> deviceMap = new HashMap<String, Object>();
+				deviceMap = (Map<String, Object>) deviceList.get(i);
+				String deviceType = (String) deviceMap.get("device_type");
+				if("1".equals(deviceType)) { // PCS
+					List<PcsEquipmentModel> pcsDetail = PMGrowApiUtil.getPcsEquipmentList(host, (String) deviceMap.get("device_id"));
+					if(pcsDetail != null && pcsDetail.size() > 0) {
+						Integer acPower = (pcsDetail.get(0).getAcPower() == null || pcsDetail.get(0).getAcPower() == "") ? 0 : Integer.parseInt(pcsDetail.get(0).getAcPower());
+						Integer dcPower = (pcsDetail.get(0).getDcPower() == null || pcsDetail.get(0).getDcPower() == "") ? 0 : Integer.parseInt(pcsDetail.get(0).getDcPower());
+						deviceMap.put("apiPower", acPower+dcPower);
+					}
+					
+				} else if("2".equals(deviceType)) { // BMS
+					List<BmsEquipmentModel> bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, (String) deviceMap.get("device_id"));
+					if(bmsDetail != null && bmsDetail.size() > 0) {
+						Integer soc = (bmsDetail.get(0).getSysSoc() == null || bmsDetail.get(0).getSysSoc() == "") ? 0 : Integer.parseInt(bmsDetail.get(0).getSysSoc());
+						deviceMap.put("apiSoc", soc);
+					}
+					
+				} else if("3".equals(deviceType)) { // PV
+					List<PvEquipmentModel> pvDetail = PMGrowApiUtil.getPvEquipmentList(host, (String) deviceMap.get("device_id"));
+					if(pvDetail != null && pvDetail.size() > 0) {
+						Integer totPower = (pvDetail.get(0).getTotalPower() == null || pvDetail.get(0).getTotalPower() == "") ? 0 : Integer.parseInt(pvDetail.get(0).getTotalPower());
+						deviceMap.put("apiTotPower", totPower);
+					}
+					
+				} else {
+					DeviceModel ioeDetail = EnertalkApiUtil.getDevice((String) deviceMap.get("device_id"));
+					if(ioeDetail != null) {
+						if(new Date().getTime() - ioeDetail.getUploadedAt().getTime() > 120000) { // 2분 보다 크면 disconnect
+							deviceMap.put("apiStatus", 2);
+						} else {
+							deviceMap.put("apiStatus", 1);
+						}
+					}
+				}
+				newDeviceList.add(deviceMap);
+			}
+		} else {
+			newDeviceList = deviceList;
+		}
+		
 		int listCnt = deviceMonitoringService.getDeviceListCnt(param);
 		int totalPageCnt = 0;
 		if(listCnt > 0) {
@@ -153,7 +205,7 @@ public class SiteMainController {
 		pagingMap.put("totalPageCnt", totalPageCnt); // 전체 페이지 수
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("deviceList", deviceList);
+		resultMap.put("deviceList", newDeviceList);
 		resultMap.put("pagingMap", pagingMap);
 		return resultMap;
 	}

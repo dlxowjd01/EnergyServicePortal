@@ -914,23 +914,25 @@
 					var strHtml = "";
 					var memo = "";
 					if(deviceList[i].device_type == 4 || deviceList[i].device_type == 6 || deviceList[i].device_type == 7 || deviceList[i].device_type == 8) {
-						strHtml = (deviceList[i].device_stat == 1) ? '<li class="ioe" />' : '<li class="ioe alert" />'; 
-						memo = (deviceList[i].device_stat == 1) ? "connect" : "disconnect";
+						strHtml = (deviceList[i].apiStatus == 1) ? '<li class="ioe" />' : '<li class="ioe alert" />'; 
+						memo = (deviceList[i].apiStatus == 1) ? "connect" : "disconnect";
 					} else if(deviceList[i].device_type == 1) {
 						strHtml = '<li class="pcs" />'; 
-						memo = Number(deviceList[i].ac_power)+Number(deviceList[i].dc_power);
+//						memo = Number(deviceList[i].ac_power)+Number(deviceList[i].dc_power);
+						memo = Number(deviceList[i].apiPower);
 					} else if(deviceList[i].device_type == 2) {
 						strHtml = '<li class="bms" />';
-						memo = (deviceList[i].sys_soc == null || deviceList[i].sys_soc == "" || deviceList[i].sys_soc == "null") ? "" : deviceList[i].sys_soc+" %";
+//						memo = (deviceList[i].sys_soc == null || deviceList[i].sys_soc == "" || deviceList[i].sys_soc == "null") ? "" : deviceList[i].sys_soc+" %";
+						memo = (deviceList[i].apiSoc == null || deviceList[i].apiSoc == "" || deviceList[i].apiSoc == "null") ? "" : deviceList[i].apiSoc+" %";
 					} else if(deviceList[i].device_type == 3 || deviceList[i].device_type == 5) {
 						strHtml = '<li class="pv" />';
-						memo = deviceList[i].tot_power;
+						memo = deviceList[i].apiTotPower;
 					} else {
-						strHtml = (deviceList[i].device_stat == 1) ? '<li class="ioe" />' : '<li class="ioe alert" />'; 
-						memo = (deviceList[i].device_stat == 1) ? "connect" : "disconnect";
+						strHtml = (deviceList[i].apiStatus == 1) ? '<li class="ioe" />' : '<li class="ioe alert" />'; 
+						memo = (deviceList[i].apiStatus == 1) ? "connect" : "disconnect";
 					}
 					$div.append(
-							$(strHtml).append( $('<a href="#;" ondbclick="getDeviceDetail(\''+deviceList[i].site_id+"\', \'"+deviceList[i].device_id+"\', \'"+deviceList[i].device_type+'\')">')
+							$(strHtml).append( $('<a href="#;" ondblclick="getDeviceDetail(\''+deviceList[i].site_id+"\', \'"+deviceList[i].device_id+"\', \'"+deviceList[i].device_type+'\');">')
 							).append( $('<span class="dname" />').append( deviceList[i].device_name )
 							).append( $('<span class="dmemo" />').append( memo )
 							)

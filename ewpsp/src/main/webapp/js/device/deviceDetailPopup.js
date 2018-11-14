@@ -6,6 +6,16 @@
 		if(ioeDetail == null) {
 			alert("조회 결과가 없습니다.");
 		} else {
+			drawIOEDetail(result);
+			popupOpen('dview_ioe');
+		}
+		
+	}
+	
+	function drawIOEDetail(result) {
+		var ioeDetail = result.detail;
+		
+		if(ioeDetail != null) {
 			$(".dview_ioe").empty().append(
 					$('<div class="ltit" />').append(
 							$('<h2 />').append( $('<span class="ioe" />') ).append( ioeDetail.device_name ).append(
@@ -37,28 +47,27 @@
 							)
 					)
 			).append(
-					$('<div class="ltbl mt30" />').append( 
-							$('<table />').append( 
-									$("<thead />").append( 
+					$('<div class="ltbl mt30" />').append(
+							$('<table />').append(
+									$("<thead />").append(
 											$("<tr />").append( $("<th />").append("전압(v)") 
 											).append( $("<th />").append("전력(kW)")
 											).append( $("<th />").append("유효전력(kW)")
 											).append( $("<th />").append("무효전력(kW)")
-											) 
+											)
 									) 
 							).append(
-									$('<tbody />').append( 
-											$('<tr />').append( $("<td />").append(  (ioeDetail.voltage == "" || ioeDetail.voltage == null) ? "-" : ioeDetail.voltage  ) 
-											).append( $("<td />").append(  (ioeDetail.activePower == "" || ioeDetail.activePower == null) ? "-" : ioeDetail.activePower  ) 
-											).append( $("<td />").append(  (ioeDetail.energy == "" || ioeDetail.energy == null) ? "-" : ioeDetail.energy  ) 
+									$('<tbody />').append(
+											$('<tr />').append( $("<td />").append(  (ioeDetail.voltage == "" || ioeDetail.voltage == null) ? "-" : Number(ioeDetail.voltage)/1000  ) 
+											).append( $("<td />").append(  (ioeDetail.activePower == "" || ioeDetail.activePower == null) ? "-" : Number(ioeDetail.activePower)/(1000*1000)  ) 
+											).append( $("<td />").append(  (ioeDetail.energy == "" || ioeDetail.energy == null) ? "-" : Number(ioeDetail.energy)/(1000*1000)  ) 
 											).append( $("<td />").append(  (ioeDetail.energyReactive == "" || ioeDetail.energyReactive == null) ? "-" : ioeDetail.energyReactive  ) 
-											)  
+											)
 									)
 							)
 					)
 			);
 			
-			popupOpen('dview_ioe');
 		}
 		
 	}
@@ -70,6 +79,16 @@
 		if(pcsDetail == null) {
 			alert("조회 결과가 없습니다.");
 		} else {
+			drawPCSDetail(result);
+			popupOpen('dview_pcs');
+		}
+		
+	}
+	
+	function drawPCSDetail(result) {
+		var pcsDetail = result.detail;
+		
+		if(pcsDetail != null) {
 			$(".dview_pcs").empty().append(
 					$('<div class="ltit" />').append(
 							$('<h2 />').append( $('<span class="pcs" />') ).append( pcsDetail.device_name ).append(
@@ -93,40 +112,40 @@
 							)
 					).append(
 							$('<div class="lstat" />').append( $('<div class="dt" />').append("운전상태") ).append(
-									$('<div class="dd" />').append( $('<span class="run" />').append( ((pcsDetail.device_stat == 1) ? "connect" : "disconnect") ) )
+									$('<div class="dd" />').append( $('<span class="run" />').append( pcsDetail.pcsStatusNm ) )
 							)
 					).append(
 							$('<div class="lstat" />').append( $('<div class="dt" />').append("알람 메시지") ).append(
 									$('<div class="dd" />').append( $('<span class="run" />').append("") )
 							)
 					).append( $('<h2 class="tbl_tit" />').append( "AC 출력" ) ).append(
-							$('<div class="ltbl" />').append( 
-									$('<table />').append( 
-											$("<thead />").append( 
+							$('<div class="ltbl" />').append(
+									$('<table />').append(
+											$("<thead />").append(
 													$("<tr />").append( $("<th />").append("전압(V)") 
-															).append( $("<th />").append("전력(kW)")
-															).append( $("<th />").append("주파수(Hz)")
-															).append( $("<th />").append("전류(A)")
-															).append( $("<th />").append("역률(PF)")
-															).append( $("<th />").append("전력설정치(kWh)")
-															) 
+													).append( $("<th />").append("전력(kW)")
+													).append( $("<th />").append("주파수(Hz)")
+													).append( $("<th />").append("전류(A)")
+													).append( $("<th />").append("역률(PF)")
+													).append( $("<th />").append("전력설정치(kWh)")
+													) 
 											) 
 									).append(
-											$('<tbody />').append( 
-													$('<tr />').append( $("<td />").append(  (pcsDetail.ac_voltage == "" || pcsDetail.ac_voltage == null) ? "-" : pcsDetail.ac_voltage  ) 
-													).append( $("<td />").append(  (pcsDetail.ac_power == "" || pcsDetail.ac_power == null) ? "-" : pcsDetail.ac_power  )
-													).append( $("<td />").append(  (pcsDetail.ac_freq == "" || pcsDetail.ac_freq == null) ? "-" : pcsDetail.ac_freq  )
-													).append( $("<td />").append(  (pcsDetail.ac_current == "" || pcsDetail.ac_current == null) ? "-" : pcsDetail.ac_current  )
-													).append( $("<td />").append(  (pcsDetail.ac_pf == "" || pcsDetail.ac_pf == null) ? "-" : pcsDetail.ac_pf  )
-													).append( $("<td />").append(  (pcsDetail.ac_set_power == "" || pcsDetail.ac_set_power == null) ? "-" : pcsDetail.ac_set_power  )
-													)  
+											$('<tbody />').append(
+													$('<tr />').append( $("<td />").append(  (pcsDetail.acVoltage == "" || pcsDetail.acVoltage == null) ? "-" : pcsDetail.acVoltage  ) 
+													).append( $("<td />").append(  (pcsDetail.acPower == "" || pcsDetail.acPower == null) ? "-" : pcsDetail.acPower  )
+													).append( $("<td />").append(  (pcsDetail.acFreq == "" || pcsDetail.acFreq == null) ? "-" : pcsDetail.acFreq  )
+													).append( $("<td />").append(  (pcsDetail.acCurrent == "" || pcsDetail.acCurrent == null) ? "-" : pcsDetail.acCurrent  )
+													).append( $("<td />").append(  (pcsDetail.acPf == "" || pcsDetail.acPf == null) ? "-" : pcsDetail.acPf  )
+													).append( $("<td />").append(  (pcsDetail.acSetPower == "" || pcsDetail.acSetPower == null) ? "-" : pcsDetail.acSetPower  )
+													)
 											)
 									)
 							)
 					).append( $('<h2 class="tbl_tit" />').append( "DC 출력" ) ).append(
-							$('<div class="ltbl" />').append( 
-									$('<table />').append( 
-											$("<thead />").append( 
+							$('<div class="ltbl" />').append(
+									$('<table />').append(
+											$("<thead />").append(
 													$("<tr />").append( $("<th />").append("전압(V)") 
 													).append( $("<th />").append("전류(A)")
 													).append( $("<th />").append("운전상태")
@@ -136,21 +155,20 @@
 													) 
 											) 
 									).append(
-											$('<tbody />').append( 
-													$('<tr />').append( $("<td />").append(pcsDetail.dc_voltage) 
-													).append( $("<td />").append(  (pcsDetail.dc_power == "" || pcsDetail.dc_power == null) ? "-" : pcsDetail.dc_power  )
-													).append( $("<td />").append(  (pcsDetail.pcs_status_nm == "" || pcsDetail.pcs_status_nm == null) ? "-" : pcsDetail.pcs_status_nm  )
-													).append( $("<td />").append(  (pcsDetail.pcs_command_nm == "" || pcsDetail.pcs_command_nm == null) ? "-" : pcsDetail.pcs_command_nm  )
-													).append( $("<td />").append(  (pcsDetail.today_c_energy == "" || pcsDetail.today_c_energy == null) ? "-" : pcsDetail.today_c_energy  )
-													).append( $("<td />").append(  (pcsDetail.today_d_energy == "" || pcsDetail.today_d_energy == null) ? "-" : pcsDetail.today_d_energy  )
-													)  
+											$('<tbody />').append(
+													$('<tr />').append( $("<td />").append(  (pcsDetail.dcVoltage == "" || pcsDetail.dcVoltage == null) ? "-" : pcsDetail.dcVoltage  ) 
+													).append( $("<td />").append(  (pcsDetail.dcPower == "" || pcsDetail.dcPower == null) ? "-" : pcsDetail.dcPower  )
+													).append( $("<td />").append(  (pcsDetail.pcsStatus == "" || pcsDetail.pcsStatus == null) ? "-" : pcsDetail.pcsStatus  )
+													).append( $("<td />").append(  (pcsDetail.pcsCommand == "" || pcsDetail.pcsCommand == null) ? "-" : pcsDetail.pcsCommand  )
+													).append( $("<td />").append(  (pcsDetail.todayCEnergy == "" || pcsDetail.todayCEnergy == null) ? "-" : pcsDetail.todayCEnergy  )
+													).append( $("<td />").append(  (pcsDetail.todayDEnergy == "" || pcsDetail.todayDEnergy == null) ? "-" : pcsDetail.todayDEnergy  )
+													)
 											)
 									)
 							)
 					)
 			);
 			
-			popupOpen('dview_pcs');
 		}
 		
 	}
@@ -162,6 +180,16 @@
 		if(bmsDetail == null) {
 			alert("조회 결과가 없습니다.");
 		} else {
+			drawBMSDetail(result);
+			popupOpen('dview_bms');
+		}
+		
+	}
+	
+	function drawBMSDetail(result) {
+		var bmsDetail = result.detail;
+		
+		if(bmsDetail != null) {
 			$(".dview_bms").empty().append(
 					$('<div class="ltit" />').append(
 							$('<h2 />').append( $('<span class="bms" />') ).append( bmsDetail.device_name ).append(
@@ -185,7 +213,7 @@
 							)
 					).append(
 							$('<div class="lstat" />').append( $('<div class="dt" />').append("운전상태") ).append(
-									$('<div class="dd" />').append( $('<span class="run" />').append( ((bmsDetail.device_stat == 1) ? "connect" : "disconnect") ) )
+									$('<div class="dd" />').append( $('<span class="run" />').append( bmsDetail.bmsStatusNm ) )
 							)
 					).append(
 							$('<div class="lstat" />').append( $('<div class="dt" />').append("알람 메시지") ).append(
@@ -196,9 +224,9 @@
 									$('<span style="color:#438fd7;font-weight:normal;" />').append("충전중")
 							)
 					).append(
-							$('<div class="ltbl" />').append( 
-									$('<table />').append( 
-											$("<thead />").append( 
+							$('<div class="ltbl" />').append(
+									$('<table />').append(
+											$("<thead />").append(
 													$("<tr />").append( $("<th />").append("SOC(%)") 
 													).append( $("<th />").append("SOH(%)")
 													).append( $("<th />").append("SOC 현재(kWh)")
@@ -208,21 +236,20 @@
 													) 
 											) 
 									).append(
-											$('<tbody />').append( 
-													$('<tr />').append( $("<td />").append(bmsDetail.sys_soc) // soc
-													).append( $("<td />").append(  (bmsDetail.sys_soh == "" || bmsDetail.sys_soh == null) ? "-" : bmsDetail.sys_soh  ) // soh
-													).append( $("<td />").append(  (bmsDetail.curr_soc == "" || bmsDetail.curr_soc == null) ? "-" : bmsDetail.curr_soc  ) // soc 현재
-													).append( $("<td />").append(  (bmsDetail.sys_voltage == "" || bmsDetail.sys_voltage == null) ? "-" : bmsDetail.sys_voltage  ) // 출력전압
-													).append( $("<td />").append(  (bmsDetail.sys_current == "" || bmsDetail.sys_current == null) ? "-" : bmsDetail.sys_current  ) // 출력전류
+											$('<tbody />').append(
+													$('<tr />').append( $("<td />").append(  (bmsDetail.sysSoc == "" || bmsDetail.sysSoc == null) ? "-" : bmsDetail.sysSoc  ) // soc
+													).append( $("<td />").append(  (bmsDetail.sysSoh == "" || bmsDetail.sysSoh == null) ? "-" : bmsDetail.sysSoh  ) // soh
+													).append( $("<td />").append(  (bmsDetail.currSoc == "" || bmsDetail.currSoc == null) ? "-" : bmsDetail.currSoc  ) // soc 현재
+													).append( $("<td />").append(  (bmsDetail.sysVoltage == "" || bmsDetail.sysVoltage == null) ? "-" : bmsDetail.sysVoltage  ) // 출력전압
+													).append( $("<td />").append(  (bmsDetail.sysCurrent == "" || bmsDetail.sysCurrent == null) ? "-" : bmsDetail.sysCurrent  ) // 출력전류
 													).append( $("<td />").append(  (bmsDetail.dod == "" || bmsDetail.dod == null) ? "-" : bmsDetail.dod  ) // dod
-													)  
+													)
 											)
 									)
 							)
 					)
 			);
 			
-			popupOpen('dview_bms');
 		}
 		
 	}
@@ -234,6 +261,16 @@
 		if(pvDetail == null) {
 			alert("조회 결과가 없습니다.");
 		} else {
+			drawPVDetail(result);
+			popupOpen('dview_pv');
+		}
+		
+	}
+	
+	function drawPVDetail(result) {
+		var pvDetail = result.detail;
+		
+		if(pvDetail != null) {
 			$(".dview_pv").empty().append(
 					$('<div class="ltit" />').append(
 							$('<h2 />').append( $('<span class="bms" />') ).append( pvDetail.device_name ).append(
@@ -257,16 +294,16 @@
 							)
 					).append(
 							$('<div class="lstat" />').append( $('<div class="dt" />').append("PV 상태") ).append(
-									$('<div class="dd" />').append( $('<span class="run" />').append( ((pvDetail.device_stat == 1) ? "connect" : "disconnect") ) )
+									$('<div class="dd" />').append( $('<span class="run" />').append( pvDetail.pvStatusNm ) )
 							)
 					).append(
 							$('<div class="lstat" />').append( $('<div class="dt" />').append("알람 메시지") ).append(
 									$('<div class="dd" />').append( $('<span class="run" />').append("") )
 							)
 					).append(
-							$('<div class="ltbl mt30" />').append( 
-									$('<table />').append( 
-											$("<thead />").append( 
+							$('<div class="ltbl mt30" />').append(
+									$('<table />').append(
+											$("<thead />").append(
 													$("<tr />").append( $("<th />").append("온도") 
 													).append( $("<th />").append("오늘 예측 발전량")
 													).append( $("<th />").append("실제 발전량")
@@ -274,19 +311,18 @@
 													) 
 											) 
 									).append(
-											$('<tbody />').append( 
-													$('<tr />').append( $("<td />").append(  (pvDetail.temp == "" || pvDetail.temp == null) ? "-" : pvDetail.temp+"℃"  ) 
+											$('<tbody />').append(
+													$('<tr />').append( $("<td />").append(  (pvDetail.temperature == "" || pvDetail.temperature == null) ? "-" : pvDetail.temperature+"℃"  ) 
 													).append( $("<td />").append("-"/*+"kWh"*/) 
 													).append( $("<td />").append("-"/*+"kWh"*/) 
-													).append( $("<td />").append(  (pvDetail.tot_power == "" || pvDetail.tot_power == null) ? "-" : pvDetail.tot_power+"kWh"  )
-													)  
+													).append( $("<td />").append(  (pvDetail.totalPower == "" || pvDetail.totalPower == null) ? "-" : pvDetail.totalPower+"kWh"  )
+													)
 											)
 									)
 							)
 					)
 			);
 			
-			popupOpen('dview_pv');
 		}
 		
 	}

@@ -8,6 +8,9 @@ import org.springframework.http.HttpHeaders;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import kr.co.ewp.ewpsp.model.BmsEquipmentModel;
+import kr.co.ewp.ewpsp.model.PcsEquipmentModel;
+import kr.co.ewp.ewpsp.model.PvEquipmentModel;
 import kr.co.ewp.ewpsp.model.SocModel;
 
 public class PMGrowApiUtil {
@@ -16,20 +19,117 @@ public class PMGrowApiUtil {
   
   private static final Logger logger = LoggerFactory.getLogger(PMGrowApiUtil.class);
 
+
+  /**
+   * PCS 운전상태 조회
+   * 
+   * @param equipmentId
+   * @param startDt
+   *          yyyyMMdd
+   * @param endDt
+   *          yyyyMMdd
+   * @param intervalType
+   * @param interval
+   * @param prettyLog
+   * @return
+   */
+  public static List<PcsEquipmentModel> getPcsEquipmentList(String host, String equipmentId) {
+	  logger.debug("PMGrowApiUtil.getPcsEquipmentList");
+    String resultBody = null;
+    List<PcsEquipmentModel> returnPCS = null;
+    try {
+      StringBuffer url = new StringBuffer(host + "/openapi/pcs-equipment-list");
+      url.append("?equipmentId=").append(equipmentId);
+      logger.debug("pmgrow api URL : "+ url);
+      resultBody = HttpUtil.get(url.toString(), getHeaders());
+      logger.debug("result "+resultBody);
+      returnPCS = JsonUtil.toObject(resultBody, new TypeReference<List<PcsEquipmentModel>>() {
+      });
+    } catch (Exception e) {
+//    	e.printStackTrace();
+		logger.error("error is : "+e.toString());
+    } finally {
+    	logger.debug("PMGrowApiUtil.getPcsEquipmentList end");
+		return returnPCS;
+    }
+  }
+
+  /**
+   * BMS 운전상태 조회
+   * 
+   * @param equipmentId
+   * @param startDt
+   *          yyyyMMdd
+   * @param endDt
+   *          yyyyMMdd
+   * @param intervalType
+   * @param interval
+   * @param prettyLog
+   * @return
+   */
+  public static List<BmsEquipmentModel> getBmsEquipmentList(String host, String equipmentId) {
+	logger.debug("PMGrowApiUtil.getBmsEquipmentList");
+    String resultBody = null;
+    List<BmsEquipmentModel> returnBMS = null;
+    try {
+      StringBuffer url = new StringBuffer(host + "/openapi/bms-equipment-list");
+      url.append("?equipmentId=").append(equipmentId);
+      logger.debug("pmgrow api URL : "+ url);
+      resultBody = HttpUtil.get(url.toString(), getHeaders());
+      logger.debug("result "+resultBody);
+      returnBMS = JsonUtil.toObject(resultBody, new TypeReference<List<BmsEquipmentModel>>() {
+      });
+    } catch (Exception e) {
+//    	e.printStackTrace();
+		logger.error("error is : "+e.toString());
+    } finally {
+    	logger.debug("PMGrowApiUtil.getBmsEquipmentList end");
+		return returnBMS;
+    }
+  }
+
+  /**
+   * PV 운전상태 조회
+   * 
+   * @param equipmentId
+   * @param startDt
+   *          yyyyMMdd
+   * @param endDt
+   *          yyyyMMdd
+   * @param intervalType
+   * @param interval
+   * @param prettyLog
+   * @return
+   */
+  public static List<PvEquipmentModel> getPvEquipmentList(String host, String equipmentId) {
+    logger.debug("PMGrowApiUtil.getPvEquipmentList");
+    String resultBody = null;
+    List<PvEquipmentModel> returnPV = null;
+    try {
+      StringBuffer url = new StringBuffer(host + "/openapi/pv-equipment-list");
+      url.append("?equipmentId=").append(equipmentId);
+      logger.debug("pmgrow api URL : "+ url);
+      resultBody = HttpUtil.get(url.toString(), getHeaders());
+      logger.debug("result "+resultBody);
+      returnPV = JsonUtil.toObject(resultBody, new TypeReference<List<PvEquipmentModel>>() {
+      });
+    } catch (Exception e) {
+//    	e.printStackTrace();
+		logger.error("error is : "+e.toString());
+    } finally {
+    	logger.debug("PMGrowApiUtil.getPvEquipmentList end");
+		return returnPV;
+    }
+  }
+  
   public static SocModel getSoc(String host, String equipmentId) {
 	  logger.debug("PMGrowApiUtil.getSoc");
 	  
 	  String resultBody = null;
 	  SocModel returnSoc = null;
 	  try {
-//		  StringBuffer url = new StringBuffer(host + "/openapi/charging-discharging-schedule-list");
 		  StringBuffer url = new StringBuffer(host + "/openapi/soc");
 		  url.append("?equipmentId=").append(equipmentId);
-//	      url.append("&startDt=").append("20180831");
-//	      url.append("&endDt=").append("20180831");
-//	      url.append("&intervalType=").append("1");
-//	      url.append("&interval=").append("15");
-		  
 		  logger.debug("pmgrow api URL : "+ url);
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
 		  logger.debug("result "+resultBody);

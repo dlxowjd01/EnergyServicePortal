@@ -22,14 +22,13 @@
 			excelCnt = 0;
 		} else {
 			for(var i=0; i<ioeList.length; i++) {
-				var tm = new Date( convertDateUTC(ioeList[i].upload_timestamp) );
 				$tbody.append(
 						$('<tr />').append( $("<td />").append( ioeList[i].rnum )
 						).append( $("<td />").append( ioeList[i].device_name )
 						).append( $("<td />").append( ioeList[i].device_id )
 						).append( $("<td />").append( ioeList[i].device_type_nm )
 						).append( $("<td />").append( ioeList[i].device_stat_name )
-						).append( $("<td />").append( tm.format("yyyy-MM-dd HH:mm:ss") )
+						).append( $("<td />").append( (ioeList[i].upload_timestamp == null) ? null : new Date( setSheetDateUTC(ioeList[i].upload_timestamp) ).format("yyyy-MM-dd HH:mm:ss") )
 						).append(
 								$("<td />").append( '<a href="#;" onclick="getDeviceIOEDetail(\''+ioeList[i].site_id+"\', \'"+ioeList[i].device_id+"\', \'"+ioeList[i].device_type+'\');" class="detail_view">상세보기</a>' )
 						)
@@ -58,7 +57,6 @@
 			excelCnt = 0;
 		} else {
 			for(var i=0; i<pcsList.length; i++) {
-				var tm = new Date( convertDateUTC(pcsList[i].std_date) );
 				$tbody.append(
 						$('<tr ondblclick="goLEMSPage(\'/lems/setting/pcs\')" />').append( $("<td />").append( pcsList[i].rnum )
 						).append( $('<td />').append( pcsList[i].device_name )
@@ -66,7 +64,7 @@
 						).append( $('<td />').append( pcsList[i].device_type_nm )
 						).append( $('<td />').append( pcsList[i].device_stat_name )
 						).append( $('<td class="ellipsis mxw400" />').append( pcsList[i].alarm_msg )
-						).append( $('<td />').append( tm.format("yyyy-MM-dd HH:mm:ss") )
+						).append( $('<td />').append( (pcsList[i].std_date == null) ? null : new Date( setSheetDateUTC(pcsList[i].std_date) ).format("yyyy-MM-dd HH:mm:ss") )
 						).append(
 								$("<td />").append( '<a href="#;" onclick="getDevicePCSDetail(\''+pcsList[i].site_id+"\', \'"+pcsList[i].device_id+"\', \'"+pcsList[i].device_type+'\');" class="detail_view">상세보기</a>' )
 						)
@@ -95,7 +93,6 @@
 			excelCnt = 0;
 		} else {
 			for(var i=0; i<bmsList.length; i++) {
-				var tm = new Date( convertDateUTC(bmsList[i].std_date) );
 				$tbody.append(
 						$('<tr ondblclick="goLEMSPage(\'/lems/setting/bat\')" />').append( $("<td />").append( bmsList[i].rnum )
 						).append( $('<td />').append( bmsList[i].device_name )
@@ -103,7 +100,7 @@
 						).append( $('<td />').append( bmsList[i].device_type_nm )
 						).append( $('<td />').append( bmsList[i].device_stat_name )
 						).append( $('<td class="ellipsis mxw400" />').append( bmsList[i].alarm_msg )
-						).append( $('<td />').append( tm.format("yyyy-MM-dd HH:mm:ss") )
+						).append( $('<td />').append( (bmsList[i].std_date == null) ? null : new Date( setSheetDateUTC(bmsList[i].std_date) ).format("yyyy-MM-dd HH:mm:ss") )
 						).append(
 								$("<td />").append( '<a href="#;" onclick="getDeviceBMSDetail(\''+bmsList[i].site_id+"\', \'"+bmsList[i].device_id+"\', \'"+bmsList[i].device_type+'\');" class="detail_view">상세보기</a>' )
 						)
@@ -132,7 +129,6 @@
 			excelCnt = 0;
 		} else {
 			for(var i=0; i<pvList.length; i++) {
-				var tm = new Date( convertDateUTC(pvList[i].std_date) );
 				$tbody.append(
 						$('<tr ondblclick="goLEMSPage(\'/lems/setting/pv\')" />').append( $("<td />").append( pvList[i].rnum )
 						).append( $('<td />').append( pvList[i].device_name )
@@ -141,7 +137,7 @@
 						).append( $('<td />').append( pvList[i].device_stat_name )
 						).append( $('<td />').append( pvList[i].temp )
 						).append( $('<td class="ellipsis mxw400" />').append( pvList[i].alarm_msg )
-						).append( $('<td />').append( tm.format("yyyy-MM-dd HH:mm:ss") )
+						).append( $('<td />').append( (pvList[i].std_date == null) ? null : new Date( setSheetDateUTC(pvList[i].std_date) ).format("yyyy-MM-dd HH:mm:ss") )
 						).append(
 								$("<td />").append( '<a href="#;" onclick="getDevicePVDetail(\''+pvList[i].site_id+"\', \'"+pvList[i].device_id+"\', \'"+pvList[i].device_type+'\');" class="detail_view">상세보기</a>' )
 						)
