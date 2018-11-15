@@ -249,11 +249,7 @@
 	
 	<update id="deleteUser" parameterType="hashMap">
 		/* 사용자 삭제 */
-		update tb_user
-		set 
-		    del_yn        = 'Y', 
-		    mod_uid       = #{modUid }, 
-		    mod_date      = now()
+		delete from tb_user
 		where 1=1
 		and user_idx = #{userIdx }
 	</update>

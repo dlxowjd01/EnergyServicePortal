@@ -310,15 +310,15 @@
 								).append(
 										$("<tbody/>").append( // tbody
 												$("<tr/>").append( // 한전 사용량
-														'<th><div class="ctit ct1"><span>한전 사용량</span></div></th>'+real_data_pc[i]
+														'<th><div class="ctit ct1"><span>한전 사용량 (kWh)</span></div></th>'+real_data_pc[i]
 												)
 										).append(
 												$("<tr/>").append( // ESS 사용량
-														'<th><div class="ctit"><span>ESS 사용량</span></div></th>'+ ess_data_pc[i]
+														'<th><div class="ctit"><span>ESS 사용량 (kWh)</span></div></th>'+ ess_data_pc[i]
 												)
 										).append(
 												$("<tr/>").append( // PV 사용량
-														'<th><div class="ctit"><span>PV 사용량</span></div></th>'+ pv_data_pc[i]
+														'<th><div class="ctit"><span>PV 사용량 (kWh)</span></div></th>'+ pv_data_pc[i]
 												)
 										)
 								) 

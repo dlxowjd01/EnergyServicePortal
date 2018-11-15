@@ -369,31 +369,31 @@
 								).append(
 										$("<tbody/>").append( // tbody
 												$("<tr/>").append( // 기본요금
-														'<th><div class="ctit ctt1"><span>기본요금</span></div></th>'+kepcoBill_data_pc[i]
+														'<th><div class="ctit ctt1"><span>기본요금 (won)</span></div></th>'+kepcoBill_data_pc[i]
 												)
 										).append(
 												$("<tr/>").append( // 역률
-														'<th><div class="ctit wht"><span>역률</span></div></th>'+ kepcoBill_data_pc2[i] 
+														'<th><div class="ctit wht"><span>역률 (won)</span></div></th>'+ kepcoBill_data_pc2[i] 
 												)
 										).append(
 												$("<tr/>").append( // 사용요금
-														'<th><div class="ctit ctt2"><span>사용요금</span></div></th>'+ kepcoBill_data_pc3[i] 
+														'<th><div class="ctit ctt2"><span>사용요금 (won)</span></div></th>'+ kepcoBill_data_pc3[i] 
 												)
 										).append(
 												$("<tr/>").append( // 전기요금합계
-														'<th><div class="ctit wht"><span>전기요금합계</span></div></th>'+ kepcoBill_data_pc4[i] 
+														'<th><div class="ctit wht"><span>전기요금합계 (won)</span></div></th>'+ kepcoBill_data_pc4[i] 
 												)
 										).append(
 												$("<tr/>").append( // 전력산업기반기금
-														'<th><div class="ctit ctt3"><span>전력산업기반기금</span></div></th>'+ kepcoBill_data_pc5[i] 
+														'<th><div class="ctit ctt3"><span>전력산업기반기금 (won)</span></div></th>'+ kepcoBill_data_pc5[i] 
 												)
 										).append(
 												$("<tr/>").append( // 부가세
-														'<th><div class="ctit ctt4"><span>부가세</span></div></th>'+ kepcoBill_data_pc6[i] 
+														'<th><div class="ctit ctt4"><span>부가세 (won)</span></div></th>'+ kepcoBill_data_pc6[i] 
 												)
 										).append(
 												$("<tr/>").append( // 청구요금
-														'<th><div class="ctit wht"><span>청구요금</span></div></th>'+ kepcoBill_data_pc7[i] 
+														'<th><div class="ctit wht"><span>청구요금 (won)</span></div></th>'+ kepcoBill_data_pc7[i] 
 												)
 										)
 								) 

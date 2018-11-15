@@ -254,15 +254,15 @@
 								).append(
 										$("<tbody/>").append( // tbody
 												$("<tr/>").append( // 피크 전력
-														'<th><div class="ctit pk1"><span>피크 전력</span></div></th>'+peak_data_pc[i]
+														'<th><div class="ctit pk1"><span>피크 전력 (kW)</span></div></th>'+peak_data_pc[i]
 												)
 										).append(
 												$("<tr/>").append( // 한진 계약 전력
-														'<th><div class="ctit pk2"><span>한전 계약 전력</span></div></th>'+ ctpPw_data_pc[i] 
+														'<th><div class="ctit pk2"><span>한전 계약 전력 (kW)</span></div></th>'+ ctpPw_data_pc[i] 
 												)
 										).append(
 												$("<tr/>").append( // 요금 적용 전력
-														'<th><div class="ctit pk3"><span>요금 적용 전력</span></th>'+ cgtPw_data_pc[i] 
+														'<th><div class="ctit pk3"><span>요금 적용 전력 (kW)</span></th>'+ cgtPw_data_pc[i] 
 												)
 										)
 								) 

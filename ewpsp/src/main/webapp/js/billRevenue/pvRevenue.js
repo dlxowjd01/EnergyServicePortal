@@ -331,28 +331,28 @@
 										$("<thead/>").append( $("<tr/>").append( "<th></th>"+pvRevenue_head_pc[i]+"<th>합계</th>" ) ) // thead
 								).append(
 										$("<tbody/>").append( // tbody
-												$("<tr/>").append( // 평일 일수 (d)
-														'<th><div class="ctit wht"><span>총 발전량</span></div></th>'+ pvRevenue_data_pc[i] 
+												$("<tr/>").append(
+														'<th><div class="ctit wht"><span>총 발전량 (kWh)</span></div></th>'+ pvRevenue_data_pc[i] 
 												)
 										).append(
-												$("<tr/>").append( // 경부하충전량 (kWh)
-														'<th><div class="ctit wht"><span>SMP 거래량</span></div></th>'+ pvRevenue_data_pc2[i] 
+												$("<tr/>").append(
+														'<th><div class="ctit wht"><span>SMP 거래량 (kWh)</span></div></th>'+ pvRevenue_data_pc2[i] 
 												)
 										).append(
-												$("<tr/>").append( // 중간부하충전량 (kWh)
-														'<th><div class="ctit pk2"><span>SMP 수익</span></div></th>'+ pvRevenue_data_pc3[i] 
+												$("<tr/>").append(
+														'<th><div class="ctit pk2"><span>SMP 수익 (won)</span></div></th>'+ pvRevenue_data_pc3[i] 
 												)
 										).append(
-												$("<tr/>").append( // 최대부하충전량 (kWh)
-														'<th><div class="ctit wht"><span>REC 거래량</span></div></th>'+ pvRevenue_data_pc4[i] 
+												$("<tr/>").append(
+														'<th><div class="ctit wht"><span>REC 거래량 (kWh)</span></div></th>'+ pvRevenue_data_pc4[i] 
 												)
 										).append(
-												$("<tr/>").append( // 경부하방전량 (kWh)
-														'<th><div class="ctit pk3"><span>REC 수익</span></div></th>'+ pvRevenue_data_pc5[i] 
+												$("<tr/>").append(
+														'<th><div class="ctit pk3"><span>REC 수익 (won)</span></div></th>'+ pvRevenue_data_pc5[i] 
 												)
 										).append(
-												$("<tr/>").append( // 경부하방전량 (kWh)
-														'<th><div class="ctit pk1"><span>총 수익</span></div></th>'+ pvRevenue_data_pc6[i] 
+												$("<tr/>").append(
+														'<th><div class="ctit pk1"><span>총 수익 (won)</span></div></th>'+ pvRevenue_data_pc6[i] 
 												)
 										)
 								) 
