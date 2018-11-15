@@ -351,6 +351,9 @@
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
 					and a.comp_idx = #{compIdx}
 					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and a.site_grp_idx = #{siteGrpIdx}
+					</if>
 					and a.area_type = #{areaType}
 					</when>
 					<otherwise>
@@ -362,6 +365,9 @@
 					</if>
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
 					and b.comp_idx = #{compIdx}
+					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and b.site_grp_idx = #{siteGrpIdx}
 					</if>
 					</otherwise>
 					</choose>
@@ -397,6 +403,9 @@
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
 					and a.comp_idx = #{compIdx}
 					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and a.site_grp_idx = #{siteGrpIdx}
+					</if>
 					and a.area_type = #{areaType}
 					</when>
 					<otherwise>
@@ -408,6 +417,9 @@
 					</if>
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
 					and b.comp_idx = #{compIdx}
+					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and b.site_grp_idx = #{siteGrpIdx}
 					</if>
 					</otherwise>
 					</choose>
@@ -429,6 +441,9 @@
 		</if>
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
 		and a.comp_idx = #{compIdx}
+		</if>
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+		and a.site_grp_idx = #{siteGrpIdx}
 		</if>
 		group by a.area_type
 	</select>
@@ -468,6 +483,9 @@
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
 					and a.comp_idx = #{compIdx}
 					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and a.site_grp_idx = #{siteGrpIdx}
+					</if>
 					and a.area_type = #{areaType}
 					</when>
 					<otherwise>
@@ -479,6 +497,9 @@
 					</if>
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
 					and b.comp_idx = #{compIdx}
+					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and b.site_grp_idx = #{siteGrpIdx}
 					</if>
 					</otherwise>
 					</choose>
@@ -514,6 +535,9 @@
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
 					and a.comp_idx = #{compIdx}
 					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and a.site_grp_idx = #{siteGrpIdx}
+					</if>
 					and a.area_type = #{areaType}
 					</when>
 					<otherwise>
@@ -525,6 +549,9 @@
 					</if>
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
 					and b.comp_idx = #{compIdx}
+					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and b.site_grp_idx = #{siteGrpIdx}
 					</if>
 					</otherwise>
 					</choose>
@@ -544,6 +571,9 @@
 		</if>
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
 		and comp_idx = #{compIdx}
+		</if>
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+		and site_grp_idx = #{siteGrpIdx}
 		</if>
 		order by site_grp_name
 	</select>
@@ -621,6 +651,9 @@
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
 			and a.comp_idx = #{compIdx}
 			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+			and a.site_grp_idx = #{siteGrpIdx}
+			</if>
 			and a.area_type = #{areaType}
 			</when>
 			<otherwise>
@@ -632,6 +665,9 @@
 			</if>
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
 			and b.comp_idx = #{compIdx}
+			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+			and b.site_grp_idx = #{siteGrpIdx}
 			</if>
 			</otherwise>
 			</choose>
@@ -672,6 +708,9 @@
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
 			and a.comp_idx = #{compIdx}
 			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+			and a.site_grp_idx = #{siteGrpIdx}
+			</if>
 			and a.area_type = #{areaType}
 			</when>
 			<otherwise>
@@ -683,6 +722,9 @@
 			</if>
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
 			and b.comp_idx = #{compIdx}
+			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+			and b.site_grp_idx = #{siteGrpIdx}
 			</if>
 			</otherwise>
 			</choose>
