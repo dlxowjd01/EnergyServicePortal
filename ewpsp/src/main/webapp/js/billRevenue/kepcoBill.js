@@ -1,8 +1,12 @@
 	$(document).ready(function() {
 		var firstDay = new Date();
 		var endDay = new Date();
+		var agoDay = new Date();
+		agoDay.setYear(agoDay.getFullYear());
+		agoDay = new Date(agoDay.setMonth(firstDay.getMonth()-5));
 		firstDay.setYear(firstDay.getFullYear()-1);
 		firstDay = new Date(firstDay.setMonth(firstDay.getMonth()+1));
+		$("#selTermAgo").val( agoDay.format("yyyyMM") );
 		$("#selTermFrom").val( firstDay.format("yyyyMM") );
 		$("#selTermTo").val( endDay.format("yyyyMM") );
 		$("#datepicker3").val( firstDay.format("yyyy-MM") );
@@ -12,6 +16,12 @@
 		
 		var formData = $("#schForm").serializeObject();
 		getDBData(formData);
+		
+		$("#selTermTo").val( endDay.format("yyyyMM") );
+		$("#selTermFrom").val( agoDay.format("yyyyMM") );
+		formData = $("#schForm").serializeObject();
+		
+		getKepcoTexBillList(formData);
 	});
 
 	function searchData() {
@@ -42,6 +52,143 @@
 //		var formData = $("#schForm").serializeObject();
 		getKepcoBillList(formData); // 실제사용량 조회
 		drawData(); // 차트 및 표 그리기
+	}
+	
+	var texDataSet1 = [];
+	var texDataSet2 = [];
+	var texDataSet3 = [];
+	var texDataSet4 = [];
+	var kepcoTexBillList1;
+	var kepcoTexBillList2;
+	var kepcoTexBillList3;
+	var kepcoTexBillList4;
+	
+	function callback_getKepcoTexBillList(result) {
+		var texList = result.texList;
+		var chartList = result.chartList;
+		var texStr = "";
+		var texFoodStr = "";
+		var customerStr = "";
+		var texInfo = "";
+		var datatable = "";
+		var str11 = "";
+		
+		if(texList.length > 0){
+			var delLastWon = Math.floor(texList[0].tot_amt_bill/10)*10-texList[0].tot_amt_bill;
+			$("#texArea").find("tbody").empty();
+			$("#texArea").find("tfoot").empty();
+			
+			texStr +="<tr>";
+			texStr +="<th>기본요금</th>";
+			texStr +="<td>"+numberComma(texList[0].base_rate)+"원</td>";
+			texStr +="</tr>";
+			texStr +="<tr>";
+			texStr +="<th>전력량요금</th>";
+			texStr +="<td>"+numberComma(texList[0].consume_rate)+"원</td>";
+			texStr +="</tr>";
+			texStr +="<tr>";
+			texStr +="<th>전기요금계</th>";
+			texStr +="<td>"+numberComma(texList[0].tot_elec_rate)+"원</td>";
+			texStr +="</tr>";
+			texStr +="<tr>";
+			texStr +="<th>부가가치세</th>";
+			texStr +="<td>"+numberComma(texList[0].val_add_tax)+"원</td>";
+			texStr +="</tr>";
+			texStr +="<tr>";
+			texStr +="<th>전력기금</th>";
+			texStr +="<td>"+numberComma(texList[0].elec_fund)+"원</td>";
+			texStr +="</tr>";
+			texStr +="<tr>";
+			texStr +="<th>원단위절사</th>";
+			texStr +="<td>"+delLastWon+"원</td>";
+			texStr +="</tr>";
+			texStr +="<tr>";
+			texStr +="<tr>";
+			texStr +="<th>당월요금계</th>";
+			texStr +="<td>"+numberComma(Math.floor(texList[0].tot_amt_bill/10)*10)+"원</td>";
+			texStr +="</tr>";
+			
+			texFoodStr +="<tr>";
+			texFoodStr +="<th>청구금액</th>";
+			texFoodStr +="<td>"+numberComma(Math.floor(texList[0].tot_amt_bill/10)*10)+"원</td>";
+			texFoodStr +="</tr>";
+			$("#texArea").find("tbody").html(texStr);
+			$("#texArea").find("tfoot").html(texFoodStr);
+			
+			
+		}
+		if(chartList.length > 0) {
+			for(var i=0; i<chartList.length; i++) {
+				var yyyyMM = chartList[i].bill_yearm;
+				var baseRate = String(chartList[i].base_rate);
+				var pwrFactorRate   = String(chartList[i].pwr_factor_rate);
+				var consumeRate  = String(chartList[i].consume_rate);
+				var totElecRate   = String(chartList[i].tot_elec_rate);
+				var elecFund  = String(chartList[i].elec_fund);
+				var valAddTax  = String(chartList[i].val_add_tax);
+				var totAmtBill  = String(chartList[i].tot_amt_bill);
+				var reBaseRate = 0; 
+				var rePwrFactorRate = 0; 
+				var reConsumeRate = 0; 
+				var reTotElecRate = 0; 
+				var reElecFund = 0; 
+				var reValAddTax = 0; 
+				var reTotAmtBill = 0; 
+				
+				// 차트데이터 셋팅
+				texDataSet1.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].base_rate] );
+				texDataSet2.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].consume_rate] ); // 역률적용된 사용요금은 다시 확인해야함
+				texDataSet3.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].elec_fund] );
+				texDataSet4.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].val_add_tax] );
+				
+			}
+			kepcoTexBillList1 = texDataSet1;
+			kepcoTexBillList2 = texDataSet2;
+			kepcoTexBillList3 = texDataSet3;
+			kepcoTexBillList4 = texDataSet4;
+				
+		}
+		
+		texDrawData_chart();
+		
+	}
+	
+	// 명세서 차트 그리기
+	function texDrawData_chart() {
+		var seriesLength = myChart1.series.length;
+		
+		for(var i = seriesLength - 1; i > -1; i--) {
+				myChart1.series[i].remove();
+		}
+		
+		myChart1.addSeries({
+			name: '기본요금',
+			color: '#438fd7', /* 기본요금 */
+			data: kepcoTexBillList1
+		}, false);
+		
+		myChart1.addSeries({
+			name: '사용요금(역률 적용)',
+			color: '#13af67', /* 사용요금(역률 적용) */
+			data: kepcoTexBillList2
+		}, false);
+		
+		myChart1.addSeries({
+			name: '전력산업기반기금',
+			color: '#f75c4a', /* 전력산업기반기금 */
+			data: kepcoTexBillList3
+		}, false);
+		
+		myChart1.addSeries({
+			name: '부가세',
+			color: '#84848f', /* 부가세 */
+			data: kepcoTexBillList4
+		}, false);
+		
+//		setTickInterval();
+		myChart1.xAxis[0].options.tickInterval = 30 * 24 * 3600 * 1000;
+		
+		myChart1.redraw(); // 차트 데이터를 다시 그린다
 	}
 	
 	// 한전 요금 조회
