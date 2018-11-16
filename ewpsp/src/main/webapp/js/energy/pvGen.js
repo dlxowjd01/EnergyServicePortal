@@ -290,11 +290,11 @@
 								).append(
 										$("<tbody/>").append( // tbody
 												$("<tr/>").append( // 실제 사용량
-														'<th><div class="ctit pv1"><span>실제 발전량</span></div></th>'+real_data_pc[i]
+														'<th><div class="ctit pv1"><span>실제 발전량 (kWh)</span></div></th>'+real_data_pc[i]
 												)
 										).append(
 												$("<tr/>").append( // 예측 사용량
-														'<th><div class="ctit pv2"><span>예측 발전량</span></div></th>'+ feture_data_pc[i] 
+														'<th><div class="ctit pv2"><span>예측 발전량 (kWh)</span></div></th>'+ feture_data_pc[i] 
 												)
 										)
 								) 

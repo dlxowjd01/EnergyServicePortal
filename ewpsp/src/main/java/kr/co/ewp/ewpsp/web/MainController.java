@@ -66,8 +66,12 @@ public class MainController {
 			userIdx = -1;
 		}
 
-		if (authType == null || (!authType.equals("1") && !authType.equals("2"))) {
+		if (authType == null || (!authType.equals("1") && !authType.equals("2") && !authType.equals("3"))) {
 			param.put("userIdx", userIdx);
+		} else if (authType.equals("2")) {
+			param.put("compIdx", (Integer)userInfo.get("comp_idx"));
+		} else if (authType.equals("3")) {
+			param.put("siteGrpIdx", (Integer)userInfo.get("site_grp_idx"));
 		}
 
 		Map result = controlService.getGMainDeviceAlarmCnt(param); // 장치별 알람건수
@@ -104,8 +108,12 @@ public class MainController {
 			userIdx = -1;
 		}
 
-		if (authType == null || (!authType.equals("1") && !authType.equals("2"))) {
+		if (authType == null || (!authType.equals("1") && !authType.equals("2") && !authType.equals("3"))) {
 			param.put("userIdx", userIdx);
+		} else if (authType.equals("2")) {
+			param.put("compIdx", (Integer)userInfo.get("comp_idx"));
+		} else if (authType.equals("3")) {
+			param.put("siteGrpIdx", (Integer)userInfo.get("site_grp_idx"));
 		}
 
 		Map result = cmpyGrpSiteMngService.getGMainSiteRankingTotalDetail(param);
@@ -144,8 +152,12 @@ public class MainController {
 			userIdx = -1;
 		}
 
-		if (authType == null || (!authType.equals("1") && !authType.equals("2"))) {
+		if (authType == null || (!authType.equals("1") && !authType.equals("2") && !authType.equals("3"))) {
 			param.put("userIdx", userIdx);
+		} else if (authType.equals("2")) {
+			param.put("compIdx", (Integer)userInfo.get("comp_idx"));
+		} else if (authType.equals("3")) {
+			param.put("siteGrpIdx", (Integer)userInfo.get("site_grp_idx"));
 		}
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
@@ -200,8 +212,12 @@ public class MainController {
 			userIdx = -1;
 		}
 
-		if (authType == null || (!authType.equals("1") && !authType.equals("2"))) {
+		if (authType == null || (!authType.equals("1") && !authType.equals("2") && !authType.equals("3"))) {
 			param.put("userIdx", userIdx);
+		} else if (authType.equals("2")) {
+			param.put("compIdx", (Integer)userInfo.get("comp_idx"));
+		} else if (authType.equals("3")) {
+			param.put("siteGrpIdx", (Integer)userInfo.get("site_grp_idx"));
 		}
 
 		Map result = cmpyGrpSiteMngService.getGMainSiteTotalDetail(param);
@@ -236,8 +252,12 @@ public class MainController {
 			userIdx = -1;
 		}
 
-		if (authType == null || (!authType.equals("1") && !authType.equals("2"))) {
+		if (authType == null || (!authType.equals("1") && !authType.equals("2") && !authType.equals("3"))) {
 			param.put("userIdx", userIdx);
+		} else if (authType.equals("2")) {
+			param.put("compIdx", (Integer)userInfo.get("comp_idx"));
+		} else if (authType.equals("3")) {
+			param.put("siteGrpIdx", (Integer)userInfo.get("site_grp_idx"));
 		}
 
 		List list = cmpyGrpSiteMngService.getGMainAreaSiteCntList(param);
@@ -276,8 +296,12 @@ public class MainController {
 			userIdx = -1;
 		}
 
-		if (authType == null || (!authType.equals("1") && !authType.equals("2"))) {
+		if (authType == null || (!authType.equals("1") && !authType.equals("2") && !authType.equals("3"))) {
 			param.put("userIdx", userIdx);
+		} else if (authType.equals("2")) {
+			param.put("compIdx", (Integer)userInfo.get("comp_idx"));
+		} else if (authType.equals("3")) {
+			param.put("siteGrpIdx", (Integer)userInfo.get("site_grp_idx"));
 		}
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
@@ -329,8 +353,12 @@ public class MainController {
 			userIdx = -1;
 		}
 
-		if (authType == null || (!authType.equals("1") && !authType.equals("2"))) {
+		if (authType == null || (!authType.equals("1") && !authType.equals("2") && !authType.equals("3"))) {
 			param.put("userIdx", userIdx);
+		} else if (authType.equals("2")) {
+			param.put("compIdx", (Integer)userInfo.get("comp_idx"));
+		} else if (authType.equals("3")) {
+			param.put("siteGrpIdx", (Integer)userInfo.get("site_grp_idx"));
 		}
 
 		List list = cmpyGrpSiteMngService.getGMainGroupList(param);

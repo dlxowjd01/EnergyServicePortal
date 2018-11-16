@@ -423,11 +423,11 @@
 												)
 										).append(
 												$("<tr/>").append(
-														'<th><div class="ctit ct1"><span>총 정산금액</span></div></th>'+ drRevenue_data_pc7[i] 
+														'<th><div class="ctit ct1"><span>총 정산금액 (won)</span></div></th>'+ drRevenue_data_pc7[i] 
 												)
 										).append(
 												$("<tr/>").append(
-														'<th><div class="ctit"><span>고객 할인금액</span></div></th>'+ drRevenue_data_pc8[i] 
+														'<th><div class="ctit"><span>고객 할인금액 (won)</span></div></th>'+ drRevenue_data_pc8[i] 
 												)
 										).append(
 												$("<tr/>").append(

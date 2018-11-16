@@ -383,19 +383,19 @@
 								).append(
 										$("<tbody/>").append( // tbody
 												$("<tr/>").append( // 실제 사용량
-														'<th><div class="ctit es1"><span>충전량</span></div></th>'+realChg_data_pc[i]
+														'<th><div class="ctit es1"><span>충전량 (kWh)</span></div></th>'+realChg_data_pc[i]
 												)
 										).append(
 												$("<tr/>").append( // 예측 사용량
-														'<th><div class="ctit es2"><span>충전 계획</span></div></th>'+ realDischg_data_pc[i]
+														'<th><div class="ctit es2"><span>충전 계획 (kWh)</span></div></th>'+ realDischg_data_pc[i]
 												)
 										).append(
 												$("<tr/>").append( // 예측 사용량
-														'<th><div class="ctit es3"><span>방전량</span></th>'+ fetureChg_data_pc[i]
+														'<th><div class="ctit es3"><span>방전량 (kWh)</span></th>'+ fetureChg_data_pc[i]
 												)
 										).append(
 												$("<tr/>").append( // 예측 사용량
-														'<th><div class="ctit es4"><span>방전 계획</span></th>'+ fetureDischg_data_pc[i]
+														'<th><div class="ctit es4"><span>방전 계획 (kWh)</span></th>'+ fetureDischg_data_pc[i]
 												)
 										)
 								) 

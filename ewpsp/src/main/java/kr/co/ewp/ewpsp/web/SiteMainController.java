@@ -166,7 +166,7 @@ public class SiteMainController {
 						deviceMap.put("apiSoc", soc);
 					}
 					
-				} else if("3".equals(deviceType)) { // PV
+				} else if("3".equals(deviceType)) { // PV(localEMS)
 					List<PvEquipmentModel> pvDetail = PMGrowApiUtil.getPvEquipmentList(host, (String) deviceMap.get("device_id"));
 					if(pvDetail != null && pvDetail.size() > 0) {
 						Integer totPower = (pvDetail.get(0).getTotalPower() == null || pvDetail.get(0).getTotalPower() == "") ? 0 : Integer.parseInt(pvDetail.get(0).getTotalPower());
@@ -176,10 +176,15 @@ public class SiteMainController {
 				} else {
 					DeviceModel ioeDetail = EnertalkApiUtil.getDevice((String) deviceMap.get("device_id"));
 					if(ioeDetail != null) {
-						if(new Date().getTime() - ioeDetail.getUploadedAt().getTime() > 120000) { // 2분 보다 크면 disconnect
-							deviceMap.put("apiStatus", 2);
+						Date upLoadedAt = ioeDetail.getUploadedAt();
+						if(upLoadedAt != null) {
+							if(new Date().getTime() - upLoadedAt.getTime() > 120000) { // 2분 보다 크면 disconnect
+								deviceMap.put("apiStatus", 2);
+							} else {
+								deviceMap.put("apiStatus", 1);
+							}
 						} else {
-							deviceMap.put("apiStatus", 1);
+							deviceMap.put("apiStatus", 2);
 						}
 					}
 				}

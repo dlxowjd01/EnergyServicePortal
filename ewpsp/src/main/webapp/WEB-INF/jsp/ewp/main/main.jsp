@@ -776,7 +776,7 @@ function callback_getGMainAreaSiteCntList(result) {
 	for (var i = 0; i < areaCntList.length; i++) {
 		area_cnt_map[areaCntList[i].area_type] = areaCntList[i].cnt;
 	}
-	console.log(area_cnt_map);
+//	console.log(area_cnt_map);
 
 	readArea();
 }
@@ -872,13 +872,13 @@ function readArea() {
 
 	// 지역에 사이트가 존재할 경우만 보여줌
 	var cnt = 0;
-	var maxCnt = 18; console.log(numToString(area_idx + 1));
+	var maxCnt = 18;
 	while (area_cnt_map[numToString(area_idx + 1)] == null && cnt++ < maxCnt) {
 		if (++area_idx > 17) {
 			area_idx = 0;
 		}
 	}
-	console.log(area_idx);
+//	console.log(area_idx);
 
 	monitoring_cycle_5sec = setTimeout(readArea, 5000); /* 5초 간격 */
 }
