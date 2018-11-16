@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title></title>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script type="text/javascrript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+<script>
+  $.support.cors = true;
+  $(document).ready(function() {
+    $(document).on("change", "#site-ids", function() {
+      var siteId = $(this).val();
+      $("#siteId").text(siteId);
+      getUsageRealtime($("#site-ids").val(), $("#periods").val());
+      return false;
+    });
+    $(document).on("change", "#periods", function() {
+      getUsageRealtime($("#site-ids").val(), $("#periods").val());
+      return false;
+    });
+  });
+  function getUsageRealtime(siteId, period) {
+    var $data = $("#data");
+    $data.empty();
+    var $tr = $("<tr/>");
+    $tr.append($("<th class='text-center' scope='row'/>").append("조회 중..."));
+    $data.append($tr);
+    var key = "Wlhkd1pHVjJRR2hyYVhSekxtTnZMbXR5WDBWWFVDRHNoSnpydVlUc2lxVHRqNnp0ZzRnPQ==";
+    var firstDay = new Date();
+    firstDay.setDate(1);
+    var request = $.ajax({
+      url : "https://api2.enertalk.com/sites/:siteId/usages/periodic".replace(":siteId", siteId),
+      type : 'get',
+      beforeSend : function(request) {
+        request.setRequestHeader("authorization", "Basic " + key);
+      },
+      data : {
+        start : firstDay.getTime(),
+        end : new Date().getTime(),
+        period : period
+      }
+    });
+
+    request.done(function(result) {
+      var data = result;
+      var $data = $("#data");
+      $data.empty();
+      for ( var key in data) {
+        var $tr = $("<tr/>");
+        $tr.append($("<th scope='row'/>").append(key)).append($("<td/>").append(JSON.stringify(data[key])));
+        $data.append($tr);
+      }
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+      console.log(jqXHR);
+    });
+  }
+  function getDevices(siteId) {
+    var siteId = $("#site-ids").val();
+    var $data = $("#data");
+    $data.empty();
+    var $tr = $("<tr/>");
+    $tr.append($("<th class='text-center' scope='row'/>").append("조회 중..."));
+    $data.append($tr);
+    var key = "Wlhkd1pHVjJRR2hyYVhSekxtTnZMbXR5WDBWWFVDRHNoSnpydVlUc2lxVHRqNnp0ZzRnPQ==";
+    var firstDay = new Date();
+    firstDay.setDate(1);
+    var request = $.ajax({
+      url : "https://api2.enertalk.com/sites/:siteId/devices".replace(":siteId", siteId),
+      type : 'get',
+      beforeSend : function(request) {
+        request.setRequestHeader("authorization", "Basic " + key);
+      },
+      data : {}
+    });
+
+    request.done(function(result) {
+      var data = result;
+      var $data = $("#data");
+      $data.empty();
+      for ( var key in data) {
+        var $tr = $("<tr/>");
+        $tr.append($("<th scope='row'/>").append(key)).append($("<td/>").append(JSON.stringify(data[key])));
+        $data.append($tr);
+      }
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+      console.log(jqXHR);
+    });
+  }
+</script>
+</head>
+<body>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark" id="menu">
+    <a class="navbar-brand" href="#">EWP Service Portal</a>
+    <option class="navbar-toggler" type="option" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </option>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#" onclick="return false;"> 사용량조회 </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="getDevices(); return false;"> 디바이스목록조회 </a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+        <option class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</option>
+      </form>
+    </div>
+  </nav>
+
+  <main role="main" class="container " id="main">
+
+  <div class="card mt-5" id="selectSite">
+    <!-- Default panel contents -->
+    <div class="card-header">사이트 선택</div>
+    <table class="table table-sm table-dark mb-0">
+      <tbody>
+        <tr>
+          <th scope="row">사이트</th>
+          <td id="btns">
+            <select class="form-control" id="site-ids">
+              <option value="17094385">구례1_전기실</option>
+              <option value="22e83dfc">구례2_올곧은</option>
+              <option value="c64b328b">구례3_전분제분양곡</option>
+              <option value="7532a5c">구례4_기계실앞</option>
+              <option value="af19e136">구례5_맘씨</option>
+              <option value="f23ac0b6">구례6_유정란</option>
+              <option value="67b72dfb">구례7_밀크쿡</option>
+              <option value="1feef4db">괴산자연드림_냉동창</option>
+              <option value="2f292a5a">괴산자연드림_해피푸</option>
+              <option value="bb3090b9">괴산자연드림_순수유</option>
+              <option value="68c1699c">괴산자연드림_쿱양콕</option>
+            </select>
+
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">사이트ID</th>
+          <td id="siteId"></td>
+        </tr>
+        <tr>
+          <th scope="row">Period</th>
+          <td id="btns">
+            <select class="form-control" id="periods">
+              <option value="15min">15min</option>
+              <option value="30min">30min</option>
+              <option value="hour">hour</option>
+              <option value="day">day</option>
+              <option value="month">month</option>
+            </select>
+
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card mt-5" id="usageRealtime">
+    <!-- Default panel contents -->
+    <div class="card-header">실시간 사용량 조회</div>
+    <table class="table table-sm table-dark mb-0">
+      <tbody id="data">
+      </tbody>
+    </table>
+  </div>
+
+  </main>
+  <!-- /.container -->
+
+
+</body>
+</html>

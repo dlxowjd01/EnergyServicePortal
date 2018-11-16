@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.ewp.api.dao.EssDischargeDao">
+    <resultMap type="EssDischarge" id="EssDischargeRM">
+        <id property="essDischgIdx" column="ess_dischg_idx" javaType="Long"></id><!--ESS방전량식별자-->
+        <result property="siteId" column="site_id" javaType="String"></result><!--사이트ID-->
+        <result property="deviceId" column="device_id" javaType="String"></result><!--장치ID-->
+        <result property="stdTimestamp" column="std_timestamp" javaType="String"></result><!--기준타임스탬프-->
+        <result property="stdDate" column="std_date" javaType="Date"></result><!--기준일시-->
+        <result property="dischgVal" column="dischg_val" javaType="Integer"></result><!--방전량(단위:kWh)-->
+        <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
+        <result property="modDate" column="mod_date" javaType="Date"></result><!--최종수정일시-->
+    </resultMap>
+    <insert id="insert" parameterType="EssDischarge">
+        /* ESS방전량 등록 */
+        INSERT INTO tb_ess_discharge (
+               site_id,
+               device_id,
+               std_timestamp,
+               std_date,
+               dischg_val,
+               reg_date,
+               mod_date
+             ) VALUES (
+               #{entity.siteId},
+               #{entity.deviceId},
+               #{entity.stdTimestamp},
+               #{entity.stdDate},
+               #{entity.dischgVal},
+               #{entity.regDate},
+               #{entity.modDate})
+        <selectKey resultType="Long" keyProperty="entity.essDischgIdx">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <update id="update" parameterType="EssDischarge">
+        /* ESS방전량 수정 */
+        UPDATE tb_ess_discharge 
+               <set>
+               <if test="entity.siteId != null">
+               site_id = #{entity.siteId},
+               </if>
+               <if test="entity.deviceId != null">
+               device_id = #{entity.deviceId},
+               </if>
+               <if test="entity.stdTimestamp != null">
+               std_timestamp = #{entity.stdTimestamp},
+               </if>
+               <if test="entity.stdDate != null">
+               std_date = #{entity.stdDate},
+               </if>
+               <if test="entity.dischgVal != null">
+               dischg_val = #{entity.dischgVal},
+               </if>
+               <if test="entity.regDate != null">
+               reg_date = #{entity.regDate},
+               </if>
+               <if test="entity.modDate != null">
+               mod_date = #{entity.modDate},
+               </if>
+               </set>
+         WHERE ess_dischg_idx = #{entity.essDischgIdx}
+    </update>
+    <delete id="delete" parameterType="EssDischarge">
+        /* ESS방전량 삭제 */
+        DELETE FROM tb_ess_discharge 
+         WHERE ess_dischg_idx = #{essDischgIdx}
+    </delete>
+    <select id="selectOne" resultMap="EssDischargeRM">
+        /* ESS방전량 상세조회 */
+        SELECT ess_dischg_idx,
+               site_id,
+               device_id,
+               std_timestamp,
+               std_date,
+               dischg_val,
+               reg_date,
+               mod_date
+          FROM tb_ess_discharge
+         WHERE ess_dischg_idx = #{essDischgIdx}
+    </select>
+    <select id="selectList" resultMap="EssDischargeRM">
+        /* ESS방전량 목록조회 */
+        SELECT ess_dischg_idx,
+               site_id,
+               device_id,
+               std_timestamp,
+               std_date,
+               dischg_val,
+               reg_date,
+               mod_date
+          FROM tb_ess_discharge
+               <if test="pageable != null">
+         WHERE LIMIT #{pageable.start}, #{pageable.end}
+               </if>
+    </select>
+    <select id="selectListCount" resultType="int">
+        /* ESS방전량 전체 개수 조회 */
+        SELECT COUNT(*) AS CNT
+          FROM tb_ess_discharge
+         WHERE ess_dischg_idx = #{essDischgIdx}
+    </select>
+</mapper>

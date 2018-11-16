@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.ewp.api.dao.DrRevenueDao">
+    <resultMap type="DrRevenue" id="DrRevenueRM">
+        <id property="drRevnIdx" column="dr_revn_idx" javaType="Long"></id><!--발전수익식별자-->
+        <result property="siteId" column="site_id" javaType="String"></result><!--사이트ID-->
+        <result property="stdYearm" column="std_yearm" javaType="String"></result><!--기준년월(형식:YYYYMM)-->
+        <result property="stdTimestamp" column="std_timestamp" javaType="Date"></result><!--기준타임스탬프-->
+        <result property="stdDate" column="std_date" javaType="Date"></result><!--기준일시-->
+        <result property="reductCap" column="reduct_cap" javaType="Integer"></result><!--감축이행용량(단위:kWh)-->
+        <result property="basicPrice" column="basic_price" javaType="Integer"></result><!--기본가격(단위:원/kWh)-->
+        <result property="maxReductRatio" column="max_reduct_ratio" javaType="Float"></result><!--감축상한비율-->
+        <result property="minReductRatio" column="min_reduct_ratio" javaType="Float"></result><!--감축하한비율-->
+        <result property="totPay" column="tot_pay" javaType="Integer"></result><!--총지급액-->
+        <result property="basicPay" column="basic_pay" javaType="Integer"></result><!--기본지급액-->
+        <result property="reductStimestamp" column="reduct_stimestamp" javaType="Date"></result><!--감축시작타임스탬프-->
+        <result property="reductEtimestamp" column="reduct_etimestamp" javaType="Date"></result><!--감축종료타임스탬프-->
+        <result property="reductSdate" column="reduct_sdate" javaType="Date"></result><!--감축시작일시-->
+        <result property="reductEdate" column="reduct_edate" javaType="Date"></result><!--감축종료일시-->
+        <result property="cblAmt" column="cbl_amt" javaType="Integer"></result><!--평균사용량(단위:kWh)-->
+        <result property="actAmt" column="act_amt" javaType="Integer"></result><!--실제사용량(단위:kWh)-->
+        <result property="reductAmt" column="reduct_amt" javaType="Integer"></result><!--감축량(단위:kWh)-->
+        <result property="smp" column="smp" javaType="Integer"></result><!--SMP(단위:원)-->
+        <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
+        <result property="modDate" column="mod_date" javaType="Date"></result><!--최종수정일시-->
+    </resultMap>
+    <insert id="insert" parameterType="DrRevenue">
+        /* DR수익 등록 */
+        INSERT INTO tb_dr_revenue (
+               site_id,
+               std_yearm,
+               std_timestamp,
+               std_date,
+               reduct_cap,
+               basic_price,
+               max_reduct_ratio,
+               min_reduct_ratio,
+               tot_pay,
+               basic_pay,
+               reduct_stimestamp,
+               reduct_etimestamp,
+               reduct_sdate,
+               reduct_edate,
+               cbl_amt,
+               act_amt,
+               reduct_amt,
+               smp,
+               reg_date
+             ) VALUES (
+               #{entity.siteId},
+               #{entity.stdYearm},
+               #{entity.stdTimestamp},
+               #{entity.stdDate},
+               #{entity.reductCap},
+               #{entity.basicPrice},
+               #{entity.maxReductRatio},
+               #{entity.minReductRatio},
+               #{entity.totPay},
+               #{entity.basicPay},
+               #{entity.reductStimestamp},
+               #{entity.reductEtimestamp},
+               #{entity.reductSdate},
+               #{entity.reductEdate},
+               #{entity.cblAmt},
+               #{entity.actAmt},
+               #{entity.reductAmt},
+               #{entity.smp},
+               NOW())
+        <selectKey resultType="Long" keyProperty="entity.drRevnIdx">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <update id="update" parameterType="DrRevenue">
+        /* DR수익 수정 */
+        UPDATE tb_dr_revenue 
+               <set>
+               <if test="entity.siteId != null">
+               site_id = #{entity.siteId},
+               </if>
+               <if test="entity.stdYearm != null">
+               std_yearm = #{entity.stdYearm},
+               </if>
+               <if test="entity.stdTimestamp != null">
+               std_timestamp = #{entity.stdTimestamp},
+               </if>
+               <if test="entity.stdDate != null">
+               std_date = #{entity.stdDate},
+               </if>
+               <if test="entity.reductCap != null">
+               reduct_cap = #{entity.reductCap},
+               </if>
+               <if test="entity.basicPrice != null">
+               basic_price = #{entity.basicPrice},
+               </if>
+               <if test="entity.maxReductRatio != null">
+               max_reduct_ratio = #{entity.maxReductRatio},
+               </if>
+               <if test="entity.minReductRatio != null">
+               min_reduct_ratio = #{entity.minReductRatio},
+               </if>
+               <if test="entity.totPay != null">
+               tot_pay = #{entity.totPay},
+               </if>
+               <if test="entity.basicPay != null">
+               basic_pay = #{entity.basicPay},
+               </if>
+               <if test="entity.reductStimestamp != null">
+               reduct_stimestamp = #{entity.reductStimestamp},
+               </if>
+               <if test="entity.reductEtimestamp != null">
+               reduct_etimestamp = #{entity.reductEtimestamp},
+               </if>
+               <if test="entity.reductSdate != null">
+               reduct_sdate = #{entity.reductSdate},
+               </if>
+               <if test="entity.reductEdate != null">
+               reduct_edate = #{entity.reductEdate},
+               </if>
+               <if test="entity.cblAmt != null">
+               cbl_amt = #{entity.cblAmt},
+               </if>
+               <if test="entity.actAmt != null">
+               act_amt = #{entity.actAmt},
+               </if>
+               <if test="entity.reductAmt != null">
+               reduct_amt = #{entity.reductAmt},
+               </if>
+               <if test="entity.smp != null">
+               smp = #{entity.smp},
+               </if>
+               mod_date = NOW()
+               </set>
+         WHERE dr_revn_idx = #{entity.drRevnIdx}
+    </update>
+    <delete id="delete" parameterType="DrRevenue">
+        /* DR수익 삭제 */
+        DELETE FROM tb_dr_revenue 
+         WHERE dr_revn_idx = #{drRevnIdx}
+    </delete>
+    <select id="selectOne" resultMap="DrRevenueRM">
+        /* DR수익 상세조회 */
+        SELECT dr_revn_idx,
+               site_id,
+               std_yearm,
+               std_timestamp,
+               std_date,
+               reduct_cap,
+               basic_price,
+               max_reduct_ratio,
+               min_reduct_ratio,
+               tot_pay,
+               basic_pay,
+               reduct_stimestamp,
+               reduct_etimestamp,
+               reduct_sdate,
+               reduct_edate,
+               cbl_amt,
+               act_amt,
+               reduct_amt,
+               smp,
+               reg_date,
+               mod_date
+          FROM tb_dr_revenue
+         WHERE dr_revn_idx = #{drRevnIdx}
+    </select>
+    <select id="selectList" resultMap="DrRevenueRM">
+        /* DR수익 목록조회 */
+        SELECT dr_revn_idx,
+               site_id,
+               std_yearm,
+               std_timestamp,
+               std_date,
+               reduct_cap,
+               basic_price,
+               max_reduct_ratio,
+               min_reduct_ratio,
+               tot_pay,
+               basic_pay,
+               reduct_stimestamp,
+               reduct_etimestamp,
+               reduct_sdate,
+               reduct_edate,
+               cbl_amt,
+               act_amt,
+               reduct_amt,
+               smp,
+               reg_date,
+               mod_date
+          FROM tb_dr_revenue
+               <if test="pageable != null">
+         WHERE LIMIT #{pageable.start}, #{pageable.end}
+               </if>
+    </select>
+    <select id="selectListCount" resultType="int">
+        /* DR수익 전체 개수 조회 */
+        SELECT COUNT(*) AS CNT
+          FROM tb_dr_revenue
+         WHERE dr_revn_idx = #{drRevnIdx}
+    </select>
+    
+    <select id="selectOneLast" resultMap="DrRevenueRM">
+        /* DR수익 상세조회 */
+        SELECT dr_revn_idx,
+               site_id,
+               std_yearm,
+               std_timestamp,
+               std_date,
+               reduct_cap,
+               basic_price,
+               max_reduct_ratio,
+               min_reduct_ratio,
+               tot_pay,
+               basic_pay,
+               reduct_stimestamp,
+               reduct_etimestamp,
+               reduct_sdate,
+               reduct_edate,
+               cbl_amt,
+               act_amt,
+               reduct_amt,
+               smp,
+               reg_date,
+               mod_date
+          FROM tb_dr_revenue
+         WHERE site_id = #{siteId}
+         ORDER BY std_timestamp DESC
+         LIMIT 1
+    </select>
+    <select id="selectOneByUnique" resultMap="DrRevenueRM">
+        /* DR수익 상세조회 */
+        SELECT dr_revn_idx,
+               site_id,
+               std_yearm,
+               std_timestamp,
+               std_date,
+               reduct_cap,
+               basic_price,
+               max_reduct_ratio,
+               min_reduct_ratio,
+               tot_pay,
+               basic_pay,
+               reduct_stimestamp,
+               reduct_etimestamp,
+               reduct_sdate,
+               reduct_edate,
+               cbl_amt,
+               act_amt,
+               reduct_amt,
+               smp,
+               reg_date,
+               mod_date
+          FROM tb_dr_revenue
+         WHERE site_id = #{siteId}
+           AND std_timestamp = #{stdTimestamp}
+           AND reduct_stimestamp = #{reductStimestamp}
+         LIMIT 1
+    </select>
+</mapper>
