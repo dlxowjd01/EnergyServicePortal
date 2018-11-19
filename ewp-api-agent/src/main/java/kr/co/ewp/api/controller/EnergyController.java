@@ -782,42 +782,53 @@ public class EnergyController {
         logger.info("energy08,{},{},{}", _deviceId, strBeginDate, strEndDate);
         List<PvGen> pvGentList = Lists.newArrayList();
         try {
-          if ("1".equals(device.getInstType())) { // 에너톡
-            UsageModel usagePeriodic = EnertalkApiUtil.getUsagePeriodicByDeviceId(_deviceId, Period._15min, beginDate, endDate, TimeType.past, UsageType.positiveEnergy, prettyLog);
-            List<UsageItemModel> items = usagePeriodic.getItems();
-            prettyLog.append("ITEM_SIZE", items.size());
-            for (UsageItemModel item : items) {
-              PvGen pvGen = new PvGen();
-              pvGen.setDeviceId(_deviceId);
-              pvGen.setSiteId(_siteId);
-              pvGen.setStdDate(item.getTimestamp());
-              pvGen.setGenVal(item.getUsage().intValue() / 1000000);
-              pvGen.setTemp(0);
-
-              pvGentList.add(pvGen);
-            }
-          } else { // localems
-            if (!localEmsAddrMap.containsKey(_siteId)) {
-              Site site = siteService.getSite(_siteId, prettyLog);
-              if (site == null) {
-                prettyLog.append("WARN", _siteId + "(SITE_ID) is null");
-                continue;
+          String deviceType = device.getDeviceType();
+          if(deviceType != null) {
+        	  if ("1".equals(device.getInstType())) { // 에너톡
+        		  switch (deviceType) {
+//              case "3":// PV
+        		  case "5":// PV모니터링기기
+        			  break;
+        		  default:
+        			  continue;
+        		  }
+        		  UsageModel usagePeriodic = EnertalkApiUtil.getUsagePeriodicByDeviceId(_deviceId, Period._15min, beginDate, endDate, TimeType.past, UsageType.positiveEnergy, prettyLog);
+        		  List<UsageItemModel> items = usagePeriodic.getItems();
+        		  prettyLog.append("ITEM_SIZE", items.size());
+        		  for (UsageItemModel item : items) {
+        			  PvGen pvGen = new PvGen();
+        			  pvGen.setDeviceId(_deviceId);
+        			  pvGen.setSiteId(_siteId);
+        			  pvGen.setStdDate(item.getTimestamp());
+        			  pvGen.setGenVal(item.getUsage().intValue() / 1000000);
+        			  pvGen.setTemp(0);
+        			  
+        			  pvGentList.add(pvGen);
+        		  }
+        	  } else { // localems
+              if (!localEmsAddrMap.containsKey(_siteId)) {
+                Site site = siteService.getSite(_siteId, prettyLog);
+                if (site == null) {
+                  prettyLog.append("WARN", _siteId + "(SITE_ID) is null");
+                  continue;
+                }
+                localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
               }
-              localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
+              List<PvPowerGenModel> resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, DateUtil.dateToString(beginDate, "yyyyMMdd"),
+                  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
+              prettyLog.append("ITEM_SIZE", resultList.size());
+              for (PvPowerGenModel item : resultList) {
+                PvGen pvGen = new PvGen();
+                pvGen.setDeviceId(_deviceId);
+                pvGen.setSiteId(_siteId);
+                pvGen.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
+                pvGen.setGenVal(Integer.parseInt(item.getGenEnergy()));
+                pvGen.setTemp(Integer.parseInt(item.getTemperature()));
+  
+                pvGentList.add(pvGen);
+              }
             }
-            List<PvPowerGenModel> resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, DateUtil.dateToString(beginDate, "yyyyMMdd"),
-                DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
-            prettyLog.append("ITEM_SIZE", resultList.size());
-            for (PvPowerGenModel item : resultList) {
-              PvGen pvGen = new PvGen();
-              pvGen.setDeviceId(_deviceId);
-              pvGen.setSiteId(_siteId);
-              pvGen.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
-              pvGen.setGenVal(Integer.parseInt(item.getGenEnergy()));
-              pvGen.setTemp(Integer.parseInt(item.getTemperature()));
-
-              pvGentList.add(pvGen);
-            }
+            
           }
         } catch (Exception e) {
           prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
