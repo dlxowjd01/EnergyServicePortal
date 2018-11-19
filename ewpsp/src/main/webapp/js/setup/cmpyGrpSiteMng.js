@@ -187,10 +187,12 @@
 		
 		$("#confirmCmpyBtn").click(function(){
 			if($("#cmpyForm").find("#compName").val() == "") {
+				alert("회사명을 입력하세요");
 				$("#cmpyForm").find("#compName").focus();
 				return;
 			}
 			if($("#cmpyForm").find("#compId").val() == "") {
+				alert("회사ID를 입력하세요");
 				$("#cmpyForm").find("#compId").focus();
 				return;
 			}
@@ -204,14 +206,17 @@
 		
 		$("#confirmGrpBtn").click(function(){
 			if($("#groupForm").find("#selCompIdx1").val() == "") {
+				alert("회사를 선택하세요");
 				$("#groupForm").find("#selCompIdx1").focus();
 				return;
 			}
 			if($("#groupForm").find("#siteGrpName").val() == "") {
+				alert("그룹명을 입력하세요");
 				$("#groupForm").find("#siteGrpName").focus();
 				return;
 			}
 			if($("#groupForm").find("#siteGrpId").val() == "") {
+				alert("그룹ID를 입력하세요");
 				$("#groupForm").find("#siteGrpId").focus();
 				return;
 			}
@@ -229,25 +234,30 @@
 		
 		$("#confirmSiteBtn").click(function(){
 			if($("#siteForm").find("#siteName").val() == "") {
+				alert("사이트명을 입력하세요");
 				$("#siteForm").find("#siteName").focus();
 				return;
 			}
 			if($("#siteForm").find("#siteId").val() == "") {
+				alert("사이트id를 입력하세요");
 				$("#siteForm").find("#siteId").focus();
 				return;
 			}
 			if($("#siteForm").find("#selCompIdx2").val() == "") {
+				alert("회사를 선택하세요");
 				$("#siteForm").find("#selCompIdx2").focus();
 				return;
 			}
 			if($("#siteForm").find("#areaType").val() == "") {
+				alert("지역을 선택하세요");
 				$("#siteForm").find("#areaType").focus();
 				return;
 			}
-			if($("#siteForm").find("#selSiteGrpIdx2").val() == "") {
-				$("#siteForm").find("#selSiteGrpIdx2").focus();
-				return;
-			}
+//			if($("#siteForm").find("#selSiteGrpIdx2").val() == "") {
+//				console.log("ddd");
+//				$("#siteForm").find("#selSiteGrpIdx2").focus();
+//				return;
+//			}
 			
 			var formData = $("#siteForm").serializeObject();
 			if(confirm("사이트를 저장하시겠습니까?")) {

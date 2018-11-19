@@ -46,9 +46,9 @@
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userIdx)">
 					and a.user_idx = #{userIdx }
 					</if>
-					order by a.reg_date desc
 			) page_tb
 			,  ( select @rownum := 0 ) r
+			order by reg_date desc
 		) f_tb
 		limit #{startNum }, #{pageRowCnt }
 	</select>
@@ -98,7 +98,6 @@
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userIdx)">
 					and a.user_idx = #{userIdx }
 					</if>
-					<!-- order by a.reg_date -->
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
