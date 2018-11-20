@@ -1,0 +1,135 @@
+JENKINS (우분투 기준)
+
+-------------------------------------------------------------------------------
+
+1.설치확인
+
+1) 미설치된 경우
+
+# sudo apt-cache  search jenkins
+아무 메시지도 나오지 않음.
+
+(Maven)
+
+# mvn -v
+The program 'mvn' is currently not installed. You can install it by typing:
+sudo apt install maven
+
+
+2) 설치된 경우
+
+# sudo apt-cache  search jenkins
+젠키스 관련 패키지들이 수십개 나옴.
+
+(Maven)
+
+# mvn -v
+Apache Maven 3.3.9
+Maven home: /usr/share/maven
+Java version: 1.8.0_181, vendor: Oracle Corporation
+Java home: /usr/lib/jvm/java-8-openjdk-amd64/jre
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "4.4.0-1061-aws", arch: "amd64", family: "unix"
+
+-------------------------------------------------------------------------------
+
+2. 설치
+
+참고 URL :https://jenkins.io/doc/book/installing/#debianubuntu
+
+# wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | apt-key add -
+# echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list
+# sudo apt-get update
+# sudo apt-get install jenkins
+# /etc/init.d/jenkins start
+
+(Maven)
+# sudo apt install maven
+-------------------------------------------------------------------------------
+
+3. 설정
+
+포트변경(루트권한)
+# vi /etc/default/jenkins
+HTTP_PORT=8080 을 찾아서 포트 변경
+
+JENKINS_HOME
+# cd /var/lib/jenkins
+
+-------------------------------------------------------------------------------
+
+4. 로그
+# vi /var/log/jenkins/jenkins.log
+
+-------------------------------------------------------------------------------
+
+5. 서비스 시작/중지
+
+sudo service jenkins status
+sudo service jenkins stop
+sudo service jenkins start
+sudo service jenkins restart
+
+# ps -ef|grep jenkins
+jenkins  28281     1  0 Sep17 ?        00:00:00 /usr/bin/daemon --name=jenkins --inherit --env=JENKINS_HOME=/var/lib/jenkins --output=/var/log/jenkins/jenkins.log --pidfile=/var/run/jenkins/jenkins.pid -- /usr/bin/java -Djava.awt.headless=true -jar /usr/share/jenkins/jenkins.war --webroot=/var/cache/jenkins/war --httpPort=8082
+
+-------------------------------------------------------------------------------
+
+6. 젠킨스 서비스 접속
+
+URL : http://13.209.107.48:8082/
+계정 : admin / ewp!@#1
+
+-------------------------------------------------------------------------------
+
+7. Git Credentials 등록
+
+Jenkins Home > Credentials > System > Global credentials (unrestricted) > Add Credentials
+
+Kind : Username with password
+Scope : Global
+Username : Github ID
+Password : Github Password
+ID :
+Description :
+
+-------------------------------------------------------------------------------
+
+8. 프로젝트 생성 및 자동 배포를 위한 설정
+
+Jenkins Home > 새로운 Item
+
+1. Enter an item name
+ - 프로젝트 영어이름 등록 (ewpsp)
+2. Freestyle Project 선택
+3. General > 설명 : 프로젝트 설명 입력
+4. 소스코드관리 >
+ - Git Repository URL : githun url (https://github.com/EncoredTech/EWPServicePortal.git)
+ - Credentials : 7에서 등록한 Credential 선택
+5. Build
+- Add build step : invoke top-level Maven targets
+-- Goals : clean package -Dmaven.test.skip=true
+- Add build step : Excute Shell
+-- Command : sudo -u ubuntu /home/ubuntu/deployEwpspByJenkins.sh
+
+6. 저장 (젠킨스 설정 끝)
+
+7. jenkins계정에서 ubuntu 권한으로 쉘을 실행하기 위한 설정
+
+# visudo (root 계정으로)
+마지막줄에 아래 라인 추가
+jenkins    ALL=(ubuntu) NOPASSWD: /home/ubuntu/deployEwpspByJenkins.sh
+
+
+-------------------------------------------------------------------------------
+
+9. 빌드
+
+0. 빌드하기
+ - Jenkins Home > ewpsp > Build Now
+1. 빌드 로그 보기
+ - Jenkins Home > ewpsp > 왼쪽메뉴하단에 Build History > 가장 상단의 빌드에 마우스 커서를 올리면 메뉴가 나옴 > Console Output
+2. 빌드결과
+ - Jenkins Home > ewpsp > 왼쪽메뉴하단에 Build History 가 빨간색이면 빌드실패
+
+

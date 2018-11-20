@@ -1,0 +1,37 @@
+[인코어드 사이트]
+
+- 사이트ID : 3b5d0a40 (실수집용)
+             b910c1ab (DR실적조회용)
+
+
+
+[인코어드 장치]
+
+- 장치ID(ESS 측정)  : adf4537b
+- 장치ID(총량 측정) : 0dbe72b9
+
+
+
+[PMGrow API 서버]
+
+1. PMGrow 개발서버
+
+- OPEN API : http://112.219.230.170:42000/openapi/
+
+
+2. 인코어드 AWS 서버
+
+- EMS URL  : https://13.125.50.136/lems/
+- OPEN API : https://13.125.50.136/openapi/
+
+
+
+[Enertalk API]
+
+- URL : https://developer.enertalk.com/
+
+
+
+[인코어드 요금/수익 API]
+
+- URL : http://13.209.107.48:8888/
