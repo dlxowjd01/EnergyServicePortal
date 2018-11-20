@@ -17,6 +17,48 @@
 			sum(ewp_reward_amt) as ewp_reward_amt, 
 			avg(profit_ratio) as profit_ratio /* 수익비율(%) : 필수 중개인-고객 계약시 정해짐 (FIX) */
 		from (
+			select b.*,
+				( total_reward_amt*profit_ratio ) as csm_reward_amt, /* 고객정산금액 : KPX에서 동서발전에 100% 지급. 동서발전(or 인코어드 같은 중개업체)에서 수수료 제외하고 나머지 고객에게 지급(실적총정산금액*수익비율(0~1)) */
+				total_reward_amt-( total_reward_amt*profit_ratio ) as ewp_reward_amt /* ewp 정산금액(실적총정산금액-고객정산금액) */
+			from (
+				select c.*,
+					( reduct_amt*reduce_hour*smp ) as reduct_reward_amt, /* 감축정산금 = 감축인정용량 * 시간(감축시간*1) * 실적정산금(or 실적요금. 90원/kwh)(실적정산금=smp) */
+					cap_amt+( reduct_amt*reduce_hour*smp ) as total_reward_amt /* 실적총정산금액 = 용량정산금 + 감축정산금 */
+				from (
+						select 
+							dr_revn_idx, site_id, std_yearm, std_timestamp, std_date, reduct_cap, basic_price, max_reduct_ratio, min_reduct_ratio, profit_ratio, 
+							tot_pay, basic_pay, reduct_stimestamp, reduct_etimestamp, reduct_sdate, reduct_edate, cbl_amt, act_amt, reduct_amt, smp, reg_date, mod_date ,
+							cast(date_format(TIMEDIFF(reduct_etimestamp, reduct_stimestamp),'%H') as unsigned INTEGER) as reduce_hour,
+							( reduct_amt/reduct_cap )*100 as reduct_cap_per, /* 감축이행율 = (감축인정용량/감축이행용량) * 100 */
+							( reduct_amt*reduct_cap ) as cap_amt /* 용량정산금 = (감축인정용량 * 기본용량요금) */
+						from tb_dr_revenue
+						where 1=1
+						and site_id = #{siteId }
+						and std_yearm between #{selTermFrom } and #{selTermTo }
+				) c
+			) b
+		) a
+		group by site_id, std_yearm
+		<if test='@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selPeriodVal) and selPeriodVal.equals("day")'>
+		, date_format(reduct_sdate,'%Y%m%d')
+		</if>
+	</select>
+	
+	<select id="getDRRevenueTexList" parameterType="hashMap" resultType="hashMap">
+		/* DR 수익 명세 조회 */
+		select
+			site_id, std_yearm, date_format(reduct_sdate,'%Y%m%d') as reduct_sdate, 
+			count(*) as reduct_cnt_hour, /* 감축 횟수-시간(회-hr) */
+			sum(reduct_cap) as reduct_cap, /* 감축이행용량 */
+			sum(reduct_amt) as reduct_amt, /* 감축인정용량 */
+			avg(reduct_cap_per) as reduct_cap_per, 
+			sum(cap_amt) as cap_amt, 
+			sum(reduct_reward_amt) as reduct_reward_amt, 
+			sum(total_reward_amt) as total_reward_amt, 
+			sum(csm_reward_amt) as csm_reward_amt, 
+			sum(ewp_reward_amt) as ewp_reward_amt, 
+			avg(profit_ratio) as profit_ratio /* 수익비율(%) : 필수 중개인-고객 계약시 정해짐 (FIX) */
+		from (
 			SELECT 
 				dr_revn_idx, site_id, std_yearm, std_timestamp, std_date, reduct_cap, basic_price, max_reduct_ratio, min_reduct_ratio, profit_ratio, 
 				tot_pay, basic_pay, reduct_stimestamp, reduct_etimestamp, reduct_sdate, reduct_edate, cbl_amt, act_amt, reduct_amt, smp, reg_date, mod_date ,
@@ -29,7 +71,49 @@
 			FROM tb_dr_revenue
 			where 1=1
 			and site_id = #{siteId }
-			and std_yearm between #{selTermFrom } and #{selTermTo }
+			and std_yearm = #{selTermTex }
+		) a
+		group by site_id, std_yearm
+		<if test='@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selPeriodVal) and selPeriodVal.equals("day")'>
+		, date_format(reduct_sdate,'%Y%m%d')
+		</if>
+	</select>
+	
+	<select id="getDRRevenueChartList" parameterType="hashMap" resultType="hashMap">
+		/* DR 수익 명세 조회 */
+		select
+			site_id, std_yearm, date_format(reduct_sdate,'%Y%m%d') as reduct_sdate, 
+			count(*) as reduct_cnt_hour, /* 감축 횟수-시간(회-hr) */
+			sum(reduct_cap) as reduct_cap, /* 감축이행용량 */
+			sum(reduct_amt) as reduct_amt, /* 감축인정용량 */
+			avg(reduct_cap_per) as reduct_cap_per, 
+			sum(cap_amt) as cap_amt, 
+			sum(reduct_reward_amt) as reduct_reward_amt, 
+			sum(total_reward_amt) as total_reward_amt, 
+			sum(csm_reward_amt) as csm_reward_amt, 
+			sum(ewp_reward_amt) as ewp_reward_amt, 
+			avg(profit_ratio) as profit_ratio /* 수익비율(%) : 필수 중개인-고객 계약시 정해짐 (FIX) */
+		from (
+			select b.*,
+				( total_reward_amt*profit_ratio ) as csm_reward_amt, /* 고객정산금액 : KPX에서 동서발전에 100% 지급. 동서발전(or 인코어드 같은 중개업체)에서 수수료 제외하고 나머지 고객에게 지급(실적총정산금액*수익비율(0~1)) */
+				total_reward_amt-( total_reward_amt*profit_ratio ) as ewp_reward_amt /* ewp 정산금액(실적총정산금액-고객정산금액) */
+			from (
+				select c.*,
+					( reduct_amt*reduce_hour*smp ) as reduct_reward_amt, /* 감축정산금 = 감축인정용량 * 시간(감축시간*1) * 실적정산금(or 실적요금. 90원/kwh)(실적정산금=smp) */
+					cap_amt+( reduct_amt*reduce_hour*smp ) as total_reward_amt /* 실적총정산금액 = 용량정산금 + 감축정산금 */
+				from (
+						select 
+							dr_revn_idx, site_id, std_yearm, std_timestamp, std_date, reduct_cap, basic_price, max_reduct_ratio, min_reduct_ratio, profit_ratio, 
+							tot_pay, basic_pay, reduct_stimestamp, reduct_etimestamp, reduct_sdate, reduct_edate, cbl_amt, act_amt, reduct_amt, smp, reg_date, mod_date ,
+							cast(date_format(TIMEDIFF(reduct_etimestamp, reduct_stimestamp),'%H') as unsigned INTEGER) as reduce_hour,
+							( reduct_amt/reduct_cap )*100 as reduct_cap_per, /* 감축이행율 = (감축인정용량/감축이행용량) * 100 */
+							( reduct_amt*reduct_cap ) as cap_amt /* 용량정산금 = (감축인정용량 * 기본용량요금) */
+						from tb_dr_revenue
+						where 1=1
+						and site_id = #{siteId }
+						and std_yearm between #{selTermFrom } and #{selTermTo }
+				) c
+			) b
 		) a
 		group by site_id, std_yearm
 		<if test='@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selPeriodVal) and selPeriodVal.equals("day")'>
