@@ -321,6 +321,7 @@ public class BillController {
             bill.setTotElecRate(item.getTotalElectricityRate().intValue());
             bill.setUsg(item.getEnergyUsage().floatValue());
             bill.setValAddTax(item.getValueAddedTax().intValue());
+            bill.setBdayInMonth(item.getBdayInMonth().intValue());
             billList.add(bill);
           }
         } catch (Exception e) {

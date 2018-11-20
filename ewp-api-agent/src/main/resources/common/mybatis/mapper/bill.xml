@@ -38,6 +38,7 @@
         <result property="essDischgOffPeak" column="ess_dischg_off_peak" javaType="Float"></result><!--경부하시간대충전량(단위:kWh)-->
         <result property="essDischgMidPeak" column="ess_dischg_mid_peak" javaType="Float"></result><!--중부하시간대충전량(단위:kWh)-->
         <result property="essDischgMaxPeak" column="ess_dischg_max_peak" javaType="Float"></result><!--최대부하시간대충전량(단위:kWh)-->
+        <result property="bdayInMonth" column="bdayIn_month" javaType="Integer"></result><!--평일일수(단위:d)-->
         <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
         <result property="modDate" column="mod_date" javaType="Date"></result><!--최종수정일시-->
     </resultMap>
@@ -79,6 +80,7 @@
                ess_dischg_off_peak,
                ess_dischg_mid_peak,
                ess_dischg_max_peak,
+               bdayIn_month,
                reg_date,
                mod_date
              ) VALUES (
@@ -117,6 +119,7 @@
                #{entity.essDischgOffPeak},
                #{entity.essDischgMidPeak},
                #{entity.essDischgMaxPeak},
+               #{entity.bdayInMonth},
                now(),
                now())
         <selectKey resultType="Long" keyProperty="entity.billIdx">
@@ -232,6 +235,9 @@
                <if test="entity.essDischgMaxPeak != null">
                ess_dischg_max_peak = #{entity.essDischgMaxPeak},
                </if>
+               <if test="entity.bdayInMonth != null">
+               bdayIn_month = #{entity.bdayInMonth},
+               </if>
                <if test="entity.regDate != null">
                reg_date = #{entity.regDate},
                </if>
@@ -284,6 +290,7 @@
                ess_dischg_off_peak,
                ess_dischg_mid_peak,
                ess_dischg_max_peak,
+               bdayIn_month,
                reg_date,
                mod_date
           FROM tb_bill
@@ -327,6 +334,7 @@
                ess_dischg_off_peak,
                ess_dischg_mid_peak,
                ess_dischg_max_peak,
+               bdayIn_month,
                reg_date,
                mod_date
           FROM tb_bill
@@ -371,6 +379,7 @@
                ess_dischg_off_peak,
                ess_dischg_mid_peak,
                ess_dischg_max_peak,
+               bdayIn_month,
                reg_date,
                mod_date
           FROM tb_bill

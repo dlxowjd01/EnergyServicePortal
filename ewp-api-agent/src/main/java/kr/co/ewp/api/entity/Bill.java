@@ -40,6 +40,7 @@ public class Bill {
     private Float essDischgOffPeak;//경부하시간대충전량(단위:kwh)
     private Float essDischgMidPeak;//중부하시간대충전량(단위:kwh)
     private Float essDischgMaxPeak;//최대부하시간대충전량(단위:kwh)
+    private Integer bdayInMonth; // 평일일수
     private Date regDate;//등록일시
     private Date modDate;//최종수정일시
    /**
@@ -546,7 +547,14 @@ public class Bill {
     public void setEssDischgMaxPeak(Float essDischgMaxPeak) {
         this.essDischgMaxPeak = essDischgMaxPeak;
     }
-   /**
+    
+    public Integer getBdayInMonth() {
+    	return bdayInMonth;
+    }
+    public void setBdayInMonth(Integer bdayInMonth) {
+    	this.bdayInMonth = bdayInMonth;
+    }
+/**
     * 등록일시 조회
     * @return regDate
     */
