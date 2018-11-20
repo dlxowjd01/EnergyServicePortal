@@ -5,23 +5,28 @@
 	<select id="getESSRevenueList" parameterType="hashMap" resultType="hashMap">
 		/* ESS 수익 조회 */
 		select
-			site_id, bill_yearm,
-			sum(ess_bdayIn_month) as ess_bdayIn_month, sum(ess_dischg_off_peak) as ess_dischg_off_peak, sum(ess_dischg_mid_peak) as ess_dischg_mid_peak, sum(ess_dischg_max_peak) as ess_dischg_max_peak, 
-			sum(ess_chg_off_peak) as ess_chg_off_peak, sum(ess_chg_mid_peak) as ess_chg_mid_peak, sum(ess_chg_max_peak) as ess_chg_max_peak, 
-			sum(pre_ess_incen) as pre_ess_incen, sum(ess_incen) as ess_incen, sum(peak_rate) as peak_rate, sum(ewp_peak_rate) as ewp_peak_rate, 90 as rate_per
+			b.*, c.profit_ratio as rate_per
 		from (
-			select 
-				bill_idx, site_id, bill_yearm, meter_read_day, plan_type, plan_name, 
-				bdayIn_month, ess_dischg_off_peak, ess_dischg_mid_peak, ess_dischg_max_peak,
-				ess_chg_off_peak, ess_chg_mid_peak, ess_chg_max_peak,
-				ess_chg_incen as pre_ess_incen, ess_chg_incen, ess_dischg_incen, (ess_chg_incen+ess_dischg_incen) as ess_incen,
-				(off_peak_rate+mid_peak_rate+max_peak_rate) as peak_rate, ess_dischg_incen as ewp_peak_rate
-			from tb_bill
-			where 1=1
-			and site_id = #{siteId }
-			and bill_yearm between #{selTermFrom } and #{selTermTo }
-		) a
-		group by site_id, bill_yearm
+			select
+				site_id, bill_yearm,
+				sum(bdayIn_month) as bdayIn_month, sum(ess_dischg_off_peak) as ess_dischg_off_peak, sum(ess_dischg_mid_peak) as ess_dischg_mid_peak, sum(ess_dischg_max_peak) as ess_dischg_max_peak, 
+				sum(ess_chg_off_peak) as ess_chg_off_peak, sum(ess_chg_mid_peak) as ess_chg_mid_peak, sum(ess_chg_max_peak) as ess_chg_max_peak, 
+				sum(pre_ess_incen) as pre_ess_incen, sum(ess_incen) as ess_incen, sum(peak_rate) as peak_rate, sum(ewp_peak_rate) as ewp_peak_rate
+			from (
+				select 
+					bill_idx, site_id, bill_yearm, meter_read_day, plan_type, plan_name, 
+					bdayIn_month, ess_dischg_off_peak, ess_dischg_mid_peak, ess_dischg_max_peak,
+					ess_chg_off_peak, ess_chg_mid_peak, ess_chg_max_peak,
+					ess_chg_incen as pre_ess_incen, ess_chg_incen, ess_dischg_incen, (ess_chg_incen+ess_dischg_incen) as ess_incen,
+					(off_peak_rate+mid_peak_rate+max_peak_rate) as peak_rate, ess_dischg_incen as ewp_peak_rate
+				from tb_bill
+				where 1=1
+				and site_id = #{siteId }
+				and bill_yearm between #{selTermFrom } and #{selTermTo }
+			) a
+			group by site_id, bill_yearm
+		) b, tb_site_set c
+		where b.site_id = c.site_id
 		order by bill_yearm
 	</select>
 	
