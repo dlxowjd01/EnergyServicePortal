@@ -100,7 +100,7 @@
 		if(sheetList != null && sheetList.length > 0) {
 			for(var i=0; i<sheetList.length; i++) {
 				var yyyyMM = sheetList[i].bill_yearm;
-				var essBdayInMonth  = String(sheetList[i].ess_bdayIn_month)   ;
+				var essBdayInMonth  = String(sheetList[i].bdayIn_month)   ;
 				var essDischgOffPeak  = String(sheetList[i].ess_dischg_off_peak);
 				var essDischgMidPeak  = String(sheetList[i].ess_dischg_mid_peak);
 				var essDischgMaxPeak  = String(sheetList[i].ess_dischg_max_peak);
@@ -320,7 +320,7 @@
 		if(chartList != null && chartList.length > 0) {
 			for(var i=0; i<chartList.length; i++) {
 				var yyyyMM = chartList[i].bill_yearm;
-				var essBdayInMonth  = String(chartList[i].ess_bdayIn_month)   ;
+				var essBdayInMonth  = String(chartList[i].bdayIn_month)   ;
 				var essDischgOffPeak  = String(chartList[i].ess_dischg_off_peak);
 				var essDischgMidPeak  = String(chartList[i].ess_dischg_mid_peak);
 				var essDischgMaxPeak  = String(chartList[i].ess_dischg_max_peak);

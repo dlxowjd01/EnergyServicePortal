@@ -12,7 +12,7 @@
 		from (
 			select 
 				bill_idx, site_id, bill_yearm, meter_read_day, plan_type, plan_name, 
-				23 as ess_bdayIn_month, ess_dischg_off_peak, ess_dischg_mid_peak, ess_dischg_max_peak,
+				bdayIn_month, ess_dischg_off_peak, ess_dischg_mid_peak, ess_dischg_max_peak,
 				ess_chg_off_peak, ess_chg_mid_peak, ess_chg_max_peak,
 				ess_chg_incen as pre_ess_incen, ess_chg_incen, ess_dischg_incen, (ess_chg_incen+ess_dischg_incen) as ess_incen,
 				(off_peak_rate+mid_peak_rate+max_peak_rate) as peak_rate, ess_dischg_incen as ewp_peak_rate
