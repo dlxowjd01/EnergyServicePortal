@@ -285,8 +285,8 @@
             });
             
             $('.lbtn_print').on('click', function(){
-            	/* $('#layerbox').css("left", "0px");
-                $('#layerbox').css("top", "-300px"); */
+            	$('#layerbox').css("left", "0px");
+                $('#layerbox').css("top", "-300px");
                 $(".lbutton").hide();
             	$('#layerbox').printThis({
 	        	});

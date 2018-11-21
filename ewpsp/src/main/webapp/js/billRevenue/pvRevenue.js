@@ -8,12 +8,15 @@ var texDay = new Date();
 		var edDay = new Date();
 		stDay = new Date(stDay.getFullYear(), stDay.getMonth()-1, 1, 0, 0, 0);
 		edDay = new Date(stDay.getFullYear(), edDay.getMonth(), 0, 23, 59, 59);
-		/*texDay.setYear(texDay.getFullYear());
+		texDay.setYear(texDay.getFullYear());
 		texDay = new Date(texDay.setMonth(firstDay.getMonth()-1));
-		texDay = texDay.format("yyyy-MM-dd");*/
+		texDay = texDay.format("yyyyMM");
 		
 		firstDay = new Date(firstDay.getFullYear()-1, firstDay.getMonth()+1, 1, 0, 0, 0);
 		endDay = new Date(endDay.getFullYear(), endDay.getMonth()+1, 0, 23, 59, 59);
+		
+		var texChartStDay =new Date(stDay.setMinutes(stDay.getMinutes() + (new Date()).getTimezoneOffset()));
+		var texChartEdDay =new Date(edDay.setMinutes(edDay.getMinutes() + (new Date()).getTimezoneOffset()));
 		
 		schStartTime = new Date(firstDay.getTime());
 		schEndTime = new Date(endDay.getTime());
@@ -32,7 +35,7 @@ var texDay = new Date();
 		
 		var formData = $("#schForm").serializeObject();
 		getDBData(formData);
-		getSiteSetDetail();
+		getSiteSetDetail(formData);
 		
 		
 		$("#selTermFrom").val( stDay.format("yyyyMMddHHmmss") );
@@ -45,7 +48,7 @@ var texDay = new Date();
 		
 	});
 	
-	var custNum = "";		//고객번호
+	/*var custNum = "";		//고객번호
 	var smpRate = "";		//SMP 단가
 	var recRate = "";		//REC 단가
 	var recWeight = "";		//REC 가중치
@@ -63,7 +66,7 @@ var texDay = new Date();
 		meterReadDay = site.meter_read_day;
 		
 	}
-		
+		*/
 
 	function searchData() {
 		getCollect_sch_condition(); // 검색조건 모으기
@@ -93,105 +96,68 @@ var texDay = new Date();
 		drawData(); // 차트 및 표 그리기
 	}
 	
+	
+	var texPvRevenueList1;
+	var texPvRevenueList2;
 	//pv 명세서
 	function callback_getPVRevenueTexList(result) {
 		
 		
 		var netGenValSheetList = result.netGenValSheetList;
 		var netGenValChartList = result.netGenValChartList;
-		var smpDealSheetList   = result.smpDealSheetList  ;
+	//	var smpDealSheetList   = result.smpDealSheetList  ;
 		var smpDealChartList   = result.smpDealChartList  ;
-		var smpPriceSheetList  = result.smpPriceSheetList ;
+		//var smpPriceSheetList  = result.smpPriceSheetList ;
 		var smpPriceChartList  = result.smpPriceChartList ;
-		var recDealSheetList   = result.recDealSheetList  ;
+		//var recDealSheetList   = result.recDealSheetList  ;
 		var recDealChartList   = result.recDealChartList  ;
-		var recPriceSheetList  = result.recPriceSheetList ;
+		//var recPriceSheetList  = result.recPriceSheetList ;
 		var recPriceChartList  = result.recPriceChartList ;
-		var totPriceSheetList  = result.totPriceSheetList ;
+		//var totPriceSheetList  = result.totPriceSheetList ;
 		var totPriceChartList  = result.totPriceChartList ;
 		var periodd = $("#selPeriodVal").val(); // 데이터조회간격
 		var start = $("#selTermFrom").val();
 		var end = $("#selTermTo").val();
+		var addTex = 0;
 		
 		// 데이터 셋팅
-		var dataSet = []; // chartData를 위한 변수
-		var dataSet2 = []; // chartData를 위한 변수
-		var dataSet3 = []; // chartData를 위한 변수
+		var texDataSet1 = []; // chartData를 위한 변수
+		var texDataSet2 = []; // chartData를 위한 변수
 		var totDataSet = 0;
 		var totDataSet2 = 0;
 		var totDataSet3 = 0;
 		var textbodyStr = "";
 		var texfootStr = "";
 		var elecStr = "";
-		var beneDivStr = ""
+		var beneDivStr = "";
+		var infoStr = "";
 			
 		
-	
+		var reNetGenVal = 0;
+		var reSmpDeal   = 0;
+		var reSmpPrice  = 0;
+		var reRecDeal   = 0;
+		var reRecPrice  = 0;
+		var reTotPrice  = 0;
 		
-		// 표데이터 셋팅
-		var start = new Date(schStartTime.getTime());
-		var end = new Date(schEndTime.getTime());
-		console.log(start, end);
 		if(netGenValSheetList != null && netGenValSheetList.length > 0) {
-			var s = start;
-			var e = end;
-			setHms(s, e);
-			if(periodd == 'month') {
-				s.setMonth(0);
-				s.setDate(1);
-				s.setHours(0)
-				s.setMinutes(0);
-				s.setSeconds(0);
-			}
-			for(var i=0; i<netGenValSheetList.length; i++) {
-				var yyyyMM = s.format("yyyyMM");
-				//dt_str_head += "<th>"+yyyyMM.substring(0, 4)+"-"+yyyyMM.substring(4, 6)+"</th>"
-				
-				var reNetGenVal = null;
-				var reSmpDeal   = null;
-				var reSmpPrice  = null;
-				var reRecDeal   = null;
-				var reRecPrice  = null;
-				var reTotPrice  = null;
-				for(var j=0; j<netGenValSheetList.length; j++) {
-					if(s.getTime() == new Date(netGenValSheetList[j].std_timestamp).getTime()) {
-						var netGenVal = String(netGenValSheetList[j].net_gen_val);
-						var smpDeal   = String(smpDealSheetList[j].smp_deal);
-						var smpPrice  = String(smpPriceSheetList[j].smp_price);
-						var recDeal   = String(recDealSheetList[j].rec_deal);
-						var recPrice  = String(recPriceSheetList[j].rec_price);
-						var totPrice  = String(totPriceSheetList[j].tot_price);
-						
-						if(netGenVal == null || netGenVal == "" || netGenVal == "null") reNetGenVal = null;
-						else {
-							reNetGenVal = Math.round( Number(netGenVal) );
-						}
-						if(smpDeal == null || smpDeal == "" || smpDeal == "null") reSmpDeal = null;
-						else {
-							reSmpDeal   = Math.round( Number(smpDeal) );
-						}
-						if(smpPrice == null || smpPrice == "" || smpPrice == "null") reSmpPrice = null;
-						else {
-							reSmpPrice  = Math.round( Number(smpPrice) );
-						}
-						if(recDeal == null || recDeal == "" || recDeal == "null") reRecDeal = null;
-						else {
-							reRecDeal   = Math.round( Number(recDeal) );
-						}
-						if(recPrice == null || recPrice == "" || recPrice == "null") reRecPrice = null;
-						else {
-							reRecPrice  = Math.round( Number(recPrice) );
-						}
-						if(totPrice == null || totPrice == "" || totPrice == "null") reTotPrice = null;
-						else {
-							reTotPrice  = Math.round( Number(totPrice) );
-						}
-						
-						break;
-					}
-				}
-			}
-		}
+		reNetGenVal = netGenValChartList[0].net_gen_val;
+		reSmpDeal   = smpDealChartList[0].smp_deal;
+		reSmpPrice  = smpPriceChartList[0].smp_price;
+		reRecDeal   = recDealChartList[0].rec_deal;
+		reRecPrice  = recPriceChartList[0].rec_price;
+		reTotPrice  = reRecPrice+reSmpPrice;
+		
+		totBeneVal = 0;
+		delLastWon = 0;
+		
+		addTex = Math.round(reTotPrice*profitRatio/100*0.1);
+		totBeneVal = (reTotPrice*profitRatio)/100+addTex;
+		delLastWon = Math.floor(totBeneVal/10)*10-totBeneVal;
+		$("#texBill").text("태양광 발전 수익 배분 청구서 (’"+texDay.substring(2,4)+"년"+texDay.substring(4,6)+"월)");
+		$("#texDay").text("청구일 : "+texDay.substring(0,4)+"-"+texDay.substring(4,6)+"-"+"20");
+		$(".dp_total").text(numberComma((totBeneVal+delLastWon)));
+		
 				/*dt_str += "<td>"+  ( (reNetGenVal == null) ? "" : reNetGenVal ) +"</td>"; // 총 발전량
 				dt_str2 += "<td>"+ ( (reSmpPrice == null) ? "" : reSmpDeal    ) +"</td>"; // SMP 거래량
 				dt_str3 += "<td>"+ ( (reSmpPrice == null) ? "" : reSmpPrice   ) +"</td>"; // SMP 수익
@@ -201,36 +167,32 @@ var texDay = new Date();
 */	
 			textbodyStr += "<tr>";
 			textbodyStr += "<th>①REC 수익</th>";
-			textbodyStr += "<td align='right'>"+reRecPrice+"</td>";
+			textbodyStr += "<td align='right'>"+numberComma(reRecPrice)+"</td>";
 			textbodyStr += "</tr>";
 			textbodyStr += "<tr>";
 			textbodyStr += "<th>②SMP 수익</th>";
-			textbodyStr += "<td align='right'>"+reSmpPrice+"</td>";
+			textbodyStr += "<td align='right'>"+numberComma(reSmpPrice)+"</td>";
 			textbodyStr += "</tr>";
 			textbodyStr += "<tr>";
 			textbodyStr += "<th>③총 수익</th>";
-			textbodyStr += "<td align='right'>"+reTotPrice+"</td>";
-			textbodyStr += "</tr>";
-			textbodyStr += "<tr>";
-			textbodyStr += "<th>고객 정산 금액</th>";
-			textbodyStr += "<td align='right'></td>";
+			textbodyStr += "<td align='right'>"+numberComma(reTotPrice)+"</td>";
 			textbodyStr += "</tr>";
 			textbodyStr += "<tr>";
 			textbodyStr += "<th>④수익배분 계</th>";
-			textbodyStr += "<td align='right'>"+reTotPrice*+"</td>";
+			textbodyStr += "<td align='right'>"+numberComma((reTotPrice*profitRatio)/100)+"</td>";
 			textbodyStr += "</tr>";
 			textbodyStr += "<tr>";
 			textbodyStr += "<th>부가가치세</th>";
-			textbodyStr += "<td align='right'></td>";
+			textbodyStr += "<td align='right'>"+numberComma(addTex)+"</td>";
 			textbodyStr += "</tr>";
 			textbodyStr += "<tr>";
 			textbodyStr += "<th>원단위절사</th>";
-			textbodyStr += "<td align='right'></td>";
+			textbodyStr += "<td align='right'>"+delLastWon+"</td>";
 			textbodyStr += "</tr>";
 			
 			texfootStr += "<tr>";
 			texfootStr += "<th>청구금액</th>";
-			texfootStr += "<td align='right'></td>";
+			texfootStr += "<td align='right'>"+(totBeneVal+delLastWon)+"</td>";
 			texfootStr += "</tr>";
 			
 			elecStr += "<tr>";
@@ -239,19 +201,19 @@ var texDay = new Date();
 			elecStr += "</tr>";
 			elecStr += "<tr>";
 			elecStr += "<th>SMP 거래량</th>";
-			elecStr += "<td align='right'>"+reSmpDeal+"</td>";
+			elecStr += "<td align='right'>"+numberComma(reSmpDeal)+"</td>";
 			elecStr += "</tr>";
 			elecStr += "<tr>";
 			elecStr += "<th>SMP 단가</th>";
-			elecStr += "<td align='right'>"+smpRate+"</td>";
+			elecStr += "<td align='right'>"+numberComma(smpRate)+"</td>";
 			elecStr += "</tr>";
 			elecStr += "<tr>";
 			elecStr += "<th>REC 거래량</th>";
-			elecStr += "<td align='right'>"+reRecDeal+"</td>";
+			elecStr += "<td align='right'>"+numberComma(reRecDeal)+"</td>";
 			elecStr += "</tr>";
 			elecStr += "<tr>";
 			elecStr += "<th>REC 단가</th>";
-			elecStr += "<td align='right'>"+recRate+"</td>";
+			elecStr += "<td align='right'>"+numberComma(recRate)+"</td>";
 			elecStr += "</tr>";
 			elecStr += "<tr>";
 			elecStr += "<th>REC 가중치</th>";
@@ -259,41 +221,95 @@ var texDay = new Date();
 			elecStr += "</tr>";
 			elecStr += "<tr>";
 			elecStr += "<th>수익 배분</th>";
-			elecStr += "<td align='right'>"+profitRatio*profitRatio+"</td>";
+			elecStr += "<td align='right'>"+profitRatio+"</td>";
 			elecStr += "</tr>";
 			elecStr += "<tr>";
-			elecStr += "<th>&nbsp;</th>";
-			elecStr += "<td align='right'>&nbsp;</td>";
-			elecStr += "</tr>";
 			
 			beneDivStr +="<tr>";
 			beneDivStr +="<th>①REC 수익</th>";
-			beneDivStr +="<td>REC 거래량 x REC 단가 ("+reRecDeal+" x "+recRate+")</td>";
+			beneDivStr +="<td>REC 거래량 x REC 단가 ("+numberComma(reRecDeal)+" x "+numberComma(recRate)+")</td>";
 			beneDivStr +="</tr>";
 			beneDivStr +="<tr>";
 			beneDivStr +="<th>②SMP 수익</th>";
-			beneDivStr +="<td>연간발전량(kWh) x SMP단가 ("+reSmpDeal+" x "+smpRate+")</td>";
+			beneDivStr +="<td>연간발전량(kWh) x SMP단가 ("+numberComma(reSmpDeal)+" x "+numberComma(smpRate)+")</td>";
 			beneDivStr +="</tr>";
 			beneDivStr +="<tr>";
 			beneDivStr +="<th>③총 수익</th>";
-			beneDivStr +="<td>①REC 수익 + ②SMP 수익 ("+reRecPrice+" + "+reSmpPrice+")</td>";
+			beneDivStr +="<td>①REC 수익 + ②SMP 수익 ("+numberComma(reRecPrice)+" + "+numberComma(reSmpPrice)+")</td>";
 			beneDivStr +="</tr>";
 			beneDivStr +="<tr>";
 			beneDivStr +="<th>④수익배분 계</th>";
-			beneDivStr +="<td>③총 수익 x 수익 배분 ("+profitRatio+" x "+profitRatio+")</td>";
+			beneDivStr +="<td>③총 수익 x 수익 배분 ("+numberComma((totBeneVal+delLastWon))+" x "+profitRatio+"%)</td>";
 			beneDivStr +="</tr>";
+			
+			
+			infoStr +="<tr>";
+			infoStr +="<th>은행명</th>";
+			infoStr +="<td>우리은행</td>";
+			infoStr +="</tr>";
+			infoStr +="<tr>";
+			infoStr +="<th>계좌번호</th>";
+			infoStr +="<td>1005 – 802 - 498030</td>";
+			infoStr +="</tr>";
+			infoStr +="<tr>";
+			infoStr +="<th>예금주</th>";
+			infoStr +="<td>한국동서발전㈜</td>";
+			infoStr +="</tr>";
+			infoStr +="<tr>";
+			infoStr +="<th>납입금액</th>";
+			infoStr +="<td>"+numberComma((totBeneVal+delLastWon))+"</td>";
+			infoStr +="</tr>";
+			infoStr +="<tr>";
+			infoStr +="<th>납기일</th>";
+			infoStr +="<td>"+texDay.substring(0,4)+"-"+texDay.substring(4,6)+"-"+"20</td>";
+			infoStr +="</tr>";
+			
+			
 			
 			$(".TexArea").find("tbody").html(textbodyStr);
 			$(".TexArea").find("tfoot").html(texfootStr);
 			$(".elecInfo").find("tbody").html(elecStr);
 			$(".beneDiv").find("tbody").html(beneDivStr);
-			
+			$(".infoArea").find("tbody").html(infoStr);
 				
 			
+			// 차트데이터 셋팅
+			texDataSet1.push( [netGenValChartList[0].std_timestamp, reSmpPrice] );
+			texDataSet2.push( [netGenValChartList[0].std_timestamp, reRecPrice] );
+			
+			texPvRevenueList1 = texDataSet1;
+			texPvRevenueList2 = texDataSet2;
+			
+			drawTexData_chart();
+		}
 	}
 	
-				
+	// 차트 그리기
+	function drawTexData_chart() {
+		var seriesLength = myChart1.series.length;
+		for(var i = seriesLength - 1; i > -1; i--) {
+				myChart1.series[i].remove();
+		}
 		
+		
+		myChart1.addSeries({
+			name: 'SMP 수익',
+			color: '#13af67', /* SMP 수익 */
+			data: texPvRevenueList1
+		}, false);
+		
+		myChart1.addSeries({
+			name: 'REC 수익',
+			color: '#f75c4a', /* REC 수익 */
+			data: texPvRevenueList2
+		}, false);
+		
+//		setTickInterval();
+		myChart1.xAxis[0].options.tickInterval = 30 * 24 * 3600 * 1000;
+		
+		myChart1.redraw(); // 차트 데이터를 다시 그린다
+	}
+	
 				
 				
 		/*// 차트데이터 셋팅

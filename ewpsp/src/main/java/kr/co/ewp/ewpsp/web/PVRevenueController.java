@@ -46,7 +46,7 @@ public class PVRevenueController {
 		logger.debug("param ::::: "+param.toString());
 		
 		param.put("selPeriodVal", "month");
-		
+		System.out.println( "param 리벤튜 ::::"+param);
 		Map result = pvRevenueService.getPVRevenueList(param, request);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -63,6 +63,7 @@ public class PVRevenueController {
 		resultMap.put("recPriceChartList", ((Map) result.get("recPriceMap")).get("chartList") );
 		resultMap.put("totPriceSheetList", ((Map) result.get("totPriceMap")).get("sheetList") );
 		resultMap.put("totPriceChartList", ((Map) result.get("totPriceMap")).get("chartList") );
+		System.out.println("resultMap : " +resultMap);
 		return resultMap;
 	}
 	
@@ -72,7 +73,7 @@ public class PVRevenueController {
 		logger.debug("param ::::: "+param.toString());
 		param.put("selPeriodVal", "month");
 		
-		System.out.println( "param  ::::"+param);
+		System.out.println( "param  텍스::::"+param);
 		Map result = pvRevenueService.getPVRevenueList(param, request);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -90,18 +91,18 @@ public class PVRevenueController {
 		resultMap.put("totPriceSheetList", ((Map) result.get("totPriceMap")).get("sheetList") );
 		resultMap.put("totPriceChartList", ((Map) result.get("totPriceMap")).get("chartList") );
 		
-		/*System.out.println("resultMap::::" + resultMap.get("netGenValSheetList"));
-		System.out.println("resultMap::::" + resultMap.get("netGenValChartList"));
-		System.out.println("resultMap::::" + resultMap.get("smpDealSheetList"));
-		System.out.println("resultMap::::" + resultMap.get("smpPriceSheetList"));
-		System.out.println("resultMap::::" + resultMap.get("smpPriceSheetList"));
-		System.out.println("resultMap::::" + resultMap.get("smpPriceChartList"));
-		System.out.println("resultMap::::" + resultMap.get("recDealSheetList"));
-		System.out.println("resultMap::::" + resultMap.get("recDealChartList"));
-		System.out.println("resultMap::::" + resultMap.get("recPriceSheetList"));
-		System.out.println("resultMap::::" + resultMap.get("recPriceChartList"));
-		System.out.println("resultMap::::" + resultMap.get("totPriceSheetList"));
-		System.out.println("resultMap::::" + resultMap.get("totPriceChartList"));*/
+		System.out.println("netGenValSheetList::::" + resultMap.get("netGenValSheetList"));
+		System.out.println("netGenValChartList::::" + resultMap.get("netGenValChartList"));
+		System.out.println("smpDealSheetList::::" + resultMap.get("smpDealSheetList"));
+		System.out.println("smpDealChartList::::" + resultMap.get("smpDealChartList"));
+		System.out.println("smpPriceSheetList::::" + resultMap.get("smpPriceSheetList"));
+		System.out.println("smpPriceChartList::::" + resultMap.get("smpPriceChartList"));
+		System.out.println("recDealSheetList::::" + resultMap.get("recDealSheetList"));
+		System.out.println("recDealChartList::::" + resultMap.get("recDealChartList"));
+		System.out.println("recPriceSheetList::::" + resultMap.get("recPriceSheetList"));
+		System.out.println("recPriceChartList::::" + resultMap.get("recPriceChartList"));
+		System.out.println("totPriceSheetList::::" + resultMap.get("totPriceSheetList"));
+		System.out.println("totPriceChartList::::" + resultMap.get("totPriceChartList"));
 		return resultMap;
 	}
 	

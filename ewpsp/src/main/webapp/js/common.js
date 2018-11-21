@@ -383,6 +383,9 @@ var planType = "";
 var planType2 = "";
 var planType3 = "";
 var planTypeName = "";
+var smpRate = "";		//SMP 단가
+var recRate = "";		//REC 단가
+var recWeight = "";		//REC 가중치
 
 function callback_getPlanTypeVal(result){
 	var thisDay = new Date();
@@ -396,6 +399,7 @@ function callback_getPlanTypeVal(result){
 	springFallVal = planType.spring_fall_val;
 }
 
+
 function callback_getSiteSetDetail(result){
 	
 	
@@ -403,12 +407,15 @@ function callback_getSiteSetDetail(result){
 	custNum = site.cust_num;		//고객번호
 	meterNum = site.meter_num;		//계량기 번호
 	meterSf = site.meter_sf;		//계량기 배수
-	profitRatio = site.profit_ratio;		//수익배분 비율
+	profitRatio = 20;//site.profit_ratio;		//수익배분 비율
 	meterReadDay = site.meter_read_day;		//검침일
 	contractPower = site.contract_power;		//계약전력
 	planType = site.plan_type;		//구분1
 	planType2 = site.plan_type2;		//구분2
 	planType3 = site.plan_type3;		//구분3
+	smpRate = site.smp_rate;		//SMP 단가
+	recRate = site.rec_rate;		//REC 단가
+	recWeight = site.rec_weight;		//REC 가중치
 	
 	getPlanTypeVal(planType,planType2,planType3);
 

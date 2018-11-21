@@ -410,7 +410,7 @@
 					</table>
 
 					<h2 style="margin-top:20px;">4. 납입처</h2>
-					<table class="tbl" style="margin-top:10px;">
+					<table class="tbl infoArea" style="margin-top:10px;">
 						<tbody>
 							<tr>
 								<th>은행명</th>

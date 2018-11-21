@@ -8,7 +8,7 @@
 			site_set_idx, site_id, cust_num, use_elec_addr, meter_num, meter_sf, 
 			/*charge_type, */plan_type, plan_type2, plan_type3, plan_name, contract_power, meter_read_day, 
 			charge_yearmd, charge_power, charge_rate, goal_power, reduce_amt, smp_rate, rec_rate, rec_weight, 
-			del_yn, reg_uid, reg_date, mod_uid, mod_date 
+			del_yn, reg_uid, reg_date, mod_uid, mod_date ,profit_ratio
 		from tb_site_set
 		where 1=1
 		and site_id = #{siteId }

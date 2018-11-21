@@ -82,7 +82,8 @@
 		var texFootStr = "";
 		var saveStr = "";
 		var saveFootStr = "";
-		var beneAreaStr = ""
+		var beneAreaStr = "";
+		var infoAreaStr = "";
 		// 데이터 셋팅
 		var dataSet1 = []; // chartData를 위한 변수
 		var dataSet2 = []; // chartData를 위한 변수
@@ -102,11 +103,11 @@
 				var totalRewardAmt  = String(sheetList[i].total_reward_amt)   ;
 				var csmRewardAmt  = String(sheetList[i].csm_reward_amt)   ;
 				var ewpRewardAmt  = String(sheetList[i].ewp_reward_amt)   ;
-				var profitRatio  =0.2;//sheetList[i].profit_ratio      ;
+				var profitRatio  =sheetList[i].profit_ratio      ;
 				var addRate = 0.1;
 				
 				var total = capAmt+reductRewardAmt;
-				var beneDiv =Math.round(total*profitRatio);
+				var beneDiv =Math.round(total*profitRatio/100);
 				var addPrice = Math.round(beneDiv*addRate);
 				var beneDivTotal =beneDiv+addPrice;
 				
@@ -201,6 +202,27 @@
 				beneAreaStr += "</tr>";
 				
 				
+				infoAreaStr +="<tr>";
+				infoAreaStr +="<th>은행명</th>";
+				infoAreaStr +="<td>우리은행</td>";
+				infoAreaStr +="</tr>";
+				infoAreaStr +="<tr>";
+				infoAreaStr +="<th>계좌번호</th>";
+				infoAreaStr +="<td>1005 – 802 - 498030</td>";
+				infoAreaStr +="</tr>";
+				infoAreaStr +="<tr>";
+				infoAreaStr +="<th>예금주</th>";
+				infoAreaStr +="<td>한국동서발전㈜</td>";
+				infoAreaStr +="</tr>";
+				infoAreaStr +="<tr>";
+				infoAreaStr +="<th>납입금액</th>";
+				infoAreaStr +="<td>"+numberComma(texPrice)+"원</td>";
+				infoAreaStr +="</tr>";
+				infoAreaStr +="<tr>";
+				infoAreaStr +="<th>납기일</th>";
+				infoAreaStr +="<td>"+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-20</td>";
+				infoAreaStr +="</tr>";
+				
 				
 			
 			}
@@ -209,6 +231,7 @@
 			$(".texArea").find("tfoot").html(texFootStr);
 			$(".saveArea").find("tbody").html(saveStr);
 			$(".beneArea").find("tbody").html(beneAreaStr);
+			$(".infoArea").find("tbody").html(infoAreaStr);
 		//}
 		
 		// 차트데이터 셋팅

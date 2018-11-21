@@ -296,13 +296,13 @@
 
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
-					<td colspan="2" style="border:solid 1px #111;text-align:center;padding:15px;font-size:20px;font-weight:600;">
+					<td colspan="2" style="border:solid 1px #111;text-align:center;padding:15px;font-size:20px;font-weight:600;" id = "texBill">
 						태양광 발전 수익 배분 청구서 (’18년 5월)
 					</td>
 				</tr>
 				<tr>
 					<td height="30" align="left" style="font-size:12px;">고객명 : 고객Site_1</td>
-					<td height="30" align="right" style="font-size:12px;">청구일 : 2018-07-20</td>
+					<td height="30" align="right" style="font-size:12px;" id = "texDay">청구일 : 2018-07-20</td>
 				</tr>
 				<tr>
 					<td colspan="2" height="60" align="right" style="font-size:16px;font-weight:600;">
@@ -451,14 +451,14 @@
 					<div class="inchart">
 						<div id="ly_chart_pv" style="max-width:440px;height:168px"></div>
 						<script language="JavaScript"> 
-						$(function () { 
-						    Highcharts.setOptions({
-						        lang: {
-						            decimalPoint: '.',
-						            thousandsSep: ','
-						        }
-						    });
-							var myChart = Highcharts.chart('ly_chart_pv', {
+// 						$(function () { 
+// 						    Highcharts.setOptions({
+// 						        lang: {
+// 						            decimalPoint: '.',
+// 						            thousandsSep: ','
+// 						        }
+// 						    });
+							var myChart1 = Highcharts.chart('ly_chart_pv', {
 							    chart: {
 							    	marginTop:0,
 									marginBottom:0,
@@ -495,25 +495,25 @@
 							    credits: {
 									enabled: false
 								},
-							    series: [{
-							        name: '수익구성',
-							        colorByPoint: true,
-							        data: [{
-							            name: '① REC 수익',
-							            y: 3188076
-							        }, {
-							            name: '② SMP 수익',
-							            y: 2227088
-							        }]
-							    }]
+// 							    series: [{
+// 							        name: '수익구성',
+// 							        colorByPoint: true,
+// 							        data: [{
+// 							            name: '① REC 수익',
+// 							            y: 3188076
+// 							        }, {
+// 							            name: '② SMP 수익',
+// 							            y: 2227088
+// 							        }]
+// 							    }]
 							});
-						});
+// 						});
 						</script>						
 					</div>
 				</div>
 				<div class="fr" style="width:42%">
 					<h2>5. 납입처</h2>
-					<table class="tbl" style="margin-top:10px;">
+					<table class="tbl infoArea" style="margin-top:10px;">
 						<colgroup>
 							<col width="40%">
 							<col width="60%">

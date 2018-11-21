@@ -431,13 +431,13 @@
 		var valAddTex = texList[0].val_add_tax				;
 		var usg = texList[0].val_add_tax	;
 		var energyChgReduct = Math.round(texList[0].energy_chg_reduct);	//전력량 요금 절감(계시별)
-		var beneDivenergyChgReduct = Math.round((energyChgReduct*ratePer)/100);		//전력량 요금 절감(계시별) 수익배분
+		var beneDivenergyChgReduct = Math.round((energyChgReduct*profitRatio)/100);		//전력량 요금 절감(계시별) 수익배분
 		var essChgIncen = Math.round(texList[0].ess_chg_incen);	//ESS 충전 요금 할인
-		var beneDivessChgIncen = Math.round((essChgIncen*ratePer)/100);		//ESS 충전 요금 할인 수익배분
+		var beneDivessChgIncen = Math.round((essChgIncen*profitRatio)/100);		//ESS 충전 요금 할인 수익배분
 		var essDischgIncen = Math.round(texList[0].ess_dischg_incen);	//ESS 방전 요금 할인
-		var beneDivessDischgIncen = Math.round((essDischgIncen*ratePer)/100);		//ESS 방전 요금 할인 수익배분
+		var beneDivessDischgIncen = Math.round((essDischgIncen*profitRatio)/100);		//ESS 방전 요금 할인 수익배분
 		var total = Math.round(energyChgReduct+essChgIncen+essDischgIncen);	//총계
-		var beneDivTotal = Math.round((total*ratePer)/100);	//수익배분 총계
+		var beneDivTotal = Math.round((total*profitRatio)/100);	//수익배분 총계
 		var addDivTotal = Math.round(beneDivTotal*1.1);
 		var reEssBdayInMonth  = 0;
 		var reEssDischgOffPeak  = 0;
@@ -498,8 +498,8 @@
 		}
 		if(ewpPeakRate == null || ewpPeakRate == "" || ewpPeakRate == "null") reEwpPeakRate = null;
 		else reEwpPeakRate = Math.round( Number(ewpPeakRate) );
-		if(ratePer == null || ratePer == "" || ratePer == "null") reRatePer = null;
-		else reRatePer = Math.round( Number(ratePer) );
+		if(profitRatio == null || profitRatio == "" || profitRatio == "null") reRatePer = null;
+		else reRatePer = Math.round( Number(profitRatio) );
 		
 		/*var reEssDischgOffPeak  = 0;
 		var reEssDischgMidPeak  = 0;
@@ -523,7 +523,6 @@
 		totChgPeakVal2 =usg*basicVal;
 		
 		
-		alert(totChgPeakVal1+ "------------"+totChgPeakVal2);
 		
 		totDischgPeakVal = dischgOffCalc+dischgMidCalc+dischgMaxCalc;
 		var delLastWon = Math.floor(addDivTotal/10)*10-addDivTotal; // 원단위 절사
@@ -571,7 +570,7 @@
 		ESSBodyStr += "<td align='right'>"+numberComma(beneDivTotal)+"원</td>";
 		ESSBodyStr += "</tr>";
 		ESSBodyStr += "<tr>";
-		ESSBodyStr += "<th colspan='2'>수익배분 계111</th>";
+		ESSBodyStr += "<th colspan='2'>수익배분 계</th>";
 		ESSBodyStr += "<td align='right'>"+numberComma(beneDivTotal)+"원</td>";
 		ESSBodyStr += "</tr>";
 		ESSBodyStr += "<tr>";
