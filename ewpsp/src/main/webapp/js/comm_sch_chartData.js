@@ -84,7 +84,6 @@ function changePeriod(param) {
 }
 
 var btwnDt = 0;
-var realTimeRefresh = null;
 $(function () { 
 	$("#datepicker1, #datepicker2").change(function () {
 		$dt1 = $("#datepicker1");

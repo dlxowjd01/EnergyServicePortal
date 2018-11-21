@@ -476,7 +476,7 @@
 					var tm = new Date( convertDateUTC(loopCntChartList[i].std_timestamp) );
 					// 차트데이터 셋팅
 					dataSet.push([setChartDateUTC(loopCntChartList[i].std_timestamp) , reKepcoUsage]);
-					dataSet2.push([setChartDateUTC(loopCntChartList[i].std_timestamp) , reKepcoUsage+reEssUsage]);
+					dataSet2.push([setChartDateUTC(loopCntChartList[i].std_timestamp) , reKepcoUsage+rePvUsage+reEssUsage]);
 					dataSet3.push([setChartDateUTC(loopCntChartList[i].std_timestamp) , reKepcoUsage+rePvUsage]);
 					
 					if( (i+1) == loopCntChartList.length ) {

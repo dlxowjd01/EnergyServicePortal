@@ -1,0 +1,75 @@
+[수집기 실행환경]
+
+- jdk1.8
+
+- 설치위치 : /home/ubuntu/ewpsp_batch
+
+
+
+
+[수집기 디렉토리구조 및 설명]
+
+- lib : ewp-api.jar 라이브러리 위치
+
+- config : jdbc 설정 및 api url 설정 파일 위치
+
+- bin : 실행파일 위치
+
+- logs : 로그 위치
+
+
+
+
+[수집기 설정파일 내용에 대한 설명]
+
+- config/application.properties : db정보 설정
+
+- config/logback.xml : log 설정
+
+- config/system.properties : API_URL 및 인증정보 설정
+
+
+
+
+[수집기 실행방법 및 옵션]
+
+- 실행파일 : /home/ubuntu/ewpsp_batch/startEwpApi.sh
+
+- 옵션 :
+
+--API_CODE : API코드(인터페이스정의서참조) - 필수
+
+--SITE_ID : SITE ID - 필수아님(없으면 전체 사이트)
+
+--DEVICE_ID : DEVICE ID - 필수아님(없으면 전체 장치)
+
+--BEGIN_DATE : 시작일(YYYYMMDD) - 필수아님(없으면 하루전 or DB저장된 마지막 일자부터)
+
+--END_DATE : 종료일(YYYYMMDD) - 필수아님(없으면 현재시간까지)
+
+- 예제 : 
+
+/home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=ENERGY01 --SITE_ID=17094385
+
+
+
+
+그리고 수집기는 최대한 시간이 겹치지 않도록 이렇게 등록해놓았습니다.
+
+10 * * * * /home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=ENERGY01
+15 * * * * /home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=ENERGY02
+20 * * * * /home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=ENERGY03
+25 * * * * /home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=ENERGY04
+30 * * * * /home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=ENERGY05
+35 * * * * /home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=ENERGY06
+40 * * * * /home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=ENERGY07
+45 * * * * /home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=ENERGY08
+50 * * * * /home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=ENERGY09
+55 * * * * /home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=ENERGY10
+00,33 * * * * /home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=DEVICE01
+00,33 * * * * /home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=DEVICE02
+00,33 * * * * /home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=DEVICE03
+00,33 * * * * /home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=DEVICE04
+02 0,6,12,18 * * * /home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=BILL01
+04 0,6,12,18 * * * /home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=BILL03
+06 0,6,12,18 * * * /home/ubuntu/ewpsp_batch/bin/startEwpApi.sh --API_CODE=BILL04

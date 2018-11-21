@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.ewp.api.dao.ChargePowerDao">
+    <resultMap type="ChargePower" id="ChargePowerRM">
+        <id property="chgPwrIdx" column="chg_pwr_idx" javaType="Integer"></id><!--요금적용전력식별자-->
+        <result property="siteId" column="site_id" javaType="String"></result><!--사이트ID-->
+        <result property="stdDate" column="std_date" javaType="String"></result><!--기준일자(형식:YYYYMMDD)-->
+        <result property="chargePower" column="charge_power" javaType="Integer"></result><!--요금적용전력(단위:KW)-->
+        <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
+    </resultMap>
+    <insert id="insert" parameterType="ChargePower">
+        /* 요금적용전력 등록 */
+        INSERT INTO tb_charge_power (
+               site_id,
+               std_date,
+               charge_power,
+               reg_date
+             ) VALUES (
+               #{entity.siteId},
+               #{entity.stdDate},
+               #{entity.chargePower},
+               #{entity.regDate})
+        <selectKey resultType="Integer" keyProperty="entity.chgPwrIdx">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <update id="update" parameterType="ChargePower">
+        /* 요금적용전력 수정 */
+        UPDATE tb_charge_power 
+               <set>
+               <if test="entity.siteId != null">
+               site_id = #{entity.siteId},
+               </if>
+               <if test="entity.stdDate != null">
+               std_date = #{entity.stdDate},
+               </if>
+               <if test="entity.chargePower != null">
+               charge_power = #{entity.chargePower},
+               </if>
+               <if test="entity.regDate != null">
+               reg_date = #{entity.regDate},
+               </if>
+               </set>
+         WHERE chg_pwr_idx = #{entity.chgPwrIdx}
+    </update>
+    <delete id="delete" parameterType="ChargePower">
+        /* 요금적용전력 삭제 */
+        DELETE FROM tb_charge_power 
+         WHERE chg_pwr_idx = #{chgPwrIdx}
+    </delete>
+    <select id="selectOne" resultMap="ChargePowerRM">
+        /* 요금적용전력 상세조회 */
+        SELECT chg_pwr_idx,
+               site_id,
+               std_date,
+               charge_power,
+               reg_date
+          FROM tb_charge_power
+         WHERE chg_pwr_idx = #{chgPwrIdx}
+    </select>
+    <select id="selectList" resultMap="ChargePowerRM">
+        /* 요금적용전력 목록조회 */
+        SELECT chg_pwr_idx,
+               site_id,
+               std_date,
+               charge_power,
+               reg_date
+          FROM tb_charge_power
+               <if test="pageable != null">
+         WHERE LIMIT #{pageable.start}, #{pageable.end}
+               </if>
+    </select>
+    <select id="selectListCount" resultType="int">
+        /* 요금적용전력 전체 개수 조회 */
+        SELECT COUNT(*) AS CNT
+          FROM tb_charge_power
+         WHERE chg_pwr_idx = #{chgPwrIdx}
+    </select>
+</mapper>

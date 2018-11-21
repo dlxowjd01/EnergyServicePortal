@@ -30,6 +30,10 @@
 									<div class="ctit ct1"><span>실제 사용량</span></div>
 									<div class="cval" id="pastUseTot"><span>0</span>kWh</div>
 								</li>
+								<li class="ct2">
+									<div class="ctit ct2"><span>목표 사용량</span></div>
+									<div class="cval" id="totalGoalPower"><span>30,100</span>kWh</div>
+								</li>
 								<li>
 									<div class="ctit"><span>감축량</span></div>
 									<div class="cval" id="totalReduceAmt"><span>0</span>kWh</div>
@@ -184,6 +188,8 @@
 										/* 그래프 스타일 */
 									    series: [{
 									        color: '#438fd7' /* 실제 사용량 */
+									    },{
+									        color: '#13af67' /* 목표 사용량 */
 									    }],
 
 									    /* 반응형 */

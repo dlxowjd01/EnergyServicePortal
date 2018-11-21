@@ -1,0 +1,2 @@
+수집기 로그 : /home/ubuntu/ewpsp_batch/logs
+탐캣 로그 : /opt/tomcat/logs

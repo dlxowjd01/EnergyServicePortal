@@ -60,6 +60,42 @@
 		});
 		
 		$("#confirmBtn").click(function(){
+			if($("#userForm").find("#userId").val() == "") {
+				alert("사용자ID를 입력하세요");
+				$("#userForm").find("#userId").focus();
+				return;
+			}
+			if($("#userForm").find("#authType").val() == "") {
+				alert("권한을 선택하세요");
+				$("#userForm").find("#authType").focus();
+				return;
+			}
+			if($("#userForm").find("#compIdx").val() == "") {
+				alert("회사를 선택하세요");
+				$("#userForm").find("#compIdx").focus();
+				return;
+			}
+			
+			var authType = $("#authType").val();
+			if(authType == 3) {
+				if($("#userForm").find("#siteGrpIdx").val() == "") {
+					alert("그룹을 선택하세요");
+					$("#userForm").find("#siteGrpIdx").focus();
+					return;
+				}
+			} else if(authType == 4 || authType == 5) {
+				if($("#userForm").find("#siteGrpIdx").val() == "") {
+					alert("그룹을 선택하세요");
+					$("#userForm").find("#siteGrpIdx").focus();
+					return;
+				}
+				if($("#userForm").find("#siteId").val() == "") {
+					alert("사이트를 선택하세요");
+					$("#userForm").find("#siteId").focus();
+					return;
+				}
+			}
+			
 			var formData = $("#userForm").serializeObject();
 			if(confirm("저장하시겠습니까?")) {
 				if(insUpdFlag ==  1) insertUser(formData);

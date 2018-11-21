@@ -1,3 +1,5 @@
+	var realTimeRefresh = null;
+	var nextDrRefreshTime = null;
 	$(document).ready(function() {
 		getSiteSetDetail();
 		cblSet();
@@ -15,13 +17,14 @@
 				$("#selPeriod").empty().append("5분").append( $('<span class="caret" />') );
 				$("#selPeriodVal").val('5min');
 				realTimeRefreshFn();
+//				nextRefreshTimeSet();
 				searchDisableChange(true);
-//				myChart.yAxis[0].options.title.text = "(kW)";
 				myChart.yAxis[0].setTitle({ text: "(kW)" });
 				
 				if(realTimeRefresh == null) { // 1분 간격
 					realTimeRefresh = setInterval(function(){
 						realTimeRefreshFn();
+//						nextRefreshTimeSet();
 					},1000*60); // 1000 = 1초, 5000 = 5초
 				} else {
 					alert("이미 실시간 자동갱신이 실행중입니다.");
@@ -32,15 +35,42 @@
 	        	$("#selPeriodVal").val('hour');
 				clearInterval(realTimeRefresh);
 				realTimeRefresh = null;
+//				nextDrRefreshTime = null;
 				searchDisableChange(false);
-//				myChart.yAxis[0].options.title.text = "(kWh)";
 				
 	        }
 	    });
 	});
+	
+	function nextRefreshTimeSet() {
+		var nextTime = new Date();
+		var nextTimeVal = new Date(nextTime.setMinutes(nextTime.getMinutes() + 1));
+		nextDrRefreshTime = setInterval(function(){
+			remain(nextTimeVal);
+		},1000);
+	}
+	
+	// 남은 시간 카운터
+	function remain(nextTimeVal){
+		var now = new Date();
+		var gap = Math.round((nextTimeVal.getTime() - now.getTime()) / 1000);
+		console.log(nextTimeVal, now);
+		
+		var D = Math.floor(gap / 86400);
+		var H = Math.floor((gap - D * 86400) / 3600 % 3600);
+		var M = Math.floor((gap - H * 3600) / 60 % 60);
+		var S = Math.floor((gap - M * 60) % 60);
+		
+//		document.getElementById('text2').innerHTML = '오늘 당신에게 주어진 시간은 ' + D + '일 ' + H + '시간 ' + M + '분 ' + S + '초 남았습니다.';
+//		$(".real_time").find('span').empty().html( D + '일 ' + H + '시간 ' + M + '분 ' + S + '초' );
+		$(".real_time").find('span').empty().html( M + ':' + S );
+		if(M == 0 && S == 0) {
+			nextTime = new Date();
+		}
+	}
 
 	var cblAmt; // 기준부하
-	var goalPower; // 목표사용량=기준부하-계약용량
+//	var goalPower; // 목표사용량=기준부하-계약용량
 	var contractPower;
 	var reduceAmt;
 	function callback_getSiteSetDetail(result) {
@@ -213,7 +243,8 @@
 		var dataSet3_2 = []; // chartData를 위한 변수(목표사용량 13시이후)
 		var dataSet3_3 = []; // chartData를 위한 변수(목표사용량 13시이후)
 		var dataSet3_4 = []; // chartData를 위한 변수(목표사용량 13시이후)
-		var totUsage = 0; // 전체 누적합
+		var totalUsage = 0; // 전체 누적합
+		var totalGoalPower = 0; // 전체 누적합
 		if(chartList != null && chartList.length > 0) {
 			$(".dr_chart").find(".inchart-nodata").css("display", "none");
 			$(".dr_chart").find(".inchart").css("display", "");
@@ -225,7 +256,7 @@
 				} else {
 					var map = convertUnitFormat(usage, "mWh", 8);
 					reUsage = Math.round( Number(map.get("formatNum")) );
-					totUsage = totUsage+Number(usage);
+					totalUsage = totalUsage+Number(usage);
 				}
 				
 				// 차트데이터 셋팅
@@ -236,7 +267,7 @@
 			if(dbCblList != null) {
 				for(var i=0; i<dbCblList.length; i++) {
 					var hour = new Date(setSheetDateUTC(dbCblList[i].start_timestamp)).getHours();
-					console.log("db날짜   ",new Date(setSheetDateUTC(dbCblList[i].start_timestamp)), "   ", dbCblList[i].cbl);
+//					console.log("db날짜   ",new Date(setSheetDateUTC(dbCblList[i].start_timestamp)), "   ", dbCblList[i].cbl);
 					
 					if(hour != 12) {
 						var next = dbCblList[i].start_timestamp+(1000 * 3600);
@@ -248,6 +279,7 @@
 							dataSet3_1.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - reduceAmt ]);
 							dataSet2_1.push([ setChartDateUTC(next), cbl ]);
 							dataSet3_1.push([ setChartDateUTC(next), cbl - reduceAmt ]);
+							totalGoalPower = cbl - reduceAmt;
 						} else if(i == 1) {
 							if(i+1 != dbCblList.length) {
 								dataSet2_2.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
@@ -290,7 +322,8 @@
 		timeSlotGoalPowerList4 = dataSet3_4;
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)		
-		unit_format(String(totUsage), "pastUseTot", "mWh");
+		unit_format(String(totalUsage), "pastUseTot", "mWh");
+		unit_format(String(totalGoalPower), "totalGoalPower", "mWh");
 	}
 	
 	// 검색결과 표 데이터
@@ -407,7 +440,6 @@
 				color: '#13af67',
 				type: 'area',
 				fillOpacity: 0.1,
-//				marker: { enabled: false },
 				data: timeSlotGoalPowerList1
 			}, false);
 		}
@@ -424,7 +456,6 @@
 				color: '#13af67',
 				type: 'area',
 				fillOpacity: 0.1,
-//				marker: { enabled: false },
 				linkedTo: linkedTo, // 전의 series와 하나로 연결한다
 				data: timeSlotGoalPowerList2
 			}, false);
@@ -443,7 +474,6 @@
 				color: '#13af67',
 				type: 'area',
 				fillOpacity: 0.1,
-//				marker: { enabled: false },
 				linkedTo: linkedTo, // 전의 series와 하나로 연결한다
 				data: timeSlotGoalPowerList3
 			}, false);
@@ -463,7 +493,6 @@
 				color: '#13af67',
 				type: 'area',
 				fillOpacity: 0.1,
-//				marker: { enabled: false },
 				linkedTo: linkedTo, // 전의 series와 하나로 연결한다
 				data: timeSlotGoalPowerList4
 			}, false);
@@ -490,7 +519,8 @@
 		var dataSet3_2 = []; // chartData를 위한 변수(목표사용량 13시이후)
 		var dataSet3_3 = []; // chartData를 위한 변수(목표사용량 13시이후)
 		var dataSet3_4 = []; // chartData를 위한 변수(목표사용량 13시이후)
-		var totUsage = 0; // 전체 누적합
+		var totalUsage = 0; // 전체 누적합
+		var totalGoalPower = 0; // 전체 누적합
 		if(chartList != null && chartList.length > 0) {
 			$(".dr_chart").find(".inchart-nodata").css("display", "none");
 			$(".dr_chart").find(".inchart").css("display", "");
@@ -502,7 +532,7 @@
 				} else {
 					var map = convertUnitFormat(usage*12, "mW", 8);
 					reUsage = Math.round( Number(map.get("formatNum")) );
-					totUsage = totUsage+Number(usage);
+					totalUsage = totalUsage+Number(usage);
 				}
 				
 				// 차트데이터 셋팅
@@ -513,7 +543,7 @@
 			if(cblList != null) {
 				for(var i=0; i<cblList.length; i++) {
 					var hour = new Date(setSheetDateUTC(cblList[i].start)).getHours();
-					console.log("실시간날짜   ",new Date(setSheetDateUTC(cblList[i].start)), new Date(setSheetDateUTC(cblList[i].end)), "   ", cblList[i].cbl);
+//					console.log("실시간날짜   ",new Date(setSheetDateUTC(cblList[i].start)), new Date(setSheetDateUTC(cblList[i].end)), "   ", cblList[i].cbl);
 					
 					if(hour != 12) {
 						var next = cblList[i].start+(1000 * 3600);
@@ -525,6 +555,7 @@
 							dataSet3_1.push([ setChartDateUTC(cblList[i].start), cbl - reduceAmt ]);
 							dataSet2_1.push([ setChartDateUTC(next), cbl ]);
 							dataSet3_1.push([ setChartDateUTC(next), cbl - reduceAmt ]);
+							totalGoalPower = cbl - reduceAmt;
 						} else if(i == 1) {
 							if(i+1 != cblList.length) {
 								dataSet2_2.push([ setChartDateUTC(cblList[i].start), cbl ]);
@@ -566,7 +597,8 @@
 		timeSlotGoalPowerList4 = dataSet3_4;
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)		
-		unit_format(String(totUsage), "pastUseTot", "mWh");
+		unit_format(String(totalUsage), "pastUseTot", "mWh");
+		unit_format(String(totalGoalPower), "totalGoalPower", "mWh");
 	}
 	
 	// 실시간 갱신 표 데이터
