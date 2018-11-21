@@ -5,6 +5,7 @@
 <head>
 <jsp:include page="../include/common_static.jsp" />
 <jsp:include page="../include/sub_static.jsp" />
+<script src="/js/printThis.js" type="text/javascript"></script>
 <script src="../js/billRevenue/pvRevenue.js" type="text/javascript"></script>
 </head>
 <body>
@@ -263,28 +264,40 @@
 
     <!-- ###### 명세서 확인 및 출력 Popup Start ###### -->
     <script type="text/javascript">
-        $(function(){
-            $("#pvRevenueBtnPrint").printPreview({
-            	obj2print:'.pvRevenueStatement',
-                width:'880',
-                style:'<style>body {background:none !important;} #layerbox {top:0 !important;left:0 !important; margin:0 !important; border-radius:0;} .dprint .lbutton {display:none !important;} #layerbox .ltit {display:none !important;} #layerbox .stit {display:none !important;} .dprint .lbody {margin-top:0 !important;}</style>'
+            $(function(){
+                $(".default_btn").on('click',function(){
+                	 $(".lbutton").show();
+                });
+                
+                $(".lbtn_pdf").on('click',function(){
+                	$(".lbutton").hide();
+                });
+                
+                $('.lbtn_print').on('click', function(){
+                	$('#layerbox').css("left", "0px");
+                    $('#layerbox').css("top", "-200px");
+                    $(".lbutton").hide();
+                	$('#layerbox').printThis({
+    	        	});
+                });
             });
+        </script>
         });
     </script>    
     <div id="layerbox" class="dprint clear pvRevenueStatement" style="margin-top:200px;width:880px;">
     	<div class="lbutton fl">
-			<a href="#;" class="lbtn_pdf"><span>PDF로 저장</span></a>
-			<a href="#;" id="pvRevenueBtnPrint" class="lbtn_print"><span>인쇄</span></a>
+			<a href="javascript:getPdfDownload();" class="lbtn_pdf"><span>PDF로 저장</span></a>
+			<a href="#" id="pvRevenueBtnPrint" class="lbtn_print"><span>인쇄</span></a>
 		</div>
         <div class="ltit fr">      	
 			<a href="javascript:popupClose('dprint');">닫기</a>
         </div>
-		<div class="lbody mt30">
+		<div class="lbody mt30" id = "printArea">
 
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
 					<td colspan="2" style="border:solid 1px #111;text-align:center;padding:15px;font-size:20px;font-weight:600;">
-						태양열 발전 수익 배분 청구서 (’18년 5월)
+						태양광 발전 수익 배분 청구서 (’18년 5월)
 					</td>
 				</tr>
 				<tr>
@@ -302,7 +315,7 @@
 			<div class="clear" style="margin-top:20px;">
 				<div class="fl" style="width:49%">
 					<h2>1. 청구내역</h2>
-					<table class="tbl" style="margin-top:10px;">
+					<table class="tbl TexArea" style="margin-top:10px;">
 						<colgroup>
 							<col width="50%"><col>
 						</colgroup>
@@ -352,7 +365,7 @@
 				</div>
 				<div class="fr" style="width:49%">
 					<h2>2. 발전 정보</h2>
-					<table class="tbl" style="margin-top:10px;">
+					<table class="tbl elecInfo" style="margin-top:10px;">
 						<colgroup>
 							<col width="50%"><col>
 						</colgroup>
@@ -401,7 +414,7 @@
 			</div>
 
 			<h2 style="margin-top:20px;">3. 수익분배 계산 내역</h2>
-			<table class="tbl" style="margin-top:10px;">
+			<table class="tbl beneDiv" style="margin-top:10px;">
 				<colgroup>
 					<col width="25%">
 					<col>

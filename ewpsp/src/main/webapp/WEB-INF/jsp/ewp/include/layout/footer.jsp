@@ -91,7 +91,7 @@
 
 
     <!-- ###### 통합 명세서 Popup Start ###### -->
-    <script type="text/javascript">
+<!--     <script type="text/javascript">
         $(function(){
             $("#btnPrint").printPreview({
                 obj2print:'#layerbox',
@@ -364,7 +364,7 @@
 			</div>
 
 		</div>
-    </div>
+    </div> -->
     <!-- ###### Popup End ###### -->
 
     <!-- 레이어 팝업 배경 -->

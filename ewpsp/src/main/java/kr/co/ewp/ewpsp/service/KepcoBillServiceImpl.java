@@ -31,4 +31,21 @@ public class KepcoBillServiceImpl implements KepcoBillService {
 		return resultMap;
 	}
 	
+	public Map getKepcoTexBillList(HashMap param) throws Exception {
+		List list = kepcoBillDao.getKepcoTexBillList(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		//resultMap = BillRevenueDataSetting.dataSetting(param, list, "bill_yearm");
+		resultMap.put("result", list);
+		return resultMap;
+	}
+	
+	public Map getKepcoResentBillList(HashMap param) throws Exception {
+		List list = kepcoBillDao.getKepcoResentBillList(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = BillRevenueDataSetting.dataSetting(param, list, "bill_yearm");
+		return resultMap;
+	}
+	
 }

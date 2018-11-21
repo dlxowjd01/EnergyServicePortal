@@ -5,6 +5,7 @@
 <head>
 <jsp:include page="../include/common_static.jsp" />
 <jsp:include page="../include/sub_static.jsp" />
+<script src="/js/printThis.js" type="text/javascript"></script>
 <script src="../js/billRevenue/essRevenue.js" type="text/javascript"></script>
 </head>
 <body>
@@ -258,32 +259,42 @@
     <!-- ###### 명세서 확인 및 출력 Popup Start ###### -->
     <script type="text/javascript">
         $(function(){
-            $("#essRevenueBtnPrint").printPreview({
-                obj2print:'.essRevenueStatement',
-                width:'880',
-                style:'<style>body {background:none !important;} #layerbox {top:0 !important;left:0 !important; margin:0 !important; border-radius:0;} .dprint .lbutton {display:none !important;} #layerbox .ltit {display:none !important;} #layerbox .stit {display:none !important;} .dprint .lbody {margin-top:0 !important;}</style>'
+            $(".default_btn").on('click',function(){
+            	 $(".lbutton").show();
+            });
+            
+            $(".lbtn_pdf").on('click',function(){
+            	$(".lbutton").hide();
+            });
+            
+            $('.lbtn_print').on('click', function(){
+            	$('#layerbox').css("left", "0px");
+                $('#layerbox').css("top", "-300px");
+                $(".lbutton").hide();
+            	$('#layerbox').printThis({
+	        	});
             });
         });
-    </script>    
-    <div id="layerbox" class="dprint clear essRevenueStatement" style="margin-top:300px;width:880px;">
+    </script>
+     <div id="layerbox" class="dprint clear essRevenueStatement" style="margin-top:300px;width:880px;">
     	<div class="lbutton fl">
-			<a href="#;" class="lbtn_pdf"><span>PDF로 저장</span></a>
-			<a href="#;" id="essRevenueBtnPrint" class="lbtn_print"><span>인쇄</span></a>
+			<a href="javascript:getPdfDownload();" class="lbtn_pdf"><span>PDF로 저장</span></a>
+			<a href="javascript:commonPrint();" id="essRevenueBtnPrint" class="lbtn_print"><span>인쇄</span></a>
 		</div>
         <div class="ltit fr">      	
 			<a href="javascript:popupClose('dprint');">닫기</a>
         </div>
-		<div class="lbody mt30">
+		<div class="lbody mt30" id="printArea">
 
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
-					<td colspan="2" style="border:solid 1px #111;text-align:center;padding:15px;font-size:20px;font-weight:600;">
+					<td colspan="2" style="border:solid 1px #111;text-align:center;padding:15px;font-size:20px;font-weight:600;" id="texBill">
 						에너지절감 솔루션 제공 전기요금 절감 수익 배분 청구서 (’18년 5월)
 					</td>
 				</tr>
 				<tr>
-					<td height="30" align="left" style="font-size:12px;">고객명 : 고객Site_1</td>
-					<td height="30" align="right" style="font-size:12px;">청구일 : 2018-07-20</td>
+					<td height="30" align="left" style="font-size:12px;">고객명 : ${selViewSite.site_name }</td>
+					<td height="30" align="right" style="font-size:12px;" id ="texDay">청구일 : 2018-07-20</td>
 				</tr>
 				<tr>
 					<td colspan="2" height="60" align="right" style="font-size:16px;font-weight:600;">
@@ -296,7 +307,7 @@
 			<div class="clear" style="margin-top:20px">
 				<div class="fl" style="width:49%;">
 					<h2>1. 청구금액</h2>
-					<table class="tbl" style="margin-top:10px">
+					<table class="tbl texArea" style="margin-top:10px">
 						<thead>
 							<tr>
 								<th>구 분</th>
@@ -353,7 +364,7 @@
 				</div>
 				<div class="fr" style="width:49%;">
 					<h2>2. ESS 충방전량 및 전력량 요금 절감내역</h2>
-					<table class="tbl" style="margin-top:10px">
+					<table class="tbl texSaveArea" style="margin-top:10px">
 						<thead>
 							<tr>
 								<th colspan="2">ESS</th>
@@ -416,7 +427,7 @@
 			</div>
 
 			<h2 style="margin-top:20px">3. ESS 피크저감, 충전, 전용 요금 할인 계산 내역</h2>
-			<table class="tbl" style="margin-top:10px">
+			<table class="tbl calcArea" style="margin-top:10px">
 				<thead>
 					<tr>
 						<th>구 분</th>
@@ -436,7 +447,7 @@
 						<td>(81,728 kW x 0.5 x 54.5 원 x 1) </td>
 					</tr>
 					<tr>
-						<th>④ESS 전용 요금 할인</th>
+						<th>④ESS 방전 요금 할인</th>
 						<td align="right">25,331,670</td>
 						<td>Min[(40,527 kW x 8,190 원), (((64,990 kW – 41 kW) / (21 일 x 3)) x 3 x 1 x 8,190 원)] </td>
 					</tr>
@@ -447,7 +458,7 @@
 			<h2 style="margin-top:10px">4. 고객 사항</h2>
 			<div class="clear" style="margin-top:10px">
 				<div class="fl" style="width:42%;">
-					<table class="tbl">							
+					<table class="tbl typeArea">							
 						<tbody>
 							<tr>
 								<th>전기사용 계약종별</th>
@@ -482,14 +493,14 @@
 					<div class="inchart">
 						<div id="ly_chart_ess" style="max-width:445px;height:169px"></div>
 						<script language="JavaScript"> 
-						$(function () { 
+						//$(function () { 
 							Highcharts.setOptions({
 						        lang: {
 						            decimalPoint: '.',
 						            thousandsSep: ','
 						        }
 						    });
-							var myChart = Highcharts.chart('ly_chart_ess', {
+							var myChart1 = Highcharts.chart('ly_chart_ess', {
 							    chart: {
 							    	marginTop:0,
 									marginBottom:10,
@@ -526,7 +537,7 @@
 							    credits: {
 									enabled: false
 								},
-							    series: [{
+							   /*  series: [{
 							        name: '전기요금 절감효과',
 							        colorByPoint: true,
 							        data: [{
@@ -539,9 +550,9 @@
 							            name: '④',
 							            y: 25331670
 							        }]
-							    }]
+							    }] */
 							});
-						});
+						//});
 						</script>						
 					</div>
 				</div>

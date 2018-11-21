@@ -11,6 +11,8 @@
 		$("#selTerm").val(SelTerm);
 		
 		var formData = $("#schForm").serializeObject();
+		getSiteSetDetail(formData);
+		getESSRevenueTexList(formData); // 명세서 조회
 		getDBData(formData);
 	});
 
@@ -100,7 +102,7 @@
 		if(sheetList != null && sheetList.length > 0) {
 			for(var i=0; i<sheetList.length; i++) {
 				var yyyyMM = sheetList[i].bill_yearm;
-				var essBdayInMonth  = String(sheetList[i].ess_bdayIn_month)   ;
+				var essBdayInMonth  = String(sheetList[i].bdayIn_month)   ;
 				var essDischgOffPeak  = String(sheetList[i].ess_dischg_off_peak);
 				var essDischgMidPeak  = String(sheetList[i].ess_dischg_mid_peak);
 				var essDischgMaxPeak  = String(sheetList[i].ess_dischg_max_peak);
@@ -320,7 +322,7 @@
 		if(chartList != null && chartList.length > 0) {
 			for(var i=0; i<chartList.length; i++) {
 				var yyyyMM = chartList[i].bill_yearm;
-				var essBdayInMonth  = String(chartList[i].ess_bdayIn_month)   ;
+				var essBdayInMonth  = String(chartList[i].bdayIn_month)   ;
 				var essDischgOffPeak  = String(chartList[i].ess_dischg_off_peak);
 				var essDischgMidPeak  = String(chartList[i].ess_dischg_mid_peak);
 				var essDischgMaxPeak  = String(chartList[i].ess_dischg_max_peak);
@@ -390,6 +392,335 @@
 		}
 		
 	}
+	
+	var texDataSet1 = [];
+	var texDataSet2 = [];
+	var texDataSet3 = [];
+	var essRevenueTexList1;
+	var essRevenueTexList2;
+	var essRevenueTexList3;
+	
+
+	function callback_getESSRevenueTexList(result){
+		var texList = result.texList;
+		var energyChgBasicBill = "";
+		var thisDay = new Date();
+		thisDay = new Date(thisDay.setMonth(thisDay.getMonth()-1));
+		thisMonth = parseInt(thisDay.format("MM"));
+				
+		if(thisMonth >=6 && thisMonth <=8){
+			energyChgBasicBill = summerVal;
+		}else if(thisMonth >=11 && thisMonth<=2){
+			energyChgBasicBill = winterVal;
+		}else{
+			energyChgBasicBill = springFallVal;
+		}
+		var yyyyMM = texList[0].bill_yearm;
+		var essBdayInMonth  = String(texList[0].ess_bdayIn_month)   ;
+		var essDischgOffPeak  = String(texList[0].ess_dischg_off_peak);
+		var essDischgMidPeak  = String(texList[0].ess_dischg_mid_peak);
+		var essDischgMaxPeak  = String(texList[0].ess_dischg_max_peak);
+		var essChgOffPeak  = String(texList[0].ess_chg_off_peak)   ;
+		var essChgMidPeak  = String(texList[0].ess_chg_mid_peak)   ;
+		var essChgMaxPeak  = String(texList[0].ess_chg_max_peak)   ;
+		var preEssIncen  = String(texList[0].pre_ess_incen)      ;
+		var essIncen  = String(texList[0].ess_incen)          ;
+		var peakRate  = String(texList[0].peak_rate)          ;
+		var ewpPeakRate  = String(texList[0].ewp_peak_rate)      ;
+		var ratePer  = String(texList[0].rate_per)           ;
+		var valAddTex = texList[0].val_add_tax				;
+		var usg = texList[0].val_add_tax	;
+		var energyChgReduct = Math.round(texList[0].energy_chg_reduct);	//전력량 요금 절감(계시별)
+		var beneDivenergyChgReduct = Math.round((energyChgReduct*ratePer)/100);		//전력량 요금 절감(계시별) 수익배분
+		var essChgIncen = Math.round(texList[0].ess_chg_incen);	//ESS 충전 요금 할인
+		var beneDivessChgIncen = Math.round((essChgIncen*ratePer)/100);		//ESS 충전 요금 할인 수익배분
+		var essDischgIncen = Math.round(texList[0].ess_dischg_incen);	//ESS 방전 요금 할인
+		var beneDivessDischgIncen = Math.round((essDischgIncen*ratePer)/100);		//ESS 방전 요금 할인 수익배분
+		var total = Math.round(energyChgReduct+essChgIncen+essDischgIncen);	//총계
+		var beneDivTotal = Math.round((total*ratePer)/100);	//수익배분 총계
+		var addDivTotal = Math.round(beneDivTotal*1.1);
+		var reEssBdayInMonth  = 0;
+		var reEssDischgOffPeak  = 0;
+		var reEssDischgMidPeak  = 0;
+		var reEssDischgMaxPeak  = 0;
+		var dischgOffCalc = 0
+		var dischgMidCalc = 0
+		var dischgMaxCalc = 0
+		var reEssDischgOffPeakVal  = 0;
+		var reEssDischgMidPeakVal  = 0;
+		var reEssDischgMaxPeakVal  = 0;
+		var chgOffCalc = 0;
+		var chgMidCalc = 0;
+		var chgMaxCalc = 0;
+		var totDischgPeak = 0;
+		var totDischgPeakVal = 0;
+		var reEssChgOffPeak  = 0;
+		var reEssChgMidPeak  = 0;
+		var reEssChgMaxPeak  = 0;
+		var reEssChgOffPeakVal  = 0;
+		var reEssChgMidPeakVal  = 0;
+		var reEssChgMaxPeakVal  = 0;
+		var totChgPeak = 0;
+		var totChgPeakVal1 =0;
+		var totChgPeakVal2 =0;
+		var rePreEssIncen  = 0;
+		var reEssIncen  = 0;
+		var rePeakRate  = 0;
+		var reEwpPeakRate  = 0;
+		var reRatePer  = 0;
+		var elecNum = 0.5;
+		
+		if(essBdayInMonth == null || essBdayInMonth == "" || essBdayInMonth == "null") reEssBdayInMonth = null;
+		else reEssBdayInMonth = Math.round( Number(essBdayInMonth) );
+		if(essDischgOffPeak == null || essDischgOffPeak == "" || essDischgOffPeak == "null") reEssDischgOffPeak = null;
+		else reEssDischgOffPeak = Math.round( Number(essDischgOffPeak) );
+		if(essDischgMidPeak == null || essDischgMidPeak == "" || essDischgMidPeak == "null") reEssDischgMidPeak = null;
+		else reEssDischgMidPeak = Math.round( Number(essDischgMidPeak) );
+		if(essDischgMaxPeak == null || essDischgMaxPeak == "" || essDischgMaxPeak == "null") reEssDischgMaxPeak = null;
+		else reEssDischgMaxPeak = Math.round( Number(essDischgMaxPeak) );
+		if(essChgOffPeak == null || essChgOffPeak == "" || essChgOffPeak == "null") reEssChgOffPeak = null;
+		else reEssChgOffPeak = Math.round( Number(essChgOffPeak) );
+		if(essChgMidPeak == null || essChgMidPeak == "" || essChgMidPeak == "null") reEssChgMidPeak = null;
+		else reEssChgMidPeak = Math.round( Number(essChgMidPeak) );
+		if(essChgMaxPeak == null || essChgMaxPeak == "" || essChgMaxPeak == "null") reEssChgMaxPeak = null;
+		else reEssChgMaxPeak = Math.round( Number(essChgMaxPeak) );
+		if(preEssIncen == null || preEssIncen == "" || preEssIncen == "null") rePreEssIncen = null;
+		else rePreEssIncen = Math.round( Number(preEssIncen) );
+		if(essIncen == null || essIncen == "" || essIncen == "null") reEssIncen = null;
+		else {
+			reEssIncen = Math.round( Number(essIncen) );
+			//totDataSet2 = totDataSet2+Number(String(sheetList[i].ess_incen));
+		}
+		if(peakRate == null || peakRate == "" || peakRate == "null") rePeakRate = null;
+		else {
+			rePeakRate = Math.round( Number(peakRate) );
+			//totDataSet = totDataSet+Number(sheetList[i].peak_rate);
+		}
+		if(ewpPeakRate == null || ewpPeakRate == "" || ewpPeakRate == "null") reEwpPeakRate = null;
+		else reEwpPeakRate = Math.round( Number(ewpPeakRate) );
+		if(ratePer == null || ratePer == "" || ratePer == "null") reRatePer = null;
+		else reRatePer = Math.round( Number(ratePer) );
+		
+		/*var reEssDischgOffPeak  = 0;
+		var reEssDischgMidPeak  = 0;
+		var reEssDischgMaxPeak  = 0;
+		var totDischgPeak = 0;
+		var reEssChgOffPeak  = 0;
+		var reEssChgMidPeak  = 0;
+		var reEssChgMaxPeak  = 0;*/
+		
+		
+		
+		
+		totDischgPeak = reEssDischgOffPeak+reEssDischgMidPeak+reEssDischgMaxPeak;
+		totChgPeak =reEssChgOffPeak+ reEssChgMidPeak+reEssChgMaxPeak
+		
+		dischgOffCalc = reEssDischgOffPeak*elecNum*energyChgBasicBill*1;
+		dischgMidCalc = reEssDischgMidPeak*elecNum*energyChgBasicBill*1;
+		dischgMaxCalc = reEssDischgMaxPeak*elecNum*energyChgBasicBill*1;
+		
+		totChgPeakVal1 =(reEssChgMaxPeak-dischgMaxCalc)/(21*3)*3*1*basicVal;
+		totChgPeakVal2 =usg*basicVal;
+		
+		
+		alert(totChgPeakVal1+ "------------"+totChgPeakVal2);
+		
+		totDischgPeakVal = dischgOffCalc+dischgMidCalc+dischgMaxCalc;
+		var delLastWon = Math.floor(addDivTotal/10)*10-addDivTotal; // 원단위 절사
+		
+		var ESSBodyStr = "";
+		var ESSFootStr = "";
+		var ESSSaveAreaStr = "";
+		var ESSSaveFootAreaStr = "";
+		var ESSCalcAreaStr = "";
+		var ESSTypeStr = "";
+		
+		/*$(".texArea").find("tbody").empty();
+		$(".texArea").find("tfoot").empty();
+		$(".texSaveArea").find("tbody").empty();
+		$(".texSaveArea").find("tfoot").empty();
+		$(".calcArea").find("tbody").empty();*/
+		$("#texBill").text("에너지절감 솔루션 제공 전기요금 절감 수익 배분 청구서 (’"+yyyyMM.substring(2,4)+"년"+yyyyMM.substring(4,6)+"월)");
+		$("#texDay").text("청구일 : "+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-"+"20");
+		$(".dp_total").text(numberComma(addDivTotal+delLastWon));
+		
+		
+		ESSBodyStr += "<tr>";
+		ESSBodyStr += "<th>①기본 요금 절감(피크저감)</th>";
+		ESSBodyStr += "<td align='right'>0</td>";
+		ESSBodyStr += "<td align='right'>0</td>";
+		ESSBodyStr += "</tr>";
+		ESSBodyStr += "<tr>";
+		ESSBodyStr += "<th>②전력량 요금 절감(계시별)</th>";
+		ESSBodyStr += "<td align='right'>"+numberComma(energyChgReduct)+"원</td>";
+		ESSBodyStr += "<td align='right'>"+numberComma(beneDivenergyChgReduct)+"원</td>";
+		ESSBodyStr += "</tr>";
+		ESSBodyStr += "<tr>";
+		ESSBodyStr += "<th>③ESS 충전 요금 할인</th>";
+		ESSBodyStr += "<td align='right'>"+numberComma(essChgIncen)+"원</td>";
+		ESSBodyStr += "<td align='right'>"+numberComma(beneDivessChgIncen)+"원</td>";
+		ESSBodyStr += "</tr>";
+		ESSBodyStr += "<tr>";
+		ESSBodyStr += "<th>④ESS 방전 요금 할인</th>";
+		ESSBodyStr += "<td align='right'>"+numberComma(essDischgIncen)+"원</td>";
+		ESSBodyStr += "<td align='right'>"+numberComma(beneDivessDischgIncen)+"원</td>";
+		ESSBodyStr += "</tr>";
+		ESSBodyStr += "<tr>";
+		ESSBodyStr += "<th>총   계</th>";
+		ESSBodyStr += "<td align='right'>"+numberComma(total)+"원</td>";
+		ESSBodyStr += "<td align='right'>"+numberComma(beneDivTotal)+"원</td>";
+		ESSBodyStr += "</tr>";
+		ESSBodyStr += "<tr>";
+		ESSBodyStr += "<th colspan='2'>수익배분 계111</th>";
+		ESSBodyStr += "<td align='right'>"+numberComma(beneDivTotal)+"원</td>";
+		ESSBodyStr += "</tr>";
+		ESSBodyStr += "<tr>";
+		ESSBodyStr += "<th colspan='2'>부가가치세</th>";
+		ESSBodyStr += "<td align='right'>"+numberComma(Math.round(beneDivTotal/10))+"원</td>";
+		ESSBodyStr += "</tr>";
+		ESSBodyStr += "<tr>";
+		ESSBodyStr += "<th colspan='2'>원단위절사</th>";
+		ESSBodyStr += "<td align='right'>"+delLastWon+"</td>";
+		ESSBodyStr += "</tr>";
+		
+		ESSFootStr += "<tr>";
+		ESSFootStr += "<th colspan='2'>청구금액</th>";
+		ESSFootStr += "<td align='right'>"+numberComma(addDivTotal+delLastWon)+"</td>";
+		ESSFootStr += "</tr>";
+			
+		
+		ESSSaveAreaStr += "<tr>";
+		ESSSaveAreaStr += "<th rowspan='4'>충전</th>";
+		ESSSaveAreaStr += "<th>경부하</th>";
+		ESSSaveAreaStr += "<td aligh ='right'>"+ ( (reEssDischgOffPeak == null) ? "" : numberComma(reEssDischgOffPeak)    ) +"</td>";
+		ESSSaveAreaStr += "<td aligh ='right'>"+numberComma(Math.round(dischgOffCalc))+"</td>";
+		ESSSaveAreaStr += "</tr>";
+		ESSSaveAreaStr += "<tr>";
+		ESSSaveAreaStr += "<th>중간부하</th>";
+		ESSSaveAreaStr += "<td aligh ='right'>"+ ( (reEssDischgMidPeak == null) ? "" : numberComma(reEssDischgMidPeak)    ) +"</td>";
+		ESSSaveAreaStr += "<td aligh ='right'>"+numberComma(Math.round(dischgMidCalc))+"</td>";
+		ESSSaveAreaStr += "</tr>";
+		ESSSaveAreaStr += "<tr>";
+		ESSSaveAreaStr += "<th>최대부하</th>";
+		ESSSaveAreaStr += "<td aligh ='right'>"+ ( (reEssDischgMaxPeak == null) ? "" : numberComma(reEssDischgMaxPeak)    ) +"</td>";
+		ESSSaveAreaStr += "<td aligh ='right'>"+numberComma(Math.round(dischgMaxCalc))+"</td>";
+		ESSSaveAreaStr += "</tr>";
+		ESSSaveAreaStr += "<tr>";
+		ESSSaveAreaStr += "<th>계</th>";
+		ESSSaveAreaStr += "<td aligh ='right'>"+numberComma(Math.round(totDischgPeak))+"</td>";
+		ESSSaveAreaStr += "<td aligh ='right'>"+numberComma(Math.round(totDischgPeakVal))+"</td>";
+		ESSSaveAreaStr += "</tr>";
+		ESSSaveAreaStr += "<tr>";
+		ESSSaveAreaStr += "<th rowspan='4'>방전</th>";
+		ESSSaveAreaStr += "<th>경부하</th>";
+		ESSSaveAreaStr += "<td aligh ='right'>"+ ( (reEssChgOffPeak == null) ? "" : numberComma(reEssChgOffPeak)    ) +"</td>";
+		ESSSaveAreaStr += "<td aligh ='right'>0</td>";
+		ESSSaveAreaStr += "</tr>";
+		ESSSaveAreaStr += "<tr>";
+		ESSSaveAreaStr += "<th>중간부하</th>";
+		ESSSaveAreaStr += "<td aligh ='right'>"+ ( (reEssChgMidPeak == null) ? "" : numberComma(reEssChgMidPeak)    ) +"</td>";
+		ESSSaveAreaStr += "<td aligh ='right'>0</td>";
+		ESSSaveAreaStr += "</tr>";
+		ESSSaveAreaStr += "<tr>";
+		ESSSaveAreaStr += "<th>최대부하</th>";
+		ESSSaveAreaStr += "<td aligh ='right'>"+ ( (reEssChgMaxPeak == null) ? "" : numberComma(reEssChgMaxPeak)    ) +"</td>";
+		ESSSaveAreaStr += "<td aligh ='right'>0</td>";
+		ESSSaveAreaStr += "</tr>";
+		ESSSaveAreaStr += "<tr>";
+		ESSSaveAreaStr += "<th>계</th>";
+		ESSSaveAreaStr += "<td aligh ='right'>"+totChgPeak+"</td>";
+		ESSSaveAreaStr += "<td aligh ='right'>0</td>";
+		ESSSaveAreaStr += "</tr>";
+		
+
+		
+		
+		
+		ESSSaveFootAreaStr += "<tr>";
+		ESSSaveFootAreaStr += "<th  colspan='3' style='font-size:12px;'>②충방전 전력량요금 절감금액)(방전 – 충전금액)</th>";
+		ESSSaveFootAreaStr += "<td>"+numberComma(Math.round((totChgPeak-totDischgPeakVal)))+"</td>";
+		ESSSaveFootAreaStr += "</tr>";
+		
+		ESSCalcAreaStr += "<tr>";
+		ESSCalcAreaStr += "<th>①기본 요금 절감(피크저감)</th>";
+		ESSCalcAreaStr += "<td aligh ='right'>0</td>";
+		ESSCalcAreaStr += "<td>ESS 피크저감 효과가 전기요금에 반영되는 시점부터 적용</td>";
+		ESSCalcAreaStr += "</tr>";
+		ESSCalcAreaStr += "<tr>";
+		ESSCalcAreaStr += "<th>③ESS 충전 요금 할인</th>";
+		ESSCalcAreaStr += "<td aligh ='right'>"+numberComma(beneDivessChgIncen)+"</td>";
+		ESSCalcAreaStr += "<td>("+numberComma(reEssDischgOffPeak)+" kW x 0.5 x"+energyChgBasicBill+"x 1)</td>";
+		ESSCalcAreaStr += "</tr>";
+		ESSCalcAreaStr += "<tr>";
+		ESSCalcAreaStr += "<th>④ESS 전용 요금 할인</th>";
+		ESSCalcAreaStr += "<td aligh ='right'>"+( (totChgPeakVal1 < totChgPeakVal2) ? numberComma(Math.round(totChgPeakVal1)) : numberComma(Math.round(totChgPeakVal2))  ) +"</td>";
+		ESSCalcAreaStr += "<td>Min[(40,527 kW x 8,190 원), (((64,990 kW – 41 kW) / (21 일 x 3)) x 3 x 1 x 8,190 원)]</td>";
+		ESSCalcAreaStr += "</tr>";
+		
+		ESSTypeStr += "<tr>";
+		ESSTypeStr += "<th>전기사용 계약종별</th>";
+		ESSTypeStr += "<td>"+planTypeName+"</td>";
+		ESSTypeStr += "</tr>";
+		ESSTypeStr += "<tr>";
+		ESSTypeStr += "<th>기본요금</th>";
+		ESSTypeStr += "<td>"+basicVal+"원</td>";
+		ESSTypeStr += "</tr>";
+		
+		
+		$(".texArea").find("tbody").html(ESSBodyStr);
+		$(".texArea").find("tfoot").html(ESSFootStr);
+		$(".texSaveArea").find("tbody").html(ESSSaveAreaStr);
+		$(".texSaveArea").find("tfoot").html(ESSSaveFootAreaStr);
+		$(".calcArea").find("tbody").html(ESSCalcAreaStr);
+		$(".typeArea").find("tbody").html(ESSTypeStr);
+		
+		
+		texDataSet1.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), reEssChgMaxPeak] );
+		texDataSet2.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), reEssDischgMidPeak] );
+		texDataSet3.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), reEssChgOffPeak] );
+		
+		
+
+		essRevenueTexList1 = texDataSet1;
+		essRevenueTexList2 = texDataSet2;
+		essRevenueTexList3 = texDataSet3;
+
+		
+		texdRawData_chart();
+		
+	}
+	
+	// 명세서 차트 그리기
+	function texdRawData_chart() {
+		var seriesLength = myChart1.series.length;
+		for(var i = seriesLength - 1; i > -1; i--) {
+				myChart1.series[i].remove();
+		}
+		
+		myChart1.addSeries({
+			name: '②충방전 전력량요금 절감금액',
+			color: '#438fd7', /* 고객 정산금액 */
+			data: essRevenueTexList1
+		}, false);
+		
+		myChart1.addSeries({
+			name: '③ESS 충전 요금 할인',
+			color: '#84848f', /* 실적 할인금액 */
+			data: essRevenueTexList2
+		}, false);
+		
+		myChart1.addSeries({
+			name: '④ESS 방전 요금 할인',
+			color: '#3d4250', /* 실적 할인금액 */
+			data: essRevenueTexList3
+		}, false);
+//		setTickInterval();
+		myChart1.xAxis[0].options.tickInterval = 30 * 24 * 3600 * 1000;
+		
+		myChart1.redraw(); // 차트 데이터를 다시 그린다
+	}
+	
+	
 	
 	// 차트 그리기
 	function drawData_chart() {

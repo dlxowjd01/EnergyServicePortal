@@ -7,5 +7,8 @@ import java.util.Map;
 public interface ESSRevenueService {
 
 	Map getESSRevenueList(HashMap param) throws Exception;
+	
+	Map getESSRevenueTexList(HashMap param) throws Exception;
+	
 
 }

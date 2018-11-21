@@ -35,12 +35,28 @@ public class KepcoBillController {
 	public @ResponseBody Map<String, Object> getKepcoBillList(@RequestParam HashMap param) throws Exception {
 		logger.debug("/getKepcoBillList");
 		logger.debug("param ::::: "+param.toString());
-		
+		System.out.println("param 빌리스트:" + param);
 		Map list = kepcoBillService.getKepcoBillList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("sheetList", list.get("sheetList"));
 		resultMap.put("chartList", list.get("chartList"));
+		return resultMap;
+	}
+	
+	@RequestMapping("/getKepcoTexBillList")
+	public @ResponseBody Map<String, Object> getKepcoTexBillList(@RequestParam HashMap param) throws Exception {
+		logger.debug("/getKepcoTexBillList");
+		logger.debug("param ::::: "+param.toString());
+		System.out.println("param 텍스리스트:" + param);
+		Map list = kepcoBillService.getKepcoTexBillList(param);
+		
+		Map list2 = kepcoBillService.getKepcoResentBillList(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("texList", list.get("result"));
+		resultMap.put("sheetList", list2.get("sheetList"));
+		resultMap.put("chartList", list2.get("chartList"));
 		return resultMap;
 	}
 	

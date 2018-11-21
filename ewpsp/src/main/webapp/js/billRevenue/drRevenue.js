@@ -1,8 +1,19 @@
 	$(document).ready(function() {
 		var firstDay = new Date();
 		var endDay = new Date();
+		var agoDay = new Date();
+		var texDay = new Date();
+		
+		texDay.setYear(texDay.getFullYear());
+		texDay = new Date(texDay.setMonth(firstDay.getMonth()-1));
+		
+		agoDay.setYear(agoDay.getFullYear());
+		agoDay = new Date(agoDay.setMonth(firstDay.getMonth()-5));
 		firstDay.setYear(firstDay.getFullYear()-1);
 		firstDay = new Date(firstDay.setMonth(firstDay.getMonth()+1));
+		
+		$("#selTermTex").val( texDay.format("yyyyMM") );
+		$("#selTermAgo").val( agoDay.format("yyyyMM") );
 		$("#selTermFrom").val( firstDay.format("yyyyMM") );
 		$("#selTermTo").val( endDay.format("yyyyMM") );
 		$("#datepicker3").val( firstDay.format("yyyy-MM") );
@@ -12,7 +23,15 @@
 		
 		var formData = $("#schForm").serializeObject();
 		getDBData(formData);
+		
+		$("#selTermFrom").val( agoDay.format("yyyyMM") );
+		formData = $("#schForm").serializeObject();
+		getDRRevenueTexList(formData);
 	});
+	
+	function callback_getSiteSetDetail(result){
+		
+	}
 
 	function searchData() {
 		getCollect_sch_condition(); // 검색조건 모으기
@@ -46,6 +65,244 @@
 		getDRRevenueList(formData); // DR 수익 조회
 		drawData(); // 차트 및 표 그리기
 	}
+	
+	
+	var texDataSet1 = [];
+	var texDataSet2 = [];
+	var DRRevenueTex1;
+	var DRRevenueTex2;
+	
+	function callback_getDRRevenueTexList(result){
+		
+		var sheetList = result.sheetList;
+		var chartList = result.chartList;
+		var start = $("#selTermFrom").val();
+		var end = $("#selTermTo").val();
+		var texStr = "";
+		var texFootStr = "";
+		var saveStr = "";
+		var saveFootStr = "";
+		var beneAreaStr = ""
+		// 데이터 셋팅
+		var dataSet1 = []; // chartData를 위한 변수
+		var dataSet2 = []; // chartData를 위한 변수
+		var totDataSet1 = 0;
+		var totDataSet2 = 0;
+		
+		// 표데이터 셋팅
+		//if(sheetList.length > 0) {
+			for(var i=0; i<sheetList.length; i++) {
+				var yyyyMM = sheetList[i].std_yearm;
+				var reductCntHour  = String(sheetList[i].reduct_cnt_hour)   ;
+				var reductCap  = String(sheetList[i].reduct_cap)   ;
+				var reductAmt  = String(sheetList[i].reduct_amt);
+				var reductCapPer  = String(sheetList[i].reduct_cap_per);
+				var capAmt  = sheetList[i].cap_amt;
+				var reductRewardAmt  = sheetList[i].reduct_reward_amt   ;
+				var totalRewardAmt  = String(sheetList[i].total_reward_amt)   ;
+				var csmRewardAmt  = String(sheetList[i].csm_reward_amt)   ;
+				var ewpRewardAmt  = String(sheetList[i].ewp_reward_amt)   ;
+				var profitRatio  =0.2;//sheetList[i].profit_ratio      ;
+				var addRate = 0.1;
+				
+				var total = capAmt+reductRewardAmt;
+				var beneDiv =Math.round(total*profitRatio);
+				var addPrice = Math.round(beneDiv*addRate);
+				var beneDivTotal =beneDiv+addPrice;
+				
+				var delLastWon = Math.floor((beneDivTotal/10))*10-beneDivTotal;
+				
+				var texPrice = beneDivTotal+delLastWon;
+				
+				var reReductCntHour = 0;
+				var reReductCap = 0;
+				var reReductAmt = 0;
+				var reReductCapPer = 0;
+				var reCapAmt = 0;
+				var reReductRewardAmt = 0;
+				var reTotalRewardAmt = 0;
+				var reCsmRewardAmt = 0;
+				var reEwpRewardAmt = 0;
+				var reProfitRatio = 0;
+				
+				if(totalRewardAmt == null || totalRewardAmt == "" || totalRewardAmt == "null") reTotalRewardAmt = null;
+				else {
+					reTotalRewardAmt = Math.round( Number(totalRewardAmt) );
+				}
+				if(csmRewardAmt == null || csmRewardAmt == "" || csmRewardAmt == "null") reCsmRewardAmt = null;
+				else {
+					reCsmRewardAmt = Math.round( Number(csmRewardAmt) );
+				}
+				if(ewpRewardAmt == null || ewpRewardAmt == "" || ewpRewardAmt == "null") reEwpRewardAmt = null;
+
+				$("#texBill").text("DR (수요반응) 수익 배분 청구서 (’"+yyyyMM.substring(2,4)+"년"+yyyyMM.substring(4,6)+"월)");
+				$("#texDay").text("청구일 : "+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-"+"20");
+				$(".dp_total").text(numberComma(texPrice));
+				// 표데이터 셋팅
+				
+				texStr += "<tr>";
+				texStr += "<th>용량 정산금</th>";
+				texStr += "<td align='right'>"+numberComma(capAmt)+"</td>";
+				texStr += "<tr>";
+				texStr += "<tr>";
+				texStr += "<th>감축 정산금</th>";
+				texStr += "<td align='right'>"+numberComma(reductRewardAmt)+"</td>";
+				texStr += "<tr>";
+				texStr += "<tr>";
+				texStr += "<th>총 정산금액</th>";
+				texStr += "<td align='right'>"+numberComma(total)+"</td>";
+				texStr += "<tr>";
+				texStr += "<tr>";
+				texStr += "<th>고객 정산 금액</th>";
+				texStr += "<td align='right'>"+numberComma(Math.round(reCsmRewardAmt))+"</td>";
+				texStr += "<tr>";
+				texStr += "<tr>";
+				texStr += "<th>①수익배분 계</th>";
+				texStr += "<td align='right'>"+numberComma(beneDiv)+"</td>";
+				texStr += "<tr>";
+				texStr += "<tr>";
+				texStr += "<th>부가가치세</th>";
+				texStr += "<td align='right'>"+numberComma(addPrice)+"</td>";
+				texStr += "<tr>";
+				texStr += "<tr>";
+				texStr += "<th>원단위절사</th>";
+				texStr += "<td align='right'>"+delLastWon+"</td>";
+				texStr += "<tr>";
+				texFootStr += "<tr>";
+				texFootStr += "<th>청구금액</th>";
+				texFootStr += "<td align='right'>"+numberComma(texPrice)+"</td>";
+				texFootStr += "</tr>";
+
+				 
+				saveStr += "<tr>";
+				saveStr += "<th>감축횟수-시간 (회-시간)</th>";
+				saveStr += "<td align='right'>"+reductCntHour+"</td>";
+				saveStr += "</tr>";
+				saveStr += "<tr>";
+				saveStr += "<th>감축 이행 용량 (kWh)</th>";
+				saveStr += "<td align='right'>"+numberComma(reductCap)+"</td>";
+				saveStr += "</tr>";
+				saveStr += "<tr>";
+				saveStr += "<th>감축 인정 용량 (kWh)</th>";
+				saveStr += "<td align='right'>"+numberComma(reductAmt)+"</td>";
+				saveStr += "</tr>";
+				saveStr += "<tr>";
+				saveStr += "<th>감축 이행율 (%)</th>";
+				saveStr += "<td align='right'>"+numberComma(reReductCapPer)+"</td>";
+				saveStr += "</tr>";
+				saveStr += "<tr>";
+				saveStr += "<th>수익 배분 (%)</th>";
+				saveStr += "<td align='right'>"+profitRatio+"</td>";
+				saveStr += "</tr>";
+				
+				beneAreaStr += "<tr>";
+				beneAreaStr += "<th>①수익배분 계</th>";
+				beneAreaStr += "<td align='right'>총 정산금액 x 수익배분("+profitRatio+")</td>";
+				beneAreaStr += "</tr>";
+				
+				
+				
+			
+			}
+			
+			$(".texArea").find("tbody").html(texStr);
+			$(".texArea").find("tfoot").html(texFootStr);
+			$(".saveArea").find("tbody").html(saveStr);
+			$(".beneArea").find("tbody").html(beneAreaStr);
+		//}
+		
+		// 차트데이터 셋팅
+		if(chartList.length > 0) {
+			for(var i=0; i<chartList.length; i++) {
+				var yyyyMM = chartList[i].std_yearm;
+				var reductCntHour  = String(chartList[i].reduct_cnt_hour)   ;
+				var reductCap  = String(chartList[i].reduct_cap)   ;
+				var reductAmt  = String(chartList[i].reduct_amt);
+				var reductCapPer  = String(chartList[i].reduct_cap_per);
+				var capAmt  = String(chartList[i].cap_amt);
+				var reductRewardAmt  = String(chartList[i].reduct_reward_amt)   ;
+				var totalRewardAmt  = String(chartList[i].total_reward_amt)   ;
+				var csmRewardAmt  = String(chartList[i].csm_reward_amt)   ;
+				var ewpRewardAmt  = String(chartList[i].ewp_reward_amt)   ;
+				var profitRatio  = String(chartList[i].profit_ratio)      ;
+				var reReductCntHour = 0;
+				var reReductCap = 0;
+				var reReductAmt = 0;
+				var reReductCapPer = 0;
+				var reCapAmt = 0;
+				var reReductRewardAmt = 0;
+				var reTotalRewardAmt = 0;
+				var reCsmRewardAmt = 0;
+				var reEwpRewardAmt = 0;
+				var reProfitRatio = 0;
+				
+				/*if(reductCntHour == null || reductCntHour == "" || reductCntHour == "null") reReductCntHour = null;
+				else reReductCntHour = Math.round( Number(reductCntHour) );
+				if(reductCap == null || reductCap == "" || reductCap == "null") reReductCap = null;
+				else reReductCap = Math.round( Number(reductCap) );
+				if(reductAmt == null || reductAmt == "" || reductAmt == "null") reReductAmt = null;
+				else reReductAmt = Math.round( Number(reductAmt) );
+				if(reductCapPer == null || reductCapPer == "" || reductCapPer == "null") reReductCapPer = null;
+				else reReductCapPer = Math.round( Number(reductCapPer) );
+				if(capAmt == null || capAmt == "" || capAmt == "null") reCapAmt = null;
+				else reCapAmt = Math.round( Number(capAmt) );
+				if(reductRewardAmt == null || reductRewardAmt == "" || reductRewardAmt == "null") reReductRewardAmt = null;
+				else reReductRewardAmt = Math.round( Number(reductRewardAmt) );
+				if(totalRewardAmt == null || totalRewardAmt == "" || totalRewardAmt == "null") reTotalRewardAmt = null;
+				else {
+					reTotalRewardAmt = Math.round( Number(totalRewardAmt) );
+					totDataSet = totDataSet+Number(chartList[i].total_reward_amt);
+				}
+				if(csmRewardAmt == null || csmRewardAmt == "" || csmRewardAmt == "null") reCsmRewardAmt = null;
+				else {
+					reCsmRewardAmt = Math.round( Number(csmRewardAmt) );
+					totDataSet2 = totDataSet2+Number(String(chartList[i].csm_reward_amt));
+				}
+				if(ewpRewardAmt == null || ewpRewardAmt == "" || ewpRewardAmt == "null") reEwpRewardAmt = null;
+				else reEwpRewardAmt = Math.round( Number(ewpRewardAmt) );
+				if(profitRatio == null || profitRatio == "" || profitRatio == "null") reProfitRatio = null;
+				else reProfitRatio = Math.round( Number(profitRatio) );*/
+				
+				// 차트데이터 셋팅
+				texDataSet1.push( [Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].total_reward_amt] );
+				texDataSet2.push( [Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].csm_reward_amt] );
+				
+			}
+				// 차트데이터 셋팅
+			DRRevenueTex1 = texDataSet1;
+			DRRevenueTex2 = texDataSet2;
+			texDrawData_chart();
+		
+		}
+	}
+	
+	// 명세서 차트 그리기
+	function texDrawData_chart() {
+		var seriesLength = myChart1.series.length;
+		
+		for(var i = seriesLength - 1; i > -1; i--) {
+				myChart1.series[i].remove();
+		}
+		
+		myChart1.addSeries({
+			name: '총 정산금액',
+			color: '#438fd7', /* 기본요금 */
+			data: DRRevenueTex1
+		}, false);
+		
+		myChart1.addSeries({
+			name: '고객할인금액',
+			color: '#13af67', /* 사용요금(역률 적용) */
+			data: DRRevenueTex2
+		}, false);
+		
+		
+//		setTickInterval();
+		myChart1.xAxis[0].options.tickInterval = 30 * 24 * 3600 * 1000;
+		
+		myChart1.redraw(); // 차트 데이터를 다시 그린다
+	}
+	
 	
 	// DR 수익 조회
 	var drRevenueList1;

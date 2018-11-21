@@ -46,4 +46,23 @@ public class DRRevenueController {
 		return resultMap;
 	}
 	
+	@RequestMapping("/getDRRevenueTexList")
+	public @ResponseBody Map<String, Object> getDRRevenueTexList(@RequestParam HashMap param) throws Exception {
+		logger.debug("/getDRRevenueTexList");
+		logger.debug("param ::::: "+param.toString());
+		
+		Map list = drRevenueService.getDRRevenueTexList(param);
+		
+		Map list2 = drRevenueService.getDRRevenueChartList(param);
+		
+		System.out.println("param : "+ param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("sheetList", list.get("result"));
+		resultMap.put("chartList", list2.get("chartList"));
+		System.out.println(" resultMap.시트  : "+resultMap.get("sheetList"));
+		System.out.println(" resultMap.차트  : "+resultMap.get("chartList"));
+		return resultMap;
+	}
+	
 }

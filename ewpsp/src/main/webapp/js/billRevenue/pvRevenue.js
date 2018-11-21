@@ -1,6 +1,17 @@
+var texDay = new Date();
+
 	$(document).ready(function() {
 		var firstDay = new Date();
 		var endDay = new Date();
+		
+		var stDay = new Date();
+		var edDay = new Date();
+		stDay = new Date(stDay.getFullYear(), stDay.getMonth()-1, 1, 0, 0, 0);
+		edDay = new Date(stDay.getFullYear(), edDay.getMonth(), 0, 23, 59, 59);
+		/*texDay.setYear(texDay.getFullYear());
+		texDay = new Date(texDay.setMonth(firstDay.getMonth()-1));
+		texDay = texDay.format("yyyy-MM-dd");*/
+		
 		firstDay = new Date(firstDay.getFullYear()-1, firstDay.getMonth()+1, 1, 0, 0, 0);
 		endDay = new Date(endDay.getFullYear(), endDay.getMonth()+1, 0, 23, 59, 59);
 		
@@ -19,8 +30,40 @@
 		$("#selTerm").val(SelTerm);
 		$("#selPeriodVal").val('month');
 		
-		getDBData();
+		var formData = $("#schForm").serializeObject();
+		getDBData(formData);
+		getSiteSetDetail();
+		
+		
+		$("#selTermFrom").val( stDay.format("yyyyMMddHHmmss") );
+		$("#selTermTo").val( edDay.format("yyyyMMddHHmmss") );
+		
+		formData = $("#schForm").serializeObject();
+		
+		
+		getPVRevenueTexList(formData);
+		
 	});
+	
+	var custNum = "";		//고객번호
+	var smpRate = "";		//SMP 단가
+	var recRate = "";		//REC 단가
+	var recWeight = "";		//REC 가중치
+	var profitRatio = "";		//수익배분 비율
+	var meterReadDay = "";		//검침일
+	
+	function callback_getSiteSetDetail(result){
+		
+		var site = result.detail;
+		custNum = site.cust_num;
+		smpRate = site.smp_rate;
+		recRate = site.rec_rate;
+		recWeight = site.rec_weight;
+		profitRatio = site.profit_ratio;
+		meterReadDay = site.meter_read_day;
+		
+	}
+		
 
 	function searchData() {
 		getCollect_sch_condition(); // 검색조건 모으기
@@ -33,7 +76,7 @@
 	var pvRevenue_data_pc4 = new Array(); //  표 데이터
 	var pvRevenue_data_pc5 = new Array(); //  표 데이터
 	var pvRevenue_data_pc6 = new Array(); //  표 데이터
-	function getDBData() {
+	function getDBData(formData) {
 		pvRevenue_head_pc.length = 0;
 		pvRevenue_data_pc.length = 0;
 		pvRevenue_data_pc2.length = 0;
@@ -44,10 +87,269 @@
 		pvRevenueList1 = null;
 		pvRevenueList2 = null;
 		pvRevenueList3 = null;
-		var formData = $("#schForm").serializeObject();
+		
+		
 		getPVRevenueList(formData); // 실제사용량 조회
 		drawData(); // 차트 및 표 그리기
 	}
+	
+	//pv 명세서
+	function callback_getPVRevenueTexList(result) {
+		
+		
+		var netGenValSheetList = result.netGenValSheetList;
+		var netGenValChartList = result.netGenValChartList;
+		var smpDealSheetList   = result.smpDealSheetList  ;
+		var smpDealChartList   = result.smpDealChartList  ;
+		var smpPriceSheetList  = result.smpPriceSheetList ;
+		var smpPriceChartList  = result.smpPriceChartList ;
+		var recDealSheetList   = result.recDealSheetList  ;
+		var recDealChartList   = result.recDealChartList  ;
+		var recPriceSheetList  = result.recPriceSheetList ;
+		var recPriceChartList  = result.recPriceChartList ;
+		var totPriceSheetList  = result.totPriceSheetList ;
+		var totPriceChartList  = result.totPriceChartList ;
+		var periodd = $("#selPeriodVal").val(); // 데이터조회간격
+		var start = $("#selTermFrom").val();
+		var end = $("#selTermTo").val();
+		
+		// 데이터 셋팅
+		var dataSet = []; // chartData를 위한 변수
+		var dataSet2 = []; // chartData를 위한 변수
+		var dataSet3 = []; // chartData를 위한 변수
+		var totDataSet = 0;
+		var totDataSet2 = 0;
+		var totDataSet3 = 0;
+		var textbodyStr = "";
+		var texfootStr = "";
+		var elecStr = "";
+		var beneDivStr = ""
+			
+		
+	
+		
+		// 표데이터 셋팅
+		var start = new Date(schStartTime.getTime());
+		var end = new Date(schEndTime.getTime());
+		console.log(start, end);
+		if(netGenValSheetList != null && netGenValSheetList.length > 0) {
+			var s = start;
+			var e = end;
+			setHms(s, e);
+			if(periodd == 'month') {
+				s.setMonth(0);
+				s.setDate(1);
+				s.setHours(0)
+				s.setMinutes(0);
+				s.setSeconds(0);
+			}
+			for(var i=0; i<netGenValSheetList.length; i++) {
+				var yyyyMM = s.format("yyyyMM");
+				//dt_str_head += "<th>"+yyyyMM.substring(0, 4)+"-"+yyyyMM.substring(4, 6)+"</th>"
+				
+				var reNetGenVal = null;
+				var reSmpDeal   = null;
+				var reSmpPrice  = null;
+				var reRecDeal   = null;
+				var reRecPrice  = null;
+				var reTotPrice  = null;
+				for(var j=0; j<netGenValSheetList.length; j++) {
+					if(s.getTime() == new Date(netGenValSheetList[j].std_timestamp).getTime()) {
+						var netGenVal = String(netGenValSheetList[j].net_gen_val);
+						var smpDeal   = String(smpDealSheetList[j].smp_deal);
+						var smpPrice  = String(smpPriceSheetList[j].smp_price);
+						var recDeal   = String(recDealSheetList[j].rec_deal);
+						var recPrice  = String(recPriceSheetList[j].rec_price);
+						var totPrice  = String(totPriceSheetList[j].tot_price);
+						
+						if(netGenVal == null || netGenVal == "" || netGenVal == "null") reNetGenVal = null;
+						else {
+							reNetGenVal = Math.round( Number(netGenVal) );
+						}
+						if(smpDeal == null || smpDeal == "" || smpDeal == "null") reSmpDeal = null;
+						else {
+							reSmpDeal   = Math.round( Number(smpDeal) );
+						}
+						if(smpPrice == null || smpPrice == "" || smpPrice == "null") reSmpPrice = null;
+						else {
+							reSmpPrice  = Math.round( Number(smpPrice) );
+						}
+						if(recDeal == null || recDeal == "" || recDeal == "null") reRecDeal = null;
+						else {
+							reRecDeal   = Math.round( Number(recDeal) );
+						}
+						if(recPrice == null || recPrice == "" || recPrice == "null") reRecPrice = null;
+						else {
+							reRecPrice  = Math.round( Number(recPrice) );
+						}
+						if(totPrice == null || totPrice == "" || totPrice == "null") reTotPrice = null;
+						else {
+							reTotPrice  = Math.round( Number(totPrice) );
+						}
+						
+						break;
+					}
+				}
+			}
+		}
+				/*dt_str += "<td>"+  ( (reNetGenVal == null) ? "" : reNetGenVal ) +"</td>"; // 총 발전량
+				dt_str2 += "<td>"+ ( (reSmpPrice == null) ? "" : reSmpDeal    ) +"</td>"; // SMP 거래량
+				dt_str3 += "<td>"+ ( (reSmpPrice == null) ? "" : reSmpPrice   ) +"</td>"; // SMP 수익
+				dt_str4 += "<td>"+ ( (reRecDeal == null) ? "" : reRecDeal     ) +"</td>"; // REC 거래량
+				dt_str5 += "<td>"+ ( (reRecPrice == null) ? "" : reRecPrice   ) +"</td>"; // REC 수익
+				dt_str6 += "<td>"+ ( (reTotPrice == null) ? "" : reTotPrice   ) +"</td>"; //총 수익
+*/	
+			textbodyStr += "<tr>";
+			textbodyStr += "<th>①REC 수익</th>";
+			textbodyStr += "<td align='right'>"+reRecPrice+"</td>";
+			textbodyStr += "</tr>";
+			textbodyStr += "<tr>";
+			textbodyStr += "<th>②SMP 수익</th>";
+			textbodyStr += "<td align='right'>"+reSmpPrice+"</td>";
+			textbodyStr += "</tr>";
+			textbodyStr += "<tr>";
+			textbodyStr += "<th>③총 수익</th>";
+			textbodyStr += "<td align='right'>"+reTotPrice+"</td>";
+			textbodyStr += "</tr>";
+			textbodyStr += "<tr>";
+			textbodyStr += "<th>고객 정산 금액</th>";
+			textbodyStr += "<td align='right'></td>";
+			textbodyStr += "</tr>";
+			textbodyStr += "<tr>";
+			textbodyStr += "<th>④수익배분 계</th>";
+			textbodyStr += "<td align='right'>"+reTotPrice*+"</td>";
+			textbodyStr += "</tr>";
+			textbodyStr += "<tr>";
+			textbodyStr += "<th>부가가치세</th>";
+			textbodyStr += "<td align='right'></td>";
+			textbodyStr += "</tr>";
+			textbodyStr += "<tr>";
+			textbodyStr += "<th>원단위절사</th>";
+			textbodyStr += "<td align='right'></td>";
+			textbodyStr += "</tr>";
+			
+			texfootStr += "<tr>";
+			texfootStr += "<th>청구금액</th>";
+			texfootStr += "<td align='right'></td>";
+			texfootStr += "</tr>";
+			
+			elecStr += "<tr>";
+			elecStr += "<th>총 발전</th>";
+			elecStr += "<td align='right'>"+reNetGenVal+"</td>";
+			elecStr += "</tr>";
+			elecStr += "<tr>";
+			elecStr += "<th>SMP 거래량</th>";
+			elecStr += "<td align='right'>"+reSmpDeal+"</td>";
+			elecStr += "</tr>";
+			elecStr += "<tr>";
+			elecStr += "<th>SMP 단가</th>";
+			elecStr += "<td align='right'>"+smpRate+"</td>";
+			elecStr += "</tr>";
+			elecStr += "<tr>";
+			elecStr += "<th>REC 거래량</th>";
+			elecStr += "<td align='right'>"+reRecDeal+"</td>";
+			elecStr += "</tr>";
+			elecStr += "<tr>";
+			elecStr += "<th>REC 단가</th>";
+			elecStr += "<td align='right'>"+recRate+"</td>";
+			elecStr += "</tr>";
+			elecStr += "<tr>";
+			elecStr += "<th>REC 가중치</th>";
+			elecStr += "<td align='right'>"+recWeight+"</td>";
+			elecStr += "</tr>";
+			elecStr += "<tr>";
+			elecStr += "<th>수익 배분</th>";
+			elecStr += "<td align='right'>"+profitRatio*profitRatio+"</td>";
+			elecStr += "</tr>";
+			elecStr += "<tr>";
+			elecStr += "<th>&nbsp;</th>";
+			elecStr += "<td align='right'>&nbsp;</td>";
+			elecStr += "</tr>";
+			
+			beneDivStr +="<tr>";
+			beneDivStr +="<th>①REC 수익</th>";
+			beneDivStr +="<td>REC 거래량 x REC 단가 ("+reRecDeal+" x "+recRate+")</td>";
+			beneDivStr +="</tr>";
+			beneDivStr +="<tr>";
+			beneDivStr +="<th>②SMP 수익</th>";
+			beneDivStr +="<td>연간발전량(kWh) x SMP단가 ("+reSmpDeal+" x "+smpRate+")</td>";
+			beneDivStr +="</tr>";
+			beneDivStr +="<tr>";
+			beneDivStr +="<th>③총 수익</th>";
+			beneDivStr +="<td>①REC 수익 + ②SMP 수익 ("+reRecPrice+" + "+reSmpPrice+")</td>";
+			beneDivStr +="</tr>";
+			beneDivStr +="<tr>";
+			beneDivStr +="<th>④수익배분 계</th>";
+			beneDivStr +="<td>③총 수익 x 수익 배분 ("+profitRatio+" x "+profitRatio+")</td>";
+			beneDivStr +="</tr>";
+			
+			$(".TexArea").find("tbody").html(textbodyStr);
+			$(".TexArea").find("tfoot").html(texfootStr);
+			$(".elecInfo").find("tbody").html(elecStr);
+			$(".beneDiv").find("tbody").html(beneDivStr);
+			
+				
+			
+	}
+	
+				
+		
+				
+				
+		/*// 차트데이터 셋팅
+		if(netGenValChartList != null && netGenValChartList.length > 0) {
+			for(var i=0; i<netGenValChartList.length; i++) {
+				var yyyyMM = new Date( convertDateUTC(netGenValChartList[i].std_timestamp) ).format("yyyyMM");
+//				var netGenVal = String(netGenValChartList[i].net_gen_val);
+//				var smpDeal   = String(smpDealChartList[i].smp_deal);
+				var smpPrice  = String(smpPriceChartList[i].smp_price);
+//				var recDeal   = String(recDealChartList[i].rec_deal);
+				var recPrice  = String(recPriceChartList[i].rec_price);
+				var totPrice  = String(totPriceChartList[i].tot_price);
+//				var reNetGenVal = 0; 
+//				var reSmpDeal   = 0; 
+				var reSmpPrice  = 0; 
+//				var reRecDeal   = 0; 
+				var reRecPrice  = 0; 
+				var reTotPrice  = 0; 
+				
+//				if(netGenVal == null || netGenVal == "" || netGenVal == "null") reNetGenVal = null;
+//				else reNetGenVal = Math.round( Number(netGenVal) );
+//				if(smpDeal == null || smpDeal == "" || smpDeal == "null") reSmpDeal = null;
+//				else reSmpDeal   = Math.round( Number(smpDeal) );
+				if(smpPrice == null || smpPrice == "" || smpPrice == "null") reSmpPrice = null;
+				else {
+					reSmpPrice  = Math.round( Number(smpPrice) );
+					totDataSet2 = totDataSet2+reSmpPrice;
+				}
+//				if(recDeal == null || recDeal == "" || recDeal == "null") reRecDeal = null;
+//				else reRecDeal   = Math.round( Number(recDeal) );
+				if(recPrice == null || recPrice == "" || recPrice == "null") reRecPrice = null;
+				else {
+					reRecPrice  = Math.round( Number(recPrice) );
+					totDataSet3 = totDataSet3+reRecPrice;
+				}
+				if(totPrice == null || totPrice == "" || totPrice == "null") reTotPrice = null;
+				else {
+					reTotPrice  = Math.round( Number(totPrice) );
+					totDataSet = totDataSet+reTotPrice;
+				}
+				
+				// 차트데이터 셋팅
+				dataSet.push( [netGenValChartList[i].std_timestamp, reTotPrice] );
+				dataSet2.push( [netGenValChartList[i].std_timestamp, reSmpPrice] );
+				dataSet3.push( [netGenValChartList[i].std_timestamp, reRecPrice] );
+				
+			}
+			pvRevenueList1 = dataSet;
+			pvRevenueList2 = dataSet2;
+			pvRevenueList3 = dataSet3;
+			
+			// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
+			unit_format_bill(String(totDataSet), "pvRevenueTot1", "won", "pv");
+			unit_format_bill(String(totDataSet2), "pvRevenueTot2", "won", "pv");
+			unit_format_bill(String(totDataSet3), "pvRevenueTot3", "won", "pv");*/
+	
 	
 	// PV 수익 조회
 	var pvRevenueList1;

@@ -17,5 +17,10 @@ public class PVRevenueDao {
 		List resultList = sqlSession.selectList("pvRevenue.getPVRevenueList", param);
 		return resultList;
 	}
+	
+	public List getPVRevenueTexList(HashMap param) {
+		List resultList = sqlSession.selectList("pvRevenue.getPVRevenueTexList", param);
+		return resultList;
+	}
 
 }

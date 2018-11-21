@@ -17,4 +17,19 @@
 		order by std_date
 	</select>
 	
+	<select id="getPVRevenueTexList" parameterType="hashMap" resultType="hashMap">
+		/* PV 수익 조회 */
+		select 
+			round( (net_gen_val*rec_weight) , 2) as rec_deal, net_gen_val as smp_deal, 
+			gen_revn_idx, site_id, gen_type, std_timestamp, 
+			std_date, meter_read_day, smp_rate, rec_rate, rec_weight, produce_val, consume_val, net_gen_val, smp_price, rec_price, tot_price,
+			reg_date, mod_date
+		from tb_gen_revenue
+		where 1=1
+		and gen_type = '1'
+		and site_id = #{siteId }
+		and std_date between #{startDay } and #{endDay }
+		order by std_date
+	</select>
+	
 </mapper>

@@ -44,4 +44,16 @@ public class ESSRevenueController {
 		return resultMap;
 	}
 	
+	@RequestMapping("/getESSRevenueTexList")
+	public @ResponseBody Map<String, Object> getESSRevenueTexList(@RequestParam HashMap param) throws Exception {
+		logger.debug("/getESSRevenueTexList");
+		logger.debug("param ::::: "+param.toString());
+		Map list = essRevenueService.getESSRevenueTexList(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("texList", list.get("result"));
+		 System.out.println("resultMap ::::::"+resultMap);
+		return resultMap;
+	}
+	
 }

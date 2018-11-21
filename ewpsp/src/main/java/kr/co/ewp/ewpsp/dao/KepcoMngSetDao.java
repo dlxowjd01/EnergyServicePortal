@@ -18,6 +18,12 @@ public class KepcoMngSetDao {
 		Map result = sqlSession.selectOne("kepcoMngSet.getSiteSetDetail", param);
 		return result;
 	}
+	
+	public Map getPlanTypeVal(HashMap param) {
+		Map result = sqlSession.selectOne("kepcoMngSet.getPlanTypeVal", param);
+		return result;
+	}
+	
 
 	public List getPlanType(HashMap param) {
 		List resultList = sqlSession.selectList("kepcoMngSet.getPlanType", param);

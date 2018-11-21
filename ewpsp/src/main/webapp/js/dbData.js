@@ -432,6 +432,20 @@ function getKepcoBillList(formData) {
 	});
 }
 
+//한전 명세서 조회
+function getKepcoTexBillList(formData) {
+	$.ajax({
+		url : "/getKepcoTexBillList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_getKepcoTexBillList(result);
+		}
+	});
+}
+
+
 // ESS 수익 조회
 function getESSRevenueList(formData) {
 	$.ajax({
@@ -441,6 +455,18 @@ function getESSRevenueList(formData) {
 		data : formData,
 		success: function(result) {
 			callback_getESSRevenueList(result);
+		}
+	});
+}
+//ESS 명세서 조회
+function getESSRevenueTexList(formData) {
+	$.ajax({
+		url : "/getESSRevenueTexList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_getESSRevenueTexList(result);
 		}
 	});
 }
@@ -458,7 +484,33 @@ function getDRRevenueList(formData) {
 	});
 }
 
+//DR 명세서 조회
+function getDRRevenueTexList(formData) {
+	$.ajax({
+		url : "/getDRRevenueTexList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_getDRRevenueTexList(result);
+		}
+	});
+}
+
 // PV 수익 조회
+function getPVRevenueTexList(formData) {
+	$.ajax({
+		url : "/getPVRevenueTexList",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_getPVRevenueTexList(result);
+		}
+	});
+}
+
+//PV 명세서 조회
 function getPVRevenueList(formData) {
 	$.ajax({
 		url : "/getPVRevenueList",
@@ -651,6 +703,24 @@ function getSiteDetail(siteId) {
 		}
 	});
 }
+
+function getPlanTypeVal(planType, planType2, planType3) {
+	$.ajax({
+		url : "/getPlanTypeVal",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : {
+			planType : planType,
+			planType2 : planType2,
+			planType3 : planType3,
+		},
+		success: function(result) {
+			callback_getPlanTypeVal(result);
+			
+		}
+	});
+}
+
 
 // 회사 등록
 function insertCmpy(formData) {

@@ -46,6 +46,7 @@
 					                    <input id="check1" type="checkbox" class="styled" >
 					                    <label for="check1">실시간 자동 갱신</label>
 					                </div>
+					                <!-- <div class="real_time fl"><span>00:00</span></div> -->
 									<div class="time fr" id="updtTime">2018-08-12 11:41:26</div>
 								</div>
 								</c:when>
@@ -127,6 +128,8 @@
 							<input type="hidden" id="siteId" name="siteId" value="${selViewSiteId }">
 							<input type="hidden" id="dtCnt" name="dtCnt">
 							
+							<input type="hidden" id="selTermTex" name="selTermTex">
+							<input type="hidden" id="selTermAgo" name="selTermAgo">
 							<input type="hidden" id="selTermFrom" name="selTermFrom">
 							<input type="hidden" id="selTermTo" name="selTermTo">
 							<input type="hidden" id="selTerm" name="selTerm">

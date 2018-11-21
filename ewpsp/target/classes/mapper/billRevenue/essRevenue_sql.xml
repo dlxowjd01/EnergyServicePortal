@@ -3,42 +3,79 @@
 
 <mapper namespace="essRevenue">
 	<select id="getESSRevenueList" parameterType="hashMap" resultType="hashMap">
-		select 
-			bill_idx, site_id, bill_yearm, meter_read_day, plan_type, plan_name, 
-			23 as ess_bdayIn_month, ess_dischg_off_peak, ess_dischg_mid_peak, ess_dischg_max_peak,
-			ess_chg_off_peak, ess_chg_mid_peak, ess_chg_max_peak,
-			ess_chg_incen as pre_ess_incen, ess_chg_incen, ess_dischg_incen, (ess_chg_incen+ess_dischg_incen) as ess_incen,
-			(off_peak_rate+mid_peak_rate+max_peak_rate) as peak_rate, ess_dischg_incen as ewp_peak_rate, 90 as rate_per
-		from tb_bill
-		where 1=1
-		and site_id = #{siteId }
-		and bill_yearm between #{selTermFrom } and #{selTermTo }
+		/* ESS 수익 조회 */
+		select
+			site_id, bill_yearm,
+			sum(ess_bdayIn_month) as ess_bdayIn_month, sum(ess_dischg_off_peak) as ess_dischg_off_peak, sum(ess_dischg_mid_peak) as ess_dischg_mid_peak, sum(ess_dischg_max_peak) as ess_dischg_max_peak, 
+			sum(ess_chg_off_peak) as ess_chg_off_peak, sum(ess_chg_mid_peak) as ess_chg_mid_peak, sum(ess_chg_max_peak) as ess_chg_max_peak, 
+			sum(pre_ess_incen) as pre_ess_incen, sum(ess_incen) as ess_incen, sum(peak_rate) as peak_rate, sum(ewp_peak_rate) as ewp_peak_rate, 90 as rate_per
+		from (
+			select 
+				bill_idx, site_id, bill_yearm, meter_read_day, plan_type, plan_name, 
+				23 as ess_bdayIn_month, ess_dischg_off_peak, ess_dischg_mid_peak, ess_dischg_max_peak,
+				ess_chg_off_peak, ess_chg_mid_peak, ess_chg_max_peak,
+				ess_chg_incen as pre_ess_incen, ess_chg_incen, ess_dischg_incen, (ess_chg_incen+ess_dischg_incen) as ess_incen,
+				(off_peak_rate+mid_peak_rate+max_peak_rate) as peak_rate, ess_dischg_incen as ewp_peak_rate
+			from tb_bill
+			where 1=1
+			and site_id = #{siteId }
+			and bill_yearm between #{selTermFrom } and #{selTermTo }
+		) a
+		group by site_id, bill_yearm
 		order by bill_yearm
 	</select>
 	
-	<select id="getESSRevenueList_test" parameterType="hashMap" resultType="hashMap">
-		select 
-			site_id, std_timestamp, 
-			sum(ess_bdayIn_month) as ess_bdayIn_month, sum(ess_dischg_off_peak) as ess_dischg_off_peak, 
-			sum(ess_dischg_mid_peak) as ess_dischg_mid_peak, sum(ess_dischg_max_peak) as ess_dischg_max_peak,
-			 sum(ess_chg_off_peak) as ess_chg_off_peak, sum(ess_chg_mid_peak) as ess_chg_mid_peak, sum(ess_chg_max_peak) as ess_chg_max_peak
-			 , sum(pre_ess_incen) as pre_ess_incen, sum(ess_incen) as ess_incen, sum(peak_rate) as peak_rate
-			 , sum(ewp_peak_rate) as ewp_peak_rate, sum(rate_per) as rate_per
+	<select id="getESSRevenueTexList" parameterType="hashMap" resultType="hashMap">
+		/* ESS 수익 조회 */
+		select
+			site_id, bill_yearm,
+			90 as rate_per,
+			sum(ess_bdayIn_month) as ess_bdayIn_month,
+			sum(ess_dischg_off_peak) as ess_dischg_off_peak,
+			sum(ess_dischg_mid_peak) as ess_dischg_mid_peak,
+			sum(ess_dischg_max_peak) as ess_dischg_max_peak, 
+			sum(ess_chg_off_peak) as ess_chg_off_peak,
+			sum(ess_chg_mid_peak) as ess_chg_mid_peak, 
+			sum(ess_chg_max_peak) as ess_chg_max_peak, 
+			sum(pre_ess_incen) as pre_ess_incen, 
+			sum(ess_incen) as ess_incen, 
+			sum(peak_rate) as peak_rate, 
+			sum(demand_chg_reduct) as demand_chg_reduct, 
+			sum(ess_chg_incen) as ess_chg_incen,
+			sum(ess_dischg_incen) as ess_dischg_incen,
+			sum(energy_chg_reduct) as energy_chg_reduct,
+			sum(val_add_tax) as val_add_tax,
+			sum(usg) as usg
 		from (
-				select 
-					usg_idx, site_id, device_id, std_timestamp, std_date, usg_val as ess_bdayIn_month, usg_val+3400000 as ess_dischg_off_peak, 
-					usg_val+(3400000*2) as ess_dischg_mid_peak, usg_val+(3400000*3) as ess_dischg_max_peak
-					, usg_val+(3400000*4) as ess_chg_off_peak, usg_val+(3400000*5) as ess_chg_mid_peak, usg_val+(3400000*6) as ess_chg_max_peak
-					, usg_val+(3400000*7) as pre_ess_incen, usg_val+(3400000*8) as ess_incen, usg_val+(3400000*9) as peak_rate
-					, usg_val+(3400000*10) as ewp_peak_rate, usg_val+(3400000*11) as rate_per
-				from tb_usage
-				where 1=1
-				and site_id = 'c64b328b'
-				<!-- and std_date between str_to_date('20180820000000','%Y%m%d%H%i%s') and str_to_date('20180820235959','%Y%m%d%H%i%s') -->
-				and std_date between str_to_date('20180820000000','%Y%m%d%H%i%s') and str_to_date('20180820025959','%Y%m%d%H%i%s')
+			select 
+				bill_idx, 
+				site_id, 
+				bill_yearm, 
+				meter_read_day, 
+				plan_type, plan_name, 
+				ess_dischg_off_peak, 
+				ess_dischg_mid_peak, 
+				ess_dischg_max_peak,
+				23 as ess_bdayIn_month,
+				ess_chg_off_peak, 
+				ess_chg_mid_peak, 
+				ess_chg_max_peak,
+				ess_chg_incen as pre_ess_incen, 
+				ess_chg_incen,
+				val_add_tax,
+				usg, 
+				ess_dischg_incen, 
+				energy_chg_reduct,
+				(ess_chg_incen+ess_dischg_incen) as ess_incen,
+				(off_peak_rate+mid_peak_rate+max_peak_rate) as peak_rate, 
+				demand_chg_reduct
+			from tb_bill
+			where 1=1
+			and site_id = #{siteId }
+			and bill_yearm ="201810"
 		) a
-		where 1=1
-		group by site_id, std_timestamp
+		group by site_id, bill_yearm
+		order by bill_yearm
 	</select>
 	
 </mapper>

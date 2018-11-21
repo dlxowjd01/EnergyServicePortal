@@ -10,12 +10,43 @@
 				page_tb.*
 			from (
 					select 
-						user_idx, user_id, user_pw, user_type, main_user_idx, main_user_yn, auth_type, lang_type, 
-						co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, 
-						del_yn, reg_uid, reg_date, mod_uid, mod_date 
-					from tb_user
-					where del_yn = 'N'
-					order by reg_date
+						a.user_idx, a.user_id, a.auth_type_name, b.comp_name, c.site_grp_name, a.note, a.reg_date
+					from (
+						select 
+							user_idx, user_id, user_pw, user_type, main_user_idx, main_user_yn, auth_type, 
+							case auth_type when 1 then '포털관리자'
+							when 2 then '고객사관리자'
+							when 3 then '그룹관리자'
+							when 4 then '사이트관리자'
+							when 5 then '사이트이용자'
+							else '' end as auth_type_name,
+							lang_type, 
+							case lang_type when 1 then '한국어'
+							when 2 then '영어'
+							when 3 then '일본어'
+							else '' end as lang_type_name,
+							comp_idx, co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, site_grp_idx, site_id,
+							del_yn, reg_uid, reg_date, mod_uid, mod_date 
+						from tb_user
+						where del_yn = 'N'
+					) a left outer join tb_company b
+					on a.comp_idx = b.comp_idx
+					left outer join tb_site_group c
+					on a.site_grp_idx = c.site_grp_idx
+					where 1=1
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and b.comp_idx = #{compIdx }
+					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and c.site_grp_idx = #{siteGrpIdx }
+					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+					and a.site_id = #{siteId }
+					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userIdx)">
+					and a.user_idx = #{userIdx }
+					</if>
+					order by a.reg_date desc
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
@@ -31,12 +62,43 @@
 				page_tb.*
 			from (
 					select 
-						user_idx, user_id, user_pw, user_type, main_user_idx, main_user_yn, auth_type, lang_type, 
-						co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, 
-						del_yn, reg_uid, reg_date, mod_uid, mod_date 
-					from tb_user
-					where del_yn = 'N'
-					order by reg_date
+						a.user_idx, a.user_id, a.auth_type_name, b.comp_name, c.site_grp_name, a.note, a.reg_date
+					from (
+						select 
+							user_idx, user_id, user_pw, user_type, main_user_idx, main_user_yn, auth_type, 
+							case auth_type when 1 then '포털관리자'
+							when 2 then '고객사관리자'
+							when 3 then '그룹관리자'
+							when 4 then '사이트관리자'
+							when 5 then '사이트이용자'
+							else '' end as auth_type_name,
+							lang_type, 
+							case lang_type when 1 then '한국어'
+							when 2 then '영어'
+							when 3 then '일본어'
+							else '' end as lang_type_name,
+							comp_idx, co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, site_grp_idx, site_id,
+							del_yn, reg_uid, reg_date, mod_uid, mod_date 
+						from tb_user
+						where del_yn = 'N'
+					) a left outer join tb_company b
+					on a.comp_idx = b.comp_idx
+					left outer join tb_site_group c
+					on a.site_grp_idx = c.site_grp_idx
+					where 1=1
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and b.comp_idx = #{compIdx }
+					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and c.site_grp_idx = #{siteGrpIdx }
+					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+					and a.site_id = #{siteId }
+					</if>
+					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userIdx)">
+					and a.user_idx = #{userIdx }
+					</if>
+					<!-- order by a.reg_date -->
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
@@ -47,11 +109,24 @@
 		/* 사용자 한건 조회 */
 		select 
 			user_idx, user_id, user_pw, user_type, main_user_idx, main_user_yn, auth_type, lang_type, 
-			co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, 
+			comp_idx, co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, site_grp_idx, site_id,
 			del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_user
 		where 1=1
 		and user_idx = #{userIdx }
+	</select>
+	
+	<select id="getLastUserDetail" parameterType="hashMap" resultType="hashMap">
+		/* 마지막에 추가된 사용자 한건 조회 */
+		select 
+			user_idx, user_id, user_pw, user_type, main_user_idx, main_user_yn, auth_type, lang_type, 
+			comp_idx, co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, site_grp_idx, site_id,
+			del_yn, reg_uid, reg_date, mod_uid, mod_date 
+		from tb_user
+		where 1=1
+		and user_id = #{userId }
+		order by user_idx desc
+		limit 1
 	</select>
 	
 	<insert id="insertUser" parameterType="hashMap">
@@ -63,8 +138,9 @@
 			user_type,   /* 사용자구분(1:동서발전,2:고객사) */
 			main_user_idx,   /* 주사용자식별자 */
 			main_user_yn,   /* 주사용자여부(Y:예,N:아니오) */
-			auth_type,   /* 권한구분(1:포털관리자,2:그룹관리자,3:사이트관리자,4:사이트이용자) */
+			auth_type,   /* 권한구분(1:포털관리자,2:고객사관리자,3:그룹관리자,4:사이트관리자,5:사이트이용자) */
 			lang_type,   /* 언어구분(1:한국어,2:영어,3:일본어) */
+			comp_idx, /* 회사식별자 */
 			co_name,   /* 고객사명 */
 			co_tel,   /* 회사전화번호 */
 			co_email,   /* 회사이메일주소 */
@@ -74,6 +150,8 @@
 			psn_mobile,   /* 담당자휴대폰번호 */
 			psn_email,   /* 담당자이메일주소 */
 			note,   /* 비고 */
+			site_grp_idx, /* 사이트그룹식별자 */
+			site_id, /* 사이트ID */
 			del_yn, 
 			reg_uid, 
 			reg_date
@@ -87,6 +165,7 @@
 			#{mainUserYn }, 
 			#{authType }, 
 			#{langType }, 
+			#{compIdx }, 
 			#{coName }, 
 			#{coTel }, 
 			#{coEmail }, 
@@ -96,8 +175,10 @@
 			#{psnMobile }, 
 			#{psnEmail }, 
 			#{note }, 
+			#{siteGrpIdx }, 
+			#{siteId }, 
 			'N', 
-			#{reg_uid }, 
+			#{regUid }, 
 			now()
 		)
 	</insert>
@@ -107,7 +188,7 @@
 		update tb_user
 		set 
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userPw)">
-			user_pw       = #{userPw },   /* 패스워드 */
+			user_pw       = sha2(#{userPw }, 256),   /* 패스워드 */
 			</if> 
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userType)"> 
 			user_type     = #{userType },   /* 사용자구분(1:동서발전,2:고객사) */
@@ -119,10 +200,13 @@
 			main_user_yn  = #{mainUserYn },   /* 주사용자여부(Y:예,N:아니오) */
 			</if> 
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(authType)">
-			auth_type     = #{authType },   /* 권한구분(1:포털관리자,2:그룹관리자,3:사이트관리자,4:사이트이용자) */
+			auth_type     = #{authType },   /* 권한구분(1:포털관리자,2:고객사관리자,3:그룹관리자,4:사이트관리자,5:사이트이용자) */
 			</if> 
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(langType)">
 			lang_type     = #{langType },   /* 언어구분(1:한국어,2:영어,3:일본어) */
+			</if> 
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
+			comp_idx       = #{compIdx },   /* 회사식별자 */
 			</if> 
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(coName)">
 			co_name       = #{coName },   /* 고객사명 */
@@ -151,6 +235,12 @@
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(note)">
 			note          = #{note },   /* 비고 */
 			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+			site_grp_idx          = #{siteGrpIdx },   /* 사이트그룹식별자 */
+			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+			site_id          = #{siteId },   /* 사이트ID */
+			</if>
 			mod_uid       = #{modUid }, 
 			mod_date      = now()
 		where 1=1
@@ -159,11 +249,7 @@
 	
 	<update id="deleteUser" parameterType="hashMap">
 		/* 사용자 삭제 */
-		update tb_user
-		set 
-		    del_yn        = 'Y', 
-		    mod_uid       = #{modUid }, 
-		    mod_date      = now()
+		delete from tb_user
 		where 1=1
 		and user_idx = #{userIdx }
 	</update>

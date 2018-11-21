@@ -301,6 +301,120 @@ $(document).ready(function(e){
     });
 });
 
+
+/**
+*   Body 내용 print 출력
+*/
+//function commonPrint(){
+	
+//$("#printArea").printThis();
+//	$("#printArea").printArea({
+//        mode       : "iframe",
+//        standard   : "html5",
+//        popClose   : false,
+//        //extraCss   : '/css/custom.css,/css/bootstrap.css', 
+//        extraHead  : '',
+//        retainAttr : ["id","class","style"],
+//        printDelay : 500, // tempo de atraso na impressao
+//    });
+	
+//	 var options = {
+//			 mode : "iFrame",
+//			 standard   : "html5",
+//			 popClose : true,
+//			 extraCss : '/css/custom.css,/css/bootstrap.css,/css/jquery-ui.css',
+//			 retainAttr : ["id","class","style"],
+//			 extraHead : "", 
+//			 };
+//	 
+//
+//	 $("#printArea").printArea();
+//}
+
+
+function getPdfDownload(){
+	html2canvas(document.getElementById("layerbox"), {
+		onrendered: function(canvas) {         
+			var imgData = canvas.toDataURL('image/png');
+			var imgWidth = 210; // A4용지 기준 이미지 width길이
+			var imgHeight = canvas.height * imgWidth / canvas.width; //화면내용 이미지화 했을때 이미지파일의 height
+			var pageHeight = imgWidth * 1.414;  // A4용지 세로 길이
+			var heightLeft = imgHeight;
+
+			/**
+			 * Creates new jsPDF document object instance.
+			 * @param orientation One of "portrait" or "landscape" (or shortcuts "p" (Default), "l")
+			 * @param unit        Measurement unit to be used when coordinates are specified.
+			 *                    One of "pt" (points), "mm" (Default), "cm", "in"
+			 * @param format      One of 'pageFormats' as shown below, default: a4
+			 * @name jsPDF
+			 */			
+			var doc = new jsPDF('p', 'mm', 'a4');
+			var position = 0;
+
+			//function(imageData, format, x, y, w, h[, alias[, compression[, rotation]]])
+			doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight); //화면의 이미지 파일 추가
+			heightLeft -= pageHeight;
+
+			//화면이 길어 1장 이상일때
+			while (heightLeft >= 20) {
+				position = heightLeft - imgHeight;
+				doc.addPage();
+				doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+				heightLeft -= pageHeight;
+			}
+			
+			doc.save('download.pdf');
+		}
+	});	
+}
+
+var winterVal = 0;
+var summerVal = 0;
+var springFallVal = 0;
+var basicVal = 0;
+var custNum = "";		//고객번호
+var meterNum = "";		//계량기 번호
+var meterSf = "";		//계량기 배수
+var profitRatio = "";		//수익배분 비율
+var meterReadDay = "";		//검침일
+var contractPower = "";		//계약전력
+var planType = "";
+var planType2 = "";
+var planType3 = "";
+var planTypeName = "";
+
+function callback_getPlanTypeVal(result){
+	var thisDay = new Date();
+	thisDay = new Date(thisDay.setMonth(thisDay.getMonth()-1));
+	thisMonth = parseInt(thisDay.format("MM"));
+	var planType = result.result;
+	planTypeName = planType.plan_name;
+	basicVal = planType.basic_val;
+	summerVal = planType.summer_val;
+	winterVal = planType.winter_val;
+	springFallVal = planType.spring_fall_val;
+}
+
+function callback_getSiteSetDetail(result){
+	
+	
+	var site = result.detail;
+	custNum = site.cust_num;		//고객번호
+	meterNum = site.meter_num;		//계량기 번호
+	meterSf = site.meter_sf;		//계량기 배수
+	profitRatio = site.profit_ratio;		//수익배분 비율
+	meterReadDay = site.meter_read_day;		//검침일
+	contractPower = site.contract_power;		//계약전력
+	planType = site.plan_type;		//구분1
+	planType2 = site.plan_type2;		//구분2
+	planType3 = site.plan_type3;		//구분3
+	
+	getPlanTypeVal(planType,planType2,planType3);
+
+}
+
+
 function selectBoxTextApply(obj) {
 	var txt = $(obj).text();
 	$(obj).parent().parent().parent().find('button').empty().append(txt).append( $('<span class="caret" />') );

@@ -5,6 +5,7 @@
 <head>
 <jsp:include page="../include/common_static.jsp" />
 <jsp:include page="../include/sub_static.jsp" />
+<script src="/js/printThis.js" type="text/javascript"></script>
 <script src="../js/billRevenue/drRevenue.js" type="text/javascript"></script>
 </head>
 <body>
@@ -258,32 +259,42 @@
     <!-- ###### 명세서 확인 및 출력 Popup Start ###### -->
     <script type="text/javascript">
         $(function(){
-            $("#drRevenueBtnPrint").printPreview({
-                obj2print:'.drRevenueStatement',
-                width:'880',
-               style:'<style>body {background:none !important;} #layerbox {top:0 !important;left:0 !important; margin:0 !important; border-radius:0;} .dprint .lbutton {display:none !important;} #layerbox .ltit {display:none !important;} #layerbox .stit {display:none !important;} .dprint .lbody {margin-top:0 !important;}</style>'
+            $(".default_btn").on('click',function(){
+            	 $(".lbutton").show();
+            });
+            
+            $(".lbtn_pdf").on('click',function(){
+            	$(".lbutton").hide();
+            });
+            
+            $('.lbtn_print').on('click', function(){
+            	$('#layerbox').css("left", "0px");
+                $('#layerbox').css("top", "-300px");
+                $(".lbutton").hide();
+            	$('#layerbox').printThis({
+	        	});
             });
         });
-    </script>    
+    </script>
     <div id="layerbox" class="dprint clear drRevenueStatement" style="margin-top:250px;width:880px;">
     	<div class="lbutton fl">
-			<a href="#;" class="lbtn_pdf"><span>PDF로 저장</span></a>
-			<a href="#;" id="drRevenueBtnPrint" class="lbtn_print"><span>인쇄</span></a>
+			<a href="javascript:getPdfDownload();" class="lbtn_pdf"><span>PDF로 저장</span></a>
+			<a href="javascript:commonPrint();" id="drRevenueBtnPrint" class="lbtn_print"><span>인쇄</span></a>
 		</div>
         <div class="ltit fr">      	
 			<a href="javascript:popupClose('dprint');">닫기</a>
         </div>
-		<div class="lbody mt30">
+		<div class="lbody mt30" id = "printArea">
 
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
-					<td colspan="2" style="border:solid 1px #111;text-align:center;padding:15px;font-size:20px;font-weight:600;">
+					<td colspan="2" style="border:solid 1px #111;text-align:center;padding:15px;font-size:20px;font-weight:600;" id="texBill">
 						DR (수요반응) 수익 배분 청구서 (’18년 5월)
 					</td>
 				</tr>
 				<tr>
-					<td height="30" align="left" style="font-size:12px;">고객명 : 고객Site_1</td>
-					<td height="30" align="right" style="font-size:12px;">청구일 : 2018-07-20</td>
+					<td height="30" align="left" style="font-size:12px;">고객명 : ${selViewSite.site_name }</td>
+					<td height="30" align="right" style="font-size:12px;" id ="texDay">청구일 : 2018-07-20</td>
 				</tr>
 				<tr>
 					<td colspan="2" height="60" align="right" style="font-size:16px;font-weight:600;">
@@ -296,7 +307,7 @@
 			<div class="clear" style="margin-top:20px;">
 				<div class="fl" style="width:49%;">
 					<h2>1. 청구내역</h2>
-					<table class="tbl" style="margin-top:10px;">
+					<table class="tbl texArea" style="margin-top:10px;">
 						<colgroup>
 							<col width="50%">
 							<col>
@@ -346,7 +357,7 @@
 					</table>
 
 					<h2 style="margin-top:20px">3. 수익분배 계산 내역</h2>
-					<table class="tbl" style="margin-top:10px;">
+					<table class="tbl beneArea" style="margin-top:10px;">
 						<thead>
 							<tr>
 								<th>구분</th>
@@ -363,7 +374,7 @@
 				</div>
 				<div class="fr" style="width:49%;">
 					<h2>2. 감축 정보</h2>
-					<table class="tbl" style="margin-top:10px;">
+					<table class="tbl saveArea" style="margin-top:10px;">
 						<colgroup>
 							<col width="50%">
 							<col>
@@ -426,223 +437,234 @@
 				</div>
 			</div>
 
-		</div>
-		<h2 style="margin-top:20px">5. 최근 6개월 수익 내역</h2>
-		<div class="inchart">
-			<div id="ly_chart_dr" style="max-width:800px;height:250px;"></div>
-			<script language="JavaScript"> 
-			$(function () { 
-				var myChart = Highcharts.chart('ly_chart_dr', {
-					data: {
-				        table: 'ly_datatable_dr' /* 테이블에서 데이터 불러오기 */
-				    },
-
-					chart: {
-						marginLeft:80,
-						marginRight:0,
-						backgroundColor: 'transparent',
-						type: 'column'
-					},
-
-					navigation: {
-						buttonOptions: {
-						  enabled: false /* 메뉴 안보이기 */
-						  }
-					},
-
-				    title: {
-				        text: ''
-				    },
-
-				    subtitle: {
-				        text: ''
-				    },
-				    
-					xAxis: {
-						labels: {
-							align: 'center',
-							style: {
-								color: '#3d4250',
-								fontSize: '13px'
-							}
+		
+			<h2 style="margin-top:20px">5. 최근 6개월 수익 내역</h2>
+			<div class="inchart">
+				<div id="ly_chart_dr" style="max-width:800px;height:250px;"></div>
+				<script language="JavaScript"> 
+	// 			$(function () { 
+					var myChart1 = Highcharts.chart('ly_chart_dr', {
+	// 					data: {
+	// 				        table: 'ly_datatable_dr' /* 테이블에서 데이터 불러오기 */
+	// 				    },
+	
+						chart: {
+							marginLeft:80,
+							marginRight:0,
+							backgroundColor: 'transparent',
+							type: 'column'
 						},
-						tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
-						title: {
-							text: null
-							}
-					},
-
-					yAxis: {
-						gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
+	
+						navigation: {
+							buttonOptions: {
+							  enabled: false /* 메뉴 안보이기 */
+							  }
+						},
+	
 					    title: {
-					    	text: 'won',
-					    	align: 'low',
-					    	rotation: 0, /* 타이틀 기울기 */
-					        y:25, /* 타이틀 위치 조정 */
-					        x:25, /* 타이틀 위치 조정 */
-					        style: {
-					            color: '#3d4250',
-					            fontSize: '13px'
-					        }
+					        text: ''
 					    },
-					    labels: {
-					        overflow: 'justify',
-					        x:-20, /* 그래프와의 거리 조정 */
-					        style: {
-					            color: '#3d4250',
-					            fontSize: '13px'
-					        }
-					    }
-					},	
-
-				    /* 범례 */
-					legend: {
-						enabled: true,
-						align:'right',
-						verticalAlign:'top',									
-						itemStyle: {
-					        color: '#3d4250',
-					        fontSize: '13px',
-					        fontWeight: 400
+	
+					    subtitle: {
+					        text: ''
 					    },
-					    itemHoverStyle: {
-					        color: '' /* 마우스 오버시 색 */
-					    },
-					    symbolPadding:3, /* 심볼 - 텍스트간 거리 */
-					    symbolHeight:8 /* 심볼 크기 */
-					},
-
-					/* 툴팁 */
-					tooltip: {
-						    formatter: function() {
-				                return  '<b>' + this.series.name + '</b><br/>' + Highcharts.dateFormat('%Y-%m ', new Date(this.x)) 
-				                	+ '월<br/><span style="color:#438fd7">' + this.y + ' won</span>';
-				            }
-					},
-
-					/* 옵션 */
-					plotOptions: {
-				        series: {
-				            label: {
-				                connectorAllowed: false
-				            },
-				            borderWidth: 0 /* 보더 0 */
-				        },
-				        line: {
-						    marker: {
-						         enabled: false /* 마커 안보이기 */
-						    }
+					    
+						xAxis: {
+							type: 'datetime', // 08.20 이우람 추가
+							dateTimeLabelFormats: { // 08.20 이우람 추가
+								millisecond: '%H:%M:%S.%L',
+							    second: '%H:%M:%S',
+					            minute: '%H:%M',
+					            hour: '%H',
+					            day: '%m.%d ',
+					            week: '%m.%e',
+					            month: '%y/%m',
+					            year: '%Y'
+					        },
+							labels: {
+								align: 'center',
+								style: {
+									color: '#3d4250',
+									fontSize: '13px'
+								}
+							},
+							tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
+							title: {
+								text: null
+								}
 						},
-						column: {
-							  stacking: '' /*위로 쌓이는 막대  ,normal */
-						}
-				    },
-
-				    /* 출처 */
-				    credits: {
-						enabled: false
-					},
-
-				    /* 그래프 스타일 */
-				    series: [{
-				        color: '#438fd7' /* 총 정산금액 */
-				    },{
-				        color: '#84848f' /* 고객 할인금액 */
-				    }],
-
-				    /* 반응형 */
-				    responsive: {
-				        rules: [{
-				            condition: {
-				                maxWidth: 414 /* 차트 사이즈 */								                
-				            },
-				            chartOptions: {
-				            	chart: {
-				            		marginLeft:80,
-				            		marginTop:30
-								},
-								xAxis: {
-									labels: {
-										style: {
-								            fontSize: '13px'
-								        }
-									}
-								},
-								yAxis: {
-									title: {
-										style: {
-								            fontSize: '13px'
-								        }
+	
+						yAxis: {
+							gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
+						    title: {
+						    	text: 'won',
+						    	align: 'low',
+						    	rotation: 0, /* 타이틀 기울기 */
+						        y:25, /* 타이틀 위치 조정 */
+						        x:25, /* 타이틀 위치 조정 */
+						        style: {
+						            color: '#3d4250',
+						            fontSize: '13px'
+						        }
+						    },
+						    labels: {
+						        overflow: 'justify',
+						        x:-20, /* 그래프와의 거리 조정 */
+						        style: {
+						            color: '#3d4250',
+						            fontSize: '13px'
+						        }
+						    }
+						},	
+	
+					    /* 범례 */
+						legend: {
+							enabled: true,
+							align:'right',
+							verticalAlign:'top',									
+							itemStyle: {
+						        color: '#3d4250',
+						        fontSize: '13px',
+						        fontWeight: 400
+						    },
+						    itemHoverStyle: {
+						        color: '' /* 마우스 오버시 색 */
+						    },
+						    symbolPadding:3, /* 심볼 - 텍스트간 거리 */
+						    symbolHeight:8 /* 심볼 크기 */
+						},
+	
+						/* 툴팁 */
+						tooltip: {
+							    formatter: function() {
+					                return  '<b>' + this.series.name + '</b><br/>' + Highcharts.dateFormat('%Y-%m ', new Date(this.x)) 
+					                	+ '월<br/><span style="color:#438fd7">' + this.y + ' won</span>';
+					            }
+						},
+	
+						/* 옵션 */
+						plotOptions: {
+					        series: {
+					            label: {
+					                connectorAllowed: false
+					            },
+					            borderWidth: 0 /* 보더 0 */
+					        },
+					        line: {
+							    marker: {
+							         enabled: false /* 마커 안보이기 */
+							    }
+							},
+							column: {
+								  stacking: '' /*위로 쌓이는 막대  ,normal */
+							}
+					    },
+	
+					    /* 출처 */
+					    credits: {
+							enabled: false
+						},
+	
+					    /* 그래프 스타일 */
+					    series: [{
+					        color: '#438fd7' /* 총 정산금액 */
+					    },{
+					        color: '#84848f' /* 고객 할인금액 */
+					    }],
+	
+					    /* 반응형 */
+					    responsive: {
+					        rules: [{
+					            condition: {
+					                maxWidth: 414 /* 차트 사이즈 */								                
+					            },
+					            chartOptions: {
+					            	chart: {
+					            		marginLeft:80,
+					            		marginTop:30
 									},
-									labels: {
-										x:-10, /* 그래프와의 거리 조정 */
-								        style: {
-								            fontSize: '13px'
-								        }
-									}
-								},
-				                legend: {									                    
-				                    layout: 'horizontal',
-				                    verticalAlign: 'bottom',
-				                    align:'center',
-				                    x:0,
-				                    itemStyle: {
-							        	fontSize: '13px'
-							    	}
-				                }
-				            }
-				        }]
-				    }
-
-				});
-			});
-			</script>
+									xAxis: {
+										labels: {
+											style: {
+									            fontSize: '13px'
+									        }
+										}
+									},
+									yAxis: {
+										title: {
+											style: {
+									            fontSize: '13px'
+									        }
+										},
+										labels: {
+											x:-10, /* 그래프와의 거리 조정 */
+									        style: {
+									            fontSize: '13px'
+									        }
+										}
+									},
+					                legend: {									                    
+					                    layout: 'horizontal',
+					                    verticalAlign: 'bottom',
+					                    align:'center',
+					                    x:0,
+					                    itemStyle: {
+								        	fontSize: '13px'
+								    	}
+					                }
+					            }
+					        }]
+					    }
+	
+					});
+	// 			});
+				</script>
+			</div>
+			<!-- 데이터 추출용 -->
+			<div class="lychart_table" style="display:none;">			
+				<table id="ly_datatable_dr">
+				    <thead>
+				        <tr>
+				            <th>2018-08</th>
+				            <th>총 정산금액</th>
+				            <th>고객 할인금액	</th>
+				        </tr>
+				    </thead>
+				    <tbody>
+				        <tr>
+				            <th>1월</th>
+				            <td>1000000</td>
+				            <td>800000</td>
+				        </tr>
+				        <tr>
+				            <th>2월</th>
+				            <td>1000000</td>
+				            <td>800000</td>
+				        </tr>
+				        <tr>
+				            <th>3월</th>
+				            <td>1000000</td>
+				            <td>800000</td>
+				        </tr>
+				        <tr>
+				            <th>4월</th>
+				            <td>1000000</td>
+				            <td>800000</td>
+				        </tr>
+				        <tr>
+				            <th>5월</th>
+				            <td>1000000</td>
+				            <td>800000</td>
+				        </tr>
+				        <tr>
+				            <th>6월</th>
+				            <td></td>
+				            <td></td>
+				        </tr>
+				    </tbody>
+				</table>			
+			</div>
 		</div>
-		<!-- 데이터 추출용 -->
-		<div class="lychart_table" style="display:none;">			
-			<table id="ly_datatable_dr">
-			    <thead>
-			        <tr>
-			            <th>2018-08</th>
-			            <th>총 정산금액</th>
-			            <th>고객 할인금액	</th>
-			        </tr>
-			    </thead>
-			    <tbody>
-			        <tr>
-			            <th>1월</th>
-			            <td>1000000</td>
-			            <td>800000</td>
-			        </tr>
-			        <tr>
-			            <th>2월</th>
-			            <td>1000000</td>
-			            <td>800000</td>
-			        </tr>
-			        <tr>
-			            <th>3월</th>
-			            <td>1000000</td>
-			            <td>800000</td>
-			        </tr>
-			        <tr>
-			            <th>4월</th>
-			            <td>1000000</td>
-			            <td>800000</td>
-			        </tr>
-			        <tr>
-			            <th>5월</th>
-			            <td>1000000</td>
-			            <td>800000</td>
-			        </tr>
-			        <tr>
-			            <th>6월</th>
-			            <td></td>
-			            <td></td>
-			        </tr>
-			    </tbody>
-			</table>			
-		</div>
-
     </div>
     <!-- ###### Popup End ###### -->
 

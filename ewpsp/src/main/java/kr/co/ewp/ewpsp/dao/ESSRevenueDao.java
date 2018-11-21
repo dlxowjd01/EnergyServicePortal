@@ -18,4 +18,8 @@ public class ESSRevenueDao {
 		return resultList;
 	}
 
+	public List getESSRevenueTexList(HashMap param) {
+		List resultList = sqlSession.selectList("essRevenue.getESSRevenueTexList", param);
+		return resultList;
+	}
 }

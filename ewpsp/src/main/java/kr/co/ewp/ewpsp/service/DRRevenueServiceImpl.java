@@ -35,4 +35,21 @@ public class DRRevenueServiceImpl implements DRRevenueService {
 		return resultMap;
 	}
 	
+	public Map getDRRevenueTexList(HashMap param) throws Exception {
+		List list = drRevenueDao.getDRRevenueTexList(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("result", list);
+		
+		return resultMap;
+	}
+	
+	public Map getDRRevenueChartList(HashMap param) throws Exception {
+		List list = drRevenueDao.getDRRevenueChartList(param);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = BillRevenueDataSetting.dataSetting(param, list, "std_yearm");
+		
+		return resultMap;
+	}
+	
 }

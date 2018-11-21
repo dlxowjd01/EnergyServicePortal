@@ -2,6 +2,8 @@
 		var firstDay = new Date();
 		var endDay = new Date();
 		var agoDay = new Date();
+		var texDay = new Date();
+		
 		agoDay.setYear(agoDay.getFullYear());
 		agoDay = new Date(agoDay.setMonth(firstDay.getMonth()-5));
 		firstDay.setYear(firstDay.getFullYear()-1);
@@ -17,12 +19,136 @@
 		var formData = $("#schForm").serializeObject();
 		getDBData(formData);
 		
+		texDay.setYear(texDay.getFullYear());
+		texDay = new Date(texDay.setMonth(firstDay.getMonth()-2));
+		$("#selTermTex").val(texDay.format('yyyyMM'));
 		$("#selTermTo").val( endDay.format("yyyyMM") );
 		$("#selTermFrom").val( agoDay.format("yyyyMM") );
 		formData = $("#schForm").serializeObject();
-		
+		getSiteSetDetail(formData);
 		getKepcoTexBillList(formData);
 	});
+	
+	var custNum = "";		//고객번호
+	var meterNum = "";		//계량기 번호
+	var meterSf = "";		//계량기 배수
+	var profitRatio = "";		//수익배분 비율
+	var meterReadDay = "";		//검침일
+	var contractPower = "";		//계약전력
+	var planType = "";
+	var planType2 = "";
+	var planType3 = "";
+	
+	
+	/*function callback_getSiteSetDetail(result){
+		
+		var site = result.detail;
+		custNum = site.cust_num;		//고객번호
+		meterNum = site.meter_num;		//계량기 번호
+		meterSf = site.meter_sf;		//계량기 배수
+		profitRatio = site.profit_ratio;		//수익배분 비율
+		meterReadDay = site.meter_read_day;		//검침일
+		contractPower = site.contract_power;		//계약전력
+		planType = site.plan_type;		//구분1
+		planType2 = site.plan_type2;		//구분2
+		planType3 = site.plan_type3;		//구분3
+		baseRate = 0;
+		
+		if(planType == "general"){
+			if(planType2 == "A1"){
+				if(planType3 == "low_voltage_A"){
+					baseRate = 6160;
+				}else if(planType3 == "high_voltage_A_option1"){
+					baseRate = 7170;
+				}else if(planType3 == "high_voltage_A_option2"){
+					baseRate = 8230;
+				}else if(planType3 == "high_voltage_B_option1"){
+					baseRate = 7170;
+				}else if(planType3 == "high_voltage_B_option2"){
+					baseRate = 8230;
+				}
+			}else if(planType2 == "A2"){
+				if(planType3 == "high_voltage_A_option1"){
+					baseRate = 7170;
+				}else if(planType3 == "high_voltage_A_option2"){
+					baseRate = 8230;
+				}else if(planType3 == "high_voltage_B_option1"){
+					baseRate = 7170;
+				}else if(planType3 == "high_voltage_B_option2"){
+					baseRate = 8230;
+				}
+				
+			}else if(planType2 =="B"){
+				if(planType3 == "high_voltage_A_option1"){
+					baseRate = 7220;
+				}else if(planType3 == "high_voltage_A_option2"){
+					baseRate = 8320;
+				}else if(planType3 == "high_voltage_A_option3"){
+					baseRate = 9810;
+				}else if(planType3 == "high_voltage_B_option1"){
+					baseRate = 6630;
+				}else if(planType3 == "high_voltage_B_option2"){
+					baseRate = 7380;
+				}else if(planType3 == "high_voltage_B_option3"){
+					baseRate = 8190;
+				}else if(planType3 == "high_voltage_C_option1"){
+					baseRate = 6590;
+				}else if(planType3 == "high_voltage_C_option2"){
+					baseRate = 7520;
+				}else if(planType3 == "high_voltage_C_option3"){
+					baseRate = 8090;
+				}
+				
+			}
+			
+		}else if(planType == "industrial"){
+			if(planType2 == "A1"){
+				if(planType3 == "low_voltage_A"){
+					baseRate = 5550;
+				}else if(planType3 == "high_voltage_A_option1"){
+					baseRate = 6490;
+				}else if(planType3 == "high_voltage_A_option2"){
+					baseRate = 7470;
+				}else if(planType3 == "high_voltage_B_option1"){
+					baseRate = 6000;
+				}else if(planType3 == "high_voltage_B_option2"){
+					baseRate = 6900;
+				}
+			}else if(planType2 == "A2"){
+				if(planType3 == "high_voltage_A_option1"){
+					baseRate = 6490;
+				}else if(planType3 == "high_voltage_A_option2"){
+					baseRate = 7470;
+				}else if(planType3 == "high_voltage_B_option1"){
+					baseRate = 6000;
+				}else if(planType3 == "high_voltage_B_option2"){
+					baseRate = 6900;
+				}
+			}else if(planType2 =="B"){
+				if(planType3 == "high_voltage_A_option1"){
+					baseRate = 7220;
+				}else if(planType3 == "high_voltage_A_option2"){
+					baseRate = 8320;
+				}else if(planType3 == "high_voltage_A_option3"){
+					baseRate = 9810;
+				}else if(planType3 == "high_voltage_B_option1"){
+					baseRate = 6630;
+				}else if(planType3 == "high_voltage_B_option2"){
+					baseRate = 7380;
+				}else if(planType3 == "high_voltage_B_option3"){
+					baseRate = 8190;
+				}else if(planType3 == "high_voltage_C_option1"){
+					baseRate = 6590;
+				}else if(planType3 == "high_voltage_C_option2"){
+					baseRate = 7520;
+				}else if(planType3 == "high_voltage_C_option3"){
+					baseRate = 8090;
+				}
+			
+			}
+		
+		}
+	}*/
 
 	function searchData() {
 		getCollect_sch_condition(); // 검색조건 모으기
@@ -66,18 +192,23 @@
 	function callback_getKepcoTexBillList(result) {
 		var texList = result.texList;
 		var chartList = result.chartList;
+		var yyyyMM = texList[0].bill_yearm;
+		var tatalTex = texList[0].tot_elec_rate+texList[0].val_add_tax+texList[0].elec_fund;
 		var texStr = "";
 		var texFoodStr = "";
 		var customerStr = "";
-		var texInfo = "";
+		var texInfoStr = "";
 		var datatable = "";
 		var str11 = "";
 		
 		if(texList.length > 0){
-			var delLastWon = Math.floor(texList[0].tot_amt_bill/10)*10-texList[0].tot_amt_bill;
+			var delLastWon = Math.floor(tatalTex/10)*10-tatalTex;
 			$("#texArea").find("tbody").empty();
 			$("#texArea").find("tfoot").empty();
 			
+			$("#texBill").text("전기 요금 청구서 ("+yyyyMM.substring(2,4)+"년"+yyyyMM.substring(5,6)+"월)");
+			$("#texDay").text("청구일 : "+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-"+"20");
+			$(".dp_total").text(numberComma(Math.floor(texList[0].tot_amt_bill/10)*10));
 			texStr +="<tr>";
 			texStr +="<th>기본요금</th>";
 			texStr +="<td>"+numberComma(texList[0].base_rate)+"원</td>";
@@ -108,16 +239,70 @@
 			texStr +="<td>"+numberComma(Math.floor(texList[0].tot_amt_bill/10)*10)+"원</td>";
 			texStr +="</tr>";
 			
+			
+			
 			texFoodStr +="<tr>";
 			texFoodStr +="<th>청구금액</th>";
 			texFoodStr +="<td>"+numberComma(Math.floor(texList[0].tot_amt_bill/10)*10)+"원</td>";
 			texFoodStr +="</tr>";
+			
+			texInfoStr +="<tr>";
+			texInfoStr +="<th>계좌번호</th>";
+			texInfoStr +="<td>1005-802-498030</td>";
+			texInfoStr +="</tr>";
+			texInfoStr +="<tr>";
+			texInfoStr +="<th>예금주</th>";
+			texInfoStr +="<td>한국동서발전(주)</td>";
+			texInfoStr +="</tr>";
+			texInfoStr +="<tr>";
+			texInfoStr +="<th>납입금액</th>";
+			texInfoStr +="<td>"+numberComma(Math.floor(texList[0].tot_amt_bill/10)*10)+"원</td>";
+			texInfoStr +="</tr>";
+			texInfoStr +="<tr>";
+			texInfoStr +="<th>납기일</th>";
+			texInfoStr +="<td>"+yyyyMM.substring(0, 4)+"년"+yyyyMM.substring(4, 6)+"월"+meterReadDay+"일</td>";
+			texInfoStr +="</tr>";
+			
+			
+			customerStr +="<tr>";
+			customerStr +="<th>고객번호</th>";
+			customerStr +="<td>"+custNum+"</td>";
+			customerStr +="</tr>";
+			customerStr +="<tr>";
+			customerStr +="<th>주소</th>";
+			customerStr +="<td>울산광역시 울주군 온산읍 원산로 40</td>";
+			customerStr +="</tr>";
+			customerStr +="</tr>";
+			customerStr +="<tr>";
+			customerStr +="<th>전기사용 계약종별</th>";
+			customerStr +="<td>산업용(을) 고압B 선택 III</td>";
+			customerStr +="</tr>";
+			customerStr +="<tr>";
+			customerStr +="<th>정기검침일</th>";
+			customerStr +="<td>"+yyyyMM.substring(0, 4)+"년"+yyyyMM.substring(4, 6)+"월"+meterReadDay+"일</td>";
+			customerStr +="</tr>";
+			customerStr +="<tr>";
+			customerStr +="<th>계량기번호</th>";
+			customerStr +="<td>"+meterNum+"</td>";
+			customerStr +="</tr>";
+			customerStr +="<tr>";
+			customerStr +="<th>계량기배수</th>";
+			customerStr +="<td>"+meterSf+"</td>";
+			customerStr +="</tr>";
+			customerStr +="<tr>";
+			customerStr +="<th>계약전력</th>";
+			customerStr +="<td>"+contractPower+"</td>";
+			customerStr +="</tr>";
+
 			$("#texArea").find("tbody").html(texStr);
 			$("#texArea").find("tfoot").html(texFoodStr);
-			
+			$(".texInfo").find("tbody").html(texInfoStr);
+			$(".customerInfo").find("tbody").html(customerStr);
 			
 		}
 		if(chartList.length > 0) {
+			//$("#ly_datatable_hj").find("tbody").empty();
+		
 			for(var i=0; i<chartList.length; i++) {
 				var yyyyMM = chartList[i].bill_yearm;
 				var baseRate = String(chartList[i].base_rate);
@@ -127,14 +312,26 @@
 				var elecFund  = String(chartList[i].elec_fund);
 				var valAddTax  = String(chartList[i].val_add_tax);
 				var totAmtBill  = String(chartList[i].tot_amt_bill);
+				var chartListStr = ""; 
 				var reBaseRate = 0; 
 				var rePwrFactorRate = 0; 
 				var reConsumeRate = 0; 
 				var reTotElecRate = 0; 
 				var reElecFund = 0; 
 				var reValAddTax = 0; 
-				var reTotAmtBill = 0; 
+				var reTotAmtBill = 0;
 				
+				
+	        /*
+	        	chartListStr += "<tr>";
+	        	chartListStr += "<th>"+yyyyMM+"</th>";
+	        	chartListStr += "<td>"+baseRate+"</td>";
+	        	chartListStr += "<td>"+consumeRate+"</td>";
+	        	chartListStr += "<td>"+elecFund+"</td>";
+	        	chartListStr += "<td>"+valAddTax+"</td>";
+	        	chartListStr += "</tr>";
+				
+	        	$("#ly_datatable_hj").find("tbody").append(chartListStr)*/
 				// 차트데이터 셋팅
 				texDataSet1.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].base_rate] );
 				texDataSet2.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].consume_rate] ); // 역률적용된 사용요금은 다시 확인해야함

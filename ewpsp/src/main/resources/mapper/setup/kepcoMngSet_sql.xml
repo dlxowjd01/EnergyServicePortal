@@ -40,6 +40,17 @@
 		</if>
 	</select>
 	
+	<select id="getPlanTypeVal" parameterType="hashMap" resultType="hashMap">
+		/* 요금제 조회 */
+		select 
+			plan_type, plan_type2, plan_type3, plan_name ,summer_val , spring_fall_val, winter_val, basic_val
+		from tb_plan_type
+		where 1=1
+		and plan_type = #{planType }
+		and plan_type2 = #{planType2 }
+		and plan_type3 = #{planType3 }
+	</select>
+	
 	<insert id="insertSiteSet" parameterType="hashMap">
 		/* 한전 계약 및 전력관리 정보 등록 */
 		insert into tb_site_set (

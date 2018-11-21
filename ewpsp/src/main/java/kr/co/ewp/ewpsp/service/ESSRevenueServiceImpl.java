@@ -30,4 +30,13 @@ public class ESSRevenueServiceImpl implements ESSRevenueService {
 		return resultMap;
 	}
 	
+	public Map getESSRevenueTexList(HashMap param) throws Exception {
+		List list = essRevenueDao.getESSRevenueTexList(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("result",list);
+		
+		return resultMap;
+	}
+	
 }

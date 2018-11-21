@@ -24,6 +24,9 @@ public class KepcoMngSetServiceImpl implements KepcoMngSetService {
 	public List getPlanType(HashMap param) throws Exception {
 		return kepcoMngSetDao.getPlanType(param);
 	}
+	public Map getPlanTypeVal(HashMap param) throws Exception {
+		return kepcoMngSetDao.getPlanTypeVal(param);
+	}
 	
 	@Transactional
 	public int updateSiteSet(HashMap param) throws Exception {

@@ -17,5 +17,17 @@ public class DRRevenueDao {
 		List resultList = sqlSession.selectList("drRevenue.getDRRevenueList", param);
 		return resultList;
 	}
+	
+	public List getDRRevenueTexList(HashMap param) {
+		List resultList = sqlSession.selectList("drRevenue.getDRRevenueTexList", param);
+		return resultList;
+	}
+	
+	public List getDRRevenueChartList(HashMap param) {
+		List resultList = sqlSession.selectList("drRevenue.getDRRevenueChartList", param);
+		
+		System.out.println("resultListresultList : :::"+resultList);
+		return resultList;
+	}
 
 }

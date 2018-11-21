@@ -53,6 +53,7 @@ public class KepcoMngSetController {
 		logger.debug("param ::::: "+param.toString());
 		
 		Map result = kepcoMngSetService.getSiteSetDetail(param);
+		System.out.println("전력관리정보 :::"+result);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
@@ -76,6 +77,26 @@ public class KepcoMngSetController {
 		resultMap.put("list", list);
 		return resultMap;
 	}
+	
+	/**
+	 * 요금제 조회 및 계절별 값 설정
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getPlanTypeVal")
+	public @ResponseBody Map<String, Object> getPlanTypeVal(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
+		logger.debug("/getPlanTypeVal");
+		logger.debug("param ::::: "+param.toString());
+		
+		Map result = kepcoMngSetService.getPlanTypeVal(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("result", result);
+		System.out.println("플랜플랜 : "+resultMap);
+		return resultMap;
+	}
+	
 	
 	/**
 	 * 한전 계약 및 전력관리 정보 수정
