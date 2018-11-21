@@ -173,7 +173,11 @@ public class BillController {
         billRequest.setMeterDay(meterDay);
         billRequest.setContElec(siteSet.getContractPower());
         billRequest.setPeriod(period);
-        billRequest.setPlanName(siteSet.getPlanType());
+        if(siteSet.getPlanType() != null && siteSet.getPlanType2() != null && siteSet.getPlanType3() != null ) {
+        	billRequest.setPlanName(siteSet.getPlanType()+"_"+siteSet.getPlanType2()+"_"+siteSet.getPlanType3());
+        } else {
+        	billRequest.setPlanName("industrial_B_high_voltage_A_option2");
+        }
         {// peakHistory
           List<PeakHistoryModel> peakHistory = Lists.newArrayList();
           Calendar calendar = DateUtil.getCalendar(beginDate);
@@ -272,13 +276,13 @@ public class BillController {
           }
           ess.setkWh(kWh);
           ess.setTimestamp(timestamp);
-          billRequest.setEss(ess);
+          billRequest.setEssCharging(ess);
           ess2.setkWh(kWh2);
           ess2.setTimestamp(timestamp);
           billRequest.setEssDischarging(ess2);
         }
         if (billRequest.getEnergy().getTimestamp().size() == 0 && billRequest.getReactivePos().getTimestamp().size() == 0 && billRequest.getReactiveNeg().getTimestamp().size() == 0
-            && billRequest.getEss().getTimestamp().size() == 0) {
+            && billRequest.getEssCharging().getTimestamp().size() == 0) {
           continue;
         }
         try {
@@ -295,11 +299,11 @@ public class BillController {
             bill.setElecFund(item.getElectricityFund().intValue());
             bill.setEnergyChgReduct(item.getEnergyChargeReduction().intValue());
             bill.setEssChgIncen(item.getEssChargingIncentive().intValue());
-            bill.setEssChgMaxPeak(item.getEssChargingingInMaxPeak().floatValue());
-            bill.setEssChgMidPeak(item.getEssChargingingInMidPeak().floatValue());
-            bill.setEssChgOffPeak(item.getEssChargingingInOffPeak().floatValue());
+            bill.setEssChgMaxPeak(item.getEssChargingInOnPeak().floatValue());
+            bill.setEssChgMidPeak(item.getEssChargingInMidPeak().floatValue());
+            bill.setEssChgOffPeak(item.getEssChargingInOffPeak().floatValue());
             bill.setEssDischgIncen(item.getEssDischargingIncentive().intValue());
-            bill.setEssDischgMaxPeak(item.getEssDischargingInMaxPeak().floatValue());
+            bill.setEssDischgMaxPeak(item.getEssDischargingInOnPeak().floatValue());
             bill.setEssDischgMidPeak(item.getEssDischargingInMidPeak().floatValue());
             bill.setEssDischgOffPeak(item.getEssDischargingInOffPeak().floatValue());
             bill.setLagPwrFactor(item.getLaggingPowerFactor().intValue());
