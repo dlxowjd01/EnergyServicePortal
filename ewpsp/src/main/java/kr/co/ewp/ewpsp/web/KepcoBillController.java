@@ -35,7 +35,7 @@ public class KepcoBillController {
 	public @ResponseBody Map<String, Object> getKepcoBillList(@RequestParam HashMap param) throws Exception {
 		logger.debug("/getKepcoBillList");
 		logger.debug("param ::::: "+param.toString());
-		System.out.println("param 빌리스트:" + param);
+		
 		Map list = kepcoBillService.getKepcoBillList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
