@@ -473,11 +473,18 @@
 						}
 					} else rePvUsage = null;
 					
+					var chartEssUsage =null;
+					var chartPvUsage = null;
+					if(reKepcoUsage != null) {
+						chartEssUsage = reKepcoUsage+rePvUsage+reEssUsage
+						chartPvUsage = reKepcoUsage+rePvUsage
+					}
+					
 					var tm = new Date( convertDateUTC(loopCntChartList[i].std_timestamp) );
 					// 차트데이터 셋팅
 					dataSet.push([setChartDateUTC(loopCntChartList[i].std_timestamp) , reKepcoUsage]);
-					dataSet2.push([setChartDateUTC(loopCntChartList[i].std_timestamp) , reKepcoUsage+rePvUsage+reEssUsage]);
-					dataSet3.push([setChartDateUTC(loopCntChartList[i].std_timestamp) , reKepcoUsage+rePvUsage]);
+					dataSet2.push([setChartDateUTC(loopCntChartList[i].std_timestamp) , chartEssUsage]);
+					dataSet3.push([setChartDateUTC(loopCntChartList[i].std_timestamp) , chartPvUsage]);
 					
 					if( (i+1) == loopCntChartList.length ) {
 						if(reKepcoUsage != null) {
