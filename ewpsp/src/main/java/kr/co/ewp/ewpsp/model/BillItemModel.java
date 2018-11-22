@@ -27,12 +27,12 @@ public class BillItemModel {
     private Double onPeakEnergyUsage;//
     private Double essChargingIncentive;//
     private Double essDischargingIncentive;//
-    private Double essChargingingInOffPeak;//
-    private Double essChargingingInMidPeak;//
-    private Double essChargingingInMaxPeak;//
+    private Double essChargingInOffPeak;//
+    private Double essChargingInMidPeak;//
+    private Double essChargingInOnPeak;//
     private Double essDischargingInOffPeak;//
     private Double essDischargingInMidPeak;//
-    private Double essDischargingInMaxPeak;//
+    private Double essDischargingInOnPeak;//
     private Double demandChargeReduction;//
     private Double energyChargeReduction;
 //    private Integer essBdayInMonth;
@@ -222,28 +222,28 @@ public class BillItemModel {
       this.essDischargingIncentive = essDischargingIncentive;
     }
 
-    public Double getEssChargingingInOffPeak() {
-      return essChargingingInOffPeak;
+    public Double getEssChargingInOffPeak() {
+      return essChargingInOffPeak;
     }
 
-    public void setEssChargingingInOffPeak(Double essChargingingInOffPeak) {
-      this.essChargingingInOffPeak = essChargingingInOffPeak;
+    public void setEssChargingInOffPeak(Double essChargingInOffPeak) {
+      this.essChargingInOffPeak = essChargingInOffPeak;
     }
 
-    public Double getEssChargingingInMidPeak() {
-      return essChargingingInMidPeak;
+    public Double getEssChargingInMidPeak() {
+      return essChargingInMidPeak;
     }
 
-    public void setEssChargingingInMidPeak(Double essChargingingInMidPeak) {
-      this.essChargingingInMidPeak = essChargingingInMidPeak;
+    public void setEssChargingInMidPeak(Double essChargingInMidPeak) {
+      this.essChargingInMidPeak = essChargingInMidPeak;
     }
 
-    public Double getEssChargingingInMaxPeak() {
-      return essChargingingInMaxPeak;
+    public Double getEssChargingInOnPeak() {
+      return essChargingInOnPeak;
     }
 
-    public void setEssChargingingInMaxPeak(Double essChargingingInMaxPeak) {
-      this.essChargingingInMaxPeak = essChargingingInMaxPeak;
+    public void setEssChargingInOnPeak(Double essChargingInOnPeak) {
+      this.essChargingInOnPeak = essChargingInOnPeak;
     }
 
     public Double getEssDischargingInOffPeak() {
@@ -262,12 +262,12 @@ public class BillItemModel {
       this.essDischargingInMidPeak = essDischargingInMidPeak;
     }
 
-    public Double getEssDischargingInMaxPeak() {
-      return essDischargingInMaxPeak;
+    public Double getEssDischargingInOnPeak() {
+      return essDischargingInOnPeak;
     }
 
-    public void setEssDischargingInMaxPeak(Double essDischargingInMaxPeak) {
-      this.essDischargingInMaxPeak = essDischargingInMaxPeak;
+    public void setEssDischargingInOnPeak(Double essDischargingInOnPeak) {
+      this.essDischargingInOnPeak = essDischargingInOnPeak;
     }
 
     public Double getDemandChargeReduction() {

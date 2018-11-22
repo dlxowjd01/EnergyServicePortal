@@ -326,7 +326,7 @@ public class SiteMainController {
 
 	      Date _begin = null;
 	      Date _end = null;
-	      Integer lastDate = null;
+//	      Integer lastDate = null;
 	      if (begin == null) {
 	  		Calendar cal = Calendar.getInstance();
 	  		cal.setTimeInMillis(   (new Date()).getTime()   );
@@ -396,8 +396,14 @@ public class SiteMainController {
 	        billRequest.setMeterDay(meterDay);
 	        billRequest.setContElec(siteSet.getContractPower());
 	        billRequest.setPeriod(period);
-//	        billRequest.setPlanName(siteSet.getPlanType());
-	        billRequest.setPlanName("industrial_B_high_voltage_A_option1"); // 10.23 변경중
+////	        billRequest.setPlanName(siteSet.getPlanType());
+//	        billRequest.setPlanName("industrial_B_high_voltage_A_option1"); // 10.23 변경중
+	        if(siteSet.getPlanType() != null && siteSet.getPlanType2() != null && siteSet.getPlanType3() != null ) {
+	        	billRequest.setPlanName(siteSet.getPlanType()+"_"+siteSet.getPlanType2()+"_"+siteSet.getPlanType3());
+	        } else {
+//	        	billRequest.setPlanName("industrial_B_high_voltage_A_option2"); // ess할인이 안되는 요금제라고 함
+	        	billRequest.setPlanName("industrial_A2_high_voltage_A_option1");
+	        }
 	        {// peakHistory
 	          List<PeakHistoryModel> peakHistory = Lists.newArrayList();
 	          Calendar calendar = DateUtil.getCalendar(beginDate);
@@ -501,12 +507,12 @@ public class SiteMainController {
 //	          }
 	          ess.setkWh(kWh);
 	          ess.setTimestamp(timestamp);
-	          billRequest.setEss(ess);
+	          billRequest.setEssCharging(ess);
 	          ess2.setkWh(kWh2);
 	          ess2.setTimestamp(timestamp);
 	          billRequest.setEssDischarging(ess2);
 	        }
-	        if (billRequest.getEnergy().getTimestamp().size() == 0 && billRequest.getReactivePos().getTimestamp().size() == 0 && billRequest.getReactiveNeg().getTimestamp().size() == 0 && billRequest.getEss().getTimestamp().size() == 0) {
+	        if (billRequest.getEnergy().getTimestamp().size() == 0 && billRequest.getReactivePos().getTimestamp().size() == 0 && billRequest.getReactiveNeg().getTimestamp().size() == 0 && billRequest.getEssCharging().getTimestamp().size() == 0) {
 	          continue;
 	        }
 	        BillResponseModel response = EncoredApiUtil.getBill(billRequest);
