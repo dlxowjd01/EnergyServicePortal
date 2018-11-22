@@ -206,7 +206,7 @@
 			$("#texArea").find("tbody").empty();
 			$("#texArea").find("tfoot").empty();
 			
-			$("#texBill").text("전기 요금 청구서 ("+yyyyMM.substring(2,4)+"년"+yyyyMM.substring(5,6)+"월)");
+			$("#texBill").text("전기 요금 청구서 ("+yyyyMM.substring(2,4)+"년"+yyyyMM.substring(4,6)+"월)");
 			$("#texDay").text("청구일 : "+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-"+"20");
 			$(".dp_total").text(numberComma(Math.floor(texList[0].tot_amt_bill/10)*10));
 			texStr +="<tr>";

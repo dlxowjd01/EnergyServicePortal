@@ -558,7 +558,7 @@
 				</div>
 				<div class="fr" style="width:42%">
 					<h2>6. 납입처</h2>
-					<table class="tbl" style="margin-top:10px;">
+					<table class="tbl infoArea" style="margin-top:10px;">
 						<colgroup>
 							<col width="40%">
 							<col width="60%">

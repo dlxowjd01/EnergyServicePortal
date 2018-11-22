@@ -17,7 +17,7 @@
 	<select id="getPlanType" parameterType="hashMap" resultType="hashMap">
 		/* 요금제 조회 */
 		select 
-			plan_type, plan_type2, plan_type3, plan_name 
+			plan_type, plan_type2, plan_type3, plan_name ,plan_type_name,plan_type_name2,plan_type_name3
 		from tb_plan_type
 		where 1=1
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(planType)">

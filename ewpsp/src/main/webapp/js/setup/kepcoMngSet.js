@@ -84,9 +84,9 @@
 				$siteIdSelBox.empty();
 				$siteIdSelBox.append('<option value="">---선택---</option>');
 				for(var i=0; i<list.length; i++) {
-					if(gbn == 1) $siteIdSelBox.append('<option value="'+list[i].plan_type+'">'+list[i].plan_type+'</option>');
-					else if(gbn == 2) $siteIdSelBox.append('<option value="'+list[i].plan_type2+'">'+list[i].plan_type2+'</option>');
-					else if(gbn == 3) $siteIdSelBox.append('<option value="'+list[i].plan_type3+'">'+list[i].plan_type3+': '+list[i].plan_name+'</option>');
+					if(gbn == 1) $siteIdSelBox.append('<option value="'+list[i].plan_type+'">'+list[i].plan_type_name+'</option>');
+					else if(gbn == 2) $siteIdSelBox.append('<option value="'+list[i].plan_type2+'">'+list[i].plan_type_name2+'</option>');
+					else if(gbn == 3) $siteIdSelBox.append('<option value="'+list[i].plan_type3+'">'+list[i].plan_type_name3+'</option>');
 				}
 				
 			}

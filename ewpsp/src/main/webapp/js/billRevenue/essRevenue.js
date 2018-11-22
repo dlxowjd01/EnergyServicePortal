@@ -533,6 +533,7 @@
 		var ESSSaveFootAreaStr = "";
 		var ESSCalcAreaStr = "";
 		var ESSTypeStr = "";
+		var ESSInfoStr = "";
 		
 		/*$(".texArea").find("tbody").empty();
 		$(".texArea").find("tfoot").empty();
@@ -653,17 +654,38 @@
 		ESSCalcAreaStr += "<tr>";
 		ESSCalcAreaStr += "<th>④ESS 전용 요금 할인</th>";
 		ESSCalcAreaStr += "<td aligh ='right'>"+( (totChgPeakVal1 < totChgPeakVal2) ? numberComma(Math.round(totChgPeakVal1)) : numberComma(Math.round(totChgPeakVal2))  ) +"</td>";
-		ESSCalcAreaStr += "<td>Min[(40,527 kW x 8,190 원), (((64,990 kW – 41 kW) / (21 일 x 3)) x 3 x 1 x 8,190 원)]</td>";
+		ESSCalcAreaStr += "<td>Min[("+numberComma(usg)+" kW x "+numberComma(basicVal)+" 원), ((("+numberComma(reEssChgMaxPeak)+" kW – "+numberComma(dischgMaxCalc)+" kW) / (21 일 x 3)) x 3 x 1 x "+numberComma(basicVal)+" 원)]</td>";
 		ESSCalcAreaStr += "</tr>";
-		
 		ESSTypeStr += "<tr>";
 		ESSTypeStr += "<th>전기사용 계약종별</th>";
 		ESSTypeStr += "<td>"+planTypeName+"</td>";
 		ESSTypeStr += "</tr>";
 		ESSTypeStr += "<tr>";
 		ESSTypeStr += "<th>기본요금</th>";
-		ESSTypeStr += "<td>"+basicVal+"원</td>";
+		ESSTypeStr += "<td>"+numberComma(basicVal)+"원</td>";
 		ESSTypeStr += "</tr>";
+		
+		ESSInfoStr += "<tr>";
+		ESSInfoStr += "<th>은행명</th>";
+		ESSInfoStr += "<td>우리은행</td>";
+		ESSInfoStr += "</tr>";
+		ESSInfoStr += "<tr>";
+		ESSInfoStr += "<th>계좌번호</th>";
+		ESSInfoStr += "<td>1005 – 802 - 498030</td>";
+		ESSInfoStr += "</tr>";
+		ESSInfoStr += "<tr>";
+		ESSInfoStr += "<th>예금주</th>";
+		ESSInfoStr += "<td>한국동서발전㈜</td>";
+		ESSInfoStr += "</tr>";
+		ESSInfoStr += "<tr>";
+		ESSInfoStr += "<th>납입금액</th>";
+		ESSInfoStr += "<td>"+numberComma(addDivTotal+delLastWon)+"</td>";
+		ESSInfoStr += "</tr>";
+		ESSInfoStr += "<tr>";
+		ESSInfoStr += "<th>납기일</th>";
+		ESSInfoStr += "<td>"+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-"+"20</td>";
+		ESSInfoStr += "</tr>";
+		
 		
 		
 		$(".texArea").find("tbody").html(ESSBodyStr);
@@ -672,6 +694,7 @@
 		$(".texSaveArea").find("tfoot").html(ESSSaveFootAreaStr);
 		$(".calcArea").find("tbody").html(ESSCalcAreaStr);
 		$(".typeArea").find("tbody").html(ESSTypeStr);
+		$(".infoArea").find("tbody").html(ESSInfoStr);
 		
 		
 		texDataSet1.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), reEssChgMaxPeak] );
