@@ -91,7 +91,7 @@
 		var totDataSet2 = 0;
 		
 		// 표데이터 셋팅
-		//if(sheetList.length > 0) {
+		if(sheetList.length > 0) {
 			for(var i=0; i<sheetList.length; i++) {
 				var yyyyMM = sheetList[i].std_yearm;
 				var reductCntHour  = String(sheetList[i].reduct_cnt_hour)   ;
@@ -224,14 +224,19 @@
 				infoAreaStr +="</tr>";
 				
 				
+				$(".texArea").find("tbody").html(texStr);
+				$(".texArea").find("tfoot").html(texFootStr);
+				$(".saveArea").find("tbody").html(saveStr);
+				$(".beneArea").find("tbody").html(beneAreaStr);
+				$(".infoArea").find("tbody").html(infoAreaStr);
 			
-			}
+			} 
+		}else {
+				$("#layerbox").html("<div>조회 결과가 없습니다.</div>");
+				$("#layerbox").append('<div class=\'ltit fr\'><a href=\'javascript:popupClose("dprint");\'>닫기</a></div>');
+		}
 			
-			$(".texArea").find("tbody").html(texStr);
-			$(".texArea").find("tfoot").html(texFootStr);
-			$(".saveArea").find("tbody").html(saveStr);
-			$(".beneArea").find("tbody").html(beneAreaStr);
-			$(".infoArea").find("tbody").html(infoAreaStr);
+			
 		//}
 		
 		// 차트데이터 셋팅

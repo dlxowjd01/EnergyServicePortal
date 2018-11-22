@@ -301,7 +301,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td height="30" align="left" style="font-size:12px;">고객명 : 고객Site_1</td>
+					<td height="30" align="left" style="font-size:12px;">고객명 : ${selViewSite.site_name }</td>
 					<td height="30" align="right" style="font-size:12px;" id = "texDay">청구일 : 2018-07-20</td>
 				</tr>
 				<tr>
