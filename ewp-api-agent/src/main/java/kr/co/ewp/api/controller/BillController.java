@@ -176,7 +176,8 @@ public class BillController {
         if(siteSet.getPlanType() != null && siteSet.getPlanType2() != null && siteSet.getPlanType3() != null ) {
         	billRequest.setPlanName(siteSet.getPlanType()+"_"+siteSet.getPlanType2()+"_"+siteSet.getPlanType3());
         } else {
-        	billRequest.setPlanName("industrial_B_high_voltage_A_option2");
+//        	billRequest.setPlanName("industrial_B_high_voltage_A_option2"); // ess할인이 안되는 요금제라고 함
+        	billRequest.setPlanName("industrial_A2_high_voltage_A_option1");
         }
         {// peakHistory
           List<PeakHistoryModel> peakHistory = Lists.newArrayList();
