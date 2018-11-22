@@ -37,6 +37,7 @@ public class ESSRevenueController {
 		logger.debug("param ::::: "+param.toString());
 		
 		Map list = essRevenueService.getESSRevenueList(param);
+		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("sheetList", list.get("sheetList"));
 		resultMap.put("chartList", list.get("chartList"));

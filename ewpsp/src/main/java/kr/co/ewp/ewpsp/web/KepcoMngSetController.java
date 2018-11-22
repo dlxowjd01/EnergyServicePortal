@@ -53,7 +53,6 @@ public class KepcoMngSetController {
 		logger.debug("param ::::: "+param.toString());
 		
 		Map result = kepcoMngSetService.getSiteSetDetail(param);
-		System.out.println("전력관리정보 :::"+result);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);

@@ -208,7 +208,7 @@ public class EncoredApiUtilTest {
       EssModel ess = new EssModel();
       ess.setkWh(kWh);
       ess.setTimestamp(timestamp);
-      billRequest.setEss(ess);
+      billRequest.setEssCharging(ess);
       EssModel ess2 = new EssModel();
       ess2.setkWh(kWh2);
       ess2.setTimestamp(timestamp);
