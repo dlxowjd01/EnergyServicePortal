@@ -415,6 +415,8 @@
 		}else{
 			energyChgBasicBill = springFallVal;
 		}
+		
+		if(texList.length > 0){
 		var yyyyMM = texList[0].bill_yearm;
 		var essBdayInMonth  = String(texList[0].ess_bdayIn_month)   ;
 		var essDischgOffPeak  = String(texList[0].ess_dischg_off_peak);
@@ -709,6 +711,10 @@
 
 		
 		texdRawData_chart();
+		} else {
+			$("#layerbox").html("<div>조회 결과가 없습니다.</div>");
+			$("#layerbox").append('<div class=\'ltit fr\'><a href=\'javascript:popupClose("dprint");\'>닫기</a></div>');
+		}
 		
 	}
 	

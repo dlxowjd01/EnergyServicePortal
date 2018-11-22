@@ -281,7 +281,11 @@ var texDay = new Date();
 			texPvRevenueList2 = texDataSet2;
 			
 			drawTexData_chart();
+		}else {
+			$("#layerbox").html("<div>조회 결과가 없습니다.</div>");
+			$("#layerbox").append('<div class=\'ltit fr\'><a href=\'javascript:popupClose("dprint");\'>닫기</a></div>');
 		}
+		
 	}
 	
 	// 차트 그리기

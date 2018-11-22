@@ -299,6 +299,9 @@
 			$(".texInfo").find("tbody").html(texInfoStr);
 			$(".customerInfo").find("tbody").html(customerStr);
 			
+		} else {
+			$("#layerbox").html("<div>조회 결과가 없습니다.</div>");
+			$("#layerbox").append('<div class=\'ltit fr\'><a href=\'javascript:popupClose("dprint");\'>닫기</a></div>');
 		}
 		if(chartList.length > 0) {
 			//$("#ly_datatable_hj").find("tbody").empty();
@@ -344,6 +347,9 @@
 			kepcoTexBillList3 = texDataSet3;
 			kepcoTexBillList4 = texDataSet4;
 				
+		}else{
+			$(".income_kt_chart").find(".inchart-nodata").css("display", "");
+			$(".income_kt_chart").find(".inchart").css("display", "none");
 		}
 		
 		texDrawData_chart();
