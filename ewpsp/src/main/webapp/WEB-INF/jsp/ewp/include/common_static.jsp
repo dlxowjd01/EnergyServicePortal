@@ -54,5 +54,20 @@
         var _offset = _myDate.getTimezoneOffset();
         document.cookie = "TIMEZONE_COOKIE=" + _offset; //Cookie name with value
     }
+    
+    $( document ).ajaxStart(function() {
+    	
+        $.blockUI({ 
+        	message: '<h1><img src="/img/loading_icon.gif" /></h1>',
+        	css: { background: '/img/loading_icon.gif' } 
+        	}); 
+    });
+    $(document).ajaxComplete(function() {
+    	
+    	setTimeout($.unblockUI, 300); 
+    	
+    	
+    });
+	
 </script>
 
