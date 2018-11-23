@@ -16,6 +16,7 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->	
     <script src="../js/jquery.min.js"></script>
+    <script src="../js/jquery.blockUI.js"></script>
     <script src="../js/jquery-ui.js"></script>
     <script src="../js/jquery-ui-1.12.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
