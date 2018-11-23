@@ -451,26 +451,26 @@
 				if(baseRate == null || baseRate == "" || baseRate == "null") reBaseRate = null;
 				else {
 					reBaseRate = Math.round( Number(baseRate) );
-					totUsage = totUsage+Number(sheetList[i].base_rate);
+//					totUsage = totUsage+Number(sheetList[i].base_rate);
 				}
 				if(pwrFactorRate == null || pwrFactorRate == "" || pwrFactorRate == "null") rePwrFactorRate = null;
 				else rePwrFactorRate = Math.round( Number(pwrFactorRate) );
 				if(consumeRate == null || consumeRate == "" || consumeRate == "null") reConsumeRate = null;
 				else {
 					reConsumeRate = Math.round( Number(consumeRate) );
-					totUsage2 = totUsage2+Number(String(sheetList[i].consume_rate));
+//					totUsage2 = totUsage2+Number(String(sheetList[i].consume_rate));
 				}
 				if(totElecRate == null || totElecRate == "" || totElecRate == "null") reTotElecRate = null;
 				else reTotElecRate = Math.round( Number(totElecRate) );
 				if(elecFund == null || elecFund == "" || elecFund == "null") reElecFund = null;
 				else {
 					reElecFund = Math.round( Number(elecFund) );
-					totUsage3 = totUsage3+Number(String(sheetList[i].elec_fund));
+//					totUsage3 = totUsage3+Number(String(sheetList[i].elec_fund));
 				}
 				if(valAddTax == null || valAddTax == "" || valAddTax == "null") reValAddTax = null;
 				else {
 					reValAddTax = Math.round( Number(valAddTax) );
-					totUsage4 = totUsage4+Number(String(sheetList[i].val_add_tax));
+//					totUsage4 = totUsage4+Number(String(sheetList[i].val_add_tax));
 				}
 				if(totAmtBill == null || totAmtBill == "" || totAmtBill == "null") reTotAmtBill = null;
 				else reTotAmtBill = Math.round( Number(totAmtBill) );

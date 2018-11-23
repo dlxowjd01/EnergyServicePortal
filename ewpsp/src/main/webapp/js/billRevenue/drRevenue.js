@@ -408,12 +408,12 @@
 				if(totalRewardAmt == null || totalRewardAmt == "" || totalRewardAmt == "null") reTotalRewardAmt = null;
 				else {
 					reTotalRewardAmt = Math.round( Number(totalRewardAmt) );
-					totDataSet = totDataSet+Number(sheetList[i].total_reward_amt);
+//					totDataSet = totDataSet+Number(sheetList[i].total_reward_amt);
 				}
 				if(csmRewardAmt == null || csmRewardAmt == "" || csmRewardAmt == "null") reCsmRewardAmt = null;
 				else {
 					reCsmRewardAmt = Math.round( Number(csmRewardAmt) );
-					totDataSet2 = totDataSet2+Number(String(sheetList[i].csm_reward_amt));
+//					totDataSet2 = totDataSet2+Number(String(sheetList[i].csm_reward_amt));
 				}
 				if(ewpRewardAmt == null || ewpRewardAmt == "" || ewpRewardAmt == "null") reEwpRewardAmt = null;
 				else reEwpRewardAmt = Math.round( Number(ewpRewardAmt) );
