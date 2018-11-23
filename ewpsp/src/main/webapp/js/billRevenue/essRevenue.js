@@ -164,12 +164,12 @@
 				if(essIncen == null || essIncen == "" || essIncen == "null") reEssIncen = null;
 				else {
 					reEssIncen = Math.round( Number(essIncen) );
-					totDataSet2 = totDataSet2+Number(String(sheetList[i].ess_incen));
+//					totDataSet2 = totDataSet2+Number(String(sheetList[i].ess_incen));
 				}
 				if(peakRate == null || peakRate == "" || peakRate == "null") rePeakRate = null;
 				else {
 					rePeakRate = Math.round( Number(peakRate) );
-					totDataSet = totDataSet+Number(sheetList[i].peak_rate);
+//					totDataSet = totDataSet+Number(sheetList[i].peak_rate);
 				}
 				if(ewpPeakRate == null || ewpPeakRate == "" || ewpPeakRate == "null") reEwpPeakRate = null;
 				else reEwpPeakRate = Math.round( Number(ewpPeakRate) );
