@@ -801,10 +801,10 @@
 												$("<tr/>").append( // 최대부하방전량 (kWh)
 														'<th><div class="ctit wht"><span>최대부하방전량 (kWh)</span></div></th>'+ essRevenue_data_pc7[i] 
 												)
-										).append(
-												$("<tr/>").append( // 예상 할인금액 (won)
-														'<th><div class="ctit wht"><span>예상 할인금액 (won)</span></div></th>'+ essRevenue_data_pc8[i] 
-												)
+//										).append(
+//												$("<tr/>").append( // 예상 할인금액 (won)
+//														'<th><div class="ctit wht"><span>예상 할인금액 (won)</span></div></th>'+ essRevenue_data_pc8[i] 
+//												)
 										).append(
 												$("<tr/>").append( // 실적 할인금액 (won)
 														'<th><div class="ctit"><span>실적 할인금액 (won)</span></div></th>'+ essRevenue_data_pc9[i] 
