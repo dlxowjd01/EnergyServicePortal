@@ -25,8 +25,6 @@ public class DRRevenueDao {
 	
 	public List getDRRevenueChartList(HashMap param) {
 		List resultList = sqlSession.selectList("drRevenue.getDRRevenueChartList", param);
-		
-		System.out.println("resultListresultList : :::"+resultList);
 		return resultList;
 	}
 

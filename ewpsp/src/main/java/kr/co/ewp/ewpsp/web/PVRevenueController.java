@@ -46,7 +46,6 @@ public class PVRevenueController {
 		logger.debug("param ::::: "+param.toString());
 		
 		param.put("selPeriodVal", "month");
-		System.out.println( "param 리벤튜 ::::"+param);
 		Map result = pvRevenueService.getPVRevenueList(param, request);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -63,7 +62,6 @@ public class PVRevenueController {
 		resultMap.put("recPriceChartList", ((Map) result.get("recPriceMap")).get("chartList") );
 		resultMap.put("totPriceSheetList", ((Map) result.get("totPriceMap")).get("sheetList") );
 		resultMap.put("totPriceChartList", ((Map) result.get("totPriceMap")).get("chartList") );
-		System.out.println("resultMap : " +resultMap);
 		return resultMap;
 	}
 	

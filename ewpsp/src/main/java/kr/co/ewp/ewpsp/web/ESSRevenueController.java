@@ -41,7 +41,6 @@ public class ESSRevenueController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("sheetList", list.get("sheetList"));
 		resultMap.put("chartList", list.get("chartList"));
-		System.out.println("resultMap:"+resultMap);
 		return resultMap;
 	}
 	

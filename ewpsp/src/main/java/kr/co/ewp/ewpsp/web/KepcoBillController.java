@@ -48,7 +48,6 @@ public class KepcoBillController {
 	public @ResponseBody Map<String, Object> getKepcoTexBillList(@RequestParam HashMap param) throws Exception {
 		logger.debug("/getKepcoTexBillList");
 		logger.debug("param ::::: "+param.toString());
-		System.out.println("param 텍스리스트:" + param);
 		Map list = kepcoBillService.getKepcoTexBillList(param);
 		
 		Map list2 = kepcoBillService.getKepcoResentBillList(param);

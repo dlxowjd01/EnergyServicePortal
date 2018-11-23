@@ -92,7 +92,6 @@ public class KepcoMngSetController {
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("result", result);
-		System.out.println("플랜플랜 : "+resultMap);
 		return resultMap;
 	}
 	
