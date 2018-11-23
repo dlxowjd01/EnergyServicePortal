@@ -29,127 +29,18 @@
 		getKepcoTexBillList(formData);
 	});
 	
-	var custNum = "";		//고객번호
-	var meterNum = "";		//계량기 번호
-	var meterSf = "";		//계량기 배수
-	var profitRatio = "";		//수익배분 비율
-	var meterReadDay = "";		//검침일
-	var contractPower = "";		//계약전력
-	var planType = "";
-	var planType2 = "";
-	var planType3 = "";
 	
+	$( function () {
+		$("#kepcoBillTex").click(function(){
+			if(texList.length > 0){
+				
+				popupOpen('dprint')
+			}else{
+				alert("명세서 조회내역이 없습니다.");
+			}
+		});
 	
-	/*function callback_getSiteSetDetail(result){
-		
-		var site = result.detail;
-		custNum = site.cust_num;		//고객번호
-		meterNum = site.meter_num;		//계량기 번호
-		meterSf = site.meter_sf;		//계량기 배수
-		profitRatio = site.profit_ratio;		//수익배분 비율
-		meterReadDay = site.meter_read_day;		//검침일
-		contractPower = site.contract_power;		//계약전력
-		planType = site.plan_type;		//구분1
-		planType2 = site.plan_type2;		//구분2
-		planType3 = site.plan_type3;		//구분3
-		baseRate = 0;
-		
-		if(planType == "general"){
-			if(planType2 == "A1"){
-				if(planType3 == "low_voltage_A"){
-					baseRate = 6160;
-				}else if(planType3 == "high_voltage_A_option1"){
-					baseRate = 7170;
-				}else if(planType3 == "high_voltage_A_option2"){
-					baseRate = 8230;
-				}else if(planType3 == "high_voltage_B_option1"){
-					baseRate = 7170;
-				}else if(planType3 == "high_voltage_B_option2"){
-					baseRate = 8230;
-				}
-			}else if(planType2 == "A2"){
-				if(planType3 == "high_voltage_A_option1"){
-					baseRate = 7170;
-				}else if(planType3 == "high_voltage_A_option2"){
-					baseRate = 8230;
-				}else if(planType3 == "high_voltage_B_option1"){
-					baseRate = 7170;
-				}else if(planType3 == "high_voltage_B_option2"){
-					baseRate = 8230;
-				}
-				
-			}else if(planType2 =="B"){
-				if(planType3 == "high_voltage_A_option1"){
-					baseRate = 7220;
-				}else if(planType3 == "high_voltage_A_option2"){
-					baseRate = 8320;
-				}else if(planType3 == "high_voltage_A_option3"){
-					baseRate = 9810;
-				}else if(planType3 == "high_voltage_B_option1"){
-					baseRate = 6630;
-				}else if(planType3 == "high_voltage_B_option2"){
-					baseRate = 7380;
-				}else if(planType3 == "high_voltage_B_option3"){
-					baseRate = 8190;
-				}else if(planType3 == "high_voltage_C_option1"){
-					baseRate = 6590;
-				}else if(planType3 == "high_voltage_C_option2"){
-					baseRate = 7520;
-				}else if(planType3 == "high_voltage_C_option3"){
-					baseRate = 8090;
-				}
-				
-			}
-			
-		}else if(planType == "industrial"){
-			if(planType2 == "A1"){
-				if(planType3 == "low_voltage_A"){
-					baseRate = 5550;
-				}else if(planType3 == "high_voltage_A_option1"){
-					baseRate = 6490;
-				}else if(planType3 == "high_voltage_A_option2"){
-					baseRate = 7470;
-				}else if(planType3 == "high_voltage_B_option1"){
-					baseRate = 6000;
-				}else if(planType3 == "high_voltage_B_option2"){
-					baseRate = 6900;
-				}
-			}else if(planType2 == "A2"){
-				if(planType3 == "high_voltage_A_option1"){
-					baseRate = 6490;
-				}else if(planType3 == "high_voltage_A_option2"){
-					baseRate = 7470;
-				}else if(planType3 == "high_voltage_B_option1"){
-					baseRate = 6000;
-				}else if(planType3 == "high_voltage_B_option2"){
-					baseRate = 6900;
-				}
-			}else if(planType2 =="B"){
-				if(planType3 == "high_voltage_A_option1"){
-					baseRate = 7220;
-				}else if(planType3 == "high_voltage_A_option2"){
-					baseRate = 8320;
-				}else if(planType3 == "high_voltage_A_option3"){
-					baseRate = 9810;
-				}else if(planType3 == "high_voltage_B_option1"){
-					baseRate = 6630;
-				}else if(planType3 == "high_voltage_B_option2"){
-					baseRate = 7380;
-				}else if(planType3 == "high_voltage_B_option3"){
-					baseRate = 8190;
-				}else if(planType3 == "high_voltage_C_option1"){
-					baseRate = 6590;
-				}else if(planType3 == "high_voltage_C_option2"){
-					baseRate = 7520;
-				}else if(planType3 == "high_voltage_C_option3"){
-					baseRate = 8090;
-				}
-			
-			}
-		
-		}
-	}*/
-
+	});
 	function searchData() {
 		getCollect_sch_condition(); // 검색조건 모으기
 	}
@@ -189,8 +80,9 @@
 	var kepcoTexBillList3;
 	var kepcoTexBillList4;
 	
+	var texList = "";
 	function callback_getKepcoTexBillList(result) {
-		var texList = result.texList;
+		texList = result.texList;
 		var chartList = result.chartList;
 		var yyyyMM = texList[0].bill_yearm;
 		var tatalTex = texList[0].tot_elec_rate+texList[0].val_add_tax+texList[0].elec_fund;
@@ -202,7 +94,21 @@
 		var str11 = "";
 		
 		if(texList.length > 0){
+			
+			var chartList = result.chartList;
+			var yyyyMM = texList[0].bill_yearm;
+			var tatalTex = texList[0].tot_elec_rate+texList[0].val_add_tax+texList[0].elec_fund;
+			var texStr = "";
+			var texFoodStr = "";
+			var customerStr = "";
+			var texInfoStr = "";
+			var datatable = "";
+			var str11 = "";
 			var delLastWon = Math.floor(tatalTex/10)*10-tatalTex;
+			
+			if(meterReadDay == 30 && yyyyMM.substring(4,6) == 02){
+				meterReadDay=28;
+			}
 			$("#texArea").find("tbody").empty();
 			$("#texArea").find("tfoot").empty();
 			
@@ -299,10 +205,7 @@
 			$(".texInfo").find("tbody").html(texInfoStr);
 			$(".customerInfo").find("tbody").html(customerStr);
 			
-		} else {
-			$("#layerbox").html("<div>조회 결과가 없습니다.</div>");
-			$("#layerbox").append('<div class=\'ltit fr\'><a href=\'javascript:popupClose("dprint");\'>닫기</a></div>');
-		}
+		} 
 		if(chartList.length > 0) {
 			//$("#ly_datatable_hj").find("tbody").empty();
 		

@@ -413,8 +413,8 @@ function callback_getSiteSetDetail(result){
 	planType = site.plan_type;		//구분1
 	planType2 = site.plan_type2;		//구분2
 	planType3 = site.plan_type3;		//구분3
-	smpRate = site.smp_rate;		//SMP 단가
-	recRate = site.rec_rate;		//REC 단가
+	smpRate = 101.59;//읾시 상수처리site.smp_rate;		//SMP 단가
+	recRate = 99.92;//임시 상수처리site.rec_rate;		//REC 단가
 	recWeight = site.rec_weight;		//REC 가중치
 	
 	getPlanTypeVal(planType,planType2,planType3);
@@ -426,3 +426,4 @@ function selectBoxTextApply(obj) {
 	var txt = $(obj).text();
 	$(obj).parent().parent().parent().find('button').empty().append(txt).append( $('<span class="caret" />') );
 }
+

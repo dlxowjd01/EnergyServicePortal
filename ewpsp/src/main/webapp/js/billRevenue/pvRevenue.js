@@ -48,25 +48,17 @@ var texDay = new Date();
 		
 	});
 	
-	/*var custNum = "";		//고객번호
-	var smpRate = "";		//SMP 단가
-	var recRate = "";		//REC 단가
-	var recWeight = "";		//REC 가중치
-	var profitRatio = "";		//수익배분 비율
-	var meterReadDay = "";		//검침일
+	$( function () {
+		$("#pvRevenueTex").click(function(){
+			if(netGenValSheetList != null && netGenValSheetList.length > 0){
+				popupOpen('dprint')
+			}else{
+				alert("명세서 조회내역이 없습니다.");
+			}
+		});
 	
-	function callback_getSiteSetDetail(result){
-		
-		var site = result.detail;
-		custNum = site.cust_num;
-		smpRate = site.smp_rate;
-		recRate = site.rec_rate;
-		recWeight = site.rec_weight;
-		profitRatio = site.profit_ratio;
-		meterReadDay = site.meter_read_day;
-		
-	}
-		*/
+	});
+	
 
 	function searchData() {
 		getCollect_sch_condition(); // 검색조건 모으기
@@ -100,10 +92,11 @@ var texDay = new Date();
 	var texPvRevenueList1;
 	var texPvRevenueList2;
 	//pv 명세서
+	var netGenValSheetList = "";
 	function callback_getPVRevenueTexList(result) {
 		
 		
-		var netGenValSheetList = result.netGenValSheetList;
+		netGenValSheetList = result.netGenValSheetList;
 		var netGenValChartList = result.netGenValChartList;
 	//	var smpDealSheetList   = result.smpDealSheetList  ;
 		var smpDealChartList   = result.smpDealChartList  ;
@@ -281,9 +274,6 @@ var texDay = new Date();
 			texPvRevenueList2 = texDataSet2;
 			
 			drawTexData_chart();
-		}else {
-			$("#layerbox").html("<div>조회 결과가 없습니다.</div>");
-			$("#layerbox").append('<div class=\'ltit fr\'><a href=\'javascript:popupClose("dprint");\'>닫기</a></div>');
 		}
 		
 	}

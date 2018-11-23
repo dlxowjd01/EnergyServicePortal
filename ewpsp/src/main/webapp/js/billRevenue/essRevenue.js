@@ -15,6 +15,19 @@
 		getESSRevenueTexList(formData); // 명세서 조회
 		getDBData(formData);
 	});
+	
+	$( function () {
+		$("#ESSRevenueTex").click(function(){
+			if(texList.length > 0){
+				
+				popupOpen('dprint')
+			}else{
+				alert("명세서 조회내역이 없습니다.");
+			}
+		});
+	
+	});
+	
 
 	function searchData() {
 		getCollect_sch_condition(); // 검색조건 모으기
@@ -400,9 +413,9 @@
 	var essRevenueTexList2;
 	var essRevenueTexList3;
 	
-
+	var texList = "";
 	function callback_getESSRevenueTexList(result){
-		var texList = result.texList;
+		texList = result.texList;
 		var energyChgBasicBill = "";
 		var thisDay = new Date();
 		thisDay = new Date(thisDay.setMonth(thisDay.getMonth()-1));
@@ -521,7 +534,13 @@
 		dischgMidCalc = reEssDischgMidPeak*elecNum*energyChgBasicBill*1;
 		dischgMaxCalc = reEssDischgMaxPeak*elecNum*energyChgBasicBill*1;
 		
-		totChgPeakVal1 =(reEssChgMaxPeak-dischgMaxCalc)/(21*3)*3*1*basicVal;
+		if(yyyyMM.substring(0,4) <2021){
+			totChgPeakVal1 =(reEssChgMaxPeak-dischgMaxCalc)/(essBdayInMonth*3)*3*1*basicVal;
+		} else {
+			totChgPeakVal1 =(reEssChgMaxPeak-dischgMaxCalc)/(essBdayInMonth*3)*1*basicVal;
+		}
+		
+		
 		totChgPeakVal2 =usg*basicVal;
 		
 		
@@ -656,7 +675,7 @@
 		ESSCalcAreaStr += "<tr>";
 		ESSCalcAreaStr += "<th>④ESS 전용 요금 할인</th>";
 		ESSCalcAreaStr += "<td aligh ='right'>"+( (totChgPeakVal1 < totChgPeakVal2) ? numberComma(Math.round(totChgPeakVal1)) : numberComma(Math.round(totChgPeakVal2))  ) +"</td>";
-		ESSCalcAreaStr += "<td>Min[("+numberComma(usg)+" kW x "+numberComma(basicVal)+" 원), ((("+numberComma(reEssChgMaxPeak)+" kW – "+numberComma(dischgMaxCalc)+" kW) / (21 일 x 3)) x 3 x 1 x "+numberComma(basicVal)+" 원)]</td>";
+		ESSCalcAreaStr += "<td>Min[("+numberComma(usg)+" kW x "+numberComma(basicVal)+" 원), ((("+numberComma(reEssChgMaxPeak)+" kW – "+numberComma(dischgMaxCalc)+" kW) / ("+essBdayInMonth+" 일 x 3)) "+( (yyyyMM.substring(0,4) <2021) ? "x 3" : ""    )+" x 1 x "+numberComma(basicVal)+" 원)]</td>";
 		ESSCalcAreaStr += "</tr>";
 		ESSTypeStr += "<tr>";
 		ESSTypeStr += "<th>전기사용 계약종별</th>";
@@ -711,9 +730,6 @@
 
 		
 		texdRawData_chart();
-		} else {
-			$("#layerbox").html("<div>조회 결과가 없습니다.</div>");
-			$("#layerbox").append('<div class=\'ltit fr\'><a href=\'javascript:popupClose("dprint");\'>닫기</a></div>');
 		}
 		
 	}

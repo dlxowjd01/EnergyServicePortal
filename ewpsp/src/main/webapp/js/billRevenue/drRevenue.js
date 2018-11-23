@@ -29,10 +29,18 @@
 		getDRRevenueTexList(formData);
 	});
 	
-	function callback_getSiteSetDetail(result){
-		
-	}
-
+	$( function () {
+		$("#drRevenueTex").click(function(){
+			if(sheetList.length > 0){
+				
+				popupOpen('dprint')
+			}else{
+				alert("명세서 조회내역이 없습니다.");
+			}
+		});
+	
+	});
+	
 	function searchData() {
 		getCollect_sch_condition(); // 검색조건 모으기
 	}
@@ -72,9 +80,10 @@
 	var DRRevenueTex1;
 	var DRRevenueTex2;
 	
+	var sheetList="";
 	function callback_getDRRevenueTexList(result){
 		
-		var sheetList = result.sheetList;
+		sheetList = result.sheetList;
 		var chartList = result.chartList;
 		var start = $("#selTermFrom").val();
 		var end = $("#selTermTo").val();
@@ -231,9 +240,6 @@
 				$(".infoArea").find("tbody").html(infoAreaStr);
 			
 			} 
-		}else {
-				$("#layerbox").html("<div>조회 결과가 없습니다.</div>");
-				$("#layerbox").append('<div class=\'ltit fr\'><a href=\'javascript:popupClose("dprint");\'>닫기</a></div>');
 		}
 			
 			

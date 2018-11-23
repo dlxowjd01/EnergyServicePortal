@@ -9,7 +9,7 @@
 		from (
 			select
 				site_id, bill_yearm,
-				sum(bdayIn_month) as bdayIn_month, sum(ess_dischg_off_peak) as ess_dischg_off_peak, sum(ess_dischg_mid_peak) as ess_dischg_mid_peak, sum(ess_dischg_max_peak) as ess_dischg_max_peak, 
+				avg(bdayIn_month) as bdayIn_month, sum(ess_dischg_off_peak) as ess_dischg_off_peak, sum(ess_dischg_mid_peak) as ess_dischg_mid_peak, sum(ess_dischg_max_peak) as ess_dischg_max_peak, 
 				sum(ess_chg_off_peak) as ess_chg_off_peak, sum(ess_chg_mid_peak) as ess_chg_mid_peak, sum(ess_chg_max_peak) as ess_chg_max_peak, 
 				sum(pre_ess_incen) as pre_ess_incen, sum(ess_incen) as ess_incen, sum(peak_rate) as peak_rate, sum(ewp_peak_rate) as ewp_peak_rate
 			from (
@@ -35,7 +35,7 @@
 		select
 			site_id, bill_yearm,
 			90 as rate_per,
-			sum(ess_bdayIn_month) as ess_bdayIn_month,
+			avg(ess_bdayIn_month) as ess_bdayIn_month,
 			sum(ess_dischg_off_peak) as ess_dischg_off_peak,
 			sum(ess_dischg_mid_peak) as ess_dischg_mid_peak,
 			sum(ess_dischg_max_peak) as ess_dischg_max_peak, 
