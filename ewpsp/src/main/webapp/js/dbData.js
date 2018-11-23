@@ -528,7 +528,8 @@ function getRevenueList(formData) {
 	$.ajax({
 		url : "/getRevenueList",
 		type : 'post',
-		async : false, // 동기로 처리해줌
+//		async : false, // 동기로 처리해줌
+		async : true, // 동기로 처리해줌
 		data : formData,
 		success: function(result) {
 			callback_getRevenueList(result);
