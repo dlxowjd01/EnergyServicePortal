@@ -53,7 +53,7 @@ var texDay = new Date();
 			if(netGenValSheetList != null && netGenValSheetList.length > 0){
 				popupOpen('dprint')
 			}else{
-				alert("명세서 조회내역이 없습니다.");
+				alert("조회할 명세서 내역이 없습니다.");
 			}
 		});
 	

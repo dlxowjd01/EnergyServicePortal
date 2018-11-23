@@ -36,7 +36,7 @@
 				
 				popupOpen('dprint')
 			}else{
-				alert("명세서 조회내역이 없습니다.");
+				alert("조회할 명세서 내역이 없습니다.");
 			}
 		});
 	
@@ -84,8 +84,7 @@
 	function callback_getKepcoTexBillList(result) {
 		texList = result.texList;
 		var chartList = result.chartList;
-		var yyyyMM = texList[0].bill_yearm;
-		var tatalTex = texList[0].tot_elec_rate+texList[0].val_add_tax+texList[0].elec_fund;
+		
 		var texStr = "";
 		var texFoodStr = "";
 		var customerStr = "";
@@ -97,14 +96,14 @@
 			
 			var chartList = result.chartList;
 			var yyyyMM = texList[0].bill_yearm;
-			var tatalTex = texList[0].tot_elec_rate+texList[0].val_add_tax+texList[0].elec_fund;
+			var totalTex = texList[0].tot_elec_rate+texList[0].val_add_tax+texList[0].elec_fund;
 			var texStr = "";
 			var texFoodStr = "";
 			var customerStr = "";
 			var texInfoStr = "";
 			var datatable = "";
 			var str11 = "";
-			var delLastWon = Math.floor(tatalTex/10)*10-tatalTex;
+			var delLastWon = Math.floor(totalTex/10)*10-totalTex;
 			
 			if(meterReadDay == 30 && yyyyMM.substring(4,6) == 02){
 				meterReadDay=28;
