@@ -20,7 +20,7 @@
 		getDBData(formData);
 		
 		texDay.setYear(texDay.getFullYear());
-		texDay = new Date(texDay.setMonth(firstDay.getMonth()-2));
+		texDay = new Date(texDay.setMonth(texDay.getMonth()-1));
 		$("#selTermTex").val(texDay.format('yyyyMM'));
 		$("#selTermTo").val( endDay.format("yyyyMM") );
 		$("#selTermFrom").val( agoDay.format("yyyyMM") );

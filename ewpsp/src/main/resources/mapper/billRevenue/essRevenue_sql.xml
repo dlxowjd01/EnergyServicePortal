@@ -87,7 +87,7 @@
 			from tb_bill b, tb_site_set c
 			where b.site_id = c.site_id
 			and b.site_id = #{siteId }
-			and bill_yearm ="201810"
+			and bill_yearm =#{selTermTex }
 		) a, tb_site_set d
 		where a.site_id = d.site_id
 		group by site_id, bill_yearm

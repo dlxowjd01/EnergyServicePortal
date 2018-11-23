@@ -1,16 +1,21 @@
 	$(document).ready(function() {
 		var firstDay = new Date();
 		var endDay = new Date();
+		var texDay = new Date()
+		texDay.setYear(texDay.getFullYear());
+		texDay = new Date(texDay.setMonth(texDay.getMonth()-1));
 		firstDay.setYear(firstDay.getFullYear()-1);
 		firstDay = new Date(firstDay.setMonth(firstDay.getMonth()+1));
 		$("#selTermFrom").val( firstDay.format("yyyyMM") );
 		$("#selTermTo").val( endDay.format("yyyyMM") );
 		$("#datepicker3").val( firstDay.format("yyyy-MM") );
 		$("#datepicker4").val( endDay.format("yyyy-MM") );
+		$("#selTermTex").val(texDay.format('yyyyMM'));
 		SelTerm = "billSelectMM";
 		$("#selTerm").val(SelTerm);
-		
 		var formData = $("#schForm").serializeObject();
+		
+		
 		getSiteSetDetail(formData);
 		getESSRevenueTexList(formData); // 명세서 조회
 		getDBData(formData);
