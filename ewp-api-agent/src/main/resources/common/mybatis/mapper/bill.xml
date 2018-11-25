@@ -41,6 +41,8 @@
         <result property="bdayInMonth" column="bdayIn_month" javaType="Integer"></result><!--평일일수(단위:d)-->
         <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
         <result property="modDate" column="mod_date" javaType="Date"></result><!--최종수정일시-->
+        <result property="svcStimestamp" column="svc_stimestamp" javaType="Date"></result><!--사용시작일(형식:timestamp)-->
+        <result property="svcEtimestamp" column="svc_etimestamp" javaType="Date"></result><!--사용종료일(형식:timestamp)-->
     </resultMap>
     <insert id="insert" parameterType="Bill">
         /* 요금 등록 */
@@ -392,5 +394,251 @@
         SELECT COUNT(*) AS CNT
           FROM tb_bill
          WHERE bill_idx = #{billIdx}
+    </select>
+    
+        <insert id="insertBillDay" parameterType="Bill">
+        /* 요금(day) 등록 */
+        INSERT INTO tb_bill_day (
+               site_id,
+               bill_yearm,
+               meter_read_day,
+               plan_type,
+               plan_name,
+               contract_power,
+               svc_stimestamp,
+               svc_etimestamp,
+               base_rate,
+               consume_rate,
+               off_peak_rate,
+               mid_peak_rate,
+               max_peak_rate,
+               pwr_factor_rate,
+               tot_elec_rate,
+               elec_fund,
+               val_add_tax,
+               tot_amt_bill,
+               peak_pwr_demand,
+               usg,
+               off_peak_usg,
+               mid_peak_usg,
+               max_peak_usg,
+               lead_pwr_factor,
+               lag_pwr_factor,
+               ess_chg_incen,
+               ess_dischg_incen,
+               demand_chg_reduct,
+               energy_chg_reduct,
+               ess_chg_off_peak,
+               ess_chg_mid_peak,
+               ess_chg_max_peak,
+               ess_dischg_off_peak,
+               ess_dischg_mid_peak,
+               ess_dischg_max_peak,
+               bdayIn_month,
+               reg_date,
+               mod_date
+             ) VALUES (
+               #{bill.siteId},
+               #{bill.billYearm},
+               #{bill.meterReadDay},
+               #{bill.planType},
+               #{bill.planName},
+               #{bill.contractPower},
+               #{bill.svcStimestamp},
+               #{bill.svcEtimestamp},
+               #{bill.baseRate},
+               #{bill.consumeRate},
+               #{bill.offPeakRate},
+               #{bill.midPeakRate},
+               #{bill.maxPeakRate},
+               #{bill.pwrFactorRate},
+               #{bill.totElecRate},
+               #{bill.elecFund},
+               #{bill.valAddTax},
+               #{bill.totAmtBill},
+               #{bill.peakPwrDemand},
+               #{bill.usg},
+               #{bill.offPeakUsg},
+               #{bill.midPeakUsg},
+               #{bill.maxPeakUsg},
+               #{bill.leadPwrFactor},
+               #{bill.lagPwrFactor},
+               #{bill.essChgIncen},
+               #{bill.essDischgIncen},
+               #{bill.demandChgReduct},
+               #{bill.energyChgReduct},
+               #{bill.essChgOffPeak},
+               #{bill.essChgMidPeak},
+               #{bill.essChgMaxPeak},
+               #{bill.essDischgOffPeak},
+               #{bill.essDischgMidPeak},
+               #{bill.essDischgMaxPeak},
+               #{bill.bdayInMonth},
+               now(),
+               now())
+        <selectKey resultType="Long" keyProperty="bill.billIdx">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <update id="updateBillDay" parameterType="Bill">
+        /* 요금(day) 수정 */
+        UPDATE tb_bill_day 
+               <set>
+               <if test="bill.siteId != null">
+               site_id = #{bill.siteId},
+               </if>
+               <if test="bill.billYearm != null">
+               bill_yearm = #{bill.billYearm},
+               </if>
+               <if test="bill.meterReadDay != null">
+               meter_read_day = #{bill.meterReadDay},
+               </if>
+               <if test="bill.planType != null">
+               plan_type = #{bill.planType},
+               </if>
+               <if test="bill.planName != null">
+               plan_name = #{bill.planName},
+               </if>
+               <if test="bill.contractPower != null">
+               contract_power = #{bill.contractPower},
+               </if>
+               <if test="bill.svcStimestamp != null">
+               svc_stimestamp = #{bill.svcStimestamp},
+               </if>
+               <if test="bill.svcEtimestamp != null">
+               svc_etimestamp = #{bill.svcEtimestamp},
+               </if>
+               <if test="bill.baseRate != null">
+               base_rate = #{bill.baseRate},
+               </if>
+               <if test="bill.consumeRate != null">
+               consume_rate = #{bill.consumeRate},
+               </if>
+               <if test="bill.offPeakRate != null">
+               off_peak_rate = #{bill.offPeakRate},
+               </if>
+               <if test="bill.midPeakRate != null">
+               mid_peak_rate = #{bill.midPeakRate},
+               </if>
+               <if test="bill.maxPeakRate != null">
+               max_peak_rate = #{bill.maxPeakRate},
+               </if>
+               <if test="bill.pwrFactorRate != null">
+               pwr_factor_rate = #{bill.pwrFactorRate},
+               </if>
+               <if test="bill.totElecRate != null">
+               tot_elec_rate = #{bill.totElecRate},
+               </if>
+               <if test="bill.elecFund != null">
+               elec_fund = #{bill.elecFund},
+               </if>
+               <if test="bill.valAddTax != null">
+               val_add_tax = #{bill.valAddTax},
+               </if>
+               <if test="bill.totAmtBill != null">
+               tot_amt_bill = #{bill.totAmtBill},
+               </if>
+               <if test="bill.peakPwrDemand != null">
+               peak_pwr_demand = #{bill.peakPwrDemand},
+               </if>
+               <if test="bill.usg != null">
+               usg = #{bill.usg},
+               </if>
+               <if test="bill.offPeakUsg != null">
+               off_peak_usg = #{bill.offPeakUsg},
+               </if>
+               <if test="bill.midPeakUsg != null">
+               mid_peak_usg = #{bill.midPeakUsg},
+               </if>
+               <if test="bill.maxPeakUsg != null">
+               max_peak_usg = #{bill.maxPeakUsg},
+               </if>
+               <if test="bill.leadPwrFactor != null">
+               lead_pwr_factor = #{bill.leadPwrFactor},
+               </if>
+               <if test="bill.lagPwrFactor != null">
+               lag_pwr_factor = #{bill.lagPwrFactor},
+               </if>
+               <if test="bill.essChgIncen != null">
+               ess_chg_incen = #{bill.essChgIncen},
+               </if>
+               <if test="bill.essDischgIncen != null">
+               ess_dischg_incen = #{bill.essDischgIncen},
+               </if>
+               <if test="bill.demandChgReduct != null">
+               demand_chg_reduct = #{bill.demandChgReduct},
+               </if>
+               <if test="bill.energyChgReduct != null">
+               energy_chg_reduct = #{bill.energyChgReduct},
+               </if>
+               <if test="bill.essChgOffPeak != null">
+               ess_chg_off_peak = #{bill.essChgOffPeak},
+               </if>
+               <if test="bill.essChgMidPeak != null">
+               ess_chg_mid_peak = #{bill.essChgMidPeak},
+               </if>
+               <if test="bill.essChgMaxPeak != null">
+               ess_chg_max_peak = #{bill.essChgMaxPeak},
+               </if>
+               <if test="bill.essDischgOffPeak != null">
+               ess_dischg_off_peak = #{bill.essDischgOffPeak},
+               </if>
+               <if test="bill.essDischgMidPeak != null">
+               ess_dischg_mid_peak = #{bill.essDischgMidPeak},
+               </if>
+               <if test="bill.essDischgMaxPeak != null">
+               ess_dischg_max_peak = #{bill.essDischgMaxPeak},
+               </if>
+               <if test="bill.bdayInMonth != null">
+               bdayIn_month = #{bill.bdayInMonth},
+               </if>
+               mod_date = NOW()
+               </set>
+         WHERE bill_idx = #{bill.billIdx}
+    </update>
+    <select id="selectOneByUniqueBillDay" resultMap="BillRM">
+        /* 요금(day) 상세조회 */
+        SELECT bill_idx,
+               site_id,
+               bill_yearm,
+               meter_read_day,
+               plan_type,
+               plan_name,
+               contract_power,
+               svc_stimestamp,
+               svc_etimestamp,
+               base_rate,
+               consume_rate,
+               off_peak_rate,
+               mid_peak_rate,
+               max_peak_rate,
+               pwr_factor_rate,
+               tot_elec_rate,
+               elec_fund,
+               val_add_tax,
+               tot_amt_bill,
+               peak_pwr_demand,
+               usg,
+               off_peak_usg,
+               mid_peak_usg,
+               max_peak_usg,
+               lead_pwr_factor,
+               lag_pwr_factor,
+               ess_chg_incen,
+               ess_dischg_incen,
+               demand_chg_reduct,
+               energy_chg_reduct,
+               ess_chg_off_peak,
+               ess_chg_mid_peak,
+               ess_chg_max_peak,
+               ess_dischg_off_peak,
+               ess_dischg_mid_peak,
+               ess_dischg_max_peak,
+               bdayIn_month,
+               reg_date,
+               mod_date
+          FROM tb_bill_day
+         WHERE site_id = #{siteId}
+           AND svc_stimestamp = #{svcStimestamp}
     </select>
 </mapper>

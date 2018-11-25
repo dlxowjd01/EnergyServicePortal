@@ -1,5 +1,6 @@
 package kr.co.ewp.api.controller;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -89,6 +90,7 @@ public class BillController {
     prettyLog.append("SITE_CNT", siteList.size());
     Period period = Period.billingMonth;
     int resultCnt = 0;
+    int resultCnt2 = 0;
     for (Site site : siteList) {
       String _siteId = site.getSiteId();
       SiteSet siteSet = siteService.getSiteSet(_siteId, prettyLog);
@@ -299,25 +301,65 @@ public class BillController {
             bill.setDemandChgReduct(item.getDemandChargeReduction().intValue());
             bill.setElecFund(item.getElectricityFund().intValue());
             bill.setEnergyChgReduct(item.getEnergyChargeReduction().intValue());
-            bill.setEssChgIncen(item.getEssChargingIncentive().intValue());
-            bill.setEssChgMaxPeak(item.getEssChargingInOnPeak().floatValue());
-            bill.setEssChgMidPeak(item.getEssChargingInMidPeak().floatValue());
-            bill.setEssChgOffPeak(item.getEssChargingInOffPeak().floatValue());
-            bill.setEssDischgIncen(item.getEssDischargingIncentive().intValue());
-            bill.setEssDischgMaxPeak(item.getEssDischargingInOnPeak().floatValue());
-            bill.setEssDischgMidPeak(item.getEssDischargingInMidPeak().floatValue());
-            bill.setEssDischgOffPeak(item.getEssDischargingInOffPeak().floatValue());
-            bill.setLagPwrFactor(item.getLaggingPowerFactor().intValue());
-            bill.setLeadPwrFactor(item.getLeadingPowerFactor().intValue());
-            bill.setMaxPeakRate(item.getOnPeakRate().intValue());
-            bill.setMaxPeakUsg(item.getOnPeakEnergyUsage().floatValue());
+            if(item.getEssChargingIncentive() == null) bill.setEssChgIncen( 0 );
+            else bill.setEssChgIncen(item.getEssChargingIncentive().intValue());
+            if(item.getEssChargingInOnPeak() == null) {
+            	Double zero = (double) 0;
+            	bill.setEssChgMaxPeak( zero.floatValue() );
+            }
+            else bill.setEssChgMaxPeak(item.getEssChargingInOnPeak().floatValue());
+            if(item.getEssChargingInMidPeak() == null) {
+            	Double zero = (double) 0;
+            	bill.setEssChgMidPeak( zero.floatValue() );
+            }
+            else bill.setEssChgMidPeak(item.getEssChargingInMidPeak().floatValue());
+            if(item.getEssChargingInOffPeak() == null) {
+            	Double zero = (double) 0;
+            	bill.setEssChgOffPeak( zero.floatValue() );
+            }
+            else bill.setEssChgOffPeak(item.getEssChargingInOffPeak().floatValue());
+            if(item.getEssDischargingIncentive() == null) bill.setEssDischgIncen( 0 );
+            else bill.setEssDischgIncen(item.getEssDischargingIncentive().intValue());
+            if(item.getEssDischargingInOnPeak() == null) {
+            	Double zero = (double) 0;
+            	bill.setEssDischgMaxPeak( zero.floatValue() );
+            }
+            else bill.setEssDischgMaxPeak(item.getEssDischargingInOnPeak().floatValue());
+            if(item.getEssDischargingInMidPeak() == null) {
+            	Double zero = (double) 0;
+            	bill.setEssDischgMidPeak( zero.floatValue() );
+            }
+            else bill.setEssDischgMidPeak(item.getEssDischargingInMidPeak().floatValue());
+            if(item.getEssDischargingInOffPeak() == null) {
+            	Double zero = (double) 0;
+            	bill.setEssDischgOffPeak( zero.floatValue() );
+            }
+            else bill.setEssDischgOffPeak(item.getEssDischargingInOffPeak().floatValue());
+            if(item.getLaggingPowerFactor() == null) bill.setLagPwrFactor( 0 );
+            else bill.setLagPwrFactor(item.getLaggingPowerFactor().intValue());
+            if(item.getLeadingPowerFactor() == null) bill.setLeadPwrFactor( 0 );
+            else bill.setLeadPwrFactor(item.getLeadingPowerFactor().intValue());
+            if(item.getOnPeakRate() == null) bill.setMaxPeakRate( 0 ); // 주말은 해당항목이 없음
+            else bill.setMaxPeakRate(item.getOnPeakRate().intValue());
+            if(item.getOnPeakEnergyUsage() == null) { // 주말은 해당항목이 없음
+            	Double zero = (double) 0;
+            	bill.setMaxPeakUsg( zero.floatValue() );
+            }
+            else bill.setMaxPeakUsg(item.getOnPeakEnergyUsage().floatValue());
             bill.setMeterReadDay(meterDay.intValue());
-            bill.setMidPeakRate(item.getMidPeakRate().intValue());
-            bill.setOffPeakRate(item.getOffPeakRate().intValue());
-            bill.setOffPeakUsg(item.getOffPeakEnergyUsage().floatValue());
+            if(item.getMidPeakRate() == null) bill.setMidPeakRate( 0 ); // 주말은 해당항목이 없음
+            else bill.setMidPeakRate(item.getMidPeakRate().intValue());
+            if(item.getOffPeakRate() == null) bill.setOffPeakRate( 0 ); // 주말은 해당항목이 없음
+            else bill.setOffPeakRate(item.getOffPeakRate().intValue());
+            if(item.getOffPeakEnergyUsage() == null) {
+          	  Double zero = (double) 0;
+          	  bill.setOffPeakUsg( zero.floatValue() );
+            }
+            else bill.setOffPeakUsg(item.getOffPeakEnergyUsage().floatValue());
             bill.setPeakPwrDemand(item.getPeakPowerDemand().floatValue());
-            bill.setPlanName(siteSet.getPlanName());
-            bill.setPlanType(siteSet.getPlanType());
+//            bill.setPlanName(siteSet.getPlanName());
+            bill.setPlanName("");
+            bill.setPlanType(siteSet.getPlanType()+"_"+siteSet.getPlanType2()+"_"+siteSet.getPlanType3());
             bill.setPwrFactorRate(item.getPowerFactorRate().intValue());
             bill.setSiteId(_siteId);
             bill.setSvcEdate(DateUtil.longToString(item.getServicePeriodTo(), "yyyyMMdd"));
@@ -335,9 +377,319 @@ public class BillController {
         }
       }
       resultCnt += billService.addOrModBillList(billList, null);
+      
+      List<Bill> billDaylist = bill01_day(_siteId, siteSet, prettyLog);
+      resultCnt2 += billService.addOrModBillDayList(billDaylist, null);
     }
     prettyLog.append("RESULT_CNT", resultCnt);
+    prettyLog.append("RESULT_CNT2", resultCnt2);
   }
+  
+  public List<Bill> bill01_day(String _siteId, SiteSet siteSet, PrettyLog prettyLog) {
+	  Period period = Period.day; // 10.23 변경중
+	  Date today = new Date();
+		Calendar _cal = Calendar.getInstance();
+		_cal.setTimeInMillis(   today.getTime()   );
+		_cal.set(Calendar.DATE, 1);
+		_cal.set(Calendar.HOUR_OF_DAY, 0);
+		_cal.set(Calendar.MINUTE, 0);
+		_cal.set(Calendar.SECOND, 0);
+		Date begin = new Timestamp(_cal.getTime().getTime());
+
+		Calendar _cal2 = Calendar.getInstance();
+		_cal2.setTimeInMillis(   today.getTime()   );
+		_cal2.set(Calendar.DATE, _cal2.getActualMaximum(Calendar.DAY_OF_MONTH));
+		_cal2.set(Calendar.HOUR_OF_DAY, 23);
+		_cal2.set(Calendar.MINUTE, 59);
+		_cal2.set(Calendar.SECOND, 59);
+		Date end = new Timestamp(_cal2.getTime().getTime());
+	  
+	  
+	  Long meterDay = siteSet.getMeterReadDay();
+
+      Date _begin = null;
+      Date _end = null;
+//      Integer lastDate = null;
+      if (begin == null) {
+  		Calendar cal = Calendar.getInstance();
+  		cal.setTimeInMillis(   (new Date()).getTime()   );
+//  		cal.set(2018, 8-1, 1, 0, 0, 0);
+  		cal.set(Calendar.DATE, 1);
+  		DateUtil.truncateHms(cal);
+  		_begin = cal.getTime();
+      } else {
+    	  Calendar cal = Calendar.getInstance();
+	  		cal.setTimeInMillis(   begin.getTime()   );
+//	  		cal.set(2018, 8-1, 1, 0, 0, 0);
+	  		cal.set(Calendar.DATE, 1);
+	  		DateUtil.truncateHms(cal);
+	  		_begin = cal.getTime();
+      }
+      if (end == null) {
+    	Calendar cal2 = Calendar.getInstance();
+  		cal2.setTimeInMillis(   (new Date()).getTime()   );
+//  		cal2.set(2018, 8-1, 31, 23, 59, 59);
+  		cal2.set(Calendar.DATE, cal2.getActualMaximum(Calendar.DAY_OF_MONTH));
+  		cal2.set(Calendar.HOUR, 23);
+  	    cal2.set(Calendar.MINUTE, 45);
+  	    cal2.set(Calendar.SECOND, 00);
+  		_end = cal2.getTime();
+      } else {
+    	  Calendar cal2 = Calendar.getInstance();
+	  		cal2.setTimeInMillis(   end.getTime()   );
+//	  		cal2.set(2018, 8-1, 31, 23, 59, 59);
+	  		cal2.set(Calendar.DATE, cal2.getActualMaximum(Calendar.DAY_OF_MONTH));
+	  		cal2.set(Calendar.HOUR, 23);
+	  	    cal2.set(Calendar.MINUTE, 45);
+	  	    cal2.set(Calendar.SECOND, 00);
+	  		_end = cal2.getTime();
+      }
+
+      Date beginDate = _begin;
+      Date endDate = _end;
+      List<Bill> billList = Lists.newArrayList();
+//      while (true) {
+//        if (beginDate == null) {
+//          beginDate = _begin;
+//        } else {
+//          Calendar calendar = DateUtil.getCalendar(beginDate);
+//          calendar.add(Calendar.MONTH, 1);
+//          calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));//
+//          lastDate = Integer.parseInt(DateUtil.dateToString(calendar, "dd"));
+//          calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
+//          calendar.add(Calendar.DATE, 1);
+//          DateUtil.truncateHms(calendar);
+//          beginDate = calendar.getTime();// 다음달 검침일 다음날
+//        }
+//        {
+//          Calendar calendar = DateUtil.getCalendar(beginDate);
+//          calendar.add(Calendar.MONTH, 1);
+//          calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));//
+//          lastDate = Integer.parseInt(DateUtil.dateToString(calendar, "dd"));
+//          calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
+//          DateUtil.truncateHms(calendar);
+//          endDate = calendar.getTime();// 다다음달 검침날
+//
+//          if (_end.getTime() < endDate.getTime()) {
+//            break;
+//          }
+//        }
+
+      BillRequestModel billRequest = new BillRequestModel();
+      billRequest.setMeterDay(meterDay);
+      billRequest.setContElec(siteSet.getContractPower());
+      billRequest.setPeriod(period);
+////      billRequest.setPlanName(siteSet.getPlanType());
+//      billRequest.setPlanName("industrial_B_high_voltage_A_option1"); // 10.23 변경중
+      if(siteSet.getPlanType() != null && siteSet.getPlanType2() != null && siteSet.getPlanType3() != null ) {
+      	billRequest.setPlanName(siteSet.getPlanType()+"_"+siteSet.getPlanType2()+"_"+siteSet.getPlanType3());
+      } else {
+//      	billRequest.setPlanName("industrial_B_high_voltage_A_option2"); // ess할인이 안되는 요금제라고 함
+      	billRequest.setPlanName("industrial_A2_high_voltage_A_option1");
+      }
+      {// peakHistory
+          List<PeakHistoryModel> peakHistory = Lists.newArrayList();
+          Calendar calendar = DateUtil.getCalendar(beginDate);
+          calendar.add(Calendar.MONTH, -1);
+          calendar.set(Calendar.DATE, 1);
+          calendar.add(Calendar.YEAR, -11);
+          DateUtil.truncateHms(calendar);
+          Date __begin = calendar.getTime();
+          Calendar eCal = DateUtil.getCalendar(endDate);
+          eCal.add(Calendar.MONTH, -1);
+          eCal.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
+          DateUtil.fullHms(eCal);
+          Date __end = eCal.getTime();
+          String strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+          String strEndDate = DateUtil.dateToString(endDate, "yyyyMMdd");
+          prettyLog.append("BEGIN", strBeginDate);
+          prettyLog.append("END", strEndDate);
+          logger.info("bill01,{},{},{}", _siteId, strBeginDate, strEndDate);
+          List<Usage> usageList = usageService.getUsageListBySiteId(_siteId, __begin, __end, prettyLog);
+          if (usageList.size() > 0) {
+            PeakRequestModel peakRequest = new PeakRequestModel();
+            peakRequest.setMeterDay(meterDay);
+            peakRequest.setPeriod(Period.day);
+            EnergyModel energy = new EnergyModel();
+            List<Long> timestamp = Lists.newArrayList();
+            List<Float> kWh = Lists.newArrayList();
+            long preTime = 0;
+            for (Usage usage : usageList) {
+              long time = usage.getStdTimestamp().getTime();
+              timestamp.add(time);
+              if (preTime != 0 && time - preTime != 900000) {
+                prettyLog.append("TIME-ERROR", preTime + "," + time);
+              }
+              kWh.add(usage.getUsgVal() / 1000000f);
+            }
+            energy.setTimestamp(timestamp);
+            energy.setkWh(kWh);
+            peakRequest.setEnergy(energy);
+            PeakResponseModel peak = EncoredApiUtil.getPeak(peakRequest, prettyLog);
+            for (int i = 0; i < peak.getBasetime().size(); i++) {
+              peakHistory.add(new PeakHistoryModel(DateUtil.dateToString(new Date(peak.getBasetime().get(i)), "yyyy-MM"), peak.getkW().get(i)));
+            }
+            peakHistory.sort(new Comparator<PeakHistoryModel>() {
+              @Override
+              public int compare(PeakHistoryModel o1, PeakHistoryModel o2) {
+                return o1.getMonth().compareTo(o2.getMonth());
+              }
+            });
+            billRequest.setPeakHistory(peakHistory);
+          }
+        }
+      
+      {// energy
+          EnergyModel energy = new EnergyModel();
+          List<Long> timestamp = Lists.newArrayList();
+          List<Float> kWh = Lists.newArrayList();
+          List<Usage> usageList = usageService.getUsageListBySiteId(_siteId, beginDate, endDate, prettyLog);
+          for (Usage usage : usageList) {
+            timestamp.add(usage.getStdTimestamp().getTime());
+            kWh.add(usage.getUsgVal() / 1000000f);
+          }
+          energy.setTimestamp(timestamp);
+          energy.setkWh(kWh);
+          billRequest.setEnergy(energy);
+        }
+      {// reactive
+          ReactiveModel posReactive = new ReactiveModel();
+          ReactiveModel negReactive = new ReactiveModel();
+          List<Long> timestamp = Lists.newArrayList();
+          List<Float> poskWh = Lists.newArrayList();
+          List<Float> negkWh = Lists.newArrayList();
+          List<Reactive> reactiveList = usageService.getReactiveListBySiteId(_siteId, beginDate, endDate, prettyLog);
+          for (Reactive re : reactiveList) {
+            timestamp.add(re.getStdTimestamp().getTime());
+            poskWh.add(re.getRctvVal() / 1000000f);
+            negkWh.add(re.getNegRctvVal() / 1000000f);
+          }
+          posReactive.setkVarh(poskWh);
+          posReactive.setTimestamp(timestamp);
+          billRequest.setReactivePos(posReactive);
+          negReactive.setkVarh(negkWh);
+          negReactive.setTimestamp(timestamp);
+          billRequest.setReactiveNeg(negReactive);
+        }
+        {// ess
+          EssModel ess = new EssModel();
+          List<Long> timestamp = Lists.newArrayList();
+          List<Float> kWh = Lists.newArrayList();
+          EssModel ess2 = new EssModel();
+          List<Float> kWh2 = Lists.newArrayList();
+          List<EssCharge> esschargeList = essService.getEssChargeListBySiteId(_siteId, beginDate, endDate, prettyLog);
+          for (EssCharge essCharge : esschargeList) {
+            timestamp.add(essCharge.getStdDate().getTime());
+            kWh.add(new Float(essCharge.getChgVal()));
+            kWh2.add(new Float(essCharge.getDischgVal()));
+          }
+          ess.setkWh(kWh);
+          ess.setTimestamp(timestamp);
+          billRequest.setEssCharging(ess);
+          ess2.setkWh(kWh2);
+          ess2.setTimestamp(timestamp);
+          billRequest.setEssDischarging(ess2);
+        }
+//        if (billRequest.getEnergy().getTimestamp().size() == 0 && billRequest.getReactivePos().getTimestamp().size() == 0 && billRequest.getReactiveNeg().getTimestamp().size() == 0
+//            && billRequest.getEssCharging().getTimestamp().size() == 0) {
+//          continue;
+//        }
+        try {
+
+            BillResponseModel response = EncoredApiUtil.getBill(billRequest, prettyLog);
+            prettyLog.append("ITEM_SIZE", response.getItems().size());
+            int i=0;
+            for (BillItemModel item : response.getItems()) {
+              Bill bill = new Bill();
+              bill.setBaseRate(item.getBaseRate().intValue());
+              bill.setBillYearm(item.getBillOfTheMonth().replaceAll("-", ""));
+              bill.setConsumeRate(item.getElectricityConsumptionRate().intValue());
+              bill.setContractPower(siteSet.getContractPower().intValue());
+              bill.setDemandChgReduct(item.getDemandChargeReduction().intValue());
+              bill.setElecFund(item.getElectricityFund().intValue());
+              bill.setEnergyChgReduct(item.getEnergyChargeReduction().intValue());
+              if(item.getEssChargingIncentive() == null) bill.setEssChgIncen( 0 );
+              else bill.setEssChgIncen(item.getEssChargingIncentive().intValue());
+              if(item.getEssChargingInOnPeak() == null) {
+              	Double zero = (double) 0;
+              	bill.setEssChgMaxPeak( zero.floatValue() );
+              }
+              else bill.setEssChgMaxPeak(item.getEssChargingInOnPeak().floatValue());
+              if(item.getEssChargingInMidPeak() == null) {
+              	Double zero = (double) 0;
+              	bill.setEssChgMidPeak( zero.floatValue() );
+              }
+              else bill.setEssChgMidPeak(item.getEssChargingInMidPeak().floatValue());
+              if(item.getEssChargingInOffPeak() == null) {
+            	  Double zero = (double) 0;
+            	  bill.setEssChgOffPeak( zero.floatValue() );
+              }
+              else bill.setEssChgOffPeak(item.getEssChargingInOffPeak().floatValue());
+              if(item.getEssDischargingIncentive() == null) bill.setEssDischgIncen( 0 );
+              else bill.setEssDischgIncen(item.getEssDischargingIncentive().intValue());
+              if(item.getEssDischargingInOnPeak() == null) {
+            	  Double zero = (double) 0;
+            	  bill.setEssDischgMaxPeak( zero.floatValue() );
+              }
+              else bill.setEssDischgMaxPeak(item.getEssDischargingInOnPeak().floatValue());
+              if(item.getEssDischargingInMidPeak() == null) {
+            	  Double zero = (double) 0;
+            	  bill.setEssDischgMidPeak( zero.floatValue() );
+              }
+              else bill.setEssDischgMidPeak(item.getEssDischargingInMidPeak().floatValue());
+              if(item.getEssDischargingInOffPeak() == null) {
+            	  Double zero = (double) 0;
+            	  bill.setEssDischgOffPeak( zero.floatValue() );
+              }
+              else bill.setEssDischgOffPeak(item.getEssDischargingInOffPeak().floatValue());
+              if(item.getLaggingPowerFactor() == null) bill.setLagPwrFactor( 0 );
+              else bill.setLagPwrFactor(item.getLaggingPowerFactor().intValue());
+              if(item.getLeadingPowerFactor() == null) bill.setLeadPwrFactor( 0 );
+              else bill.setLeadPwrFactor(item.getLeadingPowerFactor().intValue());
+              if(item.getOnPeakRate() == null) bill.setMaxPeakRate( 0 ); // 주말은 해당항목이 없음
+              else bill.setMaxPeakRate(item.getOnPeakRate().intValue());
+              if(item.getOnPeakEnergyUsage() == null) { // 주말은 해당항목이 없음
+              	Double zero = (double) 0;
+              	bill.setMaxPeakUsg( zero.floatValue() );
+              }
+              else bill.setMaxPeakUsg(item.getOnPeakEnergyUsage().floatValue());
+              bill.setMeterReadDay(meterDay.intValue());
+              if(item.getMidPeakRate() == null) bill.setMidPeakRate( 0 ); // 주말은 해당항목이 없음
+              else bill.setMidPeakRate(item.getMidPeakRate().intValue());
+              if(item.getOffPeakRate() == null) bill.setOffPeakRate( 0 ); // 주말은 해당항목이 없음
+              else bill.setOffPeakRate(item.getOffPeakRate().intValue());
+              if(item.getOffPeakEnergyUsage() == null) {
+            	  Double zero = (double) 0;
+            	  bill.setOffPeakUsg( zero.floatValue() );
+              }
+              else bill.setOffPeakUsg(item.getOffPeakEnergyUsage().floatValue());
+              bill.setPeakPwrDemand(item.getPeakPowerDemand().floatValue());
+//              bill.setPlanName(siteSet.getPlanName());
+              bill.setPlanName("");
+              bill.setPlanType(siteSet.getPlanType()+"_"+siteSet.getPlanType2()+"_"+siteSet.getPlanType3());
+              bill.setPwrFactorRate(item.getPowerFactorRate().intValue());
+              bill.setSiteId(_siteId);
+//              bill.setSvcEdate(DateUtil.longToString(item.getServicePeriodTo(), "yyyyMMdd"));
+//              bill.setSvcSdate(DateUtil.longToString(item.getServicePeriodFrom(), "yyyyMMdd"));
+              bill.setSvcStimestamp(new Date(item.getServicePeriodFrom()));
+              bill.setSvcEtimestamp(new Date(item.getServicePeriodTo()));
+              bill.setTotAmtBill(item.getTotalAmountBilled().intValue());
+              bill.setTotElecRate(item.getTotalElectricityRate().intValue());
+              bill.setUsg(item.getEnergyUsage().floatValue());
+              bill.setValAddTax(item.getValueAddedTax().intValue());
+              bill.setBdayInMonth(item.getBdayInMonth().intValue());
+              billList.add(bill);
+            }
+          } catch (Exception e) {
+            prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
+            logger.error("bill01-ERROR", e);
+          } finally {
+			return billList;
+		}
+	  
+	  
+  }
+  
 
   /**
    * @param siteId

@@ -43,6 +43,8 @@ public class Bill {
     private Integer bdayInMonth; // 평일일수
     private Date regDate;//등록일시
     private Date modDate;//최종수정일시
+    private Date svcStimestamp;//사용시작일(형식:yyyymmdd) // tb_bill_day
+    private Date svcEtimestamp;//사용종료일(형식:yyyymmdd) // tb_bill_day
    /**
     * 요금식별자 조회
     * @return billIdx
@@ -582,4 +584,17 @@ public class Bill {
     public void setModDate(Date modDate) {
         this.modDate = modDate;
     }
+	public Date getSvcStimestamp() {
+		return svcStimestamp;
+	}
+	public void setSvcStimestamp(Date svcStimestamp) {
+		this.svcStimestamp = svcStimestamp;
+	}
+	public Date getSvcEtimestamp() {
+		return svcEtimestamp;
+	}
+	public void setSvcEtimestamp(Date svcEtimestamp) {
+		this.svcEtimestamp = svcEtimestamp;
+	}
+
 }

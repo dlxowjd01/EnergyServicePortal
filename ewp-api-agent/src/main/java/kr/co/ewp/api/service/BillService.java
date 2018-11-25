@@ -45,6 +45,24 @@ public class BillService {
     }
     return result;
   }
+  
+  public int addOrModBillDayList(List<Bill> billList, PrettyLog prettyLog) {
+	  int result = 0;
+	  for (Bill bill : billList) {
+		  Bill selectOneByUnique = billDao.selectOneByUniqueBillDay(bill.getSiteId(), bill.getSvcStimestamp(), prettyLog);
+		  if (selectOneByUnique == null) {
+			  billDao.insertBillDay(bill, null);
+		  } else {
+			  bill.setBillIdx(selectOneByUnique.getBillIdx());
+			  billDao.updateBillDay(bill, null);
+		  }
+		  result++;
+		  if (result % 100 == 0) {
+			  logger.info("addOrModBillDayList,{},{}", new Object[] { bill.getSiteId(), result });
+		  }
+	  }
+	  return result;
+  }
 
   public int addOrModGenRevenueList(List<GenRevenue> getnRevenueList, PrettyLog prettyLog) {
     int result = 0;
