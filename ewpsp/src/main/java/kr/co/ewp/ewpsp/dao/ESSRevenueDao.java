@@ -22,4 +22,9 @@ public class ESSRevenueDao {
 		List resultList = sqlSession.selectList("essRevenue.getESSRevenueTexList", param);
 		return resultList;
 	}
+
+	public List getESSRevenueDayList(HashMap param) {
+		List resultList = sqlSession.selectList("essRevenue.getESSRevenueDayList", param);
+		return resultList;
+	}
 }

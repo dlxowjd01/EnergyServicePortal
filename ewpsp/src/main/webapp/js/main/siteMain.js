@@ -829,10 +829,11 @@
 					var stdDt = "";
 					var yyyyMM = "";
 					if(loopGbn == "ess") {
-//						yyyyMM = loopCntList[i].bill_yearm;
-//						stdDt = Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1);
-						yyyyMM = loopCntList[i].svcSdate;
-						stdDt = Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, yyyyMM.substring(6, 8));
+////						yyyyMM = loopCntList[i].bill_yearm;
+////						stdDt = Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1);
+//						yyyyMM = loopCntList[i].svcSdate;
+//						stdDt = Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, yyyyMM.substring(6, 8));
+						stdDt = loopCntList[i].svc_stimestamp;
 					} else if(loopGbn == "pv") {
 						stdDt = loopCntList[i].std_timestamp;
 					} else if(loopGbn == "dr") {

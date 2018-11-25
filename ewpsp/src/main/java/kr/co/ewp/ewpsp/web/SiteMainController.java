@@ -253,14 +253,15 @@ public class SiteMainController {
 		// ess 수익 조회
 		String siteId = (String) param.get("siteId");
 //		List essRevenueList = null;//essRevenueService.getESSRevenueList(param); // api로 변경
-		List<List<Bill>> essRevenueLists = bill01(siteId, start, end);
-		List<Bill> essRevenueList = null;
-		if(essRevenueLists != null && essRevenueLists.size() > 0) {
-			essRevenueList = (List<Bill>) essRevenueLists.get(0);
-			if(essRevenueList == null || essRevenueList.size() < 1) {
-				essRevenueList = null;
-			}
-		}
+//		List<List<Bill>> essRevenueLists = bill01(siteId, start, end);
+//		List<Bill> essRevenueList = null;
+//		if(essRevenueLists != null && essRevenueLists.size() > 0) {
+//			essRevenueList = (List<Bill>) essRevenueLists.get(0);
+//			if(essRevenueList == null || essRevenueList.size() < 1) {
+//				essRevenueList = null;
+//			}
+//		}
+		List essRevenueList = essRevenueService.getESSRevenueDayList(param); // api로 변경
 		
 		// dr 수익 조회
 		param.put("selTermFrom", selTermFrom.substring(0, 6));

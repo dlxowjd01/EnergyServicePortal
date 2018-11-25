@@ -38,5 +38,10 @@ public class ESSRevenueServiceImpl implements ESSRevenueService {
 		
 		return resultMap;
 	}
+
+	public List getESSRevenueDayList(HashMap param) throws Exception {
+		List list = essRevenueDao.getESSRevenueDayList(param);
+		return list;
+	}
 	
 }
