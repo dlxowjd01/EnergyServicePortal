@@ -795,8 +795,8 @@
 					
 					if(essRvList != null && essRvList.length > 0 && essRvList.length > i) { // ess 수익
 //						essRevenue = String(essRvList[i].ess_incen);
-						var essRevenue1 = ( String(essRvList[i].ess_chg_incen) == null ) ? null : String(essRvList[i].essChgIncen);
-						var essRevenue2 = ( String(essRvList[i].ess_dischg_incen) == null ) ? null : String(essRvList[i].essDischgIncen);
+						var essRevenue1 = ( String(essRvList[i].ess_chg_incen) == null ) ? null : String(essRvList[i].ess_chg_incen);
+						var essRevenue2 = ( String(essRvList[i].ess_dischg_incen) == null ) ? null : String(essRvList[i].ess_dischg_incen);
 						if( (essRevenue1 == null || essRevenue1 == "" || essRevenue1 == "null") && 
 								(essRevenue2 == null || essRevenue2 == "" || essRevenue2 == "null") ) reEssRevenue = null;
 						else {

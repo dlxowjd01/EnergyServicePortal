@@ -101,9 +101,19 @@
 		from (
 			select
 				site_id, svc_stimestamp,
-				avg(bdayIn_month) as bdayIn_month, sum(ess_dischg_off_peak) as ess_dischg_off_peak, sum(ess_dischg_mid_peak) as ess_dischg_mid_peak, sum(ess_dischg_max_peak) as ess_dischg_max_peak, 
-				sum(ess_chg_off_peak) as ess_chg_off_peak, sum(ess_chg_mid_peak) as ess_chg_mid_peak, sum(ess_chg_max_peak) as ess_chg_max_peak, 
-				sum(pre_ess_incen) as pre_ess_incen, sum(ess_incen) as ess_incen, sum(peak_rate) as peak_rate, sum(ewp_peak_rate) as ewp_peak_rate
+				avg(bdayIn_month) as bdayIn_month,
+				sum(ess_dischg_off_peak) as ess_dischg_off_peak,
+				sum(ess_dischg_mid_peak) as ess_dischg_mid_peak,
+				sum(ess_dischg_max_peak) as ess_dischg_max_peak,
+				sum(ess_chg_off_peak) as ess_chg_off_peak,
+				sum(ess_chg_mid_peak) as ess_chg_mid_peak,
+				sum(ess_chg_max_peak) as ess_chg_max_peak,
+				sum(pre_ess_incen) as pre_ess_incen,
+				sum(ess_incen) as ess_incen,
+				sum(ess_chg_incen) as ess_chg_incen,
+				sum(ess_dischg_incen) as ess_dischg_incen,
+				sum(peak_rate) as peak_rate,
+				sum(ewp_peak_rate) as ewp_peak_rate
 			from (
 				select 
 					bill_idx, d.site_id, bill_yearm, d.meter_read_day, d.plan_type, d.plan_name, 
