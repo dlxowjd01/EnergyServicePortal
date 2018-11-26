@@ -426,8 +426,10 @@ public class EnergyController {
             peak.setPeakVal(kW.get(i));
             peak.setStdDate(new Date(basetime.get(i)));
             peak.setStdTimestamp(new Date(basetime.get(i)));
-            peak.setPeakDate(new Date(occured.get(i)));
-            peak.setPeakTimestamp(new Date(occured.get(i)));
+            if(occured.get(i) != null) peak.setPeakDate(new Date(occured.get(i)));
+            else peak.setPeakDate( null );
+            if(occured.get(i) != null) peak.setPeakTimestamp(new Date(occured.get(i)));
+            else peak.setPeakTimestamp( null );
             peakList.add(peak);
           }
         } catch (Exception e) {
