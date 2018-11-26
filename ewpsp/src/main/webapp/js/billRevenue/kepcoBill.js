@@ -180,7 +180,7 @@
 			customerStr +="</tr>";
 			customerStr +="<tr>";
 			customerStr +="<th>전기사용 계약종별</th>";
-			customerStr +="<td>산업용(을) 고압B 선택 III</td>";
+			customerStr +="<td>"+planTypeName+"</td>";
 			customerStr +="</tr>";
 			customerStr +="<tr>";
 			customerStr +="<th>정기검침일</th>";
