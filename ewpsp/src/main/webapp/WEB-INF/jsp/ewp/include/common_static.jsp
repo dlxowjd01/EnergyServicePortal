@@ -46,7 +46,9 @@
 <script src="../js/moment-timezone.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
+		
 		setTimeZoneInCookie();
+		//setTimeout($.unblockUI, 500); 
 	});
 	
     function setTimeZoneInCookie() {
@@ -55,19 +57,24 @@
         document.cookie = "TIMEZONE_COOKIE=" + _offset; //Cookie name with value
     }
     
+    var AJAXCOUNT = 0;
     $( document ).ajaxStart(function() {
-    	
-        $.blockUI({ 
-        	message: '<h1><img src="/img/loading_icon.gif" /></h1>',
-        	css: { background: '/img/loading_icon.gif' } 
-        	}); 
+    	if(AJAXCOUNT == 0){
+    	$.blockUI({ 
+        	message: '<div><img src="/img/loading_icon.gif" /></div>',
+        	css: { border: 'none',  
+                padding: '15px', 
+                backgroundColor: 'rgba( 255, 255, 255, 0 )',
+                '-webkit-border-radius': '10px', 
+                '-moz-border-radius': '10px', 
+                opacity: .5, 
+                color: '#fff' 
+        	},
+        	timeout:   1000 
+        	})
+    	}
+    	AJAXCOUNT++;
     });
-    $(document).ajaxComplete(function() {
-    	
-    	setTimeout($.unblockUI, 300); 
-    	
-    	
-    });
-	
+
 </script>
 
