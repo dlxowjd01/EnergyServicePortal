@@ -80,9 +80,14 @@ public class DeviceMonitoringController {
 		logger.debug("param ::::: "+param.toString());
 		
 		Map result = deviceMonitoringService.getDeviceIOEDetail(param);
+//		List<PcsEquipmentModel> pcsDetail2 = PMGrowApiUtil.getPcsEquipmentList2("https://13.125.50.136", "1");
+//		List<BmsEquipmentModel> bmsDetail2 = PMGrowApiUtil.getBmsEquipmentList2("https://13.125.50.136", "1");
+//		List<PvEquipmentModel> pvDetail2 = PMGrowApiUtil.getPvEquipmentList2("https://13.125.50.136", "1");
 		ApiController api = new ApiController();
 		UsageRealtimeModel usageRealtime = api.getDeviceRealTime((String) param.get("deviceId"));
-		result.put("voltage", (usageRealtime == null) ? null : usageRealtime.getVoltage());
+		Long voltage = (usageRealtime == null) ? null : usageRealtime.getVoltage();
+		if(voltage < 0) voltage = null;
+		result.put("voltage", voltage);
 		result.put("activePower", (usageRealtime == null) ? null : usageRealtime.getActivePower());
 		result.put("energy", (usageRealtime == null) ? null : usageRealtime.getPositiveEnergy()+usageRealtime.getNegativeEnergy());
 		result.put("energyReactive", (usageRealtime == null) ? null : usageRealtime.getPositiveEnergyReactive()+usageRealtime.getNegativeEnergyReactive());
@@ -135,6 +140,7 @@ public class DeviceMonitoringController {
 		Map result = deviceMonitoringService.getDevicePCSDetail(param);
 		Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
 		String host = (String) siteDetail.get("local_ems_addr");
+		List<PcsEquipmentModel> pcsDetail2 = PMGrowApiUtil.getPcsEquipmentList("https://13.125.50.136", "1");
 		List<PcsEquipmentModel> pcsDetail = PMGrowApiUtil.getPcsEquipmentList(host, (String) param.get("deviceId"));
 		System.out.println("pcsDetail  "+pcsDetail.size());
 		if(pcsDetail == null || pcsDetail.size() == 0) {
@@ -216,6 +222,7 @@ public class DeviceMonitoringController {
 		Map result = deviceMonitoringService.getDeviceBMSDetail(param);
 		Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
 		String host = (String) siteDetail.get("local_ems_addr");
+		List<BmsEquipmentModel> bmsDetail2 = PMGrowApiUtil.getBmsEquipmentList("https://13.125.50.136", "1");
 		List<BmsEquipmentModel> bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, (String) param.get("deviceId"));
 		if(bmsDetail == null || bmsDetail.size() == 0) {
 			result.put("bmsStatus", null);
@@ -294,6 +301,7 @@ public class DeviceMonitoringController {
 		Map result = deviceMonitoringService.getDevicePVDetail(param);
 		Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
 		String host = (String) siteDetail.get("local_ems_addr");
+		List<PvEquipmentModel> pvDetail2 = PMGrowApiUtil.getPvEquipmentList("https://13.125.50.136", "1");
 		List<PvEquipmentModel> pvDetail = PMGrowApiUtil.getPvEquipmentList(host, (String) param.get("deviceId"));
 		if(pvDetail == null || pvDetail.size() == 0) {
 			result.put("bmsStatus", null);
