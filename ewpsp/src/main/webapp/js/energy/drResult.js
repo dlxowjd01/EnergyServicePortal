@@ -17,14 +17,14 @@
 				$("#selPeriod").empty().append("5분").append( $('<span class="caret" />') );
 				$("#selPeriodVal").val('5min');
 				realTimeRefreshFn();
-//				nextRefreshTimeSet();
+				nextRefreshTimeSet();
 				searchDisableChange(true);
 				myChart.yAxis[0].setTitle({ text: "(kW)" });
 				
 				if(realTimeRefresh == null) { // 1분 간격
 					realTimeRefresh = setInterval(function(){
 						realTimeRefreshFn();
-//						nextRefreshTimeSet();
+						nextRefreshTimeSet();
 					},1000*60); // 1000 = 1초, 5000 = 5초
 				} else {
 					alert("이미 실시간 자동갱신이 실행중입니다.");
@@ -35,7 +35,8 @@
 	        	$("#selPeriodVal").val('hour');
 				clearInterval(realTimeRefresh);
 				realTimeRefresh = null;
-//				nextDrRefreshTime = null;
+				clearInterval(nextDrRefreshTime);
+				nextDrRefreshTime = null;
 				searchDisableChange(false);
 				
 	        }
@@ -44,9 +45,11 @@
 	
 	function nextRefreshTimeSet() {
 		var nextTime = new Date();
+		
 		var nextTimeVal = new Date(nextTime.setMinutes(nextTime.getMinutes() + 1));
 		nextDrRefreshTime = setInterval(function(){
 			remain(nextTimeVal);
+			console.log("넥스트타임  ", nextTime);
 		},1000);
 	}
 	
@@ -66,6 +69,8 @@
 		$(".real_time").find('span').empty().html( M + ':' + S );
 		if(M == 0 && S == 0) {
 			nextTime = new Date();
+			clearInterval(nextDrRefreshTime);
+			nextDrRefreshTime = null;
 		}
 	}
 
