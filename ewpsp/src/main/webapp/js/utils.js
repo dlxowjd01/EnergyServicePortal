@@ -781,14 +781,14 @@ function print(printArea)
 }
 
 
-function showHideLoadingBar(txt) {
-	if(txt == "show") {
-		$("#mask").fadeTo("slow", 0.5);
-		$("#mask").append('<div class="loading"></div>');
-	}
-	if(txt == "hide") {
-		$('#mask').hide();
-		$('#mask').empty();
-	}
-}
+//function showHideLoadingBar(txt) {
+//	if(txt == "show") {
+//		$("#mask").fadeTo("slow", 0.5);
+//		$("#mask").append('<div class="loading"></div>');
+//	}
+//	if(txt == "hide") {
+//		$('#mask').hide();
+//		$('#mask').empty();
+//	}
+//}
 

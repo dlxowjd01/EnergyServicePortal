@@ -369,6 +369,8 @@
 
     <!-- 레이어 팝업 배경 -->
     <div id="mask"></div>
+	<div class="loading"><img class="loading-image" src="/img/loading_icon.gif" alt="Loading..." /></div>
+
 
 
 	<!-- 정보수정 // -->

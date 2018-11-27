@@ -8,12 +8,10 @@
 		$("#selPageNum").val(1);
 		formData = getSiteMainSchCollection();
 		
-		showHideLoadingBar('show');
 //		var myTimer = setTimeout(function(){
 			fn_cycle_10sec();
 			fn_cycle_1min();
 			fn_cycle_15min();
-			showHideLoadingBar('hide');
 //		}, (1000));
 		
 //		clearTimeout(myTimer);
