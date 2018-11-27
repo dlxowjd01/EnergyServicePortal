@@ -274,8 +274,10 @@
 		unit_format(String(totalDataSet2), "essUsageTotal", "kWh");
 		unit_format(String(totalDataSet3), "pvUsageTotal", "kWh");
 		
-		var total = totalDataSet+totalDataSet2+totalDataSet3;
-		$("#kepcoPer").empty().append("한전 사용").append( $("<span />").append( ( (totalDataSet == 0) ? 0 : ( (totalDataSet/total)*100 ).toFixed(2) )+"%" ) );
+		var remap = convertUnitFormat(totalDataSet, "mWh", 8);
+		var reTotalDataSet = Math.round( Number(remap.get("formatNum")) );
+		var total = reTotalDataSet+totalDataSet2+totalDataSet3;
+		$("#kepcoPer").empty().append("한전 사용").append( $("<span />").append( ( (reTotalDataSet == 0) ? 0 : ( (reTotalDataSet/total)*100 ).toFixed(2) )+"%" ) );
 		$("#essPer").empty().append("ESS 사용").append( $("<span />").append( ( (totalDataSet2 == 0) ? 0 : ( (totalDataSet2/total)*100 ).toFixed(2) )+"%" ) );
 		$("#pvPer").empty().append("PV 사용").append( $("<span />").append( ( (totalDataSet3 == 0) ? 0 : ( (totalDataSet3/total)*100 ).toFixed(2) )+"%" ) );
 		
