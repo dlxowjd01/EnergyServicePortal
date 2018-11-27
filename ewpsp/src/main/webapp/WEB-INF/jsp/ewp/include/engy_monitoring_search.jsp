@@ -46,7 +46,7 @@
 					                    <input id="check1" type="checkbox" class="styled" >
 					                    <label for="check1">실시간 자동 갱신</label>
 					                </div>
-					                <!-- <div class="real_time fl"><span>00:00</span></div> -->
+					                <div class="real_time fl"><span>00:00</span></div>
 									<div class="time fr" id="updtTime">2018-08-12 11:41:26</div>
 								</div>
 								</c:when>

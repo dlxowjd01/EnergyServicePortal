@@ -22,7 +22,7 @@
 				myChart.yAxis[0].setTitle({ text: "(kW)" });
 				
 				if(realTimeRefresh == null) { // 1분 간격
-					realTimeRefresh = setInterval(function(){
+					realTimeRefresh = setInterval(function(){ 
 						realTimeRefreshFn();
 						nextRefreshTimeSet();
 					},1000*60); // 1000 = 1초, 5000 = 5초
@@ -49,7 +49,6 @@
 		var nextTimeVal = new Date(nextTime.setMinutes(nextTime.getMinutes() + 1));
 		nextDrRefreshTime = setInterval(function(){
 			remain(nextTimeVal);
-			console.log("넥스트타임  ", nextTime);
 		},1000);
 	}
 	
@@ -57,7 +56,7 @@
 	function remain(nextTimeVal){
 		var now = new Date();
 		var gap = Math.round((nextTimeVal.getTime() - now.getTime()) / 1000);
-		console.log(nextTimeVal, now);
+//		console.log(nextTimeVal, now);
 		
 		var D = Math.floor(gap / 86400);
 		var H = Math.floor((gap - D * 86400) / 3600 % 3600);
