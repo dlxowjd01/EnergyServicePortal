@@ -172,6 +172,9 @@
 
 										/* 옵션 */
 										plotOptions: {
+											area: {
+									            stacking: 'normal',
+											},
 									        series: {
 									            label: {
 									                connectorAllowed: false
