@@ -29,14 +29,14 @@
 						nextDrRefreshTime = null;
 						nextRefreshTimeSet();
 						realTimeRefreshFn();
-					},1000*60); // 1000 = 1초, 5000 = 5초
+					},1000*60*5); // 1000 = 1초, 5000 = 5초
 				} else {
 					alert("이미 실시간 자동갱신이 실행중입니다.");
 				}
 				
 	        } else{
-	        	$("#selPeriod").empty().append("1시간").append( $('<span class="caret" />') );
-	        	$("#selPeriodVal").val('hour');
+	        	$("#selPeriod").empty().append("15분").append( $('<span class="caret" />') );
+	    		$("#selPeriodVal").val('15min');
 				clearInterval(realTimeRefresh);
 				realTimeRefresh = null;
 				clearInterval(nextDrRefreshTime);
@@ -51,7 +51,7 @@
 	function nextRefreshTimeSet() {
 		var nextTime = new Date();
 		
-		var nextTimeVal = new Date(nextTime.setMinutes(nextTime.getMinutes() + 1));
+		var nextTimeVal = new Date(nextTime.setMinutes(nextTime.getMinutes() + 5));
 		if(nextDrRefreshTime == null) {
 			nextDrRefreshTime = setInterval(function(){
 				remain(nextTimeVal);
@@ -74,7 +74,7 @@
 		if((String(S)).length == 1) S = "0"+S;
 		
 		$(".real_time").find('span').empty().html( M + ':' + S );
-		if(S == 0) {
+		if(M == 0 && S == 0) {
 //			nextTime = new Date();
 			clearInterval(nextDrRefreshTime);
 			nextDrRefreshTime = null;
@@ -160,26 +160,26 @@
 		var endDay = new Date();
 		var startTime;
 		var endTime;
-//		if(SelTerm == 'drday') { // 에너지모니터링 dr실적조회의 오늘날짜
-//			startTime = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), 0, 0, 0);
-//			endTime = new Date(endDay.getFullYear(), endDay.getMonth(), endDay.getDate(), 23, 59, 59);
-//		} else if(SelTerm == 'selectDay') { // 에너지모니터링 dr실적조회의 날짜검색
-//			startTime = new Date( $dtpk5.val()+" 00:00:00" );
-//			endTime = new Date( $dtpk5.val()+" 23:59:59" );
-//			$("#dtCnt").val(  dateDiff($dtpk5.val()+" 00:00:00", $dtpk5.val()+" 23:59:59")+1  );
-//		}
-		startTime = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), 0, 0, 0);
-		endTime = new Date();
-		schStartTime = new Date(startTime.getTime());
-		schEndTime = new Date(endTime.getTime());
-		
-		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
-		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
-		
-		queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
-		queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
-		$("#selTermFrom").val(queryStart);
-		$("#selTermTo").val(queryEnd);
+////		if(SelTerm == 'drday') { // 에너지모니터링 dr실적조회의 오늘날짜
+////			startTime = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), 0, 0, 0);
+////			endTime = new Date(endDay.getFullYear(), endDay.getMonth(), endDay.getDate(), 23, 59, 59);
+////		} else if(SelTerm == 'selectDay') { // 에너지모니터링 dr실적조회의 날짜검색
+////			startTime = new Date( $dtpk5.val()+" 00:00:00" );
+////			endTime = new Date( $dtpk5.val()+" 23:59:59" );
+////			$("#dtCnt").val(  dateDiff($dtpk5.val()+" 00:00:00", $dtpk5.val()+" 23:59:59")+1  );
+////		}
+//		startTime = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), 0, 0, 0);
+//		endTime = new Date();
+//		schStartTime = new Date(startTime.getTime());
+//		schEndTime = new Date(endTime.getTime());
+//		
+//		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
+//		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
+//		
+//		queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
+//		queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
+//		$("#selTermFrom").val(queryStart);
+//		$("#selTermTo").val(queryEnd);
 		
 		cblSet();
 		cblTimeSetiing();
