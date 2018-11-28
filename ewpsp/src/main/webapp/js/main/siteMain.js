@@ -741,8 +741,9 @@
 		}
 		
 		$(".chart_notice").empty();
-		if(timeTermStr != "") 
-			$(".chart_notice").empty().append("지금은 <strong>요금적용전력</strong> 갱신구간 입니다. "+"<span>"+timeTermStr+"</span>");
+//		if(timeTermStr != "") 
+//			$(".chart_notice")..append("지금은 <strong>요금적용전력</strong> 갱신구간 입니다. "+"<span>"+timeTermStr+"</span>");
+		$(".chart_notice").append("<strong>요금적용전력</strong> 제외시간 "+"<span>"+"(23:00 ~ 09:00)"+"</span>");
 	}
 	
 	var essRevenueList;

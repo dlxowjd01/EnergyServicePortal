@@ -3,6 +3,7 @@
 	$(document).ready(function() {
 		getSiteSetDetail();
 		cblSet();
+		$(".real_time").find('span').empty();
 		
 		 // 화면 첫 로딩 시 검색조건 셋팅
 		changeSelTerm('drday');
@@ -17,14 +18,17 @@
 				$("#selPeriod").empty().append("5분").append( $('<span class="caret" />') );
 				$("#selPeriodVal").val('5min');
 				realTimeRefreshFn();
+				$(".real_time").find('span').empty().show();
 				nextRefreshTimeSet();
 				searchDisableChange(true);
 				myChart.yAxis[0].setTitle({ text: "(kW)" });
 				
 				if(realTimeRefresh == null) { // 1분 간격
-					realTimeRefresh = setInterval(function(){ 
-						realTimeRefreshFn();
+					realTimeRefresh = setInterval(function(){
+						clearInterval(nextDrRefreshTime);
+						nextDrRefreshTime = null;
 						nextRefreshTimeSet();
+						realTimeRefreshFn();
 					},1000*60); // 1000 = 1초, 5000 = 5초
 				} else {
 					alert("이미 실시간 자동갱신이 실행중입니다.");
@@ -37,6 +41,7 @@
 				realTimeRefresh = null;
 				clearInterval(nextDrRefreshTime);
 				nextDrRefreshTime = null;
+				$(".real_time").find('span').empty();
 				searchDisableChange(false);
 				
 	        }
@@ -47,27 +52,30 @@
 		var nextTime = new Date();
 		
 		var nextTimeVal = new Date(nextTime.setMinutes(nextTime.getMinutes() + 1));
-		nextDrRefreshTime = setInterval(function(){
-			remain(nextTimeVal);
-		},1000);
+		if(nextDrRefreshTime == null) {
+			nextDrRefreshTime = setInterval(function(){
+				remain(nextTimeVal);
+			},1000);
+		} else {
+			
+		}
 	}
 	
 	// 남은 시간 카운터
 	function remain(nextTimeVal){
 		var now = new Date();
 		var gap = Math.round((nextTimeVal.getTime() - now.getTime()) / 1000);
-//		console.log(nextTimeVal, now);
 		
 		var D = Math.floor(gap / 86400);
 		var H = Math.floor((gap - D * 86400) / 3600 % 3600);
 		var M = Math.floor((gap - H * 3600) / 60 % 60);
+		if((String(M)).length == 1) M = "0"+M;
 		var S = Math.floor((gap - M * 60) % 60);
+		if((String(S)).length == 1) S = "0"+S;
 		
-//		document.getElementById('text2').innerHTML = '오늘 당신에게 주어진 시간은 ' + D + '일 ' + H + '시간 ' + M + '분 ' + S + '초 남았습니다.';
-//		$(".real_time").find('span').empty().html( D + '일 ' + H + '시간 ' + M + '분 ' + S + '초' );
 		$(".real_time").find('span').empty().html( M + ':' + S );
-		if(M == 0 && S == 0) {
-			nextTime = new Date();
+		if(S == 0) {
+//			nextTime = new Date();
 			clearInterval(nextDrRefreshTime);
 			nextDrRefreshTime = null;
 		}
@@ -186,7 +194,7 @@
 		$.ajax({
 			url : "/searchDRApi",
 			type : 'post',
-			async : false, // 동기로 처리해줌
+			async : true, // 동기로 처리해줌
 			data : formData,
 			success: function(result) {
 				var today = new Date();

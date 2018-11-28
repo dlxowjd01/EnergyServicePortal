@@ -322,7 +322,8 @@
 										<h2 class="ntit fl" ondblclick="javascript:location.href='/peak'" style="cursor: pointer;">피크전력현황</h2>
 										<div class="time fr" id="updtTimePeak">2018-08-12 11:41:26</div>
 									</div>
-									<div class="chart_notice">지금은 <strong>요금적용전력</strong> 갱신구간 입니다. <span>(08:00 ~ 12:00)</span></div>
+									<!-- <div class="chart_notice">지금은 <strong>요금적용전력</strong> 갱신구간 입니다. <span>(08:00 ~ 12:00)</span></div> -->
+									<div class="chart_notice"><strong>요금적용전력</strong> 제외시간 <span>(23:00 ~ 09:00)</span></div>
 									<!-- no-data { -->
 									<div class="no-data" style="display: none;">
 										<span>피크전력현황 정보를 가져올 수 없습니다.</span>
