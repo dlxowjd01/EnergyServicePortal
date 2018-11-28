@@ -46,7 +46,9 @@
 <script src="../js/moment-timezone.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
+	
 		setTimeZoneInCookie();
+		$('.loading').hide();
 	});
 	
     function setTimeZoneInCookie() {
@@ -55,21 +57,6 @@
         document.cookie = "TIMEZONE_COOKIE=" + _offset; //Cookie name with value
     }
     
-    $(window).on('load',function(){
-    	setTimeout(function() {
-    		$('.loading').hide()
-    		}, 2000);  
-       });
-
-
-  
-   
-
- $(document).ajaxStart(function() {
-	 $('.loading').show();
- }).ajaxComplete(function() {
-	 $('.loading').hide();
- });
 
 </script>
 

@@ -750,11 +750,17 @@ function insertGroup(formData) {
 //		async : false, // 동기로 처리해줌
 		data : form,
 		success: function(result) {
-			callback_insertGroup(result);
+			$('.loading').hide();
+			setTimeout(function(){
+				callback_insertGroup(result);
+			},500);
 		},
 		error:function(request,status,error){
 			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
-		}
+		},
+		beforeSend: function() {
+            $('.loading').show();
+        }
 	});
 }
 
@@ -801,11 +807,17 @@ function updateGroup(formData) {
 //		async : false, // 동기로 처리해줌
 		data : form,
 		success: function(result) {
-			callback_updateGroup(result);
+			$('.loading').hide();
+			setTimeout(function(){
+				callback_updateGroup(result);
+			},500);
 		},
 		error:function(request,status,error){
 			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
-		}
+		},
+		beforeSend: function() {
+            $('.loading').show();
+        }
 	});
 }
 
