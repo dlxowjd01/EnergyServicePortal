@@ -66,8 +66,8 @@ function changeSelTerm(gubun) {
 		$("#datepicker1, #datepicker2").attr("disabled", false).val( d.format("yyyy-MM-dd") );
 		$("#selPeriodVal").val('hour');
 	} else if(gubun == 'drday') { // 에너지모니터링 dr실적조회의 오늘날짜
-		$selPeriod.empty().append("1시간").append( $('<span class="caret" />') );
-		$("#selPeriodVal").val('hour');
+		$selPeriod.empty().append("15분").append( $('<span class="caret" />') );
+		$("#selPeriodVal").val('15min');
 	} else if(gubun == 'selectDay') { // 에너지모니터링 dr실적조회의 날짜검색
 		$selPeriod.empty().append("1시간").append( $('<span class="caret" />') );
 		var d = new Date();
@@ -201,14 +201,18 @@ function getCollect_sch_condition() {
 		
 	}
 	
-	console.log("검색일자    "+$("#selTermFrom").val()+", "+$("#selTermTo").val());
-	
 	var formData = $("#schForm").serializeObject();
 	console.log(formData);
 
+$('.loading').show();
 	var today = new Date();
-	getDBData(formData); // DB 데이터 조회(각 화면마다 존재)
+	setTimeout(function() {
+		getDBData(formData); // DB 데이터 조회(각 화면마다 존재)
+	}, 1000);
 	update_updtDataTime(today, "updtTime"); // 검색시간(차트 새로고침시간) 업데이트
+	setTimeout(function() {
+		$('.loading').hide();
+	}, 1000);
 }
 
 // 데이터 뿌리기(highcharts, datatable)
