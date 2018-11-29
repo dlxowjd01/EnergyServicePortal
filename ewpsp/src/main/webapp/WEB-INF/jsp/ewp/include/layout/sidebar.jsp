@@ -26,41 +26,41 @@ $(document).ready(function() {
 				<li class="smn5"><a href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');">요금/수익</a></li>
 				</c:when>
 				<c:otherwise>
-				<li class="smn1"><a href="/siteMain">메인</a></li>
+				<li class="smn1"><a href="/siteMain?siteId=${selViewSiteId }">메인</a></li>
 				<li class="smn2">
-					<a href="/usage">에너지<br/>정보조회</a>
+					<a href="/usage?siteId=${selViewSiteId }">에너지<br/>정보조회</a>
 					<div class="sub_layer">
 						<ul>
-							<li><a href="/usage">사용량 현황</a></li>
-							<li><a href="/peak">피크전력 현황</a></li>
-							<li><a href="/essCharge">ESS 충•방전량 조회</a></li>
-							<li><a href="/pvGen">PV 발전량 조회</a></li>
-							<li><a href="/drResult">DR 실적 조회</a></li>
-							<li><a href="/derUsage">사용량 구성</a></li>
+							<li><a href="/usage?siteId=${selViewSiteId }">사용량 현황</a></li>
+							<li><a href="/peak?siteId=${selViewSiteId }">피크전력 현황</a></li>
+							<li><a href="/essCharge?siteId=${selViewSiteId }">ESS 충•방전량 조회</a></li>
+							<li><a href="/pvGen?siteId=${selViewSiteId }">PV 발전량 조회</a></li>
+							<li><a href="/drResult?siteId=${selViewSiteId }">DR 실적 조회</a></li>
+							<li><a href="/derUsage?siteId=${selViewSiteId }">사용량 구성</a></li>
 						</ul>
 					</div>
 				</li>
 				<li class="smn3">
-					<a href="/deviceMonitoring?deviceGbn=IOE">장치<br/>모니터링</a>
+					<a href="/deviceMonitoring?deviceGbn=IOE&siteId=${selViewSiteId }">장치<br/>모니터링</a>
 					<div class="sub_layer">
 						<ul>
-							<li><a href="/deviceMonitoring?deviceGbn=IOE">IOE 통신상태</a></li>
-							<li><a href="/deviceMonitoring?deviceGbn=PCS">PCS 통신상태</a></li>
-							<li><a href="/deviceMonitoring?deviceGbn=BMS">BMS 통신상태</a></li>
-							<li><a href="/deviceMonitoring?deviceGbn=PV">PV 통신상태</a></li>
-							<li><a href="/deviceGroup">장치 그룹 현황</a></li>
+							<li><a href="/deviceMonitoring?deviceGbn=IOE&siteId=${selViewSiteId }">IOE 통신상태</a></li>
+							<li><a href="/deviceMonitoring?deviceGbn=PCS&siteId=${selViewSiteId }">PCS 통신상태</a></li>
+							<li><a href="/deviceMonitoring?deviceGbn=BMS&siteId=${selViewSiteId }">BMS 통신상태</a></li>
+							<li><a href="/deviceMonitoring?deviceGbn=PV&siteId=${selViewSiteId }">PV 통신상태</a></li>
+							<li><a href="/deviceGroup?siteId=${selViewSiteId }">장치 그룹 현황</a></li>
 						</ul>
 					</div>
 				</li>
-				<li class="smn4"><a href="/control">상황관제</a></li>
+				<li class="smn4"><a href="/control?siteId=${selViewSiteId }">상황관제</a></li>
 				<li class="smn5">
-					<a href="/kepcoBill">요금/수익</a>
+					<a href="/kepcoBill?siteId=${selViewSiteId }">요금/수익</a>
 					<div class="sub_layer">
 						<ul>
-							<li><a href="/kepcoBill">한전 요금 조회</a></li>
-							<li><a href="/essRevenue">ESS 수익 조회</a></li>
-							<li><a href="/drRevenue">DR 수익 조회</a></li>
-							<li><a href="/pvRevenue">PV 수익 조회</a></li>
+							<li><a href="/kepcoBill?siteId=${selViewSiteId }">한전 요금 조회</a></li>
+							<li><a href="/essRevenue?siteId=${selViewSiteId }">ESS 수익 조회</a></li>
+							<li><a href="/drRevenue?siteId=${selViewSiteId }">DR 수익 조회</a></li>
+							<li><a href="/pvRevenue?siteId=${selViewSiteId }">PV 수익 조회</a></li>
 							<li><a href="javascript:popupOpen('totaldprint');">통합 명세서</a></li>
 						</ul>
 					</div>
@@ -83,13 +83,13 @@ $(document).ready(function() {
 							<li><a href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');">한전관리설정</a></li>
 							</c:when>
 							<c:otherwise>
-							<li><a href="/kepcoMngSet">한전관리설정</a></li>
+							<li><a href="/kepcoMngSet?siteId=${selViewSiteId }">한전관리설정</a></li>
 							</c:otherwise>
 				</c:choose>	
 							<c:if test="${userInfo.auth_type ne '4'}">
-							<li><a href="/cmpyGrpSiteMng">그룹/사이트 관리</a></li>
+							<li><a href="/cmpyGrpSiteMng?siteId=${selViewSiteId }">그룹/사이트 관리</a></li>
 							</c:if>
-							<li><a href="/userMng">사용자관리</a></li>
+							<li><a href="/userMng?siteId=${selViewSiteId }">사용자관리</a></li>
 						</ul>
 					</div>
 				</li>
@@ -118,33 +118,33 @@ $(document).ready(function() {
 					<li class="gmn5"><a href="javascript:alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');">요금/수익</a></li>
 					</c:when>
 					<c:otherwise>
-					<li class="gmn1"><a href="/siteMain">메인</a></li>
+					<li class="gmn1"><a href="/siteMain?siteId=${selViewSiteId }">메인</a></li>
 					<li class="gmn2"><a href="#;">에너지 정보조회</a>
 						<ul>
-							<li><a href="/usage">사용량 현황</a></li>
-							<li><a href="/peak">피크전력 현황</a></li>
-							<li><a href="/essCharge">ESS 충•방전량 조회</a></li>
-							<li><a href="/pvGen">PV 발전량 조회</a></li>
-							<li><a href="/drResult">DR 실적 조회</a></li>
-							<li><a href="/derUsage">사용량 구성</a></li>
+							<li><a href="/usage?siteId=${selViewSiteId }">사용량 현황</a></li>
+							<li><a href="/peak?siteId=${selViewSiteId }">피크전력 현황</a></li>
+							<li><a href="/essCharge?siteId=${selViewSiteId }">ESS 충•방전량 조회</a></li>
+							<li><a href="/pvGen?siteId=${selViewSiteId }">PV 발전량 조회</a></li>
+							<li><a href="/drResult?siteId=${selViewSiteId }">DR 실적 조회</a></li>
+							<li><a href="/derUsage?siteId=${selViewSiteId }">사용량 구성</a></li>
 						</ul>
 					</li>
 					<li class="gmn3"><a href="#">장치 모니터링</a>
 						<ul>
-							<li><a href="/deviceMonitoring?deviceGbn=IOE">IOE 통신상태</a></li>
-							<li><a href="/deviceMonitoring?deviceGbn=IOE">PCS 통신상태</a></li>
-							<li><a href="/deviceMonitoring?deviceGbn=IOE">BMS 통신상태</a></li>
-							<li><a href="/deviceMonitoring?deviceGbn=IOE">PV 통신상태</a></li>
-							<li><a href="/deviceGroup">장치 그룹 현황</a></li>
+							<li><a href="/deviceMonitoring?deviceGbn=IOE&siteId=${selViewSiteId }">IOE 통신상태</a></li>
+							<li><a href="/deviceMonitoring?deviceGbn=IOE&siteId=${selViewSiteId }">PCS 통신상태</a></li>
+							<li><a href="/deviceMonitoring?deviceGbn=IOE&siteId=${selViewSiteId }">BMS 통신상태</a></li>
+							<li><a href="/deviceMonitoring?deviceGbn=IOE&siteId=${selViewSiteId }">PV 통신상태</a></li>
+							<li><a href="/deviceGroup?siteId=${selViewSiteId }">장치 그룹 현황</a></li>
 						</ul>
 					</li>
-					<li class="gmn4"><a href="/control">상황관제</a></li>
+					<li class="gmn4"><a href="/control?siteId=${selViewSiteId }">상황관제</a></li>
 					<li class="gmn5"><a href="#">요금/수익</a>
 						<ul>
-							<li><a href="/kepcoBill">한전 요금 조회</a></li>
-							<li><a href="/essRevenue">ESS 수익 조회</a></li>
-							<li><a href="/drRevenue">DR 수익 조회</a></li>
-							<li><a href="/pvRevenue">PV 수익 조회</a></li>
+							<li><a href="/kepcoBill?siteId=${selViewSiteId }">한전 요금 조회</a></li>
+							<li><a href="/essRevenue?siteId=${selViewSiteId }">ESS 수익 조회</a></li>
+							<li><a href="/drRevenue?siteId=${selViewSiteId }">DR 수익 조회</a></li>
+							<li><a href="/pvRevenue?siteId=${selViewSiteId }">PV 수익 조회</a></li>
 						</ul>
 					</li>
 					</c:otherwise>
@@ -153,15 +153,15 @@ $(document).ready(function() {
 				<ol>
 					<c:if test="${userInfo.auth_type ne '5'}">
 					<c:if test="${userInfo.auth_type eq '1' or userInfo.auth_type eq '2'}">
-					<li class="gmn6"><a href="/main">군관리 메인</a></li>
+					<li class="gmn6"><a href="/main?siteId=${selViewSiteId }">군관리 메인</a></li>
 					</c:if>
-					<li class="gmn7"><a href="/cmpyGrpSiteMng">설정</a>
+					<li class="gmn7"><a href="/cmpyGrpSiteMng?siteId=${selViewSiteId }">설정</a>
 						<ul>
-							<li><a href="/kepcoMngSet">한전관리설정</a></li>
+							<li><a href="/kepcoMngSet?siteId=${selViewSiteId }">한전관리설정</a></li>
 							<c:if test="${userInfo.auth_type ne '4'}">
-							<li><a href="/cmpyGrpSiteMng">그룹/사이트 관리</a></li>
+							<li><a href="/cmpyGrpSiteMng?siteId=${selViewSiteId }">그룹/사이트 관리</a></li>
 							</c:if>
-							<li><a href="/userMng">사용자관리</a></li>
+							<li><a href="/userMng?siteId=${selViewSiteId }">사용자관리</a></li>
 						</ul>
 					</li>
 					</c:if>
