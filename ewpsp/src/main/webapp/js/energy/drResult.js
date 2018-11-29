@@ -17,18 +17,33 @@
 				changeSelTerm('drday');
 				$("#selPeriod").empty().append("5분").append( $('<span class="caret" />') );
 				$("#selPeriodVal").val('5min');
-				realTimeRefreshFn();
+				
+				$('.loading').show();
 				$(".real_time").find('span').empty().show();
 				nextRefreshTimeSet();
-				searchDisableChange(true);
-				myChart.yAxis[0].setTitle({ text: "(kW)" });
+				setTimeout(function() {
+					realTimeRefreshFn();
+					searchDisableChange(true);
+					myChart.yAxis[0].setTitle({ text: "(kW)" });
+				}, 1000);
+				setTimeout(function() {
+					$('.loading').hide();
+				}, 1000);
 				
 				if(realTimeRefresh == null) { // 1분 간격
 					realTimeRefresh = setInterval(function(){
+						$('.loading').show();
 						clearInterval(nextDrRefreshTime);
 						nextDrRefreshTime = null;
 						nextRefreshTimeSet();
-						realTimeRefreshFn();
+						setTimeout(function() {
+							realTimeRefreshFn();
+						}, 1000);
+						var today = new Date();
+						update_updtDataTime(today, "updtTime"); // 검색시간(차트 새로고침시간) 업데이트
+						setTimeout(function() {
+							$('.loading').hide();
+						}, 1000);
 					},1000*60*5); // 1000 = 1초, 5000 = 5초
 				} else {
 					alert("이미 실시간 자동갱신이 실행중입니다.");
@@ -194,7 +209,7 @@
 		$.ajax({
 			url : "/searchDRApi",
 			type : 'post',
-			async : true, // 동기로 처리해줌
+			async : false, // 동기로 처리해줌
 			data : formData,
 			success: function(result) {
 				var today = new Date();
@@ -288,30 +303,30 @@
 						
 						if(i == 0) {
 							dataSet2_1.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
-							dataSet3_1.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - reduceAmt ]);
+							dataSet3_1.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - (reduceAmt/4) ]);
 							dataSet2_1.push([ setChartDateUTC(next), cbl ]);
-							dataSet3_1.push([ setChartDateUTC(next), cbl - reduceAmt ]);
-							totalGoalPower = cbl - reduceAmt;
+							dataSet3_1.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
+							totalGoalPower = cbl - (reduceAmt/4);
 						} else if(i == 1) {
 							if(i+1 != dbCblList.length) {
 								dataSet2_2.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
-								dataSet3_2.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - reduceAmt ]);
+								dataSet3_2.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - (reduceAmt/4) ]);
 								dataSet2_2.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_2.push([ setChartDateUTC(next), cbl - reduceAmt ]);
+								dataSet3_2.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
 							}
 						} else if(i == 2) {
 							if(i+1 != dbCblList.length) {
 								dataSet2_3.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
-								dataSet3_3.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - reduceAmt ]);
+								dataSet3_3.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - (reduceAmt/4) ]);
 								dataSet2_3.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_3.push([ setChartDateUTC(next), cbl - reduceAmt ]);
+								dataSet3_3.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
 							}
 						} else if(i == 3) {
 							if(i+1 != dbCblList.length) {
 								dataSet2_4.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
-								dataSet3_4.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - reduceAmt ]);
+								dataSet3_4.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - (reduceAmt/4) ]);
 								dataSet2_4.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_4.push([ setChartDateUTC(next), cbl - reduceAmt ]);
+								dataSet3_4.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
 							}
 						}
 					}
@@ -335,7 +350,8 @@
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)		
 		unit_format(String(totalUsage), "pastUseTot", "mWh");
-		unit_format(String(totalGoalPower), "totalGoalPower", "mWh");
+//		unit_format(String(totalGoalPower), "totalGoalPower", "kWh");
+		$("#"+"totalGoalPower").empty().append( $("<span/>").append( numberComma( totalGoalPower ) ) ).append("kWh");
 	}
 	
 	// 검색결과 표 데이터
@@ -564,30 +580,30 @@
 						
 						if(i == 0) {
 							dataSet2_1.push([ setChartDateUTC(cblList[i].start), cbl ]);
-							dataSet3_1.push([ setChartDateUTC(cblList[i].start), cbl - reduceAmt ]);
+							dataSet3_1.push([ setChartDateUTC(cblList[i].start), cbl - (reduceAmt/4) ]);
 							dataSet2_1.push([ setChartDateUTC(next), cbl ]);
-							dataSet3_1.push([ setChartDateUTC(next), cbl - reduceAmt ]);
-							totalGoalPower = cbl - reduceAmt;
+							dataSet3_1.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
+							totalGoalPower = cbl - (reduceAmt/4);
 						} else if(i == 1) {
 							if(i+1 != cblList.length) {
 								dataSet2_2.push([ setChartDateUTC(cblList[i].start), cbl ]);
-								dataSet3_2.push([ setChartDateUTC(cblList[i].start), cbl - reduceAmt ]);
+								dataSet3_2.push([ setChartDateUTC(cblList[i].start), cbl - (reduceAmt/4) ]);
 								dataSet2_2.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_2.push([ setChartDateUTC(next), cbl - reduceAmt ]);
+								dataSet3_2.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
 							}
 						} else if(i == 2) {
 							if(i+1 != cblList.length) {
 								dataSet2_3.push([ setChartDateUTC(cblList[i].start), cbl ]);
-								dataSet3_3.push([ setChartDateUTC(cblList[i].start), cbl - reduceAmt ]);
+								dataSet3_3.push([ setChartDateUTC(cblList[i].start), cbl - (reduceAmt/4) ]);
 								dataSet2_3.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_3.push([ setChartDateUTC(next), cbl - reduceAmt ]);
+								dataSet3_3.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
 							}
 						} else if(i == 3) {
 							if(i+1 != cblList.length) {
 								dataSet2_4.push([ setChartDateUTC(cblList[i].start), cbl ]);
-								dataSet3_4.push([ setChartDateUTC(cblList[i].start), cbl - reduceAmt ]);
+								dataSet3_4.push([ setChartDateUTC(cblList[i].start), cbl - (reduceAmt/4) ]);
 								dataSet2_4.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_4.push([ setChartDateUTC(next), cbl - reduceAmt ]);
+								dataSet3_4.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
 							}
 						}
 					}
@@ -610,7 +626,8 @@
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)		
 		unit_format(String(totalUsage), "pastUseTot", "mWh");
-		unit_format(String(totalGoalPower), "totalGoalPower", "mWh");
+//		unit_format(String(totalGoalPower), "totalGoalPower", "kWh");
+		$("#"+"totalGoalPower").empty().append( $("<span/>").append( numberComma( totalGoalPower ) ) ).append("kWh");
 	}
 	
 	// 실시간 갱신 표 데이터

@@ -32,7 +32,7 @@
 								</li>
 								<li class="ct2">
 									<div class="ctit ct2"><span>목표 사용량</span></div>
-									<div class="cval" id="totalGoalPower"><span>30,100</span>kWh</div>
+									<div class="cval" id="totalGoalPower"><span>0</span>kWh</div>
 								</li>
 								<li>
 									<div class="ctit"><span>감축량</span></div>
