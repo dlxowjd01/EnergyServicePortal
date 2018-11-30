@@ -86,7 +86,7 @@ public class DeviceMonitoringController {
 		ApiController api = new ApiController();
 		UsageRealtimeModel usageRealtime = api.getDeviceRealTime((String) param.get("deviceId"));
 		Long voltage = (usageRealtime == null) ? null : usageRealtime.getVoltage();
-		if(voltage < 0) voltage = null;
+		if(voltage < 0 || voltage > 1000000000) voltage = null;
 		result.put("voltage", voltage);
 		result.put("activePower", (usageRealtime == null) ? null : usageRealtime.getActivePower());
 		result.put("energy", (usageRealtime == null) ? null : usageRealtime.getPositiveEnergy()+usageRealtime.getNegativeEnergy());
