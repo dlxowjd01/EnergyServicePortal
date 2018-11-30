@@ -48,6 +48,14 @@
 	$(document).ready(function() {
 	
 		setTimeZoneInCookie();
+		getUserInfo(setSession);
+		var authType = sessionUser.auth_type;
+		if(authType == '1') {
+			sessionRefresh();
+			setInterval(function(){
+				sessionRefresh();
+			},1000*60*50); // 1000 = 1초, 1000*60 = 1분
+		}
 		$('.loading').hide();
 	});
 	
@@ -55,6 +63,32 @@
         var _myDate = new Date();
         var _offset = _myDate.getTimezoneOffset();
         document.cookie = "TIMEZONE_COOKIE=" + _offset; //Cookie name with value
+    }
+    
+    function sessionRefresh() {
+    	$.ajax({
+    		url : "/openapi/loginUser",
+    		type : 'post',
+    		async : true,
+    		data : {
+    			userId : sessionUser.user_id,
+    			userPw : sessionUser.user_pw
+    		},
+    		success: function(result) {
+    			if(result == -1) {
+    				alert("세션 새로고침에 실패하였습니다.");
+    			}
+    			
+    		},
+    		error:function(request,status,error){
+//     			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+    		}
+    	});
+    }
+
+    var sessionUser = null;
+    function setSession(result) {
+    	sessionUser = result;
     }
     
 
