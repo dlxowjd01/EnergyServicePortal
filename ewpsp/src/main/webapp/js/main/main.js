@@ -1,18 +1,25 @@
 var formData = null;
 
 function fn_cycle() {
+	$('.loading').show();
 	formData = getSiteMainSchCollection();
 
-	getGMainAlarmList(formData); // 알람 조회
-	getGMainSiteRankingTotalDetail(); // 사이트 사용량 순위 누적/예상 총합
-	getGMainSiteRankingList(1); // 사이트 사용량 순위 목록 조회
-	getGMainSiteTotalDetail(formData); // 사이트 사용량 총합계 조회
-	getGMainSiteList(1); // 사이트 목록 조회
+	setTimeout(function() {
+		getGMainAlarmList(formData); // 알람 조회
+		getGMainSiteRankingTotalDetail(); // 사이트 사용량 순위 누적/예상 총합
+		getGMainSiteRankingList(1); // 사이트 사용량 순위 목록 조회
+		getGMainSiteTotalDetail(formData); // 사이트 사용량 총합계 조회
+		getGMainSiteList(1); // 사이트 목록 조회
 
-	// 콤보박스 변경 (지역별 상태일 경우만 상세정보 타이틀(지역명)을 가져온다)
-	if ($('#mapGroup').val() == 'map') {
-		$('#selAllArea').text($('.local_name:eq(1)').text());
-	}
+		// 콤보박스 변경 (지역별 상태일 경우만 상세정보 타이틀(지역명)을 가져온다)
+		if ($('#mapGroup').val() == 'map') {
+			$('#selAllArea').text($('.local_name:eq(1)').text());
+		}
+	}, 1000);
+	
+	setTimeout(function() {
+		$('.loading').hide();
+	}, 1000);
 }
 
 function getSiteMainSchCollection() {
