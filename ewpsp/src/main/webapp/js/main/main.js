@@ -1,7 +1,11 @@
 var formData = null;
-
+var recycleYn = true;
 function fn_cycle() {
-	$('.loading').show();
+	if(recycleYn){
+		
+		$('.loading').show();
+		
+	}
 	formData = getSiteMainSchCollection();
 
 	setTimeout(function() {
@@ -17,9 +21,14 @@ function fn_cycle() {
 		}
 	}, 1000);
 	
-	setTimeout(function() {
-		$('.loading').hide();
-	}, 1000);
+	if(recycleYn){
+
+		setTimeout(function() {
+			$('.loading').hide();
+		}, 1000);
+		
+	}
+	recycleYn = false;
 }
 
 function getSiteMainSchCollection() {
@@ -343,6 +352,7 @@ function changeRanking(tabIdx) {
 }
 
 function changeTerm(term) {
+	recycleYn = true;
 	$('#selTerm').val(term);
 	fn_cycle();
 }
@@ -381,6 +391,8 @@ function changeMapGroup(aElmt) {
 		clearTimeout(monitoring_cycle_5sec);
 		monitoring_cycle_5sec = null;
 	}
+	recycleYn = true;
+	
 	fn_cycle();
 }
 
@@ -408,6 +420,8 @@ function changeGroup(aElmt, grpIdx) {
 	} else {
 		$('#grpIdx').val(grpIdx);
 	}
+	recycleYn = true;
+	
 	fn_cycle();
 }
 
