@@ -175,26 +175,19 @@
 		var endDay = new Date();
 		var startTime;
 		var endTime;
-////		if(SelTerm == 'drday') { // 에너지모니터링 dr실적조회의 오늘날짜
-////			startTime = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), 0, 0, 0);
-////			endTime = new Date(endDay.getFullYear(), endDay.getMonth(), endDay.getDate(), 23, 59, 59);
-////		} else if(SelTerm == 'selectDay') { // 에너지모니터링 dr실적조회의 날짜검색
-////			startTime = new Date( $dtpk5.val()+" 00:00:00" );
-////			endTime = new Date( $dtpk5.val()+" 23:59:59" );
-////			$("#dtCnt").val(  dateDiff($dtpk5.val()+" 00:00:00", $dtpk5.val()+" 23:59:59")+1  );
-////		}
-//		startTime = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), 0, 0, 0);
-//		endTime = new Date();
-//		schStartTime = new Date(startTime.getTime());
-//		schEndTime = new Date(endTime.getTime());
-//		
-//		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
-//		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
-//		
-//		queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
-//		queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
-//		$("#selTermFrom").val(queryStart);
-//		$("#selTermTo").val(queryEnd);
+		
+		startTime = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), 0, 0, 0);
+		endTime = new Date();
+		schStartTime = new Date(startTime.getTime());
+		schEndTime = new Date(endTime.getTime());
+		
+		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
+		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
+		
+		queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
+		queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
+		$("#selTermFrom").val(queryStart);
+		$("#selTermTo").val(queryEnd);
 		
 		cblSet();
 		cblTimeSetiing();
