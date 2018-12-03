@@ -369,6 +369,43 @@ function getPdfDownload(){
 	});	
 }
 
+function getPdfTotDownload(){
+	html2canvas(document.getElementById("layerboxTot"), {
+		onrendered: function(canvas) {         
+			var imgData = canvas.toDataURL('image/png');
+			var imgWidth = 210; // A4용지 기준 이미지 width길이
+			var imgHeight = canvas.height * imgWidth / canvas.width; //화면내용 이미지화 했을때 이미지파일의 height
+			var pageHeight = imgWidth * 1.414;  // A4용지 세로 길이
+			var heightLeft = imgHeight;
+
+			/**
+			 * Creates new jsPDF document object instance.
+			 * @param orientation One of "portrait" or "landscape" (or shortcuts "p" (Default), "l")
+			 * @param unit        Measurement unit to be used when coordinates are specified.
+			 *                    One of "pt" (points), "mm" (Default), "cm", "in"
+			 * @param format      One of 'pageFormats' as shown below, default: a4
+			 * @name jsPDF
+			 */			
+			var doc = new jsPDF('p', 'mm', 'a4');
+			var position = 0;
+
+			//function(imageData, format, x, y, w, h[, alias[, compression[, rotation]]])
+			doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight); //화면의 이미지 파일 추가
+			heightLeft -= pageHeight;
+
+			//화면이 길어 1장 이상일때
+			while (heightLeft >= 20) {
+				position = heightLeft - imgHeight;
+				doc.addPage();
+				doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+				heightLeft -= pageHeight;
+			}
+			
+			doc.save('download.pdf');
+		}
+	});	
+}
+
 var winterVal = 0;
 var summerVal = 0;
 var springFallVal = 0;

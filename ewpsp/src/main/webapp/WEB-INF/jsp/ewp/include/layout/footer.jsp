@@ -91,19 +91,32 @@
 
 
     <!-- ###### 통합 명세서 Popup Start ###### -->
-<!--     <script type="text/javascript">
+    <script type="text/javascript">
         $(function(){
-            $("#btnPrint").printPreview({
-                obj2print:'#layerbox',
-                width:'880',
-                style:'<style>body {background:none !important;} #layerbox {top:0 !important;left:0 !important; margin:0 !important; border-radius:0;} .totaldprint .lbutton {display:none !important;} #layerbox .ltit, #layerbox .stit {display:none !important;} .totaldprint .lbody {margin-top:0 !important;}</style>'
+        	
+        	$(".lbtn_pdf").on('click',function(){
+            	$(".lbutton").hide();
+            	setTimeout(function () {
+            		$(".lbutton").show();
+            	},1000);
+            });
+            
+            $('#btnPrintTot').on('click', function(){
+            	$('#layerboxTot').css("left", "0px");
+                $('#layerboxTot').css("top", "-200px");
+                $(".lbutton").hide();
+            	$('#layerboxTot').printThis({
+	        	});
+            	setTimeout(function () {
+            		$(".lbutton").show();
+            	},1000);
             });
         });
     </script>
-    <div id="layerbox" class="totaldprint clear" style="margin:250px 0 50px;width:880px;">
+    <div id="layerboxTot" class="totaldprint clear" style="margin:250px 0 50px;width:880px;">
     	<div class="lbutton fl">
-			<a href="#;" class="lbtn_pdf"><span>PDF로 저장</span></a>
-			<a href="#;" id="btnPrint" class="lbtn_print"><span>인쇄</span></a>
+			<a href="javascript:getPdfTotDownload()" class="lbtn_pdf"><span>PDF로 저장</span></a>
+			<a href="#;" id="btnPrintTot" class="btnPrintTot"><span>인쇄</span></a>
 		</div>  
         <div class="ltit fr">
 			<a href="javascript:popupClose('totaldprint');" class="lclose">닫기</a>
@@ -364,7 +377,7 @@
 			</div>
 
 		</div>
-    </div> -->
+    </div>
     <!-- ###### Popup End ###### -->
 
     <!-- 레이어 팝업 배경 -->

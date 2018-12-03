@@ -6,7 +6,6 @@
 <jsp:include page="../include/common_static.jsp" />
 <jsp:include page="../include/sub_static.jsp" />
 
-<script src="/js/printThis.js" type="text/javascript"></script>
 <script src="../js/billRevenue/kepcoBill.js" type="text/javascript"></script>
 </head>
 <body>
@@ -58,9 +57,9 @@
 							<div class="inchart">
 								<div id="chart2"></div>
 								<script language="JavaScript"> 
-								function commonPrint(){
-									$("#printArea").printThis();
-								}
+// 								function commonPrint(){
+// 									$("#printArea").printThis();
+// 								}
 // 								$(function () { 
 									var myChart = Highcharts.chart('chart2', {
 // 										data: {
@@ -282,6 +281,9 @@
             
             $(".lbtn_pdf").on('click',function(){
             	$(".lbutton").hide();
+            	setTimeout(function () {
+            		$(".lbutton").show();
+            	},1000);
             });
             
             $('.lbtn_print').on('click', function(){
@@ -290,6 +292,9 @@
                 $(".lbutton").hide();
             	$('#layerbox').printThis({
 	        	});
+            	setTimeout(function () {
+            		$(".lbutton").show();
+            	},1000);
             });
         });
     </script>

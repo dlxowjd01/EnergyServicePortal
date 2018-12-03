@@ -1415,6 +1415,32 @@ a.detail_view {
 	background:url('../img/layer_close.png') no-repeat 100%; width:40px; height:40px;
 }
 
+/* 레이어 팝업(종합) */
+#layerboxTot {
+	display:none; z-index:100; background:#f4f6f8; padding:40px; border-radius:17px; overflow:hidden;
+}
+
+/* 레이어 팝업 상단(종합) */
+#layerboxTot .ltit,
+#layerboxTot .stit {position:relative;}
+#layerboxTot .ltit h2 {position:relative; height:100px; padding:10px 0 0 110px; font-size:44px; color:#464d5d; font-weight:bold;}
+#layerboxTot .stit h2 {position:relative; padding:5px 0 0 0; font-size:24px; color:#464d5d; font-weight:bold;}
+#layerboxTot .ltit h2 span {
+	position:absolute; top:0; left:0;
+	display:inline-block; height:100px; width:100px; margin-right:5px; vertical-align:middle;
+	background:#464d5d; border-radius:200px;
+}
+
+#layerboxTot .ltit h2 p {
+	padding-top:20px; font-family:'Roboto', sans-serif; font-size:13px; color:#3d4250; opacity:0.6;
+	font-weight:normal;
+}
+#layerboxTot .ltit a,
+#layerboxTot .stit a {
+	display:inline-block; position:absolute; top:0; right:0; font-size:0; 
+	background:url('../img/layer_close.png') no-repeat 100%; width:40px; height:40px;
+}
+
 
 /* 상세보기 레이어 팝업 */
 .dview {max-width:1000px;}
@@ -1533,6 +1559,8 @@ a.detail_view {
 .totaldprint .lbutton a.lbtn_pdf span {background: url('../img/icon_data.png') no-repeat 0 center;}
 .totaldprint .lbutton a.lbtn_print {background:#438fd7;}
 .totaldprint .lbutton a.lbtn_print span {background:url('../img/icon_print.png') no-repeat 0 center;}
+.totaldprint .lbutton a.btnPrintTot {background:#438fd7;}
+.totaldprint .lbutton a.btnPrintTot span {background:url('../img/icon_print.png') no-repeat 0 center;}
 
 .totaldprint .ltit a.lclose {
 	top:-5px !important; width:20px !important; height:20px !important; overflow:hidden;

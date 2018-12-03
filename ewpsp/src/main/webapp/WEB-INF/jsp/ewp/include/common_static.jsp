@@ -29,7 +29,7 @@
     <script src="../js/sectionDisplay.js"></script> <!-- 텝메뉴 용 -->
     <!-- 인쇄 미리보기용 -->
     <script src="../js/printPreview.js"></script>
-    <!-- <script src="../js/printThis.js"></script> -->
+    <script src="/js/printThis.js"></script>
     <!-- <script src="../js/PrintArea.js"></script> -->    
 	<script src="../js/html2canvas.js"></script>
 	<!-- <script src="../js/html2canvas_new.js"></script> -->
