@@ -89,7 +89,7 @@
 							else {
 								var map = convertUnitFormat(kepcoUsage, "mWh", 8);
 								reKepcoUsage = toFixedNum(map.get("formatNum"), 2);
-								dt_str_totalVal = dt_str_totalVal+reKepcoUsage;
+								dt_str_totalVal = dt_str_totalVal+Number(map.get("formatNum"));
 							}
 							
 						} else reKepcoUsage = null;
@@ -100,7 +100,7 @@
 							else {
 								var map = convertUnitFormat(essUsage, "kWh", 1);
 								reEssUsage = toFixedNum(map.get("formatNum"), 2);
-								dt_str2_totalVal = dt_str2_totalVal+ reEssUsage;
+								dt_str2_totalVal = dt_str2_totalVal+ Number(map.get("formatNum"));
 							}
 						} else reEssUsage = null;
 						
@@ -110,7 +110,7 @@
 							else {
 								var map = convertUnitFormat(pvUsage, "kWh", 1);
 								rePvUsage = toFixedNum(map.get("formatNum"), 2);
-								dt_str3_totalVal = dt_str3_totalVal+ rePvUsage;
+								dt_str3_totalVal = dt_str3_totalVal+ Number(map.get("formatNum"));
 							}
 						} else rePvUsage = null;
 						
@@ -123,9 +123,9 @@
 				
 				if(dt_col_cnt == dt_col) {
 					var final_dt_str_head = "<th>"+convertDataTableHeaderDate(s, 1)+"</th>"+dt_str_head;
-					dt_str += "<td>"+dt_str_totalVal+"</td>";
-					dt_str2 += "<td>"+dt_str2_totalVal+"</td>";
-					dt_str3 += "<td>"+dt_str3_totalVal+"</td>";
+					dt_str += "<td>"+toFixedNum(dt_str_totalVal, 2)+"</td>";
+					dt_str2 += "<td>"+toFixedNum(dt_str2_totalVal, 2)+"</td>";
+					dt_str3 += "<td>"+toFixedNum(dt_str3_totalVal, 2)+"</td>";
 					usage_head_pc[dt_row_cnt-1] = final_dt_str_head;
 					real_data_pc[dt_row_cnt-1] = dt_str;
 					ess_data_pc[dt_row_cnt-1] = dt_str2;
@@ -147,9 +147,9 @@
 							dt_str3 += "<td></td>";
 						}
 						var final_dt_str_head = "<th>"+convertDataTableHeaderDate(s, 1)+"</th>"+dt_str_head;
-						dt_str += "<td>"+dt_str_totalVal+"</td>";
-						dt_str2 += "<td>"+dt_str2_totalVal+"</td>";
-						dt_str3 += "<td>"+dt_str3_totalVal+"</td>";
+						dt_str += "<td>"+toFixedNum(dt_str_totalVal, 2)+"</td>";
+						dt_str2 += "<td>"+toFixedNum(dt_str2_totalVal, 2)+"</td>";
+						dt_str3 += "<td>"+toFixedNum(dt_str3_totalVal, 2)+"</td>";
 						usage_head_pc[dt_row_cnt-1] = final_dt_str_head;
 						real_data_pc[dt_row_cnt-1] = dt_str;
 						ess_data_pc[dt_row_cnt-1] = dt_str2;
