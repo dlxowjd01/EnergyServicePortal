@@ -125,13 +125,13 @@
 
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
-					<td colspan="2" style="border:solid 1px #111;text-align:center;padding:15px;font-size:20px;font-weight:600;" id="texBill">
+					<td colspan="2" style="border:solid 1px #111;text-align:center;padding:15px;font-size:20px;font-weight:600;" id="texTotBill">
 						(종합)에너지절감 솔루션 제공 전기요금 절감 수익 배분 청구서 (’18년 5월)
 					</td>
 				</tr>
 				<tr>
 					<td height="30" align="left" style="font-size:12px;">고객명 : ${selViewSite.site_name }</td>
-					<td height="30" align="right" style="font-size:12px;" id="texDay">청구일 : 2018-07-20</td>
+					<td height="30" align="right" style="font-size:12px;" id="texTotDay">청구일 : 2018-07-20</td>
 				</tr>
 				<tr>
 					<td colspan="2" height="60" align="right" style="font-size:16px;font-weight:600;">
