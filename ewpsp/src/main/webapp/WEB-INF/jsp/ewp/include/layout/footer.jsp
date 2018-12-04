@@ -125,17 +125,17 @@
 
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
-					<td colspan="2" style="border:solid 1px #111;text-align:center;padding:15px;font-size:20px;font-weight:600;">
+					<td colspan="2" style="border:solid 1px #111;text-align:center;padding:15px;font-size:20px;font-weight:600;" id="texBill">
 						(종합)에너지절감 솔루션 제공 전기요금 절감 수익 배분 청구서 (’18년 5월)
 					</td>
 				</tr>
 				<tr>
-					<td height="30" align="left" style="font-size:12px;">고객명 : 고객Site_1</td>
-					<td height="30" align="right" style="font-size:12px;">청구일 : 2018-07-20</td>
+					<td height="30" align="left" style="font-size:12px;">고객명 : ${selViewSite.site_name }</td>
+					<td height="30" align="right" style="font-size:12px;" id="texDay">청구일 : 2018-07-20</td>
 				</tr>
 				<tr>
 					<td colspan="2" height="60" align="right" style="font-size:16px;font-weight:600;">
-						이번 달 청구 금액은 <strong style="color:#438fd7">37,938,260</strong>원 입니다
+						이번 달 청구 금액은 <strong style="color:#438fd7" class="total_tex">37,938,260</strong>원 입니다
 						<p style="padding-top:10px;font-size:12px;font-weight:normal;">(수익배분기간 : 2018-01-01 ~ 2018-12-31)</p>
 					</td>
 				</tr>
@@ -149,34 +149,34 @@
 							<col width="50%">
 							<col>
 						</colgroup>
-						<tbody>
+						<tbody id = "kepco">
 							<tr>
 								<th>기본요금</th>
-								<td align="right">10,000</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>전력량요금</th>
-								<td align="right">2,000,000</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>전기요금계</th>
-								<td align="right">2,010,000</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>부가가치세</th>
-								<td align="right">200,000</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>전력기금</th>
-								<td align="right">10,006</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>원단위절사</th>
-								<td align="right">-6</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>당월요금계</th>
-								<td align="right">2,220,000</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>미납요금</th>
@@ -187,10 +187,10 @@
 								<td align="right">&nbsp;</td>
 							</tr>
 						</tbody>
-						<tfoot>
+						<tfoot id = "kepcoFoot">
 							<tr>
 								<th>청구금액</th>
-								<td align="right">2,220,000</td>
+								<td align="right">0</td>
 							</tr>
 						</tfoot>
 					</table>
@@ -205,7 +205,7 @@
 								<th>수익배분</th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody id = "ESS">
 							<tr>
 								<th>①기본 요금 절감(피크저감)</th>
 								<td align="right">0</td>
@@ -213,41 +213,41 @@
 							</tr>
 							<tr>
 								<th>②전려량 요금 절감(계시별)</th>
-								<td align="right">3,188076</td>
-								<td align="right">2,869,268</td>
+								<td align="right">0</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>③ESS 충전 요금 할인</th>
-								<td align="right">2,227,088</td>
-								<td align="right">2,004,379</td>
+								<td align="right">0</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>④ESS 전용 요금 할인</th>
-								<td align="right">25,311,670</td>
-								<td align="right">22,798,503</td>
+								<td align="right">0</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>총   계</th>
-								<td align="right">30,746,834</td>
-								<td align="right">27,672,151</td>
+								<td align="right">0</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th colspan="2">수익배분 계</th>
-								<td align="right">27,672,151</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th colspan="2">부가가치세</th>
-								<td align="right">2,767,215</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th colspan="2">원단위절사</th>
-								<td align="right">-6</td>
+								<td align="right">0</td>
 							</tr>
 						</tbody>
-						<tfoot>
+						<tfoot id = "ESSFoot">
 							<tr>
 								<th colspan="2">청구금액</th>
-								<td align="right">30,439,360</td>
+								<td align="right">0</td>
 							</tr>
 						</tfoot>
 					</table>
@@ -267,40 +267,40 @@
 								<th>금액</th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody id = "DR">
 							<tr>
 								<th>용량 정산금</th>
-								<td align="right">900,000</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>감축 정산금</th>
-								<td align="right">100,000</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>총 정산금액</th>
-								<td align="right">1,000,000</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>고객 정산 금액</th>
-								<td align="right">800,000</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>①수익배분 계</th>
-								<td align="right">200,000</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>부가가치세</th>
-								<td align="right">20,006</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>원단위절사</th>
-								<td align="right">-6</td>
+								<td align="right">0</td>
 							</tr>
 						</tbody>
-						<tfoot>
+						<tfoot id = "DRFoot">
 							<tr>
 								<th>청구금액</th>
-								<td align="right">220,000</td>
+								<td align="right">0</td>
 							</tr>
 						</tfoot>
 					</table>
@@ -318,18 +318,18 @@
 								<th>금액</th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody id = "PV">
 							<tr>
 								<th>①REC 수익</th>
-								<td align="right">12,775,000</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>②SMP 수익</th>
-								<td align="right">10,220,000</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>③총 수익</th>
-								<td align="right">22,995,000</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>고객 정산 금액</th>
@@ -337,21 +337,21 @@
 							</tr>
 							<tr>
 								<th>④수익배분 계</th>
-								<td align="right">4,599,000</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>부가가치세</th>
-								<td align="right">459,906</td>
+								<td align="right">0</td>
 							</tr>
 							<tr>
 								<th>원단위절사</th>
-								<td align="right">-6</td>
+								<td align="right">0</td>
 							</tr>
 						</tbody>
-						<tfoot>
+						<tfoot id = "PVFoot">
 							<tr>
 								<th>청구금액</th>
-								<td align="right">5,058,900</td>
+								<td align="right">0</td>
 							</tr>
 						</tfoot>
 					</table>					
@@ -370,7 +370,7 @@
 								총 청구 금액<br/>
 								(전기요금 + 에너지 절감 수익 배분 + DR 수익 배분 + PV 발전 수익 배분)
 							</th>
-							<td align="right"><span style="font-weight:bold;">37,938,260</span></td>
+							<td align="right"><span style="font-weight:bold;" class="total_tex">0</span></td>
 						</tr>
 					</tbody>
 				</table>

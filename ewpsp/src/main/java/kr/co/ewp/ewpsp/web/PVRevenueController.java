@@ -90,4 +90,30 @@ public class PVRevenueController {
 		return resultMap;
 	}
 	
+	@RequestMapping("/getPVRevenueTex")
+	public @ResponseBody Map<String, Object> getPVRevenueTex(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
+		logger.debug("/getPVRevenueTex");
+		logger.debug("param ::::: "+param.toString());
+		param.put("selPeriodVal", "month");
+		
+		Map result = pvRevenueService.getPVRevenueList(param, request);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+//		resultMap.put("resultListMap", result);
+		resultMap.put("netGenValSheetList", ((Map) result.get("netGenValMap")).get("sheetList") );
+		resultMap.put("netGenValChartList", ((Map) result.get("netGenValMap")).get("chartList") );
+		resultMap.put("smpDealSheetList", ((Map) result.get("smpDealMap")).get("sheetList") );
+		resultMap.put("smpDealChartList", ((Map) result.get("smpDealMap")).get("chartList") );
+		resultMap.put("smpPriceSheetList", ((Map) result.get("smpPriceMap")).get("sheetList") );
+		resultMap.put("smpPriceChartList", ((Map) result.get("smpPriceMap")).get("chartList") );
+		resultMap.put("recDealSheetList", ((Map) result.get("recDealMap")).get("sheetList") );
+		resultMap.put("recDealChartList", ((Map) result.get("recDealMap")).get("chartList") );
+		resultMap.put("recPriceSheetList", ((Map) result.get("recPriceMap")).get("sheetList") );
+		resultMap.put("recPriceChartList", ((Map) result.get("recPriceMap")).get("chartList") );
+		resultMap.put("totPriceSheetList", ((Map) result.get("totPriceMap")).get("sheetList") );
+		resultMap.put("totPriceChartList", ((Map) result.get("totPriceMap")).get("chartList") );
+		System.out.println("PV : "+resultMap);
+		return resultMap;
+	}
+	
 }

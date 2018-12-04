@@ -432,6 +432,55 @@ function getKepcoBillList(formData) {
 	});
 }
 
+// 통합 한전 명세서 조회
+function getKepcoTexBill(formData) {
+	$.ajax({
+		url : "/getKepcoTexBill",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_getKepcoTexBill(result);
+		}
+	});
+}
+// 통합 ESS수익 명세서 조회
+function getESSRevenueTex(formData) {
+	$.ajax({
+		url : "/getESSRevenueTex",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_getESSRevenueTex(result);
+		}
+	});
+}
+//통합 DR 명세서 조회
+function getDRRevenueTex(formData) {
+	$.ajax({
+		url : "/getDRRevenueTex",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_getDRRevenueTex(result);
+		}
+	});
+}
+//통합 PV 명세서 조회
+function getPVRevenueTex(formData) {
+	$.ajax({
+		url : "/getPVRevenueTex",
+		type : 'post',
+		async : false, // 동기로 처리해줌
+		data : formData,
+		success: function(result) {
+			callback_getPVRevenueTex(result);
+		}
+	});
+}
+
 //한전 명세서 조회
 function getKepcoTexBillList(formData) {
 	$.ajax({
