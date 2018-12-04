@@ -569,7 +569,7 @@
 						dt = new Date(dt.setMinutes(dt.getMinutes() + 1));
 					}
 				}
-				var map = convertUnitFormat(totalUsage, "mWh", 8);
+				var map = convertUnitFormat((totalUsage*4), "mWh", 8);
 				var formatNum = map.get("formatNum");
 				var unit = map.get("unit");
 				
