@@ -70,7 +70,7 @@ $(document).ready(function() {
 			</ul>
 			<ol>
 				<c:if test="${userInfo.auth_type ne '5'}">
-				<c:if test="${userInfo.auth_type eq '1' or userInfo.auth_type eq '2'}">
+				<c:if test="${userInfo.auth_type eq '1' or userInfo.auth_type eq '2' or userInfo.auth_type eq '3'}">
 				<!-- <li class="smn6"><a href="/main">군관리<br/>메인</a></li> -->
 				<li class="smn6"><a href="/main">군관리<br/>메인</a></li>
 				</c:if>
@@ -152,7 +152,7 @@ $(document).ready(function() {
 				</ul>
 				<ol>
 					<c:if test="${userInfo.auth_type ne '5'}">
-					<c:if test="${userInfo.auth_type eq '1' or userInfo.auth_type eq '2'}">
+					<c:if test="${userInfo.auth_type eq '1' or userInfo.auth_type eq '2' or userInfo.auth_type eq '3'}">
 					<li class="gmn6"><a href="/main?siteId=${selViewSiteId }">군관리 메인</a></li>
 					</c:if>
 					<li class="gmn7"><a href="/cmpyGrpSiteMng?siteId=${selViewSiteId }">설정</a>
