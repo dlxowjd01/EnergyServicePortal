@@ -47,7 +47,6 @@
 		
 		var totTex = totKepco+totESS+totDR+totPV;
 		
-		alert(totTex);
 		$("#texBill").text("(종합)에너지절감 솔루션 제공 전기요금 절감 수익 배분 청구서 (’"+$("#selTermTex").val().substring(2,4)+"년"+$("#selTermTex").val().substring(4,6)+"월)");
 		$("#texDay").text("청구일 : "+$("#selTermTex").val().substring(0,4)+"-"+$("#selTermTex").val().substring(4,6)+"-"+"20");
 		$(".total_tex").text(numberComma(totTex));
