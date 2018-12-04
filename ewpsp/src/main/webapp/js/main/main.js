@@ -347,6 +347,12 @@ function changeRanking(tabIdx) {
 
 	$('#rankType').val(tabIdx + 4);
 
+	var txt = "";
+	if(tabIdx == 0) txt = "사용량 순위";
+	else if(tabIdx == 1) txt = "충방전 순위";
+	else if(tabIdx == 2) txt = "발전량 순위";
+	else if(tabIdx == 3) txt = "수익 순위";
+	$("#tabText").empty().text(txt);
 	getGMainSiteRankingTotalDetail(); // 사이트 사용량 순위 누적/예상 총합
 	getGMainSiteRankingList(1); // 사이트 사용량 순위 목록 조회
 }

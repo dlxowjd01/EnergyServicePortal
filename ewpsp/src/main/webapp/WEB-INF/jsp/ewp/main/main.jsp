@@ -88,7 +88,7 @@
 										<!-- 사용 -->
 										<div>
 											<div class="gchart_top clear">
-												<h2>사용량 순위</h2>
+												<h2 id="tabText">사용량 순위</h2>
 												<ul>
 													<li id="rankTime"><!-- AM 10:00 기준 --></li>
 													<li id="rankTotal"><!-- <span class="bul1">누적 - 0.00 kWh</span> --></li>
