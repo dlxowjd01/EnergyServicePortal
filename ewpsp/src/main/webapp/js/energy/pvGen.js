@@ -60,7 +60,7 @@
 							reUsage = null;
 						} else {
 							var map = convertUnitFormat(usage, "kWh", 1);
-							reUsage = Math.round( Number(map.get("formatNum")) );
+							reUsage = toFixedNum(map.get("formatNum"), 2);
 							dt_str_totalVal = dt_str_totalVal+reUsage;
 						}
 						
@@ -115,7 +115,7 @@
 					reUsage = null;
 				} else {
 					var map = convertUnitFormat(usage, "kWh", 1);
-					reUsage = Math.round( Number(map.get("formatNum")) );
+					reUsage = toFixedNum(map.get("formatNum"), 2);
 					totalUsage = totalUsage+Number(usage);
 				}
 				
@@ -170,7 +170,7 @@
 							reUsage = null;
 						} else {
 							var map = convertUnitFormat(usage, "kWh", 1);
-							reUsage = Math.round( Number(map.get("formatNum")) );
+							reUsage = toFixedNum(map.get("formatNum"), 2);
 							dt_str_totalVal = dt_str_totalVal+reUsage;
 						}
 						
@@ -220,7 +220,7 @@
 					reUsage = null;
 				} else {
 					var map = convertUnitFormat(usage, "kWh", 1);
-					reUsage = Math.round( Number(map.get("formatNum")) );
+					reUsage = toFixedNum(map.get("formatNum"), 2);
 					totalUsage = totalUsage+Number(usage);
 				}
 				// 차트데이터 셋팅

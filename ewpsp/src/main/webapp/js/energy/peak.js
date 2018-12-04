@@ -80,8 +80,9 @@
 						if(peakVal == null || peakVal == "" || peakVal == "null") {
 							rePeakVal = null;
 						} else {
-							if(peakVal.indexOf(".")>-1) rePeakVal = Math.round( Number(peakVal) );
-							else rePeakVal = Number(peakVal);
+//							if(peakVal.indexOf(".")>-1) rePeakVal = Math.round( Number(peakVal) );
+//							else rePeakVal = Number(peakVal);
+							rePeakVal = toFixedNum(peakVal, 2);
 							
 							if(maxPeakVal < rePeakVal) {
 								maxPeakVal = rePeakVal; // 최대 피크전력 구하기
@@ -103,7 +104,7 @@
 				
 				if(dt_col_cnt == dt_col) {
 					var final_dt_str_head = "<th>"+convertDataTableHeaderDate(s, 1)+"</th>"+dt_str_head;
-					dt_str += "<td>"+dt_str_totalVal+"</td>";
+					dt_str += "<td>"+toFixedNum(dt_str_totalVal, 2)+"</td>";
 					dt_str2 += "<td>"+dt_str2_totalVal+"</td>";
 					dt_str3 += "<td>"+dt_str3_totalVal+"</td>";
 					peak_head_pc[dt_row_cnt-1] = final_dt_str_head;
@@ -165,8 +166,9 @@
 				if(peakVal == null || peakVal == "" || peakVal == "null") {
 					rePeakVal = null;
 				} else {
-					if(peakVal.indexOf(".")>-1) rePeakVal = Math.round( Number(peakVal) );
-					else rePeakVal = Number(peakVal);
+//					if(peakVal.indexOf(".")>-1) rePeakVal = Math.round( Number(peakVal) );
+//					else rePeakVal = Number(peakVal);
+					rePeakVal = toFixedNum(peakVal, 2);
 					
 					if(maxPeakVal < rePeakVal) {
 						maxPeakVal = rePeakVal; // 최대 피크전력 구하기

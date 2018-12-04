@@ -348,7 +348,7 @@ public class DataPeriodCalculate {
 		int nullCnt = 0;
 		int chkCnt = 1;
 		Timestamp stdTimestamp = null;
-		long calculNum = 0;
+		double calculNum = 0;
 		Timestamp incStartDt = selTermFrom;
 		Timestamp endListDt = null;
 		int peakLoopCnt = 0;
@@ -453,15 +453,17 @@ public class DataPeriodCalculate {
 			
 			
 			
-			long peak = 0;
+			double peak = 0;
 			if(map.get(calculValStr) != null) {
 //				자료형 확인 : (map.get(calculValStr)).getClass().getName()
 				if(map.get(calculValStr) instanceof Double) {
-					peak = Math.round( (Double) map.get(calculValStr) );
+//					peak = Math.round( (Double) map.get(calculValStr) );
+					peak = (Double) map.get(calculValStr);
 				} else if(map.get(calculValStr) instanceof Float) {
-					peak = Math.round( (Float) map.get(calculValStr) );
+//					peak = Math.round( (Float) map.get(calculValStr) );
+					peak = ( (Float) map.get(calculValStr) ).doubleValue();
 				} else {
-					peak = Long.parseLong(String.valueOf(map.get(calculValStr)));
+					peak = Double.parseDouble(String.valueOf(map.get(calculValStr)));
 				}
 			}
 			

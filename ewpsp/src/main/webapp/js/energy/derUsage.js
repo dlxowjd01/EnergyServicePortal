@@ -88,7 +88,7 @@
 							if(kepcoUsage == null || kepcoUsage == "" || kepcoUsage == "null") reKepcoUsage = null;
 							else {
 								var map = convertUnitFormat(kepcoUsage, "mWh", 8);
-								reKepcoUsage = Math.round( Number(map.get("formatNum")) );
+								reKepcoUsage = toFixedNum(map.get("formatNum"), 2);
 								dt_str_totalVal = dt_str_totalVal+reKepcoUsage;
 							}
 							
@@ -99,7 +99,7 @@
 							if(essUsage == null || essUsage == "" || essUsage == "null") reEssUsage = null;
 							else {
 								var map = convertUnitFormat(essUsage, "kWh", 1);
-								reEssUsage = Math.round( Number(map.get("formatNum")) );
+								reEssUsage = toFixedNum(map.get("formatNum"), 2);
 								dt_str2_totalVal = dt_str2_totalVal+ reEssUsage;
 							}
 						} else reEssUsage = null;
@@ -109,7 +109,7 @@
 							if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
 							else {
 								var map = convertUnitFormat(pvUsage, "kWh", 1);
-								rePvUsage = Math.round( Number(map.get("formatNum")) );
+								rePvUsage = toFixedNum(map.get("formatNum"), 2);
 								dt_str3_totalVal = dt_str3_totalVal+ rePvUsage;
 							}
 						} else rePvUsage = null;
@@ -190,7 +190,7 @@
 					if(kepcoUsage == null || kepcoUsage == "" || kepcoUsage == "null") reKepcoUsage = null;
 					else {
 						var map = convertUnitFormat(kepcoUsage, "mWh", 8);
-						reKepcoUsage = Math.round( Number(map.get("formatNum")) );
+						reKepcoUsage = toFixedNum(map.get("formatNum"), 2);
 						totalDataSet = totalDataSet+Number(kepcoUsage);
 					}
 					
@@ -201,7 +201,7 @@
 					if(essUsage == null || essUsage == "" || essUsage == "null") reEssUsage = null;
 					else {
 						var map = convertUnitFormat(essUsage, "kWh", 1);
-						reEssUsage = Math.round( Number(map.get("formatNum")) );
+						reEssUsage = toFixedNum(map.get("formatNum"), 2);
 						totalDataSet2 = totalDataSet2+Number(essUsage);
 					}
 				} else reEssUsage = null;
@@ -211,7 +211,7 @@
 					if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
 					else {
 						var map = convertUnitFormat(pvUsage, "kWh", 1);
-						rePvUsage = Math.round( Number(map.get("formatNum")) );
+						rePvUsage = toFixedNum(map.get("formatNum"), 2);
 						totalDataSet3 = totalDataSet3+Number(pvUsage);
 					}
 				} else rePvUsage = null;

@@ -171,7 +171,7 @@ function checkNumLen(num) {
 // 소수점 fix자리 반올림
 function toFixedNum(num, fix) {
 	var no = Number(num);
-	return no.toFixed(fix);
+	return Number(no.toFixed(fix));
 }
 
 // 전체값에서 일부값은 몇퍼센트?
