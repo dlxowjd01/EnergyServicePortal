@@ -225,6 +225,9 @@
 
 												/* 옵션 */
 												plotOptions: {
+													area: {
+											            stacking: 'normal',
+													},
 											        series: {
 											            label: {
 											                connectorAllowed: false
@@ -995,7 +998,7 @@
 
 
 <jsp:include page="../include/popup/deviceDetailPopup.jsp" />
-<%-- <jsp:include page="../include/popup/serviceInfo.jsp" /> --%>
+<jsp:include page="../include/popup/serviceInfo.jsp" />
 
 
 
