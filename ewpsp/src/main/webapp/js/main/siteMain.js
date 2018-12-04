@@ -495,19 +495,19 @@
 				essUsageList = dataSet2;
 				pvUsageList = dataSet3;
 				
-//				if(kepcoUsageChartList.length > 0) {
+				if( kepcoUsageChartList !=null && kepcoUsageChartList.length > 0) {
 					derChart.addSeries({
 						index:3,
-						fillOpacity: 1,
+						fillOpacity: 0,
 						name: '한전 사용량',
-						color: '#3d4250',
+						color: '#438fd7',
 						lineColor: '#438fd7', /* 한전 사용량 */
 						data: pastUsageList
 					}, false);
 					
-//				}
+				}
 				
-//				if(essUsageListChartList.length > 0) {
+				if( essUsageListChartList != null && essUsageListChartList.length > 0) {
 					derChart.addSeries({
 						index: 2,
 						fillOpacity: 0.5,
@@ -516,9 +516,9 @@
 						data: essUsageList
 					}, false);
 					
-//				}
+				}
 				
-//				if(pvUsageListChartList.length > 0) {
+				if( pvUsageListChartList !=null && pvUsageListChartList.length > 0) {
 					derChart.addSeries({
 						index: 1,
 						fillOpacity: 0.5,
@@ -527,7 +527,7 @@
 						data: pvUsageList
 					}, false);
 					
-//				}
+				}
 				
 //			}
 			
@@ -569,7 +569,7 @@
 						dt = new Date(dt.setMinutes(dt.getMinutes() + 1));
 					}
 				}
-				var map = convertUnitFormat(totalUsage, "mWh", 8);
+				var map = convertUnitFormat((totalUsage*4), "mWh", 8);
 				var formatNum = map.get("formatNum");
 				var unit = map.get("unit");
 				
