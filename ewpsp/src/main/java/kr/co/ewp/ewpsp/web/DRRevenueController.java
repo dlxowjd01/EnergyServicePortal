@@ -71,7 +71,6 @@ public class DRRevenueController {
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("sheetList", list.get("result"));
-		System.out.println("DR :"+resultMap);
 		return resultMap;
 	}
 	

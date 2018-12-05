@@ -112,7 +112,6 @@ public class PVRevenueController {
 		resultMap.put("recPriceChartList", ((Map) result.get("recPriceMap")).get("chartList") );
 		resultMap.put("totPriceSheetList", ((Map) result.get("totPriceMap")).get("sheetList") );
 		resultMap.put("totPriceChartList", ((Map) result.get("totPriceMap")).get("chartList") );
-		System.out.println("PV : "+resultMap);
 		return resultMap;
 	}
 	

@@ -3,7 +3,23 @@
 	var totDR = "";
 	var totPV = "";
 	
-	function totalBill(){
+	function totalBill(siteId){
+		var appendForm = "";
+		
+		if($("#schForm").length == 0){
+			appendForm += '<form id="schForm" name="schForm">';
+			appendForm += '<input type="hidden" id="siteId" name="siteId" value ="'+siteId+'">';
+			appendForm += '<input type="hidden" id="selTermTex" name="selTermTex">';
+			appendForm += '<input type="hidden" id="selTermAgo" name="selTermAgo">';
+			appendForm += '<input type="hidden" id="selTermFrom" name="selTermFrom">';
+			appendForm += '<input type="hidden" id="selTermTo" name="selTermTo">';
+			appendForm += '<input type="hidden" id="selTerm" name="selTerm">';
+			appendForm += '</form>';
+			
+			$('body').append(appendForm);
+				
+		}
+		
 		var firstDay = new Date();
 		var endDay = new Date();
 		var agoDay = new Date();
@@ -16,12 +32,9 @@
 		var texChartStDay =new Date(stDay.setMinutes(stDay.getMinutes() + (new Date()).getTimezoneOffset()));
 		var texChartEdDay =new Date(edDay.setMinutes(edDay.getMinutes() + (new Date()).getTimezoneOffset()));
 		
+		
 		firstDay.setYear(firstDay.getFullYear()-1);
 		firstDay = new Date(firstDay.setMonth(firstDay.getMonth()+1));
-//		$("#selTermFrom").val( firstDay.format("yyyyMM") );
-//		$("#selTermTo").val( endDay.format("yyyyMM") );
-		$("#datepicker3").val( firstDay.format("yyyy-MM") );
-		$("#datepicker4").val( endDay.format("yyyy-MM") );
 		SelTerm = "billSelectMM_pv";
 		$("#selTerm").val(SelTerm);
 		
@@ -32,7 +45,7 @@
 		$("#selTermTo").val( endDay.format("yyyyMM") );
 		$("#selTermFrom").val( agoDay.format("yyyyMM") );
 		
-		formData = $("#schForm").serializeObject();
+		var formData = $("#schForm").serializeObject();
 		getSiteSetDetail(formData);
 		getKepcoTexBill(formData);
 		getESSRevenueTex(formData);
@@ -46,10 +59,13 @@
 		getPVRevenueTex(formData);
 		
 		var totTex = totKepco+totESS+totDR+totPV;
+		var texBillday=texDay.format('yyyyMM');
 		
-		$("#texTotBill").text("(종합)에너지절감 솔루션 제공 전기요금 절감 수익 배분 청구서 (’"+$("#selTermTex").val().substring(2,4)+"년"+$("#selTermTex").val().substring(4,6)+"월)");
-		$("#texTotDay").text("청구일 : "+$("#selTermTex").val().substring(0,4)+"-"+$("#selTermTex").val().substring(4,6)+"-"+"20");
+		$("#texTotBill").text("(종합)에너지절감 솔루션 제공 전기요금 절감 수익 배분 청구서 (’"+texBillday.substring(2,4)+"년"+texBillday.substring(4,6)+"월)");
+		$("#texTotDay").text("청구일 : "+texBillday.substring(0,4)+"-"+texBillday.substring(4,6)+"-"+"20");
 		$(".total_tex").text(numberComma(totTex));
+		
+		$("#schForm").remove();
 		
 		popupOpen('totaldprint');
 		
@@ -126,7 +142,6 @@
 	
 	function callback_getESSRevenueTex(result){
 		
-		var sheetList = result.sheetList;
 		
 		var ESSStr ="";
 		var ESSFootStr = "";
@@ -307,7 +322,7 @@
 	function callback_getPVRevenueTex(result){
 		var netGenValSheetList = result.netGenValSheetList;
 		var netGenValChartList = result.netGenValChartList;
-		var smpDealChartList   = result.smpDealChartList  ;
+		var smpDealChartList   = result.recDealChartList  ;
 		var smpPriceChartList  = result.smpPriceChartList ;
 		var recDealChartList   = result.recDealChartList  ;
 		var recPriceChartList  = result.recPriceChartList ;
