@@ -512,7 +512,7 @@ function excelDownload(excelName, e, gbn) {
 	if(gbn == "drResult") {
 		$td = $val.find('tr:eq(0)').find('td');
 		var tdCnt = $td.length;
-		cnt = ((tdCnt-1) == 1) ? 0 : 1;
+		cnt = (tdCnt == 1) ? 0 : 1;
 	} else {
 		cnt = $val.length;
 	}

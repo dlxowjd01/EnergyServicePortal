@@ -27,6 +27,7 @@
 				</div>
 				<form id="schForm" name="schForm">
 				<input type="hidden" id="selTermFrom" name="selTermFrom">
+				<input type="hidden" id="selTermTex" name="selTermTex">
 				<input type="hidden" id="selTermTo" name="selTermTo">
 				<input type="hidden" id="selTerm" name="selTerm" value="today">
 				<input type="hidden" id="selPeriodVal" name="selPeriodVal" value="hour">

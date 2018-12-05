@@ -298,7 +298,7 @@
 			success: function(result) {
 				var resultCnt = result.resultCnt;
 				if(resultCnt > 0) {
-					alert('회원정보가 수정되었습니다.');
+					alert('사용자정보가 수정되었습니다.');
 
 					// Local EMS 회원 연계
 					changeEMSUserDB($("#modUserIdx").val());

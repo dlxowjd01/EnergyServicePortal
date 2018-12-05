@@ -63,7 +63,6 @@ public class ESSRevenueController {
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("texList", list.get("result"));
-		System.out.println("ESS : "+resultMap);
 		return resultMap;
 	}
 	

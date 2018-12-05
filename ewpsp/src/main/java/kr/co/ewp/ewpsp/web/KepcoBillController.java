@@ -67,7 +67,6 @@ public class KepcoBillController {
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("texList", list.get("result"));
-		System.out.println("kepco : "+resultMap);
 		return resultMap;
 	}
 	

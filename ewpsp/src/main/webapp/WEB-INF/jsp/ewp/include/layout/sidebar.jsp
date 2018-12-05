@@ -61,7 +61,7 @@ $(document).ready(function() {
 							<li><a href="/essRevenue?siteId=${selViewSiteId }">ESS 수익 조회</a></li>
 							<li><a href="/drRevenue?siteId=${selViewSiteId }">DR 수익 조회</a></li>
 							<li><a href="/pvRevenue?siteId=${selViewSiteId }">PV 수익 조회</a></li>
-							<li><a href="javascript:totalBill();">통합 명세서</a></li>
+							<li><a href="javascript:totalBill('${selViewSiteId }');">통합 명세서</a></li>
 						</ul>
 					</div>
 				</li>
@@ -72,7 +72,7 @@ $(document).ready(function() {
 				<c:if test="${userInfo.auth_type ne '5'}">
 				<c:if test="${userInfo.auth_type eq '1' or userInfo.auth_type eq '2' or userInfo.auth_type eq '3'}">
 				<!-- <li class="smn6"><a href="/main">군관리<br/>메인</a></li> -->
-				<li class="smn6"><a href="/main">군관리<br/>메인</a></li>
+				<li class="smn6"><a href="/main?siteId=${selViewSiteId }">군관리<br/>메인</a></li>
 				</c:if>
 				<li class="smn7">
 					<a href="#;">설정</a>
