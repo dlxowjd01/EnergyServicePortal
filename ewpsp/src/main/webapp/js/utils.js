@@ -171,7 +171,7 @@ function checkNumLen(num) {
 // 소수점 fix자리 반올림
 function toFixedNum(num, fix) {
 	var no = Number(num);
-	return no.toFixed(fix);
+	return Number(no.toFixed(fix));
 }
 
 // 전체값에서 일부값은 몇퍼센트?
@@ -512,7 +512,7 @@ function excelDownload(excelName, e, gbn) {
 	if(gbn == "drResult") {
 		$td = $val.find('tr:eq(0)').find('td');
 		var tdCnt = $td.length;
-		cnt = ((tdCnt-1) == 1) ? 0 : 1;
+		cnt = (tdCnt == 1) ? 0 : 1;
 	} else {
 		cnt = $val.length;
 	}
