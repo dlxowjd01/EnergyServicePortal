@@ -107,13 +107,6 @@
 	}
 	
 	function getSiteMainSchCollection() {
-//		var today = new Date();
-//		firstDay = today.format("yyyyMMdd")+"000000";
-//		endDay = today.format("yyyyMMdd")+"235959";
-////		var firstDay = '20180831000000';//new Date(2018, 7, 23, 0, 0, 0);
-////		var endDay = '20180831235959';//new Date(2018, 7, 23, 23, 59, 59);
-//		$("#selTermFrom").val(firstDay);
-//		$("#selTermTo").val(endDay);
 		var firstDay = new Date();
 		var endDay = new Date();
 		var startTime;
@@ -188,12 +181,12 @@
 				
 				if(chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
 				else {
-					reChgVal = Math.round( Number(chgVal) );
+					reChgVal = toFixedNum(chgVal, 2);
 					totalDataSet = totalDataSet+reChgVal;
 				}
 				if(dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
 				else {
-					reDischgVal   = Math.round( Number(dischgVal) );
+					reDischgVal   = toFixedNum(dischgVal, 2);
 					totalDataSet2 = totalDataSet2+reDischgVal;
 				}
 				
@@ -235,12 +228,12 @@
 				
 				if(chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
 				else {
-					reChgVal = Math.round( Number(chgVal) );
+					reChgVal = toFixedNum(chgVal, 2);
 					totalDataSet = totalDataSet+reChgVal;
 				}
 				if(dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
 				else {
-					reDischgVal   = Math.round( Number(dischgVal) );
+					reDischgVal   = toFixedNum(dischgVal, 2);
 					totalDataSet2 = totalDataSet2+reDischgVal;
 				}
 				
@@ -444,8 +437,8 @@
 						kepcoUsage = String(kepcoUsageChartList[i].usg_val);
 						if(kepcoUsage == null || kepcoUsage == "" || kepcoUsage == "null") reKepcoUsage = null;
 						else {
-							if(kepcoUsage.length < 7) reKepcoUsage = Number(     kepcoUsage     ); // 나중에 수정 요망
-							else reKepcoUsage = Number(     kepcoUsage.substring( 0, kepcoUsage.length-6 )     );
+							var map = convertUnitFormat(kepcoUsage, "mWh", 8);
+							reKepcoUsage = toFixedNum(map.get("formatNum"), 2);
 							totalDataSet = totalDataSet+Number(kepcoUsage);
 						}
 						
@@ -455,8 +448,8 @@
 						essUsage = String(essUsageListChartList[i].usg_val);
 						if(essUsage == null || essUsage == "" || essUsage == "null") reEssUsage = null;
 						else {
-							if(essUsage.length < 7) reEssUsage = Number(     essUsage     ); // 나중에 수정 요망
-							else reEssUsage = Number(     essUsage.substring( 0, essUsage.length-6 )     );
+							var map = convertUnitFormat(essUsage, "kWh", 1);
+							reEssUsage = toFixedNum(map.get("formatNum"), 2);
 							totalDataSet2 = totalDataSet2+Number(essUsage);
 						}
 					} else reEssUsage = null;
@@ -465,8 +458,8 @@
 						pvUsage = String(pvUsageListChartList[i].gen_val);
 						if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
 						else {
-							if(pvUsage.length < 7) rePvUsage = Number(     pvUsage     ); // 나중에 수정 요망
-							else rePvUsage = Number(     pvUsage.substring( 0, pvUsage.length-6 )     );
+							var map = convertUnitFormat(pvUsage, "kWh", 1);
+							rePvUsage = toFixedNum(map.get("formatNum"), 2);
 							totalDataSet3 = totalDataSet3+Number(pvUsage);
 						}
 					} else rePvUsage = null;
@@ -573,7 +566,7 @@
 				var formatNum = map.get("formatNum");
 				var unit = map.get("unit");
 				
-				peakDataSet.push([ Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate(), dt2.getHours(), dt2.getMinutes(), dt2.getSeconds()), formatNum]);
+				peakDataSet.push([ Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate(), dt2.getHours(), dt2.getMinutes(), dt2.getSeconds()), toFixedNum(formatNum, 2)]);
 				
 				if(totalUsage == 0 || totalUsage == null) {
 					$(".peak").find(".no-data").css("display", "");

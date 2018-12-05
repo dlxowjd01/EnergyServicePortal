@@ -275,7 +275,7 @@
 					reUsage = null;
 				} else {
 					var map = convertUnitFormat(usage, "mWh", 8);
-					reUsage = Math.round( Number(map.get("formatNum")) );
+					reUsage = toFixedNum(map.get("formatNum"), 2);
 					totalUsage = totalUsage+Number(usage);
 				}
 				
@@ -552,7 +552,7 @@
 					reUsage = null;
 				} else {
 					var map = convertUnitFormat(usage*12, "mW", 8);
-					reUsage = Math.round( Number(map.get("formatNum")) );
+					reUsage = toFixedNum(map.get("formatNum"), 2);
 					totalUsage = totalUsage+Number(usage);
 				}
 				

@@ -60,8 +60,8 @@
 							reUsage = null;
 						} else {
 							var map = convertUnitFormat(usage, "kWh", 1);
-							reUsage = Math.round( Number(map.get("formatNum")) );
-							dt_str_totalVal = dt_str_totalVal+reUsage;
+							reUsage = toFixedNum(map.get("formatNum"), 2);
+							dt_str_totalVal = dt_str_totalVal+Number(map.get("formatNum"));
 						}
 						
 						break;
@@ -72,7 +72,7 @@
 				
 				if(dt_col_cnt == dt_col) {
 					var final_dt_str_head = "<th>"+convertDataTableHeaderDate(s, 1)+"</th>"+dt_str_head;
-					dt_str += "<td>"+dt_str_totalVal+"</td>";
+					dt_str += "<td>"+toFixedNum(dt_str_totalVal, 2)+"</td>";
 					pv_head_pc[dt_row_cnt-1] = final_dt_str_head;
 					real_data_pc[dt_row_cnt-1] = dt_str;
 					dt_str_head = "";
@@ -87,7 +87,7 @@
 							dt_str += "<td></td>";
 						}
 						var final_dt_str_head = "<th>"+convertDataTableHeaderDate(s, 1)+"</th>"+dt_str_head;
-						dt_str += "<td>"+dt_str_totalVal+"</td>";
+						dt_str += "<td>"+toFixedNum(dt_str_totalVal, 2)+"</td>";
 						pv_head_pc[dt_row_cnt-1] = final_dt_str_head;
 						real_data_pc[dt_row_cnt-1] = dt_str;
 						dt_str_head = "";
@@ -115,7 +115,7 @@
 					reUsage = null;
 				} else {
 					var map = convertUnitFormat(usage, "kWh", 1);
-					reUsage = Math.round( Number(map.get("formatNum")) );
+					reUsage = toFixedNum(map.get("formatNum"), 2);
 					totalUsage = totalUsage+Number(usage);
 				}
 				
@@ -170,8 +170,8 @@
 							reUsage = null;
 						} else {
 							var map = convertUnitFormat(usage, "kWh", 1);
-							reUsage = Math.round( Number(map.get("formatNum")) );
-							dt_str_totalVal = dt_str_totalVal+reUsage;
+							reUsage = toFixedNum(map.get("formatNum"), 2);
+							dt_str_totalVal = dt_str_totalVal+Number(map.get("formatNum"));
 						}
 						
 						break;
@@ -181,7 +181,7 @@
 				
 				
 				if(dt_col_cnt == dt_col) {
-					dt_str += "<td>"+dt_str_totalVal+"</td>";
+					dt_str += "<td>"+toFixedNum(dt_str_totalVal, 2)+"</td>";
 					feture_data_pc[dt_row_cnt-1] = dt_str;
 					dt_str_head = "";
 					dt_str = "";
@@ -193,7 +193,7 @@
 						for(a=0; a<(dt_col-dt_col_cnt); a++) {
 							dt_str += "<td></td>";
 						}
-						dt_str += "<td>"+dt_str_totalVal+"</td>";
+						dt_str += "<td>"+toFixedNum(dt_str_totalVal, 2)+"</td>";
 						feture_data_pc[dt_row_cnt-1] = dt_str;
 						dt_str_head = "";
 						dt_str = "";
@@ -220,7 +220,7 @@
 					reUsage = null;
 				} else {
 					var map = convertUnitFormat(usage, "kWh", 1);
-					reUsage = Math.round( Number(map.get("formatNum")) );
+					reUsage = toFixedNum(map.get("formatNum"), 2);
 					totalUsage = totalUsage+Number(usage);
 				}
 				// 차트데이터 셋팅

@@ -74,16 +74,16 @@
 							reChgVal = null;
 						} else {
 							var map = convertUnitFormat(chgVal, "kWh", 1);
-							reChgVal = Math.round( Number(map.get("formatNum")) );
-							dt_str_totalVal = dt_str_totalVal+reChgVal;
+							reChgVal = toFixedNum(map.get("formatNum"), 2);
+							dt_str_totalVal = dt_str_totalVal+Number(map.get("formatNum"));
 						}
 						
 						if(dischgVal == null || dischgVal == "" || dischgVal == "null") {
 							reDischgVal = null;
 						} else {
 							var map = convertUnitFormat(dischgVal, "kWh", 1);
-							reDischgVal = Math.round( Number(map.get("formatNum")) );
-							dt_str2_totalVal = dt_str2_totalVal+ reDischgVal;
+							reDischgVal = toFixedNum(map.get("formatNum"), 2);
+							dt_str2_totalVal = dt_str2_totalVal+ Number(map.get("formatNum"));
 						}
 						
 						break;
@@ -94,8 +94,8 @@
 
 				if(dt_col_cnt == dt_col) {
 					var final_dt_str_head = "<th>"+convertDataTableHeaderDate(s, 1)+"</th>"+dt_str_head;
-					dt_str += "<td>"+  dt_str_totalVal  +"</td>"; // 충전량
-					dt_str2 += "<td>"+ dt_str2_totalVal +"</td>"; // 방전량
+					dt_str += "<td>"+toFixedNum(dt_str_totalVal, 2)+"</td>"; // 충전량
+					dt_str2 += "<td>"+ toFixedNum(dt_str2_totalVal, 2) +"</td>"; // 방전량
 					ess_head_pc[dt_row_cnt-1] = final_dt_str_head;
 					realChg_data_pc[dt_row_cnt-1] = dt_str;
 					realDischg_data_pc[dt_row_cnt-1] = dt_str2;
@@ -114,8 +114,8 @@
 							dt_str2 += "<td></td>";
 						}
 						var final_dt_str_head = "<th>"+convertDataTableHeaderDate(s, 1)+"</th>"+dt_str_head;
-						dt_str += "<td>"+  dt_str_totalVal  +"</td>"; // 충전량
-						dt_str2 += "<td>"+ dt_str2_totalVal +"</td>"; // 방전량
+						dt_str += "<td>"+toFixedNum(dt_str_totalVal, 2)+"</td>"; // 충전량
+						dt_str2 += "<td>"+ toFixedNum(dt_str2_totalVal, 2) +"</td>"; // 방전량
 						ess_head_pc[dt_row_cnt-1] = final_dt_str_head;
 						realChg_data_pc[dt_row_cnt-1] = dt_str;
 						realDischg_data_pc[dt_row_cnt-1] = dt_str2;
@@ -149,12 +149,12 @@
 				if(chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
 				else {
 					reChgVal = Math.round( Number(chgVal) );
-					totalDataSet = totalDataSet+reChgVal;
+					totalDataSet = totalDataSet+chgVal;
 				}
 				if(dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
 				else {
 					reDischgVal   = Math.round( Number(dischgVal) );
-					totalDataSet2 = totalDataSet2+reDischgVal;
+					totalDataSet2 = totalDataSet2+dischgVal;
 				}
 				
 				// 차트데이터 셋팅
@@ -224,16 +224,16 @@
 							reChgVal = null;
 						} else {
 							var map = convertUnitFormat(chgVal, "kWh", 1);
-							reChgVal = Math.round( Number(map.get("formatNum")) );
-							dt_str_totalVal = dt_str_totalVal+reChgVal;
+							reChgVal = toFixedNum(map.get("formatNum"), 2);
+							dt_str_totalVal = dt_str_totalVal+Number(map.get("formatNum"));
 						}
 						
 						if(dischgVal == null || dischgVal == "" || dischgVal == "null") {
 							reDischgVal = null;
 						} else {
 							var map = convertUnitFormat(dischgVal, "kWh", 1);
-							reDischgVal = Math.round( Number(map.get("formatNum")) );
-							dt_str2_totalVal = dt_str2_totalVal+ reDischgVal;
+							reDischgVal = toFixedNum(map.get("formatNum"), 2);
+							dt_str2_totalVal = dt_str2_totalVal+ Number(map.get("formatNum"));
 						}
 						
 						break;
@@ -243,8 +243,8 @@
 				dt_str2 += "<td>"+ ( (reDischgVal == null) ? "" : reDischgVal    ) +"</td>"; // 방전량
 				
 				if(dt_col_cnt == dt_col) {
-					dt_str += "<td>"+  dt_str_totalVal  +"</td>"; // 충전량
-					dt_str2 += "<td>"+ dt_str2_totalVal +"</td>"; // 방전량
+					dt_str += "<td>"+toFixedNum(dt_str_totalVal, 2)+"</td>"; // 충전량
+					dt_str2 += "<td>"+ toFixedNum(dt_str2_totalVal, 2) +"</td>"; // 방전량
 					fetureChg_data_pc[dt_row_cnt-1] = dt_str;
 					fetureDischg_data_pc[dt_row_cnt-1] = dt_str2;
 					dt_str  = ""; 
@@ -259,8 +259,8 @@
 							dt_str += "<td></td>";
 							dt_str2 += "<td></td>";
 						}
-						dt_str += "<td>"+  dt_str_totalVal  +"</td>"; // 충전량
-						dt_str2 += "<td>"+ dt_str2_totalVal +"</td>"; // 방전량
+						dt_str += "<td>"+toFixedNum(dt_str_totalVal, 2)+"</td>"; // 충전량
+						dt_str2 += "<td>"+ toFixedNum(dt_str2_totalVal, 2) +"</td>"; // 방전량
 						fetureChg_data_pc[dt_row_cnt-1] = dt_str;
 						fetureDischg_data_pc[dt_row_cnt-1] = dt_str2;
 						dt_str = "";
@@ -289,12 +289,12 @@
 				if(chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
 				else {
 					reChgVal = Math.round( Number(chgVal) );
-					totalDataSet = totalDataSet+reChgVal;
+					totalDataSet = totalDataSet+chgVal;
 				}
 				if(dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
 				else {
 					reDischgVal   = Math.round( Number(dischgVal) );
-					totalDataSet2 = totalDataSet2+reDischgVal;
+					totalDataSet2 = totalDataSet2+dischgVal;
 				}
 				
 				// 차트데이터 셋팅
