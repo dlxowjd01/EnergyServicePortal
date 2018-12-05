@@ -147,7 +147,21 @@
 				$("#newSiteIds").val("");
 				$("#newSiteIds").val( (values == "") ? "" : values.slice(0, -1) );
 				var formData = $("#editSiteInSiteGrpForm").serializeObject();
-				saveSiteInSiteGrp(formData);
+				saveSiteInSiteGrp(formData, "confirm");
+			}
+		});
+		
+		$("#applySiteInSiteGrpBtn").click(function(){
+			if(confirm("저장하시겠습니까?")) {
+				var inputs = $(".inside_site input[name=siteIds]");
+				var values = "";
+				$.each(inputs, function (index, value) {
+					values = values+$(value).val()+",";
+				});
+				$("#newSiteIds").val("");
+				$("#newSiteIds").val( (values == "") ? "" : values.slice(0, -1) );
+				var formData = $("#editSiteInSiteGrpForm").serializeObject();
+				saveSiteInSiteGrp(formData, "apply");
 			}
 		});
 
@@ -436,7 +450,7 @@
 		
 	}
 
-	function saveSiteInSiteGrp(formData) {
+	function saveSiteInSiteGrp(formData, btnGbn) {
 		$.ajax({
 			url : "/saveSiteInSiteGrp",
 			type : 'post',
@@ -448,7 +462,7 @@
 				
 				if(changeYn == "N") {
 					alert("저장되었습니다.");
-					location.reload();
+					if(btnGbn == "confirm") location.reload();
 					
 				} else if(changeYn == "Y") {
 //					if(resultCnt > 0) {

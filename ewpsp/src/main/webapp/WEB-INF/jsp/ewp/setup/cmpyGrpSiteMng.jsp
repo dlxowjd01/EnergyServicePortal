@@ -232,6 +232,7 @@
 
 		</div>
 		<div class="btn_center">
+			<a href="#;" class="default_btn w80" id="applySiteInSiteGrpBtn">적용</a>
 			<a href="#;" class="default_btn w80" id="confirmSiteInSiteGrpBtn">확인</a>
 			<a href="#;" class="cancel_btn w80" id="cancelSiteInSiteGrpBtn">취소</a>
 		</div>
