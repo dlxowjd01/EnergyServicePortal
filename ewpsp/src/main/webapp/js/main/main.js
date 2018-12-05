@@ -106,42 +106,31 @@ function callback_getGMainSiteRankingTotalDetail(result) {
 	if (total != null) {
 		$('#rankTotal').html('<span class="bul1" />');
 		if (oldRankType == 0) {
-			if (total.usage > 1000) {
-				$('#rankTotal > span').text('누적 - ' + numberComma(Math.floor(total.usage / 1000)) + 'MWh');
-			} else {
-				$('#rankTotal > span').text('누적 - ' + numberComma(total.usage) + 'kWh');
-			}
+			var map = convertUnitFormat(total.usage, "mWh");
+			var past = toFixedNum(map.get("formatNum"), 2);
+			$('#rankTotal > span').text('누적 - ' + past + map.get("unit"));
+			
 			$('#rankPlan').html('<span class="bul2" />');
-			if (total.usage_plan > 1000) {
-				$('#rankPlan > span').text('예상 - ' + numberComma(Math.floor(total.usage_plan / 1000)) + 'MWh');
-			} else {
-				$('#rankPlan > span').text('예상 - ' + numberComma(total.usage_plan) + 'kWh');
-			}
+			var map2 = convertUnitFormat(total.usage_plan, "mWh");
+			var feture = toFixedNum(map2.get("formatNum"), 2);
+			$('#rankPlan > span').text('예상 - ' + feture + map2.get("unit"));
 		} else if (oldRankType == 1) {
-			if (total.charge > 1000) {
-				$('#rankTotal > span').text('누적 - ' + numberComma(Math.floor(total.charge / 1000)) + 'MWh');
-			} else {
-				$('#rankTotal > span').text('누적 - ' + numberComma(total.charge) + 'kWh');
-			}
+			var map = convertUnitFormat(total.charge, "kWh");
+			var past = toFixedNum(map.get("formatNum"), 2);
+			$('#rankTotal > span').text('누적 - ' + past + map.get("unit"));
+			
 			$('#rankPlan').html('<span class="bul2" />');
-			if (total.charge_plan > 1000) {
-				$('#rankPlan > span').text('예상 - ' + numberComma(Math.floor(total.charge_plan / 1000)) + 'MWh');
-			} else {
-				$('#rankPlan > span').text('예상 - ' + numberComma(total.charge_plan) + 'kWh');
-			}
+			var map2 = convertUnitFormat(total.charge_plan, "kWh");
+			var feture = toFixedNum(map2.get("formatNum"), 2);
+			$('#rankPlan > span').text('예상 - ' + feture + map2.get("unit"));
 		} else if (oldRankType == 2) {
-			if (total.gen > 1000) {
-				$('#rankTotal > span').text('누적 - ' + numberComma(Math.floor(total.gen / 1000)) + 'MWh');
-			} else {
-				$('#rankTotal > span').text('누적 - ' + numberComma(total.gen) + 'kWh');
-			}
+			var map = convertUnitFormat(total.gen, "kWh");
+			var past = toFixedNum(map.get("formatNum"), 2);
+			$('#rankTotal > span').text('누적 - ' + past + map.get("unit"));
 			$('#rankPlan').text('');
 		} else if (oldRankType == 3) {
-			if (total.reward > 1000) {
-				$('#rankTotal > span').text('누적 - ' + numberComma(Math.floor(total.reward / 1000)) + 'MWh');
-			} else {
-				$('#rankTotal > span').text('누적 - ' + numberComma(total.reward) + 'kWh');
-			}
+			var reward = (total.reward == null) ? 0 : total.reward;
+			$('#rankTotal > span').text('수익 - ' + numberComma(reward) + "won");
 			$('#rankPlan').text('');
 		}
 	} else {
@@ -162,11 +151,13 @@ function callback_getGMainSiteRankingList(result) {
 		for (var i = 0; i < siteList.length; i++) {
 			if (i < siteList.length) {
 				if (oldRankType == 0) {
+					var map = convertUnitFormat(siteList[i].usage, "mWh", 8);
+					var map2 = convertUnitFormat(siteList[i].usage_plan, "mWh", 8);
 					$tbody.append(
 						$('<tr />')
 							.append($('<th />').append(siteList[i].site_name))
-							.append($('<td />').append(siteList[i].usage))
-							.append($('<td />').append(siteList[i].usage_plan))
+							.append($('<td />').append(toFixedNum(map.get("formatNum"), 2)))
+							.append($('<td />').append(toFixedNum(map2.get("formatNum"), 2)))
 					);
 				} else if (oldRankType == 1) {
 					$tbody.append(
@@ -204,7 +195,6 @@ function callback_getGMainSiteRankingList(result) {
 
 function callback_getGMainSiteTotalDetail(result) {
 	var total = result.detail;
-//	console.log(total);
 
 	if ($('#mapGroup').val() == 'group') {
 		var imgSrc = '/img/group_dimg.png';
@@ -221,29 +211,23 @@ function callback_getGMainSiteTotalDetail(result) {
 	}
 
 	if (total != null && total.usage != null) {
-		if (total.usage > 1000) {
-			$('.detailUsage').text(numberComma(Math.floor(total.usage / 1000)));
-			$('.detailUsageUnit').text('MWh');
-		} else {
-			$('.detailUsage').text(numberComma(total.usage));
-			$('.detailUsageUnit').text('kWh');
-		}
-		if (total.gen > 1000) {
-			$('.detailGen').text(numberComma(Math.floor(total.gen / 1000)));
-			$('.detailGenUnit').text('MWh');
-		} else {
-			$('.detailGen').text(numberComma(total.gen));
-			$('.detailGenUnit').text('kWh');
-		}
-		if (total.charge > 1000) {
-			$('.detailCharge').text(numberComma(Math.floor(total.charge / 1000)));
-			$('.detailChargeUnit').text('MWh');
-		} else {
-			$('.detailCharge').text(numberComma(total.charge));
-			$('.detailChargeUnit').text('kWh');
-		}
+		var map = convertUnitFormat(total.usage, "mWh");
+		var usage = toFixedNum(map.get("formatNum"), 2);
+		$('.detailUsage').text(numberComma(usage));
+		$('.detailUsageUnit').text(map.get("unit"));
+		
+		var map2 = convertUnitFormat(total.gen, "kWh");
+		var gen = toFixedNum(map2.get("formatNum"), 2);
+		$('.detailGen').text(numberComma(gen));
+		$('.detailGenUnit').text(map2.get("unit"));
+		
+		var map3 = convertUnitFormat(total.charge, "kWh");
+		var charge = toFixedNum(map3.get("formatNum"), 2);
+		$('.detailCharge').text(numberComma(charge));
+		$('.detailChargeUnit').text(map3.get("unit"));
 
-		$('.detailReward').text(numberComma(total.reward));
+		var reward = (total.reward == null) ? 0 : total.reward;
+		$('.detailReward').text(numberComma(reward));
 	} else {
 		$('.detailUsage').text('0');
 		$('.detailGen').text('0');
@@ -274,6 +258,10 @@ function callback_getGMainSiteList(result) {
 			var eq2Cls = siteList[i].pcs > 0 ? ' on' : '';
 			var eq3Cls = siteList[i].bms > 0 ? ' on' : '';
 			var eq4Cls = siteList[i].pv > 0 ? ' on' : '';
+			
+			var map = convertUnitFormat(siteList[i].usage, "mWh", 8);
+			var usage = toFixedNum(map.get("formatNum"), 2);
+			var reward = (siteList[i].reward == null) ? 0 : siteList[i].reward;
 
 			$tbody.append(
 				$('<tr class="dbclickopen" onclick="activateSite(this, \'' + siteList[i].site_id + '\', \'' + siteList[i].site_grp_idx + '\')" ondblclick="goSiteMain(\'' + siteList[i].site_id + '\')" />')
@@ -291,10 +279,10 @@ function callback_getGMainSiteList(result) {
 							.append('<span class="eq4' + eq4Cls + '">장치4</span>')
 						)
 					)
-					.append($('<td />').append(numberComma(siteList[i].usage)))
+					.append($('<td />').append(numberComma(usage)))
 					.append($('<td />').append(numberComma(siteList[i].charge)))
 					.append($('<td />').append(numberComma(siteList[i].gen)))
-					.append($('<td />').append(numberComma(siteList[i].reward)))
+					.append($('<td />').append(numberComma(reward)))
 			);
 		}
 
@@ -348,10 +336,10 @@ function changeRanking(tabIdx) {
 	$('#rankType').val(tabIdx + 4);
 
 	var txt = "";
-	if(tabIdx == 0) txt = "사용량 순위";
-	else if(tabIdx == 1) txt = "충방전 순위";
-	else if(tabIdx == 2) txt = "발전량 순위";
-	else if(tabIdx == 3) txt = "수익 순위";
+	if(tabIdx == 0) txt = "사용량 순위(단위: kWh)";
+	else if(tabIdx == 1) txt = "충방전 순위(단위: kWh)";
+	else if(tabIdx == 2) txt = "발전량 순위(단위: kWh)";
+	else if(tabIdx == 3) txt = "수익 순위(단위: won)";
 	$("#tabText").empty().text(txt);
 	getGMainSiteRankingTotalDetail(); // 사이트 사용량 순위 누적/예상 총합
 	getGMainSiteRankingList(1); // 사이트 사용량 순위 목록 조회
