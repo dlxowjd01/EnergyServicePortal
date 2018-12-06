@@ -252,14 +252,14 @@
 
 												/* 그래프 스타일 */
 											    series: [{
-											    	name: '한전 사용량',
-											    	color: '#438fd7' /* 한전 사용량 */
+											    	name: 'PV 사용량',
+											        color: '#f75c4a' /* PV 사용량 */
 											    },{
 											    	name: 'ESS 사용량',
 											        color: '#13af67' /* ESS 사용량 */
 											    },{
-											    	name: 'PV 사용량',
-											        color: '#f75c4a' /* PV 사용량 */
+											    	name: '한전 사용량',
+											    	color: '#438fd7' /* 한전 사용량 */
 											    }],
 
 											    /* 반응형 */
