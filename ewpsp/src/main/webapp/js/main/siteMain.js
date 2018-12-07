@@ -555,12 +555,18 @@
 				// 데이터 셋팅
 				var dt = new Date(startDate);
 				var dt2 = new Date(stdDate);
+				var dataSet1 = [];
+				var dataSet2 = [];
 				if( peakDataSet.length == 0 || (dt2.getMinutes() == 0 || dt2.getMinutes() == 15 || dt2.getMinutes() == 30 || dt2.getMinutes() == 45) ) {
 					peakDataSet = [];
 					for(var i=0; i<15; i++) {
 						peakDataSet.push([ Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds()), null]);
+						dataSet1.push([ Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds()), contractPower]);
+						dataSet2.push([ Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds()), chargePower]);
 						dt = new Date(dt.setMinutes(dt.getMinutes() + 1));
 					}
+					contractPowerList = dataSet1;
+					chargePowerList = dataSet2;
 				}
 				var map = convertUnitFormat((totalUsage*4), "mWh", 8);
 				var formatNum = map.get("formatNum");
@@ -617,9 +623,9 @@
 				
 //				var tm = new Date(peakList[i].std_timestamp);
 				// 차트데이터 셋팅
-				dataSet.push([Number(peakList[i].std_timestamp), totUsage]);
-				dataSet2.push([Number(peakList[i].std_timestamp), contractPower]);
-				dataSet3.push([Number(peakList[i].std_timestamp), chargePower]);
+				dataSet.push([setChartDateUTC(peakList[i].std_timestamp), totUsage]);
+				dataSet2.push([setChartDateUTC(peakList[i].std_timestamp), contractPower]);
+				dataSet3.push([setChartDateUTC(peakList[i].std_timestamp), chargePower]);
 				
 			}
 			
@@ -648,6 +654,12 @@
 		peakChart.yAxis[0].removePlotLine('contract-power');
 		peakChart.yAxis[0].removePlotLine('charge-power');
 		
+//		if(contractPower >= chargePower) {
+//			peakChart.yAxis[0].options.max = contractPower+contractPower;
+//		} else {
+//			peakChart.yAxis[0].options.max = chargePower+100;
+//		}
+		
 		peakChart.addSeries({
 			name: '최대 피크 전력',
 			color: '#438fd7', /* 최대 피크 전력 */
@@ -655,35 +667,49 @@
 			data: peakDataSet
 		}, false);
 		
-		peakChart.yAxis[0].addPlotLine({
-		          color: '#13af67',
-		          width: 1, 
-		          value: contractPower,
-		          label: {
-		            text: '한전 계약 전력',
-		            style: {
-	                    color: '13af67',
-	                    fontWeight: 'bold'
-	                },
-	                zIndex: 4
-		          }, id: 'contract-power'
-		  });
+		if(chargePowerDisplayYn == "Y") {
+			peakChart.addSeries({
+				name: '한전 계약 전력',
+				color: '#13af67', /* 한전 계약 전력 */
+				data: contractPowerList
+			}, false);
+			
+			peakChart.addSeries({
+				name: '요금 적용 전력',
+				color: '#f75c4a', /* 요금 적용 전력 */
+				data: chargePowerList
+			}, false);
+		}
 		
-		peakChart.yAxis[0].addPlotLine({
-		          color: '#f75c4a',
-		          width: 1, 
-		          value: chargePower,
-		          label: {
-		            text: '요금 적용 전력',
-		            style: {
-	                    color: 'f75c4a',
-	                    fontWeight: 'bold'
-	                },
-                    align: 'right',
-                    x: -10,
-	                zIndex: 4
-		          }, id: 'charge-power'
-		  });
+//		peakChart.yAxis[0].addPlotLine({
+//		          color: '#13af67',
+//		          width: 1, 
+//		          value: contractPower,
+//		          label: {
+//		            text: '한전 계약 전력('+contractPower+')',
+//		            style: {
+//	                    color: '#13af67',
+//	                    fontWeight: 'bold'
+//	                },
+//	                zIndex: 4
+//		          }, id: 'contract-power'
+//		  });
+//		
+//		peakChart.yAxis[0].addPlotLine({
+//		          color: '#f75c4a',
+//		          width: 1, 
+//		          value: chargePower,
+//		          label: {
+//		            text: '요금 적용 전력('+chargePower+')',
+//		            style: {
+//	                    color: '#f75c4a',
+//	                    fontWeight: 'bold'
+//	                },
+//                    align: 'right',
+//                    x: -10,
+//	                zIndex: 4
+//		          }, id: 'charge-power'
+//		  });
 		
 		peakChart.xAxis[0].options.tickInterval = 60 * 1000;
 		peakChart.xAxis[0].options.labels.style.fontSize = '12px';
@@ -691,9 +717,11 @@
 		peakChart.redraw(); // 차트 데이터를 다시 그린다
 	}
 	
+	var chargePowerDisplayYn = "";
 	function chargePowerStrDisplayYn(today) {
 		var holidayYn = chkHoliday(today); // 공휴일여부 체크(true:공휴일, false:평일or토요일)
 		var chkSeason = checkSeason(today); // 1:봄, 2:여름, 3:가을, 4:겨울
+		chargePowerDisplayYn = "Y";
 		
 		var chkHour = today.getHours();
 		var timeTermStr = "";
@@ -701,34 +729,40 @@
 		if(!holidayYn) {
 			if(chkSeason == 1 || chkSeason == 3) {
 				// 중간부하시간대
-				if( (chkHour>=9 && chkHour<=10) )  timeTermStr = "(09:00 ~ 10:00)"; 
-				if( (chkHour>=12 && chkHour<=13) ) timeTermStr = "(12:00 ~ 13:00)";
-				if( (chkHour>=17 && chkHour<=23) ) timeTermStr = "(17:00 ~ 23:00)";
+				if( (chkHour>=9 && chkHour<10) )  timeTermStr = "(09:00 ~ 10:00)"; 
+				if( (chkHour>=12 && chkHour<13) ) timeTermStr = "(12:00 ~ 13:00)";
+				if( (chkHour>=17 && chkHour<23) ) timeTermStr = "(17:00 ~ 23:00)";
 				
 				// 최대부하시간대
-				if( (chkHour>=10 && chkHour<=12) ) timeTermStr = "(10:00 ~ 12:00)"; 
-				if( (chkHour>=13 && chkHour<=17) ) timeTermStr = "(13:00 ~ 17:00)";
+				if( (chkHour>=10 && chkHour<12) ) timeTermStr = "(10:00 ~ 12:00)"; 
+				if( (chkHour>=13 && chkHour<17) ) timeTermStr = "(13:00 ~ 17:00)";
+				
+				if( (chkHour>=23 && chkHour<9) ) chargePowerDisplayYn = "N";
 				
 			} else if(chkSeason == 2) {
 				// 중간부하시간대
-				if( (chkHour>=9 && chkHour<=10) )  timeTermStr = "(09:00 ~ 10:00)"; 
-				if( (chkHour>=12 && chkHour<=13) ) timeTermStr = "(12:00 ~ 13:00)";
-				if( (chkHour>=17 && chkHour<=23) ) timeTermStr = "(17:00 ~ 23:00)";
+				if( (chkHour>=9 && chkHour<10) )  timeTermStr = "(09:00 ~ 10:00)"; 
+				if( (chkHour>=12 && chkHour<13) ) timeTermStr = "(12:00 ~ 13:00)";
+				if( (chkHour>=17 && chkHour<23) ) timeTermStr = "(17:00 ~ 23:00)";
 				
 				// 최대부하시간대
-				if( (chkHour>=10 && chkHour<=12) ) timeTermStr = "(10:00 ~ 12:00)"; 
-				if( (chkHour>=13 && chkHour<=17) ) timeTermStr = "(13:00 ~ 17:00)";
+				if( (chkHour>=10 && chkHour<12) ) timeTermStr = "(10:00 ~ 12:00)"; 
+				if( (chkHour>=13 && chkHour<17) ) timeTermStr = "(13:00 ~ 17:00)";
+				
+				if( (chkHour>=23 && chkHour<9) ) chargePowerDisplayYn = "N";
 				
 			} else if(chkSeason == 4) {
 				// 중간부하시간대
-				if( (chkHour>=9 && chkHour<=10) )  timeTermStr = "(09:00 ~ 10:00)"; 
-				if( (chkHour>=12 && chkHour<=17) ) timeTermStr = "(12:00 ~ 17:00)";
-				if( (chkHour>=20 && chkHour<=22) ) timeTermStr = "(20:00 ~ 22:00)";
+				if( (chkHour>=9 && chkHour<10) )  timeTermStr = "(09:00 ~ 10:00)"; 
+				if( (chkHour>=12 && chkHour<17) ) timeTermStr = "(12:00 ~ 17:00)";
+				if( (chkHour>=20 && chkHour<22) ) timeTermStr = "(20:00 ~ 22:00)";
 				
 				// 최대부하시간대
-				if( (chkHour>=10 && chkHour<=12) ) timeTermStr = "(10:00 ~ 12:00)"; 
-				if( (chkHour>=17 && chkHour<=20) ) timeTermStr = "(17:00 ~ 20:00)";
-				if( (chkHour>=22 && chkHour<=23) ) timeTermStr = "(22:00 ~ 23:00)";
+				if( (chkHour>=10 && chkHour<12) ) timeTermStr = "(10:00 ~ 12:00)"; 
+				if( (chkHour>=17 && chkHour<20) ) timeTermStr = "(17:00 ~ 20:00)";
+				if( (chkHour>=22 && chkHour<23) ) timeTermStr = "(22:00 ~ 23:00)";
+				
+				if( (chkHour>=23 && chkHour<9) ) chargePowerDisplayYn = "N";
 				
 			}
 		}
