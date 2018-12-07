@@ -77,14 +77,14 @@
 	}
 	
 	function fn_cycle_1min() {
+		var today = new Date();
 		getSiteSetDetail();
+		chargePowerStrDisplayYn(today);
 		getPeak(formData);
 //		getPeakRealList(formData); // 피크전력현황 조회
 		drawData_chart_peak(); // 피크전력현황 차트그리기
 		
-		var today = new Date();
 		update_updtDataTime(today, "updtTimePeak");
-		chargePowerStrDisplayYn(today);
 	}
 	
 	function fn_cycle_15min() {
@@ -113,6 +113,8 @@
 		var endTime;
 		startTime = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), 0, 0, 0);
 		endTime = new Date(endDay.getFullYear(), endDay.getMonth(), endDay.getDate(), 23, 59, 59);
+//		startTime = new Date(2018, 10, 1, 0, 0, 0);
+//		endTime = new Date(2018, 10, 1, 23, 59, 59);
 		
 		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
 		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
@@ -541,6 +543,8 @@
 	}
 
 	var peakDataSet = []; // chartData를 위한 변수
+	var contractPowerDataSet = []; // chartData를 위한 변수
+	var chargePowerDataSet = []; // chartData를 위한 변수
 	function getPeak(formData) {
 		$.ajax({
 			url : "/getPeak",
@@ -555,18 +559,16 @@
 				// 데이터 셋팅
 				var dt = new Date(startDate);
 				var dt2 = new Date(stdDate);
-				var dataSet1 = [];
-				var dataSet2 = [];
 				if( peakDataSet.length == 0 || (dt2.getMinutes() == 0 || dt2.getMinutes() == 15 || dt2.getMinutes() == 30 || dt2.getMinutes() == 45) ) {
 					peakDataSet = [];
+					contractPowerDataSet = [];
+					chargePowerDataSet = [];
 					for(var i=0; i<15; i++) {
 						peakDataSet.push([ Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds()), null]);
-						dataSet1.push([ Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds()), contractPower]);
-						dataSet2.push([ Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds()), chargePower]);
+						contractPowerDataSet.push([ Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds()), contractPower]);
+						chargePowerDataSet.push([ Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds()), chargePower]);
 						dt = new Date(dt.setMinutes(dt.getMinutes() + 1));
 					}
-					contractPowerList = dataSet1;
-					chargePowerList = dataSet2;
 				}
 				var map = convertUnitFormat((totalUsage*4), "mWh", 8);
 				var formatNum = map.get("formatNum");
@@ -596,44 +598,6 @@
 		contractPower = siteSetDetail.contract_power;
 		chargePower = siteSetDetail.charge_power;
 	}
-
-	// 피크 전력
-	var pastPeakList;
-	var contractPowerList;
-	var chargePowerList;
-	function callback_getPeakRealList(result) {
-		var peakList = result.list;
-		
-		// 데이터 셋팅
-		var dataSet = []; // chartData를 위한 변수
-		var dataSet2 = []; // chartData를 위한 변수
-		var dataSet3 = []; // chartData를 위한 변수
-		var totUsage = 0; // 전체 누적합
-		if(peakList.length > 0) {
-			for(var i=0; i<peakList.length; i++) {
-				var peakVal = String(peakList[i].peak_val);
-				var rePeakVal = 0;
-				if(peakVal == null || peakVal == "" || peakVal == "null") {
-					rePeakVal = null;
-				} else {
-					if(peakVal.indexOf(".")>-1) rePeakVal = Math.round( Number(peakVal) );
-					else rePeakVal = Number(peakVal);
-					totUsage = totUsage+Number(peakVal);
-				}
-				
-//				var tm = new Date(peakList[i].std_timestamp);
-				// 차트데이터 셋팅
-				dataSet.push([setChartDateUTC(peakList[i].std_timestamp), totUsage]);
-				dataSet2.push([setChartDateUTC(peakList[i].std_timestamp), contractPower]);
-				dataSet3.push([setChartDateUTC(peakList[i].std_timestamp), chargePower]);
-				
-			}
-			
-		}
-		pastPeakList = dataSet;
-		contractPowerList = dataSet2;
-		chargePowerList = dataSet3;
-	}
 	
 	// 차트 그리기
 	function drawData_chart_peak() {
@@ -651,14 +615,6 @@
 		for(var i = seriesLength - 1; i > -1; i--) {
 				peakChart.series[i].remove();
 		}
-		peakChart.yAxis[0].removePlotLine('contract-power');
-		peakChart.yAxis[0].removePlotLine('charge-power');
-		
-//		if(contractPower >= chargePower) {
-//			peakChart.yAxis[0].options.max = contractPower+contractPower;
-//		} else {
-//			peakChart.yAxis[0].options.max = chargePower+100;
-//		}
 		
 		peakChart.addSeries({
 			name: '최대 피크 전력',
@@ -671,45 +627,15 @@
 			peakChart.addSeries({
 				name: '한전 계약 전력',
 				color: '#13af67', /* 한전 계약 전력 */
-				data: contractPowerList
+				data: contractPowerDataSet
 			}, false);
 			
 			peakChart.addSeries({
 				name: '요금 적용 전력',
 				color: '#f75c4a', /* 요금 적용 전력 */
-				data: chargePowerList
+				data: chargePowerDataSet
 			}, false);
 		}
-		
-//		peakChart.yAxis[0].addPlotLine({
-//		          color: '#13af67',
-//		          width: 1, 
-//		          value: contractPower,
-//		          label: {
-//		            text: '한전 계약 전력('+contractPower+')',
-//		            style: {
-//	                    color: '#13af67',
-//	                    fontWeight: 'bold'
-//	                },
-//	                zIndex: 4
-//		          }, id: 'contract-power'
-//		  });
-//		
-//		peakChart.yAxis[0].addPlotLine({
-//		          color: '#f75c4a',
-//		          width: 1, 
-//		          value: chargePower,
-//		          label: {
-//		            text: '요금 적용 전력('+chargePower+')',
-//		            style: {
-//	                    color: '#f75c4a',
-//	                    fontWeight: 'bold'
-//	                },
-//                    align: 'right',
-//                    x: -10,
-//	                zIndex: 4
-//		          }, id: 'charge-power'
-//		  });
 		
 		peakChart.xAxis[0].options.tickInterval = 60 * 1000;
 		peakChart.xAxis[0].options.labels.style.fontSize = '12px';
@@ -737,7 +663,7 @@
 				if( (chkHour>=10 && chkHour<12) ) timeTermStr = "(10:00 ~ 12:00)"; 
 				if( (chkHour>=13 && chkHour<17) ) timeTermStr = "(13:00 ~ 17:00)";
 				
-				if( (chkHour>=23 && chkHour<9) ) chargePowerDisplayYn = "N";
+				if( (chkHour>=23 || chkHour<9) ) chargePowerDisplayYn = "N";
 				
 			} else if(chkSeason == 2) {
 				// 중간부하시간대
@@ -749,7 +675,7 @@
 				if( (chkHour>=10 && chkHour<12) ) timeTermStr = "(10:00 ~ 12:00)"; 
 				if( (chkHour>=13 && chkHour<17) ) timeTermStr = "(13:00 ~ 17:00)";
 				
-				if( (chkHour>=23 && chkHour<9) ) chargePowerDisplayYn = "N";
+				if( (chkHour>=23 || chkHour<9) ) chargePowerDisplayYn = "N";
 				
 			} else if(chkSeason == 4) {
 				// 중간부하시간대
@@ -762,7 +688,7 @@
 				if( (chkHour>=17 && chkHour<20) ) timeTermStr = "(17:00 ~ 20:00)";
 				if( (chkHour>=22 && chkHour<23) ) timeTermStr = "(22:00 ~ 23:00)";
 				
-				if( (chkHour>=23 && chkHour<9) ) chargePowerDisplayYn = "N";
+				if( (chkHour>=23 || chkHour<9) ) chargePowerDisplayYn = "N";
 				
 			}
 		}
