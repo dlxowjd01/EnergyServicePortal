@@ -116,29 +116,29 @@ function callback_getGMainSiteRankingTotalDetail(result) {
 		if (oldRankType == 0) {
 			var map = convertUnitFormat(total.usage, "mWh");
 			var past = toFixedNum(map.get("formatNum"), 2);
-			$('#rankTotal > span').text('누적 - ' + past + map.get("unit"));
+			$('#rankTotal > span').text('누적 : ' + past + " " + map.get("unit"));
 			
 			$('#rankPlan').html('<span class="bul2" />');
 			var map2 = convertUnitFormat(total.usage_plan, "mWh");
 			var feture = toFixedNum(map2.get("formatNum"), 2);
-			$('#rankPlan > span').text('예상 - ' + feture + map2.get("unit"));
+			$('#rankPlan > span').text('예상 : ' + feture + map2.get("unit"));
 		} else if (oldRankType == 1) {
 			var map = convertUnitFormat(total.charge, "kWh");
 			var past = toFixedNum(map.get("formatNum"), 2);
-			$('#rankTotal > span').text('누적 - ' + past + map.get("unit"));
+			$('#rankTotal > span').text('누적 : ' + past + " " + map.get("unit"));
 			
 			$('#rankPlan').html('<span class="bul2" />');
 			var map2 = convertUnitFormat(total.charge_plan, "kWh");
 			var feture = toFixedNum(map2.get("formatNum"), 2);
-			$('#rankPlan > span').text('예상 - ' + feture + map2.get("unit"));
+			$('#rankPlan > span').text('예상 : ' + feture + " " + map2.get("unit"));
 		} else if (oldRankType == 2) {
 			var map = convertUnitFormat(total.gen, "kWh");
 			var past = toFixedNum(map.get("formatNum"), 2);
-			$('#rankTotal > span').text('누적 - ' + past + map.get("unit"));
+			$('#rankTotal > span').text('누적 : ' + past + " " + map.get("unit"));
 			$('#rankPlan').text('');
 		} else if (oldRankType == 3) {
 			var reward = (total.reward == null) ? 0 : total.reward;
-			$('#rankTotal > span').text('수익 - ' + numberComma(reward) + "won");
+			$('#rankTotal > span').text('수익 : ' + numberComma(reward) + " " + "won");
 			$('#rankPlan').text('');
 		}
 	} else {
@@ -344,10 +344,10 @@ function changeRanking(tabIdx) {
 	$('#rankType').val(tabIdx + 4);
 
 	var txt = "";
-	if(tabIdx == 0) txt = "사용량 순위(단위: kWh)";
-	else if(tabIdx == 1) txt = "충방전 순위(단위: kWh)";
-	else if(tabIdx == 2) txt = "발전량 순위(단위: kWh)";
-	else if(tabIdx == 3) txt = "수익 순위(단위: won)";
+	if(tabIdx == 0) txt = "사용량 순위(kWh)";
+	else if(tabIdx == 1) txt = "충방전 순위( kWh)";
+	else if(tabIdx == 2) txt = "발전량 순위( kWh)";
+	else if(tabIdx == 3) txt = "수익 순위( WON)";
 	$("#tabText").empty().text(txt);
 	getGMainSiteRankingTotalDetail(); // 사이트 사용량 순위 누적/예상 총합
 	getGMainSiteRankingList(1); // 사이트 사용량 순위 목록 조회
