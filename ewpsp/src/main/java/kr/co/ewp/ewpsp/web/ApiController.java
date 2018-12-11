@@ -32,6 +32,7 @@ import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.TimeType;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.UsageType;
 import kr.co.ewp.ewpsp.common.util.PMGrowApiUtil;
 import kr.co.ewp.ewpsp.common.util.UserUtil;
+import kr.co.ewp.ewpsp.model.BmsEquipmentModel;
 import kr.co.ewp.ewpsp.model.DrRequestTarget;
 import kr.co.ewp.ewpsp.model.SocModel;
 import kr.co.ewp.ewpsp.model.UsageItemModel;
@@ -125,12 +126,19 @@ public class ApiController {
 				Map<String, Object> devices = new HashMap<String, Object>();
 				devices = (Map<String, Object>) deviceList.get(i);
 				String deviceId = (String) devices.get("device_id");
-				SocModel resSoc = PMGrowApiUtil.getSoc(host, deviceId);
-				if(resSoc != null) {
-					int soc = Integer.parseInt(resSoc.getSoc());
+				List<BmsEquipmentModel> bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, deviceId);
+				if(bmsDetail != null && bmsDetail.size() > 0) {
+					String sysSoc = bmsDetail.get(0).getSysSoc();
+					int soc = Integer.parseInt(sysSoc);
 					totalSoc = totalSoc+soc;
 					socCnt = socCnt+1;
 				}
+//				SocModel resSoc = PMGrowApiUtil.getSoc(host, deviceId);
+//				if(resSoc != null) {
+//					int soc = Integer.parseInt(resSoc.getSoc());
+//					totalSoc = totalSoc+soc;
+//					socCnt = socCnt+1;
+//				}
 			}
 		}
 		
