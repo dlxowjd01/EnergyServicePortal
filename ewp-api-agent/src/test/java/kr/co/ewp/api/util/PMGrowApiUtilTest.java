@@ -1,5 +1,6 @@
 package kr.co.ewp.api.util;
 
+import java.util.Date;
 import java.util.List;
 
 import kr.co.ewp.api.model.BmsEquipmentModel;
@@ -18,19 +19,22 @@ public class PMGrowApiUtilTest {
     // adf4537b: ESS 측정
     // 0dbe72b9: 총량 측정
 	  String deviceId = "1";
-//	  getPvGenListTest();
+//	  getEssChargeTest();
+//	  getPvGenListTest(deviceId);
     getPcsEquipmentListTest(deviceId);
 //    getBmsEquipmentListTest(deviceId);
 //    getPvEquipmentListTest(deviceId);
-//    getSoc("a8324a51");
+//    getSoc("3");
   }
 
   public static void getEssChargeTest() {
     PrettyLog prettyLog = new PrettyLog("getEssChargeTest");
     try {
-      String equipmentId = "0dbe72b9";
-      String startDt = "20180901";
-      String endDt = "20180906";
+      String equipmentId = "1";
+      Date startDt = new Date(Long.parseLong("1533481200000"));//"20180806";
+      Date endDt = new Date(Long.parseLong("1533826800000"));//"20180810";
+//      String startDt = "20180806";
+//      String endDt = "20180810";
       String intervalType = "1";
       String interval = "15";
       List<ChargingDischarging> chargingDischargingList = PMGrowApiUtil.getEssCharge(API_HOST, equipmentId, startDt, endDt, intervalType, interval, prettyLog);
@@ -45,8 +49,10 @@ public class PMGrowApiUtilTest {
     PrettyLog prettyLog = new PrettyLog("getEssUsageListTest");
     try {
       String equipmentId = "0dbe72b9";
-      String startDt = "20180901";
-      String endDt = "20180906";
+      Date startDt = new Date(Long.parseLong("1535727600000"));//"20180901";
+      Date endDt = new Date(Long.parseLong("1536159600000"));//"20180906";
+//      String startDt = "20180901";
+//      String endDt = "20180906";
       String intervalType = "1";
       String interval = "15";
       List<EssUsageModel> chargingDischargingList = PMGrowApiUtil.getEssUsageList(API_HOST, equipmentId, startDt, endDt, intervalType, interval, prettyLog);
@@ -57,12 +63,14 @@ public class PMGrowApiUtilTest {
     }
   }
   
-  public static void getPvGenListTest() {
+  public static void getPvGenListTest(String equipmentId) {
 	  PrettyLog prettyLog = new PrettyLog("getPvGenListTest");
 	  try {
-		  String equipmentId = "0dbe72b9";
-		  String startDt = "20180901";
-		  String endDt = "20180906";
+//		  String equipmentId = "0dbe72b9";
+		  Date startDt = new Date(Long.parseLong("1535727600000"));//"20180901";
+	      Date endDt = new Date(Long.parseLong("1536159600000"));//"20180906";
+//		  String startDt = "20180901";
+//		  String endDt = "20180906";
 		  String intervalType = "1";
 		  String interval = "15";
 		  List<PvPowerGenModel> resultList = PMGrowApiUtil.getPvPowerGenList(API_HOST, equipmentId, startDt, endDt, "1", "15", prettyLog);

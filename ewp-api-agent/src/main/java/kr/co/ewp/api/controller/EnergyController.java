@@ -31,6 +31,7 @@ import kr.co.ewp.api.entity.SiteSet;
 import kr.co.ewp.api.entity.Usage;
 import kr.co.ewp.api.model.CblResponseModel;
 import kr.co.ewp.api.model.ChargingDischarging;
+import kr.co.ewp.api.model.ChargingDischargingSchedule;
 import kr.co.ewp.api.model.DrRequestTarget;
 import kr.co.ewp.api.model.EnergyModel;
 import kr.co.ewp.api.model.EssUsageModel;
@@ -615,8 +616,9 @@ public class EnergyController {
         }
         List<EssCharge> essChargeList = Lists.newArrayList();
         try {
-          List<ChargingDischarging> cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
-              DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
+          List<ChargingDischarging> cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "1", "15", prettyLog);
+//          List<ChargingDischarging> cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
+//        		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
           prettyLog.append("ITEM_SIZE", cdList.size());
           for (ChargingDischarging item : cdList) {
             EssCharge essCharge = new EssCharge();
@@ -703,17 +705,18 @@ public class EnergyController {
         }
         List<EssChargePlan> essChargePlanList = Lists.newArrayList();
         try {
-          List<ChargingDischarging> cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
-              DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
+          List<ChargingDischargingSchedule> cdList = PMGrowApiUtil.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "1", "15", prettyLog);
+//          List<ChargingDischargingSchedule> cdList = PMGrowApiUtil.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
+//        		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
           prettyLog.append("ITEM_SIZE", cdList.size());
-          for (ChargingDischarging item : cdList) {
+          for (ChargingDischargingSchedule item : cdList) {
             EssChargePlan essChargePlan = new EssChargePlan();
             essChargePlan.setDeviceId(device.getDeviceId());
             essChargePlan.setSiteId(_siteId);
             essChargePlan.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
             essChargePlan.setStdTimestamp(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
-            essChargePlan.setChgVal(Integer.parseInt(item.getChargeEnergy()));
-            essChargePlan.setDischgVal(Integer.parseInt(item.getDischargeEnergy()));
+            essChargePlan.setChgVal(Integer.parseInt(item.getChargingScheduleEnergy()));
+            essChargePlan.setDischgVal(Integer.parseInt(item.getDischargingScheduleEnergy()));
 
             essChargePlanList.add(essChargePlan);
           }
@@ -816,8 +819,9 @@ public class EnergyController {
                 }
                 localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
               }
-              List<PvPowerGenModel> resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, DateUtil.dateToString(beginDate, "yyyyMMdd"),
-                  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
+              List<PvPowerGenModel> resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate, endDate, "1", "15", prettyLog);
+//              List<PvPowerGenModel> resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, DateUtil.dateToString(beginDate, "yyyyMMdd"),
+//            		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
               prettyLog.append("ITEM_SIZE", resultList.size());
               for (PvPowerGenModel item : resultList) {
                 PvGen pvGen = new PvGen();
@@ -992,8 +996,9 @@ public class EnergyController {
           }
           localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
         }
-        List<EssUsageModel> resultList = PMGrowApiUtil.getEssUsageList(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
-            DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
+        List<EssUsageModel> resultList = PMGrowApiUtil.getEssUsageList(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "1", "15", prettyLog);
+//        List<EssUsageModel> resultList = PMGrowApiUtil.getEssUsageList(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
+//        		DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
         prettyLog.append("ITEM_SIZE", resultList.size());
         List<EssUsage> essUsageModel = Lists.newArrayList();
         for (EssUsageModel item : resultList) {
