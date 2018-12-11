@@ -83,12 +83,18 @@ public class DERUsageController {
 		}
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("kepcoUsageSheetList", kepcoUsageList.get("sheetList"));
-		resultMap.put("kepcoUsageChartList", kepcoUsageList.get("chartList"));
-		resultMap.put("essUsageListSheetList", essUsageList.get("sheetList"));
-		resultMap.put("essUsageListChartList", essUsageList.get("chartList"));
-		resultMap.put("pvUsageListSheetList", pvUsageList.get("sheetList"));
-		resultMap.put("pvUsageListChartList", pvUsageList.get("chartList"));
+		if(kepcoUsageList != null){
+			resultMap.put("kepcoUsageSheetList", kepcoUsageList.get("sheetList"));
+			resultMap.put("kepcoUsageChartList", kepcoUsageList.get("chartList"));
+		}
+		if(essUsageList != null){
+			resultMap.put("essUsageListSheetList", essUsageList.get("sheetList"));
+			resultMap.put("essUsageListChartList", essUsageList.get("chartList"));
+		}
+		if(pvUsageList != null){
+			resultMap.put("pvUsageListSheetList", pvUsageList.get("sheetList"));
+			resultMap.put("pvUsageListChartList", pvUsageList.get("chartList"));
+		}
 		resultMap.put("loopCntSheetList", loopCntSheetList);
 		resultMap.put("loopCntChartList", loopCntChartList);
 		

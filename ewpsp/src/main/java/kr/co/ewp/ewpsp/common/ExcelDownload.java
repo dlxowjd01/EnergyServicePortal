@@ -157,8 +157,11 @@ public class ExcelDownload {
 		String excelName = "";
 		try {
 			excelName = new String ( excel_title.getBytes("KSC5601"), "8859_1");
+		} catch (NullPointerException e) {
+			logger.error("error is : "+e.toString());
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error("error is : "+e.toString());
 		}
 		
 		response.setContentType("Application/Msexcel");
@@ -178,9 +181,11 @@ public class ExcelDownload {
 			// 엑셀 다운로드 요청을 처리하는 곳에서 응답 헤더에 fileDownloadToken 쿠키를 넣어줌.(로딩바 처리)
 //			Cookie cookie = new Cookie("fileDownloadToken", "TRUE");
 //			response.addCookie(new Cookie("fileDownloadToken", "TRUE"));
-			
+		} catch (NullPointerException e) {
+			logger.error("error is : "+e.toString());	
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error("error is : "+e.toString());
 			response.setHeader("Content-Type",  "tet/heml; charset=utf-8");
 			response.setHeader("Set-Cookie", "fileDonwload=false; path=/");
 			response.setHeader("Cache-Control", "no-cache, no-store, nust-revalidate");
@@ -189,15 +194,21 @@ public class ExcelDownload {
 				out = response.getOutputStream();
 				byte[] data = new String("엑셀 다운로드에 실패했습니다. \n 관리자에게 문의하세요.").getBytes();
 				out.write(data, 0, data.length);
+			} catch (NullPointerException e1) {
+				logger.error("error is : "+e1.toString());
 			} catch (Exception e1) {
-				e1.printStackTrace();
+				//e1.printStackTrace();
+				logger.error("error is : "+e1.toString());
 			}
 		} finally {
 			if(workbook != null) {
 				try {
 					workbook.close();
+				} catch (NullPointerException e) {
+					logger.error("error is : "+e.toString());
 				} catch (Exception e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					logger.error("error is : "+e.toString());
 				}
 			}
 		}

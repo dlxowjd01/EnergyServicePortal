@@ -445,7 +445,9 @@ public class SiteMainController {
 	            peakRequest.setEnergy(energy);
 	            PeakResponseModel peak = EncoredApiUtil.getPeak(peakRequest);
 	            for (int i = 0; i < peak.getBasetime().size(); i++) {
-	              peakHistory.add(new PeakHistoryModel(DateUtil.dateToString(new Date(peak.getBasetime().get(i)), "yyyy-MM"), peak.getkW().get(i)));
+	            	if(peak != null){
+	            		peakHistory.add(new PeakHistoryModel(DateUtil.dateToString(new Date(peak.getBasetime().get(i)), "yyyy-MM"), peak.getkW().get(i)));
+	            	}
 	            }
 	            peakHistory.sort(new Comparator<PeakHistoryModel>() {
 	              public int compare(PeakHistoryModel o1, PeakHistoryModel o2) {

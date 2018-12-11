@@ -528,8 +528,11 @@ public class CmpyGrpSiteMngController {
 			if(!"".equals(fileName)) { // 업로드할 파일이 존재할 경우
 				try {
 					mFile.transferTo(new File(root+path+newFileName));
+				} catch (NullPointerException e) {
+					logger.error("error is : "+e.toString());
 				} catch (Exception e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					logger.error("error is : "+e.toString());
 				}
 				
 				param.put("siteGrpImgPath", path);

@@ -83,6 +83,8 @@ public class EnertalkApiUtil {
 		  
 			logger.debug("result "+resultBody);
 		  returnUsage = JsonUtil.toObject(resultBody, UsageModel.class);
+	  } catch (NullPointerException e) {
+			logger.error("error is : "+e.toString());
 	  } catch (Exception e) {
 //		  e.printStackTrace();
 		  logger.error("error is : "+e.toString());
@@ -133,6 +135,8 @@ public class EnertalkApiUtil {
 		  logger.debug("result "+resultBody);
 		  returnUsage = JsonUtil.toObject(resultBody, UsageModel.class);
 		  return returnUsage;
+	  } catch (NullPointerException e) {
+			logger.error("error is : "+e.toString());
 	  } catch (Exception e) {
 //		  e.printStackTrace();
 		  logger.error("error is : "+e.toString());
@@ -153,6 +157,8 @@ public class EnertalkApiUtil {
 		  resultBody = HttpUtil.get(url, headers);
 		  logger.debug("         resultBody는      "+resultBody);
 		  usageRealtime = JsonUtil.toObject(resultBody, UsageRealtimeModel.class);
+	  } catch (NullPointerException e) {
+			logger.error("error is : "+e.toString());
 	  } catch (Exception e) {
 		  logger.error("error is : "+e.toString());
 	  } finally {
@@ -178,6 +184,8 @@ public class EnertalkApiUtil {
       logger.error("         resultBody는      "+resultBody);
       DrRequest = JsonUtil.toObject(resultBody, new TypeReference<List<DrRequestTarget>>() {
       });
+    } catch (NullPointerException e) {
+		logger.error("error is : "+e.toString());
     } catch (Exception e) {
     	logger.error("error is : "+e.toString());
     } finally {
@@ -201,6 +209,8 @@ public class EnertalkApiUtil {
 		  resultBody = HttpUtil.get(url.toString(), headers);
 		  logger.debug("result "+resultBody);
 		  getCBL = JsonUtil.toObject(resultBody, CblResponseModel.class);
+	  } catch (NullPointerException e) {
+		  logger.error("error is : "+e.toString());
 	  } catch (Exception e) {
 		  logger.error("error is : "+e.toString());
 //		  e.printStackTrace();
@@ -223,6 +233,8 @@ public class EnertalkApiUtil {
 		  resultBody = HttpUtil.get(url.toString(), headers);
 		  logger.debug("result "+resultBody);
 		  returnUsage = JsonUtil.toObject(resultBody, UsageModel.class);
+	  } catch (NullPointerException e) {
+		  logger.error("error is : "+e.toString());
 	  } catch (Exception e) {
 		  logger.error("error is : "+e.toString());
 //		  e.printStackTrace();
@@ -243,8 +255,10 @@ public class EnertalkApiUtil {
       resultBody = HttpUtil.get(url, headers);
       logger.debug("result "+resultBody);
       returnUsage = JsonUtil.toObject(resultBody, DeviceModel.class);
+    } catch (NullPointerException e) {
+    	logger.error("error is : "+e.toString());
     } catch (Exception e) {
-    	e.printStackTrace();
+    	//e.printStackTrace();
 		logger.error("error is : "+e.toString());
     } finally {
     	logger.debug("EnertalkApiUtil.getDevice end");

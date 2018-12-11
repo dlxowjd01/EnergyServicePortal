@@ -8,10 +8,13 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Deprecated
 public class AES256Util {
 
+	private static final Logger logger = LoggerFactory.getLogger(AES256Util.class);
 	private String iv;
 	private Key keySpec;
 
@@ -49,8 +52,10 @@ public class AES256Util {
 
 			byte[] encrypted = c.doFinal(str.getBytes("UTF-8"));
 			encStr = new String(Base64.encodeBase64(encrypted));
+		} catch (NullPointerException e) {
+			logger.error("error is : "+e.toString());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("error is : "+e.toString());
 		}
 
 		return encStr;
@@ -70,8 +75,10 @@ public class AES256Util {
 
 			byte[] byteStr = Base64.decodeBase64(str.getBytes());
 			decStr = new String(c.doFinal(byteStr),"UTF-8");
+		} catch (NullPointerException e) {
+			logger.error("error is : "+e.toString());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("error is : "+e.toString());
 		}
 
 		return decStr;
