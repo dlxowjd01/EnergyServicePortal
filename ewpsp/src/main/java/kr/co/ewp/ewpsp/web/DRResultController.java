@@ -168,7 +168,7 @@ public class DRResultController {
 		UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicBySiteId5Min(siteId, start, end);
 		List usageList = new ArrayList();
 		Map<String, Object> usageMap = new HashMap<String, Object>();
-		if(usageModel.getItems() != null) {
+		if(usageModel!=null && usageModel.getItems() != null) {
 			for (UsageItemModel item : usageModel.getItems()) {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("site_id", siteId);

@@ -45,6 +45,8 @@ public class PMGrowApiUtil {
       logger.debug("result "+resultBody);
       returnPCS = JsonUtil.toObject(resultBody, new TypeReference<List<PcsEquipmentModel>>() {
       });
+    } catch (NullPointerException e) {
+		logger.error("error is : "+e.toString());
     } catch (Exception e) {
 //    	e.printStackTrace();
 		logger.error("error is : "+e.toString());
@@ -99,6 +101,8 @@ public class PMGrowApiUtil {
       logger.debug("result "+resultBody);
       returnBMS = JsonUtil.toObject(resultBody, new TypeReference<List<BmsEquipmentModel>>() {
       });
+    } catch (NullPointerException e) {
+		logger.error("error is : "+e.toString());
     } catch (Exception e) {
 //    	e.printStackTrace();
 		logger.error("error is : "+e.toString());
@@ -153,6 +157,8 @@ public class PMGrowApiUtil {
       logger.debug("result "+resultBody);
       returnPV = JsonUtil.toObject(resultBody, new TypeReference<List<PvEquipmentModel>>() {
       });
+    } catch (NullPointerException e) {
+		logger.error("error is : "+e.toString());
     } catch (Exception e) {
     	e.printStackTrace();
 		logger.error("error is : "+e.toString());
@@ -194,6 +200,8 @@ public class PMGrowApiUtil {
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
 		  logger.debug("result "+resultBody);
 		  returnSoc = JsonUtil.toObject(resultBody, SocModel.class);
+	  } catch (NullPointerException e) {
+			logger.error("error is : "+e.toString());
 	  } catch (Exception e) {
 //		  e.printStackTrace();
 		  logger.error("error is : "+e.toString());

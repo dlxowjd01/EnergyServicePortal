@@ -99,6 +99,8 @@ public class RefreshableSqlSessionFactoryBean extends SqlSessionFactoryBean impl
 				if (isModified()) {
 					try {
 						refresh();
+					} catch (NullPointerException e) {
+						logger.error("error is : "+e.toString());
 					} catch (Exception e) {
 						logger.error("caught exception", e);
 					}

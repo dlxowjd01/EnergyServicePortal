@@ -86,8 +86,11 @@ public class CommonController {
 				
 			}
 			
+		} catch (NullPointerException e1) {
+			logger.error("error is : "+e1.toString());
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error("error is : "+e.toString());
 		} finally {
 			if(ed != null) {
 				ed.close();

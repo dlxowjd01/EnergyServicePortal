@@ -62,6 +62,8 @@ public class EncoredApiUtil {
       headers.set("content-type", "application/json");
       resultBody = HttpUtil.post(url, headers, JsonUtil.toJson(peakRequest));
       returnModel = JsonUtil.toObject(resultBody, PeakResponseModel.class);
+    } catch (NullPointerException e) {
+		logger.error("error is : "+e.toString());
     } catch (Exception e) {
     	logger.error("error is : "+e.toString());
     } finally {
@@ -81,6 +83,8 @@ public class EncoredApiUtil {
       headers.set("content-type", "application/json");
       resultBody = HttpUtil.post(url, headers, JsonUtil.toJson(billRequest));
       returnModel = JsonUtil.toObject(resultBody, BillResponseModel.class);
+    } catch (NullPointerException e) {
+		logger.error("error is : "+e.toString());
     } catch (Exception e) {
     	logger.error("error is : "+e.toString());
     } finally {

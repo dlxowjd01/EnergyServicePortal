@@ -138,7 +138,6 @@ public class DeviceMonitoringController {
 		Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
 		String host = (String) siteDetail.get("local_ems_addr");
 		List<PcsEquipmentModel> pcsDetail = PMGrowApiUtil.getPcsEquipmentList(host, (String) param.get("deviceId"));
-		System.out.println("pcsDetail  "+pcsDetail.size());
 		if(pcsDetail == null || pcsDetail.size() == 0) {
 			result.put("pcsStatus", null);
 			result.put("pcsStatusNm", null);

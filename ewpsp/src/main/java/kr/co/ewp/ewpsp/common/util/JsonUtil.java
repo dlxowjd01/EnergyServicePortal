@@ -76,6 +76,8 @@ public class JsonUtil {
         mapper.setPropertyNamingStrategy(pns);
       }
       return mapper.readValue(string, valueType);
+    } catch (NullPointerException e) {
+    	throw new RuntimeException(e);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

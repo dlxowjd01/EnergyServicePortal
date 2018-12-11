@@ -91,14 +91,20 @@ public class ApiController {
       response.getWriter().print("0");
       
       // SMS 전송 (한재종)
-      smsService.sendAlarmMessage(siteId, deviceId, device.get("device_name"), alarmTime, alarmType, alarmMsg);
+      if(device !=null){
+    	  smsService.sendAlarmMessage(siteId, deviceId, device.get("device_name"), alarmTime, alarmType, alarmMsg);
+      }
+    } catch (NullPointerException e) {
+		logger.error("error is : "+e.toString());
     } catch (Exception e) {
-      e.printStackTrace();
+      //e.printStackTrace();
+    	logger.error("error is : "+e.toString());
       response.setContentType("text/html; charset=UTF-8");
       try {
         response.getWriter().print("-1");
       } catch (IOException e1) {
-        e1.printStackTrace();
+        //e1.printStackTrace();
+    	  logger.error("error is : "+e1.toString());
       }
     }
   }

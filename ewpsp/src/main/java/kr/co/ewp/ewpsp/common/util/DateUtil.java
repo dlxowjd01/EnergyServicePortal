@@ -8,13 +8,22 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 public final class DateUtil {
   private static TimeZone timeZone;
-
+  private static final Logger logger = LoggerFactory.getLogger(DateUtil.class);
+  
   static {
     try {
       timeZone = TimeZone.getTimeZone("GMT+09:00");
+    } catch (NullPointerException e1) {
+		logger.error("error is : "+e1.toString());
     } catch (Exception e) {
+ 		logger.error("error is : "+e.toString());
+
     }
   }
 
@@ -133,7 +142,7 @@ public final class DateUtil {
   }
 
   public static void main(String[] args) {
-    System.out.println(DateUtil.getAfterYears(1, "yyyyMMdd"));
+	  
   }
 
   public static int getAfterSeconds(Date date1, Date date2) {

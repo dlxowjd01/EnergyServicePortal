@@ -72,7 +72,13 @@ public class DataPeriodCalculate {
 		endListDt = (Timestamp) dataMap.get("endListDt");
 		
 		// 마무리
-		List newList2 = finishPeriodCalculate(newList,  term, period, selTermTo, timestampStr, calculValStr, endListDt);
+		
+		List newList2 = new ArrayList();
+		if( endListDt != null){
+			newList2 = finishPeriodCalculate(newList,  term, period, selTermTo, timestampStr, calculValStr, endListDt);
+		}
+		
+		//List newList2 = finishPeriodCalculate(newList,  term, period, selTermTo, timestampStr, calculValStr, endListDt);
 		
 		return newList2;
 	}

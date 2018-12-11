@@ -105,7 +105,7 @@
 			var str11 = "";
 			var delLastWon = Math.floor(totalTex/10)*10-totalTex;
 			
-			if(meterReadDay == 30 && yyyyMM.substring(4,6) == 02){
+			if(meterReadDay >= 28 && yyyyMM.substring(4,6) == 02){
 				meterReadDay=28;
 			}
 			$("#texArea").find("tbody").empty();

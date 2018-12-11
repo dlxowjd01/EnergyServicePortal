@@ -42,13 +42,13 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 			HashMap param = new HashMap<String, Object>();
 			// 권한이 없거나 시스템관리자가 아니면 사용자가 권한이 있는 목록만 검색한다.
-			if (authType == null || (!authType.equals("1") && !authType.equals("2") && !authType.equals("3"))) {
+			if (authType == null || (!"1".equals(authType) && !"2".equals(authType) && !"3".equals(authType))) {
 				param.put("userIdx", userIdx);
 			}
-			if(authType.equals("2")) {
+			if("2".equals(authType)) {
 				param.put("compIdx", compIdx);
 			}
-			if(authType.equals("3")) {
+			if("3".equals(authType)) {
 				param.put("siteGrpIdx", siteGrpIdx);
 			}
 
