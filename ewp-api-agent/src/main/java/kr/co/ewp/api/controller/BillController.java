@@ -220,8 +220,10 @@ public class BillController {
             energy.setkWh(kWh);
             peakRequest.setEnergy(energy);
             PeakResponseModel peak = EncoredApiUtil.getPeak(peakRequest, prettyLog);
-            for (int i = 0; i < peak.getBasetime().size(); i++) {
-              peakHistory.add(new PeakHistoryModel(DateUtil.dateToString(new Date(peak.getBasetime().get(i)), "yyyy-MM"), peak.getkW().get(i)));
+            if(peak != null){
+            	for (int i = 0; i < peak.getBasetime().size(); i++) {
+            		peakHistory.add(new PeakHistoryModel(DateUtil.dateToString(new Date(peak.getBasetime().get(i)), "yyyy-MM"), peak.getkW().get(i)));
+            	}
             }
             peakHistory.sort(new Comparator<PeakHistoryModel>() {
               @Override
@@ -291,7 +293,10 @@ public class BillController {
         try {
 
           BillResponseModel response = EncoredApiUtil.getBill(billRequest, prettyLog);
-          prettyLog.append("ITEM_SIZE", response.getItems().size());
+          if(response != null){
+        	  
+        	  prettyLog.append("ITEM_SIZE", response.getItems().size());
+          }
           for (BillItemModel item : response.getItems()) {
             Bill bill = new Bill();
             bill.setBaseRate(item.getBaseRate().intValue());
@@ -371,6 +376,8 @@ public class BillController {
             bill.setBdayInMonth(item.getBdayInMonth().intValue());
             billList.add(bill);
           }
+        } catch (NullPointerException e) {
+	      	logger.error("error is : "+e.toString());
         } catch (Exception e) {
           prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
           logger.error("bill01-ERROR", e);
@@ -597,7 +604,10 @@ public class BillController {
         try {
 
             BillResponseModel response = EncoredApiUtil.getBill(billRequest, prettyLog);
-            prettyLog.append("ITEM_SIZE", response.getItems().size());
+            if(response !=null){
+            	
+            	prettyLog.append("ITEM_SIZE", response.getItems().size());
+            }
             int i=0;
             for (BillItemModel item : response.getItems()) {
               Bill bill = new Bill();
@@ -680,6 +690,8 @@ public class BillController {
               bill.setBdayInMonth(item.getBdayInMonth().intValue());
               billList.add(bill);
             }
+          } catch (NullPointerException e) {
+	      	logger.error("error is : "+e.toString());
           } catch (Exception e) {
             prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
             logger.error("bill01-ERROR", e);
@@ -732,31 +744,36 @@ public class BillController {
       try {
         List<DrPaymentModel> payments = EnertalkApiUtil.getDrPayments(_siteId, beginMonth, endMonth, prettyLog);
         List<DrRevenue> drRevenueList = Lists.newArrayList();
-        for (DrPaymentModel payment : payments) {
-          for (ReductionPaymentModel reduction : payment.getReductionPayments()) {
-            DrRevenue drRevenue = new DrRevenue();
-            drRevenue.setSiteId(_siteId);
-            drRevenue.setStdYearm(payment.getMonth());
-            drRevenue.setStdDate(DateUtil.stringToDate(payment.getMonth(), "yyyyMM"));
-            drRevenue.setStdTimestamp(drRevenue.getStdDate());
-            drRevenue.setBasicPay(payment.getBasicPayment().intValue());
-            drRevenue.setBasicPrice(payment.getBasicPrice().intValue());
-            drRevenue.setMaxReductRatio(payment.getMaxReductionRatio());
-            drRevenue.setMinReductRatio(payment.getMinReductionRatio());
-            drRevenue.setTotPay(payment.getTotalPayment().intValue());
-            drRevenue.setReductCap(payment.getReductionCapacity().intValue());
-            drRevenue.setActAmt(reduction.getActualAmount().intValue());
-            drRevenue.setCblAmt(reduction.getCblAmount().intValue());
-            drRevenue.setReductAmt(reduction.getReductionAmount().intValue());
-            drRevenue.setReductEdate(reduction.getEnd());
-            drRevenue.setReductEtimestamp(reduction.getEnd());
-            drRevenue.setReductSdate(reduction.getStart());
-            drRevenue.setReductStimestamp(reduction.getStart());
-            drRevenue.setSmp(reduction.getSmp().intValue());
-            drRevenueList.add(drRevenue);
-          }
-          resultCnt += billService.addOrModDrRevenueList(drRevenueList, null);
+        if(payments != null){
+        	
+        	for (DrPaymentModel payment : payments) {
+        		for (ReductionPaymentModel reduction : payment.getReductionPayments()) {
+        			DrRevenue drRevenue = new DrRevenue();
+        			drRevenue.setSiteId(_siteId);
+        			drRevenue.setStdYearm(payment.getMonth());
+        			drRevenue.setStdDate(DateUtil.stringToDate(payment.getMonth(), "yyyyMM"));
+        			drRevenue.setStdTimestamp(drRevenue.getStdDate());
+        			drRevenue.setBasicPay(payment.getBasicPayment().intValue());
+        			drRevenue.setBasicPrice(payment.getBasicPrice().intValue());
+        			drRevenue.setMaxReductRatio(payment.getMaxReductionRatio());
+        			drRevenue.setMinReductRatio(payment.getMinReductionRatio());
+        			drRevenue.setTotPay(payment.getTotalPayment().intValue());
+        			drRevenue.setReductCap(payment.getReductionCapacity().intValue());
+        			drRevenue.setActAmt(reduction.getActualAmount().intValue());
+        			drRevenue.setCblAmt(reduction.getCblAmount().intValue());
+        			drRevenue.setReductAmt(reduction.getReductionAmount().intValue());
+        			drRevenue.setReductEdate(reduction.getEnd());
+        			drRevenue.setReductEtimestamp(reduction.getEnd());
+        			drRevenue.setReductSdate(reduction.getStart());
+        			drRevenue.setReductStimestamp(reduction.getStart());
+        			drRevenue.setSmp(reduction.getSmp().intValue());
+        			drRevenueList.add(drRevenue);
+        		}
+        		resultCnt += billService.addOrModDrRevenueList(drRevenueList, null);
+        	}
         }
+      } catch (NullPointerException e) {
+      	logger.error("error is : "+e.toString());
       } catch (Exception e) {
         prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
         logger.error("bill03-ERROR", e);
@@ -846,13 +863,16 @@ public class BillController {
         genReqEss.setRecWeight(siteSet.getRecWeight());
         by.add(genReqPv);
         by.add(genReqEss);
-        for (long stdDate = beginDate.getTime(); stdDate < endDate.getTime(); stdDate = DateUtil.getAfterMinute(new Date(stdDate), 15).getTime()) {
-          genReqPv.addTimestamp(stdDate);
-          genReqPv.addProduced(new Double(IfUtil.nvl(pvGenMap.get(stdDate), 0)));
-          genReqPv.addConsumed(new Double(IfUtil.nvl(pvUsgMap.get(stdDate), 0)));
-          genReqEss.addTimestamp(stdDate);
-          genReqEss.addProduced(new Double(IfUtil.nvl(essChargeMap.get(stdDate), 0)));
-          genReqEss.addConsumed(new Double(IfUtil.nvl(essUsgMap.get(stdDate), 0)));
+        if(beginDate != null){
+        	
+        	for (long stdDate = beginDate.getTime(); stdDate < endDate.getTime(); stdDate = DateUtil.getAfterMinute(new Date(stdDate), 15).getTime()) {
+        		genReqPv.addTimestamp(stdDate);
+        		genReqPv.addProduced(new Double(IfUtil.nvl(pvGenMap.get(stdDate), 0)));
+        		genReqPv.addConsumed(new Double(IfUtil.nvl(pvUsgMap.get(stdDate), 0)));
+        		genReqEss.addTimestamp(stdDate);
+        		genReqEss.addProduced(new Double(IfUtil.nvl(essChargeMap.get(stdDate), 0)));
+        		genReqEss.addConsumed(new Double(IfUtil.nvl(essUsgMap.get(stdDate), 0)));
+        	}
         }
         if (genReqPv.getTimestamp() == null || genReqPv.getTimestamp().size() == 0) {
           continue;
@@ -860,8 +880,13 @@ public class BillController {
         GenResponseModel response = EncoredApiUtil.getGen(genRequest, prettyLog);
         List<GenRevenue> genRevenueList = Lists.newArrayList();
         try {
-          GenResponseSub genEss = response.getGenEss();
-          GenResponseSub genPv = response.getGenPv();
+        	GenResponseSub genEss = new GenResponseSub();
+        	GenResponseSub genPv = new GenResponseSub();
+        	if(response !=null){
+        		
+        		genEss = response.getGenEss();
+        		genPv = response.getGenPv();
+        	}
           int essSize = genEss.getBasetime().size();
           int pvSize = genPv.getBasetime().size();
           prettyLog.append("ITEM_SIZE", essSize);
@@ -899,6 +924,8 @@ public class BillController {
             genRevenue.setSmpRate(siteSet.getSmpRate());
             genRevenueList.add(genRevenue);
           }
+        } catch (NullPointerException e) {
+          logger.error("error is : "+e.toString());
         } catch (Exception e) {
           prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
           logger.error("energy01-ERROR", e);

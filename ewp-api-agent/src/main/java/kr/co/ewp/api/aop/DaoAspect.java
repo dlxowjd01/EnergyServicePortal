@@ -43,6 +43,9 @@ public class DaoAspect {
     try {
       retVal = joinPoint.proceed();
       return retVal;
+    } catch (NullPointerException e) {
+  	  logger.error("error is : "+e.toString());
+  	  throw e;
     } catch (Exception e) {
       if (prettyLog != null) {
         prettyLog.append("EXCEPTION", e == null ? "null" : e.getMessage());

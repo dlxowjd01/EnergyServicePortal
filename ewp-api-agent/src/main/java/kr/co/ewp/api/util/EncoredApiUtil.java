@@ -44,6 +44,9 @@ public class EncoredApiUtil {
       headers.set("content-type", "application/json");
       resultBody = HttpUtil.post(url, headers, JsonUtil.toJson(genRequest));
       return JsonUtil.toObject(resultBody, GenResponseModel.class, PropertyNamingStrategy.SNAKE_CASE);
+    } catch (NullPointerException e) {
+    	logger.error("error is : "+e.toString());
+    	throw e;
     } catch (Exception e) {
       prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
       logger.error("EncoredApiUtil.getGen:{}", JsonUtil.toJson(genRequest));
@@ -65,6 +68,9 @@ public class EncoredApiUtil {
       headers.set("content-type", "application/json");
       resultBody = HttpUtil.post(url, headers, JsonUtil.toJson(peakRequest));
       return JsonUtil.toObject(resultBody, PeakResponseModel.class);
+    } catch (NullPointerException e) {
+    	logger.error("error is : "+e.toString());
+    	throw e;
     } catch (Exception e) {
       prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
       logger.error("EncoredApiUtil.getPeak:{}", JsonUtil.toJson(peakRequest));
@@ -88,6 +94,9 @@ public class EncoredApiUtil {
       resultBody = HttpUtil.post(url, headers, JsonUtil.toJson(billRequest));
 //      System.out.println("         resultBody는      "+resultBody);
       return JsonUtil.toObject(resultBody, BillResponseModel.class);
+    } catch (NullPointerException e) {
+    	logger.error("error is : "+e.toString());
+    	throw e;
     } catch (Exception e) {
       prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
       logger.error("EncoredApiUtil.getBill:{}", JsonUtil.toJson(billRequest));

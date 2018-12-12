@@ -23,6 +23,8 @@ public final class DateUtil {
   static {
     try {
       timeZone = TimeZone.getTimeZone("GMT+09:00");
+    } catch (NullPointerException e) {
+        logger.error("error is : "+e.toString());
     } catch (Exception e) {
       // 2017.10.10 보안수정 RH.Jung PMD-AvoidCatchingGenericException
       // } catch (MsgException e) {
@@ -149,9 +151,6 @@ public final class DateUtil {
     return (int) ((date1.getTime() - date2.getTime()) / 86400000);
   }
 
-  public static void main(String[] args) {
-    System.out.println(DateUtil.getAfterYears(1, "yyyyMMdd"));
-  }
 
   /**
    * 두 날짜 간의 주차 수
@@ -468,6 +467,8 @@ public final class DateUtil {
       } else {
         result = false;
       }
+    } catch (NullPointerException e) {
+	  logger.error("error is : "+e.toString());
     } catch (Exception e) {
       // } catch (MsgException e) {
       // 2017.10.10 보안수정 RH.Jung PMD-AvoidCatchingGenericException

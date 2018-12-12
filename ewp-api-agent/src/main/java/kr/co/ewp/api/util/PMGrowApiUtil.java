@@ -3,10 +3,13 @@ package kr.co.ewp.api.util;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import kr.co.ewp.api.aop.DaoAspect;
 import kr.co.ewp.api.model.BmsEquipmentModel;
 import kr.co.ewp.api.model.ChargingDischarging;
 import kr.co.ewp.api.model.ChargingDischargingSchedule;
@@ -19,6 +22,7 @@ import kr.co.ewp.api.model.SocModel;
 public class PMGrowApiUtil {
   private static final String API_VERSION = "2.0.0";
   private static final String API_ACCESS_TOKEN = "<access_token>";
+  private static final Logger logger = LoggerFactory.getLogger(PMGrowApiUtil.class);
 
   /**
    * ESS충방전량 조회
@@ -51,6 +55,9 @@ public class PMGrowApiUtil {
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
 		  return JsonUtil.toObject(resultBody, new TypeReference<List<ChargingDischarging>>() {
 		  });
+	  } catch (NullPointerException e) {
+	  	  logger.error("error is : "+e.toString());
+	  	  throw e;
 	  } catch (Exception e) {
 		  prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
 		  throw e;
@@ -88,6 +95,9 @@ public class PMGrowApiUtil {
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
 		  return JsonUtil.toObject(resultBody, new TypeReference<List<ChargingDischargingSchedule>>() {
 		  });
+	  } catch (NullPointerException e) {
+	  	  logger.error("error is : "+e.toString());
+	  	  throw e;
 	  } catch (Exception e) {
 		  prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
 		  throw e;
@@ -125,6 +135,9 @@ public class PMGrowApiUtil {
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
 		  return JsonUtil.toObject(resultBody, new TypeReference<List<PvPowerGenModel>>() {
 		  });
+	  } catch (NullPointerException e) {
+	  	  logger.error("error is : "+e.toString());
+	  	  throw e;
 	  } catch (Exception e) {
 		  prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
 		  throw e;
@@ -161,6 +174,9 @@ public class PMGrowApiUtil {
 	      resultBody = HttpUtil.get(url.toString(), getHeaders());
 	      return JsonUtil.toObject(resultBody, new TypeReference<List<EssUsageModel>>() {
 	      });
+	    } catch (NullPointerException e) {
+		  	  logger.error("error is : "+e.toString());
+		  	  throw e;
 	    } catch (Exception e) {
 	      prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
 	      throw e;
@@ -193,6 +209,9 @@ public class PMGrowApiUtil {
 	      resultBody = HttpUtil.get(url.toString(), getHeaders());
 	      return JsonUtil.toObject(resultBody, new TypeReference<List<PcsEquipmentModel>>() {
 	      });
+	    } catch (NullPointerException e) {
+		  	  logger.error("error is : "+e.toString());
+		  	  throw e;
 	    } catch (Exception e) {
 	      prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
 	      throw e;
@@ -225,6 +244,9 @@ public class PMGrowApiUtil {
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
 		  return JsonUtil.toObject(resultBody, new TypeReference<List<BmsEquipmentModel>>() {
 		  });
+	  } catch (NullPointerException e) {
+	  	  logger.error("error is : "+e.toString());
+	  	  throw e;
 	  } catch (Exception e) {
 		  prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
 		  throw e;
@@ -257,6 +279,9 @@ public class PMGrowApiUtil {
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
 		  return JsonUtil.toObject(resultBody, new TypeReference<List<PvEquipmentModel>>() {
 		  });
+	  } catch (NullPointerException e) {
+	  	  logger.error("error is : "+e.toString());
+	  	  throw e;
 	  } catch (Exception e) {
 		  prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
 		  throw e;
@@ -276,6 +301,9 @@ public class PMGrowApiUtil {
 		  prettyLog.append("URL", url);
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
 		  return JsonUtil.toObject(resultBody, SocModel.class);
+	  } catch (NullPointerException e) {
+	  	  logger.error("error is : "+e.toString());
+	  	  throw e;
 	  } catch (Exception e) {
 		  prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
 		  throw e;

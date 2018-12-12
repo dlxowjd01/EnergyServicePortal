@@ -3,6 +3,8 @@ package kr.co.ewp.api.util;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -16,6 +18,7 @@ import kr.co.ewp.api.model.UsageModel;
 import kr.co.ewp.api.model.UsageRealtimeModel;
 
 public class EnertalkApiUtil {
+	private static final Logger logger = LoggerFactory.getLogger(EnertalkApiUtil.class);
 
   public enum Period {
     _15min, _30min, hour, day, month;
@@ -49,6 +52,9 @@ public class EnertalkApiUtil {
       HttpHeaders headers = getHeaders();
       resultBody = HttpUtil.get(url.toString(), headers);
       return JsonUtil.toObject(resultBody, UsageModel.class);
+    } catch (NullPointerException e) {
+	  	  logger.error("error is : "+e.toString());
+	  	  throw e;
     } catch (Exception e) {
       prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
       throw e;
@@ -72,6 +78,9 @@ public class EnertalkApiUtil {
       HttpHeaders headers = getHeaders();
       resultBody = HttpUtil.get(url.toString(), headers);
       return JsonUtil.toObject(resultBody, UsageModel.class);
+    } catch (NullPointerException e) {
+	  	  logger.error("error is : "+e.toString());
+	  	  throw e;
     } catch (Exception e) {
       prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
       prettyLog.append("RESULT", resultBody);
@@ -91,6 +100,9 @@ public class EnertalkApiUtil {
       resultBody = HttpUtil.get(url, headers);
       return JsonUtil.toObject(resultBody, new TypeReference<List<DeviceModel>>() {
       });
+    } catch (NullPointerException e) {
+	  	  logger.error("error is : "+e.toString());
+	  	  throw e;
     } catch (Exception e) {
       prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
       throw e;
@@ -109,6 +121,9 @@ public class EnertalkApiUtil {
       HttpHeaders headers = getHeaders();
       resultBody = HttpUtil.get(url, headers);
       return JsonUtil.toObject(resultBody, DeviceModel.class);
+    } catch (NullPointerException e) {
+	  	  logger.error("error is : "+e.toString());
+	  	  throw e;
     } catch (Exception e) {
       prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
       prettyLog.append("RESULT", resultBody);
@@ -127,6 +142,9 @@ public class EnertalkApiUtil {
 		  HttpHeaders headers = getHeaders();
 		  resultBody = HttpUtil.get(url, headers);
 		  return JsonUtil.toObject(resultBody, UsageRealtimeModel.class);
+	  } catch (NullPointerException e) {
+	  	  logger.error("error is : "+e.toString());
+	  	  throw e;
 	  } catch (Exception e) {
 		  prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
 		  prettyLog.append("RESULT", resultBody);
@@ -149,6 +167,9 @@ public class EnertalkApiUtil {
       resultBody = HttpUtil.get(url.toString(), headers);
       return JsonUtil.toObject(resultBody, new TypeReference<List<DrRequestTarget>>() {
       });
+    } catch (NullPointerException e) {
+	  	  logger.error("error is : "+e.toString());
+	  	  throw e;
     } catch (Exception e) {
       prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
       throw e;
@@ -173,6 +194,9 @@ public class EnertalkApiUtil {
 		  resultBody = HttpUtil.get(url.toString(), headers);
 		  return JsonUtil.toObject(resultBody, new TypeReference<List<DrRequestTarget>>() {
 		  });
+	  } catch (NullPointerException e) {
+	  	  logger.error("error is : "+e.toString());
+	  	  throw e;
 	  } catch (Exception e) {
 		  prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
 		  throw e;
@@ -196,6 +220,9 @@ public class EnertalkApiUtil {
       resultBody = HttpUtil.get(url.toString(), headers);
       return JsonUtil.toObject(resultBody, new TypeReference<List<DrPaymentModel>>() {
       });
+    } catch (NullPointerException e) {
+	  	  logger.error("error is : "+e.toString());
+	  	  throw e;
     } catch (Exception e) {
       prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
       throw e;
@@ -218,6 +245,9 @@ public class EnertalkApiUtil {
 		  HttpHeaders headers = getHeaders();
 		  resultBody = HttpUtil.get(url.toString(), headers);
 		  return JsonUtil.toObject(resultBody, CblResponseModel.class);
+	  } catch (NullPointerException e) {
+	  	  logger.error("error is : "+e.toString());
+	  	  throw e;
 	  } catch (Exception e) {
 		  prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
 		  throw e;

@@ -2,6 +2,8 @@ package kr.co.ewp.api.util;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.json.MappingJacksonValue;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
@@ -21,6 +23,7 @@ import kr.co.ewp.api.exception.MsgException;
 public class JsonUtil {
   public static final String[] EXCEPT_WORD_IN_JSON = { "password", "pwd", "userPwd", "currentPwd", "versionNum" };
   private static ObjectMapper mapper = new ObjectMapper();
+  private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
   static {
     mapper.setSerializationInclusion(Include.NON_NULL);
     mapper.setSerializationInclusion(Include.NON_EMPTY);
@@ -76,6 +79,9 @@ public class JsonUtil {
         mapper.setPropertyNamingStrategy(pns);
       }
       return mapper.readValue(string, valueType);
+    } catch (NullPointerException e) {
+  	  logger.error("error is : "+e.toString());
+  	  throw new RuntimeException(e);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
