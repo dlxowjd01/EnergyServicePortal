@@ -168,14 +168,6 @@ public class ValidateUtil {
     if (ValidateUtil.containsSpecialChar(newPwd) == false) {
       throw new MsgException("비밀번호는 영문/숫자/특수 문자 모두 1문자 이상 조합되게 입력해 주세요.");
     }
-    // if (ValidateUtil.loopChar(newPwd)) {
-    // throw new MsgException("비밀번호는 연속적인 문자/숫자(예:111,123,abc)가 포함되지 않게 입력해
-    // 주세요.");
-    // }
-    // if (ValidateUtil.continuosChar(newPwd)) {
-    // throw new MsgException("비밀번호는 연속적인 문자/숫자(예:111,123,abc)가 포함되지 않게 입력해
-    // 주세요.");
-    // }
   }
 
   public static void userId(String loginId) {

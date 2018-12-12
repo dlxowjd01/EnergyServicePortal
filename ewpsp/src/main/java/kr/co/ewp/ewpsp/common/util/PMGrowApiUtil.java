@@ -160,7 +160,7 @@ public class PMGrowApiUtil {
     } catch (NullPointerException e) {
 		logger.error("error is : "+e.toString());
     } catch (Exception e) {
-    	e.printStackTrace();
+    	//e.printStackTrace();
 		logger.error("error is : "+e.toString());
     } finally {
     	logger.debug("PMGrowApiUtil.getPvEquipmentList end");

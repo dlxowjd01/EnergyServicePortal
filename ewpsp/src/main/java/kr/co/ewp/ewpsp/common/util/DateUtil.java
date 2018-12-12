@@ -141,9 +141,6 @@ public final class DateUtil {
     return (int) ((date1.getTime() - date2.getTime()) / 86400000);
   }
 
-  public static void main(String[] args) {
-	  
-  }
 
   public static int getAfterSeconds(Date date1, Date date2) {
 
