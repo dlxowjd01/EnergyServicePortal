@@ -643,17 +643,17 @@ public class EnergyController {
 //        		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
           if(cdList !=null){
         	  prettyLog.append("ITEM_SIZE", cdList.getItems().size());
-          for (ChargingDischargingItemModel item : cdList.getItems()) {
-            EssCharge essCharge = new EssCharge();
-            essCharge.setDeviceId(device.getDeviceId());
-            essCharge.setSiteId(_siteId);
-            essCharge.setStdDate(item.getTimestamp());
-            essCharge.setStdTimestamp(item.getTimestamp());
-            essCharge.setChgVal(item.getChargeEnergy());
-            essCharge.setDischgVal(item.getDischargeEnergy());
-
-            essChargeList.add(essCharge);
-          }
+	          for (ChargingDischargingItemModel item : cdList.getItems()) {
+	            EssCharge essCharge = new EssCharge();
+	            essCharge.setDeviceId(device.getDeviceId());
+	            essCharge.setSiteId(_siteId);
+	            essCharge.setStdDate(item.getTimestamp());
+	            essCharge.setStdTimestamp(item.getTimestamp());
+	            essCharge.setChgVal(item.getChargeEnergy());
+	            essCharge.setDischgVal(item.getDischargeEnergy());
+	
+	            essChargeList.add(essCharge);
+	          }
           }
         } catch (NullPointerException e) {
         	logger.error("error is : "+e.toString());
@@ -735,19 +735,18 @@ public class EnergyController {
 //          List<ChargingDischargingSchedule> cdList = PMGrowApiUtil.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
 //        		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
           if(cdList != null){
-        	  
         	  prettyLog.append("ITEM_SIZE", cdList.getItems().size());
-          for (ChargingDischargingScheduleItemModel item : cdList.getItems()) {
-            EssChargePlan essChargePlan = new EssChargePlan();
-            essChargePlan.setDeviceId(device.getDeviceId());
-            essChargePlan.setSiteId(_siteId);
-            essChargePlan.setStdDate(item.getTimestamp());
-            essChargePlan.setStdTimestamp(item.getTimestamp());
-            essChargePlan.setChgVal(item.getScheduledCEnergy());
-            essChargePlan.setDischgVal(item.getScheduledDEnergy());
-
-            essChargePlanList.add(essChargePlan);
-          }
+	          for (ChargingDischargingScheduleItemModel item : cdList.getItems()) {
+	            EssChargePlan essChargePlan = new EssChargePlan();
+	            essChargePlan.setDeviceId(device.getDeviceId());
+	            essChargePlan.setSiteId(_siteId);
+	            essChargePlan.setStdDate(item.getTimestamp());
+	            essChargePlan.setStdTimestamp(item.getTimestamp());
+	            essChargePlan.setChgVal(item.getScheduledCEnergy());
+	            essChargePlan.setDischgVal(item.getScheduledDEnergy());
+	
+	            essChargePlanList.add(essChargePlan);
+	          }
           }
         } catch (NullPointerException e) {
         	logger.error("error is : "+e.toString());
@@ -858,17 +857,16 @@ public class EnergyController {
 //            		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
               if(resultList != null){
             	  prettyLog.append("ITEM_SIZE", resultList.getItems().size());
-
-              for (PvPowerGenModelItemModel item : resultList.getItems()) {
-                PvGen pvGen = new PvGen();
-                pvGen.setDeviceId(_deviceId);
-                pvGen.setSiteId(_siteId);
-                pvGen.setStdDate(item.getTimestamp());
-                pvGen.setGenVal(item.getGenEnergy());
-                pvGen.setTemp(item.getTemperature());
-  
-                pvGentList.add(pvGen);
-              }
+	              for (PvPowerGenModelItemModel item : resultList.getItems()) {
+	                PvGen pvGen = new PvGen();
+	                pvGen.setDeviceId(_deviceId);
+	                pvGen.setSiteId(_siteId);
+	                pvGen.setStdDate(item.getTimestamp());
+	                pvGen.setGenVal(item.getGenEnergy());
+	                pvGen.setTemp(item.getTemperature());
+	  
+	                pvGentList.add(pvGen);
+	              }
               }
             }
             

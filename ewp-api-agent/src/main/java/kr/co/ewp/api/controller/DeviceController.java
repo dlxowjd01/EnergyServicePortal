@@ -125,6 +125,8 @@ public class DeviceController {
             }
         }
         deviceIoeList.add(deviceIoe);
+      } catch (NullPointerException e) {
+          logger.error("error is : "+e.toString());  
       } catch (Exception e) {
         prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
         logger.error("DEVICE01-ERROR", e);
@@ -181,43 +183,43 @@ public class DeviceController {
         }
         List<PcsEquipmentModel> pcsEquipmentList = PMGrowApiUtil.getPcsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
         if(pcsEquipmentList != null){
-        prettyLog.append("ITEM_SIZE", pcsEquipmentList.size());
-        for (PcsEquipmentModel pcsEquipmentModel : pcsEquipmentList) {
-          DevicePcs devicePcs = new DevicePcs();
-          devicePcs.setSiteId(device.getSiteId());
-          devicePcs.setDeviceId(device.getDeviceId());
-          devicePcs.setAcCurrent(pcsEquipmentModel.getAcCurrent()); /*** 12.12 이우람 수정 ***/
-          devicePcs.setAcFreq(pcsEquipmentModel.getAcFreq()); /*** 12.12 이우람 수정 ***/
-          devicePcs.setAcPf(pcsEquipmentModel.getAcPf()); /*** 12.12 이우람 수정 ***/
-          devicePcs.setAcPower(pcsEquipmentModel.getAcPower()); /*** 12.12 이우람 수정 ***/
-          devicePcs.setAcSetPower(pcsEquipmentModel.getAcSetPower()); /*** 12.12 이우람 수정 ***/
-          devicePcs.setAcVoltage(pcsEquipmentModel.getAcVoltage()); /*** 12.12 이우람 수정 ***/
-          devicePcs.setAlarmMsg(pcsEquipmentModel.getAlarmMsg());
-          devicePcs.setDcCurrent(pcsEquipmentModel.getDcCurrent()); /*** 12.12 이우람 수정 ***/
-          devicePcs.setDcFreq(pcsEquipmentModel.getDcFreq()); /*** 12.12 이우람 수정 ***/
-          devicePcs.setDcPf(pcsEquipmentModel.getDcPf()); /*** 12.12 이우람 수정 ***/
-          devicePcs.setDcPower(pcsEquipmentModel.getDcPower()); /*** 12.12 이우람 수정 ***/
-          devicePcs.setDcSetPower(pcsEquipmentModel.getDcSetPower()); /*** 12.12 이우람 수정 ***/
-          devicePcs.setDcVoltage(pcsEquipmentModel.getDcVoltage()); /*** 12.12 이우람 수정 ***/
-          devicePcs.setDeviceName(pcsEquipmentModel.getPcsName()); /*** 12.12 이우람 수정 ***/
-          devicePcs.setDeviceStat(Integer.toString(pcsEquipmentModel.getOpMode())); /*** 12.12 이우람 수정 ***/
-          devicePcs.setStdDate(pcsEquipmentModel.getTimestamp()); /*** 12.12 이우람 수정 ***/
-
-          devicePcs.setPcsStatus(Integer.toString(pcsEquipmentModel.getPcsStatus())); /*** 12.12 이우람 수정 ***/
-          devicePcs.setRemoteMode(Integer.toString(pcsEquipmentModel.getRemoteMode())); /*** 12.12 이우람 수정 ***/
-          devicePcs.setPcsCommand(Integer.toString(pcsEquipmentModel.getPcsCommand())); /*** 12.12 이우람 수정 ***/
-          devicePcs.setTodayDEnergy(Integer.toString(pcsEquipmentModel.getTodayDEnergy())); /*** 12.12 이우람 수정 ***/
-          devicePcs.setTodayCEnergy(Integer.toString(pcsEquipmentModel.getTodayCEnergy())); /*** 12.12 이우람 수정 ***/
-          devicePcs.setTotalDEnergy(Integer.toString(pcsEquipmentModel.getTotalDEnergy())); /*** 12.12 이우람 수정 ***/
-          devicePcs.setTotalCEnerge(Integer.toString(pcsEquipmentModel.getTotalCEnerge())); /*** 12.12 이우람 수정 ***/
-
-          deivcePcsList.add(devicePcs);
-
-          if (deivcePcsList.size() == 20) {
-            resultCnt += deviceService.addDeivcePcsList(deivcePcsList, null);
-            deivcePcsList = Lists.newArrayList();
-          }
-        }
+        	prettyLog.append("ITEM_SIZE", pcsEquipmentList.size());
+	        for (PcsEquipmentModel pcsEquipmentModel : pcsEquipmentList) {
+	          DevicePcs devicePcs = new DevicePcs();
+	          devicePcs.setSiteId(device.getSiteId());
+	          devicePcs.setDeviceId(device.getDeviceId());
+	          devicePcs.setAcCurrent(pcsEquipmentModel.getAcCurrent()); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setAcFreq(pcsEquipmentModel.getAcFreq()); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setAcPf(pcsEquipmentModel.getAcPf()); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setAcPower(pcsEquipmentModel.getAcPower()); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setAcSetPower(pcsEquipmentModel.getAcSetPower()); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setAcVoltage(pcsEquipmentModel.getAcVoltage()); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setAlarmMsg(pcsEquipmentModel.getAlarmMsg());
+	          devicePcs.setDcCurrent(pcsEquipmentModel.getDcCurrent()); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setDcFreq(pcsEquipmentModel.getDcFreq()); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setDcPf(pcsEquipmentModel.getDcPf()); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setDcPower(pcsEquipmentModel.getDcPower()); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setDcSetPower(pcsEquipmentModel.getDcSetPower()); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setDcVoltage(pcsEquipmentModel.getDcVoltage()); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setDeviceName(pcsEquipmentModel.getPcsName()); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setDeviceStat(Integer.toString(pcsEquipmentModel.getOpMode())); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setStdDate(pcsEquipmentModel.getTimestamp()); /*** 12.12 이우람 수정 ***/
+	
+	          devicePcs.setPcsStatus(Integer.toString(pcsEquipmentModel.getPcsStatus())); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setRemoteMode(Integer.toString(pcsEquipmentModel.getRemoteMode())); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setPcsCommand(Integer.toString(pcsEquipmentModel.getPcsCommand())); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setTodayDEnergy(Integer.toString(pcsEquipmentModel.getTodayDEnergy())); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setTodayCEnergy(Integer.toString(pcsEquipmentModel.getTodayCEnergy())); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setTotalDEnergy(Integer.toString(pcsEquipmentModel.getTotalDEnergy())); /*** 12.12 이우람 수정 ***/
+	          devicePcs.setTotalCEnerge(Integer.toString(pcsEquipmentModel.getTotalCEnerge())); /*** 12.12 이우람 수정 ***/
+	
+	          deivcePcsList.add(devicePcs);
+	
+	          if (deivcePcsList.size() == 20) {
+	            resultCnt += deviceService.addDeivcePcsList(deivcePcsList, null);
+	            deivcePcsList = Lists.newArrayList();
+	          }
+	        }
         }
       } catch (NullPointerException e) {
           logger.error("error is : "+e.toString());
@@ -271,27 +273,26 @@ public class DeviceController {
         }
         List<BmsEquipmentModel> bmsEquipmentList = PMGrowApiUtil.getBmsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
         if( bmsEquipmentList != null){
-        	
-        for (BmsEquipmentModel bmsEquipmentModel : bmsEquipmentList) {
-          DeviceBms deviceBms = new DeviceBms();
-          deviceBms.setSiteId(device.getSiteId());
-          deviceBms.setDeviceId(device.getDeviceId());
-          deviceBms.setDeviceName(bmsEquipmentModel.getBmsName()); /*** 12.12 이우람 수정 ***/
-          deviceBms.setCurrSoc(bmsEquipmentModel.getCurrSoc()); /*** 12.12 이우람 수정 ***/
-          deviceBms.setDod(bmsEquipmentModel.getDod()); /*** 12.12 이우람 수정 ***/
-          deviceBms.setSysCurrent(bmsEquipmentModel.getSysCurrent()); /*** 12.12 이우람 수정 ***/
-          deviceBms.setSysSoc(bmsEquipmentModel.getSysSoc()); /*** 12.12 이우람 수정 ***/
-          deviceBms.setSysSoh(bmsEquipmentModel.getSysSoh()); /*** 12.12 이우람 수정 ***/
-          deviceBms.setSysVoltage(bmsEquipmentModel.getSysVoltage()); /*** 12.12 이우람 수정 ***/
-          deviceBms.setDeviceStat(Integer.toString(bmsEquipmentModel.getSysMode())); /*** 12.12 이우람 수정 ***/
-          deviceBms.setStdDate(bmsEquipmentModel.getTimestamp()); /*** 12.12 이우람 수정 ***/
-          deivceBmsList.add(deviceBms);
-
-          if (deivceBmsList.size() == 20) {
-            resultCnt += deviceService.addDeivceBmsList(deivceBmsList, null);
-            deivceBmsList = Lists.newArrayList();
-          }
-        }
+	        for (BmsEquipmentModel bmsEquipmentModel : bmsEquipmentList) {
+	          DeviceBms deviceBms = new DeviceBms();
+	          deviceBms.setSiteId(device.getSiteId());
+	          deviceBms.setDeviceId(device.getDeviceId());
+	          deviceBms.setDeviceName(bmsEquipmentModel.getBmsName()); /*** 12.12 이우람 수정 ***/
+	          deviceBms.setCurrSoc(bmsEquipmentModel.getCurrSoc()); /*** 12.12 이우람 수정 ***/
+	          deviceBms.setDod(bmsEquipmentModel.getDod()); /*** 12.12 이우람 수정 ***/
+	          deviceBms.setSysCurrent(bmsEquipmentModel.getSysCurrent()); /*** 12.12 이우람 수정 ***/
+	          deviceBms.setSysSoc(bmsEquipmentModel.getSysSoc()); /*** 12.12 이우람 수정 ***/
+	          deviceBms.setSysSoh(bmsEquipmentModel.getSysSoh()); /*** 12.12 이우람 수정 ***/
+	          deviceBms.setSysVoltage(bmsEquipmentModel.getSysVoltage()); /*** 12.12 이우람 수정 ***/
+	          deviceBms.setDeviceStat(Integer.toString(bmsEquipmentModel.getSysMode())); /*** 12.12 이우람 수정 ***/
+	          deviceBms.setStdDate(bmsEquipmentModel.getTimestamp()); /*** 12.12 이우람 수정 ***/
+	          deivceBmsList.add(deviceBms);
+	
+	          if (deivceBmsList.size() == 20) {
+	            resultCnt += deviceService.addDeivceBmsList(deivceBmsList, null);
+	            deivceBmsList = Lists.newArrayList();
+	          }
+	        }
         }
       } catch (NullPointerException e) {
           logger.error("error is : "+e.toString());  
@@ -348,23 +349,22 @@ public class DeviceController {
         }
         List<PvEquipmentModel> pvEquipmentList = PMGrowApiUtil.getPvEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
         if(pvEquipmentList != null){
-        	
-        for (PvEquipmentModel pcsEquipmentModel : pvEquipmentList) {
-          DevicePv devicePv = new DevicePv();
-          devicePv.setSiteId(_siteId);
-          devicePv.setDeviceId(device.getDeviceId());
-          devicePv.setAlarmMsg(pcsEquipmentModel.getAlarmMsg());
-          devicePv.setTemp(pcsEquipmentModel.getTemperature()); /*** 12.12 이우람 수정 ***/
-          devicePv.setTotPower(pcsEquipmentModel.getTotalGenPower()); /*** 12.12 이우람 수정 ***/
-          devicePv.setDeviceName(pcsEquipmentModel.getIvtName()); /*** 12.12 이우람 수정 ***/
-          devicePv.setDeviceStat(Integer.toString(pcsEquipmentModel.getStatus())); /*** 12.12 이우람 수정 ***/
-          devicePv.setStdDate(pcsEquipmentModel.getTimestamp()); /*** 12.12 이우람 수정 ***/
-          deivcePvList.add(devicePv);
-          if (deivcePvList.size() == 20) {
-            resultCnt += deviceService.addDeivcePvList(deivcePvList, null);
-            deivcePvList = Lists.newArrayList();
-          }
-        }
+	        for (PvEquipmentModel pcsEquipmentModel : pvEquipmentList) {
+	          DevicePv devicePv = new DevicePv();
+	          devicePv.setSiteId(_siteId);
+	          devicePv.setDeviceId(device.getDeviceId());
+	          devicePv.setAlarmMsg(pcsEquipmentModel.getAlarmMsg());
+	          devicePv.setTemp(pcsEquipmentModel.getTemperature()); /*** 12.12 이우람 수정 ***/
+	          devicePv.setTotPower(pcsEquipmentModel.getTotalGenPower()); /*** 12.12 이우람 수정 ***/
+	          devicePv.setDeviceName(pcsEquipmentModel.getIvtName()); /*** 12.12 이우람 수정 ***/
+	          devicePv.setDeviceStat(Integer.toString(pcsEquipmentModel.getStatus())); /*** 12.12 이우람 수정 ***/
+	          devicePv.setStdDate(pcsEquipmentModel.getTimestamp()); /*** 12.12 이우람 수정 ***/
+	          deivcePvList.add(devicePv);
+	          if (deivcePvList.size() == 20) {
+	            resultCnt += deviceService.addDeivcePvList(deivcePvList, null);
+	            deivcePvList = Lists.newArrayList();
+	          }
+	        }
         }
       } catch (NullPointerException e) {
           logger.error("error is : "+e.toString());
