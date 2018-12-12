@@ -102,7 +102,7 @@ public class PrettyLog implements Serializable {
         depth = stepLog.getDepth();
         isViewOneLine = stepLog.getViewOneLine();
       }
-      if (!stepLog.isShow()) {
+      if ( stepLog != null && !stepLog.isShow()) {
         continue;
       }
       String key = message.getKey();

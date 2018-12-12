@@ -74,50 +74,55 @@ public class DeviceController {
         DeviceModel deviceModel = EnertalkApiUtil.getDevice(device.getDeviceId(), prettyLog);
 
         DeviceIoe deviceIoe = new DeviceIoe();
-        deviceIoe.setChCnt(deviceModel.getChannelCount());
-        deviceIoe.setChPurpose(StringUtil.join(",", deviceModel.getChannelPurposes()));
-        deviceIoe.setCreateDate(deviceModel.getCreatedAt());
-        deviceIoe.setCreateTimestamp(deviceModel.getCreatedAt());
-        deviceIoe.setCtCapacity(deviceModel.getCtCapacity());
-        deviceIoe.setCtCapacityList(StringUtil.join(",", deviceModel.getCtCapacities()));
-        deviceIoe.setDataCnt(deviceModel.getDataCount());
-        deviceIoe.setDataPeriod(deviceModel.getDataPeriod());
-        deviceIoe.setDeviceId(deviceModel.getId());
-        deviceIoe.setDeviceName(deviceModel.getName());
-        deviceIoe.setDeviceRegId(deviceModel.getRegistrationId());
-        if (deviceModel.getUploadedAt() == null) {
-          deviceIoe.setDeviceStat("2");
-        } else {
-          deviceIoe.setDeviceStat(new Date().getTime() - deviceModel.getUploadedAt().getTime() > 120000 ? "2" : "1"); // 2분 보다 크면 disconnect
-        }
-        deviceIoe.setInstPurpose(String.valueOf(deviceModel.getInstallPurpose()));
-        deviceIoe.setInstType(String.valueOf(deviceModel.getInstallType()));
-        if (deviceModel.getNetworkConfig() != null) {
-          deviceIoe.setNetworkConf(JsonUtil.toJson(deviceModel.getNetworkConfig()));
-        }
-        deviceIoe.setOptions(deviceModel.getOptions());
-        deviceIoe.setProvider(deviceModel.getProvider());
-        deviceIoe.setPwCapacity(deviceModel.getPowerCapacity());
-        deviceIoe.setSerialNo(deviceModel.getSerialNumber());
-        deviceIoe.setSiteId(deviceModel.getSiteId());
-        if (deviceModel.getTargetMeter() != null) {
-          deviceIoe.setTmCtRatio(deviceModel.getTargetMeter().getCtRatio());
-          deviceIoe.setTmPtTatio(deviceModel.getTargetMeter().getPtRatio());
-          deviceIoe.setTmPulse(deviceModel.getTargetMeter().getPulse());
-          deviceIoe.setTmVoltage(deviceModel.getTargetMeter().getVoltage());
-        }
-        deviceIoe.setUploadDate(deviceModel.getUploadedAt());
-        deviceIoe.setUploadTimestamp(deviceModel.getUploadedAt());
-        if (deviceModel.getVirtualDevice() != null) {
-          deviceIoe.setVrAction(deviceModel.getVirtualDevice().getAction());
-          deviceIoe.setVrDeviceGrpId(deviceModel.getVirtualDevice().getVirtualDeviceGroupId());
-          deviceIoe.setVrDeviceId(deviceModel.getVirtualDevice().getVirtualDeviceId());
-          if (deviceModel.getVirtualDevice().getError() != null) {
-            deviceIoe.setVrError(JsonUtil.toJson(deviceModel.getVirtualDevice().getError()));
-          }
-          deviceIoe.setVrModDate(deviceModel.getVirtualDevice().getUpdatedAt());
-          deviceIoe.setVrOwnerId(deviceModel.getVirtualDevice().getOwnerId());
-          deviceIoe.setVrStat(deviceModel.getVirtualDevice().getStatus());
+        if(deviceModel !=null){
+        	
+        	if (deviceModel.getUploadedAt() == null) {
+        		deviceIoe.setDeviceStat("2");
+        	} else {
+        		deviceIoe.setDeviceStat(new Date().getTime() - deviceModel.getUploadedAt().getTime() > 120000 ? "2" : "1"); // 2분 보다 크면 disconnect
+        	}
+        	if (deviceModel.getNetworkConfig() != null) {
+        		deviceIoe.setNetworkConf(JsonUtil.toJson(deviceModel.getNetworkConfig()));
+        	}
+        	
+        	deviceIoe.setChCnt(deviceModel.getChannelCount());
+        	deviceIoe.setChPurpose(StringUtil.join(",", deviceModel.getChannelPurposes()));
+        	deviceIoe.setCreateDate(deviceModel.getCreatedAt());
+        	deviceIoe.setCreateTimestamp(deviceModel.getCreatedAt());
+        	deviceIoe.setCtCapacity(deviceModel.getCtCapacity());
+        	deviceIoe.setCtCapacityList(StringUtil.join(",", deviceModel.getCtCapacities()));
+        	deviceIoe.setDataCnt(deviceModel.getDataCount());
+        	deviceIoe.setDataPeriod(deviceModel.getDataPeriod());
+        	deviceIoe.setDeviceId(deviceModel.getId());
+        	deviceIoe.setDeviceName(deviceModel.getName());
+        	deviceIoe.setDeviceRegId(deviceModel.getRegistrationId());
+        	deviceIoe.setInstPurpose(String.valueOf(deviceModel.getInstallPurpose()));
+        	deviceIoe.setInstType(String.valueOf(deviceModel.getInstallType()));
+        	deviceIoe.setOptions(deviceModel.getOptions());
+        	deviceIoe.setProvider(deviceModel.getProvider());
+        	deviceIoe.setPwCapacity(deviceModel.getPowerCapacity());
+        	deviceIoe.setSerialNo(deviceModel.getSerialNumber());
+        	deviceIoe.setSiteId(deviceModel.getSiteId());
+        	deviceIoe.setUploadDate(deviceModel.getUploadedAt());
+            deviceIoe.setUploadTimestamp(deviceModel.getUploadedAt());
+            if (deviceModel.getTargetMeter() != null) {
+            	deviceIoe.setTmCtRatio(deviceModel.getTargetMeter().getCtRatio());
+            	deviceIoe.setTmPtTatio(deviceModel.getTargetMeter().getPtRatio());
+            	deviceIoe.setTmPulse(deviceModel.getTargetMeter().getPulse());
+            	deviceIoe.setTmVoltage(deviceModel.getTargetMeter().getVoltage());
+            }
+            
+            if (deviceModel.getVirtualDevice() != null) {
+            	deviceIoe.setVrAction(deviceModel.getVirtualDevice().getAction());
+            	deviceIoe.setVrDeviceGrpId(deviceModel.getVirtualDevice().getVirtualDeviceGroupId());
+            	deviceIoe.setVrDeviceId(deviceModel.getVirtualDevice().getVirtualDeviceId());
+            	if (deviceModel.getVirtualDevice().getError() != null) {
+            		deviceIoe.setVrError(JsonUtil.toJson(deviceModel.getVirtualDevice().getError()));
+            	}
+            	deviceIoe.setVrModDate(deviceModel.getVirtualDevice().getUpdatedAt());
+            	deviceIoe.setVrOwnerId(deviceModel.getVirtualDevice().getOwnerId());
+            	deviceIoe.setVrStat(deviceModel.getVirtualDevice().getStatus());
+            }
         }
         deviceIoeList.add(deviceIoe);
       } catch (Exception e) {
@@ -175,6 +180,7 @@ public class DeviceController {
           localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
         }
         List<PcsEquipmentModel> pcsEquipmentList = PMGrowApiUtil.getPcsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+        if(pcsEquipmentList != null){
         prettyLog.append("ITEM_SIZE", pcsEquipmentList.size());
         for (PcsEquipmentModel pcsEquipmentModel : pcsEquipmentList) {
           DevicePcs devicePcs = new DevicePcs();
@@ -212,6 +218,9 @@ public class DeviceController {
             deivcePcsList = Lists.newArrayList();
           }
         }
+        }
+      } catch (NullPointerException e) {
+          logger.error("error is : "+e.toString());
       } catch (Exception e) {
         prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
         logger.error("DEVICE02-ERROR", e);
@@ -261,6 +270,8 @@ public class DeviceController {
           localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
         }
         List<BmsEquipmentModel> bmsEquipmentList = PMGrowApiUtil.getBmsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+        if( bmsEquipmentList != null){
+        	
         for (BmsEquipmentModel bmsEquipmentModel : bmsEquipmentList) {
           DeviceBms deviceBms = new DeviceBms();
           deviceBms.setSiteId(device.getSiteId());
@@ -281,6 +292,9 @@ public class DeviceController {
             deivceBmsList = Lists.newArrayList();
           }
         }
+        }
+      } catch (NullPointerException e) {
+          logger.error("error is : "+e.toString());  
       } catch (Exception e) {
         prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
         logger.error("DEVICE03-ERROR", e);
@@ -333,6 +347,8 @@ public class DeviceController {
           localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
         }
         List<PvEquipmentModel> pvEquipmentList = PMGrowApiUtil.getPvEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+        if(pvEquipmentList != null){
+        	
         for (PvEquipmentModel pcsEquipmentModel : pvEquipmentList) {
           DevicePv devicePv = new DevicePv();
           devicePv.setSiteId(_siteId);
@@ -349,6 +365,9 @@ public class DeviceController {
             deivcePvList = Lists.newArrayList();
           }
         }
+        }
+      } catch (NullPointerException e) {
+          logger.error("error is : "+e.toString());
       } catch (Exception e) {
         prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
         logger.error("DEVICE04-ERROR", e);
@@ -375,8 +394,10 @@ public class DeviceController {
       deviceList = Lists.newArrayList();
       List<Site> siteList = siteService.getSiteList(prettyLog);
       ValidateUtil.notEmpty(siteList, "사이트 목록을 찾을 수 없습니다");
-      for (Site site : siteList) {
-        deviceList.addAll(deviceService.getDeviceList(site.getSiteId(), null));
+      if(siteList != null){
+    	  for (Site site : siteList) {
+    		  deviceList.addAll(deviceService.getDeviceList(site.getSiteId(), null));
+    	  }
       }
     }
     return deviceList;

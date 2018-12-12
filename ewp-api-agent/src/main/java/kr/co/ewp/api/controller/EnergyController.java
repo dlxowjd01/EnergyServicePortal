@@ -141,7 +141,10 @@ public class EnergyController {
         List<Usage> usageList = Lists.newArrayList();
         try {
           UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(device.getDeviceId(), period, beginDate, endDate, TimeType.past, UsageType.positiveEnergy, prettyLog);
-          prettyLog.append("ITEM_SIZE", usageModel.getItems().size());
+          if(usageModel != null){
+        	  
+        	  prettyLog.append("ITEM_SIZE", usageModel.getItems().size());
+          }
           for (UsageItemModel item : usageModel.getItems()) {
             Usage usage = new Usage();
             usage.setDeviceId(device.getDeviceId());
@@ -151,6 +154,8 @@ public class EnergyController {
             usage.setUsgVal(item.getUsage().intValue());
             usageList.add(usage);
           }
+        } catch (NullPointerException e) {
+        	logger.error("error is : "+e.toString());
         } catch (Exception e) {
           prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
           logger.error("energy01-ERROR", e);
@@ -222,16 +227,21 @@ public class EnergyController {
         List<PredictUsage> usageList = Lists.newArrayList();
         try {
           UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(device.getDeviceId(), period, beginDate, endDate, TimeType.future, UsageType.positiveEnergy, prettyLog);
-          prettyLog.append("ITEM_SIZE", usageModel.getItems().size());
-          for (UsageItemModel item : usageModel.getItems()) {
-            PredictUsage predictUsage = new PredictUsage();
-            predictUsage.setDeviceId(device.getDeviceId());
-            predictUsage.setSiteId(device.getSiteId());
-            predictUsage.setStdDate(item.getTimestamp());
-            predictUsage.setStdTimestamp(item.getTimestamp());
-            predictUsage.setPreUsgVal(item.getUsage().intValue());
-            usageList.add(predictUsage);
+          if(usageModel != null){
+        	  
+        	  prettyLog.append("ITEM_SIZE", usageModel.getItems().size());
+        	  for (UsageItemModel item : usageModel.getItems()) {
+        		  PredictUsage predictUsage = new PredictUsage();
+        		  predictUsage.setDeviceId(device.getDeviceId());
+        		  predictUsage.setSiteId(device.getSiteId());
+        		  predictUsage.setStdDate(item.getTimestamp());
+        		  predictUsage.setStdTimestamp(item.getTimestamp());
+        		  predictUsage.setPreUsgVal(item.getUsage().intValue());
+        		  usageList.add(predictUsage);
+        	  }
           }
+        } catch (NullPointerException e) {
+        	logger.error("error is : "+e.toString());
         } catch (Exception e) {
           prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
           logger.error("energy02-ERROR", e);
@@ -310,21 +320,26 @@ public class EnergyController {
         try {
           UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(device.getDeviceId(), period, beginDate, endDate, TimeType.past, UsageType.positiveEnergyReactive, prettyLog);
           UsageModel usageModel2 = EnertalkApiUtil.getUsagePeriodicByDeviceId(device.getDeviceId(), period, beginDate, endDate, TimeType.past, UsageType.negativeEnergyReactive, prettyLog);
-          prettyLog.append("ITEM_SIZE", usageModel.getItems().size());
-          for (UsageItemModel item : usageModel.getItems()) {
-            Reactive reactive = new Reactive();
-            reactive.setDeviceId(device.getDeviceId());
-            reactive.setSiteId(device.getSiteId());
-            reactive.setStdDate(item.getTimestamp());
-            reactive.setStdTimestamp(item.getTimestamp());
-            reactive.setRctvVal(item.getUsage().intValue());
-            for (UsageItemModel item2 : usageModel2.getItems()) {
-              if (item.getTimestamp().compareTo(item2.getTimestamp()) == 0) {
-                reactive.setNegRctvVal(item2.getUsage().intValue());
-              }
-            }
-            reactiveList.add(reactive);
+          if(usageModel != null){
+        	  
+        	  prettyLog.append("ITEM_SIZE", usageModel.getItems().size());
+        	  for (UsageItemModel item : usageModel.getItems()) {
+        		  Reactive reactive = new Reactive();
+        		  reactive.setDeviceId(device.getDeviceId());
+        		  reactive.setSiteId(device.getSiteId());
+        		  reactive.setStdDate(item.getTimestamp());
+        		  reactive.setStdTimestamp(item.getTimestamp());
+        		  reactive.setRctvVal(item.getUsage().intValue());
+        		  for (UsageItemModel item2 : usageModel2.getItems()) {
+        			  if (item.getTimestamp().compareTo(item2.getTimestamp()) == 0) {
+        				  reactive.setNegRctvVal(item2.getUsage().intValue());
+        			  }
+        		  }
+        		  reactiveList.add(reactive);
+        	  }
           }
+        } catch (NullPointerException e) {
+        	logger.error("error is : "+e.toString());
         } catch (Exception e) {
           prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
           logger.error("energy03-ERROR", e);
@@ -436,6 +451,8 @@ public class EnergyController {
             else peak.setPeakTimestamp( null );
             peakList.add(peak);
           }
+        } catch (NullPointerException e) {
+        	logger.error("error is : "+e.toString());
         } catch (Exception e) {
           prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
           logger.error("energy04-ERROR", e);
@@ -543,6 +560,8 @@ public class EnergyController {
             predictPeak.setPeakTimestamp(new Date(occured.get(i)));
             predictPeakList.add(predictPeak);
           }
+        } catch (NullPointerException e) {
+        	logger.error("error is : "+e.toString());
         } catch (Exception e) {
           prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
           logger.error("energy05-ERROR", e);
@@ -622,7 +641,8 @@ public class EnergyController {
             ChargingDischarging cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "1", "15", prettyLog);
 //          List<ChargingDischarging> cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
 //        		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
-          prettyLog.append("ITEM_SIZE", cdList.getItems().size());
+          if(cdList !=null){
+        	  prettyLog.append("ITEM_SIZE", cdList.getItems().size());
           for (ChargingDischargingItemModel item : cdList.getItems()) {
             EssCharge essCharge = new EssCharge();
             essCharge.setDeviceId(device.getDeviceId());
@@ -634,6 +654,9 @@ public class EnergyController {
 
             essChargeList.add(essCharge);
           }
+          }
+        } catch (NullPointerException e) {
+        	logger.error("error is : "+e.toString());
         } catch (Exception e) {
           prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
           logger.error("energy06-ERROR", e);
@@ -711,7 +734,9 @@ public class EnergyController {
         	ChargingDischargingSchedule cdList = PMGrowApiUtil.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "1", "15", prettyLog);
 //          List<ChargingDischargingSchedule> cdList = PMGrowApiUtil.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
 //        		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
-          prettyLog.append("ITEM_SIZE", cdList.getItems().size());
+          if(cdList != null){
+        	  
+        	  prettyLog.append("ITEM_SIZE", cdList.getItems().size());
           for (ChargingDischargingScheduleItemModel item : cdList.getItems()) {
             EssChargePlan essChargePlan = new EssChargePlan();
             essChargePlan.setDeviceId(device.getDeviceId());
@@ -723,6 +748,9 @@ public class EnergyController {
 
             essChargePlanList.add(essChargePlan);
           }
+          }
+        } catch (NullPointerException e) {
+        	logger.error("error is : "+e.toString());
         } catch (Exception e) {
           prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
           logger.error("energy07-ERROR", e);
@@ -801,17 +829,20 @@ public class EnergyController {
         			  continue;
         		  }
         		  UsageModel usagePeriodic = EnertalkApiUtil.getUsagePeriodicByDeviceId(_deviceId, Period._15min, beginDate, endDate, TimeType.past, UsageType.positiveEnergy, prettyLog);
-        		  List<UsageItemModel> items = usagePeriodic.getItems();
-        		  prettyLog.append("ITEM_SIZE", items.size());
-        		  for (UsageItemModel item : items) {
-        			  PvGen pvGen = new PvGen();
-        			  pvGen.setDeviceId(_deviceId);
-        			  pvGen.setSiteId(_siteId);
-        			  pvGen.setStdDate(item.getTimestamp());
-        			  pvGen.setGenVal(item.getUsage().intValue() / 1000000);
-        			  pvGen.setTemp(0);
+        		  if(usagePeriodic !=null){
+        			  List<UsageItemModel> items = usagePeriodic.getItems();
         			  
-        			  pvGentList.add(pvGen);
+        			  prettyLog.append("ITEM_SIZE", items.size());
+        			  for (UsageItemModel item : items) {
+        				  PvGen pvGen = new PvGen();
+        				  pvGen.setDeviceId(_deviceId);
+        				  pvGen.setSiteId(_siteId);
+        				  pvGen.setStdDate(item.getTimestamp());
+        				  pvGen.setGenVal(item.getUsage().intValue() / 1000000);
+        				  pvGen.setTemp(0);
+        				  
+        				  pvGentList.add(pvGen);
+        			  }
         		  }
         	  } else { // localems
               if (!localEmsAddrMap.containsKey(_siteId)) {
@@ -825,7 +856,9 @@ public class EnergyController {
               PvPowerGenModel resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate, endDate, "1", "15", prettyLog);
 //              List<PvPowerGenModel> resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, DateUtil.dateToString(beginDate, "yyyyMMdd"),
 //            		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
-              prettyLog.append("ITEM_SIZE", resultList.getItems().size());
+              if(resultList != null){
+            	  prettyLog.append("ITEM_SIZE", resultList.getItems().size());
+
               for (PvPowerGenModelItemModel item : resultList.getItems()) {
                 PvGen pvGen = new PvGen();
                 pvGen.setDeviceId(_deviceId);
@@ -836,9 +869,12 @@ public class EnergyController {
   
                 pvGentList.add(pvGen);
               }
+              }
             }
             
           }
+        } catch (NullPointerException e) {
+        	logger.error("error is : "+e.toString());
         } catch (Exception e) {
           prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
           logger.error("energy08-ERROR", e);
@@ -868,25 +904,30 @@ public class EnergyController {
       try {
         List<DrRequestTarget> resultList = EnertalkApiUtil.getDrRequest(_siteId, offset, limit, prettyLog);
         SiteSet siteSet = siteService.getSiteSet(_siteId, prettyLog);
-        for (DrRequestTarget item : resultList) {
-          DrResult drResult = new DrResult();
-          drResult.setActAmt(item.getActualAmount());
-          drResult.setCblAmt(item.getCblAmount());
-          if (siteSet == null) {
-            drResult.setContractPower(0L);
-            drResult.setGoalPower(0L);
-          } else {
-            drResult.setContractPower(siteSet.getContractPower());
-            drResult.setGoalPower(siteSet.getGoalPower());
-          }
-          drResult.setEndDate(item.getRequest().getEnd());
-          drResult.setEndTimestamp(item.getRequest().getEnd());
-          drResult.setRewardAmt(item.getRewardAmount());
-          drResult.setSiteId(siteId);
-          drResult.setStartDate(item.getRequest().getStart());
-          drResult.setStartTimestamp(item.getRequest().getStart());
-          drResultList.add(drResult);
+        if(resultList !=null){
+        	
+        	for (DrRequestTarget item : resultList) {
+        		DrResult drResult = new DrResult();
+        		drResult.setActAmt(item.getActualAmount());
+        		drResult.setCblAmt(item.getCblAmount());
+        		if (siteSet == null) {
+        			drResult.setContractPower(0L);
+        			drResult.setGoalPower(0L);
+        		} else {
+        			drResult.setContractPower(siteSet.getContractPower());
+        			drResult.setGoalPower(siteSet.getGoalPower());
+        		}
+        		drResult.setEndDate(item.getRequest().getEnd());
+        		drResult.setEndTimestamp(item.getRequest().getEnd());
+        		drResult.setRewardAmt(item.getRewardAmount());
+        		drResult.setSiteId(siteId);
+        		drResult.setStartDate(item.getRequest().getStart());
+        		drResult.setStartTimestamp(item.getRequest().getStart());
+        		drResultList.add(drResult);
+        	}
         }
+      } catch (NullPointerException e) {
+      	logger.error("error is : "+e.toString());
       } catch (Exception e) {
         prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
         logger.error("energy09-ERROR", e);
@@ -927,6 +968,8 @@ public class EnergyController {
 			  cal.add(Calendar.HOUR, 1);
 			  cal2.add(Calendar.HOUR, 1);
 		  }
+	    } catch (NullPointerException e) {
+	      	logger.error("error is : "+e.toString());
 		} catch (Exception e) {
 			prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
 	        logger.error("energy09-ERROR", e);
@@ -1004,14 +1047,18 @@ public class EnergyController {
 //        		DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
         prettyLog.append("ITEM_SIZE", resultList.size());
         List<EssUsage> essUsageModel = Lists.newArrayList();
-        for (EssUsageModel item : resultList) {
-          EssUsage essUsage = new EssUsage();
-          essUsage.setDeviceId(device.getDeviceId());
-          essUsage.setSiteId(_siteId);
-          essUsage.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
-          essUsage.setUsgVal(Integer.parseInt(item.getPowerUsage()));
-
-          essUsageModel.add(essUsage);
+        if( resultList != null ){
+        	
+        	prettyLog.append("ITEM_SIZE", resultList.size());
+        	for (EssUsageModel item : resultList) {
+        		EssUsage essUsage = new EssUsage();
+        		essUsage.setDeviceId(device.getDeviceId());
+        		essUsage.setSiteId(_siteId);
+        		essUsage.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
+        		essUsage.setUsgVal(Integer.parseInt(item.getPowerUsage()));
+        		
+        		essUsageModel.add(essUsage);
+        	}
         }
         resultCnt += essService.addOrModEssUsageList(essUsageModel, null);
       }
@@ -1103,8 +1150,11 @@ public class EnergyController {
       deviceList = Lists.newArrayList();
       List<Site> siteList = siteService.getSiteList(prettyLog);
       ValidateUtil.notEmpty(siteList, "사이트 목록을 찾을 수 없습니다");
-      for (Site site : siteList) {
-        deviceList.addAll(deviceService.getDeviceList(site.getSiteId(), null));
+      if(siteList != null){
+    	  
+    	  for (Site site : siteList) {
+    		  deviceList.addAll(deviceService.getDeviceList(site.getSiteId(), null));
+    	  }
       }
     }
     return deviceList;

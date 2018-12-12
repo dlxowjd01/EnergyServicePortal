@@ -43,6 +43,9 @@ public class ControllerAspect {
       }
       retVal = joinPoint.proceed();
       return retVal;
+    } catch (NullPointerException e) {
+	  	  logger.error("error is : "+e.toString());
+	  	  throw e;
     } catch (Exception e) {
       // 2017.09.29 보안수정 RH.Jung PMD-AvoidCatchingGenericException
       // } catch (MsgException e) {

@@ -52,6 +52,4 @@ public class SystemProperties {
     this.properties = properties;
   }
 
-  public static void main(String[] args) {
-  }
 }
