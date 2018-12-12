@@ -31,13 +31,16 @@ import kr.co.ewp.api.entity.SiteSet;
 import kr.co.ewp.api.entity.Usage;
 import kr.co.ewp.api.model.CblResponseModel;
 import kr.co.ewp.api.model.ChargingDischarging;
+import kr.co.ewp.api.model.ChargingDischargingItemModel;
 import kr.co.ewp.api.model.ChargingDischargingSchedule;
+import kr.co.ewp.api.model.ChargingDischargingScheduleItemModel;
 import kr.co.ewp.api.model.DrRequestTarget;
 import kr.co.ewp.api.model.EnergyModel;
 import kr.co.ewp.api.model.EssUsageModel;
 import kr.co.ewp.api.model.PeakRequestModel;
 import kr.co.ewp.api.model.PeakResponseModel;
 import kr.co.ewp.api.model.PvPowerGenModel;
+import kr.co.ewp.api.model.PvPowerGenModelItemModel;
 import kr.co.ewp.api.model.UsageItemModel;
 import kr.co.ewp.api.model.UsageModel;
 import kr.co.ewp.api.service.DeviceService;
@@ -616,18 +619,18 @@ public class EnergyController {
         }
         List<EssCharge> essChargeList = Lists.newArrayList();
         try {
-          List<ChargingDischarging> cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "1", "15", prettyLog);
+            ChargingDischarging cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "1", "15", prettyLog);
 //          List<ChargingDischarging> cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
 //        		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
-          prettyLog.append("ITEM_SIZE", cdList.size());
-          for (ChargingDischarging item : cdList) {
+          prettyLog.append("ITEM_SIZE", cdList.getItems().size());
+          for (ChargingDischargingItemModel item : cdList.getItems()) {
             EssCharge essCharge = new EssCharge();
             essCharge.setDeviceId(device.getDeviceId());
             essCharge.setSiteId(_siteId);
-            essCharge.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
-            essCharge.setStdTimestamp(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
-            essCharge.setChgVal(Integer.parseInt(item.getChargeEnergy()));
-            essCharge.setDischgVal(Integer.parseInt(item.getDischargeEnergy()));
+            essCharge.setStdDate(item.getTimestamp());
+            essCharge.setStdTimestamp(item.getTimestamp());
+            essCharge.setChgVal(item.getChargeEnergy());
+            essCharge.setDischgVal(item.getDischargeEnergy());
 
             essChargeList.add(essCharge);
           }
@@ -705,18 +708,18 @@ public class EnergyController {
         }
         List<EssChargePlan> essChargePlanList = Lists.newArrayList();
         try {
-          List<ChargingDischargingSchedule> cdList = PMGrowApiUtil.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "1", "15", prettyLog);
+        	ChargingDischargingSchedule cdList = PMGrowApiUtil.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "1", "15", prettyLog);
 //          List<ChargingDischargingSchedule> cdList = PMGrowApiUtil.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
 //        		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
-          prettyLog.append("ITEM_SIZE", cdList.size());
-          for (ChargingDischargingSchedule item : cdList) {
+          prettyLog.append("ITEM_SIZE", cdList.getItems().size());
+          for (ChargingDischargingScheduleItemModel item : cdList.getItems()) {
             EssChargePlan essChargePlan = new EssChargePlan();
             essChargePlan.setDeviceId(device.getDeviceId());
             essChargePlan.setSiteId(_siteId);
-            essChargePlan.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
-            essChargePlan.setStdTimestamp(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
-            essChargePlan.setChgVal(Integer.parseInt(item.getChargingScheduleEnergy()));
-            essChargePlan.setDischgVal(Integer.parseInt(item.getDischargingScheduleEnergy()));
+            essChargePlan.setStdDate(item.getTimestamp());
+            essChargePlan.setStdTimestamp(item.getTimestamp());
+            essChargePlan.setChgVal(item.getScheduledCEnergy());
+            essChargePlan.setDischgVal(item.getScheduledDEnergy());
 
             essChargePlanList.add(essChargePlan);
           }
@@ -819,17 +822,17 @@ public class EnergyController {
                 }
                 localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
               }
-              List<PvPowerGenModel> resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate, endDate, "1", "15", prettyLog);
+              PvPowerGenModel resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate, endDate, "1", "15", prettyLog);
 //              List<PvPowerGenModel> resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, DateUtil.dateToString(beginDate, "yyyyMMdd"),
 //            		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
-              prettyLog.append("ITEM_SIZE", resultList.size());
-              for (PvPowerGenModel item : resultList) {
+              prettyLog.append("ITEM_SIZE", resultList.getItems().size());
+              for (PvPowerGenModelItemModel item : resultList.getItems()) {
                 PvGen pvGen = new PvGen();
                 pvGen.setDeviceId(_deviceId);
                 pvGen.setSiteId(_siteId);
-                pvGen.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
-                pvGen.setGenVal(Integer.parseInt(item.getGenEnergy()));
-                pvGen.setTemp(Integer.parseInt(item.getTemperature()));
+                pvGen.setStdDate(item.getTimestamp());
+                pvGen.setGenVal(item.getGenEnergy());
+                pvGen.setTemp(item.getTemperature());
   
                 pvGentList.add(pvGen);
               }

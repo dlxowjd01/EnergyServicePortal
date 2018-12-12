@@ -180,30 +180,30 @@ public class DeviceController {
           DevicePcs devicePcs = new DevicePcs();
           devicePcs.setSiteId(device.getSiteId());
           devicePcs.setDeviceId(device.getDeviceId());
-          devicePcs.setAcCurrent(Integer.parseInt(pcsEquipmentModel.getAcCurrent()));
-          devicePcs.setAcFreq(Integer.parseInt(pcsEquipmentModel.getAcFreq()));
-          devicePcs.setAcPf(Integer.parseInt(pcsEquipmentModel.getAcPf()));
-          devicePcs.setAcPower(Integer.parseInt(pcsEquipmentModel.getAcPower()));
-          devicePcs.setAcSetPower(Integer.parseInt(pcsEquipmentModel.getAcSetPower()));
-          devicePcs.setAcVoltage(Integer.parseInt(pcsEquipmentModel.getAcVoltage()));
+          devicePcs.setAcCurrent(pcsEquipmentModel.getAcCurrent()); /*** 12.12 이우람 수정 ***/
+          devicePcs.setAcFreq(pcsEquipmentModel.getAcFreq()); /*** 12.12 이우람 수정 ***/
+          devicePcs.setAcPf(pcsEquipmentModel.getAcPf()); /*** 12.12 이우람 수정 ***/
+          devicePcs.setAcPower(pcsEquipmentModel.getAcPower()); /*** 12.12 이우람 수정 ***/
+          devicePcs.setAcSetPower(pcsEquipmentModel.getAcSetPower()); /*** 12.12 이우람 수정 ***/
+          devicePcs.setAcVoltage(pcsEquipmentModel.getAcVoltage()); /*** 12.12 이우람 수정 ***/
           devicePcs.setAlarmMsg(pcsEquipmentModel.getAlarmMsg());
-          devicePcs.setDcCurrent(Integer.parseInt(pcsEquipmentModel.getDcCurrent()));
-          devicePcs.setDcFreq(Integer.parseInt(pcsEquipmentModel.getDcFreq()));
-          devicePcs.setDcPf(Integer.parseInt(pcsEquipmentModel.getDcPf()));
-          devicePcs.setDcPower(Integer.parseInt(pcsEquipmentModel.getDcPower()));
-          devicePcs.setDcSetPower(Integer.parseInt(pcsEquipmentModel.getDcSetPower()));
-          devicePcs.setDcVoltage(Integer.parseInt(pcsEquipmentModel.getDcVoltage()));
-          devicePcs.setDeviceName(pcsEquipmentModel.getEquipmentName());
-          devicePcs.setDeviceStat(pcsEquipmentModel.getOpMode());
-          devicePcs.setStdDate(DateUtil.stringToDate(pcsEquipmentModel.getRetrieveTime(), "yyyyMMddHHmmss"));
+          devicePcs.setDcCurrent(pcsEquipmentModel.getDcCurrent()); /*** 12.12 이우람 수정 ***/
+          devicePcs.setDcFreq(pcsEquipmentModel.getDcFreq()); /*** 12.12 이우람 수정 ***/
+          devicePcs.setDcPf(pcsEquipmentModel.getDcPf()); /*** 12.12 이우람 수정 ***/
+          devicePcs.setDcPower(pcsEquipmentModel.getDcPower()); /*** 12.12 이우람 수정 ***/
+          devicePcs.setDcSetPower(pcsEquipmentModel.getDcSetPower()); /*** 12.12 이우람 수정 ***/
+          devicePcs.setDcVoltage(pcsEquipmentModel.getDcVoltage()); /*** 12.12 이우람 수정 ***/
+          devicePcs.setDeviceName(pcsEquipmentModel.getPcsName()); /*** 12.12 이우람 수정 ***/
+          devicePcs.setDeviceStat(Integer.toString(pcsEquipmentModel.getOpMode())); /*** 12.12 이우람 수정 ***/
+          devicePcs.setStdDate(pcsEquipmentModel.getTimestamp()); /*** 12.12 이우람 수정 ***/
 
-          devicePcs.setPcsStatus(pcsEquipmentModel.getPcsStatus());
-          devicePcs.setRemoteMode(pcsEquipmentModel.getRemoteMode());
-          devicePcs.setPcsCommand(pcsEquipmentModel.getPcsCommand());
-          devicePcs.setTodayDEnergy(pcsEquipmentModel.getTodayDEnergy());
-          devicePcs.setTodayCEnergy(pcsEquipmentModel.getTodayCEnergy());
-          devicePcs.setTotalDEnergy(pcsEquipmentModel.getTotalDEnergy());
-          devicePcs.setTotalCEnerge(pcsEquipmentModel.getTotalCEnerge());
+          devicePcs.setPcsStatus(Integer.toString(pcsEquipmentModel.getPcsStatus())); /*** 12.12 이우람 수정 ***/
+          devicePcs.setRemoteMode(Integer.toString(pcsEquipmentModel.getRemoteMode())); /*** 12.12 이우람 수정 ***/
+          devicePcs.setPcsCommand(Integer.toString(pcsEquipmentModel.getPcsCommand())); /*** 12.12 이우람 수정 ***/
+          devicePcs.setTodayDEnergy(Integer.toString(pcsEquipmentModel.getTodayDEnergy())); /*** 12.12 이우람 수정 ***/
+          devicePcs.setTodayCEnergy(Integer.toString(pcsEquipmentModel.getTodayCEnergy())); /*** 12.12 이우람 수정 ***/
+          devicePcs.setTotalDEnergy(Integer.toString(pcsEquipmentModel.getTotalDEnergy())); /*** 12.12 이우람 수정 ***/
+          devicePcs.setTotalCEnerge(Integer.toString(pcsEquipmentModel.getTotalCEnerge())); /*** 12.12 이우람 수정 ***/
 
           deivcePcsList.add(devicePcs);
 
@@ -265,15 +265,15 @@ public class DeviceController {
           DeviceBms deviceBms = new DeviceBms();
           deviceBms.setSiteId(device.getSiteId());
           deviceBms.setDeviceId(device.getDeviceId());
-          deviceBms.setDeviceName(bmsEquipmentModel.getEquipmentName());
-          deviceBms.setCurrSoc(Integer.parseInt(bmsEquipmentModel.getCurrSoc()));
-          deviceBms.setDod(Integer.parseInt(bmsEquipmentModel.getDod()));
-          deviceBms.setSysCurrent(Integer.parseInt(bmsEquipmentModel.getSysCurrent()));
-          deviceBms.setSysSoc(Integer.parseInt(bmsEquipmentModel.getSysSoc()));
-          deviceBms.setSysSoh(Integer.parseInt(bmsEquipmentModel.getSysSoh()));
-          deviceBms.setSysVoltage(Integer.parseInt(bmsEquipmentModel.getSysVoltage()));
-          deviceBms.setDeviceStat(bmsEquipmentModel.getSysMode());
-          deviceBms.setStdDate(DateUtil.stringToDate(bmsEquipmentModel.getRetrieveTime(), "yyyyMMddHHmmss"));
+          deviceBms.setDeviceName(bmsEquipmentModel.getBmsName()); /*** 12.12 이우람 수정 ***/
+          deviceBms.setCurrSoc(bmsEquipmentModel.getCurrSoc()); /*** 12.12 이우람 수정 ***/
+          deviceBms.setDod(bmsEquipmentModel.getDod()); /*** 12.12 이우람 수정 ***/
+          deviceBms.setSysCurrent(bmsEquipmentModel.getSysCurrent()); /*** 12.12 이우람 수정 ***/
+          deviceBms.setSysSoc(bmsEquipmentModel.getSysSoc()); /*** 12.12 이우람 수정 ***/
+          deviceBms.setSysSoh(bmsEquipmentModel.getSysSoh()); /*** 12.12 이우람 수정 ***/
+          deviceBms.setSysVoltage(bmsEquipmentModel.getSysVoltage()); /*** 12.12 이우람 수정 ***/
+          deviceBms.setDeviceStat(Integer.toString(bmsEquipmentModel.getSysMode())); /*** 12.12 이우람 수정 ***/
+          deviceBms.setStdDate(bmsEquipmentModel.getTimestamp()); /*** 12.12 이우람 수정 ***/
           deivceBmsList.add(deviceBms);
 
           if (deivceBmsList.size() == 20) {
@@ -338,11 +338,11 @@ public class DeviceController {
           devicePv.setSiteId(_siteId);
           devicePv.setDeviceId(device.getDeviceId());
           devicePv.setAlarmMsg(pcsEquipmentModel.getAlarmMsg());
-          devicePv.setTemp(Integer.parseInt(pcsEquipmentModel.getTemperature()));
-          devicePv.setTotPower(Integer.parseInt(pcsEquipmentModel.getTotalPower()));
-          devicePv.setDeviceName(pcsEquipmentModel.getEquipmentName());
-          devicePv.setDeviceStat(pcsEquipmentModel.getStatus());
-          devicePv.setStdDate(DateUtil.stringToDate(pcsEquipmentModel.getRetrieveTime(), "yyyyMMddHHmmss"));
+          devicePv.setTemp(pcsEquipmentModel.getTemperature()); /*** 12.12 이우람 수정 ***/
+          devicePv.setTotPower(pcsEquipmentModel.getTotalGenPower()); /*** 12.12 이우람 수정 ***/
+          devicePv.setDeviceName(pcsEquipmentModel.getIvtName()); /*** 12.12 이우람 수정 ***/
+          devicePv.setDeviceStat(Integer.toString(pcsEquipmentModel.getStatus())); /*** 12.12 이우람 수정 ***/
+          devicePv.setStdDate(pcsEquipmentModel.getTimestamp()); /*** 12.12 이우람 수정 ***/
           deivcePvList.add(devicePv);
           if (deivcePvList.size() == 20) {
             resultCnt += deviceService.addDeivcePvList(deivcePvList, null);

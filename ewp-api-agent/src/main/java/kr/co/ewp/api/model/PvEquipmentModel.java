@@ -1,77 +1,153 @@
 package kr.co.ewp.api.model;
 
+import java.util.Date;
+
 public class PvEquipmentModel {
-  private String resultCnt;//
-  private String equipmentId;//
-  private String equipmentName;//
-  private String retrieveTime;// YYYYMMDDhhmmss
-  private String status;//
+//  private String resultCnt;// /*** 12.12 이우람 수정-주석 ***/
+  private String ivtId;// /*** 12.12 이우람 수정 ***/
+  private String ivtName;// /*** 12.12 이우람 수정 ***/
+  private Date timestamp;// YYYYMMDDhhmmss /*** 12.12 이우람 수정 ***/
+  private Integer status;// /*** 12.12 이우람 수정 ***/
   private String alarmMsg;//
-  private String temperature;// (℃)
-  private String totalPower;// (kWh)
+  private Integer temperature;// (℃) /*** 12.12 이우람 수정 ***/
+  private Integer totalGenPower;// (Wh) /*** 12.12 이우람 수정 ***/
+  private Integer todayGenPower;// (Wh) /*** 12.12 이우람 추가 ***/
+  
+  private Integer acVoltage;// (V) /*** 12.12 이우람 추가 ***/
+  private Integer acPower;// (W) /*** 12.12 이우람 추가 ***/
+  private Integer acCurrent;// (A) /*** 12.12 이우람 추가 ***/
+  private Integer acFreq;// (Hz) /*** 12.12 이우람 추가 ***/
+  private Integer dcVoltage;// (V) /*** 12.12 이우람 추가 ***/
+  private Integer dcPower;// (W) /*** 12.12 이우람 추가 ***/
+  private Integer dcCurrent;// (A) /*** 12.12 이우람 추가 ***/
+  private Integer dcFreq;// (Hz) /*** 12.12 이우람 추가 ***/
 
-  public String getResultCnt() {
-    return resultCnt;
-  }
-
-  public void setResultCnt(String resultCnt) {
-    this.resultCnt = resultCnt;
-  }
-
-  public String getEquipmentId() {
-    return equipmentId;
-  }
-
-  public void setEquipmentId(String equipmentId) {
-    this.equipmentId = equipmentId;
-  }
-
-  public String getEquipmentName() {
-    return equipmentName;
-  }
-
-  public void setEquipmentName(String equipmentName) {
-    this.equipmentName = equipmentName;
-  }
-
-  public String getRetrieveTime() {
-    return retrieveTime;
-  }
-
-  public void setRetrieveTime(String retrieveTime) {
-    this.retrieveTime = retrieveTime;
-  }
-
-  public String getStatus() {
-    return status;
-  }
-
-  public void setStatus(String status) {
-    this.status = status;
-  }
-
+  public String getIvtId() {
+		return ivtId;
+	}
+	
+  public void setIvtId(String ivtId) {
+		this.ivtId = ivtId;
+	}
+	
+  public String getIvtName() {
+		return ivtName;
+	}
+	
+  public void setIvtName(String ivtName) {
+		this.ivtName = ivtName;
+	}
+	
+  public Date getTimestamp() {
+		return timestamp;
+	}
+	
+  public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
+	
+  public Integer getStatus() {
+		return status;
+	}
+	
+  public void setStatus(Integer status) {
+		this.status = status;
+	}
+	
   public String getAlarmMsg() {
-    return alarmMsg;
-  }
-
+		return alarmMsg;
+	}
+	
   public void setAlarmMsg(String alarmMsg) {
-    this.alarmMsg = alarmMsg;
-  }
-
-  public String getTemperature() {
-    return temperature;
-  }
-
-  public void setTemperature(String temperature) {
-    this.temperature = temperature;
-  }
-
-  public String getTotalPower() {
-    return totalPower;
-  }
-
-  public void setTotalPower(String totalPower) {
-    this.totalPower = totalPower;
-  }
+		this.alarmMsg = alarmMsg;
+	}
+	
+  public Integer getTemperature() {
+		return temperature;
+	}
+	
+  public void setTemperature(Integer temperature) {
+		this.temperature = temperature;
+	}
+	
+  public Integer getTotalGenPower() {
+		return totalGenPower;
+	}
+	
+  public void setTotalGenPower(Integer totalGenPower) {
+		this.totalGenPower = totalGenPower;
+	}
+	
+  public Integer getTodayGenPower() {
+		return todayGenPower;
+	}
+	
+  public void setTodayGenPower(Integer todayGenPower) {
+		this.todayGenPower = todayGenPower;
+	}
+	
+  public Integer getAcVoltage() {
+		return acVoltage;
+	}
+	
+  public void setAcVoltage(Integer acVoltage) {
+		this.acVoltage = acVoltage;
+	}
+	
+  public Integer getAcPower() {
+		return acPower;
+	}
+	
+  public void setAcPower(Integer acPower) {
+		this.acPower = acPower;
+	}
+	
+  public Integer getAcCurrent() {
+		return acCurrent;
+	}
+	
+  public void setAcCurrent(Integer acCurrent) {
+		this.acCurrent = acCurrent;
+	}
+	
+  public Integer getAcFreq() {
+		return acFreq;
+	}
+	
+  public void setAcFreq(Integer acFreq) {
+		this.acFreq = acFreq;
+	}
+	
+  public Integer getDcVoltage() {
+		return dcVoltage;
+	}
+	
+  public void setDcVoltage(Integer dcVoltage) {
+		this.dcVoltage = dcVoltage;
+	}
+	
+  public Integer getDcPower() {
+		return dcPower;
+	}
+	
+  public void setDcPower(Integer dcPower) {
+		this.dcPower = dcPower;
+	}
+	
+  public Integer getDcCurrent() {
+		return dcCurrent;
+	}
+	
+  public void setDcCurrent(Integer dcCurrent) {
+		this.dcCurrent = dcCurrent;
+	}
+	
+  public Integer getDcFreq() {
+		return dcFreq;
+	}
+	
+  public void setDcFreq(Integer dcFreq) {
+		this.dcFreq = dcFreq;
+	}
 
 }

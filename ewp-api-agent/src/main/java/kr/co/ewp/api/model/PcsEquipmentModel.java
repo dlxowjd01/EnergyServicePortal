@@ -1,235 +1,229 @@
 package kr.co.ewp.api.model;
 
+import java.util.Date;
+
 public class PcsEquipmentModel {
-  private Integer resultCnt;//
-  private String equipmentId;//
-  private String equipmentName;//
-  private String retrieveTime;// YYYYMMDDhhmmss
-  private String opMode;//
+//  private Integer resultCnt;// /*** 12.12 이우람 수정-주석 ***/
+  private String pcsId;// /*** 12.12 이우람 수정 ***/
+  private String pcsName;// /*** 12.12 이우람 수정 ***/
+  private Date timestamp;// YYYYMMDDhhmmss /*** 12.12 이우람 수정 ***/
+  private Integer opMode;// /*** 12.12 이우람 수정 ***/
   private String alarmMsg;//
-  private String acVoltage;// (V)
-  private String acPower;// (kWh)
-  private String acCurrent;// (A)
-  private String acFreq;// (Hz)
-  private String acSetPower;// (kWh)
-  private String acPf;//
-  private String dcVoltage;// (V)
-  private String dcPower;// (kWh)
-  private String dcCurrent;// (A)
-  private String dcFreq;// (Hz)
-  private String dcPf;//
-  private String dcSetPower;// (kWh)
+  private Integer acVoltage;// (V) /*** 12.12 이우람 수정 ***/
+  private Integer acPower;// W) /*** 12.12 이우람 수정 ***/
+  private Integer acCurrent;// (A) /*** 12.12 이우람 수정 ***/
+  private Integer acFreq;// (Hz) /*** 12.12 이우람 수정 ***/
+  private Integer acSetPower;// (W) /*** 12.12 이우람 수정 ***/
+  private Integer acPf;// /*** 12.12 이우람 수정 ***/
+  private Integer dcVoltage;// (V) /*** 12.12 이우람 수정 ***/
+  private Integer dcPower;// (W) /*** 12.12 이우람 수정 ***/
+  private Integer dcCurrent;// (A) /*** 12.12 이우람 수정 ***/
+  private Integer dcFreq;// (Hz) /*** 12.12 이우람 수정 ***/
+  private Integer dcPf;// /*** 12.12 이우람 수정 ***/
+  private Integer dcSetPower;// (W) /*** 12.12 이우람 수정 ***/
 
   
-  private String pcsStatus;//   0:OFF, 1:ON, 2:Fault, 3:Warning
-  private String remoteMode;//  0:Local, 1:Remote
-  private String pcsCommand;//  0:Stop, 1:Run
-  private String todayDEnergy;//  
-  private String todayCEnergy;//  
-  private String totalDEnergy;//  
-  private String totalCEnerge;//  
+  private Integer pcsStatus;//   0:OFF, 1:ON, 2:Fault, 3:Warning /*** 12.12 이우람 수정 ***/
+  private Integer remoteMode;//  0:Local, 1:Remote /*** 12.12 이우람 수정 ***/
+  private Integer pcsCommand;//  0:Stop, 1:Run /*** 12.12 이우람 수정 ***/
+  private Integer todayDEnergy;// (Wh)  /*** 12.12 이우람 수정 ***/
+  private Integer todayCEnergy;// (Wh)  /*** 12.12 이우람 수정 ***/
+  private Integer totalDEnergy;// (Wh)  /*** 12.12 이우람 수정 ***/
+  private Integer totalCEnerge;// (Wh)  /*** 12.12 이우람 수정 ***/
 
 
   
 
-  public String getPcsStatus() {
-    return pcsStatus;
-  }
-
-  public void setPcsStatus(String pcsStatus) {
-    this.pcsStatus = pcsStatus;
-  }
-
-  public String getRemoteMode() {
-    return remoteMode;
-  }
-
-  public void setRemoteMode(String remoteMode) {
-    this.remoteMode = remoteMode;
-  }
-
-  public String getPcsCommand() {
-    return pcsCommand;
-  }
-
-  public void setPcsCommand(String pcsCommand) {
-    this.pcsCommand = pcsCommand;
-  }
-
-  public String getTodayDEnergy() {
-    return todayDEnergy;
-  }
-
-  public void setTodayDEnergy(String todayDEnergy) {
-    this.todayDEnergy = todayDEnergy;
-  }
-
-  public String getTodayCEnergy() {
-    return todayCEnergy;
-  }
-
-  public void setTodayCEnergy(String todayCEnergy) {
-    this.todayCEnergy = todayCEnergy;
-  }
-
-  public String getTotalDEnergy() {
-    return totalDEnergy;
-  }
-
-  public void setTotalDEnergy(String totalDEnergy) {
-    this.totalDEnergy = totalDEnergy;
-  }
-
-  public String getTotalCEnerge() {
-    return totalCEnerge;
-  }
-
-  public void setTotalCEnerge(String totalCEnerge) {
-    this.totalCEnerge = totalCEnerge;
-  }
-
-  public Integer getResultCnt() {
-    return resultCnt;
-  }
-
-  public void setResultCnt(Integer resultCnt) {
-    this.resultCnt = resultCnt;
-  }
-
-  public String getEquipmentId() {
-    return equipmentId;
-  }
-
-  public void setEquipmentId(String equipmentId) {
-    this.equipmentId = equipmentId;
-  }
-
-  public String getEquipmentName() {
-    return equipmentName;
-  }
-
-  public void setEquipmentName(String equipmentName) {
-    this.equipmentName = equipmentName;
-  }
-
-  public String getRetrieveTime() {
-    return retrieveTime;
-  }
-
-  public void setRetrieveTime(String retrieveTime) {
-    this.retrieveTime = retrieveTime;
-  }
-
-  public String getOpMode() {
-    return opMode;
-  }
-
-  public void setOpMode(String opMode) {
-    this.opMode = opMode;
-  }
-
-  public String getAlarmMsg() {
-    return alarmMsg;
-  }
-
-  public void setAlarmMsg(String alarmMsg) {
-    this.alarmMsg = alarmMsg;
-  }
-
-  public String getAcVoltage() {
-    return acVoltage;
-  }
-
-  public void setAcVoltage(String acVoltage) {
-    this.acVoltage = acVoltage;
-  }
-
-  public String getAcPower() {
-    return acPower;
-  }
-
-  public void setAcPower(String acPower) {
-    this.acPower = acPower;
-  }
-
-  public String getAcCurrent() {
-    return acCurrent;
-  }
-
-  public void setAcCurrent(String acCurrent) {
-    this.acCurrent = acCurrent;
-  }
-
-  public String getAcFreq() {
-    return acFreq;
-  }
-
-  public void setAcFreq(String acFreq) {
-    this.acFreq = acFreq;
-  }
-
-  public String getAcSetPower() {
-    return acSetPower;
-  }
-
-  public void setAcSetPower(String acSetPower) {
-    this.acSetPower = acSetPower;
-  }
-
-  public String getAcPf() {
-    return acPf;
-  }
-
-  public void setAcPf(String acPf) {
-    this.acPf = acPf;
-  }
-
-  public String getDcVoltage() {
-    return dcVoltage;
-  }
-
-  public void setDcVoltage(String dcVoltage) {
-    this.dcVoltage = dcVoltage;
-  }
-
-  public String getDcPower() {
-    return dcPower;
-  }
-
-  public void setDcPower(String dcPower) {
-    this.dcPower = dcPower;
-  }
-
-  public String getDcCurrent() {
-    return dcCurrent;
-  }
-
-  public void setDcCurrent(String dcCurrent) {
-    this.dcCurrent = dcCurrent;
-  }
-
-  public String getDcFreq() {
-    return dcFreq;
-  }
-
-  public void setDcFreq(String dcFreq) {
-    this.dcFreq = dcFreq;
-  }
-
-  public String getDcPf() {
-    return dcPf;
-  }
-
-  public void setDcPf(String dcPf) {
-    this.dcPf = dcPf;
-  }
-
-  public String getDcSetPower() {
-    return dcSetPower;
-  }
-
-  public void setDcSetPower(String dcSetPower) {
-    this.dcSetPower = dcSetPower;
-  }
+  public String getPcsId() {
+		return pcsId;
+	}
+  
+	public void setPcsId(String pcsId) {
+		this.pcsId = pcsId;
+	}
+	
+	public String getPcsName() {
+		return pcsName;
+	}
+	
+	public void setPcsName(String pcsName) {
+		this.pcsName = pcsName;
+	}
+	
+	public Date getTimestamp() {
+		return timestamp;
+	}
+	
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
+	
+	public Integer getOpMode() {
+		return opMode;
+	}
+	
+	public void setOpMode(Integer opMode) {
+		this.opMode = opMode;
+	}
+	
+	public String getAlarmMsg() {
+		return alarmMsg;
+	}
+	
+	public void setAlarmMsg(String alarmMsg) {
+		this.alarmMsg = alarmMsg;
+	}
+	
+	public Integer getAcVoltage() {
+		return acVoltage;
+	}
+	
+	public void setAcVoltage(Integer acVoltage) {
+		this.acVoltage = acVoltage;
+	}
+	
+	public Integer getAcPower() {
+		return acPower;
+	}
+	
+	public void setAcPower(Integer acPower) {
+		this.acPower = acPower;
+	}
+	
+	public Integer getAcCurrent() {
+		return acCurrent;
+	}
+	
+	public void setAcCurrent(Integer acCurrent) {
+		this.acCurrent = acCurrent;
+	}
+	
+	public Integer getAcFreq() {
+		return acFreq;
+	}
+	
+	public void setAcFreq(Integer acFreq) {
+		this.acFreq = acFreq;
+	}
+	
+	public Integer getAcSetPower() {
+		return acSetPower;
+	}
+	
+	public void setAcSetPower(Integer acSetPower) {
+		this.acSetPower = acSetPower;
+	}
+	
+	public Integer getAcPf() {
+		return acPf;
+	}
+	
+	public void setAcPf(Integer acPf) {
+		this.acPf = acPf;
+	}
+	
+	public Integer getDcVoltage() {
+		return dcVoltage;
+	}
+	
+	public void setDcVoltage(Integer dcVoltage) {
+		this.dcVoltage = dcVoltage;
+	}
+	
+	public Integer getDcPower() {
+		return dcPower;
+	}
+	
+	public void setDcPower(Integer dcPower) {
+		this.dcPower = dcPower;
+	}
+	
+	public Integer getDcCurrent() {
+		return dcCurrent;
+	}
+	
+	public void setDcCurrent(Integer dcCurrent) {
+		this.dcCurrent = dcCurrent;
+	}
+	
+	public Integer getDcFreq() {
+		return dcFreq;
+	}
+	
+	public void setDcFreq(Integer dcFreq) {
+		this.dcFreq = dcFreq;
+	}
+	
+	public Integer getDcPf() {
+		return dcPf;
+	}
+	
+	public void setDcPf(Integer dcPf) {
+		this.dcPf = dcPf;
+	}
+	
+	public Integer getDcSetPower() {
+		return dcSetPower;
+	}
+	
+	public void setDcSetPower(Integer dcSetPower) {
+		this.dcSetPower = dcSetPower;
+	}
+	
+	public Integer getPcsStatus() {
+		return pcsStatus;
+	}
+	
+	public void setPcsStatus(Integer pcsStatus) {
+		this.pcsStatus = pcsStatus;
+	}
+	
+	public Integer getRemoteMode() {
+		return remoteMode;
+	}
+	
+	public void setRemoteMode(Integer remoteMode) {
+		this.remoteMode = remoteMode;
+	}
+	
+	public Integer getPcsCommand() {
+		return pcsCommand;
+	}
+	
+	public void setPcsCommand(Integer pcsCommand) {
+		this.pcsCommand = pcsCommand;
+	}
+	
+	public Integer getTodayDEnergy() {
+		return todayDEnergy;
+	}
+	
+	public void setTodayDEnergy(Integer todayDEnergy) {
+		this.todayDEnergy = todayDEnergy;
+	}
+	
+	public Integer getTodayCEnergy() {
+		return todayCEnergy;
+	}
+	
+	public void setTodayCEnergy(Integer todayCEnergy) {
+		this.todayCEnergy = todayCEnergy;
+	}
+	
+	public Integer getTotalDEnergy() {
+		return totalDEnergy;
+	}
+	
+	public void setTotalDEnergy(Integer totalDEnergy) {
+		this.totalDEnergy = totalDEnergy;
+	}
+	
+	public Integer getTotalCEnerge() {
+		return totalCEnerge;
+	}
+	
+	public void setTotalCEnerge(Integer totalCEnerge) {
+		this.totalCEnerge = totalCEnerge;
+	}
 
 }

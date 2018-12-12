@@ -37,7 +37,7 @@ public class PMGrowApiUtilTest {
 //      String endDt = "20180810";
       String intervalType = "1";
       String interval = "15";
-      List<ChargingDischarging> chargingDischargingList = PMGrowApiUtil.getEssCharge(API_HOST, equipmentId, startDt, endDt, intervalType, interval, prettyLog);
+      ChargingDischarging chargingDischargingList = PMGrowApiUtil.getEssCharge(API_HOST, equipmentId, startDt, endDt, intervalType, interval, prettyLog);
       prettyLog.append("RESULT", JsonUtil.toJson(chargingDischargingList));
     } finally {
       prettyLog.stop();
@@ -73,7 +73,7 @@ public class PMGrowApiUtilTest {
 //		  String endDt = "20180906";
 		  String intervalType = "1";
 		  String interval = "15";
-		  List<PvPowerGenModel> resultList = PMGrowApiUtil.getPvPowerGenList(API_HOST, equipmentId, startDt, endDt, "1", "15", prettyLog);
+		  PvPowerGenModel resultList = PMGrowApiUtil.getPvPowerGenList(API_HOST, equipmentId, startDt, endDt, "1", "15", prettyLog);
 		  prettyLog.append("RESULT", JsonUtil.toJson(resultList));
 	  } finally {
 		  prettyLog.stop();

@@ -36,7 +36,7 @@ public class PMGrowApiUtil {
    * 
    * @return
    */
-  public static List<ChargingDischarging> getEssCharge(String host, String equipmentId, Date startDt, Date endDt, String intervalType, String interval, PrettyLog prettyLog) {
+  public static ChargingDischarging getEssCharge(String host, String equipmentId, Date startDt, Date endDt, String intervalType, String interval, PrettyLog prettyLog) {
 	  prettyLog.start("PMGrowApiUtil.getEssCharge", "ERROR");
 	  String resultBody = null;
 	  try {
@@ -49,8 +49,7 @@ public class PMGrowApiUtil {
 		  
 		  prettyLog.append("URL", url);
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
-		  return JsonUtil.toObject(resultBody, new TypeReference<List<ChargingDischarging>>() {
-		  });
+		  return JsonUtil.toObject(resultBody, ChargingDischarging.class);
 	  } catch (Exception e) {
 		  prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
 		  throw e;
@@ -73,7 +72,7 @@ public class PMGrowApiUtil {
    * @param prettyLog
    * @return
    */
-  public static List<ChargingDischargingSchedule> getEssChargePlan(String host, String equipmentId, Date startDt, Date endDt, String intervalType, String interval, PrettyLog prettyLog) {
+  public static ChargingDischargingSchedule getEssChargePlan(String host, String equipmentId, Date startDt, Date endDt, String intervalType, String interval, PrettyLog prettyLog) {
 	  prettyLog.start("PMGrowApiUtil.getEssChargePlan", "ERROR");
 	  String resultBody = null;
 	  try {
@@ -86,8 +85,7 @@ public class PMGrowApiUtil {
 		  
 		  prettyLog.append("URL", url);
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
-		  return JsonUtil.toObject(resultBody, new TypeReference<List<ChargingDischargingSchedule>>() {
-		  });
+		  return JsonUtil.toObject(resultBody, ChargingDischargingSchedule.class);
 	  } catch (Exception e) {
 		  prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
 		  throw e;
@@ -110,7 +108,7 @@ public class PMGrowApiUtil {
    * @param prettyLog
    * @return
    */
-  public static List<PvPowerGenModel> getPvPowerGenList(String host, String equipmentId, Date startDt, Date endDt, String intervalType, String interval, PrettyLog prettyLog) {
+  public static PvPowerGenModel getPvPowerGenList(String host, String equipmentId, Date startDt, Date endDt, String intervalType, String interval, PrettyLog prettyLog) {
 	  prettyLog.start("PMGrowApiUtil.getPvPowerGenList", "ERROR");
 	  String resultBody = null;
 	  try {
@@ -123,8 +121,7 @@ public class PMGrowApiUtil {
 		  
 		  prettyLog.append("URL", url);
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
-		  return JsonUtil.toObject(resultBody, new TypeReference<List<PvPowerGenModel>>() {
-		  });
+		  return JsonUtil.toObject(resultBody, PvPowerGenModel.class);
 	  } catch (Exception e) {
 		  prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
 		  throw e;

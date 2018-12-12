@@ -1,104 +1,94 @@
 package kr.co.ewp.api.model;
 
+import java.util.Date;
+import java.util.List;
+
 public class ChargingDischarging {
-  private Integer resultCnt;//
-  private String equipmentId;//
-  private String totalCEnergy;// (kWh)
-  private String totalDEnergy;//
-  private String startDt;// YYYYMMDD
-  private String endDt;// YYYYMMDD
-  private Integer intervalType;//
-  private String Interval;//
-  private String retrieveTime;// YYYYMMDDhhmmss
-  private String chargeEnergy;// (kWh)
-  private String dischargeEnergy;// (kWh)
+//  private String resultCnt;// /*** 12.12 이우람 수정-주석 ***/
+  private String pcsId;// /*** 12.12 이우람 수정 ***/
+  private Integer totalCEnergy;// (Wh) /*** 12.12 이우람 수정 ***/
+  private Integer totalDEnergy;// (Wh) /*** 12.12 이우람 수정 ***/
+  private Date startDt;// YYYYMMDD /*** 12.12 이우람 수정 ***/
+  private Date endDt;// YYYYMMDD /*** 12.12 이우람 수정 ***/
+  private String intervalType;// /*** 12.12 이우람 수정 ***/
+  private Integer Interval;// /*** 12.12 이우람 수정 ***/
+  private Integer numItems; /*** 12.12 이우람 추가 ***/
+  private List<ChargingDischargingItemModel> items; /*** 12.12 이우람 추가 ***/
+//  private String retrieveTime;// YYYYMMDDhhmmss /*** 12.12 이우람 수정-주석 ***/
+//  private String chargeEnergy;// (kWh) /*** 12.12 이우람 수정-주석 ***/
+//  private String dischargeEnergy;// (kWh) /*** 12.12 이우람 수정-주석 ***/
 
-  public Integer getResultCnt() {
-    return resultCnt;
-  }
+  public String getPcsId() {
+		return pcsId;
+	}
+	
+  public void setPcsId(String pcsId) {
+		this.pcsId = pcsId;
+	}
+	
+  public Integer getTotalCEnergy() {
+		return totalCEnergy;
+	}
+	
+  public void setTotalCEnergy(Integer totalCEnergy) {
+		this.totalCEnergy = totalCEnergy;
+	}
+	
+  public Integer getTotalDEnergy() {
+		return totalDEnergy;
+	}
+	
+  public void setTotalDEnergy(Integer totalDEnergy) {
+		this.totalDEnergy = totalDEnergy;
+	}
+	
+  public Date getStartDt() {
+		return startDt;
+	}
+	
+  public void setStartDt(Date startDt) {
+		this.startDt = startDt;
+	}
+	
+  public Date getEndDt() {
+		return endDt;
+	}
+	
+  public void setEndDt(Date endDt) {
+		this.endDt = endDt;
+	}
+	
+  public String getIntervalType() {
+		return intervalType;
+	}
+	
+  public void setIntervalType(String intervalType) {
+		this.intervalType = intervalType;
+	}
+	
+  public Integer getInterval() {
+		return Interval;
+	}
+	
+  public void setInterval(Integer interval) {
+		Interval = interval;
+	}
+	
+  public List<ChargingDischargingItemModel> getItems() {
+		return items;
+	}
+	
+  public void setItems(List<ChargingDischargingItemModel> items) {
+		this.items = items;
+	}
 
-  public void setResultCnt(Integer resultCnt) {
-    this.resultCnt = resultCnt;
+  public Integer getNumItems() {
+  	return numItems;
   }
-
-  public String getEquipmentId() {
-    return equipmentId;
+  
+  public void setNumItems(Integer numItems) {
+  	this.numItems = numItems;
   }
-
-  public void setEquipmentId(String equipmentId) {
-    this.equipmentId = equipmentId;
-  }
-
-  public String getTotalCEnergy() {
-    return totalCEnergy;
-  }
-
-  public void setTotalCEnergy(String totalCEnergy) {
-    this.totalCEnergy = totalCEnergy;
-  }
-
-  public String getStartDt() {
-    return startDt;
-  }
-
-  public void setStartDt(String startDt) {
-    this.startDt = startDt;
-  }
-
-  public String getEndDt() {
-    return endDt;
-  }
-
-  public void setEndDt(String endDt) {
-    this.endDt = endDt;
-  }
-
-  public Integer getIntervalType() {
-    return intervalType;
-  }
-
-  public void setIntervalType(Integer intervalType) {
-    this.intervalType = intervalType;
-  }
-
-  public String getInterval() {
-    return Interval;
-  }
-
-  public void setInterval(String interval) {
-    Interval = interval;
-  }
-
-  public String getRetrieveTime() {
-    return retrieveTime;
-  }
-
-  public void setRetrieveTime(String retrieveTime) {
-    this.retrieveTime = retrieveTime;
-  }
-
-  public String getChargeEnergy() {
-    return chargeEnergy;
-  }
-
-  public void setChargeEnergy(String chargeEnergy) {
-    this.chargeEnergy = chargeEnergy;
-  }
-
-  public String getDischargeEnergy() {
-    return dischargeEnergy;
-  }
-
-  public void setDischargeEnergy(String dischargeEnergy) {
-    this.dischargeEnergy = dischargeEnergy;
-  }
-
-  public String getTotalDEnergy() {
-    return totalDEnergy;
-  }
-
-  public void setTotalDEnergy(String totalDEnergy) {
-    this.totalDEnergy = totalDEnergy;
-  }
+  
 
 }
