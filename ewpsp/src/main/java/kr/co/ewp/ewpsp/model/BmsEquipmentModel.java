@@ -1,121 +1,108 @@
 package kr.co.ewp.ewpsp.model;
 
+import java.util.Date;
+
 public class BmsEquipmentModel {
-  private Integer resultCnt;//
-  private String equipmentId;//
-  private String equipmentName;//
-  private String retrieveTime;// YYYYMMDDhhmmss
-  private String sysMode;//
-  private String socMax;//
-  private String socMin;//
-  private String sysSoc;// (%)
-  private String currSoc;// (kWh)
-  private String sysSoh;// (%)
-  private String sysVoltage;// (V)
-  private String sysCurrent;// (kWh)
-  private String dod;// (%)
+//  private Integer resultCnt;// /*** 12.12 이우람 수정-주석 ***/
+  private String bmsId;// /*** 12.12 이우람 수정 ***/
+  private String bmsName;// /*** 12.12 이우람 수정 ***/
+  private Date timestamp;// YYYYMMDDhhmmss /*** 12.12 이우람 수정 ***/
+  private Integer sysMode;// /*** 12.12 이우람 수정 ***/
+  private String alarmMsg;// /*** 12.12 이우람 추가 ***/
+//  private String socMax;// /*** 12.12 이우람 수정-주석 ***/
+//  private String socMin;// /*** 12.12 이우람 수정-주석 ***/
+  private Integer sysSoc;// (%) /*** 12.12 이우람 수정 ***/
+  private Integer currSoc;// (Wh) /*** 12.12 이우람 수정 ***/
+  private Integer sysSoh;// (%) /*** 12.12 이우람 수정 ***/
+  private Integer sysVoltage;// (V) /*** 12.12 이우람 수정 ***/
+  private Integer sysCurrent;// (A) /*** 12.12 이우람 수정 ***/
+  private Integer dod;// (%) /*** 12.12 이우람 수정 ***/
 
-  public Integer getResultCnt() {
-    return resultCnt;
-  }
-
-  public void setResultCnt(Integer resultCnt) {
-    this.resultCnt = resultCnt;
-  }
-
-  public String getEquipmentId() {
-    return equipmentId;
-  }
-
-  public void setEquipmentId(String equipmentId) {
-    this.equipmentId = equipmentId;
-  }
-
-  public String getEquipmentName() {
-    return equipmentName;
-  }
-
-  public void setEquipmentName(String equipmentName) {
-    this.equipmentName = equipmentName;
-  }
-
-  public String getRetrieveTime() {
-    return retrieveTime;
-  }
-
-  public void setRetrieveTime(String retrieveTime) {
-    this.retrieveTime = retrieveTime;
-  }
-
-  public String getSysMode() {
-    return sysMode;
-  }
-
-  public void setSysMode(String sysMode) {
-    this.sysMode = sysMode;
-  }
-
-  public String getSysSoc() {
-    return sysSoc;
-  }
-
-  public void setSysSoc(String sysSoc) {
-    this.sysSoc = sysSoc;
-  }
-
-  public String getCurrSoc() {
-    return currSoc;
-  }
-
-  public void setCurrSoc(String currSoc) {
-    this.currSoc = currSoc;
-  }
-
-  public String getSysSoh() {
-    return sysSoh;
-  }
-
-  public void setSysSoh(String sysSoh) {
-    this.sysSoh = sysSoh;
-  }
-
-  public String getSysVoltage() {
-    return sysVoltage;
-  }
-
-  public void setSysVoltage(String sysVoltage) {
-    this.sysVoltage = sysVoltage;
-  }
-
-  public String getSysCurrent() {
-    return sysCurrent;
-  }
-
-  public void setSysCurrent(String sysCurrent) {
-    this.sysCurrent = sysCurrent;
-  }
-
-  public String getDod() {
-    return dod;
-  }
-
-  public void setDod(String dod) {
-    this.dod = dod;
-  }
-
-  public String getSocMax() {
-    return socMax;
-  }
-
-  public void setSocMax(String socMax) {
-    this.socMax = socMax;
-  }
-
-  public String getSocMin() {
-    return socMin;
-  }
-
-  public void setSocMin(String socMin) {
-    this.socMin = socMin;
-  }
+  public String getBmsId() {
+		return bmsId;
+	}
+	
+  public void setBmsId(String bmsId) {
+		this.bmsId = bmsId;
+	}
+	
+  public String getBmsName() {
+		return bmsName;
+	}
+	
+  public void setBmsName(String bmsName) {
+		this.bmsName = bmsName;
+	}
+	
+  public Date getTimestamp() {
+		return timestamp;
+	}
+	
+  public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
+	
+  public Integer getSysMode() {
+		return sysMode;
+	}
+	
+  public void setSysMode(Integer sysMode) {
+		this.sysMode = sysMode;
+	}
+	
+  public String getAlarmMsg() {
+		return alarmMsg;
+	}
+	
+  public void setAlarmMsg(String alarmMsg) {
+		this.alarmMsg = alarmMsg;
+	}
+	
+  public Integer getSysSoc() {
+		return sysSoc;
+	}
+	
+  public void setSysSoc(Integer sysSoc) {
+		this.sysSoc = sysSoc;
+	}
+	
+  public Integer getCurrSoc() {
+		return currSoc;
+	}
+	
+  public void setCurrSoc(Integer currSoc) {
+		this.currSoc = currSoc;
+	}
+	
+  public Integer getSysSoh() {
+		return sysSoh;
+	}
+	
+  public void setSysSoh(Integer sysSoh) {
+		this.sysSoh = sysSoh;
+	}
+	
+  public Integer getSysVoltage() {
+		return sysVoltage;
+	}
+	
+  public void setSysVoltage(Integer sysVoltage) {
+		this.sysVoltage = sysVoltage;
+	}
+	
+  public Integer getSysCurrent() {
+		return sysCurrent;
+	}
+	
+  public void setSysCurrent(Integer sysCurrent) {
+		this.sysCurrent = sysCurrent;
+	}
+	
+  public Integer getDod() {
+		return dod;
+	}
+	
+  public void setDod(Integer dod) {
+		this.dod = dod;
+	}
 }

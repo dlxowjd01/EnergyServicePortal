@@ -127,22 +127,22 @@ public class SiteMainController {
 				if("1".equals(deviceType)) { // PCS
 					List<PcsEquipmentModel> pcsDetail = PMGrowApiUtil.getPcsEquipmentList(host, (String) deviceMap.get("device_id"));
 					if(pcsDetail != null && pcsDetail.size() > 0) {
-						Integer acPower = (pcsDetail.get(0).getAcPower() == null || pcsDetail.get(0).getAcPower() == "") ? 0 : Integer.parseInt(pcsDetail.get(0).getAcPower());
-						Integer dcPower = (pcsDetail.get(0).getDcPower() == null || pcsDetail.get(0).getDcPower() == "") ? 0 : Integer.parseInt(pcsDetail.get(0).getDcPower());
+						Integer acPower = (pcsDetail.get(0).getAcPower() == null) ? 0 : pcsDetail.get(0).getAcPower();
+						Integer dcPower = (pcsDetail.get(0).getDcPower() == null) ? 0 : pcsDetail.get(0).getDcPower();
 						deviceMap.put("apiPower", acPower+dcPower);
 					}
 					
 				} else if("2".equals(deviceType)) { // BMS
 					List<BmsEquipmentModel> bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, (String) deviceMap.get("device_id"));
 					if(bmsDetail != null && bmsDetail.size() > 0) {
-						Integer soc = (bmsDetail.get(0).getSysSoc() == null || bmsDetail.get(0).getSysSoc() == "") ? 0 : Integer.parseInt(bmsDetail.get(0).getSysSoc());
+						Integer soc = (bmsDetail.get(0).getSysSoc() == null) ? 0 : bmsDetail.get(0).getSysSoc();
 						deviceMap.put("apiSoc", soc);
 					}
 					
 				} else if("3".equals(deviceType)) { // PV(localEMS)
 					List<PvEquipmentModel> pvDetail = PMGrowApiUtil.getPvEquipmentList(host, (String) deviceMap.get("device_id"));
 					if(pvDetail != null && pvDetail.size() > 0) {
-						Integer totPower = (pvDetail.get(0).getTotalPower() == null || pvDetail.get(0).getTotalPower() == "") ? 0 : Integer.parseInt(pvDetail.get(0).getTotalPower());
+						Integer totPower = (pvDetail.get(0).getTotalGenPower() == null) ? 0 : pvDetail.get(0).getTotalGenPower();
 						deviceMap.put("apiTotPower", totPower);
 					}
 					

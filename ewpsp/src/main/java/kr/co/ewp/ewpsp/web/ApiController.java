@@ -63,17 +63,18 @@ public class ApiController {
 	@Resource(name="loginService")
 	private LoginService loginService;
 
-  @RequestMapping(value = { "/openapi/alarm" }, method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
+  @RequestMapping(value = { "/v1/alarm" }, method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE) /*** 12.13 이우람 수정 ***/
   public void getPrototype(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap, //
+      @RequestParam String siteId, // 사이트ID /*** 12.13 이우람 추가 ***/
       @RequestParam String deviceId, // 장치ID
-      @RequestParam String deviceType, // 장치구분(1:PCS,2:BMS,3:PV,4:부하측정기기,5:PV모니터링기기,6:ESS모니터링기기)
-      @RequestParam String alarmTime, // 알람발생일시(형식:YYYYMMDDhhmmss) -> 기준일시에 저장
-      @RequestParam String alarmType, // 알람구분(1:비상,2:주의)
+      @RequestParam Integer deviceType, // 장치구분(1:PCS,2:BMS,3:PV,4:부하측정기기,5:PV모니터링기기,6:ESS모니터링기기) /*** 12.13 이우람 수정 ***/
+      @RequestParam Date alarmTime, // 알람발생일시(형식:YYYYMMDDhhmmss) -> 기준일시에 저장 /*** 12.13 이우람 수정 ***/
+      @RequestParam Integer alarmType, // 알람구분(1:비상,2:주의) /*** 12.13 이우람 수정 ***/
       @RequestParam(defaultValue = "") String alarmMsg // 알람메시지 (파라메터는 필수이고 값은 있는 경우에만 세팅)
   ) {
     try {
       Map<String, String> device = deviceMonitoringService.getDevice(deviceId);
-      String siteId = device == null ? "" : device.get("site_id");
+//      String siteId = device == null ? "" : device.get("site_id"); /*** 12.13 이우람 수정 ***/
 
       Map<String, Object> parameter = Maps.newHashMap();
       parameter.put("siteId", siteId);
@@ -93,7 +94,8 @@ public class ApiController {
       
       // SMS 전송 (한재종)
       if(device !=null){
-    	  smsService.sendAlarmMessage(siteId, deviceId, device.get("device_name"), alarmTime, alarmType, alarmMsg);
+    	  String alarmTimeStr = CommonUtils.convertDateFormat(alarmTime, "yyyyMMddHHmmss"); /*** 12.13 이우람 추가 ***/
+    	  smsService.sendAlarmMessage(siteId, deviceId, device.get("device_name"), alarmTimeStr, Integer.toString(alarmType), alarmMsg); /*** 12.13 이우람 수정 ***/
       }
     } catch (NullPointerException e) {
 		logger.error("error is : "+e.toString());
@@ -128,9 +130,9 @@ public class ApiController {
 				String deviceId = (String) devices.get("device_id");
 				List<BmsEquipmentModel> bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, deviceId);
 				if(bmsDetail != null && bmsDetail.size() > 0) {
-					String sysSoc = bmsDetail.get(0).getSysSoc();
-					int soc = Integer.parseInt(sysSoc);
-					totalSoc = totalSoc+soc;
+					Integer sysSoc = bmsDetail.get(0).getSysSoc();
+//					int soc = Integer.parseInt(sysSoc);
+					totalSoc = totalSoc+sysSoc;
 					socCnt = socCnt+1;
 				}
 //				SocModel resSoc = PMGrowApiUtil.getSoc(host, deviceId);

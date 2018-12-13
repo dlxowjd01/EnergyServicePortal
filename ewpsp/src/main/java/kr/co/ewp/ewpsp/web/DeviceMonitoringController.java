@@ -314,7 +314,7 @@ public class DeviceMonitoringController {
 			result.put("pvStatusNm", statusNm);
 		}
 		result.put("temperature", (pvDetail == null) || pvDetail.size() == 0 ? null : pvDetail.get(0).getTemperature());
-		result.put("totalPower", (pvDetail == null || pvDetail.size() == 0) ? null : pvDetail.get(0).getTotalPower());
+		result.put("totalPower", (pvDetail == null || pvDetail.size() == 0) ? null : pvDetail.get(0).getTotalGenPower());
 		System.out.println("최종결과 : "+result.toString());
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();

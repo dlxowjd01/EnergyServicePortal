@@ -38,7 +38,7 @@ public class PMGrowApiUtil {
     String resultBody = null;
     List<PcsEquipmentModel> returnPCS = null;
     try {
-      StringBuffer url = new StringBuffer(host + "/pcses/:pcsId/current".replace(":pcsId", equipmentId));
+      StringBuffer url = new StringBuffer(host + "/v1/pcses/:pcsId/current".replace(":pcsId", equipmentId));
       url.append("?equipmentId=").append(equipmentId);
       logger.debug("pmgrow api URL : "+ url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
@@ -55,26 +55,6 @@ public class PMGrowApiUtil {
 		return returnPCS;
     }
   }
-//  public static List<PcsEquipmentModel> getPcsEquipmentList(String host, String equipmentId) {
-//	  logger.debug("PMGrowApiUtil.getPcsEquipmentList");
-//	  String resultBody = null;
-//	  List<PcsEquipmentModel> returnPCS = null;
-//	  try {
-//		  StringBuffer url = new StringBuffer(host + "/openapi/pcs-equipment-list");
-//		  url.append("?equipmentId=").append(equipmentId);
-//		  logger.debug("pmgrow api URL : "+ url);
-//		  resultBody = HttpUtil.get(url.toString(), getHeaders());
-//		  logger.debug("result "+resultBody);
-//		  returnPCS = JsonUtil.toObject(resultBody, new TypeReference<List<PcsEquipmentModel>>() {
-//		  });
-//	  } catch (Exception e) {
-////    	e.printStackTrace();
-//		  logger.error("error is : "+e.toString());
-//	  } finally {
-//		  logger.debug("PMGrowApiUtil.getPcsEquipmentList end");
-//		  return returnPCS;
-//	  }
-//  }
 
   /**
    * BMS 운전상태 조회
@@ -94,7 +74,7 @@ public class PMGrowApiUtil {
     String resultBody = null;
     List<BmsEquipmentModel> returnBMS = null;
     try {
-    	StringBuffer url = new StringBuffer(host + "/bmses/:bmsId/current".replace(":bmsId", equipmentId));
+    	StringBuffer url = new StringBuffer(host + "/v1/bmses/:bmsId/current".replace(":bmsId", equipmentId));
       url.append("?equipmentId=").append(equipmentId);
       logger.debug("pmgrow api URL : "+ url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
@@ -111,26 +91,6 @@ public class PMGrowApiUtil {
 		return returnBMS;
     }
   }
-//  public static List<BmsEquipmentModel> getBmsEquipmentList(String host, String equipmentId) {
-//	  logger.debug("PMGrowApiUtil.getBmsEquipmentList");
-//	  String resultBody = null;
-//	  List<BmsEquipmentModel> returnBMS = null;
-//	  try {
-//		  StringBuffer url = new StringBuffer(host + "/openapi/bms-equipment-list");
-//		  url.append("?equipmentId=").append(equipmentId);
-//		  logger.debug("pmgrow api URL : "+ url);
-//		  resultBody = HttpUtil.get(url.toString(), getHeaders());
-//		  logger.debug("result "+resultBody);
-//		  returnBMS = JsonUtil.toObject(resultBody, new TypeReference<List<BmsEquipmentModel>>() {
-//		  });
-//	  } catch (Exception e) {
-////    	e.printStackTrace();
-//		  logger.error("error is : "+e.toString());
-//	  } finally {
-//		  logger.debug("PMGrowApiUtil.getBmsEquipmentList end");
-//		  return returnBMS;
-//	  }
-//  }
 
   /**
    * PV 운전상태 조회
@@ -150,7 +110,7 @@ public class PMGrowApiUtil {
     String resultBody = null;
     List<PvEquipmentModel> returnPV = null;
     try {
-    	StringBuffer url = new StringBuffer(host + "/pcses/:ivtId/current".replace(":ivtId", equipmentId));
+    	StringBuffer url = new StringBuffer(host + "/v1/ivtes/:ivtId/current".replace(":ivtId", equipmentId));
       url.append("?equipmentId=").append(equipmentId);
       logger.debug("pmgrow api URL : "+ url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
@@ -167,26 +127,6 @@ public class PMGrowApiUtil {
 		return returnPV;
     }
   }
-//  public static List<PvEquipmentModel> getPvEquipmentList(String host, String equipmentId) {
-//	  logger.debug("PMGrowApiUtil.getPvEquipmentList");
-//	  String resultBody = null;
-//	  List<PvEquipmentModel> returnPV = null;
-//	  try {
-//		  StringBuffer url = new StringBuffer(host + "/openapi/pv-equipment-list");
-//		  url.append("?equipmentId=").append(equipmentId);
-//		  logger.debug("pmgrow api URL : "+ url);
-//		  resultBody = HttpUtil.get(url.toString(), getHeaders());
-//		  logger.debug("result "+resultBody);
-//		  returnPV = JsonUtil.toObject(resultBody, new TypeReference<List<PvEquipmentModel>>() {
-//		  });
-//	  } catch (Exception e) {
-////		  e.printStackTrace();
-//		logger.error("error is : "+e.toString());
-//	  } finally {
-//		  logger.debug("PMGrowApiUtil.getPvEquipmentList end");
-//		  return returnPV;
-//	  }
-//  }
   
   public static SocModel getSoc(String host, String equipmentId) {
 	  logger.debug("PMGrowApiUtil.getSoc");
