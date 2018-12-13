@@ -109,19 +109,31 @@ public class BillController {
         calendar.add(Calendar.MONTH, -2);
         calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));// 2달전 마지막날
         lastDate = Integer.parseInt(DateUtil.dateToString(calendar, "dd"));
-        calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
-        calendar.add(Calendar.DATE, 1);
+        if(calendar != null){
+        	calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
+        }
+        if(calendar != null){
+        	calendar.add(Calendar.DATE, 1);
+        }
         DateUtil.truncateHms(calendar);
-        _begin = calendar.getTime();// 오늘기준 2달전 검침일 다음날
+        if(calendar != null){
+        	_begin = calendar.getTime();// 오늘기준 2달전 검침일 다음날
+        }
       } else {
         Calendar calendar = DateUtil.getCalendar(begin);
         calendar.add(Calendar.MONTH, -1);
         calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));// 1달전 마지막날
         lastDate = Integer.parseInt(DateUtil.dateToString(calendar, "dd"));
-        calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
-        calendar.add(Calendar.DATE, 1);
+        if(calendar != null){
+        	calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
+        }
+        if(calendar != null){
+        	calendar.add(Calendar.DATE, 1);
+        }
         DateUtil.truncateHms(calendar);
-        _begin = calendar.getTime();// 시작일 기준 1달전 검침일 다음날
+        if(calendar != null){
+        	_begin = calendar.getTime();// 시작일 기준 1달전 검침일 다음날
+        }
       }
       if (end == null) {
         Calendar calendar = DateUtil.getCalendar();
@@ -136,9 +148,13 @@ public class BillController {
         calendar.add(Calendar.MONTH, 1);
         calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));// 1달전 마지막날
         lastDate = Integer.parseInt(DateUtil.dateToString(calendar, "dd"));
-        calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
+        if(calendar != null){
+        	calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
+        }
         DateUtil.truncateHms(calendar);
-        _end = calendar.getTime();// 종료일 기준 다음달 검침일
+        if(calendar != null){
+        	_end = calendar.getTime();// 종료일 기준 다음달 검침일
+        }
       }
 
       Date beginDate = null;
@@ -152,19 +168,29 @@ public class BillController {
           calendar.add(Calendar.MONTH, 1);
           calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));//
           lastDate = Integer.parseInt(DateUtil.dateToString(calendar, "dd"));
-          calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
-          calendar.add(Calendar.DATE, 1);
+          if(calendar != null){
+        	  calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
+          }
+          if(calendar != null){
+        	  calendar.add(Calendar.DATE, 1);
+          }
           DateUtil.truncateHms(calendar);
-          beginDate = calendar.getTime();// 다음달 검침일 다음날
+          if(calendar != null){
+        	  beginDate = calendar.getTime();// 다음달 검침일 다음날
+          }
         }
         {
           Calendar calendar = DateUtil.getCalendar(beginDate);
           calendar.add(Calendar.MONTH, 1);
           calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));//
           lastDate = Integer.parseInt(DateUtil.dateToString(calendar, "dd"));
-          calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
+          if(calendar != null){
+        	  calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
+          }
           DateUtil.truncateHms(calendar);
-          endDate = calendar.getTime();// 다다음달 검침날
+          if(calendar != null){
+        	  endDate = calendar.getTime();// 다다음달 검침날
+          }
 
           if (_end.getTime() < endDate.getTime()) {
             break;

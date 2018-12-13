@@ -820,56 +820,58 @@ public class EnergyController {
           String deviceType = device.getDeviceType();
           if(deviceType != null) {
         	  if ("1".equals(device.getInstType())) { // 에너톡
-        		  switch (deviceType) {
-//              case "3":// PV
-        		  case "5":// PV모니터링기기
-        			  break;
-        		  default:
-        			  continue;
-        		  }
-        		  UsageModel usagePeriodic = EnertalkApiUtil.getUsagePeriodicByDeviceId(_deviceId, Period._15min, beginDate, endDate, TimeType.past, UsageType.positiveEnergy, prettyLog);
-        		  if(usagePeriodic !=null){
-        			  List<UsageItemModel> items = usagePeriodic.getItems();
+//        		  switch (deviceType) {
+////              case "3":// PV
+//        		  case "5":// PV모니터링기기
+//        			  break;
+//        		  default:
+//        			  continue;
+//        		  }
+        		  if(deviceType == "5"){
         			  
-        			  prettyLog.append("ITEM_SIZE", items.size());
-        			  for (UsageItemModel item : items) {
-        				  PvGen pvGen = new PvGen();
-        				  pvGen.setDeviceId(_deviceId);
-        				  pvGen.setSiteId(_siteId);
-        				  pvGen.setStdDate(item.getTimestamp());
-        				  pvGen.setGenVal(item.getUsage().intValue() / 1000000);
-        				  pvGen.setTemp(0);
+        			  UsageModel usagePeriodic = EnertalkApiUtil.getUsagePeriodicByDeviceId(_deviceId, Period._15min, beginDate, endDate, TimeType.past, UsageType.positiveEnergy, prettyLog);
+        			  if(usagePeriodic !=null){
+        				  List<UsageItemModel> items = usagePeriodic.getItems();
         				  
-        				  pvGentList.add(pvGen);
+        				  prettyLog.append("ITEM_SIZE", items.size());
+        				  for (UsageItemModel item : items) {
+        					  PvGen pvGen = new PvGen();
+        					  pvGen.setDeviceId(_deviceId);
+        					  pvGen.setSiteId(_siteId);
+        					  pvGen.setStdDate(item.getTimestamp());
+        					  pvGen.setGenVal(item.getUsage().intValue() / 1000000);
+        					  pvGen.setTemp(0);
+        					  
+        					  pvGentList.add(pvGen);
+        				  }
         			  }
-        		  }
-        	  } else { // localems
-              if (!localEmsAddrMap.containsKey(_siteId)) {
-                Site site = siteService.getSite(_siteId, prettyLog);
-                if (site == null) {
-                  prettyLog.append("WARN", _siteId + "(SITE_ID) is null");
-                  continue;
-                }
-                localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
-              }
-              PvPowerGenModel resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate, endDate, "1", "15", prettyLog);
+        		  } else { // localems
+        			  if (!localEmsAddrMap.containsKey(_siteId)) {
+        				  Site site = siteService.getSite(_siteId, prettyLog);
+        				  if (site == null) {
+        					  prettyLog.append("WARN", _siteId + "(SITE_ID) is null");
+        					  continue;
+        				  }
+        				  localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
+        			  }
+        			  PvPowerGenModel resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate, endDate, "1", "15", prettyLog);
 //              List<PvPowerGenModel> resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, DateUtil.dateToString(beginDate, "yyyyMMdd"),
 //            		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
-              if(resultList != null){
-            	  prettyLog.append("ITEM_SIZE", resultList.getItems().size());
-	              for (PvPowerGenModelItemModel item : resultList.getItems()) {
-	                PvGen pvGen = new PvGen();
-	                pvGen.setDeviceId(_deviceId);
-	                pvGen.setSiteId(_siteId);
-	                pvGen.setStdDate(item.getTimestamp());
-	                pvGen.setGenVal(item.getGenEnergy());
-	                pvGen.setTemp(item.getTemperature());
-	  
-	                pvGentList.add(pvGen);
-	              }
-              }
-            }
-            
+        			  if(resultList != null){
+        				  prettyLog.append("ITEM_SIZE", resultList.getItems().size());
+        				  for (PvPowerGenModelItemModel item : resultList.getItems()) {
+        					  PvGen pvGen = new PvGen();
+        					  pvGen.setDeviceId(_deviceId);
+        					  pvGen.setSiteId(_siteId);
+        					  pvGen.setStdDate(item.getTimestamp());
+        					  pvGen.setGenVal(item.getGenEnergy());
+        					  pvGen.setTemp(item.getTemperature());
+        					  
+        					  pvGentList.add(pvGen);
+        				  }
+        			  }
+        		  }
+        	  }
           }
         } catch (NullPointerException e) {
         	logger.error("error is : "+e.toString());
