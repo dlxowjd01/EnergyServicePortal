@@ -200,8 +200,7 @@ public class PMGrowApiUtil {
 	    prettyLog.start("PMGrowApiUtil.getPcsEquipmentList", "ERROR");
 	    String resultBody = null;
 	    try {
-	      StringBuffer url = new StringBuffer(host + "/pcses/:pcsId/current".replace(":pcsId", equipmentId));
-//	      url.append("?equipmentId=").append(equipmentId);
+	      StringBuffer url = new StringBuffer(host + "/v1/pcses/:pcsId/current".replace(":pcsId", equipmentId));
 	      prettyLog.append("URL", url);
 	      resultBody = HttpUtil.get(url.toString(), getHeaders());
 	      return JsonUtil.toObject(resultBody, new TypeReference<List<PcsEquipmentModel>>() {
@@ -235,8 +234,7 @@ public class PMGrowApiUtil {
 	  prettyLog.start("PMGrowApiUtil.getBmsEquipmentList", "ERROR");
 	  String resultBody = null;
 	  try {
-		  StringBuffer url = new StringBuffer(host + "/bmses/:bmsId/current".replace(":bmsId", equipmentId));
-//		  url.append("?equipmentId=").append(equipmentId);
+		  StringBuffer url = new StringBuffer(host + "/v1/bmses/:bmsId/current".replace(":bmsId", equipmentId));
 		  prettyLog.append("URL", url);
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
 		  return JsonUtil.toObject(resultBody, new TypeReference<List<BmsEquipmentModel>>() {
@@ -270,8 +268,7 @@ public class PMGrowApiUtil {
 	  prettyLog.start("PMGrowApiUtil.getPvEquipmentList", "ERROR");
 	  String resultBody = null;
 	  try {
-		  StringBuffer url = new StringBuffer(host + "/pcses/:ivtId/current".replace(":ivtId", equipmentId));
-//		  url.append("?equipmentId=").append(equipmentId);
+		  StringBuffer url = new StringBuffer(host + "/v1/ivtes/:ivtId/current".replace(":ivtId", equipmentId));
 		  prettyLog.append("URL", url);
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
 		  return JsonUtil.toObject(resultBody, new TypeReference<List<PvEquipmentModel>>() {

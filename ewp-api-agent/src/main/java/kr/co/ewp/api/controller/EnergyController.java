@@ -1006,11 +1006,11 @@ public class EnergyController {
       Date _begin = null;
       String _siteId = device.getSiteId();
       if (begin == null) {
-        EssUsage pvGen = essService.getLastEssUsage(_siteId, device.getDeviceId(), prettyLog);
-        if (pvGen == null) {
+        EssUsage essUsage = essService.getLastEssUsage(_siteId, device.getDeviceId(), prettyLog);
+        if (essUsage == null) {
           _begin = DateUtil.getAfterDays(-1);
         } else {
-          _begin = new Date(pvGen.getStdDate().getTime() + 1);
+          _begin = new Date(essUsage.getStdDate().getTime() + 1);
         }
       } else {
         _begin = begin;
@@ -1042,20 +1042,17 @@ public class EnergyController {
           }
           localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
         }
-        List<EssUsageModel> resultList = PMGrowApiUtil.getEssUsageList(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "1", "15", prettyLog);
-//        List<EssUsageModel> resultList = PMGrowApiUtil.getEssUsageList(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
-//        		DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
-        prettyLog.append("ITEM_SIZE", resultList.size());
+        List<EssCharge> essChargeList = Lists.newArrayList();
+        ChargingDischarging cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "1", "15", prettyLog);
         List<EssUsage> essUsageModel = Lists.newArrayList();
-        if( resultList != null ){
-        	
-        	prettyLog.append("ITEM_SIZE", resultList.size());
-        	for (EssUsageModel item : resultList) {
+        if( cdList != null ){
+        	prettyLog.append("ITEM_SIZE", cdList.getItems().size());
+        	for (ChargingDischargingItemModel item : cdList.getItems()) { /*** 12.13 이우람 수정(ess방전량을 ess사용량으로 합의함) ***/
         		EssUsage essUsage = new EssUsage();
         		essUsage.setDeviceId(device.getDeviceId());
         		essUsage.setSiteId(_siteId);
-        		essUsage.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
-        		essUsage.setUsgVal(Integer.parseInt(item.getPowerUsage()));
+        		essUsage.setStdDate(item.getTimestamp());
+        		essUsage.setUsgVal(item.getDischargeEnergy());
         		
         		essUsageModel.add(essUsage);
         	}
