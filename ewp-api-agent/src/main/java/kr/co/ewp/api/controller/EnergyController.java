@@ -638,7 +638,7 @@ public class EnergyController {
         }
         List<EssCharge> essChargeList = Lists.newArrayList();
         try {
-            ChargingDischarging cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "1", "15", prettyLog);
+            ChargingDischarging cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "MI", "15", prettyLog);
 //          List<ChargingDischarging> cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
 //        		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
           if(cdList !=null){
@@ -731,7 +731,7 @@ public class EnergyController {
         }
         List<EssChargePlan> essChargePlanList = Lists.newArrayList();
         try {
-        	ChargingDischargingSchedule cdList = PMGrowApiUtil.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "1", "15", prettyLog);
+        	ChargingDischargingSchedule cdList = PMGrowApiUtil.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "MI", "15", prettyLog);
 //          List<ChargingDischargingSchedule> cdList = PMGrowApiUtil.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
 //        		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
           if(cdList != null){
@@ -854,7 +854,7 @@ public class EnergyController {
         				  }
         				  localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
         			  }
-        			  PvPowerGenModel resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate, endDate, "1", "15", prettyLog);
+        			  PvPowerGenModel resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate, endDate, "MI", "15", prettyLog);
 //              List<PvPowerGenModel> resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, DateUtil.dateToString(beginDate, "yyyyMMdd"),
 //            		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
         			  if(resultList != null){
