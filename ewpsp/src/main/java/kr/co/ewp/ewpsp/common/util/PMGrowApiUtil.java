@@ -157,11 +157,4 @@ public class PMGrowApiUtil {
     headers.set("accept-version", API_VERSION);
     return headers;
   }
-  
-  private static HttpHeaders getHeaders2() {
-	  HttpHeaders headers = new HttpHeaders();
-	  headers.set("Authorization", "Basic  " + "bG9jYWwtZW1zOmxvY2FsLWVtcw==");
-	  headers.set("accept-version", API_VERSION);
-	  return headers;
-  }
 }
