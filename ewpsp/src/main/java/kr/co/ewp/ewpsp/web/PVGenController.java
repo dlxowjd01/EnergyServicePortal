@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.ewp.ewpsp.common.energy.PeriodDataSetting;
 import kr.co.ewp.ewpsp.service.PVGenService;
 
 @Controller
@@ -42,6 +43,8 @@ public class PVGenController {
 		logger.debug("/getPVGenRealList");
 		logger.debug("param ::::: "+param.toString());
 		
+		param = PeriodDataSetting.setSearchTerm(param);
+		
 		Map list = pvGenService.getPVGenRealList(param, request);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -54,6 +57,8 @@ public class PVGenController {
 	public @ResponseBody Map<String, Object> getPVGenFutureList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getPVGenFutureList");
 		logger.debug("param ::::: "+param.toString());
+		
+		param = PeriodDataSetting.setSearchTerm(param);
 		
 		Map list = pvGenService.getPVGenFutureList(param, request);
 		

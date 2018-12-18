@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.ewp.ewpsp.common.energy.PeriodDataSetting;
 import kr.co.ewp.ewpsp.common.util.CommonUtils;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil;
 import kr.co.ewp.ewpsp.common.util.PMGrowApiUtil;
@@ -80,7 +81,8 @@ public class SiteMainController {
 	public @ResponseBody Map<String, Object> getAlarmList(@RequestParam HashMap param) throws Exception {
 		logger.debug("/getAlarmList");
 		logger.debug("param ::::: "+param.toString());
-//		param.put("alarmCfmYn", "N");
+		
+		param = PeriodDataSetting.setSearchTerm(param);
 		
 		Map result = controlService.getDeviceAlarmCnt(param); // 장치별 알람건수
 		List alarmList = alarmService.getMainAlarmList(param); // 최근 알람 목록 조회(3건)
@@ -95,6 +97,8 @@ public class SiteMainController {
 	public @ResponseBody Map<String, Object> getESSChargeSum(@RequestParam HashMap param) throws Exception {
 		logger.debug("/getESSChargeSum");
 		logger.debug("param ::::: "+param.toString());
+		
+		param = PeriodDataSetting.setSearchTerm(param);
 		
 		Map result = essChargeService.getESSChargeSum(param); // ess 충방전량 합계 조회
 		
@@ -207,6 +211,8 @@ public class SiteMainController {
 	public @ResponseBody Map<String, Object> getRevenueList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getRevenueList");
 		logger.debug("param ::::: "+param.toString());
+		
+		param = PeriodDataSetting.setSearchTerm(param);
 		
 		String selTermFrom = (String) param.get("selTermFrom");
 		String selTermTo = (String) param.get("selTermTo");

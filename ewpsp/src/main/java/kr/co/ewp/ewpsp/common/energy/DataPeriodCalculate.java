@@ -40,7 +40,8 @@ public class DataPeriodCalculate {
 		logger.debug("DataPeriodCalculate.periodCalculate()");
 		List newList = new ArrayList();
 		Timestamp endListDt = null;
-		offset = CommonUtils.getTimeOffset(request);
+//		offset = CommonUtils.getTimeOffset(request);
+		offset = (String) request.getAttribute("timeOffset");
 		
 		int calculCnt = sumCntSet(term, period, flag); // for문 루프 횟수 구하기
 		

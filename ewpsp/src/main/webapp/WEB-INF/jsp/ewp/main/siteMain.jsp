@@ -33,6 +33,7 @@
 				<input type="hidden" id="selPeriodVal" name="selPeriodVal" value="hour">
 				<input type="hidden" id="siteId" name="siteId" value="${selViewSiteId }">
 				<input type="hidden" id="selPageNum" name="selPageNum" value="">
+				<input type="hidden" id="timeOffset" name="timeOffset">
 				</form>
 				<div class="row">
 					<div class="col-lg-4">

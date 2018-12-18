@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.ewp.ewpsp.common.energy.PeriodDataSetting;
 import kr.co.ewp.ewpsp.service.DERUsageService;
 import kr.co.ewp.ewpsp.service.PVGenService;
 import kr.co.ewp.ewpsp.service.UsageService;
@@ -51,6 +52,8 @@ public class DERUsageController {
 		logger.debug("/getESSUsageList");
 		logger.debug("param ::::: "+param.toString());
 		
+		param = PeriodDataSetting.setSearchTerm(param);
+		
 		Map list = derUsageService.getESSUsageList(param, request);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -63,6 +66,8 @@ public class DERUsageController {
 	public @ResponseBody Map<String, Object> getDERUsageList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getDERUsageList");
 		logger.debug("param ::::: "+param.toString());
+		
+		param = PeriodDataSetting.setSearchTerm(param);
 		
 		Map kepcoUsageList = usageService.getUsageRealList(param, request); // 한전 사용량
 		Map essUsageList = derUsageService.getESSUsageList(param, request);// ESS 사용량

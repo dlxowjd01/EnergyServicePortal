@@ -135,4 +135,5 @@
 							<input type="hidden" id="selTerm" name="selTerm">
 							<input type="hidden" id="selPeriodVal" name="selPeriodVal">
 							<input type="hidden" id="selPageNum" name="selPageNum">
+							<input type="hidden" id="timeOffset" name="timeOffset">
 							</form>

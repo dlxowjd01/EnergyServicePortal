@@ -38,7 +38,9 @@ public class PeriodDataSetting {
 		logger.debug("PeriodDataSetting.dataSetting()+"+timestampStr+", "+calculValStr);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		offset = CommonUtils.getTimeOffset(request);
+//		offset = CommonUtils.getTimeOffset(request);
+		offset = (String) param.get("timeOffset");
+		request.setAttribute("timeOffset", offset);
 		
 		String term = (String) param.get("selTerm"); // 조회기간
 		String period = (String) param.get("selPeriodVal"); // 데이터조회간격
@@ -381,6 +383,38 @@ public class PeriodDataSetting {
 		if(minute >= 0) calendar.set(Calendar.MINUTE, minute);
 		if(secone >= 0) calendar.set(Calendar.SECOND, secone);
 		if(milllsecond >= 0) calendar.set(Calendar.MILLISECOND, milllsecond);
+	}
+	
+	/**
+	 * 검색조건(시작일시, 종료일시) timeOffset 적용
+	 * @param param
+	 * @return
+	 */
+	public static HashMap setSearchTerm(HashMap param) {
+		param = setDateApplyOffset(param, "selTermFrom");
+		param = setDateApplyOffset(param, "selTermTo");
+		
+		return param;
+	}
+	
+	public static HashMap setDateApplyOffset(HashMap param, String paramName) {
+		String setDate = (String) param.get(paramName);
+		String offset = (String) param.get("timeOffset");
+		
+		String setDtStr = setDate.substring(0, 4)+"-"+setDate.substring(4, 6)+"-"+setDate.substring(6, 8)+" "
+		+setDate.substring(8, 10)+":"+setDate.substring(10, 12)+":"+setDate.substring(12, 14);
+		
+		Timestamp tstp = Timestamp.valueOf(setDtStr);
+		
+		Calendar cal1 = Calendar.getInstance();
+		cal1.setTimeInMillis(   tstp.getTime()   );
+		cal1.add(Calendar.MINUTE, Integer.parseInt(offset));
+		
+		Date startDate = cal1.getTime();
+		
+		param.put(paramName, CommonUtils.convertDateFormat(startDate, "yyyyMMddHHmmss"));
+		
+		return param;
 	}
 	
 }

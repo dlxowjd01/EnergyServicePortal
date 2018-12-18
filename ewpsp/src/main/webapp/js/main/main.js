@@ -32,6 +32,8 @@ function fn_cycle() {
 }
 
 function getSiteMainSchCollection() {
+	$("#timeOffset").val( (new Date()).getTimezoneOffset() );
+	
 	// 기간 필터
 	var today = new Date();
 	var selTerm = $('#selTerm').val();
@@ -47,8 +49,10 @@ function getSiteMainSchCollection() {
 	
 	var startTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
 	var endTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
-	var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
-	var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
+//	var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
+//	var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
+	var queryStart = new Date(startTime.getTime());
+	var queryEnd = new Date(endTime.getTime());
 	queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
 	queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
 	

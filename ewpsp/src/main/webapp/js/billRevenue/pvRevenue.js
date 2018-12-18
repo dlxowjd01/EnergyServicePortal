@@ -1,6 +1,8 @@
 var texDay = new Date();
 
 	$(document).ready(function() {
+		$("#timeOffset").val( (new Date()).getTimezoneOffset() );
+		
 		var firstDay = new Date();
 		var endDay = new Date();
 		
@@ -15,14 +17,18 @@ var texDay = new Date();
 		firstDay = new Date(firstDay.getFullYear()-1, firstDay.getMonth()+1, 1, 0, 0, 0);
 		endDay = new Date(endDay.getFullYear(), endDay.getMonth()+1, 0, 23, 59, 59);
 		
-		var texChartStDay =new Date(stDay.setMinutes(stDay.getMinutes() + (new Date()).getTimezoneOffset()));
-		var texChartEdDay =new Date(edDay.setMinutes(edDay.getMinutes() + (new Date()).getTimezoneOffset()));
+//		var texChartStDay =new Date(stDay.setMinutes(stDay.getMinutes() + (new Date()).getTimezoneOffset()));
+//		var texChartEdDay =new Date(edDay.setMinutes(edDay.getMinutes() + (new Date()).getTimezoneOffset()));
+		var texChartStDay =new Date(stDay.getTime());
+		var texChartEdDay =new Date(edDay.getTime());
 		
 		schStartTime = new Date(firstDay.getTime());
 		schEndTime = new Date(endDay.getTime());
 		
-		var queryStart = new Date(firstDay.setMinutes(firstDay.getMinutes() + (new Date()).getTimezoneOffset()));
-		var queryEnd = new Date(endDay.setMinutes(endDay.getMinutes() + (new Date()).getTimezoneOffset()));
+//		var queryStart = new Date(firstDay.setMinutes(firstDay.getMinutes() + (new Date()).getTimezoneOffset()));
+//		var queryEnd = new Date(endDay.setMinutes(endDay.getMinutes() + (new Date()).getTimezoneOffset()));
+		var queryStart = new Date(firstDay.getTime());
+		var queryEnd = new Date(endDay.getTime());
 		
 		$("#selTermFrom").val( firstDay.format("yyyyMMddHHmmss") );
 		$("#selTermTo").val( endDay.format("yyyyMMddHHmmss") );

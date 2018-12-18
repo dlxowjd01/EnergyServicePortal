@@ -295,18 +295,18 @@ public class CommonUtils {
         return sb.toString();
 	}
 	
-	public static String getTimeOffset(HttpServletRequest request){
-		Cookie[] cookies = request.getCookies();
-		String timeOffset=null;
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("TIMEZONE_COOKIE")) {
-					timeOffset=cookie.getValue();
-					break;
-				}
-			}
-		}
-		return timeOffset;
-	}
+//	public static String getTimeOffset(HttpServletRequest request){
+//		Cookie[] cookies = request.getCookies();
+//		String timeOffset=null;
+//		if (cookies != null) {
+//			for (Cookie cookie : cookies) {
+//				if ("TIMEZONE_COOKIE".equals(cookie.getName())) {
+//					timeOffset=cookie.getValue();
+//					break;
+//				}
+//			}
+//		}
+//		return timeOffset;
+//	}
 
 }

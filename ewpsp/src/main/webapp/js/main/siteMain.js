@@ -107,17 +107,19 @@
 	}
 	
 	function getSiteMainSchCollection() {
+		$("#timeOffset").val( (new Date()).getTimezoneOffset() );
+		
 		var firstDay = new Date();
 		var endDay = new Date();
 		var startTime;
 		var endTime;
 		startTime = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), 0, 0, 0);
 		endTime = new Date(endDay.getFullYear(), endDay.getMonth(), endDay.getDate(), 23, 59, 59);
-//		startTime = new Date(2018, 10, 1, 0, 0, 0);
-//		endTime = new Date(2018, 10, 1, 23, 59, 59);
 		
-		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
-		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
+//		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
+//		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
+		var queryStart = new Date(startTime.getTime());
+		var queryEnd = new Date(endTime.getTime());
 		queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
 		queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
 		$("#selTermFrom").val(queryStart);

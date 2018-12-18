@@ -187,12 +187,16 @@ function getCollect_sch_condition() {
 		$("#selTermTo").val( endDay.format("yyyyMMddHHmmss") );
 	}
 	
+	$("#timeOffset").val( (new Date()).getTimezoneOffset() );
+	
 	if(SelTerm != "billSelectMM") {
 		schStartTime = new Date(startTime.getTime());
 		schEndTime = new Date(endTime.getTime());
 		
-		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
-		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
+//		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
+//		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
+		var queryStart = new Date(startTime.getTime());
+		var queryEnd = new Date(endTime.getTime());
 		
 		queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
 		queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
@@ -238,15 +242,6 @@ function setChartDateUTC(_dateTimestamp) {
 		return new Date( Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds()) ).getTime();
 	}
 }
-//function setChartDateUTC(_dateTimestamp) {
-////	if(localYn == "Y") {
-//	var tm = new Date(_dateTimestamp);
-//	return new Date( Date.UTC(tm.getFullYear(), tm.getMonth(), tm.getDate(), tm.getHours(), tm.getMinutes(), tm.getSeconds()) ).getTime();
-////	} else if(localYn == "N") {
-////		return _dateTimestamp;
-////	}
-//}
-
 
 // 표에 대입할 날짜 세팅
 function setSheetDateUTC(_dateTimestamp) {

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.ewp.ewpsp.common.energy.PeriodDataSetting;
 import kr.co.ewp.ewpsp.service.ESSChargeService;
 
 @Controller
@@ -43,6 +44,8 @@ public class ESSChargeController {
 		logger.debug("/getESSChargeRealList");
 		logger.debug("param ::::: "+param.toString());
 		
+		param = PeriodDataSetting.setSearchTerm(param);
+		
 		Map result = essChargeService.getESSChargeRealList(param, request);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -57,6 +60,8 @@ public class ESSChargeController {
 	public @ResponseBody Map<String, Object> getESSChargeFutureList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getESSChargeFutureList");
 		logger.debug("param ::::: "+param.toString());
+		
+		param = PeriodDataSetting.setSearchTerm(param);
 		
 		Map result = essChargeService.getESSChargeFutureList(param, request);
 		

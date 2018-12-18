@@ -61,6 +61,8 @@ public class DRResultController {
 		logger.debug("/getDRResultList");
 		logger.debug("param ::::: "+param.toString());
 		
+		param = PeriodDataSetting.setSearchTerm(param);
+		
 		List list = drResultService.getDRResultList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -72,6 +74,9 @@ public class DRResultController {
 	public @ResponseBody Map<String, Object> getCbl(@RequestParam HashMap param) throws Exception {
 		logger.debug("/getCbl");
 		logger.debug("param ::::: "+param.toString());
+		
+		param = PeriodDataSetting.setDateApplyOffset(param, "cblAmtFrom");
+		param = PeriodDataSetting.setDateApplyOffset(param, "cblAmtTo");
 		
 		String cblAmtFrom = (String) param.get("cblAmtFrom");
 		String cblAmtTo = (String) param.get("cblAmtTo");
@@ -113,6 +118,11 @@ public class DRResultController {
 	public @ResponseBody Map<String, Object> searchDRApi(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/searchDRApi");
 		logger.debug("param ::::: "+param.toString());
+		
+		param = PeriodDataSetting.setSearchTerm(param);
+
+		param = PeriodDataSetting.setDateApplyOffset(param, "cblAmtFrom");
+//		param = PeriodDataSetting.setDateApplyOffset(param, "cblAmtTo");
 		
 		String siteId = (String) request.getSession().getAttribute("selViewSiteId");
 		String selTermFrom = (String) param.get("selTermFrom");

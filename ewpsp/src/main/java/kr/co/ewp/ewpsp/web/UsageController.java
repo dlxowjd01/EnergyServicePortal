@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.ewp.ewpsp.common.energy.PeriodDataSetting;
 import kr.co.ewp.ewpsp.service.UsageService;
 
 @Controller
@@ -42,7 +43,9 @@ public class UsageController {
 	@RequestMapping("/getUsageRealList")
 	public @ResponseBody Map<String, Object> getUsageRealList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getUsageRealList");
-		logger.debug("param ::::: "+param.toString());
+		logger.debug("     param ::::: "+param.toString());
+		
+		param = PeriodDataSetting.setSearchTerm(param);
 		
 		Map list = usageService.getUsageRealList(param, request);
 		
@@ -56,6 +59,8 @@ public class UsageController {
 	public @ResponseBody Map<String, Object> getUsageFutureList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getUsageFutureList");
 		logger.debug("param ::::: "+param.toString());
+
+		param = PeriodDataSetting.setSearchTerm(param);
 		
 		Map list = usageService.getUsageFutureList(param, request);
 		

@@ -29,6 +29,7 @@
 					<input type="hidden" id="selTerm" name="selTerm" value="day" />
 					<input type="hidden" id="mapGroup" name="mapGroup" value="map" />
 					<input type="hidden" id="grpIdx" name="grpIdx" value="" />
+					<input type="hidden" id="timeOffset" name="timeOffset" />
 				</form>
 				<div class="row">
 					<div class="col-lg-4">

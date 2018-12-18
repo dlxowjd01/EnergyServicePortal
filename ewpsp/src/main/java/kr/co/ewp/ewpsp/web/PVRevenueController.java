@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.ewp.ewpsp.common.energy.PeriodDataSetting;
 import kr.co.ewp.ewpsp.service.PVRevenueService;
 import kr.co.ewp.ewpsp.service.UsageService;
 
@@ -44,6 +45,8 @@ public class PVRevenueController {
 	public @ResponseBody Map<String, Object> getPVRevenueList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getPVRevenueList");
 		logger.debug("param ::::: "+param.toString());
+		
+		param = PeriodDataSetting.setSearchTerm(param);
 		
 		param.put("selPeriodVal", "month");
 		Map result = pvRevenueService.getPVRevenueList(param, request);
@@ -69,6 +72,9 @@ public class PVRevenueController {
 	public @ResponseBody Map<String, Object> getPVRevenueTexList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getPVRevenueTexList");
 		logger.debug("param ::::: "+param.toString());
+		
+		param = PeriodDataSetting.setSearchTerm(param);
+		
 		param.put("selPeriodVal", "month");
 		
 		Map result = pvRevenueService.getPVRevenueList(param, request);
@@ -94,6 +100,9 @@ public class PVRevenueController {
 	public @ResponseBody Map<String, Object> getPVRevenueTex(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getPVRevenueTex");
 		logger.debug("param ::::: "+param.toString());
+		
+		param = PeriodDataSetting.setSearchTerm(param);
+		
 		param.put("selPeriodVal", "month");
 		
 		Map result = pvRevenueService.getPVRevenueList(param, request);

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.ewp.ewpsp.common.energy.PeriodDataSetting;
 import kr.co.ewp.ewpsp.common.util.UserUtil;
 import kr.co.ewp.ewpsp.service.AlarmService;
 import kr.co.ewp.ewpsp.service.CmpyGrpSiteMngService;
@@ -52,7 +53,8 @@ public class MainController {
 	public @ResponseBody Map<String, Object> getGMainAlarmList(HttpSession session, @RequestParam HashMap param) throws Exception {
 		logger.debug("/getGMainAlarmList");
 		logger.debug("param : {}", param);
-//		param.put("alarmCfmYn", "N");
+		
+		param = PeriodDataSetting.setSearchTerm(param);
 
 		Map userInfo = UserUtil.getUserInfo(session);
 		if (userInfo == null) {
@@ -95,6 +97,8 @@ public class MainController {
 	public @ResponseBody Map<String, Object> getGMainSiteRankingTotalDetail(HttpSession session, @RequestParam HashMap param) throws Exception {
 		logger.debug("/getGMainSiteRankingTotal");
 		logger.debug("param : {}", param);
+		
+		param = PeriodDataSetting.setSearchTerm(param);
 
 		Map userInfo = UserUtil.getUserInfo(session);
 		if (userInfo == null) {
@@ -135,6 +139,8 @@ public class MainController {
 	public @ResponseBody Map<String, Object> getGMainSiteRankingList(HttpSession session, @RequestParam HashMap param) throws Exception {
 		logger.debug("/getGMainSiteRankingList");
 		logger.debug("param : {}", param);
+		
+		param = PeriodDataSetting.setSearchTerm(param);
 
 		int selPageNum = Integer.parseInt((String) param.get("selPageNum"));
 		int pageRowCnt = 5;
@@ -199,6 +205,8 @@ public class MainController {
 	public @ResponseBody Map<String, Object> getGMainSiteTotalDetail(HttpSession session, @RequestParam HashMap param) throws Exception {
 		logger.debug("/getGMainSiteTotalDetail");
 		logger.debug("param : {}", param);
+		
+		param = PeriodDataSetting.setSearchTerm(param);
 
 		Map userInfo = UserUtil.getUserInfo(session);
 		if (userInfo == null) {

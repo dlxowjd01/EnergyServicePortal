@@ -131,8 +131,10 @@
 			endTime = new Date( $dtpk5.val()+" "+cblAmtHourTo+":00:00" );
 		}
 		
-		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
-		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
+//		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
+//		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
+		var queryStart = new Date(startTime.getTime());
+		var queryEnd = new Date(endTime.getTime());
 		
 		queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
 		queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
@@ -181,8 +183,10 @@
 		schStartTime = new Date(startTime.getTime());
 		schEndTime = new Date(endTime.getTime());
 		
-		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
-		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
+//		var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
+//		var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
+		var queryStart = new Date(startTime.getTime());
+		var queryEnd = new Date(endTime.getTime());
 		
 		queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
 		queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
