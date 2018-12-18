@@ -48,7 +48,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 	
-		setTimeZoneInCookie();
+// 		setTimeZoneInCookie();
 		getUserInfo(setSession);
 		var authType = sessionUser.auth_type;
 		if(authType == '1') {
