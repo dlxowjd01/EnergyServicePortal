@@ -48,7 +48,8 @@ public class RefreshableSqlSessionFactoryBean extends SqlSessionFactoryBean impl
 
 	public void setMapperLocations(Resource[] mapperLocations) {
 		super.setMapperLocations(mapperLocations);
-		this.mapperLocations = mapperLocations;
+		//this.mapperLocations = mapperLocations;
+		this.mapperLocations = java.util.Arrays.copyOf(mapperLocations, mapperLocations.length);
 	}
 
 	public void setInterval(int interval) {
