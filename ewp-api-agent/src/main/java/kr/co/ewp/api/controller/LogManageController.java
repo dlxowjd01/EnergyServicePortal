@@ -20,10 +20,10 @@ public class LogManageController {
 		String realPath = LogManageController.class.getResource("").getPath();
 		prettyLog.append("realPath  ", realPath);
 		String path[] = realPath.split("ewpsp_batch");
-		String _realPath = path[0].replace("file:", "")+"ewpsp_batch/logs";
+		String _realPath = path[0].replace("file:", "")+"ewpsp_batch"+File.separator+"logs";
 		prettyLog.append("_realPath  ", _realPath);
 		
-		File dirFile = new File(realPath);
+		File dirFile = new File(_realPath);
 		File [] fileList = dirFile.listFiles();
 		String substringTxt = "ewp-api.";
 		int deleteCnt = 0;
