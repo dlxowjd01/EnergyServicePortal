@@ -16,6 +16,7 @@ import com.google.common.collect.Maps;
 import kr.co.ewp.api.controller.BillController;
 import kr.co.ewp.api.controller.DeviceController;
 import kr.co.ewp.api.controller.EnergyController;
+import kr.co.ewp.api.controller.LogManageController;
 import kr.co.ewp.api.util.DateUtil;
 import kr.co.ewp.api.util.JsonUtil;
 import kr.co.ewp.api.util.PrettyLog;
@@ -32,6 +33,8 @@ public class Main implements ApplicationListener<ContextRefreshedEvent> {
   private DeviceController deviceController;
   @Autowired
   private BillController billController;
+  @Autowired
+  private LogManageController logManageController;
 
   public enum OPTION {
     API_CODE, SITE_ID, DEVICE_ID, BEGIN_DATE, END_DATE;
@@ -118,6 +121,9 @@ public class Main implements ApplicationListener<ContextRefreshedEvent> {
         case "BILL04":// 요금/수익 > PV 수익 조회> 발전수익
           billController.bill04(siteId, beginDate, endDate, prettyLog);
           break;
+        case "LOG":// 로그파일 관리
+        	logManageController.logManagement(prettyLog);
+        	break;
         }
       }
     } finally {
