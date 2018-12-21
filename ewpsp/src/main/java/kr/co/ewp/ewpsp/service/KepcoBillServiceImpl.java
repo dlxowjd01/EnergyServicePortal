@@ -44,7 +44,13 @@ public class KepcoBillServiceImpl implements KepcoBillService {
 		List list = kepcoBillDao.getKepcoResentBillList(param);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = BillRevenueDataSetting.dataSetting(param, list, "bill_yearm");
+		if(list == null || list.size() == 0) {
+			resultMap.put("sheetList", null);
+			resultMap.put("sheetList", null);
+		} else {
+			resultMap = BillRevenueDataSetting.dataSetting(param, list, "bill_yearm");
+		}
+		
 		return resultMap;
 	}
 	
