@@ -151,7 +151,9 @@ public class BillController {
         if(calendar != null){
         	calendar.set(Calendar.DATE, Math.min(lastDate, meterDay.intValue()));
         }
-        DateUtil.truncateHms(calendar);
+        if(calendar != null){
+        	DateUtil.truncateHms(calendar);
+        }
         if(calendar != null){
         	_end = calendar.getTime();// 종료일 기준 다음달 검침일
         }
@@ -849,7 +851,10 @@ public class BillController {
         } else {
           endDate = end;
         }
-        String strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+        String strBeginDate = "";
+        if(beginDate !=null){
+        	strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+        }
         String strEndDate = DateUtil.dateToString(endDate, "yyyyMMdd");
         prettyLog.append("BEGIN", strBeginDate);
         prettyLog.append("END", strEndDate);

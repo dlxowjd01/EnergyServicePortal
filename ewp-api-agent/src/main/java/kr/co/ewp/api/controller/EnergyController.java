@@ -133,7 +133,10 @@ public class EnergyController {
         } else {
           endDate = end;
         }
-        String strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+        String strBeginDate = "";
+        if(beginDate != null){
+        	strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+        }
         String strEndDate = DateUtil.dateToString(endDate, "yyyyMMddHHmmss");
         prettyLog.append("BEGIN", strBeginDate);
         prettyLog.append("END", strEndDate);
@@ -311,7 +314,10 @@ public class EnergyController {
         } else {
           endDate = end;
         }
-        String strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+        String strBeginDate = "";
+        if (beginDate != null) {
+        	strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+        }
         String strEndDate = DateUtil.dateToString(endDate, "yyyyMMdd");
         prettyLog.append("BEGIN", strBeginDate);
         prettyLog.append("END", strEndDate);
@@ -623,7 +629,10 @@ public class EnergyController {
         } else {
           endDate = end;
         }
-        String strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+        String strBeginDate = "";
+        if(beginDate != null){
+        	strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+        }
         String strEndDate = DateUtil.dateToString(endDate, "yyyyMMdd");
         prettyLog.append("BEGIN", strBeginDate);
         prettyLog.append("END", strEndDate);
@@ -716,7 +725,10 @@ public class EnergyController {
         } else {
           endDate = end;
         }
-        String strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+        String strBeginDate = "";
+        if (beginDate != null) {
+        	strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+        }
         String strEndDate = DateUtil.dateToString(endDate, "yyyyMMdd");
         prettyLog.append("BEGIN", strBeginDate);
         prettyLog.append("END", strEndDate);
@@ -810,7 +822,10 @@ public class EnergyController {
         } else {
           endDate = end;
         }
-        String strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+        String strBeginDate = "";
+        if (beginDate != null) {
+        	strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+        }
         String strEndDate = DateUtil.dateToString(endDate, "yyyyMMdd");
         prettyLog.append("BEGIN", strBeginDate);
         prettyLog.append("END", strEndDate);
@@ -1029,7 +1044,10 @@ public class EnergyController {
         } else {
           endDate = end;
         }
-        String strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+        String strBeginDate = "";
+        if(beginDate != null){
+        	strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+        }
         String strEndDate = DateUtil.dateToString(endDate, "yyyyMMdd");
         prettyLog.append("BEGIN", strBeginDate);
         prettyLog.append("END", strEndDate);
@@ -1110,7 +1128,10 @@ public class EnergyController {
         } else {
           endDate = end;
         }
-        String strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+        String strBeginDate = "";
+        if(beginDate != null){
+        	strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+        }
         String strEndDate = DateUtil.dateToString(endDate, "yyyyMMdd");
         prettyLog.append("BEGIN", strBeginDate);
         prettyLog.append("END", strEndDate);

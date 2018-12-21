@@ -30,8 +30,8 @@ public class SystemProperties {
 
   public SystemProperties() {
     properties = new Properties();
+    InputStream is = null;
     try {
-      InputStream is = null;
       String systemConfigFilePath = System.getProperty("system.config");
       if (systemConfigFilePath == null) {
         is = SystemProperties.class.getResourceAsStream("/system.properties");
@@ -41,6 +41,15 @@ public class SystemProperties {
       properties.load(is);
     } catch (IOException e) {
       logger.error(e.getMessage(), e);
+    } finally{
+    	try {
+    		if(is != null){
+    			is.close();
+    		}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage(), e);
+		}
     }
   }
 
