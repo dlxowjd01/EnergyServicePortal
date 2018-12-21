@@ -26,18 +26,22 @@
 						<div class="indiv">
 							<h2 class="ntit">DR 실적 합계</h2>
 							<ul class="chart_total">
-								<li class="ct1">
+								<!-- <li class="ct1">
 									<div class="ctit ct1"><span>실제 사용량</span></div>
 									<div class="cval" id="pastUseTot"><span>0</span>kWh</div>
+								</li> -->
+								<li class="ct3">
+									<div class="ctit ct3"><span>기준부하</span></div>
+									<div class="cval" id="totalCbl"><span>0</span>kWh</div>
 								</li>
 								<li class="ct2">
 									<div class="ctit ct2"><span>목표 사용량</span></div>
 									<div class="cval" id="totalGoalPower"><span>0</span>kWh</div>
 								</li>
-								<li>
+								<!-- <li>
 									<div class="ctit"><span>감축량</span></div>
 									<div class="cval" id="totalReduceAmt"><span>0</span>kWh</div>
-								</li>
+								</li> -->
 							</ul>
 						</div>
 					</div>
