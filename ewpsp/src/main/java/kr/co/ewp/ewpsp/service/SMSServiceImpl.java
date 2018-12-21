@@ -90,4 +90,70 @@ alarm_msg
 			logger.debug("response body: {}", responseBody);
 		}
 	}
+
+	/**
+	 * 인증번호 전송
+	 */
+	public int sendAuthCodeMessage(HashMap param) throws Exception {
+
+		RestTemplate restTemplate = new RestTemplate();
+		String url = "https://mkt.tason.com/open/auto_message_sender.jsp";
+
+		restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("EUC-KR")));
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType(MediaType.APPLICATION_FORM_URLENCODED, Charset.forName("EUC-KR")));
+
+		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
+		body.add("enc_type", "EUC-KR");
+		//TODO:!!! 맞는 템플릿으로 바꿔주세요. !!!
+		body.add("mail_code", "S0848");	// !!! 바꿔주세요. !!!
+		body.add("user_id", "encoredtech");
+		body.add("auth_key", "0BA3TU-VCWRG1-KNI6U2-6ON5U7");
+		body.add("mem_id", "JOIN_" + System.currentTimeMillis());
+		body.add("mem_name", (String)param.get("psnName"));
+		body.add("mem_phone", (String)param.get("psnMobile"));
+		String smsMsgStr = "[신재생에너지 서비스 포털] 본인확인을 위한 인증번호["+(String)param.get("authCode")+"]를 입력해 주세요.                                                   ";
+		body.add("M1", smsMsgStr);
+		logger.debug("request body: {}", body);
+
+		HttpEntity entity = new HttpEntity(body, headers);
+		String responseBody = restTemplate.postForObject(url, entity, String.class);
+		logger.debug("response body: {}", responseBody);
+		return 1;
+	}
+
+	/**
+	 * 비밀번호 sms
+	 */
+	public int sendFindPassMessage(HashMap param) throws Exception {
+
+		RestTemplate restTemplate = new RestTemplate();
+		String url = "https://mkt.tason.com/open/auto_message_sender.jsp";
+
+		restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("EUC-KR")));
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType(MediaType.APPLICATION_FORM_URLENCODED, Charset.forName("EUC-KR")));
+
+		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
+		body.add("enc_type", "EUC-KR");
+		//TODO:!!! 맞는 템플릿으로 바꿔주세요. !!!
+		body.add("mail_code", "S0848");	// !!! 바꿔주세요. !!!
+		body.add("user_id", "encoredtech");
+		body.add("auth_key", "0BA3TU-VCWRG1-KNI6U2-6ON5U7");
+		body.add("mem_id", "FIND_PW_" + System.currentTimeMillis());
+		body.add("mem_name", (String)param.get("psnName"));
+		body.add("mem_phone", (String)param.get("psnMobile"));
+		String smsMsgStr = "[신재생에너지 서비스 포털] "+(String)param.get("userId")+"의 임시 비밀번호는 "+(String)param.get("userPw")+" 입니다.                                                   ";
+		body.add("M1", smsMsgStr);
+//		body.add("M1", (String)param.get("userId"));
+//		body.add("M2", (String)param.get("userPw"));
+		logger.debug("request body: {}", body);
+
+		HttpEntity entity = new HttpEntity(body, headers);
+		String responseBody = restTemplate.postForObject(url, entity, String.class);
+		logger.debug("response body: {}", responseBody);
+		return 1;
+	}
 }

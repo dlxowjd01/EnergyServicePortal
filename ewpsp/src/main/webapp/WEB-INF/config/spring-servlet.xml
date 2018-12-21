@@ -47,6 +47,7 @@
 	    		<mvc:exclude-mapping path="/findUserId"/>
 	    		<mvc:exclude-mapping path="/findUserPw"/>
 	    		<mvc:exclude-mapping path="/checkUserId"/>
+	    		<mvc:exclude-mapping path="/sendAuthCode"/>
 	    		<mvc:exclude-mapping path="/joinUser"/>
 	    		<mvc:exclude-mapping path="/logout"/>
 	    		<mvc:exclude-mapping path="/faq"/>
