@@ -26,6 +26,7 @@ import kr.co.ewp.ewpsp.common.util.CommonUtils;
 import kr.co.ewp.ewpsp.common.util.StringUtil;
 import kr.co.ewp.ewpsp.common.util.UserUtil;
 import kr.co.ewp.ewpsp.service.LoginService;
+import kr.co.ewp.ewpsp.service.SMSService;
 
 @Controller
 public class LoginController {
@@ -34,6 +35,9 @@ public class LoginController {
 
 	@Resource(name="loginService")
 	private LoginService loginService;
+
+	@Resource(name="smsService")
+	private SMSService smsService;
 
 	@RequestMapping("/login")
 	public String login(Model model) {
@@ -109,17 +113,15 @@ public class LoginController {
 
 		if (result != null && StringUtil.isNotEmpty((String)result.get("user_pw"))) {
 			param.put("userPw", userPw);
-
 			int resultCnt = loginService.updateUserPw(param);
 			if (resultCnt > 0) {
-				result.put("user_pw", userPw);
-			} else {
-				result.remove("user_pw");
+				smsService.sendFindPassMessage(param);
 			}
 		}
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
+		System.out.println("       "+resultMap);
 		return resultMap;
 	}
 
@@ -132,6 +134,18 @@ public class LoginController {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
+		return resultMap;
+	}
+
+	@RequestMapping("/sendAuthCode")
+	public @ResponseBody Map<String, Object> sendAuthCode(@RequestParam HashMap param) throws Exception {
+		logger.debug("/sendAuthCode");
+		logger.debug("param : {}", param);
+
+		int resultCnt = smsService.sendAuthCodeMessage(param);
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("resultCnt", resultCnt);
 		return resultMap;
 	}
 

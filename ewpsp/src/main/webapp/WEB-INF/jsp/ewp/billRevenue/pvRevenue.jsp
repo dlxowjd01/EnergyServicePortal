@@ -242,7 +242,7 @@
 								<h2 class="ntit fl">PV 수익 도표</h2>
 								<ul class="fr">
 									<li><a href="#;" class="save_btn" onclick="excelDownload('PV수익조회', event);">데이터저장</a></li>
-									<li><a href="#" class="default_btn" id="pvRevenueTex">명세서 확인하기</a></li>
+									<!-- <li><a href="#" class="default_btn" id="pvRevenueTex">명세서 확인하기</a></li> -->
 									<li><a href="#;" class="fold_btn">표접기</a></li>
 								</ul>
 							</div>

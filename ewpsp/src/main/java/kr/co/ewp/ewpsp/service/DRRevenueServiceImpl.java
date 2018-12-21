@@ -47,7 +47,13 @@ public class DRRevenueServiceImpl implements DRRevenueService {
 	public Map getDRRevenueChartList(HashMap param) throws Exception {
 		List list = drRevenueDao.getDRRevenueChartList(param);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = BillRevenueDataSetting.dataSetting(param, list, "std_yearm");
+		if(list == null || list.size() == 0) {
+			resultMap.put("sheetList", null);
+			resultMap.put("sheetList", null);
+		} else {
+			resultMap = BillRevenueDataSetting.dataSetting(param, list, "std_yearm");
+			
+		}
 		
 		return resultMap;
 	}

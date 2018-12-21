@@ -177,7 +177,7 @@ alert('${msg}');
 										        <input type="radio" class="form-check-input" name="mobileType"> SKT
 										    </label>
 										    <label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="mobileType"> KTF
+										        <input type="radio" class="form-check-input" name="mobileType"> KT
 										    </label>
 										    <label class="form-check-label">
 										        <input type="radio" class="form-check-input" name="mobileType"> LG U+
@@ -258,7 +258,7 @@ alert('${msg}');
 										        <input type="radio" class="form-check-input" name="mobileType"> SKT
 										    </label>
 										    <label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="mobileType"> KTF
+										        <input type="radio" class="form-check-input" name="mobileType"> KT
 										    </label>
 										    <label class="form-check-label">
 										        <input type="radio" class="form-check-input" name="mobileType"> LG U+
@@ -491,8 +491,16 @@ alert('${msg}');
 												</div>
 												<span class="helpCont">휴대폰번호를 입력해 주세요</span>
 												<span class="helpCont">숫자를 입력해 주세요</span>
+												<span class="inline center fl" style="width:2%;" > &nbsp; </span>
+												<button type="button" class="btnstyle middle white fl" style="width:28%; white-space:nowrap; vertical-align:top; overflow:hidden;" id="joinAuthCodeBtn">인증번호 받기</button>	
 											</td>
 										</tr>
+					  	    			<tr>
+					  	    				<th>인증번호</th>
+					  	    				<td>
+					  	    					<input type="text" id="joinAuthCode" name="authCode" placeholder="">
+					  	    				</td>
+					  	    			</tr>
 									</tbody>
 								</table>
 							</div>
