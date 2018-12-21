@@ -62,6 +62,8 @@ public class LogManageController {
 				}
 			}
 		}
+
+		prettyLog.append("---------------------------------------------------", "");
 		if(fileList !=null){
 			
 			for(File tempFile : fileList) {
