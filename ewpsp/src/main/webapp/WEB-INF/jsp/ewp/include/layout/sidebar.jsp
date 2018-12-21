@@ -61,7 +61,7 @@ $(document).ready(function() {
 							<li><a href="/essRevenue?siteId=${selViewSiteId }">ESS 수익 조회</a></li>
 							<li><a href="/drRevenue?siteId=${selViewSiteId }">DR 수익 조회</a></li>
 							<li><a href="/pvRevenue?siteId=${selViewSiteId }">PV 수익 조회</a></li>
-							<li><a href="javascript:totalBill('${selViewSiteId }');">통합 명세서</a></li>
+							<%-- <li><a href="javascript:totalBill('${selViewSiteId }');">통합 명세서</a></li> --%>
 						</ul>
 					</div>
 				</li>
