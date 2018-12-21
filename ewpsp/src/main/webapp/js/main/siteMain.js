@@ -31,7 +31,7 @@
 		if(monitoring_cycle_10sec == null) { // 10초 간격
 			monitoring_cycle_10sec = setInterval(function(){
 				fn_cycle_10sec();
-			}, (1000*10)); // 1000 = 1초, 5000 = 5초
+			}, (1000)); // 1000 = 1초, 5000 = 5초
 		} else {
 			alert("이미 모니터링이 실행중입니다.");
 		}
@@ -738,7 +738,7 @@
 		
 		// ess 수익, pv 수익, dr 수익 중 하나라도 데이터가 존재할 때
 		if( !( essRvList == null && pvRvList == null && drRvList == null ) ) {
-//			if(usageList.length > 0) {
+			if(loopCntList != null && loopCntList.length > 0) {
 				for(var i=0; i<loopCntList.length; i++) {
 					var essRevenue = null;
 					var pvRevenue = null;
@@ -839,7 +839,7 @@
 					
 //				}
 				
-//			}
+			}
 			
 		}
 		
