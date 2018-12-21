@@ -269,6 +269,7 @@
 		var dataSet3_4 = []; // chartData를 위한 변수(목표사용량 13시이후)
 		var totalUsage = 0; // 전체 누적합
 		var totalGoalPower = 0; // 전체 누적합
+		var totalCbl = 0; // 전체 누적합
 		if(chartList != null && chartList.length > 0) {
 			$(".dr_chart").find(".inchart-nodata").css("display", "none");
 			$(".dr_chart").find(".inchart").css("display", "");
@@ -278,7 +279,7 @@
 				if(usage == null || usage == "" || usage == "null") {
 					reUsage = null;
 				} else {
-					var map = convertUnitFormat(usage, "mWh", 8);
+					var map = convertUnitFormat(usage*4, "mWh", 8);
 					reUsage = toFixedNum(map.get("formatNum"), 2);
 					totalUsage = totalUsage+Number(usage);
 				}
@@ -304,6 +305,7 @@
 							dataSet2_1.push([ setChartDateUTC(next), cbl ]);
 							dataSet3_1.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
 							totalGoalPower = cbl - (reduceAmt/4);
+							totalCbl = cbl;
 						} else if(i == 1) {
 							if(i+1 != dbCblList.length) {
 								dataSet2_2.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
@@ -348,7 +350,8 @@
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)		
 		unit_format(String(totalUsage), "pastUseTot", "mWh");
 //		unit_format(String(totalGoalPower), "totalGoalPower", "kWh");
-		$("#"+"totalGoalPower").empty().append( $("<span/>").append( numberComma( totalGoalPower ) ) ).append("kWh");
+		$("#"+"totalGoalPower").empty().append( $("<span/>").append( numberComma( totalGoalPower ) ) ).append("kW");
+		$("#"+"totalCbl").empty().append( $("<span/>").append( numberComma( totalCbl ) ) ).append("kW");
 	}
 	
 	// 검색결과 표 데이터
@@ -546,6 +549,7 @@
 		var dataSet3_4 = []; // chartData를 위한 변수(목표사용량 13시이후)
 		var totalUsage = 0; // 전체 누적합
 		var totalGoalPower = 0; // 전체 누적합
+		var totalCbl = 0; // 전체 누적합
 		if(chartList != null && chartList.length > 0) {
 			$(".dr_chart").find(".inchart-nodata").css("display", "none");
 			$(".dr_chart").find(".inchart").css("display", "");
@@ -581,6 +585,7 @@
 							dataSet2_1.push([ setChartDateUTC(next), cbl ]);
 							dataSet3_1.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
 							totalGoalPower = cbl - (reduceAmt/4);
+							totalCbl = cbl;
 						} else if(i == 1) {
 							if(i+1 != cblList.length) {
 								dataSet2_2.push([ setChartDateUTC(cblList[i].start), cbl ]);
@@ -624,7 +629,8 @@
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)		
 		unit_format(String(totalUsage), "pastUseTot", "mWh");
 //		unit_format(String(totalGoalPower), "totalGoalPower", "kWh");
-		$("#"+"totalGoalPower").empty().append( $("<span/>").append( numberComma( totalGoalPower ) ) ).append("kWh");
+		$("#"+"totalGoalPower").empty().append( $("<span/>").append( numberComma( totalGoalPower ) ) ).append("kW");
+		$("#"+"totalCbl").empty().append( $("<span/>").append( numberComma( totalCbl ) ) ).append("kW");
 	}
 	
 	// 실시간 갱신 표 데이터

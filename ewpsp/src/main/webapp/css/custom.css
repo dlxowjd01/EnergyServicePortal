@@ -1052,6 +1052,7 @@ h2.ntit span.time {
 /* 기본 합계 */
 .chart_total li.ct1 .cval span {color:#438fd7;}/* 기본 */
 .chart_total li.ct2 .cval span {color:#13af67;}/* 기본 */
+.chart_total li.ct3 .cval span {color:#f75c4a;}/* 기준부하 */
 /* 피크 전력 합계 */
 .chart_total li.pk1 .cval span {color:#438fd7;}/* 피크 전력 */
 .chart_total li.pk2 .cval span {color:#13af67;}/* 한진 계약 전력 */
@@ -1086,6 +1087,7 @@ h2.ntit span.time {
 /* 기본 타이틀 */
 .ctit.ct1 span:before {background:#438fd7;}/* 기본 */
 .ctit.ct2 span:before {background:#13af67;}/* 기본 */
+.ctit.ct3 span:before {background:#f75c4a;}/* 기준부하 */
 /* 피크 전력 현황 */
 .ctit.pk1 span:before {background:#438fd7;}/* 피크 전력 */
 .ctit.pk2 span:before {background:#13af67;}/* 한진 계약 전력 */
