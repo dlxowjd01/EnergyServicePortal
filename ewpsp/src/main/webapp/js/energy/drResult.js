@@ -350,8 +350,8 @@
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)		
 		unit_format(String(totalUsage), "pastUseTot", "mWh");
 //		unit_format(String(totalGoalPower), "totalGoalPower", "kWh");
-		$("#"+"totalGoalPower").empty().append( $("<span/>").append( numberComma( totalGoalPower ) ) ).append("kW");
-		$("#"+"totalCbl").empty().append( $("<span/>").append( numberComma( totalCbl ) ) ).append("kW");
+		$("#"+"totalGoalPower").empty().append( $("<span/>").append( numberComma( totalGoalPower ) ) ).append("kWh");
+		$("#"+"totalCbl").empty().append( $("<span/>").append( numberComma( totalCbl ) ) ).append("kWh");
 	}
 	
 	// 검색결과 표 데이터
@@ -629,8 +629,8 @@
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)		
 		unit_format(String(totalUsage), "pastUseTot", "mWh");
 //		unit_format(String(totalGoalPower), "totalGoalPower", "kWh");
-		$("#"+"totalGoalPower").empty().append( $("<span/>").append( numberComma( totalGoalPower ) ) ).append("kW");
-		$("#"+"totalCbl").empty().append( $("<span/>").append( numberComma( totalCbl ) ) ).append("kW");
+		$("#"+"totalGoalPower").empty().append( $("<span/>").append( numberComma( totalGoalPower ) ) ).append("kWh");
+		$("#"+"totalCbl").empty().append( $("<span/>").append( numberComma( totalCbl ) ) ).append("kWh");
 	}
 	
 	// 실시간 갱신 표 데이터

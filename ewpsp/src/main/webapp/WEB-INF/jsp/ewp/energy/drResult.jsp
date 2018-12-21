@@ -266,7 +266,7 @@
 													<th>감축일</th>
 													<th>감축시간대</th>
 													<th>사용량(kWh)</th>
-													<th>고객기준부하(kW)</th>
+													<th>고객기준부하(kWh)</th>
 													<th>계약용량(kWh)</th>
 													<th>목표사용량(kWh)</th>
 													<th>감축량(kWh)</th>
