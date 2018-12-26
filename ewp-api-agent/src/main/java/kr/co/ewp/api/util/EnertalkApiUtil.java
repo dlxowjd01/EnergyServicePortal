@@ -211,8 +211,8 @@ public class EnertalkApiUtil {
     String resultBody = null;
     try {
       // FIXME : getDrPayments 이것만 host가 다른데 임시야?
-      // StringBuffer url = new StringBuffer(API_URL + "/dr/sites/:siteId/payments".replace(":siteId", siteId));
-      StringBuffer url = new StringBuffer("https://dr-hk-tmp.enertalk.com" + "/dr/sites/:siteId/payments".replace(":siteId", siteId));
+       StringBuffer url = new StringBuffer(API_URL + "/dr/sites/:siteId/payments".replace(":siteId", siteId));
+//      StringBuffer url = new StringBuffer("https://dr-hk-tmp.enertalk.com" + "/dr/sites/:siteId/payments".replace(":siteId", siteId));
       url.append("?startMonth=").append(beginMonth);
       url.append("&endMonth=").append(endMonth);
       prettyLog.append("URL", url);
