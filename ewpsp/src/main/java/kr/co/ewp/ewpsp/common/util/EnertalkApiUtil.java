@@ -225,7 +225,8 @@ public class EnertalkApiUtil {
 	  String resultBody = null;
 	  UsageModel returnUsage = null;
 	  try {
-		  StringBuffer url = new StringBuffer("https://s3semotj1l.execute-api.ap-northeast-2.amazonaws.com" + "/dr-staging/sites/").append(siteId).append("/usages/periodic");
+//		  StringBuffer url = new StringBuffer("https://s3semotj1l.execute-api.ap-northeast-2.amazonaws.com" + "/dr-staging/sites/").append(siteId).append("/usages/periodic");
+		  StringBuffer url = new StringBuffer(API_URL + "/dr-staging/sites/").append(siteId).append("/usages/periodic");
 		  url.append("?start=").append(start.getTime());
 		  url.append("&end=").append(end.getTime());
 		  logger.debug("URL   "+ url);
