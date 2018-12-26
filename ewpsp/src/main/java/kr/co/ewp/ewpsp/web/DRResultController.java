@@ -154,7 +154,6 @@ public class DRResultController {
 			cblCal.add(Calendar.SECOND, 59);
 			Date cblEnd = cblCal.getTime();
 			CblResponseModel cbl = EnertalkApiUtil.getCBL(siteId, cblStart, cblEnd);
-			System.out.println("  ");
 			if(cbl != null) {
 				cblList.add(cbl);
 			}
