@@ -89,7 +89,7 @@ public class EnergyController {
    * @param prettyLog
    */
   public void energy01(String siteId, String deviceId, Date begin, Date end, PrettyLog prettyLog) {
-    prettyLog.title("에너지모니터링 > 사용량 현황 > 사용량");
+    prettyLog.title("에너지모니터링 > 사용량 현황 > 사용량"); 
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
     if (end == null) {
       end = new Date();
