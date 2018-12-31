@@ -60,7 +60,4 @@ public class SystemProperties {
   public void setProperties(Properties properties) {
     this.properties = properties;
   }
-
-  public static void main(String[] args) {
-  }
 }
