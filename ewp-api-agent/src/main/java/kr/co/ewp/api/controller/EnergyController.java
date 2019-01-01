@@ -104,14 +104,14 @@ public class EnergyController {
     for (Device device : deviceList) {
       Date _begin = null;
       if (begin == null) {
-        _begin = new Date(end.getTime());
-        _begin = DateUtil.getAfterMinute(_begin, -60);
-        // Usage usage = usageService.getLastUage(device.getSiteId(), device.getDeviceId(), null);
-        // if (usage == null) {
-        // _begin = DateUtil.getAfterDays(-1);
-        // } else {
-        // _begin = new Date(usage.getStdTimestamp().getTime() + 1);
-        // }
+//        _begin = new Date(end.getTime());
+//        _begin = DateUtil.getAfterMinute(_begin, -60);
+         Usage usage = usageService.getLastUage(device.getSiteId(), device.getDeviceId(), null);
+         if (usage == null) {
+         _begin = DateUtil.getAfterDays(-1);
+         } else {
+         _begin = new Date(usage.getStdTimestamp().getTime() + 1);
+         }
       } else {
         _begin = begin;
       }
@@ -285,14 +285,14 @@ public class EnergyController {
     for (Device device : deviceList) {
       Date _begin = null;
       if (begin == null) {
-        _begin = new Date(end.getTime());
-        _begin = DateUtil.getAfterMinute(_begin, -60);
-        // Reactive usage = usageService.getLastReactive(device.getSiteId(), device.getDeviceId(), null);
-        // if (usage == null) {
-        // _begin = DateUtil.getAfterDays(-1);
-        // } else {
-        // _begin = new Date(usage.getStdTimestamp().getTime() + 1);
-        // }
+//        _begin = new Date(end.getTime());
+//        _begin = DateUtil.getAfterMinute(_begin, -60);
+         Reactive usage = usageService.getLastReactive(device.getSiteId(), device.getDeviceId(), null);
+         if (usage == null) {
+         _begin = DateUtil.getAfterDays(-1);
+         } else {
+         _begin = new Date(usage.getStdTimestamp().getTime() + 1);
+         }
       } else {
         _begin = begin;
       }
