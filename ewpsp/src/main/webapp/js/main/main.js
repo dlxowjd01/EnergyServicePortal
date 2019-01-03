@@ -32,7 +32,8 @@ function fn_cycle() {
 }
 
 function getSiteMainSchCollection() {
-	$("#timeOffset").val( (new Date()).getTimezoneOffset() );
+//	$("#timeOffset").val( (new Date()).getTimezoneOffset() );
+	$("#timeOffset").val( timeOffset );
 	
 	// 기간 필터
 	var today = new Date();

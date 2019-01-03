@@ -107,7 +107,8 @@
 	}
 	
 	function getSiteMainSchCollection() {
-		$("#timeOffset").val( (new Date()).getTimezoneOffset() );
+//		$("#timeOffset").val( (new Date()).getTimezoneOffset() );
+		$("#timeOffset").val( timeOffset );
 		
 		var firstDay = new Date();
 		var endDay = new Date();

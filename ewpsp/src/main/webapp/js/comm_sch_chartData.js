@@ -187,7 +187,8 @@ function getCollect_sch_condition() {
 		$("#selTermTo").val( endDay.format("yyyyMMddHHmmss") );
 	}
 	
-	$("#timeOffset").val( (new Date()).getTimezoneOffset() );
+//	$("#timeOffset").val( (new Date()).getTimezoneOffset() );
+	$("#timeOffset").val( timeOffset );
 	
 	if(SelTerm != "billSelectMM") {
 		schStartTime = new Date(startTime.getTime());
@@ -234,7 +235,8 @@ function update_updtDataTime(now, id) {
 function setChartDateUTC(_dateTimestamp) {
 	if(localYn == "Y") {
 		var tm = new Date(_dateTimestamp);
-		var offset = (new Date()).getTimezoneOffset()*2*(-1);
+//		var offset = (new Date()).getTimezoneOffset()*2*(-1);
+		var offset = timeOffset*2*(-1);
 		var date = new Date(tm.setMinutes(tm.getMinutes() + offset));
 		return date.getTime();
 	} else if(localYn == "N") {
@@ -247,7 +249,8 @@ function setChartDateUTC(_dateTimestamp) {
 function setSheetDateUTC(_dateTimestamp) {
 	if(localYn == "Y") {
 		var tm = new Date(_dateTimestamp);
-		var offset = (new Date()).getTimezoneOffset()*(-1);
+//		var offset = (new Date()).getTimezoneOffset()*(-1);
+		var offset = timeOffset*(-1);
 		var date = new Date(tm.setMinutes(tm.getMinutes() + offset));
 		return date.getTime();
 	} else if(localYn == "N") {

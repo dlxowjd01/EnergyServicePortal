@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
@@ -35,6 +36,9 @@
 	<!-- <script src="../js/html2canvas_new.js"></script> -->
 	<script src="../js/jspdf.min.js"></script>
     <script src="../js/common.js"></script>
+<script type="text/javascript">
+var timeOffset = <spring:eval expression="@local.getProperty('server.offset')" />;
+</script>
 <script src="../js/comm_sch_chartData.js" type="text/javascript"></script>
 <script src="../js/utils.js"></script>
 <script src="/js/billRevenue/totalBill.js"></script>
@@ -44,8 +48,10 @@
 <script src="../js/lems.js" type="text/javascript"></script>
 <script src="../js/jquery.form.min.js"></script>
 <script type="text/javascript">
+	
 	$(document).ready(function() {
 	
+		console.log("timeOffset", timeOffset);
 // 		setTimeZoneInCookie();
 		getUserInfo(setSession);
 		var authType = sessionUser.auth_type;

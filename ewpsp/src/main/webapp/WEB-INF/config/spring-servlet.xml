@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:aop="http://www.springframework.org/schema/aop"
-        xmlns="http://www.springframework.org/schema/beans"
-        xmlns:p="http://www.springframework.org/schema/p"
-        xmlns:context="http://www.springframework.org/schema/context"
-        xmlns:mvc="http://www.springframework.org/schema/mvc"
-        xsi:schemaLocation="http://www.springframework.org/schema/mvc
-    http://www.springframework.org/schema/mvc/spring-mvc.xsd    http://www.springframework.org/schema/aop
-    http://www.springframework.org/schema/aop/spring-aop.xsd    http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans.xsd    http://www.springframework.org/schema/context
-    http://www.springframework.org/schema/context/spring-context.xsd">
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 
 		<!-- 서블릿 컨테이너의 디폴트 서블릿 위임 핸들러 -->
 		<!-- Handler Mapping에 해당하는 URL이 없으면 default-servlet으로 처리하겠다 는 의미 -->
@@ -90,6 +90,7 @@
 	            </list>
 	        </property>
 	    </bean>
+	    <util:properties id="local" location="file:/home/ubuntu/ewpsp_config/local.properties" />
 	    <!-- <context:property-placeholder location="classpath:properties/**/*.properties" /> --> 
 	    <!-- <bean id="prop" class="kr.co.ewp.ewpsp.common.util.ContextPropertiesUtil">
 	    	<property name="propFile" value="classpath:properties/globals.properties"></property>
