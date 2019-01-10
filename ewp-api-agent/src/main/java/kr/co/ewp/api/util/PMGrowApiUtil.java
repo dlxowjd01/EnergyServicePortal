@@ -122,7 +122,7 @@ public class PMGrowApiUtil {
 	  prettyLog.start("PMGrowApiUtil.getPvPowerGenList", "ERROR");
 	  String resultBody = null;
 	  try {
-		  StringBuffer url = new StringBuffer(host + "/v1/pcses/:pcsId/schedule".replace(":pcsId", equipmentId));
+		  StringBuffer url = new StringBuffer(host + "/v1/ivtes/:ivtId/energy".replace(":ivtId", equipmentId));
 //		  url.append("?equipmentId=").append(equipmentId);
 		  url.append("&startDt=").append(startDt.getTime());
 		  url.append("&endDt=").append(endDt.getTime());
@@ -161,7 +161,7 @@ public class PMGrowApiUtil {
 	    prettyLog.start("PMGrowApiUtil.getEssUsageList", "ERROR");
 	    String resultBody = null;
 	    try {
-	      StringBuffer url = new StringBuffer(host + "/v1/pcses/:pcsId/schedule".replace(":pcsId", equipmentId));
+	      StringBuffer url = new StringBuffer(host + "/v1/pcses/:pcsId/energy".replace(":pcsId", equipmentId));
 //	      url.append("?equipmentId=").append(equipmentId);
 	      url.append("&startDt=").append(startDt.getTime());
 	      url.append("&endDt=").append(endDt.getTime());
