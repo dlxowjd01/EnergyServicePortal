@@ -46,7 +46,7 @@ public class PMGrowApiUtil {
 	  try {
 		  StringBuffer url = new StringBuffer(host + "/v1/pcses/:pcsId/energy".replace(":pcsId", equipmentId));
 //		  url.append("?equipmentId=").append(equipmentId);
-		  url.append("&startDt=").append(startDt.getTime());
+		  url.append("?startDt=").append(startDt.getTime());
 		  url.append("&endDt=").append(endDt.getTime());
 		  url.append("&intervalType=").append(intervalType);
 		  url.append("&interval=").append(interval);
@@ -85,7 +85,7 @@ public class PMGrowApiUtil {
 	  try {
 		  StringBuffer url = new StringBuffer(host + "/v1/pcses/:pcsId/schedule".replace(":pcsId", equipmentId));
 //		  url.append("?equipmentId=").append(equipmentId);
-		  url.append("&startDt=").append(startDt.getTime());
+		  url.append("?startDt=").append(startDt.getTime());
 		  url.append("&endDt=").append(endDt.getTime());
 		  url.append("&intervalType=").append(intervalType);
 		  url.append("&interval=").append(interval);
@@ -124,7 +124,7 @@ public class PMGrowApiUtil {
 	  try {
 		  StringBuffer url = new StringBuffer(host + "/v1/ivtes/:ivtId/energy".replace(":ivtId", equipmentId));
 //		  url.append("?equipmentId=").append(equipmentId);
-		  url.append("&startDt=").append(startDt.getTime());
+		  url.append("?startDt=").append(startDt.getTime());
 		  url.append("&endDt=").append(endDt.getTime());
 		  url.append("&intervalType=").append(intervalType);
 		  url.append("&interval=").append(interval);
@@ -163,7 +163,7 @@ public class PMGrowApiUtil {
 	    try {
 	      StringBuffer url = new StringBuffer(host + "/v1/pcses/:pcsId/energy".replace(":pcsId", equipmentId));
 //	      url.append("?equipmentId=").append(equipmentId);
-	      url.append("&startDt=").append(startDt.getTime());
+	      url.append("?startDt=").append(startDt.getTime());
 	      url.append("&endDt=").append(endDt.getTime());
 	      url.append("&intervalType=").append(intervalType);
 	      url.append("&interval=").append(interval);
