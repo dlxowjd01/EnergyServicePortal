@@ -166,7 +166,7 @@ public class ExcelDownload {
 		
 		response.setContentType("Application/Msexcel");
 		response.setHeader("Set-Cookie", "fileDonwload=true; path=/");
-		response.setHeader("Content-Disposition",  String.format("attachment; filename=\""+excelName+".xls\""));
+		response.setHeader("Content-Disposition",  String.format("attachment; filename=\""+excelName+".xlsx\""));
 	}
 	
 	// 엑셀 다운로드 종료함수

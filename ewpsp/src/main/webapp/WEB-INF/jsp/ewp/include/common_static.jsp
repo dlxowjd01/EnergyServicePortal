@@ -51,8 +51,6 @@ var timeOffset = <spring:eval expression="@local.getProperty('server.offset')" /
 	
 	$(document).ready(function() {
 	
-		console.log("timeOffset", timeOffset);
-// 		setTimeZoneInCookie();
 		getUserInfo(setSession);
 		var authType = sessionUser.auth_type;
 		if(authType == '1') {
@@ -64,12 +62,6 @@ var timeOffset = <spring:eval expression="@local.getProperty('server.offset')" /
 		$('.loading').hide();
 	});
 	
-//     function setTimeZoneInCookie() {
-//         var _myDate = new Date();
-//         var _offset = _myDate.getTimezoneOffset();
-//         document.cookie = "TIMEZONE_COOKIE=" + _offset; //Cookie name with value
-//     }
-    
     function sessionRefresh() {
     	$.ajax({
     		url : "/openapi/loginUser",

@@ -38,66 +38,78 @@
 			success: function(result) {
 				drawIOEDetail(result);
 			}
+			, error:function(request,status,error){
+				alert("조회에 실패하였습니다. 관리자에게 문의하세요.");
+			}
 		});
 	}
 	
 	function drawIOEDetail(result) {
 		var ioeDetail = result.detail;
 		
-		if(ioeDetail != null) {
-			$(".dview_ioe").empty().append(
-					$('<div class="ltit" />').append(
-							$('<h2 />').append( $('<span class="ioe" />') ).append( ioeDetail.device_name ).append(
-									$('<p />').append( (new Date()).format("yyyy-MM-dd HH:mm:ss") )	
-							).append( '<a href="#;" id="closeIOEDetailBtnX" onclick="stopRealTime(\'ioe\');">닫기</a>' )
-					)
-			).append(
-					$('<div class="ltop" />').append(
-							$('<dl />').append( $('<dt />').append("Device ID") ).append( $('<dd />').append(ioeDetail.device_id) )
-					).append(
-							$('<dl />').append( $('<dt />').append("Device Group") ).append( $('<dd />').append(ioeDetail.device_grp_name) )
-					).append(
-							$('<dl />').append( $('<dt />').append("Site Name") ).append( $('<dd />').append(ioeDetail.site_name) )
-					).append(
-							$('<dl />').append( $('<dt />').append("Site ID") ).append( $('<dd />').append(ioeDetail.site_id) )
-					)
-			).append(
-					$('<div class="lbody" />').append(
-							$('<div class="lstat mt20" />').append( $('<div class="dt" />').append("장치타입") ).append(
-									$('<div class="dd" />').append( ioeDetail.device_type_nm )
-							)
-					).append(
-							$('<div class="lstat" />').append( $('<div class="dt" />').append("연결상태") ).append(
-									$('<div class="dd" />').append( $('<span class="run" />').append( ((ioeDetail.device_stat == 1) ? "connect" : "disconnect") ) )
-							)
-					).append(
-							$('<div class="lstat" />').append( $('<div class="dt" />').append("알람 메시지") ).append(
-									$('<div class="dd" />').append( $('<span class="run" />').append("") )
-							)
-					)
-			).append(
-					$('<div class="ltbl mt30" />').append(
-							$('<table />').append(
-									$("<thead />").append(
-											$("<tr />").append( $("<th />").append("전압(v)") 
-											).append( $("<th />").append("전력(kW)")
-											).append( $("<th />").append("유효전력(kW)")
-											).append( $("<th />").append("무효전력(kW)")
-											)
-									) 
-							).append(
-									$('<tbody />').append(
-											$('<tr />').append( $("<td />").append(  (ioeDetail.voltage == "" || ioeDetail.voltage == null) ? "-" : Number(ioeDetail.voltage)/1000  ) 
-											).append( $("<td />").append(  (ioeDetail.activePower == "" || ioeDetail.activePower == null) ? "-" : Number(ioeDetail.activePower)/(1000*1000)  ) 
-											).append( $("<td />").append(  (ioeDetail.energy == "" || ioeDetail.energy == null) ? "-" : Number(ioeDetail.energy)/(1000*1000)  ) 
-											).append( $("<td />").append(  (ioeDetail.energyReactive == "" || ioeDetail.energyReactive == null) ? "-" : ioeDetail.energyReactive  ) 
-											)
-									)
-							)
-					)
-			);
+		var ioeStr = '';
+		ioeStr += '<div class="ltit">';
+		ioeStr += '<h2>';
+		ioeStr += '<span class="ioe"></span>'+(  (ioeDetail.device_name == "" || ioeDetail.device_name == null) ? "-" : ioeDetail.device_name  );
+		ioeStr += '<p>'+(new Date()).format("yyyy-MM-dd HH:mm:ss")+'</p>';
+		ioeStr += '</h2>';
+		ioeStr += '<a href="#;" id="closeIOEDetailBtnX" onclick="stopRealTime(\'ioe\');">닫기</a>';
+		ioeStr += '</div>';
+		ioeStr += '<div class="ltop">';
+		ioeStr += '<dl>';
+		ioeStr += '<dt>Device ID</dt>';
+		ioeStr += '<dd>'+( (ioeDetail.device_id == "" || ioeDetail.device_id == null) ? "-" : ioeDetail.device_id )+'</dd>';
+		ioeStr += '</dl>';
+		ioeStr += '<dl>';
+		ioeStr += '<dt>Device Group</dt>';
+		ioeStr += '<dd>'+( (ioeDetail.device_grp_name == "" || ioeDetail.device_grp_name == null) ? "-" : ioeDetail.device_grp_name )+'</dd>';
+		ioeStr += '</dl>';
+		ioeStr += '<dl>';
+		ioeStr += '<dt>Site Name</dt>';
+		ioeStr += '<dd>'+( (ioeDetail.site_name == "" || ioeDetail.site_name == null) ? "-" : ioeDetail.site_name )+'</dd>';
+		ioeStr += '</dl>';
+		ioeStr += '<dl>';
+		ioeStr += '<dt>Site ID</dt>';
+		ioeStr += '<dd>'+( (ioeDetail.site_id == "" || ioeDetail.site_id == null) ? "-" : ioeDetail.site_id )+'</dd>';
+		ioeStr += '</dl>';
+		ioeStr += '</div>';
+		ioeStr += '<div class="lbody">';
+		ioeStr += '<div class="lstat mt20">';
+		ioeStr += '<div class="dt">장치타입</div>';
+		ioeStr += '<div class="dd">'+( (ioeDetail.device_type_nm == "" || ioeDetail.device_type_nm == null) ? "-" : ioeDetail.device_type_nm )+'</div>';
+		ioeStr += '</div>';
+		ioeStr += '<div class="lstat">';
+		ioeStr += '<div class="dt">연결상태</div>';
+		ioeStr += '<div class="dd"><span class="run">'+( (ioeDetail.device_stat == 1) ? "connect" : "disconnect" )+'</span></div>';
+		ioeStr += '</div>';
+		ioeStr += '<div class="lstat">';
+		ioeStr += '<div class="dt">알람 메시지</div>';
+		ioeStr += '<div class="dd">';
+		ioeStr += '</div>';
+		ioeStr += '</div>';   
+		ioeStr += '<div class="ltbl mt30">';
+		ioeStr += '<table>';
+		ioeStr += '<thead>';
+		ioeStr += '<tr>';
+		ioeStr += '<th>전압(v)</th>';
+		ioeStr += '<th>전력(kW)</th>';
+		ioeStr += '<th>유효전력(kW)</th>';
+		ioeStr += '<th>무효전력(kW)</th>';
+		ioeStr += '</tr>';
+		ioeStr += '</thead>';
+		ioeStr += '<tbody>';
+		ioeStr += '<tr>';
+		ioeStr += '<td>'+( (ioeDetail.voltage == "" || ioeDetail.voltage == null) ? "-" : Number(ioeDetail.voltage)/1000 )+'</td>';
+		ioeStr += '<td>'+( (ioeDetail.activePower == "" || ioeDetail.activePower == null) ? "-" : Number(ioeDetail.activePower)/(1000*1000) )+'</td>';
+		ioeStr += '<td>'+( (ioeDetail.energy == "" || ioeDetail.energy == null) ? "-" : Number(ioeDetail.energy)/(1000*1000) )+'</td>';
+		ioeStr += '<td>'+( (ioeDetail.energyReactive == "" || ioeDetail.energyReactive == null) ? "-" : ioeDetail.energyReactive )+'</td>';
+		ioeStr += '</tr>';
+		ioeStr += '</tbody>';
+		ioeStr += '</table>';
+		ioeStr += '</div>';
+		ioeStr += '</div>';
 			
-		}
+		$(".dview_ioe").html(ioeStr);
 		
 	}
 
@@ -141,88 +153,99 @@
 	function drawPCSDetail(result) {
 		var pcsDetail = result.detail;
 		
-		if(pcsDetail != null) {
-			$(".dview_pcs").empty().append(
-					$('<div class="ltit" />').append(
-							$('<h2 />').append( $('<span class="pcs" />') ).append( pcsDetail.device_name ).append(
-									$('<p />').append( (new Date()).format("yyyy-MM-dd HH:mm:ss") )	
-							).append( '<a href="#;" id="closePCSDetailBtnX" onclick="stopRealTime(\'pcs\');">닫기</a>' )
-					)
-			).append(
-					$('<div class="ltop" />').append(
-							$('<dl />').append( $('<dt />').append("Device ID") ).append( $('<dd />').append(pcsDetail.device_id) )
-					).append(
-							$('<dl />').append( $('<dt />').append("Device Group") ).append( $('<dd />').append(pcsDetail.device_grp_name) )
-					).append(
-							$('<dl />').append( $('<dt />').append("Site Name") ).append( $('<dd />').append(pcsDetail.site_name) )
-					).append(
-							$('<dl />').append( $('<dt />').append("Site ID") ).append( $('<dd />').append(pcsDetail.site_id) )
-					)
-			).append(
-					$('<div class="lbody" />').append(
-							$('<div class="lstat mt20" />').append( $('<div class="dt" />').append("장치타입") ).append(
-									$('<div class="dd" />').append( $('<span class="run" />').append(pcsDetail.device_type_nm) )
-							)
-					).append(
-							$('<div class="lstat" />').append( $('<div class="dt" />').append("운전상태") ).append(
-									$('<div class="dd" />').append( $('<span class="run" />').append( pcsDetail.pcsStatusNm ) )
-							)
-					).append(
-							$('<div class="lstat" />').append( $('<div class="dt" />').append("알람 메시지") ).append(
-									$('<div class="dd" />').append( $('<span class="run" />').append("") )
-							)
-					).append( $('<h2 class="tbl_tit" />').append( "AC 출력" ) ).append(
-							$('<div class="ltbl" />').append(
-									$('<table />').append(
-											$("<thead />").append(
-													$("<tr />").append( $("<th />").append("전압(V)") 
-													).append( $("<th />").append("전력(kW)")
-													).append( $("<th />").append("주파수(Hz)")
-													).append( $("<th />").append("전류(A)")
-													).append( $("<th />").append("역률(PF)")
-													).append( $("<th />").append("전력설정치(kWh)")
-													) 
-											) 
-									).append(
-											$('<tbody />').append(
-													$('<tr />').append( $("<td />").append(  (pcsDetail.acVoltage == "" || pcsDetail.acVoltage == null) ? "-" : pcsDetail.acVoltage  ) 
-													).append( $("<td />").append(  (pcsDetail.acPower == "" || pcsDetail.acPower == null) ? "-" : pcsDetail.acPower  )
-													).append( $("<td />").append(  (pcsDetail.acFreq == "" || pcsDetail.acFreq == null) ? "-" : pcsDetail.acFreq  )
-													).append( $("<td />").append(  (pcsDetail.acCurrent == "" || pcsDetail.acCurrent == null) ? "-" : pcsDetail.acCurrent  )
-													).append( $("<td />").append(  (pcsDetail.acPf == "" || pcsDetail.acPf == null) ? "-" : pcsDetail.acPf  )
-													).append( $("<td />").append(  (pcsDetail.acSetPower == "" || pcsDetail.acSetPower == null) ? "-" : pcsDetail.acSetPower  )
-													)
-											)
-									)
-							)
-					).append( $('<h2 class="tbl_tit" />').append( "DC 출력" ) ).append(
-							$('<div class="ltbl" />').append(
-									$('<table />').append(
-											$("<thead />").append(
-													$("<tr />").append( $("<th />").append("전압(V)") 
-													).append( $("<th />").append("전류(A)")
-													).append( $("<th />").append("운전상태")
-													).append( $("<th />").append("운전모드")
-													).append( $("<th />").append("충전량")
-													).append( $("<th />").append("방전량")
-													) 
-											) 
-									).append(
-											$('<tbody />').append(
-													$('<tr />').append( $("<td />").append(  (pcsDetail.dcVoltage == "" || pcsDetail.dcVoltage == null) ? "-" : pcsDetail.dcVoltage  ) 
-													).append( $("<td />").append(  (pcsDetail.dcPower == "" || pcsDetail.dcPower == null) ? "-" : pcsDetail.dcPower  )
-													).append( $("<td />").append(  (pcsDetail.pcsStatus == "" || pcsDetail.pcsStatus == null) ? "-" : pcsDetail.pcsStatus  )
-													).append( $("<td />").append(  (pcsDetail.pcsCommand == "" || pcsDetail.pcsCommand == null) ? "-" : pcsDetail.pcsCommand  )
-													).append( $("<td />").append(  (pcsDetail.todayCEnergy == "" || pcsDetail.todayCEnergy == null) ? "-" : pcsDetail.todayCEnergy  )
-													).append( $("<td />").append(  (pcsDetail.todayDEnergy == "" || pcsDetail.todayDEnergy == null) ? "-" : pcsDetail.todayDEnergy  )
-													)
-											)
-									)
-							)
-					)
-			);
-			
-		}
+		var pcsStr = '';
+		pcsStr += '<div class="ltit">';
+		pcsStr += '<h2>';
+		pcsStr += '<span class="pcs"></span>'+(  (pcsDetail.device_name == "" || pcsDetail.device_name == null) ? "-" : pcsDetail.device_name  );
+		pcsStr += '<p>'+(new Date()).format("yyyy-MM-dd HH:mm:ss")+'</p>';
+		pcsStr += '</h2>';
+		pcsStr += '<a href="#;" id="closePCSDetailBtnX" onclick="stopRealTime(\'pcs\');>닫기</a>';
+		pcsStr += '</div>';
+		pcsStr += '<div class="ltop">';
+		pcsStr += '<dl>';
+		pcsStr += '<dt>Device ID</dt>';
+		pcsStr += '<dd>'+(  (pcsDetail.device_id == "" || pcsDetail.device_id == null) ? "-" : pcsDetail.device_id  )+'</dd>';
+		pcsStr += '</dl>';
+		pcsStr += '<dl>';
+		pcsStr += '<dt>Device Group</dt>';
+		pcsStr += '<dd>'+(  (pcsDetail.device_grp_name == "" || pcsDetail.device_grp_name == null) ? "-" : pcsDetail.device_grp_name  )+'</dd>';
+		pcsStr += '</dl>';
+		pcsStr += '<dl>';
+		pcsStr += '<dt>Site Name</dt>';
+		pcsStr += '<dd>'+(  (pcsDetail.site_name == "" || pcsDetail.site_name == null) ? "-" : pcsDetail.site_name  )+'</dd>';
+		pcsStr += '</dl>';
+		pcsStr += '<dl>';
+		pcsStr += '<dt>Site ID</dt>';
+		pcsStr += '<dd>'+(  (pcsDetail.site_id == "" || pcsDetail.site_id == null) ? "-" : pcsDetail.site_id  )+'</dd>';
+		pcsStr += '</dl>';
+		pcsStr += '</div>';
+		pcsStr += '<div class="lbody">';
+		pcsStr += '<div class="lstat mt20">';
+		pcsStr += '<div class="dt">장치타입</div>';
+		pcsStr += '<div class="dd">'+(  (pcsDetail.device_type_nm == "" || pcsDetail.device_type_nm == null) ? "-" : pcsDetail.device_type_nm  )+'</div>';
+		pcsStr += '</div>';
+		pcsStr += '<div class="lstat">';
+		pcsStr += '<div class="dt">운전상태</div>';
+		pcsStr += '<div class="dd"><span class="run">'+(  (pcsDetail.pcsStatusNm == "" || pcsDetail.pcsStatusNm == null) ? "-" : pcsDetail.pcsStatusNm  )+'</span></div>';
+		pcsStr += '</div>';
+		pcsStr += '<div class="lstat">';
+		pcsStr += '<div class="dt">알람 메시지</div>';
+		pcsStr += '<div class="dd">';
+		pcsStr += '</div>';
+		pcsStr += '</div>';
+		pcsStr += '<h2 class="tbl_tit">AC 출력</h2>';
+		pcsStr += '<div class="ltbl">';
+		pcsStr += '<table>';
+		pcsStr += '<thead>';
+		pcsStr += '<tr>';
+		pcsStr += '<th>전압(V)</th>';
+		pcsStr += '<th>전력(kW)</th>';
+		pcsStr += '<th>주파수(Hz)</th>';
+		pcsStr += '<th>전류(A)</th>';
+		pcsStr += '<th>역률(PF)</th>';
+		pcsStr += '<th>전력설정치(kWh)</th>';
+		pcsStr += '</tr>';
+		pcsStr += '</thead>';
+		pcsStr += '<tbody>';
+		pcsStr += '<tr>';
+		pcsStr += '<td>'+(  (pcsDetail.acVoltage == "" || pcsDetail.acVoltage == null) ? "-" : pcsDetail.acVoltage  )+'</td>';
+		pcsStr += '<td>'+(  (pcsDetail.acPower == "" || pcsDetail.acPower == null) ? "-" : pcsDetail.acPower  )+'</td>';
+		pcsStr += '<td>'+(  (pcsDetail.acFreq == "" || pcsDetail.acFreq == null) ? "-" : pcsDetail.acFreq  )+'</td>';
+		pcsStr += '<td>'+(  (pcsDetail.acCurrent == "" || pcsDetail.acCurrent == null) ? "-" : pcsDetail.acCurrent  )+'</td>';
+		pcsStr += '<td>'+(  (pcsDetail.acPf == "" || pcsDetail.acPf == null) ? "-" : pcsDetail.acPf  )+'</td>';
+		pcsStr += '<td>'+(  (pcsDetail.acSetPower == "" || pcsDetail.acSetPower == null) ? "-" : pcsDetail.acSetPower  )+'</td>';
+		pcsStr += '</tr>';
+		pcsStr += '</tbody>';
+		pcsStr += '</table>';
+		pcsStr += '</div>';
+		pcsStr += '<h2 class="tbl_tit">DC 출력</h2>';
+		pcsStr += '<div class="ltbl">';
+		pcsStr += '<table>';
+		pcsStr += '<thead>';
+		pcsStr += '<tr>';
+		pcsStr += '<th>전압(V)</th>';
+		pcsStr += '<th>전류(A)</th>';
+		pcsStr += '<th>운전상태</th>';
+		pcsStr += '<th>운전모드</th>';
+		pcsStr += '<th>충전량</th>';
+		pcsStr += '<th>방전량</th>';
+		pcsStr += '</tr>';
+		pcsStr += '</thead>';
+		pcsStr += '<tbody>';
+		pcsStr += '<tr>';
+		pcsStr += '<td>'+(  (pcsDetail.dcVoltage == "" || pcsDetail.dcVoltage == null) ? "-" : pcsDetail.dcVoltage  ) +'</td>';
+		pcsStr += '<td>'+(  (pcsDetail.dcPower == "" || pcsDetail.dcPower == null) ? "-" : pcsDetail.dcPower  )+'</td>';
+		pcsStr += '<td>'+(  (pcsDetail.pcsStatus == "" || pcsDetail.pcsStatus == null) ? "-" : pcsDetail.pcsStatus  )+'</td>';
+		pcsStr += '<td>'+(  (pcsDetail.pcsCommand == "" || pcsDetail.pcsCommand == null) ? "-" : pcsDetail.pcsCommand  )+'</td>';
+		pcsStr += '<td>'+(  (pcsDetail.todayCEnergy == "" || pcsDetail.todayCEnergy == null) ? "-" : pcsDetail.todayCEnergy  )+'</td>';
+		pcsStr += '<td>'+(  (pcsDetail.todayDEnergy == "" || pcsDetail.todayDEnergy == null) ? "-" : pcsDetail.todayDEnergy  )+'</td>';
+		pcsStr += '</tr>';
+		pcsStr += '</tbody>';
+		pcsStr += '</table>';
+		pcsStr += '</div>';
+		pcsStr += '</div>';
+		
+		$(".dview_pcs").html(pcsStr);
 		
 	}
 
@@ -266,68 +289,74 @@
 	function drawBMSDetail(result) {
 		var bmsDetail = result.detail;
 		
-		if(bmsDetail != null) {
-			$(".dview_bms").empty().append(
-					$('<div class="ltit" />').append(
-							$('<h2 />').append( $('<span class="bms" />') ).append( bmsDetail.device_name ).append(
-									$('<p />').append( (new Date()).format("yyyy-MM-dd HH:mm:ss") )	
-							).append( '<a href="#;" id="closeBMSDetailBtnX" onclick="stopRealTime(\'bms\');">닫기</a>' )
-					)
-			).append(
-					$('<div class="ltop" />').append(
-							$('<dl />').append( $('<dt />').append("Device ID") ).append( $('<dd />').append(bmsDetail.device_id) )
-					).append(
-							$('<dl />').append( $('<dt />').append("Device Group") ).append( $('<dd />').append(bmsDetail.device_grp_name) )
-					).append(
-							$('<dl />').append( $('<dt />').append("Site Name") ).append( $('<dd />').append(bmsDetail.site_name) )
-					).append(
-							$('<dl />').append( $('<dt />').append("Site ID") ).append( $('<dd />').append(bmsDetail.site_id) )
-					)
-			).append(
-					$('<div class="lbody" />').append(
-							$('<div class="lstat mt20" />').append( $('<div class="dt" />').append("장치타입") ).append(
-									$('<div class="dd" />').append( $('<span class="run" />').append(bmsDetail.device_type_nm) )
-							)
-					).append(
-							$('<div class="lstat" />').append( $('<div class="dt" />').append("운전상태") ).append(
-									$('<div class="dd" />').append( $('<span class="run" />').append( bmsDetail.bmsStatusNm ) )
-							)
-					).append(
-							$('<div class="lstat" />').append( $('<div class="dt" />').append("알람 메시지") ).append(
-									$('<div class="dd" />').append( $('<span class="run" />').append("") )
-							)
-					).append( 
-							$('<h2 class="tbl_tit" />').append( "충/방전 상태: " ).append(
-									$('<span style="color:#438fd7;font-weight:normal;" />').append("충전중")
-							)
-					).append(
-							$('<div class="ltbl" />').append(
-									$('<table />').append(
-											$("<thead />").append(
-													$("<tr />").append( $("<th />").append("SOC(%)") 
-													).append( $("<th />").append("SOH(%)")
-													).append( $("<th />").append("SOC 현재(kWh)")
-													).append( $("<th />").append("출력 전압(V)")
-													).append( $("<th />").append("출력 전류(V)")
-													).append( $("<th />").append("Dod(%)")
-													) 
-											) 
-									).append(
-											$('<tbody />').append(
-													$('<tr />').append( $("<td />").append(  (bmsDetail.sysSoc == "" || bmsDetail.sysSoc == null) ? "-" : bmsDetail.sysSoc  ) // soc
-													).append( $("<td />").append(  (bmsDetail.sysSoh == "" || bmsDetail.sysSoh == null) ? "-" : bmsDetail.sysSoh  ) // soh
-													).append( $("<td />").append(  (bmsDetail.currSoc == "" || bmsDetail.currSoc == null) ? "-" : bmsDetail.currSoc  ) // soc 현재
-													).append( $("<td />").append(  (bmsDetail.sysVoltage == "" || bmsDetail.sysVoltage == null) ? "-" : bmsDetail.sysVoltage  ) // 출력전압
-													).append( $("<td />").append(  (bmsDetail.sysCurrent == "" || bmsDetail.sysCurrent == null) ? "-" : bmsDetail.sysCurrent  ) // 출력전류
-													).append( $("<td />").append(  (bmsDetail.dod == "" || bmsDetail.dod == null) ? "-" : bmsDetail.dod  ) // dod
-													)
-											)
-									)
-							)
-					)
-			);
-			
-		}
+		var bmsStr = '';
+		bmsStr += '<div class="ltit">';
+		bmsStr += '<h2>';
+		bmsStr += '<span class="bms"></span>'+(  (bmsDetail.device_name == "" || bmsDetail.device_name == null) ? "-" : bmsDetail.device_name  );
+		bmsStr += '<p>'+(new Date()).format("yyyy-MM-dd HH:mm:ss")+'</p>';
+		bmsStr += '</h2>';
+		bmsStr += '<a href="#;" id="closeBMSDetailBtnX">닫기</a>';
+		bmsStr += '</div>';
+		bmsStr += '<div class="ltop">';
+		bmsStr += '<dl>';
+		bmsStr += '<dt>Device ID</dt>';
+		bmsStr += '<dd>'+(  (bmsDetail.device_id == "" || bmsDetail.device_id == null) ? "-" : bmsDetail.device_id  )+'</dd>';
+		bmsStr += '</dl>';
+		bmsStr += '<dl>';
+		bmsStr += '<dt>Device Group</dt>';
+		bmsStr += '<dd>'+(  (bmsDetail.device_grp_name == "" || bmsDetail.device_grp_name == null) ? "-" : bmsDetail.device_grp_name  )+'</dd>';
+		bmsStr += '</dl>';
+		bmsStr += '<dl>';
+		bmsStr += '<dt>Site Name</dt>';
+		bmsStr += '<dd>'+(  (bmsDetail.site_name == "" || bmsDetail.site_name == null) ? "-" : bmsDetail.site_name  )+'</dd>';
+		bmsStr += '</dl>';
+		bmsStr += '<dl>';
+		bmsStr += '<dt>Site ID</dt>';
+		bmsStr += '<dd>'+(  (bmsDetail.site_id == "" || bmsDetail.site_id == null) ? "-" : bmsDetail.site_id  )+'</dd>';
+		bmsStr += '</dl>';
+		bmsStr += '</div>';
+		bmsStr += '<div class="lbody">';
+		bmsStr += '<div class="lstat mt20">';
+		bmsStr += '<div class="dt">장치타입</div>';
+		bmsStr += '<div class="dd">'+(  (bmsDetail.device_type_nm == "" || bmsDetail.device_type_nm == null) ? "-" : bmsDetail.device_type_nm  )+'</div>';
+		bmsStr += '</div>';
+		bmsStr += '<div class="lstat">';
+		bmsStr += '<div class="dt">운전상태</div>';
+		bmsStr += '<div class="dd"><span class="run">'+(  (bmsDetail.bmsStatusNm == "" || bmsDetail.bmsStatusNm == null) ? "-" : bmsDetail.bmsStatusNm  )+'</span></div>';
+		bmsStr += '</div>';
+		bmsStr += '<div class="lstat">';
+		bmsStr += '<div class="dt">알람 메시지</div>';
+		bmsStr += '<div class="dd">';
+		bmsStr += '</div>';
+		bmsStr += '</div>';
+		bmsStr += '<h2 class="tbl_tit">충/방전 상태: <span style="color:#438fd7;font-weight:normal;"></span></h2>';
+		bmsStr += '<div class="ltbl">';
+		bmsStr += '<table>';
+		bmsStr += '<thead>';
+		bmsStr += '<tr>';
+		bmsStr += '<th>SOC(%)</th>';
+		bmsStr += '<th>SOH(%)</th>';
+		bmsStr += '<th>SOC 현재(kWh)</th>';
+		bmsStr += '<th>출력 전압(V)</th>';
+		bmsStr += '<th>출력 전류(V)</th>';
+		bmsStr += '<th>Dod(%)</th>';
+		bmsStr += '</tr>';
+		bmsStr += '</thead>';
+		bmsStr += '<tbody>';
+		bmsStr += '<tr>';
+		bmsStr += '<td>'+(  (bmsDetail.sysSoc == "" || bmsDetail.sysSoc == null) ? "-" : bmsDetail.sysSoc  )+'</td>';
+		bmsStr += '<td>'+(  (bmsDetail.sysSoh == "" || bmsDetail.sysSoh == null) ? "-" : bmsDetail.sysSoh  )+'</td>';
+		bmsStr += '<td>'+(  (bmsDetail.currSoc == "" || bmsDetail.currSoc == null) ? "-" : bmsDetail.currSoc  )+'</td>';
+		bmsStr += '<td>'+(  (bmsDetail.sysVoltage == "" || bmsDetail.sysVoltage == null) ? "-" : bmsDetail.sysVoltage  )+'</td>';
+		bmsStr += '<td>'+(  (bmsDetail.sysCurrent == "" || bmsDetail.sysCurrent == null) ? "-" : bmsDetail.sysCurrent  )+'</td>';
+		bmsStr += '<td>'+(  (bmsDetail.dod == "" || bmsDetail.dod == null) ? "-" : bmsDetail.dod  )+'</td>';
+		bmsStr += '</tr>';
+		bmsStr += '</tbody>';
+		bmsStr += '</table>';
+		bmsStr += '</div>';
+		bmsStr += '</div>';
+		
+		$(".dview_bms").html(bmsStr);
 		
 	}
 
@@ -371,60 +400,69 @@
 	function drawPVDetail(result) {
 		var pvDetail = result.detail;
 		
-		if(pvDetail != null) {
-			$(".dview_pv").empty().append(
-					$('<div class="ltit" />').append(
-							$('<h2 />').append( $('<span class="bms" />') ).append( pvDetail.device_name ).append(
-									$('<p />').append( (new Date()).format("yyyy-MM-dd HH:mm:ss") )	
-							).append( '<a href="#;" id="closePVDetailBtnX" onclick="stopRealTime(\'pv\');">닫기</a>' )
-					)
-			).append(
-					$('<div class="ltop" />').append(
-							$('<dl />').append( $('<dt />').append("Device ID") ).append( $('<dd />').append(pvDetail.device_id) )
-					).append(
-							$('<dl />').append( $('<dt />').append("Device Group") ).append( $('<dd />').append(pvDetail.device_grp_name) )
-					).append(
-							$('<dl />').append( $('<dt />').append("Site Name") ).append( $('<dd />').append(pvDetail.site_name) )
-					).append(
-							$('<dl />').append( $('<dt />').append("Site ID") ).append( $('<dd />').append(pvDetail.site_id) )
-					)
-			).append(
-					$('<div class="lbody" />').append(
-							$('<div class="lstat mt20" />').append( $('<div class="dt" />').append("장치타입") ).append(
-									$('<div class="dd" />').append( $('<span class="run" />').append(pvDetail.device_type_nm) )
-							)
-					).append(
-							$('<div class="lstat" />').append( $('<div class="dt" />').append("PV 상태") ).append(
-									$('<div class="dd" />').append( $('<span class="run" />').append( pvDetail.pvStatusNm ) )
-							)
-					).append(
-							$('<div class="lstat" />').append( $('<div class="dt" />').append("알람 메시지") ).append(
-									$('<div class="dd" />').append( $('<span class="run" />').append("") )
-							)
-					).append(
-							$('<div class="ltbl mt30" />').append(
-									$('<table />').append(
-											$("<thead />").append(
-													$("<tr />").append( $("<th />").append("온도") 
-													).append( $("<th />").append("오늘 예측 발전량")
-													).append( $("<th />").append("실제 발전량")
-													).append( $("<th />").append("오늘 누적 발전량")
-													) 
-											) 
-									).append(
-											$('<tbody />').append(
-													$('<tr />').append( $("<td />").append(  (pvDetail.temperature == "" || pvDetail.temperature == null) ? "-" : pvDetail.temperature+"℃"  ) 
-													).append( $("<td />").append("-"/*+"kWh"*/) 
-													).append( $("<td />").append("-"/*+"kWh"*/) 
-													).append( $("<td />").append(  (pvDetail.totalPower == "" || pvDetail.totalPower == null) ? "-" : pvDetail.totalPower+"kWh"  )
-													)
-											)
-									)
-							)
-					)
-			);
-			
-		}
+		var pvStr = '';
+		pvStr += '<div class="ltit">';
+		pvStr += '<h2>';
+		pvStr += '<span class="bms"></span>'+(  (pvDetail.device_name == "" || pvDetail.device_name == null) ? "-" : pvDetail.device_name  );
+		pvStr += '<p>'+(new Date()).format("yyyy-MM-dd HH:mm:ss")+'</p>';
+		pvStr += '</h2>';
+		pvStr += '<a href="#;" id="closePVDetailBtnX" onclick="stopRealTime(\'pv\');">닫기</a>';
+		pvStr += '</div>';
+		pvStr += '<div class="ltop">';
+		pvStr += '<dl>';
+		pvStr += '<dt>Device ID</dt>';
+		pvStr += '<dd>'+(  (pvDetail.device_id == "" || pvDetail.device_id == null) ? "-" : pvDetail.device_id  )+'</dd>';
+		pvStr += '</dl>';
+		pvStr += '<dl>';
+		pvStr += '<dt>Device Group</dt>';
+		pvStr += '<dd>'+(  (pvDetail.device_grp_name == "" || pvDetail.device_grp_name == null) ? "-" : pvDetail.device_grp_name  )+'</dd>';
+		pvStr += '</dl>';
+		pvStr += '<dl>';
+		pvStr += '<dt>Site Name</dt>';
+		pvStr += '<dd>'+(  (pvDetail.site_name == "" || pvDetail.site_name == null) ? "-" : pvDetail.site_name  )+'</dd>';
+		pvStr += '</dl>';
+		pvStr += '<dl>';
+		pvStr += '<dt>Site ID</dt>';
+		pvStr += '<dd>'+(  (pvDetail.site_id == "" || pvDetail.site_id == null) ? "-" : pvDetail.site_id  )+'</dd>';
+		pvStr += '</dl>';
+		pvStr += '</div>';
+		pvStr += '<div class="lbody">';
+		pvStr += '<div class="lstat mt20">';
+		pvStr += '<div class="dt">장치타입</div>';
+		pvStr += '<div class="dd">'+(  (pvDetail.device_type_nm == "" || pvDetail.device_type_nm == null) ? "-" : pvDetail.device_type_nm  )+'</div>';
+		pvStr += '</div>';
+		pvStr += '<div class="lstat">';
+		pvStr += '<div class="dt">운전상태</div>';
+		pvStr += '<div class="dd"><span class="run">'+(  (pvDetail.pvStatusNm == "" || pvDetail.pvStatusNm == null) ? "-" : pvDetail.pvStatusNm  )+'</span></div>';
+		pvStr += '</div>';
+		pvStr += '<div class="lstat">';
+		pvStr += '<div class="dt">알람 메시지</div>';
+		pvStr += '<div class="dd">';
+		pvStr += '</div>';
+		pvStr += '</div>';
+		pvStr += '<div class="ltbl mt30">';
+		pvStr += '<table>';
+		pvStr += '<thead>';
+		pvStr += '<tr>';
+		pvStr += '<th>온도</th>';
+		pvStr += '<th>오늘 예측 발전량</th>';
+		pvStr += '<th>실제 발전량</th>';
+		pvStr += '<th>오늘 누적 발전량</th>';
+		pvStr += '</tr>';
+		pvStr += '</thead>';
+		pvStr += '<tbody>';
+		pvStr += '<tr>';
+		pvStr += '<td>'+(  (pvDetail.temperature == "" || pvDetail.temperature == null) ? "-" : pvDetail.temperature+"℃"  )+'</td>';
+		pvStr += '<td>'+'-'+'</td>';
+		pvStr += '<td>'+'-'+'</td>';
+		pvStr += '<td>'+(  (pvDetail.totalPower == "" || pvDetail.totalPower == null) ? "-" : pvDetail.totalPower+"kWh"  )+'</td>';
+		pvStr += '</tr>';
+		pvStr += '</tbody>';
+		pvStr += '</table>';
+		pvStr += '</div>';
+		pvStr += '</div>';
+		
+		$(".dview_pv").html(pvStr);
 		
 	}
 	

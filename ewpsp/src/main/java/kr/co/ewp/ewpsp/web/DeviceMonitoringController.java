@@ -82,9 +82,8 @@ public class DeviceMonitoringController {
 		Map result = deviceMonitoringService.getDeviceIOEDetail(param);
 		ApiController api = new ApiController();
 		UsageRealtimeModel usageRealtime = api.getDeviceRealTime((String) param.get("deviceId"));
-		Long voltage = (usageRealtime == null) ? null : usageRealtime.getVoltage();
-		if(voltage < 0 || voltage > 1000000000) voltage = null;
-		result.put("voltage", voltage);
+		Long voltage = (usageRealtime == null || usageRealtime.getVoltage() == null) ? -1 : usageRealtime.getVoltage();
+		result.put("voltage", (voltage < 0 || voltage > 1000000000) ? null : voltage);
 		result.put("activePower", (usageRealtime == null) ? null : usageRealtime.getActivePower());
 		result.put("energy", (usageRealtime == null) ? null : usageRealtime.getPositiveEnergy()+usageRealtime.getNegativeEnergy());
 		result.put("energyReactive", (usageRealtime == null) ? null : usageRealtime.getPositiveEnergyReactive()+usageRealtime.getNegativeEnergyReactive());
@@ -167,7 +166,6 @@ public class DeviceMonitoringController {
 		result.put("pcsCommand", (pcsDetail == null || pcsDetail.size() == 0) ? null : pcsDetail.get(0).getPcsCommand());
 		result.put("todayCEnergy", (pcsDetail == null || pcsDetail.size() == 0) ? null : pcsDetail.get(0).getTodayCEnergy());
 		result.put("todayDEnergy", (pcsDetail == null || pcsDetail.size() == 0) ? null : pcsDetail.get(0).getTodayDEnergy());
-		System.out.println("최종결과 : "+result.toString());
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
@@ -245,7 +243,6 @@ public class DeviceMonitoringController {
 		result.put("sysVoltage", (bmsDetail == null || bmsDetail.size() == 0) ? null : bmsDetail.get(0).getSysVoltage());
 		result.put("sysCurrent", (bmsDetail == null || bmsDetail.size() == 0) ? null : bmsDetail.get(0).getSysCurrent());
 		result.put("dod", (bmsDetail == null || bmsDetail.size() == 0) ? null : bmsDetail.get(0).getDod());
-		System.out.println("최종결과 : "+result.toString());
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
@@ -315,7 +312,6 @@ public class DeviceMonitoringController {
 		}
 		result.put("temperature", (pvDetail == null) || pvDetail.size() == 0 ? null : pvDetail.get(0).getTemperature());
 		result.put("totalPower", (pvDetail == null || pvDetail.size() == 0) ? null : pvDetail.get(0).getTotalGenPower());
-		System.out.println("최종결과 : "+result.toString());
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
