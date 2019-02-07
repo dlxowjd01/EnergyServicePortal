@@ -153,7 +153,6 @@ public class ExcelDownload {
 
 	// 엑셀 다운로드 시작 시 실행함수
 	public void open(HashMap resultObject) {
-		logger.debug("엑셀다운로드 시작");
 		String excelName = "";
 		try {
 			excelName = new String ( excel_title.getBytes("KSC5601"), "8859_1");
@@ -174,7 +173,6 @@ public class ExcelDownload {
 		try {
 //			SXSSFSheet sheet2 = workbook.createSheet();
 //			SXSSFSheet sheet3 = workbook.createSheet();
-			logger.debug("엑셀다운로드 끗");
 			workbook.write(response.getOutputStream());
 			workbook.dispose();
 			
