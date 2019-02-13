@@ -79,10 +79,10 @@ public class ApiController {
       Map<String, Object> parameter = Maps.newHashMap();
       parameter.put("siteId", siteId);
       parameter.put("deviceId", deviceId);
-      parameter.put("deviceType", deviceType);
-      parameter.put("stdDate", alarmTime);
-      parameter.put("alarmType", alarmType);
-      parameter.put("alarmMsg", alarmMsg);
+      parameter.put("deviceType", deviceType); // 1: PCS, 2: BMS, 3: IVT (PV), 4: AMI, 5: AMI Modem, 6: Enertalk
+      parameter.put("stdDate", alarmTime); // event time in millisecond
+      parameter.put("alarmType", alarmType); // 1: emergency, 2: warning
+      parameter.put("alarmMsg", alarmMsg); // alarm message
       parameter.put("alarmCfmYn", "N");
       parameter.put("alarmCfmDate", null);
       parameter.put("alarmCfmUid", "");

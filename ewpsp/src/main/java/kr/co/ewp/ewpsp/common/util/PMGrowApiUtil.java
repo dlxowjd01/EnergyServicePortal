@@ -39,10 +39,10 @@ public class PMGrowApiUtil {
     List<PcsEquipmentModel> returnPCS = null;
     try {
       StringBuffer url = new StringBuffer(host + "/v1/pcses/:pcsId/current".replace(":pcsId", equipmentId));
-      url.append("?equipmentId=").append(equipmentId);
+//      url.append("?equipmentId=").append(equipmentId);
       logger.debug("pmgrow api URL : "+ url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
-      logger.debug("result "+resultBody);
+//      logger.debug("result "+resultBody);
       returnPCS = JsonUtil.toObject(resultBody, new TypeReference<List<PcsEquipmentModel>>() {
       });
     } catch (NullPointerException e) {
@@ -75,10 +75,10 @@ public class PMGrowApiUtil {
     List<BmsEquipmentModel> returnBMS = null;
     try {
     	StringBuffer url = new StringBuffer(host + "/v1/bmses/:bmsId/current".replace(":bmsId", equipmentId));
-      url.append("?equipmentId=").append(equipmentId);
+//      url.append("?equipmentId=").append(equipmentId);
       logger.debug("pmgrow api URL : "+ url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
-      logger.debug("result "+resultBody);
+//      logger.debug("result "+resultBody);
       returnBMS = JsonUtil.toObject(resultBody, new TypeReference<List<BmsEquipmentModel>>() {
       });
     } catch (NullPointerException e) {
@@ -111,10 +111,10 @@ public class PMGrowApiUtil {
     List<PvEquipmentModel> returnPV = null;
     try {
     	StringBuffer url = new StringBuffer(host + "/v1/ivtes/:ivtId/current".replace(":ivtId", equipmentId));
-      url.append("?equipmentId=").append(equipmentId);
+//      url.append("?equipmentId=").append(equipmentId);
       logger.debug("pmgrow api URL : "+ url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
-      logger.debug("result "+resultBody);
+//      logger.debug("result "+resultBody);
       returnPV = JsonUtil.toObject(resultBody, new TypeReference<List<PvEquipmentModel>>() {
       });
     } catch (NullPointerException e) {

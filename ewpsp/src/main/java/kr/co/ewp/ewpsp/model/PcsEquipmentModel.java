@@ -6,30 +6,30 @@ public class PcsEquipmentModel {
 //  private Integer resultCnt;// /*** 12.12 이우람 수정-주석 ***/
   private String pcsId;// /*** 12.12 이우람 수정 ***/
   private String pcsName;// /*** 12.12 이우람 수정 ***/
-  private Date timestamp;// YYYYMMDDhhmmss /*** 12.12 이우람 수정 ***/
-  private Integer opMode;// /*** 12.12 이우람 수정 ***/
-  private String alarmMsg;//
+  private Date timestamp;// timestamp in millisecond /*** 12.12 이우람 수정 ***/
+  private Integer opMode;// 0:Scheduled, 1: Manual /*** 12.12 이우람 수정 ***/
+  private String alarmMsg;// Last alarm message
   private Integer acVoltage;// (V) /*** 12.12 이우람 수정 ***/
   private Integer acPower;// W) /*** 12.12 이우람 수정 ***/
   private Integer acCurrent;// (A) /*** 12.12 이우람 수정 ***/
   private Integer acFreq;// (Hz) /*** 12.12 이우람 수정 ***/
-  private Integer acSetPower;// (W) /*** 12.12 이우람 수정 ***/
-  private Integer acPf;// /*** 12.12 이우람 수정 ***/
+  private Integer acSetPower;// configured power level in AC (W) /*** 12.12 이우람 수정 ***/
+  private Integer acPf;// Power factor /*** 12.12 이우람 수정 ***/
   private Integer dcVoltage;// (V) /*** 12.12 이우람 수정 ***/
   private Integer dcPower;// (W) /*** 12.12 이우람 수정 ***/
   private Integer dcCurrent;// (A) /*** 12.12 이우람 수정 ***/
   private Integer dcFreq;// (Hz) /*** 12.12 이우람 수정 ***/
-  private Integer dcPf;// /*** 12.12 이우람 수정 ***/
-  private Integer dcSetPower;// (W) /*** 12.12 이우람 수정 ***/
+  private Integer dcPf;// Power factor /*** 12.12 이우람 수정 ***/
+  private Integer dcSetPower;// configured power level in DC (W) /*** 12.12 이우람 수정 ***/
 
   
   private Integer pcsStatus;//   0:OFF, 1:ON, 2:Fault, 3:Warning /*** 12.12 이우람 수정 ***/
   private Integer remoteMode;//  0:Local, 1:Remote /*** 12.12 이우람 수정 ***/
   private Integer pcsCommand;//  0:Stop, 1:Run /*** 12.12 이우람 수정 ***/
-  private Integer todayDEnergy;// (Wh)  /*** 12.12 이우람 수정 ***/
-  private Integer todayCEnergy;// (Wh)  /*** 12.12 이우람 수정 ***/
-  private Integer totalDEnergy;// (Wh)  /*** 12.12 이우람 수정 ***/
-  private Integer totalCEnerge;// (Wh)  /*** 12.12 이우람 수정 ***/
+  private Integer todayDEnergy;// Total energy discharged today (Wh)  /*** 12.12 이우람 수정 ***/
+  private Integer todayCEnergy;// Total energy charged today (Wh)  /*** 12.12 이우람 수정 ***/
+  private Integer totalDEnergy;// Accumulated discharged energy (Wh)  /*** 12.12 이우람 수정 ***/
+  private Integer totalCEnerge;// Accumulated charged energy (Wh)  /*** 12.12 이우람 수정 ***/
 
 
   
