@@ -6,12 +6,12 @@ public class PvEquipmentModel {
 //  private String resultCnt;// /*** 12.12 이우람 수정-주석 ***/
   private String ivtId;// /*** 12.12 이우람 수정 ***/
   private String ivtName;// /*** 12.12 이우람 수정 ***/
-  private Date timestamp;// YYYYMMDDhhmmss /*** 12.12 이우람 수정 ***/
-  private Integer status;// /*** 12.12 이우람 수정 ***/
-  private String alarmMsg;//
+  private Date timestamp;// timestamp in millisecond /*** 12.12 이우람 수정 ***/
+  private Integer status;// 0: Stop, 1: Run, 2: Fault, 3: Warning /*** 12.12 이우람 수정 ***/
+  private String alarmMsg;// Last alarm message
   private Integer temperature;// (℃) /*** 12.12 이우람 수정 ***/
-  private Integer totalGenPower;// (Wh) /*** 12.12 이우람 수정 ***/
-  private Integer todayGenPower;// (Wh) /*** 12.12 이우람 추가 ***/
+  private Integer totalGenPower;// Today generated energy (Wh) /*** 12.12 이우람 수정 ***/
+  private Integer todayGenPower;// Accumulated generated energy (Wh) /*** 12.12 이우람 추가 ***/
   
   private Integer acVoltage;// (V) /*** 12.12 이우람 추가 ***/
   private Integer acPower;// (W) /*** 12.12 이우람 추가 ***/

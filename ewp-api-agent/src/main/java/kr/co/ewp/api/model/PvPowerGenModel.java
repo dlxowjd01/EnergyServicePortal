@@ -6,7 +6,7 @@ import java.util.List;
 public class PvPowerGenModel {
 //  private String resultCnt;// /*** 12.12 이우람 수정-주석 ***/
   private String ivtId;// /*** 12.12 이우람 수정 ***/
-  private Integer totalGenEnergy;; /*** 12.12 이우람 추가 ***/
+  private Integer totalGenEnergy; /*** 12.12 이우람 추가 ***/
   private Date startDt;// YYYYMMDD /*** 12.12 이우람 수정 ***/
   private Date endDt;// YYYYMMDD /*** 12.12 이우람 수정 ***/
   private String intervalType;// /*** 12.12 이우람 수정 ***/

@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ChargingDischargingScheduleItemModel { /*** 12.12 이우람 추가 ***/
   private Date timestamp;// timestamp start timestamp
-  private Integer scheduledCEnergy;// number usage amount (Wh)
-  private Integer scheduledDEnergy;// number usage amount (Wh)
+  private Integer scheduledCEnergy;// target for charging (Wh)
+  private Integer scheduledDEnergy;// target for discharging (Wh)
 
   public Date getTimestamp() {
     return timestamp;

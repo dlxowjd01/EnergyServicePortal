@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PvPowerGenModelItemModel { /*** 12.12 이우람 추가 ***/
-  private Date timestamp;// timestamp start timestamp
-  private Integer genEnergy;// number usage amount (Wh)
-  private Integer temperature;// number usage amount (Wh)
+  private Date timestamp;// timestamp in millisecond
+  private Integer genEnergy;// total generated energy (Wh)
+  private Integer temperature;// temperature (℃)
 
   public Date getTimestamp() {
     return timestamp;

@@ -6,9 +6,9 @@ public class BmsEquipmentModel {
 //  private Integer resultCnt;// /*** 12.12 이우람 수정-주석 ***/
   private String bmsId;// /*** 12.12 이우람 수정 ***/
   private String bmsName;// /*** 12.12 이우람 수정 ***/
-  private Date timestamp;// YYYYMMDDhhmmss /*** 12.12 이우람 수정 ***/
-  private Integer sysMode;// /*** 12.12 이우람 수정 ***/
-  private String alarmMsg;// /*** 12.12 이우람 추가 ***/
+  private Date timestamp;// timestamp in millisecond /*** 12.12 이우람 수정 ***/
+  private Integer sysMode;// 0: Idle, 1: Charge, 2: Discharge, 3: MainS/W on/off, 4: Off-line, 5: Ready, 6: Fault, 7: Warning /*** 12.12 이우람 수정 ***/
+  private String alarmMsg;// Last alarm message /*** 12.12 이우람 추가 ***/
 //  private String socMax;// /*** 12.12 이우람 수정-주석 ***/
 //  private String socMin;// /*** 12.12 이우람 수정-주석 ***/
   private Integer sysSoc;// (%) /*** 12.12 이우람 수정 ***/
