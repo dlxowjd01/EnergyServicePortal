@@ -71,7 +71,7 @@ public class DeviceController {
 //        default:
 //          continue;
 //        }
-        if(deviceType=="4" || deviceType=="6" || deviceType=="7" || deviceType=="8"){
+        if("4".equals(deviceType) || "6".equals(deviceType) || "7".equals(deviceType) || "8".equals(deviceType)){
         	DeviceModel deviceModel = EnertalkApiUtil.getDevice(device.getDeviceId(), prettyLog);
         	
         	DeviceIoe deviceIoe = new DeviceIoe();
@@ -161,21 +161,27 @@ public class DeviceController {
   public void device02(String siteId, String deviceId, PrettyLog prettyLog) {
 	  System.out.println("pcs 장치");
     prettyLog.title("장치모니터링 > PCS 운전상태 > PCS 장치");
+    System.out.println("pcs 장치 111");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
+    System.out.println("pcs 장치 222   ---> "+deviceList.size());
     prettyLog.append("DEVICE_CNT", deviceList.size());
     int resultCnt = 0;
+    System.out.println("pcs 장치 333");
     List<DevicePcs> deivcePcsList = Lists.newArrayList();
     Map<String, String> localEmsAddrMap = Maps.newHashMap();
+    System.out.println("pcs 장치 444");
     for (Device device : deviceList) {
+    	System.out.println("pcs 장치 555");
       try {
         String deviceType = device.getDeviceType();
+        System.out.println("디바이스 타입은? "+deviceType);
 //        switch (deviceType) {
 //        case "1": // PCS
 //          break;
 //        default:
 //          continue;
 //        }
-        if(deviceType == "1"){
+        if("1".equals(deviceType)){
         	System.out.println("pcs 장치 시작");
         	String _siteId = device.getSiteId();
         	if (!localEmsAddrMap.containsKey(_siteId)) {
@@ -254,22 +260,28 @@ public class DeviceController {
    * @param prettyLog
    */
   public void device03(String siteId, String deviceId, PrettyLog prettyLog) {
-	  System.out.println("pcs 장치");
+	  System.out.println("bms 장치");
     prettyLog.title("장치모니터링 > BMS 운전상태 > BMS 장치");
+    System.out.println("bms 장치 111");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
+    System.out.println("bms 장치 222   ---> "+deviceList.size());
     int resultCnt = 0;
     List<DeviceBms> deivceBmsList = Lists.newArrayList();
+    System.out.println("bms 장치 333");
     Map<String, String> localEmsAddrMap = Maps.newHashMap();
+    System.out.println("bms 장치 444");
     for (Device device : deviceList) {
+    	System.out.println("bms 장치 555");
       try {
         String deviceType = device.getDeviceType();
+        System.out.println("디바이스 타입은? "+deviceType);
 //        switch (deviceType) {
 //        case "2": // BMS
 //          break;
 //        default:
 //          continue;
 //        }
-        if(deviceType == "2"){
+        if("2".equals(deviceType)){
         	System.out.println("bms 장치 시작");
         	String _siteId = device.getSiteId();
         	if (!localEmsAddrMap.containsKey(_siteId)) {
@@ -349,7 +361,7 @@ public class DeviceController {
 //        default:
 //          continue;
 //        }
-        if(deviceType == "3" || deviceType == "5"){
+        if("3".equals(deviceType) || "5".equals(deviceType)){
         	String _siteId = device.getSiteId();
         	if (!localEmsAddrMap.containsKey(_siteId)) {
         		Site site = siteService.getSite(_siteId, prettyLog);
