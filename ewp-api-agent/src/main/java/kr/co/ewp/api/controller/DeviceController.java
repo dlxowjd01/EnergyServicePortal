@@ -71,7 +71,7 @@ public class DeviceController {
 //        default:
 //          continue;
 //        }
-        if(deviceType=="8"){
+        if(deviceType=="4" || deviceType=="6" || deviceType=="7" || deviceType=="8"){
         	DeviceModel deviceModel = EnertalkApiUtil.getDevice(device.getDeviceId(), prettyLog);
         	
         	DeviceIoe deviceIoe = new DeviceIoe();
@@ -159,6 +159,7 @@ public class DeviceController {
    * @param prettyLog
    */
   public void device02(String siteId, String deviceId, PrettyLog prettyLog) {
+	  System.out.println("pcs 장치");
     prettyLog.title("장치모니터링 > PCS 운전상태 > PCS 장치");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
     prettyLog.append("DEVICE_CNT", deviceList.size());
@@ -175,6 +176,7 @@ public class DeviceController {
 //          continue;
 //        }
         if(deviceType == "1"){
+        	System.out.println("pcs 장치 시작");
         	String _siteId = device.getSiteId();
         	if (!localEmsAddrMap.containsKey(_siteId)) {
         		Site site = siteService.getSite(_siteId, prettyLog);
@@ -252,6 +254,7 @@ public class DeviceController {
    * @param prettyLog
    */
   public void device03(String siteId, String deviceId, PrettyLog prettyLog) {
+	  System.out.println("pcs 장치");
     prettyLog.title("장치모니터링 > BMS 운전상태 > BMS 장치");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
     int resultCnt = 0;
@@ -267,6 +270,7 @@ public class DeviceController {
 //          continue;
 //        }
         if(deviceType == "2"){
+        	System.out.println("bms 장치 시작");
         	String _siteId = device.getSiteId();
         	if (!localEmsAddrMap.containsKey(_siteId)) {
         		Site site = siteService.getSite(_siteId, prettyLog);
@@ -345,7 +349,7 @@ public class DeviceController {
 //        default:
 //          continue;
 //        }
-        if(deviceType == "5"){
+        if(deviceType == "3" || deviceType == "5"){
         	String _siteId = device.getSiteId();
         	if (!localEmsAddrMap.containsKey(_siteId)) {
         		Site site = siteService.getSite(_siteId, prettyLog);
