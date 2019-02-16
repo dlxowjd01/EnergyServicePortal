@@ -9,7 +9,7 @@ public class PcsEquipmentModel {
 //  private Integer resultCnt;// /*** 12.12 이우람 수정-주석 ***/
   private String pcsId;// /*** 12.12 이우람 수정 ***/
   private String pcsName;// /*** 12.12 이우람 수정 ***/
-  private Date timestamp;// timestamp in millisecond /*** 12.12 이우람 수정 ***/
+//  private Date timestamp;// timestamp in millisecond /*** 12.12 이우람 수정 ***/
   private Integer opMode;// 0:Scheduled, 1: Manual /*** 12.12 이우람 수정 ***/
   private String alarmMsg;// Last alarm message
   private Integer acVoltage;// (V) /*** 12.12 이우람 수정 ***/
@@ -53,13 +53,13 @@ public class PcsEquipmentModel {
 		this.pcsName = pcsName;
 	}
 	
-	public Date getTimestamp() {
-		return timestamp;
-	}
-	
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
-	}
+//	public Date getTimestamp() {
+//		return timestamp;
+//	}
+//	
+//	public void setTimestamp(Date timestamp) {
+//		this.timestamp = timestamp;
+//	}
 	
 	public Integer getOpMode() {
 		return opMode;

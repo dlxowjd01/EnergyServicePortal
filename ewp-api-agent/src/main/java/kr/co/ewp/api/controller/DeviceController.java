@@ -214,7 +214,7 @@ public class DeviceController {
         			devicePcs.setDcVoltage(pcsEquipmentModel.getDcVoltage()); /*** 12.12 이우람 수정 ***/
         			devicePcs.setDeviceName(pcsEquipmentModel.getPcsName()); /*** 12.12 이우람 수정 ***/
         			devicePcs.setDeviceStat(Integer.toString(pcsEquipmentModel.getOpMode())); /*** 12.12 이우람 수정 ***/
-        			devicePcs.setStdDate(pcsEquipmentModel.getTimestamp()); /*** 12.12 이우람 수정 ***/
+//        			devicePcs.setStdDate(pcsEquipmentModel.getTimestamp()); /*** 12.12 이우람 수정 ***/
         			
         			devicePcs.setPcsStatus(Integer.toString(pcsEquipmentModel.getPcsStatus())); /*** 12.12 이우람 수정 ***/
         			devicePcs.setRemoteMode(Integer.toString(pcsEquipmentModel.getRemoteMode())); /*** 12.12 이우람 수정 ***/
