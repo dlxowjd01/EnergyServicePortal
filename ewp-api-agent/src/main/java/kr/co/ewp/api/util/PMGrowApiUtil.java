@@ -51,8 +51,10 @@ public class PMGrowApiUtil {
 		  url.append("&intervalType=").append(intervalType);
 		  url.append("&interval=").append(interval);
 		  
+		  System.out.println(equipmentId+" ESS충방전량 조회 url  ==>  "+url);
 		  prettyLog.append("URL", url);
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
+		  System.out.println(equipmentId+" ESS충방전량 조회 resultBody  ==>  "+resultBody);
 		  return JsonUtil.toObject(resultBody, ChargingDischarging.class);
 	  } catch (NullPointerException e) {
 	  	  logger.error("error is : "+e.toString());
@@ -90,8 +92,10 @@ public class PMGrowApiUtil {
 		  url.append("&intervalType=").append(intervalType);
 		  url.append("&interval=").append(interval);
 		  
+		  System.out.println(equipmentId+" ESS충방전계획량 조회 url  ==>  "+url);
 		  prettyLog.append("URL", url);
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
+		  System.out.println(equipmentId+" ESS충방전계획량 조회 resultBody  ==>  "+resultBody);
 		  return JsonUtil.toObject(resultBody, ChargingDischargingSchedule.class);
 	  } catch (NullPointerException e) {
 	  	  logger.error("error is : "+e.toString());
@@ -129,8 +133,10 @@ public class PMGrowApiUtil {
 		  url.append("&intervalType=").append(intervalType);
 		  url.append("&interval=").append(interval);
 		  
+		  System.out.println(equipmentId+" PV 발전량 조회 url  ==>  "+url);
 		  prettyLog.append("URL", url);
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
+		  System.out.println(equipmentId+" PV 발전량 조회 resultBody  ==>  "+resultBody);
 		  return JsonUtil.toObject(resultBody, PvPowerGenModel.class);
 	  } catch (NullPointerException e) {
 	  	  logger.error("error is : "+e.toString());
