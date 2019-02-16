@@ -174,7 +174,7 @@ public class DeviceController {
     	System.out.println("pcs 장치 555");
       try {
         String deviceType = device.getDeviceType();
-        System.out.println("디바이스 타입은? "+deviceType);
+        System.out.println("디바이스 타입은? "+deviceType+", "+device.getDeviceId());
 //        switch (deviceType) {
 //        case "1": // PCS
 //          break;
@@ -274,7 +274,7 @@ public class DeviceController {
     	System.out.println("bms 장치 555");
       try {
         String deviceType = device.getDeviceType();
-        System.out.println("디바이스 타입은? "+deviceType);
+        System.out.println("디바이스 타입은? "+deviceType+", "+device.getDeviceId());
 //        switch (deviceType) {
 //        case "2": // BMS
 //          break;
@@ -362,6 +362,7 @@ public class DeviceController {
 //          continue;
 //        }
         if("3".equals(deviceType) || "5".equals(deviceType)){
+        	System.out.println("디바이스 타입은? "+deviceType+", "+device.getDeviceId());
         	String _siteId = device.getSiteId();
         	if (!localEmsAddrMap.containsKey(_siteId)) {
         		Site site = siteService.getSite(_siteId, prettyLog);

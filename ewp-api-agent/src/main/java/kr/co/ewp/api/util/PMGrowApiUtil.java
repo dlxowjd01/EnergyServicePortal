@@ -205,7 +205,7 @@ public class PMGrowApiUtil {
 	      System.out.println("url =====> "+url);
 	      prettyLog.append("URL", url);
 	      resultBody = HttpUtil.get(url.toString(), getHeaders());
-	      System.out.println("resultBody =====> "+resultBody);
+	      System.out.println("pcs resultBody =====> "+resultBody);
 	      return JsonUtil.toObject(resultBody, new TypeReference<List<PcsEquipmentModel>>() {
 	      });
 	    } catch (NullPointerException e) {
@@ -242,7 +242,7 @@ public class PMGrowApiUtil {
 		  System.out.println("url =====> "+url);
 		  prettyLog.append("URL", url);
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
-		  System.out.println("resultBody =====> "+resultBody);
+		  System.out.println("bms resultBody =====> "+resultBody);
 		  return JsonUtil.toObject(resultBody, new TypeReference<List<BmsEquipmentModel>>() {
 		  });
 	  } catch (NullPointerException e) {
@@ -275,13 +275,15 @@ public class PMGrowApiUtil {
 	  String resultBody = null;
 	  try {
 		  StringBuffer url = new StringBuffer(host + "/v1/ivtes/:ivtId/current".replace(":ivtId", equipmentId));
+		  System.out.println("url =====> "+url);
 		  prettyLog.append("URL", url);
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
+		  System.out.println("pv resultBody =====> "+resultBody);
 		  return JsonUtil.toObject(resultBody, new TypeReference<List<PvEquipmentModel>>() {
 		  });
 	  } catch (NullPointerException e) {
-	  	  logger.error("error is : "+e.toString());
-	  	  throw e;
+		  logger.error("error is : "+e.toString());
+		  throw e;
 	  } catch (Exception e) {
 		  prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
 		  throw e;
