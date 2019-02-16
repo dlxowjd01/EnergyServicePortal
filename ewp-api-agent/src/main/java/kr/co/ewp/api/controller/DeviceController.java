@@ -192,10 +192,10 @@ public class DeviceController {
         		}
         		localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
         	}
-        	List<PcsEquipmentModel> pcsEquipmentList = PMGrowApiUtil.getPcsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
-        	if(pcsEquipmentList != null){
-        		prettyLog.append("ITEM_SIZE", pcsEquipmentList.size());
-        		for (PcsEquipmentModel pcsEquipmentModel : pcsEquipmentList) {
+        	PcsEquipmentModel pcsEquipmentModel = PMGrowApiUtil.getPcsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+        	if(pcsEquipmentModel != null){
+        		prettyLog.append("ITEM_SIZE", pcsEquipmentModel);
+//        		for (PcsEquipmentModel pcsEquipmentModel : pcsEquipmentList) {
         			DevicePcs devicePcs = new DevicePcs();
         			devicePcs.setSiteId(device.getSiteId());
         			devicePcs.setDeviceId(device.getDeviceId());
@@ -230,7 +230,7 @@ public class DeviceController {
         				resultCnt += deviceService.addDeivcePcsList(deivcePcsList, null);
         				deivcePcsList = Lists.newArrayList();
         			}
-        		}
+//        		}
         	}
         }
       } catch (NullPointerException e) {
@@ -346,11 +346,16 @@ public class DeviceController {
    * @param prettyLog
    */
   public void device04(String siteId, String deviceId, PrettyLog prettyLog) {
+	  System.out.println("pv 장치");
     prettyLog.title("장치모니터링 > PV 운전상태 > PV 장치");
+    System.out.println("pv 장치 111");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
+    System.out.println("pv 장치 222   ---> "+deviceList.size());
     int resultCnt = 0;
     List<DevicePv> deivcePvList = Lists.newArrayList();
+    System.out.println("pv 장치 333");
     Map<String, String> localEmsAddrMap = Maps.newHashMap();
+    System.out.println("pv 장치 444");
     for (Device device : deviceList) {
       try {
         String deviceType = device.getDeviceType();

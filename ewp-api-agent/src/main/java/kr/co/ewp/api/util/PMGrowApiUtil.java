@@ -196,7 +196,7 @@ public class PMGrowApiUtil {
    * @param prettyLog
    * @return
    */
-  public static List<PcsEquipmentModel> getPcsEquipmentList(String host, String equipmentId, PrettyLog prettyLog) {
+  public static PcsEquipmentModel getPcsEquipmentList(String host, String equipmentId, PrettyLog prettyLog) {
 	    prettyLog.start("PMGrowApiUtil.getPcsEquipmentList", "ERROR");
 	    System.out.println("pcs 운전상태 조회");
 	    String resultBody = null;
@@ -206,8 +206,7 @@ public class PMGrowApiUtil {
 	      prettyLog.append("URL", url);
 	      resultBody = HttpUtil.get(url.toString(), getHeaders());
 	      System.out.println("pcs resultBody =====> "+resultBody);
-	      return JsonUtil.toObject(resultBody, new TypeReference<List<PcsEquipmentModel>>() {
-	      });
+	      return JsonUtil.toObject(resultBody, PcsEquipmentModel.class);
 	    } catch (NullPointerException e) {
 		  	  logger.error("error is : "+e.toString());
 		  	  throw e;
