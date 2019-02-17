@@ -3,6 +3,9 @@ package kr.co.ewp.api.model;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PvPowerGenModel {
 //  private String resultCnt;// /*** 12.12 이우람 수정-주석 ***/
   private String ivtId;// /*** 12.12 이우람 수정 ***/
