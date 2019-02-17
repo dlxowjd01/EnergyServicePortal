@@ -786,8 +786,11 @@ public class EnergyController {
    * @param prettyLog
    */
   public void energy08(String siteId, String deviceId, Date begin, Date end, PrettyLog prettyLog) {
-    prettyLog.title("에너지모니터링 > PV 발전량 조회 > PV 발전량");
+	  System.out.println("PV 발전량");
+	  prettyLog.title("에너지모니터링 > PV 발전량 조회 > PV 발전량");
+	  System.out.println("PV 발전량 111");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
+    System.out.println("PV 발전량 222");
     if (end == null) {
       end = new Date();
     }
@@ -795,6 +798,7 @@ public class EnergyController {
     Map<String, String> localEmsAddrMap = Maps.newHashMap();
     int resultCnt = 0;
     for (Device device : deviceList) {
+    	System.out.println("PV 발전량 333    ------>  "+device.getDeviceId()+", "+device.getDeviceName());
       Date _begin = null;
       String _deviceId = device.getDeviceId();
       String _siteId = device.getSiteId();
@@ -834,6 +838,7 @@ public class EnergyController {
         try {
           String deviceType = device.getDeviceType();
           if(deviceType != null) {
+        	  System.out.println("디바이스 타입은? "+deviceType+", "+device.getDeviceId()+", "+device.getInstType());
         	  if ("1".equals(device.getInstType())) { // 에너톡
 //        		  switch (deviceType) {
 ////              case "3":// PV
