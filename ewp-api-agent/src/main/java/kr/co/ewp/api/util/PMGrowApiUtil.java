@@ -324,8 +324,8 @@ public class PMGrowApiUtil {
   private static HttpHeaders getHeaders() {
     HttpHeaders headers = new HttpHeaders();
 //    headers.set("authorization", "Bearer  " + API_ACCESS_TOKEN);
-    headers.set("Authorization", "Basic  " + "bG9jYWwtZW1zOmxvY2FsLWVtcw==");
-    headers.set("accept-version", API_VERSION);
+//    headers.set("Authorization", "Basic  " + "bG9jYWwtZW1zOmxvY2FsLWVtcw==");
+//    headers.set("accept-version", API_VERSION);
     return headers;
   }
 }
