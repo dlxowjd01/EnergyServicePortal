@@ -847,7 +847,7 @@ public class EnergyController {
 //        		  default:
 //        			  continue;
 //        		  }
-        		  if(deviceType == "5"){
+        		  if("5".equals(deviceType)){
         			  
         			  UsageModel usagePeriodic = EnertalkApiUtil.getUsagePeriodicByDeviceId(_deviceId, Period._15min, beginDate, endDate, TimeType.past, UsageType.positiveEnergy, prettyLog);
         			  if(usagePeriodic !=null){
@@ -867,7 +867,9 @@ public class EnergyController {
         			  }
         		  }
         	  } else { // localems
-        		  if(deviceType == "3"){
+        		  System.out.println("localems pv1");
+        		  if("3".equals(deviceType)){
+        			  System.out.println("localems pv2");
         			  if (!localEmsAddrMap.containsKey(_siteId)) {
         				  Site site = siteService.getSite(_siteId, prettyLog);
         				  if (site == null) {
@@ -876,6 +878,7 @@ public class EnergyController {
         				  }
         				  localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
         			  }
+        			  System.out.println("localems pv3");
         			  PvPowerGenModel resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate, endDate, "MI", "15", prettyLog);
 //          List<PvPowerGenModel> resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, DateUtil.dateToString(beginDate, "yyyyMMdd"),
 //        		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);

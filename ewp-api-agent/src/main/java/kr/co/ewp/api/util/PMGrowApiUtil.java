@@ -123,6 +123,7 @@ public class PMGrowApiUtil {
    * @return
    */
   public static PvPowerGenModel getPvPowerGenList(String host, String equipmentId, Date startDt, Date endDt, String intervalType, String interval, PrettyLog prettyLog) {
+	  System.out.println("localems pv4444");
 	  prettyLog.start("PMGrowApiUtil.getPvPowerGenList", "ERROR");
 	  String resultBody = null;
 	  try {
