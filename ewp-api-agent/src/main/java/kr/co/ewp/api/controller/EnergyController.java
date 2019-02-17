@@ -860,7 +860,9 @@ public class EnergyController {
         					  pvGentList.add(pvGen);
         				  }
         			  }
-        		  } else { // localems
+        		  }
+        	  } else { // localems
+        		  if(deviceType == "3"){
         			  if (!localEmsAddrMap.containsKey(_siteId)) {
         				  Site site = siteService.getSite(_siteId, prettyLog);
         				  if (site == null) {
@@ -870,8 +872,8 @@ public class EnergyController {
         				  localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
         			  }
         			  PvPowerGenModel resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate, endDate, "MI", "15", prettyLog);
-//              List<PvPowerGenModel> resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, DateUtil.dateToString(beginDate, "yyyyMMdd"),
-//            		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
+//          List<PvPowerGenModel> resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, DateUtil.dateToString(beginDate, "yyyyMMdd"),
+//        		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
         			  if(resultList != null){
         				  prettyLog.append("ITEM_SIZE", resultList.getItems().size());
         				  for (PvPowerGenModelItemModel item : resultList.getItems()) {
@@ -886,7 +888,7 @@ public class EnergyController {
         				  }
         			  }
         		  }
-        	  }
+    		  }
           }
         } catch (NullPointerException e) {
         	logger.error("error is : "+e.toString());
