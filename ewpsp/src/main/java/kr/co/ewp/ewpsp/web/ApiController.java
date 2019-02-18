@@ -70,7 +70,8 @@ public class ApiController {
       @RequestParam Integer deviceType, // 장치구분(1:PCS,2:BMS,3:PV,4:부하측정기기,5:PV모니터링기기,6:ESS모니터링기기) /*** 12.13 이우람 수정 ***/
       @RequestParam Date alarmTime, // 알람발생일시(형식:YYYYMMDDhhmmss) -> 기준일시에 저장 /*** 12.13 이우람 수정 ***/
       @RequestParam Integer alarmType, // 알람구분(1:비상,2:주의) /*** 12.13 이우람 수정 ***/
-      @RequestParam(defaultValue = "") String alarmMsg // 알람메시지 (파라메터는 필수이고 값은 있는 경우에만 세팅)
+      @RequestParam(defaultValue = "") String alarmMsg, // 알람메시지 (파라메터는 필수이고 값은 있는 경우에만 세팅)
+      @RequestParam(required = false, defaultValue = "") String alarmCode // 알람메시지 (파라메터는 필수이고 값은 있는 경우에만 세팅)
   ) {
     try {
       Map<String, String> device = deviceMonitoringService.getDevice(deviceId);
@@ -81,6 +82,7 @@ public class ApiController {
       parameter.put("deviceId", deviceId);
       parameter.put("deviceType", deviceType); // 1: PCS, 2: BMS, 3: IVT (PV), 4: AMI, 5: AMI Modem, 6: Enertalk
       parameter.put("stdDate", alarmTime); // event time in millisecond
+      parameter.put("alarmCode", alarmCode);
       parameter.put("alarmType", alarmType); // 1: emergency, 2: warning
       parameter.put("alarmMsg", alarmMsg); // alarm message
       parameter.put("alarmCfmYn", "N");
