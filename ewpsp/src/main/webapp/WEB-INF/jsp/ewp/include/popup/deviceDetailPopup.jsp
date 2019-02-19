@@ -81,7 +81,7 @@
         	</dl>
         	<dl>
         		<dt>Device Group</dt>
-				<dd>_1</dd>
+				<dd></dd>
         	</dl>
         	<dl>
         		<dt>Site Name</dt>

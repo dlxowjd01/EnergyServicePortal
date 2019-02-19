@@ -159,7 +159,7 @@
 		pcsStr += '<span class="pcs"></span>'+(  (pcsDetail.device_name == "" || pcsDetail.device_name == null) ? "-" : pcsDetail.device_name  );
 		pcsStr += '<p>'+(new Date()).format("yyyy-MM-dd HH:mm:ss")+'</p>';
 		pcsStr += '</h2>';
-		pcsStr += '<a href="#;" id="closePCSDetailBtnX" onclick="stopRealTime(\'pcs\');>닫기</a>';
+		pcsStr += '<a href="#;" id="closePCSDetailBtnX" onclick="stopRealTime(\'pcs\');">닫기</a>';
 		pcsStr += '</div>';
 		pcsStr += '<div class="ltop">';
 		pcsStr += '<dl>';
@@ -295,7 +295,7 @@
 		bmsStr += '<span class="bms"></span>'+(  (bmsDetail.device_name == "" || bmsDetail.device_name == null) ? "-" : bmsDetail.device_name  );
 		bmsStr += '<p>'+(new Date()).format("yyyy-MM-dd HH:mm:ss")+'</p>';
 		bmsStr += '</h2>';
-		bmsStr += '<a href="#;" id="closeBMSDetailBtnX">닫기</a>';
+		bmsStr += '<a href="#;" id="closeBMSDetailBtnX" onclick="stopRealTime(\'bms\');">닫기</a>';
 		bmsStr += '</div>';
 		bmsStr += '<div class="ltop">';
 		bmsStr += '<dl>';
