@@ -130,9 +130,9 @@ public class ApiController {
 				Map<String, Object> devices = new HashMap<String, Object>();
 				devices = (Map<String, Object>) deviceList.get(i);
 				String deviceId = (String) devices.get("device_id");
-				List<BmsEquipmentModel> bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, deviceId);
-				if(bmsDetail != null && bmsDetail.size() > 0) {
-					Integer sysSoc = bmsDetail.get(0).getSysSoc();
+				BmsEquipmentModel bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, deviceId);
+				if(bmsDetail != null) {
+					Integer sysSoc = bmsDetail.getSysSoc();
 //					int soc = Integer.parseInt(sysSoc);
 					totalSoc = totalSoc+sysSoc;
 					socCnt = socCnt+1;
