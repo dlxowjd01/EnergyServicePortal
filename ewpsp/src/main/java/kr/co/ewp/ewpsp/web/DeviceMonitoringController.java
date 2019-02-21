@@ -140,6 +140,7 @@ public class DeviceMonitoringController {
 		if(pcsDetail == null) {
 			result.put("pcsStatus", null);
 			result.put("pcsStatusNm", null);
+			result.put("alarmMsg", null);
 		} else {
 			String statusNm = "";
 			if("0".equals(pcsDetail.getPcsStatus())) {
@@ -153,6 +154,7 @@ public class DeviceMonitoringController {
 			}
 			result.put("pcsStatus", pcsDetail.getPcsStatus());
 			result.put("pcsStatusNm", statusNm);
+			result.put("alarmMsg", pcsDetail.getAlarmMsg());
 		}
 		result.put("acVoltage", (pcsDetail == null) ? -1 : pcsDetail.getAcVoltage());
 		result.put("acPower", (pcsDetail == null) ?  -1 : pcsDetail.getAcPower());
@@ -227,6 +229,7 @@ public class DeviceMonitoringController {
 		if(bmsDetail == null) {
 			result.put("bmsStatus", null);
 			result.put("bmsStatusNm", null);
+			result.put("alarmMsg", null);
 		} else {
 			String statusNm = "";
 			if("0".equals(bmsDetail.getSysMode())) {
@@ -244,6 +247,7 @@ public class DeviceMonitoringController {
 			}
 			result.put("bmsStatus", bmsDetail.getSysMode());
 			result.put("bmsStatusNm", statusNm);
+			result.put("alarmMsg", bmsDetail.getAlarmMsg());
 		}
 		result.put("sysSoc", (bmsDetail == null) ? -1 : bmsDetail.getSysSoc());
 		result.put("sysSoh", (bmsDetail == null) ? -1 : bmsDetail.getSysSoh());
@@ -304,6 +308,7 @@ public class DeviceMonitoringController {
 		if(pvDetail == null) {
 			result.put("pvStatus", null);
 			result.put("pvStatusNm", null);
+			result.put("alarmMsg", null);
 		} else {
 			String statusNm = "";
 			if(pvDetail.getStatus() == 0) {
@@ -317,6 +322,7 @@ public class DeviceMonitoringController {
 			}
 			result.put("pvStatus", pvDetail.getStatus());
 			result.put("pvStatusNm", statusNm);
+			result.put("alarmMsg", pvDetail.getAlarmMsg());
 		}
 		result.put("temperature", (pvDetail == null) ? -1 : pvDetail.getTemperature());
 		result.put("totalPower", (pvDetail == null) ? -1 : pvDetail.getTotalGenPower());

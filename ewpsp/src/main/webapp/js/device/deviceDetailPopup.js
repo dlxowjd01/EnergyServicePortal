@@ -190,7 +190,7 @@
 		pcsStr += '</div>';
 		pcsStr += '<div class="lstat">';
 		pcsStr += '<div class="dt">알람 메시지</div>';
-		pcsStr += '<div class="dd">';
+		pcsStr += '<div class="dd"><span class="run">'+(  (pcsDetail.alarmMsg == "" || pcsDetail.alarmMsg == null) ? "-" : pcsDetail.alarmMsg  )+'</span></div>';
 		pcsStr += '</div>';
 		pcsStr += '</div>';
 		pcsStr += '<h2 class="tbl_tit">AC 출력</h2>';
@@ -326,7 +326,7 @@
 		bmsStr += '</div>';
 		bmsStr += '<div class="lstat">';
 		bmsStr += '<div class="dt">알람 메시지</div>';
-		bmsStr += '<div class="dd"><span class="run">'+(  (bmsDetail.alarm_msg == "" || bmsDetail.alarm_msg == null) ? "-" : bmsDetail.alarm_msg  )+'</span></div>';
+		bmsStr += '<div class="dd"><span class="run">'+(  (bmsDetail.alarmMsg == "" || bmsDetail.alarmMsg == null) ? "-" : bmsDetail.alarmMsg  )+'</span></div>';
 		bmsStr += '</div>';
 		bmsStr += '</div>';
 		bmsStr += '<h2 class="tbl_tit">충/방전 상태: <span style="color:#438fd7;font-weight:normal;"></span></h2>';
@@ -437,7 +437,7 @@
 		pvStr += '</div>';
 		pvStr += '<div class="lstat">';
 		pvStr += '<div class="dt">알람 메시지</div>';
-		pvStr += '<div class="dd"><span class="run">'+(  (pvDetail.alarm_msg == "" || pvDetail.alarm_msg == null) ? "-" : pvDetail.alarm_msg  )+'</span></div>';
+		pvStr += '<div class="dd"><span class="run">'+(  (pvDetail.alarmMsg == "" || pvDetail.alarmMsg == null) ? "-" : pvDetail.alarmMsg  )+'</span></div>';
 		pvStr += '</div>';
 		pvStr += '</div>';
 		pvStr += '<div class="ltbl mt30">';
