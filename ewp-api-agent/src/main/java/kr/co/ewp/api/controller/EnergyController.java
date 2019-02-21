@@ -907,6 +907,7 @@ public class EnergyController {
           prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
           logger.error("energy08-ERROR", e);
         }
+        System.out.println("                                   pv 발전량 최종 db insert될 목록  : "+pvGentList);
         resultCnt += pvService.addOrModPvGenList(pvGentList, null);
       }
     }

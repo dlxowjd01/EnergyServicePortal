@@ -31,12 +31,15 @@ public class PvService {
   public int addOrModPvGenList(List<PvGen> pvGenList, PrettyLog prettyLog) {
     int result = 0;
     for (PvGen pvGen : pvGenList) {
+    	System.out.println("pvgenService "+pvGen.getDeviceId());
       // BATCH INSERT
       // pvGenDao.insert(pvGen, null);
       PvGen selectOneByUnique = pvGenDao.selectOneByUnique(pvGen.getSiteId(), pvGen.getDeviceId(), pvGen.getStdDate(), null);
       if (selectOneByUnique == null) {
+    	  System.out.println("pvgenService "+pvGen.getDeviceId()+"      insert");
         pvGenDao.insert(pvGen, null);
       } else {
+    	  System.out.println("pvgenService "+pvGen.getDeviceId()+"      update");
         pvGen.setPvGenIdx(selectOneByUnique.getPvGenIdx());
         pvGenDao.update(pvGen, null);
       }
