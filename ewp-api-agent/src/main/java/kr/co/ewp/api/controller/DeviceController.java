@@ -378,6 +378,7 @@ public class DeviceController {
         		localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
         	}
         	PvEquipmentModel pvEquipmentModel = PMGrowApiUtil.getPvEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+        	System.out.println(device.getDeviceId()+"pv 장치 결과        :  "+pvEquipmentModel.toString());
         	if(pvEquipmentModel != null){
 //        		for (PvEquipmentModel pvEquipmentModel : pvEquipmentList) {
         			DevicePv devicePv = new DevicePv();
@@ -406,7 +407,7 @@ public class DeviceController {
       }
     }
     if (deivcePvList.size() > 0) {
-//      resultCnt += deviceService.addDeivcePvList(deivcePvList, null);
+      resultCnt += deviceService.addDeivcePvList(deivcePvList, null);
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     prettyLog.append("RESULT_CNT", resultCnt);

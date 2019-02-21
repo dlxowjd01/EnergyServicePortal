@@ -804,7 +804,7 @@ public class EnergyController {
       String _siteId = device.getSiteId();
       if (begin == null) {
         PvGen pvGen = pvService.getLastPvGen(_siteId, _deviceId, null);
-        System.out.println("====    "+pvGen);
+        System.out.println("====    "+device.getDeviceId()+", "+pvGen);
         if (pvGen == null) {
           _begin = DateUtil.getAfterDays(-1);
         } else {
@@ -896,6 +896,7 @@ public class EnergyController {
         					  pvGen.setTemp(item.getTemperature());
         					  
         					  pvGentList.add(pvGen);
+        					  System.out.println(device.getDeviceId()+"   계싼중..."+pvGentList);
         				  }
         			  }
         		  }
@@ -907,7 +908,7 @@ public class EnergyController {
           prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
           logger.error("energy08-ERROR", e);
         }
-        System.out.println("                                   pv 발전량 최종 db insert될 목록  : "+pvGentList);
+        System.out.println("                                   "+device.getDeviceId()+"        pv 발전량 최종 db insert될 목록  : "+pvGentList);
         resultCnt += pvService.addOrModPvGenList(pvGentList, null);
       }
     }
