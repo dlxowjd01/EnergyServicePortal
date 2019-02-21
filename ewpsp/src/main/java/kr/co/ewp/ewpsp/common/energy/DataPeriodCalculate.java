@@ -163,6 +163,7 @@ public class DataPeriodCalculate {
 			String period, String timestampStr, String calculValStr, int flag, int calculCnt) {
 		List newList = new ArrayList();
 		
+		int cnt = 0;
 		int nullCnt = 0;
 		int chkCnt = 1;
 		Timestamp stdTimestamp = null;
@@ -191,7 +192,7 @@ public class DataPeriodCalculate {
 						compareCal.add(Calendar.MINUTE, 15);
 						
 //						if(now != next || i+1 == dataList.size()) {
-						if(changeMonthYn == true || i+1 == dataList.size()) {
+						if(changeMonthYn == true || cnt == dataList.size()) {
 							// 다음날짜가 달이 바뀌거나 마지막데이터일 때
 							Map<String, Object> calculMap = new HashMap<String, Object>();
 							Iterator<String> paramKeys = map.keySet().iterator();
@@ -216,7 +217,7 @@ public class DataPeriodCalculate {
 						}
 						
 					} else {
-						if(chkCnt == calculCnt || i+1 == dataList.size()) { // 정해진 횟수만큼 더했거나 마지막데이터일 때
+						if(chkCnt == calculCnt || cnt == dataList.size()) { // 정해진 횟수만큼 더했거나 마지막데이터일 때
 							Map<String, Object> calculMap = new HashMap<String, Object>();
 							Iterator<String> paramKeys = map.keySet().iterator();
 							while (paramKeys.hasNext()) {
@@ -261,6 +262,7 @@ public class DataPeriodCalculate {
 				} else {
 					calculNum = calculNum + Long.parseLong(String.valueOf(map.get(calculValStr)));
 				}
+				cnt++;
 			}
 			
 			if(chkCnt == 1) {
@@ -276,7 +278,7 @@ public class DataPeriodCalculate {
 				compareCal.add(Calendar.MINUTE, 15);
 				
 //				if(now != next || i+1 == dataList.size()) {
-				if(changeMonthYn == true || i+1 == dataList.size()) {
+				if(changeMonthYn == true || cnt == dataList.size()) {
 					Map<String, Object> calculMap = new HashMap<String, Object>();
 					Iterator<String> paramKeys = map.keySet().iterator();
 					while (paramKeys.hasNext()) {
@@ -297,7 +299,7 @@ public class DataPeriodCalculate {
 				}
 				
 			} else {
-				if(chkCnt == calculCnt || i+1 == dataList.size()) { // 정해진 횟수만큼 더했거나 마지막데이터일 때
+				if(chkCnt == calculCnt || cnt == dataList.size()) { // 정해진 횟수만큼 더했거나 마지막데이터일 때
 					Map<String, Object> calculMap = new HashMap<String, Object>();
 					Iterator<String> paramKeys = map.keySet().iterator();
 					while (paramKeys.hasNext()) {
@@ -352,6 +354,7 @@ public class DataPeriodCalculate {
 			String period, String timestampStr, String calculValStr, int flag, int calculCnt) {
 		List newList = new ArrayList();
 		
+		int cnt = 0;
 		int nullCnt = 0;
 		int chkCnt = 1;
 		Timestamp stdTimestamp = null;
@@ -397,7 +400,7 @@ public class DataPeriodCalculate {
 						compareCal.add(Calendar.MINUTE, 15);
 						
 //						if(now != next || i+1 == dataList.size()) {
-						if(changeMonthYn == true || i+1 == dataList.size()) {
+						if(changeMonthYn == true || cnt == dataList.size()) {
 							// 다음날짜가 달이 바뀌거나 마지막데이터일 때
 							Map<String, Object> calculMap = new HashMap<String, Object>();
 							Iterator<String> paramKeys = map.keySet().iterator();
@@ -422,7 +425,7 @@ public class DataPeriodCalculate {
 						}
 						
 					} else {
-						if(chkCnt == calculCnt || i+1 == dataList.size()) { // 정해진 횟수만큼 더했거나 마지막데이터일 때
+						if(chkCnt == calculCnt || cnt == dataList.size()) { // 정해진 횟수만큼 더했거나 마지막데이터일 때
 							Map<String, Object> calculMap = new HashMap<String, Object>();
 							Iterator<String> paramKeys = map.keySet().iterator();
 							while (paramKeys.hasNext()) {
@@ -472,6 +475,7 @@ public class DataPeriodCalculate {
 				} else {
 					peak = Double.parseDouble(String.valueOf(map.get(calculValStr)));
 				}
+				cnt++;
 			}
 			
 			if(peakChkCnt == 1) {
@@ -509,7 +513,7 @@ public class DataPeriodCalculate {
 				compareCal.add(Calendar.MINUTE, 15);
 				
 //				if(now != next || i+1 == dataList.size()) {
-				if(changeMonthYn == true || i+1 == dataList.size()) {
+				if(changeMonthYn == true || cnt == dataList.size()) {
 					Map<String, Object> calculMap = new HashMap<String, Object>();
 					Iterator<String> paramKeys = map.keySet().iterator();
 					while (paramKeys.hasNext()) {
@@ -530,7 +534,7 @@ public class DataPeriodCalculate {
 				}
 				
 			} else {
-				if(chkCnt == calculCnt || i+1 == dataList.size()) { // 정해진 횟수만큼 더했거나 마지막데이터일 때
+				if(chkCnt == calculCnt || cnt == dataList.size()) { // 정해진 횟수만큼 더했거나 마지막데이터일 때
 					Map<String, Object> calculMap = new HashMap<String, Object>();
 					Iterator<String> paramKeys = map.keySet().iterator();
 					while (paramKeys.hasNext()) {
