@@ -437,7 +437,7 @@
 		pvStr += '</div>';
 		pvStr += '<div class="lstat">';
 		pvStr += '<div class="dt">알람 메시지</div>';
-		pvStr += '<div class="dd">';
+		pvStr += '<div class="dd"><span class="run">'+(  (pvDetail.alarm_msg == "" || pvDetail.alarm_msg == null) ? "-" : pvDetail.alarm_msg  )+'</span></div>';
 		pvStr += '</div>';
 		pvStr += '</div>';
 		pvStr += '<div class="ltbl mt30">';
@@ -452,10 +452,10 @@
 		pvStr += '</thead>';
 		pvStr += '<tbody>';
 		pvStr += '<tr>';
-		pvStr += '<td>'+(  (pvDetail.temperature == "" || pvDetail.temperature == null) ? "-" : pvDetail.temperature+"℃"  )+'</td>';
+		pvStr += '<td>'+(  (pvDetail.temperature == -1) ? "-" : pvDetail.temperature+"℃"  )+'</td>';
 		pvStr += '<td>'+'-'+'</td>';
-		pvStr += '<td>'+'-'+'</td>';
-		pvStr += '<td>'+(  (pvDetail.totalPower == "" || pvDetail.totalPower == null) ? "-" : pvDetail.totalPower+"kWh"  )+'</td>';
+		pvStr += '<td>'+(  (pvDetail.totalPower == -1) ? "-" : pvDetail.totalPower+"kWh"  )+'</td>';
+		pvStr += '<td>'+(  (pvDetail.todayPower == -1) ? "-" : pvDetail.todayPower+"kWh"  )+'</td>';
 		pvStr += '</tr>';
 		pvStr += '</tbody>';
 		pvStr += '</table>';

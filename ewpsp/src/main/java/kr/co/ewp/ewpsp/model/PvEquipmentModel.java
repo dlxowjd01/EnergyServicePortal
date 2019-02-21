@@ -153,4 +153,14 @@ public class PvEquipmentModel {
 		this.dcFreq = dcFreq;
 	}
 
+@Override
+public String toString() {
+	return "PvEquipmentModel [ivtId=" + ivtId + ", ivtName=" + ivtName + ", timestamp=" + timestamp + ", status="
+			+ status + ", alarmMsg=" + alarmMsg + ", temperature=" + temperature + ", totalGenPower=" + totalGenPower
+			+ ", todayGenPower=" + todayGenPower + ", acVoltage=" + acVoltage + ", acPower=" + acPower + ", acCurrent="
+			+ acCurrent + ", acFreq=" + acFreq + ", dcVoltage=" + dcVoltage + ", dcPower=" + dcPower + ", dcCurrent="
+			+ dcCurrent + ", dcFreq=" + dcFreq + "]";
+}
+
+  
 }

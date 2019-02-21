@@ -2,6 +2,9 @@ package kr.co.ewp.ewpsp.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PcsEquipmentModel {
 //  private Integer resultCnt;// /*** 12.12 이우람 수정-주석 ***/
   private String pcsId;// /*** 12.12 이우람 수정 ***/
