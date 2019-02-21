@@ -154,18 +154,26 @@ public class DeviceMonitoringController {
 			result.put("pcsStatus", pcsDetail.getPcsStatus());
 			result.put("pcsStatusNm", statusNm);
 		}
-		result.put("acVoltage", (pcsDetail == null) ? null : pcsDetail.getAcVoltage());
-		result.put("acPower", (pcsDetail == null) ? null : pcsDetail.getAcPower());
-		result.put("acFreq", (pcsDetail == null) ? null : pcsDetail.getAcFreq());
-		result.put("acCurrent", (pcsDetail == null) ? null : pcsDetail.getAcCurrent());
-		result.put("acPf", (pcsDetail == null) ? null : pcsDetail.getAcPf());
-		result.put("acSetPower", (pcsDetail == null) ? null : pcsDetail.getAcSetPower());
-		result.put("dcVoltage", (pcsDetail == null) ? null : pcsDetail.getDcVoltage());
-		result.put("dcPower", (pcsDetail == null) ? null : pcsDetail.getDcPower());
-		result.put("pcsStatus", (pcsDetail == null) ? null : pcsDetail.getPcsStatus());
-		result.put("pcsCommand", (pcsDetail == null) ? null : pcsDetail.getPcsCommand());
-		result.put("todayCEnergy", (pcsDetail == null) ? null : pcsDetail.getTodayCEnergy());
-		result.put("todayDEnergy", (pcsDetail == null) ? null : pcsDetail.getTodayDEnergy());
+		result.put("acVoltage", (pcsDetail == null) ? -1 : pcsDetail.getAcVoltage());
+		result.put("acPower", (pcsDetail == null) ?  -1 : pcsDetail.getAcPower());
+		result.put("acFreq", (pcsDetail == null) ?  -1 : pcsDetail.getAcFreq());
+		result.put("acCurrent", (pcsDetail == null) ?  -1 : pcsDetail.getAcCurrent());
+		result.put("acPf", (pcsDetail == null) ?  -1 : pcsDetail.getAcPf());
+		result.put("acSetPower", (pcsDetail == null) ?  -1 : pcsDetail.getAcSetPower());
+		result.put("dcVoltage", (pcsDetail == null) ?  -1 : pcsDetail.getDcVoltage());
+		result.put("dcPower", (pcsDetail == null) ?  -1 : pcsDetail.getDcPower());
+		result.put("pcsStatus", (pcsDetail == null) ?  -1 : pcsDetail.getPcsStatus());
+		if(pcsDetail == null) {
+			result.put("pcsCommand", -1);
+		} else {
+			if(pcsDetail.getPcsCommand() == 0) {
+				result.put("pcsCommand", "Stop");
+			} else {
+				result.put("pcsCommand", "Run");
+			}
+		}
+		result.put("todayCEnergy", (pcsDetail == null) ?  -1 : pcsDetail.getTodayCEnergy());
+		result.put("todayDEnergy", (pcsDetail == null) ?  -1 : pcsDetail.getTodayDEnergy());
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
@@ -215,34 +223,34 @@ public class DeviceMonitoringController {
 		Map result = deviceMonitoringService.getDeviceBMSDetail(param);
 		Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
 		String host = (String) siteDetail.get("local_ems_addr");
-		List<BmsEquipmentModel> bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, (String) param.get("deviceId"));
-		if(bmsDetail == null || bmsDetail.size() == 0) {
+		BmsEquipmentModel bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, (String) param.get("deviceId"));
+		if(bmsDetail == null) {
 			result.put("bmsStatus", null);
 			result.put("bmsStatusNm", null);
 		} else {
 			String statusNm = "";
-			if("0".equals(bmsDetail.get(0).getSysMode())) {
+			if("0".equals(bmsDetail.getSysMode())) {
 				statusNm = "Idle";
-			} else if("1".equals(bmsDetail.get(0).getSysMode())) {
+			} else if("1".equals(bmsDetail.getSysMode())) {
 				statusNm = "Charge";
-			} else if("2".equals(bmsDetail.get(0).getSysMode())) {
+			} else if("2".equals(bmsDetail.getSysMode())) {
 				statusNm = "Discharge";
-			} else if("3".equals(bmsDetail.get(0).getSysMode())) {
+			} else if("3".equals(bmsDetail.getSysMode())) {
 				statusNm = "MainS/W on/off";
-			} else if("4".equals(bmsDetail.get(0).getSysMode())) {
+			} else if("4".equals(bmsDetail.getSysMode())) {
 				statusNm = "Off-line";
-			} else if("5".equals(bmsDetail.get(0).getSysMode())) {
+			} else if("5".equals(bmsDetail.getSysMode())) {
 				statusNm = "Ready";
 			}
-			result.put("bmsStatus", bmsDetail.get(0).getSysMode());
+			result.put("bmsStatus", bmsDetail.getSysMode());
 			result.put("bmsStatusNm", statusNm);
 		}
-		result.put("sysSoc", (bmsDetail == null || bmsDetail.size() == 0) ? null : bmsDetail.get(0).getSysSoc());
-		result.put("sysSoh", (bmsDetail == null || bmsDetail.size() == 0) ? null : bmsDetail.get(0).getSysSoh());
-		result.put("currSoc", (bmsDetail == null || bmsDetail.size() == 0) ? null : bmsDetail.get(0).getCurrSoc());
-		result.put("sysVoltage", (bmsDetail == null || bmsDetail.size() == 0) ? null : bmsDetail.get(0).getSysVoltage());
-		result.put("sysCurrent", (bmsDetail == null || bmsDetail.size() == 0) ? null : bmsDetail.get(0).getSysCurrent());
-		result.put("dod", (bmsDetail == null || bmsDetail.size() == 0) ? null : bmsDetail.get(0).getDod());
+		result.put("sysSoc", (bmsDetail == null) ? -1 : bmsDetail.getSysSoc());
+		result.put("sysSoh", (bmsDetail == null) ? -1 : bmsDetail.getSysSoh());
+		result.put("currSoc", (bmsDetail == null) ? -1 : bmsDetail.getCurrSoc());
+		result.put("sysVoltage", (bmsDetail == null) ? -1 : bmsDetail.getSysVoltage());
+		result.put("sysCurrent", (bmsDetail == null) ? -1 : bmsDetail.getSysCurrent());
+		result.put("dod", (bmsDetail == null) ? -1 : bmsDetail.getDod());
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
@@ -293,7 +301,6 @@ public class DeviceMonitoringController {
 		Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
 		String host = (String) siteDetail.get("local_ems_addr");
 		PvEquipmentModel pvDetail = PMGrowApiUtil.getPvEquipmentList(host, (String) param.get("deviceId"));
-		System.out.println("결과 : "+pvDetail.toString());
 		if(pvDetail == null) {
 			result.put("pvStatus", null);
 			result.put("pvStatusNm", null);

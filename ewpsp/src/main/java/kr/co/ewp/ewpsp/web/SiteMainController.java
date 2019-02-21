@@ -137,9 +137,9 @@ public class SiteMainController {
 					}
 					
 				} else if("2".equals(deviceType)) { // BMS
-					List<BmsEquipmentModel> bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, (String) deviceMap.get("device_id"));
-					if(bmsDetail != null && bmsDetail.size() > 0) {
-						Integer soc = (bmsDetail.get(0).getSysSoc() == null) ? 0 : bmsDetail.get(0).getSysSoc();
+					BmsEquipmentModel bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, (String) deviceMap.get("device_id"));
+					if(bmsDetail != null) {
+						Integer soc = (bmsDetail.getSysSoc() == null) ? 0 : bmsDetail.getSysSoc();
 						deviceMap.put("apiSoc", soc);
 					}
 					
