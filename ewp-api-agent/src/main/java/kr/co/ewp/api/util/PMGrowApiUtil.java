@@ -239,7 +239,7 @@ public class PMGrowApiUtil {
    * @param prettyLog
    * @return
    */
-  public static List<BmsEquipmentModel> getBmsEquipmentList(String host, String equipmentId, PrettyLog prettyLog) {
+  public static BmsEquipmentModel getBmsEquipmentList(String host, String equipmentId, PrettyLog prettyLog) {
 	  prettyLog.start("PMGrowApiUtil.getBmsEquipmentList", "ERROR");
 	  System.out.println("bms 운전상태 조회");
 	  String resultBody = null;
@@ -249,8 +249,7 @@ public class PMGrowApiUtil {
 		  prettyLog.append("URL", url);
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
 		  System.out.println("bms resultBody =====> "+resultBody);
-		  return JsonUtil.toObject(resultBody, new TypeReference<List<BmsEquipmentModel>>() {
-		  });
+		  return JsonUtil.toObject(resultBody, BmsEquipmentModel.class);
 	  } catch (NullPointerException e) {
 	  	  logger.error("error is : "+e.toString());
 	  	  throw e;

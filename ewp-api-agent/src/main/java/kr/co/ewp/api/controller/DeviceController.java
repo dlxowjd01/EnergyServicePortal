@@ -193,6 +193,7 @@ public class DeviceController {
         		localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
         	}
         	PcsEquipmentModel pcsEquipmentModel = PMGrowApiUtil.getPcsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+        	System.out.println(device.getDeviceId()+"pcs 장치 결과        :  "+pcsEquipmentModel.toString());
         	if(pcsEquipmentModel != null){
         		prettyLog.append("ITEM_SIZE", pcsEquipmentModel);
 //        		for (PcsEquipmentModel pcsEquipmentModel : pcsEquipmentList) {
@@ -292,9 +293,9 @@ public class DeviceController {
         		}
         		localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
         	}
-        	List<BmsEquipmentModel> bmsEquipmentList = PMGrowApiUtil.getBmsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
-        	if( bmsEquipmentList != null){
-        		for (BmsEquipmentModel bmsEquipmentModel : bmsEquipmentList) {
+        	BmsEquipmentModel bmsEquipmentModel = PMGrowApiUtil.getBmsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+        	if( bmsEquipmentModel != null){
+//        		for (BmsEquipmentModel bmsEquipmentModel : bmsEquipmentList) {
         			DeviceBms deviceBms = new DeviceBms();
         			deviceBms.setSiteId(device.getSiteId());
         			deviceBms.setDeviceId(device.getDeviceId());
@@ -313,7 +314,7 @@ public class DeviceController {
         				resultCnt += deviceService.addDeivceBmsList(deivceBmsList, null);
         				deivceBmsList = Lists.newArrayList();
         			}
-        		}
+//        		}
         	}
         
         }

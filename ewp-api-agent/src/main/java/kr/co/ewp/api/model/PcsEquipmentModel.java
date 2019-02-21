@@ -229,4 +229,17 @@ public class PcsEquipmentModel {
 		this.totalCEnerge = totalCEnerge;
 	}
 
+	@Override
+	public String toString() {
+		return "PcsEquipmentModel [pcsId=" + pcsId + ", pcsName=" + pcsName + ", timestamp=" + timestamp + ", opMode="
+				+ opMode + ", alarmMsg=" + alarmMsg + ", acVoltage=" + acVoltage + ", acPower=" + acPower
+				+ ", acCurrent=" + acCurrent + ", acFreq=" + acFreq + ", acSetPower=" + acSetPower + ", acPf=" + acPf
+				+ ", dcVoltage=" + dcVoltage + ", dcPower=" + dcPower + ", dcCurrent=" + dcCurrent + ", dcFreq="
+				+ dcFreq + ", dcPf=" + dcPf + ", dcSetPower=" + dcSetPower + ", pcsStatus=" + pcsStatus
+				+ ", remoteMode=" + remoteMode + ", pcsCommand=" + pcsCommand + ", todayDEnergy=" + todayDEnergy
+				+ ", todayCEnergy=" + todayCEnergy + ", totalDEnergy=" + totalDEnergy + ", totalCEnerge=" + totalCEnerge
+				+ "]";
+	}
+
+	
 }

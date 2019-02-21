@@ -83,15 +83,12 @@ public class Main implements ApplicationListener<ContextRefreshedEvent> {
           energyController.energy05(siteId, beginDate, endDate, prettyLog);
           break;
         case "ENERGY06":// 에너지모니터링 > ESS 충방전량 조회 > ESS충방전량
-        	System.out.println("ESS충방전량");
           energyController.energy06(siteId, deviceId, beginDate, endDate, prettyLog);
           break;
         case "ENERGY07":// 에너지모니터링 > ESS 충방전량 조회 > ESS충방전계획량
-        	System.out.println("ESS충방전계획량");
           energyController.energy07(siteId, deviceId, beginDate, endDate, prettyLog);
           break;
         case "ENERGY08":// 에너지모니터링 > PV 발전량 조회 > PV 발전량
-        	System.out.println("PV 발전량충방전량");
           energyController.energy08(siteId, deviceId, beginDate, endDate, prettyLog);
           break;
         case "ENERGY09":// 에너지모니터링 > DR 실적조회 > DR 실적(감축이력)
@@ -104,19 +101,15 @@ public class Main implements ApplicationListener<ContextRefreshedEvent> {
           energyController.energy11(siteId, deviceId, beginDate, endDate, prettyLog);
           break;
         case "DEVICE01":// 장치모니터링 > IOE 통신상태
-        	System.out.println("ESSIOE 통신상태");
           deviceController.device01(siteId, deviceId, prettyLog);
           break;
         case "DEVICE02":// 장치모니터링 > PCS 장치
-        	System.out.println("ESSPCS 장치");
           deviceController.device02(siteId, deviceId, prettyLog);
           break;
         case "DEVICE03":// 장치모니터링 > BMS 장치
-        	System.out.println("ESSBMS 장치");
           deviceController.device03(siteId, deviceId, prettyLog);
           break;
         case "DEVICE04":// 장치모니터링 > PV 장치
-        	System.out.println("ESSPV 장치");
           deviceController.device04(siteId, deviceId, prettyLog);
           break;
         case "BILL01":// 요금/수익 > 한전요금조회 > 요금

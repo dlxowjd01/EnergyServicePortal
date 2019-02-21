@@ -158,4 +158,12 @@ public class PvGen {
   public void setModDate(Date modDate) {
     this.modDate = modDate;
   }
+
+@Override
+public String toString() {
+	return "PvGen [pvGenIdx=" + pvGenIdx + ", siteId=" + siteId + ", deviceId=" + deviceId + ", stdDate=" + stdDate
+			+ ", genVal=" + genVal + ", temp=" + temp + ", regDate=" + regDate + ", modDate=" + modDate + "]";
+}
+  
+  
 }
