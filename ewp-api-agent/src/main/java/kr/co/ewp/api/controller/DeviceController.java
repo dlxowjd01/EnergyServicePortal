@@ -377,24 +377,24 @@ public class DeviceController {
         		}
         		localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
         	}
-        	List<PvEquipmentModel> pvEquipmentList = PMGrowApiUtil.getPvEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
-        	if(pvEquipmentList != null){
-        		for (PvEquipmentModel pcsEquipmentModel : pvEquipmentList) {
+        	PvEquipmentModel pvEquipmentModel = PMGrowApiUtil.getPvEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+        	if(pvEquipmentModel != null){
+//        		for (PvEquipmentModel pvEquipmentModel : pvEquipmentList) {
         			DevicePv devicePv = new DevicePv();
         			devicePv.setSiteId(_siteId);
         			devicePv.setDeviceId(device.getDeviceId());
-        			devicePv.setAlarmMsg(pcsEquipmentModel.getAlarmMsg());
-        			devicePv.setTemp(pcsEquipmentModel.getTemperature()); /*** 12.12 이우람 수정 ***/
-        			devicePv.setTotPower(pcsEquipmentModel.getTotalGenPower()); /*** 12.12 이우람 수정 ***/
-        			devicePv.setDeviceName(pcsEquipmentModel.getIvtName()); /*** 12.12 이우람 수정 ***/
-        			devicePv.setDeviceStat(Integer.toString(pcsEquipmentModel.getStatus())); /*** 12.12 이우람 수정 ***/
-        			devicePv.setStdDate(pcsEquipmentModel.getTimestamp()); /*** 12.12 이우람 수정 ***/
+        			devicePv.setAlarmMsg(pvEquipmentModel.getAlarmMsg());
+        			devicePv.setTemp(pvEquipmentModel.getTemperature()); /*** 12.12 이우람 수정 ***/
+        			devicePv.setTotPower(pvEquipmentModel.getTotalGenPower()); /*** 12.12 이우람 수정 ***/
+        			devicePv.setDeviceName(pvEquipmentModel.getIvtName()); /*** 12.12 이우람 수정 ***/
+        			devicePv.setDeviceStat(Integer.toString(pvEquipmentModel.getStatus())); /*** 12.12 이우람 수정 ***/
+        			devicePv.setStdDate(pvEquipmentModel.getTimestamp()); /*** 12.12 이우람 수정 ***/
         			deivcePvList.add(devicePv);
         			if (deivcePvList.size() == 20) {
         				resultCnt += deviceService.addDeivcePvList(deivcePvList, null);
         				deivcePvList = Lists.newArrayList();
         			}
-        		}
+//        		}
         	}
         
         }
@@ -406,7 +406,7 @@ public class DeviceController {
       }
     }
     if (deivcePvList.size() > 0) {
-      resultCnt += deviceService.addDeivcePvList(deivcePvList, null);
+//      resultCnt += deviceService.addDeivcePvList(deivcePvList, null);
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     prettyLog.append("RESULT_CNT", resultCnt);

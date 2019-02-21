@@ -3,6 +3,9 @@ package kr.co.ewp.api.model;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ChargingDischarging {
 //  private String resultCnt;// /*** 12.12 이우람 수정-주석 ***/
   private String pcsId;// /*** 12.12 이우람 수정 ***/

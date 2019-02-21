@@ -85,4 +85,12 @@ public class PvPowerGenModel {
 		this.items = items;
 	}
 
+@Override
+public String toString() {
+	return "PvPowerGenModel [ivtId=" + ivtId + ", totalGenEnergy=" + totalGenEnergy + ", startDt=" + startDt
+			+ ", endDt=" + endDt + ", intervalType=" + intervalType + ", Interval=" + Interval + ", numItems="
+			+ numItems + ", items=" + items + "]";
+}
+
+  
 }

@@ -134,10 +134,10 @@ public class PMGrowApiUtil {
 		  url.append("&intervalType=").append(intervalType);
 		  url.append("&interval=").append(interval);
 		  
-		  System.out.println(equipmentId+" PV 발전량 조회 url  ==>  "+url);
+		  System.out.println("        "+equipmentId+" PV 발전량 조회 url  ==>  "+url);
 		  prettyLog.append("URL", url);
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
-		  System.out.println(equipmentId+" PV 발전량 조회 resultBody  ==>  "+resultBody);
+		  System.out.println("        "+url+"     PV 발전량 조회 resultBody  ==>  "+url+" ||||||| "+resultBody);
 		  return JsonUtil.toObject(resultBody, PvPowerGenModel.class);
 	  } catch (NullPointerException e) {
 	  	  logger.error("error is : "+e.toString());
@@ -276,7 +276,7 @@ public class PMGrowApiUtil {
    * @param prettyLog
    * @return
    */
-  public static List<PvEquipmentModel> getPvEquipmentList(String host, String equipmentId, PrettyLog prettyLog) {
+  public static PvEquipmentModel getPvEquipmentList(String host, String equipmentId, PrettyLog prettyLog) {
 	  prettyLog.start("PMGrowApiUtil.getPvEquipmentList", "ERROR");
 	  String resultBody = null;
 	  try {
@@ -284,9 +284,8 @@ public class PMGrowApiUtil {
 		  System.out.println("url =====> "+url);
 		  prettyLog.append("URL", url);
 		  resultBody = HttpUtil.get(url.toString(), getHeaders());
-		  System.out.println("pv resultBody =====> "+resultBody);
-		  return JsonUtil.toObject(resultBody, new TypeReference<List<PvEquipmentModel>>() {
-		  });
+		  System.out.println(url+"   pv resultBody =====> "+resultBody);
+		  return JsonUtil.toObject(resultBody, PvEquipmentModel.class);
 	  } catch (NullPointerException e) {
 		  logger.error("error is : "+e.toString());
 		  throw e;

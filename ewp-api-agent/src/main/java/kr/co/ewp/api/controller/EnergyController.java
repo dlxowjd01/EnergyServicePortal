@@ -804,6 +804,7 @@ public class EnergyController {
       String _siteId = device.getSiteId();
       if (begin == null) {
         PvGen pvGen = pvService.getLastPvGen(_siteId, _deviceId, null);
+        System.out.println("====    "+pvGen);
         if (pvGen == null) {
           _begin = DateUtil.getAfterDays(-1);
         } else {
@@ -882,6 +883,8 @@ public class EnergyController {
         			  PvPowerGenModel resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate, endDate, "MI", "15", prettyLog);
 //          List<PvPowerGenModel> resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, DateUtil.dateToString(beginDate, "yyyyMMdd"),
 //        		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
+        			  System.out.println("  pv발전량결과1  "+resultList.toString());
+        			  System.out.println("  pv발전량결과2  "+resultList.getItems().toString());
         			  if(resultList != null){
         				  prettyLog.append("ITEM_SIZE", resultList.getItems().size());
         				  for (PvPowerGenModelItemModel item : resultList.getItems()) {

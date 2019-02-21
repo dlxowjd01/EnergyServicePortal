@@ -34,5 +34,11 @@ public class PvPowerGenModelItemModel { /*** 12.12 이우람 추가 ***/
   	this.temperature = temperature;
   }
 
+@Override
+public String toString() {
+	return "PvPowerGenModelItemModel [timestamp=" + timestamp + ", genEnergy=" + genEnergy + ", temperature="
+			+ temperature + "]";
+}
+
 
 }
