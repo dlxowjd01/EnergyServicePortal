@@ -9,6 +9,7 @@ public class DeviceBms {
     private String deviceId;//장치id
     private String deviceName;//장치명
     private String deviceStat;//충방전상태
+    private String alarmMsg;// 알람메시지
     private Integer sysSoc;//soc(단위:%)
     private Integer currSoc;//soc현재(단위:kwh)
     private Integer sysSoh;//soh(단위:%)
@@ -86,6 +87,22 @@ public class DeviceBms {
     */
     public void setDeviceStat(String deviceStat) {
         this.deviceStat = deviceStat;
+    }
+    /**
+     * 알람메시지 조회
+     * 
+     * @return alarmMsg
+     */
+    public String getAlarmMsg() {
+      return this.alarmMsg;
+    }
+    /**
+     * 알람메시지 설정
+     * 
+     * @return alarmMsg
+     */
+    public void setAlarmMsg(String alarmMsg) {
+      this.alarmMsg = alarmMsg;
     }
    /**
     * soc(단위:%) 조회

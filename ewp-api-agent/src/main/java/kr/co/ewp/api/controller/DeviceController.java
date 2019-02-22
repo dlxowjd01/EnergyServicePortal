@@ -299,6 +299,7 @@ public class DeviceController {
         			DeviceBms deviceBms = new DeviceBms();
         			deviceBms.setSiteId(device.getSiteId());
         			deviceBms.setDeviceId(device.getDeviceId());
+        			deviceBms.setAlarmMsg(bmsEquipmentModel.getAlarmMsg());
         			deviceBms.setDeviceName(bmsEquipmentModel.getBmsName()); /*** 12.12 이우람 수정 ***/
         			deviceBms.setCurrSoc(bmsEquipmentModel.getCurrSoc()); /*** 12.12 이우람 수정 ***/
         			deviceBms.setDod(bmsEquipmentModel.getDod()); /*** 12.12 이우람 수정 ***/
