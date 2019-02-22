@@ -71,7 +71,7 @@ public class ApiController {
       @RequestParam Date alarmTime, // 알람발생일시(형식:YYYYMMDDhhmmss) -> 기준일시에 저장 /*** 12.13 이우람 수정 ***/
       @RequestParam Integer alarmType, // 알람구분(1:비상,2:주의) /*** 12.13 이우람 수정 ***/
       @RequestParam(defaultValue = "") String alarmMsg, // 알람메시지 (파라메터는 필수이고 값은 있는 경우에만 세팅)
-      @RequestParam(required = false, defaultValue = "") String alarmCode // 알람메시지 (파라메터는 필수이고 값은 있는 경우에만 세팅)
+      @RequestParam(required = false, defaultValue = "") String alarmCode // 알람코드
   ) {
     try {
       Map<String, String> device = deviceMonitoringService.getDevice(deviceId);

@@ -232,17 +232,17 @@ public class DeviceMonitoringController {
 			result.put("alarmMsg", null);
 		} else {
 			String statusNm = "";
-			if("0".equals(bmsDetail.getSysMode())) {
+			if(bmsDetail.getSysMode() == 0) {
 				statusNm = "Idle";
-			} else if("1".equals(bmsDetail.getSysMode())) {
+			} else if(bmsDetail.getSysMode() == 1) {
 				statusNm = "Charge";
-			} else if("2".equals(bmsDetail.getSysMode())) {
+			} else if(bmsDetail.getSysMode() == 2) {
 				statusNm = "Discharge";
-			} else if("3".equals(bmsDetail.getSysMode())) {
+			} else if(bmsDetail.getSysMode() == 3) {
 				statusNm = "MainS/W on/off";
-			} else if("4".equals(bmsDetail.getSysMode())) {
+			} else if(bmsDetail.getSysMode() == 4) {
 				statusNm = "Off-line";
-			} else if("5".equals(bmsDetail.getSysMode())) {
+			} else if(bmsDetail.getSysMode() == 5) {
 				statusNm = "Ready";
 			}
 			result.put("bmsStatus", bmsDetail.getSysMode());
