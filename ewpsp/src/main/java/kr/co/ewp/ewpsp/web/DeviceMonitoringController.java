@@ -143,13 +143,13 @@ public class DeviceMonitoringController {
 			result.put("alarmMsg", null);
 		} else {
 			String statusNm = "";
-			if("0".equals(pcsDetail.getPcsStatus())) {
+			if(pcsDetail.getPcsStatus() == 0) {
 				statusNm = "OFF";
-			} else if("1".equals(pcsDetail.getPcsStatus())) {
+			} else if(pcsDetail.getPcsStatus() == 1) {
 				statusNm = "ON";
-			} else if("2".equals(pcsDetail.getPcsStatus())) {
+			} else if(pcsDetail.getPcsStatus() == 2) {
 				statusNm = "Fault";
-			} else if("3".equals(pcsDetail.getPcsStatus())) {
+			} else if(pcsDetail.getPcsStatus() == 3) {
 				statusNm = "Warning";
 			}
 			result.put("pcsStatus", pcsDetail.getPcsStatus());
