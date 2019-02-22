@@ -172,7 +172,7 @@
 		/* PCS장치 목록 조회 */
 		select 
 			rnum, device_pcs_idx, device_name, device_id, concat('(', inst_type_nm, ')', device_type_nm) as device_type_nm, 
-			device_type, site_id, device_stat_name, cd_status, alarm_msg, std_date
+			device_type, site_id, pcs_status_name, cd_status, alarm_msg, std_date
 		from (
 			select 
 				@rownum := @rownum + 1 as rnum,
@@ -192,7 +192,7 @@
 						, case a.inst_type when 1 then '에너톡'
 							when 2 then '로컬EMS'
 							else '' end as inst_type_nm
-						, b.device_pcs_idx, b.device_stat_name, 
+						, b.device_pcs_idx, b.device_stat_name, b.pcs_status_name, 
 						b.cd_status, b.alarm_msg, b.std_date
 					from tb_device a
 					left outer join (
@@ -204,6 +204,12 @@
 								when 2 then 'Command' 
 								else 'disconnect' end as device_stat_name
 							, "" as cd_status
+							, pcs_status
+							, case pcs_status when 0 then 'Off' 
+								when 1 then 'On' 
+								when 2 then 'Fault' 
+								when 3 then 'Warning' 
+								else 'disconnect' end as pcs_status_name
 						from tb_device_pcs
 						where 1=1
 						and (device_id, reg_date) in (
@@ -263,6 +269,12 @@
 								when 2 then 'Command' 
 								else 'disconnect' end as device_stat_name
 							, "" as cd_status
+							, pcs_status
+							, case pcs_status when 0 then 'Off' 
+								when 1 then 'On' 
+								when 2 then 'Fault' 
+								when 3 then 'Warning' 
+								else 'disconnect' end as pcs_status_name
 						from tb_device_pcs
 						where 1=1
 						and (device_id, reg_date) in (

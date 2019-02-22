@@ -62,7 +62,7 @@
 						).append( $('<td />').append( pcsList[i].device_name )
 						).append( $('<td />').append( pcsList[i].device_id )
 						).append( $('<td />').append( pcsList[i].device_type_nm )
-						).append( $('<td />').append( pcsList[i].device_stat_name )
+						).append( $('<td />').append( pcsList[i].pcs_status_name )
 						).append( $('<td class="ellipsis mxw400" />').append( pcsList[i].alarm_msg )
 						).append( $('<td />').append( (pcsList[i].std_date == null) ? null : new Date( setSheetDateUTC(pcsList[i].std_date) ).format("yyyy-MM-dd HH:mm:ss") )
 						).append(
