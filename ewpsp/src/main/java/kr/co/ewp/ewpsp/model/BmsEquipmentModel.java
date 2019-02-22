@@ -105,4 +105,13 @@ public class BmsEquipmentModel {
   public void setDod(Integer dod) {
 		this.dod = dod;
 	}
+
+@Override
+public String toString() {
+	return "BmsEquipmentModel [bmsId=" + bmsId + ", bmsName=" + bmsName + ", timestamp=" + timestamp + ", sysMode="
+			+ sysMode + ", alarmMsg=" + alarmMsg + ", sysSoc=" + sysSoc + ", currSoc=" + currSoc + ", sysSoh=" + sysSoh
+			+ ", sysVoltage=" + sysVoltage + ", sysCurrent=" + sysCurrent + ", dod=" + dod + "]";
+}
+  
+  
 }
