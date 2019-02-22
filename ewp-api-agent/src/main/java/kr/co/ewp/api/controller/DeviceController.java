@@ -195,52 +195,81 @@ public class DeviceController {
         	PcsEquipmentModel pcsEquipmentModel = PMGrowApiUtil.getPcsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
         	System.out.println(device.getDeviceId()+"pcs 장치 결과        :  "+pcsEquipmentModel.toString());
         	if(pcsEquipmentModel != null){
+        		System.out.println("1");
         		prettyLog.append("ITEM_SIZE", pcsEquipmentModel);
 //        		for (PcsEquipmentModel pcsEquipmentModel : pcsEquipmentList) {
         			DevicePcs devicePcs = new DevicePcs();
         			devicePcs.setSiteId(device.getSiteId());
+        			System.out.println("2");
         			devicePcs.setDeviceId(device.getDeviceId());
+        			System.out.println("3");
         			if(pcsEquipmentModel.getAcCurrent() != null) devicePcs.setAcCurrent(pcsEquipmentModel.getAcCurrent()); /*** 12.12 이우람 수정 ***/
+        			System.out.println("4");
         			if(pcsEquipmentModel.getAcFreq() != null) devicePcs.setAcFreq(pcsEquipmentModel.getAcFreq()); /*** 12.12 이우람 수정 ***/
+        			System.out.println("5");
         			if(pcsEquipmentModel.getAcPf() != null) devicePcs.setAcPf(pcsEquipmentModel.getAcPf()); /*** 12.12 이우람 수정 ***/
+        			System.out.println("6");
         			if(pcsEquipmentModel.getAcPower() != null) devicePcs.setAcPower(pcsEquipmentModel.getAcPower()); /*** 12.12 이우람 수정 ***/
+        			System.out.println("7");
         			if(pcsEquipmentModel.getAcSetPower() != null) devicePcs.setAcSetPower(pcsEquipmentModel.getAcSetPower()); /*** 12.12 이우람 수정 ***/
+        			System.out.println("8");
         			if(pcsEquipmentModel.getAcVoltage() != null) devicePcs.setAcVoltage(pcsEquipmentModel.getAcVoltage()); /*** 12.12 이우람 수정 ***/
+        			System.out.println("9");
         			devicePcs.setAlarmMsg(pcsEquipmentModel.getAlarmMsg());
+        			System.out.println("10");
         			if(pcsEquipmentModel.getDcCurrent() != null) devicePcs.setDcCurrent(pcsEquipmentModel.getDcCurrent()); /*** 12.12 이우람 수정 ***/
+        			System.out.println("11");
         			if(pcsEquipmentModel.getDcFreq() != null) devicePcs.setDcFreq(pcsEquipmentModel.getDcFreq()); /*** 12.12 이우람 수정 ***/
+        			System.out.println("12");
         			if(pcsEquipmentModel.getDcPf() != null) devicePcs.setDcPf(pcsEquipmentModel.getDcPf()); /*** 12.12 이우람 수정 ***/
+        			System.out.println("13");
         			if(pcsEquipmentModel.getDcPower() != null) devicePcs.setDcPower(pcsEquipmentModel.getDcPower()); /*** 12.12 이우람 수정 ***/
+        			System.out.println("14");
         			if(pcsEquipmentModel.getDcSetPower() != null) devicePcs.setDcSetPower(pcsEquipmentModel.getDcSetPower()); /*** 12.12 이우람 수정 ***/
+        			System.out.println("15");
         			if(pcsEquipmentModel.getDcVoltage() != null) devicePcs.setDcVoltage(pcsEquipmentModel.getDcVoltage()); /*** 12.12 이우람 수정 ***/
+        			System.out.println("16");
         			devicePcs.setDeviceName(pcsEquipmentModel.getPcsName()); /*** 12.12 이우람 수정 ***/
+        			System.out.println("17");
         			devicePcs.setDeviceStat(Integer.toString(pcsEquipmentModel.getOpMode())); /*** 12.12 이우람 수정 ***/
+        			System.out.println("18");
         			devicePcs.setStdDate(pcsEquipmentModel.getTimestamp()); /*** 12.12 이우람 수정 ***/
+        			System.out.println("19");
         			
         			if(pcsEquipmentModel.getPcsStatus() != null) devicePcs.setPcsStatus(Integer.toString(pcsEquipmentModel.getPcsStatus())); /*** 12.12 이우람 수정 ***/
+        			System.out.println("20");
         			if(pcsEquipmentModel.getRemoteMode() != null) devicePcs.setRemoteMode(Integer.toString(pcsEquipmentModel.getRemoteMode())); /*** 12.12 이우람 수정 ***/
+        			System.out.println("21");
         			if(pcsEquipmentModel.getPcsCommand() != null) devicePcs.setPcsCommand(Integer.toString(pcsEquipmentModel.getPcsCommand())); /*** 12.12 이우람 수정 ***/
+        			System.out.println("22");
         			if(pcsEquipmentModel.getTodayDEnergy() != null) devicePcs.setTodayDEnergy(Integer.toString(pcsEquipmentModel.getTodayDEnergy())); /*** 12.12 이우람 수정 ***/
+        			System.out.println("23");
         			if(pcsEquipmentModel.getTodayCEnergy() != null) devicePcs.setTodayCEnergy(Integer.toString(pcsEquipmentModel.getTodayCEnergy())); /*** 12.12 이우람 수정 ***/
+        			System.out.println("24");
         			if(pcsEquipmentModel.getTotalDEnergy() != null) devicePcs.setTotalDEnergy(Integer.toString(pcsEquipmentModel.getTotalDEnergy())); /*** 12.12 이우람 수정 ***/
+        			System.out.println("25");
         			if(pcsEquipmentModel.getTotalCEnerge() != null) devicePcs.setTotalCEnerge(Integer.toString(pcsEquipmentModel.getTotalCEnerge())); /*** 12.12 이우람 수정 ***/
+        			System.out.println("26");
         			
         			deivcePcsList.add(devicePcs);
+        			System.out.println("27");
         			
-        			if (deivcePcsList.size() == 20) {
-        				resultCnt += deviceService.addDeivcePcsList(deivcePcsList, null);
-        				deivcePcsList = Lists.newArrayList();
-        			}
+//        			if (deivcePcsList.size() == 20) {
+//        				resultCnt += deviceService.addDeivcePcsList(deivcePcsList, null);
+//        				deivcePcsList = Lists.newArrayList();
+//        			}
 //        		}
         	}
         }
-      } catch (NullPointerException e) {
-          logger.error("error is : "+e.toString());
+//      } catch (NullPointerException e) {
+//          logger.error("error is : "+e.toString());
       } catch (Exception e) {
+    	  e.printStackTrace();
         prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
         logger.error("DEVICE02-ERROR", e);
       }
     }
+    System.out.println("pcs 최종결과   "+deivcePcsList.toString());
     if (deivcePcsList.size() > 0) {
       resultCnt += deviceService.addDeivcePcsList(deivcePcsList, null);
     }
