@@ -181,7 +181,7 @@ public class DeviceController {
 //        default:
 //          continue;
 //        }
-        if("1".equals(deviceType)){
+        if("1".equals(deviceType) && "PCS0001".equals(device.getDeviceId())){
         	System.out.println("pcs 장치 시작");
         	String _siteId = device.getSiteId();
         	if (!localEmsAddrMap.containsKey(_siteId)) {
@@ -231,7 +231,7 @@ public class DeviceController {
         			System.out.println("16");
         			devicePcs.setDeviceName(pcsEquipmentModel.getPcsName()); /*** 12.12 이우람 수정 ***/
         			System.out.println("17");
-        			devicePcs.setDeviceStat(Integer.toString(pcsEquipmentModel.getOpMode())); /*** 12.12 이우람 수정 ***/
+        			if(pcsEquipmentModel.getOpMode() != null) devicePcs.setDeviceStat(Integer.toString(pcsEquipmentModel.getOpMode())); /*** 12.12 이우람 수정 ***/
         			System.out.println("18");
         			devicePcs.setStdDate(pcsEquipmentModel.getTimestamp()); /*** 12.12 이우람 수정 ***/
         			System.out.println("19");
@@ -254,24 +254,27 @@ public class DeviceController {
         			deivcePcsList.add(devicePcs);
         			System.out.println("27");
         			
-//        			if (deivcePcsList.size() == 20) {
-//        				resultCnt += deviceService.addDeivcePcsList(deivcePcsList, null);
-//        				deivcePcsList = Lists.newArrayList();
-//        			}
+        			if (deivcePcsList.size() == 20) {
+        				System.out.println("짜잔");
+        				resultCnt += deviceService.addDeivcePcsList(deivcePcsList, null);
+        				deivcePcsList = Lists.newArrayList();
+        			}
 //        		}
         	}
         }
 //      } catch (NullPointerException e) {
 //          logger.error("error is : "+e.toString());
       } catch (Exception e) {
+    	  System.out.println("28   "+e.toString());
     	  e.printStackTrace();
         prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
         logger.error("DEVICE02-ERROR", e);
       }
     }
+    System.out.println("29");
     System.out.println("pcs 최종결과   "+deivcePcsList.toString());
     if (deivcePcsList.size() > 0) {
-      resultCnt += deviceService.addDeivcePcsList(deivcePcsList, null);
+//      resultCnt += deviceService.addDeivcePcsList(deivcePcsList, null);
     }
     prettyLog.append("RESULT_CNT", resultCnt);
   }
