@@ -28,13 +28,30 @@
 			$("#meterReadDay").val( siteSetDetail.meter_read_day );
 			$("#chargeYearmd").val( siteSetDetail.charge_yearmd );
 			var ymd = siteSetDetail.charge_yearmd;
-			$("#datepicker1").val( (ymd == "") ? "" : ymd.substring(0, 4)+"-"+ymd.substring(4, 6)+"-"+ymd.substring(6, 8) );
+			$("#datepicker10").val( (ymd == "") ? "" : ymd.substring(0, 4)+"-"+ymd.substring(4, 6)+"-"+ymd.substring(6, 8) );
 			$("#chargePower").val( siteSetDetail.charge_power );
 //			$("#goalPower").val( siteSetDetail.goal_power );
 			$("#reduceAmt").val( siteSetDetail.reduce_amt );
 			$("#chargeRate").val( siteSetDetail.charge_rate );
 			$("#siteSetIdx").val( siteSetDetail.site_set_idx );
 			$("#siteId").val( siteSetDetail.site_id );
+			
+			$("#essProfitRatio").val( siteSetDetail.ess_profit_ratio );
+			$("#drProfitRatio").val( siteSetDetail.dr_profit_ratio );
+			$("#pvProfitRatio").val( siteSetDetail.pv_profit_ratio );
+			$("#essBattery").val( siteSetDetail.ess_battery );
+			$("#essPcs").val( siteSetDetail.ess_pcs );
+			$("#meterClaimDay").val( siteSetDetail.meter_claim_day );
+			$("#recRate").val( siteSetDetail.rec_rate );
+			$("#smpRate").val( siteSetDetail.smp_rate );
+			$("#recWeight").val( siteSetDetail.rec_weight );
+			
+			$("#recRateDate").val( siteSetDetail.rec_rate_date );
+			var ymd2 = siteSetDetail.rec_rate_date;
+			$("#datepicker11").val( (ymd2 == "") ? "" : ymd2.substring(0, 4)+"-"+ymd2.substring(4, 6)+"-"+ymd2.substring(6, 8) );
+			$("#smpRateDate").val( siteSetDetail.smp_rate_date );
+			var ymd3 = siteSetDetail.smp_rate_date;
+			$("#datepicker12").val( (ymd3 == "") ? "" : ymd3.substring(0, 4)+"-"+ymd3.substring(4, 6)+"-"+ymd3.substring(6, 8) );
 			
 		}
 		
@@ -44,8 +61,12 @@
 		$(".confirm_btn").click(function(){
 			var formData = $("#siteSetForm").serializeObject();
 			if(confirm("저장하시겠습니까?")) {
-				$dtpk1 = $("#datepicker1");
+				$dtpk1 = $("#datepicker10");
 				$("#chargeYearmd").val( ($dtpk1.val() == "") ? "" : new Date( $dtpk1.val()+" 00:00:00" ).format("yyyyMMdd") );
+				$dtpk2 = $("#datepicker11");
+				$("#recRateDate").val( ($dtpk2.val() == "") ? "" : new Date( $dtpk2.val()+" 00:00:00" ).format("yyyyMMdd") );
+				$dtpk3 = $("#datepicker12");
+				$("#smpRateDate").val( ($dtpk3.val() == "") ? "" : new Date( $dtpk3.val()+" 00:00:00" ).format("yyyyMMdd") );
 				updateSiteSet(formData);
 			}
 		});

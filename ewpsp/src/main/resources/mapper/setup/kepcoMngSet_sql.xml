@@ -7,8 +7,9 @@
 		select 
 			site_set_idx, site_id, cust_num, use_elec_addr, meter_num, meter_sf, 
 			/*charge_type, */plan_type, plan_type2, plan_type3, plan_name, contract_power, meter_read_day, 
-			charge_yearmd, charge_power, charge_rate, goal_power, reduce_amt, smp_rate, rec_rate, rec_weight, 
-			del_yn, reg_uid, reg_date, mod_uid, mod_date ,profit_ratio
+			charge_yearmd, charge_power, charge_rate, goal_power, reduce_amt, smp_rate, rec_rate, rec_weight, profit_ratio, 
+			del_yn, reg_uid, reg_date, mod_uid, mod_date, 
+			ess_profit_ratio, dr_profit_ratio, pv_profit_ratio, ess_battery, ess_pcs, meter_claim_day, rec_rate_date, smp_rate_date
 		from tb_site_set
 		where 1=1
 		and site_id = #{siteId }
@@ -77,7 +78,10 @@
 		        profit_ratio,     /* 수익배분 비율 */
 		        del_yn,
 		        reg_uid,
-		        reg_date
+		        reg_date, 
+		        meter_claim_day,   /* 청구일 */
+		        rec_rate_date,      /* REC단가 일자 */
+		        smp_rate_date      /* SMP단가 일자 */
 		    ) values (
 		        <!-- #{siteSetIdx }, -->
 		        #{siteId },
@@ -102,7 +106,10 @@
 		        #{profitRatio },
 		        'N',
 		        #{regUid },
-		        now()
+		        now(),
+		        #{meterClaimDay }
+		        #{recRateDate }
+		        #{smpRateDate }
 		    )
 	</insert>
 	
@@ -147,13 +154,33 @@
 			smp_rate       = #{smpRate } ,   /* SMP단가(System Marginal Price)(단위:원) */
 			</if>
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(recTate)"> 
-			rec_rate       = #{recTate } ,    /* REC단가(단위:원) */
+			rec_rate       = #{recRate } ,    /* REC단가(단위:원) */
 			</if>
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(recWeight)">
 			rec_weight     = #{recWeight } ,    /* REC가중치 */
 			</if>
 			mod_uid        = #{modUid }, 
-			mod_date       = now() 
+			mod_date       = now(),  
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(essProfitRatio)">
+			ess_profit_ratio       = #{essProfitRatio } ,   /* ESS수익배분 비율 */
+			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(drProfitRatio)"> 
+			dr_profit_ratio       = #{drProfitRatio } ,    /* DR수익배분 비율 */
+			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(pvProfitRatio)">
+			pv_profit_ratio     = #{pvProfitRatio } ,    /* PV수익배분 비율 */
+			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(essBattery)">
+			ess_battery       = #{essBattery } ,   /* ESS Battery */
+			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(essPcs)"> 
+			ess_pcs       = #{essPcs } ,    /* ESS PCS */
+			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(meterClaimDay)">
+			meter_claim_day     = #{meterClaimDay },     /* 청구일 */
+			</if>
+			rec_rate_date   = #{recRateDate } ,   /* REC단가 일자 */
+			smp_rate_date   = #{smpRateDate }    /* SMP단가 일자 */
 		where 1=1
 		and site_set_idx = #{siteSetIdx }
 		and site_id = #{siteId }

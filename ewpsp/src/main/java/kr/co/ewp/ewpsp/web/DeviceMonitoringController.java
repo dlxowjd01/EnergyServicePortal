@@ -226,6 +226,7 @@ public class DeviceMonitoringController {
 		Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
 		String host = (String) siteDetail.get("local_ems_addr");
 		BmsEquipmentModel bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, (String) param.get("deviceId"));
+		System.out.println("bmsDetail api 결과  "+bmsDetail.toString());
 		if(bmsDetail == null) {
 			result.put("bmsStatus", null);
 			result.put("bmsStatusNm", null);

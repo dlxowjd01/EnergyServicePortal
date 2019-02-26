@@ -27,8 +27,8 @@
 							<div class="set_top clear">
 								<h2 class="ntit fl">${selViewSite.site_name }</h2>
 							</div>
+							<form id="siteSetForm" name="siteSetForm">
 							<div class="set_tbl">
-								<form id="siteSetForm" name="siteSetForm">
 								<input type="hidden" name="siteSetIdx" id="siteSetIdx" class="input" value="">
 								<input type="hidden" name="siteId" id="siteId" class="input" value="">
 								<table>
@@ -97,13 +97,13 @@
 											<th><span>요금적용 전력</span></th>
 											<td>
 												<!-- 달력 스크립트 -->
-												<input type="text" id="datepicker1" class="sel" value="" style="width:130px;">
+												<input type="text" id="datepicker10" class="sel" value="" style="width:130px;">
 												<input type="hidden" id="chargeYearmd" name="chargeYearmd">
 												<input type="text" name="chargePower" id="chargePower" class="input" maxlength="11" value=""> kW
 											</td>
-											<th><span>요금적용 전력대비</span></th>
+											<th><!-- <span>요금적용 전력대비</span> --></th>
 											<td>
-												<input type="text" name="chargeRate" id="chargeRate" class="input" value="" maxlength="2" onkeydown="onlyNum(event);"> %
+												<!-- <input type="text" name="chargeRate" id="chargeRate" class="input" value="" maxlength="2" onkeydown="onlyNum(event);"> % -->
 											</td>
 										</tr>
 										<tr>
@@ -142,15 +142,138 @@
 													<option value="30">30일</option>
 												</select>
 											</td>											
-											<th><span>수익배분 비율</span></th>
+											<th><span>청구일</span></th>
+											<td>
+												<select name="meterClaimDay" id="meterClaimDay" class="sel">
+													<option value="1">1일</option>
+													<option value="5">5일</option>
+													<option value="10">10일</option>
+													<option value="15">15일</option>
+													<option value="20">20일</option>
+													<option value="25">25일</option>
+													<option value="30">30일</option>
+												</select>
+											</td>
+											<!-- <th><span>수익배분 비율</span></th>
 											<td>
 												<input type="text" name="profitRatio" id="profitRatio" class="input" value="" maxlength="2" onkeydown="onlyNum(event);"> %
+											</td> -->
+										</tr>
+									</tbody>
+								</table>				
+							</div>
+							<div class="set_top mt40 clear">
+								<h2 class="ntit fl">ESS 구축 용량</h2>
+							</div>
+							<div class="set_tbl">
+								<table>
+									<colgroup>
+										<col width="200">
+										<col>
+										<col width="200">
+										<col>
+									</colgroup>
+									<tbody>
+										<tr>
+											<th><span>ESS Battery</span></th>
+											<td>
+												<input type="text" name="essBattery" id="essBattery" class="input" value=""> kWh
+											</td>
+											<th><span>PCS</span></th>
+											<td>
+												<input type="text" name="essPcs" id="essPcs" class="input" value=""> kW
 											</td>
 										</tr>
 									</tbody>
 								</table>				
-								</form>
 							</div>
+							<div class="set_top mt40 clear">
+								<h2 class="ntit fl">PV 거래 단가</h2>
+							</div>
+							<div class="set_tbl">
+								<table>
+									<colgroup>
+										<col width="200">
+										<col>
+										<col width="200">
+										<col>
+									</colgroup>
+									<tbody>
+										<tr>
+											<th><span>REC 단가</span></th>
+											<td>
+												<!-- 달력 스크립트 -->
+												<input type="text" id="datepicker11" class="sel" value="" style="width:130px;">
+												<input type="hidden" id="recRateDate" name="recRateDate">
+												<input type="text" name="recRate" id="recRate" class="input" value=""> 원/REC
+											</td>
+											<th><span>SMP 단가</span></th>
+											<td>
+												<!-- 달력 스크립트 -->
+												<input type="text" id="datepicker12" class="sel" value="" style="width:130px;">
+												<input type="hidden" id="smpRateDate" name="smpRateDate">
+												<input type="text" name="smpRate" id="smpRate" class="input" value=""> 원/kWh
+											</td>
+										</tr>
+										<tr>
+											<th><span>REC 가중치</span></th>
+											<td>
+												<input type="text" name="recWeight" id="recWeight" class="input" value="" style="width:130px;">
+											</td>
+											<th></th>
+											<td>
+												
+											</td>
+										</tr>
+									</tbody>
+								</table>				
+							</div>		
+							<div class="set_top mt40 clear">
+								<h2 class="ntit fl">수익배분</h2>
+							</div>
+							<div class="set_tbl">
+								<table>
+									<colgroup>
+										<col width="200">
+										<col>
+										<col width="200">
+										<col>
+									</colgroup>
+									<tbody>
+										<tr>
+											<th><span>ESS 수익배분 비율</span></th>
+											<td>
+												<input type="text" name="essProfitRatio" id="essProfitRatio" class="input" value="" style="width:130px;" maxlength="2" onkeydown="onlyNum(event);"> %
+											</td>
+											<th></th>
+											<td>
+												
+											</td>
+										</tr>
+										<tr>
+											<th><span>DR 수익배분 비율</span></th>
+											<td>
+												<input type="text" name="drProfitRatio" id="drProfitRatio" class="input" value="" style="width:130px;" maxlength="2" onkeydown="onlyNum(event);"> %
+											</td>
+											<th></th>
+											<td>
+												
+											</td>
+										</tr>
+										<tr>
+											<th><span>PV 수익배분 비율</span></th>
+											<td>
+												<input type="text" name="pvProfitRatio" id="pvProfitRatio" class="input" value="" style="width:130px;" maxlength="2" onkeydown="onlyNum(event);"> %
+											</td>
+											<th></th>
+											<td>
+												
+											</td>
+										</tr>
+									</tbody>
+								</table>				
+							</div>																		
+							</form>
 							<div class="btn_center">
 								<a href="#;" class="confirm_btn">적용</a>
 							</div>

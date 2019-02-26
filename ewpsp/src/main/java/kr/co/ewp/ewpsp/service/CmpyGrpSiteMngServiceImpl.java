@@ -148,6 +148,9 @@ public class CmpyGrpSiteMngServiceImpl implements CmpyGrpSiteMngService {
 		param2.put("chargeRate", 90);
 		param2.put("goalPower", 0);
 		param2.put("regUid", param.get("regUid"));
+		param2.put("meterClaimDay", 10);
+		param2.put("recRateDate", CommonUtils.convertDateFormat(new Date(), "yyyyMMdd"));
+		param2.put("smpRateDate", CommonUtils.convertDateFormat(new Date(), "yyyyMMdd"));
 		
 		int cnt2 = 0;
 		if(cnt > 0) cnt2 = kepcoMngSetDao.insertSiteSet(param2);
