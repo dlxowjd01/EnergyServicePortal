@@ -153,7 +153,7 @@
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(smpRate)">
 			smp_rate       = #{smpRate } ,   /* SMP단가(System Marginal Price)(단위:원) */
 			</if>
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(recTate)"> 
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(recRate)"> 
 			rec_rate       = #{recRate } ,    /* REC단가(단위:원) */
 			</if>
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(recWeight)">

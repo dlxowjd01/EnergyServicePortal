@@ -59,7 +59,6 @@
 	
 	$( function () {
 		$(".confirm_btn").click(function(){
-			var formData = $("#siteSetForm").serializeObject();
 			if(confirm("저장하시겠습니까?")) {
 				$dtpk1 = $("#datepicker10");
 				$("#chargeYearmd").val( ($dtpk1.val() == "") ? "" : new Date( $dtpk1.val()+" 00:00:00" ).format("yyyyMMdd") );
@@ -67,6 +66,7 @@
 				$("#recRateDate").val( ($dtpk2.val() == "") ? "" : new Date( $dtpk2.val()+" 00:00:00" ).format("yyyyMMdd") );
 				$dtpk3 = $("#datepicker12");
 				$("#smpRateDate").val( ($dtpk3.val() == "") ? "" : new Date( $dtpk3.val()+" 00:00:00" ).format("yyyyMMdd") );
+				var formData = $("#siteSetForm").serializeObject();
 				updateSiteSet(formData);
 			}
 		});
