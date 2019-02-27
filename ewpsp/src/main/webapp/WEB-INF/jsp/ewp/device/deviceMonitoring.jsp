@@ -7,6 +7,7 @@
 <jsp:include page="../include/sub_static.jsp" />
 <script type="text/javascript">
 	var deviceGbn = "${deviceGbn }";
+	var dvSiteId = "${selViewSiteId }";
 	$(document).ready(function() {
 		// js파일에서는 동작을 안함
 		$(".tab_menu").find("li").removeClass("active");

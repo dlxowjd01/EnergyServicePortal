@@ -7,9 +7,18 @@ function goLEMSPage(redirectUrl) {
 }
 
 function callback_goLEMSPage(result) {
-	var urlEnc = encodeURIComponent('https://13.125.50.136' + lemsUrl);
-	window.open('https://13.125.50.136/lems/sso/login?userId=' + result.user_id + '&userPw=' + result.user_pw + '&redirectUrl=' + urlEnc);
+	getSiteDetail(dvSiteId);
+//	var urlEnc = encodeURIComponent('https://13.125.50.136' + lemsUrl);
+//	window.open('https://13.125.50.136/lems/sso/login?userId=' + result.user_id + '&userPw=' + result.user_pw + '&redirectUrl=' + urlEnc);
+	var urlEnc = encodeURIComponent(localEmsAddr + lemsUrl);
+	window.open(localEmsAddr+'/lems/sso/login?userId=' + result.user_id + '&userPw=' + result.user_pw + '&redirectUrl=' + urlEnc);
 	lemsUrl = null;
+}
+
+var localEmsAddr = "";
+function callback_getSiteDetail(result) {
+	var siteDetail = result.detail;
+	localEmsAddr = siteDetail.local_ems_addr;
 }
 
 /* 아직 쓰는 곳 없음. */
