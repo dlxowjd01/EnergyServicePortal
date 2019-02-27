@@ -1,6 +1,6 @@
 /* datapicker */
 $(function() {
-    $( "#datepicker1, #datepicker2, #datepicker5, #datepicker10, #datepicker11, #datepicker12" ).datepicker({
+    $( "#datepicker1, #datepicker2, #datepicker5, #datepicker10, #datepicker12" ).datepicker({
         showOn: "both", 
         /*buttonImage: "../2016img/search_calendar.gif", */
         buttonImageOnly: true,
@@ -15,7 +15,7 @@ $(function() {
         showMonthAfterYear: true,
         yearSuffix: '년'
     });
-    $( "#datepicker3, #datepicker4" ).datepicker({
+    $( "#datepicker3, #datepicker4, #datepicker11" ).datepicker({
     	showOn: "both", 
     	/*buttonImage: "../2016img/search_calendar.gif", */
     	buttonImageOnly: true,

@@ -48,7 +48,7 @@
 			
 			$("#recRateDate").val( siteSetDetail.rec_rate_date );
 			var ymd2 = siteSetDetail.rec_rate_date;
-			$("#datepicker11").val( (ymd2 == "") ? "" : ymd2.substring(0, 4)+"-"+ymd2.substring(4, 6)+"-"+ymd2.substring(6, 8) );
+			$("#datepicker11").val( (ymd2 == "") ? "" : ymd2.substring(0, 4)+"-"+ymd2.substring(4, 6) );
 			$("#smpRateDate").val( siteSetDetail.smp_rate_date );
 			var ymd3 = siteSetDetail.smp_rate_date;
 			$("#datepicker12").val( (ymd3 == "") ? "" : ymd3.substring(0, 4)+"-"+ymd3.substring(4, 6)+"-"+ymd3.substring(6, 8) );
