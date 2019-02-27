@@ -411,9 +411,10 @@ var summerVal = 0;
 var springFallVal = 0;
 var basicVal = 0;
 var custNum = "";		//고객번호
+var useElecAddr = "";		//전기사용 장소
 var meterNum = "";		//계량기 번호
 var meterSf = "";		//계량기 배수
-var profitRatio = "";		//수익배분 비율
+//var profitRatio = "";		//수익배분 비율
 var meterReadDay = "";		//검침일
 var contractPower = "";		//계약전력
 var planType = "";
@@ -426,20 +427,28 @@ var planTypeName3 = ""; //구분3
 var smpRate = "";		//SMP 단가
 var recRate = "";		//REC 단가
 var recWeight = "";		//REC 가중치
+var meterClaimDay = 0; // 청구일
+var essProfitRatio = 0; // ESS수익배분 비율
+var drProfitRatio  = 0; // DR수익배분 비율
+var pvProfitRatio  = 0; // PV수익배분 비율
+var recRateDate = "";
+var smpRateDate = "";
 
 function callback_getPlanTypeVal(result){
 	var thisDay = new Date();
 	thisDay = new Date(thisDay.setMonth(thisDay.getMonth()-1));
 	thisMonth = parseInt(thisDay.format("MM"));
 	var planType = result.result;
-	planTypeName = planType.plan_name; //구분 전체
-	basicVal = planType.basic_val;
-	plan_type_name1 = planType.plan_type_name; //구분1 
-	plan_type_name2 = planType.plan_type_name //구분2 
-	plan_type_name3 = planType.plan_type_name //구분3 
-	summerVal = planType.summer_val;
-	winterVal = planType.winter_val;
-	springFallVal = planType.spring_fall_val;
+	if(planType != null) {
+		planTypeName = planType.plan_name; //구분 전체
+		basicVal = planType.basic_val;
+		plan_type_name1 = planType.plan_type_name; //구분1 
+		plan_type_name2 = planType.plan_type_name //구분2 
+		plan_type_name3 = planType.plan_type_name //구분3 
+		summerVal = planType.summer_val;
+		winterVal = planType.winter_val;
+		springFallVal = planType.spring_fall_val;
+	}
 }
 
 
@@ -447,18 +456,29 @@ function callback_getSiteSetDetail(result){
 	
 	
 	var site = result.detail;
-	custNum = site.cust_num;		//고객번호
-	meterNum = site.meter_num;		//계량기 번호
-	meterSf = site.meter_sf;		//계량기 배수
-	profitRatio = 20;//site.profit_ratio;		//수익배분 비율
+	custNum = (site.cust_num == null) ? "-" : site.cust_num;		//고객번호
+	useElecAddr = (site.use_elec_addr == null) ? "-" : site.use_elec_addr; // 전기사용 장소
+	meterNum = (site.meter_num == null) ? "-" : site.meter_num;		//계량기 번호
+	meterSf = (site.meter_sf == null) ? "-" : site.meter_sf;		//계량기 배수
+//	profitRatio = 20;//site.profit_ratio;		//수익배분 비율
 	meterReadDay = site.meter_read_day;		//검침일
 	contractPower = site.contract_power;		//계약전력
 	planType = site.plan_type;		//구분1
 	planType2 = site.plan_type2;		//구분2
 	planType3 = site.plan_type3;		//구분3
-	smpRate = 101.59;//읾시 상수처리site.smp_rate;		//SMP 단가
-	recRate = 99.92;//임시 상수처리site.rec_rate;		//REC 단가
+	smpRate = site.smp_rate;		//SMP 단가
+	recRate = site.rec_rate;		//REC 단가
+//	smpRate = 101.59;//읾시 상수처리site.smp_rate;		//SMP 단가
+//	recRate = 99.92;//임시 상수처리site.rec_rate;		//REC 단가
 	recWeight = site.rec_weight;		//REC 가중치
+	meterClaimDay = site.meter_claim_day; // 청구일
+	essProfitRatio = site.ess_profit_ratio; // ESS수익배분 비율
+	drProfitRatio = site.dr_profit_ratio; // DR수익배분 비율
+	pvProfitRatio = site.pv_profit_ratio; // PV수익배분 비율
+	recRateDate = site.rec_rate_date; 
+	smpRateDate = site.smp_rate_date;
+	console.log(smpRateDate);
+	console.log(recRateDate);
 	
 	getPlanTypeVal(planType,planType2,planType3);
 

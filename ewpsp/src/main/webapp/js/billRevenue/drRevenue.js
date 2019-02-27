@@ -31,12 +31,12 @@
 	
 	$( function () {
 		$("#drRevenueTex").click(function(){
-			if(sheetList.length > 0){
+//			if(sheetList.length > 0){
 				
 				popupOpen('dprint')
-			}else{
-				alert("조회할 명세서 내역이 없습니다.");
-			}
+//			}else{
+//				alert("조회할 명세서 내역이 없습니다.");
+//			}
 		});
 	
 	});
@@ -112,7 +112,7 @@
 				var totalRewardAmt  = String(sheetList[i].total_reward_amt)   ;
 				var csmRewardAmt  = String(sheetList[i].csm_reward_amt)   ;
 				var ewpRewardAmt  = String(sheetList[i].ewp_reward_amt)   ;
-				var profitRatio  =sheetList[i].profit_ratio      ;
+				var profitRatio  = drProfitRatio; //sheetList[i].profit_ratio      ;
 				var addRate = 0.1;
 				
 				var total = capAmt+reductRewardAmt;
@@ -146,38 +146,42 @@
 				if(ewpRewardAmt == null || ewpRewardAmt == "" || ewpRewardAmt == "null") reEwpRewardAmt = null;
 
 				$("#texBill").text("DR (수요반응) 수익 배분 청구서 (’"+yyyyMM.substring(2,4)+"년"+yyyyMM.substring(4,6)+"월)");
-				$("#texDay").text("청구일 : "+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-"+"20");
+				$("#texDay").text("청구일 : "+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-"+meterClaimDay);
 				$(".dp_total").text(numberComma(texPrice));
 				// 표데이터 셋팅
 				
 				texStr += "<tr>";
 				texStr += "<th>용량 정산금</th>";
 				texStr += "<td align='right'>"+numberComma(capAmt)+"</td>";
-				texStr += "<tr>";
+				texStr += "</tr>";
 				texStr += "<tr>";
 				texStr += "<th>감축 정산금</th>";
 				texStr += "<td align='right'>"+numberComma(reductRewardAmt)+"</td>";
-				texStr += "<tr>";
+				texStr += "</tr>";
 				texStr += "<tr>";
 				texStr += "<th>총 정산금액</th>";
 				texStr += "<td align='right'>"+numberComma(total)+"</td>";
-				texStr += "<tr>";
-				texStr += "<tr>";
-				texStr += "<th>고객 정산 금액</th>";
-				texStr += "<td align='right'>"+numberComma(Math.round(reCsmRewardAmt))+"</td>";
-				texStr += "<tr>";
+				texStr += "</tr>";
+//				texStr += "<tr>";
+//				texStr += "<th>고객 정산 금액</th>";
+//				texStr += "<td align='right'>"+numberComma(Math.round(reCsmRewardAmt))+"</td>";
+//				texStr += "</tr>";
 				texStr += "<tr>";
 				texStr += "<th>①수익배분 계</th>";
 				texStr += "<td align='right'>"+numberComma(beneDiv)+"</td>";
-				texStr += "<tr>";
+				texStr += "</tr>";
 				texStr += "<tr>";
 				texStr += "<th>부가가치세</th>";
 				texStr += "<td align='right'>"+numberComma(addPrice)+"</td>";
-				texStr += "<tr>";
+				texStr += "</tr>";
 				texStr += "<tr>";
 				texStr += "<th>원단위절사</th>";
 				texStr += "<td align='right'>"+delLastWon+"</td>";
+				texStr += "</tr>";
 				texStr += "<tr>";
+				texStr += "<th>&nbsp</th>";
+				texStr += "<td align='right'>&nbsp</td>";
+				texStr += "</tr>";
 				texFootStr += "<tr>";
 				texFootStr += "<th>청구금액</th>";
 				texFootStr += "<td align='right'>"+numberComma(texPrice)+"</td>";
@@ -198,7 +202,7 @@
 				saveStr += "</tr>";
 				saveStr += "<tr>";
 				saveStr += "<th>감축 이행율 (%)</th>";
-				saveStr += "<td align='right'>"+numberComma(reReductCapPer)+"</td>";
+				saveStr += "<td align='right'>"+numberComma(reductCapPer)+"</td>";
 				saveStr += "</tr>";
 				saveStr += "<tr>";
 				saveStr += "<th>수익 배분 (%)</th>";
@@ -229,7 +233,10 @@
 				infoAreaStr +="</tr>";
 				infoAreaStr +="<tr>";
 				infoAreaStr +="<th>납기일</th>";
-				infoAreaStr +="<td>"+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-20</td>";
+				var drRvClaimDay = yyyyMM.substring(0, 4)+"-"+yyyyMM.substring(4, 6)+"-"+meterClaimDay+" 00:00:00";
+				var drRvClaimDate = new Date(drRvClaimDay);
+				var paymentDate = new Date(drRvClaimDate.setDate(drRvClaimDate.getDate() + 10));
+				infoAreaStr +="<td>"+paymentDate.format("yyyy-MM-dd")+"</td>";
 				infoAreaStr +="</tr>";
 				
 				
@@ -246,7 +253,7 @@
 		//}
 		
 		// 차트데이터 셋팅
-		if(chartList.length > 0) {
+		if(chartList != null && chartList.length > 0) {
 			for(var i=0; i<chartList.length; i++) {
 				var yyyyMM = chartList[i].std_yearm;
 				var reductCntHour  = String(chartList[i].reduct_cnt_hour)   ;
@@ -258,7 +265,7 @@
 				var totalRewardAmt  = String(chartList[i].total_reward_amt)   ;
 				var csmRewardAmt  = String(chartList[i].csm_reward_amt)   ;
 				var ewpRewardAmt  = String(chartList[i].ewp_reward_amt)   ;
-				var profitRatio  = String(chartList[i].profit_ratio)      ;
+				var profitRatio  = drProfitRatio; //String(chartList[i].profit_ratio)      ;
 				var reReductCntHour = 0;
 				var reReductCap = 0;
 				var reReductAmt = 0;
@@ -392,7 +399,7 @@
 				var totalRewardAmt  = String(sheetList[i].total_reward_amt)   ;
 				var csmRewardAmt  = String(sheetList[i].csm_reward_amt)   ;
 				var ewpRewardAmt  = String(sheetList[i].ewp_reward_amt)   ;
-				var profitRatio  = String(sheetList[i].profit_ratio)      ;
+				var profitRatio  = drProfitRatio;//String(sheetList[i].profit_ratio)      ;
 				var reReductCntHour = 0;
 				var reReductCap = 0;
 				var reReductAmt = 0;

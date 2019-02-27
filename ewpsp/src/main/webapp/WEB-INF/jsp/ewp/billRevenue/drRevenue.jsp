@@ -236,7 +236,7 @@
 								<h2 class="ntit fl">DR 수익 도표</h2>
 								<ul class="fr">
 									<li><a href="#;" class="save_btn" onclick="excelDownload('DR수익조회', event);">데이터저장</a></li>
-									<!-- <li><a href="#" class="default_btn" id = "drRevenueTex">명세서 확인하기</a></li> -->
+									<li><a href="#" class="default_btn" id = "drRevenueTex">명세서 확인하기</a></li>
 									<li><a href="#;" class="fold_btn">표접기</a></li>
 								</ul>
 							</div>
@@ -336,10 +336,10 @@
 								<th>총 정산금액</th>
 								<td align="right">1,000,000</td>
 							</tr>
-							<tr>
+							<!-- <tr>
 								<th>고객 정산 금액</th>
 								<td align="right">800,000</td>
-							</tr>
+							</tr> -->
 							<tr>
 								<th>①수익배분 계</th>
 								<td align="right">200,000</td>
@@ -351,6 +351,10 @@
 							<tr>
 								<th>원단위절사</th>
 								<td align="right">-6</td>
+							</tr>
+							<tr>
+								<th>&nbsp;</th>
+								<td>&nbsp;</td>
 							</tr>
 						</tbody>
 						<tfoot>

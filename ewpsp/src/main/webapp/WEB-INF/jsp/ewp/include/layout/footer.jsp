@@ -207,22 +207,22 @@
 						</thead>
 						<tbody id = "ESS">
 							<tr>
-								<th>①기본 요금 절감(피크저감)</th>
+								<th>기본 요금 절감(피크저감)</th>
 								<td align="right">0</td>
 								<td align="right">0</td>
 							</tr>
 							<tr>
-								<th>②전려량 요금 절감(계시별)</th>
+								<th>전려량 요금 절감(계시별)</th>
 								<td align="right">0</td>
 								<td align="right">0</td>
 							</tr>
 							<tr>
-								<th>③ESS 충전 요금 할인</th>
+								<th>ESS 충전 요금 할인</th>
 								<td align="right">0</td>
 								<td align="right">0</td>
 							</tr>
 							<tr>
-								<th>④ESS 전용 요금 할인</th>
+								<th>ESS 전용 요금 할인</th>
 								<td align="right">0</td>
 								<td align="right">0</td>
 							</tr>
@@ -280,10 +280,10 @@
 								<th>총 정산금액</th>
 								<td align="right">0</td>
 							</tr>
-							<tr>
+							<!-- <tr>
 								<th>고객 정산 금액</th>
 								<td align="right">0</td>
-							</tr>
+							</tr> -->
 							<tr>
 								<th>①수익배분 계</th>
 								<td align="right">0</td>
@@ -331,10 +331,10 @@
 								<th>③총 수익</th>
 								<td align="right">0</td>
 							</tr>
-							<tr>
+							<!-- <tr>
 								<th>고객 정산 금액</th>
 								<td align="right"></td>
-							</tr>
+							</tr> -->
 							<tr>
 								<th>④수익배분 계</th>
 								<td align="right">0</td>

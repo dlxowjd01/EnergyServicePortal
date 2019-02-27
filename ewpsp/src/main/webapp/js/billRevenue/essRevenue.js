@@ -23,12 +23,12 @@
 	
 	$( function () {
 		$("#ESSRevenueTex").click(function(){
-			if(texList.length > 0){
+//			if(texList.length > 0){
 				
 				popupOpen('dprint')
-			}else{
-				alert("조회할 명세서 내역이 없습니다.");
-			}
+//			}else{
+//				alert("조회할 명세서 내역이 없습니다.");
+//			}
 		});
 	
 	});
@@ -450,14 +450,16 @@
 		var ratePer  = String(texList[0].rate_per)           ;
 		var valAddTex = texList[0].val_add_tax				;
 		var usg = texList[0].val_add_tax	;
+		var demandChgReduct = Math.round(texList[0].demand_chg_reduct);	//기본요금절감금액
+		var beneDivdemandChgReduct = Math.round((demandChgReduct*essProfitRatio)/100);	//기본요금절감금액
 		var energyChgReduct = Math.round(texList[0].energy_chg_reduct);	//전력량 요금 절감(계시별)
-		var beneDivenergyChgReduct = Math.round((energyChgReduct*profitRatio)/100);		//전력량 요금 절감(계시별) 수익배분
+		var beneDivenergyChgReduct = Math.round((energyChgReduct*essProfitRatio)/100);		//전력량 요금 절감(계시별) 수익배분
 		var essChgIncen = Math.round(texList[0].ess_chg_incen);	//ESS 충전 요금 할인
-		var beneDivessChgIncen = Math.round((essChgIncen*profitRatio)/100);		//ESS 충전 요금 할인 수익배분
+		var beneDivessChgIncen = Math.round((essChgIncen*essProfitRatio)/100);		//ESS 충전 요금 할인 수익배분
 		var essDischgIncen = Math.round(texList[0].ess_dischg_incen);	//ESS 방전 요금 할인
-		var beneDivessDischgIncen = Math.round((essDischgIncen*profitRatio)/100);		//ESS 방전 요금 할인 수익배분
+		var beneDivessDischgIncen = Math.round((essDischgIncen*essProfitRatio)/100);		//ESS 방전 요금 할인 수익배분
 		var total = Math.round(energyChgReduct+essChgIncen+essDischgIncen);	//총계
-		var beneDivTotal = Math.round((total*profitRatio)/100);	//수익배분 총계
+		var beneDivTotal = Math.round((total*essProfitRatio)/100);	//수익배분 총계
 		var addDivTotal = Math.round(beneDivTotal*1.1);
 		var reEssBdayInMonth  = 0;
 		var reEssDischgOffPeak  = 0;
@@ -518,8 +520,8 @@
 		}
 		if(ewpPeakRate == null || ewpPeakRate == "" || ewpPeakRate == "null") reEwpPeakRate = null;
 		else reEwpPeakRate = Math.round( Number(ewpPeakRate) );
-		if(profitRatio == null || profitRatio == "" || profitRatio == "null") reRatePer = null;
-		else reRatePer = Math.round( Number(profitRatio) );
+		if(essProfitRatio == null || essProfitRatio == "" || essProfitRatio == "null") reRatePer = null;
+		else reRatePer = Math.round( Number(essProfitRatio) );
 		
 		/*var reEssDischgOffPeak  = 0;
 		var reEssDischgMidPeak  = 0;
@@ -534,6 +536,10 @@
 		
 		totDischgPeak = reEssDischgOffPeak+reEssDischgMidPeak+reEssDischgMaxPeak;
 		totChgPeak =reEssChgOffPeak+ reEssChgMidPeak+reEssChgMaxPeak
+		
+		chgOffCalc = reEssChgOffPeak*elecNum*energyChgBasicBill*1;
+		chgMidCalc = reEssChgMidPeak*elecNum*energyChgBasicBill*1;
+		chgMaxCalc = reEssChgMaxPeak*elecNum*energyChgBasicBill*1;
 		
 		dischgOffCalc = reEssDischgOffPeak*elecNum*energyChgBasicBill*1;
 		dischgMidCalc = reEssDischgMidPeak*elecNum*energyChgBasicBill*1;
@@ -551,6 +557,7 @@
 		
 		
 		totDischgPeakVal = dischgOffCalc+dischgMidCalc+dischgMaxCalc;
+		totChgPeakVal = chgOffCalc+chgMidCalc+chgMaxCalc;
 		var delLastWon = Math.floor(addDivTotal/10)*10-addDivTotal; // 원단위 절사
 		
 		var ESSBodyStr = "";
@@ -567,14 +574,14 @@
 		$(".texSaveArea").find("tfoot").empty();
 		$(".calcArea").find("tbody").empty();*/
 		$("#texBill").text("에너지절감 솔루션 제공 전기요금 절감 수익 배분 청구서 (’"+yyyyMM.substring(2,4)+"년"+yyyyMM.substring(4,6)+"월)");
-		$("#texDay").text("청구일 : "+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-"+"20");
+		$("#texDay").text("청구일 : "+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-"+meterClaimDay);
 		$(".dp_total").text(numberComma(addDivTotal+delLastWon));
 		
 		
 		ESSBodyStr += "<tr>";
 		ESSBodyStr += "<th>①기본 요금 절감(피크저감)</th>";
-		ESSBodyStr += "<td align='right'>0</td>";
-		ESSBodyStr += "<td align='right'>0</td>";
+		ESSBodyStr += "<td align='right'>"+demandChgReduct+"</td>";
+		ESSBodyStr += "<td align='right'>"+beneDivdemandChgReduct+"</td>";
 		ESSBodyStr += "</tr>";
 		ESSBodyStr += "<tr>";
 		ESSBodyStr += "<th>②전력량 요금 절감(계시별)</th>";
@@ -587,7 +594,7 @@
 		ESSBodyStr += "<td align='right'>"+numberComma(beneDivessChgIncen)+"원</td>";
 		ESSBodyStr += "</tr>";
 		ESSBodyStr += "<tr>";
-		ESSBodyStr += "<th>④ESS 방전 요금 할인</th>";
+		ESSBodyStr += "<th>④ESS 전용 요금 할인</th>";
 		ESSBodyStr += "<td align='right'>"+numberComma(essDischgIncen)+"원</td>";
 		ESSBodyStr += "<td align='right'>"+numberComma(beneDivessDischgIncen)+"원</td>";
 		ESSBodyStr += "</tr>";
@@ -640,22 +647,22 @@
 		ESSSaveAreaStr += "<th rowspan='4'>방전</th>";
 		ESSSaveAreaStr += "<th>경부하</th>";
 		ESSSaveAreaStr += "<td aligh ='right'>"+ ( (reEssChgOffPeak == null) ? "" : numberComma(reEssChgOffPeak)    ) +"</td>";
-		ESSSaveAreaStr += "<td aligh ='right'>0</td>";
+		ESSSaveAreaStr += "<td aligh ='right'>"+numberComma(Math.round(chgOffCalc))+"</td>";
 		ESSSaveAreaStr += "</tr>";
 		ESSSaveAreaStr += "<tr>";
 		ESSSaveAreaStr += "<th>중간부하</th>";
 		ESSSaveAreaStr += "<td aligh ='right'>"+ ( (reEssChgMidPeak == null) ? "" : numberComma(reEssChgMidPeak)    ) +"</td>";
-		ESSSaveAreaStr += "<td aligh ='right'>0</td>";
+		ESSSaveAreaStr += "<td aligh ='right'>"+numberComma(Math.round(chgMidCalc))+"</td>";
 		ESSSaveAreaStr += "</tr>";
 		ESSSaveAreaStr += "<tr>";
 		ESSSaveAreaStr += "<th>최대부하</th>";
 		ESSSaveAreaStr += "<td aligh ='right'>"+ ( (reEssChgMaxPeak == null) ? "" : numberComma(reEssChgMaxPeak)    ) +"</td>";
-		ESSSaveAreaStr += "<td aligh ='right'>0</td>";
+		ESSSaveAreaStr += "<td aligh ='right'>"+numberComma(Math.round(chgMaxCalc))+"</td>";
 		ESSSaveAreaStr += "</tr>";
 		ESSSaveAreaStr += "<tr>";
 		ESSSaveAreaStr += "<th>계</th>";
 		ESSSaveAreaStr += "<td aligh ='right'>"+totChgPeak+"</td>";
-		ESSSaveAreaStr += "<td aligh ='right'>0</td>";
+		ESSSaveAreaStr += "<td aligh ='right'>"+numberComma(Math.round(totChgPeakVal))+"</td>";
 		ESSSaveAreaStr += "</tr>";
 		
 
@@ -675,7 +682,7 @@
 		ESSCalcAreaStr += "<tr>";
 		ESSCalcAreaStr += "<th>③ESS 충전 요금 할인</th>";
 		ESSCalcAreaStr += "<td aligh ='right'>"+numberComma(beneDivessChgIncen)+"</td>";
-		ESSCalcAreaStr += "<td>("+numberComma(reEssDischgOffPeak)+" kW x 0.5 x"+energyChgBasicBill+"x 1)</td>";
+		ESSCalcAreaStr += "<td>("+numberComma(reEssDischgOffPeak)+" kW x 0.5 x"+energyChgBasicBill+"원x 1)</td>";
 		ESSCalcAreaStr += "</tr>";
 		ESSCalcAreaStr += "<tr>";
 		ESSCalcAreaStr += "<th>④ESS 전용 요금 할인</th>";
@@ -709,7 +716,10 @@
 		ESSInfoStr += "</tr>";
 		ESSInfoStr += "<tr>";
 		ESSInfoStr += "<th>납기일</th>";
-		ESSInfoStr += "<td>"+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-"+"20</td>";
+		var essRvClaimDay = yyyyMM.substring(0, 4)+"-"+yyyyMM.substring(4, 6)+"-"+meterClaimDay+" 00:00:00";
+		var essRvClaimDate = new Date(essRvClaimDay);
+		var paymentDate = new Date(essRvClaimDate.setDate(essRvClaimDate.getDate() + 10));
+		ESSInfoStr +="<td>"+paymentDate.format("yyyy-MM-dd")+"</td>";
 		ESSInfoStr += "</tr>";
 		
 		

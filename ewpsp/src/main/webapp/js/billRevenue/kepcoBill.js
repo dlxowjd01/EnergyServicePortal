@@ -32,12 +32,12 @@
 	
 	$( function () {
 		$("#kepcoBillTex").click(function(){
-			if(texList.length > 0){
+//			if(texList.length > 0){
 				
 				popupOpen('dprint')
-			}else{
-				alert("조회할 명세서 내역이 없습니다.");
-			}
+//			}else{
+//				alert("조회할 명세서 내역이 없습니다.");
+//			}
 		});
 	
 	});
@@ -112,7 +112,7 @@
 			$("#texArea").find("tfoot").empty();
 			
 			$("#texBill").text("전기 요금 청구서 ("+yyyyMM.substring(2,4)+"년"+yyyyMM.substring(4,6)+"월)");
-			$("#texDay").text("청구일 : "+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-"+"20");
+			$("#texDay").text("청구일 : "+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-"+meterClaimDay);
 			$(".dp_total").text(numberComma(Math.floor(texList[0].tot_amt_bill/10)*10));
 			texStr +="<tr>";
 			texStr +="<th>기본요금</th>";
@@ -165,7 +165,10 @@
 			texInfoStr +="</tr>";
 			texInfoStr +="<tr>";
 			texInfoStr +="<th>납기일</th>";
-			texInfoStr +="<td>"+yyyyMM.substring(0, 4)+"년"+yyyyMM.substring(4, 6)+"월"+meterReadDay+"일</td>";
+			var kepcoBillClaimDay = yyyyMM.substring(0, 4)+"-"+yyyyMM.substring(4, 6)+"-"+meterClaimDay+" 00:00:00";
+			var kepcoBillClaimDate = new Date(kepcoBillClaimDay);
+			var paymentDate = new Date(kepcoBillClaimDate.setDate(kepcoBillClaimDate.getDate() + 10));
+			texInfoStr +="<td>"+paymentDate.format("yyyy년 MM월 dd일")+"</td>";
 			texInfoStr +="</tr>";
 			
 			
@@ -175,7 +178,7 @@
 			customerStr +="</tr>";
 			customerStr +="<tr>";
 			customerStr +="<th>주소</th>";
-			customerStr +="<td>울산광역시 울주군 온산읍 원산로 40</td>";
+			customerStr +="<td>"+useElecAddr+"</td>";
 			customerStr +="</tr>";
 			customerStr +="</tr>";
 			customerStr +="<tr>";

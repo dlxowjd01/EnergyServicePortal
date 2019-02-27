@@ -127,6 +127,10 @@
 			kepcoStr += "<th>미납요금</th>";
 			kepcoStr += "<td align='right'></td>";
 			kepcoStr += "</tr>";
+			kepcoStr += "<tr>";
+			kepcoStr += "<th>&nbsp;</th>";
+			kepcoStr += "<td align='right'>&nbsp;</td>";
+			kepcoStr += "</tr>";
 			
 			kepcoFootStr += "<tr>";
 			kepcoFootStr += "<th>청구금액</th>";
@@ -190,22 +194,22 @@
 			totESS = addDivTotal+delLastWon;
 			
 			ESSStr += "<tr>";
-			ESSStr += "<th>①기본 요금 절감(피크저감)</th>";
+			ESSStr += "<th>기본 요금 절감(피크저감)</th>";
 			ESSStr += "<td align='right'>0원</td>";
 			ESSStr += "<td align='right'>0원</td>";
 			ESSStr += "</tr>";
 			ESSStr += "<tr>";
-			ESSStr += "<th>②전려량 요금 절감(계시별)</th>";
+			ESSStr += "<th>전려량 요금 절감(계시별)</th>";
 			ESSStr += "<td align='right'>"+numberComma(energyChgReduct)+"원</td>";
 			ESSStr += "<td align='right'>"+numberComma(beneDivenergyChgReduct)+"원</td>";
 			ESSStr += "</tr>";
 			ESSStr += "<tr>";
-			ESSStr += "<th>③ESS 충전 요금 할인</th>";
+			ESSStr += "<th>ESS 충전 요금 할인</th>";
 			ESSStr += "<td align='right'>"+numberComma(essChgIncen)+"원</td>";
 			ESSStr += "<td align='right'>"+numberComma(beneDivessChgIncen)+"원</td>";
 			ESSStr += "</tr>";
 			ESSStr += "<tr>";
-			ESSStr += "<th>④ESS 전용 요금 할인</th>";
+			ESSStr += "<th>ESS 전용 요금 할인</th>";
 			ESSStr += "<td align='right'>"+numberComma(essDischgIncen)+"원</td>";
 			ESSStr += "<td align='right'>"+numberComma(beneDivessDischgIncen)+"원</td>";
 			ESSStr += "</tr>";
@@ -289,10 +293,10 @@
 				DRStr += "<th>총 정산금액</th>";
 				DRStr += "<td align='right'>"+numberComma(total)+"</td>";
 				DRStr += "</tr>";
-				DRStr += "<tr>";
-				DRStr += "<th>고객 정산 금액</th>";
-				DRStr += "<td align='right'>"+numberComma(Math.round(reCsmRewardAmt))+"</td>";
-				DRStr += "</tr>";
+//				DRStr += "<tr>";
+//				DRStr += "<th>고객 정산 금액</th>";
+//				DRStr += "<td align='right'>"+numberComma(Math.round(reCsmRewardAmt))+"</td>";
+//				DRStr += "</tr>";
 				DRStr += "<tr>";
 				DRStr += "<th>①수익배분 계</th>";
 				DRStr += "<td align='right'>"+numberComma(beneDiv)+"</td>";

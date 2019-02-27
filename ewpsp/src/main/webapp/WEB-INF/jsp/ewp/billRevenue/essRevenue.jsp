@@ -236,7 +236,7 @@
 								<h2 class="ntit fl">ESS 수익 도표</h2>
 								<ul class="fr">
 									<li><a href="#;" class="save_btn" onclick="excelDownload('ESS수익조회', event);">데이터저장</a></li>
-									<!-- <li><a href="#" class="default_btn"  id="ESSRevenueTex">명세서 확인하기</a></li> -->
+									<li><a href="#" class="default_btn"  id="ESSRevenueTex">명세서 확인하기</a></li>
 									<li><a href="#;" class="fold_btn">표접기</a></li>
 								</ul>
 							</div>
@@ -452,7 +452,7 @@
 						<td>(81,728 kW x 0.5 x 54.5 원 x 1) </td>
 					</tr>
 					<tr>
-						<th>④ESS 방전 요금 할인</th>
+						<th>④ESS 전용 요금 할인</th>
 						<td align="right">25,331,670</td>
 						<td>Min[(40,527 kW x 8,190 원), (((64,990 kW – 41 kW) / (21 일 x 3)) x 3 x 1 x 8,190 원)] </td>
 					</tr>

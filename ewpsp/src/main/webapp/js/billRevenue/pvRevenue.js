@@ -57,11 +57,11 @@ var texDay = new Date();
 	
 	$( function () {
 		$("#pvRevenueTex").click(function(){
-			if(netGenValSheetList != null && netGenValSheetList.length > 0){
+//			if(netGenValSheetList != null && netGenValSheetList.length > 0){
 				popupOpen('dprint')
-			}else{
-				alert("조회할 명세서 내역이 없습니다.");
-			}
+//			}else{
+//				alert("조회할 명세서 내역이 없습니다.");
+//			}
 		});
 	
 	});
@@ -151,11 +151,11 @@ var texDay = new Date();
 		totBeneVal = 0;
 		delLastWon = 0;
 		
-		addTex = Math.round(reTotPrice*profitRatio/100*0.1);
-		totBeneVal = (reTotPrice*profitRatio)/100+addTex;
+		addTex = Math.round(reTotPrice*pvProfitRatio/100*0.1);
+		totBeneVal = (reTotPrice*pvProfitRatio)/100+addTex;
 		delLastWon = Math.floor(totBeneVal/10)*10-totBeneVal;
 		$("#texBill").text("태양광 발전 수익 배분 청구서 (’"+texDay.substring(2,4)+"년"+texDay.substring(4,6)+"월)");
-		$("#texDay").text("청구일 : "+texDay.substring(0,4)+"-"+texDay.substring(4,6)+"-"+"20");
+		$("#texDay").text("청구일 : "+texDay.substring(0,4)+"-"+texDay.substring(4,6)+"-"+meterClaimDay);
 		$(".dp_total").text(numberComma((totBeneVal+delLastWon)));
 		
 				/*dt_str += "<td>"+  ( (reNetGenVal == null) ? "" : reNetGenVal ) +"</td>"; // 총 발전량
@@ -167,23 +167,23 @@ var texDay = new Date();
 */	
 			textbodyStr += "<tr>";
 			textbodyStr += "<th>①REC 수익</th>";
-			textbodyStr += "<td align='right'>"+numberComma(reRecPrice)+"</td>";
+			textbodyStr += "<td align='right'>"+((reRecPrice == null) ? "" : numberComma(reRecPrice))+"</td>";
 			textbodyStr += "</tr>";
 			textbodyStr += "<tr>";
 			textbodyStr += "<th>②SMP 수익</th>";
-			textbodyStr += "<td align='right'>"+numberComma(reSmpPrice)+"</td>";
+			textbodyStr += "<td align='right'>"+((reSmpPrice == null) ? "" : numberComma(reSmpPrice))+"</td>";
 			textbodyStr += "</tr>";
 			textbodyStr += "<tr>";
 			textbodyStr += "<th>③총 수익</th>";
-			textbodyStr += "<td align='right'>"+numberComma(reTotPrice)+"</td>";
+			textbodyStr += "<td align='right'>"+((reTotPrice == null) ? "" : numberComma(reTotPrice))+"</td>";
 			textbodyStr += "</tr>";
 			textbodyStr += "<tr>";
 			textbodyStr += "<th>④수익배분 계</th>";
-			textbodyStr += "<td align='right'>"+numberComma((reTotPrice*profitRatio)/100)+"</td>";
+			textbodyStr += "<td align='right'>"+numberComma((reTotPrice*pvProfitRatio)/100)+"</td>";
 			textbodyStr += "</tr>";
 			textbodyStr += "<tr>";
 			textbodyStr += "<th>부가가치세</th>";
-			textbodyStr += "<td align='right'>"+numberComma(addTex)+"</td>";
+			textbodyStr += "<td align='right'>"+((addTex == null) ? "" : numberComma(addTex))+"</td>";
 			textbodyStr += "</tr>";
 			textbodyStr += "<tr>";
 			textbodyStr += "<th>원단위절사</th>";
@@ -197,23 +197,23 @@ var texDay = new Date();
 			
 			elecStr += "<tr>";
 			elecStr += "<th>총 발전</th>";
-			elecStr += "<td align='right'>"+reNetGenVal+"</td>";
+			elecStr += "<td align='right'>"+((reNetGenVal == null) ? "" : reNetGenVal)+"</td>";
 			elecStr += "</tr>";
 			elecStr += "<tr>";
 			elecStr += "<th>SMP 거래량</th>";
-			elecStr += "<td align='right'>"+numberComma(reSmpDeal)+"</td>";
+			elecStr += "<td align='right'>"+((reSmpDeal == null) ? "" : numberComma(reSmpDeal))+"</td>";
 			elecStr += "</tr>";
 			elecStr += "<tr>";
 			elecStr += "<th>SMP 단가</th>";
-			elecStr += "<td align='right'>"+numberComma(smpRate)+"</td>";
+			elecStr += "<td align='right'>"+smpRateDate.substring(0, 4)+"년 "+smpRateDate.substring(4, 6)+"월 "+smpRateDate.substring(6, 8)+"일 : "+((smpRate == null) ? "" : numberComma(smpRate))+"원/kWh</td>";
 			elecStr += "</tr>";
 			elecStr += "<tr>";
 			elecStr += "<th>REC 거래량</th>";
-			elecStr += "<td align='right'>"+numberComma(reRecDeal)+"</td>";
+			elecStr += "<td align='right'>"+((reRecDeal == null) ? "" : numberComma(reRecDeal))+"</td>";
 			elecStr += "</tr>";
 			elecStr += "<tr>";
 			elecStr += "<th>REC 단가</th>";
-			elecStr += "<td align='right'>"+numberComma(recRate)+"</td>";
+			elecStr += "<td align='right'>"+recRateDate.substring(0, 4)+"년 "+recRateDate.substring(4, 6)+"월 : "+((recRate == null) ? "" : numberComma(recRate))+"원/REC</td>";
 			elecStr += "</tr>";
 			elecStr += "<tr>";
 			elecStr += "<th>REC 가중치</th>";
@@ -221,25 +221,25 @@ var texDay = new Date();
 			elecStr += "</tr>";
 			elecStr += "<tr>";
 			elecStr += "<th>수익 배분</th>";
-			elecStr += "<td align='right'>"+profitRatio+"</td>";
+			elecStr += "<td align='right'>"+pvProfitRatio+"</td>";
 			elecStr += "</tr>";
 			elecStr += "<tr>";
 			
 			beneDivStr +="<tr>";
 			beneDivStr +="<th>①REC 수익</th>";
-			beneDivStr +="<td>REC 거래량 x REC 단가 ("+numberComma(reRecDeal)+" x "+numberComma(recRate)+")</td>";
+			beneDivStr +="<td>REC 거래량 x REC 단가 ("+((reRecDeal == null) ? "" : numberComma(reRecDeal))+" x "+((recRate == null) ? "" : numberComma(recRate))+")</td>";
 			beneDivStr +="</tr>";
 			beneDivStr +="<tr>";
 			beneDivStr +="<th>②SMP 수익</th>";
-			beneDivStr +="<td>연간발전량(kWh) x SMP단가 ("+numberComma(reSmpDeal)+" x "+numberComma(smpRate)+")</td>";
+			beneDivStr +="<td>연간발전량(kWh) x SMP단가 ("+((reSmpDeal == null) ? "" : numberComma(reSmpDeal))+" x "+((smpRate == null) ? "" : numberComma(smpRate))+")</td>";
 			beneDivStr +="</tr>";
 			beneDivStr +="<tr>";
 			beneDivStr +="<th>③총 수익</th>";
-			beneDivStr +="<td>①REC 수익 + ②SMP 수익 ("+numberComma(reRecPrice)+" + "+numberComma(reSmpPrice)+")</td>";
+			beneDivStr +="<td>①REC 수익 + ②SMP 수익 ("+((reRecPrice == null) ? "" : numberComma(reRecPrice))+" + "+((reSmpPrice == null) ? "" : numberComma(reSmpPrice))+")</td>";
 			beneDivStr +="</tr>";
 			beneDivStr +="<tr>";
 			beneDivStr +="<th>④수익배분 계</th>";
-			beneDivStr +="<td>③총 수익 x 수익 배분 ("+numberComma((totBeneVal+delLastWon))+" x "+profitRatio+"%)</td>";
+			beneDivStr +="<td>③총 수익 x 수익 배분 ("+((totBeneVal+delLastWon == null) ? "" : numberComma((totBeneVal+delLastWon)))+" x "+pvProfitRatio+"%)</td>";
 			beneDivStr +="</tr>";
 			
 			
@@ -261,7 +261,11 @@ var texDay = new Date();
 			infoStr +="</tr>";
 			infoStr +="<tr>";
 			infoStr +="<th>납기일</th>";
-			infoStr +="<td>"+texDay.substring(0,4)+"-"+texDay.substring(4,6)+"-"+"20</td>";
+			console.log("texDay  ",texDay);
+			var pvRvClaimDay = texDay.substring(0, 4)+"-"+texDay.substring(4, 6)+"-"+meterClaimDay+" 00:00:00";
+			var pvRvClaimDate = new Date(pvRvClaimDay);
+			var paymentDate = new Date(pvRvClaimDate.setDate(pvRvClaimDate.getDate() + 10));
+			infoStr +="<td>"+paymentDate.format("yyyy-MM-dd")+"</td>";
 			infoStr +="</tr>";
 			
 			
