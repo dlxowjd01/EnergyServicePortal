@@ -179,13 +179,13 @@
 			var valAddTex = texList[0].val_add_tax				;
 			var usg = texList[0].val_add_tax	;
 			var energyChgReduct = Math.round(texList[0].energy_chg_reduct);	//전력량 요금 절감(계시별)
-			var beneDivenergyChgReduct = Math.round((energyChgReduct*profitRatio)/100);		//전력량 요금 절감(계시별) 수익배분
+			var beneDivenergyChgReduct = Math.round((energyChgReduct*essProfitRatio)/100);		//전력량 요금 절감(계시별) 수익배분
 			var essChgIncen = Math.round(texList[0].ess_chg_incen);	//ESS 충전 요금 할인
-			var beneDivessChgIncen = Math.round((essChgIncen*profitRatio)/100);		//ESS 충전 요금 할인 수익배분
+			var beneDivessChgIncen = Math.round((essChgIncen*essProfitRatio)/100);		//ESS 충전 요금 할인 수익배분
 			var essDischgIncen = Math.round(texList[0].ess_dischg_incen);	//ESS 방전 요금 할인
-			var beneDivessDischgIncen = Math.round((essDischgIncen*profitRatio)/100);		//ESS 방전 요금 할인 수익배분
+			var beneDivessDischgIncen = Math.round((essDischgIncen*essProfitRatio)/100);		//ESS 방전 요금 할인 수익배분
 			var total = Math.round(energyChgReduct+essChgIncen+essDischgIncen);	//총계
-			var beneDivTotal = Math.round((total*profitRatio)/100);	//수익배분 총계
+			var beneDivTotal = Math.round((total*essProfitRatio)/100);	//수익배분 총계
 			var addDivTotal = Math.round(beneDivTotal*1.1);
 			
 			
@@ -262,7 +262,7 @@
 				var totalRewardAmt  = String(sheetList[i].total_reward_amt)   ;
 				var csmRewardAmt  = String(sheetList[i].csm_reward_amt)   ;
 				var ewpRewardAmt  = String(sheetList[i].ewp_reward_amt)   ;
-				var profitRatio  =sheetList[i].profit_ratio      ;
+				var profitRatio  = drProfitRatio;//sheetList[i].profit_ratio      ;
 				var addRate = 0.1;
 				
 				var total = capAmt+reductRewardAmt;
@@ -356,8 +356,8 @@
 		totBeneVal = 0;
 		delLastWon = 0;
 		
-		addTex = Math.round(reTotPrice*profitRatio/100*0.1);
-		totBeneVal = (reTotPrice*profitRatio)/100+addTex;
+		addTex = Math.round(reTotPrice*pvProfitRatio/100*0.1);
+		totBeneVal = (reTotPrice*pvProfitRatio)/100+addTex;
 		delLastWon = Math.floor(totBeneVal/10)*10-totBeneVal;
 		totPV =totBeneVal+delLastWon;
 		var PVStr = "";
@@ -377,7 +377,7 @@
 		PVStr += "</tr>";
 		PVStr += "<tr>";
 		PVStr += "<th>④수익배분 계</th>";
-		PVStr += "<td align='right'>"+numberComma((reTotPrice*profitRatio)/100)+"</td>";
+		PVStr += "<td align='right'>"+numberComma((reTotPrice*pvProfitRatio)/100)+"</td>";
 		PVStr += "</tr>";
 		PVStr += "<tr>";
 		PVStr += "<th>부가가치세</th>";

@@ -136,7 +136,7 @@
 				<tr>
 					<td colspan="2" height="60" align="right" style="font-size:16px;font-weight:600;">
 						이번 달 청구 금액은 <strong style="color:#438fd7" class="total_tex">37,938,260</strong>원 입니다
-						<p style="padding-top:10px;font-size:12px;font-weight:normal;">(수익배분기간 : 2018-01-01 ~ 2018-12-31)</p>
+						<p style="padding-top:10px;font-size:12px;font-weight:normal;"><!-- (수익배분기간 : 2018-01-01 ~ 2018-12-31) --></p>
 					</td>
 				</tr>
 			</table>

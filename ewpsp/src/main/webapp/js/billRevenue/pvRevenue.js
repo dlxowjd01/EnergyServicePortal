@@ -261,7 +261,6 @@ var texDay = new Date();
 			infoStr +="</tr>";
 			infoStr +="<tr>";
 			infoStr +="<th>납기일</th>";
-			console.log("texDay  ",texDay);
 			var pvRvClaimDay = texDay.substring(0, 4)+"-"+texDay.substring(4, 6)+"-"+meterClaimDay+" 00:00:00";
 			var pvRvClaimDate = new Date(pvRvClaimDay);
 			var paymentDate = new Date(pvRvClaimDate.setDate(pvRvClaimDate.getDate() + 10));
