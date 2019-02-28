@@ -8,17 +8,23 @@ function goLEMSPage(redirectUrl) {
 
 function callback_goLEMSPage(result) {
 	getSiteDetail(dvSiteId);
-//	var urlEnc = encodeURIComponent('https://13.125.50.136' + lemsUrl);
-//	window.open('https://13.125.50.136/lems/sso/login?userId=' + result.user_id + '&userPw=' + result.user_pw + '&redirectUrl=' + urlEnc);
-	var urlEnc = encodeURIComponent(localEmsAddr + lemsUrl);
-	window.open(localEmsAddr+'/lems/sso/login?userId=' + result.user_id + '&userPw=' + result.user_pw + '&redirectUrl=' + urlEnc);
+	if(localEmsApiVer == "1.1") {
+		var urlEnc = encodeURIComponent('https://13.125.50.136' + lemsUrl);
+		window.open('https://13.125.50.136/lems/sso/login?userId=' + result.user_id + '&userPw=' + result.user_pw + '&redirectUrl=' + urlEnc);
+	} else {
+		var urlEnc = encodeURIComponent(localEmsAddr + lemsUrl);
+		window.open(localEmsAddr+'/lems/sso/login?userId=' + result.user_id + '&userPw=' + result.user_pw + '&redirectUrl=' + urlEnc);
+	}
 	lemsUrl = null;
 }
 
 var localEmsAddr = "";
+var localEmsApiVer = "";
 function callback_getSiteDetail(result) {
 	var siteDetail = result.detail;
+	console.log(siteDetail);
 	localEmsAddr = siteDetail.local_ems_addr;
+	localEmsApiVer = siteDetail.local_ems_api_ver;
 }
 
 /* 아직 쓰는 곳 없음. */

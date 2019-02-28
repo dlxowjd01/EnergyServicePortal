@@ -367,6 +367,15 @@
 							<th><span>Local EMS 암호키</span></th>
 							<td><input type="text" name="localEmsKey" id="localEmsKey" class="input" style="width:100%" maxlength="50"></td>
 						</tr>
+						<tr>
+							<th><span>Local EMS 버전</span></th>
+							<td>
+								<select name="localEmsApiVer" id="localEmsApiVer" class="sel" style="width:100%">
+									<option value="1.0">v1.0</option>
+									<option value="1.1">v1.1</option>
+								</select>
+							</td>
+						</tr>
 					</tbody>			
 				</table>
 				</form>

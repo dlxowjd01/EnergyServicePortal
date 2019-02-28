@@ -648,6 +648,7 @@
 			$("#siteForm").find("#areaType").val( siteDetail.area_type );
 			$("#siteForm").find("#localEmsAddr").val( siteDetail.local_ems_addr );
 			$("#siteForm").find("#localEmsKey").val( siteDetail.local_ems_key );
+			$("#siteForm").find("#localEmsApiVer").val( siteDetail.local_ems_api_ver );
 			
 			popupOpen('dsite');
 		}
