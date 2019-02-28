@@ -107,7 +107,7 @@
 			from (
 					select 
 						a.site_id, a.user_idx, a.site_name, a.site_grp_idx, a.area_type, a.`time_zone`, 
-						a.local_ems_addr, a.local_ems_key, a.comp_idx, a.del_yn, a.reg_uid, a.reg_date, a.mod_uid, a.mod_date 
+						a.local_ems_addr, a.local_ems_key, a.local_ems_api_ver, a.comp_idx, a.del_yn, a.reg_uid, a.reg_date, a.mod_uid, a.mod_date 
 						, b.site_grp_name, c.device_type_nms
 					from tb_site a
 					left outer join tb_site_group b
@@ -624,7 +624,7 @@
 		/* 사이트 한건 조회 */
 		select 
 			site_id, user_idx, site_name, site_grp_idx, area_type, `time_zone`, 
-			local_ems_addr, local_ems_key, comp_idx, del_yn, reg_uid, reg_date, mod_uid, mod_date
+			local_ems_addr, local_ems_key, local_ems_api_ver, comp_idx, del_yn, reg_uid, reg_date, mod_uid, mod_date
 		from tb_site
 		where del_yn = 'N'
 		and site_id = #{siteId }
@@ -927,6 +927,9 @@
 		    </if> 
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(localEmsKey)"> 
 		    local_ems_key  = #{localEmsKey },   /* Local EMS 암호키 */
+		    </if> 
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(localEmsApiVer)"> 
+		    local_ems_api_ver  = #{localEmsApiVer },   /* Local EMS 암호키 */
 		    </if> 
 		    <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)"> 
 		    comp_idx = #{compIdx },   /* 회사식별자 */

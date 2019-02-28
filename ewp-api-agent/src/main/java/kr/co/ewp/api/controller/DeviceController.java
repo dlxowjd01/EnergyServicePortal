@@ -19,15 +19,19 @@ import kr.co.ewp.api.entity.DevicePcs;
 import kr.co.ewp.api.entity.DevicePv;
 import kr.co.ewp.api.entity.Site;
 import kr.co.ewp.api.model.BmsEquipmentModel;
+import kr.co.ewp.api.model.BmsEquipmentModelBefore;
 import kr.co.ewp.api.model.DeviceModel;
 import kr.co.ewp.api.model.PcsEquipmentModel;
+import kr.co.ewp.api.model.PcsEquipmentModelBefore;
 import kr.co.ewp.api.model.PvEquipmentModel;
+import kr.co.ewp.api.model.PvEquipmentModelBefore;
 import kr.co.ewp.api.service.DeviceService;
 import kr.co.ewp.api.service.SiteService;
 import kr.co.ewp.api.util.DateUtil;
 import kr.co.ewp.api.util.EnertalkApiUtil;
 import kr.co.ewp.api.util.JsonUtil;
 import kr.co.ewp.api.util.PMGrowApiUtil;
+import kr.co.ewp.api.util.PMGrowApiUtilBefore;
 import kr.co.ewp.api.util.PrettyLog;
 import kr.co.ewp.api.util.StringUtil;
 import kr.co.ewp.api.util.ValidateUtil;
@@ -159,22 +163,15 @@ public class DeviceController {
    * @param prettyLog
    */
   public void device02(String siteId, String deviceId, PrettyLog prettyLog) {
-	  System.out.println("pcs 장치");
     prettyLog.title("장치모니터링 > PCS 운전상태 > PCS 장치");
-    System.out.println("pcs 장치 111");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
-    System.out.println("pcs 장치 222   ---> "+deviceList.size());
     prettyLog.append("DEVICE_CNT", deviceList.size());
     int resultCnt = 0;
-    System.out.println("pcs 장치 333");
     List<DevicePcs> deivcePcsList = Lists.newArrayList();
     Map<String, String> localEmsAddrMap = Maps.newHashMap();
-    System.out.println("pcs 장치 444");
     for (Device device : deviceList) {
-    	System.out.println("pcs 장치 555");
       try {
         String deviceType = device.getDeviceType();
-        System.out.println("디바이스 타입은? "+deviceType+", "+device.getDeviceId());
 //        switch (deviceType) {
 //        case "1": // PCS
 //          break;
@@ -182,8 +179,8 @@ public class DeviceController {
 //          continue;
 //        }
         if("1".equals(deviceType)){
-        	System.out.println("pcs 장치 시작");
         	String _siteId = device.getSiteId();
+        	String apiVer = "";
         	if (!localEmsAddrMap.containsKey(_siteId)) {
         		Site site = siteService.getSite(_siteId, prettyLog);
         		if (site == null) {
@@ -191,13 +188,59 @@ public class DeviceController {
         			continue;
         		}
         		localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
+        		apiVer = site.getLocalEmsApiVer();
         	}
-        	PcsEquipmentModel pcsEquipmentModel = PMGrowApiUtil.getPcsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
-        	System.out.println(device.getDeviceId()+"pcs 장치 결과        :  "+pcsEquipmentModel.toString());
-        	if(pcsEquipmentModel != null){
-        		System.out.println("1");
-        		prettyLog.append("ITEM_SIZE", pcsEquipmentModel);
-//        		for (PcsEquipmentModel pcsEquipmentModel : pcsEquipmentList) {
+        	if("1.1".equals(apiVer)) { // 기존
+        		System.out.println(device.getDeviceId()+" - 기존 pcs장치 api를 조회합니다..");
+        		List<PcsEquipmentModelBefore> pcsEquipmentList = PMGrowApiUtilBefore.getPcsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+        		System.out.println(device.getDeviceId()+"pcs 장치 1.1 결과        :  "+pcsEquipmentList.toString());
+        		if(pcsEquipmentList != null){
+        			System.out.println("1.1 1");
+        			prettyLog.append("ITEM_SIZE", pcsEquipmentList.size());
+	        		for (PcsEquipmentModelBefore pcsEquipmentModel : pcsEquipmentList) {
+	        			DevicePcs devicePcs = new DevicePcs();
+	        			devicePcs.setSiteId(device.getSiteId());
+	        			devicePcs.setDeviceId(device.getDeviceId());
+	        			if(pcsEquipmentModel.getAcCurrent() != null) devicePcs.setAcCurrent(Integer.parseInt(pcsEquipmentModel.getAcCurrent()));
+	        			if(pcsEquipmentModel.getAcFreq() != null) devicePcs.setAcFreq(Integer.parseInt(pcsEquipmentModel.getAcFreq()));
+	        			if(pcsEquipmentModel.getAcPf() != null) devicePcs.setAcPf(Integer.parseInt(pcsEquipmentModel.getAcPf()));
+	        			if(pcsEquipmentModel.getAcPower() != null) devicePcs.setAcPower(Integer.parseInt(pcsEquipmentModel.getAcPower()));
+	        			if(pcsEquipmentModel.getAcSetPower() != null) devicePcs.setAcSetPower(Integer.parseInt(pcsEquipmentModel.getAcSetPower()));
+	        			if(pcsEquipmentModel.getAcVoltage() != null) devicePcs.setAcVoltage(Integer.parseInt(pcsEquipmentModel.getAcVoltage()));
+	        	        devicePcs.setAlarmMsg(pcsEquipmentModel.getAlarmMsg());
+	        	        if(pcsEquipmentModel.getDcCurrent() != null) devicePcs.setDcCurrent(Integer.parseInt(pcsEquipmentModel.getDcCurrent()));
+	        	        if(pcsEquipmentModel.getDcFreq() != null) devicePcs.setDcFreq(Integer.parseInt(pcsEquipmentModel.getDcFreq()));
+	        	        if(pcsEquipmentModel.getDcPf() != null)  devicePcs.setDcPf(Integer.parseInt(pcsEquipmentModel.getDcPf()));
+	        	        if(pcsEquipmentModel.getDcPower() != null) devicePcs.setDcPower(Integer.parseInt(pcsEquipmentModel.getDcPower()));
+	        	        if(pcsEquipmentModel.getDcSetPower() != null)  devicePcs.setDcSetPower(Integer.parseInt(pcsEquipmentModel.getDcSetPower()));
+	        	        if(pcsEquipmentModel.getDcVoltage() != null) devicePcs.setDcVoltage(Integer.parseInt(pcsEquipmentModel.getDcVoltage()));
+	        	        devicePcs.setDeviceName(pcsEquipmentModel.getEquipmentName());
+	        	        if(pcsEquipmentModel.getOpMode() != null) devicePcs.setDeviceStat(pcsEquipmentModel.getOpMode());
+	        	        devicePcs.setStdDate(DateUtil.stringToDate(pcsEquipmentModel.getRetrieveTime(), "yyyyMMddHHmmss"));
+
+	        	        if(pcsEquipmentModel.getPcsStatus() != null) devicePcs.setPcsStatus(pcsEquipmentModel.getPcsStatus());
+	        	        if(pcsEquipmentModel.getRemoteMode() != null) devicePcs.setRemoteMode(pcsEquipmentModel.getRemoteMode());
+	        	        if(pcsEquipmentModel.getPcsCommand() != null) devicePcs.setPcsCommand(pcsEquipmentModel.getPcsCommand());
+	        	        if(pcsEquipmentModel.getTodayDEnergy() != null) devicePcs.setTodayDEnergy(pcsEquipmentModel.getTodayDEnergy());
+	        	        if(pcsEquipmentModel.getTodayCEnergy() != null) devicePcs.setTodayCEnergy(pcsEquipmentModel.getTodayCEnergy());
+	        	        if(pcsEquipmentModel.getTotalDEnergy() != null) devicePcs.setTotalDEnergy(pcsEquipmentModel.getTotalDEnergy());
+	        	        if(pcsEquipmentModel.getTotalCEnerge() != null) devicePcs.setTotalCEnerge(pcsEquipmentModel.getTotalCEnerge());
+	        			
+	        			deivcePcsList.add(devicePcs);
+	        			
+	        			if (deivcePcsList.size() == 20) {
+	        				resultCnt += deviceService.addDeivcePcsList(deivcePcsList, null);
+	        				deivcePcsList = Lists.newArrayList();
+	        			}
+	        		}
+        		}
+        	} else { // api url 변경후
+        		System.out.println(device.getDeviceId()+" - 새로운 pcs장치 api를 조회합니다..");
+        		PcsEquipmentModel pcsEquipmentModel = PMGrowApiUtil.getPcsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+        		System.out.println(device.getDeviceId()+"pcs 장치 결과        :  "+pcsEquipmentModel.toString());
+        		if(pcsEquipmentModel != null){
+        			System.out.println("1");
+        			prettyLog.append("ITEM_SIZE", pcsEquipmentModel);
         			DevicePcs devicePcs = new DevicePcs();
         			devicePcs.setSiteId(device.getSiteId());
         			devicePcs.setDeviceId(device.getDeviceId());
@@ -232,7 +275,7 @@ public class DeviceController {
         				resultCnt += deviceService.addDeivcePcsList(deivcePcsList, null);
         				deivcePcsList = Lists.newArrayList();
         			}
-//        		}
+        		}
         	}
         }
       } catch (NullPointerException e) {
@@ -264,21 +307,14 @@ public class DeviceController {
    * @param prettyLog
    */
   public void device03(String siteId, String deviceId, PrettyLog prettyLog) {
-	  System.out.println("bms 장치");
     prettyLog.title("장치모니터링 > BMS 운전상태 > BMS 장치");
-    System.out.println("bms 장치 111");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
-    System.out.println("bms 장치 222   ---> "+deviceList.size());
     int resultCnt = 0;
     List<DeviceBms> deivceBmsList = Lists.newArrayList();
-    System.out.println("bms 장치 333");
     Map<String, String> localEmsAddrMap = Maps.newHashMap();
-    System.out.println("bms 장치 444");
     for (Device device : deviceList) {
-    	System.out.println("bms 장치 555");
       try {
         String deviceType = device.getDeviceType();
-        System.out.println("디바이스 타입은? "+deviceType+", "+device.getDeviceId());
 //        switch (deviceType) {
 //        case "2": // BMS
 //          break;
@@ -286,8 +322,8 @@ public class DeviceController {
 //          continue;
 //        }
         if("2".equals(deviceType)){
-        	System.out.println("bms 장치 시작");
         	String _siteId = device.getSiteId();
+        	String apiVer = "";
         	if (!localEmsAddrMap.containsKey(_siteId)) {
         		Site site = siteService.getSite(_siteId, prettyLog);
         		if (site == null) {
@@ -295,10 +331,38 @@ public class DeviceController {
         			continue;
         		}
         		localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
+        		apiVer = site.getLocalEmsApiVer();
         	}
-        	BmsEquipmentModel bmsEquipmentModel = PMGrowApiUtil.getBmsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
-        	if( bmsEquipmentModel != null){
-//        		for (BmsEquipmentModel bmsEquipmentModel : bmsEquipmentList) {
+        	if("1.1".equals(apiVer)) { // 기존
+        		System.out.println(device.getDeviceId()+" - 기존 bms장치 api를 조회합니다..");
+        		List<BmsEquipmentModelBefore> bmsEquipmentList = PMGrowApiUtilBefore.getBmsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+        		if( bmsEquipmentList != null){
+        			prettyLog.append("ITEM_SIZE", bmsEquipmentList.size());
+	        		for (BmsEquipmentModelBefore bmsEquipmentModel : bmsEquipmentList) {
+	        			DeviceBms deviceBms = new DeviceBms();
+	        			deviceBms.setSiteId(device.getSiteId());
+	        			deviceBms.setDeviceId(device.getDeviceId());
+	        			deviceBms.setDeviceName(bmsEquipmentModel.getEquipmentName());
+	        	        deviceBms.setCurrSoc(Integer.parseInt(bmsEquipmentModel.getCurrSoc()));
+	        	        deviceBms.setDod(Integer.parseInt(bmsEquipmentModel.getDod()));
+	        	        deviceBms.setSysCurrent(Integer.parseInt(bmsEquipmentModel.getSysCurrent()));
+	        	        deviceBms.setSysSoc(Integer.parseInt(bmsEquipmentModel.getSysSoc()));
+	        	        deviceBms.setSysSoh(Integer.parseInt(bmsEquipmentModel.getSysSoh()));
+	        	        deviceBms.setSysVoltage(Integer.parseInt(bmsEquipmentModel.getSysVoltage()));
+	        	        deviceBms.setDeviceStat(bmsEquipmentModel.getSysMode());
+	        	        deviceBms.setStdDate(DateUtil.stringToDate(bmsEquipmentModel.getRetrieveTime(), "yyyyMMddHHmmss"));
+	        			deivceBmsList.add(deviceBms);
+	        			
+	        			if (deivceBmsList.size() == 20) {
+	        				resultCnt += deviceService.addDeivceBmsList(deivceBmsList, null);
+	        				deivceBmsList = Lists.newArrayList();
+	        			}
+	        		}
+        		}
+        	} else { // api url 변경후
+        		System.out.println(device.getDeviceId()+" - 새로운 bms장치 api를 조회합니다..");
+        		BmsEquipmentModel bmsEquipmentModel = PMGrowApiUtil.getBmsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+        		if( bmsEquipmentModel != null){
         			DeviceBms deviceBms = new DeviceBms();
         			deviceBms.setSiteId(device.getSiteId());
         			deviceBms.setDeviceId(device.getDeviceId());
@@ -318,7 +382,7 @@ public class DeviceController {
         				resultCnt += deviceService.addDeivceBmsList(deivceBmsList, null);
         				deivceBmsList = Lists.newArrayList();
         			}
-//        		}
+        		}
         	}
         
         }
@@ -351,16 +415,11 @@ public class DeviceController {
    * @param prettyLog
    */
   public void device04(String siteId, String deviceId, PrettyLog prettyLog) {
-	  System.out.println("pv 장치");
     prettyLog.title("장치모니터링 > PV 운전상태 > PV 장치");
-    System.out.println("pv 장치 111");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
-    System.out.println("pv 장치 222   ---> "+deviceList.size());
     int resultCnt = 0;
     List<DevicePv> deivcePvList = Lists.newArrayList();
-    System.out.println("pv 장치 333");
     Map<String, String> localEmsAddrMap = Maps.newHashMap();
-    System.out.println("pv 장치 444");
     for (Device device : deviceList) {
       try {
         String deviceType = device.getDeviceType();
@@ -372,8 +431,8 @@ public class DeviceController {
 //          continue;
 //        }
         if("3".equals(deviceType) || "5".equals(deviceType)){
-        	System.out.println("디바이스 타입은? "+deviceType+", "+device.getDeviceId());
         	String _siteId = device.getSiteId();
+        	String apiVer = "";
         	if (!localEmsAddrMap.containsKey(_siteId)) {
         		Site site = siteService.getSite(_siteId, prettyLog);
         		if (site == null) {
@@ -381,11 +440,36 @@ public class DeviceController {
         			continue;
         		}
         		localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
+        		apiVer = site.getLocalEmsApiVer();
         	}
-        	PvEquipmentModel pvEquipmentModel = PMGrowApiUtil.getPvEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
-        	System.out.println(device.getDeviceId()+"pv 장치 결과        :  "+pvEquipmentModel.toString());
-        	if(pvEquipmentModel != null){
-//        		for (PvEquipmentModel pvEquipmentModel : pvEquipmentList) {
+        	if("1.1".equals(apiVer)) { // 기존
+        		System.out.println(device.getDeviceId()+" - 기존 pv장치 api를 조회합니다..");
+        		List<PvEquipmentModelBefore> pvEquipmentList = PMGrowApiUtilBefore.getPvEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+        		System.out.println(device.getDeviceId()+"  1.1pv 장치 결과        :  "+pvEquipmentList.toString());
+        		if(pvEquipmentList != null){
+        			prettyLog.append("ITEM_SIZE", pvEquipmentList.size());
+	        		for (PvEquipmentModelBefore pvEquipmentModel : pvEquipmentList) {
+	        			DevicePv devicePv = new DevicePv();
+	        			devicePv.setSiteId(_siteId);
+	        			devicePv.setDeviceId(device.getDeviceId());
+	        			devicePv.setAlarmMsg(pvEquipmentModel.getAlarmMsg());
+	        			devicePv.setTemp(Integer.parseInt(pvEquipmentModel.getTemperature()));
+	        	          devicePv.setTotPower(Integer.parseInt(pvEquipmentModel.getTotalPower()));
+	        	          devicePv.setDeviceName(pvEquipmentModel.getEquipmentName());
+	        	          devicePv.setDeviceStat(pvEquipmentModel.getStatus());
+	        	          devicePv.setStdDate(DateUtil.stringToDate(pvEquipmentModel.getRetrieveTime(), "yyyyMMddHHmmss"));
+	        			deivcePvList.add(devicePv);
+	        			if (deivcePvList.size() == 20) {
+	        				resultCnt += deviceService.addDeivcePvList(deivcePvList, null);
+	        				deivcePvList = Lists.newArrayList();
+	        			}
+	        		}
+        		}
+        	} else { // api url 변경후
+        		System.out.println(device.getDeviceId()+" - 새로운 pv장치 api를 조회합니다..");
+        		PvEquipmentModel pvEquipmentModel = PMGrowApiUtil.getPvEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+        		System.out.println(device.getDeviceId()+"pv 장치 결과        :  "+pvEquipmentModel.toString());
+        		if(pvEquipmentModel != null){
         			DevicePv devicePv = new DevicePv();
         			devicePv.setSiteId(_siteId);
         			devicePv.setDeviceId(device.getDeviceId());
@@ -400,7 +484,7 @@ public class DeviceController {
         				resultCnt += deviceService.addDeivcePvList(deivcePvList, null);
         				deivcePvList = Lists.newArrayList();
         			}
-//        		}
+        		}
         	}
         
         }

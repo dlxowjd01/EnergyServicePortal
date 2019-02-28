@@ -45,7 +45,6 @@ public class PMGrowApiUtil {
 	  String resultBody = null;
 	  try {
 		  StringBuffer url = new StringBuffer(host + "/v1/pcses/:pcsId/energy".replace(":pcsId", equipmentId));
-//		  url.append("?equipmentId=").append(equipmentId);
 		  url.append("?startDt=").append(startDt.getTime());
 		  url.append("&endDt=").append(endDt.getTime());
 		  url.append("&intervalType=").append(intervalType);

@@ -12,6 +12,7 @@ public class Site {
     private String timeZone;//타임zone(예:gmt+8)
     private String localEmsAddr;//local ems 주소
     private String localEmsKey;//local ems 암호키
+    private String localEmsApiVer;//local ems api 버전
     private String delYn;//삭제여부(y:예,n:아니오)
     private String regUid;//등록자id
     private Date regDate;//등록일시
@@ -128,6 +129,20 @@ public class Site {
     */
     public void setLocalEmsKey(String localEmsKey) {
         this.localEmsKey = localEmsKey;
+    }
+    /**
+     * local ems api 버전 조회
+     * @return localEmsKey
+     */
+    public String getLocalEmsApiVer() {
+    	return this.localEmsApiVer;
+    }
+    /**
+     * local ems api 버전 설정
+     * @return localEmsKey
+     */
+    public void setLocalEmsApiVer(String localEmsApiVer) {
+    	this.localEmsApiVer = localEmsApiVer;
     }
    /**
     * 삭제여부(y:예,n:아니오) 조회

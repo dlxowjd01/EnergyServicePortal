@@ -10,6 +10,7 @@
         <result property="timeZone" column="time_zone" javaType="String"></result><!--타임Zone(예:GMT+8)-->
         <result property="localEmsAddr" column="local_ems_addr" javaType="String"></result><!--Local EMS 주소-->
         <result property="localEmsKey" column="local_ems_key" javaType="String"></result><!--Local EMS 암호키-->
+        <result property="localEmsApiVer" column="local_ems_api_ver" javaType="String"></result><!--Local EMS api 버전-->
         <result property="delYn" column="del_yn" javaType="String"></result><!--삭제여부(Y:예,N:아니오)-->
         <result property="regUid" column="reg_uid" javaType="String"></result><!--등록자ID-->
         <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
@@ -27,6 +28,7 @@
                time_zone,
                local_ems_addr,
                local_ems_key,
+               local_ems_api_ver,
                del_yn,
                reg_uid,
                reg_date,
@@ -41,6 +43,7 @@
                #{entity.timeZone},
                #{entity.localEmsAddr},
                #{entity.localEmsKey},
+               #{entity.localEmsApiVer},
                #{entity.delYn},
                #{entity.regUid},
                #{entity.regDate},
@@ -71,6 +74,9 @@
                </if>
                <if test="entity.localEmsKey != null">
                local_ems_key = #{entity.localEmsKey},
+               </if>
+               <if test="entity.localEmsApiVer != null">
+               local_ems_api_ver = #{entity.localEmsApiVer},
                </if>
                <if test="entity.delYn != null">
                del_yn = #{entity.delYn},
@@ -103,6 +109,7 @@
                time_zone,
                local_ems_addr,
                local_ems_key,
+               local_ems_api_ver,
                del_yn,
                reg_uid,
                reg_date,
@@ -122,6 +129,7 @@
                time_zone,
                local_ems_addr,
                local_ems_key,
+               local_ems_api_ver,
                del_yn,
                reg_uid,
                reg_date,
