@@ -24,11 +24,12 @@
 	$( function () {
 		$("#ESSRevenueTex").click(function(){
 //			if(texList.length > 0){
+			if(totalEssRevenueAmt > 0){
 				
 				popupOpen('dprint')
-//			}else{
-//				alert("조회할 명세서 내역이 없습니다.");
-//			}
+			}else{
+				alert("조회할 명세서 내역이 없습니다.");
+			}
 		});
 	
 	});
@@ -417,6 +418,7 @@
 	var essRevenueTexList1;
 	var essRevenueTexList2;
 	var essRevenueTexList3;
+	var totalEssRevenueAmt = 0;
 	
 	var texList = "";
 	function callback_getESSRevenueTexList(result){
@@ -576,6 +578,7 @@
 		$("#texBill").text("에너지절감 솔루션 제공 전기요금 절감 수익 배분 청구서 (’"+yyyyMM.substring(2,4)+"년"+yyyyMM.substring(4,6)+"월)");
 		$("#texDay").text("청구일 : "+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-"+meterClaimDay);
 		$(".dp_total").text(numberComma(addDivTotal+delLastWon));
+		totalEssRevenueAmt = numberComma(addDivTotal+delLastWon);
 		
 		
 		ESSBodyStr += "<tr>";

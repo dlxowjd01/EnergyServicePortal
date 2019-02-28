@@ -31,12 +31,12 @@
 	
 	$( function () {
 		$("#drRevenueTex").click(function(){
-//			if(sheetList.length > 0){
+			if(sheetList.length > 0){
 				
 				popupOpen('dprint')
-//			}else{
-//				alert("조회할 명세서 내역이 없습니다.");
-//			}
+			}else{
+				alert("조회할 명세서 내역이 없습니다.");
+			}
 		});
 	
 	});

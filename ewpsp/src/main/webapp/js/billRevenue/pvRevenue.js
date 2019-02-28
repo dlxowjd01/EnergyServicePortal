@@ -57,11 +57,11 @@ var texDay = new Date();
 	
 	$( function () {
 		$("#pvRevenueTex").click(function(){
-//			if(netGenValSheetList != null && netGenValSheetList.length > 0){
+			if(netGenValSheetList != null && netGenValSheetList.length > 0){
 				popupOpen('dprint')
-//			}else{
-//				alert("조회할 명세서 내역이 없습니다.");
-//			}
+			}else{
+				alert("조회할 명세서 내역이 없습니다.");
+			}
 		});
 	
 	});
