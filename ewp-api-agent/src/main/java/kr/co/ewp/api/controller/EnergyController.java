@@ -146,20 +146,26 @@ public class EnergyController {
         logger.info("energy01,{},{},{}", device.getDeviceId(), strBeginDate, strEndDate);
         List<Usage> usageList = Lists.newArrayList();
         try {
-          UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(device.getDeviceId(), period, beginDate, endDate, TimeType.past, UsageType.positiveEnergy, prettyLog);
-          if(usageModel != null){
-        	  
-        	  prettyLog.append("ITEM_SIZE", usageModel.getItems().size());
-          }
-          for (UsageItemModel item : usageModel.getItems()) {
-            Usage usage = new Usage();
-            usage.setDeviceId(device.getDeviceId());
-            usage.setSiteId(device.getSiteId());
-            usage.setStdDate(item.getTimestamp());
-            usage.setStdTimestamp(item.getTimestamp());
-            usage.setUsgVal(item.getUsage().intValue());
-            usageList.add(usage);
-          }
+        	String deviceType = device.getDeviceType();
+        	if(deviceType != null) {
+        		if ("1".equals(device.getInstType())) { // 에너톡
+        			if("8".equals(deviceType)) {
+        				UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(device.getDeviceId(), period, beginDate, endDate, TimeType.past, UsageType.positiveEnergy, prettyLog);
+        				if(usageModel != null){
+        					prettyLog.append("ITEM_SIZE", usageModel.getItems().size());
+        				}
+        				for (UsageItemModel item : usageModel.getItems()) {
+        					Usage usage = new Usage();
+        					usage.setDeviceId(device.getDeviceId());
+        					usage.setSiteId(device.getSiteId());
+        					usage.setStdDate(item.getTimestamp());
+        					usage.setStdTimestamp(item.getTimestamp());
+        					usage.setUsgVal(item.getUsage().intValue());
+        					usageList.add(usage);
+        				}
+        			}
+        		}
+        	}
         } catch (NullPointerException e) {
         	logger.error("error is : "+e.toString());
         } catch (Exception e) {
@@ -232,20 +238,26 @@ public class EnergyController {
         logger.info("energy02,{},{},{}", device.getDeviceId(), strBeginDate, strEndDate);
         List<PredictUsage> usageList = Lists.newArrayList();
         try {
-          UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(device.getDeviceId(), period, beginDate, endDate, TimeType.future, UsageType.positiveEnergy, prettyLog);
-          if(usageModel != null){
-        	  
-        	  prettyLog.append("ITEM_SIZE", usageModel.getItems().size());
-        	  for (UsageItemModel item : usageModel.getItems()) {
-        		  PredictUsage predictUsage = new PredictUsage();
-        		  predictUsage.setDeviceId(device.getDeviceId());
-        		  predictUsage.setSiteId(device.getSiteId());
-        		  predictUsage.setStdDate(item.getTimestamp());
-        		  predictUsage.setStdTimestamp(item.getTimestamp());
-        		  predictUsage.setPreUsgVal(item.getUsage().intValue());
-        		  usageList.add(predictUsage);
-        	  }
-          }
+        	String deviceType = device.getDeviceType();
+        	if(deviceType != null) {
+        		if ("1".equals(device.getInstType())) { // 에너톡
+        			if("8".equals(deviceType)) {
+        				UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(device.getDeviceId(), period, beginDate, endDate, TimeType.future, UsageType.positiveEnergy, prettyLog);
+        				if(usageModel != null){
+        					prettyLog.append("ITEM_SIZE", usageModel.getItems().size());
+        					for (UsageItemModel item : usageModel.getItems()) {
+        						PredictUsage predictUsage = new PredictUsage();
+        						predictUsage.setDeviceId(device.getDeviceId());
+        						predictUsage.setSiteId(device.getSiteId());
+        						predictUsage.setStdDate(item.getTimestamp());
+        						predictUsage.setStdTimestamp(item.getTimestamp());
+        						predictUsage.setPreUsgVal(item.getUsage().intValue());
+        						usageList.add(predictUsage);
+        					}
+        				}
+        			}
+        		}
+        	}
         } catch (NullPointerException e) {
         	logger.error("error is : "+e.toString());
         } catch (Exception e) {
@@ -327,26 +339,32 @@ public class EnergyController {
         logger.info("energy03,{},{},{}", device.getDeviceId(), strBeginDate, strEndDate);
         List<Reactive> reactiveList = Lists.newArrayList();
         try {
-          UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(device.getDeviceId(), period, beginDate, endDate, TimeType.past, UsageType.positiveEnergyReactive, prettyLog);
-          UsageModel usageModel2 = EnertalkApiUtil.getUsagePeriodicByDeviceId(device.getDeviceId(), period, beginDate, endDate, TimeType.past, UsageType.negativeEnergyReactive, prettyLog);
-          if(usageModel != null){
-        	  
-        	  prettyLog.append("ITEM_SIZE", usageModel.getItems().size());
-        	  for (UsageItemModel item : usageModel.getItems()) {
-        		  Reactive reactive = new Reactive();
-        		  reactive.setDeviceId(device.getDeviceId());
-        		  reactive.setSiteId(device.getSiteId());
-        		  reactive.setStdDate(item.getTimestamp());
-        		  reactive.setStdTimestamp(item.getTimestamp());
-        		  reactive.setRctvVal(item.getUsage().intValue());
-        		  for (UsageItemModel item2 : usageModel2.getItems()) {
-        			  if (item.getTimestamp().compareTo(item2.getTimestamp()) == 0) {
-        				  reactive.setNegRctvVal(item2.getUsage().intValue());
-        			  }
-        		  }
-        		  reactiveList.add(reactive);
-        	  }
-          }
+        	String deviceType = device.getDeviceType();
+        	if(deviceType != null) {
+        		if ("1".equals(device.getInstType())) { // 에너톡
+        			if("8".equals(deviceType)) {
+        				UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(device.getDeviceId(), period, beginDate, endDate, TimeType.past, UsageType.positiveEnergyReactive, prettyLog);
+        				UsageModel usageModel2 = EnertalkApiUtil.getUsagePeriodicByDeviceId(device.getDeviceId(), period, beginDate, endDate, TimeType.past, UsageType.negativeEnergyReactive, prettyLog);
+        				if(usageModel != null){
+        					prettyLog.append("ITEM_SIZE", usageModel.getItems().size());
+        					for (UsageItemModel item : usageModel.getItems()) {
+        						Reactive reactive = new Reactive();
+        						reactive.setDeviceId(device.getDeviceId());
+        						reactive.setSiteId(device.getSiteId());
+        						reactive.setStdDate(item.getTimestamp());
+        						reactive.setStdTimestamp(item.getTimestamp());
+        						reactive.setRctvVal(item.getUsage().intValue());
+        						for (UsageItemModel item2 : usageModel2.getItems()) {
+        							if (item.getTimestamp().compareTo(item2.getTimestamp()) == 0) {
+        								reactive.setNegRctvVal(item2.getUsage().intValue());
+        							}
+        						}
+        						reactiveList.add(reactive);
+        					}
+        				}
+        			}
+        		}
+        	}
         } catch (NullPointerException e) {
         	logger.error("error is : "+e.toString());
         } catch (Exception e) {
@@ -399,29 +417,36 @@ public class EnergyController {
         beginMap.put(_siteId, _begin);
       }
 
-      List<Usage> usageList = usageService.getUsageList(device.getDeviceId(), beginMap.get(_siteId), end, null);
-      if (usageList.size() > 0) {
-        if (!usageMap.containsKey(_siteId)) {
-          usageMap.put(_siteId, Maps.newLinkedHashMap());
-        }
-        for (Usage usage : usageList) {
-          long stdTime = usage.getStdTimestamp().getTime();
-
-          LinkedHashMap<String, LinkedHashMap<Long, Long>> usageSiteMap = usageMap.get(_siteId);
-          String month = DateUtil.dateToString(usage.getStdDate(), "yyyyMM");
-          if (!usageSiteMap.containsKey(month)) {
-            usageSiteMap.put(month, Maps.newLinkedHashMap());
-          }
-          if (usageSiteMap.get(month).containsKey(stdTime)) {
-            usageSiteMap.get(month).put(stdTime, usageSiteMap.get(month).get(stdTime) + new Long(usage.getUsgVal()));
-          } else {
-            usageSiteMap.get(month).put(stdTime, new Long(usage.getUsgVal()));
-          }
-        }
-      } else {
-        prettyLog.append("WARN",
-            "usageList is empty, " + device.getDeviceId() + ", " + DateUtil.dateToString(beginMap.get(_siteId), "yyyy-MM-dd HH:mm:ss") + "~" + DateUtil.dateToString(end, "yyyy-MM-dd HH:mm:ss"));
-      }
+      String deviceType = device.getDeviceType();
+  	  if(deviceType != null) {
+  		if ("1".equals(device.getInstType())) { // 에너톡
+  			if("8".equals(deviceType)) {
+  				List<Usage> usageList = usageService.getUsageList(device.getDeviceId(), beginMap.get(_siteId), end, null);
+  				if (usageList.size() > 0) {
+  					if (!usageMap.containsKey(_siteId)) {
+  						usageMap.put(_siteId, Maps.newLinkedHashMap());
+  					}
+  					for (Usage usage : usageList) {
+  						long stdTime = usage.getStdTimestamp().getTime();
+  						
+  						LinkedHashMap<String, LinkedHashMap<Long, Long>> usageSiteMap = usageMap.get(_siteId);
+  						String month = DateUtil.dateToString(usage.getStdDate(), "yyyyMM");
+  						if (!usageSiteMap.containsKey(month)) {
+  							usageSiteMap.put(month, Maps.newLinkedHashMap());
+  						}
+  						if (usageSiteMap.get(month).containsKey(stdTime)) {
+  							usageSiteMap.get(month).put(stdTime, usageSiteMap.get(month).get(stdTime) + new Long(usage.getUsgVal()));
+  						} else {
+  							usageSiteMap.get(month).put(stdTime, new Long(usage.getUsgVal()));
+  						}
+  					}
+  				} else {
+  					prettyLog.append("WARN",
+  							"usageList is empty, " + device.getDeviceId() + ", " + DateUtil.dateToString(beginMap.get(_siteId), "yyyy-MM-dd HH:mm:ss") + "~" + DateUtil.dateToString(end, "yyyy-MM-dd HH:mm:ss"));
+  				}
+  			}
+  		}
+  	  }
     }
     List<Peak> peakList = Lists.newArrayList();
     for (String _siteId : usageMap.keySet()) {
@@ -510,28 +535,36 @@ public class EnergyController {
         }
         beginMap.put(_siteId, _begin);
       }
-      List<PredictUsage> predictUsageList = usageService.getPredictUsageList(device.getDeviceId(), beginMap.get(_siteId), end, null);
-      if (predictUsageList.size() > 0) {
-        if (!usageMap.containsKey(_siteId)) {
-          usageMap.put(_siteId, Maps.newLinkedHashMap());
-        }
-        for (PredictUsage predictUsage : predictUsageList) {
-          long stdTime = predictUsage.getStdTimestamp().getTime();
-          LinkedHashMap<String, LinkedHashMap<Long, Long>> usageSiteMap = usageMap.get(_siteId);
-          String month = DateUtil.dateToString(predictUsage.getStdDate(), "yyyyMM");
-          if (!usageSiteMap.containsKey(month)) {
-            usageSiteMap.put(month, Maps.newLinkedHashMap());
-          }
-          if (usageSiteMap.get(month).containsKey(stdTime)) {
-            usageSiteMap.get(month).put(stdTime, usageSiteMap.get(month).get(stdTime) + new Long(predictUsage.getPreUsgVal()));
-          } else {
-            usageSiteMap.get(month).put(stdTime, new Long(predictUsage.getPreUsgVal()));
-          }
-        }
-      } else {
-        prettyLog.append("WARN", "preidctUsageList is empty, " + device.getDeviceId() + ", " + DateUtil.dateToString(beginMap.get(_siteId), "yyyy-MM-dd HH:mm:ss") + "~"
-            + DateUtil.dateToString(end, "yyyy-MM-dd HH:mm:ss"));
-      }
+      
+      String deviceType = device.getDeviceType();
+  	  if(deviceType != null) {
+  		if ("1".equals(device.getInstType())) { // 에너톡
+  			if("8".equals(deviceType)) {
+  				List<PredictUsage> predictUsageList = usageService.getPredictUsageList(device.getDeviceId(), beginMap.get(_siteId), end, null);
+  				if (predictUsageList.size() > 0) {
+  					if (!usageMap.containsKey(_siteId)) {
+  						usageMap.put(_siteId, Maps.newLinkedHashMap());
+  					}
+  					for (PredictUsage predictUsage : predictUsageList) {
+  						long stdTime = predictUsage.getStdTimestamp().getTime();
+  						LinkedHashMap<String, LinkedHashMap<Long, Long>> usageSiteMap = usageMap.get(_siteId);
+  						String month = DateUtil.dateToString(predictUsage.getStdDate(), "yyyyMM");
+  						if (!usageSiteMap.containsKey(month)) {
+  							usageSiteMap.put(month, Maps.newLinkedHashMap());
+  						}
+  						if (usageSiteMap.get(month).containsKey(stdTime)) {
+  							usageSiteMap.get(month).put(stdTime, usageSiteMap.get(month).get(stdTime) + new Long(predictUsage.getPreUsgVal()));
+  						} else {
+  							usageSiteMap.get(month).put(stdTime, new Long(predictUsage.getPreUsgVal()));
+  						}
+  					}
+  				} else {
+  					prettyLog.append("WARN", "preidctUsageList is empty, " + device.getDeviceId() + ", " + DateUtil.dateToString(beginMap.get(_siteId), "yyyy-MM-dd HH:mm:ss") + "~"
+  							+ DateUtil.dateToString(end, "yyyy-MM-dd HH:mm:ss"));
+  				}
+  			}
+  		}
+  	  }
     }
     List<PredictPeak> predictPeakList = Lists.newArrayList();
     for (String _siteId : usageMap.keySet()) {
