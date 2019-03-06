@@ -81,13 +81,14 @@
 		getSiteSetDetail();
 		chargePowerStrDisplayYn(today);
 		getPeak(formData);
-//		getPeakRealList(formData); // 피크전력현황 조회
 		drawData_chart_peak(); // 피크전력현황 차트그리기
 		
 		update_updtDataTime(today, "updtTimePeak");
 	}
 	
 	function fn_cycle_15min() {
+		getDeviceList(1); // 장치현황 조회
+		
 		getESSChargeRealList(formData); // 실제충방전량 조회
 		getESSChargeFutureList(formData); // 예측충방전량 조회
 		drawData_chart_charge(); // 충방전량 차트그리기
@@ -96,8 +97,6 @@
 		getSoc(formData); // soc 잔량 조회
 		
 		getDERUsageList(formData); // 사용량구성 조회
-		
-		getDeviceList(1); // 장치현황 조회
 		
 		getRevenueList(formData); // 수익현황 조회
 		
@@ -374,7 +373,8 @@
 		$.ajax({
 			url : "/getSoc",
 			type : 'post',
-			async : false, // 동기로 처리해줌
+//			async : false, // 동기로 처리해줌
+			async : true,
 			data : formData,
 			success: function(result) {
 				var finalSoc = result.finalSoc;
@@ -552,7 +552,8 @@
 		$.ajax({
 			url : "/getPeak",
 			type : 'post',
-			async : false, // 동기로 처리해줌
+//			async : false, // 동기로 처리해줌
+			async : true,
 			data : formData,
 			success: function(result) {
 				var totalUsage = result.totalUsage;
@@ -648,58 +649,58 @@
 	
 	var chargePowerDisplayYn = "";
 	function chargePowerStrDisplayYn(today) {
-		var holidayYn = chkHoliday(today); // 공휴일여부 체크(true:공휴일, false:평일or토요일)
-		var chkSeason = checkSeason(today); // 1:봄, 2:여름, 3:가을, 4:겨울
-		chargePowerDisplayYn = "Y";
-		
-		var chkHour = today.getHours();
-		var timeTermStr = "";
-		
-		if(!holidayYn) {
-			if(chkSeason == 1 || chkSeason == 3) {
-				// 중간부하시간대
-				if( (chkHour>=9 && chkHour<10) )  timeTermStr = "(09:00 ~ 10:00)"; 
-				if( (chkHour>=12 && chkHour<13) ) timeTermStr = "(12:00 ~ 13:00)";
-				if( (chkHour>=17 && chkHour<23) ) timeTermStr = "(17:00 ~ 23:00)";
-				
-				// 최대부하시간대
-				if( (chkHour>=10 && chkHour<12) ) timeTermStr = "(10:00 ~ 12:00)"; 
-				if( (chkHour>=13 && chkHour<17) ) timeTermStr = "(13:00 ~ 17:00)";
-				
-				if( (chkHour>=23 || chkHour<9) ) chargePowerDisplayYn = "N";
-				
-			} else if(chkSeason == 2) {
-				// 중간부하시간대
-				if( (chkHour>=9 && chkHour<10) )  timeTermStr = "(09:00 ~ 10:00)"; 
-				if( (chkHour>=12 && chkHour<13) ) timeTermStr = "(12:00 ~ 13:00)";
-				if( (chkHour>=17 && chkHour<23) ) timeTermStr = "(17:00 ~ 23:00)";
-				
-				// 최대부하시간대
-				if( (chkHour>=10 && chkHour<12) ) timeTermStr = "(10:00 ~ 12:00)"; 
-				if( (chkHour>=13 && chkHour<17) ) timeTermStr = "(13:00 ~ 17:00)";
-				
-				if( (chkHour>=23 || chkHour<9) ) chargePowerDisplayYn = "N";
-				
-			} else if(chkSeason == 4) {
-				// 중간부하시간대
-				if( (chkHour>=9 && chkHour<10) )  timeTermStr = "(09:00 ~ 10:00)"; 
-				if( (chkHour>=12 && chkHour<17) ) timeTermStr = "(12:00 ~ 17:00)";
-				if( (chkHour>=20 && chkHour<22) ) timeTermStr = "(20:00 ~ 22:00)";
-				
-				// 최대부하시간대
-				if( (chkHour>=10 && chkHour<12) ) timeTermStr = "(10:00 ~ 12:00)"; 
-				if( (chkHour>=17 && chkHour<20) ) timeTermStr = "(17:00 ~ 20:00)";
-				if( (chkHour>=22 && chkHour<23) ) timeTermStr = "(22:00 ~ 23:00)";
-				
-				if( (chkHour>=23 || chkHour<9) ) chargePowerDisplayYn = "N";
-				
-			}
-		}
-		
-		$(".chart_notice").empty();
-//		if(timeTermStr != "") 
-//			$(".chart_notice")..append("지금은 <strong>요금적용전력</strong> 갱신구간 입니다. "+"<span>"+timeTermStr+"</span>");
-		$(".chart_notice").append("<strong>요금적용전력</strong> 제외시간 "+"<span>"+"(23:00 ~ 09:00)"+"</span>");
+		$(".chart_notice").html("<strong>요금적용전력</strong> 제외시간 "+"<span>"+"(23:00 ~ 09:00)"+"</span>");
+//		var holidayYn = chkHoliday(today); // 공휴일여부 체크(true:공휴일, false:평일or토요일)
+//		var chkSeason = checkSeason(today); // 1:봄, 2:여름, 3:가을, 4:겨울
+//		chargePowerDisplayYn = "Y";
+//		
+//		var chkHour = today.getHours();
+//		var timeTermStr = "";
+//		
+//		if(!holidayYn) {
+//			if(chkSeason == 1 || chkSeason == 3) {
+//				// 중간부하시간대
+//				if( (chkHour>=9 && chkHour<10) )  timeTermStr = "(09:00 ~ 10:00)"; 
+//				if( (chkHour>=12 && chkHour<13) ) timeTermStr = "(12:00 ~ 13:00)";
+//				if( (chkHour>=17 && chkHour<23) ) timeTermStr = "(17:00 ~ 23:00)";
+//				
+//				// 최대부하시간대
+//				if( (chkHour>=10 && chkHour<12) ) timeTermStr = "(10:00 ~ 12:00)"; 
+//				if( (chkHour>=13 && chkHour<17) ) timeTermStr = "(13:00 ~ 17:00)";
+//				
+//				if( (chkHour>=23 || chkHour<9) ) chargePowerDisplayYn = "N";
+//				
+//			} else if(chkSeason == 2) {
+//				// 중간부하시간대
+//				if( (chkHour>=9 && chkHour<10) )  timeTermStr = "(09:00 ~ 10:00)"; 
+//				if( (chkHour>=12 && chkHour<13) ) timeTermStr = "(12:00 ~ 13:00)";
+//				if( (chkHour>=17 && chkHour<23) ) timeTermStr = "(17:00 ~ 23:00)";
+//				
+//				// 최대부하시간대
+//				if( (chkHour>=10 && chkHour<12) ) timeTermStr = "(10:00 ~ 12:00)"; 
+//				if( (chkHour>=13 && chkHour<17) ) timeTermStr = "(13:00 ~ 17:00)";
+//				
+//				if( (chkHour>=23 || chkHour<9) ) chargePowerDisplayYn = "N";
+//				
+//			} else if(chkSeason == 4) {
+//				// 중간부하시간대
+//				if( (chkHour>=9 && chkHour<10) )  timeTermStr = "(09:00 ~ 10:00)"; 
+//				if( (chkHour>=12 && chkHour<17) ) timeTermStr = "(12:00 ~ 17:00)";
+//				if( (chkHour>=20 && chkHour<22) ) timeTermStr = "(20:00 ~ 22:00)";
+//				
+//				// 최대부하시간대
+//				if( (chkHour>=10 && chkHour<12) ) timeTermStr = "(10:00 ~ 12:00)"; 
+//				if( (chkHour>=17 && chkHour<20) ) timeTermStr = "(17:00 ~ 20:00)";
+//				if( (chkHour>=22 && chkHour<23) ) timeTermStr = "(22:00 ~ 23:00)";
+//				
+//				if( (chkHour>=23 || chkHour<9) ) chargePowerDisplayYn = "N";
+//				
+//			}
+//		}
+//		
+//		$(".chart_notice").empty();
+////		if(timeTermStr != "") 
+////			$(".chart_notice").append("지금은 <strong>요금적용전력</strong> 갱신구간 입니다. "+"<span>"+timeTermStr+"</span>");
 	}
 	
 	var essRevenueList;
