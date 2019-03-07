@@ -75,7 +75,7 @@ public class DeviceController {
 //        default:
 //          continue;
 //        }
-        if("4".equals(deviceType) || "6".equals(deviceType) || "7".equals(deviceType) || "8".equals(deviceType)){
+        if("4".equals(deviceType) || "6".equals(deviceType) || "7".equals(deviceType) || "8".equals(deviceType)){ // 4 : 부하측정기기, 6 : ESS모니터링기기, 7 : iSmart, 8 :총량기기
         	DeviceModel deviceModel = EnertalkApiUtil.getDevice(device.getDeviceId(), prettyLog);
         	
         	DeviceIoe deviceIoe = new DeviceIoe();

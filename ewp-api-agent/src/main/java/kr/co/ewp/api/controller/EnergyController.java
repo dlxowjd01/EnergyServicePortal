@@ -149,7 +149,7 @@ public class EnergyController {
         	String deviceType = device.getDeviceType();
         	if(deviceType != null) {
         		if ("1".equals(device.getInstType())) { // 에너톡
-        			if("8".equals(deviceType)) {
+        			if("4".equals(deviceType) || "6".equals(deviceType) || "7".equals(deviceType) || "8".equals(deviceType)){ // 4 : 부하측정기기, 6 : ESS모니터링기기, 7 : iSmart, 8 :총량기기
         				UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(device.getDeviceId(), period, beginDate, endDate, TimeType.past, UsageType.positiveEnergy, prettyLog);
         				if(usageModel != null){
         					prettyLog.append("ITEM_SIZE", usageModel.getItems().size());
@@ -241,7 +241,7 @@ public class EnergyController {
         	String deviceType = device.getDeviceType();
         	if(deviceType != null) {
         		if ("1".equals(device.getInstType())) { // 에너톡
-        			if("8".equals(deviceType)) {
+        			if("4".equals(deviceType) || "6".equals(deviceType) || "7".equals(deviceType) || "8".equals(deviceType)){ // 4 : 부하측정기기, 6 : ESS모니터링기기, 7 : iSmart, 8 :총량기기
         				UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(device.getDeviceId(), period, beginDate, endDate, TimeType.future, UsageType.positiveEnergy, prettyLog);
         				if(usageModel != null){
         					prettyLog.append("ITEM_SIZE", usageModel.getItems().size());
@@ -342,7 +342,7 @@ public class EnergyController {
         	String deviceType = device.getDeviceType();
         	if(deviceType != null) {
         		if ("1".equals(device.getInstType())) { // 에너톡
-        			if("8".equals(deviceType)) {
+        			if("4".equals(deviceType) || "6".equals(deviceType) || "7".equals(deviceType) || "8".equals(deviceType)){ // 4 : 부하측정기기, 6 : ESS모니터링기기, 7 : iSmart, 8 :총량기기
         				UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(device.getDeviceId(), period, beginDate, endDate, TimeType.past, UsageType.positiveEnergyReactive, prettyLog);
         				UsageModel usageModel2 = EnertalkApiUtil.getUsagePeriodicByDeviceId(device.getDeviceId(), period, beginDate, endDate, TimeType.past, UsageType.negativeEnergyReactive, prettyLog);
         				if(usageModel != null){
@@ -420,7 +420,7 @@ public class EnergyController {
       String deviceType = device.getDeviceType();
   	  if(deviceType != null) {
   		if ("1".equals(device.getInstType())) { // 에너톡
-  			if("8".equals(deviceType)) {
+  			if("4".equals(deviceType) || "6".equals(deviceType) || "7".equals(deviceType) || "8".equals(deviceType)){ // 4 : 부하측정기기, 6 : ESS모니터링기기, 7 : iSmart, 8 :총량기기
   				List<Usage> usageList = usageService.getUsageList(device.getDeviceId(), beginMap.get(_siteId), end, null);
   				if (usageList.size() > 0) {
   					if (!usageMap.containsKey(_siteId)) {
@@ -539,7 +539,7 @@ public class EnergyController {
       String deviceType = device.getDeviceType();
   	  if(deviceType != null) {
   		if ("1".equals(device.getInstType())) { // 에너톡
-  			if("8".equals(deviceType)) {
+  			if("4".equals(deviceType) || "6".equals(deviceType) || "7".equals(deviceType) || "8".equals(deviceType)){ // 4 : 부하측정기기, 6 : ESS모니터링기기, 7 : iSmart, 8 :총량기기
   				List<PredictUsage> predictUsageList = usageService.getPredictUsageList(device.getDeviceId(), beginMap.get(_siteId), end, null);
   				if (predictUsageList.size() > 0) {
   					if (!usageMap.containsKey(_siteId)) {
@@ -685,39 +685,46 @@ public class EnergyController {
         }
         List<EssCharge> essChargeList = Lists.newArrayList();
         try {
-        	if("1.1".equals(apiVer)) { // 기존
-        		System.out.println(device.getDeviceId()+" - 기존 ess충방전량조회 api를 조회합니다..");
-              List<ChargingDischargingBefore> cdList = PMGrowApiUtilBefore.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
-            		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
-        		if(cdList !=null){
-        			prettyLog.append("ITEM_SIZE", cdList.size());
-        			for (ChargingDischargingBefore item : cdList) {
-        				EssCharge essCharge = new EssCharge();
-        				essCharge.setDeviceId(device.getDeviceId());
-        				essCharge.setSiteId(_siteId);
-        				essCharge.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
-        				essCharge.setStdTimestamp(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
-        				essCharge.setChgVal(Integer.parseInt(item.getChargeEnergy()));
-        	            essCharge.setDischgVal(Integer.parseInt(item.getDischargeEnergy()));
-        				
-        				essChargeList.add(essCharge);
-        			}
-        		}
-        	} else { // api url 변경후
-        		System.out.println(device.getDeviceId()+" - 새로운 ess충방전량조회 api를 조회합니다..");
-        		ChargingDischarging cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "MI", "15", prettyLog);
-        		if(cdList !=null){
-        			prettyLog.append("ITEM_SIZE", cdList.getItems().size());
-        			for (ChargingDischargingItemModel item : cdList.getItems()) {
-        				EssCharge essCharge = new EssCharge();
-        				essCharge.setDeviceId(device.getDeviceId());
-        				essCharge.setSiteId(_siteId);
-        				essCharge.setStdDate(item.getTimestamp());
-        				essCharge.setStdTimestamp(item.getTimestamp());
-        				essCharge.setChgVal(item.getChargeEnergy());
-        				essCharge.setDischgVal(item.getDischargeEnergy());
-        				
-        				essChargeList.add(essCharge);
+        	String deviceType = device.getDeviceType();
+        	if(deviceType != null) {
+        		if ("2".equals(device.getInstType())) { // Local EMS
+        			if("1".equals(deviceType) || "2".equals(deviceType)){ // 1: PCS, 2: BMS
+        				if("1.1".equals(apiVer)) { // 기존
+        					System.out.println(device.getDeviceId()+" - 기존 ess충방전량조회 api를 조회합니다..");
+        					List<ChargingDischargingBefore> cdList = PMGrowApiUtilBefore.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
+        							DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
+        					if(cdList !=null){
+        						prettyLog.append("ITEM_SIZE", cdList.size());
+        						for (ChargingDischargingBefore item : cdList) {
+        							EssCharge essCharge = new EssCharge();
+        							essCharge.setDeviceId(device.getDeviceId());
+        							essCharge.setSiteId(_siteId);
+        							essCharge.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
+        							essCharge.setStdTimestamp(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
+        							essCharge.setChgVal(Integer.parseInt(item.getChargeEnergy()));
+        							essCharge.setDischgVal(Integer.parseInt(item.getDischargeEnergy()));
+        							
+        							essChargeList.add(essCharge);
+        						}
+        					}
+        				} else { // api url 변경후
+        					System.out.println(device.getDeviceId()+" - 새로운 ess충방전량조회 api를 조회합니다..");
+        					ChargingDischarging cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "MI", "15", prettyLog);
+        					if(cdList !=null){
+        						prettyLog.append("ITEM_SIZE", cdList.getItems().size());
+        						for (ChargingDischargingItemModel item : cdList.getItems()) {
+        							EssCharge essCharge = new EssCharge();
+        							essCharge.setDeviceId(device.getDeviceId());
+        							essCharge.setSiteId(_siteId);
+        							essCharge.setStdDate(item.getTimestamp());
+        							essCharge.setStdTimestamp(item.getTimestamp());
+        							essCharge.setChgVal(item.getChargeEnergy());
+        							essCharge.setDischgVal(item.getDischargeEnergy());
+        							
+        							essChargeList.add(essCharge);
+        						}
+        					}
+        				}
         			}
         		}
         	}
@@ -802,39 +809,46 @@ public class EnergyController {
         }
         List<EssChargePlan> essChargePlanList = Lists.newArrayList();
         try {
-        	if("1.1".equals(apiVer)) { // 기존
-        		System.out.println(device.getDeviceId()+" - 기존 ess충방전계획량조회 api를 조회합니다..");
-              List<ChargingDischargingBefore> cdList = PMGrowApiUtilBefore.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
-            		  DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
-        		if(cdList != null){
-        			prettyLog.append("ITEM_SIZE", cdList.size());
-        			for (ChargingDischargingBefore item : cdList) {
-        				EssChargePlan essChargePlan = new EssChargePlan();
-        				essChargePlan.setDeviceId(device.getDeviceId());
-        				essChargePlan.setSiteId(_siteId);
-        				essChargePlan.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
-        				essChargePlan.setStdTimestamp(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
-        				essChargePlan.setChgVal(Integer.parseInt(item.getChargeEnergy()));
-        	            essChargePlan.setDischgVal(Integer.parseInt(item.getDischargeEnergy()));
-        				
-        				essChargePlanList.add(essChargePlan);
-        			}
-        		}
-        	} else { // api url 변경후
-        		System.out.println(device.getDeviceId()+" - 새로운 ess충방전계획량조회 api를 조회합니다..");
-        		ChargingDischargingSchedule cdList = PMGrowApiUtil.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "MI", "15", prettyLog);
-        		if(cdList != null){
-        			prettyLog.append("ITEM_SIZE", cdList.getItems().size());
-        			for (ChargingDischargingScheduleItemModel item : cdList.getItems()) {
-        				EssChargePlan essChargePlan = new EssChargePlan();
-        				essChargePlan.setDeviceId(device.getDeviceId());
-        				essChargePlan.setSiteId(_siteId);
-        				essChargePlan.setStdDate(item.getTimestamp());
-        				essChargePlan.setStdTimestamp(item.getTimestamp());
-        				essChargePlan.setChgVal(item.getScheduledCEnergy());
-        				essChargePlan.setDischgVal(item.getScheduledDEnergy());
-        				
-        				essChargePlanList.add(essChargePlan);
+        	String deviceType = device.getDeviceType();
+        	if(deviceType != null) {
+        		if ("2".equals(device.getInstType())) { // Local EMS
+        			if("1".equals(deviceType) || "2".equals(deviceType)){ // 1: PCS, 2: BMS
+        				if("1.1".equals(apiVer)) { // 기존
+        					System.out.println(device.getDeviceId()+" - 기존 ess충방전계획량조회 api를 조회합니다..");
+        					List<ChargingDischargingBefore> cdList = PMGrowApiUtilBefore.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
+        							DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
+        					if(cdList != null){
+        						prettyLog.append("ITEM_SIZE", cdList.size());
+        						for (ChargingDischargingBefore item : cdList) {
+        							EssChargePlan essChargePlan = new EssChargePlan();
+        							essChargePlan.setDeviceId(device.getDeviceId());
+        							essChargePlan.setSiteId(_siteId);
+        							essChargePlan.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
+        							essChargePlan.setStdTimestamp(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
+        							essChargePlan.setChgVal(Integer.parseInt(item.getChargeEnergy()));
+        							essChargePlan.setDischgVal(Integer.parseInt(item.getDischargeEnergy()));
+        							
+        							essChargePlanList.add(essChargePlan);
+        						}
+        					}
+        				} else { // api url 변경후
+        					System.out.println(device.getDeviceId()+" - 새로운 ess충방전계획량조회 api를 조회합니다..");
+        					ChargingDischargingSchedule cdList = PMGrowApiUtil.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "MI", "15", prettyLog);
+        					if(cdList != null){
+        						prettyLog.append("ITEM_SIZE", cdList.getItems().size());
+        						for (ChargingDischargingScheduleItemModel item : cdList.getItems()) {
+        							EssChargePlan essChargePlan = new EssChargePlan();
+        							essChargePlan.setDeviceId(device.getDeviceId());
+        							essChargePlan.setSiteId(_siteId);
+        							essChargePlan.setStdDate(item.getTimestamp());
+        							essChargePlan.setStdTimestamp(item.getTimestamp());
+        							essChargePlan.setChgVal(item.getScheduledCEnergy());
+        							essChargePlan.setDischgVal(item.getScheduledDEnergy());
+        							
+        							essChargePlanList.add(essChargePlan);
+        						}
+        					}
+        				}
         			}
         		}
         	}
@@ -1164,37 +1178,51 @@ public class EnergyController {
           apiVer = site.getLocalEmsApiVer();
         }
         List<EssUsage> essUsageModel = Lists.newArrayList();
-        if("1.1".equals(apiVer)) { // 기존
-        	System.out.println(device.getDeviceId()+" - 기존 ess사용량조회 api를 조회합니다..");
-        	List<EssUsageModel> resultList = PMGrowApiUtilBefore.getEssUsageList(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
-                DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
-        	if( resultList != null ){
-        		prettyLog.append("ITEM_SIZE", resultList.size());
-        		for (EssUsageModel item : resultList) {
-    	          EssUsage essUsage = new EssUsage();
-    	          essUsage.setDeviceId(device.getDeviceId());
-    	          essUsage.setSiteId(_siteId);
-    	          essUsage.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
-    	          essUsage.setUsgVal(Integer.parseInt(item.getPowerUsage()));
-
-    	          essUsageModel.add(essUsage);
-    	        }
-        	}
-        } else { // api url 변경후
-        	System.out.println(device.getDeviceId()+" - 새로운 ess사용량조회 api를 조회합니다..");
-        	ChargingDischarging cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "1", "15", prettyLog);
-        	if( cdList != null ){
-        		prettyLog.append("ITEM_SIZE", cdList.getItems().size());
-        		for (ChargingDischargingItemModel item : cdList.getItems()) { /*** 12.13 이우람 수정(ess방전량을 ess사용량으로 합의함) ***/
-        			EssUsage essUsage = new EssUsage();
-        			essUsage.setDeviceId(device.getDeviceId());
-        			essUsage.setSiteId(_siteId);
-        			essUsage.setStdDate(item.getTimestamp());
-        			essUsage.setUsgVal(item.getDischargeEnergy());
-        			
-        			essUsageModel.add(essUsage);
+        try {
+        	String deviceType = device.getDeviceType();
+        	if(deviceType != null) {
+        		if ("2".equals(device.getInstType())) { // Local EMS
+        			if("1".equals(deviceType) || "2".equals(deviceType)){ // 1: PCS, 2: BMS
+        				if("1.1".equals(apiVer)) { // 기존
+        					System.out.println(device.getDeviceId()+" - 기존 ess사용량조회 api를 조회합니다..");
+        					List<EssUsageModel> resultList = PMGrowApiUtilBefore.getEssUsageList(localEmsAddrMap.get(_siteId), device.getDeviceId(), DateUtil.dateToString(beginDate, "yyyyMMdd"),
+        							DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
+        					if( resultList != null ){
+        						prettyLog.append("ITEM_SIZE", resultList.size());
+        						for (EssUsageModel item : resultList) {
+        							EssUsage essUsage = new EssUsage();
+        							essUsage.setDeviceId(device.getDeviceId());
+        							essUsage.setSiteId(_siteId);
+        							essUsage.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
+        							essUsage.setUsgVal(Integer.parseInt(item.getPowerUsage()));
+        							
+        							essUsageModel.add(essUsage);
+        						}
+        					}
+        				} else { // api url 변경후
+        					System.out.println(device.getDeviceId()+" - 새로운 ess사용량조회 api를 조회합니다..");
+        					ChargingDischarging cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "1", "15", prettyLog);
+        					if( cdList != null ){
+        						prettyLog.append("ITEM_SIZE", cdList.getItems().size());
+        						for (ChargingDischargingItemModel item : cdList.getItems()) { /*** 12.13 이우람 수정(ess방전량을 ess사용량으로 합의함) ***/
+        							EssUsage essUsage = new EssUsage();
+        							essUsage.setDeviceId(device.getDeviceId());
+        							essUsage.setSiteId(_siteId);
+        							essUsage.setStdDate(item.getTimestamp());
+        							essUsage.setUsgVal(item.getDischargeEnergy());
+        							
+        							essUsageModel.add(essUsage);
+        						}
+        					}
+        				}
+        			}
         		}
         	}
+        } catch (NullPointerException e) {
+        	logger.error("error is : "+e.toString());
+        } catch (Exception e) {
+          prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
+          logger.error("energy11-ERROR", e);
         }
         resultCnt += essService.addOrModEssUsageList(essUsageModel, null);
       }
