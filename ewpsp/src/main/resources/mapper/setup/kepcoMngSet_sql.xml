@@ -107,8 +107,8 @@
 		        'N',
 		        #{regUid },
 		        now(),
-		        #{meterClaimDay }
-		        #{recRateDate }
+		        #{meterClaimDay },
+		        #{recRateDate },
 		        #{smpRateDate }
 		    )
 	</insert>
