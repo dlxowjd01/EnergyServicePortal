@@ -129,20 +129,23 @@ public class ApiController {
 			for (int i = 0; i < deviceList.size(); i++) {
 				Map<String, Object> devices = new HashMap<String, Object>();
 				devices = (Map<String, Object>) deviceList.get(i);
-				String deviceId = (String) devices.get("device_id");
-				BmsEquipmentModel bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, deviceId);
-				if(bmsDetail != null) {
-					Integer sysSoc = bmsDetail.getSysSoc();
-//					int soc = Integer.parseInt(sysSoc);
-					totalSoc = totalSoc+sysSoc;
-					socCnt = socCnt+1;
+				String deviceType = (String) devices.get("device_type");
+				if("2".equals(deviceType)) {
+					String deviceId = (String) devices.get("device_id");
+					BmsEquipmentModel bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, deviceId);
+					if(bmsDetail != null) {
+						Integer sysSoc = bmsDetail.getSysSoc();
+//						int soc = Integer.parseInt(sysSoc);
+						totalSoc = totalSoc+sysSoc;
+						socCnt = socCnt+1;
+					}
+//					SocModel resSoc = PMGrowApiUtil.getSoc(host, deviceId);
+//					if(resSoc != null) {
+//						int soc = Integer.parseInt(resSoc.getSoc());
+//						totalSoc = totalSoc+soc;
+//						socCnt = socCnt+1;
+//					}
 				}
-//				SocModel resSoc = PMGrowApiUtil.getSoc(host, deviceId);
-//				if(resSoc != null) {
-//					int soc = Integer.parseInt(resSoc.getSoc());
-//					totalSoc = totalSoc+soc;
-//					socCnt = socCnt+1;
-//				}
 			}
 		}
 		

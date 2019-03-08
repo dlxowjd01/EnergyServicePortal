@@ -73,7 +73,7 @@
 								<div class="indiv smain_soc">
 									<div class="chart_top clear">
 										<h2 class="ntit fl" ondblclick="javascript:location.href='/essCharge'" style="cursor: pointer;">SOC (잔량)</h2>
-										<div class="time fr">2018-08-12 11:41:26</div>
+										<div class="time fr" id="updtTimeSOC">2018-08-12 11:41:26</div>
 									</div>
 									<!-- no-data { -->
 									<div class="no-data" style="display: none;">
@@ -108,7 +108,7 @@
 								<div class="indiv der">
 									<div class="chart_top clear">
 										<h2 class="ntit fl" ondblclick="javascript:location.href='/derUsage'" style="cursor: pointer;">사용량 구성 (DER)</h2>
-										<div class="time fr">2018-08-12 11:41:26</div>
+										<div class="time fr" id="updtTimeDER">2018-08-12 11:41:26</div>
 									</div>
 									<!-- no-data { -->
 									<div class="no-data" style="display: none;">
@@ -755,7 +755,7 @@
 								<div class="indiv charge">
 									<div class="chart_top clear">
 										<h2 class="ntit fl" ondblclick="javascript:location.href='/essCharge'" style="cursor: pointer;">충/방전량</h2>
-										<div class="time fr">2018-08-12 11:41:26</div>
+										<div class="time fr" id="updtTimeESS">2018-08-12 11:41:26</div>
 									</div>
 									<!-- no-data { -->
 									<div class="no-data" style="display:none;">

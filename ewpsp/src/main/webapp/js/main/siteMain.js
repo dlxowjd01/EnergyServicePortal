@@ -77,32 +77,23 @@
 	}
 	
 	function fn_cycle_1min() {
-		var today = new Date();
 		getSiteSetDetail();
-		chargePowerStrDisplayYn(today);
+		chargePowerStrDisplayYn(new Date());
 		getPeak(formData);
 		drawData_chart_peak(); // 피크전력현황 차트그리기
-		
-		update_updtDataTime(today, "updtTimePeak");
+		update_updtDataTime(new Date(), "updtTimePeak");
 	}
 	
 	function fn_cycle_15min() {
 		getDeviceList(1); // 장치현황 조회
-		
 		getESSChargeRealList(formData); // 실제충방전량 조회
 		getESSChargeFutureList(formData); // 예측충방전량 조회
 		drawData_chart_charge(); // 충방전량 차트그리기
+		update_updtDataTime(new Date(), "updtTimeESS");
 		getESSChargeSum(formData); // ess 충방전량 합계 조회
-		
 		getSoc(formData); // soc 잔량 조회
-		
 		getDERUsageList(formData); // 사용량구성 조회
-		
 		getRevenueList(formData); // 수익현황 조회
-		
-		var today = new Date();
-		update_updtDataTime(today, "updtTimeRevenue");
-		update_updtDataTime(today, "updtTimeDevice");
 	}
 	
 	function getSiteMainSchCollection() {
@@ -389,6 +380,7 @@
 					$(".battery_per").empty().append('<span>'+finalSoc+'<em>%</em></span>');
 				}
 				
+				update_updtDataTime(new Date(), "updtTimeSOC");
 	   		}
 		});
 		
@@ -543,6 +535,7 @@
 		$("#essPer").empty().append( ( (totalDataSet2 == 0) ? 0 : ( (totalDataSet2/total)*100 ).toFixed(2) )+"%" );
 		$("#pvPer").empty().append( ( (totalDataSet3 == 0) ? 0 : ( (totalDataSet3/total)*100 ).toFixed(2) )+"%" );
 		
+		update_updtDataTime(new Date(), "updtTimeDER");
 	}
 
 	var peakDataSet = []; // chartData를 위한 변수
@@ -723,7 +716,8 @@
 		var totalDataSet3 = 0;
 		var nowUsage = 0;
 		
-		if( essRvList == null && pvRvList == null && drRvList == null ) {
+//		if( essRvList == null && pvRvList == null && drRvList == null ) {
+		if( loopCntList == null ) {
 			$(".income").find(".no-data").css("display", "");
 			$(".income").find(".inchart").css("display", "none");
 			$(".income").find(".chart_footer").css("display", "none");
@@ -853,6 +847,7 @@
 		var total = totalDataSet+totalDataSet2+totalDataSet3;
 		$("#totalRv").empty().append(numberComma(total)+" won");
 		
+		update_updtDataTime(new Date(), "updtTimeRevenue");
 	}
 	
 	function callback_getDeviceList(result) {
@@ -907,8 +902,9 @@
 
 			var pagingMap = result.pagingMap;
 			makePageNums2(pagingMap, "Device");
-			
 		}
+		
+		update_updtDataTime(new Date(), "updtTimeDevice");
 	}
 	
 	function getDeviceDetail(siteId, deviceId, deviceType) {
