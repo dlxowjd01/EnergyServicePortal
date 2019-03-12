@@ -32,9 +32,12 @@ import kr.co.ewp.ewpsp.common.energy.PeriodDataSetting;
 import kr.co.ewp.ewpsp.common.util.CommonUtils;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil;
 import kr.co.ewp.ewpsp.common.util.PMGrowApiUtil;
+import kr.co.ewp.ewpsp.common.util.PMGrowApiUtilBefore;
 import kr.co.ewp.ewpsp.model.BmsEquipmentModel;
+import kr.co.ewp.ewpsp.model.BmsEquipmentModelBefore;
 import kr.co.ewp.ewpsp.model.DeviceModel;
 import kr.co.ewp.ewpsp.model.PcsEquipmentModel;
+import kr.co.ewp.ewpsp.model.PcsEquipmentModelBefore;
 import kr.co.ewp.ewpsp.model.PvEquipmentModel;
 import kr.co.ewp.ewpsp.service.AlarmService;
 import kr.co.ewp.ewpsp.service.ControlService;
@@ -124,31 +127,57 @@ public class SiteMainController {
 		if(deviceList != null && deviceList.size() > 0) {
 			Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
 			String host = (String) siteDetail.get("local_ems_addr");
+			String apiVer = (String) siteDetail.get("local_ems_api_ver");
 			for(int i=0; i<deviceList.size(); i++) {
 				Map<String, Object> deviceMap = new HashMap<String, Object>();
 				deviceMap = (Map<String, Object>) deviceList.get(i);
 				String deviceType = (String) deviceMap.get("device_type");
 				if("1".equals(deviceType)) { // PCS
-					PcsEquipmentModel pcsDetail = PMGrowApiUtil.getPcsEquipmentList(host, (String) deviceMap.get("device_id"));
-					if(pcsDetail != null) {
-						Integer acPower = (pcsDetail.getAcPower() == null) ? 0 : pcsDetail.getAcPower();
-						Integer dcPower = (pcsDetail.getDcPower() == null) ? 0 : pcsDetail.getDcPower();
-						deviceMap.put("apiPower", acPower+dcPower);
+					if("1.1".equals(apiVer)) { // 기존
+						List<PcsEquipmentModelBefore> pcsDetailList = PMGrowApiUtilBefore.getPcsEquipmentList(host, (String) deviceMap.get("device_id"));
+						if(pcsDetailList != null) {
+							for (PcsEquipmentModelBefore pcsDetail : pcsDetailList) {
+								Float acPower = (pcsDetail.getAcPower() == null) ? 0 : pcsDetail.getAcPower();
+								Float dcPower = (pcsDetail.getDcPower() == null) ? 0 : pcsDetail.getDcPower();
+								deviceMap.put("apiPower", acPower+dcPower);
+							}
+						}
+					} else {
+						PcsEquipmentModel pcsDetail = PMGrowApiUtil.getPcsEquipmentList(host, (String) deviceMap.get("device_id"));
+						if(pcsDetail != null) {
+							Float acPower = (pcsDetail.getAcPower() == null) ? 0 : pcsDetail.getAcPower();
+							Float dcPower = (pcsDetail.getDcPower() == null) ? 0 : pcsDetail.getDcPower();
+							deviceMap.put("apiPower", acPower+dcPower);
+						}
 					}
 					
 				} else if("2".equals(deviceType)) { // BMS
-					BmsEquipmentModel bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, (String) deviceMap.get("device_id"));
-					if(bmsDetail != null) {
-						Integer soc = (bmsDetail.getSysSoc() == null) ? 0 : bmsDetail.getSysSoc();
-						deviceMap.put("apiSoc", soc);
+					if("1.1".equals(apiVer)) { // 기존
+						List<BmsEquipmentModelBefore> bmsDetailList = PMGrowApiUtilBefore.getBmsEquipmentList(host, (String) deviceMap.get("device_id"));
+						if(bmsDetailList != null) {
+							for (BmsEquipmentModelBefore bmsDetail : bmsDetailList) {
+								Float soc = (bmsDetail.getSysSoc() == null) ? 0 : bmsDetail.getSysSoc();
+								deviceMap.put("apiSoc", soc);
+							}
+						}
+					} else {
+						BmsEquipmentModel bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, (String) deviceMap.get("device_id"));
+						if(bmsDetail != null) {
+							Float soc = (bmsDetail.getSysSoc() == null) ? 0 : bmsDetail.getSysSoc();
+							deviceMap.put("apiSoc", soc);
+						}
 					}
 					
 				} else if("3".equals(deviceType)) { // PV(localEMS)
-					PvEquipmentModel pvDetail = PMGrowApiUtil.getPvEquipmentList(host, (String) deviceMap.get("device_id"));
-					if(pvDetail != null) {
-						Integer totPower = (pvDetail.getTotalGenPower() == null) ? 0 : pvDetail.getTotalGenPower();
-						deviceMap.put("apiTotPower", totPower);
-					}
+//					if("1.1".equals(apiVer)) { // 기존
+//						
+//					} else {
+						PvEquipmentModel pvDetail = PMGrowApiUtil.getPvEquipmentList(host, (String) deviceMap.get("device_id"));
+						if(pvDetail != null) {
+							Integer totPower = (pvDetail.getTotalGenPower() == null) ? 0 : pvDetail.getTotalGenPower();
+							deviceMap.put("apiTotPower", totPower);
+						}
+//					}
 					
 				} else if("5".equals(deviceType)) { // PV(Enertalk)
 					DeviceModel ioeDetail = EnertalkApiUtil.getDevice((String) deviceMap.get("device_id"));

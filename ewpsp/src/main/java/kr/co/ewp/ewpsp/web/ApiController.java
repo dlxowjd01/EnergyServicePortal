@@ -25,12 +25,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.inject.internal.util.Maps;
 
+import kr.co.ewp.ewpsp.model.BmsEquipmentModelBefore;
 import kr.co.ewp.ewpsp.common.util.CommonUtils;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.Period;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.TimeType;
 import kr.co.ewp.ewpsp.common.util.EnertalkApiUtil.UsageType;
 import kr.co.ewp.ewpsp.common.util.PMGrowApiUtil;
+import kr.co.ewp.ewpsp.common.util.PMGrowApiUtilBefore;
 import kr.co.ewp.ewpsp.common.util.UserUtil;
 import kr.co.ewp.ewpsp.model.BmsEquipmentModel;
 import kr.co.ewp.ewpsp.model.DrRequestTarget;
@@ -41,6 +43,7 @@ import kr.co.ewp.ewpsp.model.UsageRealtimeModel;
 import kr.co.ewp.ewpsp.service.AlarmService;
 import kr.co.ewp.ewpsp.service.CmpyGrpSiteMngService;
 import kr.co.ewp.ewpsp.service.DeviceMonitoringService;
+import kr.co.ewp.ewpsp.service.KepcoMngSetService;
 import kr.co.ewp.ewpsp.service.LoginService;
 import kr.co.ewp.ewpsp.service.SMSService;
 
@@ -102,26 +105,24 @@ public class ApiController {
     } catch (NullPointerException e) {
 		logger.error("error is : "+e.toString());
     } catch (Exception e) {
-      //e.printStackTrace();
     	logger.error("error is : "+e.toString());
       response.setContentType("text/html; charset=UTF-8");
       try {
         response.getWriter().print("-1");
       } catch (IOException e1) {
-        //e1.printStackTrace();
     	  logger.error("error is : "+e1.toString());
       }
     }
   }
 
 	@RequestMapping("/getSoc")
-	public @ResponseBody Map<String, Object> getSoc(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getSoc(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
 		logger.debug("/getSoc");
 		logger.debug("param ::::: "+param.toString());
 
 		Map result = cmpyGrpSiteMngService.getSiteDetail(param);
 		String host = (String) result.get("local_ems_addr");
-		int totalSoc = 0;
+		Float totalSoc = (float) 0;
 		int socCnt = 0;
 
 		List deviceList = deviceMonitoringService.getDeviceList(param);
@@ -132,19 +133,34 @@ public class ApiController {
 				String deviceType = (String) devices.get("device_type");
 				if("2".equals(deviceType)) {
 					String deviceId = (String) devices.get("device_id");
-					BmsEquipmentModel bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, deviceId);
-					if(bmsDetail != null) {
-						Integer sysSoc = bmsDetail.getSysSoc();
-//						int soc = Integer.parseInt(sysSoc);
-						totalSoc = totalSoc+sysSoc;
-						socCnt = socCnt+1;
+					String siteId  = (String) devices.get("site_id");
+					Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
+					String apiVer = (String) siteDetail.get("local_ems_api_ver");
+					if("1.1".equals(apiVer)) { // 기존
+						List<BmsEquipmentModelBefore> bmsDetail = PMGrowApiUtilBefore.getBmsEquipmentList(host, deviceId);
+						System.out.println("bms 결과 : "+bmsDetail.toString());
+						if(bmsDetail != null) {
+							for (BmsEquipmentModelBefore bmsEquipmentModel : bmsDetail) {
+								Float sysSoc = bmsEquipmentModel.getSysSoc();
+								totalSoc = totalSoc+sysSoc;
+								socCnt = socCnt+1;
+							}
+						}
+					} else {
+						BmsEquipmentModel bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, deviceId);
+						if(bmsDetail != null) {
+							Float sysSoc = bmsDetail.getSysSoc();
+//							int soc = Integer.parseInt(sysSoc);
+							totalSoc = totalSoc+sysSoc;
+							socCnt = socCnt+1;
+						}
+//						SocModel resSoc = PMGrowApiUtil.getSoc(host, deviceId);
+//						if(resSoc != null) {
+//							int soc = Integer.parseInt(resSoc.getSoc());
+//							totalSoc = totalSoc+soc;
+//							socCnt = socCnt+1;
+//						}
 					}
-//					SocModel resSoc = PMGrowApiUtil.getSoc(host, deviceId);
-//					if(resSoc != null) {
-//						int soc = Integer.parseInt(resSoc.getSoc());
-//						totalSoc = totalSoc+soc;
-//						socCnt = socCnt+1;
-//					}
 				}
 			}
 		}

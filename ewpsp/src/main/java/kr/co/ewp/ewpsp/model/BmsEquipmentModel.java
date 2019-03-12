@@ -11,11 +11,11 @@ public class BmsEquipmentModel {
   private String alarmMsg;// Last alarm message /*** 12.12 이우람 추가 ***/
 //  private String socMax;// /*** 12.12 이우람 수정-주석 ***/
 //  private String socMin;// /*** 12.12 이우람 수정-주석 ***/
-  private Integer sysSoc;// (%) /*** 12.12 이우람 수정 ***/
-  private Integer currSoc;// (Wh) /*** 12.12 이우람 수정 ***/
-  private Integer sysSoh;// (%) /*** 12.12 이우람 수정 ***/
-  private Integer sysVoltage;// (V) /*** 12.12 이우람 수정 ***/
-  private Integer sysCurrent;// (A) /*** 12.12 이우람 수정 ***/
+  private Float sysSoc;// (%) /*** 12.12 이우람 수정 ***/
+  private Float currSoc;// (Wh) /*** 12.12 이우람 수정 ***/
+  private Float sysSoh;// (%) /*** 12.12 이우람 수정 ***/
+  private Float sysVoltage;// (V) /*** 12.12 이우람 수정 ***/
+  private Float sysCurrent;// (A) /*** 12.12 이우람 수정 ***/
   private Integer dod;// (%) /*** 12.12 이우람 수정 ***/
 
   public String getBmsId() {
@@ -58,43 +58,43 @@ public class BmsEquipmentModel {
 		this.alarmMsg = alarmMsg;
 	}
 	
-  public Integer getSysSoc() {
+  public Float getSysSoc() {
 		return sysSoc;
 	}
 	
-  public void setSysSoc(Integer sysSoc) {
+  public void setSysSoc(Float sysSoc) {
 		this.sysSoc = sysSoc;
 	}
 	
-  public Integer getCurrSoc() {
+  public Float getCurrSoc() {
 		return currSoc;
 	}
 	
-  public void setCurrSoc(Integer currSoc) {
+  public void setCurrSoc(Float currSoc) {
 		this.currSoc = currSoc;
 	}
 	
-  public Integer getSysSoh() {
+  public Float getSysSoh() {
 		return sysSoh;
 	}
 	
-  public void setSysSoh(Integer sysSoh) {
+  public void setSysSoh(Float sysSoh) {
 		this.sysSoh = sysSoh;
 	}
 	
-  public Integer getSysVoltage() {
+  public Float getSysVoltage() {
 		return sysVoltage;
 	}
 	
-  public void setSysVoltage(Integer sysVoltage) {
+  public void setSysVoltage(Float sysVoltage) {
 		this.sysVoltage = sysVoltage;
 	}
 	
-  public Integer getSysCurrent() {
+  public Float getSysCurrent() {
 		return sysCurrent;
 	}
 	
-  public void setSysCurrent(Integer sysCurrent) {
+  public void setSysCurrent(Float sysCurrent) {
 		this.sysCurrent = sysCurrent;
 	}
 	

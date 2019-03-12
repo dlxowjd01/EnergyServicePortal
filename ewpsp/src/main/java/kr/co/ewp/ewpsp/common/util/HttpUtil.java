@@ -2,11 +2,23 @@ package kr.co.ewp.ewpsp.common.util;
 
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.SSLContext;
 
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.config.RequestConfig.Builder;
 import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.HttpContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,23 +36,45 @@ public class HttpUtil {
   private static final Logger logger = LoggerFactory.getLogger(HttpUtil.class);
 
   public static RestTemplate getRestTemplate(final HttpClientContext context) {
-    HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-    factory.setReadTimeout(60000); // milliseconds
-    RestTemplate restOperations = new RestTemplate(factory);
-    restOperations.setRequestFactory(new HttpComponentsClientHttpRequestFactory() {
-      @Override
-      protected HttpContext createHttpContext(HttpMethod httpMethod, URI uri) {
-        if (context.getAttribute(HttpClientContext.COOKIE_STORE) == null) {
-          context.setAttribute(HttpClientContext.COOKIE_STORE, new BasicCookieStore());
-          Builder builder = RequestConfig.custom()
-              // .setCookieSpec(CookieSpecs.IGNORE_COOKIES)
-              // .setAuthenticationEnabled(false)
-              .setRedirectsEnabled(false);
-          context.setRequestConfig(builder.build());
-        }
-        return context;
-      }
-    });
+	RestTemplate restOperations = null;
+	try {
+		// 2019.03.08 이우람 추가
+		// 인증무시기능 start
+		TrustStrategy acceptingTrustStrategy = new TrustStrategy() {
+			public boolean isTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+				return true;
+			}
+		};
+		SSLContext sslContext = org.apache.http.ssl.SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy).build();
+		SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
+		CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(csf).build();
+		// 인증무시기능 end
+		
+		HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+		factory.setReadTimeout(60000); // milliseconds
+		factory.setHttpClient(httpClient); // 2019.03.08 이우람 추가
+		restOperations = new RestTemplate(factory);
+//		restOperations.setRequestFactory(new HttpComponentsClientHttpRequestFactory() {
+//		  @Override
+//		  protected HttpContext createHttpContext(HttpMethod httpMethod, URI uri) {
+//		    if (context.getAttribute(HttpClientContext.COOKIE_STORE) == null) {
+//		      context.setAttribute(HttpClientContext.COOKIE_STORE, new BasicCookieStore());
+//		      Builder builder = RequestConfig.custom()
+//		          // .setCookieSpec(CookieSpecs.IGNORE_COOKIES)
+//		          // .setAuthenticationEnabled(false)
+//		          .setRedirectsEnabled(false);
+//		      context.setRequestConfig(builder.build());
+//		    }
+//		    return context;
+//		  }
+//		});
+	} catch (KeyManagementException e) {
+		e.printStackTrace();
+	} catch (NoSuchAlgorithmException e) {
+		e.printStackTrace();
+	} catch (KeyStoreException e) {
+		e.printStackTrace();
+	}
 
     return restOperations;
   }

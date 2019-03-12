@@ -8,12 +8,15 @@ import org.springframework.http.HttpHeaders;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import kr.co.ewp.ewpsp.model.BmsEquipmentModelBefore;
+import kr.co.ewp.ewpsp.model.PcsEquipmentModelBefore;
+import kr.co.ewp.ewpsp.model.PvEquipmentModelBefore;
 import kr.co.ewp.ewpsp.model.BmsEquipmentModel;
 import kr.co.ewp.ewpsp.model.PcsEquipmentModel;
 import kr.co.ewp.ewpsp.model.PvEquipmentModel;
 import kr.co.ewp.ewpsp.model.SocModel;
 
-public class PMGrowApiUtil {
+public class PMGrowApiUtilBefore_bak {
   private static final String API_VERSION = "2.0.0";
   private static final String API_ACCESS_TOKEN = "<access_token>";
   
@@ -33,21 +36,22 @@ public class PMGrowApiUtil {
    * @param prettyLog
    * @return
    */
-  public static PcsEquipmentModel getPcsEquipmentList(String host, String equipmentId) {
+  public static List<PcsEquipmentModelBefore> getPcsEquipmentList(String host, String equipmentId) {
 	  logger.debug("PMGrowApiUtil.getPcsEquipmentList");
     String resultBody = null;
-    PcsEquipmentModel returnPCS = null;
+    List<PcsEquipmentModelBefore> returnPCS = null;
     try {
-      StringBuffer url = new StringBuffer(host + "/v1/pcses/:pcsId/current".replace(":pcsId", equipmentId));
+    	StringBuffer url = new StringBuffer(host + "/openapi/pcs-equipment-list");
+        url.append("?equipmentId=").append(equipmentId);
       System.out.println("pcs device url =====> "+url);
       logger.debug("pmgrow api URL : "+ url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
       System.out.println("pcs resultBody =====> "+resultBody);
-      returnPCS = JsonUtil.toObject(resultBody, PcsEquipmentModel.class);
+      returnPCS = JsonUtil.toObject(resultBody, new TypeReference<List<PcsEquipmentModelBefore>>() {
+      });
     } catch (NullPointerException e) {
 		logger.error("error is : "+e.toString());
     } catch (Exception e) {
-//    	e.printStackTrace();
 		logger.error("error is : "+e.toString());
     } finally {
     	logger.debug("PMGrowApiUtil.getPcsEquipmentList end");
@@ -68,21 +72,22 @@ public class PMGrowApiUtil {
    * @param prettyLog
    * @return
    */
-  public static BmsEquipmentModel getBmsEquipmentList(String host, String equipmentId) {
+  public static List<BmsEquipmentModelBefore> getBmsEquipmentList(String host, String equipmentId) {
 	logger.debug("PMGrowApiUtil.getBmsEquipmentList");
     String resultBody = null;
-    BmsEquipmentModel returnBMS = null;
+    List<BmsEquipmentModelBefore> returnBMS = null;
     try {
-    	StringBuffer url = new StringBuffer(host + "/v1/bmses/:bmsId/current".replace(":bmsId", equipmentId));
+    	StringBuffer url = new StringBuffer(host + "/openapi/bms-equipment-list");
+        url.append("?equipmentId=").append(equipmentId);
     	System.out.println("bms device url =====> "+url);
       logger.debug("pmgrow api URL : "+ url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
       System.out.println("bms resultBody =====> "+resultBody);
-      returnBMS = JsonUtil.toObject(resultBody, BmsEquipmentModel.class);
+      returnBMS = JsonUtil.toObject(resultBody, new TypeReference<List<BmsEquipmentModelBefore>>() {
+      });
     } catch (NullPointerException e) {
 		logger.error("error is : "+e.toString());
     } catch (Exception e) {
-//    	e.printStackTrace();
 		logger.error("error is : "+e.toString());
     } finally {
     	logger.debug("PMGrowApiUtil.getBmsEquipmentList end");
@@ -103,21 +108,22 @@ public class PMGrowApiUtil {
    * @param prettyLog
    * @return
    */
-  public static PvEquipmentModel getPvEquipmentList(String host, String equipmentId) {
+  public static List<PvEquipmentModelBefore> getPvEquipmentList(String host, String equipmentId) {
     logger.debug("PMGrowApiUtil.getPvEquipmentList");
     String resultBody = null;
-    PvEquipmentModel returnPV = null;
+    List<PvEquipmentModelBefore> returnPV = null;
     try {
-    	StringBuffer url = new StringBuffer(host + "/v1/ivtes/:ivtId/current".replace(":ivtId", equipmentId));
+    	StringBuffer url = new StringBuffer(host + "/openapi/pv-equipment-list");
+        url.append("?equipmentId=").append(equipmentId);
     	System.out.println("pv device url =====> "+url);
       logger.debug("pmgrow api URL : "+ url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
       System.out.println("pv device resultBody =====> "+resultBody);
-      returnPV = JsonUtil.toObject(resultBody, PvEquipmentModel.class);
+      returnPV = JsonUtil.toObject(resultBody, new TypeReference<List<PvEquipmentModelBefore>>() {
+      });
     } catch (NullPointerException e) {
 		logger.error("error is : "+e.toString());
     } catch (Exception e) {
-    	//e.printStackTrace();
 		logger.error("error is : "+e.toString());
     } finally {
     	logger.debug("PMGrowApiUtil.getPvEquipmentList end");
@@ -151,7 +157,8 @@ public class PMGrowApiUtil {
   private static HttpHeaders getHeaders() {
     HttpHeaders headers = new HttpHeaders();
 //    headers.set("authorization", "Bearer  " + API_ACCESS_TOKEN);
-//    headers.set("accept-version", API_VERSION);
+    headers.set("Authorization", "Basic  " + "bG9jYWwtZW1zOmxvY2FsLWVtcw==");
+    headers.set("accept-version", API_VERSION);
     return headers;
   }
 }

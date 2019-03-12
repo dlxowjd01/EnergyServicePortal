@@ -152,6 +152,7 @@ public class EnertalkApiUtil {
 	  UsageRealtimeModel usageRealtime = null;
 	  try {
 		  String url = API_URL + "/devices/:deviceId/usages/realtime".replace(":deviceId", deviceId);
+		  System.out.println("URL "+ url);
 		  logger.debug("URL", url);
 		  HttpHeaders headers = getHeaders();
 		  resultBody = HttpUtil.get(url, headers);

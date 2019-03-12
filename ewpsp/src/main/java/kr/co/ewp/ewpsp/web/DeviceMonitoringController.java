@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.ewp.ewpsp.model.PcsEquipmentModelBefore;
+import kr.co.ewp.ewpsp.model.BmsEquipmentModelBefore;
+import kr.co.ewp.ewpsp.model.PvEquipmentModelBefore;
 import kr.co.ewp.ewpsp.common.util.PMGrowApiUtil;
+import kr.co.ewp.ewpsp.common.util.PMGrowApiUtilBefore;
 import kr.co.ewp.ewpsp.model.BmsEquipmentModel;
 import kr.co.ewp.ewpsp.model.PcsEquipmentModel;
 import kr.co.ewp.ewpsp.model.PvEquipmentModel;
@@ -136,46 +140,139 @@ public class DeviceMonitoringController {
 		Map result = deviceMonitoringService.getDevicePCSDetail(param);
 		Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
 		String host = (String) siteDetail.get("local_ems_addr");
-		PcsEquipmentModel pcsDetail = PMGrowApiUtil.getPcsEquipmentList(host, (String) param.get("deviceId"));
-		if(pcsDetail == null) {
-			result.put("pcsStatus", null);
-			result.put("pcsStatusNm", null);
-			result.put("alarmMsg", null);
-		} else {
-			String statusNm = "";
-			if(pcsDetail.getPcsStatus() == 0) {
-				statusNm = "OFF";
-			} else if(pcsDetail.getPcsStatus() == 1) {
-				statusNm = "ON";
-			} else if(pcsDetail.getPcsStatus() == 2) {
-				statusNm = "Fault";
-			} else if(pcsDetail.getPcsStatus() == 3) {
-				statusNm = "Warning";
+		String apiVer = (String) siteDetail.get("local_ems_api_ver");
+		if("1.1".equals(apiVer)) { // 기존
+			List<PcsEquipmentModelBefore> pcsDetailList = PMGrowApiUtilBefore.getPcsEquipmentList(host, (String) param.get("deviceId"));
+			System.out.println("             pcs결과  "+pcsDetailList);
+			if(pcsDetailList != null) {
+				for (PcsEquipmentModelBefore pcsDetail : pcsDetailList) {
+					if(pcsDetail == null) {
+						result.put("pcsStatus", null);
+						result.put("pcsStatusNm", null);
+						result.put("alarmMsg", null);
+					} else {
+						String statusNm = "";
+						if(pcsDetail.getPcsStatus() == 0) {
+							statusNm = "OFF";
+						} else if(pcsDetail.getPcsStatus() == 1) {
+							statusNm = "ON";
+						} else if(pcsDetail.getPcsStatus() == 2) {
+							statusNm = "Fault";
+						} else if(pcsDetail.getPcsStatus() == 3) {
+							statusNm = "Warning";
+						}
+						result.put("pcsStatus", pcsDetail.getPcsStatus());
+						result.put("pcsStatusNm", statusNm);
+						result.put("alarmMsg", pcsDetail.getAlarmMsg());
+					}
+					result.put("acVoltage", (pcsDetail == null || pcsDetail.getAcVoltage() == null) ? -1 : pcsDetail.getAcVoltage());
+					result.put("acPower", (pcsDetail == null || pcsDetail.getAcPower() == null) ?  -1 : pcsDetail.getAcPower());
+					result.put("acFreq", (pcsDetail == null || pcsDetail.getAcFreq() == null) ?  -1 : pcsDetail.getAcFreq());
+					result.put("acCurrent", (pcsDetail == null || pcsDetail.getAcCurrent() == null) ?  -1 : pcsDetail.getAcCurrent());
+					result.put("acPf", (pcsDetail == null || pcsDetail.getAcPf() == null) ?  -1 : pcsDetail.getAcPf());
+					result.put("acSetPower", (pcsDetail == null || pcsDetail.getAcSetPower() == null) ?  -1 : pcsDetail.getAcSetPower());
+					result.put("dcVoltage", (pcsDetail == null || pcsDetail.getDcVoltage() == null) ?  -1 : pcsDetail.getDcVoltage());
+					result.put("dcPower", (pcsDetail == null || pcsDetail.getDcPower() == null) ?  -1 : pcsDetail.getDcPower());
+					result.put("pcsStatus", (pcsDetail == null) ?  -1 : pcsDetail.getPcsStatus());
+					if(pcsDetail == null) {
+						result.put("pcsCommand", -1);
+					} else {
+						if(pcsDetail.getPcsCommand() == 0) {
+							result.put("pcsCommand", "Stop");
+						} else {
+							result.put("pcsCommand", "Run");
+						}
+					}
+					result.put("todayCEnergy", (pcsDetail == null) ?  -1 : pcsDetail.getTodayCEnergy());
+					result.put("todayDEnergy", (pcsDetail == null) ?  -1 : pcsDetail.getTodayDEnergy());
+				}
 			}
-			result.put("pcsStatus", pcsDetail.getPcsStatus());
-			result.put("pcsStatusNm", statusNm);
-			result.put("alarmMsg", pcsDetail.getAlarmMsg());
-		}
-		result.put("acVoltage", (pcsDetail == null) ? -1 : pcsDetail.getAcVoltage());
-		result.put("acPower", (pcsDetail == null) ?  -1 : pcsDetail.getAcPower());
-		result.put("acFreq", (pcsDetail == null) ?  -1 : pcsDetail.getAcFreq());
-		result.put("acCurrent", (pcsDetail == null) ?  -1 : pcsDetail.getAcCurrent());
-		result.put("acPf", (pcsDetail == null) ?  -1 : pcsDetail.getAcPf());
-		result.put("acSetPower", (pcsDetail == null) ?  -1 : pcsDetail.getAcSetPower());
-		result.put("dcVoltage", (pcsDetail == null) ?  -1 : pcsDetail.getDcVoltage());
-		result.put("dcPower", (pcsDetail == null) ?  -1 : pcsDetail.getDcPower());
-		result.put("pcsStatus", (pcsDetail == null) ?  -1 : pcsDetail.getPcsStatus());
-		if(pcsDetail == null) {
-			result.put("pcsCommand", -1);
+//			List<PcsEquipmentModelBefore> pcsDetailList = PMGrowApiUtilBefore.getPcsEquipmentList(host, (String) param.get("deviceId"));
+//			if(pcsDetailList != null) {
+//				for (PcsEquipmentModelBefore pcsDetail : pcsDetailList) {
+//					if(pcsDetail == null) {
+//						result.put("pcsStatus", null);
+//						result.put("pcsStatusNm", null);
+//						result.put("alarmMsg", null);
+//					} else {
+//						String statusNm = "";
+//						if(Integer.parseInt(pcsDetail.getPcsStatus()) == 0) {
+//							statusNm = "OFF";
+//						} else if(Integer.parseInt(pcsDetail.getPcsStatus()) == 1) {
+//							statusNm = "ON";
+//						} else if(Integer.parseInt(pcsDetail.getPcsStatus()) == 2) {
+//							statusNm = "Fault";
+//						} else if(Integer.parseInt(pcsDetail.getPcsStatus()) == 3) {
+//							statusNm = "Warning";
+//						}
+//						result.put("pcsStatus", pcsDetail.getPcsStatus());
+//						result.put("pcsStatusNm", statusNm);
+//						result.put("alarmMsg", pcsDetail.getAlarmMsg());
+//					}
+//					result.put("acVoltage", (pcsDetail == null) ? -1 : pcsDetail.getAcVoltage());
+//					result.put("acPower", (pcsDetail == null) ?  -1 : pcsDetail.getAcPower());
+//					result.put("acFreq", (pcsDetail == null) ?  -1 : pcsDetail.getAcFreq());
+//					result.put("acCurrent", (pcsDetail == null) ?  -1 : pcsDetail.getAcCurrent());
+//					result.put("acPf", (pcsDetail == null) ?  -1 : pcsDetail.getAcPf());
+//					result.put("acSetPower", (pcsDetail == null) ?  -1 : pcsDetail.getAcSetPower());
+//					result.put("dcVoltage", (pcsDetail == null) ?  -1 : pcsDetail.getDcVoltage());
+//					result.put("dcPower", (pcsDetail == null) ?  -1 : pcsDetail.getDcPower());
+//					result.put("pcsStatus", (pcsDetail == null) ?  -1 : pcsDetail.getPcsStatus());
+//					if(pcsDetail == null) {
+//						result.put("pcsCommand", -1);
+//					} else {
+//						if(Integer.parseInt(pcsDetail.getPcsCommand()) == 0) {
+//							result.put("pcsCommand", "Stop");
+//						} else {
+//							result.put("pcsCommand", "Run");
+//						}
+//					}
+//					result.put("todayCEnergy", (pcsDetail == null) ?  -1 : pcsDetail.getTodayCEnergy());
+//					result.put("todayDEnergy", (pcsDetail == null) ?  -1 : pcsDetail.getTodayDEnergy());
+//				}
+//			}
 		} else {
-			if(pcsDetail.getPcsCommand() == 0) {
-				result.put("pcsCommand", "Stop");
+			PcsEquipmentModel pcsDetail = PMGrowApiUtil.getPcsEquipmentList(host, (String) param.get("deviceId"));
+			if(pcsDetail == null) {
+				result.put("pcsStatus", null);
+				result.put("pcsStatusNm", null);
+				result.put("alarmMsg", null);
 			} else {
-				result.put("pcsCommand", "Run");
+				String statusNm = "";
+				if(pcsDetail.getPcsStatus() == 0) {
+					statusNm = "OFF";
+				} else if(pcsDetail.getPcsStatus() == 1) {
+					statusNm = "ON";
+				} else if(pcsDetail.getPcsStatus() == 2) {
+					statusNm = "Fault";
+				} else if(pcsDetail.getPcsStatus() == 3) {
+					statusNm = "Warning";
+				}
+				result.put("pcsStatus", pcsDetail.getPcsStatus());
+				result.put("pcsStatusNm", statusNm);
+				result.put("alarmMsg", pcsDetail.getAlarmMsg());
 			}
+			result.put("acVoltage", (pcsDetail == null) ? -1 : pcsDetail.getAcVoltage());
+			result.put("acPower", (pcsDetail == null) ?  -1 : pcsDetail.getAcPower());
+			result.put("acFreq", (pcsDetail == null) ?  -1 : pcsDetail.getAcFreq());
+			result.put("acCurrent", (pcsDetail == null) ?  -1 : pcsDetail.getAcCurrent());
+			result.put("acPf", (pcsDetail == null) ?  -1 : pcsDetail.getAcPf());
+			result.put("acSetPower", (pcsDetail == null) ?  -1 : pcsDetail.getAcSetPower());
+			result.put("dcVoltage", (pcsDetail == null) ?  -1 : pcsDetail.getDcVoltage());
+			result.put("dcPower", (pcsDetail == null) ?  -1 : pcsDetail.getDcPower());
+			result.put("pcsStatus", (pcsDetail == null) ?  -1 : pcsDetail.getPcsStatus());
+			if(pcsDetail == null) {
+				result.put("pcsCommand", -1);
+			} else {
+				if(pcsDetail.getPcsCommand() == 0) {
+					result.put("pcsCommand", "Stop");
+				} else {
+					result.put("pcsCommand", "Run");
+				}
+			}
+			result.put("todayCEnergy", (pcsDetail == null) ?  -1 : pcsDetail.getTodayCEnergy());
+			result.put("todayDEnergy", (pcsDetail == null) ?  -1 : pcsDetail.getTodayDEnergy());
 		}
-		result.put("todayCEnergy", (pcsDetail == null) ?  -1 : pcsDetail.getTodayCEnergy());
-		result.put("todayDEnergy", (pcsDetail == null) ?  -1 : pcsDetail.getTodayDEnergy());
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
@@ -225,37 +322,114 @@ public class DeviceMonitoringController {
 		Map result = deviceMonitoringService.getDeviceBMSDetail(param);
 		Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
 		String host = (String) siteDetail.get("local_ems_addr");
-		BmsEquipmentModel bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, (String) param.get("deviceId"));
-		System.out.println("bmsDetail api 결과  "+bmsDetail.toString());
-		if(bmsDetail == null) {
-			result.put("bmsStatus", null);
-			result.put("bmsStatusNm", null);
-			result.put("alarmMsg", null);
-		} else {
-			String statusNm = "";
-			if(bmsDetail.getSysMode() == 0) {
-				statusNm = "Idle";
-			} else if(bmsDetail.getSysMode() == 1) {
-				statusNm = "Charge";
-			} else if(bmsDetail.getSysMode() == 2) {
-				statusNm = "Discharge";
-			} else if(bmsDetail.getSysMode() == 3) {
-				statusNm = "MainS/W on/off";
-			} else if(bmsDetail.getSysMode() == 4) {
-				statusNm = "Off-line";
-			} else if(bmsDetail.getSysMode() == 5) {
-				statusNm = "Ready";
+		String apiVer = (String) siteDetail.get("local_ems_api_ver");
+		if("1.1".equals(apiVer)) { // 기존
+			List<BmsEquipmentModelBefore> bmsDetailList = PMGrowApiUtilBefore.getBmsEquipmentList(host, (String) param.get("deviceId"));
+			System.out.println("             bms결과  "+bmsDetailList);
+			if(bmsDetailList != null) {
+				for (BmsEquipmentModelBefore bmsDetail : bmsDetailList) {
+					if(bmsDetail == null) {
+						result.put("bmsStatus", null);
+						result.put("bmsStatusNm", null);
+						result.put("alarmMsg", null);
+					} else {
+						String statusNm = "";
+						if(!"".equals(bmsDetail.getSysMode()) && bmsDetail.getSysMode() != null) {
+							if(bmsDetail.getSysMode() == 0) {
+								statusNm = "Idle";
+							} else if(bmsDetail.getSysMode() == 1) {
+								statusNm = "Charge";
+							} else if(bmsDetail.getSysMode() == 2) {
+								statusNm = "Discharge";
+							} else if(bmsDetail.getSysMode() == 3) {
+								statusNm = "MainS/W on/off";
+							} else if(bmsDetail.getSysMode() == 4) {
+								statusNm = "Off-line";
+							} else if(bmsDetail.getSysMode() == 5) {
+								statusNm = "Ready";
+							}
+						}
+						result.put("bmsStatus", bmsDetail.getSysMode());
+						result.put("bmsStatusNm", statusNm);
+						result.put("alarmMsg", ""/*bmsDetail.getAlarmMsg()*/);
+					}
+					result.put("sysSoc", (bmsDetail == null || bmsDetail.getSysSoc() == null) ? -1 : bmsDetail.getSysSoc());
+					result.put("sysSoh", (bmsDetail == null || bmsDetail.getSysSoh() == null) ? -1 : bmsDetail.getSysSoh());
+					result.put("currSoc", (bmsDetail == null || bmsDetail.getCurrSoc() == null) ? -1 : bmsDetail.getCurrSoc());
+					result.put("sysVoltage", (bmsDetail == null || bmsDetail.getSysVoltage() == null) ? -1 : bmsDetail.getSysVoltage());
+					result.put("sysCurrent", (bmsDetail == null || bmsDetail.getSysCurrent() == null) ? -1 : bmsDetail.getSysCurrent());
+					result.put("dod", (bmsDetail == null || bmsDetail.getDod() == null) ? -1 : bmsDetail.getDod());
+				}
 			}
-			result.put("bmsStatus", bmsDetail.getSysMode());
-			result.put("bmsStatusNm", statusNm);
-			result.put("alarmMsg", bmsDetail.getAlarmMsg());
+//			List<BmsEquipmentModelBefore> bmsDetailList = PMGrowApiUtilBefore.getBmsEquipmentList(host, (String) param.get("deviceId"));
+//			if(bmsDetailList != null) {
+//				for (BmsEquipmentModelBefore bmsDetail : bmsDetailList) {
+//					if(bmsDetail == null) {
+//						result.put("bmsStatus", null);
+//						result.put("bmsStatusNm", null);
+//						result.put("alarmMsg", null);
+//					} else {
+//						String statusNm = "";
+//						if(!"".equals(bmsDetail.getSysMode())) {
+//							if(Integer.parseInt(bmsDetail.getSysMode()) == 0) {
+//								statusNm = "Idle";
+//							} else if(Integer.parseInt(bmsDetail.getSysMode()) == 1) {
+//								statusNm = "Charge";
+//							} else if(Integer.parseInt(bmsDetail.getSysMode()) == 2) {
+//								statusNm = "Discharge";
+//							} else if(Integer.parseInt(bmsDetail.getSysMode()) == 3) {
+//								statusNm = "MainS/W on/off";
+//							} else if(Integer.parseInt(bmsDetail.getSysMode()) == 4) {
+//								statusNm = "Off-line";
+//							} else if(Integer.parseInt(bmsDetail.getSysMode()) == 5) {
+//								statusNm = "Ready";
+//							}
+//						}
+//						result.put("bmsStatus", bmsDetail.getSysMode());
+//						result.put("bmsStatusNm", statusNm);
+//						result.put("alarmMsg", ""/*bmsDetail.getAlarmMsg()*/);
+//					}
+//					result.put("sysSoc", (bmsDetail == null) ? -1 : bmsDetail.getSysSoc());
+//					result.put("sysSoh", (bmsDetail == null) ? -1 : bmsDetail.getSysSoh());
+//					result.put("currSoc", (bmsDetail == null) ? -1 : bmsDetail.getCurrSoc());
+//					result.put("sysVoltage", (bmsDetail == null) ? -1 : bmsDetail.getSysVoltage());
+//					result.put("sysCurrent", (bmsDetail == null) ? -1 : bmsDetail.getSysCurrent());
+//					result.put("dod", (bmsDetail == null) ? -1 : bmsDetail.getDod());
+//				}
+//			}
+		} else {
+			BmsEquipmentModel bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, (String) param.get("deviceId"));
+			System.out.println("bmsDetail api 결과  "+bmsDetail.toString());
+			if(bmsDetail == null) {
+				result.put("bmsStatus", null);
+				result.put("bmsStatusNm", null);
+				result.put("alarmMsg", null);
+			} else {
+				String statusNm = "";
+				if(bmsDetail.getSysMode() == 0) {
+					statusNm = "Idle";
+				} else if(bmsDetail.getSysMode() == 1) {
+					statusNm = "Charge";
+				} else if(bmsDetail.getSysMode() == 2) {
+					statusNm = "Discharge";
+				} else if(bmsDetail.getSysMode() == 3) {
+					statusNm = "MainS/W on/off";
+				} else if(bmsDetail.getSysMode() == 4) {
+					statusNm = "Off-line";
+				} else if(bmsDetail.getSysMode() == 5) {
+					statusNm = "Ready";
+				}
+				result.put("bmsStatus", bmsDetail.getSysMode());
+				result.put("bmsStatusNm", statusNm);
+				result.put("alarmMsg", bmsDetail.getAlarmMsg());
+			}
+			result.put("sysSoc", (bmsDetail == null) ? -1 : bmsDetail.getSysSoc());
+			result.put("sysSoh", (bmsDetail == null) ? -1 : bmsDetail.getSysSoh());
+			result.put("currSoc", (bmsDetail == null) ? -1 : bmsDetail.getCurrSoc());
+			result.put("sysVoltage", (bmsDetail == null) ? -1 : bmsDetail.getSysVoltage());
+			result.put("sysCurrent", (bmsDetail == null) ? -1 : bmsDetail.getSysCurrent());
+			result.put("dod", (bmsDetail == null) ? -1 : bmsDetail.getDod());
 		}
-		result.put("sysSoc", (bmsDetail == null) ? -1 : bmsDetail.getSysSoc());
-		result.put("sysSoh", (bmsDetail == null) ? -1 : bmsDetail.getSysSoh());
-		result.put("currSoc", (bmsDetail == null) ? -1 : bmsDetail.getCurrSoc());
-		result.put("sysVoltage", (bmsDetail == null) ? -1 : bmsDetail.getSysVoltage());
-		result.put("sysCurrent", (bmsDetail == null) ? -1 : bmsDetail.getSysCurrent());
-		result.put("dod", (bmsDetail == null) ? -1 : bmsDetail.getDod());
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
@@ -305,29 +479,60 @@ public class DeviceMonitoringController {
 		Map result = deviceMonitoringService.getDevicePVDetail(param);
 		Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
 		String host = (String) siteDetail.get("local_ems_addr");
-		PvEquipmentModel pvDetail = PMGrowApiUtil.getPvEquipmentList(host, (String) param.get("deviceId"));
-		if(pvDetail == null) {
-			result.put("pvStatus", null);
-			result.put("pvStatusNm", null);
-			result.put("alarmMsg", null);
-		} else {
-			String statusNm = "";
-			if(pvDetail.getStatus() == 0) {
-				statusNm = "Stop";
-			} else if(pvDetail.getStatus() == 1) {
-				statusNm = "Run";
-			} else if(pvDetail.getStatus() == 2) {
-				statusNm = "Fault";
-			} else if(pvDetail.getStatus() == 3) {
-				statusNm = "Warning";
+		String apiVer = (String) siteDetail.get("local_ems_api_ver");
+		if("1.1".equals(apiVer)) { // 기존
+			List<PvEquipmentModelBefore> pvDetailList = PMGrowApiUtilBefore.getPvEquipmentList(host, (String) param.get("deviceId"));
+			if(pvDetailList != null) {
+				for (PvEquipmentModelBefore pvDetail : pvDetailList) {
+					if(pvDetail == null) {
+						result.put("pvStatus", null);
+						result.put("pvStatusNm", null);
+						result.put("alarmMsg", null);
+					} else {
+						String statusNm = "";
+						if(Integer.parseInt(pvDetail.getStatus()) == 0) {
+							statusNm = "Stop";
+						} else if(Integer.parseInt(pvDetail.getStatus()) == 1) {
+							statusNm = "Run";
+						} else if(Integer.parseInt(pvDetail.getStatus()) == 2) {
+							statusNm = "Fault";
+						} else if(Integer.parseInt(pvDetail.getStatus()) == 3) {
+							statusNm = "Warning";
+						}
+						result.put("pvStatus", pvDetail.getStatus());
+						result.put("pvStatusNm", statusNm);
+						result.put("alarmMsg", pvDetail.getAlarmMsg());
+					}
+					result.put("temperature", (pvDetail == null) ? -1 : pvDetail.getTemperature());
+					result.put("totalPower", (pvDetail == null) ? -1 : pvDetail.getTotalPower());
+					result.put("todayPower", (pvDetail == null) ? -1 : -1/*pvDetail.getTodayGenPower()*/);
+				}
 			}
-			result.put("pvStatus", pvDetail.getStatus());
-			result.put("pvStatusNm", statusNm);
-			result.put("alarmMsg", pvDetail.getAlarmMsg());
+		} else {
+			PvEquipmentModel pvDetail = PMGrowApiUtil.getPvEquipmentList(host, (String) param.get("deviceId"));
+			if(pvDetail == null) {
+				result.put("pvStatus", null);
+				result.put("pvStatusNm", null);
+				result.put("alarmMsg", null);
+			} else {
+				String statusNm = "";
+				if(pvDetail.getStatus() == 0) {
+					statusNm = "Stop";
+				} else if(pvDetail.getStatus() == 1) {
+					statusNm = "Run";
+				} else if(pvDetail.getStatus() == 2) {
+					statusNm = "Fault";
+				} else if(pvDetail.getStatus() == 3) {
+					statusNm = "Warning";
+				}
+				result.put("pvStatus", pvDetail.getStatus());
+				result.put("pvStatusNm", statusNm);
+				result.put("alarmMsg", pvDetail.getAlarmMsg());
+			}
+			result.put("temperature", (pvDetail == null) ? -1 : pvDetail.getTemperature());
+			result.put("totalPower", (pvDetail == null) ? -1 : pvDetail.getTotalGenPower());
+			result.put("todayPower", (pvDetail == null) ? -1 : pvDetail.getTodayGenPower());
 		}
-		result.put("temperature", (pvDetail == null) ? -1 : pvDetail.getTemperature());
-		result.put("totalPower", (pvDetail == null) ? -1 : pvDetail.getTotalGenPower());
-		result.put("todayPower", (pvDetail == null) ? -1 : pvDetail.getTodayGenPower());
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
