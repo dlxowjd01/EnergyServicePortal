@@ -45,8 +45,8 @@ public class PMGrowApiUtilBefore {
     try {
       StringBuffer url = new StringBuffer(host + "/openapi/equipment-charging-discharging-list");
       url.append("?pcsId=").append(equipmentId);
-      url.append("&startDt=").append(startDt.getTime());
-      url.append("&endDt=").append(endDt.getTime());
+      url.append("&startDt=").append(DateUtil.dateToString(startDt, "yyyyMMdd"));
+      url.append("&endDt=").append(DateUtil.dateToString(endDt, "yyyyMMdd"));
       url.append("&intervalType=").append(intervalType);
       url.append("&interval=").append(interval);
 
@@ -83,8 +83,8 @@ public class PMGrowApiUtilBefore {
     try {
       StringBuffer url = new StringBuffer(host + "/openapi/charging-discharging-schedule-list");
       url.append("?pcsId=").append(equipmentId);
-      url.append("&startDt=").append(startDt.getTime());
-      url.append("&endDt=").append(endDt.getTime());
+      url.append("&startDt=").append(DateUtil.dateToString(startDt, "yyyyMMdd"));
+      url.append("&endDt=").append(DateUtil.dateToString(endDt, "yyyyMMdd"));
       url.append("&intervalType=").append(intervalType);
       url.append("&interval=").append(interval);
 
