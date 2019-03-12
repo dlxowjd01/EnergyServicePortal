@@ -80,7 +80,6 @@
 		getSiteSetDetail();
 		chargePowerStrDisplayYn(new Date());
 		getPeak(formData);
-		drawData_chart_peak(); // 피크전력현황 차트그리기
 		update_updtDataTime(new Date(), "updtTimePeak");
 	}
 	
@@ -582,7 +581,7 @@
 					$(".peak").find(".inchart").css("display", "");
 					$(".peak").find(".chart_notice").css("display", "");
 				}
-				
+				drawData_chart_peak(); // 피크전력현황 차트그리기
 			}
 		});
 		
