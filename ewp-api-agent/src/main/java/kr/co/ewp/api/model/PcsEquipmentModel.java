@@ -12,18 +12,18 @@ public class PcsEquipmentModel {
   private Date timestamp;// timestamp in millisecond /*** 12.12 이우람 수정 ***/
   private Integer opMode;// 0:Scheduled, 1: Manual /*** 12.12 이우람 수정 ***/
   private String alarmMsg;// Last alarm message
-  private Integer acVoltage;// (V) /*** 12.12 이우람 수정 ***/
-  private Integer acPower;// W) /*** 12.12 이우람 수정 ***/
-  private Integer acCurrent;// (A) /*** 12.12 이우람 수정 ***/
-  private Integer acFreq;// (Hz) /*** 12.12 이우람 수정 ***/
-  private Integer acSetPower;// configured power level in AC (W) /*** 12.12 이우람 수정 ***/
-  private Integer acPf;// Power factor /*** 12.12 이우람 수정 ***/
-  private Integer dcVoltage;// (V) /*** 12.12 이우람 수정 ***/
-  private Integer dcPower;// (W) /*** 12.12 이우람 수정 ***/
-  private Integer dcCurrent;// (A) /*** 12.12 이우람 수정 ***/
-  private Integer dcFreq;// (Hz) /*** 12.12 이우람 수정 ***/
-  private Integer dcPf;// Power factor /*** 12.12 이우람 수정 ***/
-  private Integer dcSetPower;// configured power level in DC (W) /*** 12.12 이우람 수정 ***/
+  private Float acVoltage;// (V) /*** 12.12 이우람 수정 ***/
+  private Float acPower;// W) /*** 12.12 이우람 수정 ***/
+  private Float acCurrent;// (A) /*** 12.12 이우람 수정 ***/
+  private Float acFreq;// (Hz) /*** 12.12 이우람 수정 ***/
+  private Float acSetPower;// configured power level in AC (W) /*** 12.12 이우람 수정 ***/
+  private Float acPf;// Power factor /*** 12.12 이우람 수정 ***/
+  private Float dcVoltage;// (V) /*** 12.12 이우람 수정 ***/
+  private Float dcPower;// (W) /*** 12.12 이우람 수정 ***/
+  private Float dcCurrent;// (A) /*** 12.12 이우람 수정 ***/
+  private Float dcFreq;// (Hz) /*** 12.12 이우람 수정 ***/
+  private Float dcPf;// Power factor /*** 12.12 이우람 수정 ***/
+  private Float dcSetPower;// configured power level in DC (W) /*** 12.12 이우람 수정 ***/
 
   
   private Integer pcsStatus;//   0:OFF, 1:ON, 2:Fault, 3:Warning /*** 12.12 이우람 수정 ***/
@@ -77,99 +77,99 @@ public class PcsEquipmentModel {
 		this.alarmMsg = alarmMsg;
 	}
 	
-	public Integer getAcVoltage() {
+	public Float getAcVoltage() {
 		return acVoltage;
 	}
 	
-	public void setAcVoltage(Integer acVoltage) {
+	public void setAcVoltage(Float acVoltage) {
 		this.acVoltage = acVoltage;
 	}
 	
-	public Integer getAcPower() {
+	public Float getAcPower() {
 		return acPower;
 	}
 	
-	public void setAcPower(Integer acPower) {
+	public void setAcPower(Float acPower) {
 		this.acPower = acPower;
 	}
 	
-	public Integer getAcCurrent() {
+	public Float getAcCurrent() {
 		return acCurrent;
 	}
 	
-	public void setAcCurrent(Integer acCurrent) {
+	public void setAcCurrent(Float acCurrent) {
 		this.acCurrent = acCurrent;
 	}
 	
-	public Integer getAcFreq() {
+	public Float getAcFreq() {
 		return acFreq;
 	}
 	
-	public void setAcFreq(Integer acFreq) {
+	public void setAcFreq(Float acFreq) {
 		this.acFreq = acFreq;
 	}
 	
-	public Integer getAcSetPower() {
+	public Float getAcSetPower() {
 		return acSetPower;
 	}
 	
-	public void setAcSetPower(Integer acSetPower) {
+	public void setAcSetPower(Float acSetPower) {
 		this.acSetPower = acSetPower;
 	}
 	
-	public Integer getAcPf() {
+	public Float getAcPf() {
 		return acPf;
 	}
 	
-	public void setAcPf(Integer acPf) {
+	public void setAcPf(Float acPf) {
 		this.acPf = acPf;
 	}
 	
-	public Integer getDcVoltage() {
+	public Float getDcVoltage() {
 		return dcVoltage;
 	}
 	
-	public void setDcVoltage(Integer dcVoltage) {
+	public void setDcVoltage(Float dcVoltage) {
 		this.dcVoltage = dcVoltage;
 	}
 	
-	public Integer getDcPower() {
+	public Float getDcPower() {
 		return dcPower;
 	}
 	
-	public void setDcPower(Integer dcPower) {
+	public void setDcPower(Float dcPower) {
 		this.dcPower = dcPower;
 	}
 	
-	public Integer getDcCurrent() {
+	public Float getDcCurrent() {
 		return dcCurrent;
 	}
 	
-	public void setDcCurrent(Integer dcCurrent) {
+	public void setDcCurrent(Float dcCurrent) {
 		this.dcCurrent = dcCurrent;
 	}
 	
-	public Integer getDcFreq() {
+	public Float getDcFreq() {
 		return dcFreq;
 	}
 	
-	public void setDcFreq(Integer dcFreq) {
+	public void setDcFreq(Float dcFreq) {
 		this.dcFreq = dcFreq;
 	}
 	
-	public Integer getDcPf() {
+	public Float getDcPf() {
 		return dcPf;
 	}
 	
-	public void setDcPf(Integer dcPf) {
+	public void setDcPf(Float dcPf) {
 		this.dcPf = dcPf;
 	}
 	
-	public Integer getDcSetPower() {
+	public Float getDcSetPower() {
 		return dcSetPower;
 	}
 	
-	public void setDcSetPower(Integer dcSetPower) {
+	public void setDcSetPower(Float dcSetPower) {
 		this.dcSetPower = dcSetPower;
 	}
 	

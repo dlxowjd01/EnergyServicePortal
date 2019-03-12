@@ -1,121 +1,103 @@
 package kr.co.ewp.api.model;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BmsEquipmentModelBefore {
-  private Integer resultCnt;//
-  private String equipmentId;//
-  private String equipmentName;//
-  private String retrieveTime;// YYYYMMDDhhmmss
-  private String sysMode;//
-  private String socMax;//
-  private String socMin;//
-  private String sysSoc;// (%)
-  private String currSoc;// (kWh)
-  private String sysSoh;// (%)
-  private String sysVoltage;// (V)
-  private String sysCurrent;// (kWh)
-  private String dod;// (%)
+//	private Integer resultCnt;//
+	private String bmsId;//
+	private String bmsName;//
+	private Date timestamp;// YYYYMMDDhhmmss
+	private Integer sysMode;//
+//	private String socMax;//
+//	private String socMin;//
+	private Float sysSoc;// (%)
+	private Float currSoc;// (kWh)
+	private Float sysSoh;// (%)
+	private Float sysVoltage;// (V)
+	private Float sysCurrent;// (kWh)
+	private String dod;// (%)
+	
+	public String getBmsId() {
+		return bmsId;
+	}
+	
+	public void setBmsId(String bmsId) {
+		this.bmsId = bmsId;
+	}
+	
+	public String getBmsName() {
+		return bmsName;
+	}
+	
+	public void setBmsName(String bmsName) {
+		this.bmsName = bmsName;
+	}
+	
+	public Date getTimestamp() {
+		return timestamp;
+	}
+	
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
+	
+	public Integer getSysMode() {
+		return sysMode;
+	}
+	
+	public void setSysMode(Integer sysMode) {
+		this.sysMode = sysMode;
+	}
+	
+	public Float getSysSoc() {
+		return sysSoc;
+	}
+	
+	public void setSysSoc(Float sysSoc) {
+		this.sysSoc = sysSoc;
+	}
+	
+	public Float getCurrSoc() {
+		return currSoc;
+	}
+	
+	public void setCurrSoc(Float currSoc) {
+		this.currSoc = currSoc;
+	}
+	
+	public Float getSysSoh() {
+		return sysSoh;
+	}
+	
+	public void setSysSoh(Float sysSoh) {
+		this.sysSoh = sysSoh;
+	}
+	
+	public Float getSysVoltage() {
+		return sysVoltage;
+	}
+	
+	public void setSysVoltage(Float sysVoltage) {
+		this.sysVoltage = sysVoltage;
+	}
+	
+	public Float getSysCurrent() {
+		return sysCurrent;
+	}
+	
+	public void setSysCurrent(Float sysCurrent) {
+		this.sysCurrent = sysCurrent;
+	}
+	
+	public String getDod() {
+		return dod;
+	}
+	
+	public void setDod(String dod) {
+		this.dod = dod;
+	}
 
-  public Integer getResultCnt() {
-    return resultCnt;
-  }
-
-  public void setResultCnt(Integer resultCnt) {
-    this.resultCnt = resultCnt;
-  }
-
-  public String getEquipmentId() {
-    return equipmentId;
-  }
-
-  public void setEquipmentId(String equipmentId) {
-    this.equipmentId = equipmentId;
-  }
-
-  public String getEquipmentName() {
-    return equipmentName;
-  }
-
-  public void setEquipmentName(String equipmentName) {
-    this.equipmentName = equipmentName;
-  }
-
-  public String getRetrieveTime() {
-    return retrieveTime;
-  }
-
-  public void setRetrieveTime(String retrieveTime) {
-    this.retrieveTime = retrieveTime;
-  }
-
-  public String getSysMode() {
-    return sysMode;
-  }
-
-  public void setSysMode(String sysMode) {
-    this.sysMode = sysMode;
-  }
-
-  public String getSysSoc() {
-    return sysSoc;
-  }
-
-  public void setSysSoc(String sysSoc) {
-    this.sysSoc = sysSoc;
-  }
-
-  public String getCurrSoc() {
-    return currSoc;
-  }
-
-  public void setCurrSoc(String currSoc) {
-    this.currSoc = currSoc;
-  }
-
-  public String getSysSoh() {
-    return sysSoh;
-  }
-
-  public void setSysSoh(String sysSoh) {
-    this.sysSoh = sysSoh;
-  }
-
-  public String getSysVoltage() {
-    return sysVoltage;
-  }
-
-  public void setSysVoltage(String sysVoltage) {
-    this.sysVoltage = sysVoltage;
-  }
-
-  public String getSysCurrent() {
-    return sysCurrent;
-  }
-
-  public void setSysCurrent(String sysCurrent) {
-    this.sysCurrent = sysCurrent;
-  }
-
-  public String getDod() {
-    return dod;
-  }
-
-  public void setDod(String dod) {
-    this.dod = dod;
-  }
-
-  public String getSocMax() {
-    return socMax;
-  }
-
-  public void setSocMax(String socMax) {
-    this.socMax = socMax;
-  }
-
-  public String getSocMin() {
-    return socMin;
-  }
-
-  public void setSocMin(String socMin) {
-    this.socMin = socMin;
-  }
 }

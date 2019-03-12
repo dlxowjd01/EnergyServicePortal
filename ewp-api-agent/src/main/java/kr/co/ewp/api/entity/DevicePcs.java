@@ -12,18 +12,18 @@ public class DevicePcs {
   private String deviceName;// 장치명
   private String deviceStat;// 운전상태
   private String alarmMsg;// 알람메시지
-  private Integer acVoltage;// ac출력 - 전압(단위:v)
-  private Integer acPower;// ac출력 - 전력(단위:kwh)
-  private Integer acCurrent;// ac출력 - 전류(단위:a)
-  private Integer acFreq;// ac출력 - 주파수(단위:hz)
-  private Integer acSetPower;// ac출력 - 전력설정치(단위:kwh)
-  private Integer acPf;// ac출력 - 역률
-  private Integer dcVoltage;// dc출력 - 전압(단위:v)
-  private Integer dcPower;// dc출력 - 전력(단위:kwh)
-  private Integer dcCurrent;// dc출력 - 전류(단위:a)
-  private Integer dcFreq;// dc출력 - 주파수(단위:hz)
-  private Integer dcSetPower;// dc출력 - 전력설정치(단위:kwh)
-  private Integer dcPf;// dc출력 - 역률
+  private Float acVoltage;// ac출력 - 전압(단위:v)
+  private Float acPower;// ac출력 - 전력(단위:kwh)
+  private Float acCurrent;// ac출력 - 전류(단위:a)
+  private Float acFreq;// ac출력 - 주파수(단위:hz)
+  private Float acSetPower;// ac출력 - 전력설정치(단위:kwh)
+  private Float acPf;// ac출력 - 역률
+  private Float dcVoltage;// dc출력 - 전압(단위:v)
+  private Float dcPower;// dc출력 - 전력(단위:kwh)
+  private Float dcCurrent;// dc출력 - 전류(단위:a)
+  private Float dcFreq;// dc출력 - 주파수(단위:hz)
+  private Float dcSetPower;// dc출력 - 전력설정치(단위:kwh)
+  private Float dcPf;// dc출력 - 역률
   private Date stdDate;// 기준일시
   private Date regDate;// 등록일시
 
@@ -204,7 +204,7 @@ public class DevicePcs {
    * 
    * @return acVoltage
    */
-  public Integer getAcVoltage() {
+  public Float getAcVoltage() {
     return this.acVoltage;
   }
 
@@ -213,7 +213,7 @@ public class DevicePcs {
    * 
    * @return acVoltage
    */
-  public void setAcVoltage(Integer acVoltage) {
+  public void setAcVoltage(Float acVoltage) {
     this.acVoltage = acVoltage;
   }
 
@@ -222,7 +222,7 @@ public class DevicePcs {
    * 
    * @return acPower
    */
-  public Integer getAcPower() {
+  public Float getAcPower() {
     return this.acPower;
   }
 
@@ -231,7 +231,7 @@ public class DevicePcs {
    * 
    * @return acPower
    */
-  public void setAcPower(Integer acPower) {
+  public void setAcPower(Float acPower) {
     this.acPower = acPower;
   }
 
@@ -240,7 +240,7 @@ public class DevicePcs {
    * 
    * @return acCurrent
    */
-  public Integer getAcCurrent() {
+  public Float getAcCurrent() {
     return this.acCurrent;
   }
 
@@ -249,7 +249,7 @@ public class DevicePcs {
    * 
    * @return acCurrent
    */
-  public void setAcCurrent(Integer acCurrent) {
+  public void setAcCurrent(Float acCurrent) {
     this.acCurrent = acCurrent;
   }
 
@@ -258,7 +258,7 @@ public class DevicePcs {
    * 
    * @return acFreq
    */
-  public Integer getAcFreq() {
+  public Float getAcFreq() {
     return this.acFreq;
   }
 
@@ -267,7 +267,7 @@ public class DevicePcs {
    * 
    * @return acFreq
    */
-  public void setAcFreq(Integer acFreq) {
+  public void setAcFreq(Float acFreq) {
     this.acFreq = acFreq;
   }
 
@@ -276,7 +276,7 @@ public class DevicePcs {
    * 
    * @return acSetPower
    */
-  public Integer getAcSetPower() {
+  public Float getAcSetPower() {
     return this.acSetPower;
   }
 
@@ -285,7 +285,7 @@ public class DevicePcs {
    * 
    * @return acSetPower
    */
-  public void setAcSetPower(Integer acSetPower) {
+  public void setAcSetPower(Float acSetPower) {
     this.acSetPower = acSetPower;
   }
 
@@ -294,7 +294,7 @@ public class DevicePcs {
    * 
    * @return acPf
    */
-  public Integer getAcPf() {
+  public Float getAcPf() {
     return this.acPf;
   }
 
@@ -303,7 +303,7 @@ public class DevicePcs {
    * 
    * @return acPf
    */
-  public void setAcPf(Integer acPf) {
+  public void setAcPf(Float acPf) {
     this.acPf = acPf;
   }
 
@@ -312,7 +312,7 @@ public class DevicePcs {
    * 
    * @return dcVoltage
    */
-  public Integer getDcVoltage() {
+  public Float getDcVoltage() {
     return this.dcVoltage;
   }
 
@@ -321,7 +321,7 @@ public class DevicePcs {
    * 
    * @return dcVoltage
    */
-  public void setDcVoltage(Integer dcVoltage) {
+  public void setDcVoltage(Float dcVoltage) {
     this.dcVoltage = dcVoltage;
   }
 
@@ -330,7 +330,7 @@ public class DevicePcs {
    * 
    * @return dcPower
    */
-  public Integer getDcPower() {
+  public Float getDcPower() {
     return this.dcPower;
   }
 
@@ -339,7 +339,7 @@ public class DevicePcs {
    * 
    * @return dcPower
    */
-  public void setDcPower(Integer dcPower) {
+  public void setDcPower(Float dcPower) {
     this.dcPower = dcPower;
   }
 
@@ -348,7 +348,7 @@ public class DevicePcs {
    * 
    * @return dcCurrent
    */
-  public Integer getDcCurrent() {
+  public Float getDcCurrent() {
     return this.dcCurrent;
   }
 
@@ -357,7 +357,7 @@ public class DevicePcs {
    * 
    * @return dcCurrent
    */
-  public void setDcCurrent(Integer dcCurrent) {
+  public void setDcCurrent(Float dcCurrent) {
     this.dcCurrent = dcCurrent;
   }
 
@@ -366,7 +366,7 @@ public class DevicePcs {
    * 
    * @return dcFreq
    */
-  public Integer getDcFreq() {
+  public Float getDcFreq() {
     return this.dcFreq;
   }
 
@@ -375,7 +375,7 @@ public class DevicePcs {
    * 
    * @return dcFreq
    */
-  public void setDcFreq(Integer dcFreq) {
+  public void setDcFreq(Float dcFreq) {
     this.dcFreq = dcFreq;
   }
 
@@ -384,7 +384,7 @@ public class DevicePcs {
    * 
    * @return dcSetPower
    */
-  public Integer getDcSetPower() {
+  public Float getDcSetPower() {
     return this.dcSetPower;
   }
 
@@ -393,7 +393,7 @@ public class DevicePcs {
    * 
    * @return dcSetPower
    */
-  public void setDcSetPower(Integer dcSetPower) {
+  public void setDcSetPower(Float dcSetPower) {
     this.dcSetPower = dcSetPower;
   }
 
@@ -402,7 +402,7 @@ public class DevicePcs {
    * 
    * @return dcPf
    */
-  public Integer getDcPf() {
+  public Float getDcPf() {
     return this.dcPf;
   }
 
@@ -411,7 +411,7 @@ public class DevicePcs {
    * 
    * @return dcPf
    */
-  public void setDcPf(Integer dcPf) {
+  public void setDcPf(Float dcPf) {
     this.dcPf = dcPf;
   }
 

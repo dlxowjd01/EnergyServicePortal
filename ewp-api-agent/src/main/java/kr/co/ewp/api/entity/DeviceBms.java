@@ -10,11 +10,11 @@ public class DeviceBms {
     private String deviceName;//장치명
     private String deviceStat;//충방전상태
     private String alarmMsg;// 알람메시지
-    private Integer sysSoc;//soc(단위:%)
-    private Integer currSoc;//soc현재(단위:kwh)
-    private Integer sysSoh;//soh(단위:%)
-    private Integer sysVoltage;//출력전압(단위:v)
-    private Integer sysCurrent;//출력전류(단위:a)
+    private Float sysSoc;//soc(단위:%)
+    private Float currSoc;//soc현재(단위:kwh)
+    private Float sysSoh;//soh(단위:%)
+    private Float sysVoltage;//출력전압(단위:v)
+    private Float sysCurrent;//출력전류(단위:a)
     private Integer dod;//dod(단위:%)
     private Date stdDate;//기준일시
     private Date regDate;//등록일시
@@ -108,70 +108,70 @@ public class DeviceBms {
     * soc(단위:%) 조회
     * @return sysSoc
     */
-    public Integer getSysSoc() {
+    public Float getSysSoc() {
         return this.sysSoc;
     }
    /**
     * soc(단위:%) 설정
     * @return sysSoc
     */
-    public void setSysSoc(Integer sysSoc) {
+    public void setSysSoc(Float sysSoc) {
         this.sysSoc = sysSoc;
     }
    /**
     * soc현재(단위:kwh) 조회
     * @return currSoc
     */
-    public Integer getCurrSoc() {
+    public Float getCurrSoc() {
         return this.currSoc;
     }
    /**
     * soc현재(단위:kwh) 설정
     * @return currSoc
     */
-    public void setCurrSoc(Integer currSoc) {
+    public void setCurrSoc(Float currSoc) {
         this.currSoc = currSoc;
     }
    /**
     * soh(단위:%) 조회
     * @return sysSoh
     */
-    public Integer getSysSoh() {
+    public Float getSysSoh() {
         return this.sysSoh;
     }
    /**
     * soh(단위:%) 설정
     * @return sysSoh
     */
-    public void setSysSoh(Integer sysSoh) {
+    public void setSysSoh(Float sysSoh) {
         this.sysSoh = sysSoh;
     }
    /**
     * 출력전압(단위:v) 조회
     * @return sysVoltage
     */
-    public Integer getSysVoltage() {
+    public Float getSysVoltage() {
         return this.sysVoltage;
     }
    /**
     * 출력전압(단위:v) 설정
     * @return sysVoltage
     */
-    public void setSysVoltage(Integer sysVoltage) {
+    public void setSysVoltage(Float sysVoltage) {
         this.sysVoltage = sysVoltage;
     }
    /**
     * 출력전류(단위:a) 조회
     * @return sysCurrent
     */
-    public Integer getSysCurrent() {
+    public Float getSysCurrent() {
         return this.sysCurrent;
     }
    /**
     * 출력전류(단위:a) 설정
     * @return sysCurrent
     */
-    public void setSysCurrent(Integer sysCurrent) {
+    public void setSysCurrent(Float sysCurrent) {
         this.sysCurrent = sysCurrent;
     }
    /**

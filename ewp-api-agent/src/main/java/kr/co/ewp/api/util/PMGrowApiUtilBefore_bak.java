@@ -1,6 +1,5 @@
 package kr.co.ewp.api.util;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.http.HttpHeaders;
@@ -10,7 +9,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import kr.co.ewp.api.model.BmsEquipmentModel;
 import kr.co.ewp.api.model.BmsEquipmentModelBefore;
 import kr.co.ewp.api.model.ChargingDischargingBefore;
-import kr.co.ewp.api.model.ChargingDischargingScheduleBefore;
 import kr.co.ewp.api.model.EssUsageModel;
 import kr.co.ewp.api.model.PcsEquipmentModel;
 import kr.co.ewp.api.model.PcsEquipmentModelBefore;
@@ -19,7 +17,7 @@ import kr.co.ewp.api.model.PvEquipmentModelBefore;
 import kr.co.ewp.api.model.PvPowerGenModelBefore;
 import kr.co.ewp.api.model.SocModel;
 
-public class PMGrowApiUtilBefore {
+public class PMGrowApiUtilBefore_bak {
   private static final String API_VERSION = "2.0.0";
   private static final String API_ACCESS_TOKEN = "<access_token>";
 
@@ -39,14 +37,14 @@ public class PMGrowApiUtilBefore {
    * 
    * @return
    */
-  public static ChargingDischargingBefore getEssCharge(String host, String equipmentId, Date startDt, Date endDt, String intervalType, String interval, PrettyLog prettyLog) {
+  public static List<ChargingDischargingBefore> getEssCharge(String host, String equipmentId, String startDt, String endDt, String intervalType, String interval, PrettyLog prettyLog) {
     prettyLog.start("PMGrowApiUtilBefore.getEssCharge", "ERROR");
     String resultBody = null;
     try {
       StringBuffer url = new StringBuffer(host + "/openapi/equipment-charging-discharging-list");
-      url.append("?pcsId=").append(equipmentId);
-      url.append("&startDt=").append(startDt.getTime());
-      url.append("&endDt=").append(endDt.getTime());
+      url.append("?equipmentId=").append(equipmentId);
+      url.append("&startDt=").append(startDt);
+      url.append("&endDt=").append(endDt);
       url.append("&intervalType=").append(intervalType);
       url.append("&interval=").append(interval);
 
@@ -54,7 +52,8 @@ public class PMGrowApiUtilBefore {
       prettyLog.append("URL", url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
       System.out.println(equipmentId+" ESS충방전량 조회 resultBody  ==>  "+resultBody);
-      return JsonUtil.toObject(resultBody, ChargingDischargingBefore.class);
+      return JsonUtil.toObject(resultBody, new TypeReference<List<ChargingDischargingBefore>>() {
+      });
     } catch (Exception e) {
       prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
       throw e;
@@ -77,14 +76,14 @@ public class PMGrowApiUtilBefore {
    * @param prettyLog
    * @return
    */
-  public static ChargingDischargingScheduleBefore getEssChargePlan(String host, String equipmentId, Date startDt, Date endDt, String intervalType, String interval, PrettyLog prettyLog) {
+  public static List<ChargingDischargingBefore> getEssChargePlan(String host, String equipmentId, String startDt, String endDt, String intervalType, String interval, PrettyLog prettyLog) {
     prettyLog.start("PMGrowApiUtilBefore.getEssChargePlan", "ERROR");
     String resultBody = null;
     try {
       StringBuffer url = new StringBuffer(host + "/openapi/charging-discharging-schedule-list");
-      url.append("?pcsId=").append(equipmentId);
-      url.append("&startDt=").append(startDt.getTime());
-      url.append("&endDt=").append(endDt.getTime());
+      url.append("?equipmentId=").append(equipmentId);
+      url.append("&startDt=").append(startDt);
+      url.append("&endDt=").append(endDt);
       url.append("&intervalType=").append(intervalType);
       url.append("&interval=").append(interval);
 
@@ -92,7 +91,8 @@ public class PMGrowApiUtilBefore {
       prettyLog.append("URL", url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
       System.out.println(equipmentId+" ESS충방전계획량 조회 resultBody  ==>  "+resultBody);
-      return JsonUtil.toObject(resultBody, ChargingDischargingScheduleBefore.class);
+      return JsonUtil.toObject(resultBody, new TypeReference<List<ChargingDischargingBefore>>() {
+      });
     } catch (Exception e) {
       prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
       throw e;
@@ -195,7 +195,7 @@ public class PMGrowApiUtilBefore {
     String resultBody = null;
     try {
       StringBuffer url = new StringBuffer(host + "/openapi/pcs-equipment-list");
-      url.append("?pcsId=").append(equipmentId);
+      url.append("?equipmentId=").append(equipmentId);
       System.out.println("url =====> "+url);
       prettyLog.append("URL", url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
@@ -229,7 +229,7 @@ public class PMGrowApiUtilBefore {
     String resultBody = null;
     try {
       StringBuffer url = new StringBuffer(host + "/openapi/bms-equipment-list");
-      url.append("?bmsId=").append(equipmentId);
+      url.append("?equipmentId=").append(equipmentId);
       System.out.println("url =====> "+url);
       prettyLog.append("URL", url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());

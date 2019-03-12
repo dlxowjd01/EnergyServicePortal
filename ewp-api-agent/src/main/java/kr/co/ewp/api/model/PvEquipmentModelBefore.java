@@ -1,5 +1,8 @@
 package kr.co.ewp.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PvEquipmentModelBefore {
   private String resultCnt;//
   private String equipmentId;//
