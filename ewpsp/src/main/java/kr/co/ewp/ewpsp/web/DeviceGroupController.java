@@ -157,21 +157,38 @@ public class DeviceGroupController {
 		logger.debug("param ::::: "+param.toString());
 		
 		Map userInfo = UserUtil.getUserInfo(request);
+		String siteId = (String) request.getSession().getAttribute("selViewSiteId");
 		String selDvGrpIdx = (String) param.get("selDvGrpIdx"); // 추가할 그룹id
-		String nowDeviceIds = (String) param.get("nowDeviceIds"); // 기존 그룹내 장치목록
+		String nowDeviceIds = (String) param.get("nowDeviceIds"); // 기존 그룹내 장치목록 id|type,id|type,id|type,...
 		String newDeviceIds = (String) param.get("newDeviceIds"); // 변경할 그룹내 장치목록
-		String nowDeviceIds_arr[] = null; // 기존 그룹내 장치목록
-		String newDeviceIds_arr[] = null; // 변경할 그룹내 장치목록 
+		String nowDeviceIds_id[] = null; // 기존 그룹내 장치목록
+		String nowDeviceIds_type[] = null; // 기존 그룹내 장치목록
+		String newDeviceIds_id[] = null; // 변경할 그룹내 장치목록 
+		String newDeviceIds_type[] = null; // 변경할 그룹내 장치목록 
 		if(nowDeviceIds != null && !"".equals(nowDeviceIds)) {
-			nowDeviceIds_arr = nowDeviceIds.split(",");
+			String nowDvIds_ids[] = nowDeviceIds.split(","); // [id|type, id|type, id|type, ...]
+			nowDeviceIds_id = new String[nowDvIds_ids.length];
+			nowDeviceIds_type = new String[nowDvIds_ids.length];
+			for(int i=0; i<nowDvIds_ids.length; i++) {
+				String dvIds[] = nowDvIds_ids[i].split("\\|"); // [id, type]
+				nowDeviceIds_id[i] = dvIds[0];
+				nowDeviceIds_type[i] = dvIds[1];
+			}
 		}
 		if(newDeviceIds != null && !"".equals(newDeviceIds)) {
-			newDeviceIds_arr = newDeviceIds.split(",");
+			String newDvIds_ids[] = newDeviceIds.split(","); // [id|type, id|type, id|type, ...]
+			newDeviceIds_id = new String[newDvIds_ids.length];
+			newDeviceIds_type = new String[newDvIds_ids.length];
+			for(int i=0; i<newDvIds_ids.length; i++) {
+				String dvIds[] = newDvIds_ids[i].split("\\|"); // [id, type]
+				newDeviceIds_id[i] = dvIds[0];
+				newDeviceIds_type[i] = dvIds[1];
+			}
 		}
 		
 		// 기존목록과 변경목록이 동일한지 확인 -> 동일하면 변경사항 없음
 		String changeYn = "Y";
-		changeYn = ( Arrays.equals(nowDeviceIds_arr, newDeviceIds_arr) ) ? "N" : "Y"; 
+		changeYn = ( Arrays.equals(nowDeviceIds_id, newDeviceIds_id) ) ? "N" : "Y"; 
 		
 		if("Y".equals(changeYn)) {
 			// 로직 : 기존장치목록과 변경된장치목록을 비교한다.
@@ -182,17 +199,19 @@ public class DeviceGroupController {
 			// 기존장치목록이 null인데 변경된 장치목록이 존재 : 빈 그룹에 새로 추가됨
 			int addCnt = 0;
 			int delCnt = 0;
-			if(nowDeviceIds_arr != null) {
-				if(nowDeviceIds_arr.length > 0) { // 기존장치목록의 데이터를 변동된장치목록에 존재하는지 확인
-					for (int i = 0; i < nowDeviceIds_arr.length; i++) {
-						String str = nowDeviceIds_arr[i];
+			if(nowDeviceIds_id != null) {
+				if(nowDeviceIds_id.length > 0) { // 기존장치목록의 데이터가 변동된장치목록에 존재하는지 확인
+					for (int i = 0; i < nowDeviceIds_id.length; i++) {
+						String str = nowDeviceIds_id[i];
 						boolean res = false;
-						if(newDeviceIds_arr != null) res = Arrays.asList(newDeviceIds_arr).contains(str);
+						if(newDeviceIds_id != null) res = Arrays.asList(newDeviceIds_id).contains(str);
 						if(!res) { // 기존장치에 존재하고 변경된 장치목록에 미존재 : 그룹에서 제외됨
-							HashMap dvMap = new HashMap<String, Object>();
+							HashMap<String, Object> dvMap = new HashMap<String, Object>();
 							dvMap.put("deviceId", str);
+							dvMap.put("deviceType", nowDeviceIds_type[i]);
 							dvMap.put("deviceGrpIdx", 0);
-							param.put("modUid", userInfo.get("user_id"));
+							dvMap.put("modUid", userInfo.get("user_id"));
+							dvMap.put("siteId", siteId);
 							int cnt = deviceGroupService.updateDevice(dvMap);
 							delCnt = delCnt + cnt;
 						}
@@ -200,38 +219,45 @@ public class DeviceGroupController {
 				}
 				
 			} else {
-				for (int i = 0; i < newDeviceIds_arr.length; i++) {
-					HashMap dvMap = new HashMap<String, Object>();
-					dvMap.put("deviceId", newDeviceIds_arr[i]);
+				for (int i = 0; i < newDeviceIds_id.length; i++) {
+					HashMap<String, Object> dvMap = new HashMap<String, Object>();
+					dvMap.put("deviceId", newDeviceIds_id[i]);
+					dvMap.put("deviceType", newDeviceIds_type[i]);
 					dvMap.put("deviceGrpIdx", selDvGrpIdx);
-					param.put("modUid", userInfo.get("user_id"));
+					dvMap.put("modUid", userInfo.get("user_id"));
+					dvMap.put("siteId", siteId);
+					System.out.println("dvMap   "+dvMap);
 					int cnt = deviceGroupService.updateDevice(dvMap);
 					addCnt = addCnt + cnt;
 				}
 			}
 			
-			if(newDeviceIds_arr != null) {
-				if(newDeviceIds_arr.length > 0) { // 변동된장치목록의 데이터를 기존장치목록에 존재하는지 확인
-					for (int i = 0; i < newDeviceIds_arr.length; i++) {
-						String str = newDeviceIds_arr[i];
+			if(newDeviceIds_id != null) {
+				if(newDeviceIds_id.length > 0) { // 변동된장치목록의 데이터가 기존장치목록에 존재하는지 확인
+					for (int i = 0; i < newDeviceIds_id.length; i++) {
+						String str = newDeviceIds_id[i];
 						boolean res = false;
-						if(nowDeviceIds_arr != null) res = Arrays.asList(nowDeviceIds_arr).contains(str);
+						if(nowDeviceIds_id != null) res = Arrays.asList(nowDeviceIds_id).contains(str);
 						if(!res) { // 기존장치에 미존재하고 변경된 장치목록에 존재 : 그룹에 새로 추가됨
-							HashMap dvMap = new HashMap<String, Object>();
+							HashMap<String, Object> dvMap = new HashMap<String, Object>();
 							dvMap.put("deviceId", str);
+							dvMap.put("deviceType", newDeviceIds_type[i]);
 							dvMap.put("deviceGrpIdx", selDvGrpIdx);
-							param.put("modUid", userInfo.get("user_id"));
+							dvMap.put("modUid", userInfo.get("user_id"));
+							dvMap.put("siteId", siteId);
 							int cnt = deviceGroupService.updateDevice(dvMap);
 							addCnt = addCnt + cnt;
 						}
 					}
 				}
 			} else {
-				for (int i = 0; i < nowDeviceIds_arr.length; i++) {
-					HashMap dvMap = new HashMap<String, Object>();
-					dvMap.put("deviceId", nowDeviceIds_arr[i]);
+				for (int i = 0; i < nowDeviceIds_id.length; i++) {
+					HashMap<String, Object> dvMap = new HashMap<String, Object>();
+					dvMap.put("deviceId", nowDeviceIds_id[i]);
+					dvMap.put("deviceType", nowDeviceIds_type[i]);
 					dvMap.put("deviceGrpIdx", 0);
-					param.put("modUid", userInfo.get("user_id"));
+					dvMap.put("modUid", userInfo.get("user_id"));
+					dvMap.put("siteId", siteId);
 					int cnt = deviceGroupService.updateDevice(dvMap);
 					delCnt = delCnt + cnt;
 				}

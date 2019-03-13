@@ -441,15 +441,16 @@
 		
 		$insideSite = $(".inside_site");
 		$insideSite.find("ul").empty();
+		$("#nowDeviceIds").val("");
 		if(grpSiteList == null || grpSiteList.length < 1) {
 //			$tbody.append( '<tr><td colspan="6">조회 결과가 없습니다.</td><tr>' );
 		} else {
 			var devices = "";
 			for(var i=0; i<grpSiteList.length; i++) {
-				devices = devices+grpSiteList[i].device_id+",";
+				devices = devices+grpSiteList[i].device_id+"|"+grpSiteList[i].device_type+",";
 				$insideSite.find("ul").append(
 						$("<li />").append('<a href="#;">'+grpSiteList[i].device_name+'</a>').append(
-								'<input type="hidden" name="deviceIds" value="'+grpSiteList[i].device_id+'">'
+								'<input type="hidden" name="deviceIds" value="'+grpSiteList[i].device_id+"|"+grpSiteList[i].device_type+'">'
 						)
 				);
 				
@@ -466,7 +467,7 @@
 			for(var i=0; i<allSiteList.length; i++) {
 				$allSite.find("ul").append(
 						$("<li />").append('<a href="#;">'+allSiteList[i].device_name+'</a>').append(
-								'<input type="hidden" name="deviceIds" value="'+allSiteList[i].device_id+'">'
+								'<input type="hidden" name="deviceIds" value="'+allSiteList[i].device_id+"|"+allSiteList[i].device_type+'">'
 						)
 				);
 				
