@@ -7,8 +7,8 @@
         <result property="deviceId" column="device_id" javaType="String"></result><!--장치ID-->
         <result property="stdTimestamp" column="std_timestamp" javaType="Date"></result><!--기준타임스탬프-->
         <result property="stdDate" column="std_date" javaType="Date"></result><!--기준일시-->
-        <result property="chgVal" column="chg_val" javaType="Integer"></result><!--충전량(단위:kWh)-->
-        <result property="dischgVal" column="dischg_val" javaType="Integer"></result><!--방전량(단위:kWh)-->
+        <result property="chgVal" column="chg_val" javaType="Float"></result><!--충전량(단위:kWh)-->
+        <result property="dischgVal" column="dischg_val" javaType="Float"></result><!--방전량(단위:kWh)-->
         <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
         <result property="modDate" column="mod_date" javaType="Date"></result><!--최종수정일시-->
     </resultMap>

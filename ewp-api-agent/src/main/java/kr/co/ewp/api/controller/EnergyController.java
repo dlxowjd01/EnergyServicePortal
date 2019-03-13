@@ -1001,8 +1001,8 @@ public class EnergyController {
         			  }
         			  if("1.1".equals(apiVer)) { // 기존
         				  System.out.println(_siteId+", "+device.getDeviceId()+" - 기존 pv발전량조회 api를 조회합니다..");
-        				  	List<PvPowerGenModelBefore> resultList = PMGrowApiUtilBefore.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, DateUtil.dateToString(beginDate, "yyyyMMdd"),
-        				  				DateUtil.dateToString(endDate, "yyyyMMdd"), "1", "15", prettyLog);
+        				  	List<PvPowerGenModelBefore> resultList = PMGrowApiUtilBefore.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate,
+        				  				endDate, "1", "15", prettyLog);
         				  if(resultList != null){
         					  prettyLog.append("ITEM_SIZE", resultList.size());
         					  for (PvPowerGenModelBefore item : resultList) {
@@ -1227,7 +1227,7 @@ public class EnergyController {
         							essUsage.setDeviceId(device.getDeviceId());
         							essUsage.setSiteId(_siteId);
         							essUsage.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
-        							essUsage.setUsgVal(Integer.parseInt(item.getPowerUsage()));
+        							essUsage.setUsgVal(Float.parseFloat(item.getPowerUsage()));
         							
         							essUsageModel.add(essUsage);
         						}

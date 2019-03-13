@@ -8,7 +8,7 @@ public class EssUsage {
     private String siteId;//사이트id
     private String deviceId;//장치id
     private Date stdDate;//기준일시
-    private Integer usgVal;//사용량(단위:kwh)
+    private Float usgVal;//사용량(단위:kwh)
     private Date regDate;//등록일시
     private Date modDate;//최종수정일시
    /**
@@ -71,14 +71,14 @@ public class EssUsage {
     * 사용량(단위:kwh) 조회
     * @return usgVal
     */
-    public Integer getUsgVal() {
+    public Float getUsgVal() {
         return this.usgVal;
     }
    /**
     * 사용량(단위:kwh) 설정
     * @return usgVal
     */
-    public void setUsgVal(Integer usgVal) {
+    public void setUsgVal(Float usgVal) {
         this.usgVal = usgVal;
     }
    /**

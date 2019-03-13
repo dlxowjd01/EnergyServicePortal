@@ -45,8 +45,8 @@ public class PMGrowApiUtilBefore {
     try {
       StringBuffer url = new StringBuffer(host + "/openapi/equipment-charging-discharging-list");
       url.append("?pcsId=").append(equipmentId);
-      url.append("&startDt=").append(DateUtil.dateToString(startDt, "yyyyMMdd"));
-      url.append("&endDt=").append(DateUtil.dateToString(endDt, "yyyyMMdd"));
+      url.append("&startDt=").append(startDt.getTime());
+      url.append("&endDt=").append(endDt.getTime());
       url.append("&intervalType=").append(intervalType);
       url.append("&interval=").append(interval);
 
@@ -83,8 +83,8 @@ public class PMGrowApiUtilBefore {
     try {
       StringBuffer url = new StringBuffer(host + "/openapi/charging-discharging-schedule-list");
       url.append("?pcsId=").append(equipmentId);
-      url.append("&startDt=").append(DateUtil.dateToString(startDt, "yyyyMMdd"));
-      url.append("&endDt=").append(DateUtil.dateToString(endDt, "yyyyMMdd"));
+      url.append("&startDt=").append(startDt.getTime());
+      url.append("&endDt=").append(endDt.getTime());
       url.append("&intervalType=").append(intervalType);
       url.append("&interval=").append(interval);
 
@@ -115,14 +115,14 @@ public class PMGrowApiUtilBefore {
    * @param prettyLog
    * @return
    */
-  public static List<PvPowerGenModelBefore> getPvPowerGenList(String host, String equipmentId, String startDt, String endDt, String intervalType, String interval, PrettyLog prettyLog) {
+  public static List<PvPowerGenModelBefore> getPvPowerGenList(String host, String equipmentId, Date startDt, Date endDt, String intervalType, String interval, PrettyLog prettyLog) {
     prettyLog.start("PMGrowApiUtilBefore.getPvPowerGenList", "ERROR");
     String resultBody = null;
     try {
       StringBuffer url = new StringBuffer(host + "/openapi/pv-power-gen-list");
       url.append("?equipmentId=").append(equipmentId);
-      url.append("&startDt=").append(startDt);
-      url.append("&endDt=").append(endDt);
+      url.append("&startDt=").append(startDt.getTime());
+      url.append("&endDt=").append(endDt.getTime());
       url.append("&intervalType=").append(intervalType);
       url.append("&interval=").append(interval);
 

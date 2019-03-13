@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ChargingDischargingItemModel { /*** 12.12 이우람 추가 ***/
   private Date timestamp;// timestamp start timestamp
-  private Integer chargeEnergy;// total charged energy (Wh)
-  private Integer dischargeEnergy;// total discharged energy (Wh)
+  private Float chargeEnergy;// total charged energy (Wh)
+  private Float dischargeEnergy;// total discharged energy (Wh)
 
   public Date getTimestamp() {
     return timestamp;
@@ -18,19 +18,19 @@ public class ChargingDischargingItemModel { /*** 12.12 이우람 추가 ***/
     this.timestamp = timestamp;
   }
 
-  public Integer getChargeEnergy() {
+  public Float getChargeEnergy() {
   	return chargeEnergy;
   }
   
-  public void setChargeEnergy(Integer chargeEnergy) {
+  public void setChargeEnergy(Float chargeEnergy) {
   	this.chargeEnergy = chargeEnergy;
   }
   
-  public Integer getDischargeEnergy() {
+  public Float getDischargeEnergy() {
   	return dischargeEnergy;
   }
   
-  public void setDischargeEnergy(Integer dischargeEnergy) {
+  public void setDischargeEnergy(Float dischargeEnergy) {
   	this.dischargeEnergy = dischargeEnergy;
   }
 

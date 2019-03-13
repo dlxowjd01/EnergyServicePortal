@@ -872,8 +872,8 @@ public class BillController {
         List<EssUsage> essUsageList = essService.getEssUsageListBySiteId(_siteId, beginDate, endDate, prettyLog);
         Map<Long/* stdDate */, Integer /* pvGenVal */> pvGenMap = Maps.newHashMap();
         Map<Long/* stdDate */, Integer /* pvUsageVal */> pvUsgMap = Maps.newHashMap();
-        Map<Long/* stdDate */, Integer /* essChargeVal */> essChargeMap = Maps.newHashMap();
-        Map<Long/* stdDate */, Integer /* essUsageVal */> essUsgMap = Maps.newHashMap();
+        Map<Long/* stdDate */, Float /* essChargeVal */> essChargeMap = Maps.newHashMap();
+        Map<Long/* stdDate */, Float /* essUsageVal */> essUsgMap = Maps.newHashMap();
         for (PvGen item : pvGenList) {
           pvGenMap.put(item.getStdDate().getTime(), item.getGenVal());
         }
@@ -901,8 +901,8 @@ public class BillController {
         		genReqPv.addProduced(new Double(IfUtil.nvl(pvGenMap.get(stdDate), 0)));
         		genReqPv.addConsumed(new Double(IfUtil.nvl(pvUsgMap.get(stdDate), 0)));
         		genReqEss.addTimestamp(stdDate);
-        		genReqEss.addProduced(new Double(IfUtil.nvl(essChargeMap.get(stdDate), 0)));
-        		genReqEss.addConsumed(new Double(IfUtil.nvl(essUsgMap.get(stdDate), 0)));
+        		genReqEss.addProduced(new Double((double) IfUtil.nvl(essChargeMap.get(stdDate), 0)));
+        		genReqEss.addConsumed(new Double((double) IfUtil.nvl(essUsgMap.get(stdDate), 0)));
         	}
         }
         if (genReqPv.getTimestamp() == null || genReqPv.getTimestamp().size() == 0) {
