@@ -22,7 +22,7 @@
            #{siteId},
            #{deviceId},
            #{deviceType},
-           STR_TO_DATE(#{stdDate}, "%Y%m%d%H%i%s"),
+           #{stdDate},<!-- STR_TO_DATE(#{stdDate}, "%Y%m%d%H%i%s"), -->
            #{alarmCode},
            #{alarmType},
            #{alarmMsg},
