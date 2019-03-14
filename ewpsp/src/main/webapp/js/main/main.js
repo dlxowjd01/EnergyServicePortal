@@ -81,11 +81,12 @@ function getSiteMainSchCollection() {
 
 function callback_getGMainAlarmList(result) {
 	var dvTpAlarmDetail = result.detail;
+	var dvTpAlarmDetail2 = result.detail2;
 	var alarmList = result.alarmList;
 
 	$("#todayTotalAlarmCnt").html(dvTpAlarmDetail.total_cnt);
-	$("#todayAlarmCnt").html(dvTpAlarmDetail.alert_cnt);
-	$("#todayWarningCnt").html(dvTpAlarmDetail.warning_cnt);
+	$("#todayAlarmCnt").html(dvTpAlarmDetail2.alert_cnt);
+	$("#todayWarningCnt").html(dvTpAlarmDetail2.warning_cnt);
 	if(dvTpAlarmDetail.notCfm_cnt == 0) {
 		$(".no").find('span').hide();
 	} else {

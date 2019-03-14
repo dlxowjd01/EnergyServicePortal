@@ -28,6 +28,10 @@ public class ControlServiceImpl implements ControlService{
 	public Map getGMainDeviceAlarmCnt(HashMap param) throws Exception {
 		return controlDao.getGMainDeviceAlarmCnt(param);
 	}
+	
+	public Map getGMainAlarmCnt(HashMap param) throws Exception {
+		return controlDao.getGMainAlarmCnt(param);
+	}
 
 	public List getAlarmList(HashMap param) throws Exception {
 		return controlDao.getAlarmList(param);

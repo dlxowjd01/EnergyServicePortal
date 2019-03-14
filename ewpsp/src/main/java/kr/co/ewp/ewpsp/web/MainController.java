@@ -77,10 +77,12 @@ public class MainController {
 		}
 
 		Map result = controlService.getGMainDeviceAlarmCnt(param); // 장치별 알람건수
+		Map result2 = controlService.getGMainAlarmCnt(param); // 장치타입별 알람건수
 		List alarmList = alarmService.getGMainAlarmList(param); // 최근 알람 목록 조회(3건)
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
+		resultMap.put("detail2", result2);
 		resultMap.put("alarmList", alarmList);
 		return resultMap;
 	}

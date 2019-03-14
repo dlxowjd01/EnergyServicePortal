@@ -88,7 +88,7 @@ public class SiteMainController {
 		param = PeriodDataSetting.setSearchTerm(param);
 		
 		Map result = controlService.getDeviceAlarmCnt(param); // 장치별 알람건수
-		Map result2 = controlService.getSiteMainAlarmCnt(param); // 장치별 알람건수
+		Map result2 = controlService.getSiteMainAlarmCnt(param); // 장치타입별 알람건수
 		List alarmList = alarmService.getMainAlarmList(param); // 최근 알람 목록 조회(3건)
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
