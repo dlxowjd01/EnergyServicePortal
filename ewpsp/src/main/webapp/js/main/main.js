@@ -83,9 +83,9 @@ function callback_getGMainAlarmList(result) {
 	var dvTpAlarmDetail = result.detail;
 	var alarmList = result.alarmList;
 
-	$("#todayTotalAlarmCnt").val(dvTpAlarmDetail.total_cnt);
-	$("#todayAlarmCnt").val(dvTpAlarmDetail.alert_cnt);
-	$("#todayWarningCnt").val(dvTpAlarmDetail.warning_cnt);
+	$("#todayTotalAlarmCnt").html(dvTpAlarmDetail.total_cnt);
+	$("#todayAlarmCnt").html(dvTpAlarmDetail.alert_cnt);
+	$("#todayWarningCnt").html(dvTpAlarmDetail.warning_cnt);
 	if(dvTpAlarmDetail.notCfm_cnt == 0) {
 		$(".no").find('span').hide();
 	} else {
@@ -93,19 +93,20 @@ function callback_getGMainAlarmList(result) {
 		$(".no").empty().append( '<span>'+dvTpAlarmDetail.notCfm_cnt+'</span>');
 	}
 
-	$div = $(".alarm_notice");
-	$div.find("ul").empty();
+	var str = "";
 	if(alarmList == null || alarmList.length < 1) {
-		$div.find("ul").append( $('<li />').append( $('<a href="#;" />').append("조회 결과가 없습니다.") ) );
+		str += '<li>';
+		str += '	<a href="#;">조회 결과가 없습니다.</a>';
+		str += '</li>';
 	} else {
 		for(var i=0; i<alarmList.length; i++) {
 			var tm = new Date( convertDateUTC(alarmList[i].std_date) );
-
-			$div.find("ul").append( 
-					$('<li />').append( $('<a href="#;" />').append("조회 결과가 없습니다.") 
-					).append( $('<span />').append( tm.format("yyyy-MM-dd HH:mm:ss") ) ) 
-			);
+			str += '<li>';
+			str += '	<a href="#;">'+alarmList[i].alarm_msg+'</a>';
+			str += '	<span>'+tm.format("yyyy-MM-dd HH:mm:ss")+'</span>';
+			str += '</li>';
 		}
+		$(".alarm_notice").find("ul").html(str)
 	}
 }
 

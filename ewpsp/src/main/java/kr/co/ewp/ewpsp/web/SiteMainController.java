@@ -88,10 +88,12 @@ public class SiteMainController {
 		param = PeriodDataSetting.setSearchTerm(param);
 		
 		Map result = controlService.getDeviceAlarmCnt(param); // 장치별 알람건수
+		Map result2 = controlService.getSiteMainAlarmCnt(param); // 장치별 알람건수
 		List alarmList = alarmService.getMainAlarmList(param); // 최근 알람 목록 조회(3건)
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
+		resultMap.put("detail2", result2);
 		resultMap.put("alarmList", alarmList);
 		return resultMap;
 	}
@@ -275,7 +277,7 @@ public class SiteMainController {
 		
 		// ess 수익 조회
 		String siteId = (String) param.get("siteId");
-		List essRevenueList = essRevenueService.getESSRevenueDayList(param); // api로 변경
+		List essRevenueList = essRevenueService.getESSRevenueDayList(param); // api로 변경 => db조회로 변경
 		
 		// dr 수익 조회
 		param.put("selTermFrom", selTermFrom.substring(0, 6));

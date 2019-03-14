@@ -73,7 +73,7 @@
 												<col>
 												<col>
 												<col>
-												<col>
+												<!-- <col> -->
 												<col>
 												<col>
 											</colgroup>
@@ -84,7 +84,7 @@
 													<th>장치ID</th>
 													<th>알람시간</th>													
 													<th>알람메세지</th>
-													<th>알람상태</th>
+													<!-- <th>알람상태</th> -->
 													<th>조치여부</th>
 													<th>조치내용</th>
 												</tr>
@@ -107,7 +107,7 @@
 												<col>
 												<col>
 												<col>
-												<col>
+												<!-- <col> -->
 												<col>
 												<col>
 											</colgroup>
@@ -118,7 +118,7 @@
 													<th>장치ID</th>
 													<th>알람시간</th>
 													<th>알람메세지</th>
-													<th>알람상태</th>
+													<!-- <th>알람상태</th> -->
 													<th>조치여부</th>
 													<th>조치내용</th>
 												</tr>

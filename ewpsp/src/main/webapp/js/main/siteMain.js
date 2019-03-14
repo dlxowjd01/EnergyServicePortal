@@ -115,17 +115,27 @@
 		$("#selTermFrom").val(queryStart);
 		$("#selTermTo").val(queryEnd);
 		
+		var monthFrom = new Date(firstDay.getFullYear(), firstDay.getMonth(), 1, 0, 0, 0);
+		var monthTo = new Date(firstDay.getFullYear(), firstDay.getMonth(), (new Date(firstDay.getFullYear(), firstDay.getMonth(), 0)).getDate(), 23, 59, 59);
+		var yearFrom = new Date(firstDay.getFullYear(), 0, 1, 0, 0, 0);
+		var yearTo = new Date(firstDay.getFullYear(), 11, 31, 23, 59, 59);
+		$("#monthFrom").val(monthFrom.format("yyyyMMddHHmmss"));
+		$("#monthTo").val(monthTo.format("yyyyMMddHHmmss"));
+		$("#yearFrom").val(yearFrom.format("yyyyMMddHHmmss"));
+		$("#yearTo").val(yearTo.format("yyyyMMddHHmmss"));
+		
 		var formData = $("#schForm").serializeObject();
 		return formData;
 	}
 	
 	function callback_getAlarmList(result) {
 		var dvTpAlarmDetail = result.detail;
+		var dvTpAlarmDetail2 = result.detail2;
 		var alarmList = result.alarmList;
 		
-		$("#todayTotalAlarmCnt").val(dvTpAlarmDetail.total_cnt);
-		$("#todayAlarmCnt").val(dvTpAlarmDetail.alert_cnt);
-		$("#todayWarninfCnt").val(dvTpAlarmDetail.warning_cnt);
+		$("#todayTotalAlarmCnt").html(dvTpAlarmDetail.total_cnt);
+		$("#todayAlarmCnt").html(dvTpAlarmDetail2.alert_cnt);
+		$("#todayWarninfCnt").html(dvTpAlarmDetail2.warning_cnt);
 		if(dvTpAlarmDetail.notCfm_cnt == 0) {
 			$(".no").find('span').hide();
 		} else {
@@ -133,21 +143,20 @@
 			$(".no").empty().append( '<span>'+dvTpAlarmDetail.notCfm_cnt+'</span>');
 		}
 		
-		$div = $(".alarm_notice");
-		$div.find("ul").empty();
+		var str = "";
 		if(alarmList == null || alarmList.length < 1) {
-			$div.find("ul").append( $('<li />').append( $('<a href="#;" />').append("조회 결과가 없습니다.") ) );
+			str += '<li>';
+			str += '	<a href="#;">조회 결과가 없습니다.</a>';
+			str += '</li>';
 		} else {
 			for(var i=0; i<alarmList.length; i++) {
 				var tm = new Date( convertDateUTC(alarmList[i].std_date) );
-				
-				$div.find("ul").append( 
-						$('<li />').append( $('<a href="#;" />').append("조회 결과가 없습니다.") 
-						).append( $('<span />').append( tm.format("yyyy-MM-dd HH:mm:ss") ) ) 
-				);
-				
+				str += '<li>';
+				str += '	<a href="#;">'+alarmList[i].alarm_msg+'</a>';
+				str += '	<span>'+tm.format("yyyy-MM-dd HH:mm:ss")+'</span>';
+				str += '</li>';
 			}
-			
+			$(".alarm_notice").find("ul").html(str);
 		}
 		
 	}
@@ -325,35 +334,39 @@
 				var monthSum = resultListMap.monthSum;
 				var yearSum = resultListMap.yearSum;
 				
-				$("#todayCrg").empty().append( numberComma(todaySum.chg_val_sum)+" kWh" );
-				$("#todayDiscrg").empty().append( numberComma(todaySum.dischg_val_sum)+" kWh" );
-				$("#todayRevenue").empty().append( numberComma(todaySum.ess_revenue_sum) );
-				$("#monthCrg").empty().append( numberComma(monthSum.chg_val_sum)+" kWh" );
-				$("#monthDiscrg").empty().append( numberComma(monthSum.dischg_val_sum)+" kWh" );
-				$("#monthRevenue").empty().append( numberComma(monthSum.ess_revenue_sum) );
-				$("#yearCrg").empty().append( numberComma(yearSum.chg_val_sum)+" kWh" );
-				$("#yearDiscrg").empty().append( numberComma(yearSum.dischg_val_sum)+" kWh" );
-				$("#yearRevenue").empty().append( numberComma(yearSum.ess_revenue_sum) );
+				$("#todayCrg").empty().append( numberComma(Math.abs(toFixedNum(todaySum.chg_val_sum, 2)))+" kWh" );
+				$("#todayDiscrg").empty().append( numberComma(Math.abs(toFixedNum(todaySum.dischg_val_sum, 2)))+" kWh" );
+				$("#todayRevenue").empty().append( numberComma(Math.abs(toFixedNum(todaySum.ess_revenue_sum, 2))) );
+				$("#monthCrg").empty().append( numberComma(Math.abs(toFixedNum(monthSum.chg_val_sum, 2)))+" kWh" );
+				$("#monthDiscrg").empty().append( numberComma(Math.abs(toFixedNum(monthSum.dischg_val_sum, 2)))+" kWh" );
+				$("#monthRevenue").empty().append( numberComma(Math.abs(toFixedNum(monthSum.ess_revenue_sum, 2))) );
+				$("#yearCrg").empty().append( numberComma(Math.abs(toFixedNum(yearSum.chg_val_sum, 2)))+" kWh" );
+				$("#yearDiscrg").empty().append( numberComma(Math.abs(toFixedNum(yearSum.dischg_val_sum, 2)))+" kWh" );
+				$("#yearRevenue").empty().append( numberComma(Math.abs(toFixedNum(yearSum.ess_revenue_sum, 2))) );
 				
 				var chgValSum = Number(todaySum.chg_val_sum);
 				var dischgValSum = Number(todaySum.dischg_val_sum);
-				if(totalFetureChg == 0 && chgValSum == 0) {
-					chgVal = 0;
-				} else if(totalFetureChg == 0 && chgValSum > 0) {
-					chgVal = 100;
+				
+				var chgPer = 0;
+				var chgVal = numberComma(Math.abs(toFixedNum(todaySum.chg_val_sum, 2)));
+				var dischgPer = 0;
+				var dischgVal = numberComma(Math.abs(toFixedNum(todaySum.dischg_val_sum, 2)));
+				
+				if(Math.abs(totalFetureChg) > 0) {
+					chgPer = Math.abs(numOfTotal_per(totalFetureChg, chgValSum));
 				} else {
-					chgVal = ((numOfTotal_per(totalFetureChg, chgValSum)) >= 100) ? 100 : numOfTotal_per(totalFetureChg, chgValSum);
+					chgPer = 100;
 				}
-				if(totalFetureDischg == 0 && dischgValSum == 0) {
-					dischgVal = 0;
-				} else if(totalFetureDischg == 0 && dischgValSum > 0) {
-					dischgVal = 100;
+				if(Math.abs(totalFetureDischg) > 0) {
+					dischgPer = Math.abs(numOfTotal_per(totalFetureDischg, dischgValSum));
 				} else {
-					dischgVal = ((numOfTotal_per(totalFetureDischg, dischgValSum)) >= 100) ? 100 : numOfTotal_per(totalFetureDischg, dischgValSum);
+					dischgPer = 100;
 				}
 				
-				$("#socTodayCrg").empty().append( numberComma(chgVal) ).append('<em>kWh</em>');
-				$("#socTodayDiscrg").empty().append( numberComma(dischgVal) ).append('<em>kWh</em>');
+				$("#socTodayCrg").empty().append( numberComma(chgVal) ).append(' <em>kWh</em>');
+				$("#socTodayDiscrg").empty().append( numberComma(dischgVal) ).append(' <em>kWh</em>');
+				if(chgPer > 0) $(".today_charge").find("span").css("width", chgPer+"%");
+				if(dischgPer > 0) $(".today_discharge").find("span").css("width", dischgPer+"%");
 				
 			}
 		});
@@ -587,13 +600,13 @@
 		
 	}
 	
-	var contractPower;
-	var chargePower;
-	function callback_getSiteSetDetail(result) {
-		var siteSetDetail = result.detail;
-		contractPower = siteSetDetail.contract_power;
-		chargePower = siteSetDetail.charge_power;
-	}
+//	var contractPower;
+//	var chargePower;
+//	function callback_getSiteSetDetail(result) {
+//		var siteSetDetail = result.detail;
+//		contractPower = siteSetDetail.contract_power;
+//		chargePower = siteSetDetail.charge_power;
+//	}
 	
 	// 차트 그리기
 	function drawData_chart_peak() {
@@ -732,7 +745,8 @@
 		}
 		
 		// ess 수익, pv 수익, dr 수익 중 하나라도 데이터가 존재할 때
-		if( !( essRvList == null && pvRvList == null && drRvList == null ) ) {
+		if( !(loopCntList == null) ) {
+//		if( !( essRvList == null && pvRvList == null && drRvList == null ) ) {
 			if(loopCntList != null && loopCntList.length > 0) {
 				for(var i=0; i<loopCntList.length; i++) {
 					var essRevenue = null;
@@ -792,9 +806,9 @@
 					
 					var tm = new Date( convertDateUTC(loopCntList[i].std_timestamp) );
 					// 차트데이터 셋팅
-					dataSet.push([setChartDateUTC(stdDt) , reEssRevenue]);
-					dataSet2.push([setChartDateUTC(stdDt) , rePvRevenue]);
-					dataSet3.push([setChartDateUTC(stdDt) , reDrRevenue]);
+					if(essRvList != null && essRvList.length > 0 && essRvList.length > i) dataSet.push([setChartDateUTC(stdDt) , reEssRevenue]);
+					if(pvRvList != null && pvRvList.length > 0 && pvRvList.length > i) dataSet2.push([setChartDateUTC(stdDt) , rePvRevenue]);
+					if(drRvList != null && drRvList.length > 0 && drRvList.length > i) dataSet3.push([setChartDateUTC(stdDt) , reDrRevenue]);
 					
 					if( (i+1) == loopCntList.length ) {
 						if(reEssRevenue != null) {
@@ -807,32 +821,32 @@
 				pvRevenueList = dataSet2;
 				drRevenueList = dataSet3;
 				
-//				if(essRvList != null && essRvList.length > 0) {
+				if(essRvList != null && essRvList.length > 0) {
 					incomeChart.addSeries({
 						name: 'ESS 수익',
 						color: '#438fd7', /* ESS 수익 */
 						data: essRevenueList
 					}, false);
 					
-//				}
+				}
 				
-//				if(pvRvList != null && pvRvList.length > 0) {
+				if(pvRvList != null && pvRvList.length > 0) {
 					incomeChart.addSeries({
 						name: 'PV 수익',
 						color: '#13af67', /* PV 수익 */
 						data: pvRevenueList
 					}, false);
 					
-//				}
+				}
 				
-//				if(drRvList != null && drRvList.length > 0) {
+				if(drRvList != null && drRvList.length > 0) {
 					incomeChart.addSeries({
 						name: 'DR 수익',
 						color: '#f75c4a', /* DR 수익 */
 						data: drRevenueList
 					}, false);
 					
-//				}
+				}
 				
 			}
 			

@@ -8,6 +8,8 @@ public interface ControlService {
 
 	Map getDeviceAlarmCnt(HashMap param) throws Exception;
 	
+	Map getSiteMainAlarmCnt(HashMap param) throws Exception;
+	
 	Map getGMainDeviceAlarmCnt(HashMap param) throws Exception;
 
 	List getAlarmList(HashMap param) throws Exception;

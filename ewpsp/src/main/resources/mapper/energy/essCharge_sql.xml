@@ -12,7 +12,6 @@
 			from tb_ess_charge
 			where 1=1
 			and site_id = #{siteId }
-			<!-- and std_date between str_to_date('20180820000000','%Y%m%d%H%i%s') and str_to_date('20180820235959','%Y%m%d%H%i%s') -->
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
 			and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
 			</if>
@@ -59,14 +58,20 @@
 				ifnull( sum(chg_val), 0) as chg_val_sum, ifnull( sum(dischg_val), 0) as dischg_val_sum, 0 as ess_revenue_sum
 			from tb_ess_charge
 			where 1=1
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+			and site_id = #{siteId }
+			</if>
 			<if test='substringIdx.equals("dd")'>
-			and date_format(std_date,'%Y%m%d') = left(#{selTermFrom }, 8)
+			<!-- and date_format(std_date,'%Y%m%d') = left(#{selTermFrom }, 8) -->
+			and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
 			</if>
 			<if test='substringIdx.equals("MM")'>
-			and date_format(std_date,'%Y%m') = left(#{selTermFrom }, 6)
+			<!-- and date_format(std_date,'%Y%m') = left(#{selTermFrom }, 6) -->
+			and std_date between str_to_date(#{monthFrom },'%Y%m%d%H%i%s') and str_to_date(#{monthTo },'%Y%m%d%H%i%s')
 			</if>
 			<if test='substringIdx.equals("yyyy")'>
-			and date_format(std_date,'%Y') = left(#{selTermFrom }, 4)
+			<!-- and date_format(std_date,'%Y') = left(#{selTermFrom }, 4) -->
+			and std_date between str_to_date(#{yearFrom },'%Y%m%d%H%i%s') and str_to_date(#{yearTo },'%Y%m%d%H%i%s')
 			</if>
 			
 			union
@@ -74,16 +79,22 @@
 			select 
 				0 as chg_val_sum, 0 as dischg_val_sum,
 				ifnull( sum(ess_chg_incen+ess_dischg_incen), 0 ) as ess_revenue_sum
-			from tb_bill
+			from tb_bill_day
 			where 1=1
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+			and site_id = #{siteId }
+			</if>
 			<if test='substringIdx.equals("dd")'>
-			and bill_yearm = left(#{selTermFrom }, 8)
+			<!-- and bill_yearm = left(#{selTermFrom }, 8) -->
+			and svc_stimestamp between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
 			</if>
 			<if test='substringIdx.equals("MM")'>
-			and bill_yearm = left(#{selTermFrom }, 6)
+			<!-- and bill_yearm = left(#{selTermFrom }, 6) -->
+			and svc_stimestamp between str_to_date(#{monthFrom },'%Y%m%d%H%i%s') and str_to_date(#{monthTo },'%Y%m%d%H%i%s')
 			</if>
 			<if test='substringIdx.equals("yyyy")'>
-			and left(bill_yearm, 4) = left(#{selTermFrom }, 4)
+			<!-- and left(bill_yearm, 4) = left(#{selTermFrom }, 4) -->
+			and svc_stimestamp between str_to_date(#{yearFrom },'%Y%m%d%H%i%s') and str_to_date(#{yearTo },'%Y%m%d%H%i%s')
 			</if>
 		) a
 	</select>

@@ -417,6 +417,7 @@ var meterSf = "";		//계량기 배수
 //var profitRatio = "";		//수익배분 비율
 var meterReadDay = "";		//검침일
 var contractPower = "";		//계약전력
+var chargePower = "";
 var planType = "";
 var planType2 = "";
 var planType3 = "";
@@ -433,6 +434,8 @@ var drProfitRatio  = 0; // DR수익배분 비율
 var pvProfitRatio  = 0; // PV수익배분 비율
 var recRateDate = "";
 var smpRateDate = "";
+var essBattery = "";
+var essPcs = "";
 
 function callback_getPlanTypeVal(result){
 	var thisDay = new Date();
@@ -463,6 +466,7 @@ function callback_getSiteSetDetail(result){
 //	profitRatio = 20;//site.profit_ratio;		//수익배분 비율
 	meterReadDay = site.meter_read_day;		//검침일
 	contractPower = site.contract_power;		//계약전력
+	chargePower = site.charge_power;		//계약전력
 	planType = site.plan_type;		//구분1
 	planType2 = site.plan_type2;		//구분2
 	planType3 = site.plan_type3;		//구분3
@@ -477,8 +481,8 @@ function callback_getSiteSetDetail(result){
 	pvProfitRatio = site.pv_profit_ratio; // PV수익배분 비율
 	recRateDate = site.rec_rate_date; 
 	smpRateDate = site.smp_rate_date;
-	console.log(smpRateDate);
-	console.log(recRateDate);
+	essBattery = site.ess_battery; 
+	essPcs = site.ess_pcs;
 	
 	getPlanTypeVal(planType,planType2,planType3);
 

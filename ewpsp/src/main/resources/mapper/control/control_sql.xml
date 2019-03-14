@@ -18,17 +18,34 @@
 			count(*) as total_cnt /* 총 건수 */
 		from (
 				select
-					alarm_idx, site_id, device_id, device_type, std_date, alarm_type, alarm_msg, 
-					alarm_cfm_yn, alarm_cfm_date, alarm_cfm_uid, alarm_act_yn, alarm_note, reg_date, mod_date
-				from tb_alarm
-				where 1=1
+					a.alarm_idx, a.site_id, a.device_id, a.device_type, a.std_date, a.alarm_type, a.alarm_msg, 
+					a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_act_yn, a.alarm_note, a.reg_date, a.mod_date
+				from tb_alarm a, tb_device b
+				where a.device_id = b.device_id
+				and a.site_id = b.site_id
+				and a.device_type = b.device_type
 				<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
-				and site_id = #{siteId }
+				and a.site_id = #{siteId }
 				</if>
 				<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
 				and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
 				</if>
 		) a
+	</select>
+
+	<select id="getSiteMainAlarmCnt" parameterType="hashMap" resultType="hashMap">
+		/* 사이트메인 장치타입별 알람건수 조회 */
+		select
+			count( case when alarm_type = '1' then 1 end ) as warning_cnt, /* 비상 건수 */
+			count( case when alarm_type = '2' then 1 end ) as alert_cnt /* 주의 건수 */
+		from tb_alarm a, tb_device b
+		where a.device_id = b.device_id
+		and a.site_id = b.site_id
+		and a.device_type = b.device_type
+		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+		and a.site_id = #{siteId }
+		</if>
+		and a.alarm_act_yn = 'N'
 	</select>
 	
 	<select id="getAlarmList" parameterType="hashMap" resultType="hashMap">
@@ -50,6 +67,8 @@
 						a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_act_yn, a.alarm_note, a.reg_date, a.mod_date
 					from tb_alarm a, tb_device b
 					where a.device_id = b.device_id
+					and a.site_id = b.site_id
+					and a.device_type = b.device_type
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
 					</if>
@@ -85,6 +104,8 @@
 						a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_act_yn, a.alarm_note, a.reg_date, a.mod_date
 					from tb_alarm a, tb_device b
 					where a.device_id = b.device_id
+					and a.site_id = b.site_id
+					and a.device_type = b.device_type
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
 					</if>

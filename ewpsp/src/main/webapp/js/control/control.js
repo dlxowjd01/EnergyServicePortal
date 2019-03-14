@@ -160,7 +160,7 @@
 						).append( $('<td />').append( warnAlarmList[i].device_id ) // 장치ID
 						).append( $('<td />').append( tm.format("yyyy-MM-dd HH:mm:ss") ) // 알람시간
 						).append( $('<td />').append( warnAlarmList[i].alarm_msg ) // 알람메세지
-						).append( $('<td />').append( alarmCfmYn ) // 알람상태(뭘 의미하는거지??)
+//						).append( $('<td />').append( alarmCfmYn ) // 알람상태(뭘 의미하는거지??)
 						).append( // 조치여부
 								$('<td />').append( strHtml )
 						).append( // 조치내용
@@ -222,7 +222,7 @@
 						).append( $('<td />').append( alertAlarmList[i].device_id ) // 장치ID
 						).append( $('<td />').append( tm.format("yyyy-MM-dd HH:mm:ss") ) // 알람시간
 						).append( $('<td />').append( alertAlarmList[i].alarm_msg ) // 알람메세지
-						).append( $('<td />').append( alarmCfmYn ) // 알람상태(뭘 의미하는거지??)
+//						).append( $('<td />').append( alarmCfmYn ) // 알람상태(뭘 의미하는거지??)
 						).append( // 조치여부
 								$('<td />').append( strHtml )
 						).append( // 조치내용

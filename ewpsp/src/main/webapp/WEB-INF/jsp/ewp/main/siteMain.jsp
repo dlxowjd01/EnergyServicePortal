@@ -34,6 +34,10 @@
 				<input type="hidden" id="siteId" name="siteId" value="${selViewSiteId }">
 				<input type="hidden" id="selPageNum" name="selPageNum" value="">
 				<input type="hidden" id="timeOffset" name="timeOffset">
+				<input type="hidden" id="monthFrom" name="monthFrom">
+				<input type="hidden" id="monthTo" name="monthTo">
+				<input type="hidden" id="yearFrom" name="yearFrom">
+				<input type="hidden" id="yearTo" name="yearTo">
 				</form>
 				<div class="row">
 					<div class="col-lg-4">

@@ -5,14 +5,13 @@
 	<select id="getESSUsageList" resultType="hashMap">
 		/* ess 사용량 조회 */
 		select 
-			site_id, std_date, sum(usg_val) as usg_val
+			site_id, std_date, sum(dischg_val) as usg_val
 		from (
 			select 
-				ess_usg_idx, site_id, device_id, std_date, usg_val, reg_date, mod_date
-			from tb_ess_usage
+				ess_chg_idx, site_id, device_id, std_timestamp, std_date, chg_val, dischg_val, reg_date
+			from tb_ess_charge
 			where 1=1
 			and site_id = #{siteId }
-			<!-- and std_date between str_to_date('20180820000000','%Y%m%d%H%i%s') and str_to_date('20180820235959','%Y%m%d%H%i%s') -->
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
 			and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
 			</if>
@@ -20,6 +19,21 @@
 		where 1=1
 		group by site_id, std_date
 		order by std_date
+<!-- 		select 
+			site_id, std_date, sum(usg_val) as usg_val
+		from (
+			select 
+				ess_usg_idx, site_id, device_id, std_date, usg_val, reg_date, mod_date
+			from tb_ess_usage
+			where 1=1
+			and site_id = #{siteId }
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
+			and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+			</if>
+		) a
+		where 1=1
+		group by site_id, std_date
+		order by std_date -->
 	</select>
 	
 	<select id="getPVUsageList" resultType="hashMap">

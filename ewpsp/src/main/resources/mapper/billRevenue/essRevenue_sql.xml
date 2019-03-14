@@ -135,7 +135,6 @@
 				from tb_bill_day d, tb_site_set e
 				where d.site_id = e.site_id
 				and d.site_id = #{siteId }
-				<!-- and svc_stimestamp between #{selTermFrom } and #{selTermTo } -->
 				and svc_stimestamp between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
 			) a
 			group by site_id, svc_stimestamp

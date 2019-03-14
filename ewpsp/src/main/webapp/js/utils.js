@@ -82,7 +82,7 @@ function convertUnitFormat(num, unitGbn, len) {
 	var divNum = 0;
 	
 	if(len == null) {
-		var str = num.toString();
+		var str = Math.abs(num).toString();
 		len = str.length;
 	}
 	

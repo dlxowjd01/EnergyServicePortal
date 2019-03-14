@@ -21,6 +21,10 @@ public class ControlServiceImpl implements ControlService{
 		return controlDao.getDeviceAlarmCnt(param);
 	}
 	
+	public Map getSiteMainAlarmCnt(HashMap param) throws Exception {
+		return controlDao.getSiteMainAlarmCnt(param);
+	}
+	
 	public Map getGMainDeviceAlarmCnt(HashMap param) throws Exception {
 		return controlDao.getGMainDeviceAlarmCnt(param);
 	}
