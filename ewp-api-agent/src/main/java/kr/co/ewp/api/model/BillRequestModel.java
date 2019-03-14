@@ -16,8 +16,8 @@ public class BillRequestModel {
   private EnergyModel energy; // power List of timestamp and kWh 전력
   private ReactiveModel reactivePos;// List of timestamp and kVarh 무효 전력(positive 방향)
   private ReactiveModel reactiveNeg;// List of timestamp and kVarh 무효 전력(negative 방향)
-  private EssModel essCharging;// List of timestamp and kWh output power of ess
-  private EssModel essDischarging;// List of timestamp and kWh output power of ess
+  private EssModel ess_Charging;// List of timestamp and kWh output power of ess
+  private EssModel ess_Discharging;// List of timestamp and kWh output power of ess
 
   public Period getPeriod() {
     return period;
@@ -99,20 +99,20 @@ public void setReactiveNeg(ReactiveModel reactiveNeg) {
 	this.reactiveNeg = reactiveNeg;
 }
 
-public EssModel getEssCharging() {
-    return essCharging;
+public EssModel getEss_Charging() {
+    return ess_Charging;
   }
 
-  public void setEssCharging(EssModel essCharging) {
-    this.essCharging = essCharging;
+  public void setEss_Charging(EssModel essCharging) {
+    this.ess_Charging = ess_Charging;
   }
 
-public EssModel getEssDischarging() {
-	return essDischarging;
+public EssModel getEss_Discharging() {
+	return ess_Discharging;
 }
 
-public void setEssDischarging(EssModel essDischarging) {
-	this.essDischarging = essDischarging;
+public void setEss_Discharging(EssModel ess_Discharging) {
+	this.ess_Discharging = ess_Discharging;
 }
 
 
