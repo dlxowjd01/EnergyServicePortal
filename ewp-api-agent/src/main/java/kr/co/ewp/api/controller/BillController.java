@@ -309,13 +309,13 @@ public class BillController {
           }
           ess.setkWh(kWh);
           ess.setTimestamp(timestamp);
-          billRequest.setEss_Charging(ess);
+          billRequest.setEss_charging(ess);
           ess2.setkWh(kWh2);
           ess2.setTimestamp(timestamp);
-          billRequest.setEss_Discharging(ess2);
+          billRequest.setEss_discharging(ess2);
         }
         if (billRequest.getEnergy().getTimestamp().size() == 0 && billRequest.getReactivePos().getTimestamp().size() == 0 && billRequest.getReactiveNeg().getTimestamp().size() == 0
-            && billRequest.getEss_Charging().getTimestamp().size() == 0) {
+            && billRequest.getEss_charging().getTimestamp().size() == 0) {
           continue;
         }
         try {
@@ -630,10 +630,10 @@ public class BillController {
           }
           ess.setkWh(kWh);
           ess.setTimestamp(timestamp);
-          billRequest.setEss_Charging(ess);
+          billRequest.setEss_charging(ess);
           ess2.setkWh(kWh2);
           ess2.setTimestamp(timestamp);
-          billRequest.setEss_Discharging(ess2);
+          billRequest.setEss_discharging(ess2);
         }
 //        if (billRequest.getEnergy().getTimestamp().size() == 0 && billRequest.getReactivePos().getTimestamp().size() == 0 && billRequest.getReactiveNeg().getTimestamp().size() == 0
 //            && billRequest.getEssCharging().getTimestamp().size() == 0) {
