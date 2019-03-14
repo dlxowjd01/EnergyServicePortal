@@ -41,6 +41,11 @@ public class ControlServiceImpl implements ControlService{
 		return controlDao.getAlarmListCnt(param);
 	}
 
+	@Transactional
+	public int updateAlarm(HashMap param) throws Exception {
+		return controlDao.updateAlarm(param);
+	}
+
 	public List getSmsUserList(HashMap param) throws Exception {
 		return controlDao.getSmsUserList(param);
 	}

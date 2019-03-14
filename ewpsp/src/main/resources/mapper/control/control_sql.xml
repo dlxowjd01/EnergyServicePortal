@@ -120,6 +120,37 @@
 		<!-- limit #{startNum }, #{pageRowCnt } -->
 	</select>
 	
+	<update id="updateAlarm" parameterType="hashMap">
+		/* 알람 수정 */
+		update tb_alarm
+		set 
+			<!-- site_id        = '', 
+			device_id      = '', 
+			device_type    = '', 
+			std_date       = '', 
+			alarm_code     = '', 
+			alarm_type     = '', 
+			alarm_msg      = '', --> 
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(alarmCfmYn)">
+			alarm_cfm_yn   = #{alarmCfmYn}, 
+			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(alarmCfmDate)">
+			alarm_cfm_date = #{alarmCfmDate}, 
+			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(alarmCfmUid)">
+			alarm_cfm_uid  = #{alarmCfmUid}, 
+			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(alarmActYn)">
+			alarm_act_yn   = #{alarmActYn}, 
+			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(alarmNote)">
+			alarm_note     = #{alarmNote},
+			</if>
+			mod_date       = now()
+		where alarm_idx      = #{alarmIdx }
+		
+	</update>
+	
 	<!-- greatman begin -->
 	<select id="getGMainDeviceAlarmCnt" parameterType="hashMap" resultType="hashMap">
 		/* 장치구분별 알람건수 조회 */
@@ -220,6 +251,30 @@
 		</otherwise>
 		</choose>
 		and a.alarm_act_yn = 'N'
+	</select>
+	
+	<select id="getAlarmDetail" parameterType="hashMap" resultType="hashMap">
+		/* 장치구분별 알람건수 조회 */
+		select 
+			count( case when device_type = '1' then 1 end ) as pcs_cnt, /* PCS 건수 */
+			count( case when device_type = '2' then 1 end ) as bms_cnt, /* BMS 건수 */
+			count( case when device_type = '3' then 1 end ) as pv_cnt, /* PV 건수 */
+			count(*) as total_cnt /* 총 건수 */
+		from (
+				select
+					a.alarm_idx, a.site_id, a.device_id, a.device_type, a.std_date, a.alarm_type, a.alarm_msg, 
+					a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_act_yn, a.alarm_note, a.reg_date, a.mod_date
+				from tb_alarm a, tb_device b
+				where a.device_id = b.device_id
+				and a.site_id = b.site_id
+				and a.device_type = b.device_type
+				<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+				and a.site_id = #{siteId }
+				</if>
+				<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
+				and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+				</if>
+		) a
 	</select>
 
 	<select id="getSmsUserList" parameterType="hashMap" resultType="hashMap">

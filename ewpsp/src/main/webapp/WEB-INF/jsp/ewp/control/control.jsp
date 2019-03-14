@@ -134,6 +134,7 @@
 							</div>
 							<div class="clear mt30">
 								<a href="javascript:popupOpen('rpeople');" class="fr default_btn" id="smsSendMngBtn"><i class="glyphicon glyphicon-phone"></i> 알람전송 관리</a>
+								<!-- <a href="javascript:alarmTest;" class="fr default_btn" id="smsSendMngBtn"><i class="glyphicon glyphicon-phone"></i> 알람전송 테스트</a> -->
 							</div>
 
 						</div>
@@ -152,9 +153,11 @@
 			<a href="javascript:popupClose('rmanage');">닫기</a>
         </div>
 		<div class="lbody mt30">
-			<h2 class="ctit">BMS_1(12001)<!-- 장치명(장치ID) --></h2>
+			<h2 class="ctit" id="updtAlarmDvId">BMS_1(12001)<!-- 장치명(장치ID) --></h2>
 			<div class="set_tbl mt10 clear">				
+				<form id="updtAlarmForm" name="updtAlarmForm">
 				<div class="fl" style="width:calc(100% - 120px);">
+				<input type="hidden" id="alarmIdx" name="alarmIdx">
 					<table>
 						<colgroup>
 							<col width="100">
@@ -164,21 +167,22 @@
 							<tr>
 								<th><span>조치여부</span></th>
 								<td>
-									<select name="" id="" class="sel" style="width:100%;">
-										<option value="">조치</option>
-										<option value="">미조치</option>
+									<select name="alarmActYn" id="alarmActYn" class="sel" style="width:100%;">
+										<option value="Y">조치</option>
+										<option value="N">미조치</option>
 									</select>
 								</td>
 							</tr>
 							<tr>
 								<th><span>조치내용</span></th>
-								<td><input type="text" class="input" style="width:100%"></td>
+								<td><input type="text" id="alarmNote" name="alarmNote" class="input" style="width:100%"></td>
 							</tr>
 						</tbody>			
 					</table>
 				</div>
+				</form>
 				<div class="fr">
-					<input type="submit" value="적용하기" class="submit">
+					<input type="button" value="적용하기" class="submit" id="updateAlarmBtn">
 				</div>
 			</div>
 

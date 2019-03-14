@@ -76,6 +76,14 @@
 			
 		});
 		
+		$("#updateAlarmBtn").click(function(){
+			if(confirm("저장하시겠습니까?")) {
+				var formData = $("#updtAlarmForm").serializeObject();
+				updateAlarm(formData);
+			}
+			
+		});
+		
 	});
 	
 	function getDBData() {
@@ -145,14 +153,22 @@
 		} else {
 			for(var i=0; i<warnAlarmList.length; i++) {
 				var tm = new Date( convertDateUTC(warnAlarmList[i].std_date) );
-				var alarmActYn = (warnAlarmList[i].alarm_act_yn == "") ? "N" : warnAlarmList[i].alarm_act_yn;
 				var strHtml = "";
-				if(alarmActYn == "N") {
-					strHtml += '<a href="#;" onclick="popupOpen(\'rmanage\')" class="w80 cancel_btn">미조치</a>';
+				var alarmActTxt = "";
+				var alarmActClass = "";
+				if(warnAlarmList[i].alarm_act_yn == "N") {
+					alarmActTxt = "미조치";
+					alarmActClass = "cancel_btn";
 				} else {
-					strHtml += '<a href="#;" onclick="popupOpen(\'rmanage\')" class="w80 default_btn">조치</a>';
+					alarmActTxt = "조치";
+					alarmActClass = "default_btn";
 				}
-				var alarmCfmYn = (warnAlarmList[i].alarm_cfm_yn == "Y") ? "확인" : "미확인";
+				strHtml += '<a href="#;" onclick="updateAlarmActForm(\''+warnAlarmList[i].device_name;
+				strHtml += '\', \''+((warnAlarmList[i].alarm_msg == null) ? '' : warnAlarmList[i].alarm_msg);
+				strHtml += '\', \''+warnAlarmList[i].alarm_act_yn;
+				strHtml += '\', \''+((warnAlarmList[i].alarm_note == null) ? '' : warnAlarmList[i].alarm_note);
+				strHtml += '\', \''+warnAlarmList[i].alarm_idx;
+				strHtml += '\');" class="w80 '+alarmActClass+'">'+alarmActTxt+'</a>';
 				
 				$tbody.append(
 						$('<tr />').append( $('<td />').append( warnAlarmList[i].device_type_nm ) // 장치타입
@@ -160,7 +176,6 @@
 						).append( $('<td />').append( warnAlarmList[i].device_id ) // 장치ID
 						).append( $('<td />').append( tm.format("yyyy-MM-dd HH:mm:ss") ) // 알람시간
 						).append( $('<td />').append( warnAlarmList[i].alarm_msg ) // 알람메세지
-//						).append( $('<td />').append( alarmCfmYn ) // 알람상태(뭘 의미하는거지??)
 						).append( // 조치여부
 								$('<td />').append( strHtml )
 						).append( // 조치내용
@@ -207,14 +222,22 @@
 		} else {
 			for(var i=0; i<alertAlarmList.length; i++) {
 				var tm = new Date( convertDateUTC(alertAlarmList[i].std_date) );
-				var alarmActYn = (alertAlarmList[i].alarm_act_yn == "") ? "N" : alertAlarmList[i].alarm_act_yn;
 				var strHtml = "";
-				if(alarmActYn == "N") {
-					strHtml += '<a href="#;" onclick="popupOpen(\'rmanage\')" class="w80 cancel_btn">미조치</a>';
+				var alarmActTxt = "";
+				var alarmActClass = "";
+				if(alertAlarmList[i].alarm_act_yn == "N") {
+					alarmActTxt = "미조치";
+					alarmActClass = "cancel_btn";
 				} else {
-					strHtml += '<a href="#;" onclick="popupOpen(\'rmanage\')" class="w80 default_btn">조치</a>';
+					alarmActTxt = "조치";
+					alarmActClass = "default_btn";
 				}
-				var alarmCfmYn = (alertAlarmList[i].alarm_cfm_yn == "Y") ? "확인" : "미확인";
+				strHtml += '<a href="#;" onclick="updateAlarmActForm(\''+alertAlarmList[i].device_name;
+				strHtml += '\', \''+((alertAlarmList[i].alarm_msg == null) ? '' : alertAlarmList[i].alarm_msg);
+				strHtml += '\', \''+alertAlarmList[i].alarm_act_yn;
+				strHtml += '\', \''+((alertAlarmList[i].alarm_note == null) ? '' : alertAlarmList[i].alarm_note);
+				strHtml += '\', \''+alertAlarmList[i].alarm_idx;
+				strHtml += '\');" class="w80 '+alarmActClass+'">'+alarmActTxt+'</a>';
 				
 				$tbody.append(
 						$('<tr />').append( $('<td />').append( alertAlarmList[i].device_type_nm ) // 장치타입
@@ -360,3 +383,58 @@
 		}
 	}
 	
+//	function alarmTest() {
+//		var dt = new Date();
+//		$.ajax({
+//			url : "/v1/alarm",
+//			type : 'post',
+//			async : false, // 동기로 처리해줌
+//			data : {
+//				siteId : "9de1d9f",
+//				deviceId : "1",
+//				deviceType : 1,
+//				alarmTime : dt.getTime(),
+//				alarmType : 1,
+//				alarmMsg : "짹짹이",
+//				alarmCode : 3
+//			},
+//			success: function(result) {
+//				
+//			},
+//			error:function(request,status,error){
+//				
+//			}
+//		});
+//	}
+	
+	function updateAlarmActForm(deviceName, alarmMsg, alarmActYn, alarmNote, alarmIdx) {
+		$("#alarmIdx").val(alarmIdx);
+		$("#updtAlarmDvId").text(deviceName+" : "+alarmMsg);
+		$("#alarmActYn").val(alarmActYn);
+		$("#alarmNote").val(alarmNote);
+		
+		popupOpen('rmanage');
+	}
+	
+	function updateAlarm(formData) {
+		$.ajax({
+			url : "/updateAlarm",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+			data : formData,
+			success: function(result) {
+				var resultCnt = result.resultCnt;
+				if(resultCnt > 0) {
+					alert("저장되었습니다.");
+					
+					popupClose('rmanage');
+					getWarningAlarmList(selPageNumWarnAlarm);
+					getAlertAlarmList(selPageNumAlertAlarm);
+					
+				} else {
+					alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
+				}
+			}
+		});
+	}
+

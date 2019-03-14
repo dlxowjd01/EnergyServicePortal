@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.ewp.ewpsp.common.util.UserUtil;
 import kr.co.ewp.ewpsp.service.ControlService;
 
 @Controller
@@ -133,6 +134,27 @@ public class ControlController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("list", list);
 		resultMap.put("pagingMap", pagingMap);
+		return resultMap;
+	}
+	
+	/**
+	 * 알람 수정
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/updateAlarm")
+	public @ResponseBody Map<String, Object> updateAlarm(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
+		logger.debug("/updateAlarm");
+		logger.debug("param ::::: "+param.toString());
+
+		Map userInfo = UserUtil.getUserInfo(request);
+		param.put("modUid", userInfo.get("user_id"));
+		
+		int resultCnt = controlService.updateAlarm(param);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("resultCnt", resultCnt);
 		return resultMap;
 	}
 
