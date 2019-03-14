@@ -92,7 +92,7 @@ public class EncoredApiUtil {
       prettyLog.append("URL", url);
       headers.set("content-type", "application/json");
       resultBody = HttpUtil.post(url, headers, JsonUtil.toJson(billRequest));
-//      System.out.println("         resultBody는      "+resultBody);
+      System.out.println("         resultBody는      "+resultBody);
       return JsonUtil.toObject(resultBody, BillResponseModel.class);
     } catch (NullPointerException e) {
     	logger.error("error is : "+e.toString());

@@ -100,12 +100,12 @@ public void setReactiveNeg(ReactiveModel reactiveNeg) {
 }
 
 public EssModel getEss_Charging() {
-    return ess_Charging;
-  }
+	return ess_Charging;
+}
 
-  public void setEss_Charging(EssModel essCharging) {
-    this.ess_Charging = ess_Charging;
-  }
+public void setEss_Charging(EssModel ess_Charging) {
+	this.ess_Charging = ess_Charging;
+}
 
 public EssModel getEss_Discharging() {
 	return ess_Discharging;
