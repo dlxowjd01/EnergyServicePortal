@@ -191,9 +191,9 @@ public class DeviceController {
         		apiVer = site.getLocalEmsApiVer();
         	}
     		if("1.1".equals(apiVer)) { // 기존
-    			System.out.println(_siteId+", "+device.getDeviceId()+" - 기존 pcs장치 api를 조회합니다..");
+    			System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 기존 pcs장치 api를 조회합니다..");
     			List<PcsEquipmentModelBefore> pcsEquipmentList = PMGrowApiUtilBefore.getPcsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
-    			System.out.println(device.getDeviceId()+"pcs 장치 1.1 결과        :  "+pcsEquipmentList.toString());
+    			System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+"pcs 장치 1.1 결과        :  "+pcsEquipmentList.toString());
     			if(pcsEquipmentList != null){
     				System.out.println("1.1 1");
     				prettyLog.append("ITEM_SIZE", pcsEquipmentList.size());
@@ -235,7 +235,7 @@ public class DeviceController {
     				}
     			}
 //    			List<PcsEquipmentModelBefore> pcsEquipmentList = PMGrowApiUtilBefore.getPcsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
-//    			System.out.println(device.getDeviceId()+"pcs 장치 1.1 결과        :  "+pcsEquipmentList.toString());
+//    			System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+"pcs 장치 1.1 결과        :  "+pcsEquipmentList.toString());
 //    			if(pcsEquipmentList != null){
 //    				System.out.println("1.1 1");
 //    				prettyLog.append("ITEM_SIZE", pcsEquipmentList.size());
@@ -277,9 +277,9 @@ public class DeviceController {
 //    				}
 //    			}
     		} else { // api url 변경후
-    			System.out.println(_siteId+", "+device.getDeviceId()+" - 새로운 pcs장치 api를 조회합니다..");
+    			System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 새로운 pcs장치 api를 조회합니다..");
     			PcsEquipmentModel pcsEquipmentModel = PMGrowApiUtil.getPcsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
-    			System.out.println(device.getDeviceId()+"pcs 장치 결과        :  "+pcsEquipmentModel.toString());
+    			System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+"pcs 장치 결과        :  "+pcsEquipmentModel.toString());
     			if(pcsEquipmentModel != null){
     				System.out.println("1");
     				prettyLog.append("ITEM_SIZE", pcsEquipmentModel);
@@ -375,7 +375,7 @@ public class DeviceController {
         		apiVer = site.getLocalEmsApiVer();
         	}
         	if("1.1".equals(apiVer)) { // 기존
-        		System.out.println(_siteId+", "+device.getDeviceId()+" - 기존 bms장치 api를 조회합니다..");
+        		System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 기존 bms장치 api를 조회합니다..");
         		List<BmsEquipmentModelBefore> bmsEquipmentList = PMGrowApiUtilBefore.getBmsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
         		if( bmsEquipmentList != null){
         			prettyLog.append("ITEM_SIZE", bmsEquipmentList.size());
@@ -425,7 +425,7 @@ public class DeviceController {
 //        			}
 //        		}
         	} else { // api url 변경후
-        		System.out.println(_siteId+", "+device.getDeviceId()+" - 새로운 bms장치 api를 조회합니다..");
+        		System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 새로운 bms장치 api를 조회합니다..");
         		BmsEquipmentModel bmsEquipmentModel = PMGrowApiUtil.getBmsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
         		if( bmsEquipmentModel != null){
         			DeviceBms deviceBms = new DeviceBms();
@@ -508,9 +508,9 @@ public class DeviceController {
         		apiVer = site.getLocalEmsApiVer();
         	}
         	if("1.1".equals(apiVer)) { // 기존
-        		System.out.println(device.getDeviceId()+" - 기존 pv장치 api를 조회합니다..");
+        		System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 기존 pv장치 api를 조회합니다..");
         		List<PvEquipmentModelBefore> pvEquipmentList = PMGrowApiUtilBefore.getPvEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
-        		System.out.println(device.getDeviceId()+"  1.1pv 장치 결과        :  "+pvEquipmentList.toString());
+        		System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+"  1.1pv 장치 결과        :  "+pvEquipmentList.toString());
         		if(pvEquipmentList != null){
         			prettyLog.append("ITEM_SIZE", pvEquipmentList.size());
 	        		for (PvEquipmentModelBefore pvEquipmentModel : pvEquipmentList) {
@@ -531,9 +531,9 @@ public class DeviceController {
 	        		}
         		}
         	} else { // api url 변경후
-        		System.out.println(device.getDeviceId()+" - 새로운 pv장치 api를 조회합니다..");
+        		System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 새로운 pv장치 api를 조회합니다..");
         		PvEquipmentModel pvEquipmentModel = PMGrowApiUtil.getPvEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
-        		System.out.println(device.getDeviceId()+"pv 장치 결과        :  "+pvEquipmentModel.toString());
+        		System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+"pv 장치 결과        :  "+pvEquipmentModel.toString());
         		if(pvEquipmentModel != null){
         			DevicePv devicePv = new DevicePv();
         			devicePv.setSiteId(_siteId);

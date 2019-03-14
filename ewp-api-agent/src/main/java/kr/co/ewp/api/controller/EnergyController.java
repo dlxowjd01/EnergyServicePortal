@@ -691,7 +691,7 @@ public class EnergyController {
         		if ("2".equals(device.getInstType())) { // Local EMS
         			if("1".equals(deviceType) || "2".equals(deviceType)){ // 1: PCS, 2: BMS
         				if("1.1".equals(apiVer)) { // 기존
-        					System.out.println(_siteId+", "+device.getDeviceId()+" - 기존 ess충방전량조회 api를 조회합니다..");
+        					System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 기존 ess충방전량조회 api를 조회합니다..");
         					ChargingDischargingBefore cdList = PMGrowApiUtilBefore.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate,
         							endDate, "MI", "15", prettyLog);
         					if(cdList !=null){
@@ -725,7 +725,7 @@ public class EnergyController {
 //        						}
 //        					}
         				} else { // api url 변경후
-        					System.out.println(_siteId+", "+device.getDeviceId()+" - 새로운 ess충방전량조회 api를 조회합니다..");
+        					System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 새로운 ess충방전량조회 api를 조회합니다..");
         					ChargingDischarging cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "MI", "15", prettyLog);
         					if(cdList !=null){
         						prettyLog.append("ITEM_SIZE", cdList.getItems().size());
@@ -831,7 +831,7 @@ public class EnergyController {
         		if ("2".equals(device.getInstType())) { // Local EMS
         			if("1".equals(deviceType) || "2".equals(deviceType)){ // 1: PCS, 2: BMS
         				if("1.1".equals(apiVer)) { // 기존
-        					System.out.println(_siteId+", "+device.getDeviceId()+" - 기존 ess충방전계획량조회 api를 조회합니다..");
+        					System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 기존 ess충방전계획량조회 api를 조회합니다..");
         					ChargingDischargingScheduleBefore cdList = PMGrowApiUtilBefore.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate,
         							endDate, "MI", "15", prettyLog);
         					if(cdList != null){
@@ -865,7 +865,7 @@ public class EnergyController {
 //        						}
 //        					}
         				} else { // api url 변경후
-        					System.out.println(_siteId+", "+device.getDeviceId()+" - 새로운 ess충방전계획량조회 api를 조회합니다..");
+        					System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 새로운 ess충방전계획량조회 api를 조회합니다..");
         					ChargingDischargingSchedule cdList = PMGrowApiUtil.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "MI", "15", prettyLog);
         					if(cdList != null){
         						prettyLog.append("ITEM_SIZE", cdList.getItems().size());
@@ -1000,7 +1000,7 @@ public class EnergyController {
         				  apiVer = site.getLocalEmsApiVer();
         			  }
         			  if("1.1".equals(apiVer)) { // 기존
-        				  System.out.println(_siteId+", "+device.getDeviceId()+" - 기존 pv발전량조회 api를 조회합니다..");
+        				  System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 기존 pv발전량조회 api를 조회합니다..");
         				  	List<PvPowerGenModelBefore> resultList = PMGrowApiUtilBefore.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate,
         				  				endDate, "1", "15", prettyLog);
         				  if(resultList != null){
@@ -1017,7 +1017,7 @@ public class EnergyController {
         					  }
         				  }//
         			  } else { // api url 변경후
-        				  System.out.println(_siteId+", "+device.getDeviceId()+" - 새로운 pv발전량조회 api를 조회합니다..");
+        				  System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 새로운 pv발전량조회 api를 조회합니다..");
         				  PvPowerGenModel resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate, endDate, "MI", "15", prettyLog);
         				  if(resultList != null){
         					  prettyLog.append("ITEM_SIZE", resultList.getItems().size());

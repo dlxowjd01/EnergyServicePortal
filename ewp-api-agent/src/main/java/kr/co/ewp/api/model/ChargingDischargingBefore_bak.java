@@ -3,11 +3,11 @@ package kr.co.ewp.api.model;
 import java.util.Date;
 import java.util.List;
 
-public class ChargingDischargingBefore {
+public class ChargingDischargingBefore_bak {
   private Integer numItems;//
   private String pcsId;//
-  private Float totalCEnergy;// (kWh)
-  private Float totalDEnergy;//
+  private Integer totalCEnergy;// (kWh)
+  private Integer totalDEnergy;//
   private Date startDt;// YYYYMMDD
   private Date endDt;// YYYYMMDD
   private String intervalType;//
@@ -33,19 +33,19 @@ public class ChargingDischargingBefore {
   	this.pcsId = pcsId;
   }
   
-  public Float getTotalCEnergy() {
+  public Integer getTotalCEnergy() {
   	return totalCEnergy;
   }
   
-  public void setTotalCEnergy(Float totalCEnergy) {
+  public void setTotalCEnergy(Integer totalCEnergy) {
   	this.totalCEnergy = totalCEnergy;
   }
   
-  public Float getTotalDEnergy() {
+  public Integer getTotalDEnergy() {
   	return totalDEnergy;
   }
   
-  public void setTotalDEnergy(Float totalDEnergy) {
+  public void setTotalDEnergy(Integer totalDEnergy) {
   	this.totalDEnergy = totalDEnergy;
   }
   

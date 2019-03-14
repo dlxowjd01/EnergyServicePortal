@@ -6,8 +6,8 @@ import java.util.List;
 public class ChargingDischargingScheduleBefore {
   private Integer itemsCnt;//
   private String pcsId;//
-  private Integer totalScheduledCEnergy;// (kWh)
-  private Integer totalScheduledDEnergy;//
+  private Float totalScheduledCEnergy;// (kWh)
+  private Float totalScheduledDEnergy;//
   private Date startDt;// YYYYMMDD
   private Date endDt;// YYYYMMDD
   private String intervalType;//
@@ -33,19 +33,19 @@ public class ChargingDischargingScheduleBefore {
 		this.pcsId = pcsId;
 	}
 	
-	public Integer getTotalScheduledCEnergy() {
+	public Float getTotalScheduledCEnergy() {
 		return totalScheduledCEnergy;
 	}
 	
-	public void setTotalScheduledCEnergy(Integer totalScheduledCEnergy) {
+	public void setTotalScheduledCEnergy(Float totalScheduledCEnergy) {
 		this.totalScheduledCEnergy = totalScheduledCEnergy;
 	}
 	
-	public Integer getTotalScheduledDEnergy() {
+	public Float getTotalScheduledDEnergy() {
 		return totalScheduledDEnergy;
 	}
 	
-	public void setTotalScheduledDEnergy(Integer totalScheduledDEnergy) {
+	public void setTotalScheduledDEnergy(Float totalScheduledDEnergy) {
 		this.totalScheduledDEnergy = totalScheduledDEnergy;
 	}
 	
