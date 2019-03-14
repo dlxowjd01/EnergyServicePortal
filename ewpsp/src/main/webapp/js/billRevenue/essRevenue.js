@@ -3,7 +3,7 @@
 		var endDay = new Date();
 		var texDay = new Date()
 		texDay.setYear(texDay.getFullYear());
-		texDay = new Date(texDay.setMonth(texDay.getMonth()-1));
+		texDay = new Date(texDay.setMonth(texDay.getMonth()+1));
 		firstDay.setYear(firstDay.getFullYear()-1);
 		firstDay = new Date(firstDay.setMonth(firstDay.getMonth()+1));
 		$("#selTermFrom").val( firstDay.format("yyyyMM") );
@@ -578,7 +578,7 @@
 		$("#texBill").text("에너지절감 솔루션 제공 전기요금 절감 수익 배분 청구서 (’"+yyyyMM.substring(2,4)+"년"+yyyyMM.substring(4,6)+"월)");
 		$("#texDay").text("청구일 : "+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-"+meterClaimDay);
 		$(".dp_total").text(numberComma(addDivTotal+delLastWon));
-		totalEssRevenueAmt = numberComma(addDivTotal+delLastWon);
+		totalEssRevenueAmt = addDivTotal+delLastWon;
 		
 		
 		ESSBodyStr += "<tr>";

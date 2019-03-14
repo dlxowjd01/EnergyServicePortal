@@ -5,7 +5,7 @@
 	<select id="getESSRevenueList" parameterType="hashMap" resultType="hashMap">
 		/* ESS 수익 조회 */
 		select
-			b.*, c.profit_ratio as rate_per
+			b.*, c.ess_profit_ratio as rate_per
 		from (
 			select
 				site_id, bill_yearm,
@@ -15,7 +15,7 @@
 			from (
 				select 
 					bill_idx, d.site_id, bill_yearm, d.meter_read_day, d.plan_type, d.plan_name, 
-					profit_ratio,
+					ess_profit_ratio,
 					bdayIn_month,  /* 평일일수 */
 					ess_dischg_off_peak,  /* 경부하시간대충전량(단위:kWh) */
 					ess_dischg_mid_peak,  /* 중부하시간대충전량(단위:kWh) */
@@ -27,12 +27,13 @@
 					ess_chg_incen, /* ESS충전요금할인 */
 					ess_dischg_incen,  /* ESS방전요금할인 */
 					(ess_chg_incen+ess_dischg_incen) as ess_incen, /* 실적 할인금액 */
-					(ess_chg_incen+ess_dischg_incen)*(profit_ratio/100) as peak_rate,  /* 고객 정산금액 */ 
-					(ess_chg_incen+ess_dischg_incen)-((ess_chg_incen+ess_dischg_incen)*(profit_ratio/100)) as ewp_peak_rate  /* EWP 정산금액 */
+					(ess_chg_incen+ess_dischg_incen)*(ess_profit_ratio/100) as peak_rate,  /* 고객 정산금액 */ 
+					(ess_chg_incen+ess_dischg_incen)-((ess_chg_incen+ess_dischg_incen)*(ess_profit_ratio/100)) as ewp_peak_rate  /* EWP 정산금액 */
 				from tb_bill d, tb_site_set e
 				where d.site_id = e.site_id
 				and d.site_id = #{siteId }
 				and bill_yearm between #{selTermFrom } and #{selTermTo }
+				<!-- and bill_yearm between date_format(date_add(str_to_date(CONCAT(#{selTermFrom }, '01'), '%Y%m%d%H%i%s'), interval +1 month), '%Y%m') and date_format(date_add(str_to_date(CONCAT(#{selTermTo }, '01'), '%Y%m%d%H%i%s'), interval +1 month), '%Y%m') -->
 			) a
 			group by site_id, bill_yearm
 		) b, tb_site_set c
@@ -41,10 +42,10 @@
 	</select>
 	
 	<select id="getESSRevenueTexList" parameterType="hashMap" resultType="hashMap">
-		/* ESS 수익 조회 */
+		/* ESS 수익 명세서 조회 */
 		select
 			d.site_id, bill_yearm,
-			d.profit_ratio as rate_per,
+			d.ess_profit_ratio as rate_per,
 			avg(bdayIn_month) as ess_bdayIn_month,
 			sum(ess_dischg_off_peak) as ess_dischg_off_peak,
 			sum(ess_dischg_mid_peak) as ess_dischg_mid_peak,
@@ -82,7 +83,7 @@
 				ess_dischg_incen, 
 				energy_chg_reduct,
 				(ess_chg_incen+ess_dischg_incen) as ess_incen,
-				(ess_chg_incen+ess_dischg_incen)-((ess_chg_incen+ess_dischg_incen)*(profit_ratio/100)) as peak_rate, 
+				(ess_chg_incen+ess_dischg_incen)-((ess_chg_incen+ess_dischg_incen)*(ess_profit_ratio/100)) as peak_rate, 
 				demand_chg_reduct
 			from tb_bill b, tb_site_set c
 			where b.site_id = c.site_id
@@ -97,7 +98,7 @@
 	<select id="getESSRevenueDayList" parameterType="hashMap" resultType="hashMap">
 		/* ESS 수익(day) 조회 */
 		select
-			b.*, c.profit_ratio as rate_per
+			b.*, c.ess_profit_ratio as rate_per
 		from (
 			select
 				site_id, svc_stimestamp,
@@ -117,7 +118,7 @@
 			from (
 				select 
 					bill_idx, d.site_id, bill_yearm, d.meter_read_day, d.plan_type, d.plan_name, 
-					profit_ratio,
+					ess_profit_ratio,
 					bdayIn_month,  /* 평일일수 */
 					svc_stimestamp,
 					ess_dischg_off_peak,  /* 경부하시간대충전량(단위:kWh) */
@@ -130,8 +131,8 @@
 					ess_chg_incen, /* ESS충전요금할인 */
 					ess_dischg_incen,  /* ESS방전요금할인 */
 					(ess_chg_incen+ess_dischg_incen) as ess_incen, /* 실적 할인금액 */
-					(ess_chg_incen+ess_dischg_incen)*(profit_ratio/100) as peak_rate,  /* 고객 정산금액 */ 
-					(ess_chg_incen+ess_dischg_incen)-((ess_chg_incen+ess_dischg_incen)*(profit_ratio/100)) as ewp_peak_rate  /* EWP 정산금액 */
+					(ess_chg_incen+ess_dischg_incen)*(ess_profit_ratio/100) as peak_rate,  /* 고객 정산금액 */ 
+					(ess_chg_incen+ess_dischg_incen)-((ess_chg_incen+ess_dischg_incen)*(ess_profit_ratio/100)) as ewp_peak_rate  /* EWP 정산금액 */
 				from tb_bill_day d, tb_site_set e
 				where d.site_id = e.site_id
 				and d.site_id = #{siteId }
