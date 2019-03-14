@@ -79,8 +79,8 @@ public class DeviceMonitoringDao {
 		return sqlSession.selectOne("deviceMonitoring.getDeviceListCnt", param);
 	}
 	
-	public HashMap<String, String> getDevice(String deviceId) {
-	  return sqlSession.selectOne("deviceMonitoring.getDevice", deviceId);
+	public HashMap<String, String> getDevice(Map<String, Object> dvMap) {
+	  return sqlSession.selectOne("deviceMonitoring.getDevice", dvMap);
 	}
 	
 }

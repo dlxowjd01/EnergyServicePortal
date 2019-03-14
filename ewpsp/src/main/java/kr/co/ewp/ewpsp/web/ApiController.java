@@ -78,7 +78,11 @@ public class ApiController {
       @RequestParam(required = false, defaultValue = "") String alarmCode // 알람코드
   ) {
     try {
-      Map<String, String> device = deviceMonitoringService.getDevice(deviceId);
+    	Map<String, Object> dvMap = Maps.newHashMap();
+    	dvMap.put("siteId", siteId);
+        dvMap.put("deviceId", deviceId);
+        dvMap.put("deviceType", deviceType);
+      Map<String, String> device = deviceMonitoringService.getDevice(dvMap);
 //      String siteId = device == null ? "" : device.get("site_id"); /*** 12.13 이우람 수정 ***/
 
       Map<String, Object> parameter = Maps.newHashMap();

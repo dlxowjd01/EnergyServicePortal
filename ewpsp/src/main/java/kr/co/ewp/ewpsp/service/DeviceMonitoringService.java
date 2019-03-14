@@ -34,5 +34,5 @@ public interface DeviceMonitoringService {
 
 	int getDeviceListCnt(HashMap param) throws Exception;
 	
-	Map<String, String> getDevice(String deviceId) throws Exception;
+	Map<String, String> getDevice(Map<String, Object> dvMap) throws Exception;
 }

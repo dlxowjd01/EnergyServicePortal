@@ -153,14 +153,15 @@
 					network_conf, options, create_timestamp, create_date, upload_timestamp, upload_date, device_stat, reg_date
 				from tb_device_ioe
 				where 1=1
-				and (device_id, reg_date) in (
+				and (site_id, device_id, reg_date) in (
 					select 
-						device_id, max(reg_date) reg_date 
+						site_id, device_id, max(reg_date) reg_date 
 					from tb_device_ioe
-					group by device_id
+					group by site_id, device_id
 				)
 		) b
-		on a.device_id = b.device_id
+		on a.site_id = b.site_id
+		and a.device_id = b.device_id
 		, tb_site site
 		where a.site_id = site.site_id
 		and a.site_id = #{siteId }
@@ -342,14 +343,15 @@
 						else '' end as pcs_command_nm
 				from tb_device_pcs
 				where 1=1
-				and (device_id, reg_date) in (
+				and (site_id, device_id, reg_date) in (
 					select 
-						device_id, max(reg_date) reg_date 
+						site_id, device_id, max(reg_date) reg_date 
 					from tb_device_pcs
-					group by device_id
+					group by site_id, device_id
 				)
 		) b
-		on a.device_id = b.device_id
+		on a.site_id = b.site_id
+		and a.device_id = b.device_id
 		, tb_site site
 		where a.site_id = site.site_id
 		and a.site_id = #{siteId }
@@ -522,14 +524,15 @@
 						else '' end as device_stat_nm
 				from tb_device_bms
 				where 1=1
-				and (device_id, reg_date) in (
+				and (site_id, device_id, reg_date) in (
 					select 
-						device_id, max(reg_date) reg_date 
+						site_id, device_id, max(reg_date) reg_date 
 					from tb_device_bms
-					group by device_id
+					group by site_id, device_id
 				)
 		) b
-		on a.device_id = b.device_id
+		on a.site_id = b.site_id 
+		and a.device_id = b.device_id
 		, tb_site site
 		where a.site_id = site.site_id
 		and a.site_id = #{siteId }
@@ -685,14 +688,15 @@
 						else '' end as device_stat_nm
 				from tb_device_pv
 				where 1=1
-				and (device_id, reg_date) in (
+				and (site_id, device_id, reg_date) in (
 					select 
-						device_id, max(reg_date) reg_date 
+						site_id, device_id, max(reg_date) reg_date 
 					from tb_device_pv
-					group by device_id
+					group by site_id, device_id
 				)
 		) b
-		on a.device_id = b.device_id
+		on a.site_id = b.site_id 
+		and a.device_id = b.device_id
 		, tb_site site
 		where a.site_id = site.site_id
 		and a.site_id = #{siteId }
@@ -904,13 +908,16 @@
 		<!-- limit #{startNum }, #{pageRowCnt } -->
 	</select>
 	
-	<select id="getDevice" parameterType="string" resultType="hashMap">
+	<select id="getDevice" parameterType="hashMap" resultType="hashMap">
 		/* 장치 상세 조회 */
 		select 
 			device_id, site_id, user_idx, device_name, device_grp_idx, 
 			device_type, inst_type, del_yn, reg_uid, reg_date, mod_uid, mod_date
 		from tb_device
-		where device_id = #{deviceId}
+		where 1=1
+		and site_id = #{siteId} 
+		and device_id = #{deviceId}
+		and device_type = #{deviceType}
 	</select>
 	
 </mapper>

@@ -72,8 +72,8 @@ public class DeviceMonitoringServiceImpl implements DeviceMonitoringService{
 		return deviceMonitoringDao.getDeviceListCnt(param);
 	}
 	
-	public Map<String, String> getDevice(String deviceId) throws Exception {
-	  return deviceMonitoringDao.getDevice(deviceId);
+	public Map<String, String> getDevice(Map<String, Object> dvMap) throws Exception {
+	  return deviceMonitoringDao.getDevice(dvMap);
 	}
 	
 }
