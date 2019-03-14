@@ -215,7 +215,7 @@ function onlyNum(event) {
 //////////////////////////////////////////////날짜관련//////////////////////////////////////////////
 
 // 날짜에 utc 적용여부
-var localYn="N"; // 개발서버인 경우 N으로 변경
+var localYn="Y"; // 개발서버인 경우 N으로 변경
 function convertDateUTC(_dateTimestamp) {
 //	if(localYn == "Y") {
 //		return _dateTimestamp;
@@ -414,6 +414,17 @@ String.prototype.string = function(len){var s = '', i = 0; while (i++ < len) { s
 String.prototype.zf = function(len){return "0".string(len - this.length) + this;};
 Number.prototype.zf = function(len){return this.toString().zf(len);};
 
+// 이번주 시작일자를 구한다
+function findWeak(now) { 
+    var nowDayOfWeek = now.getDay(); 
+    var nowDay = now.getDate(); 
+    var nowMonth = now.getMonth(); 
+    var nowYear = now.getYear(); 
+    nowYear += (nowYear < 2000) ? 1900 : 0; 
+    var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek); 
+//    var weekEndDate = new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek)); 
+    return weekStartDate; 
+} 
 
 //////////////////////////////////////////////엑셀다운관련//////////////////////////////////////////////
 

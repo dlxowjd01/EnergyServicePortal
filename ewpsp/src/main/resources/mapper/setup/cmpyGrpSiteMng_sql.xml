@@ -330,9 +330,13 @@
 						(select ifnull(sum(chg_val), 0) + ifnull(sum(dischg_val), 0) from tb_ess_charge where site_id = a.site_id and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) charge,
 						(select ifnull(sum(gen_val), 0) from tb_pv_gen where site_id = a.site_id and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) gen,
 						(
-							(select ifnull(sum(off_peak_rate + mid_peak_rate + max_peak_rate), 0) from tb_bill where site_id = a.site_id and bill_yearm between #{selTermFrom } and #{selTermTo }) +
+							<!-- (select ifnull(sum(off_peak_rate + mid_peak_rate + max_peak_rate), 0) from tb_bill where site_id = a.site_id and bill_yearm between #{selTermFrom } and #{selTermTo }) --> 
+							(select ifnull(sum(ess_chg_incen+ess_dischg_incen), 0) from tb_bill_day 
+					where site_id = a.site_id
+					and svc_stimestamp between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s'))
+							
+						<!-- 	+
 							(select ifnull(sum(tot_price), 0) from tb_gen_revenue where site_id = a.site_id and gen_type = '1' and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) +
-							<!-- (select ifnull(sum(((reduct_amt / reduct_cap) * 100) + 123), 0) from tb_dr_revenue where site_id = a.site_id and std_yearm between #{selTermFrom } and #{selTermTo }) -->
 							(select cap_amt+( reduct_amt*reduce_hour*smp ) from (
 								select 
 									dr_revn_idx, site_id, std_yearm, std_timestamp, std_date, reduct_cap, basic_price, max_reduct_ratio, min_reduct_ratio, profit_ratio, 
@@ -340,7 +344,7 @@
 									cast(date_format(TIMEDIFF(reduct_etimestamp, reduct_stimestamp),'%H') as unsigned INTEGER) as reduce_hour,
 									( reduct_amt/reduct_cap )*100 as reduct_cap_per, ( reduct_amt*reduct_cap ) as cap_amt
 								from tb_dr_revenue ) a where site_id = a.site_id and std_yearm between #{selTermFrom } and #{selTermTo }
-							)
+							) -->
 						) reward,
 
 						(select ifnull(sum(pre_usg_val), 0) from tb_predict_usage where site_id = a.site_id and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) usage_plan,
@@ -464,18 +468,22 @@
 					select
 						a.site_id, a.site_name, b.site_grp_idx,
 
-						(select count(reg_date) from tb_device_ioe where site_id = a.site_id) ioe,
-						(select count(reg_date) from tb_device_pcs where site_id = a.site_id) pcs,
-						(select count(reg_date) from tb_device_bms where site_id = a.site_id) bms,
-						(select count(reg_date) from tb_device_pv where site_id = a.site_id) pv,
+						(select 0) ioe,
+						(select 0) pcs,
+						<!-- (select count( case when device_type = '1' then 1 end ) from tb_device where site_id = a.site_id) pcs, -->
+						(select count( case when device_type = '2' then 1 end ) from tb_device where site_id = a.site_id) bms,
+						(select count( case when device_type = '3' then 1 end ) from tb_device where site_id = a.site_id) pv,
 
 						(select ifnull(sum(usg_val), 0) from tb_usage where site_id = a.site_id and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) "usage",
 						(select ifnull(sum(chg_val), 0) + ifnull(sum(dischg_val), 0) from tb_ess_charge where site_id = a.site_id and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) charge,
 						(select ifnull(sum(gen_val), 0) from tb_pv_gen where site_id = a.site_id and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) gen,
 						(
-							(select ifnull(sum(off_peak_rate + mid_peak_rate + max_peak_rate), 0) from tb_bill where site_id = a.site_id and bill_yearm between #{selTermFrom } and #{selTermTo }) +
-							(select ifnull(sum(tot_price), 0) from tb_gen_revenue where site_id = a.site_id and gen_type = '1' and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) +
-							<!-- (select ifnull(sum(((reduct_amt / reduct_cap) * 100) + 123), 0) from tb_dr_revenue where site_id = a.site_id and std_yearm between #{selTermFrom } and #{selTermTo }) -->
+							<!-- (select ifnull(sum(off_peak_rate + mid_peak_rate + max_peak_rate), 0) from tb_bill where site_id = a.site_id and bill_yearm between #{selTermFrom } and #{selTermTo }) + -->
+							(select ifnull(sum(ess_chg_incen+ess_dischg_incen), 0) from tb_bill_day 
+					where site_id = a.site_id
+					and svc_stimestamp between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s'))
+							
+							<!-- (select ifnull(sum(tot_price), 0) from tb_gen_revenue where site_id = a.site_id and gen_type = '1' and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) +
 							(select cap_amt+( reduct_amt*reduce_hour*smp ) from (
 								select 
 									dr_revn_idx, site_id, std_yearm, std_timestamp, std_date, reduct_cap, basic_price, max_reduct_ratio, min_reduct_ratio, profit_ratio, 
@@ -483,7 +491,7 @@
 									cast(date_format(TIMEDIFF(reduct_etimestamp, reduct_stimestamp),'%H') as unsigned INTEGER) as reduce_hour,
 									( reduct_amt/reduct_cap )*100 as reduct_cap_per, ( reduct_amt*reduct_cap ) as cap_amt
 								from tb_dr_revenue ) a where site_id = a.site_id and std_yearm between #{selTermFrom } and #{selTermTo }
-							)
+							) -->
 						) reward
 					from tb_site a, tb_site_group b
 					where 1=1
@@ -713,9 +721,14 @@
 				(select ifnull(sum(chg_val), 0) + ifnull(sum(dischg_val), 0) from tb_ess_charge where site_id = a.site_id and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) charge,
 				(select ifnull(sum(gen_val), 0) from tb_pv_gen where site_id = a.site_id and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) gen,
 				(
-					(select ifnull(sum(off_peak_rate + mid_peak_rate + max_peak_rate), 0) from tb_bill where site_id = a.site_id and bill_yearm between #{selTermFrom } and #{selTermTo }) +
+					(select ifnull(sum(ess_chg_incen+ess_dischg_incen), 0) from tb_bill_day 
+					where site_id = a.site_id
+					and svc_stimestamp between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s'))
+					<!-- bill_yearm between #{selTermFrom } and #{selTermTo }) --> 
+					
+					<!-- +
 					(select ifnull(sum(tot_price), 0) from tb_gen_revenue where site_id = a.site_id and gen_type = '1' and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) +
-					<!-- (select ifnull(sum(((reduct_amt / reduct_cap) * 100) + 123), 0) from tb_dr_revenue where site_id = a.site_id and std_yearm between #{selTermFrom } and #{selTermTo }) -->
+					
 					(select cap_amt+( reduct_amt*reduce_hour*smp ) from (
 						select 
 							dr_revn_idx, site_id, std_yearm, std_timestamp, std_date, reduct_cap, basic_price, max_reduct_ratio, min_reduct_ratio, profit_ratio, 
@@ -723,7 +736,7 @@
 							cast(date_format(TIMEDIFF(reduct_etimestamp, reduct_stimestamp),'%H') as unsigned INTEGER) as reduce_hour,
 							( reduct_amt/reduct_cap )*100 as reduct_cap_per, ( reduct_amt*reduct_cap ) as cap_amt
 						from tb_dr_revenue ) a where site_id = a.site_id and std_yearm between #{selTermFrom } and #{selTermTo }
-					)
+					) -->
 				) reward
 			from tb_site a, tb_site_group b
 			where 1=1

@@ -37,25 +37,33 @@ function getSiteMainSchCollection() {
 	
 	// 기간 필터
 	var today = new Date();
+	var startDay;
 	var selTerm = $('#selTerm').val();
-	endDay = today.format("yyyyMMdd") + "235959";
+//	endDay = today.format("yyyyMMdd") + "235959";
 	if (selTerm == 'day') {
-		// Nothing
+		// 오늘 날짜에 시간 정보만 000000
+		startDay = today.format("yyyyMMdd") + "000000";
 	} else if (selTerm == 'week') {
-		today.setDate(today.getDate() - today.getDay());
+		var dt = findWeak(today);
+		startDay = dt.format("yyyyMMdd") + "000000";
+//		startDay.setDate(findWeak(today).getYear() , findWeak(today).getMonth(), findWeak(today).getDay()     );
+		// 시간 정보 000000 한 다음에 findWeek에서 연월일 가져와서 설정
 	} else if (selTerm == 'month') {
-		today.setDate(1);
+		// 이번달 1일 000000 부터
+		var dt = new Date(today.getFullYear(), today.getMonth(), 1, 0, 0, 0);
+		startDay = dt.format("yyyyMMddHHmmss");
 	}
-	firstDay = today.format("yyyyMMdd") + "000000";
-	
-	var startTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
-	var endTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
+		
+	//var startTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+//	var startTime = startDay;
+//	var endTime = today;
+//	var endTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
 //	var queryStart = new Date(startTime.setMinutes(startTime.getMinutes() + (new Date()).getTimezoneOffset()));
 //	var queryEnd = new Date(endTime.setMinutes(endTime.getMinutes() + (new Date()).getTimezoneOffset()));
-	var queryStart = new Date(startTime.getTime());
-	var queryEnd = new Date(endTime.getTime());
-	queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
-	queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
+//	var queryStart = new Date(startTime.getTime());
+//	var queryEnd = new Date(endTime.getTime());
+	queryStart = startDay;
+	queryEnd = today.format("yyyyMMddHHmmss");
 	
 	$("#selTermFrom").val(queryStart);
 	$("#selTermTo").val(queryEnd);
@@ -123,29 +131,35 @@ function callback_getGMainSiteRankingTotalDetail(result) {
 		if (oldRankType == 0) {
 			var map = convertUnitFormat(total.usage, "mWh");
 			var past = toFixedNum(map.get("formatNum"), 2);
-			$('#rankTotal > span').text('누적 : ' + past + " " + map.get("unit"));
+			$('#rankTotal > span').text('누적');
+			//"(: ' + past + " " + map.get("unit"));
 			
 			$('#rankPlan').html('<span class="bul2" />');
 			var map2 = convertUnitFormat(total.usage_plan, "mWh");
 			var feture = toFixedNum(map2.get("formatNum"), 2);
-			$('#rankPlan > span').text('예상 : ' + feture + map2.get("unit"));
+			$('#rankPlan > span').text('예상');
+			//: ' + feture + map2.get("unit"));
 		} else if (oldRankType == 1) {
 			var map = convertUnitFormat(total.charge, "kWh");
 			var past = toFixedNum(map.get("formatNum"), 2);
-			$('#rankTotal > span').text('누적 : ' + past + " " + map.get("unit"));
+			$('#rankTotal > span').text('누적');
+			//: ' + past + " " + map.get("unit"));
 			
 			$('#rankPlan').html('<span class="bul2" />');
 			var map2 = convertUnitFormat(total.charge_plan, "kWh");
 			var feture = toFixedNum(map2.get("formatNum"), 2);
-			$('#rankPlan > span').text('예상 : ' + feture + " " + map2.get("unit"));
+			$('#rankPlan > span').text('예상');
+			//: ' + feture + " " + map2.get("unit"));
 		} else if (oldRankType == 2) {
 			var map = convertUnitFormat(total.gen, "kWh");
 			var past = toFixedNum(map.get("formatNum"), 2);
-			$('#rankTotal > span').text('누적 : ' + past + " " + map.get("unit"));
+			$('#rankTotal > span').text('누적');
+//			: ' + past + " " + map.get("unit"));
 			$('#rankPlan').text('');
 		} else if (oldRankType == 3) {
 			var reward = (total.reward == null) ? 0 : total.reward;
-			$('#rankTotal > span').text('수익 : ' + numberComma(reward) + " " + "won");
+			$('#rankTotal > span').text('수익');
+//			: ' + numberComma(reward) + " " + "won");
 			$('#rankPlan').text('');
 		}
 	} else {
@@ -210,6 +224,7 @@ function callback_getGMainSiteRankingList(result) {
 
 function callback_getGMainSiteTotalDetail(result) {
 	var total = result.detail;
+	console.log(total);
 
 	if ($('#mapGroup').val() == 'group') {
 		var imgSrc = '/img/group_dimg.png';
@@ -236,11 +251,14 @@ function callback_getGMainSiteTotalDetail(result) {
 		$('.detailGen').text(numberComma(gen));
 		$('.detailGenUnit').text(map2.get("unit"));
 		
-		var map3 = convertUnitFormat(total.charge, "kWh");
-		var charge = toFixedNum(map3.get("formatNum"), 2);
+		var charge = toFixedNum(total.charge, 0);
+		var map3 = convertUnitFormat(charge, "kWh");
+		
+		charge = toFixedNum(map3.get("formatNum"), 2);
 		$('.detailCharge').text(numberComma(charge));
 		$('.detailChargeUnit').text(map3.get("unit"));
 
+		console.log("total.charge0   ", total.reward);
 		var reward = (total.reward == null) ? 0 : total.reward;
 		$('.detailReward').text(numberComma(reward));
 	} else {
@@ -295,7 +313,7 @@ function callback_getGMainSiteList(result) {
 						)
 					)
 					.append($('<td />').append(numberComma(usage)))
-					.append($('<td />').append(numberComma(siteList[i].charge)))
+					.append($('<td />').append(numberComma(toFixedNum(siteList[i].charge, 0))))
 					.append($('<td />').append(numberComma(siteList[i].gen)))
 					.append($('<td />').append(numberComma(reward)))
 			);

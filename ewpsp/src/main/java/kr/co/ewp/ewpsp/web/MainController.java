@@ -121,6 +121,8 @@ public class MainController {
 		} else if (authType.equals("3")) {
 			param.put("siteGrpIdx", (Integer)userInfo.get("site_grp_idx"));
 		}
+		
+		param = PeriodDataSetting.setSearchTerm(param);
 
 		Map result = cmpyGrpSiteMngService.getGMainSiteRankingTotalDetail(param);
 
@@ -315,6 +317,8 @@ public class MainController {
 		}
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
+		
+		param = PeriodDataSetting.setSearchTerm(param);
 
 		List list = cmpyGrpSiteMngService.getGMainSiteList(param);
 		int listCnt = cmpyGrpSiteMngService.getGMainSiteListCnt(param);
