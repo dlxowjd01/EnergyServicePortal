@@ -78,8 +78,8 @@ alarm_msg
 			body.add("M1", (String)userMap.get("site_name"));
 //			body.add("M1", siteId);
 //			body.add("M2", deviceName);
-			body.add("M2", deviceId);
-			body.add("M3", alarmType.equals("1") ? "비상" : "주의");
+			body.add("M2", alarmType.equals("1") ? "비상" : "주의");
+			body.add("M3", deviceName);
 			body.add("M4", alarmTime.substring(0, 4) + "-" + alarmTime.substring(4, 6) + "-" + alarmTime.substring(6, 8) + " "
 					+ alarmTime.substring(8, 10) + ":" + alarmTime.substring(10, 12));
 			body.add("M5", alarmMsg);
