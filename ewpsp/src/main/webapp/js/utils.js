@@ -215,7 +215,7 @@ function onlyNum(event) {
 //////////////////////////////////////////////날짜관련//////////////////////////////////////////////
 
 // 날짜에 utc 적용여부
-var localYn="Y"; // 개발서버인 경우 N으로 변경
+var localYn="N"; // 개발서버인 경우 N으로 변경
 function convertDateUTC(_dateTimestamp) {
 //	if(localYn == "Y") {
 //		return _dateTimestamp;
