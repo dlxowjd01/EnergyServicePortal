@@ -11,8 +11,8 @@ public class EssChargePlan {
   private String deviceId;// 장치id
   private Date stdTimestamp;// 기준타임스탬프
   private Date stdDate;// 기준일시
-  private Integer chgVal;// 충전계획량(단위:kwh)
-  private Integer dischgVal;// 방전계획량(단위:kwh)
+  private Float chgVal;// 충전계획량(단위:kwh)
+  private Float dischgVal;// 방전계획량(단위:kwh)
   private Date regDate;// 등록일시
   private Date modDate;// 최종수정일시
 
@@ -111,7 +111,7 @@ public class EssChargePlan {
    * 
    * @return chgVal
    */
-  public Integer getChgVal() {
+  public Float getChgVal() {
     return this.chgVal;
   }
 
@@ -120,7 +120,7 @@ public class EssChargePlan {
    * 
    * @return chgVal
    */
-  public void setChgVal(Integer chgVal) {
+  public void setChgVal(Float chgVal) {
     this.chgVal = chgVal;
   }
 
@@ -129,7 +129,7 @@ public class EssChargePlan {
    * 
    * @return dischgVal
    */
-  public Integer getDischgVal() {
+  public Float getDischgVal() {
     return this.dischgVal;
   }
 
@@ -138,7 +138,7 @@ public class EssChargePlan {
    * 
    * @return dischgVal
    */
-  public void setDischgVal(Integer dischgVal) {
+  public void setDischgVal(Float dischgVal) {
     this.dischgVal = dischgVal;
   }
 
