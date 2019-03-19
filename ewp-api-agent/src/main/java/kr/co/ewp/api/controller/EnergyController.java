@@ -692,6 +692,7 @@ public class EnergyController {
         			if("1".equals(deviceType) || "2".equals(deviceType)){ // 1: PCS, 2: BMS
         				if("1.1".equals(apiVer)) { // 기존
         					System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 기존 ess충방전량조회 api를 조회합니다..");
+        					System.out.println("                                                                    endDate4   "+endDate);
         					ChargingDischargingBefore cdList = PMGrowApiUtilBefore.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate,
         							endDate, "MI", "15", prettyLog);
         					if(cdList !=null){
@@ -1001,20 +1002,34 @@ public class EnergyController {
         			  }
         			  if("1.1".equals(apiVer)) { // 기존
         				  System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 기존 pv발전량조회 api를 조회합니다..");
-        				  	List<PvPowerGenModelBefore> resultList = PMGrowApiUtilBefore.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate,
-        				  				endDate, "1", "15", prettyLog);
+        				  	PvPowerGenModelBefore resultList = PMGrowApiUtilBefore.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate,
+        				  				endDate, "MI", "15", prettyLog);
         				  if(resultList != null){
-        					  prettyLog.append("ITEM_SIZE", resultList.size());
-        					  for (PvPowerGenModelBefore item : resultList) {
+        					  prettyLog.append("ITEM_SIZE", resultList.getItems().size());
+        					  for (PvPowerGenModelItemModel item : resultList.getItems()) {
         						  PvGen pvGen = new PvGen();
         						  pvGen.setDeviceId(_deviceId);
         						  pvGen.setSiteId(_siteId);
-        						  pvGen.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
-        			              pvGen.setGenVal(Integer.parseInt(item.getGenEnergy()));
-        			              pvGen.setTemp(Integer.parseInt(item.getTemperature()));
+        						  pvGen.setStdDate(item.getTimestamp());
+        						  pvGen.setGenVal(item.getGenEnergy());
+        						  pvGen.setTemp(item.getTemperature());
         						  
         						  pvGentList.add(pvGen);
         					  }
+//        					  List<PvPowerGenModelBefore> resultList = PMGrowApiUtilBefore.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate,
+//        							  endDate, "1", "15", prettyLog);
+//        					  if(resultList != null){
+//        						  prettyLog.append("ITEM_SIZE", resultList.size());
+//        						  for (PvPowerGenModelBefore item : resultList) {
+//        							  PvGen pvGen = new PvGen();
+//        							  pvGen.setDeviceId(_deviceId);
+//        							  pvGen.setSiteId(_siteId);
+//        							  pvGen.setStdDate(DateUtil.stringToDate(item.getRetrieveTime(), "yyyyMMddHHmmss"));
+//        							  pvGen.setGenVal(Integer.parseInt(item.getGenEnergy()));
+//        							  pvGen.setTemp(Integer.parseInt(item.getTemperature()));
+//        							  
+//        							  pvGentList.add(pvGen);
+//        						  }
         				  }//
         			  } else { // api url 변경후
         				  System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 새로운 pv발전량조회 api를 조회합니다..");

@@ -306,10 +306,10 @@ public class DeviceController {
     				if(pcsEquipmentModel.getPcsStatus() != null) devicePcs.setPcsStatus(Integer.toString(pcsEquipmentModel.getPcsStatus())); /*** 12.12 이우람 수정 ***/
     				if(pcsEquipmentModel.getRemoteMode() != null) devicePcs.setRemoteMode(Integer.toString(pcsEquipmentModel.getRemoteMode())); /*** 12.12 이우람 수정 ***/
     				if(pcsEquipmentModel.getPcsCommand() != null) devicePcs.setPcsCommand(Integer.toString(pcsEquipmentModel.getPcsCommand())); /*** 12.12 이우람 수정 ***/
-    				if(pcsEquipmentModel.getTodayDEnergy() != null) devicePcs.setTodayDEnergy(Integer.toString(pcsEquipmentModel.getTodayDEnergy())); /*** 12.12 이우람 수정 ***/
-    				if(pcsEquipmentModel.getTodayCEnergy() != null) devicePcs.setTodayCEnergy(Integer.toString(pcsEquipmentModel.getTodayCEnergy())); /*** 12.12 이우람 수정 ***/
-    				if(pcsEquipmentModel.getTotalDEnergy() != null) devicePcs.setTotalDEnergy(Integer.toString(pcsEquipmentModel.getTotalDEnergy())); /*** 12.12 이우람 수정 ***/
-    				if(pcsEquipmentModel.getTotalCEnerge() != null) devicePcs.setTotalCEnerge(Integer.toString(pcsEquipmentModel.getTotalCEnerge())); /*** 12.12 이우람 수정 ***/
+    				if(pcsEquipmentModel.getTodayDEnergy() != null) devicePcs.setTodayDEnergy(Float.toString(pcsEquipmentModel.getTodayDEnergy())); /*** 12.12 이우람 수정 ***/
+    				if(pcsEquipmentModel.getTodayCEnergy() != null) devicePcs.setTodayCEnergy(Float.toString(pcsEquipmentModel.getTodayCEnergy())); /*** 12.12 이우람 수정 ***/
+    				if(pcsEquipmentModel.getTotalDEnergy() != null) devicePcs.setTotalDEnergy(Float.toString(pcsEquipmentModel.getTotalDEnergy())); /*** 12.12 이우람 수정 ***/
+    				if(pcsEquipmentModel.getTotalCEnerge() != null) devicePcs.setTotalCEnerge(Float.toString(pcsEquipmentModel.getTotalCEnerge())); /*** 12.12 이우람 수정 ***/
     				
     				deivcePcsList.add(devicePcs);
     				
@@ -509,27 +509,48 @@ public class DeviceController {
         	}
         	if("1.1".equals(apiVer)) { // 기존
         		System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 기존 pv장치 api를 조회합니다..");
-        		List<PvEquipmentModelBefore> pvEquipmentList = PMGrowApiUtilBefore.getPvEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
-        		System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+"  1.1pv 장치 결과        :  "+pvEquipmentList.toString());
-        		if(pvEquipmentList != null){
-        			prettyLog.append("ITEM_SIZE", pvEquipmentList.size());
-	        		for (PvEquipmentModelBefore pvEquipmentModel : pvEquipmentList) {
+        		PvEquipmentModelBefore pvEquipmentModel = PMGrowApiUtilBefore.getPvEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+        		System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+"  1.1pv 장치 결과        :  "+pvEquipmentModel.toString());
+        		if(pvEquipmentModel != null){
+        			prettyLog.append("ITEM_SIZE", pvEquipmentModel);
+//	        		for (PvEquipmentModelBefore pvEquipmentModel : pvEquipmentList) {
 	        			DevicePv devicePv = new DevicePv();
 	        			devicePv.setSiteId(_siteId);
 	        			devicePv.setDeviceId(device.getDeviceId());
 	        			devicePv.setAlarmMsg(pvEquipmentModel.getAlarmMsg());
-	        			devicePv.setTemp(Integer.parseInt(pvEquipmentModel.getTemperature()));
-	        	          devicePv.setTotPower(Integer.parseInt(pvEquipmentModel.getTotalPower()));
-	        	          devicePv.setDeviceName(pvEquipmentModel.getEquipmentName());
-	        	          devicePv.setDeviceStat(pvEquipmentModel.getStatus());
-	        	          devicePv.setStdDate(DateUtil.stringToDate(pvEquipmentModel.getRetrieveTime(), "yyyyMMddHHmmss"));
+	        			devicePv.setTemp(pvEquipmentModel.getTemperature());
+	        			devicePv.setTotPower(pvEquipmentModel.getTotalGenPower());
+	        			devicePv.setDeviceName(pvEquipmentModel.getIvtName());
+	        			devicePv.setDeviceStat(Integer.toString(pvEquipmentModel.getStatus()));
+	        			devicePv.setStdDate(pvEquipmentModel.getTimestamp());
 	        			deivcePvList.add(devicePv);
 	        			if (deivcePvList.size() == 20) {
 	        				resultCnt += deviceService.addDeivcePvList(deivcePvList, null);
 	        				deivcePvList = Lists.newArrayList();
 	        			}
-	        		}
+//	        		}
         		}
+//        		List<PvEquipmentModelBefore> pvEquipmentList = PMGrowApiUtilBefore.getPvEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+//        		System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+"  1.1pv 장치 결과        :  "+pvEquipmentList.toString());
+//        		if(pvEquipmentList != null){
+//        			prettyLog.append("ITEM_SIZE", pvEquipmentList.size());
+//        			for (PvEquipmentModelBefore pvEquipmentModel : pvEquipmentList) {
+//        				DevicePv devicePv = new DevicePv();
+//        				devicePv.setSiteId(_siteId);
+//        				devicePv.setDeviceId(device.getDeviceId());
+//        				devicePv.setAlarmMsg(pvEquipmentModel.getAlarmMsg());
+//        				devicePv.setTemp(Integer.parseInt(pvEquipmentModel.getTemperature()));
+//        				devicePv.setTotPower(Integer.parseInt(pvEquipmentModel.getTotalPower()));
+//        				devicePv.setDeviceName(pvEquipmentModel.getEquipmentName());
+//        				devicePv.setDeviceStat(pvEquipmentModel.getStatus());
+//        				devicePv.setStdDate(DateUtil.stringToDate(pvEquipmentModel.getRetrieveTime(), "yyyyMMddHHmmss"));
+//        				deivcePvList.add(devicePv);
+//        				if (deivcePvList.size() == 20) {
+//        					resultCnt += deviceService.addDeivcePvList(deivcePvList, null);
+//        					deivcePvList = Lists.newArrayList();
+//        				}
+//        			}
+//        		}
         	} else { // api url 변경후
         		System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 새로운 pv장치 api를 조회합니다..");
         		PvEquipmentModel pvEquipmentModel = PMGrowApiUtil.getPvEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);

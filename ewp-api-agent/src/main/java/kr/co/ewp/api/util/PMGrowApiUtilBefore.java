@@ -115,7 +115,7 @@ public class PMGrowApiUtilBefore {
    * @param prettyLog
    * @return
    */
-  public static List<PvPowerGenModelBefore> getPvPowerGenList(String host, String equipmentId, Date startDt, Date endDt, String intervalType, String interval, PrettyLog prettyLog) {
+  public static PvPowerGenModelBefore getPvPowerGenList(String host, String equipmentId, Date startDt, Date endDt, String intervalType, String interval, PrettyLog prettyLog) {
     prettyLog.start("PMGrowApiUtilBefore.getPvPowerGenList", "ERROR");
     String resultBody = null;
     try {
@@ -130,8 +130,7 @@ public class PMGrowApiUtilBefore {
       prettyLog.append("URL", url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
       System.out.println("        "+url+"     PV 발전량 조회 resultBody  ==>  "+url+" ||||||| "+resultBody);
-      return JsonUtil.toObject(resultBody, new TypeReference<List<PvPowerGenModelBefore>>() {
-      });
+      return JsonUtil.toObject(resultBody, PvPowerGenModelBefore.class);
     } catch (Exception e) {
       prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
       throw e;
@@ -258,7 +257,7 @@ public class PMGrowApiUtilBefore {
    * @param prettyLog
    * @return
    */
-  public static List<PvEquipmentModelBefore> getPvEquipmentList(String host, String equipmentId, PrettyLog prettyLog) {
+  public static PvEquipmentModelBefore getPvEquipmentList(String host, String equipmentId, PrettyLog prettyLog) {
     prettyLog.start("PMGrowApiUtilBefore.getPvEquipmentList", "ERROR");
     String resultBody = null;
     try {
@@ -268,8 +267,7 @@ public class PMGrowApiUtilBefore {
       prettyLog.append("URL", url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
       System.out.println("pcs resultBody =====> "+resultBody);
-      return JsonUtil.toObject(resultBody, new TypeReference<List<PvEquipmentModelBefore>>() {
-      });
+      return JsonUtil.toObject(resultBody, PvEquipmentModelBefore.class);
     } catch (Exception e) {
       prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
       throw e;

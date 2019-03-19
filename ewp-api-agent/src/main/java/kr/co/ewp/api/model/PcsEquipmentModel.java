@@ -29,10 +29,10 @@ public class PcsEquipmentModel {
   private Integer pcsStatus;//   0:OFF, 1:ON, 2:Fault, 3:Warning /*** 12.12 이우람 수정 ***/
   private Integer remoteMode;//  0:Local, 1:Remote /*** 12.12 이우람 수정 ***/
   private Integer pcsCommand;//  0:Stop, 1:Run /*** 12.12 이우람 수정 ***/
-  private Integer todayDEnergy;// Total energy discharged today (Wh)  /*** 12.12 이우람 수정 ***/
-  private Integer todayCEnergy;// Total energy charged today (Wh)  /*** 12.12 이우람 수정 ***/
-  private Integer totalDEnergy;// Accumulated discharged energy (Wh)  /*** 12.12 이우람 수정 ***/
-  private Integer totalCEnerge;// Accumulated charged energy (Wh)  /*** 12.12 이우람 수정 ***/
+  private Float todayDEnergy;// Total energy discharged today (Wh)  /*** 12.12 이우람 수정 ***/
+  private Float todayCEnergy;// Total energy charged today (Wh)  /*** 12.12 이우람 수정 ***/
+  private Float totalDEnergy;// Accumulated discharged energy (Wh)  /*** 12.12 이우람 수정 ***/
+  private Float totalCEnerge;// Accumulated charged energy (Wh)  /*** 12.12 이우람 수정 ***/
 
 
   
@@ -197,35 +197,35 @@ public class PcsEquipmentModel {
 		this.pcsCommand = pcsCommand;
 	}
 	
-	public Integer getTodayDEnergy() {
+	public Float getTodayDEnergy() {
 		return todayDEnergy;
 	}
 	
-	public void setTodayDEnergy(Integer todayDEnergy) {
+	public void setTodayDEnergy(Float todayDEnergy) {
 		this.todayDEnergy = todayDEnergy;
 	}
 	
-	public Integer getTodayCEnergy() {
+	public Float getTodayCEnergy() {
 		return todayCEnergy;
 	}
 	
-	public void setTodayCEnergy(Integer todayCEnergy) {
+	public void setTodayCEnergy(Float todayCEnergy) {
 		this.todayCEnergy = todayCEnergy;
 	}
 	
-	public Integer getTotalDEnergy() {
+	public Float getTotalDEnergy() {
 		return totalDEnergy;
 	}
 	
-	public void setTotalDEnergy(Integer totalDEnergy) {
+	public void setTotalDEnergy(Float totalDEnergy) {
 		this.totalDEnergy = totalDEnergy;
 	}
 	
-	public Integer getTotalCEnerge() {
+	public Float getTotalCEnerge() {
 		return totalCEnerge;
 	}
 	
-	public void setTotalCEnerge(Integer totalCEnerge) {
+	public void setTotalCEnerge(Float totalCEnerge) {
 		this.totalCEnerge = totalCEnerge;
 	}
 
