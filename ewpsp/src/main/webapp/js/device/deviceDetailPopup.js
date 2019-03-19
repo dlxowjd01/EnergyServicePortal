@@ -99,10 +99,10 @@
 		ioeStr += '</thead>';
 		ioeStr += '<tbody>';
 		ioeStr += '<tr>';
-		ioeStr += '<td>'+( (ioeDetail.voltage == "" || ioeDetail.voltage == null) ? "-" : Number(ioeDetail.voltage)/1000 )+'</td>';
-		ioeStr += '<td>'+( (ioeDetail.activePower == "" || ioeDetail.activePower == null) ? "-" : Number(ioeDetail.activePower)/(1000*1000) )+'</td>';
-		ioeStr += '<td>'+( (ioeDetail.energy == "" || ioeDetail.energy == null) ? "-" : Number(ioeDetail.energy)/(1000*1000) )+'</td>';
-		ioeStr += '<td>'+( (ioeDetail.energyReactive == "" || ioeDetail.energyReactive == null) ? "-" : ioeDetail.energyReactive )+'</td>';
+		ioeStr += '<td>'+( (ioeDetail.voltage == "" || ioeDetail.voltage == null) ? "-" : toFixedNum(Number(ioeDetail.voltage)/1000, 2) )+'</td>';
+		ioeStr += '<td>'+( (ioeDetail.activePower == "" || ioeDetail.activePower == null) ? "-" : toFixedNum(Number(ioeDetail.activePower)/(1000*1000), 2) )+'</td>';
+		ioeStr += '<td>'+( (ioeDetail.energy == "" || ioeDetail.energy == null) ? "-" : toFixedNum(Number(ioeDetail.energy)/(1000*1000), 2) )+'</td>';
+		ioeStr += '<td>'+( (ioeDetail.energyReactive == "" || ioeDetail.energyReactive == null) ? "-" : toFixedNum(Number(ioeDetail.energyReactive)/(1000*1000), 2) )+'</td>';
 		ioeStr += '</tr>';
 		ioeStr += '</tbody>';
 		ioeStr += '</table>';

@@ -214,7 +214,6 @@
 			}
 		});
 		$("#delDevices_"+deviceGrpIdx).val(values.slice(0, -1));
-		console.log($("#delDevices_"+deviceGrpIdx).val());
 		
 		if(confirm("선택한 장치들을 삭제하시겠습니까?")) {
 			$.ajax({
@@ -324,12 +323,12 @@
 		
 		$("#confirmDvInDbGrpBtn").click(function(){
 			if(confirm("저장하시겠습니까?")) {
-				var inputs = $(".inside_site input[name=deviceIds]");
+				var inputs = $(".inside_site input[name=devicePks]");
 				var values = "";
 				$.each(inputs, function (index, value) {
 					values = values+$(value).val()+",";
 				});
-				$("#newDeviceIds").val(values.slice(0, -1));
+				$("#newDevicePks").val(values.slice(0, -1));
 				var formData = $("#editDvInDvGrpForm").serializeObject();
 				saveDvInDvGrp(formData);
 			}
@@ -441,7 +440,7 @@
 		
 		$insideSite = $(".inside_site");
 		$insideSite.find("ul").empty();
-		$("#nowDeviceIds").val("");
+		$("#nowDevicePks").val("");
 		if(grpSiteList == null || grpSiteList.length < 1) {
 //			$tbody.append( '<tr><td colspan="6">조회 결과가 없습니다.</td><tr>' );
 		} else {
@@ -450,12 +449,12 @@
 				devices = devices+grpSiteList[i].device_id+"|"+grpSiteList[i].device_type+",";
 				$insideSite.find("ul").append(
 						$("<li />").append('<a href="#;">'+grpSiteList[i].device_name+'</a>').append(
-								'<input type="hidden" name="deviceIds" value="'+grpSiteList[i].device_id+"|"+grpSiteList[i].device_type+'">'
+								'<input type="hidden" name="devicePks" value="'+grpSiteList[i].device_id+"|"+grpSiteList[i].device_type+'">'
 						)
 				);
 				
 			}
-			$("#nowDeviceIds").val(devices.slice(0, -1));
+			$("#nowDevicePks").val(devices.slice(0, -1));
 			
 		}
 		
@@ -467,7 +466,7 @@
 			for(var i=0; i<allSiteList.length; i++) {
 				$allSite.find("ul").append(
 						$("<li />").append('<a href="#;">'+allSiteList[i].device_name+'</a>').append(
-								'<input type="hidden" name="deviceIds" value="'+allSiteList[i].device_id+"|"+allSiteList[i].device_type+'">'
+								'<input type="hidden" name="devicePks" value="'+allSiteList[i].device_id+"|"+allSiteList[i].device_type+'">'
 						)
 				);
 				
@@ -499,16 +498,15 @@
 				var changeYn = result.changeYn;
 				
 				if(changeYn == "N") {
-					alert("저장되었습니다.");
-					location.reload();
+					alert("변경된 내용이 없습니다.");
 					
 				} else if(changeYn == "Y") {
-//					if(resultCnt > 0) {
+					if(resultCnt > 0) {
 						alert("저장되었습니다.");
 						location.reload();
-//					} else {
-//						alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
-//					}
+					} else {
+						alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
+					}
 				}
 				
 			}

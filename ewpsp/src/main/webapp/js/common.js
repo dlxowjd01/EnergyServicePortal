@@ -58,7 +58,7 @@ $(function() {
 $(function() {
     $('.fold_btn').click(function(){
         var tbl_height = $(".fold_div").height();
-        $(".tbl_wrap").css("min-height",tbl_height);
+//        $(".tbl_wrap").css("min-height",tbl_height);
         $('.fold_div').slideToggle();
         $(this).toggleClass("on");
         $(this).text($(this).text() == '표접기' ? '펼치기' : '표접기');

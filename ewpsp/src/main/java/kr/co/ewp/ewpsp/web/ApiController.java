@@ -144,7 +144,7 @@ public class ApiController {
 					String apiVer = (String) siteDetail.get("local_ems_api_ver");
 					if("1.1".equals(apiVer)) { // 기존
 						List<BmsEquipmentModelBefore> bmsDetail = PMGrowApiUtilBefore.getBmsEquipmentList(host, deviceId);
-						System.out.println("bms 결과 : "+bmsDetail.toString());
+						System.out.println("bms 결과 : "+bmsDetail);
 						if(bmsDetail != null) {
 							for (BmsEquipmentModelBefore bmsEquipmentModel : bmsDetail) {
 								Float sysSoc = bmsEquipmentModel.getSysSoc();
