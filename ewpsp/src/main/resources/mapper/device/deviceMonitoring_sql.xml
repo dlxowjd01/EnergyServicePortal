@@ -39,14 +39,15 @@
 								else 'disconnect' end as device_stat_name
 						from tb_device_ioe
 						where 1=1
-						and (device_id, reg_date) in (
+						and (site_id, device_id, reg_date) in (
 							select 
-								device_id, max(reg_date) reg_date 
+								site_id, device_id, max(reg_date) reg_date 
 							from tb_device_ioe
-							group by device_id
+							group by site_id, device_id
 						)
 					) b
-					on b.device_id = a.device_id
+					on a.site_id = b.site_id
+					and a.device_id = b.device_id
 					where 1=1
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
@@ -97,14 +98,15 @@
 								else 'disconnect' end as device_stat_name
 						from tb_device_ioe
 						where 1=1
-						and (device_id, reg_date) in (
+						and (site_id, device_id, reg_date) in (
 							select 
-								device_id, max(reg_date) reg_date 
+								site_id, device_id, max(reg_date) reg_date 
 							from tb_device_ioe
-							group by device_id
+							group by site_id, device_id
 						)
 					) b
-					on b.device_id = a.device_id
+					on a.site_id = b.site_id
+					and a.device_id = b.device_id
 					where 1=1
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
@@ -213,14 +215,15 @@
 								else 'disconnect' end as pcs_status_name
 						from tb_device_pcs
 						where 1=1
-						and (device_id, reg_date) in (
+						and (site_id, device_id, reg_date) in (
 							select 
-								device_id, max(reg_date) reg_date 
+								site_id, device_id, max(reg_date) reg_date 
 							from tb_device_pcs
-							group by device_id
+							group by site_id, device_id
 						)
 					) b
-					on b.device_id = a.device_id
+					on a.site_id = b.site_id
+					and a.device_id = b.device_id
 					where 1=1
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
@@ -278,14 +281,15 @@
 								else 'disconnect' end as pcs_status_name
 						from tb_device_pcs
 						where 1=1
-						and (device_id, reg_date) in (
+						and (site_id, device_id, reg_date) in (
 							select 
-								device_id, max(reg_date) reg_date 
+								site_id, device_id, max(reg_date) reg_date 
 							from tb_device_pcs
-							group by device_id
+							group by site_id, device_id
 						)
 					) b
-					on b.device_id = a.device_id
+					on a.site_id = b.site_id
+					and a.device_id = b.device_id
 					where 1=1
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
@@ -400,14 +404,15 @@
 							, "" as cd_status, alarm_msg
 						from tb_device_bms
 						where 1=1
-						and (device_id, reg_date) in (
+						and (site_id, device_id, reg_date) in (
 							select 
-								device_id, max(reg_date) reg_date 
+								site_id, device_id, max(reg_date) reg_date 
 							from tb_device_bms
-							group by device_id
+							group by site_id, device_id
 						)
 					) b
-					on b.device_id = a.device_id
+					on a.site_id = b.site_id 
+					and a.device_id = b.device_id
 					where 1=1
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
@@ -462,14 +467,15 @@
 							, "" as cd_status, alarm_msg
 						from tb_device_bms
 						where 1=1
-						and (device_id, reg_date) in (
+						and (site_id, device_id, reg_date) in (
 							select 
-								device_id, max(reg_date) reg_date 
+								site_id, device_id, max(reg_date) reg_date 
 							from tb_device_bms
-							group by device_id
+							group by site_id, device_id
 						)
 					) b
-					on b.device_id = a.device_id
+					on a.site_id = b.site_id 
+					and a.device_id = b.device_id
 					where 1=1
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
@@ -575,14 +581,15 @@
 								else 'disconnect' end as device_stat_name
 						from tb_device_pv
 						where 1=1
-						and (device_id, reg_date) in (
+						and (site_id, device_id, reg_date) in (
 							select 
-								device_id, max(reg_date) reg_date 
+								site_id, device_id, max(reg_date) reg_date 
 							from tb_device_pv
-							group by device_id
+							group by site_id, device_id
 						)
 					) b
-					on b.device_id = a.device_id
+					on a.site_id = b.site_id 
+					and a.device_id = b.device_id
 					where 1=1
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
@@ -631,14 +638,15 @@
 								else 'disconnect' end as device_stat_name
 						from tb_device_pv
 						where 1=1
-						and (device_id, reg_date) in (
+						and (site_id, device_id, reg_date) in (
 							select 
-								device_id, max(reg_date) reg_date 
+								site_id, device_id, max(reg_date) reg_date 
 							from tb_device_pv
-							group by device_id
+							group by site_id, device_id
 						)
 					) b
-					on b.device_id = a.device_id
+					on a.site_id = b.site_id 
+					and a.device_id = b.device_id
 					where 1=1
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
@@ -726,11 +734,11 @@
 								network_conf, options, create_timestamp, create_date, upload_timestamp, upload_date, device_stat, reg_date
 							from tb_device_ioe
 							where 1=1
-							and (device_id, reg_date) in (
+							and (site_id, device_id, reg_date) in (
 								select 
-									device_id, max(reg_date) reg_date 
+									site_id, device_id, max(reg_date) reg_date 
 								from tb_device_ioe
-								group by device_id
+								group by site_id, device_id
 							)
 							<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 							and site_id = #{siteId }
@@ -745,11 +753,11 @@
 								dc_voltage, dc_power, dc_current, dc_freq, dc_set_power, dc_pf, std_date, reg_date
 							from tb_device_pcs
 							where 1=1
-							and (device_id, reg_date) in (
+							and (site_id, device_id, reg_date) in (
 								select 
-									device_id, max(reg_date) reg_date 
+									site_id, device_id, max(reg_date) reg_date 
 								from tb_device_pcs
-								group by device_id
+								group by site_id, device_id
 							)
 							<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 							and site_id = #{siteId }
@@ -763,11 +771,11 @@
 								sys_soc, curr_soc, sys_soh, sys_voltage, sys_current, dod, std_date, reg_date
 							from tb_device_bms
 							where 1=1
-							and (device_id, reg_date) in (
+							and (site_id, device_id, reg_date) in (
 								select 
-									device_id, max(reg_date) reg_date 
+									site_id, device_id, max(reg_date) reg_date 
 								from tb_device_bms
-								group by device_id
+								group by site_id, device_id
 							)
 							<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 							and site_id = #{siteId }
@@ -780,11 +788,11 @@
 								device_pv_idx, site_id, device_id, device_name, device_stat, alarm_msg, temp, tot_power, std_date, reg_date
 							from tb_device_pv
 							where 1=1
-							and (device_id, reg_date) in (
+							and (site_id, device_id, reg_date) in (
 								select 
-									device_id, max(reg_date) reg_date 
+									site_id, device_id, max(reg_date) reg_date 
 								from tb_device_pv
-								group by device_id
+								group by site_id, device_id
 							)
 							<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 							and site_id = #{siteId }
@@ -830,11 +838,11 @@
 								network_conf, options, create_timestamp, create_date, upload_timestamp, upload_date, device_stat, reg_date
 							from tb_device_ioe
 							where 1=1
-							and (device_id, reg_date) in (
+							and (site_id, device_id, reg_date) in (
 								select 
-									device_id, max(reg_date) reg_date 
+									site_id, device_id, max(reg_date) reg_date 
 								from tb_device_ioe
-								group by device_id
+								group by site_id, device_id
 							)
 							<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 							and site_id = #{siteId }
@@ -849,11 +857,11 @@
 								dc_voltage, dc_power, dc_current, dc_freq, dc_set_power, dc_pf, std_date, reg_date
 							from tb_device_pcs
 							where 1=1
-							and (device_id, reg_date) in (
+							and (site_id, device_id, reg_date) in (
 								select 
-									device_id, max(reg_date) reg_date 
+									site_id, device_id, max(reg_date) reg_date 
 								from tb_device_pcs
-								group by device_id
+								group by site_id, device_id
 							)
 							<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 							and site_id = #{siteId }
@@ -867,11 +875,11 @@
 								sys_soc, curr_soc, sys_soh, sys_voltage, sys_current, dod, std_date, reg_date
 							from tb_device_bms
 							where 1=1
-							and (device_id, reg_date) in (
+							and (site_id, device_id, reg_date) in (
 								select 
-									device_id, max(reg_date) reg_date 
+									site_id, device_id, max(reg_date) reg_date 
 								from tb_device_bms
-								group by device_id
+								group by site_id, device_id
 							)
 							<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 							and site_id = #{siteId }
@@ -884,11 +892,11 @@
 								device_pv_idx, site_id, device_id, device_name, device_stat, alarm_msg, temp, tot_power, std_date, reg_date
 							from tb_device_pv
 							where 1=1
-							and (device_id, reg_date) in (
+							and (site_id, device_id, reg_date) in (
 								select 
-									device_id, max(reg_date) reg_date 
+									site_id, device_id, max(reg_date) reg_date 
 								from tb_device_pv
-								group by device_id
+								group by site_id, device_id
 							)
 							<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 							and site_id = #{siteId }
