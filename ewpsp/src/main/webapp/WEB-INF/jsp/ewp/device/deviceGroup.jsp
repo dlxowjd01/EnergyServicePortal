@@ -140,8 +140,8 @@
 				<form id="editDvInDvGrpForm" name="editDvInDvGrpForm">
 				<input type="hidden" id="selSiteId" name="selSiteId">
 				<input type="hidden" id="selDvGrpIdx" name="selDvGrpIdx">
-				<input type="hidden" id="nowDeviceIds" name="nowDeviceIds">
-				<input type="hidden" id="newDeviceIds" name="newDeviceIds">
+				<input type="hidden" id="nowDevicePks" name="nowDevicePks">
+				<input type="hidden" id="newDevicePks" name="newDevicePks">
 				<div class="inside_site fl">
 					<h2 class="ntit">그룹에 포함된 장치</h2>
 					<div class="inbox">
