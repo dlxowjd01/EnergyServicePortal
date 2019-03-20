@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class PvPowerGenModelBefore {
 //  private Integer resultCnt;//
 	private String ivtId;//
-	private Integer totalGenEnergy;
+	private Float totalGenEnergy;
 	private Date startDt;// YYYYMMDD
 	private Date endDt;// YYYYMMDD
 	private String intervalType;//
@@ -29,11 +29,11 @@ public class PvPowerGenModelBefore {
 		this.ivtId = ivtId;
 	}
 	
-	public Integer getTotalGenEnergy() {
+	public Float getTotalGenEnergy() {
 		return totalGenEnergy;
 	}
 	
-	public void setTotalGenEnergy(Integer totalGenEnergy) {
+	public void setTotalGenEnergy(Float totalGenEnergy) {
 		this.totalGenEnergy = totalGenEnergy;
 	}
 	

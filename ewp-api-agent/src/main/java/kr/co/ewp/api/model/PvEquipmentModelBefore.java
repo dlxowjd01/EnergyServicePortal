@@ -13,17 +13,17 @@ public class PvEquipmentModelBefore {
 	private Integer status;//
 	private String alarmMsg;//
 	private Integer temperature;// (℃)
-	private Integer totalGenPower;// (kWh)
-	private Integer todayGenPower;
+	private Float totalGenPower;// (kWh)
+	private Float todayGenPower;
 	
-	private Integer acVoltage;
-	private Integer acPower;
-	private Integer acCurrent;
-	private Integer acFreq;
-	private Integer dcVoltage;
-	private Integer dcPower;
-	private Integer dcCurrent;
-	private Integer dcFreq;
+	private Float acVoltage;
+	private Float acPower;
+	private Float acCurrent;
+	private Float acFreq;
+	private Float dcVoltage;
+	private Float dcPower;
+	private Float dcCurrent;
+	private Float dcFreq;
 	
 	public String getIvtId() {
 		return ivtId;
@@ -73,83 +73,83 @@ public class PvEquipmentModelBefore {
 		this.temperature = temperature;
 	}
 	
-	public Integer getTotalGenPower() {
+	public Float getTotalGenPower() {
 		return totalGenPower;
 	}
 	
-	public void setTotalGenPower(Integer totalGenPower) {
+	public void setTotalGenPower(Float totalGenPower) {
 		this.totalGenPower = totalGenPower;
 	}
 	
-	public Integer getTodayGenPower() {
+	public Float getTodayGenPower() {
 		return todayGenPower;
 	}
 	
-	public void setTodayGenPower(Integer todayGenPower) {
+	public void setTodayGenPower(Float todayGenPower) {
 		this.todayGenPower = todayGenPower;
 	}
 	
-	public Integer getAcVoltage() {
+	public Float getAcVoltage() {
 		return acVoltage;
 	}
 	
-	public void setAcVoltage(Integer acVoltage) {
+	public void setAcVoltage(Float acVoltage) {
 		this.acVoltage = acVoltage;
 	}
 	
-	public Integer getAcPower() {
+	public Float getAcPower() {
 		return acPower;
 	}
 	
-	public void setAcPower(Integer acPower) {
+	public void setAcPower(Float acPower) {
 		this.acPower = acPower;
 	}
 	
-	public Integer getAcCurrent() {
+	public Float getAcCurrent() {
 		return acCurrent;
 	}
 	
-	public void setAcCurrent(Integer acCurrent) {
+	public void setAcCurrent(Float acCurrent) {
 		this.acCurrent = acCurrent;
 	}
 	
-	public Integer getAcFreq() {
+	public Float getAcFreq() {
 		return acFreq;
 	}
 	
-	public void setAcFreq(Integer acFreq) {
+	public void setAcFreq(Float acFreq) {
 		this.acFreq = acFreq;
 	}
 	
-	public Integer getDcVoltage() {
+	public Float getDcVoltage() {
 		return dcVoltage;
 	}
 	
-	public void setDcVoltage(Integer dcVoltage) {
+	public void setDcVoltage(Float dcVoltage) {
 		this.dcVoltage = dcVoltage;
 	}
 	
-	public Integer getDcPower() {
+	public Float getDcPower() {
 		return dcPower;
 	}
 	
-	public void setDcPower(Integer dcPower) {
+	public void setDcPower(Float dcPower) {
 		this.dcPower = dcPower;
 	}
 	
-	public Integer getDcCurrent() {
+	public Float getDcCurrent() {
 		return dcCurrent;
 	}
 	
-	public void setDcCurrent(Integer dcCurrent) {
+	public void setDcCurrent(Float dcCurrent) {
 		this.dcCurrent = dcCurrent;
 	}
 	
-	public Integer getDcFreq() {
+	public Float getDcFreq() {
 		return dcFreq;
 	}
 	
-	public void setDcFreq(Integer dcFreq) {
+	public void setDcFreq(Float dcFreq) {
 		this.dcFreq = dcFreq;
 	}
 

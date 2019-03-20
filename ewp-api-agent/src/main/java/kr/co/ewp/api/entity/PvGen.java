@@ -10,7 +10,7 @@ public class PvGen {
   private String siteId;// 사이트id
   private String deviceId;// 장치id
   private Date stdDate;// 기준일시
-  private Integer genVal;// 발전량(단위:kwh)
+  private Float genVal;// 발전량(단위:kwh)
   private Integer temp;// 온도(단위:℃)
   private Date regDate;// 등록일시
   private Date modDate;// 최종수정일시
@@ -92,7 +92,7 @@ public class PvGen {
    * 
    * @return genVal
    */
-  public Integer getGenVal() {
+  public Float getGenVal() {
     return this.genVal;
   }
 
@@ -101,7 +101,7 @@ public class PvGen {
    * 
    * @return genVal
    */
-  public void setGenVal(Integer genVal) {
+  public void setGenVal(Float genVal) {
     this.genVal = genVal;
   }
 

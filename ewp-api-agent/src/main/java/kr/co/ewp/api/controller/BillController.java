@@ -885,7 +885,7 @@ public class BillController {
         Map<Long/* stdDate */, Float /* essChargeVal */> essChargeMap = Maps.newHashMap();
         Map<Long/* stdDate */, Float /* essUsageVal */> essUsgMap = Maps.newHashMap();
         for (PvGen item : pvGenList) {
-          pvGenMap.put(item.getStdDate().getTime(), item.getGenVal());
+          pvGenMap.put(item.getStdDate().getTime(), item.getGenVal().intValue());
         }
         for (PvUsage item : pvUsageList) {
           pvUsgMap.put(item.getStdDate().getTime(), item.getUsgVal());

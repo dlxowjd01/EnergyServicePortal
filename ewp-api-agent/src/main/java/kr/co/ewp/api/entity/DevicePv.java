@@ -11,7 +11,7 @@ public class DevicePv {
     private String deviceStat;//pv상태
     private String alarmMsg;//알람메시지
     private Integer temp;//온도(단위:℃)
-    private Integer totPower;//금일누적발전량(단위:kwh)
+    private Float totPower;//금일누적발전량(단위:kwh)
     private Date stdDate;//기준일시
     private Date regDate;//등록일시
    /**
@@ -116,14 +116,14 @@ public class DevicePv {
     * 금일누적발전량(단위:kwh) 조회
     * @return totPower
     */
-    public Integer getTotPower() {
+    public Float getTotPower() {
         return this.totPower;
     }
    /**
     * 금일누적발전량(단위:kwh) 설정
     * @return totPower
     */
-    public void setTotPower(Integer totPower) {
+    public void setTotPower(Float totPower) {
         this.totPower = totPower;
     }
    /**

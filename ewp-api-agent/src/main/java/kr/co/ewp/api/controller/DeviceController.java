@@ -561,7 +561,7 @@ public class DeviceController {
         			devicePv.setDeviceId(device.getDeviceId());
         			devicePv.setAlarmMsg(pvEquipmentModel.getAlarmMsg());
         			devicePv.setTemp(pvEquipmentModel.getTemperature()); /*** 12.12 이우람 수정 ***/
-        			devicePv.setTotPower(pvEquipmentModel.getTotalGenPower()); /*** 12.12 이우람 수정 ***/
+        			devicePv.setTotPower((float) pvEquipmentModel.getTotalGenPower()); /*** 12.12 이우람 수정 ***/
         			devicePv.setDeviceName(pvEquipmentModel.getIvtName()); /*** 12.12 이우람 수정 ***/
         			devicePv.setDeviceStat(Integer.toString(pvEquipmentModel.getStatus())); /*** 12.12 이우람 수정 ***/
         			devicePv.setStdDate(pvEquipmentModel.getTimestamp()); /*** 12.12 이우람 수정 ***/
