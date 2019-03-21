@@ -120,7 +120,7 @@ public class PMGrowApiUtilBefore {
     String resultBody = null;
     try {
       StringBuffer url = new StringBuffer(host + "/openapi/pv-power-gen-list");
-      url.append("?equipmentId=").append(equipmentId);
+      url.append("?ivtId=").append(equipmentId);
       url.append("&startDt=").append(startDt.getTime());
       url.append("&endDt=").append(endDt.getTime());
       url.append("&intervalType=").append(intervalType);
@@ -129,7 +129,7 @@ public class PMGrowApiUtilBefore {
       System.out.println("        "+equipmentId+" PV 발전량 조회 url  ==>  "+url);
       prettyLog.append("URL", url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
-      System.out.println("        "+url+"     PV 발전량 조회 resultBody  ==>  "+url+" ||||||| "+resultBody);
+      System.out.println("        "+url+"     PV 발전량 조회 resultBody  ==>  "+resultBody);
       return JsonUtil.toObject(resultBody, PvPowerGenModelBefore.class);
     } catch (Exception e) {
       prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
@@ -262,7 +262,7 @@ public class PMGrowApiUtilBefore {
     String resultBody = null;
     try {
       StringBuffer url = new StringBuffer(host + "/openapi/pv-equipment-list");
-      url.append("?equipmentId=").append(equipmentId);
+      url.append("?ivtId=").append(equipmentId);
       System.out.println("url =====> "+url);
       prettyLog.append("URL", url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
