@@ -518,10 +518,10 @@ public class DeviceController {
 	        			devicePv.setSiteId(_siteId);
 	        			devicePv.setDeviceId(device.getDeviceId());
 	        			devicePv.setAlarmMsg(pvEquipmentModel.getAlarmMsg());
-	        			devicePv.setTemp(pvEquipmentModel.getTemperature());
+	        			if(pvEquipmentModel.getTemperature() != null) devicePv.setTemp(pvEquipmentModel.getTemperature());
 	        			devicePv.setTotPower(pvEquipmentModel.getTotalGenPower());
 	        			devicePv.setDeviceName(pvEquipmentModel.getIvtName());
-	        			devicePv.setDeviceStat(Integer.toString(pvEquipmentModel.getStatus()));
+	        			if(pvEquipmentModel.getStatus() != null) devicePv.setDeviceStat(Integer.toString(pvEquipmentModel.getStatus()));
 	        			devicePv.setStdDate(pvEquipmentModel.getTimestamp());
 	        			deivcePvList.add(devicePv);
 	        			if (deivcePvList.size() == 20) {

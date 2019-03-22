@@ -129,7 +129,7 @@ public class PMGrowApiUtilBefore {
       System.out.println("        "+equipmentId+" PV 발전량 조회 url  ==>  "+url);
       prettyLog.append("URL", url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
-      System.out.println("        "+url+"     PV 발전량 조회 resultBody  ==>  "+resultBody);
+      System.out.println("     PV 발전량 조회 resultBody  ==>  "+resultBody);
       return JsonUtil.toObject(resultBody, PvPowerGenModelBefore.class);
     } catch (Exception e) {
       prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
