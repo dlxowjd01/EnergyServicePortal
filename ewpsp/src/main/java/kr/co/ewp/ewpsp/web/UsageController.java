@@ -47,11 +47,11 @@ public class UsageController {
 		
 		param = PeriodDataSetting.setSearchTerm(param);
 		
-		Map list = usageService.getUsageRealList(param, request);
+		Map result = usageService.getUsageRealList(param, request);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("sheetList", list.get("sheetList"));
-		resultMap.put("chartList", list.get("chartList"));
+		resultMap.put("sheetList", result.get("sheetList"));
+		resultMap.put("chartList", result.get("chartList"));
 		return resultMap;
 	}
 	
@@ -62,11 +62,11 @@ public class UsageController {
 
 		param = PeriodDataSetting.setSearchTerm(param);
 		
-		Map list = usageService.getUsageFutureList(param, request);
+		Map result = usageService.getUsageFutureList(param, request);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("sheetList", list.get("sheetList"));
-		resultMap.put("chartList", list.get("chartList"));
+		resultMap.put("sheetList", result.get("sheetList"));
+		resultMap.put("chartList", result.get("chartList"));
 		return resultMap;
 	}
 	

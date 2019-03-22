@@ -111,7 +111,7 @@
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
 					</if>
-					and a.device_type = 4
+					and a.device_type in (4, 6, 7, 8)
 					<!-- order by a.device_id -->
 			) page_tb
 			,  ( select @rownum := 0 ) r

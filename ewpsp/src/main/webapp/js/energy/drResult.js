@@ -96,16 +96,16 @@
 		}
 	}
 
-	var cblAmt; // 기준부하
-//	var goalPower; // 목표사용량=기준부하-계약용량
-	var contractPower;
-	var reduceAmt;
-	function callback_getSiteSetDetail(result) {
-		var siteSetDetail = result.detail;
-//		contractPower = siteSetDetail.contract_power;
-//		chargePower = siteSetDetail.charge_power;
-		reduceAmt = siteSetDetail.reduce_amt;
-	}
+////	var cblAmt; // 기준부하
+////	var goalPower; // 목표사용량=기준부하-계약용량
+//	var contractPower;
+//	var reduceAmt;
+//	function callback_getSiteSetDetail(result) {
+//		var siteSetDetail = result.detail;
+////		contractPower = siteSetDetail.contract_power;
+////		chargePower = siteSetDetail.charge_power;
+//		reduceAmt = siteSetDetail.reduce_amt;
+//	}
 	
 	function cblSet() {
 		var now = new Date();
@@ -292,7 +292,6 @@
 			if(dbCblList != null) {
 				for(var i=0; i<dbCblList.length; i++) {
 					var hour = new Date(setSheetDateUTC(dbCblList[i].start_timestamp)).getHours();
-//					console.log("db날짜   ",new Date(setSheetDateUTC(dbCblList[i].start_timestamp)), "   ", dbCblList[i].cbl);
 					
 					if(hour != 12) {
 						var next = dbCblList[i].start_timestamp+(1000 * 3600);
@@ -349,7 +348,6 @@
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)		
 		unit_format(String(totalUsage), "pastUseTot", "mWh");
-//		unit_format(String(totalGoalPower), "totalGoalPower", "kWh");
 		$("#"+"totalGoalPower").empty().append( $("<span/>").append( numberComma( totalGoalPower ) ) ).append("kWh");
 		$("#"+"totalCbl").empty().append( $("<span/>").append( numberComma( totalCbl ) ) ).append("kWh");
 	}
@@ -360,35 +358,69 @@
 		var totalReduceAmt = 0; // 전체 누적합
 		
 		$tbody = $("#drResultTbody");
-		$tbody.empty();
-		if(drList == null || drList.length < 1) {
-			$tbody.append( '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>' );
-		} else {
+		var tbodyStr = '';
+		if(drList != null && drList.length > 0) {
 			for(var i=0; i<drList.length; i++) {
-//				var drStartDate = new Date( convertDateUTC(drList[i].start_timestamp) );
-//				var drEndDate = new Date( convertDateUTC(drList[i].end_timestamp) );
 				var drStartDate = setSheetDateUTC(drList[i].start_timestamp);
 				var drEndDate = setSheetDateUTC(drList[i].end_timestamp);
-				$tbody.append(
-						$('<tr />').append( $("<td />").append( drStartDate.format("yyyy-MM-dd") ) // 감축일
-						).append( $("<td />").append( drStartDate.format("HH:mm")+" ~ "+drEndDate.format("HH:mm") ) // 감축시간대
-						).append( $("<td />").append( drList[i].act_amt ) // 사용량
-						).append( $("<td />").append( drList[i].cbl_amt ) // 고객기준부하
-						).append( $("<td />").append( drList[i].cbl_power ) // 계약용량
-						).append( $("<td />").append( drList[i].goal_power ) // 목표사용량
-						).append( $("<td />").append( drList[i].reduce_amt ) // 감축량
-						).append( $("<td />").append( drList[i].fulfill_per ) // 이행률
-						)
-				);
+				tbodyStr += '<tr>';
+				tbodyStr += '<td>'+drStartDate.format("yyyy-MM-dd")+'</td>';
+				tbodyStr += '<td>'+drStartDate.format("HH:mm")+" ~ "+drEndDate.format("HH:mm")+'</td>';
+				tbodyStr += '<td>'+drList[i].act_amt+'</td>';
+				tbodyStr += '<td>'+drList[i].cbl_amt+'</td>';
+				tbodyStr += '<td>'+drList[i].cbl_power+'</td>';
+				tbodyStr += '<td>'+drList[i].goal_power+'</td>';
+				tbodyStr += '<td>'+drList[i].reduce_amt+'</td>';
+				tbodyStr += '<td>'+drList[i].fulfill_per+'</td>';
+				tbodyStr += '</tr>';
+				
 				totalReduceAmt = totalReduceAmt+Number( String(drList[i].reduce_amt) );
 			}
 			
+		} else {
+			tbodyStr += '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>';
 		}
+		
+		$tbody.html(tbodyStr);
 
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
 		unit_format(String(totalReduceAmt), "totalReduceAmt", "Wh");
 		
 	}
+//	function callback_getDRResultList(result) {
+//		var drList = result.list;
+//		var totalReduceAmt = 0; // 전체 누적합
+//		
+//		$tbody = $("#drResultTbody");
+//		$tbody.empty();
+//		if(drList == null || drList.length < 1) {
+//			$tbody.append( '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>' );
+//		} else {
+//			for(var i=0; i<drList.length; i++) {
+////				var drStartDate = new Date( convertDateUTC(drList[i].start_timestamp) );
+////				var drEndDate = new Date( convertDateUTC(drList[i].end_timestamp) );
+//				var drStartDate = setSheetDateUTC(drList[i].start_timestamp);
+//				var drEndDate = setSheetDateUTC(drList[i].end_timestamp);
+//				$tbody.append(
+//						$('<tr />').append( $("<td />").append( drStartDate.format("yyyy-MM-dd") ) // 감축일
+//						).append( $("<td />").append( drStartDate.format("HH:mm")+" ~ "+drEndDate.format("HH:mm") ) // 감축시간대
+//						).append( $("<td />").append( drList[i].act_amt ) // 사용량
+//						).append( $("<td />").append( drList[i].cbl_amt ) // 고객기준부하
+//						).append( $("<td />").append( drList[i].cbl_power ) // 계약용량
+//						).append( $("<td />").append( drList[i].goal_power ) // 목표사용량
+//						).append( $("<td />").append( drList[i].reduce_amt ) // 감축량
+//						).append( $("<td />").append( drList[i].fulfill_per ) // 이행률
+//						)
+//				);
+//				totalReduceAmt = totalReduceAmt+Number( String(drList[i].reduce_amt) );
+//			}
+//			
+//		}
+//		
+//		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
+//		unit_format(String(totalReduceAmt), "totalReduceAmt", "Wh");
+//		
+//	}
 	
 	// 차트 그리기
 	function drawData_chart() {
@@ -572,7 +604,6 @@
 			if(cblList != null) {
 				for(var i=0; i<cblList.length; i++) {
 					var hour = new Date(setSheetDateUTC(cblList[i].start)).getHours();
-//					console.log("실시간날짜   ",new Date(setSheetDateUTC(cblList[i].start)), new Date(setSheetDateUTC(cblList[i].end)), "   ", cblList[i].cbl);
 					
 					if(hour != 12) {
 						var next = cblList[i].start+(1000 * 3600);
@@ -628,7 +659,6 @@
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)		
 		unit_format(String(totalUsage), "pastUseTot", "mWh");
-//		unit_format(String(totalGoalPower), "totalGoalPower", "kWh");
 		$("#"+"totalGoalPower").empty().append( $("<span/>").append( numberComma( totalGoalPower ) ) ).append("kWh");
 		$("#"+"totalCbl").empty().append( $("<span/>").append( numberComma( totalCbl ) ) ).append("kWh");
 	}
@@ -640,32 +670,65 @@
 		
 		$tbody = $("#drResultTbody");
 		$tbody.empty();
-		if(drList == null || drList.length < 1) {
-			$tbody.append( '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>' );
-		} else {
+		var tbodyStr = '';
+		if(drList != null && drList.length > 0) {
 			for(var i=0; i<drList.length; i++) {
-//				var drStartDate = new Date( drList[i].request.start );
-//				var drEndDate = new Date( drList[i].request.end );
 				var drStartDate = setSheetDateUTC(drList[i].request.start);
 				var drEndDate = setSheetDateUTC(drList[i].request.end);
-				$tbody.append(
-						$('<tr />').append( $("<td />").append( drStartDate.format("yyyy-MM-dd") ) // 감축일
-						).append( $("<td />").append( drStartDate.format("HH:mm")+" ~ "+drEndDate.format("HH:mm") ) // 감축시간대
-						).append( $("<td />").append( drList[i].actualAmount ) // 사용량
-						).append( $("<td />").append( drList[i].cblAmount ) // 고객기준부하
-						).append( $("<td />").append( drList[i].cblAmount-goalPower ) // 계약용량
-						).append( $("<td />").append( goalPower ) // 목표사용량
-						).append( $("<td />").append( drList[i].cblAmount - drList[i].actualAmount ) // 감축량
-						).append( $("<td />").append( (drList[i].cblAmount - drList[i].actualAmount)/(drList[i].cblAmount-goalPower) ) // 이행률
-						)
-				);
+				tbodyStr += '<tr>';
+				tbodyStr += '<td>'+drStartDate.format("yyyy-MM-dd")+'</td>';
+				tbodyStr += '<td>'+drStartDate.format("HH:mm")+" ~ "+drEndDate.format("HH:mm")+'</td>';
+				tbodyStr += '<td>'+drList[i].actualAmount+'</td>'; // 사용량
+				tbodyStr += '<td>'+drList[i].cblAmount+'</td>'; // 고객기준부하
+				tbodyStr += '<td>'+(drList[i].cblAmount-goalPower)+'</td>'; // 계약용량
+				tbodyStr += '<td>'+goalPower+'</td>'; // 목표사용량
+				tbodyStr += '<td>'+(drList[i].cblAmount - drList[i].actualAmount)+'</td>'; // 감축량
+				tbodyStr += '<td>'+(drList[i].cblAmount - drList[i].actualAmount)/(drList[i].cblAmount-goalPower)+'</td>'; // 이행률
+				tbodyStr += '</tr>';
 				
 				totalReduceAmt = totalReduceAmt+Number( drList[i].cblAmount - drList[i].actualAmount );
 			}
 			
+		} else {
+			tbodyStr += '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>';
 		}
+		
+		$tbody.html(tbodyStr);
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
 		unit_format(String(totalReduceAmt), "totalReduceAmt", "Wh");
 		
 	}
+//	function refreshSheetData(result) {
+//		var drList = result.drResultList;
+//		var totalReduceAmt = 0; // 전체 누적합
+//		
+//		$tbody = $("#drResultTbody");
+//		$tbody.empty();
+//		if(drList == null || drList.length < 1) {
+//			$tbody.append( '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>' );
+//		} else {
+//			for(var i=0; i<drList.length; i++) {
+//				var drStartDate = setSheetDateUTC(drList[i].request.start);
+//				var drEndDate = setSheetDateUTC(drList[i].request.end);
+//				$tbody.append(
+//						$('<tr />').append( $("<td />").append( drStartDate.format("yyyy-MM-dd") ) // 감축일
+//						).append( $("<td />").append( drStartDate.format("HH:mm")+" ~ "+drEndDate.format("HH:mm") ) // 감축시간대
+//						).append( $("<td />").append( drList[i].actualAmount ) // 사용량
+//						).append( $("<td />").append( drList[i].cblAmount ) // 고객기준부하
+//						).append( $("<td />").append( drList[i].cblAmount-goalPower ) // 계약용량
+//						).append( $("<td />").append( goalPower ) // 목표사용량
+//						).append( $("<td />").append( drList[i].cblAmount - drList[i].actualAmount ) // 감축량
+//						).append( $("<td />").append( (drList[i].cblAmount - drList[i].actualAmount)/(drList[i].cblAmount-goalPower) ) // 이행률
+//						)
+//				);
+//				
+//				totalReduceAmt = totalReduceAmt+Number( drList[i].cblAmount - drList[i].actualAmount );
+//			}
+//			
+//		}
+//		
+//		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
+//		unit_format(String(totalReduceAmt), "totalReduceAmt", "Wh");
+//		
+//	}

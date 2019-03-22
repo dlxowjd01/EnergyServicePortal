@@ -229,49 +229,94 @@
 	
 	// 표(테이블) 그리기
 	function drawData_table() {
-		// pc버전 테이블
-		// 조회기간에 따라 테이블이 여러개 나올 수 있으므로 for문으로 돌려야 한다
-		$div = $("#pc_use_dataDiv");
-		$div.empty(); // 초기화
-		if(peak_data_pc.length < 1) {
-			$(".peak_chart").find(".inchart-nodata").css("display", "");
-			$(".peak_chart").find(".inchart").css("display", "none");
-			$div.prepend(
-					$('<div class="chart_table" />').append(
-							$('<table class="pc_use" />').append(
-									$("<thead/>").append( $("<tr/>").append(  
-											"<th width='33%'></th><td width='34%'>조회 결과가 없습니다.</td><th width='33%'></th>" ) 
-									) // thead
-							)
-					)
-			);
-		} else {
-			$(".peak_chart").find(".inchart-nodata").css("display", "none");
-			$(".peak_chart").find(".inchart").css("display", "");
-			for(var i=dt_row-1; i>-1; i--) {
-				$div.prepend(
-						$('<div class="chart_table" />').append(
-								$('<table class="pc_use" />').append(
-										$("<thead/>").append( $("<tr/>").append( peak_head_pc[i]+"<th>합계</th>" ) ) // thead
-								).append(
-										$("<tbody/>").append( // tbody
-												$("<tr/>").append( // 피크 전력
-														'<th><div class="ctit pk1"><span>피크 전력 (kW)</span></div></th>'+peak_data_pc[i]
-												)
-										).append(
-												$("<tr/>").append( // 한진 계약 전력
-														'<th><div class="ctit pk2"><span>한전 계약 전력 (kW)</span></div></th>'+ ctpPw_data_pc[i] 
-												)
-										).append(
-												$("<tr/>").append( // 요금 적용 전력
-														'<th><div class="ctit pk3"><span>요금 적용 전력 (kW)</span></th>'+ cgtPw_data_pc[i] 
-												)
-										)
-								) 
-						)
-				);
-				
+		$chart = $(".peak_chart");
+		var tbodyStr = '';
+		if(peak_data_pc.length > 0) {
+			$chart.find(".inchart-nodata").css("display", "none");
+			$chart.find(".inchart").css("display", "");
+			for(var i=0; i<dt_row; i++) {
+				tbodyStr += '<div class="chart_table">';
+				tbodyStr += '<table class="pc_use">';
+				tbodyStr += '<thead>';
+				tbodyStr += '<tr>';
+				tbodyStr += peak_head_pc[i]+'<th>합계</th>';
+				tbodyStr += '</tr>';
+				tbodyStr += '</thead>';
+				tbodyStr += '<tbody>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit pk1"><span>피크 전력 (kW)</span></div></th>'+peak_data_pc[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit pk2"><span>한전 계약 전력 (kW)</span></div></th>'+ ctpPw_data_pc[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit pk3"><span>요금 적용 전력 (kW)</span></th>'+ cgtPw_data_pc[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '</tbody>';
+				tbodyStr += '</table>';
+				tbodyStr += '</div>';
 			}
 			
+		} else {
+			$chart.find(".inchart-nodata").css("display", "");
+			$chart.find(".inchart").css("display", "none");
+			tbodyStr += '<div class="chart_table">';
+			tbodyStr += '<table class="pc_use">';
+			tbodyStr += '<thead>';
+			tbodyStr += '<tr>';
+			tbodyStr += '<th width="33%"></th>';
+			tbodyStr += '<td width="34%">조회 결과가 없습니다.</td>';
+			tbodyStr += '<th width="33%"></th>';
+			tbodyStr += '</tr>';
+			tbodyStr += '</thead>';
+			tbodyStr += '</table>';
+			tbodyStr += '</div>';
 		}
+		
+		$("#pc_use_dataDiv").html(tbodyStr);
 	}
+//	function drawData_table() {
+//		$div = $("#pc_use_dataDiv");
+//		$div.empty(); // 초기화
+//		if(peak_data_pc.length < 1) {
+//			$(".peak_chart").find(".inchart-nodata").css("display", "");
+//			$(".peak_chart").find(".inchart").css("display", "none");
+//			$div.prepend(
+//					$('<div class="chart_table" />').append(
+//							$('<table class="pc_use" />').append(
+//									$("<thead/>").append( $("<tr/>").append(  
+//									"<th width='33%'></th><td width='34%'>조회 결과가 없습니다.</td><th width='33%'></th>" ) 
+//									) // thead
+//							)
+//					)
+//			);
+//		} else {
+//			$(".peak_chart").find(".inchart-nodata").css("display", "none");
+//			$(".peak_chart").find(".inchart").css("display", "");
+//			for(var i=dt_row-1; i>-1; i--) {
+//				$div.prepend(
+//						$('<div class="chart_table" />').append(
+//								$('<table class="pc_use" />').append(
+//										$("<thead/>").append( $("<tr/>").append( peak_head_pc[i]+"<th>합계</th>" ) ) // thead
+//								).append(
+//										$("<tbody/>").append( // tbody
+//												$("<tr/>").append( // 피크 전력
+//														'<th><div class="ctit pk1"><span>피크 전력 (kW)</span></div></th>'+peak_data_pc[i]
+//												)
+//										).append(
+//												$("<tr/>").append( // 한진 계약 전력
+//														'<th><div class="ctit pk2"><span>한전 계약 전력 (kW)</span></div></th>'+ ctpPw_data_pc[i] 
+//												)
+//										).append(
+//												$("<tr/>").append( // 요금 적용 전력
+//														'<th><div class="ctit pk3"><span>요금 적용 전력 (kW)</span></th>'+ cgtPw_data_pc[i] 
+//												)
+//										)
+//								) 
+//						)
+//				);
+//				
+//			}
+//			
+//		}
+//	}

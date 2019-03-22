@@ -263,45 +263,89 @@
 	
 	// 표(테이블) 그리기
 	function drawData_table() {
-		// pc버전 테이블
-		// 조회기간에 따라 테이블이 여러개 나올 수 있으므로 for문으로 돌려야 한다..(내일해내일)
-		$div = $("#pc_use_dataDiv");
-		$div.empty(); // 초기화
-		if(real_data_pc.length < 1) {
-			$(".pv_chart").find(".inchart-nodata").css("display", "");
-			$(".pv_chart").find(".inchart").css("display", "none");
-			$div.prepend(
-					$('<div class="chart_table" />').append(
-							$('<table class="pc_use" />').append(
-									$("<thead/>").append( $("<tr/>").append(  
-											"<th width='33%'></th><td width='34%'>조회 결과가 없습니다.</td><th width='33%'></th>" ) 
-									) // thead
-							)
-					)
-			);
-		} else {
-			$(".pv_chart").find(".inchart-nodata").css("display", "none");
-			$(".pv_chart").find(".inchart").css("display", "");
-			for(var i=dt_row-1; i>-1; i--) {
-				$div.prepend(
-						$('<div class="chart_table" />').append(
-								$('<table class="pc_use" />').append(
-										$("<thead/>").append( $("<tr/>").append( pv_head_pc[i]+"<th>합계</th>" ) ) // thead
-								).append(
-										$("<tbody/>").append( // tbody
-												$("<tr/>").append( // 실제 사용량
-														'<th><div class="ctit pv1"><span>실제 발전량 (kWh)</span></div></th>'+real_data_pc[i]
-												)
-										).append(
-												$("<tr/>").append( // 예측 사용량
-														'<th><div class="ctit pv2"><span>예측 발전량 (kWh)</span></div></th>'+ feture_data_pc[i] 
-												)
-										)
-								) 
-						)
-				);
-				
+		$chart = $(".pv_chart");
+		var tbodyStr = '';
+		if(real_data_pc.length > 0) {
+			$chart.find(".inchart-nodata").css("display", "none");
+			$chart.find(".inchart").css("display", "");
+			for(var i=0; i<dt_row; i++) {
+				tbodyStr += '<div class="chart_table">';
+				tbodyStr += '<table class="pc_use">';
+				tbodyStr += '<thead>';
+				tbodyStr += '<tr>';
+				tbodyStr += pv_head_pc[i]+'<th>합계</th>';
+				tbodyStr += '</tr>';
+				tbodyStr += '</thead>';
+				tbodyStr += '<tbody>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit pv1"><span>실제 발전량 (kWh)</span></div></th>'+real_data_pc[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit pv2"><span>예측 발전량 (kWh)</span></div></th>'+ feture_data_pc[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '</tbody>';
+				tbodyStr += '</table>';
+				tbodyStr += '</div>';
 			}
+			
+		} else {
+			$chart.find(".inchart-nodata").css("display", "");
+			$chart.find(".inchart").css("display", "none");
+			tbodyStr += '<div class="chart_table">';
+			tbodyStr += '<table class="pc_use">';
+			tbodyStr += '<thead>';
+			tbodyStr += '<tr>';
+			tbodyStr += '<th width="33%"></th>';
+			tbodyStr += '<td width="34%">조회 결과가 없습니다.</td>';
+			tbodyStr += '<th width="33%"></th>';
+			tbodyStr += '</tr>';
+			tbodyStr += '</thead>';
+			tbodyStr += '</table>';
+			tbodyStr += '</div>';
 		}
 		
+		$("#pc_use_dataDiv").html(tbodyStr);
 	}
+//	function drawData_table() {
+//		// pc버전 테이블
+//		// 조회기간에 따라 테이블이 여러개 나올 수 있으므로 for문으로 돌려야 한다..(내일해내일)
+//		$div = $("#pc_use_dataDiv");
+//		$div.empty(); // 초기화
+//		if(real_data_pc.length < 1) {
+//			$(".pv_chart").find(".inchart-nodata").css("display", "");
+//			$(".pv_chart").find(".inchart").css("display", "none");
+//			$div.prepend(
+//					$('<div class="chart_table" />').append(
+//							$('<table class="pc_use" />').append(
+//									$("<thead/>").append( $("<tr/>").append(  
+//									"<th width='33%'></th><td width='34%'>조회 결과가 없습니다.</td><th width='33%'></th>" ) 
+//									) // thead
+//							)
+//					)
+//			);
+//		} else {
+//			$(".pv_chart").find(".inchart-nodata").css("display", "none");
+//			$(".pv_chart").find(".inchart").css("display", "");
+//			for(var i=dt_row-1; i>-1; i--) {
+//				$div.prepend(
+//						$('<div class="chart_table" />').append(
+//								$('<table class="pc_use" />').append(
+//										$("<thead/>").append( $("<tr/>").append( pv_head_pc[i]+"<th>합계</th>" ) ) // thead
+//								).append(
+//										$("<tbody/>").append( // tbody
+//												$("<tr/>").append( // 실제 사용량
+//														'<th><div class="ctit pv1"><span>실제 발전량 (kWh)</span></div></th>'+real_data_pc[i]
+//												)
+//										).append(
+//												$("<tr/>").append( // 예측 사용량
+//														'<th><div class="ctit pv2"><span>예측 발전량 (kWh)</span></div></th>'+ feture_data_pc[i] 
+//												)
+//										)
+//								) 
+//						)
+//				);
+//				
+//			}
+//		}
+//		
+//	}

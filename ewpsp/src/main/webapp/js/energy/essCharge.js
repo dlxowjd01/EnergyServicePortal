@@ -12,6 +12,7 @@
 	var realDischg_data_pc = new Array(); // 실제 방전량 표 데이터
 	var fetureChg_data_pc = new Array(); //  예측 충전량 표 데이터
 	var fetureDischg_data_pc = new Array(); //  예측 방전량 표 데이터
+	var defaultData_pc = "";
 	function getDBData(formData) {
 		 realChg_data_pc.length = 0;
 		 fetureChg_data_pc.length = 0;
@@ -66,7 +67,6 @@
 				var reDischgVal   = null; 
 				for(var j=0; j<chgSheetList.length; j++) {
 					if(s.getTime() == setSheetDateUTC(chgSheetList[j].std_timestamp)) {
-//					if(s.getTime() == new Date(chgSheetList[j].std_timestamp).getTime()) {
 						var chgVal = String(chgSheetList[j].chg_val);
 						var dischgVal   = String(dischgSheetList[j].dischg_val);
 						
@@ -131,7 +131,7 @@
 					}
 					
 				}
-
+				
 				s = incrementTime(s);
 				
 			}
@@ -149,12 +149,12 @@
 				if(chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
 				else {
 					reChgVal = Math.round( Number(chgVal) );
-					totalDataSet = totalDataSet+chgVal;
+					totalDataSet = totalDataSet+Number(chgVal);
 				}
 				if(dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
 				else {
 					reDischgVal   = Math.round( Number(dischgVal) );
-					totalDataSet2 = totalDataSet2+dischgVal;
+					totalDataSet2 = totalDataSet2+Number(dischgVal);
 				}
 				
 				// 차트데이터 셋팅
@@ -216,7 +216,6 @@
 				var reDischgVal   = null; 
 				for(var j=0; j<chgSheetList.length; j++) {
 					if(s.getTime() == setSheetDateUTC(chgSheetList[j].std_timestamp)) {
-//					if(s.getTime() == new Date(chgSheetList[j].std_timestamp).getTime()) {
 						var chgVal = String(chgSheetList[j].chg_val);
 						var dischgVal   = String(dischgSheetList[j].dischg_val);
 						
@@ -277,6 +276,11 @@
 				
 			}
 			
+		} else {
+			for(var i=0; i<dt_col; i++) {
+				defaultData_pc += "<td></td>";
+			}
+			defaultData_pc += "<td></td>";
 		}
 		// 차트데이터 셋팅
 		if(chgChartList != null && chgChartList.length > 0) {
@@ -289,12 +293,12 @@
 				if(chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
 				else {
 					reChgVal = Math.round( Number(chgVal) );
-					totalDataSet = totalDataSet+chgVal;
+					totalDataSet = totalDataSet+Number(chgVal);
 				}
 				if(dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
 				else {
 					reDischgVal   = Math.round( Number(dischgVal) );
-					totalDataSet2 = totalDataSet2+dischgVal;
+					totalDataSet2 = totalDataSet2+Number(dischgVal);
 				}
 				
 				// 차트데이터 셋팅
@@ -356,52 +360,104 @@
 	
 	// 표(테이블) 그리기
 	function drawData_table() {
-		// pc버전 테이블
-		// 조회기간에 따라 테이블이 여러개 나올 수 있으므로 for문으로 돌려야 한다
-		$div = $("#pc_use_dataDiv");
-		$div.empty(); // 초기화
-		if(realChg_data_pc.length < 1) {
-			$(".ess_chart").find(".inchart-nodata").css("display", "");
-			$(".ess_chart").find(".inchart").css("display", "none");
-			$div.prepend(
-					$('<div class="chart_table" />').append(
-							$('<table class="pc_use" />').append(
-									$("<thead/>").append( $("<tr/>").append(  
-											"<th width='33%'></th><td width='34%'>조회 결과가 없습니다.</td><th width='33%'></th>" ) 
-									) // thead
-							)
-					)
-			);
-		} else {
-			$(".ess_chart").find(".inchart-nodata").css("display", "none");
-			$(".ess_chart").find(".inchart").css("display", "");
-			for(var i=dt_row-1; i>-1; i--) {
-				$div.prepend(
-						$('<div class="chart_table" />').append(
-								$('<table class="pc_use" />').append(
-										$("<thead/>").append( $("<tr/>").append( ess_head_pc[i]+"<th>합계</th>" ) ) // thead
-								).append(
-										$("<tbody/>").append( // tbody
-												$("<tr/>").append( // 충전량
-														'<th><div class="ctit es1"><span>충전량 (kWh)</span></div></th>'+realChg_data_pc[i]
-												)
-										).append(
-												$("<tr/>").append( // 충전 계획
-														'<th><div class="ctit es2"><span>충전 계획 (kWh)</span></div></th>'+ fetureChg_data_pc[i]
-												)
-										).append(
-												$("<tr/>").append( // 방전량
-														'<th><div class="ctit es3"><span>방전량 (kWh)</span></th>'+ realDischg_data_pc[i]
-												)
-										).append(
-												$("<tr/>").append( // 방전 계획
-														'<th><div class="ctit es4"><span>방전 계획 (kWh)</span></th>'+ fetureDischg_data_pc[i]
-												)
-										)
-								) 
-						)
-				);
-				
+		$chart = $(".ess_chart");
+		var tbodyStr = '';
+		
+		if(realChg_data_pc.length > 0) {
+			$chart.find(".inchart-nodata").css("display", "none");
+			$chart.find(".inchart").css("display", "");
+			for(var i=0; i<dt_row; i++) {
+				tbodyStr += '<div class="chart_table">';
+				tbodyStr += '<table class="pc_use">';
+				tbodyStr += '<thead>';
+				tbodyStr += '<tr>';
+				tbodyStr += ess_head_pc[i]+'<th>합계</th>';
+				tbodyStr += '</tr>';
+				tbodyStr += '</thead>';
+				tbodyStr += '<tbody>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit es1"><span>충전량 (kWh)</span></div></th>'+realChg_data_pc[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit es2"><span>충전 계획 (kWh)</span></div></th>'+ ((fetureChg_data_pc[i] == undefined) ? defaultData_pc : fetureChg_data_pc[i]);
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit es3"><span>방전량 (kWh)</span></th>'+ realDischg_data_pc[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit es4"><span>방전 계획 (kWh)</span></th>'+((fetureDischg_data_pc[i] == undefined) ? defaultData_pc : fetureDischg_data_pc[i]);
+				tbodyStr += '</tr>';
+				tbodyStr += '</tbody>';
+				tbodyStr += '</table>';
+				tbodyStr += '</div>';
 			}
+			
+		} else {
+			$chart.find(".inchart-nodata").css("display", "");
+			$chart.find(".inchart").css("display", "none");
+			tbodyStr += '<div class="chart_table">';
+			tbodyStr += '<table class="pc_use">';
+			tbodyStr += '<thead>';
+			tbodyStr += '<tr>';
+			tbodyStr += '<th width="33%"></th>';
+			tbodyStr += '<td width="34%">조회 결과가 없습니다.</td>';
+			tbodyStr += '<th width="33%"></th>';
+			tbodyStr += '</tr>';
+			tbodyStr += '</thead>';
+			tbodyStr += '</table>';
+			tbodyStr += '</div>';
+			
 		}
+		
+		$("#pc_use_dataDiv").html(tbodyStr);
 	}
+//	function drawData_table() {
+//		// pc버전 테이블
+//		// 조회기간에 따라 테이블이 여러개 나올 수 있으므로 for문으로 돌려야 한다
+//		$div = $("#pc_use_dataDiv");
+//		$div.empty(); // 초기화
+//		if(realChg_data_pc.length < 1) {
+//			$(".ess_chart").find(".inchart-nodata").css("display", "");
+//			$(".ess_chart").find(".inchart").css("display", "none");
+//			$div.prepend(
+//					$('<div class="chart_table" />').append(
+//							$('<table class="pc_use" />').append(
+//									$("<thead/>").append( $("<tr/>").append(  
+//									"<th width='33%'></th><td width='34%'>조회 결과가 없습니다.</td><th width='33%'></th>" ) 
+//									) // thead
+//							)
+//					)
+//			);
+//		} else {
+//			$(".ess_chart").find(".inchart-nodata").css("display", "none");
+//			$(".ess_chart").find(".inchart").css("display", "");
+//			for(var i=dt_row-1; i>-1; i--) {
+//				$div.prepend(
+//						$('<div class="chart_table" />').append(
+//								$('<table class="pc_use" />').append(
+//										$("<thead/>").append( $("<tr/>").append( ess_head_pc[i]+"<th>합계</th>" ) ) // thead
+//								).append(
+//										$("<tbody/>").append( // tbody
+//												$("<tr/>").append( // 충전량
+//														'<th><div class="ctit es1"><span>충전량 (kWh)</span></div></th>'+realChg_data_pc[i]
+//												)
+//										).append(
+//												$("<tr/>").append( // 충전 계획
+//														'<th><div class="ctit es2"><span>충전 계획 (kWh)</span></div></th>'+ fetureChg_data_pc[i]
+//												)
+//										).append(
+//												$("<tr/>").append( // 방전량
+//														'<th><div class="ctit es3"><span>방전량 (kWh)</span></th>'+ realDischg_data_pc[i]
+//												)
+//										).append(
+//												$("<tr/>").append( // 방전 계획
+//														'<th><div class="ctit es4"><span>방전 계획 (kWh)</span></th>'+ fetureDischg_data_pc[i]
+//												)
+//										)
+//								) 
+//						)
+//				);
+//				
+//			}
+//		}
+//	}

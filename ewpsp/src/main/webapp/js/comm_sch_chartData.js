@@ -187,7 +187,6 @@ function getCollect_sch_condition() {
 		$("#selTermTo").val( endDay.format("yyyyMMddHHmmss") );
 	}
 	
-//	$("#timeOffset").val( (new Date()).getTimezoneOffset() );
 	$("#timeOffset").val( timeOffset );
 	
 	if(SelTerm != "billSelectMM") {
@@ -209,7 +208,7 @@ function getCollect_sch_condition() {
 	var formData = $("#schForm").serializeObject();
 	console.log(formData);
 
-$('.loading').show();
+	$('.loading').show();
 	var today = new Date();
 	setTimeout(function() {
 		getDBData(formData); // DB 데이터 조회(각 화면마다 존재)

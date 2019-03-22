@@ -224,7 +224,6 @@ function callback_getGMainSiteRankingList(result) {
 
 function callback_getGMainSiteTotalDetail(result) {
 	var total = result.detail;
-	console.log(total);
 
 	if ($('#mapGroup').val() == 'group') {
 		var imgSrc = '/img/group_dimg.png';
@@ -370,9 +369,9 @@ function changeRanking(tabIdx) {
 
 	var txt = "";
 	if(tabIdx == 0) txt = "사용량 순위(kWh)";
-	else if(tabIdx == 1) txt = "충방전 순위( kWh)";
-	else if(tabIdx == 2) txt = "발전량 순위( kWh)";
-	else if(tabIdx == 3) txt = "수익 순위( WON)";
+	else if(tabIdx == 1) txt = "충방전 순위(kWh)";
+	else if(tabIdx == 2) txt = "발전량 순위(kWh)";
+	else if(tabIdx == 3) txt = "수익 순위(WON)";
 	$("#tabText").empty().text(txt);
 	getGMainSiteRankingTotalDetail(); // 사이트 사용량 순위 누적/예상 총합
 	getGMainSiteRankingList(1); // 사이트 사용량 순위 목록 조회
