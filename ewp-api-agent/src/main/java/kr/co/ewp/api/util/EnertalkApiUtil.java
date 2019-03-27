@@ -215,9 +215,11 @@ public class EnertalkApiUtil {
 //      StringBuffer url = new StringBuffer("https://dr-hk-tmp.enertalk.com" + "/dr/sites/:siteId/payments".replace(":siteId", siteId));
       url.append("?startMonth=").append(beginMonth);
       url.append("&endMonth=").append(endMonth);
+      System.out.println("dr수익 url :     "+url);
       prettyLog.append("URL", url);
       HttpHeaders headers = getHeaders();
       resultBody = HttpUtil.get(url.toString(), headers);
+      System.out.println("dr수익 result :     "+resultBody);
       return JsonUtil.toObject(resultBody, new TypeReference<List<DrPaymentModel>>() {
       });
     } catch (NullPointerException e) {

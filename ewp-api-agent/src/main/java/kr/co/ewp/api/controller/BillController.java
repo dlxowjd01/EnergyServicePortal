@@ -781,6 +781,7 @@ public class BillController {
       logger.info("bill03,{},{},{}", _siteId, beginMonth, endMonth);
       try {
         List<DrPaymentModel> payments = EnertalkApiUtil.getDrPayments(_siteId, beginMonth, endMonth, prettyLog);
+        System.out.println(_siteId+"  dr수익결과  :   "+payments.toString());
         List<DrRevenue> drRevenueList = Lists.newArrayList();
         if(payments != null){
         	
@@ -911,8 +912,8 @@ public class BillController {
         		genReqPv.addProduced(new Double(IfUtil.nvl(pvGenMap.get(stdDate), 0)));
         		genReqPv.addConsumed(new Double(IfUtil.nvl(pvUsgMap.get(stdDate), 0)));
         		genReqEss.addTimestamp(stdDate);
-        		genReqEss.addProduced(new Double((double) IfUtil.nvl(essChargeMap.get(stdDate), 0)));
-        		genReqEss.addConsumed(new Double((double) IfUtil.nvl(essUsgMap.get(stdDate), 0)));
+        		genReqEss.addProduced(new Double((double) IfUtil.nvl(essChargeMap.get(stdDate), (double) 0)));
+        		genReqEss.addConsumed(new Double((double) IfUtil.nvl(essUsgMap.get(stdDate), (double) 0)));
         	}
         }
         if (genReqPv.getTimestamp() == null || genReqPv.getTimestamp().size() == 0) {

@@ -43,6 +43,7 @@ public class EncoredApiUtil {
       prettyLog.append("URL", url);
       headers.set("content-type", "application/json");
       resultBody = HttpUtil.post(url, headers, JsonUtil.toJson(genRequest));
+      System.out.println("발전수익 result :     "+resultBody);
       return JsonUtil.toObject(resultBody, GenResponseModel.class, PropertyNamingStrategy.SNAKE_CASE);
     } catch (NullPointerException e) {
     	logger.error("error is : "+e.toString());
