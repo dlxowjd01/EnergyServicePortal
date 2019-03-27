@@ -60,6 +60,7 @@ import kr.co.ewp.api.util.EnertalkApiUtil.TimeType;
 import kr.co.ewp.api.util.EnertalkApiUtil.UsageType;
 import kr.co.ewp.api.util.PMGrowApiUtil;
 import kr.co.ewp.api.util.PMGrowApiUtilBefore;
+import kr.co.ewp.api.util.PMGrowApiUtil_omni;
 import kr.co.ewp.api.util.PrettyLog;
 import kr.co.ewp.api.util.ValidateUtil;
 
@@ -639,6 +640,7 @@ public class EnergyController {
     prettyLog.append("DEVICE_CNT", deviceList.size());
     int resultCnt = 0;
     Map<String, String> localEmsAddrMap = Maps.newHashMap();
+    Map<String, String> localEmsApiVerMap = Maps.newHashMap();
     for (Device device : deviceList) {
       Date _begin = null;
       String _siteId = device.getSiteId();
@@ -674,7 +676,6 @@ public class EnergyController {
         prettyLog.append("BEGIN", strBeginDate);
         prettyLog.append("END", strEndDate);
         logger.info("energy06,{},{},{}", device.getDeviceId(), strBeginDate, strEndDate);
-        String apiVer = "";
         if (!localEmsAddrMap.containsKey(_siteId)) {
           Site site = siteService.getSite(_siteId, prettyLog);
           if (site == null) {
@@ -682,7 +683,7 @@ public class EnergyController {
             continue;
           }
           localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
-          apiVer = site.getLocalEmsApiVer();
+          localEmsApiVerMap.put(_siteId, site.getLocalEmsApiVer());
         }
         List<EssCharge> essChargeList = Lists.newArrayList();
         try {
@@ -690,7 +691,7 @@ public class EnergyController {
         	if(deviceType != null) {
         		if ("2".equals(device.getInstType())) { // Local EMS
         			if("1".equals(deviceType) || "2".equals(deviceType)){ // 1: PCS, 2: BMS
-        				if("1.1".equals(apiVer)) { // 기존
+        				if("1.1".equals(localEmsApiVerMap.get(_siteId))) { // 기존
         					System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 기존 ess충방전량조회 api를 조회합니다..");
         					System.out.println("                                                                    endDate4   "+endDate);
         					ChargingDischargingBefore cdList = PMGrowApiUtilBefore.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate,
@@ -725,6 +726,23 @@ public class EnergyController {
 //        							essChargeList.add(essCharge);
 //        						}
 //        					}
+        				} else if("1.2".equals(localEmsApiVerMap.get(_siteId))) { // api url 변경후(옴니시스템)
+        					System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 옴니시스템 새로운 ess충방전량조회 api를 조회합니다..");
+        					ChargingDischarging cdList = PMGrowApiUtil_omni.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "MI", "15", prettyLog);
+        					if(cdList !=null){
+        						prettyLog.append("ITEM_SIZE", cdList.getItems().size());
+        						for (ChargingDischargingItemModel item : cdList.getItems()) {
+        							EssCharge essCharge = new EssCharge();
+        							essCharge.setDeviceId(device.getDeviceId());
+        							essCharge.setSiteId(_siteId);
+        							essCharge.setStdDate(item.getTimestamp());
+        							essCharge.setStdTimestamp(item.getTimestamp());
+        							essCharge.setChgVal(item.getChargeEnergy());
+        							essCharge.setDischgVal(item.getDischargeEnergy());
+        							
+        							essChargeList.add(essCharge);
+        						}
+        					}
         				} else { // api url 변경후
         					System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 새로운 ess충방전량조회 api를 조회합니다..");
         					ChargingDischarging cdList = PMGrowApiUtil.getEssCharge(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "MI", "15", prettyLog);
@@ -780,6 +798,7 @@ public class EnergyController {
     prettyLog.append("DEVICE_CNT", deviceList.size());
     int resultCnt = 0;
     Map<String, String> localEmsAddrMap = Maps.newHashMap();
+    Map<String, String> localEmsApiVerMap = Maps.newHashMap();
     for (Device device : deviceList) {
       Date _begin = null;
       String _siteId = device.getSiteId();
@@ -815,7 +834,6 @@ public class EnergyController {
         prettyLog.append("BEGIN", strBeginDate);
         prettyLog.append("END", strEndDate);
         logger.info("energy07,{},{},{}", device.getDeviceId(), strBeginDate, strEndDate);
-        String apiVer = "";
         if (!localEmsAddrMap.containsKey(_siteId)) {
           Site site = siteService.getSite(_siteId, prettyLog);
           if (site == null) {
@@ -823,7 +841,7 @@ public class EnergyController {
             continue;
           }
           localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
-          apiVer = site.getLocalEmsApiVer();
+          localEmsApiVerMap.put(_siteId, site.getLocalEmsApiVer());
         }
         List<EssChargePlan> essChargePlanList = Lists.newArrayList();
         try {
@@ -831,7 +849,7 @@ public class EnergyController {
         	if(deviceType != null) {
         		if ("2".equals(device.getInstType())) { // Local EMS
         			if("1".equals(deviceType) || "2".equals(deviceType)){ // 1: PCS, 2: BMS
-        				if("1.1".equals(apiVer)) { // 기존
+        				if("1.1".equals(localEmsApiVerMap.get(_siteId))) { // 기존
         					System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 기존 ess충방전계획량조회 api를 조회합니다..");
         					ChargingDischargingScheduleBefore cdList = PMGrowApiUtilBefore.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate,
         							endDate, "MI", "15", prettyLog);
@@ -865,6 +883,23 @@ public class EnergyController {
 //        							essChargePlanList.add(essChargePlan);
 //        						}
 //        					}
+        				} else if("1.2".equals(localEmsApiVerMap.get(_siteId))) { // api url 변경후(옴니시스템)
+        					System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 옴니시스템 새로운 ess충방전계획량조회 api를 조회합니다..");
+        					ChargingDischargingSchedule cdList = PMGrowApiUtil_omni.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "MI", "15", prettyLog);
+        					if(cdList != null){
+        						prettyLog.append("ITEM_SIZE", cdList.getItems().size());
+        						for (ChargingDischargingScheduleItemModel item : cdList.getItems()) {
+        							EssChargePlan essChargePlan = new EssChargePlan();
+        							essChargePlan.setDeviceId(device.getDeviceId());
+        							essChargePlan.setSiteId(_siteId);
+        							essChargePlan.setStdDate(item.getTimestamp());
+        							essChargePlan.setStdTimestamp(item.getTimestamp());
+        							essChargePlan.setChgVal(item.getScheduledCEnergy());
+        							essChargePlan.setDischgVal(item.getScheduledDEnergy());
+        							
+        							essChargePlanList.add(essChargePlan);
+        						}
+        					}
         				} else { // api url 변경후
         					System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 새로운 ess충방전계획량조회 api를 조회합니다..");
         					ChargingDischargingSchedule cdList = PMGrowApiUtil.getEssChargePlan(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "MI", "15", prettyLog);
@@ -919,6 +954,7 @@ public class EnergyController {
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     Map<String, String> localEmsAddrMap = Maps.newHashMap();
+    Map<String, String> localEmsApiVerMap = Maps.newHashMap();
     int resultCnt = 0;
     for (Device device : deviceList) {
       Date _begin = null;
@@ -990,7 +1026,6 @@ public class EnergyController {
         		  }
         	  } else { // localems
         		  if("3".equals(deviceType)){
-        			  String apiVer = "";
         			  if (!localEmsAddrMap.containsKey(_siteId)) {
         				  Site site = siteService.getSite(_siteId, prettyLog);
         				  if (site == null) {
@@ -998,9 +1033,9 @@ public class EnergyController {
         					  continue;
         				  }
         				  localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
-        				  apiVer = site.getLocalEmsApiVer();
+        				  localEmsApiVerMap.put(_siteId, site.getLocalEmsApiVer());
         			  }
-        			  if("1.1".equals(apiVer)) { // 기존
+        			  if("1.1".equals(localEmsApiVerMap.get(_siteId))) { // 기존
         				  System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 기존 pv발전량조회 api를 조회합니다..");
         				  	PvPowerGenModelBefore resultList = PMGrowApiUtilBefore.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate,
         				  				endDate, "MI", "15", prettyLog);
@@ -1031,6 +1066,22 @@ public class EnergyController {
 //        							  pvGentList.add(pvGen);
 //        						  }
         				  }//
+        			  } else if("1.2".equals(localEmsApiVerMap.get(_siteId))) { // api url 변경후(옴니시스템)
+      					System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 옴니시스템 새로운 pv발전량조회 api를 조회합니다..");
+      					PvPowerGenModel resultList = PMGrowApiUtil_omni.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate, endDate, "MI", "15", prettyLog);
+	      				  if(resultList != null){
+	      					  prettyLog.append("ITEM_SIZE", resultList.getItems().size());
+	      					  for (PvPowerGenModelItemModel item : resultList.getItems()) {
+	      						  PvGen pvGen = new PvGen();
+	      						  pvGen.setDeviceId(_deviceId);
+	      						  pvGen.setSiteId(_siteId);
+	      						  pvGen.setStdDate(item.getTimestamp());
+	      						  pvGen.setGenVal(item.getGenEnergy());
+	      						  pvGen.setTemp(item.getTemperature());
+	      						  
+	      						  pvGentList.add(pvGen);
+	      					  }
+	      				  }//
         			  } else { // api url 변경후
         				  System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 새로운 pv발전량조회 api를 조회합니다..");
         				  PvPowerGenModel resultList = PMGrowApiUtil.getPvPowerGenList(localEmsAddrMap.get(_siteId), _deviceId, beginDate, endDate, "MI", "15", prettyLog);

@@ -141,5 +141,20 @@ public class DrPaymentModel {
     public void setSmp(Long smp) {
       this.smp = smp;
     }
+
+	@Override
+	public String toString() {
+		return "ReductionPaymentModel [start=" + start + ", end=" + end + ", cblAmount=" + cblAmount + ", actualAmount="
+				+ actualAmount + ", reductionAmount=" + reductionAmount + ", smp=" + smp + "]";
+	}
+    
   }
+
+	@Override
+	public String toString() {
+		return "DrPaymentModel [month=" + month + ", reductionCapacity=" + reductionCapacity + ", basicPrice=" + basicPrice
+				+ ", maxReductionRatio=" + maxReductionRatio + ", minReductionRatio=" + minReductionRatio + ", profitRatio="
+				+ profitRatio + ", totalPayment=" + totalPayment + ", basicPayment=" + basicPayment + ", reductionPayments="
+				+ reductionPayments + "]";
+	}
 }
