@@ -146,7 +146,8 @@ function sendJoinAuthCode() {
 	var formData = $("#joinForm").serializeObject();
 	formData.authCode = authCode;
 	$.ajax({
-		url : "/sendJoinAuthCode",
+//		url : "/sendJoinAuthCode",
+		url : "/sendAuthCode",
 		type : 'post',
 		async : false, // 동기로 처리해줌
 		data : formData,

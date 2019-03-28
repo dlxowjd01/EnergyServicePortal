@@ -2,9 +2,7 @@ var formData = null;
 var recycleYn = true;
 function fn_cycle() {
 	if(recycleYn){
-		
 		$('.loading').show();
-		
 	}
 	formData = getSiteMainSchCollection();
 
@@ -22,11 +20,9 @@ function fn_cycle() {
 	}, 1000);
 	
 	if(recycleYn){
-
 		setTimeout(function() {
 			$('.loading').hide();
 		}, 1000);
-		
 	}
 	recycleYn = false;
 }
@@ -39,7 +35,6 @@ function getSiteMainSchCollection() {
 	var today = new Date();
 	var startDay;
 	var selTerm = $('#selTerm').val();
-//	endDay = today.format("yyyyMMdd") + "235959";
 	if (selTerm == 'day') {
 		// 오늘 날짜에 시간 정보만 000000
 		startDay = today.format("yyyyMMdd") + "000000";
@@ -76,14 +71,6 @@ function getSiteMainSchCollection() {
 	$('#areaType').val(areaType);
 
 	var formData = $("#schForm").serializeObject();
-//	{
-//			selTerm : "day",
-//			selPeriodVal : "15min",
-//			selTermFrom : firstDay,
-//			selTermTo : endDay, 
-//			siteId : "c64b328b"
-//	};
-	
 	return formData;
 }
 
@@ -124,7 +111,6 @@ function callback_getGMainSiteRankingTotalDetail(result) {
 	var now = new Date();
 
 	$('#rankTime').text(now.format('a/p hh:mm') + ' 기준');
-//	console.log(total);
 
 	if (total != null) {
 		$('#rankTotal').html('<span class="bul1" />');
