@@ -14,7 +14,7 @@
 		var urlArr = url.split("?");
 		var newParamUrl = "";
 		if(urlArr.length > 1) {
-			var \paramArr = urlArr[1].split("&");
+			var paramArr = urlArr[1].split("&");
 			var separator = "";
 			for(var i in paramArr) {
 				var compareParam = paramArr[i].split("=");
