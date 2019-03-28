@@ -1044,7 +1044,6 @@ function getGMainAlarmList(formData) {
 	$.ajax({
 		url : "/getGMainAlarmList",
 		type : 'post',
-//		async : false, // 동기로 처리해줌
 		async : true,
 		data : formData,
 		success: function(result) {
@@ -1059,7 +1058,6 @@ function getGMainSiteRankingTotalDetail() {
 		url : "/getGMainSiteRankingTotalDetail",
 		type : 'post',
 		async : false, // 동기로 처리해줌
-//		async : true,
 		data : formData,
 		success: function(result) {
 			callback_getGMainSiteRankingTotalDetail(result);
@@ -1074,7 +1072,6 @@ function getGMainSiteRankingList(selPageNum) {
 		url : "/getGMainSiteRankingList",
 		type : 'post',
 		async : false, // 동기로 처리해줌
-//		async : true,
 		data : formData,
 		success: function(result) {
 			callback_getGMainSiteRankingList(result);
@@ -1088,7 +1085,6 @@ function getGMainSiteTotalDetail(formData) {
 		url : "/getGMainSiteTotalDetail",
 		type : 'post',
 		async : false, // 동기로 처리해줌
-//		async : true,
 		data : formData,
 		success: function(result) {
 			callback_getGMainSiteTotalDetail(result);

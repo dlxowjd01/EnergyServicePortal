@@ -809,32 +809,34 @@ function changeAllMap() {
 
 /* 지역별 상세지도/정보 표시 */
 function local_detail(lname, area_type) {
-	$("#local_detail").attr("src", "../img/local_map_" + lname + "_detail.png");
-	if (area_type != null) {
-		area_idx = area_type - 1;
-	}
-
-	if (lname == "Seoul") {$(".detailmap .local_name").text("서울");}
-	if (lname == "Gyeonggi") {$(".detailmap .local_name").text("경기");}
-	if (lname == "Incheon") {$(".detailmap .local_name").text("인천");}
-	if (lname == "Gangwon") {$(".detailmap .local_name").text("강원");}
-	if (lname == "Chungbuk") {$(".detailmap .local_name").text("충북");}
-	if (lname == "Daejeon") {$(".detailmap .local_name").text("대전");}
-	if (lname == "Chungnam") {$(".detailmap .local_name").text("충남");}
-	if (lname == "Kyungbuk") {$(".detailmap .local_name").text("경북");}
-	if (lname == "Daegu") {$(".detailmap .local_name").text("대구");}
-	if (lname == "Ulsan") {$(".detailmap .local_name").text("울산");}
-	if (lname == "Sejong") {$(".detailmap .local_name").text("세종");}
-	if (lname == "Gyeongnam") {$(".detailmap .local_name").text("경남");}
-	if (lname == "Busan") {$(".detailmap .local_name").text("부산");}
-	if (lname == "Jeonbuk") {$(".detailmap .local_name").text("전북");}
-	if (lname == "Gwangju") {$(".detailmap .local_name").text("광주");}
-	if (lname == "Jeonnam") {$(".detailmap .local_name").text("전남");}	
-	if (lname == "Jeju") {$(".detailmap .local_name").text("제주");}
-	if (lname == "Ulleungdo") {$(".detailmap .local_name").text("울릉도");}
-
 	/* 데이터 조회 */
 	fn_cycle();
+
+	setTimeout(function() {
+		$("#local_detail").attr("src", "../img/local_map_" + lname + "_detail.png");
+		if (area_type != null) {
+			area_idx = area_type - 1;
+		}
+	
+		if (lname == "Seoul") {$(".detailmap .local_name").text("서울");}
+		if (lname == "Gyeonggi") {$(".detailmap .local_name").text("경기");}
+		if (lname == "Incheon") {$(".detailmap .local_name").text("인천");}
+		if (lname == "Gangwon") {$(".detailmap .local_name").text("강원");}
+		if (lname == "Chungbuk") {$(".detailmap .local_name").text("충북");}
+		if (lname == "Daejeon") {$(".detailmap .local_name").text("대전");}
+		if (lname == "Chungnam") {$(".detailmap .local_name").text("충남");}
+		if (lname == "Kyungbuk") {$(".detailmap .local_name").text("경북");}
+		if (lname == "Daegu") {$(".detailmap .local_name").text("대구");}
+		if (lname == "Ulsan") {$(".detailmap .local_name").text("울산");}
+		if (lname == "Sejong") {$(".detailmap .local_name").text("세종");}
+		if (lname == "Gyeongnam") {$(".detailmap .local_name").text("경남");}
+		if (lname == "Busan") {$(".detailmap .local_name").text("부산");}
+		if (lname == "Jeonbuk") {$(".detailmap .local_name").text("전북");}
+		if (lname == "Gwangju") {$(".detailmap .local_name").text("광주");}
+		if (lname == "Jeonnam") {$(".detailmap .local_name").text("전남");}	
+		if (lname == "Jeju") {$(".detailmap .local_name").text("제주");}
+		if (lname == "Ulleungdo") {$(".detailmap .local_name").text("울릉도");}
+	}, 1000);
 }
 
 function readArea() {
@@ -842,46 +844,48 @@ function readArea() {
 	if (area_idx == area_array.length) {area_idx = 0;}
 //	console.log(area_array[area_idx]);
 
-	/* 전체지도/정보 변경 */
-	$("#local").attr("src", "../img/local_map_" + area_array[area_idx] + ".png");
-	$('img[usemap]').rwdImageMaps();
-
-	if (area_array[area_idx] == "Seoul") {$(".allmap .local_name").text("서울");}
-	if (area_array[area_idx] == "Busan") {$(".allmap .local_name").text("부산");}
-	if (area_array[area_idx] == "Daegu") {$(".allmap .local_name").text("대구");}
-	if (area_array[area_idx] == "Incheon") {$(".allmap .local_name").text("인천");}
-	if (area_array[area_idx] == "Gwangju") {$(".allmap .local_name").text("광주");}
-	if (area_array[area_idx] == "Daejeon") {$(".allmap .local_name").text("대전");}
-	if (area_array[area_idx] == "Ulsan") {$(".allmap .local_name").text("울산");}
-	if (area_array[area_idx] == "Sejong") {$(".allmap .local_name").text("세종");}
-	if (area_array[area_idx] == "Gyeonggi") {$(".allmap .local_name").text("경기");}
-	if (area_array[area_idx] == "Gangwon") {$(".allmap .local_name").text("강원");}
-	if (area_array[area_idx] == "Chungbuk") {$(".allmap .local_name").text("충북");}
-	if (area_array[area_idx] == "Chungnam") {$(".allmap .local_name").text("충남");}
-	if (area_array[area_idx] == "Jeonbuk") {$(".allmap .local_name").text("전북");}
-	if (area_array[area_idx] == "Jeonnam") {$(".allmap .local_name").text("전남");}
-	if (area_array[area_idx] == "Kyungbuk") {$(".allmap .local_name").text("경북");}
-	if (area_array[area_idx] == "Gyeongnam") {$(".allmap .local_name").text("경남");}
-	if (area_array[area_idx] == "Jeju") {$(".allmap .local_name").text("제주");}
-	if (area_array[area_idx] == "Ulleungdo") {$(".allmap .local_name").text("울릉도");}
-
 	/* 상세지도/정보 변경 */
 	local_detail(area_array[area_idx]);
 
-	area_idx++;
-//	if (area_idx == 7) { area_idx++ } // 세종(08)은 아직 이미지가 없으므로 스킵
-
-	// 지역에 사이트가 존재할 경우만 보여줌
-	var cnt = 0;
-	var maxCnt = 18;
-	while (area_cnt_map[numToString(area_idx + 1)] == null && cnt++ < maxCnt) {
-		if (++area_idx > 17) {
-			area_idx = 0;
+	setTimeout(function() {
+		/* 전체지도/정보 변경 */
+		$("#local").attr("src", "../img/local_map_" + area_array[area_idx] + ".png");
+		$('img[usemap]').rwdImageMaps();
+	
+		if (area_array[area_idx] == "Seoul") {$(".allmap .local_name").text("서울");}
+		if (area_array[area_idx] == "Busan") {$(".allmap .local_name").text("부산");}
+		if (area_array[area_idx] == "Daegu") {$(".allmap .local_name").text("대구");}
+		if (area_array[area_idx] == "Incheon") {$(".allmap .local_name").text("인천");}
+		if (area_array[area_idx] == "Gwangju") {$(".allmap .local_name").text("광주");}
+		if (area_array[area_idx] == "Daejeon") {$(".allmap .local_name").text("대전");}
+		if (area_array[area_idx] == "Ulsan") {$(".allmap .local_name").text("울산");}
+		if (area_array[area_idx] == "Sejong") {$(".allmap .local_name").text("세종");}
+		if (area_array[area_idx] == "Gyeonggi") {$(".allmap .local_name").text("경기");}
+		if (area_array[area_idx] == "Gangwon") {$(".allmap .local_name").text("강원");}
+		if (area_array[area_idx] == "Chungbuk") {$(".allmap .local_name").text("충북");}
+		if (area_array[area_idx] == "Chungnam") {$(".allmap .local_name").text("충남");}
+		if (area_array[area_idx] == "Jeonbuk") {$(".allmap .local_name").text("전북");}
+		if (area_array[area_idx] == "Jeonnam") {$(".allmap .local_name").text("전남");}
+		if (area_array[area_idx] == "Kyungbuk") {$(".allmap .local_name").text("경북");}
+		if (area_array[area_idx] == "Gyeongnam") {$(".allmap .local_name").text("경남");}
+		if (area_array[area_idx] == "Jeju") {$(".allmap .local_name").text("제주");}
+		if (area_array[area_idx] == "Ulleungdo") {$(".allmap .local_name").text("울릉도");}
+	
+		area_idx++;
+	//	if (area_idx == 7) { area_idx++ } // 세종(08)은 아직 이미지가 없으므로 스킵
+	
+		// 지역에 사이트가 존재할 경우만 보여줌
+		var cnt = 0;
+		var maxCnt = 18;
+		while (area_cnt_map[numToString(area_idx + 1)] == null && cnt++ < maxCnt) {
+			if (++area_idx > 17) {
+				area_idx = 0;
+			}
 		}
-	}
-//	console.log(area_idx);
-
-	monitoring_cycle_5sec = setTimeout(readArea, 5000); /* 5초 간격 */
+	//	console.log(area_idx);
+	
+		monitoring_cycle_5sec = setTimeout(readArea, 5000); /* 5초 간격 */
+	}, 1000);
 }
 
 function numToString(num) {

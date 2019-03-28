@@ -257,7 +257,6 @@ function callback_getGMainSiteTotalDetail(result) {
 		$('.detailCharge').text(numberComma(charge));
 		$('.detailChargeUnit').text(map3.get("unit"));
 
-		console.log("total.charge0   ", total.reward);
 		var reward = (total.reward == null) ? 0 : total.reward;
 		$('.detailReward').text(numberComma(reward));
 	} else {
