@@ -1,29 +1,12 @@
 	$(document).ready(function() {
 		changeSelTerm('day');
-		
-		$dtpk1 = $("#datepicker1");
-		$dtpk2 = $("#datepicker2");
-		$("#dtCnt").val("");
-		if(SelTerm == "other") {
-			$("#selTermFrom").val( ($dtpk1.val() == "") ? "" : new Date( $dtpk1.val()+" 00:00:00" ).format("yyyyMMddHHmmss") );
-			$("#selTermTo").val( ($dtpk2.val() == "") ? "" : new Date( $dtpk2.val()+" 23:59:59" ).format("yyyyMMddHHmmss") );
-			$("#dtCnt").val(  dateDiff($dtpk1.val()+" 00:00:00", $dtpk2.val()+" 23:59:59")+1  );
-		}
-		
+		settingSelTerm();
 		getDBData();
 	});
 	
 	$( function () {
 		$("#searchBtn").click(function(){
-			$dtpk1 = $("#datepicker1");
-			$dtpk2 = $("#datepicker2");
-			$("#dtCnt").val("");
-			if(SelTerm == "other") {
-				$("#selTermFrom").val( ($dtpk1.val() == "") ? "" : new Date( $dtpk1.val()+" 00:00:00" ).format("yyyyMMddHHmmss") );
-				$("#selTermTo").val( ($dtpk2.val() == "") ? "" : new Date( $dtpk2.val()+" 23:59:59" ).format("yyyyMMddHHmmss") );
-				$("#dtCnt").val(  dateDiff($dtpk1.val()+" 00:00:00", $dtpk2.val()+" 23:59:59")+1  );
-			}
-			
+			settingSelTerm();
 			getDBData();
 		});
 		
@@ -383,29 +366,30 @@
 		}
 	}
 	
-//	function alarmTest() {
-//		var dt = new Date();
-//		$.ajax({
-//			url : "/v1/alarm",
-//			type : 'post',
-//			async : false, // 동기로 처리해줌
-//			data : {
-//				siteId : "9de1d9f",
-//				deviceId : "1",
-//				deviceType : 1,
-//				alarmTime : dt.getTime(),
-//				alarmType : 1,
-//				alarmMsg : "짹짹이",
+	function alarmTest() {
+		var dt = new Date();
+		$.ajax({
+			url : "/v1/alarm",
+			type : 'post',
+			async : false, // 동기로 처리해줌
+			contentType : "application/x-www-form-urlencoded",
+			data : {
+				siteId : "17094385",
+				deviceId : "1",
+				deviceType : 1,
+				alarmTime : dt.getTime(),
+				alarmType : 1,
+				alarmMsg : "짹짹이"
 //				alarmCode : 3
-//			},
-//			success: function(result) {
-//				
-//			},
-//			error:function(request,status,error){
-//				
-//			}
-//		});
-//	}
+			},
+			success: function(result) {
+				
+			},
+			error:function(request,status,error){
+				
+			}
+		});
+	}
 	
 	function updateAlarmActForm(deviceName, alarmMsg, alarmActYn, alarmNote, alarmIdx) {
 		$("#alarmIdx").val(alarmIdx);

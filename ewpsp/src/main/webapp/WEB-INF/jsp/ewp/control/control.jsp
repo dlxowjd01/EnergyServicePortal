@@ -134,7 +134,7 @@
 							</div>
 							<div class="clear mt30">
 								<a href="javascript:popupOpen('rpeople');" class="fr default_btn" id="smsSendMngBtn"><i class="glyphicon glyphicon-phone"></i> 알람전송 관리</a>
-								<!-- <a href="javascript:alarmTest;" class="fr default_btn" id="smsSendMngBtn"><i class="glyphicon glyphicon-phone"></i> 알람전송 테스트</a> -->
+								<!-- <a href="javascript:alarmTest();" class="fr default_btn" id="smsSendMngBtn"><i class="glyphicon glyphicon-phone"></i> 알람전송 테스트</a> -->
 							</div>
 
 						</div>

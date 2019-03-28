@@ -77,7 +77,6 @@ public class ApiController {
 		@RequestParam(defaultValue = "") String alarmMsg, // 알람메시지 (파라메터는 필수이고 값은 있는 경우에만 세팅)
 		@RequestParam(required = false, defaultValue = "") String alarmCode // 알람코드
 	) {
-		System.out.println("siteId : "+siteId+", deviceId : "+deviceId+", deviceType : "+deviceType+", alarmTime : "+alarmTime+", alarmType : "+alarmType+", alarmMsg : "+alarmMsg+", alarmCode : "+alarmCode);
 		try {
 			Map<String, Object> dvMap = Maps.newHashMap();
 			dvMap.put("siteId", siteId);

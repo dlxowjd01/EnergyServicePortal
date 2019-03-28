@@ -373,6 +373,7 @@
 								<select name="localEmsApiVer" id="localEmsApiVer" class="sel" style="width:100%">
 									<option value="1.0">v1.0</option>
 									<option value="1.1">v1.1</option>
+									<option value="1.2">v1.2</option>
 								</select>
 							</td>
 						</tr>

@@ -128,9 +128,26 @@ $(function () {
 });
 
 // 에너지모니터링 db조회 검색조건 모으기
+function getCollect_sch_condition() {
+	settingSelTerm();
+	
+	var formData = $("#schForm").serializeObject();
+	console.log(formData);
+
+	$('.loading').show();
+	var today = new Date();
+	setTimeout(function() {
+		getDBData(formData); // DB 데이터 조회(각 화면마다 존재)
+	}, 1000);
+	update_updtDataTime(today, "updtTime"); // 검색시간(차트 새로고침시간) 업데이트
+	setTimeout(function() {
+		$('.loading').hide();
+	}, 1000);
+}
+
 var schStartTime;
 var schEndTime;
-function getCollect_sch_condition() {
+function settingSelTerm() {
 	$dtpk1 = $("#datepicker1");
 	$dtpk2 = $("#datepicker2");
 	$dtpk3 = $("#datepicker3");
@@ -140,8 +157,6 @@ function getCollect_sch_condition() {
 	
 	var firstDay = new Date();
 	var endDay = new Date();
-//	var firstDay = new Date(2018, 9, 10, 13, 45, 37); 
-//	var endDay = new Date(2018, 9, 10, 13, 45, 37);
 	var startTime;
 	var endTime;
 	if(SelTerm == '15min') { // 15분(현재 안나옴)
@@ -202,21 +217,7 @@ function getCollect_sch_condition() {
 		queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
 		$("#selTermFrom").val(queryStart);
 		$("#selTermTo").val(queryEnd);
-		
 	}
-	
-	var formData = $("#schForm").serializeObject();
-	console.log(formData);
-
-	$('.loading').show();
-	var today = new Date();
-	setTimeout(function() {
-		getDBData(formData); // DB 데이터 조회(각 화면마다 존재)
-	}, 1000);
-	update_updtDataTime(today, "updtTime"); // 검색시간(차트 새로고침시간) 업데이트
-	setTimeout(function() {
-		$('.loading').hide();
-	}, 1000);
 }
 
 // 데이터 뿌리기(highcharts, datatable)

@@ -853,6 +853,7 @@
 			`time_zone`,   /* 타임Zone(예:GMT+8) */
 			local_ems_addr,   /* Local EMS 주소 */
 			local_ems_key,   /* Local EMS 암호키 */
+			local_ems_api_ver,   /* Local EMS api 버전 */
 			comp_idx,   /* 회사식별자 */
 			del_yn, 
 			reg_uid, 
@@ -867,6 +868,7 @@
 			'GMT+8', 
 			#{localEmsAddr }, 
 			#{localEmsKey }, 
+			#{localEmsApiVer }, 
 			#{compIdx }, 
 			'N', 
 			#{regUid }, 

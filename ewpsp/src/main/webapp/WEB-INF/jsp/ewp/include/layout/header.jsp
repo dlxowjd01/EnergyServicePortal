@@ -3,7 +3,30 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <script type="text/javascript">
-var selViewSiteName = "";
+	var selViewSiteName = "";
+	
+	function selectSite(siteId) {
+		var newUrl = changeParamUrl(window.location.href, "siteId", siteId);
+		location.href = newUrl;
+	}
+	
+	function changeParamUrl(url, paramName, paramValue) {
+		var urlArr = url.split("?");
+		var newParamUrl = "";
+		var paramArr = urlArr[1].split("&");
+		var separator = "";
+		for(var i in paramArr) {
+			var compareParam = paramArr[i].split("=");
+			if(compareParam[0].indexOf(paramName) > -1) {
+				newParamUrl += separator+paramName+"="+paramValue;
+			} else {
+				newParamUrl += separator+paramArr[i];
+			}
+			separator = "&";
+		}
+		
+		return urlArr[0]+"?"+newParamUrl;
+	}
 </script>
 			<nav class="clear">
 				<button type="button" class="category">카테고리</button>
@@ -26,7 +49,7 @@ var selViewSiteName = "";
 									<c:set var="siteExist" value="false" />
 									<c:forEach var="userSite" items="${userSiteList}" varStatus="j">
 										<c:if test="${userSite.site_grp_idx eq userGroup.site_grp_idx}">
-										<li data-value="${userSite.site_id}"><a href="/siteMain?siteId=${userSite.site_id}">${userSite.site_name}</a></li>
+										<li data-value="${userSite.site_id}"><a href="javascript:selectSite('${userSite.site_id}')">${userSite.site_name}</a></li>
 										<c:if test="${not siteExist}"><c:set var="siteExist" value="true" /></c:if>
 										</c:if>
 									</c:forEach>

@@ -54,19 +54,19 @@ public class CommonController {
 		if("IOE".equals(gbn)) {
 			list = deviceMonitoringService.getDeviceIOEList(param);
 			excel_title = "장치현황(IOE)_"+CommonUtils.convertDateFormat(new Date(), "yyyyMMddHHmmssSSS");
-			col_nm = "No.|Site ID|Device Name|Device ID|Status|Status Time";
+			col_nm = "No.|Device Name|Device ID|Status|Status Time";
 		} else if("PCS".equals(gbn)) {
 			list = deviceMonitoringService.getDevicePCSList(param);
 			excel_title = "장치현황(PCS)_"+CommonUtils.convertDateFormat(new Date(), "yyyyMMddHHmmssSSS");
-			col_nm = "No.|Site ID|Device Name|Device ID|PCS Status|C/D Status|PCS Message|Status Time";
+			col_nm = "No.|Device Name|Device ID|Device Type|PCS Status|PCS Message|Status Time";
 		} else if("BMS".equals(gbn)) {
 			list = deviceMonitoringService.getDeviceBMSList(param);
 			excel_title = "장치현황(BMS)_"+CommonUtils.convertDateFormat(new Date(), "yyyyMMddHHmmssSSS");
-			col_nm = "No|Site ID|Device Name|Device ID|BMS Status|C/D Status|BMS Message|Status Time";
+			col_nm = "No|Device Name|Device ID|Device Type|BMS Status|BMS Message|Status Time";
 		} else if("PV".equals(gbn)) {
 			list = deviceMonitoringService.getDevicePVList(param);
 			excel_title = "장치현황(PV)_"+CommonUtils.convertDateFormat(new Date(), "yyyyMMddHHmmssSSS");
-			col_nm = "No.|Site ID|Device Name|Device ID|PV Status|Temperature|PV Message|Status Time";
+			col_nm = "No.|Device Name|Device ID|Device Type|PV Status|Temperature|PV Message|Status Time";
 		}
 		
 		param.put("COL_NM", col_nm);
@@ -87,10 +87,11 @@ public class CommonController {
 			}
 			
 		} catch (NullPointerException e1) {
-			logger.error("error is : "+e1.toString());
+			logger.error("error1 is : "+e1.toString());
+			e1.printStackTrace();
 		} catch (Exception e) {
-			//e.printStackTrace();
 			logger.error("error is : "+e.toString());
+			e.printStackTrace();
 		} finally {
 			if(ed != null) {
 				ed.close();

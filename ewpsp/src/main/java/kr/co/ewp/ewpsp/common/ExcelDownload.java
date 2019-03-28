@@ -124,8 +124,9 @@ public class ExcelDownload {
 					}
 				} else if(name.contains("_timestamp")) {
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					String str = sdf.format( new Date( ((Timestamp)excelMap.get(name)).getTime() ) );
-					cell.setCellValue( str );
+					if(excelMap.get(name) != null && !"".equals(excelMap.get(name))) cell.setCellValue( sdf.format( new Date( ((Timestamp)excelMap.get(name)).getTime() ) ) );
+					else cell.setCellValue( "" );
+					
 				} else {
 					if(excelMap.get(name) instanceof BigDecimal) {
 						cell.setCellValue( ((BigDecimal)excelMap.get(name)).toString() );

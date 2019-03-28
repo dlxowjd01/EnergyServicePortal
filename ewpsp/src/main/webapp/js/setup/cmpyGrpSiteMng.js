@@ -467,7 +467,8 @@
 				} else if(changeYn == "Y") {
 //					if(resultCnt > 0) {
 						alert("저장되었습니다.");
-						location.reload();
+//						location.reload();
+						if(btnGbn == "confirm") location.reload();
 //					} else {
 //						alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
 //					}
