@@ -6,26 +6,37 @@
 	var selViewSiteName = "";
 	
 	function selectSite(siteId) {
-		var newUrl = changeParamUrl(window.location.href, "siteId", siteId);
+		var newUrl = changeParamUrl(window.location.href, "siteId", siteId, window.location.pathname);
 		location.href = newUrl;
 	}
 	
-	function changeParamUrl(url, paramName, paramValue) {
+	function changeParamUrl(url, paramName, paramValue, pathName) {
 		var urlArr = url.split("?");
 		var newParamUrl = "";
-		var paramArr = urlArr[1].split("&");
-		var separator = "";
-		for(var i in paramArr) {
-			var compareParam = paramArr[i].split("=");
-			if(compareParam[0].indexOf(paramName) > -1) {
-				newParamUrl += separator+paramName+"="+paramValue;
-			} else {
-				newParamUrl += separator+paramArr[i];
+		if(urlArr.length > 1) {
+			var \paramArr = urlArr[1].split("&");
+			var separator = "";
+			for(var i in paramArr) {
+				var compareParam = paramArr[i].split("=");
+				if(compareParam[0].indexOf(paramName) > -1) {
+					newParamUrl += separator+paramName+"="+paramValue;
+				} else {
+					newParamUrl += separator+paramArr[i];
+				}
+				separator = "&";
 			}
-			separator = "&";
+		} else {
+			newParamUrl = paramName+"="+paramValue;
 		}
 		
-		return urlArr[0]+"?"+newParamUrl;
+		var newPathName = pathName;
+		if(pathName != null && pathName != "" && pathName != undefined) {
+			if(pathName == "/main") {
+				newPathName = "/siteMain";
+			}
+		}
+		
+		return newPathName+"?"+newParamUrl;
 	}
 </script>
 			<nav class="clear">
