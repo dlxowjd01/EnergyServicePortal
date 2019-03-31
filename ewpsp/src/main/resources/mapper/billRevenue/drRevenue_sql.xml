@@ -45,7 +45,7 @@
 	</select>
 	
 	<select id="getDRRevenueTexList" parameterType="hashMap" resultType="hashMap">
-		/* DR 수익 명세 조회 */
+		/* DR 수익 명세서 조회 */
 		select
 			site_id, std_yearm, date_format(reduct_sdate,'%Y%m%d') as reduct_sdate, 
 			count(*) as reduct_cnt_hour, /* 감축 횟수-시간(회-hr) */
@@ -60,8 +60,8 @@
 			avg(dr_profit_ratio) as profit_ratio /* 수익비율(%) : 필수 중개인-고객 계약시 정해짐 (FIX) */
 		from (
 			SELECT 
-				dr_revn_idx, site_id, std_yearm, std_timestamp, std_date, reduct_cap, basic_price, max_reduct_ratio, min_reduct_ratio, dr_profit_ratio, 
-				tot_pay, basic_pay, reduct_stimestamp, reduct_etimestamp, reduct_sdate, reduct_edate, cbl_amt, act_amt, reduct_amt, smp, reg_date, mod_date ,
+				dr_revn_idx, d.site_id, std_yearm, std_timestamp, std_date, reduct_cap, basic_price, max_reduct_ratio, min_reduct_ratio, dr_profit_ratio, 
+				tot_pay, basic_pay, reduct_stimestamp, reduct_etimestamp, reduct_sdate, reduct_edate, cbl_amt, act_amt, reduct_amt, smp, 
 				( reduct_amt/reduct_cap )*100 as reduct_cap_per, /* 감축이행율 = (감축인정용량/감축이행용량) * 100 */
 				( reduct_amt*reduct_cap ) as cap_amt, /* 용량정산금 = (감축인정용량 * 기본용량요금) */
 				123 as reduct_reward_amt, /* 감축정산금 = 감축인정용량 * 시간 * 실적정산금(or 실적요금. 90원/kwh)(현재 임의의 숫자를 넣어 진행) */
@@ -70,7 +70,7 @@
 				33 as ewp_reward_amt /* ewp 정산금액(현재 임의의 숫자를 넣어 진행) */
 			FROM tb_dr_revenue d, tb_site_set e
 			where d.site_id = e.site_id
-			and site_id = #{siteId }
+			and d.site_id = #{siteId }
 			and std_yearm = #{selTermTex }
 		) a
 		group by site_id, std_yearm
@@ -80,7 +80,7 @@
 	</select>
 	
 	<select id="getDRRevenueChartList" parameterType="hashMap" resultType="hashMap">
-		/* DR 수익 명세 조회 */
+		/* DR 수익 명세서 그래프 조회 */
 		select
 			site_id, std_yearm, date_format(reduct_sdate,'%Y%m%d') as reduct_sdate, 
 			count(*) as reduct_cnt_hour, /* 감축 횟수-시간(회-hr) */
@@ -103,14 +103,14 @@
 					cap_amt+( reduct_amt*reduce_hour*smp ) as total_reward_amt /* 실적총정산금액 = 용량정산금 + 감축정산금 */
 				from (
 						select 
-							dr_revn_idx, site_id, std_yearm, std_timestamp, std_date, reduct_cap, basic_price, max_reduct_ratio, min_reduct_ratio, dr_profit_ratio, 
-							tot_pay, basic_pay, reduct_stimestamp, reduct_etimestamp, reduct_sdate, reduct_edate, cbl_amt, act_amt, reduct_amt, smp, reg_date, mod_date ,
+							dr_revn_idx, d.site_id, std_yearm, std_timestamp, std_date, reduct_cap, basic_price, max_reduct_ratio, min_reduct_ratio, dr_profit_ratio, 
+							tot_pay, basic_pay, reduct_stimestamp, reduct_etimestamp, reduct_sdate, reduct_edate, cbl_amt, act_amt, reduct_amt, smp, 
 							cast(date_format(TIMEDIFF(reduct_etimestamp, reduct_stimestamp),'%H') as unsigned INTEGER) as reduce_hour,
 							( reduct_amt/reduct_cap )*100 as reduct_cap_per, /* 감축이행율 = (감축인정용량/감축이행용량) * 100 */
 							( reduct_amt*reduct_cap ) as cap_amt /* 용량정산금 = (감축인정용량 * 기본용량요금) */
 						from tb_dr_revenue d, tb_site_set e
 						where d.site_id = e.site_id
-						and site_id = #{siteId }
+						and d.site_id = #{siteId }
 						and std_yearm between #{selTermFrom } and #{selTermTo }
 				) c
 			) b
