@@ -46,7 +46,7 @@ public class CmpyGrpSiteMngController {
 //	@Resource(name="prop")
 //	private ContextPropertiesUtil properties;
 	@Value("${globals.fileUpload.rootPath}")
-	private String fileUploadRootPath;;
+	private String fileUploadRootPath;
 	
 	
 	@RequestMapping("/cmpyGrpSiteMng")
@@ -507,7 +507,8 @@ public class CmpyGrpSiteMngController {
 		Integer userIdx = (userInfo.get("user_idx") == null) ? null : (Integer) userInfo.get("user_idx");
 		
 		String root = fileUploadRootPath;
-		String path = "/upload/";
+		String seperator = File.separator;
+		String path = seperator+"upload"+seperator;
 		
 		String fileName = "";
 		String newFileName = ""; // 업로드 되는 파일명
@@ -617,7 +618,8 @@ public class CmpyGrpSiteMngController {
 		
 		if("Y".equals(fileChangeYn)) {
 			String root = fileUploadRootPath;
-			String path = "/upload/";
+			String seperator = File.separator;
+			String path = seperator+"upload"+seperator;
 			
 			String fileName = "";
 			String newFileName = ""; // 업로드 되는 파일명

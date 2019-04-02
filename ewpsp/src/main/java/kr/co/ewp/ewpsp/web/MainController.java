@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,6 +35,9 @@ public class MainController {
 
 	@Resource(name="cmpyGrpSiteMngService")
 	private CmpyGrpSiteMngService cmpyGrpSiteMngService;
+
+	@Value("${globals.fileUpload.rootPath}")
+	private String fileUploadRootPath;
 
 	@RequestMapping("/main")
 	public String main() {
@@ -236,6 +240,7 @@ public class MainController {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
+		resultMap.put("imgRoot", fileUploadRootPath);
 		return resultMap;
 	}
 

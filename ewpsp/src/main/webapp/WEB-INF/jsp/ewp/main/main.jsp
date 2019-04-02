@@ -223,7 +223,7 @@
 			var imgSrc = '/img/group_dimg.png';
 			if ($('#grpIdx').val() != '') {
 				if (total.site_grp_img_path != null && total.site_grp_img_sname != null) {
-					imgSrc = total.site_grp_img_path + total.site_grp_img_sname;
+					imgSrc = result.imgRoot+total.site_grp_img_path + total.site_grp_img_sname;
 				}
 				$('#grpImg').attr('src', imgSrc);
 				$('.group_name').text(total.site_grp_name);
