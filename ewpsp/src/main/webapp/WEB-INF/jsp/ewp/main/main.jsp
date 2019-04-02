@@ -344,6 +344,8 @@
 				.concat(groupList[i].site_grp_name)
 				.concat('</a>');
 			groupListHtml = groupListHtml.concat(li);
+			siteGrp_cnt_map[groupList[i].site_grp_idx] = groupList[i].site_grp_name;
+			siteGrp_array[i] = groupList[i].site_grp_idx;
 		}
 		$('#selAreaList').html(groupListHtml);
 	}
@@ -379,6 +381,10 @@
 	function changeMapGroup(aElmt) {
 		var text = changeLiClass(aElmt);
 		$('#selMapGroup').text(text);
+		
+		done = true;
+		clearTimeout(monitoring_cycle_5sec);
+		monitoring_cycle_5sec = null;
 	
 		if (text == '지역별') {
 			$('#mapUsage').show();
@@ -406,9 +412,11 @@
 				$('#selAreaList').html(groupListHtml);
 			}
 	
-			done = true;
-			clearTimeout(monitoring_cycle_5sec);
-			monitoring_cycle_5sec = null;
+			if (allSiteGrpFlag) {
+				changeAllSiteGrp();
+			} else {
+				changeLocalSiteGrp();
+			}
 		}
 		recycleYn = true;
 		
@@ -436,12 +444,11 @@
 	
 		if (grpIdx == 'All') {
 			$('#grpIdx').val('');
+			changeAllSiteGrp();
 		} else {
-			$('#grpIdx').val(grpIdx);
+			siteGrp_local_detail('', grpIdx);
+			changeLocalSiteGrp();
 		}
-		recycleYn = true;
-		
-		fn_cycle();
 	}
 	
 	// 선택된 li에 class='on'을 붙이고 텍스트를 얻어온다.
@@ -514,20 +521,6 @@
 										<h2>최근 알람</h2>
 										<ul>
 											<li><a href="#;">조회중입니다.</a></li>
-<!-- 
-											<li>
-												<a href="#;">랙 전압 불균형이 감지되었습니다. 신속한 처리요망. 메시지가 길면 절삭처리 됩니다. 메시지가 길면 절삭처리 됩니다.</a>
-												<span>2018-08-12 11:41:26</span>
-											</li>
-											<li>
-												<a href="#;">랙 전압 불균형이 감지되었습니다. 신속한 처리요망.</a>
-												<span>2018-08-12 11:41:26</span>
-											</li>
-											<li>
-												<a href="#;">랙 전압 불균형이 감지되었습니다. 신속한 처리요망.</a>
-												<span>2018-08-12 11:41:26</span>
-											</li>
- -->
 										</ul>
 									</div>
 								</div>
@@ -567,33 +560,6 @@
 												        </tr>
 												    </thead>
 												    <tbody id="siteRankingTbody">
-<!-- 
-												        <tr>
-												            <th>한국제지</th>
-												            <td>50</td>
-												            <td>100</td>
-												        </tr>
-												        <tr>
-												            <th>문수경기장</th>
-												            <td>90</td>
-												            <td>100</td>
-												        </tr>
-												        <tr>
-												            <th>태광석유화학</th>
-												            <td>70</td>
-												            <td>90</td>
-												        </tr>
-												        <tr>
-												            <th>한국제지</th>
-												            <td>30</td>
-												            <td>40</td>
-												        </tr>
-												        <tr>
-												            <th>문수경기장</th>
-												            <td>100</td>
-												            <td>92</td>
-												        </tr>
- -->
 												    </tbody>
 												</table>
 											</div>											
@@ -790,188 +756,6 @@
 										      <tr class="dbclickopen">
 										        <td colspan="7">데이터 조회중입니다.</td>
 										      </tr>
-<!-- 
-										      <tr class="dbclickopen">
-										        <td>1</td>
-										        <td>
-										        	<div class="cname"><a href="../main/smain.html">롯데정밀화학Z</a></div>
-										        </td>
-											    <td>
-											    	<div class="eq_icon">
-											        	<span class="eq1 on">장치1</span>
-											        	<span class="eq2">장치2</span>
-											        	<span class="eq3">장치3</span>
-											        	<span class="eq4">장치4</span>
-											        </div>
-											    </td>
-										        <td>1,100</td>
-										        <td>500</td>
-										        <td>700</td>
-										        <td>200</td>
-										      </tr>
-										      <tr class="dbclickopen">
-										      	<td>2</td>
-										        <td>
-											        <div class="cname"><a href="../main/smain.html">한국프랜지</a></div>
-											    </td>
-											    <td>
-											    	<div class="eq_icon">
-											        	<span class="eq1 on">장치1</span>
-											        	<span class="eq2">장치2</span>
-											        	<span class="eq3">장치3</span>
-											        	<span class="eq4">장치4</span>
-											        </div>
-											    </td>
-										        <td>1,100</td>
-										        <td>500</td>
-										        <td>700</td>
-										        <td>200</td>
-										      </tr>
-										      <tr class="dbclickopen">
-										      	<td>3</td>
-										        <td>
-											        <div class="cname"><a href="../main/smain.html">제일화성</a></div>
-											    </td>
-											    <td>
-											    	<div class="eq_icon">
-											        	<span class="eq1 on">장치1</span>
-											        	<span class="eq2 on">장치2</span>
-											        	<span class="eq3">장치3</span>
-											        	<span class="eq4">장치4</span>
-											        </div>
-											    </td>
-										        <td>1,100</td>
-										        <td>500</td>
-										        <td>700</td>
-										        <td>200</td>
-										      </tr>
-										      <tr class="dbclickopen">
-										      	<td>4</td>
-										        <td>
-											        <div class="cname"><a href="../main/smain.html">한국제지</a></div>
-											    </td>
-											    <td>
-											    	<div class="eq_icon">
-											        	<span class="eq1">장치1</span>
-											        	<span class="eq2 on">장치2</span>
-											        	<span class="eq3">장치3</span>
-											        	<span class="eq4 on">장치4</span>
-											        </div>
-											    </td>
-										        <td>1,100</td>
-										        <td>500</td>
-										        <td>700</td>
-										        <td>200</td>
-										      </tr>
-										      <tr class="dbclickopen">
-										      	<td>5</td>
-										        <td>
-											        <div class="cname"><a href="../main/smain.html">문수경기장</a></div>
-											    </td>
-											    <td>
-											    	<div class="eq_icon">
-											        	<span class="eq1">장치1</span>
-											        	<span class="eq2">장치2</span>
-											        	<span class="eq3 on">장치3</span>
-											        	<span class="eq4 on">장치4</span>
-											        </div>
-											    </td>
-										        <td>1,100</td>
-										        <td>500</td>
-										        <td>700</td>
-										        <td>200</td>
-										      </tr>
-										      <tr class="dbclickopen">
-										      	<td>6</td>
-										        <td>
-											        <div class="cname"><a href="../main/smain.html">태광석유화학</a></div>
-											    </td>
-											    <td>
-											    	<div class="eq_icon">
-											        	<span class="eq1 on">장치1</span>
-											        	<span class="eq2 on">장치2</span>
-											        	<span class="eq3 on">장치3</span>
-											        	<span class="eq4">장치4</span>
-											        </div>
-											    </td>
-										        <td>1,100</td>
-										        <td>500</td>
-										        <td>700</td>
-										        <td>200</td>
-										      </tr>
-										      <tr class="dbclickopen">
-										      	<td align="left">7</td>
-										        <td>
-											        <div class="cname"><a href="../main/smain.html">SNF KOREA</a></div>
-											    </td>
-											    <td>
-											    	<div class="eq_icon">
-											        	<span class="eq1 on">장치1</span>
-											        	<span class="eq2 on">장치2</span>
-											        	<span class="eq3">장치3</span>
-											        	<span class="eq4">장치4</span>
-											        </div>
-											    </td>
-										        <td>1,100</td>
-										        <td>500</td>
-										        <td>700</td>
-										        <td>200</td>
-										      </tr>
-										      <tr class="dbclickopen">
-										        <td>8</td>
-										        <td>
-											        <div class="cname"><a href="../main/smain.html">롯데정밀화학</a></div>
-											    </td>
-											    <td>
-											    	<div class="eq_icon">
-											        	<span class="eq1 on">장치1</span>
-											        	<span class="eq2 on">장치2</span>
-											        	<span class="eq3 on">장치3</span>
-											        	<span class="eq4 on">장치4</span>
-											        </div>
-											    </td>
-										        <td>1,100</td>
-										        <td>500</td>
-										        <td>700</td>
-										        <td>200</td>
-										      </tr>
-										      <tr class="dbclickopen">
-										      	<td>9</td>
-										        <td>
-											        <div class="cname"><a href="../main/smain.html">한국프랜지</a></div>
-											    </td>
-											    <td>
-											    	<div class="eq_icon">
-											        	<span class="eq1 on">장치1</span>
-											        	<span class="eq2">장치2</span>
-											        	<span class="eq3">장치3</span>
-											        	<span class="eq4">장치4</span>
-											        </div>
-											    </td>
-										        <td>1,100</td>
-										        <td>500</td>
-										        <td>700</td>
-										        <td>200</td>
-										      </tr>
-										      <tr class="dbclickopen">
-										      	<td>10</td>
-										        <td>
-											        <div class="cname"><a href="../main/smain.html">제일화성</a></div>
-											    </td>
-											    <td>
-											    	<div class="eq_icon">
-											        	<span class="eq1 on">장치1</span>
-											        	<span class="eq2">장치2</span>
-											        	<span class="eq3">장치3</span>
-											        	<span class="eq4 on">장치4</span>
-											        </div>
-											    </td>
-										        <td>1,100</td>
-										        <td>500</td>
-										        <td>700</td>
-										        <td>200</td>
-										      </tr>
- -->
 										    </tbody>
 										</table>
 									</div>
@@ -1234,7 +1018,6 @@ function callback_getGMainAreaSiteCntList(result) {
 	for (var i = 0; i < areaCntList.length; i++) {
 		area_cnt_map[areaCntList[i].area_type] = areaCntList[i].cnt;
 	}
-//	console.log(area_cnt_map);
 
 	readArea();
 }
@@ -1266,40 +1049,37 @@ function changeAllMap() {
 
 /* 지역별 상세지도/정보 표시 */
 function local_detail(lname, area_type) {
+	$("#local_detail").attr("src", "../img/local_map_" + lname + "_detail.png");
+	if (area_type != null) {
+		area_idx = area_type - 1;
+	}
+
+	if (lname == "Seoul") {$(".detailmap .local_name").text("서울");}
+	if (lname == "Gyeonggi") {$(".detailmap .local_name").text("경기");}
+	if (lname == "Incheon") {$(".detailmap .local_name").text("인천");}
+	if (lname == "Gangwon") {$(".detailmap .local_name").text("강원");}
+	if (lname == "Chungbuk") {$(".detailmap .local_name").text("충북");}
+	if (lname == "Daejeon") {$(".detailmap .local_name").text("대전");}
+	if (lname == "Chungnam") {$(".detailmap .local_name").text("충남");}
+	if (lname == "Kyungbuk") {$(".detailmap .local_name").text("경북");}
+	if (lname == "Daegu") {$(".detailmap .local_name").text("대구");}
+	if (lname == "Ulsan") {$(".detailmap .local_name").text("울산");}
+	if (lname == "Sejong") {$(".detailmap .local_name").text("세종");}
+	if (lname == "Gyeongnam") {$(".detailmap .local_name").text("경남");}
+	if (lname == "Busan") {$(".detailmap .local_name").text("부산");}
+	if (lname == "Jeonbuk") {$(".detailmap .local_name").text("전북");}
+	if (lname == "Gwangju") {$(".detailmap .local_name").text("광주");}
+	if (lname == "Jeonnam") {$(".detailmap .local_name").text("전남");}	
+	if (lname == "Jeju") {$(".detailmap .local_name").text("제주");}
+	if (lname == "Ulleungdo") {$(".detailmap .local_name").text("울릉도");}
+
 	/* 데이터 조회 */
 	fn_cycle();
-
-	setTimeout(function() {
-		$("#local_detail").attr("src", "../img/local_map_" + lname + "_detail.png");
-		if (area_type != null) {
-			area_idx = area_type - 1;
-		}
-	
-		if (lname == "Seoul") {$(".detailmap .local_name").text("서울");}
-		if (lname == "Gyeonggi") {$(".detailmap .local_name").text("경기");}
-		if (lname == "Incheon") {$(".detailmap .local_name").text("인천");}
-		if (lname == "Gangwon") {$(".detailmap .local_name").text("강원");}
-		if (lname == "Chungbuk") {$(".detailmap .local_name").text("충북");}
-		if (lname == "Daejeon") {$(".detailmap .local_name").text("대전");}
-		if (lname == "Chungnam") {$(".detailmap .local_name").text("충남");}
-		if (lname == "Kyungbuk") {$(".detailmap .local_name").text("경북");}
-		if (lname == "Daegu") {$(".detailmap .local_name").text("대구");}
-		if (lname == "Ulsan") {$(".detailmap .local_name").text("울산");}
-		if (lname == "Sejong") {$(".detailmap .local_name").text("세종");}
-		if (lname == "Gyeongnam") {$(".detailmap .local_name").text("경남");}
-		if (lname == "Busan") {$(".detailmap .local_name").text("부산");}
-		if (lname == "Jeonbuk") {$(".detailmap .local_name").text("전북");}
-		if (lname == "Gwangju") {$(".detailmap .local_name").text("광주");}
-		if (lname == "Jeonnam") {$(".detailmap .local_name").text("전남");}	
-		if (lname == "Jeju") {$(".detailmap .local_name").text("제주");}
-		if (lname == "Ulleungdo") {$(".detailmap .local_name").text("울릉도");}
-	}, 1000);
 }
 
 function readArea() {
 	if (done) return;
 	if (area_idx == area_array.length) {area_idx = 0;}
-//	console.log(area_array[area_idx]);
 
 	/* 상세지도/정보 변경 */
 	local_detail(area_array[area_idx]);
@@ -1352,6 +1132,82 @@ function numToString(num) {
 		return num.toString();
 	}
 
+}
+</script>
+<script type="text/javascript">
+/* 5초마다 지도/정보 변경 */
+var allSiteGrpFlag = true; // 전체지도 여부
+var siteGrp_idx = 0; // 지도 array 인덱스
+var siteGrp_array = [];
+var siteGrp_cnt_map = {};
+// 그룹필터 html을 저장
+var siteGrpListHtml = '';
+
+$(function() {
+// 	// 지역에 사이트가 존재할 경우만 보여주기 위해 카운트 조회
+// 	getGMainAreaSiteCntList();
+});
+
+// function callback_getGMainAreaSiteCntList(result) {
+// 	var areaCntList = result.list;
+
+// 	for (var i = 0; i < areaCntList.length; i++) {
+// 		siteGrp_cnt_map[areaCntList[i].area_type] = areaCntList[i].cnt;
+// 	}
+// //	console.log(siteGrp_cnt_map);
+
+// 	readArea();
+// }
+
+function changeLocalSiteGrp() {
+	allSiteGrpFlag = false;
+	done = true;
+	clearTimeout(monitoring_cycle_5sec);
+	monitoring_cycle_5sec = null;
+}
+
+function changeAllSiteGrp() {
+	allSiteGrpFlag = true;
+	done = false;
+	readSiteGrp(); // 다시 시작
+}
+
+/* 지역별 상세지도/정보 표시 */
+function siteGrp_local_detail(lname, grpIdx) {
+	$('#grpIdx').val(grpIdx);
+// 	$("#local_detail").attr("src", "../img/local_map_" + lname + "_detail.png");
+// 	if (area_type != null) {
+// 		siteGrp_idx = area_type - 1;
+// 	}
+
+	/* 데이터 조회 */
+	fn_cycle();
+}
+
+function readSiteGrp() {
+	if (done) return;
+	if (siteGrp_idx == siteGrp_array.length) {siteGrp_idx = 0;}
+
+	/* 상세지도/정보 변경 */
+	siteGrp_local_detail('', siteGrp_array[siteGrp_idx]);
+
+	setTimeout(function() {
+		siteGrp_idx++;
+	
+		// 그룹에 사이트가 존재할 경우만 보여줌(현재 미사용)
+// 		var cnt = 0;
+		var maxCnt = siteGrp_array.length;
+// 		while (siteGrp_cnt_map[numToString(siteGrp_idx + 1)] == null && cnt++ < maxCnt) {
+// 			if (++siteGrp_idx > maxCnt-1) {
+// 				siteGrp_idx = 0;
+// 			}
+// 		}
+		if (siteGrp_idx > maxCnt) {
+			siteGrp_idx = 0;
+		}
+	
+		monitoring_cycle_5sec = setTimeout(readSiteGrp, 5000); /* 5초 간격 */
+	}, 1000);
 }
 </script>
 
