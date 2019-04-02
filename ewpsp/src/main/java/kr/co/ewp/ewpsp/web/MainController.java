@@ -240,7 +240,8 @@ public class MainController {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("detail", result);
-		resultMap.put("imgRoot", fileUploadRootPath);
+//		resultMap.put("imgRoot", fileUploadRootPath);
+		resultMap.put("imgRoot", "/ewpspFiles");
 		return resultMap;
 	}
 
