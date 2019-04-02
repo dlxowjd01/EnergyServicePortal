@@ -87,6 +87,8 @@ body {
 nav .nav_brand a {background:url('../img/main_logo.png') no-repeat 0 0;}
 /* ewp 로고 */
 nav .nav_brand.ewp a {background:url('../img/main_logo_ewp.png') no-repeat 0 0;}
+/* 서울시 에너지자립마을 로고 */
+nav .nav_brand.seoul a {background:url('../img/main_logo_seoul.png') no-repeat 0 0;}
 nav .nav_right li {color:#fff;}
 nav .nav_right li span {color:#8e95a1;}
 nav .nav_right li.member .fr {color:#8e95a1;}
@@ -102,6 +104,8 @@ nav .category {
 	nav .nav_brand a {background:url('../img/main_logo_4k.png') no-repeat 0 0; background-size:259px 60px;}	
 	/* ewp 로고 */
 	nav .nav_brand.ewp a {background:url('../img/main_logo_4k_ewp.png') no-repeat 0 0; background-size:90px 25px;}
+	/* 서울시 에너지자립마을 로고 */
+	nav .nav_brand.seoul a {background:url('../img/main_logo_4k_seoul.png') no-repeat 0 0; background-size:300px 85px;}
 }
 @media all and (min-width:1700px) {
 	
