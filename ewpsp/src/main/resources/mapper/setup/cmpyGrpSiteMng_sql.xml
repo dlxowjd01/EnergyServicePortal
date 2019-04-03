@@ -214,29 +214,6 @@
 		and a.site_grp_idx = #{siteGrpIdx }
 		</if>
 		order by a.site_grp_name
-		
-		<!-- select 
-			c.site_grp_idx, c.user_idx, c.site_grp_id, c.site_grp_name, c.site_grp_img_path, c.site_grp_img_sname, c.site_grp_img_rname, 
-			d.comp_idx, d.comp_id, d.comp_name
-		from tb_site_group c, (
-			select 
-				a.user_idx, a.user_id, a.user_type, a.main_user_idx, a.main_user_yn, a.auth_type, a.lang_type, a.comp_idx, 
-				b.comp_id, b.comp_name
-			from tb_user a
-			left outer join tb_company b
-			on a.comp_idx = b.comp_idx
-			where a.del_yn = 'N'
-			and b.del_yn = 'N'
-		) d
-		where c.user_idx = d.user_idx
-		and c.del_yn = 'N'
-		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)"> 
-		and c.site_grp_idx = #{siteGrpIdx }
-		</if>
-		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)"> 
-		and d.comp_idx = #{compIdx }
-		</if>
-		order by c.site_grp_name -->
 	</select>
 	
 	<select id="getGrpSiteList" parameterType="hashMap" resultType="hashMap">
@@ -481,7 +458,7 @@
 						(select count( case when device_type = '1' then 1 end ) from tb_device where site_id = a.site_id) pcs, 
 						(select count( case when device_type = '2' then 1 end ) from tb_device where site_id = a.site_id) bms,
 						(select count( case when device_type in ('3', '5') then 1 end ) from tb_device where site_id = a.site_id) pv,
-						ifnull(c.usg_val, 0) as "usage",
+						ifnull(c.usg_val, 0) as usg,
 						ifnull(d.charge, 0) as charge,
 						ifnull(e.gen_val, 0) as gen,
 						ifnull(f.reward, 0) as reward
@@ -541,10 +518,10 @@
 					</if>
 					</otherwise>
 					</choose>
-					order by a.site_name
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
+		order by usg desc
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)">
 		limit #{startNum }, #{pageRowCnt }
 		</if>

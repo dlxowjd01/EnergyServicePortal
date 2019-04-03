@@ -25,6 +25,9 @@
 			if ($('#mapGroup').val() == 'map') {
 				$('#selAllArea').text($('.local_name:eq(1)').text());
 			}
+			if ($('#mapGroup').val() == 'group') {
+				$('#selAllArea').text($('.group_name').text());
+			}
 		}, 1000);
 		
 		if(recycleYn){
@@ -284,7 +287,7 @@
 				var eq3Cls = siteList[i].bms > 0 ? ' on' : '';
 				var eq4Cls = siteList[i].pv > 0 ? ' on' : '';
 				
-				var map = convertUnitFormat(siteList[i].usage, "mWh", 8);
+				var map = convertUnitFormat(siteList[i].usg, "mWh", 8);
 				var usage = toFixedNum(map.get("formatNum"), 2);
 				var reward = (siteList[i].reward == null) ? 0 : siteList[i].reward;
 	
