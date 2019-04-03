@@ -282,7 +282,8 @@
 			var grpName = '';
 	
 			for (var i = 0; i < siteList.length; i++) {
-				var eq1Cls = siteList[i].ioe > 0 ? ' on' : '';
+// 				var eq1Cls = siteList[i].ioe > 0 ? ' on' : '';
+				var eq1Cls = '';
 				var eq2Cls = siteList[i].pcs > 0 ? ' on' : '';
 				var eq3Cls = siteList[i].bms > 0 ? ' on' : '';
 				var eq4Cls = siteList[i].pv > 0 ? ' on' : '';
