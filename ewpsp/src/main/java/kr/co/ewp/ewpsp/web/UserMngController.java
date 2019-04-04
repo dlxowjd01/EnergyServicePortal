@@ -146,6 +146,7 @@ public class UserMngController {
 		
 		Map userInfo = UserUtil.getUserInfo(request);
 		param.put("regUid", userInfo.get("user_id"));
+		param.put("userPw", param.get("userId"));
 		
 		int resultCnt = userMngService.insertUser(param);
 		

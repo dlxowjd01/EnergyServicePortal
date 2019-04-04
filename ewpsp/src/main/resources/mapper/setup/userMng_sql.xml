@@ -129,6 +129,7 @@
 		/* 사용자 등록 */
 		insert into tb_user (
 			user_id,   /* 아이디 */
+			user_pw,   /* 패스워드 */
 			user_type,   /* 사용자구분(1:동서발전,2:고객사) */
 			main_user_idx,   /* 주사용자식별자 */
 			main_user_yn,   /* 주사용자여부(Y:예,N:아니오) */
@@ -152,6 +153,7 @@
 		)
 		values (
 			#{userId }, 
+			sha2(#{userPw }, 256),
 			#{userType }, 
 			#{mainUserIdx }, 
 			#{mainUserYn }, 
