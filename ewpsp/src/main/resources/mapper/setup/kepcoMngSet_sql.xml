@@ -11,8 +11,7 @@
 			del_yn, reg_uid, reg_date, mod_uid, mod_date, 
 			ess_profit_ratio, dr_profit_ratio, pv_profit_ratio, ess_battery, ess_pcs, meter_claim_day, rec_rate_date, smp_rate_date
 		from tb_site_set
-		where 1=1
-		and site_id = #{siteId }
+		where site_id = #{siteId }
 	</select>
 	
 	<select id="getPlanType" parameterType="hashMap" resultType="hashMap">
@@ -46,8 +45,7 @@
 		select 
 			plan_type, plan_type2, plan_type3, plan_name ,summer_val , spring_fall_val, winter_val, basic_val
 		from tb_plan_type
-		where 1=1
-		and plan_type = #{planType }
+		where plan_type = #{planType }
 		and plan_type2 = #{planType2 }
 		and plan_type3 = #{planType3 }
 	</select>
@@ -55,7 +53,6 @@
 	<insert id="insertSiteSet" parameterType="hashMap">
 		/* 한전 계약 및 전력관리 정보 등록 */
 		insert into tb_site_set (
-		        <!-- site_set_idx,     /* 사이트설정식별자 */ -->
 		        site_id,          /* 사이트ID */
 		        cust_num,         /* 고객 번호 */
 		        use_elec_addr,       /* 전기사용 장소 */
@@ -83,7 +80,6 @@
 		        rec_rate_date,      /* REC단가 일자 */
 		        smp_rate_date      /* SMP단가 일자 */
 		    ) values (
-		        <!-- #{siteSetIdx }, -->
 		        #{siteId },
 		        #{custNum }, 
 		        #{useElecAddr }, 
@@ -181,8 +177,7 @@
 			</if>
 			rec_rate_date   = #{recRateDate } ,   /* REC단가 일자 */
 			smp_rate_date   = #{smpRateDate }    /* SMP단가 일자 */
-		where 1=1
-		and site_set_idx = #{siteSetIdx }
+		where site_set_idx = #{siteSetIdx }
 		and site_id = #{siteId }
 	</update>
 	

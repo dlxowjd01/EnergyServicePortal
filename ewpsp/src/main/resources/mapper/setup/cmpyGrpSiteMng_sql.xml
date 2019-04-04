@@ -18,6 +18,7 @@
 					</if>
 			) page_tb
 			,  ( select @rownum := 0 ) r
+			order by reg_date desc
 		) f_tb
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)"> 
 		limit #{startNum }, #{pageRowCnt }
@@ -132,8 +133,7 @@
 						group by site_id
 					) c
 					on a.site_id = c.site_id
-					where 1=1
-					and a.del_yn = 'N'
+					where a.del_yn = 'N'
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
 					and a.comp_idx = #{compIdx }
 					</if>
@@ -142,8 +142,8 @@
 					</if>
 			) page_tb
 			,  ( select @rownum := 0 ) r
+			order by reg_date desc
 		) f_tb
-		order by reg_date desc
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)">
 		limit #{startNum }, #{pageRowCnt }
 		</if>
@@ -185,8 +185,7 @@
 						group by site_id
 					) c
 					on a.site_id = c.site_id
-					where 1=1
-					and a.del_yn = 'N'
+					where a.del_yn = 'N'
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
 					and a.comp_idx = #{compIdx }
 					</if>
@@ -254,7 +253,6 @@
 		order by reg_date
 	</select>
 	
-	<!-- greatman list begin -->
 	<select id="getUserGroupList" parameterType="hashMap" resultType="hashMap">
 		/* 상단 사이트그룹 목록 조회 */
 		select
@@ -278,8 +276,7 @@
 		select
 			a.site_id, a.site_name, a.site_grp_idx, a.comp_idx
 		from tb_site a, tb_site_group b
-		where 1=1
-		and a.site_grp_idx = b.site_grp_idx
+		where a.site_grp_idx = b.site_grp_idx
 		and a.del_yn = 'N'
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(compIdx)">
 		and a.comp_idx = #{compIdx}
@@ -337,8 +334,7 @@
 					left outer join (select site_id, ifnull(sum(chg_val), 0) + ifnull(sum(dischg_val), 0) as charge_plan from tb_ess_charge_plan where std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) h
 					on a.site_id = h.site_id
 					, tb_site_group b
-					where 1=1
-					and a.site_grp_idx = b.site_grp_idx
+					where a.site_grp_idx = b.site_grp_idx
 					and a.del_yn = 'N'
 					<choose>
 					<when test="mapGroup == 'map'">
@@ -389,8 +385,7 @@
 					select
 						a.site_id, a.site_name
 					from tb_site a, tb_site_group b
-					where 1=1
-					and a.site_grp_idx = b.site_grp_idx
+					where a.site_grp_idx = b.site_grp_idx
 					and a.del_yn = 'N'
 					<choose>
 					<when test="mapGroup == 'map'">
@@ -430,8 +425,7 @@
 		select
 			a.area_type, count(*) cnt
 		from tb_site a, tb_site_group b
-		where 1=1
-		and a.site_grp_idx = b.site_grp_idx
+		where a.site_grp_idx = b.site_grp_idx
 		and a.del_yn = 'N'
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userIdx)">
 		and a.user_idx = #{userIdx}
@@ -487,8 +481,7 @@
 					) f
 					on a.site_id = f.site_id
 					, tb_site_group b
-					where 1=1
-					and a.site_grp_idx = b.site_grp_idx
+					where a.site_grp_idx = b.site_grp_idx
 					and a.del_yn = 'N'
 					<choose>
 					<when test="mapGroup == 'map'">
@@ -539,8 +532,7 @@
 					select
 						a.site_id, a.site_name, b.site_grp_idx
 					from tb_site a, tb_site_group b
-					where 1=1
-					and a.site_grp_idx = b.site_grp_idx
+					where a.site_grp_idx = b.site_grp_idx
 					and a.del_yn = 'N'
 					<choose>
 					<when test="mapGroup == 'map'">
@@ -592,7 +584,6 @@
 		</if>
 		order by site_grp_name
 	</select>
-	<!-- greatman list end -->
 	
 	<select id="getCmpyDetail" parameterType="hashMap" resultType="hashMap">
 		/* 회사 한건 조회 */
@@ -617,8 +608,7 @@
 		select 
 			count(*) as cnt 
 		from tb_site_group
-		where 1=1
-		and site_grp_id = #{siteGrpId }
+		where site_grp_id = #{siteGrpId }
 	</select>
 	
 	<select id="getSiteDetail" parameterType="hashMap" resultType="hashMap">
@@ -678,8 +668,7 @@
 			left outer join (select site_id, ifnull(sum(chg_val), 0) + ifnull(sum(dischg_val), 0) as charge_plan from tb_ess_charge_plan where std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) h
 			on a.site_id = h.site_id
 			, tb_site_group b
-			where 1=1
-			and a.site_grp_idx = b.site_grp_idx
+			where a.site_grp_idx = b.site_grp_idx
 			and a.del_yn = 'N'
 			<choose>
 			<when test="mapGroup == 'map'">
@@ -753,8 +742,7 @@
 			) f
 			on a.site_id = f.site_id
 			, tb_site_group b
-			where 1=1
-			and a.site_grp_idx = b.site_grp_idx
+			where a.site_grp_idx = b.site_grp_idx
 			and a.del_yn = 'N'
 			<choose>
 			<when test="mapGroup == 'map'">
@@ -786,12 +774,10 @@
 			</choose>
 		) f_tb
 	</select>
-	<!-- greatman detail end -->
 	
 	<insert id="insertCmpy" parameterType="hashMap">
 		/* 회사 등록 */
 		insert into tb_company (
-			<!-- comp_idx,   /* 회사식별자 */ -->
 			user_idx, /* 사용자식별자 */
 			comp_name,   /* 회사명 */
 			comp_id,   /* 회사ID */
@@ -800,7 +786,6 @@
 			reg_date
 		)
 		values (
-			<!-- #{comp_idx }, --> 
 			#{userIdx }, 
 			#{compName }, 
 			#{compId }, 
@@ -813,7 +798,6 @@
 	<insert id="insertGroup" parameterType="hashMap">
 		/* 그룹 등록 */
 		insert into tb_site_group (
-			<!-- site_grp_idx,   /* 사이트그룹식별자 */ -->
 			user_idx,   /* 사용자식별자 */
 			site_grp_id,   /* 사이트그룹ID */
 			site_grp_name,   /* 사이트그룹명 */
@@ -834,7 +818,6 @@
 			reg_date
 		)
 		values (
-			<!-- #{site_grp_idx }, --> 
 			#{userIdx }, 
 			#{siteGrpId }, 
 			#{siteGrpName }, 
@@ -902,17 +885,13 @@
 		    </if>
 		    mod_uid       = #{modUid }, 
 		    mod_date      = now()
-		where 1=1
-		and comp_idx = #{compIdx }
+		where comp_idx = #{compIdx }
 	</update>
 	
 	<update id="updateGroup" parameterType="hashMap">
 		/* 그룹 정보 수정 */
 		update tb_site_group
 		set 
-			<!-- <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userIdx)"> 
-		    user_idx      = #{userIdx },   /* 사용자식별자 */
-		    </if>  -->
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteGrpId)"> 
 		    site_grp_id = #{siteGrpId },   /* 사이트그룹ID */
 		    </if>
@@ -933,8 +912,7 @@
 		    </if>
 		    mod_uid       = #{modUid }, 
 		    mod_date      = now()
-		where 1=1
-		and site_grp_idx = #{siteGrpIdx }
+		where site_grp_idx = #{siteGrpIdx }
 	</update>
 	
 	<update id="updateSite" parameterType="hashMap">
@@ -965,8 +943,7 @@
 		    </if>
 			mod_uid        = #{modUid }, 
 			mod_date       =now() 
-		where 1=1
-		and site_id = #{siteId }
+		where site_id = #{siteId }
 	</update>
 	
 	<update id="deleteCmpy" parameterType="hashMap">
@@ -976,33 +953,32 @@
 		    del_yn        = 'Y', 
 		    mod_uid       = #{modUid }, 
 		    mod_date      = now()
-		where 1=1
-		and comp_idx = #{compIdx }
+		where comp_idx = #{compIdx }
 	</update>
 	
 	<update id="deleteGroup" parameterType="hashMap">
 		/* 그룹 삭제 */
-		update tb_site_group
+		<!-- update tb_site_group
 		set 
 		    del_yn        = 'Y', 
 		    mod_uid       = #{modUid }, 
 		    mod_date      = now()
-		where 1=1
-		and site_grp_idx = #{siteGrpIdx }
+		where site_grp_idx = #{siteGrpIdx } -->
+		
+		delete from tb_site_set
+		where and site_grp_idx = #{siteGrpIdx }
 	</update>
 	
 	<update id="deleteSiteSet" parameterType="hashMap">
 		/* 사이트설정 삭제 */
 		delete from tb_site_set
-		where 1=1
-		and site_id = #{siteId }
+		where site_id = #{siteId }
 	</update>
 	
 	<update id="deleteSite" parameterType="hashMap">
 		/* 사이트 삭제 */
 		delete from tb_site
-		where 1=1
-		and site_id = #{siteId }
+		where site_id = #{siteId }
 	</update>
 	
 </mapper>

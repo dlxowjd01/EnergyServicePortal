@@ -101,7 +101,6 @@
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
-		<!-- limit #{startNum }, #{pageRowCnt } -->
 	</select>
 	
 	<select id="getUserDetail" parameterType="hashMap" resultType="hashMap">
@@ -111,8 +110,7 @@
 			comp_idx, co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, site_grp_idx, site_id,
 			del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_user
-		where 1=1
-		and user_idx = #{userIdx }
+		where user_idx = #{userIdx }
 	</select>
 	
 	<select id="getLastUserDetail" parameterType="hashMap" resultType="hashMap">
@@ -122,8 +120,7 @@
 			comp_idx, co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, site_grp_idx, site_id,
 			del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_user
-		where 1=1
-		and user_id = #{userId }
+		where user_id = #{userId }
 		order by user_idx desc
 		limit 1
 	</select>
@@ -131,9 +128,7 @@
 	<insert id="insertUser" parameterType="hashMap">
 		/* 사용자 등록 */
 		insert into tb_user (
-			<!-- user_idx,   /* 사용자식별자 */ -->
 			user_id,   /* 아이디 */
-			<!-- user_pw,   /* 패스워드 */ -->
 			user_type,   /* 사용자구분(1:동서발전,2:고객사) */
 			main_user_idx,   /* 주사용자식별자 */
 			main_user_yn,   /* 주사용자여부(Y:예,N:아니오) */
@@ -156,9 +151,7 @@
 			reg_date
 		)
 		values (
-			<!-- #{user_idx },  -->
 			#{userId }, 
-			<!-- #{userPw }, --> 
 			#{userType }, 
 			#{mainUserIdx }, 
 			#{mainUserYn }, 
@@ -242,15 +235,13 @@
 			</if>
 			mod_uid       = #{modUid }, 
 			mod_date      = now()
-		where 1=1
-		and user_idx = #{userIdx }
+		where user_idx = #{userIdx }
 	</update>
 	
 	<update id="deleteUser" parameterType="hashMap">
 		/* 사용자 삭제 */
 		delete from tb_user
-		where 1=1
-		and user_idx = #{userIdx }
+		where user_idx = #{userIdx }
 	</update>
 	
 </mapper>

@@ -10,13 +10,11 @@
 			select 
 				usg_idx, site_id, device_id, std_timestamp, std_date, usg_val, reg_date, mod_date
 			from tb_usage
-			where 1=1
-			and site_id = #{siteId }
+			where site_id = #{siteId }
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
 			and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
 			</if>
 		) a
-		where 1=1
 		group by site_id, std_timestamp
 		order by std_timestamp
 	</select>
@@ -29,13 +27,11 @@
 			select 
 				pre_usg_idx, site_id, device_id, std_timestamp, std_date, pre_usg_val, reg_date, mod_date
 			from tb_predict_usage
-			where 1=1
-			and site_id = #{siteId }
+			where site_id = #{siteId }
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
 			and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
 			</if>
 		) a
-		where 1=1
 		group by site_id, std_timestamp
 		order by std_timestamp
 	</select>

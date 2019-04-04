@@ -10,8 +10,7 @@
 			std_date, meter_read_day, smp_rate, rec_rate, rec_weight, produce_val, consume_val, net_gen_val, smp_price, rec_price, tot_price,
 			reg_date, mod_date
 		from tb_gen_revenue
-		where 1=1
-		and gen_type = '1'
+		where gen_type = '1'
 		and site_id = #{siteId }
 		and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
 		order by std_date
@@ -25,8 +24,7 @@
 			std_date, meter_read_day, smp_rate, rec_rate, rec_weight, produce_val, consume_val, net_gen_val, smp_price, rec_price, tot_price,
 			reg_date, mod_date
 		from tb_gen_revenue
-		where 1=1
-		and gen_type = '1'
+		where gen_type = '1'
 		and site_id = #{siteId }
 		and std_date between #{startDay } and #{endDay }
 		order by std_date

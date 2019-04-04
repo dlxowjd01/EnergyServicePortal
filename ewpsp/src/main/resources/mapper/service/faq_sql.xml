@@ -32,8 +32,7 @@
 		select
 			faq_cate_idx, faq_cate_name
 		from tb_faq_category
-		where 1=1
-		and faq_cate_idx = #{faqCateIdx}
+		where faq_cate_idx = #{faqCateIdx}
 	</select>
 
 	<select id="getFAQDetail" parameterType="hashMap" resultType="hashMap">
@@ -90,8 +89,7 @@
 		    faq_cate_name = #{faqCateName},
 		    mod_uid       = #{modUid }, 
 		    mod_date      = now()
-		where 1=1
-		and faq_cate_idx = #{faqCateIdx}
+		where faq_cate_idx = #{faqCateIdx}
 	</update>
 
 	<update id="updateFAQ" parameterType="hashMap">
@@ -103,8 +101,7 @@
 		    answer        = replace(#{answer}, '\\n', '&lt;br/>'),
 		    mod_uid       = #{modUid }, 
 		    mod_date      = now()
-		where 1=1
-		and faq_idx = #{faqIdx}
+		where faq_idx = #{faqIdx}
 	</update>
 
 	<delete id="deleteFAQCate" parameterType="hashMap">
@@ -120,8 +117,7 @@
 		    del_yn        = 'Y', 
 		    mod_uid       = #{modUid }, 
 		    mod_date      = now()
-		where 1=1
-		and faq_idx = #{faqIdx }
+		where faq_idx = #{faqIdx }
 	</update>
 
 </mapper>

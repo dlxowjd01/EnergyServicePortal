@@ -8,8 +8,7 @@
 		select 
 			device_grp_idx, site_id, user_idx, device_grp_name, del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_device_group
-		where 1=1
-		and del_yn = 'N'
+		where del_yn = 'N'
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 		and site_id = #{siteId }
 		</if>
@@ -20,8 +19,7 @@
 		select 
 			device_id, site_id, user_idx, device_name, device_grp_idx, device_type, inst_type, del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_device
-		where 1=1
-		and del_yn = 'N' 
+		where del_yn = 'N' 
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 		and site_id =  #{siteId }
 		</if>
@@ -38,8 +36,7 @@
 			select 
 				site_id, device_id, device_type, alarm_type, count(*) as cnt
 			from tb_alarm
-			where 1=1
-			and alarm_act_yn = 'N'
+			where alarm_act_yn = 'N'
 			and alarm_type = #{alarmType }
 			group by site_id, device_id, device_type, alarm_type
 		) a left outer join tb_device b
@@ -55,8 +52,7 @@
 		select 
 			device_id, site_id, user_idx, device_name, device_grp_idx, device_type, inst_type, del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_device
-		where 1=1
-		and del_yn = 'N'
+		where del_yn = 'N'
 		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 		and site_id =  #{siteId }
 		</if> 
@@ -70,8 +66,7 @@
 		select 
 			device_id, site_id, user_idx, device_name, device_grp_idx, device_type, inst_type, del_yn, reg_uid, reg_date, mod_uid, mod_date 
 		from tb_device
-		where 1=1
-		and del_yn = 'N'
+		where del_yn = 'N'
 		and site_id =  #{siteId }
 		and (device_grp_idx is null or device_grp_idx = 0)
 	</select>
@@ -79,14 +74,12 @@
 	<delete id="deleteDeviceGroup" parameterType="hashMap">
 		/* 장치그룹 삭제 */
 		delete from tb_device_group
-		where 1=1
-		and device_grp_idx = #{deviceGrpIdx }
+		where device_grp_idx = #{deviceGrpIdx }
 	</delete>
 	
 	<insert id="insertDeviceGroup" parameterType="hashMap">
 		/* 장치그룹 등록 */
 		insert into tb_device_group (
-	        <!-- device_grp_idx, -->
 	        site_id,
 	        user_idx,
 	        device_grp_name,
@@ -94,7 +87,6 @@
 	        reg_uid,
 	        reg_date
 	    ) values (
-	        <!-- #{device_grp_idx }, -->
 	        #{siteId },
 	        #{userIdx },
 	        #{deviceGrpName },
@@ -109,8 +101,7 @@
 		select 
 			count(*) as cnt 
 		from tb_device
-		where 1=1
-		and site_id = #{siteId }
+		where site_id = #{siteId }
 		and device_id = #{deviceId }
 		and device_type = #{deviceType }
 	</select>
@@ -146,8 +137,6 @@
 		/* 장치 수정 */
 		update tb_device
 		set 
-		    <!-- site_id        = #{site_id }, 
-		    user_idx       = #{user_idx },  -->
 		    <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(deviceName)"> 
 		    device_name    = #{deviceName }, 
 		    </if>
@@ -162,8 +151,7 @@
 		    </if>
 		    mod_uid        = #{modUid }, 
 		    mod_date       = now()
-		where 1=1
-		and site_id = #{siteId }
+		where site_id = #{siteId }
 		and device_id = #{deviceId }
 		and device_type = #{deviceType }
 	</update>
@@ -171,8 +159,7 @@
 	<delete id="deleteDevice" parameterType="hashMap">
 		/* 장치 삭제 */
 		delete from tb_device
-		where 1=1
-		and site_id = #{siteId }
+		where site_id = #{siteId }
 		and device_id = #{deviceId }
 		and device_type = #{deviceType }
 	</delete>

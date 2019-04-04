@@ -38,8 +38,7 @@
 							, case device_stat when 1 then 'connect' 
 								else 'disconnect' end as device_stat_name
 						from tb_device_ioe
-						where 1=1
-						and (site_id, device_id, reg_date) in (
+						where (site_id, device_id, reg_date) in (
 							select 
 								site_id, device_id, max(reg_date) reg_date 
 							from tb_device_ioe
@@ -48,11 +47,10 @@
 					) b
 					on a.site_id = b.site_id
 					and a.device_id = b.device_id
-					where 1=1
+					where a.device_type in (4, 6, 7, 8)
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
 					</if>
-					and a.device_type in (4, 6, 7, 8)
 					order by a.device_id
 			) page_tb
 			,  ( select @rownum := 0 ) r
@@ -97,8 +95,7 @@
 							, case device_stat when 1 then 'connect' 
 								else 'disconnect' end as device_stat_name
 						from tb_device_ioe
-						where 1=1
-						and (site_id, device_id, reg_date) in (
+						where (site_id, device_id, reg_date) in (
 							select 
 								site_id, device_id, max(reg_date) reg_date 
 							from tb_device_ioe
@@ -107,16 +104,13 @@
 					) b
 					on a.site_id = b.site_id
 					and a.device_id = b.device_id
-					where 1=1
+					where a.device_type in (4, 6, 7, 8)
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
 					</if>
-					and a.device_type in (4, 6, 7, 8)
-					<!-- order by a.device_id -->
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
-		<!-- limit #{startNum }, #{pageRowCnt } -->
 	</select>
 	
 	<select id="getDeviceIOEDetail" parameterType="hashMap" resultType="hashMap">
@@ -154,8 +148,7 @@
 					tm_voltage, tm_pulse, tm_ct_ratio, tm_pt_tatio, 
 					network_conf, options, create_timestamp, create_date, upload_timestamp, upload_date, device_stat, reg_date
 				from tb_device_ioe
-				where 1=1
-				and (site_id, device_id, reg_date) in (
+				where (site_id, device_id, reg_date) in (
 					select 
 						site_id, device_id, max(reg_date) reg_date 
 					from tb_device_ioe
@@ -214,8 +207,7 @@
 								when 3 then 'Warning' 
 								else 'disconnect' end as pcs_status_name
 						from tb_device_pcs
-						where 1=1
-						and (site_id, device_id, reg_date) in (
+						where (site_id, device_id, reg_date) in (
 							select 
 								site_id, device_id, max(reg_date) reg_date 
 							from tb_device_pcs
@@ -224,11 +216,10 @@
 					) b
 					on a.site_id = b.site_id
 					and a.device_id = b.device_id
-					where 1=1
+					where a.device_type = 1
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
 					</if>
-					and a.device_type = 1
 					order by a.device_id
 			) page_tb
 			,  ( select @rownum := 0 ) r
@@ -280,8 +271,7 @@
 								when 3 then 'Warning' 
 								else 'disconnect' end as pcs_status_name
 						from tb_device_pcs
-						where 1=1
-						and (site_id, device_id, reg_date) in (
+						where (site_id, device_id, reg_date) in (
 							select 
 								site_id, device_id, max(reg_date) reg_date 
 							from tb_device_pcs
@@ -290,16 +280,13 @@
 					) b
 					on a.site_id = b.site_id
 					and a.device_id = b.device_id
-					where 1=1
+					where a.device_type = 1
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
 					</if>
-					and a.device_type = 1
-					<!-- order by a.device_id -->
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
-		<!-- limit #{startNum }, #{pageRowCnt } -->
 	</select>
 	
 	<select id="getDevicePCSDetail" parameterType="hashMap" resultType="hashMap">
@@ -346,8 +333,7 @@
 						when 1 then 'Run'
 						else '' end as pcs_command_nm
 				from tb_device_pcs
-				where 1=1
-				and (site_id, device_id, reg_date) in (
+				where (site_id, device_id, reg_date) in (
 					select 
 						site_id, device_id, max(reg_date) reg_date 
 					from tb_device_pcs
@@ -403,8 +389,7 @@
 								else 'disconnect' end as device_stat_name
 							, "" as cd_status, alarm_msg
 						from tb_device_bms
-						where 1=1
-						and (site_id, device_id, reg_date) in (
+						where (site_id, device_id, reg_date) in (
 							select 
 								site_id, device_id, max(reg_date) reg_date 
 							from tb_device_bms
@@ -413,11 +398,10 @@
 					) b
 					on a.site_id = b.site_id 
 					and a.device_id = b.device_id
-					where 1=1
+					where a.device_type = 2
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
 					</if>
-					and a.device_type = 2
 					order by a.device_id
 			) page_tb
 			,  ( select @rownum := 0 ) r
@@ -466,8 +450,7 @@
 								else 'disconnect' end as device_stat_name
 							, "" as cd_status, alarm_msg
 						from tb_device_bms
-						where 1=1
-						and (site_id, device_id, reg_date) in (
+						where (site_id, device_id, reg_date) in (
 							select 
 								site_id, device_id, max(reg_date) reg_date 
 							from tb_device_bms
@@ -476,16 +459,13 @@
 					) b
 					on a.site_id = b.site_id 
 					and a.device_id = b.device_id
-					where 1=1
+					where a.device_type = 2
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
 					</if>
-					and a.device_type = 2
-					<!-- order by a.device_id -->
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
-		<!-- limit #{startNum }, #{pageRowCnt } -->
 	</select>
 	
 	<select id="getDeviceBMSDetail" parameterType="hashMap" resultType="hashMap">
@@ -529,8 +509,7 @@
 						when 7 then 'Warning'
 						else '' end as device_stat_nm
 				from tb_device_bms
-				where 1=1
-				and (site_id, device_id, reg_date) in (
+				where (site_id, device_id, reg_date) in (
 					select 
 						site_id, device_id, max(reg_date) reg_date 
 					from tb_device_bms
@@ -580,8 +559,7 @@
 								when 1 then 'Run' 
 								else 'disconnect' end as device_stat_name
 						from tb_device_pv
-						where 1=1
-						and (site_id, device_id, reg_date) in (
+						where (site_id, device_id, reg_date) in (
 							select 
 								site_id, device_id, max(reg_date) reg_date 
 							from tb_device_pv
@@ -590,11 +568,10 @@
 					) b
 					on a.site_id = b.site_id 
 					and a.device_id = b.device_id
-					where 1=1
+					where a.device_type in (3, 5)
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
 					</if>
-					and a.device_type in (3, 5)
 					order by a.device_id
 			) page_tb
 			,  ( select @rownum := 0 ) r
@@ -637,8 +614,7 @@
 								when 1 then 'Run' 
 								else 'disconnect' end as device_stat_name
 						from tb_device_pv
-						where 1=1
-						and (site_id, device_id, reg_date) in (
+						where (site_id, device_id, reg_date) in (
 							select 
 								site_id, device_id, max(reg_date) reg_date 
 							from tb_device_pv
@@ -647,16 +623,13 @@
 					) b
 					on a.site_id = b.site_id 
 					and a.device_id = b.device_id
-					where 1=1
+					where a.device_type in (3, 5)
 					<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 					and a.site_id = #{siteId }
 					</if>
-					and a.device_type = 3
-					<!-- order by a.device_id -->
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
-		<!-- limit #{startNum }, #{pageRowCnt } -->
 	</select>
 	
 	<select id="getDevicePVDetail" parameterType="hashMap" resultType="hashMap">
@@ -695,8 +668,7 @@
 						when 3 then 'Warning'
 						else '' end as device_stat_nm
 				from tb_device_pv
-				where 1=1
-				and (site_id, device_id, reg_date) in (
+				where (site_id, device_id, reg_date) in (
 					select 
 						site_id, device_id, max(reg_date) reg_date 
 					from tb_device_pv
@@ -733,8 +705,7 @@
 								tm_voltage, tm_pulse, tm_ct_ratio, tm_pt_tatio, 
 								network_conf, options, create_timestamp, create_date, upload_timestamp, upload_date, device_stat, reg_date
 							from tb_device_ioe
-							where 1=1
-							and (site_id, device_id, reg_date) in (
+							where (site_id, device_id, reg_date) in (
 								select 
 									site_id, device_id, max(reg_date) reg_date 
 								from tb_device_ioe
@@ -752,8 +723,7 @@
 								ac_voltage, ac_power, ac_current, ac_freq, ac_set_power, ac_pf, 
 								dc_voltage, dc_power, dc_current, dc_freq, dc_set_power, dc_pf, std_date, reg_date
 							from tb_device_pcs
-							where 1=1
-							and (site_id, device_id, reg_date) in (
+							where (site_id, device_id, reg_date) in (
 								select 
 									site_id, device_id, max(reg_date) reg_date 
 								from tb_device_pcs
@@ -770,8 +740,7 @@
 								device_bms_idx, site_id, device_id, device_name, device_stat, 
 								sys_soc, curr_soc, sys_soh, sys_voltage, sys_current, dod, std_date, reg_date
 							from tb_device_bms
-							where 1=1
-							and (site_id, device_id, reg_date) in (
+							where (site_id, device_id, reg_date) in (
 								select 
 									site_id, device_id, max(reg_date) reg_date 
 								from tb_device_bms
@@ -787,8 +756,7 @@
 							select 
 								device_pv_idx, site_id, device_id, device_name, device_stat, alarm_msg, temp, tot_power, std_date, reg_date
 							from tb_device_pv
-							where 1=1
-							and (site_id, device_id, reg_date) in (
+							where (site_id, device_id, reg_date) in (
 								select 
 									site_id, device_id, max(reg_date) reg_date 
 								from tb_device_pv
@@ -800,8 +768,7 @@
 							order by device_id
 				) pv
 				on a.device_id = pv.device_id
-				where 1=1
-				and a.del_yn = 'N'
+				where a.del_yn = 'N'
 				<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 				and a.site_id = #{siteId }
 				</if>
@@ -837,8 +804,7 @@
 								tm_voltage, tm_pulse, tm_ct_ratio, tm_pt_tatio, 
 								network_conf, options, create_timestamp, create_date, upload_timestamp, upload_date, device_stat, reg_date
 							from tb_device_ioe
-							where 1=1
-							and (site_id, device_id, reg_date) in (
+							where (site_id, device_id, reg_date) in (
 								select 
 									site_id, device_id, max(reg_date) reg_date 
 								from tb_device_ioe
@@ -856,8 +822,7 @@
 								ac_voltage, ac_power, ac_current, ac_freq, ac_set_power, ac_pf, 
 								dc_voltage, dc_power, dc_current, dc_freq, dc_set_power, dc_pf, std_date, reg_date
 							from tb_device_pcs
-							where 1=1
-							and (site_id, device_id, reg_date) in (
+							where (site_id, device_id, reg_date) in (
 								select 
 									site_id, device_id, max(reg_date) reg_date 
 								from tb_device_pcs
@@ -874,8 +839,7 @@
 								device_bms_idx, site_id, device_id, device_name, device_stat, 
 								sys_soc, curr_soc, sys_soh, sys_voltage, sys_current, dod, std_date, reg_date
 							from tb_device_bms
-							where 1=1
-							and (site_id, device_id, reg_date) in (
+							where (site_id, device_id, reg_date) in (
 								select 
 									site_id, device_id, max(reg_date) reg_date 
 								from tb_device_bms
@@ -891,8 +855,7 @@
 							select 
 								device_pv_idx, site_id, device_id, device_name, device_stat, alarm_msg, temp, tot_power, std_date, reg_date
 							from tb_device_pv
-							where 1=1
-							and (site_id, device_id, reg_date) in (
+							where (site_id, device_id, reg_date) in (
 								select 
 									site_id, device_id, max(reg_date) reg_date 
 								from tb_device_pv
@@ -904,8 +867,7 @@
 							order by device_id
 				) pv
 				on a.device_id = pv.device_id
-				where 1=1
-				and a.del_yn = 'N'
+				where a.del_yn = 'N'
 				<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
 				and a.site_id = #{siteId }
 				</if>
@@ -913,7 +875,6 @@
 			) page_tb
 			,  ( select @rownum := 0 ) r
 		) f_tb
-		<!-- limit #{startNum }, #{pageRowCnt } -->
 	</select>
 	
 	<select id="getDevice" parameterType="hashMap" resultType="hashMap">
@@ -922,8 +883,7 @@
 			device_id, site_id, user_idx, device_name, device_grp_idx, 
 			device_type, inst_type, del_yn, reg_uid, reg_date, mod_uid, mod_date
 		from tb_device
-		where 1=1
-		and site_id = #{siteId} 
+		where site_id = #{siteId} 
 		and device_id = #{deviceId}
 		and device_type = #{deviceType}
 	</select>

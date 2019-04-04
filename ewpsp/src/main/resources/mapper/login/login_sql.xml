@@ -156,8 +156,7 @@
 		    del_yn        = 'Y', 
 		    mod_uid       = #{modUid }, 
 		    mod_date      = now()
-		where 1=1
-		and user_idx = #{userIdx }
+		where user_idx = #{userIdx }
 	</update>
 
 </mapper>

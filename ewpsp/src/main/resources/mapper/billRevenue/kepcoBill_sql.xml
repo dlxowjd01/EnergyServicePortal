@@ -15,8 +15,7 @@
 				elec_fund, val_add_tax, tot_amt_bill, peak_pwr_demand, usg, off_peak_usg, mid_peak_usg, max_peak_usg, lead_pwr_factor, lag_pwr_factor, 
 				demand_chg_reduct, energy_chg_reduct, reg_date
 			from tb_bill
-			where 1=1
-			and site_id = #{siteId }
+			where site_id = #{siteId }
 			and bill_yearm between #{selTermFrom } and #{selTermTo }
 		) a
 		group by site_id, bill_yearm
@@ -36,8 +35,7 @@
 				elec_fund, val_add_tax, tot_amt_bill, peak_pwr_demand, usg, off_peak_usg, mid_peak_usg, max_peak_usg, lead_pwr_factor, lag_pwr_factor, 
 				demand_chg_reduct, energy_chg_reduct, reg_date
 			from tb_bill
-			where 1=1
-			and site_id = #{siteId }
+			where site_id = #{siteId }
 			and bill_yearm = #{selTermTex }
 		) a
 		group by site_id, bill_yearm
@@ -58,8 +56,7 @@
 				elec_fund, val_add_tax, tot_amt_bill, peak_pwr_demand, usg, off_peak_usg, mid_peak_usg, max_peak_usg, lead_pwr_factor, lag_pwr_factor, 
 				demand_chg_reduct, energy_chg_reduct, reg_date
 			from tb_bill
-			where 1=1
-			and site_id = #{siteId }
+			where site_id = #{siteId }
 			and bill_yearm between #{selTermFrom } and #{selTermTo } 
 		) a
 		group by site_id, bill_yearm
