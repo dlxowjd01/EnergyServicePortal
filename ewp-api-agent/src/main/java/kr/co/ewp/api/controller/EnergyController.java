@@ -1006,7 +1006,7 @@ public class EnergyController {
 //        			  continue;
 //        		  }
         		  if("5".equals(deviceType)){
-        			  
+        			  System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 에너톡 pv발전량조회 api를 조회합니다..");
         			  UsageModel usagePeriodic = EnertalkApiUtil.getUsagePeriodicByDeviceId(_deviceId, Period._15min, beginDate, endDate, TimeType.past, UsageType.positiveEnergy, prettyLog);
         			  if(usagePeriodic !=null){
         				  List<UsageItemModel> items = usagePeriodic.getItems();
@@ -1017,7 +1017,7 @@ public class EnergyController {
         					  pvGen.setDeviceId(_deviceId);
         					  pvGen.setSiteId(_siteId);
         					  pvGen.setStdDate(item.getTimestamp());
-        					  pvGen.setGenVal((float) (item.getUsage().intValue() / 1000000));
+        					  pvGen.setGenVal((float) (item.getUsage().floatValue() / 1000000.0));
         					  pvGen.setTemp(0);
         					  
         					  pvGentList.add(pvGen);
