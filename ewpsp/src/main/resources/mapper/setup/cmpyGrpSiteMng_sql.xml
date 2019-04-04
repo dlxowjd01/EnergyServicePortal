@@ -332,9 +332,9 @@
 						) -->
 					) f
 					on a.site_id = f.site_id
-					left outer join (select site_id, ifnull(sum(pre_usg_val), 0) as usage_plan from tb_predict_usage where std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) g
+					left outer join (select site_id, ifnull(sum(pre_usg_val), 0) as usage_plan from tb_predict_usage where std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) g
 					on a.site_id = g.site_id
-					left outer join (select site_id, ifnull(sum(chg_val), 0) + ifnull(sum(dischg_val), 0) as charge_plan from tb_ess_charge_plan where std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) h
+					left outer join (select site_id, ifnull(sum(chg_val), 0) + ifnull(sum(dischg_val), 0) as charge_plan from tb_ess_charge_plan where std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) h
 					on a.site_id = h.site_id
 					, tb_site_group b
 					where 1=1
@@ -673,9 +673,9 @@
 				) -->
 			) f
 			on a.site_id = f.site_id
-			left outer join (select site_id, ifnull(sum(pre_usg_val), 0) as usage_plan from tb_predict_usage where std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) g
+			left outer join (select site_id, ifnull(sum(pre_usg_val), 0) as usage_plan from tb_predict_usage where std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) g
 			on a.site_id = g.site_id
-			left outer join (select site_id, ifnull(sum(chg_val), 0) + ifnull(sum(dischg_val), 0) as charge_plan from tb_ess_charge_plan where std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) h
+			left outer join (select site_id, ifnull(sum(chg_val), 0) + ifnull(sum(dischg_val), 0) as charge_plan from tb_ess_charge_plan where std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) h
 			on a.site_id = h.site_id
 			, tb_site_group b
 			where 1=1
