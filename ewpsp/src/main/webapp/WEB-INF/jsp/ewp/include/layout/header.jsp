@@ -124,6 +124,7 @@
 							<span class="myinfo">
 								<c:choose>
 									<c:when test="${not empty userInfo and not empty userInfo.psn_name}">${userInfo.psn_name}</c:when>
+									<c:when test="${not empty userInfo and empty userInfo.psn_name}">${userInfo.user_id}</c:when>
 									<c:otherwise>Not logined</c:otherwise>
 								</c:choose>
 							</span><br/>
