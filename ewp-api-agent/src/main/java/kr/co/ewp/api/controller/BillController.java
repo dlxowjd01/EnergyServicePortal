@@ -881,15 +881,17 @@ public class BillController {
         List<PvUsage> pvUsageList = Lists.newArrayList();// pvService.getPvUsageListBySiteId(site.getSiteId(), beginDate, endDate, prettyLog);
         List<EssCharge> essChargeList = essService.getEssChargeListBySiteId(_siteId, beginDate, endDate, prettyLog);
         List<EssUsage> essUsageList = essService.getEssUsageListBySiteId(_siteId, beginDate, endDate, prettyLog);
-        Map<Long/* stdDate */, Integer /* pvGenVal */> pvGenMap = Maps.newHashMap();
-        Map<Long/* stdDate */, Integer /* pvUsageVal */> pvUsgMap = Maps.newHashMap();
+//        Map<Long/* stdDate */, Integer /* pvGenVal */> pvGenMap = Maps.newHashMap();
+//        Map<Long/* stdDate */, Integer /* pvUsageVal */> pvUsgMap = Maps.newHashMap();
+        Map<Long/* stdDate */, Float /* pvGenVal */> pvGenMap = Maps.newHashMap();
+        Map<Long/* stdDate */, Float /* pvUsageVal */> pvUsgMap = Maps.newHashMap();
         Map<Long/* stdDate */, Float /* essChargeVal */> essChargeMap = Maps.newHashMap();
         Map<Long/* stdDate */, Float /* essUsageVal */> essUsgMap = Maps.newHashMap();
         for (PvGen item : pvGenList) {
-          pvGenMap.put(item.getStdDate().getTime(), item.getGenVal().intValue());
+          pvGenMap.put(item.getStdDate().getTime(), item.getGenVal().floatValue() / 1000000f); // mWh -> kWh 변경
         }
         for (PvUsage item : pvUsageList) {
-          pvUsgMap.put(item.getStdDate().getTime(), item.getUsgVal());
+          pvUsgMap.put(item.getStdDate().getTime(), item.getUsgVal().floatValue() / 1000000f); // mWh -> kWh 변경
         }
         for (EssCharge item : essChargeList) {
           essChargeMap.put(item.getStdDate().getTime(), item.getChgVal());
@@ -909,8 +911,8 @@ public class BillController {
         	
         	for (long stdDate = beginDate.getTime(); stdDate < endDate.getTime(); stdDate = DateUtil.getAfterMinute(new Date(stdDate), 15).getTime()) {
         		genReqPv.addTimestamp(stdDate);
-        		genReqPv.addProduced(new Double(IfUtil.nvl(pvGenMap.get(stdDate), 0)));
-        		genReqPv.addConsumed(new Double(IfUtil.nvl(pvUsgMap.get(stdDate), 0)));
+        		genReqPv.addProduced(new Double((double) IfUtil.nvl(pvGenMap.get(stdDate), 0)));
+        		genReqPv.addConsumed(new Double((double) IfUtil.nvl(pvUsgMap.get(stdDate), 0)));
         		genReqEss.addTimestamp(stdDate);
         		genReqEss.addProduced(new Double((double) IfUtil.nvl(essChargeMap.get(stdDate), (double) 0)));
         		genReqEss.addConsumed(new Double((double) IfUtil.nvl(essUsgMap.get(stdDate), (double) 0)));
