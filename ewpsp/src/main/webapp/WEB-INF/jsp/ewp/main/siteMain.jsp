@@ -16,14 +16,10 @@
 		$("#selPageNum").val(1);
 		formData = getSiteMainSchCollection();
 		
-	//	var myTimer = setTimeout(function(){
-			fn_cycle_10sec();
-			fn_cycle_1min();
-			fn_cycle_15min();
-	//	}, (1000));
+		fn_cycle_10sec();
+		fn_cycle_1min();
+		fn_cycle_15min();
 		
-	//	clearTimeout(myTimer);
-	
 		realTime_monitoring_start();
 		
 	});
@@ -475,7 +471,8 @@
 						pvUsage = String(pvUsageListChartList[i].gen_val);
 						if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
 						else {
-							var map = convertUnitFormat(pvUsage, "kWh", 1);
+// 							var map = convertUnitFormat(pvUsage, "kWh", 1);
+							var map = convertUnitFormat(pvUsage, "mWh", 8);
 							rePvUsage = toFixedNum(map.get("formatNum"), 2);
 							totalDataSet3 = totalDataSet3+Number(pvUsage);
 						}

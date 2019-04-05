@@ -193,10 +193,12 @@
 								.append($('<td />').append(siteList[i].charge_plan))
 							);
 					} else if (oldRankType == 2) {
+						var map = convertUnitFormat(siteList[i].gen, "mWh", 8);
 						$tbody.append(
 							$('<tr />')
 								.append($('<th />').append(siteList[i].site_name))
-								.append($('<td />').append(siteList[i].gen))
+// 								.append($('<td />').append(siteList[i].gen))
+								.append($('<td />').append(toFixedNum(map.get("formatNum"), 2)))
 								.append($('<td />').append(0))
 							);
 					} else if (oldRankType == 3) {
@@ -242,7 +244,8 @@
 			$('.detailUsage').text(numberComma(usage));
 			$('.detailUsageUnit').text(map.get("unit"));
 			
-			var map2 = convertUnitFormat(total.gen, "kWh");
+// 			var map2 = convertUnitFormat(total.gen, "kWh");
+			var map2 = convertUnitFormat(total.gen, "mWh");
 			var gen = toFixedNum(map2.get("formatNum"), 2);
 			$('.detailGen').text(numberComma(gen));
 			$('.detailGenUnit').text(map2.get("unit"));
@@ -272,12 +275,9 @@
 		var siteList = result.list;
 	
 		var $tbody = $('#siteTbody');
-		$tbody.empty();
+		var tbodyStr = '';
 	
-		if (siteList == null || siteList.length < 1) {
-			$tbody.append('<tr><td colspan="7">조회 결과가 없습니다.</td><tr>');
-			$('#GMainSitePaging').empty();
-		} else {
+		if (siteList != null && siteList.length > 0) {
 			var imgSrc = '';
 			var grpName = '';
 	
@@ -290,34 +290,34 @@
 				
 				var map = convertUnitFormat(siteList[i].usg, "mWh", 8);
 				var usage = toFixedNum(map.get("formatNum"), 2);
+				var map2 = convertUnitFormat(siteList[i].gen, "mWh", 8);
+				var gen = toFixedNum(map2.get("formatNum"), 2);
 				var reward = (siteList[i].reward == null) ? 0 : siteList[i].reward;
 	
-				$tbody.append(
-					$('<tr class="dbclickopen" onclick="activateSite(this, \'' + siteList[i].site_id + '\', \'' + siteList[i].site_grp_idx + '\')" ondblclick="goSiteMain(\'' + siteList[i].site_id + '\')" />')
-						.append($('<td />').append(siteList[i].rnum)) // no
-						.append($('<td />')
-							.append($('<div class="cname" />')
-								.append('<a href="#none">' + siteList[i].site_name + '</a>')
-							)
-						)
-						.append($('<td />')
-							.append($('<div class="eq_icon" />')
-								.append('<span class="eq1' + eq1Cls + '">장치1</span>')
-								.append('<span class="eq2' + eq2Cls + '">장치2</span>')
-								.append('<span class="eq3' + eq3Cls + '">장치3</span>')
-								.append('<span class="eq4' + eq4Cls + '">장치4</span>')
-							)
-						)
-						.append($('<td />').append(numberComma(usage)))
-						.append($('<td />').append(numberComma(toFixedNum(siteList[i].charge, 0))))
-						.append($('<td />').append(numberComma(siteList[i].gen)))
-						.append($('<td />').append(numberComma(reward)))
-				);
+				tbodyStr += '<tr class="dbclickopen" onclick="activateSite(this, \'' + siteList[i].site_id + '\', \'' + siteList[i].site_grp_idx + '\')" ondblclick="goSiteMain(\'' + siteList[i].site_id + '\')">';
+				tbodyStr += '<td>'+siteList[i].rnum+'</td>';
+				tbodyStr += '<td><div class="cname">'+'<a href="#none">' + siteList[i].site_name + '</a>'+'</div></td>';
+				tbodyStr += '<td><div class="eq_icon">';
+				tbodyStr += '<span class="eq1' + eq1Cls + '">장치1</span>';
+				tbodyStr += '<span class="eq2' + eq2Cls + '">장치2</span>';
+				tbodyStr += '<span class="eq3' + eq3Cls + '">장치3</span>';
+				tbodyStr += '<span class="eq4' + eq4Cls + '">장치4</span>';
+				tbodyStr += '</div></td>';
+				tbodyStr += '<td>'+numberComma(usage)+'</td>';
+				tbodyStr += '<td>'+numberComma(toFixedNum(siteList[i].charge, 0))+'</td>';
+				tbodyStr += '<td>'+numberComma(gen)+'</td>';
+				tbodyStr += '<td>'+numberComma(reward)+'</td>';
+				tbodyStr += '</tr>';
 			}
 	
 			var pagingMap = result.pagingMap;
 			makePageNums2(pagingMap, "GMainSite");
+		} else {
+			tbodyStr += '<tr><td colspan="7">조회 결과가 없습니다.</td><tr>';
+			$('#GMainSitePaging').empty();
 		}
+		
+		$tbody.html(tbodyStr);
 	}
 	
 	// 사이트 목록 클릭 시 활성화
