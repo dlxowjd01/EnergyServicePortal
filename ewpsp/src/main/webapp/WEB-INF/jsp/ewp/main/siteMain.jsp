@@ -481,8 +481,10 @@
 					var chartEssUsage =null;
 					var chartPvUsage = null;
 					if(reKepcoUsage != null) {
-						chartEssUsage = reKepcoUsage+rePvUsage+reEssUsage
-						chartPvUsage = reKepcoUsage+rePvUsage
+// 						chartEssUsage = reKepcoUsage+rePvUsage+reEssUsage;
+// 						chartPvUsage = reKepcoUsage+rePvUsage;
+						chartEssUsage = reEssUsage;
+						chartPvUsage = rePvUsage;
 					}
 					
 					var tm = new Date( convertDateUTC(loopCntChartList[i].std_timestamp) );
@@ -545,12 +547,17 @@
 		
 		derChart.redraw(); // 차트 데이터를 다시 그린다
 		
-		var total = totalDataSet+totalDataSet2+totalDataSet3;
+// 		var total = totalDataSet+totalDataSet2+totalDataSet3;
 		$("#nowUsage").empty().append(nowUsage+"kWh");
 		
-		$("#kepcoPer").empty().append( ( (totalDataSet == 0) ? 0 : ( (totalDataSet/total)*100 ).toFixed(2) )+"%" );
+		var remap = convertUnitFormat(totalDataSet, "mWh", 8);
+		var reTotalDataSet = Math.round( Number(remap.get("formatNum")) );
+		var remap3 = convertUnitFormat(totalDataSet3, "mWh", 8);
+		var reTotalDataSet3 = Math.round( Number(remap3.get("formatNum")) );
+		var total = reTotalDataSet+totalDataSet2+reTotalDataSet3;
+		$("#kepcoPer").empty().append( ( (reTotalDataSet == 0) ? 0 : ( (reTotalDataSet/total)*100 ).toFixed(2) )+"%" );
 		$("#essPer").empty().append( ( (totalDataSet2 == 0) ? 0 : ( (totalDataSet2/total)*100 ).toFixed(2) )+"%" );
-		$("#pvPer").empty().append( ( (totalDataSet3 == 0) ? 0 : ( (totalDataSet3/total)*100 ).toFixed(2) )+"%" );
+		$("#pvPer").empty().append( ( (reTotalDataSet3 == 0) ? 0 : ( (reTotalDataSet3/total)*100 ).toFixed(2) )+"%" );
 		
 		update_updtDataTime(new Date(), "updtTimeDER");
 	}

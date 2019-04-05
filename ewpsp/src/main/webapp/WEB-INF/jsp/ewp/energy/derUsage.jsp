@@ -115,7 +115,8 @@
 							pvUsage = String(pvUsageListSheetList[i].gen_val);
 							if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
 							else {
-								var map = convertUnitFormat(pvUsage, "kWh", 1);
+// 								var map = convertUnitFormat(pvUsage, "kWh", 1);
+								var map = convertUnitFormat(pvUsage, "mWh", 8);
 								rePvUsage = toFixedNum(map.get("formatNum"), 2);
 								dt_str3_totalVal = dt_str3_totalVal+ Number(map.get("formatNum"));
 							}
@@ -217,7 +218,8 @@
 					pvUsage = String(pvUsageListChartList[i].gen_val);
 					if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
 					else {
-						var map = convertUnitFormat(pvUsage, "kWh", 1);
+// 						var map = convertUnitFormat(pvUsage, "kWh", 1);
+						var map = convertUnitFormat(pvUsage, "mWh", 8);
 						rePvUsage = toFixedNum(map.get("formatNum"), 2);
 						totalDataSet3 = totalDataSet3+Number(pvUsage);
 					}
@@ -226,8 +228,8 @@
 				var chartEssUsage =null;
 				var chartPvUsage = null;
 				if(reKepcoUsage != null) {
-					chartEssUsage = reEssUsage
-					chartPvUsage = rePvUsage
+					chartEssUsage = reEssUsage;
+					chartPvUsage = rePvUsage;
 				}
 				
 				// 차트데이터 셋팅
@@ -279,14 +281,16 @@
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
 		unit_format(String(totalDataSet), "usageTotal", "mWh");
 		unit_format(String(totalDataSet2), "essUsageTotal", "kWh");
-		unit_format(String(totalDataSet3), "pvUsageTotal", "kWh");
+		unit_format(String(totalDataSet3), "pvUsageTotal", "mWh");
 		
 		var remap = convertUnitFormat(totalDataSet, "mWh", 8);
 		var reTotalDataSet = Math.round( Number(remap.get("formatNum")) );
-		var total = reTotalDataSet+totalDataSet2+totalDataSet3;
+		var remap3 = convertUnitFormat(totalDataSet3, "mWh", 8);
+		var reTotalDataSet3 = Math.round( Number(remap3.get("formatNum")) );
+		var total = reTotalDataSet+totalDataSet2+reTotalDataSet3;
 		$("#kepcoPer").empty().append("한전 사용").append( $("<span />").append( ( (reTotalDataSet == 0) ? 0 : ( (reTotalDataSet/total)*100 ).toFixed(2) )+"%" ) );
 		$("#essPer").empty().append("ESS 사용").append( $("<span />").append( ( (totalDataSet2 == 0) ? 0 : ( (totalDataSet2/total)*100 ).toFixed(2) )+"%" ) );
-		$("#pvPer").empty().append("PV 사용").append( $("<span />").append( ( (totalDataSet3 == 0) ? 0 : ( (totalDataSet3/total)*100 ).toFixed(2) )+"%" ) );
+		$("#pvPer").empty().append("PV 사용").append( $("<span />").append( ( (reTotalDataSet3 == 0) ? 0 : ( (reTotalDataSet3/total)*100 ).toFixed(2) )+"%" ) );
 		
 	}
 	
