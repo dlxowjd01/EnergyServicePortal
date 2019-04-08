@@ -822,87 +822,71 @@
 	
 	// 표(테이블) 그리기
 	function drawData_table() {
-		// pc버전 테이블
-		// 조회기간에 따라 테이블이 여러개 나올 수 있으므로 for문으로 돌려야 한다
-		$div = $("#pc_use_dataDiv");
-		$div.empty(); // 초기화
-		if(essRevenue_data_pc.length < 1) {
-			$(".income_ess_chart").find(".inchart-nodata").css("display", "");
-			$(".income_ess_chart").find(".inchart").css("display", "none");
-			$div.prepend(
-					$('<div class="chart_table" />').append( // pc_use_dataTable
-							$('<table class="pc_use" />').append(
-									$("<thead/>").append( $("<tr/>").append(  
-											"<th width='33%'></th><td width='34%'>조회 결과가 없습니다.</td><th width='33%'></th>" ) 
-									) // thead
-							)
-					)
-			);
-		} else {
-			$(".income_ess_chart").find(".inchart-nodata").css("display", "none");
-			$(".income_ess_chart").find(".inchart").css("display", "");
-			for(var i=dt_row-1; i>-1; i--) {
-				$div.prepend(
-						$('<div class="chart_table" />').append(
-								$('<table class="pc_use" />').append(
-										$("<thead/>").append( $("<tr/>").append( "<th></th>"+essRevenue_head_pc[i]+"<th>합계</th>" ) ) // thead
-								).append(
-										$("<tbody/>").append( // tbody
-												$("<tr/>").append( // 평일 일수 (d)
-														'<th><div class="ctit wht"><span>평일 일수 (d)</span></div></th>'+ essRevenue_data_pc[i] 
-												)
-										).append(
-												$("<tr/>").append( // 경부하충전량 (kWh)
-														'<th><div class="ctit wht"><span>경부하충전량 (kWh)</span></div></th>'+ essRevenue_data_pc2[i] 
-												)
-										).append(
-												$("<tr/>").append( // 중간부하충전량 (kWh)
-														'<th><div class="ctit wht"><span>중간부하충전량 (kWh)</span></div></th>'+ essRevenue_data_pc3[i] 
-												)
-										).append(
-												$("<tr/>").append( // 최대부하충전량 (kWh)
-														'<th><div class="ctit wht"><span>최대부하충전량 (kWh)</span></div></th>'+ essRevenue_data_pc4[i] 
-												)
-										).append(
-												$("<tr/>").append( // 경부하방전량 (kWh)
-														'<th><div class="ctit wht"><span>경부하방전량 (kWh)</span></div></th>'+ essRevenue_data_pc5[i] 
-												)
-										).append(
-												$("<tr/>").append( // 중간부하방전량 (kWh)
-														'<th><div class="ctit wht"><span>중간부하방전량 (kWh)</span></div></th>'+ essRevenue_data_pc6[i] 
-												)
-										).append(
-												$("<tr/>").append( // 최대부하방전량 (kWh)
-														'<th><div class="ctit wht"><span>최대부하방전량 (kWh)</span></div></th>'+ essRevenue_data_pc7[i] 
-												)
-	//									).append(
-	//											$("<tr/>").append( // 예상 할인금액 (won)
-	//													'<th><div class="ctit wht"><span>예상 할인금액 (won)</span></div></th>'+ essRevenue_data_pc8[i] 
-	//											)
-										).append(
-												$("<tr/>").append( // 실적 할인금액 (won)
-														'<th><div class="ctit"><span>실적 할인금액 (won)</span></div></th>'+ essRevenue_data_pc9[i] 
-												)
-										).append(
-												$("<tr/>").append( // 고객 정산금액 (won)
-														'<th><div class="ctit ct1"><span>고객 정산금액 (won)</span></div></th>'+essRevenue_data_pc10[i]
-												)
-										).append(
-												$("<tr/>").append( // EWP 정산금액 (won)
-														'<th><div class="ctit wht"><span>EWP 정산금액 (won)</span></div></th>'+ essRevenue_data_pc11[i] 
-												)
-										).append(
-												$("<tr/>").append( // 정산비율 (%)
-														'<th><div class="ctit wht"><span>정산비율 (%)</span></div></th>'+ essRevenue_data_pc12[i] 
-												)
-										)
-								) 
-						)
-				);
-				
+		var $chart = $(".income_ess_chart");
+		var tbodyStr = '';
+		if(essRevenue_data_pc.length > 0) {
+			$chart.find(".inchart-nodata").css("display", "none");
+			$chart.find(".inchart").css("display", "");
+			for(var i=0; i<dt_row; i++) {
+				tbodyStr += '<div class="chart_table">';
+				tbodyStr += '<table class="pc_use">';
+				tbodyStr += '<thead>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th></th>'+essRevenue_head_pc[i]+'<th>합계</th>';
+				tbodyStr += '</tr>';
+				tbodyStr += '</thead>';
+				tbodyStr += '<tbody>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit wht"><span>평일 일수 (d)</span></div></th>'+ essRevenue_data_pc[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit wht"><span>경부하충전량 (kWh)</span></div></th>'+ essRevenue_data_pc2[i] ;
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit wht"><span>중간부하충전량 (kWh)</span></div></th>'+ essRevenue_data_pc3[i] ;
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit wht"><span>최대부하충전량 (kWh)</span></div></th>'+ essRevenue_data_pc4[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit wht"><span>경부하방전량 (kWh)</span></div></th>'+ essRevenue_data_pc5[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit wht"><span>중간부하방전량 (kWh)</span></div></th>'+ essRevenue_data_pc6[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit wht"><span>최대부하방전량 (kWh)</span></div></th>'+ essRevenue_data_pc7[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit"><span>실적 할인금액 (won)</span></div></th>'+ essRevenue_data_pc9[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit ct1"><span>고객 정산금액 (won)</span></div></th>'+essRevenue_data_pc10[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit wht"><span>EWP 정산금액 (won)</span></div></th>'+ essRevenue_data_pc11[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit wht"><span>정산비율 (%)</span></div></th>'+ essRevenue_data_pc12[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '</tbody>';
+				tbodyStr += '</table>';
+				tbodyStr += '</div>';
 			}
+			
+		} else {
+			$chart.find(".inchart-nodata").css("display", "");
+			$chart.find(".inchart").css("display", "none");
+			tbodyStr += '<div class="chart_table">';
+			tbodyStr += '<table class="pc_use">';
+			tbodyStr += '<thead>';
+			tbodyStr += '<tr>'+'<th width="33%"></th>'+'<td width="34%">조회 결과가 없습니다.</td>'+'<th width="33%"></th>'+'</tr>';
+			tbodyStr += '</thead>';
+			tbodyStr += '</table>';
+			tbodyStr += '</div>';
 		}
 		
+		$("#pc_use_dataDiv").html(tbodyStr);
 	}
 </script>
 </head>

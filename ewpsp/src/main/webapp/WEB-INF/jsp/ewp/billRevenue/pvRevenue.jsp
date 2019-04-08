@@ -635,63 +635,56 @@
 	
 	// 표(테이블) 그리기
 	function drawData_table() {
-		// pc버전 테이블
-		// 조회기간에 따라 테이블이 여러개 나올 수 있으므로 for문으로 돌려야 한다..(내일해내일)
-		$div = $("#pc_use_dataDiv");
-		$div.empty(); // 초기화
-		if(pvRevenue_data_pc.length < 1) {
-			$(".income_pv_chart").find(".inchart-nodata").css("display", "");
-			$(".income_pv_chart").find(".inchart").css("display", "none");
-			$div.prepend(
-					$('<div class="chart_table" />').append( // pc_use_dataTable
-							$('<table class="pc_use" />').append(
-									$("<thead/>").append( $("<tr/>").append(  
-											"<th width='33%'></th><td width='34%'>조회 결과가 없습니다.</td><th width='33%'></th>" ) 
-									) // thead
-							)
-					)
-			);
-		} else {
-			$(".income_pv_chart").find(".inchart-nodata").css("display", "none");
-			$(".income_pv_chart").find(".inchart").css("display", "");
-			for(var i=dt_row-1; i>-1; i--) {
-				$div.prepend(
-						$('<div class="chart_table" />').append(
-								$('<table class="pc_use" />').append(
-										$("<thead/>").append( $("<tr/>").append( "<th></th>"+pvRevenue_head_pc[i]+"<th>합계</th>" ) ) // thead
-								).append(
-										$("<tbody/>").append( // tbody
-												$("<tr/>").append(
-														'<th><div class="ctit wht"><span>총 발전량 (kWh)</span></div></th>'+ pvRevenue_data_pc[i] 
-												)
-										).append(
-												$("<tr/>").append(
-														'<th><div class="ctit wht"><span>SMP 거래량 (kWh)</span></div></th>'+ pvRevenue_data_pc2[i] 
-												)
-										).append(
-												$("<tr/>").append(
-														'<th><div class="ctit pk2"><span>SMP 수익 (won)</span></div></th>'+ pvRevenue_data_pc3[i] 
-												)
-										).append(
-												$("<tr/>").append(
-														'<th><div class="ctit wht"><span>REC 거래량 (kWh)</span></div></th>'+ pvRevenue_data_pc4[i] 
-												)
-										).append(
-												$("<tr/>").append(
-														'<th><div class="ctit pk3"><span>REC 수익 (won)</span></div></th>'+ pvRevenue_data_pc5[i] 
-												)
-										).append(
-												$("<tr/>").append(
-														'<th><div class="ctit pk1"><span>총 수익 (won)</span></div></th>'+ pvRevenue_data_pc6[i] 
-												)
-										)
-								) 
-						)
-				);
-				
+		var $chart = $(".income_pv_chart");
+		var tbodyStr = '';
+		if(pvRevenue_data_pc.length > 0) {
+			$chart.find(".inchart-nodata").css("display", "none");
+			$chart.find(".inchart").css("display", "");
+			for(var i=0; i<dt_row; i++) {
+				tbodyStr += '<div class="chart_table">';
+				tbodyStr += '<table class="pc_use">';
+				tbodyStr += '<thead>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th></th>'+pvRevenue_head_pc[i]+'<th>합계</th>';
+				tbodyStr += '</tr>';
+				tbodyStr += '</thead>';
+				tbodyStr += '<tbody>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit wht"><span>총 발전량 (kWh)</span></div></th>'+ pvRevenue_data_pc[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit wht"><span>SMP 거래량 (kWh)</span></div></th>'+ pvRevenue_data_pc2[i] ;
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit pk2"><span>SMP 수익 (won)</span></div></th>'+ pvRevenue_data_pc3[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit wht"><span>REC 거래량 (kWh)</span></div></th>'+ pvRevenue_data_pc4[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit pk3"><span>REC 수익 (won)</span></div></th>'+ pvRevenue_data_pc5[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit pk1"><span>총 수익 (won)</span></div></th>'+ pvRevenue_data_pc6[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '</tbody>';
+				tbodyStr += '</table>';
+				tbodyStr += '</div>';
 			}
+			
+		} else {
+			$chart.find(".inchart-nodata").css("display", "");
+			$chart.find(".inchart").css("display", "none");
+			tbodyStr += '<div class="chart_table">';
+			tbodyStr += '<table class="pc_use">';
+			tbodyStr += '<thead>';
+			tbodyStr += '<tr>'+'<th width="33%"></th>'+'<td width="34%">조회 결과가 없습니다.</td>'+'<th width="33%"></th>'+'</tr>';
+			tbodyStr += '</thead>';
+			tbodyStr += '</table>';
+			tbodyStr += '</div>';
 		}
 		
+		$("#pc_use_dataDiv").html(tbodyStr);
 	}
 </script>
 </head>

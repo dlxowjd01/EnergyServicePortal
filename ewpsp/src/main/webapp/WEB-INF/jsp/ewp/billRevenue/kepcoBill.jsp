@@ -605,66 +605,59 @@
 	
 	// 표(테이블) 그리기
 	function drawData_table() {
-		// pc버전 테이블
-		// 조회기간에 따라 테이블이 여러개 나올 수 있으므로 for문으로 돌려야 한다
-		$div = $("#pc_use_dataDiv");
-		$div.empty(); // 초기화
-		if(kepcoBill_data_pc.length < 1) {
-			$(".income_kt_chart").find(".inchart-nodata").css("display", "");
-			$(".income_kt_chart").find(".inchart").css("display", "none");
-			$div.prepend(
-					$('<div class="chart_table" />').append( // pc_use_dataTable
-							$('<table class="pc_use" />').append(
-									$("<thead/>").append( $("<tr/>").append(  
-											"<th width='33%'></th><td width='34%'>조회 결과가 없습니다.</td><th width='33%'></th>" ) 
-									) // thead
-							)
-					)
-			);
-		} else {
-			$(".income_kt_chart").find(".inchart-nodata").css("display", "none");
-			$(".income_kt_chart").find(".inchart").css("display", "");
-			for(var i=dt_row-1; i>-1; i--) {
-				$div.prepend(
-						$('<div class="chart_table" />').append(
-								$('<table class="pc_use" />').append(
-										$("<thead/>").append( $("<tr/>").append( "<th></th>"+kepcoBill_head_pc[i]+"<th>합계</th>" ) ) // thead
-								).append(
-										$("<tbody/>").append( // tbody
-												$("<tr/>").append( // 기본요금
-														'<th><div class="ctit ctt1"><span>기본요금 (won)</span></div></th>'+kepcoBill_data_pc[i]
-												)
-										).append(
-												$("<tr/>").append( // 역률
-														'<th><div class="ctit wht"><span>역률 (won)</span></div></th>'+ kepcoBill_data_pc2[i] 
-												)
-										).append(
-												$("<tr/>").append( // 사용요금
-														'<th><div class="ctit ctt2"><span>사용요금 (won)</span></div></th>'+ kepcoBill_data_pc3[i] 
-												)
-										).append(
-												$("<tr/>").append( // 전기요금합계
-														'<th><div class="ctit wht"><span>전기요금합계 (won)</span></div></th>'+ kepcoBill_data_pc4[i] 
-												)
-										).append(
-												$("<tr/>").append( // 전력산업기반기금
-														'<th><div class="ctit ctt3"><span>전력산업기반기금 (won)</span></div></th>'+ kepcoBill_data_pc5[i] 
-												)
-										).append(
-												$("<tr/>").append( // 부가세
-														'<th><div class="ctit ctt4"><span>부가세 (won)</span></div></th>'+ kepcoBill_data_pc6[i] 
-												)
-										).append(
-												$("<tr/>").append( // 청구요금
-														'<th><div class="ctit wht"><span>청구요금 (won)</span></div></th>'+ kepcoBill_data_pc7[i] 
-												)
-										)
-								) 
-						)
-				);
-				
+		var $chart = $(".income_kt_chart");
+		var tbodyStr = '';
+		if(kepcoBill_data_pc.length > 0) {
+			$chart.find(".inchart-nodata").css("display", "none");
+			$chart.find(".inchart").css("display", "");
+			for(var i=0; i<dt_row; i++) {
+				tbodyStr += '<div class="chart_table">';
+				tbodyStr += '<table class="pc_use">';
+				tbodyStr += '<thead>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th></th>'+kepcoBill_head_pc[i]+'<th>합계</th>';
+				tbodyStr += '</tr>';
+				tbodyStr += '</thead>';
+				tbodyStr += '<tbody>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit ctt1"><span>기본요금 (won)</span></div></th>'+kepcoBill_data_pc[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit wht"><span>역률 (won)</span></div></th>'+ kepcoBill_data_pc2[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit ctt2"><span>사용요금 (won)</span></div></th>'+ kepcoBill_data_pc3[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit wht"><span>전기요금합계 (won)</span></div></th>'+ kepcoBill_data_pc4[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit ctt3"><span>전력산업기반기금 (won)</span></div></th>'+ kepcoBill_data_pc5[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit ctt4"><span>부가세 (won)</span></div></th>'+ kepcoBill_data_pc6[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '<tr>';
+				tbodyStr += '<th><div class="ctit wht"><span>청구요금 (won)</span></div></th>'+ kepcoBill_data_pc7[i];
+				tbodyStr += '</tr>';
+				tbodyStr += '</tbody>';
+				tbodyStr += '</table>';
+				tbodyStr += '</div>';
 			}
+			
+		} else {
+			$chart.find(".inchart-nodata").css("display", "");
+			$chart.find(".inchart").css("display", "none");
+			tbodyStr += '<div class="chart_table">';
+			tbodyStr += '<table class="pc_use">';
+			tbodyStr += '<thead>';
+			tbodyStr += '<tr>'+'<th width="33%"></th>'+'<td width="34%">조회 결과가 없습니다.</td>'+'<th width="33%"></th>'+'</tr>';
+			tbodyStr += '</thead>';
+			tbodyStr += '</table>';
+			tbodyStr += '</div>';
 		}
+		
+		$("#pc_use_dataDiv").html(tbodyStr);
 	}
 </script>
 </head>
