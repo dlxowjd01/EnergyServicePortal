@@ -100,7 +100,8 @@ public class EnergyController {
       end = new Date();
       Calendar cal = Calendar.getInstance();
       cal.setTimeInMillis(end.getTime());
-      DateUtil.setHms(cal, -1, 0, 0, 000);
+//      DateUtil.setHms(cal, -1, 0, 0, 000);
+      cal.add(Calendar.MINUTE, -15);
       end = cal.getTime();
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
@@ -294,7 +295,8 @@ public class EnergyController {
       end = new Date();
       Calendar cal = Calendar.getInstance();
       cal.setTimeInMillis(end.getTime());
-      DateUtil.setHms(cal, -1, 0, 0, 000);
+//      DateUtil.setHms(cal, -1, 0, 0, 000);
+      cal.add(Calendar.MINUTE, -15);
       end = cal.getTime();
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
