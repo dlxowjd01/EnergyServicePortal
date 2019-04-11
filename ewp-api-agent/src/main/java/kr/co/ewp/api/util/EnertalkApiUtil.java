@@ -48,9 +48,11 @@ public class EnertalkApiUtil {
       url.append("&period=").append(period);
       url.append("&start=").append(start.getTime());
       url.append("&end=").append(end.getTime());
+      System.out.println("             장치조회 url : "+url);
       prettyLog.append("URL", url);
       HttpHeaders headers = getHeaders();
       resultBody = HttpUtil.get(url.toString(), headers);
+      System.out.println("             장치조회 url : "+resultBody);
       return JsonUtil.toObject(resultBody, UsageModel.class);
     } catch (NullPointerException e) {
 	  	  logger.error("error is : "+e.toString());

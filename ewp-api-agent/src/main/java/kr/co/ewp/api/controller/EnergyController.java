@@ -152,6 +152,7 @@ public class EnergyController {
         	if(deviceType != null) {
         		if ("1".equals(device.getInstType())) { // 에너톡
         			if("4".equals(deviceType) || "6".equals(deviceType) || "7".equals(deviceType) || "8".equals(deviceType)){ // 4 : 부하측정기기, 6 : ESS모니터링기기, 7 : iSmart, 8 :총량기기
+        				System.out.println("  siteId : "+device.getSiteId()+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+"사용량조회");
         				UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(device.getDeviceId(), period, beginDate, endDate, TimeType.past, UsageType.positiveEnergy, prettyLog);
         				if(usageModel != null){
         					prettyLog.append("ITEM_SIZE", usageModel.getItems().size());
