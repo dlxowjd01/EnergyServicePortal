@@ -55,7 +55,7 @@ public class GenResponseModel {
     private List<Long> basetime;
     private List<Double> produced;
     private List<Double> consumed;
-    private List<Double> netGeneration;
+    private List<Double> netGeneration; // kWh
     private List<Double> smpPrice;
     private List<Double> recPrice;
     private List<Double> revenues;

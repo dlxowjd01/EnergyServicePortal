@@ -162,7 +162,7 @@ public class EnergyController {
         					usage.setSiteId(device.getSiteId());
         					usage.setStdDate(item.getTimestamp());
         					usage.setStdTimestamp(item.getTimestamp());
-        					usage.setUsgVal(item.getUsage().intValue());
+        					usage.setUsgVal(  item.getUsage() / 1000f  ); // mWh ->Wh (2019.04.10)
         					usageList.add(usage);
         				}
         			}
@@ -253,7 +253,7 @@ public class EnergyController {
         						predictUsage.setSiteId(device.getSiteId());
         						predictUsage.setStdDate(item.getTimestamp());
         						predictUsage.setStdTimestamp(item.getTimestamp());
-        						predictUsage.setPreUsgVal(item.getUsage().intValue());
+        						predictUsage.setPreUsgVal(  item.getUsage() / 1000f  ); // mWh ->Wh (2019.04.10)
         						usageList.add(predictUsage);
         					}
         				}
@@ -355,10 +355,10 @@ public class EnergyController {
         						reactive.setSiteId(device.getSiteId());
         						reactive.setStdDate(item.getTimestamp());
         						reactive.setStdTimestamp(item.getTimestamp());
-        						reactive.setRctvVal(item.getUsage().intValue());
+        						reactive.setRctvVal(item.getUsage() / 1000f  ); // mVarh -> Varh (2019.04.10)
         						for (UsageItemModel item2 : usageModel2.getItems()) {
         							if (item.getTimestamp().compareTo(item2.getTimestamp()) == 0) {
-        								reactive.setNegRctvVal(item2.getUsage().intValue());
+        								reactive.setNegRctvVal(item2.getUsage() / 1000f  ); // mVarh -> Varh (2019.04.10)
         							}
         						}
         						reactiveList.add(reactive);
@@ -400,7 +400,7 @@ public class EnergyController {
     prettyLog.append("DEVICE_CNT", deviceList.size());
     EncoredApiUtil.Period period = EncoredApiUtil.Period._15min;
     Map<String/* siteId */, Date/* begin */> beginMap = Maps.newHashMap();
-    LinkedHashMap<String/* siteId */, LinkedHashMap<String/* 월별 */, LinkedHashMap<Long/* std_timestamp */, Long/* usg_val */>>> usageMap = Maps.newLinkedHashMap();
+    LinkedHashMap<String/* siteId */, LinkedHashMap<String/* 월별 */, LinkedHashMap<Long/* std_timestamp */, Float/* usg_val */>>> usageMap = Maps.newLinkedHashMap();
     int resultCnt = 0;
     for (Device device : deviceList) {
       String _siteId = device.getSiteId();
@@ -431,15 +431,15 @@ public class EnergyController {
   					for (Usage usage : usageList) {
   						long stdTime = usage.getStdTimestamp().getTime();
   						
-  						LinkedHashMap<String, LinkedHashMap<Long, Long>> usageSiteMap = usageMap.get(_siteId);
+  						LinkedHashMap<String, LinkedHashMap<Long, Float>> usageSiteMap = usageMap.get(_siteId);
   						String month = DateUtil.dateToString(usage.getStdDate(), "yyyyMM");
   						if (!usageSiteMap.containsKey(month)) {
   							usageSiteMap.put(month, Maps.newLinkedHashMap());
   						}
   						if (usageSiteMap.get(month).containsKey(stdTime)) {
-  							usageSiteMap.get(month).put(stdTime, usageSiteMap.get(month).get(stdTime) + new Long(usage.getUsgVal()));
+  							usageSiteMap.get(month).put(stdTime, usageSiteMap.get(month).get(stdTime) + usage.getUsgVal());
   						} else {
-  							usageSiteMap.get(month).put(stdTime, new Long(usage.getUsgVal()));
+  							usageSiteMap.get(month).put(stdTime, usage.getUsgVal());
   						}
   					}
   				} else {
@@ -461,10 +461,10 @@ public class EnergyController {
         EnergyModel energy = new EnergyModel();
         List<Long> timestamp = Lists.newArrayList();
         List<Float> kWh = Lists.newArrayList();
-        LinkedHashMap<Long, Long> usageSiteMap = usageMap.get(_siteId).get(month);
+        LinkedHashMap<Long, Float> usageSiteMap = usageMap.get(_siteId).get(month);
         for (Long stdtime : usageSiteMap.keySet()) {
           timestamp.add(stdtime);
-          kWh.add(usageSiteMap.get(stdtime) / 1000000f);
+          kWh.add(usageSiteMap.get(stdtime) / 1000f); // Wh -> kWh
         }
 
         energy.setTimestamp(timestamp);
@@ -478,7 +478,7 @@ public class EnergyController {
           for (int i = 0; i < basetime.size(); i++) {
             Peak peak = new Peak();
             peak.setSiteId(_siteId);
-            peak.setPeakVal(kW.get(i));
+            peak.setPeakVal(  kW.get(i)*1000f  ); // kW -> W
             peak.setStdDate(new Date(basetime.get(i)));
             peak.setStdTimestamp(new Date(basetime.get(i)));
             if(occured.get(i) != null) peak.setPeakDate(new Date(occured.get(i)));
@@ -520,7 +520,7 @@ public class EnergyController {
     prettyLog.append("DEVICE_CNT", deviceList.size());
     EncoredApiUtil.Period period = EncoredApiUtil.Period.hour;
     Map<String/* siteId */, Date/* begin */> beginMap = Maps.newHashMap();
-    LinkedHashMap<String/* siteId */, LinkedHashMap<String/* 월별 */, LinkedHashMap<Long/* std_timestamp */, Long/* usg_val */>>> usageMap = Maps.newLinkedHashMap();
+    LinkedHashMap<String/* siteId */, LinkedHashMap<String/* 월별 */, LinkedHashMap<Long/* std_timestamp */, Float/* usg_val */>>> usageMap = Maps.newLinkedHashMap();
     for (Device device : deviceList) {
       String _siteId = device.getSiteId();
       if (!beginMap.containsKey(_siteId)) {
@@ -549,15 +549,15 @@ public class EnergyController {
   					}
   					for (PredictUsage predictUsage : predictUsageList) {
   						long stdTime = predictUsage.getStdTimestamp().getTime();
-  						LinkedHashMap<String, LinkedHashMap<Long, Long>> usageSiteMap = usageMap.get(_siteId);
+  						LinkedHashMap<String, LinkedHashMap<Long, Float>> usageSiteMap = usageMap.get(_siteId);
   						String month = DateUtil.dateToString(predictUsage.getStdDate(), "yyyyMM");
   						if (!usageSiteMap.containsKey(month)) {
   							usageSiteMap.put(month, Maps.newLinkedHashMap());
   						}
   						if (usageSiteMap.get(month).containsKey(stdTime)) {
-  							usageSiteMap.get(month).put(stdTime, usageSiteMap.get(month).get(stdTime) + new Long(predictUsage.getPreUsgVal()));
+  							usageSiteMap.get(month).put(stdTime, usageSiteMap.get(month).get(stdTime) + predictUsage.getPreUsgVal());
   						} else {
-  							usageSiteMap.get(month).put(stdTime, new Long(predictUsage.getPreUsgVal()));
+  							usageSiteMap.get(month).put(stdTime, predictUsage.getPreUsgVal());
   						}
   					}
   				} else {
@@ -579,10 +579,10 @@ public class EnergyController {
         EnergyModel energy = new EnergyModel();
         List<Long> timestamp = Lists.newArrayList();
         List<Float> kWh = Lists.newArrayList();
-        LinkedHashMap<Long, Long> usageSiteMap = usageMap.get(_siteId).get(month);
+        LinkedHashMap<Long, Float> usageSiteMap = usageMap.get(_siteId).get(month);
         for (Long stdtime : usageSiteMap.keySet()) {
           timestamp.add(stdtime);
-          kWh.add(usageSiteMap.get(stdtime) / 1000000f);
+          kWh.add(usageSiteMap.get(stdtime) / 1000f); // Wh -> kWh
         }
 
         energy.setTimestamp(timestamp);
@@ -597,7 +597,7 @@ public class EnergyController {
           for (int i = 0; i < basetime.size(); i++) {
             PredictPeak predictPeak = new PredictPeak();
             predictPeak.setSiteId(_siteId);
-            predictPeak.setPeakVal(kW.get(i));
+            predictPeak.setPeakVal(  kW.get(i)*1000f  ); // kW -> W
             predictPeak.setStdDate(new Date(basetime.get(i)));
             predictPeak.setStdTimestamp(new Date(basetime.get(i)));
             predictPeak.setPeakDate(new Date(occured.get(i)));
@@ -1018,7 +1018,7 @@ public class EnergyController {
         					  pvGen.setSiteId(_siteId);
         					  pvGen.setStdDate(item.getTimestamp());
 //        					  pvGen.setGenVal((float) (item.getUsage().floatValue() / 1000000.0));
-        					  pvGen.setGenVal(item.getUsage().intValue());
+        					  pvGen.setGenVal(  item.getUsage() / 1000f  ); // mWh ->Wh (2019.04.10)
         					  pvGen.setTemp(0);
         					  
         					  pvGentList.add(pvGen);
@@ -1048,7 +1048,7 @@ public class EnergyController {
         						  pvGen.setDeviceId(_deviceId);
         						  pvGen.setSiteId(_siteId);
         						  pvGen.setStdDate(item.getTimestamp());
-        						  pvGen.setGenVal(item.getGenEnergy().intValue());
+        						  pvGen.setGenVal(item.getGenEnergy().floatValue());
         						  pvGen.setTemp(item.getTemperature());
         						  
         						  pvGentList.add(pvGen);
@@ -1078,7 +1078,7 @@ public class EnergyController {
 	      						  pvGen.setDeviceId(_deviceId);
 	      						  pvGen.setSiteId(_siteId);
 	      						  pvGen.setStdDate(item.getTimestamp());
-	      						pvGen.setGenVal(item.getGenEnergy().intValue());
+	      						  pvGen.setGenVal(item.getGenEnergy().floatValue());
 	      						  pvGen.setTemp(item.getTemperature());
 	      						  
 	      						  pvGentList.add(pvGen);
@@ -1094,7 +1094,7 @@ public class EnergyController {
         						  pvGen.setDeviceId(_deviceId);
         						  pvGen.setSiteId(_siteId);
         						  pvGen.setStdDate(item.getTimestamp());
-        						  pvGen.setGenVal(item.getGenEnergy().intValue());
+        						  pvGen.setGenVal(item.getGenEnergy().floatValue());
         						  pvGen.setTemp(item.getTemperature());
         						  
         						  pvGentList.add(pvGen);
@@ -1139,8 +1139,8 @@ public class EnergyController {
         	
         	for (DrRequestTarget item : resultList) {
         		DrResult drResult = new DrResult();
-        		drResult.setActAmt(item.getActualAmount());
-        		drResult.setCblAmt(item.getCblAmount());
+        		drResult.setActAmt(  item.getActualAmount() / 1000f  ); // mWh ->Wh (2019.04.10)
+        		drResult.setCblAmt(  item.getCblAmount() / 1000f  ); // mWh ->Wh (2019.04.10)
         		if (siteSet == null) {
         			drResult.setContractPower(0L);
         			drResult.setGoalPower(0L);
@@ -1192,8 +1192,8 @@ public class EnergyController {
 		        cbl.setStartDate(cblModel.getStart());
 		        cbl.setEndTimestamp(cblModel.getEnd());
 		        cbl.setEndDate(cblModel.getEnd());
-		        cbl.setCbl(cblModel.getCbl().intValue());
-		        cbl.setCml(cblModel.getCml().intValue());
+		        cbl.setCbl(  cblModel.getCbl().intValue() / 1000f  ); // mWh ->Wh (2019.04.10)
+		        cbl.setCml(  cblModel.getCml().intValue() / 1000f  ); // mWh ->Wh (2019.04.10)
 		        drService.addOrModCbl(cbl, null);
 		      }
 			  cal.add(Calendar.HOUR, 1);
@@ -1212,7 +1212,7 @@ public class EnergyController {
   }
 
   /**
-   * 에너지모니터링 > ESS/PV 사용량 구성 > ESS 사용량
+   * 에너지모니터링 > ESS/PV 사용량 구성 > ESS 사용량(현재 미사용, 스케줄러 주석처리함)
    * 
    * @param siteId
    *          사이트아이디

@@ -10,7 +10,7 @@ public class Bill {
     private Integer meterReadDay;//검침일(단위:일)
     private String planType;//요금제구분
     private String planName;//요금제
-    private Integer contractPower;//계약전력(단위:kw)
+    private Integer contractPower;//계약전력(단위:kW -> W)
     private String svcSdate;//사용시작일(형식:yyyymmdd)
     private String svcEdate;//사용종료일(형식:yyyymmdd)
     private Integer baseRate;//기본요금
@@ -23,23 +23,23 @@ public class Bill {
     private Integer elecFund;//전력기금
     private Integer valAddTax;//부가가치세
     private Integer totAmtBill;//당월요금계
-    private Float peakPwrDemand;//요금적용전력(단위:kw)
-    private Float usg;//전체전력사용량(단위:kwh)
-    private Float offPeakUsg;//경부하전력사용량(단위:kwh)
-    private Float midPeakUsg;//중부하전력사용량(단위:kwh)
-    private Float maxPeakUsg;//최대부하전력사용량(단위:kwh)
+    private Float peakPwrDemand;//요금적용전력(단위:kW -> W)
+    private Float usg;//전체전력사용량(단위:kWh -> Wh)
+    private Float offPeakUsg;//경부하전력사용량(단위:kWh -> Wh)
+    private Float midPeakUsg;//중부하전력사용량(단위:kWh -> Wh)
+    private Float maxPeakUsg;//최대부하전력사용량(단위:kWh -> Wh)
     private Integer leadPwrFactor;//진상역률(단위:%)
     private Integer lagPwrFactor;//지상역률(단위:%)
     private Integer essChgIncen;//ess충전요금할인
     private Integer essDischgIncen;//ess방전요금할인
     private Integer demandChgReduct;//기본요금절감금액
     private Integer energyChgReduct;//전력량요금절감금액
-    private Float essChgOffPeak;//경부하시간대방전량(단위:kwh)
-    private Float essChgMidPeak;//중부하시간대방전량(단위:kwh)
-    private Float essChgMaxPeak;//최대부하시간대방전량(단위:kwh)
-    private Float essDischgOffPeak;//경부하시간대충전량(단위:kwh)
-    private Float essDischgMidPeak;//중부하시간대충전량(단위:kwh)
-    private Float essDischgMaxPeak;//최대부하시간대충전량(단위:kwh)
+    private Float essChgOffPeak;//경부하시간대방전량(단위:kWh -> Wh)
+    private Float essChgMidPeak;//중부하시간대방전량(단위:kWh -> Wh)
+    private Float essChgMaxPeak;//최대부하시간대방전량(단위:kWh -> Wh)
+    private Float essDischgOffPeak;//경부하시간대충전량(단위:kWh -> Wh)
+    private Float essDischgMidPeak;//중부하시간대충전량(단위:kWh -> Wh)
+    private Float essDischgMaxPeak;//최대부하시간대충전량(단위:kWh -> Wh)
     private Integer bdayInMonth; // 평일일수
     private Date regDate;//등록일시
     private Date modDate;//최종수정일시
@@ -130,14 +130,14 @@ public class Bill {
         this.planName = planName;
     }
    /**
-    * 계약전력(단위:kw) 조회
+    * 계약전력(단위:kW -> W) 조회
     * @return contractPower
     */
     public Integer getContractPower() {
         return this.contractPower;
     }
    /**
-    * 계약전력(단위:kw) 설정
+    * 계약전력(단위:kW -> W) 설정
     * @return contractPower
     */
     public void setContractPower(Integer contractPower) {
@@ -312,21 +312,21 @@ public class Bill {
         this.totAmtBill = totAmtBill;
     }
    /**
-    * 요금적용전력(단위:kw) 조회
+    * 요금적용전력(단위:kW -> W) 조회
     * @return peakPwrDemand
     */
     public Float getPeakPwrDemand() {
         return this.peakPwrDemand;
     }
    /**
-    * 요금적용전력(단위:kw) 설정
+    * 요금적용전력(단위:kW -> W) 설정
     * @return peakPwrDemand
     */
     public void setPeakPwrDemand(Float peakPwrDemand) {
         this.peakPwrDemand = peakPwrDemand;
     }
    /**
-    * 전체전력사용량(단위:kwh) 조회
+    * 전체전력사용량(단위:kWh -> Wh) 조회
     * @return usg
     */
     public Float getUsg() {
@@ -340,42 +340,42 @@ public class Bill {
         this.usg = usg;
     }
    /**
-    * 경부하전력사용량(단위:kwh) 조회
+    * 경부하전력사용량(단위:kWh -> Wh) 조회
     * @return offPeakUsg
     */
     public Float getOffPeakUsg() {
         return this.offPeakUsg;
     }
    /**
-    * 경부하전력사용량(단위:kwh) 설정
+    * 경부하전력사용량(단위:kWh -> Wh) 설정
     * @return offPeakUsg
     */
     public void setOffPeakUsg(Float offPeakUsg) {
         this.offPeakUsg = offPeakUsg;
     }
    /**
-    * 중부하전력사용량(단위:kwh) 조회
+    * 중부하전력사용량(단위:kWh -> Wh) 조회
     * @return midPeakUsg
     */
     public Float getMidPeakUsg() {
         return this.midPeakUsg;
     }
    /**
-    * 중부하전력사용량(단위:kwh) 설정
+    * 중부하전력사용량(단위:kWh -> Wh) 설정
     * @return midPeakUsg
     */
     public void setMidPeakUsg(Float midPeakUsg) {
         this.midPeakUsg = midPeakUsg;
     }
    /**
-    * 최대부하전력사용량(단위:kwh) 조회
+    * 최대부하전력사용량(단위:kWh -> Wh) 조회
     * @return maxPeakUsg
     */
     public Float getMaxPeakUsg() {
         return this.maxPeakUsg;
     }
    /**
-    * 최대부하전력사용량(단위:kwh) 설정
+    * 최대부하전력사용량(단위:kWh -> Wh) 설정
     * @return maxPeakUsg
     */
     public void setMaxPeakUsg(Float maxPeakUsg) {
@@ -466,84 +466,84 @@ public class Bill {
         this.energyChgReduct = energyChgReduct;
     }
    /**
-    * 경부하시간대방전량(단위:kwh) 조회
+    * 경부하시간대방전량(단위:kWh -> Wh) 조회
     * @return essChgOffPeak
     */
     public Float getEssChgOffPeak() {
         return this.essChgOffPeak;
     }
    /**
-    * 경부하시간대방전량(단위:kwh) 설정
+    * 경부하시간대방전량(단위:kWh -> Wh) 설정
     * @return essChgOffPeak
     */
     public void setEssChgOffPeak(Float essChgOffPeak) {
         this.essChgOffPeak = essChgOffPeak;
     }
    /**
-    * 중부하시간대방전량(단위:kwh) 조회
+    * 중부하시간대방전량(단위:kWh -> Wh) 조회
     * @return essChgMidPeak
     */
     public Float getEssChgMidPeak() {
         return this.essChgMidPeak;
     }
    /**
-    * 중부하시간대방전량(단위:kwh) 설정
+    * 중부하시간대방전량(단위:kWh -> Wh) 설정
     * @return essChgMidPeak
     */
     public void setEssChgMidPeak(Float essChgMidPeak) {
         this.essChgMidPeak = essChgMidPeak;
     }
    /**
-    * 최대부하시간대방전량(단위:kwh) 조회
+    * 최대부하시간대방전량(단위:kWh -> Wh) 조회
     * @return essChgMaxPeak
     */
     public Float getEssChgMaxPeak() {
         return this.essChgMaxPeak;
     }
    /**
-    * 최대부하시간대방전량(단위:kwh) 설정
+    * 최대부하시간대방전량(단위:kWh -> Wh) 설정
     * @return essChgMaxPeak
     */
     public void setEssChgMaxPeak(Float essChgMaxPeak) {
         this.essChgMaxPeak = essChgMaxPeak;
     }
    /**
-    * 경부하시간대충전량(단위:kwh) 조회
+    * 경부하시간대충전량(단위:kWh -> Wh) 조회
     * @return essDischgOffPeak
     */
     public Float getEssDischgOffPeak() {
         return this.essDischgOffPeak;
     }
    /**
-    * 경부하시간대충전량(단위:kwh) 설정
+    * 경부하시간대충전량(단위:kWh -> Wh) 설정
     * @return essDischgOffPeak
     */
     public void setEssDischgOffPeak(Float essDischgOffPeak) {
         this.essDischgOffPeak = essDischgOffPeak;
     }
    /**
-    * 중부하시간대충전량(단위:kwh) 조회
+    * 중부하시간대충전량(단위:kWh -> Wh) 조회
     * @return essDischgMidPeak
     */
     public Float getEssDischgMidPeak() {
         return this.essDischgMidPeak;
     }
    /**
-    * 중부하시간대충전량(단위:kwh) 설정
+    * 중부하시간대충전량(단위:kWh -> Wh) 설정
     * @return essDischgMidPeak
     */
     public void setEssDischgMidPeak(Float essDischgMidPeak) {
         this.essDischgMidPeak = essDischgMidPeak;
     }
    /**
-    * 최대부하시간대충전량(단위:kwh) 조회
+    * 최대부하시간대충전량(단위:kWh -> Wh) 조회
     * @return essDischgMaxPeak
     */
     public Float getEssDischgMaxPeak() {
         return this.essDischgMaxPeak;
     }
    /**
-    * 최대부하시간대충전량(단위:kwh) 설정
+    * 최대부하시간대충전량(단위:kWh -> Wh) 설정
     * @return essDischgMaxPeak
     */
     public void setEssDischgMaxPeak(Float essDischgMaxPeak) {

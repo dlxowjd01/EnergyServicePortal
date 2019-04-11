@@ -11,7 +11,7 @@ public class PredictUsage {
   private String deviceId;// 장치id
   private Date stdTimestamp;// 기준타임스탬프
   private Date stdDate;// 기준일시
-  private Integer preUsgVal;// 예측사용량(단위:mwh)
+  private Float preUsgVal;// 예측사용량(단위:mwh -> Wh)
   private Date regDate;// 등록일시
   private Date modDate;// 최종수정일시
 
@@ -106,20 +106,20 @@ public class PredictUsage {
   }
 
   /**
-   * 예측사용량(단위:mwh) 조회
+   * 예측사용량(단위:mWh -> Wh) 조회
    * 
    * @return preUsgVal
    */
-  public Integer getPreUsgVal() {
+  public Float getPreUsgVal() {
     return this.preUsgVal;
   }
 
   /**
-   * 예측사용량(단위:mwh) 설정
+   * 예측사용량(단위:mWh -> Wh) 설정
    * 
    * @return preUsgVal
    */
-  public void setPreUsgVal(Integer preUsgVal) {
+  public void setPreUsgVal(Float preUsgVal) {
     this.preUsgVal = preUsgVal;
   }
 

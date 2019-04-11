@@ -9,7 +9,7 @@ public class BillRequestModel {
   private Period period;//
   private Long meterDay;// 30 검침일 (defaul 30)
   private String planName;// "industrial_B_high_voltage_A_option2" 요금제
-  private Long contElec;// 970 계약전력
+  private Long contElec;// 970 계약전력(kW)
   private Date timestamp;// ‘ms’ 1483228800000 unix timestamp
   private Float kWh;// kWh 100 전력량
   private List<PeakHistoryModel> peakHistory;// 과거 1년 월별최대 수요

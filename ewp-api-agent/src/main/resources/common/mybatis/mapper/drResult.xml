@@ -8,10 +8,10 @@
         <result property="startDate" column="start_date" javaType="Date"></result><!--감축시작일시-->
         <result property="endTimestamp" column="end_timestamp" javaType="Date"></result><!--감축종료타임스탬프-->
         <result property="endDate" column="end_date" javaType="Date"></result><!--감축종료일시-->
-        <result property="cblAmt" column="cbl_amt" javaType="Integer"></result><!--기준부하(CBL)(단위:mWh)-->
-        <result property="actAmt" column="act_amt" javaType="Integer"></result><!--실제사용량(단위:mWh)-->
-        <result property="contractPower" column="contract_power" javaType="Integer"></result><!--계약전력(단위:kW)-->
-        <result property="goalPower" column="goal_power" javaType="Integer"></result><!--목표전력(단위:kW)-->
+        <result property="cblAmt" column="cbl_amt" javaType="Float"></result><!--기준부하(CBL)(단위:mWh -> Wh)-->
+        <result property="actAmt" column="act_amt" javaType="Float"></result><!--실제사용량(단위:mWh -> Wh)-->
+        <result property="contractPower" column="contract_power" javaType="Long"></result><!--계약전력(단위:kW -> W)-->
+        <result property="goalPower" column="goal_power" javaType="Long"></result><!--목표전력(단위:kW -> W)-->
         <result property="rewardAmt" column="reward_amt" javaType="Integer"></result><!--감축정산금-->
         <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
         <result property="modDate" column="mod_date" javaType="Date"></result><!--최종수정일시-->
@@ -23,8 +23,8 @@
         <result property="startDate" column="start_date" javaType="Date"></result><!--시작일시-->
         <result property="endTimestamp" column="end_timestamp" javaType="Date"></result><!--종료타임스탬프-->
         <result property="endDate" column="end_date" javaType="Date"></result><!--종료일시-->
-        <result property="cbl" column="cbl" javaType="Integer"></result><!--기준부하-->
-        <result property="cml" column="cml" javaType="Integer"></result><!--최소부하-->
+        <result property="cbl" column="cbl" javaType="Float"></result><!--기준부하(단위:mWh -> Wh)-->
+        <result property="cml" column="cml" javaType="Float"></result><!--최소부하(단위:mWh -> Wh)-->
         <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
     </resultMap>
     <insert id="insert" parameterType="DrResult">

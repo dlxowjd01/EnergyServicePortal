@@ -18,21 +18,21 @@ public class BillItemModel {
     private Double midPeakRate;//
     private Double offPeakRate;//
     private Double onPeakRate;//
-    private Double peakPowerDemand;//
-    private Double energyUsage;//
+    private Double peakPowerDemand;// kW
+    private Double energyUsage;// kWh
     private Double leadingPowerFactor;//
     private Double laggingPowerFactor;//
-    private Double midPeakEnergyUsage;//
-    private Double offPeakEnergyUsage;//
-    private Double onPeakEnergyUsage;//
+    private Double midPeakEnergyUsage;// kWh
+    private Double offPeakEnergyUsage;//  kWh
+    private Double onPeakEnergyUsage;// kWh
     private Double essChargingIncentive;//
     private Double essDischargingIncentive;//
-    private Double essChargingInOffPeak;//
-    private Double essChargingInMidPeak;//
-    private Double essChargingInOnPeak;//
-    private Double essDischargingInOffPeak;//
-    private Double essDischargingInMidPeak;//
-    private Double essDischargingInOnPeak;//
+    private Double essChargingInOffPeak;// kWh
+    private Double essChargingInMidPeak;// kWh
+    private Double essChargingInOnPeak;// kWh
+    private Double essDischargingInOffPeak;// kWh
+    private Double essDischargingInMidPeak;// kWh
+    private Double essDischargingInOnPeak;// kWh
     private Double demandChargeReduction;//
     private Double energyChargeReduction;
 //    private Integer essBdayInMonth;

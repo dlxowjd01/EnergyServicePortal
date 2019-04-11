@@ -11,7 +11,7 @@ public class DeviceBms {
     private String deviceStat;//충방전상태
     private String alarmMsg;// 알람메시지
     private Float sysSoc;//soc(단위:%)
-    private Float currSoc;//soc현재(단위:kwh)
+    private Float currSoc;//soc현재(단위:kWh -> Wh)
     private Float sysSoh;//soh(단위:%)
     private Float sysVoltage;//출력전압(단위:v)
     private Float sysCurrent;//출력전류(단위:a)
@@ -119,14 +119,14 @@ public class DeviceBms {
         this.sysSoc = sysSoc;
     }
    /**
-    * soc현재(단위:kwh) 조회
+    * soc현재(단위:kWh -> Wh) 조회
     * @return currSoc
     */
     public Float getCurrSoc() {
         return this.currSoc;
     }
    /**
-    * soc현재(단위:kwh) 설정
+    * soc현재(단위:kWh -> Wh) 설정
     * @return currSoc
     */
     public void setCurrSoc(Float currSoc) {

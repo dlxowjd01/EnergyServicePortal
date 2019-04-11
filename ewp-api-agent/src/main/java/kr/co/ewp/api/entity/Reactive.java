@@ -11,8 +11,8 @@ public class Reactive {
   private String deviceId;// 장치id
   private Date stdTimestamp;// 기준타임스탬프
   private Date stdDate;// 기준일시
-  private Integer rctvVal;// positive 방향 무효전력량(단위:mvarh)
-  private Integer negRctvVal;// negative 방향 무효전력량(단위:mvarh)
+  private Float rctvVal;// positive 방향 무효전력량(단위:mVarh -> Varh)
+  private Float negRctvVal;// negative 방향 무효전력량(단위:mVarh -> Varh)
   private Date regDate;// 등록일시
   private Date modDate;// 최종수정일시
 
@@ -107,38 +107,38 @@ public class Reactive {
   }
 
   /**
-   * positive 방향 무효전력량(단위:mvarh) 조회
+   * positive 방향 무효전력량(단위:mVarh -> Varh) 조회
    * 
    * @return rctvVal
    */
-  public Integer getRctvVal() {
+  public Float getRctvVal() {
     return this.rctvVal;
   }
 
   /**
-   * positive 방향 무효전력량(단위:mvarh) 설정
+   * positive 방향 무효전력량(단위:mVarh -> Varh) 설정
    * 
    * @return rctvVal
    */
-  public void setRctvVal(Integer rctvVal) {
+  public void setRctvVal(Float rctvVal) {
     this.rctvVal = rctvVal;
   }
 
   /**
-   * negative 방향 무효전력량(단위:mvarh) 조회
+   * negative 방향 무효전력량(단위:mVarh -> Varh) 조회
    * 
  * @return the negRctvVal
  */
-public Integer getNegRctvVal() {
+public Float getNegRctvVal() {
 	return negRctvVal;
 }
 
 /**
- * negative 방향 무효전력량(단위:mvarh) 설정
+ * negative 방향 무효전력량(단위:mVarh -> Varh) 설정
  * 
  * @param negRctvVal the negRctvVal to set
  */
-public void setNegRctvVal(Integer negRctvVal) {
+public void setNegRctvVal(Float negRctvVal) {
 	this.negRctvVal = negRctvVal;
 }
 

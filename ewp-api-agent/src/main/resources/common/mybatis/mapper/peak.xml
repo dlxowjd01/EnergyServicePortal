@@ -6,7 +6,7 @@
         <result property="siteId" column="site_id" javaType="String"></result><!--사이트ID-->
         <result property="stdTimestamp" column="std_timestamp" javaType="Date"></result><!--기준타임스탬프-->
         <result property="stdDate" column="std_date" javaType="Date"></result><!--기준일시-->
-        <result property="peakVal" column="peak_val" javaType="Float"></result><!--최대수요(단위:kW)-->
+        <result property="peakVal" column="peak_val" javaType="Float"></result><!--최대수요(단위:kW -> W)-->
         <result property="peakTimestamp" column="peak_timestamp" javaType="Date"></result><!--최대수요발생타임스탬프-->
         <result property="peakDate" column="peak_date" javaType="Date"></result><!--최대수요발생일시-->
         <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->

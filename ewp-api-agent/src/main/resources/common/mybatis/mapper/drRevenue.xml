@@ -7,8 +7,8 @@
         <result property="stdYearm" column="std_yearm" javaType="String"></result><!--기준년월(형식:YYYYMM)-->
         <result property="stdTimestamp" column="std_timestamp" javaType="Date"></result><!--기준타임스탬프-->
         <result property="stdDate" column="std_date" javaType="Date"></result><!--기준일시-->
-        <result property="reductCap" column="reduct_cap" javaType="Integer"></result><!--감축이행용량(단위:kWh)-->
-        <result property="basicPrice" column="basic_price" javaType="Integer"></result><!--기본가격(단위:원/kWh)-->
+        <result property="reductCap" column="reduct_cap" javaType="Integer"></result><!--감축이행용량(단위:kWh -> Wh)-->
+        <result property="basicPrice" column="basic_price" javaType="Integer"></result><!--기본가격(단위:원/kWh -> Wh)-->
         <result property="maxReductRatio" column="max_reduct_ratio" javaType="Float"></result><!--감축상한비율-->
         <result property="minReductRatio" column="min_reduct_ratio" javaType="Float"></result><!--감축하한비율-->
         <result property="totPay" column="tot_pay" javaType="Integer"></result><!--총지급액-->
@@ -17,9 +17,9 @@
         <result property="reductEtimestamp" column="reduct_etimestamp" javaType="Date"></result><!--감축종료타임스탬프-->
         <result property="reductSdate" column="reduct_sdate" javaType="Date"></result><!--감축시작일시-->
         <result property="reductEdate" column="reduct_edate" javaType="Date"></result><!--감축종료일시-->
-        <result property="cblAmt" column="cbl_amt" javaType="Integer"></result><!--평균사용량(단위:kWh)-->
-        <result property="actAmt" column="act_amt" javaType="Integer"></result><!--실제사용량(단위:kWh)-->
-        <result property="reductAmt" column="reduct_amt" javaType="Integer"></result><!--감축량(단위:kWh)-->
+        <result property="cblAmt" column="cbl_amt" javaType="Integer"></result><!--평균사용량(단위:kWh -> Wh)-->
+        <result property="actAmt" column="act_amt" javaType="Integer"></result><!--실제사용량(단위:kWh -> Wh)-->
+        <result property="reductAmt" column="reduct_amt" javaType="Integer"></result><!--감축량(단위:kWh -> Wh)-->
         <result property="smp" column="smp" javaType="Integer"></result><!--SMP(단위:원)-->
         <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
         <result property="modDate" column="mod_date" javaType="Date"></result><!--최종수정일시-->

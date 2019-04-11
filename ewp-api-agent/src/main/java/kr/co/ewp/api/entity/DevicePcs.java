@@ -13,16 +13,16 @@ public class DevicePcs {
   private String deviceStat;// 운전상태
   private String alarmMsg;// 알람메시지
   private Float acVoltage;// ac출력 - 전압(단위:v)
-  private Float acPower;// ac출력 - 전력(단위:kwh)
+  private Float acPower;// ac출력 - 전력(단위:kWh -> W)
   private Float acCurrent;// ac출력 - 전류(단위:a)
   private Float acFreq;// ac출력 - 주파수(단위:hz)
-  private Float acSetPower;// ac출력 - 전력설정치(단위:kwh)
+  private Float acSetPower;// ac출력 - 전력설정치(단위:kWh -> W)
   private Float acPf;// ac출력 - 역률
   private Float dcVoltage;// dc출력 - 전압(단위:v)
-  private Float dcPower;// dc출력 - 전력(단위:kwh)
+  private Float dcPower;// dc출력 - 전력(단위:kWh -> W)
   private Float dcCurrent;// dc출력 - 전류(단위:a)
   private Float dcFreq;// dc출력 - 주파수(단위:hz)
-  private Float dcSetPower;// dc출력 - 전력설정치(단위:kwh)
+  private Float dcSetPower;// dc출력 - 전력설정치(단위:kWh -> W)
   private Float dcPf;// dc출력 - 역률
   private Date stdDate;// 기준일시
   private Date regDate;// 등록일시
@@ -30,10 +30,10 @@ public class DevicePcs {
   private String pcsStatus;// 0:OFF, 1:ON, 2:Fault, 3:Warning
   private String remoteMode;// 0:Local, 1:Remote
   private String pcsCommand;// 0:Stop, 1:Run
-  private String todayDEnergy;//
-  private String todayCEnergy;//
-  private String totalDEnergy;//
-  private String totalCEnerge;//
+  private String todayDEnergy;// (Wh)
+  private String todayCEnergy;// (Wh)
+  private String totalDEnergy;// (Wh)
+  private String totalCEnerge;// (Wh)
 
   public String getPcsStatus() {
     return pcsStatus;
@@ -218,7 +218,7 @@ public class DevicePcs {
   }
 
   /**
-   * ac출력 - 전력(단위:kwh) 조회
+   * ac출력 - 전력(단위:kWh -> Wh) 조회
    * 
    * @return acPower
    */
@@ -227,7 +227,7 @@ public class DevicePcs {
   }
 
   /**
-   * ac출력 - 전력(단위:kwh) 설정
+   * ac출력 - 전력(단위:kWh -> Wh) 설정
    * 
    * @return acPower
    */
@@ -272,7 +272,7 @@ public class DevicePcs {
   }
 
   /**
-   * ac출력 - 전력설정치(단위:kwh) 조회
+   * ac출력 - 전력설정치(단위:kWh -> Wh) 조회
    * 
    * @return acSetPower
    */
@@ -281,7 +281,7 @@ public class DevicePcs {
   }
 
   /**
-   * ac출력 - 전력설정치(단위:kwh) 설정
+   * ac출력 - 전력설정치(단위:kWh -> Wh) 설정
    * 
    * @return acSetPower
    */
@@ -326,7 +326,7 @@ public class DevicePcs {
   }
 
   /**
-   * dc출력 - 전력(단위:kwh) 조회
+   * dc출력 - 전력(단위:kWh -> Wh) 조회
    * 
    * @return dcPower
    */
@@ -335,7 +335,7 @@ public class DevicePcs {
   }
 
   /**
-   * dc출력 - 전력(단위:kwh) 설정
+   * dc출력 - 전력(단위:kWh -> Wh) 설정
    * 
    * @return dcPower
    */
@@ -380,7 +380,7 @@ public class DevicePcs {
   }
 
   /**
-   * dc출력 - 전력설정치(단위:kwh) 조회
+   * dc출력 - 전력설정치(단위:kWh -> Wh) 조회
    * 
    * @return dcSetPower
    */
@@ -389,7 +389,7 @@ public class DevicePcs {
   }
 
   /**
-   * dc출력 - 전력설정치(단위:kwh) 설정
+   * dc출력 - 전력설정치(단위:kWh -> Wh) 설정
    * 
    * @return dcSetPower
    */

@@ -12,8 +12,8 @@ public class Cbl {
   private Date startDate;// 시작일시
   private Date endTimestamp;// 종료타임스탬프
   private Date endDate;// 종료일시
-  private Integer cbl;// 기준부하
-  private Integer cml;// 최소부하
+  private Float cbl;// 기준부하
+  private Float cml;// 최소부하
   private Date regDate;// 등록일시
   private Date modDate;// 등록일시
   
@@ -65,19 +65,19 @@ public class Cbl {
 		this.endDate = endDate;
 	}
 	
-	public Integer getCbl() {
+	public Float getCbl() {
 		return cbl;
 	}
 	
-	public void setCbl(Integer cbl) {
+	public void setCbl(Float cbl) {
 		this.cbl = cbl;
 	}
 	
-	public Integer getCml() {
+	public Float getCml() {
 		return cml;
 	}
 	
-	public void setCml(Integer cml) {
+	public void setCml(Float cml) {
 		this.cml = cml;
 	}
 	

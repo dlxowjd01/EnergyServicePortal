@@ -201,7 +201,7 @@ public class BillController {
 
         BillRequestModel billRequest = new BillRequestModel();
         billRequest.setMeterDay(meterDay);
-        billRequest.setContElec(siteSet.getContractPower());
+        billRequest.setContElec(siteSet.getContractPower()*1000); // W -> kW
         billRequest.setPeriod(period);
         if(siteSet.getPlanType() != null && siteSet.getPlanType2() != null && siteSet.getPlanType3() != null ) {
         	billRequest.setPlanName(siteSet.getPlanType()+"_"+siteSet.getPlanType2()+"_"+siteSet.getPlanType3());
@@ -242,7 +242,7 @@ public class BillController {
               if (preTime != 0 && time - preTime != 900000) {
                 prettyLog.append("TIME-ERROR", preTime + "," + time);
               }
-              kWh.add(usage.getUsgVal() / 1000000f);
+              kWh.add(usage.getUsgVal() / 1000f); // Wh -> kWh
             }
             energy.setTimestamp(timestamp);
             energy.setkWh(kWh);
@@ -270,7 +270,7 @@ public class BillController {
           List<Usage> usageList = usageService.getUsageListBySiteId(_siteId, beginDate, endDate, prettyLog);
           for (Usage usage : usageList) {
             timestamp.add(usage.getStdTimestamp().getTime());
-            kWh.add(usage.getUsgVal() / 1000000f);
+            kWh.add(usage.getUsgVal() / 1000f); // Wh -> kWh
           }
           energy.setTimestamp(timestamp);
           energy.setkWh(kWh);
@@ -285,8 +285,8 @@ public class BillController {
           List<Reactive> reactiveList = usageService.getReactiveListBySiteId(_siteId, beginDate, endDate, prettyLog);
           for (Reactive re : reactiveList) {
             timestamp.add(re.getStdTimestamp().getTime());
-            poskWh.add(re.getRctvVal() / 1000000f);
-            negkWh.add(re.getNegRctvVal() / 1000000f);
+            poskWh.add(re.getRctvVal() / 1000f); // Wh -> kWh
+            negkWh.add(re.getNegRctvVal() / 1000f); // Wh -> kWh
           }
           posReactive.setkVarh(poskWh);
           posReactive.setTimestamp(timestamp);
@@ -304,8 +304,8 @@ public class BillController {
           List<EssCharge> esschargeList = essService.getEssChargeListBySiteId(_siteId, beginDate, endDate, prettyLog);
           for (EssCharge essCharge : esschargeList) {
             timestamp.add(essCharge.getStdDate().getTime());
-            kWh.add(new Float(essCharge.getChgVal()));
-            kWh2.add(new Float(essCharge.getDischgVal()));
+            kWh.add(new Float(essCharge.getChgVal() / 1000f)); // Wh -> kWh
+            kWh2.add(new Float(essCharge.getDischgVal() / 1000f)); // Wh -> kWh
           }
           ess.setkWh(kWh);
           ess.setTimestamp(timestamp);
@@ -340,34 +340,34 @@ public class BillController {
             	Double zero = (double) 0;
             	bill.setEssChgMaxPeak( zero.floatValue() );
             }
-            else bill.setEssChgMaxPeak(item.getEssChargingInOnPeak().floatValue());
+            else bill.setEssChgMaxPeak(item.getEssChargingInOnPeak().floatValue()*1000f); // kWh -> Wh
             if(item.getEssChargingInMidPeak() == null) {
             	Double zero = (double) 0;
             	bill.setEssChgMidPeak( zero.floatValue() );
             }
-            else bill.setEssChgMidPeak(item.getEssChargingInMidPeak().floatValue());
+            else bill.setEssChgMidPeak(item.getEssChargingInMidPeak().floatValue()*1000f); // kWh -> Wh
             if(item.getEssChargingInOffPeak() == null) {
             	Double zero = (double) 0;
             	bill.setEssChgOffPeak( zero.floatValue() );
             }
-            else bill.setEssChgOffPeak(item.getEssChargingInOffPeak().floatValue());
+            else bill.setEssChgOffPeak(item.getEssChargingInOffPeak().floatValue()*1000f); // kWh -> Wh
             if(item.getEssDischargingIncentive() == null) bill.setEssDischgIncen( 0 );
             else bill.setEssDischgIncen(item.getEssDischargingIncentive().intValue());
             if(item.getEssDischargingInOnPeak() == null) {
             	Double zero = (double) 0;
             	bill.setEssDischgMaxPeak( zero.floatValue() );
             }
-            else bill.setEssDischgMaxPeak(item.getEssDischargingInOnPeak().floatValue());
+            else bill.setEssDischgMaxPeak(item.getEssDischargingInOnPeak().floatValue()*1000f); // kWh -> Wh
             if(item.getEssDischargingInMidPeak() == null) {
             	Double zero = (double) 0;
             	bill.setEssDischgMidPeak( zero.floatValue() );
             }
-            else bill.setEssDischgMidPeak(item.getEssDischargingInMidPeak().floatValue());
+            else bill.setEssDischgMidPeak(item.getEssDischargingInMidPeak().floatValue()*1000f); // kWh -> Wh
             if(item.getEssDischargingInOffPeak() == null) {
             	Double zero = (double) 0;
             	bill.setEssDischgOffPeak( zero.floatValue() );
             }
-            else bill.setEssDischgOffPeak(item.getEssDischargingInOffPeak().floatValue());
+            else bill.setEssDischgOffPeak(item.getEssDischargingInOffPeak().floatValue()*1000f); // kWh -> Wh
             if(item.getLaggingPowerFactor() == null) bill.setLagPwrFactor( 0 );
             else bill.setLagPwrFactor(item.getLaggingPowerFactor().intValue());
             if(item.getLeadingPowerFactor() == null) bill.setLeadPwrFactor( 0 );
@@ -378,7 +378,7 @@ public class BillController {
             	Double zero = (double) 0;
             	bill.setMaxPeakUsg( zero.floatValue() );
             }
-            else bill.setMaxPeakUsg(item.getOnPeakEnergyUsage().floatValue());
+            else bill.setMaxPeakUsg(item.getOnPeakEnergyUsage().floatValue()*1000f); // kWh -> Wh
             bill.setMeterReadDay(meterDay.intValue());
             if(item.getMidPeakRate() == null) bill.setMidPeakRate( 0 ); // 주말은 해당항목이 없음
             else bill.setMidPeakRate(item.getMidPeakRate().intValue());
@@ -388,8 +388,8 @@ public class BillController {
           	  Double zero = (double) 0;
           	  bill.setOffPeakUsg( zero.floatValue() );
             }
-            else bill.setOffPeakUsg(item.getOffPeakEnergyUsage().floatValue());
-            bill.setPeakPwrDemand(item.getPeakPowerDemand().floatValue());
+            else bill.setOffPeakUsg(item.getOffPeakEnergyUsage().floatValue()*1000f); // kWh -> Wh
+            bill.setPeakPwrDemand(item.getPeakPowerDemand().floatValue()*1000f); // kW -> W
 //            bill.setPlanName(siteSet.getPlanName());
             bill.setPlanName("");
             bill.setPlanType(siteSet.getPlanType()+"_"+siteSet.getPlanType2()+"_"+siteSet.getPlanType3());
@@ -399,7 +399,7 @@ public class BillController {
             bill.setSvcSdate(DateUtil.longToString(item.getServicePeriodFrom(), "yyyyMMdd"));
             bill.setTotAmtBill(item.getTotalAmountBilled().intValue());
             bill.setTotElecRate(item.getTotalElectricityRate().intValue());
-            bill.setUsg(item.getEnergyUsage().floatValue());
+            bill.setUsg(item.getEnergyUsage().floatValue()*1000f); // kWh -> Wh
             bill.setValAddTax(item.getValueAddedTax().intValue());
             bill.setBdayInMonth(item.getBdayInMonth().intValue());
             billList.add(bill);
@@ -520,7 +520,7 @@ public class BillController {
 
       BillRequestModel billRequest = new BillRequestModel();
       billRequest.setMeterDay(meterDay);
-      billRequest.setContElec(siteSet.getContractPower());
+      billRequest.setContElec(siteSet.getContractPower()*1000); // W -> kW
       billRequest.setPeriod(period);
 ////      billRequest.setPlanName(siteSet.getPlanType());
 //      billRequest.setPlanName("industrial_B_high_voltage_A_option1"); // 10.23 변경중
@@ -662,34 +662,34 @@ public class BillController {
               	Double zero = (double) 0;
               	bill.setEssChgMaxPeak( zero.floatValue() );
               }
-              else bill.setEssChgMaxPeak(item.getEssChargingInOnPeak().floatValue());
+              else bill.setEssChgMaxPeak(item.getEssChargingInOnPeak().floatValue()*1000f); // kWh -> Wh
               if(item.getEssChargingInMidPeak() == null) {
               	Double zero = (double) 0;
               	bill.setEssChgMidPeak( zero.floatValue() );
               }
-              else bill.setEssChgMidPeak(item.getEssChargingInMidPeak().floatValue());
+              else bill.setEssChgMidPeak(item.getEssChargingInMidPeak().floatValue()*1000f); // kWh -> Wh
               if(item.getEssChargingInOffPeak() == null) {
             	  Double zero = (double) 0;
             	  bill.setEssChgOffPeak( zero.floatValue() );
               }
-              else bill.setEssChgOffPeak(item.getEssChargingInOffPeak().floatValue());
+              else bill.setEssChgOffPeak(item.getEssChargingInOffPeak().floatValue()*1000f); // kWh -> Wh
               if(item.getEssDischargingIncentive() == null) bill.setEssDischgIncen( 0 );
               else bill.setEssDischgIncen(item.getEssDischargingIncentive().intValue());
               if(item.getEssDischargingInOnPeak() == null) {
             	  Double zero = (double) 0;
             	  bill.setEssDischgMaxPeak( zero.floatValue() );
               }
-              else bill.setEssDischgMaxPeak(item.getEssDischargingInOnPeak().floatValue());
+              else bill.setEssDischgMaxPeak(item.getEssDischargingInOnPeak().floatValue()*1000f); // kWh -> Wh
               if(item.getEssDischargingInMidPeak() == null) {
             	  Double zero = (double) 0;
             	  bill.setEssDischgMidPeak( zero.floatValue() );
               }
-              else bill.setEssDischgMidPeak(item.getEssDischargingInMidPeak().floatValue());
+              else bill.setEssDischgMidPeak(item.getEssDischargingInMidPeak().floatValue()*1000f); // kWh -> Wh
               if(item.getEssDischargingInOffPeak() == null) {
             	  Double zero = (double) 0;
             	  bill.setEssDischgOffPeak( zero.floatValue() );
               }
-              else bill.setEssDischgOffPeak(item.getEssDischargingInOffPeak().floatValue());
+              else bill.setEssDischgOffPeak(item.getEssDischargingInOffPeak().floatValue()*1000f); // kWh -> Wh
               if(item.getLaggingPowerFactor() == null) bill.setLagPwrFactor( 0 );
               else bill.setLagPwrFactor(item.getLaggingPowerFactor().intValue());
               if(item.getLeadingPowerFactor() == null) bill.setLeadPwrFactor( 0 );
@@ -700,7 +700,7 @@ public class BillController {
               	Double zero = (double) 0;
               	bill.setMaxPeakUsg( zero.floatValue() );
               }
-              else bill.setMaxPeakUsg(item.getOnPeakEnergyUsage().floatValue());
+              else bill.setMaxPeakUsg(item.getOnPeakEnergyUsage().floatValue()*1000f); // kWh -> Wh
               bill.setMeterReadDay(meterDay.intValue());
               if(item.getMidPeakRate() == null) bill.setMidPeakRate( 0 ); // 주말은 해당항목이 없음
               else bill.setMidPeakRate(item.getMidPeakRate().intValue());
@@ -710,8 +710,8 @@ public class BillController {
             	  Double zero = (double) 0;
             	  bill.setOffPeakUsg( zero.floatValue() );
               }
-              else bill.setOffPeakUsg(item.getOffPeakEnergyUsage().floatValue());
-              bill.setPeakPwrDemand(item.getPeakPowerDemand().floatValue());
+              else bill.setOffPeakUsg(item.getOffPeakEnergyUsage().floatValue()*1000f); // kWh -> Wh
+              bill.setPeakPwrDemand(item.getPeakPowerDemand().floatValue()); // kW -> W
 //              bill.setPlanName(siteSet.getPlanName());
               bill.setPlanName("");
               bill.setPlanType(siteSet.getPlanType()+"_"+siteSet.getPlanType2()+"_"+siteSet.getPlanType3());
@@ -723,7 +723,7 @@ public class BillController {
               bill.setSvcEtimestamp(new Date(item.getServicePeriodTo()));
               bill.setTotAmtBill(item.getTotalAmountBilled().intValue());
               bill.setTotElecRate(item.getTotalElectricityRate().intValue());
-              bill.setUsg(item.getEnergyUsage().floatValue());
+              bill.setUsg(item.getEnergyUsage().floatValue()*1000f); // kWh -> Wh
               bill.setValAddTax(item.getValueAddedTax().intValue());
               bill.setBdayInMonth(item.getBdayInMonth().intValue());
               billList.add(bill);
@@ -793,14 +793,14 @@ public class BillController {
         			drRevenue.setStdDate(DateUtil.stringToDate(payment.getMonth(), "yyyyMM"));
         			drRevenue.setStdTimestamp(drRevenue.getStdDate());
         			drRevenue.setBasicPay(payment.getBasicPayment().intValue());
-        			drRevenue.setBasicPrice(payment.getBasicPrice().intValue());
+        			drRevenue.setBasicPrice(payment.getBasicPrice().intValue()*1000); // kWh -> Wh
         			drRevenue.setMaxReductRatio(payment.getMaxReductionRatio());
         			drRevenue.setMinReductRatio(payment.getMinReductionRatio());
         			drRevenue.setTotPay(payment.getTotalPayment().intValue());
-        			drRevenue.setReductCap(payment.getReductionCapacity().intValue());
-        			drRevenue.setActAmt(reduction.getActualAmount().intValue());
-        			drRevenue.setCblAmt(reduction.getCblAmount().intValue());
-        			drRevenue.setReductAmt(reduction.getReductionAmount().intValue());
+        			drRevenue.setReductCap(payment.getReductionCapacity().intValue()*1000); // kWh -> Wh
+        			drRevenue.setActAmt(reduction.getActualAmount().intValue()*1000); // kWh -> Wh
+        			drRevenue.setCblAmt(reduction.getCblAmount().intValue()*1000); // kWh -> Wh
+        			drRevenue.setReductAmt(reduction.getReductionAmount().intValue()*1000); // kWh -> Wh
         			drRevenue.setReductEdate(reduction.getEnd());
         			drRevenue.setReductEtimestamp(reduction.getEnd());
         			drRevenue.setReductSdate(reduction.getStart());
@@ -880,7 +880,7 @@ public class BillController {
         List<PvGen> pvGenList = pvService.getPvGenListBySiteId(_siteId, beginDate, endDate, prettyLog);
         List<PvUsage> pvUsageList = Lists.newArrayList();// pvService.getPvUsageListBySiteId(site.getSiteId(), beginDate, endDate, prettyLog);
         List<EssCharge> essChargeList = essService.getEssChargeListBySiteId(_siteId, beginDate, endDate, prettyLog);
-        List<EssUsage> essUsageList = essService.getEssUsageListBySiteId(_siteId, beginDate, endDate, prettyLog);
+//        List<EssUsage> essUsageList = essService.getEssUsageListBySiteId(_siteId, beginDate, endDate, prettyLog);
 //        Map<Long/* stdDate */, Integer /* pvGenVal */> pvGenMap = Maps.newHashMap();
 //        Map<Long/* stdDate */, Integer /* pvUsageVal */> pvUsgMap = Maps.newHashMap();
         Map<Long/* stdDate */, Float /* pvGenVal */> pvGenMap = Maps.newHashMap();
@@ -888,17 +888,18 @@ public class BillController {
         Map<Long/* stdDate */, Float /* essChargeVal */> essChargeMap = Maps.newHashMap();
         Map<Long/* stdDate */, Float /* essUsageVal */> essUsgMap = Maps.newHashMap();
         for (PvGen item : pvGenList) {
-          pvGenMap.put(item.getStdDate().getTime(), item.getGenVal().floatValue() / 1000000f); // mWh -> kWh 변경
+          pvGenMap.put(item.getStdDate().getTime(), item.getGenVal().floatValue() / 1000f); // Wh -> kWh 변경
         }
         for (PvUsage item : pvUsageList) {
-          pvUsgMap.put(item.getStdDate().getTime(), item.getUsgVal().floatValue() / 1000000f); // mWh -> kWh 변경
+          pvUsgMap.put(item.getStdDate().getTime(), item.getUsgVal().floatValue() / 1000f); // Wh -> kWh 변경
         }
         for (EssCharge item : essChargeList) {
-          essChargeMap.put(item.getStdDate().getTime(), item.getChgVal());
+          essChargeMap.put(item.getStdDate().getTime(), item.getChgVal() / 1000f); // Wh -> kWh 변경
+          essUsgMap.put(item.getStdDate().getTime(), item.getDischgVal() / 1000f); // Wh -> kWh 변경
         }
-        for (EssUsage item : essUsageList) {
-          essUsgMap.put(item.getStdDate().getTime(), item.getUsgVal());
-        }
+//        for (EssUsage item : essUsageList) {
+//          essUsgMap.put(item.getStdDate().getTime(), item.getUsgVal());
+//        }
         GenRequestSub genReqPv = new GenRequestSub();
         GenRequestSub genReqEss = new GenRequestSub();
         genReqPv.setLabel("gen_pv");
@@ -941,9 +942,9 @@ public class BillController {
             genRevenue.setStdTimestamp(genRevenue.getStdDate());
             genRevenue.setMeterReadDay(siteSet.getMeterReadDay().intValue());
             genRevenue.setGenType("2");
-            genRevenue.setConsumeVal(genEss.getConsumed().get(i));
-            genRevenue.setNetGenVal(genEss.getNetGeneration().get(i));
-            genRevenue.setProduceVal(genEss.getProduced().get(i));
+            genRevenue.setConsumeVal(genEss.getConsumed().get(i)*1000); // kWh -> Wh
+            genRevenue.setNetGenVal(genEss.getNetGeneration().get(i)*1000); // kWh -> Wh
+            genRevenue.setProduceVal(genEss.getProduced().get(i)*1000); // kWh -> Wh
             genRevenue.setRecPrice(genEss.getRecPrice().get(i));
             genRevenue.setSmpPrice(genEss.getSmpPrice().get(i));
             genRevenue.setTotPrice(genEss.getRevenues().get(i));
@@ -958,9 +959,9 @@ public class BillController {
             genRevenue.setStdTimestamp(genRevenue.getStdDate());
             genRevenue.setMeterReadDay(siteSet.getMeterReadDay().intValue());
             genRevenue.setGenType("1");
-            genRevenue.setConsumeVal(genPv.getConsumed().get(i));
-            genRevenue.setNetGenVal(genPv.getNetGeneration().get(i));
-            genRevenue.setProduceVal(genPv.getProduced().get(i));
+            genRevenue.setConsumeVal(genPv.getConsumed().get(i)*1000); // kWh -> Wh
+            genRevenue.setNetGenVal(genPv.getNetGeneration().get(i)*1000); // kWh -> Wh
+            genRevenue.setProduceVal(genPv.getProduced().get(i)*1000); // kWh -> Wh
             genRevenue.setRecPrice(genPv.getRecPrice().get(i));
             genRevenue.setSmpPrice(genPv.getSmpPrice().get(i));
             genRevenue.setTotPrice(genPv.getRevenues().get(i));

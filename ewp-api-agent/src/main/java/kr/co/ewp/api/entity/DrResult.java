@@ -12,10 +12,10 @@ public class DrResult {
   private Date startDate;// 감축시작일시
   private Date endTimestamp;// 감축종료타임스탬프
   private Date endDate;// 감축종료일시
-  private Long cblAmt;// 기준부하(cbl)(단위:mwh)
-  private Long actAmt;// 실제사용량(단위:mwh)
-  private Long contractPower;// 계약전력(단위:kw)
-  private Long goalPower;// 목표전력(단위:kw)
+  private Float cblAmt;// 기준부하(cbl)(단위:mWh -> Wh)
+  private Float actAmt;// 실제사용량(단위:mWh -> Wh)
+  private Long contractPower;// 계약전력(단위:kW -> W)
+  private Long goalPower;// 목표전력(단위:kW -> W)
   private Long rewardAmt;// 감축정산금
   private Date regDate;// 등록일시
   private Date modDate;// 최종수정일시
@@ -129,43 +129,43 @@ public class DrResult {
   }
 
   /**
-   * 기준부하(cbl)(단위:mwh) 조회
+   * 기준부하(cbl)(단위:mWh -> Wh) 조회
    * 
    * @return cblAmt
    */
-  public Long getCblAmt() {
+  public Float getCblAmt() {
     return this.cblAmt;
   }
 
   /**
-   * 기준부하(cbl)(단위:mwh) 설정
+   * 기준부하(cbl)(단위:mWh -> Wh) 설정
    * 
    * @return cblAmt
    */
-  public void setCblAmt(Long cblAmt) {
+  public void setCblAmt(Float cblAmt) {
     this.cblAmt = cblAmt;
   }
 
   /**
-   * 실제사용량(단위:mwh) 조회
+   * 실제사용량(단위:mWh -> Wh) 조회
    * 
    * @return actAmt
    */
-  public Long getActAmt() {
+  public Float getActAmt() {
     return this.actAmt;
   }
 
   /**
-   * 실제사용량(단위:mwh) 설정
+   * 실제사용량(단위:mWh -> Wh) 설정
    * 
    * @return actAmt
    */
-  public void setActAmt(Long actAmt) {
+  public void setActAmt(Float actAmt) {
     this.actAmt = actAmt;
   }
 
   /**
-   * 계약전력(단위:kw) 조회
+   * 계약전력(단위:kW -> W) 조회
    * 
    * @return contractPower
    */
@@ -174,7 +174,7 @@ public class DrResult {
   }
 
   /**
-   * 계약전력(단위:kw) 설정
+   * 계약전력(단위:kW -> W) 설정
    * 
    * @return contractPower
    */
@@ -183,7 +183,7 @@ public class DrResult {
   }
 
   /**
-   * 목표전력(단위:kw) 조회
+   * 목표전력(단위:kW -> W) 조회
    * 
    * @return goalPower
    */
@@ -192,7 +192,7 @@ public class DrResult {
   }
 
   /**
-   * 목표전력(단위:kw) 설정
+   * 목표전력(단위:kW -> W) 설정
    * 
    * @return goalPower
    */

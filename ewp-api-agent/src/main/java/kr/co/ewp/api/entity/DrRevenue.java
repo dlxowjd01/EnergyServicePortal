@@ -11,8 +11,8 @@ public class DrRevenue {
   private String stdYearm;// 기준년월(형식:YYYYMM)
   private Date stdTimestamp;// 기준타임스탬프
   private Date stdDate;// 기준일시
-  private Integer reductCap;// 감축용량(단위:kwh)
-  private Integer basicPrice;// 기본가격(단위:원/kwh)
+  private Integer reductCap;// 감축용량(단위:kWh -> Wh)
+  private Integer basicPrice;// 기본가격(단위:원/kWh -> Wh)
   private Float maxReductRatio;// 감축상한비율
   private Float minReductRatio;// 감축하한비율
   private Integer totPay;// 총지급액
@@ -21,9 +21,9 @@ public class DrRevenue {
   private Date reductEtimestamp;// 감축종료타임스탬프
   private Date reductSdate;// 감축시작일시
   private Date reductEdate;// 감축종료일시
-  private Integer cblAmt;// 평균사용량(단위:kwh)
-  private Integer actAmt;// 실제사용량(단위:kwh)
-  private Integer reductAmt;// 감축량(단위:kwh)
+  private Integer cblAmt;// 평균사용량(단위:kWh -> Wh)
+  private Integer actAmt;// 실제사용량(단위:kWh -> Wh)
+  private Integer reductAmt;// 감축량(단위:kWh -> Wh)
   private Integer smp;// smp(단위:원)
   private Date regDate;// 등록일시
   private Date modDate;// 최종수정일시
@@ -227,7 +227,7 @@ public class DrRevenue {
   }
 
   /**
-   * 평균사용량(단위:kwh) 조회
+   * 평균사용량(단위:kWh -> Wh) 조회
    * 
    * @return cblAmt
    */
@@ -236,7 +236,7 @@ public class DrRevenue {
   }
 
   /**
-   * 평균사용량(단위:kwh) 설정
+   * 평균사용량(단위:kWh -> Wh) 설정
    * 
    * @return cblAmt
    */
@@ -245,7 +245,7 @@ public class DrRevenue {
   }
 
   /**
-   * 실제사용량(단위:kwh) 조회
+   * 실제사용량(단위:kWh -> Wh) 조회
    * 
    * @return actAmt
    */
@@ -254,7 +254,7 @@ public class DrRevenue {
   }
 
   /**
-   * 실제사용량(단위:kwh) 설정
+   * 실제사용량(단위:kWh -> Wh) 설정
    * 
    * @return actAmt
    */
@@ -263,7 +263,7 @@ public class DrRevenue {
   }
 
   /**
-   * 감축량(단위:kwh) 조회
+   * 감축량(단위:kWh -> Wh) 조회
    * 
    * @return reductAmt
    */
@@ -272,7 +272,7 @@ public class DrRevenue {
   }
 
   /**
-   * 감축량(단위:kwh) 설정
+   * 감축량(단위:kWh -> Wh) 설정
    * 
    * @return reductAmt
    */

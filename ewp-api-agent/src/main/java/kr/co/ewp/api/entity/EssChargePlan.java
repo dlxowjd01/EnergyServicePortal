@@ -11,8 +11,8 @@ public class EssChargePlan {
   private String deviceId;// 장치id
   private Date stdTimestamp;// 기준타임스탬프
   private Date stdDate;// 기준일시
-  private Float chgVal;// 충전계획량(단위:kwh)
-  private Float dischgVal;// 방전계획량(단위:kwh)
+  private Float chgVal;// 충전계획량(단위:kWh -> Wh)
+  private Float dischgVal;// 방전계획량(단위:kWh -> Wh)
   private Date regDate;// 등록일시
   private Date modDate;// 최종수정일시
 

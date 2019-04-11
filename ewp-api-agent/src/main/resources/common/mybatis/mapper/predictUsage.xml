@@ -7,7 +7,7 @@
         <result property="deviceId" column="device_id" javaType="String"></result><!--장치ID-->
         <result property="stdTimestamp" column="std_timestamp" javaType="Date"></result><!--기준타임스탬프-->
         <result property="stdDate" column="std_date" javaType="Date"></result><!--기준일시-->
-        <result property="preUsgVal" column="pre_usg_val" javaType="Integer"></result><!--예측사용량(단위:mWh)-->
+        <result property="preUsgVal" column="pre_usg_val" javaType="Float"></result><!--예측사용량(단위:mWh -> Wh)-->
         <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
         <result property="modDate" column="mod_date" javaType="Date"></result><!--최종수정일시-->
     </resultMap>

@@ -11,9 +11,9 @@
         <result property="smpRate" column="smp_rate" javaType="Double"></result><!--SMP단가(System Marginal Price)(단위:원)-->
         <result property="recRate" column="rec_rate" javaType="Double"></result><!--REC단가(단위:원)-->
         <result property="recWeight" column="rec_weight" javaType="Double"></result><!--REC가중치-->
-        <result property="produceVal" column="produce_val" javaType="Double"></result><!--생산량(단위:kWh)-->
-        <result property="consumeVal" column="consume_val" javaType="Double"></result><!--소비량(단위:kWh)-->
-        <result property="netGenVal" column="net_gen_val" javaType="Double"></result><!--순발전량(단위:kWh)-->
+        <result property="produceVal" column="produce_val" javaType="Double"></result><!--생산량(단위:kWh -> Wh)-->
+        <result property="consumeVal" column="consume_val" javaType="Double"></result><!--소비량(단위:kWh -> Wh)-->
+        <result property="netGenVal" column="net_gen_val" javaType="Double"></result><!--순발전량(단위:kWh -> Wh)-->
         <result property="smpPrice" column="smp_price" javaType="Double"></result><!--SMP수익(단위:원)-->
         <result property="recPrice" column="rec_price" javaType="Double"></result><!--REC수익(단위:원)-->
         <result property="totPrice" column="tot_price" javaType="Double"></result><!--총수익(단위:원)-->

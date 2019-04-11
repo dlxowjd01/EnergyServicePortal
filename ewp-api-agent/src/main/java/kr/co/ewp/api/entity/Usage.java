@@ -11,7 +11,7 @@ public class Usage {
   private String deviceId;// 장치id
   private Date stdTimestamp;// 기준타임스탬프
   private Date stdDate;// 기준일시
-  private Integer usgVal;// 사용량(단위:mwh)
+  private Float usgVal;// 사용량(단위:mWh -> Wh)
   private Date regDate;// 등록일시
   private Date modDate;// 최종수정일시
 
@@ -106,20 +106,20 @@ public class Usage {
   }
 
   /**
-   * 사용량(단위:mwh) 조회
+   * 사용량(단위:mWh -> Wh) 조회
    * 
    * @return usgVal
    */
-  public Integer getUsgVal() {
+  public Float getUsgVal() {
     return this.usgVal;
   }
 
   /**
-   * 사용량(단위:mwh) 설정
+   * 사용량(단위:mWh -> Wh) 설정
    * 
    * @return usgVal
    */
-  public void setUsgVal(Integer usgVal) {
+  public void setUsgVal(Float usgVal) {
     this.usgVal = usgVal;
   }
 

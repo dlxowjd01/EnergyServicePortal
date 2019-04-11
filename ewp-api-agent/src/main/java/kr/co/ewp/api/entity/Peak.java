@@ -10,7 +10,7 @@ public class Peak {
   private String siteId;// 사이트id
   private Date stdTimestamp;// 기준타임스탬프
   private Date stdDate;// 기준일시
-  private Float peakVal;// 최대수요(단위:kw)
+  private Float peakVal;// 최대수요(단위:kW -> W)
   private Date peakTimestamp;// 최대수요발생타임스탬프
   private Date peakDate;// 최대수요발생일시
   private Date regDate;// 등록일시

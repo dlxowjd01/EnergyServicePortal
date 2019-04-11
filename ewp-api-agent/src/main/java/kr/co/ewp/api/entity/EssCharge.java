@@ -11,8 +11,8 @@ public class EssCharge {
   private String deviceId;// 장치id
   private Date stdTimestamp;// 기준타임스탬프
   private Date stdDate;// 기준일시
-  private Float chgVal;// 충전량(단위:kwh)
-  private Float dischgVal;// 방전량(단위:kwh)
+  private Float chgVal;// 충전량(단위:kWh -> Wh)
+  private Float dischgVal;// 방전량(단위:kWh -> Wh)
   private Date regDate;// 등록일시
   private Date modDate;// 최종수정일시
 
@@ -107,7 +107,7 @@ public class EssCharge {
   }
 
   /**
-   * 충전량(단위:kwh) 조회
+   * 충전량(단위:kWh -> Wh) 조회
    * 
    * @return chgVal
    */
@@ -116,7 +116,7 @@ public class EssCharge {
   }
 
   /**
-   * 충전량(단위:kwh) 설정
+   * 충전량(단위:kWh -> Wh) 설정
    * 
    * @return chgVal
    */
@@ -125,7 +125,7 @@ public class EssCharge {
   }
 
   /**
-   * 방전량(단위:kwh) 조회
+   * 방전량(단위:kWh -> Wh) 조회
    * 
    * @return dischgVal
    */
@@ -134,7 +134,7 @@ public class EssCharge {
   }
 
   /**
-   * 방전량(단위:kwh) 설정
+   * 방전량(단위:kWh -> Wh) 설정
    * 
    * @return dischgVal
    */

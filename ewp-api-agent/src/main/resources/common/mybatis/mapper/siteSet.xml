@@ -12,13 +12,13 @@
         <result property="planType2" column="plan_type2" javaType="String"></result><!--요금제구분2(general_A1_low_voltage_A 외. bill_api.pdf 참조요망)-->
         <result property="planType3" column="plan_type3" javaType="String"></result><!--요금제구분3(general_A1_low_voltage_A 외. bill_api.pdf 참조요망)-->
         <result property="planName" column="plan_name" javaType="String"></result><!--요금제(일반용 전력 (갑)I 저압전력 외. bill_api.pdf 참조요망)-->
-        <result property="contractPower" column="contract_power" javaType="Long"></result><!--계약전력(단위:KW)-->
+        <result property="contractPower" column="contract_power" javaType="Long"></result><!--계약전력(단위:KW -> W)-->
         <result property="meterReadDay" column="meter_read_day" javaType="Long"></result><!--검침일(단위:일)-->
         <result property="chargeYearmd" column="charge_yearmd" javaType="String"></result><!--요금적용기준년월(형식:YYYYMM)-->
-        <result property="chargePower" column="charge_power" javaType="Long"></result><!--요금적용전력(단위:KW)-->
+        <result property="chargePower" column="charge_power" javaType="Long"></result><!--요금적용전력(단위:KW -> W)-->
         <result property="chargeRate" column="charge_rate" javaType="Long"></result><!--요금적용전력대비(단위:%)-->
-        <result property="goalPower" column="goal_power" javaType="Long"></result><!--목표전력(단위:KW)-->
-        <result property="reduceAmt" column="reduce_amt" javaType="Long"></result><!--감축용량(단위:kW)-->
+        <result property="goalPower" column="goal_power" javaType="Long"></result><!--목표전력(단위:KW -> W)-->
+        <result property="reduceAmt" column="reduce_amt" javaType="Long"></result><!--감축용량(단위:kW -> W)-->
         <result property="smpRate" column="smp_rate" javaType="Double"></result><!--SMP단가(System Marginal Price)(단위:원)-->
         <result property="recRate" column="rec_rate" javaType="Double"></result><!--REC단가(단위:원)-->
         <result property="recWeight" column="rec_weight" javaType="Double"></result><!--REC가중치-->

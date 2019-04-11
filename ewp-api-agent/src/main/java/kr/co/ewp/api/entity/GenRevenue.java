@@ -15,9 +15,9 @@ public class GenRevenue {
   private Double smpRate;// smp단가(system marginal price)(단위:원)
   private Double recRate;// rec단가(단위:원)
   private Double recWeight;// rec가중치
-  private Double produceVal;// 생산량(단위:kwh)
-  private Double consumeVal;// 소비량(단위:kwh)
-  private Double netGenVal;// 순발전량(단위:kwh)
+  private Double produceVal;// 생산량(단위:kWh -> Wh)
+  private Double consumeVal;// 소비량(단위:kWh -> Wh)
+  private Double netGenVal;// 순발전량(단위:kWh -> Wh)
   private Double smpPrice;// smp수익(단위:원)
   private Double recPrice;// rec수익(단위:원)
   private Double totPrice;// 총수익(단위:원)
