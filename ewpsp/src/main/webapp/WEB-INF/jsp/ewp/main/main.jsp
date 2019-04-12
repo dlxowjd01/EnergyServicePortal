@@ -126,29 +126,29 @@
 		if (total != null) {
 			$('#rankTotal').html('<span class="bul1" />');
 			if (oldRankType == 0) {
-				var map = convertUnitFormat(total.usage, "mWh");
+				var map = convertUnitFormat(total.usage, "Wh");
 				var past = toFixedNum(map.get("formatNum"), 2);
 				$('#rankTotal > span').text('누적');
 				//"(: ' + past + " " + map.get("unit"));
 				
 				$('#rankPlan').html('<span class="bul2" />');
-				var map2 = convertUnitFormat(total.usage_plan, "mWh");
+				var map2 = convertUnitFormat(total.usage_plan, "Wh");
 				var feture = toFixedNum(map2.get("formatNum"), 2);
 				$('#rankPlan > span').text('예상');
 				//: ' + feture + map2.get("unit"));
 			} else if (oldRankType == 1) {
-				var map = convertUnitFormat(total.charge, "kWh");
+				var map = convertUnitFormat(total.charge, "Wh");
 				var past = toFixedNum(map.get("formatNum"), 2);
 				$('#rankTotal > span').text('누적');
 				//: ' + past + " " + map.get("unit"));
 				
 				$('#rankPlan').html('<span class="bul2" />');
-				var map2 = convertUnitFormat(total.charge_plan, "kWh");
+				var map2 = convertUnitFormat(total.charge_plan, "Wh");
 				var feture = toFixedNum(map2.get("formatNum"), 2);
 				$('#rankPlan > span').text('예상');
 				//: ' + feture + " " + map2.get("unit"));
 			} else if (oldRankType == 2) {
-				var map = convertUnitFormat(total.gen, "kWh");
+				var map = convertUnitFormat(total.gen, "Wh");
 				var past = toFixedNum(map.get("formatNum"), 2);
 				$('#rankTotal > span').text('누적');
 	//			: ' + past + " " + map.get("unit"));
@@ -171,14 +171,12 @@
 		var $tbody = $('#siteRankingTbody');
 		$tbody.empty();
 	
-		if (siteList == null || siteList.length < 1) {
-			$('#GMainSiteRankingPaging').empty();
-		} else {
+		if (siteList != null && siteList.length > 0) {
 			for (var i = 0; i < siteList.length; i++) {
 				if (i < siteList.length) {
 					if (oldRankType == 0) {
-						var map = convertUnitFormat(siteList[i].usage, "mWh", 8);
-						var map2 = convertUnitFormat(siteList[i].usage_plan, "mWh", 8);
+						var map = convertUnitFormat(siteList[i].usage, "Wh", 5);
+						var map2 = convertUnitFormat(siteList[i].usage_plan, "Wh", 5);
 						$tbody.append(
 							$('<tr />')
 								.append($('<th />').append(siteList[i].site_name))
@@ -186,18 +184,19 @@
 								.append($('<td />').append(toFixedNum(map2.get("formatNum"), 2)))
 						);
 					} else if (oldRankType == 1) {
+						var map = convertUnitFormat(siteList[i].charge, "Wh", 5);
+						var map2 = convertUnitFormat(siteList[i].charge_plan, "Wh", 5);
 						$tbody.append(
 							$('<tr />')
 								.append($('<th />').append(siteList[i].site_name))
-								.append($('<td />').append(siteList[i].charge))
-								.append($('<td />').append(siteList[i].charge_plan))
+								.append($('<td />').append(toFixedNum(map.get("formatNum"), 2)))
+								.append($('<td />').append(toFixedNum(map2.get("formatNum"), 2)))
 							);
 					} else if (oldRankType == 2) {
-						var map = convertUnitFormat(siteList[i].gen, "mWh", 8);
+						var map = convertUnitFormat(siteList[i].gen, "Wh", 5);
 						$tbody.append(
 							$('<tr />')
 								.append($('<th />').append(siteList[i].site_name))
-// 								.append($('<td />').append(siteList[i].gen))
 								.append($('<td />').append(toFixedNum(map.get("formatNum"), 2)))
 								.append($('<td />').append(0))
 							);
@@ -214,6 +213,9 @@
 	
 			var pagingMap = result.pagingMap;
 			makePageNums2(pagingMap, "GMainSiteRanking");
+			
+		} else {
+			$('#GMainSiteRankingPaging').empty();
 		}
 	
 		if (myChart != null) {
@@ -239,19 +241,19 @@
 		}
 	
 		if (total != null && total.usage != null) {
-			var map = convertUnitFormat(total.usage, "mWh");
+			var map = convertUnitFormat(total.usage, "Wh");
 			var usage = toFixedNum(map.get("formatNum"), 2);
 			$('.detailUsage').text(numberComma(usage));
 			$('.detailUsageUnit').text(map.get("unit"));
 			
 // 			var map2 = convertUnitFormat(total.gen, "kWh");
-			var map2 = convertUnitFormat(total.gen, "mWh");
+			var map2 = convertUnitFormat(total.gen, "Wh");
 			var gen = toFixedNum(map2.get("formatNum"), 2);
 			$('.detailGen').text(numberComma(gen));
 			$('.detailGenUnit').text(map2.get("unit"));
 			
 			var charge = toFixedNum(total.charge, 0);
-			var map3 = convertUnitFormat(charge, "kWh");
+			var map3 = convertUnitFormat(charge, "Wh");
 			
 			charge = toFixedNum(map3.get("formatNum"), 2);
 			$('.detailCharge').text(numberComma(charge));
@@ -288,9 +290,9 @@
 				var eq3Cls = siteList[i].bms > 0 ? ' on' : '';
 				var eq4Cls = siteList[i].pv > 0 ? ' on' : '';
 				
-				var map = convertUnitFormat(siteList[i].usg, "mWh", 8);
+				var map = convertUnitFormat(siteList[i].usg, "Wh", 5);
 				var usage = toFixedNum(map.get("formatNum"), 2);
-				var map2 = convertUnitFormat(siteList[i].gen, "mWh", 8);
+				var map2 = convertUnitFormat(siteList[i].gen, "Wh", 5);
 				var gen = toFixedNum(map2.get("formatNum"), 2);
 				var reward = (siteList[i].reward == null) ? 0 : siteList[i].reward;
 	
