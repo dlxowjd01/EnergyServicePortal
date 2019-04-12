@@ -26,7 +26,8 @@
 	        pause: 4000,
 	        auto:false,
 	        controls: true,
-	        infiniteLoop: false
+	        infiniteLoop: false,
+	        touchEnabled : (navigator.maxTouchPoints > 0) // 또는 false
 	    });
 		
 		$(".device li").click(function() {

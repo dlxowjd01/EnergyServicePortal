@@ -958,15 +958,8 @@
 	
 	<update id="deleteGroup" parameterType="hashMap">
 		/* 그룹 삭제 */
-		<!-- update tb_site_group
-		set 
-		    del_yn        = 'Y', 
-		    mod_uid       = #{modUid }, 
-		    mod_date      = now()
-		where site_grp_idx = #{siteGrpIdx } -->
-		
-		delete from tb_site_set
-		where and site_grp_idx = #{siteGrpIdx }
+		delete from tb_site_group
+		where site_grp_idx = #{siteGrpIdx }
 	</update>
 	
 	<update id="deleteSiteSet" parameterType="hashMap">
