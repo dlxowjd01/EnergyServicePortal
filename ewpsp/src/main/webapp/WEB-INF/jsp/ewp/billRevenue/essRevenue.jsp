@@ -463,16 +463,16 @@
 		var ratePer  = String(texList[0].rate_per)           ;
 		var valAddTex = texList[0].val_add_tax				;
 		var usg = texList[0].val_add_tax	;
-		var demandChgReduct = Math.round(texList[0].demand_chg_reduct);	//기본요금절감금액
-		var beneDivdemandChgReduct = Math.round((demandChgReduct*essProfitRatio)/100);	//기본요금절감금액
-		var energyChgReduct = Math.round(texList[0].energy_chg_reduct);	//전력량 요금 절감(계시별)
-		var beneDivenergyChgReduct = Math.round((energyChgReduct*essProfitRatio)/100);		//전력량 요금 절감(계시별) 수익배분
-		var essChgIncen = Math.round(texList[0].ess_chg_incen);	//ESS 충전 요금 할인
-		var beneDivessChgIncen = Math.round((essChgIncen*essProfitRatio)/100);		//ESS 충전 요금 할인 수익배분
-		var essDischgIncen = Math.round(texList[0].ess_dischg_incen);	//ESS 방전 요금 할인
-		var beneDivessDischgIncen = Math.round((essDischgIncen*essProfitRatio)/100);		//ESS 방전 요금 할인 수익배분
-		var total = Math.round(energyChgReduct+essChgIncen+essDischgIncen);	//총계
-		var beneDivTotal = Math.round((total*essProfitRatio)/100);	//수익배분 총계
+		var demandChgReduct = Math.round(texList[0].demand_chg_reduct); //기본요금절감금액
+		var beneDivdemandChgReduct = Math.round((demandChgReduct*essProfitRatio)/100); //기본요금절감금액
+		var energyChgReduct = Math.round(texList[0].energy_chg_reduct); //전력량 요금 절감(계시별)
+		var beneDivenergyChgReduct = Math.round((energyChgReduct*essProfitRatio)/100); //전력량 요금 절감(계시별) 수익배분
+		var essChgIncen = Math.round(texList[0].ess_chg_incen); //ESS 충전 요금 할인
+		var beneDivessChgIncen = Math.round((essChgIncen*essProfitRatio)/100); //ESS 충전 요금 할인 수익배분
+		var essDischgIncen = Math.round(texList[0].ess_dischg_incen); //ESS 방전 요금 할인
+		var beneDivessDischgIncen = Math.round((essDischgIncen*essProfitRatio)/100); //ESS 방전 요금 할인 수익배분
+		var total = Math.round(energyChgReduct+essChgIncen+essDischgIncen); //총계
+		var beneDivTotal = Math.round((total*essProfitRatio)/100); //수익배분 총계
 		var addDivTotal = Math.round(beneDivTotal*1.1);
 		var reEssBdayInMonth  = 0;
 		var reEssDischgOffPeak  = 0;
@@ -508,17 +508,17 @@
 		if(essBdayInMonth == null || essBdayInMonth == "" || essBdayInMonth == "null") reEssBdayInMonth = null;
 		else reEssBdayInMonth = Math.round( Number(essBdayInMonth) );
 		if(essDischgOffPeak == null || essDischgOffPeak == "" || essDischgOffPeak == "null") reEssDischgOffPeak = null;
-		else reEssDischgOffPeak = Math.round( Number(essDischgOffPeak) );
+		else reEssDischgOffPeak = Math.round( Number(essDischgOffPeak)/1000 );
 		if(essDischgMidPeak == null || essDischgMidPeak == "" || essDischgMidPeak == "null") reEssDischgMidPeak = null;
-		else reEssDischgMidPeak = Math.round( Number(essDischgMidPeak) );
+		else reEssDischgMidPeak = Math.round( Number(essDischgMidPeak)/1000 );
 		if(essDischgMaxPeak == null || essDischgMaxPeak == "" || essDischgMaxPeak == "null") reEssDischgMaxPeak = null;
-		else reEssDischgMaxPeak = Math.round( Number(essDischgMaxPeak) );
+		else reEssDischgMaxPeak = Math.round( Number(essDischgMaxPeak)/1000 );
 		if(essChgOffPeak == null || essChgOffPeak == "" || essChgOffPeak == "null") reEssChgOffPeak = null;
-		else reEssChgOffPeak = Math.round( Number(essChgOffPeak) );
+		else reEssChgOffPeak = Math.round( Number(essChgOffPeak)/1000 );
 		if(essChgMidPeak == null || essChgMidPeak == "" || essChgMidPeak == "null") reEssChgMidPeak = null;
-		else reEssChgMidPeak = Math.round( Number(essChgMidPeak) );
+		else reEssChgMidPeak = Math.round( Number(essChgMidPeak)/1000 );
 		if(essChgMaxPeak == null || essChgMaxPeak == "" || essChgMaxPeak == "null") reEssChgMaxPeak = null;
-		else reEssChgMaxPeak = Math.round( Number(essChgMaxPeak) );
+		else reEssChgMaxPeak = Math.round( Number(essChgMaxPeak)/1000 );
 		if(preEssIncen == null || preEssIncen == "" || preEssIncen == "null") rePreEssIncen = null;
 		else rePreEssIncen = Math.round( Number(preEssIncen) );
 		if(essIncen == null || essIncen == "" || essIncen == "null") reEssIncen = null;
@@ -536,13 +536,6 @@
 		if(essProfitRatio == null || essProfitRatio == "" || essProfitRatio == "null") reRatePer = null;
 		else reRatePer = Math.round( Number(essProfitRatio) );
 		
-		/*var reEssDischgOffPeak  = 0;
-		var reEssDischgMidPeak  = 0;
-		var reEssDischgMaxPeak  = 0;
-		var totDischgPeak = 0;
-		var reEssChgOffPeak  = 0;
-		var reEssChgMidPeak  = 0;
-		var reEssChgMaxPeak  = 0;*/
 		
 		
 		
@@ -581,11 +574,6 @@
 		var ESSTypeStr = "";
 		var ESSInfoStr = "";
 		
-		/*$(".texArea").find("tbody").empty();
-		$(".texArea").find("tfoot").empty();
-		$(".texSaveArea").find("tbody").empty();
-		$(".texSaveArea").find("tfoot").empty();
-		$(".calcArea").find("tbody").empty();*/
 		$("#texBill").text("에너지절감 솔루션 제공 전기요금 절감 수익 배분 청구서 (’"+yyyyMM.substring(2,4)+"년"+yyyyMM.substring(4,6)+"월)");
 		$("#texDay").text("청구일 : "+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-"+meterClaimDay);
 		$(".dp_total").text(numberComma(addDivTotal+delLastWon));
