@@ -31,7 +31,7 @@
 	function callback_getDeviceIOEList(result) {
 		var ioeList = result.list;
 		
-		$tbody = $("#ioeTbody");
+		var $tbody = $("#ioeTbody");
 		var tbodyStr = '';
 		if(ioeList != null && ioeList.length > 0) {
 			for(var i=0; i<ioeList.length; i++) {
@@ -58,66 +58,27 @@
 			excelCnt = 0;
 		}
 		
-		$("#ioeTbody").html(tbodyStr);
+		$tbody.html(tbodyStr);
 	}
-//	function callback_getDeviceIOEList(result) {
-//		var ioeList = result.list;
-//		
-//		$tbody = $("#ioeTbody");
-//		$tbody.empty();
-//		if(ioeList == null || ioeList.length < 1) {
-//			$tbody.append( '<tr><td colspan="6">조회 결과가 없습니다.</td><tr>' );
-//			$('#DeviceIOEPaging').empty();
-//			excelCnt = 0;
-//		} else {
-//			for(var i=0; i<ioeList.length; i++) {
-//				$tbody.append(
-//						$('<tr />').append( $("<td />").append( ioeList[i].rnum )
-//						).append( $("<td />").append( ioeList[i].device_name )
-//						).append( $("<td />").append( ioeList[i].device_id )
-//						).append( $("<td />").append( ioeList[i].device_type_nm )
-//						).append( $("<td />").append( ioeList[i].device_stat_name )
-//						).append( $("<td />").append( (ioeList[i].upload_timestamp == null) ? '' : new Date( setSheetDateUTC(ioeList[i].upload_timestamp) ).format("yyyy-MM-dd HH:mm:ss") )
-//						).append(
-//								$("<td />").append( '<a href="#;" onclick="getDeviceIOEDetail(\''+ioeList[i].site_id+"\', \'"+ioeList[i].device_id+"\', \'"+ioeList[i].device_type+'\');" class="detail_view">상세보기</a>' )
-//						)
-//				);
-//			}
-//			
-//			var pagingMap = result.pagingMap;
-//			makePageNums2(pagingMap, "DeviceIOE");
-//			
-//			excelCnt = ioeList.length;
-//			selectDeviceGbn = "IOE";
-//			
-//		}
-//		
-//	}
 	
 	// 장치목록 조회(PCS)
 	function callback_getDevicePCSList(result) {
 		var pcsList = result.list;
 
-		$tbody = $("#pcsTbody");
-		$tbody.empty();
-		if(pcsList == null || pcsList.length < 1) {
-			$tbody.append( '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>' );
-			$('#DevicePCSPaging').empty();
-			excelCnt = 0;
-		} else {
+		var $tbody = $("#pcsTbody");
+		var tbodyStr = '';
+		if(pcsList != null && pcsList.length > 0) {
 			for(var i=0; i<pcsList.length; i++) {
-				$tbody.append(
-						$('<tr ondblclick="goLEMSPage(\'/lems/setting/pcs\')" />').append( $("<td />").append( pcsList[i].rnum )
-						).append( $('<td />').append( pcsList[i].device_name )
-						).append( $('<td />').append( pcsList[i].device_id )
-						).append( $('<td />').append( pcsList[i].device_type_nm )
-						).append( $('<td />').append( pcsList[i].pcs_status_name )
-						).append( $('<td class="ellipsis mxw400" />').append( pcsList[i].alarm_msg )
-						).append( $('<td />').append( (pcsList[i].std_date == null) ? '' : new Date( setSheetDateUTC(pcsList[i].std_date) ).format("yyyy-MM-dd HH:mm:ss") )
-						).append(
-								$("<td />").append( '<a href="#;" onclick="getDevicePCSDetail(\''+pcsList[i].site_id+"\', \'"+pcsList[i].device_id+"\', \'"+pcsList[i].device_type+'\');" class="detail_view">상세보기</a>' )
-						)
-				);
+				tbodyStr += '<tr ondblclick="goLEMSPage(\'/lems/setting/pcs\')">';
+				tbodyStr += '<td>'+pcsList[i].rnum+'</td>';
+				tbodyStr += '<td>'+pcsList[i].device_name+'</td>';
+				tbodyStr += '<td>'+pcsList[i].device_id+'</td>';
+				tbodyStr += '<td>'+pcsList[i].device_type_nm+'</td>';
+				tbodyStr += '<td>'+pcsList[i].pcs_status_name+'</td>';
+				tbodyStr += '<td class="ellipsis mxw400">'+( (pcsList[i].alarm_msg == null) ? '' : pcsList[i].alarm_msg )+'</td>';
+				tbodyStr += '<td>'+( (pcsList[i].std_date == null) ? '' : new Date( setSheetDateUTC(pcsList[i].std_date) ).format("yyyy-MM-dd HH:mm:ss") )+'</td>';
+				tbodyStr += '<td>'+'<a href="#;" onclick="getDevicePCSDetail(\''+pcsList[i].site_id+"\', \'"+pcsList[i].device_id+"\', \'"+pcsList[i].device_type+'\');" class="detail_view">상세보기</a>'+'</td>';
+				tbodyStr += '</tr>';
 			}
 			
 			var pagingMap = result.pagingMap;
@@ -126,68 +87,33 @@
 			excelCnt = pcsList.length;
 			selectDeviceGbn = "PCS";
 			
+		} else {
+			tbodyStr += '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>';
+			$('#DevicePCSPaging').empty();
+			excelCnt = 0;
 		}
 		
+		$tbody.html(tbodyStr);
 	}
-//	function callback_getDevicePCSList(result) {
-//		var pcsList = result.list;
-//		
-//		$tbody = $("#pcsTbody");
-//		$tbody.empty();
-//		if(pcsList == null || pcsList.length < 1) {
-//			$tbody.append( '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>' );
-//			$('#DevicePCSPaging').empty();
-//			excelCnt = 0;
-//		} else {
-//			for(var i=0; i<pcsList.length; i++) {
-//				$tbody.append(
-//						$('<tr ondblclick="goLEMSPage(\'/lems/setting/pcs\')" />').append( $("<td />").append( pcsList[i].rnum )
-//						).append( $('<td />').append( pcsList[i].device_name )
-//						).append( $('<td />').append( pcsList[i].device_id )
-//						).append( $('<td />').append( pcsList[i].device_type_nm )
-//						).append( $('<td />').append( pcsList[i].pcs_status_name )
-//						).append( $('<td class="ellipsis mxw400" />').append( pcsList[i].alarm_msg )
-//						).append( $('<td />').append( (pcsList[i].std_date == null) ? '' : new Date( setSheetDateUTC(pcsList[i].std_date) ).format("yyyy-MM-dd HH:mm:ss") )
-//						).append(
-//								$("<td />").append( '<a href="#;" onclick="getDevicePCSDetail(\''+pcsList[i].site_id+"\', \'"+pcsList[i].device_id+"\', \'"+pcsList[i].device_type+'\');" class="detail_view">상세보기</a>' )
-//						)
-//				);
-//			}
-//			
-//			var pagingMap = result.pagingMap;
-//			makePageNums2(pagingMap, "DevicePCS");
-//			
-//			excelCnt = pcsList.length;
-//			selectDeviceGbn = "PCS";
-//			
-//		}
-//		
-//	}
 	
 	// 장치목록 조회(BMS)
 	function callback_getDeviceBMSList(result) {
 		var bmsList = result.list;
 		
 		$tbody = $("#bmsTbody");
-		$tbody.empty();
-		if(bmsList == null || bmsList.length < 1) {
-			$tbody.append( '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>' );
-			$('#DeviceBMSPaging').empty();
-			excelCnt = 0;
-		} else {
+		var tbodyStr = '';
+		if(bmsList != null && bmsList.length > 0) {
 			for(var i=0; i<bmsList.length; i++) {
-				$tbody.append(
-						$('<tr ondblclick="goLEMSPage(\'/lems/setting/bat\')" />').append( $("<td />").append( bmsList[i].rnum )
-						).append( $('<td />').append( bmsList[i].device_name )
-						).append( $('<td />').append( bmsList[i].device_id )
-						).append( $('<td />').append( bmsList[i].device_type_nm )
-						).append( $('<td />').append( bmsList[i].device_stat_name )
-						).append( $('<td class="ellipsis mxw400" />').append( bmsList[i].alarm_msg )
-						).append( $('<td />').append( (bmsList[i].std_date == null) ? '' : new Date( setSheetDateUTC(bmsList[i].std_date) ).format("yyyy-MM-dd HH:mm:ss") )
-						).append(
-								$("<td />").append( '<a href="#;" onclick="getDeviceBMSDetail(\''+bmsList[i].site_id+"\', \'"+bmsList[i].device_id+"\', \'"+bmsList[i].device_type+'\');" class="detail_view">상세보기</a>' )
-						)
-				);
+				tbodyStr += '<tr ondblclick="goLEMSPage(\'/lems/setting/bat\')">';
+				tbodyStr += '<td>'+bmsList[i].rnum+'</td>';
+				tbodyStr += '<td>'+bmsList[i].device_name+'</td>';
+				tbodyStr += '<td>'+bmsList[i].device_id+'</td>';
+				tbodyStr += '<td>'+bmsList[i].device_type_nm+'</td>';
+				tbodyStr += '<td>'+bmsList[i].device_stat_name+'</td>';
+				tbodyStr += '<td class="ellipsis mxw400">'+( (bmsList[i].alarm_msg == null) ? '' : bmsList[i].alarm_msg )+'</td>';
+				tbodyStr += '<td>'+( (bmsList[i].std_date == null) ? '' : new Date( setSheetDateUTC(bmsList[i].std_date) ).format("yyyy-MM-dd HH:mm:ss") )+'</td>';
+				tbodyStr += '<td>'+'<a href="#;" onclick="getDeviceBMSDetail(\''+bmsList[i].site_id+"\', \'"+bmsList[i].device_id+"\', \'"+bmsList[i].device_type+'\');" class="detail_view">상세보기</a>'+'</td>';
+				tbodyStr += '</tr>';
 			}
 			
 			var pagingMap = result.pagingMap;
@@ -196,69 +122,34 @@
 			excelCnt = bmsList.length;
 			selectDeviceGbn = "BMS";
 			
+		} else {
+			tbodyStr += '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>';
+			$('#DeviceBMSPaging').empty();
+			excelCnt = 0;
 		}
 		
+		$tbody.html(tbodyStr);
 	}
-//	function callback_getDeviceBMSList(result) {
-//		var bmsList = result.list;
-//		
-//		$tbody = $("#bmsTbody");
-//		$tbody.empty();
-//		if(bmsList == null || bmsList.length < 1) {
-//			$tbody.append( '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>' );
-//			$('#DeviceBMSPaging').empty();
-//			excelCnt = 0;
-//		} else {
-//			for(var i=0; i<bmsList.length; i++) {
-//				$tbody.append(
-//						$('<tr ondblclick="goLEMSPage(\'/lems/setting/bat\')" />').append( $("<td />").append( bmsList[i].rnum )
-//						).append( $('<td />').append( bmsList[i].device_name )
-//						).append( $('<td />').append( bmsList[i].device_id )
-//						).append( $('<td />').append( bmsList[i].device_type_nm )
-//						).append( $('<td />').append( bmsList[i].device_stat_name )
-//						).append( $('<td class="ellipsis mxw400" />').append( bmsList[i].alarm_msg )
-//						).append( $('<td />').append( (bmsList[i].std_date == null) ? '' : new Date( setSheetDateUTC(bmsList[i].std_date) ).format("yyyy-MM-dd HH:mm:ss") )
-//						).append(
-//								$("<td />").append( '<a href="#;" onclick="getDeviceBMSDetail(\''+bmsList[i].site_id+"\', \'"+bmsList[i].device_id+"\', \'"+bmsList[i].device_type+'\');" class="detail_view">상세보기</a>' )
-//						)
-//				);
-//			}
-//			
-//			var pagingMap = result.pagingMap;
-//			makePageNums2(pagingMap, "DeviceBMS");
-//			
-//			excelCnt = bmsList.length;
-//			selectDeviceGbn = "BMS";
-//			
-//		}
-//		
-//	}
 	
 	// 장치목록 조회(PV)
 	function callback_getDevicePVList(result) {
 		var pvList = result.list;
 		
 		$tbody = $("#pvTbody");
-		$tbody.empty();
-		if(pvList == null || pvList.length < 1) {
-			$tbody.append( '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>' );
-			$('#DevicePVPaging').empty();
-			excelCnt = 0;
-		} else {
+		var tbodyStr = '';
+		if(pvList != null && pvList.length > 0) {
 			for(var i=0; i<pvList.length; i++) {
-				$tbody.append(
-						$('<tr ondblclick="goLEMSPage(\'/lems/setting/pv\')" />').append( $("<td />").append( pvList[i].rnum )
-						).append( $('<td />').append( pvList[i].device_name )
-						).append( $('<td />').append( pvList[i].device_id )
-						).append( $('<td />').append( pvList[i].device_type_nm )
-						).append( $('<td />').append( pvList[i].device_stat_name )
-						).append( $('<td />').append( pvList[i].temp )
-						).append( $('<td class="ellipsis mxw400" />').append( pvList[i].alarm_msg )
-						).append( $('<td />').append( (pvList[i].std_date == null) ? '' : new Date( setSheetDateUTC(pvList[i].std_date) ).format("yyyy-MM-dd HH:mm:ss") )
-						).append(
-								$("<td />").append( '<a href="#;" onclick="getDevicePVDetail(\''+pvList[i].site_id+"\', \'"+pvList[i].device_id+"\', \'"+pvList[i].device_type+'\');" class="detail_view">상세보기</a>' )
-						)
-				);
+				tbodyStr += '<tr ondblclick="goLEMSPage(\'/lems/setting/pv\')">';
+				tbodyStr += '<td>'+pvList[i].rnum+'</td>';
+				tbodyStr += '<td>'+pvList[i].device_name+'</td>';
+				tbodyStr += '<td>'+pvList[i].device_id+'</td>';
+				tbodyStr += '<td>'+pvList[i].device_type_nm+'</td>';
+				tbodyStr += '<td>'+pvList[i].device_stat_name+'</td>';
+				tbodyStr += '<td>'+( (pvList[i].temp == null) ? '' : pvList[i].temp )+'</td>';
+				tbodyStr += '<td class="ellipsis mxw400">'+( (pvList[i].alarm_msg == null) ? '' : pvList[i].alarm_msg )+'</td>';
+				tbodyStr += '<td>'+( (pvList[i].std_date == null) ? '' : new Date( setSheetDateUTC(pvList[i].std_date) ).format("yyyy-MM-dd HH:mm:ss") )+'</td>';
+				tbodyStr += '<td>'+'<a href="#;" onclick="getDevicePVDetail(\''+pvList[i].site_id+"\', \'"+pvList[i].device_id+"\', \'"+pvList[i].device_type+'\');" class="detail_view">상세보기</a>'+'</td>';
+				tbodyStr += '</tr>';
 			}
 			
 			var pagingMap = result.pagingMap;
@@ -267,44 +158,14 @@
 			excelCnt = pvList.length;
 			selectDeviceGbn = "PV";
 			
+		} else {
+			tbodyStr += '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>';
+			$('#DevicePVPaging').empty();
+			excelCnt = 0;
 		}
 		
+		$tbody.html(tbodyStr);
 	}
-//	function callback_getDevicePVList(result) {
-//		var pvList = result.list;
-//		
-//		$tbody = $("#pvTbody");
-//		$tbody.empty();
-//		if(pvList == null || pvList.length < 1) {
-//			$tbody.append( '<tr><td colspan="8">조회 결과가 없습니다.</td><tr>' );
-//			$('#DevicePVPaging').empty();
-//			excelCnt = 0;
-//		} else {
-//			for(var i=0; i<pvList.length; i++) {
-//				$tbody.append(
-//						$('<tr ondblclick="goLEMSPage(\'/lems/setting/pv\')" />').append( $("<td />").append( pvList[i].rnum )
-//						).append( $('<td />').append( pvList[i].device_name )
-//						).append( $('<td />').append( pvList[i].device_id )
-//						).append( $('<td />').append( pvList[i].device_type_nm )
-//						).append( $('<td />').append( pvList[i].device_stat_name )
-//						).append( $('<td />').append( pvList[i].temp )
-//						).append( $('<td class="ellipsis mxw400" />').append( pvList[i].alarm_msg )
-//						).append( $('<td />').append( (pvList[i].std_date == null) ? '' : new Date( setSheetDateUTC(pvList[i].std_date) ).format("yyyy-MM-dd HH:mm:ss") )
-//						).append(
-//								$("<td />").append( '<a href="#;" onclick="getDevicePVDetail(\''+pvList[i].site_id+"\', \'"+pvList[i].device_id+"\', \'"+pvList[i].device_type+'\');" class="detail_view">상세보기</a>' )
-//						)
-//				);
-//			}
-//			
-//			var pagingMap = result.pagingMap;
-//			makePageNums2(pagingMap, "DevicePV");
-//			
-//			excelCnt = pvList.length;
-//			selectDeviceGbn = "PV";
-//			
-//		}
-//		
-//	}
 	
 </script>
 <script src="../js/device/deviceDetailPopup.js" type="text/javascript"></script>

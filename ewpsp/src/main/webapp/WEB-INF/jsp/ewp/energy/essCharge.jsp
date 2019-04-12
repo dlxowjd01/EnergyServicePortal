@@ -80,7 +80,7 @@
 						if(chgVal == null || chgVal == "" || chgVal == "null") {
 							reChgVal = null;
 						} else {
-							var map = convertUnitFormat(chgVal, "kWh", 1);
+							var map = convertUnitFormat(chgVal, "Wh", 5);
 							reChgVal = toFixedNum(map.get("formatNum"), 2);
 							dt_str_totalVal = dt_str_totalVal+Number(map.get("formatNum"));
 						}
@@ -88,7 +88,7 @@
 						if(dischgVal == null || dischgVal == "" || dischgVal == "null") {
 							reDischgVal = null;
 						} else {
-							var map = convertUnitFormat(dischgVal, "kWh", 1);
+							var map = convertUnitFormat(dischgVal, "Wh", 5);
 							reDischgVal = toFixedNum(map.get("formatNum"), 2);
 							dt_str2_totalVal = dt_str2_totalVal+ Number(map.get("formatNum"));
 						}
@@ -155,12 +155,16 @@
 				
 				if(chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
 				else {
-					reChgVal = Math.round( Number(chgVal) );
+					var map = convertUnitFormat(chgVal, "Wh", 5);
+					reChgVal = toFixedNum(map.get("formatNum"), 2);
+// 					reChgVal = Math.round( Number(chgVal) );
 					totalDataSet = totalDataSet+Number(chgVal);
 				}
 				if(dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
 				else {
-					reDischgVal   = Math.round( Number(dischgVal) );
+					var map = convertUnitFormat(dischgVal, "Wh", 5);
+					reDischgVal = toFixedNum(map.get("formatNum"), 2);
+// 					reDischgVal   = Math.round( Number(dischgVal) );
 					totalDataSet2 = totalDataSet2+Number(dischgVal);
 				}
 				
@@ -229,7 +233,7 @@
 						if(chgVal == null || chgVal == "" || chgVal == "null") {
 							reChgVal = null;
 						} else {
-							var map = convertUnitFormat(chgVal, "kWh", 1);
+							var map = convertUnitFormat(chgVal, "Wh", 5);
 							reChgVal = toFixedNum(map.get("formatNum"), 2);
 							dt_str_totalVal = dt_str_totalVal+Number(map.get("formatNum"));
 						}
@@ -237,7 +241,7 @@
 						if(dischgVal == null || dischgVal == "" || dischgVal == "null") {
 							reDischgVal = null;
 						} else {
-							var map = convertUnitFormat(dischgVal, "kWh", 1);
+							var map = convertUnitFormat(dischgVal, "Wh", 5);
 							reDischgVal = toFixedNum(map.get("formatNum"), 2);
 							dt_str2_totalVal = dt_str2_totalVal+ Number(map.get("formatNum"));
 						}
@@ -299,12 +303,16 @@
 				
 				if(chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
 				else {
-					reChgVal = Math.round( Number(chgVal) );
+					var map = convertUnitFormat(chgVal, "Wh", 5);
+					reChgVal = toFixedNum(map.get("formatNum"), 2);
+// 					reChgVal = Math.round( Number(chgVal) );
 					totalDataSet = totalDataSet+Number(chgVal);
 				}
 				if(dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
 				else {
-					reDischgVal   = Math.round( Number(dischgVal) );
+					var map = convertUnitFormat(dischgVal, "Wh", 5);
+					reDischgVal = toFixedNum(map.get("formatNum"), 2);
+// 					reDischgVal   = Math.round( Number(dischgVal) );
 					totalDataSet2 = totalDataSet2+Number(dischgVal);
 				}
 				

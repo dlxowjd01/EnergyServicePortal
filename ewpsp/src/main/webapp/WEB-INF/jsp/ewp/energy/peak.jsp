@@ -29,14 +29,6 @@
 		drawData(); // 차트 및 표 그리기
 	}
 	
-	var contractPower;
-	var chargePower;
-	function callback_getSiteSetDetail(result) {
-		var siteSetDetail = result.detail;
-		contractPower = (siteSetDetail == null) ? null : siteSetDetail.contract_power;
-		chargePower = (siteSetDetail == null) ? null : siteSetDetail.charge_power;
-	}
-	
 	// 한전계약전력
 	var contractPowerList;
 	// 요금적용전력
@@ -89,6 +81,7 @@
 						} else {
 	//						if(peakVal.indexOf(".")>-1) rePeakVal = Math.round( Number(peakVal) );
 	//						else rePeakVal = Number(peakVal);
+							peakVal = peakVal/1000;
 							rePeakVal = toFixedNum(peakVal, 2);
 							
 							if(maxPeakVal < rePeakVal) {
@@ -101,11 +94,11 @@
 					}
 				}
 				dt_str += "<td>"+  ( (rePeakVal == null) ? "" : rePeakVal ) +"</td>";
-				dt_str2 += "<td>"+ ( (contractPower == null) ? "" : contractPower    )+"</td>";
-				dt_str3 += "<td>"+ ( (chargePower == null) ? "" : chargePower    )+"</td>";
+				dt_str2 += "<td>"+ ( (contractPower == null) ? "" : contractPower/1000    )+"</td>";
+				dt_str3 += "<td>"+ ( (chargePower == null) ? "" : chargePower/1000    )+"</td>";
 				dt_str_totalVal = dt_str_totalVal+ rePeakVal;
-				dt_str2_totalVal = dt_str2_totalVal+ contractPower;
-				dt_str3_totalVal = dt_str3_totalVal+ chargePower;
+				dt_str2_totalVal = dt_str2_totalVal+ (contractPower/1000);
+				dt_str3_totalVal = dt_str3_totalVal+ (chargePower/1000);
 				
 				
 				
@@ -175,6 +168,7 @@
 				} else {
 	//				if(peakVal.indexOf(".")>-1) rePeakVal = Math.round( Number(peakVal) );
 	//				else rePeakVal = Number(peakVal);
+					peakVal = peakVal/1000;
 					rePeakVal = toFixedNum(peakVal, 2);
 					
 					if(maxPeakVal < rePeakVal) {
@@ -185,8 +179,8 @@
 				
 				// 차트데이터 셋팅
 				dataSet.push([ setChartDateUTC(chartList[i].std_timestamp), rePeakVal ]);
-				dataSet2.push([ setChartDateUTC(chartList[i].std_timestamp), contractPower ]);
-				dataSet3.push([ setChartDateUTC(chartList[i].std_timestamp) , chargePower ]);
+				dataSet2.push([ setChartDateUTC(chartList[i].std_timestamp), contractPower/1000 ]);
+				dataSet3.push([ setChartDateUTC(chartList[i].std_timestamp) , chargePower/1000 ]);
 				
 			}
 			
@@ -199,8 +193,8 @@
 		// 피크의 경우 피크 최대 전력을 입력
 		$(".pktime").empty().append( $("<span />").append(maxPeakTmstp) );
 		unit_format(String( Math.round( Number(maxPeakVal) ) ), "pastPeakListTot", "kW");
-		unit_format(String( Math.round( Number(contractPower) ) ), "contractPowerListTot", "kW");
-		unit_format(String( Math.round( Number(chargePower) ) ), "chargePowerListTot", "kW");
+		unit_format(String( Math.round( Number(contractPower) ) ), "contractPowerListTot", "W");
+		unit_format(String( Math.round( Number(chargePower) ) ), "chargePowerListTot", "W");
 	}
 	
 	// 차트 그리기

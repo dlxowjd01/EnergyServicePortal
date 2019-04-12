@@ -286,7 +286,7 @@
 				if(usage == null || usage == "" || usage == "null") {
 					reUsage = null;
 				} else {
-					var map = convertUnitFormat(usage*4, "mWh", 8);
+					var map = convertUnitFormat(usage*4, "Wh", 5);
 					reUsage = toFixedNum(map.get("formatNum"), 2);
 					totalUsage = totalUsage+Number(usage);
 				}
@@ -302,7 +302,7 @@
 					
 					if(hour != 12) {
 						var next = dbCblList[i].start_timestamp+(1000 * 3600);
-						var map = convertUnitFormat(dbCblList[i].cbl, "mWh", 8);
+						var map = convertUnitFormat(dbCblList[i].cbl, "Wh", 5);
 						cbl = Math.round( Number(map.get("formatNum")) );
 						
 						if(i == 0) {
@@ -564,7 +564,7 @@
 				if(usage == null || usage == "" || usage == "null") {
 					reUsage = null;
 				} else {
-					var map = convertUnitFormat(usage*12, "mW", 8);
+					var map = convertUnitFormat(usage*12, "W", 5);
 					reUsage = toFixedNum(map.get("formatNum"), 2);
 					totalUsage = totalUsage+Number(usage);
 				}
@@ -580,7 +580,7 @@
 					
 					if(hour != 12) {
 						var next = cblList[i].start+(1000 * 3600);
-						var map = convertUnitFormat(cblList[i].cbl, "mWh", 8);
+						var map = convertUnitFormat(cblList[i].cbl, "Wh", 5);
 						cbl = Math.round( Number(map.get("formatNum")) );
 						
 						if(i == 0) {
@@ -651,11 +651,11 @@
 				tbodyStr += '<tr>';
 				tbodyStr += '<td>'+drStartDate.format("yyyy-MM-dd")+'</td>';
 				tbodyStr += '<td>'+drStartDate.format("HH:mm")+" ~ "+drEndDate.format("HH:mm")+'</td>';
-				tbodyStr += '<td>'+drList[i].actualAmount+'</td>'; // 사용량
-				tbodyStr += '<td>'+drList[i].cblAmount+'</td>'; // 고객기준부하
-				tbodyStr += '<td>'+(drList[i].cblAmount-goalPower)+'</td>'; // 계약용량
-				tbodyStr += '<td>'+goalPower+'</td>'; // 목표사용량
-				tbodyStr += '<td>'+(drList[i].cblAmount - drList[i].actualAmount)+'</td>'; // 감축량
+				tbodyStr += '<td>'+drList[i].actualAmount/1000+'</td>'; // 사용량
+				tbodyStr += '<td>'+drList[i].cblAmount/1000+'</td>'; // 고객기준부하
+				tbodyStr += '<td>'+(drList[i].cblAmount-goalPower)/1000+'</td>'; // 계약용량
+				tbodyStr += '<td>'+goalPower/1000+'</td>'; // 목표사용량
+				tbodyStr += '<td>'+(drList[i].cblAmount - drList[i].actualAmount)/1000+'</td>'; // 감축량
 				tbodyStr += '<td>'+(drList[i].cblAmount - drList[i].actualAmount)/(drList[i].cblAmount-goalPower)+'</td>'; // 이행률
 				tbodyStr += '</tr>';
 				

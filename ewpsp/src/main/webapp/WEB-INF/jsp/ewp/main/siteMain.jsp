@@ -188,12 +188,14 @@
 				
 				if(chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
 				else {
-					reChgVal = toFixedNum(chgVal, 2);
+					var map = convertUnitFormat(chgVal, "Wh", 5);
+					reChgVal = toFixedNum(map.get("formatNum"), 2);
 					totalDataSet = totalDataSet+reChgVal;
 				}
 				if(dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
 				else {
-					reDischgVal   = toFixedNum(dischgVal, 2);
+					var map = convertUnitFormat(dischgVal, "Wh", 5);
+					reDischgVal = toFixedNum(map.get("formatNum"), 2);
 					totalDataSet2 = totalDataSet2+reDischgVal;
 				}
 				
@@ -235,12 +237,15 @@
 				
 				if(chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
 				else {
+					var map = convertUnitFormat(chgVal, "Wh", 5);
+					reChgVal = toFixedNum(map.get("formatNum"), 2);
 					reChgVal = toFixedNum(chgVal, 2);
 					totalDataSet = totalDataSet+reChgVal;
 				}
 				if(dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
 				else {
-					reDischgVal   = toFixedNum(dischgVal, 2);
+					var map = convertUnitFormat(dischgVal, "Wh", 5);
+					reDischgVal = toFixedNum(map.get("formatNum"), 2);
 					totalDataSet2 = totalDataSet2+reDischgVal;
 				}
 				
@@ -338,23 +343,23 @@
 				var monthSum = resultListMap.monthSum;
 				var yearSum = resultListMap.yearSum;
 				
-				$("#todayCrg").empty().append( numberComma(Math.abs(toFixedNum(todaySum.chg_val_sum, 2)))+" kWh" );
-				$("#todayDiscrg").empty().append( numberComma(Math.abs(toFixedNum(todaySum.dischg_val_sum, 2)))+" kWh" );
+				$("#todayCrg").empty().append( numberComma(Math.abs(toFixedNum(todaySum.chg_val_sum/1000, 2)))+" kWh" );
+				$("#todayDiscrg").empty().append( numberComma(Math.abs(toFixedNum(todaySum.dischg_val_sum/1000, 2)))+" kWh" );
 				$("#todayRevenue").empty().append( numberComma(Math.abs(toFixedNum(todaySum.ess_revenue_sum, 2))) );
-				$("#monthCrg").empty().append( numberComma(Math.abs(toFixedNum(monthSum.chg_val_sum, 2)))+" kWh" );
-				$("#monthDiscrg").empty().append( numberComma(Math.abs(toFixedNum(monthSum.dischg_val_sum, 2)))+" kWh" );
+				$("#monthCrg").empty().append( numberComma(Math.abs(toFixedNum(monthSum.chg_val_sum/1000, 2)))+" kWh" );
+				$("#monthDiscrg").empty().append( numberComma(Math.abs(toFixedNum(monthSum.dischg_val_sum/1000, 2)))+" kWh" );
 				$("#monthRevenue").empty().append( numberComma(Math.abs(toFixedNum(monthSum.ess_revenue_sum, 2))) );
-				$("#yearCrg").empty().append( numberComma(Math.abs(toFixedNum(yearSum.chg_val_sum, 2)))+" kWh" );
-				$("#yearDiscrg").empty().append( numberComma(Math.abs(toFixedNum(yearSum.dischg_val_sum, 2)))+" kWh" );
+				$("#yearCrg").empty().append( numberComma(Math.abs(toFixedNum(yearSum.chg_val_sum/1000, 2)))+" kWh" );
+				$("#yearDiscrg").empty().append( numberComma(Math.abs(toFixedNum(yearSum.dischg_val_sum/1000, 2)))+" kWh" );
 				$("#yearRevenue").empty().append( numberComma(Math.abs(toFixedNum(yearSum.ess_revenue_sum, 2))) );
 				
 				var chgValSum = Number(todaySum.chg_val_sum);
 				var dischgValSum = Number(todaySum.dischg_val_sum);
 				
 				var chgPer = 0;
-				var chgVal = numberComma(Math.abs(toFixedNum(todaySum.chg_val_sum, 2)));
+				var chgVal = numberComma(Math.abs(toFixedNum(todaySum.chg_val_sum/1000, 2)));
 				var dischgPer = 0;
-				var dischgVal = numberComma(Math.abs(toFixedNum(todaySum.dischg_val_sum, 2)));
+				var dischgVal = numberComma(Math.abs(toFixedNum(todaySum.dischg_val_sum/1000, 2)));
 				
 				if(Math.abs(totalFetureChg) > 0) {
 					chgPer = Math.abs(numOfTotal_per(totalFetureChg, chgValSum));
@@ -450,7 +455,7 @@
 						kepcoUsage = String(kepcoUsageChartList[i].usg_val);
 						if(kepcoUsage == null || kepcoUsage == "" || kepcoUsage == "null") reKepcoUsage = null;
 						else {
-							var map = convertUnitFormat(kepcoUsage, "mWh", 8);
+							var map = convertUnitFormat(kepcoUsage, "Wh", 5);
 							reKepcoUsage = toFixedNum(map.get("formatNum"), 2);
 							totalDataSet = totalDataSet+Number(kepcoUsage);
 						}
@@ -461,7 +466,7 @@
 						essUsage = String(essUsageListChartList[i].usg_val);
 						if(essUsage == null || essUsage == "" || essUsage == "null") reEssUsage = null;
 						else {
-							var map = convertUnitFormat(essUsage, "kWh", 1);
+							var map = convertUnitFormat(essUsage, "Wh", 5);
 							reEssUsage = toFixedNum(map.get("formatNum"), 2);
 							totalDataSet2 = totalDataSet2+Number(essUsage);
 						}
@@ -471,8 +476,7 @@
 						pvUsage = String(pvUsageListChartList[i].gen_val);
 						if(pvUsage == null || pvUsage == "" || pvUsage == "null") rePvUsage = null;
 						else {
-// 							var map = convertUnitFormat(pvUsage, "kWh", 1);
-							var map = convertUnitFormat(pvUsage, "mWh", 8);
+							var map = convertUnitFormat(pvUsage, "Wh", 5);
 							rePvUsage = toFixedNum(map.get("formatNum"), 2);
 							totalDataSet3 = totalDataSet3+Number(pvUsage);
 						}
@@ -547,17 +551,12 @@
 		
 		derChart.redraw(); // 차트 데이터를 다시 그린다
 		
-// 		var total = totalDataSet+totalDataSet2+totalDataSet3;
 		$("#nowUsage").empty().append(nowUsage+"kWh");
 		
-		var remap = convertUnitFormat(totalDataSet, "mWh", 8);
-		var reTotalDataSet = Math.round( Number(remap.get("formatNum")) );
-		var remap3 = convertUnitFormat(totalDataSet3, "mWh", 8);
-		var reTotalDataSet3 = Math.round( Number(remap3.get("formatNum")) );
-		var total = reTotalDataSet+totalDataSet2+reTotalDataSet3;
-		$("#kepcoPer").empty().append( ( (reTotalDataSet == 0) ? 0 : ( (reTotalDataSet/total)*100 ).toFixed(2) )+"%" );
+		var total = totalDataSet+totalDataSet2+totalDataSet3;
+		$("#kepcoPer").empty().append( ( (totalDataSet == 0) ? 0 : ( (totalDataSet/total)*100 ).toFixed(2) )+"%" );
 		$("#essPer").empty().append( ( (totalDataSet2 == 0) ? 0 : ( (totalDataSet2/total)*100 ).toFixed(2) )+"%" );
-		$("#pvPer").empty().append( ( (reTotalDataSet3 == 0) ? 0 : ( (reTotalDataSet3/total)*100 ).toFixed(2) )+"%" );
+		$("#pvPer").empty().append( ( (totalDataSet3 == 0) ? 0 : ( (totalDataSet3/total)*100 ).toFixed(2) )+"%" );
 		
 		update_updtDataTime(new Date(), "updtTimeDER");
 	}
@@ -611,14 +610,6 @@
 		});
 		
 	}
-	
-	//var contractPower;
-	//var chargePower;
-	//function callback_getSiteSetDetail(result) {
-	//	var siteSetDetail = result.detail;
-	//	contractPower = siteSetDetail.contract_power;
-	//	chargePower = siteSetDetail.charge_power;
-	//}
 	
 	// 차트 그리기
 	function drawData_chart_peak() {

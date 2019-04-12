@@ -66,8 +66,7 @@
 						if(usage == null || usage == "" || usage == "null") {
 							reUsage = null;
 						} else {
-// 							var map = convertUnitFormat(usage, "kWh", 1);
-							var map = convertUnitFormat(usage, "mWh", 8);
+							var map = convertUnitFormat(usage, "Wh", 1);
 							reUsage = toFixedNum(map.get("formatNum"), 2);
 							dt_str_totalVal = dt_str_totalVal+Number(map.get("formatNum"));
 						}
@@ -122,8 +121,7 @@
 				if(usage == null || usage == "" || usage == "null") {
 					reUsage = null;
 				} else {
-// 					var map = convertUnitFormat(usage, "kWh", 1);
-					var map = convertUnitFormat(usage, "mWh", 8);
+					var map = convertUnitFormat(usage, "Wh", 1);
 					reUsage = toFixedNum(map.get("formatNum"), 2);
 					totalUsage = totalUsage+Number(usage);
 				}
@@ -138,7 +136,7 @@
 		pastPVGenList = dataSet;
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-		unit_format(String(totalUsage), "pastPvGenTot", "kWh");
+		unit_format(String(totalUsage), "pastPvGenTot", "Wh");
 	}
 	
 	// PV 예측 발전량
@@ -178,8 +176,7 @@
 						if(usage == null || usage == "" || usage == "null") {
 							reUsage = null;
 						} else {
-// 							var map = convertUnitFormat(usage, "kWh", 1);
-							var map = convertUnitFormat(usage, "mWh", 8);
+							var map = convertUnitFormat(usage, "Wh", 1);
 							reUsage = toFixedNum(map.get("formatNum"), 2);
 							dt_str_totalVal = dt_str_totalVal+Number(map.get("formatNum"));
 						}
@@ -229,8 +226,7 @@
 				if(usage == null || usage == "" || usage == "null") {
 					reUsage = null;
 				} else {
-// 					var map = convertUnitFormat(usage, "kWh", 1);
-					var map = convertUnitFormat(usage, "mWh", 8);
+					var map = convertUnitFormat(usage, "Wh", 1);
 					reUsage = toFixedNum(map.get("formatNum"), 2);
 					totalUsage = totalUsage+Number(usage);
 				}
@@ -243,7 +239,7 @@
 		feturePVGenList = dataSet;
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-		unit_format(String(totalUsage), "feturePvGenTot", "kWh");
+		unit_format(String(totalUsage), "feturePvGenTot", "Wh");
 	}
 	
 	// 차트 그리기
@@ -431,7 +427,7 @@
 											gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 										    min: 0, /* 최소값 지정 */
 										    title: {
-										    	text: '(kWh)',
+										    	text: '(Wh)',
 										    	align: 'low',
 										    	rotation: 0, /* 타이틀 기울기 */
 										        y:25, /* 타이틀 위치 조정 */
