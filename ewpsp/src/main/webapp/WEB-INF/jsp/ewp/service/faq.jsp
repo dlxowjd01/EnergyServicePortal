@@ -27,7 +27,7 @@
 		var faqList = result.list;
 	
 		var strHtml = "";
-		$ul = $("#faqList");
+		var $ul = $("#faqList");
 		$ul.empty();
 		if (faqList == null || faqList.length < 1) {
 			$ul.append('<li><a href="#;" class="question"><span class="gubun">검색 결과가 없습니다.<span></a></li>');

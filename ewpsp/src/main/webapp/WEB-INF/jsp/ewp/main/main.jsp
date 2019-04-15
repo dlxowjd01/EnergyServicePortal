@@ -169,7 +169,7 @@
 		var siteList = result.list;
 	
 		var $tbody = $('#siteRankingTbody');
-		$tbody.empty();
+		var tbodyStr = '';
 	
 		if (siteList != null && siteList.length > 0) {
 			for (var i = 0; i < siteList.length; i++) {
@@ -177,36 +177,32 @@
 					if (oldRankType == 0) {
 						var map = convertUnitFormat(siteList[i].usage, "Wh", 5);
 						var map2 = convertUnitFormat(siteList[i].usage_plan, "Wh", 5);
-						$tbody.append(
-							$('<tr />')
-								.append($('<th />').append(siteList[i].site_name))
-								.append($('<td />').append(toFixedNum(map.get("formatNum"), 2)))
-								.append($('<td />').append(toFixedNum(map2.get("formatNum"), 2)))
-						);
+						tbodyStr += '<tr>';
+						tbodyStr += '<th>'+siteList[i].site_name+'</th>';
+						tbodyStr += '<td>'+toFixedNum(map.get("formatNum"), 2)+'</td>';
+						tbodyStr += '<td>'+toFixedNum(map2.get("formatNum"), 2)+'</td>';
+						tbodyStr += '</tr>';
 					} else if (oldRankType == 1) {
 						var map = convertUnitFormat(siteList[i].charge, "Wh", 5);
 						var map2 = convertUnitFormat(siteList[i].charge_plan, "Wh", 5);
-						$tbody.append(
-							$('<tr />')
-								.append($('<th />').append(siteList[i].site_name))
-								.append($('<td />').append(toFixedNum(map.get("formatNum"), 2)))
-								.append($('<td />').append(toFixedNum(map2.get("formatNum"), 2)))
-							);
+						tbodyStr += '<tr>';
+						tbodyStr += '<th>'+siteList[i].site_name+'</th>';
+						tbodyStr += '<td>'+toFixedNum(map.get("formatNum"), 2)+'</td>';
+						tbodyStr += '<td>'+toFixedNum(map2.get("formatNum"), 2)+'</td>';
+						tbodyStr += '</tr>';
 					} else if (oldRankType == 2) {
 						var map = convertUnitFormat(siteList[i].gen, "Wh", 5);
-						$tbody.append(
-							$('<tr />')
-								.append($('<th />').append(siteList[i].site_name))
-								.append($('<td />').append(toFixedNum(map.get("formatNum"), 2)))
-								.append($('<td />').append(0))
-							);
+						tbodyStr += '<tr>';
+						tbodyStr += '<th>'+siteList[i].site_name+'</th>';
+						tbodyStr += '<td>'+toFixedNum(map.get("formatNum"), 2)+'</td>';
+						tbodyStr += '<td>'+'0'+'</td>';
+						tbodyStr += '</tr>';
 					} else if (oldRankType == 3) {
-						$tbody.append(
-							$('<tr />')
-								.append($('<th />').append(siteList[i].site_name))
-								.append($('<td />').append(siteList[i].reward))
-								.append($('<td />').append(0))
-							);
+						tbodyStr += '<tr>';
+						tbodyStr += '<th>'+siteList[i].site_name+'</th>';
+						tbodyStr += '<td>'+siteList[i].reward+'</td>';
+						tbodyStr += '<td>'+'0'+'</td>';
+						tbodyStr += '</tr>';
 					}
 				}
 			}
@@ -217,6 +213,8 @@
 		} else {
 			$('#GMainSiteRankingPaging').empty();
 		}
+		
+		$tbody.html(tbodyStr);
 	
 		if (myChart != null) {
 			myChart.update({data:{table: 'gdatatable1'}});

@@ -83,11 +83,11 @@
 			var chartList = result.chartList;
 			var yyyyMM = texList[0].bill_yearm;
 			var totalTex = texList[0].tot_elec_rate+texList[0].val_add_tax+texList[0].elec_fund;
-			var texStr = "";
-			var texFoodStr = "";
-			var customerStr = "";
-			var texInfoStr = "";
-			var datatable = "";
+//			var texStr = "";
+//			var texFoodStr = "";
+//			var customerStr = "";
+//			var texInfoStr = "";
+//			var datatable = "";
 			var str11 = "";
 			var delLastWon = Math.floor(totalTex/10)*10-totalTex;
 			totKepco = Math.floor(texList[0].tot_amt_bill/10)*10;
@@ -164,20 +164,20 @@
 		}
 		if(texList.length > 0){
 			var yyyyMM = texList[0].bill_yearm;
-			var essBdayInMonth  = String(texList[0].ess_bdayIn_month)   ;
-			var essDischgOffPeak  = String(texList[0].ess_dischg_off_peak);
-			var essDischgMidPeak  = String(texList[0].ess_dischg_mid_peak);
-			var essDischgMaxPeak  = String(texList[0].ess_dischg_max_peak);
-			var essChgOffPeak  = String(texList[0].ess_chg_off_peak)   ;
-			var essChgMidPeak  = String(texList[0].ess_chg_mid_peak)   ;
-			var essChgMaxPeak  = String(texList[0].ess_chg_max_peak)   ;
-			var preEssIncen  = String(texList[0].pre_ess_incen)      ;
-			var essIncen  = String(texList[0].ess_incen)          ;
-			var peakRate  = String(texList[0].peak_rate)          ;
-			var ewpPeakRate  = String(texList[0].ewp_peak_rate)      ;
-			var ratePer  = String(texList[0].rate_per)           ;
-			var valAddTex = texList[0].val_add_tax				;
-			var usg = texList[0].val_add_tax	;
+//			var essBdayInMonth  = String(texList[0].ess_bdayIn_month)   ;
+//			var essDischgOffPeak  = String(texList[0].ess_dischg_off_peak);
+//			var essDischgMidPeak  = String(texList[0].ess_dischg_mid_peak);
+//			var essDischgMaxPeak  = String(texList[0].ess_dischg_max_peak);
+//			var essChgOffPeak  = String(texList[0].ess_chg_off_peak)   ;
+//			var essChgMidPeak  = String(texList[0].ess_chg_mid_peak)   ;
+//			var essChgMaxPeak  = String(texList[0].ess_chg_max_peak)   ;
+//			var preEssIncen  = String(texList[0].pre_ess_incen)      ;
+//			var essIncen  = String(texList[0].ess_incen)          ;
+//			var peakRate  = String(texList[0].peak_rate)          ;
+//			var ewpPeakRate  = String(texList[0].ewp_peak_rate)      ;
+//			var ratePer  = String(texList[0].rate_per)           ;
+//			var valAddTex = texList[0].val_add_tax				;
+//			var usg = texList[0].val_add_tax	;
 			var energyChgReduct = Math.round(texList[0].energy_chg_reduct);	//전력량 요금 절감(계시별)
 			var beneDivenergyChgReduct = Math.round((energyChgReduct*essProfitRatio)/100);		//전력량 요금 절감(계시별) 수익배분
 			var essChgIncen = Math.round(texList[0].ess_chg_incen);	//ESS 충전 요금 할인
@@ -253,15 +253,15 @@
 		if(sheetList.length > 0) {
 			for(var i=0; i<sheetList.length; i++) {
 				var yyyyMM = sheetList[i].std_yearm;
-				var reductCntHour  = String(sheetList[i].reduct_cnt_hour)   ;
-				var reductCap  = String(sheetList[i].reduct_cap)   ;
-				var reductAmt  = String(sheetList[i].reduct_amt);
-				var reductCapPer  = String(sheetList[i].reduct_cap_per);
+//				var reductCntHour  = String(sheetList[i].reduct_cnt_hour)   ;
+//				var reductCap  = String(sheetList[i].reduct_cap)   ;
+//				var reductAmt  = String(sheetList[i].reduct_amt);
+//				var reductCapPer  = String(sheetList[i].reduct_cap_per);
 				var capAmt  = sheetList[i].cap_amt;
 				var reductRewardAmt  = sheetList[i].reduct_reward_amt   ;
-				var totalRewardAmt  = String(sheetList[i].total_reward_amt)   ;
-				var csmRewardAmt  = String(sheetList[i].csm_reward_amt)   ;
-				var ewpRewardAmt  = String(sheetList[i].ewp_reward_amt)   ;
+//				var totalRewardAmt  = String(sheetList[i].total_reward_amt)   ;
+//				var csmRewardAmt  = String(sheetList[i].csm_reward_amt)   ;
+//				var ewpRewardAmt  = String(sheetList[i].ewp_reward_amt)   ;
 				var profitRatio  = drProfitRatio;//sheetList[i].profit_ratio      ;
 				var addRate = 0.1;
 				
@@ -274,11 +274,11 @@
 				
 				var texPrice = beneDivTotal+delLastWon;
 				totDR =texPrice;
-				var reCsmRewardAmt = 0;
-				if(csmRewardAmt == null || csmRewardAmt == "" || csmRewardAmt == "null") reCsmRewardAmt = null;
-				else {
-					reCsmRewardAmt = Math.round( Number(csmRewardAmt) );
-				}
+//				var reCsmRewardAmt = 0;
+//				if(csmRewardAmt == null || csmRewardAmt == "" || csmRewardAmt == "null") reCsmRewardAmt = null;
+//				else {
+//					reCsmRewardAmt = Math.round( Number(csmRewardAmt) );
+//				}
 
 				
 				DRStr += "<tr>";
@@ -338,18 +338,18 @@
 		
 		// 데이터 셋팅
 			
-		var reNetGenVal = 0;
-		var reSmpDeal   = 0;
+//		var reNetGenVal = 0;
+//		var reSmpDeal   = 0;
 		var reSmpPrice  = 0;
-		var reRecDeal   = 0;
+//		var reRecDeal   = 0;
 		var reRecPrice  = 0;
 		var reTotPrice  = 0;
 		
 		if(netGenValSheetList != null && netGenValSheetList.length > 0) {
-		reNetGenVal = netGenValChartList[0].net_gen_val;
-		reSmpDeal   = smpDealChartList[0].smp_deal;
+//		reNetGenVal = netGenValChartList[0].net_gen_val;
+//		reSmpDeal   = smpDealChartList[0].smp_deal;
 		reSmpPrice  = smpPriceChartList[0].smp_price;
-		reRecDeal   = recDealChartList[0].rec_deal;
+//		reRecDeal   = recDealChartList[0].rec_deal;
 		reRecPrice  = recPriceChartList[0].rec_price;
 		reTotPrice  = reRecPrice+reSmpPrice;
 		

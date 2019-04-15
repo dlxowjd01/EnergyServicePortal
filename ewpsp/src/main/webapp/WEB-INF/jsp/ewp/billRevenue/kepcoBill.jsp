@@ -238,16 +238,6 @@
 				var reTotAmtBill = 0;
 				
 				
-	        /*
-	        	chartListStr += "<tr>";
-	        	chartListStr += "<th>"+yyyyMM+"</th>";
-	        	chartListStr += "<td>"+baseRate+"</td>";
-	        	chartListStr += "<td>"+consumeRate+"</td>";
-	        	chartListStr += "<td>"+elecFund+"</td>";
-	        	chartListStr += "<td>"+valAddTax+"</td>";
-	        	chartListStr += "</tr>";
-				
-	        	$("#ly_datatable_hj").find("tbody").append(chartListStr)*/
 				// 차트데이터 셋팅
 				texDataSet1.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].base_rate] );
 				texDataSet2.push( [ Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].consume_rate] ); // 역률적용된 사용요금은 다시 확인해야함
