@@ -201,7 +201,7 @@ public class BillController {
 
         BillRequestModel billRequest = new BillRequestModel();
         billRequest.setMeterDay(meterDay);
-        billRequest.setContElec(siteSet.getContractPower()*1000); // W -> kW
+        billRequest.setContElec(siteSet.getContractPower()/1000); // W -> kW
         billRequest.setPeriod(period);
         if(siteSet.getPlanType() != null && siteSet.getPlanType2() != null && siteSet.getPlanType3() != null ) {
         	billRequest.setPlanName(siteSet.getPlanType()+"_"+siteSet.getPlanType2()+"_"+siteSet.getPlanType3());
@@ -520,7 +520,7 @@ public class BillController {
 
       BillRequestModel billRequest = new BillRequestModel();
       billRequest.setMeterDay(meterDay);
-      billRequest.setContElec(siteSet.getContractPower()*1000); // W -> kW
+      billRequest.setContElec(siteSet.getContractPower()/1000); // W -> kW
       billRequest.setPeriod(period);
 ////      billRequest.setPlanName(siteSet.getPlanType());
 //      billRequest.setPlanName("industrial_B_high_voltage_A_option1"); // 10.23 변경중
