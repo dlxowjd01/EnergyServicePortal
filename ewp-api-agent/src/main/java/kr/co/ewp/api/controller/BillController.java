@@ -93,6 +93,7 @@ public class BillController {
     int resultCnt2 = 0;
     for (Site site : siteList) {
       String _siteId = site.getSiteId();
+      System.out.println("          "+_siteId+"______bill01 시작");
       SiteSet siteSet = siteService.getSiteSet(_siteId, prettyLog);
       if (siteSet == null) {
         prettyLog.append("WARN", _siteId + " SiteSet is null");
@@ -431,7 +432,6 @@ public class BillController {
 		_cal.set(Calendar.MINUTE, 0);
 		_cal.set(Calendar.SECOND, 0);
 		Date begin = new Timestamp(_cal.getTime().getTime());
-		System.out.println("          "+_siteId+"__begin___     "+begin);
 
 		Calendar _cal2 = Calendar.getInstance();
 		_cal2.setTimeInMillis(   today.getTime()   );
@@ -440,11 +440,9 @@ public class BillController {
 		_cal2.set(Calendar.MINUTE, 59);
 		_cal2.set(Calendar.SECOND, 59);
 		Date end = new Timestamp(_cal2.getTime().getTime());
-		System.out.println("          "+_siteId+"__end___     "+end);
 	  
 	  
 	  Long meterDay = siteSet.getMeterReadDay();
-	  System.out.println("          "+_siteId+"__meterDay___     "+meterDay);
 
       Date _begin = null;
       Date _end = null;
@@ -473,7 +471,6 @@ public class BillController {
   	    cal2.set(Calendar.MINUTE, 45);
   	    cal2.set(Calendar.SECOND, 00);
   		_end = cal2.getTime();
-  		System.out.println("          "+_siteId+"__ _end___     "+_end);
       } else {
     	  Calendar cal2 = Calendar.getInstance();
 	  		cal2.setTimeInMillis(   end.getTime()   );
@@ -483,13 +480,10 @@ public class BillController {
 	  	    cal2.set(Calendar.MINUTE, 45);
 	  	    cal2.set(Calendar.SECOND, 00);
 	  		_end = cal2.getTime();
-	  		System.out.println("          "+_siteId+"__ _end2___     "+_end);
       }
 
       Date beginDate = _begin;
       Date endDate = _end;
-      System.out.println("          "+_siteId+"__ beginDate___     "+beginDate);
-      System.out.println("          "+_siteId+"__endDate___     "+endDate);
       List<Bill> billList = Lists.newArrayList();
 //      while (true) {
 //        if (beginDate == null) {
@@ -620,8 +614,6 @@ public class BillController {
           List<Float> kWh = Lists.newArrayList();
           EssModel ess2 = new EssModel();
           List<Float> kWh2 = Lists.newArrayList();
-          System.out.println("          "+_siteId+"__ ess beginDate___     "+beginDate);
-          System.out.println("          "+_siteId+"__ess endDate___     "+endDate);
           List<EssCharge> esschargeList = essService.getEssChargeListBySiteId(_siteId, beginDate, endDate, prettyLog);
           for (EssCharge essCharge : esschargeList) {
             timestamp.add(essCharge.getStdDate().getTime());
