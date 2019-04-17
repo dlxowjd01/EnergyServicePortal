@@ -66,7 +66,7 @@
 						if(usage == null || usage == "" || usage == "null") {
 							reUsage = null;
 						} else {
-							var map = convertUnitFormat(usage, "Wh", 1);
+							var map = convertUnitFormat(usage, "Wh", 5);
 							reUsage = toFixedNum(map.get("formatNum"), 2);
 							dt_str_totalVal = dt_str_totalVal+Number(map.get("formatNum"));
 						}
@@ -121,7 +121,7 @@
 				if(usage == null || usage == "" || usage == "null") {
 					reUsage = null;
 				} else {
-					var map = convertUnitFormat(usage, "Wh", 1);
+					var map = convertUnitFormat(usage, "Wh", 5);
 					reUsage = toFixedNum(map.get("formatNum"), 2);
 					totalUsage = totalUsage+Number(usage);
 				}
@@ -176,7 +176,7 @@
 						if(usage == null || usage == "" || usage == "null") {
 							reUsage = null;
 						} else {
-							var map = convertUnitFormat(usage, "Wh", 1);
+							var map = convertUnitFormat(usage, "Wh", 5);
 							reUsage = toFixedNum(map.get("formatNum"), 2);
 							dt_str_totalVal = dt_str_totalVal+Number(map.get("formatNum"));
 						}
@@ -226,7 +226,7 @@
 				if(usage == null || usage == "" || usage == "null") {
 					reUsage = null;
 				} else {
-					var map = convertUnitFormat(usage, "Wh", 1);
+					var map = convertUnitFormat(usage, "Wh", 5);
 					reUsage = toFixedNum(map.get("formatNum"), 2);
 					totalUsage = totalUsage+Number(usage);
 				}
@@ -427,7 +427,7 @@
 											gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 										    min: 0, /* 최소값 지정 */
 										    title: {
-										    	text: '(Wh)',
+										    	text: '(kWh)',
 										    	align: 'low',
 										    	rotation: 0, /* 타이틀 기울기 */
 										        y:25, /* 타이틀 위치 조정 */
