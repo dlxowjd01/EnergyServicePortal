@@ -239,7 +239,6 @@
 				else {
 					var map = convertUnitFormat(chgVal, "Wh", 5);
 					reChgVal = toFixedNum(map.get("formatNum"), 2);
-					reChgVal = toFixedNum(chgVal, 2);
 					totalDataSet = totalDataSet+reChgVal;
 				}
 				if(dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
@@ -362,12 +361,12 @@
 				var dischgVal = numberComma(Math.abs(toFixedNum(todaySum.dischg_val_sum/1000, 2)));
 				
 				if(Math.abs(totalFetureChg) > 0) {
-					chgPer = Math.abs(numOfTotal_per(totalFetureChg, chgValSum));
+					chgPer = Math.abs(numOfTotal_per(totalFetureChg, chgValSum/1000));
 				} else {
 					chgPer = 100;
 				}
 				if(Math.abs(totalFetureDischg) > 0) {
-					dischgPer = Math.abs(numOfTotal_per(totalFetureDischg, dischgValSum));
+					dischgPer = Math.abs(numOfTotal_per(totalFetureDischg, dischgValSum/1000));
 				} else {
 					dischgPer = 100;
 				}
