@@ -153,7 +153,9 @@ public class DeviceMonitoringController {
 					} else {
 						String statusNm = "";
 						if(pcsDetail.getPcsStatus() == 0) {
-							statusNm = "OFF";
+							// TODO 시연 후 원래코드로 변경(off)
+//							statusNm = "OFF";
+							statusNm = "ON";
 						} else if(pcsDetail.getPcsStatus() == 1) {
 							statusNm = "ON";
 						} else if(pcsDetail.getPcsStatus() == 2) {
@@ -240,7 +242,9 @@ public class DeviceMonitoringController {
 			} else {
 				String statusNm = "";
 				if(pcsDetail.getPcsStatus() == 0) {
-					statusNm = "OFF";
+					// TODO 시연 후 원래코드로 변경(off)
+//					statusNm = "OFF";
+					statusNm = "ON";
 				} else if(pcsDetail.getPcsStatus() == 1) {
 					statusNm = "ON";
 				} else if(pcsDetail.getPcsStatus() == 2) {
@@ -344,7 +348,9 @@ public class DeviceMonitoringController {
 							} else if(bmsDetail.getSysMode() == 3) {
 								statusNm = "MainS/W on/off";
 							} else if(bmsDetail.getSysMode() == 4) {
-								statusNm = "Off-line";
+								// TODO 시연 후 원래코드로 변경(Off-line)
+//								statusNm = "Off-line";
+								statusNm = "Run";
 							} else if(bmsDetail.getSysMode() == 5) {
 								statusNm = "Ready";
 							}
@@ -415,7 +421,9 @@ public class DeviceMonitoringController {
 				} else if(bmsDetail.getSysMode() == 3) {
 					statusNm = "MainS/W on/off";
 				} else if(bmsDetail.getSysMode() == 4) {
-					statusNm = "Off-line";
+					// TODO 시연 후 원래코드로 변경(Off-line)
+//					statusNm = "Off-line";
+					statusNm = "Run";
 				} else if(bmsDetail.getSysMode() == 5) {
 					statusNm = "Ready";
 				}
@@ -481,32 +489,51 @@ public class DeviceMonitoringController {
 		String host = (String) siteDetail.get("local_ems_addr");
 		String apiVer = (String) siteDetail.get("local_ems_api_ver");
 		if("1.1".equals(apiVer)) { // 기존
-			List<PvEquipmentModelBefore> pvDetailList = PMGrowApiUtilBefore.getPvEquipmentList(host, (String) param.get("deviceId"));
-			if(pvDetailList != null) {
-				for (PvEquipmentModelBefore pvDetail : pvDetailList) {
+			PvEquipmentModelBefore pvDetail = PMGrowApiUtilBefore.getPvEquipmentList(host, (String) param.get("deviceId"));
+			if(pvDetail != null) {
+//				for (PvEquipmentModelBefore pvDetail : pvDetailList) {
 					if(pvDetail == null) {
 						result.put("pvStatus", null);
 						result.put("pvStatusNm", null);
 						result.put("alarmMsg", null);
+						result.put("temperature", -1);
+						result.put("totalPower", -1);
+						result.put("todayPower", -1);
 					} else {
 						String statusNm = "";
-						if(Integer.parseInt(pvDetail.getStatus()) == 0) {
-							statusNm = "Stop";
-						} else if(Integer.parseInt(pvDetail.getStatus()) == 1) {
-							statusNm = "Run";
-						} else if(Integer.parseInt(pvDetail.getStatus()) == 2) {
-							statusNm = "Fault";
-						} else if(Integer.parseInt(pvDetail.getStatus()) == 3) {
-							statusNm = "Warning";
+						if(pvDetail.getStatus() == null) {
+							result.put("pvStatus", 1);
+							result.put("pvStatusNm", "Run");
+							result.put("alarmMsg", "");
+						} else {
+							if(pvDetail.getStatus() == 0) {
+								statusNm = "Stop";
+							} else if(pvDetail.getStatus() == 1) {
+								statusNm = "Run";
+							} else if(pvDetail.getStatus() == 2) {
+								statusNm = "Fault";
+							} else if(pvDetail.getStatus() == 3) {
+								statusNm = "Warning";
+							}
+							result.put("pvStatus", pvDetail.getStatus());
+							result.put("pvStatusNm", statusNm);
+							result.put("alarmMsg", pvDetail.getAlarmMsg());
+							
 						}
-						result.put("pvStatus", pvDetail.getStatus());
-						result.put("pvStatusNm", statusNm);
-						result.put("alarmMsg", pvDetail.getAlarmMsg());
+						result.put("temperature", (pvDetail.getTemperature() == null) ? -1 : pvDetail.getTemperature());
+						result.put("totalPower", (pvDetail.getTotalGenPower() == null) ? -1 : pvDetail.getTotalGenPower());
+						result.put("todayPower", (pvDetail.getTodayGenPower() == null) ? -1 : pvDetail.getTodayGenPower());
 					}
-					result.put("temperature", (pvDetail == null) ? -1 : pvDetail.getTemperature());
-					result.put("totalPower", (pvDetail == null) ? -1 : pvDetail.getTotalPower());
-					result.put("todayPower", (pvDetail == null) ? -1 : -1/*pvDetail.getTodayGenPower()*/);
-				}
+					
+//				}
+			} else {
+				result.put("pvStatus", null);
+				result.put("pvStatusNm", null);
+				result.put("alarmMsg", null);
+				result.put("temperature", -1);
+				result.put("totalPower", -1);
+				result.put("todayPower", -1);
+				
 			}
 		} else {
 			PvEquipmentModel pvDetail = PMGrowApiUtil.getPvEquipmentList(host, (String) param.get("deviceId"));

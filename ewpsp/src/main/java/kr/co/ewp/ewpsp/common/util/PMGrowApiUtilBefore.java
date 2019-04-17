@@ -37,7 +37,7 @@ public class PMGrowApiUtilBefore {
    * @return
    */
   public static List<PcsEquipmentModelBefore> getPcsEquipmentList(String host, String equipmentId) {
-	  logger.debug("PMGrowApiUtil.getPcsEquipmentList");
+	  logger.debug("PMGrowApiUtilBefore.getPcsEquipmentList");
     String resultBody = null;
     List<PcsEquipmentModelBefore> returnPCS = null;
     try {
@@ -55,7 +55,7 @@ public class PMGrowApiUtilBefore {
 		logger.error("error is : "+e.toString());
 		e.printStackTrace();
     } finally {
-    	logger.debug("PMGrowApiUtil.getPcsEquipmentList end");
+    	logger.debug("PMGrowApiUtilBefore.getPcsEquipmentList end");
 		return returnPCS;
     }
   }
@@ -74,7 +74,7 @@ public class PMGrowApiUtilBefore {
    * @return
    */
   public static List<BmsEquipmentModelBefore> getBmsEquipmentList(String host, String equipmentId) {
-	logger.debug("PMGrowApiUtil.getBmsEquipmentList");
+	logger.debug("PMGrowApiUtilBefore.getBmsEquipmentList");
     String resultBody = null;
     List<BmsEquipmentModelBefore> returnBMS = null;
     try {
@@ -91,7 +91,7 @@ public class PMGrowApiUtilBefore {
     } catch (Exception e) {
 		logger.error("error is : "+e.toString());
     } finally {
-    	logger.debug("PMGrowApiUtil.getBmsEquipmentList end");
+    	logger.debug("PMGrowApiUtilBefore.getBmsEquipmentList end");
 		return returnBMS;
     }
   }
@@ -109,31 +109,30 @@ public class PMGrowApiUtilBefore {
    * @param prettyLog
    * @return
    */
-  public static List<PvEquipmentModelBefore> getPvEquipmentList(String host, String equipmentId) {
-    logger.debug("PMGrowApiUtil.getPvEquipmentList");
+  public static PvEquipmentModelBefore getPvEquipmentList(String host, String equipmentId) {
+    logger.debug("PMGrowApiUtilBefore.getPvEquipmentList");
     String resultBody = null;
-    List<PvEquipmentModelBefore> returnPV = null;
+    PvEquipmentModelBefore returnPV = null;
     try {
     	StringBuffer url = new StringBuffer(host + "/openapi/pv-equipment-list");
-        url.append("?equipmentId=").append(equipmentId);
+        url.append("?ivtId=").append(equipmentId);
     	System.out.println("before pv device url =====> "+url);
       logger.debug("pmgrow api URL : "+ url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
       System.out.println("before pv device resultBody =====> "+resultBody);
-      returnPV = JsonUtil.toObject(resultBody, new TypeReference<List<PvEquipmentModelBefore>>() {
-      });
+      returnPV = JsonUtil.toObject(resultBody, PvEquipmentModelBefore.class);
     } catch (NullPointerException e) {
 		logger.error("error is : "+e.toString());
     } catch (Exception e) {
 		logger.error("error is : "+e.toString());
     } finally {
-    	logger.debug("PMGrowApiUtil.getPvEquipmentList end");
+    	logger.debug("PMGrowApiUtilBefore.getPvEquipmentList end");
 		return returnPV;
     }
   }
   
   public static SocModel getSoc(String host, String equipmentId) {
-	  logger.debug("PMGrowApiUtil.getSoc");
+	  logger.debug("PMGrowApiUtilBefore.getSoc");
 	  
 	  String resultBody = null;
 	  SocModel returnSoc = null;
@@ -150,7 +149,7 @@ public class PMGrowApiUtilBefore {
 //		  e.printStackTrace();
 		  logger.error("error is : "+e.toString());
 	  } finally {
-		  logger.debug("PMGrowApiUtil.getSoc end");
+		  logger.debug("PMGrowApiUtilBefore.getSoc end");
 		  return returnSoc;
 	  }
   }

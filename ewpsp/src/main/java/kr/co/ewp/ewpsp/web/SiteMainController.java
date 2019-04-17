@@ -39,6 +39,7 @@ import kr.co.ewp.ewpsp.model.DeviceModel;
 import kr.co.ewp.ewpsp.model.PcsEquipmentModel;
 import kr.co.ewp.ewpsp.model.PcsEquipmentModelBefore;
 import kr.co.ewp.ewpsp.model.PvEquipmentModel;
+import kr.co.ewp.ewpsp.model.PvEquipmentModelBefore;
 import kr.co.ewp.ewpsp.service.AlarmService;
 import kr.co.ewp.ewpsp.service.ControlService;
 import kr.co.ewp.ewpsp.service.DRRevenueService;
@@ -143,14 +144,14 @@ public class SiteMainController {
 								Float dcPower = (pcsDetail.getDcPower() == null) ? 0 : pcsDetail.getDcPower();
 								deviceMap.put("apiPower", acPower+dcPower);
 							}
-						}
+						} else deviceMap.put("apiPower", "-");
 					} else {
 						PcsEquipmentModel pcsDetail = PMGrowApiUtil.getPcsEquipmentList(host, (String) deviceMap.get("device_id"));
 						if(pcsDetail != null) {
 							Float acPower = (pcsDetail.getAcPower() == null) ? 0 : pcsDetail.getAcPower();
 							Float dcPower = (pcsDetail.getDcPower() == null) ? 0 : pcsDetail.getDcPower();
 							deviceMap.put("apiPower", acPower+dcPower);
-						}
+						} else deviceMap.put("apiPower", "-");
 					}
 					
 				} else if("2".equals(deviceType)) { // BMS
@@ -161,25 +162,29 @@ public class SiteMainController {
 								Float soc = (bmsDetail.getSysSoc() == null) ? 0 : bmsDetail.getSysSoc();
 								deviceMap.put("apiSoc", soc);
 							}
-						}
+						} else deviceMap.put("apiSoc", "-");
 					} else {
 						BmsEquipmentModel bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, (String) deviceMap.get("device_id"));
 						if(bmsDetail != null) {
 							Float soc = (bmsDetail.getSysSoc() == null) ? 0 : bmsDetail.getSysSoc();
 							deviceMap.put("apiSoc", soc);
-						}
+						} else deviceMap.put("apiSoc", "-");
 					}
 					
 				} else if("3".equals(deviceType)) { // PV(localEMS)
-//					if("1.1".equals(apiVer)) { // 기존
-//						
-//					} else {
+					if("1.1".equals(apiVer)) { // 기존
+						PvEquipmentModelBefore pvDetail = PMGrowApiUtilBefore.getPvEquipmentList(host, (String) deviceMap.get("device_id"));
+						if(pvDetail != null) {
+							Float totPower = (pvDetail.getTotalGenPower() == null) ? 0 : pvDetail.getTotalGenPower();
+							deviceMap.put("apiTotPower", pvDetail.getTotalGenPower());
+						} else deviceMap.put("apiTotPower", "-");
+					} else {
 						PvEquipmentModel pvDetail = PMGrowApiUtil.getPvEquipmentList(host, (String) deviceMap.get("device_id"));
 						if(pvDetail != null) {
 							Integer totPower = (pvDetail.getTotalGenPower() == null) ? 0 : pvDetail.getTotalGenPower();
 							deviceMap.put("apiTotPower", totPower);
-						}
-//					}
+						} else deviceMap.put("apiTotPower", "-");
+					}
 					
 				} else if("5".equals(deviceType)) { // PV(Enertalk)
 					DeviceModel ioeDetail = EnertalkApiUtil.getDevice((String) deviceMap.get("device_id"));
@@ -194,7 +199,7 @@ public class SiteMainController {
 						} else {
 							deviceMap.put("apiStatus", 2);
 						}
-					}
+					} else deviceMap.put("apiStatus", 2);
 					
 				} else {
 					DeviceModel ioeDetail = EnertalkApiUtil.getDevice((String) deviceMap.get("device_id"));
@@ -209,7 +214,7 @@ public class SiteMainController {
 						} else {
 							deviceMap.put("apiStatus", 2);
 						}
-					}
+					} else deviceMap.put("apiStatus", 2);
 				}
 				newDeviceList.add(deviceMap);
 			}

@@ -133,7 +133,7 @@
 		pastUsageList = dataSet;
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-		unit_format(String(totalUsage), "pastUseTot", "mWh");
+		unit_format(String(totalUsage), "pastUseTot", "Wh");
 	}
 	
 	// 예측 사용량
@@ -235,7 +235,7 @@
 		fetureUsageList = dataSet;
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-		unit_format(String(totalUsage), "futureUseTot", "mWh");
+		unit_format(String(totalUsage), "futureUseTot", "Wh");
 	}
 	
 	// 차트 그리기

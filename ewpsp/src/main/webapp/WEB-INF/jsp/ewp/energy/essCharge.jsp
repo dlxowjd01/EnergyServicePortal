@@ -425,6 +425,7 @@
 		}
 		
 		$("#pc_use_dataDiv").html(tbodyStr);
+		defaultData_pc = "";
 	}
 </script>
 </head>

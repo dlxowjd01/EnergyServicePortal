@@ -23,7 +23,7 @@
 		feture_data_pc.length = 0;
 		setDataTableColRowCnt(); // 1행의 최대 칸 수 및 테이블갯수
 		getPVGenRealList(formData); // 실제 발전량 조회
-		getPVGenFutureList(formData); // 예측 발전량 조회
+// 		getPVGenFutureList(formData); // 예측 발전량 조회
 		drawData(); // 차트 및 표 그리기
 	}
 	
@@ -256,12 +256,12 @@
 			data: pastPVGenList
 		}, false);
 		
-		myChart.addSeries({
-			name: '예측 발전량',
-			color: '#13af67', /* 예측 발전량 */
-			dashStyle: 'ShortDash',
-			data: feturePVGenList
-		}, false);
+// 		myChart.addSeries({
+// 			name: '예측 발전량',
+// 			color: '#13af67', /* 예측 발전량 */
+// 			dashStyle: 'ShortDash',
+// 			data: feturePVGenList
+// 		}, false);
 		
 		setTickInterval();
 		
@@ -287,9 +287,9 @@
 				tbodyStr += '<tr>';
 				tbodyStr += '<th><div class="ctit pv1"><span>실제 발전량 (kWh)</span></div></th>'+real_data_pc[i];
 				tbodyStr += '</tr>';
-				tbodyStr += '<tr>';
-				tbodyStr += '<th><div class="ctit pv2"><span>예측 발전량 (kWh)</span></div></th>'+ feture_data_pc[i];
-				tbodyStr += '</tr>';
+// 				tbodyStr += '<tr>';
+// 				tbodyStr += '<th><div class="ctit pv2"><span>예측 발전량 (kWh)</span></div></th>'+ feture_data_pc[i];
+// 				tbodyStr += '</tr>';
 				tbodyStr += '</tbody>';
 				tbodyStr += '</table>';
 				tbodyStr += '</div>';
@@ -338,10 +338,10 @@
 									<div class="ctit pv1"><span>실제 발전량</span></div>
 									<div class="cval" id="pastPvGenTot"><span>0</span>kWh</div>
 								</li>
-								<li class="pv2">
+								<!-- <li class="pv2">
 									<div class="ctit pv2"><span>예측 발전량</span></div>
 									<div class="cval" id="feturePvGenTot"><span>0</span>kWh</div>
-								</li>
+								</li> -->
 							</ul>
 						</div>
 					</div>

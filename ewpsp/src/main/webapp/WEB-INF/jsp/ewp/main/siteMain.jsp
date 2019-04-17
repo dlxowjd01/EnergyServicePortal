@@ -894,14 +894,14 @@
 					} else if(deviceList[i].device_type == 1) {
 						strHtml = '<li class="pcs" />'; 
 	//					memo = Number(deviceList[i].ac_power)+Number(deviceList[i].dc_power);
-						memo = Number(deviceList[i].apiPower);
+						memo = Number(deviceList[i].apiPower); // W
 					} else if(deviceList[i].device_type == 2) {
 						strHtml = '<li class="bms" />';
 	//					memo = (deviceList[i].sys_soc == null || deviceList[i].sys_soc == "" || deviceList[i].sys_soc == "null") ? "" : deviceList[i].sys_soc+" %";
-						memo = (deviceList[i].apiSoc == null || deviceList[i].apiSoc == "" || deviceList[i].apiSoc == "null") ? "" : deviceList[i].apiSoc+" %";
+						memo = (deviceList[i].apiSoc == null || deviceList[i].apiSoc == "" || deviceList[i].apiSoc == "null") ? "" : deviceList[i].apiSoc+" %"; // %
 					} else if(deviceList[i].device_type == 3 || deviceList[i].device_type == 5) {
 						strHtml = '<li class="pv" />';
-						memo = deviceList[i].apiTotPower;
+						memo = deviceList[i].apiTotPower; // Wh
 					} else {
 						strHtml = (deviceList[i].apiStatus == 1) ? '<li class="ioe" />' : '<li class="ioe alert" />'; 
 						memo = (deviceList[i].apiStatus == 1) ? "connect" : "disconnect";
