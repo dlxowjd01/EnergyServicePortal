@@ -75,8 +75,8 @@ jobs:
       - persist_to_workspace:
           root: ~/circleci-demo-java-spring
           paths:
-            - ewpsp/target/ewpsp.war
-            - ewp-api-agent/target/ewp-api-0.0.1-SNAPSHOT.jar
+            - ewpsp.war
+            - ewp-api-0.0.1-SNAPSHOT.jar
 
   publish-github-release:
     docker:
