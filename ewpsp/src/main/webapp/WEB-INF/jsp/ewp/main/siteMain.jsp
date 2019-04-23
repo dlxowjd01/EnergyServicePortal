@@ -1460,7 +1460,7 @@
 							<div class="col-sm-12">
 								<div class="indiv smain_device">
 									<div class="chart_top clear">
-										<h2 class="ntit fl" ondblclick="javascript:location.href='/deviceMonitoring?deviceGbn=IOE'" style="cursor: pointer;">장치현황</h2>
+										<h2 class="ntit fl" ondblclick="javascript:location.href='/deviceGroup'" style="cursor: pointer;">장치현황</h2>
 										<div class="time fr" id="updtTimeDevice">2018-08-12 11:41:26</div>
 									</div>
 									<!-- no-data { -->
