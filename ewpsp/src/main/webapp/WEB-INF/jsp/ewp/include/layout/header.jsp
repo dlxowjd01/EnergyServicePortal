@@ -45,7 +45,8 @@
 				<!-- input/dropdown //-->
 				<div class="site form-group">
 					<div class="input-group">
-						<input type="text" value="" autocomplete="off" class="form-control" id="selSiteBox" name="selSiteBox" placeholder="${selViewSite.site_name}">
+						<c:if test="${empty selViewSite.site_name}"><input type="text" value="" autocomplete="off" class="form-control" id="selSiteBox" name="selSiteBox" placeholder="전체"></c:if>
+						<c:if test="${not empty selViewSite.site_name}"><input type="text" value="" autocomplete="off" class="form-control" id="selSiteBox" name="selSiteBox" placeholder="${selViewSite.site_name}"></c:if>
 						<div class="input-group-btn bs-dropdown-to-select-group">
 							<button type="button" class="btn btn-default dropdown-toggle as-is bs-dropdown-to-select" data-toggle="dropdown">
 								<span data-bind="bs-drp-sel-label">&nbsp;&nbsp;&nbsp;</span>

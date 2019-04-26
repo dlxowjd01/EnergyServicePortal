@@ -1060,7 +1060,7 @@
 
 												chart: {
 													marginTop:50,
-													marginLeft:50,
+													marginLeft:60,
 													marginRight:0,
 													backgroundColor: 'transparent',
 													type: 'area'
@@ -1116,10 +1116,10 @@
 												    	align: 'low',
 												    	rotation: 0, /* 타이틀 기울기 */
 												        y:25, /* 타이틀 위치 조정 */
-												        x:10,
+												        x:-7,
 												        style: {
 												            color: '#fff',
-												            fontSize: '12px'
+												            fontSize: '10px'
 												        }
 												    },
 												    labels: {
@@ -1707,7 +1707,7 @@
 
 												chart: {
 													marginTop:50,
-													marginLeft:50,
+													marginLeft:60,
 													marginRight:0,
 													backgroundColor: 'transparent',
 													type: 'column'
@@ -1760,10 +1760,10 @@
 												    	align: 'low',
 												    	rotation: 0, /* 타이틀 기울기 */
 												        y:25, /* 타이틀 위치 조정 */
-												        x:10,
+												        x:-7,
 												        style: {
 												            color: '#fff',
-												            fontSize: '12px'
+												            fontSize: '10px'
 												        }
 												    },
 												    labels: {

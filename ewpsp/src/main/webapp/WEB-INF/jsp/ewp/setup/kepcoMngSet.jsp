@@ -263,8 +263,7 @@
 													<option value="26">26일</option>
 													<option value="27">27일</option>
 													<option value="28">28일</option>
-													<option value="29">29일</option>
-													<option value="30">30일</option>
+													<option value="30">말일</option>
 												</select>
 											</td>											
 											<th><span>청구일</span></th>
