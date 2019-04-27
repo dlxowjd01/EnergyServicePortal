@@ -6,15 +6,8 @@
 					<a href="#;" class="serviceBtn"><spring:message code="ewp.bot.Services" /></a>
 					<a href="/faq"><spring:message code="ewp.bot.FAQ" /></a>
 				</div>
-				<div class="ft_menu fr">
-					<a href="javascript:addParameterUrl('lang', 'ko');">한국어</a> 
-					<a href="javascript:addParameterUrl('lang', 'en');">English</a> 
-					
-					<div class="copyright fr">
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						&copy; 2018 Encored Technologies, Inc.
-					</div>
+				<div class="copyright fr">
+					&copy; 2018 Encored Technologies, Inc.
 				</div>
 			</footer>
 
