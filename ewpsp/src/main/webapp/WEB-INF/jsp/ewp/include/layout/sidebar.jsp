@@ -17,6 +17,15 @@ $(document).ready(function() {
 </script>
 		<div id="sidebar">
 			<c:if test="${not empty userInfo}">
+			<!-- PC용 언어 선택 -->
+			<div class="lang dropdown">
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">${sessionScope.sessionLangNm }
+				<span class="caret"></span></button>
+				<ul class="dropdown-menu">
+					<li><a href="javascript:addParameterUrl('lang', 'ko');">KO</a></li>
+					<li><a href="javascript:addParameterUrl('lang', 'en');">EN</a></li>
+				</ul>
+			</div>
 			<ul>
 				<c:choose>
 				<c:when test="${not empty userInfo and empty selViewSiteId}">
@@ -108,6 +117,15 @@ $(document).ready(function() {
 			</div>
 			<div class="g_menu w100">
 				<c:if test="${not empty userInfo}">
+				<!-- 모바일용 언어 선택 -->
+				<div class="lang dropdown">
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">${sessionScope.sessionLangNm }
+					<span class="caret"></span></button>
+					<ul class="dropdown-menu">
+						<li><a href="javascript:addParameterUrl('lang', 'ko');">KO</a></li>
+						<li><a href="javascript:addParameterUrl('lang', 'en');">EN</a></li>
+					</ul>
+				</div>	
 				<ul>
 					<c:choose>
 					<c:when test="${not empty userInfo and empty selViewSiteId}">

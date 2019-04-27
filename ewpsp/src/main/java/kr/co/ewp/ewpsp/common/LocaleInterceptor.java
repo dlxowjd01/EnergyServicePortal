@@ -47,7 +47,7 @@ public class LocaleInterceptor extends HandlerInterceptorAdapter {
 		// step. Locale을 새로 설정한다.          
 		session.setAttribute("sessionLocale", lo);
 		session.setAttribute("sessionLang", lang);
-		
+		session.setAttribute("sessionLangNm", lang.toUpperCase());
 		
 		return super.preHandle(request, response, handler);
 	}

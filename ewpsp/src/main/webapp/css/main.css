@@ -733,7 +733,7 @@ h2.ntit {color:#fff;}
 	display:inline-block; width:25%; border-bottom:solid 1px #515562; padding-bottom:20px;
 	text-align:center;
 }
-.gmain_chart .gtab_menu li a {display:block; font-size:18px; color:#8e95a1; font-weight:600;}
+.gmain_chart .gtab_menu li a {display:block; font-size:15px; color:#8e95a1; font-weight:600;}
 .gmain_chart .gtab_menu li.active a,
 .gmain_chart .gtab_menu li:hover a {color:#fff;}
 .gmain_chart .tblDisplay {padding:30px 0 10px;}
@@ -816,14 +816,14 @@ h2.ntit {color:#fff;}
 .local_info div ul + ul {border-left:solid 1px #515562;}
 .local_info div ul:first-child {padding-right:20px;}
 .local_info div ul:last-child {padding-left:20px;}
-.local_info div ul li strong {float:left; display:inline-block; font-size:18px; color:#8e95a1; font-weight:600;}
+.local_info div ul li strong {float:left; display:inline-block; font-size:15px; color:#8e95a1; font-weight:600;}
 .local_info div ul li span {
-	display:inline-block; font-family:'Roboto', sans-serif; font-size:28px; color:#fff; 
+	display:inline-block; font-family:'Roboto', sans-serif; font-size:20px; color:#fff; 
 	font-weight:300; margin-right:5px;
 }
 .local_info div ul li em {
 	display:inline-block; font-family:'Roboto', sans-serif; 
-	font-size:15px; color:#fff; font-weight:500;
+	font-size:13px; color:#fff; font-weight:500;
 }
 /* 상세지도용 지역정보 */
 .local_info.detailmap {display:none;}
