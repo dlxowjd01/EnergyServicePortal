@@ -31,10 +31,11 @@ public class KepcoMngSetServiceImpl implements KepcoMngSetService {
 	
 	@Transactional
 	public int updateSiteSet(HashMap param) throws Exception {
-		if(param.get("essBattery") != null) param.put("essBattery", ( Float.parseFloat((String)param.get("essBattery")) )*1000); // kWh -> Wh
-		if(param.get("essPcs") != null) param.put("essPcs", ( Float.parseFloat((String)param.get("essPcs")) )*1000); // kW -> W
-		if(param.get("contractPower") != null) param.put("contractPower", ( Float.parseFloat((String)param.get("contractPower")) )*1000); // kWh -> Wh
-		if(param.get("chargePower") != null) param.put("chargePower", ( Float.parseFloat((String)param.get("chargePower")) )*1000); // kWh -> Wh
+		if(param.get("essBattery") != null) param.put("essBattery", ( Float.parseFloat((String)param.get("essBattery")) )*1000); // ess배터리 kWh -> Wh
+		if(param.get("essPcs") != null) param.put("essPcs", ( Float.parseFloat((String)param.get("essPcs")) )*1000); // ess PCS kW -> W
+		if(param.get("contractPower") != null) param.put("contractPower", ( Float.parseFloat((String)param.get("contractPower")) )*1000); // 계약전력 kWh -> Wh
+		if(param.get("chargePower") != null) param.put("chargePower", ( Float.parseFloat((String)param.get("chargePower")) )*1000); // 요금적용전력 kWh -> Wh
+		if(param.get("reduceAmt") != null) param.put("reduceAmt", ( Float.parseFloat((String)param.get("reduceAmt")) )*1000); // 감축용량 kW -> W
 		return kepcoMngSetDao.updateSiteSet(param);
 	}
 	

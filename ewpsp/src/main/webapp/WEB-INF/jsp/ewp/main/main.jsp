@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -103,7 +104,7 @@
 		var str = "";
 		if(alarmList == null || alarmList.length < 1) {
 			str += '<li>';
-			str += '	<a href="#;">조회 결과가 없습니다.</a>';
+			str += '	<a href="#;"><spring:message code="ewp.main.There_is_no_query_results" /></a>';
 			str += '</li>';
 		} else {
 			for(var i=0; i<alarmList.length; i++) {
@@ -121,41 +122,41 @@
 		var total = result.detail;
 		var now = new Date();
 	
-		$('#rankTime').text(now.format('a/p hh:mm') + ' 기준');
+		$('#rankTime').text('<spring:message code="ewp.main.baseTime" arguments="'+now.format('a/p hh:mm')+'" />');
 	
 		if (total != null) {
 			$('#rankTotal').html('<span class="bul1" />');
 			if (oldRankType == 0) {
 				var map = convertUnitFormat(total.usage, "Wh");
 				var past = toFixedNum(map.get("formatNum"), 2);
-				$('#rankTotal > span').text('누적');
+				$('#rankTotal > span').text('<spring:message code="ewp.main.Cumulative" />');
 				//"(: ' + past + " " + map.get("unit"));
 				
 				$('#rankPlan').html('<span class="bul2" />');
 				var map2 = convertUnitFormat(total.usage_plan, "Wh");
 				var feture = toFixedNum(map2.get("formatNum"), 2);
-				$('#rankPlan > span').text('예상');
+				$('#rankPlan > span').text('<spring:message code="ewp.main.Forecast" />');
 				//: ' + feture + map2.get("unit"));
 			} else if (oldRankType == 1) {
 				var map = convertUnitFormat(total.charge, "Wh");
 				var past = toFixedNum(map.get("formatNum"), 2);
-				$('#rankTotal > span').text('누적');
+				$('#rankTotal > span').text('<spring:message code="ewp.main.Cumulative" />');
 				//: ' + past + " " + map.get("unit"));
 				
 				$('#rankPlan').html('<span class="bul2" />');
 				var map2 = convertUnitFormat(total.charge_plan, "Wh");
 				var feture = toFixedNum(map2.get("formatNum"), 2);
-				$('#rankPlan > span').text('예상');
+				$('#rankPlan > span').text('<spring:message code="ewp.main.Forecast" />');
 				//: ' + feture + " " + map2.get("unit"));
 			} else if (oldRankType == 2) {
 				var map = convertUnitFormat(total.gen, "Wh");
 				var past = toFixedNum(map.get("formatNum"), 2);
-				$('#rankTotal > span').text('누적');
+				$('#rankTotal > span').text('<spring:message code="ewp.main.Cumulative" />');
 	//			: ' + past + " " + map.get("unit"));
 				$('#rankPlan').text('');
 			} else if (oldRankType == 3) {
 				var reward = (total.reward == null) ? 0 : total.reward;
-				$('#rankTotal > span').text('수익');
+				$('#rankTotal > span').text('<spring:message code="ewp.main.Revenue" />');
 	//			: ' + numberComma(reward) + " " + "won");
 				$('#rankPlan').text('');
 			}
@@ -234,7 +235,7 @@
 				$('.group_name').text(total.site_grp_name);
 			} else {
 				$('#grpImg').attr('src', imgSrc);
-				$('.group_name').text('전체그룹');
+				$('.group_name').text('<spring:message code="ewp.main.Whole_group" />');
 			}
 		}
 	
@@ -298,10 +299,10 @@
 				tbodyStr += '<td>'+siteList[i].rnum+'</td>';
 				tbodyStr += '<td><div class="cname">'+'<a href="#none">' + siteList[i].site_name + '</a>'+'</div></td>';
 				tbodyStr += '<td><div class="eq_icon">';
-				tbodyStr += '<span class="eq1' + eq1Cls + '">장치1</span>';
-				tbodyStr += '<span class="eq2' + eq2Cls + '">장치2</span>';
-				tbodyStr += '<span class="eq3' + eq3Cls + '">장치3</span>';
-				tbodyStr += '<span class="eq4' + eq4Cls + '">장치4</span>';
+				tbodyStr += '<span class="eq1' + eq1Cls + '"><spring:message code="ewp.main.Device" />1</span>';
+				tbodyStr += '<span class="eq2' + eq2Cls + '"><spring:message code="ewp.main.Device" />2</span>';
+				tbodyStr += '<span class="eq3' + eq3Cls + '"><spring:message code="ewp.main.Device" />3</span>';
+				tbodyStr += '<span class="eq4' + eq4Cls + '"><spring:message code="ewp.main.Device" />4</span>';
 				tbodyStr += '</div></td>';
 				tbodyStr += '<td>'+numberComma(usage)+'</td>';
 				tbodyStr += '<td>'+numberComma(toFixedNum(siteList[i].charge, 0))+'</td>';
@@ -313,7 +314,7 @@
 			var pagingMap = result.pagingMap;
 			makePageNums2(pagingMap, "GMainSite");
 		} else {
-			tbodyStr += '<tr><td colspan="7">조회 결과가 없습니다.</td><tr>';
+			tbodyStr += '<tr><td colspan="7"><spring:message code="ewp.main.There_is_no_query_results" /></td><tr>';
 			$('#GMainSitePaging').empty();
 		}
 		
@@ -341,7 +342,7 @@
 	function callback_getGMainGroupList(result) {
 		var groupList = result.list;
 	
-		groupListHtml = '<li class="on"><a href="#;" onclick="changeGroup(this, \'All\')">전체그룹</a></li>';
+		groupListHtml = '<li class="on"><a href="#;" onclick="changeGroup(this, \'All\')"><spring:message code="ewp.main.Whole_group" /></a></li>';
 		for (var i = 0; i < groupList.length; i++) {
 			var li = '<li>'
 				.concat('<a href="#;" onclick="changeGroup(this, \'' + groupList[i].site_grp_idx + '\')">')
@@ -367,10 +368,10 @@
 		$('#rankType').val(tabIdx + 4);
 	
 		var txt = "";
-		if(tabIdx == 0) txt = "사용량 순위(kWh)";
-		else if(tabIdx == 1) txt = "충방전 순위(kWh)";
-		else if(tabIdx == 2) txt = "발전량 순위(kWh)";
-		else if(tabIdx == 3) txt = "수익 순위(WON)";
+		if(tabIdx == 0) txt = '<spring:message code="ewp.main.Rank_usage" />'+" (kWh)";
+		else if(tabIdx == 1) txt = '<spring:message code="ewp.main.Rank_charging_discharging" />'+" (kWh)";
+		else if(tabIdx == 2) txt = '<spring:message code="ewp.main.Rank_power_generation" />'+" (kWh)";
+		else if(tabIdx == 3) txt = '<spring:message code="ewp.main.Rank_revenue" />'+" (kWh)";
 		$("#tabText").empty().text(txt);
 		getGMainSiteRankingTotalDetail(); // 사이트 사용량 순위 누적/예상 총합
 		getGMainSiteRankingList(1); // 사이트 사용량 순위 목록 조회
@@ -390,12 +391,12 @@
 		clearTimeout(monitoring_cycle_5sec);
 		monitoring_cycle_5sec = null;
 	
-		if (text == '지역별') {
+		if (text == '<spring:message code="ewp.main.Regional" />') {
 			$('#mapUsage').show();
 			$('#groupUsage').hide();
 			$('#mapGroup').val('map');
 	
-			$('#selAllArea').text('전체지역');
+			$('#selAllArea').text('<spring:message code="ewp.main.Whole_area" />'/* '전체지역' */);
 			$('#selAreaList').html(areaListHtml);
 	
 			if (allMapFlag) {
@@ -403,13 +404,13 @@
 			} else {
 				changeLocalMap();
 			}
-		} else if (text == '그룹별') {
+		} else if (text == '<spring:message code="ewp.main.Groupby" />') {
 			$('#mapUsage').hide();
 			$('#groupUsage').show();
 			$('#mapGroup').val('group');
 			$('#grpIdx').val('');
 	
-			$('#selAllArea').text('전체그룹');
+			$('#selAllArea').text('<spring:message code="ewp.main.Whole_group" />');
 			if (groupListHtml == '') {
 				getGMainGroupList(formData);
 			} else {
@@ -505,9 +506,9 @@
 							<div class="col-sm-12">
 								<div class="indiv gmain_alarm">
 									<div class="chart_top clear">
-										<h2 class="ntit">알람</h2>
+										<h2 class="ntit"><spring:message code="ewp.main.Alarm" /></h2>
 										<div class="fr today_alarm">
-											<div class="total">금일발생 <span id="todayTotalAlarmCnt">0</span></div>
+											<div class="total"><spring:message code="ewp.main.Occurence_today" /><span id="todayTotalAlarmCnt">0</span></div>
 											<div class="no"><span style="display:none">0</span></div>
 										</div>
 									</div>
@@ -522,9 +523,9 @@
 										</div>
 									</div>
 									<div class="alarm_notice">
-										<h2>최근 알람</h2>
+										<h2><spring:message code="ewp.main.Recent_alarms" /></h2>
 										<ul>
-											<li><a href="#;">조회중입니다.</a></li>
+											<li><a href="#;"><spring:message code="ewp.main.Looking_data" /></a></li>
 										</ul>
 									</div>
 								</div>
@@ -534,16 +535,16 @@
 							<div class="col-sm-12">
 								<div class="indiv gmain_chart">
 									<ul class="gtab_menu">
-										<li class="active" onclick="javascript:changeRanking(0);"><a href="#;">사용</a></li>
-										<li onclick="javascript:changeRanking(1);"><a href="#;">충•방전</a></li>
-										<li onclick="javascript:changeRanking(2);"><a href="#;">발전</a></li>
-										<li onclick="javascript:changeRanking(3);"><a href="#;">수익</a></li>									
+										<li class="active" onclick="javascript:changeRanking(0);"><a href="#;"><spring:message code="ewp.main.Usage" /></a></li>
+										<li onclick="javascript:changeRanking(1);"><a href="#;"><a href="#;"><spring:message code="ewp.main.Charging_discharging" /></a></li>
+										<li onclick="javascript:changeRanking(2);"><a href="#;"><spring:message code="ewp.main.Power_generation" /></a></li>
+										<li onclick="javascript:changeRanking(3);"><a href="#;"><spring:message code="ewp.main.Revenue" /></a></li>									
 									</ul>
 									<div class="tblDisplay">
 										<!-- 사용 -->
 										<div>
 											<div class="gchart_top clear">
-												<h2 id="tabText">사용량 순위 (kWh)</h2>
+												<h2 id="tabText"><spring:message code="ewp.main.Rank_usage" /> (kWh)</h2>
 												<ul>
 													<li id="rankTime"><!-- AM 10:00 기준 --></li>
 													<li id="rankTotal"><!-- <span class="bul1">누적 - 0.00 kWh</span> --></li>
@@ -559,8 +560,8 @@
 												    <thead>
 												        <tr>
 												            <th></th>
-												            <th>누적</th>
-												            <th>예상</th>
+												            <th><spring:message code="ewp.main.Cumulative" /></th>
+												            <th><spring:message code="ewp.main.Forecast" /></th>
 												        </tr>
 												    </thead>
 												    <tbody id="siteRankingTbody">
@@ -575,15 +576,15 @@
 										</div>
 										<!-- 충•방전 -->
 										<div>
-											충•방전
+											<spring:message code="ewp.main.Charging_discharging" />
 										</div>
 										<!-- 발전 -->
 										<div>
-											발전
+											<spring:message code="ewp.main.Power_generation" />
 										</div>
 										<!-- 수익 -->
 										<div>
-											수익
+											<spring:message code="ewp.main.Revenue" />
 										</div>
 									</div>
 								</div>
@@ -597,8 +598,8 @@
 								<!-- 지역별 사용량 //-->
 								<div id="mapUsage" class="indiv gmain_map">
 									<div class="chart_top clear">
-										<h2 class="ntit">군별사용량</h2>
-										<a href="#;" class="default_btn fr all_map_view"><span>전체지도보기</span></a>
+										<h2 class="ntit"><spring:message code="ewp.main.Regional" /></h2>
+										<a href="#;" class="default_btn fr all_map_view"><span><spring:message code="ewp.main.Whole_area" /></span></a>
 									</div>
 									<div class="map_wrap">
 										<img src="../img/local_map_all.png" alt="전체지도" name="local" usemap="#local_map_all" id="local" border="0" />
@@ -627,29 +628,29 @@
 									</div>
 									<!-- 전체지도용 지역정보 -->
 									<div class="local_info allmap">
-										<h2 class="local_name">서울</h2>
+										<h2 class="local_name"><spring:message code="ewp.main.Seoul" /></h2>
 										<div class="clear">
 											<ul>
-												<li><strong>사용량</strong> <span class="detailUsage">0</span> <em class="detailUsageUnit">MWh</em></li>
-												<li><strong>발전량</strong> <span class="detailGen">0</span> <em class="detailGenUnit">MWh</em></li>
+												<li><strong><spring:message code="ewp.main.The_amount_usage" /></strong> <span class="detailUsage">0</span> <em class="detailUsageUnit">MWh</em></li>
+												<li><strong><spring:message code="ewp.main.The_amount_power_generation" /></strong> <span class="detailGen">0</span> <em class="detailGenUnit">MWh</em></li>
 											</ul>
 											<ul>
-												<li><strong>충•방전량</strong> <span class="detailCharge">0</span> <em class="detailChargeUnit">MWh</em></li>
-												<li><strong>수익</strong> <span class="detailReward">0</span> <em class="detailRewardUnit">won</em></li>
+												<li><strong><spring:message code="ewp.main.The_amount_charging_discharging" /></strong> <span class="detailCharge">0</span> <em class="detailChargeUnit">MWh</em></li>
+												<li><strong><spring:message code="ewp.main.Revenue" /></strong> <span class="detailReward">0</span> <em class="detailRewardUnit">won</em></li>
 											</ul>
 										</div>
 									</div>
 									<!-- 상세지도용 지역정보 -->
 									<div class="local_info detailmap">
-										<h2 class="local_name">서울</h2>
+										<h2 class="local_name"><spring:message code="ewp.main.Seoul" /></h2>
 										<div class="clear">
 											<ul>
-												<li><strong>사용량</strong> <span class="detailUsage">0</span> <em class="detailUsageUnit">MWh</em></li>
-												<li><strong>발전량</strong> <span class="detailGen">0</span> <em class="detailGenUnit">MWh</em></li>
+												<li><strong><spring:message code="ewp.main.The_amount_usage" /></strong></strong> <span class="detailUsage">0</span> <em class="detailUsageUnit">MWh</em></li>
+												<li><strong><spring:message code="ewp.main.The_amount_power_generation" /></strong> <span class="detailGen">0</span> <em class="detailGenUnit">MWh</em></li>
 											</ul>
 											<ul>
-												<li><strong>충•방전량</strong> <span class="detailCharge">0</span> <em class="detailChargeUnit">MWh</em></li>
-												<li><strong>수익</strong> <span class="detailReward">0</span> <em class="detailRewardUnit">won</em></li>
+												<li><strong><spring:message code="ewp.main.The_amount_charging_discharging" /></strong> <span class="detailCharge">0</span> <em class="detailChargeUnit">MWh</em></li>
+												<li><strong><spring:message code="ewp.main.Revenue" /></strong> <span class="detailReward">0</span> <em class="detailRewardUnit">won</em></li>
 											</ul>
 										</div>
 									</div>
@@ -659,22 +660,22 @@
 								<!-- 그룹별 사용량 //-->
 								<div id="groupUsage" class="indiv gmain_group" style="display:none">
 									<div class="chart_top clear">
-										<h2 class="ntit">그룹별사용량</h2>
+										<h2 class="ntit"><spring:message code="ewp.main.Groupby" /></h2>
 									</div>
 									<div class="group_wrap">
 										<img id="grpImg" src="" onError="this.src='../img/group_dimg.png';" alt="그룹이미지" />
 									</div>
 									<!-- 그룹별 정보 -->
 									<div class="group_info">
-										<h2 class="group_name">그룹명</h2>
+										<h2 class="group_name"><spring:message code="ewp.main.Group_name" /></h2>
 										<div class="clear">
 											<ul>
-												<li><strong>사용량</strong> <span class="detailUsage">564</span> <em class="detailUsageUnit">MWh</em></li>
-												<li><strong>발전량</strong> <span class="detailGen">328</span> <em class="detailGenUnit">MWh</em></li>
+												<li><strong><spring:message code="ewp.main.The_amount_usage" /></strong> <span class="detailUsage">564</span> <em class="detailUsageUnit">MWh</em></li>
+												<li><strong><spring:message code="ewp.main.The_amount_power_generation" /></strong> <span class="detailGen">328</span> <em class="detailGenUnit">MWh</em></li>
 											</ul>
 											<ul>
-												<li><strong>충•방전량</strong> <span class="detailCharge">183</span> <em class="detailChargeUnit">MWh</em></li>
-												<li><strong>수익</strong> <span class="detailReward">99,000</span> <em class="detailRewardUnit">won</em></li>
+												<li><strong><spring:message code="ewp.main.The_amount_charging_discharging" /></strong> <span class="detailCharge">183</span> <em class="detailChargeUnit">MWh</em></li>
+												<li><strong><spring:message code="ewp.main.Revenue" /></strong> <span class="detailReward">99,000</span> <em class="detailRewardUnit">won</em></li>
 											</ul>
 										</div>
 									</div>
@@ -690,45 +691,45 @@
 								<div class="indiv gmain_table">
 									<div class="term_menu clear">
 										<ul>
-											<li class="on"><a href="javascript:changeTerm('day')">오늘</a></li>
-											<li><a href="javascript:changeTerm('week')">이번주</a></li>
-											<li><a href="javascript:changeTerm('month')">이번달</a></li>
+											<li class="on"><a href="javascript:changeTerm('day')"><spring:message code="ewp.main.Today" /></a></li>
+											<li><a href="javascript:changeTerm('week')"><spring:message code="ewp.main.This_week" /></a></li>
+											<li><a href="javascript:changeTerm('month')"><spring:message code="ewp.main.This_month" /></a></li>
 										</ul>
 										<ol>
 											<li>
 												<div class="dropdown">
-												  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><em id="selMapGroup">지역별</em>
+												  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><em id="selMapGroup"><spring:message code="ewp.main.Regional" /></em>
 												  <span class="caret"></span></button>
 												  <ul class="dropdown-menu">
-												    <li class="on"><a href="#;" onclick="changeMapGroup(this)">지역별</a></li>
-												    <li><a href="#;" onclick="changeMapGroup(this)">그룹별</a></li>
+												    <li class="on"><a href="#;" onclick="changeMapGroup(this)"><spring:message code="ewp.main.Regional" /></a></li>
+												    <li><a href="#;" onclick="changeMapGroup(this)"><spring:message code="ewp.main.Groupby" /></a></li>
 												  </ul>
 												</div>
 											</li>
 											<li>
 												<div class="dropdown">
-												  <button id="allAreaDiv" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><em id="selAllArea">전체지역</em>
+												  <button id="allAreaDiv" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><em id="selAllArea"><spring:message code="ewp.main.Whole_area" /><!-- 전체지역 --></em>
 												  <span class="caret"></span></button>
 												  <ul id="selAreaList" class="dropdown-menu">
-												    <li class="on"><a href="#;" onclick="changeAllArea(this, 'All', 0)">전체지역</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, 'Seoul', 1)">서울</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, 'Busan', 2)">부산</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, 'Daegu', 3)">대구</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, 'Incheon', 4)">인천</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, 'Gwangju', 5)">광주</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, 'Daejeon', 6)">대전</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, 'Ulsan', 7)">울산</a></li>
-												    <li style="display:none"><a href="#;" onclick="changeAllArea(this, 'Sejong', 8)">세종</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, 'Gyeonggi', 9)">경기</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, 'Gangwon', 10)">강원</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, 'Chungbuk', 11)">충북</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, 'Chungnam', 12)">충남</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, 'Jeonbuk', 13)">전북</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, 'Jeonnam', 14)">전남</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, 'Kyungbuk', 15)">경북</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, 'Gyeongnam', 16)">경남</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, 'Jeju', 17)">제주</a></li>
-												    <li><a href="#;" onclick="changeAllArea(this, 'Ulleungdo', 18)">울릉도</a></li>
+												    <li class="on"><a href="#;" onclick="changeAllArea(this, 'All', 0)"><spring:message code="ewp.main.Whole_area" /><!-- 전체지역 --></a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Seoul', 1)"><spring:message code="ewp.main.Seoul" /><!-- 서울 --></a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Busan', 2)"><spring:message code="ewp.main.Busan" /><!-- 부산 --></a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Daegu', 3)"><spring:message code="ewp.main.Daegu" /><!-- 대구 --></a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Incheon', 4)"><spring:message code="ewp.main.Incheon" /><!-- 인천 --></a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Gwangju', 5)"><spring:message code="ewp.main.Gwangju" /><!-- 광주 --></a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Daejeon', 6)"><spring:message code="ewp.main.Daejeon" /><!-- 대전 --></a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Ulsan', 7)"><spring:message code="ewp.main.Ulsan" /><!-- 울산 --></a></li>
+												    <li style="display:none"><a href="#;" onclick="changeAllArea(this, 'Sejong', 8)"><spring:message code="ewp.main.Sejong" /><!-- 세종 --></a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Gyeonggi', 9)"><spring:message code="ewp.main.Gyeonggi" /><!-- 경기 --></a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Gangwon', 10)"><spring:message code="ewp.main.Gangwon" /><!-- 강원 --></a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Chungbuk', 11)"><spring:message code="ewp.main.Chungbuk" /><!-- 충북 --></a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Chungnam', 12)"><spring:message code="ewp.main.Chungnam" /><!-- 충남 --></a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Jeonbuk', 13)"><spring:message code="ewp.main.Jeonbuk" /><!-- 전북 --></a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Jeonnam', 14)"><spring:message code="ewp.main.Jeonnam" /><!-- 전남 --></a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Kyungbuk', 15)"><spring:message code="ewp.main.Gyeongbuk" /><!-- 경북 --></a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Gyeongnam', 16)"><spring:message code="ewp.main.Gyeongnam" /><!-- 경남 --></a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Jeju', 17)"><spring:message code="ewp.main.Jeju" /><!-- 제주 --></a></li>
+												    <li><a href="#;" onclick="changeAllArea(this, 'Ulleungdo', 18)"><spring:message code="ewp.main.Ulleung" /><!-- 울릉도 --></a></li>
 												  </ul>
 												</div>
 											</li>
@@ -747,18 +748,18 @@
 											</colgroup>
 										    <thead>
 										      <tr>
-										      	<th>번호</th>
-										        <th>사이트</th>
-										        <th>장치현황</th>
-										        <th>사용</th>
-										        <th>충•방전</th>
-										        <th>발전</th>
-										        <th>수익</th>
+										      	<th><spring:message code="ewp.main.Number" /></th>
+										        <th><spring:message code="ewp.main.Site" /></th>
+										        <th><spring:message code="ewp.main.Device_status" /></th>
+										        <th><spring:message code="ewp.main.Usage" /></th>
+										        <th><spring:message code="ewp.main.Charging_discharging" /><br></th>
+										        <th><spring:message code="ewp.main.Power_generation" /></th>
+										        <th><spring:message code="ewp.main.Revenue" /></th>
 										      </tr>
 										    </thead>
 										    <tbody id="siteTbody">
 										      <tr class="dbclickopen">
-										        <td colspan="7">데이터 조회중입니다.</td>
+										        <td colspan="7"><spring:message code="ewp.main.Looking_data" /></td>
 										      </tr>
 										    </tbody>
 										</table>
@@ -1007,7 +1008,7 @@ $(function() {
 	/* 전체지도/정보 보기 */
 	$(".all_map_view").click(function() {
 		changeAllMap();
-		$('#selAllArea').text('전체지역');
+		$('#selAllArea').text('<spring:message code="ewp.main.Whole_area" />'/* '전체지역' */);
 	});
 
 	areaListHtml = $('#selAreaList').html();
@@ -1058,24 +1059,24 @@ function local_detail(lname, area_type) {
 		area_idx = area_type - 1;
 	}
 
-	if (lname == "Seoul") {$(".detailmap .local_name").text("서울");}
-	if (lname == "Gyeonggi") {$(".detailmap .local_name").text("경기");}
-	if (lname == "Incheon") {$(".detailmap .local_name").text("인천");}
-	if (lname == "Gangwon") {$(".detailmap .local_name").text("강원");}
-	if (lname == "Chungbuk") {$(".detailmap .local_name").text("충북");}
-	if (lname == "Daejeon") {$(".detailmap .local_name").text("대전");}
-	if (lname == "Chungnam") {$(".detailmap .local_name").text("충남");}
-	if (lname == "Kyungbuk") {$(".detailmap .local_name").text("경북");}
-	if (lname == "Daegu") {$(".detailmap .local_name").text("대구");}
-	if (lname == "Ulsan") {$(".detailmap .local_name").text("울산");}
-	if (lname == "Sejong") {$(".detailmap .local_name").text("세종");}
-	if (lname == "Gyeongnam") {$(".detailmap .local_name").text("경남");}
-	if (lname == "Busan") {$(".detailmap .local_name").text("부산");}
-	if (lname == "Jeonbuk") {$(".detailmap .local_name").text("전북");}
-	if (lname == "Gwangju") {$(".detailmap .local_name").text("광주");}
-	if (lname == "Jeonnam") {$(".detailmap .local_name").text("전남");}	
-	if (lname == "Jeju") {$(".detailmap .local_name").text("제주");}
-	if (lname == "Ulleungdo") {$(".detailmap .local_name").text("울릉도");}
+	if (lname == "Seoul") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Seoul" />');}/* "서울" */
+	if (lname == "Gyeonggi") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Gyeonggi" />');}/* "경기" */
+	if (lname == "Incheon") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Incheon" />');}/* "인천" */
+	if (lname == "Gangwon") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Gangwon" />');}/* "강원" */
+	if (lname == "Chungbuk") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Chungbuk" />');}/* "충북" */
+	if (lname == "Daejeon") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Daejeon" />');}/* "대전" */
+	if (lname == "Chungnam") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Chungnam" />');}/* "충남" */
+	if (lname == "Kyungbuk") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Gyeongbuk" />');}/* "경북" */
+	if (lname == "Daegu") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Daegu" />');}/* "대구" */
+	if (lname == "Ulsan") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Ulsan" />');}/* "울산" */
+	if (lname == "Sejong") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Sejong" />');}/* "세종" */
+	if (lname == "Gyeongnam") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Gyeongnam" />');}/* "경남" */
+	if (lname == "Busan") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Busan" />');}/* "부산" */
+	if (lname == "Jeonbuk") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Jeonbuk" />');}/* "전북" */
+	if (lname == "Gwangju") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Gwangju" />');}/* "광주" */
+	if (lname == "Jeonnam") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Jeonnam" />');}/* "전남" */
+	if (lname == "Jeju") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Jeju" />');}/* "제주" */
+	if (lname == "Ulleungdo") {$(".detailmap .local_name").text('<spring:message code="ewp.main.Ulleung" />');}/* "울릉도" */
 
 	/* 데이터 조회 */
 	fn_cycle();
@@ -1093,24 +1094,24 @@ function readArea() {
 		$("#local").attr("src", "../img/local_map_" + area_array[area_idx] + ".png");
 		$('img[usemap]').rwdImageMaps();
 	
-		if (area_array[area_idx] == "Seoul") {$(".allmap .local_name").text("서울");}
-		if (area_array[area_idx] == "Busan") {$(".allmap .local_name").text("부산");}
-		if (area_array[area_idx] == "Daegu") {$(".allmap .local_name").text("대구");}
-		if (area_array[area_idx] == "Incheon") {$(".allmap .local_name").text("인천");}
-		if (area_array[area_idx] == "Gwangju") {$(".allmap .local_name").text("광주");}
-		if (area_array[area_idx] == "Daejeon") {$(".allmap .local_name").text("대전");}
-		if (area_array[area_idx] == "Ulsan") {$(".allmap .local_name").text("울산");}
-		if (area_array[area_idx] == "Sejong") {$(".allmap .local_name").text("세종");}
-		if (area_array[area_idx] == "Gyeonggi") {$(".allmap .local_name").text("경기");}
-		if (area_array[area_idx] == "Gangwon") {$(".allmap .local_name").text("강원");}
-		if (area_array[area_idx] == "Chungbuk") {$(".allmap .local_name").text("충북");}
-		if (area_array[area_idx] == "Chungnam") {$(".allmap .local_name").text("충남");}
-		if (area_array[area_idx] == "Jeonbuk") {$(".allmap .local_name").text("전북");}
-		if (area_array[area_idx] == "Jeonnam") {$(".allmap .local_name").text("전남");}
-		if (area_array[area_idx] == "Kyungbuk") {$(".allmap .local_name").text("경북");}
-		if (area_array[area_idx] == "Gyeongnam") {$(".allmap .local_name").text("경남");}
-		if (area_array[area_idx] == "Jeju") {$(".allmap .local_name").text("제주");}
-		if (area_array[area_idx] == "Ulleungdo") {$(".allmap .local_name").text("울릉도");}
+		if (area_array[area_idx] == "Seoul") {$(".allmap .local_name").text('<spring:message code="ewp.main.Seoul" />');}/* "서울" */
+		if (area_array[area_idx] == "Busan") {$(".allmap .local_name").text('<spring:message code="ewp.main.Busan" />');}/* "부산" */
+		if (area_array[area_idx] == "Daegu") {$(".allmap .local_name").text('<spring:message code="ewp.main.Daegu" />');}/* "대구" */
+		if (area_array[area_idx] == "Incheon") {$(".allmap .local_name").text('<spring:message code="ewp.main.Incheon" />');}/* "인천" */
+		if (area_array[area_idx] == "Gwangju") {$(".allmap .local_name").text('<spring:message code="ewp.main.Gwangju" />');}/* "광주" */
+		if (area_array[area_idx] == "Daejeon") {$(".allmap .local_name").text('<spring:message code="ewp.main.Daejeon" />');}/* "대전" */
+		if (area_array[area_idx] == "Ulsan") {$(".allmap .local_name").text('<spring:message code="ewp.main.Ulsan" />');}/* "울산" */
+		if (area_array[area_idx] == "Sejong") {$(".allmap .local_name").text('<spring:message code="ewp.main.Sejong" />');}/* "세종" */
+		if (area_array[area_idx] == "Gyeonggi") {$(".allmap .local_name").text('<spring:message code="ewp.main.Gyeonggi" />');}/* "경기" */
+		if (area_array[area_idx] == "Gangwon") {$(".allmap .local_name").text('<spring:message code="ewp.main.Gangwon" />');}/* "강원" */
+		if (area_array[area_idx] == "Chungbuk") {$(".allmap .local_name").text('<spring:message code="ewp.main.Chungbuk" />');}/* "충북" */
+		if (area_array[area_idx] == "Chungnam") {$(".allmap .local_name").text('<spring:message code="ewp.main.Chungnam" />');}/* "충남" */
+		if (area_array[area_idx] == "Jeonbuk") {$(".allmap .local_name").text('<spring:message code="ewp.main.Jeonbuk" />');}/* "전북" */
+		if (area_array[area_idx] == "Jeonnam") {$(".allmap .local_name").text('<spring:message code="ewp.main.Jeonnam" />');}/* "전남" */
+		if (area_array[area_idx] == "Kyungbuk") {$(".allmap .local_name").text('<spring:message code="ewp.main.Gyeongbuk" />');}/* "경북" */
+		if (area_array[area_idx] == "Gyeongnam") {$(".allmap .local_name").text('<spring:message code="ewp.main.Gyeongnam" />');}/* "경남" */
+		if (area_array[area_idx] == "Jeju") {$(".allmap .local_name").text('<spring:message code="ewp.main.Jeju" />');}/* "제주" */
+		if (area_array[area_idx] == "Ulleungdo") {$(".allmap .local_name").text('<spring:message code="ewp.main.Ulleung" />');}/* "울릉도" */
 	
 		area_idx++;
 	//	if (area_idx == 7) { area_idx++ } // 세종(08)은 아직 이미지가 없으므로 스킵

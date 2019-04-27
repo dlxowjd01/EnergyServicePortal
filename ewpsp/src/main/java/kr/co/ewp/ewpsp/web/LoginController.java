@@ -8,6 +8,7 @@
 package kr.co.ewp.ewpsp.web;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -39,6 +40,9 @@ public class LoginController {
 	@Resource(name="smsService")
 	private SMSService smsService;
 
+	@Resource(name = "egovMessageSource")
+	EgovMessageSource egovMessageSource;
+
 	@RequestMapping("/login")
 	public String login(Model model) {
 		logger.debug("/login");
@@ -67,7 +71,7 @@ public class LoginController {
 			String siteId = (String)result.get("site_id");
 
 			if (authType == null || authType.equals("")) {
-				model.addAttribute("msg", "등록이 되지 않은 사용자입니다.\\n관리자에게 문의하세요.");
+				model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", (Locale) session.getAttribute("sessionLocale")));
 				return "ewp/login/login";
 			} else if (authType.equals("1") || authType.equals("2") || authType.equals("3")) {
 				session.setAttribute(UserUtil.USER_SESSION_ID, result);
@@ -76,11 +80,11 @@ public class LoginController {
 				session.setAttribute(UserUtil.USER_SESSION_ID, result);
 				return "redirect:/siteMain?siteId=" + siteId;
 			} else {
-				model.addAttribute("msg", "등록이 되지 않은 사용자입니다.\\n관리자에게 문의하세요.");
+				model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", (Locale) session.getAttribute("sessionLocale")));
 				return "ewp/login/login";
 			}
 		} else {
-			model.addAttribute("msg", "아이디가 없거나 비밀번호가 맞지 않습니다.");
+			model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_correct", (Locale) session.getAttribute("sessionLocale")));
 			return "ewp/login/login";
 		}
 	}

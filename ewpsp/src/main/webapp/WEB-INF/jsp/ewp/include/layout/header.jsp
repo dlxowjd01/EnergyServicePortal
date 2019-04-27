@@ -5,8 +5,8 @@
 <script type="text/javascript">
 	var selViewSiteName = "";
 	
-	function selectSite(siteId) {
-		var newUrl = changeParamUrl(window.location.href, "siteId", siteId, window.location.pathname);
+	function addParameterUrl(paramNm, paramVal) {
+		var newUrl = changeParamUrl(window.location.href, paramNm, paramVal, window.location.pathname);
 		location.href = newUrl;
 	}
 	
@@ -16,15 +16,22 @@
 		if(urlArr.length > 1) {
 			var paramArr = urlArr[1].split("&");
 			var separator = "";
+			var ynFlag = false;
 			for(var i in paramArr) {
 				var compareParam = paramArr[i].split("=");
 				if(compareParam[0].indexOf(paramName) > -1) {
 					newParamUrl += separator+paramName+"="+paramValue;
+					ynFlag = true;
 				} else {
 					newParamUrl += separator+paramArr[i];
 				}
 				separator = "&";
 			}
+			
+			if(!ynFlag) {
+				newParamUrl += separator+paramName+"="+paramValue;
+			}
+			
 		} else {
 			newParamUrl = paramName+"="+paramValue;
 		}
@@ -32,7 +39,9 @@
 		var newPathName = pathName;
 		if(pathName != null && pathName != "" && pathName != undefined) {
 			if(pathName == "/main") {
-				newPathName = "/siteMain";
+				if(paramName == "siteId") {
+					newPathName = "/siteMain";
+				}
 			}
 		}
 		
@@ -61,7 +70,7 @@
 									<c:set var="siteExist" value="false" />
 									<c:forEach var="userSite" items="${userSiteList}" varStatus="j">
 										<c:if test="${userSite.site_grp_idx eq userGroup.site_grp_idx}">
-										<li data-value="${userSite.site_id}"><a href="javascript:selectSite('${userSite.site_id}')">${userSite.site_name}</a></li>
+										<li data-value="${userSite.site_id}"><a href="javascript:addParameterUrl('siteId', '${userSite.site_id}')">${userSite.site_name}</a></li>
 										<c:if test="${not siteExist}"><c:set var="siteExist" value="true" /></c:if>
 										</c:if>
 									</c:forEach>

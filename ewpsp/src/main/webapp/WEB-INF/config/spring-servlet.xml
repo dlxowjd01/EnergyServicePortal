@@ -80,6 +80,7 @@
 
 	    		<bean class="kr.co.ewp.ewpsp.common.PreLoadInterceptor" />
 	    	</mvc:interceptor>
+    		<bean class="kr.co.ewp.ewpsp.common.LocaleInterceptor" />
 	    </mvc:interceptors>
 	    
 	    <!-- properties 설정 -->
@@ -91,9 +92,13 @@
 	        </property>
 	    </bean>
 	    <util:properties id="local" location="file:/home/ubuntu/ewpsp_config/local.properties" />
-	    <!-- <context:property-placeholder location="classpath:properties/**/*.properties" /> --> 
-	    <!-- <bean id="prop" class="kr.co.ewp.ewpsp.common.util.ContextPropertiesUtil">
-	    	<property name="propFile" value="classpath:properties/globals.properties"></property>
-	    </bean> -->
+	    
+	    <!-- 다국어 처리 message 프로퍼티 설정 -->
+	    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+	    <mvc:interceptors>
+		    <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+		        <property name="paramName" value="lang" />
+		    </bean>
+	    </mvc:interceptors>
 
 </beans>

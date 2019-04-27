@@ -207,7 +207,7 @@
 	        			<tr>
 	        				<th>SOC(%)</th>	        				
 	        				<th>SOH(%)</th>
-	        				<th>SOC 현재(kWh)</th>	        				
+	        				<th>SOC 현재(%)</th>	        				
 	        				<th>출력 전압(V)</th>
 	        				<th>출력 전류(V)</th>
 	        				<th>Dod(%)</th>	        				

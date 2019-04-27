@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -150,7 +151,7 @@
 		var str = "";
 		if(alarmList == null || alarmList.length < 1) {
 			str += '<li>';
-			str += '	<a href="#;">조회 결과가 없습니다.</a>';
+			str += '	<a href="#;"><spring:message code="ewp.main.There_is_no_query_results" /></a>';
 			str += '</li>';
 		} else {
 			for(var i=0; i<alarmList.length; i++) {
@@ -294,14 +295,14 @@
 		
 		chargeChart.addSeries({
 			type: 'column',
-	        name: '충전량',
+	        name: '<spring:message code="ewp.site.The_amount_charge" />'/* '충전량' */,
 	        color: '#438fd7',
 			data: pastChgList
 		}, false);
 		
 		chargeChart.addSeries({
 			type: 'line',
-	        name: '충전 계획',
+	        name: '<spring:message code="ewp.site.Plan_for_ESS_charge" />'/* '충전 계획' */,
 	        color: '#13af67',
 	        dashStyle: 'ShortDash',
 			data: fetureChgList
@@ -309,14 +310,14 @@
 		
 		chargeChart.addSeries({
 			type: 'column',
-	        name: '방전량',
+	        name: '<spring:message code="ewp.site.The_amount_discharge" />'/* '방전량' */,
 	        color: '#f75c4a',
 			data: pastDischgList
 		}, false);
 		
 		chargeChart.addSeries({
 			type: 'line',
-	        name: '방전 계획',
+	        name: '<spring:message code="ewp.site.Plan_for_ESS_discharge" />'/* '방전 계획' */,
 	        color: '#84848f',
 	        dashStyle: 'ShortDash',
 			data: fetureDischgList
@@ -511,7 +512,7 @@
 					derChart.addSeries({
 						index:3,
 						fillOpacity: 0,
-						name: '한전 사용량',
+						name: '<spring:message code="ewp.site.KEPCO_usage" />'/* '한전 사용량' */,
 						color: '#438fd7',
 						lineColor: '#438fd7', /* 한전 사용량 */
 						data: pastUsageList
@@ -523,7 +524,7 @@
 					derChart.addSeries({
 						index: 2,
 						fillOpacity: 0.5,
-						name: 'ESS 사용량',
+						name: '<spring:message code="ewp.site.ESS_usage" />'/* 'ESS 사용량' */,
 						color: '#13af67', /* ESS 사용량 */
 						data: essUsageList
 					}, false);
@@ -534,7 +535,7 @@
 					derChart.addSeries({
 						index: 1,
 						fillOpacity: 0.5,
-						name: 'PV 사용량',
+						name: '<spring:message code="ewp.site.PV_usage" />'/* 'PV 사용량' */,
 						color: '#f75c4a', /* PV 사용량 */
 						data: pvUsageList
 					}, false);
@@ -628,7 +629,7 @@
 		}
 		
 		peakChart.addSeries({
-			name: '최대 피크 전력',
+			name: '<spring:message code="ewp.site.Maximal_peak_demand" />'/* '최대 피크 전력' */,
 			color: '#438fd7', /* 최대 피크 전력 */
 			type: 'column',
 			data: peakDataSet
@@ -636,13 +637,13 @@
 		
 		if(chargePowerDisplayYn == "Y") {
 			peakChart.addSeries({
-				name: '한전 계약 전력',
+				name: '<spring:message code="ewp.site.Maximal_peak_demand" />'/* '한전 계약 전력' */,
 				color: '#13af67', /* 한전 계약 전력 */
 				data: contractPowerDataSet
 			}, false);
 			
 			peakChart.addSeries({
-				name: '요금 적용 전력',
+				name: '<spring:message code="ewp.site.Rate_plan_applied_power" />'/* '요금 적용 전력' */,
 				color: '#f75c4a', /* 요금 적용 전력 */
 				data: chargePowerDataSet
 			}, false);
@@ -656,7 +657,8 @@
 	
 	var chargePowerDisplayYn = "";
 	function chargePowerStrDisplayYn(today) {
-		$(".chart_notice").html("<strong>요금적용전력</strong> 제외시간 "+"<span>"+"(23:00 ~ 09:00)"+"</span>");
+// 		$(".chart_notice").html("<strong>요금적용전력</strong> 제외시간 "+"<span>"+"(23:00 ~ 09:00)"+"</span>");
+		$(".chart_notice").html('<strong><spring:message code="ewp.site.Time_not_covered_rate_plan" /></strong>'+'<span>'+'(23:00 ~ 09:00)'+'</span>');
 	//	var holidayYn = chkHoliday(today); // 공휴일여부 체크(true:공휴일, false:평일or토요일)
 	//	var chkSeason = checkSeason(today); // 1:봄, 2:여름, 3:가을, 4:겨울
 	//	chargePowerDisplayYn = "Y";
@@ -825,7 +827,7 @@
 				
 				if(essRvList != null && essRvList.length > 0) {
 					incomeChart.addSeries({
-						name: 'ESS 수익',
+						name: '<spring:message code="ewp.site.ESS_revenue" />'/* 'ESS 수익' */,
 						color: '#438fd7', /* ESS 수익 */
 						data: essRevenueList
 					}, false);
@@ -834,7 +836,7 @@
 				
 				if(pvRvList != null && pvRvList.length > 0) {
 					incomeChart.addSeries({
-						name: 'PV 수익',
+						name: '<spring:message code="ewp.site.PV_revenue" />'/* 'PV 수익' */,
 						color: '#13af67', /* PV 수익 */
 						data: pvRevenueList
 					}, false);
@@ -843,7 +845,7 @@
 				
 				if(drRvList != null && drRvList.length > 0) {
 					incomeChart.addSeries({
-						name: 'DR 수익',
+						name: '<spring:message code="ewp.site.DR_revenue" />'/* 'DR 수익' */,
 						color: '#f75c4a', /* DR 수익 */
 						data: drRevenueList
 					}, false);
@@ -975,15 +977,15 @@
 							<div class="col-sm-12">
 								<div class="indiv alarm">
 									<div class="chart_top clear">
-										<h2 class="ntit fl" ondblclick="javascript:location.href='/control'" style="cursor: pointer;">알람</h2>
+										<h2 class="ntit fl" ondblclick="javascript:location.href='/control'" style="cursor: pointer;"><spring:message code="ewp.main.Alarm" /><!-- 알람 --></h2>
 										<div class="fr today_alarm">
-											<div class="total">금일발생 <span id="todayTotalAlarmCnt">0</span></div>
+											<div class="total"><spring:message code="ewp.main.Occurence_today" /><!-- 금일발생 --> <span id="todayTotalAlarmCnt">0</span></div>
 											<div class="no"><span style="display: none;">0</span></div>
 										</div>
 									</div>
 									<!-- no-data { -->
 									<div class="no-data" style="display: none;">
-										<span>알람 정보를 가져올 수 없습니다.</span>
+										<span><spring:message code="ewp.site.Cannot_alarm_information" /><!-- 알람 정보를 가져올 수 없습니다. --></span>
 									</div>
 									<!-- } no-data -->
 									<div class="alarm_stat mt10 clear">
@@ -995,7 +997,7 @@
 										</div>
 									</div>
 									<div class="alarm_notice">
-										<h2>최근 알람</h2>
+										<h2><spring:message code="ewp.main.Recent_alarms" /><!-- 최근 알람 --></h2>
 										<ul>
 										</ul>
 									</div>
@@ -1006,12 +1008,12 @@
 							<div class="col-sm-12">
 								<div class="indiv smain_soc">
 									<div class="chart_top clear">
-										<h2 class="ntit fl" ondblclick="javascript:location.href='/essCharge'" style="cursor: pointer;">SOC (잔량)</h2>
+										<h2 class="ntit fl" ondblclick="javascript:location.href='/essCharge'" style="cursor: pointer;"><spring:message code="ewp.site.SOC" /><!-- SOC (잔량) --></h2>
 										<div class="time fr" id="updtTimeSOC">2018-08-12 11:41:26</div>
 									</div>
 									<!-- no-data { -->
 									<div class="no-data" style="display: none;">
-										<span>SOC 정보를 가져올 수 없습니다.</span>
+										<span><spring:message code="ewp.site.Cannot_SOC_information" /><!-- SOC 정보를 가져올 수 없습니다. --></span>
 									</div>
 									<!-- } no-data -->
 									<div class="soc mt15 clear">
@@ -1021,15 +1023,15 @@
 										</div>
 										<div class="charge_dis fr">
 											<dl>
-												<dt>오늘 충전량 <span id="socTodayCrg">0<em>kWh</em></span></dt>
+												<dt><spring:message code="ewp.site.Today_charge" /><!-- 오늘 충전량 --> <span id="socTodayCrg">0<em>kWh</em></span></dt>
 												<dd>
-													<div class="today_charge"><span style="width:0%;">충전량</span></div>
+													<div class="today_charge"><span style="width:0%;"><spring:message code="ewp.site.The_amount_charge" /><!-- 충전량 --></span></div>
 												</dd>
 											</dl>
 											<dl>
-												<dt>오늘 방전량 <span id="socTodayDiscrg">0<em>kWh</em></span> </dt>
+												<dt><spring:message code="ewp.site.Today_discharge" /><!-- 오늘 방전량 --> <span id="socTodayDiscrg">0<em>kWh</em></span> </dt>
 												<dd>
-													<div class="today_discharge"><span style="width:0%;">방전량</span></div>
+													<div class="today_discharge"><span style="width:0%;"><spring:message code="ewp.site.The_amount_discharge" /><!-- 방전량 --></span></div>
 												</dd>
 											</dl>
 										</div>
@@ -1041,12 +1043,12 @@
 							<div class="col-sm-12">
 								<div class="indiv der">
 									<div class="chart_top clear">
-										<h2 class="ntit fl" ondblclick="javascript:location.href='/derUsage'" style="cursor: pointer;">사용량 구성 (DER)</h2>
+										<h2 class="ntit fl" ondblclick="javascript:location.href='/derUsage'" style="cursor: pointer;"><spring:message code="ewp.site.Usage_composition" /><!-- 사용량 구성 (DER) --></h2>
 										<div class="time fr" id="updtTimeDER">2018-08-12 11:41:26</div>
 									</div>
 									<!-- no-data { -->
 									<div class="no-data" style="display: none;">
-										<span>사용량 구성 정보를 가져올 수 없습니다.</span>
+										<span><spring:message code="ewp.site.Cannot_usage_composition_information." /><!-- 사용량 구성 정보를 가져올 수 없습니다. --></span>
 									</div>
 									<!-- } no-data -->	
 									<div class="inchart">
@@ -1187,13 +1189,13 @@
 
 												/* 그래프 스타일 */
 											    series: [{
-											    	name: 'PV 사용량',
+											    	name: '<spring:message code="ewp.site.PV_usage" />'/* 'PV 사용량' */,
 											        color: '#f75c4a' /* PV 사용량 */
 											    },{
-											    	name: 'ESS 사용량',
+											    	name: '<spring:message code="ewp.site.ESS_usage" />'/* 'ESS 사용량' */,
 											        color: '#13af67' /* ESS 사용량 */
 											    },{
-											    	name: '한전 사용량',
+											    	name: '<spring:message code="ewp.site.KEPCO_usage" />'/* '한전 사용량' */,
 											    	color: '#438fd7' /* 한전 사용량 */
 											    }],
 
@@ -1243,8 +1245,8 @@
 									</div>
 									<div class="chart_footer">
 										<ul class="clear">
-											<li>현재 사용량 <span id="nowUsage">0kWh</span></li>
-											<li>한전 <span id="kepcoPer">0%</span></li>
+											<li><spring:message code="ewp.site.Current_usage" /><!-- 현재 사용량 --> <span id="nowUsage">0kWh</span></li>
+											<li><spring:message code="ewp.site.KEPCO" /><!-- 한전 --> <span id="kepcoPer">0%</span></li>
 											<li>ESS <span id="essPer">0%</span></li>
 											<li>PV <span id="pvPer">0%</span></li>
 										</ul>
@@ -1258,14 +1260,14 @@
 							<div class="col-sm-12">
 								<div class="indiv peak">
 									<div class="chart_top clear">
-										<h2 class="ntit fl" ondblclick="javascript:location.href='/peak'" style="cursor: pointer;">피크전력현황</h2>
+										<h2 class="ntit fl" ondblclick="javascript:location.href='/peak'" style="cursor: pointer;"><spring:message code="ewp.site.Peak_demand_status" /><!-- 피크전력현황 --></h2>
 										<div class="time fr" id="updtTimePeak">2018-08-12 11:41:26</div>
 									</div>
 									<!-- <div class="chart_notice">지금은 <strong>요금적용전력</strong> 갱신구간 입니다. <span>(08:00 ~ 12:00)</span></div> -->
-									<div class="chart_notice"><strong>요금적용전력</strong> 제외시간 <span>(23:00 ~ 09:00)</span></div>
+									<div class="chart_notice"><strong><spring:message code="ewp.site.Time_not_covered_rate_plan" /></strong><!-- 요금적용전력 제외시간 --> <span>(23:00 ~ 09:00)</span></div>
 									<!-- no-data { -->
 									<div class="no-data" style="display: none;">
-										<span>피크전력현황 정보를 가져올 수 없습니다.</span>
+										<span><spring:message code="ewp.site.Cannot_peak_demand_information" /><!-- 피크전력현황 정보를 가져올 수 없습니다. --></span>
 									</div>
 									<!-- } no-data -->									
 									<div class="inchart">
@@ -1398,7 +1400,7 @@
 
 												/* 그래프 스타일 */
 											    series: [{
-											        name: '최대 피크 전력',
+											        name: '<spring:message code="ewp.site.Maximal_peak_demand" />'/* '최대 피크 전력' */,
 											    	color: '#438fd7', /* 최대 피크 전력 */
 											        type: 'column'
 //											    },{
@@ -1460,12 +1462,12 @@
 							<div class="col-sm-12">
 								<div class="indiv smain_device">
 									<div class="chart_top clear">
-										<h2 class="ntit fl" ondblclick="javascript:location.href='/deviceGroup'" style="cursor: pointer;">장치현황</h2>
+										<h2 class="ntit fl" ondblclick="javascript:location.href='/deviceGroup'" style="cursor: pointer;"><spring:message code="ewp.site.Device_status" /><!-- 장치현황 --></h2>
 										<div class="time fr" id="updtTimeDevice">2018-08-12 11:41:26</div>
 									</div>
 									<!-- no-data { -->
 									<div class="no-data" style="display: none;">
-										<span>장치현황 정보를 가져올 수 없습니다.</span>
+										<span><spring:message code="ewp.site.Cannot_device_status_information" /><!-- 장치현황 정보를 가져올 수 없습니다. --></span>
 									</div>
 									<!-- } no-data -->	
 									<ul class="device clear" id="deviceList">
@@ -1481,12 +1483,12 @@
 							<div class="col-sm-12">
 								<div class="indiv income">
 									<div class="chart_top clear">
-										<h2 class="ntit fl" ondblclick="javascript:location.href='/essRevenue'" style="cursor: pointer;">수익현황</h2>
+										<h2 class="ntit fl" ondblclick="javascript:location.href='/essRevenue'" style="cursor: pointer;"><spring:message code="ewp.site.Revenue_status" /><!-- 수익현황 --></h2>
 										<div class="time fr" id="updtTimeRevenue">2018-08-12 11:41:26</div>
 									</div>
 									<!-- no-data { -->
 									<div class="no-data" style="display: none;">
-										<span>수익현황 정보를 가져올 수 없습니다.</span>
+										<span><spring:message code="ewp.site.Cannot_revenue_information" /><!-- 수익현황 정보를 가져올 수 없습니다. --></span>
 									</div>
 									<!-- } no-data -->										
 									<div class="inchart">
@@ -1622,13 +1624,13 @@
 
 												/* 그래프 스타일 */
 											    series: [{
-											    	name: 'ESS 수익',
+											    	name: '<spring:message code="ewp.site.ESS_revenue" />'/* 'ESS 수익' */,
 											    	color: '#438fd7' /* ESS 수익 */
 											    },{
-											    	name: 'DR 수익',
+											    	name: '<spring:message code="ewp.site.DR_revenue" />'/* 'DR 수익' */,
 											        color: '#13af67' /* DR 수익 */
 											    },{
-											    	name: 'PV 수익',
+											    	name: '<spring:message code="ewp.site.PV_revenue" />'/* 'PV 수익' */,
 											        color: '#f75c4a' /* PV 수익 */
 											    }],
 
@@ -1678,7 +1680,7 @@
 									</div>
 									<div class="chart_footer">
 										<ul class="clear">
-											<li>전체수익 <span id="totalRv">0 won</span></li>
+											<li><spring:message code="ewp.site.Total_revenue" /><!-- 전체수익 --> <span id="totalRv">0 won</span></li>
 										</ul>
 									</div>									
 								</div>
@@ -1688,12 +1690,12 @@
 							<div class="col-sm-12">
 								<div class="indiv charge">
 									<div class="chart_top clear">
-										<h2 class="ntit fl" ondblclick="javascript:location.href='/essCharge'" style="cursor: pointer;">충/방전량</h2>
+										<h2 class="ntit fl" ondblclick="javascript:location.href='/essCharge'" style="cursor: pointer;"><spring:message code="ewp.main.The_amount_charging_discharging" /><!-- 충/방전량 --></h2>
 										<div class="time fr" id="updtTimeESS">2018-08-12 11:41:26</div>
 									</div>
 									<!-- no-data { -->
 									<div class="no-data" style="display:none;">
-										<span>충/방전량 정보를 가져올 수 없습니다.</span>
+										<span><spring:message code="ewp.site.Cannot_retrieve_charge_and_discharge_information" /><!-- 충/방전량 정보를 가져올 수 없습니다. --></span>
 									</div>
 									<!-- } no-data -->								
 									<div class="inchart">
@@ -1826,20 +1828,20 @@
 												/* 그래프 스타일 */
 											    series: [{
 											    	type: 'column',
-											        name: '충전량',
+											        name: '<spring:message code="ewp.site.The_amount_charge" />'/* '충전량' */,
 											        color: '#438fd7'
 											    },{
 											    	type: 'line',
-											        name: '충전 계획',
+											        name: '<spring:message code="ewp.site.Plan_for_ESS_charge" />'/* '충전 계획' */,
 											        color: '#13af67',
 											        dashStyle: 'ShortDash'
 											    },{
 											    	type: 'column',
-											        name: '방전량',
+											        name: '<spring:message code="ewp.site.The_amount_discharge" />'/* '방전량' */,
 											        color: '#f75c4a'
 											    },{
 											    	type: 'line',
-											        name: '방전 계획',
+											        name: '<spring:message code="ewp.site.Plan_for_ESS_discharge" />'/* '방전 계획' */,
 											        color: '#84848f',
 											        dashStyle: 'ShortDash'
 											    }],
@@ -1893,10 +1895,10 @@
 											<table class="main_use">
 												<thead>
 													<tr>
-														<th>충/방전량</th>
-														<th>충전량</th>
-														<th>방전량</th>
-														<th>수익</th>
+														<th><spring:message code="ewp.main.The_amount_charging_discharging" /><!-- 충/방전량 --></th>
+														<th><spring:message code="ewp.site.The_amount_charge" /><!-- 충전량 --></th>
+														<th><spring:message code="ewp.site.The_amount_discharge" /><!-- 방전량 --></th>
+														<th><spring:message code="ewp.main.Revenue" /><!-- 수익 --></th>
 													</tr>
 												</thead>
 												<tbody>

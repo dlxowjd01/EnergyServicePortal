@@ -336,7 +336,7 @@
 		bmsStr += '<tr>';
 		bmsStr += '<th>SOC(%)</th>';
 		bmsStr += '<th>SOH(%)</th>';
-		bmsStr += '<th>SOC 현재(kWh)</th>';
+		bmsStr += '<th>SOC 현재(%)</th>';
 		bmsStr += '<th>출력 전압(V)</th>';
 		bmsStr += '<th>출력 전류(V)</th>';
 		bmsStr += '<th>Dod(%)</th>';

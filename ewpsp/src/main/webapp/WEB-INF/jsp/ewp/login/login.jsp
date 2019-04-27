@@ -1,12 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <jsp:include page="../include/common_static.jsp" />
 <script type="text/javascript">
 	$(function() {
+		var lan = location.search.substr(location.search.length-2,2);
+		if(lan == ""){
+			$('#language').val("ko");
+		}else{
+			$('#language').val(lan);
+		}
+		
 		// 아이디 찾기
 		$('#findAuthCodeBtn').click(function() {
 			if (!checkFind(false)) {
@@ -62,17 +70,30 @@
 		});
 	});
 	
+	function show_Language(v) {
+		var f = document.loginForm;
+		
+		if(v=="english"){
+			  f.action = "/login?lang=en";
+		}else{
+			  f.action = "/login?lang=ko";
+		}
+		
+		f.method = "post"
+		f.submit();
+	};
+	
 	function checkLogin() {
 		var userId = $('#loginUserId');
 		var userPw = $('#loginUserPw');
 	
 		if (userId.val() == '') {
-			alert('아이디를 입력하세요.');
+			alert('<spring:message code="ewp.login.Singup_ID" />');
 			userId.focus();
 			return false;
 		}
 		if (userPw.val() == '') {
-			alert('비밀번호를 입력하세요.');
+			alert('<spring:message code="ewp.login.Singup_PW" />');
 			userPw.focus();
 			return false;
 		}
@@ -101,7 +122,7 @@
 			success: function(result) {
 				var resultCnt = result.resultCnt;
 				if (resultCnt == null) {
-					alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+					alert('<spring:message code="ewp.error.default" />');
 				} else {
 					alert("인증번호가 발송되었습니다.");
 				}
@@ -132,7 +153,7 @@
 			success: function(result) {
 				var resultCnt = result.resultCnt;
 				if (resultCnt == null) {
-					alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+					alert('<spring:message code="ewp.error.default" />');
 				} else {
 					alert("인증번호가 발송되었습니다.");
 				}
@@ -162,7 +183,7 @@
 			success: function(result) {
 				var resultCnt = result.resultCnt;
 				if (resultCnt == null) {
-					alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+					alert('<spring:message code="ewp.error.default" />');
 				}
 			}
 		});
@@ -466,20 +487,21 @@ alert('${msg}');
 
 				<div class="loginForm">
 					<form id="loginForm" name="loginForm" action="/loginUser" method="post" onsubmit="return checkLogin(this)">
+					<input type="hidden" id="language" name="language"/>
 						<div class="lf_body">
 							<div class="lftit">
 				                <h1>LOGIN</h1>
 				            </div>
-						    <div class="mt10"><input type="text" id="loginUserId" name="userId" class="lfinp" placeholder="아이디"></div>
-						  	<div class="mt15"><input type="password" id="loginUserPw" name="userPw" class="lfinp" placeholder="비밀번호"></div>
+						    <div class="mt10"><input type="text" id="loginUserId" name="userId" class="lfinp" placeholder=<spring:message code="ewp.login.ID" />></div>
+						  	<div class="mt15"><input type="password" id="loginUserPw" name="userPw" class="lfinp" placeholder=<spring:message code="ewp.login.Password" />></div>
 						    <div class="mt30">
-						    	<a href="#" class="findidBtn arrbtn">아이디 찾기</a>
-						    	<a href="#" class="findpassBtn arrbtn ml30">비밀번호 찾기</a>
+						    	<a href="#" class="findidBtn arrbtn"><spring:message code="ewp.login.Forgot_account" /></a>
+						    	<a href="#" class="findpassBtn arrbtn ml30"><spring:message code="ewp.login.Forgot_password" /></a>
 						    </div>
 						</div>
 						<div class="lf_bottom">
-							<a href="#;" class="joinBtn">회원가입</a>
-							<input type="submit" name="login" value="로그인">
+							<a href="#;" class="joinBtn"><spring:message code="ewp.login.Singup" /></a>
+							<input type="submit" name="login" value="<spring:message code="ewp.login.Signin" />">
 						</div>
 					</form>
 				</div>
@@ -487,11 +509,18 @@ alert('${msg}');
 			</div>
 			<footer class="clear">
 				<div class="ft_menu fl">
-					<a href="#;" class="serviceBtn">서비스 소개</a>
-					<a href="/faq">자주하는 질문</a>
+					<a href="#;" class="serviceBtn"><spring:message code="ewp.bot.Services" /></a>
+					<a href="/faq"><spring:message code="ewp.bot.FAQ" /></a>
 				</div>
-				<div class="copyright fr">
-					&copy; 2018 Encored Technologies, Inc.
+				<div class="ft_menu fr">
+					<a href="javascript:show_Language('korea');">한국어</a> 
+					<a href="javascript:show_Language('english');">English</a> 
+					
+					<div class="copyright fr">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&copy; 2018 Encored Technologies, Inc.
+					</div>
 				</div>
 			</footer>
 		</div>
@@ -847,7 +876,7 @@ alert('${msg}');
 											<th>비밀번호확인</th>
 											<td>
 												<input type="password" id="joinUserPw2" class="inp" style="width:100%;" maxlength="100" />
-												<span class="helpCont">비밀번호를 입력하세요</span>
+												<span class="helpCont">비밀번호가 일치하지 않습니다</span>
 											</td>
 										</tr>
 										<tr>

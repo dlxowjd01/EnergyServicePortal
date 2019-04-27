@@ -1,12 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 			<footer class="clear">
 				<div class="ft_menu fl">
-					<a href="#;" class="serviceBtn">서비스 소개</a>
-					<a href="/faq">자주하는 질문</a>
+					<a href="#;" class="serviceBtn"><spring:message code="ewp.bot.Services" /></a>
+					<a href="/faq"><spring:message code="ewp.bot.FAQ" /></a>
 				</div>
-				<div class="copyright fr">
-					&copy; 2018 Encored Technologies, Inc.
+				<div class="ft_menu fr">
+					<a href="javascript:addParameterUrl('lang', 'ko');">한국어</a> 
+					<a href="javascript:addParameterUrl('lang', 'en');">English</a> 
+					
+					<div class="copyright fr">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&copy; 2018 Encored Technologies, Inc.
+					</div>
 				</div>
 			</footer>
 
