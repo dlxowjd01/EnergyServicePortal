@@ -50,6 +50,7 @@ jobs:
             cp ewpsp/target/ewpsp.war .
             DOCKERHUB_REPO=enertalk/ewp
             IMAGE_TAG=ewpsp-$CIRCLE_SHA1
+
             IMAGE_DEFAULT_TAG=ewpsp-latest
             IMAGE_NAME=$DOCKERHUB_REPO:$IMAGE_TAG
             IMAGE_DEFAULT_NAME=$DOCKERHUB_REPO:$IMAGE_DEFAULT_TAG
@@ -100,15 +101,15 @@ jobs:
     docker:
       - image: circleci/openjdk:8u171-jdk-stretch-browsers
     steps:
-      - attach_workspace: 
+      - attach_workspace:
           at: ~/circleci-demo-java-spring
-      - run: 
+      - run:
           name: Generate ssh key
           command: |
             mkdir ~/.ssh
             echo -e $SSH_PRIVATE_KEY > ~/.ssh/ewp.pem
             chmod 600 ~/.ssh/ewp.pem
-      - run: 
+      - run:
           name: Build and push SP Docker image (jar)
           command: |
             REMOTE_SERVER=$SSH_USER@$SSH_HOST
@@ -120,19 +121,20 @@ jobs:
   test-sitespeed:
     machine: true
     steps:
-      - attach_workspace: 
+      - attach_workspace:
           at: ~/circleci-demo-java-spring
       - checkout
       - run: sudo modprobe ifb numifbs=1
-      - run: docker run --rm -v ~/circleci-demo-java-spring/sitespeed.io:/sitespeed.io sitespeedio/sitespeed.io:8.14.0 --preScript /sitespeed.io/login.js http://localhost:8080/main
+      - run: docker run --rm -v $(pwd)/sitespeed.io:/sitespeed.io sitespeedio/sitespeed.io:8.14.0 --preScript /sitespeed.io/login.js http://derms.enertalk.com:8080/main
+
       - store_artifacts:
-          path: sitespeed-results/
+          path: $(pwd)/sitespeed.io/sitespeed-results/
 
   publish-github-release:
     docker:
       - image: cibuilds/github:0.10
     steps:
-      - attach_workspace: 
+      - attach_workspace:
           at: ~/circleci-demo-java-spring
       - run:
           name: "Publish Release on GitHub"

@@ -1,14 +1,16 @@
 module.exports = async function(context, commands) {
+  context.log.info('Log message from the task');
+
   await commands.navigate(
-    'http://localhost:8080/loginUser'
+      'http://derms.enertalk.com:8080/login'
   );
   // Add text into an input field y finding the field by id
-  await commands.addText.byId('loginUserId', 'demo');
-  await commands.addText.byId('password', 'demo');
+  await commands.addText.byId('spadmin', 'loginUserId');
+  await commands.addText.byId('11111111', 'loginUserPw');
 
   // find the sumbit button and click it
-  await commands.click.byNameAndWait('login');
+  await commands.click.byXpath('//*[@id="loginForm"]/div[2]/input');
 
   // we wait for something on the page that verifies that we are logged in
-  return commands.wait.byId('userGroupList',3000);
+  return commands.wait.byTime(10000);
 };
