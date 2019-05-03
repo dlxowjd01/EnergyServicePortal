@@ -406,15 +406,49 @@ function getPdfTotDownload(){
 	});	
 }
 
-var winterVal = 0;
 var summerVal = 0;
-var springFallVal = 0;
+var summerOffVal = 0;
+var summerMidVal = 0;
+var summerMaxVal = 0;
+var spring_fallVal = 0;
+var springFallOffVal = 0;
+var springFallMidVal = 0;
+var springFallMaxVal = 0;
+var winterVal = 0;
+var winterOffVal = 0;
+var winterMidVal = 0;
+var winterMaxVal = 0;
 var basicVal = 0;
+function callback_getPlanTypeVal(result){
+	var thisDay = new Date();
+	thisDay = new Date(thisDay.setMonth(thisDay.getMonth()-1));
+	thisMonth = parseInt(thisDay.format("MM"));
+	var planType = result.result;
+	if(planType != null) {
+		planTypeName = planType.plan_name; //구분 전체
+		planTypeName1 = planType.plan_type_name; //구분1 
+		planTypeName2 = planType.plan_type_name2; //구분2 
+		planTypeName3 = planType.plan_type_name3; //구분3 
+		summerVal        = planType.summer_val;
+		summerOffVal     = (planType.summer_off_val == null) ? planType.summer_val : planType.summer_off_val;
+		summerMidVal     = (planType.summer_mid_val == null) ? planType.summer_val : planType.summer_mid_val;
+		summerMaxVal     = (planType.summer_max_val == null) ? planType.summer_val : planType.summer_max_val;
+		springFallVal    = planType.spring_fall_val;
+		springFallOffVal = (planType.spring_fall_off_val == null) ? planType.spring_fall_val : planType.spring_fall_off_val;
+		springFallMidVal = (planType.spring_fall_mid_val == null) ? planType.spring_fall_val : planType.spring_fall_mid_val;
+		springFallMaxVal = (planType.spring_fall_max_val == null) ? planType.spring_fall_val : planType.spring_fall_max_val;
+		winterVal        = planType.winter_val;
+		winterOffVal     = (planType.winter_off_val == null) ? planType.spring_fall_val : planType.winter_off_val;
+		winterMidVal     = (planType.winter_mid_val == null) ? planType.spring_fall_val : planType.winter_mid_val;
+		winterMaxVal     = (planType.winter_max_val == null) ? planType.spring_fall_val : planType.winter_max_val;
+		basicVal        = planType.basic_val;
+	}
+}
+
 var custNum = "";		//고객번호
 var useElecAddr = "";		//전기사용 장소
 var meterNum = "";		//계량기 번호
 var meterSf = "";		//계량기 배수
-//var profitRatio = "";		//수익배분 비율
 var meterReadDay = "";		//검침일
 var contractPower = "";		//계약전력
 var chargePower = "";
@@ -437,34 +471,12 @@ var recRateDate = "";
 var smpRateDate = "";
 var essBattery = "";
 var essPcs = "";
-
-function callback_getPlanTypeVal(result){
-	var thisDay = new Date();
-	thisDay = new Date(thisDay.setMonth(thisDay.getMonth()-1));
-	thisMonth = parseInt(thisDay.format("MM"));
-	var planType = result.result;
-	if(planType != null) {
-		planTypeName = planType.plan_name; //구분 전체
-		basicVal = planType.basic_val;
-		plan_type_name1 = planType.plan_type_name; //구분1 
-		plan_type_name2 = planType.plan_type_name //구분2 
-		plan_type_name3 = planType.plan_type_name //구분3 
-		summerVal = planType.summer_val;
-		winterVal = planType.winter_val;
-		springFallVal = planType.spring_fall_val;
-	}
-}
-
-
 function callback_getSiteSetDetail(result){
-	
-	
 	var site = result.detail;
 	custNum = (site.cust_num == null) ? "-" : site.cust_num;		//고객번호
 	useElecAddr = (site.use_elec_addr == null) ? "-" : site.use_elec_addr; // 전기사용 장소
 	meterNum = (site.meter_num == null) ? "-" : site.meter_num;		//계량기 번호
 	meterSf = (site.meter_sf == null) ? "-" : site.meter_sf;		//계량기 배수
-//	profitRatio = 20;//site.profit_ratio;		//수익배분 비율
 	meterReadDay = site.meter_read_day;		//검침일
 	contractPower = site.contract_power;		//계약전력
 	chargePower = site.charge_power;		//계약전력

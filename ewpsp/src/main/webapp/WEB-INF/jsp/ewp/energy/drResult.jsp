@@ -66,6 +66,7 @@
 				$(".real_time").find('span').empty();
 				searchDisableChange(false);
 				
+				$("#searchBtn").trigger('click');
 	        }
 	    });
 	});
@@ -103,17 +104,6 @@
 		}
 	}
 	
-	////var cblAmt; // 기준부하
-	////var goalPower; // 목표사용량=기준부하-계약용량
-	//var contractPower;
-	//var reduceAmt;
-	//function callback_getSiteSetDetail(result) {
-	//	var siteSetDetail = result.detail;
-	////	contractPower = siteSetDetail.contract_power;
-	////	chargePower = siteSetDetail.charge_power;
-	//	reduceAmt = siteSetDetail.reduce_amt;
-	//}
-	
 	function cblSet() {
 		var now = new Date();
 		var hour = now.getHours();
@@ -121,7 +111,7 @@
 		$("#cblAmtHourTo").val(hour+2);
 	}
 	
-	// 기준부하세팅
+	// 기준부하시간 설정
 	function cblTimeSetiing() {
 		var cblAmtHourFrom = $("#cblAmtHourFrom").val();
 		var cblAmtHourTo = $("#cblAmtHourTo").val();
@@ -303,35 +293,36 @@
 					if(hour != 12) {
 						var next = dbCblList[i].start_timestamp+(1000 * 3600);
 						var map = convertUnitFormat(dbCblList[i].cbl, "Wh", 5);
-						cbl = Math.round( Number(map.get("formatNum")) );
+						var cbl = Math.round( Number(map.get("formatNum")) );
+						var reReduceAmt = (reduceAmt/1000)/4;
 						
 						if(i == 0) {
 							dataSet2_1.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
-							dataSet3_1.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - (reduceAmt/4) ]);
+							dataSet3_1.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - reReduceAmt ]);
 							dataSet2_1.push([ setChartDateUTC(next), cbl ]);
-							dataSet3_1.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
-							totalGoalPower = cbl - (reduceAmt/4);
+							dataSet3_1.push([ setChartDateUTC(next), cbl - reReduceAmt ]);
+							totalGoalPower = cbl - reReduceAmt;
 							totalCbl = cbl;
 						} else if(i == 1) {
 							if(i+1 != dbCblList.length) {
 								dataSet2_2.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
-								dataSet3_2.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - (reduceAmt/4) ]);
+								dataSet3_2.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - reReduceAmt ]);
 								dataSet2_2.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_2.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
+								dataSet3_2.push([ setChartDateUTC(next), cbl - reReduceAmt ]);
 							}
 						} else if(i == 2) {
 							if(i+1 != dbCblList.length) {
 								dataSet2_3.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
-								dataSet3_3.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - (reduceAmt/4) ]);
+								dataSet3_3.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - reReduceAmt ]);
 								dataSet2_3.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_3.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
+								dataSet3_3.push([ setChartDateUTC(next), cbl - reReduceAmt ]);
 							}
 						} else if(i == 3) {
 							if(i+1 != dbCblList.length) {
 								dataSet2_4.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl ]);
-								dataSet3_4.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - (reduceAmt/4) ]);
+								dataSet3_4.push([ setChartDateUTC(dbCblList[i].start_timestamp), cbl - reReduceAmt ]);
 								dataSet2_4.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_4.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
+								dataSet3_4.push([ setChartDateUTC(next), cbl - reReduceAmt ]);
 							}
 						}
 					}
@@ -354,7 +345,7 @@
 		timeSlotGoalPowerList4 = dataSet3_4;
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)		
-		unit_format(String(totalUsage), "pastUseTot", "mWh");
+		unit_format(String(totalUsage), "pastUseTot", "Wh");
 		$("#"+"totalGoalPower").empty().append( $("<span/>").append( numberComma( totalGoalPower ) ) ).append("kWh");
 		$("#"+"totalCbl").empty().append( $("<span/>").append( numberComma( totalCbl ) ) ).append("kWh");
 	}
@@ -564,7 +555,7 @@
 				if(usage == null || usage == "" || usage == "null") {
 					reUsage = null;
 				} else {
-					var map = convertUnitFormat(usage*12, "W", 5);
+					var map = convertUnitFormat(usage*12, "mW", 8);
 					reUsage = toFixedNum(map.get("formatNum"), 2);
 					totalUsage = totalUsage+Number(usage);
 				}
@@ -580,36 +571,37 @@
 					
 					if(hour != 12) {
 						var next = cblList[i].start+(1000 * 3600);
-						var map = convertUnitFormat(cblList[i].cbl, "Wh", 5);
-						cbl = Math.round( Number(map.get("formatNum")) );
+						var map = convertUnitFormat(cblList[i].cbl, "mWh", 8);
+						var cbl = Math.round( Number(map.get("formatNum")) );
+						var reReduceAmt = (reduceAmt/1000)/4;
 						
 						if(i == 0) {
 							dataSet2_1.push([ setChartDateUTC(cblList[i].start), cbl ]);
-							dataSet3_1.push([ setChartDateUTC(cblList[i].start), cbl - (reduceAmt/4) ]);
+							dataSet3_1.push([ setChartDateUTC(cblList[i].start), cbl - reReduceAmt ]);
 							dataSet2_1.push([ setChartDateUTC(next), cbl ]);
-							dataSet3_1.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
-							totalGoalPower = cbl - (reduceAmt/4);
+							dataSet3_1.push([ setChartDateUTC(next), cbl - reReduceAmt ]);
+							totalGoalPower = cbl - reReduceAmt;
 							totalCbl = cbl;
 						} else if(i == 1) {
 							if(i+1 != cblList.length) {
 								dataSet2_2.push([ setChartDateUTC(cblList[i].start), cbl ]);
-								dataSet3_2.push([ setChartDateUTC(cblList[i].start), cbl - (reduceAmt/4) ]);
+								dataSet3_2.push([ setChartDateUTC(cblList[i].start), cbl - reReduceAmt ]);
 								dataSet2_2.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_2.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
+								dataSet3_2.push([ setChartDateUTC(next), cbl - reReduceAmt ]);
 							}
 						} else if(i == 2) {
 							if(i+1 != cblList.length) {
 								dataSet2_3.push([ setChartDateUTC(cblList[i].start), cbl ]);
-								dataSet3_3.push([ setChartDateUTC(cblList[i].start), cbl - (reduceAmt/4) ]);
+								dataSet3_3.push([ setChartDateUTC(cblList[i].start), cbl - reReduceAmt ]);
 								dataSet2_3.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_3.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
+								dataSet3_3.push([ setChartDateUTC(next), cbl - reReduceAmt ]);
 							}
 						} else if(i == 3) {
 							if(i+1 != cblList.length) {
 								dataSet2_4.push([ setChartDateUTC(cblList[i].start), cbl ]);
-								dataSet3_4.push([ setChartDateUTC(cblList[i].start), cbl - (reduceAmt/4) ]);
+								dataSet3_4.push([ setChartDateUTC(cblList[i].start), cbl - reReduceAmt ]);
 								dataSet2_4.push([ setChartDateUTC(next), cbl ]);
-								dataSet3_4.push([ setChartDateUTC(next), cbl - (reduceAmt/4) ]);
+								dataSet3_4.push([ setChartDateUTC(next), cbl - reReduceAmt ]);
 							}
 						}
 					}
@@ -693,10 +685,10 @@
 						<div class="indiv">
 							<h2 class="ntit">DR 실적 합계</h2>
 							<ul class="chart_total">
-								<!-- <li class="ct1">
+								<li class="ct1">
 									<div class="ctit ct1"><span>실제 사용량</span></div>
 									<div class="cval" id="pastUseTot"><span>0</span>kWh</div>
-								</li> -->
+								</li>
 								<li class="ct3">
 									<div class="ctit ct3"><span>기준부하</span></div>
 									<div class="cval" id="totalCbl"><span>0</span>kWh</div>
@@ -858,8 +850,14 @@
 
 										/* 그래프 스타일 */
 									    series: [{
-									        color: '#438fd7' /* 실제 사용량 */
+									    	name: '실제 사용량',
+									    	color: '#438fd7' /* 실제 사용량 */
 									    },{
+									    	name: '기준부하',
+											color: '#f75c4a',
+									    },{
+									    	name: '목표사용량',
+									    	type: 'area',
 									        color: '#13af67' /* 목표 사용량 */
 									    }],
 

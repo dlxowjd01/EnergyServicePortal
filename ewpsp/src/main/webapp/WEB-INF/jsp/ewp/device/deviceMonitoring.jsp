@@ -168,7 +168,6 @@
 	}
 	
 </script>
-<script src="../js/device/deviceDetailPopup.js" type="text/javascript"></script>
 </head>
 <body>
 

@@ -436,7 +436,8 @@ alert('${msg}');
 	/* 로그인 페이지용 스타일 */
 	body {background:none;}
 	#page-wrapper {margin:0; padding:0;}
-	#page-wrapper > nav {margin:0; height:80px; padding:0 32px; overflow:hidden;}
+	#page-wrapper > nav {margin:0; height:80px; padding:0 32px;}
+	nav .nav_brand {float:left;}
 	#page-wrapper > footer {margin:0; height:80px; padding:32px 32px;}
 	#page-wrapper .login {
 		position:relative;
@@ -472,16 +473,30 @@ alert('${msg}');
 	.lf_bottom > a {background:#555; line-height:60px;}
 	.lf_bottom > input {background:#438fd7 ; line-height:55px;}
 
+	nav .lang {display:block; top:50%; right:20px; transform:translateY(-50%); z-index:10;}
+
 	/* 반응형 미디어 쿼리 */
 	@media all and (max-width:768px) {
+		#page-wrapper > nav {padding:0 15px;}
 		#page-wrapper .login {padding:0 10px; min-height:650px;}
 		#page-wrapper .login .loginForm {position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:95%;}
+		.lf_body .arrbtn {display:block; margin-bottom:15px; margin-left:0 !important;}
+		nav .lang {right:10px;}
 	}
 	</style>
 	<div id="wrapper">
 		<div id="page-wrapper">
 			<nav class="clear">
 				<div class="nav_brand ewp"><a href="/">EWP</a></div> 
+				<!-- 언어 선택 -->
+				<div class="lang dropdown">
+				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">${sessionScope.sessionLangNm }
+				    <span class="caret"></span></button>
+				    <ul class="dropdown-menu">
+				        <li><a href="javascript:show_Language('korea');">KO</a></li>
+				        <li><a href="javascript:show_Language('english');">EN</a></li>
+				    </ul>
+				</div>
 			</nav>
 			<div id="container" class="login">
 
@@ -512,16 +527,9 @@ alert('${msg}');
 					<a href="#;" class="serviceBtn"><spring:message code="ewp.bot.Services" /></a>
 					<a href="/faq"><spring:message code="ewp.bot.FAQ" /></a>
 				</div>
-				<div class="ft_menu fr">
-					<a href="javascript:show_Language('korea');">한국어</a> 
-					<a href="javascript:show_Language('english');">English</a> 
-					
 					<div class="copyright fr">
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						&copy; 2018 Encored Technologies, Inc.
 					</div>
-				</div>
 			</footer>
 		</div>
 	</div>

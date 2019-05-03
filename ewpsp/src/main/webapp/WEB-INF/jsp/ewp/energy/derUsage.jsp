@@ -226,8 +226,8 @@
 				var chartEssUsage =null;
 				var chartPvUsage = null;
 				if(reKepcoUsage != null) {
-					chartEssUsage = reEssUsage;
-					chartPvUsage = rePvUsage;
+					chartEssUsage = toFixedNum(reKepcoUsage+reEssUsage, 2);
+					chartPvUsage = toFixedNum(reKepcoUsage+reEssUsage+rePvUsage, 2);
 				}
 				
 				// 차트데이터 셋팅

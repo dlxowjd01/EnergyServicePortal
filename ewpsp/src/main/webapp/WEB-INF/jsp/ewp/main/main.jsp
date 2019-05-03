@@ -82,8 +82,8 @@
 		}
 		$('#areaType').val(areaType);
 	
-		var formData = $("#schForm").serializeObject();
-		return formData;
+		var frm = $("#schForm").serializeObject();
+		return frm;
 	}
 	
 	function callback_getGMainAlarmList(result) {
@@ -281,6 +281,7 @@
 		if (siteList != null && siteList.length > 0) {
 			var imgSrc = '';
 			var grpName = '';
+			var pagingMap = result.pagingMap;
 	
 			for (var i = 0; i < siteList.length; i++) {
 // 				var eq1Cls = siteList[i].ioe > 0 ? ' on' : '';
@@ -296,7 +297,7 @@
 				var reward = (siteList[i].reward == null) ? 0 : siteList[i].reward;
 	
 				tbodyStr += '<tr class="dbclickopen" onclick="activateSite(this, \'' + siteList[i].site_id + '\', \'' + siteList[i].site_grp_idx + '\')" ondblclick="goSiteMain(\'' + siteList[i].site_id + '\')">';
-				tbodyStr += '<td>'+siteList[i].rnum+'</td>';
+				tbodyStr += '<td>'+( (pagingMap.selPageNum-1)*pagingMap.pageRowCnt + (i+1)   )+'</td>';
 				tbodyStr += '<td><div class="cname">'+'<a href="#none">' + siteList[i].site_name + '</a>'+'</div></td>';
 				tbodyStr += '<td><div class="eq_icon">';
 				tbodyStr += '<span class="eq1' + eq1Cls + '"><spring:message code="ewp.main.Device" />1</span>';
@@ -311,7 +312,6 @@
 				tbodyStr += '</tr>';
 			}
 	
-			var pagingMap = result.pagingMap;
 			makePageNums2(pagingMap, "GMainSite");
 		} else {
 			tbodyStr += '<tr><td colspan="7"><spring:message code="ewp.main.There_is_no_query_results" /></td><tr>';
@@ -364,8 +364,8 @@
 		initChart();
 	
 		oldRankType = tabIdx;
-	
-		$('#rankType').val(tabIdx + 4);
+		$('#rankType').val(tabIdx + 3);
+		formData = $("#schForm").serializeObject();
 	
 		var txt = "";
 		if(tabIdx == 0) txt = '<spring:message code="ewp.main.Rank_usage" />'+" (kWh)";
@@ -492,7 +492,7 @@
 			<div id="container">
 				<form id="schForm" name="schForm">
 					<input type="hidden" id="areaType" name="areaType" value="" />
-					<input type="hidden" id="rankType" name="rankType" value="4" />
+					<input type="hidden" id="rankType" name="rankType" value="3" />
 					<input type="hidden" id="selTermFrom" name="selTermFrom" />
 					<input type="hidden" id="selTermTo" name="selTermTo" />
 					<input type="hidden" id="selTerm" name="selTerm" value="day" />
@@ -752,7 +752,7 @@
 										        <th><spring:message code="ewp.main.Site" /></th>
 										        <th><spring:message code="ewp.main.Device_status" /></th>
 										        <th><spring:message code="ewp.main.Usage" /></th>
-										        <th><spring:message code="ewp.main.Charging_discharging" /><br></th>
+										        <th><spring:message code="ewp.main.Charging_discharging_th" /><br></th>
 										        <th><spring:message code="ewp.main.Power_generation" /></th>
 										        <th><spring:message code="ewp.main.Revenue" /></th>
 										      </tr>

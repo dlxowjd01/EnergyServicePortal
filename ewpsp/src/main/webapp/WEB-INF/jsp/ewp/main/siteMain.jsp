@@ -485,10 +485,8 @@
 					var chartEssUsage =null;
 					var chartPvUsage = null;
 					if(reKepcoUsage != null) {
-// 						chartEssUsage = reKepcoUsage+rePvUsage+reEssUsage;
-// 						chartPvUsage = reKepcoUsage+rePvUsage;
-						chartEssUsage = reEssUsage;
-						chartPvUsage = rePvUsage;
+						chartEssUsage = toFixedNum(reKepcoUsage+reEssUsage, 2);
+						chartPvUsage = toFixedNum(reKepcoUsage+reEssUsage+rePvUsage, 2);
 					}
 					
 					var tm = new Date( convertDateUTC(loopCntChartList[i].std_timestamp) );
@@ -938,7 +936,6 @@
 		}
 	}
 </script>
-<script src="../js/device/deviceDetailPopup.js" type="text/javascript"></script>
 </head>
 <body>
 

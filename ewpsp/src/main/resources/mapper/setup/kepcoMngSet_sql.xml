@@ -15,7 +15,7 @@
 	</select>
 	
 	<select id="getPlanType" parameterType="hashMap" resultType="hashMap">
-		/* 요금제 조회 */
+		/* 요금제명 조회 */
 		select 
 			plan_type, plan_type2, plan_type3, plan_name ,plan_type_name,plan_type_name2,plan_type_name3
 		from tb_plan_type
@@ -41,9 +41,13 @@
 	</select>
 	
 	<select id="getPlanTypeVal" parameterType="hashMap" resultType="hashMap">
-		/* 요금제 조회 */
+		/* 요금제 전력량 및 금액 조회 */
 		select 
-			plan_type, plan_type2, plan_type3, plan_name ,summer_val , spring_fall_val, winter_val, basic_val
+			plan_type, plan_type2, plan_type3, plan_name,
+			summer_val, summer_off_val, summer_mid_val, summer_max_val,
+			spring_fall_val, spring_fall_off_val, spring_fall_mid_val, spring_fall_max_val,
+			winter_val, winter_off_val, winter_mid_val, winter_max_val,
+			basic_val
 		from tb_plan_type
 		where plan_type = #{planType }
 		and plan_type2 = #{planType2 }
