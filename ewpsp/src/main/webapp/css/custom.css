@@ -1808,7 +1808,7 @@ a.detail_view {
 .c_board ul li.bms div.fl {background:#464d5d url('../img/icon_bms.png') no-repeat center 60%;}
 .c_board ul li.pv div.fl {background:#464d5d url('../img/icon_pv.png') no-repeat center 60%;}
 .c_board ul li.etc div.fl {background:#464d5d url('../img/icon_etc.png') no-repeat center 60%;}
-.c_board ul li div.fr {font-family:'Roboto', sans-serif; font-size:52px; color:#f75c4a; font-weight:300;}
+.c_board ul li div.fr {font-family:'Roboto', sans-serif; font-size:52px; color:#464d5d; font-weight:300;}
 .c_board ul li div.fr span {position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);}
 
 .c_tbl_wrap .a_alarm > h2 {margin:30px 0 15px; font-size:18px; color:#f75c4a; font-weight:600;}

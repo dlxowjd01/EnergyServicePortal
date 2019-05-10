@@ -346,8 +346,8 @@
 		
 		// 총 합계(사용량, 발전량, 충전량, 방전량 등등)		
 		unit_format(String(totalUsage), "pastUseTot", "Wh");
-		$("#"+"totalGoalPower").empty().append( $("<span/>").append( numberComma( totalGoalPower ) ) ).append("kWh");
-		$("#"+"totalCbl").empty().append( $("<span/>").append( numberComma( totalCbl ) ) ).append("kWh");
+		$("#"+"totalCbl").empty().append( $("<span/>").append( numberComma( checkNumLen(totalCbl) ) ) ).append("kWh");
+		$("#"+"totalGoalPower").empty().append( $("<span/>").append( numberComma( checkNumLen(totalGoalPower) ) ) ).append("kWh");
 	}
 	
 	// 검색결과 표 데이터

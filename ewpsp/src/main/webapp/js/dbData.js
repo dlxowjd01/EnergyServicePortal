@@ -42,7 +42,7 @@ function getPeakRealList(formData) {
 	});
 }
 //
-//// 한전계약전력 조회
+//// 한전 계약전력 조회
 //function getContractPowerList(formData) {
 //	$.ajax({
 //		url : "/getContractPowerList",
@@ -592,7 +592,7 @@ function getRevenueList(formData) {
 
 
 
-// 한전 계약 및 전력관리 정보 조회
+// 한전 계약 및 전력 관리 정보 조회
 function getSiteSetDetail() {
 	$.ajax({
 		url : "/getSiteSetDetail",
@@ -605,7 +605,7 @@ function getSiteSetDetail() {
 	});
 }
 
-// 한전 계약 및 전력관리 정보 수정
+// 한전 계약 및 전력 관리 정보 수정
 function updateSiteSet(formData) {
 	$.ajax({
 		url : "/updateSiteSet",

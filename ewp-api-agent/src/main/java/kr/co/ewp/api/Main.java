@@ -100,6 +100,9 @@ public class Main implements ApplicationListener<ContextRefreshedEvent> {
         case "ENERGY11":// 에너지모니터링 > ESS/PV 사용량 구성 > PV 사용량
           energyController.energy11(siteId, deviceId, beginDate, endDate, prettyLog);
           break;
+        case "ENERGY12":// 에너지모니터링 > ESS/PV 사용량 구성 > PV 예측발전량
+        	energyController.energy12(siteId, deviceId, beginDate, endDate, prettyLog);
+        	break;
         case "DEVICE01":// 장치모니터링 > IOE 통신상태
           deviceController.device01(siteId, deviceId, prettyLog);
           break;

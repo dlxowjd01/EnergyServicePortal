@@ -230,11 +230,19 @@ public class FaqController {
 		if (userInfo != null) {
 			param.put("modUid", userInfo.get("user_id"));
 		}
-
-		int resultCnt = faqService.deleteFAQCate(param);
-
+		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("resultCnt", resultCnt);
+		
+		param.put("cateIdx", param.get("faqCateIdx"));
+		int cnt = faqService.getFAQListCnt(param);
+		if(cnt > 0) {
+			resultMap.put("msg", "해당 카테고리에 게시물이 있어 삭제할 수 없습니다.");
+		} else {
+			int resultCnt = faqService.deleteFAQCate(param);
+			resultMap.put("msg", "");
+			resultMap.put("resultCnt", resultCnt);
+		}
+		
 		return resultMap;
 	}
 

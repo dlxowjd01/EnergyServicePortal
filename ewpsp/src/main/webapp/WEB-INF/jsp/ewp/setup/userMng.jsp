@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="../include/taglib.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -17,36 +18,36 @@
 	function callback_getUserList(result) {
 		var userList = result.list;
 		
-		var strHtml = "";
+		var tbodyStr = "";
 		$tbody = $("#userTbody");
 		$tbody.empty();
-		if(userList == null || userList.length < 1) {
-			strHtml += '<tr><td colspan="7">조회 결과가 없습니다.</td><tr>';
-			$tbody.append( strHtml );
-		} else {
+		var auth_type = sessionUser.auth_type;
+		if(userList != null && userList.length > 0) {
 			for(var i=0; i<userList.length; i++) {
 				var tm = new Date( convertDateUTC(userList[i].reg_date) );
-				$tbody.append(
-						$('<tr />').append( $('<td />').append( userList[i].user_id ) // id
-						).append( $('<td />').append( userList[i].auth_type_name ) // 권한등급
-						).append( $('<td />').append( userList[i].comp_name ) // 회사명
-						).append( $('<td />').append( userList[i].site_grp_name ) // 그룹
-						).append( $('<td class="ellipsis mxw500" />').append( userList[i].note ) // 설명
-						).append( $('<td />').append( tm.format("yyyy-MM-dd HH:mm:ss") ) // 등록일자
-						).append(
-								$('<td />').append(
-										'<a href="#" onclick="updateUserForm(\''+userList[i].user_idx+'\');" class="default_btn">수정</a>'+
-										'<a href="#" onclick="deleteUserYn(\''+userList[i].user_idx+'\');" class="cancel_btn">삭제</a>'
-								)
-						)
-				);
+				tbodyStr += '<tr>';
+				tbodyStr += '<td>'+userList[i].user_id+'</td>'; // id
+				tbodyStr += '<td>'+((userList[i].auth_type_name==null) ? '' : userList[i].auth_type_name)+'</td>'; // 권한등급
+				tbodyStr += '<td>'+((userList[i].comp_name==null) ? '' : userList[i].comp_name)+'</td>'; // 회사명
+				tbodyStr += '<td>'+((userList[i].site_grp_name==null) ? '' : userList[i].site_grp_name)+'</td>'; // 그룹
+				tbodyStr += '<td class="ellipsis mxw500">'+((userList[i].note==null) ? '' : userList[i].note)+'</td>'; // 설명
+				tbodyStr += '<td>'+tm.format("yyyy-MM-dd HH:mm:ss")+'</td>'; // 등록일자
+				tbodyStr += '<td>';
+				if(userList[i].auth_type >= auth_type) {
+					tbodyStr += '<a href="#" onclick="updateUserForm(\''+userList[i].user_idx+'\');" class="default_btn">수정</a>'+'<a href="#" onclick="deleteUserYn(\''+userList[i].user_idx+'\');" class="cancel_btn">삭제</a>';
+				}
+				tbodyStr += '</td>'; // 그룹
+				tbodyStr += '</tr>';
 			}
 	
 			var pagingMap = result.pagingMap;
 			makePageNums2(pagingMap, "User");
 			
+		} else {
+			tbodyStr += '<tr><td colspan="7">조회 결과가 없습니다.</td><tr>';
 		}
 		
+		$tbody.append( tbodyStr );
 	}
 	
 	var insUpdFlag = 0; // 1:insertForm, 2:updateForm, 0:reset
@@ -62,23 +63,24 @@
 			$("#mainUserIdx").val( "1" );
 			$("#userId").attr("readonly", false);
 	
-	//		getCmpyPopupList(); // 회사목록 조회
+// 			getCmpyPopupList(); // 회사목록 조회
+			$("#authType").not(":selected").attr("disabled", false);
 			
 			popupOpen('duser');
 		});
 		
 		$("#confirmBtn").click(function(){
-			if($("#userId").val() == "") {
+			if( isEmpty($("#userId").val()) ) {
 				alert("사용자ID를 입력하세요");
 				$("#userId").focus();
 				return;
 			}
-			if($("#authType").val() == "") {
+			if( isEmpty($("#authType").val()) ) {
 				alert("권한을 선택하세요");
 				$("#authType").focus();
 				return;
 			}
-			if($("#compIdx").val() == "") {
+			if( isEmpty($("#compIdx").val()) ) {
 				alert("회사를 선택하세요");
 				$("#compIdx").focus();
 				return;
@@ -86,18 +88,18 @@
 			
 			var authType = $("#authType").val();
 			if(authType == 3) {
-				if($("#siteGrpIdx").val() == "") {
+				if( isEmpty($("#siteGrpIdx").val()) ) {
 					alert("그룹을 선택하세요");
 					$("#siteGrpIdx").focus();
 					return;
 				}
 			} else if(authType == 4 || authType == 5) {
-				if($("#siteGrpIdx").val() == "") {
+				if( isEmpty($("#siteGrpIdx").val()) ) {
 					alert("그룹을 선택하세요");
 					$("#siteGrpIdx").focus();
 					return;
 				}
-				if($("#siteId").val() == "") {
+				if( isEmpty($("#siteId").val()) ) {
 					alert("사이트를 선택하세요");
 					$("#siteId").focus();
 					return;
@@ -265,18 +267,12 @@
 	function callback_getUserDetail(result) {
 		var userDetail = result.detail;
 		
-		if(userDetail == null) {
-			alert("조회 결과가 없습니다.");
-	//		location.href = "/siteMain";
-		} else {
+		if(userDetail != null) {
 			var authType = userDetail.auth_type;
 			
 			$("#compIdx").empty().attr("disable", true);
 			$("#siteGrpIdx").empty().attr("disable", true);
 			$("#siteId").empty().attr("disable", true);
-// 			$("#compIdx").attr("disable", true);
-// 			$("#siteGrpIdx").attr("disable", true);
-// 			$("#siteId").attr("disable", true);
 			
 			if(authType == 1) { // 서비스 포털 관리자
 				
@@ -316,7 +312,14 @@
 			$("#siteGrpIdx").val( userDetail.site_grp_idx );
 			$("#siteId").val( userDetail.site_id );
 			
+			if(sessionUser.user_id == userDetail.user_id) {
+				$("#authType").not(":selected").attr("disabled", true);
+			}
+			
 			popupOpen('duser');
+		} else {
+			alert("조회 결과가 없습니다.");
+	//		location.href = "/siteMain";
 		}
 		
 	}

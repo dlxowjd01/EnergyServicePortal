@@ -207,7 +207,7 @@
 			customerStr +="</tr>";
 			customerStr +="<tr>";
 			customerStr +="<th>계약전력</th>";
-			customerStr +="<td>"+contractPower+"</td>";
+			customerStr +="<td>"+contractPower/1000+" kW</td>";
 			customerStr +="</tr>";
 	
 			$("#texArea").find("tbody").html(texStr);
@@ -828,13 +828,17 @@
 
 									    /* 그래프 스타일 */
 									    series: [{
-									        color: '#438fd7' /* 기본요금 */
+									    	name: '기본요금',
+									    	color: '#438fd7' /* 기본요금 */
 									    },{
-									        color: '#13af67' /* 사용요금(역률 적용) */
+									    	name: '사용요금(역률 적용)',
+									    	color: '#13af67' /* 사용요금(역률 적용) */
 									    },{
-									        color: '#f75c4a' /* 전력산업기반기금 */
+									    	name: '전력산업기반기금',
+									    	color: '#f75c4a' /* 전력산업기반기금 */
 									    },{
-									        color: '#84848f' /* 부가세 */
+									    	name: '부가세',
+									    	color: '#84848f' /* 부가세 */
 									    }],
 
 									    /* 반응형 */

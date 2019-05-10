@@ -3,7 +3,7 @@
 
 <mapper namespace="kepcoMngSet">
 	<select id="getSiteSetDetail" parameterType="hashMap" resultType="hashMap">
-		/* 한전 계약 및 전력관리 정보 조회 */
+		/* 한전 계약 및 전력 관리 정보 조회 */
 		select 
 			site_set_idx, site_id, cust_num, use_elec_addr, meter_num, meter_sf, 
 			/*charge_type, */plan_type, plan_type2, plan_type3, plan_name, contract_power, meter_read_day, 
@@ -55,7 +55,7 @@
 	</select>
 	
 	<insert id="insertSiteSet" parameterType="hashMap">
-		/* 한전 계약 및 전력관리 정보 등록 */
+		/* 한전 계약 및 전력 관리 정보 등록 */
 		insert into tb_site_set (
 		        site_id,          /* 사이트ID */
 		        cust_num,         /* 고객 번호 */
@@ -114,7 +114,7 @@
 	</insert>
 	
 	<update id="updateSiteSet" parameterType="hashMap">
-		/* 한전 계약 및 전력관리 정보 수정 */
+		/* 한전 계약 및 전력 관리 정보 수정 */
 		update tb_site_set
 		set 
 			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(custNum)">

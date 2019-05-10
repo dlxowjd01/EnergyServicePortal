@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.co.ewp.api.dao.PredictPvGenDao;
 import kr.co.ewp.api.dao.PvGenDao;
 import kr.co.ewp.api.dao.PvUsageDao;
+import kr.co.ewp.api.entity.PredictPvGen;
 import kr.co.ewp.api.entity.PvGen;
 import kr.co.ewp.api.entity.PvUsage;
 import kr.co.ewp.api.util.PrettyLog;
@@ -22,24 +24,28 @@ public class PvService {
   @Autowired
   private PvGenDao pvGenDao;
   @Autowired
+  private PredictPvGenDao predictPvGenDao;
+  @Autowired
   private PvUsageDao pvUsageDao;
 
   public PvGen getLastPvGen(String siteId, String deviceId, PrettyLog prettyLog) {
     return pvGenDao.selectOneLast(siteId, deviceId, prettyLog);
   }
 
+  public PredictPvGen getLastPredictPvGen(String siteId, String deviceId, PrettyLog prettyLog) {
+	  return predictPvGenDao.selectOneLastPredictPvGen(siteId, deviceId, prettyLog);
+  }
+
   public int addOrModPvGenList(List<PvGen> pvGenList, PrettyLog prettyLog) {
     int result = 0;
     for (PvGen pvGen : pvGenList) {
-    	System.out.println("pvgenService "+pvGen.getDeviceId());
+    	System.out.println("pvGenService "+pvGen.getDeviceId());
       // BATCH INSERT
       // pvGenDao.insert(pvGen, null);
       PvGen selectOneByUnique = pvGenDao.selectOneByUnique(pvGen.getSiteId(), pvGen.getDeviceId(), pvGen.getStdDate(), null);
       if (selectOneByUnique == null) {
-    	  System.out.println("pvgenService "+pvGen.getDeviceId()+"      insert");
         pvGenDao.insert(pvGen, null);
       } else {
-    	  System.out.println("pvgenService "+pvGen.getDeviceId()+"      update");
         pvGen.setPvGenIdx(selectOneByUnique.getPvGenIdx());
         pvGenDao.update(pvGen, null);
       }
@@ -49,6 +55,27 @@ public class PvService {
       }
     }
     return result;
+  }
+
+  public int addOrModPredictPvGenList(List<PredictPvGen> pvGenList, PrettyLog prettyLog) {
+	  int result = 0;
+	  for (PredictPvGen pvGen : pvGenList) {
+		  System.out.println("pvGenService "+pvGen.getDeviceId());
+		  // BATCH INSERT
+		  // pvGenDao.insert(pvGen, null);
+		  PredictPvGen selectOneByUnique = predictPvGenDao.selectOneByUnique(pvGen.getSiteId(), pvGen.getDeviceId(), pvGen.getStdDate(), null);
+		  if (selectOneByUnique == null) {
+			  predictPvGenDao.insert(pvGen, null);
+		  } else {
+			  pvGen.setPrePvGenIdx(selectOneByUnique.getPrePvGenIdx());
+			  predictPvGenDao.update(pvGen, null);
+		  }
+		  result++;
+		  if (result % 100 == 0) {
+			  logger.info("addOrModPredictPvGenList,{},{}", new Object[] { pvGen.getDeviceId(), result });
+		  }
+	  }
+	  return result;
   }
 
   public int addOrModPvUsageList(List<PvUsage> pvUsageList, PrettyLog prettyLog) {

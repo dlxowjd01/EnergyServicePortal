@@ -24,6 +24,10 @@ public class FAQDao {
 		return resultList;
 	}
 
+	public int getFAQListCnt(HashMap param) {
+		return sqlSession.selectOne("faq.getFAQListCnt", param);
+	}
+
 	public Map getFAQCateDetail(HashMap param) {
 		Map result = sqlSession.selectOne("faq.getFAQCateDetail", param);
 		return result;

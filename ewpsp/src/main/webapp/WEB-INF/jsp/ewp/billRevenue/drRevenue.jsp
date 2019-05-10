@@ -335,13 +335,13 @@
 		
 		myChart1.addSeries({
 			name: '총 정산금액',
-			color: '#438fd7', /* 기본요금 */
+			color: '#438fd7', /* 총 정산금액 */
 			data: DRRevenueTex1
 		}, false);
 		
 		myChart1.addSeries({
-			name: '고객할인금액',
-			color: '#13af67', /* 사용요금(역률 적용) */
+			name: '고객 할인금액',
+			color: '#13af67', /* 고객 할인금액 */
 			data: DRRevenueTex2
 		}, false);
 		
@@ -909,9 +909,11 @@
 
 									    /* 그래프 스타일 */
 									    series: [{
-									        color: '#438fd7' /* 총 정산금액 */
+									    	name: '총 정산금액',
+									    	color: '#438fd7' /* 총 정산금액 */
 									    },{
-									        color: '#84848f' /* 고객 할인금액 */
+									    	name: '고객 할인금액',
+									    	color: '#84848f' /* 고객 할인금액 */
 									    }],
 
 									    /* 반응형 */
@@ -991,40 +993,40 @@
 
 
 
-    <!-- ###### 명세서 확인 및 출력 Popup Start ###### -->
-    <script type="text/javascript">
-        $(function(){
-            $(".default_btn").on('click',function(){
-            	 $(".lbutton").show();
-            });
-            
-            $(".lbtn_pdf").on('click',function(){
-            	$(".lbutton").hide();
-            	setTimeout(function () {
-            		$(".lbutton").show();
-            	},1000);
-            });
-            
-            $('.lbtn_print').on('click', function(){
-            	$('#layerbox').css("left", "0px");
-                $('#layerbox').css("top", "-300px");
-                $(".lbutton").hide();
-            	$('#layerbox').printThis({
-	        	});
-            	setTimeout(function () {
-            		$(".lbutton").show();
-            	},1000);
-            });
-        });
-    </script>
-    <div id="layerbox" class="dprint clear drRevenueStatement" style="margin-top:250px;width:880px;">
-    	<div class="lbutton fl">
+	<!-- ###### 명세서 확인 및 출력 Popup Start ###### -->
+	<script type="text/javascript">
+		$(function(){
+			$(".default_btn").on('click',function(){
+				$(".lbutton").show();
+			});
+			
+			$(".lbtn_pdf").on('click',function(){
+				$(".lbutton").hide();
+				setTimeout(function () {
+					$(".lbutton").show();
+				},1000);
+			});
+			
+			$('.lbtn_print').on('click', function(){
+				$('#layerbox').css("left", "0px");
+				$('#layerbox').css("top", "-300px");
+				$(".lbutton").hide();
+				$('#layerbox').printThis({
+				});
+				setTimeout(function () {
+					$(".lbutton").show();
+				},1000);
+			});
+		});
+	</script>
+	<div id="layerbox" class="dprint clear drRevenueStatement" style="margin-top:250px;width:880px;">
+		<div class="lbutton fl">
 			<a href="javascript:getPdfDownload();" class="lbtn_pdf"><span>PDF로 저장</span></a>
-			<a href="javascript:commonPrint();" id="drRevenueBtnPrint" class="lbtn_print"><span>인쇄</span></a>
+			<a href="#" id="drRevenueBtnPrint" class="lbtn_print"><span>인쇄</span></a>
 		</div>
-        <div class="ltit fr">      	
+		<div class="ltit fr">      	
 			<a href="javascript:popupClose('dprint');">닫기</a>
-        </div>
+		</div>
 		<div class="lbody mt30" id = "printArea">
 
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">

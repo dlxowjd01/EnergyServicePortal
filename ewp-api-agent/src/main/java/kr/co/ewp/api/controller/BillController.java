@@ -557,7 +557,7 @@ public class BillController {
               if (preTime != 0 && time - preTime != 900000) {
                 prettyLog.append("TIME-ERROR", preTime + "," + time);
               }
-              kWh.add(usage.getUsgVal() / 1000000f);
+              kWh.add(usage.getUsgVal() / 1000f); // Wh -> kWh
             }
             energy.setTimestamp(timestamp);
             energy.setkWh(kWh);
@@ -583,7 +583,7 @@ public class BillController {
           List<Usage> usageList = usageService.getUsageListBySiteId(_siteId, beginDate, endDate, prettyLog);
           for (Usage usage : usageList) {
             timestamp.add(usage.getStdTimestamp().getTime());
-            kWh.add(usage.getUsgVal() / 1000000f);
+            kWh.add(usage.getUsgVal() / 1000f); // Wh -> kWh
           }
           energy.setTimestamp(timestamp);
           energy.setkWh(kWh);
@@ -598,8 +598,8 @@ public class BillController {
           List<Reactive> reactiveList = usageService.getReactiveListBySiteId(_siteId, beginDate, endDate, prettyLog);
           for (Reactive re : reactiveList) {
             timestamp.add(re.getStdTimestamp().getTime());
-            poskWh.add(re.getRctvVal() / 1000000f);
-            negkWh.add(re.getNegRctvVal() / 1000000f);
+            poskWh.add(re.getRctvVal() / 1000f); // Wh -> kWh
+            negkWh.add(re.getNegRctvVal() / 1000f); // Wh -> kWh
           }
           posReactive.setkVarh(poskWh);
           posReactive.setTimestamp(timestamp);
@@ -617,8 +617,8 @@ public class BillController {
           List<EssCharge> esschargeList = essService.getEssChargeListBySiteId(_siteId, beginDate, endDate, prettyLog);
           for (EssCharge essCharge : esschargeList) {
             timestamp.add(essCharge.getStdDate().getTime());
-            kWh.add(new Float(essCharge.getChgVal()));
-            kWh2.add(new Float(essCharge.getDischgVal()));
+            kWh.add(new Float(essCharge.getChgVal() / 1000f)); // Wh -> kWh
+            kWh2.add(new Float(essCharge.getDischgVal() / 1000f)); // Wh -> kWh
           }
           ess.setkWh(kWh);
           ess.setTimestamp(timestamp);
@@ -627,10 +627,10 @@ public class BillController {
           ess2.setTimestamp(timestamp);
           billRequest.setEss_discharging(ess2);
         }
-//        if (billRequest.getEnergy().getTimestamp().size() == 0 && billRequest.getReactivePos().getTimestamp().size() == 0 && billRequest.getReactiveNeg().getTimestamp().size() == 0
-//            && billRequest.getEssCharging().getTimestamp().size() == 0) {
-//          continue;
-//        }
+        if (billRequest.getEnergy().getTimestamp().size() == 0 && billRequest.getReactivePos().getTimestamp().size() == 0 && billRequest.getReactiveNeg().getTimestamp().size() == 0
+            && billRequest.getEss_charging().getTimestamp().size() == 0) {
+        	return billList;
+        }
         try {
 
             BillResponseModel response = EncoredApiUtil.getBill(billRequest, prettyLog);

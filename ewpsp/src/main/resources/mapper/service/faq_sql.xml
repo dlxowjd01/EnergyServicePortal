@@ -27,6 +27,25 @@
 		order by a.reg_date desc
 	</select>
 
+	<select id="getFAQListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+		/* FAQ 목록 조회 */
+		select 
+			count(*) as listCnt
+		from(
+			select 
+				a.faq_idx, a.question, a.answer, b.faq_cate_idx, b.faq_cate_name
+			from tb_faq a, tb_faq_category b
+			where a.faq_cate_idx = b.faq_cate_idx
+			and a.del_yn = 'N'
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(cateIdx)">
+			and a.faq_cate_idx = #{cateIdx}
+			</if>
+			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(search)">
+			and (a.question like concat('%', #{search}, '%') or a.answer like concat('%', #{search}, '%'))
+			</if>
+		) f_tb
+	</select>
+
 	<select id="getFAQCateDetail" parameterType="hashMap" resultType="hashMap">
 		/* FAQ 카테고리 한건 조회 */
 		select

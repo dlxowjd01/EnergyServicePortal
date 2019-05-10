@@ -10,10 +10,10 @@
 	});
 	
 	function getDBData() {
-		getSiteSetDetail(); // 한전 계약 및 전력관리 정보 조회
+		getSiteSetDetail(); // 한전 계약 및 전력 관리 정보 조회
 	}
 	
-	// 한전 계약 및 전력관리 정보 조회
+	// 한전 계약 및 전력 관리 정보 조회
 	function callback_getSiteSetDetail(result) {
 		var siteSetDetail = result.detail;
 		
@@ -143,7 +143,7 @@
 			<div id="container">
 				<div class="row">
 					<div class="col-lg-12">
-						<h1 class="page-header">한전 계약 및 전력관리 정보</h1>
+						<h1 class="page-header">한전 계약 및 전력 관리 정보</h1>
 					</div>
 				</div>
 				<div class="row">

@@ -46,7 +46,7 @@
 									<p><strong>에너지 현황 (대시보드)</strong></p>
 									<p class="mt5 tint">※ 군관리 Main– 고객사 전체, 고객사 그룹 별 현황 대시보드 화면</p>
 									<p class="mt5 tint">※ 사이트 Main – 각 사이트 별 현황 대시보드 화면 </p>
-									<p class="mt5 tint">※ 전력관리 설정 – 한전계약 및 전력관리 정보를 설정</p>	
+									<p class="mt5 tint">※ 전력관리 설정 – 한전 계약 및 전력 관리 정보를 설정</p>	
 								</div>							
 							</div>
 

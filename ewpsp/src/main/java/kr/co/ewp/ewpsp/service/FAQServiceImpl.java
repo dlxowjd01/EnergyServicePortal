@@ -24,6 +24,10 @@ public class FAQServiceImpl implements FAQService{
 		return faqDao.getFAQList(param);
 	}
 
+	public int getFAQListCnt(HashMap param) {
+		return faqDao.getFAQListCnt(param);
+	}
+
 	public Map getFAQCateDetail(HashMap param) {
 		return faqDao.getFAQCateDetail(param);
 	}

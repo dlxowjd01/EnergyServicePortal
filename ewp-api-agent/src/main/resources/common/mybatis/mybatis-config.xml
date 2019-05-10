@@ -33,6 +33,7 @@
     <mapper resource="mybatis/mapper/genRevenue.xml" />
     <mapper resource="mybatis/mapper/peak.xml" />
     <mapper resource="mybatis/mapper/predictPeak.xml" />
+    <mapper resource="mybatis/mapper/predictPvGen.xml" />
     <mapper resource="mybatis/mapper/predictUsage.xml" />
     <mapper resource="mybatis/mapper/pvGen.xml" />
     <mapper resource="mybatis/mapper/pvUsage.xml" />

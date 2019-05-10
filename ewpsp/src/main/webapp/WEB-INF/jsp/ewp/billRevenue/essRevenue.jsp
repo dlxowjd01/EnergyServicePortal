@@ -434,40 +434,27 @@
 	var texList = "";
 	function callback_getESSRevenueTexList(result){
 		texList = result.texList;
-		var energyChgBasicBill = "";
+		var engyChgOffBill = "";
+		var engyChgMidBill = "";
+		var engyChgMaxBill = "";
 		var thisDay = new Date();
 		
 		var chkSeason = checkSeason(thisDay); // 1:봄, 2:여름, 3:가을, 4:겨울
 		var chkHour = thisDay.getHours();
 		if(chkSeason == 1 || chkSeason == 3) {
-			// 중간부하시간대
-			if( (chkHour>=9 && chkHour<10) || (chkHour>=12 && chkHour<13) || (chkHour>=17 && chkHour<23) )  energyChgBasicBill = summerMidVal; 
-			
-			// 최대부하시간대
-			if( (chkHour>=10 && chkHour<12) || (chkHour>=13 && chkHour<17) ) energyChgBasicBill = summerMaxVal;
-			
-			// 경부하시간대
-			if( (chkHour>=23 || chkHour<9) ) energyChgBasicBill = summerOffVal;
+			engyChgOffBill = summerOffVal;
+			engyChgMidBill = summerMidVal;
+			engyChgMaxBill = summerMaxVal;
 			
 		} else if(chkSeason == 2) {
-			// 중간부하시간대
-			if( (chkHour>=9 && chkHour<10) || (chkHour>=12 && chkHour<13) || (chkHour>=17 && chkHour<23) )  energyChgBasicBill = springFallMidVal; 
-			
-			// 최대부하시간대
-			if( (chkHour>=10 && chkHour<12) || (chkHour>=13 && chkHour<17) ) energyChgBasicBill = springFallMaxVal;
-			
-			// 경부하시간대
-			if( (chkHour>=23 || chkHour<9) ) energyChgBasicBill = springFallOffVal;
+			engyChgOffBill = springFallOffVal;
+			engyChgMidBill = springFallMidVal;
+			engyChgMaxBill = springFallMaxVal;
 			
 		} else if(chkSeason == 4) {
-			// 중간부하시간대
-			if( (chkHour>=9 && chkHour<10) || (chkHour>=12 && chkHour<17) || (chkHour>=20 && chkHour<22) ) energyChgBasicBill = winterMidVal;
-			
-			// 최대부하시간대
-			if( (chkHour>=10 && chkHour<12) || (chkHour>=17 && chkHour<20) || (chkHour>=22 && chkHour<23) ) energyChgBasicBill = winterMaxVal;
-			
-			// 경부하시간대
-			if( (chkHour>=23 || chkHour<9) ) energyChgBasicBill = winterOffVal;
+			engyChgOffBill = winterOffVal;
+			engyChgMidBill = winterMidVal;
+			engyChgMaxBill = winterMaxVal;
 		}
 		
 		if(texList.length > 0){
@@ -566,13 +553,13 @@
 		totDischgPeak = reEssDischgOffPeak+reEssDischgMidPeak+reEssDischgMaxPeak;
 		totChgPeak =reEssChgOffPeak+ reEssChgMidPeak+reEssChgMaxPeak
 		
-		chgOffCalc = reEssChgOffPeak*elecNum*energyChgBasicBill*1;
-		chgMidCalc = reEssChgMidPeak*elecNum*energyChgBasicBill*1;
-		chgMaxCalc = reEssChgMaxPeak*elecNum*energyChgBasicBill*1;
+		chgOffCalc = reEssChgOffPeak*engyChgOffBill;
+		chgMidCalc = reEssChgMidPeak*engyChgMidBill;
+		chgMaxCalc = reEssChgMaxPeak*engyChgMaxBill;
 		
-		dischgOffCalc = reEssDischgOffPeak*elecNum*energyChgBasicBill*1;
-		dischgMidCalc = reEssDischgMidPeak*elecNum*energyChgBasicBill*1;
-		dischgMaxCalc = reEssDischgMaxPeak*elecNum*energyChgBasicBill*1;
+		dischgOffCalc = reEssDischgOffPeak*engyChgOffBill;
+		dischgMidCalc = reEssDischgMidPeak*engyChgMidBill;
+		dischgMaxCalc = reEssDischgMaxPeak*engyChgMaxBill;
 		
 		if(yyyyMM.substring(0,4) <2021){
 			totChgPeakVal1 =(reEssChgMaxPeak-dischgMaxCalc)/(essBdayInMonth*3)*3*1*basicVal;
@@ -707,7 +694,7 @@
 		ESSCalcAreaStr += "<tr>";
 		ESSCalcAreaStr += "<th>③ESS 충전 요금 할인</th>";
 		ESSCalcAreaStr += "<td aligh ='right'>"+numberComma(essChgIncen)+"</td>";
-		ESSCalcAreaStr += "<td>("+numberComma(reEssChgOffPeak)+" kW x 0.5 x"+energyChgBasicBill+"원x 1)</td>";
+		ESSCalcAreaStr += "<td>("+numberComma(reEssChgOffPeak)+" kW x 0.5 x"+engyChgOffBill+"원x 1)</td>";
 		ESSCalcAreaStr += "</tr>";
 		ESSCalcAreaStr += "<tr>";
 		ESSCalcAreaStr += "<th>④ESS 전용 요금 할인</th>";
@@ -1061,9 +1048,11 @@
 
 									    /* 그래프 스타일 */
 									    series: [{
-									        color: '#438fd7' /* 고객 정산금액 */
+									        name: '고객 정산금액',
+									    	color: '#438fd7' /* 고객 정산금액 */
 									    },{
-									        color: '#84848f' /* 실적 할인금액 */
+									    	name: '실적 할인금액',
+									    	color: '#84848f' /* 실적 할인금액 */
 									    }],
 
 									    /* 반응형 */
@@ -1143,40 +1132,40 @@
 
 
 
-    <!-- ###### 명세서 확인 및 출력 Popup Start ###### -->
-    <script type="text/javascript">
-        $(function(){
-            $(".default_btn").on('click',function(){
-            	 $(".lbutton").show();
-            });
-            
-            $(".lbtn_pdf").on('click',function(){
-            	$(".lbutton").hide();
-            	setTimeout(function () {
-            		$(".lbutton").show();
-            	},1000);
-            });
-            
-            $('.lbtn_print').on('click', function(){
-            	$('#layerbox').css("left", "0px");
-                $('#layerbox').css("top", "-300px");
-                $(".lbutton").hide();
-            	$('#layerbox').printThis({
-	        	});
-            	setTimeout(function () {
-            		$(".lbutton").show();
-            	},1000);
-            });
-        });
-    </script>
-     <div id="layerbox" class="dprint clear essRevenueStatement" style="margin-top:300px;width:880px;">
-    	<div class="lbutton fl">
+	<!-- ###### 명세서 확인 및 출력 Popup Start ###### -->
+	<script type="text/javascript">
+		$(function(){
+			$(".default_btn").on('click',function(){
+				$(".lbutton").show();
+			});
+			
+			$(".lbtn_pdf").on('click',function(){
+				$(".lbutton").hide();
+				setTimeout(function () {
+					$(".lbutton").show();
+				},1000);
+			});
+			
+			$('.lbtn_print').on('click', function(){
+				$('#layerbox').css("left", "0px");
+				$('#layerbox').css("top", "-300px");
+				$(".lbutton").hide();
+				$('#layerbox').printThis({
+				});
+				setTimeout(function () {
+					$(".lbutton").show();
+				},1000);
+			});
+		});
+	</script>
+	<div id="layerbox" class="dprint clear essRevenueStatement" style="margin-top:300px;width:880px;">
+		<div class="lbutton fl">
 			<a href="javascript:getPdfDownload();" class="lbtn_pdf"><span>PDF로 저장</span></a>
-			<a href="javascript:commonPrint();" id="essRevenueBtnPrint" class="lbtn_print"><span>인쇄</span></a>
+			<a href="#" id="essRevenueBtnPrint" class="lbtn_print"><span>인쇄</span></a>
 		</div>
-        <div class="ltit fr">      	
+		<div class="ltit fr">      	
 			<a href="javascript:popupClose('dprint');">닫기</a>
-        </div>
+		</div>
 		<div class="lbody mt30" id="printArea">
 
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">

@@ -10,7 +10,7 @@
 				page_tb.*
 			from (
 					select 
-						a.user_idx, a.user_id, a.auth_type_name, b.comp_name, c.site_grp_name, a.note, a.reg_date
+						a.user_idx, a.user_id, a.auth_type, a.auth_type_name, b.comp_name, c.site_grp_name, a.note, a.reg_date
 					from (
 						select 
 							user_idx, user_id, user_pw, user_type, main_user_idx, main_user_yn, auth_type, 

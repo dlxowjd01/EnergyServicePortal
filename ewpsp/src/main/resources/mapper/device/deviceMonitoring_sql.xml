@@ -694,7 +694,10 @@
 				select 
 					a.device_id, a.site_id, a.user_idx, a.device_name, a.device_grp_idx, 
 					a.device_type, a.inst_type, 
-					ioe.upload_date, ioe.device_stat, pcs.ac_power, pcs.dc_power, bms.sys_soc, pv.tot_power,
+					ioe.upload_date, ioe.device_stat as ioe_device_stat, 
+					pcs.ac_power, pcs.dc_power, pcs.pcs_status as pcs_device_stat, 
+					bms.sys_soc, bms.device_stat as bms_device_stat, 
+					pv.tot_power, pv.device_stat as pv_device_stat,
 					a.del_yn, a.reg_uid, a.reg_date, a.mod_uid, a.mod_date
 				from tb_device a
 				left outer join (
@@ -721,7 +724,7 @@
 							select 
 								device_pcs_idx, site_id, device_id, device_name, device_stat, alarm_msg, 
 								ac_voltage, ac_power, ac_current, ac_freq, ac_set_power, ac_pf, 
-								dc_voltage, dc_power, dc_current, dc_freq, dc_set_power, dc_pf, std_date, reg_date
+								dc_voltage, dc_power, dc_current, dc_freq, dc_set_power, dc_pf, pcs_status, std_date, reg_date
 							from tb_device_pcs
 							where (site_id, device_id, reg_date) in (
 								select 

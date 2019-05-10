@@ -302,36 +302,6 @@ $(document).ready(function(e){
 });
 
 
-/**
-*   Body 내용 print 출력
-*/
-//function commonPrint(){
-	
-//$("#printArea").printThis();
-//	$("#printArea").printArea({
-//        mode       : "iframe",
-//        standard   : "html5",
-//        popClose   : false,
-//        //extraCss   : '/css/custom.css,/css/bootstrap.css', 
-//        extraHead  : '',
-//        retainAttr : ["id","class","style"],
-//        printDelay : 500, // tempo de atraso na impressao
-//    });
-	
-//	 var options = {
-//			 mode : "iFrame",
-//			 standard   : "html5",
-//			 popClose : true,
-//			 extraCss : '/css/custom.css,/css/bootstrap.css,/css/jquery-ui.css',
-//			 retainAttr : ["id","class","style"],
-//			 extraHead : "", 
-//			 };
-//	 
-//
-//	 $("#printArea").printArea();
-//}
-
-
 function getPdfDownload(){
 	html2canvas(document.getElementById("layerbox"), {
 		onrendered: function(canvas) {         

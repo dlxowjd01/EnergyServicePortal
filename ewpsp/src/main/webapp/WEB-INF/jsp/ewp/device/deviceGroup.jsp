@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="../include/taglib.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -48,11 +49,8 @@
 			url : "/getDeviceNotInGroupList",
 			type : 'post',
 			async : false, // 동기로 처리해줌
-	//		data : formData,
 			success: function(result) {
-				$div = $(".dg_wrap");
-				$div.empty();
-				$div.append( '<h2 class="dtit">그룹 없음</h2>' );
+				$(".dg_wrap").html( '<h2 class="dtit">그룹 없음</h2>' );
 				callback_getDvInDeviceGroupList(result, 0);
 				
 				getDeviceGrpAlarmList(0);
@@ -66,39 +64,36 @@
 		var deviceGroupList = result.list;
 		
 		if(popupYn == "N") {
-			$div = $(".dg_wrap");
-	//		$div.empty();
-			if(deviceGroupList == null || deviceGroupList.length < 1) {
-				$div.append( '<h2 class="dtit">조회 결과가 없습니다.</h2>' );
-			} else {
+			var $div = $(".dg_wrap");
+			if(deviceGroupList != null && deviceGroupList.length > 0) {
 				for(var i=0; i<deviceGroupList.length; i++) {
 					$div.append( '<h2 class="dtit">'+deviceGroupList[i].device_grp_name+'</h2>' );
 					getDvInDeviceGroupList(deviceGroupList[i].device_grp_idx);
 					
 					getDeviceGrpAlarmList(deviceGroupList[i].device_grp_idx);
 				}
+			} else {
+				$div.append( '<h2 class="dtit">조회 결과가 없습니다.</h2>' );
 			}
 			
 		} else if(popupYn == "Y") {
 			if(siteViewFlag == 2) {
-				$insideSite = $("#insideDeviceGrp");
+				var $insideSite = $("#insideDeviceGrp");
 				$insideSite.find("ul").empty();
-				if(deviceGroupList == null || deviceGroupList.length < 1) {
-	//				$tbody.append( '<tr><td colspan="6">조회 결과가 없습니다.</td><tr>' );
-				} else {
+				if(deviceGroupList != null && deviceGroupList.length > 0) {
 					for(var i=0; i<deviceGroupList.length; i++) {
 						$insideSite.find("ul").append(
 								$("<li />").append('<a href="#;" onclick="selectBoxTextApply(this);changeSelDeviceGrp(\''+deviceGroupList[i].device_grp_idx+'\');">'+deviceGroupList[i].device_grp_name+'</a>')
 						);
 					}
+				} else {
+	//				$tbody.append( '<tr><td colspan="6">조회 결과가 없습니다.</td><tr>' );
 				}
 				
 			} else if(siteViewFlag == 3) {
-				$tbody = $("#dvGrpTbody");
+				var $tbody = $("#dvGrpTbody");
 				$tbody.empty();
-				if(deviceGroupList == null || deviceGroupList.length < 1) {
-					$tbody.append( '<tr><td colspan="3">조회 결과가 없습니다.</td><tr>' );
-				} else {
+				if(deviceGroupList != null && deviceGroupList.length > 0) {
 					var dvGrps = "";
 					for(var i=0; i<deviceGroupList.length; i++) {
 						$("#selectSiteId").val(deviceGroupList[i].site_id);
@@ -114,6 +109,8 @@
 						);
 					}
 					$("#nowDvGrpIds").val(dvGrps.slice(0, -1));
+				} else {
+					$tbody.append( '<tr><td colspan="3">조회 결과가 없습니다.</td><tr>' );
 				}
 				
 			}
@@ -126,9 +123,7 @@
 		var deviceList = result.list;
 	
 		var addHtml = "";
-		if(deviceList == null || deviceList.length < 1) {
-			addHtml += "조회 결과가 없습니다.";
-		} else {
+		if(deviceList != null && deviceList.length > 0) {
 			for(var i=0; i<deviceList.length; i++) {
 				var strHtml = ""
 				if(deviceList[i].device_type == 4) strHtml = '<li class="ioe">'; 
@@ -145,17 +140,30 @@
 				addHtml += '</li>';
 			}
 			
+		} else {
+			addHtml += "조회 결과가 없습니다.";
 		}
 		
-		$(".dg_wrap").append( $('<div class="dsec clear" />').append(
-				$('<div class="fl" />').append( $('<ul class="device clear" />').append(addHtml) ).append(
-						$('<div class="new_add" />').append( '<a href="javascript:insertDeviceForm(\''+deviceGrpIdx+'\');"><i class="glyphicon glyphicon-plus"></i></a>' )
-				).append(
-						$('<div class="device_del" />').append( 
-								'<a href="#;" onclick="deleteDeviceInGrp(\''+deviceGrpIdx+'\');"><i class="glyphicon glyphicon-remove-circle"></i><em>삭제</em></a>' 
-						).append('<input type="hidden" id="delDevices_'+deviceGrpIdx+'" name="delDevices_'+deviceGrpIdx+'">')
-				)
-		) )
+		var str = '';
+		str += '';
+		str += '';
+		str += '<div class="dsec clear">';
+		str += '<div class="fl">';
+		str += '<ul class="device clear">';
+		str += addHtml;
+		str += '</ul>'; // device clear
+		if(sessionUser.auth_type != 5) {
+			str += '<div class="new_add">';
+			str += '<a href="javascript:insertDeviceForm(\''+deviceGrpIdx+'\');"><i class="glyphicon glyphicon-plus"></i></a>';
+			str += '</div>'; // new_add
+			str += '<div class="device_del">';
+			str += '<a href="#;" onclick="deleteDeviceInGrp(\''+deviceGrpIdx+'\');"><i class="glyphicon glyphicon-remove-circle"></i><em>삭제</em></a>';
+			str += '<input type="hidden" id="delDevices_'+deviceGrpIdx+'" name="delDevices_'+deviceGrpIdx+'">';
+			str += '</div>'; // device_del
+		}
+		str += '</div>'; // fl
+		str += '</div>'; // dsec
+		$(".dg_wrap").append(str);
 		
 	}
 	
@@ -450,9 +458,7 @@
 		$insideSite = $(".inside_site");
 		$insideSite.find("ul").empty();
 		$("#nowDevicePks").val("");
-		if(grpSiteList == null || grpSiteList.length < 1) {
-	//		$tbody.append( '<tr><td colspan="6">조회 결과가 없습니다.</td><tr>' );
-		} else {
+		if(grpSiteList != null && grpSiteList.length > 0) {
 			var devices = "";
 			for(var i=0; i<grpSiteList.length; i++) {
 				devices = devices+grpSiteList[i].device_id+"|"+grpSiteList[i].device_type+",";
@@ -465,13 +471,13 @@
 			}
 			$("#nowDevicePks").val(devices.slice(0, -1));
 			
+		} else {
+	//		$tbody.append( '<tr><td colspan="6">조회 결과가 없습니다.</td><tr>' );
 		}
 		
 		$allSite = $(".all_site");
 		$allSite.find("ul").empty();
-		if(allSiteList == null || allSiteList.length < 1) {
-	//		$tbody.append( '<tr><td colspan="6">조회 결과가 없습니다.</td><tr>' );
-		} else {
+		if(allSiteList != null && allSiteList.length > 0) {
 			for(var i=0; i<allSiteList.length; i++) {
 				$allSite.find("ul").append(
 						$("<li />").append('<a href="#;">'+allSiteList[i].device_name+'</a>').append(
@@ -481,6 +487,8 @@
 				
 			}
 			
+		} else {
+	//		$tbody.append( '<tr><td colspan="6">조회 결과가 없습니다.</td><tr>' );
 		}
 		
 	    $(".multi_select a").click(function() {
@@ -591,7 +599,9 @@
 								<h2 class="ntit fl">${selViewSite.site_name }</h2>
 								<div class="clear fr">
 									<ul class="fl">
+									<c:if test="${not empty userInfo and userInfo.auth_type eq '1'}">
 										<li><a href="#;" class="default_btn" id="grpMngFormBtn"><i class="glyphicon glyphicon-th-list"></i> 장치그룹관리</a></li>
+									</c:if>
 									</ul>
 								</div>
 							</div>

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ include file="../include/taglib.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -562,22 +562,24 @@
 	var peakDataSet = []; // chartData를 위한 변수
 	var contractPowerDataSet = []; // chartData를 위한 변수
 	var chargePowerDataSet = []; // chartData를 위한 변수
+	var peakDataCnt = 0;
 	function getPeak(formData) {
 		$.ajax({
 			url : "/getPeak",
 			type : 'post',
-	//		async : false, // 동기로 처리해줌
 			async : true,
 			data : formData,
 			success: function(result) {
 				var totalUsage = result.totalUsage;
 				var stdDate = result.stdDate;
 				var startDate = result.startDate;
+				peakDataCnt++;
+				console.log("peakDataCnt   ", peakDataCnt);
 				
 				// 데이터 셋팅
-				var dt = new Date(startDate);
+				var dt = new Date(stdDate);
 				var dt2 = new Date(stdDate);
-				if( peakDataSet.length == 0 || (dt2.getMinutes() == 0 || dt2.getMinutes() == 15 || dt2.getMinutes() == 30 || dt2.getMinutes() == 45) ) {
+				if( peakDataSet.length == 0 || peakDataCnt == 16 ) {
 					peakDataSet = [];
 					contractPowerDataSet = [];
 					chargePowerDataSet = [];
@@ -891,15 +893,13 @@
 						strHtml = (deviceList[i].apiStatus == 1) ? '<li class="ioe" />' : '<li class="ioe alert" />'; 
 						memo = (deviceList[i].apiStatus == 1) ? "connect" : "disconnect";
 					} else if(deviceList[i].device_type == 1) {
-						strHtml = '<li class="pcs" />'; 
-	//					memo = Number(deviceList[i].ac_power)+Number(deviceList[i].dc_power);
+						strHtml = (deviceList[i].pcs_device_stat == 1) ? '<li class="pcs" />' : '<li class="pcs alert" />'; 
 						memo = Number(deviceList[i].apiPower); // W
 					} else if(deviceList[i].device_type == 2) {
-						strHtml = '<li class="bms" />';
-	//					memo = (deviceList[i].sys_soc == null || deviceList[i].sys_soc == "" || deviceList[i].sys_soc == "null") ? "" : deviceList[i].sys_soc+" %";
+						strHtml = (deviceList[i].bms_device_stat == 2 || deviceList[i].bms_device_stat == 3) ? '<li class="bms" />' : '<li class="bms alert" />';
 						memo = (deviceList[i].apiSoc == null || deviceList[i].apiSoc == "" || deviceList[i].apiSoc == "null") ? "" : deviceList[i].apiSoc+" %"; // %
 					} else if(deviceList[i].device_type == 3 || deviceList[i].device_type == 5) {
-						strHtml = '<li class="pv" />';
+						strHtml = (deviceList[i].pv_device_stat == 1) ? '<li class="pv" />' : '<li class="pv alert" />';
 						memo = deviceList[i].apiTotPower; // Wh
 					} else {
 						strHtml = (deviceList[i].apiStatus == 1) ? '<li class="ioe" />' : '<li class="ioe alert" />'; 

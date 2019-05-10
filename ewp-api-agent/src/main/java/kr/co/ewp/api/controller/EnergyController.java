@@ -22,6 +22,7 @@ import kr.co.ewp.api.entity.EssChargePlan;
 import kr.co.ewp.api.entity.EssUsage;
 import kr.co.ewp.api.entity.Peak;
 import kr.co.ewp.api.entity.PredictPeak;
+import kr.co.ewp.api.entity.PredictPvGen;
 import kr.co.ewp.api.entity.PredictUsage;
 import kr.co.ewp.api.entity.PvGen;
 import kr.co.ewp.api.entity.PvUsage;
@@ -98,11 +99,11 @@ public class EnergyController {
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
     if (end == null) {
       end = new Date();
-      Calendar cal = Calendar.getInstance();
-      cal.setTimeInMillis(end.getTime());
-//      DateUtil.setHms(cal, -1, 0, 0, 000);
-      cal.add(Calendar.MINUTE, -15);
-      end = cal.getTime();
+      int mm = end.getMinutes();
+      if(mm >= 00 && mm < 15) end.setMinutes(0);
+      if(mm >= 15 && mm < 30) end.setMinutes(15);
+      if(mm >= 30 && mm < 45) end.setMinutes(30);
+      if(mm >= 45) end.setMinutes(45);
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     Period period = Period._15min;
@@ -110,8 +111,6 @@ public class EnergyController {
     for (Device device : deviceList) {
       Date _begin = null;
       if (begin == null) {
-//        _begin = new Date(end.getTime());
-//        _begin = DateUtil.getAfterMinute(_begin, -60);
          Usage usage = usageService.getLastUage(device.getSiteId(), device.getDeviceId(), null);
          if (usage == null) {
          _begin = DateUtil.getAfterDays(-1);
@@ -293,11 +292,11 @@ public class EnergyController {
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
     if (end == null) {
       end = new Date();
-      Calendar cal = Calendar.getInstance();
-      cal.setTimeInMillis(end.getTime());
-//      DateUtil.setHms(cal, -1, 0, 0, 000);
-      cal.add(Calendar.MINUTE, -15);
-      end = cal.getTime();
+      int mm = end.getMinutes();
+      if(mm >= 00 && mm < 15) end.setMinutes(0);
+      if(mm >= 15 && mm < 30) end.setMinutes(15);
+      if(mm >= 30 && mm < 45) end.setMinutes(30);
+      if(mm >= 45) end.setMinutes(45);
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     Period period = Period._15min;
@@ -305,8 +304,6 @@ public class EnergyController {
     for (Device device : deviceList) {
       Date _begin = null;
       if (begin == null) {
-//        _begin = new Date(end.getTime());
-//        _begin = DateUtil.getAfterMinute(_begin, -60);
          Reactive usage = usageService.getLastReactive(device.getSiteId(), device.getDeviceId(), null);
          if (usage == null) {
          _begin = DateUtil.getAfterDays(-1);
@@ -1169,7 +1166,7 @@ public class EnergyController {
       resultCnt += drService.addOrModDrReusltList(drResultList, null);
     }
 
-    
+    // 기준부하
     Date today = new Date();
     for (Site site : siteList) {
       String _siteId = site.getSiteId();
@@ -1418,6 +1415,104 @@ public class EnergyController {
       }
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
+    prettyLog.append("RESULT_CNT", resultCnt);
+  }
+
+  /**
+   * 에너지모니터링 > PV 발전량 조회 > PV 예측발전량
+   * 
+   * @param siteId
+   *          사이트아이디
+   * @param deviceId
+   *          장치아이디
+   * @param begin
+   *          시작일 yyyyMMdd
+   * @param end
+   *          종료일 yyyyMMdd
+   * @param prettyLog
+   */
+  public void energy12(String siteId, String deviceId, Date begin, Date end, PrettyLog prettyLog) {
+	  prettyLog.title("에너지모니터링 > PV 발전량 조회 > PV 예측발전량");
+    List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
+    if (end == null) {
+    	end = DateUtil.getAfterDays(1);
+    }
+    prettyLog.append("DEVICE_CNT", deviceList.size());
+    Map<String, String> localEmsAddrMap = Maps.newHashMap();
+    Map<String, String> localEmsApiVerMap = Maps.newHashMap();
+    int resultCnt = 0;
+    for (Device device : deviceList) {
+      Date _begin = null;
+      String _deviceId = device.getDeviceId();
+      String _siteId = device.getSiteId();
+      if (begin == null) {
+        PredictPvGen pvGen = pvService.getLastPredictPvGen(_siteId, _deviceId, null);
+        if (pvGen == null) {
+          _begin = DateUtil.getAfterDays(-1);
+        } else {
+          _begin = new Date(pvGen.getStdDate().getTime() + 1);
+        }
+      } else {
+        _begin = begin;
+      }
+      Date beginDate = null;
+      Date endDate = null;
+      while (!end.equals(endDate)) {
+        if (beginDate == null) {
+          beginDate = _begin;
+        } else {
+          beginDate = DateUtil.getNextMonthFirstDate(beginDate);
+        }
+        Date lastDate = DateUtil.getMonthLastDate(beginDate);
+        if (end.getTime() > lastDate.getTime()) {
+          endDate = lastDate;
+        } else {
+          endDate = end;
+        }
+        String strBeginDate = "";
+        if (beginDate != null) {
+        	strBeginDate = DateUtil.dateToString(beginDate, "yyyyMMdd");
+        }
+        String strEndDate = DateUtil.dateToString(endDate, "yyyyMMdd");
+        prettyLog.append("BEGIN", strBeginDate);
+        prettyLog.append("END", strEndDate);
+        logger.info("energy12,{},{},{}", _deviceId, strBeginDate, strEndDate);
+        List<PredictPvGen> pvGentList = Lists.newArrayList();
+        try {
+          String deviceType = device.getDeviceType();
+          if(deviceType != null) {
+        	  if ("1".equals(device.getInstType())) { // 에너톡
+        		  if("5".equals(deviceType)){
+        			  System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 에너톡 pv예측발전량조회 api를 조회합니다..");
+        			  UsageModel usagePeriodic = EnertalkApiUtil.getUsagePeriodicByDeviceId(_deviceId, Period.hour, beginDate, endDate, TimeType.future, UsageType.positiveEnergy, prettyLog);
+        			  if(usagePeriodic !=null){
+        				  List<UsageItemModel> items = usagePeriodic.getItems();
+        				  
+        				  prettyLog.append("ITEM_SIZE", items.size());
+        				  for (UsageItemModel item : items) {
+        					  PredictPvGen pvGen = new PredictPvGen();
+        					  pvGen.setDeviceId(_deviceId);
+        					  pvGen.setSiteId(_siteId);
+        					  pvGen.setStdDate(item.getTimestamp());
+        					  pvGen.setGenVal(  item.getUsage() / 1000f  ); // mWh ->Wh (2019.04.10)
+        					  pvGen.setTemp(0);
+        					  
+        					  pvGentList.add(pvGen);
+        					  System.out.println("  pvGen    "+pvGen.toString());
+        				  }
+        			  }
+        		  }
+    		  }
+          }
+        } catch (NullPointerException e) {
+        	logger.error("error is : "+e.toString());
+        } catch (Exception e) {
+          prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
+          logger.error("energy12-ERROR", e);
+        }
+        resultCnt += pvService.addOrModPredictPvGenList(pvGentList, null);
+      }
+    }
     prettyLog.append("RESULT_CNT", resultCnt);
   }
 

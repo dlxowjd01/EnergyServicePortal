@@ -9,6 +9,8 @@ public interface FAQService {
 	List getFAQCateList();
 
 	List getFAQList(HashMap param);
+	
+	int getFAQListCnt(HashMap param);
 
 	Map getFAQCateDetail(HashMap param);
 

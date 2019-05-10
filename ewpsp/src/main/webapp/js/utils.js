@@ -68,6 +68,17 @@ function onlyEngNum(event) {
 	event.preventDefault();
 }
 
+//넘어온 값이 빈값인지 체크
+// !value 하면 생기는 논리적 오류를 제거하기 위해 명시적으로 value == 사용 
+// [], {} 도 빈값으로 처리
+var isEmpty = function(value) {
+	if (value == "" || value == null || value == undefined || (value != null && typeof value == "object" && !Object.keys(value).length)) {
+		return true;
+	} else {
+		return false;
+	}
+};
+
 //////////////////////////////////////////////숫자관련//////////////////////////////////////////////
 
 // 숫자 콤마 붙이기
@@ -158,11 +169,11 @@ function checkNumLen(num) {
 	var reNum;
 	
 	if( chkNum.length == 1 ) {
-		reNum = toFixedNum(num, 2);
+		reNum = (Number(num)).toFixed(2)
 	} else if( chkNum.length == 2 ) {
-		reNum = toFixedNum(num, 1);
+		reNum = (Number(num)).toFixed(1)
 	} else if( chkNum.length == 3 ) {
-		reNum = toFixedNum(num, 0);
+		reNum = (Number(num)).toFixed(0)
 	}
 	
 	return reNum;
