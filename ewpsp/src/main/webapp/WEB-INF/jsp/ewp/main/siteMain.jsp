@@ -573,8 +573,7 @@
 				var totalUsage = result.totalUsage;
 				var stdDate = result.stdDate;
 				var startDate = result.startDate;
-				peakDataCnt++;
-				console.log("peakDataCnt   ", peakDataCnt);
+				peakDataCnt = peakDataCnt+1;
 				
 				// 데이터 셋팅
 				var dt = new Date(stdDate);
@@ -589,6 +588,7 @@
 						chargePowerDataSet.push([ Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds()), chargePower]);
 						dt = new Date(dt.setMinutes(dt.getMinutes() + 1));
 					}
+					if(peakDataCnt == 16) peakDataCnt = 0;
 				}
 				var map = convertUnitFormat((totalUsage*4), "mWh", 8);
 				var formatNum = map.get("formatNum");

@@ -209,21 +209,23 @@ public class ApiController {
 		List deviceList = deviceMonitoringService.getDeviceList(param);
 		if(deviceList != null && deviceList.size() > 0) {
 			for (int i = 0; i < deviceList.size(); i++) {
-				Map<String, Object> devices = new HashMap<String, Object>();
-				devices = (Map<String, Object>) deviceList.get(i);
-				String deviceId = (String) devices.get("device_id");
-				
-				UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(deviceId, Period._15min, startDate, endDate, TimeType.past, UsageType.positiveEnergy);
-				if(usageModel != null) {
-					if(usageModel.getItems() != null) {
-						for (UsageItemModel item : usageModel.getItems()) {
-							Integer usageVal = item.getUsage().intValue();
-							if(usageVal != null) totalUsage = totalUsage+usageVal;
-							
+				Map<String, Object> device = new HashMap<String, Object>();
+				device = (Map<String, Object>) deviceList.get(i);
+				String deviceType = (String) device.get("device_type");
+				if("4".equals(deviceType) || "6".equals(deviceType) || "7".equals(deviceType) || "8".equals(deviceType)) {
+					String deviceId = (String) device.get("device_id");
+					UsageModel usageModel = EnertalkApiUtil.getUsagePeriodicByDeviceId(deviceId, Period._15min, startDate, endDate, TimeType.past, UsageType.positiveEnergy);
+					if(usageModel != null) {
+						if(usageModel.getItems() != null) {
+							for (UsageItemModel item : usageModel.getItems()) {
+								Integer usageVal = item.getUsage().intValue();
+								if(usageVal != null) totalUsage = totalUsage+usageVal;
+								
+							}
 						}
+						usageCnt = usageCnt+1;
+						
 					}
-					usageCnt = usageCnt+1;
-					
 				}
 			}
 		}

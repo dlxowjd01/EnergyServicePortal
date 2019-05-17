@@ -259,11 +259,11 @@ function setSheetDateUTC(_dateTimestamp) {
 }
 
 function setHms(start, end) {
-	start.setHours(0)
+	if(SelTerm != '30min' && SelTerm != 'hour') start.setHours(0)
 	start.setMinutes(0);
 	start.setSeconds(0);
 	start.setMilliseconds(0);
-	end.setHours(23);
+	if(SelTerm != '30min' && SelTerm != 'hour') end.setHours(23);
 	end.setMinutes(59);
 	end.setSeconds(59);
 	end.setMilliseconds(999);
@@ -392,7 +392,7 @@ function setTickInterval() {
 	// 24 * 60 * 60 * 1000 = 1일
 	// 7 * 24 * 60 * 60 * 1000 = 일주일
 	if(SelTerm == 'hour') {
-		tickInterval = 60 * 1000;//15 * 60 * 1000;
+		tickInterval = 15 * 60 * 1000;//15 * 60 * 1000;
 		myChart.xAxis[0].options.labels.style.fontSize = '12px';
 		
 	} else if(SelTerm == 'day') {

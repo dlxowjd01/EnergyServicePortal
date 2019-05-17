@@ -333,6 +333,9 @@
 				} else {
 					alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
 				}
+			},
+			error:function(request,status,error){
+				alert("오류가 발생하였습니다. \n 관리자에게 문의하세요.");
 			}
 		});
 	}

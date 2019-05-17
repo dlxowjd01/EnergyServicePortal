@@ -457,10 +457,18 @@
 							<td>
 								<select name="authType" id="authType" class="sel" style="width:100%">
 									<option value="">---권한선택---</option>
+									<c:if test="${not empty userInfo and userInfo.auth_type <= 1}">
 									<option value="1">서비스 포털 관리자</option>
+									</c:if>
+									<c:if test="${not empty userInfo and userInfo.auth_type <= 2}">
 									<option value="2">고객사 관리자</option>
+									</c:if>
+									<c:if test="${not empty userInfo and userInfo.auth_type <= 3}">
 									<option value="3">그룹 관리자</option>
+									</c:if>
+									<c:if test="${not empty userInfo and userInfo.auth_type <= 4}">
 									<option value="4">사이트 관리자</option>
+									</c:if>
 									<option value="5">사이트 이용자</option>
 								</select>
 							</td>

@@ -308,11 +308,7 @@
 	
 	<update id="deleteAddressee" parameterType="hashMap">
 		/* 알람 수신자 삭제 */
-		update tb_sms_user
-		set 
-		    del_yn        = 'Y', 
-		    mod_uid       = #{modUid }, 
-		    mod_date      = now()
+		delete from tb_sms_user
 		where sms_user_idx = #{smsUserIdx }
 	</update>
 	

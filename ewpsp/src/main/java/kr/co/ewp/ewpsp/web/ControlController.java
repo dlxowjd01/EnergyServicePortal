@@ -212,6 +212,8 @@ public class ControlController {
 		logger.debug("/insertAddressee");
 		logger.debug("param ::::: "+param.toString());
 		
+		Map userInfo = UserUtil.getUserInfo(request);
+		param.put("regUid", userInfo.get("user_id"));
 		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
 		
 		int resultCnt = controlService.insertAddressee(param);
