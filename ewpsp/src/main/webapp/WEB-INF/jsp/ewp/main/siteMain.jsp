@@ -1243,9 +1243,9 @@
 									<div class="chart_footer">
 										<ul class="clear">
 											<li><spring:message code="ewp.site.Current_usage" /><!-- 현재 사용량 --> <span id="nowUsage">0kWh</span></li>
-											<li><spring:message code="ewp.site.KEPCO" /><!-- 한전 --> <span id="kepcoPer">0%</span></li>
-											<li>ESS <span id="essPer">0%</span></li>
 											<li>PV <span id="pvPer">0%</span></li>
+											<li>ESS <span id="essPer">0%</span></li>
+											<li><spring:message code="ewp.site.KEPCO" /><!-- 한전 --> <span id="kepcoPer">0%</span></li>
 										</ul>
 									</div>
 								</div>
