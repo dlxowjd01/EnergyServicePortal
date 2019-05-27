@@ -18,36 +18,40 @@ public class UserMngServiceImpl implements UserMngService {
 	private UserMngDao userMngDao;
 
 	@Transactional
-	public List getUserList(HashMap param) throws Exception {
+	public List getUserList(Map<String, Object> param) throws Exception {
 		return userMngDao.getUserList(param);
 	}
 
-	public int getUserListCnt(HashMap param) throws Exception {
+	public int getUserListCnt(Map<String, Object> param) throws Exception {
 		return userMngDao.getUserListCnt(param);
 	}
 
-	public Map getUserDetail(HashMap param) throws Exception {
+	public Map getUserDetail(Map<String, Object> param) throws Exception {
 		return userMngDao.getUserDetail(param);
 	}
 
-	public Map getLastUserDetail(HashMap param) throws Exception {
+	public Map getLastUserDetail(Map<String, Object> param) throws Exception {
 		return userMngDao.getLastUserDetail(param);
 	}
 
 	@Transactional
-	public int insertUser(HashMap param) throws Exception {
+	public int insertUser(Map<String, Object> param) throws Exception {
 		return userMngDao.insertUser(param);
 	}
 
 	@Transactional
-	public int updateUser(HashMap param) throws Exception {
+	public int updateUser(Map<String, Object> param) throws Exception {
 		return userMngDao.updateUser(param);
 	}
 	
 	@Transactional
-	public int deleteUser(HashMap param) throws Exception {
+	public int deleteUser(Map<String, Object> param) throws Exception {
 		return userMngDao.deleteUser(param);
 	}
-	
+
+	@Transactional
+	public int updateUserAuth(Map<String, Object> param) throws Exception {
+		return userMngDao.updateUserAuth(param);
+	}
 	
 }

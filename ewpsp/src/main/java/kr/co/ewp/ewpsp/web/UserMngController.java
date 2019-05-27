@@ -47,15 +47,13 @@ public class UserMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/getUserList")
-	public @ResponseBody Map<String, Object> getUserList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
+	public @ResponseBody Map<String, Object> getUserList(@RequestParam Map<String, Object> param, HttpServletRequest request) throws Exception {
 		logger.debug("/getUserList");
 		logger.debug("param ::::: "+param.toString());
 		
 		Map userInfo = UserUtil.getUserInfo(request);
 		String authType = (String)userInfo.get("auth_type");
-		if("1".equals(authType)) { // 포털관리자
-			
-		} else if("2".equals(authType)) { // 고객사관리자
+		if("2".equals(authType)) { // 고객사관리자
 			param.put("compIdx", userInfo.get("comp_idx"));
 		} else if("3".equals(authType)) { // 그룹관리자
 			param.put("siteGrpIdx", userInfo.get("site_grp_idx"));
@@ -69,7 +67,6 @@ public class UserMngController {
 		int pageRowCnt = 5;
 		int startNum = pageRowCnt*(selPageNum-1);
 		
-//		param.put("siteId", request.getSession().getAttribute("selViewSiteId"));
 		param.put("startNum", startNum);
 		param.put("pageRowCnt", pageRowCnt);
 		
@@ -102,7 +99,7 @@ public class UserMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/getUserDetail")
-	public @ResponseBody Map<String, Object> getUserDetail(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getUserDetail(@RequestParam Map<String, Object> param) throws Exception {
 		logger.debug("/getUserDetail");
 		logger.debug("param ::::: "+param.toString());
 		
@@ -121,7 +118,7 @@ public class UserMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/getLastUserDetail")
-	public @ResponseBody Map<String, Object> getLastUserDetail(@RequestParam HashMap param) throws Exception {
+	public @ResponseBody Map<String, Object> getLastUserDetail(@RequestParam Map<String, Object> param) throws Exception {
 		logger.debug("/getUserDetail");
 		logger.debug("param ::::: "+param.toString());
 		
@@ -140,7 +137,7 @@ public class UserMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/insertUser")
-	public @ResponseBody Map<String, Object> insertUser(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
+	public @ResponseBody Map<String, Object> insertUser(@RequestParam Map<String, Object> param, HttpServletRequest request) throws Exception {
 		logger.debug("/insertUser");
 		logger.debug("param ::::: "+param.toString());
 		
@@ -162,7 +159,7 @@ public class UserMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/updateUser")
-	public @ResponseBody Map<String, Object> updateUser(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
+	public @ResponseBody Map<String, Object> updateUser(@RequestParam Map<String, Object> param, HttpServletRequest request) throws Exception {
 		logger.debug("/updateUser");
 		logger.debug("param ::::: "+param.toString());
 
@@ -170,7 +167,8 @@ public class UserMngController {
 		param.put("modUid", userInfo.get("user_id"));
 		
 		int resultCnt = userMngService.updateUser(param);
-		
+		int resultAuthCnt = userMngService.updateUserAuth(param);
+
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("resultCnt", resultCnt);
 		return resultMap;
@@ -183,7 +181,7 @@ public class UserMngController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/deleteUser")
-	public @ResponseBody Map<String, Object> deleteUser(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
+	public @ResponseBody Map<String, Object> deleteUser(@RequestParam Map<String, Object> param, HttpServletRequest request) throws Exception {
 		logger.debug("/deleteUser");
 		logger.debug("param ::::: "+param.toString());
 

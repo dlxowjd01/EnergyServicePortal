@@ -70,46 +70,51 @@
 		});
 		
 		$("#confirmBtn").click(function(){
-			if( isEmpty($("#userId").val()) ) {
+            var $userId = $("#userId");
+		    if( isEmpty($userId.val()) ) {
 				alert("사용자ID를 입력하세요");
-				$("#userId").focus();
+                $userId.focus();
 				return;
 			}
-			if( isEmpty($("#authType").val()) ) {
+			var $authType = $("#authType");
+			if( isEmpty($authType.val()) ) {
 				alert("권한을 선택하세요");
-				$("#authType").focus();
+				$authType.focus();
 				return;
 			}
-			if( isEmpty($("#compIdx").val()) ) {
+            var $compIdx = $("#compIdx");
+			if( isEmpty($compIdx.val()) ) {
 				alert("회사를 선택하세요");
-				$("#compIdx").focus();
+                $compIdx.focus();
 				return;
 			}
 			
-			var authType = $("#authType").val();
-			if(authType == 3) {
-				if( isEmpty($("#siteGrpIdx").val()) ) {
+			var authType = $authType.val();
+            var $siteGrpIdx = $("#siteGrpIdx");
+            var $siteId = $("#siteId");
+			if(authType === 3) {
+				if( isEmpty($siteGrpIdx.val()) ) {
 					alert("그룹을 선택하세요");
-					$("#siteGrpIdx").focus();
+					$siteGrpIdx.focus();
 					return;
 				}
-			} else if(authType == 4 || authType == 5) {
-				if( isEmpty($("#siteGrpIdx").val()) ) {
+			} else if(authType === 4 || authType === 5) {
+				if( isEmpty($siteGrpIdx.val()) ) {
 					alert("그룹을 선택하세요");
-					$("#siteGrpIdx").focus();
+					$siteGrpIdx.focus();
 					return;
 				}
-				if( isEmpty($("#siteId").val()) ) {
+				if( isEmpty($siteId.val()) ) {
 					alert("사이트를 선택하세요");
-					$("#siteId").focus();
+                    $siteId.focus();
 					return;
 				}
 			}
 			
 			var formData = $("#userForm").serializeObject();
 			if(confirm("저장하시겠습니까?")) {
-				if(insUpdFlag ==  1) insertUser(formData);
-				else if(insUpdFlag ==  2)  updateUser(formData);
+				if(insUpdFlag ===  1) insertUser(formData);
+				else if(insUpdFlag ===  2)  updateUser(formData);
 			}
 		});
 		
@@ -130,31 +135,32 @@
 		// 권한 선택 시
 		$('#authType').change(function(){
 			var authType = $(this).val();
-			$("#compIdx").empty();
-			$("#siteGrpIdx").empty();
-			$("#siteId").empty();
-			$("#compIdx").attr("disable", true);
-			$("#siteGrpIdx").attr("disable", true);
-			$("#siteId").attr("disable", true);
+			var $compIdx = $("#compIdx");
+            var $siteGrpIdx = $("#siteGrpIdx");
+            var $siteId = $("#siteId");
+            $compIdx.empty();
+			$siteGrpIdx.empty();
+			$siteId.empty();
+            $compIdx.attr("disable", true);
+			$siteGrpIdx.attr("disable", true);
+			$siteId.attr("disable", true);
 			
-			if(authType == 1) { // 서비스 포털 관리자
-				
-			} else if(authType == 2) { // 고객사 관리자
-				$("#compIdx").attr("disable", false)
-			} else if(authType == 3) { // 그룹 관리자
-				$("#compIdx").attr("disable", false);
-				$("#siteGrpIdx").attr("disable", false);
-			} else if(authType == 4) { // 사이트 관리자
-				$("#compIdx").attr("disable", false);
-				$("#siteGrpIdx").attr("disable", false);
-				$("#siteId").attr("disable", false);
-			} else if(authType == 5) { // 사이트 이용자
-				$("#compIdx").attr("disable", false);
-				$("#siteGrpIdx").attr("disable", false);
-				$("#siteId").attr("disable", false);
+			if(authType === 2) { // 고객사 관리자
+				$compIdx.attr("disable", false)
+			} else if(authType === 3) { // 그룹 관리자
+				$compIdx.attr("disable", false);
+				$siteGrpIdx.attr("disable", false);
+			} else if(authType === 4) { // 사이트 관리자
+				$compIdx.attr("disable", false);
+				$siteGrpIdx.attr("disable", false);
+				$siteId.attr("disable", false);
+			} else if(authType === 5) { // 사이트 이용자
+				$compIdx.attr("disable", false);
+				$siteGrpIdx.attr("disable", false);
+				$siteId.attr("disable", false);
 			}
 			
-			if(authType != 1 || autyType != "") {
+			if(authType !== 1 || autyType !== "") {
 				$("#userType").val(2);
 				getCmpyPopupList(); // 회사목록 조회
 			} else {
@@ -167,7 +173,7 @@
 			$("#siteGrpIdx").empty();
 			$("#siteId").empty();
 			var authType = $('#authType').val();
-			if(authType == 3 || authType == 4 || authType == 5) {
+			if(authType === 3 || authType === 4 || authType === 5) {
 				var compIdx = $(this).val();
 				getGroupPopupList(compIdx); // 그룹목록 조회
 			}
@@ -177,11 +183,10 @@
 		$('#siteGrpIdx').change(function(){
 			$("#siteId").empty();
 			var authType = $('#authType').val();
-			if(authType == 4 || authType == 5) {
+			if(authType === 4 || authType === 5) {
 				var siteGrpIdx = $(this).val();
 				getSitePopupList(siteGrpIdx); // 그룹내 사이트목록 조회
 			}
-			
 		});
 	});
 	
@@ -190,9 +195,6 @@
 			url : "/getCmpyPopupList",
 			type : 'post',
 			async : false, // 동기로 처리해줌
-	//		data : {
-	//			selPageNum : ""
-	//		},
 			success: function(result) {
 				var list = result.list;
 				
@@ -201,7 +203,6 @@
 				$siteIdSelBox.append('<option value="">---회사선택---</option>');
 				for(var i=0; i<list.length; i++) {
 					$siteIdSelBox.append('<option value="'+list[i].comp_idx+'">'+list[i].comp_name+'</option>');
-					
 				}
 			}
 		});
@@ -223,7 +224,6 @@
 				$siteIdSelBox.append('<option value="">---그룹선택---</option>');
 				for(var i=0; i<list.length; i++) {
 					$siteIdSelBox.append('<option value="'+list[i].site_grp_idx+'">'+list[i].site_grp_name+'</option>');
-					
 				}
 			}
 		});
@@ -238,9 +238,7 @@
 		$siteIdSelBox.append('<option value="">---사이트선택---</option>');
 		for(var i=0; i<grpSiteList.length; i++) {
 			$siteIdSelBox.append('<option value="'+grpSiteList[i].site_id+'">'+grpSiteList[i].site_name+'</option>');
-			
 		}
-		
 	}
 	
 	function callback_insertUser(result) {
@@ -269,32 +267,39 @@
 		
 		if(userDetail != null) {
 			var authType = userDetail.auth_type;
+
+            var $authType = $("#authType");
+			if(sessionUser.user_id === userDetail.user_id) {
+				$authType.not(":selected").attr("disabled", true);
+			} else {
+				$authType.not(":selected").attr("disabled", false);
+			}
+            var $compIdx = $("#compIdx");
+            var $siteGrpIdx = $("#siteGrpIdx");
+            var $siteId = $("#siteId");
+			$compIdx.empty().attr("disable", true);
+			$siteGrpIdx.empty().attr("disable", true);
+			$siteId.empty().attr("disable", true);
 			
-			$("#compIdx").empty().attr("disable", true);
-			$("#siteGrpIdx").empty().attr("disable", true);
-			$("#siteId").empty().attr("disable", true);
-			
-			if(authType == 1) { // 서비스 포털 관리자
-				
-			} else if(authType == 2) { // 고객사 관리자
-				$("#compIdx").attr("disable", false);
+			 if(authType === 2) { // 고객사 관리자
+				$compIdx.attr("disable", false);
 				getCmpyPopupList(); // 회사목록 조회
-			} else if(authType == 3) { // 그룹 관리자
-				$("#compIdx").attr("disable", false);
-				$("#siteGrpIdx").attr("disable", false);
+			} else if(authType === 3) { // 그룹 관리자
+				$compIdx.attr("disable", false);
+				$siteGrpIdx.attr("disable", false);
 				getCmpyPopupList(); // 회사목록 조회
 				getGroupPopupList(userDetail.comp_idx); // 그룹목록 조회
-			} else if(authType == 4) { // 사이트 관리자
-				$("#compIdx").attr("disable", false);
-				$("#siteGrpIdx").attr("disable", false);
-				$("#siteId").attr("disable", false);
+			} else if(authType === 4) { // 사이트 관리자
+				$compIdx.attr("disable", false);
+				$siteGrpIdx.attr("disable", false);
+				$siteId.attr("disable", false);
 				getCmpyPopupList(); // 회사목록 조회
 				getGroupPopupList(userDetail.comp_idx); // 그룹목록 조회
 				getSitePopupList(userDetail.site_grp_idx); // 그룹내 사이트목록 조회
-			} else if(authType == 5) { // 사이트 이용자
-				$("#compIdx").attr("disable", false);
-				$("#siteGrpIdx").attr("disable", false);
-				$("#siteId").attr("disable", false);
+			} else if(authType === 5) { // 사이트 이용자
+				$compIdx.attr("disable", false);
+				$siteGrpIdx.attr("disable", false);
+				$siteId.attr("disable", false);
 				getCmpyPopupList(); // 회사목록 조회
 				getGroupPopupList(userDetail.comp_idx); // 그룹목록 조회
 				getSitePopupList(userDetail.site_grp_idx); // 그룹내 사이트목록 조회
@@ -304,24 +309,19 @@
 			$("#mainUserIdx").val( userDetail.main_user_idx );
 			$("#userIdx").val( userDetail.user_idx );
 			$("#userType").val( userDetail.user_type );
-			$("#userId").val( userDetail.user_id );
-			$("#userId").attr("readonly", true);
-			$("#authType").val( userDetail.auth_type );
-			$("#compIdx").val( userDetail.comp_idx );
+			var $userId = $("#userId");
+            $userId .val( userDetail.user_id );
+            $userId .attr("readonly", true);
+			$authType.val( userDetail.auth_type );
+			$compIdx.val( userDetail.comp_idx );
 			$("#note").val( userDetail.note );
-			$("#siteGrpIdx").val( userDetail.site_grp_idx );
-			$("#siteId").val( userDetail.site_id );
-			
-			if(sessionUser.user_id == userDetail.user_id) {
-				$("#authType").not(":selected").attr("disabled", true);
-			}
+			$siteGrpIdx.val( userDetail.site_grp_idx );
+			$siteId.val( userDetail.site_id );
 			
 			popupOpen('duser');
 		} else {
 			alert("조회 결과가 없습니다.");
-	//		location.href = "/siteMain";
 		}
-		
 	}
 	
 	// 마지막에 추가된 사용자 한건 조회
@@ -436,7 +436,7 @@
 		<div class="lbody mt30">
 
 			<div class="set_tbl">
-				<form id="userForm" name="userForm">
+				<form id="userForm" name="userForm" action="">
 				<input type="hidden" name="mainUserYn" id="mainUserYn" class="input" value="N">
 				<input type="hidden" name="mainUserIdx" id="mainUserIdx" class="input" value="">
 				<input type="hidden" name="userIdx" id="userIdx" class="input" value="">

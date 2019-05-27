@@ -245,5 +245,28 @@
 		delete from tb_user
 		where user_idx = #{userIdx }
 	</update>
-	
+
+	<update id="updateUserAuth" parameterType="hashMap">
+		/* 사용자 권한 수정 */
+		update tb_user
+		set
+		<if test='@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(authType)'>
+			<if test='authType.equals("1")'>
+				comp_idx       = #{compIdx },   /* 회사식별자 */
+				site_grp_idx          = #{siteGrpIdx },   /* 사이트그룹식별자 */
+				site_id          = #{siteId },   /* 사이트ID */
+			</if>
+			<if test='authType.equals("2")'>
+				site_grp_idx          = #{siteGrpIdx },   /* 사이트그룹식별자 */
+				site_id          = #{siteId },   /* 사이트ID */
+			</if>
+			<if test='authType.equals("3")'>
+				site_id          = #{siteId },   /* 사이트ID */
+			</if>
+		</if>
+		mod_uid       = #{modUid },
+		mod_date      = now()
+		where user_idx = #{userIdx }
+	</update>
+
 </mapper>
