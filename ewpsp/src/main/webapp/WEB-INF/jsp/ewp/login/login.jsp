@@ -5,6 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+	<title>Login popup</title>
 <jsp:include page="../include/common_static.jsp" />
 <script type="text/javascript">
 	$(function() {
@@ -309,52 +310,64 @@
 	
 		return true;
 	}
-	
+
+	function emptyAlert(index) {
+		if ($(index).val() == '') {
+			$('.helpCont').hide();
+			$(index).parents('td').children('.helpCont:eq(0)').show();
+			return 1;
+		} else {
+			$('.helpCont').hide();
+		}
+	}
+
 	function checkJoin() {
-		if ($('#joinUserId').val() == '') {
-			$('.helpCont').hide();
-			$('#joinUserId').parents('td').children('.helpCont:eq(0)').show();
+		if (emptyAlert('#joinUserId') == 1) {
 			return;
 		}
-		if ($('#joinUserPw').val() == '') {
-			$('.helpCont').hide();
-			$('#joinUserPw').parents('td').children('.helpCont:eq(0)').show();
+		if (emptyAlert('#joinUserPw') == 1) {
 			return;
 		}
-		if ($('#joinUserPw2').val() == '') {
-			$('.helpCont').hide();
-			$('#joinUserPw2').parents('td').children('.helpCont:eq(0)').show();
+		if (emptyAlert('#joinUserPw2') == 1) {
 			return;
 		}
 		if ($('#joinUserPw').val() != $('#joinUserPw2').val()) {
 			$('.helpCont').hide();
 			$('#joinUserPw2').parents('td').children('.helpCont:eq(0)').show();
 			return;
-		}
-		if ($('#joinPsnName').val() == '') {
+		} else {
 			$('.helpCont').hide();
-			$('#joinPsnName').parents('td').children('.helpCont:eq(0)').show();
+		}
+		if (emptyAlert('#joinPsnName') == 1) {
 			return;
 		}
 		if ($('#joinEmail1').val() == '' || $('#joinEmail2').val() == '') {
 			$('.helpCont').hide();
 			$('#joinEmail1').parents('td').children('.helpCont:eq(0)').show();
 			return;
+		} else {
+			$('.helpCont').hide();
 		}
 		if ($('#joinEmail2').val() == 'manual' && $('#joinEmail3').val() == '') {
 			$('.helpCont').hide();
 			$('#joinEmail1').parents('td').children('.helpCont:eq(0)').show();
 			return;
+		} else {
+			$('.helpCont').hide();
 		}
 		if ($('#joinMobile1').val() == '' || $('#joinMobile2').val() == '' || $('#joinMobile3').val() == '') {
 			$('.helpCont').hide();
 			$('#joinMobile1').parents('td').children('.helpCont:eq(0)').show();
 			return;
+		} else {
+			$('.helpCont').hide();
 		}
 		if (isNaN($('#joinMobile1').val()) || isNaN($('#joinMobile2').val()) || isNaN($('#joinMobile3').val())) {
 			$('.helpCont').hide();
 			$('#joinMobile1').parents('td').children('.helpCont:eq(1)').show();
 			return;
+		} else {
+			$('.helpCont').hide();
 		}
 		if ($('#joinAuthCode').val() == '') {
 			alert('인증코드를 입력하세요');
@@ -366,9 +379,9 @@
 			$('#joinAuthCode').focus();
 			return;
 		}
-	
+
 		$('.helpCont').hide();
-	
+
 		if (confirm("가입하시겠습니까?")) {
 			if ($('#joinEmail2').val() != 'manual') {
 				$('#joinPsnEmail').val($('#joinEmail1').val() + '@' + $('#joinEmail2').val());
@@ -376,7 +389,7 @@
 				$('#joinPsnEmail').val($('#joinEmail1').val() + '@' + $('#joinEmail3').val());
 			}
 			$('#joinPsnMobile').val($('#joinMobile1').val() + '-' + $('#joinMobile2').val() + '-' + $('#joinMobile3').val());
-	
+
 			checkUserId(joinUser);
 		}
 	}
@@ -746,7 +759,7 @@ alert('${msg}');
 	        <div class="modal-content">
 	            <div class="modal-header" style="padding:25px 30px;">
 	                <button type="button" class="close" data-dismiss="modal">&times;</button>
-	                <h4><i class="glyphicon glyphicon-user"></i> JOIN</h4>
+	                <h4><em class="glyphicon glyphicon-user"></em> JOIN</h4>
 	            </div>
 	            <div class="modal-body" style="padding:20px 30px;">
 					
@@ -842,7 +855,7 @@ alert('${msg}');
 	        <div class="modal-content">
 	            <div class="modal-header" style="padding:25px 30px;">
 	                <button type="button" class="close" data-dismiss="modal">&times;</button>
-	                <h4><i class="glyphicon glyphicon-user"></i> JOIN</h4>
+	                <h4><em class="glyphicon glyphicon-user"></em> JOIN</h4>
 	            </div>
 	            <form id="joinForm" name="joinForm">
 	            <input type="hidden" id="joinPsnEmail" name="psnEmail" />
@@ -978,7 +991,7 @@ alert('${msg}');
 	        <div class="modal-content">
 	            <div class="modal-header" style="padding:25px 30px;">
 	                <button type="button" class="close" data-dismiss="modal">&times;</button>
-	                <h4><i class="glyphicon glyphicon-user"></i> JOIN</h4>
+	                <h4><em class="glyphicon glyphicon-user"></em> JOIN</h4>
 	            </div>
 	            <div class="modal-body" style="padding:20px 30px;">
 					
