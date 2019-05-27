@@ -793,7 +793,7 @@ public class EnergyController {
     prettyLog.title("에너지모니터링 > ESS 충방전량 조회 > ESS충방전계획량");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
     if (end == null) {
-      end = new Date();
+        end = DateUtil.getAfterDays(1);
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     int resultCnt = 0;
@@ -1136,7 +1136,7 @@ public class EnergyController {
         List<DrRequestTarget> resultList = EnertalkApiUtil.getDrRequest(_siteId, offset, limit, prettyLog);
         SiteSet siteSet = siteService.getSiteSet(_siteId, prettyLog);
         if(resultList !=null){
-        	
+
         	for (DrRequestTarget item : resultList) {
         		DrResult drResult = new DrResult();
         		drResult.setActAmt(  item.getActualAmount() / 1000f  ); // mWh ->Wh (2019.04.10)
