@@ -30,6 +30,7 @@
 		$("#selTerm").val(SelTerm);
 		
 		var formData = $("#schForm").serializeObject();
+		getSiteSetDetail();
 		getDBData(formData);
 		
 		$("#selTermFrom").val( agoDay.format("yyyyMM") );
@@ -41,7 +42,7 @@
 		$("#drRevenueTex").click(function(){
 			if(sheetList.length > 0){
 				
-				popupOpen('dprint')
+				popupOpen('dprint');
 			}else{
 				alert("조회할 명세서 내역이 없습니다.");
 			}
@@ -111,16 +112,16 @@
 		if(sheetList.length > 0) {
 			for(var i=0; i<sheetList.length; i++) {
 				var yyyyMM = sheetList[i].std_yearm;
-				var reductCntHour  = String(sheetList[i].reduct_cnt_hour)   ;
-				var reductCap  = String(sheetList[i].reduct_cap)   ;
-				var reductAmt  = String(sheetList[i].reduct_amt);
-				var reductCapPer  = String(sheetList[i].reduct_cap_per);
-				var capAmt  = sheetList[i].cap_amt;
-				var reductRewardAmt  = sheetList[i].reduct_reward_amt   ;
-				var totalRewardAmt  = String(sheetList[i].total_reward_amt)   ;
-				var csmRewardAmt  = String(sheetList[i].csm_reward_amt)   ;
-				var ewpRewardAmt  = String(sheetList[i].ewp_reward_amt)   ;
-				var profitRatio  = drProfitRatio; //sheetList[i].profit_ratio      ;
+				var reductCntHour = String(sheetList[i].reduct_cnt_hour);
+				var reductCap = String(sheetList[i].reduct_cap);
+				var reductAmt = String(sheetList[i].reduct_amt);
+				var reductCapPer = String(sheetList[i].reduct_cap_per);
+				var capAmt = sheetList[i].cap_amt;
+				var reductRewardAmt = sheetList[i].reduct_reward_amt;
+				var totalRewardAmt = String(sheetList[i].total_reward_amt);
+				var csmRewardAmt = String(sheetList[i].csm_reward_amt);
+				var ewpRewardAmt = String(sheetList[i].ewp_reward_amt);
+				var profitRatio = drProfitRatio; //sheetList[i].profit_ratio      ;
 				var addRate = 0.1;
 				
 				var total = capAmt+reductRewardAmt;
@@ -143,15 +144,11 @@
 				var reEwpRewardAmt = 0;
 				var reProfitRatio = 0;
 				
-				if(totalRewardAmt == null || totalRewardAmt == "" || totalRewardAmt == "null") reTotalRewardAmt = null;
-				else {
-					reTotalRewardAmt = Math.round( Number(totalRewardAmt) );
-				}
-				if(csmRewardAmt == null || csmRewardAmt == "" || csmRewardAmt == "null") reCsmRewardAmt = null;
-				else {
-					reCsmRewardAmt = Math.round( Number(csmRewardAmt) );
-				}
-				if(ewpRewardAmt == null || ewpRewardAmt == "" || ewpRewardAmt == "null") reEwpRewardAmt = null;
+				if( isEqVal(totalRewardAmt, "null") ) reTotalRewardAmt = null;
+				else reTotalRewardAmt = Math.round( Number(totalRewardAmt) );
+				if( isEqVal(csmRewardAmt, "null") ) reCsmRewardAmt = null;
+				else reCsmRewardAmt = Math.round( Number(csmRewardAmt) );
+				if( isEqVal(ewpRewardAmt, "null") ) reEwpRewardAmt = null;
 	
 				$("#texBill").text("DR (수요반응) 수익 배분 청구서 (’"+yyyyMM.substring(2,4)+"년"+yyyyMM.substring(4,6)+"월)");
 				$("#texDay").text("청구일 : "+yyyyMM.substring(0,4)+"-"+yyyyMM.substring(4,6)+"-"+meterClaimDay);
@@ -264,54 +261,7 @@
 		if(chartList != null && chartList.length > 0) {
 			for(var i=0; i<chartList.length; i++) {
 				var yyyyMM = chartList[i].std_yearm;
-				var reductCntHour  = String(chartList[i].reduct_cnt_hour)   ;
-				var reductCap  = String(chartList[i].reduct_cap)   ;
-				var reductAmt  = String(chartList[i].reduct_amt);
-				var reductCapPer  = String(chartList[i].reduct_cap_per);
-				var capAmt  = String(chartList[i].cap_amt);
-				var reductRewardAmt  = String(chartList[i].reduct_reward_amt)   ;
-				var totalRewardAmt  = String(chartList[i].total_reward_amt)   ;
-				var csmRewardAmt  = String(chartList[i].csm_reward_amt)   ;
-				var ewpRewardAmt  = String(chartList[i].ewp_reward_amt)   ;
-				var profitRatio  = drProfitRatio; //String(chartList[i].profit_ratio)      ;
-				var reReductCntHour = 0;
-				var reReductCap = 0;
-				var reReductAmt = 0;
-				var reReductCapPer = 0;
-				var reCapAmt = 0;
-				var reReductRewardAmt = 0;
-				var reTotalRewardAmt = 0;
-				var reCsmRewardAmt = 0;
-				var reEwpRewardAmt = 0;
-				var reProfitRatio = 0;
-				
-				/*if(reductCntHour == null || reductCntHour == "" || reductCntHour == "null") reReductCntHour = null;
-				else reReductCntHour = Math.round( Number(reductCntHour) );
-				if(reductCap == null || reductCap == "" || reductCap == "null") reReductCap = null;
-				else reReductCap = Math.round( Number(reductCap) );
-				if(reductAmt == null || reductAmt == "" || reductAmt == "null") reReductAmt = null;
-				else reReductAmt = Math.round( Number(reductAmt) );
-				if(reductCapPer == null || reductCapPer == "" || reductCapPer == "null") reReductCapPer = null;
-				else reReductCapPer = Math.round( Number(reductCapPer) );
-				if(capAmt == null || capAmt == "" || capAmt == "null") reCapAmt = null;
-				else reCapAmt = Math.round( Number(capAmt) );
-				if(reductRewardAmt == null || reductRewardAmt == "" || reductRewardAmt == "null") reReductRewardAmt = null;
-				else reReductRewardAmt = Math.round( Number(reductRewardAmt) );
-				if(totalRewardAmt == null || totalRewardAmt == "" || totalRewardAmt == "null") reTotalRewardAmt = null;
-				else {
-					reTotalRewardAmt = Math.round( Number(totalRewardAmt) );
-					totDataSet = totDataSet+Number(chartList[i].total_reward_amt);
-				}
-				if(csmRewardAmt == null || csmRewardAmt == "" || csmRewardAmt == "null") reCsmRewardAmt = null;
-				else {
-					reCsmRewardAmt = Math.round( Number(csmRewardAmt) );
-					totDataSet2 = totDataSet2+Number(String(chartList[i].csm_reward_amt));
-				}
-				if(ewpRewardAmt == null || ewpRewardAmt == "" || ewpRewardAmt == "null") reEwpRewardAmt = null;
-				else reEwpRewardAmt = Math.round( Number(ewpRewardAmt) );
-				if(profitRatio == null || profitRatio == "" || profitRatio == "null") reProfitRatio = null;
-				else reProfitRatio = Math.round( Number(profitRatio) );*/
-				
+
 				// 차트데이터 셋팅
 				texDataSet1.push( [Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].total_reward_amt] );
 				texDataSet2.push( [Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].csm_reward_amt] );
@@ -393,21 +343,22 @@
 		var dt_str8_totalVal = 0; // 테이블 라인별 누적합
 		var dt_str9_totalVal = 0; // 테이블 라인별 누적합
 		var dt_str10_totalVal = 0; // 테이블 라인별 누적합
+		var reProfitRatio_cnt = 0; // 라인별 수익비율 더한 횟수
 		
 		// 표데이터 셋팅
 		if(sheetList != null && sheetList.length > 0) {
 			for(var i=0; i<sheetList.length; i++) {
 				var yyyyMM = sheetList[i].std_yearm;
-				var reductCntHour  = String(sheetList[i].reduct_cnt_hour)   ;
-				var reductCap  = String(sheetList[i].reduct_cap)   ;
-				var reductAmt  = String(sheetList[i].reduct_amt);
-				var reductCapPer  = String(sheetList[i].reduct_cap_per);
-				var capAmt  = String(sheetList[i].cap_amt);
-				var reductRewardAmt  = String(sheetList[i].reduct_reward_amt)   ;
-				var totalRewardAmt  = String(sheetList[i].total_reward_amt)   ;
-				var csmRewardAmt  = String(sheetList[i].csm_reward_amt)   ;
-				var ewpRewardAmt  = String(sheetList[i].ewp_reward_amt)   ;
-				var profitRatio  = drProfitRatio;//String(sheetList[i].profit_ratio)      ;
+				var reductCntHour = String(sheetList[i].reduct_cnt_hour);
+				var reductCap = String(sheetList[i].reduct_cap);
+				var reductAmt = String(sheetList[i].reduct_amt);
+				var reductCapPer = String(sheetList[i].reduct_cap_per);
+				var capAmt = String(sheetList[i].cap_amt);
+				var reductRewardAmt = String(sheetList[i].reduct_reward_amt);
+				var totalRewardAmt = String(sheetList[i].total_reward_amt);
+				var csmRewardAmt = String(sheetList[i].csm_reward_amt);
+				var ewpRewardAmt = String(sheetList[i].ewp_reward_amt);
+				var profitRatio = String(sheetList[i].profit_ratio);
 				var reReductCntHour = 0;
 				var reReductCap = 0;
 				var reReductAmt = 0;
@@ -419,45 +370,42 @@
 				var reEwpRewardAmt = 0;
 				var reProfitRatio = 0;
 				
-				if(reductCntHour == null || reductCntHour == "" || reductCntHour == "null") reReductCntHour = null;
+				if( isEqVal(reductCntHour, "null") ) reReductCntHour = null;
 				else reReductCntHour = Math.round( Number(reductCntHour) );
-				if(reductCap == null || reductCap == "" || reductCap == "null") reReductCap = null;
+				if( isEqVal(reductCap, "null") ) reReductCap = null;
 				else reReductCap = Math.round( Number(reductCap) );
-				if(reductAmt == null || reductAmt == "" || reductAmt == "null") reReductAmt = null;
+				if( isEqVal(reductAmt, "null") ) reReductAmt = null;
 				else reReductAmt = Math.round( Number(reductAmt) );
-				if(reductCapPer == null || reductCapPer == "" || reductCapPer == "null") reReductCapPer = null;
+				if( isEqVal(reductCapPer, "null") ) reReductCapPer = null;
 				else reReductCapPer = Math.round( Number(reductCapPer) );
-				if(capAmt == null || capAmt == "" || capAmt == "null") reCapAmt = null;
+				if( isEqVal(capAmt, "null") ) reCapAmt = null;
 				else reCapAmt = Math.round( Number(capAmt) );
-				if(reductRewardAmt == null || reductRewardAmt == "" || reductRewardAmt == "null") reReductRewardAmt = null;
+				if( isEqVal(reductRewardAmt, "null") ) reReductRewardAmt = null;
 				else reReductRewardAmt = Math.round( Number(reductRewardAmt) );
-				if(totalRewardAmt == null || totalRewardAmt == "" || totalRewardAmt == "null") reTotalRewardAmt = null;
-				else {
-					reTotalRewardAmt = Math.round( Number(totalRewardAmt) );
-	//				totDataSet = totDataSet+Number(sheetList[i].total_reward_amt);
-				}
-				if(csmRewardAmt == null || csmRewardAmt == "" || csmRewardAmt == "null") reCsmRewardAmt = null;
-				else {
-					reCsmRewardAmt = Math.round( Number(csmRewardAmt) );
-	//				totDataSet2 = totDataSet2+Number(String(sheetList[i].csm_reward_amt));
-				}
-				if(ewpRewardAmt == null || ewpRewardAmt == "" || ewpRewardAmt == "null") reEwpRewardAmt = null;
+				if( isEqVal(totalRewardAmt, "null") ) reTotalRewardAmt = null;
+				else reTotalRewardAmt = Math.round( Number(totalRewardAmt) );
+				if( isEqVal(csmRewardAmt, "null") ) reCsmRewardAmt = null;
+				else reCsmRewardAmt = Math.round( Number(csmRewardAmt) );
+				if( isEqVal(ewpRewardAmt, "null") ) reEwpRewardAmt = null;
 				else reEwpRewardAmt = Math.round( Number(ewpRewardAmt) );
-				if(profitRatio == null || profitRatio == "" || profitRatio == "null") reProfitRatio = null;
-				else reProfitRatio = Math.round( Number(profitRatio) );
+				if( isEqVal(profitRatio, "null") ) reProfitRatio = null;
+				else {
+					reProfitRatio = Math.round( Number(profitRatio) );
+					reProfitRatio_cnt = reProfitRatio_cnt+1;
+				}
 	
 				// 표데이터 셋팅
 				dt_str_head += "<th>"+yyyyMM.substring(0, 4)+"-"+yyyyMM.substring(4, 6)+"</th>"
-				dt_str +=   "<td>"+ ( (reReductCntHour == null) ? "" : reReductCntHour    ) +"</td>"; // 감축 횟수-시간 (회-hr)
-				dt_str2 +=   "<td>"+ ( (reReductCap == null) ? "" : reReductCap    ) +"</td>"; // 감축이행용량 (kWh)
-				dt_str3 +=  "<td>"+ ( (reReductAmt == null) ? "" : reReductAmt    ) +"</td>"; // 감축인정용량 (kWh)
-				dt_str4 +=  "<td>"+ ( (reReductCapPer == null) ? "" : reReductCapPer    ) +"</td>"; // 감축이행율 (%)
-				dt_str5 +=  "<td>"+ ( (reCapAmt == null) ? "" : reCapAmt    ) +"</td>"; // 용량정산금 (won)
-				dt_str6 +=  "<td>"+ ( (reReductRewardAmt == null) ? "" : reReductRewardAmt    ) +"</td>"; // 감축정산금 (won)
-				dt_str7 +=  "<td>"+ ( (reTotalRewardAmt == null) ? "" : reTotalRewardAmt    ) +"</td>"; // 총 정산금액
-				dt_str8 +=  "<td>"+ ( (reCsmRewardAmt == null) ? "" : reCsmRewardAmt    ) +"</td>"; // 고객 할인금액
-				dt_str9 += "<td>"+ ( (reEwpRewardAmt == null) ? "" : reEwpRewardAmt    ) +"</td>"; // EWP 정산금액 (won)
-				dt_str10 +=  "<td>"+ ( (reProfitRatio == null) ? "" : reProfitRatio    ) +"</td>"; // 수익비율 (%)
+				dt_str += "<td>"+ ( (reReductCntHour == null) ? "" : reReductCntHour ) +"</td>"; // 감축 횟수-시간 (회-hr)
+				dt_str2 += "<td>"+ ( (reReductCap == null) ? "" : reReductCap ) +"</td>"; // 감축이행용량 (kWh)
+				dt_str3 += "<td>"+ ( (reReductAmt == null) ? "" : reReductAmt ) +"</td>"; // 감축인정용량 (kWh)
+				dt_str4 += "<td>"+ ( (reReductCapPer == null) ? "" : reReductCapPer ) +"</td>"; // 감축이행율 (%)
+				dt_str5 += "<td>"+ ( (reCapAmt == null) ? "" : reCapAmt ) +"</td>"; // 용량정산금 (won)
+				dt_str6 += "<td>"+ ( (reReductRewardAmt == null) ? "" : reReductRewardAmt ) +"</td>"; // 감축정산금 (won)
+				dt_str7 += "<td>"+ ( (reTotalRewardAmt == null) ? "" : reTotalRewardAmt ) +"</td>"; // 총 정산금액
+				dt_str8 += "<td>"+ ( (reCsmRewardAmt == null) ? "" : reCsmRewardAmt ) +"</td>"; // 고객 할인금액
+				dt_str9 += "<td>"+ ( (reEwpRewardAmt == null) ? "" : reEwpRewardAmt ) +"</td>"; // EWP 정산금액 (won)
+				dt_str10 += "<td>"+ ( (reProfitRatio == null) ? "" : reProfitRatio ) +"</td>"; // 수익비율 (%)
 				dt_str_totalVal = dt_str_totalVal+ reReductCntHour;
 				dt_str2_totalVal = dt_str2_totalVal+ reReductCap;
 				dt_str3_totalVal = dt_str3_totalVal+ reReductAmt;
@@ -469,16 +417,16 @@
 				dt_str9_totalVal = dt_str9_totalVal+ reEwpRewardAmt;
 				dt_str10_totalVal = dt_str10_totalVal+ reProfitRatio;
 				if(dt_col_cnt == 12) {
-					dt_str +=   "<td>"+ dt_str_totalVal  +"</td>"; 
-					dt_str2 +=  "<td>"+ dt_str2_totalVal  +"</td>";
-					dt_str3 +=  "<td>"+ dt_str3_totalVal  +"</td>";
-					dt_str4 +=  "<td>"+ dt_str4_totalVal  +"</td>";
-					dt_str5 +=  "<td>"+ dt_str5_totalVal  +"</td>";
-					dt_str6 +=  "<td>"+ dt_str6_totalVal  +"</td>";
-					dt_str7 +=  "<td>"+ dt_str7_totalVal  +"</td>";
-					dt_str8 +=  "<td>"+ dt_str8_totalVal  +"</td>";
-					dt_str9 +=  "<td>"+ dt_str9_totalVal  +"</td>";
-					dt_str10 += "<td>"+ dt_str10_totalVal +"</td>";
+					dt_str += "<td>"+ dt_str_totalVal +"</td>";
+					dt_str2 += "<td>"+ dt_str2_totalVal +"</td>";
+					dt_str3 += "<td>"+ dt_str3_totalVal +"</td>";
+					dt_str4 += "<td>"+ dt_str4_totalVal +"</td>";
+					dt_str5 += "<td>"+ dt_str5_totalVal +"</td>";
+					dt_str6 += "<td>"+ dt_str6_totalVal +"</td>";
+					dt_str7 += "<td>"+ dt_str7_totalVal +"</td>";
+					dt_str8 += "<td>"+ dt_str8_totalVal +"</td>";
+					dt_str9 += "<td>"+ dt_str9_totalVal +"</td>";
+					dt_str10 += "<td>"+ ( (reProfitRatio_cnt == 0) ? 0 : Math.round(dt_str10_totalVal/reProfitRatio_cnt) ) +"</td>";
 					drRevenue_head_pc[dt_row_cnt-1] = dt_str_head;
 					drRevenue_data_pc[dt_row_cnt-1] = dt_str;
 					drRevenue_data_pc2[dt_row_cnt-1] = dt_str2;
@@ -513,6 +461,7 @@
 					dt_str8_totalVal = 0; 
 					dt_str9_totalVal = 0; 
 					dt_str10_totalVal = 0;
+					reProfitRatio_cnt = 0;
 				} else {
 					if( (i+1) == sheetList.length ) { // 조회한 목록이 라인을 다 못채울 때
 	//					var headerDate1 = convertDataTableHeaderDate(tm, 1);
@@ -530,16 +479,16 @@
 							dt_str9 += "<td></td>";
 							dt_str10 += "<td></td>";
 						}
-						dt_str +=   "<td>"+ dt_str_totalVal  +"</td>"; 
-						dt_str2 +=  "<td>"+ dt_str2_totalVal  +"</td>";
-						dt_str3 +=  "<td>"+ dt_str3_totalVal  +"</td>";
-						dt_str4 +=  "<td>"+ dt_str4_totalVal  +"</td>";
-						dt_str5 +=  "<td>"+ dt_str5_totalVal  +"</td>";
-						dt_str6 +=  "<td>"+ dt_str6_totalVal  +"</td>";
-						dt_str7 +=  "<td>"+ dt_str7_totalVal  +"</td>";
-						dt_str8 +=  "<td>"+ dt_str8_totalVal  +"</td>";
-						dt_str9 +=  "<td>"+ dt_str9_totalVal  +"</td>";
-						dt_str10 += "<td>"+ dt_str10_totalVal +"</td>";
+						dt_str += "<td>"+ dt_str_totalVal +"</td>";
+						dt_str2 += "<td>"+ dt_str2_totalVal +"</td>";
+						dt_str3 += "<td>"+ dt_str3_totalVal +"</td>";
+						dt_str4 += "<td>"+ dt_str4_totalVal +"</td>";
+						dt_str5 += "<td>"+ dt_str5_totalVal +"</td>";
+						dt_str6 += "<td>"+ dt_str6_totalVal +"</td>";
+						dt_str7 += "<td>"+ dt_str7_totalVal +"</td>";
+						dt_str8 += "<td>"+ dt_str8_totalVal +"</td>";
+						dt_str9 += "<td>"+ dt_str9_totalVal +"</td>";
+						dt_str10 += "<td>"+ ( (reProfitRatio_cnt == 0) ? 0 : Math.round(dt_str10_totalVal/reProfitRatio_cnt) ) +"</td>";
 						drRevenue_head_pc[dt_row_cnt-1] = dt_str_head;
 						drRevenue_data_pc[dt_row_cnt-1] = dt_str;
 						drRevenue_data_pc2[dt_row_cnt-1] = dt_str2;
@@ -574,6 +523,7 @@
 						dt_str8_totalVal = 0; 
 						dt_str9_totalVal = 0; 
 						dt_str10_totalVal = 0;
+						reProfitRatio_cnt = 0;
 					} else {
 						dt_col_cnt++;
 					}
@@ -588,54 +538,12 @@
 		if(chartList != null && chartList.length > 0) {
 			for(var i=0; i<chartList.length; i++) {
 				var yyyyMM = chartList[i].std_yearm;
-				var reductCntHour  = String(chartList[i].reduct_cnt_hour)   ;
-				var reductCap  = String(chartList[i].reduct_cap)   ;
-				var reductAmt  = String(chartList[i].reduct_amt);
-				var reductCapPer  = String(chartList[i].reduct_cap_per);
-				var capAmt  = String(chartList[i].cap_amt);
-				var reductRewardAmt  = String(chartList[i].reduct_reward_amt)   ;
 				var totalRewardAmt  = String(chartList[i].total_reward_amt)   ;
 				var csmRewardAmt  = String(chartList[i].csm_reward_amt)   ;
-				var ewpRewardAmt  = String(chartList[i].ewp_reward_amt)   ;
-				var profitRatio  = String(chartList[i].profit_ratio)      ;
-				var reReductCntHour = 0;
-				var reReductCap = 0;
-				var reReductAmt = 0;
-				var reReductCapPer = 0;
-				var reCapAmt = 0;
-				var reReductRewardAmt = 0;
-				var reTotalRewardAmt = 0;
-				var reCsmRewardAmt = 0;
-				var reEwpRewardAmt = 0;
-				var reProfitRatio = 0;
-				
-				if(reductCntHour == null || reductCntHour == "" || reductCntHour == "null") reReductCntHour = null;
-				else reReductCntHour = Math.round( Number(reductCntHour) );
-				if(reductCap == null || reductCap == "" || reductCap == "null") reReductCap = null;
-				else reReductCap = Math.round( Number(reductCap) );
-				if(reductAmt == null || reductAmt == "" || reductAmt == "null") reReductAmt = null;
-				else reReductAmt = Math.round( Number(reductAmt) );
-				if(reductCapPer == null || reductCapPer == "" || reductCapPer == "null") reReductCapPer = null;
-				else reReductCapPer = Math.round( Number(reductCapPer) );
-				if(capAmt == null || capAmt == "" || capAmt == "null") reCapAmt = null;
-				else reCapAmt = Math.round( Number(capAmt) );
-				if(reductRewardAmt == null || reductRewardAmt == "" || reductRewardAmt == "null") reReductRewardAmt = null;
-				else reReductRewardAmt = Math.round( Number(reductRewardAmt) );
-				if(totalRewardAmt == null || totalRewardAmt == "" || totalRewardAmt == "null") reTotalRewardAmt = null;
-				else {
-					reTotalRewardAmt = Math.round( Number(totalRewardAmt) );
-					totDataSet = totDataSet+Number(chartList[i].total_reward_amt);
-				}
-				if(csmRewardAmt == null || csmRewardAmt == "" || csmRewardAmt == "null") reCsmRewardAmt = null;
-				else {
-					reCsmRewardAmt = Math.round( Number(csmRewardAmt) );
-					totDataSet2 = totDataSet2+Number(String(chartList[i].csm_reward_amt));
-				}
-				if(ewpRewardAmt == null || ewpRewardAmt == "" || ewpRewardAmt == "null") reEwpRewardAmt = null;
-				else reEwpRewardAmt = Math.round( Number(ewpRewardAmt) );
-				if(profitRatio == null || profitRatio == "" || profitRatio == "null") reProfitRatio = null;
-				else reProfitRatio = Math.round( Number(profitRatio) );
-				
+
+				if( !isEqVal(totalRewardAmt, "null") ) totDataSet = totDataSet+Number(chartList[i].total_reward_amt);
+				if( !isEqVal(csmRewardAmt, "null") ) totDataSet2 = totDataSet2+Number(String(chartList[i].csm_reward_amt));
+
 				// 차트데이터 셋팅
 				dataSet.push( [Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].total_reward_amt] );
 				dataSet2.push( [Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6)-1, 1), chartList[i].csm_reward_amt] );
@@ -688,7 +596,7 @@
 				tbodyStr += '<table class="pc_use">';
 				tbodyStr += '<thead>';
 				tbodyStr += '<tr>';
-				tbodyStr += '<th></th>'+drRevenue_head_pc[i]+'<th>합계</th>';
+				tbodyStr += '<th></th>'+drRevenue_head_pc[i]+'<th>합계/평균(%)</th>';
 				tbodyStr += '</tr>';
 				tbodyStr += '</thead>';
 				tbodyStr += '<tbody>';
