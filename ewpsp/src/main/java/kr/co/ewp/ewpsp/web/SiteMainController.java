@@ -176,7 +176,7 @@ public class SiteMainController {
 						PvEquipmentModelBefore pvDetail = PMGrowApiUtilBefore.getPvEquipmentList(host, (String) deviceMap.get("device_id"));
 						if(pvDetail != null) {
 							Float totPower = (pvDetail.getTotalGenPower() == null) ? 0 : pvDetail.getTotalGenPower();
-							deviceMap.put("apiTotPower", pvDetail.getTotalGenPower());
+							deviceMap.put("apiTotPower", totPower);
 						} else deviceMap.put("apiTotPower", "-");
 					} else {
 						PvEquipmentModel pvDetail = PMGrowApiUtil.getPvEquipmentList(host, (String) deviceMap.get("device_id"));
@@ -186,7 +186,7 @@ public class SiteMainController {
 						} else deviceMap.put("apiTotPower", "-");
 					}
 					
-				} else if("5".equals(deviceType)) { // PV(Enertalk)
+				} else { // (deviceType == 4, 5, 6, 7, 8)
 					DeviceModel ioeDetail = EnertalkApiUtil.getDevice((String) deviceMap.get("device_id"));
 					if(ioeDetail != null) {
 						Date upLoadedAt = ioeDetail.getUploadedAt();
@@ -201,20 +201,6 @@ public class SiteMainController {
 						}
 					} else deviceMap.put("apiStatus", 2);
 					
-				} else {
-					DeviceModel ioeDetail = EnertalkApiUtil.getDevice((String) deviceMap.get("device_id"));
-					if(ioeDetail != null) {
-						Date upLoadedAt = ioeDetail.getUploadedAt();
-						if(upLoadedAt != null) {
-							if(new Date().getTime() - upLoadedAt.getTime() > 120000) { // 2분 보다 크면 disconnect
-								deviceMap.put("apiStatus", 2);
-							} else {
-								deviceMap.put("apiStatus", 1);
-							}
-						} else {
-							deviceMap.put("apiStatus", 2);
-						}
-					} else deviceMap.put("apiStatus", 2);
 				}
 				newDeviceList.add(deviceMap);
 			}
@@ -249,44 +235,33 @@ public class SiteMainController {
 		logger.debug("param ::::: "+param.toString());
 		
 		param = PeriodDataSetting.setSearchTerm(param);
-		
-		String selTermFrom = (String) param.get("selTermFrom");
-		String selTermTo = (String) param.get("selTermTo");
-		
+
 		// pv 수익 조회
 		Date today = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(   today.getTime()   );
-		cal.set(Calendar.DATE, 1);
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		Date start = new Timestamp(cal.getTime().getTime());
-		param.put("selTermFrom", CommonUtils.convertDateFormat(start, "yyyyMMddHHmmss"));
 		
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(   today.getTime()   );
-		cal2.set(Calendar.DATE, cal2.getActualMaximum(Calendar.DAY_OF_MONTH));
-		cal2.set(Calendar.HOUR_OF_DAY, 23);
-		cal2.set(Calendar.MINUTE, 59);
-		cal2.set(Calendar.SECOND, 59);
-		Date end = new Timestamp(cal2.getTime().getTime());
+		Date end = CommonUtils.getDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DATE), 23, 59, 59);
 		param.put("selTermTo", CommonUtils.convertDateFormat(end, "yyyyMMddHHmmss"));
-		
+		cal.add(Calendar.DATE, -6);
+		Date start = CommonUtils.getDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DATE), 0, 0, 0);
+		param.put("selTermFrom", CommonUtils.convertDateFormat(start, "yyyyMMddHHmmss"));
 		param.put("selTerm", "month");
 		param.put("selPeriodVal", "day");
 		logger.debug("                                   param ::::: "+param.toString());
 		Map result = pvRevenueService.getPVRevenueList(param, request);
 		Map totPriceMap = (Map) result.get("totPriceMap");
 		List totPriceList = (totPriceMap == null) ? null : (List) totPriceMap.get("chartList");
-		
+
 		// ess 수익 조회
 		String siteId = (String) param.get("siteId");
 		List essRevenueList = essRevenueService.getESSRevenueDayList(param); // api로 변경 => db조회로 변경
-		
+
 		// dr 수익 조회
-		param.put("selTermFrom", selTermFrom.substring(0, 6));
-		param.put("selTermTo", selTermTo.substring(0, 6));
+		param.put("siteMainSelTermFrom", param.get("selTermFrom"));
+		param.put("siteMainSelTermTo", param.get("selTermTo"));
+		param.put("selTermFrom", null);
+		param.put("selTermTo", null);
 		param.put("selPeriodVal", "day");
 		Map drRevenueMap = drRevenueService.getDRRevenueList(param);
 		List drRevenueList = (List) drRevenueMap.get("chartList");

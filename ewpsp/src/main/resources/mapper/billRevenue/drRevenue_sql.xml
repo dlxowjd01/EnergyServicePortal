@@ -34,7 +34,12 @@
 						from tb_dr_revenue d, tb_site_set e
 						where d.site_id = e.site_id
 						and d.site_id = #{siteId }
+						<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
 						and std_yearm between #{selTermFrom } and #{selTermTo }
+						</if>
+						<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteMainSelTermFrom)">
+						and std_date between str_to_date(#{siteMainSelTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{siteMainSelTermTo },'%Y%m%d%H%i%s')
+						</if>
 				) c
 			) b
 		) a
