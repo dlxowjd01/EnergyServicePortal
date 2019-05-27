@@ -237,7 +237,7 @@
 		pcsStr += '<tbody>';
 		pcsStr += '<tr>';
 		pcsStr += '<td>'+(  (pcsDetail.dcVoltage == -1) ? "-" : pcsDetail.dcVoltage  ) +'</td>';
-		pcsStr += '<td>'+(  (pcsDetail.dcPower == -1) ? "-" : pcsDetail.dcPower  )+'</td>';
+		pcsStr += '<td>'+(  (pcsDetail.dcCurrent == -1) ? "-" : pcsDetail.dcCurrent  )+'</td>';
 		pcsStr += '<td>'+(  (pcsDetail.pcsStatus == -1) ? "-" : pcsDetail.pcsStatus  )+'</td>';
 		pcsStr += '<td>'+(  (pcsDetail.pcsCommand == -1) ? "-" : pcsDetail.pcsCommand  )+'</td>';
 		pcsStr += '<td>'+(  (pcsDetail.todayCEnergy == -1) ? "-" : pcsDetail.todayCEnergy  )+'</td>';

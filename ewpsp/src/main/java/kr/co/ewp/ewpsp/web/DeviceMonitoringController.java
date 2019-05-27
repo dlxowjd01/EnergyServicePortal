@@ -83,7 +83,7 @@ public class DeviceMonitoringController {
 		logger.debug("/getDeviceIOEDetail");
 		logger.debug("param ::::: "+param.toString());
 		
-		Map result = deviceMonitoringService.getDeviceIOEDetail(param);
+		Map<String, Object> result = deviceMonitoringService.getDeviceIOEDetail(param);
 		ApiController api = new ApiController();
 		UsageRealtimeModel usageRealtime = api.getDeviceRealTime((String) param.get("deviceId"));
 		Long voltage = (usageRealtime == null || usageRealtime.getVoltage() == null) ? -1 : usageRealtime.getVoltage();
@@ -137,7 +137,7 @@ public class DeviceMonitoringController {
 		logger.debug("/getDevicePCSDetail");
 		logger.debug("param ::::: "+param.toString());
 		
-		Map result = deviceMonitoringService.getDevicePCSDetail(param);
+		Map<String, Object> result = deviceMonitoringService.getDevicePCSDetail(param);
 		Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
 		String host = (String) siteDetail.get("local_ems_addr");
 		String apiVer = (String) siteDetail.get("local_ems_api_ver");
@@ -173,6 +173,7 @@ public class DeviceMonitoringController {
 					result.put("acSetPower", (pcsDetail == null || pcsDetail.getAcSetPower() == null) ?  -1 : pcsDetail.getAcSetPower());
 					result.put("dcVoltage", (pcsDetail == null || pcsDetail.getDcVoltage() == null) ?  -1 : pcsDetail.getDcVoltage());
 					result.put("dcPower", (pcsDetail == null || pcsDetail.getDcPower() == null) ?  -1 : pcsDetail.getDcPower());
+					result.put("dcCurrent", (pcsDetail == null || pcsDetail.getDcCurrent() == null) ?  -1 : pcsDetail.getDcCurrent());
 					result.put("pcsStatus", (pcsDetail == null) ?  -1 : pcsDetail.getPcsStatus());
 					if(pcsDetail == null) {
 						result.put("pcsCommand", -1);
@@ -292,7 +293,7 @@ public class DeviceMonitoringController {
 		logger.debug("/getDeviceBMSDetail");
 		logger.debug("param ::::: "+param.toString());
 		
-		Map result = deviceMonitoringService.getDeviceBMSDetail(param);
+		Map<String, Object> result = deviceMonitoringService.getDeviceBMSDetail(param);
 		Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
 		String host = (String) siteDetail.get("local_ems_addr");
 		String apiVer = (String) siteDetail.get("local_ems_api_ver");
@@ -424,14 +425,13 @@ public class DeviceMonitoringController {
 		logger.debug("/getDevicePVDetail");
 		logger.debug("param ::::: "+param.toString());
 		
-		Map result = deviceMonitoringService.getDevicePVDetail(param);
+		Map<String, Object> result = deviceMonitoringService.getDevicePVDetail(param);
 		Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
 		String host = (String) siteDetail.get("local_ems_addr");
 		String apiVer = (String) siteDetail.get("local_ems_api_ver");
 		if("1.1".equals(apiVer)) { // 기존
 			PvEquipmentModelBefore pvDetail = PMGrowApiUtilBefore.getPvEquipmentList(host, (String) param.get("deviceId"));
 			if(pvDetail != null) {
-//				for (PvEquipmentModelBefore pvDetail : pvDetailList) {
 					if(pvDetail == null) {
 						result.put("pvStatus", null);
 						result.put("pvStatusNm", null);
@@ -464,8 +464,6 @@ public class DeviceMonitoringController {
 						result.put("totalPower", (pvDetail.getTotalGenPower() == null) ? -1 : pvDetail.getTotalGenPower());
 						result.put("todayPower", (pvDetail.getTodayGenPower() == null) ? -1 : pvDetail.getTodayGenPower());
 					}
-					
-//				}
 			} else {
 				result.put("pvStatus", null);
 				result.put("pvStatusNm", null);
