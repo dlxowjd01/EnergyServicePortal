@@ -6,25 +6,25 @@ import java.util.Map;
 
 public interface FAQService {
 
-	List getFAQCateList();
+    List getFAQCateList();
 
-	List getFAQList(HashMap param);
-	
-	int getFAQListCnt(HashMap param);
+    List getFAQList(HashMap param);
 
-	Map getFAQCateDetail(HashMap param);
+    int getFAQListCnt(HashMap param);
 
-	Map getFAQDetail(HashMap param);
+    Map getFAQCateDetail(HashMap param);
 
-	int insertFAQCate(HashMap param);
+    Map getFAQDetail(HashMap param);
 
-	int insertFAQ(HashMap param);
+    int insertFAQCate(HashMap param);
 
-	int updateFAQCate(HashMap param);
+    int insertFAQ(HashMap param);
 
-	int updateFAQ(HashMap param);
+    int updateFAQCate(HashMap param);
 
-	int deleteFAQCate(HashMap param);
+    int updateFAQ(HashMap param);
 
-	int deleteFAQ(HashMap param);
+    int deleteFAQCate(HashMap param);
+
+    int deleteFAQ(HashMap param);
 }

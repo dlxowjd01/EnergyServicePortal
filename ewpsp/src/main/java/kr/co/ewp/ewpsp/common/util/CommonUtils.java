@@ -1,63 +1,48 @@
 package kr.co.ewp.ewpsp.common.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.lang.reflect.Array;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import kr.co.ewp.ewpsp.web.UsageController;
+import java.util.*;
 
 public class CommonUtils {
 
-	private static final Logger logger = LoggerFactory.getLogger(CommonUtils.class);
-	
-	/**
-	* Object type 변수가 비어있는지 체크
-	* 
-	* @param obj 
-	* @return Boolean : true / false
-	*/
-	public static Boolean isEmpty(Object obj) {
-		if (obj instanceof String) return obj == null || "".equals(obj.toString().trim());
-		else if (obj instanceof List) return obj == null || ((List<?>) obj).isEmpty();
-		else if (obj instanceof Map) return obj == null || ((Map<?, ?>) obj).isEmpty();
-		else if (obj instanceof Object[]) return obj == null || Array.getLength(obj) == 0;
-		else return obj == null;
-	}
- 
-	/**
-	* Object type 변수가 비어있지 않은지 체크
-	* 
-	* @param obj
-	* @return Boolean : true / false
-	*/
-	public static Boolean isNotEmpty(Object obj) {
-		return !isEmpty(obj);
-	}
-	
-	/**
-	 * 파일 업로드
-	 * @param multiRequest
-	 * @return
-	 */
+    private static final Logger logger = LoggerFactory.getLogger(CommonUtils.class);
+
+    /**
+     * Object type 변수가 비어있는지 체크
+     *
+     * @param obj
+     * @return Boolean : true / false
+     */
+    public static Boolean isEmpty(Object obj) {
+        if (obj instanceof String) return obj == null || "".equals(obj.toString().trim());
+        else if (obj instanceof List) return obj == null || ((List<?>) obj).isEmpty();
+        else if (obj instanceof Map) return obj == null || ((Map<?, ?>) obj).isEmpty();
+        else if (obj instanceof Object[]) return obj == null || Array.getLength(obj) == 0;
+        else return obj == null;
+    }
+
+    /**
+     * Object type 변수가 비어있지 않은지 체크
+     *
+     * @param obj
+     * @return Boolean : true / false
+     */
+    public static Boolean isNotEmpty(Object obj) {
+        return !isEmpty(obj);
+    }
+
+    /**
+     * 파일 업로드
+     *
+     * @param multiRequest
+     * @return
+     */
 //	public static HashMap<String, Object> fileUpload(MultipartHttpServletRequest multiRequest, HttpSession session) {
 //		logger.debug("function fileUpload");
 //		if (isEmpty(file)) {
@@ -184,99 +169,102 @@ public class CommonUtils {
 //		logger.debug("file map : "+map.toString());
 //		return map;
 //	}
-	
-	public static void deleteFile(String file_path, String file_name) {
-		File f = new File(file_path+file_name);
-		File f_origin = new File(file_path+"originals/"+file_name);
+    public static void deleteFile(String file_path, String file_name) {
+        File f = new File(file_path + file_name);
+        File f_origin = new File(file_path + "originals/" + file_name);
 
-		if(f.delete()){
-			logger.info("파일삭제 완료");
-		}else{
-			logger.info("파일삭제 실패");
-		}
-		
-		if(f_origin.delete()){
-			logger.info("원본파일삭제 완료");
-		}else{
-			logger.info("원본파일삭제 실패");
-		}
-		
-	}
-	
-	private static String filePathBlackList(String value) {
-		String returnValue = value;
-		if (returnValue == null || returnValue.trim().equals("")) {
-			return "";
-		}
+        if (f.delete()) {
+            logger.info("파일삭제 완료");
+        } else {
+            logger.info("파일삭제 실패");
+        }
 
-		returnValue = returnValue.replaceAll("\\.\\./", ""); // ../
-		returnValue = returnValue.replaceAll("\\.\\.\\\\", ""); // ..\
+        if (f_origin.delete()) {
+            logger.info("원본파일삭제 완료");
+        } else {
+            logger.info("원본파일삭제 실패");
+        }
 
-		return returnValue;
-	}
-	
-	/**
-	 * Date Type의 데이터를 포맷팅 하여 반환
-	 * @param input
-	 * @param format
-	 * @return
-	 * @throws Exception
-	 */
-	public static String convertDateFormat(Date input, String format) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-		return dateFormat.format(input);
-	}
-	
-	/**
-	 * 원하는 날짜 생성
-	 * @param year
-	 * @param month
-	 * @param date
-	 * @param hour
-	 * @param minute
-	 * @param second
-	 * @return
-	 */
-	public static Date getDate(int year, int month, int date, int hour, int minute, int second) {
-		Calendar cal = Calendar.getInstance();
-		cal.set(year, month-1, date, hour, minute, second);
-		cal.set(Calendar.MILLISECOND, 0);
-		return cal.getTime();
-	}
+    }
 
-	/**
-	 * 알파뱃 난수
-	 * 입력받은 수 만큼 렌덤 문자를 만들어 반환한다.
-	 * @param textSize
-	 * @param rmSeed
-	 * @return
-	 */
+    private static String filePathBlackList(String value) {
+        String returnValue = value;
+        if (returnValue == null || returnValue.trim().equals("")) {
+            return "";
+        }
 
-	public static String getRandomText(int textSize , Integer rmSeed){
-		Random random = new Random(System.currentTimeMillis());
-		if(CommonUtils.isEmpty(rmSeed) || rmSeed <= 0){
-			rmSeed = random.nextInt(10);
-		}
-		String rmText = "";
-		int rmNum = 0;
-		char ch = 'a';
-		for (int i = 0; i < textSize; i++) {
-			random.setSeed(System.currentTimeMillis() * rmSeed * i + rmSeed + i);
-			rmNum = random.nextInt(10);
-			ch += rmNum;
-			rmText = rmText + ch ;
-			ch = 'a';
-		}
-		return rmText;
-	}
+        returnValue = returnValue.replaceAll("\\.\\./", ""); // ../
+        returnValue = returnValue.replaceAll("\\.\\.\\\\", ""); // ..\
 
-	/**
-	 * 입력된 문자열(비밀번호)를 Hash알고리즘으로 암호화 한다.
-	 * @param pwd
-	 * @return
-	 * @throws Exception
-	 */
-	public static String encPassword(String pwd) throws Exception{
+        return returnValue;
+    }
+
+    /**
+     * Date Type의 데이터를 포맷팅 하여 반환
+     *
+     * @param input
+     * @param format
+     * @return
+     * @throws Exception
+     */
+    public static String convertDateFormat(Date input, String format) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        return dateFormat.format(input);
+    }
+
+    /**
+     * 원하는 날짜 생성
+     *
+     * @param year
+     * @param month
+     * @param date
+     * @param hour
+     * @param minute
+     * @param second
+     * @return
+     */
+    public static Date getDate(int year, int month, int date, int hour, int minute, int second) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month - 1, date, hour, minute, second);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+
+    /**
+     * 알파뱃 난수
+     * 입력받은 수 만큼 렌덤 문자를 만들어 반환한다.
+     *
+     * @param textSize
+     * @param rmSeed
+     * @return
+     */
+
+    public static String getRandomText(int textSize, Integer rmSeed) {
+        Random random = new Random(System.currentTimeMillis());
+        if (CommonUtils.isEmpty(rmSeed) || rmSeed <= 0) {
+            rmSeed = random.nextInt(10);
+        }
+        String rmText = "";
+        int rmNum = 0;
+        char ch = 'a';
+        for (int i = 0; i < textSize; i++) {
+            random.setSeed(System.currentTimeMillis() * rmSeed * i + rmSeed + i);
+            rmNum = random.nextInt(10);
+            ch += rmNum;
+            rmText = rmText + ch;
+            ch = 'a';
+        }
+        return rmText;
+    }
+
+    /**
+     * 입력된 문자열(비밀번호)를 Hash알고리즘으로 암호화 한다.
+     *
+     * @param pwd
+     * @return
+     * @throws Exception
+     */
+    public static String encPassword(String pwd) throws Exception {
 
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         String tmpString = "ewpsp" + pwd;
@@ -287,14 +275,14 @@ public class CommonUtils {
         //convert the byte to hex format method 1
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < byteData.length; i++) {
-         sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
         }
 
         //logger.info("Hex format : " + sb.toString());
 
         return sb.toString();
-	}
-	
+    }
+
 //	public static String getTimeOffset(HttpServletRequest request){
 //		Cookie[] cookies = request.getCookies();
 //		String timeOffset=null;

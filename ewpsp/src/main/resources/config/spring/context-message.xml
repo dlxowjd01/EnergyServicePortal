@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-		<property name="basenames" >
-			<list>
-				<value>classpath:/config/message/com/message-common</value>
-				<value>classpath:/rte/fdl/idgnr/messages/idgnr</value>
-				<value>classpath:/rte/fdl/property/messages/properties</value>
-				<value>classpath:/properties/globals</value>
-			</list>
-		</property>
-		<property name="cacheSeconds" value="60"/>
-		<property name="defaultEncoding" value="UTF-8"/>
-	</bean>
-	
-	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
-		<property name="defaultLocale" value="ko"/>
-	</bean>
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>classpath:/config/message/com/message-common</value>
+                <value>classpath:/rte/fdl/idgnr/messages/idgnr</value>
+                <value>classpath:/rte/fdl/property/messages/properties</value>
+                <value>classpath:/properties/globals</value>
+            </list>
+        </property>
+        <property name="cacheSeconds" value="60"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <property name="defaultLocale" value="ko"/>
+    </bean>
 
 </beans>

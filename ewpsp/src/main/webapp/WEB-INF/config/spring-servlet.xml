@@ -1,104 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns="http://www.springframework.org/schema/beans"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 
-		<!-- 서블릿 컨테이너의 디폴트 서블릿 위임 핸들러 -->
-		<!-- Handler Mapping에 해당하는 URL이 없으면 default-servlet으로 처리하겠다 는 의미 -->
-		<!-- ex) css, js, image파일 등 -->
-		<mvc:annotation-driven />
-		<mvc:default-servlet-handler />
+    <!-- 서블릿 컨테이너의 디폴트 서블릿 위임 핸들러 -->
+    <!-- Handler Mapping에 해당하는 URL이 없으면 default-servlet으로 처리하겠다 는 의미 -->
+    <!-- ex) css, js, image파일 등 -->
+    <mvc:annotation-driven/>
+    <mvc:default-servlet-handler/>
 
-		<!-- 빈 설정을 어노테이션 기반으로 하겠다는 설정태그 -->
-        <context:annotation-config />
-        <!-- 스캐닝 할 기준 패키지 -->
-        <context:component-scan base-package="kr.co.ewp.ewpsp"/>
-        
-        <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-	        <property name="prefix" value="/WEB-INF/jsp/" />
-	        <property name="suffix" value=".jsp" />
-	    </bean>
-	    
-<!--         <interceptors>
-	        <interceptor>
-	            <mapping path="/board/register"/>
-	            <mapping path="/board/modify"/>
-	            <mapping path="/board/delete"/>
-	            <ref bean="sessionCheckInterceptor"/>
-	        </interceptor>
-	    </interceptors> -->
-	    
-	    <mvc:interceptors>
-	    	<mvc:interceptor>
-	    		<mvc:mapping path="/*"/>
-	    		<mvc:exclude-mapping path="/login"/>
-	    		<mvc:exclude-mapping path="/loginUser"/>
-	    		<mvc:exclude-mapping path="/getAuthCode"/>
-	    		<mvc:exclude-mapping path="/findUserId"/>
-	    		<mvc:exclude-mapping path="/findUserPw"/>
-	    		<mvc:exclude-mapping path="/checkUserId"/>
-	    		<mvc:exclude-mapping path="/sendAuthCode"/>
-	    		<mvc:exclude-mapping path="/joinUser"/>
-	    		<mvc:exclude-mapping path="/logout"/>
-	    		<mvc:exclude-mapping path="/faq"/>
-	    		<mvc:exclude-mapping path="/getFAQList"/>
-	    		<mvc:exclude-mapping path="/getUserDetail"/>
-	    		<mvc:exclude-mapping path="/openapi/loginUser"/>
-	    		<mvc:exclude-mapping path="/openapi/getUser"/>
-	    		<bean class="kr.co.ewp.ewpsp.common.SessionCheckInterceptor" />
-	    	</mvc:interceptor>
-	    	<mvc:interceptor>
-	    		<mvc:mapping path="/siteMain"/>
-	    		<mvc:mapping path="/usage"/>
-	    		<mvc:mapping path="/peak"/>
-	    		<mvc:mapping path="/essCharge"/>
-	    		<mvc:mapping path="/pvGen"/>
-	    		<mvc:mapping path="/drResult"/>
-	    		<mvc:mapping path="/derUsage"/>
-	    		<mvc:mapping path="/deviceMonitoring"/>
-	    		<mvc:mapping path="/deviceGroup"/>
-	    		<mvc:mapping path="/control"/>
-	    		<mvc:mapping path="/kepcoBill"/>
-	    		<mvc:mapping path="/essRevenue"/>
-	    		<mvc:mapping path="/drRevenue"/>
-	    		<mvc:mapping path="/pvRevenue"/>
-	    		<mvc:mapping path="/main"/>
-	    		<mvc:mapping path="/kepcoMngSet"/>
-	    		<mvc:mapping path="/cmpyGrpSiteMng"/>
-	    		<mvc:mapping path="/userMng"/>
-	    		<mvc:mapping path="/faq"/>
+    <!-- 빈 설정을 어노테이션 기반으로 하겠다는 설정태그 -->
+    <context:annotation-config/>
+    <!-- 스캐닝 할 기준 패키지 -->
+    <context:component-scan base-package="kr.co.ewp.ewpsp"/>
 
-	    		<bean class="kr.co.ewp.ewpsp.common.PreLoadInterceptor" />
-	    	</mvc:interceptor>
-    		<bean class="kr.co.ewp.ewpsp.common.LocaleInterceptor" />
-	    </mvc:interceptors>
-	    
-	    <!-- properties 설정 -->
-	    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-	        <property name="locations">
-	            <list>    
-	                <value>classpath:properties/**/*.properties</value>
-	            </list>
-	        </property>
-	    </bean>
-	    <util:properties id="local" location="file:/home/ubuntu/ewpsp_config/local.properties" />
-	    
-	    <!-- 다국어 처리 message 프로퍼티 설정 -->
-	    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
-	    <mvc:interceptors>
-		    <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
-		        <property name="paramName" value="lang" />
-		    </bean>
-	    </mvc:interceptors>
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--         <interceptors>
+                <interceptor>
+                    <mapping path="/board/register"/>
+                    <mapping path="/board/modify"/>
+                    <mapping path="/board/delete"/>
+                    <ref bean="sessionCheckInterceptor"/>
+                </interceptor>
+            </interceptors> -->
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/*"/>
+            <mvc:exclude-mapping path="/login"/>
+            <mvc:exclude-mapping path="/loginUser"/>
+            <mvc:exclude-mapping path="/getAuthCode"/>
+            <mvc:exclude-mapping path="/findUserId"/>
+            <mvc:exclude-mapping path="/findUserPw"/>
+            <mvc:exclude-mapping path="/checkUserId"/>
+            <mvc:exclude-mapping path="/sendAuthCode"/>
+            <mvc:exclude-mapping path="/joinUser"/>
+            <mvc:exclude-mapping path="/logout"/>
+            <mvc:exclude-mapping path="/faq"/>
+            <mvc:exclude-mapping path="/getFAQList"/>
+            <mvc:exclude-mapping path="/getUserDetail"/>
+            <mvc:exclude-mapping path="/openapi/loginUser"/>
+            <mvc:exclude-mapping path="/openapi/getUser"/>
+            <bean class="kr.co.ewp.ewpsp.common.SessionCheckInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/siteMain"/>
+            <mvc:mapping path="/usage"/>
+            <mvc:mapping path="/peak"/>
+            <mvc:mapping path="/essCharge"/>
+            <mvc:mapping path="/pvGen"/>
+            <mvc:mapping path="/drResult"/>
+            <mvc:mapping path="/derUsage"/>
+            <mvc:mapping path="/deviceMonitoring"/>
+            <mvc:mapping path="/deviceGroup"/>
+            <mvc:mapping path="/control"/>
+            <mvc:mapping path="/kepcoBill"/>
+            <mvc:mapping path="/essRevenue"/>
+            <mvc:mapping path="/drRevenue"/>
+            <mvc:mapping path="/pvRevenue"/>
+            <mvc:mapping path="/main"/>
+            <mvc:mapping path="/kepcoMngSet"/>
+            <mvc:mapping path="/cmpyGrpSiteMng"/>
+            <mvc:mapping path="/userMng"/>
+            <mvc:mapping path="/faq"/>
+
+            <bean class="kr.co.ewp.ewpsp.common.PreLoadInterceptor"/>
+        </mvc:interceptor>
+        <bean class="kr.co.ewp.ewpsp.common.LocaleInterceptor"/>
+    </mvc:interceptors>
+
+    <!-- properties 설정 -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:properties/**/*.properties</value>
+            </list>
+        </property>
+    </bean>
+    <util:properties id="local" location="file:/Users/encored/Project/EWPServicePortal/ewpsp/src/main/resources/properties/globals.properties"/>
+
+    <!-- 다국어 처리 message 프로퍼티 설정 -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver"/>
+    <mvc:interceptors>
+        <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+            <property name="paramName" value="lang"/>
+        </bean>
+    </mvc:interceptors>
 
 </beans>

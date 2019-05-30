@@ -6,8 +6,8 @@ import java.util.Map;
 
 public interface DRResultService {
 
-	List getDRResultList(HashMap param) throws Exception;
-	
-	Map getCbl(HashMap param) throws Exception;
+    List getDRResultList(HashMap param) throws Exception;
+
+    Map getCbl(HashMap param) throws Exception;
 
 }

@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
 
 
-	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="file:/home/ubuntu/ewpsp_config/db.properties" />
-		<property name="fileEncoding" value="UTF-8" />
-	</bean>
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="file:/Users/encored/Project/EWPServicePortal/ewpsp/src/main/resources/properties/globals.properties"/>
+        <property name="fileEncoding" value="UTF-8"/>
+    </bean>
 
-	<!-- MariaDB -->
+    <!-- MariaDB -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${db.driverClassName}"/>
         <property name="url" value="${db.url}"/>
@@ -26,8 +24,8 @@
         <property name="password" value="${globals.password}"/>
     </bean> -->
 
-	<!-- MySQL --><!-- 개발db -->
-        <!-- <property name="url" value="jdbc:log4jdbc:mysql://121.124.127.173/ewpsp?serverTimezone=UTC"/> -->
+    <!-- MySQL --><!-- 개발db -->
+    <!-- <property name="url" value="jdbc:log4jdbc:mysql://121.124.127.173/ewpsp?serverTimezone=UTC"/> -->
     <!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
         <property name="url" value="jdbc:mysql://121.124.127.173/ewpsp"/>
@@ -35,14 +33,13 @@
         <property name="password" value="#xnrpej0920#"/>
     </bean> -->
 
-	<!-- Oracle -->
+    <!-- Oracle -->
     <!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
         <property name="url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
         <property name="username" value="아이디"/>
         <property name="password" value="비밀번호"/>
     </bean> -->
-
 
 
 </beans>

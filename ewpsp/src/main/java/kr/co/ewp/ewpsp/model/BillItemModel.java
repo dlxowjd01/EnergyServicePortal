@@ -35,255 +35,255 @@ public class BillItemModel {
     private Double essDischargingInOnPeak;//
     private Double demandChargeReduction;//
     private Double energyChargeReduction;
-//    private Integer essBdayInMonth;
+    //    private Integer essBdayInMonth;
     private Integer bdayInMonth;
 
     public String getMeterReadingDate() {
-      return meterReadingDate;
+        return meterReadingDate;
     }
 
     public void setMeterReadingDate(String meterReadingDate) {
-      this.meterReadingDate = meterReadingDate;
+        this.meterReadingDate = meterReadingDate;
     }
 
     public String getBillOfTheMonth() {
-      return billOfTheMonth;
+        return billOfTheMonth;
     }
 
     public void setBillOfTheMonth(String billOfTheMonth) {
-      this.billOfTheMonth = billOfTheMonth;
+        this.billOfTheMonth = billOfTheMonth;
     }
 
     public Long getServicePeriodFrom() {
-      return servicePeriodFrom;
+        return servicePeriodFrom;
     }
 
     public void setServicePeriodFrom(Long servicePeriodFrom) {
-      this.servicePeriodFrom = servicePeriodFrom;
+        this.servicePeriodFrom = servicePeriodFrom;
     }
 
     public Long getServicePeriodTo() {
-      return servicePeriodTo;
+        return servicePeriodTo;
     }
 
     public void setServicePeriodTo(Long servicePeriodTo) {
-      this.servicePeriodTo = servicePeriodTo;
+        this.servicePeriodTo = servicePeriodTo;
     }
 
     public Double getBaseRate() {
-      return baseRate;
+        return baseRate;
     }
 
     public void setBaseRate(Double baseRate) {
-      this.baseRate = baseRate;
+        this.baseRate = baseRate;
     }
 
     public Double getElectricityConsumptionRate() {
-      return electricityConsumptionRate;
+        return electricityConsumptionRate;
     }
 
     public void setElectricityConsumptionRate(Double electricityConsumptionRate) {
-      this.electricityConsumptionRate = electricityConsumptionRate;
+        this.electricityConsumptionRate = electricityConsumptionRate;
     }
 
     public Double getPowerFactorRate() {
-      return powerFactorRate;
+        return powerFactorRate;
     }
 
     public void setPowerFactorRate(Double powerFactorRate) {
-      this.powerFactorRate = powerFactorRate;
+        this.powerFactorRate = powerFactorRate;
     }
 
     public Double getTotalElectricityRate() {
-      return totalElectricityRate;
+        return totalElectricityRate;
     }
 
     public void setTotalElectricityRate(Double totalElectricityRate) {
-      this.totalElectricityRate = totalElectricityRate;
+        this.totalElectricityRate = totalElectricityRate;
     }
 
     public Double getElectricityFund() {
-      return electricityFund;
+        return electricityFund;
     }
 
     public void setElectricityFund(Double electricityFund) {
-      this.electricityFund = electricityFund;
+        this.electricityFund = electricityFund;
     }
 
     public Double getValueAddedTax() {
-      return valueAddedTax;
+        return valueAddedTax;
     }
 
     public void setValueAddedTax(Double valueAddedTax) {
-      this.valueAddedTax = valueAddedTax;
+        this.valueAddedTax = valueAddedTax;
     }
 
     public Double getTotalAmountBilled() {
-      return totalAmountBilled;
+        return totalAmountBilled;
     }
 
     public void setTotalAmountBilled(Double totalAmountBilled) {
-      this.totalAmountBilled = totalAmountBilled;
+        this.totalAmountBilled = totalAmountBilled;
     }
 
     public Double getMidPeakRate() {
-      return midPeakRate;
+        return midPeakRate;
     }
 
     public void setMidPeakRate(Double midPeakRate) {
-      this.midPeakRate = midPeakRate;
+        this.midPeakRate = midPeakRate;
     }
 
     public Double getOffPeakRate() {
-      return offPeakRate;
+        return offPeakRate;
     }
 
     public void setOffPeakRate(Double offPeakRate) {
-      this.offPeakRate = offPeakRate;
+        this.offPeakRate = offPeakRate;
     }
 
     public Double getOnPeakRate() {
-      return onPeakRate;
+        return onPeakRate;
     }
 
     public void setOnPeakRate(Double onPeakRate) {
-      this.onPeakRate = onPeakRate;
+        this.onPeakRate = onPeakRate;
     }
 
     public Double getPeakPowerDemand() {
-      return peakPowerDemand;
+        return peakPowerDemand;
     }
 
     public void setPeakPowerDemand(Double peakPowerDemand) {
-      this.peakPowerDemand = peakPowerDemand;
+        this.peakPowerDemand = peakPowerDemand;
     }
 
     public Double getEnergyUsage() {
-      return energyUsage;
+        return energyUsage;
     }
 
     public void setEnergyUsage(Double energyUsage) {
-      this.energyUsage = energyUsage;
+        this.energyUsage = energyUsage;
     }
 
     public Double getLeadingPowerFactor() {
-      return leadingPowerFactor;
+        return leadingPowerFactor;
     }
 
     public void setLeadingPowerFactor(Double leadingPowerFactor) {
-      this.leadingPowerFactor = leadingPowerFactor;
+        this.leadingPowerFactor = leadingPowerFactor;
     }
 
     public Double getLaggingPowerFactor() {
-      return laggingPowerFactor;
+        return laggingPowerFactor;
     }
 
     public void setLaggingPowerFactor(Double laggingPowerFactor) {
-      this.laggingPowerFactor = laggingPowerFactor;
+        this.laggingPowerFactor = laggingPowerFactor;
     }
 
     public Double getMidPeakEnergyUsage() {
-      return midPeakEnergyUsage;
+        return midPeakEnergyUsage;
     }
 
     public void setMidPeakEnergyUsage(Double midPeakEnergyUsage) {
-      this.midPeakEnergyUsage = midPeakEnergyUsage;
+        this.midPeakEnergyUsage = midPeakEnergyUsage;
     }
 
     public Double getOffPeakEnergyUsage() {
-      return offPeakEnergyUsage;
+        return offPeakEnergyUsage;
     }
 
     public void setOffPeakEnergyUsage(Double offPeakEnergyUsage) {
-      this.offPeakEnergyUsage = offPeakEnergyUsage;
+        this.offPeakEnergyUsage = offPeakEnergyUsage;
     }
 
     public Double getOnPeakEnergyUsage() {
-      return onPeakEnergyUsage;
+        return onPeakEnergyUsage;
     }
 
     public void setOnPeakEnergyUsage(Double onPeakEnergyUsage) {
-      this.onPeakEnergyUsage = onPeakEnergyUsage;
+        this.onPeakEnergyUsage = onPeakEnergyUsage;
     }
 
     public Double getEssChargingIncentive() {
-      return essChargingIncentive;
+        return essChargingIncentive;
     }
 
     public void setEssChargingIncentive(Double essChargingIncentive) {
-      this.essChargingIncentive = essChargingIncentive;
+        this.essChargingIncentive = essChargingIncentive;
     }
 
     public Double getEssDischargingIncentive() {
-      return essDischargingIncentive;
+        return essDischargingIncentive;
     }
 
     public void setEssDischargingIncentive(Double essDischargingIncentive) {
-      this.essDischargingIncentive = essDischargingIncentive;
+        this.essDischargingIncentive = essDischargingIncentive;
     }
 
     public Double getEssChargingInOffPeak() {
-      return essChargingInOffPeak;
+        return essChargingInOffPeak;
     }
 
     public void setEssChargingInOffPeak(Double essChargingInOffPeak) {
-      this.essChargingInOffPeak = essChargingInOffPeak;
+        this.essChargingInOffPeak = essChargingInOffPeak;
     }
 
     public Double getEssChargingInMidPeak() {
-      return essChargingInMidPeak;
+        return essChargingInMidPeak;
     }
 
     public void setEssChargingInMidPeak(Double essChargingInMidPeak) {
-      this.essChargingInMidPeak = essChargingInMidPeak;
+        this.essChargingInMidPeak = essChargingInMidPeak;
     }
 
     public Double getEssChargingInOnPeak() {
-      return essChargingInOnPeak;
+        return essChargingInOnPeak;
     }
 
     public void setEssChargingInOnPeak(Double essChargingInOnPeak) {
-      this.essChargingInOnPeak = essChargingInOnPeak;
+        this.essChargingInOnPeak = essChargingInOnPeak;
     }
 
     public Double getEssDischargingInOffPeak() {
-      return essDischargingInOffPeak;
+        return essDischargingInOffPeak;
     }
 
     public void setEssDischargingInOffPeak(Double essDischargingInOffPeak) {
-      this.essDischargingInOffPeak = essDischargingInOffPeak;
+        this.essDischargingInOffPeak = essDischargingInOffPeak;
     }
 
     public Double getEssDischargingInMidPeak() {
-      return essDischargingInMidPeak;
+        return essDischargingInMidPeak;
     }
 
     public void setEssDischargingInMidPeak(Double essDischargingInMidPeak) {
-      this.essDischargingInMidPeak = essDischargingInMidPeak;
+        this.essDischargingInMidPeak = essDischargingInMidPeak;
     }
 
     public Double getEssDischargingInOnPeak() {
-      return essDischargingInOnPeak;
+        return essDischargingInOnPeak;
     }
 
     public void setEssDischargingInOnPeak(Double essDischargingInOnPeak) {
-      this.essDischargingInOnPeak = essDischargingInOnPeak;
+        this.essDischargingInOnPeak = essDischargingInOnPeak;
     }
 
     public Double getDemandChargeReduction() {
-      return demandChargeReduction;
+        return demandChargeReduction;
     }
 
     public void setDemandChargeReduction(Double demandChargeReduction) {
-      this.demandChargeReduction = demandChargeReduction;
+        this.demandChargeReduction = demandChargeReduction;
     }
 
     public Double getEnergyChargeReduction() {
-      return energyChargeReduction;
+        return energyChargeReduction;
     }
 
     public void setEnergyChargeReduction(Double energyChargeReduction) {
-      this.energyChargeReduction = energyChargeReduction;
+        this.energyChargeReduction = energyChargeReduction;
     }
 
 //    public Integer getEssBdayInMonth() {
@@ -294,11 +294,11 @@ public class BillItemModel {
 //      this.essBdayInMonth = essBdayInMonth;
 //    }
 
-	public Integer getBdayInMonth() {
-		return bdayInMonth;
-	}
+    public Integer getBdayInMonth() {
+        return bdayInMonth;
+    }
 
-	public void setBdayInMonth(Integer bdayInMonth) {
-		this.bdayInMonth = bdayInMonth;
-	}
+    public void setBdayInMonth(Integer bdayInMonth) {
+        this.bdayInMonth = bdayInMonth;
+    }
 }

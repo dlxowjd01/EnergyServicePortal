@@ -6,27 +6,27 @@ import java.util.Map;
 
 public interface ControlService {
 
-	Map getDeviceAlarmCnt(HashMap param) throws Exception;
-	
-	Map getSiteMainAlarmCnt(HashMap param) throws Exception;
-	
-	Map getGMainDeviceAlarmCnt(HashMap param) throws Exception;
-	
-	Map getGMainAlarmCnt(HashMap param) throws Exception;
+    Map getDeviceAlarmCnt(HashMap param) throws Exception;
 
-	List getAlarmList(HashMap param) throws Exception;
-	
-	int getAlarmListCnt(HashMap param) throws Exception;
+    Map getSiteMainAlarmCnt(HashMap param) throws Exception;
 
-	int updateAlarm(HashMap param) throws Exception;
+    Map getGMainDeviceAlarmCnt(HashMap param) throws Exception;
 
-	List getSmsUserList(HashMap param) throws Exception;
+    Map getGMainAlarmCnt(HashMap param) throws Exception;
 
-	List getSmsAddresseeList(HashMap param) throws Exception;
-	
-	List getInsertAddresseeNameList(HashMap param) throws Exception;
+    List getAlarmList(HashMap param) throws Exception;
 
-	int insertAddressee(HashMap param) throws Exception;
+    int getAlarmListCnt(HashMap param) throws Exception;
 
-	int deleteAddressee(HashMap param) throws Exception;
+    int updateAlarm(HashMap param) throws Exception;
+
+    List getSmsUserList(HashMap param) throws Exception;
+
+    List getSmsAddresseeList(HashMap param) throws Exception;
+
+    List getInsertAddresseeNameList(HashMap param) throws Exception;
+
+    int insertAddressee(HashMap param) throws Exception;
+
+    int deleteAddressee(HashMap param) throws Exception;
 }

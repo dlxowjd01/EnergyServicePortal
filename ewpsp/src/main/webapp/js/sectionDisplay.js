@@ -1,95 +1,99 @@
-;(function($){
-	$.fn.sectionDisplay = function(options){
-		var opts = $.extend({}, $.fn.sectionDisplay.defaults, options);
-		
-		return this.each(function(){
-			//OVJECT SEARCH
-			var elem = $(this);
-			var nav = opts.nav;
-			
-			/* DISPLAY RESET */
-			var displayReset = function(){
-				elem.find(".sec_obj").hide();
-				nav.children("*").removeClass("active");
-			}
-			
-			/* HANDLER */
-			var handEvent = function(handIndex){
-				displayReset(); //SLIDE RESET
-				elem.find(".sec_obj").eq(handIndex).show(); //INDEX SLIDE ACTIVE
-				nav.children("*").eq(handIndex).addClass("active"); //NAV ACTIVE
-				console.log(elem.find(".sec_obj").eq(handIndex))
-			}
+;(function ($) {
+    $.fn.sectionDisplay = function (options) {
+        var opts = $.extend({}, $.fn.sectionDisplay.defaults, options);
 
-			//SLIDE OVJECT MARKING
-			$(this).children("*").each(function(){
-				if(!$(this).hasClass(nav.attr("class"))){
-					//Å¬·¡½º Ãß°¡ ÈÄ HIDE
-					$(this).addClass("sec_obj");
-					displayReset();
-				}
-			});
-			
-			//DEFUALT
-			handEvent(opts.start);
-			
-			//EVENT LISTENER
-			nav.children("*").bind("click", function(){
-				handEvent($(this).index());
-			});
+        return this.each(function () {
+            //OVJECT SEARCH
+            var elem = $(this);
+            var nav = opts.nav;
+
+            /* DISPLAY RESET */
+            var displayReset = function () {
+                elem.find(".sec_obj").hide();
+                nav.children("*").removeClass("active");
+            };
+
+            /* HANDLER */
+            var handEvent = function (handIndex) {
+                displayReset(); //SLIDE RESET
+                elem.find(".sec_obj").eq(handIndex).show(); //INDEX SLIDE ACTIVE
+                nav.children("*").eq(handIndex).addClass("active"); //NAV ACTIVE
+                console.log(elem.find(".sec_obj").eq(handIndex))
+            };
+
+            //SLIDE OVJECT MARKING
+            $(this).children("*").each(function () {
+                if (!$(this).hasClass(nav.attr("class"))) {
+                    //Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½ï¿½ HIDE
+                    $(this).addClass("sec_obj");
+                    displayReset();
+                }
+            });
+
+            //DEFUALT
+            handEvent(opts.start);
+
+            //EVENT LISTENER
+            nav.children("*").bind("click", function () {
+                handEvent($(this).index());
+            });
 
 
-			//EVENT LISTENER
-			if(opts.act == "hover"){
-				nav.children("*").hover(function(){
-					handEvent($(this).index());
-				});
-			} else if(opts.act == "click"){
-				nav.children("*").bind("click", function(){
-					handEvent($(this).index());
-				});
-			}
-			
-			//ÀÌº¥Æ® Å¸ÀÌ¸Ó
-			if(opts.auto == true){
-				var autoSlideListener = setInterval(function(){autoSlide();}, opts.autoTime);
-				
-				//¸¶¿ì½º ¿À¹ö½Ã ½½¶óÀÌµå ¸ØÃß±â
-				elem.hover(function(){
-					clearInterval(autoSlideListener);
-				}, function(){
-					autoSlideListener = setInterval(function(){autoSlide();}, opts.autoTime);
-				});
-				
-				var getNowIndex = function(){
-					return nav.find(".active");
-				}
-				var getPagerLength = function(){
-					return elem.find(".sec_obj").length;
-				}
-				var autoSlide = function(){
-					var length = getPagerLength();
-					var list = getNowIndex();
-					
-					console.log(list.index() +"/"+ length)
-					
-					if (list.index() < (length - 1)){
-						handEvent(list.index() + 1);
-					} else {
-						handEvent(0);
-					}
-				}
-			}
-			
-		});
-	}
-	$.fn.sectionDisplay.defaults = {
-		act : "hover",
-		start:0,
-		nav : null,
-		auto:false,
-		autoTime:3000
-	}
+            //EVENT LISTENER
+            if (opts.act == "hover") {
+                nav.children("*").hover(function () {
+                    handEvent($(this).index());
+                });
+            } else if (opts.act == "click") {
+                nav.children("*").bind("click", function () {
+                    handEvent($(this).index());
+                });
+            }
+
+            //ï¿½Ìºï¿½Æ® Å¸ï¿½Ì¸ï¿½
+            if (opts.auto == true) {
+                var autoSlideListener = setInterval(function () {
+                    autoSlide();
+                }, opts.autoTime);
+
+                //ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ß±ï¿½
+                elem.hover(function () {
+                    clearInterval(autoSlideListener);
+                }, function () {
+                    autoSlideListener = setInterval(function () {
+                        autoSlide();
+                    }, opts.autoTime);
+                });
+
+                var getNowIndex = function () {
+                    return nav.find(".active");
+                };
+                var getPagerLength = function () {
+                    return elem.find(".sec_obj").length;
+                };
+                var autoSlide = function () {
+                    var length = getPagerLength();
+                    var list = getNowIndex();
+
+                    console.log(list.index() + "/" + length);
+
+                    if (list.index() < (length - 1)) {
+                        handEvent(list.index() + 1);
+                    } else {
+                        handEvent(0);
+                    }
+                }
+            }
+
+        });
+    };
+    $.fn.sectionDisplay.defaults = {
+        act: "hover",
+        start: 0,
+        nav: null,
+        auto: false,
+        autoTime: 3000
+    }
 })(jQuery);
 
 /*

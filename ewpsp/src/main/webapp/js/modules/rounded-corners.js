@@ -1,6 +1,6 @@
 /**
  * Highcharts plugin for creating individual rounded corners.
- * 
+ *
  * Author: Torstein Honsi
  * Version: 1.0.5
  * License: MIT License
@@ -35,10 +35,10 @@
                 rTopRight = rel(options.borderRadiusTopRight || 0, w),
                 rBottomRight = rel(options.borderRadiusBottomRight || 0, w),
                 rBottomLeft = rel(options.borderRadiusBottomLeft || 0, w);
-        
+
             if (rTopLeft || rTopRight || rBottomRight || rBottomLeft) {
-                var maxR = Math.min(w, h) / 2
-                    
+                var maxR = Math.min(w, h) / 2;
+
                 if (rTopLeft > maxR) {
                     rTopLeft = maxR;
                 }
@@ -82,7 +82,7 @@
                     ]
                 };
             }
-                
+
         });
     });
 }));

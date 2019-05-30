@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="pvRevenue">
-	<select id="getPVRevenueList" parameterType="hashMap" resultType="hashMap">
+    <select id="getPVRevenueList" parameterType="hashMap" resultType="hashMap">
 		/* PV 수익 조회 */
 		select 
 			round( (net_gen_val*rec_weight) , 2) as rec_deal, net_gen_val as smp_deal, 
@@ -15,8 +15,8 @@
 		and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
 		order by std_date
 	</select>
-	
-	<select id="getPVRevenueTexList" parameterType="hashMap" resultType="hashMap">
+
+    <select id="getPVRevenueTexList" parameterType="hashMap" resultType="hashMap">
 		/* PV 수익 명세서 조회 */
 		select 
 			round( (net_gen_val*rec_weight) , 2) as rec_deal, net_gen_val as smp_deal, 
@@ -29,5 +29,5 @@
 		and std_date between #{startDay } and #{endDay }
 		order by std_date
 	</select>
-	
+
 </mapper>

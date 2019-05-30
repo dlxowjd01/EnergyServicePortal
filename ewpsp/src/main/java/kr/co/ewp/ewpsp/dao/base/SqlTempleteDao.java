@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class SqlTempleteDao {
 
-	@Autowired
-	private SqlSessionTemplate sqlSession;
-	
+    @Autowired
+    private SqlSessionTemplate sqlSession;
+
 }

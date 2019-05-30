@@ -15,50 +15,50 @@
     <insert id="insert" parameterType="EssCharge">
         /* ESS충방전량 등록 */
         INSERT INTO tb_ess_charge (
-               site_id,
-               device_id,
-               std_timestamp,
-               std_date,
-               chg_val,
-               dischg_val,
-               reg_date
-             ) VALUES (
-               #{entity.siteId},
-               #{entity.deviceId},
-               #{entity.stdTimestamp},
-               #{entity.stdDate},
-               #{entity.chgVal},
-               #{entity.dischgVal},
-               NOW())
+        site_id,
+        device_id,
+        std_timestamp,
+        std_date,
+        chg_val,
+        dischg_val,
+        reg_date
+        ) VALUES (
+        #{entity.siteId},
+        #{entity.deviceId},
+        #{entity.stdTimestamp},
+        #{entity.stdDate},
+        #{entity.chgVal},
+        #{entity.dischgVal},
+        NOW())
         <selectKey resultType="Long" keyProperty="entity.essChgIdx">
             SELECT LAST_INSERT_ID()
         </selectKey>
     </insert>
     <update id="update" parameterType="EssCharge">
         /* ESS충방전량 수정 */
-        UPDATE tb_ess_charge 
-               <set>
-               <if test="entity.siteId != null">
-               site_id = #{entity.siteId},
-               </if>
-               <if test="entity.deviceId != null">
-               device_id = #{entity.deviceId},
-               </if>
-               <if test="entity.stdTimestamp != null">
-               std_timestamp = #{entity.stdTimestamp},
-               </if>
-               <if test="entity.stdDate != null">
-               std_date = #{entity.stdDate},
-               </if>
-               <if test="entity.chgVal != null">
-               chg_val = #{entity.chgVal},
-               </if>
-               <if test="entity.dischgVal != null">
-               dischg_val = #{entity.dischgVal},
-               </if>
-               mod_date = NOW()
-               </set>
-         WHERE ess_chg_idx = #{entity.essChgIdx}
+        UPDATE tb_ess_charge
+        <set>
+            <if test="entity.siteId != null">
+                site_id = #{entity.siteId},
+            </if>
+            <if test="entity.deviceId != null">
+                device_id = #{entity.deviceId},
+            </if>
+            <if test="entity.stdTimestamp != null">
+                std_timestamp = #{entity.stdTimestamp},
+            </if>
+            <if test="entity.stdDate != null">
+                std_date = #{entity.stdDate},
+            </if>
+            <if test="entity.chgVal != null">
+                chg_val = #{entity.chgVal},
+            </if>
+            <if test="entity.dischgVal != null">
+                dischg_val = #{entity.dischgVal},
+            </if>
+            mod_date = NOW()
+        </set>
+        WHERE ess_chg_idx = #{entity.essChgIdx}
     </update>
     <delete id="delete" parameterType="EssCharge">
         /* ESS충방전량 삭제 */
@@ -82,18 +82,18 @@
     <select id="selectList" resultMap="EssChargeRM">
         /* ESS충방전량 목록조회 */
         SELECT ess_chg_idx,
-               site_id,
-               device_id,
-               std_timestamp,
-               std_date,
-               chg_val,
-               dischg_val,
-               reg_date,
-               mod_date
-          FROM tb_ess_charge
-               <if test="pageable != null">
-         WHERE LIMIT #{pageable.start}, #{pageable.end}
-               </if>
+        site_id,
+        device_id,
+        std_timestamp,
+        std_date,
+        chg_val,
+        dischg_val,
+        reg_date,
+        mod_date
+        FROM tb_ess_charge
+        <if test="pageable != null">
+            WHERE LIMIT #{pageable.start}, #{pageable.end}
+        </if>
     </select>
     <select id="selectListCount" resultType="int">
         /* ESS충방전량 전체 개수 조회 */

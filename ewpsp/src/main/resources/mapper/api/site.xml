@@ -6,7 +6,8 @@
         <result property="userIdx" column="user_idx" javaType="Integer"></result><!--사용자식별자-->
         <result property="siteName" column="site_name" javaType="String"></result><!--사이트명-->
         <result property="siteGrpIdx" column="site_grp_idx" javaType="Integer"></result><!--사이트그룹식별자-->
-        <result property="areaType" column="area_type" javaType="String"></result><!--지역구분(01:서울,02:부산,03:대구,04:인천,05:광주,06:대전,07:울산,08:세종,09:경기,10:강원,11:충북,12:충남,13:전북,14:전남,15:경북,16:경남,17:제주)-->
+        <result property="areaType" column="area_type"
+                javaType="String"></result><!--지역구분(01:서울,02:부산,03:대구,04:인천,05:광주,06:대전,07:울산,08:세종,09:경기,10:강원,11:충북,12:충남,13:전북,14:전남,15:경북,16:경남,17:제주)-->
         <result property="timeZone" column="time_zone" javaType="String"></result><!--타임Zone(예:GMT+8)-->
         <result property="localEmsAddr" column="local_ems_addr" javaType="String"></result><!--Local EMS 주소-->
         <result property="localEmsKey" column="local_ems_key" javaType="String"></result><!--Local EMS 암호키-->
@@ -49,44 +50,44 @@
     </insert>
     <update id="update" parameterType="Site">
         /* 사이트 수정 */
-        UPDATE tb_site 
-               <set>
-               <if test="entity.userIdx != null">
-               user_idx = #{entity.userIdx},
-               </if>
-               <if test="entity.siteName != null">
-               site_name = #{entity.siteName},
-               </if>
-               <if test="entity.siteGrpIdx != null">
-               site_grp_idx = #{entity.siteGrpIdx},
-               </if>
-               <if test="entity.areaType != null">
-               area_type = #{entity.areaType},
-               </if>
-               <if test="entity.timeZone != null">
-               time_zone = #{entity.timeZone},
-               </if>
-               <if test="entity.localEmsAddr != null">
-               local_ems_addr = #{entity.localEmsAddr},
-               </if>
-               <if test="entity.localEmsKey != null">
-               local_ems_key = #{entity.localEmsKey},
-               </if>
-               <if test="entity.delYn != null">
-               del_yn = #{entity.delYn},
-               </if>
-               <if test="entity.regUid != null">
-               reg_uid = #{entity.regUid},
-               </if>
-               <if test="entity.regDate != null">
-               reg_date = #{entity.regDate},
-               </if>
-               <if test="entity.modUid != null">
-               mod_uid = #{entity.modUid},
-               </if>
-               mod_date = NOW(),
-               </set>
-         WHERE site_id = #{entity.siteId}
+        UPDATE tb_site
+        <set>
+            <if test="entity.userIdx != null">
+                user_idx = #{entity.userIdx},
+            </if>
+            <if test="entity.siteName != null">
+                site_name = #{entity.siteName},
+            </if>
+            <if test="entity.siteGrpIdx != null">
+                site_grp_idx = #{entity.siteGrpIdx},
+            </if>
+            <if test="entity.areaType != null">
+                area_type = #{entity.areaType},
+            </if>
+            <if test="entity.timeZone != null">
+                time_zone = #{entity.timeZone},
+            </if>
+            <if test="entity.localEmsAddr != null">
+                local_ems_addr = #{entity.localEmsAddr},
+            </if>
+            <if test="entity.localEmsKey != null">
+                local_ems_key = #{entity.localEmsKey},
+            </if>
+            <if test="entity.delYn != null">
+                del_yn = #{entity.delYn},
+            </if>
+            <if test="entity.regUid != null">
+                reg_uid = #{entity.regUid},
+            </if>
+            <if test="entity.regDate != null">
+                reg_date = #{entity.regDate},
+            </if>
+            <if test="entity.modUid != null">
+                mod_uid = #{entity.modUid},
+            </if>
+            mod_date = NOW(),
+        </set>
+        WHERE site_id = #{entity.siteId}
     </update>
     <delete id="delete" parameterType="Site">
         /* 사이트 삭제 */

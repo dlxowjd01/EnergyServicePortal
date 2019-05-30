@@ -7,14 +7,11 @@
 
 package kr.co.ewp.ewpsp.web;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
-
+import kr.co.ewp.ewpsp.common.util.CommonUtils;
+import kr.co.ewp.ewpsp.common.util.StringUtil;
+import kr.co.ewp.ewpsp.common.util.UserUtil;
+import kr.co.ewp.ewpsp.service.LoginService;
+import kr.co.ewp.ewpsp.service.SMSService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -23,187 +20,193 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.co.ewp.ewpsp.common.util.CommonUtils;
-import kr.co.ewp.ewpsp.common.util.StringUtil;
-import kr.co.ewp.ewpsp.common.util.UserUtil;
-import kr.co.ewp.ewpsp.service.LoginService;
-import kr.co.ewp.ewpsp.service.SMSService;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
 @Controller
 public class LoginController {
 
-	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+    @Resource(name = "egovMessageSource")
+    EgovMessageSource egovMessageSource;
+    @Resource(name = "loginService")
+    private LoginService loginService;
+    @Resource(name = "smsService")
+    private SMSService smsService;
 
-	@Resource(name="loginService")
-	private LoginService loginService;
+    @RequestMapping("/login")
+    public String login(Model model) {
+        logger.debug("/login");
+        return "ewp/login/login";
+    }
 
-	@Resource(name="smsService")
-	private SMSService smsService;
+    @RequestMapping("/logout")
+    public String logout(HttpSession session, Model model) {
+        logger.debug("/logout");
+        session.removeAttribute(UserUtil.USER_SESSION_ID);
+        return "redirect:/login";
+    }
 
-	@Resource(name = "egovMessageSource")
-	EgovMessageSource egovMessageSource;
+    @RequestMapping("/loginUser")
+    public String loginUser(HttpSession session, Model model, @RequestParam HashMap param) throws Exception {
+        logger.debug("/loginUser");
+        logger.debug("param : {}", param);
 
-	@RequestMapping("/login")
-	public String login(Model model) {
-		logger.debug("/login");
-		return "ewp/login/login";
-	}
-
-	@RequestMapping("/logout")
-	public String logout(HttpSession session, Model model) {
-		logger.debug("/logout");
-		session.removeAttribute(UserUtil.USER_SESSION_ID);
-		return "redirect:/login";
-	}
-
-	@RequestMapping("/loginUser")
-	public String loginUser(HttpSession session, Model model, @RequestParam HashMap param) throws Exception {
-		logger.debug("/loginUser");
-		logger.debug("param : {}", param);
-
-		Map result = loginService.getUserDetail(param);
-		logger.debug("result : {}", result);
+        Map result = loginService.getUserDetail(param);
+        logger.debug("result : {}", result);
 
 //		session.setMaxInactiveInterval(24 * 60 * 60); // web.xml 에 추가함
 
-		if (result != null && CommonUtils.isNotEmpty(result.get("user_idx"))) {
-			String authType = (String)result.get("auth_type");
-			String siteId = (String)result.get("site_id");
+        if (result != null && CommonUtils.isNotEmpty(result.get("user_idx"))) {
+            String authType = (String) result.get("auth_type");
+            String siteId = (String) result.get("site_id");
 
-			if (authType == null || authType.equals("")) {
-				model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", (Locale) session.getAttribute("sessionLocale")));
-				return "ewp/login/login";
-			} else if (authType.equals("1") || authType.equals("2") || authType.equals("3")) {
-				session.setAttribute(UserUtil.USER_SESSION_ID, result);
-				return "redirect:/main";
-			} else if (siteId != null && !siteId.isEmpty()) {
-				session.setAttribute(UserUtil.USER_SESSION_ID, result);
-				return "redirect:/siteMain?siteId=" + siteId;
-			} else {
-				model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", (Locale) session.getAttribute("sessionLocale")));
-				return "ewp/login/login";
-			}
-		} else {
-			model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_correct", (Locale) session.getAttribute("sessionLocale")));
-			return "ewp/login/login";
-		}
-	}
+            if (authType == null || authType.equals("")) {
+                model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", (Locale) session.getAttribute("sessionLocale")));
+                return "ewp/login/login";
+            } else if (authType.equals("1") || authType.equals("2") || authType.equals("3")) {
+                session.setAttribute(UserUtil.USER_SESSION_ID, result);
+                return "redirect:/main";
+            } else if (siteId != null && !siteId.isEmpty()) {
+                session.setAttribute(UserUtil.USER_SESSION_ID, result);
+                return "redirect:/siteMain?siteId=" + siteId;
+            } else {
+                model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", (Locale) session.getAttribute("sessionLocale")));
+                return "ewp/login/login";
+            }
+        } else {
+            model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_correct", (Locale) session.getAttribute("sessionLocale")));
+            return "ewp/login/login";
+        }
+    }
 
-	@RequestMapping("/getUserInfo")
-	public @ResponseBody Map getUserInfo(HttpSession session) {
-		return UserUtil.getUserInfo(session);
-	}
+    @RequestMapping("/getUserInfo")
+    public @ResponseBody
+    Map getUserInfo(HttpSession session) {
+        return UserUtil.getUserInfo(session);
+    }
 
-	@RequestMapping("/findUserId")
-	public @ResponseBody Map<String, Object> findUserId(@RequestParam HashMap param) throws Exception {
-		logger.debug("/findUserId");
-		logger.debug("param : {}", param);
+    @RequestMapping("/findUserId")
+    public @ResponseBody
+    Map<String, Object> findUserId(@RequestParam HashMap param) throws Exception {
+        logger.debug("/findUserId");
+        logger.debug("param : {}", param);
 
-		Map result = loginService.findUserId(param);
+        Map result = loginService.findUserId(param);
 
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("detail", result);
-		return resultMap;
-	}
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("detail", result);
+        return resultMap;
+    }
 
-	@RequestMapping("/findUserPw")
-	public @ResponseBody Map<String, Object> findUserPw(@RequestParam HashMap param) throws Exception {
-		logger.debug("/findUserPw");
-		logger.debug("param : {}", param);
+    @RequestMapping("/findUserPw")
+    public @ResponseBody
+    Map<String, Object> findUserPw(@RequestParam HashMap param) throws Exception {
+        logger.debug("/findUserPw");
+        logger.debug("param : {}", param);
 
-		String userPw = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 8);
+        String userPw = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 8);
 
-		Map result = loginService.findUserPw(param);
+        Map result = loginService.findUserPw(param);
 
-		if (result != null && StringUtil.isNotEmpty((String)result.get("user_pw"))) {
-			param.put("userPw", userPw);
-			int resultCnt = loginService.updateUserPw(param);
-			if (resultCnt > 0) {
-				smsService.sendFindPassMessage(param);
-			}
-		}
+        if (result != null && StringUtil.isNotEmpty((String) result.get("user_pw"))) {
+            param.put("userPw", userPw);
+            int resultCnt = loginService.updateUserPw(param);
+            if (resultCnt > 0) {
+                smsService.sendFindPassMessage(param);
+            }
+        }
 
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("detail", result);
-		System.out.println("       "+resultMap);
-		return resultMap;
-	}
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("detail", result);
+        System.out.println("       " + resultMap);
+        return resultMap;
+    }
 
-	@RequestMapping("/checkUserId")
-	public @ResponseBody Map<String, Object> checkUserId(@RequestParam HashMap param) throws Exception {
-		logger.debug("/checkUserId");
-		logger.debug("param : {}", param);
+    @RequestMapping("/checkUserId")
+    public @ResponseBody
+    Map<String, Object> checkUserId(@RequestParam HashMap param) throws Exception {
+        logger.debug("/checkUserId");
+        logger.debug("param : {}", param);
 
-		Map result = loginService.checkUserId(param);
+        Map result = loginService.checkUserId(param);
 
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("detail", result);
-		return resultMap;
-	}
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("detail", result);
+        return resultMap;
+    }
 
-	@RequestMapping("/sendAuthCode")
-	public @ResponseBody Map<String, Object> sendAuthCode(@RequestParam HashMap param) throws Exception {
-		logger.debug("/sendAuthCode");
-		logger.debug("param : {}", param);
+    @RequestMapping("/sendAuthCode")
+    public @ResponseBody
+    Map<String, Object> sendAuthCode(@RequestParam HashMap param) throws Exception {
+        logger.debug("/sendAuthCode");
+        logger.debug("param : {}", param);
 
-		int resultCnt = smsService.sendAuthCodeMessage(param);
+        int resultCnt = smsService.sendAuthCodeMessage(param);
 
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("resultCnt", resultCnt);
-		return resultMap;
-	}
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("resultCnt", resultCnt);
+        return resultMap;
+    }
 
-	@RequestMapping("/joinUser")
-	public @ResponseBody Map<String, Object> joinUser(@RequestParam HashMap param) throws Exception {
-		logger.debug("/joinUser");
-		logger.debug("param : {}", param);
+    @RequestMapping("/joinUser")
+    public @ResponseBody
+    Map<String, Object> joinUser(@RequestParam HashMap param) throws Exception {
+        logger.debug("/joinUser");
+        logger.debug("param : {}", param);
 
-		int resultCnt = loginService.insertUser(param);
+        int resultCnt = loginService.insertUser(param);
 
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("resultCnt", resultCnt);
-		return resultMap;
-	}
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("resultCnt", resultCnt);
+        return resultMap;
+    }
 
-	@RequestMapping("/modifyUser")
-	public @ResponseBody Map<String, Object> modifyUser(HttpSession session, @RequestParam HashMap param) throws Exception {
-		logger.debug("/modifyUser");
-		logger.debug("param : {}", param);
+    @RequestMapping("/modifyUser")
+    public @ResponseBody
+    Map<String, Object> modifyUser(HttpSession session, @RequestParam HashMap param) throws Exception {
+        logger.debug("/modifyUser");
+        logger.debug("param : {}", param);
 
-		Map userInfo = UserUtil.getUserInfo(session);
-		param.put("userIdx", userInfo.get("user_idx"));
-		param.put("modUid", userInfo.get("user_id"));
+        Map userInfo = UserUtil.getUserInfo(session);
+        param.put("userIdx", userInfo.get("user_idx"));
+        param.put("modUid", userInfo.get("user_id"));
 
-		int resultCnt = loginService.updateUser(param);
+        int resultCnt = loginService.updateUser(param);
 
-		// 현재 로그인 된 세션의 정보도 수정해 준다.
-		userInfo.put("psn_email", param.get("psnEmail"));
-		userInfo.put("psn_mobile", param.get("psnMobile"));
-		if (param.get("userPw") != null && StringUtil.isNotEmpty((String)param.get("userPw"))) {
-			userInfo.put("user_pw", UserUtil.encSHA256((String)param.get("userPw")));
-		}
+        // 현재 로그인 된 세션의 정보도 수정해 준다.
+        userInfo.put("psn_email", param.get("psnEmail"));
+        userInfo.put("psn_mobile", param.get("psnMobile"));
+        if (param.get("userPw") != null && StringUtil.isNotEmpty((String) param.get("userPw"))) {
+            userInfo.put("user_pw", UserUtil.encSHA256((String) param.get("userPw")));
+        }
 
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("resultCnt", resultCnt);
-		return resultMap;
-	}
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("resultCnt", resultCnt);
+        return resultMap;
+    }
 
-	@RequestMapping("/removeUser")
-	public @ResponseBody Map<String, Object> removeUser(HttpSession session, @RequestParam HashMap param) throws Exception {
-		logger.debug("/removeUser");
-		logger.debug("param : {}", param);
+    @RequestMapping("/removeUser")
+    public @ResponseBody
+    Map<String, Object> removeUser(HttpSession session, @RequestParam HashMap param) throws Exception {
+        logger.debug("/removeUser");
+        logger.debug("param : {}", param);
 
-		Map userInfo = UserUtil.getUserInfo(session);
-		param.put("userIdx", userInfo.get("user_idx"));
-		param.put("modUid", userInfo.get("user_id"));
+        Map userInfo = UserUtil.getUserInfo(session);
+        param.put("userIdx", userInfo.get("user_idx"));
+        param.put("modUid", userInfo.get("user_id"));
 
-		int resultCnt = loginService.deleteUser(param);
+        int resultCnt = loginService.deleteUser(param);
 
-		// 현재 세션을 끊는다.
-		session.removeAttribute(UserUtil.USER_SESSION_ID);
+        // 현재 세션을 끊는다.
+        session.removeAttribute(UserUtil.USER_SESSION_ID);
 
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("resultCnt", resultCnt);
-		return resultMap;
-	}
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("resultCnt", resultCnt);
+        return resultMap;
+    }
 }

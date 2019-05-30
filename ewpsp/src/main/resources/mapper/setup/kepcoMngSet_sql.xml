@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kepcoMngSet">
-	<select id="getSiteSetDetail" parameterType="hashMap" resultType="hashMap">
+    <select id="getSiteSetDetail" parameterType="hashMap" resultType="hashMap">
 		/* 한전 계약 및 전력 관리 정보 조회 */
 		select 
 			site_set_idx, site_id, cust_num, use_elec_addr, meter_num, meter_sf, 
@@ -13,34 +13,34 @@
 		from tb_site_set
 		where site_id = #{siteId }
 	</select>
-	
-	<select id="getPlanType" parameterType="hashMap" resultType="hashMap">
-		/* 요금제명 조회 */
-		select 
-			plan_type, plan_type2, plan_type3, plan_name ,plan_type_name,plan_type_name2,plan_type_name3
-		from tb_plan_type
-		where 1=1
-		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(planType)">
-		and plan_type = #{planType }
-		</if>
-		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(planType2)">
-		and plan_type2 = #{planType2 }
-		</if>
-		<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(planType3)">
-		and plan_type3 = #{planType3 }
-		</if>
-		<if test="gbn == 1"> 
-		group by plan_type 
-		</if>
-		<if test="gbn == 2">
-		group by plan_type, plan_type2 
-		</if>
-		<if test="gbn == 3">
-		group by plan_type, plan_type2, plan_type3
-		</if>
-	</select>
-	
-	<select id="getPlanTypeVal" parameterType="hashMap" resultType="hashMap">
+
+    <select id="getPlanType" parameterType="hashMap" resultType="hashMap">
+        /* 요금제명 조회 */
+        select
+        plan_type, plan_type2, plan_type3, plan_name ,plan_type_name,plan_type_name2,plan_type_name3
+        from tb_plan_type
+        where 1=1
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(planType)">
+            and plan_type = #{planType }
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(planType2)">
+            and plan_type2 = #{planType2 }
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(planType3)">
+            and plan_type3 = #{planType3 }
+        </if>
+        <if test="gbn == 1">
+            group by plan_type
+        </if>
+        <if test="gbn == 2">
+            group by plan_type, plan_type2
+        </if>
+        <if test="gbn == 3">
+            group by plan_type, plan_type2, plan_type3
+        </if>
+    </select>
+
+    <select id="getPlanTypeVal" parameterType="hashMap" resultType="hashMap">
 		/* 요금제 전력량 및 금액 조회 */
 		select 
 			plan_type, plan_type2, plan_type3, plan_name,
@@ -53,8 +53,8 @@
 		and plan_type2 = #{planType2 }
 		and plan_type3 = #{planType3 }
 	</select>
-	
-	<insert id="insertSiteSet" parameterType="hashMap">
+
+    <insert id="insertSiteSet" parameterType="hashMap">
 		/* 한전 계약 및 전력 관리 정보 등록 */
 		insert into tb_site_set (
 		        site_id,          /* 사이트ID */
@@ -112,77 +112,80 @@
 		        #{smpRateDate }
 		    )
 	</insert>
-	
-	<update id="updateSiteSet" parameterType="hashMap">
-		/* 한전 계약 및 전력 관리 정보 수정 */
-		update tb_site_set
-		set 
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(custNum)">
-			cust_num      = #{custNum } ,   /* 고객 번호 */
-			</if> <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(useElecAddr)">
-			use_elec_addr      = #{useElecAddr } ,   /* 전기사용 장소 */
-			</if> <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(meterNum)">
-			meter_num      = #{meterNum } ,   /* 계량기 번호 */
-			</if> <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(meterSf)">
-			meter_sf      = #{meterSf } ,   /* 계량기 배수 */
-			</if> 
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(chargeType)">
-			charge_type    = #{chargeType } ,   /* 요금구분(1:일반용-고압A,2:일반용-고압B) */
-			</if> 
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(planType)">
-			plan_type      = #{planType } ,   /* 요금제구분(general_A1_low_voltage_A 외. bill_api.pdf 참조요망) */
-			</if> 
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(planType)">
-			plan_type2      = #{planType2 } ,   /* 요금제구분(general_A1_low_voltage_A 외. bill_api.pdf 참조요망) */
-			</if> 
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(planType)">
-			plan_type3      = #{planType3 } ,   /* 요금제구분(general_A1_low_voltage_A 외. bill_api.pdf 참조요망) */
-			</if> 
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(planName)">
-			plan_name      = #{planName } ,   /*요금제(일반용 전력 (갑)I 저압전력 외. bill_api.pdf 참조요망)  */
-			</if> 
-			contract_power = #{contractPower } ,   /* 계약전력(단위:KW) */
-			meter_read_day = #{meterReadDay } ,   /* 검침일(단위:일) */
-			charge_yearmd   = #{chargeYearmd } ,   /* 요금적용기준년월(형식:YYYYMM) */
-			charge_power   = #{chargePower } ,   /* 요금적용전력(단위:KW) */
-			charge_rate    = #{chargeRate } ,   /* 요금적용전력대비(단위:%) */
-			goal_power     = #{goalPower } ,   /* 목표전력(단위:KW) */
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(reduceAmt)">
-			reduce_amt     = #{reduceAmt } ,   /* 감축용량(단위:KW) */
-			</if>
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(smpRate)">
-			smp_rate       = #{smpRate } ,   /* SMP단가(System Marginal Price)(단위:원) */
-			</if>
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(recRate)"> 
-			rec_rate       = #{recRate } ,    /* REC단가(단위:원) */
-			</if>
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(recWeight)">
-			rec_weight     = #{recWeight } ,    /* REC가중치 */
-			</if>
-			mod_uid        = #{modUid }, 
-			mod_date       = now(),  
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(essProfitRatio)">
-			ess_profit_ratio       = #{essProfitRatio } ,   /* ESS수익배분 비율 */
-			</if>
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(drProfitRatio)"> 
-			dr_profit_ratio       = #{drProfitRatio } ,    /* DR수익배분 비율 */
-			</if>
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(pvProfitRatio)">
-			pv_profit_ratio     = #{pvProfitRatio } ,    /* PV수익배분 비율 */
-			</if>
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(essBattery)">
-			ess_battery       = #{essBattery } ,   /* ESS Battery */
-			</if>
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(essPcs)"> 
-			ess_pcs       = #{essPcs } ,    /* ESS PCS */
-			</if>
-			<if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(meterClaimDay)">
-			meter_claim_day     = #{meterClaimDay },     /* 청구일 */
-			</if>
-			rec_rate_date   = #{recRateDate } ,   /* REC단가 일자 */
-			smp_rate_date   = #{smpRateDate }    /* SMP단가 일자 */
-		where site_set_idx = #{siteSetIdx }
-		and site_id = #{siteId }
-	</update>
-	
+
+    <update id="updateSiteSet" parameterType="hashMap">
+        /* 한전 계약 및 전력 관리 정보 수정 */
+        update tb_site_set
+        set
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(custNum)">
+            cust_num = #{custNum } , /* 고객 번호 */
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(useElecAddr)">
+            use_elec_addr = #{useElecAddr } , /* 전기사용 장소 */
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(meterNum)">
+            meter_num = #{meterNum } , /* 계량기 번호 */
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(meterSf)">
+            meter_sf = #{meterSf } , /* 계량기 배수 */
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(chargeType)">
+            charge_type = #{chargeType } , /* 요금구분(1:일반용-고압A,2:일반용-고압B) */
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(planType)">
+            plan_type = #{planType } , /* 요금제구분(general_A1_low_voltage_A 외. bill_api.pdf 참조요망) */
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(planType)">
+            plan_type2 = #{planType2 } , /* 요금제구분(general_A1_low_voltage_A 외. bill_api.pdf 참조요망) */
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(planType)">
+            plan_type3 = #{planType3 } , /* 요금제구분(general_A1_low_voltage_A 외. bill_api.pdf 참조요망) */
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(planName)">
+            plan_name = #{planName } , /*요금제(일반용 전력 (갑)I 저압전력 외. bill_api.pdf 참조요망) */
+        </if>
+        contract_power = #{contractPower } , /* 계약전력(단위:KW) */
+        meter_read_day = #{meterReadDay } , /* 검침일(단위:일) */
+        charge_yearmd = #{chargeYearmd } , /* 요금적용기준년월(형식:YYYYMM) */
+        charge_power = #{chargePower } , /* 요금적용전력(단위:KW) */
+        charge_rate = #{chargeRate } , /* 요금적용전력대비(단위:%) */
+        goal_power = #{goalPower } , /* 목표전력(단위:KW) */
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(reduceAmt)">
+            reduce_amt = #{reduceAmt } , /* 감축용량(단위:KW) */
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(smpRate)">
+            smp_rate = #{smpRate } , /* SMP단가(System Marginal Price)(단위:원) */
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(recRate)">
+            rec_rate = #{recRate } , /* REC단가(단위:원) */
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(recWeight)">
+            rec_weight = #{recWeight } , /* REC가중치 */
+        </if>
+        mod_uid = #{modUid },
+        mod_date = now(),
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(essProfitRatio)">
+            ess_profit_ratio = #{essProfitRatio } , /* ESS수익배분 비율 */
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(drProfitRatio)">
+            dr_profit_ratio = #{drProfitRatio } , /* DR수익배분 비율 */
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(pvProfitRatio)">
+            pv_profit_ratio = #{pvProfitRatio } , /* PV수익배분 비율 */
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(essBattery)">
+            ess_battery = #{essBattery } , /* ESS Battery */
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(essPcs)">
+            ess_pcs = #{essPcs } , /* ESS PCS */
+        </if>
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(meterClaimDay)">
+            meter_claim_day = #{meterClaimDay }, /* 청구일 */
+        </if>
+        rec_rate_date = #{recRateDate } , /* REC단가 일자 */
+        smp_rate_date = #{smpRateDate } /* SMP단가 일자 */
+        where site_set_idx = #{siteSetIdx }
+        and site_id = #{siteId }
+    </update>
+
 </mapper>
