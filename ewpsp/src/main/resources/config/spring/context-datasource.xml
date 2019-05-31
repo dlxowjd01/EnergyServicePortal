@@ -6,7 +6,7 @@
 
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="file:/Users/encored/Project/EWPServicePortal/ewpsp/src/main/resources/properties/globals.properties"/>
+        <property name="location" value="file:/home/ubuntu/ewpsp_config/db.properties"/>
         <property name="fileEncoding" value="UTF-8"/>
     </bean>
 
