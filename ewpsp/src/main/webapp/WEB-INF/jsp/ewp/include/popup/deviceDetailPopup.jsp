@@ -95,7 +95,7 @@
         ioeStr += '<table>';
         ioeStr += '<thead>';
         ioeStr += '<tr>';
-        ioeStr += '<th>전압(v)</th>';
+        ioeStr += '<th>전압(V)</th>';
         ioeStr += '<th>전력(kW)</th>';
         ioeStr += '<th>유효전력(kW)</th>';
         ioeStr += '<th>무효전력(kW)</th>';
@@ -342,7 +342,7 @@
         bmsStr += '<th>SOH(%)</th>';
         bmsStr += '<th>SOC 현재(%)</th>';
         bmsStr += '<th>출력 전압(V)</th>';
-        bmsStr += '<th>출력 전류(V)</th>';
+        bmsStr += '<th>출력 전류(A)</th>';
         bmsStr += '<th>Dod(%)</th>';
         bmsStr += '</tr>';
         bmsStr += '</thead>';
@@ -529,7 +529,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>전압(v)</th>
+                        <th>전압(V)</th>
                         <th>전력(kW)</th>
                         <th>유효전력(kW)</th>
                         <th>무효전력(kW)</th>
@@ -692,7 +692,7 @@
                         <th>SOH(%)</th>
                         <th>SOC 현재(%)</th>
                         <th>출력 전압(V)</th>
-                        <th>출력 전류(V)</th>
+                        <th>출력 전류(A)</th>
                         <th>Dod(%)</th>
                     </tr>
                 </thead>
