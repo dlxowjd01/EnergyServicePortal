@@ -25,7 +25,7 @@
                 else if (deviceGbn == "PV") getDevicePVList(1); // 장치목록 조회(PV)
 
                 var today = new Date();
-                update_updtDataTime(today); // 검색시간(차트 새로고침시간) 업데이트
+                update_updtDataTime(today, "updtTime"); // 검색시간(차트 새로고침시간) 업데이트
             }
 
             // 장치목록 조회(IOE)
