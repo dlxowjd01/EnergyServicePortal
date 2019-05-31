@@ -311,23 +311,21 @@
             }
 
             function emptyAlert(index) {
+            	$('.helpCont').hide();
                 if ($(index).val() == '') {
-                    $('.helpCont').hide();
                     $(index).parents('td').children('.helpCont:eq(0)').show();
-                    return 1;
-                } else {
-                    $('.helpCont').hide();
+                    return true;
                 }
             }
 
             function checkJoin() {
-                if (emptyAlert('#joinUserId') == 1) {
+                if (emptyAlert('#joinUserId')) {
                     return;
                 }
-                if (emptyAlert('#joinUserPw') == 1) {
+                if (emptyAlert('#joinUserPw')) {
                     return;
                 }
-                if (emptyAlert('#joinUserPw2') == 1) {
+                if (emptyAlert('#joinUserPw2')) {
                     return;
                 }
                 if ($('#joinUserPw').val() != $('#joinUserPw2').val()) {
@@ -337,7 +335,7 @@
                 } else {
                     $('.helpCont').hide();
                 }
-                if (emptyAlert('#joinPsnName') == 1) {
+                if (emptyAlert('#joinPsnName')) {
                     return;
                 }
                 if ($('#joinEmail1').val() == '' || $('#joinEmail2').val() == '') {
