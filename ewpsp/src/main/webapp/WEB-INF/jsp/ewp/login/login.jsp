@@ -10,7 +10,7 @@
         <script type="text/javascript">
             $(function () {
                 var lan = location.search.substr(location.search.length - 2, 2);
-                if (lan == "") {
+                if ( isEmpty(lan) ) {
                     $('#language').val("ko");
                 } else {
                     $('#language').val(lan);
@@ -57,7 +57,7 @@
 
                 $('#joinEmail2').change(function () {
                     var val = $(this).val();
-                    if (val == 'manual') {
+                    if (val === 'manual') {
                         $('#joinEmail1').css('width', '30%');
                         $('#joinEmail3').show();
                     } else {
@@ -67,6 +67,15 @@
                 });
 
                 $('#joinAuthCodeBtn').click(function () {
+                    if( isEmpty($('#joinPsnName').val()) ) {
+                        alert("이름을 입력하세요");
+                        return;
+                    }
+
+                    if( isEmpty($('#joinMobile1').val()) || isEmpty($('#joinMobile2').val()) || isEmpty($('#joinMobile3').val()) ) {
+                        alert('휴대폰번호를 입력해 주세요');
+                        return;
+                    }
                     sendJoinAuthCode();
                 });
             });
@@ -74,7 +83,7 @@
             function show_Language(v) {
                 var f = document.loginForm;
 
-                if (v == "english") {
+                if (v === "english") {
                     f.action = "/login?lang=en";
                 } else {
                     f.action = "/login?lang=ko";
@@ -84,17 +93,17 @@
                 f.submit();
             }
             function checkLogin() {
-                var userId = $('#loginUserId');
-                var userPw = $('#loginUserPw');
+                var $userId = $('#loginUserId');
+                var $userPw = $('#loginUserPw');
 
-                if (userId.val() == '') {
+                if ( isEmpty($userId.val()) ) {
                     alert('<spring:message code="ewp.login.Singup_ID" />');
-                    userId.focus();
+                    $userId.focus();
                     return false;
                 }
-                if (userPw.val() == '') {
+                if ( isEmpty($userPw.val()) ) {
                     alert('<spring:message code="ewp.login.Singup_PW" />');
-                    userPw.focus();
+                    $userPw.focus();
                     return false;
                 }
 
@@ -102,16 +111,16 @@
             }
 
             function getAuthCode() {
-                var formData = $("#findForm").serializeObject();
+                var $frm = $("#findForm");
+                var formData = $frm.serializeObject();
                 var result = Math.floor(Math.random() * 1000000) + 100000;
                 if (result > 1000000) {
                     result = result - 100000;
                 }
 
-                //	$('#findAuthCode').val(result.toString());
                 authCode = result.toString();
 
-                var formData = $("#findForm").serializeObject();
+                formData = $frm.serializeObject();
                 formData.authCode = authCode;
                 console.log(formData);
                 $.ajax({
@@ -121,7 +130,7 @@
                     data: formData,
                     success: function (result) {
                         var resultCnt = result.resultCnt;
-                        if (resultCnt == null) {
+                        if ( isEmpty(resultCnt) ) {
                             alert('<spring:message code="ewp.error.default" />');
                         } else {
                             alert("인증번호가 발송되었습니다.");
@@ -134,7 +143,8 @@
             var authCode = '';
 
             function sendFindPwAuthCode() {
-                var formData = $('#findPwForm').serializeObject();
+                var $frm = $("#findPwForm");
+                var formData = $frm.serializeObject();
                 var result = Math.floor(Math.random() * 1000000) + 100000;
                 if (result > 1000000) {
                     result = result - 100000;
@@ -142,7 +152,7 @@
 
                 authCode = result.toString();
 
-                var formData = $("#findPwForm").serializeObject();
+                formData = $frm.serializeObject();
                 formData.authCode = authCode;
                 $.ajax({
                     //		url : "/sendFindPwAuthCode",
@@ -152,7 +162,7 @@
                     data: formData,
                     success: function (result) {
                         var resultCnt = result.resultCnt;
-                        if (resultCnt == null) {
+                        if ( isEmpty(resultCnt) ) {
                             alert('<spring:message code="ewp.error.default" />');
                         } else {
                             alert("인증번호가 발송되었습니다.");
@@ -162,7 +172,8 @@
             }
 
             function sendJoinAuthCode() {
-                var formData = $('#joinForm').serializeObject();
+                var $frm = $("#joinForm");
+                var formData = $frm.serializeObject();
                 var result = Math.floor(Math.random() * 1000000) + 100000;
                 if (result > 1000000) {
                     result = result - 100000;
@@ -172,17 +183,18 @@
 
                 $('#joinPsnMobile').val($('#joinMobile1').val() + '-' + $('#joinMobile2').val() + '-' + $('#joinMobile3').val());
 
-                var formData = $("#joinForm").serializeObject();
+                formData = $frm.serializeObject();
                 formData.authCode = authCode;
                 $.ajax({
-                    //		url : "/sendJoinAuthCode",
                     url: "/sendAuthCode",
                     type: 'post',
                     async: false, // 동기로 처리해줌
                     data: formData,
                     success: function (result) {
                         var resultCnt = result.resultCnt;
-                        if (resultCnt == null) {
+                        if (resultCnt === 40) {
+                            alert('문자가 발송되었습니다.');
+                        } else {
                             alert('<spring:message code="ewp.error.default" />');
                         }
                     }
@@ -190,33 +202,36 @@
             }
 
             function checkFind(findFlag) {
-                if ($('#findPsnName').val() == '') {
+                if ( isEmpty($('#findPsnName').val()) ) {
                     alert('이름를 입력하세요');
                     $('#findPsnName').focus();
                     return false;
                 }
-                if ($('#findForm').find('[name=mobileType]:checked').length == 0) {
+                if ($('#findForm').find('[name=mobileType]:checked').length === 0) {
                     alert('통신사를 선택해 주세요');
                     $('#findForm').find('[name=mobileType]:eq(0)').focus();
                     return false;
                 }
-                if ($('#findMobile1').val() == '' || $('#findMobile2').val() == '' || $('#findMobile3').val() == '') {
+                var $findMobile1 = $('#findMobile1');
+                var $findMobile2 = $('#findMobile2');
+                var $findMobile3 = $('#findMobile3');
+                if ( isEmpty($indMobile1.val()) || isEmpty($findMobile2.val()) || isEmpty($findMobile3.val()) ) {
                     alert('휴대폰번호를 입력해 주세요');
-                    $('#findMobile2').focus();
+                    $findMobile2.focus();
                     return false;
                 }
-                if (isNaN($('#findMobile2').val()) || isNaN($('#findMobile3').val())) {
+                if (isNaN($findMobile2.val()) || isNaN($findMobile3.val())) {
                     alert('숫자를 입력해 주세요');
-                    $('#findMobile2').focus();
+                    $findMobile2.focus();
                     return false;
                 }
-                if (findFlag && $('#findAuthCode').val() != authCode) {
+                if (findFlag && $('#findAuthCode').val() !== authCode) {
                     alert('인증코드를 맞게 입력하세요');
                     $('#findAuthCode').focus();
                     return;
                 }
 
-                $('#findPsnMobile').val($('#findMobile1').val() + '-' + $('#findMobile2').val() + '-' + $('#findMobile3').val());
+                $('#findPsnMobile').val($findMobile1.val() + '-' + $findMobile2.val() + '-' + $findMobile3.val());
                 return true;
             }
 
@@ -229,7 +244,7 @@
                     data: formData,
                     success: function (result) {
                         var userDetail = result.detail;
-                        if (userDetail != null) {
+                        if ( !isEmpty(userDetail) ) {
                             alert('귀하의 아이디는 ' + userDetail.user_id + ' 입니다.');
                         } else {
                             alert('일치하는 정보가 없습니다.');
@@ -239,38 +254,41 @@
             }
 
             function checkFindPw(findFlag) {
-                if ($('#findPwPsnName').val() == '') {
+                if ( isEmpty($('#findPwPsnName').val()) ) {
                     alert('이름를 입력하세요');
                     $('#findPwPsnName').focus();
                     return false;
                 }
-                if ($('#findPwForm').find('[name=mobileType]:checked').length == 0) {
+                if ($('#findPwForm').find('[name=mobileType]:checked').length === 0) {
                     alert('통신사를 선택해 주세요');
                     $('#findPwForm').find('[name=mobileType]:eq(0)').focus();
                     return false;
                 }
-                if ($('#findPwMobile1').val() == '' || $('#findPwMobile2').val() == '' || $('#findPwMobile3').val() == '') {
+                var $findPwMobile1 = $('#findPwMobile1');
+                var $findPwMobile2 = $('#findPwMobile2');
+                var $findPwMobile3 = $('#findPwMobile3');
+                if ( isEmpty($findPwMobile1.val()) || isEmpty($findPwMobile2.val()) || isEmpty($findPwMobile3.val()) ) {
                     alert('휴대폰번호를 입력해 주세요');
-                    $('#findPwMobile2').focus();
+                    $findPwMobile2.focus();
                     return false;
                 }
-                if (isNaN($('#findPwMobile2').val()) || isNaN($('#findPwMobile3').val())) {
+                if (isNaN($findPwMobile2.val()) || isNaN($findPwMobile3.val())) {
                     alert('숫자를 입력해 주세요');
-                    $('#findPwMobile2').focus();
+                    $findPwMobile2.focus();
                     return false;
                 }
-                if (findFlag && $('#findPwAuthCode').val() == '') {
+                if (findFlag && isEmpty($('#findPwAuthCode').val()) ) {
                     alert('인증코드를 입력하세요');
                     $('#findPwAuthCode').focus();
                     return;
                 }
-                if (findFlag && $('#findPwAuthCode').val() != authCode) {
+                if (findFlag && $('#findPwAuthCode').val() !== authCode) {
                     alert('인증코드를 맞게 입력하세요');
                     $('#findPwAuthCode').focus();
                     return;
                 }
 
-                $('#findPwPsnMobile').val($('#findPwMobile1').val() + '-' + $('#findPwMobile2').val() + '-' + $('#findPwMobile3').val());
+                $('#findPwPsnMobile').val($findPwMobile1.val() + '-' + $findPwMobile2.val() + '-' + $findPwMobile3.val());
                 return true;
             }
 
@@ -283,10 +301,7 @@
                     data: formData,
                     success: function (result) {
                         var userDetail = result.detail;
-                        console.log(result);
-                        console.log(userDetail);
-                        if (userDetail != null) {
-                            //				alert('귀하의 임시 비밀번호는 ' + userDetail.user_pw + ' 입니다.');
+                        if ( !isEmpty(userDetail) ) {
                             alert("임시 비밀번호가 sms로 발송되었습니다.");
                         } else {
                             alert('일치하는 정보가 없습니다.');
@@ -312,7 +327,7 @@
 
             function emptyAlert(index) {
             	$('.helpCont').hide();
-                if ($(index).val() == '') {
+                if ($(index).val() === '') {
                     $(index).parents('td').children('.helpCont:eq(0)').show();
                     return true;
                 }
@@ -328,9 +343,11 @@
                 if (emptyAlert('#joinUserPw2')) {
                     return;
                 }
-                if ($('#joinUserPw').val() != $('#joinUserPw2').val()) {
+                var $joinUserPw = $('#joinUserPw');
+                var $joinUserPw2 = $('#joinUserPw2');
+                if ($joinUserPw.val() !== $joinUserPw2.val()) {
                     $('.helpCont').hide();
-                    $('#joinUserPw2').parents('td').children('.helpCont:eq(0)').show();
+                    $joinUserPw2.parents('td').children('.helpCont:eq(0)').show();
                     return;
                 } else {
                     $('.helpCont').hide();
@@ -338,54 +355,61 @@
                 if (emptyAlert('#joinPsnName')) {
                     return;
                 }
-                if ($('#joinEmail1').val() == '' || $('#joinEmail2').val() == '') {
+                var $joinEmail1 = $('#joinEmail1');
+                var $joinEmail2 = $('#joinEmail2');
+                var $joinEmail3 = $('#joinEmail3');
+                if ( isEmpty($joinEmail1.val()) || isEmpty($joinEmail2.val()) ) {
                     $('.helpCont').hide();
-                    $('#joinEmail1').parents('td').children('.helpCont:eq(0)').show();
+                    $joinEmail1.parents('td').children('.helpCont:eq(0)').show();
                     return;
                 } else {
                     $('.helpCont').hide();
                 }
-                if ($('#joinEmail2').val() == 'manual' && $('#joinEmail3').val() == '') {
+                if ($joinEmail2.val() === 'manual' && isEmpty($joinEmail3.val())) {
                     $('.helpCont').hide();
-                    $('#joinEmail1').parents('td').children('.helpCont:eq(0)').show();
+                    $joinEmail1.parents('td').children('.helpCont:eq(0)').show();
                     return;
                 } else {
                     $('.helpCont').hide();
                 }
-                if ($('#joinMobile1').val() == '' || $('#joinMobile2').val() == '' || $('#joinMobile3').val() == '') {
+                var $joinMobile1 = $('#joinMobile1');
+                var $joinMobile2 = $('#joinMobile2');
+                var $joinMobile3 = $('#joinMobile3');
+                if ( isEmpty($joinMobile1.val()) || isEmpty($joinMobile2.val()) || isEmpty($joinMobile3.val()) ) {
                     $('.helpCont').hide();
-                    $('#joinMobile1').parents('td').children('.helpCont:eq(0)').show();
+                    $joinMobile1.parents('td').children('.helpCont:eq(0)').show();
                     return;
                 } else {
                     $('.helpCont').hide();
                 }
-                if (isNaN($('#joinMobile1').val()) || isNaN($('#joinMobile2').val()) || isNaN($('#joinMobile3').val())) {
+                if (isNaN($joinMobile1.val()) || isNaN($joinMobile2.val()) || isNaN($joinMobile3.val())) {
                     $('.helpCont').hide();
-                    $('#joinMobile1').parents('td').children('.helpCont:eq(1)').show();
+                    $joinMobile1.parents('td').children('.helpCont:eq(1)').show();
                     return;
                 } else {
                     $('.helpCont').hide();
                 }
-                if ($('#joinAuthCode').val() == '') {
+                var $joinAuthCode = $('#joinAuthCode');
+                if ( isEmpty($joinAuthCode.val()) ) {
                     alert('인증코드를 입력하세요');
-                    $('#joinAuthCode').focus();
+                    $joinAuthCode .focus();
                     return;
                 }
-                if ($('#joinAuthCode').val() != authCode) {
+                if ($joinAuthCode.val() !== authCode) {
                     alert('인증코드를 맞게 입력하세요');
-                    $('#joinAuthCode').focus();
+                    $joinAuthCode .focus();
                     return;
                 }
 
                 $('.helpCont').hide();
 
                 if (confirm("가입하시겠습니까?")) {
-                    if ($('#joinEmail2').val() != 'manual') {
-                        $('#joinPsnEmail').val($('#joinEmail1').val() + '@' + $('#joinEmail2').val());
+                    if ($joinEmail2.val() !== 'manual') {
+                        $('#joinPsnEmail').val($joinEmail1.val() + '@' + $joinEmail2.val());
                     } else {
-                        $('#joinPsnEmail').val($('#joinEmail1').val() + '@' + $('#joinEmail3').val());
+                        $('#joinPsnEmail').val($joinEmail1.val() + '@' + $joinEmail3.val());
                     }
-                    $('#joinPsnMobile').val($('#joinMobile1').val() + '-' + $('#joinMobile2').val() + '-' + $('#joinMobile3').val());
+                    $('#joinPsnMobile').val($joinMobile1.val() + '-' + $joinMobile2.val() + '-' + $joinMobile3.val());
 
                     checkUserId(joinUser);
                 }
@@ -402,15 +426,14 @@
                     },
                     success: function (result) {
                         var userDetail = result.detail;
-                        if (userDetail == null) {
-                            if (fn != null) {
+                        if ( isEmpty(userDetail) ) {
+                            if ( !isEmpty(fn) ) {
                                 fn();
                             } else {
                                 alert($('#joinUserId').val() + ' 아이디는 사용가능 합니다.');
                             }
                         } else {
                             alert($('#joinUserId').val() + ' 아이디는 사용중입니다.\n다른 아이디를 사용하세요.');
-                            //				$('#joinUserId').val('');
                         }
                     }
                 });
@@ -681,7 +704,7 @@
                 </div>
             </div>
         </div>
-        <script>
+        <script type="text/javascript">
             $(function () {
                 $(".joinBtn").click(function () {
                     $("#loginModal").modal("hide");
@@ -757,7 +780,7 @@
                                                         <option value="016">016</option>
                                                         <option value="017">017</option>
                                                         <option value="019">019</option>
-                                                        <select>
+                                                        </select>
                                                             <span class="inline center fl mt10"
                                                                   style="width:2%;"> - </span>
                                                             <input type="text" id="findMobile2" class="inp fl"
@@ -1022,7 +1045,7 @@
                 </div>
             </div>
         </div>
-        <script>
+        <script type="text/javascript">
             $(function () {
                 $(".joinnextBtn").click(function () {
                     if (!checkAgree()) {
@@ -1175,7 +1198,7 @@
                 </div>
             </div>
         </div>
-        <script>
+        <script type="text/javascript">
             $(function () {
                 $(".join2nextBtn").click(function () {
                     checkJoin();
@@ -1294,7 +1317,7 @@
                 </div>
             </div>
         </div>
-        <script>
+        <script type="text/javascript">
             $(function () {
                 $(".serviceBtn").click(function () {
                     $("#serviceModal").modal("show");

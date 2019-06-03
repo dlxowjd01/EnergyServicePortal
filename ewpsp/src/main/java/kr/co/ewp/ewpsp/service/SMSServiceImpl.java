@@ -119,7 +119,7 @@ public class SMSServiceImpl implements SMSService {
         HttpEntity entity = new HttpEntity(body, headers);
         String responseBody = restTemplate.postForObject(url, entity, String.class);
         logger.debug("response body: {}", responseBody);
-        return 1;
+        return Integer.parseInt(responseBody.trim());
     }
 
     /**
@@ -146,13 +146,11 @@ public class SMSServiceImpl implements SMSService {
         body.add("mem_phone", (String) param.get("psnMobile"));
         String smsMsgStr = "[신재생에너지 서비스 포털] " + (String) param.get("userId") + "의 임시 비밀번호는 " + (String) param.get("userPw") + " 입니다.                                                   ";
         body.add("M1", smsMsgStr);
-//		body.add("M1", (String)param.get("userId"));
-//		body.add("M2", (String)param.get("userPw"));
         logger.debug("request body: {}", body);
 
         HttpEntity entity = new HttpEntity(body, headers);
         String responseBody = restTemplate.postForObject(url, entity, String.class);
         logger.debug("response body: {}", responseBody);
-        return 1;
+        return Integer.parseInt(responseBody.trim());
     }
 }
