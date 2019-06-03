@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class ExcelDownload {
 
@@ -28,11 +29,10 @@ public class ExcelDownload {
 
     private boolean isStarted = false; // 엑셀다운 시작여부
     private int rowNum = 1; // row순서
-    private String excel_title = ""; // 엑셀명
-    private String col_tb = ""; // 테이블조회컬럼
-    private String col_nm = ""; // 엑셀 헤더 제목(한글)
+    private String excelTitle = ""; // 엑셀명
+    private String colNm = ""; // 엑셀 헤더 제목(한글)
 
-    public ExcelDownload(HttpServletResponse response, HashMap param) {
+    public ExcelDownload(HttpServletResponse response, Map<String, Object> param) {
         init();
         this.response = response;
 
@@ -40,15 +40,14 @@ public class ExcelDownload {
         workbook = new SXSSFWorkbook(100);
         sheet = workbook.createSheet();
 
-        this.excel_title = (String) param.get("excel_title");
-        this.col_tb = (String) param.get("COL_TB");
-        this.col_nm = (String) param.get("COL_NM");
+        this.excelTitle = (String) param.get("excelTitle");
+        this.colNm = (String) param.get("colNm");
     }
 
     public void handleRow(Object resultContext) {
-        HashMap excelMap = (HashMap) resultContext;
+        Map<String, Object> excelMap = (Map<String, Object>) resultContext;
         if (!isStarted) {
-            open(excelMap);
+            open();
             isStarted = true;
         }
 
@@ -78,31 +77,29 @@ public class ExcelDownload {
         this.sheet = null;
         this.isStarted = false;
         this.rowNum = 1;
-        this.excel_title = "";
-        this.col_tb = "";
-        this.col_nm = "";
+        this.excelTitle = "";
+        this.colNm = "";
     }
 
     // 헤더 생성
-    public void writeHeader(int cellNum) {
+    private void writeHeader(int cellNum) {
         SXSSFRow header = sheet.createRow(rowNum - 1);
         SXSSFCell headerCell = null;
-        String[] col_nms = this.col_nm.split("\\|");
-        for (int i = 0; i < col_nms.length; i++) {
-            String col_nm = col_nms[i];
+        String [] colNmArr = this.colNm.split("\\|");
+        for (int i = 0; i < colNmArr.length; i++) {
+            String colNmVal = colNmArr[i];
             headerCell = header.createCell(cellNum);
-            headerCell.setCellValue(col_nm);
+            headerCell.setCellValue(colNmVal);
             cellNum++;
         }
     }
 
     // 데이터라인 생성
-    public void writeCell(HashMap excelMap, SXSSFRow row, SXSSFCell cell, int cellNum) {
+    private void writeCell(Map<String, Object> excelMap, SXSSFRow row, SXSSFCell cell, int cellNum) {
         Iterator<String> paramKeys = excelMap.keySet().iterator();
         while (paramKeys.hasNext()) {
             String name = paramKeys.next();
-//			logger.debug("rownum : "+rowNum+", cell name : "+name+", "+excelMap.get(name)+", "+cellNum);
-            if (!(name.contains("_idx") || name.contains("device_type") || name.contains("inst_type") || name.contains("site_id"))) {
+            if( !(name.contains("_idx") || name.equals("device_type") || name.equals("inst_type") || name.contains("site_id")) ) {
                 cell = row.createCell(cellNum);
                 if ("reg_date".equals(name) || "std_date".equals(name)) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -122,8 +119,7 @@ public class ExcelDownload {
                     }
                 } else if (name.contains("_timestamp")) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    if (excelMap.get(name) != null && !"".equals(excelMap.get(name)))
-                        cell.setCellValue(sdf.format(new Date(((Timestamp) excelMap.get(name)).getTime())));
+                    if(excelMap.get(name) != null && !"".equals(excelMap.get(name))) cell.setCellValue( sdf.format( new Date( ((Timestamp)excelMap.get(name)).getTime() ) ) );
                     else cell.setCellValue("");
 
                 } else {
@@ -140,26 +136,16 @@ public class ExcelDownload {
             }
 
         }
-//		logger.debug("==================sdf=======================");
-    }
-
-    // 헤더 스타일
-    public void headerStyle(SXSSFCell cell) {
-        CellStyle headerStyle = workbook.createCellStyle();
-//		headerStyle.setAlignment();
-
-        cell.setCellStyle(headerStyle);
     }
 
     // 엑셀 다운로드 시작 시 실행함수
-    public void open(HashMap resultObject) {
+    public void open() {
         String excelName = "";
         try {
-            excelName = new String(excel_title.getBytes("KSC5601"), "8859_1");
+            excelName = new String(excelTitle.getBytes("KSC5601"), "8859_1");
         } catch (NullPointerException e) {
             logger.error("error is : " + e.toString());
         } catch (Exception e) {
-            //e.printStackTrace();
             logger.error("error is : " + e.toString());
         }
 
@@ -171,18 +157,11 @@ public class ExcelDownload {
     // 엑셀 다운로드 종료함수
     public void close() {
         try {
-//			SXSSFSheet sheet2 = workbook.createSheet();
-//			SXSSFSheet sheet3 = workbook.createSheet();
             workbook.write(response.getOutputStream());
             workbook.dispose();
-
-            // 엑셀 다운로드 요청을 처리하는 곳에서 응답 헤더에 fileDownloadToken 쿠키를 넣어줌.(로딩바 처리)
-//			Cookie cookie = new Cookie("fileDownloadToken", "TRUE");
-//			response.addCookie(new Cookie("fileDownloadToken", "TRUE"));
         } catch (NullPointerException e) {
             logger.error("error is : " + e.toString());
         } catch (Exception e) {
-            //e.printStackTrace();
             logger.error("error is : " + e.toString());
             response.setHeader("Content-Type", "tet/heml; charset=utf-8");
             response.setHeader("Set-Cookie", "fileDonwload=false; path=/");
@@ -195,7 +174,6 @@ public class ExcelDownload {
             } catch (NullPointerException e1) {
                 logger.error("error is : " + e1.toString());
             } catch (Exception e1) {
-                //e1.printStackTrace();
                 logger.error("error is : " + e1.toString());
             }
         } finally {
@@ -205,7 +183,6 @@ public class ExcelDownload {
                 } catch (NullPointerException e) {
                     logger.error("error is : " + e.toString());
                 } catch (Exception e) {
-                    //e.printStackTrace();
                     logger.error("error is : " + e.toString());
                 }
             }

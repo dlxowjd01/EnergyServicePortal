@@ -9,9 +9,9 @@
             var deviceGbn = "${deviceGbn }";
             var dvSiteId = "${selViewSiteId }";
             $(document).ready(function () {
-                // js파일에서는 동작을 안함
-                $(".tab_menu").find("li").removeClass("active");
-                $(".tab_menu").find("#tab_${deviceGbn }").addClass("active").trigger('click');
+                var $tab_menu = $(".tab_menu");
+                $tab_menu.find("li").removeClass("active");
+                $tab_menu.find("#tab_${deviceGbn }").addClass("active").trigger('click');
                 getDBData(deviceGbn);
             });
 
@@ -19,10 +19,10 @@
             var selectDeviceGbn = "";
 
             function getDBData(deviceGbn) {
-                if (deviceGbn == "IOE") getDeviceIOEList(1); // 장치목록 조회(IOE)
-                else if (deviceGbn == "PCS") getDevicePCSList(1); // 장치목록 조회(PCS)
-                else if (deviceGbn == "BMS") getDeviceBMSList(1); // 장치목록 조회(BMS)
-                else if (deviceGbn == "PV") getDevicePVList(1); // 장치목록 조회(PV)
+                if (deviceGbn === "IOE") getDeviceIOEList(1); // 장치목록 조회(IOE)
+                else if (deviceGbn === "PCS") getDevicePCSList(1); // 장치목록 조회(PCS)
+                else if (deviceGbn === "BMS") getDeviceBMSList(1); // 장치목록 조회(BMS)
+                else if (deviceGbn === "PV") getDevicePVList(1); // 장치목록 조회(PV)
 
                 var today = new Date();
                 update_updtDataTime(today, "updtTime"); // 검색시간(차트 새로고침시간) 업데이트
@@ -194,16 +194,13 @@
                                 <div class="tbl_top mt20 clear">
                                     <div class="clear fr">
                                         <ul class="tab_menu fl">
-                                            <li class="active" id="tab_IOE"><a href="javascript:getDeviceIOEList(1);">IOE</a>
-                                            </li>
+                                            <li class="active" id="tab_IOE"><a href="javascript:getDeviceIOEList(1);">IOE</a></li>
                                             <li id="tab_PCS"><a href="javascript:getDevicePCSList(1);">PCS</a></li>
                                             <li id="tab_BMS"><a href="javascript:getDeviceBMSList(1);">BMS</a></li>
                                             <li id="tab_PV"><a href="javascript:getDevicePVList(1);">PV</a></li>
                                         </ul>
                                         <ul class="button_area fl">
-                                            <li><a href="#;" class="save_btn"
-                                                   onclick="deviceExcelDownload('장치모니터링', event, 'device');">데이터저장</a>
-                                            </li>
+                                            <li><a href="#;" class="save_btn" onclick="deviceExcelDownload('장치모니터링', event, 'device');">데이터저장</a></li>
                                         </ul>
                                     </div>
                                 </div>

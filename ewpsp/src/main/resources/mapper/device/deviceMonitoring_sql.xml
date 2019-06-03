@@ -30,9 +30,8 @@
         from tb_device a
         left outer join (
         select
-        device_ioe_idx, site_id, device_id, device_name, device_reg_id, serial_no, inst_type, inst_purpose, data_period,
-        data_cnt,
-        ct_capacity, ct_capacity_list, pw_capacity, ch_cnt, ch_purpose, provider,
+		device_ioe_idx, site_id, device_id, device_name, device_reg_id, serial_no, inst_type, inst_purpose, data_period, data_cnt,
+		ct_capacity, ct_capacity_list, pw_capacity, ch_cnt, ch_purpose, provider,
         vr_device_id, vr_device_grp_id, vr_owner_id, vr_action, vr_stat, vr_mod_date, vr_error,
         tm_voltage, tm_pulse, tm_ct_ratio, tm_pt_tatio,
         network_conf, options, create_timestamp, create_date, upload_timestamp, upload_date, device_stat, reg_date
@@ -88,8 +87,7 @@
         from tb_device a
         left outer join (
         select
-        device_ioe_idx, site_id, device_id, device_name, device_reg_id, serial_no, inst_type, inst_purpose, data_period,
-        data_cnt,
+		device_ioe_idx, site_id, device_id, device_name, device_reg_id, serial_no, inst_type, inst_purpose, data_period, data_cnt,
         ct_capacity, ct_capacity_list, pw_capacity, ch_cnt, ch_purpose, provider,
         vr_device_id, vr_device_grp_id, vr_owner_id, vr_action, vr_stat, vr_mod_date, vr_error,
         tm_voltage, tm_pulse, tm_ct_ratio, tm_pt_tatio,
@@ -170,7 +168,7 @@
         /* PCS장치 목록 조회 */
         select
         rnum, device_pcs_idx, device_name, device_id, concat('(', inst_type_nm, ')', device_type_nm) as device_type_nm,
-        device_type, site_id, pcs_status_name, cd_status, alarm_msg, std_date
+        device_type, site_id, pcs_status_name, alarm_msg, std_date
         from (
         select
         @rownum := @rownum + 1 as rnum,
@@ -191,7 +189,7 @@
         when 2 then '로컬EMS'
         else '' end as inst_type_nm
         , b.device_pcs_idx, b.device_stat_name, b.pcs_status_name,
-        b.cd_status, b.alarm_msg, b.std_date
+        b.alarm_msg, b.std_date
         from tb_device a
         left outer join (
         select
@@ -201,7 +199,6 @@
         , case device_stat when 1 then 'Schedule'
         when 2 then 'Command'
         else 'disconnect' end as device_stat_name
-        , "" as cd_status
         , pcs_status
         , case pcs_status when 0 then 'Off'
         when 1 then 'On'
@@ -255,7 +252,7 @@
         when 2 then '로컬EMS'
         else '' end as inst_type_nm
         , b.device_pcs_idx, b.device_stat_name,
-        b.cd_status, b.alarm_msg, b.std_date
+        b.alarm_msg, b.std_date
         from tb_device a
         left outer join (
         select
@@ -355,7 +352,7 @@
         /* BMS장치 목록 조회 */
         select
         rnum, device_bms_idx, device_name, device_id, concat('(', inst_type_nm, ')', device_type_nm) as device_type_nm,
-        device_type, site_id, device_stat_name, cd_status, alarm_msg, std_date
+        device_type, site_id, device_stat_name, alarm_msg, std_date
         from (
         select
         @rownum := @rownum + 1 as rnum,
@@ -376,7 +373,7 @@
         when 2 then '로컬EMS'
         else '' end as inst_type_nm
         , b.device_bms_idx, b.device_stat_name,
-        b.cd_status, b.alarm_msg, b.std_date
+        b.alarm_msg, b.std_date
         from tb_device a
         left outer join (
         select
@@ -389,7 +386,7 @@
         when 4 then 'Off-line'
         when 5 then 'Ready'
         else 'disconnect' end as device_stat_name
-        , "" as cd_status, alarm_msg
+        , alarm_msg
         from tb_device_bms
         where (site_id, device_id, reg_date) in (
         select
@@ -437,7 +434,7 @@
         when 2 then '로컬EMS'
         else '' end as inst_type_nm
         , b.device_bms_idx, b.device_stat_name,
-        b.cd_status, b.alarm_msg, b.std_date
+        b.alarm_msg, b.std_date
         from tb_device a
         left outer join (
         select
@@ -450,7 +447,7 @@
         when 4 then 'Off-line'
         when 5 then 'Ready'
         else 'disconnect' end as device_stat_name
-        , "" as cd_status, alarm_msg
+        , alarm_msg
         from tb_device_bms
         where (site_id, device_id, reg_date) in (
         select
@@ -704,8 +701,7 @@
         from tb_device a
         left outer join (
         select
-        device_ioe_idx, site_id, device_id, device_name, device_reg_id, serial_no, inst_type, inst_purpose, data_period,
-        data_cnt,
+		device_ioe_idx, site_id, device_id, device_name, device_reg_id, serial_no, inst_type, inst_purpose, data_period, data_cnt,
         ct_capacity, ct_capacity_list, pw_capacity, ch_cnt, ch_purpose, provider,
         vr_device_id, vr_device_grp_id, vr_owner_id, vr_action, vr_stat, vr_mod_date, vr_error,
         tm_voltage, tm_pulse, tm_ct_ratio, tm_pt_tatio,
@@ -804,8 +800,7 @@
         from tb_device a
         left outer join (
         select
-        device_ioe_idx, site_id, device_id, device_name, device_reg_id, serial_no, inst_type, inst_purpose, data_period,
-        data_cnt,
+		device_ioe_idx, site_id, device_id, device_name, device_reg_id, serial_no, inst_type, inst_purpose, data_period, data_cnt,
         ct_capacity, ct_capacity_list, pw_capacity, ch_cnt, ch_purpose, provider,
         vr_device_id, vr_device_grp_id, vr_owner_id, vr_action, vr_stat, vr_mod_date, vr_error,
         tm_voltage, tm_pulse, tm_ct_ratio, tm_pt_tatio,

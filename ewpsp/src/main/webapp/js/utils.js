@@ -25,7 +25,7 @@ function maxLengthCheck(id, title, maxLength, event) {
         event.preventDefault();
 //         return false;
     } else {
-
+        return;
     }
 }
 
@@ -70,7 +70,7 @@ function onlyEngNum(event) {
 // !value 하면 생기는 논리적 오류를 제거하기 위해 명시적으로 value == 사용 
 // [], {} 도 빈값으로 처리
 var isEmpty = function (value) {
-    if (value == "" || value == null || value == undefined || (value != null && typeof value == "object" && !Object.keys(value).length)) {
+    if (value === "" || value === null || value === undefined || (value !== null && typeof value === "object" && !Object.keys(value).length)) {
         return true;
     } else {
         return false;
@@ -79,7 +79,7 @@ var isEmpty = function (value) {
 
 // 넘어온 값이 특정값인지 체크
 var isEqVal = function (value, eqVal) {
-    if (!isEmpty(value) && value == eqVal) {
+    if (!isEmpty(value) && value === eqVal) {
         return true;
     } else {
         return false;
@@ -385,7 +385,6 @@ function dateDiff(_date1, _date2) {
 
 // 서버의 시간대를 가져온다
 var xmlHttp;
-
 function serverTime() {
     if (window.XMLHttpRequest) { // 분기하지 않으면 IE에서만 작동함
         xmlHttp = new XMLHttpRequest(); // IE 7.0 이상, 크롬, 파이어폭스 등
@@ -462,7 +461,6 @@ $(function () {
 ////					$("#ajaxLoading").hide(); // 로딩바 숨기기
 //				}
 //			}, 500);
-
         }
     };
 
@@ -730,16 +728,6 @@ $(function () {
         });
     });
 
-    // 프린트
-//	$(".lbtn_print").click(function() {
-//		if(confirm("인쇄하시겠습니까?")) {
-////			window.print();
-////			$(".lbody").printThis();
-////			$(".lbody").printElement({ printMode: 'popup' });
-//			print($(".lbody").html());
-//		}
-//	});
-
 
     // 리스트박스 왼쪽 목록의 데이터 오른쪽으로 이동
     $("#moveRight").click(function () {
@@ -757,37 +745,4 @@ $(function () {
 
 });
 
-function print(printArea) {
-    win = window.open();
-    self.focus();
-    win.document.open();
-
-    /*
-        1. div 안의 모든 태그들을 innerHTML을 사용하여 매개변수로 받는다.
-        2. window.open() 을 사용하여 새 팝업창을 띄운다.
-        3. 열린 새 팝업창에 기본 <html><head><body>를 추가한다.
-        4. <body> 안에 매개변수로 받은 printArea를 추가한다.
-        5. window.print() 로 인쇄
-        6. 인쇄 확인이 되면 팝업창은 자동으로 window.close()를 호출하여 닫힘
-    */
-    win.document.write('<html><head><title></title>');
-    win.document.write('</haed><body>');
-    win.document.write(printArea);
-    win.document.write('</body></html>');
-    win.document.close();
-    win.print();
-    win.close();
-}
-
-
-//function showHideLoadingBar(txt) {
-//	if(txt == "show") {
-//		$("#mask").fadeTo("slow", 0.5);
-//		$("#mask").append('<div class="loading"></div>');
-//	}
-//	if(txt == "hide") {
-//		$('#mask').hide();
-//		$('#mask').empty();
-//	}
-//}
 
