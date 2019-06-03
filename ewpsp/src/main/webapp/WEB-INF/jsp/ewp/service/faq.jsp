@@ -34,7 +34,7 @@
 		} else {
 			for (var i = 0; i < faqList.length; i++) {
 				var adminBtn = '';
-				if (userInfo != null && userInfo.auth_type == '1') {
+				if (userInfo !== null && userInfo.auth_type === '1') {
 					adminBtn = $('<div class="edit_btn mt15 fr" />')
 						.append('<a href="#;" onclick="updateFAQForm(' + faqList[i].faq_idx + ')"><i class="glyphicon glyphicon-edit"></i></a>')
 						.append('<a href="#;" onclick="deleteFAQYn(' + faqList[i].faq_idx + ')"><i class="glyphicon glyphicon-remove"></i></a>')
@@ -74,7 +74,7 @@
 		} else {
 			$('#faqList > li').each(function(idx, liElmt) {
 				var liObj = $(liElmt);
-				var gubun = liObj.find('.gubun');
+				var gubun = liObj.find('.gubun');	
 				if (gubun.data('cateIdx') != cateIdx) {
 					liObj.hide();
 				} else {
@@ -84,11 +84,12 @@
 		}
 	}
 
-	var insUpdFlag = 0; // 1:insertForm, 2:updateForm, 0:reset
+	var faqInsUpdFlag = 0; // 1:insertForm, 2:updateForm, 0:reset
+	var categoryInsUpdFlag = 0; // 1:insertForm, 2:updateForm, 0:reset
 	// FAQ
 	$( function () {
 		$("#insertFAQFormBtn").click(function(){
-			insUpdFlag = 1;
+			faqInsUpdFlag = 1;
 	
 			$('#faqForm').each(function() {
 				this.reset();
@@ -100,8 +101,8 @@
 				async : false, // 동기로 처리해줌
 				success: function(result) {
 					var list = result.list;
-	
-					$faqCateIdxSelBox = $("#faqCateIdx");
+
+					var $faqCateIdxSelBox = $("#faqCateIdx");
 					$faqCateIdxSelBox.children('option').not(':eq(0)').remove();
 					for(var i=0; i<list.length; i++) {
 						$faqCateIdxSelBox.append('<option value="' + list[i].faq_cate_idx+'">' + list[i].faq_cate_name + '</option>');
@@ -113,30 +114,33 @@
 		});
 	
 		$("#confirmFAQBtn").click(function(){
-			if ($('#faqCateIdx').val() == '') {
+			var $faqCateIdx = $('#faqCateIdx');
+			if ( isEmpty($faqCateIdx.val()) ) {
 				alert('카테고리를 선택하세요.');
-				$('#faqCateIdx').focus();
+				$faqCateIdx.focus();
 				return;
 			}
-			if ($('#question').val() == '') {
+			var $question = $('#question');
+			if ( isEmpty($question.val()) ) {
 				alert('질문을 입력하세요.');
-				$('#question').focus();
+				$question.focus();
 				return;
 			}
-			if ($('#answer').val() == '') {
+			var $answer = $('#answer');
+			if ( isEmpty($answer.val()) ) {
 				alert('답변을 입력하세요.');
-				$('#answer').focus();
+				$answer.focus();
 				return;
 			}
 			var formData = $("#faqForm").serializeObject();
 			if (confirm("저장하시겠습니까?")) {
-				if(insUpdFlag ==  1) insertFAQ(formData);
-				else if(insUpdFlag ==  2) updateFAQ(formData);
+				if(faqInsUpdFlag ===  1) insertFAQ(formData);
+				else if(faqInsUpdFlag ===  2) updateFAQ(formData);
 			}
 		});
 	
 		$("#cancelFAQBtn").click(function(){
-			insUpdFlag = 0;
+			faqInsUpdFlag = 0;
 			$('#faqForm').each(function() {
 				this.reset();
 			});
@@ -156,7 +160,7 @@
 	}
 	
 	function updateFAQForm(faqIdx) {
-		insUpdFlag = 2;
+		faqInsUpdFlag = 2;
 		getFAQDetail(faqIdx);
 	}
 	
@@ -177,8 +181,8 @@
 				async : false, // 동기로 처리해줌
 				success: function(result) {
 					var list = result.list;
-	
-					$faqCateIdxSelBox = $("#faqCateIdx");
+
+					var $faqCateIdxSelBox = $("#faqCateIdx");
 					$faqCateIdxSelBox.children('option').not(':eq(0)').remove();
 					for(var i=0; i<list.length; i++) {
 						$faqCateIdxSelBox.append('<option value="' + list[i].faq_cate_idx+'">' + list[i].faq_cate_name + '</option>');
@@ -226,20 +230,21 @@
 		});
 	
 		$("#confirmFAQCateBtn").click(function(){
-			if ($('#faqCateName').val() == '') {
+			var $faqCateName= $('#faqCateName');
+			if ( isEmpty($faqCateName.val()) ) {
 				alert('카테고리명을 입력하세요.');
-				$('#faqCateName').focus();
+				$faqCateName.focus();
 				return;
 			}
 			var formData = $("#faqCateForm").serializeObject();
 			if (confirm("저장하시겠습니까?")) {
-				if(insUpdFlag ==  1) insertFAQCate(formData);
-				else if(insUpdFlag ==  2) updateFAQCate(formData);
+				if(categoryInsUpdFlag ===  1) insertFAQCate(formData);
+				else if(categoryInsUpdFlag ===  2) updateFAQCate(formData);
 			}
 		});
-	
-		$("#cancelFAQCateBtn").click(function(){
-			insUpdFlag = 0;
+
+		$("#cancelFAQCateBtn, #cancelFAQCateBtnX").click(function(){
+			categoryInsUpdFlag  = 0;
 			$('#confirmFAQCateBtn').val('추가하기');
 			$('#faqCateForm').each(function() {
 				this.reset();
@@ -250,7 +255,7 @@
 	});
 
 	function faqCateInit() {
-		insUpdFlag = 1;
+		categoryInsUpdFlag = 1;
 		$('#confirmFAQCateBtn').val('추가하기');
 
 		$('#faqCateForm').each(function() {
@@ -293,7 +298,7 @@
 	}
 	
 	function updateFAQCateForm(faqCateIdx) {
-		insUpdFlag = 2;
+		categoryInsUpdFlag = 2;
 		$('#confirmFAQCateBtn').val('수정하기');
 		getFAQCateDetail(faqCateIdx);
 	}
@@ -378,24 +383,6 @@
 									</c:forEach>
 								</div>
 								<ul class="faq_list mt15" id="faqList">
-<!--
-									<li>
-										<a href="#;" class="question">
-											<span class="gubun">로그인/회원</span>
-											<span class="sbj">
-												본인 확인제를 관리, 감독하는 기관은 어디인가요?
-											</span>
-										</a>
-										<div class="answer">
-								            본인 확인제를 관리, 감독하는 기관은<br/>
-											정보통신부에서 게시판 이용자의 본인확인제에 대한 전반적인 사항에 대해 관리 및 감독을 수행합니다.
-											<div class="edit_btn mt15 fr">
-												<a href="#;"><i class="glyphicon glyphicon-edit"></i></a>
-												<a href="#;"><i class="glyphicon glyphicon-remove"></i></a>
-											</div>
-								        </div>
-									</li>
--->
 								</ul>
 							</div>
 							<c:if test="${not empty userInfo and userInfo.auth_type eq '1'}">
@@ -465,8 +452,8 @@
     <!-- ###### 카테고리 편집 Popup Start ###### -->
     <div id="layerbox" class="category_edit" style="min-width:400px;">
         <div class="stit">
-        	<h2>카테고리 편집</h2>        	
-			<a href="javascript:popupClose('category_edit');">닫기</a>
+        	<h2>카테고리 편집</h2>
+			<a href="#;" id="cancelFAQCateBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
 			<div class="company_list mt10">				
@@ -484,13 +471,6 @@
 						</tr>
 					</thead>
 					<tbody id="faqCateTBody">
-<!--
-						<tr>
-							<td>1</td>
-							<td>서비스관련</td>
-							<td><a href="#;"><i class="glyphicon glyphicon-remove"></i></a></td>
-						</tr>
--->
 					</tbody>
 				</table>
 			</div>
@@ -519,7 +499,6 @@
 
 		</div>
 		<div class="btn_center">
-			<!-- <a href="#;" class="default_btn w80" id="cancelFAQCateBtn">확인</a> -->
 			<a href="#;" class="cancel_btn w80" id="cancelFAQCateBtn">취소</a>
 		</div>
     </div>
