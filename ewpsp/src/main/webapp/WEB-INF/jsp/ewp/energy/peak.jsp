@@ -36,6 +36,8 @@
             // 피크 전력
             var pastPeakList;
 
+            var rePeakVal = null;
+            var peakVal = null;
             function callback_getPeakRealList(result) {
                 var sheetList = result.sheetList;
                 var chartList = result.chartList;
@@ -54,8 +56,7 @@
                 var dt_str2 = "";
                 var dt_str3 = "";
                 var dt_str_totalVal = 0; // 테이블 라인별 누적합
-                var dt_str2_totalVal = 0; // 테이블 라인별 누적합
-                var dt_str3_totalVal = 0; // 테이블 라인별 누적합
+                var final_dt_str_head = "";
 
                 // 표데이터 셋팅
                 var start = new Date(schStartTime.getTime());
@@ -64,7 +65,7 @@
                     var s = start;
                     var e = end;
                     setHms(s, e);
-                    if (periodd == 'month') {
+                    if (periodd === 'month') {
                         s.setDate(1);
                         s.setHours(0);
                         s.setMinutes(0);
@@ -73,15 +74,13 @@
                     for (var i = 0; i < sheetList.length; i++) {
                         dt_str_head += "<th>" + convertDataTableHeaderDate(s, 2) + "</th>";
 
-                        var rePeakVal = null;
+                        rePeakVal = null;
                         for (var j = 0; j < sheetList.length; j++) {
-                            if (s.getTime() == setSheetDateUTC(sheetList[j].std_timestamp)) {
-                                var peakVal = String(sheetList[j].peak_val);
-                                if (peakVal == null || peakVal == "" || peakVal == "null") {
+                            if (s.getTime() === setSheetDateUTC(sheetList[j].std_timestamp)) {
+                                peakVal = String(sheetList[j].peak_val);
+                                if ( isEmpty(peakVal) || peakVal === "null") {
                                     rePeakVal = null;
                                 } else {
-                                    //						if(peakVal.indexOf(".")>-1) rePeakVal = Math.round( Number(peakVal) );
-                                    //						else rePeakVal = Number(peakVal);
                                     peakVal = peakVal / 1000;
                                     rePeakVal = toFixedNum(peakVal, 2);
 
@@ -94,19 +93,18 @@
                                 break;
                             }
                         }
-                        dt_str += "<td>" + ((rePeakVal == null) ? "" : rePeakVal) + "</td>";
-                        dt_str2 += "<td>" + ((contractPower == null) ? "" : contractPower / 1000) + "</td>";
-                        dt_str3 += "<td>" + ((chargePower == null) ? "" : chargePower / 1000) + "</td>";
-                        dt_str_totalVal = dt_str_totalVal + rePeakVal;
-                        dt_str2_totalVal = dt_str2_totalVal + (contractPower / 1000);
-                        dt_str3_totalVal = dt_str3_totalVal + (chargePower / 1000);
+                        dt_str += "<td>" + (( isEmpty(rePeakVal) ) ? "" : rePeakVal) + "</td>";
+                        dt_str2 += "<td>" + (( isEmpty(contractPower) ) ? "" : contractPower / 1000) + "</td>";
+                        dt_str3 += "<td>" + (( isEmpty(chargePower) ) ? "" : chargePower / 1000) + "</td>";
+						if (dt_str_totalVal < rePeakVal) {
+							dt_str_totalVal = rePeakVal; // 최대 피크전력 구하기
+						}
 
-
-                        if (dt_col_cnt == dt_col) {
-                            var final_dt_str_head = "<th>" + convertDataTableHeaderDate(s, 1) + "</th>" + dt_str_head;
+                        if (dt_col_cnt === dt_col) {
+                            final_dt_str_head = "<th>" + convertDataTableHeaderDate(s, 1) + "</th>" + dt_str_head;
                             dt_str += "<td>" + toFixedNum(dt_str_totalVal, 2) + "</td>";
-                            dt_str2 += "<td>" + dt_str2_totalVal + "</td>";
-                            dt_str3 += "<td>" + dt_str3_totalVal + "</td>";
+                            dt_str2 += "<td>" + "-" + "</td>";
+                            dt_str3 += "<td>" + "-" + "</td>";
                             peak_head_pc[dt_row_cnt - 1] = final_dt_str_head;
                             peak_data_pc[dt_row_cnt - 1] = dt_str;
                             ctpPw_data_pc[dt_row_cnt - 1] = dt_str2;
@@ -118,20 +116,19 @@
                             dt_row_cnt++;
                             dt_col_cnt = 1;
                             dt_str_totalVal = 0;
-                            dt_str2_totalVal = 0;
-                            dt_str3_totalVal = 0;
+                            final_dt_str_head = "";
                         } else {
-                            if ((i + 1) == sheetList.length) { // 루프 다 돌고 조회한 목록이 라인을 다 못채울 때
+                            if ((i + 1) === sheetList.length) { // 루프 다 돌고 조회한 목록이 라인을 다 못채울 때
                                 for (a = 0; a < (dt_col - dt_col_cnt); a++) {
                                     dt_str_head += "<th></th>";
                                     dt_str += "<td></td>";
                                     dt_str2 += "<td></td>";
                                     dt_str3 += "<td></td>";
                                 }
-                                var final_dt_str_head = "<th>" + convertDataTableHeaderDate(s, 1) + "</th>" + dt_str_head;
+                                final_dt_str_head = "<th>" + convertDataTableHeaderDate(s, 1) + "</th>" + dt_str_head;
                                 dt_str += "<td>" + dt_str_totalVal + "</td>";
-                                dt_str2 += "<td>" + dt_str2_totalVal + "</td>";
-                                dt_str3 += "<td>" + dt_str3_totalVal + "</td>";
+								dt_str2 += "<td>" + "-" + "</td>";
+								dt_str3 += "<td>" + "-" + "</td>";
                                 peak_head_pc[dt_row_cnt - 1] = final_dt_str_head;
                                 peak_data_pc[dt_row_cnt - 1] = dt_str;
                                 ctpPw_data_pc[dt_row_cnt - 1] = dt_str2;
@@ -140,34 +137,27 @@
                                 dt_str = "";
                                 dt_str2 = "";
                                 dt_str3 = "";
-                                //					dt_row_cnt++;
-                                //					dt_col_cnt = 1;
                                 dt_str_totalVal = 0;
-                                dt_str2_totalVal = 0;
-                                dt_str3_totalVal = 0;
+                                final_dt_str_head = "";
                             } else {
                                 dt_col_cnt++;
                             }
                         }
 
                         s = incrementTime(s);
-
                     }
-
                 }
 
                 // 차트데이터 셋팅
                 if (chartList != null && chartList.length > 0) {
                     for (var i = 0; i < chartList.length; i++) {
-                        var peakVal = String(chartList[i].peak_val);
-                        var rePeakVal = 0;
+                        peakVal = String(chartList[i].peak_val);
+                        rePeakVal = 0;
                         var tm = new Date(setSheetDateUTC(chartList[i].std_timestamp));
 
-                        if (peakVal == null || peakVal == "" || peakVal == "null") {
+                        if ( isEmpty(peakVal) || peakVal === "null") {
                             rePeakVal = null;
                         } else {
-                            //				if(peakVal.indexOf(".")>-1) rePeakVal = Math.round( Number(peakVal) );
-                            //				else rePeakVal = Number(peakVal);
                             peakVal = peakVal / 1000;
                             rePeakVal = toFixedNum(peakVal, 2);
 
@@ -181,9 +171,7 @@
                         dataSet.push([setChartDateUTC(chartList[i].std_timestamp), rePeakVal]);
                         dataSet2.push([setChartDateUTC(chartList[i].std_timestamp), contractPower / 1000]);
                         dataSet3.push([setChartDateUTC(chartList[i].std_timestamp), chargePower / 1000]);
-
                     }
-
                 }
                 pastPeakList = dataSet;
                 contractPowerList = dataSet2;
@@ -224,13 +212,12 @@
                 }, false);
 
                 setTickInterval();
-
                 myChart.redraw(); // 차트 데이터를 다시 그린다
             }
 
             // 표(테이블) 그리기
             function drawData_table() {
-                $chart = $(".peak_chart");
+                var $chart = $(".peak_chart");
                 var tbodyStr = '';
                 if (peak_data_pc.length > 0) {
                     $chart.find(".inchart-nodata").css("display", "none");
@@ -325,13 +312,8 @@
                                 </div>
                                 <div class="inchart">
                                     <div id="chart2"></div>
-                                    <script language="JavaScript">
-                                        // 								$(function () {
+                                    <script language="JavaScript" type="text/javascript">
                                         var myChart = Highcharts.chart('chart2', {
-// 										data: {
-// 									        table: 'datatable' /* 테이블에서 데이터 불러오기 */
-// 									    },
-
                                             chart: {
                                                 marginLeft: 80,
                                                 marginRight: 0,
@@ -391,7 +373,6 @@
 
                                             yAxis: {
                                                 gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-// 											max: 2000, /* 최대값 설정 (=한전계약 전력) */
                                                 min: 0, /* 최소값 지정 */
                                                 title: {
                                                     text: '(kW)',
@@ -461,11 +442,14 @@
 
                                             /* 그래프 스타일 */
                                             series: [{
+                                                name: '피크 전력',
                                                 color: '#438fd7', /* 최대 피크 전력 */
                                                 type: 'column'
                                             }, {
+                                                name: '한진 계약 전력',
                                                 color: '#13af67' /* 한진 계약 전력 */
                                             }, {
+                                                name: '요금 적용 전력',
                                                 color: '#f75c4a' /* 요금 적용 전력 */
                                             }],
 
@@ -514,7 +498,6 @@
                                             }
 
                                         });
-                                        // 								});
                                     </script>
                                 </div>
                             </div>
