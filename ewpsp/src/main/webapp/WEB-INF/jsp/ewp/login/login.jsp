@@ -674,9 +674,14 @@
                         <a href="#;" class="serviceBtn"><spring:message code="ewp.bot.Services"/></a>
                         <a href="/faq"><spring:message code="ewp.bot.FAQ"/></a>
                     </div>
-                    <div class="copyright fr">
-                        &copy; 2018 Encored Technologies, Inc.
-                    </div>
+					<div class="copyright fr">
+						<!-- 인코어드는 주석처리된 소스 이용 -->
+						<%--&copy; 2018 Encored Technologies, Inc.--%>
+						COPYRIGHT &copy; 2018 KOREA EAST-WEST POWER CO.,LTD (EWP). ALL RIGHTS RESERVED
+					</div>
+					<div class="copyright fr">
+						Ver 1.0.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					</div>
                 </footer>
             </div>
         </div>

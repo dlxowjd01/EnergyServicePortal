@@ -7,7 +7,12 @@
         <a href="/faq"><spring:message code="ewp.bot.FAQ"/></a>
         </div>
         <div class="copyright fr">
-        &copy; 2018 Encored Technologies, Inc.
+            <!-- 인코어드는 주석처리된 소스 이용 -->
+            <%--&copy; 2018 Encored Technologies, Inc.--%>
+            COPYRIGHT &copy; 2018 KOREA EAST-WEST POWER CO.,LTD (EWP). ALL RIGHTS RESERVED
+        </div>
+        <div class="copyright fr">
+            Ver 1.0.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
         </footer>
 
@@ -101,10 +106,11 @@
         });
 
         $('#btnPrintTot').on('click', function(){
-        $('#layerboxTot').css("left", "0px");
-        $('#layerboxTot').css("top", "-200px");
+        var $layerboxTot = $('#layerboxTot');
+        $layerboxTot.css("left", "0px");
+        $layerboxTot.css("top", "-200px");
         $(".lbutton").hide();
-        $('#layerboxTot').printThis({
+        $layerboxTot.printThis({
         });
         setTimeout(function () {
         $(".lbutton").show();
@@ -280,10 +286,6 @@
         <th>총 정산금액</th>
         <td align="right">0</td>
         </tr>
-        <!-- <tr>
-        <th>고객 정산 금액</th>
-        <td align="right">0</td>
-        </tr> -->
         <tr>
         <th>①수익배분 계</th>
         <td align="right">0</td>
@@ -331,10 +333,6 @@
         <th>③총 수익</th>
         <td align="right">0</td>
         </tr>
-        <!-- <tr>
-        <th>고객 정산 금액</th>
-        <td align="right"></td>
-        </tr> -->
         <tr>
         <th>④수익배분 계</th>
         <td align="right">0</td>
@@ -453,7 +451,7 @@
         <option value="nate.com">nate.com</option>
         <option value="gmail.com">gmail.com</option>
         <option value="manual" selected="selected">직접입력</option>
-        <select>
+        </select>
         </div>
         <span class="helpCont">email을 입력하세요</span>
         </td>
@@ -515,7 +513,7 @@
 
         $('#modEmail2').change(function() {
         var val = $(this).val();
-        if (val == 'manual') {
+        if (val === 'manual') {
         $('#modEmail1').css('width', '30%');
         $('#modEmail3').show();
         } else {
@@ -534,14 +532,14 @@
         $('#modUserPw2').val('');
 
         var email = result.psn_email;
-        if (email != null && email.indexOf('@') != -1) {
+        if (email != null && email.indexOf('@') !== -1) {
         var emails = email.split('@');
         $('#modEmail1').val(emails[0]);
         $('#modEmail3').val(emails[1]);
         }
 
         var mobile = result.psn_mobile;
-        if (mobile != null && mobile.indexOf('-') != -1) {
+        if (mobile !== null && mobile.indexOf('-') !== -1) {
         var mobiles = mobile.split('-');
         $('#modMobile1').val(mobiles[0]);
         $('#modMobile2').val(mobiles[1]);
@@ -552,41 +550,49 @@
         }
 
         function checkModify() {
-        if ($('#modUserPw').val() != $('#modUserPw2').val()) {
-        $('.helpCont').hide();
-        $('#modUserPw2').parents('td').children('.helpCont:eq(0)').show();
+        var $modUserPw2 = $('#modUserPw2');
+        var $helpCont = $('.helpCont');
+        if ($('#modUserPw').val() !== $modUserPw2.val()) {
+        $helpCont.hide();
+        $modUserPw2.parents('td').children('.helpCont:eq(0)').show();
         return;
         }
-        if ($('#modEmail1').val() == '' || $('#modEmail2').val() == '') {
-        $('.helpCont').hide();
-        $('#modEmail1').parents('td').children('.helpCont:eq(0)').show();
+        var $modEmail1 = $('#modEmail1');
+        var $modEmail2 = $('#modEmail2');
+        var $modEmail3 = $('#modEmail3');
+        if ($modEmail1.val() === '' || $modEmail2.val() === '') {
+        $helpCont.hide();
+        $modEmail1.parents('td').children('.helpCont:eq(0)').show();
         return;
         }
-        if ($('#modEmail2').val() == 'manual' && $('#modEmail3').val() == '') {
-        $('.helpCont').hide();
-        $('#modEmail1').parents('td').children('.helpCont:eq(0)').show();
+        if ($modEmail2.val() === 'manual' && $modEmail3.val() === '') {
+        $helpCont.hide();
+        $modEmail1.parents('td').children('.helpCont:eq(0)').show();
         return;
         }
-        if ($('#modMobile1').val() == '' || $('#modMobile2').val() == '' || $('#modMobile3').val() == '') {
-        $('.helpCont').hide();
-        $('#modMobile1').parents('td').children('.helpCont:eq(0)').show();
+        var $modMobile1 = $('#modMobile1');
+        var $modMobile2 = $('#modMobile2');
+        var $modMobile3 = $('#modMobile3');
+        if ($modMobile1.val() === '' || $modMobile2.val() === '' || $modMobile3.val() === '') {
+        $helpCont.hide();
+        $modMobile1.parents('td').children('.helpCont:eq(0)').show();
         return;
         }
-        if (isNaN($('#modMobile1').val()) || isNaN($('#modMobile2').val()) || isNaN($('#modMobile3').val())) {
-        $('.helpCont').hide();
-        $('#modMobile1').parents('td').children('.helpCont:eq(1)').show();
+        if (isNaN($modMobile1.val()) || isNaN($modMobile2.val()) || isNaN($modMobile3.val())) {
+        $helpCont.hide();
+        $modMobile1.parents('td').children('.helpCont:eq(1)').show();
         return;
         }
 
-        $('.helpCont').hide();
+        $helpCont.hide();
 
         if (confirm("수정하시겠습니까?")) {
-        if ($('#modEmail2').val() != 'manual') {
-        $('#modPsnEmail').val($('#modEmail1').val() + '@' + $('#modEmail2').val());
+        if ($modEmail2.val() !== 'manual') {
+        $('#modPsnEmail').val($modEmail1.val() + '@' + $modEmail2.val());
         } else {
-        $('#modPsnEmail').val($('#modEmail1').val() + '@' + $('#modEmail3').val());
+        $('#modPsnEmail').val($modEmail1.val() + '@' + $modEmail3.val());
         }
-        $('#modPsnMobile').val($('#modMobile1').val() + '-' + $('#modMobile2').val() + '-' + $('#modMobile3').val());
+        $('#modPsnMobile').val($modMobile1.val() + '-' + $modMobile2.val() + '-' + $modMobile3.val());
 
         modifyUser();
         }
