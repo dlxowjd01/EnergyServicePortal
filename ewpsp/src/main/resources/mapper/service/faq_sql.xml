@@ -131,11 +131,7 @@
 
     <update id="deleteFAQ" parameterType="hashMap">
 		/* FAQ 삭제 */
-		update tb_faq
-		set 
-		    del_yn        = 'Y', 
-		    mod_uid       = #{modUid }, 
-		    mod_date      = now()
+		delete from  tb_faq
 		where faq_idx = #{faqIdx }
 	</update>
 

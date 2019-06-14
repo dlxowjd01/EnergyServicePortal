@@ -230,6 +230,26 @@ public class FaqController {
     }
 
     /**
+     * FAQ 카테고리 내 게시물 존재 유무 체크
+     *
+     * @param session
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/getFAQListCnt")
+    public @ResponseBody
+    Map<String, Object> getFAQListCnt(HttpSession session, @RequestParam HashMap param) throws Exception {
+        logger.debug("/getFAQListCnt");
+        logger.debug("param : {}", param);
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("resultCnt", faqService.getFAQListCnt(param));
+
+        return resultMap;
+    }
+
+    /**
      * FAQ 카테고리 삭제
      *
      * @param session
@@ -249,16 +269,20 @@ public class FaqController {
         }
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
-
         param.put("cateIdx", param.get("faqCateIdx"));
-        int cnt = faqService.getFAQListCnt(param);
-        if (cnt > 0) {
-            resultMap.put("msg", "해당 카테고리에 게시물이 있어 삭제할 수 없습니다.");
-        } else {
-            int resultCnt = faqService.deleteFAQCate(param);
-            resultMap.put("msg", "");
-            resultMap.put("resultCnt", resultCnt);
+        List list = faqService.getFAQList(param);
+        if(!list.isEmpty()) {
+            for (int i=0; i<list.size(); i++) {
+                HashMap<String, Object> faqMap = new HashMap<String, Object>();
+                faqMap.put("faqIdx", ((Map)list.get(i)).get("faq_idx"));
+                faqMap.put("modUid", userInfo.get("user_id"));
+
+                faqService.deleteFAQ(faqMap);
+            }
         }
+
+        int resultCnt = faqService.deleteFAQCate(param);
+        resultMap.put("resultCnt", resultCnt);
 
         return resultMap;
     }

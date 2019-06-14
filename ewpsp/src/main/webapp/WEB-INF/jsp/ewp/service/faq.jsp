@@ -329,24 +329,44 @@
 	
 	function deleteFAQCateYn(faqCateIdx) {
 		if(confirm("삭제하시겠습니까?")) {
-			deleteFAQCate(faqCateIdx);
+			getFAQListCnt(faqCateIdx);
 		}
+	}
+
+	// FAQ 카테고리 내 게시물 존재 유무 체크
+	function getFAQListCnt(faqCateIdx) {
+		$.ajax({
+			url: "/getFAQListCnt",
+			type: 'post',
+			async: false, // 동기로 처리해줌
+			data: {
+				cateIdx: faqCateIdx
+			},
+			success: function (result) {
+				var cnt = result.resultCnt;
+				if(cnt > 0) {
+					if(confirm("카테고리 안에 게시물이 "+cnt+"건 존재합니다. 그래도 카테고리를 삭제 하시 겠습니까?")) {
+						deleteFAQCate(faqCateIdx);
+					}
+				} else {
+					deleteFAQCate(faqCateIdx);
+				}
+			},
+			error: function (request, status, error) {
+				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+			}
+		});
 	}
 	
 	function callback_deleteFAQCate(result) {
 		var msg = result.msg;
 		var resultCnt = result.resultCnt;
-		if( isEmpty(msg) ) {
-			if(resultCnt > 0) {
-				alert("삭제되었습니다.");
-				faqCateInit();
-			} else {
-				alert("삭제에 실패하였습니다. \n 관리자에게 문의하세요.");
-			}
+		if(resultCnt > 0) {
+			alert("삭제되었습니다.");
+			faqCateInit();
 		} else {
-			alert(msg);
+			alert("삭제에 실패하였습니다. \n 관리자에게 문의하세요.");
 		}
-		
 	}
 </script>
 </head>
