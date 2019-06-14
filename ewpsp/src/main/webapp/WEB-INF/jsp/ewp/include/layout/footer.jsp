@@ -12,7 +12,7 @@
             COPYRIGHT &copy; 2018 KOREA EAST-WEST POWER CO.,LTD (EWP). ALL RIGHTS RESERVED
         </div>
         <div class="copyright fr">
-            Ver 1.0.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Ver 1.0.6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
         </footer>
 
