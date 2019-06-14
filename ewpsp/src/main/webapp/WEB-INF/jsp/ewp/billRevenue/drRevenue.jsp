@@ -20,21 +20,23 @@
                 firstDay.setYear(firstDay.getFullYear() - 1);
                 firstDay = new Date(firstDay.setMonth(firstDay.getMonth() + 1));
 
+                var $selTermFrom = $("#selTermFrom");
                 $("#selTermTex").val(texDay.format("yyyyMM"));
                 $("#selTermAgo").val(agoDay.format("yyyyMM"));
-                $("#selTermFrom").val(firstDay.format("yyyyMM"));
+                $selTermFrom.val(firstDay.format("yyyyMM"));
                 $("#selTermTo").val(endDay.format("yyyyMM"));
                 $("#datepicker3").val(firstDay.format("yyyy-MM"));
                 $("#datepicker4").val(endDay.format("yyyy-MM"));
                 SelTerm = "billSelectMM";
                 $("#selTerm").val(SelTerm);
 
-                var formData = $("#schForm").serializeObject();
+                var  $formData = $("#schForm");
+                var formData = $formData.serializeObject();
                 getSiteSetDetail();
                 getDBData(formData);
 
-                $("#selTermFrom").val(agoDay.format("yyyyMM"));
-                formData = $("#schForm").serializeObject();
+                $selTermFrom.val(agoDay.format("yyyyMM"));
+                formData = $formData.serializeObject();
                 getDRRevenueTexList(formData);
             });
 
@@ -193,7 +195,6 @@
                         texFootStr += "<td align='right'>" + numberComma(texPrice) + "</td>";
                         texFootStr += "</tr>";
 
-
                         saveStr += "<tr>";
                         saveStr += "<th>감축횟수-시간 (회-시간)</th>";
                         saveStr += "<td align='right'>" + reductCntHour + "</td>";
@@ -220,7 +221,6 @@
                         beneAreaStr += "<td align='right'>총 정산금액 x 수익배분(" + profitRatio + ")</td>";
                         beneAreaStr += "</tr>";
 
-
                         infoAreaStr += "<tr>";
                         infoAreaStr += "<th>은행명</th>";
                         infoAreaStr += "<td>우리은행</td>";
@@ -245,16 +245,15 @@
                         infoAreaStr += "<td>" + paymentDate.format("yyyy-MM-dd") + "</td>";
                         infoAreaStr += "</tr>";
 
-
-                        $(".texArea").find("tbody").html(texStr);
-                        $(".texArea").find("tfoot").html(texFootStr);
+                        var $texArea = $(".texArea");
+                        $texArea.find("tbody").html(texStr);
+                        $texArea.find("tfoot").html(texFootStr);
                         $(".saveArea").find("tbody").html(saveStr);
                         $(".beneArea").find("tbody").html(beneAreaStr);
                         $(".infoArea").find("tbody").html(infoAreaStr);
 
                     }
                 }
-
 
                 //}
 
@@ -266,13 +265,11 @@
                         // 차트데이터 셋팅
                         texDataSet1.push([Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6) - 1, 1), chartList[i].total_reward_amt]);
                         texDataSet2.push([Date.UTC(yyyyMM.substring(0, 4), yyyyMM.substring(4, 6) - 1, 1), chartList[i].csm_reward_amt]);
-
                     }
                     // 차트데이터 셋팅
                     DRRevenueTex1 = texDataSet1;
                     DRRevenueTex2 = texDataSet2;
                     texDrawData_chart();
-
                 }
             }
 
@@ -346,6 +343,7 @@
                 var dt_str9_totalVal = 0; // 테이블 라인별 누적합
                 var dt_str10_totalVal = 0; // 테이블 라인별 누적합
                 var reProfitRatio_cnt = 0; // 라인별 수익비율 더한 횟수
+                var reReductCapPer_cnt = 0; // 라인별 감축이행율 더한 횟수
 
                 // 표데이터 셋팅
                 if (sheetList != null && sheetList.length > 0) {
@@ -379,7 +377,10 @@
                         if (isEqVal(reductAmt, "null")) reReductAmt = null;
                         else reReductAmt = Math.round(Number(reductAmt));
                         if (isEqVal(reductCapPer, "null")) reReductCapPer = null;
-                        else reReductCapPer = Math.round(Number(reductCapPer));
+                        else {
+                            reReductCapPer = Math.round(Number(reductCapPer));
+                            reReductCapPer_cnt = reReductCapPer_cnt + 1;
+                        }
                         if (isEqVal(capAmt, "null")) reCapAmt = null;
                         else reCapAmt = Math.round(Number(capAmt));
                         if (isEqVal(reductRewardAmt, "null")) reReductRewardAmt = null;
@@ -398,16 +399,16 @@
 
                         // 표데이터 셋팅
                         dt_str_head += "<th>" + yyyyMM.substring(0, 4) + "-" + yyyyMM.substring(4, 6) + "</th>";
-                        dt_str += "<td>" + ((reReductCntHour == null) ? "" : reReductCntHour) + "</td>"; // 감축 횟수-시간 (회-hr)
-                        dt_str2 += "<td>" + ((reReductCap == null) ? "" : reReductCap) + "</td>"; // 감축이행용량 (kWh)
-                        dt_str3 += "<td>" + ((reReductAmt == null) ? "" : reReductAmt) + "</td>"; // 감축인정용량 (kWh)
-                        dt_str4 += "<td>" + ((reReductCapPer == null) ? "" : reReductCapPer) + "</td>"; // 감축이행율 (%)
-                        dt_str5 += "<td>" + ((reCapAmt == null) ? "" : reCapAmt) + "</td>"; // 용량정산금 (won)
-                        dt_str6 += "<td>" + ((reReductRewardAmt == null) ? "" : reReductRewardAmt) + "</td>"; // 감축정산금 (won)
-                        dt_str7 += "<td>" + ((reTotalRewardAmt == null) ? "" : reTotalRewardAmt) + "</td>"; // 총 정산금액
-                        dt_str8 += "<td>" + ((reCsmRewardAmt == null) ? "" : reCsmRewardAmt) + "</td>"; // 고객 할인금액
-                        dt_str9 += "<td>" + ((reEwpRewardAmt == null) ? "" : reEwpRewardAmt) + "</td>"; // EWP 정산금액 (won)
-                        dt_str10 += "<td>" + ((reProfitRatio == null) ? "" : reProfitRatio) + "</td>"; // 수익비율 (%)
+                        dt_str += "<td>" + (( isEmpty(reReductCntHour) ) ? "" : reReductCntHour) + "</td>"; // 감축 횟수-시간 (회-hr)
+                        dt_str2 += "<td>" + (( isEmpty(reReductCap) ) ? "" : reReductCap) + "</td>"; // 감축이행용량 (kWh)
+                        dt_str3 += "<td>" + (( isEmpty(reReductAmt) ) ? "" : reReductAmt) + "</td>"; // 감축인정용량 (kWh)
+                        dt_str4 += "<td>" + (( isEmpty(reReductCapPer) ) ? "" : reReductCapPer) + "</td>"; // 감축이행율 (%)
+                        dt_str5 += "<td>" + (( isEmpty(reCapAmt)) ? "" : reCapAmt) + "</td>"; // 용량정산금 (won)
+                        dt_str6 += "<td>" + (( isEmpty(reReductRewardAmt) ) ? "" : reReductRewardAmt) + "</td>"; // 감축정산금 (won)
+                        dt_str7 += "<td>" + (( isEmpty(reTotalRewardAmt) ) ? "" : reTotalRewardAmt) + "</td>"; // 총 정산금액
+                        dt_str8 += "<td>" + (( isEmpty(reCsmRewardAmt) ) ? "" : reCsmRewardAmt) + "</td>"; // 고객 할인금액
+                        dt_str9 += "<td>" + (( isEmpty(reEwpRewardAmt) ) ? "" : reEwpRewardAmt) + "</td>"; // EWP 정산금액 (won)
+                        dt_str10 += "<td>" + (( isEmpty(reProfitRatio) ) ? "" : reProfitRatio) + "</td>"; // 수익비율 (%)
                         dt_str_totalVal = dt_str_totalVal + reReductCntHour;
                         dt_str2_totalVal = dt_str2_totalVal + reReductCap;
                         dt_str3_totalVal = dt_str3_totalVal + reReductAmt;
@@ -418,17 +419,17 @@
                         dt_str8_totalVal = dt_str8_totalVal + reCsmRewardAmt;
                         dt_str9_totalVal = dt_str9_totalVal + reEwpRewardAmt;
                         dt_str10_totalVal = dt_str10_totalVal + reProfitRatio;
-                        if (dt_col_cnt == 12) {
+                        if (dt_col_cnt === 12) {
                             dt_str += "<td>" + dt_str_totalVal + "</td>";
                             dt_str2 += "<td>" + dt_str2_totalVal + "</td>";
                             dt_str3 += "<td>" + dt_str3_totalVal + "</td>";
-                            dt_str4 += "<td>" + dt_str4_totalVal + "</td>";
+                            dt_str4 += "<td>" + ((reReductCapPer_cnt === 0) ? 0 : Math.round(dt_str4_totalVal / reReductCapPer_cnt)) + "</td>";
                             dt_str5 += "<td>" + dt_str5_totalVal + "</td>";
                             dt_str6 += "<td>" + dt_str6_totalVal + "</td>";
                             dt_str7 += "<td>" + dt_str7_totalVal + "</td>";
                             dt_str8 += "<td>" + dt_str8_totalVal + "</td>";
                             dt_str9 += "<td>" + dt_str9_totalVal + "</td>";
-                            dt_str10 += "<td>" + ((reProfitRatio_cnt == 0) ? 0 : Math.round(dt_str10_totalVal / reProfitRatio_cnt)) + "</td>";
+                            dt_str10 += "<td>" + ((reProfitRatio_cnt === 0) ? 0 : Math.round(dt_str10_totalVal / reProfitRatio_cnt)) + "</td>";
                             drRevenue_head_pc[dt_row_cnt - 1] = dt_str_head;
                             drRevenue_data_pc[dt_row_cnt - 1] = dt_str;
                             drRevenue_data_pc2[dt_row_cnt - 1] = dt_str2;
@@ -465,7 +466,7 @@
                             dt_str10_totalVal = 0;
                             reProfitRatio_cnt = 0;
                         } else {
-                            if ((i + 1) == sheetList.length) { // 조회한 목록이 라인을 다 못채울 때
+                            if ((i + 1) === sheetList.length) { // 조회한 목록이 라인을 다 못채울 때
                                 //					var headerDate1 = convertDataTableHeaderDate(tm, 1);
                                 var final_dt_str_head = dt_str_head;
                                 for (a = 0; a < (12 - dt_col_cnt); a++) {
@@ -484,13 +485,13 @@
                                 dt_str += "<td>" + dt_str_totalVal + "</td>";
                                 dt_str2 += "<td>" + dt_str2_totalVal + "</td>";
                                 dt_str3 += "<td>" + dt_str3_totalVal + "</td>";
-                                dt_str4 += "<td>" + dt_str4_totalVal + "</td>";
+                                dt_str4 += "<td>" + ((reReductCapPer_cnt === 0) ? 0 : Math.round(dt_str4_totalVal / reReductCapPer_cnt)) + "</td>";
                                 dt_str5 += "<td>" + dt_str5_totalVal + "</td>";
                                 dt_str6 += "<td>" + dt_str6_totalVal + "</td>";
                                 dt_str7 += "<td>" + dt_str7_totalVal + "</td>";
                                 dt_str8 += "<td>" + dt_str8_totalVal + "</td>";
                                 dt_str9 += "<td>" + dt_str9_totalVal + "</td>";
-                                dt_str10 += "<td>" + ((reProfitRatio_cnt == 0) ? 0 : Math.round(dt_str10_totalVal / reProfitRatio_cnt)) + "</td>";
+                                dt_str10 += "<td>" + ((reProfitRatio_cnt === 0) ? 0 : Math.round(dt_str10_totalVal / reProfitRatio_cnt)) + "</td>";
                                 drRevenue_head_pc[dt_row_cnt - 1] = dt_str_head;
                                 drRevenue_data_pc[dt_row_cnt - 1] = dt_str;
                                 drRevenue_data_pc2[dt_row_cnt - 1] = dt_str2;
@@ -693,13 +694,8 @@
                                 </div>
                                 <div class="inchart">
                                     <div id="chart2"></div>
-                                    <script language="JavaScript">
-                                        // 								$(function () {
+                                    <script language="JavaScript" type="text/javascript">
                                         var myChart = Highcharts.chart('chart2', {
-// 										data: {
-// 									        table: 'datatable' /* 테이블에서 데이터 불러오기 */
-// 									    },
-
                                             chart: {
                                                 marginLeft: 80,
                                                 marginRight: 0,
@@ -871,7 +867,6 @@
                                             }
 
                                         });
-                                        // 								});
                                     </script>
                                 </div>
                             </div>
@@ -917,10 +912,11 @@
                 });
 
                 $('.lbtn_print').on('click', function () {
-                    $('#layerbox').css("left", "0px");
-                    $('#layerbox').css("top", "-300px");
+                    var $layerbox = $('#layerbox');
+                    $layerbox.css("left", "0px");
+                    $layerbox.css("top", "-300px");
                     $(".lbutton").hide();
-                    $('#layerbox').printThis({});
+                    $layerbox.printThis({});
                     setTimeout(function () {
                         $(".lbutton").show();
                     }, 1000);
@@ -1099,7 +1095,7 @@
                 <h2 style="margin-top:20px">5. 최근 6개월 수익 내역</h2>
                 <div class="inchart">
                     <div id="ly_chart_dr" style="max-width:800px;height:250px;"></div>
-                    <script language="JavaScript">
+                    <script language="JavaScript" type="text/javascript">
                         // 			$(function () {
                         var myChart1 = Highcharts.chart('ly_chart_dr', {
                             // 					data: {
