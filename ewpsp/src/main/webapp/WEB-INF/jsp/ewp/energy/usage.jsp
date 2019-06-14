@@ -4,14 +4,15 @@
 <html>
     <head>
         <jsp:include page="../include/common_static.jsp"/>
+        <script src="../js/worker/worker.js"></script>
         <script type="text/javascript">
             $(document).ready(function () {
                 changeSelTerm('day');
-                getCollect_sch_condition();
+                getCollect_sch_condition('worker');
             });
 
             function searchData() {
-                getCollect_sch_condition(); // 검색조건 모으기
+                getCollect_sch_condition('worker'); // 검색조건 모으기
             }
 
             var usage_head_pc = []; // 실제 사용량 표 데이터
@@ -24,224 +25,227 @@
                 setDataTableColRowCnt(); // 1행의 최대 칸 수 및 테이블갯수
                 getUsageRealList(formData); // 실제사용량 조회
                 getUsageFutureList(formData); // 예측사용량 조회
-                drawData(); // 차트 및 표 그리기
+                if ( !window.Worker ) {
+                    drawData(); // 차트 및 표 그리기
+                }
             }
 
             // 실제 사용량
             var pastUsageList;
-
+            var usage = null;
+            var reUsage = null;
+            var pastTotalUsage = 0; // 전체 누적합
             function callback_getUsageRealList(result) {
-                var sheetList = result.sheetList;
-                var chartList = result.chartList;
-                var periodd = $("#selPeriodVal").val(); // 데이터조회간격
+                // Worker 지원 유무 확인
+                if ( !!window.Worker ) {
+                    startWorker(result, "pastUsageList");
+                } else {
+                    var sheetList = result.sheetList;
+                    var chartList = result.chartList;
+                    var periodd = $("#selPeriodVal").val(); // 데이터조회간격
 
-                // 데이터 셋팅
-                var dataSet = []; // chartData를 위한 변수
-                var totalUsage = 0; // 전체 누적합
-                var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
-                var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
-                var dt_str_head = "";
-                var dt_str = "";
-                var dt_str_totalVal = 0; // 테이블 라인별 누적합
+                    // 데이터 셋팅
+                    var dataSet = []; // chartData를 위한 변수
+                    var pastTotalUsage = 0; // 전체 누적합
+                    var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
+                    var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
+                    var dt_str_head = "";
+                    var dt_str = "";
+                    var dt_str_totalVal = 0; // 테이블 라인별 누적합
+                    var final_dt_str_head = "";
+                    var map = null;
 
-                // 표데이터 셋팅
-                var start = new Date(schStartTime.getTime());
-                var end = new Date(schEndTime.getTime());
-                if (sheetList != null && sheetList.length > 0) {
-                    var s = start;
-                    var e = end;
-                    setHms(s, e);
-                    if (periodd == 'month') {
-                        s.setDate(1);
-                        s.setHours(0);
-                        s.setMinutes(0);
-                        s.setSeconds(0);
-                    }
-                    for (var i = 0; i < sheetList.length; i++) {
-                        dt_str_head += "<th>" + convertDataTableHeaderDate(s, 2) + "</th>";
-
-                        var reUsage = null;
-                        for (var j = 0; j < sheetList.length; j++) {
-                            if (s.getTime() == setSheetDateUTC(sheetList[j].std_timestamp)) {
-                                var usage = String(sheetList[j].usg_val);
-                                if (usage == null || usage == "" || usage == "null") {
-                                    reUsage = null;
-                                } else {
-                                    var map = convertUnitFormat(usage, "Wh", 5);
-                                    reUsage = toFixedNum(map.get("formatNum"), 2);
-                                    dt_str_totalVal = dt_str_totalVal + Number(map.get("formatNum"));
-                                }
-
-                                break;
-                            }
+                    // 표데이터 셋팅
+                    var start = new Date(schStartTime.getTime());
+                    var end = new Date(schEndTime.getTime());
+                    if (sheetList != null && sheetList.length > 0) {
+                        var s = start;
+                        var e = end;
+                        setHms(s, e);
+                        if (periodd === 'month') {
+                            s.setDate(1);
+                            s.setHours(0);
+                            s.setMinutes(0);
+                            s.setSeconds(0);
                         }
-                        dt_str += "<td>" + ((reUsage == null) ? "" : reUsage) + "</td>";
+                        for (var i = 0; i < sheetList.length; i++) {
+                            dt_str_head += "<th>" + convertDataTableHeaderDate(s, 2) + "</th>";
 
-                        if (dt_col_cnt == dt_col) {
-                            var final_dt_str_head = "<th>" + convertDataTableHeaderDate(s, 1) + "</th>" + dt_str_head;
-                            dt_str += "<td>" + toFixedNum(dt_str_totalVal, 2) + "</td>";
-                            usage_head_pc[dt_row_cnt - 1] = final_dt_str_head;
-                            real_data_pc[dt_row_cnt - 1] = dt_str;
-                            dt_str_head = "";
-                            dt_str = "";
-                            dt_row_cnt++;
-                            dt_col_cnt = 1;
-                            dt_str_totalVal = 0;
-                        } else {
-                            if ((i + 1) == sheetList.length) { // 루프 다 돌고 조회한 목록이 라인을 다 못채울 때
-                                for (a = 0; a < (dt_col - dt_col_cnt); a++) {
-                                    dt_str_head += "<th></th>";
-                                    dt_str += "<td></td>";
-                                }
-                                var final_dt_str_head = "<th>" + convertDataTableHeaderDate(s, 1) + "</th>" + dt_str_head;
+                            usage = String(sheetList[i].usg_val);
+                            reUsage = null;
+                            if ( isEmpty(usage) || usage === "null") {
+                                reUsage = null;
+                            } else {
+                                map = convertUnitFormat(usage, "Wh", 5);
+                                reUsage = toFixedNum(map.get("formatNum"), 2);
+                                dt_str_totalVal = dt_str_totalVal + Number(map.get("formatNum"));
+                            }
+
+                            dt_str += "<td>" + (( isEmpty(reUsage) ) ? "" : reUsage) + "</td>";
+
+                            if (dt_col_cnt === dt_col) {
+                                final_dt_str_head = "<th>" + convertDataTableHeaderDate(s, 1) + "</th>" + dt_str_head;
                                 dt_str += "<td>" + toFixedNum(dt_str_totalVal, 2) + "</td>";
                                 usage_head_pc[dt_row_cnt - 1] = final_dt_str_head;
                                 real_data_pc[dt_row_cnt - 1] = dt_str;
                                 dt_str_head = "";
                                 dt_str = "";
-                                //					dt_row_cnt++;
-                                //					dt_col_cnt = 1;
+                                dt_row_cnt++;
+                                dt_col_cnt = 1;
                                 dt_str_totalVal = 0;
+                                final_dt_str_head = "";
                             } else {
-                                dt_col_cnt++;
+                                if ((i + 1) === sheetList.length) { // 루프 다 돌고 조회한 목록이 라인을 다 못채울 때
+                                    for (a = 0; a < (dt_col - dt_col_cnt); a++) {
+                                        dt_str_head += "<th></th>";
+                                        dt_str += "<td></td>";
+                                    }
+                                    final_dt_str_head = "<th>" + convertDataTableHeaderDate(s, 1) + "</th>" + dt_str_head;
+                                    dt_str += "<td>" + toFixedNum(dt_str_totalVal, 2) + "</td>";
+                                    usage_head_pc[dt_row_cnt - 1] = final_dt_str_head;
+                                    real_data_pc[dt_row_cnt - 1] = dt_str;
+                                    dt_str_head = "";
+                                    dt_str = "";
+                                    dt_str_totalVal = 0;
+                                    final_dt_str_head = "";
+                                } else {
+                                    dt_col_cnt++;
+                                }
                             }
+                            s = incrementTime(s);
                         }
-
-                        s = incrementTime(s);
-
                     }
 
-                }
-
-                // 차트데이터 셋팅
-                if (chartList != null && chartList.length > 0) {
-                    for (var i = 0; i < chartList.length; i++) {
-                        var usage = String(chartList[i].usg_val);
-                        var reUsage = 0;
-                        if (usage == null || usage == "" || usage == "null") {
-                            reUsage = null;
-                        } else {
-                            var map = convertUnitFormat(usage, "Wh", 5);
-                            reUsage = toFixedNum(map.get("formatNum"), 2);
-                            totalUsage = totalUsage + Number(usage);
+                    // 차트데이터 셋팅
+                    if (chartList != null && chartList.length > 0) {
+                        for (var i = 0; i < chartList.length; i++) {
+                            usage = String(chartList[i].usg_val);
+                            reUsage = 0;
+                            if ( isEmpty(usage) || usage === "null") {
+                                reUsage = null;
+                            } else {
+                                map = convertUnitFormat(usage, "Wh", 5);
+                                reUsage = toFixedNum(map.get("formatNum"), 2);
+                                pastTotalUsage = pastTotalUsage + Number(usage);
+                            }
+                            dataSet.push([setChartDateUTC(chartList[i].std_timestamp), reUsage]);
                         }
-
-                        dataSet.push([setChartDateUTC(chartList[i].std_timestamp), reUsage]);
-
                     }
+                    pastUsageList = dataSet;
 
+                    // 총 합계(사용량, 발전량, 충전량, 방전량 등등)
+                    unit_format(String(pastTotalUsage), "pastUseTot", "Wh");
                 }
-                pastUsageList = dataSet;
 
-                // 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-                unit_format(String(totalUsage), "pastUseTot", "Wh");
             }
 
             // 예측 사용량
             var fetureUsageList;
-
+            var fetureTotalUsage = 0; // 전체 누적합
             function callback_getUsageFutureList(result) {
-                var sheetList = result.sheetList;
-                var chartList = result.chartList;
-                var periodd = $("#selPeriodVal").val(); // 데이터조회간격
+                // Worker 지원 유무 확인
+                if ( !!window.Worker ) {
+                    startWorker(result, "predictUsageList");
+                } else {
+                    var sheetList = result.sheetList;
+                    var chartList = result.chartList;
+                    var periodd = $("#selPeriodVal").val(); // 데이터조회간격
 
-                // 데이터 셋팅
-                var dataSet = []; // chartData를 위한 변수
-                var totalUsage = 0; // 전체 누적합
-                var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
-                var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
-                var dt_str = "";
-                var dt_str_totalVal = 0; // 테이블 라인별 누적합
+                    // 데이터 셋팅
+                    var dataSet = []; // chartData를 위한 변수
+                    var fetureTotalUsage = 0; // 전체 누적합
+                    var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
+                    var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
+                    var dt_str = "";
+                    var dt_str_totalVal = 0; // 테이블 라인별 누적합
+                    var map = null;
 
-                // 표데이터 셋팅
-                var start = new Date(schStartTime.getTime());
-                var end = new Date(schEndTime.getTime());
-                if (sheetList != null && sheetList.length > 0) {
-                    var s = start;
-                    var e = end;
-                    setHms(s, e);
-                    if (periodd == 'month') {
-                        s.setDate(1);
-                        s.setHours(0);
-                        s.setMinutes(0);
-                        s.setSeconds(0);
-                    }
-                    for (var i = 0; i < sheetList.length; i++) {
-
-                        var reUsage = null;
-                        for (var j = 0; j < sheetList.length; j++) {
-                            if (s.getTime() == setSheetDateUTC(sheetList[j].std_timestamp)) {
-                                var usage = String(sheetList[j].pre_usg_val);
-                                if (usage == null || usage == "" || usage == "null") {
-                                    reUsage = null;
-                                } else {
-                                    var map = convertUnitFormat(usage, "Wh", 5);
-                                    reUsage = toFixedNum(map.get("formatNum"), 2);
-                                    dt_str_totalVal = dt_str_totalVal + Number(map.get("formatNum"));
-                                }
-
-                                break;
-                            }
+                    // 표데이터 셋팅
+                    var start = new Date(schStartTime.getTime());
+                    var end = new Date(schEndTime.getTime());
+                    if (sheetList != null && sheetList.length > 0) {
+                        var s = start;
+                        var e = end;
+                        setHms(s, e);
+                        if (periodd === 'month') {
+                            s.setDate(1);
+                            s.setHours(0);
+                            s.setMinutes(0);
+                            s.setSeconds(0);
                         }
-                        dt_str += "<td>" + ((reUsage == null) ? "" : reUsage) + "</td>";
+                        for (var i = 0; i < sheetList.length; i++) {
 
-                        if (dt_col_cnt == dt_col) {
-                            dt_str += "<td>" + toFixedNum(dt_str_totalVal, 2) + "</td>";
-                            feture_data_pc[dt_row_cnt - 1] = dt_str;
-                            dt_str = "";
-                            dt_row_cnt++;
-                            dt_col_cnt = 1;
-                            dt_str_totalVal = 0;
-                        } else {
-                            if ((i + 1) == sheetList.length) { // 루프 다 돌고 조회한 목록이 라인을 다 못채울 때
-                                for (a = 0; a < (dt_col - dt_col_cnt); a++) {
-                                    dt_str += "<td></td>";
-                                }
+                            usage = String(sheetList[i].pre_usg_val);
+                            reUsage = null;
+                            if ( isEmpty(usage) || usage === "null") {
+                                reUsage = null;
+                            } else {
+                                map = convertUnitFormat(usage, "Wh", 5);
+                                reUsage = toFixedNum(map.get("formatNum"), 2);
+                                dt_str_totalVal = dt_str_totalVal + Number(map.get("formatNum"));
+                            }
+
+                            dt_str += "<td>" + ((reUsage == null) ? "" : reUsage) + "</td>";
+
+                            if (dt_col_cnt === dt_col) {
                                 dt_str += "<td>" + toFixedNum(dt_str_totalVal, 2) + "</td>";
                                 feture_data_pc[dt_row_cnt - 1] = dt_str;
-                                //					dt_str_head = "";
                                 dt_str = "";
-                                //					dt_row_cnt++;
-                                //					dt_col_cnt = 1;
+                                dt_row_cnt++;
+                                dt_col_cnt = 1;
                                 dt_str_totalVal = 0;
                             } else {
-                                dt_col_cnt++;
+                                if ((i + 1) === sheetList.length) { // 루프 다 돌고 조회한 목록이 라인을 다 못채울 때
+                                    for (a = 0; a < (dt_col - dt_col_cnt); a++) {
+                                        dt_str += "<td></td>";
+                                    }
+                                    dt_str += "<td>" + toFixedNum(dt_str_totalVal, 2) + "</td>";
+                                    feture_data_pc[dt_row_cnt - 1] = dt_str;
+                                    dt_str = "";
+                                    dt_str_totalVal = 0;
+                                } else {
+                                    dt_col_cnt++;
+                                }
                             }
+                            s = incrementTime(s);
                         }
-
-                        s = incrementTime(s);
-
                     }
 
-                }
-
-                // 차트데이터 셋팅
-                if (chartList != null && chartList.length > 0) {
-                    for (var i = 0; i < chartList.length; i++) {
-                        var usage = String(chartList[i].pre_usg_val);
-                        var reUsage = 0;
-                        if (usage == null || usage == "" || usage == "null") {
-                            reUsage = null;
-                        } else {
-                            var map = convertUnitFormat(usage, "Wh", 5);
-                            reUsage = toFixedNum(map.get("formatNum"), 2);
-                            totalUsage = totalUsage + Number(usage);
+                    // 차트데이터 셋팅
+                    if (chartList != null && chartList.length > 0) {
+                        for (var i = 0; i < chartList.length; i++) {
+                            usage = String(chartList[i].pre_usg_val);
+                            reUsage = 0;
+                            if ( isEmpty(usage) || usage === "null") {
+                                reUsage = null;
+                            } else {
+                                map = convertUnitFormat(usage, "Wh", 5);
+                                reUsage = toFixedNum(map.get("formatNum"), 2);
+                                fetureTotalUsage = fetureTotalUsage + Number(usage);
+                            }
+                            // 차트데이터 셋팅
+                            dataSet.push([setChartDateUTC(chartList[i].std_timestamp), reUsage]);
                         }
-
-                        // 차트데이터 셋팅
-                        dataSet.push([setChartDateUTC(chartList[i].std_timestamp), reUsage]);
-
                     }
+                    fetureUsageList = dataSet;
 
+                    // 총 합계(사용량, 발전량, 충전량, 방전량 등등)
+                    unit_format(String(fetureTotalUsage), "futureUseTot", "Wh");
                 }
-                fetureUsageList = dataSet;
 
-                // 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-                unit_format(String(totalUsage), "futureUseTot", "Wh");
             }
 
             // 차트 그리기
             function drawData_chart() {
+                var $chart = $(".usage_chart");
+                if (pastUsageList.length > 0) {
+                    $chart.find(".inchart-nodata").css("display", "none");
+                    $chart.find(".inchart").css("display", "");
+                } else {
+                    $chart.find(".inchart-nodata").css("display", "");
+                    $chart.find(".inchart").css("display", "none");
+                }
+
                 var seriesLength = myChart.series.length;
                 for (var i = seriesLength - 1; i > -1; i--) {
                     myChart.series[i].remove();
@@ -267,11 +271,8 @@
 
             // 표(테이블) 그리기
             function drawData_table() {
-                $chart = $(".usage_chart");
                 var tbodyStr = '';
                 if (real_data_pc.length > 0) {
-                    $chart.find(".inchart-nodata").css("display", "none");
-                    $chart.find(".inchart").css("display", "");
                     for (var i = 0; i < dt_row; i++) {
                         tbodyStr += '<div class="chart_table">';
                         tbodyStr += '<table class="pc_use">';
@@ -293,8 +294,6 @@
                     }
 
                 } else {
-                    $chart.find(".inchart-nodata").css("display", "");
-                    $chart.find(".inchart").css("display", "none");
                     tbodyStr += '<div class="chart_table">';
                     tbodyStr += '<table class="pc_use">';
                     tbodyStr += '<thead>';
@@ -356,12 +355,8 @@
                                         <a href="#;" class="chart_change_line" style="display:none;">그래프변경</a>
                                     </div>
                                     <div id="chart2"></div>
-                                    <script language="JavaScript">
-                                        // 								$(function () {
+                                    <script language="JavaScript" type="text/javascript">
                                         var myChart = Highcharts.chart('chart2', {
-// 										data: {
-// 									        table: 'datatable' /* 테이블에서 데이터 불러오기 */
-// 									    },
 
                                             chart: {
                                                 marginLeft: 80,
@@ -492,8 +487,10 @@
 
                                             /* 그래프 스타일 */
                                             series: [{
+                                                name: '실제 사용량',
                                                 color: '#438fd7'
                                             }, {
+                                                name: '예측 사용량',
                                                 color: '#84848f',
                                                 dashStyle: 'ShortDash'
                                             }],
@@ -542,27 +539,7 @@
                                                 }]
                                             }
 
-// 									},
-// 									/* 차트 변경 */
-// 							        function (myChart) {
-// 							            $('.chart_change_column').click(function () {
-// 							                $(this).hide();
-// 							                $('.chart_change_line').show();
-// 							                myChart.series[0].update({
-// 							                    type: "column"
-// 							                });
-
-// 							            });
-// 							            $('.chart_change_line').click(function () {
-// 							            	$(this).hide();
-// 							            	$('.chart_change_column').show();
-// 							                myChart.series[0].update({
-// 							                    type: "line"
-// 							                });
-
-// 							            });
                                         });
-                                        // 								});
 
                                         /* 차트 변경 */
                                         $(function () {

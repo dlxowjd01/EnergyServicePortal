@@ -128,7 +128,7 @@ $(function () {
 });
 
 // 에너지모니터링 db조회 검색조건 모으기
-function getCollect_sch_condition() {
+function getCollect_sch_condition(endLoadingFlag) {
     settingSelTerm();
 
     var formData = $("#schForm").serializeObject();
@@ -140,9 +140,11 @@ function getCollect_sch_condition() {
         getDBData(formData); // DB 데이터 조회(각 화면마다 존재)
     }, 1000);
     update_updtDataTime(today, "updtTime"); // 검색시간(차트 새로고침시간) 업데이트
-    setTimeout(function () {
-        $('.loading').hide();
-    }, 1000);
+    if(endLoadingFlag !== 'worker' || (endLoadingFlag === 'worker' && !window.Worker)) {
+        setTimeout(function () {
+            $('.loading').hide();
+        }, 1000);
+    }
 }
 
 var schStartTime;

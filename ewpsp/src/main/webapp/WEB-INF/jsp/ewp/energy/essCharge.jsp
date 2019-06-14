@@ -4,14 +4,15 @@
 <html>
     <head>
         <jsp:include page="../include/common_static.jsp"/>
+        <script src="../js/worker/worker.js"></script>
         <script type="text/javascript">
             $(document).ready(function () {
                 changeSelTerm('day');
-                getCollect_sch_condition();
+                getCollect_sch_condition('worker');
             });
 
             function searchData() {
-                getCollect_sch_condition(); // 검색조건 모으기
+                getCollect_sch_condition('worker'); // 검색조건 모으기
             }
 
             var ess_head_pc = []; // 실제 사용량 표 데이터
@@ -27,102 +28,87 @@
                 setDataTableColRowCnt(); // 1행의 최대 칸 수 및 테이블갯수
                 getESSChargeRealList(formData); // 실제충방전량 조회
                 getESSChargeFutureList(formData); // 예측충방전량 조회
-                drawData(); // 차트 및 표 그리기
+                if ( !window.Worker ) {
+                    drawData(); // 차트 및 표 그리기
+                }
             }
 
             // 실제 충방전량 조회
             var pastChgList;
             var pastDischgList;
-
+            var chgVal = null;
+            var dischgVal = null;
+            var reChgVal = null;
+            var reDischgVal = null;
             function callback_getESSChargeRealList(result) {
-                var resultListMap = result.resultListMap;
+                // Worker 지원 유무 확인
+                if ( !!window.Worker ) {
+                    startWorker(result, "pastEssChargeList");
+                } else {
+                    var resultListMap = result.resultListMap;
+                    var chgSheetList = result.chgSheetList;
+                    var chgChartList = result.chgChartList;
+                    var dischgSheetList = result.dischgSheetList;
+                    var dischgChartList = result.dischgChartList;
+                    var periodd = $("#selPeriodVal").val(); // 데이터조회간격
 
-                var chgSheetList = result.chgSheetList;
-                var chgChartList = result.chgChartList;
-                var dischgSheetList = result.dischgSheetList;
-                var dischgChartList = result.dischgChartList;
-                var periodd = $("#selPeriodVal").val(); // 데이터조회간격
+                    // 데이터 셋팅
+                    var dataSet = []; // chartData를 위한 변수
+                    var dataSet2 = []; // chartData를 위한 변수
+                    var totalDataSet = 0; // 전체 누적합
+                    var totalDataSet2 = 0; // 전체 누적합
+                    var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
+                    var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
+                    var dt_str_head = "";
+                    var dt_str = "";
+                    var dt_str2 = "";
+                    var dt_str_totalVal = 0; // 테이블 라인별 누적합
+                    var dt_str2_totalVal = 0; // 테이블 라인별 누적합
+                    var final_dt_str_head = "";
+                    var map = null;
 
-                // 데이터 셋팅
-                var dataSet = []; // chartData를 위한 변수
-                var dataSet2 = []; // chartData를 위한 변수
-                var totalDataSet = 0; // 전체 누적합
-                var totalDataSet2 = 0; // 전체 누적합
-                var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
-                var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
-                var dt_str_head = "";
-                var dt_str = "";
-                var dt_str2 = "";
-                var dt_str_totalVal = 0; // 테이블 라인별 누적합
-                var dt_str2_totalVal = 0; // 테이블 라인별 누적합
-
-                // 표데이터 셋팅
-                var start = new Date(schStartTime.getTime());
-                var end = new Date(schEndTime.getTime());
-                if (chgSheetList != null && chgSheetList.length > 0) {
-                    var s = start;
-                    var e = end;
-                    setHms(s, e);
-                    if (periodd == 'month') {
-                        s.setDate(1);
-                        s.setHours(0);
-                        s.setMinutes(0);
-                        s.setSeconds(0);
-                    }
-                    for (var i = 0; i < chgSheetList.length; i++) {
-                        dt_str_head += "<th>" + convertDataTableHeaderDate(s, 2) + "</th>";
-
-                        var reChgVal = null;
-                        var reDischgVal = null;
-                        for (var j = 0; j < chgSheetList.length; j++) {
-                            if (s.getTime() == setSheetDateUTC(chgSheetList[j].std_timestamp)) {
-                                var chgVal = String(chgSheetList[j].chg_val);
-                                var dischgVal = String(dischgSheetList[j].dischg_val);
-
-                                if (chgVal == null || chgVal == "" || chgVal == "null") {
-                                    reChgVal = null;
-                                } else {
-                                    var map = convertUnitFormat(chgVal, "Wh", 5);
-                                    reChgVal = toFixedNum(map.get("formatNum"), 2);
-                                    dt_str_totalVal = dt_str_totalVal + Number(map.get("formatNum"));
-                                }
-
-                                if (dischgVal == null || dischgVal == "" || dischgVal == "null") {
-                                    reDischgVal = null;
-                                } else {
-                                    var map = convertUnitFormat(dischgVal, "Wh", 5);
-                                    reDischgVal = toFixedNum(map.get("formatNum"), 2);
-                                    dt_str2_totalVal = dt_str2_totalVal + Number(map.get("formatNum"));
-                                }
-
-                                break;
-                            }
+                    // 표데이터 셋팅
+                    var start = new Date(schStartTime.getTime());
+                    var end = new Date(schEndTime.getTime());
+                    if (chgSheetList != null && chgSheetList.length > 0) {
+                        var s = start;
+                        var e = end;
+                        setHms(s, e);
+                        if (periodd === 'month') {
+                            s.setDate(1);
+                            s.setHours(0);
+                            s.setMinutes(0);
+                            s.setSeconds(0);
                         }
-                        dt_str += "<td>" + ((reChgVal == null) ? "" : reChgVal) + "</td>"; // 충전량
-                        dt_str2 += "<td>" + ((reDischgVal == null) ? "" : reDischgVal) + "</td>"; // 방전량
+                        for (var i = 0; i < chgSheetList.length; i++) {
+                            dt_str_head += "<th>" + convertDataTableHeaderDate(s, 2) + "</th>";
 
-                        if (dt_col_cnt == dt_col) {
-                            var final_dt_str_head = "<th>" + convertDataTableHeaderDate(s, 1) + "</th>" + dt_str_head;
-                            dt_str += "<td>" + toFixedNum(dt_str_totalVal, 2) + "</td>"; // 충전량
-                            dt_str2 += "<td>" + toFixedNum(dt_str2_totalVal, 2) + "</td>"; // 방전량
-                            ess_head_pc[dt_row_cnt - 1] = final_dt_str_head;
-                            realChg_data_pc[dt_row_cnt - 1] = dt_str;
-                            realDischg_data_pc[dt_row_cnt - 1] = dt_str2;
-                            dt_str_head = "";
-                            dt_str = "";
-                            dt_str2 = "";
-                            dt_row_cnt++;
-                            dt_col_cnt = 1;
-                            dt_str_totalVal = 0;
-                            dt_str2_totalVal = 0;
-                        } else {
-                            if ((i + 1) == chgSheetList.length) { // 루프 다 돌고 조회한 목록이 라인을 다 못채울 때
-                                for (a = 0; a < (dt_col - dt_col_cnt); a++) {
-                                    dt_str_head += "<th></th>";
-                                    dt_str += "<td></td>";
-                                    dt_str2 += "<td></td>";
-                                }
-                                var final_dt_str_head = "<th>" + convertDataTableHeaderDate(s, 1) + "</th>" + dt_str_head;
+                            reChgVal = null;
+                            reDischgVal = null;
+                            chgVal = String(chgSheetList[i].chg_val);
+                            dischgVal = String(dischgSheetList[i].dischg_val);
+
+                            if ( isEmpty(chgVal) || chgVal === "null") {
+                                reChgVal = null;
+                            } else {
+                                map = convertUnitFormat(chgVal, "Wh", 5);
+                                reChgVal = toFixedNum(map.get("formatNum"), 2);
+                                dt_str_totalVal = dt_str_totalVal + Number(map.get("formatNum"));
+                            }
+
+                            if ( isEmpty(dischgVal) || dischgVal === "null") {
+                                reDischgVal = null;
+                            } else {
+                                map = convertUnitFormat(dischgVal, "Wh", 5);
+                                reDischgVal = toFixedNum(map.get("formatNum"), 2);
+                                dt_str2_totalVal = dt_str2_totalVal + Number(map.get("formatNum"));
+                            }
+
+                            dt_str += "<td>" + (( isEmpty(reChgVal) ) ? "" : reChgVal) + "</td>"; // 충전량
+                            dt_str2 += "<td>" + (( isEmpty(reDischgVal) ) ? "" : reDischgVal) + "</td>"; // 방전량
+
+                            if (dt_col_cnt === dt_col) {
+                                final_dt_str_head = "<th>" + convertDataTableHeaderDate(s, 1) + "</th>" + dt_str_head;
                                 dt_str += "<td>" + toFixedNum(dt_str_totalVal, 2) + "</td>"; // 충전량
                                 dt_str2 += "<td>" + toFixedNum(dt_str2_totalVal, 2) + "</td>"; // 방전량
                                 ess_head_pc[dt_row_cnt - 1] = final_dt_str_head;
@@ -131,207 +117,212 @@
                                 dt_str_head = "";
                                 dt_str = "";
                                 dt_str2 = "";
-                                //					dt_row_cnt++;
-                                //					dt_col_cnt = 1;
+                                dt_row_cnt++;
+                                dt_col_cnt = 1;
                                 dt_str_totalVal = 0;
                                 dt_str2_totalVal = 0;
+                                final_dt_str_head = "";
                             } else {
-                                dt_col_cnt++;
+                                if ((i + 1) === chgSheetList.length) { // 루프 다 돌고 조회한 목록이 라인을 다 못채울 때
+                                    for (a = 0; a < (dt_col - dt_col_cnt); a++) {
+                                        dt_str_head += "<th></th>";
+                                        dt_str += "<td></td>";
+                                        dt_str2 += "<td></td>";
+                                    }
+                                    final_dt_str_head = "<th>" + convertDataTableHeaderDate(s, 1) + "</th>" + dt_str_head;
+                                    dt_str += "<td>" + toFixedNum(dt_str_totalVal, 2) + "</td>"; // 충전량
+                                    dt_str2 += "<td>" + toFixedNum(dt_str2_totalVal, 2) + "</td>"; // 방전량
+                                    ess_head_pc[dt_row_cnt - 1] = final_dt_str_head;
+                                    realChg_data_pc[dt_row_cnt - 1] = dt_str;
+                                    realDischg_data_pc[dt_row_cnt - 1] = dt_str2;
+                                    dt_str_head = "";
+                                    dt_str = "";
+                                    dt_str2 = "";
+                                    dt_str_totalVal = 0;
+                                    dt_str2_totalVal = 0;
+                                    final_dt_str_head = "";
+                                } else {
+                                    dt_col_cnt++;
+                                }
                             }
-
+                            s = incrementTime(s);
                         }
-
-                        s = incrementTime(s);
-
                     }
 
-                }
+                    // 차트데이터 셋팅
+                    if (chgChartList != null && chgChartList.length > 0) {
+                        for (var i = 0; i < chgChartList.length; i++) {
+                            chgVal = String(chgChartList[i].chg_val);
+                            dischgVal = String(dischgChartList[i].dischg_val);
+                            reChgVal = 0;
+                            reDischgVal = 0;
 
-                // 차트데이터 셋팅
-                if (chgChartList != null && chgChartList.length > 0) {
-                    for (var i = 0; i < chgChartList.length; i++) {
-                        var chgVal = String(chgChartList[i].chg_val);
-                        var dischgVal = String(dischgChartList[i].dischg_val);
-                        var reChgVal = 0;
-                        var reDischgVal = 0;
-
-                        if (chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
-                        else {
-                            var map = convertUnitFormat(chgVal, "Wh", 5);
-                            reChgVal = toFixedNum(map.get("formatNum"), 2);
-// 					reChgVal = Math.round( Number(chgVal) );
-                            totalDataSet = totalDataSet + Number(chgVal);
+                            if ( isEmpty(chgVal) || chgVal === "null") reChgVal = null;
+                            else {
+                                map = convertUnitFormat(chgVal, "Wh", 5);
+                                reChgVal = toFixedNum(map.get("formatNum"), 2);
+                                totalDataSet = totalDataSet + Number(chgVal);
+                            }
+                            if ( isEmpty(dischgVal) || dischgVal === "null") reDischgVal = null;
+                            else {
+                                map = convertUnitFormat(dischgVal, "Wh", 5);
+                                reDischgVal = toFixedNum(map.get("formatNum"), 2);
+                                totalDataSet2 = totalDataSet2 + Number(dischgVal);
+                            }
+                            // 차트데이터 셋팅
+                            dataSet.push([setChartDateUTC(chgChartList[i].std_timestamp), reChgVal]);
+                            dataSet2.push([setChartDateUTC(chgChartList[i].std_timestamp), reDischgVal]);
                         }
-                        if (dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
-                        else {
-                            var map = convertUnitFormat(dischgVal, "Wh", 5);
-                            reDischgVal = toFixedNum(map.get("formatNum"), 2);
-// 					reDischgVal   = Math.round( Number(dischgVal) );
-                            totalDataSet2 = totalDataSet2 + Number(dischgVal);
-                        }
-
-                        // 차트데이터 셋팅
-                        dataSet.push([setChartDateUTC(chgChartList[i].std_timestamp), reChgVal]);
-                        dataSet2.push([setChartDateUTC(chgChartList[i].std_timestamp), reDischgVal]);
 
                     }
+                    pastChgList = dataSet;
+                    pastDischgList = dataSet2;
 
+                    // 총 합계(사용량, 발전량, 충전량, 방전량 등등)
+                    unit_format(String(totalDataSet), "pastChgTot", "Wh");
+                    unit_format(String(totalDataSet2), "pastDischgTot", "Wh");
                 }
-                pastChgList = dataSet;
-                pastDischgList = dataSet2;
 
-                // 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-                unit_format(String(totalDataSet), "pastChgTot", "Wh");
-                unit_format(String(totalDataSet2), "pastDischgTot", "Wh");
             }
 
             // 예측 충방전량
             var fetureChgList;
             var fetureDischgList;
-
             function callback_getESSChargeFutureList(result) {
-                var resultListMap = result.resultListMap;
+                // Worker 지원 유무 확인
+                if ( !!window.Worker ) {
+                    startWorker(result, "predictEssChargeList");
+                } else {
+                    var resultListMap = result.resultListMap;
+                    var chgSheetList = result.chgSheetList;
+                    var chgChartList = result.chgChartList;
+                    var dischgSheetList = result.dischgSheetList;
+                    var dischgChartList = result.dischgChartList;
+                    var periodd = $("#selPeriodVal").val(); // 데이터조회간격
 
-                var chgSheetList = result.chgSheetList;
-                var chgChartList = result.chgChartList;
-                var dischgSheetList = result.dischgSheetList;
-                var dischgChartList = result.dischgChartList;
-                var periodd = $("#selPeriodVal").val(); // 데이터조회간격
+                    // 데이터 셋팅
+                    var dataSet = []; // chartData를 위한 변수
+                    var dataSet2 = []; // chartData를 위한 변수
+                    var totalDataSet = 0; // 전체 누적합
+                    var totalDataSet2 = 0; // 전체 누적합
+                    var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
+                    var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
+                    var dt_str = "";
+                    var dt_str2 = "";
+                    var dt_str_totalVal = 0; // 테이블 라인별 누적합
+                    var dt_str2_totalVal = 0; // 테이블 라인별 누적합
+                    var map = null;
 
-                // 데이터 셋팅
-                var dataSet = []; // chartData를 위한 변수
-                var dataSet2 = []; // chartData를 위한 변수
-                var totalDataSet = 0; // 전체 누적합
-                var totalDataSet2 = 0; // 전체 누적합
-                var dt_col_cnt = 1; // 1행의 최대 칸 수 체크를 위한 변수
-                var dt_row_cnt = 1; // 테이블갯수 체크를 위한 변수
-                //	var dt_str_head = "";
-                var dt_str = "";
-                var dt_str2 = "";
-                var dt_str_totalVal = 0; // 테이블 라인별 누적합
-                var dt_str2_totalVal = 0; // 테이블 라인별 누적합
-
-                // 표데이터 셋팅
-                var start = new Date(schStartTime.getTime());
-                var end = new Date(schEndTime.getTime());
-                if (chgSheetList != null && chgSheetList.length > 0) {
-                    var s = start;
-                    var e = end;
-                    setHms(s, e);
-                    if (periodd == 'month') {
-                        s.setDate(1);
-                        s.setHours(0);
-                        s.setMinutes(0);
-                        s.setSeconds(0);
-                    }
-                    for (var i = 0; i < chgSheetList.length; i++) {
-
-                        var reChgVal = null;
-                        var reDischgVal = null;
-                        for (var j = 0; j < chgSheetList.length; j++) {
-                            if (s.getTime() == setSheetDateUTC(chgSheetList[j].std_timestamp)) {
-                                var chgVal = String(chgSheetList[j].chg_val);
-                                var dischgVal = String(dischgSheetList[j].dischg_val);
-
-                                if (chgVal == null || chgVal == "" || chgVal == "null") {
-                                    reChgVal = null;
-                                } else {
-                                    var map = convertUnitFormat(chgVal, "Wh", 5);
-                                    reChgVal = toFixedNum(map.get("formatNum"), 2);
-                                    dt_str_totalVal = dt_str_totalVal + Number(map.get("formatNum"));
-                                }
-
-                                if (dischgVal == null || dischgVal == "" || dischgVal == "null") {
-                                    reDischgVal = null;
-                                } else {
-                                    var map = convertUnitFormat(dischgVal, "Wh", 5);
-                                    reDischgVal = toFixedNum(map.get("formatNum"), 2);
-                                    dt_str2_totalVal = dt_str2_totalVal + Number(map.get("formatNum"));
-                                }
-
-                                break;
-                            }
+                    // 표데이터 셋팅
+                    var start = new Date(schStartTime.getTime());
+                    var end = new Date(schEndTime.getTime());
+                    if (chgSheetList != null && chgSheetList.length > 0) {
+                        var s = start;
+                        var e = end;
+                        setHms(s, e);
+                        if (periodd === 'month') {
+                            s.setDate(1);
+                            s.setHours(0);
+                            s.setMinutes(0);
+                            s.setSeconds(0);
                         }
-                        dt_str += "<td>" + ((reChgVal == null) ? "" : reChgVal) + "</td>"; // 충전량
-                        dt_str2 += "<td>" + ((reDischgVal == null) ? "" : reDischgVal) + "</td>"; // 방전량
+                        for (var i = 0; i < chgSheetList.length; i++) {
 
-                        if (dt_col_cnt == dt_col) {
-                            dt_str += "<td>" + toFixedNum(dt_str_totalVal, 2) + "</td>"; // 충전량
-                            dt_str2 += "<td>" + toFixedNum(dt_str2_totalVal, 2) + "</td>"; // 방전량
-                            fetureChg_data_pc[dt_row_cnt - 1] = dt_str;
-                            fetureDischg_data_pc[dt_row_cnt - 1] = dt_str2;
-                            dt_str = "";
-                            dt_str2 = "";
-                            dt_row_cnt++;
-                            dt_col_cnt = 1;
-                            dt_str_totalVal = 0;
-                            dt_str2_totalVal = 0;
-                        } else {
-                            if ((i + 1) == chgSheetList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
-                                for (a = 0; a < (dt_col - dt_col_cnt); a++) {
-                                    dt_str += "<td></td>";
-                                    dt_str2 += "<td></td>";
-                                }
+                            reChgVal = null;
+                            reDischgVal = null;
+                            chgVal = String(chgSheetList[i].chg_val);
+                            dischgVal = String(dischgSheetList[i].dischg_val);
+
+                            if ( isEmpty(chgVal) || chgVal === "null") {
+                                reChgVal = null;
+                            } else {
+                                map = convertUnitFormat(chgVal, "Wh", 5);
+                                reChgVal = toFixedNum(map.get("formatNum"), 2);
+                                dt_str_totalVal = dt_str_totalVal + Number(map.get("formatNum"));
+                            }
+
+                            if ( isEmpty(dischgVal) || dischgVal === "null") {
+                                reDischgVal = null;
+                            } else {
+                                map = convertUnitFormat(dischgVal, "Wh", 5);
+                                reDischgVal = toFixedNum(map.get("formatNum"), 2);
+                                dt_str2_totalVal = dt_str2_totalVal + Number(map.get("formatNum"));
+                            }
+
+                            dt_str += "<td>" + (( isEmpty(reChgVal)) ? "" : reChgVal) + "</td>"; // 충전량
+                            dt_str2 += "<td>" + (( isEmpty(reDischgVal )) ? "" : reDischgVal) + "</td>"; // 방전량
+
+                            if (dt_col_cnt === dt_col) {
                                 dt_str += "<td>" + toFixedNum(dt_str_totalVal, 2) + "</td>"; // 충전량
                                 dt_str2 += "<td>" + toFixedNum(dt_str2_totalVal, 2) + "</td>"; // 방전량
                                 fetureChg_data_pc[dt_row_cnt - 1] = dt_str;
                                 fetureDischg_data_pc[dt_row_cnt - 1] = dt_str2;
                                 dt_str = "";
                                 dt_str2 = "";
+                                dt_row_cnt++;
+                                dt_col_cnt = 1;
                                 dt_str_totalVal = 0;
                                 dt_str2_totalVal = 0;
                             } else {
-                                dt_col_cnt++;
+                                if ((i + 1) === chgSheetList.length) { // 오늘이고 조회한 목록이 라인을 다 못채울 때
+                                    for (a = 0; a < (dt_col - dt_col_cnt); a++) {
+                                        dt_str += "<td></td>";
+                                        dt_str2 += "<td></td>";
+                                    }
+                                    dt_str += "<td>" + toFixedNum(dt_str_totalVal, 2) + "</td>"; // 충전량
+                                    dt_str2 += "<td>" + toFixedNum(dt_str2_totalVal, 2) + "</td>"; // 방전량
+                                    fetureChg_data_pc[dt_row_cnt - 1] = dt_str;
+                                    fetureDischg_data_pc[dt_row_cnt - 1] = dt_str2;
+                                    dt_str = "";
+                                    dt_str2 = "";
+                                    dt_str_totalVal = 0;
+                                    dt_str2_totalVal = 0;
+                                } else {
+                                    dt_col_cnt++;
+                                }
                             }
-
+                            s = incrementTime(s);
                         }
-
-                        s = incrementTime(s);
-
-                    }
-
-                } else {
-                    for (var i = 0; i < dt_col; i++) {
+                    } else {
+                        for (var i = 0; i < dt_col; i++) {
+                            defaultData_pc += "<td></td>";
+                        }
                         defaultData_pc += "<td></td>";
                     }
-                    defaultData_pc += "<td></td>";
-                }
-                // 차트데이터 셋팅
-                if (chgChartList != null && chgChartList.length > 0) {
-                    for (var i = 0; i < chgChartList.length; i++) {
-                        var chgVal = String(chgChartList[i].chg_val);
-                        var dischgVal = String(dischgChartList[i].dischg_val);
-                        var reChgVal = 0;
-                        var reDischgVal = 0;
 
-                        if (chgVal == null || chgVal == "" || chgVal == "null") reChgVal = null;
-                        else {
-                            var map = convertUnitFormat(chgVal, "Wh", 5);
-                            reChgVal = toFixedNum(map.get("formatNum"), 2);
-// 					reChgVal = Math.round( Number(chgVal) );
-                            totalDataSet = totalDataSet + Number(chgVal);
+                    // 차트데이터 셋팅
+                    if (chgChartList != null && chgChartList.length > 0) {
+                        for (var i = 0; i < chgChartList.length; i++) {
+                            chgVal = String(chgChartList[i].chg_val);
+                            dischgVal = String(dischgChartList[i].dischg_val);
+                            reChgVal = 0;
+                            reDischgVal = 0;
+
+                            if ( isEmpty(chgVal) || chgVal === "null") reChgVal = null;
+                            else {
+                                map = convertUnitFormat(chgVal, "Wh", 5);
+                                reChgVal = toFixedNum(map.get("formatNum"), 2);
+                                totalDataSet = totalDataSet + Number(chgVal);
+                            }
+                            if ( isEmpty(dischgVal) || dischgVal === "null") reDischgVal = null;
+                            else {
+                                map = convertUnitFormat(dischgVal, "Wh", 5);
+                                reDischgVal = toFixedNum(map.get("formatNum"), 2);
+                                totalDataSet2 = totalDataSet2 + Number(dischgVal);
+                            }
+                            // 차트데이터 셋팅
+                            dataSet.push([setChartDateUTC(chgChartList[i].std_timestamp), reChgVal]);
+                            dataSet2.push([setChartDateUTC(chgChartList[i].std_timestamp), reDischgVal]);
                         }
-                        if (dischgVal == null || dischgVal == "" || dischgVal == "null") reDischgVal = null;
-                        else {
-                            var map = convertUnitFormat(dischgVal, "Wh", 5);
-                            reDischgVal = toFixedNum(map.get("formatNum"), 2);
-// 					reDischgVal   = Math.round( Number(dischgVal) );
-                            totalDataSet2 = totalDataSet2 + Number(dischgVal);
-                        }
-
-                        // 차트데이터 셋팅
-                        dataSet.push([setChartDateUTC(chgChartList[i].std_timestamp), reChgVal]);
-                        dataSet2.push([setChartDateUTC(chgChartList[i].std_timestamp), reDischgVal]);
-
                     }
+                    fetureChgList = dataSet;
+                    fetureDischgList = dataSet2;
 
+                    // 총 합계(사용량, 발전량, 충전량, 방전량 등등)
+                    unit_format(String(totalDataSet), "fetureChgTot", "Wh");
+                    unit_format(String(totalDataSet2), "fetureDischgTot", "Wh");
                 }
-                fetureChgList = dataSet;
-                fetureDischgList = dataSet2;
 
-                // 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-                unit_format(String(totalDataSet), "fetureChgTot", "Wh");
-                unit_format(String(totalDataSet2), "fetureDischgTot", "Wh");
             }
 
             // 차트 그리기
@@ -378,7 +369,7 @@
 
             // 표(테이블) 그리기
             function drawData_table() {
-                $chart = $(".ess_chart");
+                var $chart = $(".ess_chart");
                 var tbodyStr = '';
 
                 if (realChg_data_pc.length > 0) {
@@ -397,13 +388,13 @@
                         tbodyStr += '<th><div class="ctit es1"><span>충전량 (kWh)</span></div></th>' + realChg_data_pc[i];
                         tbodyStr += '</tr>';
                         tbodyStr += '<tr>';
-                        tbodyStr += '<th><div class="ctit es2"><span>충전 계획 (kWh)</span></div></th>' + ((fetureChg_data_pc[i] == undefined) ? defaultData_pc : fetureChg_data_pc[i]);
+                        tbodyStr += '<th><div class="ctit es2"><span>충전 계획 (kWh)</span></div></th>' + ((fetureChg_data_pc[i] === undefined) ? defaultData_pc : fetureChg_data_pc[i]);
                         tbodyStr += '</tr>';
                         tbodyStr += '<tr>';
                         tbodyStr += '<th><div class="ctit es3"><span>방전량 (kWh)</span></th>' + realDischg_data_pc[i];
                         tbodyStr += '</tr>';
                         tbodyStr += '<tr>';
-                        tbodyStr += '<th><div class="ctit es4"><span>방전 계획 (kWh)</span></th>' + ((fetureDischg_data_pc[i] == undefined) ? defaultData_pc : fetureDischg_data_pc[i]);
+                        tbodyStr += '<th><div class="ctit es4"><span>방전 계획 (kWh)</span></th>' + ((fetureDischg_data_pc[i] === undefined) ? defaultData_pc : fetureDischg_data_pc[i]);
                         tbodyStr += '</tr>';
                         tbodyStr += '</tbody>';
                         tbodyStr += '</table>';
@@ -484,12 +475,8 @@
                                         <a href="#;" class="chart_change_line" style="display:none;">그래프변경</a>
                                     </div>
                                     <div id="chart2"></div>
-                                    <script language="JavaScript">
-                                        // 								$(function () {
+                                    <script language="JavaScript" type="text/javascript">
                                         var myChart = Highcharts.chart('chart2', {
-// 										data: {
-// 									        table: 'datatable' /* 테이블에서 데이터 불러오기 */
-// 									    },
 
                                             chart: {
                                                 marginLeft: 80,
@@ -682,33 +669,7 @@
                                                 }]
                                             }
 
-// 									},
-// 									/* 차트 변경 */
-// 							        function (myChart) {
-// 							            $('.chart_change_column').click(function () {
-// 							                $(this).hide();
-// 							                $('.chart_change_line').show();
-// 							                myChart.series[1].update({
-// 							                    type: "column"
-// 							                });
-// 							                myChart.series[3].update({
-// 							                    type: "column"
-// 							                });
-
-// 							            });
-// 							            $('.chart_change_line').click(function () {
-// 							            	$(this).hide();
-// 							            	$('.chart_change_column').show();
-// 							                myChart.series[1].update({
-// 							                    type: "line"
-// 							                });
-// 							                myChart.series[3].update({
-// 							                    type: "line"
-// 							                });
-
-// 							            });
                                         });
-                                        // 								});
 
                                         /* 차트 변경 */
                                         $(function () {
