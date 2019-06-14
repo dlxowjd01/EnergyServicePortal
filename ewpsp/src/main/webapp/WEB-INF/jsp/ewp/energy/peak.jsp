@@ -227,7 +227,7 @@
                         tbodyStr += '<table class="pc_use">';
                         tbodyStr += '<thead>';
                         tbodyStr += '<tr>';
-                        tbodyStr += peak_head_pc[i] + '<th>합계</th>';
+                        tbodyStr += peak_head_pc[i] + '<th>최대피크</th>';
                         tbodyStr += '</tr>';
                         tbodyStr += '</thead>';
                         tbodyStr += '<tbody>';
