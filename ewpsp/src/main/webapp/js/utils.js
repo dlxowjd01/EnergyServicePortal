@@ -113,6 +113,7 @@ function convertUnitFormat(num, unitGbn, len) {
             if (unitGbn == "mWh") unit = "mWh";
             if (unitGbn == "Wh") unit = "Wh";
             if (unitGbn == "kWh") unit = "kWh";
+            if (unitGbn == "mW") unit = "mW";
             if (unitGbn == "W") unit = "W";
             if (unitGbn == "kW") unit = "kW";
 
@@ -121,6 +122,7 @@ function convertUnitFormat(num, unitGbn, len) {
             if (unitGbn == "mWh") unit = "Wh";
             if (unitGbn == "Wh") unit = "kWh";
             if (unitGbn == "kWh") unit = "MWh";
+            if (unitGbn == "mW") unit = "W";
             if (unitGbn == "W") unit = "kW";
             if (unitGbn == "kW") unit = "MW";
 
@@ -129,6 +131,7 @@ function convertUnitFormat(num, unitGbn, len) {
             if (unitGbn == "mWh") unit = "kWh";
             if (unitGbn == "Wh") unit = "MWh";
             if (unitGbn == "kWh") unit = "GWh";
+            if (unitGbn == "mW") unit = "kW";
             if (unitGbn == "W") unit = "MW";
             if (unitGbn == "kW") unit = "GW";
 
@@ -137,6 +140,7 @@ function convertUnitFormat(num, unitGbn, len) {
             if (unitGbn == "mWh") unit = "MWh";
             if (unitGbn == "Wh") unit = "GWh";
             if (unitGbn == "kWh") unit = "TWh";
+            if (unitGbn == "mW") unit = "MW";
             if (unitGbn == "W") unit = "GW";
             if (unitGbn == "kW") unit = "TW";
         } else {
@@ -144,6 +148,7 @@ function convertUnitFormat(num, unitGbn, len) {
             if (unitGbn == "mWh") unit = "GWh";
             if (unitGbn == "Wh") unit = "TWh";
             if (unitGbn == "kWh") unit = "PWh";
+            if (unitGbn == "mW") unit = "GW";
             if (unitGbn == "W") unit = "TW";
             if (unitGbn == "kW") unit = "PW";
         }

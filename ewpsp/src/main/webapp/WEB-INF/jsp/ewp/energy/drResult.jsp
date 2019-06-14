@@ -92,12 +92,12 @@
                 var D = Math.floor(gap / 86400);
                 var H = Math.floor((gap - D * 86400) / 3600 % 3600);
                 var M = Math.floor((gap - H * 3600) / 60 % 60);
-                if ((String(M)).length == 1) M = "0" + M;
+                if ((String(M)).length === 1) M = "0" + M;
                 var S = Math.floor((gap - M * 60) % 60);
-                if ((String(S)).length == 1) S = "0" + S;
+                if ((String(S)).length === 1) S = "0" + S;
 
                 $(".real_time").find('span').empty().html(M + ':' + S);
-                if (M == 0 && S == 0) {
+                if (M === 0 && S === 0) {
                     //		nextTime = new Date();
                     clearInterval(nextDrRefreshTime);
                     nextDrRefreshTime = null;
@@ -120,10 +120,10 @@
                 var endDay = new Date();
                 var startTime;
                 var endTime;
-                if (SelTerm == 'drday') { // 에너지모니터링 dr실적조회의 오늘날짜
+                if (SelTerm === 'drday') { // 에너지모니터링 dr실적조회의 오늘날짜
                     startTime = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate(), cblAmtHourFrom, 0, 0);
                     endTime = new Date(endDay.getFullYear(), endDay.getMonth(), endDay.getDate(), cblAmtHourTo, 0, 0);
-                } else if (SelTerm == 'selectDay') { // 에너지모니터링 dr실적조회의 날짜검색
+                } else if (SelTerm === 'selectDay') { // 에너지모니터링 dr실적조회의 날짜검색
                     startTime = new Date($dtpk5.val() + " " + cblAmtHourFrom + ":00:00");
                     endTime = new Date($dtpk5.val() + " " + cblAmtHourTo + ":00:00");
                 }
@@ -133,8 +133,8 @@
                 var queryStart = new Date(startTime.getTime());
                 var queryEnd = new Date(endTime.getTime());
 
-                queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
-                queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
+                queryStart = ( isEmpty(queryStart) ) ? "" : queryStart.format("yyyyMMddHHmmss");
+                queryEnd = ( isEmpty(queryEnd) ) ? "" : queryEnd.format("yyyyMMddHHmmss");
 
                 $("#cblAmtFrom").val(queryStart);
                 $("#cblAmtTo").val(queryEnd);
@@ -185,8 +185,8 @@
                 var queryStart = new Date(startTime.getTime());
                 var queryEnd = new Date(endTime.getTime());
 
-                queryStart = (queryStart == "") ? "" : queryStart.format("yyyyMMddHHmmss");
-                queryEnd = (queryEnd == "") ? "" : queryEnd.format("yyyyMMddHHmmss");
+                queryStart = ( isEmpty(queryStart) ) ? "" : queryStart.format("yyyyMMddHHmmss");
+                queryEnd = ( isEmpty(queryEnd ) ) ? "" : queryEnd.format("yyyyMMddHHmmss");
                 $("#selTermFrom").val(queryStart);
                 $("#selTermTo").val(queryEnd);
 
@@ -269,17 +269,18 @@
                 var totalUsage = 0; // 전체 누적합
                 var totalGoalPower = 0; // 전체 누적합
                 var totalCbl = 0; // 전체 누적합
+                var $dr_chart = $(".dr_chart");
                 if (chartList != null && chartList.length > 0) {
-                    $(".dr_chart").find(".inchart-nodata").css("display", "none");
-                    $(".dr_chart").find(".inchart").css("display", "");
+                    $dr_chart.find(".inchart-nodata").css("display", "none");
+                    $dr_chart.find(".inchart").css("display", "");
                     for (var i = 0; i < chartList.length; i++) {
                         var usage = String(chartList[i].usg_val);
                         var reUsage = 0;
-                        if (usage == null || usage == "" || usage == "null") {
+                        if ( isEmpty(usage) || usage === "null") {
                             reUsage = null;
                         } else {
-                            var map = convertUnitFormat(usage * 4, "Wh", 5);
-                            reUsage = toFixedNum(map.get("formatNum"), 2);
+                            var usageMap = convertUnitFormat(usage * 4, "Wh", 5);
+                            reUsage = toFixedNum(usageMap.get("formatNum"), 2);
                             totalUsage = totalUsage + Number(usage);
                         }
 
@@ -292,35 +293,35 @@
                         for (var i = 0; i < dbCblList.length; i++) {
                             var hour = new Date(setSheetDateUTC(dbCblList[i].start_timestamp)).getHours();
 
-                            if (hour != 12) {
+                            if (hour !== 12) {
                                 var next = dbCblList[i].start_timestamp + (1000 * 3600);
-                                var map = convertUnitFormat(dbCblList[i].cbl, "Wh", 5);
-                                var cbl = Math.round(Number(map.get("formatNum")));
+                                var cblMap = convertUnitFormat(dbCblList[i].cbl, "Wh", 5);
+                                var cbl = Math.round(Number(cblMap.get("formatNum")));
                                 var reReduceAmt = (reduceAmt / 1000) / 4;
 
-                                if (i == 0) {
+                                if (i === 0) {
                                     dataSet2_1.push([setChartDateUTC(dbCblList[i].start_timestamp), cbl]);
                                     dataSet3_1.push([setChartDateUTC(dbCblList[i].start_timestamp), cbl - reReduceAmt]);
                                     dataSet2_1.push([setChartDateUTC(next), cbl]);
                                     dataSet3_1.push([setChartDateUTC(next), cbl - reReduceAmt]);
                                     totalGoalPower = cbl - reReduceAmt;
                                     totalCbl = cbl;
-                                } else if (i == 1) {
-                                    if (i + 1 != dbCblList.length) {
+                                } else if (i === 1) {
+                                    if (i + 1 !== dbCblList.length) {
                                         dataSet2_2.push([setChartDateUTC(dbCblList[i].start_timestamp), cbl]);
                                         dataSet3_2.push([setChartDateUTC(dbCblList[i].start_timestamp), cbl - reReduceAmt]);
                                         dataSet2_2.push([setChartDateUTC(next), cbl]);
                                         dataSet3_2.push([setChartDateUTC(next), cbl - reReduceAmt]);
                                     }
-                                } else if (i == 2) {
-                                    if (i + 1 != dbCblList.length) {
+                                } else if (i === 2) {
+                                    if (i + 1 !== dbCblList.length) {
                                         dataSet2_3.push([setChartDateUTC(dbCblList[i].start_timestamp), cbl]);
                                         dataSet3_3.push([setChartDateUTC(dbCblList[i].start_timestamp), cbl - reReduceAmt]);
                                         dataSet2_3.push([setChartDateUTC(next), cbl]);
                                         dataSet3_3.push([setChartDateUTC(next), cbl - reReduceAmt]);
                                     }
-                                } else if (i == 3) {
-                                    if (i + 1 != dbCblList.length) {
+                                } else if (i === 3) {
+                                    if (i + 1 !== dbCblList.length) {
                                         dataSet2_4.push([setChartDateUTC(dbCblList[i].start_timestamp), cbl]);
                                         dataSet3_4.push([setChartDateUTC(dbCblList[i].start_timestamp), cbl - reReduceAmt]);
                                         dataSet2_4.push([setChartDateUTC(next), cbl]);
@@ -333,8 +334,8 @@
                     }
 
                 } else {
-                    $(".dr_chart").find(".inchart-nodata").css("display", "");
-                    $(".dr_chart").find(".inchart").css("display", "none");
+                    $dr_chart .find(".inchart-nodata").css("display", "");
+                    $dr_chart .find(".inchart").css("display", "none");
                 }
                 pastUsageList = dataSet;
                 timeSlotCblAmtList1 = dataSet2_1;
@@ -548,17 +549,18 @@
                 var totalUsage = 0; // 전체 누적합
                 var totalGoalPower = 0; // 전체 누적합
                 var totalCbl = 0; // 전체 누적합
+                var $dr_chart = $(".dr_chart");
                 if (chartList != null && chartList.length > 0) {
-                    $(".dr_chart").find(".inchart-nodata").css("display", "none");
-                    $(".dr_chart").find(".inchart").css("display", "");
+                    $dr_chart.find(".inchart-nodata").css("display", "none");
+                    $dr_chart.find(".inchart").css("display", "");
                     for (var i = 0; i < chartList.length; i++) {
                         var usage = String(chartList[i].usg_val);
                         var reUsage = 0;
-                        if (usage == null || usage == "" || usage == "null") {
+                        if ( isEmpty(usage) || usage === "null") {
                             reUsage = null;
                         } else {
-                            var map = convertUnitFormat(usage * 12, "mW", 8);
-                            reUsage = toFixedNum(map.get("formatNum"), 2);
+                            var usageMap = convertUnitFormat(usage * 12, "mW", 8);
+                            reUsage = toFixedNum(usageMap.get("formatNum"), 2);
                             totalUsage = totalUsage + Number(usage);
                         }
 
@@ -571,35 +573,35 @@
                         for (var i = 0; i < cblList.length; i++) {
                             var hour = new Date(setSheetDateUTC(cblList[i].start)).getHours();
 
-                            if (hour != 12) {
+                            if (hour !== 12) {
                                 var next = cblList[i].start + (1000 * 3600);
-                                var map = convertUnitFormat(cblList[i].cbl, "mWh", 8);
-                                var cbl = Math.round(Number(map.get("formatNum")));
+                                var cblMap = convertUnitFormat(cblList[i].cbl, "mWh", 8);
+                                var cbl = Math.round(Number(cblMap.get("formatNum")));
                                 var reReduceAmt = (reduceAmt / 1000) / 4;
 
-                                if (i == 0) {
+                                if (i === 0) {
                                     dataSet2_1.push([setChartDateUTC(cblList[i].start), cbl]);
                                     dataSet3_1.push([setChartDateUTC(cblList[i].start), cbl - reReduceAmt]);
                                     dataSet2_1.push([setChartDateUTC(next), cbl]);
                                     dataSet3_1.push([setChartDateUTC(next), cbl - reReduceAmt]);
                                     totalGoalPower = cbl - reReduceAmt;
                                     totalCbl = cbl;
-                                } else if (i == 1) {
-                                    if (i + 1 != cblList.length) {
+                                } else if (i === 1) {
+                                    if (i + 1 !== cblList.length) {
                                         dataSet2_2.push([setChartDateUTC(cblList[i].start), cbl]);
                                         dataSet3_2.push([setChartDateUTC(cblList[i].start), cbl - reReduceAmt]);
                                         dataSet2_2.push([setChartDateUTC(next), cbl]);
                                         dataSet3_2.push([setChartDateUTC(next), cbl - reReduceAmt]);
                                     }
-                                } else if (i == 2) {
-                                    if (i + 1 != cblList.length) {
+                                } else if (i === 2) {
+                                    if (i + 1 !== cblList.length) {
                                         dataSet2_3.push([setChartDateUTC(cblList[i].start), cbl]);
                                         dataSet3_3.push([setChartDateUTC(cblList[i].start), cbl - reReduceAmt]);
                                         dataSet2_3.push([setChartDateUTC(next), cbl]);
                                         dataSet3_3.push([setChartDateUTC(next), cbl - reReduceAmt]);
                                     }
-                                } else if (i == 3) {
-                                    if (i + 1 != cblList.length) {
+                                } else if (i === 3) {
+                                    if (i + 1 !== cblList.length) {
                                         dataSet2_4.push([setChartDateUTC(cblList[i].start), cbl]);
                                         dataSet3_4.push([setChartDateUTC(cblList[i].start), cbl - reReduceAmt]);
                                         dataSet2_4.push([setChartDateUTC(next), cbl]);
@@ -611,8 +613,8 @@
                     }
 
                 } else {
-                    $(".dr_chart").find(".inchart-nodata").css("display", "");
-                    $(".dr_chart").find(".inchart").css("display", "none");
+                    $dr_chart.find(".inchart-nodata").css("display", "");
+                    $dr_chart.find(".inchart").css("display", "none");
                 }
                 pastUsageList = dataSet;
                 timeSlotCblAmtList1 = dataSet2_1;
@@ -625,9 +627,9 @@
                 timeSlotGoalPowerList4 = dataSet3_4;
 
                 // 총 합계(사용량, 발전량, 충전량, 방전량 등등)
-                unit_format(String(totalUsage), "pastUseTot", "mWh");
-                $("#" + "totalGoalPower").empty().append($("<span/>").append(numberComma(totalGoalPower))).append("kWh");
-                $("#" + "totalCbl").empty().append($("<span/>").append(numberComma(totalCbl))).append("kWh");
+                unit_format(String(totalUsage), "pastUseTot", "mW");
+                $("#" + "totalGoalPower").empty().append($("<span/>").append(numberComma(totalGoalPower))).append("kW");
+                $("#" + "totalCbl").empty().append($("<span/>").append(numberComma(totalCbl))).append("kW");
             }
 
             // 실시간 갱신 표 데이터
