@@ -98,12 +98,7 @@ public class EnergyController {
     prettyLog.title("에너지모니터링 > 사용량 현황 > 사용량"); 
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
     if (end == null) {
-      end = new Date();
-      int mm = end.getMinutes();
-      if(mm >= 00 && mm < 15) end.setMinutes(0);
-      if(mm >= 15 && mm < 30) end.setMinutes(15);
-      if(mm >= 30 && mm < 45) end.setMinutes(30);
-      if(mm >= 45) end.setMinutes(45);
+      end = convertMinuteDate(new Date());
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     Period period = Period._15min;
@@ -291,12 +286,7 @@ public class EnergyController {
     prettyLog.title("에너지모니터링 > 사용량 현황 > 무효전력");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
     if (end == null) {
-      end = new Date();
-      int mm = end.getMinutes();
-      if(mm >= 00 && mm < 15) end.setMinutes(0);
-      if(mm >= 15 && mm < 30) end.setMinutes(15);
-      if(mm >= 30 && mm < 45) end.setMinutes(30);
-      if(mm >= 45) end.setMinutes(45);
+        end = convertMinuteDate(new Date());
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     Period period = Period._15min;
@@ -395,7 +385,7 @@ public class EnergyController {
     prettyLog.title("에너지모니터링 > 피크 전력 현황 > 피크");
     List<Device> deviceList = getDeviceList(siteId, null, prettyLog);
     if (end == null) {
-      end = new Date();
+        end = convertMinuteDate(new Date());
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     EncoredApiUtil.Period period = EncoredApiUtil.Period._15min;
@@ -515,7 +505,7 @@ public class EnergyController {
     prettyLog.title("에너지모니터링 > 피크 전력 현황 > 예측피크");
     List<Device> deviceList = getDeviceList(siteId, null, prettyLog);
     if (end == null) {
-      end = new Date();
+        end = DateUtil.getAfterDays(1);
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     EncoredApiUtil.Period period = EncoredApiUtil.Period.hour;
@@ -635,7 +625,7 @@ public class EnergyController {
     prettyLog.title("에너지모니터링 > ESS 충방전량 조회 > ESS충방전량");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
     if (end == null) {
-      end = new Date();
+        end = convertMinuteDate(new Date());
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     int resultCnt = 0;
@@ -793,7 +783,7 @@ public class EnergyController {
     prettyLog.title("에너지모니터링 > ESS 충방전량 조회 > ESS충방전계획량");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
     if (end == null) {
-        end = DateUtil.getAfterDays(1);
+        end = convertMinuteDate(new Date());
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     int resultCnt = 0;
@@ -950,7 +940,7 @@ public class EnergyController {
 	  prettyLog.title("에너지모니터링 > PV 발전량 조회 > PV 발전량");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
     if (end == null) {
-      end = new Date();
+        end = convertMinuteDate(new Date());
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     Map<String, String> localEmsAddrMap = Maps.newHashMap();
@@ -1228,7 +1218,7 @@ public class EnergyController {
     prettyLog.title("에너지모니터링 > ESS/PV 사용량 구성 > ESS 사용량");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
     if (end == null) {
-      end = new Date();
+        end = convertMinuteDate(new Date());
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     int resultCnt = 0;
@@ -1362,7 +1352,7 @@ public class EnergyController {
     prettyLog.title("에너지모니터링 > ESS/PV 사용량 구성 > PV 사용량");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
     if (end == null) {
-      end = new Date();
+        end = convertMinuteDate(new Date());
     }
     Period period = Period._15min;
     int resultCnt = 0;
@@ -1435,7 +1425,7 @@ public class EnergyController {
 	  prettyLog.title("에너지모니터링 > PV 발전량 조회 > PV 예측발전량");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
     if (end == null) {
-    	end = DateUtil.getAfterDays(1);
+        end = convertMinuteDate(new Date());
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     Map<String, String> localEmsAddrMap = Maps.newHashMap();
@@ -1550,5 +1540,16 @@ public class EnergyController {
       ValidateUtil.notEmpty(siteList, "사이트 목록을 찾을 수 없습니다");
     }
     return siteList;
+  }
+
+  private Date convertMinuteDate(Date dt) {
+      Calendar cal = Calendar.getInstance();
+      cal.setTimeInMillis(dt.getTime());
+      int mm = cal.get(Calendar.MINUTE);
+      if(mm < 15) cal.set(Calendar.MINUTE, 0);
+      if(mm >= 15 && mm < 30) cal.set(Calendar.MINUTE, 15);
+      if(mm >= 30 && mm < 45) cal.set(Calendar.MINUTE, 30);
+      if(mm >= 45) cal.set(Calendar.MINUTE, 45);
+      return cal.getTime();
   }
 }
