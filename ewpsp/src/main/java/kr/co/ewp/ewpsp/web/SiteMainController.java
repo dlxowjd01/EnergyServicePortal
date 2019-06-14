@@ -227,7 +227,7 @@ public class SiteMainController {
 
         Date end = CommonUtils.getDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE), 23, 59, 59);
         param.put("selTermTo", CommonUtils.convertDateFormat(end, "yyyyMMddHHmmss"));
-        cal.add(Calendar.DATE, -6);
+        cal.add(Calendar.DATE, -7);
         Date start = CommonUtils.getDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE), 0, 0, 0);
         param.put("selTermFrom", CommonUtils.convertDateFormat(start, "yyyyMMddHHmmss"));
         param.put("selTerm", "month");

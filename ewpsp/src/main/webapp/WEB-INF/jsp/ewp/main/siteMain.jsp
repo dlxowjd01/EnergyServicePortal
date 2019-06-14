@@ -1419,7 +1419,7 @@
                                         <div class="chart_top clear">
                                             <h2 class="ntit fl" ondblclick="location.href='/essRevenue'"
                                                 style="cursor: pointer;">
-                                                <spring:message code="ewp.site.Revenue_status" /><!-- 수익현황 --></h2>
+                                                <spring:message code="ewp.site.Revenue_status" /><!-- 수익현황 -->(최근 7일)</h2>
                                             <div class="time fr" id="updtTimeRevenue">2018-08-12 11:41:26</div>
                                         </div>
                                         <!-- no-data { -->
