@@ -82,6 +82,9 @@ function derUsageListUI(result) {
     var dt_str4_totalVal = 0; // 테이블 라인별 누적합
     var final_dt_str_head = "";
     var map = null;
+    kepcoTotalUsage = 0; // 전체 누적합
+    essTotalUsage = 0;
+    pvTotalUsage = 0;
 
     // 한전사용량, ess사용량, pv사용량 중 하나라도 데이터가 존재할 때
     // 표데이터 셋팅

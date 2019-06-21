@@ -81,6 +81,8 @@ function pastEssChargeListUI(result) {
     var dt_str2_totalVal = 0; // 테이블 라인별 누적합
     var final_dt_str_head = "";
     var map = null;
+    pastEssChgTotalVal = 0; // 전체 누적합
+    pastEssDischgTotalVal = 0; // 전체 누적합
 
     // 표데이터 셋팅
     var start = new Date(schStartTime.getTime());
@@ -216,6 +218,9 @@ function predictEssChargeListUI(result) {
     var dt_str_totalVal = 0; // 테이블 라인별 누적합
     var dt_str2_totalVal = 0; // 테이블 라인별 누적합
     var map = null;
+    fetureEssChgTotalVal = 0; // 전체 누적합
+    fetureEssDischgTotalVal = 0; // 전체 누적합
+    defaultData_pc = "";
 
     // 표데이터 셋팅
     var start = new Date(schStartTime.getTime());

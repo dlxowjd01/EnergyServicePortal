@@ -61,6 +61,7 @@ function pastUsageListUI(result) {
     var dt_str_totalVal = 0; // 테이블 라인별 누적합
     var final_dt_str_head = "";
     var map = null;
+    totalUsage = 0;
 
     // 표데이터 셋팅
     var start = new Date(schStartTime.getTime());
@@ -157,6 +158,7 @@ function predictUsageListUI(result) {
     var dt_str = "";
     var dt_str_totalVal = 0; // 테이블 라인별 누적합
     var map = null;
+    fetureTotalUsage = 0;
 
     // 표데이터 셋팅
     var start = new Date(schStartTime.getTime());
