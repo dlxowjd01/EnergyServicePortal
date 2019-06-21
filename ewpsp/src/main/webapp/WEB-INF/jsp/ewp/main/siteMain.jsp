@@ -824,17 +824,17 @@
                         } else {
                             var strHtml = "";
                             var memo = "";
-                            if (deviceList[i].device_type === 4 || deviceList[i].device_type === 6 || deviceList[i].device_type === 7 || deviceList[i].device_type === 8) {
+                            if (deviceList[i].device_type === '4' || deviceList[i].device_type === '6' || deviceList[i].device_type === '7' || deviceList[i].device_type === '8') {
                                 strHtml = (deviceList[i].apiStatus === 1) ? '<li class="ioe" />' : '<li class="ioe alert" />';
                                 memo = (deviceList[i].apiStatus === 1) ? "connect" : "disconnect";
-                            } else if (deviceList[i].device_type === 1) {
-                                strHtml = (deviceList[i].pcs_device_stat === 1) ? '<li class="pcs" />' : '<li class="pcs alert" />';
+                            } else if (deviceList[i].device_type === '1') {
+                                strHtml = (Number(deviceList[i].pcs_device_stat) === 1) ? '<li class="pcs" />' : '<li class="pcs alert" />';
                                 memo = Number(deviceList[i].apiPower); // W
-                            } else if (deviceList[i].device_type === 2) {
-                                strHtml = (deviceList[i].bms_device_stat === 2 || deviceList[i].bms_device_stat === 3) ? '<li class="bms" />' : '<li class="bms alert" />';
+                            } else if (deviceList[i].device_type === '2') {
+                                strHtml = (Number(deviceList[i].bms_device_stat) === 2 || Number(deviceList[i].bms_device_stat) === 3) ? '<li class="bms" />' : '<li class="bms alert" />';
                                 memo = (deviceList[i].apiSoc === null || deviceList[i].apiSoc === "" || deviceList[i].apiSoc === "null") ? "" : deviceList[i].apiSoc + " %"; // %
-                            } else if (deviceList[i].device_type === 3 || deviceList[i].device_type === 5) {
-                                strHtml = (deviceList[i].pv_device_stat === 1) ? '<li class="pv" />' : '<li class="pv alert" />';
+                            } else if (deviceList[i].device_type === '3' || deviceList[i].device_type === '5') {
+                                strHtml = (Number(deviceList[i].pv_device_stat) === 1) ? '<li class="pv" />' : '<li class="pv alert" />';
                                 memo = deviceList[i].apiTotPower; // Wh
                             } else {
                                 strHtml = (deviceList[i].apiStatus === 1) ? '<li class="ioe" />' : '<li class="ioe alert" />';

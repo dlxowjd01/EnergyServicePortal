@@ -126,15 +126,23 @@ public class SiteMainController {
                                 Float acPower = (pcsDetail.getAcPower() == null) ? 0 : pcsDetail.getAcPower();
                                 Float dcPower = (pcsDetail.getDcPower() == null) ? 0 : pcsDetail.getDcPower();
                                 deviceMap.put("apiPower", acPower + dcPower);
+                                deviceMap.put("pcs_device_stat", pcsDetail.getPcsStatus());
                             }
-                        } else deviceMap.put("apiPower", "-");
+                        } else {
+                            deviceMap.put("apiPower", "-");
+                            deviceMap.put("pcs_device_stat", 0);
+                        }
                     } else {
                         PcsEquipmentModel pcsDetail = PMGrowApiUtil.getPcsEquipmentList(host, (String) deviceMap.get("device_id"));
                         if (pcsDetail != null) {
                             Float acPower = (pcsDetail.getAcPower() == null) ? 0 : pcsDetail.getAcPower();
                             Float dcPower = (pcsDetail.getDcPower() == null) ? 0 : pcsDetail.getDcPower();
                             deviceMap.put("apiPower", acPower + dcPower);
-                        } else deviceMap.put("apiPower", "-");
+                            deviceMap.put("pcs_device_stat", pcsDetail.getPcsStatus());
+                        } else {
+                            deviceMap.put("apiPower", "-");
+                            deviceMap.put("pcs_device_stat", 0);
+                        }
                     }
 
                 } else if ("2".equals(deviceType)) { // BMS
@@ -144,14 +152,22 @@ public class SiteMainController {
                             for (BmsEquipmentModelBefore bmsDetail : bmsDetailList) {
                                 Float soc = (bmsDetail.getSysSoc() == null) ? 0 : bmsDetail.getSysSoc();
                                 deviceMap.put("apiSoc", soc);
+                                deviceMap.put("bms_device_stat", bmsDetail.getSysMode());
                             }
-                        } else deviceMap.put("apiSoc", "-");
+                        } else {
+                            deviceMap.put("apiSoc", "-");
+                            deviceMap.put("bms_device_stat", 0);
+                        }
                     } else {
                         BmsEquipmentModel bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, (String) deviceMap.get("device_id"));
                         if (bmsDetail != null) {
                             Float soc = (bmsDetail.getSysSoc() == null) ? 0 : bmsDetail.getSysSoc();
                             deviceMap.put("apiSoc", soc);
-                        } else deviceMap.put("apiSoc", "-");
+                            deviceMap.put("bms_device_stat", bmsDetail.getSysMode());
+                        } else {
+                            deviceMap.put("apiSoc", "-");
+                            deviceMap.put("bms_device_stat", 0);
+                        }
                     }
 
                 } else if ("3".equals(deviceType)) { // PV(localEMS)
@@ -160,13 +176,21 @@ public class SiteMainController {
                         if (pvDetail != null) {
                             Float totPower = (pvDetail.getTotalGenPower() == null) ? 0 : pvDetail.getTotalGenPower();
                             deviceMap.put("apiTotPower", totPower);
-                        } else deviceMap.put("apiTotPower", "-");
+                            deviceMap.put("pv_device_stat", pvDetail.getStatus());
+                        } else {
+                            deviceMap.put("apiTotPower", "-");
+                            deviceMap.put("pv_device_stat", 0);
+                        }
                     } else {
                         PvEquipmentModel pvDetail = PMGrowApiUtil.getPvEquipmentList(host, (String) deviceMap.get("device_id"));
                         if (pvDetail != null) {
                             Integer totPower = (pvDetail.getTotalGenPower() == null) ? 0 : pvDetail.getTotalGenPower();
                             deviceMap.put("apiTotPower", totPower);
-                        } else deviceMap.put("apiTotPower", "-");
+                            deviceMap.put("pv_device_stat", pvDetail.getStatus());
+                        } else {
+                            deviceMap.put("apiTotPower", "-");
+                            deviceMap.put("pv_device_stat", 0);
+                        }
                     }
 
                 } else { // (deviceType == 4, 5, 6, 7, 8)
