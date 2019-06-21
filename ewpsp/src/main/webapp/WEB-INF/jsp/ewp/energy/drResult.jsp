@@ -133,8 +133,8 @@
                 var queryStart = new Date(startTime.getTime());
                 var queryEnd = new Date(endTime.getTime());
 
-                queryStart = ( isEmpty(queryStart) ) ? "" : queryStart.format("yyyyMMddHHmmss");
-                queryEnd = ( isEmpty(queryEnd) ) ? "" : queryEnd.format("yyyyMMddHHmmss");
+                queryStart = (!queryStart instanceof Date) ? "" : queryStart.format("yyyyMMddHHmmss");
+                queryEnd = (!queryEnd instanceof Date) ? "" : queryEnd.format("yyyyMMddHHmmss");
 
                 $("#cblAmtFrom").val(queryStart);
                 $("#cblAmtTo").val(queryEnd);
@@ -185,8 +185,8 @@
                 var queryStart = new Date(startTime.getTime());
                 var queryEnd = new Date(endTime.getTime());
 
-                queryStart = ( isEmpty(queryStart) ) ? "" : queryStart.format("yyyyMMddHHmmss");
-                queryEnd = ( isEmpty(queryEnd ) ) ? "" : queryEnd.format("yyyyMMddHHmmss");
+                queryStart = (!queryStart instanceof Date) ? "" : queryStart.format("yyyyMMddHHmmss");
+                queryEnd = (!queryEnd instanceof Date) ? "" : queryEnd.format("yyyyMMddHHmmss");
                 $("#selTermFrom").val(queryStart);
                 $("#selTermTo").val(queryEnd);
 
