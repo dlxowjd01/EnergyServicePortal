@@ -858,13 +858,13 @@
             }
 
             function getDeviceDetail(siteId, deviceId, deviceType) {
-                if (deviceType === 4 || deviceType === 6 || deviceType === 7 || deviceType === 8) {
+                if (deviceType === '4' || deviceType === '6' || deviceType === '7' || deviceType === '8') {
                     getDeviceIOEDetail(siteId, deviceId, deviceType);
-                } else if (deviceType === 1) {
+                } else if (deviceType === '1') {
                     getDevicePCSDetail(siteId, deviceId, deviceType);
-                } else if (deviceType === 2) {
+                } else if (deviceType === '2') {
                     getDeviceBMSDetail(siteId, deviceId, deviceType);
-                } else if (deviceType === 3 || deviceType === 5) {
+                } else if (deviceType === '3' || deviceType === '5') {
                     getDevicePVDetail(siteId, deviceId, deviceType)
                 } else {
                     getDeviceIOEDetail(siteId, deviceId, deviceType);
