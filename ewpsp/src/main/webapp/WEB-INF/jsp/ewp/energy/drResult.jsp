@@ -347,6 +347,11 @@
                 timeSlotGoalPowerList3 = dataSet3_3;
                 timeSlotGoalPowerList4 = dataSet3_4;
 
+                myChart.tooltip.options.formatter = function () {
+                    return '<b>' + this.series.name + '</b><br/>' + Highcharts.dateFormat('%Y-%m-%d %H:%M:%S ', new Date(this.x))
+                        + '<br/><span style="color:#438fd7">' + this.y + ' kWh</span>';
+                };
+
                 // 총 합계(사용량, 발전량, 충전량, 방전량 등등)
                 unit_format(String(totalUsage), "pastUseTot", "Wh");
                 $("#" + "totalCbl").empty().append($("<span/>").append(numberComma(checkNumLen(totalCbl)))).append("kWh");
@@ -626,6 +631,11 @@
                 timeSlotGoalPowerList3 = dataSet3_3;
                 timeSlotGoalPowerList4 = dataSet3_4;
 
+                myChart.tooltip.options.formatter = function () {
+                    return '<b>' + this.series.name + '</b><br/>' + Highcharts.dateFormat('%Y-%m-%d %H:%M:%S ', new Date(this.x))
+                        + '<br/><span style="color:#438fd7">' + this.y + ' kW</span>';
+                };
+
                 // 총 합계(사용량, 발전량, 충전량, 방전량 등등)
                 unit_format(String(totalUsage), "pastUseTot", "mW");
                 $("#" + "totalGoalPower").empty().append($("<span/>").append(numberComma(totalGoalPower))).append("kW");
@@ -719,11 +729,7 @@
                                 <div class="inchart">
                                     <div id="chart2"></div>
                                     <script language="JavaScript">
-                                        // 								$(function () {
                                         var myChart = Highcharts.chart('chart2', {
-// 										data: {
-// 									        table: 'datatable' /* 테이블에서 데이터 불러오기 */
-// 									    },
 
                                             chart: {
                                                 marginLeft: 80,
@@ -910,7 +916,6 @@
                                             }
 
                                         });
-                                        // 								});
                                     </script>
                                 </div>
                             </div>
