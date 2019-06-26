@@ -24,7 +24,9 @@
 
             function getDBData(formData) {
                 realChg_data_pc.length = 0;
+                realDischg_data_pc.length = 0;
                 fetureChg_data_pc.length = 0;
+                fetureDischg_data_pc.length = 0;
                 setDataTableColRowCnt(); // 1행의 최대 칸 수 및 테이블갯수
                 getESSChargeRealList(formData); // 실제충방전량 조회
                 getESSChargeFutureList(formData); // 예측충방전량 조회

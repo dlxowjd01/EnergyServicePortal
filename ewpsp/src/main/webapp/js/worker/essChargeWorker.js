@@ -44,6 +44,12 @@ function init(config){
     SelTerm = config.SelTerm;
     dt_col = config.dt_col;
     timeOffset = config.timeOffset;
+
+    realChg_data_pc.length = 0;
+    realDischg_data_pc.length = 0;
+    fetureChg_data_pc.length = 0;
+    fetureDischg_data_pc.length = 0;
+    defaultData_pc = "";
 }
 
 var ess_head_pc = []; // 실제 사용량 표 데이터
