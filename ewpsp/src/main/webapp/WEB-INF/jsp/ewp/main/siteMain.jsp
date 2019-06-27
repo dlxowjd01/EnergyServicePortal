@@ -482,10 +482,8 @@
 
                         var chartEssUsage = null;
                         var chartPvUsage = null;
-                        if (reKepcoUsage != null) {
-                            chartEssUsage = toFixedNum(reEssUsage, 2);
-                            chartPvUsage = toFixedNum(rePvUsage, 2);
-                        }
+                        chartEssUsage = toFixedNum(reEssUsage, 2);
+                        chartPvUsage = toFixedNum(rePvUsage, 2);
 
                         var tm = new Date(convertDateUTC(loopCntChartList[i].std_timestamp));
                         // 차트데이터 셋팅

@@ -25,7 +25,7 @@ public class DERUsageServiceImpl implements DERUsageService {
 
             return resultMap;
         } else {
-            resultMap = PeriodDataSetting.dataSetting(request, param, list, "std_date", "usg_val", 1);
+            resultMap = PeriodDataSetting.dataSetting(request, param, list, "std_timestamp", "usg_val", 1);
             return resultMap;
         }
     }

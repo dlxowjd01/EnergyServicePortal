@@ -76,27 +76,27 @@ public class DERUsageController {
 
         List loopCntSheetList = null;
         List loopCntChartList = null;
-        if (kepcoUsageList != null && kepcoUsageList.size() > 0) {
+        if ((List) kepcoUsageList.get("sheetList") != null && ((List) kepcoUsageList.get("sheetList")).size() > 0) {
             loopCntSheetList = (List) kepcoUsageList.get("sheetList");
             loopCntChartList = (List) kepcoUsageList.get("chartList");
-        } else if (essUsageList != null && essUsageList.size() > 0) {
+        } else if ((List) essUsageList.get("sheetList") != null && ((List) essUsageList.get("sheetList")).size() > 0) {
             loopCntSheetList = (List) essUsageList.get("sheetList");
             loopCntChartList = (List) essUsageList.get("chartList");
-        } else if (pvUsageList != null && pvUsageList.size() > 0) {
+        } else if ((List) pvUsageList.get("sheetList") != null && ((List) pvUsageList.get("sheetList")).size() > 0) {
             loopCntSheetList = (List) pvUsageList.get("sheetList");
             loopCntChartList = (List) pvUsageList.get("chartList");
         }
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
-        if (kepcoUsageList != null) {
+        if ((List) kepcoUsageList.get("sheetList") != null) {
             resultMap.put("kepcoUsageSheetList", kepcoUsageList.get("sheetList"));
             resultMap.put("kepcoUsageChartList", kepcoUsageList.get("chartList"));
         }
-        if (essUsageList != null) {
+        if ((List) essUsageList.get("sheetList") != null) {
             resultMap.put("essUsageListSheetList", essUsageList.get("sheetList"));
             resultMap.put("essUsageListChartList", essUsageList.get("chartList"));
         }
-        if (pvUsageList != null) {
+        if ((List) pvUsageList.get("sheetList") != null) {
             resultMap.put("pvUsageListSheetList", pvUsageList.get("sheetList"));
             resultMap.put("pvUsageListChartList", pvUsageList.get("chartList"));
         }

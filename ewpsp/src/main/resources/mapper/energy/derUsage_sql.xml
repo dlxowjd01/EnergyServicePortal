@@ -5,7 +5,7 @@
     <select id="getESSUsageList" resultType="hashMap">
         /* ess 사용량 조회 */
         select
-        site_id, std_date, sum(dischg_val) as usg_val
+        site_id, std_timestamp, sum(dischg_val) as usg_val
         from (
         select
         ess_chg_idx, site_id, device_id, std_timestamp, std_date, chg_val, dischg_val, reg_date
@@ -16,8 +16,8 @@
             str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
         </if>
         ) a
-        group by site_id, std_date
-        order by std_date
+        group by site_id, std_timestamp
+        order by std_timestamp
     </select>
 
     <select id="getPVUsageList" resultType="hashMap">
