@@ -363,7 +363,10 @@
                 var drList = result.list;
                 var totalReduceAmt = 0; // 전체 누적합
 
-                $tbody = $("#drResultTbody");
+                var theadStr = '<th>감축일</th><th>감축시간대</th><th>사용량(kWh)</th><th>고객기준부하(kWh)</th><th>계약용량(kWh)</th><th>목표사용량(kWh)</th><th>감축량(kWh)</th><th>이행률(%)</th>';
+                $("#drResultThead").html(theadStr);
+
+                var $tbody = $("#drResultTbody");
                 var tbodyStr = '';
                 if (drList != null && drList.length > 0) {
                     for (var i = 0; i < drList.length; i++) {
@@ -647,7 +650,10 @@
                 var drList = result.drResultList;
                 var totalReduceAmt = 0; // 전체 누적합
 
-                $tbody = $("#drResultTbody");
+                var theadStr = '<th>감축일</th><th>감축시간대</th><th>사용량(kW)</th><th>고객기준부하(kW)</th><th>계약용량(kW)</th><th>목표사용량(kW)</th><th>감축량(kW)</th><th>이행률(%)</th>';
+                $("#drResultThead").html(theadStr);
+
+                var $tbody = $("#drResultTbody");
                 $tbody.empty();
                 var tbodyStr = '';
                 if (drList != null && drList.length > 0) {
@@ -937,7 +943,7 @@
                                         <div class="chart_table">
                                             <table class="dr_use">
                                                 <thead>
-                                                    <tr>
+                                                    <tr id="drResultThead">
                                                         <th>감축일</th>
                                                         <th>감축시간대</th>
                                                         <th>사용량(kWh)</th>
