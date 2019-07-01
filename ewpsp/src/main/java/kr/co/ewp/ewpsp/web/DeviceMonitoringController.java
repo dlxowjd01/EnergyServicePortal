@@ -162,13 +162,13 @@ public class DeviceMonitoringController {
                         result.put("alarmMsg", pcsDetail.getAlarmMsg());
                     }
                     result.put("acVoltage", (pcsDetail == null || pcsDetail.getAcVoltage() == null) ? -1 : pcsDetail.getAcVoltage());
-                    result.put("acPower", (pcsDetail == null || pcsDetail.getAcPower() == null) ? -1 : pcsDetail.getAcPower());
+                    result.put("acPower", (pcsDetail == null || pcsDetail.getAcPower() == null) ? -1 : Math.ceil((pcsDetail.getAcPower()/1000f)*10)/10);
                     result.put("acFreq", (pcsDetail == null || pcsDetail.getAcFreq() == null) ? -1 : pcsDetail.getAcFreq());
                     result.put("acCurrent", (pcsDetail == null || pcsDetail.getAcCurrent() == null) ? -1 : pcsDetail.getAcCurrent());
                     result.put("acPf", (pcsDetail == null || pcsDetail.getAcPf() == null) ? -1 : pcsDetail.getAcPf());
-                    result.put("acSetPower", (pcsDetail == null || pcsDetail.getAcSetPower() == null) ? -1 : pcsDetail.getAcSetPower());
+                    result.put("acSetPower", (pcsDetail == null || pcsDetail.getAcSetPower() == null) ? -1 : Math.ceil((pcsDetail.getAcSetPower()/1000f)*10)/10);
                     result.put("dcVoltage", (pcsDetail == null || pcsDetail.getDcVoltage() == null) ? -1 : pcsDetail.getDcVoltage());
-                    result.put("dcPower", (pcsDetail == null || pcsDetail.getDcPower() == null) ? -1 : pcsDetail.getDcPower());
+                    result.put("dcPower", (pcsDetail == null || pcsDetail.getDcPower() == null) ? -1 : Math.ceil((pcsDetail.getDcPower()/1000f)*10)/10);
                     result.put("dcCurrent", (pcsDetail == null || pcsDetail.getDcCurrent() == null) ? -1 : pcsDetail.getDcCurrent());
                     result.put("pcsStatus", (pcsDetail == null) ? -1 : pcsDetail.getPcsStatus());
                     if (pcsDetail == null) {
@@ -180,8 +180,8 @@ public class DeviceMonitoringController {
                             result.put("pcsCommand", "Run");
                         }
                     }
-                    result.put("todayCEnergy", (pcsDetail == null) ? -1 : pcsDetail.getTodayCEnergy());
-                    result.put("todayDEnergy", (pcsDetail == null) ? -1 : pcsDetail.getTodayDEnergy());
+                    result.put("todayCEnergy", (pcsDetail == null) ? -1 : Math.ceil((pcsDetail.getTodayCEnergy()/1000f)*10)/10);
+                    result.put("todayDEnergy", (pcsDetail == null) ? -1 : Math.ceil((pcsDetail.getTodayDEnergy()/1000f)*10)/10);
                 }
             } else {
                 result.put("pcsStatus", null);
@@ -224,13 +224,13 @@ public class DeviceMonitoringController {
                 result.put("alarmMsg", null);
             }
             result.put("acVoltage", (pcsDetail == null) ? -1 : pcsDetail.getAcVoltage());
-            result.put("acPower", (pcsDetail == null) ? -1 : pcsDetail.getAcPower());
+            result.put("acPower", (pcsDetail == null) ? -1 : Math.ceil((pcsDetail.getAcPower()/1000f)*10)/10);
             result.put("acFreq", (pcsDetail == null) ? -1 : pcsDetail.getAcFreq());
             result.put("acCurrent", (pcsDetail == null) ? -1 : pcsDetail.getAcCurrent());
             result.put("acPf", (pcsDetail == null) ? -1 : pcsDetail.getAcPf());
-            result.put("acSetPower", (pcsDetail == null) ? -1 : pcsDetail.getAcSetPower());
+            result.put("acSetPower", (pcsDetail == null) ? -1 : Math.ceil((pcsDetail.getAcSetPower()/1000f)*10)/10);
             result.put("dcVoltage", (pcsDetail == null) ? -1 : pcsDetail.getDcVoltage());
-            result.put("dcPower", (pcsDetail == null) ? -1 : pcsDetail.getDcPower());
+            result.put("dcPower", (pcsDetail == null) ? -1 : Math.ceil((pcsDetail.getDcPower()/1000f)*10)/10);
             result.put("dcCurrent", (pcsDetail == null) ? -1 : pcsDetail.getDcCurrent());
             result.put("pcsStatus", (pcsDetail == null) ? -1 : pcsDetail.getPcsStatus());
             if (pcsDetail == null) {
@@ -242,8 +242,8 @@ public class DeviceMonitoringController {
                     result.put("pcsCommand", "Run");
                 }
             }
-            result.put("todayCEnergy", (pcsDetail == null) ? -1 : pcsDetail.getTodayCEnergy());
-            result.put("todayDEnergy", (pcsDetail == null) ? -1 : pcsDetail.getTodayDEnergy());
+            result.put("todayCEnergy", (pcsDetail == null) ? -1 : Math.ceil((pcsDetail.getTodayCEnergy()/1000f)*10)/10);
+            result.put("todayDEnergy", (pcsDetail == null) ? -1 : Math.ceil((pcsDetail.getTodayDEnergy()/1000f)*10)/10);
         }
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -329,7 +329,7 @@ public class DeviceMonitoringController {
                     }
                     result.put("sysSoc", (bmsDetail == null || bmsDetail.getSysSoc() == null) ? -1 : bmsDetail.getSysSoc());
                     result.put("sysSoh", (bmsDetail == null || bmsDetail.getSysSoh() == null) ? -1 : bmsDetail.getSysSoh());
-                    result.put("currSoc", (bmsDetail == null || bmsDetail.getCurrSoc() == null) ? -1 : bmsDetail.getCurrSoc());
+                    result.put("currSoc", (bmsDetail == null || bmsDetail.getCurrSoc() == null) ? -1 : Math.ceil((bmsDetail.getCurrSoc()/1000f)*10)/10);
                     result.put("sysVoltage", (bmsDetail == null || bmsDetail.getSysVoltage() == null) ? -1 : bmsDetail.getSysVoltage());
                     result.put("sysCurrent", (bmsDetail == null || bmsDetail.getSysCurrent() == null) ? -1 : bmsDetail.getSysCurrent());
                     result.put("dod", (bmsDetail == null || bmsDetail.getDod() == null) ? -1 : bmsDetail.getDod());
@@ -374,7 +374,7 @@ public class DeviceMonitoringController {
             }
             result.put("sysSoc", (bmsDetail == null) ? -1 : bmsDetail.getSysSoc());
             result.put("sysSoh", (bmsDetail == null) ? -1 : bmsDetail.getSysSoh());
-            result.put("currSoc", (bmsDetail == null) ? -1 : bmsDetail.getCurrSoc());
+            result.put("currSoc", (bmsDetail == null) ? -1 : Math.ceil((bmsDetail.getCurrSoc()/1000f)*10)/10);
             result.put("sysVoltage", (bmsDetail == null) ? -1 : bmsDetail.getSysVoltage());
             result.put("sysCurrent", (bmsDetail == null) ? -1 : bmsDetail.getSysCurrent());
             result.put("dod", (bmsDetail == null) ? -1 : bmsDetail.getDod());
@@ -463,8 +463,8 @@ public class DeviceMonitoringController {
 
                     }
                     result.put("temperature", (pvDetail.getTemperature() == null) ? -1 : pvDetail.getTemperature());
-                    result.put("totalPower", (pvDetail.getTotalGenPower() == null) ? -1 : pvDetail.getTotalGenPower());
-                    result.put("todayPower", (pvDetail.getTodayGenPower() == null) ? -1 : pvDetail.getTodayGenPower());
+                    result.put("totalPower", (pvDetail.getTotalGenPower() == null) ? -1 : Math.ceil((pvDetail.getTotalGenPower()/1000f)*10)/10);
+                    result.put("todayPower", (pvDetail.getTodayGenPower() == null) ? -1 : Math.ceil((pvDetail.getTodayGenPower()/1000f)*10)/10);
                 }
             } else {
                 result.put("pvStatus", null);
@@ -498,8 +498,8 @@ public class DeviceMonitoringController {
                 result.put("alarmMsg", null);
             }
             result.put("temperature", (pvDetail == null) ? -1 : pvDetail.getTemperature());
-            result.put("totalPower", (pvDetail == null) ? -1 : pvDetail.getTotalGenPower());
-            result.put("todayPower", (pvDetail == null) ? -1 : pvDetail.getTodayGenPower());
+            result.put("totalPower", (pvDetail == null) ? -1 : Math.ceil((pvDetail.getTotalGenPower()/1000f)*10)/10);
+            result.put("todayPower", (pvDetail == null) ? -1 : Math.ceil((pvDetail.getTodayGenPower()/1000f)*10)/10);
         }
 
         Map<String, Object> resultMap = new HashMap<String, Object>();

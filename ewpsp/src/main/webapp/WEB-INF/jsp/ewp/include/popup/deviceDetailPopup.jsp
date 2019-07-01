@@ -203,11 +203,11 @@
         pcsStr += '<thead>';
         pcsStr += '<tr>';
         pcsStr += '<th>전압(V)</th>';
-        pcsStr += '<th>전력(W)</th>';
+        pcsStr += '<th>전력(kW)</th>';
         pcsStr += '<th>주파수(Hz)</th>';
         pcsStr += '<th>전류(A)</th>';
         pcsStr += '<th>역률(PF)</th>';
-        pcsStr += '<th>전력설정치(W)</th>';
+        pcsStr += '<th>전력설정치(kW)</th>';
         pcsStr += '</tr>';
         pcsStr += '</thead>';
         pcsStr += '<tbody>';
@@ -340,7 +340,7 @@
         bmsStr += '<tr>';
         bmsStr += '<th>SOC 잔여율(%)</th>';
         bmsStr += '<th>SOH(%)</th>';
-        bmsStr += '<th>SOC 잔여량(Wh)</th>';
+        bmsStr += '<th>SOC 잔여량(kWh)</th>';
         bmsStr += '<th>출력 전압(V)</th>';
         bmsStr += '<th>출력 전류(A)</th>';
         bmsStr += '<th>Dod(%)</th>';

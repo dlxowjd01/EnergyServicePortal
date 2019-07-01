@@ -13,8 +13,8 @@ public class PvEquipmentModelBefore {
     private Integer status;//
     private String alarmMsg;//
     private Integer temperature;// (℃)
-    private Float totalGenPower;// (kWh)
-    private Float todayGenPower;
+    private Float totalGenPower;// (Wh)
+    private Float todayGenPower;// (Wh)
 
     private Float acVoltage;
     private Float acPower;
