@@ -195,6 +195,7 @@ public class DeviceMonitoringController {
                 result.put("acSetPower", -1);
                 result.put("dcVoltage", -1);
                 result.put("dcPower", -1);
+                result.put("dcCurrent", -1);
                 result.put("pcsStatus", -1);
                 result.put("pcsCommand", -1);
                 result.put("todayCEnergy", -1);
@@ -230,6 +231,7 @@ public class DeviceMonitoringController {
             result.put("acSetPower", (pcsDetail == null) ? -1 : pcsDetail.getAcSetPower());
             result.put("dcVoltage", (pcsDetail == null) ? -1 : pcsDetail.getDcVoltage());
             result.put("dcPower", (pcsDetail == null) ? -1 : pcsDetail.getDcPower());
+            result.put("dcCurrent", (pcsDetail == null) ? -1 : pcsDetail.getDcCurrent());
             result.put("pcsStatus", (pcsDetail == null) ? -1 : pcsDetail.getPcsStatus());
             if (pcsDetail == null) {
                 result.put("pcsCommand", -1);
