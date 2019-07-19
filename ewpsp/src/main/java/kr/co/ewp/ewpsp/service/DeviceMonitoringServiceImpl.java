@@ -4,6 +4,8 @@ import kr.co.ewp.ewpsp.dao.DeviceMonitoringDao;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,6 +73,10 @@ public class DeviceMonitoringServiceImpl implements DeviceMonitoringService {
 
     public Map<String, String> getDevice(Map<String, Object> dvMap) throws Exception {
         return deviceMonitoringDao.getDevice(dvMap);
+    }
+
+    public Map<String, Object> getDeviceAMIDetail(Map<String, Object> param) throws Exception {
+        return deviceMonitoringDao.getDeviceAMIDetail(param);
     }
 
 }

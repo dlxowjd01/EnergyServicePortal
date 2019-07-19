@@ -2,22 +2,19 @@ package kr.co.ewp.api.service;
 
 import java.util.List;
 
+import kr.co.ewp.api.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.co.ewp.api.dao.DeviceAmiDao;
 import kr.co.ewp.api.dao.DeviceBmsDao;
 import kr.co.ewp.api.dao.DeviceDao;
 import kr.co.ewp.api.dao.DeviceIoeDao;
 import kr.co.ewp.api.dao.DevicePcsDao;
 import kr.co.ewp.api.dao.DevicePvDao;
-import kr.co.ewp.api.entity.Device;
-import kr.co.ewp.api.entity.DeviceBms;
-import kr.co.ewp.api.entity.DeviceIoe;
-import kr.co.ewp.api.entity.DevicePcs;
-import kr.co.ewp.api.entity.DevicePv;
 import kr.co.ewp.api.util.PrettyLog;
 
 @Service
@@ -35,6 +32,8 @@ public class DeviceService {
   private DeviceBmsDao deviceBmsDao;
   @Autowired
   private DevicePvDao devicePvDao;
+  @Autowired
+  private DeviceAmiDao deviceAmiDao;
 
   @Transactional(readOnly = true)
   public List<Device> getDeviceList(String siteId, PrettyLog prettyLog) {
@@ -94,6 +93,18 @@ public class DeviceService {
       result++;
       if (result % 100 == 0) {
         logger.info("addDeivcePvList,{},{}", new Object[] { devicePv.getDeviceId(), result });
+      }
+    }
+    return result;
+  }
+
+  public int addDeivceAmiList(List<DeviceAmi> deivceAmiList, PrettyLog prettyLog) {
+    int result = 0;
+    for (DeviceAmi deivceAmi : deivceAmiList) {
+    	deviceAmiDao.insert(deivceAmi, prettyLog);
+      result++;
+      if (result % 100 == 0) {
+        logger.info("addDeivceAmiList,{},{}", new Object[] { deivceAmi.getDeviceId(), result });
       }
     }
     return result;

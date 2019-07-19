@@ -73,4 +73,8 @@ public class DeviceMonitoringDao {
         return sqlSession.selectOne("deviceMonitoring.getDevice", dvMap);
     }
 
+	public Map<String, Object> getDeviceAMIDetail(Map<String, Object> param) {
+		return sqlSession.selectOne("deviceMonitoring.getDeviceAMIDetail", param);
+	}
+
 }

@@ -47,7 +47,7 @@
         ) b
         on a.site_id = b.site_id
         and a.device_id = b.device_id
-        where a.device_type in (4, 6, 7, 8)
+        where a.device_type in (4, 6, 7, 8, 9)
         <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
             and a.site_id = #{siteId }
         </if>
@@ -104,7 +104,7 @@
         ) b
         on a.site_id = b.site_id
         and a.device_id = b.device_id
-        where a.device_type in (4, 6, 7, 8)
+        where a.device_type in (4, 6, 7, 8, 9)
         <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
             and a.site_id = #{siteId }
         </if>
@@ -888,6 +888,64 @@
 		where site_id = #{siteId} 
 		and device_id = #{deviceId}
 		and device_type = #{deviceType}
+	</select>
+	
+    <select id="getDeviceAMIDetail" parameterType="hashMap" resultType="hashMap">
+		/* AMI장치 상세 조회 */
+		select 
+			a.device_id, a.site_id, a.device_name, site.site_name, a.device_grp_name, 
+			a.device_type, concat('(', a.inst_type_nm, ')', a.device_type_nm) as device_type_nm, 
+			b.device_stat,
+			b.voltage_r, b.voltage_s, b.voltage_t, b.current_r, b.current_s, b.current_t, b.frequency, 
+			b.accum_actv_pwr_r, b.accum_actv_pwr_s, b.accum_actv_pwr_t, 
+			b.accum_rctv_pwr_lagging_r, b.accum_rctv_pwr_lagging_s, b.accum_rctv_pwr_lagging_t, 
+			b.accum_rctv_pwr_leading_r, b.accum_rctv_pwr_leading_s, b.accum_rctv_pwr_leading_t,  
+			b.device_ami_idx
+		from (
+				select 
+					device.device_id, device.site_id, device.user_idx, device.device_name, device.device_grp_idx, 
+					device.device_type, device.inst_type, 
+					case device_type when 1 then 'PCS'
+						when 2 then 'BMS'
+						when 3 then 'PV'
+						when 4 then '부하측정기기'
+						when 5 then 'PV모니터링기기'
+						when 6 then 'ESS모니터링기기'
+						when 7 then 'iSmart'
+						when 8 then '총량기기'
+						when 9 then 'AMI'
+						else '' end as device_type_nm
+					, case inst_type when 1 then '에너톡'
+						when 2 then '로컬EMS'
+						else '' end as inst_type_nm
+					, device_grp_name
+				from tb_device device
+				left outer join tb_device_group deviceGroup
+				on device.device_grp_idx = deviceGroup.device_grp_idx
+		) a
+		left outer join (
+				select 
+					device_ami_idx, site_id, device_id, device_name, device_stat, alarmMsg, 
+					voltage_r, voltage_s, voltage_t, current_r, current_s, current_t, frequency, 
+					accum_actv_pwr_r, accum_actv_pwr_s, accum_actv_pwr_t, 
+					accum_rctv_pwr_lagging_r, accum_rctv_pwr_lagging_s, accum_rctv_pwr_lagging_t, 
+					accum_rctv_pwr_leading_r, accum_rctv_pwr_leading_s, accum_rctv_pwr_leading_t, 
+					std_date, reg_date 
+				from tb_device_ami
+				where (site_id, device_id, reg_date) in (
+					select 
+						site_id, device_id, max(reg_date) reg_date 
+					from tb_device_ami
+					group by site_id, device_id
+				)
+		) b
+		on a.site_id = b.site_id
+		and a.device_id = b.device_id
+		, tb_site site
+		where a.site_id = site.site_id
+		and a.site_id = #{siteId }
+		and a.device_id = #{deviceId }
+		and a.device_type = #{deviceType }
 	</select>
 
 </mapper>

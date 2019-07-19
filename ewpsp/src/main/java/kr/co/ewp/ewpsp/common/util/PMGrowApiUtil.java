@@ -1,5 +1,6 @@
 package kr.co.ewp.ewpsp.common.util;
 
+import kr.co.ewp.ewpsp.model.AmiEquipmentModel;
 import kr.co.ewp.ewpsp.model.BmsEquipmentModel;
 import kr.co.ewp.ewpsp.model.PcsEquipmentModel;
 import kr.co.ewp.ewpsp.model.PvEquipmentModel;
@@ -40,7 +41,6 @@ public class PMGrowApiUtil {
         } catch (NullPointerException e) {
             logger.error("error is : " + e.toString());
         } catch (Exception e) {
-//    	e.printStackTrace();
             logger.error("error is : " + e.toString());
         } finally {
             logger.debug("PMGrowApiUtil.getPcsEquipmentList end");
@@ -73,7 +73,6 @@ public class PMGrowApiUtil {
         } catch (NullPointerException e) {
             logger.error("error is : " + e.toString());
         } catch (Exception e) {
-//    	e.printStackTrace();
             logger.error("error is : " + e.toString());
         } finally {
             logger.debug("PMGrowApiUtil.getBmsEquipmentList end");
@@ -106,11 +105,42 @@ public class PMGrowApiUtil {
         } catch (NullPointerException e) {
             logger.error("error is : " + e.toString());
         } catch (Exception e) {
-            //e.printStackTrace();
             logger.error("error is : " + e.toString());
         } finally {
             logger.debug("PMGrowApiUtil.getPvEquipmentList end");
             return returnPV;
+        }
+    }
+
+    /**
+     * AMI 운전상태 조회
+     *
+     * @param equipmentId
+     * @param startDt      yyyyMMdd
+     * @param endDt        yyyyMMdd
+     * @param intervalType
+     * @param interval
+     * @param prettyLog
+     * @return
+     */
+    public static AmiEquipmentModel getAmiEquipmentList(String host, String equipmentId) {
+        logger.debug("PMGrowApiUtil.getAmiEquipmentList");
+        String resultBody = null;
+        AmiEquipmentModel returnAMI = null;
+        try {
+            StringBuffer url = new StringBuffer(host + "/v1/amis/:amiId/current".replace(":amiId", equipmentId));
+            System.out.println("ami device url =====> " + url);
+            logger.debug("pmgrow api URL : " + url);
+            resultBody = HttpUtil.get(url.toString(), getHeaders());
+            System.out.println("ami device resultBody =====> " + resultBody);
+            returnAMI = JsonUtil.toObject(resultBody, AmiEquipmentModel.class);
+        } catch (NullPointerException e) {
+            logger.error("error is : " + e.toString());
+        } catch (Exception e) {
+            logger.error("error is : " + e.toString());
+        } finally {
+            logger.debug("PMGrowApiUtil.getPvEquipmentList end");
+            return returnAMI;
         }
     }
 
@@ -129,7 +159,6 @@ public class PMGrowApiUtil {
         } catch (NullPointerException e) {
             logger.error("error is : " + e.toString());
         } catch (Exception e) {
-//		  e.printStackTrace();
             logger.error("error is : " + e.toString());
         } finally {
             logger.debug("PMGrowApiUtil.getSoc end");

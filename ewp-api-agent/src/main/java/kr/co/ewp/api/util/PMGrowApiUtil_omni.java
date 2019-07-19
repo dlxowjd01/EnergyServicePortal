@@ -10,6 +10,8 @@ import org.springframework.http.HttpHeaders;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import kr.co.ewp.api.aop.DaoAspect;
+import kr.co.ewp.api.model.AmiEquipmentModel;
+import kr.co.ewp.api.model.AmiUsageModel;
 import kr.co.ewp.api.model.BmsEquipmentModel;
 import kr.co.ewp.api.model.ChargingDischarging;
 import kr.co.ewp.api.model.ChargingDischargingSchedule;
@@ -287,6 +289,74 @@ public class PMGrowApiUtil_omni {
 	  } catch (NullPointerException e) {
 		  logger.error("error is : "+e.toString());
 		  throw e;
+	  } catch (Exception e) {
+		  prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
+		  throw e;
+	  } finally {
+		  prettyLog.append("RESULT", resultBody);
+		  prettyLog.stop();
+	  }
+  }
+  
+  /**
+   * ami 운전상태 조회
+   * 
+   * @param equipmentId
+   * @param startDt
+   *          yyyyMMdd
+   * @param endDt
+   *          yyyyMMdd
+   * @param intervalType
+   * @param interval
+   * @param prettyLog
+   * @return
+   */
+  public static AmiEquipmentModel getAmiEquipmentList(String host, String equipmentId, PrettyLog prettyLog) {
+	  prettyLog.start("PMGrowApiUtil.getAmiEquipmentList", "ERROR");
+	  String resultBody = null;
+	  try {
+		  StringBuffer url = new StringBuffer(host + "/v1/amis/:amiId/current".replace(":amiId", equipmentId));
+		  System.out.println("url =====> "+url);
+		  prettyLog.append("URL", url);
+		  resultBody = HttpUtil.get(url.toString(), getHeaders());
+		  System.out.println("ami resultBody =====> "+resultBody);
+		  return JsonUtil.toObject(resultBody, AmiEquipmentModel.class);
+	  } catch (Exception e) {
+		  prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
+		  throw e;
+	  } finally {
+		  prettyLog.append("RESULT", resultBody);
+		  prettyLog.stop();
+	  }
+  }
+  
+  /**
+   * ami 사용량 조회
+   * 
+   * @param equipmentId
+   * @param startDt
+   *          yyyyMMdd
+   * @param endDt
+   *          yyyyMMdd
+   * @param intervalType
+   * @param interval
+   * @param prettyLog
+   * @return
+   */
+  public static AmiUsageModel getAmiUsageList(String host, String equipmentId, Date startDt, Date endDt, String intervalType, String interval, PrettyLog prettyLog) {
+	  prettyLog.start("PMGrowApiUtil.getAmiEquipmentList", "ERROR");
+	  String resultBody = null;
+	  try {
+		  StringBuffer url = new StringBuffer(host + "/v1/amis/:amiId/energy".replace(":amiId", equipmentId));
+		  url.append("?startDt=").append(1561924800000l);
+		  url.append("&endDt=").append(1561932000000l);
+		  url.append("&intervalType=").append(intervalType);
+		  url.append("&interval=").append(interval);
+		  System.out.println("url =====> "+url);
+		  prettyLog.append("URL", url);
+		  resultBody = HttpUtil.get(url.toString(), getHeaders());
+		  System.out.println("ami resultBody =====> "+resultBody);
+		  return JsonUtil.toObject(resultBody, AmiUsageModel.class);
 	  } catch (Exception e) {
 		  prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
 		  throw e;

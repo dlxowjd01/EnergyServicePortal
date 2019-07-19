@@ -856,7 +856,7 @@
             }
 
             function getDeviceDetail(siteId, deviceId, deviceType) {
-                if (deviceType === '4' || deviceType === '6' || deviceType === '7' || deviceType === '8') {
+                if (deviceType === '4' || deviceType === '6' || deviceType === '7' || deviceType === '8' || deviceType === '9') {
                     getDeviceIOEDetail(siteId, deviceId, deviceType);
                 } else if (deviceType === '1') {
                     getDevicePCSDetail(siteId, deviceId, deviceType);

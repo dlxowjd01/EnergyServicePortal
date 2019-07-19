@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import kr.co.ewp.api.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,23 +31,6 @@ import kr.co.ewp.api.entity.Reactive;
 import kr.co.ewp.api.entity.Site;
 import kr.co.ewp.api.entity.SiteSet;
 import kr.co.ewp.api.entity.Usage;
-import kr.co.ewp.api.model.CblResponseModel;
-import kr.co.ewp.api.model.ChargingDischarging;
-import kr.co.ewp.api.model.ChargingDischargingBefore;
-import kr.co.ewp.api.model.ChargingDischargingItemModel;
-import kr.co.ewp.api.model.ChargingDischargingSchedule;
-import kr.co.ewp.api.model.ChargingDischargingScheduleBefore;
-import kr.co.ewp.api.model.ChargingDischargingScheduleItemModel;
-import kr.co.ewp.api.model.DrRequestTarget;
-import kr.co.ewp.api.model.EnergyModel;
-import kr.co.ewp.api.model.EssUsageModel;
-import kr.co.ewp.api.model.PeakRequestModel;
-import kr.co.ewp.api.model.PeakResponseModel;
-import kr.co.ewp.api.model.PvPowerGenModel;
-import kr.co.ewp.api.model.PvPowerGenModelBefore;
-import kr.co.ewp.api.model.PvPowerGenModelItemModel;
-import kr.co.ewp.api.model.UsageItemModel;
-import kr.co.ewp.api.model.UsageModel;
 import kr.co.ewp.api.service.DeviceService;
 import kr.co.ewp.api.service.DrService;
 import kr.co.ewp.api.service.EssService;
@@ -103,8 +87,11 @@ public class EnergyController {
     prettyLog.append("DEVICE_CNT", deviceList.size());
     Period period = Period._15min;
     int resultCnt = 0;
+    Map<String, String> localEmsAddrMap = Maps.newHashMap();
+    Map<String, String> localEmsApiVerMap = Maps.newHashMap();
     for (Device device : deviceList) {
       Date _begin = null;
+      String _siteId = device.getSiteId();
       if (begin == null) {
          Usage usage = usageService.getLastUage(device.getSiteId(), device.getDeviceId(), null);
          if (usage == null) {
@@ -162,7 +149,41 @@ public class EnergyController {
         					usageList.add(usage);
         				}
         			}
-        		}
+        		} else {
+                    if("9".equals(deviceType)){ // 9 : AMI
+                        if (!localEmsAddrMap.containsKey(_siteId)) {
+                            Site site = siteService.getSite(_siteId, prettyLog);
+                            if (site == null) {
+                                prettyLog.append("WARN", _siteId + "(SITE_ID) is null");
+                                continue;
+                            }
+                            localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
+                            localEmsApiVerMap.put(_siteId, site.getLocalEmsApiVer());
+                        }
+
+                        AmiUsageModel amiUsageModel = null;
+                        System.out.println("  siteId : "+device.getSiteId()+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+"ami사용량조회");
+                        if("1.1".equals(localEmsApiVerMap.get(_siteId))) { // 기존
+                            amiUsageModel = PMGrowApiUtilBefore.getAmiUsageList(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "MI", "15", prettyLog);
+                        } else if("1.2".equals(localEmsApiVerMap.get(_siteId))) { // api url 변경후(옴니시스템)
+                            amiUsageModel = PMGrowApiUtil_omni.getAmiUsageList(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "MI", "15", prettyLog);
+                        } else { // api url 변경후
+                            amiUsageModel = PMGrowApiUtil.getAmiUsageList(localEmsAddrMap.get(_siteId), device.getDeviceId(), beginDate, endDate, "MI", "15", prettyLog);
+                        }
+                        if(amiUsageModel != null){
+                            prettyLog.append("ITEM_SIZE", amiUsageModel.getItems().size());
+                        }
+                        for (AmiUsageItemModel item : amiUsageModel.getItems()) {
+                            Usage usage = new Usage();
+                            usage.setDeviceId(device.getDeviceId());
+                            usage.setSiteId(device.getSiteId());
+                            usage.setStdDate(item.getTimestamp());
+                            usage.setStdTimestamp(item.getTimestamp());
+                            usage.setUsgVal(item.getActiveEnergy()); // Wh 
+                            usageList.add(usage);
+                        }
+                    }
+                }
         	}
         } catch (NullPointerException e) {
         	logger.error("error is : "+e.toString());
@@ -783,7 +804,7 @@ public class EnergyController {
     prettyLog.title("에너지모니터링 > ESS 충방전량 조회 > ESS충방전계획량");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
     if (end == null) {
-        end = convertMinuteDate(new Date());
+        end = DateUtil.getAfterDays(1);
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     int resultCnt = 0;
@@ -940,7 +961,7 @@ public class EnergyController {
 	  prettyLog.title("에너지모니터링 > PV 발전량 조회 > PV 발전량");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
     if (end == null) {
-        end = convertMinuteDate(new Date());
+    	end = convertMinuteDate(new Date());
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     Map<String, String> localEmsAddrMap = Maps.newHashMap();
@@ -1425,7 +1446,7 @@ public class EnergyController {
 	  prettyLog.title("에너지모니터링 > PV 발전량 조회 > PV 예측발전량");
     List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
     if (end == null) {
-        end = convertMinuteDate(new Date());
+    	end = DateUtil.getAfterDays(1);
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
     Map<String, String> localEmsAddrMap = Maps.newHashMap();

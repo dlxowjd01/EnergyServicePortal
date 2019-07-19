@@ -115,6 +115,9 @@ public class Main implements ApplicationListener<ContextRefreshedEvent> {
         case "DEVICE04":// 장치모니터링 > PV 장치
           deviceController.device04(siteId, deviceId, prettyLog);
           break;
+        case "DEVICE05":// 장치모니터링 > AMI 장치
+          deviceController.device05(siteId, deviceId, prettyLog);
+          break;
         case "BILL01":// 요금/수익 > 한전요금조회 > 요금
           billController.bill01(siteId, beginDate, endDate, prettyLog);
           break;

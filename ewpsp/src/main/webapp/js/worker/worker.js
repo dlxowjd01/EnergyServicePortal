@@ -51,6 +51,7 @@ function startWorker(result, command) {
                     break;
                 case 'predictUsageList':
                     feture_data_pc = e.data.feture_data_pc;
+                    defaultData_pc = e.data.defaultData_pc;
                     fetureUsageList = e.data.fetureUsageList;
                     fetureTotalUsage = e.data.fetureTotalUsage;
                     unit_format(String(fetureTotalUsage), "futureUseTot", "Wh");

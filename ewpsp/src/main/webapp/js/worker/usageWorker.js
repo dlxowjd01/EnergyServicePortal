@@ -16,6 +16,7 @@ this.onmessage = function(e){
        postMessage({
            command: 'predictUsageList',
            feture_data_pc: feture_data_pc,
+           defaultData_pc: defaultData_pc,
            fetureUsageList: fetureUsageList,
            fetureTotalUsage: fetureTotalUsage
        });
@@ -37,11 +38,16 @@ function init(config){
     SelTerm = config.SelTerm;
     dt_col = config.dt_col;
     timeOffset = config.timeOffset;
+
+    real_data_pc.length = 0;
+    feture_data_pc.length = 0;
+    defaultData_pc = "";
 }
 
 var usage_head_pc = []; // 실제 사용량 표 데이터
 var real_data_pc = []; // 실제 사용량 표 데이터
 var feture_data_pc = []; //  예측 사용량 표 데이터
+var defaultData_pc = "";
 
 // 실제 사용량
 var pastUsageList;
@@ -159,6 +165,7 @@ function predictUsageListUI(result) {
     var dt_str_totalVal = 0; // 테이블 라인별 누적합
     var map = null;
     fetureTotalUsage = 0;
+    defaultData_pc = "";
 
     // 표데이터 셋팅
     var start = new Date(schStartTime.getTime());
@@ -209,6 +216,11 @@ function predictUsageListUI(result) {
             }
             s = incrementTime(s);
         }
+    } else {
+        for (var i = 0; i < dt_col; i++) {
+            defaultData_pc += "<td></td>";
+        }
+        defaultData_pc += "<td></td>";
     }
 
     // 차트데이터 셋팅

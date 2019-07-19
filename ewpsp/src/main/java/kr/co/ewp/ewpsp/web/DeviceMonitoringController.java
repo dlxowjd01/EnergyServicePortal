@@ -73,21 +73,57 @@ public class DeviceMonitoringController {
 
     @RequestMapping("/getDeviceIOEDetail")
     public @ResponseBody
-    Map<String, Object> getDeviceIOEDetail(@RequestParam HashMap param) throws Exception {
+    Map<String, Object> getDeviceIOEDetail(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
         logger.debug("/getDeviceIOEDetail");
         logger.debug("param ::::: " + param.toString());
 
-        Map<String, Object> result = deviceMonitoringService.getDeviceIOEDetail(param);
-        ApiController api = new ApiController();
-        UsageRealtimeModel usageRealtime = api.getDeviceRealTime((String) param.get("deviceId"));
-        Long voltage = (usageRealtime == null || usageRealtime.getVoltage() == null) ? -1 : usageRealtime.getVoltage();
-        result.put("voltage", (voltage < 0 || voltage > 1000000000) ? null : voltage);
-        result.put("activePower", (usageRealtime == null) ? null : usageRealtime.getActivePower());
-        result.put("energy", (usageRealtime == null) ? null : usageRealtime.getPositiveEnergy() + usageRealtime.getNegativeEnergy());
-        result.put("energyReactive", (usageRealtime == null) ? null : usageRealtime.getPositiveEnergyReactive() + usageRealtime.getNegativeEnergyReactive());
+        String deviceType = (String) param.get("deviceType");
+        Map<String, Object> result = new HashMap<String, Object>();
+        if(!"9".equals(deviceType)) {
+            result = deviceMonitoringService.getDeviceIOEDetail(param);
+            ApiController api = new ApiController();
+            UsageRealtimeModel usageRealtime = api.getDeviceRealTime((String) param.get("deviceId"));
+            Long voltage = (usageRealtime == null || usageRealtime.getVoltage() == null) ? -1 : usageRealtime.getVoltage();
+            result.put("voltage", (voltage < 0 || voltage > 1000000000) ? null : voltage/ 1000);
+            result.put("activePower", (usageRealtime == null) ? null : usageRealtime.getActivePower()/ (1000 * 1000));
+            result.put("energy", (usageRealtime == null) ? null : (usageRealtime.getPositiveEnergy() + usageRealtime.getNegativeEnergy())/ (1000 * 1000));
+            result.put("energyReactive", (usageRealtime == null) ? null : (usageRealtime.getPositiveEnergyReactive() + usageRealtime.getNegativeEnergyReactive())/ (1000 * 1000));
+        } else {
+        	result = deviceMonitoringService.getDeviceAMIDetail(param);
+        	Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
+            String host = (String) siteDetail.get("local_ems_addr");
+            String apiVer = (String) siteDetail.get("local_ems_api_ver");
+            AmiEquipmentModel amiModel = null;
+            if ("1.1".equals(apiVer)) { // 기존
+                amiModel = PMGrowApiUtilBefore.getAmiEquipmentList(host, (String) param.get("deviceId"));
+            } else {
+                amiModel = PMGrowApiUtil.getAmiEquipmentList(host, (String) param.get("deviceId"));
+            }
+            result.put("voltage", (amiModel == null) ? null : (Math.abs(amiModel.getVoltageR()-amiModel.getVoltageS())+Math.abs(amiModel.getVoltageS()-amiModel.getVoltageT())+Math.abs(amiModel.getVoltageR()-amiModel.getVoltageT()))/3);
+            result.put("activePower", (amiModel == null) ? null : 1.732*((amiModel.getCurrentR()+amiModel.getCurrentS()+amiModel.getCurrentT())*380));
+            result.put("energy", (amiModel == null) ? null : (amiModel.getAccumActivePowerR()+amiModel.getAccumActivePowerS()+amiModel.getAccumActivePowerT())/1000);
+            Float rctvPwrLagging = null;
+            Float rctvPwrLeading = null;
+            Float arpLaggingR = amiModel.getAccumReactivePowerLaggingR();
+            Float arpLaggingS = amiModel.getAccumReactivePowerLaggingS();
+            Float arpLaggingT = amiModel.getAccumReactivePowerLaggingT();
+            Float arpLeadingR = amiModel.getAccumReactivePowerLeadingR();
+            Float arpLeadingS = amiModel.getAccumReactivePowerLeadingS();
+            Float arpLeadingT = amiModel.getAccumReactivePowerLeadingT();
+            
+            if(!(arpLaggingR == null && arpLaggingS == null && arpLaggingT == null)) {
+                rctvPwrLagging = ((arpLaggingR == null) ? 0 : arpLaggingR)+((arpLaggingS == null) ? 0 : arpLaggingS)+((arpLaggingT == null) ? 0 : arpLaggingT);
+            }
+            if(!(arpLeadingR == null && arpLeadingS == null && arpLeadingT == null)) {
+                rctvPwrLeading = ((arpLeadingR == null) ? 0 : arpLeadingR)+((arpLeadingS == null) ? 0 : arpLeadingS)+((arpLeadingT == null) ? 0 : arpLeadingT);
+            }
+            Float energyReactive = (rctvPwrLagging != null) ? rctvPwrLagging : rctvPwrLeading;
+            result.put("energyReactive", (energyReactive == null) ? null : energyReactive/1000);
+        }
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("detail", result);
+        System.out.println("최종 : "+resultMap);
         return resultMap;
     }
 

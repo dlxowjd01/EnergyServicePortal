@@ -1,5 +1,6 @@
 package kr.co.ewp.ewpsp.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,4 +35,6 @@ public interface DeviceMonitoringService {
     int getDeviceListCnt(Map<String, Object> param) throws Exception;
 
     Map<String, String> getDevice(Map<String, Object> dvMap) throws Exception;
+
+	Map<String, Object> getDeviceAMIDetail(Map<String, Object> param) throws Exception;
 }

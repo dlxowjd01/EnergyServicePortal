@@ -19,6 +19,7 @@
     <mapper resource="mybatis/mapper/bill.xml" />
     <mapper resource="mybatis/mapper/chargePower.xml" />
     <mapper resource="mybatis/mapper/device.xml" />
+    <mapper resource="mybatis/mapper/deviceAmi.xml" />
     <mapper resource="mybatis/mapper/deviceBms.xml" />
     <mapper resource="mybatis/mapper/deviceGroup.xml" />
     <mapper resource="mybatis/mapper/deviceIoe.xml" />

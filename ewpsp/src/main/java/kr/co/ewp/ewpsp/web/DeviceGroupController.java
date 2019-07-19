@@ -347,7 +347,7 @@ public class DeviceGroupController {
 		param.put("regUid", userInfo.get("user_id"));
 		param.put("userIdx", userInfo.get("user_idx"));
 		
-		if("1".equals(param.get("deviceType")) || "2".equals(param.get("deviceType")) || "3".equals(param.get("deviceType"))) {
+		if("1".equals(param.get("deviceType")) || "2".equals(param.get("deviceType")) || "3".equals(param.get("deviceType")) || "9".equals(param.get("deviceType"))) {
 			param.put("instType", 2); // localEMS
 		} else {
 			param.put("instType", 1); // enertalk

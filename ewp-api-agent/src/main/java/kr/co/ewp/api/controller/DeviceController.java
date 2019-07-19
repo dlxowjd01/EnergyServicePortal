@@ -13,11 +13,13 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import kr.co.ewp.api.entity.Device;
+import kr.co.ewp.api.entity.DeviceAmi;
 import kr.co.ewp.api.entity.DeviceBms;
 import kr.co.ewp.api.entity.DeviceIoe;
 import kr.co.ewp.api.entity.DevicePcs;
 import kr.co.ewp.api.entity.DevicePv;
 import kr.co.ewp.api.entity.Site;
+import kr.co.ewp.api.model.AmiEquipmentModel;
 import kr.co.ewp.api.model.BmsEquipmentModel;
 import kr.co.ewp.api.model.BmsEquipmentModelBefore;
 import kr.co.ewp.api.model.DeviceModel;
@@ -656,6 +658,108 @@ public class DeviceController {
       resultCnt += deviceService.addDeivcePvList(deivcePvList, null);
     }
     prettyLog.append("DEVICE_CNT", deviceList.size());
+    prettyLog.append("RESULT_CNT", resultCnt);
+  }
+
+  /**
+   * 장치모니터링 > AMI 운전상태 > AMI 장치
+   * 
+   * @param siteId
+   *          사이트아이디
+   * @param deviceId
+   *          장치아이디
+   * @param begin
+   *          시작일 yyyyMMdd
+   * @param end
+   *          종료일 yyyyMMdd
+   * @param prettyLog
+   */
+  public void device05(String siteId, String deviceId, PrettyLog prettyLog) {
+    prettyLog.title("장치모니터링 > AMI 운전상태 > AMI 장치");
+    List<Device> deviceList = getDeviceList(siteId, deviceId, prettyLog);
+    prettyLog.append("DEVICE_CNT", deviceList.size());
+    int resultCnt = 0;
+    List<DeviceAmi> deivceAmiList = Lists.newArrayList();
+    Map<String, String> localEmsAddrMap = Maps.newHashMap();
+    Map<String, String> localEmsApiVerMap = Maps.newHashMap();
+    for (Device device : deviceList) {
+      try {
+        String deviceType = device.getDeviceType();
+//        switch (deviceType) {
+//        case "1": // PCS
+//          break;
+//        default:
+//          continue;
+//        }
+        if("9".equals(deviceType)){
+        	String _siteId = device.getSiteId();
+        	if (!localEmsAddrMap.containsKey(_siteId)) {
+        		Site site = siteService.getSite(_siteId, prettyLog);
+        		if (site == null) {
+        			prettyLog.append("WARN", _siteId + "(SITE_ID) is null");
+        			continue;
+        		}
+        		localEmsAddrMap.put(_siteId, site.getLocalEmsAddr());
+        		localEmsApiVerMap.put(_siteId, site.getLocalEmsApiVer());
+        	}
+        	AmiEquipmentModel amiEquipmentModel = null;
+    		if("1.1".equals(localEmsApiVerMap.get(_siteId))) { // 기존
+    			System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 기존 ami장치 api를 조회합니다..");
+    			amiEquipmentModel = PMGrowApiUtilBefore.getAmiEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+    		} else if("1.2".equals(localEmsApiVerMap.get(_siteId))) { // api url 변경후(옴니시스템)
+    			System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 옴니시스템 pcs장치 api를 조회합니다..");
+    			amiEquipmentModel = PMGrowApiUtil_omni.getAmiEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+    		} else { // api url 변경후
+    			System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 새로운 pcs장치 api를 조회합니다..");
+    			amiEquipmentModel = PMGrowApiUtil.getAmiEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+    		}
+			System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+"ami 장치 결과        :  "+amiEquipmentModel.toString());
+    		
+			if(amiEquipmentModel != null){
+				prettyLog.append("ITEM_SIZE", amiEquipmentModel);
+				DeviceAmi deviceAmi = new DeviceAmi();
+				deviceAmi.setSiteId(device.getSiteId());
+				deviceAmi.setDeviceId(device.getDeviceId());
+				if(amiEquipmentModel.getAmiName() != null) deviceAmi.setDeviceName(amiEquipmentModel.getAmiName());
+				if(amiEquipmentModel.getTimestamp() != null) deviceAmi.setStdDate(amiEquipmentModel.getTimestamp());
+				if(amiEquipmentModel.getStatus() != null) deviceAmi.setDeviceStat(amiEquipmentModel.getStatus());
+				if(amiEquipmentModel.getAlarmMsg() != null) deviceAmi.setAlarmMsg(amiEquipmentModel.getAlarmMsg());
+				if(amiEquipmentModel.getVoltageR() != null) deviceAmi.setVoltageR(amiEquipmentModel.getVoltageR());
+				if(amiEquipmentModel.getVoltageS() != null) deviceAmi.setVoltageS(amiEquipmentModel.getVoltageS());
+				if(amiEquipmentModel.getVoltageT() != null) deviceAmi.setVoltageT(amiEquipmentModel.getVoltageT());
+				if(amiEquipmentModel.getCurrentR() != null) deviceAmi.setCurrentR(amiEquipmentModel.getCurrentR());
+				if(amiEquipmentModel.getCurrentS() != null) deviceAmi.setCurrentS(amiEquipmentModel.getCurrentS());
+				if(amiEquipmentModel.getCurrentT() != null) deviceAmi.setCurrentT(amiEquipmentModel.getCurrentT());
+				if(amiEquipmentModel.getFrequency() != null) deviceAmi.setFrequency(amiEquipmentModel.getFrequency());
+				if(amiEquipmentModel.getAccumActivePowerR() != null) deviceAmi.setAccumActvPwrR(amiEquipmentModel.getAccumActivePowerR());
+				if(amiEquipmentModel.getAccumActivePowerS() != null) deviceAmi.setAccumActvPwrS(amiEquipmentModel.getAccumActivePowerS());
+				if(amiEquipmentModel.getAccumActivePowerT() != null) deviceAmi.setAccumActvPwrT(amiEquipmentModel.getAccumActivePowerT());
+				if(amiEquipmentModel.getAccumReactivePowerLaggingR() != null) deviceAmi.setAccumRctvPwrLaggingR(amiEquipmentModel.getAccumReactivePowerLaggingR());
+				if(amiEquipmentModel.getAccumReactivePowerLaggingS() != null) deviceAmi.setAccumRctvPwrLaggingS(amiEquipmentModel.getAccumReactivePowerLaggingS());
+				if(amiEquipmentModel.getAccumReactivePowerLaggingT() != null) deviceAmi.setAccumRctvPwrLaggingT(amiEquipmentModel.getAccumReactivePowerLaggingT());
+				if(amiEquipmentModel.getAccumReactivePowerLeadingR() != null) deviceAmi.setAccumRctvPwrLeadingR(amiEquipmentModel.getAccumReactivePowerLeadingR());
+				if(amiEquipmentModel.getAccumReactivePowerLeadingS() != null) deviceAmi.setAccumRctvPwrLeadingS(amiEquipmentModel.getAccumReactivePowerLeadingS());
+				if(amiEquipmentModel.getAccumReactivePowerLeadingT() != null) deviceAmi.setAccumRctvPwrLeadingT(amiEquipmentModel.getAccumReactivePowerLeadingT());
+				
+				deivceAmiList.add(deviceAmi);
+				
+				if (deivceAmiList.size() == 20) {
+					resultCnt += deviceService.addDeivceAmiList(deivceAmiList, null);
+					deivceAmiList = Lists.newArrayList();
+				}
+			}
+        }
+      } catch (NullPointerException e) {
+          logger.error("error is : "+e.toString());
+      } catch (Exception e) {
+    	  e.printStackTrace();
+        prettyLog.append("ERROR", e == null ? "Null" : e.getMessage());
+        logger.error("DEVICE05-ERROR", e);
+      }
+    }
+    if (deivceAmiList.size() > 0) {
+      resultCnt += deviceService.addDeivceAmiList(deivceAmiList, null);
+    }
     prettyLog.append("RESULT_CNT", resultCnt);
   }
 

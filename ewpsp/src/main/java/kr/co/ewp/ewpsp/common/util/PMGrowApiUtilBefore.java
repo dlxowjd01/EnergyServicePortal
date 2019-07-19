@@ -1,6 +1,8 @@
 package kr.co.ewp.ewpsp.common.util;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+
+import kr.co.ewp.ewpsp.model.AmiEquipmentModel;
 import kr.co.ewp.ewpsp.model.BmsEquipmentModelBefore;
 import kr.co.ewp.ewpsp.model.PcsEquipmentModelBefore;
 import kr.co.ewp.ewpsp.model.PvEquipmentModelBefore;
@@ -117,6 +119,38 @@ public class PMGrowApiUtilBefore {
         } finally {
             logger.debug("PMGrowApiUtilBefore.getPvEquipmentList end");
             return returnPV;
+        }
+    }
+
+    /**
+     * AMI 운전상태 조회
+     *
+     * @param equipmentId
+     * @param startDt      yyyyMMdd
+     * @param endDt        yyyyMMdd
+     * @param intervalType
+     * @param interval
+     * @param prettyLog
+     * @return
+     */
+    public static AmiEquipmentModel getAmiEquipmentList(String host, String equipmentId) {
+        logger.debug("PMGrowApiUtil.getAmiEquipmentList");
+        String resultBody = null;
+        AmiEquipmentModel returnAMI = null;
+        try {
+            StringBuffer url = new StringBuffer(host + "/v1/amis/:amiId/current".replace(":amiId", equipmentId));
+            System.out.println("ami device url =====> " + url);
+            logger.debug("pmgrow api URL : " + url);
+            resultBody = HttpUtil.get(url.toString(), getHeaders());
+            System.out.println("ami device resultBody =====> " + resultBody);
+            returnAMI = JsonUtil.toObject(resultBody, AmiEquipmentModel.class);
+        } catch (NullPointerException e) {
+            logger.error("error is : " + e.toString());
+        } catch (Exception e) {
+            logger.error("error is : " + e.toString());
+        } finally {
+            logger.debug("PMGrowApiUtil.getPvEquipmentList end");
+            return returnAMI;
         }
     }
 

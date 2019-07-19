@@ -18,6 +18,7 @@
             var usage_head_pc = []; // 실제 사용량 표 데이터
             var real_data_pc = []; // 실제 사용량 표 데이터
             var feture_data_pc = []; //  예측 사용량 표 데이터
+            var defaultData_pc = "";
             function getDBData(formData) {
                 usage_head_pc.length = 0;
                 real_data_pc.length = 0;
@@ -209,6 +210,11 @@
                             }
                             s = incrementTime(s);
                         }
+                    } else {
+                        for (var i = 0; i < dt_col; i++) {
+                            defaultData_pc += "<td></td>";
+                        }
+                        defaultData_pc += "<td></td>";
                     }
 
                     // 차트데이터 셋팅
@@ -286,7 +292,7 @@
                         tbodyStr += '<th><div class="ctit ct1"><span>실제 사용량 (kWh)</span></div></th>' + real_data_pc[i];
                         tbodyStr += '</tr>';
                         tbodyStr += '<tr>';
-                        tbodyStr += '<th><div class="ctit"><span>예측 사용량 (kWh)</span></div></th>' + feture_data_pc[i];
+                        tbodyStr += '<th><div class="ctit"><span>예측 사용량 (kWh)</span></div></th>' + ((feture_data_pc[i] === undefined) ? defaultData_pc : feture_data_pc[i]);
                         tbodyStr += '</tr>';
                         tbodyStr += '</tbody>';
                         tbodyStr += '</table>';
