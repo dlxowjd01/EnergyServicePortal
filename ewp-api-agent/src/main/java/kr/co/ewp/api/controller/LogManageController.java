@@ -53,7 +53,7 @@ public class LogManageController {
 					long calDate = today.getTime()-logDate.getTime();
 					long calDateDays = calDate / ( 24*60*60*1000 ); 
 					
-					if(calDateDays > 31) {
+					if(calDateDays > 14) {
 						tempFile.delete();
 						prettyLog.append(tempFileName, " : The file was deleted from the server after the storage period.");
 						deleteCnt++;
