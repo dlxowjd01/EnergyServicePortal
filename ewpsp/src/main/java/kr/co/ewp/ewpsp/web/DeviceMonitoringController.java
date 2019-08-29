@@ -99,9 +99,18 @@ public class DeviceMonitoringController {
             } else {
                 amiModel = PMGrowApiUtil.getAmiEquipmentList(host, (String) param.get("deviceId"));
             }
-            result.put("voltage", (amiModel == null) ? null : (Math.abs(amiModel.getVoltageR()-amiModel.getVoltageS())+Math.abs(amiModel.getVoltageS()-amiModel.getVoltageT())+Math.abs(amiModel.getVoltageR()-amiModel.getVoltageT()))/3);
-            result.put("activePower", (amiModel == null) ? null : 1.732*((amiModel.getCurrentR()+amiModel.getCurrentS()+amiModel.getCurrentT())*380));
-            result.put("energy", (amiModel == null) ? null : (amiModel.getAccumActivePowerR()+amiModel.getAccumActivePowerS()+amiModel.getAccumActivePowerT())/1000);
+            Float volR = amiModel.getVoltageR();
+            Float volS = amiModel.getVoltageS();
+            Float volT = amiModel.getVoltageT();
+            Float curR = amiModel.getCurrentR();
+            Float curS = amiModel.getCurrentS();
+            Float curT = amiModel.getCurrentT();
+            Float aapR = amiModel.getAccumActivePowerR();
+            Float aapS = amiModel.getAccumActivePowerS();
+            Float aapT = amiModel.getAccumActivePowerT();
+            result.put("voltage", (amiModel == null) ? null : (Math.abs(volR-volS)+Math.abs(volS-volT)+Math.abs(volR-volT))/3);
+            result.put("activePower", (amiModel == null || (amiModel != null && curR==null && curS==null && curT==null)) ? null : 1.732*((((curR==null)?0:curR)+((curS==null)?0:curS)+((curT==null)?0:curT))*380));
+            result.put("energy", (amiModel == null || (amiModel != null && aapR==null && aapS==null && aapT==null)) ? null : (((aapR==null)?0:aapR)+((aapS==null)?0:aapS)+((aapT==null)?0:aapT))/1000);
             Float rctvPwrLagging = null;
             Float rctvPwrLeading = null;
             Float arpLaggingR = amiModel.getAccumReactivePowerLaggingR();
@@ -174,10 +183,10 @@ public class DeviceMonitoringController {
         String host = (String) siteDetail.get("local_ems_addr");
         String apiVer = (String) siteDetail.get("local_ems_api_ver");
         if ("1.1".equals(apiVer)) { // 기존
-            List<PcsEquipmentModelBefore> pcsDetailList = PMGrowApiUtilBefore.getPcsEquipmentList(host, (String) param.get("deviceId"));
-            System.out.println("             pcs결과  " + pcsDetailList);
-            if (pcsDetailList != null && pcsDetailList.size() > 0) {
-                for (PcsEquipmentModelBefore pcsDetail : pcsDetailList) {
+            PcsEquipmentModelBefore pcsDetail = PMGrowApiUtilBefore.getPcsEquipmentList(host, (String) param.get("deviceId"));
+            System.out.println("             pcs결과  " + pcsDetail);
+            if (pcsDetail != null) {
+//                for (PcsEquipmentModelBefore pcsDetail : pcsDetailList) {
                     if (pcsDetail == null) {
                         result.put("pcsStatus", null);
                         result.put("pcsStatusNm", null);
@@ -218,7 +227,7 @@ public class DeviceMonitoringController {
                     }
                     result.put("todayCEnergy", (pcsDetail == null) ? -1 : Math.ceil((pcsDetail.getTodayCEnergy()/1000f)*10)/10);
                     result.put("todayDEnergy", (pcsDetail == null) ? -1 : Math.ceil((pcsDetail.getTodayDEnergy()/1000f)*10)/10);
-                }
+//                }
             } else {
                 result.put("pcsStatus", null);
                 result.put("pcsStatusNm", null);
@@ -334,10 +343,10 @@ public class DeviceMonitoringController {
         String host = (String) siteDetail.get("local_ems_addr");
         String apiVer = (String) siteDetail.get("local_ems_api_ver");
         if ("1.1".equals(apiVer)) { // 기존
-            List<BmsEquipmentModelBefore> bmsDetailList = PMGrowApiUtilBefore.getBmsEquipmentList(host, (String) param.get("deviceId"));
-            System.out.println("             bms결과  " + bmsDetailList);
-            if (bmsDetailList != null && bmsDetailList.size() > 0) {
-                for (BmsEquipmentModelBefore bmsDetail : bmsDetailList) {
+            BmsEquipmentModelBefore bmsDetail = PMGrowApiUtilBefore.getBmsEquipmentList(host, (String) param.get("deviceId"));
+            System.out.println("             bms결과  " + bmsDetail);
+            if (bmsDetail != null) {
+//                for (BmsEquipmentModelBefore bmsDetail : bmsDetailList) {
                     if (bmsDetail == null) {
                         result.put("bmsStatus", null);
                         result.put("bmsStatusNm", null);
@@ -369,7 +378,7 @@ public class DeviceMonitoringController {
                     result.put("sysVoltage", (bmsDetail == null || bmsDetail.getSysVoltage() == null) ? -1 : bmsDetail.getSysVoltage());
                     result.put("sysCurrent", (bmsDetail == null || bmsDetail.getSysCurrent() == null) ? -1 : bmsDetail.getSysCurrent());
                     result.put("dod", (bmsDetail == null || bmsDetail.getDod() == null) ? -1 : bmsDetail.getDod());
-                }
+//                }
             } else {
                 result.put("bmsStatus", null);
                 result.put("bmsStatusNm", null);

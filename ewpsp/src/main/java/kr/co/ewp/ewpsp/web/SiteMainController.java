@@ -120,14 +120,14 @@ public class SiteMainController {
                 String deviceType = (String) deviceMap.get("device_type");
                 if ("1".equals(deviceType)) { // PCS
                     if ("1.1".equals(apiVer)) { // 기존
-                        List<PcsEquipmentModelBefore> pcsDetailList = PMGrowApiUtilBefore.getPcsEquipmentList(host, (String) deviceMap.get("device_id"));
-                        if (pcsDetailList != null) {
-                            for (PcsEquipmentModelBefore pcsDetail : pcsDetailList) {
+                        PcsEquipmentModelBefore pcsDetail = PMGrowApiUtilBefore.getPcsEquipmentList(host, (String) deviceMap.get("device_id"));
+                        if (pcsDetail != null) {
+//                            for (PcsEquipmentModelBefore pcsDetail : pcsDetailList) {
                                 Float acPower = (pcsDetail.getAcPower() == null) ? 0 : pcsDetail.getAcPower();
                                 Float dcPower = (pcsDetail.getDcPower() == null) ? 0 : pcsDetail.getDcPower();
                                 deviceMap.put("apiPower", acPower + dcPower);
                                 deviceMap.put("pcs_device_stat", pcsDetail.getPcsStatus());
-                            }
+//                            }
                         } else {
                             deviceMap.put("apiPower", "-");
                             deviceMap.put("pcs_device_stat", 0);
@@ -147,13 +147,13 @@ public class SiteMainController {
 
                 } else if ("2".equals(deviceType)) { // BMS
                     if ("1.1".equals(apiVer)) { // 기존
-                        List<BmsEquipmentModelBefore> bmsDetailList = PMGrowApiUtilBefore.getBmsEquipmentList(host, (String) deviceMap.get("device_id"));
-                        if (bmsDetailList != null) {
-                            for (BmsEquipmentModelBefore bmsDetail : bmsDetailList) {
+                        BmsEquipmentModelBefore bmsDetail = PMGrowApiUtilBefore.getBmsEquipmentList(host, (String) deviceMap.get("device_id"));
+                        if (bmsDetail != null) {
+//                            for (BmsEquipmentModelBefore bmsDetail : bmsDetailList) {
                                 Float soc = (bmsDetail.getSysSoc() == null) ? 0 : bmsDetail.getSysSoc();
                                 deviceMap.put("apiSoc", soc);
                                 deviceMap.put("bms_device_stat", bmsDetail.getSysMode());
-                            }
+//                            }
                         } else {
                             deviceMap.put("apiSoc", "-");
                             deviceMap.put("bms_device_stat", 0);
@@ -191,6 +191,35 @@ public class SiteMainController {
                             deviceMap.put("apiTotPower", "-");
                             deviceMap.put("pv_device_stat", 0);
                         }
+                    }
+
+                } else if ("9".equals(deviceType)) { // AMI
+                    AmiEquipmentModel amiModel = null;
+                    if ("1.1".equals(apiVer)) { // 기존
+                        amiModel = PMGrowApiUtilBefore.getAmiEquipmentList(host, (String) deviceMap.get("device_id"));
+                    } else {
+                        amiModel = PMGrowApiUtil.getAmiEquipmentList(host, (String) deviceMap.get("device_id"));
+                    }
+                    if(amiModel != null) {
+                        String statusNm = "";
+                        if(amiModel.getStatus() == null) {
+                            statusNm = "Stop";
+                        } else if(amiModel.getStatus() == 0) {
+                            statusNm = "Stop";
+                        } else if(amiModel.getStatus() == 1) {
+                            statusNm = "Run";
+                        } else if(amiModel.getStatus() == 2) {
+                            statusNm = "Fault";
+                        } else if(amiModel.getStatus() == 3) {
+                            statusNm = "Warning";
+                        } else {
+                            statusNm = "disconnect";
+                        }
+                        deviceMap.put("ami_device_stat", amiModel.getStatus());
+                        deviceMap.put("ami_status_nm", statusNm);
+                    } else {
+                        deviceMap.put("ami_device_stat", 2);
+                        deviceMap.put("ami_status_nm", "disconnect");
                     }
 
                 } else { // (deviceType == 4, 5, 6, 7, 8)

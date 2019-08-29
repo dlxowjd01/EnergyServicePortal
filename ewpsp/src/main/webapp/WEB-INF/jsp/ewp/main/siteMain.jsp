@@ -834,8 +834,11 @@
                             } else if (deviceList[i].device_type === '3' || deviceList[i].device_type === '5') {
                                 strHtml = (Number(deviceList[i].pv_device_stat) === 1) ? '<li class="pv" />' : '<li class="pv alert" />';
                                 memo = deviceList[i].apiTotPower; // Wh
+                            } else if (deviceList[i].device_type === '9') {
+                                strHtml = (Number(deviceList[i].ami_device_stat) === 1) ? '<li class="ioe" />' : '<li class="ioe alert" />';
+                                memo = deviceList[i].ami_status_nm;
                             } else {
-                                strHtml = (deviceList[i].apiStatus === 1) ? '<li class="ioe" />' : '<li class="ioe alert" />';
+                                strHtml = (deviceList[i].ami_device_stat === 1) ? '<li class="ioe" />' : '<li class="ioe alert" />';
                                 memo = (deviceList[i].apiStatus === 1) ? "connect" : "disconnect";
                             }
                             $div.append(

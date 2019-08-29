@@ -15,7 +15,7 @@ public class DeviceBms {
     private Float sysSoh;//soh(단위:%)
     private Float sysVoltage;//출력전압(단위:v)
     private Float sysCurrent;//출력전류(단위:a)
-    private Integer dod;//dod(단위:%)
+    private Float dod;//dod(단위:%)
     private Date stdDate;//기준일시
     private Date regDate;//등록일시
    /**
@@ -178,14 +178,14 @@ public class DeviceBms {
     * dod(단위:%) 조회
     * @return dod
     */
-    public Integer getDod() {
+    public Float getDod() {
         return this.dod;
     }
    /**
     * dod(단위:%) 설정
     * @return dod
     */
-    public void setDod(Integer dod) {
+    public void setDod(Float dod) {
         this.dod = dod;
     }
    /**

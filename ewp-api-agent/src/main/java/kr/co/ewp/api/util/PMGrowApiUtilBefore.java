@@ -45,9 +45,11 @@ public class PMGrowApiUtilBefore {
     prettyLog.start("PMGrowApiUtilBefore.getEssCharge", "ERROR");
     String resultBody = null;
     try {
-      StringBuffer url = new StringBuffer(host + "/openapi/equipment-charging-discharging-list");
-      url.append("?pcsId=").append(equipmentId);
-      url.append("&startDt=").append(startDt.getTime());
+//      StringBuffer url = new StringBuffer(host + "/openapi/equipment-charging-discharging-list");
+//      url.append("?pcsId=").append(equipmentId);
+//      url.append("&startDt=").append(startDt.getTime());
+      StringBuffer url = new StringBuffer(host + "/v1/pcses/:pcsId/energy".replace(":pcsId", equipmentId));
+      url.append("?startDt=").append(startDt.getTime());
       url.append("&endDt=").append(endDt.getTime());
       url.append("&intervalType=").append(intervalType);
       url.append("&interval=").append(interval);
@@ -83,9 +85,11 @@ public class PMGrowApiUtilBefore {
     prettyLog.start("PMGrowApiUtilBefore.getEssChargePlan", "ERROR");
     String resultBody = null;
     try {
-      StringBuffer url = new StringBuffer(host + "/openapi/charging-discharging-schedule-list");
-      url.append("?pcsId=").append(equipmentId);
-      url.append("&startDt=").append(startDt.getTime());
+//      StringBuffer url = new StringBuffer(host + "/openapi/charging-discharging-schedule-list");
+//      url.append("?pcsId=").append(equipmentId);
+//      url.append("&startDt=").append(startDt.getTime());
+      StringBuffer url = new StringBuffer(host + "/v1/pcses/:pcsId/schedule".replace(":pcsId", equipmentId));
+      url.append("?startDt=").append(startDt.getTime());
       url.append("&endDt=").append(endDt.getTime());
       url.append("&intervalType=").append(intervalType);
       url.append("&interval=").append(interval);
@@ -121,9 +125,11 @@ public class PMGrowApiUtilBefore {
     prettyLog.start("PMGrowApiUtilBefore.getPvPowerGenList", "ERROR");
     String resultBody = null;
     try {
-      StringBuffer url = new StringBuffer(host + "/openapi/pv-power-gen-list");
-      url.append("?ivtId=").append(equipmentId);
-      url.append("&startDt=").append(startDt.getTime());
+//      StringBuffer url = new StringBuffer(host + "/openapi/pv-power-gen-list");
+//      url.append("?ivtId=").append(equipmentId);
+//      url.append("&startDt=").append(startDt.getTime());
+      StringBuffer url = new StringBuffer(host + "/v1/ivts/:ivtId/energy".replace(":ivtId", equipmentId));
+      url.append("?startDt=").append(startDt.getTime());
       url.append("&endDt=").append(endDt.getTime());
       url.append("&intervalType=").append(intervalType);
       url.append("&interval=").append(interval);
@@ -159,9 +165,11 @@ public class PMGrowApiUtilBefore {
     prettyLog.start("PMGrowApiUtilBefore.getEssUsageList", "ERROR");
     String resultBody = null;
     try {
-      StringBuffer url = new StringBuffer(host + "/openapi/ess-usage-list");
-      url.append("?equipmentId=").append(equipmentId);
-      url.append("&startDt=").append(startDt);
+//      StringBuffer url = new StringBuffer(host + "/openapi/ess-usage-list");
+//      url.append("?equipmentId=").append(equipmentId);
+//      url.append("&startDt=").append(startDt);
+      StringBuffer url = new StringBuffer(host + "/v1/pcses/:pcsId/energy".replace(":pcsId", equipmentId));
+      url.append("?startDt=").append(startDt);
       url.append("&endDt=").append(endDt);
       url.append("&intervalType=").append(intervalType);
       url.append("&interval=").append(interval);
@@ -191,18 +199,18 @@ public class PMGrowApiUtilBefore {
    * @param prettyLog
    * @return
    */
-  public static List<PcsEquipmentModelBefore> getPcsEquipmentList(String host, String equipmentId, PrettyLog prettyLog) {
+  public static PcsEquipmentModelBefore getPcsEquipmentList(String host, String equipmentId, PrettyLog prettyLog) {
     prettyLog.start("PMGrowApiUtilBefore.getPcsEquipmentList", "ERROR");
     String resultBody = null;
     try {
-      StringBuffer url = new StringBuffer(host + "/openapi/pcs-equipment-list");
-      url.append("?pcsId=").append(equipmentId);
+//      StringBuffer url = new StringBuffer(host + "/openapi/pcs-equipment-list");
+//      url.append("?pcsId=").append(equipmentId);
+      StringBuffer url = new StringBuffer(host + "/v1/pcses/:pcsId/current".replace(":pcsId", equipmentId));
       System.out.println("url =====> "+url);
       prettyLog.append("URL", url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
       System.out.println("pcs resultBody =====> "+resultBody);
-      return JsonUtil.toObject(resultBody, new TypeReference<List<PcsEquipmentModelBefore>>() {
-      });
+      return JsonUtil.toObject(resultBody, PcsEquipmentModelBefore.class);
     } catch (Exception e) {
       prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
       throw e;
@@ -225,18 +233,18 @@ public class PMGrowApiUtilBefore {
    * @param prettyLog
    * @return
    */
-  public static List<BmsEquipmentModelBefore> getBmsEquipmentList(String host, String equipmentId, PrettyLog prettyLog) {
+  public static BmsEquipmentModelBefore getBmsEquipmentList(String host, String equipmentId, PrettyLog prettyLog) {
     prettyLog.start("PMGrowApiUtilBefore.getBmsEquipmentList", "ERROR");
     String resultBody = null;
     try {
-      StringBuffer url = new StringBuffer(host + "/openapi/bms-equipment-list");
-      url.append("?bmsId=").append(equipmentId);
+//      StringBuffer url = new StringBuffer(host + "/openapi/bms-equipment-list");
+//      url.append("?bmsId=").append(equipmentId);
+      StringBuffer url = new StringBuffer(host + "/v1/bmses/:bmsId/current".replace(":bmsId", equipmentId));
       System.out.println("url =====> "+url);
       prettyLog.append("URL", url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());
       System.out.println("bms resultBody =====> "+resultBody);
-      return JsonUtil.toObject(resultBody, new TypeReference<List<BmsEquipmentModelBefore>>() {
-      });
+      return JsonUtil.toObject(resultBody, BmsEquipmentModelBefore.class);
     } catch (Exception e) {
       prettyLog.append("ERROR", e == null ? "NULL" : e.getMessage());
       throw e;
@@ -263,8 +271,9 @@ public class PMGrowApiUtilBefore {
     prettyLog.start("PMGrowApiUtilBefore.getPvEquipmentList", "ERROR");
     String resultBody = null;
     try {
-      StringBuffer url = new StringBuffer(host + "/openapi/pv-equipment-list");
-      url.append("?ivtId=").append(equipmentId);
+//      StringBuffer url = new StringBuffer(host + "/openapi/pv-equipment-list");
+//      url.append("?ivtId=").append(equipmentId);
+      StringBuffer url = new StringBuffer(host + "/v1/ivts/:ivtId/current".replace(":ivtId", equipmentId));
       System.out.println("url =====> "+url);
       prettyLog.append("URL", url);
       resultBody = HttpUtil.get(url.toString(), getHeaders());

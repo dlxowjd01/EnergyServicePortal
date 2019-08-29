@@ -195,12 +195,12 @@ public class DeviceController {
         	}
     		if("1.1".equals(localEmsApiVerMap.get(_siteId))) { // 기존
     			System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 기존 pcs장치 api를 조회합니다..");
-    			List<PcsEquipmentModelBefore> pcsEquipmentList = PMGrowApiUtilBefore.getPcsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
-    			System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+"pcs 장치 1.1 결과        :  "+pcsEquipmentList.toString());
-    			if(pcsEquipmentList != null){
+    			PcsEquipmentModelBefore pcsEquipmentModel = PMGrowApiUtilBefore.getPcsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+    			System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+"pcs 장치 1.1 결과        :  "+pcsEquipmentModel.toString());
+    			if(pcsEquipmentModel != null){
     				System.out.println("1.1 1");
-    				prettyLog.append("ITEM_SIZE", pcsEquipmentList.size());
-    				for (PcsEquipmentModelBefore pcsEquipmentModel : pcsEquipmentList) {
+    				prettyLog.append("ITEM_SIZE", pcsEquipmentModel);
+//    				for (PcsEquipmentModelBefore pcsEquipmentModel : pcsEquipmentList) {
     					DevicePcs devicePcs = new DevicePcs();
     					devicePcs.setSiteId(device.getSiteId());
     					devicePcs.setDeviceId(device.getDeviceId());
@@ -235,7 +235,7 @@ public class DeviceController {
     						resultCnt += deviceService.addDeivcePcsList(deivcePcsList, null);
     						deivcePcsList = Lists.newArrayList();
     					}
-    				}
+//    				}
     			}
 //    			List<PcsEquipmentModelBefore> pcsEquipmentList = PMGrowApiUtilBefore.getPcsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
 //    			System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+"pcs 장치 1.1 결과        :  "+pcsEquipmentList.toString());
@@ -424,16 +424,16 @@ public class DeviceController {
         	}
         	if("1.1".equals(localEmsApiVerMap.get(_siteId))) { // 기존
         		System.out.println("  siteId : "+_siteId+", deviceId : "+device.getDeviceId()+", deviceType : "+device.getDeviceType()+" - 기존 bms장치 api를 조회합니다..");
-        		List<BmsEquipmentModelBefore> bmsEquipmentList = PMGrowApiUtilBefore.getBmsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
-        		if( bmsEquipmentList != null){
-        			prettyLog.append("ITEM_SIZE", bmsEquipmentList.size());
-	        		for (BmsEquipmentModelBefore bmsEquipmentModel : bmsEquipmentList) {
+        		BmsEquipmentModelBefore bmsEquipmentModel = PMGrowApiUtilBefore.getBmsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
+        		if( bmsEquipmentModel != null){
+        			prettyLog.append("ITEM_SIZE", bmsEquipmentModel);
+//	        		for (BmsEquipmentModelBefore bmsEquipmentModel : bmsEquipmentList) {
 	        			DeviceBms deviceBms = new DeviceBms();
 	        			deviceBms.setSiteId(device.getSiteId());
 	        			deviceBms.setDeviceId(device.getDeviceId());
 	        			deviceBms.setDeviceName(bmsEquipmentModel.getBmsName());
 	        			if(bmsEquipmentModel.getCurrSoc() != null && !"".equals(bmsEquipmentModel.getCurrSoc())) deviceBms.setCurrSoc(bmsEquipmentModel.getCurrSoc());
-	        			if(bmsEquipmentModel.getDod() != null && !"".equals(bmsEquipmentModel.getDod())) deviceBms.setDod(Integer.parseInt(bmsEquipmentModel.getDod()));
+	        			if(bmsEquipmentModel.getDod() != null && !"".equals(bmsEquipmentModel.getDod())) deviceBms.setDod(bmsEquipmentModel.getDod());
 	        			if(bmsEquipmentModel.getSysCurrent() != null && !"".equals(bmsEquipmentModel.getSysCurrent())) deviceBms.setSysCurrent(bmsEquipmentModel.getSysCurrent());
 	        			if(bmsEquipmentModel.getSysSoc() != null && !"".equals(bmsEquipmentModel.getSysSoc())) deviceBms.setSysSoc(bmsEquipmentModel.getSysSoc());
 	        			if(bmsEquipmentModel.getSysSoc() != null && !"".equals(bmsEquipmentModel.getSysSoc())) deviceBms.setSysSoh(bmsEquipmentModel.getSysSoc());
@@ -446,7 +446,7 @@ public class DeviceController {
 	        				resultCnt += deviceService.addDeivceBmsList(deivceBmsList, null);
 	        				deivceBmsList = Lists.newArrayList();
 	        			}
-	        		}
+//	        		}
         		}
 //        		List<BmsEquipmentModelBefore> bmsEquipmentList = PMGrowApiUtilBefore.getBmsEquipmentList(localEmsAddrMap.get(_siteId), device.getDeviceId(), prettyLog);
 //        		if( bmsEquipmentList != null){

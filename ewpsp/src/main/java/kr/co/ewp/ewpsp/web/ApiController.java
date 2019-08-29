@@ -123,14 +123,14 @@ public class ApiController {
                     Map siteDetail = (Map) request.getSession().getAttribute("selViewSite");
                     String apiVer = (String) siteDetail.get("local_ems_api_ver");
                     if ("1.1".equals(apiVer)) { // 기존
-                        List<BmsEquipmentModelBefore> bmsDetail = PMGrowApiUtilBefore.getBmsEquipmentList(host, deviceId);
+                        BmsEquipmentModelBefore bmsDetail = PMGrowApiUtilBefore.getBmsEquipmentList(host, deviceId);
                         System.out.println("bms 결과 : " + bmsDetail);
                         if (bmsDetail != null) {
-                            for (BmsEquipmentModelBefore bmsEquipmentModel : bmsDetail) {
-                                Float sysSoc = bmsEquipmentModel.getSysSoc();
+//                            for (BmsEquipmentModelBefore bmsEquipmentModel : bmsDetail) {
+                                Float sysSoc = bmsDetail.getSysSoc();
                                 totalSoc = totalSoc + sysSoc;
                                 socCnt = socCnt + 1;
-                            }
+//                            }
                         }
                     } else {
                         BmsEquipmentModel bmsDetail = PMGrowApiUtil.getBmsEquipmentList(host, deviceId);

@@ -31,19 +31,19 @@ public class PMGrowApiUtilBefore {
      * @param prettyLog
      * @return
      */
-    public static List<PcsEquipmentModelBefore> getPcsEquipmentList(String host, String equipmentId) {
+    public static PcsEquipmentModelBefore getPcsEquipmentList(String host, String equipmentId) {
         logger.debug("PMGrowApiUtilBefore.getPcsEquipmentList");
         String resultBody = null;
-        List<PcsEquipmentModelBefore> returnPCS = null;
+        PcsEquipmentModelBefore returnPCS = null;
         try {
-            StringBuffer url = new StringBuffer(host + "/openapi/pcs-equipment-list");
-            url.append("?pcsId=").append(equipmentId);
+//            StringBuffer url = new StringBuffer(host + "/openapi/pcs-equipment-list");
+//            url.append("?pcsId=").append(equipmentId);
+            StringBuffer url = new StringBuffer(host + "/v1/pcses/:pcsId/current".replace(":pcsId", equipmentId));
             System.out.println("      before pcs device url =====> " + url);
             logger.debug("pmgrow api URL : " + url);
             resultBody = HttpUtil.get(url.toString(), getHeaders());
             System.out.println("      before pcs resultBody =====> " + resultBody);
-            returnPCS = JsonUtil.toObject(resultBody, new TypeReference<List<PcsEquipmentModelBefore>>() {
-            });
+            returnPCS = JsonUtil.toObject(resultBody, PcsEquipmentModelBefore.class);
         } catch (NullPointerException e) {
             logger.error("error is : " + e.toString());
         } catch (Exception e) {
@@ -66,19 +66,19 @@ public class PMGrowApiUtilBefore {
      * @param prettyLog
      * @return
      */
-    public static List<BmsEquipmentModelBefore> getBmsEquipmentList(String host, String equipmentId) {
+    public static BmsEquipmentModelBefore getBmsEquipmentList(String host, String equipmentId) {
         logger.debug("PMGrowApiUtilBefore.getBmsEquipmentList");
         String resultBody = null;
-        List<BmsEquipmentModelBefore> returnBMS = null;
+        BmsEquipmentModelBefore returnBMS = null;
         try {
-            StringBuffer url = new StringBuffer(host + "/openapi/bms-equipment-list");
-            url.append("?bmsId=").append(equipmentId);
+//            StringBuffer url = new StringBuffer(host + "/openapi/bms-equipment-list");
+//            url.append("?bmsId=").append(equipmentId);
+            StringBuffer url = new StringBuffer(host + "/v1/bmses/:bmsId/current".replace(":bmsId", equipmentId));
             System.out.println("      before bms device url =====> " + url);
             logger.debug("pmgrow api URL : " + url);
             resultBody = HttpUtil.get(url.toString(), getHeaders());
             System.out.println("      before bms resultBody =====> " + resultBody);
-            returnBMS = JsonUtil.toObject(resultBody, new TypeReference<List<BmsEquipmentModelBefore>>() {
-            });
+            returnBMS = JsonUtil.toObject(resultBody, BmsEquipmentModelBefore.class);
         } catch (NullPointerException e) {
             logger.error("error is : " + e.toString());
         } catch (Exception e) {
@@ -105,8 +105,9 @@ public class PMGrowApiUtilBefore {
         String resultBody = null;
         PvEquipmentModelBefore returnPV = null;
         try {
-            StringBuffer url = new StringBuffer(host + "/openapi/pv-equipment-list");
-            url.append("?ivtId=").append(equipmentId);
+//            StringBuffer url = new StringBuffer(host + "/openapi/pv-equipment-list");
+//            url.append("?ivtId=").append(equipmentId);
+            StringBuffer url = new StringBuffer(host + "/v1/ivts/:ivtId/current".replace(":ivtId", equipmentId));
             System.out.println("before pv device url =====> " + url);
             logger.debug("pmgrow api URL : " + url);
             resultBody = HttpUtil.get(url.toString(), getHeaders());
@@ -134,7 +135,7 @@ public class PMGrowApiUtilBefore {
      * @return
      */
     public static AmiEquipmentModel getAmiEquipmentList(String host, String equipmentId) {
-        logger.debug("PMGrowApiUtil.getAmiEquipmentList");
+        logger.debug("PMGrowApiUtilBefore.getAmiEquipmentList");
         String resultBody = null;
         AmiEquipmentModel returnAMI = null;
         try {

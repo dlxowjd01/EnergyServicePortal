@@ -660,7 +660,7 @@ public class EnergyController {
         if (chargingDischarging == null) {
           _begin = DateUtil.getAfterDays(-1);
         } else {
-          _begin = new Date(chargingDischarging.getStdTimestamp().getTime() + 1);
+          _begin = new Date(chargingDischarging.getStdTimestamp().getTime() + 1000);
         }
       } else {
         _begin = begin;
@@ -818,7 +818,7 @@ public class EnergyController {
         if (essChargePlan == null) {
           _begin = DateUtil.getAfterDays(-1);
         } else {
-          _begin = new Date(essChargePlan.getStdTimestamp().getTime() + 1);
+          _begin = new Date(essChargePlan.getStdTimestamp().getTime() + 1000);
         }
       } else {
         _begin = begin;
@@ -977,7 +977,7 @@ public class EnergyController {
         if (pvGen == null) {
           _begin = DateUtil.getAfterDays(-1);
         } else {
-          _begin = new Date(pvGen.getStdDate().getTime() + 1);
+          _begin = new Date(pvGen.getStdDate().getTime() + 1000);
         }
       } else {
         _begin = begin;

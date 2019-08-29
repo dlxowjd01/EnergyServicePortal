@@ -19,7 +19,7 @@ public class BmsEquipmentModel {
   private Float sysSoh;// (%) /*** 12.12 이우람 수정 ***/
   private Float sysVoltage;// (V) /*** 12.12 이우람 수정 ***/
   private Float sysCurrent;// (A) /*** 12.12 이우람 수정 ***/
-  private Integer dod;// (%) /*** 12.12 이우람 수정 ***/
+  private Float dod;// (%) /*** 12.12 이우람 수정 ***/
 
   public String getBmsId() {
 		return bmsId;
@@ -101,11 +101,11 @@ public class BmsEquipmentModel {
 		this.sysCurrent = sysCurrent;
 	}
 	
-  public Integer getDod() {
+  public Float getDod() {
 		return dod;
 	}
 	
-  public void setDod(Integer dod) {
+  public void setDod(Float dod) {
 		this.dod = dod;
 	}
 }

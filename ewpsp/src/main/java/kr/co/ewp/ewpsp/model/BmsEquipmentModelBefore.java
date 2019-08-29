@@ -18,7 +18,7 @@ public class BmsEquipmentModelBefore {
     private Float sysSoh;// (%)
     private Float sysVoltage;// (V)
     private Float sysCurrent;// (kWh)
-    private String dod;// (%)
+    private Float dod;// (%)
 
     public String getBmsId() {
         return bmsId;
@@ -92,11 +92,11 @@ public class BmsEquipmentModelBefore {
         this.sysCurrent = sysCurrent;
     }
 
-    public String getDod() {
+    public Float getDod() {
         return dod;
     }
 
-    public void setDod(String dod) {
+    public void setDod(Float dod) {
         this.dod = dod;
     }
 

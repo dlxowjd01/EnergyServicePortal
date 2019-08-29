@@ -22,6 +22,7 @@
         when 6 then 'ESS모니터링기기'
         when 7 then 'iSmart'
         when 8 then '총량기기'
+        when 9 then 'AMI'
         else '' end as device_type_nm
         , case a.inst_type when 1 then '에너톡'
         when 2 then '로컬EMS'
@@ -47,11 +48,57 @@
         ) b
         on a.site_id = b.site_id
         and a.device_id = b.device_id
-        where a.device_type in (4, 6, 7, 8, 9)
+        where a.device_type in (4, 6, 7, 8)
         <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
             and a.site_id = #{siteId }
         </if>
-        order by a.device_id
+
+        union all
+        select
+        a.device_id, a.device_name, a.site_id, a.device_type,
+        case a.device_type when 1 then 'PCS'
+        when 2 then 'BMS'
+        when 3 then 'PV'
+        when 4 then '부하측정기기'
+        when 5 then 'PV모니터링기기'
+        when 6 then 'ESS모니터링기기'
+        when 7 then 'iSmart'
+        when 8 then '총량기기'
+        when 9 then 'AMI'
+        else '' end as device_type_nm
+        , case a.inst_type when 1 then '에너톡'
+        when 2 then '로컬EMS'
+        else '' end as inst_type_nm
+        , b.device_ioe_idx, b.upload_timestamp, b.device_stat_name
+        from tb_device a
+        left outer join (
+        select
+        device_ami_idx as device_ioe_idx, site_id, device_id, device_name, device_stat, alarmMsg,
+        voltage_r, voltage_s, voltage_t, current_r, current_s, current_t, frequency,
+        accum_actv_pwr_r, accum_actv_pwr_s, accum_actv_pwr_t,
+        accum_rctv_pwr_lagging_r, accum_rctv_pwr_lagging_s, accum_rctv_pwr_lagging_t,
+        accum_rctv_pwr_leading_r, accum_rctv_pwr_leading_s, accum_rctv_pwr_leading_t,
+        std_date as upload_timestamp, reg_date
+        , case device_stat when 0 then 'Stop'
+        when 1 then 'Run'
+        when 2 then 'Fault'
+        when 3 then 'Warning'
+        else 'disconnect' end as device_stat_name
+        from tb_device_ami
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_ami
+        group by site_id, device_id
+        )
+        ) b
+        on a.site_id = b.site_id
+        and a.device_id = b.device_id
+        where a.device_type = 9
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+
         ) page_tb
         , ( select @rownum := 0 ) r
         ) f_tb
@@ -104,10 +151,57 @@
         ) b
         on a.site_id = b.site_id
         and a.device_id = b.device_id
-        where a.device_type in (4, 6, 7, 8, 9)
+        where a.device_type in (4, 6, 7, 8)
         <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
             and a.site_id = #{siteId }
         </if>
+
+        union all
+        select
+        a.device_id, a.device_name, a.site_id, a.device_type,
+        case a.device_type when 1 then 'PCS'
+        when 2 then 'BMS'
+        when 3 then 'PV'
+        when 4 then '부하측정기기'
+        when 5 then 'PV모니터링기기'
+        when 6 then 'ESS모니터링기기'
+        when 7 then 'iSmart'
+        when 8 then '총량기기'
+        when 9 then 'AMI'
+        else '' end as device_type_nm
+        , case a.inst_type when 1 then '에너톡'
+        when 2 then '로컬EMS'
+        else '' end as inst_type_nm
+        , b.device_ioe_idx, b.upload_timestamp, b.device_stat_name
+        from tb_device a
+        left outer join (
+        select
+        device_ami_idx as device_ioe_idx, site_id, device_id, device_name, device_stat, alarmMsg,
+        voltage_r, voltage_s, voltage_t, current_r, current_s, current_t, frequency,
+        accum_actv_pwr_r, accum_actv_pwr_s, accum_actv_pwr_t,
+        accum_rctv_pwr_lagging_r, accum_rctv_pwr_lagging_s, accum_rctv_pwr_lagging_t,
+        accum_rctv_pwr_leading_r, accum_rctv_pwr_leading_s, accum_rctv_pwr_leading_t,
+        std_date as upload_timestamp, reg_date
+        , case device_stat when 0 then 'Stop'
+        when 1 then 'Run'
+        when 2 then 'Fault'
+        when 3 then 'Warning'
+        else 'disconnect' end as device_stat_name
+        from tb_device_ami
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_ami
+        group by site_id, device_id
+        )
+        ) b
+        on a.site_id = b.site_id
+        and a.device_id = b.device_id
+        where a.device_type = 9
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+
         ) page_tb
         , ( select @rownum := 0 ) r
         ) f_tb
@@ -131,6 +225,7 @@
 						when 6 then 'ESS모니터링기기'
 						when 7 then 'iSmart'
 						when 8 then '총량기기'
+						when 9 then 'AMI'
 						else '' end as device_type_nm
 					, case inst_type when 1 then '에너톡'
 						when 2 then '로컬EMS'
@@ -184,6 +279,7 @@
         when 6 then 'ESS모니터링기기'
         when 7 then 'iSmart'
         when 8 then '총량기기'
+        when 9 then 'AMI'
         else '' end as device_type_nm
         , case a.inst_type when 1 then '에너톡'
         when 2 then '로컬EMS'
@@ -247,6 +343,7 @@
         when 6 then 'ESS모니터링기기'
         when 7 then 'iSmart'
         when 8 then '총량기기'
+        when 9 then 'AMI'
         else '' end as device_type_nm
         , case a.inst_type when 1 then '에너톡'
         when 2 then '로컬EMS'
@@ -308,6 +405,7 @@
 						when 6 then 'ESS모니터링기기'
 						when 7 then 'iSmart'
 						when 8 then '총량기기'
+						when 9 then 'AMI'
 						else '' end as device_type_nm
 					, case inst_type when 1 then '에너톡'
 						when 2 then '로컬EMS'
@@ -368,6 +466,7 @@
         when 6 then 'ESS모니터링기기'
         when 7 then 'iSmart'
         when 8 then '총량기기'
+        when 9 then 'AMI'
         else '' end as device_type_nm
         , case a.inst_type when 1 then '에너톡'
         when 2 then '로컬EMS'
@@ -429,6 +528,7 @@
         when 6 then 'ESS모니터링기기'
         when 7 then 'iSmart'
         when 8 then '총량기기'
+        when 9 then 'AMI'
         else '' end as device_type_nm
         , case a.inst_type when 1 then '에너톡'
         when 2 then '로컬EMS'
@@ -485,6 +585,7 @@
 						when 6 then 'ESS모니터링기기'
 						when 7 then 'iSmart'
 						when 8 then '총량기기'
+						when 9 then 'AMI'
 						else '' end as device_type_nm
 					, case inst_type when 1 then '에너톡'
 						when 2 then '로컬EMS'
@@ -544,6 +645,7 @@
         when 6 then 'ESS모니터링기기'
         when 7 then 'iSmart'
         when 8 then '총량기기'
+        when 9 then 'AMI'
         else '' end as device_type_nm
         , case a.inst_type when 1 then '에너톡'
         when 2 then '로컬EMS'
@@ -599,6 +701,7 @@
         when 6 then 'ESS모니터링기기'
         when 7 then 'iSmart'
         when 8 then '총량기기'
+        when 9 then 'AMI'
         else '' end as device_type_nm
         , case a.inst_type when 1 then '에너톡'
         when 2 then '로컬EMS'
@@ -649,6 +752,7 @@
 						when 6 then 'ESS모니터링기기'
 						when 7 then 'iSmart'
 						when 8 then '총량기기'
+						when 9 then 'AMI'
 						else '' end as device_type_nm
 					, case inst_type when 1 then '에너톡'
 						when 2 then '로컬EMS'
@@ -697,6 +801,7 @@
         pcs.ac_power, pcs.dc_power, pcs.pcs_status as pcs_device_stat,
         bms.sys_soc, bms.device_stat as bms_device_stat,
         pv.tot_power, pv.device_stat as pv_device_stat,
+        ami.device_stat as ami_device_stat,
         a.del_yn, a.reg_uid, a.reg_date, a.mod_uid, a.mod_date
         from tb_device a
         left outer join (
@@ -718,7 +823,7 @@
         </if>
         order by device_id
         ) ioe
-        on a.device_id = ioe.device_id
+        on a.device_id = ioe.device_id and a.device_type in (4, 6, 7, 8)
         left outer join (
         select
         device_pcs_idx, site_id, device_id, device_name, device_stat, alarm_msg,
@@ -736,7 +841,7 @@
         </if>
         order by device_id
         ) pcs
-        on a.device_id = pcs.device_id
+        on a.device_id = pcs.device_id and a.device_type = 1
         left outer join (
         select
         device_bms_idx, site_id, device_id, device_name, device_stat,
@@ -753,7 +858,7 @@
         </if>
         order by device_id
         ) bms
-        on a.device_id = bms.device_id
+        on a.device_id = bms.device_id and a.device_type = 2
         left outer join (
         select
         device_pv_idx, site_id, device_id, device_name, device_stat, alarm_msg, temp, tot_power, std_date, reg_date
@@ -769,7 +874,28 @@
         </if>
         order by device_id
         ) pv
-        on a.device_id = pv.device_id
+        on a.device_id = pv.device_id and a.device_type = 3
+        left outer join (
+        select
+        device_ami_idx, site_id, device_id, device_name, device_stat, alarmMsg,
+        voltage_r, voltage_s, voltage_t, current_r, current_s, current_t, frequency,
+        accum_actv_pwr_r, accum_actv_pwr_s, accum_actv_pwr_t,
+        accum_rctv_pwr_lagging_r, accum_rctv_pwr_lagging_s, accum_rctv_pwr_lagging_t,
+        accum_rctv_pwr_leading_r, accum_rctv_pwr_leading_s, accum_rctv_pwr_leading_t,
+        std_date, reg_date
+        from tb_device_ami
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_ami
+        group by site_id, device_id
+        )
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and site_id = #{siteId }
+        </if>
+        order by device_id
+        ) ami
+        on a.device_id = ami.device_id and a.device_type = 9
         where a.del_yn = 'N'
         <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
             and a.site_id = #{siteId }
@@ -796,6 +922,7 @@
         a.device_id, a.site_id, a.user_idx, a.device_name, a.device_grp_idx,
         a.device_type, a.inst_type,
         ioe.upload_date, ioe.device_stat, pcs.ac_power, pcs.dc_power, bms.sys_soc, pv.tot_power,
+        ami.device_stat as ami_device_stat,
         a.del_yn, a.reg_uid, a.reg_date, a.mod_uid, a.mod_date
         from tb_device a
         left outer join (
@@ -817,7 +944,7 @@
         </if>
         order by device_id
         ) ioe
-        on a.device_id = ioe.device_id
+        on a.device_id = ioe.device_id and a.device_type in (4, 6, 7, 8)
         left outer join (
         select
         device_pcs_idx, site_id, device_id, device_name, device_stat, alarm_msg,
@@ -835,7 +962,7 @@
         </if>
         order by device_id
         ) pcs
-        on a.device_id = pcs.device_id
+        on a.device_id = pcs.device_id and a.device_type = 1
         left outer join (
         select
         device_bms_idx, site_id, device_id, device_name, device_stat,
@@ -852,7 +979,7 @@
         </if>
         order by device_id
         ) bms
-        on a.device_id = bms.device_id
+        on a.device_id = bms.device_id and a.device_type = 2
         left outer join (
         select
         device_pv_idx, site_id, device_id, device_name, device_stat, alarm_msg, temp, tot_power, std_date, reg_date
@@ -868,7 +995,28 @@
         </if>
         order by device_id
         ) pv
-        on a.device_id = pv.device_id
+        on a.device_id = pv.device_id and a.device_type = 3
+        left outer join (
+        select
+        device_ami_idx, site_id, device_id, device_name, device_stat, alarmMsg,
+        voltage_r, voltage_s, voltage_t, current_r, current_s, current_t, frequency,
+        accum_actv_pwr_r, accum_actv_pwr_s, accum_actv_pwr_t,
+        accum_rctv_pwr_lagging_r, accum_rctv_pwr_lagging_s, accum_rctv_pwr_lagging_t,
+        accum_rctv_pwr_leading_r, accum_rctv_pwr_leading_s, accum_rctv_pwr_leading_t,
+        std_date, reg_date
+        from tb_device_ami
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_ami
+        group by site_id, device_id
+        )
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and site_id = #{siteId }
+        </if>
+        order by device_id
+        ) ami
+        on a.device_id = ami.device_id and a.device_type = 9
         where a.del_yn = 'N'
         <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
             and a.site_id = #{siteId }
