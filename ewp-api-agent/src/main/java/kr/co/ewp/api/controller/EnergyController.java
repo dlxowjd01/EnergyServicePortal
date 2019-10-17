@@ -1059,7 +1059,7 @@ public class EnergyController {
         						  pvGen.setDeviceId(_deviceId);
         						  pvGen.setSiteId(_siteId);
         						  pvGen.setStdDate(item.getTimestamp());
-        						  pvGen.setGenVal(item.getGenEnergy().floatValue());
+        						  pvGen.setGenVal(item.getGenEnergy());
         						  pvGen.setTemp(item.getTemperature());
         						  
         						  pvGentList.add(pvGen);
@@ -1089,7 +1089,7 @@ public class EnergyController {
 	      						  pvGen.setDeviceId(_deviceId);
 	      						  pvGen.setSiteId(_siteId);
 	      						  pvGen.setStdDate(item.getTimestamp());
-	      						  pvGen.setGenVal(item.getGenEnergy().floatValue());
+	      						  pvGen.setGenVal(item.getGenEnergy());
 	      						  pvGen.setTemp(item.getTemperature());
 	      						  
 	      						  pvGentList.add(pvGen);
@@ -1105,7 +1105,7 @@ public class EnergyController {
         						  pvGen.setDeviceId(_deviceId);
         						  pvGen.setSiteId(_siteId);
         						  pvGen.setStdDate(item.getTimestamp());
-        						  pvGen.setGenVal(item.getGenEnergy().floatValue());
+        						  pvGen.setGenVal(item.getGenEnergy());
         						  pvGen.setTemp(item.getTemperature());
         						  
         						  pvGentList.add(pvGen);

@@ -15,15 +15,24 @@
         <result property="currentS" column="current_s" javaType="Integer"></result>
         <result property="currentT" column="current_t" javaType="Integer"></result>
         <result property="frequency" column="frequency" javaType="Integer"></result>
-        <result property="accumActvPwrR" column="accum_actv_pwr_r" javaType="Integer"></result>
-        <result property="accumActvPwrS" column="accum_actv_pwr_s" javaType="Integer"></result>
-        <result property="accumActvPwrT" column="accum_actv_pwr_t" javaType="Integer"></result>
-        <result property="accumRctvPwrLaggingR" column="accum_rctv_pwr_lagging_r" javaType="Integer"></result>
-        <result property="accumRctvPwrLaggingS" column="accum_rctv_pwr_lagging_s" javaType="Integer"></result>
-        <result property="accumRctvPwrLaggingT" column="accum_rctv_pwr_lagging_t" javaType="Integer"></result>
-        <result property="accumRctvPwrLeadingR" column="accum_rctv_pwr_leading_r" javaType="Integer"></result>
-        <result property="accumRctvPwrLeadingS" column="accum_rctv_pwr_leading_s" javaType="Integer"></result>
-        <result property="accumRctvPwrLeadingT" column="accum_rctv_pwr_leading_t" javaType="Integer"></result>
+        <result property="activePowerR" column="active_power_r" javaType="Integer"></result>
+        <result property="activePowerS" column="active_power_s" javaType="Integer"></result>
+        <result property="activePowerT" column="active_power_t" javaType="Integer"></result>
+        <result property="reactivePowerLaggingR" column="reactive_power_lagging_r" javaType="Integer"></result>
+        <result property="reactivePowerLaggingS" column="reactive_power_lagging_s" javaType="Integer"></result>
+        <result property="reactivePowerLaggingT" column="reactive_power_lagging_t" javaType="Integer"></result>
+        <result property="reactivePowerLeadingR" column="reactive_power_leading_r" javaType="Integer"></result>
+        <result property="reactivePowerLeadingS" column="reactive_power_leading_s" javaType="Integer"></result>
+        <result property="reactivePowerLeadingT" column="reactive_power_leading_t" javaType="Integer"></result>
+        <result property="accumActivePowerR" column="accum_active_power_r" javaType="Integer"></result>
+        <result property="accumActivePowerS" column="accum_active_power_s" javaType="Integer"></result>
+        <result property="accumActivePowerT" column="accum_active_power_t" javaType="Integer"></result>
+        <result property="accumReactivePowerLaggingR" column="accum_reactive_power_lagging_r" javaType="Integer"></result>
+        <result property="accumReactivePowerLaggingS" column="accum_reactive_power_lagging_s" javaType="Integer"></result>
+        <result property="accumReactivePowerLaggingT" column="accum_reactive_power_lagging_t" javaType="Integer"></result>
+        <result property="accumReactivePowerLeadingR" column="accum_reactive_power_leading_r" javaType="Integer"></result>
+        <result property="accumReactivePowerLeadingS" column="accum_reactive_power_leading_s" javaType="Integer"></result>
+        <result property="accumReactivePowerLeadingT" column="accum_reactive_power_leading_t" javaType="Integer"></result>
         <result property="stdDate" column="std_date" javaType="Date"></result><!--기준일시-->
         <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
     </resultMap>
@@ -42,15 +51,24 @@
                current_s,
                current_t,
                frequency,
-               accum_actv_pwr_r,
-               accum_actv_pwr_s,
-               accum_actv_pwr_t,
-               accum_rctv_pwr_lagging_r,
-               accum_rctv_pwr_lagging_s,
-               accum_rctv_pwr_lagging_t,
-               accum_rctv_pwr_leading_r,
-               accum_rctv_pwr_leading_s,
-               accum_rctv_pwr_leading_t,
+               active_power_r,
+               active_power_s,
+               active_power_t,
+               reactive_power_lagging_r,
+               reactive_power_lagging_s,
+               reactive_power_lagging_t,
+               reactive_power_leading_r,
+               reactive_power_leading_s,
+               reactive_power_leading_t,
+               accum_active_power_r,
+               accum_active_power_s,
+               accum_active_power_t,
+               accum_reactive_power_lagging_r,
+               accum_reactive_power_lagging_s,
+               accum_reactive_power_lagging_t,
+               accum_reactive_power_leading_r,
+               accum_reactive_power_leading_s,
+               accum_reactive_power_leading_t,
                std_date,
                reg_date
              ) VALUES (
@@ -66,15 +84,24 @@
                #{entity.currentS},
                #{entity.currentT},
                #{entity.frequency},
-               #{entity.accumActvPwrR},
-               #{entity.accumActvPwrS},
-               #{entity.accumActvPwrT},
-               #{entity.accumRctvPwrLaggingR},
-               #{entity.accumRctvPwrLaggingS},
-               #{entity.accumRctvPwrLaggingT},
-               #{entity.accumRctvPwrLeadingR},
-               #{entity.accumRctvPwrLeadingS},
-               #{entity.accumRctvPwrLeadingT},
+               #{entity.activePowerR},
+               #{entity.activePowerS},
+               #{entity.activePowerT},
+               #{entity.reactivePowerLaggingR},
+               #{entity.reactivePowerLaggingS},
+               #{entity.reactivePowerLaggingT},
+               #{entity.reactivePowerLeadingR},
+               #{entity.reactivePowerLeadingS},
+               #{entity.reactivePowerLeadingT},
+               #{entity.accumActivePowerR},
+               #{entity.accumActivePowerS},
+               #{entity.accumActivePowerT},
+               #{entity.accumReactivePowerLaggingR},
+               #{entity.accumReactivePowerLaggingS},
+               #{entity.accumReactivePowerLaggingT},
+               #{entity.accumReactivePowerLeadingR},
+               #{entity.accumReactivePowerLeadingS},
+               #{entity.accumReactivePowerLeadingT},
                #{entity.stdDate},
                NOW())
         <selectKey resultType="Long" keyProperty="entity.deviceAmiIdx">
@@ -121,32 +148,59 @@
                <if test="entity.frequency != null">
                frequency = #{entity.frequency},
                </if>
+               <if test="entity.actvPwrR != null">
+                   actv_pwr_r = #{entity.activePowerR},
+               </if>
+               <if test="entity.actvPwrS != null">
+                   actv_pwr_s = #{entity.activePowerS},
+               </if>
+               <if test="entity.actvPwrT != null">
+                   actv_pwr_t = #{entity.activePowerT},
+               </if>
+               <if test="entity.rctvPwrLaggingR != null">
+                   rctv_pwr_lagging_r = #{entity.reactivePowerLaggingR},
+               </if>
+               <if test="entity.rctvPwrLaggingS != null">
+                   rctv_pwr_lagging_s = #{entity.reactivePowerLaggingS},
+               </if>
+               <if test="entity.rctvPwrLaggingT != null">
+                   rctv_pwr_lagging_t = #{entity.reactivePowerLaggingT},
+               </if>
+               <if test="entity.rctvPwrLeadingR != null">
+                   rctv_pwr_leading_r = #{entity.reactivePowerLeadingR},
+               </if>
+               <if test="entity.rctvPwrLeadingS != null">
+                   rctv_pwr_leading_s = #{entity.reactivePowerLeadingS},
+               </if>
+               <if test="entity.rctvPwrLeadingT != null">
+                   rctv_pwr_leading_t = #{entity.reactivePowerLeadingT},
+               </if>
                <if test="entity.accumActvPwrR != null">
-               accum_actv_pwr_r = #{entity.accumActvPwrR},
+               accum_actv_pwr_r = #{entity.accumActivePowerR},
                </if>
                <if test="entity.accumActvPwrS != null">
-               accum_actv_pwr_s = #{entity.accumActvPwrS},
+               accum_actv_pwr_s = #{entity.accumActivePowerS},
                </if>
                <if test="entity.accumActvPwrT != null">
-               accum_actv_pwr_t = #{entity.accumActvPwrT},
+               accum_actv_pwr_t = #{entity.accumActivePowerT},
                </if>
                <if test="entity.accumRctvPwrLaggingR != null">
-               accum_rctv_pwr_lagging_r = #{entity.accumRctvPwrLaggingR},
+               accum_rctv_pwr_lagging_r = #{entity.accumReactivePowerLaggingR},
                </if>
                <if test="entity.accumRctvPwrLaggingS != null">
-               accum_rctv_pwr_lagging_s = #{entity.accumRctvPwrLaggingS},
+               accum_rctv_pwr_lagging_s = #{entity.accumReactivePowerLaggingS},
                </if>
                <if test="entity.accumRctvPwrLaggingT != null">
-               accum_rctv_pwr_lagging_t = #{entity.accumRctvPwrLaggingT},
+               accum_rctv_pwr_lagging_t = #{entity.accumReactivePowerLaggingT},
                </if>
                <if test="entity.accumRctvPwrLeadingR != null">
-               accum_rctv_pwr_leading_r = #{entity.accumRctvPwrLeadingR},
+               accum_rctv_pwr_leading_r = #{entity.accumReactivePowerLeadingR},
                </if>
                <if test="entity.accumRctvPwrLeadingS != null">
-               accum_rctv_pwr_leading_s = #{entity.accumRctvPwrLeadingS},
+               accum_rctv_pwr_leading_s = #{entity.accumReactivePowerLeadingS},
                </if>
                <if test="entity.accumRctvPwrLeadingT != null">
-               accum_rctv_pwr_leading_t = #{entity.accumRctvPwrLeadingT},
+               accum_rctv_pwr_leading_t = #{entity.accumReactivePowerLeadingT},
                </if>
                <if test="entity.stdDate != null">
                std_date = #{entity.stdDate},
@@ -177,15 +231,24 @@
                current_s,
                current_t,
                frequency,
-               accum_actv_pwr_r,
-               accum_actv_pwr_s,
-               accum_actv_pwr_t,
-               accum_rctv_pwr_lagging_r,
-               accum_rctv_pwr_lagging_s,
-               accum_rctv_pwr_lagging_t,
-               accum_rctv_pwr_leading_r,
-               accum_rctv_pwr_leading_s,
-               accum_rctv_pwr_leading_t,
+               active_power_r,
+               active_power_s,
+               active_power_t,
+               reactive_power_lagging_r,
+               reactive_power_lagging_s,
+               reactive_power_lagging_t,
+               reactive_power_leading_r,
+               reactive_power_leading_s,
+               reactive_power_leading_t,
+               accum_active_power_r,
+               accum_active_power_s,
+               accum_active_power_t,
+               accum_reactive_power_lagging_r,
+               accum_reactive_power_lagging_s,
+               accum_reactive_power_lagging_t,
+               accum_reactive_power_leading_r,
+               accum_reactive_power_leading_s,
+               accum_reactive_power_leading_t,
                std_date,
                reg_date
           FROM tb_device_ami
@@ -206,15 +269,24 @@
                current_s,
                current_t,
                frequency,
-               accum_actv_pwr_r,
-               accum_actv_pwr_s,
-               accum_actv_pwr_t,
-               accum_rctv_pwr_lagging_r,
-               accum_rctv_pwr_lagging_s,
-               accum_rctv_pwr_lagging_t,
-               accum_rctv_pwr_leading_r,
-               accum_rctv_pwr_leading_s,
-               accum_rctv_pwr_leading_t,
+               active_power_r,
+               active_power_s,
+               active_power_t,
+               reactive_power_lagging_r,
+               reactive_power_lagging_s,
+               reactive_power_lagging_t,
+               reactive_power_leading_r,
+               reactive_power_leading_s,
+               reactive_power_leading_t,
+               accum_active_power_r,
+               accum_active_power_s,
+               accum_active_power_t,
+               accum_reactive_power_lagging_r,
+               accum_reactive_power_lagging_s,
+               accum_reactive_power_lagging_t,
+               accum_reactive_power_leading_r,
+               accum_reactive_power_leading_s,
+               accum_reactive_power_leading_t,
                std_date,
                reg_date
           FROM tb_device_ami

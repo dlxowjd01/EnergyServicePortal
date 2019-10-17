@@ -680,7 +680,7 @@
 						COPYRIGHT &copy; 2018 KOREA EAST-WEST POWER CO.,LTD (EWP). ALL RIGHTS RESERVED
 					</div>
 					<div class="copyright fr">
-						Ver 1.1.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						Ver 1.1.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					</div>
                 </footer>
             </div>

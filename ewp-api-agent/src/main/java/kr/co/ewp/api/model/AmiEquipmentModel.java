@@ -11,13 +11,22 @@ public class AmiEquipmentModel {
 	private Date timestamp; // timestamp in millisecond
 	private Integer status; // 0: Stop, 1: Run, 2: Fault, 3: Warning
 	private String alarmMsg; // Last alarm message
-	private Float voltageR; // (V)
+	private Float voltageR; // (V); 현재 R상의 전압
 	private Float voltageS; // (V)
 	private Float voltageT; // (V)
-	private Float currentR; // (A)
+	private Float currentR; // (A); 현재 R상의 전류
 	private Float currentS; // (A)
 	private Float currentT; // (A)
 	private Float frequency; // (Hz)
+	private Float activePowerR; // 순시 유효전력량 R (W)
+	private Float activePowerS; // 순시 유효전력량 S (W)
+	private Float activePowerT; // 순시 유효전력량 T (W)
+	private Float reactivePowerLaggingR; // 순시 무효전력량 지상 R (Var)
+	private Float reactivePowerLaggingS; // 순시 무효전력량 지상 S (Var)
+	private Float reactivePowerLaggingT; // 순시 무효전력량 지상 T (Var)
+	private Float reactivePowerLeadingR; // 순시 무효전력량 진상 R (Var)
+	private Float reactivePowerLeadingS; // 순시 무효전력량 진상 S (Var)
+	private Float reactivePowerLeadingT; // 순시 무효전력량 진상 T (Var)
 	private Float accumActivePowerR; // 총 누적 유효전력량 R상 (Wh)
 	private Float accumActivePowerS; // (Wh)
 	private Float accumActivePowerT; // (Wh)
@@ -122,6 +131,78 @@ public class AmiEquipmentModel {
 
 	public void setFrequency(Float frequency) {
 		this.frequency = frequency;
+	}
+
+	public Float getActivePowerR() {
+		return activePowerR;
+	}
+
+	public void setActivePowerR(Float activePowerR) {
+		this.activePowerR = activePowerR;
+	}
+
+	public Float getActivePowerS() {
+		return activePowerS;
+	}
+
+	public void setActivePowerS(Float activePowerS) {
+		this.activePowerS = activePowerS;
+	}
+
+	public Float getActivePowerT() {
+		return activePowerT;
+	}
+
+	public void setActivePowerT(Float activePowerT) {
+		this.activePowerT = activePowerT;
+	}
+
+	public Float getReactivePowerLaggingR() {
+		return reactivePowerLaggingR;
+	}
+
+	public void setReactivePowerLaggingR(Float reactivePowerLaggingR) {
+		this.reactivePowerLaggingR = reactivePowerLaggingR;
+	}
+
+	public Float getReactivePowerLaggingS() {
+		return reactivePowerLaggingS;
+	}
+
+	public void setReactivePowerLaggingS(Float reactivePowerLaggingS) {
+		this.reactivePowerLaggingS = reactivePowerLaggingS;
+	}
+
+	public Float getReactivePowerLaggingT() {
+		return reactivePowerLaggingT;
+	}
+
+	public void setReactivePowerLaggingT(Float reactivePowerLaggingT) {
+		this.reactivePowerLaggingT = reactivePowerLaggingT;
+	}
+
+	public Float getReactivePowerLeadingR() {
+		return reactivePowerLeadingR;
+	}
+
+	public void setReactivePowerLeadingR(Float reactivePowerLeadingR) {
+		this.reactivePowerLeadingR = reactivePowerLeadingR;
+	}
+
+	public Float getReactivePowerLeadingS() {
+		return reactivePowerLeadingS;
+	}
+
+	public void setReactivePowerLeadingS(Float reactivePowerLeadingS) {
+		this.reactivePowerLeadingS = reactivePowerLeadingS;
+	}
+
+	public Float getReactivePowerLeadingT() {
+		return reactivePowerLeadingT;
+	}
+
+	public void setReactivePowerLeadingT(Float reactivePowerLeadingT) {
+		this.reactivePowerLeadingT = reactivePowerLeadingT;
 	}
 
 	public Float getAccumActivePowerR() {

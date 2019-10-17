@@ -75,9 +75,12 @@
         select
         device_ami_idx as device_ioe_idx, site_id, device_id, device_name, device_stat, alarmMsg,
         voltage_r, voltage_s, voltage_t, current_r, current_s, current_t, frequency,
-        accum_actv_pwr_r, accum_actv_pwr_s, accum_actv_pwr_t,
-        accum_rctv_pwr_lagging_r, accum_rctv_pwr_lagging_s, accum_rctv_pwr_lagging_t,
-        accum_rctv_pwr_leading_r, accum_rctv_pwr_leading_s, accum_rctv_pwr_leading_t,
+        active_power_r, active_power_s, active_power_t,
+        reactive_power_lagging_r, reactive_power_lagging_s, reactive_power_lagging_t,
+        reactive_power_leading_r, reactive_power_leading_s, reactive_power_leading_t,
+        accum_active_power_r, accum_active_power_s, accum_active_power_t,
+        accum_reactive_power_lagging_r, accum_reactive_power_lagging_s, accum_reactive_power_lagging_t,
+        accum_reactive_power_leading_r, accum_reactive_power_leading_s, accum_reactive_power_leading_t,
         std_date as upload_timestamp, reg_date
         , case device_stat when 0 then 'Stop'
         when 1 then 'Run'
@@ -178,9 +181,9 @@
         select
         device_ami_idx as device_ioe_idx, site_id, device_id, device_name, device_stat, alarmMsg,
         voltage_r, voltage_s, voltage_t, current_r, current_s, current_t, frequency,
-        accum_actv_pwr_r, accum_actv_pwr_s, accum_actv_pwr_t,
-        accum_rctv_pwr_lagging_r, accum_rctv_pwr_lagging_s, accum_rctv_pwr_lagging_t,
-        accum_rctv_pwr_leading_r, accum_rctv_pwr_leading_s, accum_rctv_pwr_leading_t,
+        accum_active_power_r, accum_active_power_s, accum_active_power_t,
+        accum_reactive_power_lagging_r, accum_reactive_power_lagging_s, accum_reactive_power_lagging_t,
+        accum_reactive_power_leading_r, accum_reactive_power_leading_s, accum_reactive_power_leading_t,
         std_date as upload_timestamp, reg_date
         , case device_stat when 0 then 'Stop'
         when 1 then 'Run'
@@ -879,9 +882,9 @@
         select
         device_ami_idx, site_id, device_id, device_name, device_stat, alarmMsg,
         voltage_r, voltage_s, voltage_t, current_r, current_s, current_t, frequency,
-        accum_actv_pwr_r, accum_actv_pwr_s, accum_actv_pwr_t,
-        accum_rctv_pwr_lagging_r, accum_rctv_pwr_lagging_s, accum_rctv_pwr_lagging_t,
-        accum_rctv_pwr_leading_r, accum_rctv_pwr_leading_s, accum_rctv_pwr_leading_t,
+        accum_active_power_r, accum_active_power_s, accum_active_power_t,
+        accum_reactive_power_lagging_r, accum_reactive_power_lagging_s, accum_reactive_power_lagging_t,
+        accum_reactive_power_leading_r, accum_reactive_power_leading_s, accum_reactive_power_leading_t,
         std_date, reg_date
         from tb_device_ami
         where (site_id, device_id, reg_date) in (
@@ -1000,9 +1003,9 @@
         select
         device_ami_idx, site_id, device_id, device_name, device_stat, alarmMsg,
         voltage_r, voltage_s, voltage_t, current_r, current_s, current_t, frequency,
-        accum_actv_pwr_r, accum_actv_pwr_s, accum_actv_pwr_t,
-        accum_rctv_pwr_lagging_r, accum_rctv_pwr_lagging_s, accum_rctv_pwr_lagging_t,
-        accum_rctv_pwr_leading_r, accum_rctv_pwr_leading_s, accum_rctv_pwr_leading_t,
+        accum_active_power_r, accum_active_power_s, accum_active_power_t,
+        accum_reactive_power_lagging_r, accum_reactive_power_lagging_s, accum_reactive_power_lagging_t,
+        accum_reactive_power_leading_r, accum_reactive_power_leading_s, accum_reactive_power_leading_t,
         std_date, reg_date
         from tb_device_ami
         where (site_id, device_id, reg_date) in (
@@ -1045,9 +1048,9 @@
 			a.device_type, concat('(', a.inst_type_nm, ')', a.device_type_nm) as device_type_nm, 
 			b.device_stat,
 			b.voltage_r, b.voltage_s, b.voltage_t, b.current_r, b.current_s, b.current_t, b.frequency, 
-			b.accum_actv_pwr_r, b.accum_actv_pwr_s, b.accum_actv_pwr_t, 
-			b.accum_rctv_pwr_lagging_r, b.accum_rctv_pwr_lagging_s, b.accum_rctv_pwr_lagging_t, 
-			b.accum_rctv_pwr_leading_r, b.accum_rctv_pwr_leading_s, b.accum_rctv_pwr_leading_t,  
+			b.accum_active_power_r, b.accum_active_power_s, b.accum_active_power_t, 
+			b.accum_reactive_power_lagging_r, b.accum_reactive_power_lagging_s, b.accum_reactive_power_lagging_t, 
+			b.accum_reactive_power_leading_r, b.accum_reactive_power_leading_s, b.accum_reactive_power_leading_t,  
 			b.device_ami_idx
 		from (
 				select 
@@ -1075,9 +1078,9 @@
 				select 
 					device_ami_idx, site_id, device_id, device_name, device_stat, alarmMsg, 
 					voltage_r, voltage_s, voltage_t, current_r, current_s, current_t, frequency, 
-					accum_actv_pwr_r, accum_actv_pwr_s, accum_actv_pwr_t, 
-					accum_rctv_pwr_lagging_r, accum_rctv_pwr_lagging_s, accum_rctv_pwr_lagging_t, 
-					accum_rctv_pwr_leading_r, accum_rctv_pwr_leading_s, accum_rctv_pwr_leading_t, 
+					accum_active_power_r, accum_active_power_s, accum_active_power_t, 
+					accum_reactive_power_lagging_r, accum_reactive_power_lagging_s, accum_reactive_power_lagging_t, 
+					accum_reactive_power_leading_r, accum_reactive_power_leading_s, accum_reactive_power_leading_t, 
 					std_date, reg_date 
 				from tb_device_ami
 				where (site_id, device_id, reg_date) in (

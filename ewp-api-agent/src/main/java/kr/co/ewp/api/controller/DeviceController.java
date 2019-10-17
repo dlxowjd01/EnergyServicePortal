@@ -731,15 +731,24 @@ public class DeviceController {
 				if(amiEquipmentModel.getCurrentS() != null) deviceAmi.setCurrentS(amiEquipmentModel.getCurrentS());
 				if(amiEquipmentModel.getCurrentT() != null) deviceAmi.setCurrentT(amiEquipmentModel.getCurrentT());
 				if(amiEquipmentModel.getFrequency() != null) deviceAmi.setFrequency(amiEquipmentModel.getFrequency());
-				if(amiEquipmentModel.getAccumActivePowerR() != null) deviceAmi.setAccumActvPwrR(amiEquipmentModel.getAccumActivePowerR());
-				if(amiEquipmentModel.getAccumActivePowerS() != null) deviceAmi.setAccumActvPwrS(amiEquipmentModel.getAccumActivePowerS());
-				if(amiEquipmentModel.getAccumActivePowerT() != null) deviceAmi.setAccumActvPwrT(amiEquipmentModel.getAccumActivePowerT());
-				if(amiEquipmentModel.getAccumReactivePowerLaggingR() != null) deviceAmi.setAccumRctvPwrLaggingR(amiEquipmentModel.getAccumReactivePowerLaggingR());
-				if(amiEquipmentModel.getAccumReactivePowerLaggingS() != null) deviceAmi.setAccumRctvPwrLaggingS(amiEquipmentModel.getAccumReactivePowerLaggingS());
-				if(amiEquipmentModel.getAccumReactivePowerLaggingT() != null) deviceAmi.setAccumRctvPwrLaggingT(amiEquipmentModel.getAccumReactivePowerLaggingT());
-				if(amiEquipmentModel.getAccumReactivePowerLeadingR() != null) deviceAmi.setAccumRctvPwrLeadingR(amiEquipmentModel.getAccumReactivePowerLeadingR());
-				if(amiEquipmentModel.getAccumReactivePowerLeadingS() != null) deviceAmi.setAccumRctvPwrLeadingS(amiEquipmentModel.getAccumReactivePowerLeadingS());
-				if(amiEquipmentModel.getAccumReactivePowerLeadingT() != null) deviceAmi.setAccumRctvPwrLeadingT(amiEquipmentModel.getAccumReactivePowerLeadingT());
+				if(amiEquipmentModel.getActivePowerR() != null) deviceAmi.setActivePowerR(amiEquipmentModel.getActivePowerR());
+				if(amiEquipmentModel.getActivePowerS() != null) deviceAmi.setActivePowerS(amiEquipmentModel.getActivePowerS());
+				if(amiEquipmentModel.getActivePowerT() != null) deviceAmi.setActivePowerT(amiEquipmentModel.getActivePowerT());
+				if(amiEquipmentModel.getReactivePowerLaggingR() != null) deviceAmi.setReactivePowerLaggingR(amiEquipmentModel.getReactivePowerLaggingR());
+				if(amiEquipmentModel.getReactivePowerLaggingS() != null) deviceAmi.setReactivePowerLaggingS(amiEquipmentModel.getReactivePowerLaggingS());
+				if(amiEquipmentModel.getReactivePowerLaggingT() != null) deviceAmi.setReactivePowerLaggingT(amiEquipmentModel.getReactivePowerLaggingT());
+				if(amiEquipmentModel.getReactivePowerLeadingR() != null) deviceAmi.setReactivePowerLeadingR(amiEquipmentModel.getReactivePowerLeadingR());
+				if(amiEquipmentModel.getReactivePowerLeadingS() != null) deviceAmi.setReactivePowerLeadingS(amiEquipmentModel.getReactivePowerLeadingS());
+				if(amiEquipmentModel.getReactivePowerLeadingT() != null) deviceAmi.setReactivePowerLeadingT(amiEquipmentModel.getReactivePowerLeadingT());
+				if(amiEquipmentModel.getAccumActivePowerR() != null) deviceAmi.setAccumActivePowerR(amiEquipmentModel.getAccumActivePowerR());
+				if(amiEquipmentModel.getAccumActivePowerS() != null) deviceAmi.setAccumActivePowerS(amiEquipmentModel.getAccumActivePowerS());
+				if(amiEquipmentModel.getAccumActivePowerT() != null) deviceAmi.setAccumActivePowerT(amiEquipmentModel.getAccumActivePowerT());
+				if(amiEquipmentModel.getAccumReactivePowerLaggingR() != null) deviceAmi.setAccumReactivePowerLaggingR(amiEquipmentModel.getAccumReactivePowerLaggingR());
+				if(amiEquipmentModel.getAccumReactivePowerLaggingS() != null) deviceAmi.setAccumReactivePowerLaggingS(amiEquipmentModel.getAccumReactivePowerLaggingS());
+				if(amiEquipmentModel.getAccumReactivePowerLaggingT() != null) deviceAmi.setAccumReactivePowerLaggingT(amiEquipmentModel.getAccumReactivePowerLaggingT());
+				if(amiEquipmentModel.getAccumReactivePowerLeadingR() != null) deviceAmi.setAccumReactivePowerLeadingR(amiEquipmentModel.getAccumReactivePowerLeadingR());
+				if(amiEquipmentModel.getAccumReactivePowerLeadingS() != null) deviceAmi.setAccumReactivePowerLeadingS(amiEquipmentModel.getAccumReactivePowerLeadingS());
+				if(amiEquipmentModel.getAccumReactivePowerLeadingT() != null) deviceAmi.setAccumReactivePowerLeadingT(amiEquipmentModel.getAccumReactivePowerLeadingT());
 				
 				deivceAmiList.add(deviceAmi);
 				

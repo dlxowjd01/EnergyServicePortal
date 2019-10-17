@@ -19,15 +19,24 @@ public class DeviceAmi {
   private Float currentS; // (A)
   private Float currentT; // (A)
   private Float frequency; // (Hz)
-  private Float accumActvPwrR; // 총 누적 유효전력량 R상 (Wh)
-  private Float accumActvPwrS; // (Wh)
-  private Float accumActvPwrT; // (Wh)
-  private Float accumRctvPwrLaggingR; // 총 누적 무효전력량 지상 R상 (Varh)
-  private Float accumRctvPwrLaggingS; // (Varh)
-  private Float accumRctvPwrLaggingT; // (Varh)
-  private Float accumRctvPwrLeadingR; // 총 누적 무효전력량 진상 R상 (Varh)
-  private Float accumRctvPwrLeadingS; // (Varh)
-  private Float accumRctvPwrLeadingT; // (Varh)
+  private Float activePowerR; // 순시 유효전력량 R (W)
+  private Float activePowerS; // 순시 유효전력량 S (W)
+  private Float activePowerT; // 순시 유효전력량 T (W)
+  private Float reactivePowerLaggingR; // 순시 무효전력량 지상 R (Var)
+  private Float reactivePowerLaggingS; // 순시 무효전력량 지상 S (Var)
+  private Float reactivePowerLaggingT; // 순시 무효전력량 지상 T (Var)
+  private Float reactivePowerLeadingR; // 순시 무효전력량 진상 R (Var)
+  private Float reactivePowerLeadingS; // 순시 무효전력량 진상 S (Var)
+  private Float reactivePowerLeadingT; // 순시 무효전력량 진상 T (Var)
+  private Float accumActivePowerR; // 총 누적 유효전력량 R상 (Wh)
+  private Float accumActivePowerS; // (Wh)
+  private Float accumActivePowerT; // (Wh)
+  private Float accumReactivePowerLaggingR; // 총 누적 무효전력량 지상 R상 (Varh)
+  private Float accumReactivePowerLaggingS; //  (Varh)
+  private Float accumReactivePowerLaggingT; //  (Varh)
+  private Float accumReactivePowerLeadingR; // 총 누적 무효전력량 진상 R상 (Varh)
+  private Float accumReactivePowerLeadingS; // (Varh)
+  private Float accumReactivePowerLeadingT; // (Varh)
   private Date stdDate;// 기준일시
   private Date regDate;// 등록일시
 
@@ -135,76 +144,148 @@ public class DeviceAmi {
     this.frequency = frequency;
   }
 
-  public Float getAccumActvPwrR() {
-    return accumActvPwrR;
+  public Float getActivePowerR() {
+    return activePowerR;
   }
 
-  public void setAccumActvPwrR(Float accumActvPwrR) {
-    this.accumActvPwrR = accumActvPwrR;
+  public void setActivePowerR(Float activePowerR) {
+    this.activePowerR = activePowerR;
   }
 
-  public Float getAccumActvPwrS() {
-    return accumActvPwrS;
+  public Float getActivePowerS() {
+    return activePowerS;
   }
 
-  public void setAccumActvPwrS(Float accumActvPwrS) {
-    this.accumActvPwrS = accumActvPwrS;
+  public void setActivePowerS(Float activePowerS) {
+    this.activePowerS = activePowerS;
   }
 
-  public Float getAccumActvPwrT() {
-    return accumActvPwrT;
+  public Float getActivePowerT() {
+    return activePowerT;
   }
 
-  public void setAccumActvPwrT(Float accumActvPwrT) {
-    this.accumActvPwrT = accumActvPwrT;
+  public void setActivePowerT(Float activePowerT) {
+    this.activePowerT = activePowerT;
   }
 
-  public Float getAccumRctvPwrLaggingR() {
-    return accumRctvPwrLaggingR;
+  public Float getReactivePowerLaggingR() {
+    return reactivePowerLaggingR;
   }
 
-  public void setAccumRctvPwrLaggingR(Float accumRctvPwrLaggingR) {
-    this.accumRctvPwrLaggingR = accumRctvPwrLaggingR;
+  public void setReactivePowerLaggingR(Float reactivePowerLaggingR) {
+    this.reactivePowerLaggingR = reactivePowerLaggingR;
   }
 
-  public Float getAccumRctvPwrLaggingS() {
-    return accumRctvPwrLaggingS;
+  public Float getReactivePowerLaggingS() {
+    return reactivePowerLaggingS;
   }
 
-  public void setAccumRctvPwrLaggingS(Float accumRctvPwrLaggingS) {
-    this.accumRctvPwrLaggingS = accumRctvPwrLaggingS;
+  public void setReactivePowerLaggingS(Float reactivePowerLaggingS) {
+    this.reactivePowerLaggingS = reactivePowerLaggingS;
   }
 
-  public Float getAccumRctvPwrLaggingT() {
-    return accumRctvPwrLaggingT;
+  public Float getReactivePowerLaggingT() {
+    return reactivePowerLaggingT;
   }
 
-  public void setAccumRctvPwrLaggingT(Float accumRctvPwrLaggingT) {
-    this.accumRctvPwrLaggingT = accumRctvPwrLaggingT;
+  public void setReactivePowerLaggingT(Float reactivePowerLaggingT) {
+    this.reactivePowerLaggingT = reactivePowerLaggingT;
   }
 
-  public Float getAccumRctvPwrLeadingR() {
-    return accumRctvPwrLeadingR;
+  public Float getReactivePowerLeadingR() {
+    return reactivePowerLeadingR;
   }
 
-  public void setAccumRctvPwrLeadingR(Float accumRctvPwrLeadingR) {
-    this.accumRctvPwrLeadingR = accumRctvPwrLeadingR;
+  public void setReactivePowerLeadingR(Float reactivePowerLeadingR) {
+    this.reactivePowerLeadingR = reactivePowerLeadingR;
   }
 
-  public Float getAccumRctvPwrLeadingS() {
-    return accumRctvPwrLeadingS;
+  public Float getReactivePowerLeadingS() {
+    return reactivePowerLeadingS;
   }
 
-  public void setAccumRctvPwrLeadingS(Float accumRctvPwrLeadingS) {
-    this.accumRctvPwrLeadingS = accumRctvPwrLeadingS;
+  public void setReactivePowerLeadingS(Float reactivePowerLeadingS) {
+    this.reactivePowerLeadingS = reactivePowerLeadingS;
   }
 
-  public Float getAccumRctvPwrLeadingT() {
-    return accumRctvPwrLeadingT;
+  public Float getReactivePowerLeadingT() {
+    return reactivePowerLeadingT;
   }
 
-  public void setAccumRctvPwrLeadingT(Float accumRctvPwrLeadingT) {
-    this.accumRctvPwrLeadingT = accumRctvPwrLeadingT;
+  public void setReactivePowerLeadingT(Float reactivePowerLeadingT) {
+    this.reactivePowerLeadingT = reactivePowerLeadingT;
+  }
+
+  public Float getAccumActivePowerR() {
+    return accumActivePowerR;
+  }
+
+  public void setAccumActivePowerR(Float accumActivePowerR) {
+    this.accumActivePowerR = accumActivePowerR;
+  }
+
+  public Float getAccumActivePowerS() {
+    return accumActivePowerS;
+  }
+
+  public void setAccumActivePowerS(Float accumActivePowerS) {
+    this.accumActivePowerS = accumActivePowerS;
+  }
+
+  public Float getAccumActivePowerT() {
+    return accumActivePowerT;
+  }
+
+  public void setAccumActivePowerT(Float accumActivePowerT) {
+    this.accumActivePowerT = accumActivePowerT;
+  }
+
+  public Float getAccumReactivePowerLaggingR() {
+    return accumReactivePowerLaggingR;
+  }
+
+  public void setAccumReactivePowerLaggingR(Float accumReactivePowerLaggingR) {
+    this.accumReactivePowerLaggingR = accumReactivePowerLaggingR;
+  }
+
+  public Float getAccumReactivePowerLaggingS() {
+    return accumReactivePowerLaggingS;
+  }
+
+  public void setAccumReactivePowerLaggingS(Float accumReactivePowerLaggingS) {
+    this.accumReactivePowerLaggingS = accumReactivePowerLaggingS;
+  }
+
+  public Float getAccumReactivePowerLaggingT() {
+    return accumReactivePowerLaggingT;
+  }
+
+  public void setAccumReactivePowerLaggingT(Float accumReactivePowerLaggingT) {
+    this.accumReactivePowerLaggingT = accumReactivePowerLaggingT;
+  }
+
+  public Float getAccumReactivePowerLeadingR() {
+    return accumReactivePowerLeadingR;
+  }
+
+  public void setAccumReactivePowerLeadingR(Float accumReactivePowerLeadingR) {
+    this.accumReactivePowerLeadingR = accumReactivePowerLeadingR;
+  }
+
+  public Float getAccumReactivePowerLeadingS() {
+    return accumReactivePowerLeadingS;
+  }
+
+  public void setAccumReactivePowerLeadingS(Float accumReactivePowerLeadingS) {
+    this.accumReactivePowerLeadingS = accumReactivePowerLeadingS;
+  }
+
+  public Float getAccumReactivePowerLeadingT() {
+    return accumReactivePowerLeadingT;
+  }
+
+  public void setAccumReactivePowerLeadingT(Float accumReactivePowerLeadingT) {
+    this.accumReactivePowerLeadingT = accumReactivePowerLeadingT;
   }
 
   public Date getStdDate() {
@@ -230,7 +311,7 @@ public class DeviceAmi {
             ", siteId='" + siteId + '\'' +
             ", deviceId='" + deviceId + '\'' +
             ", deviceName='" + deviceName + '\'' +
-            ", deviceStat='" + deviceStat + '\'' +
+            ", deviceStat=" + deviceStat +
             ", alarmMsg='" + alarmMsg + '\'' +
             ", voltageR=" + voltageR +
             ", voltageS=" + voltageS +
@@ -239,15 +320,24 @@ public class DeviceAmi {
             ", currentS=" + currentS +
             ", currentT=" + currentT +
             ", frequency=" + frequency +
-            ", accumActvPwrR=" + accumActvPwrR +
-            ", accumActvPwrS=" + accumActvPwrS +
-            ", accumActvPwrT=" + accumActvPwrT +
-            ", accumRctvPwrLaggingR=" + accumRctvPwrLaggingR +
-            ", accumRctvPwrLaggingS=" + accumRctvPwrLaggingS +
-            ", accumRctvPwrLaggingT=" + accumRctvPwrLaggingT +
-            ", accumRctvPwrLeadingR=" + accumRctvPwrLeadingR +
-            ", accumRctvPwrLeadingS=" + accumRctvPwrLeadingS +
-            ", accumRctvPwrLeadingT=" + accumRctvPwrLeadingT +
+            ", activePowerR=" + activePowerR +
+            ", activePowerS=" + activePowerS +
+            ", activePowerT=" + activePowerT +
+            ", reactivePowerLaggingR=" + reactivePowerLaggingR +
+            ", reactivePowerLaggingS=" + reactivePowerLaggingS +
+            ", reactivePowerLaggingT=" + reactivePowerLaggingT +
+            ", reactivePowerLeadingR=" + reactivePowerLeadingR +
+            ", reactivePowerLeadingS=" + reactivePowerLeadingS +
+            ", reactivePowerLeadingT=" + reactivePowerLeadingT +
+            ", accumActivePowerR=" + accumActivePowerR +
+            ", accumActivePowerS=" + accumActivePowerS +
+            ", accumActivePowerT=" + accumActivePowerT +
+            ", accumReactivePowerLaggingR=" + accumReactivePowerLaggingR +
+            ", accumReactivePowerLaggingS=" + accumReactivePowerLaggingS +
+            ", accumReactivePowerLaggingT=" + accumReactivePowerLaggingT +
+            ", accumReactivePowerLeadingR=" + accumReactivePowerLeadingR +
+            ", accumReactivePowerLeadingS=" + accumReactivePowerLeadingS +
+            ", accumReactivePowerLeadingT=" + accumReactivePowerLeadingT +
             ", stdDate=" + stdDate +
             ", regDate=" + regDate +
             '}';

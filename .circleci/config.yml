@@ -137,7 +137,7 @@ jobs:
       - run:
           name: "Publish Release on GitHub"
           command: |
-            VERSION=1.1.0
+            VERSION=1.1.1
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} /root/circleci-demo-java-spring
 
 workflows:
