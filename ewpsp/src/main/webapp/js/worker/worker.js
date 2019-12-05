@@ -98,12 +98,13 @@ function startWorker(result, command) {
                     real_data_pc = e.data.real_data_pc;
                     pastPVGenList = e.data.pastPVGenList;
                     unit_format(String(e.data.pastPvGenTotalVal), "pastPvGenTot", "Wh");
-                    endWorker();
                     break;
                 case 'predictPvGenList':
                     feture_data_pc = e.data.feture_data_pc;
+                    defaultData_pc = e.data.defaultData_pc;
                     feturePVGenList = e.data.feturePVGenList;
                     unit_format(String(e.data.feturePvGenTotalVal), "feturePvGenTot", "Wh");
+                    endWorker();
                     break;
                 case 'derUsageList':
                     usage_head_pc = e.data.usage_head_pc;
