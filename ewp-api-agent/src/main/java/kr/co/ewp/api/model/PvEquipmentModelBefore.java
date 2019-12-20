@@ -12,7 +12,7 @@ public class PvEquipmentModelBefore {
 	private Date timestamp;// YYYYMMDDhhmmss
 	private Integer status;//
 	private String alarmMsg;//
-	private Integer temperature;// (℃)
+	private Float temperature;// (℃)
 	private Float totalGenPower;// (kWh)
 	private Float todayGenPower;
 	
@@ -65,11 +65,11 @@ public class PvEquipmentModelBefore {
 		this.alarmMsg = alarmMsg;
 	}
 	
-	public Integer getTemperature() {
+	public Float getTemperature() {
 		return temperature;
 	}
 	
-	public void setTemperature(Integer temperature) {
+	public void setTemperature(Float temperature) {
 		this.temperature = temperature;
 	}
 	

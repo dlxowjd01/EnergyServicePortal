@@ -10,8 +10,18 @@ public class DevicePv {
 	private String deviceName;//장치명
 	private String deviceStat;//pv상태
 	private String alarmMsg;//알람메시지
-	private Integer temp;//온도(단위:℃)
+	private Float acVoltage;// ac출력 - 전압(단위:v)
+	private Float acPower;// ac출력 - 전력(단위:kWh -> W)
+	private Float acCurrent;// ac출력 - 전류(단위:a)
+	private Float acFreq;// ac출력 - 주파수(단위:hz)
+	private Float dcVoltage;// dc출력 - 전압(단위:v)
+	private Float dcPower;// dc출력 - 전력(단위:kWh -> W)
+	private Float dcCurrent;// dc출력 - 전류(단위:a)
+	private Float dcFreq;// dc출력 - 주파수(단위:hz)
+	private Float temp;//온도(단위:℃)
 	private Float totPower;//금일누적발전량(단위:kWh -> Wh)
+	private Float todayGenPower;//Today generated energy (Wh)
+	private Float totalGenPower;//Accumulated generated energy (Wh)
 	private Date stdDate;//기준일시
 	private Date regDate;//등록일시
 	/**
@@ -99,17 +109,145 @@ public class DevicePv {
 		this.alarmMsg = alarmMsg;
 	}
 	/**
+	 * ac출력 - 전압(단위:v) 조회
+	 *
+	 * @return acVoltage
+	 */
+	public Float getAcVoltage() {
+		return this.acVoltage;
+	}
+	/**
+	 * ac출력 - 전압(단위:v) 설정
+	 *
+	 * @return acVoltage
+	 */
+	public void setAcVoltage(Float acVoltage) {
+		this.acVoltage = acVoltage;
+	}
+	/**
+	 * ac출력 - 전력(단위:kWh -> Wh) 조회
+	 *
+	 * @return acPower
+	 */
+	public Float getAcPower() {
+		return this.acPower;
+	}
+	/**
+	 * ac출력 - 전력(단위:kWh -> Wh) 설정
+	 *
+	 * @return acPower
+	 */
+	public void setAcPower(Float acPower) {
+		this.acPower = acPower;
+	}
+	/**
+	 * ac출력 - 전류(단위:a) 조회
+	 *
+	 * @return acCurrent
+	 */
+	public Float getAcCurrent() {
+		return this.acCurrent;
+	}
+	/**
+	 * ac출력 - 전류(단위:a) 설정
+	 *
+	 * @return acCurrent
+	 */
+	public void setAcCurrent(Float acCurrent) {
+		this.acCurrent = acCurrent;
+	}
+	/**
+	 * ac출력 - 주파수(단위:hz) 조회
+	 *
+	 * @return acFreq
+	 */
+	public Float getAcFreq() {
+		return this.acFreq;
+	}
+	/**
+	 * ac출력 - 주파수(단위:hz) 설정
+	 *
+	 * @return acFreq
+	 */
+	public void setAcFreq(Float acFreq) {
+		this.acFreq = acFreq;
+	}
+	/**
+	 * dc출력 - 전압(단위:v) 조회
+	 *
+	 * @return dcVoltage
+	 */
+	public Float getDcVoltage() {
+		return this.dcVoltage;
+	}
+	/**
+	 * dc출력 - 전압(단위:v) 설정
+	 *
+	 * @return dcVoltage
+	 */
+	public void setDcVoltage(Float dcVoltage) {
+		this.dcVoltage = dcVoltage;
+	}
+	/**
+	 * dc출력 - 전력(단위:kWh -> Wh) 조회
+	 *
+	 * @return dcPower
+	 */
+	public Float getDcPower() {
+		return this.dcPower;
+	}
+	/**
+	 * dc출력 - 전력(단위:kWh -> Wh) 설정
+	 *
+	 * @return dcPower
+	 */
+	public void setDcPower(Float dcPower) {
+		this.dcPower = dcPower;
+	}
+	/**
+	 * dc출력 - 전류(단위:a) 조회
+	 *
+	 * @return dcCurrent
+	 */
+	public Float getDcCurrent() {
+		return this.dcCurrent;
+	}
+	/**
+	 * dc출력 - 전류(단위:a) 설정
+	 *
+	 * @return dcCurrent
+	 */
+	public void setDcCurrent(Float dcCurrent) {
+		this.dcCurrent = dcCurrent;
+	}
+	/**
+	 * dc출력 - 주파수(단위:hz) 조회
+	 *
+	 * @return dcFreq
+	 */
+	public Float getDcFreq() {
+		return this.dcFreq;
+	}
+	/**
+	 * dc출력 - 주파수(단위:hz) 설정
+	 *
+	 * @return dcFreq
+	 */
+	public void setDcFreq(Float dcFreq) {
+		this.dcFreq = dcFreq;
+	}
+	/**
 	* 온도(단위:℃) 조회
 	* @return temp
 	*/
-	public Integer getTemp() {
+	public Float getTemp() {
 		return this.temp;
 	}
 	/**
 	* 온도(단위:℃) 설정
 	* @return temp
 	*/
-	public void setTemp(Integer temp) {
+	public void setTemp(Float temp) {
 		this.temp = temp;
 	}
 	/**
@@ -125,6 +263,34 @@ public class DevicePv {
 	*/
 	public void setTotPower(Float totPower) {
 		this.totPower = totPower;
+	}
+	/**
+	 * 금일누적발전량(단위:kWh -> Wh) 조회
+	 * @return totPower
+	 */
+	public Float getTodayGenPower() {
+		return this.todayGenPower;
+	}
+	/**
+	 * 금일누적발전량(단위:kWh -> Wh) 설정
+	 * @return totPower
+	 */
+	public void setTodayGenPower(Float todayGenPower) {
+		this.todayGenPower = todayGenPower;
+	}
+	/**
+	 * 금일누적발전량(단위:kWh -> Wh) 조회
+	 * @return totPower
+	 */
+	public Float getTotalGenPower() {
+		return this.totalGenPower;
+	}
+	/**
+	 * 금일누적발전량(단위:kWh -> Wh) 설정
+	 * @return totPower
+	 */
+	public void setTotalGenPower(Float totalGenPower) {
+		this.totalGenPower = totalGenPower;
 	}
 	/**
 	* 기준일시 조회

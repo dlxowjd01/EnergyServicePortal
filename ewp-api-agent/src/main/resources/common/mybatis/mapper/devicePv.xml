@@ -8,8 +8,18 @@
         <result property="deviceName" column="device_name" javaType="String"></result><!--장치명-->
         <result property="deviceStat" column="device_stat" javaType="String"></result><!--PV상태-->
         <result property="alarmMsg" column="alarm_msg" javaType="String"></result><!--알람메시지-->
+        <result property="acVoltage" column="ac_voltage" javaType="Integer"></result><!--AC출력 - 전압(단위:V)-->
+        <result property="acPower" column="ac_power" javaType="Integer"></result><!--AC출력 - 전력(단위:kWh)-->
+        <result property="acCurrent" column="ac_current" javaType="Integer"></result><!--AC출력 - 전류(단위:A)-->
+        <result property="acFreq" column="ac_freq" javaType="Integer"></result><!--AC출력 - 주파수(단위:Hz)-->
+        <result property="dcVoltage" column="dc_voltage" javaType="Integer"></result><!--DC출력 - 전압(단위:V)-->
+        <result property="dcPower" column="dc_power" javaType="Integer"></result><!--DC출력 - 전력(단위:kWh)-->
+        <result property="dcCurrent" column="dc_current" javaType="Integer"></result><!--DC출력 - 전류(단위:A)-->
+        <result property="dcFreq" column="dc_freq" javaType="Integer"></result><!--DC출력 - 주파수(단위:Hz)-->
         <result property="temp" column="temp" javaType="Integer"></result><!--온도(단위:℃)-->
         <result property="totPower" column="tot_power" javaType="Integer"></result><!--금일누적발전량(단위:kWh)-->
+        <result property="todayGenPower" column="today_gen_power" javaType="Integer"></result><!--Today generated energy (Wh)-->
+        <result property="totalGenPower" column="total_gen_power" javaType="Integer"></result><!--Accumulated generated energy (Wh)-->
         <result property="stdDate" column="std_date" javaType="Date"></result><!--기준일시-->
         <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
     </resultMap>
@@ -21,8 +31,18 @@
                device_name,
                device_stat,
                alarm_msg,
+               ac_voltage,
+               ac_power,
+               ac_current,
+               ac_freq,
+               dc_voltage,
+               dc_power,
+               dc_current,
+               dc_freq,
                temp,
                tot_power,
+               today_gen_power,
+               total_gen_power,
                std_date,
                reg_date
              ) VALUES (
@@ -31,8 +51,18 @@
                #{entity.deviceName},
                #{entity.deviceStat},
                #{entity.alarmMsg},
+               #{entity.acVoltage},
+               #{entity.acPower},
+               #{entity.acCurrent},
+               #{entity.acFreq},
+               #{entity.dcVoltage},
+               #{entity.dcPower},
+               #{entity.dcCurrent},
+               #{entity.dcFreq},
                #{entity.temp},
                #{entity.totPower},
+               #{entity.todayGenPower},
+               #{entity.totalGenPower},
                #{entity.stdDate},
                NOW())
         <selectKey resultType="Long" keyProperty="entity.devicePvIdx">
@@ -58,11 +88,41 @@
                <if test="entity.alarmMsg != null">
                alarm_msg = #{entity.alarmMsg},
                </if>
+               <if test="entity.acVoltage != null">
+                   ac_voltage = #{entity.acVoltage},
+               </if>
+               <if test="entity.acPower != null">
+                   ac_power = #{entity.acPower},
+               </if>
+               <if test="entity.acCurrent != null">
+                   ac_current = #{entity.acCurrent},
+               </if>
+               <if test="entity.acFreq != null">
+                   ac_freq = #{entity.acFreq},
+               </if>
+               <if test="entity.dcVoltage != null">
+                   dc_voltage = #{entity.dcVoltage},
+               </if>
+               <if test="entity.dcPower != null">
+                   dc_power = #{entity.dcPower},
+               </if>
+               <if test="entity.dcCurrent != null">
+                   dc_current = #{entity.dcCurrent},
+               </if>
+               <if test="entity.dcFreq != null">
+                   dc_freq = #{entity.dcFreq},
+               </if>
                <if test="entity.temp != null">
                temp = #{entity.temp},
                </if>
                <if test="entity.totPower != null">
                tot_power = #{entity.totPower},
+               </if>
+               <if test="entity.todayGenPower != null">
+                   today_gen_power = #{entity.todayGenPower},
+               </if>
+               <if test="entity.totalGenPower != null">
+                   total_gen_power = #{entity.totalGenPower},
                </if>
                <if test="entity.stdDate != null">
                std_date = #{entity.stdDate},
@@ -86,8 +146,18 @@
                device_name,
                device_stat,
                alarm_msg,
+               ac_voltage,
+               ac_power,
+               ac_current,
+               ac_freq,
+               dc_voltage,
+               dc_power,
+               dc_current,
+               dc_freq,
                temp,
                tot_power,
+               today_gen_power,
+               total_gen_power,
                std_date,
                reg_date
           FROM tb_device_pv
@@ -101,8 +171,18 @@
                device_name,
                device_stat,
                alarm_msg,
-               temp,
-               tot_power,
+                ac_voltage,
+                ac_power,
+                ac_current,
+                ac_freq,
+                dc_voltage,
+                dc_power,
+                dc_current,
+                dc_freq,
+                temp,
+                tot_power,
+                today_gen_power,
+                total_gen_power,
                std_date,
                reg_date
           FROM tb_device_pv

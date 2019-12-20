@@ -591,8 +591,18 @@ public class DeviceController {
 	        			devicePv.setSiteId(_siteId);
 	        			devicePv.setDeviceId(device.getDeviceId());
 	        			devicePv.setAlarmMsg(pvEquipmentModel.getAlarmMsg());
-	        			if(pvEquipmentModel.getTemperature() != null) devicePv.setTemp(pvEquipmentModel.getTemperature());
+	        			if(pvEquipmentModel.getAcVoltage() != null) devicePv.setAcVoltage(pvEquipmentModel.getAcVoltage());
+	        			if(pvEquipmentModel.getAcPower() != null) devicePv.setAcPower(pvEquipmentModel.getAcPower());
+	        			if(pvEquipmentModel.getAcCurrent() != null) devicePv.setAcCurrent(pvEquipmentModel.getAcCurrent());
+	        			if(pvEquipmentModel.getAcFreq() != null) devicePv.setAcFreq(pvEquipmentModel.getAcFreq());
+	        			if(pvEquipmentModel.getDcVoltage() != null) devicePv.setDcVoltage(pvEquipmentModel.getDcVoltage());
+	        			if(pvEquipmentModel.getDcPower() != null) devicePv.setDcPower(pvEquipmentModel.getDcPower());
+	        			if(pvEquipmentModel.getDcCurrent() != null) devicePv.setDcCurrent(pvEquipmentModel.getDcCurrent());
+	        			if(pvEquipmentModel.getDcFreq() != null) devicePv.setDcFreq(pvEquipmentModel.getDcFreq());
+	        			devicePv.setTemp(pvEquipmentModel.getTemperature());
 	        			devicePv.setTotPower(pvEquipmentModel.getTotalGenPower());
+	        			if(pvEquipmentModel.getTodayGenPower() != null) devicePv.setTodayGenPower(pvEquipmentModel.getTodayGenPower());
+	        			if(pvEquipmentModel.getTotalGenPower() != null) devicePv.setTotalGenPower(pvEquipmentModel.getTotalGenPower());
 	        			devicePv.setDeviceName(pvEquipmentModel.getIvtName());
 	        			if(pvEquipmentModel.getStatus() != null) devicePv.setDeviceStat(Integer.toString(pvEquipmentModel.getStatus()));
 	        			devicePv.setStdDate(pvEquipmentModel.getTimestamp());
@@ -633,8 +643,18 @@ public class DeviceController {
         			devicePv.setSiteId(_siteId);
         			devicePv.setDeviceId(device.getDeviceId());
         			devicePv.setAlarmMsg(pvEquipmentModel.getAlarmMsg());
+					if(pvEquipmentModel.getAcVoltage() != null) devicePv.setAcVoltage(pvEquipmentModel.getAcVoltage());
+					if(pvEquipmentModel.getAcPower() != null) devicePv.setAcPower(pvEquipmentModel.getAcPower());
+					if(pvEquipmentModel.getAcCurrent() != null) devicePv.setAcCurrent(pvEquipmentModel.getAcCurrent());
+					if(pvEquipmentModel.getAcFreq() != null) devicePv.setAcFreq(pvEquipmentModel.getAcFreq());
+					if(pvEquipmentModel.getDcVoltage() != null) devicePv.setDcVoltage(pvEquipmentModel.getDcVoltage());
+					if(pvEquipmentModel.getDcPower() != null) devicePv.setDcPower(pvEquipmentModel.getDcPower());
+					if(pvEquipmentModel.getDcCurrent() != null) devicePv.setDcCurrent(pvEquipmentModel.getDcCurrent());
+					if(pvEquipmentModel.getDcFreq() != null) devicePv.setDcFreq(pvEquipmentModel.getDcFreq());
         			devicePv.setTemp(pvEquipmentModel.getTemperature()); /*** 12.12 이우람 수정 ***/
         			devicePv.setTotPower((float) pvEquipmentModel.getTotalGenPower()); /*** 12.12 이우람 수정 ***/
+					if(pvEquipmentModel.getTodayGenPower() != null) devicePv.setTodayGenPower(pvEquipmentModel.getTodayGenPower());
+					if(pvEquipmentModel.getTotalGenPower() != null) devicePv.setTotalGenPower(pvEquipmentModel.getTotalGenPower());
         			devicePv.setDeviceName(pvEquipmentModel.getIvtName()); /*** 12.12 이우람 수정 ***/
         			devicePv.setDeviceStat(Integer.toString(pvEquipmentModel.getStatus())); /*** 12.12 이우람 수정 ***/
         			devicePv.setStdDate(pvEquipmentModel.getTimestamp()); /*** 12.12 이우람 수정 ***/

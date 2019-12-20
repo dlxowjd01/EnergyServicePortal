@@ -12,18 +12,18 @@ public class PvEquipmentModel {
   private Date timestamp;// timestamp in millisecond /*** 12.12 이우람 수정 ***/
   private Integer status;// 0: Stop, 1: Run, 2: Fault, 3: Warning /*** 12.12 이우람 수정 ***/
   private String alarmMsg;// Last alarm message
-  private Integer temperature;// (℃) /*** 12.12 이우람 수정 ***/
-  private Integer totalGenPower;// Today generated energy (Wh) /*** 12.12 이우람 수정 ***/
-  private Integer todayGenPower;// Accumulated generated energy (Wh) /*** 12.12 이우람 추가 ***/
+  private Float temperature;// (℃) /*** 12.12 이우람 수정 ***/
+  private Float totalGenPower;// Today generated energy (Wh) /*** 12.12 이우람 수정 ***/
+  private Float todayGenPower;// Accumulated generated energy (Wh) /*** 12.12 이우람 추가 ***/
   
-  private Integer acVoltage;// (V) /*** 12.12 이우람 추가 ***/
-  private Integer acPower;// (W) /*** 12.12 이우람 추가 ***/
-  private Integer acCurrent;// (A) /*** 12.12 이우람 추가 ***/
-  private Integer acFreq;// (Hz) /*** 12.12 이우람 추가 ***/
-  private Integer dcVoltage;// (V) /*** 12.12 이우람 추가 ***/
-  private Integer dcPower;// (W) /*** 12.12 이우람 추가 ***/
-  private Integer dcCurrent;// (A) /*** 12.12 이우람 추가 ***/
-  private Integer dcFreq;// (Hz) /*** 12.12 이우람 추가 ***/
+  private Float acVoltage;// (V) /*** 12.12 이우람 추가 ***/
+  private Float acPower;// (W) /*** 12.12 이우람 추가 ***/
+  private Float acCurrent;// (A) /*** 12.12 이우람 추가 ***/
+  private Float acFreq;// (Hz) /*** 12.12 이우람 추가 ***/
+  private Float dcVoltage;// (V) /*** 12.12 이우람 추가 ***/
+  private Float dcPower;// (W) /*** 12.12 이우람 추가 ***/
+  private Float dcCurrent;// (A) /*** 12.12 이우람 추가 ***/
+  private Float dcFreq;// (Hz) /*** 12.12 이우람 추가 ***/
 
   public String getIvtId() {
 		return ivtId;
@@ -65,91 +65,91 @@ public class PvEquipmentModel {
 		this.alarmMsg = alarmMsg;
 	}
 	
-  public Integer getTemperature() {
+  public Float getTemperature() {
 		return temperature;
 	}
 	
-  public void setTemperature(Integer temperature) {
+  public void setTemperature(Float temperature) {
 		this.temperature = temperature;
 	}
 	
-  public Integer getTotalGenPower() {
+  public Float getTotalGenPower() {
 		return totalGenPower;
 	}
 	
-  public void setTotalGenPower(Integer totalGenPower) {
+  public void setTotalGenPower(Float totalGenPower) {
 		this.totalGenPower = totalGenPower;
 	}
 	
-  public Integer getTodayGenPower() {
+  public Float getTodayGenPower() {
 		return todayGenPower;
 	}
 	
-  public void setTodayGenPower(Integer todayGenPower) {
+  public void setTodayGenPower(Float todayGenPower) {
 		this.todayGenPower = todayGenPower;
 	}
 	
-  public Integer getAcVoltage() {
+  public Float getAcVoltage() {
 		return acVoltage;
 	}
 	
-  public void setAcVoltage(Integer acVoltage) {
+  public void setAcVoltage(Float acVoltage) {
 		this.acVoltage = acVoltage;
 	}
 	
-  public Integer getAcPower() {
+  public Float getAcPower() {
 		return acPower;
 	}
 	
-  public void setAcPower(Integer acPower) {
+  public void setAcPower(Float acPower) {
 		this.acPower = acPower;
 	}
 	
-  public Integer getAcCurrent() {
+  public Float getAcCurrent() {
 		return acCurrent;
 	}
 	
-  public void setAcCurrent(Integer acCurrent) {
+  public void setAcCurrent(Float acCurrent) {
 		this.acCurrent = acCurrent;
 	}
 	
-  public Integer getAcFreq() {
+  public Float getAcFreq() {
 		return acFreq;
 	}
 	
-  public void setAcFreq(Integer acFreq) {
+  public void setAcFreq(Float acFreq) {
 		this.acFreq = acFreq;
 	}
 	
-  public Integer getDcVoltage() {
+  public Float getDcVoltage() {
 		return dcVoltage;
 	}
 	
-  public void setDcVoltage(Integer dcVoltage) {
+  public void setDcVoltage(Float dcVoltage) {
 		this.dcVoltage = dcVoltage;
 	}
 	
-  public Integer getDcPower() {
+  public Float getDcPower() {
 		return dcPower;
 	}
 	
-  public void setDcPower(Integer dcPower) {
+  public void setDcPower(Float dcPower) {
 		this.dcPower = dcPower;
 	}
 	
-  public Integer getDcCurrent() {
+  public Float getDcCurrent() {
 		return dcCurrent;
 	}
 	
-  public void setDcCurrent(Integer dcCurrent) {
+  public void setDcCurrent(Float dcCurrent) {
 		this.dcCurrent = dcCurrent;
 	}
 	
-  public Integer getDcFreq() {
+  public Float getDcFreq() {
 		return dcFreq;
 	}
 	
-  public void setDcFreq(Integer dcFreq) {
+  public void setDcFreq(Float dcFreq) {
 		this.dcFreq = dcFreq;
 	}
 
