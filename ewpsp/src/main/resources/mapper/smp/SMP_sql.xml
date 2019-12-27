@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SMPDao">
+    <!--오늘 시간대별 SMP 마켓 가격-->
+    <select id="getFixedSMPMarketPrice" parameterType="Map" resultType="Map">
+        <![CDATA[
+        SELECT *
+        FROM tb_fixed_price
+        WHERE market_id = #{market_id}
+        AND price_time >= CURDATE() AND price_time < (CURDATE()+INTERVAL 1 DAY)
+        ORDER BY price_time;
+        ]]>
+   </select>
+</mapper>

@@ -1003,37 +1003,38 @@ h2.ntit {
 .chart_footer ul {
     font-size: 0;
     text-align: right;
+    line-height: 26px;
 }
 
 .chart_footer ul li {
-    display: inline-block;
+    display: block;
     font-size: 14px;
     color: #8e95a1;
 }
 
-.chart_footer ul li + li:after {
-    display: inline-block;
-    width: 1px;
-    height: 11px;
-    background: #4a505d;
-    vertical-align: middle;
-    margin: 0 10px;
-    content: "";
-}
+/*.chart_footer ul li:after {*/
+/*    display: inline-block;*/
+/*    width: 1px;*/
+/*    height: 11px;*/
+/*    background: #4a505d;*/
+/*    vertical-align: middle;*/
+/*    margin: 0 10px;*/
+/*    content: "";*/
+/*}*/
 
 .chart_footer ul li span {
     color: #fff;
     font-weight: 600;
 }
 
-.chart_footer ul li:first-child {
-    float: left;
-    margin-left: 50px;
-}
+/*.chart_footer ul li:first-child {*/
+/*    float: left;*/
+/*    margin-left: 50px;*/
+/*}*/
 
-.chart_footer ul li:last-child:after {
-    display: none;
-}
+/*.chart_footer ul li:last-child:after {*/
+/*    display: none;*/
+/*}*/
 
 /* 반응형 미디어 쿼리 */
 @media all and (min-width: 3000px) {
@@ -1104,7 +1105,6 @@ h2.ntit {
 }
 
 .income .chart_footer ul li {
-    float: right;
     margin: 0;
 }
 
@@ -1164,6 +1164,150 @@ h2.ntit {
     overflow-x: auto;
 }
 
+/*
+	## PV 메인 레이아웃 ##
+*/
+
+/* 월별 수입 종합 */
+/* REC 종합 */
+.pie_chart .chart_footer ul li span {
+    font-family: 'Roboto', sans-serif;
+    font-size: 21px;
+    color: #fff;
+    font-weight: normal;
+}
+
+/* 오늘의 태양광 사업 */
+.chart_header ul li {
+    display: inline-block;
+    font-size: 14px;
+    color: #ffffff;
+    margin-right: 10px;
+}
+
+/* 오늘의 가격 정보 (SMP) */
+.mainland_container {
+    margin-bottom: 5px;
+}
+
+.mainland_container > span {
+    color: #fff;
+    margin-right: 10px;
+    font-size: 14px;
+    border-bottom: 2px solid #FBBC04;
+}
+
+.jeju_container {
+    margin-bottom: 5px;
+}
+
+.jeju_container > span {
+    color: #fff;
+    margin-right: 10px;
+    font-size: 14px;
+    border-bottom: 2px solid #13af67;
+}
+
+.mainland {
+    display: inline-block;
+}
+
+.jeju {
+    display: inline-block;
+}
+/* REC 시장 현황 */
+.market {
+    background-color: #f75c4a;
+    color: #fff;
+    margin-top: 6px;
+    margin-left: 5px;
+    padding: 4px 3px;
+    font-size: 10px;
+}
+
+.market + .active {
+    background-color: #13af67;
+}
+
+/* 날씨 */
+/* 현재 발전 현황*/
+.highcharts-figure .chart-container {
+    width: 100%;
+    height: 100%;
+    float: left;
+}
+
+@media (max-width: 600px) {
+    .highcharts-figure {
+        width: 100%;
+    }
+
+    .highcharts-figure .chart-container {
+        width: 100%;
+        float: none;
+        margin: 0 auto;
+    }
+}
+
+.highcharts-figure, .highcharts-data-table table {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.highcharts-data-table table {
+    font-family: Verdana, sans-serif;
+    border-collapse: collapse;
+    border: 1px solid #EBEBEB;
+    margin: 10px auto;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+.highcharts-data-table caption {
+    padding: 1em 0;
+    font-size: 1.2em;
+    color: #555;
+}
+
+.highcharts-data-table th {
+    font-weight: 600;
+    padding: 0.5em;
+}
+
+.highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+    padding: 0.5em;
+}
+
+.highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+    background: #f8f8f8;
+}
+
+.highcharts-data-table tr:hover {
+    background: #f1f7ff;
+}
+
+.gen {
+    height: 260px;
+    padding-bottom: 40px;
+}
+
+.gen div {
+    height: 100%;
+}
+
+.gen > .left div {
+    height: 100%;
+}
+
+.gen > .right div {
+    height: 50%;
+}
+
+.gen > .right div div {
+    height: 100%;
+}
+/* 알람 */
 /* 메인용 */
 .chart_table table.main_use {
     width: 100%

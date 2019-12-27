@@ -2092,7 +2092,7 @@ input.inp[readonly]:focus {
 .indiv {
     background: #fff;
     border-radius: 17px;
-    padding: 20px 30px;
+    padding: 20px 30px !important;
     -webkit-box-shadow: 0px -1px 40px 0px rgba(29, 34, 43, 0.15);
     -moz-box-shadow: 0px -1px 40px 0px rgba(29, 34, 43, 0.15);
     box-shadow: 0px -1px 40px 0px rgba(29, 34, 43, 0.15);

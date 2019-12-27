@@ -11,6 +11,8 @@
 <title>동서발전 Service Portal</title>
 <link href="../css/bootstrap.css" rel="stylesheet">
 <link href="../css/font-awesome.min.css" rel="stylesheet">
+<link href="../css/weather-icons.min.css" rel="stylesheet">
+<link href="../css/weather-icons-wind.min.css" rel="stylesheet">
 <link href="/css/custom.css" rel="stylesheet">
 <link rel="stylesheet" href="../css/jquery-ui.css" type="text/css" media="all">
 <!-- datapicker용 -->
@@ -24,10 +26,14 @@
 <script src="../js/jquery-ui-1.12.1.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/highcharts.js"></script>
+<script src="../js/highcharts-more.js"></script>
 <!-- 하이차트 데이타 추출용 -->
 <script src="../js/modules/data.js"></script>
+<script src="../js/modules/solid-gauge.js"></script>
 <script src="../js/modules/exporting.js"></script>
 <script src="../js/modules/export-data.js"></script>
+<script src="../js/modules/accessibility.js"></script>
+<script src="../js/modules/stock.js"></script>
 <!-- //하이타트 데이타 추출용 -->
 <script src="../js/sectionDisplay.js"></script>
 <!-- 텝메뉴 용 -->

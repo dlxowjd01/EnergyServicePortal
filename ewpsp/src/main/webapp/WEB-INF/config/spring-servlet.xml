@@ -57,6 +57,8 @@
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/siteMain"/>
+            <mvc:mapping path="/pvMain"/>
+            <mvc:mapping path="/pvMain_nodata"/>
             <mvc:mapping path="/usage"/>
             <mvc:mapping path="/peak"/>
             <mvc:mapping path="/essCharge"/>

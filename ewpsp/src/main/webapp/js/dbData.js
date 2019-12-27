@@ -1029,6 +1029,18 @@ function deleteUser(userIdx) {
     });
 }
 
+// 오늘의 SMP 시장 정보
+function getFixedSMPMarketPrice() {
+    $.ajax({
+        url: "/getFixedSMPMarketPrice",
+        type: 'post',
+        async: false, // 동기로 처리해줌
+        success: function (result) {
+            callback_getFixedSMPMarketPrice(result);
+        }
+    });
+}
+
 //===== 군관리메인 조회 begin (greatman) =====
 
 // 군관리 알람 조회
