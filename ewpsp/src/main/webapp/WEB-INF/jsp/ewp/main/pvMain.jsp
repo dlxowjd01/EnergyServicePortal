@@ -1,3 +1,4 @@
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -10,6 +11,7 @@
           let monitoring_cycle_10sec = null;
           let monitoring_cycle_1min = null;
           let monitoring_cycle_15min = null;
+          let monitoring_cycle_1day = null;
           let formData = null;
 
           $(document).ready(() => {
@@ -18,6 +20,7 @@
             fn_cycle_10sec();
             fn_cycle_1min();
             fn_cycle_15min();
+            fn_cycle_1day();
 
             realTime_monitoring_start();
 
@@ -28,6 +31,7 @@
             monitoring_cycle_10sec_start();
             monitoring_cycle_1min_start();
             monitoring_cycle_15min_start();
+            monitoring_cycle_1day_start();
           };
 
           const monitoring_cycle_10sec_start = () => {
@@ -60,6 +64,16 @@
             }
           };
 
+          const monitoring_cycle_1day_start = () => {
+            if (monitoring_cycle_1day == null) {
+              monitoring_cycle_1day = setInterval(() => {
+                fn_cycle_1day();
+              }, 1000 * 60 * 60 * 24);
+            } else {
+              alert("1일 간격 모니터링이 이미 실행중입니다.")
+            }
+          };
+
           const monitoring_cycle_10sec_end = () => {
             clearInterval(monitoring_cycle_10sec);
             monitoring_cycle_10sec = null;
@@ -75,8 +89,13 @@
             monitoring_cycle_15min = null;
           };
 
+          const monitoring_cycle_1day_end = () => {
+            clearInterval(monitoring_cycle_1day);
+            monitoring_cycle_1day = null;
+          };
+
           const fn_cycle_10sec = () => {
-            // getAlarmList(formData);
+            getPVAlarmList(formData);
           };
 
           const fn_cycle_1min = () => {
@@ -89,10 +108,16 @@
             getPVGenRealList(formData);
             // PV 예측 발전량 조회
             getPVGenFutureList(formData);
-            // PV 예측 날씨 데이터 조회
             // SMP 오늘의 시장가 조회
             getFixedSMPMarketPrice();
+            // 1일 발전 시간 조회
+            getGeneratedHour(formData);
             // 종합 수익 계산
+          };
+
+          const fn_cycle_1day = () => {
+            // PV 예측 날씨 데이터 조회
+            getWeatherInfo(formData);
           };
 
           const getSiteMainSchCollection = () => {
@@ -237,6 +262,64 @@
                   const averageSMP = fixedSMPMarketPriceListOfJeju.reduce((a, b) => a + b, 0) / fixedSMPMarketPriceListOfJeju.length;
                   $(".jeju .averageSMP").html(Math.floor(averageSMP) + '원');
                 }
+              }
+            })
+          }
+
+          function callback_getPVAlarmList(result) {
+            var dvTpAlarmDetail = result.detail;
+            var dvTpAlarmDetail2 = result.detail2;
+            var alarmList = result.alarmList;
+
+            $("#todayTotalAlarmCnt").html(dvTpAlarmDetail.total_cnt);
+            $("#todayAlarmCnt").html(dvTpAlarmDetail2.alert_cnt);
+            $("#todayWarninfCnt").html(dvTpAlarmDetail2.warning_cnt);
+            if (dvTpAlarmDetail.notCfm_cnt === 0) {
+              $(".no").find('span').hide();
+            } else {
+              var $no = $(".no");
+              $no.find('span').show();
+              $no.empty().append('<span>' + dvTpAlarmDetail.notCfm_cnt + '</span>');
+            }
+
+            var str = "";
+            if (alarmList == null || alarmList.length < 1) {
+              str += '<li>';
+              str += '	<a href="#;"><spring:message code="ewp.main.There_is_no_query_results" /></a>';
+              str += '</li>';
+            } else {
+              for (var i = 0; i < alarmList.length; i++) {
+                var tm = new Date(convertDateUTC(alarmList[i].std_date));
+                str += '<li>';
+                str += '	<a href="#;">' + alarmList[i].alarm_msg + '</a>';
+                str += '	<span>' + tm.format("yyyy-MM-dd HH:mm:ss") + '</span>';
+                str += '</li>';
+              }
+              $(".alarm_notice").find("ul").html(str);
+            }
+
+          }
+
+          function callback_getWeatherInfo(result) {
+            let skycons = new Skycons({"color": "white"});
+            const current_date = new Date();
+            const cday = current_date.getDay();
+            const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+            result.map((e, idx) => {
+              skycons.add(`${'${days[idx]}'}`, Skycons[`${'${e.icon.toUpperCase().replace(/-/g,"_")}'}`]);
+              if (idx === cday) {
+                $(`#${'${days[idx]}'}_generated_hour`).closest('.day').addClass('today');
+              }
+            });
+            // start icon animation!
+            skycons.play();
+          }
+
+          function callback_getGeneratedHour(result) {
+            const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+            result.map((e, idx) => {
+              if (e) {
+                $(`#${'${days[idx]}'}_generated_hour`).html(e.generated_hour + ' H');
               }
             })
           }
@@ -1132,43 +1215,34 @@
                         <div class="col-lg-4">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="indiv">
+                                    <div class="indiv alarm">
                                         <div class="chart_top clear">
-                                            <h2 class="ntit fl">알람</h2>
+                                            <h2 class="ntit fl" ondblclick="location.href='/control'"
+                                                style="cursor: pointer;">
+                                                <spring:message code="ewp.main.Alarm" /><!-- 알람 --></h2>
                                             <div class="fr today_alarm">
-                                                <!-- <div class="total">금일발생 <span>614</span></div>
-                                                <div class="no"><span>2</span></div> -->
+                                                <div class="total">
+                                                    <spring:message code="ewp.main.Occurence_today" /><!-- 금일발생 -->
+                                                    <span id="todayTotalAlarmCnt">0</span></div>
+                                                <div class="no"><span style="display: none;">0</span></div>
                                             </div>
                                         </div>
                                         <!-- no-data { -->
-                                        <%--                                        <div class="no-data">--%>
-                                        <%--                                            <span>알람 정보를 가져올 수 없습니다.</span>--%>
-                                        <%--                                        </div>--%>
+                                        <div class="no-data" style="display: none;">
+                                            <span><spring:message code="ewp.site.Cannot_alarm_information" /><!-- 알람 정보를 가져올 수 없습니다. --></span>
+                                        </div>
                                         <!-- } no-data -->
                                         <div class="alarm_stat mt10 clear">
                                             <div class="a_alert clear">
-                                                <span>ALERT</span> <em>128</em>
+                                                <span>ALERT</span> <em id="todayAlarmCnt">0</em>
                                             </div>
                                             <div class="a_warning clear">
-                                                <span>WARNING</span> <em>486</em>
+                                                <span>WARNING</span> <em id="todayWarninfCnt">0</em>
                                             </div>
                                         </div>
                                         <div class="alarm_notice">
-                                            <h2>최근 알람</h2>
+                                            <h2><spring:message code="ewp.main.Recent_alarms" /><!-- 최근 알람 --></h2>
                                             <ul>
-                                                <li>
-                                                    <a href="#;">랙 전압 불균형이 감지되었습니다. 신속한 처리요망. 메시지가 길면 절삭처리 됩니다. 메시지가 길면
-                                                        절삭처리 됩니다.</a>
-                                                    <span>2018-08-12 11:41:26</span>
-                                                </li>
-                                                <li>
-                                                    <a href="#;">랙 전압 불균형이 감지되었습니다. 신속한 처리요망.</a>
-                                                    <span>2018-08-12 11:41:26</span>
-                                                </li>
-                                                <li>
-                                                    <a href="#;">랙 전압 불균형이 감지되었습니다. 신속한 처리요망.</a>
-                                                    <span>2018-08-12 11:41:26</span>
-                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -1869,11 +1943,11 @@
                                                     <span style="color:#fff; text-align:center;">Sun</span>
                                                 </div>
                                                 <div style="margin-bottom: 20px;">
-                                                    <i class="wi wi-night-sleet"
-                                                       style="font-size: 30px; color:#fff"></i>
+                                                    <canvas id="sun" width="30" height="30"></canvas>
                                                 </div>
                                                 <div style="margin-bottom: 20px;">
-                                                    <span style="color:#fff; text-align:center;">4.2 H</span>
+                                                    <span id="sun_generated_hour"
+                                                          style="color:#fff; text-align:center;"> - </span>
                                                 </div>
                                             </div>
                                             <div class="day"
@@ -1882,11 +1956,11 @@
                                                     <span style="color:#fff; text-align:center;">Mon</span>
                                                 </div>
                                                 <div style="margin-bottom: 20px;">
-                                                    <i class="wi wi-day-sunny"
-                                                       style="font-size: 30px; color:#fff"></i>
+                                                    <canvas id="mon" width="30" height="30"></canvas>
                                                 </div>
                                                 <div style="margin-bottom: 20px;">
-                                                    <span style="color:#fff; text-align:center;">3.5 H</span>
+                                                    <span id="mon_generated_hour"
+                                                          style="color:#fff; text-align:center;"> - </span>
                                                 </div>
                                             </div>
                                             <div class="day"
@@ -1895,11 +1969,11 @@
                                                     <span style="color:#fff; text-align:center;">Tue</span>
                                                 </div>
                                                 <div style="margin-bottom: 20px;">
-                                                    <i class="wi wi-day-rain-mix"
-                                                       style="font-size: 30px; color:#fff"></i>
+                                                    <canvas id="tue" width="30" height="30"></canvas>
                                                 </div>
                                                 <div style="margin-bottom: 20px;">
-                                                    <span style="color:#fff; text-align:center;">3.4 H</span>
+                                                    <span id="tue_generated_hour"
+                                                          style="color:#fff; text-align:center;"> - </span>
                                                 </div>
                                             </div>
                                             <div class="day"
@@ -1908,11 +1982,11 @@
                                                     <span style="color:#fff; text-align:center;">Wed</span>
                                                 </div>
                                                 <div style="margin-bottom: 20px;">
-                                                    <i class="wi wi-day-sunny-overcast"
-                                                       style="font-size: 30px; color:#fff"></i>
+                                                    <canvas id="wed" width="30" height="30"></canvas>
                                                 </div>
                                                 <div style="margin-bottom: 20px;">
-                                                    <span style="color:#fff; text-align:center;">1.7 H</span>
+                                                    <span id="wed_generated_hour"
+                                                          style="color:#fff; text-align:center;"> - </span>
                                                 </div>
                                             </div>
                                             <div class="day"
@@ -1921,11 +1995,11 @@
                                                     <span style="color:#fff; text-align:center;">Thu</span>
                                                 </div>
                                                 <div style="margin-bottom: 20px;">
-                                                    <i class="wi wi-day-showers"
-                                                       style="font-size: 30px; color:#fff"></i>
+                                                    <canvas id="thu" width="30" height="30"></canvas>
                                                 </div>
                                                 <div style="margin-bottom: 20px;">
-                                                    <span style="color:#fff; text-align:center;">2.2 H</span>
+                                                    <span id="thu_generated_hour"
+                                                          style="color:#fff; text-align:center;"> - </span>
                                                 </div>
                                             </div>
                                             <div class="day"
@@ -1934,11 +2008,11 @@
                                                     <span style="color:#fff; text-align:center;">Fri</span>
                                                 </div>
                                                 <div style="margin-bottom: 20px;">
-                                                    <i class="wi wi-day-cloudy-gusts"
-                                                       style="font-size: 30px; color:#fff"></i>
+                                                    <canvas id="fri" width="30" height="30"></canvas>
                                                 </div>
                                                 <div style="margin-bottom: 20px;">
-                                                    <span style="color:#fff; text-align:center;">3.3 H</span>
+                                                    <span id="fri_generated_hour"
+                                                          style="color:#fff; text-align:center;"> - </span>
                                                 </div>
                                             </div>
                                             <div class="day"
@@ -1947,11 +2021,11 @@
                                                     <span style="color:#fff; text-align:center;">Sat</span>
                                                 </div>
                                                 <div style="margin-bottom: 20px;">
-                                                    <i class="wi wi-day-fog"
-                                                       style="font-size: 30px; color:#fff"></i>
+                                                    <canvas id="sat" width="30" height="30"></canvas>
                                                 </div>
                                                 <div style="margin-bottom: 20px;">
-                                                    <span style="color:#fff; text-align:center;">4.4 H</span>
+                                                    <span id="sat_generated_hour"
+                                                          style="color:#fff; text-align:center;"> - </span>
                                                 </div>
                                             </div>
                                         </div>

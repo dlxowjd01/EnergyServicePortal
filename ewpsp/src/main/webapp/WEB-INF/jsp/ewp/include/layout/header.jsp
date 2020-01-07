@@ -230,4 +230,9 @@
         currEm.text(now.format('yyyy-MM-dd HH:mm:ss'));
         setTimeout(refreshCurrTime, 1000); // 매초 갱신
         }
+
+            //PV 대시보드 로고 변경
+            if(window.location.pathname === "/pvMain"){
+            $('.nav_brand').removeClass("ewp");
+            }
         </script>

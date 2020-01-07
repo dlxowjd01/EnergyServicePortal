@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="WeatherDao">
+    <!--시간대별 SMP 마켓 가격-->
+    <select id="getWeatherInfo" parameterType="Map" resultType="Map">
+        SELECT *
+        FROM tb_daily_weather
+        WHERE site_id = #{site_id}
+          AND YEARWEEK(time) = YEARWEEK(NOW())
+        ORDER BY time;
+    </select>
+    <select id="getGeneratedHour" parameterType="Map" resultType="Map">
+        SELECT
+            TIMESTAMPDIFF(HOUR, min(reg_date), max(reg_date)) AS generated_hour,
+            DATE_FORMAT(reg_date,'%Y-%m-%d') AS day
+        FROM
+            ewpsp.tb_pv_gen
+        WHERE site_id = #{site_id}
+          AND gen_val > 0
+          AND YEARWEEK(reg_date) = YEARWEEK(NOW())
+        GROUP BY DAY(reg_date)
+        ORDER BY reg_date
+    </select>
+</mapper>

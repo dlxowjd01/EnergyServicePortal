@@ -643,8 +643,9 @@
         }
         });
         }
+        //PV 대시보드 저작권자 변경
+        if(window.location.pathname === "/pvMain"){
+        $('.copyright.fr:first').html("COPYRIGHT &copy; 2020 Encored Technologies, Inc. ALL RIGHTS RESERVED");
+        }
         </script>
         <!-- //정보수정 -->
-
-
-

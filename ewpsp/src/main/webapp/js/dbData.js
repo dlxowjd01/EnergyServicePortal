@@ -1041,6 +1041,46 @@ function getFixedSMPMarketPrice() {
     });
 }
 
+// 날씨 정보 조회
+function getWeatherInfo(formData) {
+    $.ajax({
+        url: "/getWeatherInfo",
+        type: "post",
+        async: false,
+        data: formData,
+        success: function (result) {
+            callback_getWeatherInfo(result);
+        }
+    })
+}
+
+// 발전 시간 조회
+function getGeneratedHour(formData) {
+    $.ajax({
+        url: "/getGeneratedHour",
+        type: "post",
+        async: false,
+        data: formData,
+        success: function (result) {
+            callback_getGeneratedHour(result);
+        }
+    })
+}
+
+// PV 알람 조회
+function getPVAlarmList(formData) {
+    $.ajax({
+        url: "/getPVAlarmList",
+        type: 'post',
+//		async : false, // 동기로 처리해줌
+        async: true,
+        data: formData,
+        success: function (result) {
+            callback_getPVAlarmList(result);
+        }
+    });
+}
+
 //===== 군관리메인 조회 begin (greatman) =====
 
 // 군관리 알람 조회
