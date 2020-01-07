@@ -52,6 +52,9 @@ public class PVMainController {
     @Resource(name = "SMPService")
     private SMPService SMPService;
 
+    @Resource(name = "WeatherService")
+    private WeatherService weatherService;
+
     @Autowired
     private AlarmService alarmService;
 
@@ -87,5 +90,45 @@ public class PVMainController {
         return result;
     }
 
+    @RequestMapping("/getPVAlarmList")
+    public @ResponseBody
+    Map<String, Object> getPVAlarmList(@RequestParam HashMap param) throws Exception {
+        logger.debug("/getPVAlarmList");
+        logger.debug("param ::::: " + param.toString());
+
+        param = PeriodDataSetting.setSearchTerm(param);
+
+        Map result = controlService.getDeviceAlarmCnt(param); // 장치별 알람건수
+        Map result2 = controlService.getSiteMainAlarmCnt(param); // 장치타입별 알람건수
+        List alarmList = alarmService.getMainAlarmList(param); // 최근 알람 목록 조회(3건)
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("detail", result);
+        resultMap.put("detail2", result2);
+        resultMap.put("alarmList", alarmList);
+        return resultMap;
+    }
+
+    @PostMapping("/getWeatherInfo")
+    public @ResponseBody
+    List getWeatherInfo(@RequestParam Map param, HttpServletRequest request) throws Exception {
+        logger.debug("/getWeatherInfoController");
+        HashMap params = new HashMap();
+        params.put("site_id", param.get("siteId"));
+        List result = weatherService.getWeatherInfo(params, request);
+        logger.debug("/getWeatherInfoListResult:: + {}", result);
+        return result;
+    }
+
+    @PostMapping("/getGeneratedHour")
+    public @ResponseBody
+    List getGeneratedHour(@RequestParam Map param, HttpServletRequest request) throws Exception {
+        logger.debug("/getGeneratedHourController");
+        HashMap params = new HashMap();
+        params.put("site_id", param.get("siteId"));
+        List result = weatherService.getGeneratedHour(params, request);
+        logger.debug("/getGeneratedHourListResult:: + {}", result);
+        return result;
+    }
 
 }

@@ -106,6 +106,10 @@ nav .nav_brand.ewp a {
     background: url('../img/main_logo_ewp.png') no-repeat 0 0;
 }
 
+nav .nav_brand.encored a {
+    background: url('../img/main_logo.png') no-repeat 0 0;
+}
+
 /* 서울시 에너지자립마을 로고 */
 nav .nav_brand.seoul a {
     background: url('../img/main_logo_seoul.png') no-repeat 0 0;
@@ -1230,6 +1234,11 @@ h2.ntit {
 }
 
 /* 날씨 */
+.today {
+    border: 1px solid #464d5d;
+    border-radius: 2px;
+    background-color: #464d5d;
+}
 /* 현재 발전 현황*/
 .highcharts-figure .chart-container {
     width: 100%;
