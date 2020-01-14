@@ -120,9 +120,8 @@ jobs:
 
   test-sitespeed:
     machine: true
+    working_directory: ~/repo
     steps:
-      - attach_workspace:
-          at: ~/circleci-demo-java-spring
       - checkout
       - run: sudo modprobe ifb numifbs=1
       - run: docker run --rm -v $(pwd)/sitespeed.io:/sitespeed.io sitespeedio/sitespeed.io:8.14.0 --preScript /sitespeed.io/login.js http://derms.enertalk.com:8080/main
