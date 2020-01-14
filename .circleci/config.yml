@@ -50,7 +50,6 @@ jobs:
             cp ewpsp/target/ewpsp.war .
             DOCKERHUB_REPO=enertalk/ewp
             IMAGE_TAG=ewpsp-$CIRCLE_SHA1
-
             IMAGE_DEFAULT_TAG=ewpsp-latest
             IMAGE_NAME=$DOCKERHUB_REPO:$IMAGE_TAG
             IMAGE_DEFAULT_NAME=$DOCKERHUB_REPO:$IMAGE_DEFAULT_TAG
@@ -124,11 +123,15 @@ jobs:
     steps:
       - checkout
       - run:
+          name: "Initial setting"
+          command: |
+            sudo modprobe ifb numifbs=1
+      - run:
           name: "Run test"
           command: |
             docker run --rm -v $(pwd)/sitespeed.io:/sitespeed.io sitespeedio/sitespeed.io:8.14.0 --preScript /sitespeed.io/login.js http://derms.enertalk.com:8080/main
       - store_artifacts:
-          path: $(pwd)/sitespeed.io/sitespeed-results/
+          path: sitespeed.io/sitespeed-results/
 
   publish-github-release:
     docker:
