@@ -131,7 +131,7 @@ jobs:
           command: |
             docker run --rm -v $(pwd)/sitespeed.io:/sitespeed.io sitespeedio/sitespeed.io:8.14.0 --preScript /sitespeed.io/login.js http://derms.enertalk.com:8080/main
       - store_artifacts:
-          path: sitespeed.io/sitespeed-results/
+          path: sitespeed.io/sitespeed-result/
 
   publish-github-release:
     docker:
