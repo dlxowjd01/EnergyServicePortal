@@ -149,7 +149,7 @@ workflows:
       - build:
           filters:
             branches:
-              ignore: develop
+              only: master
       - deploy:
           requires:
             - build
@@ -157,8 +157,6 @@ workflows:
             branches:
               only: master
       - test-sitespeed:
-          requires:
-            - deploy
       - publish-github-release:
           requires:
             - build
