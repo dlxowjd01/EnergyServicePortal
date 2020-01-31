@@ -23,4 +23,44 @@ public class PVGenDao {
         return resultList;
     }
 
+    public Integer getPVGenRealListForToday(HashMap param) {
+        Integer result = sqlSession.selectOne("pvGenDao.getPVGenRealListForToday", param);
+        return result;
+    }
+
+    public Integer getPVGenRealListForLastMonth(HashMap param) {
+        Integer result = sqlSession.selectOne("pvGenDao.getPVGenRealListForLastMonth", param);
+        return result;
+    }
+
+    public Integer getPVGenRealListForThisMonth(HashMap param) {
+        Integer result = sqlSession.selectOne("pvGenDao.getPVGenRealListForThisMonth", param);
+        return result;
+    }
+
+    public List getPVGenRealListForThisMonthDaily(HashMap param) {
+        List result = sqlSession.selectList("pvGenDao.getPVGenRealListForThisMonthDaily", param);
+        return result;
+    }
+
+    public Integer getPVGenRealListForLastYear(HashMap param) {
+        Integer result = sqlSession.selectOne("pvGenDao.getPVGenRealListForLastYear", param);
+        return result;
+    }
+
+    public Integer getPVGenRealListForThisYear(HashMap param) {
+        Integer result = sqlSession.selectOne("pvGenDao.getPVGenRealListForThisYear", param);
+        return result;
+    }
+
+    public List getPVGenRealListForThisYearMonthly(HashMap param) {
+        List result = sqlSession.selectList("pvGenDao.getPVGenRealListForThisYearMonthly", param);
+        return result;
+    }
+
+    public List getPVGenRealLatestListOfDevices(HashMap param) {
+        List resultList = sqlSession.selectList("pvGenDao.getPVGenRealLatestListOfDevices", param);
+        return resultList;
+    }
+
 }

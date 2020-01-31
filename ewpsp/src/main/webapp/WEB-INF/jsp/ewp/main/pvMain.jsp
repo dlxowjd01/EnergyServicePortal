@@ -102,22 +102,58 @@
           };
 
           const fn_cycle_15min = () => {
-            // 현재 PV 장치 상태 조회
-            // update_updtDataTime(new Date(), "updtTimeESS"); -> 15분마다 조회하는 컴포넌트 시간 바꾸기
+            $(".updateTimePV").empty().append(new Date().format("yyyy-MM-dd HH:mm:ss"));
             // PV 발전량 조회
             getPVGenRealList(formData);
             // PV 예측 발전량 조회
             getPVGenFutureList(formData);
+            // 오늘 PV 발전량 조회
+            getPVGenRealListForToday(formData);
+            // 이번 달 PV 발전량 조회
+            getPVGenRealListForThisMonth(formData);
+            // 이번 달 PV 발전량 일별 조회
+            getPVGenRealListForThisMonthDaily(formData);
+            // 지난 달 PV 발전량 조회
+            getPVGenRealListForLastMonth(formData);
+            // 올해 PV 발전량 조회
+            getPVGenRealListForThisYear(formData);
+            // 올해 PV 월별 발전량 조회
+            getPVGenRealListForThisYearMonthly(formData);
+            // 작년 PV 발전량 조회
+            getPVGenRealListForLastYear(formData);
+            // 장비별 최근 PV 발전량 리스트 조회
+            getPVGenRealLatestListOfDevices(formData);
+            // REC 현물 시장 현재 데이터 조회
+            getCurrentRECMarketPrice();
+            // REC 발급 내역 데이터 조회
+            getSiteRECIssued(formData);
+            // REC 판매 내역 데이터 조회
+            getSiteRECBook(formData);
+            // 이번 달 미정산 REC 조회
+            getIssuedRECInThisMonth(formData);
+            // 오늘 정산 REC, 정산 금액 조회
+            getSoldRECInThisDay(formData);
+            // 이번 달 정산 REC, 정산 금액 조회
+            getSoldRECInThisMonth(formData);
+            // 직전 달 정산 REC, 정산 금액 조회
+            getSoldRECInLastMonth(formData);
+            // 올해 정산 REC, 정산 금액 조회
+            getSoldRECInThisYear(formData);
+            // 작년 정산 REC, 정산 금액 조회
+            getSoldRECInLastYear(formData);
+            // 올해 정산 REC, 정산 금액 월별 조회
+            getSoldRECInThisYearMonthly(formData);
+            // 오늘의 거래량 조회
+            getTradingVolumeByDay(formData);
+            // 오늘의 거래 가격 조회
+            getTransactionPriceByDay(formData);
             // SMP 오늘의 시장가 조회
             getFixedSMPMarketPrice();
-            // 1일 발전 시간 조회
-            getGeneratedHour(formData);
-            // 종합 수익 계산
           };
 
           const fn_cycle_1day = () => {
             // PV 예측 날씨 데이터 조회
-            getWeatherInfo(formData);
+            getWeatherIconMonthly(formData);
           };
 
           const getSiteMainSchCollection = () => {
@@ -234,36 +270,361 @@
             // }
           }
 
+          function callback_getPVGenRealListForToday(result) {
+            $('#pv_gen_in_today').html(result + " kWh");
+          }
+
+          let PVGenRealListForThisMonth;
+
+          function callback_getPVGenRealListForThisMonth(result) {
+            PVGenRealListForThisMonth = result;
+            $('#sum_pv_gen_for_this_month').html(result.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+          }
+
+          function callback_getPVGenRealListForThisMonthDaily(result) {
+            result.map(e => {
+              $(`#${'${e.std_date}'}>div>div>span`).html(`${'${e.gen_val}'}`);
+            })
+          }
+
+          let PVGenRealListForLastMonth;
+
+          function callback_getPVGenRealListForLastMonth(result) {
+            PVGenRealListForLastMonth = result;
+          }
+
+          let PVGenRealListForThisYear;
+
+          function callback_getPVGenRealListForThisYear(result) {
+            PVGenRealListForThisYear = result;
+            $('#sum_pv_gen_for_this_year').html(result.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+          }
+
+          function callback_getPVGenRealListForThisYearMonthly(result) {
+            result.map((e, idx) => {
+              $(`#income_datatable > tbody > tr:nth-child(${'${idx+1}'}) > td:nth-child(${'${idx+2}'})`).html(e.gen_val);
+            })
+          }
+
+          let PVGenRealListForLastYear;
+
+          function callback_getPVGenRealListForLastYear(result) {
+            PVGenRealListForLastYear = result;
+            changePVGen();
+          }
+
+          let PVGenRealLatestListOfDevices;
+
+          function changePage(currentPageNum, pageRowCnt, deviceList) {
+
+            const devices = JSON.parse(deviceList);
+            const stringifiedDeviceList = JSON.stringify(deviceList);
+            let totalPageCnt = Math.floor(devices.length / pageRowCnt) + 1;
+
+            const $paging = $('#pvMain_device_paging');
+            $paging.empty();
+
+            if (currentPageNum > 1) {
+              $("#selPageNum").val(currentPageNum - 1);
+              $paging.append($('<a href=\'javascript:changePage(' + (currentPageNum - 1) + ',' + pageRowCnt + ',' + stringifiedDeviceList + ')\' class="prev" />').append("PREV"));
+            } else {
+              $paging.append($('<a href="#" class="prev" />').append("PREV"));
+            }
+
+            $paging.append(
+              $('<span />').append($("<strong />").append(currentPageNum)).append(" / " + totalPageCnt)
+            );
+
+            if (currentPageNum < totalPageCnt) {
+              $("#selPageNum").val(currentPageNum + 1);
+              $paging.append($('<a href=\'javascript:changePage(' + (currentPageNum + 1) + ',' + pageRowCnt + ',' + stringifiedDeviceList + ')\' class="next" />').append("NEXT"));
+            } else {
+              $paging.append($('<a href="#" class="next" />').append("NEXT"));
+            }
+
+            devices.map((e, idx) => {
+              if (idx >= (pageRowCnt * (currentPageNum - 1)) && idx < pageRowCnt * currentPageNum) {
+                $(`#container-speed${'${idx}'}`).css("display", "block");
+              } else {
+                $(`#container-speed${'${idx}'}`).css("display", "none");
+              }
+              $(`#container-speed${'${idx}'}`).closest('.col-sm-4').css("min-height", "0");
+            })
+          };
+
+          function callback_getPVGenRealLatestListOfDevices(result) {
+            let deviceList = result;
+            const pvMain_deviceList = $('.pvMain_deviceList');
+            pvMain_deviceList.empty();
+
+            deviceList.map((e, idx) => {
+              const id = `container-speed${'${idx}'}`;
+              pvMain_deviceList.append(`<div class="col-sm-4">
+                                                <figure class="highcharts-figure">
+                                                    <div id=${'${id}'} class="chart-container" style="display:none;"
+                                                    ></div>
+                                                </figure>
+                                            </div>`
+              );
+              var gaugeOptions = {
+                chart: {
+                  type: 'solidgauge',
+                  backgroundColor: 'transparent'
+                },
+                title: null,
+                pane: {
+                  center: ['50%', '85%'],
+                  size: '100%',
+                  startAngle: -90,
+                  endAngle: 90,
+                  background: {
+                    backgroundColor:
+                      Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
+                    innerRadius: '60%',
+                    outerRadius: '100%',
+                    shape: 'arc'
+                  }
+                },
+                exporting: {
+                  enabled: false
+                },
+                tooltip: {
+                  enabled: false
+                },
+                // the value axis
+                yAxis: {
+                  stops: [
+                    [0.1, '#13af67'], // green
+                    [0.5, '#FBBC04'], // yellow
+                    [0.9, '#f75c4a'] // red
+                  ],
+                  lineWidth: 0,
+                  tickWidth: 0,
+                  minorTickInterval: null,
+                  tickAmount: 2,
+                  title: {
+                    y: -70,
+                    style: {
+                      fontSize: 20,
+                      color: '#fff'
+                    }
+                  },
+                  labels: {
+                    y: 16,
+                    distance: -6,
+                    style: {
+                      color: '#fff'
+                    }
+                  }
+                },
+                plotOptions: {
+                  solidgauge: {
+                    dataLabels: {
+                      y: 20,
+                      borderWidth: 0,
+                      useHTML: false,
+                      style: {
+                        color: '#fff',
+                        textAlign: 'center',
+                      }
+                    }
+                  }
+                },
+              };
+              // The speed gauge
+              var chartSpeed = Highcharts.chart(`container-speed${'${idx}'}`, Highcharts.merge(gaugeOptions, {
+                yAxis: {
+                  min: 0,
+                  max: 200,
+                  x: 0,
+                  title: {
+                    text: `IVT ${'${e.device_id}'}`
+                  }
+                },
+                credits: {
+                  enabled: false
+                },
+                series: [{
+                  name: 'Speed',
+                  data: [e.gen_val],
+                  dataLabels: {
+                    format:
+                      '<div style="text-align:center">' +
+                      '<span class="gauge-data-label-num" style="font-size:14px; display:inline-block;">{y}</span><br/>' +
+                      '<span class="gauge-data-label-text" style="font-size:8px; display:inline-block;">kW/h</span>' +
+                      '</div>',
+                    style: {textOutline: 'none'}
+                  },
+                  tooltip: {
+                    valueSuffix: ' kW/h'
+                  }
+                }]
+              }));
+            });
+
+            let pageRowCnt = 3;
+            let $currentPageNum = Number($('#selPageNum').val());
+            const deviceListString = JSON.stringify(deviceList);
+
+            changePage($currentPageNum, pageRowCnt, deviceListString);
+
+          }
+
+          function callback_getDeviceList(result) {
+            const deviceList = result.deviceList;
+            const $pvMain_device = $(".pvMain_device");
+            if (deviceList.length < 1) {
+              $pvMain_device.find(".no-device").css("display", "");
+              $pvMain_device.find(".gen").css("display", "none");
+              $pvMain_device.find(".paging").css("display", "none");
+            } else {
+              $pvMain_device.find(".no-device").css("display", "none");
+              $pvMain_device.find(".gen").css("display", "");
+              $pvMain_device.find(".paging").css("display", "");
+            }
+          }
+
           let fixedSMPMarketPriceListOfMainland = [];
           let fixedSMPMarketPriceListOfJeju = [];
 
           function callback_getFixedSMPMarketPrice(result) {
-            console.log("callback_getFixedSMPMarketPrice", result);
-            result.filter(e => {
-              for (const [key, value] of Object.entries(e)) {
-                if (key === 'KPX_SMP') {
-                  fixedSMPMarketPriceListOfMainland = value.map(e => e.price);
-                  const currentSMP = Math.floor(value[new Date().getHours()].price);
-                  $(".mainland .currentSMP").html(Math.floor(currentSMP) + '원');
-                  const highestSMP = Math.max(...fixedSMPMarketPriceListOfMainland);
-                  $(".mainland .highestSMP").html(Math.floor(highestSMP) + '원');
-                  const lowestSMP = Math.min(...fixedSMPMarketPriceListOfMainland);
-                  $(".mainland .lowestSMP").html(Math.floor(lowestSMP) + '원');
-                  const averageSMP = fixedSMPMarketPriceListOfMainland.reduce((a, b) => a + b, 0) / fixedSMPMarketPriceListOfMainland.length;
-                  $(".mainland .averageSMP").html(Math.floor(averageSMP) + '원');
-                } else if (key === 'KPX_SMP_JEJU') {
-                  const currentSMP = Math.floor(value[new Date().getHours()].price);
-                  $(".jeju .currentSMP").html(Math.floor(currentSMP) + '원');
-                  fixedSMPMarketPriceListOfJeju = value.map(e => e.price);
-                  const highestSMP = Math.max(...fixedSMPMarketPriceListOfJeju);
-                  $(".jeju .highestSMP").html(Math.floor(highestSMP) + '원');
-                  const lowestSMP = Math.min(...fixedSMPMarketPriceListOfJeju);
-                  $(".jeju .lowestSMP").html(Math.floor(lowestSMP) + '원');
-                  const averageSMP = fixedSMPMarketPriceListOfJeju.reduce((a, b) => a + b, 0) / fixedSMPMarketPriceListOfJeju.length;
-                  $(".jeju .averageSMP").html(Math.floor(averageSMP) + '원');
+            if (result[0] != null && result[1] != null) {
+              result.filter(e => {
+                for (const [key, value] of Object.entries(e)) {
+                  if (key === 'KPX_SMP') {
+                    fixedSMPMarketPriceListOfMainland = value.map(e => e.price);
+                    const currentSMP = Math.floor(value[new Date().getHours()].price);
+                    $(".mainland .currentSMP").html(Math.floor(currentSMP) + '원');
+                    const highestSMP = Math.max(...fixedSMPMarketPriceListOfMainland);
+                    $(".mainland .highestSMP").html(Math.floor(highestSMP) + '원');
+                    const lowestSMP = Math.min(...fixedSMPMarketPriceListOfMainland);
+                    $(".mainland .lowestSMP").html(Math.floor(lowestSMP) + '원');
+                    const averageSMP = fixedSMPMarketPriceListOfMainland.reduce((a, b) => a + b, 0) / fixedSMPMarketPriceListOfMainland.length;
+                    $(".mainland .averageSMP").html(Math.floor(averageSMP) + '원');
+                  } else if (key === 'KPX_SMP_JEJU') {
+                    const currentSMP = Math.floor(value[new Date().getHours()].price);
+                    $(".jeju .currentSMP").html(Math.floor(currentSMP) + '원');
+                    fixedSMPMarketPriceListOfJeju = value.map(e => e.price);
+                    const highestSMP = Math.max(...fixedSMPMarketPriceListOfJeju);
+                    $(".jeju .highestSMP").html(Math.floor(highestSMP) + '원');
+                    const lowestSMP = Math.min(...fixedSMPMarketPriceListOfJeju);
+                    $(".jeju .lowestSMP").html(Math.floor(lowestSMP) + '원');
+                    const averageSMP = fixedSMPMarketPriceListOfJeju.reduce((a, b) => a + b, 0) / fixedSMPMarketPriceListOfJeju.length;
+                    $(".jeju .averageSMP").html(Math.floor(averageSMP) + '원');
+                  }
                 }
+              })
+            }
+          }
+
+          let currentRECMarketPriceList = {};
+
+          function callback_getCurrentRECMarketPrice(result) {
+            currentRECMarketPriceList = result;
+          }
+
+          function callback_getSiteRECIssued(result) {
+          }
+
+          function callback_getSiteRECBook(result) {
+            let sell_rec_num = 0;
+            result[${selViewSiteId}].map(e => {
+              sell_rec_num += e.sell_rec_num;
+            });
+            $('#sell_rec_num').html(sell_rec_num);
+            let sell_rec_value = 0;
+            result[${selViewSiteId}].map(e => {
+              sell_rec_value += e.sell_rec_value;
+            });
+            const sell_rec_value_with_comma = sell_rec_value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            $('#sell_rec_value').html(sell_rec_value_with_comma);
+          }
+
+          let issuedRECInThisMonth;
+
+          function callback_getIssuedRECInThisMonth(result) {
+            $('#not_sell_rec_num').html(result);
+            issuedRECInThisMonth = result;
+          }
+
+          let sellRecNumInThisDay;
+          let sellRecValueInThisDay;
+
+          function callback_getSoldRECInThisDay(result) {
+            result.map(e => {
+              if (e) {
+                sellRecNumInThisMonth = e.sell_rec_num;
+                sellRecValueInThisMonth = e.sell_rec_value;
               }
-            })
+            });
+          }
+
+          let sellRecNumInThisMonth;
+          let sellRecValueInThisMonth;
+
+          function callback_getSoldRECInThisMonth(result) {
+            result.map(e => {
+              // $('#sell_rec_num').html(e.sell_rec_num);
+              sellRecNumInThisMonth = e.sell_rec_num;
+              // $('#sell_rec_value').html(e.sell_rec_value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+              // $('#REC_earnings_for_this_month').html(e.sell_rec_value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+              sellRecValueInThisMonth = e.sell_rec_value;
+            });
+          }
+
+          let sellRecNumInLastMonth;
+          let sellRecValueInLastMonth;
+
+          function callback_getSoldRECInLastMonth(result) {
+            result.map(e => {
+              sellRecNumInLastMonth = e.sell_rec_num;
+              sellRecValueInLastMonth = e.sell_rec_value;
+            });
+          }
+
+          let sellRecNumInThisYear;
+          let sellRecValueInThisYear;
+
+          function callback_getSoldRECInThisYear(result) {
+            result.map(e => {
+              sellRecNumInThisYear = e.sell_rec_num;
+              sellRecValueInThisYear = e.sell_rec_value;
+            });
+          }
+
+          let sellRecNumInLastYear;
+          let sellRecValueInLastYear;
+
+          function callback_getSoldRECInLastYear(result) {
+            result.map(e => {
+              sellRecNumInLastYear = e.sell_rec_num;
+              sellRecValueInLastYear = e.sell_rec_value;
+            });
+          }
+
+          function callback_getSoldRECInThisYearMonthly(result) {
+          }
+
+          let tradingVolumeByDay = [];
+
+          function callback_getTradingVolumeByDay(result) {
+            if (tradingVolumeByDay) {
+              tradingVolumeByDay = [];
+            }
+            result.map(e => {
+              tradingVolumeByDay = [...tradingVolumeByDay, Object.values(e)];
+            });
+          }
+
+          let transactionPriceByDay = [];
+
+          function callback_getTransactionPriceByDay(result) {
+            if (transactionPriceByDay) {
+              transactionPriceByDay = [];
+            }
+            result.map(e => {
+              transactionPriceByDay = [...transactionPriceByDay, Object.values(e)];
+            });
           }
 
           function callback_getPVAlarmList(result) {
@@ -315,6 +676,14 @@
             skycons.play();
           }
 
+          function callback_getWeatherIconMonthly(result) {
+            let skycons = new Skycons({"color": "white"});
+            result.map(e => {
+              skycons.add(`${'${e.time}icon'}`, Skycons[`${'${e.icon.toUpperCase().replace(/-/g,"_")}'}`]);
+            })
+            skycons.play();
+          }
+
           function callback_getGeneratedHour(result) {
             const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
             result.map((e, idx) => {
@@ -324,6 +693,61 @@
             })
           }
 
+          function changeEarnings() {
+            $('#sum_earnings_for_this_month').html((sellRecValueInThisMonth + SMPEarningsForThisMonth).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+            $('#sum_earnings_for_this_year').html((sellRecValueInThisYear + SMPEarningsForThisYear).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+            //지난 달과 이번 달의 REC 수익 격차
+            if ((sellRecValueInLastMonth - sellRecValueInThisMonth) > 0) {
+              $('#REC_earnings_increase_for_this_month').removeClass('glyphicon-triangle-top').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-bottom');
+              $('#REC_earnings_increase_for_this_month').html('(' + (Math.abs(sellRecValueInLastMonth - sellRecValueInThisMonth)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')');
+            } else {
+              $('#REC_earnings_increase_for_this_month').removeClass('glyphicon-triangle-top').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-top');
+              $('#REC_earnings_increase_for_this_month').html('(' + (Math.abs(sellRecValueInLastMonth - sellRecValueInThisMonth)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')');
+            }
+            //지난 달과 이번 달의 SMP 수익 격차
+            if ((SMPEarningsForLastMonth - SMPEarningsForThisMonth) > 0) {
+              $('#SMP_earnings_increase_for_this_month').removeClass('glyphicon-triangle-top').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-bottom');
+              $('#SMP_earnings_increase_for_this_month').html('(' + (Math.abs(SMPEarningsForLastMonth - SMPEarningsForThisMonth)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')');
+            } else {
+              $('#SMP_earnings_increase_for_this_month').removeClass('glyphicon-triangle-top').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-top');
+              $('#SMP_earnings_increase_for_this_month').html('(' + (Math.abs(SMPEarningsForLastMonth - SMPEarningsForThisMonth)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')');
+            }
+            //지난 달과 이번 달의 총 수익 격차
+            if ((sellRecValueInLastMonth + SMPEarningsForLastMonth) - (sellRecValueInThisMonth + SMPEarningsForThisMonth) > 0) {
+              $('#sum_earnings_increase_for_this_month').removeClass('glyphicon-triangle-top').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-bottom');
+              $('#sum_earnings_increase_for_this_month').html('(' + (Math.abs((sellRecValueInLastMonth + SMPEarningsForLastMonth) - (sellRecValueInThisMonth + SMPEarningsForThisMonth))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')');
+            } else {
+              $('#sum_earnings_increase_for_this_month').removeClass('glyphicon-triangle-top').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-top');
+              $('#sum_earnings_increase_for_this_month').html('(' + (Math.abs((sellRecValueInLastMonth + SMPEarningsForLastMonth) - (sellRecValueInThisMonth + SMPEarningsForThisMonth))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')');
+            }
+            //작년과 올해의 수익 격차
+            if (((sellRecValueInLastYear + SMPEarningsForLastYear) - (sellRecValueInThisYear + SMPEarningsForThisYear)) > 0) {
+              $('#sum_earnings_increase_for_this_year').removeClass('glyphicon-triangle-top').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-bottom');
+              $('#sum_earnings_increase_for_this_year').html('(' + (Math.abs((sellRecValueInLastYear + SMPEarningsForLastYear) - (sellRecValueInThisYear + SMPEarningsForThisYear))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')');
+            } else {
+              $('#sum_earnings_increase_for_this_year').removeClass('glyphicon-triangle-top').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-top');
+              $('#sum_earnings_increase_for_this_year').html('(' + (Math.abs((sellRecValueInLastYear + SMPEarningsForLastYear) - (sellRecValueInThisYear + SMPEarningsForThisYear))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')');
+            }
+          }
+
+          function changePVGen() {
+            //지난 달과 이번 달의 총 발전량 격차
+            if ((PVGenRealListForLastMonth - PVGenRealListForThisMonth) > 0) {
+              $('#sum_pv_gen_increase_for_this_month').removeClass('glyphicon-triangle-top').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-bottom');
+              $('#sum_pv_gen_increase_for_this_month').html('(' + (Math.abs((PVGenRealListForLastMonth - PVGenRealListForThisMonth))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')');
+            } else {
+              $('#sum_pv_gen_increase_for_this_month').removeClass('glyphicon-triangle-top').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-top');
+              $('#sum_pv_gen_increase_for_this_month').html('(' + (Math.abs((PVGenRealListForLastMonth - PVGenRealListForThisMonth))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')');
+            }
+            //작년과 올해의 발전량 격차
+            if ((PVGenRealListForLastYear - PVGenRealListForThisYear) > 0) {
+              $('#sum_pv_gen_increase_for_this_year').removeClass('glyphicon-triangle-top').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-bottom');
+              $('#sum_pv_gen_increase_for_this_year').html('(' + (Math.abs((PVGenRealListForLastYear - PVGenRealListForThisYear))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')');
+            } else {
+              $('#sum_pv_gen_increase_for_this_year').removeClass('glyphicon-triangle-top').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-top');
+              $('#sum_pv_gen_increase_for_this_year').html('(' + (Math.abs((PVGenRealListForLastYear - PVGenRealListForThisYear))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')');
+            }
+          }
         </script>
     </head>
     <body>
@@ -350,7 +774,7 @@
                         <input type="hidden" id="selTerm" name="selTerm" value="today">
                         <input type="hidden" id="selPeriodVal" name="selPeriodVal" value="hour">
                         <input type="hidden" id="siteId" name="siteId" value="${selViewSiteId}">
-                        <input type="hidden" id="selPageNum" name="selPageNum" value="">
+                      <input type="hidden" id="selPageNum" name="selPageNum" value="1">
                         <input type="hidden" id="timeOffset" name="timeOffset">
                         <input type="hidden" id="monthFrom" name="monthFrom">
                         <input type="hidden" id="monthTo" name="monthTo">
@@ -363,8 +787,8 @@
                                 <div class="col-sm-12">
                                     <div class="indiv income">
                                         <div class="chart_top clear">
-                                            <h2 class="ntit fl">월별 수입 종합</h2>
-                                            <div class="time fr">2018-08-12 11:41:26</div>
+                                          <h2 class="ntit fl">월별 PV 발전량 종합</h2>
+                                          <div class="time fr updateTimePV">2018-08-12 11:41:26</div>
                                         </div>
                                         <div class="inchart">
                                             <div id="income_chart" style="height:332px;"></div>
@@ -416,7 +840,7 @@
                                                     gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
                                                     min: 0, /* 최소값 지정 */
                                                     title: {
-                                                      text: '(won)',
+                                                      text: '(kWh)',
                                                       align: 'low',
                                                       rotation: 0, /* 타이틀 기울기 */
                                                       y: 25, /* 타이틀 위치 조정 */
@@ -458,7 +882,7 @@
                                                   /* 툴팁 */
                                                   tooltip: {
                                                     formatter: function () {
-                                                      return '<b>' + this.series.name + '</b><br/>' + this.x + '<br/><span style="color:#438fd7">' + this.y + ' won</span>';
+                                                      return '<b>' + this.series.name + '</b><br/>' + this.x + '월' + '<br/><span style="color:#438fd7">' + this.y + ' kWh</span>';
                                                     }
                                                   },
 
@@ -487,9 +911,7 @@
 
                                                   /* 그래프 스타일 */
                                                   series: [{
-                                                    color: '#438fd7' /* REC 수익 */
-                                                  }, {
-                                                    color: '#f75c4a' /* SMP 수익 */
+                                                    color: '#ED7217' /* 발전량 */
                                                   }]
 
                                                 });
@@ -501,69 +923,56 @@
                                                     <thead>
                                                         <tr>
                                                             <th></th>
-                                                            <th>REC 수익</th>
-                                                            <th>SMP 수익</th>
+                                                          <th>PV 발전량</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
                                                             <th>1</th>
-                                                            <td>500</td>
-                                                            <td>400</td>
+                                                          <td>0</td>
                                                         </tr>
                                                         <tr>
                                                             <th>2</th>
-                                                            <td>300</td>
-                                                            <td>500</td>
+                                                          <td>0</td>
                                                         </tr>
                                                         <tr>
                                                             <th>3</th>
-                                                            <td>200</td>
-                                                            <td>550</td>
+                                                          <td>0</td>
                                                         </tr>
                                                         <tr>
                                                             <th>4</th>
-                                                            <td>400</td>
-                                                            <td>540</td>
+                                                          <td>0</td>
                                                         </tr>
                                                         <tr>
                                                             <th>5</th>
-                                                            <td>300</td>
-                                                            <td>550</td>
+                                                          <td>0</td>
                                                         </tr>
                                                         <tr>
                                                             <th>6</th>
-                                                            <td>500</td>
-                                                            <td>520</td>
+                                                          <td>0</td>
                                                         </tr>
                                                         <tr>
                                                             <th>7</th>
-                                                            <td>400</td>
-                                                            <td>530</td>
+                                                          <td>0</td>
                                                         </tr>
                                                         <tr>
                                                             <th>8</th>
-                                                            <td>300</td>
-                                                            <td>750</td>
+                                                          <td>0</td>
                                                         </tr>
                                                         <tr>
                                                             <th>9</th>
-                                                            <td>450</td>
-                                                            <td>800</td>
+                                                          <td>0</td>
                                                         </tr>
                                                         <tr>
                                                             <th>10</th>
-                                                            <td>0</td>
                                                             <td>0</td>
                                                         </tr>
                                                         <tr>
                                                             <th>11</th>
                                                             <td>0</td>
-                                                            <td>0</td>
                                                         </tr>
                                                         <tr>
                                                             <th>12</th>
-                                                            <td>0</td>
                                                             <td>0</td>
                                                         </tr>
                                                     </tbody>
@@ -572,121 +981,34 @@
                                         </div>
                                         <div class="chart_footer">
                                             <ul class="clear">
-                                                <li>이번달 총 REC 수익: <span>1,000</span> 원 <i
-                                                        class="glyphicon glyphicon-triangle-top" style="color:#f75c4a">(90)</i>
-                                                </li>
-                                                <li>이번달 총 SMP 수익: <span>500,000</span> 원 <i
-                                                        class="glyphicon glyphicon-triangle-bottom"
-                                                        style="color:#438fd7">(60)</i></li>
-                                                <li>이번달 총 수익: <span>1,500</span> 원 <i
-                                                        class="glyphicon glyphicon-triangle-bottom"
-                                                        style="color:#438fd7">(150)</i></li>
-                                                <li>올해 누적 수익: <span>15,121,231</span> 원 <i
-                                                        class="glyphicon glyphicon-triangle-top" style="color:#f75c4a">(12,405)</i>
+                                              <li>이번달 총 발전량: <span id="sum_pv_gen_for_this_month">1,500</span> kWh
+                                                <i
+                                                    class="glyphicon glyphicon-triangle-bottom"
+                                                    id="sum_pv_gen_increase_for_this_month"
+                                                    style="color:#438fd7">(150)</i></li>
+                                              <li>올해 누적 발전량: <span id="sum_pv_gen_for_this_year">15,121,231</span>
+                                                kWh
+                                                <i
+                                                    class="glyphicon glyphicon-triangle-top"
+                                                    id="sum_pv_gen_increase_for_this_year"
+                                                    style="color:#f75c4a">(12,405)</i>
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="indiv">
-                                        <div class="chart_top clear">
-                                            <h2 class="ntit fl">REC 종합</h2>
-                                            <div class="time fr">2018-08-12 11:41:26</div>
-                                        </div>
-                                        <div class="pie_chart">
-                                            <div id="REC_pie" style="height:260px;"></div>
-                                            <script language="JavaScript">
-                                              $(function () {
-                                                var REC_pie = Highcharts.chart('REC_pie', {
-                                                  chart: {
-                                                    plotBackgroundColor: null,
-                                                    plotBorderWidth: null,
-                                                    plotShadow: false,
-                                                    type: 'pie',
-                                                    backgroundColor: 'transparent',
-                                                  },
-                                                  title: {
-                                                    text: ''
-                                                  },
-                                                  tooltip: {
-                                                    pointFormat: '<b>{point.percentage:.1f} %</b>'
-                                                  },
-                                                  navigation: {
-                                                    buttonOptions: {
-                                                      enabled: false /* 메뉴 안보이기 */
-                                                    }
-                                                  },
-                                                  plotOptions: {
-                                                    pie: {
-                                                      allowPointSelect: true,
-                                                      cursor: 'pointer',
-                                                      dataLabels: {
-                                                        enabled: true,
-                                                        color: '#F0F0F3',
-                                                        format: '{point.percentage:.1f} %',
-                                                        distance: -50,
-                                                      },
-                                                      showInLegend: true
-                                                    },
-                                                    candlestick: {
-                                                      lineColor: 'white'
-                                                    }
-                                                  },
-                                                  legend: {
-                                                    enabled: true,
-                                                    align: 'right',
-                                                    verticalAlign: 'top',
-                                                    x: 0,
-                                                    y: 0,
-                                                    itemStyle: {
-                                                      color: '#fff',
-                                                      fontSize: '12px',
-                                                      fontWeight: 400
-                                                    },
-                                                    itemHoverStyle: {
-                                                      color: '' /* 마우스 오버시 색 */
-                                                    },
-                                                    symbolPadding: 0, /* 심볼 - 텍스트간 거리 */
-                                                    symbolHeight: 7 /* 심볼 크기 */
-                                                  },
-                                                  credits: {
-                                                    enabled: false
-                                                  },
-                                                  series: [{
-                                                    name: 'Brands',
-                                                    colorByPoint: true,
-                                                    data: [{
-                                                      name: '정산받은 REC',
-                                                      y: 70,
-                                                      color: '#438fd7',
-                                                    }, {
-                                                      name: '보유 REC',
-                                                      y: 20,
-                                                      color: '#f75c4a'
-                                                    }, {
-                                                      name: '발급 가능 REC',
-                                                      y: 10,
-                                                      color: '#FBBC04'
-                                                    },],
-                                                  }]
-                                                });
-                                              })
-                                            </script>
-                                            <div class="chart_footer">
-                                                <ul class="clear">
-                                                    <li>보유 REC: <span>100</span> 개</li>
-                                                    <li>발급 가능 REC: <span>50</span> 개</li>
-                                                    <li>총 정산된 REC: <span>500</span> 개</li>
-                                                    <li>총 정산 금액: <span>25,000,000</span> 원</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <div class="indiv">
+                                <div class="chart_top clear">
+                                  <h2 class="ntit fl">이 달의 발전 달력</h2>
+                                  <div class="time fr updateTimePV">2018-08-12 11:41:26</div>
                                 </div>
+                                <div id="PVGenCalendar" class="calendar" style="height:400px;"></div>
+                              </div>
                             </div>
+                          </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="row">
@@ -694,13 +1016,13 @@
                                     <div class="indiv">
                                         <div class="chart_top clear">
                                             <h2 class="ntit fl">오늘의 태양광 사업</h2>
-                                            <div class="time fr">2018-08-12 11:41:26</div>
+                                          <div class="time fr updateTimePV">2018-08-12 11:41:26</div>
                                         </div>
                                         <div class="chart_header">
                                             <ul class="clear">
-                                                <li>누적 발전량: <span>400kWh</span> </li>
-                                                <li>SMP 수익: <span>40,000 개</span></li>
-                                                <li>REC: <span>0.4 개</span> </li>
+                                              <li>누적 발전량: <span id="pv_gen_in_today">0 kWh</span></li>
+                                              <li>SMP 수익: <span id="SMP_earnings_in_today">0 원</span></li>
+                                              <li>REC: <span id="REC_earnings_in_today">0 개</span></li>
                                             </ul>
                                         </div>
                                         <div class="area_chart">
@@ -836,7 +1158,7 @@
                                     <div class="indiv">
                                         <div class="chart_top clear">
                                             <h2 class="ntit fl">오늘의 가격정보 (SMP)</h2>
-                                            <div class="time fr">2018-08-12 11:41:26</div>
+                                          <div class="time fr updateTimePV">2018-08-12 11:41:26</div>
                                         </div>
                                         <div class="chart_header">
                                             <div class="mainland_container">
@@ -984,7 +1306,7 @@
                                             <h2 class="ntit fl">REC 시장 현황</h2>
                                             <div class="market fl">폐장</div>
                                             <div class="market active fl">개장</div>
-                                            <div class="time fr">2018-08-12 11:41:26</div>
+                                          <div class="time fr updateTimePV">2018-08-12 11:41:26</div>
                                         </div>
                                         <div class="line_chart">
                                             <div id="PV_market_status" style="height:400px;"></div>
@@ -999,9 +1321,6 @@
                                                         fontFamily: '\'Unica One\', sans-serif'
                                                       },
                                                       plotBorderColor: '#606063'
-                                                    },
-                                                    rangeSelector: {
-                                                      selected: 1
                                                     },
                                                     title: {
                                                       text: ''
@@ -1022,10 +1341,14 @@
                                                         }
                                                       }
                                                     },
-                                                    yAxis: {
+                                                    yAxis: [{ //left y axis
+                                                      opposite: false,
+                                                      min: 0,
                                                       gridLineColor: '#707073',
                                                       labels: {
-                                                        x: 10,
+                                                        align: 'left',
+                                                        x: 0,
+                                                        y: 0,
                                                         style: {
                                                           color: '#E0E0E3'
                                                         }
@@ -1035,11 +1358,35 @@
                                                       tickColor: '#707073',
                                                       tickWidth: 1,
                                                       title: {
+                                                        text: "Trading volume",
                                                         style: {
                                                           color: '#A0A0A3'
                                                         }
                                                       }
-                                                    },
+                                                    }, { // right y axis
+                                                      linkedTo: 0,
+                                                      gridLineWidth: 0,
+                                                      opposite: true,
+                                                      gridLineColor: '#707073',
+                                                      labels: {
+                                                        align: 'right',
+                                                        x: 0,
+                                                        y: 0,
+                                                        style: {
+                                                          color: '#E0E0E3'
+                                                        }
+                                                      },
+                                                      lineColor: '#707073',
+                                                      minorGridLineColor: '#505053',
+                                                      tickColor: '#707073',
+                                                      tickWidth: 1,
+                                                      title: {
+                                                        text: "Transaction price",
+                                                        style: {
+                                                          color: '#A0A0A3'
+                                                        }
+                                                      }
+                                                    }],
                                                     plotOptions: {
                                                       series: {
                                                         dataLabels: {
@@ -1053,12 +1400,12 @@
                                                         }
                                                       },
                                                       boxplot: {
-                                                        fillColor: '#505053'
+                                                        fillColor: '#505053',
                                                       },
                                                       candlestick: {
                                                         lineColor: '#fff',
                                                         color: '#f75c4a',
-                                                        upColor: 'green'
+                                                        upColor: 'green',
                                                       },
                                                       errorbar: {
                                                         color: '#fff'
@@ -1113,6 +1460,7 @@
                                                     // scroll charts
                                                     rangeSelector: {
                                                       selected: 1,
+                                                      enabled: false,
                                                       buttonTheme: {
                                                         fill: '#505053',
                                                         stroke: '#000000',
@@ -1146,6 +1494,7 @@
                                                       }
                                                     },
                                                     navigator: {
+                                                      enabled: false,
                                                       handles: {
                                                         backgroundColor: '#666',
                                                         borderColor: '#AAA'
@@ -1171,37 +1520,47 @@
                                                       trackBorderColor: '#404043'
                                                     },
                                                     series: [{
-                                                      type: 'candlestick',
-                                                      name: '거래량',
-                                                      data: data,
-                                                      dataGrouping: {
-                                                        units: [
-                                                          [
-                                                            'week', // unit name
-                                                            [1] // allowed multiples
-                                                          ], [
-                                                            'month',
-                                                            [1, 2, 3, 4, 6]
-                                                          ]
-                                                        ]
-                                                      },
-                                                      color: '#f75c4a'
-                                                    }, {
                                                       type: 'line',
-                                                      name: '실거래가',
-                                                      data: data,
+                                                      name: '거래량',
+                                                      data: tradingVolumeByDay,
                                                       dataGrouping: {
                                                         units: [
                                                           [
-                                                            'week', // unit name
+                                                            'hour', // unit name
                                                             [1] // allowed multiples
-                                                          ], [
-                                                            'month',
-                                                            [1, 2, 3, 4, 6]
-                                                          ]
+                                                          ],
+                                                          // [
+                                                          //   'week',
+                                                          //   [1,2,3,4,6]
+                                                          // ]
+                                                          // [
+                                                          //   'month',
+                                                          //   [1,2,3,4,6]
+                                                          // ]
                                                         ]
                                                       },
                                                       color: '#438fd7'
+                                                    }, {
+                                                      type: 'candlestick',
+                                                      name: '실거래가',
+                                                      data: transactionPriceByDay,
+                                                      dataGrouping: {
+                                                        units: [
+                                                          [
+                                                            'hour', // unit name
+                                                            [1] // allowed multiples
+                                                          ],
+                                                          // [
+                                                          //   'week',
+                                                          //   [1,2,3,4,6]
+                                                          // ]
+                                                          // [
+                                                          //   'month',
+                                                          //   [1,2,3,4,6]
+                                                          // ]
+                                                        ]
+                                                      },
+                                                      color: '#f75c4a'
                                                     }]
                                                   });
                                                 });
@@ -1250,784 +1609,25 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="col-sm-12 indiv">
+                                  <div class="col-sm-12 indiv pvMain_device">
                                         <div class="chart_top clear">
                                             <h2 class="ntit fl">현재 발전 현황</h2>
-                                            <div class="time fr">2018-08-12 11:41:26</div>
+                                          <div class="time fr updateTimePV">2018-08-12 11:41:26</div>
                                         </div>
-                                        <div class="col-sm-12 gen">
-                                            <div class="col-sm-6 left">
-                                                <div id="container-speed" class="chart-container"
-                                                ></div>
-                                                <script language="JavaScript">
-                                                  $(function () {
-                                                    var gaugeOptions = {
-                                                      chart: {
-                                                        type: 'solidgauge',
-                                                        backgroundColor: 'transparent'
-                                                      },
-
-                                                      title: null,
-
-                                                      pane: {
-                                                        center: ['50%', '85%'],
-                                                        size: '100%',
-                                                        startAngle: -90,
-                                                        endAngle: 90,
-                                                        background: {
-                                                          backgroundColor:
-                                                            Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
-                                                          innerRadius: '60%',
-                                                          outerRadius: '100%',
-                                                          shape: 'arc'
-                                                        }
-                                                      },
-
-                                                      exporting: {
-                                                        enabled: false
-                                                      },
-
-                                                      tooltip: {
-                                                        enabled: false
-                                                      },
-
-                                                      // the value axis
-                                                      yAxis: {
-                                                        stops: [
-                                                          [0.1, '#13af67'], // green
-                                                          [0.5, '#FBBC04'], // yellow
-                                                          [0.9, '#f75c4a'] // red
-                                                        ],
-                                                        lineWidth: 0,
-                                                        tickWidth: 0,
-                                                        minorTickInterval: null,
-                                                        tickAmount: 2,
-                                                        title: {
-                                                          y: -70,
-                                                          style: {
-                                                            fontSize: 20,
-                                                            color: '#fff'
-                                                          }
-                                                        },
-                                                        labels: {
-                                                          y: 16,
-                                                          distance: -20,
-                                                          style: {
-                                                            color: '#fff'
-                                                          }
-                                                        }
-                                                      },
-
-                                                      plotOptions: {
-                                                        solidgauge: {
-                                                          dataLabels: {
-                                                            y: 40,
-                                                            borderWidth: 0,
-                                                            useHTML: false,
-                                                            style: {
-                                                              color: '#fff'
-                                                            }
-                                                          }
-                                                        }
-                                                      },
-
-
-                                                    };
-
-                                                    // The speed gauge
-                                                    var chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOptions, {
-                                                      yAxis: {
-                                                        min: 0,
-                                                        max: 200,
-                                                        x: 0,
-                                                        title: {
-                                                          text: 'Total'
-                                                        }
-                                                      },
-
-                                                      credits: {
-                                                        enabled: false
-                                                      },
-
-                                                      series: [{
-                                                        name: 'Speed',
-                                                        data: [80],
-                                                        dataLabels: {
-                                                          format:
-                                                            '<div style="text-align:center">' +
-                                                            '<span style="font-size:25px">{y}</span><br/>' +
-                                                            '<span style="font-size:12px;">kW/h</span>' +
-                                                            '</div>'
-                                                        },
-                                                        tooltip: {
-                                                          valueSuffix: ' kW/h'
-                                                        }
-                                                      }]
-
-                                                    }));
-
-                                                    //Bring life to the dials
-                                                    setInterval(function () {
-                                                      // Speed
-                                                      var point,
-                                                        newVal,
-                                                        inc;
-
-                                                      if (chartSpeed) {
-                                                        point = chartSpeed.series[0].points[0];
-                                                        inc = Math.round((Math.random() - 0.5) * 100);
-                                                        newVal = point.y + inc;
-
-                                                        if (newVal < 0 || newVal > 200) {
-                                                          newVal = point.y - inc;
-                                                        }
-
-                                                        point.update(newVal);
-                                                      }
-                                                    }, 2000);
-
-                                                  });
-                                                </script>
-                                            </div>
-                                            <div class="col-sm-6 right">
-                                                <div class="col-sm-6">
-                                                    <div id="container-speed1" class="chart-container"></div>
-                                                    <script language="JavaScript">
-                                                      $(function () {
-                                                        var gaugeOptions = {
-                                                          chart: {
-                                                            type: 'solidgauge',
-                                                            backgroundColor: 'transparent'
-                                                          },
-
-                                                          title: null,
-
-                                                          pane: {
-                                                            center: ['50%', '85%'],
-                                                            size: '100%',
-                                                            startAngle: -90,
-                                                            endAngle: 90,
-                                                            background: {
-                                                              backgroundColor:
-                                                                Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
-                                                              innerRadius: '60%',
-                                                              outerRadius: '100%',
-                                                              shape: 'arc'
-                                                            }
-                                                          },
-
-                                                          exporting: {
-                                                            enabled: false
-                                                          },
-
-                                                          tooltip: {
-                                                            enabled: false
-                                                          },
-
-                                                          // the value axis
-                                                          yAxis: {
-                                                            stops: [
-                                                              [0.1, '#13af67'], // green
-                                                              [0.5, '#FBBC04'], // yellow
-                                                              [0.9, '#f75c4a'] // red
-                                                            ],
-                                                            lineWidth: 0,
-                                                            tickWidth: 0,
-                                                            minorTickInterval: null,
-                                                            tickAmount: 2,
-                                                            title: {
-                                                              y: -30,
-                                                              style: {
-                                                                color: '#fff'
-                                                              }
-                                                            },
-                                                            labels: {
-                                                              y: 16,
-                                                              distance: -3,
-                                                              style: {
-                                                                color: '#fff'
-                                                              }
-                                                            }
-                                                          },
-
-                                                          plotOptions: {
-                                                            solidgauge: {
-                                                              dataLabels: {
-                                                                y: 40,
-                                                                borderWidth: 0,
-                                                                useHTML: false,
-                                                                style: {
-                                                                  color: '#fff'
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        };
-
-                                                        // The speed gauge
-                                                        var chartSpeed = Highcharts.chart('container-speed1', Highcharts.merge(gaugeOptions, {
-                                                            yAxis: {
-                                                              min: 0,
-                                                              max: 200,
-                                                              x: 0,
-                                                              title: {
-                                                                text: 'IVT 1'
-                                                              }
-                                                            },
-
-                                                            credits: {
-                                                              enabled: false
-                                                            },
-
-                                                            series: [{
-                                                              name: 'Speed',
-                                                              data: [80],
-                                                              dataLabels: {
-                                                                format:
-                                                                  '<div style="text-align:center;">' +
-                                                                  '<span style="font-size:14px;">{y}</span><br/>' +
-                                                                  '<span style="font-size:8px;">km/h</span>' +
-                                                                  '</div>'
-                                                              },
-                                                              tooltip:
-                                                                {
-                                                                  valueSuffix: ' km/h'
-                                                                }
-                                                            }]
-
-                                                          }))
-                                                        ;
-
-                                                        // Bring life to the dials
-                                                        setInterval(function () {
-                                                          // Speed
-                                                          var point,
-                                                            newVal,
-                                                            inc;
-
-                                                          if (chartSpeed) {
-                                                            point = chartSpeed.series[0].points[0];
-                                                            inc = Math.round((Math.random() - 0.5) * 100);
-                                                            newVal = point.y + inc;
-
-                                                            if (newVal < 0 || newVal > 200) {
-                                                              newVal = point.y - inc;
-                                                            }
-
-                                                            point.update(newVal);
-                                                          }
-                                                        }, 2000);
-
-                                                      });
-                                                    </script>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div id="container-speed2" class="chart-container"></div>
-                                                    <script language="JavaScript">
-                                                      $(function () {
-                                                        var gaugeOptions = {
-                                                          chart: {
-                                                            type: 'solidgauge',
-                                                            backgroundColor: 'transparent'
-                                                          },
-
-                                                          title: null,
-
-                                                          pane: {
-                                                            center: ['50%', '85%'],
-                                                            size: '100%',
-                                                            startAngle: -90,
-                                                            endAngle: 90,
-                                                            background: {
-                                                              backgroundColor:
-                                                                Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
-                                                              innerRadius: '60%',
-                                                              outerRadius: '100%',
-                                                              shape: 'arc'
-                                                            }
-                                                          },
-
-                                                          exporting: {
-                                                            enabled: false
-                                                          },
-
-                                                          tooltip: {
-                                                            enabled: false
-                                                          },
-
-                                                          // the value axis
-                                                          yAxis: {
-                                                            stops: [
-                                                              [0.1, '#13af67'], // green
-                                                              [0.5, '#FBBC04'], // yellow
-                                                              [0.9, '#f75c4a'] // red
-                                                            ],
-                                                            lineWidth: 0,
-                                                            tickWidth: 0,
-                                                            minorTickInterval: null,
-                                                            tickAmount: 2,
-                                                            title: {
-                                                              y: -30,
-                                                              style: {
-                                                                color: '#fff'
-                                                              }
-                                                            },
-                                                            labels: {
-                                                              y: 16,
-                                                              distance: -3,
-                                                              style: {
-                                                                color: '#fff'
-                                                              }
-                                                            }
-                                                          },
-
-                                                          plotOptions: {
-                                                            solidgauge: {
-                                                              dataLabels: {
-                                                                y: 40,
-                                                                borderWidth: 0,
-                                                                useHTML: false,
-                                                                style: {
-                                                                  color: '#fff'
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        };
-
-                                                        // The speed gauge
-                                                        var chartSpeed = Highcharts.chart('container-speed2', Highcharts.merge(gaugeOptions, {
-                                                            yAxis: {
-                                                              min: 0,
-                                                              max: 200,
-                                                              x: 0,
-                                                              title: {
-                                                                text: 'IVT 2'
-                                                              }
-                                                            },
-
-                                                            credits: {
-                                                              enabled: false
-                                                            },
-
-                                                            series: [{
-                                                              name: 'Speed',
-                                                              data: [80],
-                                                              dataLabels: {
-                                                                format:
-                                                                  '<div style="text-align:center;">' +
-                                                                  '<span style="font-size:14px;">{y}</span><br/>' +
-                                                                  '<span style="font-size:8px;">km/h</span>' +
-                                                                  '</div>'
-                                                              },
-                                                              tooltip:
-                                                                {
-                                                                  valueSuffix: ' km/h'
-                                                                }
-                                                            }]
-
-                                                          }))
-                                                        ;
-
-                                                        // Bring life to the dials
-                                                        setInterval(function () {
-                                                          // Speed
-                                                          var point,
-                                                            newVal,
-                                                            inc;
-
-                                                          if (chartSpeed) {
-                                                            point = chartSpeed.series[0].points[0];
-                                                            inc = Math.round((Math.random() - 0.5) * 100);
-                                                            newVal = point.y + inc;
-
-                                                            if (newVal < 0 || newVal > 200) {
-                                                              newVal = point.y - inc;
-                                                            }
-
-                                                            point.update(newVal);
-                                                          }
-                                                        }, 2000);
-
-                                                      });
-                                                    </script>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div id="container-speed3" class="chart-container"></div>
-                                                    <script language="JavaScript">
-                                                      $(function () {
-                                                        var gaugeOptions = {
-                                                          chart: {
-                                                            type: 'solidgauge',
-                                                            backgroundColor: 'transparent'
-                                                          },
-
-                                                          title: null,
-
-                                                          pane: {
-                                                            center: ['50%', '85%'],
-                                                            size: '100%',
-                                                            startAngle: -90,
-                                                            endAngle: 90,
-                                                            background: {
-                                                              backgroundColor:
-                                                                Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
-                                                              innerRadius: '60%',
-                                                              outerRadius: '100%',
-                                                              shape: 'arc'
-                                                            }
-                                                          },
-
-                                                          exporting: {
-                                                            enabled: false
-                                                          },
-
-                                                          tooltip: {
-                                                            enabled: false
-                                                          },
-
-                                                          // the value axis
-                                                          yAxis: {
-                                                            stops: [
-                                                              [0.1, '#13af67'], // green
-                                                              [0.5, '#FBBC04'], // yellow
-                                                              [0.9, '#f75c4a'] // red
-                                                            ],
-                                                            lineWidth: 0,
-                                                            tickWidth: 0,
-                                                            minorTickInterval: null,
-                                                            tickAmount: 2,
-                                                            title: {
-                                                              y: -30,
-                                                              style: {
-                                                                color: '#fff'
-                                                              }
-                                                            },
-                                                            labels: {
-                                                              y: 16,
-                                                              distance: -3,
-                                                              style: {
-                                                                color: '#fff'
-                                                              }
-                                                            }
-                                                          },
-
-                                                          plotOptions: {
-                                                            solidgauge: {
-                                                              dataLabels: {
-                                                                y: 40,
-                                                                borderWidth: 0,
-                                                                useHTML: false,
-                                                                style: {
-                                                                  color: '#fff'
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        };
-
-                                                        // The speed gauge
-                                                        var chartSpeed = Highcharts.chart('container-speed3', Highcharts.merge(gaugeOptions, {
-                                                            yAxis: {
-                                                              min: 0,
-                                                              max: 200,
-                                                              x: 0,
-                                                              title: {
-                                                                text: 'IVT 3'
-                                                              }
-                                                            },
-
-                                                            credits: {
-                                                              enabled: false
-                                                            },
-
-                                                            series: [{
-                                                              name: 'Speed',
-                                                              data: [80],
-                                                              dataLabels: {
-                                                                format:
-                                                                  '<div style="text-align:center;">' +
-                                                                  '<span style="font-size:14px;">{y}</span><br/>' +
-                                                                  '<span style="font-size:8px;">km/h</span>' +
-                                                                  '</div>'
-                                                              },
-                                                              tooltip:
-                                                                {
-                                                                  valueSuffix: ' km/h'
-                                                                }
-                                                            }]
-
-                                                          }))
-                                                        ;
-
-                                                        // Bring life to the dials
-                                                        setInterval(function () {
-                                                          // Speed
-                                                          var point,
-                                                            newVal,
-                                                            inc;
-
-                                                          if (chartSpeed) {
-                                                            point = chartSpeed.series[0].points[0];
-                                                            inc = Math.round((Math.random() - 0.5) * 100);
-                                                            newVal = point.y + inc;
-
-                                                            if (newVal < 0 || newVal > 200) {
-                                                              newVal = point.y - inc;
-                                                            }
-
-                                                            point.update(newVal);
-                                                          }
-                                                        }, 2000);
-
-                                                      });
-                                                    </script>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div id="container-speed4" class="chart-container"></div>
-                                                    <script language="JavaScript">
-                                                      $(function () {
-                                                        var gaugeOptions = {
-                                                          chart: {
-                                                            type: 'solidgauge',
-                                                            backgroundColor: 'transparent'
-                                                          },
-
-                                                          title: null,
-
-                                                          pane: {
-                                                            center: ['50%', '85%'],
-                                                            size: '100%',
-                                                            startAngle: -90,
-                                                            endAngle: 90,
-                                                            background: {
-                                                              backgroundColor:
-                                                                Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
-                                                              innerRadius: '60%',
-                                                              outerRadius: '100%',
-                                                              shape: 'arc'
-                                                            }
-                                                          },
-
-                                                          exporting: {
-                                                            enabled: false
-                                                          },
-
-                                                          tooltip: {
-                                                            enabled: false
-                                                          },
-
-                                                          // the value axis
-                                                          yAxis: {
-                                                            stops: [
-                                                              [0.1, '#13af67'], // green
-                                                              [0.5, '#FBBC04'], // yellow
-                                                              [0.9, '#f75c4a'] // red
-                                                            ],
-                                                            lineWidth: 0,
-                                                            tickWidth: 0,
-                                                            minorTickInterval: null,
-                                                            tickAmount: 2,
-                                                            title: {
-                                                              y: -30,
-                                                              style: {
-                                                                color: '#fff'
-                                                              }
-                                                            },
-                                                            labels: {
-                                                              y: 16,
-                                                              distance: -3,
-                                                              style: {
-                                                                color: '#fff'
-                                                              }
-                                                            }
-                                                          },
-
-                                                          plotOptions: {
-                                                            solidgauge: {
-                                                              dataLabels: {
-                                                                y: 40,
-                                                                borderWidth: 0,
-                                                                useHTML: false,
-                                                                style: {
-                                                                  color: '#fff'
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        };
-
-                                                        // The speed gauge
-                                                        var chartSpeed = Highcharts.chart('container-speed4', Highcharts.merge(gaugeOptions, {
-                                                            yAxis: {
-                                                              min: 0,
-                                                              max: 200,
-                                                              x: 0,
-                                                              title: {
-                                                                text: 'IVT 4'
-                                                              }
-                                                            },
-
-                                                            credits: {
-                                                              enabled: false
-                                                            },
-
-                                                            series: [{
-                                                              name: 'Speed',
-                                                              data: [80],
-                                                              dataLabels: {
-                                                                format:
-                                                                  '<div style="text-align:center;">' +
-                                                                  '<span style="font-size:14px;">{y}</span><br/>' +
-                                                                  '<span style="font-size:8px;">km/h</span>' +
-                                                                  '</div>'
-                                                              },
-                                                              tooltip:
-                                                                {
-                                                                  valueSuffix: ' km/h'
-                                                                }
-                                                            }]
-
-                                                          }))
-                                                        ;
-
-                                                        // Bring life to the dials
-                                                        setInterval(function () {
-                                                          // Speed
-                                                          var point,
-                                                            newVal,
-                                                            inc;
-
-                                                          if (chartSpeed) {
-                                                            point = chartSpeed.series[0].points[0];
-                                                            inc = Math.round((Math.random() - 0.5) * 100);
-                                                            newVal = point.y + inc;
-
-                                                            if (newVal < 0 || newVal > 200) {
-                                                              newVal = point.y - inc;
-                                                            }
-
-                                                            point.update(newVal);
-                                                          }
-                                                        }, 2000);
-
-                                                      });
-                                                    </script>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="paging clear">
+                                    <!-- no-data { -->
+                                    <div class="col-sm-12 no-device" style="display: none;">
+                                      <div>
+                                        <image src="../img/icon_nodata.png"></image>
+                                      </div>
+                                      <span><spring:message code="ewp.site.Cannot_device_status_information" /><!-- 발전현황 정보를 가져올 수 없습니다. --></span>
+                                    </div>
+                                    <!-- } no-data -->
+                                    <div class="col-sm-12 pvMain_deviceList">
+                                    </div>
+                                    <div class="paging clear" id="pvMain_device_paging">
                                             <a href="#;" class="prev">PREV</a>
                                             <span><strong>1</strong> / 3</span>
                                             <a href="#;" class="next">NEXT</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="col-sm-12 indiv">
-                                        <div class="chart_top clear">
-                                            <h2 class="ntit fl">날씨</h2>
-                                            <div class="time fr">2018-08-12 11:41:26</div>
-                                            <div class="fr today_alarm">
-                                                <!-- <div class="total">금일발생 <span>614</span></div>
-                                                <div class="no"><span>2</span></div> -->
-                                            </div>
-                                        </div>
-                                        <div class="weather_box"
-                                             style="text-align: center; margin-top: 20px; line-height:50px; vertical-align: middle;">
-                                            <div class="day"
-                                                 style="width:13%; vertical-align: top; display: inline-block; text-align: center">
-                                                <div style="margin-bottom: 20px;">
-                                                    <span style="color:#fff; text-align:center;">Sun</span>
-                                                </div>
-                                                <div style="margin-bottom: 20px;">
-                                                    <canvas id="sun" width="30" height="30"></canvas>
-                                                </div>
-                                                <div style="margin-bottom: 20px;">
-                                                    <span id="sun_generated_hour"
-                                                          style="color:#fff; text-align:center;"> - </span>
-                                                </div>
-                                            </div>
-                                            <div class="day"
-                                                 style="width:13%; vertical-align: top; display: inline-block; text-align: center">
-                                                <div style="margin-bottom: 20px;">
-                                                    <span style="color:#fff; text-align:center;">Mon</span>
-                                                </div>
-                                                <div style="margin-bottom: 20px;">
-                                                    <canvas id="mon" width="30" height="30"></canvas>
-                                                </div>
-                                                <div style="margin-bottom: 20px;">
-                                                    <span id="mon_generated_hour"
-                                                          style="color:#fff; text-align:center;"> - </span>
-                                                </div>
-                                            </div>
-                                            <div class="day"
-                                                 style="width:13%; vertical-align: top; display: inline-block; text-align: center">
-                                                <div style="margin-bottom: 20px;">
-                                                    <span style="color:#fff; text-align:center;">Tue</span>
-                                                </div>
-                                                <div style="margin-bottom: 20px;">
-                                                    <canvas id="tue" width="30" height="30"></canvas>
-                                                </div>
-                                                <div style="margin-bottom: 20px;">
-                                                    <span id="tue_generated_hour"
-                                                          style="color:#fff; text-align:center;"> - </span>
-                                                </div>
-                                            </div>
-                                            <div class="day"
-                                                 style="width:13%; vertical-align: top; display: inline-block; text-align: center">
-                                                <div style="margin-bottom: 20px;">
-                                                    <span style="color:#fff; text-align:center;">Wed</span>
-                                                </div>
-                                                <div style="margin-bottom: 20px;">
-                                                    <canvas id="wed" width="30" height="30"></canvas>
-                                                </div>
-                                                <div style="margin-bottom: 20px;">
-                                                    <span id="wed_generated_hour"
-                                                          style="color:#fff; text-align:center;"> - </span>
-                                                </div>
-                                            </div>
-                                            <div class="day"
-                                                 style="width:13%; vertical-align: top; display: inline-block; text-align: center">
-                                                <div style="margin-bottom: 20px;">
-                                                    <span style="color:#fff; text-align:center;">Thu</span>
-                                                </div>
-                                                <div style="margin-bottom: 20px;">
-                                                    <canvas id="thu" width="30" height="30"></canvas>
-                                                </div>
-                                                <div style="margin-bottom: 20px;">
-                                                    <span id="thu_generated_hour"
-                                                          style="color:#fff; text-align:center;"> - </span>
-                                                </div>
-                                            </div>
-                                            <div class="day"
-                                                 style="width:13%; vertical-align: top; display: inline-block; text-align: center">
-                                                <div style="margin-bottom: 20px;">
-                                                    <span style="color:#fff; text-align:center;">Fri</span>
-                                                </div>
-                                                <div style="margin-bottom: 20px;">
-                                                    <canvas id="fri" width="30" height="30"></canvas>
-                                                </div>
-                                                <div style="margin-bottom: 20px;">
-                                                    <span id="fri_generated_hour"
-                                                          style="color:#fff; text-align:center;"> - </span>
-                                                </div>
-                                            </div>
-                                            <div class="day"
-                                                 style="width:13%; display: inline-block; text-align: center">
-                                                <div style="margin-bottom: 20px;">
-                                                    <span style="color:#fff; text-align:center;">Sat</span>
-                                                </div>
-                                                <div style="margin-bottom: 20px;">
-                                                    <canvas id="sat" width="30" height="30"></canvas>
-                                                </div>
-                                                <div style="margin-bottom: 20px;">
-                                                    <span id="sat_generated_hour"
-                                                          style="color:#fff; text-align:center;"> - </span>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -2040,4 +1640,243 @@
         </div>
 
     </body>
+  <script type="text/javascript">
+    (function makePVCalendar() {
+      //https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Date
+      const today = new Date();
+      const setCalendarData = (year, month) => {
+        let calHtml = "";
+        //getMonth(): Get the month as a number (0-11)
+        //0부터 시작하므로 현재 달에서 -1한 값이 Date 객체의 현재 달
+        const setDate = new Date(year, month - 1, 1);
+        //getDate(): Get the day as a number (1-31)
+        const firstDay = setDate.getDate();
+        //getDay(): Get the weekday as a number (0-6)
+        const firstDayName = setDate.getDay();
+        //new Date(today.getFullYear(), today.getMonth(), 0); => 지난달 마지막 날
+        //new Date(today.getFullYear(), today.getMonth(), 1); => 이번달 1일
+        //+1로 다음 달을 넣고, day에 0을 넣으면 현재 달의 마지막 날짜가 나옴.
+        const lastDay = new Date(
+          today.getFullYear(),
+          today.getMonth() + 1,
+          0
+        ).getDate();
+        //현재 달을 넣고, day에 0을 넣으면 이전 달의 마지막 날짜가 나옴.
+        const prevLastDay = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          0
+        ).getDate();
+
+        let startDayCount = 1;
+        let lastDayCount = 1;
+
+        //1~5주차 -> 5로 해도 상관 없지 않나? 왜 6으로 했을까. 5로 해도 됨.
+        for (let i = 0; i < 5; i++) {
+          //일요일~월요일
+          for (let j = 0; j < 7; j++) {
+            // i == 0: 1주차일 때
+            // j == firstDayName: 이번 달 시작 요일일 때
+            if (i == 0 && j == firstDayName) {
+              //일요일일 때, 토요일일 때, 나머지 요일 일 때
+              if (j == 0) {
+                calHtml +=
+                  "<div id='" +
+                  year +
+                  month +
+                  setFixDayCount(startDayCount) +
+                  "' class='calendar__day horizontalGutter'><span class='calendar__dayNum'>" +
+                  startDayCount++ +
+                  "</span><canvas class='calendar__weatherIcon'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
+              } else if (j == 6) {
+                calHtml +=
+                  "<div id='" +
+                  year +
+                  month +
+                  setFixDayCount(startDayCount) +
+                  "' class='calendar__day'><span class='calendar__dayNum'>" +
+                  startDayCount++ +
+                  "</span><canvas class='calendar__weatherIcon'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
+              } else {
+                calHtml +=
+                  "<div id='" +
+                  year +
+                  month +
+                  setFixDayCount(startDayCount) +
+                  "' class='calendar__day horizontalGutter'><span class='calendar__dayNum'>" +
+                  startDayCount++ +
+                  "</span><canvas class='calendar__weatherIcon'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
+              }
+              // i == 0: 1주차일 때
+              // j < firstDayName: 이번 달 시작 요일 이전 일 때
+            } else if (i == 0 && j < firstDayName) {
+              //일요일일 때, 토요일일 때, 나머지 요일 일 때
+              if (j == 0) {
+                calHtml +=
+                  "<div id='" +
+                  year +
+                  month +
+                  setFixDayCount(0) +
+                  "' class='calendar__day horizontalGutter'><span class='calendar__dayNum'>" +
+                  (prevLastDay - (firstDayName - 1) + j) +
+                  "</span></div>";
+              } else if (j == 6) {
+                calHtml +=
+                  "<div id='" +
+                  year +
+                  month +
+                  setFixDayCount(0) +
+                  "' class='calendar__day'><span class='calendar__dayNum'>" +
+                  (prevLastDay - (firstDayName - 1) + j) +
+                  "</span></div>";
+              } else {
+                calHtml +=
+                  "<div id='" +
+                  year +
+                  month +
+                  setFixDayCount(0) +
+                  "' class='calendar__day horizontalGutter'><span class='calendar__dayNum'>" +
+                  (prevLastDay - (firstDayName - 1) + j) +
+                  "</span></div>";
+              }
+              // i == 0: 1주차일 때
+              // j > firstDayName: 이번 달 시작 요일 이후 일 때
+            } else if (i == 0 && j > firstDayName) {
+              //일요일일 때, 토요일일 때, 나머지 요일 일 때
+              if (j == 0) {
+                calHtml +=
+                  "<div id='" +
+                  year +
+                  month +
+                  setFixDayCount(startDayCount) +
+                  "' class='calendar__day horizontalGutter'><span class='calendar__dayNum'>" +
+                  startDayCount++ +
+                  "</span><canvas class='calendar__weatherIcon'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
+              } else if (j == 6) {
+                calHtml +=
+                  "<div id='" +
+                  year +
+                  month +
+                  setFixDayCount(startDayCount) +
+                  "' class='calendar__day'><span class='calendar__dayNum'>" +
+                  startDayCount++ +
+                  "</span><canvas class='calendar__weatherIcon'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
+              } else {
+                calHtml +=
+                  "<div id='" +
+                  year +
+                  month +
+                  setFixDayCount(startDayCount) +
+                  "' class='calendar__day horizontalGutter'><span class='calendar__dayNum'>" +
+                  startDayCount++ +
+                  "</span><canvas class='calendar__weatherIcon'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
+              }
+              // startDayCount > lastDay: 이번 달의 마지막 날 이후일 때
+            } else if (startDayCount > lastDay) {
+              //일요일일 때, 토요일일 때, 나머지 요일 일 때
+              if (j == 0) {
+                calHtml +=
+                  "<div id='" +
+                  year +
+                  month +
+                  setFixDayCount(0) +
+                  "' class='calendar__day horizontalGutter verticalGutter'><span class='calendar__dayNum'>" +
+                  lastDayCount++ +
+                  "</span></div>";
+              } else if (j == 6) {
+                calHtml +=
+                  "<div id='" +
+                  year +
+                  month +
+                  setFixDayCount(0) +
+                  "' class='calendar__day verticalGutter'><span class='calendar__dayNum'>" +
+                  lastDayCount++ +
+                  "</span></div>";
+              } else {
+                calHtml +=
+                  "<div id='" +
+                  year +
+                  month +
+                  setFixDayCount(0) +
+                  "' class='calendar__day horizontalGutter verticalGutter'><span class='calendar__dayNum'>" +
+                  lastDayCount++ +
+                  "</span></div>";
+              }
+            }
+            // startDayCount <= lastDay: 이번 달의 마지막 날이거나 이전일 때
+            if (i > 0 && startDayCount <= lastDay) {
+              //일요일일 때, 토요일일 때, 나머지 요일 일 때
+              if (j == 0) {
+                //일요일
+                calHtml +=
+                  "<div id='" +
+                  year +
+                  month +
+                  setFixDayCount(startDayCount) +
+                  "' class='calendar__day horizontalGutter verticalGutter'><span class='calendar__dayNum'>" +
+                  startDayCount++ +
+                  "</span><canvas id='" +
+                  year +
+                  month +
+                  setFixDayCount(startDayCount) +
+                  "icon" +
+                  "' class='calendar__weatherIcon'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
+              } else if (j == 6) {
+                //토요일
+                calHtml +=
+                  "<div id='" +
+                  year +
+                  month +
+                  setFixDayCount(startDayCount) +
+                  "' class='calendar__day verticalGutter'><span class='calendar__dayNum'>" +
+                  startDayCount++ +
+                  "</span><canvas id='" +
+                  year +
+                  month +
+                  setFixDayCount(startDayCount) +
+                  "icon" +
+                  "' class='calendar__weatherIcon'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
+              } else {
+                //월~금
+                calHtml +=
+                  "<div id='" +
+                  year +
+                  month +
+                  setFixDayCount(startDayCount) +
+                  "' class='calendar__day horizontalGutter verticalGutter'><span class='calendar__dayNum'>" +
+                  startDayCount++ +
+                  "</span><canvas id='" +
+                  year +
+                  month +
+                  setFixDayCount(startDayCount) +
+                  "icon" +
+                  "' class='calendar__weatherIcon'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
+              }
+            }
+          }
+        }
+        //캘린더에 내용 붙임
+        document
+          .querySelector("#PVGenCalendar")
+          .insertAdjacentHTML("beforeend", calHtml);
+      };
+
+      const setFixDayCount = number => {
+        //캘린더 하루마다 아이디를 만들어주기 위해 사용
+        let fixNum = "";
+        if (number < 10) {
+          fixNum = "0" + number;
+        } else {
+          fixNum = number;
+        }
+        return fixNum;
+      };
+
+      if (today.getMonth() + 1 < 10) {
+        setCalendarData(today.getFullYear(), "0" + (today.getMonth() + 1));
+      } else {
+        setCalendarData(today.getFullYear(), "" + (today.getMonth() + 1));
+      }
+    })();
+  </script>
 </html>

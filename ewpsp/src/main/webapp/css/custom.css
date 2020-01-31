@@ -1541,7 +1541,6 @@ footer .copyright {
 }
 
 .unit {
-    overflow:;
     display: block;
 }
 
@@ -1861,7 +1860,6 @@ input.btnstyle,
 /* 폰트 크기 부분 -  line-height와 height 2px 차이나는 이유 - border 1px로 인한 텍스트 middle 정렬 때문 */
 .btnstyle.small {
     font-size: 13px;
-    font-weight:;
     height: 24px;
     line-height: 22px;
     padding: 0px 10px;
@@ -1870,7 +1868,6 @@ input.btnstyle,
 
 .btnstyle.middle {
     font-size: 13px;
-    font-weight:;
     height: 30px;
     line-height: 28px;
     padding: 0px 10px;
@@ -1879,7 +1876,6 @@ input.btnstyle,
 
 .btnstyle.large {
     font-size: 15px;
-    font-weight:;
     height: 40px;
     line-height: 38px;
     padding: 0px 14px;
@@ -5209,11 +5205,9 @@ input[type="radio"] .styled:checked + label::after {
     color: #3d4250;
     display: table;
     width: 100%;
-    color: #3d4250;
     background: #f4f6f8 url('../img/arr_down.png') no-repeat right 30px center;
     background-size: 15px auto;
     border-radius: 200px;
-    overflow: none;
 }
 
 .faq .faq_table .faq_list > li > .question.on {

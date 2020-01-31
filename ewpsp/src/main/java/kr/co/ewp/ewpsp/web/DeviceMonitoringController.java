@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -430,11 +431,10 @@ public class DeviceMonitoringController {
         return resultMap;
     }
 
-    @RequestMapping("/getDevicePVList")
+    @PostMapping("/getDevicePVList")
     public @ResponseBody
-    Map<String, Object> getDevicePVList(@RequestParam HashMap param, HttpServletRequest request) throws Exception {
-        logger.debug("/getDevicePVList");
-        logger.debug("param ::::: " + param.toString());
+    Map<String, Object> getDevicePVList(@RequestParam Map<String, Object> param, HttpServletRequest request) throws Exception {
+        logger.debug("/getDevicePVList {}", param);
 
         int selPageNum = Integer.parseInt((String) param.get("selPageNum"));
         int pageRowCnt = 5;

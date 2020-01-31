@@ -5,6 +5,5 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface WeatherService {
-    List getWeatherInfo(HashMap params, HttpServletRequest request) throws Exception;
-    List getGeneratedHour(HashMap params, HttpServletRequest request) throws Exception;
+    List getWeatherIconMonthly(HashMap params, HttpServletRequest request) throws Exception;
 }

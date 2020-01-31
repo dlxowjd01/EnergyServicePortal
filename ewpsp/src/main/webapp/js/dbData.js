@@ -124,6 +124,111 @@ function getPVGenFutureList(formData) {
     });
 }
 
+// PV 오늘 발전량 조회
+function getPVGenRealListForToday(formData) {
+    $.ajax({
+        url: "/getPVGenRealListForToday",
+        type: 'post',
+        async: false,
+        data: formData,
+        success: function (result) {
+            callback_getPVGenRealListForToday(result);
+        }
+    })
+}
+
+// PV 이번 달 발전량 조회
+function getPVGenRealListForThisMonth(formData) {
+    $.ajax({
+        url: "/getPVGenRealListForThisMonth",
+        type: 'post',
+        async: false,
+        data: formData,
+        success: function (result) {
+            callback_getPVGenRealListForThisMonth(result);
+        }
+    })
+}
+
+// PV 이번 달 발전량 일별 조회
+function getPVGenRealListForThisMonthDaily(formData) {
+    $.ajax({
+        url: "/getPVGenRealListForThisMonthDaily",
+        type: 'post',
+        async: false,
+        data: formData,
+        success: function (result) {
+            callback_getPVGenRealListForThisMonthDaily(result);
+        }
+    })
+}
+
+// PV 지난 달 발전량 조회
+function getPVGenRealListForLastMonth(formData) {
+    $.ajax({
+        url: "/getPVGenRealListForLastMonth",
+        type: 'post',
+        async: false,
+        data: formData,
+        success: function (result) {
+            callback_getPVGenRealListForLastMonth(result);
+        }
+    })
+}
+
+// PV 올해 발전량 조회
+function getPVGenRealListForThisYear(formData) {
+    $.ajax({
+        url: "/getPVGenRealListForThisYear",
+        type: 'post',
+        async: false,
+        data: formData,
+        success: function (result) {
+            callback_getPVGenRealListForThisYear(result);
+        }
+    })
+}
+
+// PV 올해 월별 발전량 조회
+function getPVGenRealListForThisYearMonthly(formData) {
+    $.ajax({
+        url: "/getPVGenRealListForThisYearMonthly",
+        type: 'post',
+        async: false,
+        data: formData,
+        success: function (result) {
+            callback_getPVGenRealListForThisYearMonthly(result);
+        }
+    })
+}
+
+// PV 지난 해 발전량 조회
+function getPVGenRealListForLastYear(formData) {
+    $.ajax({
+        url: "/getPVGenRealListForLastYear",
+        type: 'post',
+        async: false,
+        data: formData,
+        success: function (result) {
+            callback_getPVGenRealListForLastYear(result);
+        }
+    })
+}
+
+// 장치별 최근 PV 발전량 리스트 조회
+function getPVGenRealLatestListOfDevices(formData) {
+    $("#selPageNum").val(1);
+    $.ajax({
+        url: "/getPVGenRealLatestListOfDevices",
+        type: 'post',
+        async: false,
+        data: formData,
+        success: function (result) {
+            callback_getPVGenRealLatestListOfDevices(result);
+        }
+    })
+}
+
 // DR 실적 조회
 function getDRResultList(formData) {
     $.ajax({
@@ -162,19 +267,6 @@ function getPVUsageList(formData) {
         }
     });
 }
-
-//// pv 사용량 조회
-//function getPVUsageList(formData) {
-//	$.ajax({
-//		url : "/getPVUsageList",
-//		type : 'post',
-//		async : false, // 동기로 처리해줌
-//		data : formData,
-//		success: function(result) {
-//			callback_getPVUsageList(result);
-//		}
-//	});
-//}
 
 // 사용량 구성 조회
 function getDERUsageList(formData) {
@@ -325,11 +417,14 @@ function getDeviceList(selPageNum) {
     $.ajax({
         url: "/getDeviceList",
         type: 'post',
-//		async : false, // 동기로 처리해줌
+        // async: false, // 동기로 처리해줌
         async: true,
         data: form,
         success: function (result) {
             callback_getDeviceList(result);
+        },
+        error: (e) => {
+            console.log(e.message);
         }
     });
 }
@@ -1041,28 +1136,170 @@ function getFixedSMPMarketPrice() {
     });
 }
 
-// 날씨 정보 조회
-function getWeatherInfo(formData) {
+// REC 현물 시장 현황 조회
+function getCurrentRECMarketPrice() {
     $.ajax({
-        url: "/getWeatherInfo",
+        url: "/getCurrentRECMarketPrice",
+        type: 'post',
+        async: false, // 동기로 처리해줌
+        success: function (result) {
+            callback_getCurrentRECMarketPrice(result);
+        }
+    });
+}
+
+// REC 발급 내역 조회
+function getSiteRECIssued(formData) {
+    $.ajax({
+        url: "/getSiteRECIssued",
         type: "post",
         async: false,
         data: formData,
         success: function (result) {
-            callback_getWeatherInfo(result);
+            callback_getSiteRECIssued(result);
         }
     })
 }
 
-// 발전 시간 조회
-function getGeneratedHour(formData) {
+// REC 판매 내역 조회
+function getSiteRECBook(formData) {
     $.ajax({
-        url: "/getGeneratedHour",
+        url: "/getSiteRECBook",
         type: "post",
         async: false,
         data: formData,
         success: function (result) {
-            callback_getGeneratedHour(result);
+            callback_getSiteRECBook(result);
+        }
+    })
+}
+
+// 이번 달 미정산 REC 조회
+function getIssuedRECInThisMonth(formData) {
+    $.ajax({
+        url: "/getIssuedRECInThisMonth",
+        type: "post",
+        async: false,
+        data: formData,
+        success: (result) => {
+            callback_getIssuedRECInThisMonth(result);
+        }
+    })
+}
+
+// 오늘 정산 REC 개수, 정산 금액 조회
+function getSoldRECInThisDay(formData) {
+    $.ajax({
+        url: "/getSoldRECInThisDay",
+        type: "post",
+        async: false,
+        data: formData,
+        success: (result) => {
+            callback_getSoldRECInThisDay(result);
+        }
+    })
+}
+
+// 이번 달 정산 REC 개수, 정산 금액 조회
+function getSoldRECInThisMonth(formData) {
+    $.ajax({
+        url: "/getSoldRECInThisMonth",
+        type: "post",
+        async: false,
+        data: formData,
+        success: (result) => {
+            callback_getSoldRECInThisMonth(result);
+        }
+    })
+}
+
+// 직전 달 정산 REC 개수, 정산 금액 조회
+function getSoldRECInLastMonth(formData) {
+    $.ajax({
+        url: "/getSoldRECInLastMonth",
+        type: "post",
+        async: false,
+        data: formData,
+        success: (result) => {
+            callback_getSoldRECInLastMonth(result);
+        }
+    })
+}
+
+// 올해 정산 REC 개수, 정산 금액 조회
+function getSoldRECInThisYear(formData) {
+    $.ajax({
+        url: "/getSoldRECInThisYear",
+        type: "post",
+        async: false,
+        data: formData,
+        success: (result) => {
+            callback_getSoldRECInThisYear(result);
+        }
+    })
+}
+
+// 작년 정산 REC 개수, 정산 금액 조회
+function getSoldRECInLastYear(formData) {
+    $.ajax({
+        url: "/getSoldRECInLastYear",
+        type: "post",
+        async: false,
+        data: formData,
+        success: (result) => {
+            callback_getSoldRECInLastYear(result);
+        }
+    })
+}
+
+// 올해 정산 rec 개수 금액 월별 조회
+function getSoldRECInThisYearMonthly(formData) {
+    $.ajax({
+        url: "/getSoldRECInThisYearMonthly",
+        type: "post",
+        async: false,
+        data: formData,
+        success: (result) => {
+            callback_getSoldRECInThisYearMonthly(result);
+        }
+    })
+}
+
+// 오늘의 거래량 조회
+function getTradingVolumeByDay(formData) {
+    $.ajax({
+        url: "/getTradingVolumeByDay",
+        type: "post",
+        async: false,
+        data: formData,
+        success: result => {
+            callback_getTradingVolumeByDay(result);
+        }
+    })
+}
+
+// 오늘의 거래가격 조회
+function getTransactionPriceByDay(formData) {
+    $.ajax({
+        url: "/getTransactionPriceByDay",
+        type: "post",
+        async: false,
+        data: formData,
+        success: result => {
+            callback_getTransactionPriceByDay(result);
+        }
+    })
+}
+
+// 이번 달 날씨 아이콘 조회
+function getWeatherIconMonthly(formData) {
+    $.ajax({
+        url: "/getWeatherIconMonthly",
+        type: 'post',
+        async: false,
+        data: formData,
+        success: function (result) {
+            callback_getWeatherIconMonthly(result);
         }
     })
 }

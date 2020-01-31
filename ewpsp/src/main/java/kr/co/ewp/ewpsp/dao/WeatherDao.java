@@ -17,15 +17,9 @@ public class WeatherDao {
 
     private static final Logger logger = LoggerFactory.getLogger(WeatherDao.class);
 
-    public List getWeatherInfo(HashMap param){
-        List resultList = sqlSession.selectList("WeatherDao.getWeatherInfo", param);
-        logger.debug("/getWeatherInfoDao + {}", resultList);
-        return resultList;
-    }
-
-    public List getGeneratedHour(HashMap param){
-        List resultList = sqlSession.selectList("WeatherDao.getGeneratedHour", param);
-        logger.debug("/getGeneratedHourDao + {}", resultList);
+    public List getWeatherIconMonthly(HashMap param) {
+        List resultList = sqlSession.selectList("WeatherDao.getWeatherIconMonthly", param);
+        logger.debug("/getWeatherIconMonthly + {}", resultList);
         return resultList;
     }
 }

@@ -3,13 +3,13 @@
 
 <mapper namespace="SMPDao">
     <!--오늘 시간대별 SMP 마켓 가격-->
-    <select id="getFixedSMPMarketPrice" parameterType="Map" resultType="Map">
-        <![CDATA[
+    <select id="getFixedSMPMarketPrice" parameterType="Map" resultType="java.util.LinkedHashMap">
         SELECT *
         FROM tb_fixed_price
         WHERE market_id = #{market_id}
-        AND price_time >= CURDATE() AND price_time < (CURDATE()+INTERVAL 1 DAY)
-        ORDER BY price_time;
-        ]]>
-   </select>
+          AND YEAR(price_time) = YEAR(NOW())
+          AND MONTH(price_time) = MONTH(NOW())
+          AND DAY(price_time) = DAY(NOW())
+        GROUP BY price_time
+    </select>
 </mapper>

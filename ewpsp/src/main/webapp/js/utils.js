@@ -670,11 +670,11 @@ function makePageNums2(pagingMap, gubun) {
     var gubunStr = gubun.charAt(0).toUpperCase() + gubun.slice(1);
 
     var selPageNum = pagingMap.selPageNum; // 선택한 페이지번호
-//	var listCnt = pagingMap.listCnt; // 전체 데이터 수
+    var listCnt = pagingMap.listCnt; // 전체 데이터 수
     var pageRowCnt = pagingMap.pageRowCnt; // 한 페이지 당 보여줄 데이터 수
     var totalPageCnt = pagingMap.totalPageCnt; // 전체 페이지 수
 
-    $paging = $('#' + gubun + 'Paging');
+    var $paging = $('#' + gubun + 'Paging');
     $paging.empty();
     if (selPageNum > 1) {
         $paging.append($('<a href="javascript:get' + gubun + 'List(' + (selPageNum - 1) + ')" class="prev" />').append("PREV"));

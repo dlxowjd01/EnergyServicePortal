@@ -1172,7 +1172,67 @@ h2.ntit {
 	## PV 메인 레이아웃 ##
 */
 
-/* 월별 수입 종합 */
+/* 월별 PV 발전량 종합 */
+/* 이 달의 발전 달력 */
+.calendar {
+    height: 99%;
+    box-sizing: border-box;
+    padding: 0.5%;
+    margin-top: 20px;
+    font-size: 10px;
+}
+
+.calendar__day {
+    background-color: transparent;
+    display: inline-block;
+    vertical-align: bottom;
+    width: calc(97% / 7);
+    height: calc(98% / 5);
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 5px;
+    position: relative;
+    box-shadow: 0 0 3px 0 rgba(29, 34, 43, 0.5);
+}
+
+.horizontalGutter {
+    margin-right: 0.5%;
+}
+
+.verticalGutter {
+    margin-top: 0.5%;
+}
+
+.calendar__dayNum {
+    color: #fff;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+.calendar__weatherIcon {
+    position: absolute;
+    width: 40px;
+    top: 10px;
+    right: 0;
+}
+
+.calendar__gen {
+    clear: both;
+}
+
+.calendar__genValue {
+    position: absolute;
+    bottom: 15px;
+    right: 10px;
+    color: #8e95a1;
+    text-align: right;
+}
+
+.calendar__genText {
+    color: #fff;
+    font-size: 12px;
+}
 /* REC 종합 */
 .pie_chart .chart_footer ul li span {
     font-family: 'Roboto', sans-serif;
@@ -1240,22 +1300,20 @@ h2.ntit {
     background-color: #464d5d;
 }
 /* 현재 발전 현황*/
-.highcharts-figure .chart-container {
-    width: 100%;
-    height: 100%;
-    float: left;
+
+.no-device div {
+    margin: 20px 0;
 }
 
-@media (max-width: 600px) {
-    .highcharts-figure {
-        width: 100%;
-    }
+.no-device span {
+    color: #fff;
+    font-size: 16px;
+}
 
-    .highcharts-figure .chart-container {
-        width: 100%;
-        float: none;
-        margin: 0 auto;
-    }
+.highcharts-figure .chart-container {
+    width: 100%;
+    height: 200px;
+    float: left;
 }
 
 .highcharts-figure, .highcharts-data-table table {
@@ -1272,50 +1330,48 @@ h2.ntit {
     width: 100%;
     max-width: 500px;
 }
-
 .highcharts-data-table caption {
     padding: 1em 0;
     font-size: 1.2em;
     color: #555;
 }
-
 .highcharts-data-table th {
     font-weight: 600;
     padding: 0.5em;
 }
-
 .highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
     padding: 0.5em;
 }
-
 .highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
     background: #f8f8f8;
 }
-
 .highcharts-data-table tr:hover {
     background: #f1f7ff;
 }
 
-.gen {
-    height: 260px;
-    padding-bottom: 40px;
+@media (max-width: 600px) {
+    .highcharts-figure, .highcharts-data-table table {
+        width: 100%;
+    }
+
+    .highcharts-figure .chart-container {
+        width: 100%;
+        float: none;
+        margin: 0 auto;
+    }
+
 }
 
-.gen div {
-    height: 100%;
+@media (min-width: 1440px) {
+    .gauge-data-label-num {
+        font-size: 18px !important;
+    }
+
+    .gauge-data-label-text {
+        font-size: 10px !important;
+    }
 }
 
-.gen > .left div {
-    height: 100%;
-}
-
-.gen > .right div {
-    height: 50%;
-}
-
-.gen > .right div div {
-    height: 100%;
-}
 /* 알람 */
 /* 메인용 */
 .chart_table table.main_use {

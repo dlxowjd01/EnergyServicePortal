@@ -19,22 +19,12 @@ public class WeatherServiceImpl implements WeatherService{
 
     private static final Logger logger = LoggerFactory.getLogger(WeatherServiceImpl.class);
 
-    public List getWeatherInfo(HashMap param, HttpServletRequest request) throws Exception {
-        List list = weatherDao.getWeatherInfo(param);
-        logger.debug("/getWeatherInfo + {}", list);
-        if(list == null || list.isEmpty()){
+    public List getWeatherIconMonthly(HashMap param, HttpServletRequest request) throws Exception {
+        List list = weatherDao.getWeatherIconMonthly(param);
+        logger.debug("/getWeatherIconMonthly + {}", list);
+        if (list == null || list.isEmpty()) {
             return null;
         } else {
-            return list;
-        }
-    }
-
-    public List getGeneratedHour(HashMap param, HttpServletRequest request) throws Exception {
-        List list = weatherDao.getGeneratedHour(param);
-        logger.debug("/getGeneratedHour + {}", list);
-        if(list == null || list.isEmpty()){
-            return null;
-        }else {
             return list;
         }
     }

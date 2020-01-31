@@ -28,8 +28,7 @@ public class SMPServiceImpl implements SMPService{
         Map resultMap = new HashMap();
 
         if(list == null || list.isEmpty()){
-            resultMap.put(param.get("market_id"), null);
-            return resultMap;
+            return null;
         } else {
             resultMap.put(param.get("market_id"), list);
             return resultMap;
