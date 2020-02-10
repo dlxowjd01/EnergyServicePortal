@@ -1005,7 +1005,7 @@
                                   <h2 class="ntit fl">이 달의 발전 달력</h2>
                                   <div class="time fr updateTimePV">2018-08-12 11:41:26</div>
                                 </div>
-                                <div id="PVGenCalendar" class="calendar" style="height:400px;"></div>
+                                <div id="PVGenCalendar" class="calendar" style="height:450px;"></div>
                               </div>
                             </div>
                           </div>
@@ -1671,8 +1671,8 @@
         let startDayCount = 1;
         let lastDayCount = 1;
 
-        //1~5주차 -> 5로 해도 상관 없지 않나? 왜 6으로 했을까. 5로 해도 됨.
-        for (let i = 0; i < 5; i++) {
+        //1~6주차
+        for (let i = 0; i < 6; i++) {
           //일요일~월요일
           for (let j = 0; j < 7; j++) {
             // i == 0: 1주차일 때
@@ -1717,7 +1717,7 @@
                   year +
                   month +
                   setFixDayCount(0) +
-                  "' class='calendar__day horizontalGutter'><span class='calendar__dayNum'>" +
+                  "' class='calendar__day horizontalGutter op3'><span class='calendar__dayNum'>" +
                   (prevLastDay - (firstDayName - 1) + j) +
                   "</span></div>";
               } else if (j == 6) {
@@ -1726,7 +1726,7 @@
                   year +
                   month +
                   setFixDayCount(0) +
-                  "' class='calendar__day'><span class='calendar__dayNum'>" +
+                  "' class='calendar__day op3'><span class='calendar__dayNum'>" +
                   (prevLastDay - (firstDayName - 1) + j) +
                   "</span></div>";
               } else {
@@ -1735,7 +1735,7 @@
                   year +
                   month +
                   setFixDayCount(0) +
-                  "' class='calendar__day horizontalGutter'><span class='calendar__dayNum'>" +
+                  "' class='calendar__day horizontalGutter op3'><span class='calendar__dayNum'>" +
                   (prevLastDay - (firstDayName - 1) + j) +
                   "</span></div>";
               }
@@ -1780,7 +1780,7 @@
                   year +
                   month +
                   setFixDayCount(0) +
-                  "' class='calendar__day horizontalGutter verticalGutter'><span class='calendar__dayNum'>" +
+                  "' class='calendar__day horizontalGutter verticalGutter op3'><span class='calendar__dayNum'>" +
                   lastDayCount++ +
                   "</span></div>";
               } else if (j == 6) {
@@ -1789,7 +1789,7 @@
                   year +
                   month +
                   setFixDayCount(0) +
-                  "' class='calendar__day verticalGutter'><span class='calendar__dayNum'>" +
+                  "' class='calendar__day verticalGutter op3'><span class='calendar__dayNum'>" +
                   lastDayCount++ +
                   "</span></div>";
               } else {
@@ -1798,7 +1798,7 @@
                   year +
                   month +
                   setFixDayCount(0) +
-                  "' class='calendar__day horizontalGutter verticalGutter'><span class='calendar__dayNum'>" +
+                  "' class='calendar__day horizontalGutter verticalGutter op3'><span class='calendar__dayNum'>" +
                   lastDayCount++ +
                   "</span></div>";
               }

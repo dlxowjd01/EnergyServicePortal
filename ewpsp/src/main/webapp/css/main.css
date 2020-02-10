@@ -1187,7 +1187,7 @@ h2.ntit {
     display: inline-block;
     vertical-align: bottom;
     width: calc(97% / 7);
-    height: calc(98% / 5);
+    height: calc(98% / 6);
     box-sizing: border-box;
     border-radius: 5px;
     padding: 5px;
@@ -1201,6 +1201,10 @@ h2.ntit {
 
 .verticalGutter {
     margin-top: 0.5%;
+}
+
+.op3 {
+    opacity: 0.3;
 }
 
 .calendar__dayNum {
