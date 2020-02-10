@@ -435,7 +435,7 @@
               var chartSpeed = Highcharts.chart(`container-speed${'${idx}'}`, Highcharts.merge(gaugeOptions, {
                 yAxis: {
                   min: 0,
-                  max: 200,
+                  max: 20,
                   x: 0,
                   title: {
                     text: `IVT ${'${e.device_id}'}`
