@@ -97,7 +97,7 @@
             UNIX_TIMESTAMP(DATE_FORMAT(MAX(price_time), '%Y-%m-%d')) * 1000 AS price_time,
             MAX(accum_trading_vol) - MIN(accum_trading_vol)                 AS accum_trading_vol
         FROM tb_spot_market
-        group by DAY(price_time)
+        group by YEAR(price_time), MONTH(price_time), DAY(price_time)
         order by price_time desc
     </select>
     <select id="getTransactionPriceByDay" parameterType="Map" resultType="java.util.LinkedHashMap">
@@ -115,7 +115,7 @@
                     MIN(lowest_price)  AS lowest_price,
                     MAX(price_time)    AS last_time
                 FROM tb_spot_market
-                GROUP BY DAY(price_time)
+                GROUP BY YEAR(price_time), MONTH(price_time), DAY(price_time)
             )              as B
         WHERE A.price_time = B.last_time
     </select>

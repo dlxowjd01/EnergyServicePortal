@@ -451,12 +451,12 @@
                     format:
                       '<div style="text-align:center">' +
                       '<span class="gauge-data-label-num" style="font-size:14px; display:inline-block;">{y}</span><br/>' +
-                      '<span class="gauge-data-label-text" style="font-size:8px; display:inline-block;">kW/h</span>' +
+                      '<span class="gauge-data-label-text" style="font-size:8px; display:inline-block;">kW</span>' +
                       '</div>',
                     style: {textOutline: 'none'}
                   },
                   tooltip: {
-                    valueSuffix: ' kW/h'
+                    valueSuffix: ' kW'
                   }
                 }]
               }));
