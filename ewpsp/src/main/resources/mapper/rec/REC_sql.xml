@@ -95,9 +95,10 @@
     <select id="getTradingVolumeByDay" parameterType="Map" resultType="java.util.LinkedHashMap">
         SELECT
             UNIX_TIMESTAMP(DATE_FORMAT(MAX(price_time), '%Y-%m-%d')) * 1000 AS price_time,
-            MAX(accum_trading_vol) - MIN(accum_trading_vol)
+            MAX(accum_trading_vol) - MIN(accum_trading_vol)                 AS accum_trading_vol
         FROM tb_spot_market
         group by DAY(price_time)
+        order by price_time desc
     </select>
     <select id="getTransactionPriceByDay" parameterType="Map" resultType="java.util.LinkedHashMap">
         SELECT
