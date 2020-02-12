@@ -50,7 +50,7 @@
         </script>
         <nav class="clear">
         <button type="button" class="category">카테고리</button>
-        <div class="nav_brand ewp"><a href="/">EWP</a></div>
+        <div class="nav_brand"><a href="/">ENCORED</a></div>
         <!-- input/dropdown //-->
         <div class="site form-group">
         <div class="input-group">

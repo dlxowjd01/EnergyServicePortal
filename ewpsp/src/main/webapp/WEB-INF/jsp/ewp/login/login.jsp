@@ -628,7 +628,7 @@
         <div id="wrapper">
             <div id="page-wrapper">
                 <nav class="clear">
-                    <div class="nav_brand ewp"><a href="/">EWP</a></div>
+                    <div class="nav_brand"><a href="/">ENCORED</a></div>
                     <!-- 언어 선택 -->
                     <div class="lang dropdown">
                         <button class="btn btn-primary dropdown-toggle" type="button"
