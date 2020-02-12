@@ -1686,8 +1686,13 @@
                   month +
                   setFixDayCount(startDayCount) +
                   "' class='calendar__day horizontalGutter'><span class='calendar__dayNum'>" +
-                  startDayCount++ +
-                  "</span><canvas class='calendar__weatherIcon'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
+                  startDayCount +
+                  "</span><canvas class='calendar__weatherIcon' id='" +
+                  year +
+                  month +
+                  setFixDayCount(startDayCount++) +
+                  "icon" +
+                  "'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
               } else if (j == 6) {
                 calHtml +=
                   "<div id='" +
@@ -1695,8 +1700,13 @@
                   month +
                   setFixDayCount(startDayCount) +
                   "' class='calendar__day'><span class='calendar__dayNum'>" +
-                  startDayCount++ +
-                  "</span><canvas class='calendar__weatherIcon'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
+                  startDayCount +
+                  "</span><canvas class='calendar__weatherIcon' id='" +
+                  year +
+                  month +
+                  setFixDayCount(startDayCount++) +
+                  "icon" +
+                  "'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
               } else {
                 calHtml +=
                   "<div id='" +
@@ -1704,8 +1714,13 @@
                   month +
                   setFixDayCount(startDayCount) +
                   "' class='calendar__day horizontalGutter'><span class='calendar__dayNum'>" +
-                  startDayCount++ +
-                  "</span><canvas class='calendar__weatherIcon'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
+                  startDayCount +
+                  "</span><canvas class='calendar__weatherIcon' id='" +
+                  year +
+                  month +
+                  setFixDayCount(startDayCount++) +
+                  "icon" +
+                  "'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
               }
               // i == 0: 1주차일 때
               // j < firstDayName: 이번 달 시작 요일 이전 일 때
@@ -1814,11 +1829,11 @@
                   month +
                   setFixDayCount(startDayCount) +
                   "' class='calendar__day horizontalGutter verticalGutter'><span class='calendar__dayNum'>" +
-                  startDayCount++ +
+                  startDayCount +
                   "</span><canvas id='" +
                   year +
                   month +
-                  setFixDayCount(startDayCount) +
+                  setFixDayCount(startDayCount++) +
                   "icon" +
                   "' class='calendar__weatherIcon'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
               } else if (j == 6) {
@@ -1829,11 +1844,11 @@
                   month +
                   setFixDayCount(startDayCount) +
                   "' class='calendar__day verticalGutter'><span class='calendar__dayNum'>" +
-                  startDayCount++ +
+                  startDayCount +
                   "</span><canvas id='" +
                   year +
                   month +
-                  setFixDayCount(startDayCount) +
+                  setFixDayCount(startDayCount++) +
                   "icon" +
                   "' class='calendar__weatherIcon'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
               } else {
@@ -1844,11 +1859,11 @@
                   month +
                   setFixDayCount(startDayCount) +
                   "' class='calendar__day horizontalGutter verticalGutter'><span class='calendar__dayNum'>" +
-                  startDayCount++ +
+                  startDayCount +
                   "</span><canvas id='" +
                   year +
                   month +
-                  setFixDayCount(startDayCount) +
+                  setFixDayCount(startDayCount++) +
                   "icon" +
                   "' class='calendar__weatherIcon'></canvas><div class='calendar__gen'><div class='calendar__genValue'><span class='calendar__genText'>0  </span> kWh</div></div></div>";
               }
