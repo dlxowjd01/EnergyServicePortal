@@ -13,15 +13,18 @@
         GROUP BY price_time
     </select>
     <select id="getSoldSMPForToday" parameterType="Map" resultType="java.lang.Integer">
-        SELECT FLOOR(SUM((B.gen_val / 1000) * A.price)) as sold
+        SELECT FLOOR(SUM(B.gen_val / 1000) * A.price) as sold
         FROM
             (
-                SELECT price_time, price
+                SELECT
+                    price_time,
+                    price
                 FROM tb_fixed_price
-                where YEAR(price_time) = YEAR(NOW())
+                WHERE market_id = 'KPX_SMP'
+                  AND YEAR(price_time) = YEAR(NOW())
                   AND MONTH(price_time) = MONTH(NOW())
                   AND DAY(price_time) = DAY(NOW())
             ) AS A, tb_pv_gen AS B
-        WHERE B.std_date = A.price_time
+        WHERE B.site_id = #{site_id} AND B.std_date = A.price_time
     </select>
 </mapper>

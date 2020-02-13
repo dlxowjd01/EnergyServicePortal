@@ -304,7 +304,7 @@
 
           function callback_getPVGenRealListForThisYearMonthly(result) {
             result.map((e, idx) => {
-              $(`#income_datatable > tbody > tr:nth-child(${'${idx+1}'}) > td:nth-child(${'${idx+2}'})`).html(e.gen_val);
+              $(`#income_datatable > tbody > tr:nth-child(${'${idx+1}'}) > td:nth-child(${'${2}'})`).html(e.gen_val);
             })
           }
 
