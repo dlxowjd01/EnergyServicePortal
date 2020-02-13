@@ -271,4 +271,15 @@ public class PVMainController {
         return result;
     }
 
+    @PostMapping("/getSoldSMPForToday")
+    public @ResponseBody
+    Integer getSoldSMPForToday(@RequestParam Map param, HttpServletRequest request) throws Exception {
+        logger.debug("/getSoldSMPForToday");
+        HashMap params = new HashMap();
+        params.put("site_id", param.get("siteId"));
+        Integer result = SMPService.getSoldSMPForToday(params, request);
+        logger.debug("/getSoldSMPForToday:: + {}", result);
+        return result;
+    }
+
 }

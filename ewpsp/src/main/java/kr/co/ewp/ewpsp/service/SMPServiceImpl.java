@@ -34,4 +34,9 @@ public class SMPServiceImpl implements SMPService{
             return resultMap;
         }
     }
+
+    public Integer getSoldSMPForToday(HashMap param, HttpServletRequest request) {
+        return SMPDao.getSoldSMPForToday(param);
+
+    }
 }

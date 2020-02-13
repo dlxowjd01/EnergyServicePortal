@@ -1136,6 +1136,18 @@ function getFixedSMPMarketPrice() {
     });
 }
 
+// 오늘 SMP 수익
+function getSoldSMPForToday() {
+    $.ajax({
+        url: "/getSoldSMPForToday",
+        type: 'post',
+        async: false, // 동기로 처리해줌
+        success: function (result) {
+            callback_getSoldSMPForToday(result);
+        }
+    });
+}
+
 // REC 현물 시장 현황 조회
 function getCurrentRECMarketPrice() {
     $.ajax({

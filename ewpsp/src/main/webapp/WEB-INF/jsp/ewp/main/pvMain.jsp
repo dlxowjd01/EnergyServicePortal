@@ -149,6 +149,8 @@
             getTransactionPriceByDay(formData);
             // SMP 오늘의 시장가 조회
             getFixedSMPMarketPrice();
+            // 오늘 SMP 수익
+            getSoldSMPForToday(formData);
           };
 
           const fn_cycle_1day = () => {
@@ -515,6 +517,10 @@
                 }
               })
             }
+          }
+
+          function callback_getSoldSMPForToday(result) {
+            $('#SMP_earnings_in_today').html(result.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " 원");
           }
 
           let currentRECMarketPriceList = {};

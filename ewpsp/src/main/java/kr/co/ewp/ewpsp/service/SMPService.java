@@ -7,4 +7,6 @@ import java.util.Map;
 
 public interface SMPService {
     Map getFixedSMPMarketPrice(HashMap param, HttpServletRequest request) throws Exception;
+
+    Integer getSoldSMPForToday(HashMap param, HttpServletRequest request) throws Exception;
 }

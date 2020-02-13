@@ -25,4 +25,9 @@ public class SMPDao {
 
         return resultList;
     }
+
+    public Integer getSoldSMPForToday(HashMap param) {
+        return sqlSession.selectOne("SMPDao.getSoldSMPForToday", param);
+    }
+
 }
