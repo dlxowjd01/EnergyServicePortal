@@ -124,7 +124,7 @@
             // 장비별 최근 PV 발전량 리스트 조회
             getPVGenRealLatestListOfDevices(formData);
             // REC 현물 시장 현재 데이터 조회
-            getCurrentRECMarketPrice();
+            // getCurrentRECMarketPrice();
             // REC 발급 내역 데이터 조회
             getSiteRECIssued(formData);
             // REC 판매 내역 데이터 조회
@@ -564,11 +564,10 @@
 
           function callback_getSoldRECInThisMonth(result) {
             result.map(e => {
-              // $('#sell_rec_num').html(e.sell_rec_num);
-              sellRecNumInThisMonth = e.sell_rec_num;
-              // $('#sell_rec_value').html(e.sell_rec_value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-              // $('#REC_earnings_for_this_month').html(e.sell_rec_value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-              sellRecValueInThisMonth = e.sell_rec_value;
+              if (e) {
+                sellRecNumInThisMonth = e.sell_rec_num;
+                sellRecValueInThisMonth = e.sell_rec_value;
+              }
             });
           }
 
