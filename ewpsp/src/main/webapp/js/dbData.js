@@ -1137,11 +1137,12 @@ function getFixedSMPMarketPrice() {
 }
 
 // 오늘 SMP 수익
-function getSoldSMPForToday() {
+function getSoldSMPForToday(formData) {
     $.ajax({
         url: "/getSoldSMPForToday",
         type: 'post',
         async: false, // 동기로 처리해줌
+        data: formData,
         success: function (result) {
             callback_getSoldSMPForToday(result);
         }
