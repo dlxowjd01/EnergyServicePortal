@@ -123,7 +123,7 @@ select {
     height: 36px;
     line-height: 36px;
     font-family: 'Roboto', sans-serif;
-    color: #3d4250;
+    /*color: #3d4250;*/
     font-size: 13px;
     border: solid 2px #9ba3aa;
     border-radius: 200px;
@@ -140,7 +140,7 @@ select {
     height: 36px;
     line-height: 36px;
     font-family: 'Roboto', sans-serif;
-    color: #3d4250;
+    /*color: #3d4250;*/
     font-size: 13px;
     border: solid 2px #9ba3aa;
     border-radius: 200px;
@@ -153,7 +153,7 @@ select {
     height: 150px;
     line-height: 1.4;
     font-family: 'Roboto', sans-serif;
-    color: #3d4250;
+/
     font-size: 13px;
     border: solid 2px #9ba3aa;
     border-radius: 4px;
@@ -370,7 +370,9 @@ html, body {
 }
 
 body {
-    background: #f8f9fd url('../img/sidebar_bg.png') repeat-y 0 0;
+    /*background: #f8f9fd url('../img/sidebar_bg.png') repeat-y 0 0;*/
+    background: #131319;
+    color: #fff;
 }
 
 #wrapper {
@@ -380,22 +382,27 @@ body {
 #sidebar {
     z-index: 1;
     position: absolute;
-    top: 0;
+    top: 80px;
     left: 0;
     width: 80px;
     height: 100%;
-    background: #3d4250;
+    /*background: #3d4250;*/
+    background: #131319;
 }
 
 #page-wrapper {
-    margin: 0 0 0 80px;
+    /*margin: 0 0 0 80px;*/
     padding: 0 16px;
 }
 
+#container {
+    margin: 0 32px 28px 112px;
+}
 /* 반응형 미디어 쿼리 */
 @media all and (min-width: 3000px) {
     body {
-        background: #f8f9fd url('../img/sidebar_bg_4k.png') repeat-y 0 0;
+        /*background: #f8f9fd url('../img/sidebar_bg_4k.png') repeat-y 0 0;*/
+        background: #131319;
     }
 
     #sidebar {
@@ -403,6 +410,10 @@ body {
     }
 
     #page-wrapper {
+        /*margin: 0 0 0 120px;*/
+    }
+
+    #container {
         margin: 0 0 0 120px;
     }
 }
@@ -783,7 +794,7 @@ body {
 /* 페이지 상단 */
 nav {
     position: relative;
-    margin: 0 0 10px;
+    margin: 0 0 28px;
     padding: 0 24px;
     min-height: 80px;
 }
@@ -868,7 +879,7 @@ nav .nav_right li {
     font-family: 'Roboto', sans-serif;
     font-size: 10px;
     font-weight: 400;
-    color: #3d4250;
+    /*color: #3d4250;*/
     vertical-align: middle;
     letter-spacing: 0.3px;
 }
@@ -909,7 +920,7 @@ nav .nav_right li.member .fr {
 nav .nav_right li.member .fr span {
     cursor: pointer;
     font-size: 13px;
-    color: #3d4250;
+    /*color: #3d4250;*/
     font-weight: 500;
 }
 
@@ -1146,7 +1157,7 @@ footer .ft_menu {
 footer .ft_menu a {
     display: inline-block;
     font-size: 12px;
-    color: #7d848a;
+    color: #fff;
     font-weight: bold;
 }
 
@@ -1158,7 +1169,7 @@ footer .copyright {
     font-family: 'Roboto', sans-serif;
     font-size: 10px;
     font-weight: 500;
-    color: #333841;
+    color: #fff;
     letter-spacing: 0.3px;
 }
 
@@ -1230,11 +1241,12 @@ footer .copyright {
 .col-lg-11,
 .col-lg-12 {
     padding: 8px;
+    /*padding: 0;*/
 }
 
 .dropdown .btn-primary {
     font-family: 'Roboto', sans-serif;
-    color: #333841;
+    /*color: #333841;*/
     font-size: 13px;
     font-weight: 500;
     background: transparent;
@@ -1259,7 +1271,7 @@ footer .copyright {
 .btn-primary.active.focus,
 .open > .dropdown-toggle.btn-primary.focus {
     font-family: 'Roboto', sans-serif;
-    color: #333841;
+    /*color: #333841;*/
     font-size: 13px;
     font-weight: 500;
     background: transparent;
@@ -2041,11 +2053,11 @@ input.inp[readonly]:focus {
 
 /* 페이지 제목 */
 .page-header {
-    margin: 0 0 12px;
-    padding: 0 20px;
+    margin-bottom: 28px;
+    /*padding: 0 20px;*/
     font-size: 32px;
     line-height: 32px;
-    color: #333841;
+    /*color: #333841;*/
     border: 0;
     letter-spacing: -3px;
 }
@@ -2053,7 +2065,7 @@ input.inp[readonly]:focus {
 /* 반응형 미디어 쿼리 */
 @media all and (min-width: 3000px) {
     .page-header {
-        margin: 0 0 18px;
+        margin-bottom: 28px;
         font-size: 48px;
         line-height: 1;
         letter-spacing: -1.5px;
@@ -2086,8 +2098,9 @@ input.inp[readonly]:focus {
 
 /* 판넬 박스 */
 .indiv {
-    background: #fff;
-    border-radius: 17px;
+    /*background: #fff;*/
+    background: #363636;
+    /*border-radius: 17px;*/
     padding: 20px 30px !important;
     -webkit-box-shadow: 0px -1px 40px 0px rgba(29, 34, 43, 0.15);
     -moz-box-shadow: 0px -1px 40px 0px rgba(29, 34, 43, 0.15);
@@ -2126,7 +2139,8 @@ input.inp[readonly]:focus {
 h2.ntit {
     margin: 6px 0 10px;
     font-size: 18px;
-    color: #3d4250;
+    /*color: #3d4250;*/
+    color: #fff;
     font-weight: bold;
 }
 
@@ -2182,20 +2196,25 @@ h2.ntit span.time {
 
 
 /* 합계 */
+.chart_total {
+    margin-top: 100px;
+}
+
 .chart_total li {
     padding: 18px 0;
+    margin-bottom: 42px;
 }
 
 .chart_total li + li {
-    border-top: solid 1px #eee;
+    /*border-top: solid 1px #eee;*/
 }
 
 .chart_total li .cval {
-    margin-top: 15px;
-    text-align: right;
+    margin-top: 11px;
+    /*text-align: right;*/
     font-family: 'Roboto', sans-serif;
     font-size: 18px;
-    color: #3d4250;
+    color: #fff;
 }
 
 .chart_total li .cval span {
@@ -2319,7 +2338,8 @@ h2.ntit span.time {
 /* LEGEND 타이틀 */
 .ctit {
     font-size: 14px;
-    color: #3d4250;
+    /*color: #3d4250;*/
+    /*color: #fff;*/
     font-weight: bold;
 }
 
@@ -2388,11 +2408,21 @@ h2.ntit span.time {
 
 /* 방전 계획 */
 /* PV 발전량 */
+.ctit.pv1 span {
+    display: inline-block;
+    margin-bottom: 11px;
+}
+
 .ctit.pv1 span:before {
-    background: #438fd7;
+    background: #29c0c3;
 }
 
 /* 실제 발전량 */
+.ctit.pv2 span {
+    display: inline-block;
+    margin-bottom: 11px;
+}
+
 .ctit.pv2 span:before {
     background: #84848f;
 }
@@ -2442,6 +2472,10 @@ h2.ntit span.time {
 
 
 /* 차트 상단 */
+.chart_top {
+    margin-bottom: 25px;
+}
+
 .chart_top .ntit {
     margin-right: 30px;
 }
@@ -2465,7 +2499,7 @@ h2.ntit span.time {
     height: 36px;
     line-height: 36px;
     font-size: 14px;
-    color: #3d4250;
+    color: #fff;
     font-weight: bold;
 }
 
@@ -2551,7 +2585,7 @@ h2.ntit span.time {
     height: 36px;
     line-height: 36px;
     font-size: 14px;
-    color: #3d4250;
+    color: #fff;
     font-weight: bold;
 }
 
@@ -2579,7 +2613,7 @@ h2.ntit span.time {
     height: 36px;
     line-height: 36px;
     font-size: 14px;
-    color: #3d4250;
+    color: #fff;
     font-weight: bold;
 }
 
@@ -2676,6 +2710,7 @@ h2.ntit span.time {
 /* 차트 박스 */
 .inchart {
     position: relative;
+    padding-top: 10px;
 }
 
 .inchart-nodata {
@@ -2689,30 +2724,36 @@ h2.ntit span.time {
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 20px;
-    color: #3d4250;
+    color: #fff;
     font-weight: 600;
 }
 
 /* 차트 변경 버튼 */
 .chart_type {
-    position: absolute;
-    top: 20px;
-    right: 0;
-    z-index: 1;
+    /*position: absolute;*/
+    /*top: 20px;*/
+    /*right: 0;*/
+    /*z-index: 1;*/
+    float: right;
 }
 
 .chart_type .chart_change_column,
 .chart_type .chart_change_line {
     display: inline-block;
-    width: 115px;
+    width: 46px;
     height: 36px;
     line-height: 36px;
-    background: #438fd7 url('../img/icon_graph.png') no-repeat 15px 10px;
+    background: url('../img/icon_graph.png') no-repeat 15px 10px;
     padding-left: 35px;
     font-size: 13px;
     color: #fff;
     font-weight: bold;
     border-radius: 200px;
+}
+
+/* 차트 다운로드 버튼 */
+.chart_download {
+    float: right;
 }
 
 /* 테이블 영역 상단 */
@@ -2743,7 +2784,7 @@ h2.ntit span.time {
     height: 36px;
     line-height: 36px;
     font-size: 13px;
-    color: #444a59;
+    /*color: #444a59;*/
     padding-right: 40px;
     font-weight: bold;
 }
@@ -2767,54 +2808,80 @@ h2.ntit span.time {
 
 /* PC용 */
 .chart_table table.pc_use {
-    width: 100%
+    width: 100%;
 }
 
 .chart_table table.pc_use thead {
-    background: #eceef0;
+    /*background: #eceef0;*/
 }
 
 .chart_table table.pc_use thead th {
     font-size: 13px;
-    color: #3d4250;
+    /*color: #3d4250;*/
     font-weight: bold;
 }
 
+.chart_table table.pc_use thead tr {
+    background-color: #282828;
+}
+
 .chart_table table.pc_use thead tr th:first-child {
-    border-radius: 200px 0 0 200px;
+    text-align: left;
+    padding-left: 30px;
 }
 
 .chart_table table.pc_use thead tr th:last-child {
-    min-width: 70px;
-    border-radius: 0 200px 200px 0;
+    text-align: right;
+    padding-right: 30px;
+    width: 120px;
 }
 
 .chart_table table.pc_use th,
 .chart_table table.pc_use td {
     height: 48px;
     line-height: 48px;
-    padding: 0 5px;
-    color: #444a59;
+    /*color: #444a59;*/
     font-size: 14px;
     text-align: center;
     white-space: nowrap
 }
 
+.chart_table table.pc_use tbody tr:nth-child(2n) {
+    background-color: #282828;
+}
+
 .chart_table table.pc_use tbody tr:nth-child(2n) th,
 .chart_table table.pc_use tbody tr:nth-child(2n) td {
-    background: #f4f6f8
+    /*background: #f4f6f8*/
 }
 
 .chart_table table.pc_use tbody tr:nth-child(2n) th {
-    border-radius: 200px 0 0 200px;
 }
 
 .chart_table table.pc_use tbody tr:nth-child(2n) td:last-child {
-    border-radius: 0 200px 200px 0;
+}
+
+.chart_table table.pc_use tbody tr th:first-child {
+    padding-left: 30px;
+}
+
+.chart_table table.pc_use tbody tr th:last-child {
+    padding-right: 30px;
+}
+
+.chart_table table.pc_use tbody tr td:first-child {
+    text-align: left;
+    padding-left: 30px;
+}
+
+.chart_table table.pc_use tbody tr td:last-child {
+    text-align: right;
+    padding-right: 30px;
+    width: 120px;
 }
 
 .chart_table table.pc_use tbody .ctit {
-    padding-left: 30px;
+    /*padding-left: 30px;*/
     text-align: left;
 }
 
@@ -2829,7 +2896,7 @@ h2.ntit span.time {
 
 .chart_table table.dr_use thead th {
     font-size: 13px;
-    color: #3d4250;
+    color: #fff;
     font-weight: bold;
 }
 
@@ -2880,7 +2947,7 @@ h2.ntit span.time {
 .tot_per {
     margin-right: 20px;
     font-size: 16px;
-    color: #3d4250;
+    color: #fff;
     font-weight: bold;
 }
 
@@ -3046,7 +3113,7 @@ h2.ntit span.time {
 .table_info .default_tbl thead th {
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
-    color: #3d4250;
+    color: #fff;
     font-weight: 500;
 }
 
@@ -3144,7 +3211,7 @@ a.detail_view {
     padding-top: 20px;
     font-family: 'Roboto', sans-serif;
     font-size: 13px;
-    color: #3d4250;
+    color: #fff;
     opacity: 0.6;
     font-weight: normal;
 }
@@ -3211,7 +3278,7 @@ a.detail_view {
     padding-top: 20px;
     font-family: 'Roboto', sans-serif;
     font-size: 13px;
-    color: #3d4250;
+    color: #fff;
     opacity: 0.6;
     font-weight: normal;
 }
@@ -3275,7 +3342,7 @@ a.detail_view {
 .dview .ltop dl dt {
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
-    color: #3d4250;
+    color: #fff;
     opacity: 0.5;
 }
 
@@ -3942,7 +4009,7 @@ a.detail_view {
     line-height: 32px;
     border: 0;
     outline-style: none;
-    background: #3d4250;
+    background: #fff;
     color: #fff;
     font-size: 13px;
     border-radius: 200px;
@@ -4145,7 +4212,7 @@ a.detail_view {
 .c_tbl_wrap .default_tbl thead th {
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
-    color: #3d4250;
+    color: #fff;
     font-weight: 500;
 }
 
@@ -4382,7 +4449,7 @@ a.detail_view {
     padding: 6px 0;
     text-align: left;
     font-size: 14px;
-    color: #3d4250;
+    color: #fff;
     vertical-align: middle;
     white-space: nowrap;
 }
@@ -4437,7 +4504,7 @@ a.detail_view {
 
 .company_list h2.ctit {
     font-size: 14px;
-    color: #3d4250;
+    color: #fff;
     font-weight: 600;
 }
 
@@ -4457,7 +4524,7 @@ a.detail_view {
     padding: 8px 5px;
     text-align: center;
     font-size: 13px;
-    color: #3d4250;
+    color: #fff;
     white-space: nowrap;
     border-right: solid 1px #ccc;
     border-bottom: solid 1px #ccc;
@@ -4465,7 +4532,7 @@ a.detail_view {
 }
 
 .company_list table td a {
-    color: #3d4250;
+    color: #fff;
 }
 
 /* 그룹 관리 팝업 */
@@ -4556,7 +4623,7 @@ a.detail_view {
 
 .s_table table thead th {
     font-size: 13px;
-    color: #3d4250;
+    color: #fff;
     font-weight: bold;
 }
 
@@ -4626,10 +4693,10 @@ a.detail_view {
 /* 데이터 저장 */
 .save_btn {
     display: inline-block;
-    width: 115px;
+    width: 46px;
     height: 36px;
     line-height: 36px;
-    background: #438fd7 url('../img/icon_data.png') no-repeat 15px 10px;
+    background: url('../img/icon_data.png') no-repeat 15px 10px;
     padding-left: 35px;
     font-size: 13px;
     color: #fff;
@@ -5202,7 +5269,7 @@ input[type="radio"] .styled:checked + label::after {
 
 .faq .faq_table .faq_list > li > a.question {
     font-size: 13px;
-    color: #3d4250;
+    color: #fff;
     display: table;
     width: 100%;
     background: #f4f6f8 url('../img/arr_down.png') no-repeat right 30px center;
@@ -5243,7 +5310,7 @@ input[type="radio"] .styled:checked + label::after {
     padding: 0 20px 0 180px;
     line-height: 1.6;
     font-size: 13px;
-    color: #3d4250;
+    color: #fff;
 }
 
 .faq .faq_table .faq_list > li > div.answer:after {
@@ -5583,7 +5650,7 @@ nav .lang.dropdown .btn-primary {
     border: 0 !important;
     font-size: 18px !important;
     font-weight: 400 !important;
-    color: #3d4250;
+    color: #fff;
 }
 
 nav .lang.dropdown .btn {

@@ -32,7 +32,7 @@ $(function () {
     });
 });
 
-/* 
+/*
     ## 모바일 레이아웃 스크립트 ##
 */
 $(function () {
@@ -61,7 +61,7 @@ $(function () {
 //        $(".tbl_wrap").css("min-height",tbl_height);
         $('.fold_div').slideToggle();
         $(this).toggleClass("on");
-        $(this).text($(this).text() == '표접기' ? '펼치기' : '표접기');
+        // $(this).text($(this).text() == '표접기' ? '펼치기' : '표접기');
     });
 });
 
@@ -203,7 +203,7 @@ $(function () {
 //
 // v 0.2 - @pjfsilva - Added cancel elements option. This fixes the problem where <select> elements inside the draggable
 // element stop working and also improves UX as no drag event is triggered when the user is on top of a cancel element.
-// This solution is based on jquery-ui cancel solution. 
+// This solution is based on jquery-ui cancel solution.
 //
 (function ($) {
     $.fn.drags = function (opt) {
@@ -271,7 +271,7 @@ $(function () {
 function popupOpen(target) {
     $("#mask").fadeTo("slow", 0.9);
     $("." + target + "").css("position", "absolute");
-    //영역 가운에데 레이어를 뛰우기 위해 위치 계산 
+    //영역 가운에데 레이어를 뛰우기 위해 위치 계산
     $("." + target + "").css("top", (($(window).height() - $("." + target + "").outerHeight()) / 2) + $(window).scrollTop());
     $("." + target + "").css("left", (($(window).width() - $("." + target + "").outerWidth()) / 2) + $(window).scrollLeft());
     $("." + target + "").drags();
@@ -428,9 +428,9 @@ var planType = "";
 var planType2 = "";
 var planType3 = "";
 var planTypeName = "";
-var planTypeName1 = ""; //구분1 
-var planTypeName2 = ""; //구분2 
-var planTypeName3 = ""; //구분3 
+var planTypeName1 = ""; //구분1
+var planTypeName2 = ""; //구분2
+var planTypeName3 = ""; //구분3
 var reduceAmt = ""; // 감축용량
 var smpRate = "";		//SMP 단가
 var recRate = "";		//REC 단가

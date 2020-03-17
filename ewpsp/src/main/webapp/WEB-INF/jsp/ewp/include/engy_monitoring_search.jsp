@@ -108,19 +108,23 @@
                         <div class="dropdown fl">
                             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
                                     id="selPeriod">1시간
-                                <span class="caret"></span></button>
+                                <span class="caret"></span>
+                            </button>
                             <ul class="dropdown-menu">
-                                <li class="on" id="sp_15min"><a href="#"
-                                                                onclick="selectBoxTextApply(this);changePeriod('15min');">15분</a>
+                                <li class="on" id="sp_15min">
+                                    <a href="#" onclick="selectBoxTextApply(this);changePeriod('15min');">15분</a>
                                 </li>
-                                <li id="sp_30min"><a href="#" onclick="selectBoxTextApply(this);changePeriod('30min');">30분</a>
+                                <li id="sp_30min">
+                                    <a href="#" onclick="selectBoxTextApply(this);changePeriod('30min');">30분</a>
                                 </li>
-                                <li id="sp_1hour"><a href="#" onclick="selectBoxTextApply(this);changePeriod('hour');">1시간</a>
+                                <li id="sp_1hour">
+                                    <a href="#" onclick="selectBoxTextApply(this);changePeriod('hour');">1시간</a>
                                 </li>
-                                <li id="sp_1day"><a href="#"
-                                                    onclick="selectBoxTextApply(this);changePeriod('day');">1일</a></li>
-                                <li id="sp_1month"><a href="#"
-                                                      onclick="selectBoxTextApply(this);changePeriod('month');">1월</a>
+                                <li id="sp_1day">
+                                    <a href="#" onclick="selectBoxTextApply(this);changePeriod('day');">1일</a>
+                                </li>
+                                <li id="sp_1month">
+                                    <a href="#" onclick="selectBoxTextApply(this);changePeriod('month');">1월</a>
                                 </li>
                             </ul>
                         </div>
@@ -142,6 +146,16 @@
                         <button type="button" id="searchBtn" onclick="searchData();">조회</button>
                     </div>
                 </c:if>
+                <div class="chart_type">
+                    <a href="#;" class="chart_change_column" style="display:none;"></a>
+                    <a href="#;" class="chart_change_line"></a>
+                </div>
+                <div class="chart_download">
+                    <a href="#;" class="save_btn"
+                       onclick="excelDownload('PV발전량', event);"></a>
+                </div>
+            </div>
+            <div class="clear">
                 <div class="time fr" id="updtTime">2018-08-12 11:41:26</div>
             </div>
         </c:otherwise>

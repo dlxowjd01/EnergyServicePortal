@@ -251,14 +251,14 @@
 
                 myChart.addSeries({
                     name: '실제 발전량',
-                    color: '#438fd7', /* 실제 발전량 */
+                    color: '#29c0c3', /* 실제 발전량 */
                     type: 'column',
                     data: pastPVGenList
                 }, false);
 
                 myChart.addSeries({
                     name: '예측 발전량',
-                    color: '#13af67', /* 예측 발전량 */
+                    color: '#fff', /* 예측 발전량 */
                     dashStyle: 'ShortDash',
                     data: feturePVGenList
                 }, false);
@@ -288,7 +288,6 @@
                         tbodyStr += '<th><div class="ctit pv1"><span>실제 발전량 (kWh)</span></div></th>' + real_data_pc[i];
                         tbodyStr += '</tr>';
                         tbodyStr += '<tr>';
-                        console.log("dfsdfsdfsd  ", feture_data_pc[i]);
                         tbodyStr += '<th><div class="ctit pv2"><span>예측 발전량 (kWh)</span></div></th>'+ ((feture_data_pc[i] === undefined) ? defaultData_pc : feture_data_pc[i]);
                         tbodyStr += '</tr>';
                         tbodyStr += '</tbody>';
@@ -319,28 +318,33 @@
     <body>
 
         <div id="wrapper">
-            <jsp:include page="../include/layout/sidebar.jsp">
-                <jsp:param value="energy" name="linkGbn"/>
-            </jsp:include>
             <div id="page-wrapper">
                 <jsp:include page="../include/layout/header.jsp"/>
+                <jsp:include page="../include/layout/sidebar.jsp">
+                    <jsp:param value="energy" name="linkGbn"/>
+                </jsp:include>
                 <div id="container">
                     <div class="row">
                         <div class="col-lg-12">
                             <h1 class="page-header">PV 발전량 조회</h1>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row pv_chart_table"
+                         style="margin-top: 28px; padding: 30px 30px;">
                         <div class="col-lg-2 use_total">
                             <div class="indiv">
                                 <h2 class="ntit">PV 발전량 합계</h2>
                                 <ul class="chart_total">
                                     <li class="pv1">
-                                        <div class="ctit pv1"><span>실제 발전량</span></div>
+                                        <div class="ctit pv1"><span></span>
+                                            <div>실제 발전량</div>
+                                        </div>
                                         <div class="cval" id="pastPvGenTot"><span>0</span>kWh</div>
                                     </li>
                                     <li class="pv2">
-                                        <div class="ctit pv2"><span>예측 발전량</span></div>
+                                        <div class="ctit pv2"><span></span>
+                                            <div>예측 발전량</div>
+                                        </div>
                                         <div class="cval" id="feturePvGenTot"><span>0</span>kWh</div>
                                     </li>
                                 </ul>
@@ -355,10 +359,10 @@
                                     <span>조회 결과가 없습니다.</span>
                                 </div>
                                 <div class="inchart">
-                                    <div class="chart_type">
-                                        <a href="#;" class="chart_change_column" style="display:none;">그래프변경</a>
-                                        <a href="#;" class="chart_change_line">그래프변경</a>
-                                    </div>
+                                    <%--                                    <div class="chart_type">--%>
+                                    <%--                                        <a href="#;" class="chart_change_column" style="display:none;">그래프변경</a>--%>
+                                    <%--                                        <a href="#;" class="chart_change_line">그래프변경</a>--%>
+                                    <%--                                    </div>--%>
                                     <div id="chart2"></div>
                                     <script language="JavaScript" type="text/javascript">
                                         var myChart = Highcharts.chart('chart2', {
@@ -399,7 +403,7 @@
                                                 labels: {
                                                     align: 'center',
                                                     style: {
-                                                        color: '#3d4250',
+                                                        color: '#fff',
                                                         fontSize: '18px'
                                                     }
                                                 },
@@ -429,7 +433,7 @@
                                                     y: 25, /* 타이틀 위치 조정 */
                                                     x: 5, /* 타이틀 위치 조정 */
                                                     style: {
-                                                        color: '#3d4250',
+                                                        color: '#fff',
                                                         fontSize: '18px'
                                                     }
                                                 },
@@ -437,7 +441,7 @@
                                                     overflow: 'justify',
                                                     x: -20, /* 그래프와의 거리 조정 */
                                                     style: {
-                                                        color: '#3d4250',
+                                                        color: '#fff',
                                                         fontSize: '18px'
                                                     }
                                                 }
@@ -450,7 +454,7 @@
                                                 verticalAlign: 'top',
                                                 x: -120,
                                                 itemStyle: {
-                                                    color: '#3d4250',
+                                                    color: '#fff',
                                                     fontSize: '16px',
                                                     fontWeight: 400
                                                 },
@@ -492,7 +496,7 @@
                                             /* 그래프 스타일 */
                                             series: [{
                                                 name: '실제 발전량',
-                                                color: '#438fd7', /* 실제 발전량 */
+                                                color: '#29c0c3', /* 실제 발전량 */
                                                 type: 'column'
                                                 // }, {
                                                 //     color: '#84848f', /* 예측 발전량 */
@@ -568,16 +572,14 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row pv_chart_table">
                         <div class="col-lg-12">
                             <div class="indiv">
                                 <div class="tbl_top clear">
                                     <h2 class="ntit fl">PV 발전량 도표</h2>
                                     <ul class="fr">
-                                        <li><a href="#;" class="save_btn"
-                                               onclick="excelDownload('PV발전량', event);">데이터저장</a></li>
-                                        <li><a href="#;" class="fold_btn">표접기</a></li>
+                                        <%--<li><a href="#;" class="save_btn"
+                                               onclick="excelDownload('PV발전량', event);">데이터저장</a></li>--%>
+                                        <li><a href="#;" class="fold_btn"></a></li>
                                     </ul>
                                 </div>
                                 <div class="tbl_wrap">

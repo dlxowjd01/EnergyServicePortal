@@ -132,7 +132,6 @@ function getCollect_sch_condition(endLoadingFlag) {
     settingSelTerm();
 
     var formData = $("#schForm").serializeObject();
-    console.log(formData);
 
     $('.loading').show();
     var today = new Date();
