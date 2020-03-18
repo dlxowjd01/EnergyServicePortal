@@ -46,7 +46,7 @@
 <script src="../js/jspdf.min.js"></script>
 <script src="../js/common.js"></script>
 <script type="text/javascript">
-    var timeOffset = <spring:eval expression="@local.getProperty('server.offset')" />;
+  var timeOffset = -540;
 </script>
 <script src="../js/comm_sch_chartData.js" type="text/javascript"></script>
 <script src="../js/utils.js"></script>
