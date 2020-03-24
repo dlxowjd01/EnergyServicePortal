@@ -141,7 +141,6 @@
 		</mvc:interceptor>
 	</mvc:interceptors>
 
-	<util:properties id="local" location="file:D:\프로젝트\06.한국수력원자력\1차\local.properties" />
-	<!-- <util:properties id="local" location="file:/home/ubuntu/ewpsp_config/local.properties" /> -->
+	<util:properties id="local" location="file:/home/ubuntu/ewpsp_config/local.properties" />
 
 </beans>

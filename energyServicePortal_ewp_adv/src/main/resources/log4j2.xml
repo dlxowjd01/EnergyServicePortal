@@ -19,7 +19,7 @@
 	    <Logger name="org.springframework" level="DEBUG" additivity="false">
 	        <AppenderRef ref="console" />
 	    </Logger>
-        <Root level="DEBUG">
+        <Root level="ERROR">
             <AppenderRef ref="console" />
         </Root>
     </Loggers>

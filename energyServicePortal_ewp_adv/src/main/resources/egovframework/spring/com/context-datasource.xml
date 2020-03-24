@@ -11,8 +11,7 @@
             <list>
                 <value>classpath:/egovframework/egovProps/globals.properties</value>
                 <!-- value>file:/product/jeus/egovProps/globals.properties</value-->
-                <value>file:D:\프로젝트\06.한국수력원자력\1차\db.properties</value>
-                <!-- <value>file:/home/ubuntu/ewpsp_config/db.properties</value> -->
+                <value>file:/home/ubuntu/ewpsp_config/db.properties</value>
             </list>
         </property>
     </bean>
