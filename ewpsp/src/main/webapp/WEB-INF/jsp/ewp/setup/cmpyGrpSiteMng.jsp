@@ -20,7 +20,7 @@
 		var authType = userInfo.auth_type;
 		if(authType === '1') {
 			getCmpyList(1); // 회사 목록 조회(회사table 생성 시 주석 해제)
-		} 
+		}
 		if(authType === '1' || authType === '2') {
 			getGroupList(1); // 그룹 목록 조회
 		}
@@ -465,7 +465,7 @@
 		});
 	}
 	
-	var cmpyPopupFlag = 0; // 1:groupForm, 2:siteForm, 0:reset 
+	var cmpyPopupFlag = 0; // 1:groupForm, 2:siteForm, 0:reset
 	function getCmpyPopupList() {
 		$.ajax({
 			url : "/getCmpyPopupList",
@@ -687,11 +687,11 @@
 <body>
 
 	<div id="wrapper">
-		<jsp:include page="../include/layout/sidebar.jsp">
+		<jsp:include page="../include/layouts/sidebar.jsp">
 			<jsp:param value="setup" name="linkGbn"/>
 		</jsp:include>
 		<div id="page-wrapper">
-			<jsp:include page="../include/layout/header.jsp" />
+			<jsp:include page="../include/layouts/header.jsp" />
 			<div id="container">
 				<div class="row">
 					<div class="col-lg-12">
@@ -707,7 +707,7 @@
 									<h2 class="ntit fl">회사 현황</h2>
 									<ul class="fr">
 										<li><a href="#;" class="default_btn" id="insertCmpyFormBtn"><i class="glyphicon glyphicon-plus"></i> 회사 등록</a></li>
-									</ul>								
+									</ul>
 								</div>
 								<div class="s_table">
 									<table>
@@ -731,10 +731,10 @@
 											</tr>
 										</tbody>
 									</table>
-								</div>	
+								</div>
 								<div class="paging clear" id="CmpyPaging">
-								</div>	
-							</div>								
+								</div>
+							</div>
 							</c:if>
 							<c:if test="${userInfo.auth_type eq '1' or userInfo.auth_type eq '2'}">
 							<div class="section" id="grpDiv">
@@ -742,7 +742,7 @@
 									<h2 class="ntit fl">그룹 현황</h2>
 									<ul class="fr">
 										<li><a href="#;" class="default_btn" id="grpMngFormBtn"><i class="glyphicon glyphicon-th-list"></i> 그룹 관리</a></li>
-									</ul>								
+									</ul>
 								</div>
 								<div class="s_table">
 									<table>
@@ -768,10 +768,10 @@
 											</tr>
 										</tbody>
 									</table>
-								</div>	
+								</div>
 								<div class="paging clear" id="GroupPaging">
-								</div>	
-							</div>								
+								</div>
+							</div>
 							</c:if>
 							<c:if test="${userInfo.auth_type eq '1' or userInfo.auth_type eq '2' or userInfo.auth_type eq '3'}">
 							<div class="section" id="siteDiv">
@@ -779,7 +779,7 @@
 									<h2 class="ntit fl">사이트 현황</h2>
 									<ul class="fr">
 										<li><a href="#;" class="default_btn" id="insertSiteFormBtn"><i class="glyphicon glyphicon-plus"></i> 사이트 등록</a></li>
-									</ul>								
+									</ul>
 								</div>
 								<div class="s_table">
 									<table>
@@ -809,16 +809,16 @@
 											</tr>
 										</tbody>
 									</table>
-								</div>	
+								</div>
 								<div class="paging clear" id="SitePaging">
-								</div>	
-							</div>				
+								</div>
+							</div>
 							</c:if>
 						</div>
 					</div>
 				</div>
 			</div>
-			<jsp:include page="../include/layout/footer.jsp" />
+			<jsp:include page="../include/layouts/footer.jsp" />
 		</div>
 	</div>
 
@@ -826,7 +826,7 @@
     <!-- ###### 회사 관리 Popup Start ###### -->
     <div id="layerbox" class="dcompany" style="min-width:600px;">
         <div class="stit">
-        	<h2>신규 회사 등록</h2>        	
+        	<h2>신규 회사 등록</h2>
 			<a href="#;" id="cancelCmpyBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
@@ -848,7 +848,7 @@
 							<th><span>회사ID</span></th>
 							<td><input type="text" name="compId" id="compId" class="input" style="width:100%" maxlength="50"></td>
 						</tr>
-					</tbody>			
+					</tbody>
 				</table>
 				</form>
 			</div>
@@ -864,7 +864,7 @@
     <!-- ###### 그룹관리 Popup Start ###### -->
     <div id="layerbox" class="dgroup" style="min-width:800px;">
         <div class="stit">
-        	<h2>그룹 관리</h2>        	
+        	<h2>그룹 관리</h2>
 			<a href="#;" id="cancelSiteInSiteGrpBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
@@ -912,12 +912,12 @@
 			<a href="#;" class="cancel_btn w80" id="cancelSiteInSiteGrpBtn">취소</a>
 		</div>
     </div>
-    <!-- ###### Popup End ###### -->    
+    <!-- ###### Popup End ###### -->
 
     <!-- ###### 그룹 추가하기 Popup Start ###### -->
     <div id="layerbox" class="dgroup_add" style="min-width:600px;">
         <div class="stit">
-        	<h2>신규 그룹 등록</h2>        	
+        	<h2>신규 그룹 등록</h2>
 			<a href="#;" id="cancelGrpBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
@@ -962,7 +962,7 @@
 						        </span>
 							</td>
 						</tr>
-					</tbody>			
+					</tbody>
 				</table>
 				</form>
 			</div>
@@ -973,12 +973,12 @@
 			<a href="#;" class="cancel_btn w80" id="cancelGrpBtn">취소</a>
 		</div>
     </div>
-    <!-- ###### Popup End ###### -->      
+    <!-- ###### Popup End ###### -->
 
     <!-- ###### 신규사이트 등록/수정 Popup Start ###### -->
     <div id="layerbox" class="dsite" style="min-width:600px;">
         <div class="stit">
-        	<h2>신규 사이트 등록</h2>        	
+        	<h2>신규 사이트 등록</h2>
 			<a href="#;" id="cancelSiteBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
@@ -1057,7 +1057,7 @@
 								</select>
 							</td>
 						</tr>
-					</tbody>			
+					</tbody>
 				</table>
 				</form>
 			</div>

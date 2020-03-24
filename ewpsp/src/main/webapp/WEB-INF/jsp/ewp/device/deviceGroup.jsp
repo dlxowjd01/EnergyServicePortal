@@ -410,7 +410,7 @@
 		if(siteViewFlag === 2) {
 			$("#selSiteId").val(siteId);
 			$(".inside_site").find("ul").empty();
-			$(".all_site").find("ul").empty();	
+			$(".all_site").find("ul").empty();
 			
 		} else if(siteViewFlag === 3) {
 			$("#editDvGrpForm").find("#selectSiteId").val( siteId );
@@ -592,11 +592,11 @@
     <script src="../js/jquery.bxslider.js" type="text/javascript"></script>
 
 	<div id="wrapper">
-		<jsp:include page="../include/layout/sidebar.jsp">
+		<jsp:include page="../include/layouts/sidebar.jsp">
 			<jsp:param value="device" name="linkGbn"/>
 		</jsp:include>
 		<div id="page-wrapper">
-			<jsp:include page="../include/layout/header.jsp" />
+			<jsp:include page="../include/layouts/header.jsp" />
 			<div id="container">
 				<div class="row">
 					<div class="col-lg-12">
@@ -622,7 +622,7 @@
 					</div>
 				</div>
 			</div>
-			<jsp:include page="../include/layout/footer.jsp" />
+			<jsp:include page="../include/layouts/footer.jsp" />
 		</div>
 	</div>
 
@@ -632,7 +632,7 @@
     <!-- ###### 신규장치 등록/수정 Popup Start ###### -->
     <div id="layerbox" class="ddevice" style="min-width:600px;">
         <div class="stit">
-        	<h2>신규 장치 등록</h2>        	
+        	<h2>신규 장치 등록</h2>
 			<a href="#;" id="cancelDeviceBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
@@ -650,7 +650,7 @@
 							<th><span>사이트</span></th>
 							<td>
 								<select name="siteId" id="siteId" class="sel" style="width:100%">
-									
+								
 								</select>
 							</td>
 						</tr>
@@ -678,7 +678,7 @@
 								</select>
 							</td>
 						</tr>
-					</tbody>			
+					</tbody>
 				</table>
 				</form>
 			</div>
@@ -689,12 +689,12 @@
 			<a href="#;" class="cancel_btn w80" id="cancelDeviceBtn">취소</a>
 		</div>
     </div>
-    <!-- ###### Popup End ###### -->  
+    <!-- ###### Popup End ###### -->
 
     <!-- ###### 장치그룹관리 Popup Start ###### -->
     <div id="layerbox" class="dgdevice" style="min-width:800px;">
         <div class="stit">
-        	<h2>장치 그룹 추가/제거</h2>        	
+        	<h2>장치 그룹 추가/제거</h2>
 			<a href="#;" id="cancelDvInDbGrpBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
@@ -749,12 +749,12 @@
 			<a href="#;" class="cancel_btn w80" id="cancelDvInDbGrpBtn">취소</a>
 		</div>
     </div>
-    <!-- ###### Popup End ###### -->  
+    <!-- ###### Popup End ###### -->
 
     <!-- ###### 장치그룹편집 Popup Start ###### -->
     <div id="layerbox" class="dgdevice_edit" style="min-width:600px;">
         <div class="stit">
-        	<h2>장치 그룹 편집</h2>        	
+        	<h2>장치 그룹 편집</h2>
 			<a href="#;" id="cancelDvGrpBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
@@ -806,7 +806,7 @@
 								<th><span>장치그룹명</span></th>
 								<td><input type="text" id="deviceGrpName" name="deviceGrpName" class="input" style="width:100%"><input type="hidden" id="deviceGrpIdx2" name="deviceGrpIdx2"></td>
 							</tr>
-						</tbody>			
+						</tbody>
 					</table>
 				</div>
 				<div class="fr">
@@ -821,7 +821,7 @@
 			<a href="#;" class="cancel_btn w80" id="cancelDvGrpBtn">취소</a>
 		</div>
     </div>
-    <!-- ###### Popup End ###### --> 
+    <!-- ###### Popup End ###### -->
 
 
 

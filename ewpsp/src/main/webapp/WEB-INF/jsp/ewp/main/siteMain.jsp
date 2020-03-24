@@ -879,11 +879,11 @@
         <link href="../css/main.css" rel="stylesheet">
 
         <div id="wrapper">
-            <jsp:include page="../include/layout/sidebar.jsp">
+            <jsp:include page="../include/layouts/sidebar.jsp">
                 <jsp:param value="siteMain" name="linkGbn"/>
             </jsp:include>
             <div id="page-wrapper">
-                <jsp:include page="../include/layout/header.jsp"/>
+                <jsp:include page="../include/layouts/header.jsp"/>
                 <div id="container">
                     <div class="row">
                         <div class="col-lg-12">
@@ -1862,7 +1862,7 @@
                         </div>
                     </div>
                 </div>
-                <jsp:include page="../include/layout/footer.jsp"/>
+                <jsp:include page="../include/layouts/footer.jsp"/>
             </div>
         </div>
 

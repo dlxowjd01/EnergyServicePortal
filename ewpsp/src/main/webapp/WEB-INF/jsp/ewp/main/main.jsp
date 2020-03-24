@@ -487,11 +487,11 @@
         <script type="text/javascript" src="../js/jquery.rwdImageMaps.min.js"></script>
 
         <div id="wrapper">
-            <jsp:include page="../include/layout/sidebar.jsp">
+            <jsp:include page="../include/layouts/sidebar.jsp">
                 <jsp:param value="main" name="linkGbn"/>
             </jsp:include>
             <div id="page-wrapper">
-                <jsp:include page="../include/layout/header.jsp"/>
+                <jsp:include page="../include/layouts/header.jsp"/>
                 <div id="container">
                     <form id="schForm" name="schForm">
                         <input type="hidden" id="areaType" name="areaType" value=""/>
@@ -940,7 +940,7 @@
                         </div>
                     </div>
                 </div>
-                <jsp:include page="../include/layout/footer.jsp"/>
+                <jsp:include page="../include/layouts/footer.jsp"/>
             </div>
         </div>
 

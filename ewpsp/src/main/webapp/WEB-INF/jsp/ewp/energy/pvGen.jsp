@@ -319,8 +319,8 @@
 
         <div id="wrapper">
             <div id="page-wrapper">
-                <jsp:include page="../include/layout/header.jsp"/>
-                <jsp:include page="../include/layout/sidebar.jsp">
+                <jsp:include page="../include/layouts/header.jsp"/>
+                <jsp:include page="../include/layouts/sidebar.jsp">
                     <jsp:param value="energy" name="linkGbn"/>
                 </jsp:include>
                 <div id="container">
@@ -590,7 +590,7 @@
                         </div>
                     </div>
                 </div>
-                <jsp:include page="../include/layout/footer.jsp"/>
+                <jsp:include page="../include/layouts/footer.jsp"/>
             </div>
         </div>
 

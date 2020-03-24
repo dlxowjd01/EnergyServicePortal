@@ -74,7 +74,7 @@
 		} else {
 			$('#faqList > li').each(function(idx, liElmt) {
 				var liObj = $(liElmt);
-				var gubun = liObj.find('.gubun');	
+				var gubun = liObj.find('.gubun');
 				if (gubun.data('cateIdx') != cateIdx) {
 					liObj.hide();
 				} else {
@@ -373,11 +373,11 @@
 <body>
 
 	<div id="wrapper">
-		<jsp:include page="../include/layout/sidebar.jsp">
+		<jsp:include page="../include/layouts/sidebar.jsp">
 			<jsp:param value="setup" name="linkGbn"/>
 		</jsp:include>
 		<div id="page-wrapper">
-			<jsp:include page="../include/layout/header.jsp" />
+			<jsp:include page="../include/layouts/header.jsp" />
 			<div id="container">
 				<div class="row">
 					<div class="col-lg-12">
@@ -414,7 +414,7 @@
 					</div>
 				</div>
 			</div>
-			<jsp:include page="../include/layout/footer.jsp" />
+			<jsp:include page="../include/layouts/footer.jsp" />
 		</div>
 	</div>
 
@@ -424,7 +424,7 @@
     <!-- ###### 게시물 등록/수정 Popup Start ###### -->
     <div id="layerbox" class="faqedit" style="min-width:600px;">
         <div class="stit">
-        	<h2>자주하는 질문 등록</h2>        	
+        	<h2>자주하는 질문 등록</h2>
 			<a href="javascript:popupClose('faqedit');">닫기</a>
         </div>
 		<div class="lbody mt30">
@@ -456,7 +456,7 @@
 								<textarea id="answer" name="answer" style="width:100%" class="textarea" rows="10"></textarea>
 							</td>
 						</tr>
-					</tbody>			
+					</tbody>
 				</table>
 				</form>
 			</div>
@@ -476,7 +476,7 @@
 			<a href="#;" id="cancelFAQCateBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
-			<div class="company_list mt10">				
+			<div class="company_list mt10">
 				<table>
 					<colgroup>
 						<col width="50">
@@ -508,7 +508,7 @@
 								<th><span>카테고리명</span></th>
 								<td><input type="text" id="faqCateName" name="faqCateName" class="input" style="width:100%"></td>
 							</tr>
-						</tbody>			
+						</tbody>
 					</table>
 				</div>
 				<div class="fr">
@@ -522,7 +522,7 @@
 			<a href="#;" class="cancel_btn w80" id="cancelFAQCateBtn">취소</a>
 		</div>
     </div>
-    <!-- ###### Popup End ###### --> 
+    <!-- ###### Popup End ###### -->
 
 
 

@@ -362,11 +362,11 @@
 <body>
 
 	<div id="wrapper">
-		<jsp:include page="../include/layout/sidebar.jsp">
+		<jsp:include page="../include/layouts/sidebar.jsp">
 			<jsp:param value="setup" name="linkGbn"/>
 		</jsp:include>
 		<div id="page-wrapper">
-			<jsp:include page="../include/layout/header.jsp" />
+			<jsp:include page="../include/layouts/header.jsp" />
 			<div id="container">
 				<div class="row">
 					<div class="col-lg-12">
@@ -407,14 +407,14 @@
 										</tr>
 									</tbody>
 								</table>
-							</div>	
+							</div>
 							<div class="paging clear" id="UserPaging">
-							</div>						
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<jsp:include page="../include/layout/footer.jsp" />
+			<jsp:include page="../include/layouts/footer.jsp" />
 		</div>
 	</div>
 
@@ -424,7 +424,7 @@
     <!-- ###### 사용자 등록/수정 Popup Start ###### -->
     <div id="layerbox" class="duser" style="min-width:600px;">
         <div class="stit">
-        	<h2>신규 사용자 등록</h2>        	
+        	<h2>신규 사용자 등록</h2>
 			<a href="#;" id="cancelBtnX">닫기</a>
         </div>
 		<div class="lbody mt30">
@@ -471,7 +471,7 @@
 							<th><span>회사</span></th>
 							<td>
 								<select name="compIdx" id="compIdx" class="sel" style="width:100%">
-									
+								
 								</select>
 							</td>
 						</tr>
@@ -479,7 +479,7 @@
 							<th><span>그룹</span></th>
 							<td>
 								<select name="siteGrpIdx" id="siteGrpIdx" class="sel" style="width:100%">
-									
+								
 								</select>
 							</td>
 						</tr>
@@ -496,7 +496,7 @@
 								<textarea name="note" id="note" style="width:100%" class="textarea" rows="10"></textarea>
 							</td>
 						</tr>
-					</tbody>			
+					</tbody>
 				</table>
 			</div>
 
