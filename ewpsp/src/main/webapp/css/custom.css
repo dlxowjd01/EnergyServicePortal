@@ -1710,10 +1710,11 @@ table.tableStyle td {
     font-size: 13px;
     word-break: keep-all;
     word-wrap: break-word;
+    color: #fff;
+    background-color: #000;
 }
 
 table.tableStyle th {
-    color: #333;
     font-weight: bold;
 }
 
@@ -1896,11 +1897,12 @@ input.btnstyle,
 /* input */
 .inp {
     border: 1px solid #ccc;
-    background: #fff;
+    background: #000;
     height: 30px;
     line-height: 30px;
     padding: 0 5px;
     max-width: 100%;
+    color: #fff;
 }
 
 input.inp:focus,
