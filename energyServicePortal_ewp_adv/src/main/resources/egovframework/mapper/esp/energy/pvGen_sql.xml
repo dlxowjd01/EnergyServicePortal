@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.esp.energy.service.impl.PvGenMapper">
+    <select id="getPVGenRealList" parameterType="hashMap" resultType="hashMap">
+        /* pv 실제 발전량 조회 */
+        select
+        site_id, std_date, sum(gen_val) as gen_val
+        from (
+        select
+        pv_gen_idx, site_id, device_id, std_date, gen_val, temp, reg_date, mod_date
+        from tb_pv_gen
+        where site_id = #{siteId }
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
+            and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+            str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+        </if>
+        ) a
+        group by site_id, std_date
+        order by std_date
+    </select>
+
+    <select id="getPVGenFutureList" parameterType="hashMap" resultType="hashMap">
+        /* pv 예측 발전량 조회 */
+        select
+        site_id, std_date, sum(gen_val) as gen_val
+        from (
+        select
+        pv_gen_idx, site_id, device_id, std_date, gen_val, temp, reg_date, mod_date
+        from tb_pv_gen
+        where site_id = #{siteId }
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
+            and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+            str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+        </if>
+        ) a
+        group by site_id, std_date
+        order by std_date
+    </select>
+
+</mapper>
