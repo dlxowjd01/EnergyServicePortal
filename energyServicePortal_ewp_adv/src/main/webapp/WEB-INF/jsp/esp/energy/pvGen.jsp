@@ -1,0 +1,639 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ include file="/decorators/include/taglibs.jsp"%>
+				<div class="row">
+					<div class="col-lg-12">
+						<h1 class="page-header">발전</h1>
+						<div class="sa_select">
+							<div class="dropdown">
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">사업소#1
+								<span class="caret"></span></button>
+								<ul class="dropdown-menu">
+								  <li class="on"><a href="#">전체</a></li>
+								  <li><a href="#">사업소#1</a></li>
+								  <li><a href="#">사업소#2</a></li>
+								  <li><a href="#">사업소#3</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-2 use_total">
+						<div class="indiv">
+							<h2 class="ntit">PV 발전량 합계</h2>
+							<ul class="chart_total">
+								<li class="ct1">
+									<div class="ctit ct1"><span>실제 사용량</span></div>
+									<div class="cval"><span>14,976</span>kWh</div>
+								</li>
+								<li class="ct2">
+									<div class="ctit"><span>예측 사용량</span></div>
+									<div class="cval"><span>20,976</span>kWh</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-lg-10">
+						<div class="indiv usage_chart pv_chart">
+							<div class="chart_top clear">
+								<h2 class="ntit fl">롯데정밀화학</h2>
+								<div class="term fl clear">
+									<div class="dropdown fl">
+									  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">1일(오늘)
+									  <span class="caret"></span></button>
+									  <ul class="dropdown-menu">
+									    <li class="on"><a href="#">1일(오늘)</a></li>
+									    <li><a href="#">1주(이번주)</a></li>
+									    <li><a href="#">1월(이번달)</a></li>
+									    <li><a href="#">1년(올해)</a></li>
+									  </ul>
+									</div>
+									<div class="dropdown fl">
+									  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">15분
+									  <span class="caret"></span></button>
+									  <ul class="dropdown-menu">
+									    <li class="on"><a href="#">15분</a></li>
+									    <li><a href="#">1시간</a></li>
+									    <li><a href="#">1일</a></li>
+									    <li><a href="#">1주</a></li>
+									    <li><a href="#">1월</a></li>
+									  </ul>
+									</div>
+								</div>
+								<div class="sel_calendar fl">
+									<span>기간설정</span>
+									<input type="text" id="datepicker1" class="sel" value="" autocomplete="off" >
+									<span>-</span>
+									<input type="text" id="datepicker2" class="sel" value="" autocomplete="off" >
+									<button type="submit">조회</button>
+								</div>
+								<div class="meter fl">
+									<span class="fl">계량값</span>
+									<div class="dropdown fl">
+										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">전체
+										<span class="caret"></span></button>
+										<ul class="dropdown-menu">
+										  <li class="on"><a href="#">전체</a></li>
+										  <li><a href="#">계량#1</a></li>
+										  <li><a href="#">계량#2</a></li>
+										  <li><a href="#">계량#3</a></li>
+										</ul>
+									</div>
+								</div>								
+								<div class="time fr">2018-08-12 11:41:26</div>
+							</div>
+							<div class="inchart">
+								<div class="chart_type">
+									<a href="#;" class="chart_change_column">그래프변경</a>
+									<a href="#;" class="chart_change_line" style="display:none;">그래프변경</a>
+								</div>
+								<div id="chart2"></div>
+								<script language="JavaScript"> 
+								$(function () { 
+									var myChart = Highcharts.chart('chart2', {
+										data: {
+									        table: 'datatable' /* 테이블에서 데이터 불러오기 */
+									    },
+
+										chart: {
+											marginLeft:80,
+											marginRight:0,
+											backgroundColor: 'transparent',
+											type: 'line'
+										},
+
+										navigation: {
+											buttonOptions: {
+											  enabled: false /* 메뉴 안보이기 */
+											  }
+										},
+
+									    title: {
+									        text: ''
+									    },
+
+									    subtitle: {
+									        text: ''
+									    },
+
+										xAxis: {
+											labels: {
+												align: 'center',
+												style: {
+													color: '#3d4250',
+													fontSize: '18px'
+												}
+											},
+											tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
+											title: {
+												text: null
+											},
+											/* 기준선 */
+											plotLines: [{
+									            value: 15, /* 현재 */
+									            color: '#438fd7',
+									            width: 2,
+									            zIndex: 0,
+									            label: {
+									                 text: ''
+									            }
+									        }],
+									        crosshair: true /* 포커스 선 */
+										},
+
+										yAxis: {
+											gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
+										    min: 0, /* 최소값 지정 */
+										    title: {
+										    	text: '(kWh)',
+										    	align: 'low',
+										    	rotation: 0, /* 타이틀 기울기 */
+										        y:25, /* 타이틀 위치 조정 */
+										        x:5, /* 타이틀 위치 조정 */
+										        style: {
+										            color: '#3d4250',
+										            fontSize: '18px'
+										        }
+										    },
+										    labels: {
+										        overflow: 'justify',
+										        x:-20, /* 그래프와의 거리 조정 */
+										        style: {
+										            color: '#3d4250',
+										            fontSize: '18px'
+										        }
+										    }
+										},									    
+
+										/* 범례 */
+										legend: {
+											enabled: true,
+											align:'right',
+											verticalAlign:'top',
+											x:-120,										
+											itemStyle: {
+										        color: '#3d4250',
+										        fontSize: '16px',
+										        fontWeight: 400
+										    },
+										    itemHoverStyle: {
+										        color: '' /* 마우스 오버시 색 */
+										    },
+										    symbolPadding:3, /* 심볼 - 텍스트간 거리 */
+										    symbolHeight:8 /* 심볼 크기 */
+										},
+
+										/* 툴팁 */
+										tooltip: {
+										    shared: true /* 툴팁 공유 */
+										},
+
+										/* 옵션 */
+										plotOptions: {
+									        series: {
+									            label: {
+									                connectorAllowed: false
+									            },
+									            borderWidth: 0 /* 보더 0 */
+									        },
+									        line: {
+											    marker: {
+											         enabled: false /* 마커 안보이기 */
+											    }
+											}
+									    },
+
+										/* 출처 */
+										credits: {
+											enabled: false
+										},
+
+										/* 그래프 스타일 */
+									    series: [{
+									        color: '#438fd7', /* 실제 발전량 */
+									        type:'column',
+									        tooltip: {
+										        valueSuffix: 'kWh'
+										    }
+									    }, {
+									        color: '#84848f', /* 예측 발전량 */
+									        type: 'spline',
+									        dashStyle: 'ShortDash',
+									        tooltip: {
+										        valueSuffix: 'kWh'
+										    }
+									    }],
+
+									    /* 반응형 */
+									    responsive: {
+									        rules: [{
+									            condition: {
+									                maxWidth: 414 /* 차트 사이즈 */									                
+									            },
+									            chartOptions: {
+									            	chart: {
+									            		marginLeft:60,
+														marginTop:80
+													},
+													xAxis: {
+														labels: {
+															style: {
+													            fontSize: '13px'
+													        }
+														}
+													},
+													yAxis: {
+														title: {
+															style: {
+													            fontSize: '13px'
+													        }
+														},
+														labels: {
+															x:-10, /* 그래프와의 거리 조정 */
+													        style: {
+													            fontSize: '13px'
+													        }
+														}
+													},
+									                legend: {									                    
+									                    layout: 'horizontal',
+									                    verticalAlign: 'bottom',
+									                    align:'center',
+									                    x:0,
+									                    itemStyle: {
+												        	fontSize: '13px'
+												    	}
+									                }
+									            }
+									        }]
+									    }
+
+									},
+									/* 차트 변경 */
+							        function (myChart) {
+							            $('.chart_change_column').click(function () {
+							                $(this).hide();
+							                $('.chart_change_line').show();
+							                myChart.series[0].update({
+							                    type: "column"
+							                });
+
+							            });
+							            $('.chart_change_line').click(function () {
+							            	$(this).hide();
+							            	$('.chart_change_column').show();
+							                myChart.series[0].update({
+							                    type: "spline"
+							                });
+
+							            });
+							        });
+								});
+								</script>
+							</div>	
+						</div>
+					</div>
+				</div>
+				<div class="row pv_chart_table">
+					<div class="col-lg-12">
+						<div class="indiv">
+							<div class="tbl_top clear">
+								<h2 class="ntit fl">PV 발전량 도표</h2>
+								<ul class="fr">
+									<li><a href="#;" class="save_btn">데이터저장</a></li>
+									<li><a href="#;" class="fold_btn">표접기</a></li>
+								</ul>
+							</div>
+							<div class="tbl_wrap">
+								<div class="fold_div">
+									<!-- PC 버전용 테이블 -->
+									<div class="chart_table">			
+										<table class="pc_use">
+											<thead>
+												<tr>
+													<th>2018-08</th>
+													<th>1</th>
+													<th>2</th>
+													<th>3</th>
+													<th>4</th>
+													<th>5</th>
+													<th>6</th>
+													<th>7</th>
+													<th>8</th>
+													<th>9</th>
+													<th>10</th>
+													<th>11</th>
+													<th>12</th>
+													<th>13</th>
+													<th>14</th>
+													<th>15</th>
+													<th>16</th>
+													<th>17</th>
+													<th>18</th>
+													<th>19</th>
+													<th>20</th>
+													<th>21</th>
+													<th>22</th>
+													<th>23</th>
+													<th>24</th>
+													<th>합계</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<th><div class="ctit pv1"><span>실제 발전량</span></div></th>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td>50</td>
+													<td>100</td>
+													<td>200</td>
+													<td>400</td>
+													<td>500</td>
+													<td>400</td>
+													<td>300</td>
+													<td>200</td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+												</tr>
+												<tr>
+													<th><div class="ctit pv2"><span>예측 발전량</span></div></th>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td>100</td>
+													<td>200</td>
+													<td>400</td>
+													<td>1000</td>
+													<td>900</td>
+													<td>800</td>
+													<td>700</td>
+													<td>500</td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+												</tr>
+											</tbody>
+										</table>	
+									</div>
+									<div class="chart_table">			
+										<table class="pc_use">
+											<thead>
+												<tr>
+													<th>2018-08</th>
+													<th>1</th>
+													<th>2</th>
+													<th>3</th>
+													<th>4</th>
+													<th>5</th>
+													<th>6</th>
+													<th>7</th>
+													<th>8</th>
+													<th>9</th>
+													<th>10</th>
+													<th>11</th>
+													<th>12</th>
+													<th>13</th>
+													<th>14</th>
+													<th>15</th>
+													<th>16</th>
+													<th>17</th>
+													<th>18</th>
+													<th>19</th>
+													<th>20</th>
+													<th>21</th>
+													<th>22</th>
+													<th>23</th>
+													<th>24</th>
+													<th>합계</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<th><div class="ctit pv1"><span>실제 발전량</span></div></th>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td>50</td>
+													<td>100</td>
+													<td>200</td>
+													<td>400</td>
+													<td>500</td>
+													<td>400</td>
+													<td>300</td>
+													<td>200</td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+												</tr>
+												<tr>
+													<th><div class="ctit pv2"><span>예측 발전량</span></div></th>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td>100</td>
+													<td>200</td>
+													<td>400</td>
+													<td>1000</td>
+													<td>900</td>
+													<td>800</td>
+													<td>700</td>
+													<td>500</td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+												</tr>
+											</tbody>
+										</table>	
+									</div>	
+
+									<div class="paging clear">
+										<a href="#;" class="prev">PREV</a>
+										<span><strong>1</strong> / 3</span>
+										<a href="#;" class="next">NEXT</a>
+									</div>	
+
+									<!-- 데이터 추출용 -->
+									<div class="chart_table2" style="display:none;">			
+										<table id="datatable">
+										    <thead>
+										        <tr>
+										            <th>2018-08</th>
+										            <th>실제 발전량</th>
+										            <th>예측 발전량</th>
+										        </tr>
+										    </thead>
+										    <tbody>
+										        <tr>
+										            <th>1</th>
+										            <td></td>
+										            <td></td>
+										        </tr>
+										        <tr>
+										            <th>2</th>
+										            <td></td>
+										            <td></td>
+										        </tr>
+										        <tr>
+										            <th>3</th>
+										            <td></td>
+										            <td></td>
+										        </tr>
+										        <tr>
+										            <th>4</th>
+										            <td></td>
+										            <td></td>
+										        </tr>
+										        <tr>
+										            <th>5</th>
+										            <td></td>
+										            <td></td>
+										        </tr>
+										        <tr>
+										            <th>6</th>
+										            <td></td>
+										            <td></td>
+										        </tr>
+										        <tr>
+										            <th>7</th>
+										            <td></td>
+										            <td></td>
+										        </tr>
+										        <tr>
+										            <th>8</th>
+										            <td>50</td>
+										            <td>100</td>
+										        </tr>
+										        <tr>
+										            <th>9</th>
+										            <td>100</td>
+										            <td>200</td>
+										        </tr>
+										        <tr>
+										            <th>10</th>
+										            <td>200</td>
+										            <td>400</td>
+										        </tr>
+										        <tr>
+										            <th>11</th>
+										            <td>400</td>
+										            <td>1000</td>
+										        </tr>
+										        <tr>
+										            <th>12</th>
+										            <td>500</td>
+										            <td>900</td>
+										        </tr>
+										        <tr>
+										            <th>13</th>
+										            <td>400</td>
+										            <td>800</td>
+										        </tr>
+										        <tr>
+										            <th>14</th>
+										            <td>300</td>
+										            <td>700</td>
+										        </tr>
+										        <tr>
+										            <th>15</th>
+										            <td>200</td>
+										            <td>500</td>
+										        </tr>
+										        <tr>
+										            <th>16</th>
+										            <td></td>
+										            <td></td>
+										        </tr>
+										        <tr>
+										            <th>17</th>
+										            <td></td>
+										            <td></td>
+										        </tr>
+										        <tr>
+										            <th>18</th>
+										            <td></td>
+										            <td></td>
+										        </tr>
+										        <tr>
+										            <th>19</th>
+										            <td></td>
+										            <td></td>
+										        </tr>
+										        <tr>
+										            <th>20</th>
+										            <td></td>
+										            <td></td>
+										        </tr>
+										        <tr>
+										            <th>21</th>
+										            <td></td>
+										            <td></td>
+										        </tr>
+										        <tr>
+										            <th>22</th>
+										            <td></td>
+										            <td></td>
+										        </tr>
+										        <tr>
+										            <th>23</th>
+										            <td></td>
+										            <td></td>
+										        </tr>
+										        <tr>
+										            <th>24</th>
+										            <td></td>
+										            <td></td>
+										        </tr>
+										    </tbody>
+										</table>			
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>

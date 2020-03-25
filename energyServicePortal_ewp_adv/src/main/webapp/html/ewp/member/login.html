@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<title>로그인</title>
+	<link href="../css/bootstrap.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+	<link href="../css/custom.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/jquery-ui.css" type="text/css" media="all">	
+	<!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/jquery-ui.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/highcharts.js"></script>
+    <!-- 하이차트 데이타 추출용 -->
+    <script src="../js/modules/exporting.js"></script>
+    <script src="../js/modules/export-data.js"></script>
+    <script src="../js/modules/data.js"></script>
+    <!-- //하이타트 데이타 추출용 -->
+    <script src="../js/sectionDisplay.js"></script>
+    <script src="../js/common.js"></script>
+</head>
+<body>
+
+    <style>
+        /* 로그인 페이지용 스타일 */
+        body {background:none;}
+        #page-wrapper {margin:0; padding:0;}
+        #page-wrapper > nav {margin:0; height:80px; padding:0 32px;}
+        nav .nav_brand {float:left;}
+        #page-wrapper > footer {margin:0; height:80px; padding:32px 32px;}
+        #page-wrapper .login {
+            position:relative;
+            margin:0;
+            min-height:800px;
+            background:url('../img/login_bg.jpg') repeat center bottom;
+            background-size:cover;
+        }
+        .loginForm {
+            position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);
+            width:520px;
+            padding:0;
+            background-color:rgba(255, 255, 255, 0.08);
+            -webkit-box-shadow: 0px 5px 18px 0px rgba(0,0,0,0.27);
+            -moz-box-shadow: 0px 5px 18px 0px rgba(0,0,0,0.27);
+            box-shadow: 0px 5px 18px 0px rgba(0,0,0,0.27);
+        }
+        .lf_body {padding:60px; background:#fff;}
+        .lftit {padding-top:110px; background:url('../img/login_people.png') no-repeat center 0;}
+        .lftit h1 {font-size:34px; line-height:1; font-family:'Roboto', sans-serif; color:#222; text-align:center; font-weight:500;}
+        .lf_body .lfinp {border:0; border-bottom:solid 1px #333; width:100%; height:50px; line-height:50px;}
+        .lf_body input:focus {border:0; border-bottom:solid 1px #333; outline-style:none;}
+        .lf_body .arrbtn {
+            display:inline-block; padding-right:30px; background:url('../img/login_arr.gif') no-repeat right center;
+            font-size:14px; color:#777;
+        }
+        .lf_bottom {font-size:0; width:100%; display:table;}
+        .lf_bottom > * {
+            display:inline-block; width:50%; border:0; outline-style:none; height:60px; 
+            font-size:18px; color:#fff; font-weight:bold; text-align:center; vertical-align:top;
+        }
+        .lf_bottom > *:hover {color:#fff;}
+        .lf_bottom > a {background:#555; line-height:60px;}
+        .lf_bottom > input {background:#438fd7 ; line-height:55px;}
+
+        nav .lang {display:block; top:50%; right:20px; transform:translateY(-50%); z-index:10;}
+
+        /* 반응형 미디어 쿼리 */
+        @media all and (max-width:768px) {
+            #page-wrapper > nav {padding:0 15px;}
+            #page-wrapper .login {padding:0 10px; min-height:650px;}
+            #page-wrapper .login .loginForm {position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:95%;}
+            .lf_body .arrbtn {display:block; margin-bottom:15px; margin-left:0 !important;}
+            nav .lang {right:10px;}
+        }
+    </style>
+
+    <div id="wrapper">
+        <div id="page-wrapper">
+            <nav class="clear">
+                <div class="nav_brand ewp"><a href="#;">EWP</a></div>
+                <!-- 언어 선택 -->
+                <div class="lang dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">KO
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">KO</a></li>
+                        <li><a href="#">EN</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div id="container" class="login">
+
+                <div class="loginForm">
+                    <form>
+                        <div class="lf_body">
+                            <div class="lftit">
+                                <h1>LOGIN</h1>
+                            </div>
+                            <div class="mt10"><input type="text" name="user" class="lfinp" placeholder="아이디"></div>
+                            <div class="mt15"><input type="password" name="pass" class="lfinp" placeholder="비밀번호"></div>
+                            <div class="mt30">
+                                <a href="#" class="findidBtn arrbtn">아이디 찾기</a>
+                                <a href="#" class="findpassBtn arrbtn ml30">비밀번호 찾기</a>
+                            </div>
+                        </div>
+                        <div class="lf_bottom">
+                            <a href="#;" class="joinBtn">회원가입</a>
+                            <input type="submit" name="login" value="로그인">
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <footer class="clear">
+                <div class="ft_menu fl">
+                    <a href="#;" class="serviceBtn">서비스 소개</a>
+                    <a href="../service/faq.html">자주하는 질문</a>
+                </div>
+                <div class="copyright fr">
+                    &copy; 2018 Encored Technologies, Inc.
+                </div>
+            </footer>
+        </div>
+    </div>
+
+
+
+    <!-- 아이디찾기 modal // -->
+    <script>
+    $(function(){   
+        // FIND ID
+        $(".findidBtn").click(function(){
+            $("#loginModal").modal("hide");
+            $("#findidModal").modal("show");
+        });
+    });
+    </script>    
+    <div class="modal fade" id="findidModal" tabindex="-1" role="dialog" aria-labelledby="findidModal" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="loginmodal-container">
+                <div class="modal-header" style="padding:0 0 15px; margin:0 0 15px">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h1>FIND ID</h1>
+                </div>
+                <form>
+                <div class="modal-body">
+                    <div class="md_tbl">
+                        <table>
+                            <colgroup>
+                                <col width="100">
+                                <col>
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <th>이름</th>
+                                    <td><input type="text" name="name" placeholder=""></td>
+                                </tr>
+                                <tr>
+                                    <th>이동통신사</th>
+                                    <td>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="optradio"> SKT
+                                            </label>
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="optradio"> KTF
+                                            </label>
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="optradio"> LG U+
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>휴대폰번호</th>
+                                    <td>
+                                        <div class="inputGroup">
+                                            <select class="inp fl" style="width:22%;">
+                                                <option>선택</option>
+                                                <option>010</option>
+                                                <option>011</option>
+                                                <option>016</option>
+                                                <option>017</option>
+                                                <option>019</option>
+                                            <select>
+                                            <span class="inline center fl mt10" style="width:2%;" > - </span>
+                                            <input type="text" id="" class="inp fl" maxlength="4" style="width:22%;" />
+                                            <span class="inline center fl mt10" style="width:2%;" > - </span>
+                                            <input type="text" id="" class="inp fl" maxlength="4" style="width:22%;" />
+                                            <span class="inline center fl" style="width:2%;" > &nbsp; </span>
+                                            <button type="button" class="btnstyle middle white fl" style="width:28%; white-space:nowrap; vertical-align:top; overflow:hidden;">인증번호 받기</button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>인증번호</th>
+                                    <td>
+                                        <input type="text" name="name" placeholder="">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt20"><input type="submit" name="findpass" class="login loginmodal-submit" value="확인"></div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- 아이디찾기 modal // --> 
+
+
+    <!-- 비번찾기 modal // -->
+    <script>
+    $(function(){   
+        // FIND PASS
+        $(".findpassBtn").click(function(){
+            $("#loginModal").modal("hide");
+            $("#findpassModal").modal("show");
+        });  
+    });
+    </script>     
+    <div class="modal fade" id="findpassModal" tabindex="-1" role="dialog" aria-labelledby="findpassModal" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="loginmodal-container">
+                <div class="modal-header" style="padding:0 0 15px; margin:0 0 15px">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h1>FIND PASS</h1>
+                </div>
+                <form>
+                <div class="modal-body">
+                    <div class="md_tbl">
+                        <table>
+                            <colgroup>
+                                <col width="100">
+                                <col>
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <th>이름</th>
+                                    <td><input type="text" name="name" placeholder=""></td>
+                                </tr>
+                                <tr>
+                                    <th>ID</th>
+                                    <td><input type="text" name="name" placeholder=""></td>
+                                </tr>
+                                <tr>
+                                    <th>이동통신사</th>
+                                    <td>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="optradio"> SKT
+                                            </label>
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="optradio"> KTF
+                                            </label>
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="optradio"> LG U+
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>휴대폰번호</th>
+                                    <td>
+                                        <div class="inputGroup">
+                                            <select class="inp fl" style="width:22%;">
+                                                <option>선택</option>
+                                                <option>010</option>
+                                                <option>011</option>
+                                                <option>016</option>
+                                                <option>017</option>
+                                                <option>019</option>
+                                            <select>
+                                            <span class="inline center fl mt10" style="width:2%;" > - </span>
+                                            <input type="text" id="" class="inp fl" maxlength="4" style="width:22%;" />
+                                            <span class="inline center fl mt10" style="width:2%;" > - </span>
+                                            <input type="text" id="" class="inp fl" maxlength="4" style="width:22%;" />
+                                            <span class="inline center fl" style="width:2%;" > &nbsp; </span>
+                                            <button type="button" class="btnstyle middle white fl" style="width:28%; white-space:nowrap; vertical-align:top; overflow:hidden;">인증번호 받기</button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>인증번호</th>
+                                    <td>
+                                        <input type="text" name="name" placeholder="">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt20"><input type="submit" name="findpass" class="login loginmodal-submit" value="확인"></div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- 비번찾기 modal // -->     
+
+
+    <!-- 회원가입 step01 //////////////////// 동의부분 -->    
+    <script>
+    $(function(){ 
+        $(".joinBtn").click(function(){
+            $("#loginModal").modal("hide");
+            $("#joinModal").modal("show");
+        });         
+        $(".joinnextBtn").click(function(){
+            $("#joinModal").modal("hide");
+            $("#join2Modal").modal("show");
+        });   
+    });
+    </script>    
+    <div class="modal fade" id="joinModal" tabindex="-1" role="dialog" aria-labelledby="joinModal" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="padding:25px 30px;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4><i class="glyphicon glyphicon-user"></i> JOIN</h4>
+                </div>
+                <div class="modal-body" style="padding:20px 30px;">
+                    
+                    <div id="joinStep01" class="rowBox joinBox joinStep01" style="display:;">           
+                        
+                        <div class="unit">
+                            <div class="unit_tit clear">
+                                <span class="sTit">한국 동서발전 서비스 포털 이용약관</span>
+
+                                <div class="etcText fr mt5">
+                                    <span class="checkbox">
+                                        <input type="checkbox" id="checkbox01" class="styled" name="" />
+                                        <label for="checkbox01">동의합니다</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="unit_cont mt5">
+                                <div class="termBox">                           
+                                    제1조 개인정보 처리목적<br><br>
+                                    NICE신용정보는 다음의 목적을 위하여 개인정보를 처리합니다. 처리한 개인정보는 다음의 목적 외의 용도로는 사용되지 않으며 이용 목적이 변경되는 경우에는 개인정보보호법에 따라 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.<br>
+                                    가. 채권추심, 신용조사 등 고객 자산관리 업무 수행<br>
+                                    나. 고객센터 업무 수행<br>
+                                    다. 서류 수령 대행업무 수행<br>
+                                    라. 그 밖의 고객이 위탁하는 업무 수행<br>제2조 개인정보의 처리 및 보유 기간<br><br>
+                                        NICE신용정보는 법령에 따른 개인정보 보유?이용기간 <br>
+                                        또는 정보 주체로부터 개인정보를 수집시에 동의 받은 개인정보 보유?이용기간 내에서만 개인정보를 처리?보유하고 정해진 기간 경과 시 즉시 폐기합니다.<br>
+                                        구체적인 개인정보 처리 및 보유기간은 다음과 같습니다.<br>
+                                    가. 신용정보 업무처리에 관한 기록 : 3년<br>
+                                    나. 의뢰 또는 계약철회 등에 관한 기록 : 5년<br>
+                                    다. 이용자의 불만 또는 분쟁처리에 관한 기록 : 3년  
+                                </div>
+
+                                
+                            </div>
+                        </div>
+
+                        <div class="unit mt5">
+                            <div class="unit_tit clear">
+                                <span class="sTit">개인정보 수집, 제공 및 활용 동의</span>
+
+                                <div class="etcText fr mt5">
+                                    <span class="checkbox">
+                                        <input type="checkbox" id="checkbox02" class="styled" name="" />
+                                        <label for="checkbox02">동의합니다</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="unit_cont mt5">
+                                <div class="termBox">
+                                    제1조 개인정보 처리목적<br><br>
+                                    NICE신용정보는 다음의 목적을 위하여 개인정보를 처리합니다. 처리한 개인정보는 다음의 목적 외의 용도로는 사용되지 않으며 이용 목적이 변경되는 경우에는 개인정보보호법에 따라 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.<br>
+                                    가. 채권추심, 신용조사 등 고객 자산관리 업무 수행<br>
+                                    나. 고객센터 업무 수행<br>
+                                    다. 서류 수령 대행업무 수행<br>
+                                    라. 그 밖의 고객이 위탁하는 업무 수행<br>제2조 개인정보의 처리 및 보유 기간<br><br>
+                                        NICE신용정보는 법령에 따른 개인정보 보유?이용기간 <br>
+                                        또는 정보 주체로부터 개인정보를 수집시에 동의 받은 개인정보 보유?이용기간 내에서만 개인정보를 처리?보유하고 정해진 기간 경과 시 즉시 폐기합니다.<br>
+                                        구체적인 개인정보 처리 및 보유기간은 다음과 같습니다.<br>
+                                    가. 신용정보 업무처리에 관한 기록 : 3년<br>
+                                    나. 의뢰 또는 계약철회 등에 관한 기록 : 5년<br>
+                                    다. 이용자의 불만 또는 분쟁처리에 관한 기록 : 3년  
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <div style="padding:5px 0;text-align:center;"><button type="submit" class="joinnextBtn default_btn w80" data-dismiss="modal">다음</button></div>                  
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //회원가입 step01 // 동의부분 -->
+
+
+    <!-- 회원가입 step02 //////////////////// 정보입력 -->
+    <script>
+    $(function(){ 
+        $(".join2nextBtn").click(function(){
+            $("#join2Modal").modal("hide");
+            $("#join3Modal").modal("show");
+        });   
+    });
+    </script>      
+    <div class="modal fade" id="join2Modal" tabindex="-1" role="dialog" aria-labelledby="join2Modal" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="padding:25px 30px;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4><i class="glyphicon glyphicon-user"></i> JOIN</h4>
+                </div>
+                <div class="modal-body" style="padding:20px 30px;">
+                    
+                    <div id="joinStep02" class="rowBox joinBox joinStep02">         
+                        
+                        <div class="unit clear">
+                            <div class="unit_tit">
+                                <span class="sTit">정보입력</span>
+                            </div>
+                            <div class="unit_cont lineBox">
+                                <table class="tableStyle formStyle left">
+                                    <colgroup>
+                                        <col style="width:20%;">
+                                        <col style="width:*;">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th>아이디</th>
+                                            <td>
+                                                <div class="inputGroup">
+                                                    <input type="text" id="" class="inp fl" style="width:78%;" />
+                                                    <span class="inline center fl" style="width:2%;" >&nbsp;</span>
+                                                    <button type="button" class="btnstyle middle white fl" style="width:20%; white-space:nowrap; vertical-align:top; overflow:hidden;">중복확인</button>    
+                                                </div>
+                                                <span class="helpCont">아이디를 입력하세요</span>
+                                            </td>
+                                        </tr>                                       
+                                        <tr>
+                                            <th>비밀번호</th>
+                                            <td>
+                                                <input type="text" id="input02" class="inp" style="width:100%;" />
+                                                <span class="helpCont">비밀번호를 입력하세요</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>비밀번호확인</th>
+                                            <td>
+                                                <input type="text" id="input03" class="inp" style="width:100%;" />
+                                                <span class="helpCont">비밀번호를 입력하세요</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>이름</th>
+                                            <td>
+                                                <input type="text" id="input04" class="inp" style="width:100%;" />
+                                                <span class="helpCont">이름을 입력하세요</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>이메일 주소</th>
+                                            <td>
+                                                <div class="inputGroup">
+                                                    <input type="text" id="input05" class="inp fl" style="width:60%;" />
+                                                    <span class="inline center fl" style="width:5%;" >@</span>
+                                                    <select class="inp fl" style="width:35%;">
+                                                        <option>=선택=</option>
+                                                        <option>naver.com</option>
+                                                        <option>daum.net</option>
+                                                        <option>nate.com</option>
+                                                        <option>직접입력</option>
+                                                    <select>                                
+                                                </div>
+                                                <span class="helpCont">email을 입력하세요</span>
+                                            </td>
+                                        </tr>                                       
+                                        <tr>
+                                            <th>휴대폰 번호</th>
+                                            <td>
+                                                <div class="inputGroup">
+                                                    <select class="inp fl" style="width:22%;">
+                                                        <option>선택</option>
+                                                        <option>010</option>
+                                                        <option>011</option>
+                                                        <option>016</option>
+                                                        <option>017</option>
+                                                        <option>019</option>
+                                                    <select>
+                                                    <span class="inline center fl mt10" style="width:2%;" > - </span>
+                                                    <input type="text" id="" class="inp fl" maxlength="4" style="width:22%;" />
+                                                    <span class="inline center fl mt10" style="width:2%;" > - </span>
+                                                    <input type="text" id="" class="inp fl" maxlength="4" style="width:22%;" />
+                                                    <span class="inline center fl" style="width:2%;" > &nbsp; </span>
+                                                    <button type="button" class="btnstyle middle white fl" style="width:28%; white-space:nowrap; vertical-align:top; overflow:hidden;">인증번호 받기</button> 
+                                                </div>
+                                                <span class="helpCont">휴대폰 번호를 입력해 주세요</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>인증번호</th>
+                                            <td>
+                                                <div class="inputGroup">
+                                                    <input type="text" id="" class="inp fl" maxlength="" style="width:22%;"/>
+                                                </div>
+                                                <span class="helpCont">숫자를 입력해 주세요</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    
+                </div>
+                <div class="modal-footer">
+                    <div style="padding:5px 0;text-align:center;">
+                        <button type="button" class="cancel_btn w80" data-dismiss="modal">취소</button>
+                        <button type="submit" class="join2nextBtn default_btn w80" data-dismiss="modal">확인</button>
+                    </div>                  
+                </div>
+            </div>
+        </div>
+    </div> 
+    <!-- //회원가입 step02 // 정보입력 -->  
+
+
+    <!-- 회원가입 step03 //////////////////// 가입완료 -->
+    <div class="modal fade" id="join3Modal" tabindex="-1" role="dialog" aria-labelledby="join3Modal" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="padding:25px 30px;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4><i class="glyphicon glyphicon-user"></i> JOIN</h4>
+                </div>
+                <div class="modal-body" style="padding:20px 30px;">
+                    
+                    <div id="joinStep03" class="rowBox joinBox joinStep03">         
+                        
+                        <div class="joinEndText">
+                            <strong>"축하합니다"</strong>
+                            회원가입이 완료되었습니다.
+                        </div>
+
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <div style="padding:5px 0;text-align:center;">
+                        <a href="../member/login.html" class="default_btn w80">로그인</a>
+                    </div>                  
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //회원가입 step03 // 가입완료 -->       
+
+</body>
+</html>    

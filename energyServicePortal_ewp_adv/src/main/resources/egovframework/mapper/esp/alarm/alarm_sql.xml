@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.esp.alarm.service.impl.AlarmMapper">
+
+    <select id="getDeviceAlarmCnt" parameterType="hashMap" resultType="hashMap">
+        /* 장치구분별 알람건수 조회 */
+        select
+        count( case when device_type = '1' then 1 end ) as pcs_cnt, /* PCS 건수 */
+        count( case when device_type = '2' then 1 end ) as bms_cnt, /* BMS 건수 */
+        count( case when device_type = '3' then 1 end ) as pv_cnt, /* PV 건수 */
+        count( case when device_type = '4' then 1 end ) as ioe_cnt, /* IOE 건수 */
+        <!-- count( case when device_type = '5' then 1 end ) as cnt_mnt, -->
+        count( case when device_type not in ('1', '2', '3', '4') then 1 end ) as etc_cnt, /* 기타 건수 */
+        count( case when alarm_type = '1' then 1 end ) as warning_cnt, /* 비상 건수 */
+        count( case when alarm_type = '2' then 1 end ) as alert_cnt, /* 주의 건수 */
+        count( case when alarm_cfm_yn = 'N' then 1 end ) as notCfm_cnt, /* 미확인 건수 */
+        count(*) as total_cnt /* 총 건수 */
+        from (
+        select
+        a.alarm_idx, a.site_id, a.device_id, a.device_type, a.std_date, a.alarm_type, a.alarm_msg,
+        a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_act_yn, a.alarm_note, a.reg_date, a.mod_date
+        from tb_alarm a, tb_device b
+        where a.device_id = b.device_id
+        and a.site_id = b.site_id
+        and a.device_type = b.device_type
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
+            and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+            str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+        </if>
+        ) a
+    </select>
+
+    <select id="getSiteMainAlarmCnt" parameterType="hashMap" resultType="hashMap">
+        /* 사이트메인 장치타입별 알람건수 조회 */
+        select
+        count( case when alarm_type = '1' then 1 end ) as warning_cnt, /* 비상 건수 */
+        count( case when alarm_type = '2' then 1 end ) as alert_cnt /* 주의 건수 */
+        from tb_alarm a, tb_device b
+        where a.device_id = b.device_id
+        and a.site_id = b.site_id
+        and a.device_type = b.device_type
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
+            and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+            str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+        </if>
+        and a.alarm_act_yn = 'N'
+    </select>
+
+    <select id="getAlarmList" parameterType="hashMap" resultType="hashMap">
+        /* 알람 목록 조회 */
+        select * from (
+        select
+        a.alarm_idx, a.site_id, a.device_id, b.device_name, a.device_type,
+        case a.device_type when 1 then 'PCS'
+        when 2 then 'BMS'
+        when 3 then 'PV'
+        when 4 then '부하측정기기'
+        when 5 then 'PV모니터링기기'
+        when 6 then 'ESS모니터링기기'
+        when 7 then 'iSmart'
+        when 8 then '총량기기'
+        else '' end as device_type_nm,
+        a.std_date, a.alarm_code, a.alarm_type, a.alarm_msg,
+        a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_act_yn, a.alarm_note, a.reg_date, a.mod_date
+        from tb_alarm a, tb_device b
+        where a.device_id = b.device_id
+        and a.site_id = b.site_id
+        and a.device_type = b.device_type
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+        and a.alarm_type = #{alarmType }
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
+            and a.std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+            str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+        </if>
+        ) f_tb
+        order by std_date desc
+        limit #{startNum }, #{pageRowCnt }
+    </select>
+
+    <select id="getAlarmListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+        /* 알람 목록 건수 조회 */
+        select
+        count(*) as listCnt
+        from (
+        select
+        a.alarm_idx, a.site_id, a.device_id, b.device_name, a.device_type
+        from tb_alarm a, tb_device b
+        where a.device_id = b.device_id
+        and a.site_id = b.site_id
+        and a.device_type = b.device_type
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+        and a.alarm_type = #{alarmType }
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
+            and a.std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+            str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+        </if>
+        ) f_tb
+    </select>
+
+    <update id="updateAlarm" parameterType="hashMap">
+        /* 알람 수정 */
+        update tb_alarm
+        set
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(alarmCfmYn)">
+            alarm_cfm_yn = #{alarmCfmYn},
+        </if>
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(alarmCfmDate)">
+            alarm_cfm_date = #{alarmCfmDate},
+        </if>
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(alarmCfmUid)">
+            alarm_cfm_uid = #{alarmCfmUid},
+        </if>
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(alarmActYn)">
+            alarm_act_yn = #{alarmActYn},
+        </if>
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(alarmNote)">
+            alarm_note = #{alarmNote},
+        </if>
+        mod_date = now()
+        where alarm_idx = #{alarmIdx }
+    </update>
+
+    <!-- greatman begin -->
+    <select id="getGMainDeviceAlarmCnt" parameterType="hashMap" resultType="hashMap">
+        /* 장치구분별 알람건수 조회 */
+        select
+        count( case when device_type = '1' then 1 end ) as pcs_cnt, /* PCS 건수 */
+        count( case when device_type = '2' then 1 end ) as bms_cnt, /* BMS 건수 */
+        count( case when device_type = '3' then 1 end ) as pv_cnt, /* PV 건수 */
+        count( case when device_type = '4' then 1 end ) as ioe_cnt, /* IOE 건수 */
+        <!-- count( case when device_type = '5' then 1 end ) as cnt_mnt, -->
+        count( case when device_type not in ('1', '2', '3', '4') then 1 end ) as etc_cnt, /* 기타 건수 */
+        count( case when alarm_type = '1' then 1 end ) as warning_cnt, /* 비상 건수 */
+        count( case when alarm_type = '2' then 1 end ) as alert_cnt, /* 주의 건수 */
+        count( case when alarm_cfm_yn = 'N' then 1 end ) as notCfm_cnt, /* 미확인 건수 */
+        count(*) as total_cnt /* 총 건수 */
+        from (
+        select
+        a.alarm_idx, a.site_id, a.device_id, a.device_type, a.std_date, a.alarm_code, a.alarm_type, a.alarm_msg,
+        a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_act_yn, a.alarm_note, a.reg_date, a.mod_date
+        from tb_alarm a, tb_site b, tb_site_group c, tb_device d
+        where a.site_id = b.site_id
+        and b.site_grp_idx = c.site_grp_idx
+        and a.device_id = d.device_id
+        and a.site_id = d.site_id
+        and a.device_type = d.device_type
+        <choose>
+            <when test="mapGroup == 'map'">
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+                    and b.user_idx = #{userIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+                    and b.comp_idx = #{compIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+                    and b.site_grp_idx = #{siteGrpIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(areaType)">
+                    and b.area_type = #{areaType}
+                </if>
+            </when>
+            <otherwise>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(grpIdx)">
+                    and c.site_grp_idx = #{grpIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+                    and c.user_idx = #{userIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+                    and c.comp_idx = #{compIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+                    and c.site_grp_idx = #{siteGrpIdx}
+                </if>
+            </otherwise>
+        </choose>
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
+            and a.std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+            str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+        </if>
+        ) f_tb
+    </select>
+
+    <select id="getGMainAlarmCnt" parameterType="hashMap" resultType="hashMap">
+        /* 군관리메인 장치타입별 알람건수 조회 */
+        select
+        count( case when alarm_type = '1' then 1 end ) as warning_cnt, /* 비상 건수 */
+        count( case when alarm_type = '2' then 1 end ) as alert_cnt /* 주의 건수 */
+        from tb_alarm a, tb_site b, tb_site_group c, tb_device d
+        where a.site_id = b.site_id
+        and b.site_grp_idx = c.site_grp_idx
+        and a.device_id = d.device_id
+        and a.site_id = d.site_id
+        and a.device_type = d.device_type
+        <choose>
+            <when test="mapGroup == 'map'">
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+                    and b.user_idx = #{userIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+                    and b.comp_idx = #{compIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+                    and b.site_grp_idx = #{siteGrpIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(areaType)">
+                    and b.area_type = #{areaType}
+                </if>
+            </when>
+            <otherwise>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(grpIdx)">
+                    and c.site_grp_idx = #{grpIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+                    and c.user_idx = #{userIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+                    and c.comp_idx = #{compIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+                    and c.site_grp_idx = #{siteGrpIdx}
+                </if>
+            </otherwise>
+        </choose>
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
+            and a.std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+            str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+        </if>
+        and a.alarm_act_yn = 'N'
+    </select>
+
+    <select id="getAlarmDetail" parameterType="hashMap" resultType="hashMap">
+        /* 장치구분별 알람건수 조회 */
+        select
+        count( case when device_type = '1' then 1 end ) as pcs_cnt, /* PCS 건수 */
+        count( case when device_type = '2' then 1 end ) as bms_cnt, /* BMS 건수 */
+        count( case when device_type = '3' then 1 end ) as pv_cnt, /* PV 건수 */
+        count(*) as total_cnt /* 총 건수 */
+        from (
+        select
+        a.alarm_idx, a.site_id, a.device_id, a.device_type, a.std_date, a.alarm_type, a.alarm_msg,
+        a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_act_yn, a.alarm_note, a.reg_date, a.mod_date
+        from tb_alarm a, tb_device b
+        where a.device_id = b.device_id
+        and a.site_id = b.site_id
+        and a.device_type = b.device_type
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
+            and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+            str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+        </if>
+        ) a
+    </select>
+
+    <select id="getSmsUserList" parameterType="hashMap" resultType="hashMap">
+		/* 알람 SMS수신자 목록 조회 */
+		select 
+			a.sms_user_idx, a.site_id, b.site_name, a.name as user_name, replace(mobile, '-', '') as mobile
+		from tb_sms_user a, tb_site b
+		where a.site_id = b.site_id
+		and a.del_yn = 'N'
+		and a.site_id = #{siteId }
+	</select>
+    <!-- greatman end -->
+
+    <select id="getSmsAddresseeList" parameterType="hashMap" resultType="hashMap">
+        /* 알람 수신자 목록 조회 */
+        select
+        sms_user_idx, site_id, `name` as addressee_name, mobile, del_yn, reg_uid, reg_date, mod_uid, mod_date
+        from tb_sms_user
+        where del_yn = 'N'
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and site_id = #{siteId }
+        </if>
+    </select>
+
+    <select id="getInsertAddresseeNameList" parameterType="hashMap" resultType="hashMap">
+        /* 알람 수신자 등록가능 이름 목록 조회 */
+        select
+        user_idx, user_id, user_pw, user_type, main_user_idx, main_user_yn, auth_type, lang_type,
+        comp_idx, co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, site_grp_idx,
+        site_id,
+        del_yn, reg_uid, reg_date, mod_uid, mod_date
+        from tb_user
+        where del_yn = 'N'
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and site_grp_idx = (
+            select site_grp_idx from tb_site
+            where site_id = #{siteId }
+            )
+        </if>
+    </select>
+
+    <insert id="insertAddressee" parameterType="hashMap">
+		/* 알람 수신자 등록 */
+		insert into tb_sms_user (
+			site_id, /*사이트ID*/
+			`name`,  /*이름*/
+			mobile,  /*휴대폰번호*/
+			del_yn, 
+			reg_uid, 
+			reg_date 
+		) 
+		values (
+			#{siteId },
+			#{addresseeName },
+			#{mobile },
+			'N', 
+			#{regUid }, 
+			now()
+		)
+	</insert>
+
+    <update id="deleteAddressee" parameterType="hashMap">
+		/* 알람 수신자 삭제 */
+		delete from tb_sms_user
+		where sms_user_idx = #{smsUserIdx }
+	</update>
+
+    <insert id="insertAlarm" parameterType="hashMap">
+        /* 알람 등록 */
+        INSERT INTO tb_alarm (
+        site_id,
+        device_id,
+        device_type,
+        std_date,
+        alarm_code,
+        alarm_type,
+        alarm_msg,
+        alarm_cfm_yn,
+        alarm_cfm_date,
+        alarm_cfm_uid,
+        alarm_act_yn,
+        alarm_note,
+        reg_date
+        ) VALUES (
+        #{siteId},
+        #{deviceId},
+        #{deviceType},
+        #{stdDate},<!-- STR_TO_DATE(#{stdDate}, "%Y%m%d%H%i%s"), -->
+        #{alarmCode},
+        #{alarmType},
+        #{alarmMsg},
+        #{alarmCfmYn},
+        #{alarmCfmDate},
+        #{alarmCfmUid},
+        #{alarmActYn},
+        #{alarmNote},
+        NOW())
+        <selectKey resultType="Long" keyProperty="alarmIdx">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getMainAlarmList" parameterType="hashMap" resultType="hashMap">
+        /* 최근 알람 목록 조회(3건) */
+        select
+        a.alarm_idx, a.site_id, a.device_id, a.device_type, a.std_date, a.alarm_code, a.alarm_type, a.alarm_msg,
+        a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_act_yn, a.alarm_note, a.reg_date, a.mod_date
+        from tb_alarm a, tb_device b
+        where a.device_id = b.device_id
+        and a.site_id = b.site_id
+        and a.device_type = b.device_type
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+        <!-- <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
+        and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+        </if> -->
+        order by std_date desc
+        limit 0, 3
+    </select>
+
+    <select id="getMainAlarmTypeCntList" parameterType="hashMap" resultType="hashMap">
+        /* 알람 타입건수 조회 */
+        select
+        count(if(alarm_type=1, alarm_type, null)) as alert_cnt,
+        count(if(alarm_type=2, alarm_type, null)) as warning_cnt
+        from tb_alarm
+        where site_id = #{siteId }
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(alarmCfmYn)">
+            and alarm_cfm_yn = #{alarmCfmYn }
+        </if>
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(schTermFrom)">
+            and std_date between str_to_date(#{schTermFrom },'%Y%m%d%H%i%s') and
+            str_to_date(#{schTermTo },'%Y%m%d%H%i%s')
+        </if>
+        order std_date
+    </select>
+
+    <!-- greatman begin -->
+    <select id="getGMainAlarmList" parameterType="hashMap" resultType="hashMap">
+        /* 최근 알람 목록 조회(3건) */
+        select
+        a.alarm_idx, a.site_id, a.device_id, a.device_type, a.std_date, a.alarm_code, a.alarm_type, a.alarm_msg,
+        a.alarm_cfm_yn, a.alarm_cfm_date, a.alarm_cfm_uid, a.alarm_act_yn, a.alarm_note, a.reg_date, a.mod_date
+        from tb_alarm a, tb_site b, tb_site_group c, tb_device d
+        where a.site_id = b.site_id
+        and b.site_grp_idx = c.site_grp_idx
+        and a.device_id = d.device_id
+        and a.site_id = d.site_id
+        and a.device_type = d.device_type
+        <!-- <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(alarmCfmYn)">
+        and a.alarm_cfm_yn = #{alarmCfmYn }
+        </if> -->
+        <choose>
+            <when test="mapGroup == 'map'">
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+                    and b.user_idx = #{userIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+                    and b.comp_idx = #{compIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+                    and b.site_grp_idx = #{siteGrpIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(areaType)">
+                    and b.area_type = #{areaType}
+                </if>
+            </when>
+            <otherwise>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(grpIdx)">
+                    and b.site_grp_idx = #{grpIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+                    and c.user_idx = #{userIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+                    and c.comp_idx = #{compIdx}
+                </if>
+                <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+                    and c.site_grp_idx = #{siteGrpIdx}
+                </if>
+            </otherwise>
+        </choose>
+        <!-- <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
+        and a.std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+        </if> -->
+        order by a.std_date desc
+        limit 0, 3
+    </select>
+    <!-- greatman end -->
+
+</mapper>

@@ -1,0 +1,222 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ include file="/decorators/include/taglibs.jsp"%>
+<script>
+	function navAddClass(linkGbn) {
+		$("#sidebar").find("ul").find("li").removeClass("on");
+		if(linkGbn == "siteMain") $(".smn1").addClass("on");
+		else if(linkGbn == "energy") $(".smn2").addClass("on");
+		else if(linkGbn == "device") $(".smn3").addClass("on");
+		else if(linkGbn == "alarm") $(".smn4").addClass("on");
+		else if(linkGbn == "billRevenue") $(".smn5").addClass("on");
+		else if(linkGbn == "setting") $(".smn7").addClass("on");
+		else if(linkGbn == "main") $(".smn0").addClass("on");
+		else if(linkGbn == "commonCode") $(".smn9").addClass("on");
+	}
+	
+	function pleaseSelectSite() {
+		alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');
+	}
+
+	function gMainSelectSite(siteId) {
+		$('#smainNavLink').attr('href', '/main/siteMain.do?siteId=' + siteId);
+		$('#energyNavLink').attr('href', '/energy/usage.do?siteId=' + siteId);
+		$('#usageNavLink').attr('href', '/energy/usage.do?siteId=' + siteId);
+		$('#peakNavLink').attr('href', '/energy/peak.do?siteId=' + siteId);
+		$('#essNavLink').attr('href', '/energy/essCharge.do?siteId=' + siteId);
+		$('#pvNavLink').attr('href', '/energy/pvGen.do?siteId=' + siteId);
+		$('#drResultNavLink').attr('href', '/energy/drResult.do?siteId=' + siteId);
+		$('#derNavLink').attr('href', '/energy/derUsage.do?siteId=' + siteId);
+		$('#deviceNavLink').attr('href', '/device/deviceMonitoring.do?deviceGbn=IOE&siteId=' + siteId);
+		$('#IOENavLink').attr('href', '/device/deviceMonitoring.do?deviceGbn=IOE&siteId=' + siteId);
+		$('#PCSNavLink').attr('href', '/device/deviceMonitoring.do?deviceGbn=IOE&siteId=' + siteId);
+		$('#BMSNavLink').attr('href', '/device/deviceMonitoring.do?deviceGbn=IOE&siteId=' + siteId);
+		$('#PVNavLink').attr('href', '/device/deviceMonitoring.do?deviceGbn=IOE&siteId=' + siteId);
+		$('#DVgrpNavLink').attr('href', '/device/deviceGroup.do?siteId=' + siteId);
+		$('#alarmNavLink').attr('href', '/alarm/alarmMng.do?siteId=' + siteId);
+		$('#billNavLink').attr('href', '/billRevenue/kepcoBill.do?siteId=' + siteId);
+		$('#kepcoNavLink').attr('href', '/billRevenue/kepcoBill.do?siteId=' + siteId);
+		$('#essBillNavLink').attr('href', '/billRevenue/essRevenue.do?siteId=' + siteId);
+		$('#drBillNavLink').attr('href', '/billRevenue/drRevenue.do?siteId=' + siteId);
+		$('#pvBillNavLink').attr('href', '/billRevenue/pvRevenue.do?siteId=' + siteId);
+		$('#totalBillNavLink').attr('href', 'javascript:totalBill(' + siteId+');');
+		$('#kepcoMngNavLink').attr('href', '/system/kepcoMng.do?siteId=' + siteId);
+		$('#gmainAlarmLink').attr('onclick', "location.href='/alarm/alarmMng.do?siteId=" + siteId +"'");
+	}
+	
+</script>
+		<div id="sidebar">
+			<c:if test="${not empty userInfo}">
+				<!-- PC용 언어 선택 -->
+				<%@ include file="/decorators/include/selectLang.jsp"%>
+				<ul>
+					<li class="smn1 on">
+						<a href="#;">대시보드</a>
+						<div class="sub_layer">
+							<ul>
+								<li><a href="/dashboard/gmain.do">통합 대시보드</a></li>
+								<li>
+									<a href="#;">사업소 대시보드</a>
+									<div>
+					                    <p><a href="/dashboard/smain.do">신재생발전 대시보드</a></p>
+										<p><a href="/dashboard/emain.do">피크저감ESS 대시보드</a></p>
+										<p><a href="/dashboard/dmain.do">신재생발전+신재생 연계 ESS</a></p>
+					                </div>
+								</li>
+								<li><a href="/dashboard/jmain.do">VPP거래 대시보드</a></li>							
+								<li><a href="">DR거래 대시보드</a></li>
+							</ul>
+						</div>
+					</li>
+					<li class="smn2">
+						<a href="#;">설비현황</a>
+						<div class="sub_layer">
+							<ul>
+								<li><a href="">설비 구성</a></li>
+								<li><a href="">수집 현황</a></li>
+							</ul>
+						</div>
+					</li>
+					<li class="smn3">
+						<a href="#;">설비 이력</a>
+						<div class="sub_layer">
+							<ul>
+								<li><a href="">운전 이력</a></li>
+								<li><a href="">알람 이력</a></li>
+							</ul>
+						</div>
+					</li>
+					<li class="smn4">
+						<a href="#;">자원 분석</a>
+						<div class="sub_layer">
+							<ul>
+								<li><a href="/energy/pvGen.do">발전</a></li>
+								<li><a href="/energy/essCharge.do">피크저감 ESS</a></li>
+								<!-- <li><a href="/energy/sub01.html">수요</a></li> -->
+								<li><a href="/energy/drResult.do">수요저감<!-- DR --></a></li>
+							</ul>
+						</div>
+					</li>
+					<li class="smn5">
+						<a href="#;">예측/진단</a>
+						<div class="sub_layer">
+							<ul>
+								<li><a href="">발전</a></li>
+								<li><a href="">수요</a></li>
+							</ul>
+						</div>
+					</li>
+					<li class="smn7">
+						<a href="#;">보고서</a>
+						<div class="sub_layer">
+							<ul>
+								<li><a href="">수익 보고서</a></li>
+								<li><a href="">발전량 보고서</a></li>
+								<!-- <li><a href="/billRevenue/kepcoBill.do">한전 요금</a></li>
+								<li><a href="/billRevenue/essRevenue.do">ESS 수익</a></li>
+								<li><a href="/billRevenue/drRevenue.do">DR 수익</a></li>
+								<li><a href="/billRevenue/pvRevenue.do">PV 수익</a></li> -->
+							</ul>
+						</div>
+					</li>
+					<li class="smn6">
+						<a href="#;">관리</a>
+						<div class="sub_layer">
+							<ul>
+								<li><a href="">기본정보</a></li>
+								<li><a href="">알람</a></li>
+								<li><a href="/system/userMng.do">사용자</a></li>
+								<li><a href="/system/cmpyGrpSiteMng.do">사이트/그룹</a></li>
+								<li><a href="">공통코드</a></li>
+								<li><a href="">설정</a></li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+				<ol>
+					<li class="smn8"><a href="/logout.do">로그아웃</a></li>
+				</ol>
+			</c:if>
+		</div>
+		<!-- 모바일용 카테고리 { -->
+		<div id="gnb">
+			<div class="g_top">
+				<div class="w100">
+					<h1 class="g_logo"><a href="#;"><img src="/img/main_logo_ewp.png" class="로고"></a></h1>
+					<a href="#;" class="category_close"><img src="/img/gnb_close.png" width="17" alt="닫기"></a>
+				</div>
+			</div>
+			<div class="g_menu w100">
+				<ul>
+					<li class="gmn1">
+						<a href="#;">대시보드</a>
+						<ul>
+							<li><a href="/dashboard/gmain.do">통합 대시보드</a></li>
+							<li>
+								<a href="#;">사업소 대시보드</a>
+								<div>
+				                    <p><a href="/dashboard/smain.do">신재생발전 대시보드</a></p>
+									<p><a href="/dashboard/emain.do">피크저감ESS 대시보드</a></p>
+									<p><a href="/dashboard/dmain.do">신재생발전+신재생 연계 ESS</a></p>
+				                </div>
+							</li>
+							<li><a href="/dashboard/jmain.do">VPP거래 대시보드</a></li>							
+							<li><a href="">DR거래 대시보드</a></li>
+						</ul>
+					</li>
+					<li class="gmn2">
+						<a href="#;">설비현황</a>
+						<ul>
+							<li><a href="">장치 현황</a></li>
+							<li><a href="">수집 현황</a></li>
+						</ul>
+					</li>
+					<li class="gmn3">
+						<a href="#;">이력</a>						
+						<ul>
+							<li><a href="">운전 이력</a></li>
+							<li><a href="">알람 이력</a></li>
+						</ul>						
+					</li>
+					<li class="gmn4">
+						<a href="#;">자원분석</a>						
+						<ul>
+							<li><a href="/energy/pvGen.do">발전</a></li>
+							<li><a href="/energy/essCharge.do">피크저감 ESS</a></li>
+							<!-- <li><a href="/energy/sub01.html">수요</a></li> -->
+							<li><a href="/energy/drResult.do">수요저감<!-- DR --></a></li>
+						</ul>						
+					</li>
+					<li class="gmn5">
+						<a href="#;">예측/진단</a>						
+						<ul>
+							<li><a href="">발전</a></li>
+							<li><a href="">수요</a></li>
+						</ul>						
+					</li>
+					<li class="gmn6">
+						<a href="#;">관리</a>						
+						<ul>
+							<li><a href="">기본정보</a></li>
+							<li><a href="">알람</a></li>
+							<li><a href="/system/userMng.do">사용자</a></li>
+							<li><a href="/system/cmpyGrpSiteMng.do">사이트/그룹</a></li>
+							<li><a href="">공통코드</a></li>
+							<li><a href="">설정</a></li>
+						</ul>						
+					</li>
+					<li class="gmn7">
+						<a href="#;">보고서</a>						
+						<ul>
+							<li><a href="/billRevenue/kepcoBill.do">한전 요금</a></li>
+							<li><a href="/billRevenue/essRevenue.do">ESS 수익</a></li>
+							<li><a href="/billRevenue/drRevenue.do">DR 수익</a></li>
+							<li><a href="/billRevenue/pvRevenue.do">PV 수익</a></li>
+						</ul>						
+					</li>
+				</ul>
+				<ol>
+					<li class="gmn8"><a href="/logout.do">로그아웃</a></li>
+				</ol>
+			</div>
+		</div>
+		<!-- } 모바일용 카테고리 -->

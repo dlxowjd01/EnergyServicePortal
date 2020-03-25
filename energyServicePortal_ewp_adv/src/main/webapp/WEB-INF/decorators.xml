@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<!-- default directory 설정 -->
+<decorators defaultdir="/decorators">
+	<decorator name="web_layout" page="layout.jsp">
+		<pattern>/</pattern>
+	</decorator>
+	<!-- decorators를 적용시키지 않을 url 패턴 -->
+	 <excludes>
+	 	<pattern>/login.do</pattern>
+	 	<pattern>/login.do?**</pattern>
+	 	<pattern>/loginUser.do</pattern>
+	 	<pattern>/login.loginUser?**</pattern>
+	 	<!-- <pattern>/en/prmtevents/prmtEvent.kto?eventId=russiaTransitTour</pattern> -->
+	 </excludes>
+</decorators>
