@@ -141,6 +141,6 @@
 		</mvc:interceptor>
 	</mvc:interceptors>
 
-	<util:properties id="local" location="file:/home/ubuntu/ewpsp_config/local.properties" />
+	<!--<util:properties id="local" location="file:/home/ubuntu/ewpsp_config/local.properties" />-->
 
 </beans>

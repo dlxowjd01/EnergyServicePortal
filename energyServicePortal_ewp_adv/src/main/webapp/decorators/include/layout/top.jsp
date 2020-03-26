@@ -36,7 +36,7 @@
 	<!-- 장치 모니터링 현황용 스크립트 -->
 	<script src="/js/jquery.bxslider.js" type="text/javascript"></script>
 	
-	<c:set var="timeOffset"><spring:eval expression="@local.getProperty('server.offset')" /></c:set>
+	<%--<c:set var="timeOffset"><spring:eval expression="@local.getProperty('server.offset')" /></c:set>--%>
 	<script src="/js/custom/common.js"></script>
 	<script src="/js/custom/lems.js"></script>
 	<script src="/js/custom/searchRequirement.js"></script>
