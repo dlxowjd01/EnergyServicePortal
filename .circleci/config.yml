@@ -74,18 +74,9 @@ jobs:
             docker push $IMAGE_DEFAULT_NAME
 
       - run:
-          name: Build and push energyServicePortal_ewp_adv directory to Docker image (war)
+          name: Build and push energyServicePortal_ewp_adv directory Docker image (jar)
           command: |
             cp energyServicePortal_ewp_adv/target/energyServicePortal-1.0.0.war .
-            DOCKERHUB_REPO=enertalk/ewp
-            IMAGE_TAG=energyServicePortal-$CIRCLE_SHA1
-            IMAGE_DEFAULT_TAG=energyServicePortal-latest
-            IMAGE_NAME=$DOCKERHUB_REPO:$IMAGE_TAG
-            IMAGE_DEFAULT_NAME=$DOCKERHUB_REPO:$IMAGE_DEFAULT_TAG
-            docker build -t $IMAGE_NAME -t $IMAGE_DEFAULT_NAME -f ~/circleci-demo-java-spring/docker/energyServicePortal_ewp_adv/Dockerfile .
-            docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
-            docker push $IMAGE_NAME
-            docker push $IMAGE_DEFAULT_NAME
 
       - store_artifacts:
           path: ewpsp/target/ewpsp.war
@@ -154,7 +145,7 @@ jobs:
               scp -i ~/.ssh/ewp.pem -o StrictHostKeyChecking=no ~/circleci-demo-java-spring/ewpsp.war $REMOTE_SERVER:/home/ubuntu/build
               scp -i ~/.ssh/ewp.pem -o StrictHostKeyChecking=no ~/circleci-demo-java-spring/ewp-api-0.0.1-SNAPSHOT.jar $REMOTE_SERVER:/home/ubuntu/build
               scp -i ~/.ssh/ewp.pem -o StrictHostKeyChecking=no ~/circleci-demo-java-spring/scripts/*.sh $SSH_USER@$SSH_HOST:/home/ubuntu/
-              ssh -i ~/.ssh/ewp.pem -o StrictHostKeyChecking=no $REMOTE_SERVER 'chmod 755 ./deploy.sh; ./deploy.sh; chmod 755 ./health-check.sh; ./health-check.sh'
+              ssh -i ~/.ssh/ewp.pem -o StrictHostKeyChecking=no $REMOTE_SERVER 'chmod 755 ./deploy.sh; ./deploy.sh;'
             fi
 
   test-sitespeed:

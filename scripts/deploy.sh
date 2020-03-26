@@ -22,7 +22,7 @@ fi
 #echo "> $APPLICATION_JAR 배포"
 #cp -R $BUILD_PATH$JAR_NAME $APPLICATION_JAR
 
-WAR_NAME=ewpsp.war
+WAR_NAME=energySerivcePortal-1.0.0.war
 echo "> build 파일명: $WAR_NAME"
 
 DEPLOY_PATH=/usr/local/apache-tomcat-9.0.31/webapps/
