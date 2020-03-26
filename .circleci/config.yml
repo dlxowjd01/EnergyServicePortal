@@ -17,16 +17,16 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: circleci-demo-java-spring-{{ checksum "ewpsp/pom.xml" }}-{{ checksum "ewp-api-agent/pom.xml" }}
+          key: circleci-demo-java-spring-{{ checksum "ewpsp/pom.xml" }}-{{ checksum "ewp-api-agent/pom.xml" }}-{{ checksum "energyServicePortal_ewp_adv/pom.xml" }}
 
       - run: mvn -f ewpsp/pom.xml dependency:go-offline
-
       - run: mvn -f ewp-api-agent/pom.xml dependency:go-offline
+      - run: mvn -f energyServicePortal_ewp_adv/pom.xml dependency:go-offline
 
       - save_cache:
           paths:
             - ~/.m2
-          key: circleci-demo-java-spring-{{ checksum "ewpsp/pom.xml" }}-{{ checksum "ewp-api-agent/pom.xml" }}
+          key: circleci-demo-java-spring-{{ checksum "ewpsp/pom.xml" }}-{{ checksum "ewp-api-agent/pom.xml" }}-{{ checksum "energyServicePortal_ewp_adv/pom.xml" }}
 
       # run tests!
       #- run: mvn integration-test
@@ -36,16 +36,17 @@ jobs:
             mv settings.xml ~/.m2/settings.xml
             mvn -f ewpsp/pom.xml clean package sonar:sonar
             mvn -f ewp-api-agent/pom.xml clean package sonar:sonar
+            mvn -f energyServicePortal_ewp_adv/pom.xml clean package sonar:sonar
 
       - run: mvn -f ewpsp/pom.xml package clean package -DskipTests=true
-
       - run: mvn -f ewp-api-agent/pom.xml clean package -DskipTests=true
+      - run: mvn -f energyServicePortal_ewp_adv/pom.xml clean package -DskipTests=true
 
       - setup_remote_docker:
           docker_layer_caching: true
 
       - run:
-          name: Build and push SP Docker image (war)
+          name: Build and push ewpsp directory to Docker image (war)
           command: |
             cp ewpsp/target/ewpsp.war .
             DOCKERHUB_REPO=enertalk/ewp
@@ -59,7 +60,7 @@ jobs:
             docker push $IMAGE_DEFAULT_NAME
 
       - run:
-          name: Build and push SP Docker image (jar)
+          name: Build and push ewp-api-agent directory Docker image (jar)
           command: |
             cp ewp-api-agent/target/ewp-api-0.0.1-SNAPSHOT.jar .
             DOCKERHUB_REPO=enertalk/ewp
@@ -72,11 +73,28 @@ jobs:
             docker push $IMAGE_NAME
             docker push $IMAGE_DEFAULT_NAME
 
+      - run:
+          name: Build and push energyServicePortal_ewp_adv directory to Docker image (war)
+          command: |
+            cp energyServicePortal/target/energyServicePortal-1.0.0.war .
+            DOCKERHUB_REPO=enertalk/ewp
+            IMAGE_TAG=ewpsp-$CIRCLE_SHA1
+            IMAGE_DEFAULT_TAG=ewpsp-latest
+            IMAGE_NAME=$DOCKERHUB_REPO:$IMAGE_TAG
+            IMAGE_DEFAULT_NAME=$DOCKERHUB_REPO:$IMAGE_DEFAULT_TAG
+            docker build -t $IMAGE_NAME -t $IMAGE_DEFAULT_NAME -f ~/circleci-demo-java-spring/docker/energyServicePortal_ewp_adv/Dockerfile .
+            docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
+            docker push $IMAGE_NAME
+            docker push $IMAGE_DEFAULT_NAME
+
       - store_artifacts:
           path: ewpsp/target/ewpsp.war
 
       - store_artifacts:
           path: ewp-api-agent/target/ewp-api-0.0.1-SNAPSHOT.jar
+
+      - store_artifacts:
+          path: ewpsp/target/energyServicePortal-1.0.0.war
 
       - store_artifacts:
           path: scripts/deploy.sh
@@ -92,6 +110,7 @@ jobs:
           paths:
             - ewpsp.war
             - ewp-api-0.0.1-SNAPSHOT.jar
+            - energyServicePortal-1.0.0.war
             - scripts/deploy.sh
             - scripts/health-check.sh
             - sitespeed.io/login.js
@@ -127,7 +146,7 @@ jobs:
             elif [ "$CIRCLE_BRANCH" = "iDERMS-SaaS" ]; then
               echo -e "build in iDERMS-SaaS"
               REMOTE_SERVER=$SSH_USER_SAAS@$SSH_HOST_SAAS
-              scp ~/circleci-demo-java-spring/ewpsp.war $REMOTE_SERVER:/usr/local/apache-tomcat-9.0.31/webapps
+              scp ~/circleci-demo-java-spring/energyServicePortal-1.0.0.war $REMOTE_SERVER:/usr/local/apache-tomcat-9.0.31/webapps
               scp ~/circleci-demo-java-spring/scripts/*.sh $REMOTE_SERVER:/home/ec2-user/
               ssh $REMOTE_SERVER 'chmod 755 ./deploy.sh; ./deploy.sh; chmod 755 ./health-check.sh; ./health-check.sh'
             else
