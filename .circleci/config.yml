@@ -29,7 +29,7 @@ jobs:
           key: circleci-demo-java-spring-{{ checksum "ewpsp/pom.xml" }}-{{ checksum "ewp-api-agent/pom.xml" }}-{{ checksum "energyServicePortal_ewp_adv/pom.xml" }}
 
       # run tests!
-      #- run: mvn integration-test
+      # run: mvn integration-test
       - run:
           name: static code analysis
           command: |
@@ -46,36 +46,10 @@ jobs:
           docker_layer_caching: true
 
       - run:
-          name: Build and push ewpsp directory to Docker image (war)
+          name: Move build files from target directory to root
           command: |
             cp ewpsp/target/ewpsp.war .
-            DOCKERHUB_REPO=enertalk/ewp
-            IMAGE_TAG=ewpsp-$CIRCLE_SHA1
-            IMAGE_DEFAULT_TAG=ewpsp-latest
-            IMAGE_NAME=$DOCKERHUB_REPO:$IMAGE_TAG
-            IMAGE_DEFAULT_NAME=$DOCKERHUB_REPO:$IMAGE_DEFAULT_TAG
-            docker build -t $IMAGE_NAME -t $IMAGE_DEFAULT_NAME -f ~/circleci-demo-java-spring/docker/ewpsp/Dockerfile .
-            docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
-            docker push $IMAGE_NAME
-            docker push $IMAGE_DEFAULT_NAME
-
-      - run:
-          name: Build and push ewp-api-agent directory Docker image (jar)
-          command: |
             cp ewp-api-agent/target/ewp-api-0.0.1-SNAPSHOT.jar .
-            DOCKERHUB_REPO=enertalk/ewp
-            IMAGE_TAG=ewp-api-$CIRCLE_SHA1
-            IMAGE_DEFAULT_TAG=ewp-api-latest
-            IMAGE_NAME=$DOCKERHUB_REPO:$IMAGE_TAG
-            IMAGE_DEFAULT_NAME=$DOCKERHUB_REPO:$IMAGE_DEFAULT_TAG
-            docker build -t $IMAGE_NAME -t $IMAGE_DEFAULT_NAME -f ~/circleci-demo-java-spring/docker/ewp-api/Dockerfile .
-            docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
-            docker push $IMAGE_NAME
-            docker push $IMAGE_DEFAULT_NAME
-
-      - run:
-          name: Build and push energyServicePortal_ewp_adv directory Docker image (jar)
-          command: |
             cp energyServicePortal_ewp_adv/target/energyServicePortal-1.0.0.war .
 
       - store_artifacts:
