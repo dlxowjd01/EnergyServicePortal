@@ -76,10 +76,10 @@ jobs:
       - run:
           name: Build and push energyServicePortal_ewp_adv directory to Docker image (war)
           command: |
-            cp energyServicePortal/target/energyServicePortal-1.0.0.war .
+            cp energyServicePortal_ewp_adv/target/energyServicePortal-1.0.0.war .
             DOCKERHUB_REPO=enertalk/ewp
-            IMAGE_TAG=ewpsp-$CIRCLE_SHA1
-            IMAGE_DEFAULT_TAG=ewpsp-latest
+            IMAGE_TAG=energyServicePortal-$CIRCLE_SHA1
+            IMAGE_DEFAULT_TAG=energyServicePortal-latest
             IMAGE_NAME=$DOCKERHUB_REPO:$IMAGE_TAG
             IMAGE_DEFAULT_NAME=$DOCKERHUB_REPO:$IMAGE_DEFAULT_TAG
             docker build -t $IMAGE_NAME -t $IMAGE_DEFAULT_NAME -f ~/circleci-demo-java-spring/docker/energyServicePortal_ewp_adv/Dockerfile .
@@ -94,7 +94,7 @@ jobs:
           path: ewp-api-agent/target/ewp-api-0.0.1-SNAPSHOT.jar
 
       - store_artifacts:
-          path: ewpsp/target/energyServicePortal-1.0.0.war
+          path: energyServicePortal_ewp_adv/target/energyServicePortal-1.0.0.war
 
       - store_artifacts:
           path: scripts/deploy.sh
