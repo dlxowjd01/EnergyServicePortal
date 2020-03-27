@@ -4,7 +4,7 @@ function userTheme(toggle = false) {
   if(toggle) {
     switch(userMode) {
       case 'auto':
-        userMode = 'dark'; break;
+        userMode = 'light'; break;
       case 'dark':
         if(toggle==='light')
           userMode = 'light'; break;
