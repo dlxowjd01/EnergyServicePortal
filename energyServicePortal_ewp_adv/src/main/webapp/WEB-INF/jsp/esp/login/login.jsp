@@ -517,7 +517,7 @@
 	<div id="wrapper">
 		<div id="page-wrapper">
 			<nav class="clear">
-				<div class="nav_brand ewp"><a href="/">ENCORED</a></div>
+				<div class="nav_brand"><a href="/">ENCORED</a></div>
 				<!-- 테마 선택 -->
 				<div class="nav_theme">
 					<div class="switcher">
