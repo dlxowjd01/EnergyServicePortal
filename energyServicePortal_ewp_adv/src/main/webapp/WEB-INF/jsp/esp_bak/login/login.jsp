@@ -491,7 +491,7 @@
 	.lf_body .lfinp {border:0; border-bottom:solid 1px #333; width:100%; height:50px; line-height:50px;}
 	.lf_body input:focus {border:0; border-bottom:solid 1px #333; outline-style:none;}
 	.lf_body .arrbtn {
-		display:inline-block; padding-right:30px; background:url('../img/login_arr.gif') no-repeat right center;
+		display:inline-block; padding-right:30px; background:var(--login-arr) no-repeat right center;
 		font-size:14px; color:#777;
 	}
 	.lf_bottom {font-size:0; width:100%; display:table;}

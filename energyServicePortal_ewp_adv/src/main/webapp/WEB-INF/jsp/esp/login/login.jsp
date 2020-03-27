@@ -473,7 +473,7 @@
             position:relative;
             margin:0;
             min-height:800px;
-            background:url('../img/login_bg.jpg') repeat center bottom;
+            background:var(--bg-img) repeat center bottom;
             background-size:cover;
         }
         .loginForm {
@@ -485,13 +485,13 @@
             -moz-box-shadow: 0px 5px 18px 0px rgba(0,0,0,0.27);
             box-shadow: 0px 5px 18px 0px rgba(0,0,0,0.27);
         }
-        .lf_body {padding:60px; background:#fff;}
+        .lf_body {padding:60px; background:var(--bg-color);}
         .lftit {padding-top:110px; background:url('../img/login_people.png') no-repeat center 0;}
-        .lftit h1 {font-size:34px; line-height:1; font-family:'Roboto', sans-serif; color:#222; text-align:center; font-weight:500;}
-        .lf_body .lfinp {border:0; border-bottom:solid 1px #333; width:100%; height:50px; line-height:50px;}
+        .lftit h1 {font-size:34px; line-height:1; font-family:'Roboto', sans-serif; color:var(--color3); text-align:center; font-weight:500;}
+        .lf_body .lfinp {border:0; border-bottom:solid 1px #333; width:100%; height:50px; line-height:50px; background-color: var(--bg-color);}
         .lf_body input:focus {border:0; border-bottom:solid 1px #333; outline-style:none;}
         .lf_body .arrbtn {
-            display:inline-block; padding-right:30px; background:url('../img/login_arr.gif') no-repeat right center;
+            display:inline-block; padding-right:30px; background:var(--login-arr) no-repeat right center;
             font-size:14px; color:#777;
         }
         .lf_bottom {font-size:0; width:100%; display:table;}
