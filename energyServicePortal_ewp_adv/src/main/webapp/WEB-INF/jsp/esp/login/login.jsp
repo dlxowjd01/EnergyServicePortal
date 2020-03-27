@@ -518,6 +518,16 @@
 		<div id="page-wrapper">
 			<nav class="clear">
 				<div class="nav_brand ewp"><a href="/">ENCORED</a></div>
+				<!-- 테마 선택 -->
+				<div class="nav_theme">
+					<div class="switcher">
+						<input type="radio" name="balance" value="light" id="light" class="switcher__input switcher__input--light" checked="" onClick="userTheme('light');">
+						<label for="light" class="switcher__label">Light</label>
+						<input type="radio" name="balance" value="dark" id="dark" class="switcher__input switcher__input--dark" onClick="userTheme('dark');">
+						<label for="dark" class="switcher__label">Dark</label>
+						<span class="switcher__toggle"></span>
+					</div>
+				</div>
 				<!-- 언어 선택 -->
 				<div class="lang dropdown">
 				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">${sessionScope.sessionLangNm }
