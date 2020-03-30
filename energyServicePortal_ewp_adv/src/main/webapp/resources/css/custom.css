@@ -216,7 +216,7 @@ select {
 	--bg-color: #fff;
 	--bg-img: url('../img/login_bg.jpg');
 	--box-color: rgba(0, 0, 0, 0.05);
-	--login-arr: var(--login-arr);
+	--login-arr: url('../img/login_arr.gif');
 	--color1: #ccc;
 	--color2: #999;
 	--color3: #000;
@@ -236,6 +236,19 @@ html.darkmode:root {
 	--color1: #999;
 	--color2: #ccc;
 	--color3: #fff;
+}
+
+/* Change the white to any color ;) */
+html.darkmode input:-webkit-autofill,
+html.darkmode input:-webkit-autofill:hover,
+html.darkmode input:-webkit-autofill:focus,
+html.darkmode input:-webkit-autofill:active  {
+	transition: background-color 5000s ease-in-out 0s;
+}
+
+/*Change text in autofill textbox*/
+html.darkmode input:-webkit-autofill {
+	-webkit-text-fill-color: var(--color3) !important;
 }
 
 body {
@@ -284,10 +297,10 @@ body {
 	height: 100%;
 	margin-top:3px;
 	padding: 4px;
-	background: #fff;
+	background: var(--bg-color);
 	width: 210px;
 	border-radius: 30px;
-	border: solid 1px #ddd;
+	border: solid 1px var(--color1);
 	position: relative;
 }
 
@@ -300,7 +313,7 @@ body {
 	width: 50%;
 	font-size: 12px;
 	line-height: 30px;
-	color: #000;
+	color: var(--color3);
 	text-align: center;
 	cursor: pointer;
 	position: inherit;
@@ -326,7 +339,7 @@ body {
 }
 
 .switcher__input:checked + .switcher__label {
-	color: #fff;
+	color: var(--bg-color);
 }
 
 .switcher__input--dark:checked ~ .switcher__toggle {
@@ -574,7 +587,7 @@ nav .all-menu .menu-group > ul > li > dl > dd ul label.on {color:#fff; text-deco
 
 /* 버튼 */
 nav .all-menu .menu-group .btn-group {position:absolute; bottom:20px; right:20px;}
-nav .all-menu .menu-group .btn-group button {border:0; font-size:12px; outline-style:none; padding:5px 10px; color:#111; background:#f5f5f5; border-radius:2px;}
+nav .all-menu .menu-group .btn-group button {border:0; font-size:12px; outline-style:none; padding:5px 10px; color:var(--color3); background:var(--bg-color); border-radius:2px;}
 
 
 /* 반응형 미디어 쿼리 */
@@ -593,7 +606,7 @@ nav .all-menu .menu-group .btn-group button {border:0; font-size:12px; outline-s
 	nav .site.form-group .btn {height:56px;}
 	nav .site .dropdown-menu > li > a {padding:5px 12px; font-size:18px;}
 	nav .site .dropdown-menu > li > ul {margin-bottom:8px;}
-	nav .site .dropdown-menu > li > ul li a {display:block; padding:7px 24px; font-size:16px; color:#777;}	
+	nav .site .dropdown-menu > li > ul li a {display:block; padding:7px 24px; font-size:16px; color:#777;}
 	nav .nav_right {margin-top:30px;}
 	nav .nav_right li {font-size:15px; letter-spacing:1.5px;}
 	nav .nav_right li + li {margin-left:30px;}
@@ -696,9 +709,9 @@ nav .all-menu .menu-group .btn-group button {border:0; font-size:12px; outline-s
 /* 페이지 하단 */
 footer {margin-top:8px; height:50px; padding-top:12px;}
 footer .ft_menu {font-size:0; text-align:left;}
-footer .ft_menu a {display:inline-block; font-size:12px; color:#7d848a; font-weight:bold;}
+footer .ft_menu a {display:inline-block; font-size:12px; color:var(--color2); font-weight:bold;}
 footer .ft_menu a + a {margin-left:20px;}
-footer .copyright {font-family:'Roboto', sans-serif; font-size:10px; font-weight:500; color:#333841; letter-spacing:0.3px;}
+footer .copyright {font-family:'Roboto', sans-serif; font-size:10px; font-weight:500; color:var(--color3); letter-spacing:0.3px;}
 
 /* 반응형 미디어 쿼리 */
 @media all and (min-width:3000px) {
@@ -769,8 +782,8 @@ footer .copyright {font-family:'Roboto', sans-serif; font-size:10px; font-weight
 .btn-primary:active.focus,
 .btn-primary.active.focus,
 .open > .dropdown-toggle.btn-primary.focus {
-	font-family:'Roboto', sans-serif; color:#333841; font-size:13px; font-weight:500; background:transparent; 
-	border:solid 2px #9ba3aa; border-radius:200px; outline-style:none; box-shadow:none;
+	font-family:'Roboto', sans-serif; color:var(--color3); font-size:13px; font-weight:500; background:transparent;
+	border:solid 2px var(--color1); border-radius:200px; outline-style:none; box-shadow:none;
 }
 
 .dropdown .btn {
@@ -786,7 +799,8 @@ footer .copyright {font-family:'Roboto', sans-serif; font-size:10px; font-weight
 	height:auto;
     max-height:300px;
     overflow-x:hidden;
-
+	background-color: var(--bg-color);
+	color: var(--color3);
 }
 
 .btn-block {display:block !important; width:100% !important;}
@@ -2786,24 +2800,47 @@ input[type="radio"] .styled:checked + label::after {
 	## PC 언어선택 ##
 */
 #sidebar .lang {position:absolute; top:30px; left:50%; transform:translateX(-50%); z-index:10;}
-#sidebar .lang.dropdown .btn-primary {border:0; font-size:15px; font-weight:400; color:#fff;}
+#sidebar .lang.dropdown .btn-primary {border:0; font-size:15px; font-weight:400; color:var(--color3);}
 #sidebar .lang.dropdown .btn {padding:0 30px 0 10px; height:36px;}
-#sidebar .lang.dropdown .dropdown-menu > li > a {font-size:15px;}
+#sidebar .lang.dropdown .dropdown-menu > li > a,
+#sidebar .lang.dropdown .dropdown-menu > li > a:focus,
+#sidebar .lang.dropdown .dropdown-menu > li > a:hover {
+	font-size: 15px;
+	color: var(--color3);
+	background-color: var(--bg-color);
+}
 #sidebar .lang.dropdown .btn .caret {right:10px; background:url('../img/m_select_down.png') no-repeat 0 0;}
 /* 반응형 */
 @media (min-width:3000px) {
 	#sidebar .lang {top:50px;}
 	#sidebar .lang.dropdown .btn-primary {font-size:17px;}
-	#sidebar .lang.dropdown .dropdown-menu > li > a {font-size:17px;}
+	#sidebar .lang.dropdown .dropdown-menu > li > a,
+	#sidebar .lang.dropdown .dropdown-menu > li > a:focus,
+	#sidebar .lang.dropdown .dropdown-menu > li > a:hover {
+		font-size: 17px;
+		color: var(--color3);
+		background-color: var(--bg-color);
+	}
 }
 
 /* 
 	## MOBILE 언어선택 ##
 */
 nav .lang {display:none; position:absolute; top:0; right:0;}
-nav .lang.dropdown .btn-primary {border:0 !important; font-size:18px !important; font-weight:400 !important; color:#3d4250;}
+nav .lang.dropdown .btn-primary {
+	border: 0 !important;
+	font-size: 18px !important;
+	font-weight: 400 !important;
+	color: var(--color3);
+}
 nav .lang.dropdown .btn {padding:0 30px 0 10px; height:auto;}
-nav .lang.dropdown .dropdown-menu > li > a {padding:5px 20px; font-size:15px !important;}
+nav .lang.dropdown .dropdown-menu > li > a,
+nav .lang.dropdown .dropdown-menu > li > a:focus,
+nav .lang.dropdown .dropdown-menu > li > a:hover {
+	padding: 5px 20px;
+	font-size: 15px !important;
+	color: var(--color2);
+}
 nav .lang.dropdown .btn .caret {right:10px; background:url('../img/select_down.png') no-repeat 0 0;}
 /* 반응형 */
 @media (max-width:768px) {

@@ -31,5 +31,3 @@ if (!!window.matchMedia) {
     });
   });
 }
-
-userTheme();
