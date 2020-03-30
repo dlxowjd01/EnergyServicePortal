@@ -80,19 +80,11 @@
 			                			<a href="#">사업소별</a>
 					                	<ul>
 					                		<li><a href="">전체</a></a></li>
-					                		<li><a href="">사업소#1</a></li>
-					                		<li><a href="">사업소#2</a></li>
-					                		<li><a href="">사업소#3</a></li>
-					                		<li><a href="">사업소#4</a></li>
-					                		<li><a href="">사업소#5</a></li>
-					                		<li><a href="">사업소#6</a></li>
-					                		<li><a href="">사업소#7</a></li>
-					                		<li><a href="">사업소#8</a></li>
-					                		<li><a href="">사업소#9</a></li>
-					                		<li><a href="">사업소#10</a></li>
-					                		<li><a href="">사업소#11</a></li>
-					                		<li><a href="">사업소#12</a></li>
-					                		<li><a href="">사업소#13</a></li>
+					                		<li><a href="/dashboard/smain.do">당진태양광</a></li>
+					                		<li><a href="/dashboard/emain.do">제일화성</a></li>
+					                		<li><a href="/dashboard/emain.do">동국제강</a></li>
+					                		<li><a href="/dashboard/dmain.do">진양화학</a></li>
+					                		<li><a href="/dashboard/emain.do">코닝정밀</a></li>
 					                	</ul>
 			                		</dd>
 			                	</dl>		                    	
@@ -107,14 +99,14 @@
 					                		<li>
 					                			<a href="#">그룹#1</a>
 					                			<ul>
-					                				<li><a href="">사업소#1</a></li>
+					                				<li><a href="/dashboard/smain.do">당진태양광</a></li>
 					                			</ul>
 					                		</li>
 					                		<li>
 					                			<a href="#">그룹#2</a>
 					                			<ul>
-					                				<li><a href="">사업소#2</a></li>
-					                				<li><a href="">사업소#3</a></li>
+					                				<li><a href="/dashboard/emain.do">제일화성</a></li>
+					                				<li><a href="/dashboard/emain.do">동국제강</a></li>
 					                			</ul>
 					                		</li>
 					                	</ul>										
@@ -127,14 +119,14 @@
 									<dd>
 					                	<a href="#">중개거래</a>
 					                	<ul>
-					                		<li><a href="">자원이름#1</a></li>
+					                		<li><a href="/dashboard/jmain.do">자원이름#1</a></li>
 					                		<li><a href="">자원이름#2</a></li>
 					                		<li><a href="">자원이름#3</a></li>
 					                	</ul>										
 									</dd>
 								</dl>
 			                </li>
-			                <li>
+			                <!-- <li>
 								<dl>
 									<dt></dt>
 									<dd>
@@ -145,7 +137,7 @@
 					                	</ul>										
 									</dd>
 								</dl>
-			                </li>	
+			                </li>	 -->
 			                <li class="lo-type lo">
 								<dl>
 									<dt>지역 및 유형 선택</dt>

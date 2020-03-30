@@ -1,6 +1,27 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
 
+	<script type="text/javascript">
+	$(function(){ 
+    	$("input[name='deviceStatus']").on("click", function() {
+			var flag = $(this).is(":checked");
+			var str = $(this).val();
+			
+			var $tbody = $(".intable").find('tbody');
+			if(flag){
+				if(str == "정상") $tbody.find('.flag1').css("display", "");
+				if(str == "경고") $tbody.find('.flag2').css("display", "");
+				if(str == "이상") $tbody.find('.flag3').css("display", "");
+			} else {
+				if(str == "정상") $tbody.find('.flag1').css("display", "none");
+				if(str == "경고") $tbody.find('.flag2').css("display", "none");
+				if(str == "이상") $tbody.find('.flag3').css("display", "none");
+			}
+			
+        });
+	});
+    </script>
+
 	<!-- 메인페이지용 스타일/스크립트 파일 -->
 	<link type="text/css" href="/css/custom.css" rel="stylesheet">
 	<script type="text/javascript" src="/js/modules/rounded-corners.js"></script>
@@ -12,7 +33,7 @@
 							<div class="col-sm-12">
 								<div class="indiv smain_pv clear">
 									<div class="chart_top clear">
-										<h2 class="ntit">월별 PV발전량 종합</h2>
+										<h2 class="ntit">월별 발전량 종합</h2>
 									</div>
 									<div class="inchart">
 										<div id="schart1"></div>
@@ -466,7 +487,7 @@
 							<div class="col-sm-12">
 								<div class="indiv gmain_map smain_circle">
 									<div class="chart_top clear">
-										<h2 class="ntit">사업소 현황</h2>
+										<h2 class="ntit">${siteName }<c:if test="${empty siteName }">당진태양광</c:if></h2>
 									</div>
 									<div class="chart_box">
 										<div class="chart_info">
@@ -1072,23 +1093,23 @@
 									<div class="alarm_notice">
 										<ul>
 											<li>
-												<a href="javascript:list_detail_open('list3');">사업소#3 - 인버터21 발전 정지</a>
+												<a href="javascript:list_detail_open('list3');">동국제강 - 인버터21 발전 정지</a>
 												<span>2018-08-12 11:41:26</span>
 											</li>
 											<li>
-												<a href="#;">사업소#3 - 인버터21 발전 정지</a>
+												<a href="#;">동국제강 - 인버터21 발전 정지</a>
 												<span>2018-08-12 11:41:26</span>
 											</li>
 											<li>
-												<a href="#;">사업소#3 - 인버터21 발전 정지</a>
+												<a href="#;">동국제강 - 인버터21 발전 정지</a>
 												<span>2018-08-12 11:41:26</span>
 											</li>
 											<li>
-												<a href="#;">사업소#3 - 인버터21 발전 정지</a>
+												<a href="#;">동국제강 - 인버터21 발전 정지</a>
 												<span>2018-08-12 11:41:26</span>
 											</li>
 											<li>
-												<a href="#;">사업소#3 - 인버터21 발전 정지</a>
+												<a href="#;">동국제강 - 인버터21 발전 정지</a>
 												<span>2018-08-12 11:41:26</span>
 											</li>
 										</ul>
@@ -1105,9 +1126,9 @@
 											<input type="text" class="input" value="">
 											<button type="submit">적용</button>
 											<div class="check-option">
-												<label><input type="checkbox"> 정상</label>
-												<label><input type="checkbox"> 경고</label>
-												<label><input type="checkbox"> 이상</label>
+												<label><input type="checkbox" name="deviceStatus" value="정상" checked> 정상</label>
+												<label><input type="checkbox" name="deviceStatus" value="경고" checked> 경고</label>
+												<label><input type="checkbox" name="deviceStatus" value="이상" checked> 이상</label>
 											</div>
 										</div>									
 									</div>
@@ -1164,7 +1185,23 @@
 																</tr>
 															</thead>
 															<tbody>
-																<tr>
+																<tr class="flag1">
+																	<td>정상</td>
+																	<td>인버터#1</td>
+																	<td>5kWh</td>
+																	<td>5kWh</td>
+																	<td>99%</td>
+																	<td>152kWh</td>
+																</tr>
+																<tr class="flag2">
+																	<td>경고</td>
+																	<td>인버터#2</td>
+																	<td>5kWh</td>
+																	<td>5kWh</td>
+																	<td>99%</td>
+																	<td>152kWh</td>
+																</tr>
+																<tr class="flag3">
 																	<td>이상</td>
 																	<td>인버터#1</td>
 																	<td>5kWh</td>
@@ -1172,7 +1209,7 @@
 																	<td>99%</td>
 																	<td>152kWh</td>
 																</tr>
-																<tr>
+																<tr class="flag3">
 																	<td>이상</td>
 																	<td>인버터#1</td>
 																	<td>5kWh</td>
@@ -1180,7 +1217,7 @@
 																	<td>99%</td>
 																	<td>152kWh</td>
 																</tr>
-																<tr>
+																<tr class="flag3">
 																	<td>이상</td>
 																	<td>인버터#1</td>
 																	<td>5kWh</td>
@@ -1188,7 +1225,7 @@
 																	<td>99%</td>
 																	<td>152kWh</td>
 																</tr>
-																<tr>
+																<tr class="flag3">
 																	<td>이상</td>
 																	<td>인버터#1</td>
 																	<td>5kWh</td>
@@ -1196,7 +1233,7 @@
 																	<td>99%</td>
 																	<td>152kWh</td>
 																</tr>
-																<tr>
+																<tr class="flag3">
 																	<td>이상</td>
 																	<td>인버터#1</td>
 																	<td>5kWh</td>
@@ -1204,7 +1241,7 @@
 																	<td>99%</td>
 																	<td>152kWh</td>
 																</tr>
-																<tr>
+																<tr class="flag3">
 																	<td>이상</td>
 																	<td>인버터#1</td>
 																	<td>5kWh</td>
@@ -1212,7 +1249,7 @@
 																	<td>99%</td>
 																	<td>152kWh</td>
 																</tr>
-																<tr>
+																<tr class="flag3">
 																	<td>이상</td>
 																	<td>인버터#1</td>
 																	<td>5kWh</td>
@@ -1220,23 +1257,7 @@
 																	<td>99%</td>
 																	<td>152kWh</td>
 																</tr>
-																<tr>
-																	<td>이상</td>
-																	<td>인버터#1</td>
-																	<td>5kWh</td>
-																	<td>5kWh</td>
-																	<td>99%</td>
-																	<td>152kWh</td>
-																</tr>
-																<tr>
-																	<td>이상</td>
-																	<td>인버터#1</td>
-																	<td>5kWh</td>
-																	<td>5kWh</td>
-																	<td>99%</td>
-																	<td>152kWh</td>
-																</tr>
-																<tr>
+																<tr class="flag3">
 																	<td>이상</td>
 																	<td>인버터#1</td>
 																	<td>5kWh</td>

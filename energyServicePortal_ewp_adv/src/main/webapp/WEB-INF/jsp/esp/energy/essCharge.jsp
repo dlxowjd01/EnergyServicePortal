@@ -5,13 +5,13 @@
 						<h1 class="page-header">피크저감 ESS</h1>
 						<div class="sa_select">
 							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">사업소#1
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">당진태양광
 								<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 								  <li class="on"><a href="#">전체</a></li>
-								  <li><a href="#">사업소#1</a></li>
-								  <li><a href="#">사업소#2</a></li>
-								  <li><a href="#">사업소#3</a></li>
+								  <li><a href="#">당진태양광</a></li>
+								  <li><a href="#">제일화성</a></li>
+								  <li><a href="#">동국제강</a></li>
 								</ul>
 							</div>
 						</div>

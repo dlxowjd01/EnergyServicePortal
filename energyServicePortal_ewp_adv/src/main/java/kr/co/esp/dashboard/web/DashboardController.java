@@ -56,12 +56,16 @@ public class DashboardController {
 	@RequestMapping(value = "/dashboard/dmain.do")
 	public String groupDashboard(HttpServletRequest request, HttpSession session, Model model) {
 		System.out.println("/dashboard/dmain.do");
+		String linkSiteName = request.getParameter("linkSiteName");
+		model.addAttribute("siteName", linkSiteName);
 		return "esp/dashboard/dmain";
 	}
 	
 	@RequestMapping(value = "/dashboard/emain.do")
 	public String emain(HttpServletRequest request, HttpSession session, Model model) {
 		System.out.println("/dashboard/emain.do");
+		String linkSiteName = request.getParameter("linkSiteName");
+		model.addAttribute("siteName", linkSiteName);
 		return "esp/dashboard/emain";
 	}
 	
@@ -80,6 +84,8 @@ public class DashboardController {
 	@RequestMapping(value = "/dashboard/smain.do")
 	public String smain(HttpServletRequest request, HttpSession session, Model model) {
 		System.out.println("/dashboard/smain.do");
+		String linkSiteName = request.getParameter("linkSiteName");
+		model.addAttribute("siteName", linkSiteName);
 		return "esp/dashboard/smain";
 	}
 	

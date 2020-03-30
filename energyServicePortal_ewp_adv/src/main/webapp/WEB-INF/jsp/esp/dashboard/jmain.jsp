@@ -1,6 +1,42 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
 
+	<script type="text/javascript">
+	$(function(){ 
+    	$("input[name='deviceStatus']").on("click", function() {
+			var flag = $(this).is(":checked");
+			var str = $(this).val();
+			
+			var $tbody = $(".intable").find('tbody');
+			if(flag){
+				if(str == "정상") $tbody.find('.flag1').css("display", "");
+				if(str == "경고") $tbody.find('.flag2').css("display", "");
+				if(str == "이상") $tbody.find('.flag3').css("display", "");
+			} else {
+				if(str == "정상") $tbody.find('.flag1').css("display", "none");
+				if(str == "경고") $tbody.find('.flag2').css("display", "none");
+				if(str == "이상") $tbody.find('.flag3').css("display", "none");
+			}
+			
+        });
+	});
+
+	function linkSiteDashboard(t) {
+		var url = "", str = "";
+		if(t == 1) {str = "당진태양광"; url = '/dashboard/smain.do';}
+		if(t == 2) {str = "제일화성"; url = '/dashboard/emain.do';}
+		if(t == 3) {str = "동국제강"; url = '/dashboard/emain.do';}
+		if(t == 4) {str = "진양화학"; url = '/dashboard/dmain.do';}
+		if(t == 5) {str = "코닝정밀"; url = '/dashboard/emain.do';}
+		$("#linkSiteName").val(str);
+		document.linkSiteForm.action = url;
+		$("#linkSiteForm").submit();
+	}
+    </script>
+<form id="linkSiteForm" name="linkSiteForm" method="post">
+<input type="hidden" id="linkSiteName" name="linkSiteName" value="">
+</form>
+
 	<!-- 메인페이지용 스타일/스크립트 파일 -->
 	<link type="text/css" href="/css/custom.css" rel="stylesheet">
 	<script type="text/javascript" src="/js/modules/rounded-corners.js"></script>
@@ -161,7 +197,7 @@
 										        name: '충전',
 										        type: 'column',
 										        color: '#438fd7',
-										        data: [-10, -10, -50, -40, -90, -40, -70, -60, -30, -20, -40, -30],
+										        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 										        tooltip: {
 										            valueSuffix: 'kWh'
 										        }
@@ -170,7 +206,7 @@
 										        name: '방전',
 										        type: 'column',
 										        color: '#84848F',
-										        data: [50, 50, 60, 30, 50, 60, 30, 50, 90, 60, 60, 50],
+										        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 										        tooltip: {
 										            valueSuffix: 'kWh'
 										        }
@@ -179,7 +215,7 @@
 										        name: '태양광',
 										        type: 'column',
 										        color: '#E49E2E',
-										        data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80],
+										        data: [3160, 3250, 3010],//[50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80],
 										        tooltip: {
 										            valueSuffix: 'kWh'
 										        }
@@ -197,7 +233,7 @@
 										        name: '소수력',
 										        type: 'column',
 										        color: '#89B8E5',
-										        data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80],
+										        data: [1501, 1201, 1301],//[50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80],
 										        tooltip: {
 										            valueSuffix: 'kWh'
 										        }
@@ -208,7 +244,7 @@
 										        color: '#E85B30',
 										        dashStyle: 'ShortDash',
 										        yAxis: 1,
-										        data: [100, 110, 120, 130, 150, 180, 160, 130, 90, 110, 160, 120],
+										        data: [100, 110, 120/* , 130, 150, 180, 160, 130, 90, 110, 160, 120 */],
 										        tooltip: {
 										            valueSuffix: '만원'
 										        }
@@ -443,7 +479,7 @@
 										        name: '충전',
 										        type: 'column',
 										        color: '#438fd7',
-										        data: [-10, -10, -50, -40, -90, -40, -70, -60, -30, -20, -40, -30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+										        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//[-10, -10, -50, -40, -90, -40, -70, -60, -30, -20, -40, -30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 										        tooltip: {
 										            valueSuffix: 'kWh'
 										        }
@@ -452,7 +488,7 @@
 										        name: '방전',
 										        type: 'column',
 										        color: '#84848F',
-										        data: [50, 50, 60, 30, 50, 60, 30, 50, 90, 60, 60, 50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+										        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//[50, 50, 60, 30, 50, 60, 30, 50, 90, 60, 60, 50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 										        tooltip: {
 										            valueSuffix: 'kWh'
 										        }
@@ -461,7 +497,7 @@
 										        name: '태양광',
 										        type: 'column',
 										        color: '#E49E2E',
-										        data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+										        data: [123, 112, 185, 123, 125, 10, 123, 150, 0, 0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],//[50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 										        tooltip: {
 										            valueSuffix: 'kWh'
 										        }
@@ -470,7 +506,7 @@
 										        name: '풍력',
 										        type: 'column',
 										        color: '#13AF67',
-										        data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+										        data: [50, 10, 30, 70, 20, 20, 50, 20, 0, 0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],//[50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 										        tooltip: {
 										            valueSuffix: 'kWh'
 										        }
@@ -479,7 +515,7 @@
 										        name: '소수력',
 										        type: 'column',
 										        color: '#89B8E5',
-										        data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+										        data: [112, 111, 113, 115, 112, 121, 111, 130, 0, 0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],//[50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 										        tooltip: {
 										            valueSuffix: 'kWh'
 										        }
@@ -490,7 +526,7 @@
 										        color: '#E85B30',
 										        dashStyle: 'ShortDash',
 										        yAxis: 1,
-										        data: [10, 50, 70, 30, 50, 20, 90, 70, 90, 60, 60, 20,,,,,,,,,,,,,,,,,,],
+										        data: [10, 50, 70, 30, 50, 20, 90, 70, ,,,,,,,,,,,,,,,,,,,,,],//[10, 50, 70, 30, 50, 20, 90, 70, 90, 60, 60, 20,,,,,,,,,,,,,,,,,,],
 										        tooltip: {
 										            valueSuffix: '만원'
 										        }
@@ -798,7 +834,7 @@
 												        <tr>
 												            <th></th>
 												            <th>전일발전</th>
-												            <th>전일예측</th>
+												            <th>전일계획</th>
 												        </tr>
 												    </thead>
 												    <tbody>
@@ -979,7 +1015,7 @@
 														    series: [{
 														        color: '#438fd7' /* 전일발전 */
 														    },{
-														        color: '#84848F' /* 전일예측 */
+														        color: '#84848F' /* 전일계획 */
 														    }],
 
 														    /* 반응형 */
@@ -1132,7 +1168,7 @@
 															},
 
 															title: {																
-														        text: '102Wh', // 총용량 표기
+														        text: '1,226W', // 총용량 표기
 														        align: 'center',
 														        verticalAlign: 'middle',
 														        y:0,
@@ -1249,8 +1285,8 @@
 											</div>
 											<div class="ci_right">
 												<ul>
-													<li><strong>태양광</strong> <span>98</span><em>MW</em></li>
-													<li><strong>소수력</strong> <span>4</span><em>MW</em></li>
+													<li><strong>태양광</strong> <span>1,101</span><em>kW</em></li>
+													<li><strong>소수력</strong> <span>125</span><em>kW</em></li>
 													<li><strong>ESS</strong> <span>0</span><em>MW</em></li>
 												</ul>
 											</div>
@@ -1270,7 +1306,7 @@
 													<th>총 사업소</th>
 													<th>총 설비수</th>
 													<th>총 출력용량</th>
-													<th>금일 예상출력</th>
+													<th>금일 계획출력</th>
 													<th>금일 누적출력</th>
 												</tr>
 											</thead>
@@ -1278,9 +1314,9 @@
 												<tr>
 													<td>16개소</td>
 													<td>35대</td>
-													<td>13MW</td>
-													<td>12MW</td>
-													<td>8MW</td>
+													<td>2,500MW</td>
+													<td>3,207kWh</td>
+													<td>2,018kWh</td>
 												</tr>
 											</tbody>
 										</table>
@@ -1514,7 +1550,7 @@
 													<!-- 현재 시간 위치 52% -->
 													<em style="left:52%">14시 35분</em>
 												</dt>
-												<dd><span>1.5</span><em>MWh</em></dd>
+												<dd><span>1,501</span><em>MWh</em></dd>
 											</dl>
 										</div>
 										<div class="real_time">
@@ -1627,10 +1663,10 @@
 													    series: [{
 													        name: '실시간 출력량',
 													        data: [
-													            ['사업소#1', 20, 30], /* 타이틀 | 출력량 | 컬럼폭(전체합 100% 기준으로 분할) */
-													            ['사업소#2', 50, 20],
-													            ['사업소#3', 60, 40],
-													            ['사업소#4', 40, 10]
+													            ['당진태양광', 20, 30], /* 타이틀 | 출력량 | 컬럼폭(전체합 100% 기준으로 분할) */
+													            ['완도소수력', 50, 20],
+													            ['당진주차장', 60, 40],
+													            ['본사주차장', 40, 10]
 													        ],
 													        dataLabels: {
 													            enabled: false,
@@ -2071,23 +2107,23 @@
 									<div class="alarm_notice">
 										<ul>
 											<li>
-												<a href="javascript:list_detail_open('list3');">사업소#3 - 인버터21 발전 정지</a>
+												<a href="javascript:list_detail_open('list3');">동국제강 - 인버터21 발전 정지</a>
 												<span>2018-08-12 11:41:26</span>
 											</li>
 											<li>
-												<a href="#;">사업소#3 - 인버터21 발전 정지</a>
+												<a href="#;">동국제강 - 인버터21 발전 정지</a>
 												<span>2018-08-12 11:41:26</span>
 											</li>
 											<li>
-												<a href="#;">사업소#3 - 인버터21 발전 정지</a>
+												<a href="#;">동국제강 - 인버터21 발전 정지</a>
 												<span>2018-08-12 11:41:26</span>
 											</li>
 											<li>
-												<a href="#;">사업소#3 - 인버터21 발전 정지</a>
+												<a href="#;">동국제강 - 인버터21 발전 정지</a>
 												<span>2018-08-12 11:41:26</span>
 											</li>
 											<li>
-												<a href="#;">사업소#3 - 인버터21 발전 정지</a>
+												<a href="#;">동국제강 - 인버터21 발전 정지</a>
 												<span>2018-08-12 11:41:26</span>
 											</li>
 										</ul>
@@ -2103,9 +2139,9 @@
 											<input type="text" class="input" value="사업소">
 											<button type="submit">검색</button>
 											<div class="check-option">
-												<label><input type="checkbox"> 정상</label>
-												<label><input type="checkbox"> 경고</label>
-												<label><input type="checkbox"> 이상</label>
+												<label><input type="checkbox" name="deviceStatus" value="정상" checked> 정상</label>
+												<label><input type="checkbox" name="deviceStatus" value="경고" checked> 경고</label>
+												<label><input type="checkbox" name="deviceStatus" value="이상" checked> 이상</label>
 											</div>
 										</div>
 										<div class="fr">
@@ -2148,18 +2184,18 @@
 											      </tr>
 											    </thead>
 											    <tbody>
-											      <tr class="dbclickopen">
+											      <tr class="dbclickopen flag1">
 											        <td><span class="status status_err" title="통신이상">통신이상</span></td>
 											        <td><!--<span class="battery_icon batter_in">충전</span>--></td>
 											        <td>0</td>
 											        <td>0</td>
-											        <td><div class="cname">사업소#1</div></td>
-												    <td>800</td>											        
-											        <td>500</td>
-											        <td>13.2</td>
-											        <td>12.1</td>
+											        <td><div class="cname">보령태양광</div></td>
+												    <td>200</td>											        
+											        <td>-</td>
+											        <td>-</td>
+											        <td>-</td>
 											      </tr>
-											      <tr class="detail_info">
+											      <tr class="detail_info list1 flag1">
 											      	<td colspan="9">
 											      		<div class="di_wrap">
 											      			<div class="type1">								      			
@@ -2285,9 +2321,9 @@
 																		</div>																			
 												      				</dt>
 												      				<dd>
-												      					<div class="link"><a href="#" class="btn_cancel">대시보드 바로가기</a></div>
+												      					<div class="link"><a href="javascript:linkSiteDashboard(1);" class="btn_cancel">대시보드 바로가기</a></div>
 												      					<div class="di_top">
-																      		<span class="sbj">사업소#1</span>
+																      		<span class="sbj">당진태양광</span>
 																      		<span class="type_img type_sun">태양광</span>
 																      		<!--
 																      		<span class="type_img type_wind">풍력</span>
@@ -2337,18 +2373,18 @@
 											      		</div>
 											      	</td>
 											      </tr>
-											      <tr class="dbclickopen status_error">
+											      <tr class="dbclickopen status_error flag2">
 											      	<td><span class="status status_drv" title="운전">운전</span></td>
-											      	<td><span class="battery_icon batter_in">충전</span></td>
+											      	<td><!-- <span class="battery_icon batter_in">충전</span> --></td>
 											      	<td>2</td>
 											      	<td>0</td>
-											        <td><div class="cname">사업소#2</div></td>
-												    <td>800</td>
-											        <td>500</td>
-											        <td>13.2</td>
-											        <td>12.1</td>
+											        <td><div class="cname">완도소수력</div></td>
+												    <td>300</td>
+											        <td>-</td>
+											        <td>980</td>
+											        <td>540</td>
 											      </tr>
-											      <tr class="detail_info">
+											      <tr class="detail_info list2 flag2">
 											      	<td colspan="9">
 											      		<div class="di_wrap">
 											      			<div class="type2">								      			
@@ -2481,9 +2517,9 @@
 												      					</div>
 												      				</dt>
 												      				<dd>	
-													      				<div class="link"><a href="#" class="btn_cancel">대시보드 바로가기</a></div>	
+													      				<div class="link"><a href="javascript:linkSiteDashboard(2);" class="btn_cancel">대시보드 바로가기</a></div>	
 													      				<div class="di_top">
-																      		<span class="sbj">사업소#2</span>
+																      		<span class="sbj">제일화성</span>
 																      		<span class="type_img type_battery">배터리 룸</span>
 																      		<span>배터리 룸 </span>
 																      		<span>온도 <em>30</em>℃</span>
@@ -2526,28 +2562,28 @@
 											      		</div>
 											      	</td>
 											      </tr>
-											      <tr class="dbclickopen">
+											      <tr class="dbclickopen flag1">
 											      	<td><span class="status status_drv" title="운전">운전</span></td>
-											      	<td><span class="battery_icon batter_out">방전</span></td>
+											      	<td><!-- <span class="battery_icon batter_out">방전</span> --></td>
 											      	<td>0</td>
 											      	<td>0</td>
-											        <td><div class="cname">사업소#3</div></td>
-												    <td>800</td>
-											        <td>500</td>
-											        <td>13.2</td>
-											        <td>12.1</td>
+											        <td><div class="cname">보령주차장</div></td>
+												    <td>1,500</td>
+											        <td>-</td>
+											        <td>1,405</td>
+											        <td>720</td>
 											      </tr>
-											      <tr class="detail_info list3">
+											      <tr class="detail_info list4 flag1">
 											      	<td colspan="9">
 											      		<div class="di_wrap">
 											      			<div class="type1">
 												      			<dl>
 												      				<dt>
 																		<div class="inchart">
-																			<div id="type_chart11" style="height:130px"></div>
+																			<div id="type_chart11_1" style="height:130px"></div>
 																			<script language="JavaScript">
 																			$(function () {														
-																				var pieChart11 = Highcharts.chart('type_chart11', {
+																				var pieChart11_1 = Highcharts.chart('type_chart11_1', {
 																					chart: {
 																						marginTop:0,
 																						marginLeft:0,
@@ -2663,9 +2699,9 @@
 																		</div>	
 												      				</dt>
 												      				<dd>
-													      				<div class="link"><a href="#" class="btn_cancel">대시보드 바로가기</a></div>	
+													      				<div class="link"><a href="javascript:linkSiteDashboard(4);" class="btn_cancel">대시보드 바로가기</a></div>	
 													      				<div class="di_top">
-																      		<span class="sbj">사업소#3</span>
+																      		<span class="sbj">동국제강</span>
 																      		<span class="type_img type_sun">태양광</span>
 																      		<!--
 																      		<span class="type_img type_wind">풍력</span>
@@ -2716,10 +2752,10 @@
 																<dl>
 												      				<dt>
 																		<div class="inchart">
-																			<div id="type_chart22" style="height:130px;"></div>
+																			<div id="type_chart22_1" style="height:130px;"></div>
 																			<script language="JavaScript">
 																			$(function () {														
-																				var pieChart22 = Highcharts.chart('type_chart22', {
+																				var pieChart22_1 = Highcharts.chart('type_chart22_1', {
 																					chart: {
 																						marginTop:0,
 																						marginLeft:0,
@@ -2843,7 +2879,7 @@
 												      				</dt>
 												      				<dd>	
 													      				<div class="di_top">
-																      		<span class="sbj">사업소#2</span>
+																      		<span class="sbj">제일화성</span>
 																      		<span class="type_img type_battery">배터리 룸</span>
 																      		<span>배터리 룸 </span>
 																      		<span>온도 <em>30</em>℃</span>
@@ -2886,129 +2922,192 @@
 											      		</div>
 											      	</td>
 											      </tr>
-											      <tr class="dbclickopen">
+											      <tr class="dbclickopen status_alert flag3">
 											      	<td><span class="status status_drv" title="운전">운전</span></td>
-											      	<td><!--<span class="battery_icon batter_out">방전</span>--></td>
+											      	<td><!-- <span class="battery_icon batter_in">충전</span> --></td>
 											      	<td>0</td>
 											      	<td>0</td>
-											        <td><div class="cname">사업소#4</div></td>
-												    <td>800</td>
-											        <td>500</td>
-											        <td>13.2</td>
-											        <td>12.1</td>
+											        <td><div class="cname">본사주차장</div></td>
+												    <td>300</td>
+											        <td>-</td>
+											        <td>2,800</td>
+											        <td>1,401</td>
 											      </tr>
-											      <tr class="detail_info">
+											      <tr class="detail_info list5 flag1">
 											      	<td colspan="9">
 											      		<div class="di_wrap">
-											      			
-											      		</div>
-											      	</td>
-											      </tr>
-											      <tr class="dbclickopen">
-											      	<td><span class="status status_stp" title="정지">정지</span></td>
-											      	<td><!--<span class="battery_icon batter_in">충전</span>--></td>
-											      	<td>0</td>
-											      	<td>0</td>
-											        <td><div class="cname">사업소#5</div></td>
-												    <td>800</td>
-											        <td>500</td>
-											        <td>13.2</td>
-											        <td>12.1</td>
-											      </tr>
-											      <tr class="detail_info">
-											      	<td colspan="9">
-											      		<div class="di_wrap">
-											      			
-											      		</div>
-											      	</td>
-											      </tr>
-											      <tr class="dbclickopen status_alert">
-											      	<td><span class="status status_drv" title="운전">운전</span></td>
-											      	<td><!--<span class="battery_icon batter_out">방전</span>--></td>
-											      	<td>0</td>
-											      	<td>1</td>
-											        <td><div class="cname">사업소#6</div></td>
-												    <td>800</td>
-											        <td>500</td>
-											        <td>13.2</td>
-											        <td>12.1</td>
-											      </tr>
-											      <tr class="detail_info">
-											      	<td colspan="9">
-											      		<div class="di_wrap">
-											      			
-											      		</div>
-											      	</td>
-											      </tr>
-											      <tr class="dbclickopen">
-											      	<td><span class="status status_drv" title="운전">운전</span></td>
-											      	<td><!--<span class="battery_icon batter_in">충전</span>--></td>
-											      	<td>0</td>
-											      	<td>0</td>
-											        <td><div class="cname">사업소#7</div></td>
-												    <td>800</td>
-											        <td>500</td>
-											        <td>13.2</td>
-											        <td>12.1</td>
-											      </tr>
-											      <tr class="detail_info">
-											      	<td colspan="9">
-											      		<div class="di_wrap">
-											      			
-											      		</div>
-											      	</td>
-											      </tr>
-											      <tr class="dbclickopen">
-											        <td><span class="status status_drv" title="운전">운전</span></td>
-											        <td><!--<span class="battery_icon batter_in">충전</span>--></td>
-											        <td>0</td>
-											      	<td>0</td>
-											        <td><div class="cname">사업소#8</div></td>
-												    <td>800</td>
-											        <td>500</td>
-											        <td>13.2</td>
-											        <td>12.1</td>
-											      </tr>
-											      <tr class="detail_info">
-											      	<td colspan="9">
-											      		<div class="di_wrap">
-											      			
-											      		</div>
-											      	</td>
-											      </tr>
-											      <tr class="dbclickopen">
-											      	<td><span class="status status_hld" title="대기">대기</span></td>
-											      	<td><!--<span class="battery_icon batter_out">방전</span>--></td>
-											      	<td>0</td>
-											      	<td>0</td>
-											        <td><div class="cname">사업소#9</div></td>
-												    <td>800</td>
-											        <td>500</td>
-											        <td>13.2</td>
-											        <td>12.1</td>
-											      </tr>
-											      <tr class="detail_info">
-											      	<td colspan="9">
-											      		<div class="di_wrap">
-											      			
-											      		</div>
-											      	</td>
-											      </tr>
-											      <tr class="dbclickopen">
-											      	<td><span class="status status_drv" title="운전">운전</span></td>
-											      	<td><!--span class="battery_icon batter_in">충전</span>--></td>
-											      	<td>0</td>
-											      	<td>0</td>
-											        <td><div class="cname">사업소#10</div></td>
-												    <td>800</td>
-											        <td>500</td>
-											        <td>13.2</td>
-											        <td>12.1</td>
-											      </tr>
-											      <tr class="detail_info">
-											      	<td colspan="9">
-											      		<div class="di_wrap">
-											      			
+											      			<div class="type2">								      			
+												      			<dl>
+												      				<dt>
+																		<div class="inchart">
+																			<div id="type_chart2_1" style="height:130px;"></div>
+																			<script language="JavaScript">
+																			$(function () {														
+																				var pieChart2_1 = Highcharts.chart('type_chart2_1', {
+																					chart: {
+																						marginTop:0,
+																						marginLeft:0,
+																						marginRight:0,
+																						backgroundColor: 'transparent',
+
+																						plotBorderWidth: 0,
+																						plotShadow: false
+																					},
+
+																					navigation: {
+																						buttonOptions: {
+																							enabled: false /* 메뉴 안보이기 */
+																						}
+																					},
+
+																					title: {																
+																				        text: '70%', // %표기
+																				        align: 'center',
+																				        verticalAlign: 'middle',
+																				        y:10,
+																				        x:0,
+																				        style: {
+																				            fontSize: '14px',
+																				            color: 'white'
+																				        }
+																					},
+
+																					subtitle: {
+																						text: ''
+																					},
+
+
+																					/* 출처 */
+																					credits: {
+																						enabled: false
+																					},
+
+																					tooltip: {
+																						pointFormat: '<b>{point.percentage:.0f}%</b>'
+																					},
+
+																					plotOptions: {
+																						pie: {
+																							dataLabels: {
+																								enabled: false,
+																								style: {
+																				                    fontWeight: 'bold',
+																				                    color: 'white'
+																				                }																		
+																							},
+																							//startAngle: -90,
+																							//endAngle: 90,
+																							center: ['50%', '50%'],
+																							borderWidth: 0,
+																							size: '100%'
+																						}
+																					},
+
+																					series: [{
+																						type: 'pie',
+																						innerSize: '50%',
+																						name: '설비용량',
+																						colorByPoint: true,
+																						data: [{
+																							color: '#438fd7',
+																							name: '총 설비용량',
+																							dataLabels: {
+																								enabled: false
+																							},
+																							y: 70 //70% -- 아래로 총합 100%
+																						}, {
+																							color: '#84848f',
+																							name: '미설비용량',
+																							dataLabels: {
+																								enabled: false
+																							},
+																							y: 30 //30% 나머지 
+																						}]
+																					}],
+																					responsive: { // 반응형
+																						rules: [{
+																				            condition: {
+																				                minWidth: 305
+																				            },
+																				            chartOptions: {					            	
+																				            	title: {
+																							        x:0,
+																							        y:10,
+																							        style: {
+																							            fontSize: '12px',
+																							        }
+																								},
+																								plotOptions: {
+																									pie: {
+																										dataLabels: {
+																											style: {
+																							                    fontWeight: 'bold'
+																							                }						
+																										},
+																										center: ['50%', '50%'],
+																										size: '100%'
+																									}
+																								}													
+																							}
+																						}]
+																					}
+
+
+																				});
+																			});
+																			</script>
+																		</div>	
+																		<div class="summ">
+												      						<div class="soc">
+												      							<div class="batt_wrap clear">
+																					<div class="battery"><span style="width:30%;"><!--잔량--></span><em>30%</em></div>
+																				</div>
+												      						</div>
+												      					</div>
+												      				</dt>
+												      				<dd>	
+													      				<div class="link"><a href="javascript:linkSiteDashboard(5);" class="btn_cancel">대시보드 바로가기</a></div>	
+													      				<div class="di_top">
+																      		<span class="sbj">제일화성</span>
+																      		<span class="type_img type_battery">배터리 룸</span>
+																      		<span>배터리 룸 </span>
+																      		<span>온도 <em>30</em>℃</span>
+																      		<span>습도 <em>30</em>%</span>
+																      	</div>											      					
+												      					<ul class="clear">
+												      						<li class="clear">
+												      							<span class="fl">총 설비용량</span>
+												      							<span class="fl"><em>10</em>MW / <em>20</em>MWh</span>
+												      						</li>
+												      						<li class="clear">
+												      						</li>
+												      						<li class="clear">
+												      							<span class="fl">금일 충전예측</span>
+												      							<span class="fl"><em>28</em>MWh</span>
+												      						</li>
+												      						<li class="clear">
+												      							<span class="fl">금일 누적충전</span>
+												      							<span class="fl"><em>18.1</em>MWh</span>
+												      						</li>
+												      						<li class="clear">
+												      							<span class="fl">금일 방전예측</span>
+												      							<span class="fl"><em>20</em>MWh</span>
+												      						</li>
+												      						<li class="clear">
+												      							<span class="fl">금일 누적방전</span>
+												      							<span class="fl"><em>20</em>MWh</span>
+												      						</li>
+												      					</ul>
+												      					<div class="error">
+												      						<h2>최근 미처리 오류 : <span>2</span>건</h2>
+												      						<div>
+													      						<p>2020-02-10 12:00:01 데이터 disconnected</p>
+													      						<p>2020-02-09 11:41:26 인버터#1 이상 감지</p>
+												      						</div>
+												      					</div>
+												      				</dd>
+												      			</dl>
+											      			</div>
 											      		</div>
 											      	</td>
 											      </tr>

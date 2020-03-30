@@ -2,16 +2,16 @@
 <%@ include file="/decorators/include/taglibs.jsp"%>
 				<div class="row">
 					<div class="col-lg-12">
-						<h1 class="page-header">DR</h1>
+						<h1 class="page-header">수요자원</h1>
 						<div class="sa_select">
 							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">사업소#1
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">당진태양광
 								<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 								  <li class="on"><a href="#">전체</a></li>
-								  <li><a href="#">사업소#1</a></li>
-								  <li><a href="#">사업소#2</a></li>
-								  <li><a href="#">사업소#3</a></li>
+								  <li><a href="#">당진태양광</a></li>
+								  <li><a href="#">제일화성</a></li>
+								  <li><a href="#">동국제강</a></li>
 								</ul>
 							</div>
 						</div>
@@ -209,16 +209,52 @@
 										},
 
 										/* 그래프 스타일 */
+// 									    series: [{
+// 									    	type: 'spline',
+// 									        color: '#438fd7', /* 실제 사용량 */
+// 									        tooltip: {
+// 										        valueSuffix: 'kWh'
+// 										    }
+// 									    },{
+// 									    	type: 'spline',
+// 									        dashStyle: 'ShortDash',
+// 									        color: '#84848f', /* 감축량 */
+// 									        tooltip: {
+// 										        valueSuffix: 'kWh'
+// 										    }
+// 									    }],
+									    /* 그래프 스타일 */
 									    series: [{
-									    	type: 'spline',
+									    	type: 'line',
 									        color: '#438fd7', /* 실제 사용량 */
 									        tooltip: {
 										        valueSuffix: 'kWh'
 										    }
 									    },{
-									    	type: 'spline',
-									        dashStyle: 'ShortDash',
-									        color: '#84848f', /* 감축량 */
+									    	type: 'area',
+									        color: '#84848F', /* 목표사용량 */
+									        fillOpacity: 0.1,
+									        tooltip: {
+										        valueSuffix: 'kWh'
+										    }
+									    },{
+									    	type: 'area',
+									        color: '#84848F', /* 목표사용량 */
+									        fillOpacity: 0.1,
+									        linkedTo: ':previous', // 전의 series와 하나로 연결한다
+									        tooltip: {
+										        valueSuffix: 'kWh'
+										    }
+									    },{
+									    	type: 'line',
+									        color: '#f10075', /* 기준부하 */
+									        tooltip: {
+										        valueSuffix: 'kWh'
+										    }
+									    },{
+									    	type: 'line',
+									        color: '#f10075', /* 기준부하 */
+									        linkedTo: ':previous', // 전의 series와 하나로 연결한다
 									        tooltip: {
 										        valueSuffix: 'kWh'
 										    }
@@ -331,114 +367,202 @@
 										    <thead>
 										        <tr>
 										            <th>2018-08</th>
-										            <th>실제 사용량</th>
-										            <th>감축량</th>
+										            <th>실제사용량</th>
+										            <th>목표사용량</th>
+										            <th>목표사용량</th>
+										            <th>기준부하</th>
+										            <th>기준부하</th>
 										        </tr>
 										    </thead>
 										    <tbody>
 										        <tr>
 										            <th>1</th>
-										            <td>200</td>
-										            <td>300</td>
+										            <td>0</td>
+										            <td></td>
+										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>2</th>
-										            <td>400</td>
-										            <td>500</td>
+										            <td>200</td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>3</th>
 										            <td>300</td>
-										            <td>400</td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>4</th>
-										            <td>650</td>
-										            <td>750</td>
+										            <td>500</td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>5</th>
 										            <td>480</td>
-										            <td>580</td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>6</th>
-										            <td>1000</td>
-										            <td>1100</td>
+										            <td>600</td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>7</th>
 										            <td>500</td>
-										            <td>600</td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>8</th>
 										            <td>700</td>
-										            <td>800</td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>9</th>
 										            <td>620</td>
-										            <td>720</td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>10</th>
+										            <td>630</td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
 										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>11</th>
+										            <td>640</td>
+										            <td>720</td>
+										            <td></td>
+										            <td>920</td>
 										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>12</th>
+										            <td>720</td>
+										            <td>720</td>
+										            <td></td>
+										            <td>920</td>
 										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>13</th>
 										            <td></td>
+										            <td>720</td>
+										            <td>820</td>
+										            <td>920</td>
+										            <td>1020</td>
 										        </tr>
 										        <tr>
 										            <th>14</th>
 										            <td></td>
+										            <td></td>
+										            <td>820</td>
+										            <td></td>
+										            <td>1020</td>
 										        </tr>
 										        <tr>
 										            <th>15</th>
 										            <td></td>
+										            <td></td>
+										            <td>820</td>
+										            <td></td>
+										            <td>1020</td>
 										        </tr>
 										        <tr>
 										            <th>16</th>
 										            <td></td>
+										            <td></td>
+										            <td>820</td>
+										            <td></td>
+										            <td>1020</td>
 										        </tr>
 										        <tr>
 										            <th>17</th>
+										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
 										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>18</th>
 										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>19</th>
+										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
 										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>20</th>
 										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>21</th>
+										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
 										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>22</th>
 										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>23</th>
 										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
 										        </tr>
 										        <tr>
 										            <th>24</th>
+										            <td></td>
+										            <td></td>
+										            <td></td>
+										            <td></td>
 										            <td></td>
 										        </tr>
 										    </tbody>
