@@ -96,6 +96,9 @@
 		<property name="url" value="${Globals.maria.ewp.Url}" />
 		<property name="username" value="${Globals.maria.ewp.UserName}"/>
 		<property name="password" value="${Globals.maria.ewp.Password}"/>
+		<property name="validationQuery" value="select 1" />
+		<property name="testWhileIdle" value="true" />
+		<property name="timeBetweenEvictionRunsMillis" value="10000" />
 	</bean>
 	</beans>
 

@@ -14,7 +14,7 @@
 				location.href = '/dashboard/gmain.do';
 			</c:when>
 			<c:otherwise>
-				location.href = '/dashboard/siteMain.do?siteId=${userInfo.site_id}';
+				location.href = '/dashboard/smain.do.do?siteId=${userInfo.site_id}';
 			</c:otherwise>
 		</c:choose>
 	</script>
