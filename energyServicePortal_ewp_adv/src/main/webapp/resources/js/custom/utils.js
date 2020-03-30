@@ -165,7 +165,7 @@ function convertUnitFormat(num, unitGbn, len) {
 
     if (formatNum == "NaN") formatNum = "0";
 
-    var map = new Map();
+    var map = new _Map();
     map.put("formatNum", formatNum);
     map.put("unit", unit);
 
@@ -662,24 +662,24 @@ jQuery.fn.serializeObject = function () {
 };
 
 // ============ Map 구조 구현============
-// var map = new Map();
+// var map = new _Map();
 // map.put("name","사과");
 // map.get("name");
-function Map() {
+function _Map() {
     this.elements = {};
     this.length = 0;
 }
 
-Map.prototype.put = function (key, value) {
+_Map.prototype.put = function (key, value) {
     this.length++;
     this.elements[key] = value;
 };
 
-Map.prototype.get = function (key) {
+_Map.prototype.get = function (key) {
     return this.elements[key];
 };
 
-Map.prototype.remove = function (key) {
+_Map.prototype.remove = function (key) {
     this.elements[key] = undefined;
 };
 

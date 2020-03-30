@@ -82,7 +82,7 @@
 		});
 		$('#modifySymbolName').on('click', function() { //심볼이름 수정버튼(임시)
 			var symbolArr = $('.img_origin_name');
-			var symbolNameMap = new Map();
+			var symbolNameMap = new _Map();
 			for (var i =0; i < symbolArr.length; i++){
 				if(symbolArr[i].dataset.origin != symbolArr[i].value) {
 					var img_idx = symbolArr[i].dataset.idx;
