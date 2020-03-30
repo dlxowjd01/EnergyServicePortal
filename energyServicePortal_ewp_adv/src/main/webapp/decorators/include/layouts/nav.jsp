@@ -61,7 +61,7 @@
 					                </div>
 								</li>
 								<li><a href="/dashboard/jmain.do">VPP거래 대시보드</a></li>							
-								<li><a href="">DR거래 대시보드</a></li>
+								<!-- <li><a href="">DR거래 대시보드</a></li> -->
 							</ul>
 						</div>
 					</li>
@@ -69,7 +69,7 @@
 						<a href="#;">설비현황</a>
 						<div class="sub_layer">
 							<ul>
-								<li><a href="">설비 구성</a></li>
+								<li><a href="/device/deviceState.do">설비 구성</a></li>
 								<li><a href="">수집 현황</a></li>
 							</ul>
 						</div>
@@ -78,7 +78,7 @@
 						<a href="#;">설비 이력</a>
 						<div class="sub_layer">
 							<ul>
-								<li><a href="">운전 이력</a></li>
+								<li><a href="/history/operationHistory.do">운전 이력</a></li>
 								<li><a href="">알람 이력</a></li>
 							</ul>
 						</div>
@@ -90,7 +90,7 @@
 								<li><a href="/energy/pvGen.do">발전</a></li>
 								<li><a href="/energy/essCharge.do">피크저감 ESS</a></li>
 								<!-- <li><a href="/energy/sub01.html">수요</a></li> -->
-								<li><a href="/energy/drResult.do">수요저감<!-- DR --></a></li>
+								<li><a href="/energy/drResult.do">수요자원<!-- DR --></a></li>
 							</ul>
 						</div>
 					</li>
@@ -100,6 +100,19 @@
 							<ul>
 								<li><a href="">발전</a></li>
 								<li><a href="">수요</a></li>
+							</ul>
+						</div>
+					</li>
+					<li class="smn6">
+						<a href="#;">관리</a>
+						<div class="sub_layer">
+							<ul>
+								<li><a href="">기본정보</a></li>
+								<li><a href="">알람</a></li>
+								<li><a href="/system/userMng.do">사용자</a></li>
+								<li><a href="/system/cmpyGrpSiteMng.do">사이트/그룹</a></li>
+								<li><a href="">공통코드</a></li>
+								<li><a href="">설정</a></li>
 							</ul>
 						</div>
 					</li>
@@ -116,16 +129,13 @@
 							</ul>
 						</div>
 					</li>
-					<li class="smn6">
-						<a href="#;">관리</a>
+					<li class="smn8">
+						<a href="#;">유지보수</a>
 						<div class="sub_layer">
 							<ul>
-								<li><a href="">기본정보</a></li>
-								<li><a href="">알람</a></li>
-								<li><a href="/system/userMng.do">사용자</a></li>
-								<li><a href="/system/cmpyGrpSiteMng.do">사이트/그룹</a></li>
-								<li><a href="">공통코드</a></li>
-								<li><a href="">설정</a></li>
+								<li><a href="">고장이력</a></li>
+								<li><a href="">변경이력</a></li>
+								<li><a href="">유지보수관리</a></li>
 							</ul>
 						</div>
 					</li>
@@ -158,20 +168,20 @@
 				                </div>
 							</li>
 							<li><a href="/dashboard/jmain.do">VPP거래 대시보드</a></li>							
-							<li><a href="">DR거래 대시보드</a></li>
+							<!-- <li><a href="">DR거래 대시보드</a></li> -->
 						</ul>
 					</li>
 					<li class="gmn2">
 						<a href="#;">설비현황</a>
 						<ul>
-							<li><a href="">장치 현황</a></li>
+							<li><a href="/device/deviceState.do">설비 구성</a></li>
 							<li><a href="">수집 현황</a></li>
 						</ul>
 					</li>
 					<li class="gmn3">
-						<a href="#;">이력</a>						
+						<a href="#;">설비 이력</a>						
 						<ul>
-							<li><a href="">운전 이력</a></li>
+							<li><a href="/history/operationHistory.do">운전 이력</a></li>
 							<li><a href="">알람 이력</a></li>
 						</ul>						
 					</li>
@@ -181,7 +191,7 @@
 							<li><a href="/energy/pvGen.do">발전</a></li>
 							<li><a href="/energy/essCharge.do">피크저감 ESS</a></li>
 							<!-- <li><a href="/energy/sub01.html">수요</a></li> -->
-							<li><a href="/energy/drResult.do">수요저감<!-- DR --></a></li>
+							<li><a href="/energy/drResult.do">수요자원<!-- DR --></a></li>
 						</ul>						
 					</li>
 					<li class="gmn5">
@@ -205,10 +215,20 @@
 					<li class="gmn7">
 						<a href="#;">보고서</a>						
 						<ul>
-							<li><a href="/billRevenue/kepcoBill.do">한전 요금</a></li>
-							<li><a href="/billRevenue/essRevenue.do">ESS 수익</a></li>
-							<li><a href="/billRevenue/drRevenue.do">DR 수익</a></li>
-							<li><a href="/billRevenue/pvRevenue.do">PV 수익</a></li>
+							<li><a href="">수익 보고서</a></li>
+							<li><a href="">발전량 보고서</a></li>
+							<!-- <li><a href="/income/sa_sub05.html">한전 요금</a></li>
+							<li><a href="/income/sub01.html">ESS 수익</a></li>
+							<li><a href="/income/sub03.html">DR 수익</a></li>
+							<li><a href="/income/sub02.html">PV 수익</a></li> -->
+						</ul>						
+					</li>
+					<li class="gmn8">
+						<a href="#;">유지보수</a>						
+						<ul>
+							<li><a href="">고장이력</a></li>
+							<li><a href="">변경이력</a></li>
+							<li><a href="">유지보수관리</a></li>
 						</ul>						
 					</li>
 				</ul>

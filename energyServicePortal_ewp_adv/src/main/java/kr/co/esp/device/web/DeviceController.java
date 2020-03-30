@@ -9,10 +9,12 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,6 +40,12 @@ public class DeviceController {
 	
 	@Resource(name="deviceMonitoringService")
 	private DeviceMonitoringService deviceMonitoringService;
+
+	@RequestMapping(value = "/device/deviceState.do")
+	public String groupDashboard(HttpServletRequest request, HttpSession session, Model model) {
+		System.out.println("/device/deviceState.do");
+		return "esp/device/deviceState";
+	}
 
 //	@RequestMapping("/main/getDeviceList.json")
 //	public @ResponseBody Map<String, Object> getDeviceList(@RequestParam Map<String, Object> param, HttpServletRequest request) throws Exception {
