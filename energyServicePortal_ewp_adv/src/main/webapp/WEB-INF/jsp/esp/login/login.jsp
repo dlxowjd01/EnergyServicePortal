@@ -309,7 +309,7 @@
 
 			function checkAgree() {
 				if (!$('#agree01').prop('checked')) {
-					alert('한국 동서발전 서비스 포털 이용약관에 동의해야 합니다.');
+					alert('인코어드 iDERMS 서비스 이용약관에 동의해야 합니다.');
 					$('#agree01').focus();
 					return false;
 				}
@@ -765,7 +765,7 @@
 						
 						<div class="unit">
 							<div class="unit_tit clear">
-								<span class="sTit">한국 동서발전 서비스 포털 이용약관</span>
+								<span class="sTit">인코어드 iDERMS 서비스 이용약관</span>
 
 								<div class="etcText fr mt5">
 									<span class="checkbox">
@@ -781,7 +781,7 @@
 									제1장 총칙<br>
 									<br>
 									제 1 조 (목적)<br>
-									본 약관은 동서발전 사이트가 제공하는 모든 서비스(이하 "서비스")의 이용조건 및 절차, 이용자와 서비스포털 사이트의 권리, 의무, 책임사항과 기타 필요한 사항을 규정함을 목적으로 합니다.<br>
+									본 약관은 인코어드 iDERMS 사이트가 제공하는 모든 서비스(이하 "서비스")의 이용조건 및 절차, 이용자와 서비스포털 사이트의 권리, 의무, 책임사항과 기타 필요한 사항을 규정함을 목적으로 합니다.<br>
 									<br>
 									제 2 조 (약관의 효력과 변경)<br>
 									1. 본약관에 동의 하는 경우 서비스포털 서비스 제공 행위 및 사용 행위에 본 약관이 우선적으로 적용됩니다.<br>
