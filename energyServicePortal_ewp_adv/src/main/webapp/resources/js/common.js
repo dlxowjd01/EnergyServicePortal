@@ -88,7 +88,7 @@ $(function() {
 /* [메인] 리스트 더블클릭 */
 $(function() {
     var touchtime = 0;
-    $('.dbclickopen').click(function() {
+    $(document).on('click','.dbclickopen', function () {
         if(touchtime == 0) {
             //set first click
             touchtime = new Date().getTime();
@@ -377,5 +377,27 @@ $(function($){
                 $(this).toggleClass("on");
             });
         }
+    });
+});
+
+
+/* dropdown-menu multi check */
+$(function () { 
+    var options = [];
+    $( '.dropdown-menu-form a' ).on( 'click', function( event ) {
+       var $target = $( event.currentTarget ),
+           val = $target.attr( 'data-value' ),
+           $inp = $target.find( 'input' ),
+           idx;
+       if ( ( idx = options.indexOf( val ) ) > -1 ) {
+          options.splice( idx, 1 );
+          setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
+       } else {
+          options.push( val );
+          setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
+       }
+       $( event.target ).blur();                                              
+       console.log( options );
+       return false;
     });
 });

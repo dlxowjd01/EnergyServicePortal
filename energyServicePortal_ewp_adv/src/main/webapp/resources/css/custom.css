@@ -592,6 +592,20 @@ html.darkmode input:-webkit-autofill {
 	}
 }
 
+/* 스크롤 */
+.scroll::-webkit-scrollbar-track {/*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/ background-color:var(--color1);}
+.scroll::-webkit-scrollbar {width:10px; background-color:var(--color2);}
+.scroll::-webkit-scrollbar-corner {background-color:var(--color1);}
+.scroll::-webkit-scrollbar-thumb {/*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);*/ background-color:var(--color2);}
+
+
+/* button */
+.dbtn {
+	display:inline-block; border:0; height:30px; line-height:30px; outline-style:none;
+	background:#438FD7; font-size:13px; color:#fff; padding:0 10px; border-radius:200px; font-weight:300;
+}
+.dbtn:hover {color:#fff;}
+
 .nav_theme {
 	position: absolute;
 	top: 50%;
@@ -721,6 +735,10 @@ html.darkmode input:-webkit-autofill {
 	background: url('../img/sidebar_icon5.png') no-repeat center 20px;
 }
 
+#sidebar > ul > li.smn8 > a {
+	background: url('../img/sidebar_mnt.png') no-repeat center 20px;
+}
+
 #sidebar > ul > li.on {
 	color: var(--color2);
 }
@@ -778,6 +796,9 @@ html.darkmode input:-webkit-autofill {
 #sidebar > ul > .smn7:hover > a {
 	background: url('../img/sidebar_icon5_on.png') no-repeat center 20px;
 }
+
+#sidebar > ul > .smn8.on > a,
+#sidebar > ul > .smn8:hover > a {background:url('../img/sidebar_mnt_on.png') no-repeat center 20px;}
 
 /* 서브 레이어 */
 #sidebar li:hover .sub_layer {
@@ -1009,10 +1030,16 @@ html.darkmode input:-webkit-autofill {
 		background: url('../img/sidebar_icon5_4k_on.png') no-repeat center 30px;
 	}
 
+	#sidebar > ul > .smn8.on > a,
+	#sidebar > ul > .smn8:hover > a {
+		background: url('../img/sidebar_mnt_4k_on.png') no-repeat center 30px;
+	}
+
 	.sub_layer {
 		left: 120px;
 		width: 300px;
 	}
+
 
 	.sub_layer:after {
 		left: 120px;
@@ -10928,3 +10955,175 @@ div.di_wrap dl .link a {
 		padding-left: 0;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+	## 이력 > 운전 이력 ##
+*/
+
+.his_chart_top .sa_select {position:relative; display:inline-block; vertical-align:middle;}
+.his_chart_top .fl {display:inline-block;}
+.his_chart_top .fl + .fl {margin-left:20px;}
+.his_chart_top .fl span {
+    display: inline-block;
+    margin: 0 5px;
+    height: 36px;
+    line-height: 36px;
+    font-size: 14px;
+    color: #3d4250;
+    font-weight: bold; vertical-align:middle;
+    float:left;
+}
+.his_chart_top .sel_calendar {font-size:0;}
+.his_chart_top .sel_calendar > * {vertical-align:middle;}
+.his_chart_top .sel_calendar .sel {
+    width: 130px;
+}
+.his_chart_top .sel_calendar em {display:inline-block; font-size:12px; margin:0 5px;}
+.his_chart_top .sel_calendar button {
+    margin-left: 10px;
+    display: inline-block;
+    width: 60px;
+    height: 36px;
+    line-height: 34px;
+    background: #438fd7;
+    font-size: 14px;
+    color: #fff;
+    font-weight: bold;
+    border: 0;
+    outline-style: none;
+    text-align: center;
+    border-radius: 200px;
+}
+
+/* 설비 테이블 */
+.his_tbl {width:100%;}
+.his_tbl thead {}
+.his_tbl thead th {
+	height:48px; font-size:13px; color:##3d4250; font-weight:normal; background:#eceef0;
+	vertical-align:middle; text-align:center;
+}
+.his_tbl thead th label {cursor:pointer;}
+.his_tbl tbody {height:300px; display:block; overflow-y:auto;}
+.his_tbl thead,
+.his_tbl tbody tr {display:table; width:100%; table-layout:fixed;/* even columns width , fix width of table too*/}
+.his_tbl tbody td {
+	height:48px; font-size:14px; color:#444a59; text-align:center;
+	vertical-align:middle; white-space:nowrap; text-align:center;
+}
+
+.his_tbl thead tr th:first-child {
+    border-radius: 200px 0 0 200px;
+}
+.his_tbl thead tr th:last-child {
+    border-radius: 0 200px 200px 0;
+}
+
+.his_tbl tbody tr:nth-child(2n) td {
+    background: #f4f6f8;
+}
+
+/* tbody scroll */
+.his_tbl tbody::-webkit-scrollbar-track {/*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/ background-color:#a7a7ba;}
+.his_tbl tbody::-webkit-scrollbar {width:10px; background-color:#545569;}
+.his_tbl tbody::-webkit-scrollbar-corner {background-color:#a7a7ba;}
+.his_tbl tbody::-webkit-scrollbar-thumb {/*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);*/ background-color:#545569;}
+
+/* checkbox 스타일 */
+.his_chk {display:none;}
+.his_chk + label:before {
+	display:inline-block; width:12px; height:12px; content:""; margin-right:5px; vertical-align:bottom;
+	background:url('../img/his_check.png') no-repeat center center;
+}
+.his_chk:checked + label {color:#000; font-weight:bold;}
+.his_chk:checked + label:before {background:url('../img/his_check_on.png') no-repeat center center;}
+
+/* 높이값 지정 */
+#hchart2 {height:calc(100vh - 526px); min-height:391px; max-height:491px;}
+#hchart3 {height:calc(100vh - 518px); min-height:399px; max-height:499px;}
+.indiv.hchart_aside{padding-bottom:10px;}
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+	## 설비현황 > 장치 현황 ##
+*/
+.eq_wrap .indiv {box-shadow:none; border:solid 1px #eee;}
+
+/* 경고 아이콘 */
+.eq_icon {font-size:0;}
+.eq_icon > span {
+	display:inline-block; vertical-align:middle; padding:5px 10px;
+	font-size:12px; color:#fff; margin-left:5px; border-radius:200px;
+}
+.eq_icon > span.eq_normail {background:#438FD7;} /* 정상 */
+.eq_icon > span.eq_error {background:#F75C4A;} /* 이상 */
+.eq_icon > span.eq_alert {background:#F49E34;} /* 경고 */
+
+/* 장치 리스트 */
+.eq_list {margin:-5px -5px; height:215px; overflow-y:auto; float:left;}
+.eq_list li {
+	margin:5px 5px;
+	float:left; position:relative; width:82px; min-height:98px; border:solid 1px #5e6682; text-align:center; padding:10px;
+	padding-top:40px; background:url('../img/eq_inverter.png') no-repeat center top 10px;
+}
+.eq_list li span {display:block; font-size:13px; color:#444a59; white-space:nowrap; line-height:1.1;}
+.eq_list li em {font-size:12px; color:#777488; white-space:nowrap;}
+.eq_list li a {display:none; font-size:0; position:absolute; top:0; left:0; width:100%; height:100%;}
+.eq_list li:hover a {display:block; background:rgba(53,58,83,0.3) url('../img/eq_del.png') no-repeat right 2px top 2px;}
+
+.eq_list li.st_alert {background:#F49E34 url('../img/eq_inverter_on.png') no-repeat center top 10px !important;}
+.eq_list li.st_error {background:#F75C4A url('../img/eq_inverter_on.png') no-repeat center top 10px !important;}
+
+.eq_list li.st_alert span,
+.eq_list li.st_error span,
+.eq_list li.st_alert em,
+.eq_list li.st_error em {color:#fff;}
+
+.eq_list li.eq_add {background:none;}
+.eq_list li.eq_add a {display:block; border:0; background:url('../img/eq_add.png') no-repeat center;}
+
+/* 장치 카드 */
+.eq_card {border:solid 2px #438FD7 !important;}
+.eq_card ul {display:table; width:100%;}
+.eq_card ul li {display:table-cell; width:20%; height:46px; color:#444a59; font-size:14px; padding:0 0 0 15px;}
+.eq_card ul li span {}
+.eq_card ul li p {padding:5px; text-indent:-4px;}
+.eq_card ul li p strong {color:#3d4250; font-size:22px;}
+.eq_card dl {margin-top:10px; border:solid 1px #5e6682; border-radius:4px; overflow:hidden;}
+.eq_card dl dt {background:#5e6682; font-size:14px; color:#fff; line-height:30px; padding:0 15px;}
+.eq_card dl dd {padding:0 0 0;}
+.eq_card dl dd table {width:100%;}
+.eq_card dl dd table td {width:20%; height:57px; color:#444a59; font-size:14px; padding:9px 0 2px 15px; vertical-align:middle;}
+.eq_card dl dd table td span {color:#444a59; font-size:14px;}
+.eq_card dl dd table td p {padding:5px; text-indent:-4px;}
+.eq_card dl dd table td p strong {color:#3d4250; font-size:22px;}
+.eq_card dl dd table td div {}
+.eq_card dl dd table td div + div {margin-top:10px;}
+
+
+
+
+/* 레이아웃 높이값 지정 */
+.eq_wrap {height:calc(100vh - 17px); min-height:900px; max-height:1000px; overflow-y:auto; margin-left:-24px; padding:16px; padding-top:0; overflow-y:auto;}
+.eq_wrap > div {padding-top:0;}
+.eq_wrap > div .row:first-child > div {padding-top:0;}
