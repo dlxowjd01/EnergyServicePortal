@@ -5,7 +5,14 @@
 	<link type="text/css" href="/css/main.css" rel="stylesheet">
 	<script type="text/javascript" src="/js/modules/rounded-corners.js"></script>
 	<script type="text/javascript" src="/js/jquery.rwdImageMaps.min.js"></script>
-
+				<div class="row">
+					<div class="time">
+						<span>CURRENT TIME</span>
+						<em id="currTime">${nowTime}</em>
+						<span>DATA BASE TIME</span>
+						<em>2018-07-27 17:01:02</em>
+					</div>
+				</div>
 				<div class="row">
 					<div class="col-lg-4">
 						<div class="row">

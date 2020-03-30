@@ -3,18 +3,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<%@ include file="/decorators/include/layout/top.jsp"%>
+<%@ include file="/decorators/include/layouts/top.jsp"%>
 </head>
 <body>
 
 	<div id="wrapper">
-		<%@ include file="/decorators/include/layout/nav.jsp"%>
+		<%@ include file="/decorators/include/layouts/header.jsp"%>
 		<div id="page-wrapper">
-			<%@ include file="/decorators/include/layout/header.jsp"%>
+			<%@ include file="/decorators/include/layouts/nav.jsp"%>
 			<div id="container">
 				<decorator:body />
 			</div>
-			<%@ include file="/decorators/include/layout/footer.jsp"%>
+			<%@ include file="/decorators/include/layouts/footer.jsp"%>
 		</div>
 	</div>
 

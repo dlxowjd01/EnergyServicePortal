@@ -2,33 +2,37 @@
 	## 메인 레이아웃 ##
 */
 body {
-	background: url('../img/sidebar_bg.png') repeat-y 0 0, 
-				url('../img/main_bg.png') repeat 0 0,
-				#333841;
+	/*background: url('../img/sidebar_bg.png') repeat-y 0 0, */
+	/*			url('../img/main_bg.png') repeat 0 0,*/
+	/*			#333841;*/
 }
 
 
 
 /* 메인용 구분 버튼 */
 nav .all-menu > a {
-	display:inline-block; width:130px; height:38px; line-height:38px; padding-left:15px; 
-	color:#fff; font-size:12px;
-	border:0;
-	background:#3d4250 url('../img/m_select_down.png') no-repeat right 15px center;
-	-webkit-box-shadow: 5px 5px 5px -1px rgba(29,34,43,0.25);
-	-moz-box-shadow: 5px 5px 5px -1px rgba(29,34,43,0.25);
-	box-shadow: 5px 5px 5px -1px rgba(29,34,43,0.25);
+	display: inline-block;
+	width: 130px;
+	height: 38px;
+	line-height: 46px;
+	padding-left: 15px;
+	color: var(--color2);
+	font-size: 16px;
+	background: var(--box-color) url('../img/m_select_down.png') no-repeat right 15px center;
+	/*-webkit-box-shadow: 5px 5px 5px -1px rgba(29,34,43,0.25);*/
+	/*-moz-box-shadow: 5px 5px 5px -1px rgba(29,34,43,0.25);*/
+	/*box-shadow: 5px 5px 5px -1px rgba(29,34,43,0.25);*/
 }
-nav .all-menu > a.on {background:#438fd7 url('../img/m_select_up.png') no-repeat right 15px center;}
+nav .all-menu > a.on {background:var(--active) url('../img/m_select_up.png') no-repeat right 15px center;}
 
 
 /* 반응형 미디어 쿼리 */
 @media all and (min-width:3000px) {
-	body {
-		background: url('../img/sidebar_bg_4k.png') repeat-y 0 0, 
-					url('../img/main_bg.png') repeat 0 0,
-					#333841;
-	}
+	/*body {*/
+	/*	background: url('../img/sidebar_bg_4k.png') repeat-y 0 0, */
+	/*				url('../img/main_bg.png') repeat 0 0,*/
+	/*				#333841;*/
+	/*}*/
 }
 @media all and (min-width:1700px) {
 	
@@ -40,7 +44,7 @@ nav .all-menu > a.on {background:#438fd7 url('../img/m_select_up.png') no-repeat
 
 }
 @media all and (max-width:768px) {
-	body {background:#333841 url('../img/main_bg.png') repeat 0 0;}
+	/*body {background:#333841 url('../img/main_bg.png') repeat 0 0;}*/
 }
 @media all and (max-width:481px) {
 
@@ -59,7 +63,7 @@ nav .all-menu > a.on {background:#438fd7 url('../img/m_select_up.png') no-repeat
 */
 
 /* 부트스트랩 커스텀 */
-.col-sm-12 {padding:0 8px 16px;}
+.col-sm-12 {padding:12px 12px;}
 .row .col-lg-4 .row:last-child .col-sm-12 {padding-bottom:0;}
 
 .dropdown .btn-primary {border:solid 2px #565d6a;color:#fff;}
@@ -99,13 +103,13 @@ nav .all-menu > a.on {background:#438fd7 url('../img/m_select_up.png') no-repeat
 
 
 /* 페이지 상단 */
-nav .nav_brand a {background:url('../img/main_logo.png') no-repeat 0 0;}
+nav .nav_brand a {background:var(--encored-logo) no-repeat 0 0;}
 /* ewp 로고 */
 nav .nav_brand.ewp a {background:url('../img/main_logo_ewp.png') no-repeat 0 0;}
-nav .nav_right li {color:#fff;}
-nav .nav_right li span {color:#8e95a1;}
-nav .nav_right li.member .fr {color:#8e95a1;}
-nav .nav_right li.member .fr span {color:#fff;}
+nav .nav_right li {color:var(--color3);}
+nav .nav_right li span {color:var(--color2);}
+nav .nav_right li.member .fr {color:var(--color2);}
+nav .nav_right li.member .fr span {color:var(--color3);}
 /* 모바일용 카테고리 */
 nav .category {
 	background:url('../img/main_category.png') no-repeat center center;
@@ -114,7 +118,7 @@ nav .category {
 
 /* 반응형 미디어 쿼리 */
 @media all and (min-width:3000px) {
-	nav .nav_brand a {background:url('../img/main_logo_4k.png') no-repeat 0 0; background-size:259px 60px;}	
+	nav .nav_brand a {background:var(--encored-logo) no-repeat 0 0;}
 	/* ewp 로고 */
 	nav .nav_brand.ewp a {background:url('../img/main_logo_4k_ewp.png') no-repeat 0 0; background-size:90px 25px;}
 }
@@ -142,8 +146,8 @@ nav .category {
 
 
 /* 페이지 하단 */
-footer .ft_menu a {color:#fff;}
-footer .copyright {color:#8e95a1;}
+footer .ft_menu a {color:var(--color2);}
+footer .copyright {color:var(--color2);}
 
 
 /* 페이지 제목 */
@@ -152,10 +156,10 @@ footer .copyright {color:#8e95a1;}
 
 /* 판넬 박스 */
 .indiv {
-	background:#3d4250;
-	-webkit-box-shadow: 0px 0px 15px 0px rgba(29,34,43,0.5);
-	-moz-box-shadow: 0px 0px 15px 0px rgba(29,34,43,0.5);
-	box-shadow: 0px 0px 15px 0px rgba(29,34,43,0.5);	
+	background:var(--box-color);
+	/*-webkit-box-shadow: 0px 0px 15px 0px rgba(29,34,43,0.5);*/
+	/*-moz-box-shadow: 0px 0px 15px 0px rgba(29,34,43,0.5);*/
+	/*box-shadow: 0px 0px 15px 0px rgba(29,34,43,0.5);	*/
 }
 
 
@@ -166,8 +170,31 @@ h2.ntit {color:#fff;}
 /* 차트 상단 */
 .chart_top .ntit {margin-right:0; float:left;}
 
+.time {
+	padding: 12px;
+	height: 60px;
+	text-align: right;
+	position: relative;
+}
 
+.time span,
+.time em {
+	display: inline-block;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 500;
+	vertical-align: middle;
+	font-size: 12px;
+	line-height: 40px;
+	margin-left: 15px;
+}
 
+.time span{
+	color:var(--color1);
+}
+
+.time em {
+	color:var(--color2);
+}
 
 
 
@@ -229,33 +256,33 @@ h2.ntit {color:#fff;}
 {
 	/*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
 	border-radius: 10px;
-	background-color: #383D49;
+	background-color: var(--color1);
 }
 
 .alarm_notice::-webkit-scrollbar
 {
 	width: 12px;
-	background-color: #3d4250;
+	background-color: var(--color1);
 }
 
 .alarm_notice::-webkit-scrollbar-corner
 {
-	background-color: #3d4250;
+	background-color: var(--color1);
 }
 
 .alarm_notice::-webkit-scrollbar-thumb
 {
 	border-radius: 10px;
 	/*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);*/
-	background-color: #4c5260;
+	background-color: var(--color2);
 }
 
 
 
-.alarm_notice h2 {font-size:16px; color:#fff; font-weight:bold; padding:20px 0 15px;}
+.alarm_notice h2 {font-size:16px; color:var(--color3); font-weight:bold; padding:20px 0 15px;}
 .alarm_notice li:after {display:block; clear:both; content:"";}
 .alarm_notice li a {
-	display:block; width:calc(100% - 100px); float:left; font-size:12px; color:rgba(255,255,255,0.5); line-height:18px;
+	display:block; width:calc(100% - 100px); float:left; font-size:12px; color:var(--color2); line-height:18px;
 	text-overflow:ellipsis; overflow:hidden; white-space:nowrap;
 }
 .alarm_notice li a:before {
@@ -264,7 +291,7 @@ h2.ntit {color:#fff;}
 }
 .alarm_notice li span {
 	display:inline-block; text-align:right; float:right; margin-top:2px; width:100px; height:18px; line-height:18px; 
-	font-family:'Roboto', sans-serif; font-size:10px; color:#8e95a1;
+	font-family:'Roboto', sans-serif; font-size:10px; color:var(--color3);
 	letter-spacing:-0.5px;
 }
 

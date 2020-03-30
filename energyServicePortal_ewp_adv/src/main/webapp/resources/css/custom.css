@@ -213,13 +213,15 @@ select {
 
 /* css variables to support dark mode */
 :root {
-	--bg-color: #fff;
+	--bg-color: #EBEDF2;
 	--bg-img: url('../img/login_bg.jpg');
-	--box-color: rgba(0, 0, 0, 0.05);
+	--box-color: #fff;
+	--active: #5177FF;
 	--login-arr: url('../img/login_arr.gif');
 	--color1: #ccc;
 	--color2: #999;
 	--color3: #000;
+	--encored-logo: url('../img/encored_logo.png');
 }
 
 html, body {
@@ -231,11 +233,13 @@ html, body {
 html.darkmode:root {
 	--bg-color: #000;
 	--bg-img: url('../img/login_bg_black.jpg');
-	--box-color: rgba(255, 255, 255, 0.15);
+	--box-color: #363636;
+	--active: #363636;
 	--login-arr: url('../img/login_arr_black.png');
 	--color1: #999;
 	--color2: #ccc;
 	--color3: #fff;
+	--encored-logo: url('../img/encored_logo_white.png');
 }
 
 /* Change the white to any color ;) */
@@ -243,7 +247,7 @@ html.darkmode input:-webkit-autofill,
 html.darkmode input:-webkit-autofill:hover,
 html.darkmode input:-webkit-autofill:focus,
 html.darkmode input:-webkit-autofill:active  {
-	transition: background-color 5000s ease-in-out 0s;
+	transition: var(--box-color) 5000s ease-in-out 0s;
 }
 
 /*Change text in autofill textbox*/
@@ -251,16 +255,16 @@ html.darkmode input:-webkit-autofill {
 	-webkit-text-fill-color: var(--color3) !important;
 }
 
-body {
-	background: #f8f9fd url('../img/sidebar_bg.png') repeat-y 0 0;
-}
+/*body {*/
+/*	background: #f8f9fd url('../img/sidebar_bg.png') repeat-y 0 0;*/
+/*}*/
 #wrapper {position:relative;}
-#sidebar {z-index:1; position:absolute; top:0; left:0; width:80px; height:100%; background:#3d4250;}
-#page-wrapper {margin:0 0 0 80px; padding:0 16px;}
+#sidebar {z-index:1; position:absolute; top:0; left:0; width:80px; height:100%; background:transparent;}
+#page-wrapper {margin:0 72px 0 72px;}
 
 /* 반응형 미디어 쿼리 */
 @media all and (min-width:3000px) {
-	body {background:#f8f9fd url('../img/sidebar_bg_4k.png') repeat-y 0 0;}
+	/*body {background:#f8f9fd url('../img/sidebar_bg_4k.png') repeat-y 0 0;}*/
 	#sidebar {width:120px;}
 	#page-wrapper {margin:0 0 0 120px;}
 }
@@ -289,6 +293,10 @@ body {
 	right: 100px;
 	transform: translateY(-50%);
 	z-index: 10;
+}
+
+.nav_right .nav_theme {
+	right: 240px;
 }
 
 /* Toggle switch for theme */
@@ -330,7 +338,7 @@ body {
 	font-size: 12px;
 	line-height: 30px;
 	cursor: pointer;
-	background-color: #3366cc;
+	background-color: var(--active);
 	border-radius: 30px;
 	left: 5px;
 	top: 4px;
@@ -348,7 +356,7 @@ body {
 
 
 /* 왼쪽 메뉴 */
-#sidebar {padding-top:90px;}
+#sidebar {padding-top:149px;}
 #sidebar > ul > li {position:relative;}
 #sidebar > ul > li > a {
 	display:block; padding:62px 0 20px; text-align:center; font-size:12px; color:#a4aebf;
@@ -365,9 +373,9 @@ body {
 #sidebar > ul > li.smn6 > a {background:url('../img/sidebar_config.png') no-repeat center 20px;}
 #sidebar > ul > li.smn7 > a {background:url('../img/sidebar_icon5.png') no-repeat center 20px;}
 
-#sidebar > ul > li.on,
-#sidebar > ul > li:hover {background:#438fd7; transition:all 0.5s;}
-#sidebar > ul > li.on > a,
+#sidebar > ul > li.on {color: var(--color3);}
+#sidebar > ul > li:hover {background:var(--active); transition:all 0.5s;}
+#sidebar > ul > li.on > a {color: var(--color3);}
 #sidebar > ul > li:hover > a {color:#fff;}
 #sidebar > ul > .smn0.on > a,
 #sidebar > ul > .smn0:hover > a {background:url('../img/loc_main_on.png') no-repeat center 20px;}
@@ -390,10 +398,10 @@ body {
 
 /* 서브 레이어 */
 #sidebar li:hover .sub_layer {display:block;}
-.sub_layer {display:none; position:absolute; top:0; left:80px; width:250px; background:#438fd7; z-index:3;}
+.sub_layer {display:none; position:absolute; top:10px; left:80px; width:250px; background:var(--active); z-index:3;}
 .sub_layer:after {
-	display:block; content:""; position:fixed; top:0; left:80px; bottom:0; 
-	width:250px; height:100%; min-height:100%; background:#438fd7;
+	display:block; content:""; position:fixed; top:90px; left:80px; bottom:0;
+	width:250px; height:100%; min-height:100%; background:var(--active);
 }
 .sub_layer > ul {position:relative; z-index:4}
 .sub_layer > ul > li {margin:10px 0; padding:0 10px;}
@@ -402,7 +410,7 @@ body {
 	padding-left:20px; border-radius:200px;
 }
 .sub_layer > ul > li.on > a,
-.sub_layer > ul > li > a:hover {background:#3d4250 url('../img/icon_sub_layer.png') no-repeat right 20px center;}
+.sub_layer > ul > li > a:hover {background:#fff url('../img/icon_sub_layer.png') no-repeat right 20px center; color:var(--active);}
 
 /* */
 .sub_layer > ul > li > a ~ div {display:none;}
@@ -421,9 +429,9 @@ body {
 #sidebar > ol > li.smn6:before {display:block; margin:0 auto; content:""; width:22px; height:1px; background:#fff; opacity:0.1;}
 #sidebar > ol > li.smn6:after {display:block; margin:0 auto; content:""; width:22px; height:1px; background:#fff; opacity:0.1;}
 #sidebar > ol > .smn6.on,
-#sidebar > ol > .smn6:hover {background:#438fd7; transition:all 0.5s;}
+#sidebar > ol > .smn6:hover {background:var(--active); transition:all 0.5s;}
 #sidebar > ol > .smn7.on,
-#sidebar > ol > .smn7:hover {background:#438fd7; transition:all 0.5s;}
+#sidebar > ol > .smn7:hover {background:var(--active); transition:all 0.5s;}
 #sidebar > ol > li.smn6 > a {padding:60px 0 20px; background:url('../img/loc_main.png') no-repeat center 20px;}
 #sidebar > ol > li.smn7 > a {height:62px; font-size:0; background:url('../img/loc_config.png') no-repeat center center;}
 #sidebar > ol > li.smn8 > a {height:62px; font-size:0; background:url('../img/loc_out.png') no-repeat center center;}
@@ -503,7 +511,7 @@ body {
 
 
 /* 페이지 상단 */
-nav {position:relative; margin:0 0 10px; padding:0 24px; min-height:80px;}
+nav {position:relative; margin:0 0 10px; padding:0 72px 0 30px; min-height:64px; background-color: var(--box-color)}
 
 /* 모바일용 카테고리 */
 nav .category {
@@ -513,7 +521,7 @@ nav .category {
 }
 nav .nav_brand {float:left; margin-top:20px;}
 nav .nav_brand a {
-	display:inline-block; width:173px; height:40px; background:url('../img/logo.png') no-repeat 0 0;
+	display:inline-block; width:138px; height:23px; background:url('../img/encored_logo.png') no-repeat 0 0;
 	vertical-align:top; font-size:0;
 }
 /* ewp 로고 */
@@ -548,16 +556,20 @@ nav .nav_right li.member .fr span {cursor:pointer; font-size:13px; color:#3d4250
 
 /* 전체메뉴 버튼/레이어 */
 nav .all-menu {
-	float:left; margin:20px 0 0 40px; position:relative;
+	float:left; margin:10px 0 0 40px; position:relative;
 }
+
 nav .all-menu > a {
-	display:inline-block; width:130px; height:38px; line-height:38px; padding-left:15px;
-	border:solid 1px #ddd;
-	color:#3d4250; font-size:12px;
-	background:#fff url('../img/m_select_down_dark.png') no-repeat right 15px center;
-	-webkit-box-shadow: 5px 5px 5px -1px rgba(29,34,43,0.25);
-	-moz-box-shadow: 5px 5px 5px -1px rgba(29,34,43,0.25);
-	box-shadow: 5px 5px 5px -1px rgba(29,34,43,0.25);
+	display: inline-block;
+	width: 130px;
+	height: 38px;
+	line-height: 46px;
+	color: #3d4250;
+	font-size: 16px;
+	background: #fff url('../img/m_select_down_dark.png') no-repeat right 15px center;
+	/*-webkit-box-shadow: 5px 5px 5px -1px rgba(29,34,43,0.25);*/
+	/*-moz-box-shadow: 5px 5px 5px -1px rgba(29,34,43,0.25);*/
+	/*box-shadow: 5px 5px 5px -1px rgba(29,34,43,0.25);*/
 }
 nav .all-menu > a.on {color:#fff; border:0; background:#438fd7 url('../img/m_select_up.png') no-repeat right 15px center;}
 nav .all-menu .menu-group {
@@ -566,7 +578,7 @@ nav .all-menu .menu-group {
 	-moz-box-shadow: 5px 5px 5px -1px rgba(29,34,43,0.25);
 	box-shadow: 5px 5px 5px -1px rgba(29,34,43,0.25);
 }
-nav .all-menu .menu-group {background:#438fd7; width:auto; padding:20px 10px;}
+nav .all-menu .menu-group {background:var(--active); width:auto; padding:20px 10px;}
 nav .all-menu .menu-group > ul {display:table; width:100%;}
 nav .all-menu .menu-group > ul > li {display:table-cell; vertical-align:top; width:33.33%; padding:0 15px; min-width:140px;}
 nav .all-menu .menu-group > ul > li:nth-child(3),
@@ -1209,11 +1221,12 @@ input.inp[readonly]:focus {border:1px solid #ccc;}
 
 /* 판넬 박스 */
 .indiv {
-	background:#fff; border-radius:17px;
-	padding:20px 30px;
-	-webkit-box-shadow: 0px -1px 40px 0px rgba(29,34,43,0.15);
-	-moz-box-shadow: 0px -1px 40px 0px rgba(29,34,43,0.15);
-	box-shadow: 0px -1px 40px 0px rgba(29,34,43,0.15);
+	background: var(--box-color);
+	border-radius: 4px;
+	padding: 20px 30px;
+	-webkit-box-shadow: 0px -1px 40px 0px rgba(29, 34, 43, 0.15);
+	-moz-box-shadow: 0px -1px 40px 0px rgba(29, 34, 43, 0.15);
+	box-shadow: 0px -1px 40px 0px rgba(29, 34, 43, 0.15);
 }
 
 /* 반응형 미디어 쿼리 */

@@ -46,8 +46,6 @@
 </script>
 		<div id="sidebar">
 			<c:if test="${not empty userInfo}">
-				<!-- PC용 언어 선택 -->
-				<%@ include file="/decorators/include/selectLang.jsp"%>
 				<ul>
 					<li class="smn1 on">
 						<a href="#;">대시보드</a>

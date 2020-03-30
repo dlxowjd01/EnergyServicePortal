@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<%@ include file="/decorators/include/layout/top.jsp"%>
+	<%@ include file="/decorators/include/layouts/top.jsp"%>
 		<script type="text/javascript">
 			$(function () {
 				var lan = location.search.substr(location.search.length - 2, 2);
@@ -485,10 +485,10 @@
             -moz-box-shadow: 0px 5px 18px 0px rgba(0,0,0,0.27);
             box-shadow: 0px 5px 18px 0px rgba(0,0,0,0.27);
         }
-        .lf_body {padding:60px; background:var(--bg-color);}
+        .lf_body {padding:60px; background:var(--box-color);}
         .lftit {padding-top:110px; background:url('../img/login_people.png') no-repeat center 0;}
         .lftit h1 {font-size:34px; line-height:1; font-family:'Roboto', sans-serif; color:var(--color3); text-align:center; font-weight:500;}
-        .lf_body .lfinp {border:0; border-bottom:solid 1px #333; width:100%; height:50px; line-height:50px; background-color: var(--bg-color);}
+        .lf_body .lfinp {border:0; border-bottom:solid 1px #333; width:100%; height:50px; line-height:50px; background-color: var(--box-color);}
         .lf_body input:focus {border:0; border-bottom:solid 1px #333; outline-style:none;}
         .lf_body .arrbtn {
             display:inline-block; padding-right:30px; background:var(--login-arr) no-repeat right center;
@@ -562,7 +562,7 @@
 				</div>
 
 			</div>
-			<%@ include file="/decorators/include/layout/footer.jsp"%>
+			<%@ include file="/decorators/include/layouts/footer.jsp"%>
 		</div>
 	</div>
 

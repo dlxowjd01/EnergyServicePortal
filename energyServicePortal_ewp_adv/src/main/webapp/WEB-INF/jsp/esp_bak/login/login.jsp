@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<%@ include file="/decorators/include/layout/top.jsp"%>
+	<%@ include file="/decorators/include/layouts/top.jsp"%>
 		<script type="text/javascript">
 			$(function () {
 				var lan = location.search.substr(location.search.length - 2, 2);
@@ -558,7 +558,7 @@
 				</div>
 
 			</div>
-			<%@ include file="/decorators/include/layout/footer.jsp"%>
+			<%@ include file="/decorators/include/layouts/footer.jsp"%>
 		</div>
 	</div>
 

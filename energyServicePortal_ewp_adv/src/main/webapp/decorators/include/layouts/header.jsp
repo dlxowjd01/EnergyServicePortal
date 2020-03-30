@@ -66,7 +66,7 @@
 				        <li><a href="#">EN</a></li>
 				    </ul>
 				</div>	
-				<div class="nav_brand ewp"><a href="#;">EWP</a></div>
+				<div class="nav_brand"><a href="#;">Encored</a></div>
 				<!-- input/dropdown //-->
 				<div class="all-menu">
 					<a href="#">구분</a>
@@ -195,12 +195,12 @@
 		            </form>
 		        </div><!--// input/dropdown -->
 				<ul class="nav_right">
-					<li>
-						<span>CURRENT TIME</span> <em id="currTime">${nowTime}</em>
-					</li>
-					<li>
-						<span>DATA BASE TIME</span> 2018-07-27 17:01:02
-					</li>
+<%--					<li>--%>
+<%--						<span>CURRENT TIME</span> <em id="currTime">${nowTime}</em>--%>
+<%--					</li>--%>
+<%--					<li>--%>
+<%--						<span>DATA BASE TIME</span> 2018-07-27 17:01:02--%>
+<%--					</li>--%>
 					<li class="member clear">
 						<div class="fl"><img src="../img/m_member_pic.png" alt=""></div>
 						<div class="fr">
@@ -220,6 +220,22 @@
 								<c:otherwise>No Permission</c:otherwise>
 							</c:choose>
 						</div>						
+					</li>
+					<li>
+						<!-- 테마 선택 -->
+						<div class="nav_theme">
+							<div class="switcher">
+								<input type="radio" name="balance" value="light" id="light" class="switcher__input switcher__input--light" checked="" onClick="userTheme('light');">
+								<label for="light" class="switcher__label">Light</label>
+								<input type="radio" name="balance" value="dark" id="dark" class="switcher__input switcher__input--dark" onClick="userTheme('dark');">
+								<label for="dark" class="switcher__label">Dark</label>
+								<span class="switcher__toggle"></span>
+							</div>
+						</div>
+					</li>
+					<li>
+						<!-- PC용 언어 선택 -->
+						<%@ include file="/decorators/include/selectLang.jsp" %>
 					</li>
 				</ul>
 			</nav>
