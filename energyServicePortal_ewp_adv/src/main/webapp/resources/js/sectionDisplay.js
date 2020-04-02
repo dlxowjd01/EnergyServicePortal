@@ -18,13 +18,12 @@
 				displayReset(); //SLIDE RESET
 				elem.find(".sec_obj").eq(handIndex).show(); //INDEX SLIDE ACTIVE
 				nav.children("*").eq(handIndex).addClass("active"); //NAV ACTIVE
-				console.log(elem.find(".sec_obj").eq(handIndex))
 			}
 
 			//SLIDE OVJECT MARKING
 			$(this).children("*").each(function(){
 				if(!$(this).hasClass(nav.attr("class"))){
-					//Å¬·¡½º Ãß°¡ ÈÄ HIDE
+					//Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½ï¿½ HIDE
 					$(this).addClass("sec_obj");
 					displayReset();
 				}
@@ -50,11 +49,11 @@
 				});
 			}
 			
-			//ÀÌº¥Æ® Å¸ÀÌ¸Ó
+			//ï¿½Ìºï¿½Æ® Å¸ï¿½Ì¸ï¿½
 			if(opts.auto == true){
 				var autoSlideListener = setInterval(function(){autoSlide();}, opts.autoTime);
 				
-				//¸¶¿ì½º ¿À¹ö½Ã ½½¶óÀÌµå ¸ØÃß±â
+				//ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ß±ï¿½
 				elem.hover(function(){
 					clearInterval(autoSlideListener);
 				}, function(){
