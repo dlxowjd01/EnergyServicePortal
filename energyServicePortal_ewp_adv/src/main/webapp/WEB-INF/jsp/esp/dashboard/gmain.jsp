@@ -19,7 +19,7 @@
 							<div class="col-sm-12">
 								<div class="indiv gmain_chart gmain_chart1">
 									<div class="chart_top clear">
-										<h2 class="ntit">올해</h2>
+										<h2 class="ntit">월간</h2>
 										<span class="term">2020.1.1 ~ 2020.2.29</span>
 									</div>
 									<div class="inchart">
@@ -45,18 +45,18 @@
 										        text: ''
 										    },
 										    xAxis: [{
-										    	lineColor: '#515562', /* 눈금선색 */
-												tickColor: '#515562',
-												gridLineColor: '#515562',
+										    	lineColor: 'var(--color1)', /* 눈금선색 */
+												tickColor: 'var(--color1)',
+												gridLineColor: 'var(--color1)',
 												plotLines: [{
-											        color: '#515562',
+											        color: 'var(--color1)',
 											        width: 1
 											    }],
 											    labels: {
 													align: 'center',
 													y:27, /* 그래프와 거리 */
 													style: {
-														color: '#a4aebf',
+														color: 'var(--color2)',
 														fontSize: '12px'
 													}
 												},
@@ -68,12 +68,12 @@
 										        crosshair: true
 										    }],
 										    yAxis: [{ // Primary yAxis
-										    	lineColor: '#515562', /* 눈금선색 */
-												tickColor: '#515562',
-												gridLineColor: '#515562',
+										    	lineColor: 'var(--color1)', /* 눈금선색 */
+												tickColor: 'var(--color1)',
+												gridLineColor: 'var(--color1)',
 												gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 												plotLines: [{
-											         color: '#515562',
+											         color: 'var(--color1)',
 											         width: 1
 											    }],
 												gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
@@ -84,24 +84,24 @@
 												    y:25, /* 타이틀 위치 조정 */
 												    x:15,
 										            style: {
-										                color: '#ffffff',
+										                color: 'var(--color3)',
 												        fontSize: '12px'
 										            }
 										        },
 										        labels: {
 										            format: '{value}',
 										            style: {
-										                color: '#a4aebf',
+										                color: 'var(--color2)',
 												        fontSize: '12px'
 										            }
 										        }
 										    }, { // Secondary yAxis
-										    	lineColor: '#515562', /* 눈금선색 */
-												tickColor: '#515562',
-												gridLineColor: '#515562',
+										    	lineColor: 'var(--color1)', /* 눈금선색 */
+												tickColor: 'var(--color1)',
+												gridLineColor: 'var(--color1)',
 												gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 												plotLines: [{
-											         color: '#515562',
+											         color: 'var(--color1)',
 											         width: 1
 											    }],
 												gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
@@ -112,14 +112,14 @@
 												    y:25, /* 타이틀 위치 조정 */
 												    x:-12,
 										            style: {
-										                color: '#ffffff',
+										                color: 'var(--color3)',
 												        fontSize: '12px'
 										            }
 										        },
 										        labels: {
 										            format: '{value}',
 										            style: {
-										                color: '#a4aebf',
+										                color: 'var(--color2)',
 												        fontSize: '12px'
 										            }
 										        },
@@ -134,9 +134,9 @@
 												align:'right',
 												verticalAlign:'top',
 												x:5,
-												y:-10,										
+												y:-32,
 												itemStyle: {
-											        color: '#a4aebf',
+											        color: 'var(--color2)',
 											        fontSize: '12px',
 											        fontWeight: 400
 											    },
@@ -152,7 +152,7 @@
 											        label: {
 											            connectorAllowed: false
 											        },
-											        borderColor: '#a4aebf',
+											        borderColor: 'var(--color2)',
 											        borderWidth: 0 /* 보더 0 */
 											    },
 											    line: {
@@ -167,7 +167,7 @@
 										    series: [{
 										        name: '충전',
 										        type: 'column',
-										        color: '#438fd7',
+										        color: '#2BEEE9',
 										        data: [-10, -10, -50, -40, -90, -40, -70, -60, -30, -20, -40, -30],
 										        tooltip: {
 										            valueSuffix: 'kWh'
@@ -176,7 +176,7 @@
 										    },{
 										        name: '방전',
 										        type: 'column',
-										        color: '#84848F',
+										        color: '#878787',
 										        data: [50, 50, 60, 30, 50, 60, 30, 50, 90, 60, 60, 50],
 										        tooltip: {
 										            valueSuffix: 'kWh'
@@ -185,7 +185,7 @@
 										    },{
 										        name: '태양광',
 										        type: 'column',
-										        color: '#E49E2E',
+										        color: '#9363FD',
 										        data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80],
 										        tooltip: {
 										            valueSuffix: 'kWh'
@@ -194,7 +194,7 @@
 										    },{
 										        name: '풍력',
 										        type: 'column',
-										        color: '#13AF67',
+										        color: '#5269EF',
 										        data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80],
 										        tooltip: {
 										            valueSuffix: 'kWh'
@@ -203,7 +203,7 @@
 										    },{
 										        name: '소수력',
 										        type: 'column',
-										        color: '#89B8E5',
+										        color: '#4FB5FF',
 										        data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80],
 										        tooltip: {
 										            valueSuffix: 'kWh'
@@ -212,7 +212,7 @@
 										    },{
 										        name: '정산금',
 										        type: 'spline',
-										        color: '#E85B30',
+										        color: 'var(--color3)',
 										        dashStyle: 'ShortDash',
 										        yAxis: 1,
 										        data: [100, 110, 120, 130, 150, 180, 160, 130, 90, 110, 160, 120],
@@ -301,7 +301,7 @@
 							<div class="col-sm-12">
 								<div class="indiv gmain_chart gmain_chart2">
 									<div class="chart_top clear">
-										<h2 class="ntit">이번달</h2>
+										<h2 class="ntit">일간</h2>
 										<span class="term">2020.3.1 ~ 2020.3.6</span>
 									</div>
 									<div class="inchart">
@@ -327,18 +327,18 @@
 										        text: ''
 										    },
 										    xAxis: [{
-										    	lineColor: '#515562', /* 눈금선색 */
-												tickColor: '#515562',
-												gridLineColor: '#515562',
+										    	lineColor: 'var(--color1)', /* 눈금선색 */
+												tickColor: 'var(--color1)',
+												gridLineColor: 'var(--color1)',
 												plotLines: [{
-											        color: '#515562',
+											        color: 'var(--color1)',
 											        width: 1
 											    }],
 											    labels: {
 													align: 'center',
 													y:27, /* 그래프와 거리 */
 													style: {
-														color: '#a4aebf',
+														color: 'var(--color2)',
 														fontSize: '12px'
 													}
 												},
@@ -350,12 +350,12 @@
 										        crosshair: true
 										    }],
 										    yAxis: [{ // Primary yAxis
-										    	lineColor: '#515562', /* 눈금선색 */
-												tickColor: '#515562',
-												gridLineColor: '#515562',
+												lineColor: 'var(--colo1)', /* 눈금선색 */
+												tickColor: 'var(--colo1)',
+												gridLineColor: 'var(--colo1)',
 												gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 												plotLines: [{
-											         color: '#515562',
+											         color: 'var(--colo1)',
 											         width: 1
 											    }],
 												gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
@@ -366,24 +366,24 @@
 												    y:25, /* 타이틀 위치 조정 */
 												    x:15,
 										            style: {
-										                color: '#ffffff',
+										                color: 'var(--color3)',
 												        fontSize: '12px'
 										            }
 										        },
 										        labels: {
 										            format: '{value}',
 										            style: {
-										                color: '#a4aebf',
+										                color: 'var(--color2)',
 												        fontSize: '12px'
 										            }
 										        }
 										    }, { // Secondary yAxis
-										    	lineColor: '#515562', /* 눈금선색 */
-												tickColor: '#515562',
-												gridLineColor: '#515562',
+										    	lineColor:'var(--colo1)', /* 눈금선색 */
+												tickColor: 'var(--colo1)',
+												gridLineColor: 'var(--colo1)',
 												gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 												plotLines: [{
-											         color: '#515562',
+											         color: 'var(--colo1)',
 											         width: 1
 											    }],
 												gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
@@ -393,17 +393,17 @@
 												    rotation: 0, /* 타이틀 기울기 */
 												    y:25, /* 타이틀 위치 조정 */
 												    x:-12,
-										            style: {
-										                color: '#ffffff',
-												        fontSize: '12px'
-										            }
+															style: {
+																color: 'var(--color3)',
+																fontSize: '12px'
+															}
 										        },
 										        labels: {
-										            format: '{value}',
-										            style: {
-										                color: '#a4aebf',
-												        fontSize: '12px'
-										            }
+															format: '{value}',
+															style: {
+																color: 'var(--color2)',
+																fontSize: '12px'
+															}
 										        },
 										        opposite: true
 										    }],
@@ -416,9 +416,9 @@
 												align:'right',
 												verticalAlign:'top',
 												x:5,
-												y:-10,										
+												y:-32,
 												itemStyle: {
-											        color: '#a4aebf',
+											        color: 'var(--color2)',
 											        fontSize: '12px',
 											        fontWeight: 400
 											    },
@@ -449,7 +449,7 @@
 										    series: [{
 										        name: '충전',
 										        type: 'column',
-										        color: '#438fd7',
+										        color: '#2BEEE9',
 										        data: [-10, -10, -50, -40, -90, -40, -70, -60, -30, -20, -40, -30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 										        tooltip: {
 										            valueSuffix: 'kWh'
@@ -458,7 +458,7 @@
 										    },{
 										        name: '방전',
 										        type: 'column',
-										        color: '#84848F',
+										        color: '#878787',
 										        data: [50, 50, 60, 30, 50, 60, 30, 50, 90, 60, 60, 50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 										        tooltip: {
 										            valueSuffix: 'kWh'
@@ -467,7 +467,7 @@
 										    },{
 										        name: '태양광',
 										        type: 'column',
-										        color: '#E49E2E',
+										        color: '#9363FD',
 										        data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 										        tooltip: {
 										            valueSuffix: 'kWh'
@@ -476,7 +476,7 @@
 										    },{
 										        name: '풍력',
 										        type: 'column',
-										        color: '#13AF67',
+										        color: '#5269EF',
 										        data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 										        tooltip: {
 										            valueSuffix: 'kWh'
@@ -485,7 +485,7 @@
 										    },{
 										        name: '소수력',
 										        type: 'column',
-										        color: '#89B8E5',
+										        color: '#4FB5FF',
 										        data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 										        tooltip: {
 										            valueSuffix: 'kWh'
@@ -494,7 +494,7 @@
 										    },{
 										        name: '정산금',
 										        type: 'spline',
-										        color: '#E85B30',
+										        color: 'var(--color3)',
 										        dashStyle: 'ShortDash',
 										        yAxis: 1,
 										        data: [10, 50, 70, 30, 50, 20, 90, 70, 90, 60, 60, 20,,,,,,,,,,,,,,,,,,],
@@ -583,7 +583,7 @@
 							<div class="col-sm-12">
 								<div class="indiv gmain_chart gmain_chart3">
 									<div class="chart_top clear">
-										<h2 class="ntit">어제</h2>
+										<h2 class="ntit">전일</h2>
 										<span class="term">2020.3.6</span>
 									</div>
 									<ul class="gtab_menu">
@@ -729,9 +729,9 @@
 
 															/* 그래프 스타일 */
 														    series: [{
-														        color: '#438fd7' /* 금일발전 */
+														        color: '#25CCC8' /* 금일발전 */
 														    },{
-														        color: '#84848F' /* 금일예측 */
+														        color: '#878787' /* 금일예측 */
 														    }],
 
 														    /* 반응형 */
@@ -984,9 +984,9 @@
 
 															/* 그래프 스타일 */
 														    series: [{
-														        color: '#438fd7' /* 전일발전 */
+														        color: '#25CCC8' /* 전일발전 */
 														    },{
-														        color: '#84848F' /* 전일예측 */
+														        color: '#878787' /* 전일예측 */
 														    }],
 
 														    /* 반응형 */
@@ -1109,7 +1109,7 @@
 							<div class="col-sm-12">
 								<div class="indiv gmain_map gmain_chart gmain_chart4 ">
 									<div class="chart_top clear">
-										<h2 class="ntit">현재 현황</h2>
+										<h2 class="ntit">현재 출력</h2>
 									</div>
 									<div class="chart_box">
 										<div class="chart_info">
@@ -1146,7 +1146,7 @@
 														        x:-20,
 														        style: {
 														            fontSize: '14px',
-														            color: 'white'
+														            color: 'var(--color3)'
 														        }
 															},
 
@@ -1173,8 +1173,8 @@
 														                    color: 'white'
 														                }																		
 																	},
-																	startAngle: -90,
-																	endAngle: 90,
+																	startAngle: 0,
+																	endAngle: 360,
 																	center: ['40%', '50%'],
 																	borderWidth: 0,
 																	size: '100%'
@@ -1187,28 +1187,28 @@
 																name: '발전량',
 																colorByPoint: true,
 																data: [{
-																	color: '#E49E2E',
+																	color: '#9363FD',
 																	name: '태양광',
 																	dataLabels: {
 														                enabled: false
 														            },
 																	y: 60 //60% -- 아래로 총합 100%
 																}, {
-																	color: '#13AF67',
+																	color: '#5269EF',
 																	name: '풍력',
 																	dataLabels: {
 														                enabled: false
 														            },
 																	y: 10 //10%
 																}, {
-																	color: '#89B8E5',
+																	color: '#4FB5FF',
 																	name: '소수력',
 																	dataLabels: {
 														                enabled: false
 														            },
 																	y: 10 //10% 
 																}, {
-																	color: '#84848f',
+																	color: '#878787',
 																	name: '미사용량',
 																	dataLabels: {
 														                enabled: false
@@ -1309,7 +1309,7 @@
 											<em>5</em>
 										</div>
 										<div class="a_warning clear">
-											<a href="#" class="btn cancel_btn">상세보기</a>
+											<a href="#" class="btn">상세보기</a>
 										</div>
 									</div>
 									<div class="alarm_notice">
@@ -1343,17 +1343,17 @@
 							<div class="col-sm-12">
 								<div class="indiv gmain_table">
 									<div class="gtbl_top clear">
-										<div class="fl">
-											<input type="text" class="input" value="사업소">
-											<button type="submit">검색</button>
-											<div class="check-option">
+										<div class="upper clear">
+											<input type="text" class="input fl" value="사업소">
+											<button class="fl" type="submit">검색</button>
+											<div class="check-option fr">
 												<label><input type="checkbox"> 정상</label>
 												<label><input type="checkbox"> 경고</label>
 												<label><input type="checkbox"> 이상</label>
 											</div>
 										</div>
-										<div class="fr">
-											<span>페이지</span>
+										<div class="lower fr">
+											<span>페이지 당 표시:</span>
 											<select name="" id="" class="sel">
 												<option value="10">10</option>
 												<option value="20">20</option>
@@ -1438,7 +1438,7 @@
 																				        x:0,
 																				        style: {
 																				            fontSize: '12px',
-																				            color: 'white'
+																				            color: 'var(--color3)'
 																				        }
 																					},
 
@@ -1462,7 +1462,7 @@
 																								enabled: false,
 																								style: {
 																				                    fontWeight: 'bold',
-																				                    color: 'white'
+																				                    color: 'var(--color3)'
 																				                }																		
 																							},
 																							//startAngle: -90,
@@ -1479,7 +1479,7 @@
 																						name: '설비용량',
 																						colorByPoint: true,
 																						data: [{
-																							color: '#438fd7',
+																							color: '#26ccc8',
 																							name: '총 설비용량',
 																							dataLabels: {
 																								enabled: false
@@ -1511,7 +1511,8 @@
 																									pie: {
 																										dataLabels: {
 																											style: {
-																							                    fontWeight: 'bold'
+																							                    fontWeight: 'bold',
+																																	color: 'var(--color3)'
 																							                }						
 																										},
 																										center: ['50%', '50%'],
@@ -1627,7 +1628,7 @@
 																				        x:0,
 																				        style: {
 																				            fontSize: '14px',
-																				            color: 'white'
+																				            color: 'var(--color3)'
 																				        }
 																					},
 
@@ -1651,7 +1652,7 @@
 																								enabled: false,
 																								style: {
 																				                    fontWeight: 'bold',
-																				                    color: 'white'
+																				                    color: 'var(--color3)'
 																				                }																		
 																							},
 																							//startAngle: -90,
@@ -1668,7 +1669,7 @@
 																						name: '설비용량',
 																						colorByPoint: true,
 																						data: [{
-																							color: '#438fd7',
+																							color: '#26ccc8',
 																							name: '총 설비용량',
 																							dataLabels: {
 																								enabled: false
@@ -1700,7 +1701,8 @@
 																									pie: {
 																										dataLabels: {
 																											style: {
-																							                    fontWeight: 'bold'
+																							                    fontWeight: 'bold',
+																																	color: 'var(--color3)'
 																							                }						
 																										},
 																										center: ['50%', '50%'],
@@ -1816,7 +1818,7 @@
 																				        x:0,
 																				        style: {
 																				            fontSize: '12px',
-																				            color: 'white'
+																				            color: 'var(--color3)'
 																				        }
 																					},
 
@@ -1840,7 +1842,7 @@
 																								enabled: false,
 																								style: {
 																				                    fontWeight: 'bold',
-																				                    color: 'white'
+																				                    color: 'var(--color3)'
 																				                }																		
 																							},
 																							//startAngle: -90,
@@ -1857,7 +1859,7 @@
 																						name: '설비용량',
 																						colorByPoint: true,
 																						data: [{
-																							color: '#438fd7',
+																							color: '#26ccc8',
 																							name: '총 설비용량',
 																							dataLabels: {
 																								enabled: false
@@ -1883,13 +1885,15 @@
 																							        y:10,
 																							        style: {
 																							            fontSize: '12px',
+																													color: 'var(--color3)'
 																							        }
 																								},
 																								plotOptions: {
 																									pie: {
 																										dataLabels: {
 																											style: {
-																							                    fontWeight: 'bold'
+																							                    fontWeight: 'bold',
+																																	color: 'var(--color3)'
 																							                }						
 																										},
 																										center: ['50%', '50%'],
@@ -1988,7 +1992,7 @@
 																				        x:0,
 																				        style: {
 																				            fontSize: '14px',
-																				            color: 'white'
+																				            color: 'var(--color3)'
 																				        }
 																					},
 
@@ -2012,7 +2016,7 @@
 																								enabled: false,
 																								style: {
 																				                    fontWeight: 'bold',
-																				                    color: 'white'
+																				                    color: 'var(--color3)'
 																				                }																		
 																							},
 																							//startAngle: -90,
@@ -2029,7 +2033,7 @@
 																						name: '설비용량',
 																						colorByPoint: true,
 																						data: [{
-																							color: '#438fd7',
+																							color: '#26ccc8',
 																							name: '총 설비용량',
 																							dataLabels: {
 																								enabled: false
@@ -2055,13 +2059,15 @@
 																							        y:10,
 																							        style: {
 																							            fontSize: '12px',
+																													color: 'var(--color3)'
 																							        }
 																								},
 																								plotOptions: {
 																									pie: {
 																										dataLabels: {
 																											style: {
-																							                    fontWeight: 'bold'
+																							                    fontWeight: 'bold',
+																																	color: 'var(--color3)'
 																							                }						
 																										},
 																										center: ['50%', '50%'],
