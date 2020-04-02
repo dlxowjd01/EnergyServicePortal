@@ -1,10 +1,10 @@
 #!/bin/bash
 echo "> Health check 시작"
-echo "> curl -s http://localhost:8080/login "
+echo "> curl -s http://localhost:8080/login.do"
 
 for RETRY_COUNT in {1..15}
 do
-  RESPONSE=$(curl -s http://localhost:8080/login)
+  RESPONSE=$(curl -s http://localhost:8080/login.do)
   UP_COUNT=$(echo $RESPONSE | grep '로그인' | wc -l)
 
   if [ $UP_COUNT -ge 1 ]
