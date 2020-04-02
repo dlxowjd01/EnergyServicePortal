@@ -30,13 +30,13 @@ jobs:
 
       # run tests!
       # run: mvn integration-test
-      - run:
-          name: static code analysis
-          command: |
-            mv settings.xml ~/.m2/settings.xml
-            mvn -f ewpsp/pom.xml clean package sonar:sonar
-            mvn -f ewp-api-agent/pom.xml clean package sonar:sonar
-            mvn -f energyServicePortal_ewp_adv/pom.xml clean package sonar:sonar
+      #- run:
+      #    name: static code analysis
+      #    command: |
+      #      mv settings.xml ~/.m2/settings.xml
+      #      mvn -f ewpsp/pom.xml clean package sonar:sonar
+      #      mvn -f ewp-api-agent/pom.xml clean package sonar:sonar
+      #      mvn -f energyServicePortal_ewp_adv/pom.xml clean package sonar:sonar
 
       - run: mvn -f ewpsp/pom.xml package clean package -DskipTests=true
       - run: mvn -f ewp-api-agent/pom.xml clean package -DskipTests=true
