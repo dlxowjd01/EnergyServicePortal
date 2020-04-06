@@ -67,7 +67,7 @@ function sendEmail() {
 
 
 <!-- 메인페이지용 스타일/스크립트 파일 -->
-<link type="text/css" href="../css/main.css" rel="stylesheet">
+<link type="text/css" href="../css/custom.css" rel="stylesheet">
 
 <div id="tot" class="space" style="width:100%; height:900px; display:inline-block; overflow: auto;">
 	<div id="tot_r1_1" class="space" style="width:100%; display:inline-block;">

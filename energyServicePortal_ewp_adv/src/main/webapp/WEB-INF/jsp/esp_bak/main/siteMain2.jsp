@@ -1001,7 +1001,7 @@
 </script>
 
 <!-- 메인페이지용 스타일 파일 -->
-<link href="../css/main.css" rel="stylesheet">
+<link href="../css/custom.css" rel="stylesheet">
 
 <div id="container">
 	<form id="schForm" name="schForm" action="">
