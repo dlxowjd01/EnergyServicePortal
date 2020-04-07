@@ -17,7 +17,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="row eq_wrap scroll">
+				<div class="row scroll">
 					<div class="col-lg-12">
 						<div class="row">
 							<div class="col-lg-7">

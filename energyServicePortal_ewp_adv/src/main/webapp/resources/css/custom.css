@@ -819,7 +819,7 @@ html.darkmode input:-webkit-autofill {
 	display: block;
 	content: "";
 	position: fixed;
-	top: 154px;
+	top: 158px;
 	left: 72px;
 	bottom: 0;
 	width: 250px;
@@ -849,10 +849,12 @@ html.darkmode input:-webkit-autofill {
 	border-radius: 200px;
 }
 
-.sub_layer > ul > li.on > a,
+.sub_layer > ul > li.on > a {
+	color: var(--color3);
+}
 .sub_layer > ul > li > a:hover {
-	background: #fff url('../img/icon_sub_layer.png') no-repeat right 20px center;
-	color: var(--active);
+	/*background: #fff url('../img/icon_sub_layer.png') no-repeat right 20px center;*/
+	color: var(--color1);
 }
 
 /* */
@@ -865,8 +867,12 @@ html.darkmode input:-webkit-autofill {
 	height: 36px;
 	line-height: 36px;
 	font-size: 13px;
-	color: #f2f2f2;
+	color: var(--color3);
 	padding-left: 20px;
+}
+
+.sub_layer > ul > li > a ~ div p a:hover {
+	color: var(--color2);
 }
 
 /* 사이드 메인메뉴 */
@@ -2799,7 +2805,7 @@ input.inp[readonly]:focus {
 .page-header {
 	display: inline-block;
 	vertical-align: middle;
-	margin: 0 0 12px;
+	margin: 0;
 	padding: 0 20px;
 	font-size: 32px;
 	line-height: 32px;
@@ -2811,13 +2817,11 @@ input.inp[readonly]:focus {
 .page-header ~ .sa_select {
 	display: inline-block;
 	vertical-align: middle;
-	margin: 0 0 12px
 }
 
 /* 반응형 미디어 쿼리 */
 @media all and (min-width: 3000px) {
 	.page-header {
-		margin: 0 0 18px;
 		font-size: 48px;
 		line-height: 1;
 		letter-spacing: -1.5px;
@@ -2842,7 +2846,6 @@ input.inp[readonly]:focus {
 
 @media all and (max-width: 481px) {
 	.page-header {
-		margin-top: 20px;
 		text-align: center;
 	}
 }
@@ -11124,6 +11127,6 @@ div.di_wrap dl .link a {
 
 
 /* 레이아웃 높이값 지정 */
-.eq_wrap {height:calc(100vh - 17px); min-height:900px; max-height:1000px; overflow-y:auto; margin-left:-24px; padding:16px; padding-top:0; overflow-y:auto;}
+.eq_wrap {height:calc(100vh - 17px); min-height:900px; max-height:1000px; overflow-y:auto; padding:16px; padding-top:0; overflow-y:auto;}
 .eq_wrap > div {padding-top:0;}
 .eq_wrap > div .row:first-child > div {padding-top:0;}
