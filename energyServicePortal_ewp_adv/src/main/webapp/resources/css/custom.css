@@ -7322,11 +7322,11 @@ nav .lang.dropdown .btn .caret {
 }
 
 .gmain_chart .sa_chart {
-	height: calc(100vh - 731px);
+	/*height: calc(100vh - 731px);*/
 	overflow-y: auto;
 	padding-right: 25px;
 	min-height: 181px;
-	max-height: 374px;
+	/*max-height: 374px;*/
 }
 
 .gmain_chart .sa_chart.type-table {
@@ -9102,12 +9102,20 @@ div.di_wrap dl .link a {
 	min-height: auto;
 }
 
+.gmain_chart3 {
+	min-height: auto;
+}
+
 .gmain_chart1 #gchart1 {
-	height: 306px !important;
+	height: 202px !important;
 }
 
 .gmain_chart2 #gchart2 {
-	height: 306px !important;
+	height: 202px !important;
+}
+
+.gmain_chart3 #gchart3 {
+	height: 346px !important;
 }
 
 .gmain_chart.gmain_chart1 .chart_top .ntit,
@@ -9141,11 +9149,11 @@ div.di_wrap dl .link a {
 /* 반응형 미디어 쿼리 */
 @media all and (min-width: 3000px) {
 	.gmain_chart1 #gchart1 {
-		height: 336px !important;
+		height: 308px !important;
 	}
 
 	.gmain_chart2 #gchart2 {
-		height: 336px !important;
+		height: 308px !important;
 	}
 
 	.gmain_chart.gmain_chart1 .chart_top .ntit,
@@ -11013,7 +11021,7 @@ div.di_wrap dl .link a {
 .his_tbl {width:100%;}
 .his_tbl thead {}
 .his_tbl thead th {
-	height:48px; font-size:13px; color:##3d4250; font-weight:normal; background:#eceef0;
+	height:48px; font-size:13px; color:#3d4250; font-weight:normal; background:#eceef0;
 	vertical-align:middle; text-align:center;
 }
 .his_tbl thead th label {cursor:pointer;}
