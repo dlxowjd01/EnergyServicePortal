@@ -2,11 +2,11 @@
 <%@ include file="/decorators/include/taglibs.jsp"%>
 
 	<script type="text/javascript">
-	$(function(){ 
+	$(function(){
     	$("input[name='deviceStatus']").on("click", function() {
 			var flag = $(this).is(":checked");
 			var str = $(this).val();
-			
+
 			var $tbody = $(".intable").find('tbody');
 			if(flag){
 				if(str == "정상") $tbody.find('.flag1').css("display", "");
@@ -17,7 +17,7 @@
 				if(str == "경고") $tbody.find('.flag2').css("display", "none");
 				if(str == "이상") $tbody.find('.flag3').css("display", "none");
 			}
-			
+
         });
 	});
     </script>
@@ -34,6 +34,19 @@
 								<div class="indiv smain_pv clear">
 									<div class="chart_top clear">
 										<h2 class="ntit">월별 발전량 종합</h2>
+										<h1 class="stit">2020.01.01 ~ 2020.02.29</h1>
+									</div>
+									<div  class="chart_mid clear">
+										<div class="box">
+											<div class="line1">이번달 총 발전량</div>
+											<div class="line2"><span class="pv">763</span><em>kWh</em></div>
+											<div class="line3"><i class="fa fa-arrow-down"></i><span>6,804</span></div>
+										</div>
+										<div class="box">
+											<div class="line1">올해 누적 발전량</div>
+											<div class="line2"><span class="pv">14.4</span><em>MWh</em></div>
+											<div class="line3"><i class="fa fa-arrow-up"></i><span>13,481</span></div>
+										</div>
 									</div>
 									<div class="inchart">
 										<div id="schart1"></div>
@@ -147,7 +160,7 @@
 												align:'right',
 												verticalAlign:'top',
 												x:5,
-												y:-10,										
+												y:-10,
 												itemStyle: {
 											        color: '#a4aebf',
 											        fontSize: '12px',
@@ -205,7 +218,7 @@
 											responsive: {
 											    rules: [{
 											        condition: {
-											            minWidth: 870 /* 차트 사이즈 */									                
+											            minWidth: 870 /* 차트 사이즈 */
 											        },
 											        chartOptions: {
 											        	chart: {
@@ -223,7 +236,7 @@
 														yAxis: [{
 															title: {
 																y:30,
-																x:20,															
+																x:20,
 														        style: {
 														            fontSize: '18px'
 														        }
@@ -248,7 +261,7 @@
 														        }
 															}
 														}],
-														legend: {									
+														legend: {
 															itemStyle: {
 														        fontSize: '18px'
 														    },
@@ -257,26 +270,14 @@
 														}
 											        }
 											    }]
-											}											
+											}
 										});
 
-										</script>				
+										</script>
 									</div>
-									<ul class="fr">
-										<li>
-											<div><strong>이번달 총 발전량</strong></div>
-											<div><span>763</span><em>kWh</em></div>
-											<div>▲(6,804)</div>
-										</li>
-										<li>
-											<div><strong>올해 누적 발전량</strong></div>
-											<div><span>14.4</span><em>MWh</em></div>
-											<div>▼(13,481)</div>
-										</li>
-									</ul>
 								</div>
 							</div>
-						</div>						
+						</div>
 						<div class="row">
 							<div class="col-sm-12">
 								<div class="indiv smain_cal">
@@ -286,7 +287,7 @@
 									</div>
 									<div>
 										<table class="calendar">
-											<!--tr>
+											<tr>
 												<th>일</th>
 												<th>월</th>
 												<th>화</th>
@@ -294,193 +295,74 @@
 												<th>목</th>
 												<th>금</th>
 												<th>토</th>
-											</tr-->
-											<tr>
-												<td>
-													<em>1</em>
-													<div><i class="fas fa-cloud-sun-rain"></i><br/><strong>16.5℃</strong></div>
-													<span><strong>936</strong>kWh</span>
-												</td>
-												<td>
-													<em>2</em>
-													<div><i class="fas fa-cloud-sun"></i><br/><strong>10.2℃</strong></div>
-													<span><strong>1027</strong>kWh</span>
-												</td>
-												<td class="today">
-													<em>3</em>
-													<div><i class="fas fa-cloud-showers-heavy"></i><br/><strong>13.5℃</strong></div>
-													<span><strong>271</strong>kWh</span>
-												</td>
-												<td>
-													<em>4</em>
-													<div><i class="fas fa-cloud-rain"></i><br/><strong>15.4℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>5</em>
-													<div><i class="fas fa-cloud"></i><br/><strong>14.2℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>6</em>
-													<div><i class="fas fa-snowflake"></i><br/><strong>10℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>7</em>
-													<div><i class="fas fa-cloud-meatball"></i><br/><strong>9.5℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
 											</tr>
-											<tr>
-												<td>
-													<em>8</em>
-													<div><i class="fas fa-bolt"></i><br/><strong>16.5℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>9</em>
-													<div><i class="fas fa-wind"></i><br/><strong>10.2℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>10</em>
-													<div><i class="fas fa-smog"></i><br/><strong>13.5℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>11</em>
-													<div><i class="fas fa-umbrella"></i><br/><strong>15.4℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>12</em>
-													<div><i class="fas fa-rainbow"></i><br/><strong>14.2℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>13</em>
-													<div><i class="fas fa-poo-storm"></i><br/><strong>10℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>14</em>
-													<div><i class="fas fa-cloud-moon-rain"></i><br/><strong>9.5℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<em>15</em>
-													<div><i class="fas fa-cloud-moon"></i><br/><strong>16.5℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>16</em>
-													<div><i class="fas fa-cloud-sun"></i><br/><strong>10.2℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>17</em>
-													<div><i class="fas fa-cloud-showers-heavy"></i><br/><strong>13.5℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>18</em>
-													<div><i class="fas fa-cloud-rain"></i><br/><strong>15.4℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>19</em>
-													<div><i class="fas fa-cloud"></i><br/><strong>14.2℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>20</em>
-													<div><i class="fas fa-snowflake"></i><br/><strong>10℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>21</em>
-													<div><i class="fas fa-cloud-meatball"></i><br/><strong>9.5℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<em>22</em>
-													<div><i class="fas fa-cloud-sun-rain"></i><br/><strong>16.5℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>23</em>
-													<div><i class="fas fa-cloud-sun"></i><br/><strong>10.2℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>24</em>
-													<div><i class="fas fa-cloud-showers-heavy"></i><br/><strong>13.5℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>25</em>
-													<div><i class="fas fa-cloud-rain"></i><br/><strong>15.4℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>26</em>
-													<div><i class="fas fa-cloud"></i><br/><strong>14.2℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>27</em>
-													<div><i class="fas fa-snowflake"></i><br/><strong>10℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>28</em>
-													<div><i class="fas fa-cloud-meatball"></i><br/><strong>9.5℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<em>29</em>
-													<div><i class="fas fa-cloud-sun-rain"></i><br/><strong>16.5℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>30</em>
-													<div><i class="fas fa-cloud-sun"></i><br/><strong>10.2℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td>
-													<em>31</em>
-													<div><i class="fas fa-cloud-showers-heavy"></i><br/><strong>13.5℃</strong></div>
-													<span><strong>0</strong>kWh</span>
-												</td>
-												<td class="disabled">
-													<em>1</em>
-													<span></span>
-												</td>
-												<td class="disabled">
-													<em>2</em>
-													<span></span>
-												</td>
-												<td class="disabled">
-													<em>3</em>
-													<span></span>
-												</td>
-												<td class="disabled">
-													<em>4</em>
-													<span></span>
-												</td>
+
+											<c:forEach var="week" items="${calList}">
+												<tr>
+													<c:forEach var="day" items="${week }">
+														<c:choose>
+															<c:when test="${day ne 0 }">
+
+																<td <c:if test="${calToday eq day }">class="today"</c:if>>
+																	<div>
+																		<em class="fl day">${day }</em>
+																		<em class="fr">16.5℃</em>
+																	</div>
+																	<div>
+																		<div class="wicon"><i class="fas fa-2x fa-cloud-sun-rain"></i></div>
+																	</div>
+																	<span><strong>936</strong><em>kWh</em></span>
+																</td>
+
+															</c:when>
+															<c:otherwise>
+																<td class="disabled">
+																</td>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+												</tr>
+											</c:forEach>
+
+											<%--
+												<i class="fas fa-2x fa-cloud-sun-rain"></i>
+												<i class="fas fa-2x fa-cloud-sun"></i>
+												<i class="fas fa-2x fa-cloud-showers-heavy"></i>
+												<i class="fas fa-2x fa-cloud-rain"></i>
+												<i class="fas fa-2x fa-cloud"></i>
+												<i class="fas fa-2x fa-snowflake"></i>
+												<i class="fas fa-2x fa-cloud-meatball">
+												<i class="fas fa-2x fa-bolt"></i>
+												<i class="fas fa-2x fa-wind"></i>
+												<i class="fas fa-2x fa-smog"></i>
+												<i class="fas fa-2x fa-umbrella"></i>
+												<i class="fas fa-2x fa-rainbow"></i>
+												<i class="fas fa-2x fa-poo-storm"></i>
+												<i class="fas fa-2x fa-cloud-moon-rain"></i>
+												<i class="fas fa-2x fa-cloud-moon"></i>
+												<i class="fas fa-2x fa-cloud-sun"></i>
+												<i class="fas fa-2x fa-cloud-showers-heavy"></i>
+												<i class="fas fa-2x fa-cloud-rain"></i>
+												<i class="fas fa-2x fa-cloud"></i>
+												<i class="fas fa-2x fa-snowflake"></i>
+												<i class="fas fa-2x fa-cloud-meatball"></i>
+												<i class="fas fa-2x fa-cloud-sun-rain"></i>
+												<i class="fas fa-2x fa-cloud-sun"></i>
+												<i class="fas fa-2x fa-cloud-showers-heavy"></i>
+												<i class="fas fa-2x fa-cloud-rain"></i>
+												<i class="fas fa-2x fa-cloud"></i>
+												<i class="fas fa-2x fa-snowflake"></i>
+												<i class="fas fa-2x fa-cloud-meatball"></i>
+												<i class="fas fa-2x fa-cloud-sun-rain"></i>
+												<i class="fas fa-2x fa-cloud-sun"></i>
+												<i class="fas fa-2x fa-cloud-showers-heavy"></i>
+											--%>
 											</tr>
 										</table>
 									</div>
 								</div>
 							</div>
-						</div>				
+						</div>
 					</div>
 					<div class="col-lg-4">
 						<div class="row">
@@ -498,7 +380,7 @@
 													$(window).resize(function() { //브라우저 사이즈 변경될때마다 새로고침 (차트사이즈 재설정)
 													    location.reload();
 													});
-													$(function () {														
+													$(function () {
 														var pieChart = Highcharts.chart('pie_chart', {
 															chart: {
 																marginTop:0,
@@ -516,11 +398,11 @@
 																}
 															},
 
-															title: {																
+															title: {
 														        text: '102MW', // 총용량 표기
 														        align: 'center',
 														        verticalAlign: 'middle',
-														        y:0,
+														        y:10,
 														        x:-20,
 														        style: {
 														            fontSize: '14px',
@@ -549,10 +431,12 @@
 																		style: {
 														                    fontWeight: 'bold',
 														                    color: 'white'
-														                }																		
+														                }
 																	},
+																	/*
 																	startAngle: -90,
 																	endAngle: 90,
+																	*/
 																	center: ['40%', '50%'],
 																	borderWidth: 0,
 																	size: '100%'
@@ -565,33 +449,33 @@
 																name: '출력용량',
 																colorByPoint: true,
 																data: [{
-																	color: '#E49E2E',
+																	color: '#9363fd',
 																	name: '태양광',
 																	dataLabels: {
 														                enabled: false
 														            },
 																	y: 60 //60% -- 아래로 총합 100%
 																}, {
-																	color: '#13AF67',
+																	color: '#5269ef',
 																	name: '풍력',
 																	dataLabels: {
 														                enabled: false
 														            },
 																	y: 10 //10%
 																}, {
-																	color: '#89B8E5',
+																	color: '#4a9ade',
 																	name: '소수력',
 																	dataLabels: {
 														                enabled: false
 														            },
-																	y: 10 //10%  
+																	y: 10 //10%
 																}, {
-																	color: '#84848f',
+																	color: '#656565',
 																	name: '미사용량',
 																	dataLabels: {
 														                enabled: false
 														            },
-																	y: 20 //20% 나머지 
+																	y: 20 //20% 나머지
 																}]
 															}],
 
@@ -606,7 +490,7 @@
 																	        style: {
 																	            fontSize: '16px',
 																	        }
-																		}															
+																		}
 																	}
 																},{
 														            condition: {
@@ -617,10 +501,10 @@
 																	        x:0
 																		},
 																		plotOptions: {
-																			pie: {																				
+																			pie: {
 																				center: ['50%', '50%']
 																			}
-																		}														
+																		}
 																	}
 																}]
 															}
@@ -639,8 +523,8 @@
 													<li><strong>실시간 AC출력</strong> <span>35</span><em>MW</em></li>
 												</ul>
 											</div>
-										</div>										
-									</div>	
+										</div>
+									</div>
 									<div class="local_info smain s_center">
 										<table>
 											<thead>
@@ -660,7 +544,7 @@
 												</tr>
 											</tbody>
 										</table>
-									</div>				
+									</div>
 								</div>
 							</div>
 						</div>
@@ -673,8 +557,8 @@
 									<div class="sa_wrap">
 										<div class="inchart">
 											<div id="schart2"></div>
-											<script language="JavaScript"> 
-											$(function () { 
+											<script language="JavaScript">
+											$(function () {
 												var saChart2 = Highcharts.chart('schart2', {
 													data: {
 												        table: 'sdatatable2' /* 테이블에서 데이터 불러오기 */
@@ -758,7 +642,7 @@
 
 													tooltip: {
 												        shared: true
-												    },	
+												    },
 
 													/* 범례 */
 													legend: {
@@ -766,7 +650,7 @@
 														align:'right',
 														verticalAlign:'top',
 														x:5,
-														y:-10,										
+														y:-10,
 														itemStyle: {
 													        color: '#a4aebf',
 													        fontSize: '12px',
@@ -824,7 +708,7 @@
 													responsive: {
 													    rules: [{
 													        condition: {
-													            minWidth: 870 /* 차트 사이즈 */									                
+													            minWidth: 870 /* 차트 사이즈 */
 													        },
 													        chartOptions: {
 													        	chart: {
@@ -849,7 +733,7 @@
 																        }
 																	}
 																},
-																legend: {									
+																legend: {
 																	itemStyle: {
 																        fontSize: '18px'
 																    },
@@ -864,7 +748,7 @@
 											});
 											</script>
 											<!-- 데이터 추출용 -->
-											<div class="chart_table" style="display:none;">			
+											<div class="chart_table" style="display:none;">
 												<table id="sdatatable2">
 												    <thead>
 												        <tr>
@@ -877,127 +761,127 @@
 												        <tr>
 												            <th>1</th>
 												            <td>500</td>
-												            <td>550</td>										            
+												            <td>550</td>
 												        </tr>
 												        <tr>
 												            <th>2</th>
 												            <td>600</td>
-												            <td>620</td>										            
+												            <td>620</td>
 												        </tr>
 												        <tr>
 												            <th>3</th>
 												            <td>520</td>
-												            <td>530</td>										            
+												            <td>530</td>
 												        </tr>
 												        <tr>
 												            <th>4</th>
 												            <td>550</td>
-												            <td>420</td>										            
+												            <td>420</td>
 												        </tr>
 												        <tr>
 												            <th>5</th>
 												            <td>560</td>
-												            <td>550</td>										            
+												            <td>550</td>
 												        </tr>
 												        <tr>
 												            <th>6</th>
 												            <td>570</td>
-												            <td>560</td>										            
+												            <td>560</td>
 												        </tr>
 												        <tr>
 												            <th>7</th>
 												            <td>600</td>
-												            <td>590</td>										            
+												            <td>590</td>
 												        </tr>
 												        <tr>
 												            <th>8</th>
 												            <td>620</td>
-												            <td>600</td>										            
+												            <td>600</td>
 												        </tr>
 												        <tr>
 												            <th>9</th>
 												            <td>640</td>
-												            <td>620</td>										            
+												            <td>620</td>
 												        </tr>
 												        <tr>
 												            <th>10</th>
 												            <td>660</td>
-												            <td>640</td>										            
+												            <td>640</td>
 												        </tr>
 												        <tr>
 												            <th>11</th>
 												            <td>680</td>
-												            <td>630</td>										            
+												            <td>630</td>
 												        </tr>
 												        <tr>
 												            <th>12</th>
 												            <td>700</td>
-												            <td>650</td>										            
+												            <td>650</td>
 												        </tr>
 												        <tr>
 												            <th>13</th>
 												            <td>780</td>
-												            <td>770</td>										            
+												            <td>770</td>
 												        </tr>
 												        <tr>
 												            <th>14</th>
 												            <td>790</td>
-												            <td>780</td>										            
+												            <td>780</td>
 												        </tr>
 												        <tr>
 												            <th>15</th>
 												            <td>860</td>
-												            <td>850</td>										            
+												            <td>850</td>
 												        </tr>
 												        <tr>
 												            <th>16</th>
 												            <td>850</td>
-												            <td>840</td>										            
+												            <td>840</td>
 												        </tr>
 												        <tr>
 												            <th>17</th>
 												            <td>840</td>
-												            <td>830</td>										            
+												            <td>830</td>
 												        </tr>
 												        <tr>
 												            <th>18</th>
 												            <td>930</td>
-												            <td>920</td>										            
+												            <td>920</td>
 												        </tr>
 												        <tr>
 												            <th>19</th>
 												            <td>900</td>
-												            <td>790</td>										            
+												            <td>790</td>
 												        </tr>
 												        <tr>
 												            <th>20</th>
 												            <td>860</td>
-												            <td>880</td>										            
+												            <td>880</td>
 												        </tr>
 												        <tr>
 												            <th>21</th>
 												            <td>750</td>
-												            <td>800</td>										            
+												            <td>800</td>
 												        </tr>
 												        <tr>
 												            <th>22</th>
 												            <td>720</td>
-												            <td>750</td>										            
+												            <td>750</td>
 												        </tr>
 												        <tr>
 												            <th>23</th>
 												            <td>680</td>
-												            <td>700</td>										            
+												            <td>700</td>
 												        </tr>
 												        <tr>
 												            <th>24</th>
 												            <td>650</td>
-												            <td>660</td>										            
+												            <td>660</td>
 												        </tr>
 												    </tbody>
-												</table>			
-											</div>										
-										</div>																			
+												</table>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -1010,7 +894,7 @@
 										<span class="real_time">2020-03-03 15:25</span>
 									</div>
 									<div class="weater_wrap clear">
-										<div class="fl">											
+										<div class="fl">
 											<!-- 날씨관련 아이콘 클래스명 확인 -->
 											<!-- https://fontawesome.com/icons?d=gallery&q=weather&m=free -->
 											<dl>
@@ -1074,7 +958,7 @@
 										</div>
 									</div>
 								</div>
-							</div>							
+							</div>
 						</div>
 					</div>
 					<div class="col-lg-4">
@@ -1130,14 +1014,14 @@
 												<label><input type="checkbox" name="deviceStatus" value="경고" checked> 경고</label>
 												<label><input type="checkbox" name="deviceStatus" value="이상" checked> 이상</label>
 											</div>
-										</div>									
+										</div>
 									</div>
 									<ul class="type_list">
 										<li>
 											<div class="chart_top clear">
 												<h2 class="ntit">인버터(42)</h2>
 												<div class="alert_icon fr">
-													<span class="inv_normail">정상 39</span> 
+													<span class="inv_normail">정상 39</span>
 													<span class="inv_error">이상 1</span>
 													<span class="inv_alert">경고 2</span>
 												</div>
@@ -1162,8 +1046,8 @@
 															</tr>
 														</tbody>
 													</table>
-												</div>									
-												<div class="gtbl_wrap">										
+												</div>
+												<div class="gtbl_wrap">
 													<div class="intable">
 														<table>
 															<colgroup>
@@ -1275,7 +1159,7 @@
 											<div class="chart_top clear">
 												<h2 class="ntit">접속반(112)</h2>
 												<div class="alert_icon fr">
-													<span class="inv_normail">정상 89</span> 
+													<span class="inv_normail">정상 89</span>
 													<span class="inv_error">이상 11</span>
 													<span class="inv_alert">경고 12</span>
 												</div>
@@ -1298,7 +1182,7 @@
 															</tr>
 														</tbody>
 													</table>
-												</div>	
+												</div>
 											</div>
 										</li>
 										<li>
@@ -1328,7 +1212,7 @@
 															</tr>
 														</tbody>
 													</table>
-												</div>	
+												</div>
 											</div>
 										</li>
 										<li>
@@ -1365,7 +1249,7 @@
 												</div>
 											</div>
 										</li>
-									</ul>	
+									</ul>
 								</div>
 							</div>
 						</div>
