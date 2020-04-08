@@ -1953,8 +1953,8 @@ footer .copyright {
 
 .alarm_notice li a {
 	display: block;
-	width: calc(100% - 100px);
-	float: left;
+	/*width: calc(100% - 100px);*/
+	/*float: left;*/
 	font-size: 12px;
 	color: var(--color2);
 	line-height: 18px;
@@ -1965,13 +1965,14 @@ footer .copyright {
 
 .alarm_notice li a:before {
 	display: inline-block;
-	margin-right: 3px;
+	margin: 4px 16px 0 0;
 	content: "";
 	background: #f75c4a;
 	width: 8px;
 	height: 8px;
 	border-radius: 200px;
 	vertical-align: middle;
+	float:left;
 }
 
 .alarm_notice li span {
@@ -1983,9 +1984,17 @@ footer .copyright {
 	height: 18px;
 	line-height: 18px;
 	font-family: 'Roboto', sans-serif;
-	font-size: 10px;
+	font-size: 12px;
 	color: var(--color3);
 	letter-spacing: -0.5px;
+}
+
+.alarm_notice li span.err_msg{
+	float:left;
+}
+
+.alarm_notice li span.err_time{
+	float:right;
 }
 
 /* 반응형 미디어 쿼리 */
@@ -7187,13 +7196,25 @@ nav .lang.dropdown .btn .caret {
 
 /* 알람 */
 .gmain_alarm {
-	min-height: 131px;
+	height: 152px;
+	position: relative;
+	overflow:hidden;
+}
+
+.gmain_alarm::before{
+	content:"";
+	position: absolute;
+	top:0;
+	right:0;
+	left:0;
+	height: 10px;
+	background-color: var(--error);
 }
 
 .gmain_alarm .alarm_stat > div span {
 	float: left;
-	padding: 8px 15px;
-	font-size: 14px;
+	padding: 8px 15px 8px 0;
+	font-size: 16px;
 }
 
 .gmain_alarm .alarm_stat > div em {
@@ -7209,6 +7230,7 @@ nav .lang.dropdown .btn .caret {
 	margin: 0 0;
 	font-weight: 500;
 	height: 30px;
+	padding: 8px 0;
 }
 
 /* 반응형 미디어 쿼리 */

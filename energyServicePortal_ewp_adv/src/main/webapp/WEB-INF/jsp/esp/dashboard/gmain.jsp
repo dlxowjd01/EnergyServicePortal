@@ -3853,13 +3853,13 @@
     
     alarmStr += '<ul>';
     alarmStr += '	<li>';
-    alarmStr += '		<a href="javascript:list_detail_open(\'list1\');">당진태양광 - 인버터1 발전 정지</a>';
+    alarmStr += '		<a href="javascript:list_detail_open(\'list1\');"><span class="err_msg">당진태양광 - 인버터1 발전 정지</span><span class="err_time">2020-03-05 11:22:03</span></a>';
     alarmStr += '	</li>';
     alarmStr += '	<li>';
-    alarmStr += '		<a href="javascript:list_detail_open(\'list2\');">제일화성 - 인버터2 발전 정지</a>';
+    alarmStr += '		<a href="javascript:list_detail_open(\'list2\');"><span class="err_msg">제일화성 - 인버터2 발전 정지</span><span class="err_time">2020-03-05 11:22:03</span></a>';
     alarmStr += '	</li>';
     alarmStr += '	<li>';
-    alarmStr += '		<a href="javascript:list_detail_open(\'list3\');">동국제강 - 인버터3 발전 정지</a>';
+    alarmStr += '		<a href="javascript:list_detail_open(\'list3\');"><span class="err_msg">동국제강 - 인버터3 발전 정지</span><span class="err_time">2020-03-05 11:22:03</span></a>';
     alarmStr += '	</li>';
     alarmStr += '</ul>';
     
