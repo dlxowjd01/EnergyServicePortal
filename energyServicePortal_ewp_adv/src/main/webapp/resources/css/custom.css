@@ -465,6 +465,9 @@ select {
 	--sidebar-logout-on: url('../img/sidebar_logout_light_on_dark_off.png');
 	--sidebar-logout-off-4k: url('../img/sidebar_logout_light_off@3x.png');
 	--sidebar-logout-on-4k: url('../img/sidebar_logout_light_on_dark_off@3x.png');
+	--icon-pv: url('../img/icon_pv_light.png');
+	--icon-wind: url('../img/icon_wind_light.png');
+	--icon-water: url('../img/icon_water_light.png');
 }
 
 html, body {
@@ -515,6 +518,9 @@ html.darkmode:root {
 	--sidebar-logout-on: url('../img/sidebar_logout_dark_on.png');
 	--sidebar-logout-off-4k: url('../img/sidebar_logout_light_on_dark_off@3x.png');
 	--sidebar-logout-on-4k: url('../img/sidebar_logout_dark_on@3x.png');
+	--icon-pv: url('../img/icon_pv.png');
+	--icon-wind: url('../img/icon_wind.png');
+	--icon-water: url('../img/water.svg');
 }
 
 /* Change the white to any color ;) */
@@ -4092,7 +4098,7 @@ a.detail_view {
 }
 
 .dview .ltit h2 span.pv {
-	background: #464d5d url('../img/icon_pv.png') no-repeat center center !important;
+	background: #464d5d var(--icon-pv) no-repeat center center !important;
 }
 
 /* top */
@@ -4586,7 +4592,7 @@ a.detail_view {
 }
 
 .dg_wrap .dsec > div.fl .device li.pv a {
-	background: url('../img/icon_pv.png') no-repeat center 25%;
+	background: var(--icon-pv) no-repeat center 25%;
 }
 
 .dg_wrap .dsec > div.fl .device li span {
@@ -4919,7 +4925,7 @@ a.detail_view {
 }
 
 .c_board ul li.pv div.fl {
-	background: #464d5d url('../img/icon_pv.png') no-repeat center 60%;
+	background: #464d5d var(--icon-pv) no-repeat center 60%;
 }
 
 .c_board ul li.etc div.fl {
@@ -6685,7 +6691,7 @@ nav .lang.dropdown .btn .caret {
 }
 
 .device li.pv a {
-	background: url('../img/icon_pv.png') no-repeat center 25%;
+	background: var(--icon-pv) no-repeat center 25%;
 }
 
 .device li span {
@@ -7308,6 +7314,7 @@ nav .lang.dropdown .btn .caret {
 
 .gmain_chart .tblDisplay {
 	padding: 5px 0 0;
+	margin-top: 40px;
 }
 
 .gmain_chart .tblDisplay .paging {
@@ -7368,9 +7375,9 @@ nav .lang.dropdown .btn .caret {
 
 .gmain_chart .sa_chart {
 	/*height: calc(100vh - 731px);*/
-	overflow-y: auto;
-	padding-right: 25px;
-	min-height: 181px;
+	/*overflow-y: auto;*/
+	/*padding-right: 25px;*/
+	/*min-height: 181px;*/
 	/*max-height: 374px;*/
 }
 
@@ -7383,14 +7390,13 @@ nav .lang.dropdown .btn .caret {
 .gmain_chart .sa_chart.type-table .type-left {
 	display: table-cell;
 	width: 50%;
-	vertical-align: top;
-	padding-right: 10px;
+	vertical-align: middle;
 }
 
 .gmain_chart .sa_chart.type-table .type-right {
 	display: table-cell;
 	width: 50%;
-	vertical-align: middle;
+	vertical-align: top;
 }
 
 .gmain_chart .sa_chart.type-table .type-right dl:after {
@@ -7402,7 +7408,7 @@ nav .lang.dropdown .btn .caret {
 .gmain_chart .sa_chart.type-table .type-right dl {
 	display: table;
 	width: 100%;
-	margin-top: 5px;
+	margin: 20px 0;
 }
 
 .gmain_chart .sa_chart.type-table .type-right dl dt {
@@ -7410,16 +7416,18 @@ nav .lang.dropdown .btn .caret {
 	width: 30%;
 	text-align: right;
 	padding-right: 10px;
-	background: url('../img/icon_pv.png') no-repeat center;
+	background: var(--icon-pv) no-repeat center;
+	background-size: 24px;
 }
 
 .gmain_chart .sa_chart.type-table .type-right dl.wind dt {
-	background: url('../img/icon_wind.png') no-repeat center;
+	background: var(--icon-wind) no-repeat center;
+	background-size: 24px;
 }
 
 .gmain_chart .sa_chart.type-table .type-right dl.water dt {
-	background: url('../img/water.svg') no-repeat center;
-	background-size: auto 44px;
+	background: var(--icon-water) no-repeat center;
+	background-size: 24px;
 }
 
 .gmain_chart .sa_chart.type-table .type-right dl dt span {
@@ -7486,12 +7494,6 @@ nav .lang.dropdown .btn .caret {
 	background-color: var(--color1);
 }
 
-.gmain_chart .sa_chart #gchart4 {
-	height: calc(100vh - 731px);
-	min-height: 181px;
-	max-height: 374px;
-}
-
 /* 반응형 미디어 쿼리 */
 @media all and (min-width: 3000px) {
 	.gmain_chart .gtab_menu li {
@@ -7546,12 +7548,6 @@ nav .lang.dropdown .btn .caret {
 		max-height: 377px;
 	}
 
-	.gmain_chart .sa_chart #gchart4 {
-		height: calc(100vh - 624px);
-		min-height: 289px;
-		max-height: 377px;
-	}
-
 	.gmain_chart .sa_chart.type-table .type-right dl {
 		margin-top: 5px;
 	}
@@ -7566,7 +7562,7 @@ nav .lang.dropdown .btn .caret {
 	}
 
 	.gmain_chart .sa_chart.type-table .type-right dl.water dt {
-		background: url('../img/water.svg') no-repeat center;
+		background: var(--icon-water) no-repeat center;
 		background-size: auto 66px;
 	}
 
@@ -7657,32 +7653,34 @@ nav .lang.dropdown .btn .caret {
 	overflow: hidden;
 }
 
-.gmain_map .chart_info {
-	display: table;
-	width: 100%;
-}
+/*.gmain_map .chart_info {*/
+/*	display: table;*/
+/*	width: 100%;*/
+/*}*/
 
-.gmain_map .chart_info > div {
-	display: table-cell;
-	vertical-align: top;
-}
+/*.gmain_map .chart_info > div {*/
+/*	display: table-cell;*/
+/*	vertical-align: middle;*/
+/*}*/
 
-.gmain_map .chart_info > div.ci_left {
-	width: 230px;
-}
+/*.gmain_map .chart_info > div.ci_left {*/
+/*	width: 230px;*/
+/*}*/
 
-.gmain_map .chart_info > div.ci_right {
-	width: auto;
-}
+/*.gmain_map .chart_info > div.ci_right {*/
+/*	width: auto;*/
+/*}*/
 
 .gmain_map .chart_info > div.ci_right ul li {
 	line-height: 25px;
-	display: inline-block;
+	/*display: inline-block;*/
 	vertical-align: top;
 	width: 100%;
 	font-size: 16px;
 	color: var(--color3);
 	text-align: right;
+	padding: 10px;
+	border-bottom: 1px solid var(--color1);
 }
 
 .gmain_map .chart_info > div.ci_right ul li:after {
@@ -7695,12 +7693,12 @@ nav .lang.dropdown .btn .caret {
 	float: left;
 	color: var(--color2);
 	font-weight: 600;
+	margin-right: 80px;
 }
 
 .gmain_map .chart_info > div.ci_right ul li span {
 	display: inline-block;
 	font-family: 'Roboto', sans-serif;
-	font-size: 20px;
 	color: var(--color3);
 	font-weight: 300;
 }
@@ -7850,10 +7848,6 @@ nav .lang.dropdown .btn .caret {
 
 	.gmain_map .chart_info > div.ci_left {
 		width: 345px;
-	}
-
-	.gmain_map .chart_info > div.ci_left #pie_chart {
-		height: 220px !important;
 	}
 
 	.gmain_map .chart_info > div.ci_right {
@@ -8367,17 +8361,17 @@ div.di_wrap .di_top span.type_img {
 
 div.di_wrap .di_top span.type_img.type_sun {
 	width: 24px;
-	background: url('../img/icon_pv.png') no-repeat center;
+	background: var(--icon-pv) no-repeat center;
 	background-size: auto 22px;
 }
 
 div.di_wrap .di_top span.type_img.type_wind {
-	background: url('../img/icon_wind.png') no-repeat center;
+	background: var(--icon-wind) no-repeat center;
 	background-size: auto 22px;
 }
 
 div.di_wrap .di_top span.type_img.type_water {
-	background: url('../img/water.svg') no-repeat center;
+	background: var(--icon-water) no-repeat center;
 	background-size: auto 22px;
 }
 
@@ -8731,17 +8725,17 @@ div.di_wrap dl .link a {
 
 	div.di_wrap .di_top span.type_img.type_sun {
 		width: 36px;
-		background: url('../img/icon_pv.png') no-repeat center;
+		background: var(--icon-pv) no-repeat center;
 		background-size: auto 33px;
 	}
 
 	div.di_wrap .di_top span.type_img.type_wind {
-		background: url('../img/icon_wind.png') no-repeat center;
+		background: var(--icon-wind) no-repeat center;
 		background-size: auto 33px;
 	}
 
 	div.di_wrap .di_top span.type_img.type_water {
-		background: url('../img/water.svg') no-repeat center;
+		background: var(--icon-water) no-repeat center;
 		background-size: auto 33px;
 	}
 
@@ -9159,8 +9153,9 @@ div.di_wrap dl .link a {
 	height: 202px !important;
 }
 
-.gmain_chart3 #gchart3 {
-	height: 346px !important;
+.gmain_chart3 #gchart3,
+.gmain_chart3 #gchart4 {
+	height: 286px !important;
 }
 
 .gmain_chart.gmain_chart1 .chart_top .ntit,
@@ -9169,6 +9164,20 @@ div.di_wrap dl .link a {
 .gmain_chart.gmain_chart4 .chart_top .ntit {
 	font-size: 16px;
 	font-weight: bold;
+}
+
+.gmain_map.gmain_chart.gmain_chart4 {
+	position: relative;
+}
+
+.gmain_map.gmain_chart.gmain_chart4 .chart_top{
+	margin-bottom: 20px;
+}
+
+.gmain_map.gmain_chart.gmain_chart4 .ci_right{
+	position: absolute;
+	top: 28%;
+	right: 32px;
 }
 
 .gmain_chart .chart_top {
@@ -10867,7 +10876,7 @@ div.di_wrap dl .link a {
 /* 반응형 미디어 쿼리 */
 @media all and (min-width: 3000px) {
 
-	.gmain_map.dmain .chart_info > div.ci_left #pie_chart5 {
+	.gmain_map.dmain .chart_info > div.ci_left #pie_chart {
 		height: 220px !important;
 	}
 

@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <!-- 메인페이지용 스타일/스크립트 파일 -->
-<link type="text/css" href="/css/custom.css" rel="stylesheet">
 <script type="text/javascript" src="/js/modules/rounded-corners.js"></script>
 <script type="text/javascript" src="/js/jquery.rwdImageMaps.min.js"></script>
 <script type="text/javascript"
@@ -866,7 +865,7 @@
               <!-- 사업소별 현황 -->
               <div class="sa_chart">
                 <div class="inchart">
-                  <div id="gchart3" style="height:auto;"></div>
+                  <div id="gchart3"></div>
                   <script language="JavaScript">
                     function drawPeakChart3() {
                       var peakChart3 = Highcharts.chart('gchart3', {
@@ -875,7 +874,7 @@
                         },
                         
                         chart: {
-                          marginTop: 40,
+                          marginTop: 50,
                           marginRight: 0,
                           backgroundColor: 'transparent',
                           type: 'bar'
@@ -1136,12 +1135,12 @@
                         data: {
                           table: 'gdatatable4' /* 테이블에서 데이터 불러오기 */
                         },
-                        
+                        align: 'center',
                         chart: {
-                          marginTop: 40,
-                          marginLeft: 50,
+                          marginTop: 50,
                           backgroundColor: 'transparent',
-                          type: 'column'
+                          type: 'column',
+                          height: '100%',
                         },
                         
                         navigation: {
@@ -1159,18 +1158,18 @@
                         },
                         
                         xAxis: {
-                          lineColor: '#515562', /* 눈금선색 */
-                          tickColor: '#515562',
-                          gridLineColor: '#515562',
+                          lineColor: 'var(--color2)', /* 눈금선색 */
+                          tickColor: 'var(--color2)',
+                          gridLineColor: 'var(--color2)',
                           plotLines: [{
-                            color: '#515562',
+                            color: 'var(--color2)',
                             width: 1
                           }],
                           labels: {
                             align: 'center',
                             reserveSpace: true,
                             style: {
-                              color: '#a4aebf',
+                              color: 'var(--color1)',
                               fontSize: '12px'
                             }
                           },
@@ -1180,11 +1179,12 @@
                         },
                         
                         yAxis: {
-                          lineColor: '#515562', /* 눈금선색 */
-                          tickColor: '#515562',
-                          gridLineColor: '#515562',
+                          opposite: true,
+                          lineColor: 'var(--color2)', /* 눈금선색 */
+                          tickColor: 'var(--color2)',
+                          gridLineColor: 'var(--color2)',
                           plotLines: [{
-                            color: '#515562',
+                            color: 'var(--color2)',
                             width: 1
                           }],
                           gridLineWidth: 0, /* 기준선 grid 안보이기/보이기 */
@@ -1194,17 +1194,16 @@
                             align: 'low',
                             rotation: 0, /* 타이틀 기울기 */
                             y: 25, /* 타이틀 위치 조정 */
-                            x: 10,
+                            x: -10,
                             style: {
-                              color: '#a4aebf',
+                              color: 'var(--color1)',
                               fontSize: '12px'
                             }
                           },
                           labels: {
-                            overflow: 'justify',
-                            x: -10, /* 그래프와의 거리 조정 */
+                            x: 15, /* 그래프와의 거리 조정 */
                             style: {
-                              color: '#a4aebf',
+                              color: 'var(--color1)',
                               fontSize: '12px'
                             }
                           }
@@ -1213,12 +1212,12 @@
                         /* 범례 */
                         legend: {
                           enabled: true,
-                          align: 'right',
+                          align: 'left',
                           verticalAlign: 'top',
-                          x: 5,
+                          x: 0,
                           y: -10,
                           itemStyle: {
-                            color: '#a4aebf',
+                            color: 'var(--color1)',
                             fontSize: '12px',
                             fontWeight: 400
                           },
@@ -1395,19 +1394,15 @@
             <div class="chart_info">
               <div class="ci_left">
                 <div class="inchart">
-                  <div id="pie_chart" style="height:200px;"></div>
+                  <div id="pie_chart" style="height:172px;"></div>
                   <script language="JavaScript">
                     var pieChart1 = null;
                     $(function () {
                       pieChart1 = Highcharts.chart('pie_chart', {
                         chart: {
-                          marginTop: 0,
-                          marginLeft: 0,
-                          marginRight: 0,
                           backgroundColor: 'transparent',
-                          
                           plotBorderWidth: 0,
-                          plotShadow: false
+                          plotShadow: false,
                         },
                         
                         navigation: {
@@ -1418,10 +1413,10 @@
                         
                         title: {
                           text: '100Wh', // 총용량 표기
-                          align: 'center',
-                          verticalAlign: 'middle',
-                          y: 0,
-                          x: -20,
+                          verticalAlign: 'center',
+                          align: 'left',
+                          x: 62,
+                          y: 94,
                           style: {
                             fontSize: '14px',
                             color: 'var(--color3)'
@@ -1439,9 +1434,11 @@
   
                         legend: {
                           enabled: true,
+                          layout: 'horizontal',
                           align: 'right',
                           verticalAlign: 'top',
-                          x: 0,
+                          floating: false,
+                          x: 10,
                           y: 0,
                           itemStyle: {
                             color: 'var(--color2)',
@@ -1479,9 +1476,9 @@
                             showInLegend: true,
                             startAngle: 0,
                             endAngle: 360,
-                            center: ['40%', '50%'],
+                            center: ['15%', '40%'],
                             borderWidth: 0,
-                            size: '100%'
+                            size: '160%'
                           }
                         },
                         
@@ -1521,35 +1518,35 @@
                           }]
                         }],
                         
-                        responsive: { // 반응형
-                          rules: [{
-                            condition: {
-                              minWidth: 305
-                            },
-                            chartOptions: {
-                              title: {
-                                x: -30,
-                                style: {
-                                  fontSize: '16px',
-                                }
-                              }
-                            }
-                          }, {
-                            condition: {
-                              maxWidth: 481
-                            },
-                            chartOptions: {
-                              title: {
-                                x: 0
-                              },
-                              plotOptions: {
-                                pie: {
-                                  center: ['50%', '50%']
-                                }
-                              }
-                            }
-                          }]
-                        }
+                        // responsive: { // 반응형
+                        //   rules: [{
+                        //     condition: {
+                        //       minWidth: 305
+                        //     },
+                        //     chartOptions: {
+                        //       title: {
+                        //         x: -30,
+                        //         style: {
+                        //           fontSize: '16px',
+                        //         }
+                        //       }
+                        //     }
+                        //   }, {
+                        //     condition: {
+                        //       maxWidth: 481
+                        //     },
+                        //     chartOptions: {
+                        //       title: {
+                        //         x: 0
+                        //       },
+                        //       plotOptions: {
+                        //         pie: {
+                        //           center: ['50%', '50%']
+                        //         }
+                        //       }
+                        //     }
+                        //   }]
+                        // }
                       });
                     });
                   </script>
@@ -3663,9 +3660,6 @@
 		*/
     //임시 데이터 세팅
     pieChart1.update({
-      title: {
-        text: '200kW', // 총용량 표기
-      },
       series: [{
         type: 'pie',
         innerSize: '50%',
@@ -3710,9 +3704,9 @@
     var ciStr = '';
     ciStr += '<ul>';
     ciStr += '	<li><strong>금일 누적발전량</strong> <span>13</span><em>Wh</em></li>';
-    ciStr += '	<li><strong>금일 계획발전량</strong> <span>13</span><em>Wh</em></li>';
+    ciStr += '	<li><strong>금일 예측발전량</strong> <span>13</span><em>Wh</em></li>';
     ciStr += '	<li><strong>금일 충/방전</strong> <span>13.2</span><em>Wh</em> / <span>12.1</span><em>Wh</em></li>';
-    ciStr += '	<li><strong>금일 예측충/방전</strong> <span>25.0</span><em>Wh</em> / <span>24.8</span><em>Wh</em></li>';
+    // ciStr += '	<li><strong>금일 예측충/방전</strong> <span>25.0</span><em>Wh</em> / <span>24.8</span><em>Wh</em></li>';
     ciStr += '</ul>';
     $ciRight.append(ciStr);
     
