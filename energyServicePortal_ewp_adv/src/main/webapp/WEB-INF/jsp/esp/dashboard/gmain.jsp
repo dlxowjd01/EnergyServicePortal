@@ -153,29 +153,14 @@
     var list = [];
     var map1 = new _Map();
     var map2 = new _Map();
-    var map3 = new _Map();
-    var map4 = new _Map();
-    var map5 = new _Map();
-    map1.put("site_name", "당진태양광");
-    map1.put("site_addr", "충청남도 당진시 송악읍 중흥리 375-21번지");
+    map1.put("site_name", "혜원 솔라 1호기");
+    map1.put("site_addr", "강원도 고성군 간성읍 해상리 산 137-2");
     map1.put("site_id", "1");
     list.push(map1);
-    map2.put("site_name", "제일화성");
-    map2.put("site_addr", "경기 포천시 가산면 정금로255번길 4-50");
+    map2.put("site_name", "혜원 솔라 2호기");
+    map2.put("site_addr", "강원도 고성군 간성읍 해상리 산 137-2");
     map2.put("site_id", "2");
     list.push(map2);
-    map3.put("site_name", "동국제강");
-    map3.put("site_addr", "서울 특별시 중구 을지로 5길 19 페럼타워");
-    map3.put("site_id", "3");
-    list.push(map3);
-    map4.put("site_name", "진양화학");
-    map4.put("site_addr", "경남 진주시 공단로 255");
-    map4.put("site_id", "4");
-    list.push(map4);
-    map5.put("site_name", "코닝정밀");
-    map5.put("site_addr", "충청남도 아산시 탕정면 명암리 554-1");
-    map5.put("site_id", "5");
-    list.push(map5);
     
     for (var i = 0; i < list.length; i++) {
 // 			geocodeAddress(geocoder, map, list[i].site_addr, list[i].site_id, list[i].site_name, i);
@@ -217,24 +202,12 @@
   function linkSiteDashboard(t) {
     var url = "", str = "";
     if (t == 1) {
-      str = "당진태양광";
+      str = "혜원 솔라 1호기";
       url = '/dashboard/smain.do';
     }
     if (t == 2) {
-      str = "제일화성";
-      url = '/dashboard/emain.do';
-    }
-    if (t == 3) {
-      str = "동국제강";
-      url = '/dashboard/emain.do';
-    }
-    if (t == 4) {
-      str = "진양화학";
-      url = '/dashboard/dmain.do';
-    }
-    if (t == 5) {
-      str = "코닝정밀";
-      url = '/dashboard/emain.do';
+      str = "혜원 솔라 2호기";
+      url = '/dashboard/smain.do';
     }
     $("#linkSiteName").val(str);
     document.linkSiteForm.action = url;
@@ -247,7 +220,7 @@
 <div class="row">
   <div class="time">
     <span>CURRENT TIME</span>
-    <em id="currTime">${nowTime}</em>
+    <em class="currTime">${nowTime}</em>
     <span>DATA BASE TIME</span>
     <em>2018-07-27 17:01:02</em>
   </div>
@@ -443,24 +416,6 @@
                   name: '태양광',
                   type: 'column',
                   color: '#9363FD',
-                  data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80],
-                  tooltip: {
-                    valueSuffix: 'kWh'
-                  }
-                  
-                }, {
-                  name: '풍력',
-                  type: 'column',
-                  color: '#5269EF',
-                  data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80],
-                  tooltip: {
-                    valueSuffix: 'kWh'
-                  }
-                  
-                }, {
-                  name: '소수력',
-                  type: 'column',
-                  color: '#4FB5FF',
                   data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80],
                   tooltip: {
                     valueSuffix: 'kWh'
@@ -745,24 +700,6 @@
                   }
                   
                 }, {
-                  name: '풍력',
-                  type: 'column',
-                  color: '#5269EF',
-                  data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                  tooltip: {
-                    valueSuffix: 'kWh'
-                  }
-                  
-                }, {
-                  name: '소수력',
-                  type: 'column',
-                  color: '#4FB5FF',
-                  data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                  tooltip: {
-                    valueSuffix: 'kWh'
-                  }
-                  
-                }, {
                   name: '정산금',
                   type: 'spline',
                   color: 'var(--color3)',
@@ -856,10 +793,10 @@
             <h2 class="ntit">전일</h2>
             <span class="term">2020.3.6</span>
           </div>
-          <ul class="gtab_menu">
-            <li class="active"><a href="#;">사업소별 현황</a></li>
-            <li><a href="#;">유형별 발전 현황</a></li>
-          </ul>
+<%--          <ul class="gtab_menu">--%>
+<%--            <li class="active"><a href="#;">사업소별 현황</a></li>--%>
+<%--            <li><a href="#;">유형별 발전 현황</a></li>--%>
+<%--          </ul>--%>
           <div class="tblDisplay">
             <div>
               <!-- 사업소별 현황 -->
@@ -972,6 +909,7 @@
                           },
                           valueSuffix: ' kwh'
                         },
+
                         /* 옵션 */
                         plotOptions: {
                           series: {
@@ -1068,7 +1006,6 @@
                             }
                           }]
                         }
-                        
                       });
                     };
                   </script>
@@ -1081,45 +1018,10 @@
                     <tr>
                       <th></th>
                       <th>전일발전</th>
-                      <th>전일계획</th>
+                      <th>전일예측</th>
                     </tr>
                   </thead>
                   <tbody id="siteGenTbody">
-                    <!-- 												        <tr> -->
-                    <!-- 												            <th>사업소#13</th> -->
-                    <!-- 												            <td>50</td> -->
-                    <!-- 												            <td>100</td> -->
-                    <!-- 												        </tr> -->
-                    <!-- 												        <tr> -->
-                    <!-- 												            <th>사업소#12</th> -->
-                    <!-- 												            <td>90</td> -->
-                    <!-- 												            <td>100</td> -->
-                    <!-- 												        </tr> -->
-                    <!-- 												        <tr> -->
-                    <!-- 												            <th>사업소#11</th> -->
-                    <!-- 												            <td>70</td> -->
-                    <!-- 												            <td>90</td> -->
-                    <!-- 												        </tr> -->
-                    <!-- 												        <tr> -->
-                    <!-- 												            <th>사업소#10</th> -->
-                    <!-- 												            <td>30</td> -->
-                    <!-- 												            <td>40</td> -->
-                    <!-- 												        </tr> -->
-                    <!-- 												        <tr> -->
-                    <!-- 												            <th>사업소#09</th> -->
-                    <!-- 												            <td>100</td> -->
-                    <!-- 												            <td>92</td> -->
-                    <!-- 												        </tr> -->
-                    <!-- 												        <tr> -->
-                    <!-- 												            <th>사업소#08</th> -->
-                    <!-- 												            <td>100</td> -->
-                    <!-- 												            <td>92</td> -->
-                    <!-- 												        </tr> -->
-                    <!-- 												        <tr> -->
-                    <!-- 												            <th>사업소#07</th> -->
-                    <!-- 												            <td>100</td> -->
-                    <!-- 												            <td>92</td> -->
-                    <!-- 												        </tr> -->
                   </tbody>
                 </table>
               </div>
@@ -1316,7 +1218,6 @@
                             }
                           }]
                         }
-                        
                       });
                     };
                   </script>
@@ -1330,22 +1231,6 @@
                       <p><strong>전일발전량</strong> <span>3,500</span><em>kWH</em></p>
                     </dd>
                   </dl>
-                  <!-- 													<dl class="wind"> -->
-                  <!-- 														<dt><span>풍력</span></dt> -->
-                  <!-- 														<dd> -->
-                  <!-- 															<p><strong>가동설비</strong> <span>13</span><em>기</em></p> -->
-                  <!-- 															<p><strong>용량</strong> <span>13</span><em>MW</em></p> -->
-                  <!-- 															<p><strong>전일발전량</strong> <span>3,500</span><em>kWH</em></p> -->
-                  <!-- 														</dd> -->
-                  <!-- 													</dl> -->
-                  <!-- 													<dl class="water"> -->
-                  <!-- 														<dt><span>소수력</span></dt> -->
-                  <!-- 														<dd> -->
-                  <!-- 															<p><strong>가동설비</strong> <span>13</span><em>기</em></p> -->
-                  <!-- 															<p><strong>용량</strong> <span>13</span><em>MW</em></p> -->
-                  <!-- 															<p><strong>전일발전량</strong> <span>3,500</span><em>kWH</em></p> -->
-                  <!-- 														</dd> -->
-                  <!-- 													</dl> -->
                 </div>
               </div>
               <!-- 데이터 추출용 테이블 -->
@@ -1359,21 +1244,6 @@
                     </tr>
                   </thead>
                   <tbody id="typeGenTbody">
-                    <!-- 												        <tr> -->
-                    <!-- 												            <th>태양광</th> -->
-                    <!-- 												            <td>50</td> -->
-                    <!-- 												            <td>100</td> -->
-                    <!-- 												        </tr> -->
-                    <!-- 												        <tr> -->
-                    <!-- 												            <th>풍력</th> -->
-                    <!-- 												            <td>90</td> -->
-                    <!-- 												            <td>100</td> -->
-                    <!-- 												        </tr> -->
-                    <!-- 												        <tr> -->
-                    <!-- 												            <th>소수력</th> -->
-                    <!-- 												            <td>70</td> -->
-                    <!-- 												            <td>90</td> -->
-                    <!-- 												        </tr> -->
                   </tbody>
                 </table>
               </div>
@@ -1394,12 +1264,14 @@
             <div class="chart_info">
               <div class="ci_left">
                 <div class="inchart">
-                  <div id="pie_chart" style="height:172px;"></div>
+                  <div id="pie_chart" style="height:200px;"></div>
                   <script language="JavaScript">
-                    var pieChart1 = null;
                     $(function () {
-                      pieChart1 = Highcharts.chart('pie_chart', {
+                      var pieChart1 = Highcharts.chart('pie_chart', {
                         chart: {
+                          marginTop:0,
+                          marginLeft:0,
+                          marginRight:0,
                           backgroundColor: 'transparent',
                           plotBorderWidth: 0,
                           plotShadow: false,
@@ -1412,11 +1284,11 @@
                         },
                         
                         title: {
-                          text: '100Wh', // 총용량 표기
-                          verticalAlign: 'center',
-                          align: 'left',
-                          x: 62,
-                          y: 94,
+                          text: '- Wh', // 총용량 표기
+                          align: 'center',
+                          verticalAlign: 'middle',
+                          y:10,
+                          x:-20,
                           style: {
                             fontSize: '14px',
                             color: 'var(--color3)'
@@ -1431,27 +1303,7 @@
                         credits: {
                           enabled: false
                         },
-  
-                        legend: {
-                          enabled: true,
-                          layout: 'horizontal',
-                          align: 'right',
-                          verticalAlign: 'top',
-                          floating: false,
-                          x: 10,
-                          y: 0,
-                          itemStyle: {
-                            color: 'var(--color2)',
-                            fontSize: '12px',
-                            fontWeight: 400
-                          },
-                          itemHoverStyle: {
-                            color: '' /* 마우스 오버시 색 */
-                          },
-                          symbolPadding: 3, /* 심볼 - 텍스트간 거리 */
-                          symbolHeight: 7 /* 심볼 크기 */
-                        },
-  
+                        
                         tooltip: {
                           shared: true,
                           borderColor: 'none',
@@ -1467,18 +1319,15 @@
                         plotOptions: {
                           pie: {
                             dataLabels: {
-                              enabled: true,
+                              enabled: false,
                               style: {
                                 fontWeight: 'bold',
                                 color: 'var(--color3)'
                               }
                             },
-                            showInLegend: true,
-                            startAngle: 0,
-                            endAngle: 360,
-                            center: ['15%', '40%'],
+                            center: ['40%', '50%'],
                             borderWidth: 0,
-                            size: '160%'
+                            size: '100%'
                           }
                         },
                         
@@ -1495,20 +1344,6 @@
                             },
                             y: 60 //60% -- 아래로 총합 100%
                           }, {
-                            color: '#5269EF',
-                            name: '풍력',
-                            dataLabels: {
-                              enabled: false
-                            },
-                            y: 10 //10%
-                          }, {
-                            color: '#4FB5FF',
-                            name: '소수력',
-                            dataLabels: {
-                              enabled: false
-                            },
-                            y: 10 //10%
-                          }, {
                             color: '#878787',
                             name: '미사용량',
                             dataLabels: {
@@ -1517,48 +1352,51 @@
                             y: 20 //20% 나머지
                           }]
                         }],
-                        
-                        // responsive: { // 반응형
-                        //   rules: [{
-                        //     condition: {
-                        //       minWidth: 305
-                        //     },
-                        //     chartOptions: {
-                        //       title: {
-                        //         x: -30,
-                        //         style: {
-                        //           fontSize: '16px',
-                        //         }
-                        //       }
-                        //     }
-                        //   }, {
-                        //     condition: {
-                        //       maxWidth: 481
-                        //     },
-                        //     chartOptions: {
-                        //       title: {
-                        //         x: 0
-                        //       },
-                        //       plotOptions: {
-                        //         pie: {
-                        //           center: ['50%', '50%']
-                        //         }
-                        //       }
-                        //     }
-                        //   }]
-                        // }
+  
+                        responsive: { // 반응형
+                          rules: [{
+                            condition: {
+                              minWidth: 305
+                            },
+                            chartOptions: {
+                              title: {
+                                x:-30,
+                                style: {
+                                  fontSize: '16px',
+                                }
+                              }
+                            }
+                          },{
+                            condition: {
+                              maxWidth: 481
+                            },
+                            chartOptions: {
+                              title: {
+                                x:0
+                              },
+                              plotOptions: {
+                                pie: {
+                                  center: ['50%', '50%']
+                                }
+                              }
+                            }
+                          }]
+                        }
                       });
                     });
                   </script>
                 </div>
               </div>
               <div class="ci_right">
-                <!-- 												<ul> -->
-                <!-- 													<li><strong>금일 누적발전량</strong> <span>13</span><em>Wh</em></li> -->
-                <!-- 													<li><strong>금일 예측발전량</strong> <span>13</span><em>Wh</em></li> -->
-                <!-- 													<li><strong>금일 충/방전</strong> <span>13.2</span><em>Wh</em> / <span>12.1</span><em>Wh</em></li> -->
-                <!-- 													<li><strong>금일 예측충/방전</strong> <span>25.0</span><em>Wh</em> / <span>24.8</span><em>Wh</em></li> -->
-                <!-- 												</ul> -->
+                <div class="legend_wrap">
+                  <span class="bu1">태양광</span>
+                  <span class="bu4">미 사용량</span>
+                </div>
+                <ul>
+                  <li><strong>금일 누적발전량</strong> <span> - </span><em>Wh</em></li>
+                  <li><strong>금일 예측발전량</strong> <span> - </span><em>Wh</em></li>
+                  <li><strong>금일 충/방전</strong> <span> - </span><em>Wh</em> / <span> - </span><em>Wh</em></li>
+                </ul>
               </div>
             </div>
           </div>
@@ -1574,13 +1412,13 @@
                 </tr>
               </thead>
               <tbody id="centerTbody">
-                <!-- 												<tr> -->
-                <!-- 													<td>16개소</td> -->
-                <!-- 													<td>35대</td> -->
-                <!-- 													<td>13MW/20MWh</td> -->
-                <!-- 													<td>12tCO2</td> -->
-                <!-- 													<td>329,493KRW</td> -->
-                <!-- 												</tr> -->
+                <tr>
+                  <td> - 개소</td>
+                  <td> - 대</td>
+                  <td> - kW</td>
+                  <td> - </td>
+                  <td> - KRW</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -1611,17 +1449,39 @@
   <div class="col-lg-4">
     <div class="row">
       <div class="col-sm-12">
-        <div class="indiv gmain_alarm">
+        <div class="indiv gmain_alarm wrap_type">
           <div class="alarm_stat clear">
             <div class="a_alert clear">
               <span>금일 발생 오류</span>
               <em>5</em>
             </div>
             <div class="a_warning clear">
-              <a href="#" class="btn">상세보기</a>
+              <a href="#" class="btn cancel_btn">상세보기</a>
             </div>
           </div>
           <div class="alarm_notice">
+            <ul>
+              <li>
+                <a href="javascript:list_detail_open('list3');">동국제강 - 인버터21 발전 정지</a>
+                <span>2018-08-12 11:41:26</span>
+              </li>
+              <li>
+                <a href="#;">동국제강 - 인버터21 발전 정지</a>
+                <span>2018-08-12 11:41:26</span>
+              </li>
+              <li>
+                <a href="#;">동국제강 - 인버터21 발전 정지</a>
+                <span>2018-08-12 11:41:26</span>
+              </li>
+              <li>
+                <a href="#;">동국제강 - 인버터21 발전 정지</a>
+                <span>2018-08-12 11:41:26</span>
+              </li>
+              <li>
+                <a href="#;">동국제강 - 인버터21 발전 정지</a>
+                <span>2018-08-12 11:41:26</span>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -1630,13 +1490,16 @@
       <div class="col-sm-12">
         <div class="indiv gmain_table">
           <div class="gtbl_top clear">
-            <div class="upper clear">
-              <input type="text" class="input fl" id="siteName" value="사업소">
-              <button class="fl" type="submit" onclick="getAlarmInfo();">검색</button>
-              <div class="check-option fr">
-                <label><input type="checkbox" name="deviceStatus" value="정상" checked> 정상</label>
-                <label><input type="checkbox" name="deviceStatus" value="경고" checked> 경고</label>
-                <label><input type="checkbox" name="deviceStatus" value="이상" checked> 이상</label>
+            <div class="clear">
+              <input type="text" class="input" value="" placeholder="사업소">
+              <button type="submit">검색</button>
+              <div class="check-option chk_type">
+                <input type="checkbox" id="deviceStatus1" value="정상" checked>
+                <label for="deviceStatus1"><span></span>정상</label>
+                <input type="checkbox" id="deviceStatus2" value="경고" checked>
+                <label for="deviceStatus2"><span></span>경고</label>
+                <input type="checkbox" id="deviceStatus3" value="이상" checked>
+                <label for="deviceStatus3"><span></span>이상</label>
               </div>
             </div>
             <div class="fr">
@@ -1656,15 +1519,15 @@
               <table>
                 <thead>
                   <tr>
-                    <th><a href="">설비상태</a></span></th>
-                    <th><a href="">배터리</a></span></th>
+                    <th><a href="">설비상태</a></th>
+                    <th><a href="">배터리</a></th>
                     <th><a href="">오류</a></th>
                     <th><a href="">경고</a></th>
                     <th style="text-align:left;"><a href="" class="sort_icon desc">사업소</a></th> <!-- asc [올림차순] -->
                     <th><a href="">설비용량</a></th>
-                    <th><a href="">발전량</a></th>
-                    <th><a href="">충전량</a></th>
-                    <th><a href="">방전량</a></th>
+                    <th><a href="">현재발전량</a></th>
+                    <th><a href="">누적발전량</a></th>
+                    <th><a href="">예측발전량</a></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1674,7 +1537,7 @@
                     <td>0</td>
                     <td>0</td>
                     <td>
-                      <div class="cname">당진태양광</div>
+                      <div class="cname">혜원 솔라 1호기</div>
                     </td>
                     <td>8670</td>
                     <td>1240</td>
@@ -1865,7 +1728,7 @@
                     <td>2</td>
                     <td>0</td>
                     <td>
-                      <div class="cname">제일화성</div>
+                      <div class="cname">혜원 솔라 2호기</div>
                     </td>
                     <td>1,000</td>
                     <td>-</td>
@@ -2050,749 +1913,6 @@
                       </div>
                     </td>
                   </tr>
-                  <tr class="dbclickopen flag1">
-                    <td><span class="status status_drv" title="운전">운전</span></td>
-                    <td><span class="battery_icon batter_out">방전</span></td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>
-                      <div class="cname">동국제강</div>
-                    </td>
-                    <td>20000</td>
-                    <td>-</td>
-                    <td>79,000</td>
-                    <td>38,100</td>
-                  </tr>
-                  <tr class="detail_info list3 flag1">
-                    <td colspan="9">
-                      <div class="di_wrap">
-                        <div class="type2">
-                          <dl>
-                            <dt>
-                              <div class="inchart">
-                                <div id="type_chart22" style="height:130px;"></div>
-                                <script language="JavaScript">
-                                  $(function () {
-                                    var pieChart22 = Highcharts.chart('type_chart22', {
-                                      chart: {
-                                        marginTop: 0,
-                                        marginLeft: 0,
-                                        marginRight: 0,
-                                        backgroundColor: 'transparent',
-                                        
-                                        plotBorderWidth: 0,
-                                        plotShadow: false
-                                      },
-                                      
-                                      navigation: {
-                                        buttonOptions: {
-                                          enabled: false /* 메뉴 안보이기 */
-                                        }
-                                      },
-                                      
-                                      title: {
-                                        text: '70%', // %표기
-                                        align: 'center',
-                                        verticalAlign: 'middle',
-                                        y: 10,
-                                        x: 0,
-                                        style: {
-                                          fontSize: '14px',
-                                          color: 'white'
-                                        }
-                                      },
-                                      
-                                      subtitle: {
-                                        text: ''
-                                      },
-                                      
-                                      /* 출처 */
-                                      credits: {
-                                        enabled: false
-                                      },
-                                      
-                                      tooltip: {
-                                        pointFormat: '<b>{point.percentage:.0f}%</b>'
-                                      },
-                                      
-                                      plotOptions: {
-                                        pie: {
-                                          dataLabels: {
-                                            enabled: false,
-                                            style: {
-                                              fontWeight: 'bold',
-                                              color: 'white'
-                                            }
-                                          },
-                                          //startAngle: -90,
-                                          //endAngle: 90,
-                                          center: ['50%', '50%'],
-                                          borderWidth: 0,
-                                          size: '100%'
-                                        }
-                                      },
-                                      
-                                      series: [{
-                                        type: 'pie',
-                                        innerSize: '50%',
-                                        name: '설비용량',
-                                        colorByPoint: true,
-                                        data: [{
-                                          color: '#438fd7',
-                                          name: '총 설비용량',
-                                          dataLabels: {
-                                            enabled: false
-                                          },
-                                          y: 70 //70% -- 아래로 총합 100%
-                                        }, {
-                                          color: '#84848f',
-                                          name: '미설비용량',
-                                          dataLabels: {
-                                            enabled: false
-                                          },
-                                          y: 30 //30% 나머지
-                                        }]
-                                      }],
-                                      responsive: { // 반응형
-                                        rules: [{
-                                          condition: {
-                                            minWidth: 305
-                                          },
-                                          chartOptions: {
-                                            title: {
-                                              x: 0,
-                                              y: 10,
-                                              style: {
-                                                fontSize: '12px',
-                                              }
-                                            },
-                                            plotOptions: {
-                                              pie: {
-                                                dataLabels: {
-                                                  style: {
-                                                    fontWeight: 'bold'
-                                                  }
-                                                },
-                                                center: ['50%', '50%'],
-                                                size: '100%'
-                                              }
-                                            }
-                                          }
-                                        }]
-                                      }
-                                      
-                                    });
-                                  });
-                                </script>
-                              </div>
-                              <div class="summ">
-                                <div class="soc">
-                                  <div class="batt_wrap clear">
-                                    <div class="battery"><span style="width:30%;"><!--잔량--></span><em>30%</em></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </dt>
-                            <dd>
-                              <div class="link"><a href="javascript:linkSiteDashboard(3);" class="btn_cancel">대시보드
-                                바로가기</a></div>
-                              <div class="di_top">
-                                <span class="sbj">제일화성</span>
-                                <span class="type_img type_battery">배터리 룸</span>
-                                <span>배터리 룸 </span>
-                                <span>온도 <em>30</em>℃</span>
-                                <span>습도 <em>30</em>%</span>
-                              </div>
-                              <ul class="clear">
-                                <li class="clear">
-                                  <span class="fl">총 설비용량</span>
-                                  <span class="fl"><em>10</em>MW / <em>20</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">금일 충전예측</span>
-                                  <span class="fl"><em>28</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">금일 누적충전</span>
-                                  <span class="fl"><em>18.1</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">금일 방전예측</span>
-                                  <span class="fl"><em>20</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">금일 누적방전</span>
-                                  <span class="fl"><em>20</em>MWh</span>
-                                </li>
-                              </ul>
-                              <div class="error">
-                                <h2>최근 미처리 오류 : <span>2</span>건</h2>
-                                <div>
-                                  <p>2020-02-10 12:00:01 데이터 disconnected</p>
-                                  <p>2020-02-09 11:41:26 인버터#1 이상 감지</p>
-                                </div>
-                              </div>
-                            </dd>
-                          </dl>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="dbclickopen flag1">
-                    <td><span class="status status_drv" title="운전">운전</span></td>
-                    <td><span class="battery_icon batter_out">방전</span></td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>
-                      <div class="cname">진양화학</div>
-                    </td>
-                    <td>1,500</td>
-                    <td>-</td>
-                    <td>1,405</td>
-                    <td>720</td>
-                  </tr>
-                  <tr class="detail_info list4 flag1">
-                    <td colspan="9">
-                      <div class="di_wrap">
-                        <div class="type1">
-                          <dl>
-                            <dt>
-                              <div class="inchart">
-                                <div id="type_chart11_1" style="height:130px"></div>
-                                <script language="JavaScript">
-                                  $(function () {
-                                    var pieChart11_1 = Highcharts.chart('type_chart11_1', {
-                                      chart: {
-                                        marginTop: 0,
-                                        marginLeft: 0,
-                                        marginRight: 0,
-                                        backgroundColor: 'transparent',
-                                        
-                                        plotBorderWidth: 0,
-                                        plotShadow: false
-                                      },
-                                      
-                                      navigation: {
-                                        buttonOptions: {
-                                          enabled: false /* 메뉴 안보이기 */
-                                        }
-                                      },
-                                      
-                                      title: {
-                                        text: '70%', // %표기
-                                        align: 'center',
-                                        verticalAlign: 'middle',
-                                        y: 10,
-                                        x: 0,
-                                        style: {
-                                          fontSize: '12px',
-                                          color: 'var(--color3)'
-                                        }
-                                      },
-                                      
-                                      subtitle: {
-                                        text: ''
-                                      },
-                                      
-                                      /* 출처 */
-                                      credits: {
-                                        enabled: false
-                                      },
-                                      
-                                      tooltip: {
-                                        pointFormat: '<b>{point.percentage:.0f}%</b>'
-                                      },
-                                      
-                                      plotOptions: {
-                                        pie: {
-                                          dataLabels: {
-                                            enabled: false,
-                                            style: {
-                                              fontWeight: 'bold',
-                                              color: 'var(--color3)'
-                                            }
-                                          },
-                                          //startAngle: -90,
-                                          //endAngle: 90,
-                                          center: ['50%', '50%'],
-                                          borderWidth: 0,
-                                          size: '100%'
-                                        }
-                                      },
-                                      
-                                      series: [{
-                                        type: 'pie',
-                                        innerSize: '50%',
-                                        name: '설비용량',
-                                        colorByPoint: true,
-                                        data: [{
-                                          color: '#26ccc8',
-                                          name: '총 설비용량',
-                                          dataLabels: {
-                                            enabled: false
-                                          },
-                                          y: 70 //70% -- 아래로 총합 100%
-                                        }, {
-                                          color: '#84848f',
-                                          name: '미설비용량',
-                                          dataLabels: {
-                                            enabled: false
-                                          },
-                                          y: 30 //30% 나머지
-                                        }]
-                                      }],
-                                      responsive: { // 반응형
-                                        rules: [{
-                                          condition: {
-                                            minWidth: 305
-                                          },
-                                          chartOptions: {
-                                            title: {
-                                              x: 0,
-                                              y: 10,
-                                              style: {
-                                                fontSize: '12px',
-                                                color: 'var(--color3)'
-                                              }
-                                            },
-                                            plotOptions: {
-                                              pie: {
-                                                dataLabels: {
-                                                  style: {
-                                                    fontWeight: 'bold',
-                                                    color: 'var(--color3)'
-                                                  }
-                                                },
-                                                center: ['50%', '50%'],
-                                                size: '100%'
-                                              }
-                                            }
-                                          }
-                                        }]
-                                      }
-                                      
-                                    });
-                                  });
-                                </script>
-                              </div>
-                            </dt>
-                            <dd>
-                              <div class="link"><a href="javascript:linkSiteDashboard(4);" class="btn_cancel">대시보드
-                                바로가기</a></div>
-                              <div class="di_top">
-                                <span class="sbj">동국제강</span>
-                                <span class="type_img type_sun">태양광</span>
-                                <!--
-																      		<span class="type_img type_wind">풍력</span>
-																      		<span class="type_img type_water">소수력</span>
-																      		<span class="type_img type_battery">배터리 룸</span>
-																      		-->
-                                <span>일사량 <em>30</em>kWh/㎡․day </span>
-                                <span>현재온도 <em>30</em>℃</span>
-                                <span>현재습도 <em>65</em>%</span>
-                              </div>
-                              <ul class="clear">
-                                <li class="clear">
-                                  <span class="fl">총 설비용량</span>
-                                  <span class="fl"><em>10</em>MW</span>
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">총 인버터수량</span>
-                                  <span class="fl"><em>30</em>EA</span>
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">금일 발전예측</span>
-                                  <span class="fl"><em>28</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">금일 누적발전</span>
-                                  <span class="fl"><em>18.1</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">전일 누적발전</span>
-                                  <span class="fl"><em>20</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">전일 발전매전</span>
-                                  <span class="fl"><em>20</em>MWh</span>
-                                </li>
-                              </ul>
-                              <div class="error">
-                                <h2>최근 미처리 오류 : <span>2</span>건</h2>
-                                <div>
-                                  <p>2020-02-10 12:00:01 데이터 disconnected</p>
-                                  <p>2020-02-09 11:41:26 인버터#1 이상 감지</p>
-                                </div>
-                              </div>
-                            </dd>
-                          </dl>
-                        </div>
-                        <div class="type2">
-                          <dl>
-                            <dt>
-                              <div class="inchart">
-                                <div id="type_chart22_1" style="height:130px;"></div>
-                                <script language="JavaScript">
-                                  $(function () {
-                                    var pieChart22_1 = Highcharts.chart('type_chart22_1', {
-                                      chart: {
-                                        marginTop: 0,
-                                        marginLeft: 0,
-                                        marginRight: 0,
-                                        backgroundColor: 'transparent',
-                                        
-                                        plotBorderWidth: 0,
-                                        plotShadow: false
-                                      },
-                                      
-                                      navigation: {
-                                        buttonOptions: {
-                                          enabled: false /* 메뉴 안보이기 */
-                                        }
-                                      },
-                                      
-                                      title: {
-                                        text: '70%', // %표기
-                                        align: 'center',
-                                        verticalAlign: 'middle',
-                                        y: 10,
-                                        x: 0,
-                                        style: {
-                                          fontSize: '14px',
-                                          color: 'var(--color3)'
-                                        }
-                                      },
-                                      
-                                      subtitle: {
-                                        text: ''
-                                      },
-                                      
-                                      /* 출처 */
-                                      credits: {
-                                        enabled: false
-                                      },
-                                      
-                                      tooltip: {
-                                        pointFormat: '<b>{point.percentage:.0f}%</b>'
-                                      },
-                                      
-                                      plotOptions: {
-                                        pie: {
-                                          dataLabels: {
-                                            enabled: false,
-                                            style: {
-                                              fontWeight: 'bold',
-                                              color: 'var(--color3)'
-                                            }
-                                          },
-                                          //startAngle: -90,
-                                          //endAngle: 90,
-                                          center: ['50%', '50%'],
-                                          borderWidth: 0,
-                                          size: '100%'
-                                        }
-                                      },
-                                      
-                                      series: [{
-                                        type: 'pie',
-                                        innerSize: '50%',
-                                        name: '설비용량',
-                                        colorByPoint: true,
-                                        data: [{
-                                          color: '#26ccc8',
-                                          name: '총 설비용량',
-                                          dataLabels: {
-                                            enabled: false
-                                          },
-                                          y: 70 //70% -- 아래로 총합 100%
-                                        }, {
-                                          color: '#84848f',
-                                          name: '미설비용량',
-                                          dataLabels: {
-                                            enabled: false
-                                          },
-                                          y: 30 //30% 나머지
-                                        }]
-                                      }],
-                                      responsive: { // 반응형
-                                        rules: [{
-                                          condition: {
-                                            minWidth: 305
-                                          },
-                                          chartOptions: {
-                                            title: {
-                                              x: 0,
-                                              y: 10,
-                                              style: {
-                                                fontSize: '12px',
-                                                color: 'var(--color3)'
-                                              }
-                                            },
-                                            plotOptions: {
-                                              pie: {
-                                                dataLabels: {
-                                                  style: {
-                                                    fontWeight: 'bold',
-                                                    color: 'var(--color3)'
-                                                  }
-                                                },
-                                                center: ['50%', '50%'],
-                                                size: '100%'
-                                              }
-                                            }
-                                          }
-                                        }]
-                                      }
-                                      
-                                    });
-                                  });
-                                </script>
-                              </div>
-                              <div class="summ">
-                                <div class="soc">
-                                  <div class="batt_wrap clear">
-                                    <div class="battery"><span style="width:30%;"><!--잔량--></span><em>30%</em></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </dt>
-                            <dd>
-                              <div class="di_top">
-                                <span class="sbj">제일화성</span>
-                                <span class="type_img type_battery">배터리 룸</span>
-                                <span>배터리 룸 </span>
-                                <span>온도 <em>30</em>℃</span>
-                                <span>습도 <em>30</em>%</span>
-                              </div>
-                              <ul class="clear">
-                                <li class="clear">
-                                  <span class="fl">총 설비용량</span>
-                                  <span class="fl"><em>10</em>MW / <em>20</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">금일 충전예측</span>
-                                  <span class="fl"><em>28</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">금일 누적충전</span>
-                                  <span class="fl"><em>18.1</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">금일 방전예측</span>
-                                  <span class="fl"><em>20</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">금일 누적방전</span>
-                                  <span class="fl"><em>20</em>MWh</span>
-                                </li>
-                              </ul>
-                              <div class="error">
-                                <h2>최근 미처리 오류 : <span>2</span>건</h2>
-                                <div>
-                                  <p>2020-02-10 12:00:01 데이터 disconnected</p>
-                                  <p>2020-02-09 11:41:26 인버터#1 이상 감지</p>
-                                </div>
-                              </div>
-                            </dd>
-                          </dl>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="dbclickopen status_alert flag3">
-                    <td><span class="status status_drv" title="운전">운전</span></td>
-                    <td><span class="battery_icon batter_in">충전</span></td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>
-                      <div class="cname">코닝정밀</div>
-                    </td>
-                    <td>3,000</td>
-                    <td>-</td>
-                    <td>2,800</td>
-                    <td>1,401</td>
-                  </tr>
-                  <tr class="detail_info list5 flag1">
-                    <td colspan="9">
-                      <div class="di_wrap">
-                        <div class="type2">
-                          <dl>
-                            <dt>
-                              <div class="inchart">
-                                <div id="type_chart2_1" style="height:130px;"></div>
-                                <script language="JavaScript">
-                                  $(function () {
-                                    var pieChart2_1 = Highcharts.chart('type_chart2_1', {
-                                      chart: {
-                                        marginTop: 0,
-                                        marginLeft: 0,
-                                        marginRight: 0,
-                                        backgroundColor: 'transparent',
-                                        
-                                        plotBorderWidth: 0,
-                                        plotShadow: false
-                                      },
-                                      
-                                      navigation: {
-                                        buttonOptions: {
-                                          enabled: false /* 메뉴 안보이기 */
-                                        }
-                                      },
-                                      
-                                      title: {
-                                        text: '70%', // %표기
-                                        align: 'center',
-                                        verticalAlign: 'middle',
-                                        y: 10,
-                                        x: 0,
-                                        style: {
-                                          fontSize: '14px',
-                                          color: 'white'
-                                        }
-                                      },
-                                      
-                                      subtitle: {
-                                        text: ''
-                                      },
-                                      
-                                      /* 출처 */
-                                      credits: {
-                                        enabled: false
-                                      },
-                                      
-                                      tooltip: {
-                                        pointFormat: '<b>{point.percentage:.0f}%</b>'
-                                      },
-                                      
-                                      plotOptions: {
-                                        pie: {
-                                          dataLabels: {
-                                            enabled: false,
-                                            style: {
-                                              fontWeight: 'bold',
-                                              color: 'white'
-                                            }
-                                          },
-                                          //startAngle: -90,
-                                          //endAngle: 90,
-                                          center: ['50%', '50%'],
-                                          borderWidth: 0,
-                                          size: '100%'
-                                        }
-                                      },
-                                      
-                                      series: [{
-                                        type: 'pie',
-                                        innerSize: '50%',
-                                        name: '설비용량',
-                                        colorByPoint: true,
-                                        data: [{
-                                          color: '#438fd7',
-                                          name: '총 설비용량',
-                                          dataLabels: {
-                                            enabled: false
-                                          },
-                                          y: 70 //70% -- 아래로 총합 100%
-                                        }, {
-                                          color: '#84848f',
-                                          name: '미설비용량',
-                                          dataLabels: {
-                                            enabled: false
-                                          },
-                                          y: 30 //30% 나머지
-                                        }]
-                                      }],
-                                      responsive: { // 반응형
-                                        rules: [{
-                                          condition: {
-                                            minWidth: 305
-                                          },
-                                          chartOptions: {
-                                            title: {
-                                              x: 0,
-                                              y: 10,
-                                              style: {
-                                                fontSize: '12px',
-                                              }
-                                            },
-                                            plotOptions: {
-                                              pie: {
-                                                dataLabels: {
-                                                  style: {
-                                                    fontWeight: 'bold'
-                                                  }
-                                                },
-                                                center: ['50%', '50%'],
-                                                size: '100%'
-                                              }
-                                            }
-                                          }
-                                        }]
-                                      }
-                                      
-                                    });
-                                  });
-                                </script>
-                              </div>
-                              <div class="summ">
-                                <div class="soc">
-                                  <div class="batt_wrap clear">
-                                    <div class="battery"><span style="width:30%;"><!--잔량--></span><em>30%</em></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </dt>
-                            <dd>
-                              <div class="link"><a href="javascript:linkSiteDashboard(5);" class="btn_cancel">대시보드
-                                바로가기</a></div>
-                              <div class="di_top">
-                                <span class="sbj">제일화성</span>
-                                <span class="type_img type_battery">배터리 룸</span>
-                                <span>배터리 룸 </span>
-                                <span>온도 <em>30</em>℃</span>
-                                <span>습도 <em>30</em>%</span>
-                              </div>
-                              <ul class="clear">
-                                <li class="clear">
-                                  <span class="fl">총 설비용량</span>
-                                  <span class="fl"><em>10</em>MW / <em>20</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">금일 충전예측</span>
-                                  <span class="fl"><em>28</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">금일 누적충전</span>
-                                  <span class="fl"><em>18.1</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">금일 방전예측</span>
-                                  <span class="fl"><em>20</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">금일 누적방전</span>
-                                  <span class="fl"><em>20</em>MWh</span>
-                                </li>
-                              </ul>
-                              <div class="error">
-                                <h2>최근 미처리 오류 : <span>2</span>건</h2>
-                                <div>
-                                  <p>2020-02-10 12:00:01 데이터 disconnected</p>
-                                  <p>2020-02-09 11:41:26 인버터#1 이상 감지</p>
-                                </div>
-                              </div>
-                            </dd>
-                          </dl>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
                 </tbody>
               </table>
             </div>
@@ -2817,10 +1937,9 @@
   <input type="hidden" id="grpIdx" name="grpIdx" value=""/>
 </form>
 <script type="text/javascript">
-  var formData = null;
+  const formData = null;
   
   $(document).ready(function () {
-    
     fn_cycle_15min();
   });
   
@@ -2861,7 +1980,7 @@
 // 			$('#areaType').val(areaType);
 // 		}
     
-    var frm = $("#schForm").serializeObject();
+    const frm = $("#schForm").serializeObject();
     return frm;
   }
   
@@ -2870,141 +1989,90 @@
     drawData_year_gen();
     getMonthGenData();
     drawData_month_gen();
-    
     getGenDataBySite();
-    getGenDataByType();
+    // getGenDataByType();
     getTodayTotalDetail();
     getAlarmInfo();
   }
   
   //올해 발전데이터, 정산금 데이터
-  var chargeList;
-  var dischargeList;
-  var pvList;
-  var windList;
-  var smallHydroList;
-  var payList;
-  
+  let chargeList;
+  let dischargeList;
+  let pvList;
+  let windList;
+  let smallHydroList;
+  let payList;
+
   function getYearGenData(selTerm) {
-    chargeList = [];
-    dischargeList = [];
-    pvList = [];
-    windList = [];
-    smallHydroList = [];
-    payList = [];
-//		formData에 api parameter 세팅 -> java에서 정제 후 api 요청
-// 		selTermFrom  시작일시
-// 		selTermTo 종료일시
-// 		selTerm 조회간격
-// 		siteId (all or 개별 사이트 아이디)
-//		renewTypeCode (all or 개별 신재생유형코드)
-//		period 기간별 (별도타입 없음)
-    var formData = getSiteMainSchCollection();//api에 맞게 수정 필요
-    /* api호출을 통한 데이터 세팅
-		$.ajax({
-			url: "",
-			type: "post",
-			async: false,
-			data:formData,
-			success: function(result) {//api 요청결과
-				//success
-				var resultList = result.genList;
-				
-				//반복 or 조건을 통한 데이터 정리, 세팅
-				chargeList = resultList[0];
-				dischargeList = resultList[1];
-				pvList = resultList[2];
-				windList = resultList[3];
-				smallHydroList = resultList[4];
-				payList = resultList[5];
-				//데이터 세팅
-			},
-			error: function(result, status, error) {
-				//error function  or alert, return
-				error_getYearGenData(request, status, error);
-			}
-		});
-		*/
-    //임시 데이터 세팅
-    chargeList = [
-      [0, -10],
-      [1, -10],
-      [2, -50],
-      [3, null],
-      [4, null],
-      [5, null],
-      [6, null],
-      [7, null],
-      [8, null],
-      [9, null],
-      [10, null],
-      [11, null]
-    ];
-    dischargeList = [[0, 10],
-      [1, -30],
-      [2, 70],
-      [3, null],
-      [4, null],
-      [5, null],
-      [6, null],
-      [7, null],
-      [8, null],
-      [9, null],
-      [10, null],
-      [11, null]];
-    pvList = [[0, 10],
-      [1, 20],
-      [2, 40],
-      [3, null],
-      [4, null],
-      [5, null],
-      [6, null],
-      [7, null],
-      [8, null],
-      [9, null],
-      [10, null],
-      [11, null]];
-    windList = [[0, 40],
-      [1, 50],
-      [2, 70],
-      [3, null],
-      [4, null],
-      [5, null],
-      [6, null],
-      [7, null],
-      [8, null],
-      [9, null],
-      [10, null],
-      [11, null]];
-    smallHydroList = [[0, -10],
-      [1, -30],
-      [2, -10],
-      [3, null],
-      [4, null],
-      [5, null],
-      [6, null],
-      [7, null],
-      [8, null],
-      [9, null],
-      [10, null],
-      [1, null]];
-    payList = [[0, -90],
-      [1, -40],
-      [2, 20],
-      [3, null],
-      [4, null],
-      [5, null],
-      [6, null],
-      [7, null],
-      [8, null],
-      [9, null],
-      [10, null],
-      [11, null]];
-    
+    const nowMonth = new Date().getMonth();
+    chargeList = new Array(nowMonth + 1).fill(0);
+    dischargeList = new Array(nowMonth + 1).fill(0);
+    pvList = new Array(nowMonth + 1).fill(0);
+    payList = new Array(nowMonth + 1).fill(0);
+    const formData = getSiteMainSchCollection();//api에 맞게 수정 필요
+    $.ajax({
+      url: "http://iderms.enertalk.com:8443/config/sites",
+      type: "get",
+      async: false,
+      data: {
+        oid: "spower",
+      },
+      success: function (result) {
+        result.forEach(site => {
+          $.ajax({
+            url: "http://iderms.enertalk.com:8443/energy/sites",
+            type: "get",
+            async: false,
+            data: {
+              sid: site.sid,
+              startTime: "20200101000000",
+              endTime: formData.selTermTo,
+              interval: "month"
+            },
+            success: function (result) {
+              result.data[0].battery.charging.items.map((e) => {
+                if (e.energy) {
+                  const month = Number(e.basetime.toString().slice(4, 6));
+                  chargeList[month - 1] += e.energy;
+                }
+              });
+              result.data[0].battery.discharging.items.map((e) => {
+                if (e.energy) {
+                  const month = Number(e.basetime.toString().slice(4, 6));
+                  dischargeList[month - 1] += e.energy;
+                }
+              });
+              result.data[0].generation.items.map((e) => {
+                if (e.energy) {
+                  const month = Number(e.basetime.toString().slice(4, 6));
+                  pvList[month - 1] += e.energy;
+                }
+              });
+              result.data[0].generation.items.map((e) => {
+                if (e.energy) {
+                  const month = Number(e.basetime.toString().slice(4, 6));
+                  payList[month - 1] += e.billing;
+                }
+              });
+              //데이터 세팅
+            },
+            error: function (result, status, error) {
+              //error function or alert, return
+              // error_getYearGenData(request, status, error);
+            }
+          })
+        })
+      },
+      error: function (error) {
+        //error function or alert, return
+        // error_getYearGenData(request, status, error);
+      }
+    })
+    ;
   }
   
   function drawData_year_gen() {
-    var $charge = $(".gmain_chart1");
+    const $charge = $(".gmain_chart1");
     if (chargeList.length < 1 && chargeList.length < 1 && dischargeList.length < 1 && dischargeList.length < 1) {
       $charge.find(".no-data").css("display", "");
       $charge.find(".inchart").css("display", "none");
@@ -3046,24 +2114,6 @@
       }
     }, false);
     chargeChart1.addSeries({
-      name: '풍력',
-      type: 'column',
-      color: '#5269EF',
-      data: windList,
-      tooltip: {
-        valueSuffix: 'kWh'
-      }
-    }, false);
-    chargeChart1.addSeries({
-      name: '소수력',
-      type: 'column',
-      color: '#4FB5FF',
-      data: smallHydroList,
-      tooltip: {
-        valueSuffix: 'kWh'
-      }
-    }, false);
-    chargeChart1.addSeries({
       name: '정산금',
       type: 'spline',
       color: 'var(--color3)',
@@ -3080,236 +2130,72 @@
     
     chargeChart1.redraw(); // 차트 데이터를 다시 그린다
   }
-  
+
   function getMonthGenData() {
-    chargeList = [];
-    dischargeList = [];
-    pvList = [];
-    windList = [];
-    smallHydroList = [];
-    payList = [];
-//		formData에 api parameter 세팅 -> java에서 정제 후 api 요청
-// 		selTermFrom  시작일시
-// 		selTermTo 종료일시
-// 		selTerm 조회간격
-// 		siteId (all or 개별 사이트 아이디)
-//		renewTypeCode (all or 개별 신재생유형코드)
-//		period 기간별 (별도타입 없음)
-    
-    var formData = getSiteMainSchCollection();//api에 맞게 수정 필요
-    /* api호출을 통한 데이터 세팅
-				$.ajax({
-			url: "",
-			type: "post",
-			async: false,
-			data:formData,
-			success: function(result) {//api 요청결과
-				//success
-				var resultList = result.genList;
-				
-				//반복 or 조건을 통한 데이터 정리, 세팅
-				chargeList = resultList[0];
-				dischargeList = resultList[1];
-				pvList = resultList[2];
-				windList = resultList[3];
-				smallHydroList = resultList[4];
-				payList = resultList[5];
-				//데이터 세팅
-			},
-			error: function(result, status, error) {
-				//error function  or alert, return
-				error_getMonthGenData(request, status, error);
-			}
-		});
-		*/
-    //임시 데이터 세팅
-    //월
-    chargeList = [[0, 18.61],
-      [1, -10.86],
-      [2, 19.46],
-      [3, -17.95],
-      [4, 13.94],
-      [5, 12.82],
-      [6, 102.87],
-      [7, 15.91],
-      [8, -10.21],
-      [9, 15.96],
-      [10, 1.47],
-      [11, 21.25],
-      [12, 52.89],
-      [13, -80.17],
-      [14, 73.81],
-      [15, 83.57],
-      [16, 35.59],
-      [17, -59.94],
-      [18, 73.82],
-      [19, null],
-      [20, null],
-      [21, null],
-      [22, null],
-      [23, null],
-      [24, null],
-      [25, null],
-      [26, null],
-      [27, null],
-      [28, null],
-      [29, null],
-      [30, null]];
-    dischargeList = [[0, 18.61],
-      [1, 120.86],
-      [2, -119.46],
-      [3, 17.95],
-      [4, 13.94],
-      [5, -12.82],
-      [6, 12.87],
-      [7, 115.91],
-      [8, 10.21],
-      [9, -115.96],
-      [10, 13.47],
-      [11, 21.25],
-      [12, 292.89],
-      [13, 80.17],
-      [14, 73.81],
-      [15, -813.57],
-      [16, 75.59],
-      [17, 29.94],
-      [18, 23.82],
-      [19, null],
-      [20, null],
-      [21, null],
-      [22, null],
-      [23, null],
-      [24, null],
-      [25, null],
-      [26, null],
-      [27, null],
-      [28, null],
-      [29, null],
-      [30, null]];
-    pvList = [[0, 18.61],
-      [1, -20.86],
-      [2, 19.46],
-      [3, 17.95],
-      [4, 73.94],
-      [5, 22.82],
-      [6, 2.87],
-      [7, 15.91],
-      [8, -10.21],
-      [9, 15.96],
-      [10, 13.47],
-      [11, 1.25],
-      [12, 92.89],
-      [13, 0.17],
-      [14, 3.81],
-      [15, 3.57],
-      [16, -75.59],
-      [17, 7.94],
-      [18, 73.82],
-      [19, null],
-      [20, null],
-      [21, null],
-      [22, null],
-      [23, null],
-      [24, null],
-      [25, null],
-      [26, null],
-      [27, null],
-      [28, null],
-      [29, null],
-      [30, null]];
-    windList = [[0, 18.61],
-      [1, 12.86],
-      [2, 11.46],
-      [3, -11.95],
-      [4, 17.94],
-      [5, 12.82],
-      [6, 102.87],
-      [7, 11.91],
-      [8, 11.21],
-      [9, 115.96],
-      [10, 13.47],
-      [11, -21.25],
-      [12, 292.89],
-      [13, 80.17],
-      [14, 73.81],
-      [15, 83.57],
-      [16, -75.59],
-      [17, 79.94],
-      [18, 73.82],
-      [19, null],
-      [20, null],
-      [21, null],
-      [22, null],
-      [23, null],
-      [24, null],
-      [25, null],
-      [26, null],
-      [27, null],
-      [28, null],
-      [29, null],
-      [30, null]];
-    smallHydroList = [[0, 18.61],
-      [1, 120.86],
-      [2, 119.46],
-      [3, 117.95],
-      [4, 173.94],
-      [5, 122.82],
-      [6, 102.87],
-      [7, 115.91],
-      [8, -110.21],
-      [9, 115.96],
-      [10, 13.47],
-      [11, 21.25],
-      [12, -292.89],
-      [13, 80.17],
-      [14, 73.81],
-      [15, 83.57],
-      [16, 75.59],
-      [17, 79.94],
-      [18, -73.82],
-      [19, null],
-      [20, null],
-      [21, null],
-      [22, null],
-      [23, null],
-      [24, null],
-      [25, null],
-      [26, null],
-      [27, null],
-      [28, null],
-      [29, null],
-      [30, null]];
-    payList = [[0, 18.61],
-      [1, 120.86],
-      [2, 119.46],
-      [3, 117.95],
-      [4, 173.94],
-      [5, 122.82],
-      [6, -102.87],
-      [7, 115.91],
-      [8, 110.21],
-      [9, -115.96],
-      [10, 13.47],
-      [11, 21.25],
-      [12, 292.89],
-      [13, 80.17],
-      [14, 73.81],
-      [15, 83.57],
-      [16, 75.59],
-      [17, 79.94],
-      [18, 73.82],
-      [19, null],
-      [20, null],
-      [21, null],
-      [22, null],
-      [23, null],
-      [24, null],
-      [25, null],
-      [26, null],
-      [27, null],
-      [28, null],
-      [29, null],
-      [30, null]];
+    const nowDay = new Date().getMonth();
+    chargeList = new Array(nowDay + 1).fill(0);
+    dischargeList = new Array(nowDay + 1).fill(0);
+    pvList = new Array(nowDay + 1).fill(0);
+    payList = new Array(nowDay + 1).fill(0);
+
+    const formData = getSiteMainSchCollection();//api에 맞게 수정 필요
+    $.ajax({
+      url: "http://iderms.enertalk.com:8443/config/sites",
+      type: "get",
+      async: false,
+      data:{
+        oid: "spower",
+      },
+      success: function (result) {
+        result.forEach(site=>{
+        $.ajax({
+          url: "http://iderms.enertalk.com:8443/energy/sites",
+          type: "get",
+          async: false,
+          data: {
+            sid: site.sid,
+            startTime: "20200401000000",
+            endTime: formData.selTermTo,
+            interval: "day"
+          },
+          success: function (result) {
+            result.data[0].battery.charging.items.map((e) => {
+              if (e.energy) {
+                const day = Number(e.basetime.toString().slice(6, 8));
+                chargeList[day - 1] += e.energy;
+              }
+            });
+            result.data[0].battery.discharging.items.map((e) => {
+              if (e.energy) {
+                const day = Number(e.basetime.toString().slice(6, 8));
+                dischargeList[day - 1] += e.energy;
+              }
+            });
+            result.data[0].generation.items.map((e) => {
+              if (e.energy) {
+                const day = Number(e.basetime.toString().slice(6, 8));
+                pvList[day - 1] += e.energy;
+              }
+            });
+            result.data[0].generation.items.map((e) => {
+              if (e.energy) {
+                const day = Number(e.basetime.toString().slice(6, 8));
+                payList[day - 1] += e.billing;
+              }
+            });
+          },
+          error: function (result, status, error) {
+            //error function or alert, return
+            // error_getYearGenData(request, status, error);
+          }
+        });
+        })
+      },
+      error: function(error){
+        //error function or alert, return
+        // error_getYearGenData(request, status, error);
+      }
+    });
   }
   
   function drawData_month_gen() {
@@ -3355,24 +2241,6 @@
       }
     }, false);
     chargeChart2.addSeries({
-      name: '풍력',
-      type: 'column',
-      color: '#5269EF',
-      data: windList,
-      tooltip: {
-        valueSuffix: 'kWh'
-      }
-    }, false);
-    chargeChart2.addSeries({
-      name: '소수력',
-      type: 'column',
-      color: '#4FB5FF',
-      data: smallHydroList,
-      tooltip: {
-        valueSuffix: 'kWh'
-      }
-    }, false);
-    chargeChart2.addSeries({
       name: '정산금',
       type: 'spline',
       color: 'var(--color3)',
@@ -3384,164 +2252,128 @@
       }
     }, false);
     
-    //월
-    // chargeChart2.xAxis[0].options.tickInterval = 24 * 60 * 60 * 1000;
-    // chargeChart2.xAxis[0].options.labels.style.fontSize = '12px';
-    
     chargeChart2.redraw(); // 차트 데이터를 다시 그린다
   }
   
   function getGenDataBySite() { //3번째 indiv 사업소별 탭
 
-//		formData에 api parameter 세팅 -> java에서 정제 후 api 요청
-// 		selTermFrom  시작일시
-// 		selTermTo 종료일시
-// 		selTerm 조회간격
-// 		siteId (all or 개별 사이트 아이디)
-//		renewTypeCode (all or 개별 신재생유형코드)
-//		period 기간별 (별도타입 없음)
-    
-    var formData = getSiteMainSchCollection();//api에 맞게 수정 필요
-    /* api호출을 통한 데이터 세팅
-				$.ajax({
-			url: "",
-			type: "post",
-			async: false,
-			data:formData,
-			success: function(result) {//api 요청결과
-				//success
-				var siteList = result.list;
-				
-				var $tbody = $('#siteGenTbody');
-				var tbodyStr = '';
-				
-				if (siteList != null && siteList.length > 0) {
-					for (var i = 0; i < siteList.length; i++) {
-						if (i < siteList.length) {
-							var map = convertUnitFormat(siteList[i].usage, "Wh", 5);
-							var map2 = convertUnitFormat(siteList[i].usage_plan, "Wh", 5);
-							tbodyStr += '<tr>';
-							tbodyStr += '<th>' + siteList[i].site_name + '</th>';
-							tbodyStr += '<td>' + toFixedNum(map.get("formatNum"), 2) + '</td>';
-							tbodyStr += '<td>' + toFixedNum(map2.get("formatNum"), 2) + '</td>';
-							tbodyStr += '</tr>';
-						}
-					}
-
-					var pagingMap = result.pagingMap;
-					makePageNums2(pagingMap, "GMainSiteRanking");
-
-				} else {
-					$('#GMainSiteRankingPaging').empty();
-				}
-
-				$tbody.html(tbodyStr);
-
-				if (myChart != null) {
-					myChart.update({data: {table: 'gdatatable1'}});
-				}
-				//데이터 세팅
-			},
-			error: function(result, status, error) {
-				//error function  or alert, return
-				error_getMonthGenData(request, status, error);
-			}
-		});
-		*/
-    //임시 데이터 세팅
-    //어제
-    var $tbody = $('#siteGenTbody');
+    const formData = getSiteMainSchCollection();
+    const $tbody = $('#siteGenTbody');
     $tbody.empty();
-    var tbodyStr = '';
-    tbodyStr += '<tr>';
-    tbodyStr += '<th>당진태양광</th>';
-    tbodyStr += '<td>2144</td>';
-    tbodyStr += '<td>2004</td>';
-    tbodyStr += '</tr>';
-    tbodyStr += '<tr>';
-    tbodyStr += '<th>제일화성</th>';
-    tbodyStr += '<td>50</td>';
-    tbodyStr += '<td>100</td>';
-    tbodyStr += '</tr>';
-    tbodyStr += '<tr>';
-    tbodyStr += '<th>동국제강</th>';
-    tbodyStr += '<td>50</td>';
-    tbodyStr += '<td>100</td>';
-    tbodyStr += '</tr>';
-// 		tbodyStr += '<tr>';
-// 		tbodyStr += '<th>서울시1</th>';
-// 		tbodyStr += '<td>50</td>';
-// 		tbodyStr += '<td>100</td>';
-// 		tbodyStr += '</tr>';
-// 		tbodyStr += '<tr>';
-// 		tbodyStr += '<th>구례1전기실</th>';
-// 		tbodyStr += '<td>50</td>';
-// 		tbodyStr += '<td>100</td>';
-// 		tbodyStr += '</tr>';
-    
+    let tbodyStr = ``;
+    //get siteInformation
+    $.ajax({
+      url: "http://iderms.enertalk.com:8443/config/sites",
+      type: "get",
+      async: false,
+      data:{
+        oid: "spower",
+      },
+      success: function(result) {
+        result.forEach(site=>{
+          $.ajax({
+            url: "http://iderms.enertalk.com:8443/energy/sites",
+            type: "get",
+            async: false,
+            data:{
+              sid: site.sid,
+              startTime: "20200404000000",
+              endTime:formData.selTermTo,
+              interval:"hour"
+            },
+            success: function(result) {//api 요청결과
+              let generationSum = 0;
+              result.data[0].generation.items.forEach((e) => {generationSum += e.energy;});
+              let siteName =site.name.replace(/\s/g, "");
+              tbodyStr += `<tr><th>${'${siteName}'}</th><td>${'${Math.floor(generationSum)}'}</td>`;
+              
+            },
+            error: function(result, status, error) {
+              //error function or alert, return
+              // error_getYearGenData(request, status, error);
+            }
+          });
+          $.ajax({
+            url: "http://iderms.enertalk.com:8443/energy/forecasting/sites",
+            type: "get",
+            async: false,
+            data:{
+              sid: site.sid,
+              startTime: "20200404000000",
+              endTime:formData.selTermTo,
+              interval:"hour"
+            },
+            success: function(result) {//api 요청결과
+              let generationForecaseSum = 0;
+              result.data[0].generation.items.map((e)=>generationForecaseSum+=e.energy);
+              tbodyStr += `<td>${'${Math.floor(generationForecaseSum)}'}</td></tr>`;
+            },
+            error: function(result, status, error) {
+              //error function or alert, return
+              // error_getYearGenData(request, status, error);
+            }
+          });
+        })
+      },
+      error: function(result, status, error) {
+        //error function or alert, return
+        // error_getYearGenData(request, status, error);
+      }
+    });
     $tbody.append(tbodyStr);
-    
     drawPeakChart3();
-    
   }
   
   function getGenDataByType() { //3번째 indiv 유형별 탭
-
-//		formData에 api parameter 세팅 -> java에서 정제 후 api 요청
-// 		selTermFrom  시작일시
-// 		selTermTo 종료일시
-// 		selTerm 조회간격
-// 		siteId (all or 개별 사이트 아이디)
-//		renewTypeCode (all or 개별 신재생유형코드)
-//		period 기간별 (별도타입 없음)
     
     var formData = getSiteMainSchCollection();//api에 맞게 수정 필요
-    /* api호출을 통한 데이터 세팅
-				$.ajax({
-			url: "",
-			type: "post",
-			async: false,
-			data:formData,
-			success: function(result) {//api 요청결과
-				//success
-				var siteList = result.list;
-				
-				var $tbody = $('#siteGenTbody');
-				var tbodyStr = '';
-				
-				if (siteList != null && siteList.length > 0) {
-					for (var i = 0; i < siteList.length; i++) {
-						if (i < siteList.length) {
-							var map = convertUnitFormat(siteList[i].usage, "Wh", 5);
-							var map2 = convertUnitFormat(siteList[i].usage_plan, "Wh", 5);
-							tbodyStr += '<tr>';
-							tbodyStr += '<th>' + siteList[i].site_name + '</th>';
-							tbodyStr += '<td>' + toFixedNum(map.get("formatNum"), 2) + '</td>';
-							tbodyStr += '<td>' + toFixedNum(map2.get("formatNum"), 2) + '</td>';
-							tbodyStr += '</tr>';
-						}
-					}
-
-					var pagingMap = result.pagingMap;
-					makePageNums2(pagingMap, "GMainSiteRanking");
-
-				} else {
-					$('#GMainSiteRankingPaging').empty();
-				}
-
-				$tbody.html(tbodyStr);
-
-				if (myChart != null) {
-					myChart.update({data: {table: 'gdatatable1'}});
-				}
-				//데이터 세팅
-			},
-			error: function(result, status, error) {
-				//error function  or alert, return
-				error_getMonthGenData(request, status, error);
-			}
-		});
-		*/
+  
+    //get sites information
+    $.ajax({
+      url: "",
+      type: "post",
+      async: false,
+      data: formData,
+      success: function (result) {//api 요청결과
+        //success
+        var siteList = result.list;
+      
+        var $tbody = $('#siteGenTbody');
+        var tbodyStr = '';
+      
+        if (siteList != null && siteList.length > 0) {
+          for (var i = 0; i < siteList.length; i++) {
+            if (i < siteList.length) {
+              var map = convertUnitFormat(siteList[i].usage, "Wh", 5);
+              var map2 = convertUnitFormat(siteList[i].usage_plan, "Wh", 5);
+              tbodyStr += '<tr>';
+              tbodyStr += '<th>' + siteList[i].site_name + '</th>';
+              tbodyStr += '<td>' + toFixedNum(map.get("formatNum"), 2) + '</td>';
+              tbodyStr += '<td>' + toFixedNum(map2.get("formatNum"), 2) + '</td>';
+              tbodyStr += '</tr>';
+            }
+          }
+        
+          var pagingMap = result.pagingMap;
+          makePageNums2(pagingMap, "GMainSiteRanking");
+        
+        } else {
+          $('#GMainSiteRankingPaging').empty();
+        }
+      
+        $tbody.html(tbodyStr);
+      
+        if (myChart != null) {
+          myChart.update({data: {table: 'gdatatable1'}});
+        }
+        //데이터 세팅
+      },
+      error: function (result, status, error) {
+        //error function  or alert, return
+        error_getMonthGenData(request, status, error);
+      }
+    });
+		
     //임시 데이터 세팅
     //어제
     var $tbody = $('#typeGenTbody');
@@ -3601,129 +2433,84 @@
     water += '</dl>';
     $typeRight.append(water);
   }
-  
+
   function getTodayTotalDetail() {
-//		formData에 api parameter 세팅 -> java에서 정제 후 api 요청
-// 		selTermFrom  시작일시
-// 		selTermTo 종료일시
-// 		selTerm 조회간격
-// 		siteId (all or 개별 사이트 아이디)
-//		renewTypeCode (all or 개별 신재생유형코드)
-//		period 기간별 (별도타입 없음)
-    
-    var formData = getSiteMainSchCollection();//api에 맞게 수정 필요
-    /* api호출을 통한 데이터 세팅
-				$.ajax({
-			url: "",
-			type: "post",
-			async: false,
-			data:formData,
-			success: function(result) {//api 요청결과
-				//success
-				var siteList = result.list;
-				
-				var $tbody = $('#siteGenTbody');
-				var tbodyStr = '';
-				
-				if (siteList != null && siteList.length > 0) {
-					for (var i = 0; i < siteList.length; i++) {
-						if (i < siteList.length) {
-							var map = convertUnitFormat(siteList[i].usage, "Wh", 5);
-							var map2 = convertUnitFormat(siteList[i].usage_plan, "Wh", 5);
-							tbodyStr += '<tr>';
-							tbodyStr += '<th>' + siteList[i].site_name + '</th>';
-							tbodyStr += '<td>' + toFixedNum(map.get("formatNum"), 2) + '</td>';
-							tbodyStr += '<td>' + toFixedNum(map2.get("formatNum"), 2) + '</td>';
-							tbodyStr += '</tr>';
-						}
-					}
 
-					var pagingMap = result.pagingMap;
-					makePageNums2(pagingMap, "GMainSiteRanking");
-
-				} else {
-					$('#GMainSiteRankingPaging').empty();
-				}
-
-				$tbody.html(tbodyStr);
-
-				if (myChart != null) {
-					myChart.update({data: {table: 'gdatatable1'}});
-				}
-				//데이터 세팅
-			},
-			error: function(result, status, error) {
-				//error function  or alert, return
-				error_getMonthGenData(request, status, error);
-			}
-		});
-		*/
-    //임시 데이터 세팅
-    pieChart1.update({
-      series: [{
-        type: 'pie',
-        innerSize: '50%',
-        name: '발전량',
-        colorByPoint: true,
-        data: [{
-          color: '#9363FD',
-          name: '태양광',
-          dataLabels: {
-            enabled: false
-          },
-          y: 30 //60% -- 아래로 총합 100%
-        }, {
-          color: '#5269EF',
-          name: '풍력',
-          dataLabels: {
-            enabled: false
-          },
-          y: 30 //10%
-        }, {
-          color: '#4FB5FF',
-          name: '소수력',
-          dataLabels: {
-            enabled: false
-          },
-          y: 20 //10%
-        }, {
-          color: '#878787',
-          name: '미사용량',
-          dataLabels: {
-            enabled: false
-          },
-          y: 20 //20% 나머지
-        }]
-      }]
-    });
-    
+    var formData = getSiteMainSchCollection();
+  
+    $.ajax({
+      url: "http://iderms.enertalk.com:8443/config/sites",
+      type: "get",
+      async: false,
+      data: {
+        oid: "spower",
+      },
+      success: function (result) {
+        $('#centerTbody tr td:nth-child(1)').text(Math.floor(result.length));
+        result.forEach(site => {
+        
+          $.ajax({
+            url: "http://iderms.enertalk.com:8443/energy/sites",
+            type: "get",
+            async: false,
+            data: {
+              sid: site.sid,
+              startTime: "20200411000000",
+              endTime: formData.selTermTo,
+              interval: "hour"
+            },
+            success: function (result) {//api 요청결과
+              
+              let generationSum = 0;
+              let billingSum = 0;
+              result.data[0].generation.items.map((e) => generationSum += e.energy);
+              result.data[0].generation.items.map((e) => billingSum += e.billing);
+              
+              pieChart1.series[0].data.forEach((e) => {
+                if (e.name === "태양광") {
+                  e.update({y: Math.floor(generationSum / 100)});
+                } else if (e.name === "미사용량") {
+                  e.update({y: Math.floor(((97280 * 4 * 24) - generationSum) / 100)});
+                } else {
+                  e.update({y: 0});
+                }
+              });
+              $('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(Math.floor(generationSum));
+              $('#centerTbody tr td:nth-child(5)').text(Math.floor(billingSum));
+            },
+            error: function (result, status, error) {
+              //error function or alert, return
+              // error_getYearGenData(request, status, error);
+            }
+          });
+        
+          $.ajax({
+            url: "http://iderms.enertalk.com:8443/energy/forecasting/sites",
+            type: "get",
+            async: false,
+            data: {
+              sid: site.sid,
+              startTime: "20200411000000",
+              endTime: formData.selTermTo,
+              interval: "hour"
+            },
+            success: function (result) {//api 요청결과
+              let generationForecastSum = 0;
+              result.data[0].generation.items.map((e) => generationForecastSum += e.energy);
+              $('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(Math.floor(generationForecastSum));
+            },
+            error: function (result, status, error) {
+              //error function or alert, return
+              // error_getYearGenData(request, status, error);
+            }
+          });
+        })
+      },
+      error: function () {
+      
+      }
+    })
     pieChart1.redraw();
-    
-    var $ciRight = $('.ci_right');
-    $ciRight.empty();
-    var ciStr = '';
-    ciStr += '<ul>';
-    ciStr += '	<li><strong>금일 누적발전량</strong> <span>13</span><em>Wh</em></li>';
-    ciStr += '	<li><strong>금일 예측발전량</strong> <span>13</span><em>Wh</em></li>';
-    ciStr += '	<li><strong>금일 충/방전</strong> <span>13.2</span><em>Wh</em> / <span>12.1</span><em>Wh</em></li>';
-    // ciStr += '	<li><strong>금일 예측충/방전</strong> <span>25.0</span><em>Wh</em> / <span>24.8</span><em>Wh</em></li>';
-    ciStr += '</ul>';
-    $ciRight.append(ciStr);
-    
-    var $centerTbody = $('#centerTbody');
-    $centerTbody.empty();
-    
-    var centerStr = '';
-    centerStr += '<tr>';
-    centerStr += '	<td>16개소</td>';
-    centerStr += '	<td>35대</td>';
-    centerStr += '	<td>13MW/20MWh</td>';
-    centerStr += '	<td>12tCO2 </td>';
-    centerStr += '	<td>329,493KRW</td>';
-    centerStr += '</tr>';
-    
-    $centerTbody.append(centerStr);
-    
   }
   
   function getAlarmInfo() {
@@ -3853,13 +2640,13 @@
     
     alarmStr += '<ul>';
     alarmStr += '	<li>';
-    alarmStr += '		<a href="javascript:list_detail_open(\'list1\');"><span class="err_msg">당진태양광 - 인버터1 발전 정지</span><span class="err_time">2020-03-05 11:22:03</span></a>';
+    alarmStr += '		<a href="javascript:list_detail_open(\'list1\');"><span class="err_msg">혜원솔라01 - 인버터1 발전 정지</span><span class="err_time">2020-03-05 11:22:03</span></a>';
     alarmStr += '	</li>';
     alarmStr += '	<li>';
-    alarmStr += '		<a href="javascript:list_detail_open(\'list2\');"><span class="err_msg">제일화성 - 인버터2 발전 정지</span><span class="err_time">2020-03-05 11:22:03</span></a>';
+    alarmStr += '		<a href="javascript:list_detail_open(\'list2\');"><span class="err_msg">혜원솔라02 - 인버터2 발전 정지</span><span class="err_time">2020-03-05 11:22:03</span></a>';
     alarmStr += '	</li>';
     alarmStr += '	<li>';
-    alarmStr += '		<a href="javascript:list_detail_open(\'list3\');"><span class="err_msg">동국제강 - 인버터3 발전 정지</span><span class="err_time">2020-03-05 11:22:03</span></a>';
+    alarmStr += '		<a href="javascript:list_detail_open(\'list3\');"><span class="err_msg">혜원솔라01 - 인버터3 발전 정지</span><span class="err_time">2020-03-05 11:22:03</span></a>';
     alarmStr += '	</li>';
     alarmStr += '</ul>';
     

@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.ibm.icu.text.SimpleDateFormat;
+
 import kr.co.esp.alarm.service.AlarmService;
 import kr.co.esp.billRevenue.service.DrRevenueService;
 import kr.co.esp.billRevenue.service.EssRevenueService;
@@ -91,10 +93,60 @@ public class DashboardController {
 		String linkSiteName = request.getParameter("linkSiteName");
 		model.addAttribute("siteName", linkSiteName);
 
-		// dummy calendar
-		Calendar c = Calendar.getInstance();
-		int today = c.get(Calendar.DAY_OF_MONTH);
-		int weekDay = c.get(Calendar.DAY_OF_WEEK);
+		// range
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+
+		Calendar rangeCal = Calendar.getInstance(); /* TODO : 테스트용 일자조정  rangeCal.set(Calendar.DATE, 2); */
+		int nowYear = rangeCal.get(Calendar.YEAR);
+		int nowMonth = rangeCal.get(Calendar.MONTH);
+		int nowWeek = rangeCal.get(Calendar.DAY_OF_WEEK);
+		int nowDay = rangeCal.get(Calendar.DAY_OF_MONTH);
+
+		Calendar startDate = Calendar.getInstance(); /* TODO : 테스트 일자조정  startDate.set(Calendar.DATE, 2); */
+		Calendar endDate = Calendar.getInstance(); /* TODO : 테스트 일자조정  endDate.set(Calendar.DATE, 2); */
+
+		//2020.04.12 000000 ~ 2020.04.12 000000
+		startDate.set(nowYear, nowMonth, nowDay, 0, 0, 0);
+		endDate.set(nowYear, nowMonth, nowDay, 0, 0, 0);
+		endDate.add(Calendar.DATE, 1); //FIXME e.g. 2020.04.12 000000 ~ 2020.04.13 000000 일단위 데이터
+		model.addAttribute("startTime", sdf.format(startDate.getTime()));
+		model.addAttribute("endTime", sdf.format(endDate.getTime()));
+
+		//e.g. 2020.03.30 000000 ~ 2020.04.05 000000 (today 2020.04.02)
+		startDate.set(nowYear, nowMonth, nowDay, 0, 0, 0);
+		if( startDate.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) startDate.add(Calendar.DATE, -7);
+		startDate.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+		endDate.set(nowYear, nowMonth, nowDay, 0, 0, 0);
+		if( endDate.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)  endDate.add(Calendar.DATE, -7);
+		endDate.add(Calendar.DATE, 7);
+		endDate.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+		endDate.add(Calendar.DATE, 1); //FIXME e.g. 2020.03.30 000000 ~ 2020.04.06 000000 일단위 데이터
+		model.addAttribute("startWeek", sdf.format(startDate.getTime()));
+		model.addAttribute("endWeek", sdf.format(endDate.getTime()));
+
+		//e.g. 2020.04.01 000000 ~ 2020.04.30 000000
+		startDate.set(nowYear, nowMonth, 1, 0, 0, 0);
+		endDate.set(nowYear, nowMonth, startDate.getActualMaximum(Calendar.DATE), 0, 0, 0);
+		endDate.add(Calendar.DATE, 1); //FIXME e.g. 2020.04.01 000000 ~ 2020.05.01 000000 일단위 데이터
+		model.addAttribute("startDate", sdf.format(startDate.getTime()));
+		model.addAttribute("endDate", sdf.format(endDate.getTime()));
+
+		//e.g. 2020.01.01 000000 ~ 2020.12.31 000000
+		startDate.set(nowYear, 0, 1, 0, 0, 0);
+		endDate.set(nowYear, nowMonth, startDate.getActualMaximum(Calendar.DATE), 0, 0, 0);
+		model.addAttribute("startMonth", sdf.format(startDate.getTime()));
+		model.addAttribute("endMonth", sdf.format(endDate.getTime()));
+
+		//e.g. 2019.01.01 000000 ~ 2019.12.31 000000
+		startDate.set(nowYear-1, 0, 1, 0, 0, 0);
+		endDate.set(nowYear-1, nowMonth, startDate.getActualMaximum(Calendar.DATE), 0, 0, 0);
+		model.addAttribute("beforeStartMonth", sdf.format(startDate.getTime()));
+		model.addAttribute("beforeEndMonth", sdf.format(endDate.getTime()));
+
+		// display calendar
+		Calendar c = Calendar.getInstance(); /* TODO : 테스트 일자조정 c.set(Calendar.DATE, 2); */
+		c.set(Calendar.DATE, 1);
+		int weekDay = c.get(Calendar.DAY_OF_WEEK) - 1;
 		int lastDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
 		c.set(Calendar.DAY_OF_MONTH, lastDay);
 		int weeks = c.get(Calendar.WEEK_OF_MONTH);
@@ -113,7 +165,9 @@ public class DashboardController {
 		}
 
 		model.addAttribute("calList", calList);
-		model.addAttribute("calToday", today);
+		model.addAttribute("nowMonth", nowMonth+1);
+		model.addAttribute("nowWeek", (nowWeek > 1 ? nowWeek -1 : 7)); //sun~sat > mon~sun
+		model.addAttribute("nowDay", nowDay);
 
 		return "esp/dashboard/smain";
 	}

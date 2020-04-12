@@ -18,6 +18,9 @@ function userTheme(toggle = false) {
   }
   console.log(`current mode : ${userMode}`);
   window.__THEME_MODE = userMode === 'auto' ? osMode : userMode;
+  if(window.__THEME_MODE === 'dark'){
+    document.getElementById('dark').checked = true;
+  }
   document.getElementsByTagName('html')[0].classList[window.__THEME_MODE === 'dark' ? 'add' : 'remove']('darkmode');
 }
 

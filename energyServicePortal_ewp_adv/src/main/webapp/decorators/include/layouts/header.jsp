@@ -5,19 +5,19 @@
 	$(function() {
 		refreshCurrTime();
 	});
-	
+
 	function refreshCurrTime() {
-		var currEm = $('#currTime');
+		var currEm = $('.currTime');
 		var now = new Date();
 		currEm.text(now.format('yyyy-MM-dd HH:mm:ss'));
 		setTimeout(refreshCurrTime, 1000); // 매초 갱신
 	}
-	
+
 	function addParameterUrl(paramNm, paramVal) {
 		var newUrl = changeParamUrl(window.location.href, paramNm, paramVal, window.location.pathname);
 		location.href = newUrl;
 	}
-	
+
 	function changeParamUrl(url, paramName, paramValue, pathName) {
 		var urlArr = url.split("?");
 		var newParamUrl = "";
@@ -35,14 +35,14 @@
 				}
 				separator = "&";
 			}
-			
+
 			if(!ynFlag) {
 				newParamUrl += separator+paramName+"="+paramValue;
 			}
 		} else {
 			newParamUrl = paramName+"="+paramValue;
 		}
-		
+
 		var newPathName = pathName;
 		if(pathName != null && pathName != "" && pathName != undefined) {
 			if(pathName == "/main/gMain.do") {
@@ -51,7 +51,7 @@
 				}
 			}
 		}
-		
+
 		return newPathName+"?"+newParamUrl;
 	}
 </script>
@@ -65,7 +65,7 @@
 				        <li><a href="#">KO</a></li>
 				        <li><a href="#">EN</a></li>
 				    </ul>
-				</div>	
+				</div>
 				<div class="nav_brand"><a href="#;">Encored</a></div>
 				<!-- input/dropdown //-->
 				<div class="all-menu">
@@ -87,7 +87,7 @@
 					                		<li><a href="/dashboard/emain.do">코닝정밀</a></li>
 					                	</ul>
 			                		</dd>
-			                	</dl>		                    	
+			                	</dl>
 			                </li>
 			                <li>
 								<dl>
@@ -109,7 +109,7 @@
 					                				<li><a href="/dashboard/emain.do">동국제강</a></li>
 					                			</ul>
 					                		</li>
-					                	</ul>										
+					                	</ul>
 									</dd>
 								</dl>
 			                </li>
@@ -122,7 +122,7 @@
 					                		<li><a href="/dashboard/jmain.do">자원이름#1</a></li>
 					                		<li><a href="">자원이름#2</a></li>
 					                		<li><a href="">자원이름#3</a></li>
-					                	</ul>										
+					                	</ul>
 									</dd>
 								</dl>
 			                </li>
@@ -134,7 +134,7 @@
 					                	<ul>
 					                		<li><a href="">자원이름#1</a></li>
 					                		<li><a href="">자원이름#2</a></li>
-					                	</ul>										
+					                	</ul>
 									</dd>
 								</dl>
 			                </li>	 -->
@@ -159,7 +159,7 @@
 					                		<li><input type="checkbox" name="location" id="lo14"><label for="lo14">경상북도</label></li>
 					                		<li><input type="checkbox" name="location" id="lo15"><label for="lo15">경상남도</label></li>
 					                		<li><input type="checkbox" name="location" id="lo16"><label for="lo16">제주도</label></li>
-					                	</ul>										
+					                	</ul>
 									</dd>
 								</dl>
 			                </li>
@@ -174,10 +174,10 @@
 					                		<li><input type="checkbox" name="type" id="tp4"><label for="tp4">소수력</label></li>
 					                		<li><input type="checkbox" name="type" id="tp5"><label for="tp5">신재생 연계 ESS</label></li>
 					                		<li><input type="checkbox" name="type" id="tp6"><label for="tp6">피크저감 ESS</label></li>
-					                	</ul>										
+					                	</ul>
 									</dd>
 								</dl>
-			                </li>		                    	                    
+			                </li>
 			            </ul>
 			            <div class="btn-group">
 			            	<button type="reset" class="reset-btn">초기화</button>
@@ -211,7 +211,7 @@
 								<c:when test="${userInfo.auth_type eq '5'}">Site User</c:when>
 								<c:otherwise>No Permission</c:otherwise>
 							</c:choose>
-						</div>						
+						</div>
 					</li>
 					<li>
 						<!-- 테마 선택 -->
@@ -234,7 +234,7 @@
 			<script type="text/javascript">
 			$(function() {
 				var data = [];
-		
+
 				$('#userGroupList > li').each(function(idx, elmt) {
 					var userGroupLi = $(elmt);
 					var userSiteLiList = userGroupLi.find('li');
@@ -250,7 +250,7 @@
 						});
 					}
 				});
-		
+
 				$.widget("custom.catcomplete", $.ui.autocomplete, {
 					_create: function() {
 						this._super();
@@ -272,7 +272,7 @@
 						});
 					}
 				});
-		
+
 				$('#selSiteBox').catcomplete({
 					source: data,
 					select: function(event, ui) {
@@ -285,7 +285,7 @@
 						$('#selSiteBox').val(ui.item.label);
 					}
 				});
-		
+
 				if(selViewSiteName != "") {
 					$("#selSiteBox").val("군관리: "+selViewSiteName);
 				}
@@ -307,9 +307,9 @@
 					<input type="hidden" id="modPsnEmail" name="psnEmail" />
 					<input type="hidden" id="modPsnMobile" name="psnMobile" />
 		            <div class="modal-body" style="padding:20px 30px;">
-						
-						<div class="rowBox joinBox">			
-							
+
+						<div class="rowBox joinBox">
+
 							<div class="unit clear">
 								<div class="unit_tit">
 									<span class="sTit">사용자 정보</span>
@@ -332,7 +332,7 @@
 												<td align="left" id="modPsnName">
 													홍길동
 												</td>
-											</tr>										
+											</tr>
 											<tr>
 												<th>비밀번호</th>
 												<td>
@@ -347,7 +347,7 @@
 													<span class="helpCont">비밀번호확인이 일치하지 않습니다</span>
 												</td>
 											</tr>
-											
+
 											<tr>
 												<th>이메일 주소</th>
 												<td>
@@ -362,11 +362,11 @@
 															<option value="nate.com">nate.com</option>
 															<option value="gmail.com">gmail.com</option>
 															<option value="manual" selected="selected">직접입력</option>
-														<select>								
+														<select>
 													</div>
 													<span class="helpCont">email을 입력하세요</span>
 												</td>
-											</tr>										
+											</tr>
 											<tr>
 												<th>휴대폰 번호</th>
 												<td>
@@ -385,44 +385,44 @@
 									</table>
 								</div>
 							</div>
-	
+
 						</div>
-	
-						
+
+
 		            </div>
 		            <div class="modal-footer">
 		            	<div style="padding:5px 20px;text-align:right;">
 		            		<button type="button" class="memberout_btn w80 fl" id="removeUserBtn">탈퇴</button>
 		            		<button type="button" class="cancel_btn w80" data-dismiss="modal">취소</button>
 		            		<button type="submit" class="default_btn w80" data-dismiss="modal" id="modifyUserBtn">확인</button>
-		            	</div>	                
+		            	</div>
 		            </div>
 	            </form>
 	        </div>
 	    </div>
 	</div>
 	<script>
-		$(function(){ 
+		$(function(){
 			$(".myinfo").click(function(){
 				setModifyUserInfo(sessionUser);
 				$("#modifyModal").modal("show");
-			});	  
+			});
 		});
-		
-	
+
+
 		// 정보 수정, 탈퇴 시작 (적당한 js파일로 옮겨 주세요.)
 		$(function() {
 			$("#modifyUserBtn").click(function(){
 				checkModify();
 				return false;
 			});
-		
+
 			$("#removeUserBtn").click(function(){
 				if (confirm("탈퇴하시겠습니까?\n탈퇴하면 복구할 수 없습니다.")) {
 				removeUser();
 				}
 			});
-		
+
 			$('#modEmail2').change(function() {
 				var val = $(this).val();
 				if (val === 'manual') {
@@ -434,22 +434,22 @@
 				}
 			});
 		});
-	
+
 		function setModifyUserInfo(result) {
 			$('#modUserIdx').val(result.user_idx);
 			$('#modUserId').text(result.user_id);
 			$('#modPsnName').text(result.psn_name);
-		
+
 			$('#modUserPw').val('');
 			$('#modUserPw2').val('');
-		
+
 			var email = result.psn_email;
 			if (email != null && email.indexOf('@') !== -1) {
 				var emails = email.split('@');
 				$('#modEmail1').val(emails[0]);
 				$('#modEmail3').val(emails[1]);
 			}
-		
+
 			var mobile = result.psn_mobile;
 			if (mobile !== null && mobile.indexOf('-') !== -1) {
 				var mobiles = mobile.split('-');
@@ -457,10 +457,10 @@
 				$('#modMobile2').val(mobiles[1]);
 				$('#modMobile3').val(mobiles[2]);
 			}
-		
+
 			$('.helpCont').hide();
 		}
-	
+
 		function checkModify() {
 			var $modUserPw2 = $('#modUserPw2');
 			var $helpCont = $('.helpCont');
@@ -495,9 +495,9 @@
 				$modMobile1.parents('td').children('.helpCont:eq(1)').show();
 				return;
 			}
-		
+
 			$helpCont.hide();
-		
+
 			if (confirm("수정하시겠습니까?")) {
 				if ($modEmail2.val() !== 'manual') {
 					$('#modPsnEmail').val($modEmail1.val() + '@' + $modEmail2.val());
@@ -505,11 +505,11 @@
 					$('#modPsnEmail').val($modEmail1.val() + '@' + $modEmail3.val());
 				}
 				$('#modPsnMobile').val($modMobile1.val() + '-' + $modMobile2.val() + '-' + $modMobile3.val());
-			
+
 				modifyUser();
 			}
 		}
-	
+
 		function modifyUser() {
 			var formData = $("#modifyUserForm").serializeObject();
 			$.ajax({
@@ -521,10 +521,10 @@
 					var resultCnt = result.resultCnt;
 					if(resultCnt > 0) {
 						alert('사용자 정보가 수정되었습니다.');
-					
+
 						// Local EMS 회원 연계
 						changeEMSUserDB($("#modUserIdx").val());
-					
+
 						$("#modifyModal").modal("hide");
 						getUserInfo(setSession);
 					} else {
@@ -533,7 +533,7 @@
 				}
 			});
 		}
-	
+
 		function removeUser() {
 			var formData = $("#modifyUserForm").serializeObject();
 			$.ajax({
@@ -545,10 +545,10 @@
 					var resultCnt = result.resultCnt;
 					if(resultCnt > 0) {
 						alert('탈퇴처리 되었습니다.');
-					
+
 						// Local EMS 회원 연계
 						changeEMSUserDB($("#modUserIdx").val());
-					
+
 						location.href = '/login.do';
 					} else {
 						alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
@@ -556,5 +556,6 @@
 				}
 			});
 		}
-	</script>	
+		userTheme();
+	</script>
 	<!-- //정보수정 -->

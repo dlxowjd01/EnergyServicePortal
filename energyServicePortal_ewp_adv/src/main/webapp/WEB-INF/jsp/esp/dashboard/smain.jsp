@@ -28,24 +28,40 @@
 	<script type="text/javascript" src="/js/jquery.rwdImageMaps.min.js"></script>
 
 				<div class="row">
+				  <div class="time">
+				    <span>CURRENT TIME</span>
+				    <em class="currTime">${nowTime}</em>
+				    <span>DATA BASE TIME</span>
+				    <em>2018-07-27 17:01:02</em>
+				  </div>
+				</div>
+
+				<div class="row">
 					<div class="col-lg-4">
 						<div class="row">
 							<div class="col-sm-12">
 								<div class="indiv smain_pv clear">
 									<div class="chart_top clear">
 										<h2 class="ntit">월별 발전량 종합</h2>
-										<h1 class="stit">2020.01.01 ~ 2020.02.29</h1>
+										<h1 class="stit">
+											<fmt:parseDate var="startPrint" value="${startMonth }" pattern="yyyyMMddHHmmss"/>
+											<fmt:parseDate var="endPrint" value="${startTime }" pattern="yyyyMMddHHmmss"/>
+
+											<fmt:formatDate value="${startPrint}" pattern="yyyy.MM.dd"/>
+											 ~
+											 <fmt:formatDate value="${endPrint}" pattern="yyyy.MM.dd"/>
+										</h1>
 									</div>
 									<div  class="chart_mid clear">
 										<div class="box">
 											<div class="line1">이번달 총 발전량</div>
-											<div class="line2"><span class="pv">763</span><em>kWh</em></div>
-											<div class="line3"><i class="fa fa-arrow-down"></i><span>6,804</span></div>
+											<div class="line2" id="monthEnergyValue"></div>
+											<div class="line3" id="diffMonthEnergyValue"></div>
 										</div>
 										<div class="box">
 											<div class="line1">올해 누적 발전량</div>
-											<div class="line2"><span class="pv">14.4</span><em>MWh</em></div>
-											<div class="line3"><i class="fa fa-arrow-up"></i><span>13,481</span></div>
+											<div class="line2" id="yearEnergyValue"></div>
+											<div class="line3" id="diffYearEnergyValue"></div>
 										</div>
 									</div>
 									<div class="inchart">
@@ -56,6 +72,7 @@
 										    	marginTop:40,
 												marginLeft:50,
 												marginRight:50,
+												height: 286,
 										    	backgroundColor: 'transparent',
 										        zoomType: 'xy'
 										    },
@@ -193,8 +210,8 @@
 										    series: [{
 										        name: 'PV발전량',
 										        type: 'column',
-										        color: '#438fd7',
-										        data: [500, 500, 600, 300, 500, 600, 300, 500, 900, 600, 600, 500],
+										        color: '#26ccc8',
+										        data: [],
 										        tooltip: {
 										            valueSuffix: 'kWh'
 										        }
@@ -202,10 +219,10 @@
 										    }, {
 										        name: '매전량',
 										        type: 'spline',
-										        color: '#E85B30',
+										        color: 'var(--color4)',
 										        dashStyle: 'ShortDash',
 										        yAxis: 1,
-										        data: [500, 100, 300, 700, 200, 200, 500, 200, 500, 800, 700, 800],
+										        data: [],
 										        tooltip: {
 										            valueSuffix: '만원'
 										        }
@@ -274,6 +291,159 @@
 										});
 
 										</script>
+	<script>
+
+		const pollingTerm = 1000 * 60 * 15;
+		const pollingTimeout = 5000;
+		const debugMode = true;
+
+		const apiURL = "http://iderms.enertalk.com:8443";
+		const apiEnergySite = "/energy/sites";
+		const apiWeather = "/weather";
+		const apiForecastingSite = "/energy/forecasting/sites";
+
+		const siteId = "0c7c90c6-9505-4f77-b42d-500c2879c689";
+
+		let nowMonth = "<c:out value="${nowMonth}"/>";
+		let nowWeek = "<c:out value="${nowWeek}"/>";
+		let nowDay = "<c:out value="${nowDay}"/>";
+
+		let chargeChartUrl = apiURL + apiEnergySite;
+		let chargeChartData = {
+			sid : siteId,
+			startTime : "<c:out value="${startMonth }"/>",
+			endTime : "<c:out value="${endMonth }"/>",
+			interval : "month"
+		};
+
+		let chargeChartBeforeData = {
+			sid : siteId,
+			startTime : "<c:out value="${beforeStartMonth }"/>",
+			endTime : "<c:out value="${beforeEndMonth }"/>",
+			interval : "month"
+		};
+
+		let chargeChartItems1;
+		let chargeChartItems2;
+
+		function chargeChartPoll() {
+			$.ajax({
+				url : chargeChartUrl,
+				type : "get",
+				async : false,
+				data : chargeChartData,
+				success: function(result) {
+					var data = result.data[0];
+					chargeChartItems1 = data.generation.items;
+					if(debugMode){ console.log("chargeChart:", chargeChartItems1); }
+				},
+	            dataType: "json",
+	            complete: function() { chargeChartBeofrePoll(); },
+	            timeout: pollingTimeout
+	        })
+		}
+
+		function chargeChartBeofrePoll() {
+			$.ajax({
+				url : chargeChartUrl,
+				type : "get",
+				async : false,
+				data : chargeChartBeforeData,
+				success: function(result) {
+					var data = result.data[0];
+					chargeChartItems2 = data.generation.items;
+					if(debugMode){ console.log("chargeChartBeofre:", chargeChartItems2); }
+
+					setChargeChartData();
+				},
+	            dataType: "json",
+	            complete: setTimeout(function() {chargeChartPoll()}, pollingTerm),
+	            timeout: pollingTimeout
+	        })
+		}
+
+		function setChargeChartData(){
+			var totYearEnergy = 0;
+			var totMonthEnergy = 0;
+			var totBeforeYearEnergy = 0;
+			var totBeforeMonthEnergy = 0;
+
+			var energyData = [];
+			var billingData = [];
+			for (var i = 0; i < 12; i++) {
+				if(i < chargeChartItems1.length){
+					energyData[i] = [i, chargeChartItems1[i].energy];
+					billingData[i] = [i, chargeChartItems1[i].billing];
+
+					totYearEnergy += chargeChartItems1[i].energy;
+					if( i+1 ==  nowMonth){ totMonthEnergy = chargeChartItems1[i].energy; }
+				}else{
+					energyData[i] = [i, null];
+					billingData[i] = [i, null];
+				}
+			}
+
+			for (var i = 0; i < 12; i++) {
+				if(i < chargeChartItems2.length){
+					totBeforeYearEnergy += chargeChartItems2[i].energy;
+					if( i+1 ==  nowMonth){ totBeforeMonthEnergy = chargeChartItems2[i].energy; }
+				}
+			}
+
+			if(debugMode){
+				console.log("chargeChart energyData:", energyData);
+				console.log("chargeChart billingData:", billingData);
+			}
+
+			chargeChart.series[0].setData(energyData);
+			chargeChart.series[1].setData(billingData);
+
+
+			diffYearEnergy = totYearEnergy - totBeforeYearEnergy;
+			diffMonthEnergy = totMonthEnergy - totBeforeMonthEnergy;
+
+			if(debugMode){
+				console.log("chargeChart totYearEnergy", totYearEnergy);
+				console.log("chargeChart totBeforeYearEnergy", totBeforeYearEnergy);
+				console.log("chargeChart diffYearEnergy", diffYearEnergy);
+
+				console.log("chargeChart totMonthEnergy", totMonthEnergy);
+				console.log("chargeChart totBeforeMonthEnergy", totBeforeMonthEnergy);
+				console.log("chargeChart diffMonthEnergy", diffMonthEnergy);
+			}
+
+			//TOTAL DATA
+			/*
+			yearEnergyValue  = <span class="pv">14.4</span><em>MWh</em>
+			monthEnergyValue  = <span class="pv">763</span><em>kWh</em>
+
+			diffYearEnergyValue = <i class="fa fa-arrow-down"></i><span>6,804</span>
+			diffMonthEnergyValue = <i class="fa fa-arrow-down"></i><span>511</span>
+			*/
+
+			var diffYearIconClass = diffYearEnergy > 0 ? "fa-arrow-up" : (diffYearEnergy < 0 ? "fa-arrow-up" : "");
+			if(totYearEnergy > 10000){
+				$("#yearEnergyValue").html("<span class='pv'>" + numberComma((totYearEnergy / 1000).toFixed(2)) + "</span><em>MWh</em>");
+				$("#diffYearEnergyValue").html("<i class='fa " + diffYearIconClass + "'></i><span>" + numberComma((Math.abs(diffYearEnergy) / 1000).toFixed(2))  + "</span>");
+			}else{
+				$("#yearEnergyValue").html("<span class='pv'>" + numberComma(totYearEnergy) + "</span><em>kWh</em>");
+				$("#diffYearEnergyValue").html("<i class='fa " + diffIconClass + "'></i><span>" + numberComma(Math.abs(diffYearEnergy))  + "</span>");
+			}
+
+			var diffMonthIconClass = diffMonthEnergy > 0 ? "fa-arrow-up" : (diffMonthEnergy < 0 ? "fa-arrow-up" : "");
+			if(totMonthEnergy > 10000){
+				$("#monthEnergyValue").html("<span class='pv'>" + numberComma((totMonthEnergy / 1000).toFixed(2)) + "</span><em>MWh</em>");
+				$("#diffMonthEnergyValue").html("<i class='fa " + diffMonthIconClass + "'></i><span>" + numberComma((Math.abs(diffMonthEnergy) / 1000).toFixed(2))  + "</span>");
+			}else{
+				$("#monthEnergyValue").html("<span class='pv'>" + numberComma(totMonthEnergy) + "</span><em>kWh</em>");
+				$("#diffMonthEnergyValue").html("<i class='fa " + diffMonthIconClass + "'></i><span>" + numberComma(Math.abs(diffMonthEnergy))  + "</span>");
+			}
+
+		}
+
+		chargeChartPoll();
+
+	</script>
 									</div>
 								</div>
 							</div>
@@ -283,7 +453,7 @@
 								<div class="indiv smain_cal">
 									<div class="chart_top clear">
 										<h2 class="ntit">이 달의 발전 달력</h2>
-										<span class="real_time">2020-03-03 15:25:23</span>
+										<h1 class="stit"><em>${nowTime }</em></h1>
 									</div>
 									<div>
 										<table class="calendar">
@@ -303,15 +473,15 @@
 														<c:choose>
 															<c:when test="${day ne 0 }">
 
-																<td <c:if test="${calToday eq day }">class="today"</c:if>>
+																<td <c:if test="${nowDay eq day }">class="today"</c:if>>
 																	<div>
-																		<em class="fl day">${day }</em>
-																		<em class="fr">16.5℃</em>
+																		<em class="calWeatherDay fl day">${day }</em>
+																		<em id="calWeatherValue_${day }" class="fr"></em>
 																	</div>
 																	<div>
-																		<div class="wicon"><i class="fas fa-2x fa-cloud-sun-rain"></i></div>
+																		<div id="calWeatherIcon_${day }" class="wicon"></div>
 																	</div>
-																	<span><strong>936</strong><em>kWh</em></span>
+																	<span id="calEnergyValue_${day }"></span>
 																</td>
 
 															</c:when>
@@ -325,40 +495,183 @@
 											</c:forEach>
 
 											<%--
-												<i class="fas fa-2x fa-cloud-sun-rain"></i>
-												<i class="fas fa-2x fa-cloud-sun"></i>
-												<i class="fas fa-2x fa-cloud-showers-heavy"></i>
-												<i class="fas fa-2x fa-cloud-rain"></i>
-												<i class="fas fa-2x fa-cloud"></i>
-												<i class="fas fa-2x fa-snowflake"></i>
-												<i class="fas fa-2x fa-cloud-meatball">
-												<i class="fas fa-2x fa-bolt"></i>
-												<i class="fas fa-2x fa-wind"></i>
-												<i class="fas fa-2x fa-smog"></i>
-												<i class="fas fa-2x fa-umbrella"></i>
-												<i class="fas fa-2x fa-rainbow"></i>
-												<i class="fas fa-2x fa-poo-storm"></i>
-												<i class="fas fa-2x fa-cloud-moon-rain"></i>
-												<i class="fas fa-2x fa-cloud-moon"></i>
-												<i class="fas fa-2x fa-cloud-sun"></i>
-												<i class="fas fa-2x fa-cloud-showers-heavy"></i>
-												<i class="fas fa-2x fa-cloud-rain"></i>
-												<i class="fas fa-2x fa-cloud"></i>
-												<i class="fas fa-2x fa-snowflake"></i>
-												<i class="fas fa-2x fa-cloud-meatball"></i>
-												<i class="fas fa-2x fa-cloud-sun-rain"></i>
-												<i class="fas fa-2x fa-cloud-sun"></i>
-												<i class="fas fa-2x fa-cloud-showers-heavy"></i>
-												<i class="fas fa-2x fa-cloud-rain"></i>
-												<i class="fas fa-2x fa-cloud"></i>
-												<i class="fas fa-2x fa-snowflake"></i>
-												<i class="fas fa-2x fa-cloud-meatball"></i>
-												<i class="fas fa-2x fa-cloud-sun-rain"></i>
-												<i class="fas fa-2x fa-cloud-sun"></i>
-												<i class="fas fa-2x fa-cloud-showers-heavy"></i>
+												<i class="ico_weather w1"></i> 	1	- 맑음 o
+												<i class="ico_weather w2"></i>   	- 바람 x
+												<i class="ico_weather w3"></i>	20	- 안개 o
+												<i class="ico_weather w4"></i>	7	- 흐림 o
+												<i class="ico_weather w5"></i>	 	- 바람/비 x
+												<i class="ico_weather w6"></i>	13	- 비또는눈 o
+												<i class="ico_weather w7"></i>  	- 구름/바람/비 x
+												<i class="ico_weather w8"></i>	11	- 눈 o
+												<i class="ico_weather w9"></i>	17	- 천둥번개 o
+												<i class="ico_weather w10"></i>	12 - 가끔눈 o
 											--%>
 											</tr>
 										</table>
+
+
+										<script>
+										/*
+											calWeatherValue_1 =  16.5℃
+											calWeatherIcon_1 =  <i class="ico_weather w1"></i>
+											calEnergyValue_1 = <strong>936</strong><em>kWh</em>
+										*/
+
+										//해당월의 에너지 데이터 - polling 없음
+										let wCalendarEnergyUrl = apiURL + apiEnergySite;
+										let wCalendarEnergyData = {
+											sid : siteId,
+											startTime : "<c:out value="${startDate }"/>",
+											endTime : "<c:out value="${endDate }"/>",
+											interval : "day"
+										};
+
+										$.ajax({
+											url : wCalendarEnergyUrl,
+											type : "get",
+											async : false,
+											data : wCalendarEnergyData,
+											success: function(result) {
+												var data = result.data[0];
+												var items = data.generation.items;
+												if(debugMode){ console.log("wCalendar:", items); }
+
+												setWCalendarEnergyData(items);
+											},
+								            dataType: "json",
+								            timeout: pollingTimeout
+								        });
+
+										function setWCalendarEnergyData(items){
+											var calendarDays = $(".calWeatherDay");
+											for (var i = 0; i < calendarDays.length; i++) {
+												if(i < items.length){
+													$("#calWeatherValue_" + (i+1)).text("16.5℃");
+													$("#calWeatherIcon_" + (i+1)).html("<i class='ico_weather w1'></i>");
+
+
+													if(items[i].energy > 10000){
+														$("#calEnergyValue_" + (i+1)).html("<strong>" + numberComma((items[i].energy / 1000).toFixed(1)) + "</strong><em>MWh</em>");
+													}else{
+														$("#calEnergyValue_" + (i+1)).html("<strong>" + items[i].energy + "</strong><em>kWh</em>");
+													}
+												}
+											}
+										}
+
+										//당일 에너지 데이터 - polling 사용
+										let wCalendarEnergyDayUrl = apiURL + apiEnergySite;
+										let wCalendarEnergyDayData = {
+											sid : siteId,
+											startTime : "<c:out value="${startTime}"/>",
+											endTime : "<c:out value="${endTime }"/>",
+											interval : "day"
+										};
+
+										(function wCalendarDayPoll() {
+											$.ajax({
+												url : wCalendarEnergyDayUrl,
+												type : "get",
+												async : false,
+												data : wCalendarEnergyDayData,
+												success: function(result) {
+													var data = result.data[0];
+													var items = data.generation.items;
+													if(debugMode){ console.log("wCalendarDay:", items); }
+
+													setWCalendarEnergyDayData(items);
+												},
+									            dataType: "json",
+									            complete: setTimeout(function() {wCalendarDayPoll()}, pollingTerm),
+									            timeout: pollingTimeout
+									        })
+										})();
+
+										function setWCalendarEnergyDayData(items){
+											if(items.length > 0){
+												if(items[0].energy > 10000){
+													$("#calEnergyValue_" + nowDay).html("<strong>" + numberComma((items[0].energy / 1000).toFixed(1)) + "</strong><em>MWh</em>");
+												}else{
+													$("#calEnergyValue_" + nowDay).html("<strong>" + items[0].energy + "</strong><em>kWh</em>");
+												}
+											}
+										}
+
+										//해당월의 날씨 데이터 - polling 없음
+										let wCalendarWeatherUrl = apiURL + apiWeather;
+										let wCalendarWeatherData = {
+											sid : siteId,
+											startTime : "<c:out value="${startDate }"/>",
+											endTime : "<c:out value="${endDate }"/>",
+											interval : "day"
+										};
+
+										$.ajax({
+											url : wCalendarWeatherUrl,
+											type : "get",
+											async : false,
+											data : wCalendarWeatherData,
+											success: function(result) {
+												var items = result;
+												if(debugMode){ console.log("wCalendarWeatherData:", items); }
+
+												setWCalendarWeatherData(items);
+											},
+								            dataType: "json",
+								            timeout: pollingTimeout
+								        });
+
+										function getWeatherIconClass(weatherId){
+											/*
+											weather value 1 	> css w1
+											weather value 20	> css w3
+											weather value 7	> css w4
+											weather value 13	> css w6
+											weather value 11	> css w8
+											weather value 17	> css w9
+											weather value 12	> css w10
+											*/
+
+											var weatherIconClass = 1;
+											switch(weatherId){
+												case 1 :
+													weatherIconClass = "w1";
+													break;
+												case 7 :
+													weatherIconClass = "w4";
+													break;
+												case 11 :
+													weatherIconClass = "w8";
+													break;
+												case 12 :
+													weatherIconClass = "w10";
+													break;
+												case 13 :
+													weatherIconClass = "w6";
+													break;
+												case 17 :
+													weatherIconClass = "w9";
+													break;
+												case 20 :
+													weatherIconClass = "w3";
+													break;
+											}
+											return weatherIconClass
+										}
+
+										function setWCalendarWeatherData(items){
+											var calendarDays = $(".calWeatherDay");
+											for (var i = 0; i < calendarDays.length; i++) {
+												if(i < items.length){
+													$("#calWeatherValue_" + (i+1)).text( (items[i].temperature).toFixed(1) + "℃");
+
+													var weatherIconClass = getWeatherIconClass(items[i].weather);
+													$("#calWeatherIcon_" + (i+1)).html("<i class='ico_weather " + weatherIconClass + "'></i>");
+												}
+											}
+										}
+										</script>
+
 									</div>
 								</div>
 							</div>
@@ -369,7 +682,10 @@
 							<div class="col-sm-12">
 								<div class="indiv gmain_map smain_circle">
 									<div class="chart_top clear">
-										<h2 class="ntit">${siteName }<c:if test="${empty siteName }">당진태양광</c:if></h2>
+										<h2 class="ntit">${siteName }<c:if test="${empty siteName }">사업소 현황</c:if></h2>
+										<div class="btn_bx_type">
+											<a href="#" class="btn cancel_btn">CCTV 보기</a>
+										</div>
 									</div>
 									<div class="chart_box">
 										<div class="chart_info">
@@ -377,9 +693,6 @@
 												<div class="inchart">
 													<div id="pie_chart" style="height:200px;"></div>
 													<script language="JavaScript">
-													$(window).resize(function() { //브라우저 사이즈 변경될때마다 새로고침 (차트사이즈 재설정)
-													    location.reload();
-													});
 													$(function () {
 														var pieChart = Highcharts.chart('pie_chart', {
 															chart: {
@@ -387,7 +700,6 @@
 																marginLeft:0,
 																marginRight:0,
 																backgroundColor: 'transparent',
-
 																plotBorderWidth: 0,
 																plotShadow: false
 															},
@@ -399,14 +711,14 @@
 															},
 
 															title: {
-														        text: '102MW', // 총용량 표기
+														        text: '- Wh', // 총용량 표기
 														        align: 'center',
 														        verticalAlign: 'middle',
 														        y:10,
 														        x:-20,
 														        style: {
 														            fontSize: '14px',
-														            color: 'white'
+														            color: 'var(--color3)'
 														        }
 															},
 
@@ -421,6 +733,14 @@
 															},
 
 															tooltip: {
+																shared: true,
+																borderColor: 'none',
+																backgroundColor: 'var(--bg-color)',
+																padding: 16,
+																style: {
+																	color: 'var(--color3)'
+																},
+																valueSuffix: ' kwh',
 																pointFormat: '<b>{point.percentage:.0f}%</b>'
 															},
 
@@ -429,9 +749,9 @@
 																	dataLabels: {
 																		enabled: false,
 																		style: {
-														                    fontWeight: 'bold',
-														                    color: 'white'
-														                }
+																			fontWeight: 'bold',
+																			color: 'var(--color3)'
+																		}
 																	},
 																	/*
 																	startAngle: -90,
@@ -456,21 +776,7 @@
 														            },
 																	y: 60 //60% -- 아래로 총합 100%
 																}, {
-																	color: '#5269ef',
-																	name: '풍력',
-																	dataLabels: {
-														                enabled: false
-														            },
-																	y: 10 //10%
-																}, {
-																	color: '#4a9ade',
-																	name: '소수력',
-																	dataLabels: {
-														                enabled: false
-														            },
-																	y: 10 //10%
-																}, {
-																	color: '#656565',
+																	color: '#84848f',
 																	name: '미사용량',
 																	dataLabels: {
 														                enabled: false
@@ -517,10 +823,14 @@
 
 											</div>
 											<div class="ci_right">
+												<div class="legend_wrap">
+													<span class="bu1">태양광</span>
+													<span class="bu4">미 사용량</span>
+												</div>
 												<ul>
-													<li><strong>총 설비용량</strong> <span>55</span><em>MW</em></li>
-													<li><strong>실시간 DC입력</strong> <span>35</span><em>MW</em></li>
-													<li><strong>실시간 AC출력</strong> <span>35</span><em>MW</em></li>
+													<li><strong>총 설비용량</strong> <span>- </span><em>MW</em></li>
+													<li><strong>실시간 DC입력</strong> <span>- </span><em>MW</em></li>
+													<li><strong>실시간 AC출력</strong> <span>- </span><em>MW</em></li>
 												</ul>
 											</div>
 										</div>
@@ -537,10 +847,10 @@
 											</thead>
 											<tbody>
 												<tr>
-													<td><span>763</span>kWh</td>
-													<td><span>582</span>kWh</td>
-													<td><span>650</span>kWh</td>
-													<td><span>5,000,000</span>￦</td>
+													<td><span>- </span>kWh</td>
+													<td id="dayEnergyValue"></td>
+													<td id="dayEnergyForeValue"></td>
+													<td><span>- </span>￦</td>
 												</tr>
 											</tbody>
 										</table>
@@ -558,16 +868,12 @@
 										<div class="inchart">
 											<div id="schart2"></div>
 											<script language="JavaScript">
-											$(function () {
 												var saChart2 = Highcharts.chart('schart2', {
-													data: {
-												        table: 'sdatatable2' /* 테이블에서 데이터 불러오기 */
-												    },
-
 													chart: {
 														marginTop:40,
 														marginLeft:50,
 														marginRight:0,
+														height:301,
 														backgroundColor: 'transparent',
 														type: 'column'
 													},
@@ -606,6 +912,10 @@
 														title: {
 															text: null
 														},
+														categories: [
+															'1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+															'13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'
+														],
 														crosshair: true
 													},
 
@@ -691,17 +1001,15 @@
 												    series: [{
 												    	type: 'column',
 												        name: 'PV발전량',
-												        color: '#438fd7', /* PV발전량 */
-												        tooltip: {
-												            valueSuffix: 'kWh'
-												        }
+												        color: '#26ccc8', /* PV발전량 */
+												        tooltip: { valueSuffix: 'kWh' },
+												        data: []
 												    },{
 												    	type: 'column',
 												        name: '발전 예측',
-												        color: '#84848F', /* 발전 예측 */
-												        tooltip: {
-												            valueSuffix: 'kWh'
-												        }
+												        color: '#878787', /* 발전 예측 */
+												        tooltip: { valueSuffix: 'kWh' },
+												    	data: []
 												    }],
 
 												    /* 반응형 */
@@ -745,142 +1053,109 @@
 													}
 
 												});
-											});
 											</script>
-											<!-- 데이터 추출용 -->
-											<div class="chart_table" style="display:none;">
-												<table id="sdatatable2">
-												    <thead>
-												        <tr>
-												            <th></th>
-												            <th>PV발전량</th>
-												            <th>발전 예측</th>
-												        </tr>
-												    </thead>
-												    <tbody>
-												        <tr>
-												            <th>1</th>
-												            <td>500</td>
-												            <td>550</td>
-												        </tr>
-												        <tr>
-												            <th>2</th>
-												            <td>600</td>
-												            <td>620</td>
-												        </tr>
-												        <tr>
-												            <th>3</th>
-												            <td>520</td>
-												            <td>530</td>
-												        </tr>
-												        <tr>
-												            <th>4</th>
-												            <td>550</td>
-												            <td>420</td>
-												        </tr>
-												        <tr>
-												            <th>5</th>
-												            <td>560</td>
-												            <td>550</td>
-												        </tr>
-												        <tr>
-												            <th>6</th>
-												            <td>570</td>
-												            <td>560</td>
-												        </tr>
-												        <tr>
-												            <th>7</th>
-												            <td>600</td>
-												            <td>590</td>
-												        </tr>
-												        <tr>
-												            <th>8</th>
-												            <td>620</td>
-												            <td>600</td>
-												        </tr>
-												        <tr>
-												            <th>9</th>
-												            <td>640</td>
-												            <td>620</td>
-												        </tr>
-												        <tr>
-												            <th>10</th>
-												            <td>660</td>
-												            <td>640</td>
-												        </tr>
-												        <tr>
-												            <th>11</th>
-												            <td>680</td>
-												            <td>630</td>
-												        </tr>
-												        <tr>
-												            <th>12</th>
-												            <td>700</td>
-												            <td>650</td>
-												        </tr>
-												        <tr>
-												            <th>13</th>
-												            <td>780</td>
-												            <td>770</td>
-												        </tr>
-												        <tr>
-												            <th>14</th>
-												            <td>790</td>
-												            <td>780</td>
-												        </tr>
-												        <tr>
-												            <th>15</th>
-												            <td>860</td>
-												            <td>850</td>
-												        </tr>
-												        <tr>
-												            <th>16</th>
-												            <td>850</td>
-												            <td>840</td>
-												        </tr>
-												        <tr>
-												            <th>17</th>
-												            <td>840</td>
-												            <td>830</td>
-												        </tr>
-												        <tr>
-												            <th>18</th>
-												            <td>930</td>
-												            <td>920</td>
-												        </tr>
-												        <tr>
-												            <th>19</th>
-												            <td>900</td>
-												            <td>790</td>
-												        </tr>
-												        <tr>
-												            <th>20</th>
-												            <td>860</td>
-												            <td>880</td>
-												        </tr>
-												        <tr>
-												            <th>21</th>
-												            <td>750</td>
-												            <td>800</td>
-												        </tr>
-												        <tr>
-												            <th>22</th>
-												            <td>720</td>
-												            <td>750</td>
-												        </tr>
-												        <tr>
-												            <th>23</th>
-												            <td>680</td>
-												            <td>700</td>
-												        </tr>
-												        <tr>
-												            <th>24</th>
-												            <td>650</td>
-												            <td>660</td>
-												        </tr>
-												    </tbody>
-												</table>
-											</div>
+
+		<script>
+			let saChart2Url = apiURL + apiEnergySite;
+			let saChart2Data = {
+				sid : siteId,
+				startTime : "<c:out value="${startTime}"/>",
+				endTime : "<c:out value="${endTime}"/>",
+				interval : "hour"
+			};
+
+			let saChart2ForeUrl = apiURL + apiForecastingSite;
+			let saChart2ForeData = {
+				sid : siteId,
+				startTime : "<c:out value="${startTime}"/>",
+				endTime : "<c:out value="${endTime}"/>",
+				interval : "hour"
+			};
+
+			let saChart2EnergyItems1;
+			let saChart2EnergyItems2;
+
+			function saChart2Poll() {
+				$.ajax({
+					url : saChart2Url,
+					type : "get",
+					async : false,
+					data : saChart2Data,
+					success: function(result) {
+						var data = result.data[0];
+						saChart2EnergyItems1 = data.generation.items;
+						if(debugMode){ console.log("saChart2:", saChart2EnergyItems1); }
+					},
+		            dataType: "json",
+		            complete: function() {saChart2ForePoll()},
+		            timeout: pollingTimeout
+		        })
+			}
+
+			function saChart2ForePoll() {
+				$.ajax({
+					url : saChart2ForeUrl,
+					type : "get",
+					async : false,
+					data : saChart2ForeData,
+					success: function(result) {
+						var data = result.data[0];
+						saChart2EnergyItems2 = data.generation.items;
+						if(debugMode){ console.log("saChartFore2:", saChart2EnergyItems2); }
+
+						setSaChart2Data();
+					},
+		            dataType: "json",
+		            complete: setTimeout(function() {saChart2Poll()}, pollingTerm),
+		            timeout: pollingTimeout
+		        })
+			}
+
+			function setSaChart2Data(){
+				var totDayEnergy = 0;
+				var totDayForeEnergy = 0;
+
+				var energyData1 = [];
+				var energyData2 = [];
+				for (var i = 0; i < 24; i++) {
+					if(i < saChart2EnergyItems1.length){
+						energyData1[i] = [i, saChart2EnergyItems1[i].energy];
+						energyData2[i] = [i, saChart2EnergyItems2[i].energy];
+
+						totDayEnergy += saChart2EnergyItems1[i].energy;
+						totDayForeEnergy += saChart2EnergyItems2[i].energy;
+					}else{
+						energyData1[i] = [i, null];
+						energyData2[i] = [i, null];
+					}
+				}
+				if(debugMode){
+					console.log("saChart2 energyData1:", energyData1);
+					console.log("saChart2 energyData2:", energyData2);
+				}
+
+				saChart2.series[0].setData(energyData1);
+				saChart2.series[1].setData(energyData2)
+
+				//TODAY DATA
+				/*
+				dayEnergyValue = <span>582</span>kWh
+				*/
+				if(totDayEnergy > 10000){
+					$("#dayEnergyValue").html("<span>" + numberComma((totDayEnergy / 1000).toFixed(2)) + "</span> <em>MWh</em>");
+				}else{
+					$("#dayEnergyValue").html("<span>" + numberComma(totDayEnergy) + "</span> <em>kWh</em>");
+				}
+
+				if(totDayForeEnergy > 10000){
+					$("#dayEnergyForeValue").html("<span>" + numberComma((totDayForeEnergy / 1000).toFixed(2)) + "</span> <em>MWh</em>");
+				}else{
+					$("#dayEnergyForeValue").html("<span>" + numberComma(totDayForeEnergy) + "</span> <em>kWh</em>");
+				}
+			}
+
+			saChart2Poll();
+		</script>
 										</div>
 									</div>
 								</div>
@@ -891,15 +1166,19 @@
 								<div class="indiv smain weather">
 									<div class="chart_top clear">
 										<h2 class="ntit">기상 정보</h2>
-										<span class="real_time">2020-03-03 15:25</span>
+										<h1 class="stit">${nowTime }</h1>
 									</div>
 									<div class="weater_wrap clear">
-										<div class="fl">
+										<div class="fl wt_table_wrap">
 											<!-- 날씨관련 아이콘 클래스명 확인 -->
 											<!-- https://fontawesome.com/icons?d=gallery&q=weather&m=free -->
-											<dl>
-												<dt><strong>서울</strong> <span><i class="far fa-sun"></i></span> <em>15.4℃</em></dt>
-												<dd>
+											<dl class="wt_table">
+												<dt>
+													<span id="weekIcon"></span>
+													<strong> - </strong>
+													<em id="weekTemp"></em>
+												</dt>
+												<dd class="dd_tbl">
 													<table>
 														<tr>
 															<th>월</th>
@@ -911,51 +1190,90 @@
 															<th>일</th>
 														</tr>
 														<tr>
-															<td><span><i class="fas fa-cloud-sun-rain"></i></span></td>
-															<td><span><i class="fas fa-cloud-sun"></i></span></td>
-															<td><span><i class="fas fa-cloud-showers-heavy"></i></i></span></td>
-															<td><span><i class="fas fa-cloud-rain"></i></span></td>
-															<td><span><i class="fas fa-cloud"></i></span></td>
-															<td><span><i class="fas fa-snowflake"></i></span></td>
-															<td><span><i class="fas fa-cloud-meatball"></i></span></td>
+															<td><span id="weekIcon_1"></span></td>
+															<td><span id="weekIcon_2"></span></td>
+															<td><span id="weekIcon_3"></span></td>
+															<td><span id="weekIcon_4"></span></td>
+															<td><span id="weekIcon_5"></span></td>
+															<td><span id="weekIcon_6"></span></td>
+															<td><span id="weekIcon_7"></span></td>
 														</tr>
 														<tr>
-															<td>16.5</td>
-															<td>10.2</td>
-															<td>13.5</td>
-															<td>15.4</td>
-															<td>14.2</td>
-															<td>10</td>
-															<td>9.5</td>
+															<td id="weekTemp_1"></td>
+															<td id="weekTemp_2"></td>
+															<td id="weekTemp_3"></td>
+															<td id="weekTemp_4"></td>
+															<td id="weekTemp_5"></td>
+															<td id="weekTemp_6"></td>
+															<td id="weekTemp_7"></td>
 														</tr>
 													</table>
 												</dd>
 											</dl>
 										</div>
-										<div class="fr">
-											<table>
-												<tr>
-													<th>풍향</th>
-													<td>북서</td>
-												</tr>
-												<tr>
-													<th>풍속</th>
-													<td>10.1km/h</td>
-												</tr>
-												<tr>
-													<th>습도</th>
-													<td>47%</td>
-												</tr>
-												<tr>
-													<th>경사일사량</th>
-													<td>47kWh/㎡․day</td>
-												</tr>
-												<tr>
-													<th>수평일사량</th>
-													<td>47kWh/㎡․day</td>
-												</tr>
-											</table>
+										<div class="fr wt_list_wrap">
+											<ul class="list_type">
+												<li><strong>풍향</strong> <span> - </span></li>
+												<li><strong>풍속</strong> <span id="weekWind"></span></li>
+												<li><strong>습도</strong> <span id="weekHum"></span></li>
+												<li><strong>경사일사량</strong><span> - kWh/㎡․day</span></li>
+												<li><strong>수평일사량</strong><span> - kWh/㎡․day</span></li>
+											</ul>
 										</div>
+
+
+										<script>
+										//해당월의 날씨 데이터 - polling 없음
+										let weekWeatherUrl = "http://iderms.enertalk.com:8443/weather";
+										let weekWeatherData = {
+											sid : siteId,
+											startTime : "<c:out value="${startWeek }"/>",
+											endTime : "<c:out value="${endWeek }"/>",
+											interval : "day"
+										};
+
+										$.ajax({
+											url : weekWeatherUrl,
+											type : "get",
+											async : false,
+											data : weekWeatherData,
+											success: function(result) {
+												var items = result;
+												if(debugMode){ console.log("weekWeatherData:", items); }
+
+												setWeekWeatherData(items);
+											},
+								            dataType: "json",
+								            timeout: pollingTimeout
+								        });
+
+										function setWeekWeatherData(items){
+											/*
+											weekIcon_1 = <i class="ico_weather w2"></i>
+											weekTemp_1 = 16.5℃
+
+											weekWindspped = 10.1km/h
+											weekHumidity = 47%
+											*/
+
+											for (var i = 0; i < 7; i++) {
+												if(i < items.length){
+													$("#weekTemp_" + (i+1)).text( (items[i].temperature).toFixed(1));
+
+													var weatherIconClass = getWeatherIconClass(items[i].weather);
+													$("#weekIcon_" + (i+1)).html("<i class='ico_weather " + weatherIconClass + "'></i>");
+
+													if(i+1 == nowWeek){
+														$("#weekTemp").text( (items[i].temperature).toFixed(1) + "℃");
+														$("#weekIcon").html("<i class='ico_weather " + weatherIconClass + "'></i>");
+														$("#weekWind").text( (items[i].windspeed).toFixed(1) + " km/h");
+														$("#weekHum").text( (items[i].humidity).toFixed(1) + " %");
+													}
+												}
+											}
+										}
+										</script>
+
 									</div>
 								</div>
 							</div>
@@ -964,7 +1282,7 @@
 					<div class="col-lg-4">
 						<div class="row">
 							<div class="col-sm-12">
-								<div class="indiv gmain_alarm">
+								<div class="indiv gmain_alarm wrap_type">
 									<div class="alarm_stat clear">
 										<div class="a_alert clear">
 											<span>금일 발생 오류</span>
@@ -1003,16 +1321,18 @@
 						</div>
 						<div class="row">
 							<div class="col-sm-12">
-								<div class="indiv gmain_table smain">
+								<div class="indiv gmain_table smain wrap_type">
 									<div class="gtbl_top clear">
-										<div class="fl">
-											<span>키워드</span>
-											<input type="text" class="input" value="">
+										<div class="clear">
+											<input type="text" class="input" value="" placeholder="키워드">
 											<button type="submit">적용</button>
-											<div class="check-option">
-												<label><input type="checkbox" name="deviceStatus" value="정상" checked> 정상</label>
-												<label><input type="checkbox" name="deviceStatus" value="경고" checked> 경고</label>
-												<label><input type="checkbox" name="deviceStatus" value="이상" checked> 이상</label>
+											<div class="check-option chk_type">
+												<input type="checkbox" id="deviceStatus1" value="정상" checked>
+												<label for="deviceStatus1"><span></span>정상</label>
+												<input type="checkbox" id="deviceStatus2" value="경고" checked>
+												<label for="deviceStatus2"><span></span>경고</label>
+												<input type="checkbox" id="deviceStatus3" value="이상" checked>
+												<label for="deviceStatus3"><span></span>이상</label>
 											</div>
 										</div>
 									</div>
@@ -1021,14 +1341,20 @@
 											<div class="chart_top clear">
 												<h2 class="ntit">인버터(42)</h2>
 												<div class="alert_icon fr">
-													<span class="inv_normail">정상 39</span>
-													<span class="inv_error">이상 1</span>
-													<span class="inv_alert">경고 2</span>
+													<span class="inv_normail">정상(39)</span>
+													<span class="inv_error">이상(1)</span>
+													<span class="inv_alert">경고(2)</span>
 												</div>
 											</div>
 											<div class="type_list_detail">
-												<div class="local_info smain">
+												<div class="tbl_type">
 													<table>
+														<colgroup>
+														<col style="width:25%">
+														<col style="width:25%">
+														<col style="width:25%">
+														<col style="width:25%">
+														</colgroup>
 														<thead>
 															<tr>
 																<th>순시 DC 입력</th>
@@ -1047,7 +1373,7 @@
 														</tbody>
 													</table>
 												</div>
-												<div class="gtbl_wrap">
+												<div class="gtbl_wrap type">
 													<div class="intable">
 														<table>
 															<colgroup>
@@ -1159,13 +1485,13 @@
 											<div class="chart_top clear">
 												<h2 class="ntit">접속반(112)</h2>
 												<div class="alert_icon fr">
-													<span class="inv_normail">정상 89</span>
-													<span class="inv_error">이상 11</span>
-													<span class="inv_alert">경고 12</span>
+													<span class="inv_normail">정상(89)</span>
+													<span class="inv_error">이상(11)</span>
+													<span class="inv_alert">경고(12)</span>
 												</div>
 											</div>
 											<div class="type_list_detail">
-												<div class="local_info smain">
+												<div class="tbl_type">
 													<table>
 														<thead>
 															<tr>
@@ -1189,11 +1515,11 @@
 											<div class="chart_top clear">
 												<h2 class="ntit">계량기(3)</h2>
 												<div class="alert_icon fr">
-													<span class="inv_normail">정상 3</span>
+													<span class="inv_normail">정상(3)</span>
 												</div>
 											</div>
 											<div class="type_list_detail">
-												<div class="local_info smain">
+												<div class="tbl_type">
 													<table>
 														<thead>
 															<tr>
@@ -1219,20 +1545,22 @@
 											<div class="chart_top clear">
 												<h2 class="ntit">환경센서(3)</h2>
 												<div class="alert_icon fr">
-													<span class="inv_normail">정상 2</span>
+													<span class="inv_normail">정상(2)</span>
 												</div>
 											</div>
 											<div class="type_list_detail">
-												<div class="local_info smain">
+												<div class="tbl_type">
 													<table>
+														<colgroup>
+														<col style="width:33.3%">
+														<col style="width:33.3%">
+														<col style="width:33.3%">
+														</colgroup>
 														<thead>
 															<tr>
 																<th>기온</th>
 																<th>풍속</th>
 																<th>경사일사량</th>
-																<th>강수량</th>
-																<th>평균 습도</th>
-																<th>수평일사량</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -1240,6 +1568,26 @@
 																<td><span>15.4</span>℃</td>
 																<td><span>10.1</span>km/h</td>
 																<td><span>45</span>kWh/㎡․day</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+												<div class="tbl_type">
+													<table>
+														<colgroup>
+														<col style="width:33.3%">
+														<col style="width:33.3%">
+														<col style="width:33.3%">
+														</colgroup>
+														<thead>
+															<tr>
+																<th>강수량</th>
+																<th>평균 습도</th>
+																<th>수평일사량</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
 																<td><span>0</span>mm</td>
 																<td><span>47</span>%</td>
 																<td><span>40</span>kWh/㎡․day</td>
