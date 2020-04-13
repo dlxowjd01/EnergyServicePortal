@@ -430,6 +430,8 @@ select {
 	--bg-color2: #EBEDF2;
 	--bg-img: url('../img/login_bg.jpg');
 	--box-color: #fff;
+	--box-color2: #eee;
+	--box-color3: #eee;
 	--active: #fff;
 	--login-arr: url('../img/login_arr.gif');
 	--color1: #6b6b6b99;
@@ -470,6 +472,14 @@ select {
 	--sidebar-logout-on: url('../img/sidebar_logout_light_on_dark_off.png');
 	--sidebar-logout-off-4k: url('../img/sidebar_logout_light_off@3x.png');
 	--sidebar-logout-on-4k: url('../img/sidebar_logout_light_on_dark_off@3x.png');
+	--sidebar-report-off: url('../img/sidebar_report_light_off.png');
+	--sidebar-report-on: url('../img/sidebar_report_light_on_dark_off.png');
+	--sidebar-report-off-4k: url('../img/sidebar_report_light_off@3x.png');
+	--sidebar-report-on-4k: url('../img/sidebar_report_light_on_dark_off@3x.png');
+	--sidebar-maintenance-off: url('../img/sidebar_maintenance_light_off.png');
+	--sidebar-maintenance-on: url('../img/sidebar_maintenance_light_on_dark_off.png');
+	--sidebar-maintenance-off-4k: url('../img/sidebar_maintenance_light_off@3x.png');
+	--sidebar-maintenance-on-4k: url('../img/sidebar_maintenance_light_on_dark_off@3x.png');
 	--icon-pv: url('../img/icon_pv_light.png');
 	--icon-wind: url('../img/icon_wind_light.png');
 	--icon-water: url('../img/icon_water_light.png');
@@ -497,6 +507,8 @@ html.darkmode:root {
 	--bg-color2: #4e4e4e;
 	--bg-img: url('../img/login_bg_black.jpg');
 	--box-color: #363636;
+	--box-color2: #ffffff1a;
+	--box-color3: #ffffff1f;
 	--active: #363636;
 	--login-arr: url('../img/login_arr_black.png');
 	--color1: #6b6b6b;
@@ -529,14 +541,22 @@ html.darkmode:root {
 	--sidebar-diagnosis-on: url('../img/sidebar_diagnosis_dark_on.png');
 	--sidebar-diagnosis-off-4k: url('../img/sidebar_diagnosis_light_on_dark_off@3x.png');
 	--sidebar-diagnosis-on-4k: url('../img/sidebar_diagnosis_dark_on@3x.png');
-	--sidebar-settings-off: url('../img/sidebar_diagnosis_light_on_dark_off.png');
-	--sidebar-settings-on: url('../img/sidebar_diagnosis_dark_on.png');
-	--sidebar-settings-off-4k: url('../img/sidebar_diagnosis_light_on_dark_off@3x.png');
-	--sidebar-settings-on-4k: url('../img/sidebar_diagnosis_dark_on@3x.png');
+	--sidebar-settings-off: url('../img/sidebar_settings_light_on_dark_off.png');
+	--sidebar-settings-on: url('../img/sidebar_settings_dark_on.png');
+	--sidebar-settings-off-4k: url('../img/sidebar_settings_light_on_dark_off@3x.png');
+	--sidebar-settings-on-4k: url('../img/sidebar_settings_dark_on@3x.png');
 	--sidebar-logout-off: url('../img/sidebar_logout_light_on_dark_off.png');
 	--sidebar-logout-on: url('../img/sidebar_logout_dark_on.png');
 	--sidebar-logout-off-4k: url('../img/sidebar_logout_light_on_dark_off@3x.png');
 	--sidebar-logout-on-4k: url('../img/sidebar_logout_dark_on@3x.png');
+	--sidebar-report-off: url('../img/sidebar_report_light_on_dark_off.png');
+	--sidebar-report-on: url('../img/sidebar_report_dark_on.png');
+	--sidebar-report-off-4k: url('../img/sidebar_report_light_on_dark_off@3x.png');
+	--sidebar-report-on-4k: url('../img/sidebar_report_dark_on@3x.png');
+	--sidebar-maintenance-off: url('../img/sidebar_maintenance_light_on_dark_off.png');
+	--sidebar-maintenance-on: url('../img/sidebar_maintenance_dark_on.png');
+	--sidebar-maintenance-off-4k: url('../img/sidebar_maintenance_light_on_dark_off@3x.png');
+	--sidebar-maintenance-on-4k: url('../img/sidebar_maintenance_dark_on@3x.png');
 	--icon-pv: url('../img/icon_pv.png');
 	--icon-wind: url('../img/icon_wind.png');
 	--icon-water: url('../img/water.svg');
@@ -723,7 +743,7 @@ html.darkmode input:-webkit-autofill {
 	width: 72px;
 	height: 100%;
 	background: transparent;
-	padding-top: 158px;
+	padding-top: 134px;
 	color: var(--color1);
 }
 
@@ -774,11 +794,11 @@ html.darkmode input:-webkit-autofill {
 }
 
 #sidebar > ul > li.smn7 > a {
-	background: url('../img/sidebar_icon5.png') no-repeat center 20px;
+	background: var(--sidebar-report-off) no-repeat center 20px;
 }
 
 #sidebar > ul > li.smn8 > a {
-	background: url('../img/sidebar_mnt.png') no-repeat center 20px;
+	background: var(--sidebar-maintenance-off) no-repeat center 20px;
 }
 
 #sidebar > ul > li.on {
@@ -836,11 +856,13 @@ html.darkmode input:-webkit-autofill {
 
 #sidebar > ul > .smn7.on > a,
 #sidebar > ul > .smn7:hover > a {
-	background: url('../img/sidebar_icon5_on.png') no-repeat center 20px;
+	background: var(--sidebar-report-on) no-repeat center 20px;
 }
 
 #sidebar > ul > .smn8.on > a,
-#sidebar > ul > .smn8:hover > a {background:url('../img/sidebar_mnt_on.png') no-repeat center 20px;}
+#sidebar > ul > .smn8:hover > a {
+	background: var(--sidebar-maintenance-on) no-repeat center 20px;
+}
 
 /* 서브 레이어 */
 #sidebar li:hover .sub_layer {
@@ -919,7 +941,8 @@ html.darkmode input:-webkit-autofill {
 
 /* 사이드 메인메뉴 */
 #sidebar > ol {
-	margin-top: 40px;
+	position: relative;
+	top: 280px;
 }
 
 #sidebar > ol > li {
@@ -1035,7 +1058,11 @@ html.darkmode input:-webkit-autofill {
 	}
 
 	#sidebar > ul > li.smn7 > a {
-		background: url('../img/sidebar_icon5_4k.png') no-repeat center 30px;
+		background: var(--sidebar-report-off-4k) no-repeat center 30px;
+	}
+
+	#sidebar > ul > li.smn8 > a {
+		background: var(--sidebar-maintenance-off-4k) no-repeat center 30px;
 	}
 
 	#sidebar > ul > .smn0.on > a,
@@ -1075,12 +1102,12 @@ html.darkmode input:-webkit-autofill {
 
 	#sidebar > ul > .smn7.on > a,
 	#sidebar > ul > .smn7:hover > a {
-		background: url('../img/sidebar_icon5_4k_on.png') no-repeat center 30px;
+		background: var(--sidebar-report-on-4k) no-repeat center 30px;
 	}
 
 	#sidebar > ul > .smn8.on > a,
 	#sidebar > ul > .smn8:hover > a {
-		background: url('../img/sidebar_mnt_4k_on.png') no-repeat center 30px;
+		background: var(--sidebar-maintenance-on-4k) no-repeat center 30px;
 	}
 
 	.sub_layer {
@@ -1286,7 +1313,6 @@ nav .nav_right li.member .fr span {
 nav .all-menu {
 	float: left;
 	margin: 10px 0 0 40px;
-	position: relative;
 }
 
 nav .all-menu > a {
@@ -1309,8 +1335,9 @@ nav .all-menu > a.on {
 nav .all-menu .menu-group {
 	display: none;
 	position: absolute;
-	top: 38px;
-	left: 0;
+	top: 74px;
+	left: 10px;
+	width: 832px;
 	z-index: 10;
 	-webkit-box-shadow: 5px 5px 5px -1px rgba(29, 34, 43, 0.25);
 	-moz-box-shadow: 5px 5px 5px -1px rgba(29, 34, 43, 0.25);
@@ -1319,7 +1346,6 @@ nav .all-menu .menu-group {
 
 nav .all-menu .menu-group {
 	background: var(--active);
-	width: auto;
 	padding: 20px 10px;
 }
 
@@ -1801,8 +1827,8 @@ footer .copyright {
 }
 
 .time {
-	padding: 12px 36px;
-	height: 60px;
+	padding: 0 36px;
+	height: 36px;
 	text-align: right;
 	position: relative;
 }
@@ -2008,6 +2034,7 @@ footer .copyright {
 	height: 8px;
 	border-radius: 4px;
 	vertical-align: top;
+	float:left;
 }
 
 .alarm_notice li span {
@@ -6289,7 +6316,7 @@ input[type="radio"] .styled:checked + label::after {
 }
 
 .g_menu > ul > li.gmn7 > a {
-	background: url('../img/sidebar_icon5.png') no-repeat 20px center;
+	background: var(--sidebar-report-off) no-repeat 20px center;
 	background-size: auto 20px;
 }
 
@@ -7238,7 +7265,7 @@ nav .lang.dropdown .btn .caret {
 .gmain_alarm {
 	position:relative;
 	overflow:hidden;
-	min-height: 131px;
+	height: 152px;
 }
 .gmain_alarm:before{position:absolute;top:0;left:0;right:0;height:10px;background:#c41d27;content:''}
 
@@ -7747,7 +7774,6 @@ nav .lang.dropdown .btn .caret {
 	float: left;
 	color: var(--color2);
 	font-weight: 600;
-	margin-right: 80px;
 }
 
 .gmain_map .chart_info > div.ci_right ul li span {
@@ -7766,9 +7792,6 @@ nav .lang.dropdown .btn .caret {
 }
 
 /* 지역별 정보 */
-.local_info {
-	margin-top: 20px;
-}
 
 .local_info table {
 	width: 100%;
@@ -7778,7 +7801,7 @@ nav .lang.dropdown .btn .caret {
 	font-size: 13px;
 	color: var(--color2);
 	font-weight: normal;
-	background: var(--bg-color);
+	background: var(--box-color3);
 }
 
 .local_info table td {
@@ -7876,6 +7899,9 @@ nav .lang.dropdown .btn .caret {
 }
 
 /* 지도 */
+.gmain_map2 {
+	height: 712px;
+}
 .gmain_map2 .map_wrap {
 	position: relative;
 	text-align: center;
@@ -8111,6 +8137,10 @@ nav .lang.dropdown .btn .caret {
 
 /* 기간별/지역별 사업소별 테이블 */
 
+.gmain_table {
+	height: 933px;
+}
+
 .gmain_table .gtbl_top {
 	color: var(--color3);
 	font-size: 13px;
@@ -8142,8 +8172,8 @@ nav .lang.dropdown .btn .caret {
 	height: 36px;
 	line-height: 36px;
 	border: 0;
-	background: var(--bg-color2);
-	color: var(--color5);
+	background: var(--box-color2);
+	color: var(--color3);
 	vertical-align:top;
 	margin-right:8px
 }
@@ -8158,7 +8188,7 @@ nav .lang.dropdown .btn .caret {
 	color: #fff;
 	font-size: 12px;
 	background: #1C98E9;
-	border-radius:5px;
+	border-radius:4px;
 }
 
 .gmain_table .gtbl_top select {
@@ -8167,7 +8197,7 @@ nav .lang.dropdown .btn .caret {
 	color: var(--color2);
 	border: 0;
 	font-size: 12px;
-	background: var(--bg-color) var(--expand-arrow) no-repeat right 15px center;
+	background: var(--box-color2) var(--expand-arrow) no-repeat right 15px center;
 }
 
 .gmain_table .gtbl_top .check-option {
@@ -9191,18 +9221,17 @@ div.di_wrap dl .link a {
 */
 .gmain_chart1 {
 	min-height: auto;
+	height: 306px;
 }
 
 .gmain_chart2 {
 	min-height: auto;
+	height: 306px;
 }
 
 .gmain_chart3 {
 	min-height: auto;
-}
-
-.gmain_chart3 {
-	min-height: auto;
+	height: 450px;
 }
 
 .gmain_chart1 #gchart1 {
@@ -9226,6 +9255,7 @@ div.di_wrap dl .link a {
 }
 
 .gmain_map.gmain_chart.gmain_chart4 {
+	height: 374px;
 	position: relative;
 }
 

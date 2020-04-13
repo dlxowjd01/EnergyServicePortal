@@ -232,7 +232,7 @@
         <div class="indiv gmain_chart gmain_chart1">
           <div class="chart_top clear">
             <h2 class="ntit">월간</h2>
-            <span class="term">2020.1.1 ~ 2020.2.29</span>
+            <span class="term">2019.4.14 ~ 2020.4.13</span>
           </div>
           <div class="no-data" style="display:none;">
             <span>올해 발전량 정보를 가져올 수 없습니다.</span>
@@ -513,7 +513,7 @@
         <div class="indiv gmain_chart gmain_chart2">
           <div class="chart_top clear">
             <h2 class="ntit">일간</h2>
-            <span class="term">2020.3.1 ~ 2020.3.6</span>
+            <span class="term">2020.4.1 ~ 2020.4.13</span>
           </div>
           <div class="inchart">
             <div id="gchart2"></div>
@@ -791,7 +791,7 @@
         <div class="indiv gmain_chart gmain_chart3">
           <div class="chart_top clear">
             <h2 class="ntit">전일</h2>
-            <span class="term">2020.3.6</span>
+            <span class="term">2020.4.12</span>
           </div>
 <%--          <ul class="gtab_menu">--%>
 <%--            <li class="active"><a href="#;">사업소별 현황</a></li>--%>
@@ -917,10 +917,10 @@
                               connectorAllowed: true
                             },
                             borderWidth: 0, /* 보더 0 */
-                            borderRadiusTopLeft: '50%', /* 막대 모서리 둥글게 효과 */
-                            borderRadiusTopRight: '50%', /* 막대 모서리 둥글게 효과 */
-                            pointWidth: 8, /* 막대 두께 */
-                            pointPadding: 0.25 /* 막대 사이 간격 */
+                            borderRadiusTopLeft: 2, /* 막대 모서리 둥글게 효과 */
+                            borderRadiusTopRight: 2, /* 막대 모서리 둥글게 효과 */
+                            pointWidth: 10, /* 막대 두께 */
+                            pointPadding: 6 /* 막대 사이 간격 */
                           },
                           bar: {
                             dataLabels: {
@@ -1266,8 +1266,9 @@
                 <div class="inchart">
                   <div id="pie_chart" style="height:200px;"></div>
                   <script language="JavaScript">
+                    var piChart;
                     $(function () {
-                      var pieChart1 = Highcharts.chart('pie_chart', {
+                      pieChart = Highcharts.chart('pie_chart', {
                         chart: {
                           marginTop:0,
                           marginLeft:0,
@@ -1393,8 +1394,8 @@
                   <span class="bu4">미 사용량</span>
                 </div>
                 <ul>
-                  <li><strong>금일 누적발전량</strong> <span> - </span><em>Wh</em></li>
-                  <li><strong>금일 예측발전량</strong> <span> - </span><em>Wh</em></li>
+                  <li><strong>금일 누적발전량</strong> <span> 0 </span><em>kWh</em></li>
+                  <li><strong>금일 예측발전량</strong> <span> 0 </span><em>kWh</em></li>
                   <li><strong>금일 충/방전</strong> <span> - </span><em>Wh</em> / <span> - </span><em>Wh</em></li>
                 </ul>
               </div>
@@ -1405,7 +1406,7 @@
               <thead>
                 <tr>
                   <th>총 사업소</th>
-                  <th>총 설비(인버터,PCS)</th>
+                  <th>총 설비</th>
                   <th>총 설비용량</th>
                   <th>금일 CO2저감량</th>
                   <th>금일 누적수익</th>
@@ -1414,10 +1415,10 @@
               <tbody id="centerTbody">
                 <tr>
                   <td> - 개소</td>
-                  <td> - 대</td>
-                  <td> - kW</td>
+                  <td> 2 대</td>
+                  <td> 194.56 kW</td>
                   <td> - </td>
-                  <td> - KRW</td>
+                  <td>0</td>
                 </tr>
               </tbody>
             </table>
@@ -1453,7 +1454,7 @@
           <div class="alarm_stat clear">
             <div class="a_alert clear">
               <span>금일 발생 오류</span>
-              <em>5</em>
+              <em>0</em>
             </div>
             <div class="a_warning clear">
               <a href="#" class="btn cancel_btn">상세보기</a>
@@ -1461,26 +1462,26 @@
           </div>
           <div class="alarm_notice">
             <ul>
-              <li>
-                <a href="javascript:list_detail_open('list3');">동국제강 - 인버터21 발전 정지</a>
-                <span>2018-08-12 11:41:26</span>
-              </li>
-              <li>
-                <a href="#;">동국제강 - 인버터21 발전 정지</a>
-                <span>2018-08-12 11:41:26</span>
-              </li>
-              <li>
-                <a href="#;">동국제강 - 인버터21 발전 정지</a>
-                <span>2018-08-12 11:41:26</span>
-              </li>
-              <li>
-                <a href="#;">동국제강 - 인버터21 발전 정지</a>
-                <span>2018-08-12 11:41:26</span>
-              </li>
-              <li>
-                <a href="#;">동국제강 - 인버터21 발전 정지</a>
-                <span>2018-08-12 11:41:26</span>
-              </li>
+<%--              <li>--%>
+<%--                <a href="javascript:list_detail_open('list3');">혜원솔라01 - 인버터1 발전 정지</a>--%>
+<%--                <span>2018-08-12 11:41:26</span>--%>
+<%--              </li>--%>
+<%--              <li>--%>
+<%--                <a href="#;">혜원솔라01 - 인버터1 발전 정지</a>--%>
+<%--                <span>2018-08-12 11:41:26</span>--%>
+<%--              </li>--%>
+<%--              <li>--%>
+<%--                <a href="#;">혜원솔라01 - 인버터1 발전 정지</a>--%>
+<%--                <span>2018-08-12 11:41:26</span>--%>
+<%--              </li>--%>
+<%--              <li>--%>
+<%--                <a href="#;">혜원솔라01 - 인버터1 발전 정지</a>--%>
+<%--                <span>2018-08-12 11:41:26</span>--%>
+<%--              </li>--%>
+<%--              <li>--%>
+<%--                <a href="#;">혜원솔라01 - 인버터1 발전 정지</a>--%>
+<%--                <span>2018-08-12 11:41:26</span>--%>
+<%--              </li>--%>
             </ul>
           </div>
         </div>
@@ -1532,15 +1533,15 @@
                 </thead>
                 <tbody>
                   <tr class="dbclickopen flag1">
-                    <td><span class="status status_err" title="통신이상">통신이상</span></td>
+                    <td><span class="status status_drv" title="운전">운전</span></td>
                     <td><!--<span class="battery_icon batter_in">충전</span>--></td>
                     <td>0</td>
                     <td>0</td>
                     <td>
                       <div class="cname">혜원 솔라 1호기</div>
                     </td>
-                    <td>8670</td>
-                    <td>1240</td>
+                    <td>97.28kW</td>
+                    <td>-</td>
                     <td>-</td>
                     <td>-</td>
                   </tr>
@@ -1554,7 +1555,7 @@
                                 <div id="type_chart1" style="height:130px"></div>
                                 <script language="JavaScript">
                                   $(function () {
-                                    var pieChart = Highcharts.chart('type_chart1', {
+                                    var pieChart1 = Highcharts.chart('type_chart1', {
                                       chart: {
                                         marginTop: 0,
                                         marginLeft: 0,
@@ -1672,7 +1673,7 @@
                               <div class="link"><a href="javascript:linkSiteDashboard(1);" class="btn_cancel">대시보드
                                 바로가기</a></div>
                               <div class="di_top">
-                                <span class="sbj">당진태양광</span>
+                                <span class="sbj">혜원 솔라 1호기</span>
                                 <span class="type_img type_sun">태양광</span>
                                 <!--
 																      		<span class="type_img type_wind">풍력</span>
@@ -1686,34 +1687,34 @@
                               <ul class="clear">
                                 <li class="clear">
                                   <span class="fl">총 설비용량</span>
-                                  <span class="fl"><em>10</em>MW</span>
+                                  <span class="fl"><em>97.28</em>kWh</span>
                                 </li>
                                 <li class="clear">
                                   <span class="fl">총 인버터수량</span>
-                                  <span class="fl"><em>30</em>EA</span>
+                                  <span class="fl"><em>1</em>EA</span>
                                 </li>
                                 <li class="clear">
-                                  <span class="fl">금일 발전예측</span>
-                                  <span class="fl"><em>28</em>MWh</span>
+                                  <span class="fl">금일 누적발전량</span>
+                                  <span class="fl"><em>0</em>kWh</span>
                                 </li>
                                 <li class="clear">
-                                  <span class="fl">금일 누적발전</span>
-                                  <span class="fl"><em>18.1</em>MWh</span>
+                                  <span class="fl">금일 예측발전량</span>
+                                  <span class="fl"><em>0</em>kWh</span>
                                 </li>
-                                <li class="clear">
-                                  <span class="fl">전일 누적발전</span>
-                                  <span class="fl"><em>20</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">전일 발전매전</span>
-                                  <span class="fl"><em>20</em>MWh</span>
-                                </li>
+<%--                                <li class="clear">--%>
+<%--                                  <span class="fl">전일 누적발전</span>--%>
+<%--                                  <span class="fl"><em>20</em>MWh</span>--%>
+<%--                                </li>--%>
+<%--                                <li class="clear">--%>
+<%--                                  <span class="fl">전일 발전매전</span>--%>
+<%--                                  <span class="fl"><em>20</em>MWh</span>--%>
+<%--                                </li>--%>
                               </ul>
                               <div class="error">
-                                <h2>최근 미처리 오류 : <span>2</span>건</h2>
+                                <h2>최근 미처리 오류 : <span>0</span>건</h2>
                                 <div>
-                                  <p>2020-02-10 12:00:01 데이터 disconnected</p>
-                                  <p>2020-02-09 11:41:26 인버터#1 이상 감지</p>
+<%--                                  <p>2020-02-10 12:00:01 데이터 disconnected</p>--%>
+<%--                                  <p>2020-02-09 11:41:26 인버터#1 이상 감지</p>--%>
                                 </div>
                               </div>
                             </dd>
@@ -1722,18 +1723,20 @@
                       </div>
                     </td>
                   </tr>
-                  <tr class="dbclickopen status_error flag2">
+                  <tr class="dbclickopen flag2">
                     <td><span class="status status_drv" title="운전">운전</span></td>
-                    <td><span class="battery_icon batter_in">충전</span></td>
-                    <td>2</td>
+                    <td>
+<%--                      <span class="battery_icon batter_in">충전</span>--%>
+                    </td>
+                    <td>0</td>
                     <td>0</td>
                     <td>
                       <div class="cname">혜원 솔라 2호기</div>
                     </td>
-                    <td>1,000</td>
+                    <td>97.28kW</td>
                     <td>-</td>
-                    <td>980</td>
-                    <td>540</td>
+                    <td>-</td>
+                    <td>-</td>
                   </tr>
                   <tr class="detail_info list2 flag2">
                     <td colspan="9">
@@ -1858,53 +1861,50 @@
                                   });
                                 </script>
                               </div>
-                              <div class="summ">
-                                <div class="soc">
-                                  <div class="batt_wrap clear">
-                                    <div class="battery"><span style="width:30%;"><!--잔량--></span><em>30%</em></div>
-                                  </div>
-                                </div>
-                              </div>
+<%--                              <div class="summ">--%>
+<%--                                <div class="soc">--%>
+<%--                                  <div class="batt_wrap clear">--%>
+<%--                                    <div class="battery"><span style="width:30%;"><!--잔량--></span><em>30%</em></div>--%>
+<%--                                  </div>--%>
+<%--                                </div>--%>
+<%--                              </div>--%>
                             </dt>
                             <dd>
                               <div class="link"><a href="javascript:linkSiteDashboard(2);" class="btn_cancel">대시보드
                                 바로가기</a></div>
                               <div class="di_top">
-                                <span class="sbj">제일화성</span>
-                                <span class="type_img type_battery">배터리 룸</span>
-                                <span>배터리 룸 </span>
-                                <span>온도 <em>30</em>℃</span>
-                                <span>습도 <em>30</em>%</span>
+                                <span class="sbj">혜원 솔 2호기</span>
+                                <span class="type_img type_sun">태양광</span>
+<%--                                <span>배터리 룸 </span>--%>
+<%--                                <span>온도 <em>30</em>℃</span>--%>
+<%--                                <span>습도 <em>30</em>%</span>--%>
+                                <span>일사량 <em>30</em>kWh/㎡․day </span>
+                                <span>현재온도 <em>30</em>℃</span>
+                                <span>현재습도 <em>65</em>%</span>
                               </div>
                               <ul class="clear">
                                 <li class="clear">
                                   <span class="fl">총 설비용량</span>
-                                  <span class="fl"><em>10</em>MW / <em>20</em>MWh</span>
+                                  <span class="fl"><em>97.28</em>kWh</span>
                                 </li>
                                 <li class="clear">
+                                  <span class="fl">총 인버터수량</span>
+                                  <span class="fl"><em>1</em>EA</span>
                                 </li>
                                 <li class="clear">
-                                  <span class="fl">금일 충전예측</span>
-                                  <span class="fl"><em>28</em>MWh</span>
+                                  <span class="fl">금일 누적발전량</span>
+                                  <span class="fl"><em>0</em>kWh</span>
                                 </li>
                                 <li class="clear">
-                                  <span class="fl">금일 누적충전</span>
-                                  <span class="fl"><em>18.1</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">금일 방전예측</span>
-                                  <span class="fl"><em>20</em>MWh</span>
-                                </li>
-                                <li class="clear">
-                                  <span class="fl">금일 누적방전</span>
-                                  <span class="fl"><em>20</em>MWh</span>
+                                  <span class="fl">금일 예측발전량</span>
+                                  <span class="fl"><em>0</em>kWh</span>
                                 </li>
                               </ul>
                               <div class="error">
-                                <h2>최근 미처리 오류 : <span>2</span>건</h2>
+                                <h2>최근 미처리 오류 : <span>0</span>건</h2>
                                 <div>
-                                  <p>2020-02-10 12:00:01 데이터 disconnected</p>
-                                  <p>2020-02-09 11:41:26 인버터#1 이상 감지</p>
+<%--                                  <p>2020-02-10 12:00:01 데이터 disconnected</p>--%>
+<%--                                  <p>2020-02-09 11:41:26 인버터#1 이상 감지</p>--%>
                                 </div>
                               </div>
                             </dd>
@@ -1992,7 +1992,7 @@
     getGenDataBySite();
     // getGenDataByType();
     getTodayTotalDetail();
-    getAlarmInfo();
+    // getAlarmInfo();
   }
   
   //올해 발전데이터, 정산금 데이터
@@ -2005,10 +2005,10 @@
 
   function getYearGenData(selTerm) {
     const nowMonth = new Date().getMonth();
-    chargeList = new Array(nowMonth + 1).fill(0);
-    dischargeList = new Array(nowMonth + 1).fill(0);
-    pvList = new Array(nowMonth + 1).fill(0);
-    payList = new Array(nowMonth + 1).fill(0);
+    chargeList = new Array(12).fill(0);
+    dischargeList = new Array(12).fill(0);
+    pvList = new Array(12).fill(0);
+    payList = new Array(12).fill(0);
     const formData = getSiteMainSchCollection();//api에 맞게 수정 필요
     $.ajax({
       url: "http://iderms.enertalk.com:8443/config/sites",
@@ -2030,6 +2030,7 @@
               interval: "month"
             },
             success: function (result) {
+              console.log("월간 차트", chargeChart1);
               result.data[0].battery.charging.items.map((e) => {
                 if (e.energy) {
                   const month = Number(e.basetime.toString().slice(4, 6));
@@ -2045,13 +2046,32 @@
               result.data[0].generation.items.map((e) => {
                 if (e.energy) {
                   const month = Number(e.basetime.toString().slice(4, 6));
-                  pvList[month - 1] += e.energy;
+                  if((pvList[month - 1] + e.energy)/1000){
+                    pvList[month - 1] = Math.floor((pvList[month - 1]+e.energy)/1000);
+                    //kWh로 그래프 단위 변경
+                  }else if((pvList[month - 1] + e.energy)/1000000){
+                    pvList[month - 1] = Math.floor((pvList[month - 1]+e.energy)/1000000);
+                    //MWh로 그래프 단위 변경
+                    chargeChart1.series[2].userOptions.tooltip.valueSuffix = "MWh"
+                    console.log("변경 후", chargeChart1)
+                  }else{
+                    pvList[month - 1] += e.energy;
+                  }
                 }
               });
               result.data[0].generation.items.map((e) => {
                 if (e.energy) {
                   const month = Number(e.basetime.toString().slice(4, 6));
-                  payList[month - 1] += e.billing;
+                  if((payList[month - 1] + e.billing)/10000){
+                    payList[month - 1] = Math.floor((payList[month - 1]+e.billing)/10000);
+                    //만원으로 단위 변경
+                  }else if((payList[month - 1] + e.billing)/10000000){
+                    payList[month - 1] = Math.floor((payList[month - 1]+e.billing)/10000000);
+                    //천만원으로 단위 변경
+                    chargeChart1.series[3].userOptions.tooltip.valueSuffix = "천만원"
+                  }else{
+                    payList[month - 1] += e.billing;
+                  }
                 }
               });
               //데이터 세팅
@@ -2132,11 +2152,10 @@
   }
 
   function getMonthGenData() {
-    const nowDay = new Date().getMonth();
-    chargeList = new Array(nowDay + 1).fill(0);
-    dischargeList = new Array(nowDay + 1).fill(0);
-    pvList = new Array(nowDay + 1).fill(0);
-    payList = new Array(nowDay + 1).fill(0);
+    chargeList = new Array(30).fill(0);
+    dischargeList = new Array(30).fill(0);
+    pvList = new Array(30).fill(0);
+    payList = new Array(30).fill(0);
 
     const formData = getSiteMainSchCollection();//api에 맞게 수정 필요
     $.ajax({
@@ -2159,6 +2178,7 @@
             interval: "day"
           },
           success: function (result) {
+            console.log("일간", result);
             result.data[0].battery.charging.items.map((e) => {
               if (e.energy) {
                 const day = Number(e.basetime.toString().slice(6, 8));
@@ -2174,13 +2194,32 @@
             result.data[0].generation.items.map((e) => {
               if (e.energy) {
                 const day = Number(e.basetime.toString().slice(6, 8));
-                pvList[day - 1] += e.energy;
+                if((pvList[day - 1] + e.energy)/1000){
+                  pvList[day - 1] = Math.floor((pvList[day - 1]+e.energy)/1000);
+                  //kWh로 그래프 단위 변경
+                }else if((pvList[day - 1] + e.energy)/1000000){
+                  pvList[day - 1] = Math.floor((pvList[day - 1]+e.energy)/1000000);
+                  //MWh로 그래프 단위 변경
+                  chargeChart1.series[2].userOptions.tooltip.valueSuffix = "MWh"
+                  console.log("변경 후", chargeChart1)
+                }else{
+                  pvList[day - 1] += e.energy;
+                }
               }
             });
             result.data[0].generation.items.map((e) => {
               if (e.energy) {
                 const day = Number(e.basetime.toString().slice(6, 8));
-                payList[day - 1] += e.billing;
+                if((payList[day - 1] + e.billing)/10000){
+                  payList[day - 1] = Math.floor((payList[day - 1]+e.billing)/10000);
+                  //만원으로 단위 변경
+                }else if((payList[day - 1] + e.billing)/10000000){
+                  payList[day - 1] = Math.floor((payList[day - 1]+e.billing)/10000000);
+                  //천만원으로 단위 변경
+                  chargeChart1.series[3].userOptions.tooltip.valueSuffix = "천만원"
+                }else{
+                  payList[day - 1] += e.billing;
+                }
               }
             });
           },
@@ -2199,6 +2238,7 @@
   }
   
   function drawData_month_gen() {
+    console.log(pvList);
     var $charge = $(".gmain_chart2");
     if (chargeList.length < 1 && chargeList.length < 1 && dischargeList.length < 1 && dischargeList.length < 1) {
       $charge.find(".no-data").css("display", "");
@@ -2277,14 +2317,19 @@
             async: false,
             data:{
               sid: site.sid,
-              startTime: "20200404000000",
-              endTime:formData.selTermTo,
+              startTime: "20200412000000",
+              endTime:"20200412999999",
               interval:"hour"
             },
             success: function(result) {//api 요청결과
               let generationSum = 0;
               result.data[0].generation.items.forEach((e) => {generationSum += e.energy;});
               let siteName =site.name.replace(/\s/g, "");
+              if(generationSum>=1000){
+                generationSum = (generationSum/1000);
+              }else if(generationSum>=1000000){
+                generationSum = (generationSum/1000000);
+              }
               tbodyStr += `<tr><th>${'${siteName}'}</th><td>${'${Math.floor(generationSum)}'}</td>`;
               
             },
@@ -2299,14 +2344,20 @@
             async: false,
             data:{
               sid: site.sid,
-              startTime: "20200404000000",
-              endTime:formData.selTermTo,
+              startTime: "20200412000000",
+              endTime:"20200412999999",
               interval:"hour"
             },
             success: function(result) {//api 요청결과
-              let generationForecaseSum = 0;
-              result.data[0].generation.items.map((e)=>generationForecaseSum+=e.energy);
-              tbodyStr += `<td>${'${Math.floor(generationForecaseSum)}'}</td></tr>`;
+              let generationForecastSum = 0;
+              result.data[0].generation.items.map((e)=>generationForecastSum+=e.energy);
+              if(generationForecastSum>=1000){
+                generationForecastSum = (generationForecastSum/1000);
+              }else if(generationForecastSum>=1000000){
+                generationForecastSum = (generationForecastSum/1000000);
+              }
+              console.log(chargeChart1.series);
+              tbodyStr += `<td>${'${Math.floor(generationForecastSum)}'}</td></tr>`;
             },
             error: function(result, status, error) {
               //error function or alert, return
@@ -2447,36 +2498,41 @@
       },
       success: function (result) {
         $('#centerTbody tr td:nth-child(1)').text(Math.floor(result.length));
-        result.forEach(site => {
-        
+        let acPowerSum = 0;
+        result.forEach((site, siteIdx) => {
+          console.log("사이트", site);
           $.ajax({
             url: "http://iderms.enertalk.com:8443/energy/sites",
             type: "get",
             async: false,
             data: {
               sid: site.sid,
-              startTime: "20200411000000",
+              startTime: "20200413000000",
               endTime: formData.selTermTo,
-              interval: "hour"
+              interval: "15min"
             },
             success: function (result) {//api 요청결과
-              
               let generationSum = 0;
               let billingSum = 0;
-              result.data[0].generation.items.map((e) => generationSum += e.energy);
+              console.log("사이트 별 일간 데이터", result);
+              result.data[0].generation.items.map((e) => {generationSum += e.energy;});
               result.data[0].generation.items.map((e) => billingSum += e.billing);
               
-              pieChart1.series[0].data.forEach((e) => {
+              pieChart.series[0].data.forEach((e, idx) => {
                 if (e.name === "태양광") {
                   e.update({y: Math.floor(generationSum / 100)});
                 } else if (e.name === "미사용량") {
-                  e.update({y: Math.floor(((97280 * 4 * 24) - generationSum) / 100)});
+                  e.update({y: Math.floor((generationSum/(97280*2) )/ 100)});
                 } else {
                   e.update({y: 0});
                 }
               });
-              $('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(Math.floor(generationSum));
-              $('#centerTbody tr td:nth-child(5)').text(Math.floor(billingSum));
+              let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text());
+              $('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(Math.floor(prevVal += (generationSum/1000)));
+              let prevBillVal = Number($('#centerTbody tr td:nth-child(5)').text());
+              $('#centerTbody tr td:nth-child(5)').text(Math.floor(prevBillVal += billingSum));
+              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(8)`).text(Math.floor(generationSum/1000)+'kW');
+              $(`.detail_info.list${'${siteIdx+1}'} li.clear:nth-child(3) span.fl:nth-child(2) em`).text(Math.floor(generationSum/1000));
             },
             error: function (result, status, error) {
               //error function or alert, return
@@ -2490,14 +2546,50 @@
             async: false,
             data: {
               sid: site.sid,
-              startTime: "20200411000000",
+              startTime: "20200413000000",
+              endTime: formData.selTermTo,
+              interval: "15min"
+            },
+            success: function (result) {//api 요청결과
+              let generationForecastSum = 0;
+              result.data[0].generation.items.map((e, idx) => generationForecastSum += e.energy);
+              let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text());
+              $('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(Math.floor(prevVal += generationForecastSum/1000));
+              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(9)`).text(Math.floor(generationForecastSum/1000)+'kW');
+              $(`.detail_info.list${'${siteIdx+1}'} li.clear:nth-child(4) span.fl:nth-child(2) em`).text(Math.floor(generationForecastSum/1000));
+            },
+            error: function (result, status, error) {
+              //error function or alert, return
+              // error_getYearGenData(request, status, error);
+            }
+          });
+          
+          
+          $.ajax({
+            url: "http://iderms.enertalk.com:8443/status/raw/site",
+            type: "get",
+            async: false,
+            data: {
+              sid: site.sid,
+              startTime: "20200413000000",
               endTime: formData.selTermTo,
               interval: "hour"
             },
             success: function (result) {//api 요청결과
-              let generationForecastSum = 0;
-              result.data[0].generation.items.map((e) => generationForecastSum += e.energy);
-              $('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(Math.floor(generationForecastSum));
+              acPowerSum += result.acPower;
+              console.log("현재 출력 합", acPowerSum);
+              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(7)`).text(Math.floor(result.acPower/1000)+'kW');
+              $('.highcharts-title > tspan').text(Math.floor(acPowerSum/1000)+'kW');
+              console.log("파이차트", pieChart);
+              pieChart.series[0].data.forEach((e, idx) => {
+                if (e.name === "태양광") {
+                  e.update({y: Math.floor(acPowerSum/1000)});
+                } else if (e.name === "미사용량") {
+                  e.update({y: Math.floor(((97280*2)-acPowerSum)/1000)});
+                } else {
+                  e.update({y: 0});
+                }
+              });
             },
             error: function (result, status, error) {
               //error function or alert, return
@@ -2510,7 +2602,7 @@
       
       }
     })
-    pieChart1.redraw();
+    pieChart.redraw();
   }
   
   function getAlarmInfo() {

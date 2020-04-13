@@ -371,22 +371,34 @@
 			var energyData = [];
 			var billingData = [];
 			for (var i = 0; i < 12; i++) {
-				if(i < chargeChartItems1.length){
-					energyData[i] = [i, chargeChartItems1[i].energy];
-					billingData[i] = [i, chargeChartItems1[i].billing];
 
-					totYearEnergy += chargeChartItems1[i].energy;
-					if( i+1 ==  nowMonth){ totMonthEnergy = chargeChartItems1[i].energy; }
-				}else{
+				var matchMonth = false;
+				for (var d = 0; d < chargeChartItems1.length; d++) {
+					var dataMonth = parseInt((""+chargeChartItems1[d].basetime).substring(4,6));
+					if( i+1 == dataMonth){
+						energyData[i] = [i, chargeChartItems1[d].energy / 1000];
+						billingData[i] = [i, chargeChartItems1[d].billing];
+
+						totYearEnergy += chargeChartItems1[d].energy  / 1000;
+						if( i+1 ==  nowMonth){ totMonthEnergy = chargeChartItems1[d].energy  / 1000; }
+
+						matchMonth = true;
+					}
+				}
+
+				if(!matchMonth){
 					energyData[i] = [i, null];
 					billingData[i] = [i, null];
 				}
 			}
 
 			for (var i = 0; i < 12; i++) {
-				if(i < chargeChartItems2.length){
-					totBeforeYearEnergy += chargeChartItems2[i].energy;
-					if( i+1 ==  nowMonth){ totBeforeMonthEnergy = chargeChartItems2[i].energy; }
+				for (var d = 0; d < chargeChartItems2.length; d++) {
+					var dataMonth = parseInt((""+chargeChartItems2[d].basetime).substring(4,6));
+					if( i+1 == dataMonth){
+						totBeforeYearEnergy += chargeChartItems2[d].energy / 1000;
+						if( i+1 ==  nowMonth){ totBeforeMonthEnergy = chargeChartItems2[d].energy / 1000; }
+					}
 				}
 			}
 
@@ -427,7 +439,7 @@
 				$("#diffYearEnergyValue").html("<i class='fa " + diffYearIconClass + "'></i><span>" + numberComma((Math.abs(diffYearEnergy) / 1000).toFixed(2))  + "</span>");
 			}else{
 				$("#yearEnergyValue").html("<span class='pv'>" + numberComma(totYearEnergy) + "</span><em>kWh</em>");
-				$("#diffYearEnergyValue").html("<i class='fa " + diffIconClass + "'></i><span>" + numberComma(Math.abs(diffYearEnergy))  + "</span>");
+				$("#diffYearEnergyValue").html("<i class='fa " + diffIconClass + "'></i><span>" + numberComma(Math.abs(diffYearEnergy).toFixed(2))  + "</span>");
 			}
 
 			var diffMonthIconClass = diffMonthEnergy > 0 ? "fa-arrow-up" : (diffMonthEnergy < 0 ? "fa-arrow-up" : "");
@@ -436,7 +448,7 @@
 				$("#diffMonthEnergyValue").html("<i class='fa " + diffMonthIconClass + "'></i><span>" + numberComma((Math.abs(diffMonthEnergy) / 1000).toFixed(2))  + "</span>");
 			}else{
 				$("#monthEnergyValue").html("<span class='pv'>" + numberComma(totMonthEnergy) + "</span><em>kWh</em>");
-				$("#diffMonthEnergyValue").html("<i class='fa " + diffMonthIconClass + "'></i><span>" + numberComma(Math.abs(diffMonthEnergy))  + "</span>");
+				$("#diffMonthEnergyValue").html("<i class='fa " + diffMonthIconClass + "'></i><span>" + numberComma(Math.abs(diffMonthEnergy).toFixed(2))  + "</span>");
 			}
 
 		}
@@ -545,15 +557,17 @@
 										function setWCalendarEnergyData(items){
 											var calendarDays = $(".calWeatherDay");
 											for (var i = 0; i < calendarDays.length; i++) {
-												if(i < items.length){
-													$("#calWeatherValue_" + (i+1)).text("16.5℃");
-													$("#calWeatherIcon_" + (i+1)).html("<i class='ico_weather w1'></i>");
 
 
-													if(items[i].energy > 10000){
-														$("#calEnergyValue_" + (i+1)).html("<strong>" + numberComma((items[i].energy / 1000).toFixed(1)) + "</strong><em>MWh</em>");
-													}else{
-														$("#calEnergyValue_" + (i+1)).html("<strong>" + items[i].energy + "</strong><em>kWh</em>");
+												var matchMonth = false;
+												for (var d = 0; d < items.length; d++) {
+													var dataDay = parseInt((""+items[d].basetime).substring(6,8));
+													if( i+1 == dataDay){
+														if(items[d].energy > 10000 * 1000){
+															$("#calEnergyValue_" + (i+1)).html("<strong>" + numberComma((items[d].energy / 1000 * 1000).toFixed(1)) + "</strong><em>MWh</em>");
+														}else{
+															$("#calEnergyValue_" + (i+1)).html("<strong>" + numberComma((items[d].energy / 1000).toFixed(1)) + "</strong><em>kWh</em>");
+														}
 													}
 												}
 											}
@@ -589,10 +603,11 @@
 
 										function setWCalendarEnergyDayData(items){
 											if(items.length > 0){
-												if(items[0].energy > 10000){
-													$("#calEnergyValue_" + nowDay).html("<strong>" + numberComma((items[0].energy / 1000).toFixed(1)) + "</strong><em>MWh</em>");
+
+												if(items[0].energy > 10000 * 1000){
+													$("#calEnergyValue_" + nowDay).html("<strong>" + numberComma((items[0].energy / 1000 * 1000).toFixed(1)) + "</strong><em>MWh</em>");
 												}else{
-													$("#calEnergyValue_" + nowDay).html("<strong>" + items[0].energy + "</strong><em>kWh</em>");
+													$("#calEnergyValue_" + nowDay).html("<strong>" + numberComma((items[0].energy / 1000).toFixed(1)) + "</strong><em>kWh</em>");
 												}
 											}
 										}
@@ -828,9 +843,9 @@
 													<span class="bu4">미 사용량</span>
 												</div>
 												<ul>
-													<li><strong>총 설비용량</strong> <span>- </span><em>MW</em></li>
-													<li><strong>실시간 DC입력</strong> <span>- </span><em>MW</em></li>
-													<li><strong>실시간 AC출력</strong> <span>- </span><em>MW</em></li>
+													<li><strong>총 설비용량</strong> <span>97.28</span><em>kW</em></li>
+													<li><strong>실시간 DC입력</strong> <span>4.2</span><em>kW</em></li>
+													<li><strong>실시간 AC출력</strong> <span>41.1</span><em>kW</em></li>
 												</ul>
 											</div>
 										</div>
@@ -840,14 +855,14 @@
 											<thead>
 												<tr>
 													<th>PV 용량</th>
-													<th>오늘 누적 발전량</th>
-													<th>오늘 발전 예측</th>
+													<th>금일 누적 발전량</th>
+													<th>금일 발전 예측량</th>
 													<th>SMP 수익 예상</th>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
-													<td><span>- </span>kWh</td>
+													<td><span>97.28</span> kW</td>
 													<td id="dayEnergyValue"></td>
 													<td id="dayEnergyForeValue"></td>
 													<td><span>- </span>￦</td>
@@ -1119,16 +1134,22 @@
 				var energyData2 = [];
 				for (var i = 0; i < 24; i++) {
 					if(i < saChart2EnergyItems1.length){
-						energyData1[i] = [i, saChart2EnergyItems1[i].energy];
-						energyData2[i] = [i, saChart2EnergyItems2[i].energy];
-
-						totDayEnergy += saChart2EnergyItems1[i].energy;
-						totDayForeEnergy += saChart2EnergyItems2[i].energy;
+						energyData1[i] = [i, saChart2EnergyItems1[i].energy / 1000];
+						totDayEnergy += saChart2EnergyItems1[i].energy / 1000;
 					}else{
 						energyData1[i] = [i, null];
+					}
+				}
+
+				for (var i = 0; i < 24; i++) {
+					if(i < saChart2EnergyItems2.length){
+						energyData2[i] = [i, 1 * (saChart2EnergyItems2[i].energy / 1000).toFixed(2)];
+						totDayForeEnergy += saChart2EnergyItems2[i].energy / 1000;
+					}else{
 						energyData2[i] = [i, null];
 					}
 				}
+
 				if(debugMode){
 					console.log("saChart2 energyData1:", energyData1);
 					console.log("saChart2 energyData2:", energyData2);
@@ -1144,13 +1165,13 @@
 				if(totDayEnergy > 10000){
 					$("#dayEnergyValue").html("<span>" + numberComma((totDayEnergy / 1000).toFixed(2)) + "</span> <em>MWh</em>");
 				}else{
-					$("#dayEnergyValue").html("<span>" + numberComma(totDayEnergy) + "</span> <em>kWh</em>");
+					$("#dayEnergyValue").html("<span>" + numberComma(totDayEnergy.toFixed(2)) + "</span> <em>kWh</em>");
 				}
 
 				if(totDayForeEnergy > 10000){
 					$("#dayEnergyForeValue").html("<span>" + numberComma((totDayForeEnergy / 1000).toFixed(2)) + "</span> <em>MWh</em>");
 				}else{
-					$("#dayEnergyForeValue").html("<span>" + numberComma(totDayForeEnergy) + "</span> <em>kWh</em>");
+					$("#dayEnergyForeValue").html("<span>" + numberComma(totDayForeEnergy.toFixed(2)) + "</span> <em>kWh</em>");
 				}
 			}
 
@@ -1286,7 +1307,7 @@
 									<div class="alarm_stat clear">
 										<div class="a_alert clear">
 											<span>금일 발생 오류</span>
-											<em>5</em>
+											<em>0</em>
 										</div>
 										<div class="a_warning clear">
 											<a href="#" class="btn cancel_btn">상세보기</a>
@@ -1294,26 +1315,28 @@
 									</div>
 									<div class="alarm_notice">
 										<ul>
+											<%--
 											<li>
-												<a href="javascript:list_detail_open('list3');">동국제강 - 인버터21 발전 정지</a>
+												<a href="javascript:list_detail_open('list3');">혜원솔라01 - 인버터1 발전 정지</a>
 												<span>2018-08-12 11:41:26</span>
 											</li>
 											<li>
-												<a href="#;">동국제강 - 인버터21 발전 정지</a>
+												<a href="#;">혜원솔라01 - 인버터1 발전 정지</a>
 												<span>2018-08-12 11:41:26</span>
 											</li>
 											<li>
-												<a href="#;">동국제강 - 인버터21 발전 정지</a>
+												<a href="#;">혜원솔라01 - 인버터1 발전 정지</a>
 												<span>2018-08-12 11:41:26</span>
 											</li>
 											<li>
-												<a href="#;">동국제강 - 인버터21 발전 정지</a>
+												<a href="#;">혜원솔라01 - 인버터1 발전 정지</a>
 												<span>2018-08-12 11:41:26</span>
 											</li>
 											<li>
-												<a href="#;">동국제강 - 인버터21 발전 정지</a>
+												<a href="#;">혜원솔라01 - 인버터1 발전 정지</a>
 												<span>2018-08-12 11:41:26</span>
 											</li>
+											--%>
 										</ul>
 									</div>
 								</div>
@@ -1339,11 +1362,11 @@
 									<ul class="type_list">
 										<li>
 											<div class="chart_top clear">
-												<h2 class="ntit">인버터(42)</h2>
+												<h2 class="ntit">인버터(1)</h2>
 												<div class="alert_icon fr">
-													<span class="inv_normail">정상(39)</span>
-													<span class="inv_error">이상(1)</span>
-													<span class="inv_alert">경고(2)</span>
+													<span class="inv_normail">정상(1)</span>
+													<span class="inv_error">이상(0)</span>
+													<span class="inv_alert">경고(0)</span>
 												</div>
 											</div>
 											<div class="type_list_detail">
@@ -1358,17 +1381,17 @@
 														<thead>
 															<tr>
 																<th>순시 DC 입력</th>
-																<th>금일 입력량</th>
 																<th>순시 AC 출력</th>
-																<th>누적 출력량</th>
+																<th>효율</th>
+																<th>금일 누적발전</th>
 															</tr>
 														</thead>
 														<tbody>
 															<tr>
-																<td><span>85</span>kWh</td>
-																<td><span>85</span>kWh</td>
-																<td><span>85</span>kWh</td>
-																<td><span>85</span>kWh</td>
+																<td><span> 4.2 </span>kW</td>
+																<td><span> 41.1 </span>kW</td>
+																<td><span> - </span>%</td>
+																<td><span> - </span>kW</td>
 															</tr>
 														</tbody>
 													</table>
@@ -1398,11 +1421,12 @@
 																<tr class="flag1">
 																	<td>정상</td>
 																	<td>인버터#1</td>
-																	<td>5kWh</td>
-																	<td>5kWh</td>
-																	<td>99%</td>
-																	<td>152kWh</td>
+																	<td>4.2 kW</td>
+																	<td>41.1 kW</td>
+																	<td>- %</td>
+																	<td>- kW</td>
 																</tr>
+																<%--
 																<tr class="flag2">
 																	<td>경고</td>
 																	<td>인버터#2</td>
@@ -1475,6 +1499,7 @@
 																	<td>99%</td>
 																	<td>152kWh</td>
 																</tr>
+																--%>
 															</tbody>
 														</table>
 													</div>
@@ -1483,11 +1508,11 @@
 										</li>
 										<li>
 											<div class="chart_top clear">
-												<h2 class="ntit">접속반(112)</h2>
+												<h2 class="ntit">접속반(0)</h2>
 												<div class="alert_icon fr">
-													<span class="inv_normail">정상(89)</span>
-													<span class="inv_error">이상(11)</span>
-													<span class="inv_alert">경고(12)</span>
+													<span class="inv_normail">정상(0)</span>
+													<span class="inv_error">이상(0)</span>
+													<span class="inv_alert">경고(0)</span>
 												</div>
 											</div>
 											<div class="type_list_detail">
@@ -1502,9 +1527,9 @@
 														</thead>
 														<tbody>
 															<tr>
-																<td><span>85</span>kV</td>
-																<td><span>85</span>kA</td>
-																<td><span>85</span>kW</td>
+																<td><span> - </span>kV</td>
+																<td><span> - </span>kA</td>
+																<td><span> - </span>kW</td>
 															</tr>
 														</tbody>
 													</table>
@@ -1513,9 +1538,9 @@
 										</li>
 										<li>
 											<div class="chart_top clear">
-												<h2 class="ntit">계량기(3)</h2>
+												<h2 class="ntit">계량기(0)</h2>
 												<div class="alert_icon fr">
-													<span class="inv_normail">정상(3)</span>
+													<span class="inv_normail">정상(0)</span>
 												</div>
 											</div>
 											<div class="type_list_detail">
@@ -1531,10 +1556,10 @@
 														</thead>
 														<tbody>
 															<tr>
-																<td><span>85</span>kW</td>
-																<td><span>85</span>kWh</td>
-																<td><span>85</span>kW</td>
-																<td><span>85</span>kWh</td>
+																<td><span> - </span>kW</td>
+																<td><span> - </span>kWh</td>
+																<td><span> - </span>kW</td>
+																<td><span> - </span>kWh</td>
 															</tr>
 														</tbody>
 													</table>
@@ -1543,9 +1568,9 @@
 										</li>
 										<li>
 											<div class="chart_top clear">
-												<h2 class="ntit">환경센서(3)</h2>
+												<h2 class="ntit">환경센서(1)</h2>
 												<div class="alert_icon fr">
-													<span class="inv_normail">정상(2)</span>
+													<span class="inv_normail">정상(1)</span>
 												</div>
 											</div>
 											<div class="type_list_detail">
@@ -1565,9 +1590,9 @@
 														</thead>
 														<tbody>
 															<tr>
-																<td><span>15.4</span>℃</td>
-																<td><span>10.1</span>km/h</td>
-																<td><span>45</span>kWh/㎡․day</td>
+																<td><span>16.0</span>℃</td>
+																<td><span>3.5</span>km/h</td>
+																<td><span>-</span>kWh/㎡․day</td>
 															</tr>
 														</tbody>
 													</table>
@@ -1588,9 +1613,9 @@
 														</thead>
 														<tbody>
 															<tr>
-																<td><span>0</span>mm</td>
-																<td><span>47</span>%</td>
-																<td><span>40</span>kWh/㎡․day</td>
+																<td><span>-</span>mm</td>
+																<td><span>10.0</span>%</td>
+																<td><span>-</span>kWh/㎡․day</td>
 															</tr>
 														</tbody>
 													</table>
