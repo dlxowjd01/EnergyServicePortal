@@ -301,8 +301,14 @@
 		const apiEnergySite = "/energy/sites";
 		const apiWeather = "/weather";
 		const apiForecastingSite = "/energy/forecasting/sites";
+		const apiStatusRawSite = "/status/raw/site";
+		const apiStatusRaw = "/status/raw";
 
 		const siteId = "0c7c90c6-9505-4f77-b42d-500c2879c689";
+
+		//let invDeviceIds = ["6d836437-6995-4cc9-8d29-2c6ff9d1c4b8"];
+		let invDeviceIds = "6d836437-6995-4cc9-8d29-2c6ff9d1c4b8";
+		// todo : device id 목록조회 추가필요
 
 		let nowMonth = "<c:out value="${nowMonth}"/>";
 		let nowWeek = "<c:out value="${nowWeek}"/>";
@@ -706,132 +712,128 @@
 										<div class="chart_info">
 											<div class="ci_left">
 												<div class="inchart">
-													<div id="pie_chart" style="height:200px;"></div>
+													<div id="pie_chart" style="height:200px; width:230px"></div>
 													<script language="JavaScript">
-													$(function () {
-														var pieChart = Highcharts.chart('pie_chart', {
-															chart: {
-																marginTop:0,
-																marginLeft:0,
-																marginRight:0,
-																backgroundColor: 'transparent',
-																plotBorderWidth: 0,
-																plotShadow: false
-															},
+													var pieChart = Highcharts.chart('pie_chart', {
+														chart: {
+															marginTop:0,
+															marginLeft:0,
+															marginRight:0,
+															backgroundColor: 'transparent',
+															plotBorderWidth: 0,
+															plotShadow: false
+														},
 
-															navigation: {
-																buttonOptions: {
-																	enabled: false /* 메뉴 안보이기 */
-																}
-															},
-
-															title: {
-														        text: '- Wh', // 총용량 표기
-														        align: 'center',
-														        verticalAlign: 'middle',
-														        y:10,
-														        x:-20,
-														        style: {
-														            fontSize: '14px',
-														            color: 'var(--color3)'
-														        }
-															},
-
-															subtitle: {
-																text: ''
-															},
-
-
-															/* 출처 */
-															credits: {
-																enabled: false
-															},
-
-															tooltip: {
-																shared: true,
-																borderColor: 'none',
-																backgroundColor: 'var(--bg-color)',
-																padding: 16,
-																style: {
-																	color: 'var(--color3)'
-																},
-																valueSuffix: ' kwh',
-																pointFormat: '<b>{point.percentage:.0f}%</b>'
-															},
-
-															plotOptions: {
-																pie: {
-																	dataLabels: {
-																		enabled: false,
-																		style: {
-																			fontWeight: 'bold',
-																			color: 'var(--color3)'
-																		}
-																	},
-																	/*
-																	startAngle: -90,
-																	endAngle: 90,
-																	*/
-																	center: ['40%', '50%'],
-																	borderWidth: 0,
-																	size: '100%'
-																}
-															},
-
-															series: [{
-																type: 'pie',
-																innerSize: '50%',
-																name: '출력용량',
-																colorByPoint: true,
-																data: [{
-																	color: '#9363fd',
-																	name: '태양광',
-																	dataLabels: {
-														                enabled: false
-														            },
-																	y: 60 //60% -- 아래로 총합 100%
-																}, {
-																	color: '#84848f',
-																	name: '미사용량',
-																	dataLabels: {
-														                enabled: false
-														            },
-																	y: 20 //20% 나머지
-																}]
-															}],
-
-															responsive: { // 반응형
-																rules: [{
-														            condition: {
-														                minWidth: 305
-														            },
-														            chartOptions: {
-														            	title: {
-																	        x:-30,
-																	        style: {
-																	            fontSize: '16px',
-																	        }
-																		}
-																	}
-																},{
-														            condition: {
-														                maxWidth: 481
-														            },
-														            chartOptions: {
-														            	title: {
-																	        x:0
-																		},
-																		plotOptions: {
-																			pie: {
-																				center: ['50%', '50%']
-																			}
-																		}
-																	}
-																}]
+														navigation: {
+															buttonOptions: {
+																enabled: false /* 메뉴 안보이기 */
 															}
+														},
+
+														title: {
+													        text: '- Wh', // 총용량 표기
+													        align: 'center',
+													        verticalAlign: 'middle',
+													        y:10,
+													        x:-20,
+													        style: {
+													            fontSize: '14px',
+													            color: 'var(--color3)'
+													        }
+														},
+
+														subtitle: {
+															text: ''
+														},
 
 
-														});
+														/* 출처 */
+														credits: {
+															enabled: false
+														},
+
+														tooltip: {
+															shared: true,
+															borderColor: 'none',
+															backgroundColor: 'var(--bg-color)',
+															padding: 16,
+															style: {
+																color: 'var(--color3)'
+															},
+															valueSuffix: ' kwh',
+															pointFormat: '<b>{point.percentage:.0f}%</b>'
+														},
+
+														plotOptions: {
+															pie: {
+																dataLabels: {
+																	enabled: false,
+																	style: {
+																		fontWeight: 'bold',
+																		color: 'var(--color3)'
+																	}
+																},
+																/*
+																startAngle: -90,
+																endAngle: 90,
+																*/
+																center: ['40%', '50%'],
+																borderWidth: 0,
+																size: '100%'
+															}
+														},
+
+														series: [{
+															type: 'pie',
+															innerSize: '50%',
+															name: '출력용량',
+															colorByPoint: true,
+															data: [{
+																color: '#9363fd',
+																name: '태양광',
+																dataLabels: {
+													                enabled: false
+													            },
+																y: 60 //60% -- 아래로 총합 100%
+															}, {
+																color: '#84848f',
+																name: '미사용량',
+																dataLabels: {
+													                enabled: false
+													            },
+																y: 20 //20% 나머지
+															}]
+														}],
+
+														responsive: { // 반응형
+															rules: [{
+													            condition: {
+													                minWidth: 305
+													            },
+													            chartOptions: {
+													            	title: {
+																        x:-30,
+																        style: {
+																            fontSize: '16px',
+																        }
+																	}
+																}
+															},{
+													            condition: {
+													                maxWidth: 481
+													            },
+													            chartOptions: {
+													            	title: {
+																        x:0
+																	},
+																	plotOptions: {
+																		pie: {
+																			center: ['50%', '50%']
+																		}
+																	}
+																}
+															}]
+														}
 													});
 													</script>
 												</div>
@@ -843,9 +845,9 @@
 													<span class="bu4">미 사용량</span>
 												</div>
 												<ul>
-													<li><strong>총 설비용량</strong> <span>97.28</span><em>kW</em></li>
-													<li><strong>실시간 DC입력</strong> <span>4.2</span><em>kW</em></li>
-													<li><strong>실시간 AC출력</strong> <span>41.1</span><em>kW</em></li>
+													<li><strong>총 설비용량</strong> <span id="siteCapacity">-</span><em>kW</em></li>
+													<li><strong>실시간 DC입력</strong> <span id="siteDcPower">-</span><em>kW</em></li>
+													<li><strong>실시간 AC출력</strong> <span id="siteAcPower">-</span><em>kW</em></li>
 												</ul>
 											</div>
 										</div>
@@ -862,7 +864,7 @@
 											</thead>
 											<tbody>
 												<tr>
-													<td><span>97.28</span> kW</td>
+													<td><span id="sitePv">-</span> kW</td>
 													<td id="dayEnergyValue"></td>
 													<td id="dayEnergyForeValue"></td>
 													<td><span>- </span>￦</td>
@@ -870,6 +872,52 @@
 											</tbody>
 										</table>
 									</div>
+
+									<script type="text/javascript">
+										//당일 에너지 데이터 - polling 사용
+										let statusSiteUrl = apiURL + apiStatusRawSite;
+										let statusSiteData = {
+											sid : siteId,
+										};
+
+										(function statusSitePoll() {
+											$.ajax({
+												url : statusSiteUrl,
+												type : "get",
+												async : false,
+												data : statusSiteData,
+												success: function(result) {
+													var item = result;
+													if(debugMode){ console.log("statusSite:", item); }
+
+													setStatusSiteDataData(item);
+												},
+									            dataType: "json",
+									            complete: setTimeout(function() {statusSitePoll()}, pollingTerm),
+									            timeout: pollingTimeout
+									        })
+										})();
+
+										function setStatusSiteDataData(item){
+
+											var itemCapacity = item.capacity / 1000;
+											var itemDcPower = item.dcPower / 1000;
+											var itemAcPower = item.acPower / 1000;
+
+											$("#siteCapacity").text(  itemCapacity ? itemCapacity.toFixed(1)  : "-" );
+											$("#siteDcPower").text(  itemDcPower ? itemDcPower.toFixed(1)  : "-" );
+											$("#siteAcPower").text(  itemAcPower ? itemAcPower.toFixed(1)  : "-" );
+
+											$("#sitePv").text(  itemCapacity ? itemCapacity.toFixed(1)  : "-" );
+
+											var pie1Data = Math.round(item.efficiency ? item.efficiency : 0 );
+											var pie2Data = 100 - pie1Data;
+
+											pieChart.series[0].setData([pie1Data , pie2Data]);
+											pieChart.setTitle( {text: itemAcPower + "Wh"} );
+										}
+									</script>
+
 								</div>
 							</div>
 						</div>
@@ -1234,8 +1282,8 @@
 										</div>
 										<div class="fr wt_list_wrap">
 											<ul class="list_type">
-												<li><strong>풍향</strong> <span> - </span></li>
-												<li><strong>풍속</strong> <span id="weekWind"></span></li>
+												<li><strong>풍향</strong> <span id="weekWindvelocity">-</span> &deg;</li>
+												<li><strong>풍속</strong> <span id="weekWindspeed"></span></li>
 												<li><strong>습도</strong> <span id="weekHum"></span></li>
 												<li><strong>경사일사량</strong><span> - kWh/㎡․day</span></li>
 												<li><strong>수평일사량</strong><span> - kWh/㎡․day</span></li>
@@ -1287,7 +1335,8 @@
 													if(i+1 == nowWeek){
 														$("#weekTemp").text( (items[i].temperature).toFixed(1) + "℃");
 														$("#weekIcon").html("<i class='ico_weather " + weatherIconClass + "'></i>");
-														$("#weekWind").text( (items[i].windspeed).toFixed(1) + " km/h");
+														$("#weekWindspeed").text( (items[i].wind_speed).toFixed(1) + " km/h");
+														$("#weekWindvelocity").text( items[i].wind_velocity);
 														$("#weekHum").text( (items[i].humidity).toFixed(1) + " %");
 													}
 												}
@@ -1362,11 +1411,11 @@
 									<ul class="type_list">
 										<li>
 											<div class="chart_top clear">
-												<h2 class="ntit">인버터(1)</h2>
+												<h2 id="invCount" class="ntit">인버터(1)</h2>
 												<div class="alert_icon fr">
-													<span class="inv_normail">정상(1)</span>
-													<span class="inv_error">이상(0)</span>
-													<span class="inv_alert">경고(0)</span>
+													<span id="invNormal" class="inv_normail">정상(1)</span>
+													<span id="invError" class="inv_error">이상(0)</span>
+													<span id="invAlert" class="inv_alert">경고(0)</span>
 												</div>
 											</div>
 											<div class="type_list_detail">
@@ -1388,10 +1437,10 @@
 														</thead>
 														<tbody>
 															<tr>
-																<td><span> 4.2 </span>kW</td>
-																<td><span> 41.1 </span>kW</td>
-																<td><span> - </span>%</td>
-																<td><span> - </span>kW</td>
+																<td><span id="avgDcPower">-</span>kW</td>
+																<td><span id="avgAcPower">-</span>kW</td>
+																<td><span id="avgEfficiency">-</span>%</td>
+																<td><span id="avgGenPower">-</span>kW</td>
 															</tr>
 														</tbody>
 													</table>
@@ -1417,94 +1466,129 @@
 																	<th>금일 누적발전</th>
 																</tr>
 															</thead>
-															<tbody>
-																<tr class="flag1">
-																	<td>정상</td>
-																	<td>인버터#1</td>
-																	<td>4.2 kW</td>
-																	<td>41.1 kW</td>
-																	<td>- %</td>
-																	<td>- kW</td>
-																</tr>
-																<%--
-																<tr class="flag2">
-																	<td>경고</td>
-																	<td>인버터#2</td>
-																	<td>5kWh</td>
-																	<td>5kWh</td>
-																	<td>99%</td>
-																	<td>152kWh</td>
-																</tr>
-																<tr class="flag3">
-																	<td>이상</td>
-																	<td>인버터#1</td>
-																	<td>5kWh</td>
-																	<td>5kWh</td>
-																	<td>99%</td>
-																	<td>152kWh</td>
-																</tr>
-																<tr class="flag3">
-																	<td>이상</td>
-																	<td>인버터#1</td>
-																	<td>5kWh</td>
-																	<td>5kWh</td>
-																	<td>99%</td>
-																	<td>152kWh</td>
-																</tr>
-																<tr class="flag3">
-																	<td>이상</td>
-																	<td>인버터#1</td>
-																	<td>5kWh</td>
-																	<td>5kWh</td>
-																	<td>99%</td>
-																	<td>152kWh</td>
-																</tr>
-																<tr class="flag3">
-																	<td>이상</td>
-																	<td>인버터#1</td>
-																	<td>5kWh</td>
-																	<td>5kWh</td>
-																	<td>99%</td>
-																	<td>152kWh</td>
-																</tr>
-																<tr class="flag3">
-																	<td>이상</td>
-																	<td>인버터#1</td>
-																	<td>5kWh</td>
-																	<td>5kWh</td>
-																	<td>99%</td>
-																	<td>152kWh</td>
-																</tr>
-																<tr class="flag3">
-																	<td>이상</td>
-																	<td>인버터#1</td>
-																	<td>5kWh</td>
-																	<td>5kWh</td>
-																	<td>99%</td>
-																	<td>152kWh</td>
-																</tr>
-																<tr class="flag3">
-																	<td>이상</td>
-																	<td>인버터#1</td>
-																	<td>5kWh</td>
-																	<td>5kWh</td>
-																	<td>99%</td>
-																	<td>152kWh</td>
-																</tr>
-																<tr class="flag3">
-																	<td>이상</td>
-																	<td>인버터#1</td>
-																	<td>5kWh</td>
-																	<td>5kWh</td>
-																	<td>99%</td>
-																	<td>152kWh</td>
-																</tr>
-																--%>
+															<tbody id="invDevices">
 															</tbody>
 														</table>
 													</div>
 												</div>
 											</div>
+
+											<script type="text/javascript">
+											let invDeviceUrl = apiURL + apiStatusRaw;
+											let invDeviceData = {
+												device_type : "inv_pv",
+												device_ids : invDeviceIds
+											};
+
+											(function invDevicePoll() {
+												$.ajax({
+													url : invDeviceUrl,
+													type : "get",
+													async : false,
+													data : invDeviceData,
+													success: function(result) {
+														var items = result;
+														if(debugMode){ console.log("invDevice:", items); }
+
+														setInvDeviceData(items);
+													},
+										            dataType: "json",
+										            complete: setTimeout(function() {invDevicePoll()}, pollingTerm),
+										            timeout: pollingTimeout
+										        })
+											})();
+
+											function setInvDeviceData(items){
+
+												var countDevice = items.length;
+												var countStatus1 = 0;
+												var countStatus2 = 0;
+												var countStatus3 = 0;
+												var totDcPower = 0;
+												var totAcPower = 0;
+												var totEfficiency = 0;
+												var totGenPower = 0;
+
+												var rowHtml = "";
+												if(items.length > 0){
+													for (var i = 0; i < items.length; i++) {
+														console.log(items[i]);
+														//flag1 정상, flag2 경고, flag3 이상
+														//<th>상태</th>
+														//<th>설비명</th>
+														//<th>DC입력</th>
+														//<th>AC출력</th>
+														//<th>효율</th>
+														//<th>금일 누적발전</th>totalGenPower
+
+														var statusTxt = "-";
+														var statusClass = "";
+														if(items[i].operation == 1){
+															statusTxt = "정상";
+															statusClass = "flag1";
+
+															countStatus1++;
+														}else if(items[i].operation == 2){
+															statusTxt = "경고";
+															statusClass = "flag2";
+
+															countStatus2++;
+														}else if(items[i].operation == 3){
+															statusTxt = "이상";
+															statusClass = "flag3";
+
+															countStatus3++;
+														}
+
+														var itemDname = items[i].dname;
+														var itemDcPower = items[i].dcPower / 1000;
+														var itemAcPower = items[i].acPower / 1000;
+														var itemEfficiency = items[i].efficiency / 1000;
+														var itemTotalGenPower = items[i].totalGenPower / 1000;
+
+														rowHtml += ""
+															+"<tr class='flag1'>"
+															+"	<td>" + statusTxt + "</td>"
+															+"	<td>" + itemDname + "</td>"
+															+"	<td>" + (itemDcPower ? itemDcPower.toFixed(1) : "-") + " kW</td>"
+															+"	<td>" + (itemAcPower ? itemAcPower.toFixed(1) : "-") + " kW</td>"
+															+"	<td>" + (itemEfficiency ? itemEfficiency.toFixed(1) : "-") + " %</td>"
+															+"	<td>" + (itemTotalGenPower ? itemTotalGenPower.toFixed(1) : "-") + "  kW</td>"
+															+"</tr>";
+
+														totDcPower += items[i].dcPower;
+														totAcPower += items[i].acPower;
+														totEfficiency += items[i].efficiency;
+														totGenPower += items[i].totalGenPower;
+													}
+												}
+
+												$("#invCount").text("인버터(" + countDevice + ")");
+												$("#invNormal").text("정상(" + countStatus1 + ")");
+												$("#invError").text("이상(" + countStatus2 + ")");
+												$("#invAlert").text("경고(" + countStatus3 + ")");
+
+												console.log(totDcPower);
+												console.log(totAcPower);
+												console.log(totEfficiency);
+												console.log(totGenPower);
+
+												if(countDevice > 0){
+													totDcPower = totDcPower / 1000;
+													totAcPower = totAcPower / 1000;
+													var avgEfficiency = totEfficiency / countDevice / 1000;
+													totGenPower = totGenPower / 1000;
+
+													$("#avgDcPower").text(  totDcPower ? totDcPower.toFixed(1)  : "-" );
+													$("#avgAcPower").text( totAcPower ? totAcPower.toFixed(1) : "-");
+													$("#avgEfficiency").text( avgEfficiency ? avgEfficiency.toFixed(1) : "-");
+													$("#avgGenPower").text( totGenPower ? totGenPower.toFixed(1) : "-");
+												}
+
+												$("#invDevices").html(rowHtml);
+											}
+											</script>
+
 										</li>
 										<li>
 											<div class="chart_top clear">

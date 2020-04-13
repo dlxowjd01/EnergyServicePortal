@@ -2030,7 +2030,6 @@
               interval: "month"
             },
             success: function (result) {
-              console.log("월간 차트", chargeChart1);
               result.data[0].battery.charging.items.map((e) => {
                 if (e.energy) {
                   const month = Number(e.basetime.toString().slice(4, 6));
@@ -2053,7 +2052,6 @@
                     pvList[month - 1] = Math.floor((pvList[month - 1]+e.energy)/1000000);
                     //MWh로 그래프 단위 변경
                     chargeChart1.series[2].userOptions.tooltip.valueSuffix = "MWh"
-                    console.log("변경 후", chargeChart1)
                   }else{
                     pvList[month - 1] += e.energy;
                   }
@@ -2178,7 +2176,6 @@
             interval: "day"
           },
           success: function (result) {
-            console.log("일간", result);
             result.data[0].battery.charging.items.map((e) => {
               if (e.energy) {
                 const day = Number(e.basetime.toString().slice(6, 8));
@@ -2200,8 +2197,7 @@
                 }else if((pvList[day - 1] + e.energy)/1000000){
                   pvList[day - 1] = Math.floor((pvList[day - 1]+e.energy)/1000000);
                   //MWh로 그래프 단위 변경
-                  chargeChart1.series[2].userOptions.tooltip.valueSuffix = "MWh"
-                  console.log("변경 후", chargeChart1)
+                  chargeChart1.series[2].userOptions.tooltip.valueSuffix = "MWh";
                 }else{
                   pvList[day - 1] += e.energy;
                 }
@@ -2238,7 +2234,6 @@
   }
   
   function drawData_month_gen() {
-    console.log(pvList);
     var $charge = $(".gmain_chart2");
     if (chargeList.length < 1 && chargeList.length < 1 && dischargeList.length < 1 && dischargeList.length < 1) {
       $charge.find(".no-data").css("display", "");
@@ -2356,7 +2351,6 @@
               }else if(generationForecastSum>=1000000){
                 generationForecastSum = (generationForecastSum/1000000);
               }
-              console.log(chargeChart1.series);
               tbodyStr += `<td>${'${Math.floor(generationForecastSum)}'}</td></tr>`;
             },
             error: function(result, status, error) {
@@ -2500,7 +2494,6 @@
         $('#centerTbody tr td:nth-child(1)').text(Math.floor(result.length));
         let acPowerSum = 0;
         result.forEach((site, siteIdx) => {
-          console.log("사이트", site);
           $.ajax({
             url: "http://iderms.enertalk.com:8443/energy/sites",
             type: "get",
@@ -2514,7 +2507,6 @@
             success: function (result) {//api 요청결과
               let generationSum = 0;
               let billingSum = 0;
-              console.log("사이트 별 일간 데이터", result);
               result.data[0].generation.items.map((e) => {generationSum += e.energy;});
               result.data[0].generation.items.map((e) => billingSum += e.billing);
               
@@ -2531,7 +2523,7 @@
               $('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(Math.floor(prevVal += (generationSum/1000)));
               let prevBillVal = Number($('#centerTbody tr td:nth-child(5)').text());
               $('#centerTbody tr td:nth-child(5)').text(Math.floor(prevBillVal += billingSum));
-              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(8)`).text(Math.floor(generationSum/1000)+'kW');
+              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(8)`).text(Math.floor(generationSum/1000)+'kWh');
               $(`.detail_info.list${'${siteIdx+1}'} li.clear:nth-child(3) span.fl:nth-child(2) em`).text(Math.floor(generationSum/1000));
             },
             error: function (result, status, error) {
@@ -2555,7 +2547,7 @@
               result.data[0].generation.items.map((e, idx) => generationForecastSum += e.energy);
               let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text());
               $('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(Math.floor(prevVal += generationForecastSum/1000));
-              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(9)`).text(Math.floor(generationForecastSum/1000)+'kW');
+              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(9)`).text(Math.floor(generationForecastSum/1000)+'kWh');
               $(`.detail_info.list${'${siteIdx+1}'} li.clear:nth-child(4) span.fl:nth-child(2) em`).text(Math.floor(generationForecastSum/1000));
             },
             error: function (result, status, error) {
@@ -2577,10 +2569,8 @@
             },
             success: function (result) {//api 요청결과
               acPowerSum += result.acPower;
-              console.log("현재 출력 합", acPowerSum);
-              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(7)`).text(Math.floor(result.acPower/1000)+'kW');
+              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(7)`).text(Math.floor(result.acPower/1000)+'kWh');
               $('.highcharts-title > tspan').text(Math.floor(acPowerSum/1000)+'kW');
-              console.log("파이차트", pieChart);
               pieChart.series[0].data.forEach((e, idx) => {
                 if (e.name === "태양광") {
                   e.update({y: Math.floor(acPowerSum/1000)});
