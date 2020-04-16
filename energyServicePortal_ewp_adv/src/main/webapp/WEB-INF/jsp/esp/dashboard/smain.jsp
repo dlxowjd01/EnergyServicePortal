@@ -303,11 +303,13 @@
 		const apiForecastingSite = "/energy/forecasting/sites";
 		const apiStatusRawSite = "/status/raw/site";
 		const apiStatusRaw = "/status/raw";
+		const apiConfigDevice = '/config/orgs/' + 'spower';
 
-		const siteId = "0c7c90c6-9505-4f77-b42d-500c2879c689";
+		const siteId = '${sid}';
 
 		//let invDeviceIds = ["6d836437-6995-4cc9-8d29-2c6ff9d1c4b8"];
-		let invDeviceIds = "6d836437-6995-4cc9-8d29-2c6ff9d1c4b8";
+// 		let invDeviceIds = "6d836437-6995-4cc9-8d29-2c6ff9d1c4b8";
+		let invDeviceIds = new Array();
 		// todo : device id 목록조회 추가필요
 
 		let nowMonth = "<c:out value="${nowMonth}"/>";
@@ -329,9 +331,36 @@
 			interval : "month"
 		};
 
+		const configDeviceData = {
+			includeUsers: false,
+			includSites: false,
+			includeDevices: true,
+			includeBtus: false
+		};
+		
 		let chargeChartItems1;
 		let chargeChartItems2;
 
+		(function setDids() {
+			$.ajax({
+                url : apiURL + apiConfigDevice,
+                type : "get",
+                async : false,
+                data : configDeviceData,
+                success: function(result) {
+                	var data = result.devices;
+                	if(data != null) {
+	                    for(var i in data) {
+	                    	if(data[i].sid == siteId) {
+	                    		invDeviceIds.push(data[i].did);
+	                    	}
+	                    }
+                	}
+                },
+                dataType: "json"
+            });
+		})();
+		
 		function chargeChartPoll() {
 			$.ajax({
 				url : chargeChartUrl,
@@ -343,10 +372,10 @@
 					chargeChartItems1 = data.generation.items;
 					if(debugMode){ console.log("chargeChart:", chargeChartItems1); }
 				},
-	            dataType: "json",
-	            complete: function() { chargeChartBeofrePoll(); },
-	            timeout: pollingTimeout
-	        })
+			    dataType: "json",
+                complete: function() { chargeChartBeofrePoll(); },
+                timeout: pollingTimeout
+			});
 		}
 
 		function chargeChartBeofrePoll() {
@@ -880,6 +909,7 @@
 											sid : siteId,
 										};
 
+										
 										(function statusSitePoll() {
 											$.ajax({
 												url : statusSiteUrl,
@@ -1475,28 +1505,28 @@
 
 											<script type="text/javascript">
 											let invDeviceUrl = apiURL + apiStatusRaw;
-											let invDeviceData = {
-												device_type : "inv_pv",
-												device_ids : invDeviceIds
-											};
+                                            let invDeviceData = {
+                                                device_type : "inv_pv",
+                                                device_ids : invDeviceIds.toString()
+                                            };
 
-											(function invDevicePoll() {
-												$.ajax({
-													url : invDeviceUrl,
-													type : "get",
-													async : false,
-													data : invDeviceData,
-													success: function(result) {
-														var items = result;
-														if(debugMode){ console.log("invDevice:", items); }
+                                            (function invDevicePoll() {
+                                                $.ajax({
+                                                    url : invDeviceUrl,
+                                                    type : "get",
+                                                    async : false,
+                                                    data : invDeviceData,
+                                                    success: function(result) {
+                                                        var items = result;
+                                                        if(debugMode){ console.log("invDevice:", items); }
 
-														setInvDeviceData(items);
-													},
-										            dataType: "json",
-										            complete: setTimeout(function() {invDevicePoll()}, pollingTerm),
-										            timeout: pollingTimeout
-										        })
-											})();
+                                                        setInvDeviceData(items);
+                                                    },
+                                                    dataType: "json",
+                                                    complete: setTimeout(function() {invDevicePoll()}, pollingTerm),
+                                                    timeout: pollingTimeout
+                                                })
+                                            })();
 
 											function setInvDeviceData(items){
 

@@ -92,6 +92,7 @@ public class DashboardController {
 		System.out.println("/dashboard/smain.do");
 		String linkSiteName = request.getParameter("linkSiteName");
 		model.addAttribute("siteName", linkSiteName);
+		model.addAttribute("sid", request.getParameter("sid")); //siteId 설
 
 		// range
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");

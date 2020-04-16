@@ -200,16 +200,18 @@
     });
   }
   
-  function linkSiteDashboard(t) {
+  function linkSiteDashboard(sid) {
     var url = "", str = "";
-    if (t == 1) {
+    if (sid == '0c7c90c6-9505-4f77-b42d-500c2879c689') {
       str = "혜원 솔라 1호기";
       url = '/dashboard/smain.do';
     }
-    if (t == 2) {
+    if (sid == 'fa313b15-1fe1-41e3-b592-5a739e3d9b37') {
       str = "혜원 솔라 2호기";
       url = '/dashboard/smain.do';
     }
+
+    $('#sid').val(sid);
     $("#linkSiteName").val(str);
     document.linkSiteForm.action = url;
     $("#linkSiteForm").submit();
@@ -217,6 +219,7 @@
 </script>
 <form id="linkSiteForm" name="linkSiteForm" method="post">
   <input type="hidden" id="linkSiteName" name="linkSiteName" value="">
+  <input type="hidden" id="sid" name="sid" value="">
 </form>
 <div class="row">
   <div class="time">
@@ -2469,6 +2472,7 @@
               $('#centerTbody tr td:nth-child(5)').text(Math.floor(prevBillVal += billingSum));
               $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(8)`).text(Math.floor(generationSum/1000)+'kWh');
               $(`.detail_info.list${'${siteIdx+1}'} li.clear:nth-child(3) span.fl:nth-child(2) em`).text(Math.floor(generationSum/1000));
+              $(`.detail_info.list${'${siteIdx+1}'} div.link>a.btn_cancel`).attr('href', 'javascript:linkSiteDashboard("'+result.data[0].sid+'")');
             },
             error: function (result, status, error) {
               //error function or alert, return
