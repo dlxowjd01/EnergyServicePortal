@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
+<%@ include file="/decorators/include/dashboardSchForm.jsp" %>
 <!-- 메인페이지용 스타일/스크립트 파일 -->
 <script type="text/javascript" src="/js/modules/rounded-corners.js"></script>
 <script type="text/javascript" src="/js/jquery.rwdImageMaps.min.js"></script>
@@ -222,7 +223,7 @@
     <span>CURRENT TIME</span>
     <em class="currTime">${nowTime}</em>
     <span>DATA BASE TIME</span>
-    <em>2018-07-27 17:01:02</em>
+    <em class="dbTime">2018-07-27 17:01:02</em>
   </div>
 </div>
 <div class="row">
@@ -398,7 +399,6 @@
                   name: '충전',
                   type: 'column',
                   color: '#2BEEE9',
-                  data: [-10, -10, -50, -40, -90, -40, -70, -60, -30, -20, -40, -30],
                   tooltip: {
                     valueSuffix: 'kWh'
                   }
@@ -407,7 +407,6 @@
                   name: '방전',
                   type: 'column',
                   color: '#878787',
-                  data: [50, 50, 60, 30, 50, 60, 30, 50, 90, 60, 60, 50],
                   tooltip: {
                     valueSuffix: 'kWh'
                   }
@@ -416,7 +415,6 @@
                   name: '태양광',
                   type: 'column',
                   color: '#9363FD',
-                  data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80],
                   tooltip: {
                     valueSuffix: 'kWh'
                   }
@@ -427,7 +425,6 @@
                   color: 'var(--color3)',
                   dashStyle: 'ShortDash',
                   yAxis: 1,
-                  data: [100, 110, 120, 130, 150, 180, 160, 130, 90, 110, 160, 120],
                   tooltip: {
                     valueSuffix: '만원'
                   }
@@ -676,7 +673,6 @@
                   name: '충전',
                   type: 'column',
                   color: '#2BEEE9',
-                  data: [-10, -10, -50, -40, -90, -40, -70, -60, -30, -20, -40, -30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                   tooltip: {
                     valueSuffix: 'kWh'
                   }
@@ -685,7 +681,6 @@
                   name: '방전',
                   type: 'column',
                   color: '#878787',
-                  data: [50, 50, 60, 30, 50, 60, 30, 50, 90, 60, 60, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                   tooltip: {
                     valueSuffix: 'kWh'
                   }
@@ -694,7 +689,6 @@
                   name: '태양광',
                   type: 'column',
                   color: '#9363FD',
-                  data: [50, 10, 30, 70, 20, 20, 50, 20, 50, 80, 70, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                   tooltip: {
                     valueSuffix: 'kWh'
                   }
@@ -705,7 +699,6 @@
                   color: 'var(--color3)',
                   dashStyle: 'ShortDash',
                   yAxis: 1,
-                  data: [10, 50, 70, 30, 50, 20, 90, 70, 90, 60, 60, 20, , , , , , , , , , , , , , , , , ,],
                   tooltip: {
                     valueSuffix: '만원'
                   }
@@ -1526,7 +1519,7 @@
                     <th><a href="">경고</a></th>
                     <th style="text-align:left;"><a href="" class="sort_icon desc">사업소</a></th> <!-- asc [올림차순] -->
                     <th><a href="">설비용량</a></th>
-                    <th><a href="">현재발전량</a></th>
+                    <th><a href="">현재 출력</a></th>
                     <th><a href="">누적발전량</a></th>
                     <th><a href="">예측발전량</a></th>
                   </tr>
@@ -1922,67 +1915,12 @@
     </div>
   </div>
 </div>
-<form id="schForm" name="schForm">
-  <input type="hidden" id="selTermFrom" name="selTermFrom"/>
-  <input type="hidden" id="selTermTo" name="selTermTo"/>
-  <input type="hidden" id="selTerm" name="selTerm" value="day"/>
-  <input type="hidden" id="selType" name="selType" value="group"/>
-  <input type="hidden" id="timeOffset" name="timeOffset"/>
-  <input type="hidden" id="siteId" name="siteId"/>
-  <input type="hidden" id="renewTypeCode" name="essTypeCode"/>
-  <input type="hidden" id="period" name="period"/>
-  <input type="hidden" id="areaType" name="areaType" value=""/>
-  <input type="hidden" id="rankType" name="rankType" value="3"/>
-  <input type="hidden" id="mapGroup" name="mapGroup" value="map"/>
-  <input type="hidden" id="grpIdx" name="grpIdx" value=""/>
-</form>
 <script type="text/javascript">
   const formData = null;
   
-  $(document).ready(function () {
+  $(function () {
     fn_cycle_15min();
   });
-  
-  function getSiteMainSchCollection() { //api에 맞게 수정필요
-    //	$("#timeOffset").val( (new Date()).getTimezoneOffset() );
-    $("#timeOffset").val(timeOffset);
-    
-    // 기간 필터
-    var today = new Date();
-    var startDay;
-    var selTerm = $('#selTerm').val();
-    if (selTerm == 'day') {
-      // 오늘 날짜에 시간 정보만 000000
-      startDay = today.format("yyyyMMdd") + "000000";
-    } else if (selTerm == 'week') {
-      var dt = findWeak(today);
-      startDay = dt.format("yyyyMMdd") + "000000";
-      //		startDay.setDate(findWeak(today).getYear() , findWeak(today).getMonth(), findWeak(today).getDay()	 );
-      // 시간 정보 000000 한 다음에 findWeek에서 연월일 가져와서 설정
-    } else if (selTerm == 'month') {
-      // 이번달 1일 000000 부터
-      var dt = new Date(today.getFullYear(), today.getMonth(), 1, 0, 0, 0);
-      startDay = dt.format("yyyyMMddHHmmss");
-    }
-    
-    queryStart = startDay;
-    queryEnd = today.format("yyyyMMddHHmmss");
-    
-    $("#selTermFrom").val(queryStart);
-    $("#selTermTo").val(queryEnd);
-    
-    // 지역 필터
-// 		if(area_idx > -1) {
-// 			var areaType = (area_idx + 1).toString();
-// 			if (areaType.length == 1) {
-// 				areaType = '0' + areaType;
-// 			}
-// 			$('#areaType').val(areaType);
-// 		}
-    
-    const frm = $("#schForm").serializeObject();
-    return frm;
-  }
   
   function fn_cycle_15min() {
     getYearGenData();
@@ -1993,6 +1931,8 @@
     // getGenDataByType();
     getTodayTotalDetail();
     // getAlarmInfo();
+    const now = new Date();
+    $('.dbTime').text(`${'${now.format("yyyy-MM-dd HH:mm:ss")}'}`);
   }
   
   //올해 발전데이터, 정산금 데이터
@@ -2004,12 +1944,12 @@
   let payList;
 
   function getYearGenData(selTerm) {
-    const nowMonth = new Date().getMonth();
     chargeList = new Array(12).fill(0);
     dischargeList = new Array(12).fill(0);
     pvList = new Array(12).fill(0);
     payList = new Array(12).fill(0);
-    const formData = getSiteMainSchCollection();//api에 맞게 수정 필요
+    const formData = getSiteMainSchCollection("year");//api에 맞게 수정 필요
+    const today = new Date();
     $.ajax({
       url: "http://iderms.enertalk.com:8443/config/sites",
       type: "get",
@@ -2018,6 +1958,7 @@
         oid: "spower",
       },
       success: function (result) {
+        $(`.gmain_chart1 span.term`).text(`${'${today.getFullYear()}'}.1.1 ~ ${'${today.getFullYear()}'}.${'${today.getMonth()+1}'}.${'${today.getDate()}'}`);
         result.forEach(site => {
           $.ajax({
             url: "http://iderms.enertalk.com:8443/energy/sites",
@@ -2025,8 +1966,8 @@
             async: false,
             data: {
               sid: site.sid,
-              startTime: "20200101000000",
-              endTime: formData.selTermTo,
+              startTime: formData.startTime,
+              endTime: formData.endTime,
               interval: "month"
             },
             success: function (result) {
@@ -2154,8 +2095,8 @@
     dischargeList = new Array(30).fill(0);
     pvList = new Array(30).fill(0);
     payList = new Array(30).fill(0);
-
-    const formData = getSiteMainSchCollection();//api에 맞게 수정 필요
+    const formData = getSiteMainSchCollection("month");//api에 맞게 수정 필요
+    const today = new Date();
     $.ajax({
       url: "http://iderms.enertalk.com:8443/config/sites",
       type: "get",
@@ -2164,6 +2105,7 @@
         oid: "spower",
       },
       success: function (result) {
+        $(`.gmain_chart2 span.term`).text(`${'${today.getFullYear()}'}.${'${today.getMonth()}'}.1 ~ ${'${today.getFullYear()}'}.${'${today.getMonth()+1}'}.${'${today.getDate()}'}`);
         result.forEach(site=>{
         $.ajax({
           url: "http://iderms.enertalk.com:8443/energy/sites",
@@ -2171,8 +2113,8 @@
           async: false,
           data: {
             sid: site.sid,
-            startTime: "20200401000000",
-            endTime: formData.selTermTo,
+            startTime: formData.startTime,
+            endTime: formData.endTime,
             interval: "day"
           },
           success: function (result) {
@@ -2292,7 +2234,8 @@
   
   function getGenDataBySite() { //3번째 indiv 사업소별 탭
 
-    const formData = getSiteMainSchCollection();
+    const formData = getSiteMainSchCollection("day");
+    const today = new Date();
     const $tbody = $('#siteGenTbody');
     $tbody.empty();
     let tbodyStr = ``;
@@ -2305,6 +2248,7 @@
         oid: "spower",
       },
       success: function(result) {
+        $(`.gmain_chart3 span.term`).text(`${'${today.getFullYear()}'}.${'${today.getMonth()+1}'}.${'${today.getDate()-1}'}`);
         result.forEach(site=>{
           $.ajax({
             url: "http://iderms.enertalk.com:8443/energy/sites",
@@ -2312,8 +2256,8 @@
             async: false,
             data:{
               sid: site.sid,
-              startTime: "20200412000000",
-              endTime:"20200412999999",
+              startTime: formData.startTime,
+              endTime:formData.endTime,
               interval:"hour"
             },
             success: function(result) {//api 요청결과
@@ -2339,8 +2283,8 @@
             async: false,
             data:{
               sid: site.sid,
-              startTime: "20200412000000",
-              endTime:"20200412999999",
+              startTime: formData.startTime,
+              endTime:formData.endTime,
               interval:"hour"
             },
             success: function(result) {//api 요청결과
@@ -2481,7 +2425,7 @@
 
   function getTodayTotalDetail() {
 
-    var formData = getSiteMainSchCollection();
+    const formData = getSiteMainSchCollection("day");
   
     $.ajax({
       url: "http://iderms.enertalk.com:8443/config/sites",
@@ -2500,8 +2444,8 @@
             async: false,
             data: {
               sid: site.sid,
-              startTime: "20200413000000",
-              endTime: formData.selTermTo,
+              startTime: formData.startTime,
+              endTime: formData.endTime,
               interval: "15min"
             },
             success: function (result) {//api 요청결과
@@ -2538,8 +2482,8 @@
             async: false,
             data: {
               sid: site.sid,
-              startTime: "20200413000000",
-              endTime: formData.selTermTo,
+              startTime: formData.startTime,
+              endTime: formData.endTime,
               interval: "15min"
             },
             success: function (result) {//api 요청결과
@@ -2563,13 +2507,13 @@
             async: false,
             data: {
               sid: site.sid,
-              startTime: "20200413000000",
-              endTime: formData.selTermTo,
+              startTime: formData.startTime,
+              endTime: formData.endTime,
               interval: "hour"
             },
             success: function (result) {//api 요청결과
               acPowerSum += result.acPower;
-              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(7)`).text(Math.floor(result.acPower/1000)+'kWh');
+              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(7)`).text(Math.floor(result.acPower/1000)+'kW');
               $('.highcharts-title > tspan').text(Math.floor(acPowerSum/1000)+'kW');
               pieChart.series[0].data.forEach((e, idx) => {
                 if (e.name === "태양광") {
