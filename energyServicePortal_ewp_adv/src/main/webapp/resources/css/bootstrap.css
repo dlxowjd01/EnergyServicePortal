@@ -3498,7 +3498,7 @@ tbody.collapse.in {
   -webkit-transition-property: height, visibility;
        -o-transition-property: height, visibility;
           transition-property: height, visibility;
-}
+} 
 .caret {
   display: inline-block;
   width: 0;
@@ -3525,7 +3525,7 @@ tbody.collapse.in {
   display: none;
   float: left;
   min-width: 160px;
-  padding: 5px 0;
+  padding: 12px 0;
   margin: 2px 0 0;
   font-size: 14px;
   text-align: left;
