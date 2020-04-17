@@ -11,7 +11,6 @@
 	const apiURL = 'http://iderms.enertalk.com:8443';
 	const configSite = '/config/sites';
 	const configDevice = '/config/orgs/' + 'spower';
-	const statusRaw = '/status/raw/';
 	const forecasting = '​/energy​/forecasting​/sites';
 
 	const configSiteData = {
@@ -181,148 +180,137 @@
 
 	//선택한 SID에 해당하는 유형의 타입을 보여준다.
 	var deviceType = function () {
-		$('#type').prev('button').empty().append('전체').append('<span class="caret"></span>');
+		// 		$.ajax({
+		//						 url : apiURL + configDevice,
+		//						 type : 'get',
+		//						 async : false,
+		//						 data : configDeviceData,
+		//						 success: function(result) {
+		//								 var devicesList = result.devices;
+		//								 if(debugMode) {console.log(devicesList);}
 
-		if($(':checkbox[name="sid"]:checked').length > 0) {
-			$.ajax({
-				url : apiURL + configDevice,
-				type : 'get',
-				async : false,
-				data : configDeviceData,
-				success: function(result) {
-					devicesList = result.devices;
-					var deviceType = new Array();
-					var uniqueTypes = new Array();
-					if(debugMode) {console.log(devicesList);}
-	
-					$('#type').empty();
-	
-					if(devicesList.length > 0) {
-						$(':checkbox[name="sid"]:checked').each(function() {
-							for(var i in devicesList) {
-								if(devicesList[i].sid == $(this).val()) {
-									deviceType.push(devicesList[i].device_type);
-								}
-							}
-						})
-						//어레이에 중복제거 후 셀렉트 작성
-						$.each(deviceType, function(i, el) {
-							if($.inArray(el, uniqueTypes) === -1) {
-								uniqueTypes.push(el);
-								
-								let typeHtml = $('<li>').append('<a>');
-								typeHtml.find('a').attr('href', '#').attr('tabindex', '-1');
-								typeHtml.find('a').append('<input id="type_' + i + '" name="type" type="checkbox" value="' + el + '">').append('<label>');
-								typeHtml.find('label').attr('for', 'type_' + i).append('<span>').append('&nbsp;' + eval('deviceTemplate.' + el));
-	
-								$('#type').append(typeHtml);
-							}
-						});
-					}  else {
-						let typeHtml = $('<li>').append('<a>').data('value', '').attr('href', '#').html('조회된 설비가 없습니다.');
-						$('#type').append(typeHtml);
-						$('#type').before('button').empty().append('전체').append('<span class="caret"></span>');
-					}
-				},
-				dataType: "json"
-			});
-		}
+		//								 $('#device').empty();
+
+		//								 let deviceType = new Array();
+		//								 if(devicesList.length > 0) {
+		//								 	//선택된 사이트를 체크한다.
+		//								 	var list = '';
+		//								 	$(':checkbox[name="sid"]:checked').each(function() {
+		//								 		for(var i in devicesList) {
+		//														 if(devicesList[i].sid == $(this).val()) {
+		//														 	if(list != '') {
+		//														 		if(!(devicesList[i].device_type.test(list))) {
+		// 																	list += ',' + devicesList[i].device_type;
+		//														 		}
+		//														 	} else {
+		//														 		list += devicesList[i].device_type;
+		//														 	}
+		//														 }
+		//												 }
+		//								 	});
+
+		//								 	if(/,/.test(list)) {
+		//								 		deviceType = list.split(',');
+		//								 	} else {
+		// 										deviceType.push(list)
+		//								 	}
+
+		//								 	for(var i in deviceType) {
+		//								 		)
+		//								 	}
+		//								 } else {
+		//								 	let deviceHtml = $('<li>').append('<a>').data('value', '').attr('href', '#').html('조회된 설비가 없습니다.');
+		//										 $('#device').append(deviceHtml);
+		//										 $('#device').before('button').empty().append('선택해주세요.').append('<span class="caret"></span>');
+		//								 }
+		//						 },
+		//						 dataType: "json"
+		//				 });
+		device();
 	};
 
 	//설비타입 디바이스타입 설정한다.
 	var device = function () {
-		$('#device').prev('button').empty().append('복수 선택').append('<span class="caret"></span>');
-		
-		if($(':checkbox[name="type"]:checked').length > 0) {
-			if(devicesList.length > 0) {
-				if (debugMode) { console.log(devicesList); }
+		$.ajax({
+			url: apiURL + configDevice,
+			type: 'get',
+			async: false,
+			data: configDeviceData,
+			success: function (result) {
+				var data = result.devices;
+				if (debugMode) { console.log(data); }
 
 				$('#device>li>div.sec_li_bx').remove();
 
-				//선택된 사이트를 기준으로 한다.
-				$(':checkbox[name="sid"]:checked').each(function () {
-					var siteNm = $(this).next().text()
-					  , siteId = $(this).val()
-					  , siteGrp = $('<div>').addClass('sec_li_bx');
+				if (data.length > 0) {
 
-					siteGrp.append('<p>');
-					siteGrp.find('p').addClass('tx_li_tit').text(siteNm);
-					siteGrp.append('<ul>');
+					//선택된 사이트를 기준으로 한다.
+					$(':checkbox[name="sid"]:checked').each(function () {
+						var siteNm = $(this).next().text()
+							, siteId = $(this).val()
+							, siteGrp = $('<div>').addClass('sec_li_bx');
 
-					$.each(devicesList, function(i, el) {
-						if (el.sid == siteId) {
-							$(':checkbox[name="type"]:checked').each(function() {
-								if($(this).val() == el.device_type) {
-									let deviceHtml = $('<li>').append('<a>');
-									deviceHtml.find('a').attr('href', '#').attr('tabindex', '-1');
-									deviceHtml.find('a').append('<input id="device_' + i + '" name="device" type="checkbox" value="' + el.did + '">').append('<label>');
-									deviceHtml.find('label').attr('for', 'device_' + i).append('<span>').append('&nbsp;' + el.name);
-									siteGrp.find('ul').append(deviceHtml);
-								}
-							});
+						siteGrp.append('<p>');
+						siteGrp.find('p').addClass('tx_li_tit').text(siteNm);
+						siteGrp.append('<ul>');
+
+						for (var i in data) {
+							if (data[i].sid == siteId) {
+								let deviceHtml = $('<li>').append('<a>');
+								deviceHtml.find('a').attr('href', '#').attr('tabindex', '-1');
+								deviceHtml.find('a').append('<input id="device_' + i + '" type="checkbox" value="' + data[i].did + '">').append('<label>');
+								deviceHtml.find('label').attr('for', 'device_' + i).append('<span>').append('&nbsp;' + data[i].name);
+
+								siteGrp.find('ul').append(deviceHtml);
+							}
 						}
+						$('#device>li').prepend(siteGrp);
 					});
 
-					$('#device>li').prepend(siteGrp);
-				});
-			}
-		}
+				} else {
+					let deviceHtml = $('<li>').append('<a>').data('value', '').attr('href', '#').html('조회된 설비가 없습니다.');
+					$('#device').append(deviceHtml);
+					$('#device').before('button').empty().append('선택해주세요.').append('<span class="caret"></span>');
+				}
+			},
+			dataType: "json"
+		});
 	}
 
 	var searchGrid = function () {
 		$('.his_tbl tbody').empty();
+		// 		$.ajax({
+		//						 url : apiURL + configDevice,
+		//						 type : 'get',
+		//						 async : false,
+		//						 data : configDeviceData,
+		//						 success: function(result) {
+		//								 var data = result.devices;
+		//								 if(debugMode) {console.log(data);}
 
-		var deviceArray = new Array();
-		$(':checkbox[name="device"]').each(function() {
-			deviceArray.push($(this).val());
-		});
-		
-		//설비유형이 여러개일경우 하나만 들어가서 여러번 호출한다.
-		$(':checkbox[id^=type_]:checked').each(function() {
-			var statusRawData = {
-				device_type: $(this).val(),
-				device_ids: deviceArray.join(','),
-				startTime: $('#datepicker1').datepicker('getDate').format('yyyyMMdd') + '000000',
-				endTime: $('#datepicker2').datepicker('getDate').format('yyyyMMdd') + '235959'
-			}
+		//								 $('#device').empty();
 
-			$.ajax({
-				url : apiURL + statusRaw,
-				type : 'get',
-				async : false,
-				data : statusRawData,
-				success: function(result) {
-					var data = result;
-					if(debugMode) {console.log(data);}
-					if(data.length > 0) {
-						$.each(data, function(i, el) {
-							let trHtml = $('<tr>');
-
-							trHtml.append('<td>' + el.dname + '</td>');
-							trHtml.append('<td>' + el.did + '</td>');
-							trHtml.append('<td>' + '-' + '</td>');
-							trHtml.append('<td>' + '-' + '</td>');
-							trHtml.append('<td>' + el.dcVoltage + '</td>');
-							trHtml.append('<td>' + el.dcCurrent + '</td>');
-							trHtml.append('<td>' + el.dcPower + '</td>');
-							trHtml.append('<td>' + el.dcCurrent + '</td>');
-							trHtml.append('<td>' + el.totalGenPower + '</td>');
-							trHtml.append('<td>' + el.acVoltageRS + '</td>');
-							trHtml.append('<td>' + el.acVoltageST + '</td>');
-							trHtml.append('<td>' + el.acVoltageTR + '</td>');
-							trHtml.append('<td>' + '-' + '</td>');
-							trHtml.append('<td>' + '-' + '</td>');
-							trHtml.append('<td>' + '-' + '</td>');
-							trHtml.append('<td>' + new Date(el.timestamp).format('yyyy.MM.dd hh:mm:ss') + '</td>');
-
-							$('.his_tbl tbody').append(trHtml);
-						});
-					}
-				},
-				dataType: "json"
-			});
-		});
-// 		tableGrid();
+		//								 if(data.length > 0) {
+		//										 for(var i in data) {
+		//												 if(data[i].sid == $('#place').prev('button').data('sid')) {
+		//														 let deviceHtml = $('<li>').append('<a>');
+		//														 deviceHtml.find('a').attr('href', '#').data('value', data[i].did);
+		//														 deviceHtml.find('a').append('<input id="device_' + i + '" type="checkbox">').append('<label>');
+		//														 deviceHtml.find('label').attr('for', 'device_'+ i).append('&nbsp;'+data[i].name);
+		//														 $('#device').append(deviceHtml);
+		//												 }
+		//										 }
+		//								 } else {
+		//										 let deviceHtml = $('<li>').append('<a>').data('value', '').attr('href', '#').html('조회된 설비가 없습니다.');
+		//										 $('#device').append(deviceHtml);
+		//										 $('#device').before('button').empty().append('선택해주세요.').append('<span class="caret"></span>');
+		//								 }
+		//						 },
+		//						 dataType: "json",
+		//						 complete: '',
+		//						 timeout: pollingTimeout
+		//				 });
+		tableGrid();
 	};
 
 	var tableGrid = function () {
@@ -375,52 +363,7 @@
 				}
 				//첫 번째 값 + 외 몇개로 표기
 				$(this).parents('ul').prev('button').empty().append($(':checkbox[name="sid"]:checked').eq(0).next('label').text() + '&nbsp;' + extendText).append('<span class="caret"></span>');
-			}
-			deviceType();
-		});
-
-		$(document).on('click', '#type a', function(e) {
-			e.preventDefault();
-			if ($(this).find('input').is(':checked') == true) {
-				$(this).find('input').prop('checked', false);
-			} else {
-				//			  $(this).parents('ul').prev('button').empty().append($(this).find('label').text()).append('<span class="caret"></span>');
-				$(this).find('input').prop('checked', true);
-			}
-
-			//총 체크한 갯수를 확인한다.
-			if ($(':checkbox[name="type"]:checked').length <= 0) {
-				$(this).parents('ul').prev('button').empty().append('선택해주세요.').append('<span class="caret"></span>');
-			} else {
-				let extendText = '';
-				if ($(':checkbox[name="type"]:checked').length > 1) {
-					extendText = '외 ' + Number($(':checkbox[name="type"]:checked').length - 1) + '개';
-				}
-				//첫 번째 값 + 외 몇개로 표기
-				$(this).parents('ul').prev('button').empty().append($(':checkbox[name="type"]:checked').eq(0).next('label').text() + '&nbsp;' + extendText).append('<span class="caret"></span>');
-			}
-			device();
-		});
-
-		$(document).on('click', '#device a', function(e) {
-			e.preventDefault();
-			if ($(this).find('input').is(':checked') == true) {
-				$(this).find('input').prop('checked', false);
-			} else {
-				//			$(this).parents('ul').prev('button').empty().append($(this).find('label').text()).append('<span class="caret"></span>');
-				$(this).find('input').prop('checked', true);
-			}
-
-			//총 체크한 갯수를 확인한다.
-			if ($(':checkbox[name="device"]:checked').length <= 0) {
-				$(this).parents('ul').prev('button').empty().append('선택해주세요.').append('<span class="caret"></span>');
-			} else {
-				let extendText = '';
-				if ($(':checkbox[name="device"]:checked').length > 1) {
-					extendText = '외 ' + Number($(':checkbox[name="device"]:checked').length - 1) + '개';
-				}
-				//첫 번째 값 + 외 몇개로 표기
-				$(this).parents('ul').prev('button').empty().append($(':checkbox[name="device"]:checked').eq(0).next('label').text() + '&nbsp;' + extendText).append('<span class="caret"></span>');
+				deviceType();
 			}
 		});
 
@@ -477,12 +420,11 @@
 
 		//사이트 선택전까지 클릭 방지
 		$('#device').prev('button').on('click', function (e) {
-			if ($(':checkbox[name="sid"]:checked').length <= 0 || $(':checkbox[name="type"]:checked').length <= 0) {
+			if ($(':checkbox[name="sid"]:checked').length <= 0) {
 				e.stopPropagation();
 			}
 		});
 
-		//전체 선택/전체 해제
 		$('#device button.btn_type03').on('click', function (e) {
 			var idx = $('#device button.btn_type03').index($(this));
 
