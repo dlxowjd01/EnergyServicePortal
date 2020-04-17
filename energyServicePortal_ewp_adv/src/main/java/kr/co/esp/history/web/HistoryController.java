@@ -21,9 +21,15 @@ public class HistoryController {
 	private DeviceMonitoringService deviceMonitoringService;
 
 	@RequestMapping(value = "/history/operationHistory.do")
-	public String groupDashboard(HttpServletRequest request, HttpSession session, Model model) {
+	public String operationHistory(HttpServletRequest request, HttpSession session, Model model) {
 		logger.debug("/history/operationHistory.do");
 		return "esp/history/operationHistory";
+	}
+
+	@RequestMapping(value = "/history/alarmHistory.do")
+	public String alarmHistory(HttpServletRequest request, HttpSession session, Model model) {
+		logger.debug("/history/alarmHistory.do");
+		return "esp/history/alarmHistory";
 	}
 	
 	

@@ -70,7 +70,7 @@
 						<div class="sub_layer">
 							<ul>
 								<li><a href="/device/deviceState.do">설비 구성</a></li>
-								<li><a href="">수집 현황</a></li>
+								<li><a href="/device/collectionState.do">수집 현황</a></li>
 							</ul>
 						</div>
 					</li>
@@ -79,7 +79,7 @@
 						<div class="sub_layer">
 							<ul>
 								<li><a href="/history/operationHistory.do">운전 이력</a></li>
-								<li><a href="">알람 이력</a></li>
+								<li><a href="/history/alarmHistory.do">알람 이력</a></li>
 							</ul>
 						</div>
 					</li>
@@ -98,7 +98,7 @@
 						<a href="#;">예측/진단</a>
 						<div class="sub_layer">
 							<ul>
-								<li><a href="">발전</a></li>
+								<li><a href="/diagnosis/generation.do">발전</a></li>
 								<li><a href="">수요</a></li>
 							</ul>
 						</div>

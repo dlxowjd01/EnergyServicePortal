@@ -42,9 +42,15 @@ public class DeviceController {
 	private DeviceMonitoringService deviceMonitoringService;
 
 	@RequestMapping(value = "/device/deviceState.do")
-	public String groupDashboard(HttpServletRequest request, HttpSession session, Model model) {
+	public String deviceState(HttpServletRequest request, HttpSession session, Model model) {
 		System.out.println("/device/deviceState.do");
 		return "esp/device/deviceState";
+	}
+
+	@RequestMapping(value = "/device/collectionState.do")
+	public String collectionState(HttpServletRequest request, HttpSession session, Model model) {
+		System.out.println("/device/collectionState.do");
+		return "esp/device/collectionState";
 	}
 
 //	@RequestMapping("/main/getDeviceList.json")
