@@ -352,7 +352,9 @@
                 	if(data != null) {
 	                    for(var i in data) {
 	                    	if(data[i].sid == siteId) {
-	                    		invDeviceIds.push(data[i].did);
+	                    		if(data[i].device_type == 'INV_PV') {
+	                    		    invDeviceIds.push(data[i].did);
+	                    		}
 	                    	}
 	                    }
                 	}
