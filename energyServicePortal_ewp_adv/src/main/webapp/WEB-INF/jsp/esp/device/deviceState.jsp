@@ -2,158 +2,164 @@
 <%@ include file="/decorators/include/taglibs.jsp"%>
 				<div class="row">
 					<div class="col-lg-12">
-						<h1 class="page-header">설비 구성</h1>
-						<div class="sa_select">
-							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">당진태양광
-								<span class="caret"></span></button>
-								<ul class="dropdown-menu">
-								  <li class="on"><a href="#">전체</a></li>
-								  <li><a href="#">당진태양광</a></li>
-								  <li><a href="#">제일화성</a></li>
-								  <li><a href="#">동국제강</a></li>
-								</ul>
-							</div>
+						<h1 class="page-header fl">설비 구성</h1>
+						<div class="time fr">
+							<span>CURRENT TIME</span>
+							<em class="currTime">${nowTime}</em>
+							<span>DATA BASE TIME</span>
+							<em class="dbTime">2018-07-27 17:01:02</em>
+						  </div>
+					</div>
+					<div class="header_drop_area col-lg-2 w_type">
+						<div class="dropdown">
+							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">사업소#1
+							<span class="caret"></span></button>
+							<ul class="dropdown-menu dropdown-menu-form">
+								<li class="on"><a href="#">사업소#1</a></li>
+								<li><a href="#">사업소#2</a></li>
+								<li><a href="#">사업소#3</a></li>
+								<li><a href="#">사업소#4</a></li>
+							  </ul>
 						</div>
 					</div>
 				</div>
 				<div class="row scroll">
 					<div class="col-lg-12">
 						<div class="row">
-							<div class="col-lg-7">
+							<div class="col-lg-8">
 								<div class="indiv clear">
 									<div class="chart_top clear">
 										<h2 class="ntit fl">인버터</h2>
 										<div class="eq_icon fr">
-											<span class="eq_normail">정상 39</span> 
-											<span class="eq_error">이상 1</span>
-											<span class="eq_alert">경고 2</span>
+											<span class="eq_normail">정상(39)</span> 
+											<span class="eq_error">이상(1)</span>
+											<span class="eq_alert">경고(2)</span>
 										</div>
 									</div>
-									<ul class="eq_list scroll">
+									<ul class="eq_list scroll eq_li_type01">
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#1</span>
+											<span class="tx">인버터#1</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#2</span>
+											<span class="tx">인버터#2</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#3</span>
+											<span class="tx">인버터#3</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#4</span>
+											<span class="tx">인버터#4</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#5</span>
+											<span class="tx">인버터#5</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li class="st_error">
 											<a href="#">삭제</a>
-											<span>인버터#6</span>
+											<span class="tx">인버터#6</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#7</span>
+											<span class="tx">인버터#7</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#8</span>
+											<span class="tx">인버터#8</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#9</span>
+											<span class="tx">인버터#9</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#10</span>
+											<span class="tx">인버터#10</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#11</span>
+											<span class="tx">인버터#11</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#12</span>
+											<span class="tx">인버터#12</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#13</span>
+											<span class="tx">인버터#13</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#14</span>
+											<span class="tx">인버터#14</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#15</span>
+											<span class="tx">인버터#15</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#16</span>
+											<span class="tx">인버터#16</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li class="st_alert">
 											<a href="#">삭제</a>
-											<span>인버터#17</span>
+											<span class="tx">인버터#17</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li class="st_alert">
 											<a href="#">삭제</a>
-											<span>인버터#18</span>
+											<span class="tx">인버터#18</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#19</span>
+											<span class="tx">인버터#19</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#19</span>
+											<span class="tx">인버터#19</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
 										<li>
 											<a href="#">삭제</a>
-											<span>인버터#19</span>
+											<span class="tx">인버터#19</span>
 											<span>1000kw</span>
 											<em>560V 46.5A</em>
 										</li>
@@ -163,98 +169,89 @@
 									</ul>
 								</div>
 							</div>
-							<div class="col-lg-5">
+							<div class="col-lg-4">
 								<div class="indiv eq_card">
 									<div class="chart_top clear">
 										<h2 class="ntit fl">인버터#1</h2>
-										<div class="eq_icon fr">
-											<span class="eq_normail">정상</span> 
-										</div>
 									</div>
-									<ul>
+									<ul class="eq_card_ul clear">
 										<li>
-											<span>인버터 출력</span>
-											<p><strong>409.5</strong> kW</p>
+											<p class="t_ti">인버터 출력</p>
+											<p class="t_value">409.4kWh</p>
 										</li>
 										<li>
-											<span>태양광 입력</span>
-											<p><strong>409.5</strong> kW</p>
+											<p class="t_ti">태양광 입력</p>
+											<p class="t_value">409.4kWh</p>
 										</li>
 										<li>
-											<span>금일 발전량 출력</span>
-											<p><strong>4,856.3</strong> kWh</p>
-										</li>
-										<li>
-											
-										</li>
-										<li>
-											
+											<p class="t_ti">금일 발전량 출력</p>
+											<p class="t_value">409.4kWh</p>
 										</li>
 									</ul>
-									<dl>
-										<dt>인버터 현황</dt>
-										<dd>											
-											<table>
-												<tbody>
-													<tr>
-														<td>
-															<span>R전압</span>
-															<p><strong>409.5</strong> V</p>
-														</td>
-														<td>
-															<span>S전압</span>
-															<p><strong>409.5</strong> V</p>
-														</td>
-														<td>
-															<span>T전압</span>
-															<p><strong>409.5</strong> V</p>
-														</td>
-														<td>
-															<span>주파수</span>
-															<p><strong>60.1</strong> Hz</p>
-														</td>
-														<td rowspan="2">
-															<div><a href="#;" class="dbtn">운영이력조회</a></div>
-															<div><a href="#;" class="dbtn">변경이력조회</a></div>
-														</td>
-													</tr>
-													<tr>
-														<td>
-															<span>R전류</span>
-															<p><strong>409.5</strong> A</p>
-														</td>
-														<td>
-															<span>S전류</span>
-															<p><strong>409.5</strong> A</p>
-														</td>
-														<td>
-															<span>T전류</span>
-															<p><strong>409.5</strong> A</p>
-														</td>
-														<td>
-															<span>전력</span>
-															<p><strong>409.5</strong> kW</p>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</dd>
-									</dl>
+									<div class="inv_sec_bx">
+										<p class="inv_tit">인버터 현황</p>
+										<ul class="isb_in clear">
+											<li>
+												<ul class="di_list">
+													<li>
+														<span class="di_li_tit">R전압</span>
+														<span class="di_li_tx">409.5V</span>
+													</li>
+													<li>
+														<span class="di_li_tit">S전압</span>
+														<span class="di_li_tx">409.5V</span>
+													</li>
+													<li>
+														<span class="di_li_tit">T전압</span>
+														<span class="di_li_tx">409.5V</span>
+													</li>
+													<li>
+														<span class="di_li_tit">주파수</span>
+														<span class="di_li_tx">409.5V</span>
+													</li>
+												</ul>
+											</li>
+											<li>
+												<ul class="di_list">
+													<li>
+														<span class="di_li_tit">R전류</span>
+														<span class="di_li_tx">409.5V</span>
+													</li>
+													<li>
+														<span class="di_li_tit">S전류</span>
+														<span class="di_li_tx">409.5V</span>
+													</li>
+													<li>
+														<span class="di_li_tit">T전류</span>
+														<span class="di_li_tx">409.5V</span>
+													</li>
+													<li>
+														<span class="di_li_tit">전력</span>
+														<span class="di_li_tx">409.5V</span>
+													</li>
+												</ul>
+											</li>
+										</ul>
+									</div>
+									<div class="eq_btn_bx">
+										<button type="submit" class="btn_type04">변경 이력 조회</button>
+										<button type="submit" class="btn_type04">운영 이력 조회</button>
+									</div>
 								</div>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-lg-7">
+							<div class="col-lg-8">
 								<div class="indiv clear">
 									<div class="chart_top clear">
 										<h2 class="ntit fl">접속반</h2>
 										<div class="eq_icon fr">
-											<span class="eq_normail">정상 39</span> 
-											<span class="eq_error">이상 1</span>
-											<span class="eq_alert">경고 2</span>
+											<span class="eq_normail">정상(39)</span> 
+											<span class="eq_error">이상(1)</span>
+											<span class="eq_alert">경고(2)</span>
 										</div>
 									</div>
-									<ul class="eq_list scroll clear">
+									<ul class="eq_list scroll clear eq_li_type02">
 										<li>
 											<a href="#">삭제</a>
 											<span>접속반#1</span>
@@ -356,93 +353,65 @@
 									</ul>
 								</div>
 							</div>
-							<div class="col-lg-5">
-								<div class="indiv eq_card">
+							<div class="col-lg-4">
+								<div class="indiv eq_card t2">
 									<div class="chart_top clear">
-										<h2 class="ntit fl">접속반#17</h2>
-										<div class="eq_icon fr">
-											<span class="eq_alert">경고</span>
-										</div>
+										<h2 class="ntit fl">접속반#1</h2>
 									</div>
-									<ul>
+									<ul class="eq_card_ul clear">
 										<li>
-											<span>DCU 전체 전압</span>
-											<p><strong>409.5</strong> V</p>
+											<p class="t_ti">DCU 전체 전압</p>
+											<p class="t_value">409.5V</p>
 										</li>
 										<li>
-											<span>DCU 전체 전류</span>
-											<p><strong>409.5</strong> A</p>
+											<p class="t_ti">DCU 전제 전류</p>
+											<p class="t_value">409.5A</p>
 										</li>
 										<li>
-											<span>접속반 식별자</span>
-											<p><strong>-</strong> </p>
-										</li>
-										<li>
-											
-										</li>
-										<li>
-											
+											<p class="t_ti">전속반 식별자</p>
+											<p class="t_value">-</p>
 										</li>
 									</ul>
-									<dl>
-										<dt>접속반 현황</dt>
-										<dd>											
-											<table>
-												<tbody>
-													<tr>
-														<td>
-															<span>주변온도</span>
-															<p><strong>10</strong> ℃</p>
-														</td>
-														<td>
-															<span>경사면 일사량</span>
-															<p><strong>10</strong> kWh/㎡.day </p>
-														</td>
-														<td>
-															<span>수평 일사량</span>
-															<p><strong>10</strong> kWh/㎡.day </p>
-														</td>
-														<td>
-															
-														</td>
-														<td rowspan="2">
-															<div><a href="#;" class="dbtn">운영이력조회</a></div>
-															<div><a href="#;" class="dbtn">변경이력조회</a></div>
-														</td>
-													</tr>
-													<tr>
-														<td>
-															
-														</td>
-														<td>
-															
-														</td>
-														<td>
-															
-														</td>
-														<td>
-															
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</dd>
-									</dl>
+									<div class="inv_sec_bx">
+										<p class="inv_tit">접속반 현황</p>
+										<ul class="isb_in clear">
+											<li>
+												<ul class="di_list">
+													<li>
+														<span class="di_li_tit">주변 온도</span>
+														<span class="di_li_tx">409.5V</span>
+													</li>
+													<li>
+														<span class="di_li_tit">경사면 일사량</span>
+														<span class="di_li_tx">10 kWh/㎡.day</span>
+													</li>
+													<li>
+														<span class="di_li_tit">수평 일사량</span>
+														<span class="di_li_tx">10 kWh/㎡.day</span>
+													</li>
+												</ul>
+											</li>
+										</ul>
+									</div>
+									<div class="eq_btn_bx">
+										<button type="submit" class="btn_type04">변경 이력 조회</button>
+										<button type="submit" class="btn_type04">운영 이력 조회</button>
+									</div>
 								</div>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-lg-7">
+							<div class="col-lg-8">
 								<div class="indiv clear">
 									<div class="chart_top clear">
 										<h2 class="ntit fl">차단기</h2>
 										<div class="eq_icon fr">
-											<span class="eq_normail">정상 39</span> 
-											<span class="eq_error">이상 1</span>
-											<span class="eq_alert">경고 2</span>
+											<span class="eq_normail">정상(39)</span> 
+											<span class="eq_error">이상(1)</span>
+											<span class="eq_alert">경고(2)</span>
 										</div>
 									</div>
-									<ul class="eq_list scroll clear">
+									<ul class="eq_list scroll clear eq_li_type03">
 										<li>
 											<a href="#">삭제</a>
 											<span>차단기#1</span>
@@ -544,83 +513,74 @@
 									</ul>
 								</div>
 							</div>
-							<div class="col-lg-5">
-								<div class="indiv eq_card">
+							<div class="col-lg-4">
+								<div class="indiv eq_card t3">
 									<div class="chart_top clear">
-										<h2 class="ntit fl">차단기#6</h2>
-										<div class="eq_icon fr">
-											<span class="eq_error">이상</span>
-										</div>
+										<h2 class="ntit fl">차단기#1</h2>
 									</div>
-									<ul>
+									<ul class="eq_card_ul clear">
 										<li>
-											<span>현재 출력</span>
-											<p><strong>409.5</strong> kW</p>
+											<p class="t_ti">현재 출력</p>
+											<p class="t_value">409.4kWh</p>
 										</li>
 										<li>
-											<span>주파수</span>
-											<p><strong>62</strong> kW</p>
+											<p class="t_ti">주파수</p>
+											<p class="t_value">62Hz</p>
 										</li>
 										<li>
-											<span>누적발전량</span>
-											<p><strong>4,856.3</strong> kWh</p>
-										</li>
-										<li>
-											
-										</li>
-										<li>
-											
+											<p class="t_ti">금일 발전량 출력</p>
+											<p class="t_value">4,856.3kWh</p>
 										</li>
 									</ul>
-									<dl>
-										<dt>차단기 현황</dt>
-										<dd>											
-											<table>
-												<tbody>
-													<tr>
-														<td>
-															<span>R전압</span>
-															<p><strong>409.5</strong> V</p>
-														</td>
-														<td>
-															<span>S전압</span>
-															<p><strong>409.5</strong> V</p>
-														</td>
-														<td>
-															<span>T전압</span>
-															<p><strong>409.5</strong> V</p>
-														</td>
-														<td>
-															<span>주파수</span>
-															<p><strong>60.1</strong> Hz</p>
-														</td>
-														<td rowspan="2">
-															<div><a href="#;" class="dbtn">운영이력조회</a></div>
-															<div><a href="#;" class="dbtn">변경이력조회</a></div>
-														</td>
-													</tr>
-													<tr>
-														<td>
-															<span>R전류</span>
-															<p><strong>409.5</strong> A</p>
-														</td>
-														<td>
-															<span>S전류</span>
-															<p><strong>409.5</strong> A</p>
-														</td>
-														<td>
-															<span>T전류</span>
-															<p><strong>409.5</strong> A</p>
-														</td>
-														<td>
-															<span>전력</span>
-															<p><strong>409.5</strong> kW</p>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</dd>
-									</dl>
+									<div class="inv_sec_bx">
+										<p class="inv_tit">인버터 현황</p>
+										<ul class="isb_in clear">
+											<li>
+												<ul class="di_list">
+													<li>
+														<span class="di_li_tit">R전압</span>
+														<span class="di_li_tx">409.5V</span>
+													</li>
+													<li>
+														<span class="di_li_tit">S전압</span>
+														<span class="di_li_tx">409.5V</span>
+													</li>
+													<li>
+														<span class="di_li_tit">T전압</span>
+														<span class="di_li_tx">409.5V</span>
+													</li>
+													<li>
+														<span class="di_li_tit">주파수</span>
+														<span class="di_li_tx">409.5V</span>
+													</li>
+												</ul>
+											</li>
+											<li>
+												<ul class="di_list">
+													<li>
+														<span class="di_li_tit">R전류</span>
+														<span class="di_li_tx">409.5V</span>
+													</li>
+													<li>
+														<span class="di_li_tit">S전류</span>
+														<span class="di_li_tx">409.5V</span>
+													</li>
+													<li>
+														<span class="di_li_tit">T전류</span>
+														<span class="di_li_tx">409.5V</span>
+													</li>
+													<li>
+														<span class="di_li_tit">전력</span>
+														<span class="di_li_tx">409.5V</span>
+													</li>
+												</ul>
+											</li>
+										</ul>
+									</div>
+									<div class="eq_btn_bx">
+										<button type="submit" class="btn_type04">변경 이력 조회</button>
+										<button type="submit" class="btn_type04">운영 이력 조회</button>
+									</div>
 								</div>
 							</div>
 						</div>

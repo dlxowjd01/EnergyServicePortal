@@ -72,37 +72,118 @@
     <a href="#">구분</a>
     <form name="menuform" action="" method="post">
       <div class="menu-group">
-        <ul>
-          <li>
-            <dl>
-              <dt>사업소 분석</dt>
-              <dd>
-                <a href="#">사업소별</a>
-                <ul>
-                  <li><a href="">전체</a></a></li>
-                  <li><a href="/dashboard/smain.do">혜원 솔라 01</a></li>
-                  <li><a href="/dashboard/smain.do">혜원 솔라 02</a></li>
-                </ul>
-              </dd>
-            </dl>
-          </li>
-          <li>
-            <dl>
-              <dt></dt>
-              <dd>
-                <a href="#">그룹별</a>
-                <ul>
-                  <li><a href="">전체</a></li>
-                  <li>
-                    <a href="#">혜원 솔라</a>
-                    <ul>
-                      <li><a href="/dashboard/smain.do">혜원 솔라 01</a></li>
-                      <li><a href="/dashboard/smain.do">혜원 솔라 01</a></li>
-                    </ul>
-                  </li>
-              </dd>
-            </dl>
-          </li>
+			<ul>
+			  <li>
+				<dl>
+				  <dt>사업소 분석</dt>
+				  <dd>
+					<a href="#">사업소별</a>
+					<ul>
+					  <li><a href="">전체</a></a></li>
+					  <li><a href="/dashboard/smain.do">사업소#1</a></li>
+					  <li><a href="/dashboard/smain.do">사업소#2</a></li>
+					  <li><a href="/dashboard/smain.do">사업소#3</a></li>
+					  <li><a href="/dashboard/smain.do">사업소#4</a></li>
+					  <li><a href="/dashboard/smain.do">사업소#5</a></li>
+					</ul>
+				  </dd>
+				</dl>
+			  </li>
+			  <li>
+				<dl>
+				  <dt></dt>
+				  <dd>
+					<a href="#">그룹별</a>
+					<ul>
+					  <li>
+						<a href="">그룹#1</a>
+						<ul>
+						  <li><a href="/dashboard/smain.do">사업소#1</a></li>
+						</ul>
+					  </li>
+					  <li>
+						<a href="#">그룹#2</a>
+						<ul>
+						  <li><a href="/dashboard/smain.do">사업소#1</a></li>
+						  <li><a href="/dashboard/smain.do">사업소#2</a></li>
+						</ul>
+					  </li>
+					 </ul>
+				  </dd>
+				</dl>
+			  </li>
+			 </ul>
+			 <ul>
+			  <li>
+				<dl>
+				  <dt>에너지 거래</dt>
+				  <dd>
+					<a href="#">중개거래</a>
+					<ul>
+					  <li><a href="/dashboard/smain.do">자원이름 #1</a></li>
+					  <li><a href="/dashboard/smain.do">자원이름 #2</a></li>
+					</ul>
+				  </dd>
+				</dl>
+			  </li>
+			  <li>
+				<dl>
+				  <dt></dt>
+				  <dd>
+					<a href="#">DR 거래</a>
+					<ul>
+					  <li><a href="/dashboard/smain.do">자원이름 #1</a></li>
+					  <li><a href="/dashboard/smain.do">자원이름 #2</a></li>
+					</ul>
+				  </dd>
+				</dl>
+			  </li>
+			 </ul>
+			 <ul>
+			  <li>
+				<dl>
+				  <dt>지역 및 유형 선택</dt>
+				  <dd>
+					<a href="#">지역 별</a>
+					<ul>
+					  <li><a href="/dashboard/smain.do">서울특별시</a></li>
+					  <li><a href="/dashboard/smain.do">부산광역시</a></li>
+					  <li><a href="/dashboard/smain.do">대구광역시</a></li>
+					  <li><a href="/dashboard/smain.do">인천광역시</a></li>
+					  <li><a href="/dashboard/smain.do">광주광역시</a></li>
+					  <li><a href="/dashboard/smain.do">울산광역시</a></li>
+					  <li><a href="/dashboard/smain.do">경기도</a></li>
+					  <li><a href="/dashboard/smain.do">강원도</a></li>
+					  <li><a href="/dashboard/smain.do">충청북도</a></li>
+					  <li><a href="/dashboard/smain.do">충청남도</a></li>
+					  <li><a href="/dashboard/smain.do">전라북도</a></li>
+					  <li><a href="/dashboard/smain.do">전라남도</a></li>
+					  <li><a href="/dashboard/smain.do">경상북도</a></li>
+					  <li><a href="/dashboard/smain.do">경상남도</a></li>
+					  <li><a href="/dashboard/smain.do">제주도</a></li>
+					</ul>
+				  </dd>
+				</dl>
+			  </li>
+			  <li>
+				<dl>
+				  <dt></dt>
+				  <dd>
+					<a href="#">유형 별</a>
+					<ul>
+					  <li><a href="/dashboard/smain.do">태양광</a></li>
+					  <li><a href="/dashboard/smain.do">풍력</a></li>
+					  <li><a href="/dashboard/smain.do">소수력</a></li>
+					  <li><a href="/dashboard/smain.do">신재생 연계 ESS</a></li>
+					</ul>
+				  </dd>
+				</dl>
+			  </li>
+			 </ul>
+			 <div class="menu_btm_bx">
+				<button type="button" class="btn_type03">초기화</button>
+				<button type="button" class="btn_type">적용</button>
+			 </div>
 <%--          <li>--%>
 <%--            <dl>--%>
 <%--              <dt>에너지 거래</dt>--%>
