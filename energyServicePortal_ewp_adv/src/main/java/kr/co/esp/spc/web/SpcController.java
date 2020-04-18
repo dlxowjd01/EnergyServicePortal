@@ -1,0 +1,57 @@
+package kr.co.esp.spc.web;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+@Controller
+public class SpcController {
+    private static final Logger logger = LoggerFactory.getLogger(SpcController.class);
+
+    @RequestMapping(value = "/spc/entityInformation.do")
+    public String spcEntityInformation(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/entityInformation.do");
+        return "esp/spc/entityInformation";
+    }
+
+    @RequestMapping(value = "/spc/balanceSheet.do")
+    public String spcBalanceSheet(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/balanceSheet.do");
+        return "esp/spc/balanceSheet";
+    }
+
+    @RequestMapping(value = "/spc/maintenanceSchedule.do")
+    public String spcMaintenanceSchedule(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/maintenanceSchedule.do");
+        return "esp/spc/maintenanceSchedule";
+    }
+
+    @RequestMapping(value = "/spc/supplementaryDocuments.do")
+    public String spcSupplementaryDocuments(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/supplementaryDocuments.do");
+        return "esp/spc/supplementaryDocuments";
+    }
+
+    @RequestMapping(value = "/spc/entityDetails.do")
+    public String spcEntityDetails(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/entityDetails.do");
+        return "esp/spc/entityDetails";
+    }
+
+    @RequestMapping(value = "/spc/entityDetailsBySPC.do")
+    public String spcEntityDetailsBySPC(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/entityDetailsBySPC.do");
+        return "esp/spc/entityDetailsBySPC";
+    }
+
+    @RequestMapping(value = "/spc/entityDetailsBySite.do")
+    public String spcEntityDetailsBySite(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/entityDetailsBySite.do");
+        return "esp/spc/entityDetailsBySite";
+    }
+}

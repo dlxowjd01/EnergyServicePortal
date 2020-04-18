@@ -66,6 +66,55 @@
 								<h3 class="value_tit">예측 오차 평균</h3>
 								<p class="value_num"><span class="num">6,230</span>kwh</p>
 							</div>
+							<div class="toggle_bx">
+								<div class="tb_area clear">
+									<p class="tb_tx fl">예측 오차 계산법</p>
+									<button class="tb_fold_btn fr">펼치기</button>
+								</div>
+								<div class="tb_fold_div">
+									<div class="dropdown">
+										<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">MAPE
+										<span class="caret"></span></button>
+										<ul class="dropdown-menu">
+											<li class="on"><a href="#">NMAE</a></li>
+											<li><a href="#">MAPE</a></li>
+											<li><a href="#">APE</a></li>
+											<li><a href="#">RMSE</a></li>
+										</ul>
+									</div>
+									<p class="tb_tx">오차 계산 데이터 필터</p>
+									<div class="dropdown">
+										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">용량 대비 발전량 % 이상
+										<span class="caret"></span></button>
+										<ul class="dropdown-menu">
+											<li class="on"><a href="#">모두</a></li>
+											<li><a href="#">용량 대비 발전량 % 이상</a></li>
+											<li><a href="#">발전량 kWh 이상</a></li>
+										</ul>
+									</div>
+									<div class="inp_btm_area">
+										<div class="tx_inp_type unit fixed_type">
+											<input type="text">
+											<span>%</span>
+										</div>
+										<div class="tx_inp_type unit t1 flex_type">
+											<input type="text">
+											<span>kWh</span>
+										</div>
+									</div>
+									<button type="submit" class="btn_type">적용</button>
+								</div>
+							</div>
+							<script language="JavaScript">
+							$(function() {
+								$('.tb_fold_btn').click(function(){
+									var tbl_height = $(".tb_fold_div").height();
+									$('.tb_fold_div').slideToggle();
+									$(this).toggleClass("on");
+									$(this).text($(this).text() == '내용접기' ? '펼치기' : '내용접기');
+								});
+							});
+							</script>
 						</div>
 					</div>
 					<div class="col-lg-10">
@@ -200,18 +249,7 @@
 								<div class="fl"><button type="submit" class="btn_type">조회</button></div>
 								
 								<div class="fr">
-									<span class="tx_tit">그래프 스타일</span>
-									<div class="sa_select">
-										<div class="dropdown">
-										  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">전체 합산
-										  <span class="caret"></span></button>
-										  <ul class="dropdown-menu">
-											<li class="on"><a href="#">전체 합산</a></li>
-											<li><a href="#">사이트별 합산</a></li>
-											<li><a href="#">개별 막대</a></li>
-										  </ul>
-										</div>
-									</div>
+									<a href="#;" class="chart_change_column">그래프변경</a>
 								</div>
 							</div>
 							<p class="tx_time">2020-03-06 22:00:09</p>
@@ -435,7 +473,7 @@
 							  <a href="#;" class="save_btn">데이터저장</a>
 							</div>
 							<div class="tbl_top clear">
-								<h2 class="ntit fl">발전량 도표</h2>
+								<h2 class="ntit fl">예측 결과 도포</h2>
 								<ul class="fr">
 									<li><a href="#;" class="fold_btn">표접기</a></li>
 								</ul>
@@ -477,7 +515,7 @@
 											</thead>
 											<tbody>
 												<tr>
-													<th><span class="bu t1">사업소#1 매전량</span></th>
+													<th><span class="bu t3">실측</span></th>
 													<td>0</td>
 													<td>0</td>
 													<td>0</td>
@@ -505,35 +543,7 @@
 													<td>458</td>
 												</tr>
 												<tr>
-													<th><span class="bu t2">사업소#1 대시보드 계량</span></th>
-													<td>0</td>
-													<td>0</td>
-													<td>0</td>
-													<td>0</td>
-													<td>0</td>
-													<td>0</td>
-													<td>0</td>
-													<td>50</td>
-													<td>10</td>
-													<td>200</td>
-													<td>40</td>
-													<td>50</td>
-													<td>40</td>
-													<td>300</td>
-													<td>20</td>
-													<td>0</td>
-													<td>0</td>
-													<td>0</td>
-													<td>0</td>
-													<td>0</td>
-													<td>0</td>
-													<td>0</td>
-													<td>0</td>
-													<td>0</td>
-													<td>458</td>
-												</tr>
-												<tr>
-													<th><span class="bu t3">사업소#1 매전량</span></th>
+													<th><span class="bu t5">예측</span></th>
 													<td>0</td>
 													<td>0</td>
 													<td>0</td>
@@ -560,8 +570,45 @@
 													<td>0</td>
 													<td>458</td>
 												</tr>
+											</tbody>
+										</table>	
+									</div>
+									
+									<div class="chart_table">			
+										<table class="pc_use">
+											<thead>
 												<tr>
-													<th><span class="bu t4">사업소#1 대시보드 계량</span></th>
+													<th>2020-08-01</th>
+													<th>01:00</th>
+													<th>02:00</th>
+													<th>03:00</th>
+													<th>04:00</th>
+													<th>05:00</th>
+													<th>06:00</th>
+													<th>07:00</th>
+													<th>08:00</th>
+													<th>09:00</th>
+													<th>10:00</th>
+													<th>11:00</th>
+													<th>12:00</th>
+													<th>13:00</th>
+													<th>14:00</th>
+													<th>15:00</th>
+													<th>16:00</th>
+													<th>17:00</th>
+													<th>18:00</th>
+													<th>19:00</th>
+													<th>20:00</th>
+													<th>21:00</th>
+													<th>22:00</th>
+													<th>23:00</th>
+													<th>24:00</th>
+													<th>합계</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<th><span class="bu t3">실측</span></th>
 													<td>0</td>
 													<td>0</td>
 													<td>0</td>
@@ -580,6 +627,34 @@
 													<td>0</td>
 													<td>0</td>
 													<td>0</td>
+													<td>0</td>
+													<td>0</td>
+													<td>0</td>
+													<td>0</td>
+													<td>0</td>
+													<td>0</td>
+													<td>458</td>
+												</tr>
+												<tr>
+													<th><span class="bu t5">예측</span></th>
+													<td>0</td>
+													<td>0</td>
+													<td>0</td>
+													<td>0</td>
+													<td>0</td>
+													<td>0</td>
+													<td>0</td>
+													<td>50</td>
+													<td>10</td>
+													<td>20</td>
+													<td>10</td>
+													<td>40</td>
+													<td>50</td>
+													<td>30</td>
+													<td>0</td>
+													<td>0</td>
+													<td>0</td>
+													<td>300</td>
 													<td>0</td>
 													<td>0</td>
 													<td>0</td>

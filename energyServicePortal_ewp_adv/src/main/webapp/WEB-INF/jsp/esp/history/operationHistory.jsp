@@ -33,7 +33,6 @@
 	}
 
 	let devicesList;
-
 	const deviceTemplate = {
 			'SM': '스마트미터',
 			'SM_ISMART': '한전 아이스마트',
@@ -143,6 +142,25 @@
 			'd15': '39',
 		},
 	];
+		'SM': '스마트미터',
+		'SM_ISMART': '한전 아이스마트',
+		'SM_KPX': '전력거래소 계량포털',
+		'SM_CRAWLING': '데이터 수집기',
+		'SM_MANUAL': '수기 입력',
+		'INV_PV': '태양광 인버터',
+		'INV_WIND': '풍력 인버터',
+		'PCS_ESS': 'ESS PCS',
+		'BMS_SYS': 'BMS 시스템',
+		'BMS_RACK': 'BMS 랙',
+		'SENSOR_SOLAR': '태양광 센서',
+		'SENSOR_FRAME': '불꽃 센서',
+		'SENSOR_TEMP_HUMIDITY': '온습도 센서',
+		'CCTV': 'CCTV'
+	};
+
+	let devicesList;
+	
+	let gridList;
 
 	var initPage = function () {
 		place();
@@ -150,6 +168,8 @@
 
 	//사업소 조회 
 	var place = function (result) {
+	//사업소 조회
+	const place = function (result) {
 		$.ajax({
 			url: apiURL + configSite,
 			type: 'get',
@@ -178,9 +198,13 @@
 			dataType: "json"
 		});
 	};
+	const initPage = function () {
+		place();
+	};
 
 	//선택한 SID에 해당하는 유형의 타입을 보여준다.
 	var deviceType = function () {
+	const deviceType = function () {
 		$('#type').prev('button').empty().append('전체').append('<span class="caret"></span>');
 
 		if($(':checkbox[name="sid"]:checked').length > 0) {
@@ -231,6 +255,7 @@
 
 	//설비타입 디바이스타입 설정한다.
 	var device = function () {
+	const device = function () {
 		$('#device').prev('button').empty().append('복수 선택').append('<span class="caret"></span>');
 		
 		if($(':checkbox[name="type"]:checked').length > 0) {
@@ -270,6 +295,22 @@
 	}
 
 	var searchGrid = function () {
+
+		if($(':checkbox[name="sid"]:checked').length == 0) {
+			alert('사이트를 한개이상 선택해 주세요.');
+			return false;
+		}
+
+		if($(':checkbox[name="type"]:checked').length == 0) {
+			alert('설비타입을 한개이상 선택해 주세요.');
+			return false;
+		}
+		
+		if($(':checkbox[name="device"]:checked').length == 0) {
+			alert('설비를 한개이상 선택해 주세요.');
+			return false;
+		}
+
 		$('.his_tbl tbody').empty();
 
 		var deviceArray = new Array();
@@ -277,10 +318,15 @@
 			deviceArray.push($(this).val());
 		});
 		
+
+		console.log(devicesList);
+
 		//설비유형이 여러개일경우 하나만 들어가서 여러번 호출한다.
 		$(':checkbox[id^=type_]:checked').each(function() {
+// 		$(':checkbox[id^=type_]:checked').each(function() {
 			var statusRawData = {
 				device_type: $(this).val(),
+				device_type: ' ',
 				device_ids: deviceArray.join(','),
 				startTime: $('#datepicker1').datepicker('getDate').format('yyyyMMdd') + '000000',
 				endTime: $('#datepicker2').datepicker('getDate').format('yyyyMMdd') + '235959'
@@ -294,13 +340,28 @@
 				success: function(result) {
 					var data = result;
 					if(debugMode) {console.log(data);}
+
 					if(data.length > 0) {
 						$.each(data, function(i, el) {
 							let trHtml = $('<tr>');
 
+							//사이트명세팅
+							let siteName = '-';
+							$.each(devicesList, function(j, el2) {
+								if(el2.did == el.did) {
+									$(':checkbox[name="sid"]').each(function() {
+										if($(this).val() == el2.sid) {
+											siteName = $(this).next().text()
+										}
+									});
+								}
+							});
+
 							trHtml.append('<td>' + el.dname + '</td>');
 							trHtml.append('<td>' + el.did + '</td>');
 							trHtml.append('<td>' + '-' + '</td>');
+							trHtml.append('<td>' + '-' + '</td>');
+							trHtml.append('<td>' + siteName + '</td>');
 							trHtml.append('<td>' + '-' + '</td>');
 							trHtml.append('<td>' + el.dcVoltage + '</td>');
 							trHtml.append('<td>' + el.dcCurrent + '</td>');
@@ -311,18 +372,27 @@
 							trHtml.append('<td>' + el.acVoltageST + '</td>');
 							trHtml.append('<td>' + el.acVoltageTR + '</td>');
 							trHtml.append('<td>' + '-' + '</td>');
+							trHtml.append('<td>' + el.powerFactor + '</td>');
 							trHtml.append('<td>' + '-' + '</td>');
 							trHtml.append('<td>' + '-' + '</td>');
 							trHtml.append('<td>' + new Date(el.timestamp).format('yyyy.MM.dd hh:mm:ss') + '</td>');
 
 							$('.his_tbl tbody').append(trHtml);
 						});
+
+						gridList.concat(data);
+						if(gridList != null) {
+							gridList.concat(data);
+						} else {
+							gridList = data;
+						}
 					}
 				},
 				dataType: "json"
 			});
 		});
 // 		tableGrid();
+// 		});
 	};
 
 	var tableGrid = function () {
@@ -375,6 +445,14 @@
 				}
 				//첫 번째 값 + 외 몇개로 표기
 				$(this).parents('ul').prev('button').empty().append($(':checkbox[name="sid"]:checked').eq(0).next('label').text() + '&nbsp;' + extendText).append('<span class="caret"></span>');
+				
+				//차트 셀렉트 생성
+				$('#chartSid').empty();
+				$(':checkbox[name="sid"]:checked').each(function() {
+					$a = $('<a>').attr('href', '#').text($(this).next().text());
+					$li = $('<li>').append($a).data('sid', $(this).val());
+					$('#chartSid').append($li);
+				});
 			}
 			deviceType();
 		});
@@ -421,12 +499,23 @@
 				}
 				//첫 번째 값 + 외 몇개로 표기
 				$(this).parents('ul').prev('button').empty().append($(':checkbox[name="device"]:checked').eq(0).next('label').text() + '&nbsp;' + extendText).append('<span class="caret"></span>');
+
+				//차트 셀렉트 생성
+				$('#chartDid').empty();
+				$(':checkbox[name="device"]:checked').each(function() {
+					$a = $('<a>').attr('href', '#').text($(this).next().text());
+					$li = $('<li>').append($a).data('did', $(this).val());
+					$('#chartDid').append($li);
+				});
 			}
 		});
 
 		//기간 선택
-		$(document).on('click', '#term a', function (e) {
+		$(document).on('click', '#interval a', function (e) {
 			e.preventDefault();
+			if($(this).data('value') == '1') {
+				$('')
+			}
 			$(this).parents('ul').prev('button').data('value', $(this).data('value')).empty().append($(this).html()).append('<span class="caret"></span>');
 			device();
 		});
@@ -434,6 +523,16 @@
 		//검색
 		$('#search').on('click', function () {
 			searchGrid();
+		});
+
+		$(document).on('click', '#chartDid a', function(e) {
+			e.preventDefault();
+			$(this).parents('ul').prev('button').data('value', $(this).data('value')).empty().append($(this).html()).append('<span class="caret"></span>');
+		});
+
+		$(document).on('click', '#way a', function(e) {
+			e.preventDefault();
+			$(this).parents('ul').prev('button').data('value', $(this).data('value')).empty().append($(this).html()).append('<span class="caret"></span>');
 		});
 
 		//헤더 클릭
@@ -482,6 +581,15 @@
 			}
 		});
 
+		//분석 기준 설비 선택
+		$('#chartSid').prev('button').on('click', function(e) {
+			if ($(':checkbox[name="sid"]:checked').length <= 0) {
+		$('#chartDid').prev('button').on('click', function(e) {
+			if ($(':checkbox[name="device"]:checked').length <= 0) {
+				e.stopPropagation();
+			}
+		});
+
 		//전체 선택/전체 해제
 		$('#device button.btn_type03').on('click', function (e) {
 			var idx = $('#device button.btn_type03').index($(this));
@@ -491,6 +599,180 @@
 			} else {
 				$('[id^="device_"]').prop('checked', false);
 			}
+		});
+
+		
+		$('#chartAdd').on('click', function() {
+			if($('#chartDid').prev('button').data('value') == '') {
+				alert('추가 하시려는 사이트를 선택 해 주세요.');
+				return false;
+			}
+
+			if($(':radio[name="rdo_btn"]').is(':checked') == false) {
+				alert('추가 하시려는 항목을 선택 해 주세요.');
+				return false;
+			}
+
+			if($(':radio[name="rdo_btn2"]').is(':checked') == false) {
+				alert('선택 해 주세요.');
+				return false;
+			}
+
+
+			$('#chartDid').prev('button').data('value');
+			
+
+			$txt =$('#chartDid').prev('button').text() + ': ' + $(':radio[name="rdo_btn"]:checked').val() + $(':radio[name="rdo_btn2"]:checked').val()
+			$span = $('<span>').addClass('tag_type').append($txt).append('<button>')
+			let $txt =$('#chartDid').prev('button').text() + ': ' + $(':radio[name="rdo_btn"]:checked').val() + $(':radio[name="rdo_btn2"]:checked').val()
+			let $span = $('<span>').addClass('tag_type').append($txt).append('<button>').data('key', $(':radio[name="rdo_btn"]:checked').val())
+			$span.find('button').append('닫기');
+
+			if($('#way').prev('button').data('value') == 'l') {
+				$('.tag_bx .tx_tit').eq(0).append($span);
+			} else {
+				$('.tag_bx .tx_tit').eq(1).append($span);
+			}
+		});
+
+		$('#chartDraw').on('click', function() {
+
+			if($('.tag_bx .tx_tit').find('li').length <= 0) {
+			if($('.tag_bx .tx_tit').find('span').length <= 0) {
+				alert('한개이상 항목을 선택해 주세요.');
+				return false;
+			}
+
+			let chartSeries = new Array();
+
+			$('.tag_bx .tx_tit').eq(0).find('span').each(function() {
+				let dataArr = new Array();
+				let keyText = $(this).data('key');
+				$.each(gridList, function(j, el) {
+					if(j <= 100) {
+						dataArr.push({
+							'x': el.timestemp,
+							'y': eval('el.' + keyText)
+						});
+					}
+				});
+
+				let temp = {
+					'name': $(this).text(),
+					'type': 'column',
+					'stack': 'female',
+					'type': 'column',
+					'tooltip': {
+						'valueSuffix': 'kWh'
+					},
+					'data': dataArr
+				};
+
+				chartSeries.push(temp);
+			});
+
+			console.log(chartSeries);
+
+			Highcharts.chart('hchart2', {
+				chart: {
+					marginLeft: 80,
+					marginRight: 0,
+					backgroundColor: 'transparent',
+					type: 'column'
+				},
+				navigation: {
+					buttonOptions: {
+						enabled: false /* 메뉴 안보이기 */
+					}
+				},
+				title: {
+					text: ''
+				},
+				subtitle: {
+					text: ''
+				},
+				xAxis: {
+					labels: {
+						align: 'center',
+						style: {
+							color: '#3d4250',
+							fontSize: '14px'
+						}
+					},
+					tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
+					title: {
+						text: null
+					},
+					crosshair: true /* 포커스 선 */
+				},
+				yAxis: {
+					gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
+					min: 0, /* 최소값 지정 */
+					title: {
+						text: '(kWh)',
+						align: 'low',
+						rotation: 0, /* 타이틀 기울기 */
+						y: 25, /* 타이틀 위치 조정 */
+						x: 5, /* 타이틀 위치 조정 */
+						style: {
+							color: '#3d4250',
+							fontSize: '14px'
+						}
+					},
+					labels: {
+						overflow: 'justify',
+						x: -20, /* 그래프와의 거리 조정 */
+						style: {
+							color: '#3d4250',
+							fontSize: '14px'
+						}
+					}
+				},
+				/* 범례 */
+				legend: {
+					enabled: true,
+					align: 'right',
+					verticalAlign: 'top',
+					x: 10,
+					itemStyle: {
+						color: '#3d4250',
+						fontSize: '14px',
+						fontWeight: 400
+					},
+					itemHoverStyle: {
+						color: '' /* 마우스 오버시 색 */
+					},
+					symbolPadding: 3, /* 심볼 - 텍스트간 거리 */
+					symbolHeight: 8 /* 심볼 크기 */
+				},
+				/* 툴팁 */
+				tooltip: {
+					shared: true /* 툴팁 공유 */
+				},
+				/* 옵션 */
+				plotOptions: {
+					series: {
+						label: {
+							connectorAllowed: false
+						},
+						borderWidth: 0 /* 보더 0 */
+					},
+					line: {
+						marker: {
+							enabled: false /* 마커 안보이기 */
+						}
+					},
+					column: {
+						stacking: 'normal'
+					}
+				},
+				/* 출처 */
+				credits: {
+					enabled: false
+				}
+				},
+				series: chartSeries
+			});
 		});
 
 		$('#datepicker1').datepicker('setDate', 'today'); //데이트 피커 기본
@@ -570,7 +852,7 @@
 							<div class="dropdown">
 								<button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown">15분
 									<span class="caret"></span></button>
-								<ul class="dropdown-menu" id="term">
+								<ul class="dropdown-menu" id="interval">
 									<li><a href="#" data-value="1">1분</a></li>
 									<li class="on"><a href="#" data-value="15">15분</a></li>
 									<li><a href="#" data-value="hour">1시간</a></li>
@@ -613,6 +895,12 @@
 											<li><a href="#">사이트명</a></li>
 											<li><a href="#">사이트명</a></li>
 											<li><a href="#">사이트명</a></li>
+										<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown">사이트
+										<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown">설비명
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu" id="chartSid">
+										<ul class="dropdown-menu" id="chartDid">
 										</ul>
 									</div>
 								</div>
@@ -624,13 +912,62 @@
 											<li>
 												<a href="#" data-value="option1" tabindex="-1">
 													<input type="radio" id="rdo01" name="rdo_btn" value="DC 전압">
+													<input type="radio" id="rdo01" name="rdo_btn" value="dcVoltage">
 													<label for="rdo01"><span></span>DC 전압</label>
 												</a>
 											</li>
 											<li>
 												<a href="#" data-value="option2" tabindex="-1">
 													<input type="radio" id="rdo02" name="rdo_btn" value="DC 전류">
+													<input type="radio" id="rdo02" name="rdo_btn" value="dcCurrent">
 													<label for="rdo02"><span></span>DC 전류</label>
+												</a>
+											</li>
+											<li>
+												<a href="#" data-value="option2" tabindex="-1">
+													<input type="radio" id="rdo03" name="rdo_btn" value="DC 전력">
+													<input type="radio" id="rdo03" name="rdo_btn" value="dcPower">
+													<label for="rdo03"><span></span>DC 전류</label>
+												</a>
+											</li>
+											<li>
+												<a href="#" data-value="option2" tabindex="-1">
+													<input type="radio" id="rdo04" name="rdo_btn" value="현재 출력">
+													<label for="rdo04"><span></span>현재 출력</label>
+												</a>
+											</li>
+											<li>
+												<a href="#" data-value="option2" tabindex="-1">
+													<input type="radio" id="rdo05" name="rdo_btn" value="누전발전량">
+													<input type="radio" id="rdo05" name="rdo_btn" value="totalGenPower">
+													<label for="rdo05"><span></span>누전발전량</label>
+												</a>
+											</li>
+											<li>
+												<a href="#" data-value="option2" tabindex="-1">
+													<input type="radio" id="rdo06" name="rdo_btn" value="AC 전압R">
+													<input type="radio" id="rdo06" name="rdo_btn" value="acVoltageTR">
+													<label for="rdo06"><span></span>AC 전압R</label>
+												</a>
+											</li>
+											<li>
+												<a href="#" data-value="option2" tabindex="-1">
+													<input type="radio" id="rdo07" name="rdo_btn" value="AC 전압S">
+													<input type="radio" id="rdo07" name="rdo_btn" value="acVoltageRS">
+													<label for="rdo07"><span></span>AC 전압S</label>
+												</a>
+											</li>
+											<li>
+												<a href="#" data-value="option2" tabindex="-1">
+													<input type="radio" id="rdo08" name="rdo_btn" value="AC 전압T">
+													<input type="radio" id="rdo08" name="rdo_btn" value="acVoltageST">
+													<label for="rdo08"><span></span>AC 전압T</label>
+												</a>
+											</li>
+											<li>
+												<a href="#" data-value="option2" tabindex="-1">
+													<input type="radio" id="rdo09" name="rdo_btn" value="역률">
+													<label for="rdo09"><span></span>역률</label>
 												</a>
 											</li>
 										</ul>
@@ -669,6 +1006,12 @@
 										<ul class="dropdown-menu">
 											<li class="on"><a href="#">y-좌</a></li>
 											<li><a href="#">y-우</a></li>
+										<button class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown" data-value="l">y-좌
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu" id="way">
+											<li class="on"><a href="#" data-value="l">y-좌</a></li>
+											<li><a href="#" data-value="r">y-우</a></li>
 										</ul>
 									</div>
 								</div>
@@ -678,6 +1021,8 @@
 							<div class="fl">
 								<button type="button" class="btn_type">그래프 항목 추가</button>
 								<button type="button" class="btn_type">그래프 그리기</button>
+								<button type="button" class="btn_type" id="chartAdd">그래프 항목 추가</button>
+								<button type="button" class="btn_type" id="chartDraw">그래프 그리기</button>
 							</div>
 
 							<!-- 우측 항목 -->
@@ -1357,6 +1702,7 @@
 			<div class="col-lg-12">
 				<div class="indiv">
 					<table class="his_tbl">
+					<table class="his_tbl" id="datatable">
 						<thead>
 							<tr>
 								<th data-column="datetime">설비명</th>
@@ -1375,6 +1721,22 @@
 								<th data-column="d14"><button class="btn_align">주파수</button></th>
 								<th data-column="d15"><button class="btn_align">온도</button></th>
 								<th data-column="d16" data-column="datetime">시간</th>
+								<th data-column="dname">설비명</th>
+								<th data-column="">설비ID</th>
+								<th data-column="">사업소</th>
+								<th data-column="">상태</th>
+								<th data-column="dcVoltage"><button class="btn_align">DC전압</button></th>
+								<th data-column="dcCurrent"><button class="btn_align">DC전류</button></th>
+								<th data-column="dcPower"><button class="btn_align">DC전력</button></th>
+								<th data-column="dcCurrent"><button class="btn_align">현재출력</button></th>
+								<th data-column="totalGenPower"><button class="btn_align">누적발전량</button></th>
+								<th data-column="acVoltageRS"><button class="btn_align">AC전압R</button></th>
+								<th data-column="acVoltageST"><button class="btn_align">AC전압S</button></th>
+								<th data-column="acVoltageTR"><button class="btn_align">AC전압T</button></th>
+								<th data-column=""><button class="btn_align">역률</button></th>
+								<th data-column=""><button class="btn_align">주파수</button></th>
+								<th data-column=""><button class="btn_align">온도</button></th>
+								<th data-column="timestamp">시간</th>
 						</thead>
 						<tbody>
 						</tbody>
