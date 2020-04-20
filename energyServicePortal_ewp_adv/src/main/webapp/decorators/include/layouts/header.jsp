@@ -80,11 +80,8 @@
 					<a href="#">사업소별</a>
 					<ul>
 					  <li><a href="">전체</a></a></li>
-					  <li><a href="/dashboard/smain.do">사업소#1</a></li>
-					  <li><a href="/dashboard/smain.do">사업소#2</a></li>
-					  <li><a href="/dashboard/smain.do">사업소#3</a></li>
-					  <li><a href="/dashboard/smain.do">사업소#4</a></li>
-					  <li><a href="/dashboard/smain.do">사업소#5</a></li>
+					  <li><a href="/dashboard/smain.do?sid=fa313b15-1fe1-41e3-b592-5a739e3d9b37">혜원솔라 01</a></li>
+					  <li><a href="/dashboard/smain.do?sid=0c7c90c6-9505-4f77-b42d-500c2879c689">혜원솔라 02</a></li>
 					</ul>
 				  </dd>
 				</dl>

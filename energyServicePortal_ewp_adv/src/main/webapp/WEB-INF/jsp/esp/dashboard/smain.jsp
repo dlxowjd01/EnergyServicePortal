@@ -17,7 +17,6 @@
 				if(str == "경고") $tbody.find('.flag2').css("display", "none");
 				if(str == "이상") $tbody.find('.flag3').css("display", "none");
 			}
-
         });
 	});
     </script>
@@ -26,14 +25,14 @@
 	<link type="text/css" href="/css/custom.css" rel="stylesheet">
 	<script type="text/javascript" src="/js/modules/rounded-corners.js"></script>
 	<script type="text/javascript" src="/js/jquery.rwdImageMaps.min.js"></script>
-
-				<div class="row">
-				  <div class="time">
-				    <span>CURRENT TIME</span>
-				    <em class="currTime">${nowTime}</em>
-				    <span>DATA BASE TIME</span>
-				    <em>2018-07-27 17:01:02</em>
-				  </div>
+				<div class="col-lg-12">
+					<h1 class="page-header fl">${siteName}</h1>
+					<div class="time fr">
+						<span>CURRENT TIME</span>
+						<em class="currTime">${nowTime}</em>
+						<span>DATA BASE TIME</span>
+						<em class="dbTime"></em>
+					</div>
 				</div>
 
 				<div class="row">
