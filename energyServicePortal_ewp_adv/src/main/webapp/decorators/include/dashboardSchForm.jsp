@@ -23,6 +23,10 @@
       startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
       endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
       $("#selTerm").val("day");
+    } else if( termType === 'yesterday'){
+      startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate()-1, 0, 0, 0);
+      endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate()-1, 23, 59, 59);
+      $("#selTerm").val("day");
     } else if (termType === 'week') {
       // 시간 정보 000000 한 다음에 findWeek에서 연월일 가져와서 설정
       const weekSub = (today.getDay() === 0) ? 6 : today.getDay() - 1;
