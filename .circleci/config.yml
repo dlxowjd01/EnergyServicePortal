@@ -27,14 +27,6 @@ jobs:
           key: circleci-demo-java-spring-{{ checksum "ewpsp/pom.xml" }}-{{ checksum "ewp-api-agent/pom.xml" }}-{{ checksum "energyServicePortal_ewp_adv/pom.xml" }}
 
       # run tests!
-      # run: mvn integration-test
-      #- run:
-      #    name: static code analysis
-      #    command: |
-      #      mv settings.xml ~/.m2/settings.xml
-      #      mvn -f ewpsp/pom.xml clean package sonar:sonar
-      #      mvn -f ewp-api-agent/pom.xml clean package sonar:sonar
-      #      mvn -f energyServicePortal_ewp_adv/pom.xml clean package sonar:sonar
 
       - run: mvn -f energyServicePortal_ewp_adv/pom.xml clean package -DskipTests=true
 
@@ -44,15 +36,7 @@ jobs:
       - run:
           name: Move build files from target directory to root
           command: |
-            cp ewpsp/target/ewpsp.war .
-            cp ewp-api-agent/target/ewp-api-0.0.1-SNAPSHOT.jar .
             cp energyServicePortal_ewp_adv/target/energyServicePortal-1.0.0.war .
-
-      - store_artifacts:
-          path: ewpsp/target/ewpsp.war
-
-      - store_artifacts:
-          path: ewp-api-agent/target/ewp-api-0.0.1-SNAPSHOT.jar
 
       - store_artifacts:
           path: energyServicePortal_ewp_adv/target/energyServicePortal-1.0.0.war
@@ -69,8 +53,6 @@ jobs:
       - persist_to_workspace:
           root: ~/circleci-demo-java-spring
           paths:
-            - ewpsp.war
-            - ewp-api-0.0.1-SNAPSHOT.jar
             - energyServicePortal-1.0.0.war
             - scripts/deploy.sh
             - scripts/health-check.sh
