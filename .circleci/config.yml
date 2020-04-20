@@ -17,14 +17,14 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: circleci-demo-java-spring-{{ checksum "ewpsp/pom.xml" }}-{{ checksum "ewp-api-agent/pom.xml" }}-{{ checksum "energyServicePortal_ewp_adv/pom.xml" }}
+          key: circleci-demo-java-spring-{{ checksum "energyServicePortal_ewp_adv/pom.xml" }}
 
       - run: mvn -f energyServicePortal_ewp_adv/pom.xml dependency:go-offline
 
       - save_cache:
           paths:
             - ~/.m2
-          key: circleci-demo-java-spring-{{ checksum "ewpsp/pom.xml" }}-{{ checksum "ewp-api-agent/pom.xml" }}-{{ checksum "energyServicePortal_ewp_adv/pom.xml" }}
+          key: circleci-demo-java-spring-{{ checksum "energyServicePortal_ewp_adv/pom.xml" }}
 
       # run tests!
 
