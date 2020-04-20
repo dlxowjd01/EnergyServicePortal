@@ -1770,7 +1770,7 @@
 												<div class="inchart" id="type_chart1" style="height:100%;text-align:center">차트영역</div>
                         <script language="JavaScript">
                           $(function () {
-                            var pieChart2 = Highcharts.chart('type_chart1', {
+                            pieChart['1'] = Highcharts.chart('type_chart1', {
                               chart: {
                                 marginTop: 0,
                                 marginLeft: 0,
@@ -1897,7 +1897,7 @@
                           <span class="di_li_tx">0kWh</span>
                         </li>
                         <li>
-                          <span class="di_li_tit">전일 누적발전</span>
+                          <span class="di_li_tit">전일 총발전량</span>
                           <span class="di_li_tx">0kWh</span>
                         </li>
 											</ul>
@@ -2044,7 +2044,7 @@
                           <div class="inchart" id="type_chart2" style="height:100%;text-align:center">차트영역</div>
                           <script language="JavaScript">
                             $(function () {
-                              var pieChart2 = Highcharts.chart('type_chart2', {
+                              pieChart['2'] = Highcharts.chart('type_chart2', {
                                 chart: {
                                   marginTop: 0,
                                   marginLeft: 0,
@@ -2171,7 +2171,7 @@
                             <span class="di_li_tx">0kWh</span>
                           </li>
                           <li>
-                            <span class="di_li_tit">전일 누적발전</span>
+                            <span class="di_li_tit">전일 총발전량</span>
                             <span class="di_li_tx">0kWh</span>
                           </li>
                         </ul>
@@ -2554,14 +2554,14 @@
               interval: "day"
             },
             success: function (result) {//api 요청결과
+              const day = Number(result.data[site.sid].start.toString().slice(6, 8));
               if (result.data[site.sid].energy) {
-                const day = Number(result.data[site.sid].start.toString().slice(6, 8));
                 pvList[day - 1] += Math.floor(result.data[site.sid].energy/1000);
               }
               if (result.data[site.sid].billing) {
-                const day = Number(result.data[site.sid].start.toString().slice(6, 8));
                 payList[day - 1] += Math.floor(result.data[site.sid].billing/10000);
               }
+              $('#centerTbody tr td:nth-child(5)').text(`${'${payList[day-1]}'} 만원`);
             },
             error: function (result, status, error) {
               //error function or alert, return
@@ -2916,9 +2916,11 @@
             },
             success: function (result) {//api 요청결과
               acPowerSum += result.acPower;
+              // pieChart[siteIdx+1].title.textStr = Math.floor(result.acPower/1000)+'kW';
               $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(6)`).text(Math.floor(result.acPower/1000)+'kW');
-              $(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(1)>span:nth-child(2)`).text(Math.floor(result.acPower/1000)+'kWh');
-              $('.highcharts-title > tspan').text(Math.floor(acPowerSum/1000)+'kW');
+              $(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(1)>span:nth-child(2)`).text(Math.floor(result.acPower/1000)+'kW');
+              // $('.highcharts-title > tspan').text(Math.floor(acPowerSum/1000)+'kW');
+              pieChart.setTitle({text:Math.floor(acPowerSum/1000)+'kW'});
               pieChart.series[0].data.forEach((e, idx) => {
                 if (e.name === "태양광") {
                   e.update({y: Math.floor(acPowerSum/1000)});
