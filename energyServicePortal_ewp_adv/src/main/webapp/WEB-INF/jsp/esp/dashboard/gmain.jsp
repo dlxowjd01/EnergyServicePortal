@@ -331,7 +331,7 @@
                     width: 1
                   }],
                   title: {
-                    text: '만원',
+                    text: '천원',
                     align: 'low',
                     rotation: 0, /* 타이틀 기울기 */
                     y: 25, /* 타이틀 위치 조정 */
@@ -426,7 +426,7 @@
                   dashStyle: 'ShortDash',
                   yAxis: 1,
                   tooltip: {
-                    valueSuffix: '만원'
+                    valueSuffix: '천원'
                   }
                 }],
                 /* 출처 */
@@ -605,7 +605,7 @@
                     width: 1
                   }],
                   title: {
-                    text: '만원',
+                    text: '천원',
                     align: 'low',
                     rotation: 0, /* 타이틀 기울기 */
                     y: 25, /* 타이틀 위치 조정 */
@@ -700,7 +700,7 @@
                   dashStyle: 'ShortDash',
                   yAxis: 1,
                   tooltip: {
-                    valueSuffix: '만원'
+                    valueSuffix: '천원'
                   }
                 }],
                 /* 출처 */
@@ -1259,7 +1259,7 @@
                 <div class="inchart">
                   <div id="pie_chart" style="height:200px;"></div>
                   <script language="JavaScript">
-                    var piChart;
+                    var pieChart;
                     $(function () {
                       pieChart = Highcharts.chart('pie_chart', {
                         chart: {
@@ -1791,7 +1791,7 @@
                                 text: '70%', // %표기
                                 align: 'center',
                                 verticalAlign: 'middle',
-                                y: 35,
+                                y: 32,
                                 x: 0,
                                 style: {
                                   fontSize: '14px',
@@ -2065,7 +2065,7 @@
                                   text: '70%', // %표기
                                   align: 'center',
                                   verticalAlign: 'middle',
-                                  y: 35,
+                                  y: 32,
                                   x: 0,
                                   style: {
                                     fontSize: '14px',
@@ -2321,6 +2321,7 @@
     // getGenDataByType();
     getTodayTotalDetail();
     // getAlarmInfo();
+    getDeviceStatusInfo();
     const now = new Date();
     $('.dbTime').text(`${'${now.format("yyyy-MM-dd HH:mm:ss")}'}`);
   }
@@ -2382,7 +2383,7 @@
               result.data[0].generation.items.map((e) => {
                 if (e.energy) {
                   const month = Number(e.basetime.toString().slice(4, 6));
-                  payList[month - 1] += Math.floor(e.billing/10000);
+                  payList[month - 1] += Math.floor(e.billing/1000);
                 }
               });
               //데이터 세팅
@@ -2408,7 +2409,7 @@
               }
               if (result.data[site.sid].billing) {
                 const month = Number(result.data[site.sid].start.toString().slice(4, 6));
-                payList[month - 1] += Math.floor(result.data[site.sid].billing/10000);
+                payList[month - 1] += Math.floor(result.data[site.sid].billing/1000);
               }
             },
             error: function (result, status, error) {
@@ -2476,7 +2477,7 @@
       yAxis: 1,
       data: payList,
       tooltip: {
-        valueSuffix: '만원'
+        valueSuffix: '천원'
       }
     }, false);
     
@@ -2535,7 +2536,7 @@
             result.data[0].generation.items.map((e) => {
               if (e.energy) {
                 const day = Number(e.basetime.toString().slice(6, 8));
-                payList[day - 1] += Math.floor(e.billing/10000);
+                payList[day - 1] += Math.floor(e.billing/1000);
               }
             });
           },
@@ -2559,9 +2560,9 @@
                 pvList[day - 1] += Math.floor(result.data[site.sid].energy/1000);
               }
               if (result.data[site.sid].billing) {
-                payList[day - 1] += Math.floor(result.data[site.sid].billing/10000);
+                payList[day - 1] += Math.floor(result.data[site.sid].billing/1000);
               }
-              $('#centerTbody tr td:nth-child(5)').text(`${'${payList[day-1]}'} 만원`);
+              $('#centerTbody tr td:nth-child(5)').text(`${'${payList[day-1]}'} 천원`);
             },
             error: function (result, status, error) {
               //error function or alert, return
@@ -2627,7 +2628,7 @@
       yAxis: 1,
       data: payList,
       tooltip: {
-        valueSuffix: '만원'
+        valueSuffix: '천원'
       }
     }, false);
     
@@ -2916,7 +2917,7 @@
             },
             success: function (result) {//api 요청결과
               acPowerSum += result.acPower;
-              // pieChart[siteIdx+1].title.textStr = Math.floor(result.acPower/1000)+'kW';
+              pieChart[`${'${siteIdx+1}'}`].setTitle({text:Math.floor(result.acPower/1000)+'kW'});
               $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(6)`).text(Math.floor(result.acPower/1000)+'kW');
               $(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(1)>span:nth-child(2)`).text(Math.floor(result.acPower/1000)+'kW');
               // $('.highcharts-title > tspan').text(Math.floor(acPowerSum/1000)+'kW');
@@ -3105,6 +3106,45 @@
     
     $alarmList.append(alarmStr);
     
+  }
+  
+  function getDeviceStatusInfo(){
+    
+    const formData = getSiteMainSchCollection("day");
+    
+    $.ajax({
+      url: "http://iderms.enertalk.com:8443/config/sites",
+      type: "get",
+      async: false,
+      data: {
+        oid: "spower",
+      },
+      success: function(sites){
+        sites.forEach((site, siteIdx) => {
+          $.ajax({
+            url: "http://iderms.enertalk.com:8443/weather",
+            type: "get",
+            async: false,
+            data: {
+              sid: site.sid,
+              startTime: formData.startTime,
+              endTime: formData.endTime,
+              interval: "day"
+            },
+            success: function(weather){
+              $(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fr span:nth-child(1)`).text(weather[0].temperature + ' °C');
+              $(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fr span:nth-child(2)`).text(weather[0].humidity + ' %');
+            },
+            error: function(error){
+              console.error(error);
+            }
+          })
+        })
+      },
+      error: function(error){
+        console.error(error);
+      }
+    })
   }
 </script>
 	
