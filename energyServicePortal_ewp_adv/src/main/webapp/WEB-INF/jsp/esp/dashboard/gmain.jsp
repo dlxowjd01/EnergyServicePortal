@@ -1534,9 +1534,9 @@
                     <th>경고</th>
                     <th><button class="btn_align down">사업소</button></th>
                     <th>설비용량</th>
-                    <th>발전량</th>
-                    <th>충전량</th>
-                    <th>방전량</th>
+                    <th>현재출력</th>
+                    <th>금일누적</th>
+                    <th>금일예측</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1549,13 +1549,13 @@
 						<span class="st_bar"></span>
 						<span class="battery_icon batter_out">충전</span>
 					</td>
-                    <td>3</td>
                     <td>0</td>
-                    <td>사업소사업소</td>
-                    <td>500</td>
-                    <td>12,345</td>
-                    <td>1,222</td>
-                    <td>123,456</td>
+                    <td>0</td>
+                    <td>혜원 솔라 02</td>
+                    <td>97.28kW</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
                   </tr>
                   <tr class="detail_info list1 flag1">
 					<td colspan="8">
@@ -1629,7 +1629,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="btn_bx clear"><a href="#" class="btn_type02 fr">대시 보드 보기<span class="ico_arrow"></span></a></div>
+								<div class="btn_bx clear"><a href="/dashboard/smain.do?sid=0c7c90c6-9505-4f77-b42d-500c2879c689" class="btn_type02 fr">대시 보드 보기<span class="ico_arrow"></span></a></div>
 							</div>
 							<div class="di_wrap_in">
 								<div class="di_top_sec">
@@ -1707,13 +1707,13 @@
 						<span class="status status_err" title="통신이상">통신이상</span>
 						<span class="st_bar"></span>
 					</td>
-                    <td>3</td>
                     <td>0</td>
-                    <td>사업소사업소</td>
-                    <td>500</td>
-                    <td>12,345</td>
-                    <td>1,222</td>
-                    <td>123,456</td>
+                    <td>0</td>
+                    <td>혜원 솔라 01</td>
+                    <td>97.28kW</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
                   </tr>
                   <tr class="detail_info list2 flag2">
                     <td colspan="8">
@@ -1787,102 +1787,102 @@
 										</div>
 									</div>
 								</div>
-								<div class="btn_bx clear"><a href="#" class="btn_type02 fr">대시 보드 보기<span class="ico_arrow"></span></a></div>
+								<div class="btn_bx clear"><a href="/dashboard/smain.do?sid=fa313b15-1fe1-41e3-b592-5a739e3d9b37" class="btn_type02 fr">대시 보드 보기<span class="ico_arrow"></span></a></div>
 							</div>
 						</div>
                     </td>
                   </tr>
-				  <tr class="dbclickopen flag2">
-                    <td class="first_td">
-						<span class="status status_drv" title="운전">운전</span>
-						<span class="st_bar"></span>
-						<span class="battery_icon batter_in">충전</span>
-					</td>
-                    <td>3</td>
-                    <td>0</td>
-                    <td>사업소사업소</td>
-                    <td>500</td>
-                    <td>12,345</td>
-                    <td>1,222</td>
-                    <td>123,456</td>
-                  </tr>
-                  <tr class="detail_info list2 flag2">
-                    <td colspan="8">
-                      <div class="di_wrap">
-							<div class="di_wrap_in">
-								<div class="di_top_sec">
-									<span class="ico battery"></span>
-									<!-- <span class="ico solar"></span>
-									<span class="ico water"></span>
-									<span class="ico wind"></span> -->
-									<div class="tx_area clear">
-										<div class="fl">
-											<span class="tx">배터리 룸</span>
-										</div>
-										<div class="fr">
-											<span class="tx2">온도 30°C</span>
-											<span class="tx2">습도 30%</span>
-										</div>
-									</div>
-								</div>
-								<div class="di_btm_sec clear">
-									<div class="sec_bx">
-										<div class="bx_in">
-											<div class="bx_top">
-												<!-- [D] 차트 개발 시 style 삭제해주세요. -->
-												<div class="inchart" style="background:#555;height:100%;text-align:center">차트영역</div>
-											</div>
-											<ul class="di_list">
-												<li>
-													<span class="di_li_tit">설비 출력</span>
-													<span class="di_li_tx">7MW / 28MWh</span>
-												</li>
-												<li>
-													<span class="di_li_tit">금일 누적충전</span>
-													<span class="di_li_tx">28MWh</span>
-												</li>
-												<li>
-													<span class="di_li_tit">금일 방전예측</span>
-													<span class="di_li_tx">28MWh</span>
-												</li>
-												<li>
-													<span class="di_li_tit">금일 누적방전</span>
-													<span class="di_li_tx">28MWh</span>
-												</li>
-											</ul>
-										</div>
-									</div>
-									<div class="sec_bx">
-										<div class="bx_in">
-											<div class="bx_top">
-												<div class="bx_top_inner">
-													<div class="bg_battery">
-														<span class="bg"></span>
-														<!-- [D] 퍼센트에 맞게 width 값 조절 -->
-														<span class="var"><span style="width:80%"></span></span>
-														<span class="num">80%</span>
-													</div>
-												</div>
-											</div>
-											<ul class="di_list">
-												<li>
-													<span class="di_li_tit">총 설비용량</span>
-													<span class="di_li_tx">7MW / 28MWh</span>
-												</li>
-											</ul>
-											<div class="di_tx_bx">
-												<p class="tx">최근 미처리 오류 : <span>2건</span></p>
-												<p class="tx">2020-02-10 12:00:01 데이터 disconnected</p>
-												<p class="tx">2020-02-09 11:41:26 인버터#1 이상 감지</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="btn_bx clear"><a href="#" class="btn_type02 fr">대시 보드 보기<span class="ico_arrow"></span></a></div>
-							</div>
-						</div>
-                    </td>
-                  </tr>
+				  <%--<tr class="dbclickopen flag2">--%>
+          <%--          <td class="first_td">--%>
+					<%--	<span class="status status_drv" title="운전">운전</span>--%>
+					<%--	<span class="st_bar"></span>--%>
+					<%--	<span class="battery_icon batter_in">충전</span>--%>
+					<%--</td>--%>
+          <%--          <td>3</td>--%>
+          <%--          <td>0</td>--%>
+          <%--          <td>사업소사업소</td>--%>
+          <%--          <td>500</td>--%>
+          <%--          <td>12,345</td>--%>
+          <%--          <td>1,222</td>--%>
+          <%--          <td>123,456</td>--%>
+          <%--        </tr>--%>
+          <%--        <tr class="detail_info list2 flag2">--%>
+          <%--          <td colspan="8">--%>
+          <%--            <div class="di_wrap">--%>
+					<%--		<div class="di_wrap_in">--%>
+					<%--			<div class="di_top_sec">--%>
+					<%--				<span class="ico battery"></span>--%>
+					<%--				<!-- <span class="ico solar"></span>--%>
+					<%--				<span class="ico water"></span>--%>
+					<%--				<span class="ico wind"></span> -->--%>
+					<%--				<div class="tx_area clear">--%>
+					<%--					<div class="fl">--%>
+					<%--						<span class="tx">배터리 룸</span>--%>
+					<%--					</div>--%>
+					<%--					<div class="fr">--%>
+					<%--						<span class="tx2">온도 30°C</span>--%>
+					<%--						<span class="tx2">습도 30%</span>--%>
+					<%--					</div>--%>
+					<%--				</div>--%>
+					<%--			</div>--%>
+					<%--			<div class="di_btm_sec clear">--%>
+					<%--				<div class="sec_bx">--%>
+					<%--					<div class="bx_in">--%>
+					<%--						<div class="bx_top">--%>
+					<%--							<!-- [D] 차트 개발 시 style 삭제해주세요. -->--%>
+					<%--							<div class="inchart" style="background:#555;height:100%;text-align:center">차트영역</div>--%>
+					<%--						</div>--%>
+					<%--						<ul class="di_list">--%>
+					<%--							<li>--%>
+					<%--								<span class="di_li_tit">설비 출력</span>--%>
+					<%--								<span class="di_li_tx">7MW / 28MWh</span>--%>
+					<%--							</li>--%>
+					<%--							<li>--%>
+					<%--								<span class="di_li_tit">금일 누적충전</span>--%>
+					<%--								<span class="di_li_tx">28MWh</span>--%>
+					<%--							</li>--%>
+					<%--							<li>--%>
+					<%--								<span class="di_li_tit">금일 방전예측</span>--%>
+					<%--								<span class="di_li_tx">28MWh</span>--%>
+					<%--							</li>--%>
+					<%--							<li>--%>
+					<%--								<span class="di_li_tit">금일 누적방전</span>--%>
+					<%--								<span class="di_li_tx">28MWh</span>--%>
+					<%--							</li>--%>
+					<%--						</ul>--%>
+					<%--					</div>--%>
+					<%--				</div>--%>
+					<%--				<div class="sec_bx">--%>
+					<%--					<div class="bx_in">--%>
+					<%--						<div class="bx_top">--%>
+					<%--							<div class="bx_top_inner">--%>
+					<%--								<div class="bg_battery">--%>
+					<%--									<span class="bg"></span>--%>
+					<%--									<!-- [D] 퍼센트에 맞게 width 값 조절 -->--%>
+					<%--									<span class="var"><span style="width:80%"></span></span>--%>
+					<%--									<span class="num">80%</span>--%>
+					<%--								</div>--%>
+					<%--							</div>--%>
+					<%--						</div>--%>
+					<%--						<ul class="di_list">--%>
+					<%--							<li>--%>
+					<%--								<span class="di_li_tit">총 설비용량</span>--%>
+					<%--								<span class="di_li_tx">7MW / 28MWh</span>--%>
+					<%--							</li>--%>
+					<%--						</ul>--%>
+					<%--						<div class="di_tx_bx">--%>
+					<%--							<p class="tx">최근 미처리 오류 : <span>2건</span></p>--%>
+					<%--							<p class="tx">2020-02-10 12:00:01 데이터 disconnected</p>--%>
+					<%--							<p class="tx">2020-02-09 11:41:26 인버터#1 이상 감지</p>--%>
+					<%--						</div>--%>
+					<%--					</div>--%>
+					<%--				</div>--%>
+					<%--			</div>--%>
+					<%--			<div class="btn_bx clear"><a href="#" class="btn_type02 fr">대시 보드 보기<span class="ico_arrow"></span></a></div>--%>
+					<%--		</div>--%>
+					<%--	</div>--%>
+          <%--          </td>--%>
+          <%--        </tr>--%>
                 </tbody>
               </table>
             </div>
@@ -2082,7 +2082,7 @@
         oid: "spower",
       },
       success: function (result) {
-        $(`.gmain_chart2 span.term`).text(`${'${today.getFullYear()}'}.${'${today.getMonth()}'}.1 ~ ${'${today.getFullYear()}'}.${'${today.getMonth()+1}'}.${'${today.getDate()}'}`);
+        $(`.gmain_chart2 span.term`).text(`${'${today.getFullYear()}'}.${'${today.getMonth()+1}'}.1 ~ ${'${today.getFullYear()}'}.${'${today.getMonth()+1}'}.${'${today.getDate()}'}`);
         result.forEach(site=>{
         $.ajax({
           url: "http://iderms.enertalk.com:8443/energy/sites",
@@ -2444,7 +2444,7 @@
               $('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(Math.floor(prevVal += (generationSum/1000)));
               let prevBillVal = Number($('#centerTbody tr td:nth-child(5)').text());
               $('#centerTbody tr td:nth-child(5)').text(Math.floor(prevBillVal += billingSum));
-              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(8)`).text(Math.floor(generationSum/1000)+'kWh');
+              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(7)`).text(Math.floor(generationSum/1000)+'kWh');
               $(`.detail_info.list${'${siteIdx+1}'} li.clear:nth-child(3) span.fl:nth-child(2) em`).text(Math.floor(generationSum/1000));
             },
             error: function (result, status, error) {
@@ -2468,7 +2468,7 @@
               result.data[0].generation.items.map((e, idx) => generationForecastSum += e.energy);
               let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text());
               $('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(Math.floor(prevVal += generationForecastSum/1000));
-              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(9)`).text(Math.floor(generationForecastSum/1000)+'kWh');
+              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(8)`).text(Math.floor(generationForecastSum/1000)+'kWh');
               $(`.detail_info.list${'${siteIdx+1}'} li.clear:nth-child(4) span.fl:nth-child(2) em`).text(Math.floor(generationForecastSum/1000));
             },
             error: function (result, status, error) {
@@ -2490,7 +2490,7 @@
             },
             success: function (result) {//api 요청결과
               acPowerSum += result.acPower;
-              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(7)`).text(Math.floor(result.acPower/1000)+'kW');
+              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(6)`).text(Math.floor(result.acPower/1000)+'kW');
               $('.highcharts-title > tspan').text(Math.floor(acPowerSum/1000)+'kW');
               pieChart.series[0].data.forEach((e, idx) => {
                 if (e.name === "태양광") {
