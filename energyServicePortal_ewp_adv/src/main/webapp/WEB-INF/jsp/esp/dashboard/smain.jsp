@@ -1819,8 +1819,8 @@
 														</thead>
 														<tbody>
 															<tr>
-																<td><span>16.0</span>℃</td>
-																<td><span>3.5</span>km/h</td>
+																<td><span>-</span>℃</td>
+																<td><span>-</span>km/h</td>
 																<td><span>-</span>kWh/㎡․day</td>
 															</tr>
 														</tbody>
@@ -1843,7 +1843,7 @@
 														<tbody>
 															<tr>
 																<td><span>-</span>mm</td>
-																<td><span>10.0</span>%</td>
+																<td><span>-</span>%</td>
 																<td><span>-</span>kWh/㎡․day</td>
 															</tr>
 														</tbody>
