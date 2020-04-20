@@ -1754,16 +1754,16 @@
 									<div class="tx_area clear">
 										<div class="fl">
 											<span class="tx">일사량</span>
-											<span class="tx2">30kWh/㎡․day</span>
+											<span class="tx2">- kWh/㎡․day</span>
 										</div>
 										<div class="fr">
-											<span class="tx2">온도 30°C</span>
-											<span class="tx2">습도 30%</span>
+											<span class="tx2">온도 0°C</span>
+											<span class="tx2">습도 0%</span>
 										</div>
 									</div>
 								</div>
 								<div class="di_btm_sec clear">
-									<div class="sec_bx">
+									<div class="sec_bx left">
 										<div class="bx_in">
 											<div class="bx_top">
 												<!-- [D] 차트 개발 시 style 삭제해주세요. -->
@@ -1884,26 +1884,26 @@
                         </script>
 											</div>
 											<ul class="di_list">
-												<li>
-													<span class="di_li_tit">설비 출력</span>
-													<span class="di_li_tx">7MW / 28MWh</span>
-												</li>
-												<li>
-													<span class="di_li_tit">금일 누적충전</span>
-													<span class="di_li_tx">28MWh</span>
-												</li>
-												<li>
-													<span class="di_li_tit">금일 방전예측</span>
-													<span class="di_li_tx">28MWh</span>
-												</li>
-												<li>
-													<span class="di_li_tit">금일 누적방전</span>
-													<span class="di_li_tx">28MWh</span>
-												</li>
+                        <li>
+                          <span class="di_li_tit">설비 출력</span>
+                          <span class="di_li_tx">0KW</span>
+                        </li>
+                        <li>
+                          <span class="di_li_tit">금일 누적발전</span>
+                          <span class="di_li_tx">0kWh</span>
+                        </li>
+                        <li>
+                          <span class="di_li_tit">금일 예측발전</span>
+                          <span class="di_li_tx">0kWh</span>
+                        </li>
+                        <li>
+                          <span class="di_li_tit">전일 누적발전</span>
+                          <span class="di_li_tx">0kWh</span>
+                        </li>
 											</ul>
 										</div>
 									</div>
-									<div class="sec_bx">
+									<div class="sec_bx right">
 										<div class="bx_in">
 											<div class="bx_top">
 												<div class="bx_top_inner"></div>
@@ -1911,11 +1911,11 @@
 											<ul class="di_list">
 												<li>
 													<span class="di_li_tit">총 설비용량</span>
-													<span class="di_li_tx">7MW / 28MWh</span>
+													<span class="di_li_tx">97.28kW</span>
 												</li>
 												<li>
 													<span class="di_li_tit">총 인버터수량</span>
-													<span class="di_li_tx">30EA</span>
+													<span class="di_li_tx">1EA</span>
 												</li>
 											</ul>
 											<div class="di_tx_bx">
@@ -2028,16 +2028,16 @@
                     <div class="tx_area clear">
                       <div class="fl">
                         <span class="tx">일사량</span>
-                        <span class="tx2">30kWh/㎡․day</span>
+                        <span class="tx2">- kWh/㎡․day</span>
                       </div>
                       <div class="fr">
-                        <span class="tx2">온도 30°C</span>
-                        <span class="tx2">습도 30%</span>
+                        <span class="tx2">온도 0°C</span>
+                        <span class="tx2">습도 0%</span>
                       </div>
                     </div>
                   </div>
                   <div class="di_btm_sec clear">
-                    <div class="sec_bx">
+                    <div class="sec_bx left">
                       <div class="bx_in">
                         <div class="bx_top">
                           <!-- [D] 차트 개발 시 style 삭제해주세요. -->
@@ -2160,24 +2160,24 @@
                         <ul class="di_list">
                           <li>
                             <span class="di_li_tit">설비 출력</span>
-                            <span class="di_li_tx">7MW / 28MWh</span>
+                            <span class="di_li_tx">0KW</span>
                           </li>
                           <li>
-                            <span class="di_li_tit">금일 누적충전</span>
-                            <span class="di_li_tx">28MWh</span>
+                            <span class="di_li_tit">금일 누적발전</span>
+                            <span class="di_li_tx">0kWh</span>
                           </li>
                           <li>
-                            <span class="di_li_tit">금일 방전예측</span>
-                            <span class="di_li_tx">28MWh</span>
+                            <span class="di_li_tit">금일 예측발전</span>
+                            <span class="di_li_tx">0kWh</span>
                           </li>
                           <li>
-                            <span class="di_li_tit">금일 누적방전</span>
-                            <span class="di_li_tx">28MWh</span>
+                            <span class="di_li_tit">전일 누적발전</span>
+                            <span class="di_li_tx">0kWh</span>
                           </li>
                         </ul>
                       </div>
                     </div>
-                    <div class="sec_bx">
+                    <div class="sec_bx right">
                       <div class="bx_in">
                         <div class="bx_top">
                           <div class="bx_top_inner"></div>
@@ -2185,11 +2185,11 @@
                         <ul class="di_list">
                           <li>
                             <span class="di_li_tit">총 설비용량</span>
-                            <span class="di_li_tx">7MW / 28MWh</span>
+                            <span class="di_li_tx">97.28kW</span>
                           </li>
                           <li>
                             <span class="di_li_tit">총 인버터수량</span>
-                            <span class="di_li_tx">30EA</span>
+                            <span class="di_li_tx">1EA</span>
                           </li>
                         </ul>
                         <div class="di_tx_bx">
@@ -2382,16 +2382,7 @@
               result.data[0].generation.items.map((e) => {
                 if (e.energy) {
                   const month = Number(e.basetime.toString().slice(4, 6));
-                  if((payList[month - 1] + e.billing)/10000){
-                    payList[month - 1] = Math.floor((payList[month - 1]+e.billing)/10000);
-                    //만원으로 단위 변경
-                  }else if((payList[month - 1] + e.billing)/10000000){
-                    payList[month - 1] = Math.floor((payList[month - 1]+e.billing)/10000000);
-                    //천만원으로 단위 변경
-                    chargeChart1.series[3].userOptions.tooltip.valueSuffix = "천만원"
-                  }else{
-                    payList[month - 1] += e.billing;
-                  }
+                  payList[month - 1] += Math.floor(e.billing/10000);
                 }
               });
               //데이터 세팅
@@ -2401,6 +2392,30 @@
               // error_getYearGenData(request, status, error);
             }
           })
+          $.ajax({
+            url: "http://iderms.enertalk.com:8443/energy/now/sites",
+            type: "get",
+            async: false,
+            data: {
+              sids: site.sid,
+              metering_type: 2,
+              interval: "month"
+            },
+            success: function (result) {//api 요청결과
+              if (result.data[site.sid].energy) {
+                const month = Number(result.data[site.sid].start.toString().slice(4, 6));
+                pvList[month - 1] += Math.floor(result.data[site.sid].energy/1000);
+              }
+              if (result.data[site.sid].billing) {
+                const month = Number(result.data[site.sid].start.toString().slice(4, 6));
+                payList[month - 1] += Math.floor(result.data[site.sid].billing/10000);
+              }
+            },
+            error: function (result, status, error) {
+              //error function or alert, return
+              // error_getYearGenData(request, status, error);
+            }
+          });
         })
       },
       error: function (error) {
@@ -2520,16 +2535,7 @@
             result.data[0].generation.items.map((e) => {
               if (e.energy) {
                 const day = Number(e.basetime.toString().slice(6, 8));
-                if((payList[day - 1] + e.billing)/10000){
-                  payList[day - 1] += Math.floor((payList[day - 1]+e.billing)/10000);
-                  //만원으로 단위 변경
-                }else if((payList[day - 1] + e.billing)/10000000){
-                  payList[day - 1] += Math.floor((payList[day - 1]+e.billing)/10000000);
-                  //천만원으로 단위 변경
-                  chargeChart1.series[3].userOptions.tooltip.valueSuffix = "천만원"
-                }else{
-                  payList[day - 1] += e.billing;
-                }
+                payList[day - 1] += Math.floor(e.billing/10000);
               }
             });
           },
@@ -2538,6 +2544,30 @@
             // error_getYearGenData(request, status, error);
           }
         });
+          $.ajax({
+            url: "http://iderms.enertalk.com:8443/energy/now/sites",
+            type: "get",
+            async: false,
+            data: {
+              sids: site.sid,
+              metering_type: 2,
+              interval: "day"
+            },
+            success: function (result) {//api 요청결과
+              if (result.data[site.sid].energy) {
+                const day = Number(result.data[site.sid].start.toString().slice(6, 8));
+                pvList[day - 1] += Math.floor(result.data[site.sid].energy/1000);
+              }
+              if (result.data[site.sid].billing) {
+                const day = Number(result.data[site.sid].start.toString().slice(6, 8));
+                payList[day - 1] += Math.floor(result.data[site.sid].billing/10000);
+              }
+            },
+            error: function (result, status, error) {
+              //error function or alert, return
+              // error_getYearGenData(request, status, error);
+            }
+          });
         })
       },
       error: function(error){
@@ -2580,7 +2610,6 @@
         valueSuffix: 'kWh'
       }
     }, false);
-    console.log("태양광 리스트", pvList);
     chargeChart2.addSeries({
       name: '태양광',
       type: 'column',
@@ -2622,7 +2651,7 @@
       },
       success: function(result) {
         $(`.gmain_chart3 span.term`).text(`${'${today.getFullYear()}'}.${'${today.getMonth()+1}'}.${'${today.getDate()-1}'}`);
-        result.forEach(site=>{
+        result.forEach((site, siteIdx)=>{
           $.ajax({
             url: "http://iderms.enertalk.com:8443/energy/sites",
             type: "get",
@@ -2643,7 +2672,7 @@
                 generationSum = (generationSum/1000000);
               }
               tbodyStr += `<tr><th>${'${siteName}'}</th><td>${'${Math.floor(generationSum)}'}</td>`;
-              
+              $(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(4)>span:nth-child(2)`).text(Math.floor(generationSum)+'kWh');
             },
             error: function(result, status, error) {
               //error function or alert, return
@@ -2836,12 +2865,12 @@
                   e.update({y: 0});
                 }
               });
-              let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text());
-              $('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(Math.floor(prevVal += (generationSum/1000)));
-              let prevBillVal = Number($('#centerTbody tr td:nth-child(5)').text());
-              $('#centerTbody tr td:nth-child(5)').text(Math.floor(prevBillVal += billingSum));
-              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(7)`).text(Math.floor(generationSum/1000)+'kWh');
-              $(`.detail_info.list${'${siteIdx+1}'} li.clear:nth-child(3) span.fl:nth-child(2) em`).text(Math.floor(generationSum/1000));
+              // let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text());
+              // $('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(Math.floor(prevVal += (generationSum/1000)));
+              // let prevBillVal = Number($('#centerTbody tr td:nth-child(5)').text());
+              // $('#centerTbody tr td:nth-child(5)').text(Math.floor(prevBillVal += billingSum));
+              <%--$(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(7)`).text(Math.floor(generationSum/1000)+'kWh');--%>
+              $(`.detail_info.list${'${siteIdx+1}'} .sec_bx.left li.clear:nth-child(3) span.fl:nth-child(2) em`).text(Math.floor(generationSum/1000));
             },
             error: function (result, status, error) {
               //error function or alert, return
@@ -2866,6 +2895,7 @@
               $('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(Math.floor(prevVal += generationForecastSum/1000));
               $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(8)`).text(Math.floor(generationForecastSum/1000)+'kWh');
               $(`.detail_info.list${'${siteIdx+1}'} li.clear:nth-child(4) span.fl:nth-child(2) em`).text(Math.floor(generationForecastSum/1000));
+              $(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(3)>span:nth-child(2)`).text(Math.floor(generationForecastSum/1000)+'kWh');
             },
             error: function (result, status, error) {
               //error function or alert, return
@@ -2887,6 +2917,7 @@
             success: function (result) {//api 요청결과
               acPowerSum += result.acPower;
               $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(6)`).text(Math.floor(result.acPower/1000)+'kW');
+              $(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(1)>span:nth-child(2)`).text(Math.floor(result.acPower/1000)+'kWh');
               $('.highcharts-title > tspan').text(Math.floor(acPowerSum/1000)+'kW');
               pieChart.series[0].data.forEach((e, idx) => {
                 if (e.name === "태양광") {
@@ -2897,6 +2928,27 @@
                   e.update({y: 0});
                 }
               });
+            },
+            error: function (result, status, error) {
+              //error function or alert, return
+              // error_getYearGenData(request, status, error);
+            }
+          });
+  
+          $.ajax({
+            url: "http://iderms.enertalk.com:8443/energy/now/sites",
+            type: "get",
+            async: false,
+            data: {
+              sids: site.sid,
+              metering_type: 2,
+              interval: "day"
+            },
+            success: function (result) {//api 요청결과
+              let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text());
+              $('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(Math.floor(prevVal += (result.data[site.sid].energy/1000)));
+              $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(7)`).text(Math.floor(result.data[site.sid].energy/1000)+'kWh');
+              $(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(2)>span:nth-child(2)`).text(Math.floor(result.data[site.sid].energy/1000)+'kWh');
             },
             error: function (result, status, error) {
               //error function or alert, return
