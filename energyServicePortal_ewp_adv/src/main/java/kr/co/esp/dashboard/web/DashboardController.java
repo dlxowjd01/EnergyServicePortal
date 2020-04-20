@@ -91,8 +91,20 @@ public class DashboardController {
 	public String smain(HttpServletRequest request, HttpSession session, Model model) {
 		System.out.println("/dashboard/smain.do");
 		String linkSiteName = request.getParameter("linkSiteName");
-		model.addAttribute("siteName", linkSiteName);
-		model.addAttribute("sid", request.getParameter("sid")); //siteId 설
+
+		if(linkSiteName != null && !"".equals(linkSiteName)) {
+			model.addAttribute("siteName", linkSiteName);
+		} else {
+			model.addAttribute("siteName", "혜원솔라 02");
+		}
+
+
+		if (request.getParameter("sid") == null || "".equals(request.getParameter("sid"))) {
+			model.addAttribute("sid", "0c7c90c6-9505-4f77-b42d-500c2879c689"); //sid가 없을경우 하드코딩한 값으로 세팅한다.
+		} else {
+			model.addAttribute("sid", request.getParameter("sid")); //siteId를 받아서 다시 보낸다.
+		}
+
 
 		// range
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
