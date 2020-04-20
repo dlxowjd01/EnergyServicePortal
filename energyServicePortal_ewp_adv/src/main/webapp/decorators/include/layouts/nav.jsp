@@ -50,7 +50,7 @@
         <a href="#;">대시보드</a>
         <div class="sub_layer">
           <ul>
-            <li><a href="/dashboard/gmain.do">통합 대시보드</a></li>
+            <li><a href="/dashboard/gmain.do">통합관리 대시보드</a></li>
             <%--<li>--%>
             <%--  <a href="#;">사업소 대시보드</a>--%>
             <%--  <div>--%>
@@ -59,17 +59,17 @@
             <%--    <p><a href="/dashboard/dmain.do">신재생발전+신재생 연계 ESS</a></p>--%>
             <%--  </div>--%>
             <%--</li>--%>
-            <li><a href="/dashboard/jmain.do">VPP거래 대시보드</a></li>
-            <!-- <li><a href="">DR거래 대시보드</a></li> -->
+            <li><a href="/dashboard/jmain.do">중개거래 대시보드</a></li>
+            <!-- <li><a href="">수요자원 대시보드</a></li> -->
           </ul>
         </div>
       </li>
       <li class="smn2">
-        <a href="#;">설비현황</a>
+        <a href="#;">설비 현황</a>
         <div class="sub_layer">
           <ul>
-            <li><a href="/device/deviceState.do">설비 구성</a></li>
-            <li><a href="/device/collectionState.do">수집 현황</a></li>
+            <li><a href="/device/deviceState.do">설비구성</a></li>
+            <li><a href="/device/collectionState.do">수집현황</a></li>
           </ul>
         </div>
       </li>
@@ -77,8 +77,8 @@
         <a href="#;">설비 이력</a>
         <div class="sub_layer">
           <ul>
-            <li><a href="/history/operationHistory.do">운전 이력</a></li>
-            <li><a href="/history/alarmHistory.do">알람 이력</a></li>
+            <li><a href="/history/operationHistory.do">상태이력</a></li>
+            <li><a href="/history/alarmHistory.do">알람이력</a></li>
           </ul>
         </div>
       </li>
@@ -86,7 +86,7 @@
         <a href="#;">자원 분석</a>
         <div class="sub_layer">
           <ul>
-            <li><a href="/energy/pvGen.do">발전</a></li>
+            <li><a href="/energy/pvGen.do">발전이력</a></li>
             <%--<li><a href="/energy/essCharge.do">피크저감 ESS</a></li>--%>
             <!-- <li><a href="/energy/sub01.html">수요</a></li> -->
             <%--<li><a href="/energy/drResult.do">수요자원<!-- DR --></a></li>--%>
@@ -117,8 +117,8 @@
         <a href="#;">보고서</a>
         <div class="sub_layer">
           <ul>
-            <li><a href="/report/yieldReport">수익 보고서</a></li>
-            <li><a href="/report/maintenanceReport">작업 보고서</a></li>
+            <li><a href="/report/yieldReport">수익보고서</a></li>
+            <li><a href="/report/maintenanceReport">작업보고서</a></li>
           </ul>
         </div>
       </li>
@@ -138,11 +138,11 @@
         <div class="sub_layer">
           <ul>
             <li><a href="/system/basicInformation">기본정보</a></li>
-            <li><a href="/system/userMng.do">사용자</a></li>
-            <li><a href="/system/cmpyGrpSiteMng.do">사이트/그룹</a></li>
-            <li><a href="/system/alarmManagement">알람</a></li>
+            <li><a href="/system/userMng.do">사용자관리</a></li>
+            <li><a href="/system/cmpyGrpSiteMng.do">사이트/그룹관리</a></li>
+            <li><a href="/system/alarmManagement">알람관리</a></li>
             <li><a href="/system/systemCode">공통코드</a></li>
-            <li><a href="/system/systemSetting">설정</a></li>
+            <li><a href="/system/systemSetting">시스템설정</a></li>
           </ul>
         </div>
       </li>
