@@ -597,6 +597,7 @@
 			});
 
 			let index = 0;
+			let dupY = 1;
 			$('.tag_bx .tx_tit').eq(0).find('span').each(function() {
 				let dataArr = new Array();
 				let keyText = $(this).data('key');
@@ -643,18 +644,9 @@
 				$('.tag_bx .tx_tit').eq(1).find('span').each(function() {
 					let keyText_1 = $(this).data('key');
 					if(keyText == keyText_1) {
-						$(this).data('dup', true);
+						dupY = 0;
 					}
 				});
-			});
-
-			//같은 항목을 조회시에는 Y축은 같은걸 상요한다.
-			let dupY = 0;
-			$('.tag_bx .tx_tit').eq(1).find('span').each(function() {
-				let dupData = $(this).data('dup');
-				if(dupData == false) {
-					dupY = 1;
-				}
 			});
 
 			$('.tag_bx .tx_tit').eq(1).find('span').each(function() {
@@ -834,7 +826,7 @@
 <div class="col-lg-12">
 	<div class="row">
 		<div class="col-lg-12">
-			<h1 class="page-header">운전 이력</h1>
+			<h1 class="page-header">상태 이력</h1>
 		</div>
 	</div>
 	<div class="row">
