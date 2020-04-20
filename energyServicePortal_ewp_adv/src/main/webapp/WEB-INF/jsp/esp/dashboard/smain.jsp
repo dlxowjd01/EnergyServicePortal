@@ -418,6 +418,13 @@
 							el.billing = Math.floor(el.billing / 10000);
 						}
 					});
+
+					chargeChartItems1.push({
+						basetime: 20200401000000,
+						energy: nowEnergyMonth,
+						billing: 200
+					});
+
 					if(debugMode){ console.log("chargeChart:", chargeChartItems1); }
 				},
 			    dataType: "json",
