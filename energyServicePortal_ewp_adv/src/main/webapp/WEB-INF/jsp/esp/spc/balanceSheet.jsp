@@ -28,14 +28,14 @@
 				<span class="tx_tit">기준</span>
 				<div class="sa_select">
 					<div class="dropdown">
-						<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">전체
+						<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">2020년
 							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="type">
 							<li><a href="#">전체</a></li>
-							<li><a href="#">2020</a></li>
-							<li><a href="#">2019</a></li>
-							<li><a href="#">2018</a></li>
+							<li><a href="#">2020년</a></li>
+							<li><a href="#">2019년</a></li>
+							<li><a href="#">2018년</a></li>
 						</ul>
 					</div>
 				</div>
@@ -68,13 +68,13 @@
 									<input type="checkbox" id="chk_op01" value="순번">
 									<label for="chk_op01"><span></span>순번</label>
 								</th>
-								<th><button class="btn_align up">SPC명</button></th>
-								<th><button class="btn_align up">발전소 명</button></th>
-								<th><button class="btn_align up">기준년월</button></th>
+								<th><button class="btn_align down">SPC명</button></th>
+								<th><button class="btn_align down">발전소 명</button></th>
+								<th><button class="btn_align down">기준년월</button></th>
 								<th class="right"><button class="btn_align down">용량(kW)</button></th>
-								<th class="right"><button class="btn_align up">현금유입(원)</button></th>
+								<th class="right"><button class="btn_align down">현금유입(원)</button></th>
 								<th class="right"><button class="btn_align down">현금유출(원)</button></th>
-								<th class="right"><button class="btn_align up">기말 현금흐름(원)</button></th>
+								<th class="right"><button class="btn_align down">기말 현금흐름(원)</button></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -83,9 +83,9 @@
 									<input type="checkbox" id="chk_op02" value="1">
 									<label for="chk_op02"><span></span>1</label>
 								</td>
-								<td>OCI 서울</td>
-								<td><a href="/spc/entityDetailsBySite.do" class="tbl_link">암사 정수장</a></td>
-								<td>2019-03</td>
+								<td>S-power</td>
+								<td><a href="/spc/entityDetailsBySite.do" class="tbl_link">혜원솔라01</a></td>
+								<td>2020-04</td>
 								<td class="right">2,499.00</td>
 								<td class="right">30</td>
 								<td class="right">750</td>
@@ -96,13 +96,13 @@
 									<input type="checkbox" id="chk_op03" value="1">
 									<label for="chk_op03"><span></span>2</label>
 								</td>
-								<td>OCI 서울</td>
-								<td><a href="/spc/entityDetailsBySite.do" class="tbl_link">암사 정수장</a></td>
-								<td>2019-03</td>
-								<td class="right">2,499.00</td>
-								<td class="right">30</td>
-								<td class="right">750</td>
-								<td class="right">280</td>
+								<td>S-power</td>
+								<td><a href="/spc/entityDetailsBySite.do" class="tbl_link">혜원솔라02</a></td>
+								<td>2020-04</td>
+								<td class="right">97.28</td>
+								<td class="right">900,000</td>
+								<td class="right">4,875,000</td>
+								<td class="right">5,362,500</td>
 							</tr>
 							<tr>
 								<td></td>
@@ -190,8 +190,6 @@
 				<div class="paging_wrap">
 					<a href="#;" class="btn_prev">prev</a>
 					<strong>1</strong>
-					<a href="#;">2</a>
-					<a href="#;">3</a>
 					<a href="#;" class="btn_next">next</a>
 				</div>
 			</div>

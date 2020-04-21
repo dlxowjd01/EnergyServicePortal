@@ -31,6 +31,12 @@ public class SpcController {
         return "esp/spc/maintenanceSchedule";
     }
 
+    @RequestMapping(value = "/spc/maintenanceSchedulePost.do")
+    public String spcMaintenanceSchedulePost(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/maintenanceSchedulePost.do");
+        return "esp/spc/maintenanceSchedulePost";
+    }
+
     @RequestMapping(value = "/spc/supplementaryDocuments.do")
     public String spcSupplementaryDocuments(HttpServletRequest request, HttpSession session, Model model) {
         logger.debug("/spc/supplementaryDocuments.do");
@@ -41,6 +47,12 @@ public class SpcController {
     public String spcEntityDetails(HttpServletRequest request, HttpSession session, Model model) {
         logger.debug("/spc/entityDetails.do");
         return "esp/spc/entityDetails";
+    }
+
+    @RequestMapping(value = "/spc/entityDetails02.do")
+    public String spcEntityDetails02(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/entityDetails02.do");
+        return "esp/spc/entityDetails02";
     }
 
     @RequestMapping(value = "/spc/entityDetailsBySPC.do")

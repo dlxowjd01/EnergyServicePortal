@@ -35,9 +35,9 @@
 						</colgroup>
 						<tr>
 							<th>SPC명</th>
-							<td>암사정수장</td>
+							<td>S-power</td>
 							<th>발전소명</th>
-							<td>OCI서울</td>
+							<td>혜원솔라01</td>
 						</tr>
 					</table>	
 				</div>
@@ -46,14 +46,18 @@
 				<div class="spc_tbl_row">			
 					<table class="mt30">
 						<colgroup>
-						<col style="width:10%">
-						<col style="width:20%">
+						<col style="width:15%">
+						<col style="width:15%">
+						<col>
+						<col>
+						<col>
+						<col>
 						<col>
 						</colgroup>
 						<tr>
 							<th>구분</th>
 							<th></th>
-							<th>타이틀</th>
+							<th>첨부파일</th>
 							<th></th>
 							<th>다운로드</th>
 							<th>발급일자</th>
@@ -89,100 +93,100 @@
 						<tr>
 							<td>사업자 등록증</td>
 							<td></td>
-							<td><p class="tx_file">4.사업자등록증_암사_서울.pdf</p></td>
+							<td><p class="tx_file">에스파워 사업자등록증.pdf</p></td>
 							<td><button class="btn_file down">다운로드</button></td>
 							<td>O</td>
-							<td>2020-03-10</td>
+							<td>-</td>
 							<td><button class="btn_type05">추가</button></td>
 						</tr>
 						<tr>
 							<td>발전사업 허가증</td>
 							<td></td>
-							<td><p class="tx_file">5.발전사업허가증_암사_서울.pdf</p></td>
+							<td><p class="tx_file">에스파워 발전사업허가증.pdf</p></td>
 							<td><button class="btn_file down">다운로드</button></td>
 							<td>O</td>
-							<td>2020-03-10</td>
+							<td>-</td>
 							<td><button class="btn_type05">추가</button></td>
 						</tr>
 						<tr>
 							<td>토지 및 건물 등기부등록</td>
 							<td></td>
-							<td><p class="tx_file">6.토지등기부등본_암사_서울.pdf</p></td>
+							<td><p class="tx_file">에스파워 토지등기부등본.pdf</p></td>
 							<td><button class="btn_file down">다운로드</button></td>
 							<td>O</td>
-							<td>2020-03-10</td>
+							<td>-</td>
 							<td><button class="btn_type05">추가</button></td>
 						</tr>
 						<tr>
 							<td>토지대장 및 건물도면</td>
 							<td></td>
-							<td><p class="tx_file">7.토지대장_암사_서울.pdf</p></td>
+							<td><p class="tx_file">에스파워 토지대장.pdf</p></td>
 							<td><button class="btn_file down">다운로드</button></td>
 							<td>O</td>
-							<td>2020-03-10</td>
+							<td>-</td>
 							<td><button class="btn_type05">추가</button></td>
 						</tr>
 						<tr>
 							<td>원도급 계약서</td>
 							<td>실사 협약서</td>
-							<td><p class="tx_file">8.원도급_계약서(실시협약서)_암사_서울.pdf</p></td>
+							<td><p class="tx_file">-</p></td>
 							<td><button class="btn_file down">다운로드</button></td>
 							<td>O</td>
-							<td>2020-03-10</td>
+							<td>-</td>
 							<td><button class="btn_type05">추가</button></td>
 						</tr>
 						<tr>
 							<td></td>
 							<td>토지이용 허가서</td>
-							<td><p class="tx_file">8.원도급계약서(토지이용허가서)_암사_서울.pdf</p></td>
+							<td><p class="tx_file">-</p></td>
 							<td><button class="btn_file down">다운로드</button></td>
 							<td>O</td>
-							<td>2020-03-10</td>
+							<td>-</td>
 							<td><button class="btn_type05">추가</button></td>
 						</tr>
 						<tr>
 							<td>하도급 계약서</td>
 							<td>공사도급 계약서</td>
-							<td><p class="tx_file">9.하도급계약서(공사도급예약)_암사_서울.pdf</p></td>
+							<td><p class="tx_file">-</p></td>
 							<td><button class="btn_file down">다운로드</button></td>
 							<td>O</td>
-							<td>2020-03-10</td>
+							<td>-</td>
 							<td><button class="btn_type05">추가</button></td>
 						</tr>
 						<tr>
 							<td></td>
 							<td>설계용역 계약서</td>
-							<td><p class="tx_file">9.하도급계약서(공사도급예약)_암사_서울.pdf</p></td>
+							<td><p class="tx_file">-</p></td>
 							<td><button class="btn_file down">다운로드</button></td>
 							<td>O</td>
-							<td>2020-03-10</td>
+							<td>-</td>
 							<td><button class="btn_type05">추가</button></td>
 						</tr>
 						<tr>
 							<td></td>
 							<td>감리용역 계약서</td>
-							<td><p class="tx_file">9.하도급계약서(설계감리용역)_암사_서울.pdf</p></td>
+							<td><p class="tx_file">-</p></td>
 							<td><button class="btn_file down">다운로드</button></td>
 							<td>O</td>
-							<td>2020-03-10</td>
+							<td>-</td>
 							<td><button class="btn_type05">추가</button></td>
 						</tr>
 						<tr>
 							<td>기자재 시험 성적서</td>
 							<td>인버터</td>
-							<td><p class="tx_file">20.기자재시험성적서(인버터)_암사_서울.pdf</p></td>
+							<td><p class="tx_file">190530_T2019-05521_윌링스 100 kW PV 성능시험 시험성적서 사본.pdf</p></td>
 							<td><button class="btn_file down">다운로드</button></td>
 							<td>O</td>
-							<td>2020-03-10</td>
+							<td>-</td>
 							<td><button class="btn_type05">추가</button></td>
 						</tr>
 						<tr>
 							<td></td>
 							<td>모듈</td>
-							<td><p class="tx_file">20.기자재시험성적서(모듈)_암사_서울.pdf</p></td>
+							<td><p class="tx_file">-</p></td>
 							<td><button class="btn_file down">다운로드</button></td>
 							<td>O</td>
-							<td>2020-03-10</td>
+							<td>-</td>
 							<td><button class="btn_type05">추가</button></td>
 						</tr>
 						<tr>
@@ -228,7 +232,7 @@
 							<td></td>
 							<td></td>
 							<td></td>
-							<td><button class="btn_type05">추가</button></td>
+							<td></td>
 						</tr>
 					</table>	
 				</div>

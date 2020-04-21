@@ -37,7 +37,7 @@
 							<th>SPC명</th>
 							<td>S-power</td>
 							<th>발전소명</th>
-							<td>혜원솔라01</td>
+							<td>혜원솔라02</td>
 						</tr>
 						<tr>
 							<th>주소</th>
@@ -92,7 +92,7 @@
 						</tr>
 						<tr>
 							<th>등기이사 소속 / 등기이사 명</th>
-							<td>에스파워 회장 / 홍성민</td>
+							<td>에스파워 대표 / 서동열</td>
 							<th>등기 기간</th>
 							<td>-</td>
 						</tr>
@@ -343,7 +343,7 @@
 						</colgroup>
 						<tr>
 							<th>현장 사진</th>
-							<td><div class="img_bx"><img src="../img/@sample02.png"></div></td>
+							<td><div class="img_bx"><img src="../img/@sample03.png"></div></td>
 							<td class="vbt"><button class="btn_file up">업로드</button></td>
 						</tr>
 						<tr>

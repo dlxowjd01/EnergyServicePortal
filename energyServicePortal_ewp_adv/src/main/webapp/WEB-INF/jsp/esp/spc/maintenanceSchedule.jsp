@@ -101,7 +101,7 @@
 							<button class="btn_next_mon">next</button>
 							<strong>4월</strong>
 						</div>
-						<button class="btn_type fr">등록</button>
+						<a href="/spc/maintenanceSchedulePost.do" class="btn_type fr">등록</a>
 					</div>
 					<div class="sch_btm_area">
 						<table>
@@ -144,7 +144,7 @@
 									<td><span class="date">10</span></td>
 									<td>
 										<span class="date">11</span>
-										<p class="bu t1">[OCI서울] 정기 점검</p>
+										<p class="bu t1">[혜원 솔라 01] 정기 점검</p>
 									</td>
 								</tr>
 								<tr>
@@ -163,7 +163,7 @@
 									<td><span class="date">22</span></td>
 									<td>
 										<span class="date">23</span>
-										<p class="bu t4">[OCI서울] 등기이사 기간만료</p>
+										<p class="bu t4">[혜원 솔라 02] 등기이사 기간만료</p>
 									</td>
 									<td><span class="date">24</span></td>
 									<td><span class="date">25</span></td>
@@ -174,12 +174,12 @@
 									<td><span class="date">28</span></td>
 									<td>
 										<span class="date">29</span>
-										<p class="bu t3">[OCI서울] 구조물</p>
+										<p class="bu t3">[혜원 솔라 01] 구조물</p>
 									</td>
 									<td>
 										<span class="date">30</span>
-										<p class="bu t4">[한영강재공업] 소방점검</p>
-										<p class="bu t3">[OCI서울] 구조물 안전진단</p>
+										<p class="bu t4">[혜원 솔라 01] 소방점검</p>
+										<p class="bu t3">[혜원 솔라 02] 구조물 안전진단</p>
 									</td>
 									<td></td>
 									<td></td>

@@ -11456,7 +11456,7 @@ div.di_wrap dl .link a {
 .darkmode .btn_file.up{background:url(../img/ico_upload.png) no-repeat}
 .tx_file{color:#1d98e9}
 .img_bx{padding:15px}
-.img_bx > *{vertical-align:middle}
+.img_bx > *{vertical-align:middle;width:500px}
 .img_bx img + img{margin-left:20px}
 
 .inp_align .fl{display:inline-block;margin-left:20px}
@@ -11464,7 +11464,7 @@ div.di_wrap dl .link a {
 .inp_align .sel_calendar{display:inline-block;vertical-align:top}
 .inp_align .sel_calendar input{width:130px}
 .inp_align .sel_calendar em{display:inline-block; font-size:12px; margin:0 5px;}
-.sub_td{padding-left:45px !important}
+.sub_td{padding-left:45px !important; text-align:right !important; padding-right:105px !important}
 
 .align_type02 thead th,.align_type02 tbody td{padding-right:30px}
 .align_type02 thead th{text-align:right}
