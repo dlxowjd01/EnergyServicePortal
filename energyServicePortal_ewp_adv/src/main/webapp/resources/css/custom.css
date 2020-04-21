@@ -10918,9 +10918,9 @@ div.di_wrap dl .link a {
 	vertical-align:middle; text-align:center;
 }
 .his_tbl thead th label {cursor:pointer;}
-.his_tbl tbody {height:300px; display:block; overflow-y:auto;}
+.his_tbl tbody {height:300px; /*display:block;*/ overflow-y:auto;}
 .his_tbl thead,
-.his_tbl tbody tr {display:table; width:100%; table-layout:fixed;/* even columns width , fix width of table too*/}
+.his_tbl tbody tr {/*display:table;*/ width:100%; table-layout:fixed;/* even columns width , fix width of table too*/}
 .his_tbl tbody td {
 	height:38px; font-size:13px; color:var(--color4); text-align:center;
 	vertical-align:middle; white-space:nowrap; text-align:center;font-weight:200;
@@ -11526,9 +11526,12 @@ div.di_wrap dl .link a {
 .spc_tbl02_row.regist_ver .tx_btn_area.type{width:40%}
 .spc_tbl02_row.regist_ver .rdo_type{display:inline-block;margin-right:30px;}
 
-
-
-
-
-
+.tbl_wrap_type.collect_wrap{overflow-y:visible;height:auto}
+.collect_wrap tbody td,.collect_wrap thead th{padding-left:50px;text-align:left}
+.collect_wrap .ellipsis{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tbl_wrap_type.collect_wrap .his_tbl tbody{display:table-row-group}
+.tbl_wrap_type.collect_wrap .his_tbl thead,.tbl_wrap_type.collect_wrap .his_tbl tbody tr{table-layout:auto}
+.collect_wrap .tbl_top:first-child{margin-top:20px}
+.collect_btn{text-align:right;height:36px;line-height:36px}
+ 
 

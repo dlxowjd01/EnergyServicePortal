@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -176,6 +178,30 @@ public class SystemController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("list", list);
 		return resultMap;
+	}
+
+	@RequestMapping(value = "/system/basicInformation.do")
+	public String systemBasicInformation(HttpServletRequest request, HttpSession session, Model model) {
+		System.out.println("/system/basicInformation.do");
+		return "esp/system/basicInformation";
+	}
+
+	@RequestMapping(value = "/system/alarmManagement.do")
+	public String systemAlarmManagement(HttpServletRequest request, HttpSession session, Model model) {
+		System.out.println("/system/alarmManagement.do");
+		return "esp/system/alarmManagement";
+	}
+
+	@RequestMapping(value = "/system/systemCode.do")
+	public String systemSystemCode(HttpServletRequest request, HttpSession session, Model model) {
+		System.out.println("/system/systemCode.do");
+		return "esp/system/systemCode";
+	}
+
+	@RequestMapping(value = "/system/systemSetting.do")
+	public String systemSystemSetting(HttpServletRequest request, HttpSession session, Model model) {
+		System.out.println("/system/systemSetting.do");
+		return "esp/system/systemSetting";
 	}
 	
 }

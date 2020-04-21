@@ -99,7 +99,7 @@
           <ul>
             <li><a href="/diagnosis/generation.do">발전예측</a></li>
             <%--<li><a href="">수요예측</a></li>--%>
-            <li><a href="/diagnosis/AbnormalyAnalysis.do">이상분석</a></li>
+            <li><a href="/diagnosis/abnormallyAnalysis.do">이상분석</a></li>
           </ul>
         </div>
       </li>
@@ -107,9 +107,9 @@
         <a href="#;">BOM관리</a>
         <div class="sub_layer">
           <ul>
-            <li><a href="/bom/faultHistory">고장이력</a></li>
-            <li><a href="/bom/replacement">변경이력</a></li>
-            <li><a href="/bom/partManagement">부품관리</a></li>
+            <li><a href="/bom/faultHistory.do">고장이력</a></li>
+            <li><a href="/bom/replacement.do">변경이력</a></li>
+            <li><a href="/bom/partManagement.do">부품관리</a></li>
           </ul>
         </div>
       </li>
@@ -117,8 +117,8 @@
         <a href="#;">보고서</a>
         <div class="sub_layer">
           <ul>
-            <li><a href="/report/yieldReport">수익보고서</a></li>
-            <li><a href="/report/maintenanceReport">작업보고서</a></li>
+            <li><a href="/report/yieldReport.do">수익보고서</a></li>
+            <li><a href="/report/maintenanceReport.do">작업보고서</a></li>
           </ul>
         </div>
       </li>
@@ -137,12 +137,12 @@
         <a href="#;">설정</a>
         <div class="sub_layer">
           <ul>
-            <li><a href="/system/basicInformation">기본정보</a></li>
+            <li><a href="/system/basicInformation.do">기본정보</a></li>
             <li><a href="/system/userMng.do">사용자관리</a></li>
             <li><a href="/system/cmpyGrpSiteMng.do">사이트/그룹관리</a></li>
-            <li><a href="/system/alarmManagement">알람관리</a></li>
-            <li><a href="/system/systemCode">공통코드</a></li>
-            <li><a href="/system/systemSetting">시스템설정</a></li>
+            <li><a href="/system/alarmManagement.do">알람관리</a></li>
+            <li><a href="/system/systemCode.do">공통코드</a></li>
+            <li><a href="/system/systemSetting.do">시스템설정</a></li>
           </ul>
         </div>
       </li>
