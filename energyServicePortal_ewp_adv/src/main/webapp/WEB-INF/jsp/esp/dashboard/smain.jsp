@@ -326,6 +326,7 @@
 
 		let nowEnergyDay;
 		let nowEnergyMonth;
+		let nowBillingMonth;
 		let nowEnergyYear;
 
 		let chargeNowUrl = apiURL + apiEnergyNowSite;
@@ -352,6 +353,7 @@
 								console.log('nowEnergyDay', el2.energy);
 							} else if(el == 'month') {
 								nowEnergyMonth = el2.energy;
+								nowBillingMonth = el2.billing;
 								console.log('nowEnergyMonth', el2.energy);
 							} else {
 								nowEnergyYear = el2.energy;
@@ -421,7 +423,7 @@
 					chargeChartItems1.push({
 						basetime: 20200401000000,
 						energy: nowEnergyMonth,
-						billing: 200
+						billing: nowBillingMonth
 					});
 
 					if(debugMode){ console.log("chargeChart:", chargeChartItems1); }
@@ -1589,8 +1591,7 @@
 											<script type="text/javascript">
 											let invDeviceUrl = apiURL + apiStatusRaw;
                                             let invDeviceData = {
-                                                device_type : "inv_pv",
-                                                device_ids : invDeviceIds.join(',')
+                                                dids : invDeviceIds.join(',')
                                             };
 
                                             let nowDeviceUrl = apiURL + '/energy/now/devices';
@@ -1654,59 +1655,62 @@
 												var totGenPower = 0;
 
 												var rowHtml = "";
-												if(items.length > 0){
-													for (var i = 0; i < items.length; i++) {
-														console.log(items[i]);
+												$.each(items, function(j, el) {
+													if(el.data.length > 0) {
+														countDevice = el.data.length;
+														for (var i = 0; i < el.data.length; i++) {
+															console.log(el.data[i]);
 
-														//flag1 정상, flag2 경고, flag3 이상
-														//<th>상태</th>
-														//<th>설비명</th>
-														//<th>DC입력</th>
-														//<th>AC출력</th>
-														//<th>효율</th>
-														//<th>금일 누적발전</th>totalGenPower
+															//flag1 정상, flag2 경고, flag3 이상
+															//<th>상태</th>
+															//<th>설비명</th>
+															//<th>DC입력</th>
+															//<th>AC출력</th>
+															//<th>효율</th>
+															//<th>금일 누적발전</th>totalGenPower
 
-														var statusTxt = "-";
-														var statusClass = "";
-														if(items[i].operation == 1){
-															statusTxt = "정상";
-															statusClass = "flag1";
+															var statusTxt = "-";
+															var statusClass = "";
+															if(el.data[i].operation == 1){
+																statusTxt = "정상";
+																statusClass = "flag1";
 
-															countStatus1++;
-														}else if(items[i].operation == 2){
-															statusTxt = "경고";
-															statusClass = "flag2";
+																countStatus1++;
+															}else if(el.data[i].operation == 2){
+																statusTxt = "경고";
+																statusClass = "flag2";
 
-															countStatus2++;
-														}else if(items[i].operation == 3){
-															statusTxt = "이상";
-															statusClass = "flag3";
+																countStatus2++;
+															}else if(el.data[i].operation == 3){
+																statusTxt = "이상";
+																statusClass = "flag3";
 
-															countStatus3++;
+																countStatus3++;
+															}
+
+															var itemDname = el.dname;
+															var itemDcPower = el.data[i].dcPower / 1000;
+															var itemAcPower = el.data[i].acPower / 1000;
+															var itemEfficiency = el.data[i].efficiency;
+															var itemTotalGenPower = el.nowEnergy / 1000;
+
+															rowHtml += ""
+																	+"<tr class='flag1'>"
+																	+"	<td>" + statusTxt + "</td>"
+																	+"	<td>" + itemDname + "</td>"
+																	+"	<td>" + (itemDcPower ? itemDcPower.toFixed(1) : "-") + " kW</td>"
+																	+"	<td>" + (itemAcPower ? itemAcPower.toFixed(1) : "-") + " kW</td>"
+																	+"	<td>" + (itemEfficiency ? itemEfficiency.toFixed(1) : "-") + " %</td>"
+																	+"	<td>" + (itemTotalGenPower ? itemTotalGenPower.toFixed(1) : "-") + "  kWh</td>"
+																	+"</tr>";
+
+															totDcPower += el.data[i].dcPower;
+															totAcPower += el.data[i].acPower;
+															totEfficiency += el.data[i].efficiency;
+															totGenPower += el.nowEnergy;
 														}
-
-														var itemDname = items[i].dname;
-														var itemDcPower = items[i].dcPower / 1000;
-														var itemAcPower = items[i].acPower / 1000;
-														var itemEfficiency = items[i].efficiency;
-														var itemTotalGenPower = items[i].nowEnergy / 1000;
-
-														rowHtml += ""
-															+"<tr class='flag1'>"
-															+"	<td>" + statusTxt + "</td>"
-															+"	<td>" + itemDname + "</td>"
-															+"	<td>" + (itemDcPower ? itemDcPower.toFixed(1) : "-") + " kW</td>"
-															+"	<td>" + (itemAcPower ? itemAcPower.toFixed(1) : "-") + " kW</td>"
-															+"	<td>" + (itemEfficiency ? itemEfficiency.toFixed(1) : "-") + " %</td>"
-															+"	<td>" + (itemTotalGenPower ? itemTotalGenPower.toFixed(1) : "-") + "  kWh</td>"
-															+"</tr>";
-
-														totDcPower += items[i].dcPower;
-														totAcPower += items[i].acPower;
-														totEfficiency += items[i].efficiency;
-														totGenPower += items[i].nowEnergy;
 													}
-												}
+												});
 
 												$("#invCount").text("인버터(" + countDevice + ")");
 												$("#invNormal").text("정상(" + countStatus1 + ")");
