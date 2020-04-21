@@ -86,10 +86,10 @@
 								<td>S-power</td>
 								<td><a href="/spc/entityDetailsBySite.do" class="tbl_link">혜원솔라01</a></td>
 								<td>2020-04</td>
-								<td class="right">2,499.00</td>
-								<td class="right">30</td>
-								<td class="right">750</td>
-								<td class="right">280</td>
+								<td class="right">97.28</td>
+								<td class="right">900,000</td>
+								<td class="right">4,875,000</td>
+								<td class="right">5,362,500</td>
 							</tr>
 							<tr>
 								<td>
