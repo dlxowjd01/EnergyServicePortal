@@ -3487,7 +3487,7 @@
 							$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(Math.floor(prevVal += (result.data[site.sid].energy/1000)));
 							$(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(7)`).text(Math.floor(result.data[site.sid].energy/1000)+'kWh');
 							$(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(2)>span:nth-child(2)`).text(Math.floor(result.data[site.sid].energy/1000)+'kWh');
-							$('#centerTbody tr td:nth-child(4)').text(`${'${co2Sum}'} CO2`);
+							$('#centerTbody tr td:nth-child(4)').text(`${'${Math.floor(co2Sum/1000)}'} kg`);
 							rchart2.redraw();
 						},
 						error: function (result, status, error) {
