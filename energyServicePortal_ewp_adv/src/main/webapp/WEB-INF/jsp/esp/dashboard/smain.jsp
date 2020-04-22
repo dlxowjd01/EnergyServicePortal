@@ -325,6 +325,7 @@
 							};
 
 							let nowEnergyDay;
+							let nowBillingDay;
 							let nowEnergyMonth;
 							let nowBillingMonth;
 							let nowEnergyYear;
@@ -350,10 +351,11 @@
 											$.each(result.data, function(i, el2) {
 												if(el == 'day') {
 													nowEnergyDay = el2.energy;
+													nowBillingDay = el2.money;
 													console.log('nowEnergyDay', el2.energy);
 												} else if(el == 'month') {
 													nowEnergyMonth = el2.energy;
-													nowBillingMonth = el2.billing;
+													nowBillingMonth = el2.money;
 													console.log('nowEnergyMonth', el2.energy);
 												} else {
 													nowEnergyYear = el2.energy;
@@ -415,15 +417,15 @@
 										var data = result.data[0];
 										chargeChartItems1 = data.generation.items;
 										$.each(chargeChartItems1, function(i, el) {
-											if(el.billing != undefined && el.billing != null && el.billing != ''){
-												el.billing = Math.floor(el.billing / 10000);
+											if(el.money != undefined && el.money != null && el.money != ''){
+												el.money = Math.floor(el.money / 1000);
 											}
 										});
 
 										chargeChartItems1.push({
 											basetime: 20200401000000,
 											energy: nowEnergyMonth,
-											billing: nowBillingMonth
+											money: Math.floor(nowBillingMonth / 1000)
 										});
 
 										if(debugMode){ console.log("chargeChart:", chargeChartItems1); }
@@ -468,7 +470,7 @@
 										var dataMonth = parseInt((""+chargeChartItems1[d].basetime).substring(4,6));
 										if( i+1 == dataMonth){
 											energyData[i] = [i, chargeChartItems1[d].energy / 1000];
-											billingData[i] = [i, chargeChartItems1[d].billing];
+											billingData[i] = [i, chargeChartItems1[d].money];
 
 											totYearEnergy += chargeChartItems1[d].energy  / 1000;
 											if( i+1 ==  nowMonth){ totMonthEnergy = chargeChartItems1[d].energy  / 1000; }
@@ -981,7 +983,7 @@
 								<td><span id="sitePv">-</span> kW</td>
 								<td id="dayEnergyValue"></td>
 								<td id="dayEnergyForeValue"></td>
-								<td><span>- </span>￦</td>
+								<td id="dayEnergyMoney"><span>- </span>￦</td>
 							</tr>
 							</tbody>
 						</table>
@@ -1328,7 +1330,9 @@
 									if(nowEnergyDay > 10000){
 										$("#dayEnergyValue").html("<span>" + numberComma((nowEnergyDay / 1000).toFixed(2)) + "</span> <em>kWh</em>");
 									}else{
-										$("#dayEnergyValue").html("<span>" + numberComma(nowEnergyDay.toFixed(2)) + "</span> <em>kWh</em>");
+										if(nowEnergyDay != undefined) {
+											$("#dayEnergyValue").html("<span>" + numberComma(nowEnergyDay.toFixed(2)) + "</span> <em>kWh</em>");
+										}
 									}
 
 									if(totDayForeEnergy > 10000){
@@ -1336,6 +1340,13 @@
 									}else{
 										$("#dayEnergyForeValue").html("<span>" + numberComma(totDayForeEnergy.toFixed(2)) + "</span> <em>kWh</em>");
 									}
+
+									if(nowBillingDay > 10000) {
+										$('#dayEnergyMoney').html('<span>' + (nowBillingDay / 1000) + '</span> <em>천원</em>');
+									} else {
+										$('#dayEnergyMoney').html('<span>' + nowBillingDay + '</span> <em>원</em>');
+									}
+
 								}
 
 								saChart2Poll();
