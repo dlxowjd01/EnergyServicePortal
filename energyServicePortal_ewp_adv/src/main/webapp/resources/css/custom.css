@@ -9098,11 +9098,34 @@ div.di_wrap dl .link a {
 
 .gmain_chart.jmain_center2 .ntit,
 .gmain_chart.jmain_center3 .ntit {
-	font-size: 15px;
-	font-weight: 300;
+	font-size: 16px;
+	font-weight: bold;
 }
 
-/* 실시간 입찰/출력 현황*/
+/* 실시간 실적*/
+.realtime {
+	position:relative;
+}
+
+.realtime_by_site {
+	float: left;
+	width: 65%;
+}
+
+.realtime_total {
+	float: right;
+	width: 35%;
+}
+
+.realtime_time {
+	background-color: #000;
+	height: 8px;
+	opacity: 30%;
+	position: absolute;
+	bottom: 40px;
+	width: 100%;
+}
+
 .realtime_wrap {
 }
 

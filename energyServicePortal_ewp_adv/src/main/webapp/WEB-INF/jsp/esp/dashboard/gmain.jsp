@@ -2383,7 +2383,7 @@
               result.data[0].generation.items.map((e) => {
                 if (e.energy) {
                   const month = Number(e.basetime.toString().slice(4, 6));
-                  payList[month - 1] += Math.floor(e.billing/1000);
+                  payList[month - 1] += Math.floor(e.money/1000);
                 }
               });
               //데이터 세팅
@@ -2407,9 +2407,9 @@
                 const month = Number(result.data[site.sid].start.toString().slice(4, 6));
                 pvList[month - 1] += Math.floor(result.data[site.sid].energy/1000);
               }
-              if (result.data[site.sid].billing) {
+              if (result.data[site.sid].money) {
                 const month = Number(result.data[site.sid].start.toString().slice(4, 6));
-                payList[month - 1] += Math.floor(result.data[site.sid].billing/1000);
+                payList[month - 1] += Math.floor(result.data[site.sid].money/1000);
               }
             },
             error: function (result, status, error) {
@@ -2536,7 +2536,7 @@
             result.data[0].generation.items.map((e) => {
               if (e.energy) {
                 const day = Number(e.basetime.toString().slice(6, 8));
-                payList[day - 1] += Math.floor(e.billing/1000);
+                payList[day - 1] += Math.floor(e.money/1000);
               }
             });
           },
@@ -2559,8 +2559,8 @@
               if (result.data[site.sid].energy) {
                 pvList[day - 1] += Math.floor(result.data[site.sid].energy/1000);
               }
-              if (result.data[site.sid].billing) {
-                payList[day - 1] += Math.floor(result.data[site.sid].billing/1000);
+              if (result.data[site.sid].money) {
+                payList[day - 1] += Math.floor(result.data[site.sid].money/1000);
               }
               $('#centerTbody tr td:nth-child(5)').text(`${'${payList[day-1]}'} 천원`);
             },
@@ -2829,7 +2829,7 @@
   function getTodayTotalDetail() {
 
     const formData = getSiteMainSchCollection("day");
-  
+    
     $.ajax({
       url: "http://iderms.enertalk.com:8443/config/sites",
       type: "get",
@@ -2840,6 +2840,7 @@
       success: function (result) {
         $('#centerTbody tr td:nth-child(1)').text(Math.floor(result.length));
         let acPowerSum = 0;
+        let co2Sum = 0;
         result.forEach((site, siteIdx) => {
           $.ajax({
             url: "http://iderms.enertalk.com:8443/energy/sites",
@@ -2853,9 +2854,9 @@
             },
             success: function (result) {//api 요청결과
               let generationSum = 0;
-              let billingSum = 0;
+              let moneySum = 0;
               result.data[0].generation.items.map((e) => {generationSum += e.energy;});
-              result.data[0].generation.items.map((e) => billingSum += e.billing);
+              result.data[0].generation.items.map((e) => moneySum += e.money);
               
               pieChart.series[0].data.forEach((e, idx) => {
                 if (e.name === "태양광") {
@@ -2918,6 +2919,15 @@
             success: function (result) {//api 요청결과
               acPowerSum += result.acPower;
               pieChart[`${'${siteIdx+1}'}`].setTitle({text:Math.floor(result.acPower/1000)+'kW'});
+              pieChart[`${'${siteIdx+1}'}`].series[0].data.forEach((e, idx) => {
+                if (e.name === "총 설비용량") {
+                  e.update({y: Math.floor(result.acPower/1000)});
+                } else if (e.name === "미설비용량") {
+                  e.update({y: Math.floor(((97280*2)-result.acPower)/1000)});
+                } else {
+                  e.update({y: 0});
+                }
+              });
               $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(6)`).text(Math.floor(result.acPower/1000)+'kW');
               $(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(1)>span:nth-child(2)`).text(Math.floor(result.acPower/1000)+'kW');
               // $('.highcharts-title > tspan').text(Math.floor(acPowerSum/1000)+'kW');
@@ -2948,10 +2958,12 @@
               interval: "day"
             },
             success: function (result) {//api 요청결과
+              co2Sum += Math.floor(result.data[site.sid].co2);
               let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text());
               $('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(Math.floor(prevVal += (result.data[site.sid].energy/1000)));
               $(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(7)`).text(Math.floor(result.data[site.sid].energy/1000)+'kWh');
               $(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(2)>span:nth-child(2)`).text(Math.floor(result.data[site.sid].energy/1000)+'kWh');
+              $('#centerTbody tr td:nth-child(4)').text(`${'${co2Sum}'} CO2`);
             },
             error: function (result, status, error) {
               //error function or alert, return
