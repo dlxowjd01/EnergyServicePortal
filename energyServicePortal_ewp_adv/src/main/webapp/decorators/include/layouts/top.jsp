@@ -11,8 +11,9 @@
 	<link href="/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
 	<link href="/css/custom.css" rel="stylesheet">
-	<link rel="stylesheet" href="/css/jquery-ui.css" type="text/css" media="all"> <!-- datapicker용 -->	
-	<!--[if lt IE 9]>
+	<link rel="stylesheet" href="/css/jquery-ui.css" type="text/css" media="all"> <!-- datapicker용 -->
+	<link rel="stylesheet" href="/css/wickedpicker.css" type="text/css" media="all"> <!-- timepicker용 -->
+<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 	<![endif]-->	
@@ -52,11 +53,10 @@
 	<!-- 화면 엑셀 다운로드용 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
-	
-	
+
 	<script src="/js/iderms/idermsapi.js"></script>
-	
-	
+	<!-- timepicker -->
+	<script type="text/javascript" src="/js/wickedpicker.js"></script>
 	<script>
 		var timeOffset = '${timeOffset}';
 		$(document).ready(function () {

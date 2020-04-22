@@ -10912,7 +10912,7 @@ div.di_wrap dl .link a {
 }
 
 /* 설비 테이블 */
-.his_tbl {width:100%;}
+.his_tbl {width:100%; margin-top:30px;}
 .his_tbl thead th {
 	height:56px; font-size:13px; color:var(--color2); font-weight:normal; background:var(--box-color5);
 	vertical-align:middle; text-align:center;
@@ -10957,7 +10957,9 @@ div.di_wrap dl .link a {
 #hchart3 {height:calc(100vh - 518px); min-height:399px; max-height:499px;}
 .indiv.hchart_aside{padding-bottom:10px;}
 
-
+#PV_INVERTER tbody tr {
+	cursor: pointer;
+}
 
 
 
@@ -11027,7 +11029,7 @@ div.di_wrap dl .link a {
 .eq_list li span {display:block;font-weight:400;font-size:14px; color:var(--color2); white-space:nowrap; line-height:18px;}
 .eq_list li span.tx{margin-top:8px;font-weight:600}
 .eq_list li em {display:block;margin-top:10px;font-size:12px; line-height:14px;color:var(--color5); white-space:nowrap;}
-.eq_list li a {display:none; font-size:0; position:absolute; top:0; left:0; width:100%; height:100%; z-index:1;}
+.eq_list li a {display:none; font-size:0; position:absolute; top:0; left:0; width:100%; height:100%;}
 .eq_list li:hover a {display:block; background:rgba(53,58,83,0.3);}
 .eq_list li button {display:none; font-size:0; position:absolute; top:2px; right:2px;; width:16px; height:16px; outline-style:none; border:0;} 
 .eq_list li:hover button {display:block; background:rgba(53,58,83,0.3) url('../img/btn_close.png') no-repeat center; z-index:2;}
