@@ -25,4 +25,10 @@ public class ReportController {
         System.out.println("/report/maintenanceReport.do");
         return "esp/report/maintenanceReport";
     }
+
+    @RequestMapping(value = "/report/maintenanceReportDetails.do")
+    public String reportMaintenanceReportDetails(HttpServletRequest request, HttpSession session, Model model) {
+        System.out.println("/report/maintenanceReportDetails.do");
+        return "esp/report/maintenanceReportDetails";
+    }
 }
