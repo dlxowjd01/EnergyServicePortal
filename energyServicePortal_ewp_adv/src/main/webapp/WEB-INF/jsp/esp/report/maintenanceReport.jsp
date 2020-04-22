@@ -89,11 +89,11 @@
 									<input type="checkbox" id="chk_op02" value="1">
 									<label for="chk_op02"><span></span>1</label>
 								</td>
-								<td>OCI 서울</td>
-								<td>SPW-TR1912-18</td>
-								<td><a href="/report/maintenanceReportDetails.do" class="tbl_link">OCI서울태양광 암사아리수 정수센터 시스템 Q.C 보고서</a></td>
+								<td>혜원 솔라 01</td>
+								<td>SPW-Inverter-01</td>
+								<td><a href="/report/maintenanceReportDetails.do" class="tbl_link">혜원 솔라 01 RTU 설치 점검 QC 보고서</a></td>
 								<td>인코어드</td>
-								<td>2019-12-07</td>
+								<td>2020-04-06</td>
 								<td>임시저장</td>
 							</tr>
 							<tr>
@@ -101,11 +101,11 @@
 									<input type="checkbox" id="chk_op03" value="1">
 									<label for="chk_op03"><span></span>2</label>
 								</td>
-								<td>OCI 서울</td>
-								<td>SP-L20191217-23</td>
-								<td><a href="/report/maintenanceReportDetails.do" class="tbl_link">접속함 열화상 측정 & 인버터 설비 점검</a></td>
+								<td>혜원 솔라 02</td>
+								<td>SPW-Inverter-02</td>
+								<td><a href="/report/maintenanceReportDetails2.do" class="tbl_link">혜원솔라02 RTU 데이터 점검</a></td>
 								<td>인코어드</td>
-								<td>2020-01-12</td>
+								<td>2020-04-10</td>
 								<td>저장완료</td>
 							</tr>
 							<tr>
