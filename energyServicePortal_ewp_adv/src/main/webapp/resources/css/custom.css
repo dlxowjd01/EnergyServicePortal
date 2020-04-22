@@ -10962,6 +10962,40 @@ div.di_wrap dl .link a {
 
 
 
+/* select 버튼 */
+.select {position:relative; display:inline-block; width:150px;}
+.select > a {
+	display:block;
+	padding: 0 30px 0 12px;
+    height:36px;
+    line-height:36px;
+    font-family: 'Malgun Gothic','Roboto', sans-serif;
+    color: #3d4250;
+    font-size: 13px;
+    border:solid 1px #d7d7d7;
+    border-radius:0px;
+    outline-style: none;
+    vertical-align: middle;
+    background:#fff url(../img/select_down.png) no-repeat right 12px center;
+}
+.select > a.on {background:url('../img/select_up.png') no-repeat right 12px center;}
+.select > ul {display:none; position:absolute; padding:10px 0; top:51px; left:0; width:100%; background:#fff; border:solid 1px #d7d7d7; z-index:2;}
+.select > ul li {font-size:14px;}
+.select > ul a {display:block; line-height:30px; padding:0 10px; font-size:14px; color:#a7a7ba;}
+.select > ul a:hover {color:#111;}
+
+
+.select .inq li span {line-height:1; height:inherit;}
+.select .inq li span input[type="radio"], .select .inq li span input[type="checkbox"] {margin:0;}
+.select .inq li span label {}
+
+.select.h36 > a {height:36px; line-height:36px; font-size:14px;}
+.select.h36 > ul {top:35px;}
+
+
+.inq {white-space:nowrap; padding-top:10px;}
+.inq li {padding:6px 10px;}
+.inq li label {cursor:pointer;}
 
 
 
@@ -10986,15 +11020,17 @@ div.di_wrap dl .link a {
 /* 장치 리스트 */
 .eq_list {margin:0 -5px; height:310px; overflow-y:auto; float:left;}
 .eq_list li {
-	margin:10px 6px;
+	margin:10px 9px;
 	float:left; position:relative; width:102px; min-height:122px; border-radius:4px; text-align:left; padding:12px;
 	padding-top:40px; background:url('../img/eq_inverter.png') no-repeat 12px 14px var(--box-color6);
 }
 .eq_list li span {display:block;font-weight:400;font-size:14px; color:var(--color2); white-space:nowrap; line-height:18px;}
 .eq_list li span.tx{margin-top:8px;font-weight:600}
 .eq_list li em {display:block;margin-top:10px;font-size:12px; line-height:14px;color:var(--color5); white-space:nowrap;}
-.eq_list li a {display:none; font-size:0; position:absolute; top:0; left:0; width:100%; height:100%;}
-.eq_list li:hover a {display:block; border-radius:4px;border:2px solid #e2e2e2;background:rgba(54, 54, 54, 0.3) url('../img/btn_close.png') no-repeat right 9px top 9px;}
+.eq_list li a {display:none; font-size:0; position:absolute; top:0; left:0; width:100%; height:100%; z-index:1;}
+.eq_list li:hover a {display:block; background:rgba(53,58,83,0.3);}
+.eq_list li button {display:none; font-size:0; position:absolute; top:2px; right:2px;; width:16px; height:16px; outline-style:none; border:0;} 
+.eq_list li:hover button {display:block; background:rgba(53,58,83,0.3) url('../img/btn_close.png') no-repeat center; z-index:2;}
 
 .eq_list li.st_alert {background:#f2a363 url('../img/ico_inverter_on.png') no-repeat 12px 14px}
 .eq_list li.st_error {background:#e97373 url('../img/ico_inverter_on.png') no-repeat 12px 14px}

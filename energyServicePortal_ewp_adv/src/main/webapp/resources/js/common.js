@@ -401,3 +401,11 @@ $(function () {
        return false;
     });
 });
+
+/* SELECT 버튼 */
+$(function() {
+    $(".select > a").click(function(){
+        $(this).toggleClass("on");
+        $(this).next().slideToggle();
+    });
+});
