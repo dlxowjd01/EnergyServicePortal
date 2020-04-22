@@ -11431,7 +11431,7 @@ div.di_wrap dl .link a {
 .spc_tbl_row th{color:var(--color4);font-weight: normal;}
 .spc_tbl_row td{color:var(--color2);}
 .spc_tbl_row td.vbt{vertical-align:bottom}
-.spc_tbl_row th,.spc_tbl_row td{padding-left:36px;text-align:left;height: 48px;line-height: 48px;font-size: 13px;white-space: nowrap;vertical-align:middle}
+.spc_tbl_row th,.spc_tbl_row td{padding:12px 0 12px 36px;text-align:left;height: 48px;line-height: 24px;font-size: 13px;white-space: nowrap;vertical-align:middle}
 .spc_tbl_row tr:first-child{border-radius: 3px 3px 0 0}
 .spc_tbl_row tr:nth-child(odd){background: var(--box-color5);}
 
@@ -11454,7 +11454,9 @@ div.di_wrap dl .link a {
 .btn_file.down{background:url(../img/ico_down.png) no-repeat}
 .btn_file.up{background:url(../img/ico_upload_wh.png) no-repeat}
 .darkmode .btn_file.up{background:url(../img/ico_upload.png) no-repeat}
-.tx_file{color:#1d98e9}
+.tx_file,.tf_bar{color:#1d98e9}
+.tf_bar{padding:0 2px}
+button.tx_file{background:none;border:0}
 .img_bx{padding:15px}
 .img_bx > *{vertical-align:middle;width:500px}
 .img_bx img + img{margin-left:20px}
@@ -11472,7 +11474,7 @@ div.di_wrap dl .link a {
 .align_type02 tbody td{text-align:right;height:38px;line-height:38px}
 .align_type02 tbody td:first-child{padding:0 0 0 20px;text-align:left} 
 
-/* spc 점검계획 */
+/* spc 점검계획 */ 
 .sch_sel_area{display:flex}
 .sch_sel_item{flex:2}
 .sch_sel_item:first-child{margin-right:16px}
