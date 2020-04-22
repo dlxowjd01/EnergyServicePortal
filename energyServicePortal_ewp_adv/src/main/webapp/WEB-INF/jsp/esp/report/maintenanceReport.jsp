@@ -103,7 +103,7 @@
 								</td>
 								<td>혜원 솔라 02</td>
 								<td>SPW-Inverter-02</td>
-								<td><a href="/report/maintenanceReportDetails2.do" class="tbl_link">혜원 솔라 02 RTU 데이터 점검</a></td>
+								<td><a href="/report/maintenanceReportDetails2.do" class="tbl_link">혜원솔라02 RTU 데이터 점검</a></td>
 								<td>인코어드</td>
 								<td>2020-04-10</td>
 								<td>저장완료</td>
