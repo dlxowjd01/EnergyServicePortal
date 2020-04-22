@@ -43,7 +43,7 @@
 				</div>
 			</div>
 			<div class="indiv mt25">
-				<div class="spc_tbl_row">			
+				<div class="spc_tbl_row pb20">			
 					<table class="mt30">
 						<colgroup>
 						<col style="width:15%">

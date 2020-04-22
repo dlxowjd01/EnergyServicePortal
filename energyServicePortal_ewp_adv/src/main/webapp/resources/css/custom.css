@@ -424,6 +424,8 @@ select {
 	max-width: 900px;
 }
 
+.pb20{padding-bottom:20px}
+
 /* 레이아웃 */
 
 /* css variables to support dark mode */
@@ -511,6 +513,8 @@ select {
 	--ico-water:url('../img/ico_water.png');
 	--ico-wind:url('../img/ico_wind.png');
 	--bg-battery-cover:url('../img/battary_cover_dark.png');
+	--color-alp:rgba(0, 0, 0, 0.6);
+	--color-alp2:rgba(0, 0, 0, 0.87);
 }
 
 html, body {
@@ -603,6 +607,8 @@ html.darkmode:root {
 	--ico-water:url('../img/ico_water_dark.png');
 	--ico-wind:url('../img/ico_wind_dark.png');
 	--bg-battery-cover:url('../img/battary_cover_dark.png');
+	--color-alp:rgba(255, 255, 255, 0.6);
+	--color-alp2:rgba(255, 255, 255, 0.87);
 }
 
 /* Change the white to any color ;) */
@@ -1668,6 +1674,7 @@ nav .all-menu .menu-group .btn-group button {
 @media all and (max-width: 1200px) {
 	.w_type{width:100%}
 	/* 전체메뉴 레이어 조정 */
+	.sch_left .indiv{height:auto !important}
 	nav .all-menu .menu-group {
 		padding-bottom: 70px;
 	}
@@ -10962,40 +10969,6 @@ div.di_wrap dl .link a {
 
 
 
-/* select 버튼 */
-.select {position:relative; display:inline-block; width:150px;}
-.select > a {
-	display:block;
-	padding: 0 30px 0 12px;
-    height:36px;
-    line-height:36px;
-    font-family: 'Malgun Gothic','Roboto', sans-serif;
-    color: #3d4250;
-    font-size: 13px;
-    border:solid 1px #d7d7d7;
-    border-radius:0px;
-    outline-style: none;
-    vertical-align: middle;
-    background:#fff url(../img/select_down.png) no-repeat right 12px center;
-}
-.select > a.on {background:url('../img/select_up.png') no-repeat right 12px center;}
-.select > ul {display:none; position:absolute; padding:10px 0; top:51px; left:0; width:100%; background:#fff; border:solid 1px #d7d7d7; z-index:2;}
-.select > ul li {font-size:14px;}
-.select > ul a {display:block; line-height:30px; padding:0 10px; font-size:14px; color:#a7a7ba;}
-.select > ul a:hover {color:#111;}
-
-
-.select .inq li span {line-height:1; height:inherit;}
-.select .inq li span input[type="radio"], .select .inq li span input[type="checkbox"] {margin:0;}
-.select .inq li span label {}
-
-.select.h36 > a {height:36px; line-height:36px; font-size:14px;}
-.select.h36 > ul {top:35px;}
-
-
-.inq {white-space:nowrap; padding-top:10px;}
-.inq li {padding:6px 10px;}
-.inq li label {cursor:pointer;}
 
 
 
@@ -11021,16 +10994,14 @@ div.di_wrap dl .link a {
 .eq_list {margin:0 -5px; height:310px; overflow-y:auto; float:left;}
 .eq_list li {
 	margin:10px 9px;
-	float:left; position:relative; width:102px; min-height:122px; border-radius:4px; text-align:left; padding:12px;
+	float:left; position:relative; width:104px; min-height:122px; border-radius:4px; text-align:left; padding:12px;
 	padding-top:40px; background:url('../img/eq_inverter.png') no-repeat 12px 14px var(--box-color6);
 }
 .eq_list li span {display:block;font-weight:400;font-size:14px; color:var(--color2); white-space:nowrap; line-height:18px;}
 .eq_list li span.tx{margin-top:8px;font-weight:600}
-.eq_list li em {display:block;margin-top:10px;font-size:12px; line-height:14px;color:var(--color5); white-space:nowrap;}
-.eq_list li a {display:none; font-size:0; position:absolute; top:0; left:0; width:100%; height:100%; z-index:1;}
-.eq_list li:hover a {display:block; background:rgba(53,58,83,0.3);}
-.eq_list li button {display:none; font-size:0; position:absolute; top:2px; right:2px;; width:16px; height:16px; outline-style:none; border:0;} 
-.eq_list li:hover button {display:block; background:rgba(53,58,83,0.3) url('../img/btn_close.png') no-repeat center; z-index:2;}
+.eq_list li em {position:absolute;bottom:12px;left:12px;font-size:12px; line-height:14px;color:var(--color5); white-space:nowrap;}
+.eq_list li a {display:none; font-size:0; position:absolute; top:0; left:0; width:100%; height:100%;}
+.eq_list li:hover a {display:block; border-radius:4px;border:2px solid #e2e2e2;background:rgba(54, 54, 54, 0.3) url('../img/btn_close.png') no-repeat right 9px top 9px;}
 
 .eq_list li.st_alert {background:#f2a363 url('../img/ico_inverter_on.png') no-repeat 12px 14px}
 .eq_list li.st_error {background:#e97373 url('../img/ico_inverter_on.png') no-repeat 12px 14px}
@@ -11195,7 +11166,7 @@ div.di_wrap dl .link a {
     cursor:pointer;
 }
 .chk_type input[type="checkbox"]:checked + label span {background:url(../img/checkbox_on_wh.png) no-repeat;}
-.chk_type input[type="checkbox"] + label{font-size:13px;line-height:24px;vertical-align:top}
+.chk_type input[type="checkbox"] + label{font-size:13px;color:var(--color-alp2);line-height:24px;vertical-align:top}
  
 .chk_type.c1 input[type="checkbox"] + label span,
 .darkmode .chk_type.c1 input[type="checkbox"] + label span{background:url(../img/checkbox_c1.png) no-repeat;}
@@ -11278,6 +11249,7 @@ div.di_wrap dl .link a {
 .btn_type03{height: 36px;line-height: 33px;outline-style: none;border: 2px solid var(--color7);padding: 0 12px;min-width: 60px;color: var(--color2);font-size: 12px;background: var(--active);border-radius:4px;}
 .btn_type03 + .btn_type03{margin-left:4px}
 .btn_type04{height:36px;line-height:33px;outline-style: none;border: 2px solid #0895ec;background:none;padding: 0 12px;min-width: 60px;font-weight:500;color:#0895ec;font-size: 14px;border-radius:4px;}
+.btn_type04 + .btn_type04{margin-left:9px}
 .btn_type05{padding:0 12px 0 6px;font-size:12px;line-height:22px;border-radius:4px;border:1px solid var(--color4);color:var(--color4);background:none}
 .btn_type05:before{display:inline-block;margin:2px 3px 0 0;width:18px;height:18px;vertical-align:top;background:url(../img/ico_add2_wh.png) no-repeat;content:''}
 .darkmode .btn_type05:before{background:url(../img/ico_add2.png) no-repeat}
@@ -11293,7 +11265,7 @@ div.di_wrap dl .link a {
 .header_drop_area .dropdown_cov{width:auto}
 
 .value_area{margin-top:25px}
-.value_area .value_tit{margin-top:25px;font-size:12px;color:var(--color4);}
+.value_area .value_tit{margin-top:25px;font-size:13px;color:var(--color4);}
 .value_area .value_num{margin-top:5px;text-align:right;font-size:11px;color:var(--color4);}
 .value_area .value_num .num{margin-right:5px;font-size:24px;color:var(--color2)}  
 
@@ -11369,8 +11341,8 @@ div.di_wrap dl .link a {
 .di_list{}
 .di_list li{padding:0 12px;border-bottom:1px solid var(--color1);overflow:hidden}
 .di_list li > span{line-height:30px}
-.di_list .di_li_tit{float:left;font-size:13px;color:var(--color1)}
-.di_list .di_li_tx{float:right;font-size:13px;color:var(--color2)}
+.di_list .di_li_tit{float:left;font-size:13px;color:var(--color-alp)}
+.di_list .di_li_tx{float:right;font-size:13px;color:var(--color-alp2)}
 .di_tx_bx{margin-top:20px}
 .di_tx_bx .tx{color:var(--color1);line-height:23px;font-size:12px;letter-spacing:-0.5px}
 .di_tx_bx .tx span{font-weight:300;color:#ef5350}
@@ -11452,7 +11424,7 @@ div.di_wrap dl .link a {
 .spc_tbl::-webkit-scrollbar-thumb{border-radius: 2px;background-color: var(--scroll-color);}
 .spc_tbl table {width: 100%}
 .spc_tbl thead {background:var(--box-color5)}
-.spc_tbl thead th{background:var(--box-color5);color:var(--color2);font-weight: normal;border-top:1px solid #4d4d4d}
+.spc_tbl thead th{background:var(--box-color5);color:var(--color-alp);font-weight: normal;border-top:1px solid #4d4d4d}
 .spc_tbl tbody th{padding-left:20px;text-align:left}
 .spc_tbl thead tr th:first-child {border-radius: 3px 0 0 3px}
 .spc_tbl thead tr th:last-child {min-width: 70px;border-radius: 0 3px 3px 0;}
@@ -11463,7 +11435,7 @@ div.di_wrap dl .link a {
 .spc_tbl .chk_type input[type="checkbox"] + label{margin-top:12px}
 
 .spc_tbl_row table {width: 100%}
-.spc_tbl_row tr:first-child td,.spc_tbl_row tr:first-child th{border-top:1px solid #4d4d4d}
+/* .spc_tbl_row tr:first-child td,.spc_tbl_row tr:first-child th{border-top:1px solid #4d4d4d} */
 .spc_tbl_row th{color:var(--color4);font-weight: normal;}
 .spc_tbl_row td{color:var(--color2);}
 .spc_tbl_row td.vbt{vertical-align:bottom}
@@ -11551,7 +11523,7 @@ button.tx_file{background:none;border:0}
 .sch_btm_area .bu.t4:before{background:#878787}
 .sch_btm_area .bu.t4:before{background:#878787}
 
-.sch_left .indiv{height:calc(100vh - 135px)}
+.sch_left .indiv{height:835px}
 
 /* spc 점검계획 등록 */
 .spc_tbl02_row table{width:100%;table-layout:fixed}
@@ -11572,4 +11544,4 @@ button.tx_file{background:none;border:0}
 .collect_wrap .tbl_top:first-child{margin-top:20px}
 .collect_btn{text-align:right;height:36px;line-height:36px}
  
-
+.pv_chart_table .tbl_wrap{padding-bottom:36px}

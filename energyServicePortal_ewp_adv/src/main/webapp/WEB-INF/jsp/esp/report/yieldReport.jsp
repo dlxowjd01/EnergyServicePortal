@@ -107,8 +107,8 @@
 						<tbody>
 							<tr>
 								<td>1</td>
-								<td><a href="/report/yieldReportDetails.do" class="tbl_link">혜원 솔라</a></td>
-								<td><a href="/report/yieldReportDetails.do" class="tbl_link">혜원 솔라 01</a></td>
+								<td>혜원 솔라</td>
+								<td>혜원 솔라 01</td>
 								<td>월간보고서</td>
 								<td>2020-01</td>
 								<td onClick="location.href='/report/site?reportNo=1&sid=fa313b15-1fe1-41e3-b592-5a739e3d9b37&month=2020-01'" ><button class="tx_file">EXCEL</button></td>
@@ -116,8 +116,8 @@
 							</tr>
 							<tr>
 								<td>2</td>
-								<td><a href="/report/yieldReportDetails.do" class="tbl_link">혜원 솔라</a></td>
-								<td><a href="/report/yieldReportDetails.do" class="tbl_link">혜원 솔라 02</a></td>
+								<td>혜원 솔라</td>
+								<td>혜원 솔라 02</td>
 								<td>월간보고서</td>
 								<td>2020-01</td>
 								<td onClick="location.href='/report/site?reportNo=1&sid=0c7c90c6-9505-4f77-b42d-500c2879c689&month=2020-01'"><button class="tx_file">EXCEL</button></td>
@@ -125,8 +125,8 @@
 							</tr>
 							<tr>
 								<td>3</td>
-								<td><a href="/report/yieldReportDetails.do" class="tbl_link">혜원 솔라</a></td>
-								<td><a href="/report/yieldReportDetails.do" class="tbl_link">혜원 솔라 01</a></td>
+								<td>혜원 솔라</td>
+								<td>혜원 솔라 01</td>
 								<td>월간보고서</td>
 								<td>2020-02</td>
 								<td onClick="location.href='/report/site?reportNo=1&sid=fa313b15-1fe1-41e3-b592-5a739e3d9b37&month=2020-02'"><button class="tx_file">EXCEL</button></td>
@@ -134,8 +134,8 @@
 							</tr>
 							<tr>
 								<td>4</td>
-								<td><a href="/report/yieldReportDetails.do" class="tbl_link">혜원 솔라</a></td>
-								<td><a href="/report/yieldReportDetails.do" class="tbl_link">혜원 솔라 02</a></td>
+								<td>혜원 솔라</td>
+								<td>혜원 솔라 02</td>
 								<td>월간보고서</td>
 								<td>2020-02</td>
 								<td onClick="location.href='/report/site?reportNo=1&sid=0c7c90c6-9505-4f77-b42d-500c2879c689&month=2020-02'"><button class="tx_file">EXCEL</button></td>
