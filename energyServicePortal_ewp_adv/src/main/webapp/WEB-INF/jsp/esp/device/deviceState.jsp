@@ -7,8 +7,10 @@
 let iderms = null;
 let iderms_oid = "spower";
 let iderms_sid = null;
-let iderms_login_id = "spadmin";
-let iderms_password = "11111111";
+//let iderms_login_id = "spadmin";
+//let iderms_password = "11111111";
+let iderms_login_id = "test1111";
+let iderms_password = "test1111";
 let iderms_token = null;
 let iderms_site_list = null;
 
@@ -108,25 +110,59 @@ function getDeviceTypeName(type) {
 // device 리스트 만들기
 function getDeviceList(oid, sid) {
 
-		var result = iderms.getDevices(oid, sid);
-			
-			let myMap = new Map();
-			myMap.set('INV_PV', new Array());
-			
-			for(var i=0; i<result.length; i++) {
-				if(myMap.has(result[i].device_type)) {
-					let array = myMap.get(result[i].device_type);
-					array.push(result[i]);
-				} else {
-					let arr = new Array();
-					arr.push(result[i]);
-					myMap.set(result[i].device_type, arr);
-				} 					
+
+		let myMap = new Map();
+		myMap.set('INV_PV', new Array());
+		
+	
+	var result = null;//iderms.getDevices(oid, sid);
+	
+	if(sid === 'all_sites') {
+	
+		if (iderms_site_list != null && iderms_site_list.length > 0) {
+			for (var i = 0; i < iderms_site_list.length; i++) {
+		
+				sid = iderms_site_list[i].sid;
+				
+				result = iderms.getDevices(oid, sid);
+				
+				for(var k=0; k<result.length; k++) {
+					if(myMap.has(result[k].device_type)) {
+						let array = myMap.get(result[k].device_type);
+						array.push(result[k]);
+					} else {
+						let arr = new Array();
+						arr.push(result[k]);
+						myMap.set(result[k].device_type, arr);
+					} 					
+				}
+				
+				myMap.forEach(function(value, key) {
+					  console.log(key + ' = ' + value);
+					});	
 			}
-			
-			myMap.forEach(function(value, key) {
-				  console.log(key + ' = ' + value);
-				});
+		}	
+	}
+	else {
+		result = iderms.getDevices(oid, sid);
+		
+		for(var i=0; i<result.length; i++) {
+			if(myMap.has(result[i].device_type)) {
+				let array = myMap.get(result[i].device_type);
+				array.push(result[i]);
+			} else {
+				let arr = new Array();
+				arr.push(result[i]);
+				myMap.set(result[i].device_type, arr);
+			} 					
+		}
+		
+		myMap.forEach(function(value, key) {
+			  console.log(key + ' = ' + value);
+			});			
+	}
+	
+	
 			
 			
 		var $eqListDiv = $(".row.scroll").find(".col-lg-12");
@@ -358,11 +394,13 @@ function putSiteListToPopupAddDeviceSelectBox() {
 			$(".header_drop_area.col-lg-2.w_type div ul li").on("click", function(e) {
 				var $this = $(this);
 				var site_name = $this.text();
-				if(site_name == "전체") {
-					
-				} else {
-					getSiteDeviceList(site_name);				
-				}
+// 				if(site_name == "전체") {
+				
+// 				} else {
+// 					getSiteDeviceList(site_name);				
+// 				}
+
+				getSiteDeviceList(site_name);
 				
 				const $tbody = $('#site_list_id');
 				$tbody.empty();
@@ -376,18 +414,21 @@ function putSiteListToPopupAddDeviceSelectBox() {
 		});
 
 		function getSiteDeviceList(site_name) {
-			
 			var sid = null;
 			
-			if (iderms_site_list != null && iderms_site_list.length > 0) {
-	    		for (var i = 0; i < iderms_site_list.length; i++) {
-	    			
-	    			if( iderms_site_list[i].name === site_name ) {
-	    				iderms_sid = iderms_site_list[i].sid;
-	    				break;
-	    			}
-	    		}
-		    } 
+			if(site_name === "전체") {
+				iderms_sid = 'all_sites';
+			} else {
+				if (iderms_site_list != null && iderms_site_list.length > 0) {
+		    		for (var i = 0; i < iderms_site_list.length; i++) {
+		    			
+		    			if( iderms_site_list[i].name === site_name ) {
+		    				iderms_sid = iderms_site_list[i].sid;
+		    				break;
+		    			}
+		    		}
+			    } 
+			}
 			
 			getDeviceList(iderms_oid, iderms_sid);
 			
