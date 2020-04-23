@@ -1434,7 +1434,7 @@
 											}],
 											gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 											title: {
-												text: 'MWh',
+												text: '%',
 												align: 'low',
 												rotation: 0, /* 타이틀 기울기 */
 												y:25, /* 타이틀 위치 조정 */
@@ -1491,7 +1491,7 @@
 											format: '{point.y:.0f}'
 										},
 										tooltip: {
-											pointFormat: '출력: <b>{point.y}MWh</b>' +
+											pointFormat: '출력: <b>{point.y} %</b>' +
 												''
 										},
 										colorByPoint: true
@@ -1671,7 +1671,7 @@
 												dataLabels: {
 													enabled: true, /* 막대 안의 수치 안보이기 */
 													inside: true, /* 막대 안으로 라벨 수치 넣기 */
-													format: '{y} MWh', /* 단위 넣기 */
+													format: '{y} %', /* 단위 넣기 */
 													style: {
 														color: '#ffffff',
 														fontSize: '11px',
@@ -1696,7 +1696,7 @@
 											name: '입찰',
 											data: [55],
 											tooltip: {
-												valueSuffix: 'MWh'
+												valueSuffix: '%'
 											},
 											dataLabels: {
 												enabled: true
@@ -1772,7 +1772,6 @@
 												}
 											}]
 										}
-										
 									});
 							</script>
 						</div>
