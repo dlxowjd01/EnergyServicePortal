@@ -535,28 +535,12 @@
 		}
 
 		if(interval == 'day') {
-			let diffMonth = getDiff(eDate, sDate, 'month');
 			let diffDay = getDiff(eDate, sDate, 'day');
-			if(diffMonth == 1) {
-				for(let j = 0; j < diffDay; j++) {
-					let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1 , Number(sDate.substring(6, 8)));
-					sDateTime.setDate(sDateTime.getDate() + j);
-					let toDate = sDateTime.format('yyyyMMdd');
-					dateArr.push(toDate);
-				}
-			} else {
-				for(let j = 0; j < diffMonth; j++) {
-					let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1 , 1);
-					sDateTime.setMonth(sDateTime.getMonth() + j);
-					for(let k = 1; k <= 31; k++) {
-						let toMonth = sDateTime.format('yyyyMM');
-						if(k < 10) {
-							dateArr.push(toMonth + '0' + k);
-						} else {
-							dateArr.push(toMonth + k);
-						}
-					}
-				}
+			for(let j = 0; j < diffDay; j++) {
+				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1 , Number(sDate.substring(6, 8)));
+				sDateTime.setDate(Number(sDateTime.getDate()) + j);
+				let toDate = sDateTime.format('yyyyMMdd');
+				dateArr.push(toDate);
 			}
 		} else if(interval == 'month') {
 			let diffMonth = getDiff(eDate, sDate, 'month');
@@ -715,6 +699,58 @@
 					let time = el.substring(6, 8);
 					th.text(time);
 					tr.append(th);
+
+					if(dateArr.length == (i + 1)) {
+						th = $('<th>').html('합계');
+						tr.append(th);
+
+						tableTemp.find('table').append('<thead>');
+						tableTemp.find('thead').append(tr);
+						tableTemp.find('table').append('<tbody>');
+
+						let color = 1;
+						$.each(gridData, function(q, grid) {
+							if(grid.std == dateVal) {
+								let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.deviceNm + '</span></td>');
+								$.each(grid.data, function(w, data) {
+									let $dataTd = $('<td>');
+									if(isNaN(data)) {
+										$dataTd.html(data);
+									} else {
+
+										$dataTd.html(numberComma(data.toFixed(2)));
+									}
+									$dataTr.append($dataTd);
+								});
+
+								if(totalArr.length > 0) {
+									let putData = false;
+									$.each(totalArr, function(t, ta) {
+										if(ta.name == grid.deviceNm) {
+											putData = true;
+											ta.val += grid.data[grid.data.length - 1];
+										}
+									});
+
+									if(!putData) {
+										totalArr.push({
+											name: grid.deviceNm,
+											val: grid.data[grid.data.length - 1]
+										});
+									}
+								} else {
+									totalArr.push({
+										name: grid.deviceNm,
+										val: grid.data[grid.data.length - 1]
+									});
+								}
+
+								tableTemp.find('tbody').append($dataTr);
+								color++;
+							}
+						});
+						$('div.fold_div').append(tableTemp);
+					}
 				} else if(dateVal != el.substring(0, 6) || dateArr.length == (i + 1)) {
 					if(dateArr.length == (i + 1)) {
 						let time = el.substring(6, 8);
@@ -806,6 +842,58 @@
 					let time = el.substring(4, 6);
 					th.text(time);
 					tr.append(th);
+
+					if(dateArr.length == (i + 1)) {
+						th = $('<th>').html('합계');
+						tr.append(th);
+
+						tableTemp.find('table').append('<thead>');
+						tableTemp.find('thead').append(tr);
+						tableTemp.find('table').append('<tbody>');
+
+						let color = 1;
+						$.each(gridData, function(q, grid) {
+							if(grid.std == dateVal) {
+								let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.deviceNm + '</span></td>');
+								$.each(grid.data, function(w, data) {
+									let $dataTd = $('<td>');
+									if(isNaN(data)) {
+										$dataTd.html(data);
+									} else {
+
+										$dataTd.html(numberComma(data.toFixed(2)));
+									}
+									$dataTr.append($dataTd);
+								});
+
+								if(totalArr.length > 0) {
+									let putData = false;
+									$.each(totalArr, function(t, ta) {
+										if(ta.name == grid.deviceNm) {
+											putData = true;
+											ta.val += grid.data[grid.data.length - 1];
+										}
+									});
+
+									if(!putData) {
+										totalArr.push({
+											name: grid.deviceNm,
+											val: grid.data[grid.data.length - 1]
+										});
+									}
+								} else {
+									totalArr.push({
+										name: grid.deviceNm,
+										val: grid.data[grid.data.length - 1]
+									});
+								}
+
+								tableTemp.find('tbody').append($dataTr);
+								color++;
+							}
+						});
+						$('div.fold_div').append(tableTemp);
+					}
 				} else if(dateVal != el.substring(0, 4) || dateArr.length == (i + 1)) {
 					if(dateArr.length == (i + 1)) {
 						let time = el.substring(4, 6);
@@ -1155,8 +1243,8 @@
 
 		Highcharts.chart('chart2', {
 			chart: {
-				marginLeft: 80,
-				marginRight: 0,
+				marginLeft: 60,
+				marginRight: 20,
 				backgroundColor: 'transparent',
 				type: 'line'
 			},
@@ -1176,7 +1264,7 @@
 					align: 'center',
 					style: {
 						color: '#3d4250',
-						fontSize: '10px'
+						fontSize: '8px'
 					},
 					y: 50,
 					formatter: function() {
