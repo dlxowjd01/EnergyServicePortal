@@ -60,7 +60,7 @@
 			<div class="indiv">
 				<div class="tbl_wrap_type collect_wrap">
 					<div class="tbl_top clear">
-						<h2 class="ntit fl">접속반</h2>
+						<h2 class="ntit fl">RTU</h2>
 						<button type="submit" class="btn_type fr">등록</button>
 					</div>
 					<table class="his_tbl" id="PV_INVERTER">

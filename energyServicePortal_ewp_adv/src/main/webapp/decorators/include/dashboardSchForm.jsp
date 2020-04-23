@@ -17,7 +17,11 @@
     // 기간 필터
     const today = new Date();
     let startDate, endDate, lastDay = "";
-    if (termType === 'day') {
+    if(termType === 'hour'){
+      startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), today.getHours(), 0, 0);
+      endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), today.getHours(), 59, 59);
+      $("#selTerm").val("hour");
+    } else if (termType === 'day') {
       // 오늘 00시 ~ 오늘 23시 59분
       // 데이터가 비어도 오늘 치는 다 나오므로 괜찮을 듯.
       startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
