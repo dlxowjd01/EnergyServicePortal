@@ -573,7 +573,7 @@
 				sDateTime.setDate(sDateTime.getDate() + j);
 				let toDate = sDateTime.format('yyyyMMdd');
 
-				for(let i = 0; i <= 24; i++) {
+				for(let i = 0; i < 24; i++) {
 					if(interval == '15min') { //15분
 						if(String(i).length == 1) {
 							dateArr.push(toDate + '0' + i +'0000');
@@ -1178,6 +1178,7 @@
 						color: '#3d4250',
 						fontSize: '10px'
 					},
+					y: 50,
 					formatter: function() {
 						return dateFormat(this.value);
 					},

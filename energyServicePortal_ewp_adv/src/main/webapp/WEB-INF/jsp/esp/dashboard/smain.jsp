@@ -1342,9 +1342,9 @@
 									}
 
 									if(nowBillingDay > 10000) {
-										$('#dayEnergyMoney').html('<span>' + (nowBillingDay / 1000) + '</span> <em>천원</em>');
+										$('#dayEnergyMoney').html('<span>' + numberComma(Math.floor(nowBillingDay / 1000)) + '</span> <em>천원</em>');
 									} else {
-										$('#dayEnergyMoney').html('<span>' + nowBillingDay + '</span> <em>원</em>');
+										$('#dayEnergyMoney').html('<span>' + numberComma(nowBillingDay) + '</span> <em>원</em>');
 									}
 
 								}

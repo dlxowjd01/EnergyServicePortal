@@ -265,7 +265,7 @@
 
 							trHtml.append('<td>' + el.siteName + '</td>');
 							trHtml.append('<td>' + el.dname + '</td>');
-							trHtml.append('<td>' + new Date(el.timestamp).format('yyyy.MM.dd hh:mm:ss') + '</td>');
+							trHtml.append('<td>' + new Date(el.timestamp).format('yyyy.mm.dd HH:MM:ss') + '</td>');
 							trHtml.append('<td>' + temperature + '</td>');// 현재없음.
 							trHtml.append('<td>' + voltageR + '</td>');
 							trHtml.append('<td>' + voltageS + '</td>');
@@ -318,7 +318,7 @@
 
 			trHtml.append('<td>' + el.siteName + '</td>');
 			trHtml.append('<td>' + el.dname + '</td>');
-			trHtml.append('<td>' + new Date(el.timestamp).format('yyyy.MM.dd hh:mm:ss') + '</td>');
+			trHtml.append('<td>' + new Date(el.timestamp).format('yyyy.mm.dd HH:MM:ss') + '</td>');
 			trHtml.append('<td>' + temperature + '</td>');// 현재없음.
 			trHtml.append('<td>' + voltageR + '</td>');
 			trHtml.append('<td>' + voltageS + '</td>');
@@ -788,7 +788,7 @@
 					formatter: function () {
 						return this.points.reduce(function (s, point) {
 							return s + '<br/>' + point.series.name + ': ' + Number(point.y).toFixed(2) + point.series.userOptions.tooltip.valueSuffix;
-						}, '<b>' + new Date(this.x).format('yyyy.MM.dd hh:mm:ss') + '</b>');
+						}, '<b>' + new Date(this.x).format('yyyy.mm.dd HH:MM:ss') + '</b>');
 					},
 					shared: true /* 툴팁 공유 */
 				},
