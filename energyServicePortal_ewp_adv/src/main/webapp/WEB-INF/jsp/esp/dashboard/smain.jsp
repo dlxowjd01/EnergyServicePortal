@@ -1752,7 +1752,7 @@
 						</li>
 						<li>
 							<div class="chart_top clear">
-								<h2 class="ntit">RTU(0)</h2>
+								<h2 class="ntit">접속반(0)</h2>
 								<div class="alert_icon fr">
 									<span class="inv_normail">정상(0)</span>
 									<span class="inv_error">이상(0)</span>
