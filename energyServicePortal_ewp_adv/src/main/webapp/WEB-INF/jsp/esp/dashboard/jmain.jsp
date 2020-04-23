@@ -1858,7 +1858,7 @@
 											gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 											min: 0, /* 최소값 지정 하면 + 만 나옴 */
 											title: {
-												text: 'MWh',
+												text: 'kWh',
 												align: 'low',
 												rotation: 0, /* 타이틀 기울기 */
 												y:25, /* 타이틀 위치 조정 */
