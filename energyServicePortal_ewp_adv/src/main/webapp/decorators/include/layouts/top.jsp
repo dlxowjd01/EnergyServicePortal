@@ -40,9 +40,9 @@
 	<%--<c:set var="timeOffset"><spring:eval expression="@local.getProperty('server.offset')" /></c:set>--%>
 	<script src="/js/custom/common.js"></script>
 	<script src="/js/custom/lems.js"></script>
-	<script src="/js/custom/numberFormat.js"></script>
 	<script src="/js/custom/searchRequirement.js"></script>
 	<script src="/js/custom/utils.js"></script>
+	<script src="/js/custom/numberFormat.js"></script>
 	
 	<script src="/js/html2canvas.js"></script>	
 	<script src="/js/jspdf.min.js"></script>	

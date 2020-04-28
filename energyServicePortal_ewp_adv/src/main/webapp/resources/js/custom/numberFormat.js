@@ -23,24 +23,31 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 			whUnit.some(function(v, k) {
 				let str = String(Math.floor(number));
 				if(intChipher == undefined || intChipher == null || intChipher == '') {
-					if(str.length > 3) {
+					if(str.length > 3 && v != 'GW') {
 						number = number / 1000;
 					} else {
+						if(v == 'GW') {
+							number = number / 1000;
+						}
 						if(unit.endsWith('h')) {
-							rtnValue = [number.toFixed(decimalChipher), v + 'h'];
+							rtnValue = [numberComma((number).toFixed(decimalChipher)), v + 'h'];
 						} else {
-							rtnValue = [number.toFixed(decimalChipher), v];
+							rtnValue = [numberComma((number).toFixed(decimalChipher)), v];
 						}
 						return rtnValue;
 					}
 				} else {
-					if(str.length > intChipher) {
+					if(str.length > intChipher && v != 'GW') {
 						number = number / 1000;
 					} else {
+						if(v == 'GW') {
+							number = number / 1000;
+						}
+
 						if(unit.endsWith('h')) {
-							rtnValue = [number.toFixed(decimalChipher), v + 'h'];
+							rtnValue = [numberComma((number).toFixed(decimalChipher)), v + 'h'];
 						} else {
-							rtnValue = [number.toFixed(decimalChipher), v];
+							rtnValue = [numberComma((number).toFixed(decimalChipher)), v];
 						}
 						return rtnValue;
 					}
@@ -55,26 +62,26 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 			if(intChipher == undefined || intChipher == null || intChipher == '') {
 				if(str.length > 4) {
 					number = number / 10000;
-					rtnValue = [number.toFixed(decimalChipher), '만원'];
+					rtnValue = [numberComma((number).toFixed(decimalChipher)), '만원'];
 				} else if(str.length > 3) {
 					number = number / 1000;
-					rtnValue = [number.toFixed(decimalChipher), '천원'];
+					rtnValue = [numberComma((number).toFixed(decimalChipher)), '천원'];
 				} else {
-					rtnValue = [number.toFixed(decimalChipher), '원'];
+					rtnValue = [numberComma((number).toFixed(decimalChipher)), '원'];
 				}
 			} else {
 				let str = String(Math.floor(number));
 				if (str.length > intChipher) {
 					if (str.length - 3 <= intChipher) {
 						number = number / 1000;
-						rtnValue = [number.toFixed(decimalChipher), '천원'];
+						rtnValue = [numberComma((number).toFixed(decimalChipher)), '천원'];
 					} else {
 						number = number / 10000;
-						rtnValue = [number.toFixed(decimalChipher), '만원'];
+						rtnValue = [numberComma((number).toFixed(decimalChipher)), '만원'];
 					}
 					number = number / 1000;
 				} else {
-					rtnValue = [number.toFixed(decimalChipher), '원'];
+					rtnValue = [numberComma((number).toFixed(decimalChipher)), '원'];
 					return rtnValue;
 				}
 			}
@@ -112,6 +119,11 @@ const displayNumberFixedUnit = function(input_num, input_unit, fixed_unit, num_f
 		return rtnValue;
 	} else {
 		if(input_unit == 'Wh' || input_unit == 'W') {
+
+			if(num_frac === undefined || num_frac == null || num_frac == '') {
+				num_frac = 2;
+			}
+
 			if(fixed_unit === undefined || fixed_unit == null || fixed_unit == '') {
 				rtnValue = [input_num, input_unit];
 				return rtnValue;
@@ -119,13 +131,12 @@ const displayNumberFixedUnit = function(input_num, input_unit, fixed_unit, num_f
 
 			whUnit.some(function(v, k) {
 				let str = String(Math.floor(input_num));
-				if(fixed_unit !=  v) {
-					input_num = input_num / 1000;
-				} else {
+				if(fixed_unit.startsWith(v)) {
+					input_num = input_num / Math.pow(1000, k);
 					if(input_unit.endsWith('h')) {
-						rtnValue = [input_num.toFixed(num_frac), v + 'h'];
+						rtnValue = [numberComma((input_num).toFixed(num_frac)), v + 'h'];
 					} else {
-						rtnValue = [input_num.toFixed(num_frac), v];
+						rtnValue = [numberComma((input_num).toFixed(num_frac)), v];
 					}
 					return rtnValue;
 				}
@@ -134,7 +145,7 @@ const displayNumberFixedUnit = function(input_num, input_unit, fixed_unit, num_f
 			$.each(moneyUnit, function(i, el) {
 				if(fixed_unit == el.unit) {
 					input_num = input_num / el.chipher;
-					rtnValue = [input_num.toFixed(num_frac), el.unit];
+					rtnValue = [numberComma((input_num).toFixed(num_frac)), el.unit];
 					return false;
 				}
 			});

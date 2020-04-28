@@ -145,7 +145,7 @@
 				<div class="fl"><button type="button" class="btn_type" id="renderBtn">조회</button></div>
 
 				<div class="fr">
-					<a href="#" class="chart_change_column">그래프변경</a>
+					<a href="#" class="chart_change_column" id="changeChart">그래프변경</a>
 				</div>
 			</div>
 			<p class="tx_time">2020-03-06 22:00:09</p>
@@ -163,16 +163,16 @@
 	<div class="col-lg-12">
 		<div class="indiv clear">
 			<div class="tbl_save_bx">
-				<a href="#;" class="save_btn">데이터저장</a>
+				<a href="#" class="save_btn">데이터저장</a>
 			</div>
 			<div class="tbl_top clear">
 				<h2 class="ntit fl">예측 결과 도포</h2>
 				<ul class="fr">
-					<li><a href="#;" class="fold_btn">표접기</a></li>
+					<li><a href="#" class="fold_btn">표접기</a></li>
 				</ul>
 			</div>
 			<div class="tbl_wrap">
-				<div class="fold_div">
+				<div class="fold_div" id="pc_use">
 				</div>
 			</div>
 		</div>
@@ -189,9 +189,13 @@
 	<input type="hidden" name="interval">
 </form>
 <script type="text/javascript">
+
+	let standard = new Array();
 	let applicationData = {
 		observed: null,
-		forecasted: null
+		observedType: 'column',
+		forecasted: null,
+		forecastedType: 'column'
 	};
 
 	$(function() {
@@ -286,6 +290,38 @@
 			}
 		});
 
+		$('#changeChart').on('click', function() {
+
+			if(applicationData.type == '3') {
+				applicationData.type = '1';
+				applicationData.observedType = 'column';
+				applicationData.forecastedType = 'column';
+			} else if(applicationData.type == '2') {
+				applicationData.type = '3';
+				applicationData.observedType = 'spline';
+				applicationData.forecastedType = 'spline';
+			} else {
+				applicationData.type = '2';
+				applicationData.observedType = 'column';
+				applicationData.forecastedType = 'spline';
+			}
+
+			chartMakeData();
+		});
+
+		$('.save_btn').on('click', function(e) {
+			let excelName = '발전이력';
+			let $val = $('#pc_use').find('tbody');
+			let cnt = $val.length;
+
+			if (cnt < 1) {
+				alert('다운받을 데이터가 없습니다.');
+			} else {
+				if (confirm('엑셀로 저장하시겠습니까?')) {
+					tableToExcel('pc_use', excelName, e);
+				}
+			}
+		});
 
 		//올차범위 조회
 		$('#application').on('click', function() {
@@ -754,9 +790,9 @@
 	function drawPage() {
 		$('table.pc_use tbody').empty();
 
+		standard = new Array();
 		let sDate = $('#datepicker1').val().replace(/-/g, '');
 		let eDate = $('#datepicker2').val().replace(/-/g, '');
-		let dateArr = new Array();
 		let interval = $('#interval button').data('value');
 
 		if(interval == 'day') {
@@ -765,14 +801,14 @@
 				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1 , Number(sDate.substring(6, 8)));
 				sDateTime.setDate(Number(sDateTime.getDate()) + j);
 				let toDate = sDateTime.format('yyyyMMdd');
-				dateArr.push(toDate);
+				standard.push(toDate);
 			}
 		} else if(interval == 'month') {
 			let diffMonth = getDiff(eDate, sDate, 'month');
 			for(let j = 0; j < diffMonth; j++) {
 				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) + j - 1 , 1);
 				let toDate = sDateTime.format('yyyyMM');
-				dateArr.push(toDate);
+				standard.push(toDate);
 			}
 		} else {
 			let diffDay = getDiff(eDate, sDate, 'day');
@@ -785,36 +821,37 @@
 				for(let i = 0; i < 24; i++) {
 					if(interval == '15min') { //15분
 						if(String(i).length == 1) {
-							dateArr.push(toDate + '0' + i +'0000');
-							dateArr.push(toDate + '0' + i +'1500');
-							dateArr.push(toDate + '0' + i +'3000');
-							dateArr.push(toDate + '0' + i +'4500');
+							standard.push(toDate + '0' + i +'0000');
+							standard.push(toDate + '0' + i +'1500');
+							standard.push(toDate + '0' + i +'3000');
+							standard.push(toDate + '0' + i +'4500');
 						} else {
-							dateArr.push(toDate + i +'0000');
-							dateArr.push(toDate + i +'1500');
-							dateArr.push(toDate + i +'3000');
-							dateArr.push(toDate + i +'4500');
+							standard.push(toDate + i +'0000');
+							standard.push(toDate + i +'1500');
+							standard.push(toDate + i +'3000');
+							standard.push(toDate + i +'4500');
 						}
 					} else if(interval == '30min') { //30분
 						if(String(i).length == 1) {
-							dateArr.push(toDate + '0' + i +'0000');
-							dateArr.push(toDate + '0' + i +'3000');
+							standard.push(toDate + '0' + i +'0000');
+							standard.push(toDate + '0' + i +'3000');
 						} else {
-							dateArr.push(toDate + i +'0000');
-							dateArr.push(toDate + i +'3000');
+							standard.push(toDate + i +'0000');
+							standard.push(toDate + i +'3000');
 						}
 					} else { //시간
 						if(String(i).length == 1) {
-							dateArr.push(toDate + '0' + i +'0000');
+							standard.push(toDate + '0' + i +'0000');
 						} else {
-							dateArr.push(toDate + i +'0000');
+							standard.push(toDate + i +'0000');
 						}
 					}
 				}
 			}
 		}
 
-		let gridData = gridDataMake(dateArr, interval);
+		let gridData = gridDataMake(interval);
+
 		let totalArr = new Array();
 		if(interval == '15min' || interval == 'hour') {
 			let dateVal = '';
@@ -822,7 +859,7 @@
 			let tr = $('<tr>');
 			$('div.chart_table').remove();
 
-			$.each(dateArr, function(i, el) {
+			$.each(standard, function(i, el) {
 				let th = $('<th>');
 				if(dateVal == '') {
 					dateVal = el.substring(0, 8);
@@ -833,8 +870,8 @@
 					let time = el.substring(8, 10) + ':' + el.substring(10, 12);
 					th.text(time);
 					tr.append(th);
-				} else if(dateVal != el.substring(0, 8) || dateArr.length == (i + 1)) {
-					if(dateArr.length == (i + 1)) {
+				} else if(dateVal != el.substring(0, 8) || standard.length == (i + 1)) {
+					if(standard.length == (i + 1)) {
 						let time = el.substring(8, 10) + ':' + el.substring(10, 12);
 						th.text(time);
 						tr.append(th);
@@ -890,7 +927,7 @@
 			let tr = $('<tr>');
 			$('div.chart_table').remove();
 
-			$.each(dateArr, function(i, el) {
+			$.each(standard, function(i, el) {
 				let th = $('<th>');
 				if(dateVal == '') {
 					dateVal = el.substring(0, 6);
@@ -902,7 +939,7 @@
 					th.text(time);
 					tr.append(th);
 
-					if(dateArr.length == (i + 1)) {
+					if(standard.length == (i + 1)) {
 						th = $('<th>').html('합계');
 						tr.append(th);
 
@@ -929,8 +966,8 @@
 						});
 						$('div.fold_div').append(tableTemp);
 					}
-				} else if(dateVal != el.substring(0, 6) || dateArr.length == (i + 1)) {
-					if(dateArr.length == (i + 1)) {
+				} else if(dateVal != el.substring(0, 6) || standard.length == (i + 1)) {
+					if(standard.length == (i + 1)) {
 						let time = el.substring(6, 8);
 						th.text(time);
 						tr.append(th);
@@ -986,7 +1023,7 @@
 			let tr = $('<tr>');
 			$('div.chart_table').remove();
 
-			$.each(dateArr, function(i, el) {
+			$.each(standard, function(i, el) {
 				let th = $('<th>');
 				if(dateVal == '') {
 					dateVal = el.substring(0, 4);
@@ -998,7 +1035,7 @@
 					th.text(time);
 					tr.append(th);
 
-					if(dateArr.length == (i + 1)) {
+					if(standard.length == (i + 1)) {
 						th = $('<th>').html('합계');
 						tr.append(th);
 
@@ -1025,8 +1062,8 @@
 						});
 						$('div.fold_div').append(tableTemp);
 					}
-				} else if(dateVal != el.substring(0, 4) || dateArr.length == (i + 1)) {
-					if(dateArr.length == (i + 1)) {
+				} else if(dateVal != el.substring(0, 4) || standard.length == (i + 1)) {
+					if(standard.length == (i + 1)) {
 						let time = el.substring(4, 6);
 						th.text(time);
 						tr.append(th);
@@ -1078,13 +1115,12 @@
 			});
 		}
 
-		chartDraw(dateArr, interval);
-		responseCnt = 0;
+		chartMakeData(interval);
 		dup = false;
 	}
 
 	//그리드 데이터 만들기
-	function gridDataMake(standard, type) {
+	function gridDataMake(type) {
 		let dataArr = new Array();
 
 		accociation.forEach(function(val, key){
@@ -1183,14 +1219,12 @@
 	}
 
 	//차트
-	function chartDraw(standard, type) {
+	const chartMakeData = function(type) {
 		let seriesData = new Array();
 		let num = 0;
 		let colorArr = ['#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787'];
 
-		applicationData
-
-		accociation.forEach(function(val, key){
+		accociation.forEach(function(val, key) {
 			if(val != undefined) {
 				let arr = val;
 				arr.sort(function(a, b) {
@@ -1220,10 +1254,10 @@
 						let dataName = '';
 						if(key == 'actual') {
 							dataName = '실측';
-							$temp = {
+							let $temp = {
 								name: dataName,
-								type: 'column',
-								stack: num,
+								type: applicationData.observedType,
+								stack: 0,
 								tooltip: {
 									valueSuffix: 'Wh'
 								},
@@ -1235,10 +1269,10 @@
 							summary(total, 0);
 						} else {
 							dataName = '예측';
-							$temp = {
+							let $temp = {
 								name: dataName,
-								type: 'spline',
-								stack: num,
+								type: applicationData.forecastedType,
+								stack: 1,
 								tooltip: {
 									valueSuffix: 'Wh'
 								},
@@ -1273,33 +1307,47 @@
 			}
 		});
 
-		Highcharts.chart('chart2', {
+		chartDraw(seriesData);
+
+		application('basic');
+	}
+
+	/**
+	 * 차트 그리기
+	 *
+	 * @param standard
+	 * @param seriesData
+	 */
+	const chartDraw = function(seriesData) {
+		let chart = $('#chart2').highcharts();
+
+		if(chart) {
+			chart.destroy();
+		}
+
+		let option = {
 			chart: {
+				renderTo: 'chart2',
 				marginLeft: 60,
 				marginRight: 20,
 				backgroundColor: 'transparent',
-				type: 'line'
 			},
-
 			navigation: {
 				buttonOptions: {
 					enabled: false /* 메뉴 안보이기 */
 				}
 			},
-
 			title: {
 				text: ''
 			},
-
 			subtitle: {
 				text: ''
 			},
-
 			xAxis: {
 				labels: {
 					align: 'center',
 					style: {
-						color: '#3d4250',
+						color: 'var(--color3)',
 						fontSize: '8px'
 					},
 					y: 50,
@@ -1325,7 +1373,7 @@
 					y: 25, /* 타이틀 위치 조정 */
 					x: 5, /* 타이틀 위치 조정 */
 					style: {
-						color: '#3d4250',
+						color: 'var(--color3)',
 						fontSize: '18px'
 					}
 				},
@@ -1333,12 +1381,11 @@
 					overflow: 'justify',
 					x: -20, /* 그래프와의 거리 조정 */
 					style: {
-						color: '#3d4250',
+						color: 'var(--color3)',
 						fontSize: '10px'
 					}
 				}
 			},
-
 			/* 범례 */
 			legend: {
 				enabled: true,
@@ -1346,7 +1393,7 @@
 				verticalAlign: 'top',
 				x: -120,
 				itemStyle: {
-					color: '#3d4250',
+					color: 'var(--color3)',
 					fontSize: '10px',
 					fontWeight: 400
 				},
@@ -1356,7 +1403,6 @@
 				symbolPadding: 3, /* 심볼 - 텍스트간 거리 */
 				symbolHeight: 8 /* 심볼 크기 */
 			},
-
 			/* 툴팁 */
 			tooltip: {
 				formatter: function () {
@@ -1366,7 +1412,6 @@
 				},
 				shared: true /* 툴팁 공유 */
 			},
-
 			/* 옵션 */
 			plotOptions: {
 				series: {
@@ -1381,15 +1426,12 @@
 					}
 				}
 			},
-
 			/* 출처 */
 			credits: {
 				enabled: false
 			},
-
 			/* 그래프 스타일 */
 			series: seriesData,
-
 			/* 반응형 */
 			responsive: {
 				rules: [{
@@ -1433,9 +1475,10 @@
 					}
 				}]
 			}
-		});
+		}
 
-		application('basic');
+		chart = new Highcharts.Chart(option);
+		chart.redraw();
 	}
 
 	function summary(total, type) {

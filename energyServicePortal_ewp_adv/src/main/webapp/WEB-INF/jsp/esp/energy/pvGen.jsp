@@ -94,20 +94,26 @@
 				<div class="fr">
 					<span class="tx_tit">그래프 스타일</span>
 					<div class="sa_select">
-						<div class="dropdown">
-							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+						<div class="dropdown" id="chartStyle">
+							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-value="each">
 								개별 막대<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu">
-								<li data-value="allSum"><a href="#">전체 합산</a></li>
-								<li data-value="siteSum"><a href="#">사이트별 합산</a></li>
-								<li data-value="each" class="on"><a href="#">개별 막대</a></li>
+								<li data-value="allSum">
+									<a href="#">전체 합산</a>
+								</li>
+								<li data-value="siteSum">
+									<a href="#">사이트별 합산</a>
+								</li>
+								<li data-value="each" class="on">
+									<a href="#">개별 막대</a>
+								</li>
 							</ul>
 						</div>
 					</div>
 				</div>
 			</div>
-			<p class="tx_time">2020-03-06 22:00:09</p>
+			<p class="tx_time"></p>
 			<br>
 			<br>
 			<br>
@@ -131,7 +137,7 @@
 				</ul>
 			</div>
 			<div class="tbl_wrap">
-				<div class="fold_div">
+				<div class="fold_div" id="pc_use">
 					<!-- PC 버전용 테이블 -->
 					<div class="chart_table">
 						<table class="pc_use">
@@ -175,6 +181,12 @@
 	</div>
 </div>
 <script type="text/javascript">
+
+	let standard = new Array(); //기준일
+	let accociation = new Map(); //응답 데이터
+	let responseCnt = 0; //응답 갯수
+	let dup = false; //중복처리 방지
+
 	$(function() {
 		siteList(); //사이트 조회
 		//사이트 선택시
@@ -235,6 +247,25 @@
 			}
 		});
 
+		$('#chartStyle li').on('click', function() {
+			$(this).parents('ul').prev('button').data('value', $(this).data('value'));
+			chartDataDraw();
+		});
+
+		$('.save_btn').on('click', function(e) {
+			let excelName = '발전이력';
+			let $val = $('#pc_use').find('tbody');
+			let cnt = $val.length;
+
+			if (cnt < 1) {
+				alert('다운받을 데이터가 없습니다.');
+			} else {
+				if (confirm('엑셀로 저장하시겠습니까?')) {
+					tableToExcel('pc_use', excelName, e);
+				}
+			}
+		});
+
 		$('#datepicker1').datepicker('setDate', 'today'); //데이트 피커 기본
 		$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
 	});
@@ -282,7 +313,7 @@
 		$('#deviceType button.btn-primary').empty().append('복수 선택').append('<span class="caret"></span>');
 
 		if($(':checkbox[name="site"]:checked').length > 0) {
-			var size = 380 + (Number($(':checkbox[name="site"]:checked').length - 2) * 170);
+			let size = 380 + (Number($(':checkbox[name="site"]:checked').length - 2) * 170);
 			if(size < 380) {
 				size = 380;
 			}
@@ -290,7 +321,7 @@
 			$('#deviceType div.sec_li_bx').remove();
 			$(':checkbox[name="site"]:checked').each(function() {
 				let sid = $(this).val()
-						, sNm = $(this).next('label').text();
+				let sNm = $(this).next('label').text();
 
 				$.ajax({
 					url: 'http://iderms.enertalk.com:8443/config/devices/',
@@ -313,12 +344,11 @@
 							let deviceType = ['SM', 'SM_ISMART', 'SM_KPX', 'SM_CRAWLING', 'SM_MANUAL', 'INV_PV', 'INV_WIND', 'PCS_ESS', 'BMS_SYS',
 								'BMS_RACK', 'SENSOR_SOLAR', 'SENSOR_FLAME', 'SENSOR_TEMP_HUMIDITY', 'CCTV', 'COMBINER_BOX', 'CIRCUIT_BREAKER'];
 							$.each(devices, function(i, el) {
-
 								$.each(deviceType, function(j, tp) {
 									if(tp == el.device_type && (el.dashboard||el.billing)) {
 										let deviceHtml = $('<li>').append('<a>');
 										deviceHtml.find('a').attr('href', '#').attr('tabindex', '-1');
-										deviceHtml.find('a').append('<input id="' + el.did + '" name="device" type="checkbox" value="' + el.did + '" data-name="' + sNm + '_' + el.name + '">').append('<label>');
+										deviceHtml.find('a').append('<input id="' + el.did + '" name="device" type="checkbox" value="' + el.did + '" data-sid="' + el.sid + '" data-name="' + sNm + '_' + el.name + '">').append('<label>');
 										deviceHtml.find('label').attr('for', el.did).append('<span>').append('&nbsp;' + el.name);
 										siteGrp.find('ul').append(deviceHtml);
 									}
@@ -399,6 +429,9 @@
 				)
 		);
 
+		responseCnt = 0;
+		accociation = new Map();
+
 		//매전량
 		if(billingSites.length > 0) {
 			//API 호출
@@ -476,22 +509,46 @@
 		} else {
 			association(null, '3');
 		}
-
-		responseCnt = 0;
-		accociation = new Map();
 	}
 
-	let responseCnt = 0;
-	let accociation = new Map();
-	let dup = false;
 	function association(map, key) {
+		//사이트별 구분할수 있는 값 확인필요.
 		responseCnt++;
 		if(map != null) {
 			if(key == '1') {
+				let data = map.data;
+				$.map(data, function(v, k) {
+					$(':checkbox[id^="device_billing_"]').each(function() {
+						if($(this).val() == k) {
+							v[0].sid = $(this).val();
+							v[0].name = $(this).data('name');
+						}
+					});
+				});
 				accociation.set('billing', map.data);
 			} else if(key == '2') {
+				let data = map.data;
+				$.map(data, function(v, k) {
+					$(':checkbox[id^="device_dash_"]').each(function() {
+						if($(this).val() == k) {
+							v[0].sid = $(this).val();
+							v[0].name = $(this).data('name');
+						}
+					});
+				});
 				accociation.set('dashboard', map.data);
-			} else if (key == '3'){
+			} else if (key == '3') {
+				let data = map.data;
+				$.map(data, function(v, k) {
+					$(':checkbox[name="device"]').each(function(){
+						if($(this).data('sid') != undefined) {
+							if($(this).val() == k) {
+								v[0].sid = $(this).data('sid');
+								v[0].name = $(this).data('name');
+							}
+						}
+					});
+				});
 				accociation.set('devices', map.data);
 			} else {
 				accociation.set('devices', map.data);
@@ -511,7 +568,6 @@
 
 		let sDate = $('#datepicker1').val().replace(/-/g, '');
 		let eDate = $('#datepicker2').val().replace(/-/g, '');
-		let dateArr = new Array();
 		let interval = '';
 		switch ($('button.interval').text()) {
 			case '15분':
@@ -534,20 +590,21 @@
 				break;
 		}
 
+		standard = new Array();
 		if(interval == 'day') {
 			let diffDay = getDiff(eDate, sDate, 'day');
 			for(let j = 0; j < diffDay; j++) {
 				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1 , Number(sDate.substring(6, 8)));
 				sDateTime.setDate(Number(sDateTime.getDate()) + j);
 				let toDate = sDateTime.format('yyyyMMdd');
-				dateArr.push(toDate);
+				standard.push(toDate);
 			}
 		} else if(interval == 'month') {
 			let diffMonth = getDiff(eDate, sDate, 'month');
 			for(let j = 0; j < diffMonth; j++) {
 				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) + j - 1 , 1);
 				let toDate = sDateTime.format('yyyyMM');
-				dateArr.push(toDate);
+				standard.push(toDate);
 			}
 		} else {
 			let diffDay = getDiff(eDate, sDate, 'day');
@@ -560,36 +617,36 @@
 				for(let i = 0; i < 24; i++) {
 					if(interval == '15min') { //15분
 						if(String(i).length == 1) {
-							dateArr.push(toDate + '0' + i +'0000');
-							dateArr.push(toDate + '0' + i +'1500');
-							dateArr.push(toDate + '0' + i +'3000');
-							dateArr.push(toDate + '0' + i +'4500');
+							standard.push(toDate + '0' + i +'0000');
+							standard.push(toDate + '0' + i +'1500');
+							standard.push(toDate + '0' + i +'3000');
+							standard.push(toDate + '0' + i +'4500');
 						} else {
-							dateArr.push(toDate + i +'0000');
-							dateArr.push(toDate + i +'1500');
-							dateArr.push(toDate + i +'3000');
-							dateArr.push(toDate + i +'4500');
+							standard.push(toDate + i +'0000');
+							standard.push(toDate + i +'1500');
+							standard.push(toDate + i +'3000');
+							standard.push(toDate + i +'4500');
 						}
 					} else if(interval == '30min') { //30분
 						if(String(i).length == 1) {
-							dateArr.push(toDate + '0' + i +'0000');
-							dateArr.push(toDate + '0' + i +'3000');
+							standard.push(toDate + '0' + i +'0000');
+							standard.push(toDate + '0' + i +'3000');
 						} else {
-							dateArr.push(toDate + i +'0000');
-							dateArr.push(toDate + i +'3000');
+							standard.push(toDate + i +'0000');
+							standard.push(toDate + i +'3000');
 						}
 					} else { //시간
 						if(String(i).length == 1) {
-							dateArr.push(toDate + '0' + i +'0000');
+							standard.push(toDate + '0' + i +'0000');
 						} else {
-							dateArr.push(toDate + i +'0000');
+							standard.push(toDate + i +'0000');
 						}
 					}
 				}
 			}
 		}
 
-		let gridData = gridDataMake(dateArr, interval);
+		let gridData = gridDataMake(standard, interval);
 		let totalArr = new Array();
 		if(interval == '15min' || interval == 'hour') {
 			let dateVal = '';
@@ -597,7 +654,7 @@
 			let tr = $('<tr>');
 			$('div.chart_table').remove();
 
-			$.each(dateArr, function(i, el) {
+			$.each(standard, function(i, el) {
 				let th = $('<th>');
 				if(dateVal == '') {
 					dateVal = el.substring(0, 8);
@@ -608,8 +665,8 @@
 					let time = el.substring(8, 10) + ':' + el.substring(10, 12);
 					th.text(time);
 					tr.append(th);
-				} else if(dateVal != el.substring(0, 8) || dateArr.length == (i + 1)) {
-					if(dateArr.length == (i + 1)) {
+				} else if(dateVal != el.substring(0, 8) || standard.length == (i + 1)) {
+					if(standard.length == (i + 1)) {
 						let time = el.substring(8, 10) + ':' + el.substring(10, 12);
 						th.text(time);
 						tr.append(th);
@@ -636,28 +693,6 @@
 								$dataTr.append($dataTd);
 							});
 
-							if(totalArr.length > 0) {
-								let putData = false;
-								$.each(totalArr, function(t, ta) {
-									if(ta.name == grid.deviceNm) {
-										putData = true;
-										ta.val += grid.data[grid.data.length - 1];
-									}
-								});
-
-								if(!putData) {
-									totalArr.push({
-										name: grid.deviceNm,
-										val: grid.data[grid.data.length - 1]
-									});
-								}
-							} else {
-								totalArr.push({
-									name: grid.deviceNm,
-									val: grid.data[grid.data.length - 1]
-								});
-							}
-
 							tableTemp.find('tbody').append($dataTr);
 							color++;
 						}
@@ -673,8 +708,7 @@
 					tr.append(th);
 
 					th = $('<th>');
-					time = el.substring(8, 10) + ':' + el.substring(10, 12);
-					th.text(time);
+					th.text(el.substring(8, 10) + ':' + el.substring(10, 12));
 					tr.append(th);
 				} else {
 
@@ -688,7 +722,7 @@
 			let tr = $('<tr>');
 			$('div.chart_table').remove();
 
-			$.each(dateArr, function(i, el) {
+			$.each(standard, function(i, el) {
 				let th = $('<th>');
 				if(dateVal == '') {
 					dateVal = el.substring(0, 6);
@@ -700,7 +734,7 @@
 					th.text(time);
 					tr.append(th);
 
-					if(dateArr.length == (i + 1)) {
+					if(standard.length == (i + 1)) {
 						th = $('<th>').html('합계');
 						tr.append(th);
 
@@ -723,36 +757,14 @@
 									$dataTr.append($dataTd);
 								});
 
-								if(totalArr.length > 0) {
-									let putData = false;
-									$.each(totalArr, function(t, ta) {
-										if(ta.name == grid.deviceNm) {
-											putData = true;
-											ta.val += grid.data[grid.data.length - 1];
-										}
-									});
-
-									if(!putData) {
-										totalArr.push({
-											name: grid.deviceNm,
-											val: grid.data[grid.data.length - 1]
-										});
-									}
-								} else {
-									totalArr.push({
-										name: grid.deviceNm,
-										val: grid.data[grid.data.length - 1]
-									});
-								}
-
 								tableTemp.find('tbody').append($dataTr);
 								color++;
 							}
 						});
 						$('div.fold_div').append(tableTemp);
 					}
-				} else if(dateVal != el.substring(0, 6) || dateArr.length == (i + 1)) {
-					if(dateArr.length == (i + 1)) {
+				} else if(dateVal != el.substring(0, 6) || standard.length == (i + 1)) {
+					if(standard.length == (i + 1)) {
 						let time = el.substring(6, 8);
 						th.text(time);
 						tr.append(th);
@@ -779,28 +791,6 @@
 								$dataTr.append($dataTd);
 							});
 
-							if(totalArr.length > 0) {
-								let putData = false;
-								$.each(totalArr, function(t, ta) {
-									if(ta.name == grid.deviceNm) {
-										putData = true;
-										ta.val += grid.data[grid.data.length - 1];
-									}
-								});
-
-								if(!putData) {
-									totalArr.push({
-										name: grid.deviceNm,
-										val: grid.data[grid.data.length - 1]
-									});
-								}
-							} else {
-								totalArr.push({
-									name: grid.deviceNm,
-									val: grid.data[grid.data.length - 1]
-								});
-							}
-
 							tableTemp.find('tbody').append($dataTr);
 							color++;
 						}
@@ -816,8 +806,7 @@
 					tr.append(th);
 
 					th = $('<th>');
-					time = el.substring(6, 8);
-					th.text(time);
+					th.text(el.substring(6, 8));
 					tr.append(th);
 				} else {
 					let time = el.substring(6, 8);
@@ -831,7 +820,7 @@
 			let tr = $('<tr>');
 			$('div.chart_table').remove();
 
-			$.each(dateArr, function(i, el) {
+			$.each(standard, function(i, el) {
 				let th = $('<th>');
 				if(dateVal == '') {
 					dateVal = el.substring(0, 4);
@@ -843,7 +832,7 @@
 					th.text(time);
 					tr.append(th);
 
-					if(dateArr.length == (i + 1)) {
+					if(standard.length == (i + 1)) {
 						th = $('<th>').html('합계');
 						tr.append(th);
 
@@ -866,36 +855,14 @@
 									$dataTr.append($dataTd);
 								});
 
-								if(totalArr.length > 0) {
-									let putData = false;
-									$.each(totalArr, function(t, ta) {
-										if(ta.name == grid.deviceNm) {
-											putData = true;
-											ta.val += grid.data[grid.data.length - 1];
-										}
-									});
-
-									if(!putData) {
-										totalArr.push({
-											name: grid.deviceNm,
-											val: grid.data[grid.data.length - 1]
-										});
-									}
-								} else {
-									totalArr.push({
-										name: grid.deviceNm,
-										val: grid.data[grid.data.length - 1]
-									});
-								}
-
 								tableTemp.find('tbody').append($dataTr);
 								color++;
 							}
 						});
 						$('div.fold_div').append(tableTemp);
 					}
-				} else if(dateVal != el.substring(0, 4) || dateArr.length == (i + 1)) {
-					if(dateArr.length == (i + 1)) {
+				} else if(dateVal != el.substring(0, 4) || standard.length == (i + 1)) {
+					if(standard.length == (i + 1)) {
 						let time = el.substring(4, 6);
 						th.text(time);
 						tr.append(th);
@@ -923,28 +890,6 @@
 								$dataTr.append($dataTd);
 							});
 
-							if(totalArr.length > 0) {
-								let putData = false;
-								$.each(totalArr, function(t, ta) {
-									if(ta.name == grid.deviceNm) {
-										putData = true;
-										ta.val += grid.data[grid.data.length - 1];
-									}
-								});
-
-								if(!putData) {
-									totalArr.push({
-										name: grid.deviceNm,
-										val: grid.data[grid.data.length - 1]
-									});
-								}
-							} else {
-								totalArr.push({
-									name: grid.deviceNm,
-									val: grid.data[grid.data.length - 1]
-								});
-							}
-
 							tableTemp.find('tbody').append($dataTr);
 							color++;
 						}
@@ -971,42 +916,14 @@
 			});
 		}
 
-		chartDraw(dateArr, interval);
+		chartDataDraw();
 
-		$('.value_area').empty();
-		$('table.pc_use').parents('.pv_chart_table').show();
-		if(totalArr.length > 0) {
-			$.each(totalArr, function(i, el) {
-				let totTitle = '<h3 class="value_tit">' + el.name + '</h3>';
-
-				let loopCnt = 0;
-				for(let k = 0; k < 4; k++) {
-					if(String(Math.round(el.val)).length > 3) {
-						el.val = el.val / 1000
-						loopCnt++;
-					}
-				}
-
-				let unit = 'Wh';
-				if(loopCnt == 1) {
-					unit = 'kWh';
-				} else if(loopCnt == 2) {
-					unit = 'MWh';
-				} else if(loopCnt == 3) {
-					unit = 'GWh';
-				} else {
-					unit = 'Wh';
-				}
-				totTitle += '<p class="value_num"><span class="num">' + (el.val).toFixed(2) + '</span>' + unit + '</p>';
-				$('.value_area').append(totTitle);
-			});
-		}
 		responseCnt = 0;
 		dup = false;
 	}
 
 	//그리드 데이터 만들기
-	function gridDataMake(standard, type) {
+	const gridDataMake = function(standard, type) {
 		let dataArr = new Array();
 
 		accociation.forEach(function(val, key){
@@ -1032,14 +949,6 @@
 							} else if(key == 'dashboard') {
 								if ($(this).attr('id').match('dash')) {
 									deviceNm = $(this).data('name');
-								}
-							} else if(key == 'dashboardFore') {
-								if ($(this).attr('id').match('dash')) {
-									deviceNm = $(this).data('name') + '_예측';
-								}
-							} else if(key == 'billingFore') {
-								if ($(this).attr('id').match('billing')) {
-									deviceNm = $(this).data('name') + '_예측';
 								}
 							} else {
 								deviceNm = $(this).data('name');
@@ -1151,7 +1060,7 @@
 	}
 
 	//두기간 사이 차이 구하기.
-	function getDiff(eDate, sDate, type) {
+	const getDiff = function(eDate, sDate, type) {
 		eDate = new Date(eDate.substring(2, 4), eDate.substring(4, 6), eDate.substring(6, 8));
 		sDate = new Date(sDate.substring(2, 4), sDate.substring(4, 6), sDate.substring(6, 8));
 		if(type == 'day') {
@@ -1166,50 +1075,30 @@
 	}
 
 	//차트
-	function chartDraw(standard, type) {
-		let seriesData = new Array();
-		let dataArr = new Array();
+	const chartDataDraw = function() {
 		let num = 0;
+		let stack = 0;
+		let seriesData = new Array();
 		let colorArr = ['#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787', '#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787'];
+		let chartStyle = $('#chartStyle button').data('value'); //현재 선택된 스타일
 
-		accociation.forEach(function(val, key) {
-			if (val != undefined) {
-				$.each(val, function (k, elk) {
-					let arr = elk[0].items;
-					//일단 정렬
-					arr.sort(function (a, b) {
-						return a['localtime'] - b['localtime'];
-					})
-
+		accociation.forEach(function(v, k) {
+			if(JSON.stringify(v) != '{}') {
+				$.each(v, function(i, el) {
+					let itm = el[0].items;
+					let deviceNm = el[0].name;
 					let arrDevice = new Array();
-					let deviceNm = '';
-					$(':checkbox[name="device"]:checked').each(function() {
-						if($(this).val() == k) {
-							if(key == 'billing') {
-								if($(this).attr('id').match('billing')) {
-									deviceNm = $(this).data('name');
-								}
-							} else if(key == 'dashboard') {
-								if ($(this).attr('id').match('dash')) {
-									deviceNm = $(this).data('name');
-								}
-							} else if(key == 'dashboardFore') {
-								if ($(this).attr('id').match('dash')) {
-									deviceNm = $(this).data('name') + '_예측';
-								}
-							} else if(key == 'billingFore') {
-								if ($(this).attr('id').match('billing')) {
-									deviceNm = $(this).data('name') + '_예측';
-								}
-							} else {
-								deviceNm = $(this).data('name');
-							}
-						}
+					let sid = el[0].sid;
+					let totalCurrent = 0;
+					let dup = false;
+
+					itm.sort(function (a, b) {
+						return a['localtime'] - b['localtime'];
 					});
 
-					$.each(standard, function (j, stnd) {
+					$.each(standard, function(j, stnd) {
 						let timeValue = 0;
-						$.each(arr, function (i, el) {
+						$.each(itm, function (i, el) {
 							let base = String(el.basetime);
 							if(base.match(stnd)) {
 								timeValue = el.energy;
@@ -1217,21 +1106,48 @@
 						});
 
 						if(timeValue == null || timeValue == '') {
-							tileValue = 0;
+							timeValue = 0;
 						}
 
 						arrDevice.push([
 							stnd, timeValue
 						]);
+
+						totalCurrent += timeValue;
 					});
 
-					$temp = {
+					if(chartStyle == 'allSum') {
+						stack = 0;
+					} else {
+						if(chartStyle == 'siteSum') {
+							if(seriesData.length > 0) {
+								$.each(seriesData, function(k, elm) {
+									if(sid == elm.sid) {
+										dup = true;
+										stack = elm.stack;
+									}
+								});
+
+								if(!dup) {
+									stack++;
+								}
+							} else {
+								stack = 0;
+							}
+						} else {
+							stack++;
+						}
+					}
+
+					let $temp = {
 						name: deviceNm,
 						type: 'column',
-						stack: num,
+						stack: stack,
+						sid: sid,
 						tooltip: {
 							valueSuffix: 'Wh'
 						},
+						total: totalCurrent,
 						color: colorArr[num],
 						data: arrDevice
 					};
@@ -1241,12 +1157,84 @@
 			}
 		});
 
-		Highcharts.chart('chart2', {
+		chartDraw(standard, seriesData);
+
+		//발전량 합계
+		$('.value_area').empty();
+		$('table.pc_use').parents('.pv_chart_table').show();
+		if(seriesData.length > 0) {
+			let totalArr = new Array();
+			$.each(seriesData, function(i, el) {
+				if(chartStyle == 'allSum') {
+					if(totalArr.length > 0) {
+						totalArr[0].totVal += el.total;
+					} else {
+						totalArr.push({
+							name: '전체',
+							totVal: el.total
+						});
+					}
+				} else {
+					if (chartStyle == 'siteSum') {
+						let siteNm = (el.name).split('_');
+						let sid = el.sid;
+						let totVal = el.total;
+						if(totalArr.length > 0) {
+							let dup = false;
+							$.each(totalArr, function(j, element) {
+								if(el.sid == element.sid) {
+									dup = true;
+									element.totVal += totVal;
+								}
+							});
+
+							if(!dup) {
+								totalArr.push({
+									name: siteNm[0],
+									sid: sid,
+									totVal: totVal
+								});
+							}
+						} else {
+							totalArr.push({
+								name: siteNm[0],
+								sid: sid,
+								totVal: totVal
+							});
+						}
+					} else {
+						totalArr.push({
+							name: el.name,
+							totVal: el.total
+						});
+					}
+				}
+			});
+
+			console.log(totalArr);
+
+			$.each(totalArr, function(i, el) {
+				let totTitle = '<h3 class="value_tit">' + el.name + '</h3>';
+				let refined = displayNumberFixedDecimal(el.totVal, 'Wh');
+				totTitle += '<p class="value_num"><span class="num">' + refined[0] + '</span>' + refined[1] + '</p>';
+				$('.value_area').append(totTitle);
+			});
+		}
+	}
+
+	const chartDraw = function(standard, seriesData) {
+		let chart = $('#chart2').highcharts();
+
+		if (chart) {
+			chart.destroy();
+		}
+
+		let option = {
 			chart: {
+				renderTo: 'chart2',
 				marginLeft: 60,
 				marginRight: 20,
-				backgroundColor: 'transparent',
-				type: 'line'
+				backgroundColor: 'transparent'
 			},
 			navigation: {
 				buttonOptions: {
@@ -1263,7 +1251,7 @@
 				labels: {
 					align: 'center',
 					style: {
-						color: '#3d4250',
+						color: 'var(--color3)',
 						fontSize: '8px'
 					},
 					y: 50,
@@ -1289,7 +1277,7 @@
 					y: 25, /* 타이틀 위치 조정 */
 					x: 5, /* 타이틀 위치 조정 */
 					style: {
-						color: '#3d4250',
+						color: 'var(--color3)',
 						fontSize: '18px'
 					}
 				},
@@ -1297,7 +1285,7 @@
 					overflow: 'justify',
 					x: -20, /* 그래프와의 거리 조정 */
 					style: {
-						color: '#3d4250',
+						color: 'var(--color3)',
 						fontSize: '10px'
 					}
 				}
@@ -1310,7 +1298,7 @@
 				verticalAlign: 'top',
 				x: -120,
 				itemStyle: {
-					color: '#3d4250',
+					color: 'var(--color3)',
 					fontSize: '10px',
 					fontWeight: 400
 				},
@@ -1325,7 +1313,8 @@
 			tooltip: {
 				formatter: function () {
 					return this.points.reduce(function (s, point) {
-						return s + '<br/>' + point.series.name + ': ' + Number(point.y).toFixed(2) + point.series.userOptions.tooltip.valueSuffix;
+						let displayValue = displayNumberFixedDecimal(point.y, 'Wh');
+						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + displayValue[0] + displayValue[1];
 					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
 				},
 				shared: true /* 툴팁 공유 */
@@ -1338,6 +1327,9 @@
 						connectorAllowed: false
 					},
 					borderWidth: 0 /* 보더 0 */
+				},
+				column: {
+					stacking: 'normal'
 				},
 				line: {
 					marker: {
@@ -1397,10 +1389,13 @@
 					}
 				}]
 			}
-		});
+		}
+
+		chart = new Highcharts.Chart(option);
+		chart.redraw();
 	}
 
-	function dateFormat(val) {
+	const dateFormat = function(val) {
 		let date = '';
 		if(val != undefined) {
 			if(String(val).length == 4) {
