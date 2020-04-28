@@ -1487,8 +1487,9 @@
 											['혜원 솔라 01', 45, 55],
 										],
 										dataLabels: {
-											enabled: false,
-											format: '{point.y:.0f}'
+											enabled: true,
+											inside: true,
+											format: '{point.y:.0f} %'
 										},
 										tooltip: {
 											pointFormat: '출력: <b>{point.y} %</b>' +
@@ -1671,7 +1672,7 @@
 												dataLabels: {
 													enabled: true, /* 막대 안의 수치 안보이기 */
 													inside: true, /* 막대 안으로 라벨 수치 넣기 */
-													format: '{y} %', /* 단위 넣기 */
+													format: '{point.y:.0f} %', /* 단위 넣기 */
 													style: {
 														color: '#ffffff',
 														fontSize: '11px',
@@ -1683,6 +1684,9 @@
 											column: {
 												stacking: 'percent', /*위로 쌓이는 막대  ,normal */
 												pointWidth: 80,
+												dataLabels: {
+													format: '{point.y:.0f} %',
+												}
 											}
 										},
 										
@@ -2794,6 +2798,7 @@
 	
 	$(function () {
 		fn_cycle_15min();
+		setInterval(()=>realtimeRecord(),60000);
 	});
 	
 	function fn_cycle_15min() {
@@ -3504,8 +3509,6 @@
 	function realtimeRecord(){
 		const formDataHour = getSiteMainSchCollection("hour");
 		const formDataDay = getSiteMainSchCollection("day");
-		console.log("시간 단위 범위", formDataHour);
-		console.log("날짜 단위 범위", formDataDay);
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/config/sites",
 			type: "get",
@@ -3514,7 +3517,6 @@
 				oid: "spower",
 			},
 			success: function(sites){
-				console.log("사이트 정보", sites);
 				let todayForecastingGenAllSite = 0;
 				let todayGenAllSite = 0;
 				sites.forEach((site, siteIdx)=>{
@@ -3534,7 +3536,6 @@
 							interval: "hour"
 						},
 						success: function(result){
-							console.log("현재 시간 예측 발전", result);
 							thisHourForecastingGenBySite = Math.floor(result.data[0].generation.items[0].energy/1000);
 						},
 						error: function(error){
@@ -3552,7 +3553,6 @@
 							interval: "hour"
 						},
 						success:function(result){
-							console.log("현재 시간 실제 발전", result);
 							thisHourGenBySite = Math.floor(result.data[`${'${site.sid}'}`].energy/1000);
 						},
 						error:function(error){
@@ -3572,7 +3572,6 @@
 						},
 						success: function(result){
 							//사이트 합 오늘 예측량 더하기
-							console.log("오늘 예측 발전", result);
 							todayForecastingGenBySite = Math.floor(result.data[0].generation.items[0].energy/1000);
 							todayForecastingGenAllSite += todayForecastingGenBySite;
 						},
@@ -3592,7 +3591,6 @@
 						},
 						success:function(result){
 							//사이트 합 오늘 출력량 더하기
-							console.log("오늘 실제 발전", result);
 							todayGenBySite = Math.floor(result.data[`${'${site.sid}'}`].energy/1000);
 							todayGenAllSite += todayGenBySite;
 						},
@@ -3600,16 +3598,39 @@
 							console.error(error);
 						}
 					});
-
+					
+					let ratioHourly = 0;
+					let restHourly = 0;
+					let ratioDaily = 0;
+					let restDaily = 0;
+					
+					if(todayForecastingGenAllSite<=todayGenAllSite){
+						restDaily = null;
+						ratioDaily = 100;
+					}else{
+						ratioDaily = Math.floor((todayGenAllSite/todayForecastingGenAllSite)*100);
+						restDaily = 100-b
+					}
+					
+					if(thisHourForecastingGenBySite<=thisHourGenBySite){
+						restHourly = null;
+						ratioHourly = 100;
+					}else{
+						ratioHourly = Math.floor((thisHourGenBySite/thisHourForecastingGenBySite)*100);
+						restHourly = 100-b
+					}
+					
+					
 					//rchart1 변경
-					rchart1.series[0].data[`${'${siteIdx}'}`].z = Math.floor((todayForecastingGenBySite/todayForecastingGenAllSite)*100);
-					rchart1.series[0].data[`${'${siteIdx}'}`].y = Math.floor((thisHourGenBySite/thisHourForecastingGenBySite)*100);
+					rchart1.series[0].data[`${'${siteIdx}'}`].z = ratioDaily;
+					rchart1.series[0].data[`${'${siteIdx}'}`].y = ratioHourly;
 					rchart1.redraw();
+					
 					//rchart2 변경
 					rchart2.update({
 						series: [{
 							name: '입찰',
-							data: [`${'${Math.floor((todayGenAllSite/todayForecastingGenAllSite)*100)}'}`],
+							data: [restDaily],
 							tooltip: {
 								valueSuffix: '%'
 							},
@@ -3619,7 +3640,7 @@
 							color: '#575757' /* 입찰 */
 						},{
 							name: '출력',
-							data: [`${'${100-Math.floor((todayGenAllSite/todayForecastingGenAllSite)*100)}'}`],
+							data: [ratioDaily],
 							tooltip: {
 								valueSuffix: '%'
 							},
