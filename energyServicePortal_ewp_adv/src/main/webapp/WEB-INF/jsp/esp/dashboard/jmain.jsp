@@ -3609,7 +3609,7 @@
 						ratioDaily = 100;
 					}else{
 						ratioDaily = Math.floor((todayGenAllSite/todayForecastingGenAllSite)*100);
-						restDaily = 100-b
+						restDaily = 100-ratioDaily
 					}
 					
 					if(thisHourForecastingGenBySite<=thisHourGenBySite){
@@ -3617,7 +3617,7 @@
 						ratioHourly = 100;
 					}else{
 						ratioHourly = Math.floor((thisHourGenBySite/thisHourForecastingGenBySite)*100);
-						restHourly = 100-b
+						restHourly = 100-ratioHourly
 					}
 					
 					
