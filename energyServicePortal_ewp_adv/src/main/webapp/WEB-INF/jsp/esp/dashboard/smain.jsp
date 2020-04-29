@@ -299,7 +299,7 @@
 							const apiURL = "http://iderms.enertalk.com:8443";
 							const apiEnergySite = "/energy/sites";
 							const apiEnergyNowSite = "/energy/now/sites";
-							const apiWeather = "/weather";
+							const apiWeather = "/weather/site";
 							const apiForecastingSite = "/energy/forecasting/sites";
 							const apiStatusRawSite = "/status/raw/site";
 							const apiStatusRaw = "/status/raw";
@@ -802,7 +802,7 @@
 									if(i < items.length){
 										$("#calWeatherValue_" + (i+1)).text( (items[i].temperature).toFixed(1) + "℃");
 
-										var weatherIconClass = getWeatherIconClass(items[i].weather);
+										var weatherIconClass = getWeatherIconClass(items[i].sky);
 										$("#calWeatherIcon_" + (i+1)).html("<i class='ico_weather " + weatherIconClass + "'></i>");
 									}
 								}

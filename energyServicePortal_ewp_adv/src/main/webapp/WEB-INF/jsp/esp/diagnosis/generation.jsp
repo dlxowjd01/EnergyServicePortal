@@ -310,7 +310,7 @@
 		});
 
 		$('.save_btn').on('click', function(e) {
-			let excelName = '발전이력';
+			let excelName = '발전예측';
 			let $val = $('#pc_use').find('tbody');
 			let cnt = $val.length;
 
@@ -1407,7 +1407,7 @@
 			tooltip: {
 				formatter: function () {
 					return this.points.reduce(function (s, point) {
-						return s + '<br/>' + point.series.name + ': ' + Number(point.y).toFixed(2) + point.series.userOptions.tooltip.valueSuffix;
+						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + Number(point.y).toFixed(2) + point.series.userOptions.tooltip.valueSuffix;
 					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
 				},
 				shared: true /* 툴팁 공유 */
