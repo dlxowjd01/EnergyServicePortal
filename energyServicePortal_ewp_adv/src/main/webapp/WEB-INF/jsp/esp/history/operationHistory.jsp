@@ -265,7 +265,7 @@
 
 							trHtml.append('<td>' + el.siteName + '</td>');
 							trHtml.append('<td>' + el.dname + '</td>');
-							trHtml.append('<td>' + new Date(el.timestamp).format('yyyy.mm.dd HH:MM:ss') + '</td>');
+							trHtml.append('<td>' + new Date(el.timestamp).format('yyyy.MM.dd HH:mm:ss') + '</td>');
 							trHtml.append('<td>' + temperature + '</td>');// 현재없음.
 							trHtml.append('<td>' + voltageR + '</td>');
 							trHtml.append('<td>' + voltageS + '</td>');
@@ -321,7 +321,7 @@
 
 			trHtml.append('<td>' + el.siteName + '</td>');
 			trHtml.append('<td>' + el.dname + '</td>');
-			trHtml.append('<td>' + new Date(el.timestamp).format('yyyy.mm.dd HH:MM:ss') + '</td>');
+			trHtml.append('<td>' + new Date(el.timestamp).format('yyyy.MM.dd HH:mm:ss') + '</td>');
 			trHtml.append('<td>' + temperature + '</td>');// 현재없음.
 			trHtml.append('<td>' + voltageR + '</td>');
 			trHtml.append('<td>' + voltageS + '</td>');
@@ -341,7 +341,7 @@
 
 	const setChartDid = function() {
 		$('[id^=chartDid] ul').empty();
-		$(':checkbox[name="device"]').each(function() {
+		$(':checkbox[name="device"]:checked').each(function() {
 			let siteNm = $(this).parents('div.sec_li_bx').find('p.tx_li_tit').text().trim(); //사이트명
 			let deviceNm = $(this).next().text().trim();
 			let val = $(this).val();
@@ -580,7 +580,7 @@
 		$('#chartAdd').on('click', function() {
 
 			if($(':radio[name="analyze"]:checked').val() == '시계열 분석') {
-				if($('#chartDid').prev('button').data('value') == '') {
+				if($('#chartDid button').data('value') == '') {
 					alert('추가 하시려는 설비명을 선택 해 주세요.');
 					return false;
 				}
@@ -625,7 +625,7 @@
 					$('#analyzeTag1 .tx_tit').eq(1).append($span);
 				}
 			} else {
-				if($('#chartDid2').prev('button').data('value') == '') {
+				if($('#chartDid2 button').data('value') == '') {
 					alert('X축에 추가 하시려는 설비명을 선택 해 주세요.');
 					return false;
 				}
@@ -640,7 +640,7 @@
 					return false;
 				}
 
-				if($('#chartDid3').prev('button').data('value') == '') {
+				if($('#chartDid3 button').data('value') == '') {
 					alert('Y축에 추가 하시려는 설비명을 선택 해 주세요.');
 					return false;
 				}
@@ -1034,7 +1034,7 @@
 					if($(':radio[name="analyze"]:checked').val() == '시계열 분석') {
 						return this.points.reduce(function (s, point) {
 							return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + Number(point.y).toFixed(2) + point.series.userOptions.tooltip.valueSuffix;
-						}, '<b>' + new Date(this.x).format('yyyy.mm.dd HH:MM:ss') + '</b>');
+						}, '<b>' + new Date(this.x).format('yyyy.MM.dd HH:mm:ss') + '</b>');
 					} else {
 						let tooltip = this.series.name + '<br/>'
 						+ 'X:' + (this.x).toFixed(2) + '<br/> Y:' + (this.y).toFixed(2);
@@ -1309,63 +1309,75 @@
 									<div class="sa_select">
 										<div class="dropdown">
 											<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown">
-												DC 전압<span class="caret"></span>
+                                                AC 전압R<span class="caret"></span>
 											</button>
 											<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
-												<li>
-													<a href="#" data-value="dcVoltage" tabindex="-1">
-														<input type="radio" id="column2_01" name="column2" value="dcVoltage" checked>
-														<label for="column2_01"><span></span>DC 전압</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="dcCurrent" tabindex="-1">
-														<input type="radio" id="column2_02" name="column2" value="dcCurrent">
-														<label for="column2_02"><span></span>DC 전류</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="dcPower" tabindex="-1">
-														<input type="radio" id="column2_03" name="column2" value="dcPower">
-														<label for="column2_03"><span></span>DC 전류</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="now" tabindex="-1">
-														<input type="radio" id="column2_04" name="column2" value="now">
-														<label for="column2_04"><span></span>현재 출력</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="totalGenPower" tabindex="-1">
-														<input type="radio" id="column2_05" name="column2" value="totalGenPower">
-														<label for="column2_05"><span></span>누전발전량</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acVoltageTR" tabindex="-1">
-														<input type="radio" id="column2_06" name="column2" value="acVoltageTR">
-														<label for="column2_06"><span></span>AC 전압R</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acVoltageRS" tabindex="-1">
-														<input type="radio" id="column2_07" name="column2" value="acVoltageRS">
-														<label for="column2_07"><span></span>AC 전압S</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acVoltageST" tabindex="-1">
-														<input type="radio" id="column2_08" name="column2" value="acVoltageST">
-														<label for="column2_08"><span></span>AC 전압T</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="powerFactor" tabindex="-1">
-														<input type="radio" id="column2_09" name="column2" value="powerFactor">
-														<label for="column2_09"><span></span>역률</label>
-													</a>
-												</li>
+                                                <li>
+                                                    <a href="#" data-value="acVoltageRS" tabindex="-1">
+                                                        <input type="radio" id="column02_01" name="column2" value="acVoltageRS" checked>
+                                                        <label for="column02_01"><span></span>AC 전압R</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="acVoltageST" tabindex="-1">
+                                                        <input type="radio" id="column02_02" name="column2" value="acVoltageST">
+                                                        <label for="column02_02"><span></span>AC 전압S</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="acVoltageST" tabindex="-1">
+                                                        <input type="radio" id="column02_03" name="column2" value="acVoltageST">
+                                                        <label for="column02_03"><span></span>AC 전압T</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="acCurrentR" tabindex="-1">
+                                                        <input type="radio" id="column02_04" name="column2" value="acCurrentR">
+                                                        <label for="column02_04"><span></span>AC 전류R</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="acCurrentS" tabindex="-1">
+                                                        <input type="radio" id="column02_05" name="column2" value="acCurrentS">
+                                                        <label for="column02_06"><span></span>AC 전류S</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="acCurrentT" tabindex="-1">
+                                                        <input type="radio" id="column02_06" name="column2" value="acCurrentT">
+                                                        <label for="column02_06"><span></span>AC 전류T</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="acPower" tabindex="-1">
+                                                        <input type="radio" id="column02_07" name="column2" value="acPower">
+                                                        <label for="column02_07"><span></span>순시전력</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="dcVoltage" tabindex="-1">
+                                                        <input type="radio" id="column02_08" name="column2" value="dcVoltage">
+                                                        <label for="column02_08"><span></span>DC 전압T</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="dcCurrent" tabindex="-1">
+                                                        <input type="radio" id="column02_09" name="column2" value="dcCurrent">
+                                                        <label for="column02_09"><span></span>DC 전류</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="dcPower" tabindex="-1">
+                                                        <input type="radio" id="column02_10" name="column2" value="dcPower">
+                                                        <label for="column02_10"><span></span>DC 전력</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="temperature" tabindex="-1">
+                                                        <input type="radio" id="column02_11" name="column2" value="temperature">
+                                                        <label for="column02_11"><span></span>인번터 온도</label>
+                                                    </a>
+                                                </li>
 											</ul>
 										</div>
 									</div>
@@ -1412,63 +1424,75 @@
 									<div class="sa_select">
 										<div class="dropdown">
 											<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown">
-												DC 전압<span class="caret"></span>
+												AC 전압R<span class="caret"></span>
 											</button>
 											<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
-												<li>
-													<a href="#" data-value="dcVoltage" tabindex="-1">
-														<input type="radio" id="column3_01" name="column3" value="dcVoltage" checked>
-														<label for="column3_01"><span></span>DC 전압</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="dcCurrent" tabindex="-1">
-														<input type="radio" id="column3_02" name="column3" value="dcCurrent">
-														<label for="column3_02"><span></span>DC 전류</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="dcPower" tabindex="-1">
-														<input type="radio" id="column3_03" name="column3" value="dcPower">
-														<label for="column3_03"><span></span>DC 전류</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="now" tabindex="-1">
-														<input type="radio" id="column3_04" name="column3" value="now">
-														<label for="column3_04"><span></span>현재 출력</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="totalGenPower" tabindex="-1">
-														<input type="radio" id="column3_05" name="column3" value="totalGenPower">
-														<label for="column3_05"><span></span>누전발전량</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acVoltageTR" tabindex="-1">
-														<input type="radio" id="column3_06" name="column3" value="acVoltageTR">
-														<label for="column3_06"><span></span>AC 전압R</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acVoltageRS" tabindex="-1">
-														<input type="radio" id="column3_07" name="column3" value="acVoltageRS">
-														<label for="column3_07"><span></span>AC 전압S</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acVoltageST" tabindex="-1">
-														<input type="radio" id="column3_08" name="column3" value="acVoltageST">
-														<label for="column3_08"><span></span>AC 전압T</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="powerFactor" tabindex="-1">
-														<input type="radio" id="column3_09" name="column3" value="powerFactor">
-														<label for="column3_09"><span></span>역률</label>
-													</a>
-												</li>
+                                                <li>
+                                                    <a href="#" data-value="acVoltageRS" tabindex="-1">
+                                                        <input type="radio" id="column03_01" name="column3" value="acVoltageRS" checked>
+                                                        <label for="column03_01"><span></span>AC 전압R</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="acVoltageST" tabindex="-1">
+                                                        <input type="radio" id="column03_02" name="column3" value="acVoltageST">
+                                                        <label for="column03_02"><span></span>AC 전압S</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="acVoltageST" tabindex="-1">
+                                                        <input type="radio" id="column03_03" name="column3" value="acVoltageST">
+                                                        <label for="column03_03"><span></span>AC 전압T</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="acCurrentR" tabindex="-1">
+                                                        <input type="radio" id="column03_04" name="column3" value="acCurrentR">
+                                                        <label for="column03_04"><span></span>AC 전류R</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="acCurrentS" tabindex="-1">
+                                                        <input type="radio" id="column03_05" name="column3" value="acCurrentS">
+                                                        <label for="column03_05"><span></span>AC 전류S</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="acCurrentT" tabindex="-1">
+                                                        <input type="radio" id="column03_06" name="column3" value="acCurrentT">
+                                                        <label for="column03_06"><span></span>AC 전류T</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="acPower" tabindex="-1">
+                                                        <input type="radio" id="column03_07" name="column3" value="acPower">
+                                                        <label for="column03_07"><span></span>순시전력</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="dcVoltage" tabindex="-1">
+                                                        <input type="radio" id="column03_08" name="column3" value="dcVoltage">
+                                                        <label for="column03_08"><span></span>DC 전압T</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="dcCurrent" tabindex="-1">
+                                                        <input type="radio" id="column03_09" name="column3" value="dcCurrent">
+                                                        <label for="column03_09"><span></span>DC 전류</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="dcPower" tabindex="-1">
+                                                        <input type="radio" id="column03_10" name="column3" value="dcPower">
+                                                        <label for="column03_10"><span></span>DC 전력</label>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" data-value="temperature" tabindex="-1">
+                                                        <input type="radio" id="column03_11" name="column3" value="temperature">
+                                                        <label for="column03_11"><span></span>인번터 온도</label>
+                                                    </a>
+                                                </li>
 											</ul>
 										</div>
 									</div>
