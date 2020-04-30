@@ -1,20 +1,15 @@
 package kr.co.esp.common;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import kr.co.esp.common.util.UserUtil;
+import kr.co.esp.system.service.CmpyGrpSiteMngService;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
-import kr.co.esp.common.util.UserUtil;
-import kr.co.esp.system.service.CmpyGrpSiteMngService;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
@@ -78,8 +73,12 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			request.removeAttribute("selViewSite");
 		}
 		
-		// 상단 시간 초기값
-		request.setAttribute("nowTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		// 상단 시간 초기값 -- 서울로 세팅
+		TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		sdf.setTimeZone(timeZone);
+
+		request.setAttribute("nowTime", sdf.format(new Date()));
 		return super.preHandle(request, response, handler);
 	}
 	
