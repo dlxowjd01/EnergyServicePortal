@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import kr.co.esp.common.util.DateUtil;
+import kr.co.esp.common.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -87,6 +88,15 @@ public class DashboardController {
 
 	@RequestMapping(value = "/dashboard/smain.do")
 	public String smain(HttpServletRequest request, HttpSession session, Model model) {
+
+		Map<String, Object> userInfo = UserUtil.getUserInfo(session);
+		if (userInfo == null) {
+			userInfo = new HashMap<String, Object>();
+		}
+		logger.debug("userInfo : {}", userInfo);
+
+		model.addAttribute("userInfo", userInfo);
+
 		String linkSiteName = request.getParameter("linkSiteName");
 
 		if (request.getParameter("sid") == null || "".equals(request.getParameter("sid"))) {
@@ -102,7 +112,7 @@ public class DashboardController {
 
 		model.addAttribute("siteName", linkSiteName);
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA);
 		Date toDate = DateUtil.getDate();
 		DateUtil.truncateHms(toDate);
 		Date endDate = DateUtil.getAfterDays(toDate, 1);
