@@ -552,7 +552,7 @@ public final class DateUtil {
 
 	public static void truncateHms(Date date) {
 		Calendar calendar = DateUtil.getCalendar(date);
-		calendar.set(Calendar.HOUR_OF_DAY , 0);
+		calendar.set(Calendar.HOUR, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.MILLISECOND, 0);

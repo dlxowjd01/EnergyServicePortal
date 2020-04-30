@@ -1,27 +1,23 @@
 package kr.co.esp.dashboard.web;
 
-import java.util.*;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import kr.co.esp.common.util.DateUtil;
+import kr.co.esp.alarm.service.AlarmService;
+import kr.co.esp.billRevenue.service.DrRevenueService;
+import kr.co.esp.billRevenue.service.EssRevenueService;
+import kr.co.esp.billRevenue.service.PvRevenueService;
 import kr.co.esp.common.util.UserUtil;
+import kr.co.esp.device.service.DeviceMonitoringService;
+import kr.co.esp.energy.service.EssChargeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.ibm.icu.text.SimpleDateFormat;
-
-import kr.co.esp.alarm.service.AlarmService;
-import kr.co.esp.billRevenue.service.DrRevenueService;
-import kr.co.esp.billRevenue.service.EssRevenueService;
-import kr.co.esp.billRevenue.service.PvRevenueService;
-import kr.co.esp.device.service.DeviceMonitoringService;
-import kr.co.esp.energy.service.EssChargeService;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 public class DashboardController {
@@ -112,46 +108,61 @@ public class DashboardController {
 
 		model.addAttribute("siteName", linkSiteName);
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA);
-		Date toDate = DateUtil.getDate();
-		DateUtil.truncateHms(toDate);
-		Date endDate = DateUtil.getAfterDays(toDate, 1);
-		DateUtil.truncateHms(endDate);
+		// range
+		TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		sdf.setTimeZone(timeZone);
+		
+		Calendar rangeCal = Calendar.getInstance(timeZone); /* TODO : 테스트용 일자조정  rangeCal.set(Calendar.DATE, 2); */
 
-		model.addAttribute("startTime", sdf.format(toDate));
-		model.addAttribute("endTime", sdf.format(endDate));
-		model.addAttribute("startDate", DateUtil.getMonthFirstDate("yyyyMMdd") + "000000");
-		model.addAttribute("endDate", sdf.format(endDate));
+		int nowYear = rangeCal.get(Calendar.YEAR);
+		int nowMonth = rangeCal.get(Calendar.MONTH);
+		int nowWeek = rangeCal.get(Calendar.DAY_OF_WEEK);
+		int nowDay = rangeCal.get(Calendar.DAY_OF_MONTH);
 
-		Date startWeek = DateUtil.getFirstDateOfWeek(toDate);
-		DateUtil.truncateHms(startWeek);
-		Date endWeek = DateUtil.getAfterDays(toDate, 7);
-		DateUtil.truncateHms(endWeek);
-		model.addAttribute("startWeek", sdf.format(startWeek));
-		model.addAttribute("endWeek", sdf.format(endWeek));
+		Calendar startDate = Calendar.getInstance(timeZone, Locale.KOREAN); /* TODO : 테스트 일자조정  startDate.set(Calendar.DATE, 2); */
+		Calendar endDate = Calendar.getInstance(timeZone, Locale.KOREAN); /* TODO : 테스트 일자조정  endDate.set(Calendar.DATE, 2); */
 
-		TimeZone timeZone = TimeZone.getTimeZone("GMT+09:00");
-		Calendar startDate = Calendar.getInstance(timeZone, Locale.KOREAN);
-		int nowYear = startDate.get(Calendar.YEAR);
+		//2020.04.12 000000 ~ 2020.04.12 000000
+		startDate.set(nowYear, nowMonth, nowDay, 0, 0, 0);
+		endDate.set(nowYear, nowMonth, nowDay, 0, 0, 0);
+		endDate.add(Calendar.DATE, 1); //FIXME e.g. 2020.04.12 000000 ~ 2020.04.13 000000 일단위 데이터
+		model.addAttribute("startTime", sdf.format(startDate.getTime()));
+		model.addAttribute("endTime", sdf.format(endDate.getTime()));
 
+		//e.g. 2020.03.30 000000 ~ 2020.04.05 000000 (today 2020.04.02)
+		startDate.set(nowYear, nowMonth, nowDay, 0, 0, 0);
+		if( startDate.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) startDate.add(Calendar.DATE, -7);
+		startDate.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+		endDate.set(nowYear, nowMonth, nowDay, 0, 0, 0);
+		if( endDate.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)  endDate.add(Calendar.DATE, -7);
+		endDate.add(Calendar.DATE, 7);
+		endDate.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+		endDate.add(Calendar.DATE, 1); //FIXME e.g. 2020.03.30 000000 ~ 2020.04.06 000000 일단위 데이터
+		model.addAttribute("startWeek", sdf.format(startDate.getTime()));
+		model.addAttribute("endWeek", sdf.format(endDate.getTime()));
+
+		//e.g. 2020.04.01 000000 ~ 2020.04.30 000000
+		startDate.set(nowYear, nowMonth, 1, 0, 0, 0);
+		endDate.set(nowYear, nowMonth, startDate.getActualMaximum(Calendar.DATE), 0, 0, 0);
+		endDate.add(Calendar.DATE, 1); //FIXME e.g. 2020.04.01 000000 ~ 2020.05.01 000000 일단위 데이터
+		model.addAttribute("startDate", sdf.format(startDate.getTime()));
+		model.addAttribute("endDate", sdf.format(endDate.getTime()));
+
+		//e.g. 2020.01.01 000000 ~ 2020.12.31 000000
 		startDate.set(nowYear, 0, 1, 0, 0, 0);
+		endDate.set(nowYear, nowMonth, startDate.getActualMaximum(Calendar.DATE), 0, 0, 0);
+		model.addAttribute("startMonth", sdf.format(startDate.getTime()));
+		model.addAttribute("endMonth", sdf.format(endDate.getTime()));
 
-		model.addAttribute("startMonth", DateUtil.dateToString(startDate, "yyyyMMddHHmmss"));
-		model.addAttribute("endMonth", DateUtil.getCurMonthLastDate("yyyyMMdd") + "000000");
-
+		//e.g. 2019.01.01 000000 ~ 2019.12.31 000000
 		startDate.set(nowYear-1, 0, 1, 0, 0, 0);
+		endDate.set(nowYear-1, nowMonth, startDate.getActualMaximum(Calendar.DATE), 0, 0, 0);
+		model.addAttribute("beforeStartMonth", sdf.format(startDate.getTime()));
+		model.addAttribute("beforeEndMonth", sdf.format(endDate.getTime()));
 
-		Calendar endDateC = Calendar.getInstance(timeZone, Locale.KOREAN);
-		endDateC.set(nowYear-1, endDateC.get(Calendar.MONTH), 1, 0, 0, 0);
-		model.addAttribute("beforeStartMonth", DateUtil.dateToString(startDate, "yyyyMMddHHmmss"));
-		model.addAttribute("beforeEndMonth", DateUtil.dateToString(endDateC, "yyyyMMddHHmmss"));
-
-
+		// display calendar
 		Calendar c = Calendar.getInstance(timeZone, Locale.KOREAN); /* TODO : 테스트 일자조정 c.set(Calendar.DATE, 2); */
-		int nowMonth = c.get(Calendar.MONTH);
-		int nowWeek = c.get(Calendar.DAY_OF_WEEK);
-		int nowDay = c.get(Calendar.DAY_OF_MONTH);
-
 		c.set(Calendar.DATE, 1);
 		int weekDay = c.get(Calendar.DAY_OF_WEEK) - 1;
 		int lastDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
