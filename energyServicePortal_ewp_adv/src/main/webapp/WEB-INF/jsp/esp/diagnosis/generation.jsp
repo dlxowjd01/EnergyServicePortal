@@ -45,7 +45,7 @@
 						<ul class="dropdown-menu">
 							<li data-value="NMAE" class="on"><a href="#">NMAE</a></li>
 							<li data-value="MAPE"><a href="#">MAPE</a></li>
-							<li data-value="PRMSE"><a href="#">PRMSE</a></li>
+							<li data-value="RRMSE"><a href="#">RRMSE</a></li>
 						</ul>
 					</div>
 					<p class="tb_tx">오차 계산 데이터 필터</p>
