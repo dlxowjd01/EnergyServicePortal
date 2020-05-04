@@ -306,6 +306,7 @@
 							const apiConfigDevice = '/config/orgs/' + 'spower';
 
 							const siteId = '${sid}';
+							let siteLocation = '';
 
 							//let invDeviceIds = ["6d836437-6995-4cc9-8d29-2c6ff9d1c4b8"];
 							// 		let invDeviceIds = "6d836437-6995-4cc9-8d29-2c6ff9d1c4b8";
@@ -321,6 +322,7 @@
 								sid : siteId,
 								startTime : "<c:out value="${startMonth }"/>",
 								endTime : "<c:out value="${endMonth }"/>",
+								displayType: 'dashboard',
 								interval : "month"
 							};
 
@@ -377,9 +379,9 @@
 
 							const configDeviceData = {
 								includeUsers: false,
-								includSites: false,
+								includeSites: true,
 								includeDevices: true,
-								includeBtus: false
+								includeRtus: false
 							};
 
 							let chargeChartItems1;
@@ -392,6 +394,15 @@
 									async : false,
 									data : configDeviceData,
 									success: function(result) {
+										let sitesData = result.sites;
+										if(sitesData != null) {
+											$.each(sitesData, function(i, el) {
+												if(el.sid == siteId) {
+													siteLocation = el.location;
+												}
+											});
+										}
+
 										var data = result.devices;
 										if(data != null) {
 											for(var i in data) {
@@ -423,7 +434,7 @@
 										});
 
 										chargeChartItems1.push({
-											basetime: 20200401000000,
+											basetime: '<c:out value="${startDate }"/>',
 											energy: nowEnergyMonth,
 											money: Math.floor(nowBillingMonth / 1000)
 										});
@@ -579,7 +590,13 @@
 				<div class="indiv smain_cal">
 					<div class="chart_top clear">
 						<h2 class="ntit">이 달의 발전 달력</h2>
-						<h1 class="stit"><em>${nowTime }</em></h1>
+						<h1 class="stit">
+							<fmt:parseDate var="sDate" value="${startDate}" pattern="yyyyMMddHHmmss" />
+							<fmt:parseDate var="eDate" value="${startTime}" pattern="yyyyMMddHHmmss" />
+							<fmt:formatDate var="sDt" pattern="yyyy-MM-dd" value="${sDate}" />
+							<fmt:formatDate var="eDt" pattern="yyyy-MM-dd" value="${eDate}" />
+							<em>${sDt} ~ ${eDt}</em>
+						</h1>
 					</div>
 					<div>
 						<table class="calendar">
@@ -1376,22 +1393,22 @@
 								<dd class="dd_tbl">
 									<table>
 										<tr>
-											<th>월</th>
-											<th>화</th>
-											<th>수</th>
-											<th>목</th>
-											<th>금</th>
-											<th>토</th>
-											<th>일</th>
+											<th>오늘</th>
+											<th>내일</th>
+											<th>모레</th>
+<%--											<th>목</th>--%>
+<%--											<th>금</th>--%>
+<%--											<th>토</th>--%>
+<%--											<th>일</th>--%>
 										</tr>
 										<tr>
 											<td><span id="weekIcon_1"></span></td>
 											<td><span id="weekIcon_2"></span></td>
 											<td><span id="weekIcon_3"></span></td>
-											<td><span id="weekIcon_4"></span></td>
-											<td><span id="weekIcon_5"></span></td>
-											<td><span id="weekIcon_6"></span></td>
-											<td><span id="weekIcon_7"></span></td>
+<%--											<td><span id="weekIcon_4"></span></td>--%>
+<%--											<td><span id="weekIcon_5"></span></td>--%>
+<%--											<td><span id="weekIcon_6"></span></td>--%>
+<%--											<td><span id="weekIcon_7"></span></td>--%>
 										</tr>
 										<tr>
 											<td id="weekTemp_1"></td>
@@ -1411,15 +1428,15 @@
 								<li><strong>풍향</strong> <span id="weekWindvelocity">-</span> &deg;</li>
 								<li><strong>풍속</strong> <span id="weekWindspeed"></span></li>
 								<li><strong>습도</strong> <span id="weekHum"></span></li>
-								<li><strong>경사일사량</strong><span> - kWh/㎡․day</span></li>
-								<li><strong>수평일사량</strong><span> - kWh/㎡․day</span></li>
+<%--								<li><strong>경사일사량</strong><span> - kWh/㎡․day</span></li>--%>
+<%--								<li><strong>수평일사량</strong><span> - kWh/㎡․day</span></li>--%>
 							</ul>
 						</div>
 
 
 						<script>
 							//해당월의 날씨 데이터 - polling 없음
-							let weekWeatherUrl = "http://iderms.enertalk.com:8443/weather";
+							let weekWeatherUrl = "http://iderms.enertalk.com:8443/weather/site";
 							let weekWeatherData = {
 								sid : siteId,
 								startTime : "<c:out value="${startWeek }"/>",
@@ -1442,29 +1459,24 @@
 								timeout: pollingTimeout
 							});
 
-							function setWeekWeatherData(items){
-								/*
-                                weekIcon_1 = <i class="ico_weather w2"></i>
-                                weekTemp_1 = 16.5℃
+							function setWeekWeatherData(items) {
+								for (let i = 0; i < items.length; i++) {
+									$("#weekTemp_" + (i+1)).text( (items[i].temperature).toFixed(1));
 
-                                weekWindspped = 10.1km/h
-                                weekHumidity = 47%
-                                */
+									let weatherIconClass = getWeatherIconClass(items[i].weather);
+									$("#weekIcon_" + (i+1)).html("<i class='ico_weather w" + weatherIconClass + "'></i>");
 
-								for (var i = 0; i < 7; i++) {
-									if(i < items.length){
-										$("#weekTemp_" + (i+1)).text( (items[i].temperature).toFixed(1));
+									if(i + 1 == nowWeek) {
+										$("#weekTemp").text( (items[i].temperature).toFixed(1) + "℃");
+										$("#weekIcon").html("<i class='ico_weather w" + weatherIconClass + "'></i>");
+										$("#weekIcon").next('strong').html(' ('+siteLocation+') ');
+										$("#weekWindspeed").text( (items[i].wind_speed).toFixed(1) + " km/h");
+										$("#weekWindvelocity").text( items[i].wind_velocity);
+										$("#weekHum").text( (items[i].humidity).toFixed(1) + " %");
+									}
 
-										var weatherIconClass = getWeatherIconClass(items[i].weather);
-										$("#weekIcon_" + (i+1)).html("<i class='ico_weather " + weatherIconClass + "'></i>");
-
-										if(i+1 == nowWeek){
-											$("#weekTemp").text( (items[i].temperature).toFixed(1) + "℃");
-											$("#weekIcon").html("<i class='ico_weather " + weatherIconClass + "'></i>");
-											$("#weekWindspeed").text( (items[i].wind_speed).toFixed(1) + " km/h");
-											$("#weekWindvelocity").text( items[i].wind_velocity);
-											$("#weekHum").text( (items[i].humidity).toFixed(1) + " %");
-										}
+									if(i == items.length - 1) {
+										$('.weather .stit').html( String(items[i].basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
 									}
 								}
 							}

@@ -45,8 +45,7 @@
 						<ul class="dropdown-menu">
 							<li data-value="NMAE" class="on"><a href="#">NMAE</a></li>
 							<li data-value="MAPE"><a href="#">MAPE</a></li>
-							<li data-value="APE"><a href="#">APE</a></li>
-							<li data-value="RMSE"><a href="#">RMSE</a></li>
+							<li data-value="PRMSE"><a href="#">PRMSE</a></li>
 						</ul>
 					</div>
 					<p class="tb_tx">오차 계산 데이터 필터</p>
@@ -1482,26 +1481,8 @@
 	}
 
 	function summary(total, type) {
-		let loopCnt = 0;
-		for(let k = 0; k < 4; k++) {
-			if(String(Math.round(total)).length > 3) {
-				total = total / 1000
-				loopCnt++;
-			}
-		}
-
-		let unit = 'Wh';
-		if(loopCnt == 1) {
-			unit = 'kWh';
-		} else if(loopCnt == 2) {
-			unit = 'MWh';
-		} else if(loopCnt == 3) {
-			unit = 'GWh';
-		} else {
-			unit = 'Wh';
-		}
-
-		$('.value_num').eq(type).empty().append('<span class="num">' + total.toFixed(2) + '</span>' + unit);
+		let refine = displayNumberFixedUnit(total, 'Wh', 'kWh', 2)
+		$('.value_num').eq(type).empty().append('<span class="num">' + refine[0] + '</span>' + refine[1]);
 	}
 
 	function dateFormat(val) {
