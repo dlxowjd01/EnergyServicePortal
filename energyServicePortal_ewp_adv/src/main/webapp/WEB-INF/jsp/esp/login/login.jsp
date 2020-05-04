@@ -547,15 +547,16 @@
 							<div class="lftit">
 				                <h1>LOGIN</h1>
 				            </div>
-						    <div class="mt10"><input type="text" id="loginUserId" name="userId" class="lfinp" placeholder=<spring:message code="ewp.login.ID"/>></div>
-						  	<div class="mt15"><input type="password" id="loginUserPw" name="userPw" class="lfinp" placeholder=<spring:message code="ewp.login.Password"/>></div>
+							<div class="mt10"><input type="text" id="loginUserOid" name="oid" class="lfinp" placeholder=<spring:message code="ewp.login.OID"/>></div>
+						    <div class="mt10"><input type="text" id="loginUserId" name="login_id" class="lfinp" placeholder=<spring:message code="ewp.login.ID"/>></div>
+						  	<div class="mt15"><input type="password" id="loginUserPw" name="password" class="lfinp" placeholder=<spring:message code="ewp.login.Password"/>></div>
 						    <div class="mt30">
 						    	<a href="#" class="findidBtn arrbtn"><spring:message code="ewp.login.Forgot_account"/></a>
 						    	<a href="#" class="findpassBtn arrbtn ml30"><spring:message code="ewp.login.Forgot_password"/></a>
 						    </div>
 						</div>
 						<div class="lf_bottom">
-							<a href="#;" class="joinBtn"><spring:message code="ewp.login.Singup"/></a>
+							<a href="#" class="joinBtn"><spring:message code="ewp.login.Singup"/></a>
 							<input type="submit" name="login" value="<spring:message code="ewp.login.Signin" />">
 						</div>
 					</form>
@@ -761,7 +762,7 @@
 	            </div>
 	            <div class="modal-body" style="padding:20px 30px;">
 					
-					<div id="joinStep01" class="rowBox joinBox joinStep01" style="display:;">			
+					<div id="joinStep01" class="rowBox joinBox joinStep01" style="display:;">
 						
 						<div class="unit">
 							<div class="unit_tit clear">

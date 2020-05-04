@@ -1,13 +1,12 @@
 package kr.co.esp.login.web;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
-
+import egovframework.com.cmm.EgovMessageSource;
+import kr.co.esp.common.util.RestApiUtil;
+import kr.co.esp.common.util.StringUtil;
+import kr.co.esp.common.util.UserUtil;
+import kr.co.esp.login.service.LoginService;
+import kr.co.esp.sms.service.SmsService;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -16,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import egovframework.com.cmm.EgovMessageSource;
-import kr.co.esp.common.util.CommonUtils;
-import kr.co.esp.common.util.StringUtil;
-import kr.co.esp.common.util.UserUtil;
-import kr.co.esp.login.service.LoginService;
-import kr.co.esp.sms.service.SmsService;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
 @Controller
 public class LoginController {
@@ -52,31 +51,41 @@ public class LoginController {
 
 	@RequestMapping("/loginUser.do")
 	public String loginUser(HttpSession session, Model model, @RequestParam Map<String, Object> param) throws Exception {
-		logger.debug("/loginUser.do");
-		logger.debug("param : {}", param);
 
-		Map<String, Object> result = cmmLoginService.getUserDetail(param);
-		logger.debug("result : {}", result);
-		
 		Locale locale = (Locale) session.getAttribute("sessionLocale");
 
-//		session.setMaxInactiveInterval(24 * 60 * 60); // web.xml 에 추가함
+		JSONObject obj = new JSONObject();
+		obj.put("oid", param.get("oid"));
+		obj.put("login_id", param.get("login_id"));
+		obj.put("password", param.get("password"));
 
-		if (result != null && CommonUtils.isNotEmpty(result.get("user_idx"))) {
-			String authType = (String) result.get("auth_type");
-			String siteId = (String) result.get("site_id");
 
-			if (authType == null || authType.equals("")) {
+		Map<String, Object> userInfoMap = new HashMap<String, Object>();
+		Map<String, Object> tokenMap = RestApiUtil.post("/auth/login", obj.toString());
+		if(tokenMap != null && !tokenMap.isEmpty()) {
+			userInfoMap.putAll((Map<String, Object>) tokenMap.get("data"));
+
+			Map<String, Object> meMap = RestApiUtil.get("/auth/me", "", (String) userInfoMap.get("token"));
+			if(meMap.get("data") != null) {
+				userInfoMap.putAll((Map<String, Object>) meMap.get("data"));
+			}
+
+			Map<String, Object> siteMap = RestApiUtil.get("/auth/me/sites", "", (String) userInfoMap.get("token"));
+			if(siteMap.get("data") != null) {
+				userInfoMap.put("siteList", siteMap.get("data"));
+			}
+
+			Map<String, Object> groupMap = RestApiUtil.get("/auth/me/groups", "", (String) userInfoMap.get("token"));
+			if(groupMap.get("data") != null) {
+				userInfoMap.putAll((Map<String, Object>) groupMap.get("data"));
+			}
+
+			if(userInfoMap.get("role") == null && !"".equals(userInfoMap.get("role"))) {
 				model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", locale));
 				return "esp/login/login";
-			} else if (authType.equals("1") || authType.equals("2") || authType.equals("3")) {
-				session.setAttribute(UserUtil.USER_SESSION_ID, result);
-//				return "redirect:/main/gMain.do";
+			} else if((int) userInfoMap.get("role") == 1 || (int) userInfoMap.get("role") == 2) {
+				session.setAttribute(UserUtil.USER_SESSION_ID, userInfoMap);
 				return "redirect:/dashboard/gmain.do";
-			} else if (siteId != null && !siteId.isEmpty()) {
-				session.setAttribute(UserUtil.USER_SESSION_ID, result);
-//				return "redirect:/main/siteMain.do?siteId=" + siteId;
-				return "redirect:/dashboard/smain.do?siteId=" + siteId;
 			} else {
 				model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", locale));
 				return "esp/login/login";

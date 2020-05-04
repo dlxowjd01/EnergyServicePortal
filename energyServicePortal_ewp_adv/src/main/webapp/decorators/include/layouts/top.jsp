@@ -59,6 +59,12 @@
 	<!-- timepicker -->
 	<script type="text/javascript" src="/js/wickedpicker.js"></script>
 	<script>
+
+		//API 토큰 세팅
+		$.ajaxSetup({
+			headers: {'token': '<c:out value="${sessionScope.userInfo.token}" escapeXml="false" />'}
+		});
+
 		var timeOffset = '${timeOffset}';
 		$(document).ready(function () {
 
