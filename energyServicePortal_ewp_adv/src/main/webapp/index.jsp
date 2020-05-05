@@ -1,5 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
+<%
+String hostname = request.getServerName();
+String oid = "encored";
+if( "spower.iderms.ai".equals(hostname) )
+        oid="spower";
+else if( " 13.114.199.169".equals(hostname) )
+        oid="spower";
+
+%>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -8,13 +17,10 @@
 		// location.href = '/hptest';
 		<c:choose>
 			<c:when test="${empty userInfo}">
-				location.href = '/login.do';
-			</c:when>
-			<c:when test="${userInfo.auth_type eq '1' or userInfo.auth_type eq '2'}">
-				location.href = '/dashboard/gmain.do';
+				location.href = '/login.do?oid=<% out.print(oid); %>';
 			</c:when>
 			<c:otherwise>
-				location.href = '/dashboard/smain.do.do?siteId=${userInfo.site_id}';
+				location.href = '/dashboard/gmain.do?oid=<% out.print(oid); %>';
 			</c:otherwise>
 		</c:choose>
 	</script>
