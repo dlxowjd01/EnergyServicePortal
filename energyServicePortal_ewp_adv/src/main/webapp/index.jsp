@@ -5,7 +5,7 @@ String hostname = request.getServerName();
 String oid = "encored";
 if( "spower.iderms.ai".equals(hostname) )
         oid="spower";
-else if( " 13.114.199.169".equals(hostname) )
+else if( "13.114.199.169".equals(hostname) )
         oid="spower";
 
 %>
