@@ -547,7 +547,6 @@
 							<div class="lftit">
 				                <h1>LOGIN</h1>
 				            </div>
-							<div class="mt10"><input type="text" id="loginUserOid" name="oid" class="lfinp" placeholder=<spring:message code="ewp.login.OID"/>></div>
 						    <div class="mt10"><input type="text" id="loginUserId" name="login_id" class="lfinp" placeholder=<spring:message code="ewp.login.ID"/>></div>
 						  	<div class="mt15"><input type="password" id="loginUserPw" name="password" class="lfinp" placeholder=<spring:message code="ewp.login.Password"/>></div>
 						    <div class="mt30">

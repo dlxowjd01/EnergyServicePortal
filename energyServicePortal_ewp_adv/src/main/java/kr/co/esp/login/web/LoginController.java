@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Locale;
@@ -50,12 +51,23 @@ public class LoginController {
 	}
 
 	@RequestMapping("/loginUser.do")
-	public String loginUser(HttpSession session, Model model, @RequestParam Map<String, Object> param) throws Exception {
+	public String loginUser(HttpServletRequest request, HttpSession session, Model model, @RequestParam Map<String, Object> param) throws Exception {
 
 		Locale locale = (Locale) session.getAttribute("sessionLocale");
 
+		String serverName = request.getServerName();
+		System.out.println("serverName : " + serverName);
+		String oid = "encored";
+		if("localhost".equals(serverName) || "spower.iderms.ai".equals(serverName) || "13.114.199.169".equals(serverName)) {
+			oid = "spower";
+		} else if("ewp.iderms.ai".equals(serverName) || "52.69.111.98".equals(serverName)) {
+			oid = "ewp";
+		} else {
+			oid = "encored";
+		}
+
 		JSONObject obj = new JSONObject();
-		obj.put("oid", param.get("oid"));
+		obj.put("oid", oid);
 		obj.put("login_id", param.get("login_id"));
 		obj.put("password", param.get("password"));
 
