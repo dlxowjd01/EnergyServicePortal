@@ -67,6 +67,9 @@
 
 		var timeOffset = '${timeOffset}';
 		$(document).ready(function () {
+			<c:if test="${pageContext.request.serverName ne 'spower.iderms.ai' and pageContext.request.serverName ne '13.114.199.169'}">
+				changeFavicon('/img/logo-only.ico');
+			</c:if>
 
 			<%--sessionUser = JSON.stringify(${userInfo});--%>
 			// getUserInfo(setSession);
@@ -79,6 +82,21 @@
 			// }
 			$('.loading').hide();
 		});
+
+		const changeFavicon = link => {
+			let $favicon = document.querySelector('link[rel="icon"]')
+			// If a <link rel="icon"> element already exists,
+			// change its href to the given link.
+			if ($favicon !== null) {
+				$favicon.href = link
+				// Otherwise, create a new element and append it to <head>.
+			} else {
+				$favicon = document.createElement("link")
+				$favicon.rel = "icon"
+				$favicon.href = link
+				document.head.appendChild($favicon)
+			}
+		};
 
 		function sessionRefresh() {
 			$.ajax({

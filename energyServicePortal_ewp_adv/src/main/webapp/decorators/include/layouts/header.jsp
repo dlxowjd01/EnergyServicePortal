@@ -66,7 +66,15 @@
 			<li><a href="#">EN</a></li>
 		</ul>
 	</div>
-	<div class="nav_brand"><a href="#;">Encored</a></div>
+	<c:choose>
+		<c:when test="${pageContext.request.serverName eq 'spower.iderms.ai' or pageContext.request.serverName eq '13.114.199.169' or pageContext.request.serverName eq 'localhost'}">
+			<div class="nav_brand spower"><a href="#">Spower</a></div>
+		</c:when>
+		<c:otherwise>
+			<div class="nav_brand"><a href="#">Encored</a></div>
+		</c:otherwise>
+	</c:choose>
+
 	<!-- input/dropdown //-->
 	<div class="all-menu">
 		<a href="#">구분</a>

@@ -455,8 +455,10 @@ select {
 	--color-calendar-today: rgba(0, 0, 0, 0.1);
 	--error: rgba(247, 92, 74, 1);
 	--warning: rgba(244, 158, 52, 1);
-	--encored-logo: url('../img/s-power_logo_light.png');
-	--encored-logo-4k: url('../img/s-power_logo_light@3x.png');
+	--encored-logo: url('../img/encored_logo.png');
+	--encored-logo-4k: url('../img/encored_logo@3x.png');
+	--spower-logo: url('../img/s-power_logo_light.png');
+	--spower-logo-4k: url('../img/s-power_logo_light@3x.png');
 	--sidebar-dashboard-off: url('../img/sidebar_dashboard_light_off.png');
 	--sidebar-dashboard-on: url('../img/sidebar_dashboard_light_on_dark_off.png');
 	--sidebar-dashboard-off-4k: url('../img/sidebar_dashboard_light_off@3x.png');
@@ -547,8 +549,10 @@ html.darkmode:root {
 	--color-calendar-today: rgba(255, 255, 255, 0.1);
 	--error: #B61827;
 	--warning: #BC5100;
-	--encored-logo: url('../img/s-power_logo_dark.png');
-	--encored-logo-4k: url('../img/s-power_logo_dark@3x.png');
+	--encored-logo: url('../img/encored_logo_white.png');
+	--encored-logo-4k: url('../img/encored_logo_white@3x.png');
+	--spower-logo: url('../img/s-power_logo_dark.png');
+	--spower-logo-4k: url('../img/s-power_logo_dark@3x.png');
 	--sidebar-dashboard-off: url('../img/sidebar_dashboard_light_on_dark_off.png');
 	--sidebar-dashboard-on: url('../img/sidebar_dashboard_dark_on.png');
 	--sidebar-dashboard-off-4k: url('../img/sidebar_dashboard_light_on_dark_off@3x.png');
@@ -1284,6 +1288,15 @@ nav .nav_brand a {
 	font-size: 0;
 }
 
+nav .nav_brand.spower a {
+	display: inline-block;
+	width: 114px;
+	height: 23px;
+	background: var(--spower-logo) no-repeat 0 0;
+	vertical-align: top;
+	font-size: 0;
+}
+
 /* ewp 로고 */
 nav .nav_brand.ewp {
 	margin-top: 35px;
@@ -1553,6 +1566,12 @@ nav .all-menu .menu-group .btn-group button {
 		width: 414px;
 		height: 69px;
 		background: var(--encored-logo-4k) no-repeat 0 0;
+	}
+
+	nav .nav_brand.spower a {
+		width: 414px;
+		height: 69px;
+		background: var(--spower-logo-4k) no-repeat 0 0;
 	}
 
 	/* ewp 로고 */

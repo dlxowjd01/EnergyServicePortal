@@ -2359,6 +2359,7 @@
               sid: site.sid,
               startTime: formData.startTime,
               endTime: formData.endTime,
+	          displayType: 'dashboard',
               interval: "month"
             },
             success: function (result) {
