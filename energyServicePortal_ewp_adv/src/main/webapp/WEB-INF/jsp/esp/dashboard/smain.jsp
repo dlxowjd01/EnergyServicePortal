@@ -1,21 +1,21 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<%@ include file="/decorators/include/taglibs.jsp"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ include file="/decorators/include/taglibs.jsp" %>
 
 <script type="text/javascript">
-	$(function(){
-		$("input[name='deviceStatus']").on("click", function() {
+	$(function () {
+		$("input[name='deviceStatus']").on("click", function () {
 			var flag = $(this).is(":checked");
 			var str = $(this).val();
 
 			var $tbody = $(".intable").find('tbody');
-			if(flag){
-				if(str == "정상") $tbody.find('.flag1').css("display", "");
-				if(str == "경고") $tbody.find('.flag2').css("display", "");
-				if(str == "이상") $tbody.find('.flag3').css("display", "");
+			if (flag) {
+				if (str == "정상") $tbody.find('.flag1').css("display", "");
+				if (str == "경고") $tbody.find('.flag2').css("display", "");
+				if (str == "이상") $tbody.find('.flag3').css("display", "");
 			} else {
-				if(str == "정상") $tbody.find('.flag1').css("display", "none");
-				if(str == "경고") $tbody.find('.flag2').css("display", "none");
-				if(str == "이상") $tbody.find('.flag3').css("display", "none");
+				if (str == "정상") $tbody.find('.flag1').css("display", "none");
+				if (str == "경고") $tbody.find('.flag2').css("display", "none");
+				if (str == "이상") $tbody.find('.flag3').css("display", "none");
 			}
 		});
 	});
@@ -51,7 +51,7 @@
 							<fmt:formatDate value="${endPrint}" pattern="yyyy.MM.dd"/>
 						</h1>
 					</div>
-					<div  class="chart_mid clear">
+					<div class="chart_mid clear">
 						<div class="box">
 							<div class="line1">이번달 총 발전량</div>
 							<div class="line2" id="monthEnergyValue"></div>
@@ -68,9 +68,9 @@
 						<script type="text/javascript">
 							var chargeChart = Highcharts.chart('schart1', {
 								chart: {
-									marginTop:40,
-									marginLeft:50,
-									marginRight:50,
+									marginTop: 40,
+									marginLeft: 50,
+									marginRight: 50,
 									height: 286,
 									backgroundColor: 'transparent',
 									zoomType: 'xy'
@@ -96,7 +96,7 @@
 									}],
 									labels: {
 										align: 'center',
-										y:27, /* 그래프와 거리 */
+										y: 27, /* 그래프와 거리 */
 										style: {
 											color: '#a4aebf',
 											fontSize: '12px'
@@ -123,8 +123,8 @@
 										text: 'kWh',
 										align: 'low',
 										rotation: 0, /* 타이틀 기울기 */
-										y:25, /* 타이틀 위치 조정 */
-										x:15,
+										y: 25, /* 타이틀 위치 조정 */
+										x: 15,
 										style: {
 											color: '#ffffff',
 											fontSize: '12px'
@@ -151,8 +151,8 @@
 										text: '천원',
 										align: 'low',
 										rotation: 0, /* 타이틀 기울기 */
-										y:25, /* 타이틀 위치 조정 */
-										x:-12,
+										y: 25, /* 타이틀 위치 조정 */
+										x: -12,
 										style: {
 											color: '#ffffff',
 											fontSize: '12px'
@@ -173,10 +173,10 @@
 								/* 범례 */
 								legend: {
 									enabled: true,
-									align:'right',
-									verticalAlign:'top',
-									x:5,
-									y:-10,
+									align: 'right',
+									verticalAlign: 'top',
+									x: 5,
+									y: -10,
 									itemStyle: {
 										color: '#a4aebf',
 										fontSize: '12px',
@@ -185,8 +185,8 @@
 									itemHoverStyle: {
 										color: '' /* 마우스 오버시 색 */
 									},
-									symbolPadding:3, /* 심볼 - 텍스트간 거리 */
-									symbolHeight:7 /* 심볼 크기 */
+									symbolPadding: 3, /* 심볼 - 텍스트간 거리 */
+									symbolHeight: 7 /* 심볼 크기 */
 								},
 								/* 옵션 */
 								plotOptions: {
@@ -238,9 +238,9 @@
 										},
 										chartOptions: {
 											chart: {
-												marginTop:50,
-												marginLeft:75,
-												marginRight:75
+												marginTop: 50,
+												marginLeft: 75,
+												marginRight: 75
 											},
 											xAxis: {
 												labels: {
@@ -251,8 +251,8 @@
 											},
 											yAxis: [{
 												title: {
-													y:30,
-													x:20,
+													y: 30,
+													x: 20,
 													style: {
 														fontSize: '18px'
 													}
@@ -265,8 +265,8 @@
 											},
 												{
 													title: {
-														y:30,
-														x:-15,
+														y: 30,
+														x: -15,
 														style: {
 															fontSize: '18px'
 														}
@@ -281,8 +281,8 @@
 												itemStyle: {
 													fontSize: '18px'
 												},
-												symbolPadding:5,
-												symbolHeight:10
+												symbolPadding: 5,
+												symbolHeight: 10
 											}
 										}
 									}]
@@ -319,11 +319,11 @@
 
 							let chargeChartUrl = apiURL + apiEnergySite;
 							let chargeChartData = {
-								sid : siteId,
-								startTime : "<c:out value="${startMonth }"/>",
-								endTime : "<c:out value="${endMonth }"/>",
+								sid: siteId,
+								startTime: "<c:out value="${startMonth }"/>",
+								endTime: "<c:out value="${endMonth }"/>",
 								displayType: 'dashboard',
-								interval : "month"
+								interval: "month"
 							};
 
 							let nowEnergyDay;
@@ -337,25 +337,25 @@
 							(function chargeNowEnergy() {
 								let interValArr = ['day', 'month', 'year'];
 
-								$.each(interValArr, function(i, el) {
+								$.each(interValArr, function (i, el) {
 									let chargeNowData = {
-										sids : siteId,
+										sids: siteId,
 										metering_type: "2",
 										interval: el
 									};
 
 									$.ajax({
-										url : chargeNowUrl,
-										type : "get",
-										async : false,
-										data : chargeNowData,
-										success: function(result) {
-											$.each(result.data, function(i, el2) {
-												if(el == 'day') {
+										url: chargeNowUrl,
+										type: "get",
+										async: false,
+										data: chargeNowData,
+										success: function (result) {
+											$.each(result.data, function (i, el2) {
+												if (el == 'day') {
 													nowEnergyDay = el2.energy;
 													nowBillingDay = el2.money;
 													console.log('nowEnergyDay', el2.energy);
-												} else if(el == 'month') {
+												} else if (el == 'month') {
 													nowEnergyMonth = el2.energy;
 													nowBillingMonth = el2.money;
 													console.log('nowEnergyMonth', el2.energy);
@@ -371,10 +371,10 @@
 							})();
 
 							let chargeChartBeforeData = {
-								sid : siteId,
-								startTime : "<c:out value="${beforeStartMonth }"/>",
-								endTime : "<c:out value="${beforeEndMonth }"/>",
-								interval : "month"
+								sid: siteId,
+								startTime: "<c:out value="${beforeStartMonth }"/>",
+								endTime: "<c:out value="${beforeEndMonth }"/>",
+								interval: "month"
 							};
 
 							const configDeviceData = {
@@ -389,25 +389,25 @@
 
 							(function setDids() {
 								$.ajax({
-									url : apiURL + apiConfigDevice,
-									type : "get",
-									async : false,
-									data : configDeviceData,
-									success: function(result) {
+									url: apiURL + apiConfigDevice,
+									type: "get",
+									async: false,
+									data: configDeviceData,
+									success: function (result) {
 										let sitesData = result.sites;
-										if(sitesData != null) {
-											$.each(sitesData, function(i, el) {
-												if(el.sid == siteId) {
+										if (sitesData != null) {
+											$.each(sitesData, function (i, el) {
+												if (el.sid == siteId) {
 													siteLocation = el.location;
 												}
 											});
 										}
 
 										var data = result.devices;
-										if(data != null) {
-											for(var i in data) {
-												if(data[i].sid == siteId) {
-													if(data[i].device_type == 'INV_PV') {
+										if (data != null) {
+											for (var i in data) {
+												if (data[i].sid == siteId) {
+													if (data[i].device_type == 'INV_PV') {
 														invDeviceIds.push(data[i].did);
 													}
 												}
@@ -420,15 +420,15 @@
 
 							function chargeChartPoll() {
 								$.ajax({
-									url : chargeChartUrl,
-									type : "get",
-									async : false,
-									data : chargeChartData,
-									success: function(result) {
+									url: chargeChartUrl,
+									type: "get",
+									async: false,
+									data: chargeChartData,
+									success: function (result) {
 										var data = result.data[0];
 										chargeChartItems1 = data.generation.items;
-										$.each(chargeChartItems1, function(i, el) {
-											if(el.money != undefined && el.money != null && el.money != ''){
+										$.each(chargeChartItems1, function (i, el) {
+											if (el.money != undefined && el.money != null && el.money != '') {
 												el.money = Math.floor(el.money / 1000);
 											}
 										});
@@ -439,34 +439,42 @@
 											money: Math.floor(nowBillingMonth / 1000)
 										});
 
-										if(debugMode){ console.log("chargeChart:", chargeChartItems1); }
+										if (debugMode) {
+											console.log("chargeChart:", chargeChartItems1);
+										}
 									},
 									dataType: "json",
-									complete: function() { chargeChartBeofrePoll(); },
+									complete: function () {
+										chargeChartBeofrePoll();
+									},
 									timeout: pollingTimeout
 								});
 							}
 
 							function chargeChartBeofrePoll() {
 								$.ajax({
-									url : chargeChartUrl,
-									type : "get",
-									async : false,
-									data : chargeChartBeforeData,
-									success: function(result) {
+									url: chargeChartUrl,
+									type: "get",
+									async: false,
+									data: chargeChartBeforeData,
+									success: function (result) {
 										var data = result.data[0];
 										chargeChartItems2 = data.generation.items;
-										if(debugMode){ console.log("chargeChartBeofre:", chargeChartItems2); }
+										if (debugMode) {
+											console.log("chargeChartBeofre:", chargeChartItems2);
+										}
 
 										setChargeChartData();
 									},
 									dataType: "json",
-									complete: setTimeout(function() {chargeChartPoll()}, pollingTerm),
+									complete: setTimeout(function () {
+										chargeChartPoll()
+									}, pollingTerm),
 									timeout: pollingTimeout
 								})
 							}
 
-							function setChargeChartData(){
+							function setChargeChartData() {
 								var totYearEnergy = 0;
 								var totMonthEnergy = 0;
 								var totBeforeYearEnergy = 0;
@@ -478,19 +486,21 @@
 
 									var matchMonth = false;
 									for (var d = 0; d < chargeChartItems1.length; d++) {
-										var dataMonth = parseInt((""+chargeChartItems1[d].basetime).substring(4,6));
-										if( i+1 == dataMonth){
+										var dataMonth = parseInt(("" + chargeChartItems1[d].basetime).substring(4, 6));
+										if (i + 1 == dataMonth) {
 											energyData[i] = [i, chargeChartItems1[d].energy / 1000];
 											billingData[i] = [i, chargeChartItems1[d].money];
 
-											totYearEnergy += chargeChartItems1[d].energy  / 1000;
-											if( i+1 ==  nowMonth){ totMonthEnergy = chargeChartItems1[d].energy  / 1000; }
+											totYearEnergy += chargeChartItems1[d].energy / 1000;
+											if (i + 1 == nowMonth) {
+												totMonthEnergy = chargeChartItems1[d].energy / 1000;
+											}
 
 											matchMonth = true;
 										}
 									}
 
-									if(!matchMonth){
+									if (!matchMonth) {
 										energyData[i] = [i, null];
 										billingData[i] = [i, null];
 									}
@@ -498,15 +508,17 @@
 
 								for (var i = 0; i < 12; i++) {
 									for (var d = 0; d < chargeChartItems2.length; d++) {
-										var dataMonth = parseInt((""+chargeChartItems2[d].basetime).substring(4,6));
-										if( i+1 == dataMonth){
+										var dataMonth = parseInt(("" + chargeChartItems2[d].basetime).substring(4, 6));
+										if (i + 1 == dataMonth) {
 											totBeforeYearEnergy += chargeChartItems2[d].energy / 1000;
-											if( i+1 ==  nowMonth){ totBeforeMonthEnergy = chargeChartItems2[d].energy / 1000; }
+											if (i + 1 == nowMonth) {
+												totBeforeMonthEnergy = chargeChartItems2[d].energy / 1000;
+											}
 										}
 									}
 								}
 
-								if(debugMode){
+								if (debugMode) {
 									console.log("chargeChart energyData:", energyData);
 									console.log("chargeChart billingData:", billingData);
 								}
@@ -518,7 +530,7 @@
 								diffYearEnergy = totYearEnergy - totBeforeYearEnergy;
 								diffMonthEnergy = totMonthEnergy - totBeforeMonthEnergy;
 
-								if(debugMode){
+								if (debugMode) {
 									console.log("chargeChart totYearEnergy", totYearEnergy);
 									console.log("chargeChart totBeforeYearEnergy", totBeforeYearEnergy);
 									console.log("chargeChart diffYearEnergy", diffYearEnergy);
@@ -539,11 +551,11 @@
 
 								var diffYearIconClass = diffYearEnergy > 0 ? "fa-arrow-up" : (diffYearEnergy < 0 ? "fa-arrow-up" : "");
 
-								if(String(nowEnergyYear).length > 9) {
+								if (String(nowEnergyYear).length > 9) {
 									$("#yearEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyYear / 1000 / 1000 / 1000).toFixed(2)) + "</span><em>GWh</em>");
-								} else if(String(nowEnergyYear).length > 6) {
+								} else if (String(nowEnergyYear).length > 6) {
 									$("#yearEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyYear / 1000 / 1000).toFixed(2)) + "</span><em>MWh</em>");
-								} else if(String(nowEnergyYear).length > 3) {
+								} else if (String(nowEnergyYear).length > 3) {
 									$("#yearEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyYear / 1000).toFixed(2)) + "</span><em>kWh</em>");
 								} else {
 									$("#yearEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyYear / 1000).toFixed(2)) + "</span><em>Wh</em>");
@@ -559,11 +571,11 @@
 
 								var diffMonthIconClass = diffMonthEnergy > 0 ? "fa-arrow-up" : (diffMonthEnergy < 0 ? "fa-arrow-up" : "");
 
-								if(String(nowEnergyMonth).length > 9) {
+								if (String(nowEnergyMonth).length > 9) {
 									$("#monthEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyMonth / 1000 / 1000 / 1000).toFixed(2)) + "</span><em>GWh</em>");
-								} else if(String(nowEnergyMonth).length > 6) {
+								} else if (String(nowEnergyMonth).length > 6) {
 									$("#monthEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyMonth / 1000 / 1000).toFixed(2)) + "</span><em>MWh</em>");
-								} else if(String(nowEnergyMonth).length > 3) {
+								} else if (String(nowEnergyMonth).length > 3) {
 									$("#monthEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyMonth / 1000).toFixed(2)) + "</span><em>kWh</em>");
 								} else {
 									$("#monthEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyMonth / 1000).toFixed(2)) + "</span><em>Wh</em>");
@@ -591,10 +603,10 @@
 					<div class="chart_top clear">
 						<h2 class="ntit">이 달의 발전 달력</h2>
 						<h1 class="stit">
-							<fmt:parseDate var="sDate" value="${startDate}" pattern="yyyyMMddHHmmss" />
-							<fmt:parseDate var="eDate" value="${startTime}" pattern="yyyyMMddHHmmss" />
-							<fmt:formatDate var="sDt" pattern="yyyy-MM-dd" value="${sDate}" />
-							<fmt:formatDate var="eDt" pattern="yyyy-MM-dd" value="${eDate}" />
+							<fmt:parseDate var="sDate" value="${startDate}" pattern="yyyyMMddHHmmss"/>
+							<fmt:parseDate var="eDate" value="${startTime}" pattern="yyyyMMddHHmmss"/>
+							<fmt:formatDate var="sDt" pattern="yyyy-MM-dd" value="${sDate}"/>
+							<fmt:formatDate var="eDt" pattern="yyyy-MM-dd" value="${eDate}"/>
 							<em>${sDt} ~ ${eDt}</em>
 						</h1>
 					</div>
@@ -638,17 +650,17 @@
 							</c:forEach>
 
 							<%--
-                                <i class="ico_weather w1"></i> 	1	- 맑음 o
-                                <i class="ico_weather w2"></i>   	- 바람 x
-                                <i class="ico_weather w3"></i>	20	- 안개 o
-                                <i class="ico_weather w4"></i>	7	- 흐림 o
-                                <i class="ico_weather w5"></i>	 	- 바람/비 x
-                                <i class="ico_weather w6"></i>	13	- 비또는눈 o
-                                <i class="ico_weather w7"></i>  	- 구름/바람/비 x
-                                <i class="ico_weather w8"></i>	11	- 눈 o
-                                <i class="ico_weather w9"></i>	17	- 천둥번개 o
-                                <i class="ico_weather w10"></i>	12 - 가끔눈 o
-                            --%>
+								<i class="ico_weather w1"></i> 	1	- 맑음 o
+								<i class="ico_weather w2"></i>   	- 바람 x
+								<i class="ico_weather w3"></i>	20	- 안개 o
+								<i class="ico_weather w4"></i>	7	- 흐림 o
+								<i class="ico_weather w5"></i>	 	- 바람/비 x
+								<i class="ico_weather w6"></i>	13	- 비또는눈 o
+								<i class="ico_weather w7"></i>  	- 구름/바람/비 x
+								<i class="ico_weather w8"></i>	11	- 눈 o
+								<i class="ico_weather w9"></i>	17	- 천둥번개 o
+								<i class="ico_weather w10"></i>	12 - 가끔눈 o
+							--%>
 							</tr>
 						</table>
 
@@ -663,21 +675,23 @@
 							//해당월의 에너지 데이터 - polling 없음
 							let wCalendarEnergyUrl = apiURL + apiEnergySite;
 							let wCalendarEnergyData = {
-								sid : siteId,
-								startTime : "<c:out value="${startDate }"/>",
-								endTime : "<c:out value="${endDate }"/>",
-								interval : "day"
+								sid: siteId,
+								startTime: "<c:out value="${startDate }"/>",
+								endTime: "<c:out value="${endDate }"/>",
+								interval: "day"
 							};
 
 							$.ajax({
-								url : wCalendarEnergyUrl,
-								type : "get",
-								async : false,
-								data : wCalendarEnergyData,
-								success: function(result) {
+								url: wCalendarEnergyUrl,
+								type: "get",
+								async: false,
+								data: wCalendarEnergyData,
+								success: function (result) {
 									var data = result.data[0];
 									var items = data.generation.items;
-									if(debugMode){ console.log("wCalendar:", items); }
+									if (debugMode) {
+										console.log("wCalendar:", items);
+									}
 
 									setWCalendarEnergyData(items);
 								},
@@ -685,26 +699,26 @@
 								timeout: pollingTimeout
 							});
 
-							function setWCalendarEnergyData(items){
+							function setWCalendarEnergyData(items) {
 								var calendarDays = $(".calWeatherDay");
 								for (var i = 0; i < calendarDays.length; i++) {
 
 
 									var matchMonth = false;
 									for (var d = 0; d < items.length; d++) {
-										var dataDay = parseInt((""+items[d].basetime).substring(6,8));
-										if( i+1 == dataDay){
-											if(items[d].energy > 10000 * 1000){
-												$("#calEnergyValue_" + (i+1)).html("<strong>" + numberComma((items[d].energy / 1000 * 1000).toFixed(1)) + "</strong><em>MWh</em>");
-											}else{
-												$("#calEnergyValue_" + (i+1)).html("<strong>" + numberComma((items[d].energy / 1000).toFixed(1)) + "</strong><em>kWh</em>");
+										var dataDay = parseInt(("" + items[d].basetime).substring(6, 8));
+										if (i + 1 == dataDay) {
+											if (items[d].energy > 10000 * 1000) {
+												$("#calEnergyValue_" + (i + 1)).html("<strong>" + numberComma((items[d].energy / 1000 * 1000).toFixed(1)) + "</strong><em>MWh</em>");
+											} else {
+												$("#calEnergyValue_" + (i + 1)).html("<strong>" + numberComma((items[d].energy / 1000).toFixed(1)) + "</strong><em>kWh</em>");
 											}
 										}
 									}
 									const calDate = new Date();
-									if(nowEnergyDay > 10000 * 1000) {
+									if (nowEnergyDay > 10000 * 1000) {
 										$("#calEnergyValue_" + (calDate.getDate())).html("<strong>" + numberComma((nowEnergyDay / 1000 * 1000).toFixed(1)) + "</strong><em>MWh</em>");
-									}else{
+									} else {
 										const date = new Date();
 										console.log(date.getDate());
 										$("#calEnergyValue_" + (calDate.getDate())).html("<strong>" + numberComma((nowEnergyDay / 1000).toFixed(1)) + "</strong><em>kWh</em>");
@@ -715,37 +729,41 @@
 							//당일 에너지 데이터 - polling 사용
 							let wCalendarEnergyDayUrl = apiURL + apiEnergySite;
 							let wCalendarEnergyDayData = {
-								sid : siteId,
-								startTime : "<c:out value="${startTime}"/>",
-								endTime : "<c:out value="${endTime }"/>",
-								interval : "day"
+								sid: siteId,
+								startTime: "<c:out value="${startTime}"/>",
+								endTime: "<c:out value="${endTime }"/>",
+								interval: "day"
 							};
 
 							(function wCalendarDayPoll() {
 								$.ajax({
-									url : wCalendarEnergyDayUrl,
-									type : "get",
-									async : false,
-									data : wCalendarEnergyDayData,
-									success: function(result) {
+									url: wCalendarEnergyDayUrl,
+									type: "get",
+									async: false,
+									data: wCalendarEnergyDayData,
+									success: function (result) {
 										var data = result.data[0];
 										var items = data.generation.items;
-										if(debugMode){ console.log("wCalendarDay:", items); }
+										if (debugMode) {
+											console.log("wCalendarDay:", items);
+										}
 
 										setWCalendarEnergyDayData(items);
 									},
 									dataType: "json",
-									complete: setTimeout(function() {wCalendarDayPoll()}, pollingTerm),
+									complete: setTimeout(function () {
+										wCalendarDayPoll()
+									}, pollingTerm),
 									timeout: pollingTimeout
 								})
 							})();
 
-							function setWCalendarEnergyDayData(items){
-								if(items.length > 0){
+							function setWCalendarEnergyDayData(items) {
+								if (items.length > 0) {
 
-									if(items[0].energy > 10000 * 1000){
+									if (items[0].energy > 10000 * 1000) {
 										$("#calEnergyValue_" + nowDay).html("<strong>" + numberComma((items[0].energy / 1000 * 1000).toFixed(1)) + "</strong><em>MWh</em>");
-									}else{
+									} else {
 										$("#calEnergyValue_" + nowDay).html("<strong>" + numberComma((items[0].energy / 1000).toFixed(1)) + "</strong><em>kWh</em>");
 									}
 								}
@@ -754,20 +772,22 @@
 							//해당월의 날씨 데이터 - polling 없음
 							let wCalendarWeatherUrl = apiURL + apiWeather;
 							let wCalendarWeatherData = {
-								sid : siteId,
-								startTime : "<c:out value="${startDate }"/>",
-								endTime : "<c:out value="${endDate }"/>",
-								interval : "day"
+								sid: siteId,
+								startTime: "<c:out value="${startDate }"/>",
+								endTime: "<c:out value="${endDate }"/>",
+								interval: "day"
 							};
 
 							$.ajax({
-								url : wCalendarWeatherUrl,
-								type : "get",
-								async : false,
-								data : wCalendarWeatherData,
-								success: function(result) {
+								url: wCalendarWeatherUrl,
+								type: "get",
+								async: false,
+								data: wCalendarWeatherData,
+								success: function (result) {
 									var items = result;
-									if(debugMode){ console.log("wCalendarWeatherData:", items); }
+									if (debugMode) {
+										console.log("wCalendarWeatherData:", items);
+									}
 
 									setWCalendarWeatherData(items);
 								},
@@ -775,7 +795,7 @@
 								timeout: pollingTimeout
 							});
 
-							function getWeatherIconClass(weatherId){
+							function getWeatherIconClass(weatherId) {
 								/*
                                 weather value 1 	> css w1
                                 weather value 20	> css w3
@@ -787,7 +807,7 @@
                                 */
 
 								var weatherIconClass = 1;
-								switch(weatherId){
+								switch (weatherId) {
 									case 1 :
 										weatherIconClass = "w1";
 										break;
@@ -813,14 +833,14 @@
 								return weatherIconClass
 							}
 
-							function setWCalendarWeatherData(items){
+							function setWCalendarWeatherData(items) {
 								var calendarDays = $(".calWeatherDay");
 								for (var i = 0; i < calendarDays.length; i++) {
-									if(i < items.length){
-										$("#calWeatherValue_" + (i+1)).text( (items[i].temperature).toFixed(1) + "℃");
+									if (i < items.length) {
+										$("#calWeatherValue_" + (i + 1)).text((items[i].temperature).toFixed(1) + "℃");
 
 										var weatherIconClass = getWeatherIconClass(items[i].sky);
-										$("#calWeatherIcon_" + (i+1)).html("<i class='ico_weather " + weatherIconClass + "'></i>");
+										$("#calWeatherIcon_" + (i + 1)).html("<i class='ico_weather " + weatherIconClass + "'></i>");
 									}
 								}
 							}
@@ -849,9 +869,9 @@
 									<script language="JavaScript">
 										var pieChart = Highcharts.chart('pie_chart', {
 											chart: {
-												marginTop:0,
-												marginLeft:0,
-												marginRight:0,
+												marginTop: 0,
+												marginLeft: 0,
+												marginRight: 0,
 												backgroundColor: 'transparent',
 												plotBorderWidth: 0,
 												plotShadow: false
@@ -867,8 +887,8 @@
 												text: '- kW', // 총용량 표기
 												align: 'center',
 												verticalAlign: 'middle',
-												y:10,
-												x:-20,
+												y: 10,
+												x: -20,
 												style: {
 													fontSize: '14px',
 													color: 'var(--color3)'
@@ -945,19 +965,19 @@
 													},
 													chartOptions: {
 														title: {
-															x:-30,
+															x: -30,
 															style: {
 																fontSize: '16px',
 															}
 														}
 													}
-												},{
+												}, {
 													condition: {
 														maxWidth: 481
 													},
 													chartOptions: {
 														title: {
-															x:0
+															x: 0
 														},
 														plotOptions: {
 															pie: {
@@ -1010,45 +1030,49 @@
 						//당일 에너지 데이터 - polling 사용
 						let statusSiteUrl = apiURL + apiStatusRawSite;
 						let statusSiteData = {
-							sid : siteId,
+							sid: siteId,
 						};
 
 
 						(function statusSitePoll() {
 							$.ajax({
-								url : statusSiteUrl,
-								type : "get",
-								async : false,
-								data : statusSiteData,
-								success: function(result) {
+								url: statusSiteUrl,
+								type: "get",
+								async: false,
+								data: statusSiteData,
+								success: function (result) {
 									var item = result;
-									if(debugMode){ console.log("statusSite:", item); }
+									if (debugMode) {
+										console.log("statusSite:", item);
+									}
 
 									setStatusSiteDataData(item);
 								},
 								dataType: "json",
-								complete: setTimeout(function() {statusSitePoll()}, pollingTerm),
+								complete: setTimeout(function () {
+									statusSitePoll()
+								}, pollingTerm),
 								timeout: pollingTimeout
 							})
 						})();
 
-						function setStatusSiteDataData(item){
+						function setStatusSiteDataData(item) {
 
 							var itemCapacity = item.capacity / 1000;
 							var itemDcPower = item.dcPower / 1000;
 							var itemAcPower = item.acPower / 1000;
 
-							$("#siteCapacity").text(  itemCapacity ? itemCapacity.toFixed(1)  : "-" );
-							$("#siteDcPower").text(  itemDcPower ? itemDcPower.toFixed(1)  : "-" );
-							$("#siteAcPower").text(  itemAcPower ? itemAcPower.toFixed(1)  : "-" );
+							$("#siteCapacity").text(itemCapacity ? itemCapacity.toFixed(1) : "-");
+							$("#siteDcPower").text(itemDcPower ? itemDcPower.toFixed(1) : "-");
+							$("#siteAcPower").text(itemAcPower ? itemAcPower.toFixed(1) : "-");
 
-							$("#sitePv").text(  itemCapacity ? itemCapacity.toFixed(1)  : "-" );
+							$("#sitePv").text(itemCapacity ? itemCapacity.toFixed(1) : "-");
 
-							var pie1Data = Math.round(item.efficiency ? item.efficiency : 0 );
+							var pie1Data = Math.round(item.efficiency ? item.efficiency : 0);
 							var pie2Data = 100 - pie1Data;
 
-							pieChart.series[0].setData([pie1Data , pie2Data]);
-							pieChart.setTitle( {text: itemAcPower + "kW"} );
+							pieChart.series[0].setData([pie1Data, pie2Data]);
+							pieChart.setTitle({text: itemAcPower + "kW"});
 						}
 					</script>
 
@@ -1067,10 +1091,10 @@
 							<script language="JavaScript">
 								var saChart2 = Highcharts.chart('schart2', {
 									chart: {
-										marginTop:40,
-										marginLeft:50,
-										marginRight:0,
-										height:301,
+										marginTop: 40,
+										marginLeft: 50,
+										marginRight: 0,
+										height: 301,
 										backgroundColor: 'transparent',
 										type: 'column'
 									},
@@ -1099,7 +1123,7 @@
 										}],
 										labels: {
 											align: 'center',
-											y:27, /* 그래프와 거리 */
+											y: 27, /* 그래프와 거리 */
 											style: {
 												color: '#a4aebf',
 												fontSize: '12px'
@@ -1130,8 +1154,8 @@
 											text: 'kWh',
 											align: 'low',
 											rotation: 0, /* 타이틀 기울기 */
-											y:25, /* 타이틀 위치 조정 */
-											x:10,
+											y: 25, /* 타이틀 위치 조정 */
+											x: 10,
 											style: {
 												color: '#a4aebf',
 												fontSize: '12px'
@@ -1139,7 +1163,7 @@
 										},
 										labels: {
 											overflow: 'justify',
-											x:-10, /* 그래프와의 거리 조정 */
+											x: -10, /* 그래프와의 거리 조정 */
 											style: {
 												color: '#a4aebf',
 												fontSize: '12px'
@@ -1154,10 +1178,10 @@
 									/* 범례 */
 									legend: {
 										enabled: true,
-										align:'right',
-										verticalAlign:'top',
-										x:5,
-										y:-10,
+										align: 'right',
+										verticalAlign: 'top',
+										x: 5,
+										y: -10,
 										itemStyle: {
 											color: '#a4aebf',
 											fontSize: '12px',
@@ -1166,8 +1190,8 @@
 										itemHoverStyle: {
 											color: '' /* 마우스 오버시 색 */
 										},
-										symbolPadding:3, /* 심볼 - 텍스트간 거리 */
-										symbolHeight:7 /* 심볼 크기 */
+										symbolPadding: 3, /* 심볼 - 텍스트간 거리 */
+										symbolHeight: 7 /* 심볼 크기 */
 									},
 
 									/* 옵션 */
@@ -1199,13 +1223,13 @@
 										type: 'column',
 										name: 'PV발전량',
 										color: '#26ccc8', /* PV발전량 */
-										tooltip: { valueSuffix: 'kWh' },
+										tooltip: {valueSuffix: 'kWh'},
 										data: []
-									},{
+									}, {
 										type: 'column',
 										name: '발전 예측',
 										color: '#878787', /* 발전 예측 */
-										tooltip: { valueSuffix: 'kWh' },
+										tooltip: {valueSuffix: 'kWh'},
 										data: []
 									}],
 
@@ -1217,7 +1241,7 @@
 											},
 											chartOptions: {
 												chart: {
-													marginLeft:75
+													marginLeft: 75
 												},
 												xAxis: {
 													labels: {
@@ -1242,8 +1266,8 @@
 													itemStyle: {
 														fontSize: '18px'
 													},
-													symbolPadding:5,
-													symbolHeight:10
+													symbolPadding: 5,
+													symbolHeight: 10
 												}
 											}
 										}]
@@ -1255,18 +1279,18 @@
 							<script>
 								let saChart2Url = apiURL + apiEnergySite;
 								let saChart2Data = {
-									sid : siteId,
-									startTime : "<c:out value="${startTime}"/>",
-									endTime : "<c:out value="${endTime}"/>",
-									interval : "hour"
+									sid: siteId,
+									startTime: "<c:out value="${startTime}"/>",
+									endTime: "<c:out value="${endTime}"/>",
+									interval: "hour"
 								};
 
 								let saChart2ForeUrl = apiURL + apiForecastingSite;
 								let saChart2ForeData = {
-									sid : siteId,
-									startTime : "<c:out value="${startTime}"/>",
-									endTime : "<c:out value="${endTime}"/>",
-									interval : "hour"
+									sid: siteId,
+									startTime: "<c:out value="${startTime}"/>",
+									endTime: "<c:out value="${endTime}"/>",
+									interval: "hour"
 								};
 
 								let saChart2EnergyItems1;
@@ -1274,65 +1298,73 @@
 
 								function saChart2Poll() {
 									$.ajax({
-										url : saChart2Url,
-										type : "get",
-										async : false,
-										data : saChart2Data,
-										success: function(result) {
+										url: saChart2Url,
+										type: "get",
+										async: false,
+										data: saChart2Data,
+										success: function (result) {
 											var data = result.data[0];
 											saChart2EnergyItems1 = data.generation.items;
-											if(debugMode){ console.log("saChart2:", saChart2EnergyItems1); }
+											if (debugMode) {
+												console.log("saChart2:", saChart2EnergyItems1);
+											}
 										},
 										dataType: "json",
-										complete: function() {saChart2ForePoll()},
+										complete: function () {
+											saChart2ForePoll()
+										},
 										timeout: pollingTimeout
 									})
 								}
 
 								function saChart2ForePoll() {
 									$.ajax({
-										url : saChart2ForeUrl,
-										type : "get",
-										async : false,
-										data : saChart2ForeData,
-										success: function(result) {
+										url: saChart2ForeUrl,
+										type: "get",
+										async: false,
+										data: saChart2ForeData,
+										success: function (result) {
 											var data = result.data[0];
 											saChart2EnergyItems2 = data.generation.items;
-											if(debugMode){ console.log("saChartFore2:", saChart2EnergyItems2); }
+											if (debugMode) {
+												console.log("saChartFore2:", saChart2EnergyItems2);
+											}
 
 											setSaChart2Data();
 										},
 										dataType: "json",
-										complete: setTimeout(function() {saChart2Poll()}, pollingTerm),
+										complete: setTimeout(function () {
+											saChart2Poll()
+										}, pollingTerm),
 										timeout: pollingTimeout
 									})
 								}
 
-								function setSaChart2Data(){
+								function setSaChart2Data() {
 									var totDayEnergy = 0;
 									var totDayForeEnergy = 0;
 
 									var energyData1 = [];
 									var energyData2 = [];
 									for (var i = 0; i < 24; i++) {
-										if(i < saChart2EnergyItems1.length){
+										if (i < saChart2EnergyItems1.length) {
 											energyData1[i] = [i, saChart2EnergyItems1[i].energy / 1000];
 											totDayEnergy += saChart2EnergyItems1[i].energy / 1000;
-										}else{
+										} else {
 											energyData1[i] = [i, null];
 										}
 									}
 
 									for (var i = 0; i < 24; i++) {
-										if(i < saChart2EnergyItems2.length){
+										if (i < saChart2EnergyItems2.length) {
 											energyData2[i] = [i, 1 * (saChart2EnergyItems2[i].energy / 1000).toFixed(2)];
 											totDayForeEnergy += saChart2EnergyItems2[i].energy / 1000;
-										}else{
+										} else {
 											energyData2[i] = [i, null];
 										}
 									}
 
-									if(debugMode){
+									if (debugMode) {
 										console.log("saChart2 energyData1:", energyData1);
 										console.log("saChart2 energyData2:", energyData2);
 									}
@@ -1344,21 +1376,21 @@
 									/*
                                     dayEnergyValue = <span>582</span>kWh
                                     */
-									if(nowEnergyDay > 10000){
+									if (nowEnergyDay > 10000) {
 										$("#dayEnergyValue").html("<span>" + numberComma((nowEnergyDay / 1000).toFixed(2)) + "</span> <em>kWh</em>");
-									}else{
-										if(nowEnergyDay != undefined) {
+									} else {
+										if (nowEnergyDay != undefined) {
 											$("#dayEnergyValue").html("<span>" + numberComma(nowEnergyDay.toFixed(2)) + "</span> <em>kWh</em>");
 										}
 									}
 
-									if(totDayForeEnergy > 10000){
+									if (totDayForeEnergy > 10000) {
 										$("#dayEnergyForeValue").html("<span>" + numberComma((totDayForeEnergy / 1000).toFixed(2)) + "</span> <em>MWh</em>");
-									}else{
+									} else {
 										$("#dayEnergyForeValue").html("<span>" + numberComma(totDayForeEnergy.toFixed(2)) + "</span> <em>kWh</em>");
 									}
 
-									if(nowBillingDay > 10000) {
+									if (nowBillingDay > 10000) {
 										$('#dayEnergyMoney').html('<span>' + numberComma(Math.floor(nowBillingDay / 1000)) + '</span> <em>천원</em>');
 									} else {
 										$('#dayEnergyMoney').html('<span>' + numberComma(nowBillingDay) + '</span> <em>원</em>');
@@ -1396,19 +1428,19 @@
 											<th>오늘</th>
 											<th>내일</th>
 											<th>모레</th>
-<%--											<th>목</th>--%>
-<%--											<th>금</th>--%>
-<%--											<th>토</th>--%>
-<%--											<th>일</th>--%>
+											<%--											<th>목</th>--%>
+											<%--											<th>금</th>--%>
+											<%--											<th>토</th>--%>
+											<%--											<th>일</th>--%>
 										</tr>
 										<tr>
 											<td><span id="weekIcon_1"></span></td>
 											<td><span id="weekIcon_2"></span></td>
 											<td><span id="weekIcon_3"></span></td>
-<%--											<td><span id="weekIcon_4"></span></td>--%>
-<%--											<td><span id="weekIcon_5"></span></td>--%>
-<%--											<td><span id="weekIcon_6"></span></td>--%>
-<%--											<td><span id="weekIcon_7"></span></td>--%>
+											<%--											<td><span id="weekIcon_4"></span></td>--%>
+											<%--											<td><span id="weekIcon_5"></span></td>--%>
+											<%--											<td><span id="weekIcon_6"></span></td>--%>
+											<%--											<td><span id="weekIcon_7"></span></td>--%>
 										</tr>
 										<tr>
 											<td id="weekTemp_1"></td>
@@ -1428,8 +1460,8 @@
 								<li><strong>풍향</strong> <span id="weekWindvelocity">-</span> &deg;</li>
 								<li><strong>풍속</strong> <span id="weekWindspeed"></span></li>
 								<li><strong>습도</strong> <span id="weekHum"></span></li>
-<%--								<li><strong>경사일사량</strong><span> - kWh/㎡․day</span></li>--%>
-<%--								<li><strong>수평일사량</strong><span> - kWh/㎡․day</span></li>--%>
+								<%--								<li><strong>경사일사량</strong><span> - kWh/㎡․day</span></li>--%>
+								<%--								<li><strong>수평일사량</strong><span> - kWh/㎡․day</span></li>--%>
 							</ul>
 						</div>
 
@@ -1438,20 +1470,22 @@
 							//해당월의 날씨 데이터 - polling 없음
 							let weekWeatherUrl = "http://iderms.enertalk.com:8443/weather/site";
 							let weekWeatherData = {
-								sid : siteId,
-								startTime : "<c:out value="${startWeek }"/>",
-								endTime : "<c:out value="${endWeek }"/>",
-								interval : "day"
+								sid: siteId,
+								startTime: "<c:out value="${startTime }"/>",
+								endTime: "<c:out value="${endWeek }"/>",
+								interval: "day"
 							};
 
 							$.ajax({
-								url : weekWeatherUrl,
-								type : "get",
-								async : false,
-								data : weekWeatherData,
-								success: function(result) {
+								url: weekWeatherUrl,
+								type: "get",
+								async: false,
+								data: weekWeatherData,
+								success: function (result) {
 									var items = result;
-									if(debugMode){ console.log("weekWeatherData:", items); }
+									if (debugMode) {
+										console.log("weekWeatherData:", items);
+									}
 
 									setWeekWeatherData(items);
 								},
@@ -1461,22 +1495,22 @@
 
 							function setWeekWeatherData(items) {
 								for (let i = 0; i < items.length; i++) {
-									$("#weekTemp_" + (i+1)).text( (items[i].temperature).toFixed(1));
+									$("#weekTemp_" + (i + 1)).text((items[i].temperature).toFixed(1));
 
 									let weatherIconClass = getWeatherIconClass(items[i].weather);
-									$("#weekIcon_" + (i+1)).html("<i class='ico_weather w" + weatherIconClass + "'></i>");
+									$("#weekIcon_" + (i + 1)).html("<i class='ico_weather w" + weatherIconClass + "'></i>");
 
-									if(i + 1 == nowWeek) {
-										$("#weekTemp").text( (items[i].temperature).toFixed(1) + "℃");
+									if (i == 0) {
+										$("#weekTemp").text((items[i].temperature).toFixed(1) + "℃");
 										$("#weekIcon").html("<i class='ico_weather w" + weatherIconClass + "'></i>");
-										$("#weekIcon").next('strong').html(' ('+siteLocation+') ');
-										$("#weekWindspeed").text( (items[i].wind_speed).toFixed(1) + " km/h");
-										$("#weekWindvelocity").text( items[i].wind_velocity);
-										$("#weekHum").text( (items[i].humidity).toFixed(1) + " %");
+										$("#weekIcon").next('strong').html(' (' + siteLocation + ') ');
+										$("#weekWindspeed").text((items[i].wind_speed).toFixed(1) + " km/h");
+										$("#weekWindvelocity").text(items[i].wind_velocity);
+										$("#weekHum").text((items[i].humidity).toFixed(1) + " %");
 									}
 
-									if(i == items.length - 1) {
-										$('.weather .stit').html( String(items[i].basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
+									if (i == items.length - 1) {
+										$('.weather .stit').html(String(items[i].basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
 									}
 								}
 							}
@@ -1503,27 +1537,27 @@
 					<div class="alarm_notice">
 						<ul>
 							<%--
-                            <li>
-                                <a href="javascript:list_detail_open('list3');">혜원솔라01 - 인버터1 발전 정지</a>
-                                <span>2018-08-12 11:41:26</span>
-                            </li>
-                            <li>
-                                <a href="#;">혜원솔라01 - 인버터1 발전 정지</a>
-                                <span>2018-08-12 11:41:26</span>
-                            </li>
-                            <li>
-                                <a href="#;">혜원솔라01 - 인버터1 발전 정지</a>
-                                <span>2018-08-12 11:41:26</span>
-                            </li>
-                            <li>
-                                <a href="#;">혜원솔라01 - 인버터1 발전 정지</a>
-                                <span>2018-08-12 11:41:26</span>
-                            </li>
-                            <li>
-                                <a href="#;">혜원솔라01 - 인버터1 발전 정지</a>
-                                <span>2018-08-12 11:41:26</span>
-                            </li>
-                            --%>
+							<li>
+								<a href="javascript:list_detail_open('list3');">혜원솔라01 - 인버터1 발전 정지</a>
+								<span>2018-08-12 11:41:26</span>
+							</li>
+							<li>
+								<a href="#;">혜원솔라01 - 인버터1 발전 정지</a>
+								<span>2018-08-12 11:41:26</span>
+							</li>
+							<li>
+								<a href="#;">혜원솔라01 - 인버터1 발전 정지</a>
+								<span>2018-08-12 11:41:26</span>
+							</li>
+							<li>
+								<a href="#;">혜원솔라01 - 인버터1 발전 정지</a>
+								<span>2018-08-12 11:41:26</span>
+							</li>
+							<li>
+								<a href="#;">혜원솔라01 - 인버터1 발전 정지</a>
+								<span>2018-08-12 11:41:26</span>
+							</li>
+							--%>
 						</ul>
 					</div>
 				</div>
@@ -1614,47 +1648,53 @@
 							<script type="text/javascript">
 								let invDeviceUrl = apiURL + apiStatusRaw;
 								let invDeviceData = {
-									dids : invDeviceIds.join(',')
+									dids: invDeviceIds.join(',')
 								};
 
 								let nowDeviceUrl = apiURL + '/energy/now/devices';
 								let nowDeviceData = {
-									dids : invDeviceIds.join(','),
-									metering_type : '2',
-									interval : 'day'
+									dids: invDeviceIds.join(','),
+									metering_type: '2',
+									interval: 'day'
 								};
 
 								(function invDevicePoll() {
 									$.ajax({
-										url : invDeviceUrl,
-										type : "get",
-										async : false,
-										data : invDeviceData,
-										success: function(result) {
+										url: invDeviceUrl,
+										type: "get",
+										async: false,
+										data: invDeviceData,
+										success: function (result) {
 											var items = result;
-											if(debugMode){ console.log("invDevice:", items); }
+											if (debugMode) {
+												console.log("invDevice:", items);
+											}
 
 											nowDeviceEnergy(items);
 										},
 										dataType: "json",
-										complete: setTimeout(function() {invDevicePoll()}, pollingTerm),
+										complete: setTimeout(function () {
+											invDevicePoll()
+										}, pollingTerm),
 										timeout: pollingTimeout
 									})
 								})();
 
 								function nowDeviceEnergy(items) {
 									$.ajax({
-										url : nowDeviceUrl,
-										type : "get",
-										async : false,
-										data : nowDeviceData,
-										success: function(result) {
+										url: nowDeviceUrl,
+										type: "get",
+										async: false,
+										data: nowDeviceData,
+										success: function (result) {
 											var energyItems = result.data;
-											if(debugMode){ console.log("energyItems:", energyItems); }
+											if (debugMode) {
+												console.log("energyItems:", energyItems);
+											}
 
-											$.each(items, function(i, el) {
-												$.map(energyItems, function(val, key) {
-													if(el.did == key) {
+											$.each(items, function (i, el) {
+												$.map(energyItems, function (val, key) {
+													if (el.did == key) {
 														el.nowEnergy = val.energy;
 													}
 												});
@@ -1666,7 +1706,7 @@
 									})
 								};
 
-								function setInvDeviceData(items){
+								function setInvDeviceData(items) {
 
 									var countDevice = items.length;
 									var countStatus1 = 0;
@@ -1678,8 +1718,8 @@
 									var totGenPower = 0;
 
 									var rowHtml = "";
-									$.each(items, function(j, el) {
-										if(el.data.length > 0) {
+									$.each(items, function (j, el) {
+										if (el.data.length > 0) {
 											countDevice = el.data.length;
 											for (var i = 0; i < el.data.length; i++) {
 												console.log(el.data[i]);
@@ -1694,17 +1734,17 @@
 
 												var statusTxt = "-";
 												var statusClass = "";
-												if(el.data[i].operation == 1){
+												if (el.data[i].operation == 1) {
 													statusTxt = "정상";
 													statusClass = "flag1";
 
 													countStatus1++;
-												}else if(el.data[i].operation == 2){
+												} else if (el.data[i].operation == 2) {
 													statusTxt = "경고";
 													statusClass = "flag2";
 
 													countStatus2++;
-												}else if(el.data[i].operation == 3){
+												} else if (el.data[i].operation == 3) {
 													statusTxt = "이상";
 													statusClass = "flag3";
 
@@ -1718,14 +1758,14 @@
 												var itemTotalGenPower = el.nowEnergy / 1000;
 
 												rowHtml += ""
-														+"<tr class='flag1'>"
-														+"	<td>" + statusTxt + "</td>"
-														+"	<td>" + itemDname + "</td>"
-														+"	<td>" + (itemDcPower ? itemDcPower.toFixed(1) : "-") + " kW</td>"
-														+"	<td>" + (itemAcPower ? itemAcPower.toFixed(1) : "-") + " kW</td>"
-														+"	<td>" + (itemEfficiency ? itemEfficiency.toFixed(1) : "-") + " %</td>"
-														+"	<td>" + (itemTotalGenPower ? itemTotalGenPower.toFixed(1) : "-") + "  kWh</td>"
-														+"</tr>";
+													+ "<tr class='flag1'>"
+													+ "	<td>" + statusTxt + "</td>"
+													+ "	<td>" + itemDname + "</td>"
+													+ "	<td>" + (itemDcPower ? itemDcPower.toFixed(1) : "-") + " kW</td>"
+													+ "	<td>" + (itemAcPower ? itemAcPower.toFixed(1) : "-") + " kW</td>"
+													+ "	<td>" + (itemEfficiency ? itemEfficiency.toFixed(1) : "-") + " %</td>"
+													+ "	<td>" + (itemTotalGenPower ? itemTotalGenPower.toFixed(1) : "-") + "  kWh</td>"
+													+ "</tr>";
 
 												totDcPower += el.data[i].dcPower;
 												totAcPower += el.data[i].acPower;
@@ -1745,16 +1785,16 @@
 									console.log(totEfficiency);
 									console.log(totGenPower);
 
-									if(countDevice > 0){
+									if (countDevice > 0) {
 										totDcPower = totDcPower / 1000;
 										totAcPower = totAcPower / 1000;
 										var avgEfficiency = totEfficiency / countDevice;
 										totGenPower = totGenPower / 1000;
 
-										$("#avgDcPower").text(  totDcPower ? totDcPower.toFixed(1)  : "-" );
-										$("#avgAcPower").text( totAcPower ? totAcPower.toFixed(1) : "-");
-										$("#avgEfficiency").text( avgEfficiency ? avgEfficiency.toFixed(1) : "-");
-										$("#avgGenPower").text( totGenPower ? totGenPower.toFixed(1) : "-");
+										$("#avgDcPower").text(totDcPower ? totDcPower.toFixed(1) : "-");
+										$("#avgAcPower").text(totAcPower ? totAcPower.toFixed(1) : "-");
+										$("#avgEfficiency").text(avgEfficiency ? avgEfficiency.toFixed(1) : "-");
+										$("#avgGenPower").text(totGenPower ? totGenPower.toFixed(1) : "-");
 									}
 
 									$("#invDevices").html(rowHtml);

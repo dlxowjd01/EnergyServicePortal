@@ -1,7 +1,9 @@
 package kr.co.esp.common;
 
+import egovframework.com.cmm.service.EgovProperties;
 import kr.co.esp.common.util.UserUtil;
 import kr.co.esp.system.service.CmpyGrpSiteMngService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -13,6 +15,9 @@ import java.util.*;
 
 public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
+	@Value("${git.commit.id}")
+	private String commitId;
+
 	@Resource(name="cmpyGrpSiteMngService")
 	private CmpyGrpSiteMngService cmpyGrpSiteMngService;
 	
@@ -23,7 +28,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 		System.out.println("++++++++++++++++PreLoadInterceptor start++++++++++++++++");
 		
 		Map<String, Object> userInfo = UserUtil.getUserInfo(request);
-		
+
 		// 상단 사이트 목록 조회
 		if (userInfo != null) {
 			Integer userIdx = (Integer) userInfo.get("user_idx");
@@ -50,7 +55,6 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			List<Map<String, Object>> userSiteList = cmpyGrpSiteMngService.getUserSiteList(param);
 			request.setAttribute("userGroupList", userGroupList);
 			request.setAttribute("userSiteList", userSiteList);
-			System.out.println("userGroupList:{"+userGroupList+"}");
 		}
 
 		String siteId = (request.getParameter("siteId") != null && !"".equals(request.getParameter("siteId"))) ? request.getParameter("siteId") : (String) request.getSession().getAttribute("selViewSiteId");
@@ -78,7 +82,9 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		sdf.setTimeZone(timeZone);
 
+		String gitVersion = EgovProperties.getGitProperty("git.commit.id.abbrev");
 		request.setAttribute("nowTime", sdf.format(new Date()));
+		request.setAttribute("gitVersion", gitVersion);
 		return super.preHandle(request, response, handler);
 	}
 	

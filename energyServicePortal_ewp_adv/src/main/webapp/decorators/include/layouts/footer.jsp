@@ -6,11 +6,11 @@
 <%--					<a href="/board/faq.do"><spring:message code="ewp.bot.FAQ"/></a>--%>
 <%--					<a href="/board/refer.do">자료실</a>--%>
 <%--				</div>--%>
-				<div class="copyright fr">
+				<div class="copyright fr ml20">
 					COPYRIGHT &copy; 2020 S-Power Co, Ltd. All rights reserved.
 				</div>
 				<div class="copyright fr">
-					Version 0.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					Build No. ${gitVersion}
 				</div>
 			</footer>
 			

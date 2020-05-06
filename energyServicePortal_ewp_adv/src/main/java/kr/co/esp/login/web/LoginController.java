@@ -59,7 +59,6 @@ public class LoginController {
 		obj.put("login_id", param.get("login_id"));
 		obj.put("password", param.get("password"));
 
-
 		Map<String, Object> userInfoMap = new HashMap<String, Object>();
 		Map<String, Object> tokenMap = RestApiUtil.post("/auth/login", obj.toString());
 		if(tokenMap != null && !tokenMap.isEmpty()) {
@@ -68,6 +67,8 @@ public class LoginController {
 			Map<String, Object> meMap = RestApiUtil.get("/auth/me", "", (String) userInfoMap.get("token"));
 			if(meMap.get("data") != null) {
 				userInfoMap.putAll((Map<String, Object>) meMap.get("data"));
+				String auth_type = String.valueOf(userInfoMap.get("role"));
+				userInfoMap.put("auth_type", auth_type);
 			}
 
 			Map<String, Object> siteMap = RestApiUtil.get("/auth/me/sites", "", (String) userInfoMap.get("token"));

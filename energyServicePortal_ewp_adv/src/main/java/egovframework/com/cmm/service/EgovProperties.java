@@ -1,21 +1,14 @@
 package egovframework.com.cmm.service;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
 import egovframework.com.cmm.EgovWebUtil;
 import egovframework.com.cmm.util.EgovResourceCloseHelper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
+
+import java.io.*;
+import java.util.*;
 
 /**
  *  Class Name : EgovProperties.java
@@ -50,6 +43,7 @@ public class EgovProperties {
 	//public static final String RELATIVE_PATH_PREFIX = EgovProperties.class.getProtectionDomain().getCodeSource().getLocation().getPath().substring(0,EgovProperties.class.getProtectionDomain().getCodeSource().getLocation().getPath().indexOf("WEB-INF/classes/")+"WEB-INF/classes/".length())+"egovframework/";
 
 	public static final String GLOBALS_PROPERTIES_FILE = RELATIVE_PATH_PREFIX + "egovProps" + FILE_SEPARATOR + "globals.properties";
+	public static final String GIT_PROPERTIES_FILE = RELATIVE_PATH_PREFIX + "egovProps" + FILE_SEPARATOR + "git.properties";
 
 	/**
 	 * 인자로 주어진 문자열을 Key값으로 하는 상대경로 프로퍼티 값을 절대경로로 반환한다(Globals.java 전용)
@@ -218,5 +212,44 @@ public class EgovProperties {
 		}
 
 		return keyList;
+	}
+
+	/**
+	 * 깃 관련 정보를 조회하는 프로퍼티
+	 *
+	 * @return
+	 */
+	public static String getGitProperty(String keyName) {
+		String value = "";
+		FileInputStream fis = null;
+		try {
+			Properties props = new Properties();
+
+			fis = new FileInputStream(EgovWebUtil.filePathBlackList(GIT_PROPERTIES_FILE));
+
+			props.load(new BufferedInputStream(fis));
+			if (props.getProperty(keyName) == null) {
+				return "";
+			}
+			value = props.getProperty(keyName).trim();
+		} catch (FileNotFoundException fne) {
+			LOGGER.debug("Property file not found.", fne);
+			throw new RuntimeException("Property file not found", fne);
+		} catch (IOException ioe) {
+			LOGGER.debug("Property file IO exception", ioe);
+			throw new RuntimeException("Property file IO exception", ioe);
+		} finally {
+			EgovResourceCloseHelper.close(fis);
+		}
+
+		return value;
+	}
+
+	public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
+		PropertySourcesPlaceholderConfigurer propsConfig = new PropertySourcesPlaceholderConfigurer();
+		propsConfig.setLocation(new ClassPathResource("git.properties"));
+		propsConfig.setIgnoreResourceNotFound(true);
+		propsConfig.setIgnoreUnresolvablePlaceholders(true);
+		return propsConfig;
 	}
 }
