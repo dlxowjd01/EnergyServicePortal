@@ -136,13 +136,18 @@ public class DashboardController {
 
 		Calendar startDate = Calendar.getInstance(timeZone, Locale.KOREAN); /* TODO : 테스트 일자조정  startDate.set(Calendar.DATE, 2); */
 		Calendar endDate = Calendar.getInstance(timeZone, Locale.KOREAN); /* TODO : 테스트 일자조정  endDate.set(Calendar.DATE, 2); */
+		Calendar beforeDate = Calendar.getInstance(timeZone, Locale.KOREAN); /* TODO : 테스트 일자조정  endDate.set(Calendar.DATE, 2); */
 
 		//2020.04.12 000000 ~ 2020.04.12 000000
 		startDate.set(nowYear, nowMonth, nowDay, 0, 0, 0);
 		endDate.set(nowYear, nowMonth, nowDay, 0, 0, 0);
+		beforeDate.set(nowYear, nowMonth, nowDay, 0, 0, 0);
 		endDate.add(Calendar.DATE, 1); //FIXME e.g. 2020.04.12 000000 ~ 2020.04.13 000000 일단위 데이터
+		beforeDate.add(Calendar.DATE, -1);
+
 		model.addAttribute("startTime", sdf.format(startDate.getTime()));
 		model.addAttribute("endTime", sdf.format(endDate.getTime()));
+		model.addAttribute("beforeTime", sdf.format(beforeDate.getTime()));
 
 		//e.g. 2020.03.30 000000 ~ 2020.04.05 000000 (today 2020.04.02)
 		startDate.set(nowYear, nowMonth, nowDay, 0, 0, 0);

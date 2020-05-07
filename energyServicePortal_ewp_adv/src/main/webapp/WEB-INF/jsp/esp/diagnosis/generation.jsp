@@ -889,11 +889,7 @@
 							let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.name + '</span></td>');
 							$.each(grid.data, function(w, data) {
 								let $dataTd = $('<td>');
-								if(isNaN(data)) {
-									$dataTd.html(data);
-								} else {
-									$dataTd.html(numberComma(data.toFixed(2)));
-								}
+								$dataTd.html(data);
 								$dataTr.append($dataTd);
 							});
 							tableTemp.find('tbody').append($dataTr);
@@ -952,11 +948,7 @@
 								let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.name + '</span></td>');
 								$.each(grid.data, function(w, data) {
 									let $dataTd = $('<td>');
-									if(isNaN(data)) {
-										$dataTd.html(data);
-									} else {
-										$dataTd.html(numberComma(data.toFixed(2)));
-									}
+									$dataTd.html(data);
 									$dataTr.append($dataTd);
 								});
 								tableTemp.find('tbody').append($dataTr);
@@ -985,11 +977,7 @@
 							let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.name + '</span></td>');
 							$.each(grid.data, function(w, data) {
 								let $dataTd = $('<td>');
-								if(isNaN(data)) {
-									$dataTd.html(data);
-								} else {
-									$dataTd.html(numberComma(data.toFixed(2)));
-								}
+								$dataTd.html(data);
 								$dataTr.append($dataTd);
 							});
 							tableTemp.find('tbody').append($dataTr);
@@ -1048,11 +1036,7 @@
 								let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.name + '</span></td>');
 								$.each(grid.data, function(w, data) {
 									let $dataTd = $('<td>');
-									if(isNaN(data)) {
-										$dataTd.html(data);
-									} else {
-										$dataTd.html(numberComma(data.toFixed(2)));
-									}
+									$dataTd.html(data);
 									$dataTr.append($dataTd);
 								});
 								tableTemp.find('tbody').append($dataTr);
@@ -1081,11 +1065,7 @@
 							let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.name + '</span></td>');
 							$.each(grid.data, function(w, data) {
 								let $dataTd = $('<td>');
-								if(isNaN(data)) {
-									$dataTd.html(data);
-								} else {
-									$dataTd.html(numberComma(data.toFixed(2)));
-								}
+								$dataTd.html(data);
 								$dataTr.append($dataTd);
 							});
 							tableTemp.find('tbody').append($dataTr);
@@ -1152,14 +1132,15 @@
 							$.each(arr, function(k, elk) {
 								let basetime = String(elk.basetime);
 								if(basetime.match(stnd)) {
-									timeValue = elk.energy;
+									timeValue = displayNumberFixedUnit(elk.energy, 'Wh', 'kWh', 2);
 									total += elk.energy;
 								}
 							});
 
-							arrDevice.push(timeValue);
+							arrDevice.push(timeValue[0]);
 						}
-						arrDevice.push(total); //합계.
+						let totalArr = displayNumberFixedUnit(total, 'Wh', 'kWh', 2);
+						arrDevice.push(totalArr[0]); //합계.
 
 						let dataName = '';
 						if(key == 'actual') {
@@ -1189,12 +1170,12 @@
 					$.each(arr, function(k, elk) {
 						let basetime = String(elk.basetime);
 						if(basetime.match(stnd)) {
-							timeValue = elk.energy;
+							timeValue = displayNumberFixedUnit(elk.energy, 'Wh', 'kWh', 2);
 							total += elk.energy;
 						}
 					});
 
-					arrDevice.push(timeValue);
+					arrDevice.push(timeValue[0]);
 				});
 			}
 		});
@@ -1481,8 +1462,26 @@
 	}
 
 	function summary(total, type) {
-		let refine = displayNumberFixedUnit(total, 'Wh', 'kWh', 2)
-		$('.value_num').eq(type).empty().append('<span class="num">' + refine[0] + '</span>' + refine[1]);
+		let loopCnt = 0;
+		for(let k = 0; k < 4; k++) {
+			if(String(Math.round(total)).length > 3) {
+				total = total / 1000
+				loopCnt++;
+			}
+		}
+
+		let unit = 'Wh';
+		if(loopCnt == 1) {
+			unit = 'kWh';
+		} else if(loopCnt == 2) {
+			unit = 'MWh';
+		} else if(loopCnt == 3) {
+			unit = 'GWh';
+		} else {
+			unit = 'Wh';
+		}
+
+		$('.value_num').eq(type).empty().append('<span class="num">' + total.toFixed(2) + '</span>' + unit);
 	}
 
 	function dateFormat(val) {

@@ -134,9 +134,17 @@ const displayNumberFixedUnit = function(input_num, input_unit, fixed_unit, num_f
 				if(fixed_unit.startsWith(v)) {
 					input_num = input_num / Math.pow(1000, k);
 					if(input_unit.endsWith('h')) {
-						rtnValue = [numberComma((input_num).toFixed(num_frac)), v + 'h'];
+						if(Math.floor(input_num * 100) == 0) {
+							rtnValue = [0, v + 'h'];
+						} else {
+							rtnValue = [numberComma((input_num).toFixed(num_frac)), v + 'h'];
+						}
 					} else {
-						rtnValue = [numberComma((input_num).toFixed(num_frac)), v];
+						if(Math.floor(input_num * 100) == 0) {
+							rtnValue = [0, v + 'h'];
+						} else {
+							rtnValue = [numberComma((input_num).toFixed(num_frac)), v];
+						}
 					}
 					return rtnValue;
 				}
@@ -145,7 +153,11 @@ const displayNumberFixedUnit = function(input_num, input_unit, fixed_unit, num_f
 			$.each(moneyUnit, function(i, el) {
 				if(fixed_unit == el.unit) {
 					input_num = input_num / el.chipher;
-					rtnValue = [numberComma((input_num).toFixed(num_frac)), el.unit];
+					if(Math.floor(input_num * 100) == 0) {
+						rtnValue = [0, el.unit];
+					} else {
+						rtnValue = [numberComma((input_num).toFixed(num_frac)), el.unit];
+					}
 					return false;
 				}
 			});

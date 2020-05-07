@@ -1323,6 +1323,12 @@
 									interval: "hour"
 								};
 
+								let saChart2NowData = {
+									sids: siteId,
+									metering_type: ' ',
+									interval: 'hour'
+								};
+
 								let saChart2EnergyItems1;
 								let saChart2EnergyItems2;
 
@@ -1341,11 +1347,42 @@
 										},
 										dataType: "json",
 										complete: function () {
-											saChart2ForePoll()
+											saChart2PollNow()
 										},
 										timeout: pollingTimeout
 									})
 								}
+
+								function saChart2PollNow() {
+									$.ajax({
+										url: chargeNowUrl,
+										type: "get",
+										async: false,
+										data: saChart2NowData,
+										success: function (result) {
+											$.each(result.data, function (i, el) {
+												let time = String(el.start).substring(0, 10) + '0000';
+												let lastTime = saChart2EnergyItems1[saChart2EnergyItems1.length - 1].basetime;
+												if (time > lastTime) {
+													saChart2EnergyItems1.push({
+														basetime: time,
+														cenergy: 0,
+														cmoney: 0,
+														denergy: 0,
+														dmoney: 0,
+														energy: el.energy,
+														money: el.moeny
+													});
+												}
+											});
+										},
+										dataType: "json",
+										complete: function () {
+											saChart2ForePoll()
+										},
+									});
+								}
+
 
 								function saChart2ForePoll() {
 									$.ajax({
@@ -1506,6 +1543,13 @@
 								interval: "day"
 							};
 
+							let weekWeatherTimeData = {
+								sid: siteId,
+								startTime: "<c:out value="${beforeTime }"/>",
+								endTime: "<c:out value="${endTime}"/>",
+								interval: "hour"
+							};
+
 							$.ajax({
 								url: weekWeatherUrl,
 								type: "get",
@@ -1523,25 +1567,45 @@
 								timeout: pollingTimeout
 							});
 
+							$.ajax({
+								url: weekWeatherUrl,
+								type: "get",
+								async: false,
+								data: weekWeatherTimeData,
+								success: function (result) {
+									let items = result;
+
+									if (items.length > 0) {
+										let tempArray = new Array();
+										$.each(items, function(i, el) {
+											if(el.observed != undefined && el.observed) {
+												tempArray.push(el);
+											}
+										});
+
+										if(tempArray.length > 0) {
+											let weatherIconClass = getWeatherIconClass(tempArray[tempArray.length - 1].sky);
+											$("#weekTemp").text((tempArray[tempArray.length - 1].temperature).toFixed(1) + "℃");
+											$("#weekIcon").html("<i class='ico_weather " + weatherIconClass + "'></i>");
+											$("#weekIcon").next('strong').html(' (' + siteLocation + ') ');
+											$("#weekWindspeed").text((tempArray[tempArray.length - 1].wind_speed).toFixed(1) + " km/h");
+											$("#weekWindvelocity").text(tempArray[tempArray.length - 1].wind_velocity);
+											$("#weekHum").text((tempArray[tempArray.length - 1].humidity).toFixed(1) + " %");
+
+											$('.weather .stit').html(String(tempArray[tempArray.length - 1].basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
+										}
+									}
+								},
+								dataType: "json",
+								timeout: pollingTimeout
+							});
+
 							function setWeekWeatherData(items) {
 								for (let i = 0; i < items.length; i++) {
 									$("#weekTemp_" + (i + 1)).text((items[i].temperature).toFixed(1));
 
-									let weatherIconClass = getWeatherIconClass(items[i].weather);
-									$("#weekIcon_" + (i + 1)).html("<i class='ico_weather w" + weatherIconClass + "'></i>");
-
-									if (i == 0) {
-										$("#weekTemp").text((items[i].temperature).toFixed(1) + "℃");
-										$("#weekIcon").html("<i class='ico_weather w" + weatherIconClass + "'></i>");
-										$("#weekIcon").next('strong').html(' (' + siteLocation + ') ');
-										$("#weekWindspeed").text((items[i].wind_speed).toFixed(1) + " km/h");
-										$("#weekWindvelocity").text(items[i].wind_velocity);
-										$("#weekHum").text((items[i].humidity).toFixed(1) + " %");
-									}
-
-									if (i == items.length - 1) {
-										$('.weather .stit').html(String(items[i].basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
-									}
+									let weatherIconClass = getWeatherIconClass(items[i].sky);
+									$("#weekIcon_" + (i + 1)).html("<i class='ico_weather " + weatherIconClass + "'></i>");
 								}
 							}
 						</script>
@@ -1562,9 +1626,9 @@
 			type: 'get',
 			data: alarmData,
 			success: function (result) {
-				if(result.length > 0) {
+				if (result.length > 0) {
 					$('.a_alert em').text(result.length);
-					$.each(result, function(i, el){
+					$.each(result, function (i, el) {
 						let localTime = String(el.localtime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6')
 						let str = `<li>
 										<a href="#">${'${el.site_name}'} - ${'${el.device_name}'} ${'${el.message}'}</a>
