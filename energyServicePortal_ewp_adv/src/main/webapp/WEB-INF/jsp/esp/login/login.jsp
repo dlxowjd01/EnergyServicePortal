@@ -517,7 +517,14 @@
 	<div id="wrapper">
 		<div id="page-wrapper">
 			<nav class="clear">
-				<div class="nav_brand"><a href="/">ENCORED</a></div>
+				<c:choose>
+					<c:when test="${pageContext.request.serverName eq 'spower.iderms.ai' or pageContext.request.serverName eq '13.114.199.169' or pageContext.request.serverName eq 'localhost'}">
+						<div class="nav_brand spower"><a href="#">Spower</a></div>
+					</c:when>
+					<c:otherwise>
+						<div class="nav_brand"><a href="#">Encored</a></div>
+					</c:otherwise>
+				</c:choose>
 				<!-- 테마 선택 -->
 				<div class="nav_theme">
 					<div class="switcher">

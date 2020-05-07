@@ -73,32 +73,37 @@ public class LoginController {
 
 		Map<String, Object> userInfoMap = new HashMap<String, Object>();
 		Map<String, Object> tokenMap = RestApiUtil.post("/auth/login", obj.toString());
-		if(tokenMap != null && !tokenMap.isEmpty()) {
+		if(200 == (int) tokenMap.get("code")) {
 			userInfoMap.putAll((Map<String, Object>) tokenMap.get("data"));
 
 			Map<String, Object> meMap = RestApiUtil.get("/auth/me", "", (String) userInfoMap.get("token"));
-			if(meMap.get("data") != null) {
+			if(200 == (int) meMap.get("code")) {
 				userInfoMap.putAll((Map<String, Object>) meMap.get("data"));
 				String auth_type = String.valueOf(userInfoMap.get("role"));
 				userInfoMap.put("auth_type", auth_type);
+			} else {
+				userInfoMap.put("auth_type", "");
 			}
 
 			Map<String, Object> siteMap = RestApiUtil.get("/auth/me/sites", "", (String) userInfoMap.get("token"));
-			if(siteMap.get("data") != null) {
+			if(200 == (int) siteMap.get("code")) {
 				userInfoMap.put("siteList", siteMap.get("data"));
 			}
 
 			Map<String, Object> groupMap = RestApiUtil.get("/auth/me/groups", "", (String) userInfoMap.get("token"));
-			if(groupMap.get("data") != null) {
+			if(200 == (int) groupMap.get("code")) {
 				userInfoMap.putAll((Map<String, Object>) groupMap.get("data"));
 			}
 
-			if(userInfoMap.get("role") == null && !"".equals(userInfoMap.get("role"))) {
+			if(userInfoMap.get("auth_type") == null && "".equals(userInfoMap.get("auth_type"))) {
 				model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", locale));
 				return "esp/login/login";
-			} else if((int) userInfoMap.get("role") == 1 || (int) userInfoMap.get("role") == 2) {
+			} else if("1".equals(userInfoMap.get("auth_type"))) {
 				session.setAttribute(UserUtil.USER_SESSION_ID, userInfoMap);
 				return "redirect:/dashboard/gmain.do";
+			} else if("2".equals(userInfoMap.get("auth_type"))) {
+				session.setAttribute(UserUtil.USER_SESSION_ID, userInfoMap);
+				return "redirect:/dashboard/smain.do";
 			} else {
 				model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", locale));
 				return "esp/login/login";

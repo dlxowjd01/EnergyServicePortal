@@ -3,7 +3,6 @@ package kr.co.esp.common;
 import egovframework.com.cmm.service.EgovProperties;
 import kr.co.esp.common.util.UserUtil;
 import kr.co.esp.system.service.CmpyGrpSiteMngService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -15,18 +14,14 @@ import java.util.*;
 
 public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
-	@Value("${git.commit.id}")
-	private String commitId;
-
-	@Resource(name="cmpyGrpSiteMngService")
+	@Resource(name = "cmpyGrpSiteMngService")
 	private CmpyGrpSiteMngService cmpyGrpSiteMngService;
-	
+
 	// controller보다 먼저 수행
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-			throws Exception {
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		System.out.println("++++++++++++++++PreLoadInterceptor start++++++++++++++++");
-		
+
 		Map<String, Object> userInfo = UserUtil.getUserInfo(request);
 
 		// 상단 사이트 목록 조회
@@ -55,10 +50,13 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			List<Map<String, Object>> userSiteList = cmpyGrpSiteMngService.getUserSiteList(param);
 			request.setAttribute("userGroupList", userGroupList);
 			request.setAttribute("userSiteList", userSiteList);
+		} else {
+			response.sendRedirect("/login.do");
+			return false;
 		}
 
 		String siteId = (request.getParameter("siteId") != null && !"".equals(request.getParameter("siteId"))) ? request.getParameter("siteId") : (String) request.getSession().getAttribute("selViewSiteId");
-		System.out.println("선택된 사이트id는   "+siteId);
+		System.out.println("선택된 사이트id는   " + siteId);
 		if (siteId != null) {
 			Map<String, Object> param = new HashMap<String, Object>();
 			param.put("siteId", siteId);
@@ -76,22 +74,22 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			request.removeAttribute("selViewSiteId");
 			request.removeAttribute("selViewSite");
 		}
-		
+		return super.preHandle(request, response, handler);
+	}
+
+	@Override
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView mav) throws Exception {
+		System.out.println("++++++++++++++++PreLoadInterceptor end++++++++++++++++");
+
+
 		// 상단 시간 초기값 -- 서울로 세팅
 		TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		sdf.setTimeZone(timeZone);
 
 		String gitVersion = EgovProperties.getGitProperty("git.commit.id.abbrev");
-		request.setAttribute("nowTime", sdf.format(new Date()));
-		request.setAttribute("gitVersion", gitVersion);
-		return super.preHandle(request, response, handler);
-	}
-	
-	@Override
-	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-			ModelAndView modelAndView) throws Exception {
-		System.out.println("++++++++++++++++PreLoadInterceptor end++++++++++++++++");
-		super.postHandle(request, response, handler, modelAndView);
+		mav.addObject("nowTime", sdf.format(new Date()));
+		mav.addObject("gitVersion", gitVersion);
+		super.postHandle(request, response, handler, mav);
 	}
 }

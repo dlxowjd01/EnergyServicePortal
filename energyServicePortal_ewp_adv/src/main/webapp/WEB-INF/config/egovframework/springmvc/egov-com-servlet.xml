@@ -124,11 +124,6 @@
 		<mvc:interceptor>
 			<mvc:mapping path="/*/*.do"/>
 			<mvc:mapping path="/*/*.do?**"/>
-			<bean class="kr.co.esp.common.SessionCheckInterceptor"/>
-		</mvc:interceptor>
-		<mvc:interceptor>
-			<mvc:mapping path="/*/*.do"/>
-			<mvc:mapping path="/*/*.do?**"/>
 			<bean class="kr.co.esp.common.PreLoadInterceptor"/>
 		</mvc:interceptor>
 		<mvc:interceptor>

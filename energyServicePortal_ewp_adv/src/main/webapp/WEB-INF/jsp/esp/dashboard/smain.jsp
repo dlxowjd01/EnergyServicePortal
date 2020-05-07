@@ -1521,6 +1521,31 @@
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+		let alarmData = {
+			sids: siteId,
+			startTime: '${startTime}',
+			endTime: '${endTime}'
+		}
+		$.ajax({
+			url: apiURL + '/alarms',
+			type: 'get',
+			data: alarmData,
+			success: function (result) {
+				if(result.length > 0) {
+					$('.a_alert em').text(result.length);
+					$.each(result, function(i, el){
+						let localTime = String(el.localtime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6')
+						let str = `<li>
+										<a href="#">${'${el.site_name}'} - ${'${el.device_name}'} ${'${el.message}'}</a>
+										<span>${'${localTime}'}</span>
+									</li>`
+						$('.alarm_notice ul').append(str);
+					});
+				}
+			}
+		});
+	</script>
 	<div class="col-lg-4">
 		<div class="row">
 			<div class="col-sm-12">
@@ -1531,33 +1556,11 @@
 							<em>0</em>
 						</div>
 						<div class="a_warning clear">
-							<a href="#" class="btn cancel_btn">상세보기</a>
+							<a href="/history/alarmHistory.do" class="btn cancel_btn">상세보기</a>
 						</div>
 					</div>
 					<div class="alarm_notice">
 						<ul>
-							<%--
-							<li>
-								<a href="javascript:list_detail_open('list3');">혜원솔라01 - 인버터1 발전 정지</a>
-								<span>2018-08-12 11:41:26</span>
-							</li>
-							<li>
-								<a href="#;">혜원솔라01 - 인버터1 발전 정지</a>
-								<span>2018-08-12 11:41:26</span>
-							</li>
-							<li>
-								<a href="#;">혜원솔라01 - 인버터1 발전 정지</a>
-								<span>2018-08-12 11:41:26</span>
-							</li>
-							<li>
-								<a href="#;">혜원솔라01 - 인버터1 발전 정지</a>
-								<span>2018-08-12 11:41:26</span>
-							</li>
-							<li>
-								<a href="#;">혜원솔라01 - 인버터1 발전 정지</a>
-								<span>2018-08-12 11:41:26</span>
-							</li>
-							--%>
 						</ul>
 					</div>
 				</div>

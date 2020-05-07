@@ -86,27 +86,41 @@ public class DashboardController {
 	public String smain(HttpServletRequest request, HttpSession session, Model model) {
 
 		Map<String, Object> userInfo = UserUtil.getUserInfo(session);
-		if (userInfo == null) {
-			userInfo = new HashMap<String, Object>();
-		}
-		logger.debug("userInfo : {}", userInfo);
+		System.out.println(userInfo);
 
-		model.addAttribute("userInfo", userInfo);
-
-		String linkSiteName = request.getParameter("linkSiteName");
-
+		String siteId = "";
+		String siteNm = "";
 		if (request.getParameter("sid") == null || "".equals(request.getParameter("sid"))) {
-			model.addAttribute("sid", "0c7c90c6-9505-4f77-b42d-500c2879c689"); //sid가 없을경우 하드코딩한 값으로 세팅한다.
-		} else {
-			model.addAttribute("sid", request.getParameter("sid")); //siteId를 받아서 다시 보낸다.
-			if("0c7c90c6-9505-4f77-b42d-500c2879c689".equals(request.getParameter("sid"))) {
-				linkSiteName = "혜원솔라 02";
+			if(userInfo != null && !userInfo.isEmpty()) {
+				List<Map<String, Object>> siteList = (List<Map<String, Object>>) userInfo.get("siteList");
+
+				if(siteList != null && siteList.size() > 0) {
+					siteId = (String) siteList.get(0).get("sid");
+					siteNm = (String) siteList.get(0).get("name");
+				}
+				model.addAttribute("sid", siteId);
+				model.addAttribute("siteName", siteNm);
 			} else {
-				linkSiteName = "혜원솔라 01";
+				model.addAttribute("sid", "");
+				model.addAttribute("siteName", "");
+			}
+		} else {
+			if(userInfo != null && !userInfo.isEmpty()) {
+				List<Map<String, Object>> siteList = (List<Map<String, Object>>) userInfo.get("siteList");
+
+				for(Map<String, Object> temp : siteList) {
+					if(request.getParameter("sid").equals(temp.get("sid"))) {
+						siteId = (String) temp.get("sid");
+						siteNm = (String) temp.get("name");
+					}
+				}
+				model.addAttribute("sid", siteId);
+				model.addAttribute("siteName", siteNm);
+			} else {
+				model.addAttribute("sid", "");
+				model.addAttribute("siteName", "");
 			}
 		}
-
-		model.addAttribute("siteName", linkSiteName);
 
 		// range
 		TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
