@@ -62,6 +62,36 @@
 							<div class="line2" id="yearEnergyValue"></div>
 							<div class="line3" id="diffYearEnergyValue"></div>
 						</div>
+						<div class="box type">
+							<span class="tx_tit">그래프 옵션</span>
+							<div class="sa_select" id="deviceType">
+								<div class="dropdown">
+									<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
+										매전량<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu dropdown-menu-form rdo_type" role="menu">
+										<li>
+											<a href="#" data-value="INV_PV" tabindex="-1">
+												<input type="radio" id="radio_t1" name="radio_t">
+												<label for="radio_t1"><span></span>PR</label>
+											</a>
+										</li>
+										<li>
+											<a href="#" data-value="INV_PV" tabindex="-1">
+												<input type="radio" id="radio_t2" name="radio_t">
+												<label for="radio_t2"><span></span>발전시간</label>
+											</a>
+										</li>
+										<li>
+											<a href="#" data-value="INV_PV" tabindex="-1">
+												<input type="radio" id="radio_t3" name="radio_t">
+												<label for="radio_t3"><span></span>매전량</label>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
 					</div>
 					<div class="inchart">
 						<div id="schart1"></div>
@@ -1570,16 +1600,52 @@
 			<div class="col-sm-12">
 				<div class="indiv gmain_table smain wrap_type">
 					<div class="gtbl_top clear">
-						<div class="clear">
+						<div class="fl">
 							<input type="text" class="input" value="" placeholder="키워드">
-							<%--											<button type="submit">적용</button>--%>
-							<div class="check-option chk_type">
+							<%--											<button type="submit">검색</button>--%>
+							<!-- <div class="check-option chk_type">
 								<input type="checkbox" id="deviceStatus1" value="정상" checked>
 								<label for="deviceStatus1"><span></span>정상</label>
 								<input type="checkbox" id="deviceStatus2" value="경고" checked>
 								<label for="deviceStatus2"><span></span>경고</label>
 								<input type="checkbox" id="deviceStatus3" value="이상" checked>
 								<label for="deviceStatus3"><span></span>이상</label>
+							</div> -->
+						</div>
+						<div class="fr">
+							<span class="tx_tit">설비 상태</span>
+							<div class="sa_select" id="deviceType">
+								<div class="dropdown">
+									<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
+										매전량<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
+										<li>
+											<a href="#" data-value="INV_PV" tabindex="-1">
+												<input type="checkbox" id="deviceStatus1" value="정상" checked>
+												<label for="deviceStatus1"><span></span>정상</label>
+											</a>
+										</li>
+										<li>
+											<a href="#" data-value="INV_PV" tabindex="-1">
+												<input type="checkbox" id="deviceStatus2" value="경고" checked>
+												<label for="deviceStatus2"><span></span>경고</label>
+											</a>
+										</li>
+										<li>
+											<a href="#" data-value="INV_PV" tabindex="-1">
+												<input type="checkbox" id="deviceStatus3" value="이상" checked>
+												<label for="deviceStatus3"><span></span>이상</label>
+											</a>
+										</li>
+										<li>
+											<a href="#" data-value="INV_PV" tabindex="-1">
+												<input type="checkbox" id="deviceStatus4" value="트립" checked>
+												<label for="deviceStatus4"><span></span>트립</label>
+											</a>
+										</li>
+									</ul>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -1812,6 +1878,7 @@
 									<span class="inv_normail">정상(0)</span>
 									<span class="inv_error">이상(0)</span>
 									<span class="inv_alert">경고(0)</span>
+									<span class="inv_trip">트립(0)</span>
 								</div>
 							</div>
 							<div class="type_list_detail">
@@ -1833,11 +1900,31 @@
 										</tbody>
 									</table>
 								</div>
+								<div class="gtbl_wrap type">
+									<div class="intable">
+										<table>
+											<colgroup>
+												<col>
+												<col>
+												<col>
+											</colgroup>
+											<thead>
+											<tr>
+												<th>상태</th>
+												<th>전압</th>
+												<th>전류</th>
+											</tr>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
+									</div>
+								</div>
 							</div>
 						</li>
 						<li>
 							<div class="chart_top clear">
-								<h2 class="ntit">계량기(0)</h2>
+								<h2 class="ntit">스마트미터(0)</h2>
 								<div class="alert_icon fr">
 									<span class="inv_normail">정상(0)</span>
 								</div>
@@ -1863,11 +1950,33 @@
 										</tbody>
 									</table>
 								</div>
+								<div class="gtbl_wrap type">
+									<div class="intable">
+										<table>
+											<colgroup>
+												<col>
+												<col>
+												<col>
+												<col>
+											</colgroup>
+											<thead>
+											<tr>
+												<th>상태</th>
+												<th>유효 전력</th>
+												<th>무효 지상</th>
+												<th>무효 진상</th>
+											</tr>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
+									</div>
+								</div>
 							</div>
 						</li>
 						<li>
 							<div class="chart_top clear">
-								<h2 class="ntit">환경센서(1)</h2>
+								<h2 class="ntit">일사량 센서(1)</h2>
 								<div class="alert_icon fr">
 									<span class="inv_normail">정상(1)</span>
 								</div>
@@ -1918,6 +2027,28 @@
 										</tr>
 										</tbody>
 									</table>
+								</div>
+								<div class="gtbl_wrap type">
+									<div class="intable">
+										<table>
+											<colgroup>
+												<col>
+												<col>
+												<col>
+												<col>
+											</colgroup>
+											<thead>
+											<tr>
+												<th>상태</th>
+												<th>온도</th>
+												<th>습도</th>
+												<th>경사면 일사량</th>
+											</tr>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</div>
 						</li>

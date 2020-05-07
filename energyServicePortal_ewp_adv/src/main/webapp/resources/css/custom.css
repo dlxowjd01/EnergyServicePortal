@@ -3469,6 +3469,9 @@ h1.stit {
 	margin-right: 15px;
 }
 
+.chart_mid .box.type{float:right;margin:-10px 0 0}
+.chart_mid .box.type .dropdown ul li{text-align:left}
+
 .chart_mid .line1 {
 	font-size: 14px;
 	height: 24px;
@@ -8115,7 +8118,7 @@ nav .lang.dropdown .btn .caret {
 	margin-right: 8px
 }
 
-.gmain_table .gtbl_top button {
+.gmain_table .gtbl_top input + button {
 	height: 36px;
 	line-height: 36px;
 	outline-style: none;
@@ -10109,6 +10112,9 @@ div.di_wrap dl .link a {
 .gmain_table.smain .chart_top .alert_icon > span.inv_alert {
 	background: #fca46b;
 }
+.gmain_table.smain .chart_top .alert_icon > span.inv_trip {
+	background: #ffd954;
+}
 
 .gmain_table.smain .local_info.smain {
 	margin-bottom: 10px;
@@ -11035,6 +11041,29 @@ div.di_wrap dl .link a {
 }
 
 /* type_list */
+.type_list{
+	overflow-y:auto;
+	height:860px;
+}
+.type_list::-webkit-scrollbar-track {
+	border-radius: 2px;
+	background-color: var(--scroll-color2)
+}
+
+.type_list::-webkit-scrollbar {
+	width: 8px;
+	border-radius: 2px;
+	background-color: var(--scroll-color2);
+}
+
+.type_list::-webkit-scrollbar-corner {
+	background-color: var(--scroll-color2);
+}
+
+.type_list::-webkit-scrollbar-thumb {
+	border-radius: 2px;
+	background-color: var(--scroll-color);
+}
 .type_list .chart_top {
 	cursor: pointer;
 }
