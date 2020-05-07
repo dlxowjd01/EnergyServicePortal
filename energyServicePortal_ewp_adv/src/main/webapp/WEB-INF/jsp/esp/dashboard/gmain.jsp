@@ -1427,6 +1427,7 @@
           </div>
           <script type="text/javascript">
             var map = new google.maps.Map(document.getElementById('gMainMap'), {
+              mapTypeId: 'satellite',
               zoom: 7.3,
               mapTypeControl: false, //맵타입
               streetViewControl: false, //스트리트뷰
@@ -1494,23 +1495,6 @@
 						<label for="deviceStatus2"><span></span>경고</label>
 						<input type="checkbox" id="deviceStatus3" value="이상" checked>
 						<label for="deviceStatus3"><span></span>이상</label>
-					</div>
-				</div>
-			</div>
-			<div class="page_view_bx">
-				<span class="tx_tit">페이지 당 표시</span>
-				<div class="sa_select">
-					<div class="dropdown type01">
-					  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">10
-					  <span class="caret"></span></button>
-					  <ul class="dropdown-menu">
-						<li class="on"><a href="#">10</a></li>
-						<li><a href="#">20</a></li>
-						<li><a href="#">30</a></li>
-						<li><a href="#">40</a></li>
-						<li><a href="#">50</a></li>
-						<li><a href="#">100</a></li>
-					  </ul>
 					</div>
 				</div>
 			</div>
@@ -2309,18 +2293,25 @@
   const formData = null;
   
   $(function () {
-    fn_cycle_15min();
+    fn_cycle_1hour();
+    fn_cycle_1min();
+    setInterval(()=>fn_cycle_1hour(), 60*60*1000);
+    setInterval(()=>fn_cycle_1min(), 60*1000);
   });
-  
-  function fn_cycle_15min() {
+
+  function fn_cycle_1hour() {
     getYearGenData();
     drawData_year_gen();
     getMonthGenData();
     drawData_month_gen();
     getGenDataBySite();
-    // getGenDataByType();
+    const now = new Date();
+    $('.dbTime').text(`${'${now.format("yyyy-MM-dd HH:mm:ss")}'}`);
+  }
+  
+  function fn_cycle_1min() {
     getTodayTotalDetail();
-    // getAlarmInfo();
+    getAlarmInfo();
     getDeviceStatusInfo();
     const now = new Date();
     $('.dbTime').text(`${'${now.format("yyyy-MM-dd HH:mm:ss")}'}`);
@@ -2985,139 +2976,57 @@
     // 사업소 이름, 정상, 경고, 이상, 한번에 노출할 리스트 개수정보를 화면에서 던져줌. (처음- default)
     // 조회 시 세팅된 리스트 개수만큼 사이트의 리스트가 반환된다고 가정하고 작업
     // 리스트별 정보 -(알람시간,설비 유형 코드,설비 유형명,설비 id (장치id),설비명 (장치명),알람타입코드,알람타입명,알람메시지,알람상태)
-
-// 		var siteList = result.siteList;
-
-// 		if(siteList.length > 0) {
-// 			$(iteList).each(function() {
-
-// 			});
-// 		}
-
-// 		//임시 데이터 세팅
-// 		var siteStateStr = '';
-// 		for(var i = 0; i < 13; i++) {
-
-// 			//문제가 있는 경우, status_alert, status_error클래스 부여
-// 			siteStateStr += '<tr class="dbclickopen">';
-
-// 			//사업소 상태  status_hld, status_stp, status_drv
-// 			siteStateStr += '    <td><span class="status status_err" title="통신이상">통신이상</span></td>';
-
-// 			//배터리 충, 방전 여부 batter_in, batter_out
-// 			siteStateStr += '    <td><!--<span class="battery_icon batter_in">충전</span>--></td>';
-
-// 			siteStateStr += '    <td>0건/0건</td>';
-// 			siteStateStr += '    <td><div class="cname">당진태양광</div></td>';
-// 			siteStateStr += '    <td>1000</td>';
-// 			siteStateStr += '    <td>500</td>';
-// 			siteStateStr += '    <td>13.2</td>';
-// 			siteStateStr += '   <td>12.1</td>';
-// 			siteStateStr += '</tr>';
-
-// 			siteStateStr += '<tr class="detail_info">';
-// 			siteStateStr += '	<td colspan="8">';
-// 			siteStateStr += '  		<div class="di_wrap">';
-// 			siteStateStr += '			<div class="type"'+i+'>';
-// 			siteStateStr += '     			<div class="di_top">';
-// 			siteStateStr += '    				<span class="sbj">당진태양광</span>';
-// 			siteStateStr += '    				<span class="type_img type_sun">태양광</span>';
-// 			siteStateStr += '					<span>일사량 <em>30</em>kWh/㎡․day </span>';
-// 			siteStateStr += '					<span>현재온도 <em>30</em>℃</span>';
-// 			siteStateStr += '					<span>현재습도 <em>65</em>%</span>';
-// 			siteStateStr += '				</div>';
-// 			siteStateStr += '				<dl>';
-// 			siteStateStr += '					<dt>';
-// 			siteStateStr += '						<div class="inchart">';
-// 			siteStateStr += '							<div id="type_chart'+i+'" style="height:170px"></div>';
-// 			siteStateStr += '						</div>';
-// 			siteStateStr += '						<div class="summ">';
-// 			siteStateStr += '							<span>총 설비용량 <em>10</em>MW</span><br/>';
-// 			siteStateStr += '							<span>총 인버터수량 <em>30</em>EA</span>';
-// 			siteStateStr += '						</div>';
-// 			siteStateStr += '					</dt>';
-// 			siteStateStr += '					<dd>';
-// 			siteStateStr += '						<ul class="clear">';
-// 			siteStateStr += '							<li class="clear">';
-// 			siteStateStr += '								<span class="fl">금일 발전예측</span>';
-// 			siteStateStr += '								<span class="fl"><em>28</em>MWh</span>';
-// 			siteStateStr += '							</li>';
-// 			siteStateStr += '							<li class="clear">';
-// 			siteStateStr += '								<span class="fl">금일 누적발전</span>';
-// 			siteStateStr += '								<span class="fl"><em>18.1</em>MWh</span>';
-// 			siteStateStr += '							</li>';
-// 			siteStateStr += '							<li class="clear">';
-// 			siteStateStr += '								<span class="fl">전일 누적발전</span>';
-// 			siteStateStr += '								<span class="fl"><em>20</em>MWh</span>';
-// 			siteStateStr += '							</li>';
-// 			siteStateStr += '							<li class="clear">';
-// 			siteStateStr += '								<span class="fl">전일 발전매전</span>';
-// 			siteStateStr += '								<span class="fl"><em>20</em>MWh</span>';
-// 			siteStateStr += '							</li>';
-// 			siteStateStr += '						</ul>';
-// 			siteStateStr += '						<div class="error">';
-// 			siteStateStr += '							<h2>최근 미처리 오류 : <span>2</span>건</h2>';
-// 			siteStateStr += '							<p>2020-02-10 12:00:01 데이터 disconnected</p>';
-// 			siteStateStr += '							<p>2020-02-09 11:41:26 인버터#1 이상 감지</p>';
-// 			siteStateStr += '						</div>';
-// 			siteStateStr += '						<div class="link"><a href="#" class="btn_cancel">대시보드 바로 가기</a></div>';
-// 			siteStateStr += '					</dd>';
-// 			siteStateStr += '      			</dl>';
-// 			siteStateStr += '  			</div>';
-// 			siteStateStr += '   		</div>';
-// 			siteStateStr += '   	</td>';
-// 			siteStateStr += '</tr>';
-
-// 			$('#siteListTbody').append(siteStateStr);
-// 			siteStateStr = '';
-
-// 			$('#type_chart' + i).empty();
-
-// 			var drawChart = Highcharts.chart('type_chart'+ i, Highcharts.merge(pieChartOption,	{
-// 		 		series: [{
-// 		 			type: 'pie',
-// 		 			innerSize: '50%',
-// 		 			name: '설비용량',
-// 		 			colorByPoint: true,
-// 		 			data: [{
-// 		 				color: '#438fd7',
-// 		 				name: '총 설비용량',
-// 		 				dataLabels: {
-// 		 					enabled: false
-// 		 				},
-// 		 				y: 70 //70% -- 아래로 총합 100%
-// 		 			}, {
-// 		 				color: '#84848f',
-// 		 				name: '미설비용량',
-// 		 				dataLabels: {
-// 		 					enabled: false
-// 		 				},
-// 		 				y: 30 //30% 나머지
-// 		 			}]
-// 		 		}]
-// 			}));
-// 		}
+  
+    const formData = getSiteMainSchCollection("day");
     
-    $('.a_alert').find('em').text('3'); //알람 전체 개수
+    let alarmList = [];
+    const $alarmList = $('.alarm_notice > ul');
+    let alarmStr = '';
     
-    var $alarmList = $('.alarm_notice');
-    var alarmStr = '';
-    
-    $alarmList.empty();
-    
-    alarmStr += '<ul>';
-    alarmStr += '	<li>';
-    alarmStr += '		<a href="javascript:list_detail_open(\'list1\');"><span class="err_msg">혜원솔라01 - 인버터1 발전 정지</span><span class="err_time">2020-03-05 11:22:03</span></a>';
-    alarmStr += '	</li>';
-    alarmStr += '	<li>';
-    alarmStr += '		<a href="javascript:list_detail_open(\'list2\');"><span class="err_msg">혜원솔라02 - 인버터2 발전 정지</span><span class="err_time">2020-03-05 11:22:03</span></a>';
-    alarmStr += '	</li>';
-    alarmStr += '	<li>';
-    alarmStr += '		<a href="javascript:list_detail_open(\'list3\');"><span class="err_msg">혜원솔라01 - 인버터3 발전 정지</span><span class="err_time">2020-03-05 11:22:03</span></a>';
-    alarmStr += '	</li>';
-    alarmStr += '</ul>';
-    
-    $alarmList.append(alarmStr);
+    $.ajax({
+      url: "http://iderms.enertalk.com:8443/config/sites",
+      type: "get",
+      async: false,
+      data: {
+        oid: "spower",
+      },
+      success: function (sites) {
+        sites.forEach((site,siteIdx)=>{
+          $.ajax({
+            url: "http://iderms.enertalk.com:8443/alarms",
+            type: "get",
+            async: false,
+            data: {
+              sids: site.sid,
+              startTime: formData.startTime,
+              endTime: formData.endTime,
+            },
+            success: function(alarms){
+              alarms.forEach(alarm=>{
+                alarmList = [...alarmList, alarm];
+              })
+            },
+            error: function(error){
+              console.error(error)
+            }
+          });
+        });
+        $('.a_alert').find('em').text(`${'${alarmList.length}'}`);
+        //localtime 오름차순 정렬
+        alarmList.sort((a,b)=>{
+          return a.localtime > b.localtime ? -1 : a.localtime < b.localtime? 1 : 0 ;
+        });
+        //데이터 세팅
+        alarmList.forEach((element, index)=>{
+          alarmStr += `<li><a href="javascript:list_detail_open(${'${element.alarm_id}}'});"><span class="err_msg">${'${element.site_name} - ${element.message}}'}</span><span class="err_time">${'${element.localtime.toString().slice(0,4)}'}-${'${element.localtime.toString().slice(4,6)}'}-${'${element.localtime.toString().slice(6,8)}'} ${'${element.localtime.toString().slice(8,10)}'}:${'${element.localtime.toString().slice(10,12)}'}:${'${element.localtime.toString().slice(12,14)}'}</span></a></li>`
+        });
+        $alarmList.empty();
+        $alarmList.append(alarmStr);
+      },
+      error: function(error){
+        console.error(error);
+      }
+    });
     
   }
   

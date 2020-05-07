@@ -2169,23 +2169,6 @@
 							</div>
 						</div>
 					</div>
-					<div class="page_view_bx">
-						<span class="tx_tit">페이지 당 표시</span>
-						<div class="sa_select">
-							<div class="dropdown type01">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">10
-									<span class="caret"></span></button>
-								<ul class="dropdown-menu">
-									<li class="on"><a href="#">10</a></li>
-									<li><a href="#">20</a></li>
-									<li><a href="#">30</a></li>
-									<li><a href="#">40</a></li>
-									<li><a href="#">50</a></li>
-									<li><a href="#">100</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
 					<div class="gtbl_wrap">
 						<div class="intable">
 							<table>
@@ -2797,20 +2780,24 @@
 	const formData = null;
 	
 	$(function () {
-		fn_cycle_15min();
-		setInterval(()=>realtimeRecord(),60000);
+		fn_cycle_1hour();
+		fn_cycle_1min();
+		setInterval(()=>fn_cycle_1hour(),60*60*1000);
+		setInterval(()=>fn_cycle_1min(),60*1000);
 	});
 	
-	function fn_cycle_15min() {
+	function fn_cycle_1hour() {
 		getYearGenData();
 		drawData_year_gen();
 		getMonthGenData();
 		drawData_month_gen();
 		getGenDataBySite();
-		// getGenDataByType();
+	}
+	
+	function fn_cycle_1min() {
 		getTodayTotalDetail();
 		realtimeRecord();
-		// getAlarmInfo();
+		getAlarmInfo();
 		getDeviceStatusInfo();
 		const now = new Date();
 		$('.dbTime').text(`${'${now.format("yyyy-MM-dd HH:mm:ss")}'}`);
@@ -3659,33 +3646,62 @@
 		})
 	}
 	
-	
 	function getAlarmInfo() {
 		// 조회 파라미터 세팅
 		// 사업소 이름, 정상, 경고, 이상, 한번에 노출할 리스트 개수정보를 화면에서 던져줌. (처음- default)
 		// 조회 시 세팅된 리스트 개수만큼 사이트의 리스트가 반환된다고 가정하고 작업
 		// 리스트별 정보 -(알람시간,설비 유형 코드,설비 유형명,설비 id (장치id),설비명 (장치명),알람타입코드,알람타입명,알람메시지,알람상태)
 		
-		$('.a_alert').find('em').text('3'); //알람 전체 개수
+		const formData = getSiteMainSchCollection("day");
 		
-		var $alarmList = $('.alarm_notice');
-		var alarmStr = '';
+		let alarmList = [];
+		const $alarmList = $('.alarm_notice > ul');
+		let alarmStr = '';
 		
-		$alarmList.empty();
-		
-		alarmStr += '<ul>';
-		alarmStr += '	<li>';
-		alarmStr += '		<a href="javascript:list_detail_open(\'list1\');"><span class="err_msg">혜원솔라01 - 인버터1 발전 정지</span><span class="err_time">2020-03-05 11:22:03</span></a>';
-		alarmStr += '	</li>';
-		alarmStr += '	<li>';
-		alarmStr += '		<a href="javascript:list_detail_open(\'list2\');"><span class="err_msg">혜원솔라02 - 인버터2 발전 정지</span><span class="err_time">2020-03-05 11:22:03</span></a>';
-		alarmStr += '	</li>';
-		alarmStr += '	<li>';
-		alarmStr += '		<a href="javascript:list_detail_open(\'list3\');"><span class="err_msg">혜원솔라01 - 인버터3 발전 정지</span><span class="err_time">2020-03-05 11:22:03</span></a>';
-		alarmStr += '	</li>';
-		alarmStr += '</ul>';
-		
-		$alarmList.append(alarmStr);
+		$.ajax({
+			url: "http://iderms.enertalk.com:8443/config/sites",
+			type: "get",
+			async: false,
+			data: {
+				oid: "spower",
+			},
+			success: function (sites) {
+				sites.forEach((site,siteIdx)=>{
+					$.ajax({
+						url: "http://iderms.enertalk.com:8443/alarms",
+						type: "get",
+						async: false,
+						data: {
+							sids: site.sid,
+							startTime: formData.startTime,
+							endTime: formData.endTime,
+						},
+						success: function(alarms){
+							alarms.forEach(alarm=>{
+								alarmList = [...alarmList, alarm];
+							})
+						},
+						error: function(error){
+							console.error(error)
+						}
+					});
+				});
+				$('.a_alert').find('em').text(`${'${alarmList.length}'}`); //알람 전체 개수
+				//localtime 오름차순 정렬
+				alarmList.sort((a,b)=>{
+					return a.localtime > b.localtime ? -1 : a.localtime < b.localtime? 1 : 0 ;
+				});
+				//데이터 세팅
+				alarmList.forEach((element, index)=>{
+					alarmStr += `<li><a href="javascript:list_detail_open(${'${element.alarm_id}}'});"><span class="err_msg">${'${element.site_name} - ${element.message}}'}</span><span class="err_time">${'${element.localtime.toString().slice(0,4)}'}-${'${element.localtime.toString().slice(4,6)}'}-${'${element.localtime.toString().slice(6,8)}'} ${'${element.localtime.toString().slice(8,10)}'}:${'${element.localtime.toString().slice(10,12)}'}:${'${element.localtime.toString().slice(12,14)}'}</span></a></li>`
+				});
+				$alarmList.empty();
+				$alarmList.append(alarmStr);
+			},
+			error: function(error){
+				console.error(error);
+			}
+		});
 		
 	}
 	
