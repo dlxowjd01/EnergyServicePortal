@@ -859,6 +859,9 @@
 									case 20 :
 										weatherIconClass = "w3";
 										break;
+									default :
+										weatherIconClass = 'w1';
+										break;
 								}
 								return weatherIconClass
 							}
@@ -1360,10 +1363,46 @@
 										async: false,
 										data: saChart2NowData,
 										success: function (result) {
-											$.each(result.data, function (i, el) {
-												let time = String(el.start).substring(0, 10) + '0000';
-												let lastTime = saChart2EnergyItems1[saChart2EnergyItems1.length - 1].basetime;
-												if (time > lastTime) {
+											if(saChart2EnergyItems1.length > 0) {
+												$.each(result.data, function (i, el) {
+													let time = String(el.start).substring(0, 10) + '0000';
+													let lastTime = saChart2EnergyItems1[saChart2EnergyItems1.length - 1].basetime;
+													if (time > lastTime) {
+														saChart2EnergyItems1.push({
+															basetime: time,
+															cenergy: 0,
+															cmoney: 0,
+															denergy: 0,
+															dmoney: 0,
+															energy: el.energy,
+															money: el.moeny
+														});
+													}
+												});
+											} else {
+												$.each(result.data, function (i, el) {
+													let time = String(el.start).substring(0, 10) + '0000';
+													let hour = Number(String(el.start).substring(8, 10));
+
+													for(let j = 0; j < hour; j++) {
+														let dummyTime = time.substring(0, 8);
+														if(j >= 10) {
+															dummyTime += j + '000000';
+														} else {
+															dummyTime += '0' + j  + '000000';
+														}
+
+														saChart2EnergyItems1.push({
+															basetime: time,
+															cenergy: 0,
+															cmoney: 0,
+															denergy: 0,
+															dmoney: 0,
+															energy: null,
+															money: null
+														});
+													}
+
 													saChart2EnergyItems1.push({
 														basetime: time,
 														cenergy: 0,
@@ -1373,8 +1412,8 @@
 														energy: el.energy,
 														money: el.moeny
 													});
-												}
-											});
+												});
+											}
 										},
 										dataType: "json",
 										complete: function () {
