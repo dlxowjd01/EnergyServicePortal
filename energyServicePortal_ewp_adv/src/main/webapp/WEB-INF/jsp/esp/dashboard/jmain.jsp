@@ -2189,9 +2189,10 @@
 										<th>경고</th>
 										<th><button class="btn_align down">사업소</button></th>
 										<th>설비용량</th>
-										<th>현재출력</th>
-										<th>금일누적</th>
 										<th>금일예측</th>
+										<th>금일누적</th>
+										<th>금일충전</th>
+										<th>금일방전</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -2212,9 +2213,10 @@
 										<td>0</td>
 										<td>0</td>
 										<td>0</td>
+										<td>-</td>
 									</tr>
 									<tr class="detail_info list1 flag1">
-										<td colspan="8">
+										<td colspan="9">
 											<div class="di_wrap">
 												<div class="di_wrap_in">
 													<div class="di_top_sec">
@@ -2415,9 +2417,10 @@
 										<td>0</td>
 										<td>0</td>
 										<td>0</td>
+										<td>-</td>
 									</tr>
 									<tr class="detail_info list2 flag2">
-										<td colspan="8">
+										<td colspan="9">
 											<div class="di_wrap">
 												<%--<div class="di_wrap_in">--%>
 												<%--	<div class="di_top_sec">--%>

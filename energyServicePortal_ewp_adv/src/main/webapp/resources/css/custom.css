@@ -806,13 +806,32 @@ html.darkmode input:-webkit-autofill {
 
 #sidebar > ul > li > a {
 	display: block;
+	position:relative;
+	z-index:3;
 	height: 56px;
-	text-align: center;
-	font-size: 12px;
+	font-size: 16px;
 	color: var(--color1);
+	width:72px;
 	font-weight: bold;
-	line-height: 1.2;
-	text-indent: -9999px
+	line-height: 56px;
+	text-indent: -9999px;
+	color: var(--color2);
+}
+#sidebar:hover > ul > li > a:before{
+	position:absolute;
+	top:16px;
+	left:0;
+	width:24px;
+	height:24px;
+	background:url(../img/arrow-right.png);
+	content:''
+}
+#sidebar:hover > ul > li.on > a:before{
+	transform: rotate(90deg);
+}
+#sidebar:hover > ul > li > a{
+	width:322px;
+	text-indent: 85px;
 }
 
 #sidebar > ul > li.smn0 {
@@ -820,43 +839,56 @@ html.darkmode input:-webkit-autofill {
 }
 
 #sidebar > ul > li.smn0 > a {
-	background: url('../img/loc_main.png') no-repeat center center;
+	background: url('../img/loc_main.png') no-repeat center left 24px;
 }
 
 #sidebar > ul > li.smn1 > a {
-	background: var(--sidebar-dashboard-off) no-repeat center center;
+	background: var(--sidebar-dashboard-off) no-repeat center left 24px;
 }
 
 #sidebar > ul > li.smn2 > a {
-	background: var(--sidebar-status-off) no-repeat center center;
+	background: var(--sidebar-status-off) no-repeat center left 24px;
 }
 
 #sidebar > ul > li.smn3 > a {
-	background: var(--sidebar-history-off) no-repeat center center;
+	background: var(--sidebar-history-off) no-repeat center left 24px;
 }
 
 #sidebar > ul > li.smn4 > a {
-	background: var(--sidebar-analytics-off) no-repeat center center;
+	background: var(--sidebar-analytics-off) no-repeat center left 24px;
 }
 
 #sidebar > ul > li.smn5 > a {
-	background: var(--sidebar-diagnosis-off) no-repeat center center;
+	background: var(--sidebar-diagnosis-off) no-repeat center left 24px;
 }
 
 #sidebar > ul > li.smn6 > a {
-	background: var(--sidebar-settings-off) no-repeat center center;
+	background: var(--sidebar-settings-off) no-repeat center left 24px;
 }
 
 #sidebar > ul > li.smn7 > a {
-	background: var(--sidebar-report-off) no-repeat center center;
+	background: var(--sidebar-report-off) no-repeat center left 24px;
 }
 
 #sidebar > ul > li.smn8 > a {
-	background: var(--sidebar-maintenance-off) no-repeat center center;
+	background: var(--sidebar-maintenance-off) no-repeat center left 24px;
 }
 
 #sidebar > ul > li.smn9 > a {
-	background: var(--sidebar-spc-off) no-repeat center center;
+	background: var(--sidebar-spc-off) no-repeat center left 24px;
+}
+
+#sidebar > ul > li.smn0 > a:hover,
+#sidebar > ul > li.smn1 > a:hover,
+#sidebar > ul > li.smn2 > a:hover,
+#sidebar > ul > li.smn3 > a:hover,
+#sidebar > ul > li.smn4 > a:hover,
+#sidebar > ul > li.smn5 > a:hover,
+#sidebar > ul > li.smn6 > a:hover,
+#sidebar > ul > li.smn7 > a:hover,
+#sidebar > ul > li.smn8 > a:hover,
+#sidebar > ul > li.smn9 > a:hover{
+	background-color:rgba(255, 255, 255, 0.15);
 }
 
 #sidebar > ul > li.on {
@@ -869,87 +901,74 @@ html.darkmode input:-webkit-autofill {
 	border-radius: 4px
 }
 
-#sidebar > ul > li.on > a {
-	color: var(--color2);
+#sidebar:hover > ul > .smn0 > a,
+#sidebar > ul > .smn0.active > a {
+	background: url('../img/loc_main_on.png') no-repeat center left 24px;
 }
 
-#sidebar > ul > li:hover > a {
-	color: var(--color2);
+#sidebar:hover > ul > .smn1 > a,
+#sidebar > ul > .smn1.active > a {
+	background: var(--sidebar-dashboard-on) no-repeat center left 24px;
 }
 
-#sidebar > ul > .smn0.on > a,
-#sidebar > ul > .smn0:hover > a {
-	background: url('../img/loc_main_on.png') no-repeat center center;
+#sidebar:hover > ul > .smn2 > a,
+#sidebar > ul > .smn2.active > a {
+	background: var(--sidebar-status-on) no-repeat center left 24px;
 }
 
-#sidebar > ul > .smn1.on > a,
-#sidebar > ul > .smn1:hover > a {
-	background: var(--sidebar-dashboard-on) no-repeat center center;
+#sidebar:hover > ul > .smn3 > a,
+#sidebar > ul > .smn3.active > a {
+	background: var(--sidebar-history-on) no-repeat center left 24px;
 }
 
-#sidebar > ul > .smn2.on > a,
-#sidebar > ul > .smn2:hover > a {
-	background: var(--sidebar-status-on) no-repeat center center;
+#sidebar:hover > ul > .smn4 > a,
+#sidebar > ul > .smn4.active > a {
+	background: var(--sidebar-analytics-on) no-repeat center left 24px;
 }
 
-#sidebar > ul > .smn3.on > a,
-#sidebar > ul > .smn3:hover > a {
-	background: var(--sidebar-history-on) no-repeat center center;
+#sidebar:hover > ul > .smn5 > a,
+#sidebar > ul > .smn5.active > a {
+	background: var(--sidebar-diagnosis-on) no-repeat center left 24px;
 }
 
-#sidebar > ul > .smn4.on > a,
-#sidebar > ul > .smn4:hover > a {
-	background: var(--sidebar-analytics-on) no-repeat center center;
+#sidebar:hover > ul > .smn6 > a,
+#sidebar > ul > .smn6.active > a {
+	background: var(--sidebar-settings-on) no-repeat center left 24px;
 }
 
-#sidebar > ul > .smn5.on > a,
-#sidebar > ul > .smn5:hover > a {
-	background: var(--sidebar-diagnosis-on) no-repeat center center;
+#sidebar:hover > ul > .smn7 > a,
+#sidebar > ul > .smn7.active > a {
+	background: var(--sidebar-report-on) no-repeat center left 24px;
 }
 
-#sidebar > ul > .smn6.on > a,
-#sidebar > ul > .smn6:hover > a {
-	background: var(--sidebar-settings-on) no-repeat center center;
+#sidebar:hover > ul > .smn8 > a,
+#sidebar > ul > .smn8.active > a {
+	background: var(--sidebar-maintenance-on) no-repeat center left 24px;
 }
 
-#sidebar > ul > .smn7.on > a,
-#sidebar > ul > .smn7:hover > a {
-	background: var(--sidebar-report-on) no-repeat center center;
-}
-
-#sidebar > ul > .smn8.on > a,
-#sidebar > ul > .smn8:hover > a {
-	background: var(--sidebar-maintenance-on) no-repeat center center;
-}
-
-#sidebar > ul > .smn9.on > a,
-#sidebar > ul > .smn9:hover > a {
-	background: var(--sidebar-spc-on) no-repeat center center;
+#sidebar:hover > ul > .smn9 > a,
+#sidebar > ul > .smn9.active > a {
+	background: var(--sidebar-spc-on) no-repeat center left 24px; 
 }
 
 /* 서브 레이어 */
-#sidebar li:hover .sub_layer {
+#sidebar li.on .sub_layer {
 	display: block;
-}
+} 
 
 .sub_layer {
 	display: none;
-	position: absolute;
-	top: 10px;
-	left: 72px;
-	width: 250px;
-	background: var(--active);
-	z-index: 3;
+	width: 322px;
 }
 
-.sub_layer:after {
+#sidebar:hover:after {
 	display: block;
 	content: "";
 	position: fixed;
 	top: 0;
-	left: 72px;
+	left: 0;
 	bottom: 0;
-	width: 250px;
+	width: 322px;
 	height: 100%;
 	min-height: 100%;
 	background: var(--active2);
@@ -957,25 +976,26 @@ html.darkmode input:-webkit-autofill {
 }
 
 .sub_layer > ul {
+	display:none;
 	position: relative;
 	z-index: 4;
-	margin-top: -10px
+}
+li.on .sub_layer > ul {
+	display:block;
 }
 
 .sub_layer > ul > li {
-	margin: 10px 0;
-	padding: 0 10px;
+	/* margin: 10px 0; */
+	/* padding: 0 10px; */
 }
 
 .sub_layer > ul > li > a {
 	display: block;
-	height: 36px;
+	padding:10px 10px 10px 100px;
 	line-height: 36px;
-	font-size: 14px;
+	font-size: 16px;
 	color: var(--color2);
-	font-weight: bold;
-	padding-left: 20px;
-	border-radius: 200px;
+	font-weight: 500; 
 }
 
 .sub_layer > ul > li.on > a {
@@ -984,7 +1004,8 @@ html.darkmode input:-webkit-autofill {
 
 .sub_layer > ul > li > a:hover {
 	/*background: #fff url('../img/icon_sub_layer.png') no-repeat right 20px center;*/
-	color: var(--color1);
+	/* color: var(--color1); */
+	background:rgba(255, 255, 255, 0.15);
 }
 
 /* */
@@ -1008,6 +1029,7 @@ html.darkmode input:-webkit-autofill {
 /* 사이드 메인메뉴 */
 #sidebar > ol {
 	position: relative;
+	z-index:3;
 	top: 280px;
 }
 
@@ -1023,7 +1045,6 @@ html.darkmode input:-webkit-autofill {
 	font-size: 12px;
 	color: #fff;
 	font-weight: bold;
-	transition: all 0.5s;
 }
 
 #sidebar > ol > li.smn6:before {
@@ -1073,6 +1094,13 @@ html.darkmode input:-webkit-autofill {
 	height: 62px;
 	font-size: 0;
 	background: var(--sidebar-logout-off) no-repeat center center;
+}
+#sidebar:hover > ol > li.smn8 > a {
+	background: var(--sidebar-logout-on) no-repeat center left 24px;
+	font-size:16px;
+	width:322px;
+	text-align:left;
+	text-indent: 85px;
 }
 
 #sidebar > ol > li.smn7 .sub_layer {
@@ -13689,3 +13717,5 @@ button.tx_file {
 		background-color: var(--scroll-color);
 	}
 }
+
+.test{}

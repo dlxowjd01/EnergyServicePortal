@@ -42,11 +42,26 @@
     $('#kepcoMngNavLink').attr('href', '/system/kepcoMng.do?siteId=' + siteId);
     $('#gmainAlarmLink').attr('onclick', "location.href='/alarm/alarmMng.do?siteId=" + siteId + "'");
   }
+  
+	$(function() {
+		$('#sidebar > ul > li > a').click(function(){
+			$(this).parent('li').toggleClass('on');
+			
+		});
+		// if($('#sidebar:after').css('display','none')){
+			// $('#sidebar > ul > li').removeClass('on');
+		// }
+		$('#sidebar').mouseleave(function(){
+			$('#sidebar > ul > li').removeClass('on');
+			console.log('a')
+		});
+		
+	});
 </script>
 <div id="sidebar">
   <c:if test="${not empty userInfo}">
     <ul>
-      <li class="smn1 on">
+      <li class="smn1">
         <a href="#;">대시보드</a>
         <div class="sub_layer">
           <ul>
@@ -64,7 +79,7 @@
           </ul>
         </div>
       </li>
-      <li class="smn2">
+      <li class="smn2 active">
         <a href="#;">설비 현황</a>
         <div class="sub_layer">
           <ul>
@@ -103,7 +118,7 @@
           </ul>
         </div>
       </li>
-      <li class="smn8">
+      <!--<li class="smn8">
         <a href="#;">BOM관리</a>
         <div class="sub_layer">
           <ul>
@@ -112,7 +127,7 @@
             <li><a href="/bom/partManagement.do">부품관리</a></li>
           </ul>
         </div>
-      </li>
+      </li>-->
       <li class="smn7">
         <a href="#;">보고서</a>
         <div class="sub_layer">
@@ -165,40 +180,40 @@
       <li class="gmn1">
         <a href="#;">대시보드</a>
         <ul>
-          <li><a href="/dashboard/gmain.do">통합 대시보드</a></li>
-          <li>
-            <a href="#;">사업소 대시보드</a>
-            <div>
-              <p><a href="/dashboard/smain.do">신재생발전 대시보드</a></p>
-              <p><a href="/dashboard/emain.do">피크저감ESS 대시보드</a></p>
-              <p><a href="/dashboard/dmain.do">신재생발전+신재생 연계 ESS</a></p>
-            </div>
-          </li>
-          <li><a href="/dashboard/jmain.do">VPP거래 대시보드</a></li>
-          <!-- <li><a href="">DR거래 대시보드</a></li> -->
+          <li><a href="/dashboard/gmain.do">통합관리 대시보드</a></li>
+            <%--<li>--%>
+            <%--  <a href="#;">사업소 대시보드</a>--%>
+            <%--  <div>--%>
+            <%--    <p><a href="/dashboard/smain.do">신재생발전 대시보드</a></p>--%>
+            <%--    <p><a href="/dashboard/emain.do">피크저감ESS 대시보드</a></p>--%>
+            <%--    <p><a href="/dashboard/dmain.do">신재생발전+신재생 연계 ESS</a></p>--%>
+            <%--  </div>--%>
+            <%--</li>--%>
+            <li><a href="/dashboard/jmain.do">중개거래 대시보드</a></li>
+            <!-- <li><a href="">수요자원 대시보드</a></li> -->
         </ul>
       </li>
       <li class="gmn2">
         <a href="#;">설비현황</a>
         <ul>
-          <li><a href="/device/deviceState.do">설비 구성</a></li>
-          <li><a href="">수집 현황</a></li>
+          <li><a href="/device/deviceState.do">설비구성</a></li>
+            <li><a href="/device/collectionState.do">수집현황</a></li>
         </ul>
       </li>
       <li class="gmn3">
         <a href="#;">설비 이력</a>
         <ul>
-          <li><a href="/history/operationHistory.do">운전 이력</a></li>
-          <li><a href="">알람 이력</a></li>
+          <li><a href="/history/operationHistory.do">상태이력</a></li>
+            <li><a href="/history/alarmHistory.do">알람이력</a></li>
         </ul>
       </li>
       <li class="gmn4">
         <a href="#;">자원분석</a>
         <ul>
-          <li><a href="/energy/pvGen.do">발전</a></li>
-          <li><a href="/energy/essCharge.do">피크저감 ESS</a></li>
-          <!-- <li><a href="/energy/sub01.html">수요</a></li> -->
-          <li><a href="/energy/drResult.do">수요자원<!-- DR --></a></li>
+           <li><a href="/energy/pvGen.do">발전이력</a></li>
+            <%--<li><a href="/energy/essCharge.do">피크저감 ESS</a></li>--%>
+            <!-- <li><a href="/energy/sub01.html">수요</a></li> -->
+            <%--<li><a href="/energy/drResult.do">수요자원<!-- DR --></a></li>--%>
         </ul>
       </li>
       <li class="gmn5">
@@ -208,34 +223,39 @@
           <li><a href="">수요</a></li>
         </ul>
       </li>
-      <li class="gmn6">
-        <a href="#;">관리</a>
+      <!--<li class="gmn8">
+        <a href="#;">BOM관리</a>
         <ul>
-          <li><a href="">기본정보</a></li>
-          <li><a href="">알람</a></li>
-          <li><a href="/system/userMng.do">사용자</a></li>
-          <li><a href="/system/cmpyGrpSiteMng.do">사이트/그룹</a></li>
-          <li><a href="">공통코드</a></li>
-          <li><a href="">설정</a></li>
+          <li><a href="/bom/faultHistory.do">고장이력</a></li>
+            <li><a href="/bom/replacement.do">변경이력</a></li>
+            <li><a href="/bom/partManagement.do">부품관리</a></li>
         </ul>
-      </li>
+      </li>-->
       <li class="gmn7">
         <a href="#;">보고서</a>
         <ul>
-          <li><a href="">수익 보고서</a></li>
-          <li><a href="">발전량 보고서</a></li>
-          <!-- <li><a href="/income/sa_sub05.html">한전 요금</a></li>
-          <li><a href="/income/sub01.html">ESS 수익</a></li>
-          <li><a href="/income/sub03.html">DR 수익</a></li>
-          <li><a href="/income/sub02.html">PV 수익</a></li> -->
+         <li><a href="/report/yieldReport.do">수익보고서</a></li>
+           <li><a href="/report/maintenanceReport.do">작업보고서</a></li>
         </ul>
       </li>
-      <li class="gmn8">
-        <a href="#;">유지보수</a>
+	  <li class="gmn9">
+        <a href="#;">SPC관리</a>
         <ul>
-          <li><a href="">고장이력</a></li>
-          <li><a href="">변경이력</a></li>
-          <li><a href="">유지보수관리</a></li>
+          <li><a href="/spc/entityInformation.do">기본정보</a></li>
+            <li><a href="/spc/balanceSheet.do">원가관리</a></li>
+            <li><a href="/spc/maintenanceSchedule.do">점검계획</a></li>
+            <li><a href="/spc/supplementaryDocuments.do">이관자료</a></li>
+        </ul>
+      </li>
+      <li class="gmn6">
+        <a href="#;">설정</a>
+        <ul>
+          <li><a href="/system/basicInformation.do">기본정보</a></li>
+            <li><a href="/system/userMng.do">사용자관리</a></li>
+            <li><a href="/system/cmpyGrpSiteMng.do">사이트/그룹관리</a></li>
+            <li><a href="/system/alarmManagement.do">알람관리</a></li>
+            <li><a href="/system/systemCode.do">공통코드</a></li>
+            <li><a href="/system/systemSetting.do">시스템설정</a></li>
         </ul>
       </li>
     </ul>
