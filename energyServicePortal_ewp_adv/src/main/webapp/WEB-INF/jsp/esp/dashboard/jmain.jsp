@@ -1901,6 +1901,24 @@
 											symbolHeight:7 /* 심볼 크기 */
 										},
 										
+										series: [{
+											name: '출력',
+											type: 'column',
+											color: '#2BEEE9',
+											data: [0,0,0,0,0,0,0,0,0,0,0,0],
+											tooltip: {
+												valueSuffix: 'kWh'
+											}
+										},{
+											name: '입찰',
+											type: 'column',
+											color: '#878787',
+											data: [0,0,0,0,0,0,0,0,0,0,0,0],
+											tooltip: {
+												valueSuffix: 'kWh'
+											}
+										}],
+
 										/* 툴팁 */
 										tooltip: {
 											shared: true
@@ -3345,7 +3363,7 @@
 							result.data[0].generation.items.map((e) => {
 								if (e.energy) {
 									const hour = Number(e.basetime.toString().slice(8, 10));
-									pvListHourly[hour - 1] += Math.floor(e.energy/1000);
+									pvListHourly[hour] += Math.floor(e.energy/1000);
 								}
 							});
 							
@@ -3392,7 +3410,7 @@
 							result.data[0].generation.items.map((e) => {
 								if (e.energy) {
 									const hour = Number(e.basetime.toString().slice(8, 10));
-									pvListForecastingHourly[hour - 1] += Math.floor(e.energy/1000);
+									pvListForecastingHourly[hour] += Math.floor(e.energy/1000);
 								}
 							});
 						},
@@ -3475,24 +3493,25 @@
 			}
 		})
 		pieChart.redraw();
-		rChart3.addSeries({
-			name: '출력',
-			type: 'column',
-			color: '#2BEEE9',
-			data: pvListHourly,
-			tooltip: {
-				valueSuffix: 'kWh'
-			}
-		}, false);
-		rChart3.addSeries({
-			name: '입찰',
-			type: 'column',
-			color: '#878787',
-			data: pvListForecastingHourly,
-			tooltip: {
-				valueSuffix: 'kWh'
-			}
-		}, false);
+		rChart3.update({
+			series: [{
+				name: '출력',
+				type: 'column',
+				color: '#2BEEE9',
+				data: pvListHourly,
+				tooltip: {
+					valueSuffix: 'kWh'
+				}
+			},{
+				name: '입찰',
+				type: 'column',
+				color: '#878787',
+				data: pvListForecastingHourly,
+				tooltip: {
+					valueSuffix: 'kWh'
+				}
+			}],
+		});
 		rChart3.redraw();
 	}
 	
@@ -3610,6 +3629,28 @@
 						restHourly = 100-ratioHourly
 					}
 					
+					const nowHour = new Date().getHours();
+					pvListHourly[nowHour] = Math.floor(todayGenAllSite/1000);
+					rChart3.update({
+						series: [{
+							name: '출력',
+							type: 'column',
+							color: '#2BEEE9',
+							data: pvListHourly,
+							tooltip: {
+								valueSuffix: 'kWh'
+							}
+						},{
+							name: '입찰',
+							type: 'column',
+							color: '#878787',
+							data: pvListForecastingHourly,
+							tooltip: {
+								valueSuffix: 'kWh'
+							}
+						}],
+					});
+					rChart3.redraw();
 					
 					//rchart1 변경
 					rchart1.series[0].data[`${'${siteIdx}'}`].z = ratioDaily;
