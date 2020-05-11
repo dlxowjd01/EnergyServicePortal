@@ -75,10 +75,16 @@
 		</c:otherwise>
 	</c:choose>
 
+	<c:set var="siteList" value="${sessionScope.userInfo.siteList}"/> <!-- 사이트 별 -->
+	<c:set var="tagList" value="${sessionScope.userInfo.tag_group}"/> <!-- 그룹 별 -->
+	<c:set var="vppList" value="${sessionScope.userInfo.vpp_group}"/> <!-- 중개거래 별 -->
+	<c:set var="drList" value="${sessionScope.userInfo.dr_group}"/> <!-- DR거래 별 -->
+	<c:set var="locList" value="${sessionScope.userInfo.location_group}"/> <!-- 지역 별 -->
+	<c:set var="resList" value="${sessionScope.userInfo.resource_group}"/> <!-- 유형 별 -->
 	<!-- input/dropdown //-->
 	<div class="all-menu">
 		<a href="#">구분</a>
-		<form name="menuform" action="" method="post">
+		<form name="menuform" method="post">
 			<div class="menu-group">
 				<ul>
 					<li>
@@ -87,15 +93,7 @@
 							<dd>
 								<a href="#">사업소별</a>
 								<ul>
-									<c:if test="${sessionScope.userInfo.auth_type eq '1'}">
-										<li><a href="/dashboard/gmain.do">전체</a></li>
-									</c:if>
-									<c:set var="siteList" value="${sessionScope.userInfo.siteList}"/> <!-- 사이트 별 -->
-									<c:set var="tagList" value="${sessionScope.userInfo.tag_group}"/> <!-- 그룹 별 -->
-									<c:set var="vppList" value="${sessionScope.userInfo.vpp_group}"/> <!-- 중개거래 별 -->
-									<c:set var="drList" value="${sessionScope.userInfo.dr_group}"/> <!-- DR거래 별 -->
-									<c:set var="locList" value="${sessionScope.userInfo.location_group}"/> <!-- 지역 별 -->
-									<c:set var="resList" value="${sessionScope.userInfo.resource_group}"/> <!-- 유형 별 -->
+									<li><a href="/dashboard/gmain.do">전체</a></li>
 									<c:if test="${fn:length(siteList) > 0}">
 										<c:forEach var="site" items="${siteList}">
 											<li><a href="/dashboard/smain.do?sid=${site.sid}">${site.name}</a></li>
@@ -105,65 +103,67 @@
 							</dd>
 						</dl>
 					</li>
-					<li>
-						<dl>
-							<dt></dt>
-							<dd>
-								<a href="#">그룹별</a>
-								<ul>
-									<c:if test="${fn:length(tagList) > 0}">
-									</c:if>
-									<%--										<li>--%>
-									<%--											<a href="">그룹#1</a>--%>
-									<%--											<ul>--%>
-									<%--												<li><a href="/dashboard/smain.do">사업소#1</a></li>--%>
-									<%--											</ul>--%>
-									<%--										</li>--%>
-									<%--										<li>--%>
-									<%--											<a href="#">그룹#2</a>--%>
-									<%--											<ul>--%>
-									<%--												<li><a href="/dashboard/smain.do">사업소#1</a></li>--%>
-									<%--												<li><a href="/dashboard/smain.do">사업소#2</a></li>--%>
-									<%--											</ul>--%>
-									<%--										</li>--%>
-								</ul>
-							</dd>
-						</dl>
-					</li>
-				</ul>
-				<ul>
-					<li>
-						<dl>
-							<dt>에너지 거래</dt>
-							<dd>
-								<a href="#">중개거래</a>
-								<ul>
-									<c:if test="${fn:length(vppList) > 0}">
-										<c:forEach var="vpp" items="${vppList}">
-											<li><a href="#">${vpp.name}</a></li>
-										</c:forEach>
-									</c:if>
-								</ul>
-							</dd>
-						</dl>
-					</li>
-					<li>
-						<dl>
-							<dt></dt>
-							<dd>
-								<a href="#">DR 거래</a>
-								<ul>
-									<c:if test="${fn:length(drList) > 0}">
-										<c:forEach var="dr" items="${drList}">
-											<li><a href="#">${dr.name}</a></li>
-										</c:forEach>
-									</c:if>
-								</ul>
-							</dd>
-						</dl>
-					</li>
-				</ul>
+					<c:if test="${fn:length(tagList) > 0}">
+						<li>
+							<dl>
+								<dt></dt>
+								<dd>
+									<a href="#">그룹별</a>
+									<ul>
 
+											<%--										<li>--%>
+											<%--											<a href="">그룹#1</a>--%>
+											<%--											<ul>--%>
+											<%--												<li><a href="/dashboard/smain.do">사업소#1</a></li>--%>
+											<%--											</ul>--%>
+											<%--										</li>--%>
+											<%--										<li>--%>
+											<%--											<a href="#">그룹#2</a>--%>
+											<%--											<ul>--%>
+											<%--												<li><a href="/dashboard/smain.do">사업소#1</a></li>--%>
+											<%--												<li><a href="/dashboard/smain.do">사업소#2</a></li>--%>
+											<%--											</ul>--%>
+											<%--										</li>--%>
+									</ul>
+								</dd>
+							</dl>
+						</li>
+					</c:if>
+				</ul>
+				<c:if test="${fn:length(vppList) > 0 || fn:length(drList) > 0}">
+					<ul>
+						<c:if test="${fn:length(vppList) > 0}">
+							<li>
+								<dl>
+									<dt>에너지 거래</dt>
+									<dd>
+										<a href="#">중개거래</a>
+										<ul>
+											<c:forEach var="vpp" items="${vppList}">
+												<li><a href="#">${vpp.name}</a></li>
+											</c:forEach>
+										</ul>
+									</dd>
+								</dl>
+							</li>
+						</c:if>
+						<c:if test="${fn:length(drList) > 0}">
+							<li>
+								<dl>
+									<dt></dt>
+									<dd>
+										<a href="#">DR 거래</a>
+										<ul>
+											<c:forEach var="dr" items="${drList}">
+												<li><a href="#">${dr.name}</a></li>
+											</c:forEach>
+										</ul>
+									</dd>
+								</dl>
+							</li>
+						</c:if>
+					</ul>
+				</c:if>
 				<ul>
 					<li class="lo-type lo">
 						<dl>
@@ -171,36 +171,21 @@
 							<dd>
 								<a href="#">지역별</a>
 								<ul>
-									<li><input type="checkbox" name="location" id="lo2"><label for="lo2">서울특별시</label>
+								<c:set var="systemLoc" value="${sessionScope.systemLoc}"/> <!-- 선택된 지역 -->
+								<c:forEach var="loc" items="${systemLocation}" varStatus="stat">
+									<c:set var="choice" value="false" />
+									<c:if test="${fn:length(systemLoc) > 0}">
+										<c:forEach var="selLoc" items="${systemLoc}">
+											<c:if test="${loc eq selLoc}">
+												<c:set var="choice" value="true" />
+											</c:if>
+										</c:forEach>
+									</c:if>
+									<li>
+										<input type="checkbox" name="systemLoc" id="lo${stat.index}" value="${loc}" <c:if test="${choice eq 'true'}">checked</c:if>>
+										<label for="lo${stat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${loc}</label>
 									</li>
-									<li><input type="checkbox" name="location" id="lo3"><label for="lo3">부산광역시</label>
-									</li>
-									<li><input type="checkbox" name="location" id="lo4"><label for="lo4">대구광역시</label>
-									</li>
-									<li><input type="checkbox" name="location" id="lo5"><label for="lo5">인천광역시</label>
-									</li>
-									<li><input type="checkbox" name="location" id="lo6"><label for="lo6">광주광역시</label>
-									</li>
-									<li><input type="checkbox" name="location" id="lo7"><label for="lo7">울산광역시</label>
-									</li>
-									<li><input type="checkbox" name="location" id="lo8"><label for="lo8">경기도</label>
-									</li>
-									<li><input type="checkbox" name="location" id="lo9"><label for="lo9">강원도</label>
-									</li>
-									<li><input type="checkbox" name="location" id="lo10"><label for="lo10">충청북도</label>
-									</li>
-									<li><input type="checkbox" name="location" id="lo11"><label for="lo11">충청남도</label>
-									</li>
-									<li><input type="checkbox" name="location" id="lo12"><label for="lo12">전라북도</label>
-									</li>
-									<li><input type="checkbox" name="location" id="lo13"><label for="lo13">전라남도</label>
-									</li>
-									<li><input type="checkbox" name="location" id="lo14"><label for="lo14">경상북도</label>
-									</li>
-									<li><input type="checkbox" name="location" id="lo15"><label for="lo15">경상남도</label>
-									</li>
-									<li><input type="checkbox" name="location" id="lo16"><label for="lo16">제주도</label>
-									</li>
+								</c:forEach>
 								</ul>
 							</dd>
 						</dl>
@@ -211,92 +196,45 @@
 							<dd>
 								<a href="#">유형별</a>
 								<ul>
-									<li><input type="checkbox" name="type" id="tp2"><label for="tp2">태양광</label></li>
-									<li><input type="checkbox" name="type" id="tp3"><label for="tp3">풍력</label></li>
-									<li><input type="checkbox" name="type" id="tp4"><label for="tp4">소수력</label></li>
-									<li><input type="checkbox" name="type" id="tp5"><label for="tp5">신재생 연계 ESS</label>
-									</li>
-									<li><input type="checkbox" name="type" id="tp6"><label for="tp6">피크저감 ESS</label>
-									</li>
+									<c:set var="systemTp" value="${sessionScope.systemTp}"/> <!-- 선택된 지역 -->
+									<c:forEach var="type" items="${systemType}" varStatus="stat">
+										<c:set var="choice" value="false" />
+										<c:if test="${fn:length(systemType) > 0}">
+											<c:forEach var="selType" items="${systemTp}">
+												<c:if test="${stat.index eq selType}">
+													<c:set var="choice" value="true" />
+												</c:if>
+											</c:forEach>
+										</c:if>
+										<li>
+											<input type="checkbox" name="systemType" id="tp${stat.index}" value="${stat.index}" <c:if test="${choice eq 'true'}">checked</c:if>>
+											<label for="tp${stat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${type}</label>
+										</li>
+									</c:forEach>
 								</ul>
 							</dd>
 						</dl>
 					</li>
 				</ul>
 				<div class="menu_btm_bx">
-					<button type="button" class="btn_type03">초기화</button>
-					<button type="button" class="btn_type">적용</button>
+					<button type="button" class="btn_type03" id="systemInit">초기화</button>
+					<button type="button" class="btn_type" id="systemApply">적용</button>
 				</div>
-				<%--          <li>--%>
-				<%--            <dl>--%>
-				<%--              <dt>에너지 거래</dt>--%>
-				<%--              <dd>--%>
-				<%--                <a href="#">중개거래</a>--%>
-				<%--                <ul>--%>
-				<%--                  <li><a href="/dashboard/jmain.do">자원이름#1</a></li>--%>
-				<%--                  <li><a href="">자원이름#2</a></li>--%>
-				<%--                  <li><a href="">자원이름#3</a></li>--%>
-				<%--                </ul>--%>
-				<%--              </dd>--%>
-				<%--            </dl>--%>
-				<%--          </li>--%>
-				<!-- <li>
-		  <dl>
-			<dt></dt>
-			<dd>
-					  <a href="#">DR거래</a>
-					  <ul>
-						<li><a href="">자원이름#1</a></li>
-						<li><a href="">자원이름#2</a></li>
-					  </ul>
-			</dd>
-		  </dl>
-				</li>	 -->
-				<%--          <li class="lo-type lo">--%>
-				<%--            <dl>--%>
-				<%--              <dt>지역 및 유형 선택</dt>--%>
-				<%--              <dd>--%>
-				<%--                <a href="#">지역별</a>--%>
-				<%--                <ul>--%>
-				<%--                  <li><input type="checkbox" name="location" id="lo2"><label for="lo2">서울특별시</label></li>--%>
-				<%--                  <li><input type="checkbox" name="location" id="lo3"><label for="lo3">부산광역시</label></li>--%>
-				<%--                  <li><input type="checkbox" name="location" id="lo4"><label for="lo4">대구광역시</label></li>--%>
-				<%--                  <li><input type="checkbox" name="location" id="lo5"><label for="lo5">인천광역시</label></li>--%>
-				<%--                  <li><input type="checkbox" name="location" id="lo6"><label for="lo6">광주광역시</label></li>--%>
-				<%--                  <li><input type="checkbox" name="location" id="lo7"><label for="lo7">울산광역시</label></li>--%>
-				<%--                  <li><input type="checkbox" name="location" id="lo8"><label for="lo8">경기도</label></li>--%>
-				<%--                  <li><input type="checkbox" name="location" id="lo9"><label for="lo9">강원도</label></li>--%>
-				<%--                  <li><input type="checkbox" name="location" id="lo10"><label for="lo10">충청북도</label></li>--%>
-				<%--                  <li><input type="checkbox" name="location" id="lo11"><label for="lo11">충청남도</label></li>--%>
-				<%--                  <li><input type="checkbox" name="location" id="lo12"><label for="lo12">전라북도</label></li>--%>
-				<%--                  <li><input type="checkbox" name="location" id="lo13"><label for="lo13">전라남도</label></li>--%>
-				<%--                  <li><input type="checkbox" name="location" id="lo14"><label for="lo14">경상북도</label></li>--%>
-				<%--                  <li><input type="checkbox" name="location" id="lo15"><label for="lo15">경상남도</label></li>--%>
-				<%--                  <li><input type="checkbox" name="location" id="lo16"><label for="lo16">제주도</label></li>--%>
-				<%--                </ul>--%>
-				<%--              </dd>--%>
-				<%--            </dl>--%>
-				<%--          </li>--%>
-				<%--          <li class="lo-type type">--%>
-				<%--            <dl>--%>
-				<%--              <dt></dt>--%>
-				<%--              <dd>--%>
-				<%--                <a href="#">유형별</a>--%>
-				<%--                <ul>--%>
-				<%--                  <li><input type="checkbox" name="type" id="tp2"><label for="tp2">태양광</label></li>--%>
-				<%--                  <li><input type="checkbox" name="type" id="tp3"><label for="tp3">풍력</label></li>--%>
-				<%--                  <li><input type="checkbox" name="type" id="tp4"><label for="tp4">소수력</label></li>--%>
-				<%--                  <li><input type="checkbox" name="type" id="tp5"><label for="tp5">신재생 연계 ESS</label></li>--%>
-				<%--                  <li><input type="checkbox" name="type" id="tp6"><label for="tp6">피크저감 ESS</label></li>--%>
-				<%--                </ul>--%>
-				<%--              </dd>--%>
-				<%--            </dl>--%>
-				<%--          </li>--%>
+				<input type="hidden" name="systemValue" value="system"/>
+				<script type="text/javascript">
+					$('#systemInit').on('click', function() {
+						$(':checkbox[name="systemLoc"]').prop('checked', false);
+						$(':checkbox[name="systemType"]').prop('checked', false);
+
+
+						$('form[name="menuform"]').attr('action', location.pathname).submit();
+					});
+
+					$('#systemApply').on('click', function() {
+						$('form[name="menuform"]').attr('action', location.pathname).submit();
+					});
+				</script>
 				</ul>
-				<%--        <div class="btn-group">--%>
-				<%--          <button type="reset" class="reset-btn">초기화</button>--%>
-				<%--          <button type="submit" class="apply-btn" disabled>적용</button>--%>
-				<%--        </div>--%>
 			</div>
 		</form>
 	</div><!--// input/dropdown -->

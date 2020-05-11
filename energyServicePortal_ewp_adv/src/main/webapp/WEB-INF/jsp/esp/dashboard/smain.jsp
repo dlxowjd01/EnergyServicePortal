@@ -1023,7 +1023,6 @@
 										});
 									</script>
 								</div>
-
 							</div>
 							<div class="ci_right">
 								<div class="legend_wrap">

@@ -3,12 +3,15 @@ package kr.co.esp.common;
 import egovframework.com.cmm.service.EgovProperties;
 import kr.co.esp.common.util.UserUtil;
 import kr.co.esp.system.service.CmpyGrpSiteMngService;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -22,58 +25,131 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		System.out.println("++++++++++++++++PreLoadInterceptor start++++++++++++++++");
 
+		HttpSession session = request.getSession();
 		Map<String, Object> userInfo = UserUtil.getUserInfo(request);
 
-		// 상단 사이트 목록 조회
-		if (userInfo != null) {
-			Integer userIdx = (Integer) userInfo.get("user_idx");
-			Integer compIdx = (Integer) userInfo.get("comp_idx");
-			Integer siteGrpIdx = (Integer) userInfo.get("site_grp_idx");
-			String authType = (String) userInfo.get("auth_type");
-			if (userIdx == null) {
-				userIdx = -1; // userIdx가 빈값일 경우 검색이 안되게 한다.
+		if(userInfo != null) {
+			String[] systemLoc = request.getParameterValues("systemLoc");
+			String[] systemType = request.getParameterValues("systemType");
+			String systemValue = request.getParameter("systemValue");
+			List<Map<String, Object>> siteList = (List<Map<String, Object>>) userInfo.get("siteList");
+			List<Map<String, Object>> refineList = new ArrayList<Map<String, Object>>();
+
+			if(systemValue != null && "system".equals(systemValue)) {
+				session.setAttribute("systemLoc", systemLoc);
+				session.setAttribute("systemTp", systemType);
 			}
 
-			Map<String, Object> param = new HashMap<String, Object>();
-			// 권한이 없거나 시스템관리자가 아니면 사용자가 권한이 있는 목록만 검색한다.
-			if (authType == null || (!"1".equals(authType) && !"2".equals(authType) && !"3".equals(authType))) {
-				param.put("userIdx", userIdx);
-			}
-			if ("2".equals(authType)) {
-				param.put("compIdx", compIdx);
-			}
-			if ("3".equals(authType)) {
-				param.put("siteGrpIdx", siteGrpIdx);
+			if(systemLoc != null || systemType != null) {
+				for(Map<String, Object> siteMap: siteList) {
+					String siteLocation = (String) siteMap.get("location");
+					int siteResourceType = (int) siteMap.get("resource_type");
+					String siteId = (String) siteMap.get("sid");
+
+					if(systemLoc != null) {
+						for(String loc : systemLoc) {
+							if(loc.startsWith(siteLocation)) {
+								if(refineList.size() > 0) {
+									for(Map<String, Object> refine : refineList) {
+										String sid = (String) refine.get("sid");
+										if(!sid.equals(siteId)) {
+											refineList.add(siteMap);
+											break;
+										}
+									}
+								} else {
+									refineList.add(siteMap);
+								}
+							}
+						}
+					}
+
+					if(systemType != null) {
+						for(String type : systemType) {
+							if(type.equals(String.valueOf(siteResourceType))) {
+								if(refineList.size() > 0) {
+									for(Map<String, Object> refine : refineList) {
+										String sid = (String) refine.get("sid");
+										if(!sid.equals(siteId)) {
+											refineList.add(siteMap);
+											break;
+										}
+									}
+								} else {
+									refineList.add(siteMap);
+								}
+							}
+						}
+					}
+				}
+			} else {
+				systemLoc = (String[]) session.getAttribute("systemLoc");
+				systemType = (String[]) session.getAttribute("systemTp");
+
+				if(systemLoc != null || systemType != null) {
+					for(Map<String, Object> siteMap: siteList) {
+						String siteLocation = (String) siteMap.get("location");
+						int siteResourceType = (int) siteMap.get("resource_type");
+						String siteId = (String) siteMap.get("sid");
+
+						if(systemLoc != null) {
+							for(String loc : systemLoc) {
+								if(loc.startsWith(siteLocation))  {
+									if(refineList.size() > 0) {
+										for(Map<String, Object> refine : refineList) {
+											String sid = (String) refine.get("sid");
+											if(!sid.equals(siteId)) {
+												refineList.add(siteMap);
+												break;
+											}
+										}
+									} else {
+										refineList.add(siteMap);
+									}
+								}
+							}
+						}
+
+						if(systemType != null) {
+							for(String type : systemType) {
+								if(type.equals(String.valueOf(siteResourceType))) {
+									if(refineList.size() > 0) {
+										for(Map<String, Object> refine : refineList) {
+											String sid = (String) refine.get("sid");
+											if(!sid.equals(siteId)) {
+												refineList.add(siteMap);
+												break;
+											}
+										}
+									} else {
+										refineList.add(siteMap);
+									}
+								}
+							}
+						}
+					}
+				} else {
+					refineList = siteList;
+				}
 			}
 
-			List<Map<String, Object>> userGroupList = cmpyGrpSiteMngService.getUserGroupList(param);
-			List<Map<String, Object>> userSiteList = cmpyGrpSiteMngService.getUserSiteList(param);
-			request.setAttribute("userGroupList", userGroupList);
-			request.setAttribute("userSiteList", userSiteList);
+			JSONArray jsonArray = new JSONArray();
+
+			for(Map<String, Object> siteMap : refineList) {
+				jsonArray.put(new JSONObject(siteMap));
+			}
+
+			request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
+
+			String[] locationArray = {"서울특별시", "부산광역시", "대구광역시", "인천광역시", "광주광역시", "울산광역시", "경기도", "강원도", "충청북도", "충청남도", "전라북도", "전라남도", "경상북도", "경상남도", "제주도"};
+			String[] type = {"수요", "태양광", "풍력", "소수력"};
+			request.setAttribute("systemLocation", locationArray);
+			request.setAttribute("systemType", type);
 		} else {
 			response.sendRedirect("/login.do");
 			return false;
 		}
 
-		String siteId = (request.getParameter("siteId") != null && !"".equals(request.getParameter("siteId"))) ? request.getParameter("siteId") : (String) request.getSession().getAttribute("selViewSiteId");
-		System.out.println("선택된 사이트id는   " + siteId);
-		if (siteId != null) {
-			Map<String, Object> param = new HashMap<String, Object>();
-			param.put("siteId", siteId);
-			Map<String, Object> result = cmpyGrpSiteMngService.getSiteDetail(param);
-			request.getSession().setAttribute("selViewSiteId", siteId);
-			request.getSession().setAttribute("selViewSite", result);
-			request.setAttribute("selViewSiteId", siteId);
-			request.setAttribute("selViewSite", result);
-		}
-
-		// 군관리 메인은 세션의 사이트ID를 지운다.
-		if (request.getRequestURI() != null && request.getRequestURI().startsWith("/main/gMain.do")) {
-			request.getSession().removeAttribute("selViewSiteId");
-			request.getSession().removeAttribute("selViewSite");
-			request.removeAttribute("selViewSiteId");
-			request.removeAttribute("selViewSite");
-		}
 		return super.preHandle(request, response, handler);
 	}
 

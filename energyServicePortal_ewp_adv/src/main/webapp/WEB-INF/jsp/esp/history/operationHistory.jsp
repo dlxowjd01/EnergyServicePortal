@@ -46,31 +46,20 @@
 
 	//사업소 조회
 	const siteList = function() {
-		$.ajax({
-			url:"http://iderms.enertalk.com:8443/config/sites",
-			type: "get",
-			async: false,
-			data: { oid: "spower" },
-			success: function(sites) {
-				$('#siteList > div > ul').empty();
+		$('#siteList > div > ul').empty();
 
-				let str = '';
-
-				sites.forEach((site, index) => {
-					str += `<li>
-								<a href="#" data-value="${'${site.sid}'}" tabindex="-1">
-									<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
-									<label for="${'${site.sid}'}"><span></span>${'${site.name}'}</label>
-								</a>
-							</li>`
-				});
-
-				$('#siteList>div>ul').append(str);
-			},
-			error: function(error){
-				console.error(error);
-			}
+		let str = '';
+		let sites = JSON.parse('${siteList}');
+		sites.forEach((site, index) => {
+			str += `<li>
+						<a href="#" data-value="${'${site.sid}'}" tabindex="-1">
+							<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
+							<label for="${'${site.sid}'}"><span></span>${'${site.name}'}</label>
+						</a>
+					</li>`;
 		});
+
+		$('#siteList>div>ul').append(str);
 	};
 
 	//선택한 SID에 해당하는 유형의 타입을 보여준다.
@@ -1087,8 +1076,7 @@
 							<button class="btn btn-primary dropdown-toggle w1" type="button" data-toggle="dropdown">
 								선택해주세요.<span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
-							</ul>
+							<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu"></ul>
 						</div>
 					</div>
 					<div class="fl">

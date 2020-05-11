@@ -199,6 +199,7 @@
 
 	$(function() {
 		siteList(); //사이트 조회
+
 		//사이트 선택시
 		$(document).on('click', ':checkbox[name="site"]', function() {
 			if($(this).is(':checked')) {
@@ -407,41 +408,19 @@
 
 	//사업소 호출
 	const siteList = function() {
-		$.ajax({
-			url:"http://iderms.enertalk.com:8443/config/sites",
-			type: "get",
-			async: false,
-			data: { oid: "spower" },
-			success: function(sites){
-				//세션에 데이터 저장
-				sessionStorage.setItem("sites", JSON.stringify(sites));
-				$('#siteList>div>ul').empty();
+		$('#siteList > div > ul').empty();
 
-				//사이트 리스트
-				<!--$('#siteList button').text(`${'${sites[0].name}'} 외 ${'${sites.length-1}'} 개`);-->
-
-				let grp = $('<p>').addClass('tx_li_tit').html('사업소별');
-
-				let grpTemp = $('<li>').addClass('dropdown_cov clear').append('<div>');
-				grpTemp.find('div').addClass('sec_li_bx').append(grp).append('<ul>');
-
-				let str = ``;
-				sites.forEach((site, index) => {
-					str += `<li>
-								<a href="#" data-value="${'${site.sid}'}" tabindex="-1">
-									<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
-									<label for="${'${site.sid}'}"><span></span>${'${site.name}'}</label>
-								</a>
-							</li>`
-				});
-
-				grpTemp.find('ul').append(str);
-				$('#siteList>div>ul').append(grpTemp);
-			},
-			error: function(error){
-				console.error(error);
-			}
+		let str = '';
+		let sites = JSON.parse('${siteList}');
+		sites.forEach((site, index) => {
+			str += `<li>
+						<a href="#" data-value="${'${site.sid}'}" tabindex="-1">
+							<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
+							<label for="${'${site.sid}'}"><span></span>${'${site.name}'}</label>
+						</a>
+					</li>`;
 		});
+		$('#siteList>div>ul').append(str);
 	};
 
 	const device = function() {
