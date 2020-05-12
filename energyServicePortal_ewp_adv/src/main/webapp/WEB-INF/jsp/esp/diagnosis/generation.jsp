@@ -1164,8 +1164,8 @@
 
 	//두기간 사이 차이 구하기.
 	function getDiff(eDate, sDate, type) {
-		eDate = new Date(eDate.substring(2, 4), eDate.substring(4, 6), eDate.substring(6, 8));
-		sDate = new Date(sDate.substring(2, 4), sDate.substring(4, 6), sDate.substring(6, 8));
+		eDate = new Date(eDate.substring(2, 4), eDate.substring(4, 6)-1, eDate.substring(6, 8));
+		sDate = new Date(sDate.substring(2, 4), sDate.substring(4, 6)-1, sDate.substring(6, 8));
 		if(type == 'day') {
 			return (((((eDate - sDate)/1000)/60)/60)/24) + 1;
 		} else if(type == 'month') {
