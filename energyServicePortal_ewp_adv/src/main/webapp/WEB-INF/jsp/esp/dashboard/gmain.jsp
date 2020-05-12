@@ -2823,6 +2823,9 @@
 
   function getTodayTotalDetail() {
 
+    $('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(0);
+    $('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(0);
+
     const formData = getSiteMainSchCollection("day");
     
     $.ajax({

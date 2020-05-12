@@ -1780,17 +1780,6 @@
 							</script>
 						</div>
 						<div class="realtime_time"></div>
-						<script>
-							setInterval((()=>{
-								const now = new Date().getMinutes();
-								const nowBottom = parseInt($('.realtime_time').css('bottom'),10);
-								if(nowBottom >= 186){
-									$('.realtime_time').css('bottom', '40px');
-								}else{
-									$('.realtime_time').css('bottom', 40+((146/60)*now));
-								}
-							})(),30000)
-						</script>
 					</div>
 				</div>
 			</div>
@@ -3329,6 +3318,9 @@
 		pvListHourly = new Array(24).fill(0);
 		pvListForecastingHourly = new Array(24).fill(0);
 		
+		$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(0);
+		$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(0);
+
 		const formData = getSiteMainSchCollection("day");
 		
 		$.ajax({
@@ -3687,7 +3679,14 @@
 			error: function () {
 			
 			}
-		})
+		});
+		const now = new Date().getMinutes();
+		const nowBottom = parseInt($('.realtime_time').css('bottom'),10);
+		if(nowBottom >= 186){
+			$('.realtime_time').css('bottom', '40px');
+		}else{
+			$('.realtime_time').css('bottom', 40+((146/60)*now));
+		}
 	}
 	
 	function getAlarmInfo() {
