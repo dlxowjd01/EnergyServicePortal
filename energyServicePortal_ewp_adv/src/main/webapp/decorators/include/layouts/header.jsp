@@ -81,6 +81,7 @@
 	<c:set var="drList" value="${sessionScope.userInfo.dr_group}"/> <!-- DR거래 별 -->
 	<c:set var="locList" value="${sessionScope.userInfo.location_group}"/> <!-- 지역 별 -->
 	<c:set var="resList" value="${sessionScope.userInfo.resource_group}"/> <!-- 유형 별 -->
+
 	<!-- input/dropdown //-->
 	<div class="all-menu">
 		<a href="#">구분</a>
@@ -110,20 +111,24 @@
 								<dd>
 									<a href="#">그룹별</a>
 									<ul>
+										<c:forEach var="group" items="${tagList}">
+											<li>
+												<a href="#">${group.name}</a>
+												<ul>
+													<c:set var="groupSites" value="${group.group_sites}"/>
+													<c:forEach var="groupSiteList" items="${groupSites}">
+														<li>
+															<c:forEach var="site" items="${siteList}">
+																<c:if test="${groupSiteList.sid eq site.sid}">
+																	<a href="/dashboard/smain.do?sid=${groupSiteList.sid}">${site.name}</a>
+																</c:if>
+															</c:forEach>
 
-											<%--										<li>--%>
-											<%--											<a href="">그룹#1</a>--%>
-											<%--											<ul>--%>
-											<%--												<li><a href="/dashboard/smain.do">사업소#1</a></li>--%>
-											<%--											</ul>--%>
-											<%--										</li>--%>
-											<%--										<li>--%>
-											<%--											<a href="#">그룹#2</a>--%>
-											<%--											<ul>--%>
-											<%--												<li><a href="/dashboard/smain.do">사업소#1</a></li>--%>
-											<%--												<li><a href="/dashboard/smain.do">사업소#2</a></li>--%>
-											<%--											</ul>--%>
-											<%--										</li>--%>
+														</li>
+													</c:forEach>
+												</ul>
+											</li>
+										</c:forEach>
 									</ul>
 								</dd>
 							</dl>
@@ -140,7 +145,7 @@
 										<a href="#">중개거래</a>
 										<ul>
 											<c:forEach var="vpp" items="${vppList}">
-												<li><a href="#">${vpp.name}</a></li>
+												<li><a href="/dashboard/jmain.do?sid=${vpp.sid}">${vpp.name}</a></li>
 											</c:forEach>
 										</ul>
 									</dd>
