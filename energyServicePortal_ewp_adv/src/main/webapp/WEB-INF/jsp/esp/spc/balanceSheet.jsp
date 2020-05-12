@@ -57,8 +57,7 @@
 		<div class="col-lg-12">
 			<div class="indiv">
 				<div class="btn_wrap_type">
-					<button type="button" class="btn_type03">선택 삭제</button>
-					<button type="button" class="btn_type">신규 등록</button>
+					<a href="/spc/balanceSheetPost.do">신규 등록</a>
 				</div>
 				<div class="spc_tbl align_type">			
 					<table class="chk_type">
@@ -186,6 +185,10 @@
 							</tr>
 						</tbody>
 					</table>	
+				</div>
+				<div class="btn_wrap_type">
+					<a href="/spc/balanceSheetEdit.do">선택 수정</a>
+					<button type="button" class="btn_type">선택 삭제</button>
 				</div>
 				<div class="paging_wrap">
 					<a href="#;" class="btn_prev">prev</a>
