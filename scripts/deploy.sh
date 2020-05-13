@@ -1,5 +1,5 @@
 #!/bin/bash
-BUILD_PATH=/usr/local/apache-tomcat-9.0.31/webapps/
+BUILD_PATH=/usr/local/apache-tomcat-9.0.34/webapps/
 
 echo "> 현재 실행중인 tomcat 애플리케이션 pid 확인"
 CURRENT_PID=$(pgrep -f tomcat)
