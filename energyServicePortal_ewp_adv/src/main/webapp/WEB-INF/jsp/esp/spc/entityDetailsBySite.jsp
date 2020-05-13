@@ -11,6 +11,109 @@
     <title>Title</title>
   </head>
   <body>
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="ly_wrap">
+				<h2 class="ly_tit">SPC 원가관리 등록/수정 이력</h2>
+				<div class="spc_tbl ly_type">			
+					<table>
+						<colgroup>
+						<col style="width:15%">
+						<col>
+						</colgroup>
+						<thead>
+							<tr>
+								<th>이름</th>
+								<th>사용 아이디</th>
+								<th>시작 시간</th>
+								<th>종료 시간</th>
+								<th>내용</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>김세준</td>
+								<td>sj.kim@s-energy.com</td>
+								<td>2020-05-04 16:15</td>
+								<td>2020-05-04 16:15</td>
+								<td>5월 SPC 원가 관리 정보 등록</td>
+							</tr>
+							<tr>
+								<td>김세준</td>
+								<td>sj.kim@s-energy.com</td>
+								<td>2020-05-04 16:15</td>
+								<td>2020-05-04 16:15</td>
+								<td>5월 SPC 원가 관리 정보 수정</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="btn_wrap_type02">
+				<button type="button" class="btn_type" data-dismiss="modal">확인</button>
+			</div>
+		</div>
+	  </div>
+	</div>
+
     <div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header">SPC 원가관리</h1>
@@ -44,7 +147,7 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
-			<div class="indiv">
+			<div class="indiv entity_site">
 				<div class="btn_wrap_type">
 					<div class="dropdown">
 						<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">2020년
@@ -356,6 +459,7 @@
 				</div>
 				<div class="btn_wrap_type02">
 					<button type="button" class="btn_type03">목록</button>
+					<button type="button" class="btn_type" data-toggle="modal" data-target="#myModal">이력확인</button>
 				</div>
 			</div>
 		</div>

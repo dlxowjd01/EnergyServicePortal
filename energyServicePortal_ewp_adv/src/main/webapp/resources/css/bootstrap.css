@@ -5928,8 +5928,8 @@ button.close {
   opacity: 0;
 }
 .modal-backdrop.in {
-  filter: alpha(opacity=50);
-  opacity: .5;
+  filter: alpha(opacity=80);
+  opacity: .8;
 }
 .modal-header {
   padding: 15px;
@@ -5968,10 +5968,17 @@ button.close {
   height: 50px;
   overflow: scroll;
 }
+
 @media (min-width: 768px) {
+	.spc_tbl02_row{overflow-x:auto}
+	.spc_tbl02_row::-webkit-scrollbar-track {border-radius: 2px;background-color: var(--scroll-color2)}
+	.spc_tbl02_row::-webkit-scrollbar {height: 8px;border-radius: 2px;background-color: var(--scroll-color2);}
+	.spc_tbl02_row::-webkit-scrollbar-corner {background-color: var(--scroll-color2);}
+	.spc_tbl02_row::-webkit-scrollbar-thumb {border-radius: 2px;background-color: var(--scroll-color);}
   .modal-dialog {
     width: 600px;
     margin: 30px auto;
+	
   }
   .modal-content {
     -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
@@ -6753,5 +6760,10 @@ button.close {
   .hidden-print {
     display: none !important;
   }
+}
+@media (min-width: 1092px) {
+	.modal-dialog {width:1092px}
+	.spc_tbl02_row{overflow-x:visible}
+	
 }
 /*# sourceMappingURL=bootstrap.css.map */

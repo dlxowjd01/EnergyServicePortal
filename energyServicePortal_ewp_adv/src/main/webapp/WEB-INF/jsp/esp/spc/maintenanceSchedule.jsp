@@ -11,6 +11,164 @@
     <title>Title</title>
   </head>
   <body>
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="ly_wrap">
+				<h2 class="ly_tit">점검계획 등록</h2>
+				<div class="spc_tbl02_row">			
+					<table>
+						<colgroup>
+						<col style="width:157px">
+						<col style="width:365px">
+						<col style="width:156px">
+						<col style="width:346px">
+						</colgroup>
+						<tr>
+							<th>발전소 선택</th>
+							<td colspan="3">
+								<div class="tx_btn_area type">
+									<div class="tx_inp_type">
+										<input type="text" placeholder="입력">
+									</div>
+									<button type="submit" class="btn_type">검색</button>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>점검 구분</th>
+							<td>
+								<div class="dropdown placeholder">
+								  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">점검 계획 항목 선택
+								  <span class="caret"></span></button>
+								  <ul class="dropdown-menu">
+									<li><a href="#">정기 점검</a></li>
+									<li><a href="#">구조물 안전진단</a></li>
+									<li><a href="#">소방점검</a></li>
+								  </ul>
+								</div>
+							</td>
+							<th>기준 일자</th>
+							<td>
+								<div class="sel_calendar">
+									<input type="text" id="datepicker1" class="sel" value="" autocomplete="off" readonly placeholder="날짜 선택">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>점검 반복 주기</th>
+							<td>
+								<div class="dropdown placeholder">
+								  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">점검 반복 주기
+								  <span class="caret"></span></button>
+								  <ul class="dropdown-menu">
+									<li class="on"><a href="#">반복 안함</a></li>
+									<li><a href="#">매주 동일 요일</a></li>
+									<li><a href="#">매월 동일 날짜</a></li>
+									<li><a href="#">매년 동일 날짜</a></li>
+								  </ul>
+								</div>
+							</td>
+							<th>공휴일 처리</th>
+							<td>
+								<div class="dropdown placeholder">
+								  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">공휴일 처리 선택
+								  <span class="caret"></span></button>
+								  <ul class="dropdown-menu">
+									<li><a href="#">처리 안함</a></li>
+									<li><a href="#">공휴일 직전 영업일</a></li>
+									<li><a href="#">공휴일 직후 영업일</a></li>
+								  </ul>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>내용</th>
+							<td colspan="3">
+								<div class="txarea_inp_type">
+									<textarea placeholder="입력" rows="5"></textarea>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>작업자</th>
+							<td>
+								<div class="tx_inp_type">
+									<input type="text" placeholder="입력">
+								</div>
+							</td>
+							<th>비고</th>
+							<td>
+								<div class="tx_inp_type" style="width:100%">
+									<input type="text" placeholder="입력">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>알림 설정</th>
+							<td>
+								<div class="dropdown placeholder">
+								  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">알림 일시 선택
+								  <span class="caret"></span></button>
+								  <ul class="dropdown-menu">
+									<li><a href="#">1일 전</a></li>
+									<li><a href="#">3일 전</a></li>
+									<li><a href="#">7일 전</a></li>
+									<li><a href="#">직접 설정</a></li>
+								  </ul>
+								</div>
+							</td>
+							<th>수신 번호</th>
+							<td>
+								<div class="tx_inp_type" style="width:100%">
+									<input type="text" placeholder="입력">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>알림 설정</th>
+							<td>
+								<div class="dropdown placeholder">
+								  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">알림 일시 선택
+								  <span class="caret"></span></button>
+								  <ul class="dropdown-menu">
+									<li><a href="#">1일 전</a></li>
+									<li><a href="#">3일 전</a></li>
+									<li><a href="#">7일 전</a></li>
+									<li><a href="#">직접 설정</a></li>
+								  </ul>
+								</div>
+							</td>
+							<th>알림 시간</th>
+							<td>
+								<div class="clear">
+									<div class="dropdown placeholder fl" style="width:160px">
+									  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">알림 시간 선택
+									  <span class="caret"></span></button>
+									  <ul class="dropdown-menu">
+										<li><a href="#">0시</a></li>
+										<li><a href="#">1시</a></li>
+										<li><a href="#">2시</a></li>
+										<li><a href="#">3시</a></li>
+									  </ul>
+									</div>
+									<div class="tx_inp_type fr" style="width:160px">
+										<input type="text" placeholder="수신 번호">
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>	
+				</div>
+			</div>
+			<div class="btn_wrap_type02">
+				<button type="button" class="btn_type03" data-dismiss="modal">취소</button>
+				<button type="button" class="btn_type">등록</button>
+			</div>
+		</div>
+	  </div>
+	</div>
     <div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header">SPC 점검계획</h1>
@@ -27,36 +185,23 @@
 					<div class="dropdown">
 						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">2020년
 						<span class="caret"></span></button>
-						<ul class="dropdown-menu dropdown-menu-form">
-							<li class="dropdown_cov clear">
-								<div class="sec_li_bx">
-									<ul>
-										<li><a href="#">전체</a></li>
-										<li><a href="#">2020</a></li>
-										<li><a href="#">2019</a></li>
-										<li><a href="#">2018</a></li>
-									<ul>
-								</div>
-							</li>
-						</ul>
+						 <ul class="dropdown-menu">
+							<li><a href="#">2020</a></li>
+							<li><a href="#">2019</a></li>
+							<li><a href="#">2018</a></li>
+						  </ul>
 					</div>
 				</div>
 				<div class="sch_sel_item">
 					<div class="dropdown">
 						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">04월
 						<span class="caret"></span></button>
-						<ul class="dropdown-menu dropdown-menu-form">
-							<li class="dropdown_cov clear">
-								<div class="sec_li_bx">
-									<ul>
-										<li><a href="#">1월</a></li>
-										<li><a href="#">2월</a></li>
-										<li><a href="#">3월</a></li>
-										<li><a href="#">4월</a></li>
-									<ul>
-								</div>
-							</li>
-						</ul>
+						<ul class="dropdown-menu">
+							<li><a href="#">1월</a></li>
+							<li><a href="#">2월</a></li>
+							<li><a href="#">3월</a></li>
+							<li><a href="#">4월</a></li>
+						  </ul>
 					</div>
 				</div>
 			</div>
@@ -101,7 +246,8 @@
 							<button class="btn_next_mon">next</button>
 							<strong>4월</strong>
 						</div>
-						<a href="/spc/maintenanceSchedulePost.do" class="btn_type fr">등록</a>
+						<a href="#" class="btn_type fr" data-toggle="modal" data-target="#myModal">등록</a>
+						<!--<a href="/spc/maintenanceSchedulePost.do" class="btn_type fr">등록</a>-->
 					</div>
 					<div class="sch_btm_area">
 						<table>

@@ -56,8 +56,8 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="indiv">
-				<div class="btn_wrap_type">
-					<a href="/spc/balanceSheetPost.do">신규 등록</a>
+				<div class="btn_wrap_type02">
+					<button type="button" class="btn_type" onclick="location.href='/spc/balanceSheetPost.do'">신규 등록</button>
 				</div>
 				<div class="spc_tbl align_type">			
 					<table class="chk_type">
@@ -186,9 +186,9 @@
 						</tbody>
 					</table>	
 				</div>
-				<div class="btn_wrap_type">
-					<a href="/spc/balanceSheetEdit.do">선택 수정</a>
-					<button type="button" class="btn_type">선택 삭제</button>
+				<div class="btn_wrap_type02">
+					<button type="button" class="btn_type03" onclick="location.href='/spc/balanceSheetEdit.do'">선택 수정</button>
+					<button type="button" class="btn_type03">선택 삭제</button>
 				</div>
 				<div class="paging_wrap">
 					<a href="#;" class="btn_prev">prev</a>
