@@ -1331,7 +1331,7 @@
 									interval: 'hour'
 								};
 
-								let saChart2EnergyItems1;
+								let saChart2EnergyItems1 = new Array();
 								let saChart2EnergyItems2;
 
 								function saChart2Poll() {
@@ -1342,7 +1342,33 @@
 										data: saChart2Data,
 										success: function (result) {
 											var data = result.data[0];
-											saChart2EnergyItems1 = data.generation.items;
+											dummyItem = data.generation.items;
+
+											if(dummyItem.length > 0) {
+												let time = String(dummyItem[0].basetime).substring(0, 10) + '0000';
+												let hour = Number(String(dummyItem[0].basetime).substring(8, 10));
+												for(let j = 0; j < hour; j++) {
+													let dummyTime = time.substring(0, 8);
+													if(j >= 10) {
+														dummyTime += j + '000000';
+													} else {
+														dummyTime += '0' + j  + '000000';
+													}
+
+													saChart2EnergyItems1.push({
+														basetime: dummyTime,
+														cenergy: 0,
+														cmoney: 0,
+														denergy: 0,
+														dmoney: 0,
+														energy: null,
+														money: null
+													});
+												}
+
+												saChart2EnergyItems1 = saChart2EnergyItems1.concat(dummyItem);
+											}
+
 											if (debugMode) {
 												console.log("saChart2:", saChart2EnergyItems1);
 											}
@@ -1392,7 +1418,7 @@
 														}
 
 														saChart2EnergyItems1.push({
-															basetime: time,
+															basetime: dummyTime,
 															cenergy: 0,
 															cmoney: 0,
 															denergy: 0,
