@@ -65,7 +65,7 @@
 		<div class="col-lg-12">
 			<div class="indiv">
 				<div class="btn_wrap_type">
-					<button type="button" class="btn_type">등록</button>
+					<a href="/report/maintenanceReportPost.do">등록</a>
 				</div>
 				<div class="spc_tbl align_type">			
 					<table class="chk_type">

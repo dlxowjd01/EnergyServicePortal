@@ -64,7 +64,7 @@
 					</table>	
 				</div>
 				<div class="btn_wrap_type02">
-					<button type="button" class="btn_type03">수정</button>
+					<a href="/report/maintenanceReportEdit.do">수정</a>
 					<button type="button" class="btn_type03">목록</button>
 				</div>
 			</div>
@@ -105,7 +105,7 @@
 					</table>	
 				</div>
 				<div class="btn_wrap_type02">
-					<button type="button" class="btn_type03">수정</button>
+					<a href="/report/maintenanceReportEdit.do">수정</a>
 					<button type="button" class="btn_type03">목록</button>
 				</div>
 			</div>

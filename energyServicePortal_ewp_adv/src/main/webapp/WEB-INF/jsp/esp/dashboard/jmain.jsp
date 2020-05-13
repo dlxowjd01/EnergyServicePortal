@@ -3653,7 +3653,7 @@
 					rchart2.update({
 						series: [{
 							name: '입찰',
-							data: [restDaily],
+							data: [restHourly],
 							tooltip: {
 								valueSuffix: '%'
 							},
@@ -3663,7 +3663,7 @@
 							color: '#575757' /* 입찰 */
 						},{
 							name: '출력',
-							data: [ratioDaily],
+							data: [ratioHourly],
 							tooltip: {
 								valueSuffix: '%'
 							},
