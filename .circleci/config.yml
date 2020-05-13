@@ -89,9 +89,9 @@ jobs:
             elif [ "$CIRCLE_BRANCH" = "iDERMS-SaaS" ]; then
               echo -e "build in iDERMS-SaaS"
               REMOTE_SERVER=$SSH_USER_SAAS@$SSH_HOST_SAAS
-              scp ~/circleci-demo-java-spring/energyServicePortal-1.0.0.war $REMOTE_SERVER:/usr/local/apache-tomcat-9.0.34/webapps
-              scp ~/circleci-demo-java-spring/scripts/*.sh $REMOTE_SERVER:/home/ec2-user/
-              ssh $REMOTE_SERVER 'chmod 755 ./deploy.sh; ./deploy.sh; chmod 755 ./health-check.sh; ./health-check.sh'
+              sudo scp ~/circleci-demo-java-spring/energyServicePortal-1.0.0.war $REMOTE_SERVER:/usr/local/apache-tomcat-9.0.34/webapps
+              sudo scp ~/circleci-demo-java-spring/scripts/*.sh $REMOTE_SERVER:/home/ec2-user/
+              sudo ssh $REMOTE_SERVER 'chmod 755 ./deploy.sh; ./deploy.sh; chmod 755 ./health-check.sh; ./health-check.sh'
             else
               REMOTE_SERVER=$SSH_USER@$SSH_HOST
               scp -i ~/.ssh/ewp.pem -o StrictHostKeyChecking=no ~/circleci-demo-java-spring/ewpsp.war $REMOTE_SERVER:/home/ubuntu/build
