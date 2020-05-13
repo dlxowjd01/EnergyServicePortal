@@ -25,7 +25,7 @@ fi
 WAR_NAME=energySerivcePortal-1.0.0.war
 echo "> build 파일명: $WAR_NAME"
 
-DEPLOY_PATH=/usr/local/apache-tomcat-9.0.31/webapps/
+DEPLOY_PATH=$BUILD_PATH
 cd $DEPLOY_PATH
 
 #jar -xvf $WAR_NAME
