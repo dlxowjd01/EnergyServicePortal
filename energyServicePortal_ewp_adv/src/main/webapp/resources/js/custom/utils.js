@@ -846,7 +846,7 @@ function setJsonAutoMapping(json, areaId) {
 	for (var prop in json) {
 
 		if (typeof json[prop] == "string") {
-			setDataMapping($selecter, json.prop);
+			setDataMapping($selecter, json, prop);
 		} else if (typeof json[prop] == "object") {
 
 			if (Array.isArray(json[prop])) {
@@ -878,6 +878,12 @@ function setDataMapping($selecter, json, prop) {
 		$element.val(json[prop]);
 	} else if (_TagName == "TEXTAREA") {
 		$element.val(json[prop]);
+	} else if (_TagName == "DIV") {
+		$.each($element.find('li'), function() {
+			if($(this).data('value') == json[prop]) {
+				$element.find('button').html($(this).text() + '<span class="caret"></span>').data('value', json[prop]);
+			}
+		});
 	} else {
 		$element.text(json[prop]);
 	}

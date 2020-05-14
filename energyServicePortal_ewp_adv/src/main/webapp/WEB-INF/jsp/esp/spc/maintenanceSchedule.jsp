@@ -5,36 +5,103 @@
   Time: 15:54
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<%@ include file="/decorators/include/taglibs.jsp"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ include file="/decorators/include/taglibs.jsp" %>
 <script type="text/javascript">
 	let today = new Date();
 	let date = new Date();
+	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
+	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 
-	$(function() {
+	$(function () {
 		pageInit();
 
 		//전월
-		$('.btn_prev_mon').on('click', function() {
+		$('.btn_prev_mon').on('click', function () {
 			today = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
 			buildCalendar();
 		});
 
 		//다음월
-		$('.btn_next_mon').on('click', function() {
+		$('.btn_next_mon').on('click', function () {
 			today = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
 			buildCalendar();
 		});
 
 		//요번달
-		$('.btn_type03.active').on('click', function() {
+		$('.btn_type03.active').on('click', function () {
 			today = new Date();
 			buildCalendar();
+		});
+
+		$('#register').on('click', function () {
+			modalPopInit();
+		});
+
+		$('#registerModal li').on('click', function () {
+			let value = $(this).data('value');
+			let buttonId = $(this).parents('div').prop('id');
+			$(this).parents('div.dropdown').find('button').data('value', value);
+
+			if (buttonId == 'repeat_unit') {
+				if (value == '') {
+					$('[name="repeat_yn"]').val('N');
+				} else {
+					$('[name="repeat_yn"]').val('Y');
+				}
+			}
+		});
+
+		$('[name="siteName"]').autocomplete({
+			source: function (request, response) {
+				$.ajax({
+					url: 'http://iderms.enertalk.com:8443/auth/me/sites',
+					dataType: 'json',
+					type: "get",
+					success: function (data) {
+						response(
+							$.map(data, function (item) {
+								let siteNm = $('[name="siteName"]').val();
+								if (item.name.match(siteNm)) {
+									return {
+										label: item.name,
+										value: item.sid
+									}
+								}
+							})
+						);
+					}
+				});
+			},
+			minLength: 1,
+			autoFocus: true,
+			classes: {
+				'ui-autocomplete': 'highlight'
+			},
+			select: function (evnet, ui) {
+				evnet.preventDefault();
+				$('[name="siteName"]').val(ui.item.label);
+				$('[name="site_id"]').val(ui.item.value);
+			},
+			focus: function (evnet, ui) {
+				evnet.preventDefault();
+				$('[name="siteName"]').val(ui.item.label);
+				$('[name="site_id"]').val(ui.item.value);
+			},
+			delay: 500
+		});
+
+		$(':checkbox[name="type"]').on('change', function () {
+			checkCalendarVisual();
+		});
+
+		$('#searchName').on('keyup', function () {
+			checkCalendarVisual();
 		});
 	});
 
 	//기본세팅
-	const pageInit = function() {
+	const pageInit = function () {
 		let html = '';
 		let year = today.getFullYear();
 		let month = today.getMonth() + 1;
@@ -43,7 +110,7 @@
 		$('#year > button').html(year + '년<span class="caret"></span>').data('value', year);
 		$('#month > button').html(month + '월<span class="caret"></span>').data('value', month);
 
-		for(let i = 0; i < 5; i++) {
+		for (let i = 0; i < 5; i++) {
 			let bfYear = new Date(year - i, month + 1);
 			let select = i == 0 ? 'on' : '';
 			html += '<li data-value="' + bfYear.getFullYear() + '" class="' + select + '"><a href="#">' + bfYear.getFullYear() + '년 </a></li>';
@@ -52,10 +119,10 @@
 		$('#year ul').empty().append(html);
 
 		buildCalendar();
-	}
+	};
 
 	//달력 그리기
-	const buildCalendar = function() {//현재 달 달력 만들기
+	const buildCalendar = function () {//현재 달 달력 만들기
 		let doMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 		let lastDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 		let tbCalendar = document.getElementById('calendar');
@@ -64,24 +131,20 @@
 			tbCalendar.deleteRow(tbCalendar.rows.length - 1);
 		}
 
-		let row = null;
+		let row = tbCalendar.insertRow();
+		let cell = null;
 		let cnt = 0;
-		row = tbCalendar.insertRow();
-		for(i = 0; i < doMonth.getDay(); i++) {
+		for (let i = 0; i < doMonth.getDay(); i++) {
 			cell = row.insertCell();
 			cnt = cnt + 1;
 		}
 
-		for (i = 1; i <= lastDate.getDate(); i++) {
+		for (let i = 1; i <= lastDate.getDate(); i++) {
 			cell = row.insertCell();
-			cell.innerHTML = i;
+			cell.innerHTML = '<span class="date" data-day="' + doMonth.format('yyyyMM') + i + '">' + i;
 			cnt = cnt + 1;
-			if (cnt % 7 == 1) {
-				cell.innerHTML = '<span class="date">' + i;
-			}
 
-			if (cnt%7 == 0) {
-				cell.innerHTML = '<span class="date">' + i;
+			if (cnt % 7 == 0) {
 				row = calendar.insertRow();
 			}
 			/*오늘의 날짜에 노란색 칠하기*/
@@ -95,10 +158,215 @@
 		$('.sch_btn > strong').html(doMonth.getMonth() + 1 + '월');
 		$('#year > button').html(doMonth.getFullYear() + '년<span class="caret"></span>').data('value', doMonth.getFullYear());
 		$('#month > button').html(doMonth.getMonth() + 1 + '월<span class="caret"></span>').data('value', doMonth.getMonth() + 1);
+
+		maintenance('get');
+	};
+
+	const maintenance = function (action, jobId) {
+		let option = {};
+		if (action == 'post' || action == 'patch') {
+			let data = setData();
+			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
+			let url = '';
+			if (action == 'patch') {
+				url = 'http://iderms.enertalk.com:8443/spcs/maintenance/' + jobId + '?oid=' + oid + jobText;
+				delete data.site_id;
+			} else {
+				url = 'http://iderms.enertalk.com:8443/spcs/maintenance?oid=' + oid;
+			}
+
+			option = {
+				url: url,
+				dataType: 'json',
+				type: action,
+				contentType: "application/json",
+				traditional: true,
+				data: JSON.stringify(data)
+			};
+		} else if (action == 'get') {
+			option = {
+				url: 'http://iderms.enertalk.com:8443/spcs/maintenance',
+				type: action,
+				dataType: 'json',
+				data: {
+					oid: oid,
+					like_yyyymm: $('#year button').data('value') + ('0' + $('#month button').data('value')).slice(-2)
+				}
+			};
+
+			if (jobId != undefined) {
+				option.data.jobId = jobId;
+			}
+		} else {
+			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
+			option = {
+				url: 'http://iderms.enertalk.com:8443/spcs/maintenance/' + jobId + '?oid=' + oid + jobText,
+				type: action,
+				data: {
+					oid: oid,
+					jobId: jobId
+				}
+			};
+		}
+
+		$.ajax(option).done(function (data, textStatus, jqXHR) {
+			if (action == 'get') {
+				if (jobId != undefined) {
+					modalPopInit(data.data);
+				} else {
+					checkCalendar(data.data);
+				}
+			} else {
+				maintenance('get');
+				$('#registerModal').modal('hide');
+			}
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.log(jqXHR);
+			console.log(textStatus);
+			console.log(errorThrown);
+
+			alert('처리 중 오류가 발생했습니다.');
+			return false;
+		});
+	};
+
+	//등록&수정 용 데이터 세팅
+	const setData = function () {
+		let jsonData = {};
+		let job_info = {};
+		let job_info_Array = ['worker', 'note', 'description', 'alarmDate', 'alarmTime', 'alarmPhone', 'alarmSetup'];
+
+		$('#registerModal input, textarea').each(function () {
+			if ($.inArray($(this).prop('name'), job_info_Array) > -1) {
+				job_info[$(this).prop('name')] = String($(this).val());
+			} else {
+				if ($(this).prop('name') == 'job_date') {
+					let jobDate = $(this).datepicker('getDate');
+					console.log(jobDate);
+					console.log(jobDate.toISOString());
+					jsonData[$(this).prop('name')] = jobDate.toISOString();
+				} else if ($(this).prop('name').match('alarm')) {
+					jsonData.job_info[$(this).prop('name')] = String($(this).val());
+				} else {
+					jsonData[$(this).prop('name')] = String($(this).val());
+				}
+			}
+		});
+
+		$('#registerModal button.btn-primary').each(function () {
+			if ($.inArray($(this).parent().prop('id'), job_info_Array) > -1) {
+				job_info[$(this).parent().prop('id')] = String($(this).data('value'));
+			} else {
+				jsonData[$(this).parent().prop('id')] = String($(this).data('value'));
+			}
+		});
+
+		job_info.siteName = jsonData.siteName;
+		jsonData.job_info = JSON.stringify(job_info);
+		jsonData.updated_by = loginId;
+		delete jsonData.siteName;
+
+		return jsonData;
+	};
+
+	//달력에 그린다.
+	const checkCalendar = function (data) {
+		let calendar = $('#calendar .date');
+		$('#calendar td a').remove();
+
+		if (data.length > 0) {
+			data.forEach(function (v, k) {
+				let job_date = new Date(v.job_date).format('dd');
+				let job_type = v.job_type;
+				let sid = v.site_id;
+				let job_info = JSON.parse(v.job_info);
+
+				calendar.eq(Number(job_date) - 1).append(
+					'<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '"><p class="bu t' + job_type + '">[' + job_info.siteName + ']' + job_Name(job_type) + '</p></a>'
+				);
+			});
+		}
+
+	};
+
+	const checkCalendarVisual = function () {
+		const checkType = $.makeArray($(':checkbox[name="type"]:checked').map(
+			function () {
+				return $(this).val();
+			})
+		);
+
+		$('#calendar td a p.bu').each(function () {
+			let clsName = $(this).attr('class').replace('bu t', '').trim();
+			let siteName = $(this).html().match(/\[(.*?)\]/)[1];
+			if ($.inArray(clsName, checkType) > -1) {
+				if ($('#searchName').val() == '') {
+					$(this).parent().show();
+				} else {
+					if (siteName.match($('#searchName').val())) {
+						$(this).parent().show();
+					} else {
+						$(this).parent().hide();
+					}
+				}
+			} else {
+				$(this).parent().hide();
+			}
+		});
+	};
+
+	const modalPopInit = function (data) {
+		if (data == undefined) {
+			//팝업 오픈시 value 초기화
+			$('#registerModal input').each(function () {
+				$(this).val('');
+			});
+			$('#registerModal textarea').val('');
+			//팝업 오픈시 value 초기화
+
+			$('#registerModal button.btn-primary').each(function () {
+				console.log($(this).data('name'));
+				$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
+			});
+
+			$('#registerModal .btn_wrap_type02 .btn_type04').hide();
+			$('#registerModal .btn_wrap_type02 .btn_type').attr('onclick', 'maintenance(\'post\');').text('등록');
+
+		} else {
+			setJsonAutoMapping(data[0], 'registerModal');
+			setJsonAutoMapping(JSON.parse(data[0].job_info), 'registerModal');
+
+			let jobDate = new Date(data[0].job_date);
+			$('#datepicker1').datepicker('setDate', jobDate);
+
+			$('#registerModal .btn_wrap_type02 .btn_type04').show().attr('onclick', 'maintenance(\'delete\', \'' + data[0].id + '\' );');
+			$('#registerModal .btn_wrap_type02 .btn_type').attr('onclick', 'maintenance(\'patch\', \'' + data[0].id + '\' );').text('수정');
+		}
+
+		$('#registerModal').modal();
 	}
+
+	const job_Name = function (type) {
+		let rtn = '';
+		switch (type) {
+			case 1:
+				rtn = '정기점검'
+				break;
+			case 2:
+				rtn = '구조물 안전진단'
+				break;
+			case 3:
+				rtn = '소방점검'
+				break;
+			default:
+				rtn = '등기이사 기간만료'
+				break;
+		}
+		return rtn;
+	};
 </script>
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="ly_wrap">
@@ -115,8 +383,11 @@
 							<th>발전소 선택</th>
 							<td colspan="3">
 								<div class="tx_btn_area type">
-									<div class="tx_inp_type">
-										<input type="text" placeholder="입력">
+									<div class="tx_inp_type ui-widget">
+										<input type="text" id="siteName" name="siteName" placeholder="입력"
+										       class="ui-autocomplete-input"
+										       autocomplete="false">
+										<input type="hidden" id="site_id" name="site_id">
 									</div>
 									<button type="submit" class="btn_type">검색</button>
 								</div>
@@ -125,49 +396,55 @@
 						<tr>
 							<th>점검 구분</th>
 							<td>
-								<div class="dropdown placeholder">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-										점검 계획 항목 선택<span class="caret"></span>
+								<div class="dropdown placeholder" id="job_type">
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
+									        data-name="점검 계획 항목 선택">
+										<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu">
-										<li><a href="#">정기 점검</a></li>
-										<li><a href="#">구조물 안전진단</a></li>
-										<li><a href="#">소방점검</a></li>
+										<li data-value="1"><a href="#">정기 점검</a></li>
+										<li data-value="2"><a href="#">구조물 안전진단</a></li>
+										<li data-value="3"><a href="#">소방점검</a></li>
+										<li data-value="4"><a href="#">등기이사 기간만료</a></li>
 									</ul>
 								</div>
 							</td>
 							<th>기준 일자</th>
 							<td>
 								<div class="sel_calendar">
-									<input type="text" id="datepicker1" class="sel" value="" autocomplete="off" readonly placeholder="날짜 선택">
+									<input type="text" id="datepicker1" name="job_date" class="sel" value=""
+									       autocomplete="off" readonly placeholder="날짜 선택">
 								</div>
 							</td>
 						</tr>
 						<tr>
 							<th>점검 반복 주기</th>
 							<td>
-								<div class="dropdown placeholder">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-										점검 반복 주기<span class="caret"></span>
+								<div class="dropdown placeholder" id="repeat_unit">
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
+									        data-name="점검 반복 주기">
+										<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu">
-										<li class="on"><a href="#">반복 안함</a></li>
-										<li><a href="#">매주 동일 요일</a></li>
-										<li><a href="#">매월 동일 날짜</a></li>
-										<li><a href="#">매년 동일 날짜</a></li>
+										<li data-value=""><a href="#">반복 안함</a></li>
+										<li data-value="day_of_week"><a href="#">매주 동일 요일</a></li>
+										<li data-value="month"><a href="#">매월 동일 날짜</a></li>
+										<li data-value="year"><a href="#">매년 동일 날짜</a></li>
 									</ul>
 								</div>
+								<input type="hidden" id="repeat_yn" name="repeat_yn" value="">
 							</td>
 							<th>공휴일 처리</th>
 							<td>
-								<div class="dropdown placeholder">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-										공휴일 처리 선택<span class="caret"></span>
+								<div class="dropdown placeholder" id="repeat_before_after_holiday">
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
+									        data-name="공휴일 처리 선택">
+										<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu">
-										<li><a href="#">처리 안함</a></li>
-										<li><a href="#">공휴일 직전 영업일</a></li>
-										<li><a href="#">공휴일 직후 영업일</a></li>
+										<li data-value="N"><a href="#">처리 안함</a></li>
+										<li data-value="B"><a href="#">공휴일 직전 영업일</a></li>
+										<li data-value="A"><a href="#">공휴일 직후 영업일</a></li>
 									</ul>
 								</div>
 							</td>
@@ -176,7 +453,7 @@
 							<th>내용</th>
 							<td colspan="3">
 								<div class="txarea_inp_type">
-									<textarea placeholder="입력" rows="5"></textarea>
+									<textarea id="description" name="description" placeholder="입력" rows="5"></textarea>
 								</div>
 							</td>
 						</tr>
@@ -184,13 +461,13 @@
 							<th>작업자</th>
 							<td>
 								<div class="tx_inp_type">
-									<input type="text" placeholder="입력">
+									<input type="text" id="worker" name="worker" placeholder="입력">
 								</div>
 							</td>
 							<th>비고</th>
 							<td>
 								<div class="tx_inp_type" style="width:100%">
-									<input type="text" placeholder="입력">
+									<input type="text" id="note" name="note" placeholder="입력">
 								</div>
 							</td>
 						</tr>
@@ -198,8 +475,9 @@
 							<th>알림 설정</th>
 							<td>
 								<div class="dropdown placeholder fl" id="alarmSetup" style="width:160px">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-										알림 일시 선택<span class="caret"></span>
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
+									        data-name="알림 일시 선택">
+										<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu">
 										<li data-value="1"><a href="#">1일 전</a></li>
@@ -208,13 +486,15 @@
 										<li data-value="직접 설정"><a href="#">직접 설정</a></li>
 									</ul>
 								</div>
+								<input type="hidden" id="alarmDate" name="alarmDate" value="">
 							</td>
 							<th>수신 번호</th>
 							<td>
 								<div class="clear">
-									<div class="dropdown placeholder fl" style="width:160px">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-											알림 시간 선택<span class="caret"></span>
+									<div class="dropdown placeholder fl" style="width:160px" id="alarmTime">
+										<button class="btn btn-primary dropdown-toggle" type="button"
+										        data-toggle="dropdown" data-name="알림 시간 선택">
+											<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu">
 											<c:forEach var="time" begin="0" end="23">
@@ -223,7 +503,7 @@
 										</ul>
 									</div>
 									<div class="tx_inp_type fr" style="width:160px">
-										<input type="text" placeholder="수신 번호">
+										<input type="text" id="alarmPhone" name="alarmPhone" placeholder="수신 번호">
 									</div>
 								</div>
 							</td>
@@ -232,6 +512,7 @@
 				</div>
 			</div>
 			<div class="btn_wrap_type02">
+				<button type="button" class="btn_type04" style="display:none;">삭제</button>
 				<button type="button" class="btn_type03" data-dismiss="modal">취소</button>
 				<button type="button" class="btn_type">등록</button>
 			</div>
@@ -292,26 +573,26 @@
 			<h2 class="ntit">점검 구분</h2>
 			<div class="sch_inp_area">
 				<div class="chk_type c1">
-					<input type="checkbox" id="chk_op01" value="정기점검" checked>
+					<input type="checkbox" id="chk_op01" name="type" value="1" checked>
 					<label for="chk_op01"><span></span>정기점검</label>
 				</div>
 				<div class="chk_type c2">
-					<input type="checkbox" id="chk_op02" value="구조물 안전진단" checked>
+					<input type="checkbox" id="chk_op02" name="type" value="2" checked>
 					<label for="chk_op02"><span></span>구조물 안전진단</label>
 				</div>
 				<div class="chk_type c3">
-					<input type="checkbox" id="chk_op03" value="소방점검" checked>
+					<input type="checkbox" id="chk_op03" name="type" value="3" checked>
 					<label for="chk_op03"><span></span>소방점검</label>
 				</div>
 				<div class="chk_type c4">
-					<input type="checkbox" id="chk_op04" value="등기이사 기간만료" checked>
+					<input type="checkbox" id="chk_op04" name="type" value="4" checked>
 					<label for="chk_op04"><span></span>등기이사 기간만료</label>
 				</div>
 			</div>
 
 			<h2 class="ntit">발전소</h2>
 			<div class="tx_inp_type">
-				<input type="text" placeholder="입력">
+				<input type="text" id="searchName" name="searchName" placeholder="입력">
 			</div>
 		</div>
 	</div>
@@ -325,7 +606,7 @@
 						<button class="btn_next_mon">next</button>
 						<strong></strong>
 					</div>
-					<a href="#" class="btn_type fr" data-toggle="modal" data-target="#myModal">등록</a>
+					<a href="#" class="btn_type fr" id="register">등록</a>
 					<!--<a href="/spc/maintenanceSchedulePost.do" class="btn_type fr">등록</a>-->
 				</div>
 				<div class="sch_btm_area">
@@ -351,64 +632,6 @@
 						</tr>
 						</thead>
 						<tbody>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td><span class="date">1</span></td>
-							<td><span class="date">2</span></td>
-							<td><span class="date">3</span></td>
-							<td><span class="date">4</span></td>
-						</tr>
-						<tr>
-							<td><span class="date">5</span></td>
-							<td><span class="date">6</span></td>
-							<td><span class="date">7</span></td>
-							<td><span class="date">8</span></td>
-							<td><span class="date">9</span></td>
-							<td><span class="date">10</span></td>
-							<td>
-								<span class="date">11</span>
-								<p class="bu t1">[혜원 솔라 01] 정기 점검</p>
-							</td>
-						</tr>
-						<tr>
-							<td><span class="date">12</span></td>
-							<td><span class="date">13</span></td>
-							<td><span class="date">14</span></td>
-							<td><span class="date">15</span></td>
-							<td><span class="date">16</span></td>
-							<td><span class="date">17</span></td>
-							<td><span class="date">18</span></td>
-						</tr>
-						<tr>
-							<td class="today"><span class="date">19</span></td>
-							<td><span class="date">20</span></td>
-							<td><span class="date">21</span></td>
-							<td><span class="date">22</span></td>
-							<td>
-								<span class="date">23</span>
-								<p class="bu t4">[혜원 솔라 02] 등기이사 기간만료</p>
-							</td>
-							<td><span class="date">24</span></td>
-							<td><span class="date">25</span></td>
-						</tr>
-						<tr>
-							<td><span class="date">26</span></td>
-							<td><span class="date">27</span></td>
-							<td><span class="date">28</span></td>
-							<td>
-								<span class="date">29</span>
-								<p class="bu t3">[혜원 솔라 01] 구조물</p>
-							</td>
-							<td>
-								<span class="date">30</span>
-								<p class="bu t4">[혜원 솔라 01] 소방점검</p>
-								<p class="bu t3">[혜원 솔라 02] 구조물 안전진단</p>
-							</td>
-							<td></td>
-							<td></td>
-						</tr>
 						</tbody>
 					</table>
 				</div>
@@ -416,3 +639,5 @@
 		</div>
 	</div>
 </div>
+<ul id="ui-id-1" tabindex="0" class="ui-menu ui-widget ui-widget-content ui-autocomplete ui-front"
+    style="display: none;"></ul>
