@@ -2163,18 +2163,46 @@
 			<div class="col-sm-12">
 				<div class="indiv gmain_table">
 					<div class="gtbl_top clear">
-						<div class="clear">
-							<input type="text" class="input" value="" placeholder="키워드">
-							<button type="submit">적용</button>
-							<div class="check-option chk_type">
-								<input type="checkbox" id="deviceStatus1" value="정상" checked>
-								<label for="deviceStatus1"><span></span>정상</label>
-								<input type="checkbox" id="deviceStatus2" value="경고" checked>
-								<label for="deviceStatus2"><span></span>경고</label>
-								<input type="checkbox" id="deviceStatus3" value="이상" checked>
-								<label for="deviceStatus3"><span></span>이상</label>
-							</div>
+						<div class="fl">
+					<input type="text" class="input" value="" placeholder="키워드">
+					<button type="submit">적용</button>
+				</div>
+				<div class="fr">
+					<span class="tx_tit">설비 상태</span>
+					<div class="sa_select" id="deviceType">
+						<div class="dropdown">
+							<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
+								매전량<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu chk_type" role="menu">
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="deviceStatus1" value="정상" checked>
+										<label for="deviceStatus1"><span></span>정상</label>
+									</a>
+								</li>
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="deviceStatus2" value="경고" checked>
+										<label for="deviceStatus2"><span></span>경고</label>
+									</a>
+								</li>
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="deviceStatus3" value="이상" checked>
+										<label for="deviceStatus3"><span></span>이상</label>
+									</a>
+								</li>
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="deviceStatus4" value="트립" checked>
+										<label for="deviceStatus4"><span></span>트립</label>
+									</a>
+								</li>
+							</ul>
 						</div>
+					</div>
+				</div>
 					</div>
 					<div class="gtbl_wrap">
 						<div class="intable">

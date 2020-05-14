@@ -2076,7 +2076,7 @@ footer .copyright {
 .open > .dropdown-toggle.btn-primary.focus {
 	font-family: 'Roboto', sans-serif;
 	color: var(--color3);
-	font-size: 13px;
+	font-size: 14px;
 	font-weight: 500;
 	background: var(--box-color7);
 	border: 1px solid #dcdee5;
@@ -7762,11 +7762,9 @@ nav .lang.dropdown .btn .caret {
 	font-weight: 300;
 }
 
-.darkmode .gmain_map .chart_info > div.ci_right ul li span,
-.darkmode .gmain_map .chart_info > div.ci_right ul li em,
-.darkmode .gmain_map .chart_info > div.ci_right ul li strong {
-	color: #e4e4e4
-}
+.darkmode .gmain_map .chart_info > div.ci_right ul li span{color:var(--color8)}
+.darkmode .gmain_map .chart_info > div.ci_right ul li em{color:var(--color8)}
+.darkmode .gmain_map .chart_info > div.ci_right ul li strong{color:var(--color4)}
 
 .gmain_map .chart_info > div.ci_right ul li em {
 	display: inline-block;
@@ -7792,12 +7790,12 @@ nav .lang.dropdown .btn .caret {
 .darkmode .local_info table th {
 	background: #4a4a4a;
 	border-bottom: 1px solid #606060;
-	color: #aaa
+	color: var(--color4)
 }
 
 .local_info table td {
 	font-size: 14px;
-	color: var(--color2);
+	color: var(--color8);
 	font-weight: 300;
 }
 
@@ -8273,7 +8271,7 @@ nav .lang.dropdown .btn .caret {
 
 .gmain_table .gtbl_wrap table thead th {
 	font-size: 13px;
-	color: var(--color2);
+	color: var(--color8);
 	font-weight: normal;
 	border-bottom: solid 1px var(--color1);
 	border-top: solid 1px var(--color1);
@@ -8314,7 +8312,7 @@ nav .lang.dropdown .btn .caret {
 .gmain_table .gtbl_wrap table td {
 	height: 47px;
 	line-height: 1.6;
-	color: var(--color3);
+	color: var(--color4);
 	font-size: 13px;
 	text-align: center;
 	vertical-align: middle;
@@ -9267,7 +9265,7 @@ div.di_wrap dl .link a {
 .gmain_chart .chart_top .term {
 	float: right;
 	font-size: 13px;
-	color: var(--color3);
+	color: var(--color8);
 	line-height: 26px;
 }
 
@@ -11242,7 +11240,7 @@ div.di_wrap dl .link a {
 .his_tbl thead th {
 	height: 56px;
 	font-size: 13px;
-	color: var(--color2);
+	color: var(--color8);
 	font-weight: normal;
 	background: var(--box-color5);
 	vertical-align: middle;
@@ -11898,7 +11896,7 @@ div.di_wrap dl .link a {
 .legend_wrap span {
 	display: inline-block;
 	font-size: 11px;
-	color: #aeaeae;
+	color: var(--color8);
 	line-height: 13px;
 	vertical-align: top
 }
@@ -12681,7 +12679,7 @@ div.di_wrap dl .link a {
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 54px;
+	width: 44px;
 	height: 48px;
 }
 
@@ -12702,7 +12700,7 @@ div.di_wrap dl .link a {
 }
 
 .di_top_sec .tx_area {
-	margin-left: 54px;
+	margin-left: 48px;
 	border-bottom: 1px solid var(--color1)
 }
 
@@ -12716,7 +12714,7 @@ div.di_wrap dl .link a {
 }
 
 .di_top_sec .tx_area .tx2 {
-	color: var(--color1)
+	color: var(--color4)
 }
 
 .di_top_sec .tx_area .fl span:first-child {
@@ -12810,13 +12808,13 @@ div.di_wrap dl .link a {
 .di_list .di_li_tit {
 	float: left;
 	font-size: 13px;
-	color: var(--color1)
+	color: var(--color4)
 }
 
 .di_list .di_li_tx {
 	float: right;
 	font-size: 13px;
-	color: var(--color2)
+	color: var(--color8)
 }
 
 .di_tx_bx {
@@ -12824,7 +12822,7 @@ div.di_wrap dl .link a {
 }
 
 .di_tx_bx .tx {
-	color: var(--color1);
+	color: var(--color4);
 	line-height: 23px;
 	font-size: 12px;
 	letter-spacing: -0.5px
@@ -13252,7 +13250,7 @@ textarea::-webkit-scrollbar-thumb {
 .spc_tbl .chk_type input[type="checkbox"] + label {
 	margin-top: 12px
 }
-
+.spc_tbl thead th .btn_align{opacity:0.7}
 .spc_tbl_row table {
 	width: 100%
 }
@@ -13263,7 +13261,7 @@ textarea::-webkit-scrollbar-thumb {
 }
 
 .spc_tbl_row td {
-	color: var(--color2);
+	color: var(--color8);
 }
 
 .spc_tbl_row td.vbt {
