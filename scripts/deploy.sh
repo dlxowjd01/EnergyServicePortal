@@ -8,7 +8,7 @@ if [ -z $CURRENT_PID ]
 then
   echo "> 현재 구동중인 tomcat 애플리케이션이 없으므로 종료하지 않습니다."
 else
-  sudo $CATALINA_HOME/bin/shutdown.sh
+  sudo source /usr/local/apache-tomcat-9.0.34/bin/shutdown.sh
   sleep 5
 fi
 
@@ -31,4 +31,4 @@ cd $DEPLOY_PATH
 #jar -xvf $WAR_NAME
 
 echo "> Web + API 배포"
-sudo $CATALINA_HOME/bin/startup.sh
+sudo source /usr/local/apache-tomcat-9.0.34/bin/startup.sh
