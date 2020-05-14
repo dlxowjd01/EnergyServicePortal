@@ -121,7 +121,7 @@ select {
 	border-color: initial;
 	border-image: initial;
 }
-input::placeholder{color:rgba(255, 255, 255, 0.4)}
+input::placeholder,textarea::placeholder{color:var(--color9)}
 
 .sel {
 	padding: 0 40px 0 15px;
@@ -455,6 +455,7 @@ input::placeholder{color:rgba(255, 255, 255, 0.4)}
 	--color6: #333;
 	--color7: #d4d4d4;
 	--color8: #000;
+	--color9: #afafaf;
 	--color-calendar-today: rgba(0, 0, 0, 0.1);
 	--error: rgba(247, 92, 74, 1);
 	--warning: rgba(244, 158, 52, 1);
@@ -551,6 +552,7 @@ html.darkmode:root {
 	--color6: #aeaeae;
 	--color7: #595959;
 	--color8: rgba(255, 255, 255, 0.87);
+	--color9: rgba(255, 255, 255, 0.4);
 	--color-calendar-today: rgba(255, 255, 255, 0.1);
 	--error: #B61827;
 	--warning: #BC5100;
@@ -2039,11 +2041,14 @@ footer .copyright {
 .btn.w8 {
 	width: 120px
 }
+.btn.w9{
+	width: 200px
+}
 
 .dropdown .btn-primary {
 	font-family: 'Roboto', sans-serif;
 	color: var(--color2);
-	font-size: 13px;
+	font-size: 14px;
 	font-weight: 500;
 	background: var(--box-color7);
 	border: 1px solid #dcdee5;
@@ -12917,12 +12922,32 @@ div.di_wrap dl .link a {
 	border-radius: 2px;
 	border: 0;
 	color: var(--color2);
-	font-size: 13px;
+	font-size: 14px;
 	resize:none;
 	width:100%;
-	padding:12px 15px; 
-	outline:none
+	outline:none;
+	line-height:35px;
+	text-align:left;
 }
+textarea::-webkit-scrollbar-track {
+	border-radius: 2px;
+	background-color: var(--scroll-color2)
+}
+
+textarea::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+	border-radius: 2px;
+	background-color: var(--scroll-color2);
+}
+
+textarea::-webkit-scrollbar-corner {
+	background-color: var(--scroll-color2);
+}
+
+textarea::-webkit-scrollbar-thumb {
+	border-radius: 2px;
+	background-color: var(--scroll-color);}
 
 .tx_inp_type {
 	background: var(--box-color7);
@@ -13331,6 +13356,7 @@ div.di_wrap dl .link a {
 	border: 0;
 	text-indent: -9999px
 }
+.btn_clse{margin-left:30px;display:inline-block;width:24px;height:24px;border:0;text-indent:-9999px;vertical-align:middle;background:url(../img/icon_close.png) no-repeat center center;outline:none}
 
 .btn_file.down {
 	background: url(../img/ico_down.png) no-repeat
@@ -13345,6 +13371,7 @@ div.di_wrap dl .link a {
 }
 
 .tx_file, .tf_bar {
+	display:block;
 	color: #1d98e9
 }
 
@@ -13356,19 +13383,29 @@ button.tx_file {
 	background: none;
 	border: 0
 }
+.tx_file + .tx_file{margin-top:16px}
+.tx_file .tx_color{color:var(--color8)}
 
 .img_bx {
-	padding: 15px
+	/* padding: 15px; */
+	min-height:300px;
+	clear:both;
 }
 
 .img_bx > * {
 	vertical-align: middle;
-	width: 500px
+	width: 500px;
+	vertical-align:top;
 }
 
 .img_bx img + img {
 	margin-left: 20px
 }
+
+.img_bx .img_group{position:relative;float:left;margin-left:20px}
+.img_bx .img_group:first-child{margin-left:0}
+.img_bx .img_group img{width:100%}
+.img_bx .img_group .btn_img_clse{position:absolute;top:8px;right:8px;border:0;width:24px;height:24px;border-radius:4px;background:url(../img/icon_close.png) no-repeat center center rgba(0, 0, 0, 0.4);text-indent:-9999px;outline:none}
 
 .inp_align .fl {
 	display: inline-block;
@@ -13813,6 +13850,17 @@ button.tx_file {
 	
 }
 
+/* 작업보고서 등록/수정 */
+.sel_calendar.edit{width:300px}
+.sel_calendar.edit .sel{padding-left:0;height:auto;background-color:initial;width:100%;border:0;border-bottom:2px solid #1d98e9;line-height:46px}
+.sel_calendar.edit.twin .sel{float:left;width:50%}
+.report_post td,.report_post th{height:48px;padding-top:0;padding-bottom:0;line-height:48px}
+.report_post02 .txarea_inp_type{width:80%}
+.report_post02 th .btn_file{display:inline-block;vertical-align:top;margin-left:30px}
+.report_post02 .hei_type{display:block;min-height:150px}
+.report_post02 td,.report_post02 th{vertical-align:top;padding-top:30px;padding-bottom:30px}
+.report_post02 .vert_type{vertical-align:middle}
+.report_post02 .vert_type .btn_file{vertical-align:middle}
 
 
 

@@ -24,11 +24,28 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
+			<div>
+				<span class="tx_tit">보고서 구분</span>
+				<div class="sa_select">
+					<div class="dropdown">
+						<button class="btn btn-primary dropdown-toggle w9" type="button" data-toggle="dropdown">출장/조치 보고서
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu chk_type" role="menu" id="type">
+							<li><a href="#;">출장/조치 보고서</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--<div class="row">
+		<div class="col-lg-12">
 			<div class="right">
 				<a href="#;" class="save_btn">PDF 다운로드</a>
 			</div>
 		</div>
-	</div>
+	</div>-->
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="indiv">
@@ -64,7 +81,7 @@
 					</table>	
 				</div>
 				<div class="btn_wrap_type02">
-					<a href="/report/maintenanceReportEdit.do">수정</a>
+					<button type="button" class="btn_type03" onclick="location.href='/report/maintenanceReportEdit.do'">수정</button>
 					<button type="button" class="btn_type03">목록</button>
 				</div>
 			</div>
@@ -75,7 +92,7 @@
 				<div class="spc_tbl_row">			
 					<table>
 						<colgroup>
-						<col style="width:10%">
+						<col style="width:15%">
 						<col>
 						</colgroup>
 						<tr>
@@ -100,12 +117,12 @@
 						</tr>
 						<tr>
 							<th>첨부 파일</th>
-							<td><span class="tx_file">혜원솔라01 인버터 내부 및 RTU 사진.jpg</span></td>
+							<td><span class="tx_file">혜원솔라01 인버터 내부 및 RTU 사진.jpg <span class="tx_color">/ download - 1회</span></span></td>
 						</tr>
 					</table>	
 				</div>
 				<div class="btn_wrap_type02">
-					<a href="/report/maintenanceReportEdit.do">수정</a>
+					<button type="button" class="btn_type03" onclick="location.href='/report/maintenanceReportEdit.do'">수정</button>
 					<button type="button" class="btn_type03">목록</button>
 				</div>
 			</div>
