@@ -13,26 +13,127 @@
 <body>
 <script>
 	$(function () {
+		setInitList("listData"); //리스트초기화
+
 		getDataList();
 	});
 
 	function getDataList(){
-		setInitList("listData"); //리스트초기화
-
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/spcs",
 			type: "get",
 			async: false,
-			data: {oid: "spower"},
+			data: {oid: "spower", includeGens: true},
 			success: function (result) {
-				if(result.data.length > 0){
-					setMakeList(result.data, "listData", {"dataFunction" : {}}); //list생성
+				var jsonList = [],
+					keyWord = $("#key_word").val();
+
+				for(var i = 0, count = result.data.length; i < count; i++){
+
+					var spcGensList = result.data[i].spcGens;
+
+					if(spcGensList !== undefined && spcGensList.length > 0){
+
+						for(var j = 0, jcount = spcGensList.length; j < jcount; j++){
+							var spcGensRow = spcGensList[j];
+							var rowData = result.data[i];
+
+							rowData["gen_id"] = spcGensRow.gen_id;
+							rowData["발전소_명"] = spcGensRow.site_id;
+							rowData["연차"] = "N년차(계산할것)";
+							rowData["관리_운영_기간"] = spcGensRow.contract_info["관리_운영_기간"];
+							rowData["보증_방식"] = spcGensRow.warranty_info["보증_방식"];
+							rowData["PR_보증치"] = spcGensRow.warranty_info["PR_보증치"];
+							rowData["보증_감소율"] = spcGensRow.warranty_info["보증_감소율"];
+							rowData["추가보수"] = spcGensRow.warranty_info["추가보수"];
+
+							//키워드 검색 조건 필터 처리
+							if(rowData["name"].indexOf(keyWord) > -1){
+								jsonList.push(rowData)
+							}
+
+						}
+					}
+
 				}
+
+				setMakeList(jsonList, "listData", {"dataFunction" : {"발전소_명" : getGenName, "INDEX" : getNumberIndex}}); //list생성
+
 			},
 			error: function (request, status, error) {
 				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
 			}
 		});
+	}
+
+	function getNumberIndex(index){
+		return index + 1;
+	}
+
+	function getGenName(siteId){
+		var result = "";
+
+		$.ajax({
+			url: "http://iderms.enertalk.com:8443/config/sites/" + siteId,
+			type: "get",
+			async: false,
+			data: {includeDevices:false, includeRtus: false},
+			success: function (json) {
+				result = json.name;
+			},
+			error: function (request, status, error) {
+				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+			}
+		});
+
+		return result;
+	}
+
+	function setCheckedAll(obj, chkName){
+		var checkVal = obj.checked;
+		$("input[name='"+chkName+"']").prop("checked", checkVal);
+	}
+
+	function getCheckList(checkName){
+		var jsonList = $("#listData").data("gridJsonData"),
+			checkList = [];
+		$("input[name='"+checkName+"']").each(function(i){
+			if(this.checked){
+				checkList.push(jsonList[i]);
+			}
+		});
+
+		return checkList;
+	}
+
+	function setCheckedDataRemove(){
+		var checkDataList = getCheckList("rowCheck");
+		count = checkDataList.length,
+			sucessCnt = 0;
+
+		if(count == 0){
+			alert("삭제 할 목록을 선택하세요.");
+			return;
+		}
+
+		for(var i = 0; i < count; i++){
+			var rowData = checkDataList[i];
+			$.ajax({
+				url: "http://iderms.enertalk.com:8443/spcs/" + rowData.spc_id + "/gens/" + rowData.gen_id,
+				type: "delete",
+				async: false,
+				data: {},
+				success: function (json) {
+					sucessCnt++;
+				},
+				error: function (request, status, error) {
+
+				}
+			});
+		}
+
+		alert(sucessCnt + "건 삭제처리되었습니다.");
+		getDataList();
 	}
 </script>
 
@@ -51,9 +152,9 @@
 	<div class="col-lg-3">
 		<div class="tx_btn_area">
 			<div class="tx_inp_type">
-				<input type="text" placeholder="입력">
+				<input type="text" id="key_word" placeholder="입력">
 			</div>
-			<button type="submit" class="btn_type">검색</button>
+			<button class="btn_type" onclick="getDataList();">검색</button>
 		</div>
 	</div>
 	<div class="col-lg-9">
@@ -66,7 +167,7 @@
 	<div class="col-lg-12">
 		<div class="indiv">
 			<div class="btn_wrap_type">
-				<button type="button" class="btn_type03">선택 삭제</button>
+				<button type="button" class="btn_type03" onclick="setCheckedDataRemove();">선택 삭제</button>
 				<button type="button" class="btn_type">신규 등록</button>
 			</div>
 			<div class="spc_tbl align_type">
@@ -74,8 +175,8 @@
 					<thead>
 					<tr>
 						<th>
-							<input type="checkbox" id="chk_op01" value="순번">
-							<label for="chk_op01"><span></span>순번</label>
+							<input type="checkbox" id="chk_header" value="순번" onclick="setCheckedAll(this, 'rowCheck');">
+							<label for="chk_header"><span></span>순번</label>
 						</th>
 						<th><button class="btn_align down">SPC명</button></th>
 						<th><button class="btn_align down">발전소 명</button></th>
@@ -90,16 +191,16 @@
 					<tbody id="listData">
 					<tr>
 						<td>
-							<input type="checkbox" id="chk_op02" value="1">
-							<label for="chk_op02"><span></span>[INDEX]</label>
+							<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="">
+							<label for="chk_op[INDEX]"><span></span>[INDEX]</label>
 						</td>
-						<td><a href="/spc/entityDetails.do" class="tbl_link">[spc_name1]</a></td>
-						<td><a href="/spc/entityDetails.do" class="tbl_link">[spc_name2]</a></td>
-						<td>3년차</td>
-						<td>2018-06-18 ~ 2020-12-31</td>
-						<td>PR</td>
-						<td class="right">75</td>
-						<td class="right">-</td>
+						<td><a href="/spc/entityDetails.do?spc_id=[spc_id]&gen_id=[gen_id]" class="tbl_link">[name]</a></td>
+						<td><a href="/spc/entityDetails.do?spc_id=[spc_id]&gen_id=[gen_id]" class="tbl_link">[발전소_명]</a></td>
+						<td>[연차]</td>
+						<td>[관리_운영_기간]</td>
+						<td>[보증_방식]</td>
+						<td class="right">[PR_보증치]</td>
+						<td class="right">[보증_감소율]</td>
 						<td>-</td>
 					</tr>
 					</tbody>

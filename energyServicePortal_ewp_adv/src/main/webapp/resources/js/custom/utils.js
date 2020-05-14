@@ -952,7 +952,9 @@ function setMakeList(jsonData, listId, opts) {
 		arrTagInfo = [],
 		arr_column = [],
 		dataLenth = jsonData.length,
-		tmpHtml = null;
+		tmpHtml = null,
+		sTagName = $selecter.prop("tagName"),
+		tdCount = ($.data(document, listId).match(/<td/g) || []).length;
 
 	$selecter.data("gridJsonData", jsonData);
 
@@ -961,6 +963,16 @@ function setMakeList(jsonData, listId, opts) {
 			arr_column.push(prop);
 		}
 		arr_column.push("INDEX");
+	} else {
+		if ("TBODY" == sTagName || "TABLE" == sTagName) {
+			arrTagInfo.push("<tr><td colspan='" + tdCount + "' style='text-align:center;'>조회 데이터가 없습니다.</td></tr>");
+		} else if ("UL" == sTagName) {
+			arrTagInfo.push("<li>조회 데이터가 없습니다.</li>");
+		} else if ("SELECT" == sTagName) {
+			arrTagInfo.push("");
+		} else {
+			arrTagInfo.push("<div>조회 데이터가 없습니다.</div>");
+		}
 	}
 
 	var columLength = arr_column.length;
