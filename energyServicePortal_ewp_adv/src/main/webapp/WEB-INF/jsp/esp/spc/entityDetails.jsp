@@ -105,7 +105,7 @@
 				</table>
 			</div>
 			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" onclick="setDataEditMode('contract_info');">수정</button>
+				<a href="/spc/entityInformationEdit.do">수정</a>
 				<button type="button" class="btn_type03">목록</button>
 			</div>
 		</div>
@@ -160,7 +160,7 @@
 				</table>
 			</div>
 			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" onclick="setDataEditMode('device_info');">수정</button>
+				<a href="/spc/entityInformationEdit.do">수정</a>
 				<button type="button" class="btn_type03">목록</button>
 			</div>
 		</div>
@@ -185,7 +185,7 @@
 				</table>
 			</div>
 			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" onclick="setDataEditMode('finance_info');">수정</button>
+				<a href="/spc/entityInformationEdit.do">수정</a>
 				<button type="button" class="btn_type03">목록</button>
 			</div>
 		</div>
@@ -240,7 +240,7 @@
 				</table>
 			</div>
 			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" onclick="setDataEditMode('warranty_info');">수정</button>
+				<a href="/spc/entityInformationEdit.do">수정</a>
 				<button type="button" class="btn_type03">목록</button>
 			</div>
 		</div>
@@ -283,7 +283,7 @@
 				</table>
 			</div>
 			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" onclick="setDataEditMode('coefficient_info');">수정</button>
+				<a href="/spc/entityInformationEdit.do">수정</a>
 				<button type="button" class="btn_type03">목록</button>
 			</div>
 		</div>
@@ -326,7 +326,7 @@
 				</table>
 			</div>
 			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" onclick="setDataEditMode('contact_info');">수정</button>
+				<a href="/spc/entityInformationEdit.do">수정</a>
 				<button type="button" class="btn_type03">목록</button>
 			</div>
 		</div>
@@ -394,7 +394,7 @@
 				</table>
 			</div>
 			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" onclick="setDataEditMode('attachement_info');">수정</button>
+				<a href="/spc/entityInformationEdit.do">수정</a>
 				<button type="button" class="btn_type03">목록</button>
 			</div>
 		</div>

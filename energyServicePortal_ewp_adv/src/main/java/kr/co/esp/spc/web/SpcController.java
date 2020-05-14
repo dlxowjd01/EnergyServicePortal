@@ -19,6 +19,18 @@ public class SpcController {
         return "esp/spc/entityInformation";
     }
 
+    @RequestMapping(value = "/spc/entityInformationPost.do")
+    public String spcEntityInformationPost(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/entityInformationPost.do");
+        return "esp/spc/entityInformationPost";
+    }
+
+    @RequestMapping(value = "/spc/entityInformationEdit.do")
+    public String spcEntityInformationEdit(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/entityInformationEdit.do");
+        return "esp/spc/entityInformationEdit";
+    }
+
     @RequestMapping(value = "/spc/balanceSheet.do")
     public String spcBalanceSheet(HttpServletRequest request, HttpSession session, Model model) {
         logger.debug("/spc/balanceSheet.do");

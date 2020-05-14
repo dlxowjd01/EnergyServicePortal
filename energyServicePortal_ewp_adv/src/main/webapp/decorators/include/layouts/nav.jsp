@@ -61,7 +61,7 @@
 <div id="sidebar">
   <c:if test="${not empty userInfo}">
     <ul>
-      <li class="smn1">
+      <li class="smn1 active">
         <a href="#;">대시보드</a>
         <div class="sub_layer">
           <ul>
@@ -79,7 +79,7 @@
           </ul>
         </div>
       </li>
-      <li class="smn2 active">
+      <li class="smn2">
         <a href="#;">설비 현황</a>
         <div class="sub_layer">
           <ul>

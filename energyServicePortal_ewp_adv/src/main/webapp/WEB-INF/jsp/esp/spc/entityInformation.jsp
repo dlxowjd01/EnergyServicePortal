@@ -168,7 +168,7 @@
 		<div class="indiv">
 			<div class="btn_wrap_type">
 				<button type="button" class="btn_type03" onclick="setCheckedDataRemove();">선택 삭제</button>
-				<button type="button" class="btn_type">신규 등록</button>
+				<a href="/spc/entityInformationPost.do">신규 등록</a>
 			</div>
 			<div class="spc_tbl align_type">
 				<table class="chk_type">
