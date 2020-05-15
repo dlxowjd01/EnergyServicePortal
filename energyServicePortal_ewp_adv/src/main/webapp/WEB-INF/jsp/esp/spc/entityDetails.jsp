@@ -397,7 +397,7 @@
 			<div class="spc_tbl_row">
 				<table>
 					<colgroup>
-						<col style="width:10%">
+						<col style="width:15%">
 						<col style="width:20%">
 						<col>
 					</colgroup>

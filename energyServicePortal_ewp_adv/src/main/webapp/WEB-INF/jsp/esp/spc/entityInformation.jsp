@@ -166,8 +166,7 @@
 	<div class="col-lg-12">
 		<div class="indiv">
 			<div class="btn_wrap_type">
-				<button type="button" class="btn_type03" onclick="setCheckedDataRemove();">선택 삭제</button>
-				<a href="/spc/entityInformationPost.do">신규 등록</a>
+				<button type="button" class="btn_type" onclick="location.href='/spc/entityInformationPost.do'">신규 등록</button>
 			</div>
 			<div class="spc_tbl align_type">
 				<table class="chk_type">
@@ -205,6 +204,10 @@
 					</tbody>
 				</table>
 			</div>
+			<div class="btn_wrap_type02">
+					<button type="button" class="btn_type03" onclick="location.href='/spc/entityInformationEdit.do'">선택 수정</button>
+					<button type="button" class="btn_type03" onclick="setCheckedDataRemove();">선택 삭제</button>
+				</div>
 			<div class="paging_wrap">
 				<a href="#;" class="btn_prev">prev</a>
 				<strong>1</strong>

@@ -12097,7 +12097,8 @@ div.di_wrap dl .link a {
 .chk_type input[type="checkbox"] + label {
 	font-size: 13px;
 	line-height: 24px;
-	vertical-align: top
+	vertical-align: top;
+	color:var(--color8)
 }
 
 .chk_type.c1 input[type="checkbox"] + label span,
@@ -12375,6 +12376,7 @@ div.di_wrap dl .link a {
 }
 
 /* 버튼 스타일 */
+button.big{width:102px}
 .btn_type {
 	height: 36px;
 	line-height: 36px;
@@ -12987,6 +12989,9 @@ textarea::-webkit-scrollbar-thumb {
 .tx_inp_type.unit.t1 {
 	padding-right: 40px
 }
+.tx_inp_type.unit.t2 {
+	padding-right: 60px
+}
 
 .toggle_bx .btn {
 	width: 100%
@@ -13183,6 +13188,7 @@ textarea::-webkit-scrollbar-thumb {
 	margin: 20px 0;
 	text-align: right
 }
+.btn_wrap_type04{margin:30px 0;text-align:right}
 
 .spc_tbl {
 	overflow-x: auto;
@@ -13392,7 +13398,7 @@ button.tx_file {
 
 .img_bx > * {
 	vertical-align: middle;
-	width: 500px;
+	width: 400px;
 	vertical-align:top;
 }
 
@@ -13788,7 +13794,7 @@ button.tx_file {
 .bal_edit .spc_tbl_row{margin-top:30px}
 
 .st_edit td{padding:0 0 0 36px;line-height:48px}
-.tx_inp_type.edit{padding:0;width:300px;border:none;border-bottom:2px solid #1d98e9;background:none}
+.tx_inp_type.edit{height:48px;padding:0;width:300px;border:none;border-bottom:2px solid #1d98e9;background:none}
 .tx_inp_type.edit input{background:none}
 
 .btn_add{display: inline-block;line-height: 24px;background: url('../img/btn_add.png') no-repeat 0 2px;padding: 0 10px 0 28px;font-size: 13px;color: #0095e1;font-weight: 500;}
@@ -13861,7 +13867,51 @@ button.tx_file {
 .report_post02 .vert_type .btn_file{vertical-align:middle}
 
 
+/* spc기본정보 등록/수정 */
+.entity_wrap.post .indiv{padding-bottom:76px}
+.entity_wrap input::placeholder,.entity_wrap textarea::placeholder{color:var(--color4)}
+.entity_wrap .tx_inp_type.unit > span{right:0;line-height:48px}
+.entity_wrap .img_bx{min-height:230px}
+.rdo_type.align_type > span,.chk_type.align_type > span{display:inline-block;vertical-align:middle}
+.rdo_type.align_type > span + span,.chk_type.align_type > span + span{margin-left:25px}
+.rdo_type.align_type input + label,.chk_type.align_type input + label{margin-top:11px}
 
+.group_type{clear:both}
+.group_type > div{float:left;width:142px !important}
+.group_type > div + div{margin-left:16px}
+.group_type02{clear:both}
+.group_type02 > div:first-child{float:left;width:87px !important}
+.group_type02 > div + div{margin-left:16px}
+.group_type02 > div + div input{width:98.5px !important}
+.group_type03{clear:both}
+.group_type03 > div{float:left;}
+.group_type03 > div{width:150px !important}
+.group_type03 > div:nth-child(3){width:60.4% !important}
+.group_type03 .dropdown.edit .btn .caret{right:20px}
+.dropdown.edit{border-bottom:2px solid #1d98e9}
+.dropdown.edit .btn{padding-right:20px}
+.dropdown.edit .btn-primary{font-size:13px;padding:0;width:100%;background:initial}
+.edit .btn-primary:focus,
+.edit .btn-primary.focus,
+.edit .btn-primary:hover,
+.edit .btn-primary:active,
+.edit .btn-primary.active,
+.open.edit > .dropdown-toggle.btn-primary,
+.edit .btn-primary:active:hover,
+.edit .btn-primary.active:hover,
+.open.edit > .dropdown-toggle.btn-primary:hover,
+.edit .btn-primary:active:focus,
+.edit .btn-primary.active:focus,
+.open.edit > .dropdown-toggle.btn-primary:focus,
+.edit .btn-primary:active.focus,
+.edit .btn-primary.active.focus,
+.open.edit > .dropdown-toggle.btn-primary.focus{background:initial;font-size:13px}
+.dropdown.edit .btn .caret{right:0;margin-right:0}
+.dropup.edit,.dropdown.edit{height:48px}
+.dropdown.edit.placeholder .btn{color:var(--color4)}
 
+.entity_wrap.post input+label,.entity_wrap.edit input+label{color:var(--color4)}
+.entity_wrap.post input:checked+label,.entity_wrap.edit input:checked+label{color:var(--color8)}
+.sel_calendar.twin + div{margin-left:40px}
 
 
