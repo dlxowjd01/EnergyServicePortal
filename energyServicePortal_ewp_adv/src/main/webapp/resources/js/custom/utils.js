@@ -1044,3 +1044,42 @@ function getJsonCsvDownload(jsonData, column, header, fileName){
         }
     }
 }
+
+/**
+ * 테이블에 라인 추가 (아직 작업중)
+ *
+ * @param tblId
+ */
+function addRowTable(tblId) {
+	var table = document.getElementById(tblId);
+	var rowClone = table.rows[table.rows.length - 1];
+	var row = table.insertRow(-1);
+
+	copyAttribute(rowClone, row);
+
+	for (var i = 0; i < table.rows[table.rows.length - 2].cells.length; i++) {
+		var cellClone = rowClone.cells[i];
+		var cell = row.insertCell();
+		cell.innerHTML = cellClone.innerHTML;
+		copyAttribute(cellClone, cell);
+	}
+}
+
+/**
+ * 셀 속성 복사 (아직 작업중)
+ *
+ * @param source
+ * @param target
+ */
+function copyAttribute(source, target) {
+	var attr = source.attributes;
+	for (var i = 0; i < attr.length; i++) {
+		var attrib = attr[i];
+		if (attrib.specified) {
+			target.setAttribute(attrib.name, attrib.value.replace('hasDatepicker', ''));
+		}
+	}
+
+	target.style.cssText = source.style.cssText;
+	target.className = source.className;
+}
