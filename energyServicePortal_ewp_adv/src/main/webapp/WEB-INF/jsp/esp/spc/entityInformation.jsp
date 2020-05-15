@@ -18,6 +18,21 @@
 		getDataList();
 	});
 
+	function nvl(value, str){
+		if(isEmpty(value)){
+			return str;
+		}else{
+			return value;
+		}
+	}
+
+	function getCsvDown(){
+		var column = ["name","발전소_명","연차","관리_운영_기간","보증_방식","PR_보증치","보증_감소율","추가_보수"], //json Key
+			header = ["SPC명","발전소 명","연차","관리 운영기간	","보증" ,"보증 값", "감소율","추가보수"]; //csv 파일 헤더
+
+		getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
+	}
+
 	function getDataList(){
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/spcs",
@@ -35,20 +50,22 @@
 					if(spcGensList !== undefined && spcGensList.length > 0){
 
 						for(var j = 0, jcount = spcGensList.length; j < jcount; j++){
-							var spcGensRow = spcGensList[j];
-							var rowData = result.data[i];
+							var spcGensRow = spcGensList[j],
+								rowData = result.data[i],
+								warrantyInfo = JSON.parse(spcGensRow.warranty_info),
+								contractInfo = JSON.parse(spcGensRow.contract_info);
 
 							rowData["gen_id"] = spcGensRow.gen_id;
-							rowData["발전소_명"] = spcGensRow.site_id;
-							rowData["연차"] = "N년차(계산할것)";
-							rowData["관리_운영_기간"] = spcGensRow.contract_info["관리_운영_기간"];
-							rowData["보증_방식"] = spcGensRow.warranty_info["보증_방식"];
-							rowData["PR_보증치"] = spcGensRow.warranty_info["PR_보증치"];
-							rowData["보증_감소율"] = spcGensRow.warranty_info["보증_감소율"];
-							rowData["추가보수"] = spcGensRow.warranty_info["추가보수"];
+							rowData["발전소_명"] = spcGensRow.name;
+							rowData["관리_운영_기간"] = nvl(contractInfo["관리_운영_기간"], "-");
+							rowData["연차"] = nvl(warrantyInfo["현재_적용_연차"], "-");
+							rowData["보증_방식"] = nvl(warrantyInfo["보증_방식"], "-");
+							rowData["PR_보증치"] = nvl(warrantyInfo["PR_보증치"], "-");
+							rowData["보증_감소율"] = nvl(warrantyInfo["보증_감소율"], "-");
+							rowData["추가_보수"] = nvl(warrantyInfo["추가_보수"], "-");
 
 							//키워드 검색 조건 필터 처리
-							if(rowData["name"].indexOf(keyWord) > -1){
+							if(rowData["name"].indexOf(keyWord) > -1 || rowData["발전소_명"] .indexOf(keyWord) > - 1){
 								jsonList.push(rowData)
 							}
 
@@ -57,7 +74,7 @@
 
 				}
 
-				setMakeList(jsonList, "listData", {"dataFunction" : {"발전소_명" : getGenName, "INDEX" : getNumberIndex}}); //list생성
+				setMakeList(jsonList, "listData", {"dataFunction" : {"INDEX" : getNumberIndex}}); //list생성
 
 			},
 			error: function (request, status, error) {
@@ -68,25 +85,6 @@
 
 	function getNumberIndex(index){
 		return index + 1;
-	}
-
-	function getGenName(siteId){
-		var result = "";
-
-		$.ajax({
-			url: "http://iderms.enertalk.com:8443/config/sites/" + siteId,
-			type: "get",
-			async: false,
-			data: {includeDevices:false, includeRtus: false},
-			success: function (json) {
-				result = json.name;
-			},
-			error: function (request, status, error) {
-				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
-			}
-		});
-
-		return result;
 	}
 
 	function setCheckedAll(obj, chkName){
@@ -135,6 +133,7 @@
 		alert(sucessCnt + "건 삭제처리되었습니다.");
 		getDataList();
 	}
+
 </script>
 
 <div class="row">
@@ -159,7 +158,7 @@
 	</div>
 	<div class="col-lg-9">
 		<div class="right">
-			<a href="#;" class="save_btn">CVS 다운로드</a>
+			<a href="#;" class="save_btn" onclick="getCsvDown();">CVS 다운로드</a>
 		</div>
 	</div>
 </div>
@@ -182,7 +181,7 @@
 						<th><button class="btn_align down">발전소 명</button></th>
 						<th><button class="btn_align down">연차</button></th>
 						<th><button class="btn_align down">관리 운영기간</button></th>
-						<th><button class="btn_align up">보증</button></th>
+						<th><button class="btn_align down">보증</button></th>
 						<th class="right"><button class="btn_align down">보증 값</button></th>
 						<th class="right"><button class="btn_align down">감소율</button></th>
 						<th>- 추가보수</th>
@@ -194,14 +193,14 @@
 							<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="">
 							<label for="chk_op[INDEX]"><span></span>[INDEX]</label>
 						</td>
-						<td><a href="/spc/entityDetails.do?spc_id=[spc_id]&gen_id=[gen_id]" class="tbl_link">[name]</a></td>
-						<td><a href="/spc/entityDetails.do?spc_id=[spc_id]&gen_id=[gen_id]" class="tbl_link">[발전소_명]</a></td>
+						<td><a href="/spc/entityDetails.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">[name]</a></td>
+						<td><a href="/spc/entityDetails.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">[발전소_명]</a></td>
 						<td>[연차]</td>
 						<td>[관리_운영_기간]</td>
 						<td>[보증_방식]</td>
 						<td class="right">[PR_보증치]</td>
 						<td class="right">[보증_감소율]</td>
-						<td>-</td>
+						<td>[추가_보수]</td>
 					</tr>
 					</tbody>
 				</table>

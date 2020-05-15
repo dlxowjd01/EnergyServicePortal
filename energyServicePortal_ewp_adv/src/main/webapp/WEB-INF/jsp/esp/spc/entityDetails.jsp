@@ -11,6 +11,69 @@
 	<title>Title</title>
 </head>
 <body>
+<script>
+	$(function () {
+		getDataSpcBasic();
+		getDataSpcGen();
+	});
+
+	function getDataSpcBasic(){
+		var spcId = "${param.spc_id}",
+			oid = "${param.oid}";
+
+		$.ajax({
+			url: "http://iderms.enertalk.com:8443/spcs/" + spcId,
+			type: "get",
+			async: false,
+			data: {oid : oid},
+			success: function (json) {
+				if(json.data.length > 0){
+					setJsonAutoMapping(json.data[0], "spc_info");
+					setJsonAutoMapping(JSON.parse(json.data[0].spc_info), "spc_info");
+				}else{
+					alert("등록된 데이터가 없습니다.");
+				}
+			},
+			error: function (request, status, error) {
+				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+			}
+		});
+	}
+
+	function getDataSpcGen(){
+		var spcId = "${param.spc_id}",
+			genId = "${param.gen_id}",
+			oid = "${param.oid}";
+
+		$.ajax({
+			url: "http://iderms.enertalk.com:8443/spcs/" + spcId + "/gens/" + genId,
+			type: "get",
+			async: false,
+			data: {oid : oid},
+			success: function (json) {
+				if(json.data.length > 0){
+					$("#발전소명").text(json.data[0].name);
+					setJsonAutoMapping(JSON.parse(json.data[0].contract_info), "contract_info");
+					setJsonAutoMapping(JSON.parse(json.data[0].device_info), "device_info");
+					setJsonAutoMapping(JSON.parse(json.data[0].finance_info), "finance_info");
+					setJsonAutoMapping(JSON.parse(json.data[0].warranty_info), "warranty_info");
+					setJsonAutoMapping(JSON.parse(json.data[0].coefficient_info), "coefficient_info");
+					setJsonAutoMapping(JSON.parse(json.data[0].attachement_info), "attachement_info");
+				}else{
+					alert("등록된 데이터가 없습니다.");
+				}
+			},
+			error: function (request, status, error) {
+				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+			}
+		});
+	}
+
+	function goMoveList(){
+		location.href = "/spc/entityInformation.do";
+	}
+
+</script>
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">SPC 기본 정보</h1>
@@ -24,7 +87,7 @@
 </div>
 <div class="row">
 	<div class="col-lg-12">
-		<div class="indiv">
+		<div class="indiv" id="spc_info">
 			<div class="spc_tbl_row">
 				<table>
 					<colgroup>
@@ -35,13 +98,13 @@
 					</colgroup>
 					<tr>
 						<th>SPC명</th>
-						<td>S-power</td>
+						<td id="name"></td>
 						<th>발전소명</th>
-						<td>혜원솔라01</td>
+						<td id="발전소명"></td>
 					</tr>
 					<tr>
 						<th>주소</th>
-						<td>강원도 고성군 간성읍 해상리 산 137-2</td>
+						<td id="주소">강원도 고성군 간성읍 해상리 산 137-2</td>
 						<th></th>
 						<td></td>
 					</tr>
@@ -62,51 +125,47 @@
 					</colgroup>
 					<tr>
 						<th>담당부서</th>
-						<td data-input="text" data-column="dept" >연구소</td>
+						<td id="담당부서">연구소</td>
 						<th>담당자</th>
-						<td data-input="text" data-column="manager" >박재균 010-4711-4415</td>
+						<td id="담당자">박재균 010-4711-4415</td>
 					</tr>
 					<tr>
 						<th>설치 용량</th>
-						<td data-input="text" data-column="dept" >97.28 kW (계약)</td>
+						<td id="설치_용량">97.28 kW (계약)</td>
 						<th>관리 운영 기간</th>
-						<td data-input="text" data-column="dept" >2018-06-18 ~ 2020-12-31</td>
+						<td id="관리_운영_기간">2018-06-18 ~ 2020-12-31</td>
 					</tr>
 					<tr>
 						<th>기상 관측 지점</th>
-						<td data-input="text" data-column="dept" >38°23'36.2"N, 128°24'05.0"E</td>
+						<td id="기상_관측_지점">38°23'36.2"N, 128°24'05.0"E</td>
 						<th>하자 보증기간(전기)</th>
-						<td data-input="text" data-column="dept" >2018-06-18</td>
+						<td id="하자 _보증기간(전기)">2018-06-18</td>
 					</tr>
 					<tr>
 						<th>사용 전 검사 완료일</th>
-						<td data-input="text" data-column="dept" >2018-06-18</td>
+						<td id="사용_전_검사_완료일">2018-06-18</td>
 						<th>하자 보증기간(토목)</th>
-						<td data-input="text" data-column="dept" >-</td>
+						<td id="하자_보증기간(토목)">-</td>
 					</tr>
 					<tr>
 						<th>정기 검사</th>
-						<td data-input="text" data-column="dept" >-</td>
+						<td id="정기_검사">-</td>
 						<th></th>
 						<td></td>
 					</tr>
 					<tr>
 						<th>등기이사 소속 / 등기이사 명</th>
-						<td data-input="text" data-column="dept" >에스파워 회장 / 홍성민</td>
+						<td><span id="등기이사_소속 ">에스파워 회장</span> / <span id="등기이사_명">홍성민</span></td>
 						<th>등기 기간</th>
-						<td data-input="text" data-column="dept" >-</td>
+						<td id="등기_기간">-</td>
 					</tr>
 					<tr>
 						<th>계약 단가</th>
-						<td data-input="text" data-column="dept" >0 원</td>
+						<td id="계약_단가">0 원</td>
 						<th></th>
 						<td></td>
 					</tr>
 				</table>
-			</div>
-			<div class="btn_wrap_type02">
-				<a href="/spc/entityInformationEdit.do">수정</a>
-				<button type="button" class="btn_type03">목록</button>
 			</div>
 		</div>
 		<div class="indiv mt25" id="device_info">
@@ -123,45 +182,62 @@
 					</colgroup>
 					<tr>
 						<th>모듈 제조사 / 모델</th>
-						<td data-input="text" data-column="dept" >S-Energy / SM-300PC8</td>
+						<td>
+							<span id="모듈_제조사">S-Energy</span> / <span id="모듈_제조사_모델">SM-300PC8</span><br/>
+							<span id="모듈_제조사">S-Energy</span> / <span id="모듈_제조사_모델">SM-300PC8</span>
+						</td>
 						<th>설치 용량</th>
-						<td data-input="text" data-column="dept" >100 kW / 2100 매</td>
+						<td> <span>100 kW</span> / <span>2100 매</span></td>
 					</tr>
 					<tr>
 						<th>모듈 설치 각도</th>
-						<td data-input="text" data-column="dept" >32</td>
+						<td>
+							<span>32</span><br/>
+							<span>32</span>
+						</td>
 						<th>모듈 설치 방식</th>
-						<td data-input="text" data-column="dept" >고정형</td>
+						<td id="모듈_설치_방식">고정형</td>
 					</tr>
 					<tr>
 						<th>인버터 제조사 / 모델</th>
-						<td data-input="text" data-column="dept" >WILLIMGS / M10-100</td>
+						<td>
+							<span>WILLIMGS</span> / <span>M10-100</span><br/>
+							<span>WILLIMGS</span> / <span>M10-100</span>
+						</td>
 						<th>인버터 용량 / 대수</th>
-						<td data-input="text" data-column="dept" >100 kW 1대</td>
+						<td>
+							<span>100 kW</span> / <span>1대</span><br/>
+							<span>100 kW</span> / <span>1대</span>
+						</td>
 					</tr>
 					<tr>
 						<th>접속반 제조사 / 모델</th>
-						<td data-input="text" data-column="dept" >미래이엔아이 / MUX-COM</td>
+						<td>
+							<span>미래이엔아이</span> / <span>MUX-COM</span><br/>
+							<span>미래이엔아이</span> / <span>MUX-COM</span>
+						</td>
 						<th>접속반 채널 / 대수</th>
-						<td data-input="text" data-column="dept" >16 Ch / 1대</td>
+						<td>
+							<span>16 Ch</span> / <span>1대</span><br/>
+							<span>16 Ch</span> / <span>1대</span>
+						</td>
 					</tr>
 					<tr>
 						<th>접속반 용량 / 통신방식</th>
-						<td data-input="text" data-column="dept" >100 kW / 통신</td>
+						<td>100 kW / 통신</td>
 						<th>수배전반 제조사 / 모델</th>
-						<td data-input="text" data-column="dept" >LS산전 / GIPAM-115FI</td>
+						<td>
+							<span>LS산전</span> / <span>GIPAM-115FI</span><br/>
+							<span>LS산전</span> / <span>GIPAM-115FI</span>
+						</td>
 					</tr>
 					<tr>
 						<th>설치 타입</th>
-						<td data-input="text" data-column="dept" >그라운드</td>
+						<td id="설치_타입">그라운드</td>
 						<th></th>
 						<td></td>
 					</tr>
 				</table>
-			</div>
-			<div class="btn_wrap_type02">
-				<a href="/spc/entityInformationEdit.do">수정</a>
-				<button type="button" class="btn_type03">목록</button>
 			</div>
 		</div>
 		<div class="indiv mt25" id="finance_info">
@@ -178,15 +254,11 @@
 					</colgroup>
 					<tr>
 						<th>관련 금융사</th>
-						<td data-input="text" data-column="dept" >-</td>
+						<td id="관련_금융사">-</td>
 						<th>관련 보험사</th>
-						<td data-input="text" data-column="dept" >-</td>
+						<td id="관련_보험사">-</td>
 					</tr>
 				</table>
-			</div>
-			<div class="btn_wrap_type02">
-				<a href="/spc/entityInformationEdit.do">수정</a>
-				<button type="button" class="btn_type03">목록</button>
 			</div>
 		</div>
 		<div class="indiv mt25" id="warranty_info">
@@ -203,45 +275,41 @@
 					</colgroup>
 					<tr>
 						<th>보증 방식</th>
-						<td data-input="text" data-column="dept" >PR</td>
+						<td id="보증_방식">PR</td>
 						<th>PR 보증치</th>
-						<td data-input="text" data-column="dept" >75 %</td>
+						<td id="PR_보증치">75 %</td>
 					</tr>
 					<tr>
 						<th>발전시간 보증치</th>
-						<td data-input="text" data-column="dept" >3 h</td>
+						<td id="발전시간_보증치">3 h</td>
 						<th>보증 감소율</th>
-						<td data-input="text" data-column="dept" >연차별 0.5 %</td>
+						<td id="보증_감소율">연차별 0.5 %</td>
 					</tr>
 					<tr>
 						<th>기준 단가</th>
-						<td data-input="text" data-column="dept" >145 원 /kW</td>
+						<td id="기준_단가">145 원 /kW</td>
 						<th>현재 적용 연차</th>
-						<td data-input="text" data-column="dept" >3 년차</td>
+						<td id="현재_적용_연차">3 년차</td>
 					</tr>
 					<tr>
 						<th>년간 관리 운영비 (1년차)</th>
-						<td data-input="text" data-column="dept" >11,779 만원</td>
+						<td id="년간_관리_운영비">11,779 만원</td>
 						<th>물가 반영 비율</th>
-						<td data-input="text" data-column="dept" >100 %</td>
+						<td id="물가_반영_비율">100 %</td>
 					</tr>
 					<tr>
 						<th>추가 보수</th>
-						<td data-input="text" data-column="dept" >무</td>
+						<td id="추가_보수">무</td>
 						<th>추가 보수 용량</th>
-						<td data-input="text" data-column="dept" >0 kW 이상</td>
+						<td id="추가_보수_용량">0 kW 이상</td>
 					</tr>
 					<tr>
 						<th>추가 보수 백분율</th>
-						<td data-input="text" data-column="dept" >0 %</td>
+						<td id="추가_보수_백분율">0 %</td>
 						<th>전력요금 종별</th>
-						<td data-input="text" data-column="dept" >일반용(갑) kW</td>
+						<td id="전력요금_종별">일반용(갑) kW</td>
 					</tr>
 				</table>
-			</div>
-			<div class="btn_wrap_type02">
-				<a href="/spc/entityInformationEdit.do">수정</a>
-				<button type="button" class="btn_type03">목록</button>
 			</div>
 		</div>
 		<div class="indiv mt25" id="coefficient_info">
@@ -258,33 +326,29 @@
 					</colgroup>
 					<tr>
 						<th>Annual Variability</th>
-						<td data-input="text" data-column="dept" >1.83 %</td>
+						<td id="Annual">1.83 %</td>
 						<th>PV modul modeling/params</th>
-						<td data-input="text" data-column="dept" >2.00 %</td>
+						<td id="PV_modul">2.00 %</td>
 					</tr>
 					<tr>
 						<th>Inverter efficiency</th>
-						<td data-input="text" data-column="dept" >98.5 % </td>
+						<td id="Inverter">98.5 % </td>
 						<th>Soiling, mismatch</th>
-						<td data-input="text" data-column="dept" >1 %</td>
+						<td id="Soiling">1 %</td>
 					</tr>
 					<tr>
 						<th>Degradation estimation</th>
-						<td data-input="text" data-column="dept" >1 %</td>
+						<td id="Degradation">1 %</td>
 						<th>Resulting ann, Variability(sigma)</th>
-						<td data-input="text" data-column="dept" >98 %</td>
+						<td id="Resulting_ann">98 %</td>
 					</tr>
 					<tr>
 						<th>System Degradation</th>
-						<td data-input="text" data-column="dept" >0.5 %</td>
+						<td id="Degradation">0.5 %</td>
 						<th>System Availability</th>
-						<td data-input="text" data-column="dept" >99 %</td>
+						<td id="Availability">99 %</td>
 					</tr>
 				</table>
-			</div>
-			<div class="btn_wrap_type02">
-				<a href="/spc/entityInformationEdit.do">수정</a>
-				<button type="button" class="btn_type03">목록</button>
 			</div>
 		</div>
 		<div class="indiv mt25" id="contact_info">
@@ -301,33 +365,29 @@
 					</colgroup>
 					<tr>
 						<th>전기안전 관리 회사명</th>
-						<td data-input="text" data-column="dept" >S-power</td>
+						<td id="전기안전_관리_회사명">S-power</td>
 						<th>회사 연락처</th>
-						<td data-input="text" data-column="dept" >070-4339-7100</td>
+						<td id="회사_연락처">070-4339-7100</td>
 					</tr>
 					<tr>
 						<th>전기안전 관리 대표자명</th>
-						<td data-input="text" data-column="dept" >박재균 </td>
+						<td id="전기안전_관리_대표자명">박재균 </td>
 						<th>대표자 연락처</th>
-						<td data-input="text" data-column="dept" >070-4339-7100</td>
+						<td id="대표자_연락처">070-4339-7100</td>
 					</tr>
 					<tr>
 						<th>전기안전 관리 담당자명</th>
-						<td data-input="text" data-column="dept" >박재균</td>
+						<td id="전기안전_관리_담당자명">박재균</td>
 						<th>담당자 연락처</th>
-						<td data-input="text" data-column="dept" >010-4711-4415</td>
+						<td id="담당자_연락처">010-4711-4415</td>
 					</tr>
 					<tr>
 						<th>현장 잠금장치 비밀번호</th>
-						<td data-input="text" data-column="dept" >-</td>
+						<td id="현장_잠금장치_비밀번호">-</td>
 						<th>시공사</th>
-						<td data-input="text" data-column="dept" >S-power</td>
+						<td id="시공사">S-power</td>
 					</tr>
 				</table>
-			</div>
-			<div class="btn_wrap_type02">
-				<a href="/spc/entityInformationEdit.do">수정</a>
-				<button type="button" class="btn_type03">목록</button>
 			</div>
 		</div>
 		<div class="indiv mt25" id="attachement_info">
@@ -348,17 +408,17 @@
 					</tr>
 					<tr>
 						<th>수배전반</th>
-						<td data-input="file" data-column="dept" ></td>
+						<td></td>
 						<td><button class="btn_file down">다운로드</button></td>
 					</tr>
 					<tr>
 						<th>케이블</th>
-						<td data-input="file" data-column="dept" ></td>
+						<td></td>
 						<td><button class="btn_file down">다운로드</button></td>
 					</tr>
 					<tr>
 						<th>모듈</th>
-						<td data-input="file" data-column="dept" ></td>
+						<td></td>
 						<td><button class="btn_file down">다운로드</button></td>
 					</tr>
 					<tr>
@@ -373,29 +433,29 @@
 					</tr>
 					<tr>
 						<th>토목</th>
-						<td data-input="file" data-column="dept" ></td>
+						<td></td>
 						<td><button class="btn_file down">다운로드</button></td>
 					</tr>
 					<tr>
 						<th>구조물</th>
-						<td data-input="file" data-column="dept" ></td>
+						<td></td>
 						<td><button class="btn_file up">업로드</button></td>
 					</tr>
 					<tr>
 						<th>접속반</th>
-						<td data-input="file" data-column="dept" ></td>
+						<td></td>
 						<td><button class="btn_file down">다운로드</button></td>
 					</tr>
 					<tr>
 						<th>기타설비</th>
-						<td data-input="file" data-column="dept" ></td>
+						<td></td>
 						<td><button class="btn_file down">다운로드</button></td>
 					</tr>
 				</table>
 			</div>
 			<div class="btn_wrap_type02">
-				<a href="/spc/entityInformationEdit.do">수정</a>
-				<button type="button" class="btn_type03">목록</button>
+				<button type="button" class="btn_type03" onclick="">수정</button>
+				<button type="button" class="btn_type03" onclick="goMoveList();">목록</button>
 			</div>
 		</div>
 	</div>

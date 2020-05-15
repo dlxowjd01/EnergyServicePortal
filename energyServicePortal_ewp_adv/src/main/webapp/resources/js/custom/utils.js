@@ -850,9 +850,11 @@ function setJsonAutoMapping(json, areaId) {
 		} else if (typeof json[prop] == "object") {
 
 			if (Array.isArray(json[prop])) {
-
+				for(var i = 0, count = json[prop].length; i < count ; i++){
+					setJsonAutoMapping(json[prop][i], areaId);
+				}
 			} else {//오브젝트(key, value)
-
+				setJsonAutoMapping(json[prop], areaId);
 			}
 
 		}
@@ -998,3 +1000,47 @@ function setMakeList(jsonData, listId, opts) {
 	$selecter.html(arrTagInfo.join(""));
 }
 
+//작성일 : 2020-05-14
+//작성자 : lee sang o
+//기능 : json list값  csv파일 생성
+function getJsonCsvDownload(jsonData, column, header, fileName){
+    var	csvData = [],
+    	headerData = [],
+    	exportedFilenmae = 'csv_download.csv';		    	
+    
+    if( fileName !== undefined ){
+    	exportedFilenmae = fileName;
+    }
+
+    //헤더처리
+    for(var i = 0, count = header.length; i < count; i++){
+    	headerData.push(header[i]);
+    }
+    csvData.push(headerData.join(","));
+    
+    //내용처리
+    for (var i = 0, count = jsonData.length; i < count; i++) {
+        var rowData = [];
+        for (var j = 0, colSize = column.length; j < colSize; j++) {
+            rowData.push(jsonData[i][column[j]]);
+        }
+        csvData.push(rowData.join(","));
+    }		    
+    
+    
+    var blob = new Blob(['\uFEFF' + csvData.join("\r\n")], {type: 'text/csv;charset=UTF-8;' });
+    if (navigator.msSaveBlob) { // IE 10+
+        navigator.msSaveBlob(blob, exportedFilenmae);
+    } else {
+        var link = document.createElement("a");
+        if (link.download !== undefined) {
+            var url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", exportedFilenmae);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+}
