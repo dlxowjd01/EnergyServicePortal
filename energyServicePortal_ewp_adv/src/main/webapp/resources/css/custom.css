@@ -12511,6 +12511,11 @@ button.big{width:102px}
 	font-size: 12px;
 	color: var(--color4);
 }
+.value_area .value_tit2 {
+	margin-top: 30px;
+	font-size: 13px;
+	color: var(--color8);
+}
 
 .value_area .value_num {
 	margin-top: 5px;
@@ -13913,5 +13918,53 @@ button.tx_file {
 .entity_wrap.post input+label,.entity_wrap.edit input+label{color:var(--color4)}
 .entity_wrap.post input:checked+label,.entity_wrap.edit input:checked+label{color:var(--color8)}
 .sel_calendar.twin + div{margin-left:40px}
+
+/* 이상분석 */
+.compare_area .bgN.btn-primary:focus,
+.compare_area .bgN.btn-primary.focus,
+.compare_area .bgN.btn-primary:hover,
+.compare_area .bgN.btn-primary:active,
+.compare_area .bgN.btn-primary.active,
+.compare_area .bgN.open > .dropdown-toggle.btn-primary,
+.compare_area .bgN.btn-primary:active:hover,
+.compare_area .bgN.btn-primary.active:hover,
+.compare_area .bgN.open > .dropdown-toggle.btn-primary:hover,
+.compare_area .bgN.btn-primary:active:focus,
+.compare_area .bgN.btn-primary.active:focus,
+.compare_area .bgN.open > .dropdown-toggle.btn-primary:focus,
+.compare_area .bgN.btn-primary:active.focus,
+.compare_area .bgN.btn-primary.active.focus,
+.compare_area .bgN.open > .dropdown-toggle.btn-primary.focus{background:initial}
+.compare_area .bgN.btn{width:130px;background:initial}
+.compare_area > .dropdown > .dropdown-menu{width:584px;min-width:auto}
+.compare_bx{padding:24px}
+.compare_bx .btn,.compare_bx .sel{width:100%}
+.comp_btn_wrap{clear:both;padding:18px 18px 6px;border-top:1px solid rgba(255,255,255,0.12);text-align:right}
+.comp_btn_wrap button{width:200px}
+
+.comp_tit{padding-left:8px;margin-top:32px;font-weight:500;font-size:14px;color:var(--color4);line-height:20px}
+.comp_tit.type{margin-top:0}
+.comp_tit.type2{padding-left:0;}
+.comp_ul{margin:0 8px}
+.comp_ul > li{margin-top:16px}
+.comp_ul > li:first-child{margin-top:14px}
+.comp_ul .dropdown-menu{padding-left:14px;padding-right:14px}
+.bx_row{margin:0 -8px}
+.bx_row:after{display:block;clear:both;content:''}
+.bx_row.aN2 .bx_align{width:50%}
+.bx_row.aN3 .bx_align{width:35%}
+.bx_row.aN3 .bx_align:last-child{width:30%}
+.bx_align{float:left}
+.bx_align{} 
+.comp_inp{display:block;margin:5px 0;padding:5px 0}
+.comp_inp input+label,.comp_inp input+label{color:var(--color4)}
+.comp_inp input:checked+label,.comp_inp input:checked+label{color:var(--color8)}
+
+
+
+
+
+
+
 
 

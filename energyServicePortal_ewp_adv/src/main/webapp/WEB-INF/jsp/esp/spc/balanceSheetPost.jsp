@@ -28,6 +28,52 @@
 				<div class="spc_bal_post">
 					<table id="interestTable">
 						<colgroup>
+							<col style="width:50%">
+							<col style="width:50%">
+						</colgroup>
+						<thead>
+						<tr>
+							<th>SPC 명</th>
+							<th>발전소 명</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td>
+								<div class="sa_select">
+									<div class="dropdown placeholder">
+										<button class="btn btn-primary dropdown-toggle" type="button"
+										        data-toggle="dropdown">선택
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu chk_type" role="menu" id="type">
+											<li><a href="#">대리기관 수수료</a></li>
+											<li><a href="#">관리운영 수수료</a></li>
+										</ul>
+									</div>
+								</div>
+							</td>
+							<td>
+								<div class="sa_select">
+									<div class="dropdown placeholder">
+										<button class="btn btn-primary dropdown-toggle" type="button"
+										        data-toggle="dropdown">선택
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu chk_type" role="menu" id="type">
+											<li><a href="#">대리기관 수수료</a></li>
+											<li><a href="#">관리운영 수수료</a></li>
+										</ul>
+									</div>
+								</div>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="spc_bal_post">
+					<table id="interestTable">
+						<colgroup>
 							<col style="width:9.5%">
 							<col style="width:9.5%">
 							<col style="width:9.5%">
