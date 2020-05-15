@@ -12,16 +12,6 @@ else
   sleep 5
 fi
 
-#JAR_NAME=ewp-api-0.0.1-SNAPSHOT.jar
-#echo "> build 파일명: $JAR_NAME"
-
-#APPLICATION_JAR_NAME=ewp-api.jar
-#DEPLOY_PATH=/home/ubuntu/ewpsp_batch/lib/
-#APPLICATION_JAR=$DEPLOY_PATH$APPLICATION_JAR_NAME
-
-#echo "> $APPLICATION_JAR 배포"
-#cp -R $BUILD_PATH$JAR_NAME $APPLICATION_JAR
-
 WAR_NAME=energySerivcePortal-1.0.0.war
 echo "> build 파일명: $WAR_NAME"
 
