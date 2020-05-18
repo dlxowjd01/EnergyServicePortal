@@ -726,7 +726,7 @@
 				<div class="tbl_top">
 					<h2 class="ntit mt25">첨부 파일</h2>
 				</div>
-				<div class="spc_tbl_row">
+				<div class="spc_tbl_row fileBox">
 					<table>
 						<colgroup>
 							<col style="width:15%">
@@ -756,13 +756,19 @@
 							<td><button class="btn_clse">삭제</button></td>
 						</tr>
 						<tr>
-							<th>모듈<a href="#" class="btn_add fr">추가</a></th>
-							<td><p class="tx_file">M10-100_계통도V020_150302.pdf</p></td>
-							<td><button class="btn_clse">삭제</button></td>
-						</tr>
-						<tr>
-							<th>인버터<a href="#" class="btn_add fr">추가</a></th>
+							<th>모듈<label for="uploadBtn" class="btn_add fr">추가</label></th>
+							<td>
+								<input type="file" id="uploadBtn" class="uploadBtn">
+								<input type="text" class="fileName tx_file" readonly="readonly">
+							</td>
 							<td></td>
+						</tr>
+							<th>인버터<label for="uploadBtn" class="btn_add fr">추가</label></th>
+						<tr>
+							<td>
+								<input type="file" id="uploadBtn02" class="uploadBtn">
+								<input type="text" class="fileName tx_file" readonly="readonly">
+							</td>
 							<td></td>
 						</tr>
 						<tr>

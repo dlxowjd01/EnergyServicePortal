@@ -377,7 +377,7 @@
 							<col style="width:157px">
 							<col style="width:365px">
 							<col style="width:156px">
-							<col style="width:346px">
+							<col style="width:364px">
 						</colgroup>
 						<tr>
 							<th>발전소 선택</th>
@@ -409,11 +409,44 @@
 									</ul>
 								</div>
 							</td>
+							<th>점검 주기</th>
+							<td class="ly_w_type">
+								<div class="dropdown fl">
+								  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">점검 선택
+								  <span class="caret"></span></button>
+								  <ul class="dropdown-menu">
+									<li><a href="#">정기 점검</a></li>
+									<li><a href="#">일시 점검</a></li>
+								  </ul>
+								</div>
+								
+								<div class="tx_inp_type fl">
+									<input type="text" placeholder="입력">
+								</div>
+								
+								<div class="dropdown fl">
+								  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">주기 선택
+								  <span class="caret"></span></button>
+								  <ul class="dropdown-menu">
+									<li><a href="#">년</a></li>
+									<li><a href="#">반기</a></li>
+									<li><a href="#">분기</a></li>
+									<li><a href="#">월</a></li>
+								  </ul>
+								</div>
+							</td>
+						</tr>
+						<tr>
 							<th>기준 일자</th>
 							<td>
 								<div class="sel_calendar">
-									<input type="text" id="datepicker1" name="job_date" class="sel" value=""
-									       autocomplete="off" readonly placeholder="날짜 선택">
+								  <input type="text" id="datepicker2" class="sel" value="" autocomplete="off" style="width:100%">
+								</div>
+							</td>
+							<th>다음 검사 일자</th>
+							<td>
+								<div class="tx_inp_type">
+									<input type="text" value="자동 계산" disabled>
 								</div>
 							</td>
 						</tr>
@@ -466,7 +499,7 @@
 							</td>
 							<th>비고</th>
 							<td>
-								<div class="tx_inp_type" style="width:100%">
+								<div class="tx_inp_type">
 									<input type="text" id="note" name="note" placeholder="입력">
 								</div>
 							</td>
@@ -474,7 +507,7 @@
 						<tr>
 							<th>알림 설정</th>
 							<td>
-								<div class="dropdown placeholder fl" id="alarmSetup" style="width:160px">
+								<div class="dropdown placeholder fl" id="alarmSetup">
 									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
 									        data-name="알림 일시 선택">
 										<span class="caret"></span>
@@ -502,9 +535,42 @@
 											</c:forEach>
 										</ul>
 									</div>
-									<div class="tx_inp_type fr" style="width:160px">
+									<div class="tx_inp_type fl ml" style="width:160px">
 										<input type="text" id="alarmPhone" name="alarmPhone" placeholder="수신 번호">
 									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>알림 설정</th>
+							<td>
+								<div class="dropdown fl" style="width:160px">
+								  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">직접 설정
+								  <span class="caret"></span></button>
+								  <ul class="dropdown-menu">
+									<li class="on"><a href="#">1일 전</a></li>
+									<li><a href="#">3일 전</a></li>
+									<li><a href="#">7일 전</a></li>
+									<li><a href="#">직접 설정</a></li>
+								  </ul>
+								</div>
+								<div class="sel_calendar fl ml" style="width:160px">
+								  <input type="text" id="datepicker3" class="sel" value="" autocomplete="off">
+								</div>
+							</td>
+							<th>알림 시간</th>
+							<td>
+								<div class="dropdown fl" style="width:160px">
+								  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">알림 시간 선택
+								  <span class="caret"></span></button>
+								  <ul class="dropdown-menu">
+									<li class="on"><a href="#">12시</a></li>
+									<li><a href="#">14시</a></li>
+									<li><a href="#">16시</a></li>
+								  </ul>
+								</div>
+								<div class="tx_inp_type fl ml" style="width:160px">
+									<input type="text" placeholder="입력">
 								</div>
 							</td>
 						</tr>

@@ -712,20 +712,20 @@
 								</div>
 							</td>
 							<td>
-								<div class="chk_type">
-									<input type="checkbox" id="repayType01_1" name="repayType_1" value="1">
+								<div class="rdo_type">
+									<input type="radio" id="repayType01_1" name="repayType_1" value="1">
 									<label for="repayType01_1"><span></span></label>
 								</div>
 							</td>
 							<td>
-								<div class="chk_type">
-									<input type="checkbox" id="repayType02_1" name="repayType_1" value="2">
+								<div class="rdo_type">
+									<input type="radio" id="repayType02_1" name="repayType_1" value="2">
 									<label for="repayType02_1"><span></span></label>
 								</div>
 							</td>
 							<td>
-								<div class="chk_type">
-									<input type="checkbox" id="repayType03_1" name="repayType_1" value="3">
+								<div class="rdo_type">
+									<input type="radio" id="repayType03_1" name="repayType_1" value="3">
 									<label for="repayType03_1"><span></span></label>
 								</div>
 							</td>
@@ -794,14 +794,14 @@
 								대리기관 수수료
 							</td>
 							<td>
-								<div class="chk_type">
-									<input type="checkbox" id="chk_bal01_1" name="contract_1" value="1">
+								<div class="rdo_type">
+									<input type="radio" id="chk_bal01_1" name="contract_1" value="1">
 									<label for="chk_bal01_1"><span></span></label>
 								</div>
 							</td>
 							<td>
-								<div class="chk_type">
-									<input type="checkbox" id="chk_bal02_1" name="contract_1" value="2">
+								<div class="rdo_type">
+									<input type="radio" id="chk_bal02_1" name="contract_1" value="2">
 									<label for="chk_bal02_1"><span></span></label>
 								</div>
 							</td>
@@ -864,14 +864,14 @@
 								관리운영 수수료
 							</td>
 							<td>
-								<div class="chk_type">
-									<input type="checkbox" id="chk_bal01_2" name="contract_2" value="1">
+								<div class="rdo_type">
+									<input type="radio" id="chk_bal01_2" name="contract_2" value="1">
 									<label for="chk_bal01_2"><span></span></label>
 								</div>
 							</td>
 							<td>
-								<div class="chk_type">
-									<input type="checkbox" id="chk_bal02_2" name="contract_2" value="2">
+								<div class="rdo_type">
+									<input type="radio" id="chk_bal02_2" name="contract_2" value="2">
 									<label for="chk_bal02_2"><span></span></label>
 								</div>
 							</td>

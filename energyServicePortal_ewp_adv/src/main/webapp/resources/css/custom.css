@@ -12960,6 +12960,7 @@ textarea::-webkit-scrollbar-thumb {
 	border-radius: 2px;
 	border: 1px solid #dcdee5;
 }
+.tx_inp_type.ui-widget{background: var(--box-color7);}
 
 .tx_inp_type input {
 	width: 100%;
@@ -13666,7 +13667,7 @@ button.tx_file {
 	padding-right: 22px;
 }
 
-.spc_tbl02_row .dropdown {
+.spc_tbl02_row .dropdown,.spc_tbl02_row .sel_calendar{
 	width:342px	
 }
 .spc_tbl02_row .dropdown .btn{
@@ -13678,7 +13679,7 @@ button.tx_file {
 .spc_tbl02_row.regist_ver .tx_btn_area.type {
 	width: 40%
 }
-
+.spc_tbl02_row .ml{margin-left:22px}
 .spc_tbl02_row.regist_ver .rdo_type {
 	display: inline-block;
 	margin-right: 30px;
@@ -13718,6 +13719,10 @@ button.tx_file {
 	height: 36px;
 	line-height: 36px
 }
+.ly_w_type{}
+.ly_w_type .dropdown{margin-left:16px;width:120px}
+.ly_w_type .dropdown:first-child{margin-left:0}
+.ly_w_type .tx_inp_type{margin-left:16px;width:70px}
 
 /* 반응형 */
 @media (max-width: 768px) {
@@ -13805,7 +13810,7 @@ button.tx_file {
 .tx_inp_type.read{height:48px;padding:0;width:300px;border:none;background:none}
 .tx_inp_type.read input{background:none}
 
-.btn_add{display: inline-block;line-height: 24px;background: url('../img/btn_add.png') no-repeat 0 2px;padding: 0 10px 0 28px;font-size: 13px;color: #0095e1;font-weight: 500;}
+.btn_add{display: inline-block;line-height: 24px;background: url('../img/btn_add.png') no-repeat 0 2px;padding: 0 10px 0 28px;font-size: 13px;color: #0095e1;font-weight: 500;cursor:pointer}
 .btn_add:link,.btn_add:visited,.btn_add:hover,.btn_add:active{color: #0095e1;}
 
 .spc_bal_post + .spc_bal_post{margin-top:35px}
@@ -13828,7 +13833,7 @@ button.tx_file {
 
 /* 모달 팝업 */
 .modal-content{padding:28px 24px;border-radius: 4px;box-shadow: 0 5px 14px 9px rgba(0, 0, 0, 0.12);background-color: var(--box-color);} 
-.modal-content .btn_wrap_type02{margin-top:36px} 
+.modal-content .btn_wrap_type02{margin-top:36px;padding-right:23px}
 .modal-content .btn_wrap_type02 button{width:102px} 
 .ly_wrap .ly_tit{padding-left:16px;margin-bottom:25px;font-size:20px;line-height:50px;font-weight:bold;color:var(--color8)}
 
@@ -13963,8 +13968,10 @@ button.tx_file {
 .comp_inp input+label,.comp_inp input+label{color:var(--color4)}
 .comp_inp input:checked+label,.comp_inp input:checked+label{color:var(--color8)}
 
-
-
+/* file input */
+.fileBox .fileName {display:inline-block;background:none;border:0;font-size:14px;width:100%}
+.fileBox .btn_ip_file{}
+.fileBox .uploadBtn {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
 
 
 

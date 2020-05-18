@@ -95,7 +95,51 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="indiv bal_edit">
-			<div class="clear">
+			<div class="spc_bal_post">
+				<table>
+					<colgroup>
+						<col style="width:50%">
+						<col style="width:50%">
+					</colgroup>
+					<thead>
+					<tr>
+						<th>SPC 명</th>
+						<th>발전소 명</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td>
+							<div class="sa_select">
+								<div class="dropdown placeholder" id="spc">
+									<button class="btn btn-primary dropdown-toggle" type="button"
+											data-toggle="dropdown">선택
+										<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu chk_type" role="menu">
+									</ul>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div class="sa_select">
+								<div class="dropdown placeholder" id="spcGen">
+									<button class="btn btn-primary dropdown-toggle" type="button"
+											data-toggle="dropdown">선택
+										<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu chk_type" role="menu" id="type">
+										<li><a href="#">대리기관 수수료</a></li>
+										<li><a href="#">관리운영 수수료</a></li>
+									</ul>
+								</div>
+							</div>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="clear mt30">
 				<div class="fl">
 					<span class="tx_tit">기준</span>
 					<div class="sa_select">
