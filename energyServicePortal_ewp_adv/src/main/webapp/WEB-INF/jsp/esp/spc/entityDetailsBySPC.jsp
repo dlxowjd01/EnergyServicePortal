@@ -43,7 +43,7 @@
           </div>
         </div>
         <div class="indiv mt25">
-          <div class="spc_tbl_row pb20">
+          <div class="spc_tbl_row pb20 fileBox">
             <table class="mt30">
               <colgroup>
                 <col style="width:15%">
@@ -61,7 +61,7 @@
                 <th></th>
                 <th>다운로드</th>
                 <th>발급일자</th>
-                <th>비고</th>
+                <th style="padding-left:55px">비고</th>
               </tr>
               <tr>
                 <td>사업조직도</td>
@@ -71,7 +71,7 @@
                 <td></td>
                 <td></td>
                 <td>
-                  <button class="btn_type05">추가</button>
+                  <button class="btn_type06">추가</button>
                 </td>
               </tr>
               <tr>
@@ -82,7 +82,7 @@
                 <td></td>
                 <td></td>
                 <td>
-                  <button class="btn_type05">추가</button>
+                  <button class="btn_type06">추가</button>
                 </td>
               </tr>
               <tr>
@@ -93,7 +93,7 @@
                 <td></td>
                 <td></td>
                 <td>
-                  <button class="btn_type05">추가</button>
+                  <button class="btn_type06">추가</button>
                 </td>
               </tr>
               <tr>
@@ -106,7 +106,7 @@
                 <td>O</td>
                 <td>-</td>
                 <td>
-                  <button class="btn_type05">추가</button>
+                  <button class="btn_type06">추가</button>
                 </td>
               </tr>
               <tr>
@@ -119,20 +119,24 @@
                 <td>O</td>
                 <td>-</td>
                 <td>
-                  <button class="btn_type05">추가</button>
+                  <button class="btn_type06">추가</button>
                 </td>
               </tr>
               <tr>
                 <td>토지 및 건물 등기부등록</td>
                 <td></td>
-                <td><p class="tx_file">에스파워 토지등기부등본.pdf</p></td>
+               <td>
+					<input type="file" id="uploadBtn2" class="uploadBtn">
+					<input type="text" class="fileName tx_file" readonly="readonly">
+				</td>
                 <td>
                   <button class="btn_file down">다운로드</button>
                 </td>
                 <td>O</td>
                 <td>-</td>
                 <td>
-                  <button class="btn_type05">추가</button>
+				  <label for="uploadBtn2" class="btn_type06">추가</label>
+                  <button class="btn_type07">삭제</button>
                 </td>
               </tr>
               <tr>
@@ -145,7 +149,7 @@
                 <td>O</td>
                 <td>-</td>
                 <td>
-                  <button class="btn_type05">추가</button>
+                  <button class="btn_type06">추가</button>
                 </td>
               </tr>
               <tr>
@@ -158,7 +162,7 @@
                 <td>O</td>
                 <td>-</td>
                 <td>
-                  <button class="btn_type05">추가</button>
+                  <button class="btn_type06">추가</button>
                 </td>
               </tr>
               <tr>
@@ -171,7 +175,7 @@
                 <td>O</td>
                 <td>-</td>
                 <td>
-                  <button class="btn_type05">추가</button>
+                  <button class="btn_type06">추가</button>
                 </td>
               </tr>
               <tr>
@@ -184,7 +188,7 @@
                 <td>O</td>
                 <td>-</td>
                 <td>
-                  <button class="btn_type05">추가</button>
+                  <button class="btn_type06">추가</button>
                 </td>
               </tr>
               <tr>
@@ -197,7 +201,7 @@
                 <td>O</td>
                 <td>-</td>
                 <td>
-                  <button class="btn_type05">추가</button>
+                  <button class="btn_type06">추가</button>
                 </td>
               </tr>
               <tr>
@@ -210,7 +214,7 @@
                 <td>O</td>
                 <td>-</td>
                 <td>
-                  <button class="btn_type05">추가</button>
+                  <button class="btn_type06">추가</button>
                 </td>
               </tr>
               <tr>
@@ -223,7 +227,7 @@
                 <td>O</td>
                 <td>-</td>
                 <td>
-                  <button class="btn_type05">추가</button>
+                  <button class="btn_type06">추가</button>
                 </td>
               </tr>
               <tr>
@@ -236,7 +240,7 @@
                 <td>O</td>
                 <td>-</td>
                 <td>
-                  <button class="btn_type05">추가</button>
+                  <button class="btn_type06">추가</button>
                 </td>
               </tr>
               <tr>
@@ -247,7 +251,7 @@
                 <td></td>
                 <td></td>
                 <td>
-                  <button class="btn_type05">추가</button>
+                  <button class="btn_type06">추가</button>
                 </td>
               </tr>
               <tr>
@@ -258,7 +262,7 @@
                 <td></td>
                 <td></td>
                 <td>
-                  <button class="btn_type05">추가</button>
+                  <button class="btn_type06">추가</button>
                 </td>
               </tr>
               <tr>
@@ -269,7 +273,7 @@
                 <td></td>
                 <td></td>
                 <td>
-                  <button class="btn_type05">추가</button>
+                  <button class="btn_type06">추가</button>
                 </td>
               </tr>
               <tr>
@@ -280,7 +284,7 @@
                 <td></td>
                 <td></td>
                 <td>
-                  <button class="btn_type05">추가</button>
+                  <button class="btn_type06">추가</button>
                 </td>
               </tr>
               <tr>

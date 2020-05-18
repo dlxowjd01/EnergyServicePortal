@@ -12456,8 +12456,48 @@ button.big{width:102px}
 	background: url(../img/ico_add2_wh.png) no-repeat;
 	content: ''
 }
+.btn_type06 {
+	padding: 0 12px 0 6px;
+	font-size: 12px;
+	line-height: 22px;
+	color: var(--color4);
+	border:0;
+	background: none;
+	vertical-align:top;
+	cursor:pointer
+}
 
-.darkmode .btn_type05:before {
+.btn_type06:before {
+	display: inline-block;
+	margin: 2px 3px 0 0;
+	width: 18px;
+	height: 18px;
+	vertical-align: top;
+	background: url(../img/ico_add2_wh.png) no-repeat;
+	content: ''
+}
+.btn_type07 {
+	padding: 0 12px 0 6px;
+	font-size: 12px;
+	line-height: 22px;
+	color: var(--color4);
+	border:0;
+	background: none;
+	vertical-align:top;
+	cursor:pointer
+}
+
+.btn_type07:before {
+	display: inline-block;
+	margin: 2px 3px 0 0;
+	width: 18px;
+	height: 18px;
+	vertical-align: top;
+	background: url(../img/delete.png) no-repeat;
+	content: ''
+}
+
+.darkmode .btn_type05:before,.darkmode .btn_type06:before {
 	background: url(../img/ico_add2.png) no-repeat
 }
 
@@ -13972,8 +14012,8 @@ button.tx_file {
 .fileBox .fileName {display:inline-block;background:none;border:0;font-size:14px;width:100%}
 .fileBox .btn_ip_file{}
 .fileBox .uploadBtn {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
-
-
+.btn_type06 + .btn_type07{position:relative;padding-left:15px}
+.btn_type06 + .btn_type07:after{position:absolute;top:4px;left:0;width:1px;height:14px;background:rgba(255, 255, 255, 0.25);content:''}
 
 
 
