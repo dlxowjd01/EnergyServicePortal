@@ -1052,7 +1052,7 @@ function getJsonCsvDownload(jsonData, column, header, fileName) {
  */
 function addRowTable(tblId) {
 	var table = document.getElementById(tblId);
-	var objTable = $('#'+tblId);
+	var objTable = $('#' + tblId);
 	var rowClone = table.rows[table.rows.length - 1];
 	var row = table.insertRow(-1);
 	var trLength = objTable.find('tbody tr').length;
@@ -1067,7 +1067,7 @@ function addRowTable(tblId) {
 	}
 
 	//함수 있으면 실행하기
-	if(typeof(rowAppend) == 'function') {
+	if (typeof (rowAppend) == 'function') {
 		rowAppend();
 	}
 }
@@ -1080,22 +1080,22 @@ function addRowTable(tblId) {
  * @returns {*}
  */
 function attributeVary(cell, rowNum) {
-	if(cell.innerHTML != '' && cell.getElementsByTagName('input')[0] != undefined) {
+	if (cell.innerHTML != '' && cell.getElementsByTagName('input')[0] != undefined) {
 		var inpAttr = cell.getElementsByTagName('input')[0].attributes;
 		for (var i = 0; i < inpAttr.length; i++) {
 			var attrib = inpAttr[i];
-			if(attrib.name == 'id' || attrib.name == 'name') {
+			if (attrib.name == 'id' || attrib.name == 'name') {
 				var attVal = attrib.value.split('_')[0];
 				cell.getElementsByTagName('input')[0].setAttribute(attrib.name, attVal + '_' + rowNum);
 			}
 		}
 	}
 
-	if(cell.innerHTML != '' && cell.getElementsByTagName('label')[0] != undefined) {
+	if (cell.innerHTML != '' && cell.getElementsByTagName('label')[0] != undefined) {
 		var lebelAttr = cell.getElementsByTagName('label')[0].attributes;
 		for (var i = 0; i < lebelAttr.length; i++) {
 			var attrib = lebelAttr[i];
-			if(attrib.name == 'for') {
+			if (attrib.name == 'for') {
 				var attVal = attrib.value.split('_')[0];
 				cell.getElementsByTagName('label')[0].setAttribute(attrib.name, attVal + '_' + rowNum);
 			}
@@ -1120,7 +1120,14 @@ function copyAttribute(source, target) {
 		}
 	}
 
-	if(source.style.cssText != '') target.style.cssText = source.style.cssText;
-	if(source.className != '') target.className = source.className;
+	if (source.style.cssText != '') target.style.cssText = source.style.cssText;
+	if (source.className != '') target.className = source.className;
 
+}
+
+function genUuid() {
+	function s4() {
+		return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+	}
+	return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 }
