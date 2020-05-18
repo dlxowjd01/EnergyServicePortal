@@ -166,7 +166,7 @@
 	<div class="col-lg-12">
 		<div class="indiv">
 			<div class="btn_wrap_type">
-				<button type="button" class="btn_type" onclick="location.href='/spc/entityInformationPost.do'">신규 등록</button>
+				<a href="/spc/entityInformationPost.do">신규 등록</a>
 			</div>
 			<div class="spc_tbl align_type">
 				<table class="chk_type">

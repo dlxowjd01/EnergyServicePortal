@@ -13802,6 +13802,9 @@ button.tx_file {
 .tx_inp_type.edit{height:48px;padding:0;width:300px;border:none;border-bottom:2px solid #1d98e9;background:none}
 .tx_inp_type.edit input{background:none}
 
+.tx_inp_type.read{height:48px;padding:0;width:300px;border:none;background:none}
+.tx_inp_type.read input{background:none}
+
 .btn_add{display: inline-block;line-height: 24px;background: url('../img/btn_add.png') no-repeat 0 2px;padding: 0 10px 0 28px;font-size: 13px;color: #0095e1;font-weight: 500;}
 .btn_add:link,.btn_add:visited,.btn_add:hover,.btn_add:active{color: #0095e1;}
 

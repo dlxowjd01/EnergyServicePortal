@@ -850,7 +850,7 @@ function setJsonAutoMapping(json, areaId) {
 		} else if (typeof json[prop] == "object") {
 
 			if (Array.isArray(json[prop])) {
-				for(var i = 0, count = json[prop].length; i < count ; i++){
+				for (var i = 0, count = json[prop].length; i < count; i++) {
 					setJsonAutoMapping(json[prop][i], areaId);
 				}
 			} else {//오브젝트(key, value)
@@ -881,8 +881,8 @@ function setDataMapping($selecter, json, prop) {
 	} else if (_TagName == "TEXTAREA") {
 		$element.val(json[prop]);
 	} else if (_TagName == "DIV") {
-		$.each($element.find('li'), function() {
-			if($(this).data('value') == json[prop]) {
+		$.each($element.find('li'), function () {
+			if ($(this).data('value') == json[prop]) {
 				$element.find('button').html($(this).text() + '<span class="caret"></span>').data('value', json[prop]);
 			}
 		});
@@ -1003,46 +1003,46 @@ function setMakeList(jsonData, listId, opts) {
 //작성일 : 2020-05-14
 //작성자 : lee sang o
 //기능 : json list값  csv파일 생성
-function getJsonCsvDownload(jsonData, column, header, fileName){
-    var	csvData = [],
-    	headerData = [],
-    	exportedFilenmae = 'csv_download.csv';		    	
-    
-    if( fileName !== undefined ){
-    	exportedFilenmae = fileName;
-    }
+function getJsonCsvDownload(jsonData, column, header, fileName) {
+	var csvData = [],
+		headerData = [],
+		exportedFilenmae = 'csv_download.csv';
 
-    //헤더처리
-    for(var i = 0, count = header.length; i < count; i++){
-    	headerData.push(header[i]);
-    }
-    csvData.push(headerData.join(","));
-    
-    //내용처리
-    for (var i = 0, count = jsonData.length; i < count; i++) {
-        var rowData = [];
-        for (var j = 0, colSize = column.length; j < colSize; j++) {
-            rowData.push(jsonData[i][column[j]]);
-        }
-        csvData.push(rowData.join(","));
-    }		    
-    
-    
-    var blob = new Blob(['\uFEFF' + csvData.join("\r\n")], {type: 'text/csv;charset=UTF-8;' });
-    if (navigator.msSaveBlob) { // IE 10+
-        navigator.msSaveBlob(blob, exportedFilenmae);
-    } else {
-        var link = document.createElement("a");
-        if (link.download !== undefined) {
-            var url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", exportedFilenmae);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    }
+	if (fileName !== undefined) {
+		exportedFilenmae = fileName;
+	}
+
+	//헤더처리
+	for (var i = 0, count = header.length; i < count; i++) {
+		headerData.push(header[i]);
+	}
+	csvData.push(headerData.join(","));
+
+	//내용처리
+	for (var i = 0, count = jsonData.length; i < count; i++) {
+		var rowData = [];
+		for (var j = 0, colSize = column.length; j < colSize; j++) {
+			rowData.push(jsonData[i][column[j]]);
+		}
+		csvData.push(rowData.join(","));
+	}
+
+
+	var blob = new Blob(['\uFEFF' + csvData.join("\r\n")], {type: 'text/csv;charset=UTF-8;'});
+	if (navigator.msSaveBlob) { // IE 10+
+		navigator.msSaveBlob(blob, exportedFilenmae);
+	} else {
+		var link = document.createElement("a");
+		if (link.download !== undefined) {
+			var url = URL.createObjectURL(blob);
+			link.setAttribute("href", url);
+			link.setAttribute("download", exportedFilenmae);
+			link.style.visibility = 'hidden';
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		}
+	}
 }
 
 /**
@@ -1052,8 +1052,10 @@ function getJsonCsvDownload(jsonData, column, header, fileName){
  */
 function addRowTable(tblId) {
 	var table = document.getElementById(tblId);
+	var objTable = $('#'+tblId);
 	var rowClone = table.rows[table.rows.length - 1];
 	var row = table.insertRow(-1);
+	var trLength = objTable.find('tbody tr').length;
 
 	copyAttribute(rowClone, row);
 
@@ -1061,8 +1063,46 @@ function addRowTable(tblId) {
 		var cellClone = rowClone.cells[i];
 		var cell = row.insertCell();
 		cell.innerHTML = cellClone.innerHTML;
-		copyAttribute(cellClone, cell);
+		copyAttribute(cellClone, attributeVary(cell, trLength));
 	}
+
+	//함수 있으면 실행하기
+	if(typeof(rowAppend) == 'function') {
+		rowAppend();
+	}
+}
+
+/**
+ * 각 셀의 input id, name도 row에 따라 증가하도록 수정
+ *
+ * @param cell
+ * @param rowNum
+ * @returns {*}
+ */
+function attributeVary(cell, rowNum) {
+	if(cell.innerHTML != '' && cell.getElementsByTagName('input')[0] != undefined) {
+		var inpAttr = cell.getElementsByTagName('input')[0].attributes;
+		for (var i = 0; i < inpAttr.length; i++) {
+			var attrib = inpAttr[i];
+			if(attrib.name == 'id' || attrib.name == 'name') {
+				var attVal = attrib.value.split('_')[0];
+				cell.getElementsByTagName('input')[0].setAttribute(attrib.name, attVal + '_' + rowNum);
+			}
+		}
+	}
+
+	if(cell.innerHTML != '' && cell.getElementsByTagName('label')[0] != undefined) {
+		var lebelAttr = cell.getElementsByTagName('label')[0].attributes;
+		for (var i = 0; i < lebelAttr.length; i++) {
+			var attrib = lebelAttr[i];
+			if(attrib.name == 'for') {
+				var attVal = attrib.value.split('_')[0];
+				cell.getElementsByTagName('label')[0].setAttribute(attrib.name, attVal + '_' + rowNum);
+			}
+		}
+	}
+
+	return cell;
 }
 
 /**
@@ -1076,10 +1116,11 @@ function copyAttribute(source, target) {
 	for (var i = 0; i < attr.length; i++) {
 		var attrib = attr[i];
 		if (attrib.specified) {
-			target.setAttribute(attrib.name, attrib.value.replace('hasDatepicker', ''));
+			target.setAttribute(attrib.name, attrib.value);
 		}
 	}
 
-	target.style.cssText = source.style.cssText;
-	target.className = source.className;
+	if(source.style.cssText != '') target.style.cssText = source.style.cssText;
+	if(source.className != '') target.className = source.className;
+
 }

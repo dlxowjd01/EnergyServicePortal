@@ -1,50 +1,54 @@
 /* datepicker */
 $(function() {
-	$("#datepicker1, #datepicker2, #datepicker5, #datepicker10, #datepicker12").datepicker({
+    $.datepicker.regional['ko'] = {
+        closeText : '닫기',
+        prevText : '이전달',
+        nextText : '다음달',
+        currentText : '오늘',
+        monthNames : ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+        monthNamesShort : ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+        dayNames : ['일', '월', '화', '수', '목', '금', '토'],
+        dayNamesShort : ['일', '월', '화', '수', '목', '금', '토'],
+        dayNamesMin : ['일', '월', '화', '수', '목', '금', '토'],
+        weekHeader : 'Wk',
+        firstDay : 0,
+        isRTL : false,
+        showMonthAfterYear : true,
+        yearSuffix : '년'
+    };
+    $.datepicker.setDefaults($.datepicker.regional['ko']);
+
+
+	$("#datepicker1, #datepicker2, #datepicker5, #datepicker10, #datepicker12, .datepicker").datepicker({
 		showOn: "both",
-        /*buttonImage: "../2016img/search_calendar.gif", */
         buttonImageOnly: true,
-        dateFormat: 'yy-mm-dd',
-        prevText: '이전 달',
-        nextText: '다음 달',
-        monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-        monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-        dayNames: ['일','월','화','수','목','금','토'],
-        dayNamesShort: ['일','월','화','수','목','금','토'],
-        dayNamesMin: ['일','월','화','수','목','금','토'],
-        showMonthAfterYear: true,
-        yearSuffix: '년'
+        dateFormat: 'yy-mm-dd'
     });
+
 	$("#datepicker3, #datepicker4, #datepicker11").datepicker({
 		showOn: "both",
     	/*buttonImage: "../2016img/search_calendar.gif", */
     	buttonImageOnly: true,
-    	dateFormat: 'yy-mm',
-    	prevText: '이전 달',
-    	nextText: '다음 달',
-    	monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-    	monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-    	dayNames: ['일','월','화','수','목','금','토'],
-    	dayNamesShort: ['일','월','화','수','목','금','토'],
-    	dayNamesMin: ['일','월','화','수','목','금','토'],
-    	showMonthAfterYear: true,
-    	yearSuffix: '년'
+    	dateFormat: 'yy-mm'
+
     });
 
-    $('.datepicker').datepicker({
+    $('.fromDate').datepicker({
         showOn: "both",
-        /*buttonImage: "../2016img/search_calendar.gif", */
         buttonImageOnly: true,
         dateFormat: 'yy-mm-dd',
-        prevText: '이전 달',
-        nextText: '다음 달',
-        monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-        monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-        dayNames: ['일','월','화','수','목','금','토'],
-        dayNamesShort: ['일','월','화','수','목','금','토'],
-        dayNamesMin: ['일','월','화','수','목','금','토'],
-        showMonthAfterYear: true,
-        yearSuffix: '년'
+        onClose: function(selectedDate) {
+            $(this).parents('tr').find('.toDate').datepicker('option', 'minDate', selectedDate);
+        }
+    });
+
+    $('.toDate').datepicker({
+        showOn: "both",
+        buttonImageOnly: true,
+        dateFormat: 'yy-mm-dd',
+        onClose: function(selectedDate) {
+            $(this).parents('tr').find('.fromDate').datepicker('option', 'maxDate', selectedDate);
+        }
     });
 });
 
