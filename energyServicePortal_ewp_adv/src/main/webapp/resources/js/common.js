@@ -19,17 +19,17 @@ $(function() {
     $.datepicker.setDefaults($.datepicker.regional['ko']);
 
 
-	$("#datepicker1, #datepicker2, #datepicker5, #datepicker10, #datepicker12, .datepicker").datepicker({
-		showOn: "both",
+    $("#datepicker1, #datepicker2, #datepicker5, #datepicker10, #datepicker12, .datepicker").datepicker({
+        showOn: "both",
         buttonImageOnly: true,
         dateFormat: 'yy-mm-dd'
     });
 
-	$("#datepicker3, #datepicker4, #datepicker11").datepicker({
-		showOn: "both",
-    	/*buttonImage: "../2016img/search_calendar.gif", */
-    	buttonImageOnly: true,
-    	dateFormat: 'yy-mm'
+    $("#datepicker3, #datepicker4, #datepicker11, .monthpicker").datepicker({
+        showOn: "both",
+        /*buttonImage: "../2016img/search_calendar.gif", */
+        buttonImageOnly: true,
+        dateFormat: 'yy-mm'
 
     });
 
@@ -98,11 +98,11 @@ $(function() {
 
 /* [메인] 오늘/이번주/이번달 텝메뉴 */
 $(function() {
-    $('.term_menu>ul a').click(function(){     
-        var indexNo = $(".term_menu>ul").find("a").index(this); 
-       $('.term_menu>ul li').removeClass("on");
-       $(this).parent().addClass("on");            
-   });   
+    $('.term_menu>ul a').click(function(){
+        var indexNo = $(".term_menu>ul").find("a").index(this);
+        $('.term_menu>ul li').removeClass("on");
+        $(this).parent().addClass("on");
+    });
 });
 
 /* [메인] 리스트 더블클릭 */
@@ -131,7 +131,7 @@ $(function() {
         }
         return false;
     });
-}); 
+});
 
 
 /* 알람 리스트 클릭시 사업소 상세정보 열기 */
@@ -193,11 +193,11 @@ $(function(){
 
 /* input[file] label */
 $(function() {
-  $('input[type=file]').change(function(){
-    var t = $(this).val();
-    var labelText = 'File : ' + t.substr(12, t.length);
-    $(this).prev('label').text(labelText);
-  })
+    $('input[type=file]').change(function(){
+        var t = $(this).val();
+        var labelText = 'File : ' + t.substr(12, t.length);
+        $(this).prev('label').text(labelText);
+    })
 });
 
 /* 장치 그룹 현황 슬라이드 */
@@ -295,7 +295,7 @@ $(function() {
                 $selected.removeClass(opt.draggableClass);
             } else {
                 $selected.removeClass(opt.draggableClass)
-                    .find(opt.handle).removeClass(opt.activeHandleClass);
+                .find(opt.handle).removeClass(opt.activeHandleClass);
             }
             $selected = null;
         });
@@ -332,11 +332,11 @@ $(document).ready(function(e){
     $( document ).on( 'click', '.bs-dropdown-to-select-group .dropdown-menu li', function( event ) {
         var $target = $( event.currentTarget );
         $target.closest('.bs-dropdown-to-select-group')
-            .find('[data-bind="bs-drp-sel-value"]').val($target.attr('data-value'))
-            .end()
-            .children('.dropdown-toggle').dropdown('toggle');
+        .find('[data-bind="bs-drp-sel-value"]').val($target.attr('data-value'))
+        .end()
+        .children('.dropdown-toggle').dropdown('toggle');
         $target.closest('.bs-dropdown-to-select-group')
-            .find('[data-bind="bs-drp-sel-label"]').text($target.context.textContent);
+        .find('[data-bind="bs-drp-sel-label"]').text($target.context.textContent);
         return false;
     });
 });
@@ -350,11 +350,11 @@ $(function() {
         $(this).toggleClass("on");
         $(".menu-group").slideToggle();
     });
-	$('#page-wrapper').mouseup(function (e){
-		var container = $(".menu-group");
-		if( container.has(e.target).length === 0)
-		container.slideUp();
-	});
+    $('#page-wrapper').mouseup(function (e){
+        var container = $(".menu-group");
+        if( container.has(e.target).length === 0)
+            container.slideUp();
+    });
 });
 
 /* toggle */
@@ -369,7 +369,7 @@ $(function() {
     $(".lo-type label").click(function(){
         if($(".lo label").hasClass("on") === true && $(".type label").hasClass("on") === true) {
             $(".apply-btn").removeAttr("disabled");
-        }               
+        }
     });
 });
 
@@ -407,23 +407,23 @@ $(function($){
 
 
 /* dropdown-menu multi check */
-$(function () { 
+$(function () {
     var options = [];
     $( '.dropdown-menu-form a' ).on( 'click', function( event ) {
-       var $target = $( event.currentTarget ),
-           val = $target.attr( 'data-value' ),
-           $inp = $target.find( 'input' ),
-           idx;
-       if ( ( idx = options.indexOf( val ) ) > -1 ) {
-          options.splice( idx, 1 );
-          setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
-       } else {
-          options.push( val );
-          setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
-       }
-       $( event.target ).blur();                                              
-       console.log( options );
-       return false;
+        var $target = $( event.currentTarget ),
+            val = $target.attr( 'data-value' ),
+            $inp = $target.find( 'input' ),
+            idx;
+        if ( ( idx = options.indexOf( val ) ) > -1 ) {
+            options.splice( idx, 1 );
+            setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
+        } else {
+            options.push( val );
+            setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
+        }
+        $( event.target ).blur();
+        console.log( options );
+        return false;
     });
 });
 
@@ -437,14 +437,14 @@ $(function() {
 
 /* input file */
 $(function() {
-	var uploadFile = $('.fileBox .uploadBtn');
-	uploadFile.on('change', function(){
-		if(window.FileReader){
-			var filename = $(this)[0].files[0].name;
-		} else {
-			var filename = $(this).val().split('/').pop().split('\\').pop();
-		}
+    var uploadFile = $('.fileBox .uploadBtn');
+    uploadFile.on('change', function(){
+        if(window.FileReader){
+            var filename = $(this)[0].files[0].name;
+        } else {
+            var filename = $(this).val().split('/').pop().split('\\').pop();
+        }
 
-		$(this).siblings('.fileName').val(filename);
-	});
+        $(this).siblings('.fileName').val(filename);
+    });
 });

@@ -25,11 +25,11 @@
 			url: "http://iderms.enertalk.com:8443/spcs/" + spcId,
 			type: "get",
 			async: false,
-			data: {oid : oid},
+			data: {"oid" : oid},
 			success: function (json) {
 				if(json.data.length > 0){
 					setJsonAutoMapping(json.data[0], "spc_info");
-					setJsonAutoMapping(JSON.parse(json.data[0].spc_info), "spc_info");
+					//setJsonAutoMapping(JSON.parse(json.data[0].spc_info), "spc_info");
 				}else{
 					alert("등록된 데이터가 없습니다.");
 				}
@@ -49,7 +49,7 @@
 			url: "http://iderms.enertalk.com:8443/spcs/" + spcId + "/gens/" + genId,
 			type: "get",
 			async: false,
-			data: {oid : oid},
+			data: {"oid" : oid},
 			success: function (json) {
 				if(json.data.length > 0){
 					$("#발전소명").text(json.data[0].name);
@@ -58,6 +58,7 @@
 					setJsonAutoMapping(JSON.parse(json.data[0].finance_info), "finance_info");
 					setJsonAutoMapping(JSON.parse(json.data[0].warranty_info), "warranty_info");
 					setJsonAutoMapping(JSON.parse(json.data[0].coefficient_info), "coefficient_info");
+					setJsonAutoMapping(JSON.parse(json.data[0].contact_info), "contact_info");
 					setJsonAutoMapping(JSON.parse(json.data[0].attachement_info), "attachement_info");
 				}else{
 					alert("등록된 데이터가 없습니다.");
@@ -104,7 +105,11 @@
 					</tr>
 					<tr>
 						<th>주소</th>
-						<td id="주소">강원도 고성군 간성읍 해상리 산 137-2</td>
+						<td>
+							<span id="countryValue"></span>
+							<span id="sidoValue"></span>
+							<span id="상세_주소"></span>
+						</td>
 						<th></th>
 						<td></td>
 					</tr>
@@ -183,57 +188,60 @@
 					<tr>
 						<th>모듈 제조사 / 모델</th>
 						<td>
-							<span id="모듈_제조사">S-Energy</span> / <span id="모듈_제조사_모델">SM-300PC8</span><br/>
 							<span id="모듈_제조사">S-Energy</span> / <span id="모듈_제조사_모델">SM-300PC8</span>
 						</td>
 						<th>설치 용량</th>
-						<td> <span>100 kW</span> / <span>2100 매</span></td>
+						<td> <span id="설치_용량_KW">100 kW</span> / <span id="설치_용량_매">2100 매</span></td>
 					</tr>
 					<tr>
 						<th>모듈 설치 각도</th>
 						<td>
-							<span>32</span><br/>
-							<span>32</span>
+							<span id="모듈_설치_각도">32</span>
 						</td>
 						<th>모듈 설치 방식</th>
-						<td id="모듈_설치_방식">고정형</td>
+						<td>
+							<span id="모듈_설치_방식_고정"></span>
+							<span id="모듈_설치_방식_트래커"></span>
+							<span id="모듈_설치_방식_경사고정형"></span>
+						</td>
 					</tr>
 					<tr>
 						<th>인버터 제조사 / 모델</th>
 						<td>
-							<span>WILLIMGS</span> / <span>M10-100</span><br/>
-							<span>WILLIMGS</span> / <span>M10-100</span>
+							<span id="인버터_제조사">WILLIMGS</span> / <span id="인버터_제조사_모델">M10-100</span>
 						</td>
 						<th>인버터 용량 / 대수</th>
 						<td>
-							<span>100 kW</span> / <span>1대</span><br/>
-							<span>100 kW</span> / <span>1대</span>
+							<span id="인버터_용량">100 kW</span> / <span id="인버터_용량_대수">1대</span>
 						</td>
 					</tr>
 					<tr>
 						<th>접속반 제조사 / 모델</th>
 						<td>
-							<span>미래이엔아이</span> / <span>MUX-COM</span><br/>
-							<span>미래이엔아이</span> / <span>MUX-COM</span>
+							<span id="접속반_제조사">미래이엔아이</span> / <span id="접속반_제조사_모델">MUX-COM</span>
 						</td>
 						<th>접속반 채널 / 대수</th>
 						<td>
-							<span>16 Ch</span> / <span>1대</span><br/>
-							<span>16 Ch</span> / <span>1대</span>
+							<span id="접속반_채널">16 Ch</span> / <span id="접속반_채널_대수">1대</span>
 						</td>
 					</tr>
 					<tr>
 						<th>접속반 용량 / 통신방식</th>
-						<td>100 kW / 통신</td>
+						<td>
+							<span id="접속반_용량">100 kW</span> / <span id="통신방식"></span>
+						</td>
 						<th>수배전반 제조사 / 모델</th>
 						<td>
-							<span>LS산전</span> / <span>GIPAM-115FI</span><br/>
-							<span>LS산전</span> / <span>GIPAM-115FI</span>
+							<span id="수배전반_제조사"></span> / <span id="수배전반_제조사_모델"></span><br/>
 						</td>
 					</tr>
 					<tr>
 						<th>설치 타입</th>
-						<td id="설치_타입">그라운드</td>
+						<td>
+							<span id="설치_타입_그라운드"></span>
+							<span id="설치_타입_루프탑"></span>
+							<span id="설치_타입_수상"></span>
+						</td>
 						<th></th>
 						<td></td>
 					</tr>
@@ -454,7 +462,6 @@
 				</table>
 			</div>
 			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" onclick="">수정</button>
 				<button type="button" class="btn_type03" onclick="goMoveList();">목록</button>
 			</div>
 		</div>

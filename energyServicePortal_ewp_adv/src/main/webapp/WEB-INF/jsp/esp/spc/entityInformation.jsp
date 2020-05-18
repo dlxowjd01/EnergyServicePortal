@@ -12,6 +12,9 @@
 </head>
 <body>
 <script>
+	const oid = '${sessionScope.userInfo.oid}';
+	const loginId = '${sessionScope.userInfo.login_id}';
+
 	$(function () {
 		setInitList("listData"); //리스트초기화
 
@@ -38,7 +41,7 @@
 			url: "http://iderms.enertalk.com:8443/spcs",
 			type: "get",
 			async: false,
-			data: {oid: "spower", includeGens: true},
+			data: {"oid": oid, includeGens: true},
 			success: function (result) {
 				var jsonList = [],
 					keyWord = $("#key_word").val();
@@ -52,21 +55,24 @@
 						for(var j = 0, jcount = spcGensList.length; j < jcount; j++){
 							var spcGensRow = spcGensList[j],
 								rowData = result.data[i],
+								newData = {},
 								warrantyInfo = JSON.parse(spcGensRow.warranty_info),
 								contractInfo = JSON.parse(spcGensRow.contract_info);
 
-							rowData["gen_id"] = spcGensRow.gen_id;
-							rowData["발전소_명"] = spcGensRow.name;
-							rowData["관리_운영_기간"] = nvl(contractInfo["관리_운영_기간"], "-");
-							rowData["연차"] = nvl(warrantyInfo["현재_적용_연차"], "-");
-							rowData["보증_방식"] = nvl(warrantyInfo["보증_방식"], "-");
-							rowData["PR_보증치"] = nvl(warrantyInfo["PR_보증치"], "-");
-							rowData["보증_감소율"] = nvl(warrantyInfo["보증_감소율"], "-");
-							rowData["추가_보수"] = nvl(warrantyInfo["추가_보수"], "-");
-
+							newData["name"] = rowData.name;
+							newData["oid"] = rowData.oid;
+							newData["spc_id"] = rowData.spc_id;
+							newData["gen_id"] = spcGensRow.gen_id;
+							newData["발전소_명"] = spcGensRow.name;
+							newData["관리_운영_기간"] = nvl(contractInfo["관리_운영_기간"], "-");
+							newData["연차"] = nvl(warrantyInfo["현재_적용_연차"], "-");
+							newData["보증_방식"] = nvl(warrantyInfo["보증_방식"], "-");
+							newData["PR_보증치"] = nvl(warrantyInfo["PR_보증치"], "-");
+							newData["보증_감소율"] = nvl(warrantyInfo["보증_감소율"], "-");
+							newData["추가_보수"] = nvl(warrantyInfo["추가_보수"], "-");
 							//키워드 검색 조건 필터 처리
-							if(rowData["name"].indexOf(keyWord) > -1 || rowData["발전소_명"] .indexOf(keyWord) > - 1){
-								jsonList.push(rowData)
+							if(newData["name"].indexOf(keyWord) > -1 || newData["발전소_명"] .indexOf(keyWord) > - 1){
+								jsonList.push(newData)
 							}
 
 						}
@@ -117,10 +123,12 @@
 		for(var i = 0; i < count; i++){
 			var rowData = checkDataList[i];
 			$.ajax({
-				url: "http://iderms.enertalk.com:8443/spcs/" + rowData.spc_id + "/gens/" + rowData.gen_id,
+				url: "http://iderms.enertalk.com:8443/spcs/" + rowData.spc_id + "/gens/" + rowData.gen_id + "?oid="+oid,
 				type: "delete",
+				dataType: 'json',
 				async: false,
-				data: {},
+				contentType: "application/json",
+				data: {"oid": oid},
 				success: function (json) {
 					sucessCnt++;
 				},
@@ -132,6 +140,24 @@
 
 		alert(sucessCnt + "건 삭제처리되었습니다.");
 		getDataList();
+	}
+
+	function setCheckedDataEdit(){
+		var checkDataList = getCheckList("rowCheck");
+		count = checkDataList.length;
+
+		if( count == 0){
+			alert("수정 할 목록을 선택하세요.");
+			return false;
+		}else if(count > 1){
+			alert("1개의 목록만 선택하세요.");
+			return false;
+		}
+
+		var spcId = checkDataList[0].spc_id,
+			genId = checkDataList[0].gen_id;
+
+		location.href='/spc/entityInformationEdit.do?spc_id=' + spcId + "&gen_id="+genId;
 	}
 
 </script>
@@ -205,9 +231,9 @@
 				</table>
 			</div>
 			<div class="btn_wrap_type02">
-					<button type="button" class="btn_type03" onclick="location.href='/spc/entityInformationEdit.do'">선택 수정</button>
-					<button type="button" class="btn_type03" onclick="setCheckedDataRemove();">선택 삭제</button>
-				</div>
+				<button type="button" class="btn_type03" onclick="setCheckedDataEdit();">선택 수정</button>
+				<button type="button" class="btn_type03" onclick="setCheckedDataRemove();">선택 삭제</button>
+			</div>
 			<div class="paging_wrap">
 				<a href="#;" class="btn_prev">prev</a>
 				<strong>1</strong>
