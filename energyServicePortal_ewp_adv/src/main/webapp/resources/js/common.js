@@ -22,7 +22,12 @@ $(function() {
     $("#datepicker1, #datepicker2, #datepicker5, #datepicker10, #datepicker12, .datepicker").datepicker({
         showOn: "both",
         buttonImageOnly: true,
-        dateFormat: 'yy-mm-dd'
+        dateFormat: 'yy-mm-dd',
+        onClose: function(selectedDate) {
+            if(typeof repeatEnd == 'function') {
+                repeatEnd(selectedDate);
+            }
+        }
     });
 
     $("#datepicker3, #datepicker4, #datepicker11, .monthpicker").datepicker({
