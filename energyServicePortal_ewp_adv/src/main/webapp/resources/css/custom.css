@@ -13302,6 +13302,9 @@ textarea::-webkit-scrollbar-thumb {
 .spc_tbl .chk_type input[type="checkbox"] + label {
 	margin-top: 12px
 }
+.spc_tbl .chk_type input[type="checkbox"] + label span {
+	margin-right: 14px
+}
 .spc_tbl thead th .btn_align{opacity:0.7}
 .spc_tbl_row table {
 	width: 100%
@@ -14016,5 +14019,14 @@ button.tx_file {
 .btn_type06 + .btn_type07:after{position:absolute;top:4px;left:0;width:1px;height:14px;background:rgba(255, 255, 255, 0.25);content:''}
 
 
+/* 수익보고서 등록 팝업 */
+.yield_ly_bt{margin-top:10px;padding:18px 24px;border-top:1px solid rgba(255,255,255,0.12)}
+.yield_ly_bt .yield_list > li{margin-top:20px;clear:both;}
+.yield_ly_bt .yield_list > li:first-child{margin-top:0}
+.yield_ly_bt .yield_list > li:after{display:block;clear:both;content:''}
+.yield_ly_bt .dropdown{width:160px}
+.yield_ly_bt .dropdown .btn{width:100%}
+.yield_ly_bt .tx_inp_type{width:82px;margin-left:16px}
+.yield_ly_bt .btn_type07{margin:6px 0 0 10px}
 
 

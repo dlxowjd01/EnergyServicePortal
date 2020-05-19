@@ -221,7 +221,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">SPC 기본 정보</h1>
+		<h1 class="page-header">SPC 신규 등록</h1>
 		<div class="time fr">
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>
