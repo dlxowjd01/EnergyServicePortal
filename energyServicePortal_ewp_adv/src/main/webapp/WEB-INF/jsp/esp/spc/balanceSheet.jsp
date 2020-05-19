@@ -21,15 +21,15 @@
 	}
 
 	function getCsvDown(){
-		var column = ["name","발전소_명","연차","관리_운영_기간","보증_방식","PR_보증치","보증_감소율","추가_보수"], //json Key
-			header = ["SPC명","발전소 명","연차","관리 운영기간	","보증" ,"보증 값", "감소율","추가보수"]; //csv 파일 헤더
+		var column = ["spc_name","name","start_yyyymm","","cash_in","cash_out","balance"], //json Key
+			header = ["SPC명","발전소 명","기준년월","용량","현금유입(원)" ,"현금유(원)", "기말 현금흐름(원)"]; //csv 파일 헤더
 
 		getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
 	}
 
 	function getDataList(){
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/spcs/2/balance/year",
+			url: "http://iderms.enertalk.com:8443/spcs/balance/year",
 			type: "get",
 			async: false,
 			data: {oid: oid},
@@ -113,7 +113,7 @@
 			sucessCnt = 0;
 
 		if(count == 0){
-			alert("삭제 할 목록을 선택하세요.");
+			alert("수정 할 목록을 선택하세요.");
 			return;
 		}
 
@@ -122,6 +122,38 @@
 			var locationUrl = '/spc/balanceSheetEdit.do?spc_id=' + rowData.spc_id +'&site_id=' + rowData.site_id +'&yyyymm=' + rowData.start_yyyymm;
 
 			location.href = locationUrl;
+		}
+	}
+
+	function deleteRow() {
+		var checkDataList = getCheckList("rowCheck");
+		count = checkDataList.length,
+			sucessCnt = 0;
+
+		if(count == 0){
+			alert("삭제 할 목록을 선택하세요.");
+			return;
+		}
+
+		for(var i = 0; i < count; i++){
+			var rowData = checkDataList[i];
+			var locationUrl = '/spcs/'+ rowData.spc_id +'/balance/year?oid=' + oid + '&site_id=' + rowData.site_id +'&yyyy=' + rowData.balance_yyyy;
+			$.ajax({
+				url: 'http://iderms.enertalk.com:8443' + locationUrl,
+				type: 'delete',
+				async: false,
+				data: {},
+				success: function (json) {
+					sucessCnt++;
+				},
+				error: function (request, status, error) { alert('처리 중 오류가 발생했습니다.'); return false; }
+			});
+		}
+
+		if(sucessCnt > 0) {
+			alert('삭제 되었습니다.');
+			location.reload();
+			return false;
 		}
 	}
 </script>
@@ -163,7 +195,7 @@
 			<button type="submit" class="btn_type">검색</button>
 		</div>
 		<div class="fr">
-			<a href="#" class="save_btn">CVS 다운로드</a>
+			<a href="javascript:getCsvDown();" class="save_btn">CVS 다운로드</a>
 		</div>
 	</div>
 </div>
@@ -196,9 +228,9 @@
 							<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="">
 							<label for="chk_op[INDEX]"><span></span>[INDEX]</label>
 						</td>
-						<td>S-power</td>
+						<td>[spc_name]</td>
 						<td><a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=[site_id]&balance_yyyy=[balance_yyyy]" class="tbl_link">[name]</a></td>
-						<td>[updated_at]</td>
+						<td>[start_yyyymm]</td>
 						<td class="right">-</td>
 						<td class="right">[cash_in]</td>
 						<td class="right">[cash_out]</td>
@@ -209,7 +241,7 @@
 			</div>
 			<div class="btn_wrap_type02">
 				<button type="button" class="btn_type03" onclick="setCheckedDataModify();">선택 수정</button>
-				<button type="button" class="btn_type03">선택 삭제</button>
+				<button type="button" class="btn_type03" onclick="deleteRow();">선택 삭제</button>
 			</div>
 			<div class="paging_wrap">
 				<a href="#;" class="btn_prev">prev</a>

@@ -75,7 +75,7 @@
 			if(num > 1) {
 				for(let i = 2; i <= num; i++) {
 					let tr = $('<tr>').attr('id', 'loan_' + i);
-					for(let j = 0; j <= 12; j++) {
+					for(let j = 0; j <= 13; j++) {
 						if(j == 0) {
 							tr.append('<td class="sub_td">차입금 상환(' + String.fromCharCode(num + 64) + ')</td>')
 						} else {
@@ -83,17 +83,17 @@
 						}
 					}
 
-					$('[id^="loan_"]').eq($('[id^="interestCost_"]').length - 1).append(tr);
+					$('[id^="loan_"]').eq($('[id^="interestCost_"]').length - 1).after(tr);
 
-					tr = $('<tr>').attr('id', 'loan_' + i);
-					for(let j = 0; j <= 12; j++) {
+					tr = $('<tr>').attr('id', 'interestCost_' + i);
+					for(let j = 0; j <= 13; j++) {
 						if(j == 0) {
 							tr.append('<td class="sub_td">이자 비용(' + String.fromCharCode(num + 64) + ')</td>')
 						} else {
 							tr.append('<td>-</td>');
 						}
 					}
-					$('[id^="interestCost_"]').eq($('[id^="interestCost_"]').length - 1).append(tr);
+					$('[id^="interestCost_"]').eq($('[id^="interestCost_"]').length - 1).after(tr);
 				}
 			}
 

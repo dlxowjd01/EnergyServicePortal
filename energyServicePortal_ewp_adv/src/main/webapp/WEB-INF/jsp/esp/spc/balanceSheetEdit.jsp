@@ -5,13 +5,23 @@
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 	const siteList = JSON.parse('${siteList}');
+	const site_id = '<c:out value="${param.site_id}" escapeXml="false" />';
+	const spc_id = '<c:out value="${param.spc_id}" escapeXml="false" />';
 
 	$(function () {
+
 		callAjax({
 			url: 'http://iderms.enertalk.com:8443/spcs/${param.spc_id}/balance/month?oid=' + oid + '&site_id=${param.site_id}&yyyymm=${param.yyyymm}',
 			type: 'get',
 		}, setTable);
 
+		callAjax({
+			url: 'http://iderms.enertalk.com:8443/spcs',
+			type: 'get',
+			data: {
+				oid: oid
+			}
+		}, setSpc);
 
 		//수기 입력
 		$('#noteDown').on('click', function () {
@@ -21,12 +31,65 @@
 				$('#balanceTable').find('input[placeholder="자동 입력"]').prop('readonly', true).parent().removeClass('edit').addClass('read');
 			}
 		});
+
+		$('input[type="file"]').on('change', function() {
+			let uuid = genUuid();
+			let thisId = $(this).prop('id');
+
+			$(this).clone().appendTo('#upload');
+			$('#upload').find('input').attr('name', uuid).attr('id', uuid);
+
+			callAjax({
+				type: 'post',
+				enctype: 'multipart/form-data',
+				url: 'http://iderms.enertalk.com:8443/files/upload?oid='+oid,
+				data: new FormData($('#upload')[0]),
+				processData: false,
+				contentType: false,
+				cache: false,
+				timeout: 600000
+			}, setUploadAfter, thisId);
+		});
 	});
+
+	const setUploadAfter = function(data, propName) {
+		if(data.files.length > 0) {
+			let prop = $('#'+propName);
+			prop.parents('tr').find('label').hide();
+			prop.parents('tr').find('.btn_clse').show();
+
+
+			let linkUrl = 'http://iderms.enertalk.com:8443/files/download/'+data.files[0].filedname+'?oid='+oid+'&orgFilename='+encodeURI(data.files[0].originalname);
+			prop.next().find('a').prop('href', linkUrl).prop('target', '_blank').html(data.files[0].originalname);
+
+			let inpOgin = $('<input>').prop('type', 'hidden').prop('id', propName + '_originalname').prop('name', propName + '_originalname').val(data.files[0].originalname);
+			let inpField = $('<input>').prop('type', 'hidden').prop('id', propName + '_filedname').prop('name', propName + '_filedname').val(data.files[0].filedname);
+			prop.parent().append(inpOgin).append(inpField);
+		}
+
+		console.log(data);
+	}
+
+	const setSpc = function(data) {
+		let spcList = data.data;
+
+		spcList.some(function(v, k) {
+			if(v.spc_id == spc_id) {
+				$('#spc').text(v.name);
+			}
+		});
+
+		siteList.some(function(v, k) {
+			if(v.sid == site_id) {
+				$('#spcGen').text(v.name);
+			}
+		});
+	}
 
 	const callAjax = function (option, callBack, param) {
 		$.ajax(option).done(function (data, textStatus, jqXHR) {
 			if(typeof callBack == 'function') {
-				callBack.call(this, data);
+				callBack.call(this, data, param);
 			} else if(typeof callBack == 'string') {
 				eval(callBack+'("' + param +'")');
 			}
@@ -78,9 +141,38 @@
 	}
 	const setTable = function (json) {
 		let balanceInfo = JSON.parse(json.data[0].balance_info);
+
+		let num = 0;
+		$.map(balanceInfo, function(v, k){
+			if(k.match('loan')) {
+				let keyName = k.split('_');
+				if(num < Number(keyName[1])) {
+					num = Number(keyName[1]);
+				}
+			}
+		});
+
+		if(num > 1) {
+			for(let i = 2; i <= num; i++) {
+				let tr = $('<tr>').addClass('interestTr');
+				tr.append('<th>차입금 상환(' + String.fromCharCode(num + 64) + ')</th>');
+				tr.append('<td>').find('td').append('<div>').find('div').addClass('tx_inp_type').addClass('read');
+				tr.find('div.tx_inp_type').append('<input type="text" id="loan_' + i + '" name="loan_' + i + '" placeholder="자동 입력" readonly>');
+				tr.append('<th>이자 비용(' + String.fromCharCode(num + 64) + ')</th>');
+				tr.append('<td>').find('td:eq(1)').append('<div>').find('div').addClass('tx_inp_type').addClass('read');
+				tr.find('div:eq(1).tx_inp_type').append('<input type="text" id="interestCost_' + i + '" name="interestCost_' + i + '" placeholder="자동 입력" readonly>');
+
+				$('tr.interestTr').eq($('tr.interestTr').length - 1).after(tr);
+			}
+		}
+
 		setJsonAutoMapping(balanceInfo, 'balanceTable');
 	}
 </script>
+<!-- 파일 업로드 폼 -->
+<form id="upload" name="upload" method="multipart/form-data">
+</form>
+
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">SPC 원가관리 수정</h1>
@@ -109,31 +201,9 @@
 					</thead>
 					<tbody>
 					<tr>
-						<td>
-							<div class="sa_select">
-								<div class="dropdown placeholder" id="spc">
-									<button class="btn btn-primary dropdown-toggle" type="button"
-											data-toggle="dropdown">선택
-										<span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu chk_type" role="menu">
-									</ul>
-								</div>
-							</div>
+						<td id="spc">
 						</td>
-						<td>
-							<div class="sa_select">
-								<div class="dropdown placeholder" id="spcGen">
-									<button class="btn btn-primary dropdown-toggle" type="button"
-											data-toggle="dropdown">선택
-										<span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu chk_type" role="menu" id="type">
-										<li><a href="#">대리기관 수수료</a></li>
-										<li><a href="#">관리운영 수수료</a></li>
-									</ul>
-								</div>
-							</div>
+						<td id="spcGen">
 						</td>
 					</tr>
 					</tbody>

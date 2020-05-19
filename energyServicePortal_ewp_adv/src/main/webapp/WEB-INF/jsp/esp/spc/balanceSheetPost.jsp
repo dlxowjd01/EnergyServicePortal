@@ -6,19 +6,22 @@
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 
 	$(function () {
-		// 유형 선택
-		$(document).on('click', ':checkbox[name^="repayType"]', function () {
-			if ($(this).is(':checked')) {
-				$(':checkbox[name=' + $(this).prop('name') + ']').prop('checked', false);
-				$(this).prop('checked', true);
+
+		$(document).on('keyup keypress keydown', 'input[type="text"]', function(){
+			let text = $(this).val().replace(/[^-0-9.]/gi, '');
+			if(isNaN(text)){
+				$(this).val('');
+			} else {
+				$(this).val(text);
 			}
+
 		});
 
 		// 유형 선택
-		$(document).on('click', ':checkbox[name^="contract_"]', function () {
-			let idx = $(':checkbox[name^="contract_"][value=' + $(this).val() + ']').index($(this));
+		$(document).on('click', ':radio[name^="contract_"]', function () {
+			let idx = $(':radio[name^="contract_"][value=' + $(this).val() + ']').index($(this));
 			if ($(this).is(':checked')) {
-				$(':checkbox[name=' + $(this).prop('name') + ']').prop('checked', false);
+				$(':radio[name=' + $(this).prop('name') + ']').prop('checked', false);
 				$(this).prop('checked', true);
 
 				if ($(this).val() == '1') {
@@ -87,13 +90,13 @@
 		});
 
 		//차입금/이자
-		$(document).on('keyup click', '[name^="principal_"], [name^="interestRate_"], :checkbox[name^="repayType"]', function () {
+		$(document).on('keyup click', '[name^="principal_"], [name^="interestRate_"], :radio[name^="repayType"]', function () {
 			let inpName = $(this).prop('id').split('_');
 			let idx = $('[id^="' + inpName[0] + '_"]').index(this);
-			let loan = $('[name^="principal_"]').eq(idx).val().replace(/[^0-9.]/g, ''); //원금
+			let loan = $('[name^="principal_"]').eq(idx).val().replace(/[^0-9.-]/g, '') //원금
 			let payBalance = loan; //잔금
-			let loan_gumri = $('[name^="interestRate_"]').eq(idx).val().replace(/[^0-9.]/g, ''); //금리
-			let loan_type = $('#interestTable tbody tr').eq(idx).find(':checkbox[name^="repayType"]:checked').val();//대출유형
+			let loan_gumri = $('[name^="interestRate_"]').eq(idx).val().replace(/[^0-9.-]/g, '') //금리
+			let loan_type = $('#interestTable tbody tr').eq(idx).find(':radio[name^="repayType"]:checked').val();//대출유형
 			let loan_period = $('[name^="period_"]').eq(idx).val(); //기간
 			let loan_term = 0;
 			let total_iza = 0;		//총이자
@@ -138,7 +141,7 @@
 		$(document).on('keyup', '[name^="grossPerMonth_"]', function () {
 			let inpName = $(this).prop('name').split('_');
 			let idx = $('[name^="' + inpName[0] + '_"]').index(this);
-			let grossPerMonth = $('[name^="grossPerMonth_"]').eq(idx).val().replace(/[^0-9.]/g, '');
+			let grossPerMonth = $('[name^="grossPerMonth_"]').eq(idx).val().replace(/[^0-9.-]/g, '')
 
 			if (grossPerMonth != '' && grossPerMonth > 0) {
 				let surtax = (grossPerMonth * 0.1).toFixed(2);
@@ -171,8 +174,8 @@
 		$(document).on('keyup', '[name^="salesRate_"], [name^="salesSupply_"]', function () {
 			let inpName = $(this).prop('name').split('_');
 			let idx = $('[name^="' + inpName[0] + '_"]').index(this);
-			let salesRate = $('[name^="salesRate_"]').eq(idx).val().replace(/[^0-9.]/g, '');
-			let salesSupply = $('[name^="salesSupply_"]').eq(idx).val().replace(/[^0-9.]/g, '');
+			let salesRate = $('[name^="salesRate_"]').eq(idx).val().replace(/[^0-9.-]/g, '')
+			let salesSupply = $('[name^="salesSupply_"]').eq(idx).val().replace(/[^0-9.-]/g, '')
 
 			if (salesRate != '' && salesSupply != '' && salesSupply > 0) {
 				let surtax = ((salesSupply * salesRate) * 0.1).toFixed(2);
@@ -202,7 +205,7 @@
 		//수수료
 		$(document).on('keyup', '[name^="supply_"]', function () {
 			let idx = $('[name^="supply_"]').index(this);
-			let thisVal = $(this).val().replace(/[^0-9.]/g, '');
+			let thisVal = $(this).val().replace(/[^0-9.-]/g, '')
 
 			if (thisVal != '' && thisVal > 0) {
 				let surtax = (thisVal * 0.1).toFixed(2);
@@ -252,7 +255,7 @@
 		let inflow = 0, outflow = 0, endOfTerm = 0, endOfTermFlow = 0;
 
 		$('#balanceTable input').each(function () {
-			let thisVal = $(this).val() == '' ? 0 : $(this).val().replace(/[^0-9.]/g, '');
+			let thisVal = $(this).val() == '' ? 0 : $(this).val().replace(/[^0-9.-]/g, '')
 			let propName = $(this).prop('name');
 
 			inflowArray.forEach(function (v) {
@@ -383,7 +386,7 @@
 
 		for (let i in spcList) {
 			let temp = spcList[i];
-			html += '<li data-value="' + temp.spc_id + '"><a href="#">' + temp.name + '</a></li>';
+			html += '<li data-value="' + temp.spc_id + '"><a href="javascript:void(0);">' + temp.name + '</a></li>';
 		}
 
 		$('#spc ul').empty().append(html);
@@ -397,7 +400,7 @@
 
 		for (let i in siteList) {
 			let temp = siteList[i];
-			html += '<li data-value="' + temp.gen_id + '"><a href="#">' + temp.name + '</a></li>';
+			html += '<li data-value="' + temp.gen_id + '"><a href="javascript:void(0);">' + temp.name + '</a></li>';
 		}
 
 		$('#spcGen ul').empty().append(html);
@@ -434,9 +437,9 @@
 	}
 
 	//목록
-	const list = function () {
-		location.href = '/spc/balanceSheet.do';
-	}
+	// const list = function () {
+	// 	location.href = '/spc/balanceSheet.do';
+	// }
 
 	//등록
 	const register = function (param) {
@@ -454,8 +457,9 @@
 			nextParam = 'balance';
 		} else if(param == 'balance') {
 			nextParam = 'last';
-		} else {
+		} else if(param == 'last'){
 			nextParam = '';
+		} else {
 			alert('저장이 완료되었습니다');
 			list();
 			return false;
@@ -464,8 +468,8 @@
 		if(param == 'interest' || param == 'service_charge' || param == 'rent') {
 			$('#' + param + 'Table tbody tr').each(function () {
 				let temp = new Object();
-				if($(this).find('input[type="checkbox"]:checked').length > 0) {
-					temp[$(this).find('input[type="checkbox"]:checked').prop('name')] = $(this).find('input[type="checkbox"]:checked').val();
+				if($(this).find('input[type="radio"]:checked').length > 0) {
+					temp[$(this).find('input[type="radio"]:checked').prop('name')] = $(this).find('input[type="radio"]:checked').val();
 				}
 				$(this).find('input[type="text"]').each(function () {
 					temp[$(this).prop('name')] = $(this).val();
@@ -640,9 +644,7 @@
 										        data-toggle="dropdown">선택
 											<span class="caret"></span>
 										</button>
-										<ul class="dropdown-menu chk_type" role="menu" id="type">
-											<li><a href="#">대리기관 수수료</a></li>
-											<li><a href="#">관리운영 수수료</a></li>
+										<ul class="dropdown-menu chk_type" role="menu">
 										</ul>
 									</div>
 								</div>
@@ -738,7 +740,7 @@
 						</tbody>
 					</table>
 					<div class="btn_wrap_type">
-						<a href="#" class="btn_add" onclick="addRowTable('interestTable'); return false;">추가</a>
+						<a href="javascript:void(0);" class="btn_add" onclick="addRowTable('interestTable'); return false;">추가</a>
 					</div>
 				</div>
 
@@ -786,8 +788,8 @@
 								<%--											선택<span class="caret"></span>--%>
 								<%--										</button>--%>
 								<%--										<ul class="dropdown-menu chk_type" role="menu">--%>
-								<%--											<li><a href="#">대리기관 수수료</a></li>--%>
-								<%--											<li><a href="#">관리운영 수수료</a></li>--%>
+								<%--											<li><a href="javascript:void(0);">대리기관 수수료</a></li>--%>
+								<%--											<li><a href="javascript:void(0);">관리운영 수수료</a></li>--%>
 								<%--										</ul>--%>
 								<%--									</div>--%>
 								<%--								</div>--%>
@@ -856,8 +858,8 @@
 								<%--											선택<span class="caret"></span>--%>
 								<%--										</button>--%>
 								<%--										<ul class="dropdown-menu chk_type" role="menu">--%>
-								<%--											<li><a href="#">대리기관 수수료</a></li>--%>
-								<%--											<li><a href="#">관리운영 수수료</a></li>--%>
+								<%--											<li><a href="javascript:void(0);">대리기관 수수료</a></li>--%>
+								<%--											<li><a href="javascript:void(0);">관리운영 수수료</a></li>--%>
 								<%--										</ul>--%>
 								<%--									</div>--%>
 								<%--								</div>--%>
@@ -920,7 +922,7 @@
 						</tbody>
 					</table>
 					<%--					<div class="btn_wrap_type">--%>
-					<%--						<a href="#" class="btn_add" onclick="addRowTable('service_chargeTable'); return false;">추가</a>--%>
+					<%--						<a href="javascript:void(0);" class="btn_add" onclick="addRowTable('service_chargeTable'); return false;">추가</a>--%>
 					<%--					</div>--%>
 				</div>
 
@@ -962,7 +964,7 @@
 						</tbody>
 					</table>
 					<div class="btn_wrap_type">
-						<a href="#" class="btn_add" onclick="addRowTable('rentTable'); return false;">추가</a>
+						<a href="javascript:void(0);" class="btn_add" onclick="addRowTable('rentTable'); return false;">추가</a>
 					</div>
 				</div>
 			</div>
@@ -976,9 +978,9 @@
 								<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu chk_type" role="menu">
-								<li><a href="#">2020년</a></li>
-								<li><a href="#">2019년</a></li>
-								<li><a href="#">2018년</a></li>
+								<li><a href="javascript:void(0);">2020년</a></li>
+								<li><a href="javascript:void(0);">2019년</a></li>
+								<li><a href="javascript:void(0);">2018년</a></li>
 							</ul>
 						</div>
 					</div>
@@ -988,18 +990,18 @@
 								<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu chk_type" role="menu" id="type">
-								<li data-value="1"><a href="#">1월</a></li>
-								<li data-value="2"><a href="#">2월</a></li>
-								<li data-value="3"><a href="#">3월</a></li>
-								<li data-value="4"><a href="#">4월</a></li>
-								<li data-value="5"><a href="#">5월</a></li>
-								<li data-value="6"><a href="#">6월</a></li>
-								<li data-value="7"><a href="#">7월</a></li>
-								<li data-value="8"><a href="#">8월</a></li>
-								<li data-value="9"><a href="#">9월</a></li>
-								<li data-value="10"><a href="#">10월</a></li>
-								<li data-value="11"><a href="#">11월</a></li>
-								<li data-value="12"><a href="#">12월</a></li>
+								<li data-value="1"><a href="javascript:void(0);">1월</a></li>
+								<li data-value="2"><a href="javascript:void(0);">2월</a></li>
+								<li data-value="3"><a href="javascript:void(0);">3월</a></li>
+								<li data-value="4"><a href="javascript:void(0);">4월</a></li>
+								<li data-value="5"><a href="javascript:void(0);">5월</a></li>
+								<li data-value="6"><a href="javascript:void(0);">6월</a></li>
+								<li data-value="7"><a href="javascript:void(0);">7월</a></li>
+								<li data-value="8"><a href="javascript:void(0);">8월</a></li>
+								<li data-value="9"><a href="javascript:void(0);">9월</a></li>
+								<li data-value="10"><a href="javascript:void(0);">10월</a></li>
+								<li data-value="11"><a href="javascript:void(0);">11월</a></li>
+								<li data-value="12"><a href="javascript:void(0);">12월</a></li>
 							</ul>
 						</div>
 					</div>
@@ -1125,14 +1127,14 @@
 					<tr class="th_span">
 						<th>
 							손익 계산서
-							<a href="#" class="btn_add fr">추가</a>
+							<a href="javascript:void(0);" class="btn_add fr">추가</a>
 						</th>
 						<td colspan="3"></td>
 					</tr>
 					<tr class="th_span">
 						<th>
 							세무 조정 계산
-							<a href="#" class="btn_add fr">추가</a>
+							<a href="javascript:void(0);" class="btn_add fr">추가</a>
 						</th>
 						<td colspan="3"></td>
 					</tr>
