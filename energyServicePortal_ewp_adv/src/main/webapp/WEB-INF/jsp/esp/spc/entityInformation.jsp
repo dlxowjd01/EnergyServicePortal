@@ -6,18 +6,12 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-	<title>Title</title>
-</head>
-<body>
 <script>
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
 
 	$(function () {
 		setInitList("listData"); //리스트초기화
-
 		getDataList();
 	});
 
@@ -35,6 +29,41 @@
 
 		getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
 	}
+	
+	function setJsonDataFormat(result){
+		var jsonList = [],
+			keyWord = $("#key_word").val();
+
+		for(var i = 0, count = result.data.length; i < count; i++){
+			var spcGensList = result.data[i].spcGens;
+			if(spcGensList !== undefined && spcGensList.length > 0){
+				for(var j = 0, jcount = spcGensList.length; j < jcount; j++){
+					var spcGensRow = spcGensList[j],
+						rowData = result.data[i],
+						newData = {},
+						warrantyInfo = JSON.parse(spcGensRow.warranty_info),
+						contractInfo = JSON.parse(spcGensRow.contract_info);
+	
+					newData["name"] = rowData.name;
+					newData["oid"] = rowData.oid;
+					newData["spc_id"] = rowData.spc_id;
+					newData["gen_id"] = spcGensRow.gen_id;
+					newData["발전소_명"] = spcGensRow.name;
+					newData["관리_운영_기간"] = nvl(contractInfo["관리_운영_기간"], "-");
+					newData["연차"] = nvl(warrantyInfo["현재_적용_연차"], "-");
+					newData["보증_방식"] = nvl(warrantyInfo["보증_방식"], "-");
+					newData["PR_보증치"] = nvl(warrantyInfo["PR_보증치"], "-");
+					newData["보증_감소율"] = nvl(warrantyInfo["보증_감소율"], "-");
+					newData["추가_보수"] = nvl(warrantyInfo["추가_보수"], "-");
+					//키워드 검색 조건 필터 처리
+					if(newData["name"].indexOf(keyWord) > -1 || newData["발전소_명"] .indexOf(keyWord) > - 1){
+						jsonList.push(newData)
+					}
+				}
+			}
+		}
+		return jsonList;
+	}
 
 	function getDataList(){
 		$.ajax({
@@ -43,45 +72,7 @@
 			async: false,
 			data: {"oid": oid, includeGens: true},
 			success: function (result) {
-				var jsonList = [],
-					keyWord = $("#key_word").val();
-
-				for(var i = 0, count = result.data.length; i < count; i++){
-
-					var spcGensList = result.data[i].spcGens;
-
-					if(spcGensList !== undefined && spcGensList.length > 0){
-
-						for(var j = 0, jcount = spcGensList.length; j < jcount; j++){
-							var spcGensRow = spcGensList[j],
-								rowData = result.data[i],
-								newData = {},
-								warrantyInfo = JSON.parse(spcGensRow.warranty_info),
-								contractInfo = JSON.parse(spcGensRow.contract_info);
-
-							newData["name"] = rowData.name;
-							newData["oid"] = rowData.oid;
-							newData["spc_id"] = rowData.spc_id;
-							newData["gen_id"] = spcGensRow.gen_id;
-							newData["발전소_명"] = spcGensRow.name;
-							newData["관리_운영_기간"] = nvl(contractInfo["관리_운영_기간"], "-");
-							newData["연차"] = nvl(warrantyInfo["현재_적용_연차"], "-");
-							newData["보증_방식"] = nvl(warrantyInfo["보증_방식"], "-");
-							newData["PR_보증치"] = nvl(warrantyInfo["PR_보증치"], "-");
-							newData["보증_감소율"] = nvl(warrantyInfo["보증_감소율"], "-");
-							newData["추가_보수"] = nvl(warrantyInfo["추가_보수"], "-");
-							//키워드 검색 조건 필터 처리
-							if(newData["name"].indexOf(keyWord) > -1 || newData["발전소_명"] .indexOf(keyWord) > - 1){
-								jsonList.push(newData)
-							}
-
-						}
-					}
-
-				}
-
-				setMakeList(jsonList, "listData", {"dataFunction" : {"INDEX" : getNumberIndex}}); //list생성
-
+				setMakeList(setJsonDataFormat(result), "listData", {"dataFunction" : {"INDEX" : getNumberIndex}}); //list생성
 			},
 			error: function (request, status, error) {
 				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
@@ -111,8 +102,8 @@
 	}
 
 	function setCheckedDataRemove(){
-		var checkDataList = getCheckList("rowCheck");
-		count = checkDataList.length,
+		var checkDataList = getCheckList("rowCheck"),
+			count = checkDataList.length,
 			sucessCnt = 0;
 
 		if(count == 0){
@@ -143,8 +134,8 @@
 	}
 
 	function setCheckedDataEdit(){
-		var checkDataList = getCheckList("rowCheck");
-		count = checkDataList.length;
+		var checkDataList = getCheckList("rowCheck"),
+			count = checkDataList.length;
 
 		if( count == 0){
 			alert("수정 할 목록을 선택하세요.");
@@ -184,14 +175,14 @@
 	</div>
 	<div class="col-lg-9">
 		<div class="right">
-			<a href="#;" class="save_btn" onclick="getCsvDown();">CVS 다운로드</a>
+			<a href="#;" class="save_btn" onclick="getCsvDown();">CSV 다운로드</a>
 		</div>
 	</div>
 </div>
 <div class="row">
 	<div class="col-lg-12">
 		<div class="indiv">
-			<div class="btn_wrap_type02">
+			<div class="btn_wrap_type">
 				<button type="button" class="btn_type" onclick="location.href='/spc/entityInformationPost.do'">신규 등록</button>
 			</div>
 			<div class="spc_tbl align_type">
@@ -220,11 +211,11 @@
 						</td>
 						<td><a href="/spc/entityDetails.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">[name]</a></td>
 						<td><a href="/spc/entityDetails.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">[발전소_명]</a></td>
-						<td>[연차]</td>
+						<td>[연차] 년차</td>
 						<td>[관리_운영_기간]</td>
 						<td>[보증_방식]</td>
-						<td class="right">[PR_보증치]</td>
-						<td class="right">[보증_감소율]</td>
+						<td class="right">[PR_보증치] %</td>
+						<td class="right">[보증_감소율] %</td>
 						<td>[추가_보수]</td>
 					</tr>
 					</tbody>
@@ -242,5 +233,3 @@
 		</div>
 	</div>
 </div>
-</body>
-</html>
