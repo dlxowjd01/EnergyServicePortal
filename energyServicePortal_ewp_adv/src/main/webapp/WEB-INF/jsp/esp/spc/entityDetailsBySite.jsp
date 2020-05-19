@@ -4,33 +4,60 @@
 	let today = new Date();
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
+	const spcId = '<c:out value="${param.spcId}" escapeXml="false" />';
 
 	$(function () {
-		siteList();
+
+		$(document).on('click', 'div.dropdown li', function() {
+			let dataValue = $(this).data('value'), dataText = $(this).text();
+			$(this).parents('.dropdown').find('button').html(dataText + '<span class="caret"></span>').data('value', dataValue);
+
+			tableData();
+		});
+
+		$('.save_btn').on('click', function(e) {
+			let excelName = 'SPC 원가관리';
+			let $val = $('#balanceTable').find('tbody');
+			let cnt = $val.length;
+
+			if (cnt < 1) {
+				alert('다운받을 데이터가 없습니다.');
+			} else {
+				if (confirm('엑셀로 저장하시겠습니까?')) {
+					tableToExcel('balanceTable', excelName, e);
+				}
+			}
+		});
+
+		pageInit();
+	});
+
+	const pageInit = function() {
+		callAjax({
+			url: 'http://iderms.enertalk.com:8443/spcs/${param.spc_id}',
+			type: 'get',
+			data: {
+				oid: oid,
+				includeGens: true
+			}
+		}, setSpcGen);
+
+		tableData();
+	}
+
+	const tableData = function() {
+		let gen_id = $('#spcGen button').data('value');
+		let year = $('#year button').data('value');
 
 		callAjax({
 			url: 'http://iderms.enertalk.com:8443/spcs/${param.spc_id}/balance/month?oid=' + oid,
 			type: 'get',
+			data: {
+				site_id: gen_id,
+				yyyy: year
+			}
 		}, setTable);
-	});
-
-	//사업소 조회
-	const siteList = function () {
-		$('#siteList > div > ul').empty();
-
-		let str = '';
-		let sites = JSON.parse('${siteList}');
-		sites.forEach((site, index) => {
-			str += `<li>
-						<a href="#" data-value="${'${site.sid}'}" tabindex="-1">
-							<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
-							<label for="${'${site.sid}'}"><span></span>${'${site.name}'}</label>
-						</a>
-					</li>`;
-		});
-
-		$('#siteList>div>ul').append(str);
-	};
+	}
 
 	//목록
 	const list = function () {
@@ -56,6 +83,9 @@
 
 	const setTable = function (json) {
 		let dataInfo = json.data;
+
+		$('[id^="loan_"]:not(:eq(0))').remove();
+		$('[id^="interestCost_"]:not(:eq(0))').remove();
 
 		for(var i = 0; i < dataInfo.length; i++) {
 			let balanceyyyymm = dataInfo[i].balance_yyyymm;
@@ -112,6 +142,21 @@
 
 			td.eq(td.length - 1).html(numberComma(tdVal.toFixed(2)));
 		});
+	}
+
+	const setSpcGen = function (data) {
+		let siteList = data.data[0].spcGens;
+		let html = '';
+
+		$('#spcGen button').html('전체 <span class="caret"></span>').data('value', ''); //초기화
+
+		html += '<li data-value=""><a href="javascript:void(0);">전체</a></li>';
+		for (let i in siteList) {
+			let temp = siteList[i];
+			html += '<li data-value="' + temp.gen_id + '"><a href="javascript:void(0);">' + temp.name + '</a></li>';
+		}
+
+		$('#spcGen ul').empty().append(html);
 	}
 </script>
 
@@ -175,19 +220,17 @@
 </div>
 <div class="row">
 	<div class="header_drop_area col-lg-2">
-		<div class="dropdown" id="siteList">
+		<div class="dropdown" id="spcGen">
 			<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
 				전체<span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
-				<li><a href="#">전체</a></li>
-				<li><a href="#">2020</a></li>
 			</ul>
 		</div>
 	</div>
 	<div class="col-lg-10">
 		<div class="right">
-			<a href="#;" class="save_btn">다운로드</a>
+			<a href="javascript:void(0);" class="save_btn">다운로드</a>
 		</div>
 	</div>
 </div>
@@ -196,17 +239,17 @@
 		<div class="indiv entity_site">
 			<div class="btn_wrap_type">
 				<div class="dropdown" id="year">
-					<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
+					<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown" data-value="2020">
 						2020년<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
-						<li><a href="#">전체</a></li>
-						<li><a href="#">2020</a></li>
+						<li data-value=""><a href="#">전체</a></li>
+						<li data-value="2020"><a href="#">2020</a></li>
 					</ul>
 				</div>
 			</div>
-			<div class="spc_tbl align_type02">
-				<table id="balanceTable">
+			<div class="spc_tbl align_type02" id="balanceTable">
+				<table>
 					<colgroup>
 						<col style="width:15%">
 						<col>

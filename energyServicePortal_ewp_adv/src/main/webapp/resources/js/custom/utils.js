@@ -857,12 +857,25 @@ function setJsonAutoMapping(json, areaId) {
 				setJsonAutoMapping(json[prop], areaId);
 			}
 
+		} else if(typeof json[prop] == 'number') {
+			setDataMapping($selecter, json, prop);
 		}
 	}
 };
 
 function setDataMapping($selecter, json, prop) {
 	var $element = $selecter.find("[id='" + prop + "']"), _TagName = $element.prop("tagName");
+
+	if($element.length == 0) {
+		$element = $selecter.find("[name='" + prop + "']");
+		if($element.length > 1) {
+			$element = $element.eq(0);
+			_TagName = $element.prop("tagName");
+		} else {
+			_TagName = $element.prop("tagName");
+		}
+
+	}
 
 	if (_TagName == "INPUT") {
 		var _Type = $element.attr("type");

@@ -375,6 +375,12 @@
 			let repeatEnd = new Date(data[0].repeat_end);
 			$('#repeat_end').val(repeatEnd.format('yyyy-MM-dd'));
 
+			if($('#repeat_yn button').data('value') == 'Y') {
+				$('#repeat_yn').siblings().show();
+			} else{
+				$('#repeat_yn').siblings().hide();
+			}
+
 			$('#registerModal .btn_wrap_type02 .btn_type04').show().attr('onclick', 'maintenance(\'delete\', \'' + data[0].id + '\' );');
 			$('#registerModal .btn_wrap_type02 .btn_type').attr('onclick', 'maintenance(\'patch\', \'' + data[0].id + '\' );').text('수정');
 		}
@@ -403,8 +409,10 @@
 
 	const repeatEnd = function (selectedDate) {
 
-		if (selectedDate == undefined) {
+		if (selectedDate == undefined && $('#job_date').datepicker('getDate') != null) {
 			selectedDate = $('#job_date').datepicker('getDate');
+		} else if(selectedDate == undefined && $('#job_date').datepicker('getDate') == null) {
+			return false;
 		}
 
 		if($('#repeat_yn button').data('value') == '') {
@@ -412,7 +420,7 @@
 		}
 
 		if($('#repeat_yn button').data('value') == 'N') {
-			$('#repeat_end').val(selectedDate.format('yyyy-MM-dd'));
+			$('#repeat_end').val(selectedDate);
 
 			if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
 				selectedDate.setDate(selectedDate.getDate() - Number($('#alarmSetup button').data('value')));
@@ -433,7 +441,6 @@
 				} else {
 					unit = '1';
 				}
-
 
 				let selDate = new Date(selectedDate);
 				if (repeatUnit != 'day_of_week') {
@@ -542,7 +549,7 @@
 							<td>
 								<div class="sel_calendar">
 									<input type="text" id="job_date" name="job_date" class="sel datepicker required" value=""
-									       autocomplete="off" style="width:100%">
+									       autocomplete="off" style="width:100%" readonly>
 								</div>
 							</td>
 							<th>다음 검사 일자</th>
