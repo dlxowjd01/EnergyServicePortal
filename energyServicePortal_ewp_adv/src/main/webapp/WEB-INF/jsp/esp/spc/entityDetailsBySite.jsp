@@ -9,6 +9,8 @@
 
 	$(function () {
 
+		setInitList('historyData');
+
 		$(document).on('click', 'div.dropdown li', function() {
 			let dataValue = $(this).data('value'), dataText = $(this).text();
 			$(this).parents('.dropdown').find('button').html(dataText + '<span class="caret"></span>').data('value', dataValue);
@@ -178,10 +180,29 @@
 		tableData();
 	}
 
+	const historyInit = function () {
+		let option = {
+			url: 'http://iderms.enertalk.com:8443/spcs/history',
+			type: 'get',
+			data: {
+				oid: oid,
+				ui_id: 1,
+				spc_id: spcId,
+				site_id: $('#spcGen button').data('value')
+			}
+		};
+
+		callAjax(option, modalPopInit);
+	};
+
+	const modalPopInit = function (data) {
+		setMakeList(data.data, 'historyData', {"dataFunction" : {}});
+		$('#historyModal').modal();
+	}
 </script>
 
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="ly_wrap">
@@ -201,20 +222,13 @@
 							<th>내용</th>
 						</tr>
 						</thead>
-						<tbody>
+						<tbody id="historyData">
 						<tr>
-							<td>김세준</td>
-							<td>sj.kim@s-energy.com</td>
-							<td>2020-05-04 16:15</td>
-							<td>2020-05-04 16:15</td>
-							<td>5월 SPC 원가 관리 정보 등록</td>
-						</tr>
-						<tr>
-							<td>김세준</td>
-							<td>sj.kim@s-energy.com</td>
-							<td>2020-05-04 16:15</td>
-							<td>2020-05-04 16:15</td>
-							<td>5월 SPC 원가 관리 정보 수정</td>
+							<td>[user_name]</td>
+							<td>[user_login_id]</td>
+							<td>[changed_start]</td>
+							<td>[changed_end]</td>
+							<td>[contents]</td>
 						</tr>
 						</tbody>
 					</table>
@@ -534,7 +548,7 @@
 			</div>
 			<div class="btn_wrap_type02">
 				<button type="button" class="btn_type03" onclick="list();">목록</button>
-				<button type="button" class="btn_type" data-toggle="modal" data-target="#myModal">이력확인</button>
+				<button type="button" class="btn_type" onclick="historyInit();">이력확인</button>
 			</div>
 		</div>
 	</div>
