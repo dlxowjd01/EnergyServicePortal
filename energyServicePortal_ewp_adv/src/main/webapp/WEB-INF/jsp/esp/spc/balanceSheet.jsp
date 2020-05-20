@@ -131,7 +131,7 @@
 			return;
 		}
 
-		var rowData = checkDataList[i];
+		var rowData = checkDataList[0];
 		var locationUrl = '/spc/balanceSheetEdit.do?spc_id=' + rowData.spc_id +'&site_id=' + rowData.site_id +'&yyyymm=' + rowData.start_yyyymm;
 
 		location.href = locationUrl;
