@@ -6,11 +6,93 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-  <head>
-    <title>Title</title>
-  </head>
-  <body>
+<script>
+	const oid = '${sessionScope.userInfo.oid}';
+	const loginId = '${sessionScope.userInfo.login_id}';
+
+	$(function () {
+		setInitList("listData"); //리스트초기화
+		getDataList();
+	});
+
+	function nvl(value, str){
+		if(isEmpty(value)){
+			return str;
+		}else{
+			return value;
+		}
+	}
+
+	function getCsvDown(){
+		var column = ["보고서구분","문서번호","보고서명","작성자","작성일자"], //json Key
+			header = ["report_type","report_id","report_name","updated_by","registered_at"]; //csv 파일 헤더
+
+		getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "work_report.csv"); // json list, 컬럼, 헤더명, 파일명
+	}
+	
+	function setJsonDataFormat(result){
+		var jsonList = [],
+			keyWord = $("#key_word").val();
+
+		for(var i = 0, count = result.data.length; i < count; i++){
+			var rowData = result.data[i];
+			
+			//if(rowData["report_id"].indexOf(keyWord) > -1 || rowData["report_name"] .indexOf(keyWord) > - 1){
+				jsonList.push(rowData);
+			//}
+		}
+		return jsonList;
+	}
+
+	function getDataList(){
+		$.ajax({
+			url: "http://iderms.enertalk.com:8443/reports/remote_work",
+			type: "get",
+			async: false,
+			data: {"oid": oid},
+			success: function (result) {
+				setMakeList(setJsonDataFormat(result), "listData", {"dataFunction" : {"INDEX" : getNumberIndex, "report_type" : getReportTypeName}}); //list생성
+			},
+			error: function (request, status, error) {
+				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+			}
+		});
+	}
+	
+	function getReportTypeName(data){
+		var result = "";
+		
+		if("1" == data){
+			result = "출장/조치 보고서";	
+		}else if("2" == data){
+			result = "QC 보고서";
+		}
+		
+		return result;
+	}
+
+	function getNumberIndex(index){
+		return index + 1;
+	}
+
+	function setCheckedAll(obj, chkName){
+		var checkVal = obj.checked;
+		$("input[name='"+chkName+"']").prop("checked", checkVal);
+	}
+
+	function getCheckList(checkName){
+		var jsonList = $("#listData").data("gridJsonData"),
+			checkList = [];
+		$("input[name='"+checkName+"']").each(function(i){
+			if(this.checked){
+				checkList.push(jsonList[i]);
+			}
+		});
+
+		return checkList;
+	}
+
+</script>
     <div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header">보고서</h1>
@@ -32,10 +114,9 @@
 							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="type">
-							<li><a href="#">전체</a></li>
-							<li><a href="#">2020</a></li>
-							<li><a href="#">2019</a></li>
-							<li><a href="#">2018</a></li>
+							<li data-value=""><a href="javascript:void(0);">전체</a></li>
+							<li data-value="1"><a href="javascript:void(0);">출장/조치 보고서</a></li>
+							<li data-value="2"><a href="javascript:void(0);">QC 보고서</a></li>
 						</ul>
 					</div>
 				</div>
@@ -43,9 +124,9 @@
 			<div class="fl">
 				<span class="tx_tit">작성 일자</span>
 				<div class="sel_calendar">
-				  <input type="text" id="datepicker1" class="sel" value="" autocomplete="off">
+				  <input type="text" id="datepicker1" class="sel datepicker fromDate" value="" autocomplete="off">
 				  <em></em>
-				  <input type="text" id="datepicker2" class="sel" value="" autocomplete="off">
+				  <input type="text" id="datepicker2" class="sel datepicker toDate" value="" autocomplete="off">
 				</div>
 			</div>
 			<div class="fl">
@@ -54,10 +135,10 @@
 				</div>
 			</div>
 			<div class="fl">
-				<button type="submit" class="btn_type">검색</button>
+				<button type="submit" class="btn_type" onclick="getDataList();">검색</button>
 			</div>
 			<div class="fr">
-				<a href="#;" class="save_btn">CVS 다운로드</a>
+				<a href="javascript:void(0);" class="save_btn" onclick="getCsvDown();">CVS 다운로드</a>
 			</div>
 		</div>
 	</div>
@@ -72,8 +153,8 @@
 						<thead>
 							<tr>
 								<th>
-									<input type="checkbox" id="chk_op01" value="순번">
-									<label for="chk_op01"><span></span>순번</label>
+									<input type="checkbox" id="chk_header" value="순번" onclick="setCheckedAll(this, 'rowCheck');">
+									<label for="chk_header"><span></span>순번</label>
 								</th>
 								<th>보고서 구분</th>
 								<th>문서번호</th>
@@ -83,115 +164,27 @@
 								<th>등록상태</th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody id="listData">
 							<tr>
 								<td>
-									<input type="checkbox" id="chk_op02" value="1">
-									<label for="chk_op02"><span></span>1</label>
+									<input type="checkbox" id="chk_op[INDEX]" value="">
+									<label for="chk_op[INDEX]"><span></span>[INDEX]</label>
 								</td>
-								<td>혜원 솔라 01</td>
-								<td>SPW-Inverter-01</td>
-								<td><a href="/report/maintenanceReportDetails.do" class="tbl_link">혜원 솔라 01 RTU 설치 점검 QC 보고서</a></td>
-								<td>인코어드</td>
-								<td>2020-04-06</td>
-								<td>임시저장</td>
-							</tr>
-							<tr>
-								<td>
-									<input type="checkbox" id="chk_op03" value="1">
-									<label for="chk_op03"><span></span>2</label>
-								</td>
-								<td>혜원 솔라 02</td>
-								<td>SPW-Inverter-02</td>
-								<td><a href="/report/maintenanceReportDetails2.do" class="tbl_link">혜원솔라02 RTU 데이터 점검</a></td>
-								<td>인코어드</td>
-								<td>2020-04-10</td>
+								<td>[report_type]</td>
+								<td>[report_id]</td>
+								<td><a href="/report/maintenanceReportDetails.do?report_id=[report_id]" class="tbl_link">[report_name]</a></td>
+								<td>[updated_by]</td>
+								<td>[updated_at]</td>
 								<td>저장완료</td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
 							</tr>
 						</tbody>
 					</table>	
 				</div>
 				<div class="paging_wrap">
-					<a href="#;" class="btn_prev">prev</a>
+					<a href="javascript:void(0);" class="btn_prev">prev</a>
 					<strong>1</strong>
-					<a href="#;">2</a>
-					<a href="#;">3</a>
-					<a href="#;" class="btn_next">next</a>
+					<a href="javascript:void(0);" class="btn_next">next</a>
 				</div>
 			</div>
 		</div>
 	</div>
-  </body>
-</html>

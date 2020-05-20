@@ -6,11 +6,160 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-  <head>
-    <title>작업 보고서 등록</title>
-  </head>
-  <body>
+<script>
+const oid = '${sessionScope.userInfo.oid}';
+const loginId = '${sessionScope.userInfo.login_id}';
+
+$(function () {
+	initAddListHtml();
+	getGenData();
+});
+
+$(document).on('click', '.dropdown li', function () {
+	var dataValue = $(this).data('value'),
+		dataText = $(this).text();
+	$(this).parents('.dropdown').find('button').html(dataText + '<span class="caret"></span>').data('value', dataValue);
+});
+
+function getGenData(){
+	$.ajax({
+		url: "http://iderms.enertalk.com:8443/config/sites",
+		type: "get",
+		async: false,
+		data: {"oid": oid},
+		success: function (json) {
+			setInitList("genList");
+			setMakeList(json, "genList", {"dataFunction" : {}});
+		},
+		error: function (request, status, error) {
+
+		}
+	});
+}
+
+function initAddListHtml(){
+	$("#addFileList01").data("form", $("#addFileList01").html());
+	$("#addFileList02").data("form", $("#addFileList02").html());
+}
+
+function addList(addId){
+	var $selecter = $("#" + addId);
+	$selecter.append($selecter.data("form"));
+}
+
+function setSaveData(){
+	var report_type = $("#report_type").data("value").toString(),
+		report_name = $("#report_name").val(),
+		site_id = $("#gen").data("value");
+	
+	if(report_type === undefined || report_type == ""){
+		alert("보고서 구분을 선택하세요.");
+		return false;
+	}
+	
+	if(report_name == ""){
+		alert("보고서 명을 입력하세요.");
+		return false;
+	}
+	
+	if(site_id == ""){
+		alert("발전소를 선택하세요.");
+		return false;
+	}	
+	
+	
+	setInsertReportData();	
+}
+
+function setFileUpload(reportId){
+	
+	$("#work_detail_info").find("input[type=file]").each(function(){
+		$(this).attr("name", this.name + "_" + reportId);
+	});
+
+	$.ajax({
+		type: 'post',
+		enctype: 'multipart/form-data',
+		url: 'http://iderms.enertalk.com:8443/files/upload?oid='+oid,
+		data: new FormData($('#work_detail_info')[0]),
+		processData: false,
+		contentType: false,
+		cache: false,
+		timeout: 600000,
+		success: function (result) {
+			setUpdateReportData(reportId, result.files);
+		},
+		error: function (request, status, error) {
+			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+		}
+	});	
+}
+
+function setInsertReportData(){
+	var work_info = setAreaParamData("work_info"),
+		work_detail_info = setAreaParamData("work_detail_info"),
+		report_type = $("#report_type").data("value").toString(),
+		report_name =  $("#report_name").val(),
+		site_id = $("#gen").data("value");
+
+	$.ajax({
+		url: "http://iderms.enertalk.com:8443/reports/remote_work?oid=" + oid,
+		type: "post",
+		dataType: 'json',
+		async: false,
+		contentType: "application/json",		
+		data: JSON.stringify({
+			"report_type" : report_type,
+			"report_name" : report_name,
+			"site_id" : site_id,
+			"work_info" : JSON.stringify(work_info),
+			"work_detail_info" : JSON.stringify(work_detail_info),
+			"updated_by" : loginId
+		}),
+		success: function (result) {
+			setFileUpload(result.data[0].report_id)
+		},
+		error: function (request, status, error) {
+			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+		}
+	});	
+}
+
+function setUpdateReportData(reportId, files){
+	var work_info = setAreaParamData("work_info"),
+		work_detail_info = setAreaParamData("work_detail_info"),
+		report_name =  $("#report_name").val(),
+		site_id = $("#gen").data("value");
+	
+	work_detail_info["files"] = files;
+
+	$.ajax({
+		url: "http://iderms.enertalk.com:8443/reports/remote_work/" + reportId + "?oid=" + oid,
+		type: "patch",
+		dataType: 'json',
+		async: false,
+		contentType: "application/json",	
+		data: JSON.stringify({
+			"report_name" : report_name,
+			"site_id" : site_id,
+			"work_info" : JSON.stringify(work_info),
+			"work_detail_info" : JSON.stringify(work_detail_info),
+			"updated_by" : loginId
+		}),
+		success: function (result) {
+			alert("등록되었습니다.");
+			goMoveList();
+		},
+		error: function (request, status, error) {
+			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+		}
+	});		
+}
+
+function goMoveList(){
+	location.href = "/report/maintenanceReport.do";
+}
+</script>
     <div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header">출장/조치 보고서 </h1>
@@ -28,11 +177,12 @@
 				<span class="tx_tit">보고서 구분</span>
 				<div class="sa_select">
 					<div class="dropdown">
-						<button class="btn btn-primary dropdown-toggle w9" type="button" data-toggle="dropdown">출장/조치 보고서
+						<button id="report_type" class="btn btn-primary dropdown-toggle w9" type="button" data-toggle="dropdown" data-value="">선택
 							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu chk_type" role="menu" id="type">
-							<li><a href="#;">출장/조치 보고서</a></li>
+							<li data-value="1"><a href="javascript:void(0);">출장/조치 보고서</a></li>
+							<li data-value="2"><a href="javascript:void(0);">QC 보고서</a></li>
 						</ul>
 					</div>
 				</div>
@@ -41,7 +191,7 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
-			<div class="indiv report_post">
+			<div class="indiv report_post" id="work_info">
 				<div class="tbl_top">
 					<h2 class="ntit mt25">출장 이력</h2>
 				</div>
@@ -54,17 +204,36 @@
 						<col style="width:35%">
 						</colgroup>
 						<tr>
+							<th>보고서 명</th>
+							<td>
+								<div class="tx_inp_type edit">
+									<input type="text" id="report_name" placeholder="직접 입력">
+								</div>
+							</td>
+							<th>발전소</th>
+							<td>
+								<div class="dropdown placeholder edit">
+									<button id="gen" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-value="">선택
+										<span class="caret"></span>
+									</button>
+									<ul id="genList" class="dropdown-menu" role="menu">
+										<li data-value="[sid]"><a href="javascript:void(0);">[name]</a></li>
+									</ul>
+								</div>
+							</td>
+						</tr>						
+						<tr>
 							<th>출장 시기</th>
 							<td>
 								<div class="sel_calendar edit twin clear">
-									<input type="text" id="datepicker1" class="sel" value="" autocomplete="off" placeholder="시작일">
-									<input type="text" id="datepicker2" class="sel" value="" autocomplete="off" placeholder="종료일">
+									<input type="text" id="출장_시기_from" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일">
+									<input type="text" id="출장_시기_to" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일">
 								</div>
 							</td>
 							<th>출장 장소</th>
 							<td>
 								<div class="tx_inp_type edit">
-									<input type="text" placeholder="직접 입력">
+									<input type="text" id="출장_장소" placeholder="직접 입력">
 								</div>
 							</td>
 						</tr>
@@ -72,13 +241,13 @@
 							<th>작성 일자</th>
 							<td>
 								<div class="sel_calendar edit">
-									<input type="text" id="datepicker3" class="sel" value="" autocomplete="off" placeholder="날짜 선택">
+									<input type="text" id="작성_일자" class="sel datepicker" value="" autocomplete="off" placeholder="날짜 선택">
 								</div>
 							</td>
 							<th>출장 목적</th>
 							<td>
 								<div class="tx_inp_type edit">
-									<input type="text" placeholder="직접 입력">
+									<input type="text" id="출장_목적" placeholder="직접 입력">
 								</div>
 							</td>
 						</tr>
@@ -86,23 +255,20 @@
 							<th>소속 부서</th>
 							<td>
 								<div class="tx_inp_type edit">
-									<input type="text" placeholder="직접 입력">
+									<input type="text" id="소속_부서" placeholder="직접 입력">
 								</div>
 							</td>
 							<th>출장자</th>
 							<td>
 								<div class="tx_inp_type edit">
-									<input type="text" placeholder="직접 입력">
+									<input type="text" id="출장자" placeholder="직접 입력">
 								</div>
 							</td>
 						</tr>
 					</table>	
 				</div>
-				<div class="btn_wrap_type02">
-					<button type="button" class="btn_type03">목록</button>
-					<button type="button" class="btn_type">등록</button>
-				</div>
 			</div>
+			<form id="work_detail_info" name="work_detail_info">
 			<div class="indiv mt25 report_post02">
 				<div class="tbl_top">
 					<h2 class="ntit mt25">처리 내역</h2>
@@ -117,24 +283,21 @@
 							<th>시스템 개요</th>
 							<td>
 								<div class="txarea_inp_type">
-									<textarea placeholder="내용 추가" rows="4"></textarea>
+									<textarea placeholder="내용 추가" id="시스템_개요" rows="4"></textarea>
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<th class="vert_type">현장 점검<button class="btn_file up">업로드</button></th>
-							<td>
-								<div class="img_bx">
-									<!--<img src="../img/reportSample01.png">
-									<img src="../img/reportSample02.png">-->
-								</div>
+							<th class="vert_type">현장 점검<a href="javascript:addList('addFileList01')" class="btn_add fr">추가</a></th>
+							<td id="addFileList01">
+								<input name="work_report_file_01" type="file">
 							</td>
 						</tr>
 						<tr>
 							<th>특이사항</th>
 							<td>
 								<div class="txarea_inp_type">
-									<textarea placeholder="내용 추가" rows="4"></textarea>
+									<textarea id="특이사항" placeholder="내용 추가" rows="4"></textarea>
 								</div>
 							</td>
 						</tr>
@@ -142,7 +305,7 @@
 							<th>향후 진행예정 업무</th>
 							<td>
 								<div class="txarea_inp_type">
-									<textarea placeholder="내용 추가" rows="4"></textarea>
+									<textarea id="향후_진행예정_업무" placeholder="내용 추가" rows="4"></textarea>
 								</div>
 							</td>
 						</tr>
@@ -150,22 +313,23 @@
 							<th>담당자 의견</th>
 							<td>
 								<div class="txarea_inp_type">
-									<textarea placeholder="내용 추가" rows="4"></textarea>
+									<textarea id="담당자_의견" placeholder="내용 추가" rows="4"></textarea>
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<th class="hei_type">첨부 파일<button class="btn_file up">업로드</button></th>
-							<td></td>
+							<th class="hei_type">첨부 파일<a href="javascript:addList('addFileList02')" class="btn_add fr">추가</a></th>
+							<td id="addFileList02">
+								<input name="work_report_file_02" type="file">
+							</td>
 						</tr>
 					</table>	
 				</div>
 				<div class="btn_wrap_type02">
-					<button type="button" class="btn_type03">목록</button>
-					<button type="button" class="btn_type">등록</button>
+					<button type="button" class="btn_type03" onclick="goMoveList();">목록</button>
+					<button type="button" class="btn_type" onclick="setSaveData();">등록</button>
 				</div>
 			</div>
+			</form>
 		</div>
 	</div>
-  </body>
-</html>
