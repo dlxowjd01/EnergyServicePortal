@@ -541,12 +541,15 @@
 					</colgroup>
 					<tr>
 						<th>모듈 제조사 / 모델<a href="javascript:addList('addList01');" class="btn_add fr">추가</a></th>
-						<td id="addList01" class="group_type">
-							<div class="tx_inp_type edit">
-								<input type="text" name="모듈_제조사" placeholder="제조사">
-							</div>
-							<div class="tx_inp_type edit">
-								<input type="text" name="모듈_제조사_모델" placeholder="모델">
+						<td id="addList01">
+							<div class="group_type">
+								<div class="tx_inp_type edit">
+									<input type="text" name="모듈_제조사" placeholder="제조사">
+								</div>
+								<div class="tx_inp_type edit">
+									<input type="text" name="모듈_제조사_모델" placeholder="모델">
+								</div>
+								<button class="btn_clse" style="">삭제</button>
 							</div>
 						</td>
 						<th>설치 용량</th>
@@ -564,9 +567,12 @@
 					<tr>
 						<th>모듈 설치 각도<a href="javascript:addList('addList02');" class="btn_add fr">추가</a></th>
 						<td id="addList02">
-							<div class="tx_inp_type edit unit t1">
-								<input type="text" name="모듈_설치_각도">
-								<span>︒</span>
+							<div>
+								<div class="tx_inp_type edit unit t1 fl">
+									<input type="text" name="모듈_설치_각도">
+									<span>︒</span>
+								</div>
+								<button class="btn_clse" style="">삭제</button>
 							</div>
 						</td>
 						<th>모듈 설치 방식</th>
@@ -589,45 +595,57 @@
 					</tr>
 					<tr>
 						<th>인버터 제조사 / 모델<a href="javascript:addList('addList03');" class="btn_add fr">추가</a></th>
-						<td id="addList03" class="group_type">
-							<div class="tx_inp_type edit">
-								<input type="text" name="인버터_제조사" placeholder="제조사">
-							</div>
-							<div class="tx_inp_type edit">
-								<input type="text" name="인버터_제조사_모델" placeholder="모델">
+						<td id="addList03">
+							<div class="group_type">
+								<div class="tx_inp_type edit">
+									<input type="text" name="인버터_제조사" placeholder="제조사">
+								</div>
+								<div class="tx_inp_type edit">
+									<input type="text" name="인버터_제조사_모델" placeholder="모델">
+								</div>
+								<button class="btn_clse" style="">삭제</button>
 							</div>
 						</td>
 						<th>인버터 용량 / 대수<a href="javascript:addList('addList04');" class="btn_add fr">추가</a></th>
-						<td id="addList04" class="group_type">
-							<div class="tx_inp_type edit unit t1">
-								<input type="text" name="인버터_용량">
-								<span>kW</span>
-							</div>
-							<div class="tx_inp_type edit unit t1">
-								<input type="text" name="인버터_용량_대수">
-								<span>대</span>
+						<td id="addList04">
+							<div class="group_type">
+								<div class="tx_inp_type edit unit t1">
+									<input type="text" name="인버터_용량">
+									<span>kW</span>
+								</div>
+								<div class="tx_inp_type edit unit t1">
+									<input type="text" name="인버터_용량_대수">
+									<span>대</span>
+								</div>
+								<button class="btn_clse" style="">삭제</button>
 							</div>
 						</td>
 					</tr>
 					<tr>
 						<th>접속반 제조사 / 모델<a href="javascript:addList('addList05');" class="btn_add fr">추가</a></th>
-						<td id="addList05" class="group_type">
-							<div class="tx_inp_type edit">
-								<input type="text" placeholder="제조사" name="접속반_제조사">
-							</div>
-							<div class="tx_inp_type edit">
-								<input type="text" placeholder="모델" name="접속반_제조사_모델">
+						<td id="addList05">
+							<div class="group_type">
+								<div class="tx_inp_type edit">
+									<input type="text" placeholder="제조사" name="접속반_제조사">
+								</div>
+								<div class="tx_inp_type edit">
+									<input type="text" placeholder="모델" name="접속반_제조사_모델">
+								</div>
+								<button class="btn_clse" style="">삭제</button>
 							</div>
 						</td>
 						<th>접속반 채널 / 대수<a href="javascript:addList('addList06');" class="btn_add fr">추가</a></th>
-						<td id="addList06" class="group_type">
-							<div class="tx_inp_type edit unit t1">
-								<input type="text" name="접속반_채널">
-								<span>Ch</span>
-							</div>
-							<div class="tx_inp_type edit unit t1">
-								<input type="text" name="접속반_채널_대수">
-								<span>대</span>
+						<td id="addList06">
+							<div class="group_type">
+								<div class="tx_inp_type edit unit t1">
+									<input type="text" name="접속반_채널">
+									<span>Ch</span>
+								</div>
+								<div class="tx_inp_type edit unit t1">
+									<input type="text" name="접속반_채널_대수">
+									<span>대</span>
+								</div>
+								<button class="btn_clse" style="">삭제</button>
 							</div>
 						</td>
 					</tr>
@@ -650,12 +668,15 @@
 							</div>
 						</td>
 						<th>수배전반 제조사 / 모델<a href="javascript:addList('addList07');" class="btn_add fr">추가</a></th>
-						<td id="addList07" class="group_type">
-							<div class="tx_inp_type edit">
-								<input type="text" name="수배전반_제조사" placeholder="제조사">
-							</div>
-							<div class="tx_inp_type edit">
-								<input type="text" name="수배전반_제조사_모델" placeholder="모델">
+						<td id="addList07">
+							<div class="group_type">
+								<div class="tx_inp_type edit">
+									<input type="text" name="수배전반_제조사" placeholder="제조사">
+								</div>
+								<div class="tx_inp_type edit">
+									<input type="text" name="수배전반_제조사_모델" placeholder="모델">
+								</div>
+								<button class="btn_clse" style="">삭제</button>
 							</div>
 						</td>
 					</tr>

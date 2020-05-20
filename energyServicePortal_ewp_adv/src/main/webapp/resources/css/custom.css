@@ -2044,6 +2044,12 @@ footer .copyright {
 .btn.w9{
 	width: 200px
 }
+.btn.w10{
+	width: 280px
+}
+.btn.w11{
+	width: 194px
+}
 
 .dropdown .btn-primary {
 	font-family: 'Roboto', sans-serif;
@@ -11244,7 +11250,8 @@ div.di_wrap dl .link a {
 	font-weight: normal;
 	background: var(--box-color5);
 	vertical-align: middle;
-	text-align: center;
+	text-align: left;
+	padding:0 20px
 }
 
 .his_tbl thead th label {
@@ -11269,8 +11276,9 @@ div.di_wrap dl .link a {
 	text-align: center;
 	vertical-align: middle;
 	white-space: nowrap;
-	text-align: center;
+	text-align: left;
 	font-weight: 200;
+	padding:0 20px
 }
 
 .his_tbl thead tr th:first-child {
@@ -11284,6 +11292,21 @@ div.di_wrap dl .link a {
 .his_tbl tbody tr:nth-child(2n) td {
 	background: var(--box-color5);
 }
+
+.his_al .his_tbl tbody td{
+	padding-left:39px
+}
+.his_al .his_tbl tbody td:first-child,
+.his_al .his_tbl thead th:first-child{
+	padding-left:20px;
+	text-align:center
+}
+.his_tbl .chk_tr td,
+.his_tbl .chk_tr td .tbl_link,
+.his_tbl .chk_tr td .tbl_link:link,
+.his_tbl .chk_tr td .tbl_link:hover,
+.his_tbl .chk_tr td .tbl_link:active{color:var(--color8)}
+.his_tbl .tbl_link,.his_tbl .tbl_link:link,.his_tbl .tbl_link:hover,.his_tbl .tbl_link:active{color:var(--color4)}
 
 /* tbody scroll */
 .his_tbl tbody::-webkit-scrollbar-track {
@@ -12974,6 +12997,11 @@ button.big{width:102px}
 	line-height:35px;
 	text-align:left;
 }
+.txarea_inp_type.lh_type textarea{
+	padding-top:5px;
+	padding-bottom:5px;
+	line-height:24px
+}
 textarea::-webkit-scrollbar-track {
 	border-radius: 2px;
 	background-color: var(--scroll-color2)
@@ -13188,13 +13216,15 @@ textarea::-webkit-scrollbar-thumb {
 
 .tbl_wrap_type .tbl_top {
 	padding-left: 20px;
-	margin-top: 30px
+	margin-top: 40px
 }
 
 .tbl_wrap_type .tbl_top:first-child {
-	margin-top: 0
+	margin-top: 20px
 }
-
+.tbl_wrap_type .tbl_top + .his_tbl{
+	margin-top:0
+}
 .tx_btn_area {
 	position: relative;
 	padding-right: 98px
@@ -13729,7 +13759,7 @@ button.tx_file {
 	margin-right: 30px;
 }
 .spc_tbl02_row .tx_btn_area{width:440px}
-
+.spc_tbl02_row .vert_type{vertical-align:top;padding-top:25px} 
 .tbl_wrap_type.collect_wrap {
 	overflow-y: visible;
 	height: auto
@@ -13850,6 +13880,7 @@ button.tx_file {
 .st_edit td{padding:0 0 0 36px;line-height:48px}
 .tx_inp_type.edit{height:48px;padding:0;width:300px;border:none;border-bottom:2px solid #1d98e9;background:none}
 .tx_inp_type.edit input{background:none}
+.tx_inp_type.edit + .btn_clse{margin-left:24px}
 
 .tx_inp_type.read{height:48px;padding:0;width:300px;border:none;background:none}
 .tx_inp_type.read input{background:none}
@@ -14029,5 +14060,17 @@ button.tx_file {
 .yield_ly_bt .dropdown .btn{width:100%}
 .yield_ly_bt .tx_inp_type{width:82px;margin-left:16px}
 .yield_ly_bt .btn_type07{margin:6px 0 0 10px}
+
+.tx_line1{font-size:16px;font-weight:500;line-height:24px;color:var(--color8)}
+.modal-dialog.his_alarm .ly_wrap .ly_tit{padding-left:0}
+.modal-dialog.his_alarm .modal-content .btn_wrap_type02{padding-right:0}
+.photo_load_wrap{margin-top:18px;padding:8px 16px;border-top:1px solid rgba(255,255,255,0.12);border-bottom:1px solid rgba(255,255,255,0.12)}
+.photo_load_wrap .pt_tx{margin-right:16px}
+.photo_load_wrap .pt_load{margin-right:16px;font-weight:bold}
+.photo_load_wrap .pt_tx,.photo_load_wrap .pt_load{font-size:13px;color:var(--color8);line-height:36px;}
+.photo_load_wrap .btn_del{border:0;width:18px;height:18px;background:url(../img/delete.png);text-indent:-9999px}
+
+
+
 
 

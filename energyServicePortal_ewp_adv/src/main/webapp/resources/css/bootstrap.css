@@ -6764,6 +6764,6 @@ button.close {
 @media (min-width: 1092px) {
 	.modal-dialog {width:1092px}
 	.spc_tbl02_row{overflow-x:visible}
-	
+	.modal-dialog.his_alarm{width:560px}
 }
 /*# sourceMappingURL=bootstrap.css.map */
