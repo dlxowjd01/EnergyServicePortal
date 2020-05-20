@@ -4,7 +4,8 @@
 	let today = new Date();
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
-	const spcId = '<c:out value="${param.spcId}" escapeXml="false" />';
+	const spcId = '<c:out value="${param.spc_id}" escapeXml="false" />';
+	const siteId = '<c:out value="${param.site_id}" escapeXml="false" />';
 
 	$(function () {
 
@@ -41,21 +42,19 @@
 				includeGens: true
 			}
 		}, setSpcGen);
-
-		tableData();
 	}
 
 	const tableData = function() {
-		let gen_id = $('#spcGen button').data('value');
-		let year = $('#year button').data('value');
+		let data = new Object();
+		if($('#spcGen button').data('value') != '') {
+			data.site_id = $('#spcGen button').data('value');
+		}
+		data.year = $('#year button').data('value');
 
 		callAjax({
 			url: 'http://iderms.enertalk.com:8443/spcs/${param.spc_id}/balance/month?oid=' + oid,
 			type: 'get',
-			data: {
-				site_id: gen_id,
-				yyyy: year
-			}
+			data: data
 		}, setTable);
 	}
 
@@ -81,7 +80,22 @@
 		});
 	}
 
+	const initTable = function() {
+		let balanceTr = $('#balanceTable tr');
+		balanceTr.each(function() {
+			let td = $(this).find('td');
+			td.each(function(a) {
+				if(a != 0) {
+					$(this).html('-');
+				}
+			});
+		});
+	}
+
 	const setTable = function (json) {
+
+		initTable();
+
 		let dataInfo = json.data;
 
 		$('[id^="loan_"]:not(:eq(0))').remove();
@@ -148,16 +162,22 @@
 		let siteList = data.data[0].spcGens;
 		let html = '';
 
-		$('#spcGen button').html('전체 <span class="caret"></span>').data('value', ''); //초기화
+		//$('#spcGen button').html('전체 <span class="caret"></span>').data('value', ''); //초기화
 
 		html += '<li data-value=""><a href="javascript:void(0);">전체</a></li>';
 		for (let i in siteList) {
 			let temp = siteList[i];
+			if(temp.gen_id == siteId) {
+				$('#spcGen button').html(temp.name +'<span class="caret"></span>').data('value', temp.gen_id);
+			}
 			html += '<li data-value="' + temp.gen_id + '"><a href="javascript:void(0);">' + temp.name + '</a></li>';
 		}
 
 		$('#spcGen ul').empty().append(html);
+
+		tableData();
 	}
+
 </script>
 
 <!-- Modal -->
@@ -167,7 +187,7 @@
 			<div class="ly_wrap">
 				<h2 class="ly_tit">SPC 원가관리 등록/수정 이력</h2>
 				<div class="spc_tbl ly_type">
-					<table>
+					<table id="hitoryTable">
 						<colgroup>
 							<col style="width:15%">
 							<col>

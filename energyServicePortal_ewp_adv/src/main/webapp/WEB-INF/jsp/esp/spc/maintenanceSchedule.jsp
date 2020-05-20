@@ -351,6 +351,7 @@
 
 	const modalPopInit = function (data) {
 		if (data == undefined) {
+			$('#registerModal .ly_tit').text('점검계획 등록');
 			//팝업 오픈시 value 초기화
 			$('#registerModal input').each(function () {
 				$(this).val('');
@@ -366,6 +367,7 @@
 			$('#registerModal .btn_wrap_type02 .btn_type').attr('onclick', 'maintenance(\'post\');').text('등록');
 
 		} else {
+			$('#registerModal .ly_tit').text('점검계획 수정');
 			setJsonAutoMapping(data[0], 'registerModal');
 			setJsonAutoMapping(JSON.parse(data[0].job_info), 'registerModal');
 
@@ -391,13 +393,13 @@
 	const job_Name = function (type) {
 		let rtn = '';
 		switch (type) {
-			case 1:
+			case '1':
 				rtn = '정기점검'
 				break;
-			case 2:
+			case '2':
 				rtn = '구조물 안전진단'
 				break;
-			case 3:
+			case '3':
 				rtn = '소방점검'
 				break;
 			default:

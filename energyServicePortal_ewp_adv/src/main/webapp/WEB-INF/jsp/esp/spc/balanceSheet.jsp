@@ -10,6 +10,14 @@
 		setInitList("listData"); //리스트초기화
 
 		getDataList();
+
+		$(document).on('click', '.dropdown li', function () {
+			let dataValue = $(this).data('value');
+			let dataText = $(this).text();
+			let id = $(this).parents('.dropdown').prop('id');
+
+			$(this).parents('.dropdown').find('button').html(dataText + '<span class="caret"></span>').data('value', dataValue);
+		});
 	});
 
 	function nvl(value, str){
@@ -32,7 +40,10 @@
 			url: "http://iderms.enertalk.com:8443/spcs/balance/year",
 			type: "get",
 			async: false,
-			data: {oid: oid},
+			data: {
+				oid: oid,
+				yyyy: $('#year button').data('value')
+			},
 			success: function (result) {
 				var jsonList = [],
 					keyWord = $("#key_word").val();
@@ -115,14 +126,15 @@
 		if(count == 0){
 			alert("수정 할 목록을 선택하세요.");
 			return;
+		} else if(count > 1){
+			alert("1개의 사업소에 대해서만 수정 가능합니다.");
+			return;
 		}
 
-		for(var i = 0; i < count; i++){
-			var rowData = checkDataList[i];
-			var locationUrl = '/spc/balanceSheetEdit.do?spc_id=' + rowData.spc_id +'&site_id=' + rowData.site_id +'&yyyymm=' + rowData.start_yyyymm;
+		var rowData = checkDataList[i];
+		var locationUrl = '/spc/balanceSheetEdit.do?spc_id=' + rowData.spc_id +'&site_id=' + rowData.site_id +'&yyyymm=' + rowData.start_yyyymm;
 
-			location.href = locationUrl;
-		}
+		location.href = locationUrl;
 	}
 
 	function deleteRow() {
@@ -174,14 +186,13 @@
 			<span class="tx_tit">기준</span>
 			<div class="sa_select">
 				<div class="dropdown" id="year">
-					<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">2020년
-						<span class="caret"></span>
+					<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown" data-value="2020">
+						2020년<span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
-						<li><a href="#">전체</a></li>
-						<li><a href="#">2020년</a></li>
-						<li><a href="#">2019년</a></li>
-						<li><a href="#">2018년</a></li>
+					<ul class="dropdown-menu chk_type" role="menu">
+						<li data-value="2020"><a href="#">2020년</a></li>
+						<li data-value="2019"><a href="#">2019년</a></li>
+						<li data-value="2018"><a href="#">2018년</a></li>
 					</ul>
 				</div>
 			</div>
@@ -192,7 +203,7 @@
 			</div>
 		</div>
 		<div class="fl">
-			<button type="submit" class="btn_type">검색</button>
+			<button type="button" class="btn_type" onclick="getDataList();">검색</button>
 		</div>
 		<div class="fr">
 			<a href="javascript:getCsvDown();" class="save_btn">CVS 다운로드</a>
@@ -228,7 +239,7 @@
 							<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="">
 							<label for="chk_op[INDEX]"><span></span>[INDEX]</label>
 						</td>
-						<td>[spc_name]</td>
+						<td><a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=&balance_yyyy=[balance_yyyy]" class="tbl_link">[spc_name]</a></td>
 						<td><a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=[site_id]&balance_yyyy=[balance_yyyy]" class="tbl_link">[name]</a></td>
 						<td>[start_yyyymm]</td>
 						<td class="right">-</td>

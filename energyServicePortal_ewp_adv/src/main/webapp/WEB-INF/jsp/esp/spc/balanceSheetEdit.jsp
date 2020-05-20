@@ -51,13 +51,7 @@
 		});
 
 		$('button.btn_clse').on('click', function() {
-			let tr = $(this).parents('tr.th_span');
-			tr.find(p.text).remove();
-			tr.find('label').show();
-			tr.find('input[type="file"]').show();
-
-			tr.find('input[$="_originalname"]').val('');
-			tr.find('input[$="_filedname"]').val('');
+			setDefaultFile($(this));
 		});
 
 		$(document).on('click', '.dropdown li', function () {
@@ -170,6 +164,7 @@
 		let dataList = json.data;
 		let balanceYear = new Array();
 
+		initTable();
 		if(dataList.length > 0) {
 			let setIndex = 0;
 
@@ -316,6 +311,17 @@
 		} else {
 			obj.find('ul').append('<li data-value="' + setVal + '" ><a href="javascript:void(0);">' + setVal +  suffix +'</a></li>');
 		}
+	}
+
+	const initTable = function() {
+		let balanceInput = $('#balanceTable input[type="text"]');
+		balanceInput.each(function() {
+			$(this).val('');
+		});
+
+		$('tr.interestTr:not(:eq(0))').remove();
+		setDefaultFile($('#income'));
+		setDefaultFile($('#taxAdjustment'));
 	}
 </script>
 <!-- 파일 업로드 폼 -->

@@ -4,21 +4,21 @@
 	let today = new Date();
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
+	let repeat_type_method = 'post';
+	let repeatCoastNumber = new Object();
 
 	$(function () {
-
-		$(document).on('keyup keypress keydown', 'input[type="text"]', function(){
+		$(document).on('keyup keypress keydown', 'input[type="text"]', function () {
 			let text = $(this).val().replace(/[^-0-9.]/gi, '');
-			if(isNaN(text)){
+			if (isNaN(text)) {
 				$(this).val('');
 			} else {
 				$(this).val(text);
 			}
-
 		});
 
 		// 유형 선택
-		$(document).on('click', ':radio[name^="contract_"]', function () {
+		$(document).on('click change', ':radio[name^="contract_"]', function () {
 			let idx = $(':radio[name^="contract_"][value=' + $(this).val() + ']').index($(this));
 			if ($(this).is(':checked')) {
 				$(':radio[name=' + $(this).prop('name') + ']').prop('checked', false);
@@ -86,11 +86,20 @@
 					}, setSitesMoney);
 
 				}
+
+				callAjax({
+					url: 'http://iderms.enertalk.com:8443/spcs/' + $('#spc button').data('value') + '/balance/repeat_cost',
+					type: 'get',
+					data: {
+						oid: oid,
+						site_id: $('#spcGen button').data('value')
+					}
+				}, setRepestCost);
 			}
 		});
 
 		//차입금/이자
-		$(document).on('keyup click', '[name^="principal_"], [name^="interestRate_"], :radio[name^="repayType"]', function () {
+		$(document).on('propertychange change keyup paste input', '[name^="principal_"], [name^="interestRate_"], :radio[name^="repayType"]', function () {
 			let inpName = $(this).prop('id').split('_');
 			let idx = $('[id^="' + inpName[0] + '_"]').index(this);
 			let loan = $('[name^="principal_"]').eq(idx).val().replace(/[^0-9.-]/g, '') //원금
@@ -138,7 +147,7 @@
 		});
 
 		//대리기관/관리운영 수수료 - 월정액
-		$(document).on('keyup', '[name^="grossPerMonth_"]', function () {
+		$(document).on('propertychange change keyup paste input', '[name^="grossPerMonth_"]', function () {
 			let inpName = $(this).prop('name').split('_');
 			let idx = $('[name^="' + inpName[0] + '_"]').index(this);
 			let grossPerMonth = $('[name^="grossPerMonth_"]').eq(idx).val().replace(/[^0-9.-]/g, '')
@@ -171,7 +180,7 @@
 		});
 
 		//대리기관/관리운영 수수료 - 매출(수익)연동
-		$(document).on('keyup', '[name^="salesRate_"], [name^="salesSupply_"]', function () {
+		$(document).on('propertychange change keyup paste input', '[name^="salesRate_"], [name^="salesSupply_"]', function () {
 			let inpName = $(this).prop('name').split('_');
 			let idx = $('[name^="' + inpName[0] + '_"]').index(this);
 			let salesRate = $('[name^="salesRate_"]').eq(idx).val().replace(/[^0-9.-]/g, '')
@@ -203,7 +212,7 @@
 		});
 
 		//수수료
-		$(document).on('keyup', '[name^="supply_"]', function () {
+		$(document).on('propertychange change keyup paste input', '[name^="supply_"]', function () {
 			let idx = $('[name^="supply_"]').index(this);
 			let thisVal = $(this).val().replace(/[^0-9.-]/g, '')
 
@@ -243,6 +252,29 @@
 			if (!$('#noteDown').is(':checked')) {
 				balanceSum();
 			}
+		});
+
+		$('input[type="file"]').on('change', function() {
+			let uuid = genUuid();
+			let thisId = $(this).prop('id');
+
+			$(this).clone().appendTo('#upload');
+			$('#upload').find('input').attr('name', uuid).attr('id', uuid);
+
+			callAjax({
+				type: 'post',
+				enctype: 'multipart/form-data',
+				url: 'http://iderms.enertalk.com:8443/files/upload?oid='+oid,
+				data: new FormData($('#upload')[0]),
+				processData: false,
+				contentType: false,
+				cache: false,
+				timeout: 600000
+			}, setUploadAfter, thisId);
+		});
+
+		$('button.btn_clse').on('click', function() {
+			setDefaultFile($(this));
 		});
 
 		pageInit();
@@ -365,10 +397,14 @@
 
 	const callAjax = function (option, callBack, param) {
 		$.ajax(option).done(function (data, textStatus, jqXHR) {
-			if(typeof callBack == 'function') {
-				callBack.call(this, data);
-			} else if(typeof callBack == 'string') {
-				eval(callBack+'("' + param +'")');
+			if (typeof callBack == 'function') {
+				if(param != undefined) {
+					callBack.call(this, data, param);
+				} else {
+					callBack.call(this, data);
+				}
+			} else if (typeof callBack == 'string') {
+				eval(callBack + '("' + param + '")');
 			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
@@ -437,9 +473,9 @@
 	}
 
 	//목록
-	// const list = function () {
-	// 	location.href = '/spc/balanceSheet.do';
-	// }
+	const list = function () {
+		location.href = '/spc/balanceSheet.do';
+	}
 
 	//등록
 	const register = function (param) {
@@ -448,52 +484,78 @@
 		let rtnObj = new Object();
 		let option = {};
 		let nextParam = '';
+		let emptyValue = false;
 
-		if(param == 'interest') {
+		if (param == 'interest') {
 			nextParam = 'service_charge';
-		} else if(param == 'service_charge') {
+		} else if (param == 'service_charge') {
 			nextParam = 'rent';
-		} else if(param == 'rent') {
+		} else if (param == 'rent') {
 			nextParam = 'balance';
-		} else if(param == 'balance') {
+		} else if (param == 'balance') {
 			nextParam = 'last';
-		} else if(param == 'last'){
+		} else if (param == 'last') {
 			nextParam = '';
-		} else {
-			alert('저장이 완료되었습니다');
-			list();
-			return false;
 		}
 
-		if(param == 'interest' || param == 'service_charge' || param == 'rent') {
+		if (param == 'interest' || param == 'service_charge' || param == 'rent') {
 			$('#' + param + 'Table tbody tr').each(function () {
 				let temp = new Object();
-				if($(this).find('input[type="radio"]:checked').length > 0) {
+				if ($(this).find('input[type="radio"]:checked').length > 0) {
 					temp[$(this).find('input[type="radio"]:checked').prop('name')] = $(this).find('input[type="radio"]:checked').val();
 				}
 				$(this).find('input[type="text"]').each(function () {
+					if ($(this).val() == '' && $(this).prop('readonly') == false) {
+						emptyValue = true;
+					}
 					temp[$(this).prop('name')] = $(this).val();
 				});
 
 				rtnArray.push(temp);
 			});
 
+			//항목이 미완성이면 굳이 저장하지 않는다.
+			if (emptyValue == true) {
+				register(nextParam);
+				return false;
+			}
+
+			let methodType = 'post';
+			let queryId = '';
 			let data = new Object();
 			data.site_id = $('#spcGen button').data('value');
 			data.repeat_type = param;
 			data.repeat_info = JSON.stringify(rtnArray);
 			data.updated_by = loginId;
+			if (repeat_type_method == 'patch' && repeatCoastNumber[param] != undefined) {
+				queryId = '&id=' + repeatCoastNumber[param];
+				methodType = repeat_type_method;
+			}
 
 			option = {
-				url: 'http://iderms.enertalk.com:8443/spcs/' + $('#spc button').data('value') + '/balance/repeat_cost?oid=' + oid,
-				type: 'post',
+				url: 'http://iderms.enertalk.com:8443/spcs/' + $('#spc button').data('value') + '/balance/repeat_cost?oid=' + oid + queryId,
+				type: methodType,
 				dataType: 'json',
 				contentType: "application/json",
 				traditional: true,
 				data: JSON.stringify(data)
 			}
-		} else if(param == 'balance') {
+		} else if (param == 'balance') {
 			$('#balanceTable input[type="text"]').each(function () {
+				if ($(this).val() == '') {
+					emptyValue = true;
+				}
+				rtnObj[$(this).prop('name')] = $(this).val();
+			});
+
+			//항목이 미완성이면 오류.
+			if (emptyValue == true) {
+				alert('월별 원가관리 항목에 빈값이 존재합니다.');
+				return false;
+			}
+
+			//첨부파일
+			$('#balanceTable input[type="hidden"]').each(function () {
 				rtnObj[$(this).prop('name')] = $(this).val();
 			});
 
@@ -510,24 +572,55 @@
 				data: JSON.stringify(data)
 			};
 		} else {
-			let data = new Object();
-			data.start_yyyymm = standard;
-			data.cash_in = Number($('#inflowOfCash').val().replace(/[^0-9.]/g, ''));
-			data.cash_out = Number($('#outflowOfCash').val().replace(/[^0-9.]/g, ''));
-			data.balance = Number($('#endOfTerm').val().replace(/[^0-9.]/g, ''));
-			data.updated_by = loginId
+			checkAfterSave();
+			return false;
+		}
 
-			option = {
+		callAjax(option, 'register', nextParam);
+	}
+
+	const checkAfterSave = function () {
+		let option = {
+			url: 'http://iderms.enertalk.com:8443/spcs/' + $('#spc button').data('value') + '/balance/year?oid=' + oid + '&site_id=' + $('#spcGen button').data('value') + '&yyyy=' + $('#year button').data('value'),
+			type: 'get',
+			dataType: 'json',
+			contentType: "application/json",
+			traditional: true
+		};
+
+		callAjax(option, checkAfterSaveCallBack);
+	}
+
+	const checkAfterSaveCallBack = function (data) {
+		if (data.data.length > 0) {
+			alert('저장이 완료 되었습니다.');
+			list();
+			return false;
+		} else {
+			let aJaxdata = new Object();
+			aJaxdata.start_yyyymm = standard;
+			aJaxdata.cash_in = Number($('#inflowOfCash').val().replace(/[^0-9.]/g, ''));
+			aJaxdata.cash_out = Number($('#outflowOfCash').val().replace(/[^0-9.]/g, ''));
+			aJaxdata.balance = Number($('#endOfTerm').val().replace(/[^0-9.]/g, ''));
+			aJaxdata.updated_by = loginId
+
+			let option = {
 				url: 'http://iderms.enertalk.com:8443/spcs/' + $('#spc button').data('value') + '/balance/year?oid=' + oid + '&site_id=' + $('#spcGen button').data('value') + '&yyyy=' + $('#year button').data('value'),
 				type: 'post',
 				dataType: 'json',
 				contentType: "application/json",
 				traditional: true,
-				data: JSON.stringify(data)
+				data: JSON.stringify(aJaxdata)
 			};
-		}
 
-		callAjax(option, 'register', nextParam);
+			callAjax(option, saveAfter);
+		}
+	}
+
+	const saveAfter = function () {
+		alert('저장이 완료 되었습니다.');
+		list();
+		return false;
 	}
 
 	const CalculateUtil = {
@@ -595,7 +688,202 @@
 			return repayment;
 		}
 	};
+
+	const setRepestCost = function (data) {
+		let dataList = data.data;
+
+		$('#interestTable tbody tr:not(:eq(0))').remove();
+		$('#rentTable tbody tr:not(:eq(0))').remove();
+		$('tr.interestTr:not(:eq(0))').remove();
+		$('#interestTable input, #rentTable input, #service_chargeTable input').each(function() {
+			if($(this).prop('type') == 'text') {
+				$(this).val('');
+			} else if($(this).prop('type') == 'radio') {
+				$(this).prop('checked', false);
+			}
+		});
+
+		if (dataList.length > 0) {
+			$.each(dataList, function (k, v) {
+				let repeatType = v.repeat_type, num = JSON.parse(v.repeat_info).length;
+				repeatCoastNumber[repeatType] = v.id;
+				if (repeatType != 'service_charge') {
+
+					for (let i = 1; i < num; i++) {
+						addRowTable(repeatType + 'Table');
+					}
+				}
+
+				setJsonAutoMapping(JSON.parse(v.repeat_info), repeatType + 'Table');
+			});
+
+			repeat_type_method = 'patch';
+			setAutoComplete();
+		} else {
+			repeat_type_method = 'post';
+		}
+	}
+
+	const setAutoComplete = function () {
+
+		$('#interestTable tbody tr').each(function (index) {
+			let loan = $(this).find('[name^="principal_"]').val().replace(/[^0-9.-]/g, '');
+			let payBalance = loan; //잔금
+			let loan_gumri = $(this).find('[name^="interestRate_"]').val().replace(/[^0-9.-]/g, '') //금리
+			let loan_type = $(this).find(':radio[name^="repayType"]:checked').val();//대출유형
+			let loan_period = $(this).find('[name^="period_"]').val(); //기간
+			let loan_term = 0;
+			let total_iza = 0;		//총이자
+			let iza = 0;	        //이자
+			let org_loan = 0;	    //납입원금
+			let repayment = 0;	    //상환금
+			let org_loan_tot = 0;	//납입원금 누계
+			let standard = $('#year button').data('value') + ('0' + $('#month button').data('value')).slice(-2);
+
+			if (loan_type != undefined && loan != '' && loan_period != '' && loan_gumri != '') {
+				loan_gumri = loan_gumri / 100;
+				for (let i = 0; i < loan_period; i++) {
+					let startDate = $(this).find('.fromDate').datepicker('getDate');
+					let loanDate = new Date(startDate.getFullYear(), startDate.getMonth() + i, startDate.getDate());
+					iza = CalculateUtil.getIza(loan_type, i, loan, loan_gumri, payBalance);
+					total_iza += iza;
+
+					if (loan_type == '3') {
+						repayment = CalculateUtil.getRepayment(loan_type, org_loan, iza, loan_gumri, loan_period, loan_term, loan, i);
+						if (i >= loan_term) {	//거치기간 후부터 계산
+							org_loan = CalculateUtil.getOrgLoan(loan_type, i, loan_period, loan, loan_term, repayment, iza);
+						}
+					} else {
+						if (i >= loan_term) {	//거치기간 후부터 계산
+							org_loan = CalculateUtil.getOrgLoan(loan_type, i, loan_period, loan, loan_term, repayment, iza);
+						}
+						repayment = CalculateUtil.getRepayment(loan_type, org_loan, iza, loan_gumri, loan_period, loan_term, loan, i);
+					}
+					org_loan_tot = org_loan_tot + org_loan;
+					payBalance = loan - org_loan_tot;
+
+					if (loanDate.format('yyyyMM') == standard) {
+						$('[name^="loan"]').eq(index).val(numberComma(Math.round(org_loan)));
+						$('[name^="interestCost"]').eq(index).val(Math.round(iza));
+					}
+				}
+			}
+		});
+
+		$('#service_chargeTable tbody tr').each(function (index) {
+
+			if ($(this).find('[name^="contract_"]:checked').val() == '1') {
+				let grossPerMonth = $(this).find('[name^="grossPerMonth_"]').prop('readonly', false).val().replace(/[^0-9.-]/g, '');
+
+				if (grossPerMonth != '' && grossPerMonth > 0) {
+					let surtax = (grossPerMonth * 0.1).toFixed(2);
+					let supplySum = (grossPerMonth * 1.1).toFixed(2);
+
+					$(this).find('[name^="grossPerMonth_"]').val(numberComma(grossPerMonth));
+					$(this).find('[name^="grossPerMonthSurtax_"]').val(numberComma(surtax));
+					$(this).find('[name^="grossPerMonthSumtax_"]').val(numberComma(supplySum));
+
+					if (index == 0) {
+						$('[name^="conversionCharge"]').eq(0).val(numberComma(supplySum));
+					} else {
+						$('[name^="managementCharge"]').eq(0).val(numberComma(supplySum));
+					}
+
+				} else {
+					$(this).find('[name^="grossPerMonthSurtax_"]').val('');
+					$(this).find('[name^="grossPerMonthSumtax_"]').val('');
+
+					if (index == 0) {
+						$('[name^="conversionCharge"]').eq(0).val('');
+					} else {
+						$('[name^="managementCharge"]').eq(0).val('');
+					}
+				}
+			} else if ($(this).find('[name^="contract_"]:checked').val() == '2') {
+				let salesRate = $(this).find('[name^="salesRate_"]').val().replace(/[^0-9.-]/g, '')
+				let salesSupply = $(this).find('[name^="salesSupply_"]').val().replace(/[^0-9.-]/g, '')
+
+				if (salesRate != '' && salesSupply != '' && salesSupply > 0) {
+					let surtax = ((salesSupply * salesRate) * 0.1).toFixed(2);
+					let supplySum = ((salesSupply * salesRate) * 1.1).toFixed(2);
+					$(this).find('[name^="salesSupply_"]').val(numberComma(salesSupply));
+					$(this).find('[name^="salesSupplySurtax_"]').val(numberComma(surtax));
+					$(this).find('[name^="salesSupplySumtax_"]').val(numberComma(supplySum));
+
+					if (index == 0) {
+						$('[name^="conversionCharge"]').eq(0).val(numberComma(supplySum));
+					} else {
+						$('[name^="managementCharge"]').eq(0).val(numberComma(supplySum));
+					}
+				} else {
+					$(this).find('[name^="salesSupplySurtax_"]').val('');
+					$(this).find('[name^="salesSupplySumtax_"]').val('');
+
+					if (index == 0) {
+						$('[name^="conversionCharge"]').eq(0).val('');
+					} else {
+						$('[name^="managementCharge"]').eq(0).val('');
+					}
+				}
+			}
+		});
+
+
+		$('#rentTable tbody tr').each(function (index) {
+			let thisVal = $(this).find('[name^="supply_"]').val().replace(/[^0-9.-]/g, '');
+
+			if (thisVal != '' && thisVal > 0) {
+				let surtax = (thisVal * 0.1).toFixed(2);
+				let supplySum = (thisVal * 1.1).toFixed(2);
+
+				$(this).find('[name^="supply_"]').val(numberComma(thisVal));
+				$(this).find('[name^="surtax_"]').val(numberComma(surtax));
+				$(this).find('[name^="supplySum_"]').val(numberComma(supplySum));
+			}
+
+			let sum = 0;
+			$('[name^="supplySum_"]').each(function () {
+				sum += Number($(this).val().replace(/[^0-9.]/g, ''));
+			});
+
+			if (sum > 0) {
+				$('#rental').val(numberComma(sum.toFixed(2)));
+			} else {
+				$('#rental').val('');
+			}
+		});
+		balanceSum();
+	}
+
+	const setUploadAfter = function(data, propName) {
+		if(data.files.length > 0) {
+			let prop = $('#'+propName);
+			prop.parents('tr').find('label').hide();
+			prop.parents('tr').find('.btn_clse').show();
+
+
+			let linkUrl = 'http://iderms.enertalk.com:8443/files/download/'+data.files[0].fieldname+'?oid='+oid + '&orgFilename' + data.files[0].originalname;
+			let linkTag = $('<a>').prop('href', linkUrl).html(data.files[0].originalname);
+			let pTag = $('<p>').addClass('tx_file').append(linkTag);
+			let inpOgin = $('<input>').prop('type', 'hidden').prop('id', propName + '_originalname').prop('name', propName + '_originalname').val(data.files[0].originalname);
+			let inpField = $('<input>').prop('type', 'hidden').prop('id', propName + '_fieldname').prop('name', propName + '_fieldname').val(data.files[0].fieldname);
+			prop.parent().append(pTag).append(inpOgin).append(inpField);
+		}
+	}
+
+	const setDefaultFile = function(obj) {
+		let tr = obj.parents('tr.th_span');
+		tr.find('p.tx_file').remove();
+		tr.find('label').show();
+		tr.find('button.btn_clse').hide();
+
+		tr.find('input[name$="_originalname"]').val('');
+		tr.find('input[name$="_fieldname"]').val('');
+	}
 </script>
+<!-- 파일 업로드 폼 -->
+<form id="upload" name="upload" method="multipart/form-data">
+</form>
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">원가관리 등록</h1>
@@ -710,7 +998,7 @@
 							</td>
 							<td>
 								<div class="tx_inp_type">
-									<input type="text" id="period_1" name="period_1" placeholder="직접 입력" readonly>
+									<input type="text" id="period_1" name="period_1" placeholder="자동 계산" readonly>
 								</div>
 							</td>
 							<td>
@@ -740,7 +1028,8 @@
 						</tbody>
 					</table>
 					<div class="btn_wrap_type">
-						<a href="javascript:void(0);" class="btn_add" onclick="addRowTable('interestTable'); return false;">추가</a>
+						<a href="javascript:void(0);" class="btn_add"
+						   onclick="addRowTable('interestTable'); return false;">추가</a>
 					</div>
 				</div>
 
@@ -936,7 +1225,7 @@
 						</colgroup>
 						<thead>
 						<tr>
-							<th>임차료</th>
+							<th>임대료</th>
 							<th>공급가액</th>
 							<th>부가세</th>
 							<th>합계</th>
@@ -1125,18 +1414,18 @@
 						</td>
 					</tr>
 					<tr class="th_span">
-						<th>
-							손익 계산서
-							<a href="javascript:void(0);" class="btn_add fr">추가</a>
-						</th>
-						<td colspan="3"></td>
+						<th>손익 계산서 <label for="income" class="btn_add fr">추가</label></th>
+						<td colspan="2">
+							<input type="file" id="income" name="income" class="uploadBtn" style="display:none;">
+						</td>
+						<td><button class="btn_clse" style="display:none;">삭제</button></td>
 					</tr>
 					<tr class="th_span">
-						<th>
-							세무 조정 계산
-							<a href="javascript:void(0);" class="btn_add fr">추가</a>
-						</th>
-						<td colspan="3"></td>
+						<th>세무 조정 계산<label for="taxAdjustment" class="btn_add fr">추가</label></th>
+						<td colspan="2">
+							<input type="file" id="taxAdjustment" name="taxAdjustment" class="uploadBtn" style="display:none;">
+						</td>
+						<td><button class="btn_clse" style="display:none;">삭제</button></td>
 					</tr>
 				</table>
 			</div>
