@@ -39,31 +39,37 @@
             <ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="type">
               <li>
                 <a href="#" tabindex="-1">
-                  <input type="checkbox" id="type_11" value="9" name="alarm">
+                  <input type="checkbox" id="type_10" value="9" name="alarm" checked>
                   <label for="type_11"><span></span>알수없음</label>
                 </a>
               </li>
               <li>
                 <a href="#" tabindex="-1">
-                  <input type="checkbox" id="type_12" value="1" name="alarm">
+                  <input type="checkbox" id="type_11" value="0" name="alarm" checked>
+                  <label for="type_11"><span></span>정보</label>
+                </a>
+              </li>
+              <li>
+                <a href="#" tabindex="-1">
+                  <input type="checkbox" id="type_12" value="1" name="alarm" checked>
                   <label for="type_11"><span></span>경고</label>
                 </a>
               </li>
               <li>
                 <a href="#" tabindex="-1">
-                  <input type="checkbox" id="type_13" value="2" name="alarm">
+                  <input type="checkbox" id="type_13" value="2" name="alarm" checked>
                   <label for="type_11"><span></span>이상</label>
                 </a>
               </li>
               <li>
                 <a href="#" tabindex="-1">
-                  <input type="checkbox" id="type_14" value="3" name="alarm">
+                  <input type="checkbox" id="type_14" value="3" name="alarm" checked>
                   <label for="type_11"><span></span>트립</label>
                 </a>
               </li>
               <li>
                 <a href="#" tabindex="-1">
-                  <input type="checkbox" id="type_15" value="4" name="alarm">
+                  <input type="checkbox" id="type_15" value="4" name="alarm" checked>
                   <label for="type_11"><span></span>정상</label>
                 </a>
               </li>
@@ -104,14 +110,14 @@
   <div class="col-lg-8">
     <div class="indiv">
       <div class="his_chart_top clear">
-        <div class="clear">d
+        <div class="clear">                                                                                                                       
           <h2 class="s_tit">알람 현황</h2>
         </div>
         <!-- 기본 항목 -->
         <div class="clear">
           <!-- 우측 항목 -->
           <div class="fr his_inp_bx">
-            <div class="rdo_type his_rdo_bx">
+            <div class="rdo_type his_rdo_bx" id="chartType">
 							<span>
 								<input type="radio" id="rdo03_1" name="radio" value="type" checked>
 								<label for="rdo03_1"><span></span>설비 타입</label>
@@ -292,9 +298,10 @@ const levelTemplate = {
 //			3: 'warning', 
 //			4: 'info'
 		9: '알수없음',
-		1: '중지',
-		2: '이상' ,
-		3: '경고', 
+		0: '정보',
+		1: '경고',
+		2: '이상',
+		3: '트립', 
 		4: '정상'
 };
 
@@ -343,6 +350,7 @@ $(function(){
 				$('#datepicker2').datepicker('setDate', 'today'); 
 			} else if($(this).data('value') == 'month') { //이번달
 				$('#datepicker1').datepicker('setDate', '-30'); 
+				$('#datepicker2').datepicker('setDate', 'today'); 
 		    }
 		}	
 	});
@@ -350,6 +358,10 @@ $(function(){
 	$('#search').on('click', function() {
     periodData();
     fetchCharts();
+	});
+	
+	$('#chartType input').on('click', function() {
+		fetchCharts();
 	});
 	//헤더 클릭
 	$('.his_tbl thead th').on('click', function (e) {
@@ -396,15 +408,15 @@ const deviceTypeList = function(){
 	
 	let str = '';
 	let sites = JSON.parse('${siteList}');
-	console.log(sites);
 	dataList = deviceType(sites);
 	const deviceTypes = dataList[0];
 	
 	deviceTypes.forEach((deviceTypes, index) => {
+		const deviceRender = eval('deviceTemplate.' + deviceTypes);
 		str += `<li>
 					<a href="#" data-value="${'${index}'}" tabindex="-1">
 						<input type="checkbox" id="${'${index}'}" value="${'${deviceTypes}'}" name="deviceType">
-						<label for="${'${index}'}"><span></span>${'${deviceTypes}'}</label>
+						<label for="${'${index}'}"><span></span>${'${deviceRender}'}</label>
 					</a>
 				</li>`;
 	});
@@ -424,7 +436,7 @@ const periodData = function(){
 	
 	$('.his_tbl tbody').empty();
 	s = dataList[1];
-	let siteArray = dataList[1];
+
 	let deviceArray = new Array();
 	let alarmArray = new Array();
 	$(':checkbox[name="deviceType"]:checked').each(function() {
@@ -436,7 +448,7 @@ const periodData = function(){
 	});
 	
 	let alarmData = {
-			sids: siteArray.join(','),
+			sids: s.join(','),
 //		    dids: deviceArray.join(','),
 	        deviceTypes: deviceArray.join(','),
 			startTime: $('#datepicker1').datepicker('getDate').format('yyyyMMdd') + '000000',
@@ -634,7 +646,7 @@ var fetchCharts = function () {
 	dataMap.set(s, data);
 	
 	let columnSeriesData = new Array();
-	let typeColorArr = [ '#CDE1F3', '#85B7E4', '#438FD7', '#9BF4CC', '#3EEA9C', '#13af67', '#438fd7', '#13af67', '#f75c4a', '#84848f', '#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787', '#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787'];
+	let typeColorArr = [ '#CDE1F3', '#009389', '#438FD7', '#9BF4CC', '#3EEA9C', '#13af67', '#438fd7', '#13af67', '#f75c4a', '#84848f', '#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787', '#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787'];
 	let alarmColorArr = [ '#438FD7', '#F75C4A', '#F49E34', '#84848F', '#438fd7', '#13af67', '#f75c4a', '#84848f', '#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787', '#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787'];
 	let colorArr = (gr_type == true) ? typeColorArr : alarmColorArr;
 
@@ -671,13 +683,7 @@ var fetchCharts = function () {
 				]);
 				
 				
-				vMap.set(key, arr);
-// 				if($(':radio[name="radio"]:checked').val() == 'alarm') {
-// 					vMap.set(levelTemplate[key], arr);
-// 				} else {
-// 					vMap.set(deviceTemplate[key], arr);
-// 				}
-				
+			vMap.set(key, arr);
 			
 			});
 		});	
@@ -686,6 +692,12 @@ var fetchCharts = function () {
 		vMap.forEach(function(val, key) {
 			var typeNm = key;
 			
+			$(':checkbox[name="'+chartTypeNm+'"]:checked').each(function() {
+				if(key == $(this).val()){ 
+					typeNm =  $(this).next('label').text()
+					console.log(typeNm);
+				}
+			});
 			let $temp = {
 					name: typeNm,
 					type: 'column',
