@@ -4,24 +4,23 @@
 	let today = new Date();
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
+	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
+	const loginMail = '<c:out value="${sessionScope.userInfo.contact_email}" escapeXml="false" />';
 	const siteList = JSON.parse('${siteList}');
 	const site_id = '<c:out value="${param.site_id}" escapeXml="false" />';
 	const spc_id = '<c:out value="${param.spc_id}" escapeXml="false" />';
+	let yyyymm = '<c:out value="${param.yyyymm}" escapeXml="false" />';
 
 	$(function () {
 
 		callAjax({
-			url: 'http://iderms.enertalk.com:8443/spcs/${param.spc_id}/balance/month?oid=' + oid + '&site_id=${param.site_id}&yyyymm=${param.yyyymm}',
-			type: 'get',
-		}, setTable);
-
-		callAjax({
-			url: 'http://iderms.enertalk.com:8443/spcs',
+			url: 'http://iderms.enertalk.com:8443/spcs/${param.spc_id}/balance/month',
 			type: 'get',
 			data: {
-				oid: oid
+				oid: oid,
+				site_id: site_id
 			}
-		}, setSpc);
+		}, setTable);
 
 		//수기 입력
 		$('#noteDown').on('click', function () {
@@ -50,33 +49,32 @@
 				timeout: 600000
 			}, setUploadAfter, thisId);
 		});
-	});
 
-	const setUploadAfter = function(data, propName) {
-		if(data.files.length > 0) {
-			let prop = $('#'+propName);
-			prop.parents('tr').find('label').hide();
-			prop.parents('tr').find('.btn_clse').show();
+		$('button.btn_clse').on('click', function() {
+			let tr = $(this).parents('tr.th_span');
+			tr.find(p.text).remove();
+			tr.find('label').show();
+			tr.find('input[type="file"]').show();
 
+			tr.find('input[$="_originalname"]').val('');
+			tr.find('input[$="_filedname"]').val('');
+		});
 
-			let linkUrl = 'http://iderms.enertalk.com:8443/files/download/'+data.files[0].filedname+'?oid='+oid+'&orgFilename='+encodeURI(data.files[0].originalname);
-			prop.next().find('a').prop('href', linkUrl).prop('target', '_blank').html(data.files[0].originalname);
+		$(document).on('click', '.dropdown li', function () {
+			let dataValue = $(this).data('value');
+			let dataText = $(this).text();
+			$(this).parents('.dropdown').find('button').html(dataText + '<span class="caret"></span>').data('value', dataValue);
 
-			let inpOgin = $('<input>').prop('type', 'hidden').prop('id', propName + '_originalname').prop('name', propName + '_originalname').val(data.files[0].originalname);
-			let inpField = $('<input>').prop('type', 'hidden').prop('id', propName + '_filedname').prop('name', propName + '_filedname').val(data.files[0].filedname);
-			prop.parent().append(inpOgin).append(inpField);
-		}
+			yyyymm = $('#year button').data('value') + ('0' + $('#month button').data('value')).slice(-2);
 
-		console.log(data);
-	}
-
-	const setSpc = function(data) {
-		let spcList = data.data;
-
-		spcList.some(function(v, k) {
-			if(v.spc_id == spc_id) {
-				$('#spc').text(v.name);
-			}
+			callAjax({
+				url: 'http://iderms.enertalk.com:8443/spcs/${param.spc_id}/balance/month',
+				type: 'get',
+				data: {
+					oid: oid,
+					site_id: site_id
+				}
+			}, setTable);
 		});
 
 		siteList.some(function(v, k) {
@@ -84,7 +82,7 @@
 				$('#spcGen').text(v.name);
 			}
 		});
-	}
+	});
 
 	const callAjax = function (option, callBack, param) {
 		$.ajax(option).done(function (data, textStatus, jqXHR) {
@@ -118,6 +116,10 @@
 			rtnObj[$(this).prop('name')] = $(this).val();
 		});
 
+		$('#balanceTable input[type="hidden"]').each(function () {
+			rtnObj[$(this).prop('name')] = $(this).val();
+		});
+
 		let data = new Object();
 		data.balance_info = JSON.stringify(rtnObj);
 		data.updated_by = loginId;
@@ -125,6 +127,30 @@
 		option = {
 			url: 'http://iderms.enertalk.com:8443/spcs/${param.spc_id}/balance/month?oid=' + oid + '&site_id=${param.site_id}&yyyymm=${param.yyyymm}',
 			type: 'patch',
+			dataType: 'json',
+			contentType: "application/json",
+			traditional: true,
+			data: JSON.stringify(data)
+		};
+
+		callAjax(option, saveHistory);
+	}
+
+	const saveHistory = function() {
+		let data = new Object();
+		data.ui_id = 1;
+		data.spc_id = Number(spc_id);
+		data.site_id = site_id;
+		data.changed_start = (new Date()).toISOString();
+		data.changed_end = (new Date()).toISOString();
+		data.contents = $('#year button').data('value') + '년' + $('#month button').data('value') + '월 SPC 원가 관리 정보 수정';
+		data.user_login_id = loginId;
+		data.user_name = loginName;
+		data.user_email = loginMail;
+
+		option = {
+			url: 'http://iderms.enertalk.com:8443/spcs/history?oid=' + oid,
+			type: 'post',
 			dataType: 'json',
 			contentType: "application/json",
 			traditional: true,
@@ -139,34 +165,157 @@
 		list();
 		return false;
 	}
-	const setTable = function (json) {
-		let balanceInfo = JSON.parse(json.data[0].balance_info);
 
-		let num = 0;
-		$.map(balanceInfo, function(v, k){
-			if(k.match('loan')) {
-				let keyName = k.split('_');
-				if(num < Number(keyName[1])) {
-					num = Number(keyName[1]);
+	const setTable = function (json) {
+		let dataList = json.data;
+		let balanceYear = new Array();
+
+		if(dataList.length > 0) {
+			let setIndex = 0;
+
+			//수정 가능한 월 리스트화
+			dataList.forEach(function(v, index) {
+				$.map(v, function(val, key) {
+					if(key.match('balance_yyyymm')) {
+						balanceYear.push(val);
+					}
+				});
+
+				if(v.balance_yyyymm == yyyymm) {
+					setIndex = index;
+				}
+			})
+			setBalanceYear(balanceYear);
+
+			$('#spc').text(json.data[setIndex].spc_name);
+			let balanceInfo = JSON.parse(json.data[setIndex].balance_info);
+			let income = new Object();
+			let taxAdjustment = new Object();
+
+			let num = 0;
+			$.map(balanceInfo, function(v, k){
+				if(k.match('loan')) {
+					let keyName = k.split('_');
+					if(num < Number(keyName[1])) {
+						num = Number(keyName[1]);
+					}
+				}
+
+				//세금계산서
+				if(k.match('income')) {
+					if(k.match('_fieldname')) {
+						income['fieldname'] = v;
+					} else {
+						income['originalname'] = v;
+					}
+				}
+
+				//
+				if(k.match('taxAdjustment')) {
+					if(k.match('_fieldname')) {
+						taxAdjustment['fieldname'] = v;
+					} else {
+						taxAdjustment['originalname'] = v;
+					}
+				}
+			});
+
+			if(num > 1) {
+				for(let i = 2; i <= num; i++) {
+					let tr = $('<tr>').addClass('interestTr');
+					tr.append('<th>차입금 상환(' + String.fromCharCode(num + 64) + ')</th>');
+					tr.append('<td>').find('td').append('<div>').find('div').addClass('tx_inp_type').addClass('read');
+					tr.find('div.tx_inp_type').append('<input type="text" id="loan_' + i + '" name="loan_' + i + '" placeholder="자동 입력" readonly>');
+					tr.append('<th>이자 비용(' + String.fromCharCode(num + 64) + ')</th>');
+					tr.append('<td>').find('td:eq(1)').append('<div>').find('div').addClass('tx_inp_type').addClass('read');
+					tr.find('div:eq(1).tx_inp_type').append('<input type="text" id="interestCost_' + i + '" name="interestCost_' + i + '" placeholder="자동 입력" readonly>');
+
+					$('tr.interestTr').eq($('tr.interestTr').length - 1).after(tr);
 				}
 			}
-		});
 
-		if(num > 1) {
-			for(let i = 2; i <= num; i++) {
-				let tr = $('<tr>').addClass('interestTr');
-				tr.append('<th>차입금 상환(' + String.fromCharCode(num + 64) + ')</th>');
-				tr.append('<td>').find('td').append('<div>').find('div').addClass('tx_inp_type').addClass('read');
-				tr.find('div.tx_inp_type').append('<input type="text" id="loan_' + i + '" name="loan_' + i + '" placeholder="자동 입력" readonly>');
-				tr.append('<th>이자 비용(' + String.fromCharCode(num + 64) + ')</th>');
-				tr.append('<td>').find('td:eq(1)').append('<div>').find('div').addClass('tx_inp_type').addClass('read');
-				tr.find('div:eq(1).tx_inp_type').append('<input type="text" id="interestCost_' + i + '" name="interestCost_' + i + '" placeholder="자동 입력" readonly>');
+			if(!isEmpty(income)) {
+				let file = new Object();
+				let fileArray = new Array();
 
-				$('tr.interestTr').eq($('tr.interestTr').length - 1).after(tr);
+				fileArray.push(income);
+				file['files'] = fileArray;
+				setUploadAfter(file, 'income');
+			} else {
+				setDefaultFile($('#income'));
 			}
-		}
 
-		setJsonAutoMapping(balanceInfo, 'balanceTable');
+			if(!isEmpty(taxAdjustment)) {
+				let file = new Object();
+				let fileArray = new Array();
+
+				fileArray.push(taxAdjustment);
+				file['files'] = fileArray;
+				setUploadAfter(file, 'taxAdjustment');
+			} else {
+				setDefaultFile($('#taxAdjustment'));
+			}
+
+			setJsonAutoMapping(balanceInfo, 'balanceTable');
+		}
+	}
+
+	const setUploadAfter = function(data, propName) {
+		if(data.files.length > 0) {
+			let prop = $('#'+propName);
+			prop.parents('tr').find('label').hide();
+			prop.parents('tr').find('.btn_clse').show();
+
+
+			let linkUrl = 'http://iderms.enertalk.com:8443/files/download/'+data.files[0].fieldname+'?oid='+oid + '&orgFilename' + data.files[0].originalname;
+			let linkTag = $('<a>').prop('href', linkUrl).html(data.files[0].originalname);
+			let pTag = $('<p>').addClass('tx_file').append(linkTag);
+			let inpOgin = $('<input>').prop('type', 'hidden').prop('id', propName + '_originalname').prop('name', propName + '_originalname').val(data.files[0].originalname);
+			let inpField = $('<input>').prop('type', 'hidden').prop('id', propName + '_fieldname').prop('name', propName + '_fieldname').val(data.files[0].fieldname);
+			prop.parent().append(pTag).append(inpOgin).append(inpField);
+		}
+	}
+
+	const setDefaultFile = function(obj) {
+		let tr = obj.parents('tr.th_span');
+		tr.find('p.tx_file').remove();
+		tr.find('label').show();
+		tr.find('button.btn_clse').hide();
+
+		tr.find('input[name$="_originalname"]').val('');
+		tr.find('input[name$="_fieldname"]').val('');
+	}
+
+	const setBalanceYear = function(balanceYear) {
+		balanceYear.forEach(function(v, idx) {
+			let year = v.substring(0 ,4);
+			let month = v.substring(4, 6);
+
+			setDropDownMenu($('#year'), year, '년');
+			setDropDownMenu($('#month'), month, '월');
+
+			if(v == yyyymm) {
+				$('#year button').html(year + '년 <span class="caret"></span>').data('value', year);
+				$('#month button').html(month + '월 <span class="caret"></span>').data('value', month);
+			}
+		});
+	}
+
+	const setDropDownMenu = function(obj, setVal, suffix) {
+		if(obj.find('li').length > 0) {
+			let dup = false;
+			obj.find('li').each(function() {
+				if($(this).data('value') == setVal) {
+					return dup = true;
+				}
+			});
+
+			if(!dup) {
+				obj.find('ul').append('<li data-value="' + setVal + '" ><a href="javascript:void(0);">' + setVal + suffix +'</a></li>');
+			}
+		} else {
+			obj.find('ul').append('<li data-value="' + setVal + '" ><a href="javascript:void(0);">' + setVal +  suffix +'</a></li>');
+		}
 	}
 </script>
 <!-- 파일 업로드 폼 -->
@@ -215,20 +364,22 @@
 					<div class="sa_select">
 						<div class="dropdown" id="year">
 							<button class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown">
-								${fn:substring(param.yyyymm, 0, 4)}년<span class="caret"></span>
+<%--								${fn:substring(param.yyyymm, 0, 4)}년--%>
+								<span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu chk_type" role="menu" id="type">
-								<li><a href="#">${fn:substring(param.yyyymm, 0, 4)}년</a></li>
+							<ul class="dropdown-menu chk_type" role="menu">
+<%--								<li><a href="javascript:void(0);">${fn:substring(param.yyyymm, 0, 4)}년</a></li>--%>
 							</ul>
 						</div>
 					</div>
 					<div class="sa_select">
 						<div class="dropdown" id="month">
 							<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
-								${fn:substring(param.yyyymm, 4, 6)}월<span class="caret"></span>
+<%--								${fn:substring(param.yyyymm, 4, 6)}월--%>
+								<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu chk_type" role="menu">
-								<li><a href="#">${fn:substring(param.yyyymm, 4, 6)}월</a></li>
+<%--								<li><a href="javascript:void(0);">${fn:substring(param.yyyymm, 4, 6)}월</a></li>--%>
 							</ul>
 						</div>
 					</div>
@@ -352,18 +503,24 @@
 						</td>
 					</tr>
 					<tr class="th_span">
-						<th>
-							손익 계산서
-							<a href="#" class="btn_add fr">추가</a>
-						</th>
-						<td colspan="3"></td>
+						<th>손익 계산서 <label for="income" class="btn_add fr">추가</label></th>
+						<td colspan="2">
+							<input type="file" id="income" name="income" class="uploadBtn" style="display:none;">
+							<p class="tx_file">
+								<a href="javascript:void(0);" class="filedown"></a>
+							</p>
+						</td>
+						<td><button class="btn_clse" style="display:none;">삭제</button></td>
 					</tr>
 					<tr class="th_span">
-						<th>
-							세무 조정 계산
-							<a href="#" class="btn_add fr">추가</a>
-						</th>
-						<td colspan="3"></td>
+						<th>세무 조정 계산<label for="taxAdjustment" class="btn_add fr">추가</label></th>
+						<td colspan="2">
+							<input type="file" id="taxAdjustment" name="taxAdjustment" class="uploadBtn" style="display:none;">
+							<p class="tx_file">
+								<a href="javascript:void(0);" class="filedown"></a>
+							</p>
+						</td>
+						<td><button class="btn_clse" style="display:none;">삭제</button></td>
 					</tr>
 				</table>
 			</div>
