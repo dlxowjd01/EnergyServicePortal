@@ -201,6 +201,17 @@
 				</div>
 				<div class="spc_tbl align_type">			
 					<table class="chk_type">
+						<colgroup>
+						<col style="width:10%">
+						<col style="width:10%">
+						<col style="width:10%">
+						<col style="width:10%">
+						<col style="width:10%">
+						<col style="width:6%">
+						<col style="width:12%">
+						<col style="width:13.6%">
+						<col>
+						</colgroup>
 						<thead>
 							<tr>
 								<th>
@@ -213,7 +224,8 @@
 								<th>적용기간</th>
 								<th>다운로드</th>
 								<th>보고서 생성 시간</th>
-								<th>발행자</th>
+								<th>보고서 확정</th>
+								<th>최종 작업자</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -228,6 +240,7 @@
 								<td>2020-03-01 ~ 2020-04-30</td>
 								<td onClick="location.href='http://iderms.enertalk.com:8443/report/site?reportNo=1&sid=fa313b15-1fe1-41e3-b592-5a739e3d9b37&month=2020-01'" ><button class="tx_file">EXCEL</button></td>
 								<td>2020-03-01 14:21</td>
+								<td>2020-04-01<button class="btn_file fr down">다운로드</button></td>
 								<td>발행 아이디</td>
 							</tr>
 							<tr>
@@ -241,6 +254,7 @@
 								<td>2020-03-01 ~ 2020-04-30</td>
 								<td onClick="location.href='http://iderms.enertalk.com:8443/report/site?reportNo=1&sid=0c7c90c6-9505-4f77-b42d-500c2879c689&month=2020-01'"><button class="tx_file">EXCEL</button></td>
 								<td>2020-03-01 14:21</td>
+								<td>2020-04-01<button class="btn_file fr down">다운로드</button></td>
 								<td>발행 아이디</td>
 							</tr>
 							<tr>
@@ -254,6 +268,7 @@
 								<td>2020-03-01 ~ 2020-04-30</td>
 								<td onClick="location.href='http://iderms.enertalk.com:8443/report/site?reportNo=1&sid=fa313b15-1fe1-41e3-b592-5a739e3d9b37&month=2020-02'"><button class="tx_file">EXCEL</button></td>
 								<td>2020-03-01 14:21</td>
+								<td>2020-04-01<button class="btn_file fr down">다운로드</button></td>
 								<td>발행 아이디</td>
 							</tr>
 							<tr>
@@ -267,6 +282,7 @@
 								<td>2020-03-01 ~ 2020-04-30</td>
 								<td onClick="location.href='http://iderms.enertalk.com:8443/report/site?reportNo=1&sid=0c7c90c6-9505-4f77-b42d-500c2879c689&month=2020-02'"><button class="tx_file">EXCEL</button></td>
 								<td>2020-03-01 14:21</td>
+								<td>확정 보고서 업로드<button class="btn_file fr up">다운로드</button></td>
 								<td>발행 아이디</td>
 							</tr>
 							<tr>
@@ -278,28 +294,10 @@
 								<td></td>
 								<td></td>
 								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
 								<td></td>
 							</tr>
 							<tr>
 								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
 								<td></td>
 								<td></td>
 								<td></td>
@@ -318,8 +316,32 @@
 								<td></td>
 								<td></td>
 								<td></td>
+								<td></td>
 							</tr>
 							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
 								<td></td>
 								<td></td>
 								<td></td>
