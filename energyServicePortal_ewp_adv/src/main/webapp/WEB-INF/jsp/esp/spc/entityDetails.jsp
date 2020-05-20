@@ -9,10 +9,11 @@
 <script>
 	$(function () {
 		init();
+		getGenData();
 		getDataSpcBasic();
 		getDataSpcGen();
 	});
-	
+
 	function init(){
 		setInitList("addList01");
 		setInitList("addList02");
@@ -21,7 +22,7 @@
 		setInitList("addList05");
 		setInitList("addList06");
 		setInitList("addList07");
-		
+
 		setInitList("addFileList01");
 		setInitList("addFileList02");
 		setInitList("addFileList03");
@@ -33,15 +34,15 @@
 		setInitList("addFileList09");
 		setInitList("addFileList10");
 	}
-	
+
 	function getAttachFileDisplay(attachement_info){
 		var spcId = "${param.spc_id}",
 			genId = "${param.gen_id}",
 			oid = "${param.oid}";
-		
+
 		var	addFileList01 = [],addFileList02 = [],addFileList03 = [],addFileList04 = [],addFileList05 = [],
 			addFileList06 = [],addFileList07 = [],addFileList08 = [],addFileList09 = [],addFileList10 = [];
-		
+
 		for(var i = 0, count = attachement_info.length; i < count; i++){
 			if(attachement_info[i].fieldname =="spc_file_01_" + spcId + "_" + genId){
 				addFileList01.push(attachement_info[i]);
@@ -64,8 +65,8 @@
 			}else if(attachement_info[i].fieldname =="spc_file_10_" + spcId + "_" + genId){
 				addFileList10.push(attachement_info[i]);
 			}
-		}	
-		
+		}
+
 		setMakeList(addFileList01, "addFileList01", {"dataFunction" : {}});
 		setMakeList(addFileList02, "addFileList02", {"dataFunction" : {}});
 		setMakeList(addFileList03, "addFileList03", {"dataFunction" : {}});
@@ -76,6 +77,25 @@
 		setMakeList(addFileList08, "addFileList08", {"dataFunction" : {}});
 		setMakeList(addFileList09, "addFileList09", {"dataFunction" : {}});
 		setMakeList(addFileList10, "addFileList10", {"dataFunction" : {}});
+	}
+
+	function getGenData(){
+		var genId = "${param.gen_id}";
+		$.ajax({
+			url: "http://iderms.enertalk.com:8443/config/sites/"+ genId,
+			type: "get",
+			async: false,
+			data: {},
+			success: function (json) {
+				$("#genName").text(json.name);
+				$("#countryValue").text("대한민국");
+				$("#sidoValue").text(json.location);
+				$("#address").text(json.address)
+			},
+			error: function (request, status, error) {
+
+			}
+		});
 	}
 
 	function getDataSpcBasic(){
@@ -90,7 +110,6 @@
 			success: function (json) {
 				if(json.data.length > 0){
 					setJsonAutoMapping(json.data[0], "spc_info");
-					setJsonAutoMapping(JSON.parse(json.data[0].spc_info), "spc_info");
 				}else{
 					alert("등록된 데이터가 없습니다.");
 				}
@@ -113,7 +132,6 @@
 			data: {"oid" : oid},
 			success: function (json) {
 				if(json.data.length > 0){
-					$("#발전소명").text(json.data[0].name);
 					setJsonAutoMapping(JSON.parse(json.data[0].contract_info), "contract_info");
 					setJsonAutoMapping(JSON.parse(json.data[0].device_info), "device_info");
 					setJsonAutoMapping(JSON.parse(json.data[0].finance_info), "finance_info");
@@ -121,7 +139,7 @@
 					setJsonAutoMapping(JSON.parse(json.data[0].coefficient_info), "coefficient_info");
 					setJsonAutoMapping(JSON.parse(json.data[0].contact_info), "contact_info");
 					getAttachFileDisplay(JSON.parse(json.data[0].attachement_info));
-					
+
 					var device_info = JSON.parse(json.data[0].device_info);
 					setMakeList(device_info["addList01"], "addList01", {"dataFunction" : {}});
 					setMakeList(device_info["addList02"], "addList02", {"dataFunction" : {}});
@@ -130,7 +148,7 @@
 					setMakeList(device_info["addList05"], "addList05", {"dataFunction" : {}});
 					setMakeList(device_info["addList06"], "addList06", {"dataFunction" : {}});
 					setMakeList(device_info["addList07"], "addList07", {"dataFunction" : {}});
-					
+
 				}else{
 					alert("등록된 데이터가 없습니다.");
 				}
@@ -172,14 +190,14 @@
 						<th>SPC명</th>
 						<td id="name"></td>
 						<th>발전소명</th>
-						<td id="발전소명"></td>
+						<td id="genName"></td>
 					</tr>
 					<tr>
 						<th>주소</th>
 						<td>
 							<span id="countryValue"></span>
 							<span id="sidoValue"></span>
-							<span id="상세_주소"></span>
+							<span id="address"></span>
 						</td>
 						<th></th>
 						<td></td>

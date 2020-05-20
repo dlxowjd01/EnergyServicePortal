@@ -9,17 +9,9 @@
 <script>
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
-	var countryList = [{"value" : "대한민국"},{"value" : "미국"},{"value" : "일본"},{"value" : "칠레"}];
-	var sidoList = [
-		{"value" :"서울특별시"},{"value" :"부산광역시"},{"value" :"대구광역시"},{"value" :"인천광역시"},{"value" :"광주광역시"},
-		{"value" :"울산광역시"},{"value" :"경기도"},{"value" :"강원도"},{"value" :"충청북도"},{"value" :"충청남도"},
-		{"value" :"전라북도"},{"value" :"전라남도"},{"value" :"경상북도"},{"value" :"경상남도"},{"value" :"제주도"}
-	];
-	
+
 	$(function () {
 		initProcess();
-		$("#countryList").on("click", "li", conntryListChange);
-		$("#sidoList").on("click", "li", sidoListChange);
 		$("#unitPriceList").on("click", "li", unitPriceListChange);
 	});
 
@@ -31,11 +23,10 @@
 
 	function initProcess(){
 		initAddListHtml(); //추가 기능 관련 초기화
-		setComboBoxData(); //시도 설정
 		getSpcAndGenData(); //저장되어있는 spc정보조회
 	}
-	
-	function initAddListHtml(){	
+
+	function initAddListHtml(){
 		$("#addList01").data("form", $("#addList01").html()).data("count", ($("#addList01").html().match(/input/g) || []).length);
 		$("#addList02").data("form", $("#addList02").html()).data("count", ($("#addList02").html().match(/input/g) || []).length);
 		$("#addList03").data("form", $("#addList03").html()).data("count", ($("#addList03").html().match(/input/g) || []).length);
@@ -43,7 +34,7 @@
 		$("#addList05").data("form", $("#addList05").html()).data("count", ($("#addList05").html().match(/input/g) || []).length);
 		$("#addList06").data("form", $("#addList06").html()).data("count", ($("#addList06").html().match(/input/g) || []).length);
 		$("#addList07").data("form", $("#addList07").html()).data("count", ($("#addList07").html().match(/input/g) || []).length);
-		
+
 		setInitList("fileList01");
 		setInitList("fileList02");
 		setInitList("fileList03");
@@ -53,8 +44,8 @@
 		setInitList("fileList07");
 		setInitList("fileList08");
 		setInitList("fileList09");
-		setInitList("fileList10");		
-		
+		setInitList("fileList10");
+
 		$("#addFileList01").data("form", $("#addFileList01").html());
 		$("#addFileList02").data("form", $("#addFileList02").html());
 		$("#addFileList03").data("form", $("#addFileList03").html());
@@ -64,17 +55,17 @@
 		$("#addFileList07").data("form", $("#addFileList07").html());
 		$("#addFileList08").data("form", $("#addFileList08").html());
 		$("#addFileList09").data("form", $("#addFileList09").html());
-		$("#addFileList10").data("form", $("#addFileList10").html());		
-	}	
-	
+		$("#addFileList10").data("form", $("#addFileList10").html());
+	}
+
 	function getAttachFileDisplay(attachement_info){
 		var spcId = "${param.spc_id}",
 			genId = "${param.gen_id}",
 			oid = "${param.oid}";
-		
+
 		var	addFileList01 = [],addFileList02 = [],addFileList03 = [],addFileList04 = [],addFileList05 = [],
 			addFileList06 = [],addFileList07 = [],addFileList08 = [],addFileList09 = [],addFileList10 = [];
-		
+
 		for(var i = 0, count = attachement_info.length; i < count; i++){
 			if(attachement_info[i].fieldname =="spc_file_01_" + spcId + "_" + genId){
 				addFileList01.push(attachement_info[i]);
@@ -97,8 +88,8 @@
 			}else if(attachement_info[i].fieldname =="spc_file_10_" + spcId + "_" + genId){
 				addFileList10.push(attachement_info[i]);
 			}
-		}	
-		
+		}
+
 		setMakeList(addFileList01, "fileList01", {"dataFunction" : {}});
 		setMakeList(addFileList02, "fileList02", {"dataFunction" : {}});
 		setMakeList(addFileList03, "fileList03", {"dataFunction" : {}});
@@ -109,10 +100,17 @@
 		setMakeList(addFileList08, "fileList08", {"dataFunction" : {}});
 		setMakeList(addFileList09, "fileList09", {"dataFunction" : {}});
 		setMakeList(addFileList10, "fileList10", {"dataFunction" : {}});
-	}	
-	
+	}
+
+	function setRemoveFileList(fileId, idx){
+		var jsonList =  $("#"+fileId).data("gridJsonData");
+
+		jsonList.splice(idx, 1);
+		setMakeList(jsonList, fileId, {"dataFunction" : {}});
+	}
+
 	function addList(addId){
-		var $selecter = $("#" + addId);	
+		var $selecter = $("#" + addId);
 		$selecter.append($selecter.data("form"));
 	}
 
@@ -121,7 +119,7 @@
 			$selecter = $("#" + addId),
 			rowInputCount = $selecter.data("count"),
 			allInputCount = $selecter.find("input[type='text']").length;
-		
+
 		for(var i = 0, count = allInputCount / rowInputCount; i < count; i++){
 			var rowData = {};
 			for(var j = i*rowInputCount; j < i * rowInputCount + rowInputCount; j++){
@@ -130,51 +128,31 @@
 			}
 			param.push(rowData);
 		}
-		
+
 		return param;
 	}
-	
+
 	function getAddListDisplay(addId, jsonData){
 		var $selecter = $("#" + addId),
 			rowInputCount = $selecter.data("count");
-		
+
 		for(var i = 0 , count = jsonData.length; i < count; i++){
 			var rowData = jsonData[i];
 			for(var key in rowData){
 				$("input[name='"+ key +"']").eq(i).val(rowData[key]);
 			}
-			
+
 			if(i != count -1 ){
-				addList(addId);	//행추가	
+				addList(addId);	//행추가
 			}
-		}		
-	}
-
-	function conntryListChange(){
-		var txt = $(this).find("a").text(),
-			idx = $("#countryList").find("li").index(this);
-
-		if( txt != "대한민국"){
-			setMakeList([], "sidoList", {"dataFunction" : {}});
-		}else{
-			setMakeList(sidoList, "sidoList", {"dataFunction" : {}});
 		}
-
-		$("#countryValue").val(txt);
 	}
 
-	function sidoListChange(){
-		var txt = $(this).find("a").text(),
-			idx = $("#sidoList").find("li").index(this);
-
-		$("#sidoValue").val(txt);
-	}
-	
 	function unitPriceListChange(){
 		var txt = $(this).find("a").text(),
-		idx = $("#unitPriceList").find("li").index(this);
+			idx = $("#unitPriceList").find("li").index(this);
 
-		$("#기준_단가").val(txt);	
+		$("#기준_단가").val(txt);
 	}
 
 	function setDropDownValue(id, data){
@@ -184,9 +162,9 @@
 				$selecter.parents('.dropdown').find('button').html(data + '<span class="caret"></span>').data('value', data);
 				return false;
 			}
-		});	
-	}	
-	
+		});
+	}
+
 	function getSpcAndGenData(){
 		var spcId = "${param.spc_id}",
 			genId = "${param.gen_id}";
@@ -199,10 +177,24 @@
 			success: function (json) {
 				if(json.data.length > 0){
 					setJsonAutoMapping(json.data[0], "spc_info");
-					setJsonAutoMapping(JSON.parse(json.data[0].spc_info), "spc_info");
-					setDropDownValue("countryList", JSON.parse(json.data[0].spc_info)["countryValue"]);
-					setDropDownValue("sidoList", JSON.parse(json.data[0].spc_info)["sidoValue"]);					
 				}
+			},
+			error: function (request, status, error) {
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			}
+		});
+
+		$.ajax({
+			url: "http://iderms.enertalk.com:8443/config/sites/"+ genId,
+			type: "get",
+			async: false,
+			data: {},
+			success: function (json) {
+				$("#genName").text(json.name);
+				$("#countryValue").text("대한민국");
+				$("#sidoValue").text(json.location);
+				$("#address").text(json.address)
 			},
 			error: function (request, status, error) {
 				alert('처리 중 오류가 발생했습니다.');
@@ -217,7 +209,6 @@
 			data: {"oid": oid},
 			success: function (json) {
 				if(json.data.length > 0){
-					$("#genName").val(json.data[0].name);
 					setJsonAutoMapping(JSON.parse(json.data[0].contract_info), "contract_info");
 					setJsonAutoMapping(JSON.parse(json.data[0].device_info), "device_info");
 					setJsonAutoMapping(JSON.parse(json.data[0].finance_info), "finance_info");
@@ -225,9 +216,9 @@
 					setJsonAutoMapping(JSON.parse(json.data[0].coefficient_info), "coefficient_info");
 					setJsonAutoMapping(JSON.parse(json.data[0].contact_info), "contact_info");
 					getAttachFileDisplay(JSON.parse(json.data[0].attachement_info));
-					
+
 					setDropDownValue("unitPriceList", JSON.parse(json.data[0].warranty_info)["기준_단가"]);
-					
+
 					var device_info = JSON.parse(json.data[0].device_info);
 					getAddListDisplay("addList01", device_info["addList01"]);
 					getAddListDisplay("addList02", device_info["addList02"]);
@@ -245,22 +236,12 @@
 		});
 	}
 
-	function setComboBoxData(){
-		setInitList("countryList");
-		setMakeList(countryList, "countryList", {"dataFunction" : {}});
-
-		setInitList("sidoList");
-		setMakeList(sidoList, "sidoList", {"dataFunction" : {}});
-	}
-
 	function setSaveData(){
-		alert("[임시]파일 수정 관련 API 확인 중 그외는 개발완료");
 		sendSpcPatchPost();
 	}
 
 	function sendSpcPatchPost(){
-		var spcId = "${param.spc_id}",
-			spc_info = setAreaParamData("spc_info");
+		var spcId = "${param.spc_id}";
 
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/spcs/"+ spcId + "?oid="+oid,
@@ -270,11 +251,11 @@
 			contentType: "application/json",
 			data: JSON.stringify({
 				"name": $("#name").val(),
-				"spc_info" : JSON.stringify(spc_info),
+				"spc_info" : "",
 				"updated_by" : loginId
 			}),
 			success: function (json) {
-				sendSpcGenPatchPost();
+				sendSpcAttchFilePost();
 			},
 			error: function (request, status, error) {
 				alert('처리 중 오류가 발생했습니다.');
@@ -283,7 +264,45 @@
 		});
 	}
 
-	function sendSpcGenPatchPost(){
+	function sendSpcAttchFilePost(){
+		var spcId = "${param.spc_id}",
+			genId = "${param.gen_id}";
+
+		$("#attachement_info").find("input[type=file]").each(function(){
+			$(this).attr("name", this.name + "_" + spcId +"_" + genId);
+		});
+
+		$.ajax({
+			type: 'patch',
+			enctype: 'multipart/form-data',
+			url: 'http://iderms.enertalk.com:8443/files/upload?oid='+oid,
+			data: new FormData($('#attachement_info')[0]),
+			processData: false,
+			contentType: false,
+			cache: false,
+			timeout: 600000,
+			success: function (result) {
+				var existFileList =
+					$("#fileList01").data("gridJsonData")
+					.concat($("#fileList02").data("gridJsonData"))
+					.concat($("#fileList03").data("gridJsonData"))
+					.concat($("#fileList04").data("gridJsonData"))
+					.concat($("#fileList05").data("gridJsonData"))
+					.concat($("#fileList06").data("gridJsonData"))
+					.concat($("#fileList07").data("gridJsonData"))
+					.concat($("#fileList08").data("gridJsonData"))
+					.concat($("#fileList09").data("gridJsonData"))
+					.concat($("#fileList10").data("gridJsonData"));
+
+				sendSpcGenPatchPost(existFileList.concat(result.files));
+			},
+			error: function (request, status, error) {
+				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+			}
+		});
+	}
+
+	function sendSpcGenPatchPost(files){
 		var spcId = "${param.spc_id}",
 			genId = "${param.gen_id}";
 
@@ -293,16 +312,16 @@
 			warranty_info = setAreaParamData("warranty_info"),
 			coefficient_info = setAreaParamData("coefficient_info"),
 			contact_info = setAreaParamData("contact_info"),
-			attachement_info = setAreaParamData("attachement_info");
-		
+			attachement_info = files;
+
 		device_info["addList01"] = setAddListParam("addList01");
 		device_info["addList02"] = setAddListParam("addList02");
 		device_info["addList03"] = setAddListParam("addList03");
 		device_info["addList04"] = setAddListParam("addList04");
 		device_info["addList05"] = setAddListParam("addList05");
 		device_info["addList06"] = setAddListParam("addList06");
-		device_info["addList07"] = setAddListParam("addList07");		
-		
+		device_info["addList07"] = setAddListParam("addList07");
+
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/spcs/" + spcId +"/gens/" + genId + "?oid=" + oid,
 			type: "patch",
@@ -365,36 +384,15 @@
 							</div>
 						</td>
 						<th>발전소명</th>
-						<td class="group_type03">
-							<div class="tx_inp_type edit">
-								<input type="text" id="genName" placeholder="발전소명 입력">
-							</div>
+						<td class="group_type03" id="genName">
 						</td>
 					</tr>
 					<tr>
 						<th>주소</th>
-						<td colspan="3" class="group_type03">
-							<div class="dropdown placeholder edit">
-								<button id="country" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택
-									<span class="caret"></span>
-								</button>
-								<ul id="countryList" class="dropdown-menu" role="menu">
-									<li><a href="javascript:void();">[value]</a></li>
-								</ul>
-							</div>
-							<div class="dropdown placeholder edit">
-								<button id="sido" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택
-									<span class="caret"></span>
-								</button>
-								<ul id="sidoList" class="dropdown-menu" role="menu">
-									<li><a href="javascript:void();">[value]</a></li>
-								</ul>
-							</div>
-							<div class="tx_inp_type edit">
-								<input type="hidden" id="countryValue" value="">
-								<input type="hidden" id="sidoValue" value="">
-								<input type="text" id="상세_주소" placeholder="상세 주소">
-							</div>
+						<td class="group_type03">
+							<span id="countryValue"></span>
+							<span id="sidoValue"></span>
+							<span id="address"></span>
 						</td>
 					</tr>
 				</table>
@@ -1006,124 +1004,154 @@
 			</div>
 		</div>
 		<form id="attachement_info" name="attachement_info">
-		<div class="indiv mt25">
-			<div class="tbl_top">
-				<h2 class="ntit mt25">첨부 파일</h2>
+			<div class="indiv mt25">
+				<div class="tbl_top">
+					<h2 class="ntit mt25">첨부 파일</h2>
+				</div>
+				<div class="spc_tbl_row">
+					<table>
+						<colgroup>
+							<col style="width:15%">
+							<col style="width:20%">
+							<col>
+						</colgroup>
+						<tr>
+							<th class="th_type">현장 사진<a href="javascript:addList('addFileList01')" class="btn_add fr">추가</a></th>
+							<td>
+								<div id="fileList01">
+									<p class="tx_file">
+										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<button class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
+									</p>
+								</div>
+								<div id="addFileList01"><input name="spc_file_01" type="file" accept=".gif, .jpg, .png"></div>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<th>수배전반<a href="javascript:addList('addFileList02')" class="btn_add fr">추가</a></th>
+							<td>
+								<div id="fileList02">
+									<p class="tx_file">
+										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<button class="btn_type07" onclick="setRemoveFileList('fileList02', [INDEX]);">삭제</button>
+									</p>
+								</div>
+								<div id="addFileList02"><input name="spc_file_02" type="file" ></div>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<th>케이블<a href="javascript:addList('addFileList03')" class="btn_add fr">추가</a></th>
+							<td>
+								<div id="fileList03">
+									<p class="tx_file">
+										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<button class="btn_type07" onclick="setRemoveFileList('fileList03', [INDEX]);">삭제</button>
+									</p>
+								</div>
+								<div id="addFileList03"><input name="spc_file_03" type="file" ></div>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<th>모듈<a href="javascript:addList('addFileList04')" class="btn_add fr">추가</a></th>
+							<td>
+								<div id="fileList04">
+									<p class="tx_file">
+										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<button class="btn_type07" onclick="setRemoveFileList('fileList04', [INDEX]);">삭제</button>
+									</p>
+								</div>
+								<div id="addFileList04"><input name="spc_file_04" type="file" ></div>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<th>인버터<a href="javascript:addList('addFileList05')" class="btn_add fr">추가</a></th>
+							<td>
+								<div id="fileList05">
+									<p class="tx_file">
+										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<button class="btn_type07" onclick="setRemoveFileList('fileList05', [INDEX]);">삭제</button>
+									</p>
+								</div>
+								<div id="addFileList05"><input name="spc_file_05" type="file" ></div>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<th>결선도<a href="javascript:addList('addFileList06')" class="btn_add fr">추가</a></th>
+							<td>
+								<div id="fileList06">
+									<p class="tx_file">
+										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<button class="btn_type07" onclick="setRemoveFileList('fileList06', [INDEX]);">삭제</button>
+									</p>
+								</div>
+								<div id="addFileList06"><input name="spc_file_06" type="file" ></div>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<th>토목<a href="javascript:addList('addFileList07')" class="btn_add fr">추가</a></th>
+							<td>
+								<div id="fileList07">
+									<p class="tx_file">
+										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<button class="btn_type07" onclick="setRemoveFileList('fileList07', [INDEX]);">삭제</button>
+									</p>
+								</div>
+								<div id="addFileList07"><input name="spc_file_07" type="file" ></div>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<th>구조물<a href="javascript:addList('addFileList08')" class="btn_add fr">추가</a></th>
+							<td>
+								<div id="fileList08">
+									<p class="tx_file">
+										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<button class="btn_type07" onclick="setRemoveFileList('fileList08', [INDEX]);">삭제</button>
+									</p>
+								</div>
+								<div id="addFileList08"><input name="spc_file_08" type="file" ></div>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<th>접속반<a href="javascript:addList('addFileList09')" class="btn_add fr">추가</a></th>
+							<td>
+								<div id="fileList09">
+									<p class="tx_file">
+										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<button class="btn_type07" onclick="setRemoveFileList('fileList09', [INDEX]);">삭제</button>
+									</p>
+								</div>
+								<div id="addFileList09"><input name="spc_file_09" type="file" ></div>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<th>기타설비<a href="javascript:addList('addFileList10')" class="btn_add fr">추가</a></th>
+							<td>
+								<div id="fileList10">
+									<p class="tx_file">
+										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<button class="btn_type07" onclick="setRemoveFileList('fileList10', [INDEX]);">삭제</button>
+									</p>
+								</div>
+								<div id="addFileList10"><input name="spc_file_10" type="file" ></div>
+							</td>
+							<td></td>
+						</tr>
+					</table>
+				</div>
+				<div class="btn_wrap_type02">
+					<button type="button" class="btn_type03" onclick="goMoveList();">목록</button>
+					<button type="button" class="btn_type" onclick="setSaveData();">수정</button>
+				</div>
 			</div>
-			<div class="spc_tbl_row">
-				<table>
-					<colgroup>
-						<col style="width:15%">
-						<col style="width:20%">
-						<col>
-					</colgroup>
-					<tr>
-						<th class="th_type">현장 사진<a href="javascript:addList('addFileList01')" class="btn_add fr">추가</a></th>
-						<td>
-							<div id="fileList01">
-								<p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p>
-							</div>
-							<div id="addFileList01"><input name="spc_file_01" type="file" accept=".gif, .jpg, .png"></div>							
-						</td>
-						<td></td>
-					</tr>
-					<tr>
-						<th>수배전반<a href="javascript:addList('addFileList02')" class="btn_add fr">추가</a></th>
-						<td>
-							<div id="fileList02">
-								<p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p>
-							</div>	
-							<div id="addFileList02"><input name="spc_file_02" type="file" ></div>					
-						</td>
-						<td></td>
-					</tr>
-					<tr>
-						<th>케이블<a href="javascript:addList('addFileList03')" class="btn_add fr">추가</a></th>
-						<td>
-							<div id="fileList03">
-								<p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p>
-							</div>	
-							<div id="addFileList03"><input name="spc_file_03" type="file" ></div>
-						</td>	
-						<td></td>
-					</tr>
-					<tr>
-						<th>모듈<a href="javascript:addList('addFileList04')" class="btn_add fr">추가</a></th>
-						<td>
-							<div id="fileList04">
-								<p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p>
-							</div>	
-							<div id="addFileList04"><input name="spc_file_04" type="file" ></div>
-						</td>	
-						<td></td>
-					</tr>
-					<tr>
-						<th>인버터<a href="javascript:addList('addFileList05')" class="btn_add fr">추가</a></th>
-						<td>
-							<div id="fileList05">
-								<p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p>
-							</div>	
-							<div id="addFileList05"><input name="spc_file_05" type="file" ></div>
-						</td>	
-						<td></td>
-					</tr>
-					<tr>
-						<th>결선도<a href="javascript:addList('addFileList06')" class="btn_add fr">추가</a></th>
-						<td>
-							<div id="fileList06">
-								<p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p>
-							</div>	
-							<div id="addFileList06"><input name="spc_file_06" type="file" ></div>
-						</td>	
-						<td></td>
-					</tr>
-					<tr>
-						<th>토목<a href="javascript:addList('addFileList07')" class="btn_add fr">추가</a></th>
-						<td>
-							<div id="fileList07">
-								<p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p>
-							</div>	
-							<div id="addFileList07"><input name="spc_file_07" type="file" ></div>
-						</td>	
-						<td></td>
-					</tr>
-					<tr>
-						<th>구조물<a href="javascript:addList('addFileList08')" class="btn_add fr">추가</a></th>
-						<td>
-							<div id="fileList08">
-								<p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p>
-							</div>	
-							<div id="addFileList08"><input name="spc_file_08" type="file" ></div>
-						</td>	
-						<td></td>
-					</tr>
-					<tr>
-						<th>접속반<a href="javascript:addList('addFileList09')" class="btn_add fr">추가</a></th>
-						<td>
-							<div id="fileList09">
-								<p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p>
-							</div>	
-							<div id="addFileList09"><input name="spc_file_09" type="file" ></div>
-						</td>	
-						<td></td>
-					</tr>
-					<tr>
-						<th>기타설비<a href="javascript:addList('addFileList10')" class="btn_add fr">추가</a></th>
-						<td>
-							<div id="fileList10">
-								<p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p>
-							</div>	
-							<div id="addFileList10"><input name="spc_file_10" type="file" ></div>
-						</td>	
-						<td></td>
-					</tr>
-				</table>
-			</div>
-			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" onclick="goMoveList();">목록</button>
-				<button type="button" class="btn_type" onclick="setSaveData();">수정</button>
-			</div>
-		</div>
 		</form>
 	</div>
 </div>
