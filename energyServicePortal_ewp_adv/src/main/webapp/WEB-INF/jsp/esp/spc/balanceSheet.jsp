@@ -37,20 +37,23 @@
 
 	function getDataList(){
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/spcs/balance/year",
+			url: "http://iderms.enertalk.com:8443/spcs/balance/month",
 			type: "get",
 			async: false,
 			data: {
 				oid: oid,
-				yyyy: $('#year button').data('value')
+				yyyymm: $('#year button').data('value') + '__'
 			},
 			success: function (result) {
 				var jsonList = [],
 					keyWord = $("#key_word").val();
 
 				for(var i in result.data) {
-					var temp = result.data[i];
+					var temp = result.data[i], balance_info = JSON.parse(temp.balance_info);
 
+					result.data[i].inflowOfCash = balance_info.inflowOfCash;
+					result.data[i].outflowOfCash = balance_info.outflowOfCash;
+					result.data[i].endOfTermFlow = balance_info.endOfTermFlow;
 					for(var j in siteList) {
 						if(siteList[j].sid == temp.site_id) {
 							result.data[i].name = siteList[j].name;
@@ -239,13 +242,13 @@
 							<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="">
 							<label for="chk_op[INDEX]"><span></span>[INDEX]</label>
 						</td>
-						<td><a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=&balance_yyyy=[balance_yyyy]" class="tbl_link">[spc_name]</a></td>
-						<td><a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=[site_id]&balance_yyyy=[balance_yyyy]" class="tbl_link">[name]</a></td>
-						<td>[start_yyyymm]</td>
+						<td><a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=&balance_yyyy=[balance_yyyymm]" class="tbl_link">[spc_name]</a></td>
+						<td><a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=[site_id]&balance_yyyy=[balance_yyyymm]" class="tbl_link">[name]</a></td>
+						<td>[balance_yyyymm]</td>
 						<td class="right">-</td>
-						<td class="right">[cash_in]</td>
-						<td class="right">[cash_out]</td>
-						<td class="right">[balance]</td>
+						<td class="right">[inflowOfCash]</td>
+						<td class="right">[outflowOfCash]</td>
+						<td class="right">[endOfTermFlow]</td>
 					</tr>
 					</tbody>
 				</table>
