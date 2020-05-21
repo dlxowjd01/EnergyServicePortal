@@ -7,153 +7,157 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-  <head>
-    <title>Title</title>
-  </head>
-  <body>
-    <div class="row">
-		<div class="col-lg-12">
-			<h1 class="page-header">SPC 이관자료</h1>
-			<div class="time fr">
-				<span>CURRENT TIME</span>
-				<em class="currTime">${nowTime}</em>
-				<span>DATA BASE TIME</span>
-				<em class="dbTime">2018-07-27 17:01:02</em>
+<head>
+	<title>Title</title>
+</head>
+<body>
+<script>
+	const oid = '${sessionScope.userInfo.oid}';
+	const loginId = '${sessionScope.userInfo.login_id}';
+
+	$(function () {
+		setInitList("listData"); //리스트초기화
+
+		getDataList();
+	});
+
+	function nvl(value, str){
+		if(isEmpty(value)){
+			return str;
+		}else{
+			return value;
+		}
+	}
+
+	function getCsvDown(){
+		var column = ["name","발전소_명","설치_용량_KW","관리_운영_기간","",""], //json Key
+			header = ["SPC명","발전소 명","용량","관리 운영기간	","이관자료","첨부파일"]; //csv 파일 헤더
+
+		getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
+	}
+
+	function getDataList(){
+		$.ajax({
+			url: "http://iderms.enertalk.com:8443/spcs",
+			type: "get",
+			async: false,
+			data: {"oid": oid, includeGens: true},
+			success: function (result) {
+				var jsonList = [],
+					keyWord = $("#key_word").val();
+
+				for(var i = 0, count = result.data.length; i < count; i++){
+
+					var spcGensList = result.data[i].spcGens;
+
+					if(spcGensList !== undefined && spcGensList.length > 0){
+
+						for(var j = 0, jcount = spcGensList.length; j < jcount; j++){
+							var spcGensRow = spcGensList[j],
+								rowData = result.data[i],
+								newData = {},
+								contractInfo = JSON.parse(spcGensRow.contract_info),
+								deviceInfo = JSON.parse(spcGensRow.device_info);
+
+							newData["name"] = rowData.name;
+							newData["oid"] = rowData.oid;
+							newData["spc_id"] = rowData.spc_id;
+							newData["gen_id"] = spcGensRow.gen_id;
+							newData["발전소_명"] = spcGensRow.name;
+							newData["관리_운영_기간"] = nvl(contractInfo["관리_운영_기간"], "-");
+							newData["설치_용량_KW"] = nvl(deviceInfo["설치_용량_KW"], "-");
+							//키워드 검색 조건 필터 처리
+							if(newData["name"].indexOf(keyWord) > -1 || newData["발전소_명"] .indexOf(keyWord) > - 1){
+								jsonList.push(newData)
+							}
+
+						}
+					}
+
+				}
+
+				setMakeList(jsonList, "listData", {"dataFunction" : {"INDEX" : getNumberIndex}}); //list생성
+
+			},
+			error: function (request, status, error) {
+				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+			}
+		});
+	}
+
+	function getNumberIndex(index){
+		return index + 1;
+	}
+
+</script>
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">SPC 이관자료</h1>
+		<div class="time fr">
+			<span>CURRENT TIME</span>
+			<em class="currTime">${nowTime}</em>
+			<span>DATA BASE TIME</span>
+			<em class="dbTime">2018-07-27 17:01:02</em>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-3">
+		<div class="tx_btn_area">
+			<div class="tx_inp_type">
+				<input type="text" id="key_word" placeholder="입력">
+			</div>
+			<button class="btn_type" onclick="getDataList();">검색</button>
+		</div>
+	</div>
+	<div class="col-lg-9">
+		<div class="right">
+			<a href="#;" class="save_btn" onclick="getCsvDown();">CSV 다운로드</a>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="indiv">
+			<div class="spc_tbl align_type">
+				<table class="chk_type mt30">
+					<thead>
+						<tr>
+							<th>
+								<input type="hidden" id="chk_header" value="순번">
+								<label for="chk_header"><span></span>순번</label>
+							</th>
+							<th><button class="btn_align down">SPC명</button></th>
+							<th><button class="btn_align down">발전소 명</button></th>
+							<th class="right"><button class="btn_align down">용량(kW)</button></th>
+							<th><button class="btn_align down">관리 운영기간</button></th>
+							<th class="right"><button class="btn_align down">이관자료</button></th>
+							<th class="right"><button class="btn_align up">첨부파일</button></th>
+						</tr>
+					</thead>
+					<tbody id="listData">
+						<tr>
+							<td>
+								<input type="hidden" id="chk_op[INDEX]" name="rowCheck" value="1">
+								<label for="chk_op[INDEX]"><span></span>[INDEX]</label>
+							</td>
+							<td><a href="/spc/entityDetailsBySPC.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">[name]</a></td>
+							<td><a href="/spc/entityDetailsBySPC.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">[발전소_명]</a></td>
+							<td class="right">[설치_용량_KW]</td>
+							<td>[관리_운영_기간]</td>
+							<td class="right">0 / 0</td>
+							<td class="right">5건</td>
+						</tr>
+					</tbody>
+				</table>	
+			</div>
+			<div class="paging_wrap">
+				<a href="#;" class="btn_prev">prev</a>
+				<strong>1</strong>
+				<a href="#;" class="btn_next">next</a>
 			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-lg-3">
-			<div class="tx_btn_area">
-				<div class="tx_inp_type">
-					<input type="text" placeholder="입력">
-				</div>
-				<button type="submit" class="btn_type">검색</button>
-			</div>
-		</div>
-		<div class="col-lg-9">
-			<div class="right">
-				<a href="#;" class="save_btn">CVS 다운로드</a>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-lg-12">
-			<div class="indiv">
-				<div class="spc_tbl align_type">
-					<table class="chk_type mt30">
-						<thead>
-							<tr>
-								<th>
-									<input type="checkbox" id="chk_op01" value="순번">
-									<label for="chk_op01"><span></span>순번</label>
-								</th>
-								<th><button class="btn_align down">SPC명</button></th>
-								<th><button class="btn_align down">발전소 명</button></th>
-								<th class="right"><button class="btn_align down">용량(kW)</button></th>
-								<th><button class="btn_align down">관리 운영기간</button></th>
-								<th class="right"><button class="btn_align down">이관자료</button></th>
-								<th class="right"><button class="btn_align up">첨부파일</button></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>
-									<input type="checkbox" id="chk_op02" value="1">
-									<label for="chk_op02"><span></span>1</label>
-								</td>
-								<td><a href="/spc/entityDetailsBySPC.do" class="tbl_link">S-power</a></td>
-								<td><a href="/spc/entityDetailsBySPC.do" class="tbl_link">혜원솔라01</a></td>
-								<td class="right">97.28 kW</td>
-								<td>2018-06-18 ~ 2020-12-31</td>
-								<td class="right">0 / 0</td>
-								<td class="right">5건</td>
-							</tr>
-							<tr>
-								<td>
-									<input type="checkbox" id="chk_op03" value="1">
-									<label for="chk_op03"><span></span>2</label>
-								</td>
-								<td><a href="/spc/entityDetailsBySPC.do" class="tbl_link">S-power</a></td>
-								<td><a href="/spc/entityDetailsBySPC.do" class="tbl_link">혜원솔라02</a></td>
-								<td class="right">97.28 kW</td>
-								<td>2018-06-18 ~ 2020-12-31</td>
-								<td class="right">0 / 0</td>
-								<td class="right">5건</td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td class="right"></td>
-								<td></td>
-								<td class="right"></td>
-								<td class="right"></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td class="right"></td>
-								<td></td>
-								<td class="right"></td>
-								<td class="right"></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td class="right"></td>
-								<td></td>
-								<td class="right"></td>
-								<td class="right"></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td class="right"></td>
-								<td></td>
-								<td class="right"></td>
-								<td class="right"></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td class="right"></td>
-								<td></td>
-								<td class="right"></td>
-								<td class="right"></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td class="right"></td>
-								<td></td>
-								<td class="right"></td>
-								<td class="right"></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td class="right"></td>
-								<td></td>
-								<td class="right"></td>
-								<td class="right"></td>
-							</tr>
-						</tbody>
-					</table>	
-				</div>
-				<div class="paging_wrap">
-					<a href="#;" class="btn_prev">prev</a>
-					<strong>1</strong>
-					<a href="#;" class="btn_next">next</a>
-				</div>
-			</div>
-		</div>
-	</div>
-  </body>
+</div>
+</body>
 </html>
