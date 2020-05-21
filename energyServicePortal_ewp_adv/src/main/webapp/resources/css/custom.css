@@ -12516,8 +12516,11 @@ button.big{width:102px}
 	width: 18px;
 	height: 18px;
 	vertical-align: top;
-	background: url(../img/delete.png) no-repeat;
+	background: url(../img/delete_wh.png) no-repeat;
 	content: ''
+}
+.darkmode .btn_type07:before {
+	background-image: url(../img/delete.png);
 }
 
 .darkmode .btn_type05:before,.darkmode .btn_type06:before {
@@ -13440,7 +13443,8 @@ textarea::-webkit-scrollbar-thumb {
 	border: 0;
 	text-indent: -9999px
 }
-.btn_clse{margin-left:30px;display:inline-block;width:24px;height:24px;border:0;text-indent:-9999px;vertical-align:middle;background:url(../img/icon_close.png) no-repeat center center;outline:none}
+.btn_clse{margin-left:30px;display:inline-block;width:24px;height:24px;border:0;text-indent:-9999px;vertical-align:middle;background:url(../img/icon_close_wh.png) no-repeat center center;outline:none}
+.darkmode .btn_clse{background-image:url(../img/icon_close.png)}
 
 .btn_file.down {
 	background: url(../img/ico_down.png) no-repeat
@@ -13489,7 +13493,8 @@ button.tx_file {
 .img_bx .img_group{position:relative;float:left;margin-left:20px}
 .img_bx .img_group:first-child{margin-left:0}
 .img_bx .img_group img{width:100%}
-.img_bx .img_group .btn_img_clse{position:absolute;top:8px;right:8px;border:0;width:24px;height:24px;border-radius:4px;background:url(../img/icon_close.png) no-repeat center center rgba(0, 0, 0, 0.4);text-indent:-9999px;outline:none}
+.img_bx .img_group .btn_img_clse{position:absolute;top:8px;right:8px;border:0;width:24px;height:24px;border-radius:4px;background:url(../img/icon_close_wh.png) no-repeat center center rgba(0, 0, 0, 0.4);text-indent:-9999px;outline:none}
+.darkmode .img_bx .img_group .btn_img_clse{background-image:url(../img/icon_close.png)}
 
 .inp_align .fl {
 	display: inline-block;
@@ -14068,7 +14073,8 @@ button.tx_file {
 .photo_load_wrap .pt_tx{margin-right:16px}
 .photo_load_wrap .pt_load{margin-right:16px;font-weight:bold}
 .photo_load_wrap .pt_tx,.photo_load_wrap .pt_load{font-size:13px;color:var(--color8);line-height:36px;}
-.photo_load_wrap .btn_del{border:0;width:18px;height:18px;background:url(../img/delete.png);text-indent:-9999px}
+.photo_load_wrap .btn_del{border:0;width:18px;height:18px;background:url(../img/delete_wh.png);text-indent:-9999px}
+.darkmode .photo_load_wrap .btn_del{background-image:url(../img/delete.png)}
 
 
 
