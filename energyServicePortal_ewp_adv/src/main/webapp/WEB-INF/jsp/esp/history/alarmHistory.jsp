@@ -2,9 +2,8 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 
 <!-- Modal (확인 여부)-->
-<div id="myModal01" class="modal fade" role="dialog">
+<div id="alarmConfirm" class="modal fade" role="dialog">
 	<div class="modal-dialog his_alarm">
-
 		<!-- Modal content-->
 		<div class="modal-content">
 			<div class="ly_wrap">
@@ -13,7 +12,7 @@
 			</div>
 			<div class="btn_wrap_type02">
 				<button type="button" class="btn_type03" data-dismiss="modal">아니오</button>
-				<button type="button" class="btn_type">예</button>
+				<button type="button" class="btn_type" onclick="alarmConfirmProcess();">예</button>
 			</div>
 		</div>
 	</div>
@@ -424,23 +423,39 @@
 			<div class="tbl_wrap_type">
 				<div class="tbl_top clear" id="INV_PV2">
 					<h2 class="ntit fl">태양광 인버터</h2>
-					<button type="button" class="btn_type03 fr">일괄 확인</button>
+					<button type="button" class="btn_type03 fr" onclick="alarmConfirmAll('INV_PV');">일괄 확인</button>
 				</div>
 				<table class="his_tbl chk_type" id="INV_PV">
 					<thead>
 					<tr>
-					    <th>
-					       <input type="checkbox" id="chk014">
-                           <label for="chk014"><span></span></label>
-                        </th>
-			            <th><button class="btn_align down">사업소</button></th>
-                        <th><button class="btn_align down">장치명</button></th>
-                        <th><button class="btn_align down">알람 시간</button></th>
-                        <th><button class="btn_align down">알람 타입</button></th>
-                        <th><button class="btn_align down">알림 메시지</button></th>
-                        <th><button class="btn_align down">확인 여부</button></th>
-                        <th><button class="btn_align down">조치 상태</button></th>
-                        <th><button class="btn_align down">최종 업데이트 시간</button></th>
+						<th>
+							<input type="checkbox" id="chk014" onclick="alarmConfirmCheckAll('INV_PV');">
+							<label for="chk014"><span></span></label>
+						</th>
+						<th>
+							<button class="btn_align down">사업소</button>
+						</th>
+						<th>
+							<button class="btn_align down">장치명</button>
+						</th>
+						<th>
+							<button class="btn_align down">알람 시간</button>
+						</th>
+						<th>
+							<button class="btn_align down">알람 타입</button>
+						</th>
+						<th>
+							<button class="btn_align down">알림 메시지</button>
+						</th>
+						<th>
+							<button class="btn_align down">확인 여부</button>
+						</th>
+						<th>
+							<button class="btn_align down">조치 상태</button>
+						</th>
+						<th>
+							<button class="btn_align down">최종 업데이트 시간</button>
+						</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -453,18 +468,34 @@
 				<table class="his_tbl" id="SM_MANUAL">
 					<thead>
 					<tr>
-					    <th>
-                           <input type="checkbox" id="chk014">
-                           <label for="chk014"><span></span></label>
-                        </th>
-			            <th><button class="btn_align down">사업소</button></th>
-                        <th><button class="btn_align down">장치명</button></th>
-                        <th><button class="btn_align down">알람 시간</button></th>
-                        <th><button class="btn_align down">알람 타입</button></th>
-                        <th><button class="btn_align down">알림 메시지</button></th>
-                        <th><button class="btn_align down">확인 여부</button></th>
-                        <th><button class="btn_align down">조치 상태</button></th>
-                        <th><button class="btn_align down">최종 업데이트 시간</button></th>
+						<th>
+							<input type="checkbox" id="chk015">
+							<label for="chk015"><span></span></label>
+						</th>
+						<th>
+							<button class="btn_align down">사업소</button>
+						</th>
+						<th>
+							<button class="btn_align down">장치명</button>
+						</th>
+						<th>
+							<button class="btn_align down">알람 시간</button>
+						</th>
+						<th>
+							<button class="btn_align down">알람 타입</button>
+						</th>
+						<th>
+							<button class="btn_align down">알림 메시지</button>
+						</th>
+						<th>
+							<button class="btn_align down">확인 여부</button>
+						</th>
+						<th>
+							<button class="btn_align down">조치 상태</button>
+						</th>
+						<th>
+							<button class="btn_align down">최종 업데이트 시간</button>
+						</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -475,6 +506,8 @@
 	</div>
 </div>
 <script type="text/javascript">
+	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
+	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 	let responseDate = new Map();
 	let responseCnt = 0;
 	let dataList = [];
@@ -511,17 +544,17 @@
 		4: '정상'
 	};
 	const statusTemplate = {
-		'null': '신규',	
-        'open': '작업처리중',
-        'pending': '추가 정보 대기',
-        'resolve': '현장 조치 완료',
-        'on-hold': '처리 결과 확인',
-        'closed': '처리 완료',
-    };
+		'null': '신규',
+		'open': '작업처리중',
+		'pending': '추가 정보 대기',
+		'resolve': '현장 조치 완료',
+		'on-hold': '처리 결과 확인',
+		'closed': '처리 완료',
+	};
 
 	$(function () {
 		let sites = JSON.parse('${siteList}');
-		
+
 		siteList(sites);
 		//사이트 선택시
 		$(document).on('click', ':checkbox[name="site"]', function () {
@@ -566,13 +599,13 @@
 				}
 			}
 		});
-		
-        $(".chk_type #chk010").on('click', function(){
-            if ($(this).find('input').is(':checked')) {
-            } else {
-                $(this).find('input').prop('checked', true);
-            }	
-        })
+
+		$(".chk_type #chk010").on('click', function () {
+			if ($(this).find('input').is(':checked')) {
+			} else {
+				$(this).find('input').prop('checked', true);
+			}
+		})
 		$('#alarm li').on('click', function () {
 			let idx = $('#alarm li').index($(this));
 			if (idx == 0) {
@@ -690,10 +723,10 @@
 
 	const periodData = function () {
 		$("#INV_PV").hide();
-        $("#INV_PV2").hide();
-        $("#SM_MANUAL").hide();
-        $("#SM_MANUAL2").hide();
-        
+		$("#INV_PV2").hide();
+		$("#SM_MANUAL").hide();
+		$("#SM_MANUAL2").hide();
+
 		if ($(':checkbox[name="deviceType"]:checked').length == 0) {
 			alert('설비타입을 한개이상 선택해 주세요.');
 			return false;
@@ -703,15 +736,15 @@
 			alert('알람유형을 한개이상 선택해 주세요.');
 			return false;
 		}
-        
+
 		$('.his_tbl tbody').empty();
 		s = dataList[1];
 
-        let alarmData = "";
+		let alarmData = "";
 		let deviceArray = new Array();
 		let alarmArray = new Array();
 		let statusArray = new Array();
-		 
+
 		$(':checkbox[name="deviceType"]:checked').each(function () {
 			deviceArray.push($(this).val());
 		});
@@ -719,31 +752,31 @@
 			alarmArray.push($(this).val());
 		});
 		$(':checkbox[name="status"]:checked').each(function () {
-            statusArray.push($(this).val());
-        });
-		if($(':checkbox[name="confirm"]:checked').length == 2){
+			statusArray.push($(this).val());
+		});
+		if ($(':checkbox[name="confirm"]:checked').length == 2) {
 			alarmData = {
-		            sids: s.join(','),
-		            deviceTypes: deviceArray.join(','),
-		            startTime: $('#datepicker1').datepicker('getDate').format('yyyyMMdd') + '000000',
-		            endTime: $('#datepicker2').datepicker('getDate').format('yyyyMMdd') + '235959',
-		     }
-		}else{
-		  let confirm = "";	
-			if($(':checkbox[name="confirm"]:checked').next('label').text() === "미확인"){
+				sids: s.join(','),
+				deviceTypes: deviceArray.join(','),
+				startTime: $('#datepicker1').datepicker('getDate').format('yyyyMMdd') + '000000',
+				endTime: $('#datepicker2').datepicker('getDate').format('yyyyMMdd') + '235959',
+			}
+		} else {
+			let confirm = "";
+			if ($(':checkbox[name="confirm"]:checked').next('label').text() === "미확인") {
 				confirm = false;
-			}else{
+			} else {
 				confirm = true;
 			}
 			alarmData = {
-		            sids: s.join(','),
-		            deviceTypes: deviceArray.join(','),
-		            confirm: confirm,
-		            startTime: $('#datepicker1').datepicker('getDate').format('yyyyMMdd') + '000000',
-		            endTime: $('#datepicker2').datepicker('getDate').format('yyyyMMdd') + '235959',
-			} 
+				sids: s.join(','),
+				deviceTypes: deviceArray.join(','),
+				confirm: confirm,
+				startTime: $('#datepicker1').datepicker('getDate').format('yyyyMMdd') + '000000',
+				endTime: $('#datepicker2').datepicker('getDate').format('yyyyMMdd') + '235959',
+			}
 		}
-		
+
 		$.ajax({
 			url: 'http://iderms.enertalk.com:8443/alarms',
 			type: 'get',
@@ -755,9 +788,9 @@
 					console.log(data);
 				}
 				let filterdata = [];
-				
+
 				statusfilter(filterdata, statusArray, data);
-				
+
 				var invcnt = 0;
 				var smcnt = 0;
 				if (filterdata.length > 0) {
@@ -765,22 +798,22 @@
 							if (el.device_type === "INV_PV") {
 								invcnt++
 								tablegrid('INV_PV', el, i);
-							} else{
+							} else {
 								smcnt++
 								tablegrid('SM_MANUAL', el, i);
 							}
 						}
 					)
 
-					if(invcnt > 0){
-						 $("#INV_PV").show();
-                         $("#INV_PV2").show();						
-					                              
-			        }
-					if(smcnt > 0){
-						 $("#SM_MANUAL").show();
-						 $("#SM_MANUAL2").show();
-			        }
+					if (invcnt > 0) {
+						$("#INV_PV").show();
+						$("#INV_PV2").show();
+
+					}
+					if (smcnt > 0) {
+						$("#SM_MANUAL").show();
+						$("#SM_MANUAL2").show();
+					}
 				}
 				changeTablegird = filterdata;
 			},
@@ -792,38 +825,41 @@
 		let tbodyStr = "";
 		const Selector = '#' + tableId + ' tbody';
 		tbodyStr += '<tr>';
-		tbodyStr += '<td><input type="checkbox" value="'+ el.alarm_id +'"id="chk'+i+'"><label for="chk'+i+'"><span></span></label></td>'
+		tbodyStr += '<td><input type="checkbox" value="' + el.alarm_id + '"id="chk' + i + '"><label for="chk' + i + '"><span></span></label></td>'
 		tbodyStr += '	<td>' + el.site_name + '</td>'; // 장비타입
 		tbodyStr += '	<td>' + el.device_name + '</td>'; // 장치명
 		tbodyStr += '	<td>' + dateFormat(String(el.localtime)) + '</td>'; // 알람발생시간
 		tbodyStr += '	<td>' + ((isEmpty(el.level)) ? '-' : levelTemplate[el.level]) + '</td>'; // 알람타입
 		tbodyStr += '	<td>' + ((isEmpty(el.message)) ? "" : el.message) + '</td>'; // 알람메시지
 		if (el.confirm == false) {
-			tbodyStr += '	<td><span>미확인</span> <button type="button" class="dbtn gray h36" onclick="updateACK();">ACK</button></td>'; // 알람상태
-		} else if (el.confirm == true) {
-			tbodyStr += '	<td><span>확인</span></td>'; // 알람상태
+			tbodyStr += '	<td><a href="javascript:alarmConfirm(\'' + el.alarm_id + '\');" class="tbl_link" >미확인</a></td>'; // 알람상태
 		} else {
-			tbodyStr += '	<td><span>-</span></td>'; // 알람상태
+			tbodyStr += '	<td>확인</td>'; // 알람상태
 		}
+
 		if (!(isEmpty(el.status))) { // 조치사항이 존재할 경우
-			tbodyStr += '	<td><button type="button" onclick="javascript:measurePopup(\'' + el.alarm_id + '\');" class="dbtn h36">' + statusTemplate[el.status] + '</button></td>'; // 조치상태
+			tbodyStr += '	<td><a href="javascript:updateACK(\'' + el.alarm_id + '\');" class="tbl_link" >' + statusTemplate[el.status] + '</a></td>'; // 조치상태
 		} else {
 			tbodyStr += '	<td>신규</td>'; // 조치상태
 		}
-		if(!(isEmpty(el.status_timestamp))){
-			tbodyStr += '   <td>'+el.status_timestamp+'</td>'; // 최종업데이트 시간	  	
-		}else{
+
+		if (!(isEmpty(el.status_timestamp))) {
+			tbodyStr += '   <td>' + el.status_timestamp + '</td>'; // 최종업데이트 시간
+		} else {
 			tbodyStr += '<td></td>';
 		}
 		tbodyStr += '</tr>';
 		$(Selector).append(tbodyStr);
 	}
-	function updateACK(){
-			$("#myModal02").modal('show');
+
+	function updateACK() {
+		$("#myModal02").modal('show');
 	}
-	function measurePopup(){
-            $("#myModal01").modal('show');
+
+	function measurePopup() {
+		$("#myModal01").modal('show');
 	}
+
 	const datafilter = function (array, key) {
 		let filterArray = [];
 		for (let i = 0; i < array.length; i++) {
@@ -836,18 +872,18 @@
 		}
 		return filterArray;
 	}
-    const statusfilter = function(filterdata, statusArray, data){
-    	   $.each(data, function(i,el){
-               $.each(statusArray, function(j, e2){
-                 if( e2 == "null"){
-                     e2 = null;
-                 }
-                 if(el.status === e2){
-                	 filterdata.push(data[i])
-                 } 
-               })
-           })
-    }
+	const statusfilter = function (filterdata, statusArray, data) {
+		$.each(data, function (i, el) {
+			$.each(statusArray, function (j, e2) {
+				if (e2 == "null") {
+					e2 = null;
+				}
+				if (el.status === e2) {
+					filterdata.push(data[i])
+				}
+			})
+		})
+	}
 	const deviceType = function (sites) {
 		$('#equipmentList button').empty().append('설비유형<span class="caret"></span>');
 		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
@@ -985,7 +1021,7 @@
 		var gr_type = $(".chk_type #chk010").is(':checked');
 
 		var chartTypeNm = (gr_type == true) ? "deviceType" : "alarm";
-        console.log(chartTypeNm);
+		console.log(chartTypeNm);
 		let dataMap = new Map();
 
 		dataMap.set(s, data);
@@ -1350,5 +1386,62 @@
 			}
 		}
 		return date;
+	}
+
+	function alarmConfirm(alarmId) {
+		$('#alarmConfirm').modal().data('value', alarmId);
+	}
+
+	function alarmConfirmCheckAll(tableId) {
+		if($('#' + tableId + '> thead tr :checkbox:checked').length == 0) {
+			$('#' + tableId + '> tbody tr :checkbox').prop('checked', false);
+		} else {
+			$('#' + tableId + '> tbody tr :checkbox').prop('checked', true);
+		}
+	}
+
+	function alarmConfirmAll(tableId) {
+		if($('#' + tableId + '> tbody tr :checkbox:checked').length == 0) {
+			alert('확인할 알람이 선택되지않았습니다.');
+			return false;
+		} else {
+			let cnt = 0;
+			$('#' + tableId + '> tbody tr :checkbox:checked').each(function() {
+				$.ajax({
+					url: 'http://iderms.enertalk.com:8443/alarms/'+$(this).val(),
+					type: 'patch',
+					dataType: 'json',
+					contentType: "application/json",
+					data: JSON.stringify(data),
+					success: function (result) {
+						cnt++;
+					},
+					dataType: 'json'
+				});
+			});
+
+			alert(cnt + '개의 알람을 확인했습니다.');
+			$('#search').trigger('click');
+		}
+	}
+
+	function alarmConfirmProcess() {
+		let alarmId = $('#alarmConfirm').data('value');
+		let data = {
+			confirm: true
+		}
+		$.ajax({
+			url: 'http://iderms.enertalk.com:8443/alarms/'+alarmId,
+			type: 'patch',
+			dataType: 'json',
+			contentType: "application/json",
+			data: JSON.stringify(data),
+			success: function (result) {
+				alert('확인 처리 되었습니다.');
+				$('#alarmConfirm').modal('hide').data('value', '');
+				$('#search').trigger('click');
+			},
+			dataType: 'json'
+		});
 	}
 </script>
