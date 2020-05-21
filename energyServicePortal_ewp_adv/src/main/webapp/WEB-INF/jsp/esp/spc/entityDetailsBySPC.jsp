@@ -172,7 +172,7 @@
 			prop.parents('tr').find('.btn_type07').show(); //삭제버튼 활성화
 			prop.parents('tr').find('.down').show(); //다운로드 버튼 활성화
 			
-			let linkUrl = 'http://iderms.enertalk.com:8443/files/download/'+data.files[0].fieldname+'?oid='+oid + '&orgFilename' + data.files[0].originalname;
+			let linkUrl = 'http://iderms.enertalk.com:8443/files/download/'+data.files[0].fieldname+'?oid='+oid + '&orgFilename=' + data.files[0].originalname;
 			prop.parents('tr').find('.down').attr('onclick','location.href=\"'+linkUrl+'\"');
 			
 			$('#' + propName + '_originalName').val(data.files[0].originalname);
