@@ -225,7 +225,7 @@
 
 	const afterCreate = function (data) {
 		alert('보고서 등록이 완료되었습니다.');
-		$('#reportModal').hide();
+		$('#reportModal').modal('hide');
 		getDataList();
 	}
 
@@ -276,7 +276,7 @@
 						result.data[i].confirmed_date = confirmed_date + '<button class="btn_file fr down" onclick="' + file_link + '">다운로드</button>';
 					} else {
 						let confirmed_date = '확정 보고서 업로드';
-						result.data[i].confirmed_date = confirmed_date + '<button class="btn_file fr up"">업로드</button> <input type="file" id="cofirmFile' + i + '" name="cofirmFile' + i + '" class="uploadBtn">';
+						result.data[i].confirmed_date = confirmed_date + '<label for="cofirmFile' + i + '" class="btn_file fr up"">업로드</label> <input type="file" id="cofirmFile' + i + '" name="cofirmFile' + i + '" class="uploadBtn" style="display:none;">';
 					}
 
 					//if(jsonDataFilter(result.data[i])) {
