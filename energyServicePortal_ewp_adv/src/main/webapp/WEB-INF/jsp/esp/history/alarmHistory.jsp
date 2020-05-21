@@ -231,13 +231,13 @@
 						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="type">
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="chk_001">
+									<input type="checkbox" id="chk_001" name="confirm">
 									<label for="chk_001"><span></span>확인</label>
 								</a>
 							</li>
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="chk_002">
+									<input type="checkbox" id="chk_002" name="confirm">
 									<label for="chk_002"><span></span>미확인</label>
 								</a>
 							</li>
@@ -255,38 +255,38 @@
 						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="type">
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="chk_003">
-									<label for="chk_003"><span></span>신규</label>
+									<input type="checkbox" id="chk_001" name="status" value="null" checked>
+									<label for="chk_001"><span></span>신규</label>
 								</a>
 							</li>
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="chk_004">
-									<label for="chk_004"><span></span>작업처리중</label>
+									<input type="checkbox" id="chk_002" name="status" value="open" checked>
+									<label for="chk_002"><span></span>작업처리중</label>
 								</a>
 							</li>
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="chk_004">
-									<label for="chk_004"><span></span>추가 정보 대기</label>
+									<input type="checkbox" id="chk_003" name="status" value="pending" checked>
+									<label for="chk_003"><span></span>추가 정보 대기</label>
 								</a>
 							</li>
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="chk_004">
+									<input type="checkbox" id="chk_004" name="status" value="resolved" checked>
 									<label for="chk_004"><span></span>현장 조치 완료</label>
 								</a>
 							</li>
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="chk_004">
-									<label for="chk_004"><span></span>처리 결과 확인</label>
+									<input type="checkbox" id="chk_005" name="status" value="on-hold" checked>
+									<label for="chk_005"><span></span>처리 결과 확인</label>
 								</a>
 							</li>
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="chk_004">
-									<label for="chk_004"><span></span>처리 완료</label>
+									<input type="checkbox" id="chk_006" name="status" value="closed" checked>
+									<label for="chk_006"><span></span>처리 완료</label>
 								</a>
 							</li>
 						</ul>
@@ -310,13 +310,13 @@
 						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
 							<li>
 								<a href="#">
-									<input type="checkbox" id="chk010">
+									<input type="checkbox" id="chk010" name="type" value="type">
 									<label for="chk010"><span></span>설비 타입</label>
 								</a>
 							</li>
 							<li>
 								<a href="#">
-									<input type="checkbox" id="chk011">
+									<input type="checkbox" id="chk011" name="type" value="alarm">
 									<label for="chk011"><span></span>알람 타입</label>
 								</a>
 							</li>
@@ -422,100 +422,52 @@
 	<div class="col-lg-12">
 		<div class="indiv">
 			<div class="tbl_wrap_type">
-				<div class="tbl_top clear">
+				<div class="tbl_top clear" id="INV_PV2">
 					<h2 class="ntit fl">태양광 인버터</h2>
 					<button type="button" class="btn_type03 fr">일괄 확인</button>
 				</div>
 				<table class="his_tbl chk_type" id="INV_PV">
 					<thead>
 					<tr>
-						<th>
-							<input type="checkbox" id="chk014">
-							<label for="chk014"><span></span></label>
-						</th>
-						<th>
-							<button class="btn_align up">장비 타입</button>
-						</th>
-						<th>
-							<button class="btn_align up">장치명</button>
-						</th>
-						<th>
-							<button class="btn_align up">장치 ID</button>
-						</th>
-						<th>
-							<button class="btn_align up">알람 시간</button>
-						</th>
-						<th>
-							<button class="btn_align up">알람 타입</button>
-						</th>
-						<th>
-							<button class="btn_align down">알림 메시지</button>
-						</th>
-						<th>
-							<button class="btn_align down">알림 상태</button>
-						</th>
-						<th>
-							<button class="btn_align down">조치 상태</button>
-						</th>
+					    <th>
+					       <input type="checkbox" id="chk014">
+                           <label for="chk014"><span></span></label>
+                        </th>
+			            <th><button class="btn_align down">사업소</button></th>
+                        <th><button class="btn_align down">장치명</button></th>
+                        <th><button class="btn_align down">알람 시간</button></th>
+                        <th><button class="btn_align down">알람 타입</button></th>
+                        <th><button class="btn_align down">알림 메시지</button></th>
+                        <th><button class="btn_align down">확인 여부</button></th>
+                        <th><button class="btn_align down">조치 상태</button></th>
+                        <th><button class="btn_align down">최종 업데이트 시간</button></th>
 					</tr>
 					</thead>
 					<tbody>
 					</tbody>
 				</table>
-				<div class="tbl_top clear">
+				<div class="tbl_top clear" id="SM_MANUAL2">
 					<h2 class="ntit fl">수기입력</h2>
 					<button type="button" class="btn_type03 fr">일괄 확인</button>
 				</div>
 				<table class="his_tbl" id="SM_MANUAL">
 					<thead>
 					<tr>
-						<th>
-							<button class="btn_align up">장비 타입</button>
-						</th>
-						<th>
-							<button class="btn_align up">장치명</button>
-						</th>
-						<th>
-							<button class="btn_align up">장치 ID</button>
-						</th>
-						<th>
-							<button class="btn_align up">알람 시간</button>
-						</th>
-						<th>
-							<button class="btn_align up">알람 타입</button>
-						</th>
-						<th>
-							<button class="btn_align down">알림 메시지</button>
-						</th>
-						<th>
-							<button class="btn_align down">알림 상태</button>
-						</th>
-						<th>
-							<button class="btn_align down">조치 상태</button>
-						</th>
+					    <th>
+                           <input type="checkbox" id="chk014">
+                           <label for="chk014"><span></span></label>
+                        </th>
+			            <th><button class="btn_align down">사업소</button></th>
+                        <th><button class="btn_align down">장치명</button></th>
+                        <th><button class="btn_align down">알람 시간</button></th>
+                        <th><button class="btn_align down">알람 타입</button></th>
+                        <th><button class="btn_align down">알림 메시지</button></th>
+                        <th><button class="btn_align down">확인 여부</button></th>
+                        <th><button class="btn_align down">조치 상태</button></th>
+                        <th><button class="btn_align down">최종 업데이트 시간</button></th>
 					</tr>
 					</thead>
 					<tbody>
-					<tr>
-						<td>인버터#1</td>
-						<td>사업소#1</td>
-						<td>IVT001</td>
-						<td>2020.02.20 15:00:00</td>
-						<td>Connect</td>
-						<td>Over Cell Voltage</td>
-						<td>발생</td>
-						<td>On Hold</td>
-					</tr>
-					<tr>
-						<td>인버터#1</td>
-						<td>사업소#1</td>
-						<td>IVT001</td>
-						<td>2020.02.20 15:00:00</td>
-						<td>Connect</td>
-						<td>Over Cell Voltage</td>
-						<td>발생</td>
-						<td>On Hold</td>
-					</tr>
 					</tbody>
 				</table>
 			</div>
@@ -558,16 +510,24 @@
 		3: '트립',
 		4: '정상'
 	};
+	const statusTemplate = {
+		'null': '신규',	
+        'open': '작업처리중',
+        'pending': '추가 정보 대기',
+        'resolve': '현장 조치 완료',
+        'on-hold': '처리 결과 확인',
+        'closed': '처리 완료',
+    };
 
 	$(function () {
 		let sites = JSON.parse('${siteList}');
-
+		
 		siteList(sites);
 		//사이트 선택시
 		$(document).on('click', ':checkbox[name="site"]', function () {
 			if ($(this).is(':checked')) {
 				let extendText = '';
-				if ($(':checkbox[name="site"]:checked').length > 1) {
+				if ($(':checkbox[name="site"]:checked').length > 2) {
 					extendText = '외 ' + Number($(':checkbox[name="site"]:checked').length - 1) + '개';
 				}
 				$('#siteList button').html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
@@ -576,7 +536,7 @@
 					$('#siteList button').html('선택해주세요.' + '<span class="caret"></span>')
 				} else {
 					let extendText = '';
-					if ($(':checkbox[name="site"]:checked').length > 1) {
+					if ($(':checkbox[name="site"]:checked').length > 2) {
 						extendText = '외 ' + Number($(':checkbox[name="site"]:checked').length - 1) + '개';
 					}
 					$('#siteList button').html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
@@ -606,14 +566,13 @@
 				}
 			}
 		});
-		$(".rdo_type").on('click', function () {
-			if ($(this).find('input').is(':checked')) {
-			} else {
-				$(this).find('input').prop('checked', true);
-			}
-
-		})
-
+		
+        $(".chk_type #chk010").on('click', function(){
+            if ($(this).find('input').is(':checked')) {
+            } else {
+                $(this).find('input').prop('checked', true);
+            }	
+        })
 		$('#alarm li').on('click', function () {
 			let idx = $('#alarm li').index($(this));
 			if (idx == 0) {
@@ -697,7 +656,6 @@
 
 	const siteList = function (sites) {
 		$('#siteList > div > ul').empty();
-
 		let str = '';
 		sites.forEach((site, index) => {
 			str += `<li>
@@ -713,7 +671,6 @@
 
 	const deviceTypeList = function () {
 		$('#equipmentList > div > ul').empty();
-
 		let str = '';
 		let sites = JSON.parse('${siteList}');
 		dataList = deviceType(sites);
@@ -732,6 +689,11 @@
 	};
 
 	const periodData = function () {
+		$("#INV_PV").hide();
+        $("#INV_PV2").hide();
+        $("#SM_MANUAL").hide();
+        $("#SM_MANUAL2").hide();
+        
 		if ($(':checkbox[name="deviceType"]:checked').length == 0) {
 			alert('설비타입을 한개이상 선택해 주세요.');
 			return false;
@@ -741,27 +703,47 @@
 			alert('알람유형을 한개이상 선택해 주세요.');
 			return false;
 		}
-
+        
 		$('.his_tbl tbody').empty();
 		s = dataList[1];
 
+        let alarmData = "";
 		let deviceArray = new Array();
 		let alarmArray = new Array();
+		let statusArray = new Array();
+		 
 		$(':checkbox[name="deviceType"]:checked').each(function () {
 			deviceArray.push($(this).val());
 		});
-
 		$(':checkbox[name="alarm"]:checked').each(function () {
 			alarmArray.push($(this).val());
 		});
-
-		let alarmData = {
-			sids: s.join(','),
-//		    dids: deviceArray.join(','),
-			deviceTypes: deviceArray.join(','),
-			startTime: $('#datepicker1').datepicker('getDate').format('yyyyMMdd') + '000000',
-			endTime: $('#datepicker2').datepicker('getDate').format('yyyyMMdd') + '235959',
+		$(':checkbox[name="status"]:checked').each(function () {
+            statusArray.push($(this).val());
+        });
+		if($(':checkbox[name="confirm"]:checked').length == 2){
+			alarmData = {
+		            sids: s.join(','),
+		            deviceTypes: deviceArray.join(','),
+		            startTime: $('#datepicker1').datepicker('getDate').format('yyyyMMdd') + '000000',
+		            endTime: $('#datepicker2').datepicker('getDate').format('yyyyMMdd') + '235959',
+		     }
+		}else{
+		  let confirm = "";	
+			if($(':checkbox[name="confirm"]:checked').next('label').text() === "미확인"){
+				confirm = false;
+			}else{
+				confirm = true;
+			}
+			alarmData = {
+		            sids: s.join(','),
+		            deviceTypes: deviceArray.join(','),
+		            confirm: confirm,
+		            startTime: $('#datepicker1').datepicker('getDate').format('yyyyMMdd') + '000000',
+		            endTime: $('#datepicker2').datepicker('getDate').format('yyyyMMdd') + '235959',
+			} 
 		}
+		
 		$.ajax({
 			url: 'http://iderms.enertalk.com:8443/alarms',
 			type: 'get',
@@ -772,46 +754,75 @@
 				if (debugMode) {
 					console.log(data);
 				}
-
-				if (data.length > 0) {
-					$.each(data, function (i, el) {
+				let filterdata = [];
+				
+				statusfilter(filterdata, statusArray, data);
+				
+				var invcnt = 0;
+				var smcnt = 0;
+				if (filterdata.length > 0) {
+					$.each(filterdata, function (i, el) {
 							if (el.device_type === "INV_PV") {
-								tablegrid('INV_PV', el);
-							} else {
-								tablegrid('SM_MANUAL', el);
+								invcnt++
+								tablegrid('INV_PV', el, i);
+							} else{
+								smcnt++
+								tablegrid('SM_MANUAL', el, i);
 							}
 						}
 					)
+
+					if(invcnt > 0){
+						 $("#INV_PV").show();
+                         $("#INV_PV2").show();						
+					                              
+			        }
+					if(smcnt > 0){
+						 $("#SM_MANUAL").show();
+						 $("#SM_MANUAL2").show();
+			        }
 				}
-				changeTablegird = data;
+				changeTablegird = filterdata;
 			},
 			dataType: "json"
 		});
 	}
-	const tablegrid = function (tableId, el) {
+
+	const tablegrid = function (tableId, el, i) {
 		let tbodyStr = "";
 		const Selector = '#' + tableId + ' tbody';
 		tbodyStr += '<tr>';
-		tbodyStr += '	<td>' + eval('deviceTemplate.' + el.device_type) + '</td>'; // 장비타입
-		tbodyStr += '	<td>' + el.site_name + " " + el.device_name + '</td>'; // 장치명
-		tbodyStr += '	<td>' + el.did + '</td>'; // 장치ID
+		tbodyStr += '<td><input type="checkbox" value="'+ el.alarm_id +'"id="chk'+i+'"><label for="chk'+i+'"><span></span></label></td>'
+		tbodyStr += '	<td>' + el.site_name + '</td>'; // 장비타입
+		tbodyStr += '	<td>' + el.device_name + '</td>'; // 장치명
 		tbodyStr += '	<td>' + dateFormat(String(el.localtime)) + '</td>'; // 알람발생시간
 		tbodyStr += '	<td>' + ((isEmpty(el.level)) ? '-' : levelTemplate[el.level]) + '</td>'; // 알람타입
 		tbodyStr += '	<td>' + ((isEmpty(el.message)) ? "" : el.message) + '</td>'; // 알람메시지
 		if (el.confirm == false) {
-			tbodyStr += '	<td><span>발생</span> <button type="button" class="dbtn gray h36" onclick="updateACK(\'' + el.alarm_id + '\');">ACK</button></td>'; // 알람상태
+			tbodyStr += '	<td><span>미확인</span> <button type="button" class="dbtn gray h36" onclick="updateACK();">ACK</button></td>'; // 알람상태
 		} else if (el.confirm == true) {
 			tbodyStr += '	<td><span>확인</span></td>'; // 알람상태
 		} else {
 			tbodyStr += '	<td><span>-</span></td>'; // 알람상태
 		}
 		if (!(isEmpty(el.status))) { // 조치사항이 존재할 경우
-			tbodyStr += '	<td><button type="button" onclick="javascript:measurePopup(\'' + el.alarm_id + '\');" class="dbtn h36">' + el.status + '</button></td>'; // 조치상태
+			tbodyStr += '	<td><button type="button" onclick="javascript:measurePopup(\'' + el.alarm_id + '\');" class="dbtn h36">' + statusTemplate[el.status] + '</button></td>'; // 조치상태
 		} else {
-			tbodyStr += '	<td></td>'; // 조치상태
+			tbodyStr += '	<td>신규</td>'; // 조치상태
+		}
+		if(!(isEmpty(el.status_timestamp))){
+			tbodyStr += '   <td>'+el.status_timestamp+'</td>'; // 최종업데이트 시간	  	
+		}else{
+			tbodyStr += '<td></td>';
 		}
 		tbodyStr += '</tr>';
 		$(Selector).append(tbodyStr);
+	}
+	function updateACK(){
+			$("#myModal02").modal('show');
+	}
+	function measurePopup(){
+            $("#myModal01").modal('show');
 	}
 	const datafilter = function (array, key) {
 		let filterArray = [];
@@ -825,17 +836,26 @@
 		}
 		return filterArray;
 	}
-
+    const statusfilter = function(filterdata, statusArray, data){
+    	   $.each(data, function(i,el){
+               $.each(statusArray, function(j, e2){
+                 if( e2 == "null"){
+                     e2 = null;
+                 }
+                 if(el.status === e2){
+                	 filterdata.push(data[i])
+                 } 
+               })
+           })
+    }
 	const deviceType = function (sites) {
 		$('#equipmentList button').empty().append('설비유형<span class="caret"></span>');
-
 		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
 			function () {
 				return $(this).val();
 			}
 			)
 		);
-
 		let deviceTypes = [];
 		const oid = sites[0].oid;
 
@@ -854,9 +874,7 @@
 
 	const deviceInternet = function (siteArray, oid) {
 		let arr = [];
-
 		$.each(siteArray, function (i, site) {
-
 			$.ajax({
 				url: 'http://iderms.enertalk.com:8443/config/devices/',
 				type: 'get',
@@ -964,10 +982,10 @@
 			substringCnt = 6;
 		}
 
-		var gr_type = $(".rdo_type #rdo03_1").is(':checked');
+		var gr_type = $(".chk_type #chk010").is(':checked');
 
 		var chartTypeNm = (gr_type == true) ? "deviceType" : "alarm";
-
+        console.log(chartTypeNm);
 		let dataMap = new Map();
 
 		dataMap.set(s, data);
