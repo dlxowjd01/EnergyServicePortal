@@ -427,6 +427,7 @@ $(function () {
             setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
         }
         $( event.target ).blur();
+        
         return false;
     });
 });

@@ -1,139 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-
-<!-- Modal (확인 여부)-->
-<div id="myModal01" class="modal fade" role="dialog">
-  <div class="modal-dialog his_alarm">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-		<div class="ly_wrap">
-			<h2 class="ly_tit">알람 상태</h2>
-			<p class="tx_line1">"확인" 처리 하시겠습니까?</p>
-		</div>
-		<div class="btn_wrap_type02">
-			<button type="button" class="btn_type03" data-dismiss="modal">아니오</button>
-			<button type="button" class="btn_type">예</button>
-		</div>
-	</div>
-  </div>
-</div>
-
-<!-- Modal (조치 상태)-->
-<div id="myModal02" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-		<div class="ly_wrap">
-			<h2 class="ly_tit">조치 상태</h2>
-			<div class="spc_tbl02_row">
-				<table>
-					<colgroup>
-						<col style="width:157px">
-						<col style="width:365px">
-						<col style="width:156px">
-						<col style="width:364px">
-					</colgroup>
-					<tbody>
-					<tr>
-						<th class="vert_type">조치 이력</th>
-						<td colspan="3">
-							<div class="txarea_inp_type lh_type">
-								<textarea id="description" name="description" rows="10" readonly>
-[2020-05-04 16:14] by [sj.kim]
-조치 상태: On Hold, 담당자: 김세준
-(조치메모)
---------------------------------------------------
-[2020-05-04 16:13] by [sj.kim]
-조치 상태: On Hold, 담당자: 김세준
-(조치메모)
--------------------------------------------------- 
-[2020-05-04 16:12] by [sj.kim]
-확인으로 상태 변경
--------------------------------------------------- 
-[2020-05-04 16:10] 최초 발생
-								</textarea>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<th class="vert_type">사진 올리기</th>
-						<td colspan="3">
-							<div class="tx_btn_area type">
-								<div class="tx_inp_type">
-									<input type="text" id="">
-								</div>
-								<button type="submit" class="btn_type">업로드</button>
-							</div>
-							<div class="photo_load_wrap">
-								<ul>
-									<li>
-										<span class="pt_tx">사진 경로</span>
-										<span class="pt_load">업로드 날짜 / 업로더 아이디</span>
-										<button class="btn_del">삭제</button>
-									</li>
-									<li>
-										<span class="pt_tx">사진 경로</span>
-										<span class="pt_load">업로드 날짜 / 업로더 아이디</span>
-										<button class="btn_del">삭제</button>
-									</li>
-								</ul>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<th>조치 여부</th>
-						<td>
-							<div class="dropdown placeholder">
-								<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
-								<ul class="dropdown-menu">
-									<li><a href="#">신규</a></li>
-									<li><a href="#">작업 처리 중</a></li>
-									<li><a href="#">추가 정보 대기</a></li>
-									<li><a href="#">현장 조치 완료</a></li>
-									<li><a href="#">처리 결과 확인</a></li>
-									<li><a href="#">처리 완료</a></li>
-								</ul>
-							</div>
-						</td>
-						<th>담당자</th>
-						<td>
-							<div class="clear">
-								<div class="dropdown placeholder fl" style="width:160px">
-									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
-									<ul class="dropdown-menu">
-										<li><a href="#">유저1</a></li>
-										<li><a href="#">유저2</a></li>
-										<li><a href="#">유저3</a></li>
-									</ul>
-								</div>
-								<div class="tx_inp_type fl ml" style="width:160px">
-									<input type="text" id="alarmPhone" name="alarmPhone" placeholder="직접 입력">
-								</div>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<th class="vert_type">조치 메모</th>
-						<td colspan="3">
-							<div class="txarea_inp_type lh_type">
-								<textarea id="description" name="description" rows="7">확인으로 상태 변경</textarea>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-				</table>
-			</div>
-		</div>
-		<div class="btn_wrap_type02">
-			<button type="button" class="btn_type03" data-dismiss="modal">취소</button>
-			<button type="button" class="btn_type">확인</button>
-		</div>
-	</div>
-  </div>
-</div>
-
 <div class="row">
   <div class="col-lg-12">
     <h1 class="page-header">알람 이력</h1>
@@ -142,30 +8,19 @@
 <div class="row">
   <div class="col-lg-12">
     <div class="indiv his_chart_top clear">
-	  <div class="fl">
+      <div class="sa_select fl" id="siteList">
 		<div class="dropdown">
-			<button class="btn btn-primary dropdown-toggle w10" type="button" data-toggle="dropdown" aria-expanded="false">사업소#1, 사업소#2<span class="caret"></span></button>
-			<ul class="dropdown-menu dropdown-menu-form chk_type">
-				<li>
-					<a href="#">
-						<input type="checkbox" id="chk_op01">
-						<label for="chk_op01"><span></span>혜원솔라 02</label>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<input type="checkbox" id="chk_op02">
-						<label for="chk_op02"><span></span>혜원솔라 01</label>
-					</a>
-				</li>
-			</ul>
-		</div>
+		 <button class="btn btn-primary dropdown-toggle w1" type="button" data-toggle="dropdown">
+			선택해주세요.<span class="caret"></span>
+		 </button>
+		 <ul class="dropdown-menu dropdown-menu-form chk_type" role="menu"></ul>
+	    </div>
 	  </div>
       <div class="fl">
         <span class="tx_tit">설비 유형</span>
         <div id="equipmentList" class="sa_select">
           <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">전체
+            <button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown">전체
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="type">
@@ -185,15 +40,21 @@
       <div class="fl">
         <span class="tx_tit">알람 타입</span>
         <div class="sa_select">
-          <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">전체
+          <div class="dropdown" id="alarm">
+            <button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown">전체
               <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="type">
+            <ul class="dropdown-menu chk_type" role="menu" id="type">
+              <li>
+                <a href="#" tabindex="-1">
+                  <input type="checkbox" id="type_09" value="all" name="alarm" checked>
+                  <label for="type_09"><span></span>전체</label>
+                </a>
+              </li>
               <li>
                 <a href="#" tabindex="-1">
                   <input type="checkbox" id="type_10" value="9" name="alarm" checked>
-                  <label for="type_11"><span></span>알수없음</label>
+                  <label for="type_10"><span></span>알수없음</label>
                 </a>
               </li>
               <li>
@@ -230,114 +91,11 @@
           </div>
         </div>
       </div>
-	  <div class="fl">
-        <span class="tx_tit">알람 상태</span>
-        <div class="sa_select">
-          <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown">전체
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="type">
-              <li>
-                <a href="#" tabindex="-1">
-                  <input type="checkbox" id="chk_001">
-                  <label for="chk_001"><span></span>확인</label>
-                </a>
-              </li>
-              <li>
-                <a href="#" tabindex="-1">
-                  <input type="checkbox" id="chk_002">
-                  <label for="chk_002"><span></span>미확인</label>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-	   <div class="fl">
-        <span class="tx_tit">조치 상태</span>
-        <div class="sa_select">
-          <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown">전체
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="type">
-              <li>
-                <a href="#" tabindex="-1">
-                  <input type="checkbox" id="chk_003">
-                  <label for="chk_003"><span></span>신규</label>
-                </a>
-              </li>
-              <li>
-                <a href="#" tabindex="-1">
-                  <input type="checkbox" id="chk_004">
-                  <label for="chk_004"><span></span>작업처리중</label>
-                </a>
-              </li>
-			  <li>
-                <a href="#" tabindex="-1">
-                  <input type="checkbox" id="chk_004">
-                  <label for="chk_004"><span></span>추가 정보 대기</label>
-                </a>
-              </li>
-			  <li>
-                <a href="#" tabindex="-1">
-                  <input type="checkbox" id="chk_004">
-                  <label for="chk_004"><span></span>현장 조치 완료</label>
-                </a>
-              </li>
-			  <li>
-                <a href="#" tabindex="-1">
-                  <input type="checkbox" id="chk_004">
-                  <label for="chk_004"><span></span>처리 결과 확인</label>
-                </a>
-              </li>
-			  <li>
-                <a href="#" tabindex="-1">
-                  <input type="checkbox" id="chk_004">
-                  <label for="chk_004"><span></span>처리 완료</label>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-lg-12">
-    <div class="indiv his_chart_top clear">
-      <div class="fl">
-        <span class="tx_tit">그래프 타입</span>
-        <div class="sa_select">
-          <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:182px">전체
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
-              <li>
-                <a href="#">
-                  <input type="checkbox" id="chk010">
-                  <label for="chk010"><span></span>설비 타입</label>
-                </a>
-              </li>
-			   <li>
-                <a href="#" >
-                  <input type="checkbox" id="chk011">
-                  <label for="chk011"><span></span>알람 타입</label>
-                </a>
-              </li>
-			 </ul>
-			</div>
-        </div>
-      </div>
-      
       <div class="fl">
         <span class="tx_tit">조회 기간</span>
         <div class="sa_select">
           <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">1일
+            <button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown">1일
               <span class="caret"></span></button>
             <ul class="dropdown-menu" id="term">
               <li data-value="day"><a href="#">1일</a></li>
@@ -351,9 +109,9 @@
       <div class="fl">
         <span class="tx_tit" id="dateArea">기간 설정</span>
         <div class="sel_calendar">
-          <input type="text" id="datepicker1" class="sel" value="" autocomplete="off" style="width:140px">
+          <input type="text" id="datepicker1" class="sel" value="" autocomplete="off">
           <em>-</em>
-          <input type="text" id="datepicker2" class="sel" value="" autocomplete="off" style="width:140px">
+          <input type="text" id="datepicker2" class="sel" value="" autocomplete="off">
         </div>
       </div>
       <div class="fl">
@@ -372,20 +130,18 @@
         <!-- 기본 항목 -->
         <div class="clear">
           <!-- 우측 항목 -->
-		  <!--
           <div class="fr his_inp_bx">
             <div class="rdo_type his_rdo_bx" id="chartType">
-							<span>
-								<input type="radio" id="rdo03_1" name="radio" value="type" checked>
-								<label for="rdo03_1"><span></span>설비 타입</label>
-							</span>
+			  <span>
+				<input type="radio" id="rdo03_1" name="radio" value="type" checked>
+				<label for="rdo03_1"><span></span>설비 타입</label>
+			  </span>
               <span>
-								<input type="radio" id="rdo03_2" name="radio" value="alarm">
-								<label for="rdo03_2"><span></span>알람 타입</label>
-							</span>
+				<input type="radio" id="rdo03_2" name="radio" value="alarm">
+				<label for="rdo03_2"><span></span>알람 타입</label>
+			  </span>
             </div>
           </div>
-		  -->
         </div>
       </div>
       <br>
@@ -428,103 +184,12 @@
     </div>
   </div>
 </div>
-<div class="row usage_chart_table his_al">
+<div class="row usage_chart_table">
   <div class="col-lg-12">
     <div class="indiv">
       <div class="tbl_wrap_type">
-		<div class="tbl_top clear">
-          <h2 class="ntit fl">PCS</h2>
-		  <button type="button" class="btn_type03 fr">일괄 확인</button>
-        </div>
-        <table class="his_tbl chk_type">
-			
-          <thead>
-            <tr>
-              <th>
-				<input type="checkbox" id="chk014">
-                <label for="chk014"><span></span></label>
-			  </th>
-              <th><button class="btn_align down">사업소</button></th>
-              <th><button class="btn_align down">장치명</button></th>
-              <th><button class="btn_align down">알람 시간</button></th>
-              <th><button class="btn_align down">알람 타입</button></th>
-              <th><button class="btn_align down">알림 메시지</button></th>
-              <th><button class="btn_align down">확인 여부</button></th>
-              <th><button class="btn_align down">조치 상태</button></th>
-              <th><button class="btn_align down">최종 업데이트 시간</button></th>
-            </tr>
-          </thead>
-          <tbody>
-			<!-- 체크박스 체크된 tr에 'chk_tr' 클래스 추가 -->
-			<tr class="chk_tr">
-				<td>
-					<input type="checkbox" id="chk015" checked>
-					<label for="chk015"><span></span></label>
-				</td>
-				<td>혜원솔라 02</td>
-				<td>장치명</td>
-				<td>2020.02.20 15:00:00</td>
-				<td>Connect</td>
-				<td>Over Cell Voltage</td>
-				<td><a href="#;" class="tbl_link" data-toggle="modal" data-target="#myModal01">미확인</a></td>
-				<td><a href="#;" class="tbl_link" data-toggle="modal" data-target="#myModal02">추가 정보 대기</a></td>
-				<td>2020.02.20 15:00:00</td>
-			</tr>
-			<tr>
-				<td>
-					<input type="checkbox" id="chk016">
-					<label for="chk016"><span></span></label>
-				</td>
-				<td>혜원솔라 02</td>
-				<td>장치명</td>
-				<td>2020.02.20 15:00:00</td>
-				<td>Connect</td>
-				<td>Over Cell Voltage</td>
-				<td><a href="#" class="tbl_link">미확인</a></td>
-				<td><a href="#" class="tbl_link">추가 정보 대기</a></td>
-				<td>2020.02.20 15:00:00</td>
-			</tr>
-          </tbody>
-        </table>
-		<div class="tbl_top clear">
-          <h2 class="ntit fl">BMS</h2>
-		  <button type="button" class="btn_type03 fr">일괄 확인</button>
-        </div>
-        <table class="his_tbl" id="INV_PV">
-          <thead>
-            <tr>
-              <th>
-                <button class="btn_align up">장비 타입</button>
-              </th>
-              <th>
-                <button class="btn_align up">장치명</button>
-              </th>
-              <th>
-                <button class="btn_align up">장치 ID</button>
-              </th>
-              <th>
-                <button class="btn_align up">알람 시간</button>
-              </th>
-              <th>
-                <button class="btn_align up">알람 타입</button>
-              </th>
-              <th>
-                <button class="btn_align down">알림 메시지</button>
-              </th>
-              <th>
-                <button class="btn_align down">알림 상태</button>
-              </th>
-              <th>
-                <button class="btn_align down">조치 상태</button>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
         <div class="tbl_top clear">
           <h2 class="ntit fl">태양광 인버터</h2>
-		  <button type="button" class="btn_type03 fr">일괄 확인</button>
         </div>
         <table class="his_tbl" id="INV_PV">
           <thead>
@@ -560,7 +225,6 @@
         </table>
         <div class="tbl_top clear">
           <h2 class="ntit fl">수기입력</h2>
-		  <button type="button" class="btn_type03 fr">일괄 확인</button>
         </div>
         <table class="his_tbl" id="SM_MANUAL">
           <thead>
@@ -656,7 +320,30 @@ const levelTemplate = {
 };
 
 $(function(){
-	deviceTypeList();
+	let sites = JSON.parse('${siteList}');
+	
+	siteList(sites);
+	//사이트 선택시
+	$(document).on('click', ':checkbox[name="site"]', function() {
+		if($(this).is(':checked')) {
+			let extendText = '';
+			if ($(':checkbox[name="site"]:checked').length > 1) {
+				extendText = '외 ' + Number($(':checkbox[name="site"]:checked').length - 1) + '개';
+			}
+			$('#siteList button').html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
+		} else {
+			if($(':checkbox[name="site"]:checked').length == 0) {
+				$('#siteList button').html('선택해주세요.' + '<span class="caret"></span>')
+			} else {
+				let extendText = '';
+				if ($(':checkbox[name="site"]:checked').length > 1) {
+					extendText = '외 ' + Number($(':checkbox[name="site"]:checked').length - 1) + '개';
+				}
+				$('#siteList button').html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
+			}
+		}
+		deviceTypeList();
+	});
 	
 	$(document).on('click', ':checkbox[name="equipment"]', function() {
 		if($(this).is(':checked')) {
@@ -681,13 +368,31 @@ $(function(){
 	});
 	$(".rdo_type").on('click', function(){
 		if($(this).find('input').is(':checked')){
-		}else{
-			$(this).find('input').prop('checked', true);
+			}else{
+				$(this).find('input').prop('checked', true);
 		}
 		
 	})
 	
+	$('#alarm li').on('click', function() {
+		let idx = $('#alarm li').index($(this));
+		if(idx == 0){
+		    if($(this).find(':checkbox').is(":checked")){
+		    	$(':checkbox[name="alarm"]:not(:eq(0))').prop("checked",true);
+		    }
+		    else{
+		    	$(':checkbox[name="alarm"]:not(:eq(0))').prop("checked", false);
+		    }
+		}else{
+			if($(':checkbox[name="alarm"]:not(:eq(0)):checked').length == 6) {
+				$(':checkbox[name="alarm"]:eq(0)').prop('checked', true);
+			} else {
+				$(':checkbox[name="alarm"]:eq(0)').prop('checked', false);
+			}
+		}
+	});
 	
+    		
 	$('#term li').on('click', function() {
 		if($(this).data('value') == 'setup') {
 			$('#dateArea').show();
@@ -734,14 +439,12 @@ $(function(){
 				$(this).data('order', 'asc');
 				$(this).find('a').addClass('asc');
 			} else if (order == 'asc') {
-				console.log(changeTablegird);
 				changeTablegird.sort(function (a, b) {
 					return b[column] - a[column];
 				});
 				$(this).data('order', 'desc');
 				$(this).find('a').addClass('desc');
 			} else {
-				console.log(changeTablegird);
 				changeTablegird.sort(function (a, b) {
 					return a[column] - b[column];
 				});
@@ -752,6 +455,22 @@ $(function(){
 		}
 	});
 });
+
+const siteList = function(sites) {
+	$('#siteList > div > ul').empty();
+
+	let str = '';
+	sites.forEach((site, index) => {
+		str += `<li>
+					<a href="#" data-value="${'${site.sid}'}" tabindex="-1">
+						<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
+						<label for="${'${site.sid}'}"><span></span>${'${site.name}'}</label>
+					</a>
+				</li>`;
+	});
+
+	$('#siteList>div>ul').append(str);
+};
 
 const deviceTypeList = function(){ 
 	$('#equipmentList > div > ul').empty();
@@ -868,38 +587,56 @@ const datafilter = function(array , key){
 }
 
 const deviceType = function(sites){
+	$('#equipmentList button').empty().append('설비유형<span class="caret"></span>');
+
+	const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
+			function(){
+				return $(this).val();
+			}
+		)
+	);
+
 	let deviceTypes = [];
 	const oid = sites[0].oid;
+	  
+	if(siteArray.length > 0){
+	   const arr = deviceInternet(siteArray, oid);
 	
-	//const oid = "ewp";
-	$.ajax({
-		url: 'http://iderms.enertalk.com:8443/config/devices/',
-		type: 'get',
-		async: false,
-		data: {
-			oid: oid
-		},
-		success: function(data) {
-		const arr = [];	
-			data.forEach((data, index) => {
-			     arr.push({ "sid": data.sid, "device": data.device_type });
-			})
-			
-		const deviceTypeArray = datafilter(arr, "device");
-		const siteArray = datafilter(arr, "sid");
-		
-		deviceTypes.push(deviceTypeArray);
-		deviceTypes.push(siteArray);
-		
-		},
-		error: function(error){
-			console.error(error);
-		},
-		dataType: "json"
-	});
+	const deviceTypeArray = datafilter(arr, "device_type");
+	const sidArray = datafilter(arr, "sid");
+	
+	deviceTypes.push(deviceTypeArray);
+	deviceTypes.push(sidArray);
+	}
+	
 	return deviceTypes;
 }
 
+const deviceInternet = function(siteArray, oid){
+	let arr = [];
+	
+	$.each(siteArray, function(i, site){
+		
+		$.ajax({
+			url: 'http://iderms.enertalk.com:8443/config/devices/',
+			type: 'get',
+			async: false,
+			data: {
+				oid: oid,
+				sid: site
+			},
+			success: function(data) {
+		    arr = arr.concat(data);
+			},
+			error: function(error){
+				console.error(error);
+			},
+			dataType: "json"
+		});	
+    
+      })
+     return arr; 
+}
 let dateArr = new Array();
 var fetchCharts = function () {
 	
@@ -1044,8 +781,7 @@ var fetchCharts = function () {
 			
 			$(':checkbox[name="'+chartTypeNm+'"]:checked').each(function() {
 				if(key == $(this).val()){ 
-					typeNm =  $(this).next('label').text()
-					console.log(typeNm);
+					typeNm =  $(this).next('label').text();
 				}
 			});
 			let $temp = {
@@ -1092,7 +828,6 @@ var fetchCharts = function () {
 	$(".chart_legend").empty();
 	var num2 = 0;
 	pieMap.forEach(function(val, key){
-		console.log(typeof(key));
 		var typeNm = key;
 		$(':checkbox[name="'+chartTypeNm+'"]:checked').each(function() {
 			if(key == $(this).val()) typeNm =  $(this).next('label').text();
@@ -1151,7 +886,7 @@ const chartDraw = function(columnSeriesData, pieSeriesData) {
 	                labels: {
 	                  align: 'center',
 	                  style: {
-	                    color: '#3d4250',
+	                    color: 'var(--color3)',
 	                    fontSize: '14px'
 	                  }
 	                },
@@ -1172,7 +907,7 @@ const chartDraw = function(columnSeriesData, pieSeriesData) {
 	                  y: 25, /* 타이틀 위치 조정 */
 	                  x: 5, /* 타이틀 위치 조정 */
 	                  style: {
-	                    color: '#3d4250',
+	                    color: 'var(--color3)',
 	                    fontSize: '14px'
 	                  }
 	                },
@@ -1180,7 +915,7 @@ const chartDraw = function(columnSeriesData, pieSeriesData) {
 	                  overflow: 'justify',
 	                  x: -20, /* 그래프와의 거리 조정 */
 	                  style: {
-	                    color: '#3d4250',
+	                    color: 'var(--color3)',
 	                    fontSize: '14px'
 	                  }
 	                }
@@ -1193,7 +928,7 @@ const chartDraw = function(columnSeriesData, pieSeriesData) {
 	                verticalAlign: 'top',
 	                x: 10,
 	                itemStyle: {
-	                  color: '#3d4250',
+	                  color: 'var(--color3)',
 	                  fontSize: '14px',
 	                  fontWeight: 400
 	                },

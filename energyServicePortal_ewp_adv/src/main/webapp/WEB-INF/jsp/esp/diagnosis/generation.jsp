@@ -1279,7 +1279,6 @@
 	 */
 	const chartDraw = function(seriesData) {
 		let chart = $('#chart2').highcharts();
-
 		if(chart) {
 			chart.destroy();
 		}
