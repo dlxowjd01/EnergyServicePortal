@@ -1407,16 +1407,19 @@
 		} else {
 			let cnt = 0;
 			$('#' + tableId + '> tbody tr :checkbox:checked').each(function() {
+				let data = {
+					confirm: true
+				}
 				$.ajax({
 					url: 'http://iderms.enertalk.com:8443/alarms/'+$(this).val(),
 					type: 'patch',
 					dataType: 'json',
+					async: false,
 					contentType: "application/json",
 					data: JSON.stringify(data),
 					success: function (result) {
 						cnt++;
-					},
-					dataType: 'json'
+					}
 				});
 			});
 
