@@ -1061,7 +1061,7 @@ function getJsonCsvDownload(jsonData, column, header, fileName) {
 //작성일 : 2020-05-14
 //작성자 : lee sang o
 //기능 : 특정영역 input 값들 id 기준으로 json 데이터 생성
-function setAreaParamData(areaId){
+function setAreaParamData(areaId, type) {
 	var $area, param = {};
 	if(areaId){
 		$area = $('#'+areaId);
@@ -1071,7 +1071,12 @@ function setAreaParamData(areaId){
 
 	$area.find(":text,:password").each(function(){
 		var obj = this;
-		param[obj.getAttribute("id")] = obj.value;
+
+		if($.inArray("hasDatepicker", obj.classList) > -1){
+			param[obj.getAttribute("id")] = $(this).datepicker('getDate').toISOString();
+		} else {
+			param[obj.getAttribute("id")] = obj.value;
+		}
 	});
 
 	$area.find("[type='hidden']").each(function(){
@@ -1085,21 +1090,32 @@ function setAreaParamData(areaId){
 			param[obj.getAttribute("id")] = obj.value;
 		}
 	});
+
 	$area.find(":radio").each(function(){
 		var obj = this;
 		if(obj.checked == true){
 			param[obj.getAttribute("name")] = obj.value;
 		}
 	});
+
 	$area.find("select").each(function(){
 		var obj = this;
 		param[obj.getAttribute("id")] = obj.value;
 	});
+
 	$area.find("textarea").each(function(){
 		var obj = this;
 		param[obj.getAttribute("id")] = obj.value;	// \n 특수기호 처리해야함
 
 	});
+
+	if(type != undefined && type == 'dropdown') {
+		$area.find('button.btn-primary').each(function() {
+			var obj = this;
+			param[obj.parentElement.getAttribute('id')] = $(this).data('value');	// \n 특수기호 처리해야함
+		});
+	}
+
 	//alert(JSON.stringify(param));
 	return param;
 };
