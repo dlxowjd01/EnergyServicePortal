@@ -44,346 +44,12 @@
 	let deviceList;
 	let gridList;
 
-	//사업소 조회
-	const siteList = function() {
-		$('#siteList > div > ul').empty();
-
-		let str = '';
-		let sites = JSON.parse('${siteList}');
-		sites.forEach((site, index) => {
-			str += `<li>
-						<a href="#" data-value="${'${site.sid}'}" tabindex="-1">
-							<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
-							<label for="${'${site.sid}'}"><span></span>${'${site.name}'}</label>
-						</a>
-					</li>`;
-		});
-
-		$('#siteList>div>ul').append(str);
-	};
-
-	//선택한 SID에 해당하는 유형의 타입을 보여준다.
-	const deviceType = function () {
-		$('#deviceType button').empty().append('설비유형<span class="caret"></span>');
-
-		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
-				function(){
-					return $(this).val();
-				}
-			)
-		);
-
-		if(siteArray.length > 0) {
-			$.ajax({
-				url : apiURL + configDevice,
-				type : 'get',
-				async : false,
-				data : configDeviceData,
-				success: function(result) {
-					deviceList = result.devices;
-					let deviceType = new Array();
-
-					$('#deviceType ul').empty();
-
-					let str = '';
-					if(deviceList.length > 0) {
-						$.each(siteArray, function(i, site) {
-							// let siteId = site;
-							$.each(deviceList, function(i, el) {
-								if(el.sid == site) {
-									if($.inArray(el.device_type, deviceType) === -1) {
-										let deviceName = eval('deviceTemplate.' + el.device_type);
-										str += `<li>
-													<a href="#" data-value="${'${el.device_type}'}" tabindex="-1">
-														<input type="checkbox" id="type_${'${i}'}" name="type" value="${'${el.device_type}'}">
-														<label for="type_${'${i}'}"><span></span>${'${deviceName}'}</label>
-													</a>
-												</li>`
-										deviceType.push(el.device_type)
-									}
-								}
-							});
-						});
-						$('#deviceType ul').append(str);
-					} else {
-						let typeHtml = $('<li>').append('<a>').data('value', '').attr('href', '#').html('조회된 설비가 없습니다.');
-						$('#type').append(typeHtml);
-						$('#type').before('button').empty().append('설비유형').append('<span class="caret"></span>');
-					}
-				},
-				dataType: 'json'
-			});
-		} else {
-			$('#deviceType ul').empty();
-		}
-	};
-
-	//설비타입 디바이스타입 설정한다.
-	const device = function () {
-		$('#devices button.btn-primary').empty().append('복수 선택').append('<span class="caret"></span>');
-
-		const typeArray = $.makeArray($(':checkbox[name="type"]:checked').map(
-				function(){
-					return $(this).val();
-				}
-			)
-		);
-
-		if(typeArray.length > 0 && deviceList.length > 0) {
-			$('#devices div.sec_li_bx').remove();
-
-			//선택된 사이트를 기준으로 한다.
-			$(':checkbox[name="site"]:checked').each(function () {
-				let siteNm = $(this).next().text()
-				  , siteId = $(this).val()
-				  , siteGrp = $('<div>').addClass('sec_li_bx');
-
-				siteGrp.append('<p>');
-				siteGrp.find('p').addClass('tx_li_tit').text(siteNm);
-				siteGrp.append('<ul>');
-
-				$.each(deviceList, function(i, el) {
-					if (el.sid == siteId) {
-						$.each(typeArray, function(k, elm) {
-							if(elm == el.device_type) {
-								let str = `<li>
-											<a href="#" data-value="${'${el.did}'}" tabindex="-1">
-												<input type="checkbox" id="device_${'${i}'}" name="device" value="${'${el.did}'}" data-sid="${'${el.sid}'}" data-type="${'${el.device_type}'}">
-												<label for="device_${'${i}'}"><span></span>${'${el.name}'}</label>
-											</a>
-										</li>`
-								siteGrp.find('ul').append(str);
-							}
-						});
-					}
-				});
-
-				$('#devices li.dropdown_cov').prepend(siteGrp);
-			});
-		}
-	}
-
-	const searchGrid = function () {
-
-		if($(':checkbox[name="site"]:checked').length == 0) {
-			alert('사이트를 한개이상 선택해 주세요.');
-			return false;
-		}
-
-		if($(':checkbox[name="type"]:checked').length == 0) {
-			alert('설비타입을 한개이상 선택해 주세요.');
-			return false;
-		}
-
-		if($(':checkbox[name="device"]:checked').length == 0) {
-			alert('설비를 한개이상 선택해 주세요.');
-			return false;
-		}
-
-		$('.his_tbl tbody').empty();
-
-		let siteArray = new Array();
-		let deviceArray = new Array();
-
-		$(':checkbox[name="site"]:checked').each(function() {
-			siteArray.push($(this).val());
-		});
-
-		$(':checkbox[name="device"]:checked').each(function() {
-			deviceArray.push($(this).val());
-		});
-
-		//설비유형이 여러개일경우 하나만 들어가서 여러번 호출한다.
-// 		$(':checkbox[id^=type_]:checked').each(function() {
-			let statusSummaryData = {
-				sids: siteArray.join(','),
-				dids: deviceArray.join(','),
-				//deviceType: '',
-				startTime: $('#datepicker1').datepicker('getDate').format('yyyyMMdd') + '000000',
-				endTime: $('#datepicker2').datepicker('getDate').format('yyyyMMdd') + '235959',
-				interval: $('#interval').prev('button').data('value')
-			}
-
-			$.ajax({
-				url : apiURL + statusSummary,
-				type : 'get',
-				async : false,
-				data : statusSummaryData,
-				success: function(result) {
-					if(result.length > 0) {
-						$.each(result, function(i, el) {
-							let trHtml = $('<tr>');
-							//사이트명세팅
-							let siteName = '-';
-							$.each(deviceList, function(j, el2) {
-								if(el2.did == el.did) {
-									$(':checkbox[name="site"]').each(function() {
-										if($(this).val() == el2.sid) {
-											// siteName = $(this).next().text();
-
-											el.siteName = $(this).next().text();
-											el.sid = el2.sid;
-											el.device_type = el2.device_type;
-										}
-									});
-								}
-							});
-
-							let temperature = '-';
-							let voltageR = (el.acVoltageTR != null && el.acVoltageTR != '') ? el.acVoltageTR.toFixed(2) : '-';
-							let voltageS = (el.acVoltageRS != null && el.acVoltageRS != '') ? el.acVoltageRS.toFixed(2) : '-';
-							let voltageT = (el.acVoltageST != null && el.acVoltageST != '') ? el.acVoltageST.toFixed(2) : '-';
-							let currentR = (el.acCurrentR != null && el.acCurrentR != '') ? el.acCurrentR.toFixed(2) : '-';
-							let currentS = (el.acCurrentS != null && el.acCurrentS != '') ? el.acCurrentS.toFixed(2) : '-';
-							let currentT = (el.acCurrentT != null && el.acCurrentT != '') ? el.acCurrentT.toFixed(2) : '-';
-							let activePower = (el.acPower != null && el.acPower != '') ? el.acPower.toFixed(2) : '-';
-							let dcVoltage = (el.dcVoltage != null && el.dcVoltage != '') ? el.dcVoltage.toFixed(2) : '-';
-							let dcCurrent = (el.dcCurrent != null && el.dcCurrent != '') ? el.dcCurrent.toFixed(2) : '-';
-							let dcPower = (el.dcPower != null && el.dcPower != '') ? el.dcPower.toFixed(2) : '-';
-							let operation = el.operation;
-							if(operation == '1') {
-								operation = 'run';
-							} else if(operation == '2') {
-								operation = 'trip';
-							} else {
-								operation = 'stop';
-							}
-
-							trHtml.append('<td>' + el.siteName + '</td>');
-							trHtml.append('<td>' + el.dname + '</td>');
-							trHtml.append('<td>' + new Date(el.timestamp).format('yyyy.MM.dd HH:mm:ss') + '</td>');
-							trHtml.append('<td>' + temperature + '</td>');// 현재없음.
-							trHtml.append('<td>' + voltageR + '</td>');
-							trHtml.append('<td>' + voltageS + '</td>');
-							trHtml.append('<td>' + voltageT + '</td>');
-							trHtml.append('<td>' + currentR + '</td>');
-							trHtml.append('<td>' + currentS + '</td>');
-							trHtml.append('<td>' + currentT + '</td>');
-							trHtml.append('<td>' + activePower + '</td>');
-							trHtml.append('<td>' + dcVoltage + '</td>');
-							trHtml.append('<td>' + dcCurrent + '</td>');
-							trHtml.append('<td>' + dcPower + '</td>');
-							trHtml.append('<td>' + operation + '</td>');
-
-							$('.his_tbl tbody').append(trHtml);
-						});
-
-						gridList = result;
-
-						//분석 기준 설비 선택.
-						setChartDid();
-					}
-				},
-				dataType: 'json'
-			});
-// 		});
-	};
-
-	let tableGrid = function() {
-		$('.his_tbl tbody').empty();
-
-		$.each(gridList, function(i, el) {
-			let trHtml = $('<tr>');
-
-			let temperature = '-';
-			let voltageR = (el.acVoltageTR != null && el.acVoltageTR != '') ? el.acVoltageTR.toFixed(2) : '-';
-			let voltageS = (el.acVoltageRS != null && el.acVoltageRS != '') ? el.acVoltageRS.toFixed(2) : '-';
-			let voltageT = (el.acVoltageST != null && el.acVoltageST != '') ? el.acVoltageST.toFixed(2) : '-';
-			let currentR = (el.acCurrentR != null && el.acCurrentR != '') ? el.acCurrentR.toFixed(2) : '-';
-			let currentS = (el.acCurrentS != null && el.acCurrentS != '') ? el.acCurrentS.toFixed(2) : '-';
-			let currentT = (el.acCurrentT != null && el.acCurrentT != '') ? el.acCurrentT.toFixed(2) : '-';
-			let activePower = (el.acPower != null && el.acPower != '') ? el.acPower.toFixed(2) : '-';
-			let dcVoltage = (el.dcVoltage != null && el.dcVoltage != '') ? el.dcVoltage.toFixed(2) : '-';
-			let dcCurrent = (el.dcCurrent != null && el.dcCurrent != '') ? el.dcCurrent.toFixed(2) : '-';
-			let dcPower = (el.dcPower != null && el.dcPower != '') ? el.dcPower.toFixed(2) : '-';
-			let operation = el.operation;
-			if(operation == '1') {
-				operation = 'run';
-			} else if(operation == '2') {
-				operation = 'trip';
-			} else {
-				operation = 'stop';
-			}
-
-			trHtml.append('<td>' + el.siteName + '</td>');
-			trHtml.append('<td>' + el.dname + '</td>');
-			trHtml.append('<td>' + new Date(el.timestamp).format('yyyy.MM.dd HH:mm:ss') + '</td>');
-			trHtml.append('<td>' + temperature + '</td>');// 현재없음.
-			trHtml.append('<td>' + voltageR + '</td>');
-			trHtml.append('<td>' + voltageS + '</td>');
-			trHtml.append('<td>' + voltageT + '</td>');
-			trHtml.append('<td>' + currentR + '</td>');
-			trHtml.append('<td>' + currentS + '</td>');
-			trHtml.append('<td>' + currentT + '</td>');
-			trHtml.append('<td>' + activePower + '</td>');
-			trHtml.append('<td>' + dcVoltage + '</td>');
-			trHtml.append('<td>' + dcCurrent + '</td>');
-			trHtml.append('<td>' + dcPower + '</td>');
-			trHtml.append('<td>' + operation + '</td>');
-
-			$('.his_tbl tbody').append(trHtml);
-		});
-	};
-
-	const setChartDid = function() {
-		$('[id^=chartDid] ul').empty();
-		$(':checkbox[name="device"]:checked').each(function() {
-			let siteNm = $(this).parents('div.sec_li_bx').find('p.tx_li_tit').text().trim(); //사이트명
-			let deviceNm = $(this).next().text().trim();
-			let val = $(this).val();
-			let sid = $(this).data('sid');
-			let type = $(this).data('type');
-
-			let str = `<li>
-							<a href="#" data-value="${'${val}'}" data-sid="${'${sid}'}" data-type="${'${type}'}">
-								${'${siteNm}_${deviceNm}'}
-							</a>
-						</li>`;
-			$('[id^=chartDid] ul').append(str);
-		});
-	}
-
-	//그래프 태그 중복체크
-	const duplicateTag = function(i) {
-		let dup = false;
-		if(i == 2) {
-			$('#analyzeTag2 span').each(function() {
-				let spanDidX = $(this).data('deviceIdX');
-				let spanColumnX = $(this).data('keyX');
-				let spanRdValX = $(this).data('key2X');
-
-				let spanDidY = $(this).data('deviceIdY');
-				let spanColumnY = $(this).data('keyY');
-				let spanRdValY = $(this).data('key2Y');
-
-				if($('#chartDid2 button').data('value') == spanDidX && $(':radio[name="column2"]:checked').val() == spanColumnX && $(':radio[name="rdValue2"]:checked').val() == spanRdValX
-					&& $('#chartDid3 button').data('value') == spanDidY && $(':radio[name="column3"]:checked').val() == spanColumnY && $(':radio[name="rdValue3"]:checked').val() == spanRdValY
-				) {
-					alert('중복된 항목이 존재합니다.');
-					dup = true;
-				}
-			});
-		} else {
-			$('#analyzeTag1 .tx_tit:eq(' + i + ') span').each(function() {
-				let spanDid = $(this).data('deviceId');
-				let spanColumn = $(this).data('key');
-				let spanRdVal = $(this).data('key2');
-
-				if($('#chartDid button').data('value') == spanDid
-						&& $(':radio[name="column"]:checked').val() == spanColumn
-						&& $(':radio[name="rdValue"]:checked').val() == spanRdVal
-				) {
-					alert('중복된 항목이 존재합니다.');
-					dup = true;
-				}
-			});
-		}
-
-		return dup;
-	}
-
 	$(function () {
 		siteList();
+
+		setInitList('columnLi');
+		setInitList('columnLi2');
+		setInitList('columnLi3');
 
 		//사이트 선택시
 		$(document).on('click', ':checkbox[name="site"]', function() {
@@ -472,7 +138,18 @@
 			let val = $(this).data('value');
 			let sid = $(this).data('sid');
 			let type = $(this).data('type');
+			let idNum = $(this).parents('div.sa_select').prop('id').replace('chartDid', '');
+
 			$(this).parents('ul').prev('button').data('value', val).data('sid', sid).data('type', type).empty().append($(this).html()).append('<span class="caret"></span>');
+
+
+			$.map(featureProperties, function(value, key) {
+				if (type == key) {
+					$('#columnLi' + idNum).empty().prev().html('선택 <span class="caret"></span>');
+					setMakeList(value, 'columnLi' + idNum, {"dataFunction": {"INDEX": getNumberIndex}}); //list생성
+				}
+			});
+
 		});
 
 		$(document).on('click', '#way a', function() {
@@ -659,6 +336,9 @@
 				$span.data('keyY', $(':radio[name="column3"]:checked').val());
 				$span.data('key2Y', $(':radio[name="rdValue3"]:checked').val());
 
+				$span.data('typeX', $('#chartDid2 button').data('type'));
+				$span.data('typeY', $('#chartDid3 button').data('type'));
+
 				$span.find('button').append('닫기');
 
 				$('#analyzeTag2 > div.fl').append($span);
@@ -686,11 +366,6 @@
 					return false;
 				}
 
-				//시간순으로 정렬을 해준다.
-				gridList.sort(function(a, b) {
-					return a['timestamp'] - b['timestamp'];
-				})
-
 				let index = 0;
 				let dupY = 1;
 
@@ -698,7 +373,7 @@
 					let dataArr = new Array();
 
 					let keyText = $(this).data('key');
-					let keyText2 = $(this).data('key2') != '' ? '_' + $(this).data('key2') : '';
+					let keyText2 = $(this).data('key2');
 					let deviceId = $(this).data('deviceId');
 					let sid = $(this).data('sid');
 					let type = $(this).data('type');
@@ -706,11 +381,15 @@
 					let temp = {};
 					let suffix = '';
 
-					$.each(gridList, function(j, el) {
-						if(el.did == deviceId) {
-							dataArr.push({
-								'x': el.timestamp,
-								'y': eval('el.' + keyText + keyText2)
+					$.map(gridList, function(value, key) {
+						if(type == key) {
+							$.each(value, function(j, el) {
+								if(el.did == deviceId) {
+									dataArr.push({
+										'x': Number(el.basetime),
+										'y': parseFloat(eval('el.' + keyText2 + '.' + keyText))
+									});
+								}
 							});
 						}
 					});
@@ -792,18 +471,22 @@
 					let dataArr = new Array();
 
 					let keyText = $(this).data('key');
-					let keyText2 = $(this).data('key2') != '' ? '_' + $(this).data('key2') : '';
+					let keyText2 = $(this).data('key2');
 					let deviceId = $(this).data('deviceId');
 					let sid = $(this).data('sid');
 					let type = $(this).data('type');
 
 					let temp = {};
 					let suffix = '';
-					$.each(gridList, function (j, el) {
-						if(el.did == deviceId) {
-							dataArr.push({
-								'x': el.timestamp,
-								'y': eval('el.' + keyText + keyText2)
+					$.map(gridList, function(value, key) {
+						if(type == key) {
+							$.each(value, function(j, el) {
+								if(el.did == deviceId) {
+									dataArr.push({
+										'x': Number(el.basetime),
+										'y': parseFloat(eval('el.' + keyText2 + '.' + keyText))
+									});
+								}
 							});
 						}
 					});
@@ -844,10 +527,10 @@
 					return false;
 				}
 
-				//시간순으로 정렬을 해준다.
-				gridList.sort(function(a, b) {
-					return a['timestamp'] - b['timestamp'];
-				})
+				// //시간순으로 정렬을 해준다.
+				// gridList.sort(function(a, b) {
+				// 	return a['timestamp'] - b['timestamp'];
+				// })
 
 				let index = 0;
 				let dupY = 1;
@@ -856,30 +539,60 @@
 
 					let seriesName = $(this).text().replace(/\n(\s*)/gi, '').trim().replace('닫기', '');
 					let keyTextX = $(this).data('keyX');
-					let keyText2X = $(this).data('key2X') != '' ? '_' + $(this).data('key2X') : '';
+					let keyText2X = $(this).data('key2X');
 					let deviceIdX = $(this).data('deviceIdX');
 
 					let keyTextY = $(this).data('keyY');
-					let keyText2Y = $(this).data('key2Y') != '' ? '_' + $(this).data('key2Y') : '';
+					let keyText2Y = $(this).data('key2Y');
 					let deviceIdY = $(this).data('deviceIdY');
+
+					let typeX = $(this).data('typeX');
+					let typeY = $(this).data('typeY');
 
 					let temp = {};
 					let suffix = '';
 
-					$.each(gridList, function(j, el) {
-						let timestamp = ''
-						if(el.did == deviceIdX) {
-							timestamp = el.timestamp;
-							dataArr.push([
-								eval('el.' + keyTextX + keyText2X)
-							]);
+					$.map(gridList, function(value, key) {
+						if(typeX == key) {
+							$.each(value, function(j, el) {
+								let basetime = '';
+								basetime = Number(el.basetime);
+								dataArr.push([
+									parseFloat(eval('el.' + keyText2X + '.' + keyTextX))
+								]);
 
-							gridList.some(function(v, k) {
-								if(v.did == deviceIdY && timestamp == v.timestamp) {
-									dataArr[dataArr.length - 1].push(eval('v.' + keyTextY + keyText2Y))
+								if(el.did == deviceIdX) {
+									dataArr.push({
+										'x': Number(el.basetime),
+										'y': parseFloat(eval('el.' + keyText2X + '.' + keyTextX))
+									});
 								}
 							});
 						}
+					});
+
+					$.map(gridList, function(value, key) {
+						if (typeY == key) {
+							$.each(value, function (j, el) {
+								let timestamp = ''
+								if (el.did == deviceIdX) {
+									timestamp = Number(el.basetime);
+									dataArr.push([
+										parseFloat(eval('el.' + keyText2Y + '.' + keyTextY))
+									]);
+
+									value.some(function (v, k) {
+										if (v.did == deviceIdY && timestamp == Number(v.basetime)) {
+											dataArr[dataArr.length - 1].push(parseFloat(eval('v.' + keyText2Y + '.' + keyTextY)))
+										}
+									});
+								}
+							});
+						}
+					});
+
+					dataArr.sort(function(a, b) {
+						return a['basetime'] - b['basetime'];
 					});
 
 					temp = {
@@ -915,7 +628,411 @@
 				}
 			}
 		});
+
+		deviceProperties();
 	});
+
+	const getNumberIndex = function (index) {
+		return index + 1;
+	}
+
+	let tableProperties = new Object();
+	let featureProperties = new Object();
+	const deviceProperties = function() {
+		$.ajax({
+			url: apiURL + '/config/view/device_properties',
+			type: 'get',
+			async: false,
+			data: {
+				version: '20200513'
+			},
+			success: function(result) {
+				$.map(result, function(val, key) {
+					let deviceName = key;
+					let propList = val.properties;
+					let tempTable = new Array();
+					let tempFeature = new Array();
+
+					$.map(propList, function(v, k) {
+						if(v.analysis_table) {
+							let tempObj = new Object();
+							if(k == 'currentS') {
+								tempObj['key'] = k;
+								tempObj['value'] = v.name;
+							} else {
+								tempObj['key'] = k;
+								tempObj['value'] = v.name.kr;
+							}
+							tempTable.push(tempObj);
+						}
+
+						if(v.analysis_feature) {
+							let tempObj = new Object();
+							if(k == 'currentS') {
+								tempObj['key'] = k;
+								tempObj['value'] = v.name;
+							} else {
+								tempObj['key'] = k;
+								tempObj['value'] = v.name.kr;
+							}
+							tempFeature.push(tempObj);
+						}
+					});
+					tableProperties[deviceName] = tempTable;
+					featureProperties[deviceName] = tempFeature;
+				});
+			},
+			dataType: 'json'
+		});
+	};
+
+	//사업소 조회
+	const siteList = function() {
+		$('#siteList > div > ul').empty();
+
+		let str = '';
+		let sites = JSON.parse('${siteList}');
+		sites.forEach((site, index) => {
+			str += `<li>
+						<a href="#" data-value="${'${site.sid}'}" tabindex="-1">
+							<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
+							<label for="${'${site.sid}'}"><span></span>${'${site.name}'}</label>
+						</a>
+					</li>`;
+		});
+
+		$('#siteList>div>ul').append(str);
+	};
+
+	//선택한 SID에 해당하는 유형의 타입을 보여준다.
+	const deviceType = function () {
+		$('#deviceType button').empty().append('설비유형<span class="caret"></span>');
+
+		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
+				function(){
+					return $(this).val();
+				}
+			)
+		);
+
+		if(siteArray.length > 0) {
+			$.ajax({
+				url : apiURL + configDevice,
+				type : 'get',
+				async : false,
+				data : configDeviceData,
+				success: function(result) {
+					deviceList = result.devices;
+					let deviceType = new Array();
+
+					$('#deviceType ul').empty();
+
+					let str = '';
+					if(deviceList.length > 0) {
+						$.each(siteArray, function(i, site) {
+							// let siteId = site;
+							$.each(deviceList, function(i, el) {
+								if(el.sid == site) {
+									if($.inArray(el.device_type, deviceType) === -1) {
+										let deviceName = eval('deviceTemplate.' + el.device_type);
+										str += `<li>
+													<a href="#" data-value="${'${el.device_type}'}" tabindex="-1">
+														<input type="checkbox" id="type_${'${i}'}" name="type" value="${'${el.device_type}'}">
+														<label for="type_${'${i}'}"><span></span>${'${deviceName}'}</label>
+													</a>
+												</li>`
+										deviceType.push(el.device_type)
+									}
+								}
+							});
+						});
+						$('#deviceType ul').append(str);
+					} else {
+						let typeHtml = $('<li>').append('<a>').data('value', '').attr('href', '#').html('조회된 설비가 없습니다.');
+						$('#type').append(typeHtml);
+						$('#type').before('button').empty().append('설비유형').append('<span class="caret"></span>');
+					}
+				},
+				dataType: 'json'
+			});
+		} else {
+			$('#deviceType ul').empty();
+		}
+	};
+
+	//설비타입 디바이스타입 설정한다.
+	const device = function () {
+		$('#devices button.btn-primary').empty().append('복수 선택').append('<span class="caret"></span>');
+
+		const typeArray = $.makeArray($(':checkbox[name="type"]:checked').map(
+				function(){
+					return $(this).val();
+				}
+			)
+		);
+
+		if(typeArray.length > 0 && deviceList.length > 0) {
+			$('#devices div.sec_li_bx').remove();
+
+			//선택된 사이트를 기준으로 한다.
+			$(':checkbox[name="site"]:checked').each(function () {
+				let siteNm = $(this).next().text()
+				  , siteId = $(this).val()
+				  , siteGrp = $('<div>').addClass('sec_li_bx');
+
+				siteGrp.append('<p>');
+				siteGrp.find('p').addClass('tx_li_tit').text(siteNm);
+				siteGrp.append('<ul>');
+
+				$.each(deviceList, function(i, el) {
+					if (el.sid == siteId) {
+						$.each(typeArray, function(k, elm) {
+							if(elm == el.device_type) {
+								let str = `<li>
+											<a href="#" data-value="${'${el.did}'}" tabindex="-1">
+												<input type="checkbox" id="device_${'${i}'}" name="device" value="${'${el.did}'}" data-sid="${'${el.sid}'}" data-type="${'${el.device_type}'}">
+												<label for="device_${'${i}'}"><span></span>${'${el.name}'}</label>
+											</a>
+										</li>`
+								siteGrp.find('ul').append(str);
+							}
+						});
+					}
+				});
+
+				$('#devices li.dropdown_cov').prepend(siteGrp);
+			});
+		}
+	}
+
+	const makeTableTemplate = function () {
+		$('#datatable').empty();
+
+		$(':checkbox[name="type"]:checked').each(function() {
+			let chkVal = $(this).val();
+			let targetTable = document.createElement('table');
+			let thead = targetTable.createTHead();
+			let tbody = targetTable.createTBody();
+			let hRow = thead.insertRow();
+			let bRow = tbody.insertRow();
+
+			targetTable.setAttribute('class', 'his_tbl');
+			tbody.setAttribute('id', chkVal+'_Table');
+
+			console.log(chkVal);
+			$.map(tableProperties, function(value, key) {
+				if(chkVal == key) {
+					$.each(value, function(idx, valObj) {
+						let hCell = document.createElement("TH");
+						hCell.innerHTML = valObj.value;
+						hRow.appendChild(hCell);
+
+						let bCell = bRow.insertCell();
+						if (valObj.key == 'did') {
+							bCell.innerHTML = '[dname]';
+						} else {
+							bCell.innerHTML = '[' + valObj.key + ']';
+						}
+
+					});
+
+					let html = $('<div>').addClass('col-lg-12');
+					$('<div>').addClass('indiv').appendTo(html);
+					html.find('div.indiv').append(targetTable);
+					$('#datatable').append(html);
+					setInitList(chkVal+'_Table');
+				}
+			});
+		});
+	};
+
+	const searchGrid = function () {
+
+		if($(':checkbox[name="site"]:checked').length == 0) {
+			alert('사이트를 한개이상 선택해 주세요.');
+			return false;
+		}
+
+		if($(':checkbox[name="type"]:checked').length == 0) {
+			alert('설비타입을 한개이상 선택해 주세요.');
+			return false;
+		}
+
+		if($(':checkbox[name="device"]:checked').length == 0) {
+			alert('설비를 한개이상 선택해 주세요.');
+			return false;
+		}
+
+		let siteArray = new Array();
+		let deviceArray = new Array();
+
+		$(':checkbox[name="site"]:checked').each(function() {
+			siteArray.push($(this).val());
+		});
+
+		$(':checkbox[name="device"]:checked').each(function() {
+			deviceArray.push($(this).val());
+		});
+
+		makeTableTemplate();
+		//설비유형이 여러개일경우 하나만 들어가서 여러번 호출한다.
+// 		$(':checkbox[id^=type_]:checked').each(function() {
+			let statusSummaryData = {
+				sids: siteArray.join(','),
+				dids: deviceArray.join(','),
+				//deviceType: '',
+				startTime: $('#datepicker1').datepicker('getDate').format('yyyyMMdd') + '000000',
+				endTime: $('#datepicker2').datepicker('getDate').format('yyyyMMdd') + '235959',
+				interval: $('#interval').prev('button').data('value'),
+				formId: 'v2'
+			}
+
+			$.ajax({
+				url : apiURL + statusSummary,
+				type : 'get',
+				async : false,
+				data : statusSummaryData,
+				success: function(result) {
+					console.log(result);
+
+					let chart = $('#hchart2').highcharts();
+					if(chart) {
+						chart.destroy();
+
+						$('[id^=columnLi]').empty().prev().html('선택 <span class="caret"></span>');
+					}
+
+					$.map(result, function(value, key) {
+						if($('#'+key+'_Table').length > 0) {
+							if(key == 'INV_PV') {
+								$.each(value, function(idx, valObj) {
+									value[idx].localtime = String (valObj.basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+									$.map(valObj.mean, function(v, k) {
+										valObj.mean[k] = numberComma(v.toFixed(2));
+									});
+									$.extend(value[idx], valObj.mean);
+
+								});
+							}
+
+							setMakeList(value, key + '_Table', {'dataFunction': {}}); //list생성
+
+							$('#' + key + '_Table').find('td').each(function() {
+								$(this).html($(this).html().replace(/ *\[[^)]*\] */g, ''));
+							});
+						}
+					});
+
+					gridList = result;
+					setChartDid();
+				},
+				dataType: 'json'
+			});
+// 		});
+	};
+
+	let tableGrid = function() {
+		$('.his_tbl tbody').empty();
+
+		$.each(gridList, function(i, el) {
+			let trHtml = $('<tr>');
+
+			let temperature = '-';
+			let voltageR = (el.acVoltageTR != null && el.acVoltageTR != '') ? el.acVoltageTR.toFixed(2) : '-';
+			let voltageS = (el.acVoltageRS != null && el.acVoltageRS != '') ? el.acVoltageRS.toFixed(2) : '-';
+			let voltageT = (el.acVoltageST != null && el.acVoltageST != '') ? el.acVoltageST.toFixed(2) : '-';
+			let currentR = (el.acCurrentR != null && el.acCurrentR != '') ? el.acCurrentR.toFixed(2) : '-';
+			let currentS = (el.acCurrentS != null && el.acCurrentS != '') ? el.acCurrentS.toFixed(2) : '-';
+			let currentT = (el.acCurrentT != null && el.acCurrentT != '') ? el.acCurrentT.toFixed(2) : '-';
+			let activePower = (el.acPower != null && el.acPower != '') ? el.acPower.toFixed(2) : '-';
+			let dcVoltage = (el.dcVoltage != null && el.dcVoltage != '') ? el.dcVoltage.toFixed(2) : '-';
+			let dcCurrent = (el.dcCurrent != null && el.dcCurrent != '') ? el.dcCurrent.toFixed(2) : '-';
+			let dcPower = (el.dcPower != null && el.dcPower != '') ? el.dcPower.toFixed(2) : '-';
+			let operation = el.operation;
+			if(operation == '1') {
+				operation = 'run';
+			} else if(operation == '2') {
+				operation = 'trip';
+			} else {
+				operation = 'stop';
+			}
+
+			trHtml.append('<td>' + el.siteName + '</td>');
+			trHtml.append('<td>' + el.dname + '</td>');
+			trHtml.append('<td>' + new Date(el.timestamp).format('yyyy.MM.dd HH:mm:ss') + '</td>');
+			trHtml.append('<td>' + temperature + '</td>');// 현재없음.
+			trHtml.append('<td>' + voltageR + '</td>');
+			trHtml.append('<td>' + voltageS + '</td>');
+			trHtml.append('<td>' + voltageT + '</td>');
+			trHtml.append('<td>' + currentR + '</td>');
+			trHtml.append('<td>' + currentS + '</td>');
+			trHtml.append('<td>' + currentT + '</td>');
+			trHtml.append('<td>' + activePower + '</td>');
+			trHtml.append('<td>' + dcVoltage + '</td>');
+			trHtml.append('<td>' + dcCurrent + '</td>');
+			trHtml.append('<td>' + dcPower + '</td>');
+			trHtml.append('<td>' + operation + '</td>');
+
+			$('.his_tbl tbody').append(trHtml);
+		});
+	};
+
+	const setChartDid = function() {
+		$('[id^=chartDid] ul').empty();
+		$(':checkbox[name="device"]:checked').each(function() {
+			let siteNm = $(this).parents('div.sec_li_bx').find('p.tx_li_tit').text().trim(); //사이트명
+			let deviceNm = $(this).next().text().trim();
+			let val = $(this).val();
+			let sid = $(this).data('sid');
+			let type = $(this).data('type');
+
+			let str = `<li>
+							<a href="#" data-value="${'${val}'}" data-sid="${'${sid}'}" data-type="${'${type}'}">
+								${'${siteNm}_${deviceNm}'}
+							</a>
+						</li>`;
+			$('[id^=chartDid] ul').append(str);
+		});
+	}
+
+	//그래프 태그 중복체크
+	const duplicateTag = function(i) {
+		let dup = false;
+		if(i == 2) {
+			$('#analyzeTag2 span').each(function() {
+				let spanDidX = $(this).data('deviceIdX');
+				let spanColumnX = $(this).data('keyX');
+				let spanRdValX = $(this).data('key2X');
+
+				let spanDidY = $(this).data('deviceIdY');
+				let spanColumnY = $(this).data('keyY');
+				let spanRdValY = $(this).data('key2Y');
+
+				if($('#chartDid2 button').data('value') == spanDidX && $(':radio[name="column2"]:checked').val() == spanColumnX && $(':radio[name="rdValue2"]:checked').val() == spanRdValX
+					&& $('#chartDid3 button').data('value') == spanDidY && $(':radio[name="column3"]:checked').val() == spanColumnY && $(':radio[name="rdValue3"]:checked').val() == spanRdValY
+				) {
+					alert('중복된 항목이 존재합니다.');
+					dup = true;
+				}
+			});
+		} else {
+			$('#analyzeTag1 .tx_tit:eq(' + i + ') span').each(function() {
+				let spanDid = $(this).data('deviceId');
+				let spanColumn = $(this).data('key');
+				let spanRdVal = $(this).data('key2');
+
+				if($('#chartDid button').data('value') == spanDid
+						&& $(':radio[name="column"]:checked').val() == spanColumn
+						&& $(':radio[name="rdValue"]:checked').val() == spanRdVal
+				) {
+					alert('중복된 항목이 존재합니다.');
+					dup = true;
+				}
+			});
+		}
+
+		return dup;
+	}
 
 	const chartDraw = function(chartSeries) {
 		let chart = $('#hchart2').highcharts();
@@ -1167,74 +1284,14 @@
 								</div>
 								<div class="sa_select">
 									<div class="dropdown">
-										<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" data-value="acVoltageRS">
-											AC 전압R<span class="caret"></span>
+										<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" data-value="">
+											선택<span class="caret"></span>
 										</button>
-										<ul class="dropdown-menu dropdown-menu-form rdo_type" role="menu">
+										<ul class="dropdown-menu dropdown-menu-form rdo_type" role="menu" id="columnLi">
 											<li>
-												<a href="#" data-value="acVoltageRS" tabindex="-1">
-													<input type="radio" id="column01" name="column" value="acVoltageRS" checked>
-													<label for="column01"><span></span>AC 전압R</label>
-												</a>
-											</li>
-											<li>
-												<a href="#" data-value="acVoltageST" tabindex="-1">
-													<input type="radio" id="column02" name="column" value="acVoltageST">
-													<label for="column02"><span></span>AC 전압S</label>
-												</a>
-											</li>
-											<li>
-												<a href="#" data-value="acVoltageST" tabindex="-1">
-													<input type="radio" id="column03" name="column" value="acVoltageST">
-													<label for="column03"><span></span>AC 전압T</label>
-												</a>
-											</li>
-											<li>
-												<a href="#" data-value="acCurrentR" tabindex="-1">
-													<input type="radio" id="column04" name="column" value="acCurrentR">
-													<label for="column04"><span></span>AC 전류R</label>
-												</a>
-											</li>
-											<li>
-												<a href="#" data-value="acCurrentS" tabindex="-1">
-													<input type="radio" id="column05" name="column" value="acCurrentS">
-													<label for="column05"><span></span>AC 전류S</label>
-												</a>
-											</li>
-											<li>
-												<a href="#" data-value="acCurrentT" tabindex="-1">
-													<input type="radio" id="column06" name="column" value="acCurrentT">
-													<label for="column06"><span></span>AC 전류T</label>
-												</a>
-											</li>
-											<li>
-												<a href="#" data-value="acPower" tabindex="-1">
-													<input type="radio" id="column07" name="column" value="acPower">
-													<label for="column07"><span></span>순시전력</label>
-												</a>
-											</li>
-											<li>
-												<a href="#" data-value="dcVoltage" tabindex="-1">
-													<input type="radio" id="column08" name="column" value="dcVoltage">
-													<label for="column08"><span></span>DC 전압T</label>
-												</a>
-											</li>
-											<li>
-												<a href="#" data-value="dcCurrent" tabindex="-1">
-													<input type="radio" id="column09" name="column" value="dcCurrent">
-													<label for="column09"><span></span>DC 전류</label>
-												</a>
-											</li>
-											<li>
-												<a href="#" data-value="dcPower" tabindex="-1">
-													<input type="radio" id="column10" name="column" value="dcPower">
-													<label for="column10"><span></span>DC 전력</label>
-												</a>
-											</li>
-											<li>
-												<a href="#" data-value="temperature" tabindex="-1">
-													<input type="radio" id="column11" name="column" value="temperature">
-													<label for="column11"><span></span>인버터 온도</label>
+												<a href="#" data-value="[key]" tabindex="-1">
+													<input type="radio" id="column[INDEX]" name="column" value="[key]">
+													<label for="column[INDEX]"><span></span>[value]</label>
 												</a>
 											</li>
 										</ul>
@@ -1242,7 +1299,7 @@
 								</div>
 								<div class="sa_select">
 									<div class="dropdown">
-										<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown" data-vlue="avg">
+										<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown" data-vlue="mean">
 											평균<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu rdo_type dropdown-menu-form" role="menu">
@@ -1260,7 +1317,7 @@
 											</li>
 											<li>
 												<a href="#" data-value="avg" tabindex="-1">
-													<input type="radio" id="rdValue3" name="rdValue" value="" checked>
+													<input type="radio" id="rdValue3" name="rdValue" value="mean" checked>
 													<label for="rdValue3"><span></span>평균</label>
 												</a>
 											</li>
@@ -1294,73 +1351,13 @@
 									<div class="sa_select">
 										<div class="dropdown">
 											<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown">
-												AC 전압R<span class="caret"></span>
+												선택<span class="caret"></span>
 											</button>
-											<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
+											<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="columnLi2">
 												<li>
-													<a href="#" data-value="acVoltageRS" tabindex="-1">
-														<input type="radio" id="column02_01" name="column2" value="acVoltageRS" checked>
-														<label for="column02_01"><span></span>AC 전압R</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acVoltageST" tabindex="-1">
-														<input type="radio" id="column02_02" name="column2" value="acVoltageST">
-														<label for="column02_02"><span></span>AC 전압S</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acVoltageST" tabindex="-1">
-														<input type="radio" id="column02_03" name="column2" value="acVoltageST">
-														<label for="column02_03"><span></span>AC 전압T</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acCurrentR" tabindex="-1">
-														<input type="radio" id="column02_04" name="column2" value="acCurrentR">
-														<label for="column02_04"><span></span>AC 전류R</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acCurrentS" tabindex="-1">
-														<input type="radio" id="column02_05" name="column2" value="acCurrentS">
-														<label for="column02_06"><span></span>AC 전류S</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acCurrentT" tabindex="-1">
-														<input type="radio" id="column02_06" name="column2" value="acCurrentT">
-														<label for="column02_06"><span></span>AC 전류T</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acPower" tabindex="-1">
-														<input type="radio" id="column02_07" name="column2" value="acPower">
-														<label for="column02_07"><span></span>순시전력</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="dcVoltage" tabindex="-1">
-														<input type="radio" id="column02_08" name="column2" value="dcVoltage">
-														<label for="column02_08"><span></span>DC 전압T</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="dcCurrent" tabindex="-1">
-														<input type="radio" id="column02_09" name="column2" value="dcCurrent">
-														<label for="column02_09"><span></span>DC 전류</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="dcPower" tabindex="-1">
-														<input type="radio" id="column02_10" name="column2" value="dcPower">
-														<label for="column02_10"><span></span>DC 전력</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="temperature" tabindex="-1">
-														<input type="radio" id="column02_11" name="column2" value="temperature">
-														<label for="column02_11"><span>인버터 온도</label>
+													<a href="#" data-value="[key]" tabindex="-1">
+														<input type="radio" id="column02_[INDEX]" name="column2" value="[key]">
+														<label for="column02_[INDEX]"><span></span>[value]</label>
 													</a>
 												</li>
 											</ul>
@@ -1386,7 +1383,7 @@
 												</li>
 												<li>
 													<a href="#" data-value="option2" tabindex="-1">
-														<input type="radio" id="rdValue2_03" name="rdValue2" value="" checked>
+														<input type="radio" id="rdValue2_03" name="rdValue2" value="mean" checked>
 														<label for="rdValue2_03"><span></span>평균</label>
 													</a>
 												</li>
@@ -1409,73 +1406,13 @@
 									<div class="sa_select">
 										<div class="dropdown">
 											<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown">
-												AC 전압R<span class="caret"></span>
+												선택<span class="caret"></span>
 											</button>
-											<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
+											<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="columnLi3">
 												<li>
-													<a href="#" data-value="acVoltageRS" tabindex="-1">
-														<input type="radio" id="column03_01" name="column3" value="acVoltageRS" checked>
-														<label for="column03_01"><span></span>AC 전압R</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acVoltageST" tabindex="-1">
-														<input type="radio" id="column03_02" name="column3" value="acVoltageST">
-														<label for="column03_02"><span></span>AC 전압S</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acVoltageST" tabindex="-1">
-														<input type="radio" id="column03_03" name="column3" value="acVoltageST">
-														<label for="column03_03"><span></span>AC 전압T</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acCurrentR" tabindex="-1">
-														<input type="radio" id="column03_04" name="column3" value="acCurrentR">
-														<label for="column03_04"><span></span>AC 전류R</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acCurrentS" tabindex="-1">
-														<input type="radio" id="column03_05" name="column3" value="acCurrentS">
-														<label for="column03_05"><span></span>AC 전류S</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acCurrentT" tabindex="-1">
-														<input type="radio" id="column03_06" name="column3" value="acCurrentT">
-														<label for="column03_06"><span></span>AC 전류T</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="acPower" tabindex="-1">
-														<input type="radio" id="column03_07" name="column3" value="acPower">
-														<label for="column03_07"><span></span>순시전력</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="dcVoltage" tabindex="-1">
-														<input type="radio" id="column03_08" name="column3" value="dcVoltage">
-														<label for="column03_08"><span></span>DC 전압T</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="dcCurrent" tabindex="-1">
-														<input type="radio" id="column03_09" name="column3" value="dcCurrent">
-														<label for="column03_09"><span></span>DC 전류</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="dcPower" tabindex="-1">
-														<input type="radio" id="column03_10" name="column3" value="dcPower">
-														<label for="column03_10"><span></span>DC 전력</label>
-													</a>
-												</li>
-												<li>
-													<a href="#" data-value="temperature" tabindex="-1">
-														<input type="radio" id="column03_11" name="column3" value="temperature">
-														<label for="column03_11"><span></span>인버터 온도</label>
+													<a href="#" data-value="[key]" tabindex="-1">
+														<input type="radio" id="column03_[INDEX]" name="column3" value="[key]">
+														<label for="column03_[INDEX]"><span></span>[value]</label>
 													</a>
 												</li>
 											</ul>
@@ -1500,7 +1437,7 @@
 												</li>
 												<li>
 													<a href="#" data-value="option2" tabindex="-1">
-														<input type="radio" id="rdValue3_3" name="rdValue3" value="" checked>
+														<input type="radio" id="rdValue3_3" name="rdValue3" value="mean" checked>
 														<label for="rdValue3_3"><span></span>평균</label>
 													</a>
 												</li>
@@ -1598,8 +1535,8 @@
 			</div>
 		</div>
 
-		<div class="row usage_chart_table">
-			<div class="col-lg-12" id="datatable">
+		<div class="row usage_chart_table" id="datatable">
+			<div class="col-lg-12">
 				<div class="indiv">
 					<table class="his_tbl">
 						<thead>
