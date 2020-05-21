@@ -37,7 +37,12 @@
 			}
 		});
 
-		$(document).on('click', '.dropdown li', function () {
+		$(document).on('click', '.dropdown li', function (e) {
+			e.preventDefault();
+			if($(this).hasClass('disabled')) {
+				return false;
+			}
+
 			let dataValue = $(this).data('value');
 			let dataText = $(this).text();
 			let id = $(this).parents('.dropdown').prop('id');
@@ -53,38 +58,11 @@
 						includeGens: true
 					}
 				}, setSpcGen);
-			} else if (id == 'spcGen' || id == 'year' || id == 'month') {
+			} else if (id == 'spcGen') {
 				// 사이트 정보 조회
 				let sid = $('#spcGen button').data('value');
 				if (sid == undefined || sid == '') {
 					return;
-				}
-
-				let standard = $('#year button').data('value') + ('0' + $('#month button').data('value')).slice(-2);
-				let todayYYYMM = today.format('yyyyMM');
-				if (standard == todayYYYMM) { //요번달이면 now 조회
-					callAjax({
-						url: 'http://iderms.enertalk.com:8443/energy/now/sites',
-						type: 'get',
-						data: {
-							sids: sid,
-							metering_type: ' ',
-							interval: 'month'
-						}
-					}, setSitesNowMoney);
-				} else {
-					callAjax({
-						url: 'http://iderms.enertalk.com:8443/energy/sites',
-						type: 'get',
-						data: {
-							sid: sid,
-							startTime: standard + '01000000',
-							endTime: standard + '31000000',
-							interval: 'month',
-							displayType: 'billing'
-						}
-					}, setSitesMoney);
-
 				}
 
 				callAjax({
@@ -95,6 +73,14 @@
 						site_id: $('#spcGen button').data('value')
 					}
 				}, setRepestCost);
+
+				selAbleMonth();
+			} else if(id == 'year' || id == 'month') {
+				if(id == 'year') {
+					selAbleMonth();
+				}
+
+				payment();
 			}
 		});
 
@@ -109,7 +95,7 @@
 			let loan_period = $('[name^="period_"]').eq(idx).val(); //기간
 			let loan_term = 0;
 			let total_iza = 0;		//총이자
-			let iza = 0;	        //이자
+			let iza = 0;            //이자
 			let org_loan = 0;	    //납입원금
 			let repayment = 0;	    //상환금
 			let org_loan_tot = 0;	//납입원금 누계
@@ -308,7 +294,7 @@
 
 		$('#inflowOfCash').val(inflow);
 		$('#outflowOfCash').val(outflow);
-		$('#endOfTerm').val(endOfTerm);
+		$('#endOfTerm').val('');
 		$('#endOfTermFlow').val(endOfTermFlow);
 	};
 
@@ -880,6 +866,81 @@
 		tr.find('input[name$="_originalname"]').val('');
 		tr.find('input[name$="_fieldname"]').val('');
 	}
+
+	const selAbleMonth = function() {
+		let sid = $('#spcGen button').data('value');
+		if (sid == undefined || sid == '') {
+			return;
+		}
+
+		callAjax({
+			url: 'http://iderms.enertalk.com:8443/spcs/' + $('#spc button').data('value') + '/balance/month',
+			type: 'get',
+			data: {
+				oid: oid,
+				site_id: sid,
+				yyyymm: $('#year button').data('value') + '__'
+			}
+		}, setAbleMonth);
+	}
+
+	const setAbleMonth = function(data) {
+
+		$('#month li').removeClass('disabled');
+
+		data.data.forEach(function(val) {
+			let month = val.balance_yyyymm.slice(-2);
+
+			$('#month li').each(function() {
+				if($(this).data('value') == month) {
+					$(this).addClass('disabled');
+				}
+			});
+		});
+
+		if($('#month li:not(.disabled)').length > 0) {
+			let buttonText = $('#month li:not(.disabled):eq(0)').text() + ' <span class="caret"></span>';
+			let buttonData = $('#month li:not(.disabled):eq(0)').data('value');
+			$('#month button').html(buttonText).data('value', buttonData);
+
+			payment();
+		} else {
+			$('#month button').html('선택 <span class="caret"></span>').data('value', '');
+		}
+	}
+
+	const payment = function() {
+		let sid = $('#spcGen button').data('value');
+		if (sid == undefined || sid == '') {
+			return;
+		}
+
+		let standard = $('#year button').data('value') + ('0' + $('#month button').data('value')).slice(-2);
+		let todayYYYMM = today.format('yyyyMM');
+		if (standard == todayYYYMM) { //요번달이면 now 조회
+			callAjax({
+				url: 'http://iderms.enertalk.com:8443/energy/now/sites',
+				type: 'get',
+				data: {
+					sids: sid,
+					metering_type: ' ',
+					interval: 'month'
+				}
+			}, setSitesNowMoney);
+		} else {
+			callAjax({
+				url: 'http://iderms.enertalk.com:8443/energy/sites',
+				type: 'get',
+				data: {
+					sid: sid,
+					startTime: standard + '01000000',
+					endTime: standard + '31000000',
+					interval: 'month',
+					displayType: 'billing'
+				}
+			}, setSitesMoney);
+		}
+	}
 </script>
 <!-- 파일 업로드 폼 -->
 <form id="upload" name="upload" method="multipart/form-data">
@@ -1267,9 +1328,9 @@
 								<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu chk_type" role="menu">
-								<li><a href="javascript:void(0);">2020년</a></li>
-								<li><a href="javascript:void(0);">2019년</a></li>
-								<li><a href="javascript:void(0);">2018년</a></li>
+								<li data-value="2020"><a href="javascript:void(0);">2020년</a></li>
+								<li data-value="2019"><a href="javascript:void(0);">2019년</a></li>
+								<li data-value="2018"><a href="javascript:void(0);">2018년</a></li>
 							</ul>
 						</div>
 					</div>
@@ -1278,19 +1339,19 @@
 							<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
 								<span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu chk_type" role="menu" id="type">
-								<li data-value="1"><a href="javascript:void(0);">1월</a></li>
-								<li data-value="2"><a href="javascript:void(0);">2월</a></li>
-								<li data-value="3"><a href="javascript:void(0);">3월</a></li>
-								<li data-value="4"><a href="javascript:void(0);">4월</a></li>
-								<li data-value="5"><a href="javascript:void(0);">5월</a></li>
-								<li data-value="6"><a href="javascript:void(0);">6월</a></li>
-								<li data-value="7"><a href="javascript:void(0);">7월</a></li>
-								<li data-value="8"><a href="javascript:void(0);">8월</a></li>
-								<li data-value="9"><a href="javascript:void(0);">9월</a></li>
-								<li data-value="10"><a href="javascript:void(0);">10월</a></li>
-								<li data-value="11"><a href="javascript:void(0);">11월</a></li>
-								<li data-value="12"><a href="javascript:void(0);">12월</a></li>
+							<ul class="dropdown-menu" role="menu">
+								<li data-value="1"><a class="dropdown-item" href="javascript:void(0);">1월</a></li>
+								<li data-value="2"><a class="dropdown-item" href="javascript:void(0);">2월</a></li>
+								<li data-value="3"><a class="dropdown-item" href="javascript:void(0);">3월</a></li>
+								<li data-value="4"><a class="dropdown-item" href="javascript:void(0);">4월</a></li>
+								<li data-value="5"><a class="dropdown-item" href="javascript:void(0);">5월</a></li>
+								<li data-value="6"><a class="dropdown-item" href="javascript:void(0);">6월</a></li>
+								<li data-value="7"><a class="dropdown-item" href="javascript:void(0);">7월</a></li>
+								<li data-value="8"><a class="dropdown-item" href="javascript:void(0);">8월</a></li>
+								<li data-value="9"><a class="dropdown-item" href="javascript:void(0);">9월</a></li>
+								<li data-value="10"><a class="dropdown-item" href="javascript:void(0);">10월</a></li>
+								<li data-value="11"><a class="dropdown-item" href="javascript:void(0);">11월</a></li>
+								<li data-value="12"><a class="dropdown-item" href="javascript:void(0);">12월</a></li>
 							</ul>
 						</div>
 					</div>

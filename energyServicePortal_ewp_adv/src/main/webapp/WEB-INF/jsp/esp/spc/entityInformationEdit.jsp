@@ -113,6 +113,12 @@
 		var $selecter = $("#" + addId);
 		$selecter.append($selecter.data("form"));
 	}
+	
+	function removeList(obj){
+		if( $(obj).parent().parent().find(".group_type").length > 1){
+			$(obj).parent().remove();	
+		};	
+	}	
 
 	function setAddListParam(addId){
 		var param = [],
@@ -172,7 +178,7 @@
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/spcs/"+ spcId,
 			type: "get",
-			async: false,
+			async: true,
 			data: {"oid": oid},
 			success: function (json) {
 				if(json.data.length > 0){
@@ -188,7 +194,7 @@
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/config/sites/"+ genId,
 			type: "get",
-			async: false,
+			async: true,
 			data: {},
 			success: function (json) {
 				$("#genName").text(json.name);
@@ -205,7 +211,7 @@
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/spcs/"+ spcId + "/gens/" + genId,
 			type: "get",
-			async: false,
+			async: true,
 			data: {"oid": oid},
 			success: function (json) {
 				if(json.data.length > 0){
@@ -247,7 +253,7 @@
 			url: "http://iderms.enertalk.com:8443/spcs/"+ spcId + "?oid="+oid,
 			type: "patch",
 			dataType: 'json',
-			async: false,
+			async: true,
 			contentType: "application/json",
 			data: JSON.stringify({
 				"name": $("#name").val(),
@@ -325,7 +331,7 @@
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/spcs/" + spcId +"/gens/" + genId + "?oid=" + oid,
 			type: "patch",
-			async: false,
+			async: true,
 			contentType: "application/json",
 			data: JSON.stringify({
 				"contract_info": JSON.stringify(contract_info),
@@ -549,7 +555,7 @@
 								<div class="tx_inp_type edit">
 									<input type="text" name="모듈_제조사_모델" placeholder="모델">
 								</div>
-								<button class="btn_clse" style="">삭제</button>
+								<button class="btn_clse" style="" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 						<th>설치 용량</th>
@@ -567,12 +573,12 @@
 					<tr>
 						<th>모듈 설치 각도<a href="javascript:addList('addList02');" class="btn_add fr">추가</a></th>
 						<td id="addList02">
-							<div>
+							<div class="group_type">
 								<div class="tx_inp_type edit unit t1 fl">
 									<input type="text" name="모듈_설치_각도">
 									<span>︒</span>
 								</div>
-								<button class="btn_clse" style="">삭제</button>
+								<button class="btn_clse" style="" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 						<th>모듈 설치 방식</th>
@@ -603,7 +609,7 @@
 								<div class="tx_inp_type edit">
 									<input type="text" name="인버터_제조사_모델" placeholder="모델">
 								</div>
-								<button class="btn_clse" style="">삭제</button>
+								<button class="btn_clse" style="" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 						<th>인버터 용량 / 대수<a href="javascript:addList('addList04');" class="btn_add fr">추가</a></th>
@@ -617,7 +623,7 @@
 									<input type="text" name="인버터_용량_대수">
 									<span>대</span>
 								</div>
-								<button class="btn_clse" style="">삭제</button>
+								<button class="btn_clse" style="" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 					</tr>
@@ -631,7 +637,7 @@
 								<div class="tx_inp_type edit">
 									<input type="text" placeholder="모델" name="접속반_제조사_모델">
 								</div>
-								<button class="btn_clse" style="">삭제</button>
+								<button class="btn_clse" style="" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 						<th>접속반 채널 / 대수<a href="javascript:addList('addList06');" class="btn_add fr">추가</a></th>
@@ -645,7 +651,7 @@
 									<input type="text" name="접속반_채널_대수">
 									<span>대</span>
 								</div>
-								<button class="btn_clse" style="">삭제</button>
+								<button class="btn_clse" style="" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 					</tr>
@@ -676,7 +682,7 @@
 								<div class="tx_inp_type edit">
 									<input type="text" name="수배전반_제조사_모델" placeholder="모델">
 								</div>
-								<button class="btn_clse" style="">삭제</button>
+								<button class="btn_clse" style="" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 					</tr>

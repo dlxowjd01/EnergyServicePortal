@@ -64,6 +64,12 @@
 		var $selecter = $("#" + addId);
 		$selecter.append($selecter.data("form"));
 	}
+	
+	function removeList(obj){
+		if( $(obj).parent().parent().find(".group_type").length > 1){
+			$(obj).parent().remove();	
+		};		
+	}
 
 	function setAddListParam(addId){
 		var param = [],
@@ -120,6 +126,12 @@
 		$("#sidoValue").val(jsonData.location);
 		setDropDownValue("sidoList", jsonData.location);
 		$("#address").val(jsonData.address);
+		
+		if(jsonData.sid == ""){
+			$("#genName").prop("readonly", false);
+		}else{
+			$("#genName").prop("readonly", true);
+		}
 	}
 
 	function conntryListChange(){
@@ -174,6 +186,7 @@
 			data: {"oid": oid},
 			success: function (json) {
 				setInitList("genList");
+				json.push({"sid":"", "name" : "직접입력", "location":"", "address":""});
 				setMakeList(json, "genList", {"dataFunction" : {}});
 			},
 			error: function (request, status, error) {
@@ -191,9 +204,10 @@
 	}
 
 	function setSaveData(){
-		var spcId = $("#spc").data("value");
-		var spcName = $("#name").val();
-		var genId = $("#gen").data("value");
+		var spcId = $("#spc").data("value"),
+			spcName = $("#name").val(),
+			genId = $("#gen").data("value"),
+			genName = $("#genName").val();
 
 		if(spcId === undefined){
 			alert("SCP명을 선택하세요.");
@@ -209,11 +223,46 @@
 			alert("SCP명을 입력하세요.");
 			return false;
 		}
-
+		
+		if(genId == "" && genName == ""){
+			alert("발전소명을 입력하세요.");
+			return false;
+		}	
+		
+		//직접입력 발전소 등록..(이걸왜 여기서 하지? 발전소 관리 화면냅두고 직접입력 선택 시 사이트관리 화면 팝업을 띄우던가..ㅉㅉ)
+		if(genId == ""){
+			var bError = false;
+			$.ajax({
+				url: "http://iderms.enertalk.com:8443/config/sites?oid="+oid,
+				type: "post",
+				dataType: 'json',
+				async: false,
+				contentType: "application/json",
+				data: JSON.stringify({
+					"name": $("#genName").val(),
+					"location": $("#sidoValue").val(),
+					"address": $("#address").val(),
+					"resource_type" : 0
+				}),
+				success: function (json) {
+					$("#gen").data("value", json.sid);
+				},
+				error: function (request, status, error) {
+					alert('처리 중 오류가 발생했습니다.');
+					bError = true;
+					return false;
+				}
+			});
+			
+			if(bError){
+				return false;
+			}
+		}	
+		
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/spcs",
 			type: "get",
-			async: false,
+			async: true,
 			data: {"oid": oid, includeGens: true},
 			success: function (result) {
 				var checkCountSpc = 0, checkCountGen = 0;
@@ -267,7 +316,7 @@
 			url: "http://iderms.enertalk.com:8443/spcs?oid="+oid,
 			type: "post",
 			dataType: 'json',
-			async: false,
+			async: true,
 			contentType: "application/json",
 			data: JSON.stringify({
 				"name": $("#name").val(),
@@ -331,7 +380,7 @@
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/spcs/" + spcId +"/gens?oid=" + oid +"&gen_id=" + genId,
 			type: "post",
-			async: false,
+			async: true,
 			contentType: "application/json",
 			data: JSON.stringify({
 				"contract_info": JSON.stringify(contract_info),
@@ -584,12 +633,15 @@
 					</colgroup>
 					<tr>
 						<th>모듈 제조사 / 모델<a href="javascript:addList('addList01');" class="btn_add fr">추가</a></th>
-						<td id="addList01" class="group_type">
-							<div class="tx_inp_type edit">
-								<input type="text" name="모듈_제조사" placeholder="제조사">
-							</div>
-							<div class="tx_inp_type edit">
-								<input type="text" name="모듈_제조사_모델" placeholder="모델">
+						<td id="addList01">
+							<div class="group_type">
+								<div class="tx_inp_type edit">
+									<input type="text" name="모듈_제조사" placeholder="제조사">
+								</div>
+								<div class="tx_inp_type edit">
+									<input type="text" name="모듈_제조사_모델" placeholder="모델">
+								</div>
+								<button class="btn_clse" style="" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 						<th>설치 용량</th>
@@ -607,9 +659,12 @@
 					<tr>
 						<th>모듈 설치 각도<a href="javascript:addList('addList02');" class="btn_add fr">추가</a></th>
 						<td id="addList02">
-							<div class="tx_inp_type edit unit t1">
-								<input type="text" name="모듈_설치_각도">
-								<span>︒</span>
+							<div class="group_type">
+								<div class="tx_inp_type edit unit t1 fl">
+									<input type="text" name="모듈_설치_각도">
+									<span>︒</span>
+								</div>
+								<button class="btn_clse" style="" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 						<th>모듈 설치 방식</th>
@@ -632,45 +687,57 @@
 					</tr>
 					<tr>
 						<th>인버터 제조사 / 모델<a href="javascript:addList('addList03');" class="btn_add fr">추가</a></th>
-						<td id="addList03" class="group_type">
-							<div class="tx_inp_type edit">
-								<input type="text" name="인버터_제조사" placeholder="제조사">
-							</div>
-							<div class="tx_inp_type edit">
-								<input type="text" name="인버터_제조사_모델" placeholder="모델">
+						<td id="addList03">
+							<div class="group_type">
+								<div class="tx_inp_type edit">
+									<input type="text" name="인버터_제조사" placeholder="제조사">
+								</div>
+								<div class="tx_inp_type edit">
+									<input type="text" name="인버터_제조사_모델" placeholder="모델">
+								</div>
+								<button class="btn_clse" style="" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 						<th>인버터 용량 / 대수<a href="javascript:addList('addList04');" class="btn_add fr">추가</a></th>
-						<td id="addList04" class="group_type">
-							<div class="tx_inp_type edit unit t1">
-								<input type="text" name="인버터_용량">
-								<span>kW</span>
-							</div>
-							<div class="tx_inp_type edit unit t1">
-								<input type="text" name="인버터_용량_대수">
-								<span>대</span>
+						<td id="addList04">
+							<div class="group_type">
+								<div class="tx_inp_type edit unit t1">
+									<input type="text" name="인버터_용량">
+									<span>kW</span>
+								</div>
+								<div class="tx_inp_type edit unit t1">
+									<input type="text" name="인버터_용량_대수">
+									<span>대</span>
+								</div>
+								<button class="btn_clse" style="" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 					</tr>
 					<tr>
 						<th>접속반 제조사 / 모델<a href="javascript:addList('addList05');" class="btn_add fr">추가</a></th>
-						<td id="addList05" class="group_type">
-							<div class="tx_inp_type edit">
-								<input type="text" placeholder="제조사" name="접속반_제조사">
-							</div>
-							<div class="tx_inp_type edit">
-								<input type="text" placeholder="모델" name="접속반_제조사_모델">
+						<td id="addList05">
+							<div class="group_type">
+								<div class="tx_inp_type edit">
+									<input type="text" placeholder="제조사" name="접속반_제조사">
+								</div>
+								<div class="tx_inp_type edit">
+									<input type="text" placeholder="모델" name="접속반_제조사_모델">
+								</div>
+								<button class="btn_clse" style="" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 						<th>접속반 채널 / 대수<a href="javascript:addList('addList06');" class="btn_add fr">추가</a></th>
-						<td id="addList06" class="group_type">
-							<div class="tx_inp_type edit unit t1">
-								<input type="text" name="접속반_채널">
-								<span>Ch</span>
-							</div>
-							<div class="tx_inp_type edit unit t1">
-								<input type="text" name="접속반_채널_대수">
-								<span>대</span>
+						<td id="addList06">
+								<div class="group_type">
+								<div class="tx_inp_type edit unit t1">
+									<input type="text" name="접속반_채널">
+									<span>Ch</span>
+								</div>
+								<div class="tx_inp_type edit unit t1">
+									<input type="text" name="접속반_채널_대수">
+									<span>대</span>
+								</div>
+								<button class="btn_clse" style="" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 					</tr>
@@ -682,23 +749,26 @@
 								<span>kW</span>
 							</div>
 							<div class="rdo_type align_type">
-									<span>
-										<input type="radio" id="rdo_03_op01" name="통신방식" value="통신">
-										<label for="rdo_03_op01"><span></span>통신</label>
-									</span>
 								<span>
-										<input type="radio" id="rdo_03_op02" name="통신방식" value="비통신">
-										<label for="rdo_03_op02"><span></span>비통신</label>
-									</span>
+									<input type="radio" id="rdo_03_op01" name="통신방식" value="통신">
+									<label for="rdo_03_op01"><span></span>통신</label>
+								</span>
+								<span>
+									<input type="radio" id="rdo_03_op02" name="통신방식" value="비통신">
+									<label for="rdo_03_op02"><span></span>비통신</label>
+								</span>
 							</div>
 						</td>
 						<th>수배전반 제조사 / 모델<a href="javascript:addList('addList07');" class="btn_add fr">추가</a></th>
-						<td id="addList07" class="group_type">
-							<div class="tx_inp_type edit">
-								<input type="text" name="수배전반_제조사" placeholder="제조사">
-							</div>
-							<div class="tx_inp_type edit">
-								<input type="text" name="수배전반_제조사_모델" placeholder="모델">
+						<td id="addList07">
+							<div class="group_type">
+								<div class="tx_inp_type edit">
+									<input type="text" name="수배전반_제조사" placeholder="제조사">
+								</div>
+								<div class="tx_inp_type edit">
+									<input type="text" name="수배전반_제조사_모델" placeholder="모델">
+								</div>
+								<button class="btn_clse" style="" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 					</tr>

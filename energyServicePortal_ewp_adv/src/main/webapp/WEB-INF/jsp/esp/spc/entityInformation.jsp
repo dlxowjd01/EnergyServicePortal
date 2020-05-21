@@ -27,7 +27,17 @@
 		var column = ["name","발전소_명","연차","관리_운영_기간","보증_방식","PR_보증치","보증_감소율","추가_보수"], //json Key
 			header = ["SPC명","발전소 명","연차","관리 운영기간	","보증" ,"보증 값", "감소율","추가보수"]; //csv 파일 헤더
 
-		getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
+		getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_info_list.csv"); // json list, 컬럼, 헤더명, 파일명
+	}
+	
+	function jsonDataFilter(jsonData){
+		var keyWord = $("#key_word").val(), bResult = false;
+		
+		if(jsonData["name"].indexOf(keyWord) > -1 || jsonData["발전소_명"] .indexOf(keyWord) > - 1){
+			bResult = true;
+		}		
+		
+		return bResult;
 	}
 	
 	function setJsonDataFormat(result){
@@ -40,13 +50,10 @@
 				for(var j = 0, jcount = spcGensList.length; j < jcount; j++){
 					var spcGensRow = spcGensList[j],
 						rowData = result.data[i],
-						newData = {},
+						newData = Object.assign({}, rowData),
 						warrantyInfo = JSON.parse(spcGensRow.warranty_info),
 						contractInfo = JSON.parse(spcGensRow.contract_info);
-	
-					newData["name"] = rowData.name;
-					newData["oid"] = rowData.oid;
-					newData["spc_id"] = rowData.spc_id;
+					
 					newData["gen_id"] = spcGensRow.gen_id;
 					newData["발전소_명"] = spcGensRow.name;
 					newData["관리_운영_기간"] = nvl(contractInfo["관리_운영_기간"], "-");
@@ -55,10 +62,12 @@
 					newData["PR_보증치"] = nvl(warrantyInfo["PR_보증치"], "-");
 					newData["보증_감소율"] = nvl(warrantyInfo["보증_감소율"], "-");
 					newData["추가_보수"] = nvl(warrantyInfo["추가_보수"], "-");
+					
 					//키워드 검색 조건 필터 처리
-					if(newData["name"].indexOf(keyWord) > -1 || newData["발전소_명"] .indexOf(keyWord) > - 1){
+					if(jsonDataFilter(newData)){
 						jsonList.push(newData)
 					}
+					
 				}
 			}
 		}
@@ -69,7 +78,7 @@
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/spcs",
 			type: "get",
-			async: false,
+			async: true,
 			data: {"oid": oid, includeGens: true},
 			success: function (result) {
 				setMakeList(setJsonDataFormat(result), "listData", {"dataFunction" : {"INDEX" : getNumberIndex}}); //list생성

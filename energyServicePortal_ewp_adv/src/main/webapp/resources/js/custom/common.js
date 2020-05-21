@@ -11,7 +11,7 @@ function getUserInfo(fn) {
 }
 
 $(function() {
-	$('.dropdown-menu li a').on('click', function(){
+	$(document).on('click', '.dropdown-menu li:not(.disabled) a', function(){
 		selectBoxTextApply(this);
 	});
 });
@@ -20,12 +20,6 @@ function selectBoxTextApply(obj) {
 	var txt = $(obj).text();
 	$(obj).closest('.dropdown').find('[data-toggle="dropdown"]').html(txt+'<span class="caret"></span>');
 }
-
-
-
-
-
-
 
 function getPdfDownload() {
 	html2canvas(document.getElementById("layerbox"), {

@@ -14,6 +14,11 @@
 		setInitList("listData"); //리스트초기화
 		getDataList();
 	});
+	
+	$(document).on('click', '.dropdown li', function () {
+		var dataValue = $(this).data('value')
+		$(this).parents('.dropdown').find('button').data('value', dataValue);
+	});	
 
 	function nvl(value, str){
 		if(isEmpty(value)){
@@ -24,22 +29,67 @@
 	}
 
 	function getCsvDown(){
-		var column = ["보고서구분","문서번호","보고서명","작성자","작성일자"], //json Key
-			header = ["report_type","report_id","report_name","updated_by","registered_at"]; //csv 파일 헤더
+		var column = ["report_type_name","report_id","report_name","updated_by","write_date"], //json Key
+			header = ["보고서구분","문서번호","보고서명","작성자","작성일자"]; //csv 파일 헤더
 
 		getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "work_report.csv"); // json list, 컬럼, 헤더명, 파일명
 	}
 	
+	function jsonDataFilter(jsonData){
+		var keyWord = $("#key_word").val(),
+			report_type = $("#report_type").data("value"),
+			write_date_from = $("#write_date_from").val().split("-").join(""),
+			write_date_to = $("#write_date_to").val().split("-").join(""),
+			filterCheckCount = 0,
+			bReportType = false,
+			bWriteDate = false,
+			bKeyWord = false;
+			bResult = false;
+		
+		//보고서 구분
+		if("" != report_type && report_type == jsonData.report_type){
+			bReportType = true;
+		}else if("" == report_type){
+			bReportType = true;
+		}
+		
+		//작성일자
+		if(write_date_from != "" && write_date_to != ""){
+			var write_date = jsonData.write_date.split("-").join("");
+			
+			if(Number(write_date) >= Number(write_date_from) && Number(write_date) <= Number(write_date_to)){
+				bWriteDate = true;
+			}else{
+				bWriteDate = false;
+			}
+		}else if(write_date_from == "" && write_date_to == ""){
+			bWriteDate = true;
+		}
+		
+		//키워드검색
+		if(jsonData.report_name.indexOf(keyWord) > -1){
+			bKeyWord = true;
+		}
+		
+		if(bReportType && bWriteDate && bKeyWord){
+			bResult = true;
+		}
+		
+		return bResult
+	}
+	
 	function setJsonDataFormat(result){
-		var jsonList = [],
-			keyWord = $("#key_word").val();
+		var jsonList = [];
 
 		for(var i = 0, count = result.data.length; i < count; i++){
-			var rowData = result.data[i];
+			var rowData = result.data[i],
+				work_info = JSON.parse(rowData.work_info);				
+				rowData["report_type_name"] = getReportTypeName(rowData.report_type);
+				rowData["write_date"] = work_info["작성_일자"];
 			
-			//if(rowData["report_id"].indexOf(keyWord) > -1 || rowData["report_name"] .indexOf(keyWord) > - 1){
+			if(jsonDataFilter(rowData)){
 				jsonList.push(rowData);
-			//}
+			}
 		}
 		return jsonList;
 	}
@@ -110,10 +160,10 @@
 				<span class="tx_tit">보고서 구분</span>
 				<div class="sa_select">
 					<div class="dropdown">
-						<button class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown">전체
+						<button id="report_type" class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown" data-value="">전체
 							<span class="caret"></span>
 						</button>
-						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="type">
+						<ul class="dropdown-menu" role="menu">
 							<li data-value=""><a href="javascript:void(0);">전체</a></li>
 							<li data-value="1"><a href="javascript:void(0);">출장/조치 보고서</a></li>
 							<li data-value="2"><a href="javascript:void(0);">QC 보고서</a></li>
@@ -124,14 +174,14 @@
 			<div class="fl">
 				<span class="tx_tit">작성 일자</span>
 				<div class="sel_calendar">
-				  <input type="text" id="datepicker1" class="sel datepicker fromDate" value="" autocomplete="off">
+				  <input type="text" id="write_date_from" class="sel datepicker fromDate" value="" autocomplete="off">
 				  <em></em>
-				  <input type="text" id="datepicker2" class="sel datepicker toDate" value="" autocomplete="off">
+				  <input type="text" id="write_date_to" class="sel datepicker toDate" value="" autocomplete="off">
 				</div>
 			</div>
 			<div class="fl">
 				<div class="tx_inp_type">
-					<input type="text" placeholder="입력">
+					<input type="text" id="key_word" placeholder="입력">
 				</div>
 			</div>
 			<div class="fl">
@@ -174,7 +224,7 @@
 								<td>[report_id]</td>
 								<td><a href="/report/maintenanceReportDetails.do?report_id=[report_id]" class="tbl_link">[report_name]</a></td>
 								<td>[updated_by]</td>
-								<td>[updated_at]</td>
+								<td>[write_date]</td>
 								<td>저장완료</td>
 							</tr>
 						</tbody>
