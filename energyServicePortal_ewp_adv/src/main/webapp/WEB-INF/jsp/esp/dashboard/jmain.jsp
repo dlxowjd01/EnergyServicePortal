@@ -3449,31 +3449,44 @@
 							sid: site.sid,
 							startTime: formData.startTime,
 							endTime: formData.endTime,
-							interval: "hour"
+							interval: "hour",
+							formId: 'v2'
 						},
 						success: function (result) {//api 요청결과
-							acPowerSum += result.acPower;
-							pieChart[`${'${siteIdx+1}'}`].setTitle({text:Math.floor(result.acPower/1000)+'kW'});
-							pieChart[`${'${siteIdx+1}'}`].series[0].data.forEach((e, idx) => {
-								if (e.name === "총 설비용량") {
-									e.update({y: Math.floor(result.acPower/1000)});
-								} else if (e.name === "미설비용량") {
-									e.update({y: Math.floor(((97280*2)-result.acPower)/1000)});
-								} else {
-									e.update({y: 0});
-								}
-							});
-							$(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(6)`).text(Math.floor(result.acPower/1000)+'kW');
-							$(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(1)>span:nth-child(2)`).text(Math.floor(result.acPower/1000)+'kW');
-							// $('.highcharts-title > tspan').text(Math.floor(acPowerSum/1000)+'kW');
-							pieChart.setTitle({text:Math.floor(acPowerSum/1000)+'kW'});
-							pieChart.series[0].data.forEach((e, idx) => {
-								if (e.name === "태양광") {
-									e.update({y: Math.floor(acPowerSum/1000)});
-								} else if (e.name === "미사용량") {
-									e.update({y: Math.floor(((97280*2)-acPowerSum)/1000)});
-								} else {
-									e.update({y: 0});
+							$.map(result, function(val, key) {
+								if(key == 'INV_PV') {
+									acPowerSum += result.acPower;
+									pieChart[`${'${siteIdx+1}'}`].setTitle({text:Math.floor(result.acPower/1000)+'kW'});
+									pieChart[`${'${siteIdx+1}'}`].series[0].data.forEach((e, idx) => {
+										if (e.name === "총 설비용량") {
+											e.update({y: Math.floor(result.acPower/1000)});
+										} else if (e.name === "미설비용량") {
+											e.update({y: Math.floor(((97280*2)-result.acPower)/1000)});
+										} else {
+											e.update({y: 0});
+										}
+									});
+									$(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(6)`).text(Math.floor(result.acPower/1000)+'kW');
+									$(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(1)>span:nth-child(2)`).text(Math.floor(result.acPower/1000)+'kW');
+									// $('.highcharts-title > tspan').text(Math.floor(acPowerSum/1000)+'kW');
+									pieChart.setTitle({text:Math.floor(acPowerSum/1000)+'kW'});
+									pieChart.series[0].data.forEach((e, idx) => {
+										if (e.name === "태양광") {
+											e.update({y: Math.floor(acPowerSum/1000)});
+										} else if (e.name === "미사용량") {
+											e.update({y: Math.floor(((97280*2)-acPowerSum)/1000)});
+										} else {
+											e.update({y: 0});
+										}
+									});
+								} else if(key == 'SENSOR_SOLAR') {
+									console.log('SENSOR_SOLAR', val);
+									if(isEmpty(val)) {
+										$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fl span:nth-child(2)`).text('- kW/㎡․day');
+									} else {
+										$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fl span:nth-child(2)`).text(displayNumberFixedUnit(val.irradiationPoa, 'W', 'W')[0] + ' W/㎡․day');
+									}
+
 								}
 							});
 						},
@@ -3791,7 +3804,7 @@
 			success: function(sites){
 				sites.forEach((site, siteIdx) => {
 					$.ajax({
-						url: "http://iderms.enertalk.com:8443/weather",
+						url: "http://iderms.enertalk.com:8443/weather/site",
 						type: "get",
 						async: false,
 						data: {
