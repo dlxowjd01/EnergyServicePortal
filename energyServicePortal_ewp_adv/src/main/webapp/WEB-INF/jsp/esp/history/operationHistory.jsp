@@ -888,15 +888,13 @@
 
 					$.map(result, function(value, key) {
 						if($('#'+key+'_Table').length > 0) {
-							if(key == 'INV_PV') {
-								$.each(value, function(idx, valObj) {
-									value[idx].localtime = String (valObj.basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
-									value[idx].timestamp = new Date(value[idx].localtime).getTime();
-									$.map(valObj.mean, function(v, k) {
-										valObj[k] = numberComma(v.toFixed(2));
-									});
+							$.each(value, function(idx, valObj) {
+								value[idx].localtime = String (valObj.basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+								value[idx].timestamp = new Date(value[idx].localtime).getTime();
+								$.map(valObj.mean, function(v, k) {
+									valObj[k] = numberComma(v.toFixed(2));
 								});
-							}
+							});
 
 							setMakeList(value, key + '_Table', {'dataFunction': {}}); //list생성
 

@@ -2998,9 +2998,9 @@
 								} else if(key == 'SENSOR_SOLAR') {
 									console.log('SENSOR_SOLAR', val);
 									if(isEmpty(val)) {
-										$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fl span:nth-child(2)`).text('- kWh/㎡․day');
+										$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fl span:nth-child(2)`).text('- kW/㎡․day');
 									} else {
-										$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fl span:nth-child(2)`).text(displayNumberFixedUnit(val.irradiationPoa, 'W', 'kW')[0] + ' kWh/㎡․day');
+										$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fl span:nth-child(2)`).text(displayNumberFixedUnit(val.irradiationPoa, 'W', 'kW')[0] + ' kW/㎡․day');
 									}
 
 								}
