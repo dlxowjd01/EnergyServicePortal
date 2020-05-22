@@ -7,6 +7,8 @@
 <script type="text/javascript"
 				src="http://maps.google.com/maps/api/js?key=AIzaSyAyGrAQC_675C34l2ZJ5JgEqeEV3gLuY9I"></script>
 <script type="text/javascript">
+	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
+	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 	var pieChartOption = {
 		chart: {
 			marginTop: 0,
@@ -16,13 +18,13 @@
 			plotBorderWidth: 0,
 			plotShadow: false
 		},
-		
+
 		navigation: {
 			buttonOptions: {
 				enabled: false /* 메뉴 안보이기 */
 			}
 		},
-		
+
 		title: {
 			text: '70%', // %표기
 			align: 'center',
@@ -34,16 +36,16 @@
 				color: 'white'
 			}
 		},
-		
+
 		subtitle: {
 			text: ''
 		},
-		
+
 		/* 출처 */
 		credits: {
 			enabled: false
 		},
-		
+
 		tooltip: {
 			shared: true,
 			borderColor: 'none',
@@ -55,7 +57,7 @@
 			valueSuffix: ' kwh',
 			pointFormat: '<b>{point.percentage:.0f}%</b>'
 		},
-		
+
 		plotOptions: {
 			pie: {
 				dataLabels: {
@@ -122,16 +124,16 @@
 			}]
 		}
 	};
-	
+
 	// 	$(window).resize(function() { //브라우저 사이즈 변경될때마다 새로고침 (차트사이즈 재설정)
 	// 	    location.reload();
 	// 	});
-	
+
 	$(function () {
 		$("input[name='deviceStatus']").on("click", function () {
 			var flag = $(this).is(":checked");
 			var str = $(this).val();
-			
+
 			var $tbody = $(".intable").find('tbody');
 			if (flag) {
 				if (str == "정상") $tbody.find('.flag1').css("display", "");
@@ -142,10 +144,10 @@
 				if (str == "경고") $tbody.find('.flag2').css("display", "none");
 				if (str == "이상") $tbody.find('.flag3').css("display", "none");
 			}
-			
+
 		});
 	});
-	
+
 	function linkSiteDashboard(t) {
 		var url = "", str = "";
 		if (t == 1) {
@@ -348,7 +350,7 @@
 									tooltip: {
 										valueSuffix: 'kWh'
 									}
-									
+
 								}, {
 									name: '방전',
 									type: 'column',
@@ -356,7 +358,7 @@
 									tooltip: {
 										valueSuffix: 'kWh'
 									}
-									
+
 								}, {
 									name: '태양광',
 									type: 'column',
@@ -364,7 +366,7 @@
 									tooltip: {
 										valueSuffix: 'kWh'
 									}
-									
+
 								}, {
 									name: '정산금',
 									type: 'spline',
@@ -622,7 +624,7 @@
 									tooltip: {
 										valueSuffix: 'kWh'
 									}
-									
+
 								}, {
 									name: '방전',
 									type: 'column',
@@ -630,7 +632,7 @@
 									tooltip: {
 										valueSuffix: 'kWh'
 									}
-									
+
 								}, {
 									name: '태양광',
 									type: 'column',
@@ -638,7 +640,7 @@
 									tooltip: {
 										valueSuffix: 'kWh'
 									}
-									
+
 								}, {
 									name: '정산금',
 									type: 'spline',
@@ -748,28 +750,28 @@
 												data: {
 													table: 'gdatatable3' /* 테이블에서 데이터 불러오기 */
 												},
-												
+
 												chart: {
 													marginTop: 50,
 													marginRight: 0,
 													backgroundColor: 'transparent',
 													type: 'bar'
 												},
-												
+
 												navigation: {
 													buttonOptions: {
 														enabled: false /* 메뉴 안보이기 */
 													}
 												},
-												
+
 												title: {
 													text: ''
 												},
-												
+
 												subtitle: {
 													text: ''
 												},
-												
+
 												xAxis: {
 													lineColor: '#515562', /* 눈금선색 */
 													tickColor: '#515562',
@@ -790,7 +792,7 @@
 														text: null
 													}
 												},
-												
+
 												yAxis: {
 													lineColor: '#515562', /* 눈금선색 */
 													tickColor: '#515562',
@@ -817,7 +819,7 @@
 														}
 													}
 												},
-												
+
 												/* 범례 */
 												legend: {
 													enabled: true,
@@ -836,7 +838,7 @@
 													symbolPadding: 3, /* 심볼 - 텍스트간 거리 */
 													symbolHeight: 7 /* 심볼 크기 */
 												},
-												
+
 												/* 툴팁 */
 												tooltip: {
 													shared: true,
@@ -848,7 +850,7 @@
 													},
 													valueSuffix: ' kwh'
 												},
-												
+
 												/* 옵션 */
 												plotOptions: {
 													series: {
@@ -874,19 +876,19 @@
 														}
 													}
 												},
-												
+
 												/* 출처 */
 												credits: {
 													enabled: false
 												},
-												
+
 												/* 그래프 스타일 */
 												series: [{
 													color: '#25CCC8' /* 금일발전 */
 												}, {
 													color: '#878787' /* 금일예측 */
 												}],
-												
+
 												/* 반응형 */
 												responsive: {
 													rules: [{
@@ -983,21 +985,21 @@
 													type: 'column',
 													height: '100%',
 												},
-												
+
 												navigation: {
 													buttonOptions: {
 														enabled: false /* 메뉴 안보이기 */
 													}
 												},
-												
+
 												title: {
 													text: ''
 												},
-												
+
 												subtitle: {
 													text: ''
 												},
-												
+
 												xAxis: {
 													lineColor: 'var(--color2)', /* 눈금선색 */
 													tickColor: 'var(--color2)',
@@ -1018,7 +1020,7 @@
 														text: null
 													}
 												},
-												
+
 												yAxis: {
 													opposite: true,
 													lineColor: 'var(--color2)', /* 눈금선색 */
@@ -1049,7 +1051,7 @@
 														}
 													}
 												},
-												
+
 												/* 범례 */
 												legend: {
 													enabled: true,
@@ -1068,7 +1070,7 @@
 													symbolPadding: 3, /* 심볼 - 텍스트간 거리 */
 													symbolHeight: 7 /* 심볼 크기 */
 												},
-												
+
 												/* 툴팁 */
 												tooltip: {
 													shared: true,
@@ -1080,7 +1082,7 @@
 													},
 													valueSuffix: ' kwh'
 												},
-												
+
 												/* 옵션 */
 												plotOptions: {
 													series: {
@@ -1098,19 +1100,19 @@
 													},
 													column: {}
 												},
-												
+
 												/* 출처 */
 												credits: {
 													enabled: false
 												},
-												
+
 												/* 그래프 스타일 */
 												series: [{
 													color: '#25CCC8' /* 전일발전 */
 												}, {
 													color: '#878787' /* 전일예측 */
 												}],
-												
+
 												/* 반응형 */
 												responsive: {
 													rules: [{
@@ -1216,13 +1218,13 @@
 													plotBorderWidth: 0,
 													plotShadow: false,
 												},
-												
+
 												navigation: {
 													buttonOptions: {
 														enabled: false /* 메뉴 안보이기 */
 													}
 												},
-												
+
 												title: {
 													text: '- Wh', // 총용량 표기
 													align: 'center',
@@ -1234,16 +1236,16 @@
 														color: 'var(--color3)'
 													}
 												},
-												
+
 												subtitle: {
 													text: ''
 												},
-												
+
 												/* 출처 */
 												credits: {
 													enabled: false
 												},
-												
+
 												tooltip: {
 													shared: true,
 													borderColor: 'none',
@@ -1255,7 +1257,7 @@
 													valueSuffix: ' kwh',
 													pointFormat: '<b>{point.percentage:.0f}%</b>'
 												},
-												
+
 												plotOptions: {
 													pie: {
 														dataLabels: {
@@ -1270,7 +1272,7 @@
 														size: '100%'
 													}
 												},
-												
+
 												series: [{
 													type: 'pie',
 													innerSize: '50%',
@@ -1292,7 +1294,7 @@
 														y: 20 //20% 나머지
 													}]
 												}],
-												
+
 												responsive: { // 반응형
 													rules: [{
 														condition: {
@@ -1388,15 +1390,15 @@
 											enabled: false /* 메뉴 안보이기 */
 										}
 									},
-									
+
 									title: {
 										text: ''
 									},
-									
+
 									subtitle: {
 										text: ''
 									},
-									
+
 									xAxis: {
 										type: 'category',
 										lineColor: '#515562', /* 눈금선색 */
@@ -1419,7 +1421,7 @@
 											text: null
 										}
 									},
-									
+
 									yAxis: [
 										{ // Primary yAxis
 											min: 0,
@@ -1453,15 +1455,15 @@
 											}
 										}
 									],
-									
+
 									caption: {
 										text: ''
 									},
-									
+
 									legend: {
 										enabled: false
 									},
-									
+
 									/* 옵션 */
 									plotOptions: {
 										series: {
@@ -1479,7 +1481,7 @@
 											colors: ['#00b2aa', '#009389']
 										}
 									},
-									
+
 									series: [{
 										name: '실시간 출력량',
 										data: [
@@ -1497,12 +1499,12 @@
 										},
 										colorByPoint: true
 									}],
-									
+
 									/* 출처 */
 									credits: {
 										enabled: false
 									},
-									
+
 									/* 반응형 */
 									responsive: {
 										rules: [{
@@ -1559,7 +1561,7 @@
 											}
 										}]
 									}
-									
+
 								});
 							</script>
 						</div>
@@ -1574,21 +1576,21 @@
 											backgroundColor: 'transparent',
 											type: 'column'
 										},
-										
+
 										navigation: {
 											buttonOptions: {
 												enabled: false /* 메뉴 안보이기 */
 											}
 										},
-										
+
 										title: {
 											text: ''
 										},
-										
+
 										subtitle: {
 											text: ''
 										},
-										
+
 										xAxis: {
 											lineColor: '', /* 눈금선색 */
 											tickColor: '#515562',
@@ -1609,7 +1611,7 @@
 											categories: ['입찰', '출력'],
 											crosshair: true
 										},
-										
+
 										yAxis: {
 											lineColor: '#515562', /* 눈금선색 */
 											tickColor: '#515562',
@@ -1633,7 +1635,7 @@
 												}
 											}
 										},
-										
+
 										/* 범례 */
 										legend: {
 											enabled: false,
@@ -1652,12 +1654,12 @@
 											symbolPadding:3, /* 심볼 - 텍스트간 거리 */
 											symbolHeight:7 /* 심볼 크기 */
 										},
-										
+
 										/* 툴팁 */
 										tooltip: {
 											valueSuffix: ' MWh'
 										},
-										
+
 										/* 옵션 */
 										plotOptions: {
 											series: {
@@ -1689,12 +1691,12 @@
 												}
 											}
 										},
-										
+
 										/* 출처 */
 										credits: {
 											enabled: false
 										},
-										
+
 										/* 그래프 스타일 */
 										series: [{
 											name: '입찰',
@@ -1717,7 +1719,7 @@
 											},
 											color: '#26ccc8' /* 출력 */
 										}],
-										
+
 										/* 반응형 */
 										responsive: {
 											rules: [{
@@ -1802,21 +1804,21 @@
 											backgroundColor: 'transparent',
 											type: 'column'
 										},
-										
+
 										navigation: {
 											buttonOptions: {
 												enabled: false /* 메뉴 안보이기 */
 											}
 										},
-										
+
 										title: {
 											text: ''
 										},
-										
+
 										subtitle: {
 											text: ''
 										},
-										
+
 										xAxis: {
 											lineColor: '#515562', /* 눈금선색 */
 											tickColor: '#515562',
@@ -1839,7 +1841,7 @@
 											},
 											crosshair: true
 										},
-										
+
 										yAxis: {
 											lineColor: '#515562', /* 눈금선색 */
 											tickColor: '#515562',
@@ -1870,7 +1872,7 @@
 												}
 											}
 										},
-										
+
 										/* 범례 */
 										legend: {
 											enabled: true,
@@ -1889,7 +1891,7 @@
 											symbolPadding:3, /* 심볼 - 텍스트간 거리 */
 											symbolHeight:7 /* 심볼 크기 */
 										},
-										
+
 										series: [{
 											name: '출력',
 											type: 'column',
@@ -1912,7 +1914,7 @@
 										tooltip: {
 											shared: true
 										},
-										
+
 										/* 옵션 */
 										plotOptions: {
 											series: {
@@ -1931,12 +1933,12 @@
 												//stacking: 'normal' /*위로 쌓이는 막대  ,normal */
 											}
 										},
-										
+
 										/* 출처 */
 										credits: {
 											enabled: false
 										},
-										
+
 										/* 반응형 */
 										responsive: {
 											rules: [{
@@ -1976,7 +1978,7 @@
 												}
 											}]
 										}
-										
+
 									});
 							</script>
 							<!-- 데이터 추출용 -->
@@ -2247,7 +2249,7 @@
 										<td>97.28kW</td>
 										<td>0</td>
 										<td>0</td>
-										<td>0</td>
+										<td>-</td>
 										<td>-</td>
 									</tr>
 									<tr class="detail_info list1 flag1">
@@ -2284,17 +2286,17 @@
 																					marginLeft: 0,
 																					marginRight: 0,
 																					backgroundColor: 'transparent',
-																					
+
 																					plotBorderWidth: 0,
 																					plotShadow: false
 																				},
-																				
+
 																				navigation: {
 																					buttonOptions: {
 																						enabled: false /* 메뉴 안보이기 */
 																					}
 																				},
-																				
+
 																				title: {
 																					text: '70%', // %표기
 																					align: 'center',
@@ -2306,20 +2308,20 @@
 																						color: 'var(--color3)'
 																					}
 																				},
-																				
+
 																				subtitle: {
 																					text: ''
 																				},
-																				
+
 																				/* 출처 */
 																				credits: {
 																					enabled: false
 																				},
-																				
+
 																				tooltip: {
 																					pointFormat: '<b>{point.percentage:.0f}%</b>'
 																				},
-																				
+
 																				plotOptions: {
 																					pie: {
 																						dataLabels: {
@@ -2336,7 +2338,7 @@
 																						size: '200%'
 																					}
 																				},
-																				
+
 																				series: [{
 																					type: 'pie',
 																					innerSize: '50%',
@@ -2386,7 +2388,7 @@
 																						}
 																					}]
 																				}
-																				
+
 																			});
 																		});
 																	</script>
@@ -2451,7 +2453,7 @@
 										<td>97.28kW</td>
 										<td>0</td>
 										<td>0</td>
-										<td>0</td>
+										<td>-</td>
 										<td>-</td>
 									</tr>
 									<tr class="detail_info list2 flag2">
@@ -2559,17 +2561,17 @@
 																					marginLeft: 0,
 																					marginRight: 0,
 																					backgroundColor: 'transparent',
-																					
+
 																					plotBorderWidth: 0,
 																					plotShadow: false
 																				},
-																				
+
 																				navigation: {
 																					buttonOptions: {
 																						enabled: false /* 메뉴 안보이기 */
 																					}
 																				},
-																				
+
 																				title: {
 																					text: '70%', // %표기
 																					align: 'center',
@@ -2581,20 +2583,20 @@
 																						color: 'var(--color3)'
 																					}
 																				},
-																				
+
 																				subtitle: {
 																					text: ''
 																				},
-																				
+
 																				/* 출처 */
 																				credits: {
 																					enabled: false
 																				},
-																				
+
 																				tooltip: {
 																					pointFormat: '<b>{point.percentage:.0f}%</b>'
 																				},
-																				
+
 																				plotOptions: {
 																					pie: {
 																						dataLabels: {
@@ -2611,7 +2613,7 @@
 																						size: '200%'
 																					}
 																				},
-																				
+
 																				series: [{
 																					type: 'pie',
 																					innerSize: '50%',
@@ -2661,7 +2663,7 @@
 																						}
 																					}]
 																				}
-																				
+
 																			});
 																		});
 																	</script>
@@ -2816,14 +2818,14 @@
 </div>
 <script type="text/javascript">
 	const formData = null;
-	
+
 	$(function () {
 		fn_cycle_1hour();
 		fn_cycle_1min();
 		setInterval(()=>fn_cycle_1hour(),60*60*1000);
 		setInterval(()=>fn_cycle_1min(),60*1000);
 	});
-	
+
 	function fn_cycle_1hour() {
 		getYearGenData();
 		drawData_year_gen();
@@ -2831,7 +2833,7 @@
 		drawData_month_gen();
 		getGenDataBySite();
 	}
-	
+
 	function fn_cycle_1min() {
 		getTodayTotalDetail();
 		realtimeRecord();
@@ -2840,7 +2842,7 @@
 		const now = new Date();
 		$('.dbTime').text(`${'${now.format("yyyy-MM-dd HH:mm:ss")}'}`);
 	}
-	
+
 	//올해 발전데이터, 정산금 데이터
 	let chargeList;
 	let dischargeList;
@@ -2848,7 +2850,7 @@
 	let windList;
 	let smallHydroList;
 	let payList;
-	
+
 	function getYearGenData(selTerm) {
 		chargeList = new Array(12).fill(0);
 		dischargeList = new Array(12).fill(0);
@@ -2861,7 +2863,7 @@
 			type: "get",
 			async: false,
 			data: {
-				oid: "spower",
+				oid: oid,
 			},
 			success: function (result) {
 				$(`.gmain_chart1 span.term`).text(`${'${today.getFullYear()}'}.1.1 ~ ${'${today.getFullYear()}'}.${'${today.getMonth()+1}'}.${'${today.getDate()}'}`);
@@ -2941,7 +2943,7 @@
 		})
 		;
 	}
-	
+
 	function drawData_year_gen() {
 		const $charge = $(".gmain_chart1");
 		if (chargeList.length < 1 && chargeList.length < 1 && dischargeList.length < 1 && dischargeList.length < 1) {
@@ -2951,12 +2953,12 @@
 			$charge.find(".no-data").css("display", "none");
 			$charge.find(".inchart").css("display", "");
 		}
-		
+
 		var seriesLength = chargeChart1.series.length;
 		for (var i = seriesLength - 1; i > -1; i--) {
 			chargeChart1.series[i].remove();
 		}
-		
+
 		chargeChart1.addSeries({
 			name: '충전',
 			type: 'column',
@@ -2995,13 +2997,13 @@
 				valueSuffix: '천원'
 			}
 		}, false);
-		
+
 		// chargeChart1.xAxis[0].options.tickInterval = 30 * 24 * 3600 * 1000;
 		// chargeChart1.xAxis[0].options.labels.style.fontSize = '12px';
-		
+
 		chargeChart1.redraw(); // 차트 데이터를 다시 그린다
 	}
-	
+
 	function getMonthGenData() {
 		chargeList = new Array(30).fill(0);
 		dischargeList = new Array(30).fill(0);
@@ -3014,7 +3016,7 @@
 			type: "get",
 			async: false,
 			data:{
-				oid: "spower",
+				oid: oid,
 			},
 			success: function (result) {
 				$(`.gmain_chart2 span.term`).text(`${'${today.getFullYear()}'}.${'${today.getMonth()+1}'}.1 ~ ${'${today.getFullYear()}'}.${'${today.getMonth()+1}'}.${'${today.getDate()}'}`);
@@ -3092,7 +3094,7 @@
 			}
 		});
 	}
-	
+
 	function drawData_month_gen() {
 		var $charge = $(".gmain_chart2");
 		if (chargeList.length < 1 && chargeList.length < 1 && dischargeList.length < 1 && dischargeList.length < 1) {
@@ -3102,12 +3104,12 @@
 			$charge.find(".no-data").css("display", "none");
 			$charge.find(".inchart").css("display", "");
 		}
-		
+
 		var seriesLength = chargeChart2.series.length;
 		for (var i = seriesLength - 1; i > -1; i--) {
 			chargeChart2.series[i].remove();
 		}
-		
+
 		chargeChart2.addSeries({
 			name: '충전',
 			type: 'column',
@@ -3146,12 +3148,12 @@
 				valueSuffix: '천원'
 			}
 		}, false);
-		
+
 		chargeChart2.redraw(); // 차트 데이터를 다시 그린다
 	}
-	
+
 	function getGenDataBySite() { //3번째 indiv 사업소별 탭
-		
+
 		const formData = getSiteMainSchCollection("yesterday");
 		const today = new Date();
 		const $tbody = $('#siteGenTbody');
@@ -3163,7 +3165,7 @@
 			type: "get",
 			async: false,
 			data:{
-				oid: "spower",
+				oid: oid,
 			},
 			success: function(result) {
 				$(`.gmain_chart3 span.term`).text(`${'${today.getFullYear()}'}.${'${today.getMonth()+1}'}.${'${today.getDate()-1}'}`);
@@ -3230,11 +3232,11 @@
 		$tbody.append(tbodyStr);
 		drawPeakChart3();
 	}
-	
+
 	function getGenDataByType() { //3번째 indiv 유형별 탭
-		
+
 		var formData = getSiteMainSchCollection();//api에 맞게 수정 필요
-		
+
 		//get sites information
 		$.ajax({
 			url: "",
@@ -3244,10 +3246,10 @@
 			success: function (result) {//api 요청결과
 				//success
 				var siteList = result.list;
-				
+
 				var $tbody = $('#siteGenTbody');
 				var tbodyStr = '';
-				
+
 				if (siteList != null && siteList.length > 0) {
 					for (var i = 0; i < siteList.length; i++) {
 						if (i < siteList.length) {
@@ -3260,16 +3262,16 @@
 							tbodyStr += '</tr>';
 						}
 					}
-					
+
 					var pagingMap = result.pagingMap;
 					makePageNums2(pagingMap, "GMainSiteRanking");
-					
+
 				} else {
 					$('#GMainSiteRankingPaging').empty();
 				}
-				
+
 				$tbody.html(tbodyStr);
-				
+
 				if (myChart != null) {
 					myChart.update({data: {table: 'gdatatable1'}});
 				}
@@ -3280,7 +3282,7 @@
 				error_getMonthGenData(request, status, error);
 			}
 		});
-		
+
 		//임시 데이터 세팅
 		//어제
 		var $tbody = $('#typeGenTbody');
@@ -3301,11 +3303,11 @@
 		tbodyStr += '<td>50</td>';
 		tbodyStr += '<td>100</td>';
 		tbodyStr += '</tr>';
-		
+
 		$tbody.append(tbodyStr);
-		
+
 		drawPeakChart4();
-		
+
 		var $typeRight = $('.type-right');
 		$typeRight.empty();
 		var sun = '';
@@ -3328,7 +3330,7 @@
 		wind += '	</dd>';
 		wind += '</dl>';
 		$typeRight.append(wind);
-		
+
 		var water = '';
 		water += '<dl class="water">';
 		water += '	<dt><span>소수력</span></dt>';
@@ -3340,23 +3342,23 @@
 		water += '</dl>';
 		$typeRight.append(water);
 	}
-	
+
 	function getTodayTotalDetail() {
-		
+
 		pvListHourly = new Array(24).fill(0);
 		pvListForecastingHourly = new Array(24).fill(0);
-		
+
 		$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(0);
 		$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(0);
 
 		const formData = getSiteMainSchCollection("day");
-		
+
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/config/sites",
 			type: "get",
 			async: false,
 			data: {
-				oid: "spower",
+				oid: oid,
 			},
 			success: function (result) {
 				$('#centerTbody tr td:nth-child(1)').text(Math.floor(result.length));
@@ -3379,14 +3381,14 @@
 							let moneySum = 0;
 							result.data[0].generation.items.map((e) => {generationSum += e.energy;});
 							result.data[0].generation.items.map((e) => moneySum += e.money);
-							
+
 							result.data[0].generation.items.map((e) => {
 								if (e.energy) {
 									const hour = Number(e.basetime.toString().slice(8, 10));
 									pvListHourly[hour] += Math.floor(e.energy/1000);
 								}
 							});
-							
+
 							pieChart.series[0].data.forEach((e, idx) => {
 								if (e.name === "태양광") {
 									e.update({y: Math.floor(generationSum / 100)});
@@ -3408,7 +3410,7 @@
 							// error_getYearGenData(request, status, error);
 						}
 					});
-					
+
 					$.ajax({
 						url: "http://iderms.enertalk.com:8443/energy/forecasting/sites",
 						type: "get",
@@ -3424,7 +3426,7 @@
 							result.data[0].generation.items.map((e, idx) => generationForecastSum += e.energy);
 							let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text());
 							$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(Math.floor(prevVal += generationForecastSum/1000));
-							$(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(8)`).text(Math.floor(generationForecastSum/1000)+'kWh');
+							$(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(6)`).text(Math.floor(generationForecastSum/1000)+'kWh');
 							$(`.detail_info.list${'${siteIdx+1}'} li.clear:nth-child(4) span.fl:nth-child(2) em`).text(Math.floor(generationForecastSum/1000));
 							$(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(3)>span:nth-child(2)`).text(Math.floor(generationForecastSum/1000)+'kWh');
 							result.data[0].generation.items.map((e) => {
@@ -3439,36 +3441,33 @@
 							// error_getYearGenData(request, status, error);
 						}
 					});
-					
-					
+
+
 					$.ajax({
 						url: "http://iderms.enertalk.com:8443/status/raw/site",
 						type: "get",
 						async: false,
 						data: {
 							sid: site.sid,
-							startTime: formData.startTime,
-							endTime: formData.endTime,
-							interval: "hour",
 							formId: 'v2'
 						},
 						success: function (result) {//api 요청결과
 							$.map(result, function(val, key) {
 								if(key == 'INV_PV') {
-									acPowerSum += result.acPower;
-									pieChart[`${'${siteIdx+1}'}`].setTitle({text:Math.floor(result.acPower/1000)+'kW'});
+									acPowerSum += val.activePower;
+									pieChart[`${'${siteIdx+1}'}`].setTitle({text:Math.floor(val.activePower/1000)+'kW'});
 									pieChart[`${'${siteIdx+1}'}`].series[0].data.forEach((e, idx) => {
 										if (e.name === "총 설비용량") {
-											e.update({y: Math.floor(result.acPower/1000)});
+											e.update({y: Math.floor(val.activePower/1000)});
 										} else if (e.name === "미설비용량") {
-											e.update({y: Math.floor(((97280*2)-result.acPower)/1000)});
+											e.update({y: Math.floor(((97280*2)-val.activePower)/1000)});
 										} else {
 											e.update({y: 0});
 										}
 									});
-									$(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(6)`).text(Math.floor(result.acPower/1000)+'kW');
-									$(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(1)>span:nth-child(2)`).text(Math.floor(result.acPower/1000)+'kW');
-									// $('.highcharts-title > tspan').text(Math.floor(acPowerSum/1000)+'kW');
+									//$(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(6)`).text(Math.floor(result.activePower/1000)+'kW');
+									$(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(1)>span:nth-child(2)`).text(Math.floor(result.activePower/1000)+'kW');
+									// $('.highcharts-title > tspan').text(Math.floor(activePowerSum/1000)+'kW');
 									pieChart.setTitle({text:Math.floor(acPowerSum/1000)+'kW'});
 									pieChart.series[0].data.forEach((e, idx) => {
 										if (e.name === "태양광") {
@@ -3495,7 +3494,7 @@
 							// error_getYearGenData(request, status, error);
 						}
 					});
-					
+
 					$.ajax({
 						url: "http://iderms.enertalk.com:8443/energy/now/sites",
 						type: "get",
@@ -3522,7 +3521,7 @@
 				})
 			},
 			error: function () {
-			
+
 			}
 		})
 		pieChart.redraw();
@@ -3547,7 +3546,7 @@
 		});
 		rChart3.redraw();
 	}
-	
+
 	function realtimeRecord(){
 		const formDataHour = getSiteMainSchCollection("hour");
 		const formDataDay = getSiteMainSchCollection("day");
@@ -3556,7 +3555,7 @@
 			type: "get",
 			async: false,
 			data: {
-				oid: "spower",
+				oid: oid,
 			},
 			success: function(sites){
 				let todayForecastingGenAllSite = 0;
@@ -3640,12 +3639,12 @@
 							console.error(error);
 						}
 					});
-					
+
 					let ratioHourly = 0;
 					let restHourly = 0;
 					let ratioDaily = 0;
 					let restDaily = 0;
-					
+
 					if(todayForecastingGenAllSite<=todayGenAllSite){
 						restDaily = null;
 						ratioDaily = 100;
@@ -3653,7 +3652,7 @@
 						ratioDaily = Math.floor((todayGenAllSite/todayForecastingGenAllSite)*100);
 						restDaily = 100-ratioDaily
 					}
-					
+
 					if(thisHourForecastingGenBySite<=thisHourGenBySite){
 						restHourly = null;
 						ratioHourly = 100;
@@ -3661,7 +3660,7 @@
 						ratioHourly = Math.floor((thisHourGenBySite/thisHourForecastingGenBySite)*100);
 						restHourly = 100-ratioHourly
 					}
-					
+
 					const nowHour = new Date().getHours();
 					pvListHourly[nowHour] = Math.floor(todayGenAllSite/1000);
 					rChart3.update({
@@ -3684,12 +3683,12 @@
 						}],
 					});
 					rChart3.redraw();
-					
+
 					//rchart1 변경
 					rchart1.series[0].data[`${'${siteIdx}'}`].z = ratioDaily;
 					rchart1.series[0].data[`${'${siteIdx}'}`].y = ratioHourly;
 					rchart1.redraw();
-					
+
 					//rchart2 변경
 					rchart2.update({
 						series: [{
@@ -3718,7 +3717,7 @@
 				});
 			},
 			error: function () {
-			
+
 			}
 		});
 		const now = new Date().getMinutes();
@@ -3729,25 +3728,25 @@
 			$('.realtime_time').css('bottom', 40+((146/60)*now));
 		}
 	}
-	
+
 	function getAlarmInfo() {
 		// 조회 파라미터 세팅
 		// 사업소 이름, 정상, 경고, 이상, 한번에 노출할 리스트 개수정보를 화면에서 던져줌. (처음- default)
 		// 조회 시 세팅된 리스트 개수만큼 사이트의 리스트가 반환된다고 가정하고 작업
 		// 리스트별 정보 -(알람시간,설비 유형 코드,설비 유형명,설비 id (장치id),설비명 (장치명),알람타입코드,알람타입명,알람메시지,알람상태)
-		
+
 		const formData = getSiteMainSchCollection("day");
-		
+
 		let alarmList = [];
 		const $alarmList = $('.alarm_notice > ul');
 		let alarmStr = '';
-		
+
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/config/sites",
 			type: "get",
 			async: false,
 			data: {
-				oid: "spower",
+				oid: oid,
 			},
 			success: function (sites) {
 				sites.forEach((site,siteIdx)=>{
@@ -3787,19 +3786,19 @@
 				console.error(error);
 			}
 		});
-		
+
 	}
-	
+
 	function getDeviceStatusInfo(){
-		
+
 		const formData = getSiteMainSchCollection("day");
-		
+
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/config/sites",
 			type: "get",
 			async: false,
 			data: {
-				oid: "spower",
+				oid: oid,
 			},
 			success: function(sites){
 				sites.forEach((site, siteIdx) => {

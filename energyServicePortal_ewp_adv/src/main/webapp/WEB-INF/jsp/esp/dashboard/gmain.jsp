@@ -2386,7 +2386,7 @@
 			type: "get",
 			async: false,
 			data: {
-				oid: "spower",
+				oid: oid,
 			},
 			success: function (result) {
 				$(`.gmain_chart1 span.term`).text(`${'${today.getFullYear()}'}.1.1 ~ ${'${today.getFullYear()}'}.${'${today.getMonth()+1}'}.${'${today.getDate()}'}`);
@@ -2540,7 +2540,7 @@
 			type: "get",
 			async: false,
 			data: {
-				oid: "spower",
+				oid: oid,
 			},
 			success: function (result) {
 				$(`.gmain_chart2 span.term`).text(`${'${today.getFullYear()}'}.${'${today.getMonth()+1}'}.1 ~ ${'${today.getFullYear()}'}.${'${today.getMonth()+1}'}.${'${today.getDate()}'}`);
@@ -2689,7 +2689,7 @@
 			type: "get",
 			async: false,
 			data: {
-				oid: "spower",
+				oid: oid,
 			},
 			success: function (result) {
 				$(`.gmain_chart3 span.term`).text(`${'${today.getFullYear()}'}.${'${today.getMonth()+1}'}.${'${today.getDate()-1}'}`);
@@ -2881,14 +2881,9 @@
 			type: "get",
 			async: false,
 			data: {
-				oid: "spower",
+				oid: oid,
 			},
 			success: function (result) {
-				console.log(result);
-				console.log(result);
-				console.log(result);
-				console.log(result);
-				console.log(result);
 				$('#centerTbody tr td:nth-child(1)').text(Math.floor(result.length));
 				let acPowerSum = 0;
 				let co2Sum = 0;
@@ -2906,9 +2901,7 @@
 						success: function (result) {//api 요청결과
 							let generationSum = 0;
 							let moneySum = 0;
-							result.data[0].generation.items.map((e) => {
-								generationSum += e.energy;
-							});
+							result.data[0].generation.items.map((e) => {generationSum += e.energy;});
 							result.data[0].generation.items.map((e) => moneySum += e.money);
 
 							pieChart.series[0].data.forEach((e, idx) => {
@@ -2970,7 +2963,6 @@
 						success: function (result) {//api 요청결과
 							$.map(result, function(val, key) {
 								if(key == 'INV_PV') {
-									console.log('INV_PV', val);
 									acPowerSum += val.activePower;
 									pieChart[`${'${siteIdx+1}'}`].setTitle({text: Math.floor(val.activePower / 1000) + 'kW'});
 									pieChart[`${'${siteIdx+1}'}`].series[0].data.forEach((e, idx) => {
@@ -3060,7 +3052,7 @@
 			type: "get",
 			async: false,
 			data: {
-				oid: "spower",
+				oid: oid,
 			},
 			success: function (sites) {
 				sites.forEach((site, siteIdx) => {
@@ -3112,7 +3104,7 @@
 			type: "get",
 			async: false,
 			data: {
-				oid: "spower",
+				oid: oid,
 			},
 			success: function (sites) {
 				sites.forEach((site, siteIdx) => {
