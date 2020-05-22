@@ -1097,7 +1097,7 @@
 						</tbody>
 					</table>
 					<div class="btn_wrap_type">
-						<a href="#;" class="btn_type08">선택 삭제</a>
+						<a href="#;" class="btn_type07">선택 삭제</a>
 						<a href="javascript:void(0);" class="btn_add"
 						   onclick="addRowTable('interestTable'); return false;">추가</a>
 					</div>
@@ -1345,7 +1345,7 @@
 						</tbody>
 					</table>
 					<div class="btn_wrap_type">
-						<a href="#;" class="btn_type08">선택 삭제</a>
+						<a href="#;" class="btn_type07">선택 삭제</a>
 						<a href="javascript:void(0);" class="btn_add" onclick="addRowTable('rentTable'); return false;">추가</a>
 					</div>
 				</div>

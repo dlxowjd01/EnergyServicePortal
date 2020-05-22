@@ -12522,6 +12522,7 @@ button.big{width:102px}
 .darkmode .btn_type07:before {
 	background-image: url(../img/delete.png);
 }
+.btn_type07:link, .btn_type07:visited, .btn_type07:hover, .btn_type07:active{color:var(--color4)}
 
 .darkmode .btn_type05:before,.darkmode .btn_type06:before {
 	background: url(../img/ico_add2.png) no-repeat
