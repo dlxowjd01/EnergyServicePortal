@@ -658,11 +658,6 @@
 				, column = $(this).data('column');
 			let Selector = "";
 
-			if ($(this).parent().parent().parent().attr("id") === "INV_PV") {
-				Selector = "INV_PV";
-			} else {
-				Selector = "SM_MANUAL";
-			}
 			if (idx >= 1 && idx < 8) {
 				$('.his_tbl thead th a').removeClass('asc').removeClass('desc');
 				if (order == undefined || order == null || order == '') {
@@ -1380,9 +1375,10 @@
                 date = val.substring(0, 4)
             } else if(String(val).length == 6) {
                 date = val.substring(0, 4) + '-' + val.substring(4, 6);
-            } else if(String(val).length == 8) {
+            } else if(String(val).length == 12) {
                 date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8) + ' ' + val.substring(8, 10) + ':' + val.substring(10, 12);
-            } else if(String(val).length > 8) {
+            } else if(String(val).length > 12) {
+
                 date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8) + ' ' + val.substring(8, 10) + ':' + val.substring(10, 12) + ':' + val.substring(12, 14);
             } else {
                 date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8);
