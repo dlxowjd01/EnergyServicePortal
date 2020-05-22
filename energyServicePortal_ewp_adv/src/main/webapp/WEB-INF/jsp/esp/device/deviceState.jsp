@@ -436,13 +436,13 @@
       divStr += '		</div>';
       divStr += '		<ul class="eq_card_ul clear">';
       if (device_type == "INV_PV") {
-        divStr += '			<li><p class="t_ti">순시전력</p><p class="t_value">' + ((isEmpty(data.activePower)) ? '-' : (data.activePower)) + 'W</p></li>';
+        divStr += '			<li><p class="t_ti">순시전력</p><p class="t_value">' + ((isEmpty(data.activePower)) ? '-' : displayNumberFixedDecimal((data.activePower), "W").join("")) + '</p></li>';
         divStr += '			<li><p class="t_ti">DC전력</p><p class="t_value">' + ((isEmpty(data.dcPower)) ? '-' : displayNumberFixedDecimal((data.dcPower), "W").join("")) + '</p></li>';
         divStr += '			<li><p class="t_ti">누적발전량</p><p class="t_value">' + ((isEmpty(data.accumActiveEnergy)) ? '-' : displayNumberFixedDecimal(data.accumActiveEnergy, "Wh").join("")) + '</p></li>';
       } else if (device_type == "SENSOR_SOLAR") {
-        divStr += '			<li><p class="t_ti">온도</p><p class="t_value">' + '0' + '℃</p></li>';
-        divStr += '			<li><p class="t_ti">습도</p><p class="t_value">' + '0' + '%</p></li>';
-        divStr += '			<li><p class="t_ti">경사면 일사량</p><p class="t_value">-W/㎡</p></li>';
+        divStr += '			<li><p class="t_ti">온도</p><p class="t_value">' + ((isEmpty(data.temperature)) ? '-' : (data.temperature).toFixed(2)) + '℃</p></li>';
+        divStr += '			<li><p class="t_ti">습도</p><p class="t_value">' + ((isEmpty(data.humidity)) ? '-' : (data.humidity).toFixed(2)) + '%</p></li>';
+        divStr += '			<li><p class="t_ti">경사면 일사량</p><p class="t_value">' + ((isEmpty(data.irradiationPoa)) ? '-' : displayNumberFixedDecimal(data.irradiationPoa,"W").join("")) + '/㎡</p></li>';
       } else {
         divStr += '			<li><p class="t_ti">DCU 전체 전압</p><p class="t_value">' + '0' + '</p></li>';
         divStr += '			<li><p class="t_ti">DCU 전체 전류</p><p class="t_value">' + '0' + '</p></li>';
@@ -473,19 +473,9 @@
       } else if (device_type == "SENSOR_SOLAR") {
         divStr += '				<li>';
         divStr += '					<ul class="di_list">';
-        divStr += '						<li><span class="di_li_tit">절대시간</span><span class="di_li_tx">' + '0' + '</span></li>';
-        divStr += '						<li><span class="di_li_tit">로컬시간</span><span class="di_li_tx">' + '0' + '</span></li>';
-        divStr += '						<li><span class="di_li_tit">설비상태</span><span class="di_li_tx">' + '0' + '</span></li>';
-        divStr += '						<li><span class="di_li_tit">알람단계</span><span class="di_li_tx">' + '0' + '</span></li>';
-        divStr += '						</li>';
-        divStr += '					</ul>';
-        divStr += '				</li>';
-        divStr += '				<li>';
-        divStr += '					<ul class="di_list">';
-        divStr += '						<li><span class="di_li_tit">알람상세</span><span class="di_li_tx">' + '0' + '</span></li>';
-        divStr += '						<li><span class="di_li_tit">수평면 일사량</span><span class="di_li_tx">' + '0' + 'W/㎡</span></li>';
-        divStr += '						<li><span class="di_li_tit">누적 경사면 일사량</span><span class="di_li_tx">' + '0' + 'Wh/㎡</span></li>';
-        divStr += '						<li><span class="di_li_tit">누적 수평면 일사량</span><span class="di_li_tx">' + '0' + 'Wh/㎡</span></li>';
+        divStr += '						<li><span class="di_li_tit">수평면 일사량</span><span class="di_li_tx">' + ((isEmpty(data.irradiationHorizontal)) ? '-' : displayNumberFixedDecimal(data.irradiationHorizontal, "W").join("").concat('/㎡')) + '</span></li>';
+        divStr += '						<li><span class="di_li_tit">누적 경사면 일사량</span><span class="di_li_tx">' + ((isEmpty(data.accumIrradiationPoa)) ? '-' : displayNumberFixedDecimal(data.accumIrradiationPoa, "Wh").join("").concat('/㎡')) + '</span></li>';
+        divStr += '						<li><span class="di_li_tit">누적 수평면 일사량</span><span class="di_li_tx">' + ((isEmpty(data.accumIrradiationHorizontal)) ? '-' : displayNumberFixedDecimal(data.accumIrradiationHorizontal, "Wh").join("").concat('/㎡')) + '</span></li>';
         divStr += '						</li>';
         divStr += '					</ul>';
         divStr += '				</li>';
