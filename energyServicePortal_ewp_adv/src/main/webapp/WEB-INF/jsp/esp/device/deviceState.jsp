@@ -429,7 +429,6 @@
       var data = result[did].data[0];
       
       var alertLevel = 0;
-      
       var divStr = "";
       divStr += '	<div class="indiv eq_card">';
       divStr += '		<div class="chart_top clear">';
@@ -437,13 +436,17 @@
       divStr += '		</div>';
       divStr += '		<ul class="eq_card_ul clear">';
       if (device_type == "INV_PV") {
-        divStr += '			<li><p class="t_ti">순시전력</p><p class="t_value">' + ((isEmpty(data.acPower)) ? '-' : (data.acPower)) + 'W</p></li>';
-        divStr += '			<li><p class="t_ti">DC전력</p><p class="t_value">' + ((isEmpty(data.dcPower)) ? '-' : (data.dcPower)) + 'W</p></li>';
-        divStr += '			<li><p class="t_ti">누적발전량</p><p class="t_value">' + ((isEmpty(data.totalGenPower)) ? '-' : data.totalGenPower) + 'Wh</p></li>';
+        divStr += '			<li><p class="t_ti">순시전력</p><p class="t_value">' + ((isEmpty(data.activePower)) ? '-' : (data.activePower)) + 'W</p></li>';
+        divStr += '			<li><p class="t_ti">DC전력</p><p class="t_value">' + ((isEmpty(data.dcPower)) ? '-' : displayNumberFixedDecimal((data.dcPower), "W").join("")) + '</p></li>';
+        divStr += '			<li><p class="t_ti">누적발전량</p><p class="t_value">' + ((isEmpty(data.accumActiveEnergy)) ? '-' : displayNumberFixedDecimal(data.accumActiveEnergy, "Wh").join("")) + '</p></li>';
+      } else if (device_type == "SENSOR_SOLAR") {
+        divStr += '			<li><p class="t_ti">온도</p><p class="t_value">' + '0' + '℃</p></li>';
+        divStr += '			<li><p class="t_ti">습도</p><p class="t_value">' + '0' + '%</p></li>';
+        divStr += '			<li><p class="t_ti">경사면 일사량</p><p class="t_value">-W/㎡</p></li>';
       } else {
         divStr += '			<li><p class="t_ti">DCU 전체 전압</p><p class="t_value">' + '0' + '</p></li>';
         divStr += '			<li><p class="t_ti">DCU 전체 전류</p><p class="t_value">' + '0' + '</p></li>';
-        divStr += '			<li><p class="t_ti">금일 발전량 출력</p><p class="t_value">-</p></li>';
+        divStr += '			<li><p class="t_ti">금일 발전량 출력</p><p class="t_value">-</p></li>';    	  
       }
       divStr += '		</ul>';
       divStr += '		<div class="inv_sec_bx">';
@@ -452,19 +455,38 @@
       if (device_type == "INV_PV") {
         divStr += '				<li>';
         divStr += '					<ul class="di_list">';
-        divStr += '						<li><span class="di_li_tit">R전압</span><span class="di_li_tx">' + ((isEmpty(data.acVoltageRS)) ? '-' : data.acVoltageRS) + 'V</span></li>';
-        divStr += '						<li><span class="di_li_tit">S전압</span><span class="di_li_tx">' + ((isEmpty(data.acVoltageST)) ? '-' : data.acVoltageST) + 'V</span></li>';
-        divStr += '						<li><span class="di_li_tit">T전압</span><span class="di_li_tx">' + ((isEmpty(data.acVoltageTR)) ? '-' : data.acVoltageTR) + 'V</span></li>';
+        divStr += '						<li><span class="di_li_tit">R전압</span><span class="di_li_tx">' + ((isEmpty(data.voltageR)) ? '-' : data.voltageR) + 'V</span></li>';
+        divStr += '						<li><span class="di_li_tit">S전압</span><span class="di_li_tx">' + ((isEmpty(data.voltageS)) ? '-' : data.voltageS) + 'V</span></li>';
+        divStr += '						<li><span class="di_li_tit">T전압</span><span class="di_li_tx">' + ((isEmpty(data.voltageT)) ? '-' : data.voltageT) + 'V</span></li>';
         divStr += '						<li><span class="di_li_tit">주파수</span><span class="di_li_tx">' + ((isEmpty(data.frequency)) ? '-' : data.frequency) + 'Hz</span></li>';
         divStr += '						</li>';
         divStr += '					</ul>';
         divStr += '				</li>';
         divStr += '				<li>';
         divStr += '					<ul class="di_list">';
-        divStr += '						<li><span class="di_li_tit">R전류</span><span class="di_li_tx">' + ((isEmpty(data.acCurrentR)) ? '-' : toFixedNum(data.acCurrentR, 1)) + 'A</span></li>';
-        divStr += '						<li><span class="di_li_tit">S전류</span><span class="di_li_tx">' + ((isEmpty(data.acCurrentS)) ? '-' : toFixedNum(data.acCurrentS, 1)) + 'A</span></li>';
-        divStr += '						<li><span class="di_li_tit">T전류</span><span class="di_li_tx">' + ((isEmpty(data.acCurrentT)) ? '-' : toFixedNum(data.acCurrentT, 1)) + 'A</span></li>';
+        divStr += '						<li><span class="di_li_tit">R전류</span><span class="di_li_tx">' + ((isEmpty(data.currentR)) ? '-' : toFixedNum(data.currentR, 1)) + 'A</span></li>';
+        divStr += '						<li><span class="di_li_tit">S전류</span><span class="di_li_tx">' + ((isEmpty(data.currentS)) ? '-' : toFixedNum(data.currentS, 1)) + 'A</span></li>';
+        divStr += '						<li><span class="di_li_tit">T전류</span><span class="di_li_tx">' + ((isEmpty(data.currentT)) ? '-' : toFixedNum(data.currentT, 1)) + 'A</span></li>';
         divStr += '						<li><span class="di_li_tit">온도</span><span class="di_li_tx">' + ((isEmpty(data.temperature)) ? '-' : data.temperature) + '℃</span></li>';
+        divStr += '					</ul>';
+        divStr += '				</li>';
+      } else if (device_type == "SENSOR_SOLAR") {
+        divStr += '				<li>';
+        divStr += '					<ul class="di_list">';
+        divStr += '						<li><span class="di_li_tit">절대시간</span><span class="di_li_tx">' + '0' + '</span></li>';
+        divStr += '						<li><span class="di_li_tit">로컬시간</span><span class="di_li_tx">' + '0' + '</span></li>';
+        divStr += '						<li><span class="di_li_tit">설비상태</span><span class="di_li_tx">' + '0' + '</span></li>';
+        divStr += '						<li><span class="di_li_tit">알람단계</span><span class="di_li_tx">' + '0' + '</span></li>';
+        divStr += '						</li>';
+        divStr += '					</ul>';
+        divStr += '				</li>';
+        divStr += '				<li>';
+        divStr += '					<ul class="di_list">';
+        divStr += '						<li><span class="di_li_tit">알람상세</span><span class="di_li_tx">' + '0' + '</span></li>';
+        divStr += '						<li><span class="di_li_tit">수평면 일사량</span><span class="di_li_tx">' + '0' + 'W/㎡</span></li>';
+        divStr += '						<li><span class="di_li_tit">누적 경사면 일사량</span><span class="di_li_tx">' + '0' + 'Wh/㎡</span></li>';
+        divStr += '						<li><span class="di_li_tit">누적 수평면 일사량</span><span class="di_li_tx">' + '0' + 'Wh/㎡</span></li>';
+        divStr += '						</li>';
         divStr += '					</ul>';
         divStr += '				</li>';
       } else {
