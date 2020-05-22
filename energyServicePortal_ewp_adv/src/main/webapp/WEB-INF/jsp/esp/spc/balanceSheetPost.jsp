@@ -1005,6 +1005,7 @@
 				<div class="spc_bal_post">
 					<table id="interestTable">
 						<colgroup>
+							<col style="width:48px">
 							<col style="width:9.5%">
 							<col style="width:9.5%">
 							<col style="width:9.5%">
@@ -1017,6 +1018,7 @@
 						</colgroup>
 						<thead>
 						<tr>
+							<th rowspan="2"></th>
 							<th rowspan="2">차입금 / 이자</th>
 							<th rowspan="2">원금(원)</th>
 							<th colspan="3">기간</th>
@@ -1035,6 +1037,12 @@
 						</thead>
 						<tbody>
 						<tr>
+							<td>
+								<div class="chk_type">
+									<input type="checkbox" id="chk01">
+									<label for="chk01"><span></span></label>
+								</div>
+							</td>
 							<td>A</td>
 							<td>
 								<div class="tx_inp_type">
@@ -1089,6 +1097,7 @@
 						</tbody>
 					</table>
 					<div class="btn_wrap_type">
+						<a href="#;" class="btn_type08">선택 삭제</a>
 						<a href="javascript:void(0);" class="btn_add"
 						   onclick="addRowTable('interestTable'); return false;">추가</a>
 					</div>
@@ -1097,6 +1106,7 @@
 				<div class="spc_bal_post">
 					<table id="service_chargeTable">
 						<colgroup>
+							<col style="width:48px">
 							<col>
 							<col>
 							<col>
@@ -1110,6 +1120,7 @@
 						</colgroup>
 						<thead>
 						<tr>
+							<th rowspan="2"></th>
 							<th rowspan="2">대리기관/<br>관리운영 수수료</th>
 							<th rowspan="2">종류</th>
 							<th colspan="2">계약방식</th>
@@ -1130,6 +1141,12 @@
 						</thead>
 						<tbody>
 						<tr>
+							<td>
+								<div class="chk_type">
+									<input type="checkbox" id="chk02">
+									<label for="chk02"><span></span></label>
+								</div>
+							</td>
 							<td>A</td>
 							<td>
 								<%--								<div class="sa_select">--%>
@@ -1200,6 +1217,12 @@
 							</td>
 						</tr>
 						<tr>
+							<td>
+								<div class="chk_type">
+									<input type="checkbox" id="chk03">
+									<label for="chk03"><span></span></label>
+								</div>
+							</td>
 							<td>A</td>
 							<td>
 								<%--								<div class="sa_select">--%>
@@ -1279,13 +1302,15 @@
 				<div class="spc_bal_post">
 					<table id="rentTable">
 						<colgroup>
-							<col style="width:25%">
-							<col style="width:25%">
-							<col style="width:25%">
-							<col style="width:25%">
+							<col style="width:48px">
+							<col style="width:24%">
+							<col style="width:24%">
+							<col style="width:24%">
+							<col>
 						</colgroup>
 						<thead>
 						<tr>
+							<th></th>
 							<th>임대료</th>
 							<th>공급가액</th>
 							<th>부가세</th>
@@ -1294,6 +1319,12 @@
 						</thead>
 						<tbody>
 						<tr>
+							<td>
+								<div class="chk_type">
+									<input type="checkbox" id="chk04">
+									<label for="chk04"><span></span></label>
+								</div>
+							</td>
 							<td></td>
 							<td>
 								<div class="tx_inp_type">
@@ -1314,6 +1345,7 @@
 						</tbody>
 					</table>
 					<div class="btn_wrap_type">
+						<a href="#;" class="btn_type08">선택 삭제</a>
 						<a href="javascript:void(0);" class="btn_add" onclick="addRowTable('rentTable'); return false;">추가</a>
 					</div>
 				</div>

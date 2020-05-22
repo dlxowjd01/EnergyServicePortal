@@ -12527,6 +12527,32 @@ button.big{width:102px}
 	background: url(../img/ico_add2.png) no-repeat
 }
 
+.btn_type08 {
+	padding: 0 12px 0 6px;
+	font-size: 13px;
+	line-height: 24px;
+	color: var(--color4);
+	border:0;
+	font-weight:500;
+	background: none;
+	vertical-align:top;
+	cursor:pointer
+}
+
+.btn_type08:before {
+	display: inline-block;
+	margin: 0 3px 0 0;
+	width: 24px;
+	height: 24px;
+	vertical-align: top;
+	background: url(../img/icon_close_wh.png) no-repeat center center;
+	content: ''
+}
+.darkmode .btn_type08:before {
+	background: url(../img/icon_close.png) no-repeat center center;
+}
+.btn_type08:link, .btn_type08:visited, .btn_type08:hover, .btn_type08:active{color:var(--color4)}
+
 .btn_align {
 	padding-left: 20px;
 	line-height: 20px;
@@ -13907,6 +13933,8 @@ button.tx_file {
 .spc_bal_post .sel{padding:0;width:100%;background:url('../img/sel_down_dark.png') no-repeat right 12px top 13px;text-align:center}
 .spc_bal_post .dropdown .btn-primary{background-color:initial}
 .spc_bal_post .btn-primary:focus, .spc_bal_post .btn-primary.focus, .spc_bal_post .btn-primary:hover, .spc_bal_post .btn-primary:active, .spc_bal_post .btn-primary.active, .spc_bal_post .open > .dropdown-toggle.btn-primary, .spc_bal_post .btn-primary:active:hover,.spc_bal_post .btn-primary.active:hover,.spc_bal_post .open > .dropdown-toggle.btn-primary:hover,.spc_bal_post .btn-primary:active:focus,.spc_bal_post .btn-primary.active:focus,.spc_bal_post .open > .dropdown-toggle.btn-primary:focus,.spc_bal_post .btn-primary:active.focus,.spc_bal_post .btn-primary.active.focus,.spc_bal_post .open > .dropdown-toggle.btn-primary.focus{background:initial}
+.spc_bal_post .rdo_type input[type="radio"] + label span,
+.spc_bal_post .chk_type input[type="checkbox"] + label span{margin-right:0}
 .spc_st_top{border-bottom:1px solid rgba(255, 255, 255, 0.25);margin-bottom:44px;padding-bottom:15px}
 
 .entity_site .btn_wrap_type02 button{width:102px}
