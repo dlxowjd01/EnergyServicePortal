@@ -158,13 +158,13 @@
 						<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">전체
 							<span class="caret"></span>
 						</button>
-						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="type">
+						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="device">
 							<li class="dropdown_cov type">
 								<div class="sec_li_bx">
 									<p class="tx_li_tit">사업소별</p>
 									<a href="#" tabindex="-1">
-										<input type="checkbox" id="type_1" value="INV_PV">
-										<label for="type_1"><span></span>태양광 인버터</label>
+										<input type="checkbox" id="device_1" value="INV_PV">
+										<label for="device_1"><span></span>태양광 인버터</label>
 									</a>
 								</div>
 							</li>
@@ -182,38 +182,38 @@
 						<ul class="dropdown-menu chk_type" role="menu">
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="type_10" value="9" name="alarm" checked>
-									<label for="type_11"><span></span>알수없음</label>
+									<input type="checkbox" id="alarm1" value="9" name="alarm" checked>
+									<label for="alarm1"><span></span>알수없음</label>
 								</a>
 							</li>
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="type_11" value="0" name="alarm" checked>
-									<label for="type_11"><span></span>정보</label>
+									<input type="checkbox" id="alarm2" value="0" name="alarm" checked>
+									<label for="alarm2"><span></span>정보</label>
 								</a>
 							</li>
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="type_12" value="1" name="alarm" checked>
-									<label for="type_11"><span></span>경고</label>
+									<input type="checkbox" id="alarm3" value="1" name="alarm" checked>
+									<label for="alarm3"><span></span>경고</label>
 								</a>
 							</li>
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="type_13" value="2" name="alarm" checked>
-									<label for="type_11"><span></span>이상</label>
+									<input type="checkbox" id="alarm4" value="2" name="alarm" checked>
+									<label for="alarm4"><span></span>이상</label>
 								</a>
 							</li>
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="type_14" value="3" name="alarm" checked>
-									<label for="type_11"><span></span>트립</label>
+									<input type="checkbox" id="alarm5" value="3" name="alarm" checked>
+									<label for="alarm5"><span></span>트립</label>
 								</a>
 							</li>
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="type_15" value="4" name="alarm" checked>
-									<label for="type_11"><span></span>정상</label>
+									<input type="checkbox" id="alarm6" value="4" name="alarm" checked>
+									<label for="alarm6"><span></span>정상</label>
 								</a>
 							</li>
 						</ul>
@@ -227,17 +227,17 @@
 						<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown">전체
 							<span class="caret"></span>
 						</button>
-						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="type">
+						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="alstatus">
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="chk_001" name="confirm">
-									<label for="chk_001"><span></span>확인</label>
+									<input type="checkbox" id="alstatus1" name="confirm">
+									<label for="alstatus1"><span></span>확인</label>
 								</a>
 							</li>
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="chk_002" name="confirm">
-									<label for="chk_002"><span></span>미확인</label>
+									<input type="checkbox" id="alstatus2" name="confirm" checked>
+									<label for="alstatus2"><span></span>미확인</label>
 								</a>
 							</li>
 						</ul>
@@ -251,41 +251,41 @@
 						<button class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown">전체
 							<span class="caret"></span>
 						</button>
-						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="type">
+						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="status">
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="chk_001" name="status" value="null" checked>
-									<label for="chk_001"><span></span>신규</label>
+									<input type="checkbox" id="status1" name="status" value="null" checked>
+									<label for="status1"><span></span>신규</label>
 								</a>
 							</li>
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="chk_002" name="status" value="open" checked>
-									<label for="chk_002"><span></span>작업처리중</label>
+									<input type="checkbox" id="status2" name="status" value="open" checked>
+									<label for="status2"><span></span>작업처리중</label>
 								</a>
 							</li>
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="chk_003" name="status" value="pending" checked>
-									<label for="chk_003"><span></span>추가 정보 대기</label>
+									<input type="checkbox" id="status3" name="status" value="pending" checked>
+									<label for="status3"><span></span>추가 정보 대기</label>
 								</a>
 							</li>
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="chk_004" name="status" value="resolved" checked>
-									<label for="chk_004"><span></span>현장 조치 완료</label>
+									<input type="checkbox" id="status4" name="status" value="resolved" checked>
+									<label for="status4"><span></span>현장 조치 완료</label>
 								</a>
 							</li>
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="chk_005" name="status" value="on-hold" checked>
-									<label for="chk_005"><span></span>처리 결과 확인</label>
+									<input type="checkbox" id="status5" name="status" value="on-hold" checked>
+									<label for="status5"><span></span>처리 결과 확인</label>
 								</a>
 							</li>
 							<li>
 								<a href="#" tabindex="-1">
-									<input type="checkbox" id="chk_006" name="status" value="closed" checked>
-									<label for="chk_006"><span></span>처리 완료</label>
+									<input type="checkbox" id="status6" name="status" value="closed" checked>
+									<label for="status6"><span></span>처리 완료</label>
 								</a>
 							</li>
 						</ul>
@@ -309,14 +309,14 @@
 						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
 							<li>
 								<a href="#">
-									<input type="checkbox" id="chk010" name="type" value="type">
-									<label for="chk010"><span></span>설비 타입</label>
+									<input type="checkbox" id="type1" name="type" value="type">
+									<label for="type1"><span></span>설비 타입</label>
 								</a>
 							</li>
 							<li>
 								<a href="#">
-									<input type="checkbox" id="chk011" name="type" value="alarm">
-									<label for="chk011"><span></span>알람 타입</label>
+									<input type="checkbox" id="type2" name="type" value="alarm">
+									<label for="type2"><span></span>알람 타입</label>
 								</a>
 							</li>
 						</ul>
@@ -429,8 +429,8 @@
 					<thead>
 					<tr>
 						<th>
-							<input type="checkbox" id="chk014" onclick="alarmConfirmCheckAll('INV_PV');">
-							<label for="chk014"><span></span></label>
+							<input type="checkbox" id="alarmConfirmCheck" onclick="alarmConfirmCheckAll('INV_PV');">
+							<label for="alarmConfirmCheck"><span></span></label>
 						</th>
 						<th>
 							<button class="btn_align down">사업소</button>
@@ -469,8 +469,8 @@
 					<thead>
 					<tr>
 						<th>
-							<input type="checkbox" id="chk015">
-							<label for="chk015"><span></span></label>
+							<input type="checkbox" id="alarmConfirmCheck2">
+							<label for="alarmConfirmCheck2"><span></span></label>
 						</th>
 						<th>
 							<button class="btn_align down">사업소</button>
@@ -554,13 +554,14 @@
 
 	$(function () {
 		let sites = JSON.parse('${siteList}');
-
+		
 		siteList(sites);
 		//사이트 선택시
 		$(document).on('click', ':checkbox[name="site"]', function () {
 			if ($(this).is(':checked')) {
 				let extendText = '';
-				if ($(':checkbox[name="site"]:checked').length > 2) {
+				if ($(':checkbox[name="site"]:checked').length > 1) {
+		
 					extendText = '외 ' + Number($(':checkbox[name="site"]:checked').length - 1) + '개';
 				}
 				$('#siteList button').html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
@@ -569,7 +570,7 @@
 					$('#siteList button').html('선택해주세요.' + '<span class="caret"></span>')
 				} else {
 					let extendText = '';
-					if ($(':checkbox[name="site"]:checked').length > 2) {
+					if ($(':checkbox[name="site"]:checked').length > 1) {
 						extendText = '외 ' + Number($(':checkbox[name="site"]:checked').length - 1) + '개';
 					}
 					$('#siteList button').html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
@@ -600,12 +601,13 @@
 			}
 		});
 
-		$(".chk_type #chk010").on('click', function () {
+		$(".chk_type #type").on('click', function () {
 			if ($(this).find('input').is(':checked')) {
 			} else {
 				$(this).find('input').prop('checked', true);
 			}
 		})
+		
 		$('#alarm li').on('click', function () {
 			let idx = $('#alarm li').index($(this));
 			if (idx == 0) {
@@ -736,7 +738,7 @@
 			alert('알람유형을 한개이상 선택해 주세요.');
 			return false;
 		}
-
+        
 		$('.his_tbl tbody').empty();
 		s = dataList[1];
 
@@ -776,7 +778,7 @@
 				endTime: $('#datepicker2').datepicker('getDate').format('yyyyMMdd') + '235959',
 			}
 		}
-
+        
 		$.ajax({
 			url: 'http://iderms.enertalk.com:8443/alarms',
 			type: 'get',
@@ -1018,10 +1020,9 @@
 			substringCnt = 6;
 		}
 
-		var gr_type = $(".chk_type #chk010").is(':checked');
+		var gr_type = $(".chk_type #type1").is(':checked');
 
 		var chartTypeNm = (gr_type == true) ? "deviceType" : "alarm";
-		console.log(chartTypeNm);
 		let dataMap = new Map();
 
 		dataMap.set(s, data);
@@ -1071,6 +1072,7 @@
 
 
 			vMap.forEach(function (val, key) {
+			
 				var typeNm = key;
 
 				$(':checkbox[name="' + chartTypeNm + '"]:checked').each(function () {
@@ -1091,7 +1093,7 @@
 				columnSeriesData.push($temp)
 				num++;
 			});
-
+			
 		});
 
 		pieMap = new Map();
@@ -1146,9 +1148,7 @@
 	}
 
 	const chartDraw = function (columnSeriesData, pieSeriesData) {
-
 		let chart = $('#hchart2').highcharts();
-
 		if (chart) {
 			chart.destroy();
 		}
@@ -1182,8 +1182,12 @@
 					style: {
 						color: 'var(--color3)',
 						fontSize: '14px'
-					}
+					},
+					formatter: function() {
+                        return dateFormat(this.value);
+                    }
 				},
+				categories: dateArr,
 				tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
 				title: {
 					text: null
@@ -1195,7 +1199,7 @@
 				gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 				min: 0, /* 최소값 지정 */
 				title: {
-					text: '(kWh)',
+					text: '건',
 					align: 'low',
 					rotation: 0, /* 타이틀 기울기 */
 					y: 25, /* 타이틀 위치 조정 */
@@ -1369,24 +1373,23 @@
 	}
 
 
-	//날짜포멧 변경(yyyyMMddHHmmss형)
-	var dateFormat = function (val) {
-		let date = '';
-		if (val != undefined) {
-			if (String(val).length == 4) {
-				date = val.substring(0, 4)
-			} else if (String(val).length == 6) {
-				date = val.substring(0, 4) + '-' + val.substring(4, 6);
-			} else if (String(val).length == 8) {
-				date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8) + ' ' + val.substring(8, 10) + ':' + val.substring(10, 12);
-			} else if (String(val).length > 8) {
-				date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8) + ' ' + val.substring(8, 10) + ':' + val.substring(10, 12) + ':' + val.substring(12, 14);
-			} else {
-				date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8);
-			}
-		}
-		return date;
-	}
+	//날짜포멧 변경(yyyyMMddHHmmss형) 
+    var dateFormat = function(val) {
+        if((val != undefined && val != 0)) {
+            if(String(val).length == 4) {
+                date = val.substring(0, 4)
+            } else if(String(val).length == 6) {
+                date = val.substring(0, 4) + '-' + val.substring(4, 6);
+            } else if(String(val).length == 8) {
+                date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8) + ' ' + val.substring(8, 10) + ':' + val.substring(10, 12);
+            } else if(String(val).length > 8) {
+                date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8) + ' ' + val.substring(8, 10) + ':' + val.substring(10, 12) + ':' + val.substring(12, 14);
+            } else {
+                date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8);
+            }
+        }
+        return date;
+    }
 
 	function alarmConfirm(alarmId) {
 		$('#alarmConfirm').modal().data('value', alarmId);
