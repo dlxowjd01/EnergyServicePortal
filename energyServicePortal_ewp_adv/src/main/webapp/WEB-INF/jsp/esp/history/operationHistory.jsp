@@ -386,7 +386,7 @@
 							$.each(value, function(j, el) {
 								if(el.did == deviceId) {
 									dataArr.push({
-										'x': Number(el.basetime),
+										'x': el.timestamp,
 										'y': parseFloat(eval('el.' + keyText2 + '.' + keyText))
 									});
 								}
@@ -483,7 +483,7 @@
 							$.each(value, function(j, el) {
 								if(el.did == deviceId) {
 									dataArr.push({
-										'x': Number(el.basetime),
+										'x': el.timestamp,
 										'y': parseFloat(eval('el.' + keyText2 + '.' + keyText))
 									});
 								}
@@ -556,14 +556,14 @@
 						if(typeX == key) {
 							$.each(value, function(j, el) {
 								let basetime = '';
-								basetime = Number(el.basetime);
+								basetime = el.timestamp;
 								dataArr.push([
 									parseFloat(eval('el.' + keyText2X + '.' + keyTextX))
 								]);
 
 								if(el.did == deviceIdX) {
 									dataArr.push({
-										'x': Number(el.basetime),
+										'x': el.timestamp,
 										'y': parseFloat(eval('el.' + keyText2X + '.' + keyTextX))
 									});
 								}
@@ -576,13 +576,13 @@
 							$.each(value, function (j, el) {
 								let timestamp = ''
 								if (el.did == deviceIdX) {
-									timestamp = Number(el.basetime);
+									timestamp = el.timestamp;
 									dataArr.push([
 										parseFloat(eval('el.' + keyText2Y + '.' + keyTextY))
 									]);
 
 									value.some(function (v, k) {
-										if (v.did == deviceIdY && timestamp == Number(v.basetime)) {
+										if (v.did == deviceIdY && timestamp == v.timestamp) {
 											dataArr[dataArr.length - 1].push(parseFloat(eval('v.' + keyText2Y + '.' + keyTextY)))
 										}
 									});
@@ -592,7 +592,7 @@
 					});
 
 					dataArr.sort(function(a, b) {
-						return a['basetime'] - b['basetime'];
+						return a['timestamp'] - b['timestamp'];
 					});
 
 					temp = {
@@ -907,11 +907,10 @@
 							if(key == 'INV_PV') {
 								$.each(value, function(idx, valObj) {
 									value[idx].localtime = String (valObj.basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+									value[idx].timestamp = new Date(value[idx].localtime).getTime();
 									$.map(valObj.mean, function(v, k) {
-										valObj.mean[k] = numberComma(v.toFixed(2));
+										valObj[k] = numberComma(v.toFixed(2));
 									});
-									$.extend(value[idx], valObj.mean);
-
 								});
 							}
 
