@@ -621,7 +621,7 @@
 						</td>
 						<td>[spc_name]</td>
 						<td>[site_name]</td>
-						<td>[report_type]</td>
+						<td>[reportTypeName]</td>
 						<td>[report_date]</td>
 						<td onclick="[file_link]">
 							<button class="tx_file">EXCEL</button>
