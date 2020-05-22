@@ -3466,7 +3466,7 @@
 										}
 									});
 									//$(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(6)`).text(Math.floor(result.activePower/1000)+'kW');
-									$(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(1)>span:nth-child(2)`).text(Math.floor(result.activePower/1000)+'kW');
+									$(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(1)>span:nth-child(2)`).text(Math.floor(val.activePower/1000)+'kW');
 									// $('.highcharts-title > tspan').text(Math.floor(activePowerSum/1000)+'kW');
 									pieChart.setTitle({text:Math.floor(acPowerSum/1000)+'kW'});
 									pieChart.series[0].data.forEach((e, idx) => {
@@ -3761,9 +3761,24 @@
 							confirm: false
 						},
 						success: function(alarms){
+							let alarmWarning = 0;
+							let alarmError = 0;
+
 							alarms.forEach(alarm=>{
 								alarmList = [...alarmList, alarm];
-							})
+
+								console.log(alarm);
+								if(alarm.level == 0 || alarm.level == 1 || alarm.level == 9) {
+									alarmWarning ++;
+								} else {
+									alarmError ++;
+								}
+							});
+
+							$(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(2)`).text(alarmError);
+							$(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(3)`).text(alarmWarning);
+
+							$(`.detail_info.flag${'${siteIdx+1}'} .di_tx_bx .tx span`).text(alarmError + alarmWarning + '건');
 						},
 						error: function(error){
 							console.error(error)

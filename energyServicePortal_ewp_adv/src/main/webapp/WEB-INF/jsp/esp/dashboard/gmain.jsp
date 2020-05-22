@@ -3067,9 +3067,22 @@
 							confirm: false
 						},
 						success: function (alarms) {
+							let alarmWarning = 0;
+							let alarmError = 0;
 							alarms.forEach(alarm => {
 								alarmList = [...alarmList, alarm];
-							})
+
+								if(alarm.level == 0 || alarm.level == 1 || alarm.level == 9) {
+									alarmWarning ++;
+								} else {
+									alarmError ++;
+								}
+							});
+
+							$(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(2)`).text(alarmError);
+							$(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(3)`).text(alarmWarning);
+
+							$(`.detail_info.flag${'${siteIdx+1}'} .di_tx_bx .tx span`).text(alarmError + alarmWarning + '건');
 						},
 						error: function (error) {
 							console.error(error)
