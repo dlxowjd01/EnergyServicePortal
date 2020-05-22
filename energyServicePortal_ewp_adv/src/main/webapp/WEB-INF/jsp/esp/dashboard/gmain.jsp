@@ -3072,6 +3072,7 @@
 							sids: site.sid,
 							startTime: formData.startTime,
 							endTime: formData.endTime,
+							confirm: false
 						},
 						success: function (alarms) {
 							alarms.forEach(alarm => {

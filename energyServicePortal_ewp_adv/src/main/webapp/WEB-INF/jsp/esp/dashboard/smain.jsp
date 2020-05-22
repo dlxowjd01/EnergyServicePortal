@@ -1683,7 +1683,8 @@
 		let alarmData = {
 			sids: siteId,
 			startTime: '${startTime}',
-			endTime: '${endTime}'
+			endTime: '${endTime}',
+			confirm: false
 		}
 		$.ajax({
 			url: apiURL + '/alarms',
