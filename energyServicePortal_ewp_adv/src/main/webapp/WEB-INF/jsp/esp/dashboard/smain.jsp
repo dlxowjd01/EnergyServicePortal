@@ -1951,7 +1951,7 @@
 
 												var itemDname = el.dname;
 												var itemDcPower = el.data[i].dcPower / 1000;
-												var itemAcPower = el.data[i].acPower / 1000;
+												var itemAcPower = el.data[i].activePower / 1000;
 												var itemEfficiency = el.data[i].efficiency;
 												var itemTotalGenPower = el.nowEnergy / 1000;
 
