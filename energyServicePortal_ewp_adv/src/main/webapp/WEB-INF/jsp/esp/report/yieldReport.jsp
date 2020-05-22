@@ -7,7 +7,7 @@
 	let repeat_type_method = 'post';
 	let repeatCoastNumber = new Object();
 	let reportType = {
-		reguarl_mm: '월간 발전량',
+		regular_mm: '월간 발전량',
 		regular_qt: '분기 발전량',
 		regular_yy: '년간 발전량',
 		profit_mm: '월간 수익보고서'
@@ -45,7 +45,7 @@
 				}
 			}, setSpcGen);
 		} else if (id == 'report_type') {
-			if (dataValue == 'reguarl_mm') {
+			if (dataValue == 'regular_mm') {
 				let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
 				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1, 1));
 				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth(), 0));
@@ -440,7 +440,7 @@
 										선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu">
-										<li data-value="reguarl_mm"><a href="javascript:void(0);">월간 발전량</a></li>
+										<li data-value="regular_mm"><a href="javascript:void(0);">월간 발전량</a></li>
 										<li data-value="regular_qt"><a href="javascript:void(0);">분기 발전량</a></li>
 										<li data-value="regular_yy"><a href="javascript:void(0);">년간 발전량</a></li>
 										<li data-value="profit_mm"><a href="javascript:void(0);">월간 수익보고서</a></li>
@@ -520,7 +520,7 @@
 					</button>
 					<ul class="dropdown-menu" role="menu">
 						<li data-value=""><a href="javascript:void(0);">전체</a></li>
-						<li data-value="reguarl_mm"><a href="javascript:void(0);">월간실적</a></li>
+						<li data-value="regular_mm"><a href="javascript:void(0);">월간실적</a></li>
 						<li data-value="regular_qt"><a href="javascript:void(0);">분기실적</a></li>
 						<li data-value="regular_yy"><a href="javascript:void(0);">년간실적</a></li>
 						<li data-value="profit_mm"><a href="javascript:void(0);">수익보고서</a></li>
