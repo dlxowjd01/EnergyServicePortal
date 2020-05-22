@@ -555,45 +555,29 @@
 					$.map(gridList, function(value, key) {
 						if(typeX == key) {
 							$.each(value, function(j, el) {
-								let basetime = '';
-								basetime = el.timestamp;
+								let timestamp = el.timestamp;
 								dataArr.push([
 									parseFloat(eval('el.' + keyText2X + '.' + keyTextX))
 								]);
 
-								if(el.did == deviceIdX) {
-									dataArr.push({
-										'x': el.timestamp,
-										'y': parseFloat(eval('el.' + keyText2X + '.' + keyTextX))
-									});
-								}
+								$.map(gridList, function(value, key) {
+									if (typeY == key) {
+										$.each(value, function (j, el) {
+											if (el.did == deviceIdY) {
+												$.each(value, function (v, k) {
+													if (timestamp == v.timestamp) {
+														dataArr[dataArr.length - 1].push(parseFloat(eval('v.' + keyText2Y + '.' + keyTextY)))
+													}
+												});
+											}
+										});
+									}
+								});
 							});
 						}
 					});
 
-					$.map(gridList, function(value, key) {
-						if (typeY == key) {
-							$.each(value, function (j, el) {
-								let timestamp = ''
-								if (el.did == deviceIdX) {
-									timestamp = el.timestamp;
-									dataArr.push([
-										parseFloat(eval('el.' + keyText2Y + '.' + keyTextY))
-									]);
 
-									value.some(function (v, k) {
-										if (v.did == deviceIdY && timestamp == v.timestamp) {
-											dataArr[dataArr.length - 1].push(parseFloat(eval('v.' + keyText2Y + '.' + keyTextY)))
-										}
-									});
-								}
-							});
-						}
-					});
-
-					dataArr.sort(function(a, b) {
-						return a['timestamp'] - b['timestamp'];
-					});
 
 					temp = {
 						name: seriesName,
