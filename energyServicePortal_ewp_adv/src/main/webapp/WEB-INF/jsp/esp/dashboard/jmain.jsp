@@ -2172,7 +2172,7 @@
 					<div class="sa_select" id="deviceType">
 						<div class="dropdown">
 							<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
-								매전량<span class="caret"></span>
+								전체<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu chk_type" role="menu">
 								<li>
