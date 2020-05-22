@@ -1965,7 +1965,7 @@
 													+ "</tr>";
 
 												totDcPower += el.data[i].dcPower;
-												totAcPower += el.data[i].acPower;
+												totAcPower += el.data[i].activePower;
 												totEfficiency += el.data[i].efficiency;
 												totGenPower += el.nowEnergy;
 											}

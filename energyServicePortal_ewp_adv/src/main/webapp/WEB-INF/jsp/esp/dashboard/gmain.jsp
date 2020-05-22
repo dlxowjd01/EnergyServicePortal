@@ -3000,7 +3000,7 @@
 									if(isEmpty(val)) {
 										$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fl span:nth-child(2)`).text('- kW/㎡․day');
 									} else {
-										$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fl span:nth-child(2)`).text(displayNumberFixedUnit(val.irradiationPoa, 'W', 'kW')[0] + ' kW/㎡․day');
+										$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fl span:nth-child(2)`).text(displayNumberFixedUnit(val.irradiationPoa, 'W', 'W')[0] + ' W/㎡․day');
 									}
 
 								}
