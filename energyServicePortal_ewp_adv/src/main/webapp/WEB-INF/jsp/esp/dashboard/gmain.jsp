@@ -3014,12 +3014,14 @@
 							interval: "day"
 						},
 						success: function (result) {//api 요청결과
-							co2Sum += Math.floor(result.data[site.sid].co2);
-							let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text());
-							$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(Math.floor(prevVal += (result.data[site.sid].energy / 1000)));
-							$(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(7)`).text(Math.floor(result.data[site.sid].energy / 1000) + 'kWh');
-							$(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(2)>span:nth-child(2)`).text(Math.floor(result.data[site.sid].energy / 1000) + 'kWh');
-							$('#centerTbody tr td:nth-child(4)').text(`${'${Math.floor(co2Sum/1000)}'} kg`);
+							if(!isEmpty(result.data[site.sid])) {
+								co2Sum += Math.floor(result.data[site.sid].co2);
+								let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text());
+								$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(Math.floor(prevVal += (result.data[site.sid].energy / 1000)));
+								$(`.dbclickopen.flag${'${siteIdx+1}'} td:nth-child(7)`).text(Math.floor(result.data[site.sid].energy / 1000) + 'kWh');
+								$(`.detail_info.flag${'${siteIdx+1}'} .sec_bx.left .di_list>li:nth-child(2)>span:nth-child(2)`).text(Math.floor(result.data[site.sid].energy / 1000) + 'kWh');
+								$('#centerTbody tr td:nth-child(4)').text(`${'${Math.floor(co2Sum/1000)}'} kg`);
+							}
 						},
 						error: function (result, status, error) {
 							//error function or alert, return
