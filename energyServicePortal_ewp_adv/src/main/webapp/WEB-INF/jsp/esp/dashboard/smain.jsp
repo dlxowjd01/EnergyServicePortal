@@ -1773,26 +1773,20 @@
 									<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
 										<li>
 											<a href="#" data-value="INV_PV" tabindex="-1">
-												<input type="checkbox" id="deviceStatus1" value="정상" checked>
-												<label for="deviceStatus1"><span></span>정상</label>
+												<input type="checkbox" id="deviceStatus1" value="중지" checked>
+												<label for="deviceStatus1"><span></span>중지</label>
 											</a>
 										</li>
 										<li>
 											<a href="#" data-value="INV_PV" tabindex="-1">
-												<input type="checkbox" id="deviceStatus2" value="경고" checked>
-												<label for="deviceStatus2"><span></span>경고</label>
+												<input type="checkbox" id="deviceStatus2" value="정상" checked>
+												<label for="deviceStatus2"><span></span>정상</label>
 											</a>
 										</li>
 										<li>
 											<a href="#" data-value="INV_PV" tabindex="-1">
-												<input type="checkbox" id="deviceStatus3" value="이상" checked>
-												<label for="deviceStatus3"><span></span>이상</label>
-											</a>
-										</li>
-										<li>
-											<a href="#" data-value="INV_PV" tabindex="-1">
-												<input type="checkbox" id="deviceStatus4" value="트립" checked>
-												<label for="deviceStatus4"><span></span>트립</label>
+												<input type="checkbox" id="deviceStatus3" value="트립" checked>
+												<label for="deviceStatus3"><span></span>트립</label>
 											</a>
 										</li>
 									</ul>
@@ -2020,110 +2014,6 @@
 									$("#invDevices").html(rowHtml);
 								}
 							</script>
-
-						</li>
-						<li>
-							<div class="chart_top clear">
-								<h2 class="ntit">접속반(0)</h2>
-								<div class="alert_icon fr">
-									<span class="inv_normail">정상(0)</span>
-									<span class="inv_error">이상(0)</span>
-									<span class="inv_alert">경고(0)</span>
-									<span class="inv_trip">트립(0)</span>
-								</div>
-							</div>
-							<div class="type_list_detail">
-								<div class="tbl_type">
-									<table>
-										<thead>
-										<tr>
-											<th>평균 전압</th>
-											<th>평균 전류</th>
-											<th>평균 전력량</th>
-										</tr>
-										</thead>
-										<tbody>
-										<tr>
-											<td><span> - </span>kV</td>
-											<td><span> - </span>kA</td>
-											<td><span> - </span>kW</td>
-										</tr>
-										</tbody>
-									</table>
-								</div>
-								<div class="gtbl_wrap type">
-									<div class="intable">
-										<table>
-											<colgroup>
-												<col>
-												<col>
-												<col>
-											</colgroup>
-											<thead>
-											<tr>
-												<th>상태</th>
-												<th>전압</th>
-												<th>전류</th>
-											</tr>
-											</thead>
-											<tbody>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						</li>
-						<li>
-							<div class="chart_top clear">
-								<h2 class="ntit">스마트미터(0)</h2>
-								<div class="alert_icon fr">
-									<span class="inv_normail">정상(0)</span>
-								</div>
-							</div>
-							<div class="type_list_detail">
-								<div class="tbl_type">
-									<table>
-										<thead>
-										<tr>
-											<th>순시 유효 전력</th>
-											<th>금일 누적 전력</th>
-											<th>순시 무효 전력</th>
-											<th>금일 누적 무효 전력</th>
-										</tr>
-										</thead>
-										<tbody>
-										<tr>
-											<td><span> - </span>kW</td>
-											<td><span> - </span>kWh</td>
-											<td><span> - </span>kW</td>
-											<td><span> - </span>kWh</td>
-										</tr>
-										</tbody>
-									</table>
-								</div>
-								<div class="gtbl_wrap type">
-									<div class="intable">
-										<table>
-											<colgroup>
-												<col>
-												<col>
-												<col>
-												<col>
-											</colgroup>
-											<thead>
-											<tr>
-												<th>상태</th>
-												<th>유효 전력</th>
-												<th>무효 지상</th>
-												<th>무효 진상</th>
-											</tr>
-											</thead>
-											<tbody>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
 						</li>
 						<li>
 							<div class="chart_top clear">
@@ -2242,21 +2132,16 @@
 
 												countStatus1++;
 											} else if (el.data[0].operation == 2) {
-												statusTxt = "경고";
+												statusTxt = "트립";
 												statusClass = "flag2";
 
 												countStatus2++;
-											} else if (el.data[0].operation == 3) {
-												statusTxt = "이상";
+											} else if (el.data[0].operation == 0) {
+												statusTxt = "중지";
 												statusClass = "flag3";
 
 												countStatus3++;
 											}
-
-											$('#sensorNormal').text('정상(' + countStatus1 + ')');
-											$('#sensorError').text('이상(' + countStatus2 + ')');
-											$('#sensorAlert').text('경고(' + countStatus3 + ')');
-
 											let temperature = el.data[0].temperature;
 											let irradiationPoa = el.data[0].irradiationPoa;
 
@@ -2272,6 +2157,9 @@
 												+ "</tr>";
 										});
 
+										$('#sensorNormal').text('정상(' + countStatus1 + ')');
+										$('#sensorError').text('트립(' + countStatus2 + ')');
+										$('#sensorAlert').text('중지(' + countStatus3 + ')');
 										$("#sensorSolor").html(rowHtml);
 									}
 								</script>

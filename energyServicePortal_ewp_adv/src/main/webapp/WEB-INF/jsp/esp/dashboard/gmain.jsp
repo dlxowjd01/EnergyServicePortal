@@ -1515,20 +1515,14 @@
 									<ul class="dropdown-menu chk_type" role="menu">
 										<li>
 											<a href="#" data-value="INV_PV" tabindex="-1">
-												<input type="checkbox" id="deviceStatus1" value="정상" checked>
-												<label for="deviceStatus1"><span></span>정상</label>
+												<input type="checkbox" id="deviceStatus2" value="중지" checked>
+												<label for="deviceStatus2"><span></span>중지</label>
 											</a>
 										</li>
 										<li>
 											<a href="#" data-value="INV_PV" tabindex="-1">
-												<input type="checkbox" id="deviceStatus2" value="경고" checked>
-												<label for="deviceStatus2"><span></span>경고</label>
-											</a>
-										</li>
-										<li>
-											<a href="#" data-value="INV_PV" tabindex="-1">
-												<input type="checkbox" id="deviceStatus3" value="이상" checked>
-												<label for="deviceStatus3"><span></span>이상</label>
+												<input type="checkbox" id="deviceStatus3" value="정상" checked>
+												<label for="deviceStatus3"><span></span>정상</label>
 											</a>
 										</li>
 										<li>
@@ -3177,7 +3171,7 @@
 				});
 				setTimeout(function(){map.setZoom(cnt)}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
 			}
-		} else {a
+		} else {
 			if (cnt <= max) {
 				return;
 			} else {
