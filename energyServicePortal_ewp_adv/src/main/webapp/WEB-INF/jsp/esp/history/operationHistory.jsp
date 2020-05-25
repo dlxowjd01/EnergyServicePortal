@@ -237,12 +237,16 @@
 		});
 
 		$('#chartDraw').on('click', function () {
+			let show = true;
 			let chartColor = ['#b0e9e8', '#26ccc8', '#009389', '#50b5ff', '#5269ef', '#274dea'];
+			let categories = new Array();
 			let chartSeries = new Array();
 			let summation = $(':radio[name="summation"]:checked').val();
 			let stackNum = 0;
 
 			if ($(':radio[name="analyze"]:checked').val() == '시계열 분석') {
+				let timeCategory = new Array();
+				show = true;
 				if ($('#analyzeTag1 span').length <= 0) {
 					alert('한개이상 항목을 선택해 주세요.');
 					return false;
@@ -267,6 +271,7 @@
 						if (type == key) {
 							$.each(value, function (j, el) {
 								if (el.did == deviceId) {
+									timeCategory.push(el.timestamp);
 									dataArr.push({
 										'x': el.timestamp,
 										'y': parseFloat(eval('el.' + keyText2 + '.' + keyText))
@@ -354,6 +359,7 @@
 						if (type == key) {
 							$.each(value, function (j, el) {
 								if (el.did == deviceId) {
+									timeCategory.push(el.timestamp);
 									dataArr.push({
 										'x': el.timestamp,
 										'y': parseFloat(eval('el.' + keyText2 + '.' + keyText))
@@ -382,7 +388,15 @@
 
 					chartSeries.push(temp);
 				});
+
+				//시간 카테고리 합쳐서 중복 시간 제거
+				$.each(timeCategory, function (i, el) {
+					if ($.inArray(el, categories) === -1) categories.push(el);
+				});
+
+				categories.sort(); //시간 정렬
 			} else {
+				show = false;
 				if ($('#analyzeTag2 span').length <= 0) {
 					alert('한개이상 항목을 선택해 주세요.');
 					return false;
@@ -465,9 +479,11 @@
 						data: dataArr
 					});
 				});
+
+				categories = new Array();
 			}
 
-			chartDraw(chartSeries);
+			chartDraw(chartSeries, categories, show);
 		});
 
 		$('.save_btn').on('click', function (e) {
@@ -839,7 +855,7 @@
 		return dup;
 	}
 
-	const chartDraw = function (chartSeries) {
+	const chartDraw = function (chartSeries, categories, show) {
 		let chart = $('#hchart2').highcharts();
 
 		if (chart) {
@@ -861,13 +877,18 @@
 			},
 			xAxis: {
 				labels: {
-					// align: 'center',
-					// style: {
-					// 	color: '#3d4250',
-					// 	fontSize: '14px'
-					// }
-					enabled: false
+					align: 'center',
+					style: {
+						color: 'var(--color3)',
+						fontSize: '8px'
+					},
+					y: 50,
+					formatter: function() {
+						return dateFormat(this.value);
+					},
+					enabled: show
 				},
+				categories: categories,
 				tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
 				title: {
 					text: null
@@ -991,6 +1012,21 @@
 		} else if ($selectId.match('chartDid')) {
 			setTypeList($selectId);
 		}
+	}
+
+	function dateFormat(val) {
+		let date = '';
+		let interval = $('#interval button').data('value');
+		if(val != undefined) {
+			if(interval == '1min' || interval == '15min' || interval == 'hour') {
+				date = new Date(val).format('yyyy-MM-dd HH:mm:ss');
+			} else if(interval == 'day' || interval == 'week') {
+				date = new Date(val).format('yyyy-MM-dd');
+			} else {
+				date = new Date(val).format('yyyy-MM-dd');
+			}
+		}
+		return date;
 	}
 </script>
 

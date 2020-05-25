@@ -3481,9 +3481,9 @@
 								} else if(key == 'SENSOR_SOLAR') {
 									console.log('SENSOR_SOLAR', val);
 									if(isEmpty(val)) {
-										$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fl span:nth-child(2)`).text('- kW/㎡․day');
+										$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fl span:nth-child(2)`).text('- kW/㎡');
 									} else {
-										$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fl span:nth-child(2)`).text(displayNumberFixedUnit(val.irradiationPoa, 'W', 'W')[0] + ' W/㎡․day');
+										$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fl span:nth-child(2)`).text(displayNumberFixedUnit(val.irradiationPoa, 'W', 'W')[0] + ' W/㎡');
 									}
 
 								}
@@ -3827,7 +3827,7 @@
 							sid: site.sid,
 							startTime: formData.startTime,
 							endTime: formData.endTime,
-							interval: "day"
+							interval: "hour"
 						},
 						success: function(weather){
 							$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fr span:nth-child(1)`).text(weather[0].temperature + ' °C');
