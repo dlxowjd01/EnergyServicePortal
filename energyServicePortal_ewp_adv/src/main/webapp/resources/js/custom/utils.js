@@ -1267,4 +1267,6 @@ const setttingSuffix = function(keyText) {
 	} else {
 		suffix = '';
 	}
+
+	return suffix;
 }
