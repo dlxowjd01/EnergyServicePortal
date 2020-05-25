@@ -32,7 +32,7 @@
 	}
 
 	function getCsvDown(){
-		var column = ["name","발전소_명","설치_용량_KW","관리_운영_기간","",""], //json Key
+		var column = ["name","발전소_명","설치_용량","관리_운영_기간","",""], //json Key
 			header = ["SPC명","발전소 명","용량","관리 운영기간	","이관자료","첨부파일"]; //csv 파일 헤더
 
 		getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
@@ -86,7 +86,7 @@
 							newData["gen_id"] = spcGensRow.gen_id;
 							newData["발전소_명"] = spcGensRow.name;
 							newData["관리_운영_기간"] = nvl(contractInfo["관리_운영_기간"], "-");
-							newData["설치_용량_KW"] = nvl(deviceInfo["설치_용량_KW"], "-");
+							newData["설치_용량"] = nvl(contractInfo["설치_용량"], "-");
 							//키워드 검색 조건 필터 처리
 							if(newData["name"].indexOf(keyWord) > -1 || newData["발전소_명"] .indexOf(keyWord) > - 1){
 								jsonList.push(newData)
@@ -164,7 +164,7 @@
 							</td>
 							<td><a href="/spc/entityDetailsBySPC.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">[name]</a></td>
 							<td><a href="/spc/entityDetailsBySPC.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">[발전소_명]</a></td>
-							<td class="right">[설치_용량_KW]</td>
+							<td class="right">[설치_용량]</td>
 							<td>[관리_운영_기간]</td>
 							<td class="right">[파일_현재_개수] / [파일_총_개수]</td>
 							<td class="right">[첨부파일]건</td>
