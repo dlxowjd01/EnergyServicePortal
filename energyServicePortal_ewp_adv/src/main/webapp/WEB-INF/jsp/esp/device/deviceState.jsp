@@ -158,7 +158,7 @@
       let normalCnt = 0;
       let alertCnt = 0;
       let errorCnt = 0;
-      let emergencyCnt = 0;
+      let tripCnt = 0;
       
       let deviceType = key;
       let list = value;
@@ -170,22 +170,28 @@
       for (var i = 0; i < list.length; i++) {
         
         var deviceInfo = iderms.getStatusRaw(list[i].did);
-        if (deviceInfo.alertLevel == 0) {
-          normalCnt += 1;
-        } else if (deviceInfo.alertLevel == 1) {
-          alertCnt += 1;
-        } else if (deviceInfo.alertLevel == 2) {
-          errorCnt += 1;
-        } else if (deviceInfo.alertLevel == 3) {
-          emergencyCnt += 1;
-        }
+        console.log(deviceInfo);
+        console.log(deviceInfo[list[i].did].data.length);
+        
+		if(deviceInfo[list[i].did].data.length > 0 ){
+			if (deviceInfo[list[i].did].data[0].operation == 0) {
+				errorCnt += 1;
+			} else if (deviceInfo[list[i].did].data[0].operation == 1) {
+				normalCnt += 1;
+			} else if (deviceInfo[list[i].did].data[0].operation == 2) {
+				tripCnt += 1;
+			} else if (deviceInfo[list[i].did].data[0].operation == 3) {
+				alertCnt += 1;
+			}
+		}
+        
         
         if (deviceInfo.alertLevel == 0) strFor += '<li data-dvType="' + deviceType + '" data-did="' + list[i].did + '" onclick="deviceDetailView(\'' + list[i].did + '\')">';
         else if (deviceInfo.alertLevel == 1) strFor += '<li class="st_error" data-dvType="' + deviceType + '" data-did="' + list[i].did + '" onclick="deviceDetailView(\'' + list[i].did + '\')">';
         else if (deviceInfo.alertLevel == 2) strFor += '<li class="st_alert" data-dvType="' + deviceType + '" data-did="' + list[i].did + '" onclick="deviceDetailView(\'' + list[i].did + '\')">';
         else if (deviceInfo.alertLevel == 3) strFor += '<li class="st_alert" data-dvType="' + deviceType + '" data-did="' + list[i].did + '" onclick="deviceDetailView(\'' + list[i].did + '\')">';
         else strFor += '<li data-dvType="' + deviceType + '" data-did="' + list[i].did + '" onclick="deviceDetailView(\'' + list[i].did + '\')">';
-        strFor += '	<a href="#"></a>';
+        strFor += '	<a href="#none"></a>';
         strFor += '	<span style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">' + list[i].name + '</span>';
         strFor += '	<span>' + ((isEmpty(list[i].capacity)) ? '-' : list[i].capacity) + ((isEmpty(list[i].capacity_unit)) ? '' : list[i].capacity_unit) + '</span>';
         
@@ -228,6 +234,7 @@
       liStr += '			<span class="eq_normail">정상(' + normalCnt + ')</span>';
       liStr += '			<span class="eq_error">이상(' + errorCnt + ')</span>';
       liStr += '			<span class="eq_alert">경고(' + alertCnt + ')</span>';
+      liStr += '			<span class="eq_alert">트립(' + tripCnt + ')</span>';
       liStr += '		</div>';
       liStr += '	</div>';
       if (deviceType == "INV_PV") liStr += '	<ul class="eq_list scroll eq_li_type01">';
@@ -586,6 +593,7 @@
 							<span class="eq_normail">정상(0)</span>
 							<span class="eq_error">이상(0)</span>
 							<span class="eq_alert">경고(0)</span>
+							<span class="eq_alert">트립(0)</span>
 						</div>
 					</div>
 					<ul class="eq_list scroll eq_li_type01">
@@ -628,6 +636,7 @@
 							<span class="eq_normail">정상(0)</span>
 							<span class="eq_error">이상(0)</span>
 							<span class="eq_alert">경고(0)</span>
+							<span class="eq_alert">트립(0)</span>
 						</div>
 					</div>
 					<ul class="eq_list scroll clear eq_li_type02">
@@ -666,6 +675,7 @@
 							<span class="eq_normail">정상(0)</span>
 							<span class="eq_error">이상(0)</span>
 							<span class="eq_alert">경고(0)</span>
+							<span class="eq_alert">트립(0)</span>
 						</div>
 					</div>
 					<ul class="eq_list scroll clear eq_li_type03">
