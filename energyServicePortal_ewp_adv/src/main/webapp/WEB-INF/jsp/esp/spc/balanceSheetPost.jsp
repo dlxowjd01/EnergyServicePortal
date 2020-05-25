@@ -139,8 +139,8 @@
 			let grossPerMonth = $('[name^="grossPerMonth_"]').eq(idx).val().replace(/[^0-9.-]/g, '')
 
 			if (grossPerMonth != '' && grossPerMonth > 0) {
-				let surtax = (grossPerMonth * 0.1).toFixed(2);
-				let supplySum = (grossPerMonth * 1.1).toFixed(2);
+				let surtax = Math.round(grossPerMonth * 0.1);
+				let supplySum = Math.round(grossPerMonth * 1.1);
 
 				$('[name^="grossPerMonth_"]').eq(idx).val(numberComma(grossPerMonth));
 				$('[name^="grossPerMonthSurtax_"]').eq(idx).val(numberComma(surtax));
@@ -173,8 +173,8 @@
 			let salesSupply = $('[name^="salesSupply_"]').eq(idx).val().replace(/[^0-9.-]/g, '')
 
 			if (salesRate != '' && salesSupply != '' && salesSupply > 0) {
-				let surtax = ((salesSupply * salesRate) * 0.1).toFixed(2);
-				let supplySum = ((salesSupply * salesRate) * 1.1).toFixed(2);
+				let surtax = Math.round((salesSupply * salesRate) * 0.1);
+				let supplySum = Math.round((salesSupply * salesRate) * 1.1);
 				$('[name^="salesSupply_"]').eq(idx).val(numberComma(salesSupply));
 				$('[name^="salesSupplySurtax_"]').eq(idx).val(numberComma(surtax));
 				$('[name^="salesSupplySumtax_"]').eq(idx).val(numberComma(supplySum));
@@ -203,8 +203,8 @@
 			let thisVal = $(this).val().replace(/[^0-9.-]/g, '')
 
 			if (thisVal != '' && thisVal > 0) {
-				let surtax = (thisVal * 0.1).toFixed(2);
-				let supplySum = (thisVal * 1.1).toFixed(2);
+				let surtax = Math.round(thisVal * 0.1);
+				let supplySum = Math.round(thisVal * 1.1);
 
 				$(this).val(numberComma(thisVal));
 				$('[name^="surtax_"]').eq(idx).val(numberComma(surtax));
@@ -217,7 +217,7 @@
 			});
 
 			if (sum > 0) {
-				$('#rental').val(numberComma(sum.toFixed(2)));
+				$('#rental').val(numberComma(Math.round(sum)));
 			} else {
 				$('#rental').val('');
 			}
@@ -292,10 +292,10 @@
 		endOfTerm = inflow - outflow;
 		endOfTermFlow = inflow - outflow;
 
-		$('#inflowOfCash').val(inflow);
-		$('#outflowOfCash').val(outflow);
-		$('#endOfTerm').val(endOfTerm);
-		$('#endOfTermFlow').val(endOfTermFlow);
+		$('#inflowOfCash').val(numberComma(inflow));
+		$('#outflowOfCash').val(numberComma(outflow));
+		$('#endOfTerm').val(numberComma(endOfTerm));
+		$('#endOfTermFlow').val(numberComma(endOfTermFlow));
 	};
 
 	const rowAppend = function () {
@@ -542,7 +542,7 @@
 
 			//첨부파일
 			$('#balanceTable input[type="hidden"]').each(function () {
-				rtnObj[$(this).prop('name')] = $(this).val();
+				rtnObj[$(this).prop('name')] = $(this).val().replace(/[^0-9.]/g, '');
 			});
 
 			let data = new Object();
@@ -762,8 +762,8 @@
 				let grossPerMonth = $(this).find('[name^="grossPerMonth_"]').prop('readonly', false).val().replace(/[^0-9.-]/g, '');
 
 				if (grossPerMonth != '' && grossPerMonth > 0) {
-					let surtax = (grossPerMonth * 0.1).toFixed(2);
-					let supplySum = (grossPerMonth * 1.1).toFixed(2);
+					let surtax = Math.round(grossPerMonth * 0.1);
+					let supplySum = Math.round(grossPerMonth * 1.1);
 
 					$(this).find('[name^="grossPerMonth_"]').val(numberComma(grossPerMonth));
 					$(this).find('[name^="grossPerMonthSurtax_"]').val(numberComma(surtax));
@@ -790,8 +790,8 @@
 				let salesSupply = $(this).find('[name^="salesSupply_"]').val().replace(/[^0-9.-]/g, '')
 
 				if (salesRate != '' && salesSupply != '' && salesSupply > 0) {
-					let surtax = ((salesSupply * salesRate) * 0.1).toFixed(2);
-					let supplySum = ((salesSupply * salesRate) * 1.1).toFixed(2);
+					let surtax = Math.round((salesSupply * salesRate) * 0.1);
+					let supplySum = Math.round((salesSupply * salesRate) * 1.1);
 					$(this).find('[name^="salesSupply_"]').val(numberComma(salesSupply));
 					$(this).find('[name^="salesSupplySurtax_"]').val(numberComma(surtax));
 					$(this).find('[name^="salesSupplySumtax_"]').val(numberComma(supplySum));
@@ -819,8 +819,8 @@
 			let thisVal = $(this).find('[name^="supply_"]').val().replace(/[^0-9.-]/g, '');
 
 			if (thisVal != '' && thisVal > 0) {
-				let surtax = (thisVal * 0.1).toFixed(2);
-				let supplySum = (thisVal * 1.1).toFixed(2);
+				let surtax = Math.round(thisVal * 0.1);
+				let supplySum = Math.round(thisVal * 1.1);
 
 				$(this).find('[name^="supply_"]').val(numberComma(thisVal));
 				$(this).find('[name^="surtax_"]').val(numberComma(surtax));
@@ -833,7 +833,7 @@
 			});
 
 			if (sum > 0) {
-				$('#rental').val(numberComma(sum.toFixed(2)));
+				$('#rental').val(numberComma(Math.round(sum)));
 			} else {
 				$('#rental').val('');
 			}

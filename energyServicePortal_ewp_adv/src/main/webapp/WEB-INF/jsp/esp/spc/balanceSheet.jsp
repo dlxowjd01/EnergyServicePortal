@@ -52,9 +52,10 @@
 				for(var i in result.data) {
 					var temp = result.data[i], balance_info = JSON.parse(temp.balance_info);
 
-					result.data[i].inflowOfCash = balance_info.inflowOfCash;
-					result.data[i].outflowOfCash = balance_info.outflowOfCash;
-					result.data[i].endOfTermFlow = balance_info.endOfTermFlow;
+					result.data[i].balance_yyyymm = temp.balance_yyyymm.replace(/(\d{4})(\d{2})/, '$1-$2')
+					result.data[i].inflowOfCash = numberComma(Math.round(balance_info.inflowOfCash));
+					result.data[i].outflowOfCash = numberComma(Math.round(balance_info.outflowOfCash));
+					result.data[i].endOfTermFlow = numberComma(Math.round(balance_info.endOfTermFlow));
 					for(var j in siteList) {
 						if(siteList[j].sid == temp.site_id) {
 							result.data[i].name = siteList[j].name;

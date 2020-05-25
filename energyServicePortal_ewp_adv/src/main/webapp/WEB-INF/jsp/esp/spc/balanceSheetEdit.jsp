@@ -111,7 +111,7 @@
 		});
 
 		$('#balanceTable input[type="hidden"]').each(function () {
-			rtnObj[$(this).prop('name')] = $(this).val();
+			rtnObj[$(this).prop('name')] = $(this).val().replace(/[^0-9.]/g, '');
 		});
 
 		let data = new Object();

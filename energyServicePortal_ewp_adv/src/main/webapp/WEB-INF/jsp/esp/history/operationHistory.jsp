@@ -1002,7 +1002,6 @@
 					label: {
 						connectorAllowed: false
 					},
-					pointWidth: 15,
 					borderWidth: 0 /* 보더 0 */
 				},
 				column: {
