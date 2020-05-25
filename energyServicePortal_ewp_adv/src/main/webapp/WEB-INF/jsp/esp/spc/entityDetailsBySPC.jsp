@@ -17,6 +17,7 @@
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 	const spc_id = '<c:out value="${param.spc_id}" escapeXml="false" />';
 	const gen_id = '<c:out value="${param.gen_id}" escapeXml="false" />';
+	const currentTime = '<c:out value="${nowTime}" escapeXml="false" />';
 	
 	let supInfoLength = "";
 	
@@ -83,6 +84,7 @@
 						if(keys[i] != 'null'){
 							var subStrOriginalName = keys[i].substring(0, keys[i].indexOf("_originalName"));
 							var subStrFiledName = keys[i].substring(0, keys[i].indexOf("_filedName"));
+							var subStrRegDt = keys[i].substring(0, keys[i].indexOf("_regDt"));
 							
 							$('#'+keys[i]).val(supplementInfo[keys[i]]);
 							
@@ -99,6 +101,8 @@
 									$('#'+subStrFiledName).parents('tr').find('.btn_type07').show(); //삭제버튼 활성화
 									$('#'+subStrFiledName).parents('tr').find('.down').show(); //다운로드 버튼 활성화
 								}
+							} else if ( subStrRegDt != '' ) {
+								$('#'+subStrRegDt+'_regDt').after(supplementInfo[keys[i]]); //다운로드 버튼 활성화
 							}
 						}
 					}
@@ -117,7 +121,7 @@
 		
 			$(this).clone().appendTo('#upload');
 			$('#upload').find('input').attr('name', uuid).attr('id', uuid);
-		
+			
 			callAjax({
 				type: 'post',
 				enctype: 'multipart/form-data',
@@ -135,15 +139,18 @@
 		// 삭제버튼 클릭
 		$('button.btn_type07').on('click', function () {
 			
-			let tr = $(this).parents('tr');
-			tr.next().val('');
-			tr.find('input[type="text"]').val('')
-			tr.find('input[type="hidden"]').val('')
-			tr.find('.down').removeAttr('onclick');
-			tr.find('.down').hide();
-			$(this).hide();
-			
-			sendSupplementPatch();
+			var result = confirm("삭제하시겠습니까?");
+			if(result){
+				let tr = $(this).parents('tr');
+				tr.next().val('');
+				tr.find('input[type="text"]').val('')
+				tr.find('input[type="hidden"]').val('')
+				tr.find('.down').removeAttr('onclick');
+				tr.find('.down').hide();
+				$(this).hide();
+				
+				sendSupplementPatch();
+			}
 		});
 		
 	});
@@ -178,6 +185,8 @@
 			$('#' + propName + '_originalName').val(data.files[0].originalname);
 			$('#' + propName + '_filedName').val(data.files[0].fieldname);
 			
+			$('#' + propName + '_regDt').val(currentTime.split(" ")[0]); // 발급일자 추가
+			
 			// 수정과 등록 분기
 			if(supInfoLength > 0){
 				sendSupplementPatch(); // 수정
@@ -204,6 +213,7 @@
 			}),
 			success: function (json) {
 				console.log("등록성공 : "+json);
+				location.reload();
 			},
 			error: function (request, status, error) {
 				alert('처리 중 오류가 발생했습니다.');
@@ -215,6 +225,8 @@
 	// 이관자료 전체 수정
 	function sendSupplementPatch(){
 		var supplement_info = setAreaParamData("supplement_info");
+		
+		console.log(supplement_info);
 		
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/spcs/"+spc_id+"/gens/"+gen_id+"/supplement?oid="+oid,
@@ -228,6 +240,7 @@
 			}),
 			success: function (json) {
 				console.log("수정성공 : "+json);
+				location.reload();
 			},
 			error: function (request, status, error) {
 				alert('처리 중 오류가 발생했습니다.');
@@ -289,7 +302,6 @@
 						<th></th>
 						<th>첨부파일</th>
 						<th></th>
-						<th>다운로드</th>
 						<th>발급일자</th>
 						<th style="padding-left: 55px">비고</th>
 					</tr>
@@ -305,8 +317,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td>0</td>
-						<td>-</td>
+						<td>
+							<input type="hidden" id="사업조직도_regDt" value="">
+						</td>
 						<td>
 							<label for="사업조직도" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -324,8 +337,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td></td>
-						<td></td>
+						<td>
+							<input type="hidden" id="설치_업체_담당자_연락처_regDt" value="">
+						</td>
 						<td>
 							<label for="설치_업체_담당자_연락처" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -343,8 +357,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td></td>
-						<td></td>
+						<td>
+							<input type="hidden" id="투자_계약_심의_regDt" value="">
+						</td>
 						<td>
 							<label for="투자_계약_심의" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -362,8 +377,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td>O</td>
-						<td>-</td>
+						<td>
+							<input type="hidden" id="사업자_등록증_regDt" value="">
+						</td>
 						<td>
 							<label for="사업자_등록증" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -381,8 +397,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td>O</td>
-						<td>-</td>
+						<td>
+							<input type="hidden" id="발전사업_허가증_regDt" value="">
+						</td>
 						<td>
 							<label for="발전사업_허가증" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -400,8 +417,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td>O</td>
-						<td>-</td>
+						<td>
+							<input type="hidden" id="토지_및_건물_등기부등록_regDt" value="">
+						</td>
 						<td>
 							<label for="토지_및_건물_등기부등록" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -419,8 +437,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td>O</td>
-						<td>-</td>
+						<td>
+							<input type="hidden" id="토지대장_및_건물도면_regDt" value="">
+						</td>
 						<td>
 							<label for="토지대장_및_건물도면" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -438,8 +457,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td>O</td>
-						<td>-</td>
+						<td>
+							<input type="hidden" id="원도급_계약서_실사_협약서_regDt" value="">
+						</td>
 						<td>
 							<label for="원도급_계약서_실사_협약서" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -457,8 +477,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td>O</td>
-						<td>-</td>
+						<td>
+							<input type="hidden" id="원도급_계약서_토지이용_허가서_regDt" value="">
+						</td>
 						<td>
 							<label for="원도급_계약서_토지이용_허가서" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -476,8 +497,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td>O</td>
-						<td>-</td>
+						<td>
+							<input type="hidden" id="하도급_계약서_공사도급_계약서_regDt" value="">
+						</td>
 						<td>
 							<label for="하도급_계약서_공사도급_계약서" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -495,8 +517,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td>O</td>
-						<td>-</td>
+						<td>
+							<input type="hidden" id="하도급_계약서_설계용역_계약서_regDt" value="">
+						</td>
 						<td>
 							<label for="하도급_계약서_설계용역_계약서" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -514,8 +537,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td>O</td>
-						<td>-</td>
+						<td>
+							<input type="hidden" id="하도급_계약서_감리용역_계약서_regDt" value="">
+						</td>
 						<td>
 							<label for="하도급_계약서_감리용역_계약서" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -533,8 +557,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td>O</td>
-						<td>-</td>
+						<td>
+							<input type="hidden" id="기자재_시험_성적서_인버터_regDt" value="">
+						</td>
 						<td>
 							<label for="기자재_시험_성적서_인버터" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -552,8 +577,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td>O</td>
-						<td>-</td>
+						<td>
+							<input type="hidden" id="기자재_시험_성적서_모듈_regDt" value="">
+						</td>
 						<td>
 							<label for="기자재_시험_성적서_모듈" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -571,8 +597,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td></td>
-						<td></td>
+						<td>
+							<input type="hidden" id="기자재_시험_성적서_변압기_regDt" value="">
+						</td>
 						<td>
 							<label for="기자재_시험_성적서_변압기" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -590,8 +617,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td></td>
-						<td></td>
+						<td>
+							<input type="hidden" id="기자재_시험_성적서_수배전반_regDt" value="">
+						</td>
 						<td>
 							<label for="기자재_시험_성적서_수배전반" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -609,8 +637,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td></td>
-						<td></td>
+						<td>
+							<input type="hidden" id="모듈_Inspection_Sheet_regDt" value="">
+						</td>
 						<td>
 							<label for="모듈_Inspection_Sheet" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -628,8 +657,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td></td>
-						<td></td>
+						<td>
+							<input type="hidden" id="이관자료_테스트1_regDt" value="">
+						</td>
 						<td>
 							<label for="이관자료_테스트1" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
@@ -647,8 +677,9 @@
 						<td>
 							<button class="btn_file down">다운로드</button>
 						</td>
-						<td></td>
-						<td></td>
+						<td>
+							<input type="hidden" id="이관자료_테스트2_regDt" value="">
+						</td>
 						<td>
 							<label for="이관자료_테스트2" class="btn_type06">추가</label>
 							<button class="btn_type07">삭제</button>
