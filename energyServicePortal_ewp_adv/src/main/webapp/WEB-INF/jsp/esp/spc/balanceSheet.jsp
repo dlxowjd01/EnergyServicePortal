@@ -154,7 +154,7 @@
 
 		for(var i = 0; i < count; i++){
 			var rowData = checkDataList[i];
-			var locationUrl = '/spcs/'+ rowData.spc_id +'/balance/month?oid=' + oid + '&site_id=' + rowData.site_id +'&yyyymm=' + rowData.balance_yyyymm;
+			var locationUrl = '/spcs/'+ rowData.spc_id +'/balance/month?oid=' + oid + '&site_id=' + rowData.site_id +'&yyyymm=' + rowData.balance_yyyymm.replace('-', '');
 			$.ajax({
 				url: 'http://iderms.enertalk.com:8443' + locationUrl,
 				type: 'delete',
