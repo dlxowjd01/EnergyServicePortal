@@ -2241,7 +2241,7 @@
 																</li>
 															</ul>
 															<div class="di_tx_bx">
-																<a href="/history/alarmHistor?sid=fa313b15-1fe1-41e3-b592-5a739e3d9b37"
+																<a href="/history/alarmHistory.do?sid=fa313b15-1fe1-41e3-b592-5a739e3d9b37">
 																	<p class="tx">최근 미처리 오류 : <span>0건</span></p>
 																</a>
 																<%--<p class="tx">2020-02-10 12:00:01 데이터 disconnected</p>--%>

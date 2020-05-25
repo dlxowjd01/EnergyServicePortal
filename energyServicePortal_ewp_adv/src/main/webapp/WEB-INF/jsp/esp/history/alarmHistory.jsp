@@ -119,7 +119,7 @@
 							<th class="vert_type">조치 메모</th>
 							<td colspan="3">
 								<div class="txarea_inp_type lh_type">
-									<textarea id="description" name="description" rows="7">확인으로 상태 변경</textarea>
+									<textarea id="description2" name="description2" rows="7">확인으로 상태 변경</textarea>
 								</div>
 							</td>
 						</tr>
@@ -155,19 +155,19 @@
 				<span class="tx_tit">설비 유형</span>
 				<div id="equipmentList" class="sa_select">
 					<div class="dropdown">
-						<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">전체
+						<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">선택
 							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="device">
-							<li class="dropdown_cov type">
-								<div class="sec_li_bx">
-									<p class="tx_li_tit">사업소별</p>
-									<a href="#" tabindex="-1">
-										<input type="checkbox" id="device_1" value="INV_PV">
-										<label for="device_1"><span></span>태양광 인버터</label>
-									</a>
-								</div>
-							</li>
+<!-- 							<li class="dropdown_cov type"> -->
+<!-- 								<div class="sec_li_bx"> -->
+<!-- 									<p class="tx_li_tit">사업소별</p> -->
+<!-- 									<a href="#" tabindex="-1"> -->
+<!-- 										<input type="checkbox" id="device_1" value="INV_PV"> -->
+<!-- 										<label for="device_1"><span></span>태양광 인버터</label> -->
+<!-- 									</a> -->
+<!-- 								</div> -->
+<!-- 							</li> -->
 						</ul>
 					</div>
 				</div>
@@ -223,7 +223,7 @@
 			<div class="fl">
 				<span class="tx_tit">알람 상태</span>
 				<div class="sa_select">
-					<div class="dropdown">
+					<div class="dropdown" id="alarmstatus">
 						<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown">전체
 							<span class="caret"></span>
 						</button>
@@ -299,32 +299,6 @@
 	<div class="col-lg-12">
 		<div class="indiv his_chart_top clear">
 			<div class="fl">
-				<span class="tx_tit">그래프 타입</span>
-				<div class="sa_select">
-					<div class="dropdown">
-						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
-						        style="width:182px">전체
-							<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
-							<li>
-								<a href="#">
-									<input type="checkbox" id="type1" name="type" value="type">
-									<label for="type1"><span></span>설비 타입</label>
-								</a>
-							</li>
-							<li>
-								<a href="#">
-									<input type="checkbox" id="type2" name="type" value="alarm">
-									<label for="type2"><span></span>알람 타입</label>
-								</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-
-			<div class="fl">
 				<span class="tx_tit">조회 기간</span>
 				<div class="sa_select">
 					<div class="dropdown">
@@ -362,19 +336,18 @@
 				</div>
 				<!-- 기본 항목 -->
 				<div class="clear">
-					<!-- 우측 항목 -->
-					<%--          <div class="fr his_inp_bx">--%>
-					<%--            <div class="rdo_type his_rdo_bx" id="chartType">--%>
-					<%--			  <span>--%>
-					<%--				<input type="radio" id="rdo03_1" name="radio" value="type" checked>--%>
-					<%--				<label for="rdo03_1"><span></span>설비 타입</label>--%>
-					<%--			  </span>--%>
-					<%--              <span>--%>
-					<%--				<input type="radio" id="rdo03_2" name="radio" value="alarm">--%>
-					<%--				<label for="rdo03_2"><span></span>알람 타입</label>--%>
-					<%--			  </span>--%>
-					<%--            </div>--%>
-					<%--          </div>--%>
+					<div class="fr his_inp_bx">
+					    <div class="rdo_type his_rdo_bx" id="chartType">
+						    <span>
+								<input type="radio" id="rdo03_1" name="radio" value="type" checked>
+								<label for="rdo03_1"><span></span>설비 타입</label>
+							</span>
+					        <span>
+								<input type="radio" id="rdo03_2" name="radio" value="alarm">
+								<label for="rdo03_2"><span></span>알람 타입</label>
+							</span>
+					    </div>
+					</div>
 				</div>
 			</div>
 			<br>
@@ -421,11 +394,11 @@
 	<div class="col-lg-12">
 		<div class="indiv">
 			<div class="tbl_wrap_type">
-				<div class="tbl_top clear" id="INV_PV2">
-					<h2 class="ntit fl">태양광 인버터</h2>
-					<button type="button" class="btn_type03 fr" onclick="alarmConfirmAll('INV_PV');">일괄 확인</button>
-				</div>
-				<table class="his_tbl chk_type" id="INV_PV">
+<!-- 				<div class="tbl_top clear" id="INV_PV2"> -->
+<!-- 					<h2 class="ntit fl">태양광 인버터</h2> -->
+<!-- 					<button type="button" class="btn_type03 fr" onclick="alarmConfirmAll('INV_PV');">일괄 확인</button> -->
+<!-- 				</div> -->
+				<table class="his_tbl chk_type" id="basic">
 					<thead>
 					<tr>
 						<th>
@@ -461,53 +434,14 @@
 					<tbody>
 					</tbody>
 				</table>
-				<div class="tbl_top clear" id="SM_MANUAL2">
-					<h2 class="ntit fl">수기입력</h2>
-					<button type="button" class="btn_type03 fr">일괄 확인</button>
-				</div>
-				<table class="his_tbl" id="SM_MANUAL">
-					<thead>
-					<tr>
-						<th>
-							<input type="checkbox" id="alarmConfirmCheck2">
-							<label for="alarmConfirmCheck2"><span></span></label>
-						</th>
-						<th>
-							<button class="btn_align down">사업소</button>
-						</th>
-						<th>
-							<button class="btn_align down">장치명</button>
-						</th>
-						<th>
-							<button class="btn_align down">알람 시간</button>
-						</th>
-						<th>
-							<button class="btn_align down">알람 타입</button>
-						</th>
-						<th>
-							<button class="btn_align down">알림 메시지</button>
-						</th>
-						<th>
-							<button class="btn_align down">확인 여부</button>
-						</th>
-						<th>
-							<button class="btn_align down">조치 상태</button>
-						</th>
-						<th>
-							<button class="btn_align down">최종 업데이트 시간</button>
-						</th>
-					</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
+			</div>	
 		</div>
 	</div>
 </div>
 <script type="text/javascript">
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
+	//const sid = '<c:out value="${param.sid}" escapeXml="false"/>';
 	let responseDate = new Map();
 	let responseCnt = 0;
 	let dataList = [];
@@ -551,39 +485,36 @@
 		'on-hold': '처리 결과 확인',
 		'closed': '처리 완료',
 	};
-
 	$(function () {
+		const sidparam = "${param.sid}";
 		let sites = JSON.parse('${siteList}');
 		
-		siteList(sites);
+	    siteList(sites, sidparam);
+		if(sidparam != ""){
+			deviceTypeList(sidparam);
+		}
 		//사이트 선택시
 		$(document).on('click', ':checkbox[name="site"]', function () {
-			if ($(this).is(':checked')) {
-				let extendText = '';
-				if ($(':checkbox[name="site"]:checked').length > 1) {
-		
-					extendText = '외 ' + Number($(':checkbox[name="site"]:checked').length - 1) + '개';
-				}
-				$('#siteList button').html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
-			} else {
-				if ($(':checkbox[name="site"]:checked').length == 0) {
-					$('#siteList button').html('선택해주세요.' + '<span class="caret"></span>')
-				} else {
-					let extendText = '';
-					if ($(':checkbox[name="site"]:checked').length > 1) {
-						extendText = '외 ' + Number($(':checkbox[name="site"]:checked').length - 1) + '개';
-					}
-					$('#siteList button').html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
-				}
-			}
-			deviceTypeList();
+			if ($(':checkbox[name="site"]:checked').length <= 0) {
+                $(this).parents('ul').prev('a').empty().append('선택해주세요.');
+            } else {
+                let extendText = '';
+                if ($(':checkbox[name="site"]:checked').length > 1) {
+                    extendText = '외 ' + Number($(':checkbox[name="sid"]:checked').length - 1) + '개';
+                }
+                $(this).parents('ul').prev('a').empty().append($(':checkbox[name="site"]:checked').eq(0).next('label').text() + '&nbsp;' + extendText);
+            }
+			deviceTypeList(sidparam);
 		});
 
+		$('#datepicker1').datepicker('setDate', 'today');
+        $('#datepicker2').datepicker('setDate', 'today');
+        
 		$(document).on('click', ':checkbox[name="equipment"]', function () {
 			if ($(this).is(':checked')) {
 				let extendText = '';
 				if ($(':checkbox[name="equipment"]:checked').length > 1) {
-					extendText = '외 ' + Number($(':checkbox[name="si	te"]:checked').length - 1) + '개';
+					extendText = '외 ' + Number($(':checkbox[name="equipment"]:checked').length - 1) + '개';
 				}
 				//첫 번째 값 + 외 몇개로 표기
 				$('#equipmentList button').html($(':checkbox[name="equipment"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
@@ -600,8 +531,10 @@
 				}
 			}
 		});
+		
+		$("#alarmstatus button").html("미확인&nbsp;<span class='caret'></span>");
 
-		$(".chk_type #type").on('click', function () {
+		$(".rdo_type").on('click', function () {
 			if ($(this).find('input').is(':checked')) {
 			} else {
 				$(this).find('input').prop('checked', true);
@@ -642,7 +575,12 @@
 				}
 			}
 		});
-
+        if(sidparam != ""){
+        $("#siteList button").html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + '&nbsp;<span class="caret"></span>');
+        	periodData();
+        	fetchCharts();
+        	$('#search').trigger('click');
+        }
 		$('#search').on('click', function () {
 			periodData();
 			fetchCharts();
@@ -684,45 +622,49 @@
 		});
 	});
 
-	const siteList = function (sites) {
+	const siteList = function (sites, sidparam) {
 		$('#siteList > div > ul').empty();
 		let str = '';
 		sites.forEach((site, index) => {
-			str += `<li>
-					<a href="#" data-value="${'${site.sid}'}" tabindex="-1">
-						<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
-						<label for="${'${site.sid}'}"><span></span>${'${site.name}'}</label>
-					</a>
-				</li>`;
+			str += '<li>';
+			str += '<a href="#" data-value="'+site.sid+'" tabindex="-1">';
+			if(site.sid == sidparam){
+			     str += '<input type="checkbox" id="'+site.sid+'" value="'+site.sid+'" name="site" checked>';
+			}
+			else{
+			     str += '<input type="checkbox" id="'+site.sid+'" value="'+site.sid+'" name="site">';
+			}
+			str +=  '<label for="'+site.sid+'"><span></span>'+site.name+'</label></a></li>';
 		});
-
-		$('#siteList>div>ul').append(str);
+		$('#siteList>div>ul').append(str);			
 	};
 
-	const deviceTypeList = function () {
+	const deviceTypeList = function (sidparam) {
+		console.log(sidparam);
 		$('#equipmentList > div > ul').empty();
 		let str = '';
 		let sites = JSON.parse('${siteList}');
-		dataList = deviceType(sites);
+		dataList = deviceType(sites, sidparam);
 		const deviceTypes = dataList[0];
 
 		deviceTypes.forEach((deviceTypes, index) => {
 			const deviceRender = eval('deviceTemplate.' + deviceTypes);
-			str += `<li>
-					<a href="#" data-value="${'${index}'}" tabindex="-1">
-						<input type="checkbox" id="${'${index}'}" value="${'${deviceTypes}'}" name="deviceType">
-						<label for="${'${index}'}"><span></span>${'${deviceRender}'}</label>
-					</a>
-				</li>`;
+			str +=  '<li><a href="#" data-value="'+index+'" tabindex="-1">';
+			if(sidparam == ""){
+			str +=	'<input type="checkbox" id="'+index+'" value="'+deviceTypes+'" name="deviceType">';
+			}
+			else{
+			str +=   '<input type="checkbox" id="'+index+'" value="'+deviceTypes+'" name="deviceType" checked>';	
+			}
+			str +=	'<label for="'+index+'"><span></span>'+deviceRender+'</label>';
+			str +=	'</a></li>';
 		});
 		$('#equipmentList>div>ul').append(str);
 	};
 
 	const periodData = function () {
-		$("#INV_PV").hide();
-		$("#INV_PV2").hide();
-		$("#SM_MANUAL").hide();
-		$("#SM_MANUAL2").hide();
+		$('.tbl_wrap_type').empty();
+	
 
 		if ($(':checkbox[name="deviceType"]:checked').length == 0) {
 			alert('설비타입을 한개이상 선택해 주세요.');
@@ -787,37 +729,64 @@
 				let filterdata = [];
 
 				statusfilter(filterdata, statusArray, data);
-
-				var invcnt = 0;
-				var smcnt = 0;
+				
+				$(".his_tbl").remove();
+				$.each(deviceArray,function(i, el){
+		             makeDiv(el);
+		             makeTableHead(el);
+		        });
+		        
 				if (filterdata.length > 0) {
 					$.each(filterdata, function (i, el) {
-							if (el.device_type === "INV_PV") {
-								invcnt++
-								tablegrid('INV_PV', el, i);
-							} else {
-								smcnt++
-								tablegrid('SM_MANUAL', el, i);
-							}
+						$.each(deviceArray,function(j, e2){
+							if(el.device_type === e2){
+								  tablegrid(e2, el, i);							
+							}						   				    	
+						})
 						}
 					)
-
-					if (invcnt > 0) {
-						$("#INV_PV").show();
-						$("#INV_PV2").show();
-
-					}
-					if (smcnt > 0) {
-						$("#SM_MANUAL").show();
-						$("#SM_MANUAL2").show();
-					}
 				}
+				$.each(deviceArray,function(i, el){
+                    if($("#"+el+" tbody td").length == 0){
+                    	tdStr = '<th><td></td></th>';
+                    	$("#"+el+" tbody").append(tdStr);
+                    }
+               });
 				changeTablegird = filterdata;
 			},
 			dataType: "json"
 		});
 	}
-
+	const makeDiv = function(deviceType){
+		let DivStr = "";
+		DivStr += '<div class="tbl_top clear">';
+        DivStr += '<h2 class="ntit fl">'+deviceTemplate[deviceType]+'</h2>';
+        DivStr += '<button type="button" class="btn_type03 fr" onclick="alarmConfirmAll('+deviceType+');">일괄 확인</button>';
+        DivStr += '</div>';
+        $(".tbl_wrap_type").append(DivStr);
+	}
+    const makeTableHead = function(deviceType){
+    	let newHeadTable = document.createElement('table');
+    	let colList = ["사업소", "장치명", "알람 시간", "알람 타입", "알람 메세지", "확인 여부", "조치 상태", "최종 업데이트 시간"];
+        let thead = newHeadTable.createTHead();
+        let tbody = newHeadTable.createTBody();
+        let tRow = thead.insertRow(); 	
+   
+        	for(let i = 0; i<colList.length+1; i++){
+        		 let hCell = document.createElement("th");
+        		if(i==0){
+        			hCell.innerHTML =  '<input type="checkbox" id="alarmConfirmCheck" onclick="alarmConfirmCheckAll('+deviceType+');"><label for="alarmConfirmCheck"><span></span></label>';
+        	        tRow.appendChild(hCell);
+        		}else{
+        			hCell.innerHTML = colList[i-1];
+                    tRow.appendChild(hCell);
+        		}
+        	}
+        newHeadTable.setAttribute('class', 'his_tbl chk_type');
+        newHeadTable.setAttribute('id', deviceType);
+        $(".tbl_wrap_type").append(newHeadTable);
+        
+    }
 	const tablegrid = function (tableId, el, i) {
 		let tbodyStr = "";
 		const Selector = '#' + tableId + ' tbody';
@@ -837,7 +806,7 @@
 		if (!(isEmpty(el.status))) { // 조치사항이 존재할 경우
 			tbodyStr += '	<td><a href="javascript:updateACK(\'' + el.alarm_id + '\');" class="tbl_link" >' + statusTemplate[el.status] + '</a></td>'; // 조치상태
 		} else {
-			tbodyStr += '	<td>신규</td>'; // 조치상태
+			tbodyStr += '	<td><a href="javascript:updateACK(\'' + el.alarm_id + '\');" class="tbl_link" >신규</a></td>'; // 조치상태
 		}
 
 		if (!(isEmpty(el.status_timestamp))) {
@@ -881,8 +850,12 @@
 			})
 		})
 	}
-	const deviceType = function (sites) {
-		$('#equipmentList button').empty().append('설비유형<span class="caret"></span>');
+	const deviceType = function (sites ,sidparam) {
+		if(sidparam != ""){
+			$('#equipmentList button').empty().append('전체<span class="caret"></span>');	
+		}else{
+			$('#equipmentList button').empty().append('설비유형<span class="caret"></span>');    	
+		}
 		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
 			function () {
 				return $(this).val();
@@ -891,7 +864,6 @@
 		);
 		let deviceTypes = [];
 		const oid = sites[0].oid;
-
 		if (siteArray.length > 0) {
 			const arr = deviceInternet(siteArray, oid);
 
@@ -1015,7 +987,7 @@
 			substringCnt = 6;
 		}
 
-		var gr_type = $(".chk_type #type1").is(':checked');
+		var gr_type = $("#rdo03_1").is(':checked');
 
 		var chartTypeNm = (gr_type == true) ? "deviceType" : "alarm";
 		let dataMap = new Map();
@@ -1378,7 +1350,6 @@
             } else if(String(val).length == 12) {
                 date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8) + ' ' + val.substring(8, 10) + ':' + val.substring(10, 12);
             } else if(String(val).length > 12) {
-
                 date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8) + ' ' + val.substring(8, 10) + ':' + val.substring(10, 12) + ':' + val.substring(12, 14);
             } else {
                 date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8);
