@@ -1,28 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
+<script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
-	const debugMode = true;
-	const apiURL = 'http://iderms.enertalk.com:8443';
-	const configSite = '/config/sites';
-	const configDevice = '/config/orgs/' + 'spower';
-	const statusSummary = '/status/summary';
-	const configSiteData = {
-		oid: 'spower'
-	};
+	let today = new Date();
+	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
+	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
+	const siteList = JSON.parse('${siteList}');
 
+	const apiURL = 'http://iderms.enertalk.com:8443';
+	const configDevice = '/config/orgs/' + oid;
+	const statusSummary = '/status/summary';
 	const configDeviceData = {
 		includeUsers: false,
 		includSites: false,
 		includeDevices: true,
 		includeBtus: false
 	};
-
-	const forecastingData = {
-		dids: '',
-		metering_type: '',
-		interval: '',
-		isDummy: true
-	}
 
 	const deviceTemplate = {
 		'SM': '스마트미터',
@@ -45,121 +38,29 @@
 	let gridList;
 
 	$(function () {
-		siteList();
+		setInitList('siteULList'); //사업소 리스트
+		setInitList('typeULList'); //디바이스 리스트
+		siteMakeList();
 
-		setInitList('columnLi');
-		setInitList('columnLi2');
-		setInitList('columnLi3');
+		setInitList('columnLi'); //디바이스 유형 리스트
+		setInitList('columnLi2'); //디바이스 유형
+		setInitList('columnLi3'); //디바이스 유형
 
-		//사이트 선택시
-		$(document).on('click', ':checkbox[name="site"]', function() {
-			if($(this).is(':checked')) {
-				let extendText = '';
-				if ($(':checkbox[name="site"]:checked').length > 1) {
-					extendText = '외 ' + Number($(':checkbox[name="site"]:checked').length - 1) + '개';
-				}
-				//첫 번째 값 + 외 몇개로 표기
-				$('#siteList button').html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
-			} else {
-				if($(':checkbox[name="site"]:checked').length == 0) {
-					$('#siteList button').html('선택해주세요.' + '<span class="caret"></span>')
-				} else {
-					let extendText = '';
-					if ($(':checkbox[name="site"]:checked').length > 1) {
-						extendText = '외 ' + Number($(':checkbox[name="site"]:checked').length - 1) + '개';
-					}
-					//첫 번째 값 + 외 몇개로 표기
-					$('#siteList button').html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
-				}
-			}
-			deviceType();
-		});
+		setInitList('chartDidUl'); //차트 디바이스 선택
+		setInitList('chartDidUl2'); //차트 디바이스 선택
+		setInitList('chartDidUl3'); //차트 디바이스 선택
 
-		$(document).on('click', ':checkbox[name="type"]', function(e) {
-			if($(this).is(':checked')) {
-				let extendText = '';
-				if ($(':checkbox[name="type"]:checked').length > 1) {
-					extendText = '외 ' + Number($(':checkbox[name="type"]:checked').length - 1) + '개';
-				}
-				//첫 번째 값 + 외 몇개로 표기
-				$('#deviceType button').html($(':checkbox[name="type"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
-			} else {
-				if($(':checkbox[name="type"]:checked').length == 0) {
-					$('#deviceType button').html('선택해주세요.' + '<span class="caret"></span>')
-				} else {
-					let extendText = '';
-					if ($(':checkbox[name="type"]:checked').length > 1) {
-						extendText = '외 ' + Number($(':checkbox[name="type"]:checked').length - 1) + '개';
-					}
-					//첫 번째 값 + 외 몇개로 표기
-					$('#deviceType button').html($(':checkbox[name="type"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
-				}
-			}
-			device();
-		});
-
-		$(document).on('click', ':checkbox[name="device"]', function(e) {
-			if($(this).is(':checked')) {
-				let extendText = '';
-				if ($(':checkbox[name="device"]:checked').length > 1) {
-					extendText = '외 ' + Number($(':checkbox[name="device"]:checked').length - 1) + '개';
-				}
-				//첫 번째 값 + 외 몇개로 표기
-				$('#devices button.btn-primary').html($(':checkbox[name="device"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
-			} else {
-				if($(':checkbox[name="device"]:checked').length == 0) {
-					$('#deviceType button.btn-primary').html('선택해주세요.' + '<span class="caret"></span>')
-				} else {
-					let extendText = '';
-					if ($(':checkbox[name="type"]:checked').length > 1) {
-						extendText = '외 ' + Number($(':checkbox[name="device"]:checked').length - 1) + '개';
-					}
-					//첫 번째 값 + 외 몇개로 표기
-					$('#devices button.btn-primary').html($(':checkbox[name="device"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
-				}
-			}
-		});
-
-		//기간 선택
-		$(document).on('click', '#interval a', function (e) {
-			e.preventDefault();
-			if($(this).data('value') == '1') {
-				$('')
-			}
-			$(this).parents('ul').prev('button').data('value', $(this).data('value')).empty().append($(this).html()).append('<span class="caret"></span>');
-		});
+		$('.fromDate, .toDate').datepicker('setDate', new Date()); //기본값 세팅
 
 		//검색
 		$('#search').on('click', function () {
 			searchGrid();
 		});
 
-		$(document).on('click', '[id^=chartDid] a', function() {
-			let val = $(this).data('value');
-			let sid = $(this).data('sid');
-			let type = $(this).data('type');
-			let idNum = $(this).parents('div.sa_select').prop('id').replace('chartDid', '');
-
-			$(this).parents('ul').prev('button').data('value', val).data('sid', sid).data('type', type).empty().append($(this).html()).append('<span class="caret"></span>');
-
-
-			$.map(featureProperties, function(value, key) {
-				if (type == key) {
-					$('#columnLi' + idNum).empty().prev().html('선택 <span class="caret"></span>');
-					setMakeList(value, 'columnLi' + idNum, {"dataFunction": {"INDEX": getNumberIndex}}); //list생성
-				}
-			});
-
-		});
-
-		$(document).on('click', '#way a', function() {
-			$(this).parents('ul').prev('button').data('value', $(this).data('value')).empty().append($(this).html()).append('<span class="caret"></span>');
-		});
-
-		$(':radio[name="analyze"]').on('change', function() {
+		$(':radio[name="analyze"]').on('change', function () {
 			$('[id^="analyzeDiv"]').hide();
 			$('[id^="analyzeTag"]').hide();
-			if($(this).attr('id') == 'analyze1') {
+			if ($(this).attr('id') == 'analyze1') {
 				$('#analyzeDiv1').show();
 				$('#analyzeTag1').show();
 				$('#summation').show();
@@ -169,7 +70,7 @@
 				$('#summation').hide();
 			}
 
-			if($('#hchart2').highcharts()) {
+			if ($('#hchart2').highcharts()) {
 				$('#hchart2').highcharts().destroy();
 			}
 
@@ -203,28 +104,7 @@
 					$(this).find('button').addClass('up');
 				}
 
-				tableGrid();
-			}
-		});
-
-		//사이트 선택전까지 클릭 방지
-		$('#deviceType button').on('click', function (e) {
-			if ($(':checkbox[name="site"]:checked').length <= 0) {
-				e.stopPropagation();
-			}
-		});
-
-		//사이트 선택전까지 클릭 방지
-		$('#device').prev('button').on('click', function (e) {
-			if ($(':checkbox[name="sid"]:checked').length <= 0 || $(':checkbox[name="type"]:checked').length <= 0) {
-				e.stopPropagation();
-			}
-		});
-
-		//분석 기준 설비 선택
-		$('#chartDid').prev('button').on('click', function(e) {
-			if ($(':checkbox[name="sid"]:checked').length <= 0 || $(':checkbox[name="type"]:checked').length <= 0) {
-				e.stopPropagation();
+				// tableGrid();
 			}
 		});
 
@@ -239,41 +119,43 @@
 			}
 		});
 
+		$('#chartAdd').on('click', function () {
 
-		$('#chartAdd').on('click', function() {
-
-			if($(':radio[name="analyze"]:checked').val() == '시계열 분석') {
-				if($('#chartDid button').data('value') == '') {
+			if ($(':radio[name="analyze"]:checked').val() == '시계열 분석') {
+				if ($('#chartDid button').data('value') == '') {
 					alert('추가 하시려는 설비명을 선택 해 주세요.');
 					return false;
 				}
 
-				if($(':radio[name="column"]').is(':checked') == false) {
+				if ($(':radio[name="column"]').is(':checked') == false) {
 					alert('추가 하시려는 항목을 선택 해 주세요.');
 					return false;
 				}
 
-				if($(':radio[name="rdValue"]').is(':checked') == false) {
+				if ($(':radio[name="rdValue"]').is(':checked') == false) {
 					alert('선택 해 주세요.');
 					return false;
 				}
 
 				//기존항목이 존재한다면 중복체크
-				if($('#way').prev('button').data('value') == 'l') {
-					if($('#analyzeTag1 .tx_tit:eq(0) span').length > 0) {
-						if(duplicateTag(0)) {
+				if ($('#way').find('button').data('value') == 'l') {
+					if ($('#analyzeTag1 .tx_tit:eq(0) span').length > 0) {
+						if (duplicateTag(0)) {
+							return false;
+						}
+					}
+				} else if ($('#way').find('button').data('value') == 'r') {
+					if ($('#analyzeTag1 .tx_tit:eq(1) span').length > 0) {
+						if (duplicateTag(1)) {
 							return false;
 						}
 					}
 				} else {
-					if($('#analyzeTag1 .tx_tit:eq(1) span').length > 0) {
-						if(duplicateTag(1)) {
-							return false;
-						}
-					}
+					alert('선택 해 주세요.');
+					return false;
 				}
 
-				let $txt =$('#chartDid button').text() + ': ' + $(':radio[name="column"]:checked').next('label').text() + $(':radio[name="rdValue"]:checked').next('label').text()
+				let $txt = $('#chartDid button').text() + ': ' + $(':radio[name="column"]:checked').next('label').text() + $(':radio[name="rdValue"]:checked').next('label').text()
 				let $span = $('<span>').addClass('tag_type').append($txt).append('<button>')
 				$span.data('deviceId', $('#chartDid button').data('value'));
 				$span.data('sid', $('#chartDid button').data('sid'));
@@ -282,51 +164,51 @@
 				$span.data('key2', $(':radio[name="rdValue"]:checked').val());
 				$span.find('button').append('닫기');
 
-				if($('#way').prev('button').data('value') == 'l') {
+				if ($('#way').find('button').data('value') == 'l') {
 					$('#analyzeTag1 .tx_tit').eq(0).append($span);
 				} else {
 					$('#analyzeTag1 .tx_tit').eq(1).append($span);
 				}
 			} else {
-				if($('#chartDid2 button').data('value') == '') {
+				if ($('#chartDid2 button').data('value') == '') {
 					alert('X축에 추가 하시려는 설비명을 선택 해 주세요.');
 					return false;
 				}
 
-				if($(':radio[name="column2"]').is(':checked') == false) {
+				if ($(':radio[name="column2"]').is(':checked') == false) {
 					alert('X축에 추가 하시려는 항목을 선택 해 주세요.');
 					return false;
 				}
 
-				if($(':radio[name="rdValue2"]').is(':checked') == false) {
+				if ($(':radio[name="rdValue2"]').is(':checked') == false) {
 					alert('X축에 선택 해 주세요.');
 					return false;
 				}
 
-				if($('#chartDid3 button').data('value') == '') {
+				if ($('#chartDid3 button').data('value') == '') {
 					alert('Y축에 추가 하시려는 설비명을 선택 해 주세요.');
 					return false;
 				}
 
-				if($(':radio[name="column3"]').is(':checked') == false) {
+				if ($(':radio[name="column3"]').is(':checked') == false) {
 					alert('Y축에 추가 하시려는 항목을 선택 해 주세요.');
 					return false;
 				}
 
-				if($(':radio[name="rdValue3"]').is(':checked') == false) {
+				if ($(':radio[name="rdValue3"]').is(':checked') == false) {
 					alert('Y축에 선택 해 주세요.');
 					return false;
 				}
 
 				//기존항목이 존재한다면 중복체크
-				if($('#analyzeTag2 > div.fl > span').length > 0) {
-					if(duplicateTag(2)) {
+				if ($('#analyzeTag2 > div.fl > span').length > 0) {
+					if (duplicateTag(2)) {
 						return false;
 					}
 				}
 
-				let $txt =$('#chartDid2 button').text() + ': ' + $(':radio[name="column2"]:checked').next('label').text() + $(':radio[name="rdValue2"]:checked').next('label').text();
-				let $txt2 =$('#chartDid3 button').text() + ': ' + $(':radio[name="column3"]:checked').next('label').text() + $(':radio[name="rdValue3"]:checked').next('label').text();
+				let $txt = $('#chartDid2 button').text() + ': ' + $(':radio[name="column2"]:checked').next('label').text() + $(':radio[name="rdValue2"]:checked').next('label').text();
+				let $txt2 = $('#chartDid3 button').text() + ': ' + $(':radio[name="column3"]:checked').next('label').text() + $(':radio[name="rdValue3"]:checked').next('label').text();
 				let $span = $('<span>').addClass('tag_type').append($txt + '/' + $txt2).append('<button>')
 				$span.data('deviceIdX', $('#chartDid2 button').data('value'));
 				$span.data('keyX', $(':radio[name="column2"]:checked').val());
@@ -346,22 +228,22 @@
 		});
 
 		//항목 삭제
-		$(document).on('click', '.tag_type button', function() {
+		$(document).on('click', '.tag_type button', function () {
 			$(this).parents('span.tag_type').remove();
 		});
 
-		$(':radio[name="summation"]').on('change', function() {
+		$(':radio[name="summation"]').on('change', function () {
 			$('#chartDraw').trigger('click');
 		});
 
-		$('#chartDraw').on('click', function() {
+		$('#chartDraw').on('click', function () {
 			let chartColor = ['#b0e9e8', '#26ccc8', '#009389', '#50b5ff', '#5269ef', '#274dea'];
 			let chartSeries = new Array();
 			let summation = $(':radio[name="summation"]:checked').val();
 			let stackNum = 0;
 
-			if($(':radio[name="analyze"]:checked').val() == '시계열 분석') {
-				if($('#analyzeTag1 span').length <= 0) {
+			if ($(':radio[name="analyze"]:checked').val() == '시계열 분석') {
+				if ($('#analyzeTag1 span').length <= 0) {
 					alert('한개이상 항목을 선택해 주세요.');
 					return false;
 				}
@@ -369,7 +251,7 @@
 				let index = 0;
 				let dupY = 1;
 
-				$('#analyzeTag1 .tx_tit').eq(0).find('span').each(function() {
+				$('#analyzeTag1 .tx_tit').eq(0).find('span').each(function () {
 					let dataArr = new Array();
 
 					let keyText = $(this).data('key');
@@ -381,10 +263,10 @@
 					let temp = {};
 					let suffix = '';
 
-					$.map(gridList, function(value, key) {
-						if(type == key) {
-							$.each(value, function(j, el) {
-								if(el.did == deviceId) {
+					$.map(gridList, function (value, key) {
+						if (type == key) {
+							$.each(value, function (j, el) {
+								if (el.did == deviceId) {
 									dataArr.push({
 										'x': el.timestamp,
 										'y': parseFloat(eval('el.' + keyText2 + '.' + keyText))
@@ -394,44 +276,34 @@
 						}
 					});
 
-					if(keyText.toLowerCase().match('voltage')) {
-						suffix = 'V';
-					} else if(keyText.toLowerCase().match('current')) {
-						suffix = 'A';
-					} else if(keyText.toLowerCase().match('power')) {
-						suffix = 'W';
-					} else {
-						suffix = '';
-					}
-
-					if(dataArr.length > 0) {
-						if(summation == 'siteAccrue' || summation == 'siteAverage') {
-							if(chartSeries.length > 0) {
+					if (dataArr.length > 0) {
+						if (summation == 'siteAccrue' || summation == 'siteAverage') {
+							if (chartSeries.length > 0) {
 								let dupSeries = false;
-								chartSeries.some(function(v, k) {
-									if(v.sid == sid) {
+								chartSeries.some(function (v, k) {
+									if (v.sid == sid) {
 										dupSeries = true;
 										return stackNum = v.stack;
 									}
 								});
 
-								if(!dupSeries) {
+								if (!dupSeries) {
 									stackNum++;
 								}
 							} else {
 								stackNum++;
 							}
-						} else if(summation == 'deviceAccrue' || summation == 'deviceAverage') {
-							if(chartSeries.length > 0) {
+						} else if (summation == 'deviceAccrue' || summation == 'deviceAverage') {
+							if (chartSeries.length > 0) {
 								let dupSeries = false;
-								chartSeries.some(function(v, k) {
-									if(v.dType == type) {
+								chartSeries.some(function (v, k) {
+									if (v.dType == type) {
 										dupSeries = true;
 										return stackNum = v.stack;
 									}
 								});
 
-								if(!dupSeries) {
+								if (!dupSeries) {
 									stackNum++;
 								}
 							} else {
@@ -448,7 +320,7 @@
 							sid: sid,
 							dType: type,
 							tooltip: {
-								valueSuffix: suffix
+								valueSuffix: setttingSuffix(keyText)
 							},
 							color: chartColor[index],
 							data: dataArr
@@ -459,15 +331,15 @@
 					chartSeries.push(temp);
 
 					//양쪽이 동일할경우 체크
-					$('#analyzeTag1 .tx_tit').eq(1).find('span').each(function() {
+					$('#analyzeTag1 .tx_tit').eq(1).find('span').each(function () {
 						let keyText_1 = $(this).data('key');
-						if(keyText == keyText_1) {
+						if (keyText == keyText_1) {
 							dupY = 0;
 						}
 					});
 				});
 
-				$('#analyzeTag1 .tx_tit').eq(1).find('span').each(function() {
+				$('#analyzeTag1 .tx_tit').eq(1).find('span').each(function () {
 					let dataArr = new Array();
 
 					let keyText = $(this).data('key');
@@ -478,10 +350,10 @@
 
 					let temp = {};
 					let suffix = '';
-					$.map(gridList, function(value, key) {
-						if(type == key) {
-							$.each(value, function(j, el) {
-								if(el.did == deviceId) {
+					$.map(gridList, function (value, key) {
+						if (type == key) {
+							$.each(value, function (j, el) {
+								if (el.did == deviceId) {
 									dataArr.push({
 										'x': el.timestamp,
 										'y': parseFloat(eval('el.' + keyText2 + '.' + keyText))
@@ -491,18 +363,7 @@
 						}
 					});
 
-					if(keyText.toLowerCase().match('voltage')) {
-						suffix = 'V';
-					} else if(keyText.toLowerCase().match('current')) {
-						suffix = 'A';
-					} else if(keyText.toLowerCase().match('power')) {
-						suffix = 'W';
-					} else {
-						suffix = '';
-					}
-
-
-					if(dataArr.length > 0) {
+					if (dataArr.length > 0) {
 						temp = {
 							name: $(this).text().replace('닫기', ''),
 							type: 'spline',
@@ -512,7 +373,7 @@
 							dType: type,
 							color: chartColor[index],
 							tooltip: {
-								valueSuffix: suffix
+								valueSuffix: setttingSuffix(keyText)
 							},
 							data: dataArr
 						};
@@ -522,19 +383,12 @@
 					chartSeries.push(temp);
 				});
 			} else {
-				if($('#analyzeTag2 span').length <= 0) {
+				if ($('#analyzeTag2 span').length <= 0) {
 					alert('한개이상 항목을 선택해 주세요.');
 					return false;
 				}
 
-				// //시간순으로 정렬을 해준다.
-				// gridList.sort(function(a, b) {
-				// 	return a['timestamp'] - b['timestamp'];
-				// })
-
-				let index = 0;
-				let dupY = 1;
-				$('#analyzeTag2 span').each(function() {
+				$('#analyzeTag2 span').each(function (index) {
 					let dataArr = new Array();
 
 					let seriesName = $(this).text().replace(/\n(\s*)/gi, '').trim().replace('닫기', '');
@@ -549,37 +403,59 @@
 					let typeX = $(this).data('typeX');
 					let typeY = $(this).data('typeY');
 
-					let temp = {};
 					let suffix = '';
 
-					$.map(gridList, function(value, key) {
-						if(typeX == key) {
-							$.each(value, function(j, el) {
-								let timestamp = el.timestamp;
-								dataArr.push([
-									parseFloat(eval('el.' + keyText2X + '.' + keyTextX))
-								]);
+					let timeCategory = new Array();
+					let timeCategoryX = new Array();
+					let timeCategoryY = new Array();
+					let typeXArray = new Array();
+					let typeYArray = new Array();
 
-								$.map(gridList, function(value, key) {
-									if (typeY == key) {
-										$.each(value, function (j, el) {
-											if (el.did == deviceIdY) {
-												$.each(value, function (v, k) {
-													if (timestamp == v.timestamp) {
-														dataArr[dataArr.length - 1].push(parseFloat(eval('v.' + keyText2Y + '.' + keyTextY)))
-													}
-												});
-											}
-										});
-									}
-								});
+					$.each(eval('gridList.' + typeX), function (j, el) {
+						if (el.did == deviceIdX) {
+							timeCategoryX.push(el.timestamp);
+							typeXArray.push({
+								time: el.timestamp,
+								data: parseFloat(eval('el.' + keyText2X + '.' + keyTextX))
 							});
 						}
 					});
 
+					$.each(eval('gridList.' + typeY), function (j, el) {
+						if (el.did == deviceIdY) {
+							timeCategoryY.push(el.timestamp);
+							typeYArray.push({
+								time: el.timestamp,
+								data: parseFloat(eval('el.' + keyText2Y + '.' + keyTextY))
+							});
+						}
+					});
 
+					//시간 카테고리 합쳐서 중복 시간 제거
+					$.each(timeCategoryX.concat(timeCategoryY), function (i, el) {
+						if ($.inArray(el, timeCategory) === -1) timeCategory.push(el);
+					});
 
-					temp = {
+					timeCategory.sort(); //시간 정렬
+
+					$.each(timeCategory, function (i, el) {
+						let x = 0, y = 0;
+
+						$.each(typeXArray, function (j, elx) {
+							if (elx.time == el) {
+								x = elx.data;
+							}
+						});
+						$.each(typeYArray, function (k, ely) {
+							if (ely.time == el) {
+								y = ely.data;
+							}
+						});
+
+						dataArr.push([x, y]);
+					});
+
+					chartSeries.push({
 						name: seriesName,
 						type: 'scatter',
 						color: chartColor[index],
@@ -587,19 +463,14 @@
 							valueSuffix: suffix
 						},
 						data: dataArr
-					};
-					index++;
-					chartSeries.push(temp);
+					});
 				});
 			}
 
 			chartDraw(chartSeries);
 		});
 
-		$('#datepicker1').datepicker('setDate', 'today'); //데이트 피커 기본
-		$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
-
-		$('.save_btn').on('click', function(e) {
+		$('.save_btn').on('click', function (e) {
 			let excelName = '상태이력';
 			let $val = $('#datatable').find('tbody');
 			let cnt = $val.length;
@@ -622,7 +493,7 @@
 
 	let tableProperties = new Object();
 	let featureProperties = new Object();
-	const deviceProperties = function() {
+	const deviceProperties = function () {
 		$.ajax({
 			url: apiURL + '/config/view/device_properties',
 			type: 'get',
@@ -630,17 +501,17 @@
 			data: {
 				version: '20200513'
 			},
-			success: function(result) {
-				$.map(result, function(val, key) {
+			success: function (result) {
+				$.map(result, function (val, key) {
 					let deviceName = key;
 					let propList = val.properties;
 					let tempTable = new Array();
 					let tempFeature = new Array();
 
-					$.map(propList, function(v, k) {
-						if(v.analysis_table) {
+					$.map(propList, function (v, k) {
+						if (v.analysis_table) {
 							let tempObj = new Object();
-							if(k == 'currentS') {
+							if (k == 'currentS') {
 								tempObj['key'] = k;
 								tempObj['value'] = v.name;
 							} else {
@@ -650,9 +521,9 @@
 							tempTable.push(tempObj);
 						}
 
-						if(v.analysis_feature) {
+						if (v.analysis_feature) {
 							let tempObj = new Object();
-							if(k == 'currentS') {
+							if (k == 'currentS') {
 								tempObj['key'] = k;
 								tempObj['value'] = v.name;
 							} else {
@@ -671,21 +542,8 @@
 	};
 
 	//사업소 조회
-	const siteList = function() {
-		$('#siteList > div > ul').empty();
-
-		let str = '';
-		let sites = JSON.parse('${siteList}');
-		sites.forEach((site, index) => {
-			str += `<li>
-						<a href="#" data-value="${'${site.sid}'}" tabindex="-1">
-							<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
-							<label for="${'${site.sid}'}"><span></span>${'${site.name}'}</label>
-						</a>
-					</li>`;
-		});
-
-		$('#siteList>div>ul').append(str);
+	const siteMakeList = function () {
+		setMakeList(siteList, 'siteULList', {'dataFunction': {}}); //list생성
 	};
 
 	//선택한 SID에 해당하는 유형의 타입을 보여준다.
@@ -693,49 +551,40 @@
 		$('#deviceType button').empty().append('설비유형<span class="caret"></span>');
 
 		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
-				function(){
-					return $(this).val();
-				}
+			function () {
+				return $(this).val();
+			}
 			)
 		);
 
-		if(siteArray.length > 0) {
+		if (siteArray.length > 0) {
 			$.ajax({
-				url : apiURL + configDevice,
-				type : 'get',
-				async : false,
-				data : configDeviceData,
-				success: function(result) {
+				url: apiURL + configDevice,
+				type: 'get',
+				async: false,
+				data: configDeviceData,
+				success: function (result) {
 					deviceList = result.devices;
 					let deviceType = new Array();
 
-					$('#deviceType ul').empty();
+					$.each(deviceList, function (i, el) {
+						if ($.inArray(el.sid, siteArray) >= 0) {
+							if ($.inArray(el.device_type, deviceType) === -1) {
+								deviceType.push(el.device_type);
+							}
+						}
+						;
+					});
 
-					let str = '';
-					if(deviceList.length > 0) {
-						$.each(siteArray, function(i, site) {
-							// let siteId = site;
-							$.each(deviceList, function(i, el) {
-								if(el.sid == site) {
-									if($.inArray(el.device_type, deviceType) === -1) {
-										let deviceName = eval('deviceTemplate.' + el.device_type);
-										str += `<li>
-													<a href="#" data-value="${'${el.device_type}'}" tabindex="-1">
-														<input type="checkbox" id="type_${'${i}'}" name="type" value="${'${el.device_type}'}">
-														<label for="type_${'${i}'}"><span></span>${'${deviceName}'}</label>
-													</a>
-												</li>`
-										deviceType.push(el.device_type)
-									}
-								}
-							});
-						});
-						$('#deviceType ul').append(str);
-					} else {
-						let typeHtml = $('<li>').append('<a>').data('value', '').attr('href', '#').html('조회된 설비가 없습니다.');
-						$('#type').append(typeHtml);
-						$('#type').before('button').empty().append('설비유형').append('<span class="caret"></span>');
-					}
+					deviceType.sort(); //정렬
+					$.each(deviceType, function (i, el) {
+						deviceType[i] = {
+							name: deviceTemplate[el],
+							type: el
+						}
+					})
+
+					setMakeList(deviceType, 'typeULList', {'dataFunction': {}});
 				},
 				dataType: 'json'
 			});
@@ -748,32 +597,33 @@
 	const device = function () {
 		$('#devices button.btn-primary').empty().append('복수 선택').append('<span class="caret"></span>');
 
-		const typeArray = $.makeArray($(':checkbox[name="type"]:checked').map(
-				function(){
+		const typeArray = $.makeArray(
+			$(':checkbox[name="type"]:checked').map(
+				function () {
 					return $(this).val();
 				}
 			)
 		);
 
-		if(typeArray.length > 0 && deviceList.length > 0) {
+		if (typeArray.length > 0 && deviceList.length > 0) {
 			$('#devices div.sec_li_bx').remove();
 
 			//선택된 사이트를 기준으로 한다.
 			$(':checkbox[name="site"]:checked').each(function () {
 				let siteNm = $(this).next().text()
-				  , siteId = $(this).val()
-				  , siteGrp = $('<div>').addClass('sec_li_bx');
+					, siteId = $(this).val()
+					, siteGrp = $('<div>').addClass('sec_li_bx');
 
 				siteGrp.append('<p>');
 				siteGrp.find('p').addClass('tx_li_tit').text(siteNm);
 				siteGrp.append('<ul>');
 
-				$.each(deviceList, function(i, el) {
+				$.each(deviceList, function (i, el) {
 					if (el.sid == siteId) {
-						$.each(typeArray, function(k, elm) {
-							if(elm == el.device_type) {
+						$.each(typeArray, function (k, elm) {
+							if (elm == el.device_type) {
 								let str = `<li>
-											<a href="#" data-value="${'${el.did}'}" tabindex="-1">
+											<a href="javascript:void(0);" data-value="${'${el.did}'}" tabindex="-1">
 												<input type="checkbox" id="device_${'${i}'}" name="device" value="${'${el.did}'}" data-sid="${'${el.sid}'}" data-type="${'${el.device_type}'}">
 												<label for="device_${'${i}'}"><span></span>${'${el.name}'}</label>
 											</a>
@@ -789,10 +639,26 @@
 		}
 	}
 
+	const setTypeList = function (obj) {
+		let type = $('#' + obj + ' button').data('type');
+		let idNum = '';
+		if (obj.length > 8) {
+			idNum = obj.slice(-1);
+		}
+
+		$('#'+'columnLi' + idNum).prev().html($('#'+'columnLi' + idNum).prev().data('name') + '<span class="caret"></span>');
+		$.map(featureProperties, function (value, key) {
+			if (type == key) {
+				setMakeList(value, 'columnLi' + idNum, {"dataFunction": {"INDEX": getNumberIndex}}); //list생성
+			}
+		});
+	}
+
+	//선택된 디바이스 유형별로 테이블을 생성한다.
 	const makeTableTemplate = function () {
 		$('#datatable').empty();
 
-		$(':checkbox[name="type"]:checked').each(function() {
+		$(':checkbox[name="type"]:checked').each(function () {
 			let chkVal = $(this).val();
 			let targetTable = document.createElement('table');
 			let thead = targetTable.createTHead();
@@ -801,12 +667,11 @@
 			let bRow = tbody.insertRow();
 
 			targetTable.setAttribute('class', 'his_tbl');
-			tbody.setAttribute('id', chkVal+'_Table');
+			tbody.setAttribute('id', chkVal + '_Table');
 
-			console.log(chkVal);
-			$.map(tableProperties, function(value, key) {
-				if(chkVal == key) {
-					$.each(value, function(idx, valObj) {
+			$.map(tableProperties, function (value, key) {
+				if (chkVal == key) {
+					$.each(value, function (idx, valObj) {
 						let hCell = document.createElement("TH");
 						hCell.innerHTML = valObj.value;
 						hRow.appendChild(hCell);
@@ -824,7 +689,7 @@
 					$('<div>').addClass('indiv').appendTo(html);
 					html.find('div.indiv').append(targetTable);
 					$('#datatable').append(html);
-					setInitList(chkVal+'_Table');
+					setInitList(chkVal + '_Table');
 				}
 			});
 		});
@@ -832,17 +697,17 @@
 
 	const searchGrid = function () {
 
-		if($(':checkbox[name="site"]:checked').length == 0) {
+		if ($(':checkbox[name="site"]:checked').length == 0) {
 			alert('사이트를 한개이상 선택해 주세요.');
 			return false;
 		}
 
-		if($(':checkbox[name="type"]:checked').length == 0) {
+		if ($(':checkbox[name="type"]:checked').length == 0) {
 			alert('설비타입을 한개이상 선택해 주세요.');
 			return false;
 		}
 
-		if($(':checkbox[name="device"]:checked').length == 0) {
+		if ($(':checkbox[name="device"]:checked').length == 0) {
 			alert('설비를 한개이상 선택해 주세요.');
 			return false;
 		}
@@ -850,137 +715,96 @@
 		let siteArray = new Array();
 		let deviceArray = new Array();
 
-		$(':checkbox[name="site"]:checked').each(function() {
+		$(':checkbox[name="site"]:checked').each(function () {
 			siteArray.push($(this).val());
 		});
 
-		$(':checkbox[name="device"]:checked').each(function() {
+		$(':checkbox[name="device"]:checked').each(function () {
 			deviceArray.push($(this).val());
 		});
 
 		makeTableTemplate();
-		//설비유형이 여러개일경우 하나만 들어가서 여러번 호출한다.
-// 		$(':checkbox[id^=type_]:checked').each(function() {
-			let statusSummaryData = {
-				sids: siteArray.join(','),
-				dids: deviceArray.join(','),
-				//deviceType: '',
-				startTime: $('#datepicker1').datepicker('getDate').format('yyyyMMdd') + '000000',
-				endTime: $('#datepicker2').datepicker('getDate').format('yyyyMMdd') + '235959',
-				interval: $('#interval').prev('button').data('value'),
-				formId: 'v2'
-			}
 
-			$.ajax({
-				url : apiURL + statusSummary,
-				type : 'get',
-				async : false,
-				data : statusSummaryData,
-				success: function(result) {
-					console.log(result);
+		$('[id^="chartDid"]').each(function() {
+			$(this).find('button').html($(this).find('button').data('name') + '<span class="caret"></span>').data('value', '');
+		});
 
-					let chart = $('#hchart2').highcharts();
-					if(chart) {
-						chart.destroy();
+		$('#way button').html($('#way button').data('name') + '<span class="caret"></span>');
 
-						$('[id^=columnLi]').empty().prev().html('선택 <span class="caret"></span>');
+		let statusSummaryData = {
+			sids: siteArray.join(','),
+			dids: deviceArray.join(','),
+			//deviceType: '',
+			startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+			endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
+			interval: $('#interval').find('button').data('value'),
+			formId: 'v2'
+		}
+
+		$.ajax({
+			url: apiURL + statusSummary,
+			type: 'get',
+			async: false,
+			data: statusSummaryData,
+			success: function (result) {
+				let chart = $('#hchart2').highcharts();
+				if (chart) {
+					chart.destroy();
+
+					$('[id^=columnLi]').empty().prev().html('선택 <span class="caret"></span>');
+				}
+
+				$.map(result, function (value, key) {
+					if ($('#' + key + '_Table').length > 0) {
+						$.each(value, function (idx, valObj) {
+							value[idx].localtime = String(valObj.basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+							value[idx].timestamp = new Date(value[idx].localtime).getTime();
+							$.map(valObj.mean, function (v, k) {
+								valObj[k] = numberComma(v.toFixed(2));
+							});
+						});
+
+						setMakeList(value, key + '_Table', {'dataFunction': {}}); //list생성
+
+						$('#' + key + '_Table').find('td').each(function () {
+							$(this).html($(this).html().replace(/ *\[[^)]*\] */g, ''));
+						});
 					}
+				});
 
-					$.map(result, function(value, key) {
-						if($('#'+key+'_Table').length > 0) {
-							$.each(value, function(idx, valObj) {
-								value[idx].localtime = String (valObj.basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
-								value[idx].timestamp = new Date(value[idx].localtime).getTime();
-								$.map(valObj.mean, function(v, k) {
-									valObj[k] = numberComma(v.toFixed(2));
-								});
-							});
-
-							setMakeList(value, key + '_Table', {'dataFunction': {}}); //list생성
-
-							$('#' + key + '_Table').find('td').each(function() {
-								$(this).html($(this).html().replace(/ *\[[^)]*\] */g, ''));
-							});
-						}
-					});
-
-					gridList = result;
-					setChartDid();
-				},
-				dataType: 'json'
-			});
+				gridList = result;
+				setChartDid();
+			},
+			dataType: 'json'
+		});
 // 		});
 	};
 
-	let tableGrid = function() {
-		$('.his_tbl tbody').empty();
+	const setChartDid = function () {
+		let chartDid = new Array();
 
-		$.each(gridList, function(i, el) {
-			let trHtml = $('<tr>');
-
-			let temperature = '-';
-			let voltageR = (el.acVoltageTR != null && el.acVoltageTR != '') ? el.acVoltageTR.toFixed(2) : '-';
-			let voltageS = (el.acVoltageRS != null && el.acVoltageRS != '') ? el.acVoltageRS.toFixed(2) : '-';
-			let voltageT = (el.acVoltageST != null && el.acVoltageST != '') ? el.acVoltageST.toFixed(2) : '-';
-			let currentR = (el.acCurrentR != null && el.acCurrentR != '') ? el.acCurrentR.toFixed(2) : '-';
-			let currentS = (el.acCurrentS != null && el.acCurrentS != '') ? el.acCurrentS.toFixed(2) : '-';
-			let currentT = (el.acCurrentT != null && el.acCurrentT != '') ? el.acCurrentT.toFixed(2) : '-';
-			let activePower = (el.acPower != null && el.acPower != '') ? el.acPower.toFixed(2) : '-';
-			let dcVoltage = (el.dcVoltage != null && el.dcVoltage != '') ? el.dcVoltage.toFixed(2) : '-';
-			let dcCurrent = (el.dcCurrent != null && el.dcCurrent != '') ? el.dcCurrent.toFixed(2) : '-';
-			let dcPower = (el.dcPower != null && el.dcPower != '') ? el.dcPower.toFixed(2) : '-';
-			let operation = el.operation;
-			if(operation == '1') {
-				operation = 'run';
-			} else if(operation == '2') {
-				operation = 'trip';
-			} else {
-				operation = 'stop';
-			}
-
-			trHtml.append('<td>' + el.siteName + '</td>');
-			trHtml.append('<td>' + el.dname + '</td>');
-			trHtml.append('<td>' + new Date(el.timestamp).format('yyyy.MM.dd HH:mm:ss') + '</td>');
-			trHtml.append('<td>' + temperature + '</td>');// 현재없음.
-			trHtml.append('<td>' + voltageR + '</td>');
-			trHtml.append('<td>' + voltageS + '</td>');
-			trHtml.append('<td>' + voltageT + '</td>');
-			trHtml.append('<td>' + currentR + '</td>');
-			trHtml.append('<td>' + currentS + '</td>');
-			trHtml.append('<td>' + currentT + '</td>');
-			trHtml.append('<td>' + activePower + '</td>');
-			trHtml.append('<td>' + dcVoltage + '</td>');
-			trHtml.append('<td>' + dcCurrent + '</td>');
-			trHtml.append('<td>' + dcPower + '</td>');
-			trHtml.append('<td>' + operation + '</td>');
-
-			$('.his_tbl tbody').append(trHtml);
-		});
-	};
-
-	const setChartDid = function() {
-		$('[id^=chartDid] ul').empty();
-		$(':checkbox[name="device"]:checked').each(function() {
+		$(':checkbox[name="device"]:checked').each(function () {
 			let siteNm = $(this).parents('div.sec_li_bx').find('p.tx_li_tit').text().trim(); //사이트명
 			let deviceNm = $(this).next().text().trim();
-			let val = $(this).val();
-			let sid = $(this).data('sid');
-			let type = $(this).data('type');
 
-			let str = `<li>
-							<a href="#" data-value="${'${val}'}" data-sid="${'${sid}'}" data-type="${'${type}'}">
-								${'${siteNm}_${deviceNm}'}
-							</a>
-						</li>`;
-			$('[id^=chartDid] ul').append(str);
+			chartDid.push({
+				val: $(this).val(),
+				sid: $(this).data('sid'),
+				type: $(this).data('type'),
+				siteDevice: siteNm + '_' + deviceNm
+			});
 		});
+
+		setMakeList(chartDid, 'chartDidUl', {'dataFunction': {}});
+		setMakeList(chartDid, 'chartDidUl2', {'dataFunction': {}});
+		setMakeList(chartDid, 'chartDidUl3', {'dataFunction': {}});
 	}
 
 	//그래프 태그 중복체크
-	const duplicateTag = function(i) {
+	const duplicateTag = function (i) {
 		let dup = false;
-		if(i == 2) {
-			$('#analyzeTag2 span').each(function() {
+		if (i == 2) {
+			$('#analyzeTag2 span').each(function () {
 				let spanDidX = $(this).data('deviceIdX');
 				let spanColumnX = $(this).data('keyX');
 				let spanRdValX = $(this).data('key2X');
@@ -989,7 +813,7 @@
 				let spanColumnY = $(this).data('keyY');
 				let spanRdValY = $(this).data('key2Y');
 
-				if($('#chartDid2 button').data('value') == spanDidX && $(':radio[name="column2"]:checked').val() == spanColumnX && $(':radio[name="rdValue2"]:checked').val() == spanRdValX
+				if ($('#chartDid2 button').data('value') == spanDidX && $(':radio[name="column2"]:checked').val() == spanColumnX && $(':radio[name="rdValue2"]:checked').val() == spanRdValX
 					&& $('#chartDid3 button').data('value') == spanDidY && $(':radio[name="column3"]:checked').val() == spanColumnY && $(':radio[name="rdValue3"]:checked').val() == spanRdValY
 				) {
 					alert('중복된 항목이 존재합니다.');
@@ -997,14 +821,14 @@
 				}
 			});
 		} else {
-			$('#analyzeTag1 .tx_tit:eq(' + i + ') span').each(function() {
+			$('#analyzeTag1 .tx_tit:eq(' + i + ') span').each(function () {
 				let spanDid = $(this).data('deviceId');
 				let spanColumn = $(this).data('key');
 				let spanRdVal = $(this).data('key2');
 
-				if($('#chartDid button').data('value') == spanDid
-						&& $(':radio[name="column"]:checked').val() == spanColumn
-						&& $(':radio[name="rdValue"]:checked').val() == spanRdVal
+				if ($('#chartDid button').data('value') == spanDid
+					&& $(':radio[name="column"]:checked').val() == spanColumn
+					&& $(':radio[name="rdValue"]:checked').val() == spanRdVal
 				) {
 					alert('중복된 항목이 존재합니다.');
 					dup = true;
@@ -1015,10 +839,10 @@
 		return dup;
 	}
 
-	const chartDraw = function(chartSeries) {
+	const chartDraw = function (chartSeries) {
 		let chart = $('#hchart2').highcharts();
 
-		if(chart) {
+		if (chart) {
 			chart.destroy();
 		}
 
@@ -1115,13 +939,13 @@
 			/* 툴팁 */
 			tooltip: {
 				formatter: function () {
-					if($(':radio[name="analyze"]:checked').val() == '시계열 분석') {
+					if ($(':radio[name="analyze"]:checked').val() == '시계열 분석') {
 						return this.points.reduce(function (s, point) {
 							return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + Number(point.y).toFixed(2) + point.series.userOptions.tooltip.valueSuffix;
 						}, '<b>' + new Date(this.x).format('yyyy.MM.dd HH:mm:ss') + '</b>');
 					} else {
 						let tooltip = this.series.name + '<br/>'
-						+ 'X:' + (this.x).toFixed(2) + '<br/> Y:' + (this.y).toFixed(2);
+							+ 'X:' + (this.x).toFixed(2) + '<br/> Y:' + (this.y).toFixed(2);
 						return tooltip;
 					}
 				},
@@ -1157,6 +981,17 @@
 		chart = new Highcharts.Chart(option);
 		chart.redraw();
 	}
+
+
+	const rtnDropdown = function ($selectId) {
+		if ($selectId == 'siteList') {
+			deviceType();
+		} else if ($selectId == 'deviceType') {
+			device();
+		} else if ($selectId.match('chartDid')) {
+			setTypeList($selectId);
+		}
+	}
 </script>
 
 <div class="col-lg-12">
@@ -1169,65 +1004,87 @@
 		<div class="col-lg-12">
 			<div class="row">
 				<div class="indiv his_chart_top clear">
-					<div class="sa_select fl" id="siteList">
-						<div class="dropdown">
-							<button class="btn btn-primary dropdown-toggle w1" type="button" data-toggle="dropdown">
+					<div class="sa_select fl">
+						<div class="dropdown" id="siteList">
+							<button type="button" class="btn btn-primary dropdown-toggle w1" data-toggle="dropdown"
+							        data-name="사업소">
 								선택해주세요.<span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu"></ul>
+							<ul class="dropdown-menu chk_type" role="menu" id="siteULList">
+								<li data-value="[sid]">
+									<a href="javascript:void(0);" tabindex="-1">
+										<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
+										<label for="site_[INDEX]"><span></span>[name]</label>
+									</a>
+								</li>
+							</ul>
 						</div>
 					</div>
 					<div class="fl">
 						<span class="tx_tit">설비 타입</span>
-						<div class="sa_select" id="deviceType">
-							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown">
+						<div class="sa_select">
+							<div class="dropdown" id="deviceType">
+								<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown"
+								        data-name="설비유형">
 									설비유형<span class="caret"></span>
 								</button>
-								<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu"></ul>
+								<ul class="dropdown-menu chk_type" role="menu" id="typeULList">
+									<li data-value="[type]">
+										<a href="javascript:void(0);" tabindex="-1">
+											<input type="checkbox" id="type_[INDEX]" value="[type]" name="type">
+											<label for="type_[INDEX]"><span></span>[name]</label>
+										</a>
+									</li>
+								</ul>
 							</div>
 						</div>
-						<div class="sa_select" id="devices">
-							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle w1" type="button" data-toggle="dropdown">
+						<div class="sa_select">
+							<div class="dropdown" id="devices">
+								<button class="btn btn-primary dropdown-toggle w1" type="button" data-toggle="dropdown"
+								        data-name="복수 선택">
 									복수 선택<span class="caret"></span>
 								</button>
-								<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
+								<ul class="dropdown-menu chk_type" role="menu">
 									<li class="dropdown_cov clear">
 										<div class="li_btn_bx clear">
 											<div class="fl">
 												<button type="button" class="btn_type03">모두 선택</button>
 												<button type="button" class="btn_type03">모두 해제</button>
 											</div>
-											<div class="fr"><button type="button" class="btn_type">적용</button></div>
+											<div class="fr">
+												<button type="button" class="btn_type">적용</button>
+											</div>
 										</div>
 									</li>
 								</ul>
 							</div>
 						</div>
 					</div>
-					<div class="fl">
+					<div class="fl dateField">
 						<span class="tx_tit">기간 설정</span>
 						<div class="sel_calendar">
-							<input type="text" id="datepicker1" class="sel" value="" autocomplete="off">
+							<input type="text" id="fromDate" name="fromDate" class="sel fromDate" value=""
+							       autocomplete="off">
 							<em>-</em>
-							<input type="text" id="datepicker2" class="sel" value="" autocomplete="off">
+							<input type="text" id="toDate" name="toDate" class="sel toDate" value="" autocomplete="off">
 						</div>
 					</div>
 
 					<div class="fl">
 						<span>조회주기</span>
 						<div class="sa_select">
-							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown" data-value="15min">15분
-									<span class="caret"></span></button>
-								<ul class="dropdown-menu" id="interval">
-									<li><a href="#" data-value="1min">1분</a></li>
-									<li class="on"><a href="#" data-value="15min">15분</a></li>
-									<li><a href="#" data-value="hour">1시간</a></li>
-									<li><a href="#" data-value="day">1일</a></li>
-									<li><a href="#" data-value="week">1주</a></li>
-									<li><a href="#" data-value="month">1월</a></li>
+							<div class="dropdown" id="interval">
+								<button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown"
+								        data-value="15min" data-name="15분">
+									15분<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li data-value="1min"><a href="javascript:void(0);">1분</a></li>
+									<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
+									<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
+									<li data-value="day"><a href="javascript:void(0);">1일</a></li>
+									<li data-value="week"><a href="javascript:void(0);">1주</a></li>
+									<li data-value="month"><a href="javascript:void(0);">1월</a></li>
 								</ul>
 							</div>
 						</div>
@@ -1249,28 +1106,35 @@
 					<div class="his_chart_top clear">
 						<div class="clear">
 							<h2 class="fl s_tit">분석 기준 설비 선택</h2>
-							<a href="#" class="btn_type02 fr">분석 조건 저장</a>
+							<a href="javascript:void(0);" class="btn_type02 fr">분석 조건 저장</a>
 						</div>
 						<!-- 기본 항목 -->
 						<div class="clear">
 							<div class="fl" id="analyzeDiv1">
-								<div class="sa_select" id="chartDid">
-									<div class="dropdown">
-										<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" style="width:220px;">
+								<div class="sa_select">
+									<div class="dropdown" id="chartDid">
+										<button class="btn btn-primary dropdown-toggle w2" type="button"
+										        data-toggle="dropdown" style="width:220px;" data-name="설비명">
 											설비명<span class="caret"></span>
 										</button>
-										<ul class="dropdown-menu">
+										<ul class="dropdown-menu" id="chartDidUl">
+											<li data-value="[val]" data-sid="[sid]" data-type="[type]">
+												<a href="javascript:void(0);">
+													[siteDevice]
+												</a>
+											</li>
 										</ul>
 									</div>
 								</div>
 								<div class="sa_select">
 									<div class="dropdown">
-										<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" data-value="">
+										<button class="btn btn-primary dropdown-toggle w2" type="button"
+										        data-toggle="dropdown" data-name="선택">
 											선택<span class="caret"></span>
 										</button>
-										<ul class="dropdown-menu dropdown-menu-form rdo_type" role="menu" id="columnLi">
-											<li>
-												<a href="#" data-value="[key]" tabindex="-1">
+										<ul class="dropdown-menu rdo_type" role="menu" id="columnLi">
+											<li data-value="[key]">
+												<a href="javascript:void(0);" tabindex="-1">
 													<input type="radio" id="column[INDEX]" name="column" value="[key]">
 													<label for="column[INDEX]"><span></span>[value]</label>
 												</a>
@@ -1280,25 +1144,27 @@
 								</div>
 								<div class="sa_select">
 									<div class="dropdown">
-										<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown" data-vlue="mean">
-											평균<span class="caret"></span>
+										<button class="btn btn-primary dropdown-toggle w4" type="button"
+										        data-toggle="dropdown" data-vlue="mean" data-name="평균">
+											평균 <span class="caret"></span>
 										</button>
-										<ul class="dropdown-menu rdo_type dropdown-menu-form" role="menu">
-											<li>
-												<a href="#" data-value="max" tabindex="-1">
+										<ul class="dropdown-menu rdo_type " role="menu">
+											<li data-value="max">
+												<a href="javascript:void(0);" tabindex="-1">
 													<input type="radio" id="rdValue1" name="rdValue" value="max">
 													<label for="rdValue1"><span></span>최대</label>
 												</a>
 											</li>
-											<li>
-												<a href="#" data-value="min" tabindex="-1">
+											<li data-value="min">
+												<a href="javascript:void(0);" tabindex="-1">
 													<input type="radio" id="rdValue2" name="rdValue" value="min">
 													<label for="rdValue2"><span></span>최소</label>
 												</a>
 											</li>
-											<li>
-												<a href="#" data-value="avg" tabindex="-1">
-													<input type="radio" id="rdValue3" name="rdValue" value="mean" checked>
+											<li data-value="avg">
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="radio" id="rdValue3" name="rdValue" value="mean"
+													       checked>
 													<label for="rdValue3"><span></span>평균</label>
 												</a>
 											</li>
@@ -1306,13 +1172,14 @@
 									</div>
 								</div>
 								<div class="sa_select">
-									<div class="dropdown">
-										<button class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown" data-value="l">y-좌
-											<span class="caret"></span>
+									<div class="dropdown" id="way">
+										<button class="btn btn-primary dropdown-toggle w5" type="button"
+										        data-toggle="dropdown" data-name="선택">
+											선택<span class="caret"></span>
 										</button>
-										<ul class="dropdown-menu" id="way">
-											<li class="on"><a href="#" data-value="l">y-좌</a></li>
-											<li><a href="#" data-value="r">y-우</a></li>
+										<ul class="dropdown-menu">
+											<li data-value="l"><a href="javascript:void(0);">y-좌</a></li>
+											<li data-value="r"><a href="javascript:void(0);">y-우</a></li>
 										</ul>
 									</div>
 								</div>
@@ -1320,24 +1187,33 @@
 							<div id="analyzeDiv2" style="display:none;" class="fl">
 								<div class="fl">
 									<span class="tx_tit">x축</span>
-									<div class="sa_select" id="chartDid2">
-										<div class="dropdown">
-											<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" style="width:220px;">
+									<div class="sa_select">
+										<div class="dropdown" id="chartDid2">
+											<button class="btn btn-primary dropdown-toggle w2" type="button"
+											        data-toggle="dropdown" style="width:220px;" data-name="설비명">
 												설비명<span class="caret"></span>
 											</button>
-											<ul class="dropdown-menu" >
+											<ul class="dropdown-menu" id="chartDidUl2">
+												<li data-value="[val]" data-sid="[sid]" data-type="[type]">
+													<a href="javascript:void(0);">
+														[siteDevice]
+													</a>
+												</li>
 											</ul>
 										</div>
 									</div>
 									<div class="sa_select">
-										<div class="dropdown">
-											<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown">
+										<div class="dropdown" id="columnDrop2">
+											<button class="btn btn-primary dropdown-toggle w2" type="button"
+											        data-toggle="dropdown" data-name="선택">
 												선택<span class="caret"></span>
 											</button>
-											<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="columnLi2">
-												<li>
-													<a href="#" data-value="[key]" tabindex="-1">
-														<input type="radio" id="column02_[INDEX]" name="column2" value="[key]">
+											<ul class="dropdown-menu chk_type" role="menu"
+											    id="columnLi2">
+												<li data-value="[key]">
+													<a href="javascript:void(0);" tabindex="-1">
+														<input type="radio" id="column02_[INDEX]" name="column2"
+														       value="[key]">
 														<label for="column02_[INDEX]"><span></span>[value]</label>
 													</a>
 												</li>
@@ -1346,25 +1222,29 @@
 									</div>
 									<div class="sa_select">
 										<div class="dropdown">
-											<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown">
+											<button class="btn btn-primary dropdown-toggle w4" type="button"
+											        data-toggle="dropdown" data-value="mean" data-name="평균">
 												평균<span class="caret"></span>
 											</button>
-											<ul class="dropdown-menu rdo_type dropdown-menu-form" role="menu">
-												<li>
-													<a href="#" data-value="option1" tabindex="-1">
-														<input type="radio" id="rdValue2_01" name="rdValue2" value="max">
+											<ul class="dropdown-menu rdo_type " role="menu">
+												<li data-value="max">
+													<a href="javascript:void(0);" tabindex="-1">
+														<input type="radio" id="rdValue2_01" name="rdValue2"
+														       value="max">
 														<label for="rdValue2_01"><span></span>최대</label>
 													</a>
 												</li>
-												<li>
-													<a href="#" data-value="option2" tabindex="-1">
-														<input type="radio" id="rdValue2_02" name="rdValue2" value="min">
+												<li data-value="min">
+													<a href="javascript:void(0);" tabindex="-1">
+														<input type="radio" id="rdValue2_02" name="rdValue2"
+														       value="min">
 														<label for="rdValue2_02"><span></span>최소</label>
 													</a>
 												</li>
-												<li>
-													<a href="#" data-value="option2" tabindex="-1">
-														<input type="radio" id="rdValue2_03" name="rdValue2" value="mean" checked>
+												<li data-value="mean">
+													<a href="javascript:void(0);" tabindex="-1">
+														<input type="radio" id="rdValue2_03" name="rdValue2"
+														       value="mean" checked>
 														<label for="rdValue2_03"><span></span>평균</label>
 													</a>
 												</li>
@@ -1375,24 +1255,33 @@
 
 								<div class="fl">
 									<span class="tx_tit">y축</span>
-									<div class="sa_select" id="chartDid3">
-										<div class="dropdown">
-											<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" style="width:220px;">
+									<div class="sa_select">
+										<div class="dropdown" id="chartDid3">
+											<button class="btn btn-primary dropdown-toggle w2" type="button"
+											        data-toggle="dropdown" style="width:220px;" data-name="설비명">
 												설비명<span class="caret"></span>
 											</button>
-											<ul class="dropdown-menu">
+											<ul class="dropdown-menu" id="chartDidUl3">
+												<li data-value="[val]" data-sid="[sid]" data-type="[type]">
+													<a href="javascript:void(0);">
+														[siteDevice]
+													</a>
+												</li>
 											</ul>
 										</div>
 									</div>
 									<div class="sa_select">
-										<div class="dropdown">
-											<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown">
+										<div class="dropdown" id="columnDrop3">
+											<button class="btn btn-primary dropdown-toggle w2" type="button"
+											        data-toggle="dropdown" data-name="선택">
 												선택<span class="caret"></span>
 											</button>
-											<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="columnLi3">
+											<ul class="dropdown-menu chk_type" role="menu"
+											    id="columnLi3">
 												<li>
-													<a href="#" data-value="[key]" tabindex="-1">
-														<input type="radio" id="column03_[INDEX]" name="column3" value="[key]">
+													<a href="javascript:void(0);" data-value="[key]" tabindex="-1">
+														<input type="radio" id="column03_[INDEX]" name="column3"
+														       value="[key]">
 														<label for="column03_[INDEX]"><span></span>[value]</label>
 													</a>
 												</li>
@@ -1401,24 +1290,27 @@
 									</div>
 									<div class="sa_select">
 										<div class="dropdown">
-											<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown">
-												평균<span class="caret"></span></button>
-											<ul class="dropdown-menu rdo_type dropdown-menu-form" role="menu">
-												<li>
-													<a href="#" data-value="option1" tabindex="-1">
+											<button class="btn btn-primary dropdown-toggle w4" type="button"
+											        data-toggle="dropdown" data-value="mean" data-name="평균">
+												평균<span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu rdo_type" role="menu">
+												<li data-value="max">
+													<a href="javascript:void(0);" tabindex="-1">
 														<input type="radio" id="rdValue3_1" name="rdValue3" value="max">
 														<label for="rdValue3_1"><span></span>최대</label>
 													</a>
 												</li>
-												<li>
-													<a href="#" data-value="option2" tabindex="-1">
+												<li data-value="min">
+													<a href="javascript:void(0);" tabindex="-1">
 														<input type="radio" id="rdValue3_2" name="rdValue3" value="min">
 														<label for="rdValue3_2"><span></span>최소</label>
 													</a>
 												</li>
-												<li>
-													<a href="#" data-value="option2" tabindex="-1">
-														<input type="radio" id="rdValue3_3" name="rdValue3" value="mean" checked>
+												<li data-value="mean">
+													<a href="javascript:void(0);" tabindex="-1">
+														<input type="radio" id="rdValue3_3" name="rdValue3" value="mean"
+														       checked>
 														<label for="rdValue3_3"><span></span>평균</label>
 													</a>
 												</li>
@@ -1427,6 +1319,7 @@
 									</div>
 								</div>
 							</div>
+
 							<!-- 버튼 -->
 							<div class="fl">
 								<button type="button" class="btn_type" id="chartAdd">그래프 항목 추가</button>
@@ -1446,39 +1339,43 @@
 									</span>
 								</div>
 
-								<div class="sa_select" id="summation">
-									<div class="dropdown">
-										<button class="btn btn-primary dropdown-toggle w6" type="button" data-toggle="dropdown" data-value="siteAccrue">
+								<div class="sa_select">
+									<div class="dropdown" id="summation">
+										<button class="btn btn-primary dropdown-toggle w6" type="button"
+										        data-toggle="dropdown" data-value="siteAccrue">
 											선택안함<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu rdo_type">
 											<li>
-												<a href="#" data-value="option1" tabindex="-1">
-													<input type="radio" id="summation1" name="summation" value="siteAccrue">
+												<a href="javascript:void(0);" data-value="option1" tabindex="-1">
+													<input type="radio" id="summation1" name="summation"
+													       value="siteAccrue">
 													<label for="summation1"><span></span>사이트별 누적</label>
 												</a>
 											</li>
-<%--											<li>--%>
-<%--												<a href="#" data-value="option2" tabindex="-1">--%>
-<%--													<input type="radio" id="summation2" name="summation" value="siteAverage">--%>
-<%--													<label for="summation2"><span></span>사이트별 평균</label>--%>
-<%--												</a>--%>
-<%--											</li>--%>
+											<%--											<li>--%>
+											<%--												<a href="javascript:void(0);" data-value="option2" tabindex="-1">--%>
+											<%--													<input type="radio" id="summation2" name="summation" value="siteAverage">--%>
+											<%--													<label for="summation2"><span></span>사이트별 평균</label>--%>
+											<%--												</a>--%>
+											<%--											</li>--%>
 											<li>
-												<a href="#" data-value="option3" tabindex="-1">
-													<input type="radio" id="summation3" name="summation" value="deviceAccrue">
+												<a href="javascript:void(0);" data-value="option3" tabindex="-1">
+													<input type="radio" id="summation3" name="summation"
+													       value="deviceAccrue">
 													<label for="summation3"><span></span>설비별 누적</label>
 												</a>
 											</li>
-<%--											<li>--%>
-<%--												<a href="#" data-value="option4" tabindex="-1">--%>
-<%--													<input type="radio" id="summation4" name="summation" value="deviceAverage">--%>
-<%--													<label for="summation4"><span></span>설비별 평균</label>--%>
-<%--												</a>--%>
-<%--											</li>--%>
+											<%--											<li>--%>
+											<%--												<a href="javascript:void(0);" data-value="option4" tabindex="-1">--%>
+											<%--													<input type="radio" id="summation4" name="summation" value="deviceAverage">--%>
+											<%--													<label for="summation4"><span></span>설비별 평균</label>--%>
+											<%--												</a>--%>
+											<%--											</li>--%>
 											<li>
-												<a href="#" data-value="option5" tabindex="-1">
-													<input type="radio" id="summation5" name="summation" value="" checked>
+												<a href="javascript:void(0);" data-value="option5" tabindex="-1">
+													<input type="radio" id="summation5" name="summation" value=""
+													       checked>
 													<label for="summation5"><span></span>선택안함</label>
 												</a>
 											</li>
@@ -1517,33 +1414,6 @@
 		</div>
 
 		<div class="row usage_chart_table" id="datatable">
-			<div class="col-lg-12">
-				<div class="indiv">
-					<table class="his_tbl">
-						<thead>
-							<tr>
-								<th data-column="siteNm">사업소</th>
-								<th data-column="dname">설비명</th>
-								<th data-column="timestamp"><button class="btn_align">시간</button></th>
-								<th data-column="temperature"><button class="btn_align">온도</button></th>
-								<th data-column="acVoltageTR"><button class="btn_align">전압R</button></th>
-								<th data-column="acVoltageRS"><button class="btn_align">전압S</button></th>
-								<th data-column="acVoltageST"><button class="btn_align">전압T</button></th>
-								<th data-column="acCurrentR"><button class="btn_align">전류R</button></th>
-								<th data-column="acCurrentS"><button class="btn_align">전류S</button></th>
-								<th data-column="acCurrentT"><button class="btn_align">전류T</button></th>
-								<th data-column="acPower"><button class="btn_align">순시전력</button></th>
-								<th data-column="dcVoltage"><button class="btn_align">DC전압</button></th>
-								<th data-column="dcCurrent"><button class="btn_align">DC전류</button></th>
-								<th data-column="dcPower"><button class="btn_align">DC전력</button></th>
-								<th data-column="operation"><button class="btn_align">설비상태</button></th>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-				</div>
-			</div>
 		</div>
 	</div>
 </div>

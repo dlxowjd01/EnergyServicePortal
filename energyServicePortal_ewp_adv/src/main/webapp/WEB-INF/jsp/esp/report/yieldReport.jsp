@@ -159,33 +159,6 @@
 		$('#site_id ul').empty().append(html);
 	}
 
-	//Row 초기화
-	const initRow = function (listId) {
-		let listRowTag = document.getElementById(listId).innerHTML.replace(/\t/g, '');
-		$.data(document, listId, listRowTag);
-		$('#' + listId).removeData().html('');
-	}
-
-	//Row 등록
-	const addRow = function (listId) {
-		let rowHtml = $.data(document, listId),
-			$selecter = $('#' + listId),
-			listLength = $selecter.children('li').length,
-			col_left = "[",
-			col_right = "]";
-
-		rowHtml = rowHtml.split(col_left + 'index' + col_right).join(listLength);
-		$selecter.append(rowHtml);
-	}
-
-	const delRow = function (listId, index) {
-		if (index == undefined) {
-			$('#' + listId + '> li').remove();
-		} else {
-			$('#' + listId + '> li:eq(' + index + ')').remove();
-		}
-	}
-
 	//보고서 생성
 	const reportCreate = function () {
 		let data = setAreaParamData('reportModal', 'dropdown'),

@@ -1206,3 +1206,65 @@ function genUuid() {
 	}
 	return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 }
+
+/**
+ * 버튼으로 Row 증감할 항목 선
+ *
+ * @param listId
+ */
+const initRow = function (listId) {
+	let listRowTag = document.getElementById(listId).innerHTML.replace(/\t/g, '');
+	$.data(document, listId, listRowTag);
+	$('#' + listId).removeData().html('');
+}
+
+/**
+ * 버튼으로 Row 증가
+ *
+ * @param listId
+ */
+const addRow = function (listId) {
+	let rowHtml = $.data(document, listId),
+		$selecter = $('#' + listId),
+		sTagName = $selecter.prop("tagName"),
+		listLength = 0,
+		col_left = "[",
+		col_right = "]";
+
+	if ('TABLE' == sTagName) {
+		listLength = $selecter.find('tbody').children().length;
+	} else {
+		listLength = $selecter.children().length;
+	}
+
+	rowHtml = rowHtml.split(col_left + 'index' + col_right).join(listLength);
+	$selecter.append(rowHtml);
+}
+
+/**
+ * 버튼으로 Row 삭제
+ *
+ * @param listId -- 선택자 아이디
+ * @param index -- 삭제할 Index
+ */
+const delRow = function (listId, index) {
+	let $selecter = $('#'+ listId);
+
+	if (index == undefined) {
+		$selecter.empty();
+	} else {
+		$selecter.children().eq(index).remove();
+	}
+}
+
+const setttingSuffix = function(keyText) {
+	if(keyText.toLowerCase().match('voltage')) {
+		suffix = 'V';
+	} else if(keyText.toLowerCase().match('current')) {
+		suffix = 'A';
+	} else if(keyText.toLowerCase().match('power')) {
+		suffix = 'W';
+	} else {
+		suffix = '';
+	}
+}

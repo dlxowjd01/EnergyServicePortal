@@ -43,7 +43,7 @@ $(function() {
         buttonImageOnly: true,
         dateFormat: 'yy-mm-dd',
         onClose: function(selectedDate) {
-            $(this).parents('tr').find('.toDate').datepicker('option', 'minDate', selectedDate);
+            $(this).closest('.dateField').find('.toDate').datepicker('option', 'minDate', selectedDate);
         }
     });
 
@@ -52,7 +52,7 @@ $(function() {
         buttonImageOnly: true,
         dateFormat: 'yy-mm-dd',
         onClose: function(selectedDate) {
-            $(this).parents('tr').find('.fromDate').datepicker('option', 'maxDate', selectedDate);
+            $(this).closest('.dateField').find('.fromDate').datepicker('option', 'maxDate', selectedDate);
         }
     });
 });
