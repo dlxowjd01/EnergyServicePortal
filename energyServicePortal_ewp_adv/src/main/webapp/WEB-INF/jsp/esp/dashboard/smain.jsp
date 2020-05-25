@@ -1806,8 +1806,8 @@
 								<h2 id="invCount" class="ntit">인버터(1)</h2>
 								<div class="alert_icon fr">
 									<span id="invNormal" class="inv_normail">정상(1)</span>
-									<span id="invError" class="inv_error">이상(0)</span>
-									<span id="invAlert" class="inv_alert">경고(0)</span>
+									<span id="invError" class="inv_error">트립(0)</span>
+									<span id="invAlert" class="inv_alert">중지(0)</span>
 								</div>
 							</div>
 							<div class="type_list_detail">
@@ -1960,12 +1960,12 @@
 
 													countStatus1++;
 												} else if (el.data[i].operation == 2) {
-													statusTxt = "경고";
+													statusTxt = "트립";
 													statusClass = "flag2";
 
 													countStatus2++;
-												} else if (el.data[i].operation == 3) {
-													statusTxt = "이상";
+												} else if (el.data[i].operation == 0) {
+													statusTxt = "중지";
 													statusClass = "flag3";
 
 													countStatus3++;
@@ -1997,8 +1997,8 @@
 
 									$("#invCount").text("인버터(" + countDevice + ")");
 									$("#invNormal").text("정상(" + countStatus1 + ")");
-									$("#invError").text("이상(" + countStatus2 + ")");
-									$("#invAlert").text("경고(" + countStatus3 + ")");
+									$("#invError").text("트립(" + countStatus2 + ")");
+									$("#invAlert").text("중지(" + countStatus3 + ")");
 
 									console.log(totDcPower);
 									console.log(totAcPower);

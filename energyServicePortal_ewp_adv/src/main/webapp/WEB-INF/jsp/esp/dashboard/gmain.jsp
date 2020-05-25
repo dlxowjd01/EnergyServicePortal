@@ -152,17 +152,7 @@
 		});
 
 		$('.dbclickopen').on('click', function() {
-			let idx = $('.dbclickopen').index($(this));
-			let marker = makerArray[idx];
-			map = marker.getMap();
 
-			if($(this).next().find('.di_wrap').css('display') == 'block') {
-				map.setCenter({lat: 37.549012, lng: 126.988546});
-				smoothZoom(map, -140, map.getZoom());
-			} else {
-				map.setCenter(marker.position); // set map center to marker position
-				smoothZoom(map, 140, map.getZoom());
-			}
 		});
 	});
 
@@ -3175,17 +3165,31 @@
 		})
 	}
 
-	function smoothZoom (map, max, cnt) {
-		if (cnt >= max) {
-			return;
+	function smoothZoom (map, max, cnt, zoom) {
+
+		if(zoom) {
+			if (cnt >= max) {
+				return;
+			} else {
+				z = google.maps.event.addListener(map, 'zoom_changed', function(event){
+					google.maps.event.removeListener(z);
+					smoothZoom(map, max, cnt + 1, true);
+				});
+				setTimeout(function(){map.setZoom(cnt)}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
+			}
+		} else {a
+			if (cnt <= max) {
+				return;
+			} else {
+				z = google.maps.event.addListener(map, 'zoom_changed', function(event){
+					google.maps.event.removeListener(z);
+					smoothZoom(map, max, cnt - 1, false);
+				});
+				setTimeout(function(){map.setZoom(cnt)}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
+			}
 		}
-		else {
-			z = google.maps.event.addListener(map, 'zoom_changed', function(event){
-				google.maps.event.removeListener(z);
-				smoothZoom(map, max, cnt + 1);
-			});
-			setTimeout(function(){map.setZoom(cnt)}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
-		}
+
+
 	}
 </script>
 	
