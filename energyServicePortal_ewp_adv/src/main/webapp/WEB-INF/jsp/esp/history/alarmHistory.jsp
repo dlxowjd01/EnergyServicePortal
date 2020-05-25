@@ -84,6 +84,41 @@
 						<tr>
 							<th>조치 여부</th>
 							<td colspan="3">
+								<div class="txarea_inp_type lh_type">
+								<textarea id="description" name="description" rows="10" readonly>
+
+								</textarea>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th class="vert_type">사진 올리기</th>
+							<td colspan="3">
+								<div class="tx_btn_area type">
+									<div class="tx_inp_type">
+										<input type="text" id="">
+									</div>
+									<button type="submit" class="btn_type">업로드</button>
+								</div>
+								<div class="photo_load_wrap">
+									<ul>
+										<li>
+											<span class="pt_tx">사진 경로</span>
+											<span class="pt_load">업로드 날짜 / 업로더 아이디</span>
+											<button class="btn_del">삭제</button>
+										</li>
+										<li>
+											<span class="pt_tx">사진 경로</span>
+											<span class="pt_load">업로드 날짜 / 업로더 아이디</span>
+											<button class="btn_del">삭제</button>
+										</li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>조치 여부</th>
+							<td>
 								<div class="dropdown placeholder" id="ticket_status">
 									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown">
 										선택<span class="caret"></span>
