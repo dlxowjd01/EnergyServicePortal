@@ -502,7 +502,12 @@
 											console.log("chargeChartBeofre:", chargeChartItems2);
 										}
 
-										setChargeChartData();
+										if($(':radio[name="radio_t"]:checked').val() == 1) {
+											wetherIrradiationPoa();
+										} else {
+											setChargeChartData();
+										}
+
 									},
 									dataType: "json",
 									complete: setTimeout(function () {
@@ -512,14 +517,51 @@
 								})
 							}
 
+							let irradiationPoaArray = new Array();
+							function wetherIrradiationPoa() {
+								$.ajax({
+									url: apiURL + apiWeather,
+									type: 'get',
+									async: false,
+									data: {
+										sid: siteId,
+										startTime: "<c:out value="${startMonth }"/>",
+										endTime: "<c:out value="${endMonth }"/>",
+										interval: "day"
+									},
+									success: function (result) {
+										irradiationPoaArray = new Array();
+										let standard = String (result[0].basetime).substring(0, 6);
+										let sumVal = 0;
+
+										$.each(result, function(i, el) {
+											if(standard == String (el.basetime).substring(0, 6)) {
+												sumVal += el.sensor_solar.irradiationPoa;
+											} else {
+												irradiationPoaArray.push({
+													baseTime: standard,
+													sumVal: sumVal
+												});
+												standard = String (el.basetime).substring(0, 6);
+												sumVal = el.sensor_solar.irradiationPoa;
+											}
+										});
+
+										setChargeChartData();
+									},
+									dataType: 'json'
+								});
+							}
+
 							function setChargeChartData() {
 								var totYearEnergy = 0;
 								var totMonthEnergy = 0;
 								var totBeforeYearEnergy = 0;
 								var totBeforeMonthEnergy = 0;
-
 								var energyData = [];
 								var billingData = [];
+
+								let capacity = parseFloat($('#siteCapacity').text());
 								for (var i = 0; i < 12; i++) {
 
 									var matchMonth = false;
@@ -529,11 +571,25 @@
 											energyData[i] = [i, chargeChartItems1[d].energy / 1000];
 
 											if($(':radio[name="radio_t"]:checked').val() == 1) {
-												billingData[i] = [i, chargeChartItems1[d].money];
-											} else if($(':radio[name="radio_t"]:checked').val() == 2) { //발전량
 												let energy = chargeChartItems1[d].energy / 1000;
-												let capacity = parseFloat($('#siteCapacity').text());
-												billingData[i] = [i, parseFloat((energy / capacity).toFixed(2))];
+												let irradiationPoaSum = 0;
+												$.each(irradiationPoaArray, function(k, el) {
+													if(el.baseTime.slice(-2) == dataMonth) {
+														irradiationPoaSum = el.sumVal;
+													}
+												});
+
+												let resultValue = 0;
+												if(irradiationPoaSum > 0) {
+													resultValue = parseFloat((energy / capacity / (irradiationPoaSum / 1000)).toFixed(2));
+												}
+												billingData[i] = [i, resultValue];
+											} else if($(':radio[name="radio_t"]:checked').val() == 2) { //발전량
+												let today = new Date();
+												let lastDate = new Date(today.getFullYear(), dataMonth - 1, 0).format('dd');
+												let energy = chargeChartItems1[d].energy / 1000;
+
+												billingData[i] = [i, parseFloat(((energy / capacity) / lastDate).toFixed(2))];
 											} else { //매전량
 												billingData[i] = [i, chargeChartItems1[d].money];
 											}
@@ -574,10 +630,13 @@
 								chargeChart.series[1].setData(billingData);
 
 								if($(':radio[name="radio_t"]:checked').val() == 1) {
+									chargeChart.series[1].name = 'PR'
 									chargeChart.series[1].tooltipOptions.valueSuffix = '%';
 								} else  if($(':radio[name="radio_t"]:checked').val() == 2) {
+									chargeChart.series[1].name = '발전시간'
 									chargeChart.series[1].tooltipOptions.valueSuffix = '시간';
 								} else {
+									chargeChart.series[1].name = '매전량'
 									chargeChart.series[1].tooltipOptions.valueSuffix = '천원';
 								}
 
