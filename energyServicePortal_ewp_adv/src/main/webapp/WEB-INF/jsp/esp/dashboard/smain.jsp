@@ -581,12 +581,15 @@
 
 												let resultValue = 0;
 												if(irradiationPoaSum > 0) {
-													resultValue = parseFloat((energy / capacity / (irradiationPoaSum / 1000)).toFixed(2));
+													resultValue = parseFloat(((energy / capacity / (irradiationPoaSum / 1000 * 24 )) * 100).toFixed(2));
 												}
 												billingData[i] = [i, resultValue];
 											} else if($(':radio[name="radio_t"]:checked').val() == 2) { //발전량
 												let today = new Date();
 												let lastDate = new Date(today.getFullYear(), dataMonth - 1, 0).format('dd');
+												if(today.getMonth() == (Number(dataMonth) -1)) {
+													lastDate = today.getDate();
+												}
 												let energy = chargeChartItems1[d].energy / 1000;
 
 												billingData[i] = [i, parseFloat(((energy / capacity) / lastDate).toFixed(2))];
@@ -1796,7 +1799,7 @@
 							<em>0</em>
 						</div>
 						<div class="a_warning clear">
-							<a href="/history/alarmHistory.do" class="btn cancel_btn">상세보기</a>
+							<a href="/history/alarmHistory.do?sid=${sid}" class="btn cancel_btn">상세보기</a>
 						</div>
 					</div>
 					<div class="alarm_notice">

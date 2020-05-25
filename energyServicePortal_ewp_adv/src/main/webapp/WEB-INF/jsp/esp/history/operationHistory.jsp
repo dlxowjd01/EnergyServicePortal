@@ -255,6 +255,29 @@
 				let index = 0;
 				let dupY = 1;
 
+				$('#analyzeTag1 .tx_tit').find('span').each(function() {
+					let deviceId = $(this).data('deviceId');
+					let type = $(this).data('type');
+
+					$.map(gridList, function (value, key) {
+						if (type == key) {
+							$.each(value, function (j, el) {
+								if (el.did == deviceId) {
+									timeCategory.push(new Date(el.timestamp).format('yyyy-MM-dd HH:mm'));
+								}
+							});
+						}
+					});
+				});
+
+				//시간 카테고리 합쳐서 중복 시간 제거
+				$.each(timeCategory, function (i, el) {
+					if ($.inArray(el, categories) === -1) categories.push(el);
+				});
+
+				categories.sort(); //시간 정렬
+
+
 				$('#analyzeTag1 .tx_tit').eq(0).find('span').each(function () {
 					let dataArr = new Array();
 
@@ -267,19 +290,21 @@
 					let temp = {};
 					let suffix = '';
 
-					$.map(gridList, function (value, key) {
-						if (type == key) {
-							$.each(value, function (j, el) {
-								if (el.did == deviceId) {
-									timeCategory.push(new Date(el.timestamp).format('yyyy-MM-dd HH:mm'));
-									dataArr.push([
-										el.timestamp,
-										parseFloat(eval('el.' + keyText2 + '.' + keyText))
-									]);
-								}
-							});
-						}
+					$.each(categories, function(i, elm) {
+						$.map(gridList, function (value, key) {
+							if (type == key) {
+								let elmVal = 0;
+								$.each(value, function (j, el) {
+									if (el.did == deviceId && elm == new Date(el.timestamp).format('yyyy-MM-dd HH:mm')) {
+										elmVal = parseFloat(eval('el.' + keyText2 + '.' + keyText));
+									}
+								});
+
+								dataArr.push([elm, elmVal]);
+							}
+						});
 					});
+
 
 					if (dataArr.length > 0) {
 						if (summation == 'siteAccrue' || summation == 'siteAverage') {
@@ -358,18 +383,19 @@
 
 					let temp = {};
 					let suffix = '';
-					$.map(gridList, function (value, key) {
-						if (type == key) {
-							$.each(value, function (j, el) {
-								if (el.did == deviceId) {
-									timeCategory.push(new Date(el.timestamp).format('yyyy-MM-dd HH:mm'));
-									dataArr.push([
-										el.timestamp,
-										parseFloat(eval('el.' + keyText2 + '.' + keyText))
-									]);
-								}
-							});
-						}
+					$.each(categories, function(i, elm) {
+						$.map(gridList, function (value, key) {
+							if (type == key) {
+								let elmVal = 0;
+								$.each(value, function (j, el) {
+									if (el.did == deviceId && elm == new Date(el.timestamp).format('yyyy-MM-dd HH:mm')) {
+										elmVal = parseFloat(eval('el.' + keyText2 + '.' + keyText));
+									}
+								});
+
+								dataArr.push([elm, elmVal]);
+							}
+						});
 					});
 
 					dataArr.sort(function (a, b){
@@ -396,12 +422,7 @@
 					chartSeries.push(temp);
 				});
 
-				//시간 카테고리 합쳐서 중복 시간 제거
-				$.each(timeCategory, function (i, el) {
-					if ($.inArray(el, categories) === -1) categories.push(el);
-				});
 
-				categories.sort(); //시간 정렬
 			} else {
 				show = false;
 				if ($('#analyzeTag2 span').length <= 0) {
@@ -889,8 +910,9 @@
 						color: 'var(--color3)',
 						fontSize: '8px'
 					},
-					enabled: false
+					enabled: show
 				},
+				categories: categories,
 				tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
 				title: {
 					text: null
