@@ -667,7 +667,7 @@
 	
 
 		if ($(':checkbox[name="deviceType"]:checked').length == 0) {
-			alert('설비타입을 한개이상 선택해 주세요.');
+			alert('설비유형을 한개이상 선택해 주세요.');
 			return false;
 		}
 
