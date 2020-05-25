@@ -664,7 +664,11 @@
 							let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.deviceNm + '</span></td>');
 							$.each(grid.data, function(w, data) {
 								let $dataTd = $('<td>');
-								$dataTd.html(data);
+								if(isNaN(data)) {
+									$dataTd.html(data);
+								} else {
+									$dataTd.html(parseFloat(data).toFixed(2));
+								}
 								$dataTr.append($dataTd);
 							});
 
@@ -723,7 +727,11 @@
 								let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.deviceNm + '</span></td>');
 								$.each(grid.data, function(w, data) {
 									let $dataTd = $('<td>');
-									$dataTd.html(data);
+									if(isNaN(data)) {
+										$dataTd.html(data);
+									} else {
+										$dataTd.html(parseFloat(data).toFixed(2));
+									}
 									$dataTr.append($dataTd);
 								});
 
@@ -753,7 +761,12 @@
 							let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.deviceNm + '</span></td>');
 							$.each(grid.data, function(w, data) {
 								let $dataTd = $('<td>');
-								$dataTd.html(data);
+								if(isNaN(data)) {
+									$dataTd.html(data);
+								} else {
+									$dataTd.html(parseFloat(data).toFixed(2));
+								}
+
 								$dataTr.append($dataTd);
 							});
 
@@ -812,7 +825,11 @@
 								let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.deviceNm + '</span></td>');
 								$.each(grid.data, function(w, data) {
 									let $dataTd = $('<td>');
-									$dataTd.html(data);
+									if(isNaN(data)) {
+										$dataTd.html(data);
+									} else {
+										$dataTd.html(parseFloat(data).toFixed(2));
+									}
 									$dataTr.append($dataTd);
 								});
 
@@ -842,7 +859,11 @@
 							let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.deviceNm + '</span></td>');
 							$.each(grid.data, function(w, data) {
 								let $dataTd = $('<td>');
-								$dataTd.html(data);
+								if(isNaN(data)) {
+									$dataTd.html(data);
+								} else {
+									$dataTd.html(parseFloat(data).toFixed(2));
+								}
 								$dataTr.append($dataTd);
 							});
 
