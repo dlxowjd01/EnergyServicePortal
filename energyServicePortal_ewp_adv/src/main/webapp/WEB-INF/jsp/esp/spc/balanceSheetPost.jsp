@@ -294,7 +294,7 @@
 
 		$('#inflowOfCash').val(inflow);
 		$('#outflowOfCash').val(outflow);
-		$('#endOfTerm').val('');
+		$('#endOfTerm').val(endOfTerm);
 		$('#endOfTermFlow').val(endOfTermFlow);
 	};
 
