@@ -18,6 +18,11 @@
 				if (str == "이상") $tbody.find('.flag3').css("display", "none");
 			}
 		});
+
+
+		$(':radio[name="radio_t"]').on('click', function() {
+			chargeChartPoll();
+		});
 	});
 </script>
 
@@ -64,27 +69,27 @@
 						</div>
 						<div class="box type">
 							<span class="tx_tit">그래프 옵션</span>
-							<div class="sa_select" id="deviceType">
-								<div class="dropdown">
+							<div class="sa_select">
+								<div class="dropdown" id="chartType">
 									<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
 										매전량<span class="caret"></span>
 									</button>
-									<ul class="dropdown-menu dropdown-menu-form rdo_type" role="menu">
+									<ul class="dropdown-menu rdo_type" role="menu">
 										<li>
-											<a href="#" data-value="INV_PV" tabindex="-1">
-												<input type="radio" id="radio_t1" name="radio_t">
+											<a href="#" tabindex="-1">
+												<input type="radio" id="radio_t1" name="radio_t" value="1">
 												<label for="radio_t1"><span></span>PR</label>
 											</a>
 										</li>
 										<li>
-											<a href="#" data-value="INV_PV" tabindex="-1">
-												<input type="radio" id="radio_t2" name="radio_t">
+											<a href="#" tabindex="-1">
+												<input type="radio" id="radio_t2" name="radio_t" value="2">
 												<label for="radio_t2"><span></span>발전시간</label>
 											</a>
 										</li>
 										<li>
-											<a href="#" data-value="INV_PV" tabindex="-1">
-												<input type="radio" id="radio_t3" name="radio_t">
+											<a href="#" tabindex="-1">
+												<input type="radio" id="radio_t3" name="radio_t" value="3" checked>
 												<label for="radio_t3"><span></span>매전량</label>
 											</a>
 										</li>
@@ -341,6 +346,7 @@
 							//let invDeviceIds = ["6d836437-6995-4cc9-8d29-2c6ff9d1c4b8"];
 							// 		let invDeviceIds = "6d836437-6995-4cc9-8d29-2c6ff9d1c4b8";
 							let invDeviceIds = new Array();
+							let solorSensorDid = new Array();
 							// todo : device id 목록조회 추가필요
 
 							let nowMonth = "<c:out value="${nowMonth}"/>";
@@ -439,6 +445,8 @@
 												if (data[i].sid == siteId) {
 													if (data[i].device_type == 'INV_PV') {
 														invDeviceIds.push(data[i].did);
+													} else if (data[i].device_type == 'SENSOR_SOLAR') {
+														solorSensorDid.push(data[i].did);
 													}
 												}
 											}
@@ -519,7 +527,16 @@
 										var dataMonth = parseInt(("" + chargeChartItems1[d].basetime).substring(4, 6));
 										if (i + 1 == dataMonth) {
 											energyData[i] = [i, chargeChartItems1[d].energy / 1000];
-											billingData[i] = [i, chargeChartItems1[d].money];
+
+											if($(':radio[name="radio_t"]:checked').val() == 1) {
+												billingData[i] = [i, chargeChartItems1[d].money];
+											} else if($(':radio[name="radio_t"]:checked').val() == 2) { //발전량
+												let energy = chargeChartItems1[d].energy / 1000;
+												let capacity = parseFloat($('#siteCapacity').text());
+												billingData[i] = [i, parseFloat((energy / capacity).toFixed(2))];
+											} else { //매전량
+												billingData[i] = [i, chargeChartItems1[d].money];
+											}
 
 											totYearEnergy += chargeChartItems1[d].energy / 1000;
 											if (i + 1 == nowMonth) {
@@ -555,6 +572,14 @@
 
 								chargeChart.series[0].setData(energyData);
 								chargeChart.series[1].setData(billingData);
+
+								if($(':radio[name="radio_t"]:checked').val() == 1) {
+									chargeChart.series[1].tooltipOptions.valueSuffix = '%';
+								} else  if($(':radio[name="radio_t"]:checked').val() == 2) {
+									chargeChart.series[1].tooltipOptions.valueSuffix = '시간';
+								} else {
+									chargeChart.series[1].tooltipOptions.valueSuffix = '천원';
+								}
 
 
 								diffYearEnergy = totYearEnergy - totBeforeYearEnergy;
@@ -1695,10 +1720,7 @@
 					$('.a_alert em').text(result.length);
 					$.each(result, function (i, el) {
 						let localTime = String(el.localtime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6')
-						let str = `<li>
-										<a href="#">${'${el.site_name}'} - ${'${el.device_name}'} ${'${el.message}'}</a>
-										<span>${'${localTime}'}</span>
-									</li>`
+						let str = `<li><a href="/history/alarmHistory.do?sid=${'${el.sid}'}&did=${'${el.did}'}"><span class="err_msg">${'${el.site_name} - ${el.message}'}</span><span class="err_time">${'${el.localtime.toString().slice(0,4)}'}-${'${el.localtime.toString().slice(4,6)}'}-${'${el.localtime.toString().slice(6,8)}'} ${'${el.localtime.toString().slice(8,10)}'}:${'${el.localtime.toString().slice(10,12)}'}:${'${el.localtime.toString().slice(12,14)}'}</span></a></li>`
 						$('.alarm_notice ul').append(str);
 					});
 				}
@@ -2107,7 +2129,9 @@
 							<div class="chart_top clear">
 								<h2 class="ntit">일사량 센서(1)</h2>
 								<div class="alert_icon fr">
-									<span class="inv_normail">정상(1)</span>
+									<span class="inv_normail" id="sensorNormal">정상(0)</span>
+									<span class="inv_error" id="sensorError">이상(0)</span>
+									<span class="inv_alert" id="sensorAlert">경고(0)</span>
 								</div>
 							</div>
 							<div class="type_list_detail">
@@ -2127,9 +2151,9 @@
 										</thead>
 										<tbody>
 										<tr>
-											<td><span>-</span>℃</td>
-											<td><span>-</span>km/h</td>
-											<td><span>-</span>kWh/㎡․day</td>
+											<td><span id="sensorTemperature">-</span>℃</td>
+											<td><span id="sensorWind">-</span>km/h</td>
+											<td><span id="sensorIrradiationPoa">-</span>W/㎡․day</td>
 										</tr>
 										</tbody>
 									</table>
@@ -2150,9 +2174,9 @@
 										</thead>
 										<tbody>
 										<tr>
-											<td><span>-</span>mm</td>
-											<td><span>-</span>%</td>
-											<td><span>-</span>kWh/㎡․day</td>
+											<td><span id="sensorRainFall">-</span>mm</td>
+											<td><span id="sensorHumidity">-</span>%</td>
+											<td><span id="sensoHorizontality">-</span>W/㎡․day</td>
 										</tr>
 										</tbody>
 									</table>
@@ -2174,11 +2198,83 @@
 												<th>경사면 일사량</th>
 											</tr>
 											</thead>
-											<tbody>
+											<tbody id="sensorSolor">
 											</tbody>
 										</table>
 									</div>
 								</div>
+								<script type="text/javascript">
+									let sensorDeviceUrl = apiURL + apiStatusRaw;
+									let sensorDeviceData = {
+										dids: solorSensorDid.join(',')
+									};
+
+									(function sensorDevicePoll() {
+										$.ajax({
+											url: sensorDeviceUrl,
+											type: "get",
+											async: false,
+											data: sensorDeviceData,
+											success: function (result) {
+												var items = result;
+												setSensorDeviceData(items);
+											},
+											dataType: "json",
+											complete: setTimeout(function () {
+												sensorDevicePoll()
+											}, pollingTerm),
+											timeout: pollingTimeout
+										})
+									})();
+
+
+									function setSensorDeviceData(items) {
+										var rowHtml = "";
+										var countStatus1 = 0;
+										var countStatus2 = 0;
+										var countStatus3 = 0;
+										$.each(items, function (i, el) {
+											var statusTxt = "-";
+											var statusClass = "";
+											if (el.data[0].operation == 1) {
+												statusTxt = "정상";
+												statusClass = "flag1";
+
+												countStatus1++;
+											} else if (el.data[0].operation == 2) {
+												statusTxt = "경고";
+												statusClass = "flag2";
+
+												countStatus2++;
+											} else if (el.data[0].operation == 3) {
+												statusTxt = "이상";
+												statusClass = "flag3";
+
+												countStatus3++;
+											}
+
+											$('#sensorNormal').text('정상(' + countStatus1 + ')');
+											$('#sensorError').text('이상(' + countStatus2 + ')');
+											$('#sensorAlert').text('경고(' + countStatus3 + ')');
+
+											let temperature = el.data[0].temperature;
+											let irradiationPoa = el.data[0].irradiationPoa;
+
+											$('#sensorTemperature').text((temperature ? temperature.toFixed(1) : "-"));
+											$('#sensorIrradiationPoa').text((irradiationPoa ? irradiationPoa.toFixed(1) : "-"));
+
+											rowHtml += ""
+												+ "<tr class='flag1'>"
+												+ "	<td>" + statusTxt + "</td>"
+												+ "	<td>" + (temperature ? temperature.toFixed(1) : "-") + " ℃</td>"
+												+ "	<td></td>"
+												+ "	<td>" + (irradiationPoa ? irradiationPoa.toFixed(1) : "-") + " W/㎡</td>"
+												+ "</tr>";
+										});
+
+										$("#sensorSolor").html(rowHtml);
+									}
+								</script>
 							</div>
 						</li>
 					</ul>
