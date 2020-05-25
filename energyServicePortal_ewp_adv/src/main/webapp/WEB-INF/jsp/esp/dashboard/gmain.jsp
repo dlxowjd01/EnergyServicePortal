@@ -3144,8 +3144,14 @@
 							interval: "hour"
 						},
 						success: function (weather) {
-							$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fr span:nth-child(1)`).text(weather[0].temperature + ' °C');
-							$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fr span:nth-child(2)`).text(weather[0].humidity + ' %');
+							$.each(weather, function(i, el) {
+								if(!el.observed) {
+									delete weather[i]
+								}
+							});
+
+							$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fr span:nth-child(1)`).text(weather[weather.length - 1].temperature + ' °C');
+							$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fr span:nth-child(2)`).text(weather[weather.length - 1].humidity + ' %');
 						},
 						error: function (error) {
 							console.error(error);
