@@ -1072,7 +1072,7 @@ function setAreaParamData(areaId, type) {
 	$area.find(":text,:password").each(function(){
 		var obj = this;
 
-		if($.inArray("hasDatepicker", obj.classList) > -1){
+		if($.inArray("hasDatepicker", obj.classList) > -1 && $(this).datepicker('getDate') != null){
 			param[obj.getAttribute("id")] = $(this).datepicker('getDate').toISOString();
 		} else {
 			param[obj.getAttribute("id")] = obj.value;

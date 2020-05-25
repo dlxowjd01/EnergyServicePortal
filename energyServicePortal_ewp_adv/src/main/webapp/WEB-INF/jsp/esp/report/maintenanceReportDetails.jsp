@@ -79,6 +79,23 @@ function getAttachFileDisplay(files){
 	setMakeList(fileList02, "fileList02", {"dataFunction" : {}});
 }
 
+function goMoveDelete(){
+	$.ajax({
+		url: "http://iderms.enertalk.com:8443/reports/remote_work/" + "${param.report_id}" + "?oid=" + oid,
+		type: "delete",
+		dataType: 'json',
+		async: false,
+		data: {},
+		success: function (result) {
+			alert("삭제되었습니다..");
+			goMoveList();
+		},
+		error: function (request, status, error) {
+			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+		}
+	});	
+}
+
 function goMoveEdit(){
 	location.href = "/report/maintenanceReportEdit.do?report_id=" + "${param.report_id}";
 }
@@ -215,6 +232,7 @@ function goMoveList(){
 					</table>	
 				</div>
 				<div class="btn_wrap_type02">
+					<button type="button" class="btn_type03" onclick="goMoveDelete();">삭제</button>
 					<button type="button" class="btn_type03" onclick="goMoveEdit();">수정</button>
 					<button type="button" class="btn_type03" onclick="goMoveList();">목록</button>
 				</div>
