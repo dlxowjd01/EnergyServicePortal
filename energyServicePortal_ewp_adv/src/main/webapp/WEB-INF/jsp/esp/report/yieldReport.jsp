@@ -47,8 +47,8 @@
 		} else if (id == 'report_type') {
 			if (dataValue == 'regular_mm') {
 				let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1, 1));
-				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth(), 0));
+				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 2, 1));
+				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1, 0));
 			} else if (dataValue == 'regular_qt') {
 				var quarter = Math.floor((today.getMonth() - 3) / 3);
 				prevtq = new Date(today.getFullYear(), quarter * 3, 1);
@@ -60,8 +60,8 @@
 				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), 0, 0));
 			} else if (dataValue == 'profit_mm') {
 				let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1, 1));
-				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth(), 0));
+				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 2, 1));
+				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1 , 0));
 			} else {
 				alert('보고서 유형이 선택되지 않았습니다.');
 				return false;

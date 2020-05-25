@@ -28,16 +28,42 @@ function getReportData(){
 		async: false,
 		data: {},
 		success: function (json) {
+			
 			setDropDownValue("report_type_list", getReportTypeName(json.data[0].report_type));
 			setJsonAutoMapping(json.data[0], "work_info");
 			setJsonAutoMapping(JSON.parse(json.data[0].work_info) ,"work_info");
 			setJsonAutoMapping(JSON.parse(json.data[0].work_detail_info) ,"work_detail_info");
 			getAttachFileDisplay(JSON.parse(json.data[0].work_detail_info).files);
+			
+			var regDt = new Date(JSON.parse(json.data[0].work_info)["작성_일자"])
+			var tripFrom = new Date(JSON.parse(json.data[0].work_info)["출장_시기_from"])
+			var tripTo = new Date(JSON.parse(json.data[0].work_info)["출장_시기_to"])
+			
+			$("#작성_일자").text(dateFormatWorkInfo(regDt));
+			$("#출장_시기_from").text(dateFormatWorkInfo(tripFrom));
+			$("#출장_시기_to").text(dateFormatWorkInfo(tripTo));
+			
 		},
 		error: function (request, status, error) {
 
 		}
 	});
+}
+
+function dateFormatWorkInfo(date){
+	
+	var year = date.getFullYear();
+	var month = date.getMonth()+1;
+	var date = date.getDate();
+	
+	if((""+month).length == 1){
+		month = "0" + month; 
+	}
+	if((""+date).length == 1){
+		date = "0" + date; 
+	}
+	
+	return year+'-'+month+'-'+date;
 }
 
 function getReportTypeName(data){

@@ -92,23 +92,14 @@
 				var month = workInfo.getMonth()+1;
 				var date = workInfo.getDate();
 				
-				var hours = workInfo.getHours();
-				var minutes = workInfo.getMinutes();
-				
 				if((""+month).length == 1){
 					month = "0" + month; 
 				}
 				if((""+date).length == 1){
 					date = "0" + date; 
 				}
-				if((""+hours).length == 1){ 
-					hours = "0" + hours; 
-				}
-				if((""+minutes).length == 1){ 
-					minutes = "0" + minutes; 
-				}
 				
-				rowData["write_date"] = year+'-'+month+'-'+date+' '+hours+':'+minutes; 
+				rowData["write_date"] = year+'-'+month+'-'+date; 
 			
 			if(jsonDataFilter(rowData)){
 				jsonList.push(rowData);
