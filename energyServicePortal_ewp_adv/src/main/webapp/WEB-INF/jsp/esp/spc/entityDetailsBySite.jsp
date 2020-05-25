@@ -144,7 +144,7 @@
 			}
 
 			$.map(balanceInfo, function(v, k){
-				let val = v.replace(/[^0-9.-]/g, '');
+				let val = Math.round(v.replace(/[^0-9.-]/g, ''));
 				$('#'+k).find('td').eq(mm).html(numberComma(Number(val)));
 			});
 		}
