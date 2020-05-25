@@ -107,7 +107,7 @@
 		let option = {};
 
 		$('#balanceTable input[type="text"]').each(function () {
-			rtnObj[$(this).prop('name')] = $(this).val().replace(/[^0-9.]/g, '');
+			rtnObj[$(this).prop('name')] = $(this).val().replace(/[^-0-9.]/g, '');
 		});
 
 		$('#balanceTable input[type="hidden"]').each(function () {

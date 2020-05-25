@@ -531,7 +531,7 @@
 				if ($(this).val() == '') {
 					emptyValue = true;
 				}
-				rtnObj[$(this).prop('name')] = $(this).val().replace(/[^0-9.]/g, '');
+				rtnObj[$(this).prop('name')] = $(this).val().replace(/[^-0-9.]/g, '');
 			});
 
 			//항목이 미완성이면 오류.
