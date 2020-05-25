@@ -105,7 +105,7 @@ function goMoveList(){
 				<span class="tx_tit">보고서 구분</span>
 				<div class="sa_select">
 					<div class="dropdown">
-						<button id="report_type" class="btn btn-primary dropdown-toggle w9" type="button" data-toggle="dropdown">출장/조치 보고서
+						<button id="report_type" class="btn btn-primary dropdown-toggle w9 disabled" type="button" data-toggle="dropdown">출장/조치 보고서
 							<span class="caret"></span>
 						</button>
 						<ul id="report_type_list" class="dropdown-menu chk_type" role="menu" id="type">
@@ -158,7 +158,7 @@ function goMoveList(){
 						</tr>
 						<tr>
 							<th>소속 부서</th>
-							<td id="소속">인코어드 엔지니어링팀</td>
+							<td id="소속_부서">인코어드 엔지니어링팀</td>
 							<th>출장자</th>
 							<td id="출장자">박준호, 이세용, 최상훈, 권종인</td>
 						</tr>
@@ -184,7 +184,8 @@ function goMoveList(){
 							<td>
 								<div id="fileList01">
 									<p class="tx_file">
-										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+<%-- 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a> --%>
+										<img src="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]" alt="[originalname]">
 									</p>
 								</div>
 							</td>

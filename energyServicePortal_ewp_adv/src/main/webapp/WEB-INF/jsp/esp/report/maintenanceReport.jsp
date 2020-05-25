@@ -85,7 +85,30 @@
 			var rowData = result.data[i],
 				work_info = JSON.parse(rowData.work_info);				
 				rowData["report_type_name"] = getReportTypeName(rowData.report_type);
-				rowData["write_date"] = work_info["작성_일자"];
+				
+				var workInfo = new Date(work_info["작성_일자"])
+				
+				var year = workInfo.getFullYear();
+				var month = workInfo.getMonth()+1;
+				var date = workInfo.getDate();
+				
+				var hours = workInfo.getHours();
+				var minutes = workInfo.getMinutes();
+				
+				if((""+month).length == 1){
+					month = "0" + month; 
+				}
+				if((""+date).length == 1){
+					date = "0" + date; 
+				}
+				if((""+hours).length == 1){ 
+					hours = "0" + hours; 
+				}
+				if((""+minutes).length == 1){ 
+					minutes = "0" + minutes; 
+				}
+				
+				rowData["write_date"] = year+'-'+month+'-'+date+' '+hours+':'+minutes; 
 			
 			if(jsonDataFilter(rowData)){
 				jsonList.push(rowData);
