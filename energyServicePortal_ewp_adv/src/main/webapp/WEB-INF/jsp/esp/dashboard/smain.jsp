@@ -635,12 +635,45 @@
 								if($(':radio[name="radio_t"]:checked').val() == 1) {
 									chargeChart.series[1].name = 'PR'
 									chargeChart.series[1].tooltipOptions.valueSuffix = '%';
+									chargeChart.yAxis[1].setTitle({
+										text: '%',
+										align: 'low',
+										rotation: 0, /* 타이틀 기울기 */
+										y: 25, /* 타이틀 위치 조정 */
+										x: -12,
+										style: {
+											color: '#ffffff',
+											fontSize: '12px'
+										}
+									});
 								} else  if($(':radio[name="radio_t"]:checked').val() == 2) {
 									chargeChart.series[1].name = '발전시간'
 									chargeChart.series[1].tooltipOptions.valueSuffix = '시간';
+									chargeChart.yAxis[1].setTitle({
+										text: '시간',
+										align: 'low',
+										rotation: 0, /* 타이틀 기울기 */
+										y: 25, /* 타이틀 위치 조정 */
+										x: -12,
+										style: {
+											color: '#ffffff',
+											fontSize: '12px'
+										}
+									});
 								} else {
 									chargeChart.series[1].name = '매전량'
 									chargeChart.series[1].tooltipOptions.valueSuffix = '천원';
+									chargeChart.yAxis[1].setTitle({
+										text: '천원',
+										align: 'low',
+										rotation: 0, /* 타이틀 기울기 */
+										y: 25, /* 타이틀 위치 조정 */
+										x: -12,
+										style: {
+											color: '#ffffff',
+											fontSize: '12px'
+										}
+									});
 								}
 
 
@@ -2096,38 +2129,15 @@
 										</colgroup>
 										<thead>
 										<tr>
-											<th>기온</th>
-											<th>풍속</th>
-											<th>경사일사량</th>
+											<th>모듈온도</th>
+											<th>경사면 일사량</th>
+											<th>수평 일사량</th>
 										</tr>
 										</thead>
 										<tbody>
 										<tr>
 											<td><span id="sensorTemperature">-</span>℃</td>
-											<td><span id="sensorWind">-</span>km/h</td>
 											<td><span id="sensorIrradiationPoa">-</span>W/㎡․day</td>
-										</tr>
-										</tbody>
-									</table>
-								</div>
-								<div class="tbl_type">
-									<table>
-										<colgroup>
-											<col style="width:33.3%">
-											<col style="width:33.3%">
-											<col style="width:33.3%">
-										</colgroup>
-										<thead>
-										<tr>
-											<th>강수량</th>
-											<th>평균 습도</th>
-											<th>수평일사량</th>
-										</tr>
-										</thead>
-										<tbody>
-										<tr>
-											<td><span id="sensorRainFall">-</span>mm</td>
-											<td><span id="sensorHumidity">-</span>%</td>
 											<td><span id="sensoHorizontality">-</span>W/㎡․day</td>
 										</tr>
 										</tbody>
@@ -2145,9 +2155,10 @@
 											<thead>
 											<tr>
 												<th>상태</th>
-												<th>온도</th>
-												<th>습도</th>
+												<th>설비명</th>
+												<th>모듈온도</th>
 												<th>경사면 일사량</th>
+												<th>수평 일사량</th>
 											</tr>
 											</thead>
 											<tbody id="sensorSolor">
@@ -2185,6 +2196,10 @@
 										var countStatus1 = 0;
 										var countStatus2 = 0;
 										var countStatus3 = 0;
+
+										let temperature = 0;
+										let irradiationPoa = 0;
+
 										$.each(items, function (i, el) {
 											var statusTxt = "-";
 											var statusClass = "";
@@ -2204,24 +2219,26 @@
 
 												countStatus3++;
 											}
-											let temperature = el.data[0].temperature;
-											let irradiationPoa = el.data[0].irradiationPoa;
-
-											$('#sensorTemperature').text((temperature ? temperature.toFixed(1) : "-"));
-											$('#sensorIrradiationPoa').text((irradiationPoa ? irradiationPoa.toFixed(1) : "-"));
+											temperature += el.data[0].temperature;
+											irradiationPoa += el.data[0].irradiationPoa;
 
 											rowHtml += ""
 												+ "<tr class='flag1'>"
 												+ "	<td>" + statusTxt + "</td>"
+												+ "	<td>" + el.dname + "</td>"
 												+ "	<td>" + (temperature ? temperature.toFixed(1) : "-") + " ℃</td>"
-												+ "	<td></td>"
 												+ "	<td>" + (irradiationPoa ? irradiationPoa.toFixed(1) : "-") + " W/㎡</td>"
+												+ "	<td></td>"
 												+ "</tr>";
 										});
 
 										$('#sensorNormal').text('정상(' + countStatus1 + ')');
 										$('#sensorError').text('트립(' + countStatus2 + ')');
 										$('#sensorAlert').text('중지(' + countStatus3 + ')');
+
+										$('#sensorTemperature').text((temperature ? (temperature).toFixed(1) : "-"));
+										$('#sensorIrradiationPoa').text((irradiationPoa ? (irradiationPoa).toFixed(1) : "-"));
+
 										$("#sensorSolor").html(rowHtml);
 									}
 								</script>
