@@ -1943,7 +1943,9 @@
 																</li>
 															</ul>
 															<div class="di_tx_bx">
-																<p class="tx">최근 미처리 오류 : <span>0건</span></p>
+																<a href="/history/alarmHistory.do?sid=0c7c90c6-9505-4f77-b42d-500c2879c689">
+																	<p class="tx">최근 미처리 오류 : <span>0건</span></p>
+																</a>
 																<%--<p class="tx">2020-02-10 12:00:01 데이터 disconnected</p>--%>
 																<%--<p class="tx">2020-02-09 11:41:26 인버터#1 이상 감지</p>--%>
 															</div>
@@ -2223,7 +2225,9 @@
 																</li>
 															</ul>
 															<div class="di_tx_bx">
-																<p class="tx">최근 미처리 오류 : <span>0건</span></p>
+																<a href="/history/alarmHistor?sid=fa313b15-1fe1-41e3-b592-5a739e3d9b37"
+																	<p class="tx">최근 미처리 오류 : <span>0건</span></p>
+																</a>
 																<%--<p class="tx">2020-02-10 12:00:01 데이터 disconnected</p>--%>
 																<%--<p class="tx">2020-02-09 11:41:26 인버터#1 이상 감지</p>--%>
 															</div>
@@ -3098,7 +3102,7 @@
 				});
 				//데이터 세팅
 				alarmList.forEach((element, index) => {
-					alarmStr += `<li><a href="javascript:list_detail_open(${'${element.alarm_id}}'});"><span class="err_msg">${'${element.site_name} - ${element.message}}'}</span><span class="err_time">${'${element.localtime.toString().slice(0,4)}'}-${'${element.localtime.toString().slice(4,6)}'}-${'${element.localtime.toString().slice(6,8)}'} ${'${element.localtime.toString().slice(8,10)}'}:${'${element.localtime.toString().slice(10,12)}'}:${'${element.localtime.toString().slice(12,14)}'}</span></a></li>`
+					alarmStr += `<li><a href="/history/alarmHistory.do?sid=${'${element.sid}'}&did=${'${element.did}'}"><span class="err_msg">${'${element.site_name} - ${element.message}'}</span><span class="err_time">${'${element.localtime.toString().slice(0,4)}'}-${'${element.localtime.toString().slice(4,6)}'}-${'${element.localtime.toString().slice(6,8)}'} ${'${element.localtime.toString().slice(8,10)}'}:${'${element.localtime.toString().slice(10,12)}'}:${'${element.localtime.toString().slice(12,14)}'}</span></a></li>`
 				});
 				$alarmList.empty();
 				$alarmList.append(alarmStr);
