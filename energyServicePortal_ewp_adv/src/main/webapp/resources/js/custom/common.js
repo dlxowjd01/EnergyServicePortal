@@ -18,7 +18,7 @@ $(function() {
 
 function selectBoxTextApply(obj) {
 	var txt = $(obj).text();
-	$(obj).closest('.dropdown').find('[data-toggle="dropdown"]').html(txt+'<span class="caret"></span>');
+	$(obj).closest('.dropdown').find('[data-toggle="dropdown"]').html(txt+'<span class="caret"></span>').data('value', $(obj).parents().data('value'));
 }
 
 function getPdfDownload() {

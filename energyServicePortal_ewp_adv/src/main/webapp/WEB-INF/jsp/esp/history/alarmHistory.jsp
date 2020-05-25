@@ -35,101 +35,102 @@
 							<col style="width:364px">
 						</colgroup>
 						<tbody>
-						<tr>
-							<th class="vert_type">조치 이력</th>
-							<td colspan="3">
-								<div class="txarea_inp_type lh_type">
-								<textarea id="description" name="description" rows="10" readonly>
-									[2020-05-04 16:14] by [sj.kim]
-									조치 상태: On Hold, 담당자: 김세준
-									(조치메모)
-									--------------------------------------------------
-									[2020-05-04 16:13] by [sj.kim]
-									조치 상태: On Hold, 담당자: 김세준
-									(조치메모)
-									--------------------------------------------------
-									[2020-05-04 16:12] by [sj.kim]
-									확인으로 상태 변경
-									--------------------------------------------------
-									[2020-05-04 16:10] 최초 발생
-								</textarea>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<th class="vert_type">사진 올리기</th>
-							<td colspan="3">
-								<div class="tx_btn_area type">
-									<div class="tx_inp_type">
-										<input type="text" id="">
-									</div>
-									<button type="submit" class="btn_type">업로드</button>
-								</div>
-								<div class="photo_load_wrap">
-									<ul>
-										<li>
-											<span class="pt_tx">사진 경로</span>
-											<span class="pt_load">업로드 날짜 / 업로더 아이디</span>
-											<button class="btn_del">삭제</button>
-										</li>
-										<li>
-											<span class="pt_tx">사진 경로</span>
-											<span class="pt_load">업로드 날짜 / 업로더 아이디</span>
-											<button class="btn_del">삭제</button>
-										</li>
-									</ul>
-								</div>
-							</td>
-						</tr>
+<%--						<tr>--%>
+<%--							<th class="vert_type">조치 이력</th>--%>
+<%--							<td colspan="3">--%>
+<%--								<div class="txarea_inp_type lh_type">--%>
+<%--								<textarea id="description" name="description" rows="10" readonly>--%>
+<%--									[2020-05-04 16:14] by [sj.kim]--%>
+<%--									조치 상태: On Hold, 담당자: 김세준--%>
+<%--									(조치메모)--%>
+<%--									----------------------------------------------------%>
+<%--									[2020-05-04 16:13] by [sj.kim]--%>
+<%--									조치 상태: On Hold, 담당자: 김세준--%>
+<%--									(조치메모)--%>
+<%--									----------------------------------------------------%>
+<%--									[2020-05-04 16:12] by [sj.kim]--%>
+<%--									확인으로 상태 변경--%>
+<%--									----------------------------------------------------%>
+<%--									[2020-05-04 16:10] 최초 발생--%>
+<%--								</textarea>--%>
+<%--								</div>--%>
+<%--							</td>--%>
+<%--						</tr>--%>
+<%--						<tr>--%>
+<%--							<th class="vert_type">사진 올리기</th>--%>
+<%--							<td colspan="3">--%>
+<%--								<div class="tx_btn_area type">--%>
+<%--									<div class="tx_inp_type">--%>
+<%--										<input type="text" id="">--%>
+<%--									</div>--%>
+<%--									<button type="submit" class="btn_type">업로드</button>--%>
+<%--								</div>--%>
+<%--								<div class="photo_load_wrap">--%>
+<%--									<ul>--%>
+<%--										<li>--%>
+<%--											<span class="pt_tx">사진 경로</span>--%>
+<%--											<span class="pt_load">업로드 날짜 / 업로더 아이디</span>--%>
+<%--											<button class="btn_del">삭제</button>--%>
+<%--										</li>--%>
+<%--										<li>--%>
+<%--											<span class="pt_tx">사진 경로</span>--%>
+<%--											<span class="pt_load">업로드 날짜 / 업로더 아이디</span>--%>
+<%--											<button class="btn_del">삭제</button>--%>
+<%--										</li>--%>
+<%--									</ul>--%>
+<%--								</div>--%>
+<%--							</td>--%>
+<%--						</tr>--%>
 						<tr>
 							<th>조치 여부</th>
-							<td>
-								<div class="dropdown placeholder">
-									<button class="btn btn-primary dropdown-toggle required" type="button"
-									        data-toggle="dropdown">선택<span class="caret"></span></button>
+							<td colspan="3">
+								<div class="dropdown placeholder" id="ticket_status">
+									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown">
+										선택<span class="caret"></span>
+									</button>
 									<ul class="dropdown-menu">
-										<li><a href="#">신규</a></li>
-										<li><a href="#">작업 처리 중</a></li>
-										<li><a href="#">추가 정보 대기</a></li>
-										<li><a href="#">현장 조치 완료</a></li>
-										<li><a href="#">처리 결과 확인</a></li>
-										<li><a href="#">처리 완료</a></li>
+										<li data-value="new"><a href="javascript:void(0);">신규</a></li>
+										<li data-value="open"><a href="javascript:void(0);">작업 처리 중</a></li>
+										<li data-value="on-hold"><a href="javascript:void(0);">추가 정보 대기</a></li>
+										<li data-value="resolved"><a href="javascript:void(0);">현장 조치 완료</a></li>
+										<li data-value="pending"><a href="javascript:void(0);">처리 결과 확인</a></li>
+										<li data-value="closed"><a href="javascript:void(0);">처리 완료</a></li>
 									</ul>
 								</div>
 							</td>
-							<th>담당자</th>
-							<td>
-								<div class="clear">
-									<div class="dropdown placeholder fl" style="width:160px">
-										<button class="btn btn-primary dropdown-toggle required" type="button"
-										        data-toggle="dropdown">선택<span class="caret"></span></button>
-										<ul class="dropdown-menu">
-											<li><a href="#">유저1</a></li>
-											<li><a href="#">유저2</a></li>
-											<li><a href="#">유저3</a></li>
-										</ul>
-									</div>
-									<div class="tx_inp_type fl ml" style="width:160px">
-										<input type="text" id="alarmPhone" name="alarmPhone" placeholder="직접 입력">
-									</div>
-								</div>
-							</td>
+<%--							<th>담당자</th>--%>
+<%--							<td>--%>
+<%--								<div class="clear">--%>
+<%--									<div class="dropdown placeholder fl" style="width:160px">--%>
+<%--										<button class="btn btn-primary dropdown-toggle required" type="button"--%>
+<%--										        data-toggle="dropdown">선택<span class="caret"></span></button>--%>
+<%--										<ul class="dropdown-menu">--%>
+<%--											<li><a href="#">유저1</a></li>--%>
+<%--											<li><a href="#">유저2</a></li>--%>
+<%--											<li><a href="#">유저3</a></li>--%>
+<%--										</ul>--%>
+<%--									</div>--%>
+<%--									<div class="tx_inp_type fl ml" style="width:160px">--%>
+<%--										<input type="text" id="alarmPhone" name="alarmPhone" placeholder="직접 입력">--%>
+<%--									</div>--%>
+<%--								</div>--%>
+<%--							</td>--%>
 						</tr>
-						<tr>
-							<th class="vert_type">조치 메모</th>
-							<td colspan="3">
-								<div class="txarea_inp_type lh_type">
-									<textarea id="description2" name="description2" rows="7">확인으로 상태 변경</textarea>
-								</div>
-							</td>
-						</tr>
+<%--						<tr>--%>
+<%--							<th class="vert_type">조치 메모</th>--%>
+<%--							<td colspan="3">--%>
+<%--								<div class="txarea_inp_type lh_type">--%>
+<%--									<textarea id="description2" name="description2" rows="7">확인으로 상태 변경</textarea>--%>
+<%--								</div>--%>
+<%--							</td>--%>
+<%--						</tr>--%>
 						</tbody>
 					</table>
 				</div>
 			</div>
 			<div class="btn_wrap_type02">
 				<button type="button" class="btn_type03" data-dismiss="modal">취소</button>
-				<button type="button" class="btn_type">확인</button>
+				<button type="button" class="btn_type" onclick="ackProcess();">확인</button>
 			</div>
 		</div>
 	</div>
@@ -531,7 +532,7 @@
 				}
 			}
 		});
-		
+
 		$("#alarmstatus button").html("미확인&nbsp;<span class='caret'></span>");
 
 		$(".rdo_type").on('click', function () {
@@ -818,8 +819,42 @@
 		$(Selector).append(tbodyStr);
 	}
 
-	function updateACK() {
-		$("#myModal02").modal('show');
+	function updateACK(alarmId) {
+		$("#myModal02").modal('show').data('value', alarmId);
+	}
+
+	function ackProcess() {
+
+		let alarmData= {
+			alarm_confirmed_at: new Date().toISOString(),
+			alarm_confirmed_by: loginId,
+			ticket_status: $('#ticket_status button').data('value'),
+			ticket_user_id: loginId,
+			ticket_person: '',
+			pic_file_link: '',
+			ticket_log: '',
+			updated_by: loginId
+		}
+
+		$.ajax({
+			url: 'http://iderms.enertalk.com:8443/alarm_ticket?oid=' + oid + '&alarm_id=' + $("#myModal02").data('value'),
+			dataType: 'json',
+			type: 'post',
+			async: false,
+			contentType: "application/json",
+			data: JSON.stringify(alarmData),
+			success: function (result) {
+				console.log(result);
+				alert('저장에 성공했습니다.');
+				$("#myModal02").modal('hide');
+				periodData();
+			},
+			error: function (error) {
+				console.error(error);
+			}
+		});
+
+
 	}
 
 	function measurePopup() {
