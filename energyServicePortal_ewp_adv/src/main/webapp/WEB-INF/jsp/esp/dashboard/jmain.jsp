@@ -2131,7 +2131,7 @@
 							<em>0</em>
 						</div>
 						<div class="a_warning clear">
-							<a href="#" class="btn cancel_btn">상세보기</a>
+							<a href="/history/alarmHistory.do?sid=all" class="btn cancel_btn">상세보기</a>
 						</div>
 					</div>
 					<div class="alarm_notice">

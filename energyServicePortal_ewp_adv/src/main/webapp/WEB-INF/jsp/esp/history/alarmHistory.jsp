@@ -628,7 +628,7 @@
 		sites.forEach((site, index) => {
 			str += '<li>';
 			str += '<a href="#" data-value="'+site.sid+'" tabindex="-1">';
-			if(site.sid == sidparam){
+			if(site.sid == sidparam || sidparam == 'all'){
 			     str += '<input type="checkbox" id="'+site.sid+'" value="'+site.sid+'" name="site" checked>';
 			}
 			else{

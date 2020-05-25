@@ -155,8 +155,14 @@
 			let idx = $('.dbclickopen').index($(this));
 			let marker = makerArray[idx];
 			map = marker.getMap();
-			map.setCenter(marker.position); // set map center to marker position
-			smoothZoom(map, 200, map.getZoom());
+
+			if($(this).next().find('.di_wrap').css('display') == 'block') {
+				map.setCenter({lat: 37.549012, lng: 126.988546});
+				smoothZoom(map, -140, map.getZoom());
+			} else {
+				map.setCenter(marker.position); // set map center to marker position
+				smoothZoom(map, 140, map.getZoom());
+			}
 		});
 	});
 
@@ -1470,7 +1476,7 @@
 							<em>0</em>
 						</div>
 						<div class="a_warning clear">
-							<a href="#" class="btn cancel_btn">상세보기</a>
+							<a href="/history/alarmHistory.do?sid=all" class="btn cancel_btn">상세보기</a>
 						</div>
 					</div>
 					<div class="alarm_notice">
