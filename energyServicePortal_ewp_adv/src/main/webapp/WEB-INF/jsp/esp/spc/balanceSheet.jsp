@@ -53,9 +53,9 @@
 					var temp = result.data[i], balance_info = JSON.parse(temp.balance_info);
 
 					result.data[i].balance_yyyymm = temp.balance_yyyymm.replace(/(\d{4})(\d{2})/, '$1-$2')
-					result.data[i].inflowOfCash = numberComma(Math.round(balance_info.inflowOfCash));
-					result.data[i].outflowOfCash = numberComma(Math.round(balance_info.outflowOfCash));
-					result.data[i].endOfTermFlow = numberComma(Math.round(balance_info.endOfTermFlow));
+					result.data[i].inflowOfCash = numberComma(Math.round(balance_info.inflowOfCash.replace(/[^0-9.]/g, '')));
+					result.data[i].outflowOfCash = numberComma(Math.round(balance_info.outflowOfCash.replace(/[^0-9.]/g, '')));
+					result.data[i].endOfTermFlow = numberComma(Math.round(balance_info.endOfTermFlow.replace(/[^0-9.]/g, '')));
 					for(var j in siteList) {
 						if(siteList[j].sid == temp.site_id) {
 							result.data[i].name = siteList[j].name;

@@ -145,7 +145,7 @@
 
 			$.map(balanceInfo, function(v, k){
 				let val = v.replace(/[^0-9.-]/g, '');
-				$('#'+k).find('td').eq(mm).html(numberComma(Number(val).toFixed(2)));
+				$('#'+k).find('td').eq(mm).html(numberComma(Number(val)));
 			});
 		}
 
@@ -156,7 +156,7 @@
 				tdVal += $(this).text() == '-' ? 0 : Number($(this).text().replace(/[^0-9.-]/g, ''));
 			});
 
-			td.eq(td.length - 1).html(numberComma(tdVal.toFixed(2)));
+			td.eq(td.length - 1).html(numberComma(tdVal));
 		});
 	}
 

@@ -531,7 +531,7 @@
 				if ($(this).val() == '') {
 					emptyValue = true;
 				}
-				rtnObj[$(this).prop('name')] = $(this).val();
+				rtnObj[$(this).prop('name')] = $(this).val().replace(/[^0-9.]/g, '');
 			});
 
 			//항목이 미완성이면 오류.
@@ -542,7 +542,7 @@
 
 			//첨부파일
 			$('#balanceTable input[type="hidden"]').each(function () {
-				rtnObj[$(this).prop('name')] = $(this).val().replace(/[^0-9.]/g, '');
+				rtnObj[$(this).prop('name')] = $(this).val();
 			});
 
 			let data = new Object();

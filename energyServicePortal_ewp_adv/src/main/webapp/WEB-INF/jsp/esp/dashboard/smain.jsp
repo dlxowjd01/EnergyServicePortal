@@ -72,12 +72,12 @@
 							<div class="sa_select">
 								<div class="dropdown" id="chartType">
 									<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
-										매전량<span class="caret"></span>
+										PR<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu rdo_type" role="menu">
 										<li>
 											<a href="#" tabindex="-1">
-												<input type="radio" id="radio_t1" name="radio_t" value="1">
+												<input type="radio" id="radio_t1" name="radio_t" value="1" checked>
 												<label for="radio_t1"><span></span>PR</label>
 											</a>
 										</li>
@@ -89,7 +89,7 @@
 										</li>
 										<li>
 											<a href="#" tabindex="-1">
-												<input type="radio" id="radio_t3" name="radio_t" value="3" checked>
+												<input type="radio" id="radio_t3" name="radio_t" value="3">
 												<label for="radio_t3"><span></span>매전량</label>
 											</a>
 										</li>
@@ -368,7 +368,27 @@
 							let nowBillingMonth;
 							let nowEnergyYear;
 
+							let itemChartCapacity;
 							let chargeNowUrl = apiURL + apiEnergyNowSite;
+
+							//당일 에너지 데이터 - polling 사용
+							let statusSiteUrl = apiURL + apiStatusRawSite;
+							let statusSiteData = {
+								sid: siteId,
+							};
+
+							$.ajax({
+								url: statusSiteUrl,
+								type: "get",
+								async: false,
+								data: statusSiteData,
+								success: function (result) {
+									var item = result;
+									itemChartCapacity = (item.capacity / 1000).toFixed(1);
+								},
+								dataType: "json"
+
+							});
 
 							(function chargeNowEnergy() {
 								let interValArr = ['day', 'month', 'year'];
@@ -567,7 +587,6 @@
 								var energyData = [];
 								var billingData = [];
 
-								let capacity = parseFloat($('#siteCapacity').text());
 								for (var i = 0; i < 12; i++) {
 
 									var matchMonth = false;
@@ -587,7 +606,7 @@
 
 												let resultValue = 0;
 												if(irradiationPoaSum > 0) {
-													resultValue = parseFloat(((energy / capacity / (irradiationPoaSum / 1000 * 24 )) * 100).toFixed(2));
+													resultValue = parseFloat(((energy / itemChartCapacity / (irradiationPoaSum / 1000 * 24 )) * 100).toFixed(2));
 												}
 												billingData[i] = [i, resultValue];
 											} else if($(':radio[name="radio_t"]:checked').val() == 2) { //발전량
@@ -598,7 +617,7 @@
 												}
 												let energy = chargeChartItems1[d].energy / 1000;
 
-												billingData[i] = [i, parseFloat(((energy / capacity) / lastDate).toFixed(2))];
+												billingData[i] = [i, parseFloat(((energy / itemChartCapacity) / lastDate).toFixed(2))];
 											} else { //매전량
 												billingData[i] = [i, chargeChartItems1[d].money];
 											}
