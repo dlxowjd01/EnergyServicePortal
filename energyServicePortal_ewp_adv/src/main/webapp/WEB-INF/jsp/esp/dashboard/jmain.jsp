@@ -1801,6 +1801,7 @@
 											marginTop:40,
 											marginLeft:50,
 											marginRight:0,
+											height: 270,
 											backgroundColor: 'transparent',
 											type: 'column'
 										},
