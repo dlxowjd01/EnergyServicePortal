@@ -537,6 +537,12 @@
 										$.each(result, function(i, el) {
 											if(standard == String (el.basetime).substring(0, 6)) {
 												sumVal += el.sensor_solar.irradiationPoa;
+												if(i == (result.length - 1)) {
+													irradiationPoaArray.push({
+														baseTime: standard,
+														sumVal: sumVal
+													});
+												}
 											} else {
 												irradiationPoaArray.push({
 													baseTime: standard,
