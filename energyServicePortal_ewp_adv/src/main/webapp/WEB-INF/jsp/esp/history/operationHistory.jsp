@@ -271,11 +271,11 @@
 						if (type == key) {
 							$.each(value, function (j, el) {
 								if (el.did == deviceId) {
-									timeCategory.push(el.timestamp);
-									dataArr.push({
-										'x': el.timestamp,
-										'y': parseFloat(eval('el.' + keyText2 + '.' + keyText))
-									});
+									timeCategory.push(new Date(el.timestamp).format('yyyy-MM-dd HH:mm'));
+									dataArr.push([
+										el.timestamp,
+										parseFloat(eval('el.' + keyText2 + '.' + keyText))
+									]);
 								}
 							});
 						}
@@ -318,6 +318,9 @@
 							stackNum++;
 						}
 
+						dataArr.sort(function (a, b){
+							return a[0] - b[0];
+						});
 						temp = {
 							name: $(this).text().replace('닫기', ''),
 							type: 'column',
@@ -359,14 +362,18 @@
 						if (type == key) {
 							$.each(value, function (j, el) {
 								if (el.did == deviceId) {
-									timeCategory.push(el.timestamp);
-									dataArr.push({
-										'x': el.timestamp,
-										'y': parseFloat(eval('el.' + keyText2 + '.' + keyText))
-									});
+									timeCategory.push(new Date(el.timestamp).format('yyyy-MM-dd HH:mm'));
+									dataArr.push([
+										el.timestamp,
+										parseFloat(eval('el.' + keyText2 + '.' + keyText))
+									]);
 								}
 							});
 						}
+					});
+
+					dataArr.sort(function (a, b){
+						return a[0] - b[0];
 					});
 
 					if (dataArr.length > 0) {
@@ -882,13 +889,8 @@
 						color: 'var(--color3)',
 						fontSize: '8px'
 					},
-					y: 50,
-					formatter: function() {
-						return dateFormat(this.value);
-					},
-					enabled: show
+					enabled: false
 				},
-				categories: categories,
 				tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
 				title: {
 					text: null

@@ -9,6 +9,7 @@
 <script type="text/javascript">
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
+	let makerArray = new Array();
 	var pieChartOption = {
 		chart: {
 			marginTop: 0,
@@ -149,6 +150,14 @@
 			}
 
 		});
+
+		$('.dbclickopen').on('click', function() {
+			let idx = $('.dbclickopen').index($(this));
+			let marker = makerArray[idx];
+			map = marker.getMap();
+			map.setCenter(marker.position); // set map center to marker position
+			smoothZoom(map, 200, map.getZoom());
+		});
 	});
 
 	//사이트 목록(지도표시) 조회
@@ -176,31 +185,38 @@
 		geocoder.geocode({'address': address}, function (results, status) {
 			if (status === 'OK') {
 // 				resultsMap.setCenter(results[0].geometry.location);
-				var marker = new google.maps.Marker({
-					map: resultsMap,
-					title: siteName,
-					position: results[0].geometry.location,
-					title: siteName
-				});
+
+				makerArray.push(
+					new google.maps.Marker({
+						map: resultsMap,
+						title: siteName,
+						position: results[0].geometry.location,
+						title: siteName
+					})
+				);
+
+				console.log(makerArray);
+
 				var infowindow = new google.maps.InfoWindow({
 					content: siteName
 				});
-				infowindow.open(map, marker);
-				google.maps.event.addListener(marker, 'click', (function (marker, i) {
+				infowindow.open(map, makerArray[i]);
+				google.maps.event.addListener(makerArray[i], 'click', (function (makerArray, i) {
 					return function () {
-						infowindow.open(map, marker);
+						infowindow.open(map, makerArray[i]);
 						var num = i + 1;
 						var str = 'list' + num;
 // 								list_detail_open('list3');
 						list_detail_open(str);
 					}
-				})(marker, i));
+				})(makerArray, i));
 			} else {
 				map.setCenter({lat: 37.549012, lng: 126.988546});
 				console.log('Geocode was not successful for the following reason: ' + status);
 			}
 		});
 	}
+
 
 	function linkSiteDashboard(t) {
 		var url = "", str = "";
@@ -3151,6 +3167,19 @@
 				console.error(error);
 			}
 		})
+	}
+
+	function smoothZoom (map, max, cnt) {
+		if (cnt >= max) {
+			return;
+		}
+		else {
+			z = google.maps.event.addListener(map, 'zoom_changed', function(event){
+				google.maps.event.removeListener(z);
+				smoothZoom(map, max, cnt + 1);
+			});
+			setTimeout(function(){map.setZoom(cnt)}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
+		}
 	}
 </script>
 	
