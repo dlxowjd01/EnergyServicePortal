@@ -1204,12 +1204,6 @@
 					</div>
 
 					<script type="text/javascript">
-						//당일 에너지 데이터 - polling 사용
-						let statusSiteUrl = apiURL + apiStatusRawSite;
-						let statusSiteData = {
-							sid: siteId,
-						};
-
 
 						(function statusSitePoll() {
 							$.ajax({
