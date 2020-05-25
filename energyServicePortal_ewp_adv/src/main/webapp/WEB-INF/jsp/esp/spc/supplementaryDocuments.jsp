@@ -19,6 +19,8 @@
 		setInitList("listData"); //리스트초기화
 
 		getDataList();
+		
+		
 	});
 
 	function nvl(value, str){
@@ -59,6 +61,25 @@
 								contractInfo = JSON.parse(spcGensRow.contract_info),
 								deviceInfo = JSON.parse(spcGensRow.device_info);
 
+							$.ajax({
+								url: "http://iderms.enertalk.com:8443/spcs/"+rowData.spc_id+"/gens/"+spcGensRow.gen_id+"/supplement?oid="+rowData.oid,
+								type: "get",
+								dataType: 'json',
+								async: false,
+								contentType: "application/json",
+								success: function (json) {
+									
+									newData["파일_총_개수"] = json.data[0].file_count_all;
+									newData["파일_현재_개수"] = json.data[0].file_count_now;
+									newData["첨부파일"] = json.data[0].file_count_now;
+									
+								},
+								error: function (request, status, error) {
+									alert('처리 중 오류가 발생했습니다.');
+									return false;
+								}
+							});
+							
 							newData["name"] = rowData.name;
 							newData["oid"] = rowData.oid;
 							newData["spc_id"] = rowData.spc_id;
@@ -70,10 +91,10 @@
 							if(newData["name"].indexOf(keyWord) > -1 || newData["발전소_명"] .indexOf(keyWord) > - 1){
 								jsonList.push(newData)
 							}
-
 						}
+						
 					}
-
+					
 				}
 
 				setMakeList(jsonList, "listData", {"dataFunction" : {"INDEX" : getNumberIndex}}); //list생성
@@ -145,8 +166,8 @@
 							<td><a href="/spc/entityDetailsBySPC.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">[발전소_명]</a></td>
 							<td class="right">[설치_용량_KW]</td>
 							<td>[관리_운영_기간]</td>
-							<td class="right">0 / 0</td>
-							<td class="right">5건</td>
+							<td class="right">[파일_현재_개수] / [파일_총_개수]</td>
+							<td class="right">[첨부파일]건</td>
 						</tr>
 					</tbody>
 				</table>	

@@ -443,9 +443,9 @@
         divStr += '			<li><p class="t_ti">DC전력</p><p class="t_value">' + ((isEmpty(data.dcPower)) ? '-' : displayNumberFixedDecimal((data.dcPower), "W").join("")) + '</p></li>';
         divStr += '			<li><p class="t_ti">누적발전량</p><p class="t_value">' + ((isEmpty(data.accumActiveEnergy)) ? '-' : displayNumberFixedDecimal(data.accumActiveEnergy, "Wh").join("")) + '</p></li>';
       } else if (device_type == "SENSOR_SOLAR") {
-        divStr += '			<li><p class="t_ti">온도</p><p class="t_value">' + ((isEmpty(data.temperature)) ? '-' : (data.temperature).toFixed(2)) + '℃</p></li>';
-        divStr += '			<li><p class="t_ti">습도</p><p class="t_value">' + ((isEmpty(data.humidity)) ? '-' : (data.humidity).toFixed(2)) + '%</p></li>';
+        divStr += '			<li><p class="t_ti">모듈온도</p><p class="t_value">' + ((isEmpty(data.temperature)) ? '-' : (data.temperature).toFixed(2)) + '℃</p></li>';
         divStr += '			<li><p class="t_ti">경사면 일사량</p><p class="t_value">' + ((isEmpty(data.irradiationPoa)) ? '-' : displayNumberFixedDecimal(data.irradiationPoa,"W").join("")) + '/㎡</p></li>';
+        divStr += '			<li><p class="t_ti">수평면 일사량</p><p class="t_value">' + ((isEmpty(data.irradiationHorizontal)) ? '-' : displayNumberFixedDecimal(data.irradiationHorizontal, "W").join("").concat('/㎡')) + '</p></li>';
       } else {
         divStr += '			<li><p class="t_ti">DCU 전체 전압</p><p class="t_value">' + '0' + '</p></li>';
         divStr += '			<li><p class="t_ti">DCU 전체 전류</p><p class="t_value">' + '0' + '</p></li>';
@@ -476,7 +476,6 @@
       } else if (device_type == "SENSOR_SOLAR") {
         divStr += '				<li>';
         divStr += '					<ul class="di_list">';
-        divStr += '						<li><span class="di_li_tit">수평면 일사량</span><span class="di_li_tx">' + ((isEmpty(data.irradiationHorizontal)) ? '-' : displayNumberFixedDecimal(data.irradiationHorizontal, "W").join("").concat('/㎡')) + '</span></li>';
         divStr += '						<li><span class="di_li_tit">누적 경사면 일사량</span><span class="di_li_tx">' + ((isEmpty(data.accumIrradiationPoa)) ? '-' : displayNumberFixedDecimal(data.accumIrradiationPoa, "Wh").join("").concat('/㎡')) + '</span></li>';
         divStr += '						<li><span class="di_li_tit">누적 수평면 일사량</span><span class="di_li_tx">' + ((isEmpty(data.accumIrradiationHorizontal)) ? '-' : displayNumberFixedDecimal(data.accumIrradiationHorizontal, "Wh").join("").concat('/㎡')) + '</span></li>';
         divStr += '						</li>';
