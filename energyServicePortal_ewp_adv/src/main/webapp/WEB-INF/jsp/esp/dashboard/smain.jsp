@@ -2143,8 +2143,8 @@
 										<tbody>
 										<tr>
 											<td><span id="sensorTemperature">-</span>℃</td>
-											<td><span id="sensorIrradiationPoa">-</span>W/㎡․day</td>
-											<td><span id="sensoHorizontality">-</span>W/㎡․day</td>
+											<td><span id="sensorIrradiationPoa">-</span>W/㎡</td>
+											<td><span id="sensoHorizontality">-</span>W/㎡</td>
 										</tr>
 										</tbody>
 									</table>
