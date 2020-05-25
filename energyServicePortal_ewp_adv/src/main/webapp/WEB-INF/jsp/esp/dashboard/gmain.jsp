@@ -3146,12 +3146,11 @@
 						success: function (weather) {
 							$.each(weather, function(i, el) {
 								if(!el.observed) {
-									delete weather[i]
+									weather.slice(i, 1);
 								}
 							});
-
 							$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fr span:nth-child(1)`).text(weather[weather.length - 1].temperature + ' °C');
-							$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fr span:nth-child(2)`).text(weather[weather.length - 1].humidity + ' %');
+							$(`.detail_info.flag${'${siteIdx+1}'} .tx_area .fr span:nth-child(2)`).text(weather[weather.length - 1].humidity.toFixed(1) + ' %');
 						},
 						error: function (error) {
 							console.error(error);

@@ -3831,7 +3831,7 @@
 						success: function(weather){
 							$.each(weather, function(i, el) {
 								if(!el.observed) {
-									delete weather[i]
+									weather.slice(i, 1);
 								}
 							});
 
