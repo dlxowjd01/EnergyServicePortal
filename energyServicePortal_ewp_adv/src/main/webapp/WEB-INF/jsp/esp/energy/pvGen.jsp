@@ -918,7 +918,8 @@
 							if(stdDate == '') {
 								stdDate = stnd.substring(0, 8);
 							} else if(stdDate != '' && stdDate != stnd.substring(0, 8)) {
-								arrDevice.push(total); //합계.
+								let totalValue = displayNumberFixedUnit(total, 'Wh', 'kWh', 2);
+								arrDevice.push(totalValue[0]); //합계.
 
 								let tempMap = {
 									deviceId: deviceId,
@@ -938,14 +939,15 @@
 								let base = String(el.basetime);
 								if(base.match(stnd)) {
 									timeValue = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 2);;
-									total += Number(timeValue[0]);
+									total += el.energy;
 								}
 							});
 						} else if(type == 'day') {
 							if(stdDate == '') {
 								stdDate = stnd.substring(0, 6);
 							} else if(stdDate != '' && stdDate != stnd.substring(0, 6)) {
-								arrDevice.push(total); //합계.
+								let totalValue = displayNumberFixedUnit(total, 'Wh', 'kWh', 2);
+								arrDevice.push(totalValue[0]); //합계.
 
 								let tempMap = {
 									deviceId: deviceId,
@@ -964,15 +966,16 @@
 							$.each(arr, function(i, el) {
 								let base = String(el.basetime);
 								if(base.match(stnd)) {
-									timeValue = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 2);;
-									total += Number(timeValue[0]);
+									timeValue = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 2);
+									total += el.energy;
 								}
 							});
 						} else {
 							if(stdDate == '') {
 								stdDate = stnd.substring(0, 4);
 							} else if(stdDate != '' && stdDate != stnd.substring(0, 4)) {
-								arrDevice.push(total); //합계.
+								let totalValue = displayNumberFixedUnit(total, 'Wh', 'kWh', 2);
+								arrDevice.push(totalValue[0]); //합계.
 
 								let tempMap = {
 									deviceId: deviceId,
@@ -991,8 +994,8 @@
 							$.each(arr, function(i, el) {
 								let base = String(el.basetime);
 								if(base.match(stnd)) {
-									timeValue = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 2);;
-									total += Number(timeValue[0]);
+									timeValue = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 2);
+									total += el.energy;
 								}
 							});
 						}
@@ -1270,7 +1273,9 @@
 				formatter: function () {
 					return this.points.reduce(function (s, point) {
 						let displayValue = displayNumberFixedDecimal(point.y, 'Wh');
-						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + displayValue[0] + displayValue[1];
+						let displayNumber = displayValue[0] == undefined ? '' : displayValue[0];
+						let displayUnit = displayValue[1] == undefined ? '' : displayValue[1];
+						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + displayNumber + displayUnit;
 					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
 				},
 				shared: true /* 툴팁 공유 */
