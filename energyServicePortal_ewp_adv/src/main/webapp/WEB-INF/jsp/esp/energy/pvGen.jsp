@@ -667,7 +667,7 @@
 								if(isNaN(data)) {
 									$dataTd.html(data);
 								} else {
-									$dataTd.html(parseFloat(data).toFixed(2));
+									$dataTd.html(numberComma(parseFloat(data).toFixed(2)));
 								}
 								$dataTr.append($dataTd);
 							});
@@ -730,7 +730,7 @@
 									if(isNaN(data)) {
 										$dataTd.html(data);
 									} else {
-										$dataTd.html(parseFloat(data).toFixed(2));
+										$dataTd.html(numberComma(parseFloat(data).toFixed(2)));
 									}
 									$dataTr.append($dataTd);
 								});
@@ -764,7 +764,7 @@
 								if(isNaN(data)) {
 									$dataTd.html(data);
 								} else {
-									$dataTd.html(parseFloat(data).toFixed(2));
+									$dataTd.html(numberComma(parseFloat(data).toFixed(2)));
 								}
 
 								$dataTr.append($dataTd);
@@ -828,7 +828,7 @@
 									if(isNaN(data)) {
 										$dataTd.html(data);
 									} else {
-										$dataTd.html(parseFloat(data).toFixed(2));
+										$dataTd.html(numberComma(parseFloat(data).toFixed(2)));
 									}
 									$dataTr.append($dataTd);
 								});
@@ -862,7 +862,7 @@
 								if(isNaN(data)) {
 									$dataTd.html(data);
 								} else {
-									$dataTd.html(parseFloat(data).toFixed(2));
+									$dataTd.html(numberComma(parseFloat(data).toFixed(2)));
 								}
 								$dataTr.append($dataTd);
 							});
