@@ -156,7 +156,6 @@
       let deviceTypeName = getDeviceTypeName(key);
       
       let normalCnt = 0;
-      let alertCnt = 0;
       let errorCnt = 0;
       let tripCnt = 0;
       
@@ -180,8 +179,6 @@
 				normalCnt += 1;
 			} else if (deviceInfo[list[i].did].data[0].operation == 2) {
 				tripCnt += 1;
-			} else if (deviceInfo[list[i].did].data[0].operation == 3) {
-				alertCnt += 1;
 			}
 		}
         
@@ -232,9 +229,8 @@
       liStr += '		<h2 class="ntit fl">' + deviceTypeName + '</h2>';
       liStr += '		<div class="eq_icon fr">';
       liStr += '			<span class="eq_normail">정상(' + normalCnt + ')</span>';
-      liStr += '			<span class="eq_error">이상(' + errorCnt + ')</span>';
-      liStr += '			<span class="eq_alert">경고(' + alertCnt + ')</span>';
-      liStr += '			<span class="eq_alert">트립(' + tripCnt + ')</span>';
+      liStr += '			<span class="eq_alert">중지(' + errorCnt + ')</span>';
+      liStr += '			<span class="eq_error">트립(' + tripCnt + ')</span>';
       liStr += '		</div>';
       liStr += '	</div>';
       if (deviceType == "INV_PV") liStr += '	<ul class="eq_list scroll eq_li_type01">';
@@ -591,9 +587,8 @@
 						<h2 class="ntit fl"></h2>
 						<div class="eq_icon fr">
 							<span class="eq_normail">정상(0)</span>
-							<span class="eq_error">이상(0)</span>
-							<span class="eq_alert">경고(0)</span>
-							<span class="eq_alert">트립(0)</span>
+							<span class="eq_alert">중지(0)</span>
+							<span class="eq_error">트립(0)</span>
 						</div>
 					</div>
 					<ul class="eq_list scroll eq_li_type01">
@@ -634,9 +629,8 @@
 						<h2 class="ntit fl"></h2>
 						<div class="eq_icon fr">
 							<span class="eq_normail">정상(0)</span>
-							<span class="eq_error">이상(0)</span>
-							<span class="eq_alert">경고(0)</span>
-							<span class="eq_alert">트립(0)</span>
+							<span class="eq_alert">중지(0)</span>
+							<span class="eq_error">트립(0)</span>
 						</div>
 					</div>
 					<ul class="eq_list scroll clear eq_li_type02">
@@ -673,9 +667,8 @@
 						<h2 class="ntit fl"></h2>
 						<div class="eq_icon fr">
 							<span class="eq_normail">정상(0)</span>
-							<span class="eq_error">이상(0)</span>
-							<span class="eq_alert">경고(0)</span>
-							<span class="eq_alert">트립(0)</span>
+							<span class="eq_alert">중지(0)</span>
+							<span class="eq_error">트립(0)</span>
 						</div>
 					</div>
 					<ul class="eq_list scroll clear eq_li_type03">
