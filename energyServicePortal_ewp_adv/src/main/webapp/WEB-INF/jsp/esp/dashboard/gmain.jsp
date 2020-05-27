@@ -232,8 +232,9 @@
 <form id="linkSiteForm" name="linkSiteForm" method="post">
 	<input type="hidden" id="linkSiteName" name="linkSiteName" value="">
 </form>
-<div class="row">
-	<div class="time">
+<div class="col-lg-12">
+	<h1 class="page-header fl">${siteName}</h1>
+	<div class="time fr">
 		<span>CURRENT TIME</span>
 		<em class="currTime">${nowTime}</em>
 		<span>DATA BASE TIME</span>

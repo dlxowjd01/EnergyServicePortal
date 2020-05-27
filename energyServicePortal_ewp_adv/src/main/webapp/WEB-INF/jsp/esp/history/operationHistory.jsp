@@ -555,24 +555,26 @@
 					$.map(propList, function (v, k) {
 						if (v.analysis_table) {
 							let tempObj = new Object();
+							let unit = (v.unit != null && v.unit != '') ? '(' + v.unit + ')' : '';
 							if (k == 'currentS') {
 								tempObj['key'] = k;
-								tempObj['value'] = v.name;
+								tempObj['value'] = v.name + unit;
 							} else {
 								tempObj['key'] = k;
-								tempObj['value'] = v.name.kr;
+								tempObj['value'] = v.name.kr + unit;
 							}
 							tempTable.push(tempObj);
 						}
 
 						if (v.analysis_feature) {
 							let tempObj = new Object();
+							let unit = (v.unit != null && v.unit != '') ? '(' + v.unit + ')' : '';
 							if (k == 'currentS') {
 								tempObj['key'] = k;
-								tempObj['value'] = v.name;
+								tempObj['value'] = v.name + unit;
 							} else {
 								tempObj['key'] = k;
-								tempObj['value'] = v.name.kr;
+								tempObj['value'] = v.name.kr + unit;
 							}
 							tempFeature.push(tempObj);
 						}

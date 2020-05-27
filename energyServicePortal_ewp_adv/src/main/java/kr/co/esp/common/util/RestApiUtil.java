@@ -5,11 +5,8 @@ import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.*;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,29 +16,32 @@ public class RestApiUtil {
 	private static final Logger logger = LoggerFactory.getLogger(RestApiUtil.class);
 
 	/**
-	 *
 	 * @param strUrl
-	 * @param json
+	 * @param parameters
 	 * @return
 	 */
-	public static Map<String, Object> get(String strUrl, String json) {
-		return post(strUrl, json, null);
+	public static Map<String, Object> get(String strUrl, Map<String, String> parameters) {
+		return get(strUrl, parameters, null);
 	}
 
-	public static Map<String, Object> get(String strUrl, String json, String token) {
+	public static Map<String, Object> get(String strUrl, Map<String, String> parameters, String token) {
 		Map<String, Object> rtnMap = new HashMap<String, Object>();
 
 		try {
-			URL url = new URL("http://iderms.enertalk.com:8443" + strUrl);
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			URI uri = new URI("http://iderms.enertalk.com:8443" + strUrl);
+			if(parameters != null) {
+				uri = applyParameters(uri, parameters);
+			}
+
+			HttpURLConnection con = (HttpURLConnection) uri.toURL().openConnection();
 			con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
 			con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
 			con.setRequestMethod("GET");
-			if(token != null && !"".equals(token)) {
+			con.setRequestProperty("Content-Type", "application/json");
+			con.setRequestProperty("Cache-Control", "no-cache");
+			if (token != null && !"".equals(token)) {
 				con.setRequestProperty("Authorization", "Bearer " + token);
 			}
-
-			con.setDoOutput(false);
 
 			StringBuilder sb = new StringBuilder();
 			if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -53,13 +53,15 @@ public class RestApiUtil {
 				br.close();
 
 				ObjectMapper mapper = new ObjectMapper();
-				if(sb.toString().startsWith("[")) {
+				if (sb.toString().startsWith("[")) {
 					List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-					list = mapper.readValue(sb.toString(), new TypeReference<List<Map<String, Object>>>(){});
+					list = mapper.readValue(sb.toString(), new TypeReference<List<Map<String, Object>>>() {
+					});
 					rtnMap.put("data", list);
 				} else {
 					Map<String, Object> map = new HashMap<String, Object>();
-					map = mapper.readValue(sb.toString(), new TypeReference<Map<String, Object>>(){});
+					map = mapper.readValue(sb.toString(), new TypeReference<Map<String, Object>>() {
+					});
 					rtnMap.put("data", map);
 				}
 
@@ -80,9 +82,7 @@ public class RestApiUtil {
 		return rtnMap;
 	}
 
-
 	/**
-	 *
 	 * @param strUrl
 	 * @param jsonMessage
 	 * @return
@@ -107,7 +107,7 @@ public class RestApiUtil {
 			con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
 			con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
 			con.setRequestMethod("POST");
-			if(token != null && !"".equals(token)) {
+			if (token != null && !"".equals(token)) {
 				con.setRequestProperty("Authorization", "Bearer " + token);
 			}
 
@@ -132,13 +132,15 @@ public class RestApiUtil {
 				br.close();
 
 				ObjectMapper mapper = new ObjectMapper();
-				if(sb.toString().startsWith("[")) {
+				if (sb.toString().startsWith("[")) {
 					List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-					list = mapper.readValue(sb.toString(), new TypeReference<List<Map<String, Object>>>(){});
+					list = mapper.readValue(sb.toString(), new TypeReference<List<Map<String, Object>>>() {
+					});
 					rtnMap.put("data", list);
 				} else {
 					Map<String, Object> map = new HashMap<String, Object>();
-					map = mapper.readValue(sb.toString(), new TypeReference<Map<String, Object>>(){});
+					map = mapper.readValue(sb.toString(), new TypeReference<Map<String, Object>>() {
+					});
 					rtnMap.put("data", map);
 				}
 
@@ -149,7 +151,7 @@ public class RestApiUtil {
 				rtnMap.put("code", con.getResponseCode());
 				rtnMap.put("msg", con.getResponseMessage());
 			}
-		} catch (Exception e){
+		} catch (Exception e) {
 			System.err.println(e.toString());
 			rtnMap.put("data", null);
 			rtnMap.put("code", "");
@@ -157,5 +159,26 @@ public class RestApiUtil {
 		}
 
 		return rtnMap;
+	}
+
+	private static URI applyParameters(URI baseUri, Map<String, String> urlParameters) {
+		StringBuilder query = new StringBuilder();
+
+		for (Map.Entry<String, String> elem : urlParameters.entrySet()) {
+			try {
+				if(query.length() > 1) {
+					query.append("&");
+				}
+				query.append(elem.getKey()).append("=").append(URLEncoder.encode(elem.getValue(), "UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+
+		try {
+			return new URI(baseUri.getScheme(), baseUri.getAuthority(), baseUri.getPath(), query.toString(), null);
+		} catch (URISyntaxException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 }
