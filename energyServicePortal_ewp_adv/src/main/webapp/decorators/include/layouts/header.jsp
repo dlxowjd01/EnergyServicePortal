@@ -98,8 +98,6 @@
 	<c:set var="tagList" value="${tag_group}"/> <!-- 그룹 별 -->
 	<c:set var="vppList" value="${vpp_group}"/> <!-- 중개거래 별 -->
 	<c:set var="drList" value="${dr_group}"/> <!-- DR거래 별 -->
-	<c:set var="locationList" value="${location_group}"/> <!-- 지역 별 -->
-	<c:set var="resourceList" value="${resource_group}"/> <!-- 장비유형 별 -->
 
 	<div class="all-menu">
 		<a href="javascript:void(0);">구분</a>
@@ -209,21 +207,21 @@
 							<dd>
 								<a href="javascript:void(0);">지역별</a>
 								<ul>
-								<c:set var="systemLoc" value="${sessionScope.systemLoc}"/> <!-- 선택된 지역 -->
-								<c:forEach var="loc" items="${locationList}" varStatus="stat">
-									<c:set var="choice" value="false" />
-									<c:if test="${fn:length(systemLoc) > 0}">
-										<c:forEach var="selLoc" items="${systemLoc}">
-											<c:if test="${loc.location eq selLoc}">
-												<c:set var="choice" value="true" />
-											</c:if>
-										</c:forEach>
-									</c:if>
-									<li>
-										<input type="checkbox" name="systemLoc" id="lo${stat.index}" value="${loc.location}" <c:if test="${choice eq 'true'}">checked</c:if>>
-										<label for="lo${stat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${loc.location}</label>
-									</li>
-								</c:forEach>
+									<c:set var="systemLoc" value="${sessionScope.systemLoc}"/>
+									<c:forEach var="loc" items="${location.kr.locations}" varStatus="stat">
+										<c:set var="choice" value="false" />
+										<c:if test="${fn:length(systemLoc) > 0}">
+											<c:forEach var="selLoc" items="${systemLoc}">
+												<c:if test="${loc.value.code eq selLoc}">
+													<c:set var="choice" value="true" />
+												</c:if>
+											</c:forEach>
+										</c:if>
+										<li>
+											<input type="checkbox" name="systemLoc" id="lo${stat.index}" value="${loc.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
+											<label for="lo${stat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${loc.value.name.kr}</label>
+										</li>
+									</c:forEach>
 								</ul>
 							</dd>
 						</dl>
@@ -234,19 +232,19 @@
 							<dd>
 								<a href="javascript:void(0);">유형별</a>
 								<ul>
-									<c:set var="systemTp" value="${sessionScope.systemTp}"/> <!-- 선택된 지역 -->
-									<c:forEach var="type" items="${resourceList}" varStatus="stat">
+									<c:set var="systemTp" value="${sessionScope.systemTp}"/>
+									<c:forEach var="type" items="${resource}" varStatus="stat">
 										<c:set var="choice" value="false" />
-										<c:if test="${fn:length(systemType) > 0}">
+										<c:if test="${fn:length(systemTp) > 0}">
 											<c:forEach var="selType" items="${systemTp}">
-												<c:if test="${type.resource_type eq selType}">
+												<c:if test="${type.value.code eq selType}">
 													<c:set var="choice" value="true" />
 												</c:if>
 											</c:forEach>
 										</c:if>
 										<li>
-											<input type="checkbox" name="systemType" id="tp${stat.index}" value="${type.resource_type}" <c:if test="${choice eq 'true'}">checked</c:if>>
-											<label for="tp${stat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${type.name}</label>
+											<input type="checkbox" name="systemType" id="tp${stat.index}" value="${type.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
+											<label for="tp${stat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${type.value.name.kr}</label>
 										</li>
 									</c:forEach>
 								</ul>

@@ -160,6 +160,18 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
 			}
 
+			parameters.clear();
+			parameters.put("types", "resource,location");
+			Map<String, Object> typeProperties = get("/config/view/properties", parameters, token); //그룹화되어있는 사이트 리스트 정보
+			if(200 == (int) typeProperties.get("code")) {
+				Map<String, Object> typeMap = (Map<String, Object>) typeProperties.get("data");
+
+				request.setAttribute("resource", typeMap.get("resource"));
+				request.setAttribute("location", typeMap.get("location"));
+			} else {
+				request.setAttribute("resource", null);
+				request.setAttribute("location", null);
+			}
 		} else {
 			response.sendRedirect("/login.do");
 			return false;

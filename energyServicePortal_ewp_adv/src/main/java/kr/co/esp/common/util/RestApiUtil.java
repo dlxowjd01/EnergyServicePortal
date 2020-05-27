@@ -165,14 +165,10 @@ public class RestApiUtil {
 		StringBuilder query = new StringBuilder();
 
 		for (Map.Entry<String, String> elem : urlParameters.entrySet()) {
-			try {
-				if(query.length() > 1) {
-					query.append("&");
-				}
-				query.append(elem.getKey()).append("=").append(URLEncoder.encode(elem.getValue(), "UTF-8"));
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+			if(query.length() > 1) {
+				query.append("&");
 			}
+			query.append(elem.getKey()).append("=").append(elem.getValue());
 		}
 
 		try {
