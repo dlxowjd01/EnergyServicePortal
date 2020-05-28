@@ -35,8 +35,10 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 		HttpSession session = request.getSession();
 		Map<String, Object> groupMap = new HashMap<String, Object>();
+		List<Map<String, Object>> refineList = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> siteOriginList = new ArrayList<Map<String, Object>>();
 		Map<String, Object> userInfo = UserUtil.getUserInfo(request);
+		JSONArray jsonArray = new JSONArray();
 
 		if(userInfo != null) {
 			String token = (String) userInfo.get("token");
@@ -74,10 +76,16 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			}
 
 			if("/dashboard/gmain.do".equals(request.getRequestURI())) {
+				List<Map<String, Object>> selectList = new ArrayList<Map<String, Object>>();
+				if(systemValue != null && "system".equals(systemValue)) {
+					selectList = makeSiteList(siteOriginList, groupMap, session, systemLoc, systemType, systemValue);
+				} else {
+					session.removeAttribute("systemLoc");
+					session.removeAttribute("systemTp");
+				}
+
 				if(request.getParameter("sgid") != null && !"".equals(request.getParameter("sgid"))) {
-					JSONArray jsonArray = new JSONArray();
 					String siteName = "";
-					List<Map<String, Object>> refineList = new ArrayList<Map<String, Object>>();
 					if(groupMap != null && !groupMap.isEmpty()) {
 						for(Map<String, Object> tagGroup: (List<Map<String, Object>>) groupMap.get("tag_group")) {
 							if(request.getParameter("sgid").equals(tagGroup.get("sgid"))) {
@@ -90,26 +98,29 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 						}
 					}
 
-					if(refineList.size() > 0) {
-						for (Map<String, Object> tmpMap : refineList) {
-							jsonArray.put(new JSONObject(tmpMap));
-						}
-					}
 					request.setAttribute("sgid", request.getParameter("sgid"));
 					request.setAttribute("siteName", siteName);
-					request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
 				} else {
 					//그룹 대시보드는 처음 진입시 들어오는 화면이라 파라미터가 없을경우는 사용자가 볼수있는 모든 사이트가 대상이다.
 					request.setAttribute("sgid", "");
 					request.setAttribute("siteName", "전체");
-					JSONArray jsonArray = makeSiteList(siteOriginList, groupMap, session, systemLoc, systemType, systemValue);
-					request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
+
+					refineList = siteOriginList;
 				}
+
+				if(systemValue != null && "system".equals(systemValue)) {
+					refineList = intersection(refineList, selectList);
+				}
+
+				for(Map<String, Object> refineMap : refineList) {
+					jsonArray.put(new JSONObject(refineMap));
+				}
+
+				request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
+
 			} else if("/dashboard/jmain.do".equals(request.getRequestURI())) {
 				if(request.getParameter("vgid") != null && !"".equals(request.getParameter("vgid"))) {
-					JSONArray jsonArray = new JSONArray();
 					String siteName = "";
-					List<Map<String, Object>> refineList = new ArrayList<Map<String, Object>>();
 					if (groupMap != null && !groupMap.isEmpty()) {
 						for (Map<String, Object> tagGroup : (List<Map<String, Object>>) groupMap.get("vpp_group")) {
 							if (request.getParameter("vgid").equals(tagGroup.get("vgid"))) {
@@ -156,7 +167,12 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 					throw new Exception();
 				}
 			} else {
-				JSONArray jsonArray = makeSiteList(siteOriginList, groupMap, session, systemLoc, systemType, systemValue);
+				refineList = makeSiteList(siteOriginList, groupMap, session, systemLoc, systemType, systemValue);
+
+				for(Map<String, Object> refineMap : refineList) {
+					jsonArray.put(new JSONObject(refineMap));
+				}
+
 				request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
 			}
 
@@ -205,12 +221,10 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 	 * @param systemValue
 	 * @return
 	 */
-	public JSONArray makeSiteList(List<Map<String, Object>> siteOriginList, Map<String, Object> userSiteGroupSearch, HttpSession session, String[] systemLoc, String[] systemType, String systemValue) {
-		JSONArray jsonArray = new JSONArray();
-		List<Map<String, Object>> siteList = new ArrayList<Map<String, Object>>();
+	public List<Map<String, Object>> makeSiteList(List<Map<String, Object>> siteOriginList, Map<String, Object> userSiteGroupSearch, HttpSession session, String[] systemLoc, String[] systemType, String systemValue) {
+		List<Map<String, Object>> siteLocationList = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> siteResourceList = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> refineList = new ArrayList<Map<String, Object>>();
-		List<Map<String, Object>> location_group = (List<Map<String, Object>>) userSiteGroupSearch.get("location_group"); //지역 그룹
-		List<Map<String, Object>> resource_group = (List<Map<String, Object>>) userSiteGroupSearch.get("resource_group"); //장비유형 그룹
 
 		if(systemValue != null && "system".equals(systemValue)) {
 			session.setAttribute("systemLoc", systemLoc);
@@ -222,34 +236,63 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 		if((systemLoc != null && !"".equals(systemLoc)) || (systemType != null && !"".equals(systemType))) {
 			if(userSiteGroupSearch != null && !userSiteGroupSearch.isEmpty()) {
-				if(systemLoc != null && systemLoc.length > 0 && location_group != null && !location_group.isEmpty()) {
-					for(Map<String, Object> locMap: location_group) {
-						String location = (String) locMap.get("location");
-						if(Arrays.asList(systemLoc).contains(location)) {
-							siteList.addAll((List<Map<String, Object>>) locMap.get("sites"));
-						}
-					}
-				}
-
-				if(systemType != null && systemType.length > 0 && resource_group != null && !resource_group.isEmpty()) {
-					for(Map<String, Object> resMap: resource_group) {
-						String resource_type = (String) resMap.get("location");
-						if(Arrays.asList(systemType).contains(resource_type)) {
-							siteList.addAll((List<Map<String, Object>>) resMap.get("sites"));
-						}
-					}
-				}
+				refineSiteList(systemLoc, siteLocationList, (List<Map<String, Object>>) userSiteGroupSearch.get("location_group"));
+				refineSiteList(systemType, siteResourceList, (List<Map<String, Object>>) userSiteGroupSearch.get("resource_group"));
 			}
 
-			refineList = new ArrayList<Map<String, Object>>(new HashSet<Map<String, Object>>(siteList));
+			if((systemLoc != null && systemLoc.length > 0) && (systemType != null && systemType.length > 0)) {
+				refineList = intersection(siteLocationList, siteResourceList);
+			} else {
+				if(siteLocationList.size() > 0) {
+					refineList = siteLocationList;
+				}
+
+				if(siteResourceList.size() > 0) {
+					refineList = siteResourceList;
+				}
+			}
 		} else {
 			refineList = siteOriginList;
 		}
 
-		for(Map<String, Object> siteMap : refineList) {
-			jsonArray.put(new JSONObject(siteMap));
+		return refineList;
+	}
+
+	/**
+	 * 선택된 지역 및 유형을 각각 리스트화 한다.
+	 *
+	 * @param system
+	 * @param rtnSiteList
+	 * @param grp
+	 */
+	private void refineSiteList(String[] system, List<Map<String, Object>> rtnSiteList, List<Map<String, Object>> grp) {
+		if(system != null && system.length > 0 && grp != null && !grp.isEmpty()) {
+			for(Map<String, Object> locMap: grp) {
+				String location = (String) locMap.get("location");
+				if(Arrays.asList(system).contains(location)) {
+					rtnSiteList.addAll((List<Map<String, Object>>) locMap.get("sites"));
+				}
+			}
+		}
+	}
+
+	/**
+	 * 두 리스트를 비교하여 교집합을 찾는다.
+	 *
+	 * @param list1
+	 * @param list2
+	 * @param <T>
+	 * @return
+	 */
+	public <T> List<T> intersection(List<T> list1, List<T> list2) {
+		List<T> list = new ArrayList<T>();
+
+		for (T t : list1) {
+			if (list2.contains(t)) {
+				list.add(t);
+			}
 		}
 
-		return jsonArray;
+		return list;
 	}
 }

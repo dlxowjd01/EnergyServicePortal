@@ -256,18 +256,22 @@
 					<button type="button" class="btn_type03" id="systemInit">초기화</button>
 					<button type="button" class="btn_type" id="systemApply">적용</button>
 				</div>
-				<input type="hidden" name="systemValue" value="system"/>
 				<script type="text/javascript">
 					$('#systemInit').on('click', function() {
 						$(':checkbox[name="systemLoc"]').prop('checked', false);
 						$(':checkbox[name="systemType"]').prop('checked', false);
 
-
-						$('form[name="menuform"]').attr('action', location.pathname).submit();
+						$('form[name="menuform"]').attr('action', '/dashboard/gmain.do').submit();
 					});
 
 					$('#systemApply').on('click', function() {
-						$('form[name="menuform"]').attr('action', location.pathname).submit();
+						let sysInp = $('<input>').attr('type', 'hidden').attr('name', 'systemValue').val('system');
+						if(typeof sgid != 'undefined' && sgid != null && sgid != '') {
+							let inp = $('<input>').attr('type', 'hidden').attr('name', 'sgid').val(sgid);
+							$('form[name="menuform"]').append(sysInp).append(inp).attr('action', '/dashboard/gmain.do').submit();
+						} else {
+							$('form[name="menuform"]').append(sysInp).attr('action', '/dashboard/gmain.do').submit();
+						}
 					});
 				</script>
 				</ul>

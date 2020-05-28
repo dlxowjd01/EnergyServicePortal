@@ -9,6 +9,9 @@
 <script type="text/javascript">
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
+	const vgid = '<c:out value="${vgid}" escapeXml="false" />';
+	const siteList = JSON.parse('<c:out value="${siteList}" escapeXml="false" />');
+
 	var pieChartOption = {
 		chart: {
 			marginTop: 0,
@@ -2859,90 +2862,75 @@
 		payList = new Array(12).fill(0);
 		const formData = getSiteMainSchCollection("year");//api에 맞게 수정 필요
 		const today = new Date();
-		$.ajax({
-			url: "http://iderms.enertalk.com:8443/config/sites",
-			type: "get",
-			async: false,
-			data: {
-				oid: oid,
-			},
-			success: function (result) {
-				$(`.gmain_chart1 span.term`).text(`${'${today.getFullYear()}'}.1.1 ~ ${'${today.getFullYear()}'}.${'${today.getMonth()+1}'}.${'${today.getDate()}'}`);
-				result.forEach(site => {
-					$.ajax({
-						url: "http://iderms.enertalk.com:8443/energy/sites",
-						type: "get",
-						async: false,
-						data: {
-							sid: site.sid,
-							startTime: formData.startTime,
-							endTime: formData.endTime,
-							interval: "month"
-						},
-						success: function (result) {
-							result.data[0].battery.charging.items.map((e) => {
-								if (e.energy) {
-									const month = Number(e.basetime.toString().slice(4, 6));
-									chargeList[month - 1] += e.energy;
-								}
-							});
-							result.data[0].battery.discharging.items.map((e) => {
-								if (e.energy) {
-									const month = Number(e.basetime.toString().slice(4, 6));
-									dischargeList[month - 1] += e.energy;
-								}
-							});
-							result.data[0].generation.items.map((e) => {
-								if (e.energy) {
-									const month = Number(e.basetime.toString().slice(4, 6));
-									pvList[month - 1] += Math.floor(e.energy/1000);
-								}
-							});
-							result.data[0].generation.items.map((e) => {
-								if (e.energy) {
-									const month = Number(e.basetime.toString().slice(4, 6));
-									payList[month - 1] += Math.floor(e.money/1000);
-								}
-							});
-							//데이터 세팅
-						},
-						error: function (result, status, error) {
-							//error function or alert, return
-							// error_getYearGenData(request, status, error);
-						}
-					})
-					$.ajax({
-						url: "http://iderms.enertalk.com:8443/energy/now/sites",
-						type: "get",
-						async: false,
-						data: {
-							sids: site.sid,
-							metering_type: 2,
-							interval: "month"
-						},
-						success: function (result) {//api 요청결과
-							if (result.data[site.sid].energy) {
-								const month = Number(result.data[site.sid].start.toString().slice(4, 6));
-								pvList[month - 1] += Math.floor(result.data[site.sid].energy/1000);
-							}
-							if (result.data[site.sid].money) {
-								const month = Number(result.data[site.sid].start.toString().slice(4, 6));
-								payList[month - 1] += Math.floor(result.data[site.sid].money/1000);
-							}
-						},
-						error: function (result, status, error) {
-							//error function or alert, return
-							// error_getYearGenData(request, status, error);
+		$(`.gmain_chart1 span.term`).text(`${'${today.getFullYear()}'}.1.1 ~ ${'${today.getFullYear()}'}.${'${today.getMonth()+1}'}.${'${today.getDate()}'}`);
+		siteList.forEach(site => {
+			$.ajax({
+				url: "http://iderms.enertalk.com:8443/energy/sites",
+				type: "get",
+				async: false,
+				data: {
+					sid: site.sid,
+					startTime: formData.startTime,
+					endTime: formData.endTime,
+					interval: "month"
+				},
+				success: function (result) {
+					result.data[0].battery.charging.items.map((e) => {
+						if (e.energy) {
+							const month = Number(e.basetime.toString().slice(4, 6));
+							chargeList[month - 1] += e.energy;
 						}
 					});
-				})
-			},
-			error: function (error) {
-				//error function or alert, return
-				// error_getYearGenData(request, status, error);
-			}
-		})
-		;
+					result.data[0].battery.discharging.items.map((e) => {
+						if (e.energy) {
+							const month = Number(e.basetime.toString().slice(4, 6));
+							dischargeList[month - 1] += e.energy;
+						}
+					});
+					result.data[0].generation.items.map((e) => {
+						if (e.energy) {
+							const month = Number(e.basetime.toString().slice(4, 6));
+							pvList[month - 1] += Math.floor(e.energy/1000);
+						}
+					});
+					result.data[0].generation.items.map((e) => {
+						if (e.energy) {
+							const month = Number(e.basetime.toString().slice(4, 6));
+							payList[month - 1] += Math.floor(e.money/1000);
+						}
+					});
+					//데이터 세팅
+				},
+				error: function (result, status, error) {
+					//error function or alert, return
+					// error_getYearGenData(request, status, error);
+				}
+			})
+			$.ajax({
+				url: "http://iderms.enertalk.com:8443/energy/now/sites",
+				type: "get",
+				async: false,
+				data: {
+					sids: site.sid,
+					metering_type: 2,
+					interval: "month"
+				},
+				success: function (result) {//api 요청결과
+					if (result.data[site.sid].energy) {
+						const month = Number(result.data[site.sid].start.toString().slice(4, 6));
+						pvList[month - 1] += Math.floor(result.data[site.sid].energy/1000);
+					}
+					if (result.data[site.sid].money) {
+						const month = Number(result.data[site.sid].start.toString().slice(4, 6));
+						payList[month - 1] += Math.floor(result.data[site.sid].money/1000);
+					}
+				},
+				error: function (result, status, error) {
+					//error function or alert, return
+					// error_getYearGenData(request, status, error);
+				}
+			});
+		});
 	}
 
 	function drawData_year_gen() {
