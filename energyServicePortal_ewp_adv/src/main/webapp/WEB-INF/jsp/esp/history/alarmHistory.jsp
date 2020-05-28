@@ -35,52 +35,52 @@
 							<col style="width:364px">
 						</colgroup>
 						<tbody>
-<%--						<tr>--%>
-<%--							<th class="vert_type">조치 이력</th>--%>
-<%--							<td colspan="3">--%>
-<%--								<div class="txarea_inp_type lh_type">--%>
-<%--								<textarea id="description" name="description" rows="10" readonly>--%>
-<%--									[2020-05-04 16:14] by [sj.kim]--%>
-<%--									조치 상태: On Hold, 담당자: 김세준--%>
-<%--									(조치메모)--%>
-<%--									----------------------------------------------------%>
-<%--									[2020-05-04 16:13] by [sj.kim]--%>
-<%--									조치 상태: On Hold, 담당자: 김세준--%>
-<%--									(조치메모)--%>
-<%--									----------------------------------------------------%>
-<%--									[2020-05-04 16:12] by [sj.kim]--%>
-<%--									확인으로 상태 변경--%>
-<%--									----------------------------------------------------%>
-<%--									[2020-05-04 16:10] 최초 발생--%>
-<%--								</textarea>--%>
-<%--								</div>--%>
-<%--							</td>--%>
-<%--						</tr>--%>
-<%--						<tr>--%>
-<%--							<th class="vert_type">사진 올리기</th>--%>
-<%--							<td colspan="3">--%>
-<%--								<div class="tx_btn_area type">--%>
-<%--									<div class="tx_inp_type">--%>
-<%--										<input type="text" id="">--%>
-<%--									</div>--%>
-<%--									<button type="submit" class="btn_type">업로드</button>--%>
-<%--								</div>--%>
-<%--								<div class="photo_load_wrap">--%>
-<%--									<ul>--%>
-<%--										<li>--%>
-<%--											<span class="pt_tx">사진 경로</span>--%>
-<%--											<span class="pt_load">업로드 날짜 / 업로더 아이디</span>--%>
-<%--											<button class="btn_del">삭제</button>--%>
-<%--										</li>--%>
-<%--										<li>--%>
-<%--											<span class="pt_tx">사진 경로</span>--%>
-<%--											<span class="pt_load">업로드 날짜 / 업로더 아이디</span>--%>
-<%--											<button class="btn_del">삭제</button>--%>
-<%--										</li>--%>
-<%--									</ul>--%>
-<%--								</div>--%>
-<%--							</td>--%>
-<%--						</tr>--%>
+						<tr>
+							<th class="vert_type">조치 이력</th>
+							<td colspan="3">
+								<div class="txarea_inp_type lh_type">
+								<textarea id="description" name="description" rows="10" readonly>
+									[2020-05-04 16:14] by [sj.kim]
+									조치 상태: On Hold, 담당자: 김세준
+									(조치메모)
+									--------------------------------------------------
+									[2020-05-04 16:13] by [sj.kim]
+									조치 상태: On Hold, 담당자: 김세준
+									(조치메모)
+									--------------------------------------------------
+									[2020-05-04 16:12] by [sj.kim]
+									확인으로 상태 변경
+									--------------------------------------------------
+									[2020-05-04 16:10] 최초 발생
+								</textarea>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th class="vert_type">사진 올리기</th>
+							<td colspan="3">
+								<div class="tx_btn_area type">
+									<div class="tx_inp_type">
+										<input type="text" id="">
+									</div>
+									<button type="submit" class="btn_type">업로드</button>
+								</div>
+								<div class="photo_load_wrap">
+									<ul>
+										<li>
+											<span class="pt_tx">사진 경로</span>
+											<span class="pt_load">업로드 날짜 / 업로더 아이디</span>
+											<button class="btn_del">삭제</button>
+										</li>
+										<li>
+											<span class="pt_tx">사진 경로</span>
+											<span class="pt_load">업로드 날짜 / 업로더 아이디</span>
+											<button class="btn_del">삭제</button>
+										</li>
+									</ul>
+								</div>
+							</td>
+						</tr>
 						<tr>
 							<th>조치 여부</th>
 							<td colspan="3">
@@ -133,32 +133,32 @@
 									</ul>
 								</div>
 							</td>
-<%--							<th>담당자</th>--%>
-<%--							<td>--%>
-<%--								<div class="clear">--%>
-<%--									<div class="dropdown placeholder fl" style="width:160px">--%>
-<%--										<button class="btn btn-primary dropdown-toggle required" type="button"--%>
-<%--										        data-toggle="dropdown">선택<span class="caret"></span></button>--%>
-<%--										<ul class="dropdown-menu">--%>
-<%--											<li><a href="#">유저1</a></li>--%>
-<%--											<li><a href="#">유저2</a></li>--%>
-<%--											<li><a href="#">유저3</a></li>--%>
-<%--										</ul>--%>
-<%--									</div>--%>
-<%--									<div class="tx_inp_type fl ml" style="width:160px">--%>
-<%--										<input type="text" id="alarmPhone" name="alarmPhone" placeholder="직접 입력">--%>
-<%--									</div>--%>
-<%--								</div>--%>
-<%--							</td>--%>
+							<th>담당자</th>
+							<td>
+								<div class="clear">
+									<div class="dropdown placeholder fl" style="width:160px">
+										<button class="btn btn-primary dropdown-toggle required" type="button"
+										        data-toggle="dropdown">선택<span class="caret"></span></button>
+										<ul class="dropdown-menu">
+											<li><a href="#">유저1</a></li>
+											<li><a href="#">유저2</a></li>
+											<li><a href="#">유저3</a></li>
+										</ul>
+									</div>
+									<div class="tx_inp_type fl ml" style="width:160px">
+										<input type="text" id="alarmPhone" name="alarmPhone" placeholder="직접 입력">
+									</div>
+								</div>
+							</td>
 						</tr>
-<%--						<tr>--%>
-<%--							<th class="vert_type">조치 메모</th>--%>
-<%--							<td colspan="3">--%>
-<%--								<div class="txarea_inp_type lh_type">--%>
-<%--									<textarea id="description2" name="description2" rows="7">확인으로 상태 변경</textarea>--%>
-<%--								</div>--%>
-<%--							</td>--%>
-<%--						</tr>--%>
+						<tr>
+							<th class="vert_type">조치 메모</th>
+							<td colspan="3">
+								<div class="txarea_inp_type lh_type">
+									<textarea id="description2" name="description2" rows="7">확인으로 상태 변경</textarea>
+								</div>
+							</td>
+						</tr>
 						</tbody>
 					</table>
 				</div>
@@ -515,10 +515,11 @@
 	};
 	const statusTemplate = {
 		'null': '신규',
+		'new' : '신규',
 		'open': '작업처리중',
-		'pending': '추가 정보 대기',
+		'on-hold': '추가 정보 대기',
 		'resolve': '현장 조치 완료',
-		'on-hold': '처리 결과 확인',
+		'pending': '처리 결과 확인',
 		'closed': '처리 완료',
 	};
 	$(function () {
@@ -811,7 +812,7 @@
         	for(let i = 0; i<colList.length+1; i++){
         		 let hCell = document.createElement("th");
         		if(i==0){
-        			hCell.innerHTML =  '<input type="checkbox" id="alarmConfirmCheck" onclick="alarmConfirmCheckAll('+deviceType+');"><label for="alarmConfirmCheck"><span></span></label>';
+        			hCell.innerHTML =  '<input type="checkbox" id="alarmConfirmCheck'+deviceType+'" onclick="alarmConfirmCheckAll(\''+deviceType+'\');"><label for="alarmConfirmCheck'+deviceType+'"><span></span></label>';
         	        tRow.appendChild(hCell);
         		}else{
         			hCell.innerHTML = colList[i-1];

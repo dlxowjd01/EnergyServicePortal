@@ -134,7 +134,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
 
 				session.setAttribute("sessionSiteList", jsonArray);
-			} else if (sid != null && !"".equals(sid)) {
+			} else if (request.getRequestURI() == "/dashboard/smain.do" && sid != null && !"".equals(sid)) {
 				String siteName = "";
 				for (Map<String, Object> site : siteOriginList) {
 					if (sid.equals(site.get("sid"))) {
