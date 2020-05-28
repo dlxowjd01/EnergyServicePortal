@@ -48,6 +48,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			String systemValue = request.getParameter("systemValue");
 			String sgid = request.getParameter("sgid");
 			String vgid = request.getParameter("vgid");
+			String sid = request.getParameter("sid");
 
 
 			Map<String, Object> siteMap = get("/auth/me/sites", null, token); //사이트 리스트 정보
@@ -128,11 +129,24 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 						jsonArray.put(new JSONObject(tmpMap));
 					}
 				}
-				request.setAttribute("vgid", request.getParameter("vgid"));
+				request.setAttribute("vgid", vgid);
 				request.setAttribute("siteName", siteName);
 				request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
 
 				session.setAttribute("sessionSiteList", jsonArray);
+			} else if (sid != null && !"".equals(sid)) {
+				String siteName = "";
+				for (Map<String, Object> site : siteOriginList) {
+					if (sid.equals(site.get("sid"))) {
+						siteName = (String) site.get("name");
+						break;
+					} else {
+						continue;
+					}
+				}
+
+				request.setAttribute("sid", sid);
+				request.setAttribute("siteName", siteName);
 			} else {
 				if (systemValue != null && !"".equals(systemValue)) {
 					session.removeAttribute("sessionSiteList");
