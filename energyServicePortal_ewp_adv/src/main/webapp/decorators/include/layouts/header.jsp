@@ -208,19 +208,27 @@
 								<a href="javascript:void(0);">지역별</a>
 								<ul>
 									<c:set var="systemLoc" value="${sessionScope.systemLoc}"/>
-									<c:forEach var="loc" items="${location.kr.locations}" varStatus="stat">
-										<c:set var="choice" value="false" />
-										<c:if test="${fn:length(systemLoc) > 0}">
-											<c:forEach var="selLoc" items="${systemLoc}">
-												<c:if test="${loc.value.code eq selLoc}">
-													<c:set var="choice" value="true" />
-												</c:if>
-											</c:forEach>
-										</c:if>
+									<c:forEach var="loc" items="${location}" varStatus="stat">
 										<li>
-											<input type="checkbox" name="systemLoc" id="lo${stat.index}" value="${loc.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
-											<label for="lo${stat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${loc.value.name.kr}</label>
+											<a href="javascript:void(0);">${loc.value.name.kr}</a>
+											<ul>
+												<c:forEach var="country" items="${loc.value.locations}" varStatus="countryStat">
+													<c:set var="choice" value="false" />
+													<c:if test="${fn:length(systemLoc) > 0}">
+														<c:forEach var="selLoc" items="${systemLoc}">
+															<c:if test="${country.value.code eq selLoc}">
+																<c:set var="choice" value="true" />
+															</c:if>
+														</c:forEach>
+													</c:if>
+													<li>
+														<input type="checkbox" name="systemLoc" id="lo${countryStat.index}" value="${country.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
+														<label for="lo${countryStat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${country.value.name.kr}</label>
+													</li>
+												</c:forEach>
+											</ul>
 										</li>
+
 									</c:forEach>
 								</ul>
 							</dd>
