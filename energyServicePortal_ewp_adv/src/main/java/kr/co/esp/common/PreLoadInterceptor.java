@@ -82,6 +82,8 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				} else {
 					session.removeAttribute("systemLoc");
 					session.removeAttribute("systemTp");
+
+					refineList = siteOriginList;
 				}
 
 				if(request.getParameter("sgid") != null && !"".equals(request.getParameter("sgid"))) {
@@ -104,12 +106,12 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 					//그룹 대시보드는 처음 진입시 들어오는 화면이라 파라미터가 없을경우는 사용자가 볼수있는 모든 사이트가 대상이다.
 					request.setAttribute("sgid", "");
 					request.setAttribute("siteName", "전체");
-
-					refineList = siteOriginList;
 				}
 
 				if(systemValue != null && "system".equals(systemValue)) {
 					refineList = intersection(refineList, selectList);
+				} else {
+					refineList = siteOriginList;
 				}
 
 				for(Map<String, Object> refineMap : refineList) {
@@ -232,7 +234,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 		}
 
 		systemLoc = (String[]) session.getAttribute("systemLoc");
-		systemType = (String[]) session.getAttribute("systemType");
+		systemType = (String[]) session.getAttribute("systemTp");
 
 		if((systemLoc != null && !"".equals(systemLoc)) || (systemType != null && !"".equals(systemType))) {
 			if(userSiteGroupSearch != null && !userSiteGroupSearch.isEmpty()) {
