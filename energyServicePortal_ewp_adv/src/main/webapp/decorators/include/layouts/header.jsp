@@ -260,18 +260,13 @@
 					$('#systemInit').on('click', function() {
 						$(':checkbox[name="systemLoc"]').prop('checked', false);
 						$(':checkbox[name="systemType"]').prop('checked', false);
-
-						$('form[name="menuform"]').attr('action', '/dashboard/gmain.do').submit();
+						let sysInp = $('<input>').attr('type', 'hidden').attr('name', 'systemValue').val('system');
+						$('form[name="menuform"]').append(sysInp).attr('action', '/dashboard/gmain.do').submit();
 					});
 
 					$('#systemApply').on('click', function() {
 						let sysInp = $('<input>').attr('type', 'hidden').attr('name', 'systemValue').val('system');
-						if(typeof sgid != 'undefined' && sgid != null && sgid != '') {
-							let inp = $('<input>').attr('type', 'hidden').attr('name', 'sgid').val(sgid);
-							$('form[name="menuform"]').append(sysInp).append(inp).attr('action', '/dashboard/gmain.do').submit();
-						} else {
-							$('form[name="menuform"]').append(sysInp).attr('action', '/dashboard/gmain.do').submit();
-						}
+						$('form[name="menuform"]').append(sysInp).attr('action', '/dashboard/gmain.do').submit();
 					});
 				</script>
 				</ul>
