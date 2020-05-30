@@ -911,9 +911,8 @@
    
 			const Confirmresult = confirm('변경 사항이 없습니다. 정말 계속 진행 하시겠습니까?');
 			if(Confirmresult){
-					console.log(TicketlogList);
 					let UpalarmData= {
-							ala confirmed_at: new Date().toISOString(),
+							alarm_confirmed_at: new Date().toISOString(),
 							alarm_confirmed_by: loginId,
 							ticket_status: $('#ticket_status button').data('value'),
 							ticket_user_id: $("#userId").val(),
