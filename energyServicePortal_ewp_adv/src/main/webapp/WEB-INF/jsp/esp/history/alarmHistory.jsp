@@ -43,18 +43,17 @@
 							<th class="vert_type">조치 이력</th>
 							<td colspan="3">
 								<div class="txarea_inp_type lh_type">
-								<textarea id="description" name="description" rows="10" readonly></textarea>
+									<textarea id="ticket_log" name="ticket_log" rows="10" readonly></textarea>
 								</div>
 							</td>
 						</tr>
 						<tr>
 							<th class="vert_type">사진 올리기</th>
 							<td colspan="3">
-								<div class="tx_btn_area type">
-									<div class="tx_inp_type">
-										<button type="submit" class="btn_type">업로드</button>
-										<input type="file" id="picture" name="filename" class="uploadBtn" style="display:none"/>
-									</div>
+								<div class="type">
+									<button id="fileUpload" type="button" class="btn_type">업로드</button>
+									<input type="file" id="picture" name="filename" class="uploadBtn"
+									       style="display:none"/>
 								</div>
 								<div class="photo_load_wrap">
 									<ul>
@@ -66,7 +65,8 @@
 							<th>조치 여부</th>
 							<td>
 								<div class="dropdown placeholder" id="ticket_status">
-									<button class="btn btn-primary dropdown-toggle required" type="button" placeholder="선택" data-toggle="dropdown">
+									<button class="btn btn-primary dropdown-toggle required" type="button"
+									        placeholder="선택" data-toggle="dropdown">
 										<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu">
@@ -81,15 +81,16 @@
 							</td>
 							<th>담당자</th>
 							<td>
-								<div class="clear" id="userlist">
-									<div class="dropdown placeholder fl"  style="width:160px">
+								<div class="clear">
+									<div class="dropdown placeholder fl" style="width:160px" id="userlist">
 										<button class="btn btn-primary dropdown-toggle required" type="button"
-												data-toggle="dropdown">선택<span class="caret"></span></button>
+										        data-toggle="dropdown">선택<span class="caret"></span></button>
 										<ul class="dropdown-menu">
 										</ul>
 									</div>
 									<div class="tx_inp_type fl ml" style="width:160px">
-										<input type="text" id="userId" name="userId" placeholder="직접 입력" readonly>
+										<input type="text" id="userId" name="userId" placeholder="직접 입력" readonly
+										       autocomplete="off">
 									</div>
 								</div>
 							</td>
@@ -98,7 +99,7 @@
 							<th class="vert_type">조치 메모</th>
 							<td colspan="3">
 								<div class="txarea_inp_type lh_type">
-									<textarea id="description2" name="description2" rows="7"></textarea>
+									<textarea id="description" name="description" rows="7"></textarea>
 								</div>
 							</td>
 						</tr>
@@ -363,7 +364,9 @@
 	let dataList = [];
 	let changeTablegird = null;
 	let s = [];
-	const debugMode = true;
+	let ticketFileList = new Array();
+	let ticketLogList = new Array();
+
 	const deviceTemplate = {
 		'SM': '스마트미터',
 		'SM_ISMART': '한전 아이스마트',
@@ -395,7 +398,7 @@
 	};
 	const statusTemplate = {
 		'null': '신규',
-		'new' : '신규',
+		'new': '신규',
 		'open': '작업처리중',
 		'on-hold': '추가 정보 대기',
 		'resolved': '현장 조치 완료',
@@ -405,10 +408,8 @@
 	$(function () {
 		const sidparam = "${param.sid}";
 		let sites = JSON.parse('${siteList}');
-		let TicketlogList = "";
-		let TicketfileList = "";
 		siteList(sites, sidparam);
-		if(sidparam != ""){
+		if (sidparam != "") {
 			deviceTypeList(sidparam);
 		}
 		//사이트 선택시
@@ -427,7 +428,7 @@
 
 		$('#datepicker1').datepicker('setDate', 'today');
 		$('#datepicker2').datepicker('setDate', 'today');
-		
+
 		$(document).on('click', ':checkbox[name="equipment"]', function () {
 			if ($(this).is(':checked')) {
 				let extendText = '';
@@ -458,7 +459,7 @@
 				$(this).find('input').prop('checked', true);
 			}
 		})
-		
+
 		$('#alarm li').on('click', function () {
 			let idx = $('#alarm li').index($(this));
 			if (idx == 0) {
@@ -492,8 +493,8 @@
 				}
 			}
 		});
-		if(sidparam != ""){
-		$("#siteList button").html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + '&nbsp;<span class="caret"></span>');
+		if (sidparam != "") {
+			$("#siteList button").html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + '&nbsp;<span class="caret"></span>');
 			periodData();
 			fetchCharts();
 			$('#search').trigger('click');
@@ -537,67 +538,70 @@
 
 			}
 		});
-	});	
-	$(document).on('change', 'input[type="file"]', function() {
+
+		$('#fileUpload').on('click', function () {
+			$('#picture').trigger('click');
+		});
+
+	});
+
+	$(document).on('change', 'input[type="file"]', function () {
 		let uuid = genUuid();
-		let liStr = '';   
+		let liStr = '';
 		$('#picupload').empty();
 		$(this).clone().appendTo('#picupload');
 		$('#picupload').find('input').attr('name', uuid).attr('id', uuid);
 		$.ajax({
 			enctype: 'multipart/form-data',
-			url: 'http://iderms.enertalk.com:8443/files/upload?oid='+oid,
+			url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
 			data: new FormData($('#picupload')[0]),
 			type: 'post',
 			async: false,
 			processData: false,
 			contentType: false,
 			success: function (result) {
-				 if(result.files.length > 0) {
-					 liStr += '<li name="ticketfile"><span class="pt_tx"><a href="http://iderms.enertalk.com:8443/files/download/'+result.files[0].fieldname +'?oid='+ oid + '&orgFilename='+result.files[0].originalname+'">'+ result.files[0].originalname +'</a></span>';
-					 liStr += '<button class="btn_del" value="'+ result.files[0].fieldname +'" name="ticketfile">삭제</button></li>';
-				 }									
-				 $(".photo_load_wrap ul").append(liStr);
+				if (result.files.length > 0) {
+					liStr += '<li data-value="ticketfile"><span class="pt_tx"><a href="http://iderms.enertalk.com:8443/files/download/' + result.files[0].fieldname + '?oid=' + oid + '&orgFilename=' + result.files[0].originalname + '">' + result.files[0].originalname + '</a></span>';
+					liStr += '<button class="btn_del" value="' + result.files[0].fieldname + '" name="ticketfile">삭제</button></li>';
+				}
+				$('.photo_load_wrap ul').append(liStr).show();
+
+				if($('.photo_load_wrap').css('display') == 'none') {
+					$('.photo_load_wrap').show();
+				}
 			},
 			error: function (error) {
 				console.error(error);
 			}
 		});
 	});
-	$(document).on('click', 'button[name="ticketfile"]', function(){
+
+	$(document).on('click', 'button[name="ticketFile"]', function () {
 		$(this).parent().remove();
 	});
-	$(document).on('click', 'button[type="submit"]', function() {
-		$('#picture').click();  		
-	});	 
-	$(document).on('click', 'li[name="user"]', function() {
-		if($(this).text() == "직접 입력"){
-			$("#userId").val("");
-			$('#userId').prop('readonly', false);
-			$('#userId').attr('autocomplete', 'off');
-		}else{
-			$("#userId").val($(this).find("a").text());
-			$('#userId').prop('readonly', true);
-			$('#userId').attr('autocomplete', 'off');
+
+	$(document).on('click', '#userlist li', function () {
+		if ($(this).text() == '직접 입력') {
+			$('#userId').val('').prop('readonly', false);
+		} else {
+			$('#userId').val($(this).data('value')).prop('readonly', true);
 		}
-		
 	});
-	
+
 	const siteList = function (sites, sidparam) {
 		$('#siteList > div > ul').empty();
 		let str = '';
 		sites.forEach((site, index) => {
 			str += '<li>';
-			str += '<a href="javascript:void(0)" data-value="'+site.sid+'" tabindex="-1">';
-			if(site.sid == sidparam || sidparam == 'all'){
-				 str += '<input type="checkbox" id="'+site.sid+'" value="'+site.sid+'" name="site" checked>';
+			str += '<a href="javascript:void(0)" data-value="' + site.sid + '" tabindex="-1">';
+			if (site.sid == sidparam || sidparam == 'all') {
+				str += '<input type="checkbox" id="' + site.sid + '" value="' + site.sid + '" name="site" checked>';
+			} else {
+				str += '<input type="checkbox" id="' + site.sid + '" value="' + site.sid + '" name="site">';
 			}
-			else{
-				 str += '<input type="checkbox" id="'+site.sid+'" value="'+site.sid+'" name="site">';
-			}
-			str +=  '<label for="'+site.sid+'"><span></span>'+site.name+'</label></a></li>';
+			str += '<label for="' + site.sid + '"><span></span>' + site.name + '</label></a></li>';
 		});
-		$('#siteList>div>ul').append(str);			
+		$('#siteList>div>ul').append(str);
 	};
 
 	const deviceTypeList = function (sidparam) {
@@ -609,22 +613,21 @@
 
 		deviceTypes.forEach((deviceTypes, index) => {
 			const deviceRender = eval('deviceTemplate.' + deviceTypes);
-			str +=  '<li><a href="javascript:void(0)" data-value="'+index+'" tabindex="-1">';
-			if(sidparam == ""){
-			str +=	'<input type="checkbox" id="'+index+'" value="'+deviceTypes+'" name="deviceType">';
+			str += '<li><a href="javascript:void(0)" data-value="' + index + '" tabindex="-1">';
+			if (sidparam == "") {
+				str += '<input type="checkbox" id="' + index + '" value="' + deviceTypes + '" name="deviceType">';
+			} else {
+				str += '<input type="checkbox" id="' + index + '" value="' + deviceTypes + '" name="deviceType" checked>';
 			}
-			else{
-			str +=   '<input type="checkbox" id="'+index+'" value="'+deviceTypes+'" name="deviceType" checked>';	
-			}
-			str +=	'<label for="'+index+'"><span></span>'+deviceRender+'</label>';
-			str +=	'</a></li>';
+			str += '<label for="' + index + '"><span></span>' + deviceRender + '</label>';
+			str += '</a></li>';
 		});
 		$('#equipmentList>div>ul').append(str);
 	};
 
 	const periodData = function () {
 		$('.tbl_wrap_type').empty();
-	
+
 		if ($(':checkbox[name="deviceType"]:checked').length == 0) {
 			alert('설비유형을 한개이상 선택해 주세요.');
 			return false;
@@ -634,7 +637,7 @@
 			alert('알람유형을 한개이상 선택해 주세요.');
 			return false;
 		}
-		
+
 		$('.his_tbl tbody').empty();
 		s = dataList[1];
 
@@ -674,7 +677,7 @@
 				endTime: $('#datepicker2').datepicker('getDate').format('yyyyMMdd') + '235959',
 			}
 		}
-		
+
 		$.ajax({
 			url: 'http://iderms.enertalk.com:8443/alarms',
 			type: 'get',
@@ -682,65 +685,62 @@
 			data: alarmData,
 			success: function (result) {
 				var data = result;
-				if (debugMode) {
-					console.log(data);
-				}
 				let filterdata = [];
 
 				statusfilter(filterdata, statusArray, data);
-				
+
 				$(".his_tbl").remove();
-				$.each(deviceArray,function(i, el){
-					 makeDiv(el);
-					 makeTableHead(el);
+				$.each(deviceArray, function (i, el) {
+					makeDiv(el);
+					makeTableHead(el);
 				});
-				
+
 				if (filterdata.length > 0) {
 					$.each(filterdata, function (i, el) {
-						$.each(deviceArray,function(j, e2){
-							if(el.device_type === e2){
-								  tablegrid(e2, el, i);							
-							}						   						
-						})
+							$.each(deviceArray, function (j, e2) {
+								if (el.device_type === e2) {
+									tablegrid(e2, el, i);
+								}
+							})
 						}
 					)
 				}
-				$.each(deviceArray,function(i, el){
-					if($("#"+el+" tbody td").length == 0){
+				$.each(deviceArray, function (i, el) {
+					if ($("#" + el + " tbody td").length == 0) {
 						tdStr = '<th><td></td></th>';
-						$("#"+el+" tbody").append(tdStr);
+						$("#" + el + " tbody").append(tdStr);
 					}
-			   });
+				});
 				changeTablegird = filterdata;
 			},
 			dataType: "json"
 		});
 	}
-	const makeDiv = function(deviceType){
+	const makeDiv = function (deviceType) {
 		let DivStr = "";
 		DivStr += '<div class="tbl_top clear">';
-		DivStr += '<h2 class="ntit fl">'+deviceTemplate[deviceType]+'</h2>';
-		DivStr += '<button type="button" class="btn_type03 fr" onclick="alarmConfirmAll(\''+deviceType+'\');">일괄 확인</button>';
+		DivStr += '<h2 class="ntit fl">' + deviceTemplate[deviceType] + '</h2>';
+		DivStr += '<button type="button" class="btn_type03 fr" onclick="alarmConfirmAll(\'' + deviceType + '\');">일괄 확인</button>';
 		DivStr += '</div>';
 		$(".tbl_wrap_type").append(DivStr);
 	}
-	const makeTableHead = function(deviceType){
+	const makeTableHead = function (deviceType) {
 		let newHeadTable = document.createElement('table');
 		let colList = ["사업소", "장치명", "알람 시간", "알람 타입", "알람 메세지", "확인 여부", "조치 상태", "최종 업데이트 시간"];
 		let thead = newHeadTable.createTHead();
 		let tbody = newHeadTable.createTBody();
-		let tRow = thead.insertRow(); 	
-   
-			for(let i=0; i< colList.length+1; i++){
-				 let hCell = document.createElement("th");
-				if(i==0){
-					hCell.innerHTML =  '<input type="checkbox" id="alarmConfirmCheck'+deviceType+'" onclick="alarmConfirmCheckAll(\''+deviceType+'\');"><label for="alarmConfirmCheck'+deviceType+'"><span></span></label>';
-					tRow.appendChild(hCell);
-				}else{
-					hCell.innerHTML = colList[i-1];
-					tRow.appendChild(hCell);
-				}
+		let tRow = thead.insertRow();
+
+		for (let i = 0; i < colList.length + 1; i++) {
+			let hCell = document.createElement("th");
+			if (i == 0) {
+				hCell.innerHTML = '<input type="checkbox" id="alarmConfirmCheck' + deviceType + '" onclick="alarmConfirmCheckAll(\'' + deviceType + '\');"><label for="alarmConfirmCheck' + deviceType + '"><span></span></label>';
+				tRow.appendChild(hCell);
+			} else {
+				hCell.innerHTML = colList[i - 1];
+				tRow.appendChild(hCell);
 			}
+		}
 		newHeadTable.setAttribute('class', 'his_tbl chk_type');
 		newHeadTable.setAttribute('id', deviceType);
 		$(".tbl_wrap_type").append(newHeadTable);
@@ -762,246 +762,240 @@
 		}
 
 		if (!(isEmpty(el.status))) { // 조치사항이 존재할 경우
-			tbodyStr += '	<td><a href="javascript:updateACK2(\'' + el.alarm_id + '\',\''+el.ticket_id + '\');" class="tbl_link" >' + statusTemplate[el.status] + '</a></td>'; // 조치상태
+			tbodyStr += '	<td><a href="javascript:updateACK2(\'' + el.alarm_id + '\',\'' + el.ticket_id + '\');" class="tbl_link" >' + statusTemplate[el.status] + '</a></td>'; // 조치상태
 		} else {
 			tbodyStr += '	<td><a href="javascript:updateACK(\'' + el.alarm_id + '\');" class="tbl_link" >신규</a></td>'; // 조치상태
 		}
 
 		if (!(isEmpty(el.status_timestamp))) {
-			tbodyStr += '   <td>' + el.status_timestamp + '</td>'; // 최종업데이트 시간
+			tbodyStr += '   <td>' + new Date(el.status_timestamp).format('yyyy-MM-dd HH:mm:ss') + '</td>'; // 최종업데이트 시간
 		} else {
 			tbodyStr += '<td></td>';
 		}
 		tbodyStr += '</tr>';
 		$(Selector).append(tbodyStr);
 	}
-	const updateACK = function(alarmId){
-		$("#myModal02").modal('show').data('value', alarmId);
-		 $('#ticket_status button').data('value', "");
-		$(".photo_load_wrap ul").empty();
-		$("#userlist button").html("선택 &nbsp;<span class='caret'></span>");
-		$("#ticket_status button").html(" 선택 &nbsp;<span class='caret'></span>");
-		$("#description").empty();
-		$("#userId").val("");
-		$("#description2").val("");
-		UserListRender(oid);
+	const updateACK = function (alarmId) {
+		$('#myModal02').modal('show').data('value', alarmId);
+		ackStatusInit();
 	}
-	
 
-	const updateACK2 = function(alarmId, ticketId) {
-		let alarmIds = alarmId.split(",");
-		$("#myModal02").modal('show').data('value', alarmId);
-		$("#myModal02").modal('show').data('ticket', ticketId);
-		$(".photo_load_wrap ul").empty();
-		$("#userlist button").html("선택 &nbsp;<span class='caret'></span>");
-		$("#ticket_status button").html(" 선택 &nbsp;<span class='caret'></span>");
-		$("#description").empty();
-		$("#userId").val("");
-		$("#description2").val("");
+	//조치상태 팝업 초기화
+	const ackStatusInit = function () {
+		$('.photo_load_wrap').hide().find('li').remove();
+		$('#ticket_log').empty();
+		$('#description').val('');
+		$('#userlist button').html('선택 &nbsp;<span class="caret"></span>');
+		$('#ticket_status button').html('선택 &nbsp;<span class="caret"></span>');
+		$('#userId').val('');
+		userListRender(oid); //OID에 속한 사용자 리스트
+	}
+
+	const updateACK2 = function (alarmId, ticketId) {
+		$('#myModal02').modal('show').data('value', alarmId).data('ticket', ticketId);
+
+		ackStatusInit();
+
 		let ticketArray = {
-			oid :  oid,
-			alarm_id : alarmId,
-			ticket_id : ticketId
+			oid: oid,
+			alarm_id: alarmId,
+			ticket_id: ticketId
 		}
-		UserListRender(oid); 
+
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/alarm_ticket' ,
+			url: 'http://iderms.enertalk.com:8443/alarm_ticket',
 			dataType: 'json',
 			type: 'get',
 			async: false,
 			data: ticketArray,
 			success: function (result) {
-					let data = result.data[0];
-						TicketfileList = JSON.parse(data.pic_file_link);
-						TicketlogList = JSON.parse(data.ticket_log);
-					 
-						$.each(TicketlogList, function(i, el){								
-							let TextStr = "";
-								TextStr += "["+el.memo_dt+"] by ["+el.person_at_memo+"]<br/>"; 
-								TextStr += "조치 상태: "+ statusTemplate[el.status_at_memo] + ", 담당자:" +el.person_at_memo+ "<br/>";
-								TextStr += el.memo + "<br/>";
-								TextStr += "----------------------------------------------<br/>";
-								NeWTextStr = TextStr.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n');
-							$("#description").append(NeWTextStr);								  
-						})
-						
-						$.each(TicketfileList, function(i, el){
-							let liStr = "";
-							if(TicketfileList.length > 0) {
-								liStr += '<li name="ticketfile"><span class="pt_tx"><a href="http://iderms.enertalk.com:8443/files/download/'+ el.file_key +'?oid='+ oid + '&orgFilename='+ el.file_original_name +'">'+ el.file_original_name +'</a></span>';
-								liStr += '<button class="btn_del" value="'+ el.file_key +'" name="ticketfile">삭제</button></li>';
-							}								  
-							$(".photo_load_wrap ul").append(liStr);		 
-						})
-					$("#ticket_status button").html(statusTemplate[data.ticket_status]+"&nbsp;<span class='caret'></span>");
-					$("#userId").val(data.ticket_user_id);
-					$('#userId').prop('readonly', true);
+				let data = result.data[0];
+				ticketFileList = JSON.parse(data.pic_file_link);
+				ticketLogList = JSON.parse(data.ticket_log);
+
+				$.each(ticketLogList, function (i, el) {
+					let textStr = '';
+					textStr += '[' + new Date(el.memo_dt).format('yyyy-MM-dd') + '] by [' + el.person_at_memo + ']\r\n';
+					textStr += '조치 상태: ' + statusTemplate[el.status_at_memo] + ', 담당자:' + el.person_at_memo + '\r\n';
+					textStr += el.memo + '\r\n';
+					textStr += '----------------------------------------------\r\n';
+					$('#ticket_log').append(textStr);
+				})
+
+				$.each(ticketFileList, function (i, el) {
+					let liStr = '';
+					if (ticketFileList.length > 0) {
+						liStr += '<li data-value="ticketFile"><span class="pt_tx"><a href="http://iderms.enertalk.com:8443/files/download/' + el.file_key + '?oid=' + oid + '&orgFilename=' + el.file_original_name + '">' + el.file_original_name + '</a></span>';
+						liStr += '<button class="btn_del" value="' + el.file_key + '" name="ticketFile">삭제</button></li>';
+					}
+					$('.photo_load_wrap ul').append(liStr);
+				})
+
+				if($('.photo_load_wrap li').length > 0) {
+					$('.photo_load_wrap').show();
+				}
+
+				$('#ticket_status button').html(statusTemplate[data.ticket_status] + '&nbsp;<span class="caret"></span>').data('value', data.ticket_status);
+
+				//유져리스트
+				const userIdArray = $.makeArray($('#userlist li').map(function () {
+					return $(this).data('value');
+				}));
+
+				if ($.inArray(data.ticket_user_id, userIdArray) > -1) {
+					$('#userlist button').html(data.ticket_user_id + '&nbsp;<span class="caret"></span>');
+				} else {
+					$('#userlist button').html('직접 입력 &nbsp;<span class="caret"></span>');
+				}
+				$('#userId').val(data.ticket_user_id).prop('readonly', true);
 			},
 			error: function (error) {
 				console.error(error);
 			}
 		});
 	}
-	const ackProcess = function(){
-		let pic_file_link = [];
-		$(":button[name='ticketfile']").each(function(){
-			pic_file_link.push({
-				update_dt : new Date().toISOString(),
-		        file_key : $(this).val(),
-		        file_original_name : $(this).parent().find("a").text()
-			}); 	
-	    })
-		pic_file_link = JSON.stringify(pic_file_link);
-	    if($("#description").val() == "" ){
 
-	    	let ticketLog = [{
-	    	    memo_dt : new Date().toISOString(),
-			    memo : $("#description2").val(),
-			    status_at_memo : $('#ticket_status button').data('value'),
-			    person_at_memo : $("#userId").val()
+	const ackProcess = function () {
+
+		if($('#ticket_status button').data('value') == '') {
+			alert('조치 여부가 선택되지 않았습니다.');
+			return false;
+		}
+
+		if($('#userId').val() == '') {
+			alert('담당자가 입력되지 않았습니다.');
+			$('#userId').focus();
+			return false;
+		}
+
+		let pic_file_link = [];
+		$(':button[name="ticketFile"]').each(function () {
+			pic_file_link.push({
+				update_dt: new Date().toISOString(),
+				file_key: $(this).val(),
+				file_original_name: $(this).parent().find("a").text()
+			});
+		})
+		pic_file_link = JSON.stringify(pic_file_link);
+
+		if ($('#ticket_log').val() == '') {
+			let ticketLog = [{
+				memo_dt: new Date().toISOString(),
+				memo: $('#description').val(),
+				status_at_memo: $('#ticket_status button').data('value'),
+				person_at_memo: $('#userId').val()
 			}];
 
-	    	let alarmData= {
-	    		alarm_confirmed_at: new Date().toISOString(),
-			    alarm_confirmed_by: loginId,
-			    ticket_status: $('#ticket_status button').data('value'),
-			    ticket_user_id: $("#userId").val(),
-			    ticket_person: $("#userId").val(),
-			    pic_file_link: pic_file_link,
-			    ticket_log: JSON.stringify(ticketLog),
-			    updated_by: $("#userId").val()
-		};
-		if(alarmData.ticket_status == ""|| alarmData.ticket_user_id ==""){
-			alert("알람상태와 회원 아이디를 꼭 입력해주세요");
-		}else{
-			$.ajax({
-			    url: 'http://iderms.enertalk.com:8443/alarm_ticket?oid=' + oid + '&alarm_id=' + $("#myModal02").data('value'),
+			let alarmData = {
+				alarm_confirmed_at: new Date().toISOString(),
+				alarm_confirmed_by: loginId,
+				ticket_status: $('#ticket_status button').data('value'),
+				ticket_user_id: $('#userId').val(),
+				ticket_person: $('#userId').val(),
+				pic_file_link: pic_file_link,
+				ticket_log: JSON.stringify(ticketLog),
+				updated_by: $('#userId').val()
+			};
+
+			if (alarmData.ticket_status == '' || alarmData.ticket_user_id == '') {
+				alert('알람상태와 회원 아이디를 꼭 입력해주세요');
+			} else {
+				$.ajax({
+					url: 'http://iderms.enertalk.com:8443/alarm_ticket?oid=' + oid + '&alarm_id=' + $('#myModal02').data('value'),
 					dataType: 'json',
 					type: 'post',
 					async: false,
-					contentType: "application/json",
+					contentType: 'application/json',
 					data: JSON.stringify(alarmData),
 					success: function (result) {
 						console.log(result);
-						alert('저장에 성공했습니다.','저장');
-						$("#myModal02").modal('hide');
+						alert('저장에 성공했습니다.', '저장');
+						$('#myModal02').modal('hide');
 						periodData();
-				},
-				 error: function (error) {
-					  console.error(error);
-				 }
-			  });
-		}
-	 }else{
-		let ticketId = Number($("#myModal02").data("ticket"));
-		 
-		TicketlogList.push({
-			memo_dt : new Date().toISOString(),
-			memo : $("#description2").val(),
-			status_at_memo : $('#ticket_status button').data('value'),
-			person_at_memo : $("#userId").val()
-		});
-		 
-		let beforeData = TicketlogList[TicketlogList.length-2];
-		 
-		TicketfileList = JSON.stringify(TicketfileList);		 
-					   
-		if( (beforeData.status_at_memo == $('#ticket_status button').data('value'))
-				&& (beforeData.person_at_memo == $("#userId").val()) &&($("#description2").val() == "")){
-   
-			const Confirmresult = confirm('변경 사항이 없습니다. 정말 계속 진행 하시겠습니까?');
-			if(Confirmresult){
-					let UpalarmData= {
-							alarm_confirmed_at: new Date().toISOString(),
-							alarm_confirmed_by: loginId,
-							ticket_status: $('#ticket_status button').data('value'),
-							ticket_user_id: $("#userId").val(),
-							ticket_person: $("#userId").val(),
-							pic_file_link: pic_file_link,
-							ticket_log: JSON.stringify(TicketlogList),
-							updated_by: $("#userId").val()
+					},
+					error: function (error) {
+						console.error(error);
 					}
-					$.ajax({
-						url: 'http://iderms.enertalk.com:8443/alarm_ticket/' + ticketId + '?oid=' + oid,
-						dataType: 'json',
-						type: 'patch',
-						async: false,
-						contentType: "application/json",
-						data: JSON.stringify(UpalarmData),
-						success: function (result) {
-							 console.log(result);
-							 alert('저장에 성공했습니다.');
-							 $("#myModal02").modal('hide');
-							 periodData();
-						},
-						error: function (error) {
-							 console.error(error);
-						}
-				   }); 
-				}else{
-					TicketlogList = TicketlogList.splice(TicketlogList.length-1, 1);						
-				}
-				
-			}else{
-
-			let UpalarmData= {
-					alarm_confirmed_at: new Date().toISOString(),
-					alarm_confirmed_by: loginId,
-					ticket_status: $('#ticket_status button').data('value'),
-					ticket_user_id: $("#userId").val(),
-					ticket_person: $("#userId").val(),
-					pic_file_link: JSON.stringify(pic_file_link),
-					ticket_log: JSON.stringify(TicketlogList),
-					updated_by: $("#userId").val()
+				});
 			}
+		} else {
+			let ticketId = Number($('#myModal02').data('ticket'));
+			let beforeData = ticketLogList[ticketLogList.length - 1];
+
+			if(beforeData.person_at_memo == $('#userId').val() && beforeData.status_at_memo == $('#ticket_status button').data('value')) {
+				if(!confirm('변경 사항이 없습니다. 정말 계속 진행 하시겠습니까?')) {
+					return false;
+				}
+			}
+
+			ticketLogList.push({
+				memo_dt: new Date().toISOString(),
+				memo: $('#description').val(),
+				status_at_memo: $('#ticket_status button').data('value'),
+				person_at_memo: $('#userId').val()
+			});
+
+			ticketFileList = JSON.stringify(ticketFileList);
+			let upAlarmData = {
+				alarm_confirmed_at: new Date().toISOString(),
+				alarm_confirmed_by: loginId,
+				ticket_status: $('#ticket_status button').data('value'),
+				ticket_user_id: $('#userId').val(),
+				ticket_person: $('#userId').val(),
+				pic_file_link: pic_file_link,
+				ticket_log: JSON.stringify(ticketLogList),
+				updated_by: $('#userId').val()
+			}
+
 			$.ajax({
 				url: 'http://iderms.enertalk.com:8443/alarm_ticket/' + ticketId + '?oid=' + oid,
 				dataType: 'json',
 				type: 'patch',
 				async: false,
-				contentType: "application/json",
-				data: JSON.stringify(UpalarmData),
+				contentType: 'application/json',
+				data: JSON.stringify(upAlarmData),
 				success: function (result) {
-					 console.log(result);
-					 alert('저장에 성공했습니다.');
-					 $("#myModal02").modal('hide');
-					 periodData();
+					console.log(result);
+					alert('저장에 성공했습니다.');
+					$('#myModal02').modal('hide');
+					periodData();
 				},
 				error: function (error) {
-					 console.error(error);
+					console.error(error);
+					ticketLogList.splice(ticketLogList.length - 1, 1);
 				}
-		   }); 
-			}
-	  }
+			});
+		}
 	}
 
-	const measurePopup = function(){
-		$("#myModal01").modal('show');
+	const measurePopup = function () {
+		$('#myModal01').modal('show');
 	}
-	
-	const UserListRender = function(oid){
-		$("#userlist ul").append('<li name="user"><a href="javascript:void(0)">직접 입력</a></li>')
+
+	const userListRender = function (oid) {
+		$('#userlist ul').empty().append('<li data-value="직접 입력"><a href="javascript:void(0)">직접 입력</a></li>');
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/config/users' ,
+			url: 'http://iderms.enertalk.com:8443/config/users',
 			dataType: 'json',
 			type: 'get',
 			async: false,
 			data: {
-				oid : oid
-			} ,
+				oid: oid
+			},
 			success: function (result) {
 				let data = result;
-				$.each(data,function(i, el){
-					let liStr = "";
-					liStr += '<li name="user"><a href="javascript:void(0)">'+el.login_id+'</a></li>';
-					$("#userlist ul").append(liStr);
-				})						
+				$.each(data, function (i, el) {
+					let liStr = '';
+					liStr += '<li data-value="' + el.name + '"><a href="javascript:void(0)">' + el.name + '</a></li>';
+					$('#userlist ul').append(liStr);
+				})
 			},
 			error: function (error) {
 				console.error(error);
 			}
 		});
 	}
+
 	const datafilter = function (array, key) {
 		let filterArray = [];
 		for (let i = 0; i < array.length; i++) {
@@ -1026,11 +1020,11 @@
 			})
 		})
 	}
-	const deviceType = function (sites ,sidparam) {
-		if(sidparam != ""){
-			$('#equipmentList button').empty().append('전체<span class="caret"></span>');	
-		}else{
-			$('#equipmentList button').empty().append('설비유형<span class="caret"></span>');		
+	const deviceType = function (sites, sidparam) {
+		if (sidparam != "") {
+			$('#equipmentList button').empty().append('전체<span class="caret"></span>');
+		} else {
+			$('#equipmentList button').empty().append('설비유형<span class="caret"></span>');
 		}
 		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
 			function () {
@@ -1215,7 +1209,7 @@
 
 
 			vMap.forEach(function (val, key) {
-			
+
 				var typeNm = key;
 
 				$(':checkbox[name="' + chartTypeNm + '"]:checked').each(function () {
@@ -1236,7 +1230,7 @@
 				columnSeriesData.push($temp)
 				num++;
 			});
-			
+
 		});
 
 		pieMap = new Map();
@@ -1326,7 +1320,7 @@
 						color: 'var(--color3)',
 						fontSize: '14px'
 					},
-					formatter: function() {
+					formatter: function () {
 						return dateFormat(this.value);
 					}
 				},
@@ -1501,7 +1495,7 @@
 
 
 	//두기간 사이 차이 구하기.
-	const getDiff = function(eDate, sDate, type) {
+	const getDiff = function (eDate, sDate, type) {
 		eDate = new Date(eDate.substring(2, 4), eDate.substring(4, 6), eDate.substring(6, 8));
 		sDate = new Date(sDate.substring(2, 4), sDate.substring(4, 6), sDate.substring(6, 8));
 		if (type == 'day') {
@@ -1517,15 +1511,15 @@
 
 
 	//날짜포멧 변경(yyyyMMddHHmmss형) 
-	var dateFormat = function(val) {
-		if((val != undefined && val != 0)) {
-			if(String(val).length == 4) {
+	var dateFormat = function (val) {
+		if ((val != undefined && val != 0)) {
+			if (String(val).length == 4) {
 				date = val.substring(0, 4)
-			} else if(String(val).length == 6) {
+			} else if (String(val).length == 6) {
 				date = val.substring(0, 4) + '-' + val.substring(4, 6);
-			} else if(String(val).length == 12) {
+			} else if (String(val).length == 12) {
 				date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8) + ' ' + val.substring(8, 10) + ':' + val.substring(10, 12);
-			} else if(String(val).length > 12) {
+			} else if (String(val).length > 12) {
 				date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8) + ' ' + val.substring(8, 10) + ':' + val.substring(10, 12) + ':' + val.substring(12, 14);
 			} else {
 				date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8);
@@ -1534,30 +1528,30 @@
 		return date;
 	}
 
-	const alarmConfirm = function(alarmId) {
+	const alarmConfirm = function (alarmId) {
 		$('#alarmConfirm').modal().data('value', alarmId);
 	}
 
-	const alarmConfirmCheckAll = function(tableId) {
-		if($('#' + tableId + '> thead tr :checkbox:checked').length == 0) {
+	const alarmConfirmCheckAll = function (tableId) {
+		if ($('#' + tableId + '> thead tr :checkbox:checked').length == 0) {
 			$('#' + tableId + '> tbody tr :checkbox').prop('checked', false);
 		} else {
 			$('#' + tableId + '> tbody tr :checkbox').prop('checked', true);
 		}
 	}
 
-	const alarmConfirmAll = function(tableId) {
-		if($('#' + tableId + '> tbody tr :checkbox:checked').length == 0) {
+	const alarmConfirmAll = function (tableId) {
+		if ($('#' + tableId + '> tbody tr :checkbox:checked').length == 0) {
 			alert('확인할 알람이 선택되지않았습니다.');
 			return false;
 		} else {
 			let cnt = 0;
-			$('#' + tableId + '> tbody tr :checkbox:checked').each(function() {
+			$('#' + tableId + '> tbody tr :checkbox:checked').each(function () {
 				let data = {
 					confirm: true
 				}
 				$.ajax({
-					url: 'http://iderms.enertalk.com:8443/alarms/'+$(this).val(),
+					url: 'http://iderms.enertalk.com:8443/alarms/' + $(this).val(),
 					type: 'patch',
 					dataType: 'json',
 					async: false,
@@ -1574,13 +1568,13 @@
 		}
 	}
 
-	const alarmConfirmProcess = function() {
+	const alarmConfirmProcess = function () {
 		let alarmId = $('#alarmConfirm').data('value');
 		let data = {
 			confirm: true
 		}
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/alarms/'+alarmId,
+			url: 'http://iderms.enertalk.com:8443/alarms/' + alarmId,
 			type: 'patch',
 			dataType: 'json',
 			contentType: "application/json",
