@@ -564,7 +564,7 @@
 					liStr += '<li data-value="ticketfile"><span class="pt_tx"><a href="http://iderms.enertalk.com:8443/files/download/' + result.files[0].fieldname + '?oid=' + oid + '&orgFilename=' + result.files[0].originalname + '">' + result.files[0].originalname + '</a></span>';
 					liStr += '<button class="btn_del" value="' + result.files[0].fieldname + '" name="ticketfile">삭제</button></li>';
 				}
-				$('.photo_load_wrap ul').append(liStr).show();
+				$('.photo_load_wrap ul').append(liStr);
 
 				if($('.photo_load_wrap').css('display') == 'none') {
 					$('.photo_load_wrap').show();
