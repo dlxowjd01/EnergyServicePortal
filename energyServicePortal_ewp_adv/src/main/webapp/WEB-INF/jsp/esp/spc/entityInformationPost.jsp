@@ -296,6 +296,8 @@
 					return false;
 				}
 
+				$("#sendSpcPostModal").modal(); // 처리중 모달띄우기
+				
 				//신규 spc 일떄..
 				if(spcId == ""){
 					sendSpcPost();
@@ -408,6 +410,18 @@
 		location.href = "/spc/entityInformation.do";
 	}
 </script>
+
+<!-- Modal (처리 중 모달)-->
+<div id="sendSpcPostModal" class="modal fade" role="dialog">
+	<div class="modal-dialog his_alarm">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="ly_wrap">
+				<h2 class="ly_tit" style="text-align: center;">처리중...</h2>
+			</div>
+		</div>
+	</div>
+</div>
 
 <div class="row">
 	<div class="col-lg-12">
