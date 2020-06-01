@@ -23,7 +23,7 @@
 </div>
 
 <!-- Modal (조치 상태)-->
-<div id="myModal02" class="modal fade" role="dialog">
+<div id="alarmMeasure" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 
 		<!-- Modal content-->
@@ -89,7 +89,7 @@
 										</ul>
 									</div>
 									<div class="tx_inp_type fl ml" style="width:160px">
-										<input type="text" id="userId" name="userId" placeholder="직접 입력" readonly
+										<input type="text" id="ticket_user_id" name="ticket_user_id" placeholder="직접 입력" readonly
 										       autocomplete="off">
 									</div>
 								</div>
@@ -99,7 +99,7 @@
 							<th class="vert_type">조치 메모</th>
 							<td colspan="3">
 								<div class="txarea_inp_type lh_type">
-									<textarea id="description" name="description" rows="7"></textarea>
+									<textarea id="memo" name="memo" rows="7"></textarea>
 								</div>
 							</td>
 						</tr>
@@ -316,11 +316,11 @@
 					<div class="fr his_inp_bx">
 						<div class="rdo_type his_rdo_bx" id="chartType">
 							<span>
-								<input type="radio" id="rdo03_1" name="radio" value="type" checked>
+								<input type="radio" id="rdo03_1" name="chartType" value="type" checked>
 								<label for="rdo03_1"><span></span>설비 타입</label>
 							</span>
 							<span>
-								<input type="radio" id="rdo03_2" name="radio" value="alarm">
+								<input type="radio" id="rdo03_2" name="chartType" value="alarm">
 								<label for="rdo03_2"><span></span>알람 타입</label>
 							</span>
 						</div>
@@ -451,14 +451,14 @@
 			}
 		});
 
-		$("#alarmstatus button").html("미확인&nbsp;<span class='caret'></span>");
+		$("#alarmstatus button").html("미확인&nbsp;<span class='caret'></span>");	
 
 		$(".rdo_type").on('click', function () {
 			if ($(this).find('input').is(':checked')) {
 			} else {
 				$(this).find('input').prop('checked', true);
 			}
-		})
+		});
 
 		$('#alarm li').on('click', function () {
 			let idx = $('#alarm li').index($(this));
@@ -562,7 +562,7 @@
 			success: function (result) {
 				if (result.files.length > 0) {
 					liStr += '<li data-value="ticketfile"><span class="pt_tx"><a href="http://iderms.enertalk.com:8443/files/download/' + result.files[0].fieldname + '?oid=' + oid + '&orgFilename=' + result.files[0].originalname + '">' + result.files[0].originalname + '</a></span>';
-					liStr += '<button class="btn_del" value="' + result.files[0].fieldname + '" name="ticketfile">삭제</button></li>';
+					liStr += '<button class="btn_del" value="' + result.files[0].fieldname + '" name="file_original_name">삭제</button></li>';
 				}
 				$('.photo_load_wrap ul').append(liStr);
 
@@ -576,15 +576,15 @@
 		});
 	});
 
-	$(document).on('click', 'button[name="ticketFile"]', function () {
+	$(document).on('click', 'button[name="file_original_name"]', function () {
 		$(this).parent().remove();
 	});
 
 	$(document).on('click', '#userlist li', function () {
 		if ($(this).text() == '직접 입력') {
-			$('#userId').val('').prop('readonly', false);
+			$('#ticket_user_id').val('').prop('readonly', false);
 		} else {
-			$('#userId').val($(this).data('value')).prop('readonly', true);
+			$('#ticket_user_id').val($(this).data('value')).prop('readonly', true);
 		}
 	});
 
@@ -776,7 +776,7 @@
 		$(Selector).append(tbodyStr);
 	}
 	const updateACK = function (alarmId) {
-		$('#myModal02').modal('show').data('value', alarmId);
+		$('#alarmMeasure').modal('show').data('value', alarmId);
 		ackStatusInit();
 	}
 
@@ -784,16 +784,16 @@
 	const ackStatusInit = function () {
 		$('.photo_load_wrap').hide().find('li').remove();
 		$('#ticket_log').empty();
-		$('#description').val('');
+		$('#memo').val('');
 		$('#userlist button').html('선택 &nbsp;<span class="caret"></span>');
 		$('#ticket_status button').html('선택 &nbsp;<span class="caret"></span>');
-		$('#userId').val('');
+		$('#ticket_user_id').val('');
 		userListRender(oid); //OID에 속한 사용자 리스트
 	}
 
 	const updateACK2 = function (alarmId, ticketId) {
-		$('#myModal02').modal('show').data('value', alarmId).data('ticket', ticketId);
-
+		$('#alarmMeasure').modal('show').data('value', alarmId).data('ticket', ticketId);
+    
 		ackStatusInit();
 
 		let ticketArray = {
@@ -847,7 +847,7 @@
 				} else {
 					$('#userlist button').html('직접 입력 &nbsp;<span class="caret"></span>');
 				}
-				$('#userId').val(data.ticket_user_id).prop('readonly', true);
+				$('#ticket_user_id').val(data.ticket_user_id).prop('readonly', true);
 			},
 			error: function (error) {
 				console.error(error);
@@ -862,9 +862,9 @@
 			return false;
 		}
 
-		if($('#userId').val() == '') {
+		if($('#ticket_user_id').val() == '') {
 			alert('담당자가 입력되지 않았습니다.');
-			$('#userId').focus();
+			$('#ticket_user_id').focus();
 			return false;
 		}
 
@@ -881,27 +881,27 @@
 		if ($('#ticket_log').val() == '') {
 			let ticketLog = [{
 				memo_dt: new Date().toISOString(),
-				memo: $('#description').val(),
+				memo: $('#memo').val(),
 				status_at_memo: $('#ticket_status button').data('value'),
-				person_at_memo: $('#userId').val()
+				person_at_memo: $('#ticket_user_id').val()
 			}];
 
 			let alarmData = {
 				alarm_confirmed_at: new Date().toISOString(),
 				alarm_confirmed_by: loginId,
 				ticket_status: $('#ticket_status button').data('value'),
-				ticket_user_id: $('#userId').val(),
-				ticket_person: $('#userId').val(),
+				ticket_user_id: $('#ticket_user_id').val(),
+				ticket_person: $('#ticket_user_id').val(),
 				pic_file_link: pic_file_link,
 				ticket_log: JSON.stringify(ticketLog),
-				updated_by: $('#userId').val()
+				updated_by: $('#ticket_user_id').val()
 			};
 
 			if (alarmData.ticket_status == '' || alarmData.ticket_user_id == '') {
 				alert('알람상태와 회원 아이디를 꼭 입력해주세요');
 			} else {
 				$.ajax({
-					url: 'http://iderms.enertalk.com:8443/alarm_ticket?oid=' + oid + '&alarm_id=' + $('#myModal02').data('value'),
+					url: 'http://iderms.enertalk.com:8443/alarm_ticket?oid=' + oid + '&alarm_id=' + $('#alarmMeasure').data('value'),
 					dataType: 'json',
 					type: 'post',
 					async: false,
@@ -910,7 +910,7 @@
 					success: function (result) {
 						console.log(result);
 						alert('저장에 성공했습니다.', '저장');
-						$('#myModal02').modal('hide');
+						$('#alarmMeasure').modal('hide');
 						periodData();
 					},
 					error: function (error) {
@@ -919,20 +919,41 @@
 				});
 			}
 		} else {
-			let ticketId = Number($('#myModal02').data('ticket'));
+			let ticketId = Number($('#alarmMeasure').data('ticket'));
 			let beforeData = ticketLogList[ticketLogList.length - 1];
 
-			if(beforeData.person_at_memo == $('#userId').val() && beforeData.status_at_memo == $('#ticket_status button').data('value')) {
+			if(beforeData.person_at_memo == $('#ticket_user_id').val() && beforeData.status_at_memo == $('#ticket_status button').data('value')) {
 				if(!confirm('변경 사항이 없습니다. 정말 계속 진행 하시겠습니까?')) {
 					return false;
 				}
 			}
-
+			
+			let ticketArray = {
+		        oid: oid,
+		        alarm_id: $('#alarmMeasure').data("value"),
+		        ticket_id: ticketId
+		    }
+            
+			$.ajax({
+	            url: 'http://iderms.enertalk.com:8443/alarm_ticket',
+	            dataType: 'json',
+	            type: 'get',
+	            async: false,
+	            data: ticketArray,
+	            success: function (result) {
+	                let data = result.data[0];
+	                ticketLogList = JSON.parse(data.ticket_log);
+	            },
+	            error: function (error) {
+	                console.error(error);
+	            }
+	        });
+			
 			ticketLogList.push({
 				memo_dt: new Date().toISOString(),
-				memo: $('#description').val(),
+				memo: $('#memo').val(),
 				status_at_memo: $('#ticket_status button').data('value'),
-				person_at_memo: $('#userId').val()
+				person_at_memo: $('#ticket_user_id').val()
 			});
 
 			ticketFileList = JSON.stringify(ticketFileList);
@@ -940,11 +961,11 @@
 				alarm_confirmed_at: new Date().toISOString(),
 				alarm_confirmed_by: loginId,
 				ticket_status: $('#ticket_status button').data('value'),
-				ticket_user_id: $('#userId').val(),
-				ticket_person: $('#userId').val(),
+				ticket_user_id: $('#ticket_user_id').val(),
+				ticket_person: $('#ticket_user_id').val(),
 				pic_file_link: pic_file_link,
 				ticket_log: JSON.stringify(ticketLogList),
-				updated_by: $('#userId').val()
+				updated_by: $('#ticket_user_id').val()
 			}
 
 			$.ajax({
@@ -957,7 +978,7 @@
 				success: function (result) {
 					console.log(result);
 					alert('저장에 성공했습니다.');
-					$('#myModal02').modal('hide');
+					$('#alarmMeasure').modal('hide');
 					periodData();
 				},
 				error: function (error) {
