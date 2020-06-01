@@ -1,22 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <script>
-  function navAddClass(linkGbn) {
-    $("#sidebar").find("ul").find("li").removeClass("on");
-    if (linkGbn == "siteMain") $(".smn1").addClass("on");
-    else if (linkGbn == "energy") $(".smn2").addClass("on");
-    else if (linkGbn == "device") $(".smn3").addClass("on");
-    else if (linkGbn == "alarm") $(".smn4").addClass("on");
-    else if (linkGbn == "billRevenue") $(".smn5").addClass("on");
-    else if (linkGbn == "setting") $(".smn7").addClass("on");
-    else if (linkGbn == "main") $(".smn0").addClass("on");
-    else if (linkGbn == "commonCode") $(".smn9").addClass("on");
-  }
-  
-  function pleaseSelectSite() {
-    alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');
-  }
-  
   function gMainSelectSite(siteId) {
     $('#smainNavLink').attr('href', '/main/siteMain.do?siteId=' + siteId);
     $('#energyNavLink').attr('href', '/energy/usage.do?siteId=' + siteId);
@@ -42,26 +26,110 @@
     $('#kepcoMngNavLink').attr('href', '/system/kepcoMng.do?siteId=' + siteId);
     $('#gmainAlarmLink').attr('onclick', "location.href='/alarm/alarmMng.do?siteId=" + siteId + "'");
   }
+
+  function navAddClass(linkGbn) {
+      console.log('linkGbn===', sideBar, upperMenu)
+      // listItem.removeClass("on");
+      switch (linkGbn) {
+        case "siteMain": sideBar.find(".smn1").addClass("on"); break;
+        case "energy": sideBar.find(".smn2").addClass("on"); break;
+        case "device": $(".smn3").addClass("on"); break;
+        case "alarm": $(".smn4").addClass("on"); break;
+        case "billRevenue": $(".smn5").addClass("on"); break;
+        case "setting": $(".smn7").addClass("on"); break;
+        case "main": $(".smn0").addClass("on"); break;
+        case "commonCode": $(".smn9").addClass("on"); break;
+      }
+    // upperMenu.first().addClass("active");
+  }
   
-	$(function() {
-		$('#sidebar > ul > li > a').click(function(){
-			$(this).parent('li').toggleClass('on');
-			
-		});
-		// if($('#sidebar:after').css('display','none')){
-			// $('#sidebar > ul > li').removeClass('on');
-		// }
-		$('#sidebar').mouseleave(function(){
-			$('#sidebar > ul > li').removeClass('on');
-			console.log('a')
-		});
-		
-	});
+  $(function() {
+    const sideBar = $("#sidebar"),
+      menuItem = sideBar.find("li"),
+      menuItemLink = menuItem.find("a"),
+      upperMenu = sideBar.find("li.menu-item"),
+      upperMenuLink = upperMenu.find("a"),
+      subMenu = upperMenu.find("li"),
+      subMenuLink = subMenu.find("a"),
+      path = $(location).attr("pathname");
+
+      subMenuLink.each(function(e){
+        if( $(this).attr("href") === path ){
+          $(this).parents(".menu-item").addClass("active").siblings().removeClass("active");
+        }
+      });
+
+      window.onload = function(e) {
+        console.log("window onload---")
+        let reloading = sessionStorage.getItem("reloading");
+        if(path.includes("dashboard")){
+          upperMenu.first().addClass("active");
+        }
+        if (reloading) {
+            sessionStorage.removeItem("reloading");
+        }
+      }
+      upperMenuLink.click(function(e){
+        $(this).parent("li").toggleClass('on');
+      });
+      sideBar.mouseleave(function(){
+        menuItem.removeClass('on');
+      });
+
+      $('#sidebar:after').css('display','none') ? menuItemLink.removeClass('on') : null;
+
+
+    // document.addEventListener('readystatechange', function(){
+    //   console.log("ready state changed====")
+    // });
+    
+    // if(typeof(Storage) !== 'undefined') {
+    //   const origin = document.location.origin;
+    //   const pathname = document.location.pathname;
+
+    //   // Check if it changes here
+    //   const storageOrigin = localStorage.getItem('origin');
+    //   const storagePathname = localStorage.getItem('pathname');
+
+      // upperMenu.each(function(e){
+      //   if($(this).children('a[href="' + path + '"]')){
+      //     console.log('found match====', $(this).children("a"))
+      //   }
+      // })
+      // Check if storageOrigin and storagePathname are not null or undefined.
+      // if (storageOrigin && storagePathname) {
+      //   if (storageOrigin !== origin || storagePathname !== pathname) {
+      //     console.log("storageOrigin !== origin")
+      //     subMenuLink.each(function(e){
+      //       if( $(this).attr("href") === path ){
+      //         // console.log("found the match");
+      //         $(this).parents(".menu-item").addClass("active").siblings().removeClass("active");
+      //       }
+      //     });
+      //   } else {
+      //     console.log("storageOrigin === origin")
+      //     if(path.includes("dashboard")){
+      //       upperMenu.first().css("border", "solid 1px red").addClass("active");
+      //     }
+      //   }
+      // }
+      // console.log("setItem origin=====")
+      //   localStorage.setItem('origin', origin);
+      //   localStorage.setItem('pathname', pathname);
+      // } else {
+      //   console.log('storage origin and path name are null')
+      // }
+  });
+
+  function pleaseSelectSite() {
+    alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');
+  }
 </script>
+
 <div id="sidebar">
   <c:if test="${not empty userInfo}">
     <ul>
-      <li class="smn1 active">
+      <li class="smn1 menu-item">
         <a href="#;">대시보드</a>
         <div class="sub_layer">
           <ul>
@@ -79,7 +147,7 @@
           </ul>
         </div>
       </li>
-      <li class="smn2">
+      <li class="smn2 menu-item">
         <a href="#;">설비 현황</a>
         <div class="sub_layer">
           <ul>
@@ -88,7 +156,7 @@
           </ul>
         </div>
       </li>
-      <li class="smn3">
+      <li class="smn3 menu-item">
         <a href="#;">설비 이력</a>
         <div class="sub_layer">
           <ul>
@@ -97,7 +165,7 @@
           </ul>
         </div>
       </li>
-      <li class="smn4">
+      <li class="smn4 menu-item">
         <a href="#;">자원 분석</a>
         <div class="sub_layer">
           <ul>
@@ -108,7 +176,7 @@
           </ul>
         </div>
       </li>
-      <li class="smn5">
+      <li class="smn5 menu-item">
         <a href="#;">예측/진단</a>
         <div class="sub_layer">
           <ul>
@@ -128,7 +196,7 @@
           </ul>
         </div>
       </li>-->
-      <li class="smn7">
+      <li class="smn7 menu-item">
         <a href="#;">보고서</a>
         <div class="sub_layer">
           <ul>
@@ -137,7 +205,7 @@
           </ul>
         </div>
       </li>
-      <li class="smn9">
+      <li class="smn9 menu-item">
         <a href="#;">SPC관리</a>
         <div class="sub_layer">
           <ul>
@@ -148,7 +216,7 @@
           </ul>
         </div>
       </li>
-      <li class="smn6">
+      <li class="smn6 menu-item">
         <a href="#;">설정</a>
         <div class="sub_layer">
           <ul>

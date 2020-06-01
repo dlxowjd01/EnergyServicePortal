@@ -1,16 +1,33 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ include file="/decorators/include/taglibs.jsp"%>
+
+<script>
+	$(function() {
+		const compareArea = $("#siteList").next().find(".compare_area");
+		const dropdownArea = compareArea.find(".dropdown");
+		const compareSelectBox = compareArea.children().find(".dropdown-toggle.bgN");
+		const modalCompare = compareSelectBox.next("ul");
+		// const innerSelectBox = selectModal.find("btn.dropdown-toggle");
+		const addRuleBtn = modalCompare.find("comp_btn_wrap .btn_type");
+
+		compareSelectBox.on("click", function(){
+			// modalCompare.toggleClass("toggled");
+			dropdownArea.toggleClass("open");
+		});
+
+		// compareSelectBox.on("click", function(){
+		// 	dropdown.removeClass("open");
+		// })
+	});
+</script>
+
 <%--
-  Created by IntelliJ IDEA.
-  User: Youduk
-  Date: 2020/04/21
-  Time: 15:19
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
   <head>
     <title>Abnormally Analysis</title>
   </head>
   <body>
+--%>
     <div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header">이상 분석</h1>
@@ -28,7 +45,7 @@
 		<div class="col-lg-10">
 			<div class="compare_area">
 				<div class="dropdown">
-					<button class="btn btn-primary dropdown-toggle bgN" type="button" data-toggle="dropdown">
+					<button class="btn btn-primary dropdown-toggle bgN" type="button">
 						비교하기<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu chk_type">
@@ -423,7 +440,7 @@
 								</div>
 							</div>
 							<div class="comp_btn_wrap">
-								<button class="btn_type">규칙 등록</button>
+								<button type="submit" class="btn_type">규칙 등록</button>
 							</div>
 						</li>
 					</ul>
@@ -476,5 +493,8 @@
 			</div>
 		</div>
 	</div>
+
+<%--
   </body>
 </html>
+--%>

@@ -3,6 +3,10 @@
 <script type="text/javascript">
 	var selViewSiteName = "";
 	$(function () {
+		// const navLogo = $(".nav_brand.spower");
+		// navLogo.on("click", function(){
+		// 	console.log("logo clicked===")
+		// })
 		refreshCurrTime();
 	});
 
@@ -68,7 +72,7 @@
 	</div>
 	<c:choose>
 		<c:when test="${pageContext.request.serverName eq 'spower.iderms.ai' or pageContext.request.serverName eq '13.114.199.169' or pageContext.request.serverName eq 'localhost'}">
-			<div class="nav_brand spower"><a href="#">Spower</a></div>
+			<div class="nav_brand spower"><a href="/dashboard/gmain.do">Spower</a></div>
 		</c:when>
 		<c:otherwise>
 			<div class="nav_brand"><a href="#">Encored</a></div>
