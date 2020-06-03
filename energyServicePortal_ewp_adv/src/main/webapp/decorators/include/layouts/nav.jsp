@@ -26,9 +26,7 @@
     $('#kepcoMngNavLink').attr('href', '/system/kepcoMng.do?siteId=' + siteId);
     $('#gmainAlarmLink').attr('onclick', "location.href='/alarm/alarmMng.do?siteId=" + siteId + "'");
   }
-
   function navAddClass(linkGbn) {
-      console.log('linkGbn===', sideBar, upperMenu)
       // listItem.removeClass("on");
       switch (linkGbn) {
         case "siteMain": sideBar.find(".smn1").addClass("on"); break;
@@ -42,7 +40,9 @@
       }
     // upperMenu.first().addClass("active");
   }
-  
+  function pleaseSelectSite() {
+    alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');
+  }
   $(function() {
     const sideBar = $("#sidebar"),
       menuItem = sideBar.find("li"),
@@ -58,9 +58,7 @@
           $(this).parents(".menu-item").addClass("active").siblings().removeClass("active");
         }
       });
-
       window.onload = function(e) {
-        console.log("window onload---")
         let reloading = sessionStorage.getItem("reloading");
         if(path.includes("dashboard")){
           upperMenu.first().addClass("active");
@@ -75,14 +73,10 @@
       sideBar.mouseleave(function(){
         menuItem.removeClass('on');
       });
-
       $('#sidebar:after').css('display','none') ? menuItemLink.removeClass('on') : null;
-
-
     // document.addEventListener('readystatechange', function(){
     //   console.log("ready state changed====")
     // });
-    
     // if(typeof(Storage) !== 'undefined') {
     //   const origin = document.location.origin;
     //   const pathname = document.location.pathname;
@@ -119,11 +113,11 @@
       // } else {
       //   console.log('storage origin and path name are null')
       // }
+      // (function(){
+      // })();
   });
 
-  function pleaseSelectSite() {
-    alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');
-  }
+
 </script>
 
 <div id="sidebar">

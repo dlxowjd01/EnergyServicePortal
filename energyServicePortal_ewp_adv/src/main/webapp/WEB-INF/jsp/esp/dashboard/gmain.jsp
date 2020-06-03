@@ -241,7 +241,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-4">
+	<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="indiv gmain_chart gmain_chart1">
@@ -1260,7 +1260,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-lg-4">
+	<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="indiv gmain_map gmain_chart gmain_chart4 ">
@@ -1456,7 +1456,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-lg-4">
+	<div class="col-xl-4 col-lg-12 col-md-12">
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="indiv gmain_alarm wrap_type">
