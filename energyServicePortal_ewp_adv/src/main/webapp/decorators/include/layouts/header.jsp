@@ -137,7 +137,7 @@
 											<li>
 												<a href="javascript:void(0);" onclick="dashboardMove('group', 'sgid', '${group.sgid}');">${group.name}</a>
 												<ul>
-													<c:set var="groupSites" value="${group.group_sites}"/>
+													<c:set var="groupSites" value="${group.sites}"/>
 													<c:forEach var="groupSiteList" items="${groupSites}">
 														<li>
 															<c:forEach var="site" items="${siteList}">

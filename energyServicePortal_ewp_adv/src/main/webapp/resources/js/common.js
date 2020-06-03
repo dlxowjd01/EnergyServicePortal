@@ -118,14 +118,16 @@ $(function() {
         if(typeof(smoothZoom) == 'function') {
             let idx = $('.dbclickopen').index($(this));
             let marker = makerArray[idx];
-            map = marker.getMap();
+            if(marker != null) {
+                map = marker.getMap();
 
-            if($(this).next().find('.di_wrap').css('display') == 'block') {
-                map.setCenter({lat: 37.549012, lng: 126.988546});
-                smoothZoom(map, 6, map.getZoom(), false);
-            } else {
-                map.setCenter(marker.position); // set map center to marker position
-                smoothZoom(map, 18, map.getZoom(), true);
+                if($(this).next().find('.di_wrap').css('display') == 'block') {
+                    map.setCenter({lat: 37.549012, lng: 126.988546});
+                    smoothZoom(map, 6, map.getZoom(), false);
+                } else {
+                    map.setCenter(marker.position); // set map center to marker position
+                    smoothZoom(map, 18, map.getZoom(), true);
+                }
             }
         }
 

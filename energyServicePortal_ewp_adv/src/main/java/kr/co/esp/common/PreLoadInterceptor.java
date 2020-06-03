@@ -1,23 +1,20 @@
 package kr.co.esp.common;
 
 import egovframework.com.cmm.service.EgovProperties;
-import kr.co.esp.common.util.RestApiUtil;
-import kr.co.esp.common.util.StringUtil;
 import kr.co.esp.common.util.UserUtil;
 import kr.co.esp.system.service.CmpyGrpSiteMngService;
-import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.springframework.security.access.method.P;
+import org.codehaus.jettison.json.JSONTokener;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.annotation.Resource;
-import javax.json.Json;
-import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -51,16 +48,26 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			String sid = request.getParameter("sid");
 
 
-			Map<String, Object> siteMap = get("/auth/me/sites", null, token); //사이트 리스트 정보
+			Map<String, String> parameters = new HashMap<String, String>();
+			parameters.put("includeDevices", "true");
+
+			Map<String, Object> siteMap = get("/auth/me/sites", parameters, token); //사이트 리스트 정보
 			if (200 == (int) siteMap.get("code")) {
 				siteOriginList = (List<Map<String, Object>>) siteMap.get("data");
 				request.setAttribute("siteHeaderList", siteOriginList); //사이트 리스트 세팅
 			} else {
-				request.setAttribute("siteHeaderList", null); //사이트 리스트 세팅
+				session.invalidate();
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script type=\"text/javascript\">alert('토큰이 만료되었습니다. 로그인페이지로 이동합니다.'); location.href='/login.do';</script>");
+				out.flush();
+
+				return false;
 			}
 
-			Map<String, String> parameters = new HashMap<String, String>();
+			parameters.clear();
 			parameters.put("includeSites", "true");
+			parameters.put("includeDevices", "true");
 
 			Map<String, Object> userSiteGroupSearch = get("/auth/me/groups", parameters, token); //그룹화되어있는 사이트 리스트 정보
 			if (200 == (int) userSiteGroupSearch.get("code")) {
@@ -75,8 +82,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				request.setAttribute("dr_group", null); //DR그룹 별
 			}
 
-			//sgid -- 그룹코드
-			//vgid -- VPP코드
+			//sgid -- 그룹코드 vgid -- VPP코드
 			if (sgid != null && !"".equals(sgid)) {
 				session.removeAttribute("systemLoc");
 				session.removeAttribute("systemTp");
@@ -96,8 +102,9 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				}
 
 				if (refineList != null && refineList.size() > 0) {
-					for (Map<String, Object> tmpMap : refineList) {
-						jsonArray.put(new JSONObject(tmpMap));
+					jsonArray = new JSONArray();
+					for (Map<String, Object> refineMap : refineList) {
+						jsonArray.put(jsonParser(refineMap));
 					}
 				}
 
@@ -125,8 +132,9 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				}
 
 				if (refineList != null && refineList.size() > 0) {
-					for (Map<String, Object> tmpMap : refineList) {
-						jsonArray.put(new JSONObject(tmpMap));
+					jsonArray = new JSONArray();
+					for (Map<String, Object> refineMap : refineList) {
+						jsonArray.put(jsonParser(refineMap));
 					}
 				}
 				request.setAttribute("vgid", vgid);
@@ -157,18 +165,31 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 					refineList = makeSiteList(siteOriginList, groupMap, session, systemLoc, systemType, systemValue);
 
+					jsonArray = new JSONArray();
 					for (Map<String, Object> refineMap : refineList) {
-						jsonArray.put(new JSONObject(refineMap));
+						jsonArray.put(jsonParser(refineMap));
 					}
 
 					request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
 					session.setAttribute("sessionSiteList", jsonArray);
 				} else {
 					jsonArray = (JSONArray) session.getAttribute("sessionSiteList");
-					if (jsonArray == null) {
+
+					if ("/dashboard/gmain.do".equals(request.getRequestURI())) {
 						jsonArray = new JSONArray();
 						for (Map<String, Object> refineMap : siteOriginList) {
-							jsonArray.put(new JSONObject(refineMap));
+							jsonArray.put(jsonParser(refineMap));
+						}
+
+						//그룹 대시보드는 처음 진입시 들어오는 화면이라 파라미터가 없을경우는 사용자가 볼수있는 모든 사이트가 대상이다.
+						request.setAttribute("sgid", "");
+						request.setAttribute("siteName", "전체");
+					} else {
+						if (jsonArray == null) {
+							jsonArray = new JSONArray();
+							for (Map<String, Object> refineMap : siteOriginList) {
+								jsonArray.put(jsonParser(refineMap));
+							}
 						}
 					}
 
@@ -286,13 +307,34 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 	 */
 	public <T> List<T> intersection(List<T> list1, List<T> list2) {
 		List<T> list = new ArrayList<T>();
-
 		for (T t : list1) {
 			if (list2.contains(t)) {
 				list.add(t);
 			}
 		}
-
 		return list;
+	}
+
+	public JSONObject jsonParser(Map<String, Object> target) {
+		JSONObject jo = new JSONObject(target);
+
+		for (Map.Entry<String, Object> elem : target.entrySet()) {
+			if(elem.getValue() instanceof ArrayList) {
+				JSONArray ja = new JSONArray();
+				List<Map<String, Object>> objectArr = (List<Map<String, Object>>) elem.getValue();
+				for(Map<String, Object> el : objectArr) {
+					JSONObject jsonObject = new JSONObject(el);
+					ja.put(jsonObject);
+				}
+
+				try {
+					jo.put(elem.getKey(), ja);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return jo;
 	}
 }
