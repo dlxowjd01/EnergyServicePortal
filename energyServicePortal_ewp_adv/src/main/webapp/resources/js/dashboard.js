@@ -854,7 +854,7 @@ const getGenDataBySiteYesterday = function () { //3번째 indiv 사업소별 탭
 			siteGenArray[siteIdx] =parseFloat(siteGenSum);
 
 			if (siteGenSum > 0) {
-				siteList[siteIdx].beforeDay = siteGenSum + 'kWh';
+				siteList[siteIdx].beforeDay = siteGenSum;
 			} else {
 				siteList[siteIdx].beforeDay = '-';
 			}
@@ -894,7 +894,7 @@ const getGenDataBySiteYesterday = function () { //3번째 indiv 사업소별 탭
 			});
 
 			siteForeGenSum = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 2)[0];
-			siteForeGenArray[siteIdx] =parseFloat(siteForeGenSum);
+			siteForeGenArray[siteIdx] = parseFloat(siteForeGenSum);
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
@@ -1490,7 +1490,7 @@ const searchSiteList = function () {
 				}
 			});
 
-			siteList[siteIdx].capacity = displayNumberFixedUnit(capacity, 'W', 'kW', 2)[0] + ' kW';
+			siteList[siteIdx].capacity = displayNumberFixedUnit(capacity, 'W', 'kW', 2)[0];
 			siteList[siteIdx].inverterCount = inverterCount;
 		} else {
 			siteList[siteIdx].capacity = '-';
@@ -1525,7 +1525,7 @@ const searchSiteList = function () {
 			if (siteForeGenSum == 0) {
 				siteList[siteIdx].forecast = '-';
 			} else {
-				siteList[siteIdx].forecast = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 2)[0] + 'kWh';
+				siteList[siteIdx].forecast = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 2)[0];
 			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
@@ -1556,7 +1556,7 @@ const searchSiteList = function () {
 						}
 					}
 					if (key == 'INV_PV') {
-						siteList[siteIdx].activePower = displayNumberFixedUnit(val.activePower, 'W', 'kW', 2)[0] + 'kW';
+						siteList[siteIdx].activePower = displayNumberFixedUnit(val.activePower, 'W', 'kW', 2)[0];
 					} else if (key == 'SENSOR_SOLAR') {
 						if (isEmpty(val)) {
 							siteList[siteIdx].irradiationPoa = '-';
@@ -1631,7 +1631,7 @@ const searchSiteList = function () {
 					if (isEmpty(el)) {
 						siteList[idx].accumulate = '-';
 					} else {
-						siteList[idx].accumulate = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 2)[0] + ' kWh';
+						siteList[idx].accumulate = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 2)[0];
 					}
 				}
 			});
@@ -1687,7 +1687,7 @@ const searchSiteList = function () {
 
 
 /**
- * 왼쪽 사이트 리스트 세팅
+ * 오른쪽 사이트 리스트 세팅
  *
  * @param type
  */
@@ -1724,12 +1724,10 @@ const searchSite = function () {
 
 	siteList.forEach((site, siteIdx) => {
 		if (!isEmpty(searchName)) {
-			if (site.name.match(searchName)) {
+			if (site.name.match(searchName) || site.address.match(searchName)) {
 				if (deviceStatus.length == 3) {
 					refineList.push(site);
 				} else {
-					console.log('status', status);
-					console.log('site.operation', site.operation);
 					deviceStatus.some(status => {
 						if ($.inArray(Number(status), site.operation) != -1) {
 							return refineList.push(site);
@@ -1742,8 +1740,6 @@ const searchSite = function () {
 				refineList.push(site);
 			} else {
 				deviceStatus.some(status => {
-					console.log('status', status);
-					console.log('site.operation', site.operation);
 					if ($.inArray(Number(status), site.operation) != -1) {
 						return refineList.push(site);
 					}
@@ -1752,7 +1748,7 @@ const searchSite = function () {
 		}
 	});
 
-	setMakeList(refineList, 'siteList', {'dataFunction': {}}); //list생성
+	setMakeList(refineList, 'siteList', {'dataFunction': {'align': alignFunc}}); //list생성
 
 	if (typeof (geocodeAddress) == 'function') {
 		map = new google.maps.Map(document.getElementById('gMainMap'), {
@@ -1781,9 +1777,6 @@ const searchSite = function () {
 		refineList.forEach((site, siteIdx) => {
 			let capacity = site.capacity.replace('kW', '') == '-' ? 0 : Number(site.capacity.replace('kW', ''));
 			let activePower = site.activePower.replace('kW', '') == '-' ? 0 : Number(site.activePower.replace('kW', ''));
-
-			console.log('capacity', capacity);
-			console.log('activePower', activePower);
 
 			let activePercent = Math.floor((activePower / capacity) * 100);
 			let title = activePercent + '%';

@@ -269,11 +269,11 @@
 									<th>
 										<button class="btn_align down">사업소</button>
 									</th>
-									<th>설비용량</th>
-									<th>금일예측</th>
-									<th>금일누적</th>
-									<th>금일충전</th>
-									<th>금일방전</th>
+									<th>설비용량 (kW)</th>
+									<th>금일예측 (kWh)</th>
+									<th>금일누적 (kWh)</th>
+									<th>금일충전 (kWh)</th>
+									<th>금일방전 (kWh)</th>
 								</tr>
 								</thead>
 								<tbody id="siteList">
@@ -288,10 +288,10 @@
 									</td>
 									<td>[alarmError]</td>
 									<td>[alarmWarning]</td>
-									<td>[name]</td>
-									<td>[capacity]</td>
-									<td>[forecast]</td>
-									<td>[accumulate]</td>
+									<td class="left">[name]</td>
+									<td class="right">[capacity]</td>
+									<td class="right">[forecast]</td>
+									<td class="right">[accumulate]</td>
 									<td>-</td>
 									<td>-</td>
 								</tr>
@@ -328,19 +328,19 @@
 															</div>
 															<ul class="di_list">
 																<li>
-																	<span class="di_li_tit">설비 출력</span>
+																	<span class="di_li_tit">설비 출력 (kW)</span>
 																	<span class="di_li_tx">[activePower]</span>
 																</li>
 																<li>
-																	<span class="di_li_tit">금일 누적발전</span>
+																	<span class="di_li_tit">금일 누적발전 (kWh)</span>
 																	<span class="di_li_tx">[accumulate]</span>
 																</li>
 																<li>
-																	<span class="di_li_tit">금일 예측발전</span>
+																	<span class="di_li_tit">금일 예측발전 (kWh)</span>
 																	<span class="di_li_tx">[forecast]</span>
 																</li>
 																<li>
-																	<span class="di_li_tit">전일 총발전량</span>
+																	<span class="di_li_tit">전일 총발전량 (kWh)</span>
 																	<span class="di_li_tx">[beforeDay]</span>
 																</li>
 															</ul>
@@ -353,12 +353,12 @@
 															</div>
 															<ul class="di_list">
 																<li>
-																	<span class="di_li_tit">총 설비용량</span>
+																	<span class="di_li_tit">총 설비용량 (kW)</span>
 																	<span class="di_li_tx">[capacity]</span>
 																</li>
 																<li>
-																	<span class="di_li_tit">총 인버터수량</span>
-																	<span class="di_li_tx">[inverterCount] EA</span>
+																	<span class="di_li_tit">총 인버터수량 (EA)</span>
+																	<span class="di_li_tx">[inverterCount]</span>
 																</li>
 															</ul>
 															<div class="di_tx_bx">

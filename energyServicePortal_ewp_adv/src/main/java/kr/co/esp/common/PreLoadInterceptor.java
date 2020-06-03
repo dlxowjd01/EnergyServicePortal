@@ -184,6 +184,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 						//그룹 대시보드는 처음 진입시 들어오는 화면이라 파라미터가 없을경우는 사용자가 볼수있는 모든 사이트가 대상이다.
 						request.setAttribute("sgid", "");
 						request.setAttribute("siteName", "전체");
+						session.setAttribute("sessionSiteList", jsonArray);
 					} else {
 						if (jsonArray == null) {
 							jsonArray = new JSONArray();
@@ -191,6 +192,8 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 								jsonArray.put(jsonParser(refineMap));
 							}
 						}
+
+						session.setAttribute("sessionSiteList", jsonArray);
 					}
 
 					request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅

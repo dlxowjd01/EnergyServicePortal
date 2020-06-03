@@ -8324,6 +8324,24 @@ nav .lang.dropdown .btn .caret {
 	vertical-align: middle;
 }
 
+.gmain_table .gtbl_wrap table td.left {
+	height: 47px;
+	line-height: 1.6;
+	color: var(--color4);
+	font-size: 13px;
+	text-align: left;
+	vertical-align: middle;
+}
+
+.gmain_table .gtbl_wrap table td.right {
+	height: 47px;
+	line-height: 1.6;
+	color: var(--color4);
+	font-size: 13px;
+	text-align: right;
+	vertical-align: middle;
+}
+
 .gmain_table .gtbl_wrap table td {
 	height: 55px
 }

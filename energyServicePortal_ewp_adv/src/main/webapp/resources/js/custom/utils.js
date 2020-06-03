@@ -1008,9 +1008,26 @@ function setMakeList(jsonData, listId, opts) {
 				tmpHtml = tmpHtml.split(col_left + arr_column[j] + col_right).join(jsonData[i][arr_column[j]]);
 			}
 		}
+
+		if(opts.dataFunction['align']) {
+			tmpHtml = alignFunc(tmpHtml);
+		}
 		arrTagInfo.push(tmpHtml);
 	}
 	$selecter.html(arrTagInfo.join(""));
+}
+
+function alignFunc(tmpHtml) {
+	let $div = $('<div>').append(tmpHtml);
+
+	$div.find('.dbclickopen td').each(function() {
+		let text = $(this).text();
+		if(text == '-') {
+			$(this).removeAttr('class');
+		}
+	});
+
+	return $div.html();
 }
 
 //작성일 : 2020-05-14
