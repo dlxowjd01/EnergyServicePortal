@@ -91,12 +91,12 @@ function setDropDownValue(id, data){
 }
 
 function getAttachFileDisplay(files){
-	var reportId = "${param.report_id}";
+// 	var reportId = "${param.report_id}";
 	var	fileList01 = [],fileList02 = [];
 	for(var i = 0, count = files.length; i < count; i++){
-		if(files[i].fieldname =="work_report_file_01_" + reportId){
+		if(files[i].fieldname.substring(0,19) =="work_report_file_01"){
 			fileList01.push(files[i]);
-		}else if(files[i].fieldname =="work_report_file_02_" + reportId){
+		}else if(files[i].fieldname.substring(0,19) =="work_report_file_02"){
 			fileList02.push(files[i]);
 		}
 	}

@@ -10,6 +10,9 @@
 const oid = '${sessionScope.userInfo.oid}';
 const loginId = '${sessionScope.userInfo.login_id}';
 
+let addListCnt1 = 0; // 첨부하는 파일 추가할 경우 카운트 1씩 증가 ( 현장점검 )
+let addListCnt2 = 0; // 첨부하는 파일 추가할 경우 카운트 1씩 증가 ( 첨부파일 )
+
 $(function () {
 	initAddListHtml();
 	getGenData();
@@ -44,7 +47,15 @@ function initAddListHtml(){
 
 function addList(addId){
 	var $selecter = $("#" + addId);
-	$selecter.append($selecter.data("form"));
+// 	$selecter.append($selecter.data("form"));
+	
+	if ( addId ==  'addFileList01') {
+		$selecter.append('<input name="work_report_file_01'+addListCnt1+'" type="file" >')
+		addListCnt1++;
+	} else if ( addId == 'addFileList02' ){
+		$selecter.append('<input name="work_report_file_02'+addListCnt2+'" type="file" >')
+		addListCnt2++;
+	}
 }
 
 function setSaveData(){

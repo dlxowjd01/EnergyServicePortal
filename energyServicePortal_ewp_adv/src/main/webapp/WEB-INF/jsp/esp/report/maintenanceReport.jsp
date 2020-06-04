@@ -231,7 +231,7 @@
 						<tbody id="listData">
 							<tr>
 								<td>
-									<input type="checkbox" id="chk_op[INDEX]" value="">
+									<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="">
 									<label for="chk_op[INDEX]"><span></span>[INDEX]</label>
 								</td>
 								<td>[report_type]</td>
