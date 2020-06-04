@@ -850,7 +850,7 @@ const getGenDataBySiteYesterday = function () { //3번째 indiv 사업소별 탭
 				}
 			});
 
-			siteGenSum = displayNumberFixedUnit(siteGenSum, 'Wh', 'kWh', 2)[0];
+			siteGenSum = displayNumberFixedUnit(siteGenSum, 'Wh', 'kWh', 0)[0];
 			siteGenArray[siteIdx] =parseFloat(siteGenSum);
 
 			if (siteGenSum > 0) {
@@ -893,7 +893,7 @@ const getGenDataBySiteYesterday = function () { //3번째 indiv 사업소별 탭
 				}
 			});
 
-			siteForeGenSum = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 2)[0];
+			siteForeGenSum = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 0)[0];
 			siteForeGenArray[siteIdx] = parseFloat(siteForeGenSum);
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
@@ -1284,7 +1284,7 @@ const getTodayTotalDetail = function () {
 		}).done(function (data, textStatus, jqXHR) {
 			let generationForecastSum = 0;
 			data.data[0].generation.items.map((e, idx) => generationForecastSum += e.energy);
-			let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text().replace(/,/, ''));
+			let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text().replace(/[^0-9]/, ''));
 			$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal += generationForecastSum / 1000)));
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
@@ -1306,11 +1306,11 @@ const getTodayTotalDetail = function () {
 		}).done(function (data, textStatus, jqXHR) {
 			if (!isEmpty(data.data[site.sid])) {
 				co2Sum += Math.floor(data.data[site.sid].co2);
-				let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text().replace(/,/, ''));
+				let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text().replace(/[^0-9]/, ''));
 				$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal += (data.data[site.sid].energy / 1000))));
 				$('#centerTbody tr td:nth-child(4) span').text(numberComma(Math.floor(co2Sum / 1000)));
 
-				let prevPay = Number($('#centerTbody tr td:nth-child(5)  span').text().replace(/,/, ''));
+				let prevPay = Number($('#centerTbody tr td:nth-child(5)  span').text().replace(/[^0-9]/, ''));
 				let money = Math.floor(data.data[site.sid].money / 1000);
 				$('#centerTbody tr td:nth-child(5) span').text(numberComma(prevPay + money));
 			}
@@ -1322,10 +1322,13 @@ const getTodayTotalDetail = function () {
 
 		if (site.devices != undefined) {
 			site.devices.forEach(device => {
-				let capacity = Number($('#centerTbody tr td:nth-child(3) span').text().replace(/,/, '')) + (device.capacity / 1000);
+				let capacity = Number($('#centerTbody tr td:nth-child(3) span').text().replace(/[^0-9]/, '')) + Math.round(device.capacity / 1000);
 				$('#centerTbody tr td:nth-child(3) span').text(numberComma(capacity));
 				if (device.device_type.match('INV')) {
-					let inverterCount = Number($('#centerTbody tr td:nth-child(2) span').text().replace(/,/, '')) + 1;
+					let inverterCount = Number($('#centerTbody tr td:nth-child(2) span').text().replace(/[^0-9]/, '')) + 1;
+					$('#centerTbody tr td:nth-child(2) span').text(numberComma(inverterCount));
+				} else {
+					let inverterCount = Number($('#centerTbody tr td:nth-child(2) span').text().replace(/[^0-9]/, ''));
 					$('#centerTbody tr td:nth-child(2) span').text(numberComma(inverterCount));
 				}
 			});
@@ -1490,7 +1493,7 @@ const searchSiteList = function () {
 				}
 			});
 
-			siteList[siteIdx].capacity = displayNumberFixedUnit(capacity, 'W', 'kW', 2)[0];
+			siteList[siteIdx].capacity = displayNumberFixedUnit(capacity, 'W', 'kW', 0)[0];
 			siteList[siteIdx].inverterCount = inverterCount;
 		} else {
 			siteList[siteIdx].capacity = '-';
@@ -1525,7 +1528,7 @@ const searchSiteList = function () {
 			if (siteForeGenSum == 0) {
 				siteList[siteIdx].forecast = '-';
 			} else {
-				siteList[siteIdx].forecast = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 2)[0];
+				siteList[siteIdx].forecast = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 0)[0];
 			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
@@ -1549,6 +1552,8 @@ const searchSiteList = function () {
 				siteList[siteIdx].operation = new Array();
 			} else {
 				let siteOperation = new Array();
+				let activePower = '-';
+				let irradiationPoa = '-';
 				$.map(data, function (val, key) {
 					if ($.inArray(val.operation, siteOperation) === -1) {
 						if (val.operation != undefined) {
@@ -1556,17 +1561,19 @@ const searchSiteList = function () {
 						}
 					}
 					if (key == 'INV_PV') {
-						siteList[siteIdx].activePower = displayNumberFixedUnit(val.activePower, 'W', 'kW', 2)[0];
+						activePower = displayNumberFixedUnit(val.activePower, 'W', 'kW', 0)[0];
 					} else if (key == 'SENSOR_SOLAR') {
 						if (isEmpty(val)) {
-							siteList[siteIdx].irradiationPoa = '-';
+							irradiationPoa = '-';
 						} else {
-							siteList[siteIdx].irradiationPoa = val.irradiationPoa.toFixed(1);
+							irradiationPoa = val.irradiationPoa.toFixed(1);
 						}
 					}
 				});
 
 				siteList[siteIdx].operation = siteOperation;
+				siteList[siteIdx].activePower = activePower;
+				siteList[siteIdx].irradiationPoa = irradiationPoa;
 			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
@@ -1631,7 +1638,7 @@ const searchSiteList = function () {
 					if (isEmpty(el)) {
 						siteList[idx].accumulate = '-';
 					} else {
-						siteList[idx].accumulate = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 2)[0];
+						siteList[idx].accumulate = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 0)[0];
 					}
 				}
 			});
@@ -1775,8 +1782,8 @@ const searchSite = function () {
 
 	setTimeout(function () {
 		refineList.forEach((site, siteIdx) => {
-			let capacity = site.capacity.replace('kW', '') == '-' ? 0 : Number(site.capacity.replace('kW', ''));
-			let activePower = site.activePower.replace('kW', '') == '-' ? 0 : Number(site.activePower.replace('kW', ''));
+			let capacity = site.capacity == '-' ? 0 : Number(site.capacity.replace(/[^0-9]/, ''));
+			let activePower = site.activePower == '-' ? 0 : Number(site.activePower.replace(/[^0-9]/, ''));
 
 			let activePercent = Math.floor((activePower / capacity) * 100);
 			let title = activePercent + '%';
