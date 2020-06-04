@@ -14,7 +14,7 @@
 			<title>Encored iDERMS</title>
 		</c:otherwise>
 	</c:choose>
-	<link href="/css/bootstrap.css" rel="stylesheet">
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
 	<link href="/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
 	<link href="/css/custom.css" rel="stylesheet">
@@ -25,7 +25,7 @@
 <!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-	<![endif]-->	
+	<![endif]-->
 	<script src="/js/jquery.min.js"></script>
 	<script src="/js/jquery.blockUI.js"></script>
 	<script src="/js/jquery-ui.js"></script>
