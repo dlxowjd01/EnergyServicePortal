@@ -126,7 +126,7 @@
 		font-size: 22px;
 	}
 	nav .all-menu .menu-group>ul>li a, nav .all-menu .menu-group>ul>li label {
-		font-size: 18px !important;
+		font-size: 18px;
 	}
 	nav .all-menu .menu-group>ul>li>a, nav .all-menu .menu-group>ul>li>label {
 		font-size: 21px;
@@ -192,7 +192,7 @@
 	#sidebar:hover:after {
 		width: 480px;
 	}
-	#sidebar:hover > ul > li > a {
+	#sidebar:hover>ul>li>a {
 		text-indent: 150px;
 	}
 	#sidebar>ul>li>a {
@@ -226,25 +226,25 @@
 	#sidebar>ul>li.smn0>a {
 		background: url('../img/loc_main_4k.png') no-repeat center 38px;
 	}
-	#sidebar > ul > .smn0.active > a {
+	#sidebar>ul>.smn0.active>a {
 		background: url('../img/loc_main_4k_on.png') no-repeat center 38px;
 	}
 	#sidebar>ul>li.smn1>a {
 		background: var(--sidebar-dashboard-off-4k) no-repeat center 38px;
 	}
-	#sidebar > ul > .smn1.active > a {
+	#sidebar>ul>.smn1.active>a {
 		background: var(--sidebar-dashboard-on-4k) no-repeat center 38px;
 	}
 	#sidebar>ul>li.smn2>a {
 		background: var(--sidebar-status-off-4k) no-repeat center 38px;
 	}
-	#sidebar > ul > .smn2.active > a {
+	#sidebar>ul>.smn2.active>a {
 		background: var(--sidebar-status-on-4k) no-repeat center 38px;
 	}
 	#sidebar>ul>li.smn3>a {
 		background: var(--sidebar-history-off-4k) no-repeat center 38px;
 	}
-	#sidebar > ul > .smn3.active > a {
+	#sidebar>ul>.smn3.active>a {
 		background: var(--sidebar-history-on-4k) no-repeat center 38px;
 	}
 	#sidebar>ul>li.smn4>a {
@@ -283,8 +283,7 @@
 	#sidebar>ul>li.smn9.active>a {
 		background: var(--sidebar-spc-on-4k) no-repeat center 38px;
 	}
-
-	#sidebar>ul>.smn1:hover>a{
+	#sidebar>ul>.smn1:hover>a {
 		background: var(--sidebar-dashboard-on-4k) no-repeat center left 56px;
 	}
 	#sidebar>ul>.smn2:hover>a {
@@ -311,7 +310,6 @@
 	#sidebar>ul>.smn9:hover>a {
 		background: var(--sidebar-spc-on-4k) no-repeat center left 38px;
 	}
-
 	#sidebar:hover>ul>.smn1>a, #sidebar:hover>ul>.smn1.active>a {
 		background: var(--sidebar-dashboard-on-4k) no-repeat center left 56px;
 		background-position-y: 34px;
@@ -348,7 +346,6 @@
 		background: var(--sidebar-spc-on-4k) no-repeat center left 56px;
 		background-position-y: 34px;
 	}
-
 	.sub_layer {
 		left: 120px;
 		width: 480px;
@@ -366,7 +363,7 @@
 	.sub_layer li.on a {
 		padding-left: 150px;
 	}
-	.sub_layer > ul > li > a {
+	.sub_layer>ul>li>a {
 		font-size: 36px;
 		padding-left: 150px;
 	}
@@ -386,8 +383,7 @@
 		height: 93px;
 		background: var(--sidebar-settings-off-4k) no-repeat center 24px;
 	}
-	#sidebar>ol>li.smn8>a,
-	#sidebar:hover>ol>li.smn8>a {
+	#sidebar>ol>li.smn8>a, #sidebar:hover>ol>li.smn8>a {
 		height: 150px;
 		background: var(--sidebar-logout-off-4k) no-repeat center 24px;
 	}
@@ -491,7 +487,7 @@
 		font-size: 19px;
 	}
 	.chart_top .search_opt input[type=text] {
-		width: 90px !important;
+		width: 90px;
 		height: 54px;
 		line-height: 54px;
 		font-size: 19px;
@@ -606,13 +602,13 @@
 		margin-left: 75px;
 	}
 	.income .inchart #income_chart {
-		height: 400px !important;
+		height: 400px;
 	}
 	.income .chart_footer ul li span {
 		font-size: 31px;
 	}
 	.charge .inchart #charge_chart {
-		height: 340px !important;
+		height: 340px;
 	}
 	.chart_table table.main_use th {
 		font-size: 19px;
@@ -754,7 +750,7 @@
 		padding: 15px 7px;
 	}
 	.gmain_table .gtbl_wrap .click+.detail_info td dl dt .inchart>div {
-		height: 195px !important;
+		height: 195px;
 	}
 	div.di_wrap .di_top span {
 		font-size: 19px;
@@ -888,7 +884,7 @@
 		margin-top: -10px;
 	}
 	div.di_wrap dl .link a {
-		font-size: 18px !important;
+		font-size: 18px;
 		padding-left: 8px;
 	}
 	.group_wrap {
@@ -934,10 +930,10 @@
 		font-weight: 300;
 	}
 	.jmain_chart #jchart1 {
-		height: 328px !important;
+		height: 328px;
 	}
 	.jmain_chart #jchart2 {
-		height: 328px !important;
+		height: 328px;
 	}
 	.jmain_circle .chart_top .ntit {
 		font-size: 22px;
@@ -980,10 +976,10 @@
 		bottom: -5px;
 	}
 	.realtime_wrap #rchart0 {
-		height: 65px !important;
+		height: 65px;
 	}
 	.realtime_wrap #rchart1 {
-		height: 292px !important;
+		height: 292px;
 	}
 	.realtime_wrap #rchart2 {
 		height: calc(100vh - 626px);
@@ -1124,7 +1120,7 @@
 		padding-right: 7px;
 	}
 	.emain .ci_left {
-		width: 345px !important;
+		width: 345px;
 	}
 	.emain .ci_center dl+dl {
 		margin-top: 15px;
@@ -1242,7 +1238,7 @@
 		max-height: 439px;
 	}
 	.gmain_map.dmain .chart_info>div.ci_left #pie_chart {
-		height: 220px !important;
+		height: 220px;
 	}
 	.dmain .chart_info>div .pc_tit {
 		margin-top: 7px;
@@ -1390,22 +1386,32 @@
 /* Large desktop screen sizes */
 
 @media all and (min-width: 1921px) and (max-width: 2560px) {
-	.gmain_chart1 {
+	.gmain_chart.gmain_chart1 {
 		min-height: auto;
-		height: 300px;
+		height: 320px;
 	}
-	.gmain_chart2 {
+	.gmain_chart1 #gchart1 {
+		height: 227px;
+	}
+	.gmain_chart.gmain_chart2 {
 		min-height: auto;
-		height: 455px;
+		height: 433px;
+	}
+	.gmain_chart.gmain_chart2 .inchart {
+		min-height: auto;
+		height: 340px;
 	}
 	.gmain_chart2 #gchart2 {
 		height: 340px;
 	}
-	.gmain_chart3 {
-		min-height: auto;
-		height: 446px;
+	.gmain_chart.jmain_center2 {
+		height: 376px;
 	}
-	.gmain_chart4 {
+	.gmain_chart.gmain_chart3 {
+		min-height: auto;
+		height: 447px;
+	}
+	.gmain_chart.gmain_chart4 {
 		height: 450px;
 	}
 	.gmain_map2 {
@@ -1415,36 +1421,117 @@
 		max-height: 100%;
 	}
 	.gmain_alarm {
-		height: 180px;
+		height: 184px;
 	}
 	.gmain_table {
 		height: 1040px;
 	}
-	/* .gmain_chart1 #gchart1 {
-		height: 202px !important;
+	.gmain_chart.jmain_center3 {
+		min-height: auto;
+		height: 447px;
 	}
-	
-	.gmain_chart2 #gchart2 {
-		height: 202px !important;
+	.realtime_by_site,
+	.realtime_total {
+		height: 285px;
 	}
-	
-	.gmain_chart3 #gchart3 {
-		height: 346px !important;
+	.realtime_by_site #rchart1,
+	.realtime_total #rchart2 {
+		height: 280px;
 	}
-	*/
+	.gmain_chart.jmain_center3 .realtime_wrap .inchart{
+		height: 350px;
+	}
+	.realtime_wrap #rchart3 {
+		height: 350px;
+	}
 }
-
 /* Laptop screen sizes */
 
-@media all and (min-width: 993px) and (max-width: 1918px) {
+@media all and (min-width: 993px) and (max-width: 1920px) {
+	.gmain_chart1 {
+		min-height: auto;
+		height: 377px;
+	}
+	.gmain_chart1 #gchart1 {
+		height: 285px;
+	}
+	.gmain_chart.gmain_chart2,
+	.gmain_chart.jmain_center2{
+		min-height: auto;
+		height: 420px;
+	}
 	.gmain_chart2 #gchart2 {
-		height: 190px;
+		height: 323px;
+	}
+	.gmain_chart.gmain_chart3,
+	.gmain_chart.jmain_center3 {
+		height: 450px;
+		margin-bottom: 15px;
+	}
+	.realtime_by_site,
+	.realtime_total {
+		height: 325px;
+	}
+	.realtime_by_site #rchart1,
+	.realtime_total #rchart2 {
+		height: 325px;
+	}
+	.realtime_wrap .inchart,
+	.realtime_wrap .inchart #rchart3 {
+		height: 358px;
+	}
+	.gmain_map2 {
+		height: 893px;
 	}
 	.gmain_alarm.wrap_type {
 		margin-top: -16px;
 	}
 }
+@media all and (min-width: 768px) and (max-width: 992px) {
+	.gmain_chart1,
+	.gmain_chart4 {
+		height: 533px;
+	}
+	.gmain_chart1 #gchart1 {
+		height: 450px;
+	}
+	.gmain_chart2,
+	.gmain_chart.jmain_center2 {
+		height: 400px;
+	}
+	.gmain_chart2 #gchart2 {
+		height: 315px;
+	}
+	.realtime_by_site,
+	.realtime_total {
+		height: 300px;
+	}
+	.realtime_by_site #rchart1,
+	.realtime_total #rchart2 {
+		height: 300px;
+	}
+	.gmain_map2 {
+		height: 875px;
+	}
+	.gmain_chart3,
+	.jmain_center3 {
+		min-height: auto;
+		height: 450px;
+	}
+	.gmain_chart3 .inchart {
+		height: 355px;
+	}
+	.gmain_chart3 #gchart3 {
+		height: 355px;
+	}
 
+	.jmain_center3 .realtime_wrap .inchart {
+		height: 365px;
+	}
+	.jmain_center3 .realtime_wrap .inchart #rchart3 {
+		height: 365px;
+	}
+}
 /* smaller than aver. laptop screen sizes */
 
 @media all and (max-width: 1200px) {
@@ -1455,7 +1542,6 @@
 	nav .all-menu .menu-group {
 		padding-bottom: 70px;
 	}
-	nav .all-menu .menu-group>ul>li {}
 	nav .all-menu .menu-group>ul>li.lo-type {
 		display: inline-block;
 		float: left;
@@ -1495,7 +1581,14 @@
 
 /* Mobile (horizontal) screen sizes */
 
-@media all and (max-width: 768px) {
+@media all and (max-width: 767px) {
+	#page-wrapper {
+		margin: 0;
+		padding: 0 10px;
+	}
+	.indiv {
+		padding: 20px 20px;
+	}
 	.control .chart_top .sel_calendar {
 		margin-left: 0;
 	}
@@ -1517,7 +1610,7 @@
 		height: 80px;
 	}
 	.c_tbl_wrap .default_tbl th, .c_tbl_wrap .default_tbl td {
-		border-radius: 0 !important;
+		border-radius: 0;
 	}
 	.income_kt_chart .chart_top .sel_calendar *, .income_kt_chart_table {
 		display: none;
@@ -1652,7 +1745,7 @@
 		margin: 15px 0 30px;
 	}
 	.dr_chart .chart_top .ntit, .dr_chart .chart_top .term, .dr_chart .chart_top .today_date, .dr_chart .chart_top .search_opt, .dr_chart .chart_top .checkbox {
-		float: none !important;
+		float: none;
 		margin: 10px 0 0;
 		text-align: left;
 	}
@@ -1725,7 +1818,7 @@
 		margin-right: 0;
 	}
 	.page-device .tab_menu li+li {
-		margin-left: 10px !important;
+		margin-left: 10px;
 	}
 	.page-device .tbl_top .button_area {
 		display: none;
@@ -1734,7 +1827,7 @@
 		display: none;
 	}
 	.page-device .default_tbl table th, .page-device .default_tbl table td {
-		border-radius: 0 !important;
+		border-radius: 0;
 	}
 	.device_group .dg_wrap {
 		padding-right: 0;
@@ -1775,10 +1868,10 @@
 		padding: 0 10px;
 	}
 	.indiv {
-		padding: 20px 20px !important;
+		padding: 20px;
 	}
 	.indiv.wrap_type {
-		padding: 0 !important;
+		padding: 0;
 	}
 	.modal-dialog {
 		display: initial;
@@ -1908,7 +2001,7 @@
 		display: block;
 	}
 	.gmain_map .chart_info>div.ci_left {
-		width: 100% !important;
+		width: 100%;
 	}
 	.local_info h2 {
 		font-size: 22px;
@@ -1953,7 +2046,6 @@
 		line-height: 2.5;
 		padding: 5px;
 	}
-	.gmain_map #pie_chart {}
 	.gmain_map .chart_info>div.ci_right {
 		/* margin-top: -80px; */
 	}
@@ -1977,9 +2069,9 @@
 		border: none;
 		border-bottom: 1px solid #4c5260;
 		position: relative;
-		padding-left: 50% !important;
-		text-align: right !important;
-		vertical-align: top !important;
+		padding-left: 50%;
+		text-align: right;
+		vertical-align: top;
 	}
 	.local_info.s_center td:before {
 		/* Now like a table header */
@@ -2031,12 +2123,12 @@
 		font-size: 12px;
 	}
 	.gmain_table .gtbl_wrap table td a {
-		font-size: 12px !important;
+		font-size: 12px;
 	}
 	.gmain_table .gtbl_wrap table tbody td .eq_icon span {
-		height: 14px !important;
-		width: 14px !important;
-		background-size: 90% !important;
+		height: 14px;
+		width: 14px;
+		background-size: 90%;
 	}
 	.gmain_table .gtbl_wrap table tbody td .eq_icon span+span {
 		margin-left: 0px;
@@ -2050,7 +2142,7 @@
 	}
 	.group_wrap {
 		min-height: initial;
-		display: none !important;
+		display: none;
 	}
 	.group_info h2 {
 		font-size: 22px;
@@ -2079,19 +2171,19 @@
 	}
 	/* Label the data */
 	.local_info.jmain.s_center td:nth-of-type(1):before {
-		content: "총 사업소" !important;
+		content: "총 사업소";
 	}
 	.local_info.jmain.s_center td:nth-of-type(2):before {
-		content: "총 설비수" !important;
+		content: "총 설비수";
 	}
 	.local_info.jmain.s_center td:nth-of-type(3):before {
-		content: "총 출력용량" !important;
+		content: "총 출력용량";
 	}
 	.local_info.jmain.s_center td:nth-of-type(4):before {
-		content: "금일 예상출력" !important;
+		content: "금일 예상출력";
 	}
 	.local_info.jmain.s_center td:nth-of-type(5):before {
-		content: "금일 누적출력" !important;
+		content: "금일 누적출력";
 	}
 	.smain_pv ul li {
 		line-height: 1.5;
@@ -2113,10 +2205,10 @@
 		font-size: 12px;
 	}
 	.local_info.smain.s_center td {
-		font-size: 13px !important;
+		font-size: 13px;
 	}
 	.local_info.smain.s_center td span {
-		font-size: 14px !important;
+		font-size: 14px;
 	}
 	/* Label the data */
 	.local_info.smain.s_center td:nth-of-type(1):before {
@@ -2135,7 +2227,7 @@
 		line-height: 1.3;
 	}
 	.type_list_detail .local_info td {
-		padding: 5px 2px !important;
+		padding: 5px 2px;
 	}
 	.smain_cal {
 		min-height: auto;
@@ -2287,7 +2379,7 @@
 		height: auto;
 	}
 	.dmain .chart_info>div {
-		width: 100% !important;
+		width: 100%;
 	}
 	.dmain .chart_info>div.ci_left {
 		height: 120px;
@@ -2297,7 +2389,7 @@
 	}
 	.dmain .pchart_info>div {
 		float: none;
-		padding-left: 0 !important;
+		padding-left: 0;
 		width: 100%;
 		text-align: right;
 	}
@@ -2313,11 +2405,11 @@
 	}
 	.dmain.dminfo .tfl {
 		display: block;
-		width: 100% !important;
+		width: 100%;
 	}
 	.dmain.dminfo .tfr {
 		display: block;
-		width: 100% !important;
+		width: 100%;
 	}
 	.dmain.dminfo>div.tfl>div {
 		line-height: 1.6;
@@ -2330,10 +2422,10 @@
 		padding-left: 0;
 	}
 	.indiv {
-		padding: 20px 15px !important;
+		padding: 20px 15px;
 	}
 	.indiv.wrap_type {
-		padding: 0 !important;
+		padding: 0;
 	}
 	nav .nav_right li {
 		display: block;
@@ -2347,11 +2439,11 @@
 		overflow: hidden
 	}
 	nav .all-menu .menu-group>ul>li {
-		display: block !important;
-		width: 100% !important;
-		float: none !important;
-		padding-top: 0px !important;
-		border-left: 0 !important;
+		display: block;
+		width: 100%;
+		float: none;
+		padding-top: 0px;
+		border-left: 0;
 	}
 	nav .all-menu .menu-group>ul>li:nth-child(3), nav .all-menu .menu-group>ul>li:nth-child(5) {
 		margin-top: 30px;
@@ -2393,11 +2485,11 @@
 
 @media print {
 	.totaldprint .lbody table.tbl th {
-		background-color: #eaeaea !important;
+		background-color: #eaeaea;
 		-webkit-print-color-adjust: exact;
 	}
 	.dprint .lbody table.tbl th {
-		background-color: #eaeaea !important;
+		background-color: #eaeaea;
 		-webkit-print-color-adjust: exact;
 	}
 }

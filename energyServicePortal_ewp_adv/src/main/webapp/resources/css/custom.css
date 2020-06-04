@@ -1004,7 +1004,7 @@ li.on .sub_layer > ul {
 /* 페이지 상단 */
 nav {
 	position: relative;
-	margin: 0 0 10px;
+	margin: 0;
 	padding: 0 72px 0 30px;
 	min-height: 64px;
 	background-color: var(--box-color);
@@ -1048,7 +1048,9 @@ nav .nav_brand.spower a {
 	vertical-align: top;
 	font-size: 0;
 }
-
+nav .nav_brand.spower a:hover {
+	opacity: 0.7;
+}
 /* ewp 로고 */
 nav .nav_brand.ewp {
 	margin-top: 35px;
@@ -1308,9 +1310,8 @@ nav .all-menu .menu-group .btn-group button {
 
 /* 페이지 하단 */
 footer {
-	margin-top: 8px;
-	height: 50px;
-	padding-top: 12px;
+	height: 48px;
+	padding-top: 10px;
 }
 
 footer .ft_menu {
@@ -1336,12 +1337,14 @@ footer .copyright {
 	color: var(--color3);
 	letter-spacing: 0.3px;
 }
-
 .time {
-	/* padding: 0 36px; */
-	padding: 0;
-	margin-right: -18px;
-	height: 36px;
+	/* justify-self: end; */
+	/* padding: 0 10px 0 0;
+	margin-left: auto;
+    order: 2; */
+	/* margin-right: -18px; */
+	height: 60px;
+	line-height: 60px;
 	text-align: right;
 	position: relative;
 }
@@ -1481,7 +1484,7 @@ footer .copyright {
 }
 
 .dropdown-menu {
-	/* top:95%; */
+	top:36px;
 	width: auto;
 	min-width: 100%;
 	height: auto;
@@ -1495,7 +1498,7 @@ footer .copyright {
 
 .dropdown-menu > li > a {
 	color: var(--color6);
-	padding: 3px 16px;
+	/* padding: 0; */
 	font-size: 12px;
 	line-height: 28px
 }
@@ -1506,7 +1509,9 @@ footer .copyright {
 	text-decoration: none;
 	background-color: #e6e6e6;
 }
-
+.dropdown-menu > .no-data {
+	padding: 8px 5px 5px;
+}
 .darkmode .dropdown-menu > li > a:hover,
 .darkmode .dropdown-menu > li > a:focus {
 	color: #e8e8e8;
@@ -5850,10 +5855,23 @@ nav .lang.dropdown .btn .caret {
 	font-size: 13px
 }
 
-
 /* 사용량 차트 */
+.row.content-wrapper {
+	margin-top: -12px;
+}
+/* .indiv.gmain_chart.gmain_chart1,
+.indiv.gmain_chart.gmain_chart2,
+.indiv.gmain_chart.gmain_chart4,
+.indiv.gmain_alarm.wrap_type {
+	margin-bottom: 24px;
+} */
+.indiv.gmain_chart:not(:last-of-type),
+.indiv.gmain_alarm.wrap_type {
+	margin-bottom: 24px;
+}
+
 .gmain_chart .chart_top .ntit {
-	margin: 6px 0 10px;
+	margin: 6px 0 22px;
 }
 
 .gmain_chart .gtab_menu {
@@ -5894,10 +5912,6 @@ nav .lang.dropdown .btn .caret {
 .gmain_chart .gtab_menu li:hover a {
 	color: var(--color2);
 	font-weight: bold;
-}
-
-.gmain_chart .tblDisplay {
-	margin-top: 40px;
 }
 
 .gmain_chart .tblDisplay .paging {
@@ -6097,10 +6111,20 @@ nav .lang.dropdown .btn .caret {
 }
 
 .gmain_map .chart_info > div.ci_left {
-	width: 230px;
+	/* width: 230px; */
+	width: 180px;
+	padding-right: 21px;
 	vertical-align: bottom;
 }
-
+.gmain_map .chart_info > div.ci_left > .inchart {
+	padding: 5px 0 30px;
+	width: 180px;
+	height: 190px;
+}
+.gmain_map .chart_info > div.ci_left > .inchart #pie_chart {
+	width: 180px;
+	height: 180px;
+}
 .gmain_map .chart_info > div.ci_right {
 	width: auto;
 	vertical-align: top;
@@ -6942,27 +6966,25 @@ div.di_wrap dl .link a {
 	min-height: auto;
 	height: 305px;
 }
-
+.gmain_chart1 #gchart1 {
+	height: 200px;
+}
 .gmain_chart2 {
 	min-height: auto;
 	height: 305px;
 }
-
+.gmain_chart2 #gchart2 {
+	height: 200px;
+}
 .gmain_chart3 {
 	min-height: auto;
 	height: 450px;
 }
-
-.gmain_chart1 #gchart1 {
-	height: 200px;
+.gmain_chart3 .inchart {
+	height: 355px;
 }
-
-.gmain_chart2 #gchart2 {
-	height: 200px;
-}
-
 .gmain_chart3 #gchart3 {
-	height: 346px;
+	height: 355px;
 }
 
 .gmain_chart.gmain_chart1 .chart_top .ntit,
@@ -6972,9 +6994,8 @@ div.di_wrap dl .link a {
 	font-size: 16px;
 	font-weight: bold;
 }
-
 .gmain_map.gmain_chart.gmain_chart4 {
-	height: 363px;
+	height: 377px;
 	position: relative;
 }
 
@@ -6983,7 +7004,7 @@ div.di_wrap dl .link a {
 }
 
 .gmain_chart .chart_top {
-	margin-bottom: 38px;
+	margin-bottom: 15px;
 }
 
 .gmain_chart .chart_top .term {
@@ -7150,11 +7171,11 @@ div.di_wrap dl .link a {
 	bottom: -5px;
 }
 
-.realtime_wrap #rchart2 {
+/* .realtime_wrap #rchart2 {
 	height: calc(100vh - 748px);
 	min-height: 165px;
 	max-height: 253px;
-}
+} */
 
 /* 월별 PV발전량 종합 */
 
@@ -9207,7 +9228,6 @@ div.di_wrap dl .link a {
 }
 
 .dropdown_cov {
-	padding: 0 22px 10px 22px;
 	width: 380px
 }
 
@@ -9234,6 +9254,7 @@ div.di_wrap dl .link a {
 }
 
 .li_btn_bx {
+	padding: 5px 12px;
 	margin-top: 80px
 }
 
@@ -9431,9 +9452,8 @@ button.big{width:102px}
 }
 
 .header_drop_area .dropdown_cov {
-	width: auto
+	width: auto;
 }
-
 .value_area {
 	margin-top: 25px
 }

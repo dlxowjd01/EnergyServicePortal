@@ -952,11 +952,11 @@ function setInitList(listId) {
 	if ("TBODY" == sTagName || "TABLE" == sTagName) {
 		sEmptyMsg = "<tr><td colspan='" + tdCount + "' style='text-align:center;'>조회 데이터가 없습니다.</td></tr>";
 	} else if ("UL" == sTagName) {
-		sEmptyMsg = "<li>조회 데이터가 없습니다.</li>";
+		sEmptyMsg = '<li class=' + '"no-data"'+ '>조회 데이터가 없습니다.</li>';
 	} else if ("SELECT" == sTagName) {
 		sEmptyMsg = "";
 	} else {
-		sEmptyMsg = "<div>조회 데이터가 없습니다.</div>";
+		sEmptyMsg = '<div class=' + '"no-data"'+ '>조회 데이터가 없습니다.</div>';
 	}
 
 	$selecter.removeData().html(sEmptyMsg);
@@ -988,11 +988,11 @@ function setMakeList(jsonData, listId, opts) {
 		if ("TBODY" == sTagName || "TABLE" == sTagName) {
 			arrTagInfo.push("<tr><td colspan='" + tdCount + "' style='text-align:center;'>조회 데이터가 없습니다.</td></tr>");
 		} else if ("UL" == sTagName) {
-			arrTagInfo.push("<li>조회 데이터가 없습니다.</li>");
+			arrTagInfo.push('<li class=' + '"no-data"'+ '>조회 데이터가 없습니다.</li>');
 		} else if ("SELECT" == sTagName) {
 			arrTagInfo.push("");
 		} else {
-			arrTagInfo.push("<div>조회 데이터가 없습니다.</div>");
+			arrTagInfo.push('<div class=' + '"no-data"'+ '>조회 데이터가 없습니다.</div>');
 		}
 	}
 

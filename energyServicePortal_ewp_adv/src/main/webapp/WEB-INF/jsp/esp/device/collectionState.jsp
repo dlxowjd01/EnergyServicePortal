@@ -12,8 +12,9 @@
 		</div>
 		<div class="header_drop_area col-lg-2">
 			<div class="dropdown">
-			  <button id="siteSummary" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">-
-				<span class="caret"></span></button>
+				<button id="siteSummary" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+					<span class="caret"></span>
+				</button>
 				<ul class="dropdown-menu dropdown-menu-form chk_type">
 					<li class="dropdown_cov clear">
 						<div class="sec_li_bx">
@@ -373,7 +374,9 @@
 					oid,
 				},
 				success: function (sites) {
-					$('#siteSummary').text(`${'${sites[0].name}'} 외 ${'${sites.length-1}개'}`)
+					$('#siteSummary').text(`${'${sites[0].name}'} 외 ${'${sites.length-1}개'}`).append('<span class="caret"></span>');
+					$('#siteSummary').html
+
 					$('#siteList').empty();
 					$('#PV_INVERTER tbody').empty();
 					let str = ``;
