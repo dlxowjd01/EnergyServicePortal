@@ -72,7 +72,7 @@
 					</div>
 				</div>
 				<div class="fl" id="cycle">
-					<span class="tx_tit">주기</span>
+					<span class="tx_tit">단위</span>
 					<div class="sa_select">
 						<div class="dropdown">
 							<button class="btn btn-primary dropdown-toggle w3 interval" type="button" data-toggle="dropdown">

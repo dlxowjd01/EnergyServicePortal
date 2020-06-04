@@ -125,7 +125,7 @@
 				</div>
 
 				<div class="fl">
-					<span class="tx_tit">주기</span>
+					<span class="tx_tit">단위</span>
 					<div class="sa_select">
 						<div class="dropdown" id="interval">
 							<button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown" data-value="15min">
