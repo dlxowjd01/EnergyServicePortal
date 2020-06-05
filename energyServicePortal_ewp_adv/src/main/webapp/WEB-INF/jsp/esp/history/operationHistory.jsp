@@ -1044,108 +1044,105 @@
 	}
 </script>
 
-<div class="col-lg-12">
+<div class="col-12">
 	<div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header">상태 이력</h1>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-lg-12">
-			<div class="row">
-				<div class="indiv his_chart_top clear">
-					<div class="sa_select fl">
-						<div class="dropdown" id="siteList">
-							<button type="button" class="btn btn-primary dropdown-toggle w1" data-toggle="dropdown"
-							        data-name="사업소">
-								선택해주세요.<span class="caret"></span>
+		<div class="inline-wrapper">
+			<div class="search-select dropdown" id="siteList">
+				<button type="button" class="btn btn-primary dropdown-toggle w1" data-toggle="dropdown"
+						data-name="사업소">
+					선택해주세요.<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu chk_type" role="menu" id="siteULList">
+					<li data-value="[sid]">
+						<a href="javascript:void(0);" tabindex="-1">
+							<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
+							<label for="site_[INDEX]"><span></span>[name]</label>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="search-wrap">
+				<div class="facility-type-wrap">
+					<span class="tx_tit">설비 타입</span>
+					<div class="sa_select">
+						<div class="dropdown" id="deviceType">
+							<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown"
+									data-name="설비유형">
+								설비유형<span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu chk_type" role="menu" id="siteULList">
-								<li data-value="[sid]">
+							<ul class="dropdown-menu chk_type" role="menu" id="typeULList">
+								<li data-value="[type]">
 									<a href="javascript:void(0);" tabindex="-1">
-										<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
-										<label for="site_[INDEX]"><span></span>[name]</label>
+										<input type="checkbox" id="type_[INDEX]" value="[type]" name="type">
+										<label for="type_[INDEX]"><span></span>[name]</label>
 									</a>
 								</li>
 							</ul>
 						</div>
 					</div>
-					<div class="fl">
-						<span class="tx_tit">설비 타입</span>
-						<div class="sa_select">
-							<div class="dropdown" id="deviceType">
-								<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown"
-								        data-name="설비유형">
-									설비유형<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu chk_type" role="menu" id="typeULList">
-									<li data-value="[type]">
-										<a href="javascript:void(0);" tabindex="-1">
-											<input type="checkbox" id="type_[INDEX]" value="[type]" name="type">
-											<label for="type_[INDEX]"><span></span>[name]</label>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-						<div class="sa_select">
-							<div class="dropdown" id="devices">
-								<button class="btn btn-primary dropdown-toggle w1" type="button" data-toggle="dropdown"
-								        data-name="복수 선택">
-									복수 선택<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu chk_type" role="menu">
-									<li class="dropdown_cov clear">
-										<div class="li_btn_bx clear">
-											<div class="fl">
-												<button type="button" class="btn_type03">모두 선택</button>
-												<button type="button" class="btn_type03">모두 해제</button>
-											</div>
-											<div class="fr">
-												<button type="button" class="btn_type">적용</button>
-											</div>
+					<div class="sa_select">
+						<div class="dropdown" id="devices">
+							<button class="btn btn-primary dropdown-toggle w1" type="button" data-toggle="dropdown"
+									data-name="복수 선택">
+								복수 선택<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu chk_type" role="menu">
+								<li class="dropdown_cov clear">
+									<div class="li_btn_bx clear">
+										<div class="fl">
+											<button type="button" class="btn_type03">모두 선택</button>
+											<button type="button" class="btn_type03">모두 해제</button>
 										</div>
-									</li>
-								</ul>
-							</div>
+										<div class="fr">
+											<button type="button" class="btn_type">적용</button>
+										</div>
+									</div>
+								</li>
+							</ul>
 						</div>
-					</div>
-					<div class="fl dateField">
-						<span class="tx_tit">기간 설정</span>
-						<div class="sel_calendar">
-							<input type="text" id="fromDate" name="fromDate" class="sel fromDate" value=""
-							       autocomplete="off">
-							<em>-</em>
-							<input type="text" id="toDate" name="toDate" class="sel toDate" value="" autocomplete="off">
-						</div>
-					</div>
-
-					<div class="fl">
-						<span>조회주기</span>
-						<div class="sa_select">
-							<div class="dropdown" id="interval">
-								<button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown"
-								        data-value="15min" data-name="15분">
-									15분<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu">
-									<li data-value="1min"><a href="javascript:void(0);">1분</a></li>
-									<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
-									<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
-									<li data-value="day"><a href="javascript:void(0);">1일</a></li>
-									<li data-value="week"><a href="javascript:void(0);">1주</a></li>
-									<li data-value="month"><a href="javascript:void(0);">1월</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="fl">
-						<button type="button" id="search" class="btn_type">조회</button>
-					</div>
-					<div class="fr">
-						<a href="#;" class="save_btn">데이터저장</a>
 					</div>
 				</div>
+
+				<div class="dateField">
+					<span class="tx_tit">기간 설정</span>
+					<div class="sel_calendar">
+						<input type="text" id="fromDate" name="fromDate" class="sel fromDate" value=""
+							autocomplete="off">
+						<em>-</em>
+						<input type="text" id="toDate" name="toDate" class="sel toDate" value="" autocomplete="off">
+					</div>
+				</div>
+
+				<div class="unit-wrap">
+					<span class="tx_tit">단위</span>
+					<div class="sa_select">
+						<div class="dropdown" id="interval">
+							<button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown"
+									data-value="15min" data-name="15분">
+								15분<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li data-value="1min"><a href="javascript:void(0);">1분</a></li>
+								<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
+								<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
+								<li data-value="day"><a href="javascript:void(0);">1일</a></li>
+								<li data-value="week"><a href="javascript:void(0);">1주</a></li>
+								<li data-value="month"><a href="javascript:void(0);">1월</a></li>
+							</ul>
+						</div>
+					</div>
+					<button type="button" id="search" class="btn_type">조회</button>
+				</div>
+			</div>
+			<!-- <div class="indiv his_chart_top clear fl"> -->
+			<div class="fr">
+				<a href="#;" class="save_btn">데이터저장</a>
 			</div>
 		</div>
 	</div>

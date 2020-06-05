@@ -8,12 +8,17 @@
 		const compareSelectBox = compareArea.children().find(".dropdown-toggle.bgN");
 		const modalCompare = compareSelectBox.next("ul");
 		// const innerSelectBox = selectModal.find("btn.dropdown-toggle");
-		const addRuleBtn = modalCompare.find("comp_btn_wrap .btn_type");
+		const confirmBtn = modalCompare.find("comp_btn_wrap button");
 
 		compareSelectBox.on("click", function(){
 			// modalCompare.toggleClass("toggled");
 			dropdownArea.toggleClass("open");
 		});
+		confirmBtn.on("click", function(e){
+			// e.preventDefault();
+			console.log("btn---", dropdownArea)
+			dropdownArea.removeClass("open");
+		})
 
 		// compareSelectBox.on("click", function(){
 		// 	dropdown.removeClass("open");
@@ -440,7 +445,7 @@
 								</div>
 							</div>
 							<div class="comp_btn_wrap">
-								<button type="submit" class="btn_type">규칙 등록</button>
+								<button type="button" class="btn_type">확인</button>
 							</div>
 						</li>
 					</ul>

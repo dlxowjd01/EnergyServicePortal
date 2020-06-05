@@ -299,6 +299,23 @@
 					<input type="text" id="datepicker2" class="sel" value="" autocomplete="off" style="width:140px">
 				</div>
 			</div>
+			<div class="fl" id="cycle">
+				<span class="tx_tit">단위</span>
+				<div class="sa_select">
+					<div class="dropdown">
+						<button class="btn btn-primary dropdown-toggle w3 interval" type="button" data-toggle="dropdown" aria-expanded="false">
+							기간<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li class="on"><a href="#">15분</a></li>
+							
+							<li><a href="#">1시간</a></li>
+							<li><a href="#">1일</a></li>
+							<li><a href="#">1월</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
 			<div class="fl">
 				<button type="button" id="search" class="btn_type">조회</button>
 			</div>

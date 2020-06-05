@@ -11,6 +11,23 @@
 	const loginId = '${sessionScope.userInfo.login_id}';
 
 	$(function () {
+		var spcFrom = document.getElementById("spc_form");
+		var keyWord = document.getElementById("key_word");
+
+		keyWord.addEventListener("focus", function(e){
+			if(!keyWord.value.replace(/\s/g, '').length){
+				keyWord.value='';
+			 } else {
+				keyWord.value === keyWord.value;
+			 }
+		});
+
+		spcFrom.addEventListener("submit", function(e){
+			e.preventDefault();
+			(!keyWord.value || !keyWord.value.trim() ) ? ( keyWord.value='' ) : ( keyWord.value === keyWord.value );
+			getDataList();
+		});
+
 		setInitList("listData"); //리스트초기화
 		getDataList();
 	});
@@ -29,17 +46,17 @@
 
 		getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_info_list.csv"); // json list, 컬럼, 헤더명, 파일명
 	}
-	
+
 	function jsonDataFilter(jsonData){
 		var keyWord = $("#key_word").val(), bResult = false;
-		
+
 		if(jsonData["name"].indexOf(keyWord) > -1 || jsonData["발전소_명"] .indexOf(keyWord) > - 1){
 			bResult = true;
-		}		
-		
+		}
+
 		return bResult;
 	}
-	
+
 	function setJsonDataFormat(result){
 		var jsonList = [],
 			keyWord = $("#key_word").val();
@@ -53,7 +70,7 @@
 						newData = Object.assign({}, rowData),
 						warrantyInfo = JSON.parse(spcGensRow.warranty_info),
 						contractInfo = JSON.parse(spcGensRow.contract_info);
-					
+
 					newData["gen_id"] = spcGensRow.gen_id;
 					newData["발전소_명"] = spcGensRow.name;
 					newData["관리_운영_기간"] = nvl(contractInfo["관리_운영_기간"], "-");
@@ -62,12 +79,12 @@
 					newData["PR_보증치"] = nvl(warrantyInfo["PR_보증치"], "-");
 					newData["보증_감소율"] = nvl(warrantyInfo["보증_감소율"], "-");
 					newData["추가_보수"] = nvl(warrantyInfo["추가_보수"], "-");
-					
+
 					//키워드 검색 조건 필터 처리
 					if(jsonDataFilter(newData)){
 						jsonList.push(newData)
 					}
-					
+
 				}
 			}
 		}
@@ -81,6 +98,8 @@
 			async: true,
 			data: {"oid": oid, includeGens: true},
 			success: function (result) {
+				// console.log('result===', result)
+
 				setMakeList(setJsonDataFormat(result), "listData", {"dataFunction" : {"INDEX" : getNumberIndex}}); //list생성
 			},
 			error: function (request, status, error) {
@@ -175,13 +194,13 @@
 </div>
 <div class="row">
 	<div class="col-lg-3">
-		<div class="tx_btn_area">
+		<form id="spc_form" class="tx_btn_area">
 			<div class="tx_inp_type">
 				<input type="text" id="key_word" placeholder="입력">
 			</div>
-			<button class="btn_type" onclick="getDataList();">검색</button>
+			<button class="btn_type">검색</button>
 		</div>
-	</div>
+	</form>
 	<div class="col-lg-9">
 		<div class="right">
 			<a href="#;" class="save_btn" onclick="getCsvDown();">CSV 다운로드</a>
