@@ -211,7 +211,6 @@
 			data['report_type'] = type;
 		}
 
-
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/reports/performance",
 			type: "get",
@@ -219,7 +218,7 @@
 			data: data,
 			success: function (result) {
 				var jsonList = [],
-					keyWord = $("#key_word").val();
+					keyWord = $('#key_word').val();
 
 				for (var i in result.data) {
 					var temp = result.data[i],
@@ -252,9 +251,9 @@
 						result.data[i].confirmed_date = confirmed_date + '<label for="cofirmFile' + i + '" class="btn_file fr up"">업로드</label> <input type="file" id="cofirmFile' + i + '" name="cofirmFile' + i + '" class="uploadBtn" style="display:none;">';
 					}
 
-					//if(jsonDataFilter(result.data[i])) {
+					if(jsonDataFilter(result.data[i])) {
 						jsonList.push(result.data[i]);
-					//}
+					}
 				}
 
 				setMakeList(jsonList, "listData", {"dataFunction": {"INDEX": getNumberIndex}}); //list생성
@@ -266,11 +265,33 @@
 	}
 
 	function jsonDataFilter(jsonData){
-		var keyWord = $("#key_word").val(), bResult = false;
-		if(jsonData['site_name'].indexOf(keyWord) > -1 || jsonData['spc_name'] .indexOf(keyWord) > - 1){
+		var keyWord = $('#key_word').val(), 
+// 		selectYear = $("#year button").text(),
+// 		selectMonth = $("#month button").text(),
+// 		bWriteDate = false,
+// 		bKeyWord = false,
+		bResult = false;
+// 		let jsonDataYear = jsonData.report_date.substring(0, 4);
+// 		let jsonDataMonth = jsonData.report_date.substring(5, 7);
+		
+// 		if(selectYear == "" && selectMonth == ""){
+// 			bWriteDate = true;	
+// 		}else{
+// 			if(selectYear == jsonDataYear || selectMonth == jsonDataMonth){
+// 				bWriteDate = true;
+// 			}else{
+// 				bWriteDate = false;
+// 			}			
+// 		}
+		
+		if(jsonData['site_name'].indexOf(keyWord) > -1 || jsonData['spc_name'].indexOf(keyWord) > -1 || jsonData['updated_by'].indexOf(keyWord) > -1){			
 			bResult = true;
 		}
-
+		
+// 		if(bWriteDate && bKeyWord){
+// 			bResult = true;	
+// 		}
+		
 		return bResult;
 	}
 
@@ -541,7 +562,7 @@
 		</div>
 		<div class="fl">
 			<div class="tx_inp_type">
-				<input type="text" placeholder="입력">
+				<input type="text" id = "key_word" placeholder="입력">
 			</div>
 		</div>
 		<div class="fl">

@@ -61,9 +61,11 @@
 							result.data[i].name = siteList[j].name;
 						}
 					}
+					if(result.data[i].name.indexOf(keyWord) > -1 || result.data[i].spc_name.indexOf(keyWord) > - 1){
+						jsonList.push(result.data[i]);
+                    }		
 				}
-
-				setMakeList(result.data, "listData", {"dataFunction" : {"INDEX" : getNumberIndex}}); //list생성
+				setMakeList(jsonList, "listData", {"dataFunction" : {"INDEX" : getNumberIndex}}); //list생성
 
 			},
 			error: function (request, status, error) {
@@ -204,7 +206,7 @@
 		</div>
 		<div class="fl">
 			<div class="tx_inp_type">
-				<input type="text" id="searchName" name="searchName" placeholder="입력">
+				<input type="text" id="key_word" name="searchName" placeholder="입력">
 			</div>
 		</div>
 		<div class="fl">

@@ -41,18 +41,17 @@
 			write_date_from = $("#write_date_from").val().split("-").join(""),
 			write_date_to = $("#write_date_to").val().split("-").join(""),
 			filterCheckCount = 0,
+			workinfoObj = JSON.parse(jsonData.work_info),
 			bReportType = false,
 			bWriteDate = false,
 			bKeyWord = false;
 			bResult = false;
-		
 		//보고서 구분
 		if("" != report_type && report_type == jsonData.report_type){
 			bReportType = true;
 		}else if("" == report_type){
 			bReportType = true;
-		}
-		
+		}		
 		//작성일자
 		if(write_date_from != "" && write_date_to != ""){
 			var write_date = jsonData.write_date.split("-").join("");
@@ -64,17 +63,17 @@
 			}
 		}else if(write_date_from == "" && write_date_to == ""){
 			bWriteDate = true;
-		}
-		
+		}		
 		//키워드검색
-		if(jsonData.report_name.indexOf(keyWord) > -1){
+		if(jsonData.report_name.indexOf(keyWord) > -1 || workinfoObj.출장_장소.indexOf(keyWord) > -1 || workinfoObj.출장_목적.indexOf(keyWord) > -1 
+		|| workinfoObj.출장자.indexOf(keyWord) > -1 || jsonData.site_name.indexOf(keyWord) > -1 || jsonData.updated_by.indexOf(keyWord) > -1){
 			bKeyWord = true;
-		}
+		}		
 		
 		if(bReportType && bWriteDate && bKeyWord){
 			bResult = true;
 		}
-		
+
 		return bResult
 	}
 	

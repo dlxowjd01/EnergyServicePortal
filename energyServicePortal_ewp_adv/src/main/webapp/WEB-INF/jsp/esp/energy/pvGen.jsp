@@ -25,7 +25,7 @@
 		<div class="indiv usage_chart pv_chart">
 			<div class="chart_top clear">
 				<div class="fl" id="deviceType">
-					<span class="tx_tit">계량값</span>
+					<span class="tx_tit">계량값</span>	
 					<div class="sa_select">
 						<div class="dropdown">
 							<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">복수 선택
