@@ -154,7 +154,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		marginTop: 40,
 		marginLeft: 55,
 		marginRight: 50,
-		height: 220,
+		height: 285,
 		backgroundColor: 'transparent',
 		zoomType: 'xy'
 	},
@@ -550,7 +550,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		marginTop: 40,
 		marginLeft: 50,
 		marginRight: 50,
-		height: 220,
+		height: 323,
 		backgroundColor: 'transparent',
 		zoomType: 'xy'
 	},
@@ -696,7 +696,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 					var visibility = this.visible ? 'visible' : 'hidden';
 					this.legendItem.styles.color == 'var(--color4)'
 					// var visibility = this.visible ? 'visible' : 'hidden';
-					
+
 				}
 			}
 		},
@@ -962,7 +962,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 	chart: {
 		marginTop: 50,
 		marginRight: 0,
-		height: 330,
+		height: 355,
 		backgroundColor: 'transparent',
 		type: 'bar'
 	},
@@ -1926,4 +1926,92 @@ const siteListChart = function (selector, seriesData, title) {
 
 	chartSelector = new Highcharts.Chart(option);
 	chartSelector.redraw();
+}
+
+$(document).ready(function () {
+	// 모든 table 헤더에 클릭 이벤트를 설정한다.
+	var tables = document.getElementsByTagName("table");
+	for (var i = 0; i < tables.length; ++i) {
+		var headers = tables[i].getElementsByTagName("th");
+		for (var j = 0; j < headers.length; ++j) {
+			// 지역 유효범위에 생성할 중첩 함수
+			(function (table, n) {
+				headers[j].onclick = function () {
+					let sort = 'down';
+					if(this.getElementsByTagName('button')[0].classList.length == 1) {
+						console.log(j);
+						this.getElementsByTagName('button')[0].classList.add('down');
+						sort = 'down';
+					} else {
+						if(this.getElementsByTagName('button')[0].classList[1] == 'up') {
+							this.getElementsByTagName('button')[0].classList.replace('up', 'down');
+							sort = 'down';
+						} else {
+							this.getElementsByTagName('button')[0].classList.replace('down', 'up');
+							sort = 'up';
+						}
+					}
+
+					for (var k = 0; k < headers.length; k++) {
+						if(n != k) {
+							headers[k].getElementsByTagName('button')[0].classList.remove('up');
+							headers[k].getElementsByTagName('button')[0].classList.remove('down');
+						}
+					}
+					SortTable(table, n, sort)
+				};
+			}(tables[i], j));
+		}
+	}
+});
+
+function SortTable(table, n, sort) {
+	// table 에 tbody tag 가 반드시 존재한다고 가정한다.
+	let tbody = table.tBodies[0];
+	let rows = tbody.querySelectorAll('tr.dbclickopen');
+	let rows2 = tbody.querySelectorAll('tr.detail_info');
+	rows = Array.prototype.slice.call(rows, 0);
+	rows.sort(function (row1, row2) {
+		var cell1 = row1.getElementsByTagName("td")[n];
+		var cell2 = row2.getElementsByTagName("td")[n];
+		var value1 = cell1.textContent || cell1.innerText;
+		var value2 = cell2.textContent || cell2.innerText;
+
+		value1 = value1 == '-' ? 0 : value1;
+		value2 = value2 == '-' ? 0 : value2;
+
+		console.log(isNaN(value1));
+		console.log(isNaN(value2));
+
+		if(!isNaN(value1) && typeof(value1) == 'string') {
+			value1 = Number(value1.replace(/[^0-9]/, ''));
+		}
+
+		if(!isNaN(value2) && typeof(value2) == 'string') {
+			value2 = Number(value2.replace(/[^0-9]/, ''));
+		}
+
+		if(sort == 'up') {
+			if (value1 < value2) return -1;
+			if (value1 > value2) return 1;
+		} else {
+			if (value1 < value2) return 1;
+			if (value1 > value2) return -1;
+		}
+
+		return 0;
+	});
+
+
+	// 정렬된 배열로 row 를 다시 저장한다. 문서에 이미 존재하는 node 는 삽입하면 해당 node 는 자동으로 제거되고 새 위치에 저장된다.
+	for (var i = 0; i < rows.length; ++i) {
+		let flag = rows[i].classList[1];
+		tbody.appendChild(rows[i]);
+
+		for (var j = 0; j < rows2.length; j++) {
+			if (rows2[j].classList.contains(flag)) {
+				tbody.appendChild(rows2[j]);
+			}
+		}
+	}
 }

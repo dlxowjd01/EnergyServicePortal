@@ -143,7 +143,9 @@ $(function() {
             if(((new Date().getTime())-touchtime) < 800) {
                 //double click occurred
                 touchtime = 0;
-                window.location = $(this).find("a").attr(href);
+                if(href != undefined) {
+                    window.location = $(this).find("a").attr(href);
+                }
             } else {
                 //not a double click so set as a new first click
                 touchtime = new Date().getTime();
