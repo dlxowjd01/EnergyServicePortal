@@ -152,7 +152,7 @@ const monthlyChartDraw = function (type, chargeList, dischargeList, pvList, payL
 const monthlyChart = Highcharts.chart('monthlyChart', {
 	chart: {
 		marginTop: 40,
-		marginLeft: 50,
+		marginLeft: 55,
 		marginRight: 50,
 		height: 220,
 		backgroundColor: 'transparent',
@@ -192,7 +192,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			align: 'center',
 			y: 27, /* 그래프와 거리 */
 			style: {
-				color: 'var(--color2)',
+				color: 'var(--color4)',
 				fontSize: '12px'
 			}
 		},
@@ -219,14 +219,14 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			y: 25, /* 타이틀 위치 조정 */
 			x: 15,
 			style: {
-				color: 'var(--color3)',
+				color: 'var(--color4)',
 				fontSize: '12px'
 			}
 		},
 		labels: {
 			format: '{value}',
 			style: {
-				color: 'var(--color2)',
+				color: 'var(--color4)',
 				fontSize: '12px'
 			}
 		}
@@ -246,14 +246,14 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			y: 25, /* 타이틀 위치 조정 */
 			x: -12,
 			style: {
-				color: 'var(--color3)',
+				color: 'var(--color4)',
 				fontSize: '12px'
 			}
 		},
 		labels: {
 			format: '{value}',
 			style: {
-				color: 'var(--color2)',
+				color: 'var(--color4)',
 				fontSize: '12px'
 			}
 		},
@@ -588,7 +588,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			align: 'center',
 			y: 27, /* 그래프와 거리 */
 			style: {
-				color: 'var(--color2)',
+				color: 'var(--color4)',
 				fontSize: '12px'
 			}
 		},
@@ -615,14 +615,14 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			y: 25, /* 타이틀 위치 조정 */
 			x: 15,
 			style: {
-				color: 'var(--color3)',
+				color: 'var(--color4)',
 				fontSize: '12px'
 			}
 		},
 		labels: {
 			format: '{value}',
 			style: {
-				color: 'var(--color2)',
+				color: 'var(--color4)',
 				fontSize: '12px'
 			}
 		}
@@ -642,14 +642,14 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			y: 25, /* 타이틀 위치 조정 */
 			x: -12,
 			style: {
-				color: 'var(--color3)',
+				color: 'var(--color4)',
 				fontSize: '12px'
 			}
 		},
 		labels: {
 			format: '{value}',
 			style: {
-				color: 'var(--color2)',
+				color: 'var(--color4)',
 				fontSize: '12px'
 			}
 		},
@@ -672,7 +672,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		x: 5,
 		y: -15,
 		itemStyle: {
-			color: 'var(--color2)',
+			color: 'var(--color4)',
 			fontSize: '12px',
 			fontWeight: 400
 		},
@@ -689,7 +689,16 @@ const dailyChart = Highcharts.chart('dailyChart', {
 				connectorAllowed: false
 			},
 			borderColor: 'var(--color2)',
-			borderWidth: 0 /* 보더 0 */
+			borderWidth: 0, /* 보더 0 */
+			events: {
+				legendItemClick: function () {
+					console.log("this---", this);
+					var visibility = this.visible ? 'visible' : 'hidden';
+					this.legendItem.styles.color == 'var(--color4)'
+					// var visibility = this.visible ? 'visible' : 'hidden';
+					
+				}
+			}
 		},
 		line: {
 			marker: {
@@ -1372,7 +1381,7 @@ var pieChart = Highcharts.chart('pie_chart', {
 		x: -20,
 		style: {
 			fontSize: '14px',
-			color: 'var(--color3)'
+			color: 'var(--color4)'
 		}
 	},
 
@@ -1855,7 +1864,7 @@ const siteListChart = function (selector, seriesData, title) {
 			x: 0,
 			style: {
 				fontSize: '14px',
-				color: 'var(--color3)'
+				color: 'var(--color4)'
 			}
 		},
 		subtitle: {
