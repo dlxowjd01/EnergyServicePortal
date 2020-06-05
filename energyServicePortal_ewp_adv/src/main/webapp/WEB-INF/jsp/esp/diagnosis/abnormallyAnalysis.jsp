@@ -19,6 +19,7 @@
 			console.log("btn---", dropdownArea)
 			dropdownArea.removeClass("open");
 		})
+
 		// compareSelectBox.on("click", function(){
 		// 	dropdown.removeClass("open");
 		// })

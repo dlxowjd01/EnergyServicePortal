@@ -10,6 +10,9 @@
 const oid = '${sessionScope.userInfo.oid}';
 const loginId = '${sessionScope.userInfo.login_id}';
 
+let addListCnt1 = 0; // 첨부하는 파일 추가할 경우 카운트 1씩 증가 ( 현장점검 )
+let addListCnt2 = 0; // 첨부하는 파일 추가할 경우 카운트 1씩 증가 ( 첨부파일 )
+
 $(function () {
 	initAddListHtml();
 	getGenData();
@@ -44,7 +47,15 @@ function initAddListHtml(){
 
 function addList(addId){
 	var $selecter = $("#" + addId);
-	$selecter.append($selecter.data("form"));
+// 	$selecter.append($selecter.data("form"));
+	
+	if ( addId ==  'addFileList01') {
+		$selecter.append('<input name="work_report_file_01'+addListCnt1+'" type="file" >')
+		addListCnt1++;
+	} else if ( addId == 'addFileList02' ){
+		$selecter.append('<input name="work_report_file_02'+addListCnt2+'" type="file" >')
+		addListCnt2++;
+	}
 }
 
 function setSaveData(){
@@ -102,6 +113,8 @@ function setInsertReportData(){
 		report_name =  $("#report_name").val(),
 		site_id = $("#gen").data("value");
 
+	$("#insertReportModal").modal(); // 처리중 모달띄우기
+	
 	$.ajax({
 		url: "http://iderms.enertalk.com:8443/reports/remote_work?oid=" + oid,
 		type: "post",
@@ -160,6 +173,19 @@ function goMoveList(){
 	location.href = "/report/maintenanceReport.do";
 }
 </script>
+
+	<!-- Modal (처리 중 모달)-->
+	<div id="insertReportModal" class="modal fade" role="dialog">
+		<div class="modal-dialog his_alarm">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="ly_wrap">
+					<h2 class="ly_tit" style="text-align: center;">처리중...</h2>
+				</div>
+			</div>
+		</div>
+	</div>
+
     <div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header">출장/조치 보고서 </h1>

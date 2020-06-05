@@ -60,7 +60,7 @@ public class LoginController {
 		String oid = "encored";
 		if("localhost".equals(serverName) || "spower.iderms.ai".equals(serverName) || "13.114.199.169".equals(serverName)) {
 			oid = "spower";
-		} else if("ewp.iderms.ai".equals(serverName) || "52.69.111.98".equals(serverName)) {
+		} else if("ewp.iderms.ai".equals(serverName)) {
 			oid = "ewp";
 		} else {
 			oid = "encored";
@@ -76,23 +76,13 @@ public class LoginController {
 		if(200 == (int) tokenMap.get("code")) {
 			userInfoMap.putAll((Map<String, Object>) tokenMap.get("data"));
 
-			Map<String, Object> meMap = RestApiUtil.get("/auth/me", "", (String) userInfoMap.get("token"));
+			Map<String, Object> meMap = RestApiUtil.get("/auth/me", null, (String) userInfoMap.get("token"));
 			if(200 == (int) meMap.get("code")) {
 				userInfoMap.putAll((Map<String, Object>) meMap.get("data"));
 				String auth_type = String.valueOf(userInfoMap.get("role"));
 				userInfoMap.put("auth_type", auth_type);
 			} else {
 				userInfoMap.put("auth_type", "");
-			}
-
-			Map<String, Object> siteMap = RestApiUtil.get("/auth/me/sites", "", (String) userInfoMap.get("token"));
-			if(200 == (int) siteMap.get("code")) {
-				userInfoMap.put("siteList", siteMap.get("data"));
-			}
-
-			Map<String, Object> groupMap = RestApiUtil.get("/auth/me/groups", "", (String) userInfoMap.get("token"));
-			if(200 == (int) groupMap.get("code")) {
-				userInfoMap.putAll((Map<String, Object>) groupMap.get("data"));
 			}
 
 			if(userInfoMap.get("auth_type") == null && "".equals(userInfoMap.get("auth_type"))) {

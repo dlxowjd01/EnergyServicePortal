@@ -26,13 +26,19 @@ $(document).on('click', '.dropdown-menu li:not(.disabled, .dropdown_cov)', funct
 			$checkbox.prop('checked', true);
 		}
 
-		let checkboxLength = $dropdown.find('input[type="checkbox"]:checked').length;
-		if(checkboxLength > 1) {
-			$displayText = $dropdown.find('input[type="checkbox"]:checked:eq(0)').next().text() + '외 ' + checkboxLength + '개';
-		} else if(checkboxLength == 0) {
-			$displayText = $displayButton.data('name');
+		let checkedboxLength = $dropdown.find('input[type="checkbox"]:checked').length;
+		let checkboxLength = $dropdown.find('input[type="checkbox"]').length;
+
+		if(checkedboxLength == checkboxLength) {
+			$displayText = '전체';
 		} else {
-			$displayText = $dropdown.find('input[type="checkbox"]:checked:eq(0)').next().text();
+			if(checkedboxLength > 1) {
+				$displayText = $dropdown.find('input[type="checkbox"]:checked:eq(0)').next().text() + '외 ' + (checkedboxLength - 1) + '개';
+			} else if(checkedboxLength == 0) {
+				$displayText = $displayButton.data('name');
+			} else {
+				$displayText = $dropdown.find('input[type="checkbox"]:checked:eq(0)').next().text();
+			}
 		}
 	} else {
 		$displayData = $selecter.data();

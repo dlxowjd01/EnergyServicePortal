@@ -58,7 +58,26 @@
 
 		return newPathName + "?" + newParamUrl;
 	}
+
+	function dashboardMove(type, key, value) {
+
+		let inp = $('input').attr('type', 'hidden').attr('name', key).attr('value', value);
+
+		if(type == 'group') {
+			$('#dashboardForm').append(inp).attr('action', '/dashboard/gmain.do').submit();
+		} else if(type == 'site') {
+			$('#dashboardForm').append(inp).attr('action', '/dashboard/smain.do').submit();
+		} else if(type == 'vpp') {
+			$('#dashboardForm').append(inp).attr('action', '/dashboard/jmain.do').submit();
+		} else {
+			alert('아직 정의 되지않은 타입입니다.');
+			return;
+		}
+	}
+
 </script>
+<form id="dashboardForm" name="dashboardForm" method="post">
+</form>
 <nav class="clear">
 	<button type="button" class="category">카테고리</button>
 	<!-- 모바일용 언어 선택 -->
@@ -79,16 +98,13 @@
 		</c:otherwise>
 	</c:choose>
 
-	<c:set var="siteList" value="${sessionScope.userInfo.siteList}"/> <!-- 사이트 별 -->
-	<c:set var="tagList" value="${sessionScope.userInfo.tag_group}"/> <!-- 그룹 별 -->
-	<c:set var="vppList" value="${sessionScope.userInfo.vpp_group}"/> <!-- 중개거래 별 -->
-	<c:set var="drList" value="${sessionScope.userInfo.dr_group}"/> <!-- DR거래 별 -->
-	<c:set var="locList" value="${sessionScope.userInfo.location_group}"/> <!-- 지역 별 -->
-	<c:set var="resList" value="${sessionScope.userInfo.resource_group}"/> <!-- 유형 별 -->
+	<c:set var="siteList" value="${siteHeaderList}"/> <!-- 사이트 별 -->
+	<c:set var="tagList" value="${tag_group}"/> <!-- 그룹 별 -->
+	<c:set var="vppList" value="${vpp_group}"/> <!-- 중개거래 별 -->
+	<c:set var="drList" value="${dr_group}"/> <!-- DR거래 별 -->
 
-	<!-- input/dropdown //-->
 	<div class="all-menu">
-		<a href="#">구분</a>
+		<a href="javascript:void(0);">구분</a>
 		<form name="menuform" method="post">
 			<div class="menu-group">
 				<ul>
@@ -96,12 +112,14 @@
 						<dl>
 							<dt>사업소 분석</dt>
 							<dd>
-								<a href="#">사업소별</a>
+								<a href="javascript:void(0);">사업소별</a>
 								<ul>
-									<li><a href="/dashboard/gmain.do">전체</a></li>
+									<li><a href="javascript:void(0);"  onclick="dashboardMove('group', '', '');">전체</a></li>
 									<c:if test="${fn:length(siteList) > 0}">
 										<c:forEach var="site" items="${siteList}">
-											<li><a href="/dashboard/smain.do?sid=${site.sid}">${site.name}</a></li>
+											<li>
+												<a href="javascript:void(0);" onclick="dashboardMove('site', 'sid', '${site.sid}');">${site.name}</a>
+											</li>
 										</c:forEach>
 									</c:if>
 								</ul>
@@ -113,21 +131,20 @@
 							<dl>
 								<dt></dt>
 								<dd>
-									<a href="#">그룹별</a>
+									<a href="javascript:void(0);">그룹별</a>
 									<ul>
 										<c:forEach var="group" items="${tagList}">
 											<li>
-												<a href="#">${group.name}</a>
+												<a href="javascript:void(0);" onclick="dashboardMove('group', 'sgid', '${group.sgid}');">${group.name}</a>
 												<ul>
-													<c:set var="groupSites" value="${group.group_sites}"/>
+													<c:set var="groupSites" value="${group.sites}"/>
 													<c:forEach var="groupSiteList" items="${groupSites}">
 														<li>
 															<c:forEach var="site" items="${siteList}">
 																<c:if test="${groupSiteList.sid eq site.sid}">
-																	<a href="/dashboard/smain.do?sid=${groupSiteList.sid}">${site.name}</a>
+																	<a href="javascript:void(0);" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}');">${site.name}</a>
 																</c:if>
 															</c:forEach>
-
 														</li>
 													</c:forEach>
 												</ul>
@@ -146,10 +163,24 @@
 								<dl>
 									<dt>에너지 거래</dt>
 									<dd>
-										<a href="#">중개거래</a>
+										<a href="javascript:void(0);">중개거래</a>
 										<ul>
 											<c:forEach var="vpp" items="${vppList}">
-												<li><a href="/dashboard/jmain.do?sid=${vpp.sid}">${vpp.name}</a></li>
+												<li>
+													<a href="javascript:void(0);" onclick="dashboardMove('vpp', 'vgid', '${vpp.vgid}');">${vpp.name}</a>
+													<ul>
+														<c:set var="groupSites" value="${vpp.sites}"/>
+														<c:forEach var="groupSiteList" items="${groupSites}">
+															<li>
+																<c:forEach var="site" items="${siteList}">
+																	<c:if test="${groupSiteList.sid eq site.sid}">
+																		<a href="javascript:void(0);" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}');">${site.name}</a>
+																	</c:if>
+																</c:forEach>
+															</li>
+														</c:forEach>
+													</ul>
+												</li>
 											</c:forEach>
 										</ul>
 									</dd>
@@ -161,7 +192,7 @@
 								<dl>
 									<dt></dt>
 									<dd>
-										<a href="#">DR 거래</a>
+										<a href="javascript:void(0);">DR 거래</a>
 										<ul>
 											<c:forEach var="dr" items="${drList}">
 												<li><a href="#">${dr.name}</a></li>
@@ -178,23 +209,31 @@
 						<dl>
 							<dt>지역 및 유형 선택</dt>
 							<dd>
-								<a href="#">지역별</a>
+								<a href="javascript:void(0);">지역별</a>
 								<ul>
-								<c:set var="systemLoc" value="${sessionScope.systemLoc}"/> <!-- 선택된 지역 -->
-								<c:forEach var="loc" items="${systemLocation}" varStatus="stat">
-									<c:set var="choice" value="false" />
-									<c:if test="${fn:length(systemLoc) > 0}">
-										<c:forEach var="selLoc" items="${systemLoc}">
-											<c:if test="${loc eq selLoc}">
-												<c:set var="choice" value="true" />
-											</c:if>
-										</c:forEach>
-									</c:if>
-									<li>
-										<input type="checkbox" name="systemLoc" id="lo${stat.index}" value="${loc}" <c:if test="${choice eq 'true'}">checked</c:if>>
-										<label for="lo${stat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${loc}</label>
-									</li>
-								</c:forEach>
+									<c:set var="systemLoc" value="${sessionScope.systemLoc}"/>
+									<c:forEach var="loc" items="${location}" varStatus="stat">
+										<li>
+											<a href="javascript:void(0);">${loc.value.name.kr}</a>
+											<ul>
+												<c:forEach var="country" items="${loc.value.locations}" varStatus="countryStat">
+													<c:set var="choice" value="false" />
+													<c:if test="${fn:length(systemLoc) > 0}">
+														<c:forEach var="selLoc" items="${systemLoc}">
+															<c:if test="${country.value.code eq selLoc}">
+																<c:set var="choice" value="true" />
+															</c:if>
+														</c:forEach>
+													</c:if>
+													<li>
+														<input type="checkbox" name="systemLoc" id="lo${countryStat.index}" value="${country.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
+														<label for="lo${countryStat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${country.value.name.kr}</label>
+													</li>
+												</c:forEach>
+											</ul>
+										</li>
+
+									</c:forEach>
 								</ul>
 							</dd>
 						</dl>
@@ -203,21 +242,21 @@
 						<dl>
 							<dt></dt>
 							<dd>
-								<a href="#">유형별</a>
+								<a href="javascript:void(0);">유형별</a>
 								<ul>
-									<c:set var="systemTp" value="${sessionScope.systemTp}"/> <!-- 선택된 지역 -->
-									<c:forEach var="type" items="${systemType}" varStatus="stat">
+									<c:set var="systemTp" value="${sessionScope.systemTp}"/>
+									<c:forEach var="type" items="${resource}" varStatus="stat">
 										<c:set var="choice" value="false" />
-										<c:if test="${fn:length(systemType) > 0}">
+										<c:if test="${fn:length(systemTp) > 0}">
 											<c:forEach var="selType" items="${systemTp}">
-												<c:if test="${stat.index eq selType}">
+												<c:if test="${type.value.code eq selType}">
 													<c:set var="choice" value="true" />
 												</c:if>
 											</c:forEach>
 										</c:if>
 										<li>
-											<input type="checkbox" name="systemType" id="tp${stat.index}" value="${stat.index}" <c:if test="${choice eq 'true'}">checked</c:if>>
-											<label for="tp${stat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${type}</label>
+											<input type="checkbox" name="systemType" id="tp${stat.index}" value="${type.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
+											<label for="tp${stat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${type.value.name.kr}</label>
 										</li>
 									</c:forEach>
 								</ul>
@@ -229,18 +268,17 @@
 					<button type="button" class="btn_type03" id="systemInit">초기화</button>
 					<button type="button" class="btn_type" id="systemApply">적용</button>
 				</div>
-				<input type="hidden" name="systemValue" value="system"/>
 				<script type="text/javascript">
 					$('#systemInit').on('click', function() {
 						$(':checkbox[name="systemLoc"]').prop('checked', false);
 						$(':checkbox[name="systemType"]').prop('checked', false);
-
-
-						$('form[name="menuform"]').attr('action', location.pathname).submit();
+						let sysInp = $('<input>').attr('type', 'hidden').attr('name', 'systemValue').val('system');
+						$('form[name="menuform"]').append(sysInp).attr('action', '/dashboard/gmain.do').submit();
 					});
 
 					$('#systemApply').on('click', function() {
-						$('form[name="menuform"]').attr('action', location.pathname).submit();
+						let sysInp = $('<input>').attr('type', 'hidden').attr('name', 'systemValue').val('system');
+						$('form[name="menuform"]').append(sysInp).attr('action', '/dashboard/gmain.do').submit();
 					});
 				</script>
 				</ul>

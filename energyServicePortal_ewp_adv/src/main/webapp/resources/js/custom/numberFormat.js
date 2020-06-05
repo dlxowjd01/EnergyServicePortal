@@ -11,18 +11,18 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 	let rtnValue = []
 	let whUnit = ['W', 'kW', 'MW', 'GW'];
 
-	if(number == undefined || number == null || number == '') {
+	if(isEmpty(number)) {
 		return rtnValue;
 	} else {
 		if(unit == 'Wh' || unit == 'W') {
 
-			if(decimalChipher === undefined || decimalChipher == null || decimalChipher == '') {
+			if(isEmpty(decimalChipher)) {
 				decimalChipher = 2;
 			}
 
 			whUnit.some(function(v, k) {
 				let str = String(Math.floor(number));
-				if(intChipher == undefined || intChipher == null || intChipher == '') {
+				if(isEmpty(intChipher)) {
 					if(str.length > 3 && v != 'GW') {
 						number = number / 1000;
 					} else {
@@ -54,12 +54,12 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 				}
 			});
 		} else {
-			if(decimalChipher === undefined || decimalChipher == null || decimalChipher == '') {
+			if(isEmpty(decimalChipher)) {
 				decimalChipher = 0;
 			}
 
 			let str = String(Math.floor(number));
-			if(intChipher == undefined || intChipher == null || intChipher == '') {
+			if(isEmpty(intChipher)) {
 				if(str.length > 4) {
 					number = number / 10000;
 					rtnValue = [numberComma((number).toFixed(decimalChipher)), '만원'];
@@ -114,17 +114,17 @@ const displayNumberFixedUnit = function(input_num, input_unit, fixed_unit, num_f
 		{ unit: '억원', chipher: 100000000 },
 	];
 
-	if(input_num == undefined || input_num == null || input_num == '') {
+	if(isEmpty(input_num)) {
 		rtnValue = [input_num, input_unit];
 		return rtnValue;
 	} else {
 		if(input_unit == 'Wh' || input_unit == 'W') {
 
-			if(num_frac === undefined || num_frac == null || num_frac == '') {
+			if(isEmpty(num_frac)) {
 				num_frac = 2;
 			}
 
-			if(fixed_unit === undefined || fixed_unit == null || fixed_unit == '') {
+			if(isEmpty(fixed_unit)) {
 				rtnValue = [input_num, input_unit];
 				return rtnValue;
 			}

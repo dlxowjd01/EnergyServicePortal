@@ -542,9 +542,7 @@
 			url: apiURL + '/config/view/device_properties',
 			type: 'get',
 			async: false,
-			data: {
-				version: '20200513'
-			},
+			data: {},
 			success: function (result) {
 				$.map(result, function (val, key) {
 					let deviceName = key;
@@ -555,25 +553,17 @@
 					$.map(propList, function (v, k) {
 						if (v.analysis_table) {
 							let tempObj = new Object();
-							if (k == 'currentS') {
-								tempObj['key'] = k;
-								tempObj['value'] = v.name;
-							} else {
-								tempObj['key'] = k;
-								tempObj['value'] = v.name.kr;
-							}
+							let unit = (v.unit != null && v.unit != '') ? '(' + v.unit + ')' : '';
+							tempObj['key'] = k;
+							tempObj['value'] = v.name.kr + unit;
 							tempTable.push(tempObj);
 						}
 
 						if (v.analysis_feature) {
 							let tempObj = new Object();
-							if (k == 'currentS') {
-								tempObj['key'] = k;
-								tempObj['value'] = v.name;
-							} else {
-								tempObj['key'] = k;
-								tempObj['value'] = v.name.kr;
-							}
+							let unit = (v.unit != null && v.unit != '') ? '(' + v.unit + ')' : '';
+							tempObj['key'] = k;
+							tempObj['value'] = v.name.kr + unit;
 							tempFeature.push(tempObj);
 						}
 					});
