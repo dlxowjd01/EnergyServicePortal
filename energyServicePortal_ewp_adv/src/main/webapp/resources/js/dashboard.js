@@ -1293,7 +1293,7 @@ const getTodayTotalDetail = function () {
 		}).done(function (data, textStatus, jqXHR) {
 			let generationForecastSum = 0;
 			data.data[0].generation.items.map((e, idx) => generationForecastSum += e.energy);
-			let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text().replace(/[^0-9]/, ''));
+			let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
 			$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal += generationForecastSum / 1000)));
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
@@ -1315,11 +1315,11 @@ const getTodayTotalDetail = function () {
 		}).done(function (data, textStatus, jqXHR) {
 			if (!isEmpty(data.data[site.sid])) {
 				co2Sum += Math.floor(data.data[site.sid].co2);
-				let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text().replace(/[^0-9]/, ''));
+				let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
 				$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal += (data.data[site.sid].energy / 1000))));
 				$('#centerTbody tr td:nth-child(4) span').text(numberComma(Math.floor(co2Sum / 1000)));
 
-				let prevPay = Number($('#centerTbody tr td:nth-child(5)  span').text().replace(/[^0-9]/, ''));
+				let prevPay = Number($('#centerTbody tr td:nth-child(5)  span').text().replace(/[^0-9]/g, ''));
 				let money = Math.floor(data.data[site.sid].money / 1000);
 				$('#centerTbody tr td:nth-child(5) span').text(numberComma(prevPay + money));
 			}
@@ -1331,13 +1331,13 @@ const getTodayTotalDetail = function () {
 
 		if (site.devices != undefined) {
 			site.devices.forEach(device => {
-				let capacity = Number($('#centerTbody tr td:nth-child(3) span').text().replace(/[^0-9]/, '')) + Math.round(device.capacity / 1000);
+				let capacity = Number($('#centerTbody tr td:nth-child(3) span').text().replace(/[^0-9]/g, '')) + Math.round(device.capacity / 1000);
 				$('#centerTbody tr td:nth-child(3) span').text(numberComma(capacity));
 				if (device.device_type.match('INV')) {
-					let inverterCount = Number($('#centerTbody tr td:nth-child(2) span').text().replace(/[^0-9]/, '')) + 1;
+					let inverterCount = Number($('#centerTbody tr td:nth-child(2) span').text().replace(/[^0-9]/g, '')) + 1;
 					$('#centerTbody tr td:nth-child(2) span').text(numberComma(inverterCount));
 				} else {
-					let inverterCount = Number($('#centerTbody tr td:nth-child(2) span').text().replace(/[^0-9]/, ''));
+					let inverterCount = Number($('#centerTbody tr td:nth-child(2) span').text().replace(/[^0-9]/g, ''));
 					$('#centerTbody tr td:nth-child(2) span').text(numberComma(inverterCount));
 				}
 			});
@@ -1791,8 +1791,8 @@ const searchSite = function () {
 
 	setTimeout(function () {
 		refineList.forEach((site, siteIdx) => {
-			let capacity = site.capacity == '-' ? 0 : Number(site.capacity.replace(/[^0-9]/, ''));
-			let activePower = site.activePower == '-' ? 0 : Number(site.activePower.replace(/[^0-9]/, ''));
+			let capacity = site.capacity == '-' ? 0 : Number(site.capacity.replace(/[^0-9]/g, ''));
+			let activePower = site.activePower == '-' ? 0 : Number(site.activePower.replace(/[^0-9]/g, ''));
 
 			let activePercent = Math.floor((activePower / capacity) * 100);
 			let title = activePercent + '%';
@@ -1980,11 +1980,11 @@ function SortTable(table, n, sort) {
 		value2 = value2 == '-' ? '0' : String(value2).replace(/^\s+|\s+$/g, "");;
 
 		if (isNumberic(value1)) {
-			value1 = Number(value1.replace(/[^0-9]/, ''));
+			value1 = Number(value1.replace(/[^0-9]/g, ''));
 		}
 
 		if (isNumberic(value2)) {
-			value2 = Number(value2.replace(/[^0-9]/, ''));
+			value2 = Number(value2.replace(/[^0-9]/g, ''));
 		}
 
 		if (sort == 'up') {
