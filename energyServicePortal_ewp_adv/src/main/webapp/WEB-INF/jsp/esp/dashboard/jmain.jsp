@@ -8,7 +8,7 @@
         src="http://maps.google.com/maps/api/js?key=AIzaSyAyGrAQC_675C34l2ZJ5JgEqeEV3gLuY9I"></script>
 <form id="linkSiteForm" name="linkSiteForm" method="post"></form>
 
-<<div class="row header-wrapper">
+<div class="row header-wrapper">
 	<div class="col-12">
 		<h1 class="page-header fl">${siteName}</h1>
 		<div class="time fr">
@@ -92,20 +92,6 @@
 								</dd>
 							</dl>
 						</div>
-					</div>
-					<!-- 데이터 추출용 테이블 -->
-					<div class="hidden_table" style="display:none">
-						<table id="gdatatable4">
-							<thead>
-							<tr>
-								<th></th>
-								<th>전일발전량</th>
-								<th>예측발전량</th>
-							</tr>
-							</thead>
-							<tbody id="typeGenTbody">
-							</tbody>
-						</table>
 					</div>
 				</div>
 			</div>

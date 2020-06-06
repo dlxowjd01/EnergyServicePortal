@@ -860,7 +860,7 @@ const getGenDataBySiteYesterday = function () { //3번째 indiv 사업소별 탭
 			});
 
 			siteGenSum = displayNumberFixedUnit(siteGenSum, 'Wh', 'kWh', 0)[0];
-			siteGenArray[siteIdx] =parseFloat(siteGenSum);
+			siteGenArray[siteIdx] = parseFloat(siteGenSum);
 
 			if (siteGenSum > 0) {
 				siteList[siteIdx].beforeDay = siteGenSum;
@@ -1796,7 +1796,7 @@ const searchSite = function () {
 
 			let activePercent = Math.floor((activePower / capacity) * 100);
 			let title = activePercent + '%';
-			if(isNaN(activePercent)) {
+			if (isNaN(activePercent)) {
 				title = '- %';
 			}
 
@@ -1938,12 +1938,11 @@ $(document).ready(function () {
 			(function (table, n) {
 				headers[j].onclick = function () {
 					let sort = 'down';
-					if(this.getElementsByTagName('button')[0].classList.length == 1) {
-						console.log(j);
+					if (this.getElementsByTagName('button')[0].classList.length == 1) {
 						this.getElementsByTagName('button')[0].classList.add('down');
 						sort = 'down';
 					} else {
-						if(this.getElementsByTagName('button')[0].classList[1] == 'up') {
+						if (this.getElementsByTagName('button')[0].classList[1] == 'up') {
 							this.getElementsByTagName('button')[0].classList.replace('up', 'down');
 							sort = 'down';
 						} else {
@@ -1953,7 +1952,7 @@ $(document).ready(function () {
 					}
 
 					for (var k = 0; k < headers.length; k++) {
-						if(n != k) {
+						if (n != k) {
 							headers[k].getElementsByTagName('button')[0].classList.remove('up');
 							headers[k].getElementsByTagName('button')[0].classList.remove('down');
 						}
@@ -1977,21 +1976,18 @@ function SortTable(table, n, sort) {
 		var value1 = cell1.textContent || cell1.innerText;
 		var value2 = cell2.textContent || cell2.innerText;
 
-		value1 = value1 == '-' ? 0 : value1;
-		value2 = value2 == '-' ? 0 : value2;
+		value1 = value1 == '-' ? '0' : String(value1).replace(/^\s+|\s+$/g, "");;
+		value2 = value2 == '-' ? '0' : String(value2).replace(/^\s+|\s+$/g, "");;
 
-		console.log(isNaN(value1));
-		console.log(isNaN(value2));
-
-		if(!isNaN(value1) && typeof(value1) == 'string') {
+		if (isNumberic(value1)) {
 			value1 = Number(value1.replace(/[^0-9]/, ''));
 		}
 
-		if(!isNaN(value2) && typeof(value2) == 'string') {
+		if (isNumberic(value2)) {
 			value2 = Number(value2.replace(/[^0-9]/, ''));
 		}
 
-		if(sort == 'up') {
+		if (sort == 'up') {
 			if (value1 < value2) return -1;
 			if (value1 > value2) return 1;
 		} else {
@@ -2013,5 +2009,15 @@ function SortTable(table, n, sort) {
 				tbody.appendChild(rows2[j]);
 			}
 		}
+	}
+}
+
+function isNumberic (num) {
+	var regex = /^(([1-9][0-9]{0,2}(,[0-9]{3})*)|[0-9]+){1}(\.[0-9]+)?$/g;
+	if (regex.test(num)) {
+		num = String(num).replace(/,/g, "");
+		return isNaN(num) ? false : true;
+	} else {
+		return false;
 	}
 }
