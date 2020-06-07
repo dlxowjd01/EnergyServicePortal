@@ -1,6 +1,5 @@
 /* TV screen sizes */
-
-@media all and (min-width: 3000px) {
+@media all and (min-width: 2561px) {
 	#page-wrapper {
 		margin: 0 120px 0 120px;
 	}
@@ -161,7 +160,6 @@
 	.alarm_notice {
 		margin-top: 15px;
 		padding-right: 15px;
-		height: 70px;
 	}
 	.alarm_notice h2 {
 		font-size: 24px;
@@ -652,10 +650,6 @@
 	.gmain_map .chart_info>div.ci_right ul li em {
 		font-size: 21px;
 	}
-	.gmain_map2 .map_wrap {
-		height: calc(100vh - 121px);
-		max-height: 896px;
-	}
 	.local_info table th, .local_info table td {
 		font-size: 20px;
 		height: 75px;
@@ -729,8 +723,6 @@
 		margin-top: 15px;
 	}
 	.gmain_table .gtbl_wrap .intable {
-		height: calc(100vh + 35px);
-		min-height: 948px;
 		max-height: 1036px;
 	}
 	.gmain_table .gtbl_wrap table th, .gmain_table .gtbl_wrap table td {
@@ -1337,7 +1329,7 @@
 	.gmain_chart .sa_chart {
 		height: calc(100vh - 624px);
 		min-height: 289px;
-		max-height: 377px;
+		max-height: 360px;
 	}
 	.gmain_chart .sa_chart.type-table .type-right dl {
 		margin-top: 5px;
@@ -1375,146 +1367,128 @@
 	}
 }
 
-/* Laptop ~ large desktop screen sizes */
-
-@media all and (min-width: 1200px) and (max-width: 2999px) {
-	.group_wrap {
-		height: 522px;
-	}
-}
-
-/* Large desktop screen sizes */
-
-@media all and (min-width: 1921px) and (max-width: 2560px) {
-	.gmain_chart.gmain_chart1 {
-		min-height: auto;
-		height: 320px;
-	}
-	.gmain_chart1 #gchart1 {
-		height: 227px;
-	}
-	.gmain_chart.gmain_chart2 {
-		min-height: auto;
-		height: 433px;
-	}
-	.gmain_chart.gmain_chart2 .inchart {
-		min-height: auto;
-		height: 340px;
-	}
-	.gmain_chart2 #gchart2 {
-		height: 340px;
-	}
+/* Large Desktop screen sizes */
+@media all and (min-width: 1920px) and (max-width: 2560px) {
 	.gmain_chart.jmain_center2 {
 		height: 376px;
-	}
-	.gmain_chart.gmain_chart3 {
-		min-height: auto;
-		height: 447px;
-	}
-	.gmain_chart.gmain_chart4 {
-		height: 450px;
-	}
-	.gmain_map2 {
-		height: 847px;
-	}
-	.gmain_map2 .map_wrap {
-		max-height: 100%;
-	}
-	.gmain_alarm {
-		height: 184px;
-	}
-	.gmain_table {
-		height: 1040px;
 	}
 	.gmain_chart.jmain_center3 {
 		min-height: auto;
 		height: 447px;
 	}
-	.realtime_by_site,
-	.realtime_total {
+	.realtime_by_site, .realtime_total {
 		height: 285px;
 	}
-	.realtime_by_site #rchart1,
-	.realtime_total #rchart2 {
+	.realtime_by_site #rchart1, .realtime_total #rchart2 {
 		height: 280px;
 	}
-	.gmain_chart.jmain_center3 .realtime_wrap .inchart{
+	.gmain_chart.jmain_center3 .realtime_wrap .inchart {
 		height: 350px;
 	}
 	.realtime_wrap #rchart3 {
 		height: 350px;
 	}
-}
-/* Laptop screen sizes */
-
-@media all and (min-width: 993px) and (max-width: 1920px) {
-	.gmain_chart1 {
-		min-height: auto;
-		height: 377px;
+	.gmain_table .gtbl_wrap .intable {
+		max-height: 750px;
 	}
-	.gmain_chart1 #gchart1 {
+	.di_btm_sec .bx_top {
+		width: auto;
+		height: 160px;
+	}
+	.di_btm_sec .bx_top .inchart {
+		height: 160px;
+	}
+}
+
+/* Laptop ~ Desktop screen sizes */
+@media all and (min-width: 1200px) and (max-width: 1919px) {
+	.gmain_chart1 #monthlyChart {
 		height: 285px;
 	}
-	.gmain_chart.gmain_chart2,
-	.gmain_chart.jmain_center2{
+	.gmain_chart.jmain_center2 {
 		min-height: auto;
 		height: 420px;
 	}
-	.gmain_chart2 #gchart2 {
-		height: 323px;
-	}
-	.gmain_chart.gmain_chart3,
 	.gmain_chart.jmain_center3 {
 		height: 450px;
 		margin-bottom: 15px;
 	}
-	.realtime_by_site,
-	.realtime_total {
+	.realtime_by_site, .realtime_total {
 		height: 325px;
 	}
-	.realtime_by_site #rchart1,
-	.realtime_total #rchart2 {
+	.realtime_by_site #rchart1, .realtime_total #rchart2 {
 		height: 325px;
 	}
-	.realtime_wrap .inchart,
-	.realtime_wrap .inchart #rchart3 {
+	.realtime_wrap .inchart, .realtime_wrap .inchart #rchart3 {
 		height: 358px;
 	}
-	.gmain_map2 {
-		height: 893px;
+	.gmain_table .gtbl_wrap .intable {
+		max-height: 800px;
 	}
-	.gmain_alarm.wrap_type {
-		margin-top: -16px;
+	.di_btm_sec .bx_top {
+		margin: 0 auto;
+		width: auto;
+		height: 170px
+	}
+	.di_btm_sec .bx_top .inchart {
+		height: 160px;
 	}
 }
+
+@media all and (min-width: 993px) and (max-width: 1199px) {
+	.gmain_chart1 #monthlyChart {
+		height: 285px;
+	}
+	.gmain_chart2 #dailyChart {
+		height: 323px;
+	}
+	.gmain_chart.jmain_center3 {
+		height: 450px;
+		margin-bottom: 15px;
+	}
+	.realtime_by_site, .realtime_total {
+		height: 325px;
+	}
+	.realtime_by_site #rchart1, .realtime_total #rchart2 {
+		height: 325px;
+	}
+	.realtime_wrap .inchart, .realtime_wrap .inchart #rchart3 {
+		height: 358px;
+	}
+	.gmain_table .gtbl_wrap .intable {
+		max-height: 835px;
+	}
+	.di_btm_sec .bx_top {
+		margin: 0 auto;
+		width: auto;
+		height: 170px
+	}
+	.di_btm_sec .bx_top .inchart {
+		height: 160px;
+	}
+}
+
+/* col-md size */
 @media all and (min-width: 768px) and (max-width: 992px) {
-	.gmain_chart1,
-	.gmain_chart4 {
+	.gmain_chart1, .gmain_chart4 {
 		height: 533px;
 	}
-	.gmain_chart1 #gchart1 {
+	.gmain_chart1 #monthlyChart {
 		height: 450px;
 	}
-	.gmain_chart2,
-	.gmain_chart.jmain_center2 {
+	.gmain_chart2, .gmain_chart.jmain_center2 {
 		height: 400px;
 	}
-	.gmain_chart2 #gchart2 {
+	.gmain_chart2 #dailyChart {
 		height: 315px;
 	}
-	.realtime_by_site,
-	.realtime_total {
+	.realtime_by_site, .realtime_total {
 		height: 300px;
 	}
-	.realtime_by_site #rchart1,
-	.realtime_total #rchart2 {
+	.realtime_by_site #rchart1, .realtime_total #rchart2 {
 		height: 300px;
 	}
-	.gmain_map2 {
-		height: 875px;
-	}
-	.gmain_chart3,
-	.jmain_center3 {
+	.gmain_chart3, .jmain_center3 {
 		min-height: auto;
 		height: 450px;
 	}
@@ -1524,58 +1498,18 @@
 	.gmain_chart3 #gchart3 {
 		height: 355px;
 	}
-
 	.jmain_center3 .realtime_wrap .inchart {
 		height: 365px;
 	}
 	.jmain_center3 .realtime_wrap .inchart #rchart3 {
 		height: 365px;
 	}
-}
-/* smaller than aver. laptop screen sizes */
-
-@media all and (max-width: 1200px) {
-	.w_type {
-		width: 100%
+	.di_btm_sec .bx_top {
+		width: 120px;
+		height: 120px;
 	}
-	/* 전체메뉴 레이어 조정 */
-	nav .all-menu .menu-group {
-		padding-bottom: 70px;
-	}
-	nav .all-menu .menu-group>ul>li.lo-type {
-		display: inline-block;
-		float: left;
-		width: auto;
-	}
-	nav .all-menu .menu-group>ul>li:nth-child(6) {
-		border-left: solid 1px #4a73bd;
-	}
-}
-
-/* smaller than tablet pc screen sizes */
-
-@media all and (max-width: 992px) {
-	/* 전체메뉴 레이어 조정 */
-	nav .all-menu .menu-group>ul>li:nth-child(4) {
-		border-left: solid 1px #4a73bd;
-	}
-	nav .all-menu .menu-group>ul>li:nth-child(3), nav .all-menu .menu-group>ul>li:nth-child(4) {
-		display: inline-block;
-		float: left;
-		width: auto;
-	}
-	nav .all-menu .menu-group>ul>li:nth-child(5) {
-		padding-top: 30px;
-	}
-	.gmain_map .chart_info>div {
-		display: block;
-		width: 100%
-	}
-	.gmain_map .chart_info>div.ci_left {
-		margin: 0 auto
-	}
-	.gmain_map.gmain_chart.gmain_chart4 {
-		height: 533px;
+	.di_btm_sec .bx_top .inchart {
+		height: 120px;
 	}
 }
 
@@ -1663,17 +1597,6 @@
 	}
 	.faq .faq_bottom, .faq .faq_table .faq_list>li>div.answer .edit_btn {
 		display: none;
-	}
-	/* 지도 */
-	.gmain_map2 .map_wrap {
-		padding-top: 100%;
-	}
-	.gmain_map2 .map_wrap iframe {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
 	}
 	nav {
 		padding: 0 0 8px 0;
@@ -1878,7 +1801,73 @@
 		text-align: initial;
 		vertical-align: initial;
 	}
+	.di_btm_sec .bx_top {
+		height: 140px
+	}
+	.di_btm_sec .bx_top .inchart {
+		height: 140px
+	}
 }
+
+
+/* Laptop ~ Large desktop screen sizes */
+@media all and (min-width: 1200px) and (max-width: 2999px) {
+	.group_wrap {
+		height: 522px;
+	}
+}
+
+/* Small laptop, table and mobile screen sizes */
+@media all and (max-width: 1200px) {
+	.w_type {
+		width: 100%
+	}
+	/* 전체메뉴 레이어 조정 */
+	nav .all-menu .menu-group {
+		padding-bottom: 70px;
+	}
+	nav .all-menu .menu-group>ul>li.lo-type {
+		display: inline-block;
+		float: left;
+		width: auto;
+	}
+	nav .all-menu .menu-group>ul>li:nth-child(6) {
+		border-left: solid 1px #4a73bd;
+	}
+	.gmain_map .chart_info>div.ci_left {
+		margin: 0 auto;
+		/* display: table-caption; */
+	}
+}
+
+/* smaller than tablet pc screen sizes */
+@media all and (max-width: 992px) {
+	/* 전체메뉴 레이어 조정 */
+	nav .all-menu .menu-group>ul>li:nth-child(4) {
+		border-left: solid 1px #4a73bd;
+	}
+	nav .all-menu .menu-group>ul>li:nth-child(3), nav .all-menu .menu-group>ul>li:nth-child(4) {
+		display: inline-block;
+		float: left;
+		width: auto;
+	}
+	nav .all-menu .menu-group>ul>li:nth-child(5) {
+		padding-top: 30px;
+	}
+	.gmain_map .chart_info>div {
+		display: block;
+		width: 100%
+	}
+	.gmain_map.gmain_chart.gmain_chart4,
+	.gmain_alarm {
+		height: 533px;
+	}
+	.gmain_table .gtbl_wrap .intable {
+		max-height: 835px;
+	}
+}
+
+
 
 /* Above mobile devices */
 
@@ -1888,6 +1877,12 @@
 		vertical-align: middle;
 		content: " ";
 		height: 100%;
+	}
+}
+
+@media all and (max-width: 487px) {
+	.gmain_table .gtbl_wrap .intable {
+		max-height: 80px;
 	}
 }
 

@@ -23,9 +23,6 @@ $(function(){
 </script>
 
 <!-- 메인페이지용 스타일/스크립트 파일 -->
-<link href="/css/custom.css" rel="stylesheet">
-<link href="/css/custom-grid.css" rel="stylesheet">
-<link href="/css/custom-mquery.css" rel="stylesheet">
 <script type="text/javascript" src="/js/modules/rounded-corners.js"></script>
 <script type="text/javascript" src="/js/jquery.rwdImageMaps.min.js"></script>
 
@@ -1009,110 +1006,110 @@ $(function(){
 								<tr>
 									<th>8</th>
 									<td></td>
-									<td>-600</td>	
-									<td></td>									            
-									<td>-750</td>									            
+									<td>-600</td>
+									<td></td>
+									<td>-750</td>
 								</tr>
 								<tr>
 									<th>9</th>
 									<td></td>
-									<td>-620</td>	
-									<td></td>									            
-									<td>-680</td>									            
+									<td>-620</td>
+									<td></td>
+									<td>-680</td>
 								</tr>
 								<tr>
 									<th>10</th>
 									<td></td>
-									<td>-640</td>	
-									<td></td>									            
-									<td>-780</td>									            
+									<td>-640</td>
+									<td></td>
+									<td>-780</td>
 								</tr>
 								<tr>
 									<th>11</th>
 									<td></td>
-									<td>-630</td>	
-									<td></td>									            
-									<td>-710</td>									            
+									<td>-630</td>
+									<td></td>
+									<td>-710</td>
 								</tr>
 								<tr>
 									<th>12</th>
 									<td></td>
-									<td>-650</td>	
-									<td></td>									            
-									<td>-660</td>									            
+									<td>-650</td>
+									<td></td>
+									<td>-660</td>
 								</tr>
 								<tr>
 									<th>13</th>
 									<td></td>
 									<td>-770</td>
-									<td></td>									            
-									<td>-850</td>										            
+									<td></td>
+									<td>-850</td>
 								</tr>
 								<tr>
 									<th>14</th>
 									<td></td>
-									<td>-780</td>	
-									<td></td>									            
-									<td>-950</td>									            
+									<td>-780</td>
+									<td></td>
+									<td>-950</td>
 								</tr>
 								<tr>
 									<th>15</th>
 									<td></td>
-									<td>-850</td>	
-									<td></td>									            
-									<td>-950</td>									            
+									<td>-850</td>
+									<td></td>
+									<td>-950</td>
 								</tr>
 								<tr>
 									<th>16</th>
 									<td></td>
-									<td>-840</td>	
-									<td></td>									            
-									<td>-990</td>									            
+									<td>-840</td>
+									<td></td>
+									<td>-990</td>
 								</tr>
 								<tr>
 									<th>17</th>
 									<td></td>
-									<td></td>										            
+									<td></td>
 								</tr>
 								<tr>
 									<th>18</th>
 									<td></td>
-									<td></td>										            
+									<td></td>
 								</tr>
 								<tr>
 									<th>19</th>
 									<td></td>
-									<td></td>										            
+									<td></td>
 								</tr>
 								<tr>
 									<th>20</th>
 									<td></td>
-									<td></td>										            
+									<td></td>
 								</tr>
 								<tr>
 									<th>21</th>
 									<td></td>
-									<td></td>										            
+									<td></td>
 								</tr>
 								<tr>
 									<th>22</th>
 									<td></td>
-									<td></td>										            
+									<td></td>
 								</tr>
 								<tr>
 									<th>23</th>
 									<td></td>
-									<td></td>										            
+									<td></td>
 								</tr>
 								<tr>
 									<th>24</th>
 									<td></td>
-									<td></td>										            
+									<td></td>
 								</tr>
 							</tbody>
-						</table>			
-					</div>										
-				</div>																			
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="indiv emain">
@@ -1452,14 +1449,14 @@ $(function(){
 						<label><input type="checkbox" name="deviceStatus" value="경고" checked> 경고</label>
 						<label><input type="checkbox" name="deviceStatus" value="이상" checked> 이상</label>
 					</div>
-				</div>									
+				</div>
 			</div>
 			<ul class="type_list">
 				<li>
 					<div class="chart_top clear">
 						<h2 class="ntit">PCS(10)</h2>
 						<div class="alert_icon fr">
-							<span class="inv_normail">정상 9</span> 
+							<span class="inv_normail">정상 9</span>
 							<span class="inv_error">이상 1</span>
 							<span class="inv_alert">경고 2</span>
 						</div>
@@ -1603,7 +1600,7 @@ $(function(){
 					<div class="chart_top clear">
 						<h2 class="ntit">BMS(10)</h2>
 						<div class="alert_icon fr">
-							<span class="inv_normail">정상 8</span> 
+							<span class="inv_normail">정상 8</span>
 							<span class="inv_error">이상 1</span>
 							<span class="inv_alert">경고 1</span>
 						</div>
@@ -1637,7 +1634,7 @@ $(function(){
 									</tr>
 								</tbody>
 							</table>
-						</div>	
+						</div>
 					</div>
 				</li>
 				<li>
@@ -1673,7 +1670,7 @@ $(function(){
 									</tr>
 								</tbody>
 							</table>
-						</div>	
+						</div>
 					</div>
 				</li>
 				<li>
@@ -1715,10 +1712,10 @@ $(function(){
 									</tr>
 								</tbody>
 							</table>
-						</div>	
+						</div>
 					</div>
 				</li>
-			</ul>																									
+			</ul>
 		</div>
 	</div>
 </div>

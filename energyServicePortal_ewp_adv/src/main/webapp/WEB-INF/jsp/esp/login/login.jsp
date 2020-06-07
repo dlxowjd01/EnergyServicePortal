@@ -545,7 +545,7 @@
 				    </ul>
 				</div>
 			</nav>
-			<div id="container" class="login">
+			<div class="login container-fluid">
 
 				<div class="loginForm">
 					<form id="loginForm" name="loginForm" action="/loginUser.do" method="post" onsubmit="return checkLogin(this)">

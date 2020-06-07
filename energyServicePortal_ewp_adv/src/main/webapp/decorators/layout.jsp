@@ -11,7 +11,7 @@
 		<%@ include file="/decorators/include/layouts/header.jsp"%>
 		<div id="page-wrapper">
 			<%@ include file="/decorators/include/layouts/nav.jsp"%>
-			<div id="container">
+			<div class="container-fluid">
 				<decorator:body />
 			</div>
 			<%@ include file="/decorators/include/layouts/footer.jsp"%>

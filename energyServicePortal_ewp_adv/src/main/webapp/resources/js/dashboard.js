@@ -153,8 +153,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	chart: {
 		marginTop: 40,
 		marginLeft: 55,
-		marginRight: 50,
-		height: 285,
+		marginRight: 55,
 		backgroundColor: 'transparent',
 		zoomType: 'xy'
 	},
@@ -276,7 +275,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		x: 5,
 		y: -15,
 		itemStyle: {
-			color: 'var(--color2)',
+			color: 'var(--color4)',
 			fontSize: '12px',
 			fontWeight: 400
 		},
@@ -346,18 +345,13 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	responsive: {
 		rules: [{ /* 차트 사이즈 - 4K용 */
 			condition: {
-				minWidth: 870,
+				minWidth: 787,
 			},
 			chartOptions: {
-				chart: {
-					marginTop: 50,
-					marginLeft: 75,
-					marginRight: 75
-				},
 				xAxis: {
 					labels: {
 						style: {
-							fontSize: '18px'
+							fontSize: '12px'
 						}
 					}
 				},
@@ -366,32 +360,31 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 						y: 30,
 						x: 20,
 						style: {
-							fontSize: '18px'
+							fontSize: '12px'
 						}
 					},
 					labels: {
 						style: {
-							fontSize: '18px'
+							fontSize: '12px'
 						}
 					}
-				},
-					{
-						title: {
-							y: 30,
-							x: -15,
-							style: {
-								fontSize: '18px'
-							}
-						},
-						labels: {
-							style: {
-								fontSize: '18px'
-							}
+				}, {
+					title: {
+						y: 30,
+						x: -15,
+						style: {
+							fontSize: '12px'
 						}
-					}],
+					},
+					labels: {
+						style: {
+							fontSize: '12px'
+						}
+					}
+				}],
 				legend: {
 					itemStyle: {
-						fontSize: '18px'
+						fontSize: '12px'
 					},
 					symbolPadding: 5,
 					symbolHeight: 10
@@ -550,7 +543,6 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		marginTop: 40,
 		marginLeft: 50,
 		marginRight: 50,
-		height: 323,
 		backgroundColor: 'transparent',
 		zoomType: 'xy'
 	},
@@ -629,7 +621,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 	}, { // Secondary yAxis
 		lineColor: 'var(--colo1)', /* 눈금선색 */
 		tickColor: 'var(--colo1)',
-		gridLineColor: 'var(--colo1)',
+		gridLineColor: 'var(--color1)',
 		gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 		plotLines: [{
 			color: 'var(--colo1)',
@@ -751,18 +743,13 @@ const dailyChart = Highcharts.chart('dailyChart', {
 	responsive: {
 		rules: [{
 			condition: {
-				minWidth: 870 /* 차트 사이즈 */
+				minWidth: 787,
 			},
 			chartOptions: {
-				chart: {
-					marginTop: 50,
-					marginLeft: 75,
-					marginRight: 75
-				},
 				xAxis: {
 					labels: {
 						style: {
-							fontSize: '18px'
+							fontSize: '12px'
 						}
 					}
 				},
@@ -771,12 +758,12 @@ const dailyChart = Highcharts.chart('dailyChart', {
 						y: 30,
 						x: 20,
 						style: {
-							fontSize: '18px'
+							fontSize: '12px'
 						}
 					},
 					labels: {
 						style: {
-							fontSize: '18px'
+							fontSize: '12px'
 						}
 					}
 				},
@@ -785,18 +772,18 @@ const dailyChart = Highcharts.chart('dailyChart', {
 							y: 30,
 							x: -15,
 							style: {
-								fontSize: '18px'
+								fontSize: '12px'
 							}
 						},
 						labels: {
 							style: {
-								fontSize: '18px'
+								fontSize: '12px'
 							}
 						}
 					}],
 				legend: {
 					itemStyle: {
-						fontSize: '18px'
+						fontSize: '12px'
 					},
 					symbolPadding: 5,
 					symbolHeight: 10
@@ -960,9 +947,9 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 
 const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 	chart: {
-		marginTop: 50,
+		marginTop: 0,
 		marginRight: 0,
-		height: 355,
+		height: 305,
 		backgroundColor: 'transparent',
 		type: 'bar'
 	},
@@ -1059,18 +1046,23 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			borderWidth: 0, /* 보더 0 */
 			borderRadiusTopLeft: 2, /* 막대 모서리 둥글게 효과 */
 			borderRadiusTopRight: 2, /* 막대 모서리 둥글게 효과 */
-			pointWidth: 10, /* 막대 두께 */
-			pointPadding: 6 /* 막대 사이 간격 */
+			pointWidth: 12, /* 막대 두께 */
+			// groupPadding: 7,
+			pointPadding: 0.5 /* 막대 사이 간격 */
 		},
 		bar: {
 			dataLabels: {
 				enabled: true,
-				inside: true, /* 막대 안으로 라벨 수치 넣기 */
+				// inside: true, /* 막대 안으로 라벨 수치 넣기 */
 				format: '{y} kWh', /* 단위 넣기 */
 				style: {
 					color: '#ffffff',
-					fontSize: '11px',
-					fontWeight: 400
+					fontSize: '12px',
+					fontWeight: 400,
+					// borderWidth: 1,
+					// remove label stroke
+					textOutline: 0,
+					textShadow: true
 				}
 			}
 		}
@@ -1081,7 +1073,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 	responsive: {
 		rules: [{
 			condition: {
-				maxWidth: 414 /* 차트 사이즈 */
+				maxWidth: 767 /* 차트 사이즈 */
 			},
 			chartOptions: {
 				xAxis: {
@@ -1090,31 +1082,17 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 							fontSize: '12px'
 						}
 					}
-				}
-			}
-		}],
-		rules: [{
-			condition: {
-				minWidth: 842 /* 차트 사이즈 */
-			},
-			chartOptions: {
-				xAxis: {
-					labels: {
-						style: {
-							fontSize: '18px'
-						}
-					}
 				},
 				yAxis: {
 					labels: {
 						style: {
-							fontSize: '18px'
+							fontSize: '12px'
 						}
 					}
 				},
 				legend: {
 					itemStyle: {
-						fontSize: '18px'
+						fontSize: '12px'
 					},
 					symbolPadding: 5,
 					symbolHeight: 10
@@ -1127,7 +1105,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 					bar: {
 						dataLabels: {
 							style: {
-								fontSize: '13px'
+								fontSize: '12px'
 							}
 						}
 					}
@@ -1423,7 +1401,7 @@ var pieChart = Highcharts.chart('pie_chart', {
 
 	series: [{
 		type: 'pie',
-		innerSize: '50%',
+		innerSize: '70%',
 		name: '발전량',
 		colorByPoint: true,
 		data: [{
@@ -1730,11 +1708,9 @@ const setSiteList = function (type) {
  */
 const searchSite = function () {
 	let searchName = $('#searchName').val();
-	let deviceStatus = $.makeArray($(':checkbox[name="deviceStatus"]:checked').map(
-		function () {
+	let deviceStatus = $.makeArray($(':checkbox[name="deviceStatus"]:checked').map(function () {
 			return $(this).val();
-		}
-		)
+		})
 	);
 	let refineList = new Array();
 
@@ -1843,7 +1819,7 @@ const siteListChart = function (selector, seriesData, title) {
 
 	let option = {
 		chart: {
-			marginTop: 0,
+			marginTop: 20,
 			marginLeft: 0,
 			marginRight: 0,
 			backgroundColor: 'transparent',
@@ -1888,39 +1864,96 @@ const siteListChart = function (selector, seriesData, title) {
 				},
 				startAngle: -90,
 				endAngle: 90,
-				center: ['50%', '120%'],
+				center: ['50%', '100%'],
 				borderWidth: 0,
-				size: '200%'
+				size: '100%'
 			}
 		},
 		series: seriesData,
-		responsive: { // 반응형
-			rules: [{
-				condition: {
-					minWidth: 305
-				},
-				chartOptions: {
-					title: {
-						x: 0,
-						y: 10,
-						style: {
-							fontSize: '12px',
-						}
+		responsive: {
+			rules: [
+				{
+					condition: {
+						maxWidth: 1919,
+						minWidth: 1200
 					},
-					plotOptions: {
-						pie: {
-							dataLabels: {
-								style: {
-									fontWeight: 'bold',
-									color: 'var(--color3)'
-								}
-							},
-							center: ['50%', '50%'],
-							size: '100%'
+					chartOptions: {
+						title: {
+							x: 0,
+							y: 60,
+							style: {
+								fontSize: '12px',
+							}
+						},
+						plotOptions: {
+							pie: {
+								dataLabels: {
+									style: {
+										fontWeight: 'bold',
+										color: 'var(--color3)'
+									}
+								},
+								center: ['50%', '100%'],
+								size: '100%'
+							}
+						}
+					}
+				},
+				{
+					condition: {
+						maxWidth: 1199,
+						minWidth: 768
+					},
+					chartOptions: {
+						title: {
+							x: 0,
+							y: 60,
+							style: {
+								fontSize: '12px',
+							}
+						},
+						plotOptions: {
+							pie: {
+								dataLabels: {
+									style: {
+										fontWeight: 'bold',
+										color: 'var(--color3)'
+									}
+								},
+								center: ['50%', '100%'],
+								size: '100%'
+							}
+						}
+					}
+				},
+				{
+					condition: {
+						maxWidth: 767,
+						minWidth: 320
+					},
+					chartOptions: {
+						title: {
+							x: 0,
+							y: 10,
+							style: {
+								fontSize: '12px',
+							}
+						},
+						plotOptions: {
+							pie: {
+								dataLabels: {
+									style: {
+										fontWeight: 'bold',
+										color: 'var(--color3)'
+									}
+								},
+								center: ['50%', '50%'],
+								size: '100%'
+							}
 						}
 					}
 				}
-			}]
+			]
 		}
 	}
 
