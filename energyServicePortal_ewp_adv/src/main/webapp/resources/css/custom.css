@@ -22,6 +22,189 @@
 	src: url(../font/Roboto-Medium.eot);
 	src: url(../font/Roboto-Medium.eot?#iefix) format('embedded-opentype'), url(../font/Roboto-Medium.woff) format('woff'), url(../font/Roboto-Medium.ttf) format('truetype');
 }
+/* css variables to support dark mode */
+
+:root {
+	--scroll-color: #9e9fa1;
+	--scroll-color2: #ebedf2;
+	--bg-color: #EBEDF2;
+	--bg-color2: #EBEDF2;
+	--bg-img: url('../img/login_bg.jpg');
+	--box-color: #fff;
+	--box-color2: #eee;
+	--box-color3: #eee;
+	--box-color4: #fff;
+	--box-color5: #eee;
+	--box-color6: #dadada;
+	--box-color7: #fff;
+	--active: #fff;
+	--active2: #fff;
+	--login-arr: url('../img/login_arr.gif');
+	--color1: #6b6b6b99;
+	--color2: #6b6b6b;
+	--color3: #000;
+	--color4: #000;
+	--color5: #6b6b6b;
+	--color6: #333;
+	--color7: #d4d4d4;
+	--color8: #000;
+	--color9: #afafaf;
+	--color-calendar-today: rgba(0, 0, 0, 0.1);
+	--error: rgba(247, 92, 74, 1);
+	--warning: rgba(244, 158, 52, 1);
+	--encored-logo: url('../img/encored_logo.png');
+	--encored-logo-4k: url('../img/encored_logo@3x.png');
+	--spower-logo: url('../img/s-power_logo_light.png');
+	--spower-logo-4k: url('../img/s-power_logo_light@3x.png');
+	--sidebar-dashboard-off: url('../img/sidebar_dashboard_light_off.png');
+	--sidebar-dashboard-on: url('../img/sidebar_dashboard_light_on_dark_off.png');
+	--sidebar-dashboard-off-4k: url('../img/sidebar_dashboard_light_off@3x.png');
+	--sidebar-dashboard-on-4k: url('../img/sidebar_dashboard_light_on_dark_off@3x.png');
+	--sidebar-status-off: url('../img/sidebar_status_light_off.png');
+	--sidebar-status-on: url('../img/sidebar_status_light_on_dark_off.png');
+	--sidebar-status-off-4k: url('../img/sidebar_status_light_off@3x.png');
+	--sidebar-status-on-4k: url('../img/sidebar_status_light_on_dark_off@3x.png');
+	--sidebar-history-off: url('../img/sidebar_history_light_off.png');
+	--sidebar-history-on: url('../img/sidebar_history_light_on_dark_off.png');
+	--sidebar-history-off-4k: url('../img/sidebar_history_light_off@3x.png');
+	--sidebar-history-on-4k: url('../img/sidebar_history_light_on_dark_off@3x.png');
+	--sidebar-analytics-off: url('../img/sidebar_analytics_light_off.png');
+	--sidebar-analytics-on: url('../img/sidebar_analytics_light_on_dark_off.png');
+	--sidebar-analytics-off-4k: url('../img/sidebar_analytics_light_off@3x.png');
+	--sidebar-analytics-on-4k: url('../img/sidebar_analytics_light_on_dark_off@3x.png');
+	--sidebar-diagnosis-off: url('../img/sidebar_diagnosis_light_off.png');
+	--sidebar-diagnosis-on: url('../img/sidebar_diagnosis_light_on_dark_off.png');
+	--sidebar-diagnosis-off-4k: url('../img/sidebar_diagnosis_light_off@3x.png');
+	--sidebar-diagnosis-on-4k: url('../img/sidebar_diagnosis_light_on_dark_off@3x.png');
+	--sidebar-settings-off: url('../img/sidebar_settings_light_off.png');
+	--sidebar-settings-on: url('../img/sidebar_settings_light_on_dark_off.png');
+	--sidebar-settings-off-4k: url('../img/sidebar_settings_light_off@3x.png');
+	--sidebar-settings-on-4k: url('../img/sidebar_settings_light_on_dark_off@3x.png');
+	--sidebar-logout-off: url('../img/sidebar_logout_light_off.png');
+	--sidebar-logout-on: url('../img/sidebar_logout_light_on_dark_off.png');
+	--sidebar-logout-off-4k: url('../img/sidebar_logout_light_off@3x.png');
+	--sidebar-logout-on-4k: url('../img/sidebar_logout_light_on_dark_off@3x.png');
+	--sidebar-report-off: url('../img/sidebar_report_light_off.png');
+	--sidebar-report-on: url('../img/sidebar_report_light_on_dark_off.png');
+	--sidebar-report-off-4k: url('../img/sidebar_report_light_off@3x.png');
+	--sidebar-report-on-4k: url('../img/sidebar_report_light_on_dark_off@3x.png');
+	--sidebar-maintenance-off: url('../img/sidebar_maintenance_light_off.png');
+	--sidebar-maintenance-on: url('../img/sidebar_maintenance_light_on_dark_off.png');
+	--sidebar-maintenance-off-4k: url('../img/sidebar_maintenance_light_off@3x.png');
+	--sidebar-maintenance-on-4k: url('../img/sidebar_maintenance_light_on_dark_off@3x.png');
+	--sidebar-spc-off: url('../img/sidebar_spc_light_off.png');
+	--sidebar-spc-on: url('../img/sidebar_spc_light_on.png');
+	--sidebar-spc-off-4k: url('../img/sidebar_spc_light_off@3x.png');
+	--sidebar-spc-on-4k: url('../img/sidebar_spc_light_on@3x.png');
+	--icon-pv: url('../img/icon_pv_light.png');
+	--icon-wind: url('../img/icon_wind_light.png');
+	--icon-water: url('../img/icon_water_light.png');
+	--status-error: url('../img/status_error_light.png');
+	--status-drive: url('../img/status_drive_light.png');
+	--status-hold: url('../img/status_hold_light.png');
+	--status-stop: url('../img/status_stop_light.png');
+	--status-charging: url('../img/status_charging_light.png');
+	--status-discharging: url('../img/status_discharging_light.png');
+	--expand-arrow: url('../img/expand_arrow_light.png');
+	--right-arrow: url('../img/arrow_right_light.png');
+	--down-arrow: url('../img/arrow_down_light.png');
+	--ico-battery: url('../img/ico_battery.png');
+	--ico-solar: url('../img/ico_solar.png');
+	--ico-water: url('../img/ico_water.png');
+	--ico-wind: url('../img/ico_wind.png');
+	--bg-battery-cover: url('../img/battary_cover_dark.png');
+}
+
+html.darkmode:root {
+	--scroll-color: #676767;
+	--scroll-color2: #444;
+	--bg-color: #000;
+	--bg-color2: #4e4e4e;
+	--bg-img: url('../img/login_bg_black.jpg');
+	--box-color: #363636;
+	--box-color2: #ffffff1a;
+	--box-color3: #ffffff1f;
+	--box-color4: #292929;
+	--box-color5: #282828;
+	--box-color6: #2d2e2e;
+	--box-color7: rgba(255, 255, 255, 0.12);
+	--active: #363636;
+	--active2: #131319;
+	--login-arr: url('../img/login_arr_black.png');
+	--color1: #6b6b6b;
+	--color2: #e1e1e1;
+	--color3: #fff;
+	--color4: rgba(255, 255, 255, 0.6);
+	--color5: #b8b8b8;
+	--color6: #aeaeae;
+	--color7: #595959;
+	--color8: rgba(255, 255, 255, 0.87);
+	--color9: rgba(255, 255, 255, 0.4);
+	--color-calendar-today: rgba(255, 255, 255, 0.1);
+	--error: #B61827;
+	--warning: #BC5100;
+	--encored-logo: url('../img/encored_logo_white.png');
+	--encored-logo-4k: url('../img/encored_logo_white@3x.png');
+	--spower-logo: url('../img/s-power_logo_dark.png');
+	--spower-logo-4k: url('../img/s-power_logo_dark@3x.png');
+	--sidebar-dashboard-off: url('../img/sidebar_dashboard_light_on_dark_off.png');
+	--sidebar-dashboard-on: url('../img/sidebar_dashboard_dark_on.png');
+	--sidebar-dashboard-off-4k: url('../img/sidebar_dashboard_light_on_dark_off@3x.png');
+	--sidebar-dashboard-on-4k: url('../img/sidebar_dashboard_dark_on@3x.png');
+	--sidebar-status-off: url('../img/sidebar_status_light_on_dark_off.png');
+	--sidebar-status-on: url('../img/sidebar_status_dark_on.png');
+	--sidebar-status-off-4k: url('../img/sidebar_status_light_on_dark_off@3x.png');
+	--sidebar-status-on-4k: url('../img/sidebar_status_dark_on@3x.png');
+	--sidebar-history-off: url('../img/sidebar_history_light_on_dark_off.png');
+	--sidebar-history-on: url('../img/sidebar_history_dark_on.png');
+	--sidebar-history-off-4k: url('../img/sidebar_history_light_on_dark_off@3x.png');
+	--sidebar-history-on-4k: url('../img/sidebar_history_dark_on@3x.png');
+	--sidebar-analytics-off: url('../img/sidebar_analytics_light_on_dark_off.png');
+	--sidebar-analytics-on: url('../img/sidebar_analytics_dark_on.png');
+	--sidebar-analytics-off-4k: url('../img/sidebar_analytics_light_on_dark_off@3x.png');
+	--sidebar-analytics-on-4k: url('../img/sidebar_analytics_dark_on@3x.png');
+	--sidebar-diagnosis-off: url('../img/sidebar_diagnosis_light_on_dark_off.png');
+	--sidebar-diagnosis-on: url('../img/sidebar_diagnosis_dark_on.png');
+	--sidebar-diagnosis-off-4k: url('../img/sidebar_diagnosis_light_on_dark_off@3x.png');
+	--sidebar-diagnosis-on-4k: url('../img/sidebar_diagnosis_dark_on@3x.png');
+	--sidebar-settings-off: url('../img/sidebar_settings_light_on_dark_off.png');
+	--sidebar-settings-on: url('../img/sidebar_settings_dark_on.png');
+	--sidebar-settings-off-4k: url('../img/sidebar_settings_light_on_dark_off@3x.png');
+	--sidebar-settings-on-4k: url('../img/sidebar_settings_dark_on@3x.png');
+	--sidebar-logout-off: url('../img/sidebar_logout_light_on_dark_off.png');
+	--sidebar-logout-on: url('../img/sidebar_logout_dark_on.png');
+	--sidebar-logout-off-4k: url('../img/sidebar_logout_light_on_dark_off@3x.png');
+	--sidebar-logout-on-4k: url('../img/sidebar_logout_dark_on@3x.png');
+	--sidebar-report-off: url('../img/sidebar_report_light_on_dark_off.png');
+	--sidebar-report-on: url('../img/sidebar_report_dark_on.png');
+	--sidebar-report-off-4k: url('../img/sidebar_report_light_on_dark_off@3x.png');
+	--sidebar-report-on-4k: url('../img/sidebar_report_dark_on@3x.png');
+	--sidebar-maintenance-off: url('../img/sidebar_maintenance_light_on_dark_off.png');
+	--sidebar-maintenance-on: url('../img/sidebar_maintenance_dark_on.png');
+	--sidebar-maintenance-off-4k: url('../img/sidebar_maintenance_light_on_dark_off@3x.png');
+	--sidebar-maintenance-on-4k: url('../img/sidebar_maintenance_dark_on@3x.png');
+	--sidebar-spc-off: url('../img/sidebar_spc_dark_off.png');
+	--sidebar-spc-on: url('../img/sidebar_spc_dark_on.png');
+	--sidebar-spc-off-4k: url('../img/sidebar_spc_dark_off@3x.png');
+	--sidebar-spc-on-4k: url('../img/sidebar_spc_dark_on@3x.png');
+	--icon-pv: url('../img/icon_pv.png');
+	--icon-wind: url('../img/icon_wind.png');
+	--icon-water: url('../img/water.svg');
+	--status-error: url('../img/status_error_dark.png');
+	--status-drive: url('../img/status_drive_dark.png');
+	--status-hold: url('../img/status_hold_dark.png');
+	--status-stop: url('../img/status_stop_dark.png');
+	--status-charging: url('../img/status_charging_dark.png');
+	--status-discharging: url('../img/status_discharging_dark.png');
+	--expand-arrow: url('../img/expand_arrow_dark.png');
+	--right-arrow: url('../img/arrow_right_dark.png');
+	--down-arrow: url('../img/arrow_down_dark.png');
+	--ico-battery: url('../img/ico_battery_dark.png');
+	--ico-solar: url('../img/ico_solar_dark.png');
+	--ico-water: url('../img/ico_water_dark.png');
+	--ico-wind: url('../img/ico_wind_dark.png');
+	--bg-battery-cover: url('../img/battary_cover_dark.png');
+}
 
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
 	margin: 0;
@@ -377,6 +560,10 @@ input::placeholder, textarea::placeholder {
 	width: 35% !important;
 }
 
+.w-45 {
+	width: 45% !important;
+}
+
 .w-50 {
 	width: 50% !important;
 }
@@ -393,196 +580,15 @@ input::placeholder, textarea::placeholder {
 	width: 100% !important;
 }
 
-/* 레이아웃 */
-
-/* css variables to support dark mode */
-
-:root {
-	--scroll-color: #9e9fa1;
-	--scroll-color2: #ebedf2;
-	--bg-color: #EBEDF2;
-	--bg-color2: #EBEDF2;
-	--bg-img: url('../img/login_bg.jpg');
-	--box-color: #fff;
-	--box-color2: #eee;
-	--box-color3: #eee;
-	--box-color4: #fff;
-	--box-color5: #eee;
-	--box-color6: #dadada;
-	--box-color7: #fff;
-	--active: #fff;
-	--active2: #fff;
-	--login-arr: url('../img/login_arr.gif');
-	--color1: #6b6b6b99;
-	--color2: #6b6b6b;
-	--color3: #000;
-	--color4: #000;
-	--color5: #6b6b6b;
-	--color6: #333;
-	--color7: #d4d4d4;
-	--color8: #000;
-	--color9: #afafaf;
-	--color-calendar-today: rgba(0, 0, 0, 0.1);
-	--error: rgba(247, 92, 74, 1);
-	--warning: rgba(244, 158, 52, 1);
-	--encored-logo: url('../img/encored_logo.png');
-	--encored-logo-4k: url('../img/encored_logo@3x.png');
-	--spower-logo: url('../img/s-power_logo_light.png');
-	--spower-logo-4k: url('../img/s-power_logo_light@3x.png');
-	--sidebar-dashboard-off: url('../img/sidebar_dashboard_light_off.png');
-	--sidebar-dashboard-on: url('../img/sidebar_dashboard_light_on_dark_off.png');
-	--sidebar-dashboard-off-4k: url('../img/sidebar_dashboard_light_off@3x.png');
-	--sidebar-dashboard-on-4k: url('../img/sidebar_dashboard_light_on_dark_off@3x.png');
-	--sidebar-status-off: url('../img/sidebar_status_light_off.png');
-	--sidebar-status-on: url('../img/sidebar_status_light_on_dark_off.png');
-	--sidebar-status-off-4k: url('../img/sidebar_status_light_off@3x.png');
-	--sidebar-status-on-4k: url('../img/sidebar_status_light_on_dark_off@3x.png');
-	--sidebar-history-off: url('../img/sidebar_history_light_off.png');
-	--sidebar-history-on: url('../img/sidebar_history_light_on_dark_off.png');
-	--sidebar-history-off-4k: url('../img/sidebar_history_light_off@3x.png');
-	--sidebar-history-on-4k: url('../img/sidebar_history_light_on_dark_off@3x.png');
-	--sidebar-analytics-off: url('../img/sidebar_analytics_light_off.png');
-	--sidebar-analytics-on: url('../img/sidebar_analytics_light_on_dark_off.png');
-	--sidebar-analytics-off-4k: url('../img/sidebar_analytics_light_off@3x.png');
-	--sidebar-analytics-on-4k: url('../img/sidebar_analytics_light_on_dark_off@3x.png');
-	--sidebar-diagnosis-off: url('../img/sidebar_diagnosis_light_off.png');
-	--sidebar-diagnosis-on: url('../img/sidebar_diagnosis_light_on_dark_off.png');
-	--sidebar-diagnosis-off-4k: url('../img/sidebar_diagnosis_light_off@3x.png');
-	--sidebar-diagnosis-on-4k: url('../img/sidebar_diagnosis_light_on_dark_off@3x.png');
-	--sidebar-settings-off: url('../img/sidebar_settings_light_off.png');
-	--sidebar-settings-on: url('../img/sidebar_settings_light_on_dark_off.png');
-	--sidebar-settings-off-4k: url('../img/sidebar_settings_light_off@3x.png');
-	--sidebar-settings-on-4k: url('../img/sidebar_settings_light_on_dark_off@3x.png');
-	--sidebar-logout-off: url('../img/sidebar_logout_light_off.png');
-	--sidebar-logout-on: url('../img/sidebar_logout_light_on_dark_off.png');
-	--sidebar-logout-off-4k: url('../img/sidebar_logout_light_off@3x.png');
-	--sidebar-logout-on-4k: url('../img/sidebar_logout_light_on_dark_off@3x.png');
-	--sidebar-report-off: url('../img/sidebar_report_light_off.png');
-	--sidebar-report-on: url('../img/sidebar_report_light_on_dark_off.png');
-	--sidebar-report-off-4k: url('../img/sidebar_report_light_off@3x.png');
-	--sidebar-report-on-4k: url('../img/sidebar_report_light_on_dark_off@3x.png');
-	--sidebar-maintenance-off: url('../img/sidebar_maintenance_light_off.png');
-	--sidebar-maintenance-on: url('../img/sidebar_maintenance_light_on_dark_off.png');
-	--sidebar-maintenance-off-4k: url('../img/sidebar_maintenance_light_off@3x.png');
-	--sidebar-maintenance-on-4k: url('../img/sidebar_maintenance_light_on_dark_off@3x.png');
-	--sidebar-spc-off: url('../img/sidebar_spc_light_off.png');
-	--sidebar-spc-on: url('../img/sidebar_spc_light_on.png');
-	--sidebar-spc-off-4k: url('../img/sidebar_spc_light_off@3x.png');
-	--sidebar-spc-on-4k: url('../img/sidebar_spc_light_on@3x.png');
-	--icon-pv: url('../img/icon_pv_light.png');
-	--icon-wind: url('../img/icon_wind_light.png');
-	--icon-water: url('../img/icon_water_light.png');
-	--status-error: url('../img/status_error_light.png');
-	--status-drive: url('../img/status_drive_light.png');
-	--status-hold: url('../img/status_hold_light.png');
-	--status-stop: url('../img/status_stop_light.png');
-	--status-charging: url('../img/status_charging_light.png');
-	--status-discharging: url('../img/status_discharging_light.png');
-	--expand-arrow: url('../img/expand_arrow_light.png');
-	--right-arrow: url('../img/arrow_right_light.png');
-	--down-arrow: url('../img/arrow_down_light.png');
-	--ico-battery: url('../img/ico_battery.png');
-	--ico-solar: url('../img/ico_solar.png');
-	--ico-water: url('../img/ico_water.png');
-	--ico-wind: url('../img/ico_wind.png');
-	--bg-battery-cover: url('../img/battary_cover_dark.png');
+.pt-0 {
+	padding-top: 0 !important;
 }
+/* 레이아웃 */
 
 html, body {
 	height: 100%;
 	background-color: var(--bg-color);
 	color: var(--color3);
-}
-
-html.darkmode:root {
-	--scroll-color: #676767;
-	--scroll-color2: #444;
-	--bg-color: #000;
-	--bg-color2: #4e4e4e;
-	--bg-img: url('../img/login_bg_black.jpg');
-	--box-color: #363636;
-	--box-color2: #ffffff1a;
-	--box-color3: #ffffff1f;
-	--box-color4: #292929;
-	--box-color5: #282828;
-	--box-color6: #2d2e2e;
-	--box-color7: rgba(255, 255, 255, 0.12);
-	--active: #363636;
-	--active2: #131319;
-	--login-arr: url('../img/login_arr_black.png');
-	--color1: #6b6b6b;
-	--color2: #e1e1e1;
-	--color3: #fff;
-	--color4: rgba(255, 255, 255, 0.6);
-	--color5: #b8b8b8;
-	--color6: #aeaeae;
-	--color7: #595959;
-	--color8: rgba(255, 255, 255, 0.87);
-	--color9: rgba(255, 255, 255, 0.4);
-	--color-calendar-today: rgba(255, 255, 255, 0.1);
-	--error: #B61827;
-	--warning: #BC5100;
-	--encored-logo: url('../img/encored_logo_white.png');
-	--encored-logo-4k: url('../img/encored_logo_white@3x.png');
-	--spower-logo: url('../img/s-power_logo_dark.png');
-	--spower-logo-4k: url('../img/s-power_logo_dark@3x.png');
-	--sidebar-dashboard-off: url('../img/sidebar_dashboard_light_on_dark_off.png');
-	--sidebar-dashboard-on: url('../img/sidebar_dashboard_dark_on.png');
-	--sidebar-dashboard-off-4k: url('../img/sidebar_dashboard_light_on_dark_off@3x.png');
-	--sidebar-dashboard-on-4k: url('../img/sidebar_dashboard_dark_on@3x.png');
-	--sidebar-status-off: url('../img/sidebar_status_light_on_dark_off.png');
-	--sidebar-status-on: url('../img/sidebar_status_dark_on.png');
-	--sidebar-status-off-4k: url('../img/sidebar_status_light_on_dark_off@3x.png');
-	--sidebar-status-on-4k: url('../img/sidebar_status_dark_on@3x.png');
-	--sidebar-history-off: url('../img/sidebar_history_light_on_dark_off.png');
-	--sidebar-history-on: url('../img/sidebar_history_dark_on.png');
-	--sidebar-history-off-4k: url('../img/sidebar_history_light_on_dark_off@3x.png');
-	--sidebar-history-on-4k: url('../img/sidebar_history_dark_on@3x.png');
-	--sidebar-analytics-off: url('../img/sidebar_analytics_light_on_dark_off.png');
-	--sidebar-analytics-on: url('../img/sidebar_analytics_dark_on.png');
-	--sidebar-analytics-off-4k: url('../img/sidebar_analytics_light_on_dark_off@3x.png');
-	--sidebar-analytics-on-4k: url('../img/sidebar_analytics_dark_on@3x.png');
-	--sidebar-diagnosis-off: url('../img/sidebar_diagnosis_light_on_dark_off.png');
-	--sidebar-diagnosis-on: url('../img/sidebar_diagnosis_dark_on.png');
-	--sidebar-diagnosis-off-4k: url('../img/sidebar_diagnosis_light_on_dark_off@3x.png');
-	--sidebar-diagnosis-on-4k: url('../img/sidebar_diagnosis_dark_on@3x.png');
-	--sidebar-settings-off: url('../img/sidebar_settings_light_on_dark_off.png');
-	--sidebar-settings-on: url('../img/sidebar_settings_dark_on.png');
-	--sidebar-settings-off-4k: url('../img/sidebar_settings_light_on_dark_off@3x.png');
-	--sidebar-settings-on-4k: url('../img/sidebar_settings_dark_on@3x.png');
-	--sidebar-logout-off: url('../img/sidebar_logout_light_on_dark_off.png');
-	--sidebar-logout-on: url('../img/sidebar_logout_dark_on.png');
-	--sidebar-logout-off-4k: url('../img/sidebar_logout_light_on_dark_off@3x.png');
-	--sidebar-logout-on-4k: url('../img/sidebar_logout_dark_on@3x.png');
-	--sidebar-report-off: url('../img/sidebar_report_light_on_dark_off.png');
-	--sidebar-report-on: url('../img/sidebar_report_dark_on.png');
-	--sidebar-report-off-4k: url('../img/sidebar_report_light_on_dark_off@3x.png');
-	--sidebar-report-on-4k: url('../img/sidebar_report_dark_on@3x.png');
-	--sidebar-maintenance-off: url('../img/sidebar_maintenance_light_on_dark_off.png');
-	--sidebar-maintenance-on: url('../img/sidebar_maintenance_dark_on.png');
-	--sidebar-maintenance-off-4k: url('../img/sidebar_maintenance_light_on_dark_off@3x.png');
-	--sidebar-maintenance-on-4k: url('../img/sidebar_maintenance_dark_on@3x.png');
-	--sidebar-spc-off: url('../img/sidebar_spc_dark_off.png');
-	--sidebar-spc-on: url('../img/sidebar_spc_dark_on.png');
-	--sidebar-spc-off-4k: url('../img/sidebar_spc_dark_off@3x.png');
-	--sidebar-spc-on-4k: url('../img/sidebar_spc_dark_on@3x.png');
-	--icon-pv: url('../img/icon_pv.png');
-	--icon-wind: url('../img/icon_wind.png');
-	--icon-water: url('../img/water.svg');
-	--status-error: url('../img/status_error_dark.png');
-	--status-drive: url('../img/status_drive_dark.png');
-	--status-hold: url('../img/status_hold_dark.png');
-	--status-stop: url('../img/status_stop_dark.png');
-	--status-charging: url('../img/status_charging_dark.png');
-	--status-discharging: url('../img/status_discharging_dark.png');
-	--expand-arrow: url('../img/expand_arrow_dark.png');
-	--right-arrow: url('../img/arrow_right_dark.png');
-	--down-arrow: url('../img/arrow_down_dark.png');
-	--ico-battery: url('../img/ico_battery_dark.png');
-	--ico-solar: url('../img/ico_solar_dark.png');
-	--ico-water: url('../img/ico_water_dark.png');
-	--ico-wind: url('../img/ico_wind_dark.png');
-	--bg-battery-cover: url('../img/battary_cover_dark.png');
 }
 
 /* Change the white to any color ;) */
@@ -597,17 +603,7 @@ html.darkmode input:-webkit-autofill {
 	-webkit-text-fill-color: var(--color3) !important;
 }
 
-.wickedpicker__controls {
-	color: var(--color4);
-}
-
-/*body {*/
-
-/*	background: #f8f9fd url('../img/sidebar_bg.png') repeat-y 0 0;*/
-
-/*}*/
-
-#wrapper {
+.outer-wrapper {
 	position: relative;
 }
 
@@ -2989,7 +2985,7 @@ h1.stit {
 /* 테이블 영역 상단 */
 
 .tbl_top {
-	padding-bottom: 10px;
+	padding-bottom: 28px;
 }
 
 .tbl_top ul {
@@ -5396,10 +5392,7 @@ input[type="checkbox"] .styled:checked+label::after, input[type="radio"] .styled
 	background: var(--expand-arrow) no-repeat 0 0;
 }
 
-/*
-	## MOBILE 언어선택 ##
-*/
-
+/* Language Switcher*/
 nav .lang {
 	display: none;
 	position: absolute;
@@ -6514,13 +6507,13 @@ nav .lang.dropdown .btn .caret {
 }
 
 .gmain_table .gtbl_wrap {
-	margin-top: 10px;
+	margin-top: 24px;
 	overflow-y: auto;
 	/* height: calc(100% - 60px); */
 }
 
 .gmain_table .gtbl_wrap .intable {
-	max-height: 800px;
+	max-height: 675px;
 }
 
 /*
@@ -7108,6 +7101,7 @@ div.di_wrap dl .link a {
 .gmain_chart2 #dailyChart {
 	height: 265px;
 }
+
 .gmain_chart3 {
 	height: 400px;
 }
@@ -8186,35 +8180,56 @@ div.di_wrap dl .link a {
 }
 
 /* 수집현황 */
+
 .modal-content {
 	padding: 9px;
 }
+
 .modal-body {
 	padding: 20px 0;
 }
+
 .modal-body .input-group {
 	display: inline-flex;
 	align-items: center;
 	width: 100%;
 }
+
 .modal-body .input-group .dropdown-toggle {
 	width: 250px;
 }
+
 .modal-body .input-group:not(:last-of-type) {
 	margin-bottom: 16px;
 }
+
 .modal-body .input-group label {
 	width: 25%;
 }
-.modal-header,
-.modal-footer {
+
+.modal-header, .modal-footer {
 	padding: 0;
 	border: none;
 }
 
-.modal-footer {
+.modal-footer {}
 
+.device_list {
+	width: 100%;
+	margin-bottom: 30px;
 }
+.device_list li {
+	height: 36px;
+	color: var(--color8);
+	border-bottom: 1px solid var(--color6);
+	font-size: 13px;
+	text-align: left;
+}
+
+.device_list li:not(:last-of-type){
+	margin-bottom: 18px;
+}
+
 /* 설비 테이블 */
 
 .his_tbl {
@@ -8237,7 +8252,7 @@ div.di_wrap dl .link a {
 	cursor: pointer;
 }
 
-.his_tbl tbody {
+.his_tbl tbody{
 	height: 300px;
 	/*display:block;*/
 	overflow-y: auto;
@@ -8283,7 +8298,11 @@ div.di_wrap dl .link a {
 	text-align: center
 }
 
-.his_tbl .chk_tr td, .his_tbl .chk_tr td .tbl_link, .his_tbl .chk_tr td .tbl_link:link, .his_tbl .chk_tr td .tbl_link:hover, .his_tbl .chk_tr td .tbl_link:active {
+.his_tbl .chk_tr td,
+.his_tbl .chk_tr td .tbl_link,
+.his_tbl .chk_tr td .tbl_link:link,
+.his_tbl .chk_tr td .tbl_link:hover,
+.his_tbl .chk_tr td .tbl_link:active {
 	color: var(--color8)
 }
 
@@ -8954,10 +8973,6 @@ div.di_wrap dl .link a {
 	border-radius: 4px
 }
 
-.weater_wrap .wt_table_wrap .wt_table dt strong {}
-
-.weater_wrap .wt_table_wrap .wt_table dt span {}
-
 .weater_wrap .wt_table_wrap .wt_table dt em {
 	float: right;
 	font-size: 14px;
@@ -9544,7 +9559,8 @@ button.big {
 	font-size: 13px;
 	color: var(--color2);
 	font-weight: normal;
-	background: var(--box-color4);
+	/* background: var(--box-color4); */
+	background: var(--box-color);
 	vertical-align: middle;
 	text-align: center
 }
@@ -10236,15 +10252,6 @@ textarea::-webkit-scrollbar-thumb {
 	height: auto
 }
 
-.tbl_wrap_type .tbl_top {
-	padding-left: 20px;
-	margin-top: 40px
-}
-
-.tbl_wrap_type .tbl_top:first-child {
-	margin-top: 20px
-}
-
 .tbl_wrap_type .tbl_top+.his_tbl {
 	margin-top: 0
 }
@@ -10427,7 +10434,7 @@ textarea::-webkit-scrollbar-thumb {
 }
 
 .paging_wrap {
-	margin: 34px 0;
+	margin: 34px 0 0;
 	text-align: center
 }
 
@@ -10575,9 +10582,11 @@ button.tx_file {
 
 .inp_align .fl {
 	display: inline-block;
-	margin-left: 20px
 }
+.inp_align .fl + .fl {
+	margin-left: 20px;
 
+}
 .inp_align .tx_inp_type {
 	width: 340px
 }
@@ -10866,14 +10875,37 @@ button.tx_file {
 	padding-top: 25px
 }
 
+.collect_box {
+	overflow: auto;
+}
+.collect_box:first-of-type {
+	height: 818px;
+}
+.collect_box_fixed {
+	/* height: 560px; */
+	overflow: hidden;
+}
+.collect_box .paging_wrap {
+	position: absolute;
+	bottom: 40px;
+	width: calc(100% - 87px);
+}
+.collect_wrap.table_scroll {
+	overflow: auto;
+	height: 300px;
+}
+.collect_wrap.table_scroll table {
+	margin-top: 0;
+}
 .tbl_wrap_type.collect_wrap {
 	overflow-y: visible;
-	height: auto
+	height: auto;
+	padding: 10px 0;
 }
 
-.collect_wrap tbody td, .collect_wrap thead th {
-	padding-left: 50px;
-	text-align: left
+.collect_wrap thead th,
+.collect_wrap tbody td   {
+	text-align: center;
 }
 
 .collect_wrap .ellipsis {
@@ -10888,10 +10920,6 @@ button.tx_file {
 
 .tbl_wrap_type.collect_wrap .his_tbl thead, .tbl_wrap_type.collect_wrap .his_tbl tbody tr {
 	table-layout: auto
-}
-
-.collect_wrap .tbl_top:first-child {
-	margin-top: 20px
 }
 
 .collect_btn {
@@ -10914,65 +10942,6 @@ button.tx_file {
 .ly_w_type .tx_inp_type {
 	margin-left: 16px;
 	width: 70px
-}
-
-/* 반응형 */
-
-@media (max-width: 768px) {
-	nav .lang {
-		display: block;
-	}
-	nav .nav_brand {
-		margin-top: 0;
-		padding-top: 20px;
-	}
-	nav .category {
-		top: 20px;
-		left: 20px
-	}
-	nav .all-menu .menu-group {
-		top: 104px;
-		text-align: left
-	}
-	nav .all-menu .menu-group>ul+ul {
-		margin-left: 0
-	}
-	.nav_right .nav_theme {
-		right: 50%;
-		margin-right: -105px
-	}
-	nav .nav_right {
-		margin-top: 10px;
-		text-align: center
-	}
-	nav .all-menu:before {
-		display: none
-	}
-	nav .all-menu .menu-group>ul {
-		width: 33.3%
-	}
-	.tbl_wrap_type.collect_wrap {
-		overflow-y: auto
-	}
-	.spc_tbl_row {
-		overflow-y: auto
-	}
-	.spc_tbl_row::-webkit-scrollbar-track {
-		border-radius: 2px;
-		background-color: var(--scroll-color2)
-	}
-	.spc_tbl_row::-webkit-scrollbar {
-		height: 8px;
-		border-radius: 2px;
-		background-color: var(--scroll-color2);
-	}
-	.spc_tbl_row::-webkit-scrollbar-corner {
-		background-color: var(--scroll-color2);
-	}
-	.spc_tbl_row::-webkit-scrollbar-thumb {
-		border-radius: 2px;
-		background-color: var(--scroll-color);
-	}
 }
 
 /* 원가관리 수정 */
@@ -11372,7 +11341,7 @@ button.tx_file {
 	min-width: auto
 }
 
-.compare_bx{
+.compare_bx {
 	padding: 24px
 }
 

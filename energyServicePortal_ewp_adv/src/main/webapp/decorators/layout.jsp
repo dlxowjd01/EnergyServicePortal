@@ -7,7 +7,7 @@
 </head>
 <body>
 
-	<div id="wrapper">
+	<div class="outer-wrapper">
 		<%@ include file="/decorators/include/layouts/header.jsp"%>
 		<div id="page-wrapper">
 			<%@ include file="/decorators/include/layouts/nav.jsp"%>
