@@ -17,7 +17,7 @@
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>
 			<span>DATA BASE TIME</span>
-			<em class="dbTime">2018-07-27 17:01:02</em>
+			<em class="dbTime"></em>
 		</div>
 	</div>
 </div>
@@ -112,20 +112,6 @@
 					</div>
 				</div>
 			</div>
-			<!-- 데이터 추출용 테이블 -->
-			<div class="hidden_table" style="display:none">
-				<table id="gdatatable3">
-					<thead>
-					<tr>
-						<th></th>
-						<th>전일발전</th>
-						<th>전일예측</th>
-					</tr>
-					</thead>
-					<tbody id="siteGenTbody">
-					</tbody>
-				</table>
-			</div>
 		</div>
 	</div>
 
@@ -165,27 +151,6 @@
 						<th>총 설비용량</th>
 						<th>금일 CO2저감량</th>
 						<th>금일 누적수익</th>
-					</tr>
-					</thead>
-					<tbody id="centerTbody">
-					<tr>
-						<td> - 개소</td>
-						<td> 2 대</td>
-						<td> 194.56 kW</td>
-						<td> -</td>
-						<td>0</td>
-					</tr>
-					</tbody>
-				</table>
-			</div>
-			<!-- 데이터 추출용 테이블 -->
-			<div class="hidden_table" style="display:none">
-				<table id="gdatatable4">
-					<thead>
-					<tr>
-						<th></th>
-						<th>전일발전량</th>
-						<th>예측발전량</th>
 					</tr>
 					</thead>
 					<tbody id="centerTbody">
@@ -275,17 +240,33 @@
 					<table>
 						<thead>
 						<tr>
-							<th>설비상태</th>
-							<th>오류</th>
-							<th>경고</th>
 							<th>
-								<button class="btn_align down">사업소</button>
+								<button class="btn_align">설비상태</button>
 							</th>
-							<th>설비용량 (kW)</th>
-							<th>금일예측 (kWh)</th>
-							<th>금일누적 (kWh)</th>
-							<th>금일충전 (kWh)</th>
-							<th>금일방전 (kWh)</th>
+							<th>
+								<button class="btn_align">오류</button>
+							</th>
+							<th>
+								<button class="btn_align">경고</button>
+							</th>
+							<th>
+								<button class="btn_align">사업소</button>
+							</th>
+							<th>
+								<button class="btn_align">설비용량 (kW)</button>
+							</th>
+							<th>
+								<button class="btn_align">금일예측 (kWh)</button>
+							</th>
+							<th>
+								<button class="btn_align">금일누적 (kWh)</button>
+							</th>
+							<th>
+								<button class="btn_align">금일충전 (kWh)</button>
+							</th>
+							<th>
+								<button class="btn_align">금일방전 (kWh)</button>
+							</th>
 						</tr>
 						</thead>
 						<tbody id="siteList">
@@ -388,7 +369,6 @@
 			</div>
 		</div>
 	</div>
-
 </div>
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript" src="/js/dashboard.js"></script>
