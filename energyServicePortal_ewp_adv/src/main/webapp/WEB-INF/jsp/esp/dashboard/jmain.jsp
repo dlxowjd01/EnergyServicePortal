@@ -20,7 +20,7 @@
 	</div>
 </div>
 <div class="row content-wrapper">
-	<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
+	<div class="col-xl-4 col-md-12 col-sm-12">
 		<div class="indiv gmain_chart gmain_chart1">
 			<div class="chart_top clear">
 				<h2 class="ntit">월간</h2>
@@ -54,10 +54,8 @@
 			<div class="tblDisplay">
 				<div>
 					<!-- 사업소별 현황 -->
-					<div class="sa_chart">
-						<div class="inchart">
-							<div id="typeSiteCurrent"></div>
-						</div>
+					<div class="inchart">
+						<div id="typeSiteCurrent"></div>
 					</div>
 					<!-- 데이터 추출용 테이블 -->
 					<div class="hidden_table" style="display:none">
@@ -96,7 +94,7 @@
 		</div>
 	</div>
 
-	<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
+	<div class="col-xl-4 col-md-12 col-sm-12">
 		<div class="indiv gmain_map gmain_chart gmain_chart4 ">
 			<div class="chart_top clear">
 				<h2 class="ntit">현재 출력</h2>
@@ -171,7 +169,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-xl-4 col-lg-12 col-md-12 col-sm-12">
+	<div class="col-xl-4 col-md-12 col-sm-12">
 		<div class="indiv jmain_alarm wrap_type">
 			<div class="alarm_stat clear">
 				<div class="a_alert clear">
@@ -702,7 +700,8 @@
 			marginLeft: 50,
 			marginRight: 0,
 			backgroundColor: 'transparent',
-			type: 'variwide'
+			type: 'variwide',
+			height: 260
 		},
 		navigation: {
 			buttonOptions: {
@@ -885,7 +884,8 @@
 			marginLeft: 0,
 			marginRight: 0,
 			backgroundColor: 'transparent',
-			type: 'column'
+			type: 'column',
+			height: 260
 		},
 
 		navigation: {
@@ -1098,7 +1098,8 @@
 			marginRight: 0,
 			height: 270,
 			backgroundColor: 'transparent',
-			type: 'column'
+			type: 'column',
+			height: 260
 		},
 
 		navigation: {

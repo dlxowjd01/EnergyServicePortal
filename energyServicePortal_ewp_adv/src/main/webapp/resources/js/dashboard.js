@@ -949,7 +949,6 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 	chart: {
 		marginTop: 0,
 		marginRight: 0,
-		height: 305,
 		backgroundColor: 'transparent',
 		type: 'bar'
 	},
@@ -1018,7 +1017,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		x: 5,
 		y: -10,
 		itemStyle: {
-			color: '#a4aebf',
+			color: 'var(--color4)',
 			fontSize: '12px',
 			fontWeight: 400
 		},
@@ -1056,7 +1055,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 				// inside: true, /* 막대 안으로 라벨 수치 넣기 */
 				format: '{y} kWh', /* 단위 넣기 */
 				style: {
-					color: '#ffffff',
+					color: 'var(--color3)',
 					fontSize: '12px',
 					fontWeight: 400,
 					// borderWidth: 1,
@@ -1341,17 +1340,16 @@ var pieChart = Highcharts.chart('pie_chart', {
 		marginLeft: 0,
 		marginRight: 0,
 		backgroundColor: 'transparent',
+		zoomType: 'xy',
 		plotBorderWidth: 0,
 		plotShadow: false,
 		height: 180
 	},
-
 	navigation: {
 		buttonOptions: {
 			enabled: false /* 메뉴 안보이기 */
 		}
 	},
-
 	title: {
 		text: '- Wh', // 총용량 표기
 		align: 'center',
@@ -1363,16 +1361,12 @@ var pieChart = Highcharts.chart('pie_chart', {
 			color: 'var(--color4)'
 		}
 	},
-
 	subtitle: {
 		text: ''
 	},
-
-	/* 출처 */
 	credits: {
 		enabled: false
 	},
-
 	tooltip: {
 		shared: true,
 		borderColor: 'none',
@@ -1384,7 +1378,6 @@ var pieChart = Highcharts.chart('pie_chart', {
 		valueSuffix: ' kwh',
 		pointFormat: '<b>{point.percentage:.0f}%</b>'
 	},
-
 	plotOptions: {
 		pie: {
 			dataLabels: {
@@ -1399,7 +1392,6 @@ var pieChart = Highcharts.chart('pie_chart', {
 			size: '100%'
 		}
 	},
-
 	series: [{
 		type: 'pie',
 		innerSize: '70%',

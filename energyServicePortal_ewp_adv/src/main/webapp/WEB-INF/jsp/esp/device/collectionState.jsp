@@ -51,12 +51,16 @@
 					</div>
 					<div class="input-group">
 						<label for="siteName" class="input-name">시리얼 번호</label>
-						<input type="text" name="serialNum" id="serialNum" class="input">
+						<input type="text" name="serialNum" id="serialNum" class="input text_input">
+					</div>
+					<div class="input-group">
+						<label for="siteName" class="input-name">이름</label>
+						<input type="text" name="rtuName" id="rtuName" class="input text_input">
 					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn_type" data-dismiss="modal">확인</button>
-					<button type="button" class="btn btn-btn_type" data-dismiss="modal">취소</button>
+					<button type="button" class="btn btn_type grey_btn" data-dismiss="modal">취소</button>
 				</div>
 			</div>
 		</div>
@@ -131,16 +135,13 @@
 		<div class="col-xl-7 col-lg-6 col-md-6 col-sm-12">
 			<div class="indiv collect_box_fixed">
 				<div class="tbl_top clear">
-					<h2 class="ntit fl">RTU 이름</h2>
+					<h2 class="ntit fl">RTU 상세정보 <span id="selectedRTU"></span></h2>
 					<button type="button" class="btn_type fr">삭제</button>
 				</div>
 				<div class="row">
 					<div class="col-6 pt-0">
+						<header class="list_title">기기정보</header>
 						<ul class="device_list">
-							<li>
-								<span>기기 정보</span>
-								<span></span>
-							</li>
 							<li>
 								<td>RTU 이름</td>
 								<span></span>
@@ -160,11 +161,8 @@
 						</ul>
 					</div>
 					<div class="col-6 pt-0">
+						<header class="list_title">기기상태</header>
 						<ul class="device_list">
-							<li>
-								<span>기기 상태</span>
-								<span></span>
-							</li>
 							<li>
 								<td>CPU 사용량</td>
 								<span></span>
@@ -201,36 +199,7 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-							</tr>
-							<tr>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-							</tr>
-							<tr>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-							</tr>
-							<tr>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
+								<td colspan="6">왼쪽 표에서 조회하고자 하는 RTU를 클릭해 주세요.</td>
 							</tr>
 						</tbody>
 					</table>
@@ -298,14 +267,9 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-								<td>-</td>
-								<td class="ellipsis">-</td>
+								<td colspan="7">위의 표에서 조회하고자 사이트 혹은 RTU를 클릭해 주세요.</td>
 							</tr>
+							<!--
 							<tr>
 								<td>-</td>
 								<td>-</td>
@@ -350,7 +314,7 @@
 								<td>-</td>
 								<td>-</td>
 								<td class="ellipsis">-</td>
-							</tr>
+							</tr> -->
 						</tbody>
 					</table>
 					<div class="paging_wrap">
@@ -372,7 +336,7 @@
 			const nowLocal = now.format("yyyyMMddhhmmss");
 			const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours()-1, now.getMinutes(), now.getSeconds()).format("yyyyMMddhhmmss");
 			const searchFilter = JSON.stringify({ "include": [{ "relation": "rtus" }] });
-			
+
 			function selectLog(rids, startTime, endTime, limit=5, page=1){
 				const now = new Date();
 				const nowLocal = now.format("yyyyMMddhhmmss");
@@ -436,53 +400,70 @@
 					siteList.empty();
 					tableData.empty();
 
-					let str = ``;
-					let newList = ``;
-					console.log("sites----", sites)
-					sites.forEach((site, siteIdx) =>{
-						newList = `
+					let logList = ``;
+					let rtuInfo = ``;
+					// console.log("item===", sites);
+					for(let i=0; i<sites.length; i++) {
+						let optionList = `
 							<li>
-								<a href="#" data-value="option${'${site.siteIdx}'}" tabindex="-1">
-									<input type="checkbox" id="chk_op${'${site.siteIdx}'}" value="${'${site.name}'}" name="${'${site.siteIdx}'}">
-									<label for="chk_op0${'${site.siteIdx}'}"><span></span>${'${site.name}'}</label>
+								<a href="#" data-value="option${'${sites[i]}'}" tabindex="-1">
+									<input type="checkbox" id="chk_op${'${sites[i].siteIdx}'}" value="${'${sites[i].name}'}" name="${'${i}'}">
+									<label for="chk_op0${'${i}'}"><span></span>${'${sites[i].name}'}</label>
 								</a>
 							</li>
 						`;
-						siteList.append(newList);
-						$.ajax({
-							url: "http://iderms.enertalk.com:8443/config/rtus",
-							type: "get",
-							async: false,
-							data: {
-								oid,
-								sid: site.sid
-							},
-							success: function (rtus) {
-								let rtuDate = ``;
-								rtus.forEach((rtu, rtuIdx)=>{
-									rtuDate = new Date(rtu.createdAt).format("yyyy-MM-dd");
-									str = `
-									<tr id="${'${rtu.serialNumber}'}">
-										<td>${'${site.name}'}</td>
-										<td>${'${rtu.name}'}</td>
-										<td>${'${rtu.serialNumber}'}</td>
+						siteList.append(optionList);
+
+						if(sites[i].rtus) {
+							let rtuDate = new Date(sites[i].rtus[0].createdAt).format("yyyy-MM-dd");
+							let rtuArr = sites[i].rtus;
+
+							if(sites[i].rtus.length > 1) {
+
+							} else if (sites[i].rtus.length > 0 && sites[i].rtus.length === 1){
+								let serialId = `#${'${sites[i].rtus[0].serialNumber}'}`
+
+								rtuInfo =
+								`	<tr id="${'${sites[i].rtus[0].serialNumber}'}">
+										<td>${'${sites[i].name}'}</td>
+										<td>${'${sites[i].rtus[0].name}'}</td>
+										<td>${'${sites[i].rtus[0].serialNumber}'}</td>
 										<td>${'${rtuDate}'}</td>
-									</tr>`;
-									tableData.append(str);
-									$(`#${'${rtu.serialNumber}'}`).on('click', ()=>{selectLog(rtu.rid)});
-									dateFilter.on('click', ()=>{
-										const start = new Date($('#datepicker1').val().slice(0,4),Number($('#datepicker1').val().slice(5,7))-1, $('#datepicker1').val().slice(8,10),$('#timepicker1').val().slice(0,2),$('#timepicker1').val().slice(5,7),0 ).format("yyyyMMddhhmmss");
-										const end = new Date($('#datepicker2').val().slice(0,4),Number($('#datepicker2').val().slice(5,7))-1, $('#datepicker2').val().slice(8,10),$('#timepicker2').val().slice(0,2),$('#timepicker2').val().slice(5,7),0 ).format("yyyyMMddhhmmss");
-										selectLog(rtu.rid, start, end);
-									});
+									</tr>
+								`
+								tableData.append(rtuInfo);
+
+								$(serialId).on('click', () =>{
+									selectLog(sites[i].rtus[0].rid);
+									console.log("ri===", sites[i].rtus[0])
+									$("#selectedRTU").text("[ " + sites[i].rtus[0].name + " ]");
 								});
-							},
-							error: function (error){
-								console.error(error);
+
+								dateFilter.on('click', () => {
+									const datePicker1 = $('#datepicker1');
+									const datePicker2 = $('#datepicker2');
+
+									let start_yy = datePicker1.val().slice(0,4);
+									let start_mm = Number(datePicker1.val().slice(5,7))-1;
+									let start_dd = datePicker1.val().slice(8,10);
+									let start_hr = datePicker1.val().slice(0,2);
+									let start_min = datePicker1.val().slice(5,7);
+
+									let end_yy = datePicker2.val().slice(0,4);
+									let end_mm = Number(datePicker2.val().slice(5,7))-1;
+									let end_dd = datePicker2.val().slice(8,10);
+									let end_hr = datePicker2.val().slice(0,2);
+									let end_min = datePicker2.val().slice(5,7);
+
+									const start = new Date(start_yy, start_mm, start_dd, start_hr, start_min, 0 ).format("yyyyMMddhhmmss");
+									const end = new Date(end_yy, end_mm, end_dd, end_hr, end_min, 0 ).format("yyyyMMddhhmmss");
+
+									selectLog(sites[i].rtus[0].rid, start, end);
+								});
 							}
-						})
-					})
-					
+						}
+					}
+
 				},
 				error: function (error){
 					console.error(error);
