@@ -465,9 +465,7 @@
 	<style>
         /* 로그인 페이지용 스타일 */
         body {background:none;}
-        #page-wrapper {margin:0; padding:0;}
-        #page-wrapper > nav {margin:0; height:80px; padding:0 32px;}
-        nav .nav_brand {float:left;}
+		#page-wrapper {margin:0; padding:0;}
         #page-wrapper > footer {margin:0; height:80px; padding:32px 32px;}
         #page-wrapper .login {
             position:relative;
@@ -485,36 +483,35 @@
             -moz-box-shadow: 0px 5px 18px 0px rgba(0,0,0,0.27);
             box-shadow: 0px 5px 18px 0px rgba(0,0,0,0.27);
         }
-        .lf_body {padding:60px; background:var(--box-color);}
-        .lftit {padding-top:110px; background:url('../img/login_people.png') no-repeat center 0;}
-        .lftit h1 {font-size:34px; line-height:1; font-family:'Roboto', sans-serif; color:var(--color3); text-align:center; font-weight:500;}
-        .lf_body .lfinp {border:0; border-bottom:solid 1px #333; width:100%; height:50px; line-height:50px; background-color: var(--box-color);}
-        .lf_body input:focus {border:0; border-bottom:solid 1px #333; outline-style:none;}
-        .lf_body .arrbtn {
-            display:inline-block; padding-right:30px; background:var(--login-arr) no-repeat right center;
-            font-size:14px; color:#777;
-        }
-        .lf_bottom {font-size:0; width:100%; display:table;}
-        .lf_bottom > * {
-            display:inline-block; width:50%; border:0; outline-style:none; height:60px; 
-            font-size:18px; color:#fff; font-weight:bold; text-align:center; vertical-align:top;
-        }
-        .lf_bottom > *:hover {color:#fff;}
-        .lf_bottom > a {background:#555; line-height:60px;}
-        .lf_bottom > input {background:#438fd7 ; line-height:55px;}
-
+		.lf_body {padding:60px; background:var(--box-color);}
+		.lftit {padding-top:110px; background:url('../img/login_people.png') no-repeat center 0;}
+		.lftit h1 {font-size:34px; line-height:1; font-family:'Roboto', sans-serif; color:var(--color3); text-align:center; font-weight:500;}
+		.lf_body .lfinp {border:0; border-bottom:solid 1px #333; width:100%; height:50px; line-height:50px; background-color: var(--box-color);}
+		.lf_body input:focus {border:0; border-bottom:solid 1px #333; outline-style:none;}
+		.lf_body .arrbtn {
+			display:inline-block; padding-right:30px; background:var(--login-arr) no-repeat right center;
+			font-size:14px; color:#777;
+		}
+		.lf_bottom {font-size:0; width:100%; display:table;}
+		.lf_bottom > * {
+			display:inline-block; width:50%; border:0; outline-style:none; height:60px; 
+			font-size:18px; color:#fff; font-weight:bold; text-align:center; vertical-align:top;
+		}
+		.lf_bottom > *:hover {color:#fff;}
+		.lf_bottom > a {background:#555; line-height:60px;}
+		.lf_bottom > input {background:#438fd7 ; line-height:55px;}
         nav .lang {display:block; top:50%; right:20px; transform:translateY(-50%); z-index:10;}
 
         /* 반응형 미디어 쿼리 */
         @media all and (max-width:768px) {
-            #page-wrapper > nav {padding:0 15px;}
+            #page-wrapper > nav {padding:0 15px;height: 115px;}
             #page-wrapper .login {padding:0 10px; min-height:650px;}
             #page-wrapper .login .loginForm {position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:95%;}
             .lf_body .arrbtn {display:block; margin-bottom:15px; margin-left:0 !important;}
-            nav .lang {right:10px;}
+            nav .lang {top:19px;right:10px;float: right;transform:none;}
         }
     </style>
-	<div id="wrapper">
+	<div class="outer-wrapper">
 		<div id="page-wrapper">
 			<nav class="clear">
 				<c:choose>
@@ -545,7 +542,7 @@
 				    </ul>
 				</div>
 			</nav>
-			<div id="container" class="login">
+			<div class="login container-fluid">
 
 				<div class="loginForm">
 					<form id="loginForm" name="loginForm" action="/loginUser.do" method="post" onsubmit="return checkLogin(this)">

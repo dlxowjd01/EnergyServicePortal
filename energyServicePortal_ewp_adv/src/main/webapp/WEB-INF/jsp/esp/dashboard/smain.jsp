@@ -27,12 +27,12 @@
 </script>
 
 <!-- 메인페이지용 스타일/스크립트 파일 -->
-<link href="/css/custom.css" rel="stylesheet">
-<link href="/css/custom-grid.css" rel="stylesheet">
-<link href="/css/custom-mquery.css" rel="stylesheet">
+<!-- <link href="/css/custom.css" rel="stylesheet"> -->
+<!-- <link href="/css/custom-grid.css" rel="stylesheet">
+<link href="/css/custom-mquery.css" rel="stylesheet"> -->
 <script type="text/javascript" src="/js/modules/rounded-corners.js"></script>
 <script type="text/javascript" src="/js/jquery.rwdImageMaps.min.js"></script>
-<div id="container">
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-12">
 			<h1 class="page-header fl">${siteName}</h1>
@@ -46,990 +46,983 @@
 	</div>
 	<div class="row">
 		<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
-			<div class="row">
-				<div class="col-sm-12">
-					<div class="indiv smain_pv clear">
-						<div class="chart_top clear">
-							<h2 class="ntit">월별 발전량 종합</h2>
-							<h1 class="stit">
-								<fmt:parseDate var="startPrint" value="${startMonth }" pattern="yyyyMMddHHmmss"/>
-								<fmt:parseDate var="endPrint" value="${startTime }" pattern="yyyyMMddHHmmss"/>
+			<div class="indiv smain_pv clear">
+				<div class="chart_top clear">
+					<h2 class="ntit">월별 발전량 종합</h2>
+					<h1 class="stit">
+						<fmt:parseDate var="startPrint" value="${startMonth }" pattern="yyyyMMddHHmmss"/>
+						<fmt:parseDate var="endPrint" value="${startTime }" pattern="yyyyMMddHHmmss"/>
 
-								<fmt:formatDate value="${startPrint}" pattern="yyyy.MM.dd"/>
-								~
-								<fmt:formatDate value="${endPrint}" pattern="yyyy.MM.dd"/>
-							</h1>
-						</div>
-						<div class="chart_mid clear">
-							<div class="box">
-								<div class="line1">이번달 총 발전량</div>
-								<div class="line2" id="monthEnergyValue"></div>
-								<div class="line3" id="diffMonthEnergyValue"></div>
+						<fmt:formatDate value="${startPrint}" pattern="yyyy.MM.dd"/>
+						~
+						<fmt:formatDate value="${endPrint}" pattern="yyyy.MM.dd"/>
+					</h1>
+				</div>
+				<div class="chart_mid clear">
+					<div class="box">
+						<div class="line1">이번달 총 발전량</div>
+						<div class="line2" id="monthEnergyValue"></div>
+						<div class="line3" id="diffMonthEnergyValue"></div>
+					</div>
+					<div class="box">
+						<div class="line1">올해 누적 발전량</div>
+						<div class="line2" id="yearEnergyValue"></div>
+						<div class="line3" id="diffYearEnergyValue"></div>
+					</div>
+					<div class="box type">
+						<span class="tx_tit">그래프 옵션</span>
+						<div class="sa_select">
+							<div class="dropdown" id="chartType">
+								<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
+									PR<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu rdo_type" role="menu">
+									<li>
+										<a href="#" tabindex="-1">
+											<input type="radio" id="radio_t1" name="radio_t" value="1" checked>
+											<label for="radio_t1"><span></span>PR</label>
+										</a>
+									</li>
+									<li>
+										<a href="#" tabindex="-1">
+											<input type="radio" id="radio_t2" name="radio_t" value="2">
+											<label for="radio_t2"><span></span>발전시간</label>
+										</a>
+									</li>
+									<li>
+										<a href="#" tabindex="-1">
+											<input type="radio" id="radio_t3" name="radio_t" value="3">
+											<label for="radio_t3"><span></span>매전량</label>
+										</a>
+									</li>
+								</ul>
 							</div>
-							<div class="box">
-								<div class="line1">올해 누적 발전량</div>
-								<div class="line2" id="yearEnergyValue"></div>
-								<div class="line3" id="diffYearEnergyValue"></div>
-							</div>
-							<div class="box type">
-								<span class="tx_tit">그래프 옵션</span>
-								<div class="sa_select">
-									<div class="dropdown" id="chartType">
-										<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
-											PR<span class="caret"></span>
-										</button>
-										<ul class="dropdown-menu rdo_type" role="menu">
-											<li>
-												<a href="#" tabindex="-1">
-													<input type="radio" id="radio_t1" name="radio_t" value="1" checked>
-													<label for="radio_t1"><span></span>PR</label>
-												</a>
-											</li>
-											<li>
-												<a href="#" tabindex="-1">
-													<input type="radio" id="radio_t2" name="radio_t" value="2">
-													<label for="radio_t2"><span></span>발전시간</label>
-												</a>
-											</li>
-											<li>
-												<a href="#" tabindex="-1">
-													<input type="radio" id="radio_t3" name="radio_t" value="3">
-													<label for="radio_t3"><span></span>매전량</label>
-												</a>
-											</li>
-										</ul>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="inchart">
-							<div id="schart1"></div>
-							<script type="text/javascript">
-								var chargeChart = Highcharts.chart('schart1', {
-									chart: {
-										marginTop: 40,
-										marginLeft: 50,
-										marginRight: 50,
-										height: 286,
-										backgroundColor: 'transparent',
-										zoomType: 'xy'
-									},
-									navigation: {
-										buttonOptions: {
-											enabled: false /* 메뉴 안보이기 */
-										}
-									},
-									title: {
-										text: ''
-									},
-									subtitle: {
-										text: ''
-									},
-									xAxis: [{
-										lineColor: '#515562', /* 눈금선색 */
-										tickColor: '#515562',
-										gridLineColor: '#515562',
-										plotLines: [{
-											color: '#515562',
-											width: 1
-										}],
-										labels: {
-											align: 'center',
-											y: 27, /* 그래프와 거리 */
-											style: {
-												color: '#a4aebf',
-												fontSize: '12px'
-											}
-										},
-										tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
-										title: {
-											text: null
-										},
-										categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-										crosshair: true
-									}],
-									yAxis: [{ // Primary yAxis
-										lineColor: '#515562', /* 눈금선색 */
-										tickColor: '#515562',
-										gridLineColor: '#515562',
-										gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-										plotLines: [{
-											color: '#515562',
-											width: 1
-										}],
-										gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-										title: {
-											text: 'kWh',
-											align: 'low',
-											rotation: 0, /* 타이틀 기울기 */
-											y: 25, /* 타이틀 위치 조정 */
-											x: 15,
-											style: {
-												color: '#ffffff',
-												fontSize: '12px'
-											}
-										},
-										labels: {
-											format: '{value}',
-											style: {
-												color: '#a4aebf',
-												fontSize: '12px'
-											}
-										}
-									}, { // Secondary yAxis
-										lineColor: '#515562', /* 눈금선색 */
-										tickColor: '#515562',
-										gridLineColor: '#515562',
-										gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-										plotLines: [{
-											color: '#515562',
-											width: 1
-										}],
-										gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-										title: {
-											text: '천원',
-											align: 'low',
-											rotation: 0, /* 타이틀 기울기 */
-											y: 25, /* 타이틀 위치 조정 */
-											x: -12,
-											style: {
-												color: '#ffffff',
-												fontSize: '12px'
-											}
-										},
-										labels: {
-											format: '{value}',
-											style: {
-												color: '#a4aebf',
-												fontSize: '12px'
-											}
-										},
-										opposite: true
-									}],
-									tooltip: {
-										shared: true
-									},
-									/* 범례 */
-									legend: {
-										enabled: true,
-										align: 'right',
-										verticalAlign: 'top',
-										x: 5,
-										y: -10,
-										itemStyle: {
-											color: '#a4aebf',
-											fontSize: '12px',
-											fontWeight: 400
-										},
-										itemHoverStyle: {
-											color: '' /* 마우스 오버시 색 */
-										},
-										symbolPadding: 3, /* 심볼 - 텍스트간 거리 */
-										symbolHeight: 7 /* 심볼 크기 */
-									},
-									/* 옵션 */
-									plotOptions: {
-										series: {
-											label: {
-												connectorAllowed: false
-											},
-											borderColor: '#a4aebf',
-											borderWidth: 0 /* 보더 0 */
-										},
-										line: {
-											marker: {
-												enabled: false /* 마커 안보이기 */
-											}
-										},
-										column: {
-											stacking: 'normal' /*위로 쌓이는 막대  ,normal */
-										}
-									},
-									series: [{
-										name: 'PV발전량',
-										type: 'column',
-										color: '#26ccc8',
-										data: [],
-										tooltip: {
-											valueSuffix: 'kWh'
-										}
-
-									}, {
-										name: '매전량',
-										type: 'spline',
-										color: 'var(--color4)',
-										dashStyle: 'ShortDash',
-										yAxis: 1,
-										data: [],
-										tooltip: {
-											valueSuffix: '천원'
-										}
-									}],
-									/* 출처 */
-									credits: {
-										enabled: false
-									},
-									/* 반응형 */
-									responsive: {
-										rules: [{
-											condition: {
-												minWidth: 870 /* 차트 사이즈 */
-											},
-											chartOptions: {
-												chart: {
-													marginTop: 50,
-													marginLeft: 75,
-													marginRight: 75
-												},
-												xAxis: {
-													labels: {
-														style: {
-															fontSize: '18px'
-														}
-													}
-												},
-												yAxis: [{
-													title: {
-														y: 30,
-														x: 20,
-														style: {
-															fontSize: '18px'
-														}
-													},
-													labels: {
-														style: {
-															fontSize: '18px'
-														}
-													}
-												},
-													{
-														title: {
-															y: 30,
-															x: -15,
-															style: {
-																fontSize: '18px'
-															}
-														},
-														labels: {
-															style: {
-																fontSize: '18px'
-															}
-														}
-													}],
-												legend: {
-													itemStyle: {
-														fontSize: '18px'
-													},
-													symbolPadding: 5,
-													symbolHeight: 10
-												}
-											}
-										}]
-									}
-								});
-
-							</script>
-							<script>
-
-								const pollingTerm = 1000 * 60 * 15;
-								const pollingTimeout = 5000;
-								const debugMode = true;
-
-								const apiURL = "http://iderms.enertalk.com:8443";
-								const apiEnergySite = "/energy/sites";
-								const apiEnergyNowSite = "/energy/now/sites";
-								const apiWeather = "/weather/site";
-								const apiForecastingSite = "/energy/forecasting/sites";
-								const apiStatusRawSite = "/status/raw/site";
-								const apiStatusRaw = "/status/raw";
-								const apiConfigDevice = '/config/orgs/' + 'spower';
-
-								const siteId = '${sid}';
-								let siteLocation = '';
-
-								//let invDeviceIds = ["6d836437-6995-4cc9-8d29-2c6ff9d1c4b8"];
-								// 		let invDeviceIds = "6d836437-6995-4cc9-8d29-2c6ff9d1c4b8";
-								let invDeviceIds = new Array();
-								let solorSensorDid = new Array();
-								// todo : device id 목록조회 추가필요
-
-								let nowMonth = "<c:out value="${nowMonth}"/>";
-								let nowWeek = "<c:out value="${nowWeek}"/>";
-								let nowDay = "<c:out value="${nowDay}"/>";
-
-								let chargeChartUrl = apiURL + apiEnergySite;
-								let chargeChartData = {
-									sid: siteId,
-									startTime: "<c:out value="${startMonth }"/>",
-									endTime: "<c:out value="${endMonth }"/>",
-									displayType: 'dashboard',
-									interval: "month"
-								};
-
-								let nowEnergyDay;
-								let nowBillingDay;
-								let nowEnergyMonth;
-								let nowBillingMonth;
-								let nowEnergyYear;
-
-								let itemChartCapacity;
-								let chargeNowUrl = apiURL + apiEnergyNowSite;
-
-								//당일 에너지 데이터 - polling 사용
-								let statusSiteUrl = apiURL + apiStatusRawSite;
-								let statusSiteData = {
-									sid: siteId,
-								};
-
-								$.ajax({
-									url: statusSiteUrl,
-									type: "get",
-									async: false,
-									data: statusSiteData,
-									success: function (result) {
-										var item = result;
-										itemChartCapacity = (item.capacity / 1000).toFixed(1);
-									},
-									dataType: "json"
-
-								});
-
-								(function chargeNowEnergy() {
-									let interValArr = ['day', 'month', 'year'];
-
-									$.each(interValArr, function (i, el) {
-										let chargeNowData = {
-											sids: siteId,
-											metering_type: "2",
-											interval: el
-										};
-
-										$.ajax({
-											url: chargeNowUrl,
-											type: "get",
-											async: false,
-											data: chargeNowData,
-											success: function (result) {
-												$.each(result.data, function (i, el2) {
-													if (el == 'day') {
-														nowEnergyDay = el2.energy;
-														nowBillingDay = el2.money;
-														console.log('nowEnergyDay', el2.energy);
-													} else if (el == 'month') {
-														nowEnergyMonth = el2.energy;
-														nowBillingMonth = el2.money;
-														console.log('nowEnergyMonth', el2.energy);
-													} else {
-														nowEnergyYear = el2.energy;
-														console.log('nowEnergyYear', el2.energy);
-													}
-												});
-											},
-											dataType: "json"
-										});
-									});
-								})();
-
-								let chargeChartBeforeData = {
-									sid: siteId,
-									startTime: "<c:out value="${beforeStartMonth }"/>",
-									endTime: "<c:out value="${beforeEndMonth }"/>",
-									interval: "month"
-								};
-
-								const configDeviceData = {
-									includeUsers: false,
-									includeSites: true,
-									includeDevices: true,
-									includeRtus: false
-								};
-
-								let chargeChartItems1;
-								let chargeChartItems2;
-
-								(function setDids() {
-									$.ajax({
-										url: apiURL + apiConfigDevice,
-										type: "get",
-										async: false,
-										data: configDeviceData,
-										success: function (result) {
-											let sitesData = result.sites;
-											if (sitesData != null) {
-												$.each(sitesData, function (i, el) {
-													if (el.sid == siteId) {
-														siteLocation = el.location;
-													}
-												});
-											}
-
-											var data = result.devices;
-											if (data != null) {
-												for (var i in data) {
-													if (data[i].sid == siteId) {
-														if (data[i].device_type == 'INV_PV') {
-															invDeviceIds.push(data[i].did);
-														} else if (data[i].device_type == 'SENSOR_SOLAR') {
-															solorSensorDid.push(data[i].did);
-														}
-													}
-												}
-											}
-										},
-										dataType: "json"
-									});
-								})();
-
-								function chargeChartPoll() {
-									$.ajax({
-										url: chargeChartUrl,
-										type: "get",
-										async: false,
-										data: chargeChartData,
-										success: function (result) {
-											var data = result.data[0];
-											chargeChartItems1 = data.generation.items;
-											$.each(chargeChartItems1, function (i, el) {
-												if (el.money != undefined && el.money != null && el.money != '') {
-													el.money = Math.floor(el.money / 1000);
-												}
-											});
-
-											chargeChartItems1.push({
-												basetime: '<c:out value="${startDate }"/>',
-												energy: nowEnergyMonth,
-												money: Math.floor(nowBillingMonth / 1000)
-											});
-
-											if (debugMode) {
-												console.log("chargeChart:", chargeChartItems1);
-											}
-										},
-										dataType: "json",
-										complete: function () {
-											chargeChartBeofrePoll();
-										},
-										timeout: pollingTimeout
-									});
-								}
-
-								function chargeChartBeofrePoll() {
-									$.ajax({
-										url: chargeChartUrl,
-										type: "get",
-										async: false,
-										data: chargeChartBeforeData,
-										success: function (result) {
-											var data = result.data[0];
-											chargeChartItems2 = data.generation.items;
-											if (debugMode) {
-												console.log("chargeChartBeofre:", chargeChartItems2);
-											}
-
-											if($(':radio[name="radio_t"]:checked').val() == 1) {
-												wetherIrradiationPoa();
-											} else {
-												setChargeChartData();
-											}
-
-										},
-										dataType: "json",
-										complete: setTimeout(function () {
-											chargeChartPoll()
-										}, pollingTerm),
-										timeout: pollingTimeout
-									})
-								}
-
-								let irradiationPoaArray = new Array();
-								function wetherIrradiationPoa() {
-									$.ajax({
-										url: apiURL + apiWeather,
-										type: 'get',
-										async: false,
-										data: {
-											sid: siteId,
-											startTime: "<c:out value="${startMonth }"/>",
-											endTime: "<c:out value="${endMonth }"/>",
-											interval: "day"
-										},
-										success: function (result) {
-											irradiationPoaArray = new Array();
-											let standard = String (result[0].basetime).substring(0, 6);
-											let sumVal = 0;
-
-											$.each(result, function(i, el) {
-												if(standard == String (el.basetime).substring(0, 6)) {
-													sumVal += el.sensor_solar.irradiationPoa;
-													if(i == (result.length - 1)) {
-														irradiationPoaArray.push({
-															baseTime: standard,
-															sumVal: sumVal
-														});
-													}
-												} else {
-													irradiationPoaArray.push({
-														baseTime: standard,
-														sumVal: sumVal
-													});
-													standard = String (el.basetime).substring(0, 6);
-													sumVal = el.sensor_solar.irradiationPoa;
-												}
-											});
-
-											setChargeChartData();
-										},
-										dataType: 'json'
-									});
-								}
-
-								function setChargeChartData() {
-									var totYearEnergy = 0;
-									var totMonthEnergy = 0;
-									var totBeforeYearEnergy = 0;
-									var totBeforeMonthEnergy = 0;
-									var energyData = [];
-									var billingData = [];
-
-									for (var i = 0; i < 12; i++) {
-
-										var matchMonth = false;
-										for (var d = 0; d < chargeChartItems1.length; d++) {
-											var dataMonth = parseInt(("" + chargeChartItems1[d].basetime).substring(4, 6));
-											if (i + 1 == dataMonth) {
-												energyData[i] = [i, chargeChartItems1[d].energy / 1000];
-
-												if($(':radio[name="radio_t"]:checked').val() == 1) {
-													let energy = chargeChartItems1[d].energy / 1000;
-													let irradiationPoaSum = 0;
-													$.each(irradiationPoaArray, function(k, el) {
-														if(el.baseTime.slice(-2) == dataMonth) {
-															irradiationPoaSum = el.sumVal;
-														}
-													});
-
-													let resultValue = 0;
-													if(irradiationPoaSum > 0) {
-														resultValue = parseFloat(((energy / itemChartCapacity / (irradiationPoaSum / 1000 * 24 )) * 100).toFixed(2));
-													}
-													billingData[i] = [i, resultValue];
-												} else if($(':radio[name="radio_t"]:checked').val() == 2) { //발전량
-													let today = new Date();
-													let lastDate = new Date(today.getFullYear(), dataMonth, 0).format('dd');
-													if(today.getMonth() == (Number(dataMonth) -1)) {
-														lastDate = today.getDate();
-													}
-													let energy = chargeChartItems1[d].energy / 1000;
-
-													billingData[i] = [i, parseFloat(((energy / itemChartCapacity) / lastDate).toFixed(2))];
-												} else { //매전량
-													billingData[i] = [i, chargeChartItems1[d].money];
-												}
-
-												totYearEnergy += chargeChartItems1[d].energy / 1000;
-												if (i + 1 == nowMonth) {
-													totMonthEnergy = chargeChartItems1[d].energy / 1000;
-												}
-
-												matchMonth = true;
-											}
-										}
-
-										if (!matchMonth) {
-											energyData[i] = [i, null];
-											billingData[i] = [i, null];
-										}
-									}
-
-									for (var i = 0; i < 12; i++) {
-										for (var d = 0; d < chargeChartItems2.length; d++) {
-											var dataMonth = parseInt(("" + chargeChartItems2[d].basetime).substring(4, 6));
-											if (i + 1 == dataMonth) {
-												totBeforeYearEnergy += chargeChartItems2[d].energy / 1000;
-												if (i + 1 == nowMonth) {
-													totBeforeMonthEnergy = chargeChartItems2[d].energy / 1000;
-												}
-											}
-										}
-									}
-
-									if (debugMode) {
-										console.log("chargeChart energyData:", energyData);
-										console.log("chargeChart billingData:", billingData);
-									}
-
-									chargeChart.series[0].setData(energyData);
-									chargeChart.series[1].setData(billingData);
-
-									if($(':radio[name="radio_t"]:checked').val() == 1) {
-										chargeChart.series[1].name = 'PR'
-										chargeChart.series[1].tooltipOptions.valueSuffix = '%';
-										chargeChart.yAxis[1].setTitle({
-											text: '%',
-											align: 'low',
-											rotation: 0, /* 타이틀 기울기 */
-											y: 25, /* 타이틀 위치 조정 */
-											x: -12,
-											style: {
-												color: '#ffffff',
-												fontSize: '12px'
-											}
-										});
-									} else  if($(':radio[name="radio_t"]:checked').val() == 2) {
-										chargeChart.series[1].name = '발전시간'
-										chargeChart.series[1].tooltipOptions.valueSuffix = '시간';
-										chargeChart.yAxis[1].setTitle({
-											text: '시간',
-											align: 'low',
-											rotation: 0, /* 타이틀 기울기 */
-											y: 25, /* 타이틀 위치 조정 */
-											x: -12,
-											style: {
-												color: '#ffffff',
-												fontSize: '12px'
-											}
-										});
-									} else {
-										chargeChart.series[1].name = '매전량'
-										chargeChart.series[1].tooltipOptions.valueSuffix = '천원';
-										chargeChart.yAxis[1].setTitle({
-											text: '천원',
-											align: 'low',
-											rotation: 0, /* 타이틀 기울기 */
-											y: 25, /* 타이틀 위치 조정 */
-											x: -12,
-											style: {
-												color: '#ffffff',
-												fontSize: '12px'
-											}
-										});
-									}
-
-
-									diffYearEnergy = totYearEnergy - totBeforeYearEnergy;
-									diffMonthEnergy = totMonthEnergy - totBeforeMonthEnergy;
-
-									if (debugMode) {
-										console.log("chargeChart totYearEnergy", totYearEnergy);
-										console.log("chargeChart totBeforeYearEnergy", totBeforeYearEnergy);
-										console.log("chargeChart diffYearEnergy", diffYearEnergy);
-
-										console.log("chargeChart totMonthEnergy", totMonthEnergy);
-										console.log("chargeChart totBeforeMonthEnergy", totBeforeMonthEnergy);
-										console.log("chargeChart diffMonthEnergy", diffMonthEnergy);
-									}
-
-									//TOTAL DATA
-									/*
-									yearEnergyValue  = <span class="pv">14.4</span><em>MWh</em>
-									monthEnergyValue  = <span class="pv">763</span><em>kWh</em>
-
-									diffYearEnergyValue = <i class="fa fa-arrow-down"></i><span>6,804</span>
-									diffMonthEnergyValue = <i class="fa fa-arrow-down"></i><span>511</span>
-									*/
-
-									var diffYearIconClass = diffYearEnergy > 0 ? "fa-arrow-up" : (diffYearEnergy < 0 ? "fa-arrow-up" : "");
-
-									if (String(nowEnergyYear).length > 9) {
-										$("#yearEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyYear / 1000 / 1000 / 1000).toFixed(2)) + "</span><em>GWh</em>");
-									} else if (String(nowEnergyYear).length > 6) {
-										$("#yearEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyYear / 1000 / 1000).toFixed(2)) + "</span><em>MWh</em>");
-									} else if (String(nowEnergyYear).length > 3) {
-										$("#yearEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyYear / 1000).toFixed(2)) + "</span><em>kWh</em>");
-									} else {
-										$("#yearEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyYear / 1000).toFixed(2)) + "</span><em>Wh</em>");
-									}
-
-									// if(nowEnergyYear > 10000){
-									// 	$("#yearEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyYear / 1000).toFixed(2)) + "</span><em>MWh</em>");
-									// 	// $("#diffYearEnergyValue").html("<i class='fa " + diffYearIconClass + "'></i><span>" + numberComma((Math.abs(diffYearEnergy) / 1000).toFixed(2))  + "</span>");
-									// }else{
-									// 	$("#yearEnergyValue").html("<span class='pv'>" + numberComma(nowEnergyYear) + "</span><em>kWh</em>");
-									// 	// $("#diffYearEnergyValue").html("<i class='fa " + diffIconClass + "'></i><span>" + numberComma(Math.abs(diffYearEnergy).toFixed(2))  + "</span>");
-									// }
-
-									var diffMonthIconClass = diffMonthEnergy > 0 ? "fa-arrow-up" : (diffMonthEnergy < 0 ? "fa-arrow-up" : "");
-
-									if (String(nowEnergyMonth).length > 9) {
-										$("#monthEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyMonth / 1000 / 1000 / 1000).toFixed(2)) + "</span><em>GWh</em>");
-									} else if (String(nowEnergyMonth).length > 6) {
-										$("#monthEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyMonth / 1000 / 1000).toFixed(2)) + "</span><em>MWh</em>");
-									} else if (String(nowEnergyMonth).length > 3) {
-										$("#monthEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyMonth / 1000).toFixed(2)) + "</span><em>kWh</em>");
-									} else {
-										$("#monthEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyMonth / 1000).toFixed(2)) + "</span><em>Wh</em>");
-									}
-									// if(nowEnergyMonth > 10000){
-									// 	$("#monthEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyMonth / 1000).toFixed(2)) + "</span><em>MWh</em>");
-									// 	// $("#diffMonthEnergyValue").html("<i class='fa " + diffMonthIconClass + "'></i><span>" + numberComma((Math.abs(diffMonthEnergy) / 1000).toFixed(2))  + "</span>");
-									// }else{
-									// 	$("#monthEnergyValue").html("<span class='pv'>" + numberComma(nowEnergyMonth) + "</span><em>kWh</em>");
-									// 	// $("#diffMonthEnergyValue").html("<i class='fa " + diffMonthIconClass + "'></i><span>" + numberComma(Math.abs(diffMonthEnergy).toFixed(2))  + "</span>");
-									// }
-
-								}
-
-								chargeChartPoll();
-
-							</script>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-sm-12">
-					<div class="indiv smain_cal">
-						<div class="chart_top clear">
-							<h2 class="ntit">이 달의 발전 달력</h2>
-							<h1 class="stit">
-								<fmt:parseDate var="sDate" value="${startDate}" pattern="yyyyMMddHHmmss"/>
-								<fmt:parseDate var="eDate" value="${startTime}" pattern="yyyyMMddHHmmss"/>
-								<fmt:formatDate var="sDt" pattern="yyyy-MM-dd" value="${sDate}"/>
-								<fmt:formatDate var="eDt" pattern="yyyy-MM-dd" value="${eDate}"/>
-								<em>${sDt} ~ ${eDt}</em>
-							</h1>
-						</div>
-						<div>
-							<table class="calendar">
-								<tr>
-									<th>일</th>
-									<th>월</th>
-									<th>화</th>
-									<th>수</th>
-									<th>목</th>
-									<th>금</th>
-									<th>토</th>
-								</tr>
+				<div class="inchart">
+					<div id="schart1"></div>
+					<script type="text/javascript">
+						var chargeChart = Highcharts.chart('schart1', {
+							chart: {
+								marginTop: 40,
+								marginLeft: 50,
+								marginRight: 50,
+								height: 286,
+								backgroundColor: 'transparent',
+								zoomType: 'xy'
+							},
+							navigation: {
+								buttonOptions: {
+									enabled: false /* 메뉴 안보이기 */
+								}
+							},
+							title: {
+								text: ''
+							},
+							subtitle: {
+								text: ''
+							},
+							xAxis: [{
+								lineColor: '#515562', /* 눈금선색 */
+								tickColor: '#515562',
+								gridLineColor: '#515562',
+								plotLines: [{
+									color: '#515562',
+									width: 1
+								}],
+								labels: {
+									align: 'center',
+									y: 27, /* 그래프와 거리 */
+									style: {
+										color: '#a4aebf',
+										fontSize: '12px'
+									}
+								},
+								tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
+								title: {
+									text: null
+								},
+								categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+								crosshair: true
+							}],
+							yAxis: [{ // Primary yAxis
+								lineColor: '#515562', /* 눈금선색 */
+								tickColor: '#515562',
+								gridLineColor: '#515562',
+								gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
+								plotLines: [{
+									color: '#515562',
+									width: 1
+								}],
+								gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
+								title: {
+									text: 'kWh',
+									align: 'low',
+									rotation: 0, /* 타이틀 기울기 */
+									y: 25, /* 타이틀 위치 조정 */
+									x: 15,
+									style: {
+										color: '#ffffff',
+										fontSize: '12px'
+									}
+								},
+								labels: {
+									format: '{value}',
+									style: {
+										color: '#a4aebf',
+										fontSize: '12px'
+									}
+								}
+							}, { // Secondary yAxis
+								lineColor: '#515562', /* 눈금선색 */
+								tickColor: '#515562',
+								gridLineColor: '#515562',
+								gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
+								plotLines: [{
+									color: '#515562',
+									width: 1
+								}],
+								gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
+								title: {
+									text: '천원',
+									align: 'low',
+									rotation: 0, /* 타이틀 기울기 */
+									y: 25, /* 타이틀 위치 조정 */
+									x: -12,
+									style: {
+										color: '#ffffff',
+										fontSize: '12px'
+									}
+								},
+								labels: {
+									format: '{value}',
+									style: {
+										color: '#a4aebf',
+										fontSize: '12px'
+									}
+								},
+								opposite: true
+							}],
+							tooltip: {
+								shared: true
+							},
+							/* 범례 */
+							legend: {
+								enabled: true,
+								align: 'right',
+								verticalAlign: 'top',
+								x: 5,
+								y: -10,
+								itemStyle: {
+									color: '#a4aebf',
+									fontSize: '12px',
+									fontWeight: 400
+								},
+								itemHoverStyle: {
+									color: '' /* 마우스 오버시 색 */
+								},
+								symbolPadding: 3, /* 심볼 - 텍스트간 거리 */
+								symbolHeight: 7 /* 심볼 크기 */
+							},
+							/* 옵션 */
+							plotOptions: {
+								series: {
+									label: {
+										connectorAllowed: false
+									},
+									borderColor: '#a4aebf',
+									borderWidth: 0 /* 보더 0 */
+								},
+								line: {
+									marker: {
+										enabled: false /* 마커 안보이기 */
+									}
+								},
+								column: {
+									stacking: 'normal' /*위로 쌓이는 막대  ,normal */
+								}
+							},
+							series: [{
+								name: 'PV발전량',
+								type: 'column',
+								color: '#26ccc8',
+								data: [],
+								tooltip: {
+									valueSuffix: 'kWh'
+								}
 
-								<c:forEach var="week" items="${calList}">
-									<tr>
-										<c:forEach var="day" items="${week }">
-											<c:choose>
-												<c:when test="${day ne 0 }">
+							}, {
+								name: '매전량',
+								type: 'spline',
+								color: 'var(--color4)',
+								dashStyle: 'ShortDash',
+								yAxis: 1,
+								data: [],
+								tooltip: {
+									valueSuffix: '천원'
+								}
+							}],
+							/* 출처 */
+							credits: {
+								enabled: false
+							},
+							/* 반응형 */
+							responsive: {
+								rules: [{
+									condition: {
+										minWidth: 870 /* 차트 사이즈 */
+									},
+									chartOptions: {
+										chart: {
+											marginTop: 50,
+											marginLeft: 75,
+											marginRight: 75
+										},
+										xAxis: {
+											labels: {
+												style: {
+													fontSize: '18px'
+												}
+											}
+										},
+										yAxis: [{
+											title: {
+												y: 30,
+												x: 20,
+												style: {
+													fontSize: '18px'
+												}
+											},
+											labels: {
+												style: {
+													fontSize: '18px'
+												}
+											}
+										},
+											{
+												title: {
+													y: 30,
+													x: -15,
+													style: {
+														fontSize: '18px'
+													}
+												},
+												labels: {
+													style: {
+														fontSize: '18px'
+													}
+												}
+											}],
+										legend: {
+											itemStyle: {
+												fontSize: '18px'
+											},
+											symbolPadding: 5,
+											symbolHeight: 10
+										}
+									}
+								}]
+							}
+						});
 
-													<td <c:if test="${nowDay eq day }">class="today"</c:if>>
-														<div>
-															<em class="calWeatherDay fl day">${day }</em>
-															<em id="calWeatherValue_${day }" class="fr"></em>
-														</div>
-														<div>
-															<div id="calWeatherIcon_${day }" class="wicon"></div>
-														</div>
-														<span id="calEnergyValue_${day }"></span>
-													</td>
+					</script>
+					<script>
 
-												</c:when>
-												<c:otherwise>
-													<td class="disabled">
-													</td>
-												</c:otherwise>
-											</c:choose>
-										</c:forEach>
-									</tr>
-								</c:forEach>
+						const pollingTerm = 1000 * 60 * 15;
+						const pollingTimeout = 5000;
+						const debugMode = true;
 
-								<%--
-									<i class="ico_weather w1"></i> 	1	- 맑음 o
-									<i class="ico_weather w2"></i>   	- 바람 x
-									<i class="ico_weather w3"></i>	20	- 안개 o
-									<i class="ico_weather w4"></i>	7	- 흐림 o
-									<i class="ico_weather w5"></i>	 	- 바람/비 x
-									<i class="ico_weather w6"></i>	13	- 비또는눈 o
-									<i class="ico_weather w7"></i>  	- 구름/바람/비 x
-									<i class="ico_weather w8"></i>	11	- 눈 o
-									<i class="ico_weather w9"></i>	17	- 천둥번개 o
-									<i class="ico_weather w10"></i>	12 - 가끔눈 o
-								--%>
-								</tr>
-							</table>
+						const apiURL = "http://iderms.enertalk.com:8443";
+						const apiEnergySite = "/energy/sites";
+						const apiEnergyNowSite = "/energy/now/sites";
+						const apiWeather = "/weather/site";
+						const apiForecastingSite = "/energy/forecasting/sites";
+						const apiStatusRawSite = "/status/raw/site";
+						const apiStatusRaw = "/status/raw";
+						const apiConfigDevice = '/config/orgs/' + 'spower';
 
+						const siteId = '${sid}';
+						let siteLocation = '';
 
-							<script>
-								/*
-									calWeatherValue_1 =  16.5℃
-									calWeatherIcon_1 =  <i class="ico_weather w1"></i>
-									calEnergyValue_1 = <strong>936</strong><em>kWh</em>
-								*/
+						//let invDeviceIds = ["6d836437-6995-4cc9-8d29-2c6ff9d1c4b8"];
+						// 		let invDeviceIds = "6d836437-6995-4cc9-8d29-2c6ff9d1c4b8";
+						let invDeviceIds = new Array();
+						let solorSensorDid = new Array();
+						// todo : device id 목록조회 추가필요
 
-								//해당월의 에너지 데이터 - polling 없음
-								let wCalendarEnergyUrl = apiURL + apiEnergySite;
-								let wCalendarEnergyData = {
-									sid: siteId,
-									startTime: "<c:out value="${startDate }"/>",
-									endTime: "<c:out value="${endDate }"/>",
-									interval: "day"
+						let nowMonth = "<c:out value="${nowMonth}"/>";
+						let nowWeek = "<c:out value="${nowWeek}"/>";
+						let nowDay = "<c:out value="${nowDay}"/>";
+
+						let chargeChartUrl = apiURL + apiEnergySite;
+						let chargeChartData = {
+							sid: siteId,
+							startTime: "<c:out value="${startMonth }"/>",
+							endTime: "<c:out value="${endMonth }"/>",
+							displayType: 'dashboard',
+							interval: "month"
+						};
+
+						let nowEnergyDay;
+						let nowBillingDay;
+						let nowEnergyMonth;
+						let nowBillingMonth;
+						let nowEnergyYear;
+
+						let itemChartCapacity;
+						let chargeNowUrl = apiURL + apiEnergyNowSite;
+
+						//당일 에너지 데이터 - polling 사용
+						let statusSiteUrl = apiURL + apiStatusRawSite;
+						let statusSiteData = {
+							sid: siteId,
+						};
+
+						$.ajax({
+							url: statusSiteUrl,
+							type: "get",
+							async: false,
+							data: statusSiteData,
+							success: function (result) {
+								var item = result;
+								itemChartCapacity = (item.capacity / 1000).toFixed(1);
+							},
+							dataType: "json"
+
+						});
+
+						(function chargeNowEnergy() {
+							let interValArr = ['day', 'month', 'year'];
+
+							$.each(interValArr, function (i, el) {
+								let chargeNowData = {
+									sids: siteId,
+									metering_type: "2",
+									interval: el
 								};
 
 								$.ajax({
-									url: wCalendarEnergyUrl,
+									url: chargeNowUrl,
 									type: "get",
 									async: false,
-									data: wCalendarEnergyData,
+									data: chargeNowData,
 									success: function (result) {
-										var data = result.data[0];
-										var items = data.generation.items;
-										if (debugMode) {
-											console.log("wCalendar:", items);
-										}
-
-										setWCalendarEnergyData(items);
+										$.each(result.data, function (i, el2) {
+											if (el == 'day') {
+												nowEnergyDay = el2.energy;
+												nowBillingDay = el2.money;
+												console.log('nowEnergyDay', el2.energy);
+											} else if (el == 'month') {
+												nowEnergyMonth = el2.energy;
+												nowBillingMonth = el2.money;
+												console.log('nowEnergyMonth', el2.energy);
+											} else {
+												nowEnergyYear = el2.energy;
+												console.log('nowEnergyYear', el2.energy);
+											}
+										});
 									},
-									dataType: "json",
-									timeout: pollingTimeout
+									dataType: "json"
 								});
+							});
+						})();
 
-								function setWCalendarEnergyData(items) {
-									var calendarDays = $(".calWeatherDay");
-									for (var i = 0; i < calendarDays.length; i++) {
+						let chargeChartBeforeData = {
+							sid: siteId,
+							startTime: "<c:out value="${beforeStartMonth }"/>",
+							endTime: "<c:out value="${beforeEndMonth }"/>",
+							interval: "month"
+						};
 
+						const configDeviceData = {
+							includeUsers: false,
+							includeSites: true,
+							includeDevices: true,
+							includeRtus: false
+						};
 
-										var matchMonth = false;
-										for (var d = 0; d < items.length; d++) {
-											var dataDay = parseInt(("" + items[d].basetime).substring(6, 8));
-											if (i + 1 == dataDay) {
-												if (items[d].energy > 10000 * 1000) {
-													$("#calEnergyValue_" + (i + 1)).html("<strong>" + numberComma((items[d].energy / 1000 * 1000).toFixed(1)) + "</strong><em>MWh</em>");
-												} else {
-													$("#calEnergyValue_" + (i + 1)).html("<strong>" + numberComma((items[d].energy / 1000).toFixed(1)) + "</strong><em>kWh</em>");
+						let chargeChartItems1;
+						let chargeChartItems2;
+
+						(function setDids() {
+							$.ajax({
+								url: apiURL + apiConfigDevice,
+								type: "get",
+								async: false,
+								data: configDeviceData,
+								success: function (result) {
+									let sitesData = result.sites;
+									if (sitesData != null) {
+										$.each(sitesData, function (i, el) {
+											if (el.sid == siteId) {
+												siteLocation = el.location;
+											}
+										});
+									}
+
+									var data = result.devices;
+									if (data != null) {
+										for (var i in data) {
+											if (data[i].sid == siteId) {
+												if (data[i].device_type == 'INV_PV') {
+													invDeviceIds.push(data[i].did);
+												} else if (data[i].device_type == 'SENSOR_SOLAR') {
+													solorSensorDid.push(data[i].did);
 												}
 											}
 										}
-										const calDate = new Date();
-										if (nowEnergyDay > 10000 * 1000) {
-											$("#calEnergyValue_" + (calDate.getDate())).html("<strong>" + numberComma((nowEnergyDay / 1000 * 1000).toFixed(1)) + "</strong><em>MWh</em>");
-										} else {
-											const date = new Date();
-											console.log(date.getDate());
-											$("#calEnergyValue_" + (calDate.getDate())).html("<strong>" + numberComma((nowEnergyDay / 1000).toFixed(1)) + "</strong><em>kWh</em>");
-										}
 									}
-								}
+								},
+								dataType: "json"
+							});
+						})();
 
-								//당일 에너지 데이터 - polling 사용
-								let wCalendarEnergyDayUrl = apiURL + apiEnergySite;
-								let wCalendarEnergyDayData = {
+						function chargeChartPoll() {
+							$.ajax({
+								url: chargeChartUrl,
+								type: "get",
+								async: false,
+								data: chargeChartData,
+								success: function (result) {
+									var data = result.data[0];
+									chargeChartItems1 = data.generation.items;
+									$.each(chargeChartItems1, function (i, el) {
+										if (el.money != undefined && el.money != null && el.money != '') {
+											el.money = Math.floor(el.money / 1000);
+										}
+									});
+
+									chargeChartItems1.push({
+										basetime: '<c:out value="${startDate }"/>',
+										energy: nowEnergyMonth,
+										money: Math.floor(nowBillingMonth / 1000)
+									});
+
+									if (debugMode) {
+										console.log("chargeChart:", chargeChartItems1);
+									}
+								},
+								dataType: "json",
+								complete: function () {
+									chargeChartBeofrePoll();
+								},
+								timeout: pollingTimeout
+							});
+						}
+
+						function chargeChartBeofrePoll() {
+							$.ajax({
+								url: chargeChartUrl,
+								type: "get",
+								async: false,
+								data: chargeChartBeforeData,
+								success: function (result) {
+									var data = result.data[0];
+									chargeChartItems2 = data.generation.items;
+									if (debugMode) {
+										console.log("chargeChartBeofre:", chargeChartItems2);
+									}
+
+									if($(':radio[name="radio_t"]:checked').val() == 1) {
+										wetherIrradiationPoa();
+									} else {
+										setChargeChartData();
+									}
+
+								},
+								dataType: "json",
+								complete: setTimeout(function () {
+									chargeChartPoll()
+								}, pollingTerm),
+								timeout: pollingTimeout
+							})
+						}
+
+						let irradiationPoaArray = new Array();
+						function wetherIrradiationPoa() {
+							$.ajax({
+								url: apiURL + apiWeather,
+								type: 'get',
+								async: false,
+								data: {
 									sid: siteId,
-									startTime: "<c:out value="${startTime}"/>",
-									endTime: "<c:out value="${endTime }"/>",
+									startTime: "<c:out value="${startMonth }"/>",
+									endTime: "<c:out value="${endMonth }"/>",
 									interval: "day"
-								};
+								},
+								success: function (result) {
+									irradiationPoaArray = new Array();
+									let standard = String (result[0].basetime).substring(0, 6);
+									let sumVal = 0;
 
-								(function wCalendarDayPoll() {
-									$.ajax({
-										url: wCalendarEnergyDayUrl,
-										type: "get",
-										async: false,
-										data: wCalendarEnergyDayData,
-										success: function (result) {
-											var data = result.data[0];
-											var items = data.generation.items;
-											if (debugMode) {
-												console.log("wCalendarDay:", items);
+									$.each(result, function(i, el) {
+										if(standard == String (el.basetime).substring(0, 6)) {
+											sumVal += el.sensor_solar.irradiationPoa;
+											if(i == (result.length - 1)) {
+												irradiationPoaArray.push({
+													baseTime: standard,
+													sumVal: sumVal
+												});
 											}
-
-											setWCalendarEnergyDayData(items);
-										},
-										dataType: "json",
-										complete: setTimeout(function () {
-											wCalendarDayPoll()
-										}, pollingTerm),
-										timeout: pollingTimeout
-									})
-								})();
-
-								function setWCalendarEnergyDayData(items) {
-									if (items.length > 0) {
-
-										if (items[0].energy > 10000 * 1000) {
-											$("#calEnergyValue_" + nowDay).html("<strong>" + numberComma((items[0].energy / 1000 * 1000).toFixed(1)) + "</strong><em>MWh</em>");
 										} else {
-											$("#calEnergyValue_" + nowDay).html("<strong>" + numberComma((items[0].energy / 1000).toFixed(1)) + "</strong><em>kWh</em>");
+											irradiationPoaArray.push({
+												baseTime: standard,
+												sumVal: sumVal
+											});
+											standard = String (el.basetime).substring(0, 6);
+											sumVal = el.sensor_solar.irradiationPoa;
 										}
+									});
+
+									setChargeChartData();
+								},
+								dataType: 'json'
+							});
+						}
+
+						function setChargeChartData() {
+							var totYearEnergy = 0;
+							var totMonthEnergy = 0;
+							var totBeforeYearEnergy = 0;
+							var totBeforeMonthEnergy = 0;
+							var energyData = [];
+							var billingData = [];
+
+							for (var i = 0; i < 12; i++) {
+
+								var matchMonth = false;
+								for (var d = 0; d < chargeChartItems1.length; d++) {
+									var dataMonth = parseInt(("" + chargeChartItems1[d].basetime).substring(4, 6));
+									if (i + 1 == dataMonth) {
+										energyData[i] = [i, chargeChartItems1[d].energy / 1000];
+
+										if($(':radio[name="radio_t"]:checked').val() == 1) {
+											let energy = chargeChartItems1[d].energy / 1000;
+											let irradiationPoaSum = 0;
+											$.each(irradiationPoaArray, function(k, el) {
+												if(el.baseTime.slice(-2) == dataMonth) {
+													irradiationPoaSum = el.sumVal;
+												}
+											});
+
+											let resultValue = 0;
+											if(irradiationPoaSum > 0) {
+												resultValue = parseFloat(((energy / itemChartCapacity / (irradiationPoaSum / 1000 * 24 )) * 100).toFixed(2));
+											}
+											billingData[i] = [i, resultValue];
+										} else if($(':radio[name="radio_t"]:checked').val() == 2) { //발전량
+											let today = new Date();
+											let lastDate = new Date(today.getFullYear(), dataMonth, 0).format('dd');
+											
+											if(today.getMonth() == (Number(dataMonth) -1)) {
+												lastDate = today.getDate();
+											}
+											let energy = chargeChartItems1[d].energy / 1000;
+
+											billingData[i] = [i, parseFloat(((energy / itemChartCapacity) / lastDate).toFixed(2))];
+										} else { //매전량
+											billingData[i] = [i, chargeChartItems1[d].money];
+										}
+
+										totYearEnergy += chargeChartItems1[d].energy / 1000;
+										if (i + 1 == nowMonth) {
+											totMonthEnergy = chargeChartItems1[d].energy / 1000;
+										}
+
+										matchMonth = true;
 									}
 								}
 
-								//해당월의 날씨 데이터 - polling 없음
-								let wCalendarWeatherUrl = apiURL + apiWeather;
-								let wCalendarWeatherData = {
-									sid: siteId,
-									startTime: "<c:out value="${startDate }"/>",
-									endTime: "<c:out value="${endDate }"/>",
-									interval: "day"
-								};
+								if (!matchMonth) {
+									energyData[i] = [i, null];
+									billingData[i] = [i, null];
+								}
+							}
 
-								$.ajax({
-									url: wCalendarWeatherUrl,
-									type: "get",
-									async: false,
-									data: wCalendarWeatherData,
-									success: function (result) {
-										var items = result;
-										if (debugMode) {
-											console.log("wCalendarWeatherData:", items);
+							for (var i = 0; i < 12; i++) {
+								for (var d = 0; d < chargeChartItems2.length; d++) {
+									var dataMonth = parseInt(("" + chargeChartItems2[d].basetime).substring(4, 6));
+									if (i + 1 == dataMonth) {
+										totBeforeYearEnergy += chargeChartItems2[d].energy / 1000;
+										if (i + 1 == nowMonth) {
+											totBeforeMonthEnergy = chargeChartItems2[d].energy / 1000;
 										}
+									}
+								}
+							}
 
-										setWCalendarWeatherData(items);
-									},
-									dataType: "json",
-									timeout: pollingTimeout
+							if (debugMode) {
+								console.log("chargeChart energyData:", energyData);
+								console.log("chargeChart billingData:", billingData);
+							}
+
+							chargeChart.series[0].setData(energyData);
+							chargeChart.series[1].setData(billingData);
+
+							if($(':radio[name="radio_t"]:checked').val() == 1) {
+								chargeChart.series[1].name = 'PR'
+								chargeChart.series[1].tooltipOptions.valueSuffix = '%';
+								chargeChart.yAxis[1].setTitle({
+									text: '%',
+									align: 'low',
+									rotation: 0, /* 타이틀 기울기 */
+									y: 25, /* 타이틀 위치 조정 */
+									x: -12,
+									style: {
+										color: '#ffffff',
+										fontSize: '12px'
+									}
 								});
-
-								function getWeatherIconClass(weatherId) {
-									/*
-									weather value 1 	> css w1
-									weather value 20	> css w3
-									weather value 7	> css w4
-									weather value 13	> css w6
-									weather value 11	> css w8
-									weather value 17	> css w9
-									weather value 12	> css w10
-									*/
-
-									var weatherIconClass = 1;
-									switch (weatherId) {
-										case 1 :
-											weatherIconClass = "w1";
-											break;
-										case 7 :
-											weatherIconClass = "w4";
-											break;
-										case 11 :
-											weatherIconClass = "w8";
-											break;
-										case 12 :
-											weatherIconClass = "w10";
-											break;
-										case 13 :
-											weatherIconClass = "w6";
-											break;
-										case 17 :
-											weatherIconClass = "w9";
-											break;
-										case 20 :
-											weatherIconClass = "w3";
-											break;
-										default :
-											weatherIconClass = 'w1';
-											break;
+							} else  if($(':radio[name="radio_t"]:checked').val() == 2) {
+								chargeChart.series[1].name = '발전시간'
+								chargeChart.series[1].tooltipOptions.valueSuffix = '시간';
+								chargeChart.yAxis[1].setTitle({
+									text: '시간',
+									align: 'low',
+									rotation: 0, /* 타이틀 기울기 */
+									y: 25, /* 타이틀 위치 조정 */
+									x: -12,
+									style: {
+										color: '#ffffff',
+										fontSize: '12px'
 									}
-									return weatherIconClass
+								});
+							} else {
+								chargeChart.series[1].name = '매전량'
+								chargeChart.series[1].tooltipOptions.valueSuffix = '천원';
+								chargeChart.yAxis[1].setTitle({
+									text: '천원',
+									align: 'low',
+									rotation: 0, /* 타이틀 기울기 */
+									y: 25, /* 타이틀 위치 조정 */
+									x: -12,
+									style: {
+										color: '#ffffff',
+										fontSize: '12px'
+									}
+								});
+							}
+
+
+							diffYearEnergy = totYearEnergy - totBeforeYearEnergy;
+							diffMonthEnergy = totMonthEnergy - totBeforeMonthEnergy;
+
+							if (debugMode) {
+								console.log("chargeChart totYearEnergy", totYearEnergy);
+								console.log("chargeChart totBeforeYearEnergy", totBeforeYearEnergy);
+								console.log("chargeChart diffYearEnergy", diffYearEnergy);
+
+								console.log("chargeChart totMonthEnergy", totMonthEnergy);
+								console.log("chargeChart totBeforeMonthEnergy", totBeforeMonthEnergy);
+								console.log("chargeChart diffMonthEnergy", diffMonthEnergy);
+							}
+
+							//TOTAL DATA
+							/*
+							yearEnergyValue  = <span class="pv">14.4</span><em>MWh</em>
+							monthEnergyValue  = <span class="pv">763</span><em>kWh</em>
+
+							diffYearEnergyValue = <i class="fa fa-arrow-down"></i><span>6,804</span>
+							diffMonthEnergyValue = <i class="fa fa-arrow-down"></i><span>511</span>
+							*/
+
+							var diffYearIconClass = diffYearEnergy > 0 ? "fa-arrow-up" : (diffYearEnergy < 0 ? "fa-arrow-up" : "");
+
+							if (String(nowEnergyYear).length > 9) {
+								$("#yearEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyYear / 1000 / 1000 / 1000).toFixed(2)) + "</span><em>GWh</em>");
+							} else if (String(nowEnergyYear).length > 6) {
+								$("#yearEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyYear / 1000 / 1000).toFixed(2)) + "</span><em>MWh</em>");
+							} else if (String(nowEnergyYear).length > 3) {
+								$("#yearEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyYear / 1000).toFixed(2)) + "</span><em>kWh</em>");
+							} else {
+								$("#yearEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyYear / 1000).toFixed(2)) + "</span><em>Wh</em>");
+							}
+
+							// if(nowEnergyYear > 10000){
+							// 	$("#yearEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyYear / 1000).toFixed(2)) + "</span><em>MWh</em>");
+							// 	// $("#diffYearEnergyValue").html("<i class='fa " + diffYearIconClass + "'></i><span>" + numberComma((Math.abs(diffYearEnergy) / 1000).toFixed(2))  + "</span>");
+							// }else{
+							// 	$("#yearEnergyValue").html("<span class='pv'>" + numberComma(nowEnergyYear) + "</span><em>kWh</em>");
+							// 	// $("#diffYearEnergyValue").html("<i class='fa " + diffIconClass + "'></i><span>" + numberComma(Math.abs(diffYearEnergy).toFixed(2))  + "</span>");
+							// }
+
+							var diffMonthIconClass = diffMonthEnergy > 0 ? "fa-arrow-up" : (diffMonthEnergy < 0 ? "fa-arrow-up" : "");
+
+							if (String(nowEnergyMonth).length > 9) {
+								$("#monthEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyMonth / 1000 / 1000 / 1000).toFixed(2)) + "</span><em>GWh</em>");
+							} else if (String(nowEnergyMonth).length > 6) {
+								$("#monthEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyMonth / 1000 / 1000).toFixed(2)) + "</span><em>MWh</em>");
+							} else if (String(nowEnergyMonth).length > 3) {
+								$("#monthEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyMonth / 1000).toFixed(2)) + "</span><em>kWh</em>");
+							} else {
+								$("#monthEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyMonth / 1000).toFixed(2)) + "</span><em>Wh</em>");
+							}
+							// if(nowEnergyMonth > 10000){
+							// 	$("#monthEnergyValue").html("<span class='pv'>" + numberComma((nowEnergyMonth / 1000).toFixed(2)) + "</span><em>MWh</em>");
+							// 	// $("#diffMonthEnergyValue").html("<i class='fa " + diffMonthIconClass + "'></i><span>" + numberComma((Math.abs(diffMonthEnergy) / 1000).toFixed(2))  + "</span>");
+							// }else{
+							// 	$("#monthEnergyValue").html("<span class='pv'>" + numberComma(nowEnergyMonth) + "</span><em>kWh</em>");
+							// 	// $("#diffMonthEnergyValue").html("<i class='fa " + diffMonthIconClass + "'></i><span>" + numberComma(Math.abs(diffMonthEnergy).toFixed(2))  + "</span>");
+							// }
+
+						}
+
+						chargeChartPoll();
+
+					</script>
+				</div>
+			</div>
+			<div class="indiv smain_cal">
+				<div class="chart_top clear">
+					<h2 class="ntit">이 달의 발전 달력</h2>
+					<h1 class="stit">
+						<fmt:parseDate var="sDate" value="${startDate}" pattern="yyyyMMddHHmmss"/>
+						<fmt:parseDate var="eDate" value="${startTime}" pattern="yyyyMMddHHmmss"/>
+						<fmt:formatDate var="sDt" pattern="yyyy-MM-dd" value="${sDate}"/>
+						<fmt:formatDate var="eDt" pattern="yyyy-MM-dd" value="${eDate}"/>
+						<em>${sDt} ~ ${eDt}</em>
+					</h1>
+				</div>
+				<div>
+					<table class="calendar">
+						<tr>
+							<th>일</th>
+							<th>월</th>
+							<th>화</th>
+							<th>수</th>
+							<th>목</th>
+							<th>금</th>
+							<th>토</th>
+						</tr>
+
+						<c:forEach var="week" items="${calList}">
+							<tr>
+								<c:forEach var="day" items="${week }">
+									<c:choose>
+										<c:when test="${day ne 0 }">
+
+											<td <c:if test="${nowDay eq day }">class="today"</c:if>>
+												<div>
+													<em class="calWeatherDay fl day">${day }</em>
+													<em id="calWeatherValue_${day }" class="fr"></em>
+												</div>
+												<div>
+													<div id="calWeatherIcon_${day }" class="wicon"></div>
+												</div>
+												<span id="calEnergyValue_${day }"></span>
+											</td>
+
+										</c:when>
+										<c:otherwise>
+											<td class="disabled">
+											</td>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+							</tr>
+						</c:forEach>
+
+						<%--
+							<i class="ico_weather w1"></i> 	1	- 맑음 o
+							<i class="ico_weather w2"></i>   	- 바람 x
+							<i class="ico_weather w3"></i>	20	- 안개 o
+							<i class="ico_weather w4"></i>	7	- 흐림 o
+							<i class="ico_weather w5"></i>	 	- 바람/비 x
+							<i class="ico_weather w6"></i>	13	- 비또는눈 o
+							<i class="ico_weather w7"></i>  	- 구름/바람/비 x
+							<i class="ico_weather w8"></i>	11	- 눈 o
+							<i class="ico_weather w9"></i>	17	- 천둥번개 o
+							<i class="ico_weather w10"></i>	12 - 가끔눈 o
+						--%>
+						</tr>
+					</table>
+
+
+					<script>
+						/*
+							calWeatherValue_1 =  16.5℃
+							calWeatherIcon_1 =  <i class="ico_weather w1"></i>
+							calEnergyValue_1 = <strong>936</strong><em>kWh</em>
+						*/
+
+						//해당월의 에너지 데이터 - polling 없음
+						let wCalendarEnergyUrl = apiURL + apiEnergySite;
+						let wCalendarEnergyData = {
+							sid: siteId,
+							startTime: "<c:out value="${startDate }"/>",
+							endTime: "<c:out value="${endDate }"/>",
+							interval: "day"
+						};
+
+						$.ajax({
+							url: wCalendarEnergyUrl,
+							type: "get",
+							async: false,
+							data: wCalendarEnergyData,
+							success: function (result) {
+								var data = result.data[0];
+								var items = data.generation.items;
+								if (debugMode) {
+									console.log("wCalendar:", items);
 								}
 
-								function setWCalendarWeatherData(items) {
-									var calendarDays = $(".calWeatherDay");
-									for (var i = 0; i < calendarDays.length; i++) {
-										if (i < items.length) {
-											$("#calWeatherValue_" + (i + 1)).text((items[i].temperature).toFixed(1) + "℃");
+								setWCalendarEnergyData(items);
+							},
+							dataType: "json",
+							timeout: pollingTimeout
+						});
 
-											var weatherIconClass = getWeatherIconClass(items[i].sky);
-											$("#calWeatherIcon_" + (i + 1)).html("<i class='ico_weather " + weatherIconClass + "'></i>");
+						function setWCalendarEnergyData(items) {
+							var calendarDays = $(".calWeatherDay");
+							for (var i = 0; i < calendarDays.length; i++) {
+
+
+								var matchMonth = false;
+								for (var d = 0; d < items.length; d++) {
+									var dataDay = parseInt(("" + items[d].basetime).substring(6, 8));
+									if (i + 1 == dataDay) {
+										if (items[d].energy > 10000 * 1000) {
+											$("#calEnergyValue_" + (i + 1)).html("<strong>" + numberComma((items[d].energy / 1000 * 1000).toFixed(1)) + "</strong><em>MWh</em>");
+										} else {
+											$("#calEnergyValue_" + (i + 1)).html("<strong>" + numberComma((items[d].energy / 1000).toFixed(1)) + "</strong><em>kWh</em>");
 										}
 									}
 								}
-							</script>
+								const calDate = new Date();
+								if (nowEnergyDay > 10000 * 1000) {
+									$("#calEnergyValue_" + (calDate.getDate())).html("<strong>" + numberComma((nowEnergyDay / 1000 * 1000).toFixed(1)) + "</strong><em>MWh</em>");
+								} else {
+									const date = new Date();
+									console.log(date.getDate());
+									$("#calEnergyValue_" + (calDate.getDate())).html("<strong>" + numberComma((nowEnergyDay / 1000).toFixed(1)) + "</strong><em>kWh</em>");
+								}
+							}
+						}
 
-						</div>
-					</div>
+						//당일 에너지 데이터 - polling 사용
+						let wCalendarEnergyDayUrl = apiURL + apiEnergySite;
+						let wCalendarEnergyDayData = {
+							sid: siteId,
+							startTime: "<c:out value="${startTime}"/>",
+							endTime: "<c:out value="${endTime }"/>",
+							interval: "day"
+						};
+
+						(function wCalendarDayPoll() {
+							$.ajax({
+								url: wCalendarEnergyDayUrl,
+								type: "get",
+								async: false,
+								data: wCalendarEnergyDayData,
+								success: function (result) {
+									var data = result.data[0];
+									var items = data.generation.items;
+									if (debugMode) {
+										console.log("wCalendarDay:", items);
+									}
+
+									setWCalendarEnergyDayData(items);
+								},
+								dataType: "json",
+								complete: setTimeout(function () {
+									wCalendarDayPoll()
+								}, pollingTerm),
+								timeout: pollingTimeout
+							})
+						})();
+
+						function setWCalendarEnergyDayData(items) {
+							if (items.length > 0) {
+
+								if (items[0].energy > 10000 * 1000) {
+									$("#calEnergyValue_" + nowDay).html("<strong>" + numberComma((items[0].energy / 1000 * 1000).toFixed(1)) + "</strong><em>MWh</em>");
+								} else {
+									$("#calEnergyValue_" + nowDay).html("<strong>" + numberComma((items[0].energy / 1000).toFixed(1)) + "</strong><em>kWh</em>");
+								}
+							}
+						}
+
+						//해당월의 날씨 데이터 - polling 없음
+						let wCalendarWeatherUrl = apiURL + apiWeather;
+						let wCalendarWeatherData = {
+							sid: siteId,
+							startTime: "<c:out value="${startDate }"/>",
+							endTime: "<c:out value="${endDate }"/>",
+							interval: "day"
+						};
+
+						$.ajax({
+							url: wCalendarWeatherUrl,
+							type: "get",
+							async: false,
+							data: wCalendarWeatherData,
+							success: function (result) {
+								var items = result;
+								if (debugMode) {
+									console.log("wCalendarWeatherData:", items);
+								}
+
+								setWCalendarWeatherData(items);
+							},
+							dataType: "json",
+							timeout: pollingTimeout
+						});
+
+						function getWeatherIconClass(weatherId) {
+							/*
+							weather value 1 	> css w1
+							weather value 20	> css w3
+							weather value 7	> css w4
+							weather value 13	> css w6
+							weather value 11	> css w8
+							weather value 17	> css w9
+							weather value 12	> css w10
+							*/
+
+							var weatherIconClass = 1;
+							switch (weatherId) {
+								case 1 :
+									weatherIconClass = "w1";
+									break;
+								case 7 :
+									weatherIconClass = "w4";
+									break;
+								case 11 :
+									weatherIconClass = "w8";
+									break;
+								case 12 :
+									weatherIconClass = "w10";
+									break;
+								case 13 :
+									weatherIconClass = "w6";
+									break;
+								case 17 :
+									weatherIconClass = "w9";
+									break;
+								case 20 :
+									weatherIconClass = "w3";
+									break;
+								default :
+									weatherIconClass = 'w1';
+									break;
+							}
+							return weatherIconClass
+						}
+
+						function setWCalendarWeatherData(items) {
+							var calendarDays = $(".calWeatherDay");
+							for (var i = 0; i < calendarDays.length; i++) {
+								if (i < items.length) {
+									$("#calWeatherValue_" + (i + 1)).text((items[i].temperature).toFixed(1) + "℃");
+
+									var weatherIconClass = getWeatherIconClass(items[i].sky);
+									$("#calWeatherIcon_" + (i + 1)).html("<i class='ico_weather " + weatherIconClass + "'></i>");
+								}
+							}
+						}
+					</script>
+
 				</div>
 			</div>
 		</div>
@@ -1846,430 +1839,423 @@
 			});
 		</script>
 		<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
-			<div class="row">
-				<div class="col-sm-12">
-					<div class="indiv gmain_alarm wrap_type">
-						<div class="alarm_stat clear">
-							<div class="a_alert clear">
-								<span>금일 발생 오류</span>
-								<em>0</em>
-							</div>
-							<div class="a_warning clear">
-								<a href="/history/alarmHistory.do?sid=${sid}" class="btn cancel_btn">상세보기</a>
-							</div>
-						</div>
-						<div class="alarm_notice">
-							<ul>
-							</ul>
-						</div>
+			<div class="indiv smain wrap_type">
+				<div class="alarm_stat clear">
+					<div class="a_alert clear">
+						<span>금일 발생 오류</span>
+						<em>0</em>
 					</div>
+					<div class="a_warning clear">
+						<a href="/history/alarmHistory.do?sid=${sid}" class="btn cancel_btn">상세보기</a>
+					</div>
+				</div>
+				<div class="alarm_notice">
+					<ul>
+					</ul>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-sm-12">
-					<div class="indiv gmain_table smain wrap_type">
-						<div class="gtbl_top clear">
-							<div class="fl">
-								<input type="text" class="input" value="" placeholder="키워드">
-								<%--											<button type="submit">검색</button>--%>
-								<!-- <div class="check-option chk_type">
-									<input type="checkbox" id="deviceStatus1" value="정상" checked>
-									<label for="deviceStatus1"><span></span>정상</label>
-									<input type="checkbox" id="deviceStatus2" value="경고" checked>
-									<label for="deviceStatus2"><span></span>경고</label>
-									<input type="checkbox" id="deviceStatus3" value="이상" checked>
-									<label for="deviceStatus3"><span></span>이상</label>
-								</div> -->
+
+			<div class="indiv gmain_table smain wrap_type">
+				<div class="gtbl_top clear">
+					<div class="fl">
+						<input type="text" class="input" value="" placeholder="키워드">
+						<%--											<button type="submit">검색</button>--%>
+						<!-- <div class="check-option chk_type">
+							<input type="checkbox" id="deviceStatus1" value="정상" checked>
+							<label for="deviceStatus1"><span></span>정상</label>
+							<input type="checkbox" id="deviceStatus2" value="경고" checked>
+							<label for="deviceStatus2"><span></span>경고</label>
+							<input type="checkbox" id="deviceStatus3" value="이상" checked>
+							<label for="deviceStatus3"><span></span>이상</label>
+						</div> -->
+					</div>
+					<div class="fr">
+						<span class="tx_tit">설비 상태</span>
+						<div class="sa_select" id="deviceType">
+							<div class="dropdown">
+								<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
+									전체 <span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
+									<li>
+										<a href="#" data-value="INV_PV" tabindex="-1">
+											<input type="checkbox" id="deviceStatus1" value="중지" checked>
+											<label for="deviceStatus1"><span></span>중지</label>
+										</a>
+									</li>
+									<li>
+										<a href="#" data-value="INV_PV" tabindex="-1">
+											<input type="checkbox" id="deviceStatus2" value="정상" checked>
+											<label for="deviceStatus2"><span></span>정상</label>
+										</a>
+									</li>
+									<li>
+										<a href="#" data-value="INV_PV" tabindex="-1">
+											<input type="checkbox" id="deviceStatus3" value="트립" checked>
+											<label for="deviceStatus3"><span></span>트립</label>
+										</a>
+									</li>
+								</ul>
 							</div>
-							<div class="fr">
-								<span class="tx_tit">설비 상태</span>
-								<div class="sa_select" id="deviceType">
-									<div class="dropdown">
-										<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
-											전체 <span class="caret"></span>
-										</button>
-										<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
-											<li>
-												<a href="#" data-value="INV_PV" tabindex="-1">
-													<input type="checkbox" id="deviceStatus1" value="중지" checked>
-													<label for="deviceStatus1"><span></span>중지</label>
-												</a>
-											</li>
-											<li>
-												<a href="#" data-value="INV_PV" tabindex="-1">
-													<input type="checkbox" id="deviceStatus2" value="정상" checked>
-													<label for="deviceStatus2"><span></span>정상</label>
-												</a>
-											</li>
-											<li>
-												<a href="#" data-value="INV_PV" tabindex="-1">
-													<input type="checkbox" id="deviceStatus3" value="트립" checked>
-													<label for="deviceStatus3"><span></span>트립</label>
-												</a>
-											</li>
-										</ul>
-									</div>
+						</div>
+					</div>
+				</div>
+				<ul class="type_list">
+					<li>
+						<div class="chart_top clear">
+							<h2 id="invCount" class="ntit">인버터(1)</h2>
+							<div class="alert_icon fr">
+								<span id="invNormal" class="inv_normail">정상(1)</span>
+								<span id="invError" class="inv_error">트립(0)</span>
+								<span id="invAlert" class="inv_alert">중지(0)</span>
+							</div>
+						</div>
+						<div class="type_list_detail">
+							<div class="tbl_type">
+								<table>
+									<colgroup>
+										<col style="width:25%">
+										<col style="width:25%">
+										<col style="width:25%">
+										<col style="width:25%">
+									</colgroup>
+									<thead>
+									<tr>
+										<th>순시 DC 입력</th>
+										<th>순시 AC 출력</th>
+										<th>효율</th>
+										<th>금일 누적발전</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td><span id="avgDcPower">-</span>kW</td>
+										<td><span id="avgAcPower">-</span>kW</td>
+										<td><span id="avgEfficiency">-</span>%</td>
+										<td><span id="avgGenPower">-</span>kWh</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="gtbl_wrap type">
+								<div class="intable">
+									<table>
+										<colgroup>
+											<col>
+											<col>
+											<col>
+											<col>
+											<col>
+											<col>
+										</colgroup>
+										<thead>
+										<tr>
+											<th>상태</th>
+											<th>설비명</th>
+											<th>DC입력</th>
+											<th>AC출력</th>
+											<th>효율</th>
+											<th>금일 누적발전</th>
+										</tr>
+										</thead>
+										<tbody id="invDevices">
+										</tbody>
+									</table>
 								</div>
 							</div>
 						</div>
-						<ul class="type_list">
-							<li>
-								<div class="chart_top clear">
-									<h2 id="invCount" class="ntit">인버터(1)</h2>
-									<div class="alert_icon fr">
-										<span id="invNormal" class="inv_normail">정상(1)</span>
-										<span id="invError" class="inv_error">트립(0)</span>
-										<span id="invAlert" class="inv_alert">중지(0)</span>
-									</div>
-								</div>
-								<div class="type_list_detail">
-									<div class="tbl_type">
-										<table>
-											<colgroup>
-												<col style="width:25%">
-												<col style="width:25%">
-												<col style="width:25%">
-												<col style="width:25%">
-											</colgroup>
-											<thead>
-											<tr>
-												<th>순시 DC 입력</th>
-												<th>순시 AC 출력</th>
-												<th>효율</th>
-												<th>금일 누적발전</th>
-											</tr>
-											</thead>
-											<tbody>
-											<tr>
-												<td><span id="avgDcPower">-</span>kW</td>
-												<td><span id="avgAcPower">-</span>kW</td>
-												<td><span id="avgEfficiency">-</span>%</td>
-												<td><span id="avgGenPower">-</span>kWh</td>
-											</tr>
-											</tbody>
-										</table>
-									</div>
-									<div class="gtbl_wrap type">
-										<div class="intable">
-											<table>
-												<colgroup>
-													<col>
-													<col>
-													<col>
-													<col>
-													<col>
-													<col>
-												</colgroup>
-												<thead>
-												<tr>
-													<th>상태</th>
-													<th>설비명</th>
-													<th>DC입력</th>
-													<th>AC출력</th>
-													<th>효율</th>
-													<th>금일 누적발전</th>
-												</tr>
-												</thead>
-												<tbody id="invDevices">
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
 
-								<script type="text/javascript">
-									let invDeviceUrl = apiURL + apiStatusRaw;
-									let invDeviceData = {
-										dids: invDeviceIds.join(',')
-									};
+						<script type="text/javascript">
+							let invDeviceUrl = apiURL + apiStatusRaw;
+							let invDeviceData = {
+								dids: invDeviceIds.join(',')
+							};
 
-									let nowDeviceUrl = apiURL + '/energy/now/devices';
-									let nowDeviceData = {
-										dids: invDeviceIds.join(','),
-										metering_type: '2',
-										interval: 'day'
-									};
+							let nowDeviceUrl = apiURL + '/energy/now/devices';
+							let nowDeviceData = {
+								dids: invDeviceIds.join(','),
+								metering_type: '2',
+								interval: 'day'
+							};
 
-									(function invDevicePoll() {
-										$.ajax({
-											url: invDeviceUrl,
-											type: "get",
-											async: false,
-											data: invDeviceData,
-											success: function (result) {
-												var items = result;
-												if (debugMode) {
-													console.log("invDevice:", items);
+							(function invDevicePoll() {
+								$.ajax({
+									url: invDeviceUrl,
+									type: "get",
+									async: false,
+									data: invDeviceData,
+									success: function (result) {
+										var items = result;
+										if (debugMode) {
+											console.log("invDevice:", items);
+										}
+
+										nowDeviceEnergy(items);
+									},
+									dataType: "json",
+									complete: setTimeout(function () {
+										invDevicePoll()
+									}, pollingTerm),
+									timeout: pollingTimeout
+								})
+							})();
+
+							function nowDeviceEnergy(items) {
+								$.ajax({
+									url: nowDeviceUrl,
+									type: "get",
+									async: false,
+									data: nowDeviceData,
+									success: function (result) {
+										var energyItems = result.data;
+										if (debugMode) {
+											console.log("energyItems:", energyItems);
+										}
+
+										$.each(items, function (i, el) {
+											$.map(energyItems, function (val, key) {
+												if (el.did == key) {
+													el.nowEnergy = val.energy;
 												}
-
-												nowDeviceEnergy(items);
-											},
-											dataType: "json",
-											complete: setTimeout(function () {
-												invDevicePoll()
-											}, pollingTerm),
-											timeout: pollingTimeout
-										})
-									})();
-
-									function nowDeviceEnergy(items) {
-										$.ajax({
-											url: nowDeviceUrl,
-											type: "get",
-											async: false,
-											data: nowDeviceData,
-											success: function (result) {
-												var energyItems = result.data;
-												if (debugMode) {
-													console.log("energyItems:", energyItems);
-												}
-
-												$.each(items, function (i, el) {
-													$.map(energyItems, function (val, key) {
-														if (el.did == key) {
-															el.nowEnergy = val.energy;
-														}
-													});
-												});
-
-												setInvDeviceData(items);
-											},
-											dataType: "json"
-										})
-									};
-
-									function setInvDeviceData(items) {
-
-										var countDevice = items.length;
-										var countStatus1 = 0;
-										var countStatus2 = 0;
-										var countStatus3 = 0;
-										var totDcPower = 0;
-										var totAcPower = 0;
-										var totEfficiency = 0;
-										var totGenPower = 0;
-
-										var rowHtml = "";
-										$.each(items, function (j, el) {
-											if (el.data.length > 0) {
-												countDevice = el.data.length;
-												for (var i = 0; i < el.data.length; i++) {
-													console.log(el.data[i]);
-
-													//flag1 정상, flag2 경고, flag3 이상
-													//<th>상태</th>
-													//<th>설비명</th>
-													//<th>DC입력</th>
-													//<th>AC출력</th>
-													//<th>효율</th>
-													//<th>금일 누적발전</th>totalGenPower
-
-													var statusTxt = "-";
-													var statusClass = "";
-													if (el.data[i].operation == 1) {
-														statusTxt = "정상";
-														statusClass = "flag1";
-
-														countStatus1++;
-													} else if (el.data[i].operation == 2) {
-														statusTxt = "트립";
-														statusClass = "flag2";
-
-														countStatus2++;
-													} else if (el.data[i].operation == 0) {
-														statusTxt = "중지";
-														statusClass = "flag3";
-
-														countStatus3++;
-													}
-
-													var itemDname = el.dname;
-													var itemDcPower = el.data[i].dcPower / 1000;
-													var itemAcPower = el.data[i].activePower / 1000;
-													var itemEfficiency = el.data[i].efficiency;
-													var itemTotalGenPower = el.nowEnergy / 1000;
-
-													rowHtml += ""
-														+ "<tr class='flag1'>"
-														+ "	<td>" + statusTxt + "</td>"
-														+ "	<td>" + itemDname + "</td>"
-														+ "	<td>" + (itemDcPower ? itemDcPower.toFixed(1) : "-") + " kW</td>"
-														+ "	<td>" + (itemAcPower ? itemAcPower.toFixed(1) : "-") + " kW</td>"
-														+ "	<td>" + (itemEfficiency ? itemEfficiency.toFixed(1) : "-") + " %</td>"
-														+ "	<td>" + (itemTotalGenPower ? itemTotalGenPower.toFixed(1) : "-") + "  kWh</td>"
-														+ "</tr>";
-
-													totDcPower += el.data[i].dcPower;
-													totAcPower += el.data[i].activePower;
-													totEfficiency += el.data[i].efficiency;
-													totGenPower += el.nowEnergy;
-												}
-											}
+											});
 										});
 
-										$("#invCount").text("인버터(" + countDevice + ")");
-										$("#invNormal").text("정상(" + countStatus1 + ")");
-										$("#invError").text("트립(" + countStatus2 + ")");
-										$("#invAlert").text("중지(" + countStatus3 + ")");
+										setInvDeviceData(items);
+									},
+									dataType: "json"
+								})
+							};
 
-										console.log(totDcPower);
-										console.log(totAcPower);
-										console.log(totEfficiency);
-										console.log(totGenPower);
+							function setInvDeviceData(items) {
 
-										if (countDevice > 0) {
-											totDcPower = totDcPower / 1000;
-											totAcPower = totAcPower / 1000;
-											var avgEfficiency = totEfficiency / countDevice;
-											totGenPower = totGenPower / 1000;
+								var countDevice = items.length;
+								var countStatus1 = 0;
+								var countStatus2 = 0;
+								var countStatus3 = 0;
+								var totDcPower = 0;
+								var totAcPower = 0;
+								var totEfficiency = 0;
+								var totGenPower = 0;
 
-											$("#avgDcPower").text(totDcPower ? totDcPower.toFixed(1) : "-");
-											$("#avgAcPower").text(totAcPower ? totAcPower.toFixed(1) : "-");
-											$("#avgEfficiency").text(avgEfficiency ? avgEfficiency.toFixed(1) : "-");
-											$("#avgGenPower").text(totGenPower ? totGenPower.toFixed(1) : "-");
+								var rowHtml = "";
+								$.each(items, function (j, el) {
+									if (el.data.length > 0) {
+										countDevice = el.data.length;
+										for (var i = 0; i < el.data.length; i++) {
+											console.log(el.data[i]);
+
+											//flag1 정상, flag2 경고, flag3 이상
+											//<th>상태</th>
+											//<th>설비명</th>
+											//<th>DC입력</th>
+											//<th>AC출력</th>
+											//<th>효율</th>
+											//<th>금일 누적발전</th>totalGenPower
+
+											var statusTxt = "-";
+											var statusClass = "";
+											if (el.data[i].operation == 1) {
+												statusTxt = "정상";
+												statusClass = "flag1";
+
+												countStatus1++;
+											} else if (el.data[i].operation == 2) {
+												statusTxt = "트립";
+												statusClass = "flag2";
+
+												countStatus2++;
+											} else if (el.data[i].operation == 0) {
+												statusTxt = "중지";
+												statusClass = "flag3";
+
+												countStatus3++;
+											}
+
+											var itemDname = el.dname;
+											var itemDcPower = el.data[i].dcPower / 1000;
+											var itemAcPower = el.data[i].activePower / 1000;
+											var itemEfficiency = el.data[i].efficiency;
+											var itemTotalGenPower = el.nowEnergy / 1000;
+
+											rowHtml += ""
+												+ "<tr class='flag1'>"
+												+ "	<td>" + statusTxt + "</td>"
+												+ "	<td>" + itemDname + "</td>"
+												+ "	<td>" + (itemDcPower ? itemDcPower.toFixed(1) : "-") + " kW</td>"
+												+ "	<td>" + (itemAcPower ? itemAcPower.toFixed(1) : "-") + " kW</td>"
+												+ "	<td>" + (itemEfficiency ? itemEfficiency.toFixed(1) : "-") + " %</td>"
+												+ "	<td>" + (itemTotalGenPower ? itemTotalGenPower.toFixed(1) : "-") + "  kWh</td>"
+												+ "</tr>";
+
+											totDcPower += el.data[i].dcPower;
+											totAcPower += el.data[i].activePower;
+											totEfficiency += el.data[i].efficiency;
+											totGenPower += el.nowEnergy;
 										}
-
-										$("#invDevices").html(rowHtml);
 									}
-								</script>
-							</li>
-							<li>
-								<div class="chart_top clear">
-									<h2 class="ntit">일사량 센서(1)</h2>
-									<div class="alert_icon fr">
-										<span class="inv_normail" id="sensorNormal">정상(0)</span>
-										<span class="inv_error" id="sensorError">이상(0)</span>
-										<span class="inv_alert" id="sensorAlert">경고(0)</span>
-									</div>
+								});
+
+								$("#invCount").text("인버터(" + countDevice + ")");
+								$("#invNormal").text("정상(" + countStatus1 + ")");
+								$("#invError").text("트립(" + countStatus2 + ")");
+								$("#invAlert").text("중지(" + countStatus3 + ")");
+
+								console.log(totDcPower);
+								console.log(totAcPower);
+								console.log(totEfficiency);
+								console.log(totGenPower);
+
+								if (countDevice > 0) {
+									totDcPower = totDcPower / 1000;
+									totAcPower = totAcPower / 1000;
+									var avgEfficiency = totEfficiency / countDevice;
+									totGenPower = totGenPower / 1000;
+
+									$("#avgDcPower").text(totDcPower ? totDcPower.toFixed(1) : "-");
+									$("#avgAcPower").text(totAcPower ? totAcPower.toFixed(1) : "-");
+									$("#avgEfficiency").text(avgEfficiency ? avgEfficiency.toFixed(1) : "-");
+									$("#avgGenPower").text(totGenPower ? totGenPower.toFixed(1) : "-");
+								}
+
+								$("#invDevices").html(rowHtml);
+							}
+						</script>
+					</li>
+					<li>
+						<div class="chart_top clear">
+							<h2 class="ntit">일사량 센서(1)</h2>
+							<div class="alert_icon fr">
+								<span class="inv_normail" id="sensorNormal">정상(0)</span>
+								<span class="inv_error" id="sensorError">이상(0)</span>
+								<span class="inv_alert" id="sensorAlert">경고(0)</span>
+							</div>
+						</div>
+						<div class="type_list_detail">
+							<div class="tbl_type">
+								<table>
+									<colgroup>
+										<col style="width:33.3%">
+										<col style="width:33.3%">
+										<col style="width:33.3%">
+									</colgroup>
+									<thead>
+									<tr>
+										<th>모듈온도</th>
+										<th>경사면 일사량</th>
+										<th>수평 일사량</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td><span id="sensorTemperature">-</span>℃</td>
+										<td><span id="sensorIrradiationPoa">-</span>W/㎡</td>
+										<td><span id="sensoHorizontality">-</span>W/㎡</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="gtbl_wrap type">
+								<div class="intable">
+									<table>
+										<colgroup>
+											<col>
+											<col>
+											<col>
+											<col>
+										</colgroup>
+										<thead>
+										<tr>
+											<th>상태</th>
+											<th>설비명</th>
+											<th>모듈온도</th>
+											<th>경사면 일사량</th>
+											<th>수평 일사량</th>
+										</tr>
+										</thead>
+										<tbody id="sensorSolor">
+										</tbody>
+									</table>
 								</div>
-								<div class="type_list_detail">
-									<div class="tbl_type">
-										<table>
-											<colgroup>
-												<col style="width:33.3%">
-												<col style="width:33.3%">
-												<col style="width:33.3%">
-											</colgroup>
-											<thead>
-											<tr>
-												<th>모듈온도</th>
-												<th>경사면 일사량</th>
-												<th>수평 일사량</th>
-											</tr>
-											</thead>
-											<tbody>
-											<tr>
-												<td><span id="sensorTemperature">-</span>℃</td>
-												<td><span id="sensorIrradiationPoa">-</span>W/㎡</td>
-												<td><span id="sensoHorizontality">-</span>W/㎡</td>
-											</tr>
-											</tbody>
-										</table>
-									</div>
-									<div class="gtbl_wrap type">
-										<div class="intable">
-											<table>
-												<colgroup>
-													<col>
-													<col>
-													<col>
-													<col>
-												</colgroup>
-												<thead>
-												<tr>
-													<th>상태</th>
-													<th>설비명</th>
-													<th>모듈온도</th>
-													<th>경사면 일사량</th>
-													<th>수평 일사량</th>
-												</tr>
-												</thead>
-												<tbody id="sensorSolor">
-												</tbody>
-											</table>
-										</div>
-									</div>
-									<script type="text/javascript">
-										let sensorDeviceUrl = apiURL + apiStatusRaw;
-										let sensorDeviceData = {
-											dids: solorSensorDid.join(',')
-										};
+							</div>
+							<script type="text/javascript">
+								let sensorDeviceUrl = apiURL + apiStatusRaw;
+								let sensorDeviceData = {
+									dids: solorSensorDid.join(',')
+								};
 
-										(function sensorDevicePoll() {
-											$.ajax({
-												url: sensorDeviceUrl,
-												type: "get",
-												async: false,
-												data: sensorDeviceData,
-												success: function (result) {
-													var items = result;
-													setSensorDeviceData(items);
-												},
-												dataType: "json",
-												complete: setTimeout(function () {
-													sensorDevicePoll()
-												}, pollingTerm),
-												timeout: pollingTimeout
-											})
-										})();
+								(function sensorDevicePoll() {
+									$.ajax({
+										url: sensorDeviceUrl,
+										type: "get",
+										async: false,
+										data: sensorDeviceData,
+										success: function (result) {
+											var items = result;
+											setSensorDeviceData(items);
+										},
+										dataType: "json",
+										complete: setTimeout(function () {
+											sensorDevicePoll()
+										}, pollingTerm),
+										timeout: pollingTimeout
+									})
+								})();
 
 
-										function setSensorDeviceData(items) {
-											var rowHtml = "";
-											var countStatus1 = 0;
-											var countStatus2 = 0;
-											var countStatus3 = 0;
+								function setSensorDeviceData(items) {
+									var rowHtml = "";
+									var countStatus1 = 0;
+									var countStatus2 = 0;
+									var countStatus3 = 0;
 
-											let temperature = 0;
-											let irradiationPoa = 0;
+									let temperature = 0;
+									let irradiationPoa = 0;
 
-											$.each(items, function (i, el) {
-												var statusTxt = "-";
-												var statusClass = "";
-												if (el.data[0].operation == 1) {
-													statusTxt = "정상";
-													statusClass = "flag1";
+									$.each(items, function (i, el) {
+										var statusTxt = "-";
+										var statusClass = "";
+										if (el.data[0].operation == 1) {
+											statusTxt = "정상";
+											statusClass = "flag1";
 
-													countStatus1++;
-												} else if (el.data[0].operation == 2) {
-													statusTxt = "트립";
-													statusClass = "flag2";
+											countStatus1++;
+										} else if (el.data[0].operation == 2) {
+											statusTxt = "트립";
+											statusClass = "flag2";
 
-													countStatus2++;
-												} else if (el.data[0].operation == 0) {
-													statusTxt = "중지";
-													statusClass = "flag3";
+											countStatus2++;
+										} else if (el.data[0].operation == 0) {
+											statusTxt = "중지";
+											statusClass = "flag3";
 
-													countStatus3++;
-												}
-												temperature += el.data[0].temperature;
-												irradiationPoa += el.data[0].irradiationPoa;
-
-												rowHtml += ""
-													+ "<tr class='flag1'>"
-													+ "	<td>" + statusTxt + "</td>"
-													+ "	<td>" + el.dname + "</td>"
-													+ "	<td>" + (temperature ? temperature.toFixed(1) : "-") + " ℃</td>"
-													+ "	<td>" + (irradiationPoa ? irradiationPoa.toFixed(1) : "-") + " W/㎡</td>"
-													+ "	<td></td>"
-													+ "</tr>";
-											});
-
-											$('#sensorNormal').text('정상(' + countStatus1 + ')');
-											$('#sensorError').text('트립(' + countStatus2 + ')');
-											$('#sensorAlert').text('중지(' + countStatus3 + ')');
-
-											$('#sensorTemperature').text((temperature ? (temperature).toFixed(1) : "-"));
-											$('#sensorIrradiationPoa').text((irradiationPoa ? (irradiationPoa).toFixed(1) : "-"));
-
-											$("#sensorSolor").html(rowHtml);
+											countStatus3++;
 										}
-									</script>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
+										temperature += el.data[0].temperature;
+										irradiationPoa += el.data[0].irradiationPoa;
+
+										rowHtml += ""
+											+ "<tr class='flag1'>"
+											+ "	<td>" + statusTxt + "</td>"
+											+ "	<td>" + el.dname + "</td>"
+											+ "	<td>" + (temperature ? temperature.toFixed(1) : "-") + " ℃</td>"
+											+ "	<td>" + (irradiationPoa ? irradiationPoa.toFixed(1) : "-") + " W/㎡</td>"
+											+ "	<td></td>"
+											+ "</tr>";
+									});
+
+									$('#sensorNormal').text('정상(' + countStatus1 + ')');
+									$('#sensorError').text('트립(' + countStatus2 + ')');
+									$('#sensorAlert').text('중지(' + countStatus3 + ')');
+
+									$('#sensorTemperature').text((temperature ? (temperature).toFixed(1) : "-"));
+									$('#sensorIrradiationPoa').text((irradiationPoa ? (irradiationPoa).toFixed(1) : "-"));
+
+									$("#sensorSolor").html(rowHtml);
+								}
+							</script>
+						</div>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</div>

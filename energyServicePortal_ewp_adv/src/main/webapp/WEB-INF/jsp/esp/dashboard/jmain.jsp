@@ -33,7 +33,6 @@
 				<div id="monthlyChart"></div>
 			</div>
 		</div>
-
 		<div class="indiv gmain_chart gmain_chart2">
 			<div class="chart_top clear">
 				<h2 class="ntit">일간</h2>
@@ -43,7 +42,6 @@
 				<div id="dailyChart"></div>
 			</div>
 		</div>
-
 		<div class="indiv gmain_chart gmain_chart3">
 			<div class="chart_top clear">
 				<h2 class="ntit">전일</h2>
@@ -174,7 +172,7 @@
 		</div>
 	</div>
 	<div class="col-xl-4 col-lg-12 col-md-12 col-sm-12">
-		<div class="indiv gmain_alarm wrap_type">
+		<div class="indiv jmain_alarm wrap_type">
 			<div class="alarm_stat clear">
 				<div class="a_alert clear">
 					<span>금일 발생 오류</span>
@@ -195,13 +193,13 @@
 				</ul>
 			</div>
 		</div>
-		<div class="indiv gmain_table">
+		<div class="indiv gmain_table jmain_table">
 			<div class="gtbl_top clear">
-				<div class="fl">
+				<div class="input_group1">
 					<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색">
 					<button type="button" onclick="searchSite();">적용</button>
 				</div>
-				<div class="fr">
+				<div class="input_group2">
 					<span class="tx_tit">설비 상태</span>
 					<div class="sa_select">
 						<div class="dropdown" id="deviceStatus">
@@ -378,15 +376,16 @@
 	const sgid = '<c:out value="${sgid}" escapeXml="false" />';
 	const today = new Date();
 
-	$(function () {
-		setInitList('alarmNotice'); //알람 공지 세팅
-		setInitList('siteList'); //사이트 리스트
+	let actualCount = 0;
+	let forecastCount = 0;
 
-		fn_cycle_1hour();
-		fn_cycle_1min();
-		setInterval(() => fn_cycle_1hour(), 60 * 60 * 1000);
-		setInterval(() => fn_cycle_1min(), 60 * 1000);
-	});
+	let foreCastHourCount = 0;
+	let foreCastDayCount = 0;
+	let nowHour = false;
+	let nowDay = false;
+
+	let pvListHourly = new Array();
+	let pvListForecastingHourly = new Array();
 
 	function fn_cycle_1hour() {
 		getYearGenData();
@@ -423,16 +422,6 @@
 		}
 	}
 
-	let actualCount = 0;
-	let forecastCount = 0;
-
-	let foreCastHourCount = 0;
-	let foreCastDayCount = 0;
-	let nowHour = false;
-	let nowDay = false;
-
-	let pvListHourly = new Array();
-	let pvListForecastingHourly = new Array();
 	const realtimeRecord = () => {
 		const formDataHour = getSiteMainSchCollection('hour');
 		const formDataDay = getSiteMainSchCollection('day');
@@ -466,29 +455,6 @@
 					if (e.energy) {
 						const hour = Number(e.basetime.toString().slice(8, 10));
 						pvListHourly[hour] += Math.floor(e.energy / 1000);
-					}
-				});
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.error(jqXHR);
-				console.error(textStatus);
-				console.error(errorThrown);
-			}).always(function (jqXHR, textStatus) {
-				setRealtimeRecord('actual');
-			});
-
-			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/energy/forecasting/sites',
-				type: 'get',
-				data: {
-					sid: site.sid,
-					startTime: formDataDay.startTime,
-					endTime: formDataDay.endTime,
-					interval: 'hour'
-				},
-			}).done(function (data, textStatus, jqXHR) {
-				data.data[0].generation.items.map((e) => {
-					if (e.energy) {
-						const hour = Number(e.basetime.toString().slice(8, 10));
 						pvListForecastingHourly[hour] += Math.floor(e.energy / 1000);
 					}
 				});
@@ -497,6 +463,7 @@
 				console.error(textStatus);
 				console.error(errorThrown);
 			}).always(function (jqXHR, textStatus) {
+				setRealtimeRecord('actual');
 				setRealtimeRecord('forecast');
 			});
 
@@ -511,7 +478,10 @@
 					interval: 'hour'
 				},
 			}).done(function (data, textStatus, jqXHR) {
-				siteList[siteIdx].hourForecastingGenBySite = Math.floor(data.data[0].generation.items[0].energy / 1000);
+				if(data.data[0].generation.items[0]) {
+					siteList[siteIdx].hourForecastingGenBySite = Math.floor(data.data[0].generation.items[0].energy / 1000);
+					console.log("data===", data.data[0].generation.items[0])
+				}
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.error(jqXHR);
 				console.error(textStatus);
@@ -1305,6 +1275,17 @@
 			}]
 		}
 
+	});
+
+
+	$(function () {
+		setInitList('alarmNotice'); //알람 공지 세팅
+		setInitList('siteList'); //사이트 리스트
+
+		fn_cycle_1hour();
+		fn_cycle_1min();
+		setInterval(() => fn_cycle_1hour(), 60 * 60 * 1000);
+		setInterval(() => fn_cycle_1min(), 60 * 1000);
 	});
 </script>
 
