@@ -821,8 +821,8 @@
 				};
 
 				if (result.manager == null) {
-					confirmData.createuser = '';
-					confirmData.userName = '';
+					confirmData.createuser = 'spadmin';
+					confirmData.userName = 'S-POWER';
 				} else {
 					confirmData.createuser = result.manager.split(',')[1];
 					confirmData.userName = result.manager.split(',')[0];
@@ -877,38 +877,41 @@
 			success: function (result) {
 				let data = result.data[0];
 
-				if (data.pic_file_link != '') {
+				if(data.pic_file_link != '') {
 					ticketFileList = JSON.parse(data.pic_file_link);
 				}
 
-				if (data.ticket_log != '') {
+				if(!isEmpty(data.ticket_log)) {
 					ticketLogList = JSON.parse(data.ticket_log);
+					
+					$.each(ticketLogList, function (i, el) {
+						let memoDate = '';
+						if (typeof (el.memo_dt) == 'number') {
+							memoDate = dateFormat(String(el.memo_dt));
+						} else {
+							memoDate = new Date(el.memo_dt).format('yyyy-MM-dd hh:mm:ss');
+						}
+
+						let textStr = '';
+						textStr += '----------------------------------------------\r\n';
+						if(isEmpty(el.createperson_at_memo)) {
+							textStr += '[ ' + memoDate + ' ] by [ ' + loginName + '(' + loginId + ')' + ' ]\r\n';
+						} else {
+							textStr += '[ ' + memoDate + ' ] by [ ' + el.createperson_at_memo + ' ]\r\n';
+						}
+						if(el.memo.trim() != '미확인 -> 확인으로 처리') {
+							textStr += '조치 상태 : ' + statusTemplate[el.status_at_memo] + ', 담당자 : ' + el.person_at_memo + '\r\n';
+						}
+						textStr += '메모 : ' + el.memo + '\r\n';
+						if (!isEmpty(el.file_at_memo)) {
+							textStr += '사진 : ' + el.file_at_memo + '\r\n';
+						}
+						$('#ticket_log').append(textStr);
+					});
+
+				}else{
+					ticketLogList = [];
 				}
-
-				$.each(ticketLogList, function (i, el) {
-					let memoDate = '';
-					if (typeof (el.memo_dt) == 'number') {
-						memoDate = dateFormat(String(el.memo_dt));
-					} else {
-						memoDate = new Date(el.memo_dt).format('yyyy-MM-dd');
-					}
-
-					let textStr = '';
-					textStr += '----------------------------------------------\r\n';
-					if(isEmpty(el.createperson_at_memo)) {
-						textStr += '[ ' + memoDate + ' ] by [ ' + loginName + '(' + loginId + ')' + ' ]\r\n';
-					} else {
-						textStr += '[ ' + memoDate + ' ] by [ ' + el.createperson_at_memo + ' ]\r\n';
-					}
-					if(el.memo.trim() != '미확인 -> 확인으로 처리') {
-						textStr += '조치 상태 : ' + statusTemplate[el.status_at_memo] + ', 담당자 : ' + el.person_at_memo + '\r\n';
-					}
-					textStr += '메모 : ' + el.memo + '\r\n';
-					if (!isEmpty(el.file_at_memo)) {
-						textStr += '사진 : ' + el.file_at_memo + '\r\n';
-					}
-					$('#ticket_log').append(textStr);
-				})
 
 				$.each(ticketFileList, function (i, el) {
 					let liStr = '';
@@ -1019,7 +1022,9 @@
 
 			if (alarmData.ticket_status == '' || alarmData.ticket_user_id == '') {
 				alert('알람상태와 회원 아이디를 꼭 입력해주세요');
-			} else {
+			}else if(alarmData.ticket_log == ''){
+				return false;	
+			}else {
 				$.ajax({
 					url: 'http://iderms.enertalk.com:8443/alarm_ticket?oid=' + oid + '&alarm_id=' + $('#alarmMeasure').data('value'),
 					dataType: 'json',
@@ -1077,36 +1082,41 @@
 				createperson_at_memo: loginName + ' ( ' + loginId + ' )',
 				file_at_memo: fileMemo
 			});
+			
+			if(!isEmpty(ticketLogList)){							
 
-			let upAlarmData = {
-				alarm_confirmed_at: new Date().toISOString(),
-				alarm_confirmed_by: loginId,
-				ticket_status: $('#ticket_status button').data('value'),
-				ticket_user_id: ticketUserId,
-				ticket_person: ticketPerson,
-				pic_file_link: pic_file_link,
-				ticket_log: JSON.stringify(ticketLogList),
-				updated_by: loginId
+				let upAlarmData = {
+						alarm_confirmed_at: new Date().toISOString(),
+						alarm_confirmed_by: loginId,
+						ticket_status: $('#ticket_status button').data('value'),
+						ticket_user_id: ticketUserId,
+						ticket_person: ticketPerson,
+						pic_file_link: pic_file_link,
+						ticket_log: JSON.stringify(ticketLogList),
+						updated_by: loginId
+					}
+
+					$.ajax({
+						url: 'http://iderms.enertalk.com:8443/alarm_ticket/' + ticketId + '?oid=' + oid,
+						dataType: 'json',
+						type: 'patch',
+						async: false,
+						contentType: 'application/json',
+						data: JSON.stringify(upAlarmData),
+						success: function (result) {
+							console.log(result)
+							alert('저장에 성공했습니다.');
+							$('#alarmMeasure').modal('hide');
+							periodData();
+						},
+						error: function (error) {
+							console.error(error);
+							ticketLogList.splice(ticketLogList.length - 1, 1);
+						}
+					});
+			}else{
+				return false;
 			}
-
-			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/alarm_ticket/' + ticketId + '?oid=' + oid,
-				dataType: 'json',
-				type: 'patch',
-				async: false,
-				contentType: 'application/json',
-				data: JSON.stringify(upAlarmData),
-				success: function (result) {
-					console.log(result)
-					alert('저장에 성공했습니다.');
-					$('#alarmMeasure').modal('hide');
-					periodData();
-				},
-				error: function (error) {
-					console.error(error);
-					ticketLogList.splice(ticketLogList.length - 1, 1);
-				}
-			});
 		}
 	}
 
