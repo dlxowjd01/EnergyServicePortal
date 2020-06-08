@@ -1752,8 +1752,8 @@ const searchSite = function () {
 
 	setTimeout(function () {
 		refineList.forEach((site, siteIdx) => {
-			let capacity = site.capacity == '-' ? 0 : Number(site.capacity.replace(/[^0-9]/g, ''));
-			let activePower = site.activePower == '-' ? 0 : Number(site.activePower.replace(/[^0-9]/g, ''));
+			let capacity = (site.capacity == '-' || site.capacity == 0) ? 0 : Number(site.capacity.replace(/[^0-9]/g, ''));
+			let activePower = (site.activePower == '-' || site.activePower == 0) ? 0 : Number(site.activePower.replace(/[^0-9]/g, ''));
 
 			let activePercent = Math.floor((activePower / capacity) * 100);
 			let title = activePercent + '%';

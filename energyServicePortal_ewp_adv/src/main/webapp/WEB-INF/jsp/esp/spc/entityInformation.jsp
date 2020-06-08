@@ -145,7 +145,9 @@
 			return;
 		}
 
-		if(!confirm(count + '건을 삭제하시겠습니까?')) {
+		let delPrompt = prompt(count + '건을 삭제하시겠습니까? \n삭제를 원하시면 아래 "삭제"라고 입력하고 확인을 눌러 주세요.', '');
+
+		if(delPrompt != '삭제') {
 			return;
 		}
 

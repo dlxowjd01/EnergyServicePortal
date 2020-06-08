@@ -557,7 +557,7 @@
 				</table>
 			</div>
 			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" onclick="setCheckedDataEdit();">선택 수정</button>
+				<button type="button" class="btn_type03" onclick="setCheckedDataEdit();">수정</button>
 				<button type="button" class="btn_type03" onclick="goMoveList();">목록</button>
 			</div>
 		</div>
