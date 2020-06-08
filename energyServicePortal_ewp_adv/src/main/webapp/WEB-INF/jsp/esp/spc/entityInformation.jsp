@@ -139,6 +139,10 @@
 			return;
 		}
 
+		if(!confirm(count + '건을 삭제하시겠습니까?')) {
+			return;
+		}
+
 		for(var i = 0; i < count; i++){
 			var rowData = checkDataList[i];
 			$.ajax({
@@ -250,7 +254,7 @@
 				</table>
 			</div>
 			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" onclick="setCheckedDataEdit();">선택 수정</button>
+<%--				<button type="button" class="btn_type03" onclick="setCheckedDataEdit();">선택 수정</button>--%>
 				<button type="button" class="btn_type03" onclick="setCheckedDataRemove();">선택 삭제</button>
 			</div>
 			<div class="paging_wrap">
