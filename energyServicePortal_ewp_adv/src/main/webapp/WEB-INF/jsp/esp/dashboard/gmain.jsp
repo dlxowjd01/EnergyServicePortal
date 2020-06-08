@@ -185,16 +185,16 @@
 		</div>
 		<div class="gmain_row2">
 			<div class="indiv gmain_table">
-				<div class="w-35 gmain_map2">
+				<div class="gmain_map2">
 					<div class="map_wrap" id="gMainMap"></div>
 				</div>
-				<div class="w-62">
+				<div class="gmain_map2_content">
 					<div class="gtbl_top clear">
-						<div class="fl">
+						<div class="input_group1">
 							<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색">
 							<button type="button" onclick="searchSite();">적용</button>
 						</div>
-						<div class="fr">
+						<div class="input_group2">
 							<span class="tx_tit">설비 상태</span>
 							<div class="sa_select">
 								<div class="dropdown" id="deviceStatus">

@@ -614,6 +614,7 @@
 										} else if($(':radio[name="radio_t"]:checked').val() == 2) { //발전량
 											let today = new Date();
 											let lastDate = new Date(today.getFullYear(), dataMonth, 0).format('dd');
+											
 											if(today.getMonth() == (Number(dataMonth) -1)) {
 												lastDate = today.getDate();
 											}

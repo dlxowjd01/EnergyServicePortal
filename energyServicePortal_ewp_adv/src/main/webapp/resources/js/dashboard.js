@@ -1343,6 +1343,7 @@ var pieChart = Highcharts.chart('pie_chart', {
 		backgroundColor: 'transparent',
 		plotBorderWidth: 0,
 		plotShadow: false,
+		height: 180
 	},
 
 	navigation: {
@@ -1356,7 +1357,7 @@ var pieChart = Highcharts.chart('pie_chart', {
 		align: 'center',
 		verticalAlign: 'middle',
 		y: 10,
-		x: -20,
+		x: 0,
 		style: {
 			fontSize: '14px',
 			color: 'var(--color4)'
@@ -1420,28 +1421,12 @@ var pieChart = Highcharts.chart('pie_chart', {
 			y: 20 //20% 나머지
 		}]
 	}],
-
 	responsive: { // 반응형
 		rules: [{
 			condition: {
-				minWidth: 305
+				maxWidth: 768
 			},
 			chartOptions: {
-				title: {
-					x: -30,
-					style: {
-						fontSize: '16px',
-					}
-				}
-			}
-		}, {
-			condition: {
-				maxWidth: 481
-			},
-			chartOptions: {
-				title: {
-					x: 0
-				},
 				plotOptions: {
 					pie: {
 						center: ['50%', '50%']
@@ -1812,20 +1797,21 @@ const searchSite = function () {
  */
 const siteListChart = function (selector, seriesData, title) {
 	let chartSelector = $('#' + selector).highcharts();
-
 	if (chartSelector) {
 		chartSelector.destroy();
 	}
 
 	let option = {
 		chart: {
-			marginTop: 20,
+			marginTop: -50,
 			marginLeft: 0,
 			marginRight: 0,
+			// marginBottom: 20,
 			backgroundColor: 'transparent',
 			renderTo: selector,
 			plotBorderWidth: 0,
-			plotShadow: false
+			plotShadow: false,
+			// height: 190
 		},
 		navigation: {
 			buttonOptions: {
@@ -1836,8 +1822,9 @@ const siteListChart = function (selector, seriesData, title) {
 			text: title, // %표기
 			align: 'center',
 			verticalAlign: 'middle',
-			y: 32,
-			x: 0,
+			// x: 0,
+			// y: 32,
+			// y: 200,
 			style: {
 				fontSize: '14px',
 				color: 'var(--color4)'
@@ -1864,7 +1851,7 @@ const siteListChart = function (selector, seriesData, title) {
 				},
 				startAngle: -90,
 				endAngle: 90,
-				center: ['50%', '100%'],
+				center: ['50%', '72%'],
 				borderWidth: 0,
 				size: '100%'
 			}
@@ -1874,83 +1861,11 @@ const siteListChart = function (selector, seriesData, title) {
 			rules: [
 				{
 					condition: {
-						maxWidth: 1919,
-						minWidth: 1200
+						maxWidth: 992,
 					},
-					chartOptions: {
-						title: {
-							x: 0,
-							y: 60,
-							style: {
-								fontSize: '12px',
-							}
-						},
-						plotOptions: {
-							pie: {
-								dataLabels: {
-									style: {
-										fontWeight: 'bold',
-										color: 'var(--color3)'
-									}
-								},
-								center: ['50%', '100%'],
-								size: '100%'
-							}
-						}
-					}
-				},
-				{
-					condition: {
-						maxWidth: 1199,
-						minWidth: 768
-					},
-					chartOptions: {
-						title: {
-							x: 0,
-							y: 60,
-							style: {
-								fontSize: '12px',
-							}
-						},
-						plotOptions: {
-							pie: {
-								dataLabels: {
-									style: {
-										fontWeight: 'bold',
-										color: 'var(--color3)'
-									}
-								},
-								center: ['50%', '100%'],
-								size: '100%'
-							}
-						}
-					}
-				},
-				{
-					condition: {
-						maxWidth: 767,
-						minWidth: 320
-					},
-					chartOptions: {
-						title: {
-							x: 0,
-							y: 10,
-							style: {
-								fontSize: '12px',
-							}
-						},
-						plotOptions: {
-							pie: {
-								dataLabels: {
-									style: {
-										fontWeight: 'bold',
-										color: 'var(--color3)'
-									}
-								},
-								center: ['50%', '50%'],
-								size: '100%'
-							}
-						}
+					chart: {
+						marginTop: -20,
+						// marginBottom: -90
 					}
 				}
 			]

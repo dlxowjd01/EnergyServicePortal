@@ -51,12 +51,7 @@
 					</div>
 					<div class="input-group">
 						<label for="siteName" class="input-name">시리얼 번호</label>
-						<div id="serialNum" class="dropdown">
-							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-								선택해주세요.<span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu dropdown-menu-form chk_type"></ul>
-						</div>
+						<input type="text" name="serialNum" id="serialNum" class="input">
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -376,7 +371,8 @@
 			const now = new Date();
 			const nowLocal = now.format("yyyyMMddhhmmss");
 			const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours()-1, now.getMinutes(), now.getSeconds()).format("yyyyMMddhhmmss");
-
+			const searchFilter = JSON.stringify({ "include": [{ "relation": "rtus" }] });
+			
 			function selectLog(rids, startTime, endTime, limit=5, page=1){
 				const now = new Date();
 				const nowLocal = now.format("yyyyMMddhhmmss");
@@ -427,6 +423,7 @@
 				async: false,
 				data: {
 					oid,
+					filter : JSON.stringify({ "include": [{ "relation": "rtus" }] })
 				},
 				success: function (sites) {
 					const siteSum = $('#siteSummary');
@@ -441,6 +438,7 @@
 
 					let str = ``;
 					let newList = ``;
+					console.log("sites----", sites)
 					sites.forEach((site, siteIdx) =>{
 						newList = `
 							<li>
