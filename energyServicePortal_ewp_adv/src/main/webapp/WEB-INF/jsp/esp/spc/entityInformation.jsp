@@ -31,6 +31,12 @@
 		setInitList("listData"); //리스트초기화
 		getDataList();
 	});
+	
+	$(document).on('keyup', '#key_word', function(e){
+		if(e.keyCode == 13){
+			getDataList();
+		}
+	})
 
 	function nvl(value, str){
 		if(isEmpty(value)){
@@ -48,9 +54,9 @@
 	}
 
 	function jsonDataFilter(jsonData){
-		var keyWord = $("#key_word").val(), bResult = false;
+		var keyWord = $("#key_word").val().trim().toLowerCase(), bResult = false;
 
-		if(jsonData["name"].indexOf(keyWord) > -1 || jsonData["발전소_명"] .indexOf(keyWord) > - 1){
+		if(jsonData["name"].toLowerCase().indexOf(keyWord) > -1 || jsonData["발전소_명"].toLowerCase().indexOf(keyWord) > - 1){
 			bResult = true;
 		}
 

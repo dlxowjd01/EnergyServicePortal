@@ -21,6 +21,12 @@
 		});
 	});
 
+	$(document).on('keyup', '#key_word', function(e){
+		if(e.keyCode == 13){
+			getDataList();
+		}
+	})
+	
 	function nvl(value, str){
 		if(isEmpty(value)){
 			return str;
@@ -47,7 +53,7 @@
 			},
 			success: function (result) {
 				var jsonList = [],
-					keyWord = $("#key_word").val();
+					keyWord = $("#key_word").val().trim().toLowerCase();
 
 				for(var i in result.data) {
 					var temp = result.data[i], balance_info = JSON.parse(temp.balance_info);
@@ -61,7 +67,7 @@
 							result.data[i].name = siteList[j].name;
 						}
 					}
-					if(result.data[i].name.indexOf(keyWord) > -1 || result.data[i].spc_name.indexOf(keyWord) > - 1){
+					if(result.data[i].name.toLowerCase().indexOf(keyWord) > -1 || result.data[i].spc_name.toLowerCase().indexOf(keyWord) > - 1){
 						jsonList.push(result.data[i]);
                     }		
 				}

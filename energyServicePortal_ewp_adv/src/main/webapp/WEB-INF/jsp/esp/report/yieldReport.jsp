@@ -110,6 +110,12 @@
 		});
 	}
 
+	$(document).on('keyup', '#key_word', function(e){
+		if(e.keyCode == 13){
+			getDataList();
+		}
+	})
+	
 	const modalInit = function () {
 		callAjax({
 			url: 'http://iderms.enertalk.com:8443/spcs',
@@ -265,32 +271,12 @@
 	}
 
 	function jsonDataFilter(jsonData){
-		var keyWord = $('#key_word').val(), 
-// 		selectYear = $("#year button").text(),
-// 		selectMonth = $("#month button").text(),
-// 		bWriteDate = false,
-// 		bKeyWord = false,
+		var keyWord = $('#key_word').val().trim().toLowerCase(), 
 		bResult = false;
-// 		let jsonDataYear = jsonData.report_date.substring(0, 4);
-// 		let jsonDataMonth = jsonData.report_date.substring(5, 7);
 		
-// 		if(selectYear == "" && selectMonth == ""){
-// 			bWriteDate = true;	
-// 		}else{
-// 			if(selectYear == jsonDataYear || selectMonth == jsonDataMonth){
-// 				bWriteDate = true;
-// 			}else{
-// 				bWriteDate = false;
-// 			}			
-// 		}
-		
-		if(jsonData['site_name'].indexOf(keyWord) > -1 || jsonData['spc_name'].indexOf(keyWord) > -1 || jsonData['updated_by'].indexOf(keyWord) > -1){			
+		if(jsonData['site_name'].toLowerCase().indexOf(keyWord) > -1 || jsonData['spc_name'].toLowerCase().indexOf(keyWord) > -1 || jsonData['updated_by'].toLowerCase().indexOf(keyWord) > -1){			
 			bResult = true;
 		}
-		
-// 		if(bWriteDate && bKeyWord){
-// 			bResult = true;	
-// 		}
 		
 		return bResult;
 	}

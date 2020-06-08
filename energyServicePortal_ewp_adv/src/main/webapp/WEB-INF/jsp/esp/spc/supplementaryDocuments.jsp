@@ -22,7 +22,13 @@
 		
 		
 	});
-
+	
+	$(document).on('keyup', '#key_word', function(e){
+		if(e.keyCode == 13){
+			getDataList();
+		}
+	})
+	
 	function nvl(value, str){
 		if(isEmpty(value)){
 			return str;
@@ -46,7 +52,7 @@
 			data: {"oid": oid, includeGens: true},
 			success: function (result) {
 				var jsonList = [],
-					keyWord = $("#key_word").val();
+					keyWord = $("#key_word").val().trim().toLowerCase();
 
 				for(var i = 0, count = result.data.length; i < count; i++){
 
@@ -69,9 +75,15 @@
 								contentType: "application/json",
 								success: function (json) {
 									
-									newData["파일_총_개수"] = json.data[0].file_count_all;
-									newData["파일_현재_개수"] = json.data[0].file_count_now;
-									newData["첨부파일"] = json.data[0].file_count_now;
+									if(isEmpty(json.data[0])){
+										newData["파일_총_개수"] = '-';
+										newData["파일_현재_개수"] = '-';
+										newData["첨부파일"] = '-';
+									}else{
+										newData["파일_총_개수"] = json.data[0].file_count_all;
+										newData["파일_현재_개수"] = json.data[0].file_count_now;
+										newData["첨부파일"] = json.data[0].file_count_now;
+									}
 									
 								},
 								error: function (request, status, error) {
@@ -88,7 +100,7 @@
 							newData["관리_운영_기간"] = nvl(contractInfo["관리_운영_기간"], "-");
 							newData["설치_용량"] = nvl(contractInfo["설치_용량"], "-");
 							//키워드 검색 조건 필터 처리
-							if(newData["name"].indexOf(keyWord) > -1 || newData["발전소_명"] .indexOf(keyWord) > - 1){
+							if(newData["name"].toLowerCase().indexOf(keyWord) > -1 || newData["발전소_명"].toLowerCase().indexOf(keyWord) > -1){
 								jsonList.push(newData)
 							}
 						}
