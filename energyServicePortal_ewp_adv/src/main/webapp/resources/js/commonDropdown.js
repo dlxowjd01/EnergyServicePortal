@@ -7,51 +7,35 @@
 //드롭 다운 공통 동작 작업 -- 디스에이블이 아닌 항목에 대해서 작동함.
 $(document).on('click', '.dropdown-menu li:not(.disabled, .dropdown_cov)', function (e) {
 	e.preventDefault(); //다른 드롭 다운 동작 막기
-	let $selecter = $(this),
-		$dropdown = $selecter.closest('.dropdown'),
+	let $selector = $(this),
+		$dropdown = $selector.closest('.dropdown'),
 		$dropdownId = $dropdown.prop('id'),
-		$displayButton = $dropdown.find('button'),
-		$displayData = '',
-		$displayText = '';
+		$displayButton = $dropdown.find('button');
 
-	if ($selecter.find(':radio').length > 0) {
-		let $radio = $(this).find(':radio');
-		$radio.prop('checked', true);
-		$displayText = $dropdown.find('input[type="radio"]:checked').next().text();
-	} else if ($selecter.find(':checkbox').length > 0) {
-		let $checkbox = $(this).find(':checkbox');
-		if($checkbox.prop('checked')) {
-			$checkbox.prop('checked', false);
+	if ($selector.find(':radio').length > 0) {
+		$selector.find(':radio').prop('checked', true);
+	} else if ($selector.find(':checkbox').length > 0) {
+		if($selector.find(':checkbox').prop('checked')) {
+			$selector.find(':checkbox').prop('checked', false);
 		} else {
-			$checkbox.prop('checked', true);
+			$selector.find(':checkbox').prop('checked', true);
 		}
-
-		let checkedboxLength = $dropdown.find('input[type="checkbox"]:checked').length;
-		let checkboxLength = $dropdown.find('input[type="checkbox"]').length;
-
-		if(checkedboxLength == checkboxLength) {
-			$displayText = '전체';
-		} else {
-			if(checkedboxLength > 1) {
-				$displayText = $dropdown.find('input[type="checkbox"]:checked:eq(0)').next().text() + '외 ' + (checkedboxLength - 1) + '개';
-			} else if(checkedboxLength == 0) {
-				$displayText = $displayButton.data('name');
-			} else {
-				$displayText = $dropdown.find('input[type="checkbox"]:checked:eq(0)').next().text();
-			}
-		}
-	} else {
-		$displayData = $selecter.data();
-		$displayText = $selecter.text();
 	}
 
-	$displayButton.eq(0).html($displayText + '<span class="caret"></span>').data('value', $displayData);
+	if ($selector.find(':radio').length > 0 || $selector.find(':checkbox').length > 0) {
+		displayDropdown($dropdown);
+	} else {
+		let $displayData = $selector.data();
+		let $displayText = $selector.text();
 
-	//data Setting
-	if(!isEmpty($displayData)) {
-		$.map($displayData, function(val, key) {
-			$displayButton.data(key, val);
-		});
+		$displayButton.eq(0).html($displayText + '<span class="caret"></span>');
+
+		//data Setting
+		if(!isEmpty($displayData)) {
+			$.map($displayData, function(val, key) {
+				$displayButton.data(key, val);
+			});
+		}
 	}
 
 
@@ -59,3 +43,37 @@ $(document).on('click', '.dropdown-menu li:not(.disabled, .dropdown_cov)', funct
 		rtnDropdown($dropdownId);
 	}
 });
+
+const displayDropdown = ($selector) => {
+	let $displayButton = $selector.find('button'),
+		$displayData = '',
+		$displayText = '';
+
+	if ($selector.find(':radio').length > 0) {
+		$displayText = $selector.find('input[type="radio"]:checked').next().text();
+	} else if ($selector.find(':checkbox').length > 0) {
+		let checkedboxLength = $selector.find('input[type="checkbox"]:checked').length;
+		let checkboxLength = $selector.find('input[type="checkbox"]').length;
+
+		if(checkedboxLength == checkboxLength) {
+			$displayText = '전체';
+		} else {
+			if(checkedboxLength > 1) {
+				$displayText = $selector.find('input[type="checkbox"]:checked:eq(0)').next().text() + '외 ' + (checkedboxLength - 1) + '개';
+			} else if(checkedboxLength == 0) {
+				$displayText = $displayButton.data('name');
+			} else {
+				$displayText = $selector.find('input[type="checkbox"]:checked:eq(0)').next().text();
+			}
+		}
+	}
+
+	$displayButton.eq(0).html($displayText + '<span class="caret"></span>');
+
+	//data Setting
+	if(!isEmpty($displayData)) {
+		$.map($displayData, function(val, key) {
+			$displayButton.data(key, val);
+		});
+	}
+}
