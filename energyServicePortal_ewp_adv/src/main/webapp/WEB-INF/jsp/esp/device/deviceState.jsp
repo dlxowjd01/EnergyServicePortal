@@ -148,11 +148,7 @@
                     });
                 }
 
-<<<<<<< HEAD
                 var $eqListDiv = $(".row.scroll").find(".col-lg-12");
-=======
-                var $eqListDiv = $(".content-wrapper.scroll");
->>>>>>> 6c076d5f1067cd6f5fb49ab556228fffe17a86df
                 $eqListDiv.empty();
 
                 myMap.forEach(function(value, key) {
@@ -230,11 +226,7 @@
 
                     let liStr = "";
                     liStr += '<div class="row">';
-<<<<<<< HEAD
                     liStr += '<div class="col-lg-8">';
-=======
-                    liStr += '<div class="col-xl-8 col-md-9 col-sm-12">';
->>>>>>> 6c076d5f1067cd6f5fb49ab556228fffe17a86df
                     liStr += '<div class="indiv clear">';
                     liStr += '	<div class="chart_top clear">';
                     liStr += '		<h2 class="ntit fl">' + deviceTypeName + '</h2>';
@@ -257,11 +249,7 @@
                     liStr += '</div>';
 
                     // 상세조회 영역
-<<<<<<< HEAD
                     liStr += '<div class="col-lg-4" data-dvType="' + deviceType + '">';
-=======
-                    liStr += '<div class="col-xl-4 col-md-3 col-sm-12" data-dvType="' + deviceType + '">';
->>>>>>> 6c076d5f1067cd6f5fb49ab556228fffe17a86df
                     liStr += '	<div class="indiv eq_card">';
                     liStr += '		<div class="chart_top clear">';
                     liStr += '			<h2 class="ntit fl">&nbsp;</h2>';
@@ -377,11 +365,7 @@
         <script type="text/javascript">
             $(function() {
                 // 사업소 선택
-<<<<<<< HEAD
                 $("#site_list1 ul li").on("click", function(e) {
-=======
-                $("#site_list_id ul li").on("click", function(e) {
->>>>>>> 6c076d5f1067cd6f5fb49ab556228fffe17a86df
                     var $this = $(this);
                     var site_name = $this.text();
                     // 				if(site_name == "전체") {
@@ -599,7 +583,6 @@
                 </div>
             </div>
         </div>
-<<<<<<< HEAD
         <div class="row scroll">
             <div class="col-lg-12">
                 <div class="row">
@@ -725,9 +708,6 @@
                     </div>
                 </div>
             </div>
-=======
-        <div class="content-wrapper scroll">
->>>>>>> 6c076d5f1067cd6f5fb49ab556228fffe17a86df
         </div>
 
         <script>
