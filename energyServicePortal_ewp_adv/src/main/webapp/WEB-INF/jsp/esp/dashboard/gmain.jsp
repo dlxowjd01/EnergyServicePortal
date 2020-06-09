@@ -229,6 +229,7 @@
 					<div class="gtbl_wrap">
 						<div class="intable">
 							<table>
+								<caption>(단위: kWh)</caption>
 								<thead>
 								<tr>
 									<th>

@@ -691,7 +691,6 @@
     .gmain_table .gtbl_top {
         font-size: 19px;
     }
-    .gmain_table .gtbl_top .fl {}
     .gmain_table .gtbl_top .fl>* {
         margin-right: 7px;
     }
@@ -1469,7 +1468,7 @@
 
 /* Small laptop, Tablet and Mobile screen sizes */
 
-@media all and (max-width: 1200px) {
+@media all and (max-width: 1199px) {
     .w_type {
         width: 100%
     }
@@ -1496,6 +1495,9 @@
     }
     .gmain_map .chart_info>div {
         display: block;
+    }
+    .gmain_chart .chart_top {
+        margin-bottom: 0;
     }
     .gmain_chart.gmain_chart1,
     .gmain_chart.gmain_chart2,
@@ -1621,7 +1623,7 @@
 	*********************************************************************************/
     #page-wrapper {
         margin: 0;
-        padding: 0 10px;
+        padding: 0 16px;
     }
     #page-wrapper>.nav {
         height: 115px;
@@ -1729,7 +1731,6 @@
     nav .nav_right li+li {
         margin: 10px 0 0 0;
     }
-    /* 전체메뉴 레이어 조정 */
     nav .all-menu .menu-group {
         /* width: 100%; */
         overflow: hidden
@@ -1747,6 +1748,9 @@
     }
     #sidebar {
         display: none;
+    }
+    .header-wrapper {
+        height: auto;
     }
     /********************************************************************************
 							indiv(box-container), modal, alarm
@@ -2174,7 +2178,6 @@
     .local_info.s_center tr {
         margin: 0 0 1rem 0;
     }
-    .local_info.s_center tr:nth-child(odd) {}
     .local_info.s_center td {
         border: none;
         border-bottom: 1px solid #4c5260;
@@ -2312,6 +2315,21 @@
     /* *************************************************
 							gmain
 	************************************************* */
+    .indiv.gmain_chart:not(:last-of-type) {
+        margin-bottom: 12px;
+    }
+    .gmain_row1 {
+        display: table;
+        margin-bottom: 12px;
+    }
+    .gmain_alarm {
+        height: 280px;
+        overflow: auto;
+    }
+    .gmain_map.gmain_chart.gmain_chart4,
+    .gmain_alarm {
+        margin: auto 0 12px;
+    }
     .gmain_table.smain {
         height: auto;
         max-height: inherit;

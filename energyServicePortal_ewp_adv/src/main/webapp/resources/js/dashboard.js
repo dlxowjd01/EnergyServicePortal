@@ -170,7 +170,9 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	},
 	xAxis: [{
 		lineColor: 'var(--color1)', /* 눈금선색 */
+		tickWidth: 1,
 		tickColor: 'var(--color1)',
+		tickInterval: 1,
 		gridLineColor: 'var(--color1)',
 		plotLines: [{
 			color: 'var(--color1)',
@@ -230,14 +232,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			}
 		}
 	}, { // Secondary yAxis
-		lineColor: 'var(--color1)', /* 눈금선색 */
-		tickColor: 'var(--color1)',
-		gridLineColor: 'var(--color1)',
-		gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-		plotLines: [{
-			color: 'var(--color1)',
-			width: 1
-		}],
+		gridLineWidth: 0,
 		title: {
 			text: '천원',
 			align: 'low',
@@ -291,7 +286,6 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			label: {
 				connectorAllowed: false
 			},
-			borderColor: 'var(--color2)',
 			borderWidth: 0 /* 보더 0 */
 		},
 		line: {
@@ -330,7 +324,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	}, {
 		name: '정산금',
 		type: 'spline',
-		color: 'var(--color3)',
+		color: 'var(--color1)',
 		dashStyle: 'ShortDash',
 		yAxis: 1,
 		tooltip: {
@@ -558,11 +552,11 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		text: ''
 	},
 	xAxis: [{
-		lineColor: 'var(--color1)', /* 눈금선색 */
-		tickColor: 'var(--color1)',
-		gridLineColor: 'var(--color1)',
+		// lineColor: 'var(--color4)',
+		tickWidth: 1,
+		tickColor: 'var(--color4)',
 		plotLines: [{
-			color: 'var(--color1)',
+			color: 'red',
 			width: 1
 		}],
 		type: 'datetime', // 08.20 이우람 추가
@@ -584,7 +578,9 @@ const dailyChart = Highcharts.chart('dailyChart', {
 				fontSize: '12px'
 			}
 		},
-		tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
+		tickWidth: 1,
+		tickColor: 'var(--color1)',
+		tickInterval: 1,
 		title: {
 			text: null
 		},
@@ -592,12 +588,12 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		crosshair: true
 	}],
 	yAxis: [{ // Primary yAxis
-		lineColor: 'var(--colo1)', /* 눈금선색 */
-		tickColor: 'var(--colo1)',
-		gridLineColor: 'var(--colo1)',
+		lineColor: 'var(--color1)', /* 눈금선색 */
+		tickColor: 'var(--color1)',
+		gridLineColor: 'var(--color1)',
 		gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 		plotLines: [{
-			color: 'var(--colo1)',
+			color: 'var(--color1)',
 			width: 1
 		}],
 		title: {
@@ -619,14 +615,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			}
 		}
 	}, { // Secondary yAxis
-		lineColor: 'var(--colo1)', /* 눈금선색 */
-		tickColor: 'var(--colo1)',
-		gridLineColor: 'var(--color1)',
-		gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-		plotLines: [{
-			color: 'var(--colo1)',
-			width: 1
-		}],
+		gridLineWidth: 0, /* 기준선 grid 안보이기/보이기 */
 		title: {
 			text: '천원',
 			align: 'low',
@@ -680,11 +669,9 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			label: {
 				connectorAllowed: false
 			},
-			borderColor: 'var(--color2)',
 			borderWidth: 0, /* 보더 0 */
 			events: {
 				legendItemClick: function () {
-					console.log("this---", this);
 					var visibility = this.visible ? 'visible' : 'hidden';
 					this.legendItem.styles.color == 'var(--color4)'
 					// var visibility = this.visible ? 'visible' : 'hidden';
@@ -728,7 +715,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 	}, {
 		name: '정산금',
 		type: 'spline',
-		color: 'var(--color3)',
+		color: 'var(--color1)',
 		dashStyle: 'ShortDash',
 		yAxis: 1,
 		tooltip: {
@@ -738,67 +725,6 @@ const dailyChart = Highcharts.chart('dailyChart', {
 	/* 출처 */
 	credits: {
 		enabled: false
-	},
-	/* 반응형 */
-	responsive: {
-		rules: [{
-			condition: {
-				minWidth: 787,
-			},
-			chartOptions: {
-				xAxis: {
-					labels: {
-						style: {
-							fontSize: '12px'
-						}
-					}
-				},
-				yAxis: [{
-					title: {
-						y: 30,
-						x: 20,
-						style: {
-							fontSize: '12px'
-						}
-					},
-					labels: {
-						style: {
-							fontSize: '12px'
-						}
-					}
-				},
-					{
-						title: {
-							y: 30,
-							x: -15,
-							style: {
-								fontSize: '12px'
-							}
-						},
-						labels: {
-							style: {
-								fontSize: '12px'
-							}
-						}
-					}],
-				legend: {
-					itemStyle: {
-						fontSize: '12px'
-					},
-					symbolPadding: 5,
-					symbolHeight: 10
-				}
-			}
-		}, { /* 차트 사이즈 - 모바일용 */
-			condition: {
-				maxWidth: 481
-			},
-			chartOptions: {
-				chart: {
-					marginTop: 55
-				}
-			}
-		}]
 	}
 });
 
@@ -950,7 +876,8 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		marginTop: 0,
 		marginRight: 0,
 		backgroundColor: 'transparent',
-		type: 'bar'
+		type: 'bar',
+		// height: 300
 	},
 	navigation: {
 		buttonOptions: {
@@ -1043,11 +970,11 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 				connectorAllowed: true
 			},
 			borderWidth: 0, /* 보더 0 */
-			borderRadiusTopLeft: 2, /* 막대 모서리 둥글게 효과 */
-			borderRadiusTopRight: 2, /* 막대 모서리 둥글게 효과 */
-			pointWidth: 12, /* 막대 두께 */
-			// groupPadding: 7,
-			pointPadding: 0.5 /* 막대 사이 간격 */
+			borderRadiusTopLeft: 5, /* 막대 모서리 둥글게 효과 */
+			borderRadiusTopRight: 5, /* 막대 모서리 둥글게 효과 */
+			pointWidth: 15, /* 막대 두께 */
+			groupPadding: 0.1,
+			pointPadding: 0
 		},
 		bar: {
 			dataLabels: {
@@ -1068,49 +995,6 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 	},
 	credits: {
 		enabled: false
-	},
-	responsive: {
-		rules: [{
-			condition: {
-				maxWidth: 767 /* 차트 사이즈 */
-			},
-			chartOptions: {
-				xAxis: {
-					labels: {
-						style: {
-							fontSize: '12px'
-						}
-					}
-				},
-				yAxis: {
-					labels: {
-						style: {
-							fontSize: '12px'
-						}
-					}
-				},
-				legend: {
-					itemStyle: {
-						fontSize: '12px'
-					},
-					symbolPadding: 5,
-					symbolHeight: 10
-				},
-				plotOptions: {
-					series: {
-						pointWidth: 8,
-						pointPadding: 0.25 /* 막대 사이 간격 */
-					},
-					bar: {
-						dataLabels: {
-							style: {
-								fontSize: '12px'
-							}
-						}
-					}
-				}
-			}
-		}]
 	}
 });
 
