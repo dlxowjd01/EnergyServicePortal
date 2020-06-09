@@ -21,7 +21,7 @@
 </div>
 
 <div class="row content-wrapper">
-	<div class="col-xl-4 col-lg-2 col-md-2 col-sm-12">
+	<div class="col-xl-4 col-md-12 col-sm-12">
 		<div class="indiv gmain_chart gmain_chart1">
 			<div class="chart_top clear">
 				<h2 class="ntit">월간</h2>
@@ -111,7 +111,7 @@
 		</div>
 	</div>
 
-	<div class="col-xl-8 col-lg-10 col-md-10 col-sm-12">
+	<div class="col-xl-8 col-md-12 col-sm-12">
 		<div class="gmain_row1">
 			<div class="indiv gmain_map gmain_chart gmain_chart4">
 				<div class="chart_top clear">
@@ -232,7 +232,7 @@
 								<thead>
 								<tr>
 									<th>
-										<button class="btn_align">설비상태</button>
+										<button class="btn_align">상태</button>
 									</th>
 									<th>
 										<button class="btn_align">오류</button>
@@ -244,19 +244,19 @@
 										<button class="btn_align">사업소</button>
 									</th>
 									<th>
-										<button class="btn_align">설비용량 (kW)</button>
+										<button class="btn_align">설비용량</button>
 									</th>
 									<th>
-										<button class="btn_align">금일예측 (kWh)</button>
+										<button class="btn_align">금일예측</button>
 									</th>
 									<th>
-										<button class="btn_align">금일누적 (kWh)</button>
+										<button class="btn_align">금일누적</button>
 									</th>
 									<th>
-										<button class="btn_align">금일충전 (kWh)</button>
+										<button class="btn_align">금일충전</button>
 									</th>
 									<th>
-										<button class="btn_align">금일방전 (kWh)</button>
+										<button class="btn_align">금일방전</button>
 									</th>
 								</tr>
 								</thead>

@@ -394,230 +394,221 @@
 									        data-name="">
 										선택<span class="caret"></span>
 									</button>
-									<ul class="dropdown-menu">
-									</ul>
-								</div>
-							</td>
-							<th>발전소</th>
-							<td>
-								<div class="dropdown placeholder fl" id="site_id">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
-									        data-name="">
+                                            <ul class="dropdown-menu">
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <th>발전소</th>
+                                    <td>
+                                        <div class="dropdown placeholder fl" id="site_id">
+                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="">
 										선택<span class="caret"></span>
 									</button>
-									<ul class="dropdown-menu">
+                                            <ul class="dropdown-menu">
 
-									</ul>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<th>보고서 유형</th>
-							<td>
-								<div class="dropdown placeholder fl" id="report_type">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
-									        data-name="선택">
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>보고서 유형</th>
+                                    <td>
+                                        <div class="dropdown placeholder fl" id="report_type">
+                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">
 										선택<span class="caret"></span>
 									</button>
-									<ul class="dropdown-menu">
-										<li data-value="regular_mm"><a href="javascript:void(0);">월간 발전량</a></li>
-										<li data-value="regular_qt"><a href="javascript:void(0);">분기 발전량</a></li>
-										<li data-value="regular_yy"><a href="javascript:void(0);">년간 발전량</a></li>
-										<li data-value="profit_mm"><a href="javascript:void(0);">월간 수익보고서</a></li>
-									</ul>
-								</div>
-							</td>
-							<th>적용 기간</th>
-							<td>
-								<div class="sel_calendar fl" style="width:160px">
-									<input type="text" id="report_data_start" name="report_data_start" value=""
-									       class="sel fromDate"
-									       autocomplete="off" readonly="" placeholder="날짜 선택">
-								</div>
-								<div class="sel_calendar fl ml" style="width:160px">
-									<input type="text" id="report_data_end" name="report_data_end" value=""
-									       class="sel toDate"
-									       autocomplete="off" readonly="" placeholder="날짜 선택">
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<th colspan="4">적용 변수
-								<a href="javascript:void(0);" class="btn_add ml" onclick="addRow('yield_list');">추가</a>
-							</th>
-						</tr>
-					</table>
-				</div>
-			</div>
-			<div class="yield_ly_bt">
-				<ul class="yield_list" id="yield_list">
-					<li>
-						<div class="dropdown placeholder fl" id="report_variable_key_[index]">
-							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
-							        data-name="">
+                                            <ul class="dropdown-menu">
+                                                <li data-value="regular_mm"><a href="javascript:void(0);">월간 발전량</a></li>
+                                                <li data-value="regular_qt"><a href="javascript:void(0);">분기 발전량</a></li>
+                                                <li data-value="regular_yy"><a href="javascript:void(0);">년간 발전량</a></li>
+                                                <li data-value="profit_mm"><a href="javascript:void(0);">월간 수익보고서</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <th>적용 기간</th>
+                                    <td>
+                                        <div class="sel_calendar fl" style="width:160px">
+                                            <input type="text" id="report_data_start" name="report_data_start" value="" class="sel fromDate" autocomplete="off" readonly="" placeholder="날짜 선택">
+                                        </div>
+                                        <div class="sel_calendar fl ml" style="width:160px">
+                                            <input type="text" id="report_data_end" name="report_data_end" value="" class="sel toDate" autocomplete="off" readonly="" placeholder="날짜 선택">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="4">적용 변수
+                                        <a href="javascript:void(0);" class="btn_add ml" onclick="addRow('yield_list');">추가</a>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="yield_ly_bt">
+                        <ul class="yield_list" id="yield_list">
+                            <li>
+                                <div class="dropdown placeholder fl" id="report_variable_key_[index]">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="">
 								선택<span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu">
-								<li data-value="수익 배분율"><a href="javascript:void(0);">수익 배분율</a></li>
-								<li data-value="REC 단가"><a href="javascript:void(0);">REC 단가</a></li>
-								<li data-value="추가 예정"><a href="javascript:void(0);">추가 예정</a></li>
-							</ul>
-						</div>
-						<div class="tx_inp_type fl">
-							<input type="text" id="report_variable_val_[index]" name="report_variable_val_[index]"
-							       placeholder="입력">
-						</div>
-						<button class="btn_type07">삭제</button>
-					</li>
-				</ul>
-			</div>
-			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" data-dismiss="modal">취소</button>
-				<button type="button" class="btn_type" onclick="reportCreate();">생성</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="col-lg-12">
-		<h1 class="page-header">수익 보고서</h1>
-		<div class="time fr">
-			<span>CURRENT TIME</span>
-			<em class="currTime">${nowTime}</em>
-			<span>DATA BASE TIME</span>
-			<em class="dbTime">2018-07-27 17:01:02</em>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="col-lg-12 clear inp_align">
-		<div class="fl">
-			<span class="tx_tit">유형</span>
-			<div class="sa_select">
-				<div class="dropdown" id="reportClass">
-					<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">전체
+                                    <ul class="dropdown-menu">
+                                        <li data-value="수익 배분율"><a href="javascript:void(0);">수익 배분율</a></li>
+                                        <li data-value="REC 단가"><a href="javascript:void(0);">REC 단가</a></li>
+                                        <li data-value="추가 예정"><a href="javascript:void(0);">추가 예정</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tx_inp_type fl">
+                                    <input type="text" id="report_variable_val_[index]" name="report_variable_val_[index]" placeholder="입력">
+                                </div>
+                                <button class="btn_type07">삭제</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="btn_wrap_type02">
+                        <button type="button" class="btn_type03" data-dismiss="modal">취소</button>
+                        <button type="button" class="btn_type" onclick="reportCreate();">생성</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row header-wrapper">
+            <div class="col-12">
+                <h1 class="page-header fl">수익 보고서</h1>
+                <div class="time fr">
+                    <span>CURRENT TIME</span>
+                    <em class="currTime">${nowTime}</em>
+                    <span>DATA BASE TIME</span>
+                    <em class="dbTime">2018-07-27 17:01:02</em>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 clear inp_align">
+                <div class="fl">
+                    <span class="tx_tit">유형</span>
+                    <div class="sa_select">
+                        <div class="dropdown" id="reportClass">
+                            <button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">전체
 						<span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu" role="menu">
-						<li data-value=""><a href="javascript:void(0);">전체</a></li>
-						<li data-value="regular_mm"><a href="javascript:void(0);">월간실적</a></li>
-						<li data-value="regular_qt"><a href="javascript:void(0);">분기실적</a></li>
-						<li data-value="regular_yy"><a href="javascript:void(0);">년간실적</a></li>
-						<li data-value="profit_mm"><a href="javascript:void(0);">수익보고서</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div class="fl">
-			<span class="tx_tit">적용 시작 월</span>
-			<div class="sa_select">
-				<div class="dropdown" id="year">
-					<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">
+                            <ul class="dropdown-menu" role="menu">
+                                <li data-value=""><a href="javascript:void(0);">전체</a></li>
+                                <li data-value="regular_mm"><a href="javascript:void(0);">월간실적</a></li>
+                                <li data-value="regular_qt"><a href="javascript:void(0);">분기실적</a></li>
+                                <li data-value="regular_yy"><a href="javascript:void(0);">년간실적</a></li>
+                                <li data-value="profit_mm"><a href="javascript:void(0);">수익보고서</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="fl">
+                    <span class="tx_tit">적용 시작 월</span>
+                    <div class="sa_select">
+                        <div class="dropdown" id="year">
+                            <button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">
 						2020년<span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu" role="menu">
-						<li><a href="javascript:void(0);">전체</a></li>
-						<li><a href="javascript:void(0);">2020년</a></li>
-						<li><a href="javascript:void(0);">2019년</a></li>
-						<li><a href="javascript:void(0);">2018년</a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="sa_select">
-				<div class="dropdown" id="month">
-					<button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown">
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="javascript:void(0);">전체</a></li>
+                                <li><a href="javascript:void(0);">2020년</a></li>
+                                <li><a href="javascript:void(0);">2019년</a></li>
+                                <li><a href="javascript:void(0);">2018년</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sa_select">
+                        <div class="dropdown" id="month">
+                            <button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown">
 						전체<span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu" role="menu">
-						<li><a href="javascript:void(0);">전체</a></li>
-						<li><a href="javascript:void(0);">1월</a></li>
-						<li><a href="javascript:void(0);">2월</a></li>
-						<li><a href="javascript:void(0);">3월</a></li>
-						<li><a href="javascript:void(0);">4월</a></li>
-						<li><a href="javascript:void(0);">5월</a></li>
-						<li><a href="javascript:void(0);">6월</a></li>
-						<li><a href="javascript:void(0);">7월</a></li>
-						<li><a href="javascript:void(0);">8월</a></li>
-						<li><a href="javascript:void(0);">9월</a></li>
-						<li><a href="javascript:void(0);">10월</a></li>
-						<li><a href="javascript:void(0);">11월</a></li>
-						<li><a href="javascript:void(0);">12월</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div class="fl">
-			<div class="tx_inp_type">
-				<input type="text" id = "key_word" placeholder="입력">
-			</div>
-		</div>
-		<div class="fl">
-			<button type="submit" class="btn_type" onclick="getDataList();">검색</button>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="col-lg-12">
-		<div class="indiv">
-			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" onclick="setCheckedDataRemove();">선택 삭제</button>
-				<button type="button" class="btn_type" onclick="modalInit();">신규 생성</button>
-			</div>
-			<div class="spc_tbl align_type">
-				<table class="chk_type">
-					<colgroup>
-						<col style="width:10%">
-						<col style="width:10%">
-						<col style="width:10%">
-						<col style="width:10%">
-						<col style="width:10%">
-						<col style="width:6%">
-						<col style="width:12%">
-						<col style="width:13.6%">
-						<col>
-					</colgroup>
-					<thead>
-					<tr>
-						<th>
-							<input type="checkbox" id="chk_header" value="순번"
-							       onclick="setCheckedAll(this, 'rowCheck');">
-							<label for="chk_header"><span></span>순번</label>
-						</th>
-						<th>SPC명</th>
-						<th>발전소명</th>
-						<th>보고서 유형</th>
-						<th>적용기간</th>
-						<th>다운로드</th>
-						<th>보고서 생성 시간</th>
-						<th>보고서 확정</th>
-						<th>최종 작업자</th>
-					</tr>
-					</thead>
-					<tbody id="listData">
-					<tr>
-						<td>
-							<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="">
-							<label for="chk_op[INDEX]"><span></span>[INDEX]</label>
-						</td>
-						<td>[spc_name]</td>
-						<td>[site_name]</td>
-						<td>[reportTypeName]</td>
-						<td>[report_date]</td>
-						<td onclick="[file_link]">
-							<button class="tx_file">EXCEL</button>
-						</td>
-						<td>[generated_date]</td>
-						<td>[confirmed_date]</td>
-						<td>[updated_by]</td>
-					</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="paging_wrap">
-				<a href="#;" class="btn_prev">prev</a>
-				<strong>1</strong>
-				<a href="#;" class="btn_next">next</a>
-			</div>
-		</div>
-	</div>
-</div>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="javascript:void(0);">전체</a></li>
+                                <li><a href="javascript:void(0);">1월</a></li>
+                                <li><a href="javascript:void(0);">2월</a></li>
+                                <li><a href="javascript:void(0);">3월</a></li>
+                                <li><a href="javascript:void(0);">4월</a></li>
+                                <li><a href="javascript:void(0);">5월</a></li>
+                                <li><a href="javascript:void(0);">6월</a></li>
+                                <li><a href="javascript:void(0);">7월</a></li>
+                                <li><a href="javascript:void(0);">8월</a></li>
+                                <li><a href="javascript:void(0);">9월</a></li>
+                                <li><a href="javascript:void(0);">10월</a></li>
+                                <li><a href="javascript:void(0);">11월</a></li>
+                                <li><a href="javascript:void(0);">12월</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="fl">
+                    <div class="tx_inp_type">
+                        <input type="text" id="key_word" placeholder="입력">
+                    </div>
+                </div>
+                <div class="fl">
+                    <button type="submit" class="btn_type" onclick="getDataList();">검색</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="indiv">
+                    <div class="btn_wrap_type01">
+                        <button type="button" class="btn_type03" onclick="setCheckedDataRemove();">선택 삭제</button>
+                        <button type="button" class="btn_type" onclick="modalInit();">신규 생성</button>
+                    </div>
+                    <div class="spc_tbl align_type">
+                        <table class="chk_type">
+                            <colgroup>
+                                <col style="width:10%">
+                                <col style="width:10%">
+                                <col style="width:10%">
+                                <col style="width:10%">
+                                <col style="width:10%">
+                                <col style="width:6%">
+                                <col style="width:12%">
+                                <col style="width:13.6%">
+                                <col>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="chk_header" value="순번" onclick="setCheckedAll(this, 'rowCheck');">
+                                        <label for="chk_header"><span></span>순번</label>
+                                    </th>
+                                    <th>SPC명</th>
+                                    <th>발전소명</th>
+                                    <th>보고서 유형</th>
+                                    <th>적용기간</th>
+                                    <th>다운로드</th>
+                                    <th>보고서 생성 시간</th>
+                                    <th>보고서 확정</th>
+                                    <th>최종 작업자</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listData">
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="">
+                                        <label for="chk_op[INDEX]"><span></span>[INDEX]</label>
+                                    </td>
+                                    <td>[spc_name]</td>
+                                    <td>[site_name]</td>
+                                    <td>[reportTypeName]</td>
+                                    <td>[report_date]</td>
+                                    <td onclick="[file_link]">
+                                        <button class="tx_file">EXCEL</button>
+                                    </td>
+                                    <td>[generated_date]</td>
+                                    <td>[confirmed_date]</td>
+                                    <td>[updated_by]</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="paging_wrap">
+                        <a href="#;" class="btn_prev">prev</a>
+                        <strong>1</strong>
+                        <a href="#;" class="btn_next">next</a>
+                    </div>
+                </div>
+            </div>
+        </div>
