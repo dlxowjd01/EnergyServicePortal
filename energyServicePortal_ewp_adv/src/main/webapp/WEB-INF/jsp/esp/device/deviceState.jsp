@@ -148,7 +148,7 @@
                     });
                 }
 
-                var $eqListDiv = $(".content-wrapper.scroll");
+                var $eqListDiv = $(".row.scroll").find(".col-lg-12");
                 $eqListDiv.empty();
 
                 myMap.forEach(function(value, key) {
@@ -226,7 +226,7 @@
 
                     let liStr = "";
                     liStr += '<div class="row">';
-                    liStr += '<div class="col-xl-8 col-md-9 col-sm-12">';
+                    liStr += '<div class="col-lg-8">';
                     liStr += '<div class="indiv clear">';
                     liStr += '	<div class="chart_top clear">';
                     liStr += '		<h2 class="ntit fl">' + deviceTypeName + '</h2>';
@@ -249,7 +249,7 @@
                     liStr += '</div>';
 
                     // 상세조회 영역
-                    liStr += '<div class="col-xl-4 col-md-3 col-sm-12" data-dvType="' + deviceType + '">';
+                    liStr += '<div class="col-lg-4" data-dvType="' + deviceType + '">';
                     liStr += '	<div class="indiv eq_card">';
                     liStr += '		<div class="chart_top clear">';
                     liStr += '			<h2 class="ntit fl">&nbsp;</h2>';
@@ -365,7 +365,7 @@
         <script type="text/javascript">
             $(function() {
                 // 사업소 선택
-                $("#site_list_id ul li").on("click", function(e) {
+                $("#site_list1 ul li").on("click", function(e) {
                     var $this = $(this);
                     var site_name = $this.text();
                     // 				if(site_name == "전체") {
@@ -583,7 +583,131 @@
                 </div>
             </div>
         </div>
-        <div class="content-wrapper scroll">
+        <div class="row scroll">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="indiv clear">
+                            <div class="chart_top clear">
+                                <h2 class="ntit fl"></h2>
+                                <div class="eq_icon fr">
+                                    <span class="eq_normail">정상(0)</span>
+                                    <span class="eq_alert">중지(0)</span>
+                                    <span class="eq_error">트립(0)</span>
+                                </div>
+                            </div>
+                            <ul class="eq_list scroll eq_li_type01">
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="indiv eq_card">
+                            <div class="chart_top clear">
+                                <h2 class="ntit fl"></h2>
+                            </div>
+                            <ul class="eq_card_ul clear">
+                            </ul>
+                            <div class="inv_sec_bx">
+                                <p class="inv_tit"></p>
+                                <ul class="isb_in clear">
+                                    <li>
+                                        <ul class="di_list">
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <ul class="di_list">
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="eq_btn_bx">
+                                <button type="submit" class="btn_type04">변경 이력 조회</button>
+                                <button type="submit" class="btn_type04">운영 이력 조회</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="indiv clear">
+                            <div class="chart_top clear">
+                                <h2 class="ntit fl"></h2>
+                                <div class="eq_icon fr">
+                                    <span class="eq_normail">정상(0)</span>
+                                    <span class="eq_alert">중지(0)</span>
+                                    <span class="eq_error">트립(0)</span>
+                                </div>
+                            </div>
+                            <ul class="eq_list scroll clear eq_li_type02">
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="indiv eq_card t2">
+                            <div class="chart_top clear">
+                                <h2 class="ntit fl"></h2>
+                            </div>
+                            <ul class="eq_card_ul clear">
+                            </ul>
+                            <div class="inv_sec_bx">
+                                <p class="inv_tit"></p>
+                                <ul class="isb_in clear">
+                                    <li>
+                                        <ul class="di_list">
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="eq_btn_bx">
+                                <button type="submit" class="btn_type04">변경 이력 조회</button>
+                                <button type="submit" class="btn_type04">운영 이력 조회</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="indiv clear">
+                            <div class="chart_top clear">
+                                <h2 class="ntit fl"></h2>
+                                <div class="eq_icon fr">
+                                    <span class="eq_normail">정상(0)</span>
+                                    <span class="eq_alert">중지(0)</span>
+                                    <span class="eq_error">트립(0)</span>
+                                </div>
+                            </div>
+                            <ul class="eq_list scroll clear eq_li_type03">
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="indiv eq_card t3">
+                            <div class="chart_top clear">
+                                <h2 class="ntit fl"></h2>
+                            </div>
+                            <ul class="eq_card_ul clear">
+                            </ul>
+                            <div class="inv_sec_bx">
+                                <p class="inv_tit"></p>
+                                <ul class="isb_in clear">
+                                    <li>
+                                        <ul class="di_list">
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <ul class="di_list">
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="eq_btn_bx">
+                                <button type="submit" class="btn_type04">변경 이력 조회</button>
+                                <button type="submit" class="btn_type04">운영 이력 조회</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <script>

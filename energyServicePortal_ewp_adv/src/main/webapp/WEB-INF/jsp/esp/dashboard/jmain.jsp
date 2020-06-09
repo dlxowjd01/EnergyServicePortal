@@ -156,6 +156,7 @@
 					<div id="rchart2"></div>
 				</div>
 				<div class="realtime_time"></div>
+				<div class="realtime_label"></div>
 			</div>
 		</div>
 		<div class="indiv gmain_chart jmain_center3">
@@ -232,6 +233,7 @@
 			<div class="gtbl_wrap">
 				<div class="intable">
 					<table>
+						<caption>(단위: kWh)</caption>
 						<thead>
 						<tr>
 							<th>
@@ -247,19 +249,19 @@
 								<button class="btn_align">사업소</button>
 							</th>
 							<th>
-								<button class="btn_align">설비용량 (kW)</button>
+								<button class="btn_align">설비용량</button>
 							</th>
 							<th>
-								<button class="btn_align">금일예측 (kWh)</button>
+								<button class="btn_align">금일예측</button>
 							</th>
 							<th>
-								<button class="btn_align">금일누적 (kWh)</button>
+								<button class="btn_align">금일누적</button>
 							</th>
 							<th>
-								<button class="btn_align">금일충전 (kWh)</button>
+								<button class="btn_align">금일충전</button>
 							</th>
 							<th>
-								<button class="btn_align">금일방전 (kWh)</button>
+								<button class="btn_align">금일방전</button>
 							</th>
 						</tr>
 						</thead>
@@ -696,25 +698,32 @@
 				}],
 			});
 			rChart3.redraw();
-
+			let currentTime = new Date().getHours() + ':' + new Date().getMinutes();
+			let label = `${' 현재시간<br>${ currentTime }'}`;
+			console.log(label)
 			const now = new Date().getMinutes();
 			const nowBottom = parseInt($('.realtime_time').css('bottom'), 10);
-			if (nowBottom >= 186) {
-				$('.realtime_time').css('bottom', '40px');
+			
+			if (nowBottom >= 206) {
+				$(".realtime_label").html(label).css('bottom', '44px');
+				$('.realtime_time').css('bottom', '63px');
 			} else {
-				$('.realtime_time').css('bottom', 40 + ((146 / 60) * now));
+				$(".realtime_label").html(label).css('bottom', 44 + ((206 / 60) * now));
+				$('.realtime_time').css('bottom', 63 + ((206 / 60) * now));
 			}
 		}
 	}
 
 	const rchart1 = Highcharts.chart('rchart1', {
 		chart: {
-			marginTop: 5,
+			marginTop: 15,
 			marginLeft: 50,
 			marginRight: 0,
+			paddingRight: 30,
+			zoomType: 'xy',
 			backgroundColor: 'transparent',
 			type: 'variwide',
-			height: 260
+			height: 280
 		},
 		navigation: {
 			buttonOptions: {
@@ -729,21 +738,21 @@
 		subtitle: {
 			text: ''
 		},
-
 		xAxis: {
 			type: 'category',
-			lineColor: '#515562', /* 눈금선색 */
-			tickColor: '#515562',
-			gridLineColor: '#515562',
+			lineColor: 'var(--color4)', /* 눈금선색 */
+			tickColor: 'var(--color4)',
+			gridLineColor: 'var(--color4)',
 			plotLines: [{
-				color: '#515562',
+				color: 'var(--color1)',
 				width: 1
 			}],
 			labels: {
 				align: 'center',
+				reserveSpace: true,
 				y: 27, /* 그래프와 거리 */
 				style: {
-					color: '#a4aebf',
+					color: 'var(--color4)',
 					fontSize: '12px'
 				}
 			},
@@ -752,57 +761,58 @@
 				text: null
 			}
 		},
-
-		yAxis: [
-			{ // Primary yAxis
-				min: 0,
-				max: 100,
-				lineColor: '#515562', /* 눈금선색 */
-				tickColor: '#515562',
-				gridLineColor: '#515562',
-				gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-				plotLines: [{
-					color: '#515562',
-					width: 1
-				}],
-				gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-				title: {
-					text: '%',
-					align: 'low',
-					rotation: 0, /* 타이틀 기울기 */
-					y: 25, /* 타이틀 위치 조정 */
-					x: 15,
-					style: {
-						color: '#a4aebf',
-						fontSize: '12px'
-					}
-				},
-				labels: {
-					format: '{value}',
-					style: {
-						color: '#a4aebf',
-						fontSize: '12px'
-					}
+		yAxis: {
+			min: 0,
+			max: 100,
+			lineColor: 'var(--color4)', /* 눈금선색 */
+			tickColor: 'var(--color4)',
+			gridLineColor: 'var(--color4)',
+			gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
+			plotLines: [{
+				color: 'var(--color4)',
+				width: 1
+			}],
+			scrollbar: {
+                enabled: true,
+                showFull: false
+            },
+			title: {
+				text: '%',
+				align: 'low',
+				rotation: 0, /* 타이틀 기울기 */
+				y: 25, /* 타이틀 위치 조정 */
+				x: 15,
+				style: {
+					color: 'var(--color4)',
+					fontSize: '12px'
 				}
-			}
-		],
-
+			},
+			labels: {
+				format: '{value}',
+				style: {
+					color: 'var(--color4)',
+					fontSize: '12px'
+				},
+				align: 'right',
+				x: 0,
+				y: -2
+			},
+			opposite: true
+		},
 		caption: {
 			text: ''
 		},
-
 		legend: {
 			enabled: false
 		},
-
 		/* 옵션 */
 		plotOptions: {
 			series: {
 				label: {
 					connectorAllowed: false
 				},
-				borderColor: '#a4aebf',
-				borderWidth: 0 /* 보더 0 */
+				borderWidth: 0,
+				pointPadding: .2
 			},
 			column: {
 				stacking: 'percent' /*위로 쌓이는 막대  ,normal */
@@ -812,7 +822,6 @@
 				colors: ['#00b2aa', '#009389']
 			}
 		},
-
 		series: [{
 			name: '실시간 출력량',
 			data: null,
@@ -822,8 +831,7 @@
 				format: '{point.y:.0f} %'
 			},
 			tooltip: {
-				pointFormat: '출력: <b>{point.y} %</b>' +
-					''
+				pointFormat: '출력: <b>{point.y} %</b>' + ''
 			},
 			colorByPoint: true
 		}],
@@ -831,63 +839,6 @@
 		/* 출처 */
 		credits: {
 			enabled: false
-		},
-
-		/* 반응형 */
-		responsive: {
-			rules: [{
-				condition: {
-					minWidth: 870 /* 차트 사이즈 */
-				},
-				chartOptions: {
-					chart: {
-						marginTop: 50,
-						marginLeft: 75
-					},
-					xAxis: {
-						labels: {
-							style: {
-								fontSize: '18px'
-							}
-						}
-					},
-					yAxis: [{
-						title: {
-							y: 30,
-							x: 20,
-							style: {
-								fontSize: '18px'
-							}
-						},
-						labels: {
-							style: {
-								fontSize: '18px'
-							}
-						}
-					},
-						{
-							title: {
-								y: 30,
-								x: -15,
-								style: {
-									fontSize: '18px'
-								}
-							},
-							labels: {
-								style: {
-									fontSize: '18px'
-								}
-							}
-						}],
-					legend: {
-						itemStyle: {
-							fontSize: '18px'
-						},
-						symbolPadding: 5,
-						symbolHeight: 10
-					}
-				}
-			}]
 		}
 	});
 
@@ -917,14 +868,14 @@
 
 		xAxis: {
 			lineColor: '', /* 눈금선색 */
-			tickColor: '#515562',
-			gridLineColor: '#515562',
+			tickColor: 'var(--color4)',
+			gridLineColor: 'var(--color4)',
 			labels: {
 				enabled: false,
 				align: 'right',
 				reserveSpace: true,
 				style: {
-					color: '#a4aebf',
+					color: 'var(--color4)',
 					fontSize: '12px'
 				}
 			},
@@ -937,15 +888,15 @@
 		},
 
 		yAxis: {
-			lineColor: '#515562', /* 눈금선색 */
-			tickColor: '#515562',
-			gridLineColor: '#515562',
-			gridLineWidth: 0, /* 기준선 grid 안보이기/보이기 */
-			min: 0, /* 최소값 지정 */
+			lineColor: 'var(--color4)',
+			tickColor: 'var(--color4)',
+			gridLineColor: 'var(--color4)',
+			gridLineWidth: 0,
+			min: 0,
 			title: {
 				text: '',
 				style: {
-					color: '#a4aebf',
+					color: 'var(--color4)',
 					fontSize: '12px'
 				}
 			},
@@ -954,7 +905,7 @@
 				overflow: 'justify',
 				x: -10, /* 그래프와의 거리 조정 */
 				style: {
-					color: '#a4aebf',
+					color: 'var(--color4)',
 					fontSize: '12px'
 				}
 			}
@@ -968,7 +919,7 @@
 			x: 5,
 			y: -10,
 			itemStyle: {
-				color: '#a4aebf',
+				color: 'var(--color4)',
 				fontSize: '12px',
 				fontWeight: 400
 			},
@@ -1109,10 +1060,9 @@
 			marginTop: 40,
 			marginLeft: 50,
 			marginRight: 0,
-			height: 270,
 			backgroundColor: 'transparent',
 			type: 'column',
-			height: 260
+			height: 300
 		},
 
 		navigation: {
@@ -1130,18 +1080,18 @@
 		},
 
 		xAxis: {
-			lineColor: '#515562', /* 눈금선색 */
-			tickColor: '#515562',
-			gridLineColor: '#515562',
+			lineColor: 'var(--color4)', /* 눈금선색 */
+			tickColor: 'var(--color4)',
+			gridLineColor: 'var(--color4)',
 			plotLines: [{
-				color: '#515562',
+				color: 'var(--color4)',
 				width: 1
 			}],
 			labels: {
 				align: 'center',
 				y: 27, /* 그래프와 거리 */
 				style: {
-					color: '#a4aebf',
+					color: 'var(--color4)',
 					fontSize: '12px'
 				}
 			},
@@ -1153,11 +1103,11 @@
 		},
 
 		yAxis: {
-			lineColor: '#515562', /* 눈금선색 */
-			tickColor: '#515562',
-			gridLineColor: '#515562',
+			lineColor: 'var(--color4)', /* 눈금선색 */
+			tickColor: 'var(--color4)',
+			gridLineColor: 'var(--color4)',
 			plotLines: [{
-				color: '#515562',
+				color: 'var(--color4)',
 				width: 1
 			}],
 			gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
@@ -1169,7 +1119,7 @@
 				y: 25, /* 타이틀 위치 조정 */
 				x: 10,
 				style: {
-					color: '#a4aebf',
+					color: 'var(--color4)',
 					fontSize: '12px'
 				}
 			},
@@ -1177,7 +1127,7 @@
 				overflow: 'justify',
 				x: -10, /* 그래프와의 거리 조정 */
 				style: {
-					color: '#a4aebf',
+					color: 'var(--color4)',
 					fontSize: '12px'
 				}
 			}
@@ -1191,7 +1141,7 @@
 			x: 5,
 			y: -10,
 			itemStyle: {
-				color: '#a4aebf',
+				color: 'var(--color4)',
 				fontSize: '12px',
 				fontWeight: 400
 			},
@@ -1231,7 +1181,7 @@
 				label: {
 					connectorAllowed: false
 				},
-				borderColor: '#a4aebf',
+				borderColor: 'var(--color4)',
 				borderWidth: 0 /* 보더 0 */
 			},
 			line: {

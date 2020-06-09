@@ -700,6 +700,7 @@
                 $('#datatable').empty();
 
                 $(':checkbox[name="type"]:checked').each(function() {
+                    console.log("checked---")
                     let chkVal = $(this).val();
                     let targetTable = document.createElement('table');
                     let thead = targetTable.createTHead();
@@ -726,7 +727,7 @@
 
                             });
 
-                            let html = $('<div>').addClass('col-lg-12');
+                            let html = $('<div>').addClass('col-12');
                             $('<div>').addClass('indiv').appendTo(html);
                             html.find('div.indiv').append(targetTable);
                             $('#datatable').append(html);
@@ -1080,7 +1081,7 @@
                 <div class="inline-wrapper">
                     <div class="search-select dropdown" id="siteList">
                         <button type="button" class="btn btn-primary dropdown-toggle w1" data-toggle="dropdown" data-name="사업소">선택해주세요.</button>
-                        <ul class="dropdown dropdown-menu chk_type" role="menu" id="siteULList">
+                        <ul class="dropdown-menu chk_type" role="menu" id="siteULList">
                             <li data-value="[sid]">
                                 <a href="javascript:void(0);" tabindex="-1">
                                     <input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
