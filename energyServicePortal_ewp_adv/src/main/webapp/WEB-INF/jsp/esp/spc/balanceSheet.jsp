@@ -34,10 +34,22 @@
     }
 
     function getCsvDown() {
-        var column = ["spc_name", "name", "start_yyyymm", "", "cash_in", "cash_out", "balance"], //json Key
-            header = ["SPC명", "발전소 명", "기준년월", "용량", "현금유입(원)", "현금유(원)", "기말 현금흐름(원)"]; //csv 파일 헤더
+//         var column = ["spc_name", "name", "start_yyyymm", "", "cash_in", "cash_out", "balance"], //json Key
+//             header = ["SPC명", "발전소 명", "기준년월", "용량", "현금유입(원)", "현금유(원)", "기말 현금흐름(원)"]; //csv 파일 헤더
 
-        getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
+//         getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
+        
+        let excelName = 'spc_info_list';
+        let $val = $('#excelList').find('tbody');
+        let cnt = $val.length;
+
+        if (cnt < 1) {
+            alert('다운받을 데이터가 없습니다.');
+        } else {
+            if (confirm('엑셀로 저장하시겠습니까?')) {
+                tableToExcel('excelList', excelName);
+            }
+        }
     }
     function getDataList(){
 $.ajax({
@@ -130,24 +142,24 @@ $.ajax({
         getDataList();
     }
 
-    function setCheckedDataModify() {
-        var checkDataList = getCheckList("rowCheck");
-        count = checkDataList.length,
-            sucessCnt = 0;
+//     function setCheckedDataModify() {
+//         var checkDataList = getCheckList("rowCheck");
+//         count = checkDataList.length,
+//             sucessCnt = 0;
 
-        if (count == 0) {
-            alert("수정 할 목록을 선택하세요.");
-            return;
-        } else if (count > 1) {
-            alert("1개의 사업소에 대해서만 수정 가능합니다.");
-            return;
-        }
+//         if (count == 0) {
+//             alert("수정 할 목록을 선택하세요.");
+//             return;
+//         } else if (count > 1) {
+//             alert("1개의 사업소에 대해서만 수정 가능합니다.");
+//             return;
+//         }
 
-        var rowData = checkDataList[0];
-        var locationUrl = '/spc/balanceSheetEdit.do?spc_id=' + rowData.spc_id + '&site_id=' + rowData.site_id + '&yyyymm=' + rowData.balance_yyyymm;
+//         var rowData = checkDataList[0];
+//         var locationUrl = '/spc/balanceSheetEdit.do?spc_id=' + rowData.spc_id + '&site_id=' + rowData.site_id + '&yyyymm=' + rowData.balance_yyyymm;
 
-        location.href = locationUrl;
-    }
+//         location.href = locationUrl;
+//     }
 
     function deleteRow() {
         var checkDataList = getCheckList("rowCheck");
@@ -159,22 +171,26 @@ $.ajax({
             return;
         }
 
-        for (var i = 0; i < count; i++) {
-            var rowData = checkDataList[i];
-            var locationUrl = '/spcs/' + rowData.spc_id + '/balance/month?oid=' + oid + '&site_id=' + rowData.site_id + '&yyyymm=' + rowData.balance_yyyymm.replace('-', '');
-            $.ajax({
-                url: 'http://iderms.enertalk.com:8443' + locationUrl,
-                type: 'delete',
-                async: false,
-                data: {},
-                success: function(json) {
-                    sucessCnt++;
-                },
-                error: function(request, status, error) {
-                    alert('처리 중 오류가 발생했습니다.');
-                    return false;
-                }
-            });
+        var inputString = prompt(count+'건을 삭제하시겠습니까? \n삭제를 원하시면 아래 "삭제"라고 입력하고 확인을 눌러 주세요.', '');
+        
+        if(inputString == '삭제'){
+        	for (var i = 0; i < count; i++) {
+                var rowData = checkDataList[i];
+                var locationUrl = '/spcs/' + rowData.spc_id + '/balance/month?oid=' + oid + '&site_id=' + rowData.site_id + '&yyyymm=' + rowData.balance_yyyymm.replace('-', '');
+                $.ajax({
+                    url: 'http://iderms.enertalk.com:8443' + locationUrl,
+                    type: 'delete',
+                    async: false,
+                    data: {},
+                    success: function(json) {
+                        sucessCnt++;
+                    },
+                    error: function(request, status, error) {
+                        alert('처리 중 오류가 발생했습니다.');
+                        return false;
+                    }
+                });
+            }
         }
 
         if (sucessCnt > 0) {
@@ -221,7 +237,7 @@ $.ajax({
             <button type="button" class="btn_type" onclick="getDataList();">검색</button>
         </div>
         <div class="fr">
-            <a href="javascript:getCsvDown();" class="save_btn">CVS 다운로드</a>
+            <a href="javascript:getCsvDown();" class="save_btn">엑셀 다운로드</a>
         </div>
     </div>
 </div>
@@ -231,7 +247,7 @@ $.ajax({
             <div class="btn_wrap_type01">
                 <button type="button" class="btn_type" onclick="location.href='/spc/balanceSheetPost.do'">신규 등록</button>
             </div>
-            <div class="spc_tbl align_type">
+            <div class="spc_tbl align_type" id="excelList">
                 <table class="sort_table chk_type">
                     <thead>
                         <tr>
@@ -266,7 +282,7 @@ $.ajax({
                 </table>
             </div>
             <div class="btn_wrap_type02">
-                <button type="button" class="btn_type03" onclick="setCheckedDataModify();">선택 수정</button>
+<!--                 <button type="button" class="btn_type03" onclick="setCheckedDataModify();">선택 수정</button> -->
                 <button type="button" class="btn_type03" onclick="deleteRow();">선택 삭제</button>
             </div>
             <div class="paging_wrap">

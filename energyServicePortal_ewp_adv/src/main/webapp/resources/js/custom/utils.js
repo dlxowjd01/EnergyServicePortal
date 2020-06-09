@@ -900,7 +900,12 @@ function setDataMapping($selecter, json, prop) {
 			}
 		});
 	} else {
-		$element.text(json[prop]);
+		if (String(json[prop]).match(/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(\.\d+)?(([+-]\d\d:\d\d)|Z)?$/i)) {
+			let newDate = new Date(json[prop]);
+			$element.text(newDate.format('yyyy-MM-dd'));
+		} else {
+			$element.text(json[prop]);
+		}
 	}
 }
 

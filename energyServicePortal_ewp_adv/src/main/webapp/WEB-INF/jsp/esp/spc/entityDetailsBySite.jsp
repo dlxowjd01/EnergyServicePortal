@@ -6,9 +6,9 @@
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 	const spcId = '<c:out value="${param.spc_id}" escapeXml="false" />';
 	const siteId = '<c:out value="${param.site_id}" escapeXml="false" />';
-
+	const balance_yyyy = '<c:out value="${param.balance_yyyy}" escapeXml="false" />';
+	
 	$(function () {
-
 		setInitList('historyData');
 
 		$(document).on('click', 'div.dropdown li', function() {
@@ -199,6 +199,11 @@
 		setMakeList(data.data, 'historyData', {"dataFunction" : {}});
 		$('#historyModal').modal();
 	}
+	
+	function setCheckedDataModify() {
+        var locationUrl = '/spc/balanceSheetEdit.do?spc_id=' + spcId + '&site_id=' + siteId + '&yyyymm=' + balance_yyyy;
+        location.href = locationUrl;
+    }
 </script>
 
 <!-- Modal -->
@@ -547,6 +552,7 @@
 				</table>
 			</div>
 			<div class="btn_wrap_type02">
+				<button type="button" class="btn_type03" onclick="setCheckedDataModify();">수정</button>
 				<button type="button" class="btn_type03" onclick="list();">목록</button>
 				<button type="button" class="btn_type" onclick="historyInit();">이력확인</button>
 			</div>

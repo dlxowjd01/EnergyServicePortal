@@ -62,7 +62,8 @@
                                         rowData = result.data[i],
                                         newData = {},
                                         contractInfo = JSON.parse(spcGensRow.contract_info),
-                                        deviceInfo = JSON.parse(spcGensRow.device_info);
+                                        deviceInfo = JSON.parse(spcGensRow.device_info),
+                                        originFile = new Array();
 
                                     $.ajax({
                                         url: "http://iderms.enertalk.com:8443/spcs/" + rowData.spc_id + "/gens/" + spcGensRow.gen_id + "/supplement?oid=" + rowData.oid,
@@ -80,6 +81,16 @@
                                                 newData["파일_총_개수"] = json.data[0].file_count_all;
                                                 newData["파일_현재_개수"] = json.data[0].file_count_now;
                                                 newData["첨부파일"] = json.data[0].file_count_now;
+                                                
+                                                var supplementInfo = JSON.parse(json.data[0].supplement_info)
+                                                var keys = Object.keys(supplementInfo);
+                                                for ( var i in keys ) {
+                                                	if ( keys[i] != 'null' ) {
+                                                		if ( keys[i].substring(keys[i].length-12, keys[i].length) == 'originalName' && supplementInfo[keys[i]] != '') {
+                                                			originFile.push(supplementInfo[keys[i]]);
+                                                		}
+                                                	}
+                                                }
                                             }
 
                                         },
@@ -99,7 +110,14 @@
                                     //키워드 검색 조건 필터 처리
                                     if (newData["name"].toLowerCase().indexOf(keyWord) > -1 || newData["발전소_명"].toLowerCase().indexOf(keyWord) > -1) {
                                         jsonList.push(newData)
+                                    } else {
+                                    	$.each(originFile, function(k,v){
+                                        	if (v.toLowerCase().indexOf(keyWord) > -1) {
+                                        		jsonList.push(newData);
+                                        	}
+                                        });
                                     }
+                                    
                                 }
 
                             }

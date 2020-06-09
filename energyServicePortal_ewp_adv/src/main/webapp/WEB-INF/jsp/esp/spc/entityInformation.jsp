@@ -40,10 +40,21 @@
         }
 
         function getCsvDown() {
-            var column = ["name", "발전소_명", "연차", "관리_운영_기간", "보증_방식", "PR_보증치", "보증_감소율", "추가_보수"], //json Key
-                header = ["SPC명", "발전소 명", "연차", "관리 운영기간	", "보증", "보증 값", "감소율", "추가보수"]; //csv 파일 헤더
+//             var column = ["name", "발전소_명", "연차", "관리_운영_기간", "보증_방식", "PR_보증치", "보증_감소율", "추가_보수"], //json Key
+//                 header = ["SPC명", "발전소 명", "연차", "관리 운영기간	", "보증", "보증 값", "감소율", "추가보수"]; //csv 파일 헤더
 
-            getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_info_list.csv"); // json list, 컬럼, 헤더명, 파일명
+//             getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_info_list.csv"); // json list, 컬럼, 헤더명, 파일명
+            let excelName = 'spc_info_list';
+            let $val = $('#excelList').find('tbody');
+            let cnt = $val.length;
+
+            if (cnt < 1) {
+                alert('다운받을 데이터가 없습니다.');
+            } else {
+                if (confirm('엑셀로 저장하시겠습니까?')) {
+                    tableToExcel('excelList', excelName);
+                }
+            }
         }
 
         function jsonDataFilter(jsonData) {
@@ -217,7 +228,7 @@
         </form>
         <div class="col-lg-9 col-md-8 col-sm-6">
             <div class="right">
-                <a href="#;" class="save_btn" onclick="getCsvDown();">CSV 다운로드</a>
+                <a href="#;" class="save_btn" onclick="getCsvDown();">엑셀 다운로드</a>
             </div>
         </div>
     </div>
@@ -227,7 +238,7 @@
                 <div class="btn_wrap_type01">
                     <button type="button" class="btn_type" onclick="location.href='/spc/entityInformationPost.do'">신규 등록</button>
                 </div>
-                <div class="spc_tbl align_type">
+                <div class="spc_tbl align_type" id="excelList">
                     <table class="sort_table chk_type">
                         <thead>
                             <tr>
