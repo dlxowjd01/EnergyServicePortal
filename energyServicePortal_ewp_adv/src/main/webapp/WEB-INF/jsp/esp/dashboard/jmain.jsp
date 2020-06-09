@@ -455,7 +455,6 @@
 					if (e.energy) {
 						const hour = Number(e.basetime.toString().slice(8, 10));
 						pvListHourly[hour] += Math.floor(e.energy / 1000);
-						pvListForecastingHourly[hour] += Math.floor(e.energy / 1000);
 					}
 				});
 			}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -464,6 +463,29 @@
 				console.error(errorThrown);
 			}).always(function (jqXHR, textStatus) {
 				setRealtimeRecord('actual');
+			});
+
+			$.ajax({
+				url: 'http://iderms.enertalk.com:8443/energy/forecasting/sites',
+				type: 'get',
+				data: {
+					sid: site.sid,
+					startTime: formDataDay.startTime,
+					endTime: formDataDay.endTime,
+					interval: 'hour'
+				},
+			}).done(function (data, textStatus, jqXHR) {
+				data.data[0].generation.items.map((e) => {
+					if (e.energy) {
+						const hour = Number(e.basetime.toString().slice(8, 10));
+						pvListForecastingHourly[hour] += Math.floor(e.energy / 1000);
+					}
+				});
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.error(jqXHR);
+				console.error(textStatus);
+				console.error(errorThrown);
+			}).always(function (jqXHR, textStatus) {
 				setRealtimeRecord('forecast');
 			});
 
@@ -600,18 +622,26 @@
 				hourGenAllSite += site.hourGenBySite;
 				hourForecastingGenAllSite += site.hourForecastingGenBySite;
 
-				if (site.todayForecastingGenBySite <= site.todayGenBySite) {
-					restDaily = null;
-					ratioDaily = 100;
+				if(site.todayForecastingGenBySite == 0 && site.todayGenBySite == 0) {
+					ratioDaily = 0;
 				} else {
-					ratioDaily = Math.floor((site.todayGenBySite / site.todayForecastingGenBySite) * 100);
-					restDaily = 100 - ratioDaily
+					if (site.todayForecastingGenBySite <= site.todayGenBySite) {
+						restDaily = null;
+						ratioDaily = 100;
+					} else {
+						ratioDaily = Math.floor((site.todayGenBySite / site.todayForecastingGenBySite) * 100);
+						restDaily = 100 - ratioDaily
+					}
 				}
 
-				if (site.hourForecastingGenBySite <= site.hourGenBySite) {
-					ratioHourly = 100;
+				if(site.hourForecastingGenBySite == 0 && site.hourGenBySite == 0) {
+					ratioHourly = 0;
 				} else {
-					ratioHourly = Math.floor((site.hourGenBySite / site.hourForecastingGenBySite) * 100);
+					if (site.hourForecastingGenBySite <= site.hourGenBySite) {
+						ratioHourly = 100;
+					} else {
+						ratioHourly = Math.floor((site.hourGenBySite / site.hourForecastingGenBySite) * 100);
+					}
 				}
 
 				//rchart1 변경

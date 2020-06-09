@@ -462,8 +462,39 @@ textarea::placeholder {
     border-radius: 4px;
     outline-style: none;
     vertical-align: middle;
+<<<<<<< HEAD
 }
 
+=======
+}
+
+
+/* custom webkit scroll */
+
+::-webkit-scrollbar-track {
+    /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
+    border-radius: 10px;
+    background-color: var(--scroll-color2);
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background-color: var(--scroll-color2);
+}
+
+::-webkit-scrollbar-corner {
+    background-color: var(--scroll-color2);
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);*/
+    background-color: var(--scroll-color);
+}
+
+>>>>>>> 6c076d5f1067cd6f5fb49ab556228fffe17a86df
 
 /* 달력 이미지 */
 
@@ -1996,6 +2027,7 @@ footer .copyright {
 
 .modal-body {
     padding: 20px 0;
+<<<<<<< HEAD
 }
 
 .modal-body .input-group {
@@ -2022,6 +2054,34 @@ footer .copyright {
     border: none;
 }
 
+=======
+}
+
+.modal-body .input-group {
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+}
+
+.modal-body .input-group .dropdown-toggle {
+    width: 250px;
+}
+
+.modal-body .input-group:not(:last-of-type) {
+    margin-bottom: 16px;
+}
+
+.modal-body .input-group label {
+    width: 25%;
+}
+
+.modal-header,
+.modal-footer {
+    padding: 0;
+    border: none;
+}
+
+>>>>>>> 6c076d5f1067cd6f5fb49ab556228fffe17a86df
 .modal-dialog.his_alarm .ly_wrap .ly_tit {
     padding-left: 0
 }
@@ -6894,6 +6954,7 @@ nav .lang.dropdown .btn .caret {
     justify-content: space-between;
     height: 784px;
     padding-top: 25px;
+<<<<<<< HEAD
 }
 
 .gmain_table.smain {
@@ -6903,6 +6964,17 @@ nav .lang.dropdown .btn .caret {
     padding-top: 0;
 }
 
+=======
+}
+
+.gmain_table.smain {
+    display: block;
+    width: 100%;
+    height: 846px;
+    padding-top: 0;
+}
+
+>>>>>>> 6c076d5f1067cd6f5fb49ab556228fffe17a86df
 .jmain_table.gmain_table {
     display: block;
 }
@@ -6914,7 +6986,10 @@ nav .lang.dropdown .btn .caret {
 
 .gmain_table .gtbl_top.clear .input_group1 {
     float: left;
+<<<<<<< HEAD
     margin-bottom: 10px;
+=======
+>>>>>>> 6c076d5f1067cd6f5fb49ab556228fffe17a86df
 }
 
 .gmain_table .gtbl_top.clear .input_group2 {
@@ -7027,12 +7102,17 @@ nav .lang.dropdown .btn .caret {
 }
 
 .gmain_table .gtbl_wrap {
+<<<<<<< HEAD
     margin-top: 20px;
+=======
+    margin-top: 24px;
+>>>>>>> 6c076d5f1067cd6f5fb49ab556228fffe17a86df
     overflow-y: auto;
 }
 
 .gmain_table .gtbl_wrap .intable {
     max-height: 675px;
+<<<<<<< HEAD
 }
 .gmain_table .gtbl_wrap .intable caption {
     margin-bottom: 10px;
@@ -7040,6 +7120,10 @@ nav .lang.dropdown .btn .caret {
     font-size: 13px;
     text-align: right;
 }
+=======
+}
+
+>>>>>>> 6c076d5f1067cd6f5fb49ab556228fffe17a86df
 .gmain_table .gtbl_wrap .intable th .btn_align {
     white-space: normal;
 }
@@ -7732,12 +7816,17 @@ div.di_wrap dl .link a {
 
 .realtime_time {
     background-color: #000;
+<<<<<<< HEAD
     border-radius: 3px;
     height: 6px;
+=======
+    height: 8px;
+>>>>>>> 6c076d5f1067cd6f5fb49ab556228fffe17a86df
     opacity: 30%;
     position: absolute;
     bottom: 40px;
     width: 100%;
+<<<<<<< HEAD
 }
 .realtime_label {
     position: absolute;
@@ -7748,6 +7837,10 @@ div.di_wrap dl .link a {
     line-height: 22px;
     color: var(--color-4);
 }
+=======
+}
+
+>>>>>>> 6c076d5f1067cd6f5fb49ab556228fffe17a86df
 .real_total h3 {
     font-size: 15px;
     color: #fff;
