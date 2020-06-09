@@ -556,7 +556,7 @@
                         <button type="button" class="btn_type" onclick="modalInit();">신규 생성</button>
                     </div>
                     <div class="spc_tbl align_type">
-                        <table class="chk_type">
+                        <table class="sort_table chk_type">
                             <colgroup>
                                 <col style="width:10%">
                                 <col style="width:10%">
@@ -574,14 +574,14 @@
                                         <input type="checkbox" id="chk_header" value="순번" onclick="setCheckedAll(this, 'rowCheck');">
                                         <label for="chk_header"><span></span>순번</label>
                                     </th>
-                                    <th>SPC명</th>
-                                    <th>발전소명</th>
-                                    <th>보고서 유형</th>
-                                    <th>적용기간</th>
-                                    <th>다운로드</th>
-                                    <th>보고서 생성 시간</th>
-                                    <th>보고서 확정</th>
-                                    <th>최종 작업자</th>
+                                    <th><button class="btn_align down">SPC명</button></th>
+                                    <th><button class="btn_align down">발전소명</button></th>
+                                    <th><button class="btn_align down">보고서 유형</button></th>
+                                    <th><button class="btn_align down">적용기간</button></th>
+                                    <th><button class="btn_align down">다운로드</button></th>
+                                    <th><button class="btn_align down">보고서 생성 시간</button></th>
+                                    <th><button class="btn_align down">보고서 확정</button></th>
+                                    <th><button class="btn_align down">최종 작업자</button></th>
                                 </tr>
                             </thead>
                             <tbody id="listData">

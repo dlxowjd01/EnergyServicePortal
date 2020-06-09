@@ -1951,13 +1951,3 @@ function SortTable(table, n, sort) {
 		}
 	}
 }
-
-function isNumberic (num) {
-	var regex = /^(([1-9][0-9]{0,2}(,[0-9]{3})*)|[0-9]+){1}(\.[0-9]+)?$/g;
-	if (regex.test(num)) {
-		num = String(num).replace(/,/g, "");
-		return isNaN(num) ? false : true;
-	} else {
-		return false;
-	}
-}

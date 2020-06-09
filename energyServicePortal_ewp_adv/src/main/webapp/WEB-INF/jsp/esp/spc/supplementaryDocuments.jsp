@@ -15,7 +15,6 @@
 
                 getDataList();
 
-
             });
 
             $(document).on('keyup', '#key_word', function(e) {
@@ -154,7 +153,7 @@
             <div class="col-lg-12">
                 <div class="indiv">
                     <div class="spc_tbl align_type">
-                        <table class="chk_type mt30">
+                        <table class="sort_table chk_type mt30">
                             <thead>
                                 <tr>
                                     <th>
@@ -163,9 +162,9 @@
                                     </th>
                                     <th><button class="btn_align down">SPC명</button></th>
                                     <th><button class="btn_align down">발전소 명</button></th>
-                                    <th class="right"><button class="btn_align down">용량(kW)</button></th>
+                                    <th><button class="btn_align down">용량(kW)</button></th>
                                     <th><button class="btn_align down">관리 운영기간</button></th>
-                                    <th class="right"><button class="btn_align down">이관자료</button></th>
+                                    <th><button class="btn_align down">이관자료</button></th>
                                     <th class="right"><button class="btn_align up">첨부파일</button></th>
                                 </tr>
                             </thead>

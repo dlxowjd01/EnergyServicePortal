@@ -232,7 +232,7 @@ $.ajax({
                 <button type="button" class="btn_type" onclick="location.href='/spc/balanceSheetPost.do'">신규 등록</button>
             </div>
             <div class="spc_tbl align_type">
-                <table class="chk_type">
+                <table class="sort_table chk_type">
                     <thead>
                         <tr>
                             <th>

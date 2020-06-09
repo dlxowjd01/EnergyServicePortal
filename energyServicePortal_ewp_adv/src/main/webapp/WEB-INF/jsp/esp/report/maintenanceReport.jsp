@@ -218,19 +218,19 @@
 					<button type="button" class="btn_type" onclick="location.href='/report/maintenanceReportPost.do'">등록</button>
 				</div>
 				<div class="spc_tbl align_type">			
-					<table class="chk_type">
+					<table class="sort_table chk_type">
 						<thead>
 							<tr>
 								<th>
 									<input type="checkbox" id="chk_header" value="순번" onclick="setCheckedAll(this, 'rowCheck');">
 									<label for="chk_header"><span></span>순번</label>
 								</th>
-								<th>보고서 구분</th>
-								<th>문서번호</th>
-								<th>보고서명</th>
-								<th>작성자</th>
-								<th>작성일자</th>
-								<th>등록상태</th>
+								<th><button class="btn_align down">보고서 구분</button></th>
+								<th><button class="btn_align down">문서번호</button></th>
+								<th><button class="btn_align down">보고서명</button></th>
+								<th><button class="btn_align down">작성자</button></th>
+								<th><button class="btn_align down">작성일자</button></th>
+								<th><button class="btn_align down">등록상태</button></th>
 							</tr>
 						</thead>
 						<tbody id="listData">

@@ -504,38 +504,7 @@
                 $('#chartType input').on('click', function() {
                     fetchCharts();
                 });
-                //헤더 클릭
-                $('.his_tbl thead th').on('click', function(e) {
-                    var idx = $('.his_tbl thead th').index($(this)),
-                        order = $(this).data('order'),
-                        column = $(this).data('column');
-                    let Selector = '';
-
-                    if (idx >= 1 && idx < 8) {
-                        $('.his_tbl thead th a').removeClass('asc').removeClass('desc');
-                        if (order == undefined || order == null || order == '') {
-                            changeTablegird.sort(function(a, b) {
-                                return a[column] - b[column];
-                            });
-                            $(this).data('order', 'asc');
-                            $(this).find('a').addClass('asc');
-                        } else if (order == 'asc') {
-                            changeTablegird.sort(function(a, b) {
-                                return b[column] - a[column];
-                            });
-                            $(this).data('order', 'desc');
-                            $(this).find('a').addClass('desc');
-                        } else {
-                            changeTablegird.sort(function(a, b) {
-                                return a[column] - b[column];
-                            });
-                            $(this).data('order', 'asc');
-                            $(this).find('a').addClass('asc');
-                        }
-
-                    }
-                });
-
+                
                 $('#fileUpload').on('click', function() {
                     $('#picture').trigger('click');
                 });
@@ -733,11 +702,11 @@
                         hCell.innerHTML = '<input type="checkbox" id="alarmConfirmCheck' + deviceType + '" onclick="alarmConfirmCheckAll(\'' + deviceType + '\');"><label for="alarmConfirmCheck' + deviceType + '"><span></span></label>';
                         tRow.appendChild(hCell);
                     } else {
-                        hCell.innerHTML = colList[i - 1];
+                        hCell.innerHTML = '<button class="btn_align">' + colList[i - 1] + '</button>';
                         tRow.appendChild(hCell);
                     }
                 }
-                newHeadTable.setAttribute('class', 'his_tbl chk_type');
+                newHeadTable.setAttribute('class', 'sort_table his_tbl chk_type');
                 newHeadTable.setAttribute('id', deviceType);
                 $(".tbl_wrap_type").append(newHeadTable);
             }
@@ -771,6 +740,7 @@
                 tbodyStr += '</tr>';
                 $(Selector).append(tbodyStr);
             }
+            
             const createAck = function(alarmId) {
                 $('#alarmMeasure').modal('show').data('value', alarmId).data('ticket', '');
                 ackStatusInit();
@@ -1136,6 +1106,7 @@
                 }
                 return filterArray;
             }
+            
             const statusFilter = function(filterdata, statusArray, data) {
                 $.each(data, function(i, el) {
                     $.each(statusArray, function(j, e2) {

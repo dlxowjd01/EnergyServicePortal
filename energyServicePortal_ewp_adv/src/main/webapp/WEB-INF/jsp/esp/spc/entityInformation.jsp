@@ -228,7 +228,7 @@
                     <button type="button" class="btn_type" onclick="location.href='/spc/entityInformationPost.do'">신규 등록</button>
                 </div>
                 <div class="spc_tbl align_type">
-                    <table class="chk_type">
+                    <table class="sort_table chk_type">
                         <thead>
                             <tr>
                                 <th>
@@ -242,7 +242,7 @@
                                 <th><button class="btn_align down">보증</button></th>
                                 <th class="right"><button class="btn_align down">보증 값</button></th>
                                 <th class="right"><button class="btn_align down">감소율</button></th>
-                                <th>- 추가보수</th>
+                                <th><button class="btn_align down">- 추가보수</button></th>
                             </tr>
                         </thead>
                         <tbody id="listData">
