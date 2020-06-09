@@ -476,9 +476,10 @@
 					interval: 'hour'
 				},
 			}).done(function (data, textStatus, jqXHR) {
-				if(data.data[0].generation.items[0]) {
+				if(isEmpty(data.data[0].generation.items[0])) {
+					siteList[siteIdx].hourForecastingGenBySite = 0;
+				} else {
 					siteList[siteIdx].hourForecastingGenBySite = Math.floor(data.data[0].generation.items[0].energy / 1000);
-					console.log("data===", data.data[0].generation.items[0])
 				}
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.error(jqXHR);
@@ -500,7 +501,11 @@
 				},
 			}).done(function (data, textStatus, jqXHR) {
 				//사이트 합 오늘 예측량 더하기
-				siteList[siteIdx].todayForecastingGenBySite = Math.floor(data.data[0].generation.items[0].energy / 1000);
+				if(isEmpty(data.data[0].generation.items[0])) {
+					siteList[siteIdx].todayForecastingGenBySite = 0;
+				} else{
+					siteList[siteIdx].todayForecastingGenBySite = Math.floor(data.data[0].generation.items[0].energy / 1000);
+				}
 				// todayForecastingGenAllSite += todayForecastingGenBySite;
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.error(jqXHR);
@@ -522,7 +527,11 @@
 			},
 		}).done(function (data, textStatus, jqXHR) {
 			siteList.forEach((site, siteIdx) => {
-				siteList[siteIdx].hourGenBySite = Math.floor(data.data[site.sid].energy / 1000);
+				if(isEmpty(data.data[site.sid])) {
+					siteList[siteIdx].hourGenBySite = 0;
+				} else {
+					siteList[siteIdx].hourGenBySite = Math.floor(data.data[site.sid].energy / 1000);
+				}
 			});
 			setRealtimeRecord('nowHour');
 		}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -542,7 +551,11 @@
 			},
 		}).done(function (data, textStatus, jqXHR) {
 			siteList.forEach((site, siteIdx) => {
-				siteList[siteIdx].todayGenBySite = Math.floor(data.data[site.sid].energy / 1000);
+				if(isEmpty(data.data[site.sid])) {
+					siteList[siteIdx].todayGenBySite = 0;
+				} else {
+					siteList[siteIdx].todayGenBySite = Math.floor(data.data[site.sid].energy / 1000);
+				}
 			});
 			//todayGenAllSite += todayGenBySite;
 			setRealtimeRecord('nowToday');

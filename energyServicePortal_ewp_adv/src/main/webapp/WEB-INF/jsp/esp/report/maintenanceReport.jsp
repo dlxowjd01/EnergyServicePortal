@@ -20,6 +20,12 @@
 		$(this).parents('.dropdown').find('button').data('value', dataValue);
 	});	
 
+	$(document).on('keyup', '#key_word', function(e){
+		if(e.keyCode == 13){
+			getDataList();
+		}
+	})
+	
 	function nvl(value, str){
 		if(isEmpty(value)){
 			return str;
@@ -36,7 +42,7 @@
 	}
 	
 	function jsonDataFilter(jsonData){
-		var keyWord = $("#key_word").val(),
+		var keyWord = $("#key_word").val().trim().toLowerCase(),
 			report_type = $("#report_type").data("value"),
 			write_date_from = $("#write_date_from").val().split("-").join(""),
 			write_date_to = $("#write_date_to").val().split("-").join(""),
@@ -65,8 +71,8 @@
 			bWriteDate = true;
 		}		
 		//키워드검색
-		if(jsonData.report_name.indexOf(keyWord) > -1 || workinfoObj.출장_장소.indexOf(keyWord) > -1 || workinfoObj.출장_목적.indexOf(keyWord) > -1 
-		|| workinfoObj.출장자.indexOf(keyWord) > -1 || jsonData.site_name.indexOf(keyWord) > -1 || jsonData.updated_by.indexOf(keyWord) > -1){
+		if(jsonData.report_name.toLowerCase().indexOf(keyWord) > -1 || workinfoObj.출장_장소.toLowerCase().indexOf(keyWord) > -1 || workinfoObj.출장_목적.toLowerCase().indexOf(keyWord) > -1 
+		|| workinfoObj.출장자.toLowerCase().indexOf(keyWord) > -1 || jsonData.site_name.toLowerCase().indexOf(keyWord) > -1 || jsonData.updated_by.toLowerCase().indexOf(keyWord) > -1){
 			bKeyWord = true;
 		}		
 		

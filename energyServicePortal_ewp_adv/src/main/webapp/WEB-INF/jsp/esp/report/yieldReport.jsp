@@ -1,413 +1,397 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-    <%@ include file="/decorators/include/taglibs.jsp" %>
-        <script type="text/javascript">
-            let today = new Date();
-            const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
-            const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
-            let repeat_type_method = 'post';
-            let repeatCoastNumber = new Object();
-            let reportType = {
-                regular_mm: '월간 발전량',
-                regular_qt: '분기 발전량',
-                regular_yy: '년간 발전량',
-                profit_mm: '월간 수익보고서'
-            }
-
-            $(function() {
-                // popOption();
-                initRow('yield_list');
-
-                setInitList("listData"); //리스트초기화
-
-                getDataList();
-            })
-
-            $(document).on('click', '#yield_list > li > button.btn_type07', function() {
-                let idx = $('#yield_list > li > button.btn_type07').index($(this));
-                delRow('yield_list', idx);
-            });
-
-            $(document).on('click', '.dropdown li', function(e) {
-                e.preventDefault();
-                let dataValue = $(this).data('value');
-                let dataText = $(this).text();
-                let id = $(this).parents('.dropdown').prop('id');
-
-                $(this).parents('.dropdown').find('button').html(dataText + '<span class="caret"></span>').data('value', dataValue);
-
-                if (id == 'spc_id') {
-                    callAjax({
-                        url: 'http://iderms.enertalk.com:8443/spcs/' + dataValue,
-                        type: 'get',
-                        data: {
-                            oid: oid,
-                            includeGens: true
-                        }
-                    }, setSpcGen);
-                } else if (id == 'report_type') {
-                    if (dataValue == 'regular_mm') {
-                        let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-                        $('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 2, 1));
-                        $('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1, 0));
-                    } else if (dataValue == 'regular_qt') {
-                        var quarter = Math.floor((today.getMonth() - 3) / 3);
-                        prevtq = new Date(today.getFullYear(), quarter * 3, 1);
-                        $('.fromDate').datepicker('setDate', new Date(today.getFullYear(), quarter * 3, 1));
-                        $('.toDate').datepicker('setDate', new Date(today.getFullYear(), (quarter + 1) * 3, 0));
-                    } else if (dataValue == 'regular_yy') {
-                        let reportDate = new Date(today.getFullYear() - 1, 0, 1);
-                        $('.fromDate').datepicker('setDate', new Date(today.getFullYear() - 1, 0, 1));
-                        $('.toDate').datepicker('setDate', new Date(today.getFullYear(), 0, 0));
-                    } else if (dataValue == 'profit_mm') {
-                        let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-                        $('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 2, 1));
-                        $('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1, 0));
-                    } else {
-                        alert('보고서 유형이 선택되지 않았습니다.');
-                        return false;
-                    }
-                }
-            });
-
-            $(document).on('change', 'input[type="file"]', function() {
-                let uuid = genUuid();
-                let thisId = $(this).prop('id');
-
-                $('#upload').empty();
-                $(this).clone().appendTo('#upload');
-                $('#upload').find('input').attr('name', uuid).attr('id', uuid);
-
-                callAjax({
-                    type: 'post',
-                    enctype: 'multipart/form-data',
-                    url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
-                    data: new FormData($('#upload')[0]),
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    timeout: 600000
-                }, setUploadAfter, thisId);
-            });
-
-            const callAjax = function(option, callBack, param) {
-                $.ajax(option).done(function(data, textStatus, jqXHR) {
-                    if (typeof callBack == 'function') {
-                        if (param != undefined) {
-                            callBack.call(this, data, param);
-                        } else {
-                            callBack.call(this, data);
-                        }
-                    } else if (typeof callBack == 'string') {
-                        eval(callBack + '("' + param + '")');
-                    }
-                }).fail(function(jqXHR, textStatus, errorThrown) {
-                    console.error(jqXHR);
-                    console.error(textStatus);
-                    console.error(errorThrown);
-
-                    alert('처리 중 오류가 발생했습니다.');
-                    return false;
-                });
-            }
-
-            const modalInit = function() {
-                callAjax({
-                    url: 'http://iderms.enertalk.com:8443/spcs',
-                    type: 'get',
-                    data: {
-                        oid: oid
-                    }
-                }, setSpc);
-            }
-
-            const setSpc = function(data) {
-                let spcList = data.data;
-                let html = '';
-
-                for (let i in spcList) {
-                    let temp = spcList[i];
-                    html += '<li data-value="' + temp.spc_id + '"><a href="javascript:void(0);">' + temp.name + '</a></li>';
-                }
-
-                $('#spc_id ul').empty().append(html);
-
-                delRow('yield_list');
-
-                //팝업 오픈시 value 초기화
-                $('#reportModal input').each(function() {
-                    $(this).val('');
-                });
-
-                $('#reportModal button.btn-primary').each(function() {
-                    $(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
-                });
-
-                $('#reportModal').modal();
-            }
-
-            const setSpcGen = function(data) {
-                let siteList = data.data[0].spcGens;
-                let html = '';
-
-                $('#site_id button').html('선택 <span class="caret"></span>').data('value', ''); //초기화
-
-                for (let i in siteList) {
-                    let temp = siteList[i];
-                    html += '<li data-value="' + temp.gen_id + '"><a href="javascript:void(0);">' + temp.name + '</a></li>';
-                }
-
-                $('#site_id ul').empty().append(html);
-            }
-
-            //보고서 생성
-            const reportCreate = function() {
-                let data = setAreaParamData('reportModal', 'dropdown'),
-                    report_variable = new Array();
-
-                $('[id^=report_variable_key_]').each(function() {
-                    let keyText = $(this).find('button').data('value'),
-                        valText = $(this).next().find('input').val(),
-                        temp = new Object();
-
-                    temp[keyText] = valText;
-                    report_variable.push(temp);
-                });
-
-                $.map(data, function(val, key) {
-                    if (key.match('report_variable_')) {
-                        delete data[key];
-                    }
-                });
-
-                data['report_variable'] = JSON.stringify(report_variable);
-                data['generated_by'] = loginId;
-                data['updated_by'] = loginId;
-                data['generated_at'] = today.toISOString();
-
-                let option = {
-                    url: 'http://iderms.enertalk.com:8443/reports/performance?oid=' + oid,
-                    method: 'post',
-                    dataType: 'json',
-                    contentType: "application/json",
-                    traditional: true,
-                    data: JSON.stringify(data)
-                };
-
-                callAjax(option, afterCreate);
-            }
-
-            const afterCreate = function(data) {
-                alert('보고서 등록이 완료되었습니다.');
-                $('#reportModal').modal('hide');
-                getDataList();
-            }
-
-            function getDataList() {
-                let type = $('#reportClass button').data('value');
-                let data = {
-                    oid: oid
-                }
-                if (type != undefined && type != '') {
-                    data['report_type'] = type;
-                }
-
-                $.ajax({
-                    url: "http://iderms.enertalk.com:8443/reports/performance",
-                    type: "get",
-                    async: false,
-                    data: data,
-                    success: function(result) {
-                        var jsonList = [],
-                            keyWord = $('#key_word').val();
-
-                        for (var i in result.data) {
-                            var temp = result.data[i],
-                                reportTypeName = reportType[temp.report_type],
-                                report_data_start = (new Date(temp.report_data_start)).format('yyyy-MM-dd'),
-                                report_data_end = (new Date(temp.report_data_end)).format('yyyy-MM-dd');
-
-                            result.data[i].reportTypeName = reportTypeName; //리포트 유형명
-                            result.data[i].report_date = report_data_start + '~' + report_data_end;
-
-                            if (temp.generated_at != null) {
-                                let generated_date = (new Date(temp.generated_at)).format('yyyy-MM-dd');
-                                result.data[i].generated_date = generated_date;
-                            }
-
-                            if (temp.generated_file_link != null) {
-                                let linkData = JSON.parse(temp.generated_file_link);
-                                console.log(linkData);
-                                result.data[i].file_link = 'location.href=\'http://iderms.enertalk.com:8443/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
-                            }
-
-
-                            if (temp.confirmed_at != null) {
-                                let confirmed_date = (new Date(temp.confirmed_at)).format('yyyy-MM-dd');
-                                let linkData = JSON.parse(temp.confirmed_file_link);
-                                let file_link = 'location.href=\'http://iderms.enertalk.com:8443/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
-                                result.data[i].confirmed_date = confirmed_date + '<button class="btn_file fr down" onclick="' + file_link + '">다운로드</button>';
-                            } else {
-                                let confirmed_date = '확정 보고서 업로드';
-                                result.data[i].confirmed_date = confirmed_date + '<label for="cofirmFile' + i + '" class="btn_file fr up"">업로드</label> <input type="file" id="cofirmFile' + i + '" name="cofirmFile' + i + '" class="uploadBtn" style="display:none;">';
-                            }
-
-                            if (jsonDataFilter(result.data[i])) {
-                                jsonList.push(result.data[i]);
-                            }
-                        }
-
-                        setMakeList(jsonList, "listData", {
-                            "dataFunction": {
-                                "INDEX": getNumberIndex
-                            }
-                        }); //list생성
-                    },
-                    error: function(request, status, error) {
-                        alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
-                    }
-                });
-            }
-
-            function jsonDataFilter(jsonData) {
-                var keyWord = $('#key_word').val(),
-                    // 		selectYear = $("#year button").text(),
-                    // 		selectMonth = $("#month button").text(),
-                    // 		bWriteDate = false,
-                    // 		bKeyWord = false,
-                    bResult = false;
-                // 		let jsonDataYear = jsonData.report_date.substring(0, 4);
-                // 		let jsonDataMonth = jsonData.report_date.substring(5, 7);
-
-                // 		if(selectYear == "" && selectMonth == ""){
-                // 			bWriteDate = true;	
-                // 		}else{
-                // 			if(selectYear == jsonDataYear || selectMonth == jsonDataMonth){
-                // 				bWriteDate = true;
-                // 			}else{
-                // 				bWriteDate = false;
-                // 			}			
-                // 		}
-
-                if (jsonData['site_name'].indexOf(keyWord) > -1 || jsonData['spc_name'].indexOf(keyWord) > -1 || jsonData['updated_by'].indexOf(keyWord) > -1) {
-                    bResult = true;
-                }
-
-                // 		if(bWriteDate && bKeyWord){
-                // 			bResult = true;	
-                // 		}
-
-                return bResult;
-            }
-
-            function getNumberIndex(index) {
-                return index + 1;
-            }
-
-            function setCheckedAll(obj, chkName) {
-                var checkVal = obj.checked;
-                $("input[name='" + chkName + "']").prop("checked", checkVal);
-            }
-
-            function getCheckList(checkName) {
-                var jsonList = $("#listData").data("gridJsonData"),
-                    checkList = [];
-                $("input[name='" + checkName + "']").each(function(i) {
-                    if (this.checked) {
-                        checkList.push(jsonList[i]);
-                    }
-                });
-
-                return checkList;
-            }
-
-            function setCheckedDataRemove() {
-                var checkDataList = getCheckList("rowCheck");
-                count = checkDataList.length,
-                    sucessCnt = 0;
-
-                if (count == 0) {
-                    alert("삭제 할 목록을 선택하세요.");
-                    return;
-                }
-
-                for (var i = 0; i < count; i++) {
-                    var rowData = checkDataList[i];
-                    $.ajax({
-                        url: 'http://iderms.enertalk.com:8443/reports/performance/' + rowData.id + '?oid=' + oid,
-                        type: 'delete',
-                        async: false,
-                        data: {},
-                        success: function(json) {
-                            sucessCnt++;
-                        },
-                        error: function(request, status, error) {}
-                    });
-                }
-
-                alert(sucessCnt + "건 삭제처리되었습니다.");
-                getDataList();
-            }
-
-            const setUploadAfter = function(result, propName) {
-                if (result.files.length > 0) {
-                    var checkDataList = $("#listData").data("gridJsonData"),
-                        idx = Number(propName.replace('cofirmFile', ''));
-
-                    let confirmed_file_link = {
-                        fileKey: result.files[0].fieldname,
-                        orgFileName: result.files[0].originalname
-                    }
-
-                    let data = {
-                        confirmed_file_link: JSON.stringify(confirmed_file_link),
-                        confirmed_by: loginId,
-                        confirmed_at: new Date().toISOString()
-                    }
-
-                    let option = {
-                        url: 'http://iderms.enertalk.com:8443/reports/performance/' + checkDataList[idx].id + '?oid=' + oid,
-                        method: 'patch',
-                        dataType: 'json',
-                        contentType: "application/json",
-                        traditional: true,
-                        data: JSON.stringify(data)
-                    };
-
-                    callAjax(option, confirmUpload);
-                }
-            }
-
-            const confirmUpload = function(data) {
-                console.log(data);
-
-                alert('보고서가 확정 처리 되었습니다.');
-                getDataList();
-            }
-        </script>
-
-        <!-- 파일 업로드 폼 -->
-        <form id="upload" name="upload" method="multipart/form-data">
-        </form>
-
-        <!-- 모달 -->
-        <div id="reportModal" class="modal fade" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="ly_wrap">
-                        <h2 class="ly_tit">수익보고서 신규</h2>
-                        <div class="spc_tbl02_row">
-                            <table>
-                                <colgroup>
-                                    <col style="width:157px">
-                                    <col style="width:365px">
-                                    <col style="width:156px">
-                                    <col style="width:364px">
-                                </colgroup>
-                                <tr>
-                                    <th>SPC</th>
-                                    <td>
-                                        <div class="dropdown placeholder fl" id="spc_id">
-                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="">
+<%@ include file="/decorators/include/taglibs.jsp" %>
+<script type="text/javascript">
+	let today = new Date();
+	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
+	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
+	let repeat_type_method = 'post';
+	let repeatCoastNumber = new Object();
+	let reportType = {
+		regular_mm: '월간 발전량',
+		regular_qt: '분기 발전량',
+		regular_yy: '년간 발전량',
+		profit_mm: '월간 수익보고서'
+	}
+
+	$(function () {
+		// popOption();
+		initRow('yield_list');
+
+		setInitList("listData"); //리스트초기화
+
+		getDataList();
+	})
+
+	$(document).on('click', '#yield_list > li > button.btn_type07', function () {
+		let idx = $('#yield_list > li > button.btn_type07').index($(this));
+		delRow('yield_list', idx);
+	});
+
+	$(document).on('click', '.dropdown li', function (e) {
+		e.preventDefault();
+		let dataValue = $(this).data('value');
+		let dataText = $(this).text();
+		let id = $(this).parents('.dropdown').prop('id');
+
+		$(this).parents('.dropdown').find('button').html(dataText + '<span class="caret"></span>').data('value', dataValue);
+
+		if (id == 'spc_id') {
+			callAjax({
+				url: 'http://iderms.enertalk.com:8443/spcs/' + dataValue,
+				type: 'get',
+				data: {
+					oid: oid,
+					includeGens: true
+				}
+			}, setSpcGen);
+		} else if (id == 'report_type') {
+			if (dataValue == 'regular_mm') {
+				let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 2, 1));
+				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1, 0));
+			} else if (dataValue == 'regular_qt') {
+				var quarter = Math.floor((today.getMonth() - 3) / 3);
+				prevtq = new Date(today.getFullYear(), quarter * 3, 1);
+				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), quarter * 3, 1));
+				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), (quarter + 1) * 3, 0));
+			} else if (dataValue == 'regular_yy') {
+				let reportDate = new Date(today.getFullYear() - 1, 0, 1);
+				$('.fromDate').datepicker('setDate', new Date(today.getFullYear() - 1, 0, 1));
+				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), 0, 0));
+			} else if (dataValue == 'profit_mm') {
+				let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 2, 1));
+				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1 , 0));
+			} else {
+				alert('보고서 유형이 선택되지 않았습니다.');
+				return false;
+			}
+		}
+	});
+
+	$(document).on('change', 'input[type="file"]', function() {
+		let uuid = genUuid();
+		let thisId = $(this).prop('id');
+
+		$('#upload').empty();
+		$(this).clone().appendTo('#upload');
+		$('#upload').find('input').attr('name', uuid).attr('id', uuid);
+
+		callAjax({
+			type: 'post',
+			enctype: 'multipart/form-data',
+			url: 'http://iderms.enertalk.com:8443/files/upload?oid='+oid,
+			data: new FormData($('#upload')[0]),
+			processData: false,
+			contentType: false,
+			cache: false,
+			timeout: 600000
+		}, setUploadAfter, thisId);
+	});
+
+	const callAjax = function (option, callBack, param) {
+		$.ajax(option).done(function (data, textStatus, jqXHR) {
+			if (typeof callBack == 'function') {
+				if (param != undefined) {
+					callBack.call(this, data, param);
+				} else {
+					callBack.call(this, data);
+				}
+			} else if (typeof callBack == 'string') {
+				eval(callBack + '("' + param + '")');
+			}
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.error(jqXHR);
+			console.error(textStatus);
+			console.error(errorThrown);
+
+			alert('처리 중 오류가 발생했습니다.');
+			return false;
+		});
+	}
+
+	$(document).on('keyup', '#key_word', function(e){
+		if(e.keyCode == 13){
+			getDataList();
+		}
+	})
+	
+	const modalInit = function () {
+		callAjax({
+			url: 'http://iderms.enertalk.com:8443/spcs',
+			type: 'get',
+			data: {
+				oid: oid
+			}
+		}, setSpc);
+	}
+
+	const setSpc = function (data) {
+		let spcList = data.data;
+		let html = '';
+
+		for (let i in spcList) {
+			let temp = spcList[i];
+			html += '<li data-value="' + temp.spc_id + '"><a href="javascript:void(0);">' + temp.name + '</a></li>';
+		}
+
+		$('#spc_id ul').empty().append(html);
+
+		delRow('yield_list');
+
+		//팝업 오픈시 value 초기화
+		$('#reportModal input').each(function () {
+			$(this).val('');
+		});
+
+		$('#reportModal button.btn-primary').each(function () {
+			$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
+		});
+
+		$('#reportModal').modal();
+	}
+
+	const setSpcGen = function (data) {
+		let siteList = data.data[0].spcGens;
+		let html = '';
+
+		$('#site_id button').html('선택 <span class="caret"></span>').data('value', ''); //초기화
+
+		for (let i in siteList) {
+			let temp = siteList[i];
+			html += '<li data-value="' + temp.gen_id + '"><a href="javascript:void(0);">' + temp.name + '</a></li>';
+		}
+
+		$('#site_id ul').empty().append(html);
+	}
+
+	//보고서 생성
+	const reportCreate = function () {
+		let data = setAreaParamData('reportModal', 'dropdown'),
+			report_variable = new Array();
+
+		$('[id^=report_variable_key_]').each(function () {
+			let keyText = $(this).find('button').data('value'),
+				valText = $(this).next().find('input').val(),
+				temp = new Object();
+
+			temp[keyText] = valText;
+			report_variable.push(temp);
+		});
+
+		$.map(data, function (val, key) {
+			if (key.match('report_variable_')) {
+				delete data[key];
+			}
+		});
+
+		data['report_variable'] = JSON.stringify(report_variable);
+		data['generated_by'] = loginId;
+		data['updated_by'] = loginId;
+		data['generated_at'] = today.toISOString();
+
+		let option = {
+			url: 'http://iderms.enertalk.com:8443/reports/performance?oid=' + oid,
+			method: 'post',
+			dataType: 'json',
+			contentType: "application/json",
+			traditional: true,
+			data: JSON.stringify(data)
+		};
+
+		callAjax(option, afterCreate);
+	}
+
+	const afterCreate = function (data) {
+		alert('보고서 등록이 완료되었습니다.');
+		$('#reportModal').modal('hide');
+		getDataList();
+	}
+
+	function getDataList() {
+		let type = $('#reportClass button').data('value');
+		let data = {
+			oid: oid
+		}
+		if(type != undefined && type != '') {
+			data['report_type'] = type;
+		}
+
+		$.ajax({
+			url: "http://iderms.enertalk.com:8443/reports/performance",
+			type: "get",
+			async: false,
+			data: data,
+			success: function (result) {
+				var jsonList = [],
+					keyWord = $('#key_word').val();
+
+				for (var i in result.data) {
+					var temp = result.data[i],
+						reportTypeName = reportType[temp.report_type],
+						report_data_start = (new Date(temp.report_data_start)).format('yyyy-MM-dd'),
+						report_data_end = (new Date(temp.report_data_end)).format('yyyy-MM-dd');
+
+					result.data[i].reportTypeName = reportTypeName; //리포트 유형명
+					result.data[i].report_date = report_data_start + '~' + report_data_end;
+
+					if (temp.generated_at != null) {
+						let generated_date = (new Date(temp.generated_at)).format('yyyy-MM-dd');
+						result.data[i].generated_date = generated_date;
+					}
+
+					if (temp.generated_file_link != null) {
+						let linkData = JSON.parse(temp.generated_file_link);
+						console.log(linkData);
+						result.data[i].file_link = 'location.href=\'http://iderms.enertalk.com:8443/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
+					}
+
+
+					if (temp.confirmed_at != null) {
+						let confirmed_date = (new Date(temp.confirmed_at)).format('yyyy-MM-dd');
+						let linkData = JSON.parse(temp.confirmed_file_link);
+						let file_link = 'location.href=\'http://iderms.enertalk.com:8443/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
+						result.data[i].confirmed_date = confirmed_date + '<button class="btn_file fr down" onclick="' + file_link + '">다운로드</button>';
+					} else {
+						let confirmed_date = '확정 보고서 업로드';
+						result.data[i].confirmed_date = confirmed_date + '<label for="cofirmFile' + i + '" class="btn_file fr up"">업로드</label> <input type="file" id="cofirmFile' + i + '" name="cofirmFile' + i + '" class="uploadBtn" style="display:none;">';
+					}
+
+					if(jsonDataFilter(result.data[i])) {
+						jsonList.push(result.data[i]);
+					}
+				}
+
+				setMakeList(jsonList, "listData", {"dataFunction": {"INDEX": getNumberIndex}}); //list생성
+			},
+			error: function (request, status, error) {
+				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+			}
+		});
+	}
+
+	function jsonDataFilter(jsonData){
+		var keyWord = $('#key_word').val().trim().toLowerCase(), 
+		bResult = false;
+		
+		if(jsonData['site_name'].toLowerCase().indexOf(keyWord) > -1 || jsonData['spc_name'].toLowerCase().indexOf(keyWord) > -1 || jsonData['updated_by'].toLowerCase().indexOf(keyWord) > -1){			
+			bResult = true;
+		}
+		
+		return bResult;
+	}
+
+	function getNumberIndex(index) {
+		return index + 1;
+	}
+
+	function setCheckedAll(obj, chkName) {
+		var checkVal = obj.checked;
+		$("input[name='" + chkName + "']").prop("checked", checkVal);
+	}
+
+	function getCheckList(checkName) {
+		var jsonList = $("#listData").data("gridJsonData"),
+			checkList = [];
+		$("input[name='" + checkName + "']").each(function (i) {
+			if (this.checked) {
+				checkList.push(jsonList[i]);
+			}
+		});
+
+		return checkList;
+	}
+
+	function setCheckedDataRemove() {
+		var checkDataList = getCheckList("rowCheck");
+		count = checkDataList.length,
+			sucessCnt = 0;
+
+		if (count == 0) {
+			alert("삭제 할 목록을 선택하세요.");
+			return;
+		}
+
+		for (var i = 0; i < count; i++) {
+			var rowData = checkDataList[i];
+			$.ajax({
+				url: 'http://iderms.enertalk.com:8443/reports/performance/' + rowData.id + '?oid=' + oid,
+				type: 'delete',
+				async: false,
+				data: {},
+				success: function (json) {
+					sucessCnt++;
+				},
+				error: function (request, status, error) {
+				}
+			});
+		}
+
+		alert(sucessCnt + "건 삭제처리되었습니다.");
+		getDataList();
+	}
+
+	const setUploadAfter = function(result, propName) {
+		if(result.files.length > 0) {
+			var checkDataList = $("#listData").data("gridJsonData"),
+				idx = Number(propName.replace('cofirmFile', ''));
+
+			let confirmed_file_link = {
+				fileKey: result.files[0].fieldname,
+				orgFileName: result.files[0].originalname
+			}
+
+			let data = {
+				confirmed_file_link: JSON.stringify(confirmed_file_link),
+				confirmed_by: loginId,
+				confirmed_at: new Date().toISOString()
+			}
+
+			let option = {
+				url: 'http://iderms.enertalk.com:8443/reports/performance/' + checkDataList[idx].id + '?oid=' + oid,
+				method: 'patch',
+				dataType: 'json',
+				contentType: "application/json",
+				traditional: true,
+				data: JSON.stringify(data)
+			};
+
+			callAjax(option, confirmUpload);
+		}
+	}
+
+	const confirmUpload = function (data) {
+		console.log(data);
+
+		alert('보고서가 확정 처리 되었습니다.');
+		getDataList();
+	}
+</script>
+
+<!-- 파일 업로드 폼 -->
+<form id="upload" name="upload" method="multipart/form-data">
+</form>
+
+<!-- 모달 -->
+<div id="reportModal" class="modal fade" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="ly_wrap">
+				<h2 class="ly_tit">수익보고서 신규</h2>
+				<div class="spc_tbl02_row">
+					<table>
+						<colgroup>
+							<col style="width:157px">
+							<col style="width:365px">
+							<col style="width:156px">
+							<col style="width:364px">
+						</colgroup>
+						<tr>
+							<th>SPC</th>
+							<td>
+								<div class="dropdown placeholder fl" id="spc_id">
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
+									        data-name="">
 										선택<span class="caret"></span>
 									</button>
                                             <ul class="dropdown-menu">
