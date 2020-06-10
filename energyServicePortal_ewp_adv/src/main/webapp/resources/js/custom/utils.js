@@ -1387,3 +1387,41 @@ function isNumberic(num) {
 		return false;
 	}
 }
+
+function paging(page, jsonList){
+	let totalPage = Math.ceil(jsonList.length/pagePerData);
+	let totalnav = Math.ceil(totalPage/navCount);
+	let startNum = (pagePerData*(page-1));
+	let endNum = ((pagePerData*page)>= jsonList.length)? jsonList.length : (pagePerData*page);
+	jsonList = jsonList.slice(startNum, endNum);
+	makeNavigation(page, totalPage);
+	return jsonList;
+}
+
+function makeNavigation (page, totalPage){
+	$('#paging').empty();
+	let pageStr = '';
+	let navgroup = Math.floor((page-1)/navCount)+1;
+	let startPage = ((navgroup-1)*navCount)+1;
+	let totalnav = Math.ceil(totalPage/navCount);
+	let endPage = ((startPage + navCount-1) > totalPage)? totalPage : (startPage + navCount-1);
+	
+	if( navgroup == 1 ){
+		pageStr += '<a href="javascript:void(0);" class="btn_prev first_prev">prev</a>';
+	}else{
+		pageStr += '<a href="javascript:getDataList(' + Number(startPage-1) + ');" class="btn_prev">prev</a>';			
+	}
+    for(let i = startPage ; i <= endPage; i++){
+    	if(i==page){
+    		pageStr += '<a href="javascript:getDataList('+i+');"><strong>'+i+'</strong></a>';
+    	}else{
+    		pageStr += '<a href="javascript:getDataList('+i+');">'+i+'</a>';
+    	}
+    }
+    if( navgroup <totalnav ){
+    	pageStr += '<a href="javascript:getDataList(' + Number(endPage+1) + ');"  class="btn_next">next</a>';	    	
+    }else{
+    	pageStr += '<a href="javascript:void(0);"  class="btn_next larst_next">next</a>';
+    }
+    $('#paging').append(pageStr);
+}

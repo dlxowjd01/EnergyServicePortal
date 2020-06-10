@@ -9,17 +9,20 @@
         <script>
             const oid = '${sessionScope.userInfo.oid}';
             const loginId = '${sessionScope.userInfo.login_id}';
+        	const pagePerData = 1;
+        	const navCount = 10;
+        	let page = 1;
 
             $(function() {
                 setInitList("listData"); //리스트초기화
 
-                getDataList();
+                getDataList(page);
 
             });
 
             $(document).on('keyup', '#key_word', function(e) {
                 if (e.keyCode == 13) {
-                    getDataList();
+                    getDataList(page);
                 }
             })
 
@@ -38,7 +41,10 @@
                 getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
             }
 
-            function getDataList() {
+            function getDataList(page) {
+            	if(page == undefined){
+        			page = 1;
+        		}
                 $.ajax({
                     url: "http://iderms.enertalk.com:8443/spcs",
                     type: "get",
@@ -123,7 +129,7 @@
                             }
 
                         }
-
+                        jsonList = paging(page, jsonList);
                         setMakeList(jsonList, "listData", {
                             "dataFunction": {
                                 "INDEX": getNumberIndex
@@ -202,10 +208,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="paging_wrap">
-                        <a href="#;" class="btn_prev">prev</a>
-                        <strong>1</strong>
-                        <a href="#;" class="btn_next">next</a>
+                    <div class="paging_wrap" id="paging">
                     </div>
                 </div>
             </div>

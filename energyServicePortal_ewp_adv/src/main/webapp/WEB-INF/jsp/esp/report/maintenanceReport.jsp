@@ -9,10 +9,13 @@
 <script>
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
-
+	const pagePerData = 1;
+	const navCount = 10;
+	let page = 1;
+	
 	$(function () {
 		setInitList("listData"); //리스트초기화
-		getDataList();
+		getDataList(page);
 	});
 	
 	$(document).on('click', '.dropdown li', function () {
@@ -83,7 +86,7 @@
 		return bResult
 	}
 	
-	function setJsonDataFormat(result){
+	function setJsonDataFormat(result, page){
 		var jsonList = [];
 
 		for(var i = 0, count = result.data.length; i < count; i++){
@@ -110,17 +113,21 @@
 				jsonList.push(rowData);
 			}
 		}
+		jsonList = paging(page, jsonList);
 		return jsonList;
 	}
 
-	function getDataList(){
+	function getDataList(page){
+		if(page == undefined){
+			page = 1;
+		}
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/reports/remote_work",
 			type: "get",
 			async: false,
 			data: {"oid": oid},
 			success: function (result) {
-				setMakeList(setJsonDataFormat(result), "listData", {"dataFunction" : {"INDEX" : getNumberIndex, "report_type" : getReportTypeName}}); //list생성
+				setMakeList(setJsonDataFormat(result, page), "listData", {"dataFunction" : {"INDEX" : getNumberIndex, "report_type" : getReportTypeName}}); //list생성
 			},
 			error: function (request, status, error) {
 				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
@@ -249,10 +256,7 @@
 						</tbody>
 					</table>	
 				</div>
-				<div class="paging_wrap">
-					<a href="javascript:void(0);" class="btn_prev">prev</a>
-					<strong>1</strong>
-					<a href="javascript:void(0);" class="btn_next">next</a>
+				<div class="paging_wrap" id="paging">
 				</div>
 			</div>
 		</div>

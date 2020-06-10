@@ -5,12 +5,15 @@
     const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
     const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
     const siteList = JSON.parse('${siteList}');
-
+	const pagePerData = 1;
+	const navCount = 10;
+	let page = 1;
+	
     $(function() {
 
         setInitList("listData"); //리스트초기화
 
-        getDataList();
+        getDataList(page);
 
         $(document).on('click', '.dropdown li', function() {
             let dataValue = $(this).data('value');
@@ -20,11 +23,13 @@
             $(this).parents('.dropdown').find('button').html(dataText + '<span class="caret"></span>').data('value', dataValue);
         });
     });
+    
     $(document).on('keyup', '#key_word', function(e){
         if(e.keyCode == 13){
-            getDataList();
+            getDataList(page);
         }
     })
+    
     function nvl(value, str){
         if(isEmpty(value)){
             return str;
@@ -51,18 +56,22 @@
             }
         }
     }
-    function getDataList(){
-$.ajax({
-    url: "http://iderms.enertalk.com:8443/spcs/balance/month",
-    type: "get",
-    async: false,
-    data: {
-        oid: oid,
-        yyyymm: $('#year button').data('value') + '__'
-    },
-    success: function (result) {
-        var jsonList = [],
-            keyWord = $("#key_word").val().trim().toLowerCase();
+    
+    function getDataList(page){
+    	if(page == undefined){
+			page = 1;
+		}
+		$.ajax({
+    		url: "http://iderms.enertalk.com:8443/spcs/balance/month",
+    		type: "get",
+    		async: false,
+    		data: {
+        		oid: oid,
+        		yyyymm: $('#year button').data('value') + '__'
+    		},
+    		success: function (result) {
+        		var jsonList = [],
+            	keyWord = $("#key_word").val().trim().toLowerCase();
 
                 for (var i in result.data) {
                     var temp = result.data[i],
@@ -82,6 +91,7 @@ $.ajax({
                         jsonList.push(result.data[i]);
                     }
                 }
+                jsonList = paging(page, jsonList);
                 setMakeList(jsonList, "listData", {"dataFunction" : {"INDEX" : getNumberIndex}}); //list생성
 
             },
@@ -139,7 +149,7 @@ $.ajax({
         }
 
         alert(sucessCnt + "건 삭제처리되었습니다.");
-        getDataList();
+        getDataList(page);
     }
 
 //     function setCheckedDataModify() {
@@ -285,10 +295,7 @@ $.ajax({
 <!--                 <button type="button" class="btn_type03" onclick="setCheckedDataModify();">선택 수정</button> -->
                 <button type="button" class="btn_type03" onclick="deleteRow();">선택 삭제</button>
             </div>
-            <div class="paging_wrap">
-                <a href="#;" class="btn_prev">prev</a>
-                <strong>1</strong>
-                <a href="#;" class="btn_next">next</a>
+            <div class="paging_wrap" id="paging">
             </div>
         </div>
     </div>

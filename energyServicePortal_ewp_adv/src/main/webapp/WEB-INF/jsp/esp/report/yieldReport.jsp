@@ -8,6 +8,9 @@
 	let today = new Date();
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
+	const pagePerData = 1;
+	const navCount = 10;
+	let page = 1;
 	let repeat_type_method = 'post';
 	let repeatCoastNumber = new Object();
 	let reportType = {
@@ -23,7 +26,7 @@
 
 		setInitList("listData"); //리스트초기화
 
-		getDataList();
+		getDataList(page);
 	})
 
 	$(document).on('click', '#yield_list > li > button.btn_type07', function () {
@@ -209,10 +212,13 @@
 	const afterCreate = function (data) {
 		alert('보고서 등록이 완료되었습니다.');
 		$('#reportModal').modal('hide');
-		getDataList();
+		getDataList(page);
 	}
 
-	function getDataList() {
+	function getDataList(page) {
+		if(page == undefined){
+			page = 1;
+		}
 		let type = $('#reportClass button').data('value');
 		let data = {
 			oid: oid
@@ -265,7 +271,7 @@
 						jsonList.push(result.data[i]);
 					}
 				}
-
+				jsonList = paging(page, jsonList);
 				setMakeList(jsonList, "listData", {"dataFunction": {"INDEX": getNumberIndex}}); //list생성
 			},
 			error: function (request, status, error) {
@@ -357,7 +363,7 @@
 		}
 
 		alert(sucessCnt + "건 삭제처리되었습니다.");
-		getDataList();
+		getDataList(page);
 	}
 
 	const setUploadAfter = function(result, propName) {
@@ -393,7 +399,7 @@
 		console.log(data);
 
 		alert('보고서가 확정 처리 되었습니다.');
-		getDataList();
+		getDataList(page);
 	}
 	
 	//압축
@@ -606,7 +612,7 @@
                     </div>
                 </div>
                 <div class="fl">
-                    <button type="submit" class="btn_type" onclick="getDataList();">검색</button>
+                    <button type="submit" class="btn_type" onclick="getDataList(page);">검색</button>
                 </div>
             </div>
         </div>
@@ -667,10 +673,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="paging_wrap">
-                        <a href="#;" class="btn_prev">prev</a>
-                        <strong>1</strong>
-                        <a href="#;" class="btn_next">next</a>
+                    <div class="paging_wrap" id="paging">
                     </div>
                 </div>
             </div>

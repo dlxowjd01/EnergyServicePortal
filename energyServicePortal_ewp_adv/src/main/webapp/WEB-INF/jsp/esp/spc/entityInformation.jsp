@@ -2,6 +2,9 @@
     <script>
         const oid = '${sessionScope.userInfo.oid}';
         const loginId = '${sessionScope.userInfo.login_id}';
+    	const pagePerData = 1;
+    	const navCount = 10;
+    	let page = 1;
 
         $(function() {
             var spcFrom = document.getElementById("spc_form");
@@ -18,16 +21,16 @@
             spcFrom.addEventListener("submit", function(e) {
                 e.preventDefault();
                 (!keyWord.value || !keyWord.value.trim()) ? (keyWord.value = '') : (keyWord.value === keyWord.value);
-                getDataList();
+                getDataList(page);
             });
 
             setInitList("listData"); //리스트초기화
-            getDataList();
+            getDataList(page);
         });
 
         $(document).on('keyup', '#key_word', function(e) {
             if (e.keyCode == 13) {
-                getDataList();
+                getDataList(page);
             }
         })
 
@@ -68,7 +71,7 @@
             return bResult;
         }
 
-        function setJsonDataFormat(result) {
+        function setJsonDataFormat(result, page) {
             var jsonList = [],
                 keyWord = $("#key_word").val();
 
@@ -99,10 +102,14 @@
                     }
                 }
             }
+            jsonList = paging(page, jsonList);
             return jsonList;
         }
 
-        function getDataList() {
+        function getDataList(page) {
+        	if(page == undefined){
+    			page = 1;
+    		}
             $.ajax({
                 url: "http://iderms.enertalk.com:8443/spcs",
                 type: "get",
@@ -114,7 +121,7 @@
                 success: function(result) {
                     // console.log('result===', result)
 
-                    setMakeList(setJsonDataFormat(result), "listData", {
+                    setMakeList(setJsonDataFormat(result, page), "listData", {
                         "dataFunction": {
                             "INDEX": getNumberIndex
                         }
@@ -184,7 +191,7 @@
             }
 
             alert(sucessCnt + "건 삭제처리되었습니다.");
-            getDataList();
+            getDataList(page);
         }
 
         function setCheckedDataEdit() {
@@ -278,10 +285,7 @@
                     <%--				<button type="button" class="btn_type03" onclick="setCheckedDataEdit();">선택 수정</button>--%>
                         <button type="button" class="btn_type03" onclick="setCheckedDataRemove();">선택 삭제</button>
                 </div>
-                <div class="paging_wrap">
-                    <a href="#;" class="btn_prev">prev</a>
-                    <strong>1</strong>
-                    <a href="#;" class="btn_next">next</a>
+                <div class="paging_wrap" id="paging">
                 </div>
             </div>
         </div>
