@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
+<script type="text/javascript" src="/js/custom/jszip.js" charset="utf-8"></script>
+<script type="text/javascript" src="/js/custom/jszip-utils.js" charset="utf-8"></script>
+<script type="text/javascript" src="/js/custom/FileSaver.js" charset="utf-8"></script>
+
 <script type="text/javascript">
 	let today = new Date();
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
@@ -302,6 +306,31 @@
 		return checkList;
 	}
 
+	function setCheckedDataExcelDown() {
+		var checkDataList = getCheckList("rowCheck");
+		count = checkDataList.length,
+			sucessCnt = 0;
+
+		if (count == 0) {
+			alert("다운로드할 목록을 선택하세요.");
+			return;
+		}
+		
+		var urlArr = new Array();
+		var fileNameArr = new Array();
+		for (var i = 0; i < count; i++) {
+			var rowData = checkDataList[i];
+			var fileLink = rowData.file_link.substring(15);
+			var fileLinkUrl = fileLink.substring(0, fileLink.length-1); // 파일링크 (뒤에 쉼표 제거)
+			var orgFileName = JSON.parse(rowData.generated_file_link).orgFileName; // 파일이름
+			urlArr.push(fileLinkUrl);
+			fileNameArr.push(orgFileName);
+		}
+		
+		getZip(urlArr,fileNameArr);
+		getDataList();
+	}
+	
 	function setCheckedDataRemove() {
 		var checkDataList = getCheckList("rowCheck");
 		count = checkDataList.length,
@@ -365,6 +394,39 @@
 
 		alert('보고서가 확정 처리 되었습니다.');
 		getDataList();
+	}
+	
+	//압축
+	const getZip = function (urlArr,fileNameArr) {
+		
+		var Promise = window.Promise;
+		if (!Promise) {
+			Promise = JSZip.external.Promise;
+		}
+		//압축하기
+		var zip = new JSZip();
+		var url = ''
+		for (var i=0; i<urlArr.length; i++) {
+			zip.file(fileNameArr[i], urlToPromise(urlArr[i]), {binary:true});
+		}
+		zip.generateAsync({type:"blob"})
+		.then(function(blob)
+		{
+			saveAs(blob, "엑셀_다운로드.zip");
+		});
+	}
+	
+	//바이너리
+	const urlToPromise = function(url) {
+		return new Promise(function(resolve, reject) {
+			JSZipUtils.getBinaryContent(url, function (err, data) {
+				if(err) {
+					reject(err);
+				} else {
+					resolve(data);
+				}
+			});
+		});
 	}
 </script>
 
@@ -552,6 +614,7 @@
             <div class="col-12">
                 <div class="indiv">
                     <div class="btn_wrap_type01">
+                        <button type="button" class="btn_type03" onclick="setCheckedDataExcelDown();">선택 다운로드</button>
                         <button type="button" class="btn_type03" onclick="setCheckedDataRemove();">선택 삭제</button>
                         <button type="button" class="btn_type" onclick="modalInit();">신규 생성</button>
                     </div>
