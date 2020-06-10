@@ -74,6 +74,20 @@
 			searchGrid();
 		});
 
+
+		$('.save_btn').on('click', function (e) {
+			let excelName = '이상분석';
+			let $val = $('#datatable').find('tbody');
+			let cnt = $val.length;
+
+			if (cnt < 1) {
+				alert('다운받을 데이터가 없습니다.');
+			} else {
+				if (confirm('엑셀로 저장하시겠습니까?')) {
+					tableToExcel('datatable', excelName, e);
+				}
+			}
+		});
 	});
 
 	const rtnDropdown = function ($selectId) {
@@ -589,7 +603,7 @@
 				} else {
 					if (verifyObj[stnd] != 0) {
 						verifyObj[stnd] = benchmarkProcess(verifyObj[stnd], 'verify');
-						verifyTotal += verifyObj[stnd] == '-' ? 0 : verifyObj[stnd];
+						verifyTotal += verifyObj[stnd] == '-' ? 0 : Number(verifyObj[stnd]);
 					}
 				}
 
@@ -598,7 +612,7 @@
 				} else {
 					if (compareObj[stnd] != 0) {
 						compareObj[stnd] = benchmarkProcess(compareObj[stnd], 'compare');
-						compareTotal += compareObj[stnd] == '-' ? 0 : compareObj[stnd];
+						compareTotal += compareObj[stnd] == '-' ? 0 :Number(compareObj[stnd]);
 					}
 				}
 			});
