@@ -169,6 +169,25 @@
 
 		location.href='/spc/entityInformationEdit.do?spc_id=' + spcId + "&gen_id="+genId;
 	}
+	
+	function getExcelDown(){
+		let excelName = 'spc_info_list';
+		
+		var excelHtml = '';
+		excelHtml += $('#spc_info .spc_tbl_row').html();
+		excelHtml += $('#contract_info .spc_tbl_row').html();
+		excelHtml += $('#device_info .spc_tbl_row').html();
+		excelHtml += $('#finance_info .spc_tbl_row').html();
+		excelHtml += $('#warranty_info .spc_tbl_row').html();
+		excelHtml += $('#coefficient_info .spc_tbl_row').html();
+		excelHtml += $('#attachement_info .spc_tbl_row').html();
+		
+		$('#excelList').html(excelHtml);
+		
+        if (confirm('엑셀로 저장하시겠습니까?')) {
+            tableToExcel('excelList', excelName);
+        }
+	}
 </script>
 <div class="row">
 	<div class="col-lg-12">
@@ -507,59 +526,62 @@
 					<tr>
 						<th>현장 사진</th>
 						<td id="addFileList01"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
-						<td><button class="btn_file down">다운로드</button></td>
+						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>수배전반</th>
 						<td id="addFileList02"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
-						<td><button class="btn_file down">다운로드</button></td>
+						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>케이블</th>
 						<td id="addFileList03"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
-						<td><button class="btn_file down">다운로드</button></td>
+						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>모듈</th>
 						<td id="addFileList04"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
-						<td><button class="btn_file down">다운로드</button></td>
+						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>인버터</th>
 						<td id="addFileList05"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
-						<td><button class="btn_file down">다운로드</button></td>
+						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>결선도</th>
 						<td  id="addFileList06"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
-						<td><button class="btn_file down">다운로드</button></td>
+						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>토목</th>
 						<td id="addFileList07"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
-						<td><button class="btn_file down">다운로드</button></td>
+						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>구조물</th>
 						<td id="addFileList08"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
-						<td><button class="btn_file down">다운로드</button></td>
+						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>접속반</th>
 						<td id="addFileList09"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
-						<td><button class="btn_file down">다운로드</button></td>
+						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>기타설비</th>
 						<td id="addFileList10"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
-						<td><button class="btn_file down">다운로드</button></td>
+						<td><button class="btn_file down"></button></td>
 					</tr>
 				</table>
 			</div>
 			<div class="btn_wrap_type02">
+				<button type="button" class="btn_type03" onclick="getExcelDown();">엑셀 다운로드</button>
 				<button type="button" class="btn_type03" onclick="setCheckedDataEdit();">수정</button>
 				<button type="button" class="btn_type03" onclick="goMoveList();">목록</button>
 			</div>
+		</div>
+		<div id="excelList" style="display:none;">
 		</div>
 	</div>
 </div>
