@@ -336,6 +336,7 @@
 			const nowLocal = now.format("yyyyMMddhhmmss");
 			const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours()-1, now.getMinutes(), now.getSeconds()).format("yyyyMMddhhmmss");
 			const searchFilter = JSON.stringify({ "include": [{ "relation": "rtus" }] });
+			const sites = JSON.parse('${siteList}');
 
 			function selectLog(rids, startTime, endTime, limit=5, page=1){
 				const now = new Date();
@@ -381,15 +382,15 @@
 				})
 			};
 			
-			$.ajax({
-				url: "http://iderms.enertalk.com:8443/config/sites",
-				type: "get",
-				async: false,
-				data: {
-					oid,
-					filter : JSON.stringify({ "include": [{ "relation": "rtus" }] })
-				},
-				success: function (sites) {
+// 			$.ajax({
+// 				url: "http://iderms.enertalk.com:8443/config/sites",
+// 				type: "get",
+// 				async: false,
+// 				data: {
+// 					oid,
+// 					filter : JSON.stringify({ "include": [{ "relation": "rtus" }] })
+// 				},
+// 				success: function (sites) {
 					const siteSum = $('#siteSummary');
 					const tableData = $('#PV_INVERTER').find("tbody");
 					const arrIcon = '<span class="caret"></span>';
@@ -464,10 +465,10 @@
 						}
 					}
 
-				},
-				error: function (error){
-					console.error(error);
-				}
-			});
+// 				},
+// 				error: function (error){
+// 					console.error(error);
+// 				}
+// 			});
 		})
 	</script>

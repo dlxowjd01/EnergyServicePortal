@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
     <%@ include file="/decorators/include/taglibs.jsp" %>
         <script>
+            const siteList = JSON.parse('${siteList}');
             let iderms = null;
             let iderms_oid = "spower";
             let iderms_sid = null;
@@ -14,8 +15,8 @@
             $(document).ready(function() {
                 iderms = new IdermsClass(iderms_oid, iderms_login_id, iderms_password);
                 iderms_token = iderms.postAuthLogin();
-                iderms_site_list = iderms.getSites(iderms_oid);
-
+//                 iderms_site_list = iderms.getSites(iderms_oid);
+                iderms_site_list = JSON.parse('${siteList}');
                 if (iderms_site_list != null) {
                     putSiteListToSelectBox();
                     putSiteListToPopupAddDeviceSelectBox();
