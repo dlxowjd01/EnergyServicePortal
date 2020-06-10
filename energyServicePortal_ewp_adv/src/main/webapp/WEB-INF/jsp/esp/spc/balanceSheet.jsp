@@ -5,9 +5,6 @@
     const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
     const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
     const siteList = JSON.parse('${siteList}');
-	const pagePerData = 1;
-	const navCount = 10;
-	let page = 1;
 	
     $(function() {
 

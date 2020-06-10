@@ -9,9 +9,6 @@
         <script>
             const oid = '${sessionScope.userInfo.oid}';
             const loginId = '${sessionScope.userInfo.login_id}';
-        	const pagePerData = 1;
-        	const navCount = 10;
-        	let page = 1;
 
             $(function() {
                 setInitList("listData"); //리스트초기화

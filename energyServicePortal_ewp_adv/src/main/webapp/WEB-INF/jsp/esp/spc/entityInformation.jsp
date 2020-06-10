@@ -2,9 +2,6 @@
     <script>
         const oid = '${sessionScope.userInfo.oid}';
         const loginId = '${sessionScope.userInfo.login_id}';
-    	const pagePerData = 1;
-    	const navCount = 10;
-    	let page = 1;
 
         $(function() {
             var spcFrom = document.getElementById("spc_form");

@@ -8,9 +8,7 @@
 	let today = new Date();
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
-	const pagePerData = 1;
-	const navCount = 10;
-	let page = 1;
+
 	let repeat_type_method = 'post';
 	let repeatCoastNumber = new Object();
 	let reportType = {
@@ -252,7 +250,6 @@
 
 					if (temp.generated_file_link != null) {
 						let linkData = JSON.parse(temp.generated_file_link);
-						console.log(linkData);
 						result.data[i].file_link = 'location.href=\'http://iderms.enertalk.com:8443/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
 					}
 
@@ -396,8 +393,6 @@
 	}
 
 	const confirmUpload = function (data) {
-		console.log(data);
-
 		alert('보고서가 확정 처리 되었습니다.');
 		getDataList(page);
 	}
