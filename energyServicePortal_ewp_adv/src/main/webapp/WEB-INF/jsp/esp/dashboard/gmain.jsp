@@ -162,14 +162,8 @@
 				</div>
 			</div>
 			<div class="indiv gmain_alarm wrap_type">
-				<div class="alarm_stat clear">
-					<div class="a_alert clear">
-						<span>금일 발생 오류</span>
-						<em>0</em>
-					</div>
-					<div class="a_warning clear">
-						<a href="javascript:void(0);" onclick="pageMove('all', 'alarm');" class="btn cancel_btn">상세보기</a>
-					</div>
+				<div class="alarm_stat">
+					<div class="a_alert"><span>금일 발생 오류</span><em>0</em></div><div class="a_warning"><a href="javascript:void(0);" onclick="pageMove('all', 'alarm');" class="btn cancel_btn">상세보기</a></div>
 				</div>
 				<div class="alarm_notice">
 					<ul id="alarmNotice">
@@ -248,16 +242,16 @@
 										<button class="btn_align">설비용량</button>
 									</th>
 									<th>
-										<button class="btn_align">금일예측</button>
+										<button class="btn_align">예측</button>
 									</th>
 									<th>
-										<button class="btn_align">금일누적</button>
+										<button class="btn_align">누적</button>
 									</th>
 									<th>
-										<button class="btn_align">금일충전</button>
+										<button class="btn_align">충전</button>
 									</th>
 									<th>
-										<button class="btn_align">금일방전</button>
+										<button class="btn_align">방전</button>
 									</th>
 								</tr>
 								</thead>
@@ -271,7 +265,7 @@
 										</td>
 										<td>[alarmError]</td>
 										<td>[alarmWarning]</td>
-										<td class="left">[name]</td>
+										<td class="center">[name]</td>
 										<td class="right">[capacity]</td>
 										<td class="right">[forecast]</td>
 										<td class="right">[accumulate]</td>

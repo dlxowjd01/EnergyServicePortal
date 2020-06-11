@@ -4,6 +4,7 @@
 <html lang="en">
 <head>
 	<%@ include file="/decorators/include/layouts/top.jsp"%>
+		<link href="/css/custom-login.css" rel="stylesheet">
 		<script type="text/javascript">
 			$(function () {
 				var lan = location.search.substr(location.search.length - 2, 2);
@@ -412,6 +413,10 @@
 				}
 			}
 
+			function join2next() {
+				$("#joinModal2").modal("hide");
+				$("#joinModal3").modal("show");
+			}
 			// 아이디 중복 체크
 			function checkUserId(fn) {
 				$.ajax({
@@ -461,58 +466,8 @@
 		</script>
 </head>
 <body>
-
-	<style>
-        /* 로그인 페이지용 스타일 */
-        body {background:none;}
-		#page-wrapper {margin:0; padding:0;}
-        #page-wrapper > footer {margin:0; height:80px; padding:32px 32px;}
-        #page-wrapper .login {
-            position:relative;
-            margin:0;
-            min-height:800px;
-            background:var(--bg-img) repeat center bottom;
-            background-size:cover;
-        }
-        .loginForm {
-            position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);
-            width:520px;
-            padding:0;
-            background-color:rgba(255, 255, 255, 0.08);
-            -webkit-box-shadow: 0px 5px 18px 0px rgba(0,0,0,0.27);
-            -moz-box-shadow: 0px 5px 18px 0px rgba(0,0,0,0.27);
-            box-shadow: 0px 5px 18px 0px rgba(0,0,0,0.27);
-        }
-		.lf_body {padding:60px; background:var(--box-color);}
-		.lftit {padding-top:110px; background:url('../img/login_people.png') no-repeat center 0;}
-		.lftit h1 {font-size:34px; line-height:1; font-family:'Roboto', sans-serif; color:var(--color3); text-align:center; font-weight:500;}
-		.lf_body .lfinp {border:0; border-bottom:solid 1px #333; width:100%; height:50px; line-height:50px; background-color: var(--box-color);}
-		.lf_body input:focus {border:0; border-bottom:solid 1px #333; outline-style:none;}
-		.lf_body .arrbtn {
-			display:inline-block; padding-right:30px; background:var(--login-arr) no-repeat right center;
-			font-size:14px; color:#777;
-		}
-		.lf_bottom {font-size:0; width:100%; display:table;}
-		.lf_bottom > * {
-			display:inline-block; width:50%; border:0; outline-style:none; height:60px; 
-			font-size:18px; color:#fff; font-weight:bold; text-align:center; vertical-align:top;
-		}
-		.lf_bottom > *:hover {color:#fff;}
-		.lf_bottom > a {background:#555; line-height:60px;}
-		.lf_bottom > input {background:#438fd7 ; line-height:55px;}
-        nav .lang {display:block; top:50%; right:20px; transform:translateY(-50%); z-index:10;}
-
-        /* 반응형 미디어 쿼리 */
-        @media all and (max-width:768px) {
-            #page-wrapper > nav {padding:0 15px;height: 115px;}
-            #page-wrapper .login {padding:0 10px; min-height:650px;}
-            #page-wrapper .login .loginForm {position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:95%;}
-            .lf_body .arrbtn {display:block; margin-bottom:15px; margin-left:0 !important;}
-            nav .lang {top:19px;right:10px;float: right;transform:none;}
-        }
-    </style>
 	<div class="outer-wrapper">
-		<div id="page-wrapper">
+		<div class="login_wrapper">
 			<nav class="clear">
 				<c:choose>
 					<c:when test="${pageContext.request.serverName eq 'spower.iderms.ai' or pageContext.request.serverName eq '13.114.199.169' or pageContext.request.serverName eq 'localhost'}">
@@ -522,7 +477,6 @@
 						<div class="nav_brand"><a href="#">Encored</a></div>
 					</c:otherwise>
 				</c:choose>
-				<!-- 테마 선택 -->
 				<div class="nav_theme">
 					<div class="switcher">
 						<input type="radio" name="balance" value="light" id="light" class="switcher__input switcher__input--light" checked="" onClick="userTheme('light');">
@@ -532,8 +486,7 @@
 						<span class="switcher__toggle"></span>
 					</div>
 				</div>
-				<!-- 언어 선택 -->
-				<div class="lang dropdown">
+				<div class="lang login_lang dropdown">
 				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">${sessionScope.sessionLangNm }
 				    <span class="caret"></span></button>
 				    <ul class="dropdown-menu">
@@ -543,7 +496,6 @@
 				</div>
 			</nav>
 			<div class="login container-fluid">
-
 				<div class="loginForm">
 					<form id="loginForm" name="loginForm" action="/loginUser.do" method="post" onsubmit="return checkLogin(this)">
 						<input type="hidden" id="language" name="language"/>
@@ -570,37 +522,10 @@
 		</div>
 	</div>
 
-
-
-
-	
-	<!-- 로그인 modal // -->
-	<script>
-	$(function(){   
-		$(".joinBtn").click(function(){
-			$("#loginModal").modal("hide");
-			$("#joinModal").modal("show");
-		});	
-		// FIND ID
-		$(".findidBtn").click(function(){
-			$("#loginModal").modal("hide");
-			$("#findidModal").modal("show");
-		});	 
-		// FIND PASS
-		$(".findpassBtn").click(function(){
-			$("#loginModal").modal("hide");
-			$("#findpassModal").modal("show");
-		});	 
-	});
-	</script>
-	<!-- 로그인 modal // -->
-
-
-	<!-- 아이디찾기 modal // -->
-	<div class="modal fade" id="findidModal" tabindex="-1" role="dialog" aria-labelledby="findidModal" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
-			<div class="loginmodal-container">
-				<div class="modal-header" style="padding:0 0 15px; margin:0 0 15px">
+	<div class="modal fade" id="findidModal" tabindex="-1" role="dialog" aria-labelledby="findidModal" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+			<div class="login-modal-content modal-content">
+				<div class="modal-header">
 	                <button type="button" class="close" data-dismiss="modal">&times;</button>
 	                <h1>FIND ID</h1>
 	            </div>
@@ -638,7 +563,7 @@
 			  	    				<th>휴대폰번호</th>
 			  	    				<td>
 			  	    					<div class="inputGroup">
-			  	    						<select id="findMobile1" class="inp fl" style="width:22%;">
+			  	    						<select id="findMobile1" class="inp fl">
 												<option value="">선택</option>
 												<option value="010">010</option>
 												<option value="011">011</option>
@@ -646,12 +571,12 @@
 												<option value="017">017</option>
 												<option value="019">019</option>
 											<select>
-											<span class="inline center fl mt10" style="width:2%;"> - </span>
-											<input type="text" id="findMobile2" class="inp fl" maxlength="4" style="width:22%;"/>
-											<span class="inline center fl mt10" style="width:2%;"> - </span>
-											<input type="text" id="findMobile3" class="inp fl" maxlength="4" style="width:22%;"/>
-											<span class="inline center fl" style="width:2%;"> &nbsp; </span>
-											<button type="button" class="btnstyle middle white fl" style="width:28%; white-space:nowrap; vertical-align:top; overflow:hidden;" id="findAuthCodeBtn">인증번호 받기 </button>	
+											<span class="inline center fl mt10"> - </span>
+											<input type="text" id="findMobile2" class="inp fl" maxlength="4">
+											<span class="inline center fl mt10"> - </span>
+											<input type="text" id="findMobile3" class="inp fl" maxlength="4"/>
+											<span class="inline center fl"> &nbsp; </span>
+											<button type="button" class="btnstyle middle white fl" id="findAuthCodeBtn">인증번호 받기 </button>	
 										</div>
 			  	    				</td>
 			  	    			</tr>
@@ -664,20 +589,17 @@
 			  	    		</tbody>
 			  	    	</table>
 			  	    </div>
-			  	    <div class="mt20"><input type="submit" name="findpass" class="login loginmodal-submit" value="확인" id="findBtn"></div>
+			  	    <div class="mt20"><input type="submit" name="findpass" class="login login-modal-submit" value="확인" id="findBtn"></div>
 			  	</div>
 			    </form>
 			</div>
 		</div>
 	</div>
-	<!-- 아이디찾기 modal // -->	
 
-
-	<!-- 비번찾기 modal // -->
-	<div class="modal fade" id="findpassModal" tabindex="-1" role="dialog" aria-labelledby="findpassModal" aria-hidden="true" style="display: none;">
+	<div class="modal fade" id="findpassModal" tabindex="-1" role="dialog" aria-labelledby="findpassModal" aria-hidden="true">
         <div class="modal-dialog">
-			<div class="loginmodal-container">
-				<div class="modal-header" style="padding:0 0 15px; margin:0 0 15px">
+			<div class="login-modal-content">
+				<div class="modal-header">
 	                <button type="button" class="close" data-dismiss="modal">&times;</button>
 	                <h1>FIND PASS</h1>
 	            </div>
@@ -719,7 +641,7 @@
 			  	    				<th>휴대폰번호</th>
 			  	    				<td>
 			  	    					<div class="inputGroup">
-			  	    						<select id="findPwMobile1" class="inp fl" style="width:22%;">
+			  	    						<select id="findPwMobile1" class="inp fl">
 												<option value="">선택</option>
 												<option value="010">010</option>
 												<option value="011">011</option>
@@ -727,12 +649,12 @@
 												<option value="017">017</option>
 												<option value="019">019</option>
 											<select>
-											<span class="inline center fl mt10" style="width:2%;"> - </span>
-															<input type="text" id="findPwMobile2" class="inp fl" maxlength="4" style="width:22%;"/>
-															<span class="inline center fl mt10" style="width:2%;"> - </span>
-															<input type="text" id="findPwMobile3" class="inp fl" maxlength="4" style="width:22%;"/>
-															<span class="inline center fl" style="width:2%;"> &nbsp; </span>
-															<button type="button" class="btnstyle middle white fl" style="width:28%; white-space:nowrap; vertical-align:top; overflow:hidden;" id="findPwAuthCodeBtn">인증번호 받기</button>	
+											<span class="inline center fl mt10"> - </span>
+															<input type="text" id="findPwMobile2" class="inp fl" maxlength="4"/>
+															<span class="inline center fl mt10"> - </span>
+															<input type="text" id="findPwMobile3" class="inp fl" maxlength="4"/>
+															<span class="inline center fl"> &nbsp; </span>
+															<button type="button" class="btnstyle middle white fl" id="findPwAuthCodeBtn">인증번호 받기</button>	
 										</div>
 			  	    				</td>
 			  	    			</tr>
@@ -745,28 +667,22 @@
 			  	    		</tbody>
 			  	    	</table>
 			  	    </div>
-			  	    <div class="mt20"><input type="submit" name="findpass" class="login loginmodal-submit" value="확인" id="findPwBtn"></div>
+			  	    <div class="mt20"><input type="submit" name="findpass" class="login login-modal-submit" value="확인" id="findPwBtn"></div>
 			  	</div>
 			    </form>
 			</div>
 		</div>
 	</div>
-	<!-- 비번찾기 modal // -->	
 
-
-	<!-- 회원가입 step01 //////////////////// 동의부분 -->
-	<div class="modal fade" id="joinModal" tabindex="-1" role="dialog" aria-labelledby="joinModal" aria-hidden="true">
-	    <div class="modal-dialog modal-md">
-	        <!-- Modal content-->
-	        <div class="modal-content">
-	            <div class="modal-header" style="padding:25px 30px;">
+	<div class="modal fade" id="joinModal1" tabindex="-1" role="dialog" aria-labelledby="joinModal" aria-hidden="true">
+	    <div class="join_dialog modal-dialog modal-md">
+	        <div class="modal-content step1">
+	            <div class="modal-header">
 	                <button type="button" class="close" data-dismiss="modal">&times;</button>
-	                <h4><i class="glyphicon glyphicon-user"></i> JOIN</h4>
+	                <h1 class="modal_title">JOIN</h1>
 	            </div>
-	            <div class="modal-body" style="padding:20px 30px;">
-					
-					<div id="joinStep01" class="rowBox joinBox joinStep01" style="display:;">
-						
+	            <div class="modal-body">
+					<div id="joinStep01" class="rowBox joinBox joinStep01">
 						<div class="unit">
 							<div class="unit_tit clear">
 								<span class="sTit">S-POWER iDERMS 서비스 이용약관</span>
@@ -853,8 +769,6 @@
 									귀하는 본 안내에 따른 개인정보 수집에 대하여 거부하실 수 있는 권리가 있습니다.<br>
 									본 개인정보 수집에 대하여 거부하시는 경우 본 서비스를 이용하실 수 없습니다.
 								</div>
-
-								
 							</div>
 						</div>
 
@@ -876,200 +790,181 @@
 						</div>
 
 					</div>
-					
 	            </div>
 	            <div class="modal-footer">
-	            	<button type="submit" class="joinnextBtn default_btn w80" data-dismiss="modal">다음</button>	                
+	            	<button type="submit" class="joinnextBtn default_btn w80" data-dismiss="modal">다음</button>
 	            </div>
-	        </div>
+			</div>
 	    </div>
 	</div>
-	<script>
-	$(function () {
-		$(".joinnextBtn").click(function () {
-			if (!checkAgree()) {
-				return false;
-			}
-			$("#joinModal").modal("hide");
-			$("#join2Modal").modal("show");
-		});
-	});
-	</script>
-	<!-- //회원가입 step01 // 동의부분 -->
 
-
-	<!-- 회원가입 step02 //////////////////// 정보입력 -->
-	<div class="modal fade" id="join2Modal" tabindex="-1" role="dialog" aria-labelledby="join2Modal" aria-hidden="true">
-	    <div class="modal-dialog modal-md">
-	        <!-- Modal content-->
-	        <div class="modal-content">
-	            <div class="modal-header" style="padding:25px 30px;">
-	                <button type="button" class="close" data-dismiss="modal">&times;</button>
-	                <h4><i class="glyphicon glyphicon-user"></i> JOIN</h4>
-	            </div>
-	            <form id="joinForm" name="joinForm">
-	            	<input type="hidden" id="joinPsnEmail" name="psnEmail"/>
+	<div class="modal fade" id="joinModal2" tabindex="-1" role="dialog" aria-labelledby="joinModal" aria-hidden="true">
+	    <div class="join_dialog modal-dialog modal-md">
+			<div class="modal-content step2">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h1 class="modal_title"> JOIN</h1>
+				</div>
+				<form id="joinForm" name="joinForm">
+					<input type="hidden" id="joinPsnEmail" name="psnEmail"/>
 					<input type="hidden" id="joinPsnMobile" name="psnMobile"/>
-	            <div class="modal-body" style="padding:20px 30px;">
-					
-					<div id="joinStep02" class="rowBox joinBox joinStep02">			
-						
-						<div class="unit clear">
-							<div class="unit_tit">
-								<span class="sTit">정보입력</span>
-							</div>
-							<div class="unit_cont lineBox">
-								<table class="tableStyle formStyle left">
-									<colgroup>
-										<col style="width:20%;">
-										<col style="width:*;">
-									</colgroup>
-									<tbody>
-										<tr>
-											<th>아이디</th>
-											<td>
-												<div class="inputGroup">
-													<input type="text" id="joinUserId" name="userId" class="inp fl" style="width:78%;" maxlength="20"/>
-													<span class="inline center fl" style="width:2%;">&nbsp;</span>
-													<button type="button" class="btnstyle middle white fl" style="width:20%; white-space:nowrap; vertical-align:top; overflow:hidden;" id="duplicateBtn">중복확인</button>	
-												</div>
-												<span class="helpCont">아이디를 입력하세요</span>
-											</td>
-										</tr>										
-										<tr>
-											<th>비밀번호</th>
-											<td>
-												<input type="password" id="joinUserPw" name="userPw" class="inp" style="width:100%;" maxlength="100"/>
-												<span class="helpCont">비밀번호를 입력하세요</span>
-											</td>
-										</tr>
-										<tr>
-											<th>비밀번호확인</th>
-											<td>
-												<input type="password" id="joinUserPw2" class="inp" style="width:100%;" maxlength="100"/>
-												<span class="helpCont">비밀번호를 입력하세요</span>
-											</td>
-										</tr>
-										<tr>
-											<th>이름</th>
-											<td>
-												<input type="text" id="joinPsnName" name="psnName" class="inp" style="width:100%;"/>
-												<span class="helpCont">이름을 입력하세요</span>
-											</td>
-										</tr>
-										<tr>
-											<th>이메일 주소</th>
-											<td>
-												<div class="inputGroup">
-													<input type="text" id="joinEmail1" class="inp fl" style="width:60%;" maxlength="25"/>
-													<span class="inline center fl" style="width:5%;">@</span>
-													<input type="text" id="joinEmail3" class="inp fl" style="width:27%; margin-right:10px; display:none;" maxlength="25"/>
-													<select id="joinEmail2" class="inp fl" style="width:35%;">
-														<option value="">=선택=</option>
-														<option value="naver.com">naver.com</option>
-														<option value="hanmail.net">hanmail.net</option>
-														<option value="nate.com">nate.com</option>
-														<option value="gmail.com">gmail.com</option>
-														<option value="manual">직접입력</option>
-														<select>
-												</div>
-												<span class="helpCont">email을 입력하세요</span>
-											</td>
-										</tr>										
-										<tr>
-											<th>휴대폰 번호</th>
-											<td>
-												<div class="inputGroup">
-													<input type="text" id="joinMobile1" class="inp fl" style="width:30%;" maxlength="3"/>
-													<span class="inline center fl" style="width:5%;">-</span>
-													<input type="text" id="joinMobile2" class="inp fl" style="width:30%;" maxlength="4"/>
-													<span class="inline center fl" style="width:5%;">-</span>
-													<input type="text" id="joinMobile3" class="inp fl" style="width:30%;" maxlength="4"/>
-												</div>
-												<span class="helpCont">휴대폰번호를 입력해 주세요</span>
-												<span class="helpCont">숫자를 입력해 주세요</span>
-												<span class="inline center fl" style="width:2%;"> &nbsp; </span>
-												<button type="button" class="btnstyle middle white fl" style="width:28%; white-space:nowrap; vertical-align:top; overflow:hidden;" id="joinAuthCodeBtn">인증번호 받기 </button>
-											</td>
-										</tr>
-										<tr>
-											<th>인증번호</th>
-											<td>
-												<input type="text" id="joinAuthCode" name="authCode"
-													   placeholder="">
-											</td>
-										</tr>
-									</tbody>
-								</table>
+					<div class="modal-body">
+						<div id="joinStep02" class="rowBox joinBox joinStep02">
+							<div class="unit clear">
+								<div class="unit_tit">
+									<span class="sTit">정보입력</span>
+								</div>
+								<div class="unit_cont lineBox">
+									<table class="tableStyle formStyle left">
+										<colgroup>
+											<col>
+											<col>
+										</colgroup>
+										<tbody>
+											<tr>
+												<th>아이디</th>
+												<td>
+													<div class="inputGroup">
+														<input type="text" id="joinUserId" name="userId" class="inp fl" maxlength="20"/>
+														<span class="inline center fl">&nbsp;</span>
+														<button type="button" class="btnstyle middle white fl" id="duplicateBtn">중복확인</button>	
+													</div>
+													<span class="helpCont">아이디를 입력하세요</span>
+												</td>
+											</tr>
+											<tr>
+												<th>비밀번호</th>
+												<td>
+													<input type="password" id="joinUserPw" name="userPw" class="inp" maxlength="100"/>
+													<span class="helpCont">비밀번호를 입력하세요</span>
+												</td>
+											</tr>
+											<tr>
+												<th>비밀번호확인</th>
+												<td>
+													<input type="password" id="joinUserPw2" class="inp" maxlength="100"/>
+													<span class="helpCont">비밀번호를 입력하세요</span>
+												</td>
+											</tr>
+											<tr>
+												<th>이름</th>
+												<td>
+													<input type="text" id="joinPsnName" name="psnName" class="inp"/>
+													<span class="helpCont">이름을 입력하세요</span>
+												</td>
+											</tr>
+											<tr>
+												<th>이메일 주소</th>
+												<td>
+													<div class="inputGroup">
+														<input type="text" id="joinEmail1" class="inp fl" maxlength="25"/>
+														<span class="inline center fl">@</span>
+														<input type="text" id="joinEmail3" class="inp fl" maxlength="25"/>
+														<select id="joinEmail2" class="inp fl">
+															<option value="">=선택=</option>
+															<option value="naver.com">naver.com</option>
+															<option value="hanmail.net">hanmail.net</option>
+															<option value="nate.com">nate.com</option>
+															<option value="gmail.com">gmail.com</option>
+															<option value="manual">직접입력</option>
+															<select>
+													</div>
+													<span class="helpCont">email을 입력하세요</span>
+												</td>
+											</tr>
+											<tr>
+												<th>휴대폰 번호</th>
+												<td>
+													<div class="inputGroup">
+														<input type="text" id="joinMobile1" class="inp fl" maxlength="3"/>
+														<span class="inline center fl">-</span>
+														<input type="text" id="joinMobile2" class="inp fl" maxlength="4"/>
+														<span class="inline center fl">-</span>
+														<input type="text" id="joinMobile3" class="inp fl" maxlength="4"/>
+													</div>
+													<span class="helpCont">휴대폰번호를 입력해 주세요</span>
+													<span class="helpCont">숫자를 입력해 주세요</span>
+													<span class="inline center fl"> &nbsp; </span>
+													<button type="button" class="btnstyle middle white fl" id="joinAuthCodeBtn">인증번호 받기 </button>
+												</td>
+											</tr>
+											<tr>
+												<th>인증번호</th>
+												<td>
+													<input type="text" id="joinAuthCode" name="authCode"
+															placeholder="">
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
-
 					</div>
-
-					
-	            </div>
-	            <div class="modal-footer">
-	            	<div style="padding:5px 0;text-align:center;">
-	            		<button type="button" class="cancel_btn w80" data-dismiss="modal">취소</button>
-	            		<button type="submit" class="join2nextBtn default_btn w80" data-dismiss="modal">확인</button>
-	            	</div>	                
-	            </div>
-	            </form>
-	        </div>
+					<div class="modal-footer">
+						<button type="button" class="cancel_btn w80" data-dismiss="modal">취소</button>
+						<button type="submit" class="join2nextBtn default_btn w80" data-dismiss="modal">확인</button>
+					</div>
+				</form>
+			</div>
 	    </div>
 	</div>
-	<script>
-	$(function(){ 
-		$(".join2nextBtn").click(function(){
-			checkJoin();
-			return false;
-// 			$("#join2Modal").modal("hide");
-// 			$("#join3Modal").modal("show");
-		});	  
-	});
-	
-	function join2next() {
-		$("#join2Modal").modal("hide");
-		$("#join3Modal").modal("show");
-	}
-	</script>	
-	<!-- //회원가입 step02 // 정보입력 -->	
 
-
-	<!-- 회원가입 step03 //////////////////// 가입완료 -->
-	<div class="modal fade" id="join3Modal" tabindex="-1" role="dialog" aria-labelledby="join3Modal" aria-hidden="true">
-	    <div class="modal-dialog modal-md">
-	        <!-- Modal content-->
-	        <div class="modal-content">
-	            <div class="modal-header" style="padding:25px 30px;">
+	<div class="modal fade" id="joinModal3" tabindex="-1" role="dialog" aria-labelledby="joinModal" aria-hidden="true">
+	    <div class="join_dialog modal-dialog modal-md">
+			<div class="modal-content step3">
+				<div class="modal-header">
 	                <button type="button" class="close" data-dismiss="modal">&times;</button>
-	                <h4><i class="glyphicon glyphicon-user"></i> JOIN</h4>
+	                <h1 class="modal_title"> JOIN</h1>
 	            </div>
-	            <div class="modal-body" style="padding:20px 30px;">
-					
-					<div id="joinStep03" class="rowBox joinBox joinStep03">			
-						
+	            <div class="modal-body">
+					<div id="joinStep03" class="rowBox joinBox joinStep03">
 						<div class="joinEndText">
 							<strong>"축하합니다"</strong>
 							회원가입이 완료되었습니다.
 						</div>
 
 					</div>
-					
 	            </div>
 	            <div class="modal-footer">
-	            	<div style="padding:5px 0;text-align:center;">
-	            		<a href="/login.do" class="default_btn w80">로그인</a>
-	            	</div>	                
-	            </div>
-	        </div>
+	            	<a href="/login.do" class="default_btn w80">로그인</a>
+				</div>
+			</div>
 	    </div>
 	</div>
-	<!-- //회원가입 step03 // 가입완료 -->	
 
-
-
-
+	<script>
+		$(function(){
+			// Sign Up btn click
+			$(".joinBtn").click(function(){
+				$("#loginModal").modal("hide");
+				$("#joinModal1").modal("show");
+				$('input[type=checkbox]').prop('checked',false);
+			});
+			// Sign Up => step1
+			$(".joinnextBtn").click(function () {
+				if (!checkAgree()) {
+					return false;
+				} else {
+					$("#joinModal1").modal("hide");
+					$("#joinModal2").modal("show");
+				}
+			});
+			// Sign Up => step2
+			$(".join2nextBtn").click(function () {
+				checkJoin();
+				return false;
+			});
+			// FIND ID
+			$(".findidBtn").click(function(){
+				$("#loginModal").modal("hide");
+				$("#findidModal").modal("show");
+			});
+			// FIND PASS
+			$(".findpassBtn").click(function(){
+			});
+		});
+	</script>
 
 </body>
 </html>
