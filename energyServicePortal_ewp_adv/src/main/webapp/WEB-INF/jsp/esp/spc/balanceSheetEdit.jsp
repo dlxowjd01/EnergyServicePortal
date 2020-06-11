@@ -169,17 +169,19 @@
 			let setIndex = 0;
 
 			//수정 가능한 월 리스트화
-			dataList.forEach(function(v, index) {
-				$.map(v, function(val, key) {
+			for (var i=0; i<dataList.length; i++) {
+				$.map(dataList[i], function(val, key) {
 					if(key.match('balance_yyyymm')) {
 						balanceYear.push(val);
 					}
 				});
-
-				if(v.balance_yyyymm == yyyymm) {
-					setIndex = index;
+				if(dataList[i].balance_yyyymm == yyyymm) {
+					setIndex = i ;
+					break;
+				}else{
+					setIndex = dataList.length-1; // 처음 시작시 마지막인덱스(최근데이터)로 저장
 				}
-			})
+			}
 			setBalanceYear(balanceYear);
 
 			$('#spc').text(json.data[setIndex].spc_name);
@@ -290,6 +292,10 @@
 			setDropDownMenu($('#month'), month, '월');
 
 			if(v == yyyymm) {
+				$('#year button').html(year + '년 <span class="caret"></span>').data('value', year);
+				$('#month button').html(month + '월 <span class="caret"></span>').data('value', month);
+				return false;
+			}else if(balanceYear.length-1 == idx){
 				$('#year button').html(year + '년 <span class="caret"></span>').data('value', year);
 				$('#month button').html(month + '월 <span class="caret"></span>').data('value', month);
 			}

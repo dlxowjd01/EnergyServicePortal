@@ -552,7 +552,10 @@
 				</table>
 			</div>
 			<div class="btn_wrap_type02">
+				<c:set var="siteId" value="${param.site_id}"/>
+				<c:if test="${not empty siteId}">
 				<button type="button" class="btn_type03" onclick="setCheckedDataModify();">수정</button>
+				</c:if>
 				<button type="button" class="btn_type03" onclick="list();">목록</button>
 				<button type="button" class="btn_type" onclick="historyInit();">이력확인</button>
 			</div>
