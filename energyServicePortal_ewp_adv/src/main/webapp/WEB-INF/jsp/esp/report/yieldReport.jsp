@@ -1,9 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
+<script type="text/javascript" src="/js/custom/jszip.js" charset="utf-8"></script>
+<script type="text/javascript" src="/js/custom/jszip-utils.js" charset="utf-8"></script>
+<script type="text/javascript" src="/js/custom/FileSaver.js" charset="utf-8"></script>
+
 <script type="text/javascript">
 	let today = new Date();
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
+
 	let repeat_type_method = 'post';
 	let repeatCoastNumber = new Object();
 	let reportType = {
@@ -19,7 +24,7 @@
 
 		setInitList("listData"); //리스트초기화
 
-		getDataList();
+		getDataList(page);
 	})
 
 	$(document).on('click', '#yield_list > li > button.btn_type07', function () {
@@ -205,10 +210,13 @@
 	const afterCreate = function (data) {
 		alert('보고서 등록이 완료되었습니다.');
 		$('#reportModal').modal('hide');
-		getDataList();
+		getDataList(page);
 	}
 
-	function getDataList() {
+	function getDataList(page) {
+		if(page == undefined){
+			page = 1;
+		}
 		let type = $('#reportClass button').data('value');
 		let data = {
 			oid: oid
@@ -242,7 +250,6 @@
 
 					if (temp.generated_file_link != null) {
 						let linkData = JSON.parse(temp.generated_file_link);
-						console.log(linkData);
 						result.data[i].file_link = 'location.href=\'http://iderms.enertalk.com:8443/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
 					}
 
@@ -261,7 +268,7 @@
 						jsonList.push(result.data[i]);
 					}
 				}
-
+				jsonList = paging(page, jsonList);
 				setMakeList(jsonList, "listData", {"dataFunction": {"INDEX": getNumberIndex}}); //list생성
 			},
 			error: function (request, status, error) {
@@ -302,6 +309,31 @@
 		return checkList;
 	}
 
+	function setCheckedDataExcelDown() {
+		var checkDataList = getCheckList("rowCheck");
+		count = checkDataList.length,
+			sucessCnt = 0;
+
+		if (count == 0) {
+			alert("다운로드할 목록을 선택하세요.");
+			return;
+		}
+		
+		var urlArr = new Array();
+		var fileNameArr = new Array();
+		for (var i = 0; i < count; i++) {
+			var rowData = checkDataList[i];
+			var fileLink = rowData.file_link.substring(15);
+			var fileLinkUrl = fileLink.substring(0, fileLink.length-1); // 파일링크 (뒤에 쉼표 제거)
+			var orgFileName = JSON.parse(rowData.generated_file_link).orgFileName; // 파일이름
+			urlArr.push(fileLinkUrl);
+			fileNameArr.push(orgFileName);
+		}
+		
+		getZip(urlArr,fileNameArr);
+		getDataList();
+	}
+	
 	function setCheckedDataRemove() {
 		var checkDataList = getCheckList("rowCheck");
 		count = checkDataList.length,
@@ -328,7 +360,7 @@
 		}
 
 		alert(sucessCnt + "건 삭제처리되었습니다.");
-		getDataList();
+		getDataList(page);
 	}
 
 	const setUploadAfter = function(result, propName) {
@@ -361,10 +393,41 @@
 	}
 
 	const confirmUpload = function (data) {
-		console.log(data);
-
 		alert('보고서가 확정 처리 되었습니다.');
-		getDataList();
+		getDataList(page);
+	}
+	
+	//압축
+	const getZip = function (urlArr,fileNameArr) {
+		
+		var Promise = window.Promise;
+		if (!Promise) {
+			Promise = JSZip.external.Promise;
+		}
+		//압축하기
+		var zip = new JSZip();
+		var url = ''
+		for (var i=0; i<urlArr.length; i++) {
+			zip.file(fileNameArr[i], urlToPromise(urlArr[i]), {binary:true});
+		}
+		zip.generateAsync({type:"blob"})
+		.then(function(blob)
+		{
+			saveAs(blob, "엑셀_다운로드.zip");
+		});
+	}
+	
+	//바이너리
+	const urlToPromise = function(url) {
+		return new Promise(function(resolve, reject) {
+			JSZipUtils.getBinaryContent(url, function (err, data) {
+				if(err) {
+					reject(err);
+				} else {
+					resolve(data);
+				}
+			});
+		});
 	}
 </script>
 
@@ -544,7 +607,7 @@
                     </div>
                 </div>
                 <div class="fl">
-                    <button type="submit" class="btn_type" onclick="getDataList();">검색</button>
+                    <button type="submit" class="btn_type" onclick="getDataList(page);">검색</button>
                 </div>
             </div>
         </div>
@@ -552,11 +615,12 @@
             <div class="col-12">
                 <div class="indiv">
                     <div class="btn_wrap_type01">
+                        <button type="button" class="btn_type03" onclick="setCheckedDataExcelDown();">선택 다운로드</button>
                         <button type="button" class="btn_type03" onclick="setCheckedDataRemove();">선택 삭제</button>
                         <button type="button" class="btn_type" onclick="modalInit();">신규 생성</button>
                     </div>
                     <div class="spc_tbl align_type">
-                        <table class="chk_type">
+                        <table class="sort_table chk_type">
                             <colgroup>
                                 <col style="width:10%">
                                 <col style="width:10%">
@@ -574,14 +638,14 @@
                                         <input type="checkbox" id="chk_header" value="순번" onclick="setCheckedAll(this, 'rowCheck');">
                                         <label for="chk_header"><span></span>순번</label>
                                     </th>
-                                    <th>SPC명</th>
-                                    <th>발전소명</th>
-                                    <th>보고서 유형</th>
-                                    <th>적용기간</th>
-                                    <th>다운로드</th>
-                                    <th>보고서 생성 시간</th>
-                                    <th>보고서 확정</th>
-                                    <th>최종 작업자</th>
+                                    <th><button class="btn_align down">SPC명</button></th>
+                                    <th><button class="btn_align down">발전소명</button></th>
+                                    <th><button class="btn_align down">보고서 유형</button></th>
+                                    <th><button class="btn_align down">적용기간</button></th>
+                                    <th><button class="btn_align down">다운로드</button></th>
+                                    <th><button class="btn_align down">보고서 생성 시간</button></th>
+                                    <th><button class="btn_align down">보고서 확정</button></th>
+                                    <th><button class="btn_align down">최종 작업자</button></th>
                                 </tr>
                             </thead>
                             <tbody id="listData">
@@ -604,10 +668,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="paging_wrap">
-                        <a href="#;" class="btn_prev">prev</a>
-                        <strong>1</strong>
-                        <a href="#;" class="btn_next">next</a>
+                    <div class="paging_wrap" id="paging">
                     </div>
                 </div>
             </div>

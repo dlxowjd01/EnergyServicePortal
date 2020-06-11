@@ -13,14 +13,13 @@
             $(function() {
                 setInitList("listData"); //리스트초기화
 
-                getDataList();
-
+                getDataList(page);
 
             });
 
             $(document).on('keyup', '#key_word', function(e) {
                 if (e.keyCode == 13) {
-                    getDataList();
+                    getDataList(page);
                 }
             })
 
@@ -39,7 +38,10 @@
                 getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
             }
 
-            function getDataList() {
+            function getDataList(page) {
+            	if(page == undefined){
+        			page = 1;
+        		}
                 $.ajax({
                     url: "http://iderms.enertalk.com:8443/spcs",
                     type: "get",
@@ -63,7 +65,8 @@
                                         rowData = result.data[i],
                                         newData = {},
                                         contractInfo = JSON.parse(spcGensRow.contract_info),
-                                        deviceInfo = JSON.parse(spcGensRow.device_info);
+                                        deviceInfo = JSON.parse(spcGensRow.device_info),
+                                        originFile = new Array();
 
                                     $.ajax({
                                         url: "http://iderms.enertalk.com:8443/spcs/" + rowData.spc_id + "/gens/" + spcGensRow.gen_id + "/supplement?oid=" + rowData.oid,
@@ -81,6 +84,16 @@
                                                 newData["파일_총_개수"] = json.data[0].file_count_all;
                                                 newData["파일_현재_개수"] = json.data[0].file_count_now;
                                                 newData["첨부파일"] = json.data[0].file_count_now;
+                                                
+                                                var supplementInfo = JSON.parse(json.data[0].supplement_info)
+                                                var keys = Object.keys(supplementInfo);
+                                                for ( var i in keys ) {
+                                                	if ( keys[i] != 'null' ) {
+                                                		if ( keys[i].substring(keys[i].length-12, keys[i].length) == 'originalName' && supplementInfo[keys[i]] != '') {
+                                                			originFile.push(supplementInfo[keys[i]]);
+                                                		}
+                                                	}
+                                                }
                                             }
 
                                         },
@@ -100,13 +113,20 @@
                                     //키워드 검색 조건 필터 처리
                                     if (newData["name"].toLowerCase().indexOf(keyWord) > -1 || newData["발전소_명"].toLowerCase().indexOf(keyWord) > -1) {
                                         jsonList.push(newData)
+                                    } else {
+                                    	$.each(originFile, function(k,v){
+                                        	if (v.toLowerCase().indexOf(keyWord) > -1) {
+                                        		jsonList.push(newData);
+                                        	}
+                                        });
                                     }
+                                    
                                 }
 
                             }
 
                         }
-
+                        jsonList = paging(page, jsonList);
                         setMakeList(jsonList, "listData", {
                             "dataFunction": {
                                 "INDEX": getNumberIndex
@@ -154,7 +174,7 @@
             <div class="col-lg-12">
                 <div class="indiv">
                     <div class="spc_tbl align_type">
-                        <table class="chk_type mt30">
+                        <table class="sort_table chk_type mt30">
                             <thead>
                                 <tr>
                                     <th>
@@ -163,9 +183,9 @@
                                     </th>
                                     <th><button class="btn_align down">SPC명</button></th>
                                     <th><button class="btn_align down">발전소 명</button></th>
-                                    <th class="right"><button class="btn_align down">용량(kW)</button></th>
+                                    <th><button class="btn_align down">용량(kW)</button></th>
                                     <th><button class="btn_align down">관리 운영기간</button></th>
-                                    <th class="right"><button class="btn_align down">이관자료</button></th>
+                                    <th><button class="btn_align down">이관자료</button></th>
                                     <th class="right"><button class="btn_align up">첨부파일</button></th>
                                 </tr>
                             </thead>
@@ -185,10 +205,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="paging_wrap">
-                        <a href="#;" class="btn_prev">prev</a>
-                        <strong>1</strong>
-                        <a href="#;" class="btn_next">next</a>
+                    <div class="paging_wrap" id="paging">
                     </div>
                 </div>
             </div>

@@ -9,10 +9,10 @@
 <script>
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
-
+	
 	$(function () {
 		setInitList("listData"); //리스트초기화
-		getDataList();
+		getDataList(page);
 	});
 	
 	$(document).on('click', '.dropdown li', function () {
@@ -83,7 +83,7 @@
 		return bResult
 	}
 	
-	function setJsonDataFormat(result){
+	function setJsonDataFormat(result, page){
 		var jsonList = [];
 
 		for(var i = 0, count = result.data.length; i < count; i++){
@@ -110,17 +110,21 @@
 				jsonList.push(rowData);
 			}
 		}
+		jsonList = paging(page, jsonList);
 		return jsonList;
 	}
 
-	function getDataList(){
+	function getDataList(page){
+		if(page == undefined){
+			page = 1;
+		}
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/reports/remote_work",
 			type: "get",
 			async: false,
 			data: {"oid": oid},
 			success: function (result) {
-				setMakeList(setJsonDataFormat(result), "listData", {"dataFunction" : {"INDEX" : getNumberIndex, "report_type" : getReportTypeName}}); //list생성
+				setMakeList(setJsonDataFormat(result, page), "listData", {"dataFunction" : {"INDEX" : getNumberIndex, "report_type" : getReportTypeName}}); //list생성
 			},
 			error: function (request, status, error) {
 				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
@@ -218,19 +222,19 @@
 					<button type="button" class="btn_type" onclick="location.href='/report/maintenanceReportPost.do'">등록</button>
 				</div>
 				<div class="spc_tbl align_type">			
-					<table class="chk_type">
+					<table class="sort_table chk_type">
 						<thead>
 							<tr>
 								<th>
 									<input type="checkbox" id="chk_header" value="순번" onclick="setCheckedAll(this, 'rowCheck');">
 									<label for="chk_header"><span></span>순번</label>
 								</th>
-								<th>보고서 구분</th>
-								<th>문서번호</th>
-								<th>보고서명</th>
-								<th>작성자</th>
-								<th>작성일자</th>
-								<th>등록상태</th>
+								<th><button class="btn_align down">보고서 구분</button></th>
+								<th><button class="btn_align down">문서번호</button></th>
+								<th><button class="btn_align down">보고서명</button></th>
+								<th><button class="btn_align down">작성자</button></th>
+								<th><button class="btn_align down">작성일자</button></th>
+								<th><button class="btn_align down">등록상태</button></th>
 							</tr>
 						</thead>
 						<tbody id="listData">
@@ -249,10 +253,7 @@
 						</tbody>
 					</table>	
 				</div>
-				<div class="paging_wrap">
-					<a href="javascript:void(0);" class="btn_prev">prev</a>
-					<strong>1</strong>
-					<a href="javascript:void(0);" class="btn_next">next</a>
+				<div class="paging_wrap" id="paging">
 				</div>
 			</div>
 		</div>

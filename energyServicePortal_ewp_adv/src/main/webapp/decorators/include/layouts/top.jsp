@@ -68,7 +68,10 @@
 	<!-- timepicker -->
 	<script type="text/javascript" src="/js/wickedpicker.js"></script>
 	<script>
-
+		const pagePerData = 15; //페이지당 게시글 갯수
+		const navCount = 10; //한 화면당 네비게이션 갯수
+		let page = 1; //현재 페이지
+		
 		//API 토큰 세팅
 		$.ajaxSetup({
 			headers: {'Authorization': 'Bearer <c:out value="${sessionScope.userInfo.token}" escapeXml="false" />'}

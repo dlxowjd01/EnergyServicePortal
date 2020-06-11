@@ -1,503 +1,1656 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-    <%@ include file="/decorators/include/taglibs.jsp"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ include file="/decorators/include/taglibs.jsp" %>
+<script type="text/javascript" src="/js/commonDropdown.js"></script>
+<script type="text/javascript">
+	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
+	const apiURL = 'http://iderms.enertalk.com:8443';
+	const siteList = JSON.parse('${siteList}');
 
-        <script>
-            $(function() {
-                const compareArea = $("#siteList").next().find(".compare_area");
-                const dropdownArea = compareArea.find(".dropdown");
-                const compareSelectBox = compareArea.children().find(".dropdown-toggle.bgN");
-                const modalCompare = compareSelectBox.next("ul");
-                // const innerSelectBox = selectModal.find("btn.dropdown-toggle");
-                const confirmBtn = modalCompare.find("comp_btn_wrap button");
+	const configDevice = '/config/orgs/' + oid;
+	const statusRawDid = '/status/raw?dids=';
+	const statusSummary = '/status/summary';
+	const forecast = '/energy/forecasting/devices';
+	const configDeviceData = {
+		includeUsers: false,
+		includSites: false,
+		includeDevices: true,
+		includeBtus: false
+	};
 
-                compareSelectBox.on("click", function() {
-                    // modalCompare.toggleClass("toggled");
-                    dropdownArea.toggleClass("open");
-                });
-                confirmBtn.on("click", function(e) {
-                    // e.preventDefault();
-                    console.log("btn---", dropdownArea)
-                    dropdownArea.removeClass("open");
-                })
+	const deviceTemplate = {
+		'SM': '스마트미터',
+		'SM_ISMART': '한전 아이스마트',
+		'SM_KPX': '전력거래소 계량포털',
+		'SM_CRAWLING': '데이터 수집기',
+		'SM_MANUAL': '수기 입력',
+		'INV_PV': '태양광 인버터',
+		'INV_WIND': '풍력 인버터',
+		'PCS_ESS': 'ESS PCS',
+		'BMS_SYS': 'BMS 시스템',
+		'BMS_RACK': 'BMS 랙',
+		'SENSOR_SOLAR': '태양광 센서',
+		'SENSOR_FRAME': '불꽃 센서',
+		'SENSOR_TEMP_HUMIDITY': '온습도 센서',
+		'CCTV': 'CCTV'
+	};
 
-                // compareSelectBox.on("click", function(){
-                // 	dropdown.removeClass("open");
-                // })
-            });
-        </script>
+	let deviceList;
 
-        <%--
-<html>
-  <head>
-    <title>Abnormally Analysis</title>
-  </head>
-  <body>
---%>
-            <div class="row">
-                <div class="col-12">
-                    <h1 class="page-header">이상 분석</h1>
-                </div>
-            </div>
-            <div class="row">
-                <div id="siteList" class="header_drop_area col-lg-2 col-md-4 col-sm-3">
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-					선택해주세요.<span class="caret"></span>
+	$(function () {
+		const compareArea = $("#siteList").next().find(".compare_area");
+		const dropdownArea = compareArea.find(".dropdown");
+		const compareSelectBox = compareArea.children().find(".dropdown-toggle.bgN");
+		const modalCompare = compareSelectBox.next("ul");
+		// const innerSelectBox = selectModal.find("btn.dropdown-toggle");
+		const confirmBtn = modalCompare.find("comp_btn_wrap button");
+
+		compareSelectBox.on('click', function () {
+			dropdownArea.toggleClass("open");
+		});
+
+		confirmBtn.on('click', function () {
+			dropdownArea.removeClass('open');
+		});
+
+		setInitList('siteULList'); //사업소 리스트 초기화
+		setInitList('typeULList'); //검증설비 - 설비유형 리스트 초기화
+		setInitList('compareTypeULList'); //검증설비 - 설비유형 리스트 초기화
+		siteMakeList(); //사업소 리스트 그리기
+
+		setInitList('deviceName'); //검증설비 - 설비유형 리스트 초기화
+		setInitList('compareDeviceName'); //검증설비 - 설비유형 리스트 초기화
+
+		setInitList('deviceAttribute'); //검증설비 - 설비유형 리스트 초기화
+		setInitList('compareDeviceAttribute'); //검증설비 - 설비유형 리스트 초기화
+
+		setInitList('formulaList');
+
+		$('.fromDate, .toDate').datepicker('setDate', new Date()); //기본값 세팅
+
+		deviceProperties(); //설비속성 템플릿 만들기
+
+		//확인 클릭시
+		$('#renderBtn').on('click', function () {
+			searchGrid();
+		});
+
+
+		$('.save_btn').on('click', function (e) {
+			let excelName = '이상분석';
+			let $val = $('#datatable').find('tbody');
+			let cnt = $val.length;
+
+			if (cnt < 1) {
+				alert('다운받을 데이터가 없습니다.');
+			} else {
+				if (confirm('엑셀로 저장하시겠습니까?')) {
+					tableToExcel('datatable', excelName, e);
+				}
+			}
+		});
+	});
+
+	const rtnDropdown = function ($selectId) {
+		if ($selectId == 'selectSiteList') {
+			deviceType();
+		}
+//                 else if ($selectId == 'typeULList' || $selectId == 'compareTypeULList') {
+//                     deviceName($selectId); //설비명
+//                     setTypeList($selectId); //설비속성
+//                 }
+	}
+
+	//사업소 조회
+	const siteMakeList = () => {
+		setMakeList(siteList, 'siteULList', {'dataFunction': {}}); //list생성
+	};
+
+	//검증설비 - 설비유형 선택 시
+	$(document).on('click', '[id$=ypeULList] li', function () {
+		deviceName($(this)); //설비명
+		setCalSumList($(this));//계산식 (예측의평균 ) 제어
+	});
+
+	$(document).on('click', '[id$=eviceName] li', function () {
+		setTypeList($(this)); //설비속성
+	});
+
+	$(document).on('click', '[id$="ttribute"] li', function () {
+		attrSelect($(this));
+	});
+
+	const attrSelect = (obj) => {
+		let value = obj.find('input').val();
+		if (value == 'metering' || value == 'metering') {
+			$('#interval button').html('1달 <span class="caret"></span>').data('value', 'month');
+			$('#interval li').each(function () {
+				if ($(this).data('value') != 'month') {
+					$(this).addClass('disabled');
+				}
+			});
+		} else {
+			$('#interval li').each(function () {
+				$(this).removeClass('disabled');
+			});
+		}
+	}
+
+	//설비유형 리스트 그리기
+	const deviceType = () => {
+
+		$('#deviceType button').empty().append('설비유형<span class="caret"></span>');
+		$('#compareDeviceType button').empty().append('설비유형<span class="caret"></span>');
+
+		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
+			function () {
+				return $(this).val();
+			}
+			)
+		);
+
+		if (siteArray.length > 0) {
+			$.ajax({
+				url: apiURL + configDevice,
+				type: 'get',
+				async: false,
+				data: configDeviceData,
+				success: function (result) {
+					deviceList = result.devices;
+					let deviceType = new Array();
+
+					$.each(deviceList, function (i, el) {
+						if ($.inArray(el.sid, siteArray) >= 0) {
+							if ($.inArray(el.device_type, deviceType) === -1) {
+								deviceType.push(el.device_type);
+							}
+						}
+					});
+
+					deviceType.sort(); //정렬
+
+					$.each(deviceType, function (i, el) {
+						deviceType[i] = {
+							name: deviceTemplate[el],
+							type: el
+						}
+					});
+
+					setMakeList(deviceType, 'typeULList', {'dataFunction': {}});
+					setMakeList(deviceType, 'compareTypeULList', {'dataFunction': {}});
+				},
+				dataType: 'json'
+			});
+		} else {
+			$('#deviceType ul').empty();
+			$('#compareDeviceType ul').empty();
+		}
+	};
+
+	//설비명 그리기
+	const deviceName = (obj) => {
+		let objType = obj.data('type');
+		let objId = $(obj).parent('ul').attr('id');
+
+		if(objId.match('comp')) {
+			let button = $('#compareDeviceName').closest('.dropdown').find('button');
+			let buttonNm = $('#compareDeviceName').closest('.dropdown').find('button').data('name');
+
+			button.html(buttonNm + '<span class="caret"></span>');
+
+			button = $('#compAttr').closest('.dropdown').find('button');
+			buttonNm = $('#compAttr').closest('.dropdown').find('button').data('name');
+
+			button.html(buttonNm + '<span class="caret"></span>');
+
+			button = $('#formulaList').closest('.dropdown').find('button');
+			buttonNm = $('#formulaList').closest('.dropdown').find('button').data('name');
+
+			button.html(buttonNm + '<span class="caret"></span>');
+		} else {
+			let button = $('#deviceName').closest('.dropdown').find('button');
+			let buttonNm = $('#deviceName').closest('.dropdown').find('button').data('name');
+
+			button.html(buttonNm + '<span class="caret"></span>');
+
+			button = $('#deviceAttribute').closest('.dropdown').find('button');
+			buttonNm = $('#deviceAttribute').closest('.dropdown').find('button').data('name');
+
+			button.html(buttonNm + '<span class="caret"></span>');
+		}
+
+		let deviceNameArr = new Array();
+		let deviceNameArrCnt = 0;
+
+		if (deviceList.length > 0) {
+			//선택된 사이트를 기준으로 한다.
+			$(':checkbox[name="site"]:checked').each(function () {
+				let siteNm = $(this).next().text()
+					, siteId = $(this).val();
+
+				$.each(deviceList, function (i, el) {
+					if (el.sid == siteId) {
+						if (objType == el.device_type) {
+							let metering = false;
+							if (el.metering_type > 0) {
+								metering = true;
+							}
+
+							deviceNameArr.push({
+								siteName: siteNm,
+								name: el.name,
+								did: el.did,
+								forcasting: el.forecasting,
+								metering: metering,
+								type: el.device_type,
+							});
+						}
+					}
+				});
+			});
+			if (objId == 'typeULList') {
+				setMakeList(deviceNameArr, 'deviceName', {'dataFunction': {}});
+			} else if (objId == 'compareTypeULList') {
+				setMakeList(deviceNameArr, 'compareDeviceName', {'dataFunction': {}});
+			}
+		}
+	}
+
+	//설비 속성 템플릿
+	const featureProperties = new Object();
+	const deviceProperties = () => {
+		$.ajax({
+			url: apiURL + '/config/view/device_properties',
+			type: 'get',
+			async: false,
+			data: {},
+			success: function (result) {
+				$.map(result, function (val, key) {
+					let deviceName = key;
+					let propList = val.properties;
+					let tempFeature = new Array();
+
+					$.map(propList, function (v, k) {
+						if (v.abnormality_feature) {
+							let tempObj = new Object();
+							let unit = (v.unit != null && v.unit != '') ? '(' + v.unit + ')' : '';
+							tempObj['key'] = k;
+							tempObj['value'] = v.name.kr + unit;
+							tempFeature.push(tempObj);
+						}
+					});
+					featureProperties[deviceName] = tempFeature;
+				});
+			},
+			dataType: 'json'
+		});
+	};
+
+	// 설비속성 그리기
+	const setTypeList = (obj) => {
+		let typeArray = new Array();
+		let thisId = obj.parent('ul').attr('id');
+		let thisForecast = Boolean(obj.find('input').data('forecast'));
+		let thisMetering = Boolean(obj.find('input').data('metering'));
+		$.map(featureProperties, function (value, key) {
+			if (obj.data('type') == key) {
+				typeArray = Array.from(value);
+			}
+		});
+
+		if (thisForecast) {
+			typeArray.push({
+				key: 'forecast',
+				value: '예측사용량',
+			});
+		}
+
+		if (thisMetering) {
+			typeArray.push({
+				key: 'metering',
+				value: '사용량',
+			});
+		}
+
+		if (!thisId.match('comp')) {
+			setMakeList(typeArray, 'deviceAttribute', {'dataFunction': {}});
+		} else {
+			setMakeList(typeArray, 'compareDeviceAttribute', {'dataFunction': {}});
+		}
+	}
+
+	const setCalSumList = (obj) => {
+		let formula = new Array();
+		let foreCasting = true;
+		let objId = $(obj).parent('ul').attr('id');
+		let objType = obj.data('type');
+
+		formula.push({
+			name: '평균'
+		});
+
+		if (objId == 'compareTypeULList') {
+			$.each(deviceList, function (i, el) {
+				if (el.device_type == objType) {
+					if (!el.forecasting) {
+						foreCasting = el.forecasting;
+					}
+				}
+			});
+
+			if (foreCasting) {
+				formula.push({
+					name: '예측'
+				});
+			}
+			setMakeList(formula, 'formulaList', {'dataFunction': {}});
+		}
+	}
+
+	//조회
+	const searchGrid = () => {
+
+		verifyBoolean = false;
+		compareBoolean = false;
+		verifyList = new Array();
+		compareList = new Array();
+
+		let siteArray = new Array();
+		let deviceArray = new Array();
+		let compDeviceArray = new Array();
+
+		// 사이트
+		$(':checkbox[name="site"]:checked').each(function () {
+			siteArray.push($(this).val());
+		});
+
+		// 검증설비
+		$(':radio[name="deviceNm"]:checked').each(function () {
+			deviceArray.push($(this).val());
+		});
+
+		// 비교설비
+		$(':checkbox[name="compDevice"]:checked').each(function () {
+			compDeviceArray.push($(this).val());
+		});
+		let interval = $('#interval').find('button').data('value');
+
+		if (siteArray.length <= 0) {
+			alert('사이트를 선택 해 주세요.');
+			return false;
+		}
+
+		if ($(':radio[name="type"]:checked').length <= 0) {
+			alert('검증성비 유형을 선택 해 주세요.');
+			return false;
+		}
+
+		if ($(':radio[name="compareType"]:checked').length <= 0) {
+			alert('비교성비 유형을 선택 해 주세요.');
+			return false;
+		}
+
+		if (deviceArray.length <= 0) {
+			alert('검증설비를 선택 해 주세요.');
+			return false;
+		}
+
+		if (compDeviceArray.length <= 0) {
+			alert('비교설비를 선택 해 주세요.');
+			return false;
+		}
+
+		if ($(':radio[name="attr"]:checked').length <= 0) {
+			alert('검증성비 속성을 선택 해 주세요.');
+			return false;
+		}
+
+		if ($(':radio[name="compAttr"]:checked').length <= 0) {
+			alert('비교성비 속성을 선택 해 주세요.');
+			return false;
+		}
+
+		if ($(':radio[name="formula"]:checked').length <= 0) {
+			alert('계산식을 선택 해 주세요.');
+			return false;
+		}
+
+		if ($(':radio[name="benchmark"]:checked').length > 0 || $(':radio[name="unit"]:checked').length > 0 || $('[name="reference"]').val() != '') {
+			if ($(':radio[name="benchmark"]:checked').length <= 0) {
+				alert('제외 값의 기준을 선택 해 주세요.');
+				return false;
+			}
+
+			if ($(':radio[name="unit"]:checked').length <= 0) {
+				alert('제외 값의 단위를 선택 해 주세요.');
+				return false;
+			}
+
+			if (isEmpty($('[name="reference"]').val())) {
+				alert('제외 값의 기준 값을 선택 해 주세요.');
+				return false;
+			}
+		}
+
+		if ($(':radio[name="comparison"]:checked').length > 0 || $(':radio[name="criteria"]:checked').length > 0 || !isEmpty($('[name="tolerance"]').val())) {
+			if ($(':radio[name="comparison"]:checked').length <= 0) {
+				alert('비교방법의 비교식을 선택 해 주세요.');
+				return false;
+			}
+
+			if ($(':radio[name="criteria"]:checked').length <= 0) {
+				alert('비교방법의 비교 기준을 선택 해 주세요.');
+				return false;
+			}
+
+			if (isEmpty($('[name="tolerance"]').val())) {
+				alert('비교방법의 허용치를 선택 해 주세요.');
+				return false;
+			}
+		}
+
+		$('#siteList').next().find('.compare_area').find('.dropdown').removeClass('open');
+
+		// 검증설비 그리기
+		let statusSummaryData = {
+			sids: siteArray.join(','),
+			dids: deviceArray.join(','),
+			startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+			endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
+			interval: interval,
+			formId: 'v2'
+		};
+
+		let standard = makeStandard(interval);
+		makeTableTemplate(standard);
+
+		//검증 설비
+		$.ajax({
+			url: apiURL + statusSummary,
+			type: 'get',
+			data: statusSummaryData,
+		}).done(function (data, textStatus, jqXHR) {
+			gridDataMake(data, 'verify', standard);
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.error(jqXHR);
+			console.error(textStatus);
+			console.error(errorThrown);
+
+			alert('처리 중 오류가 발생했습니다.');
+			return false;
+		});
+
+		//비교 설비
+		let option = new Object();
+		if ($(':radio[name="formula"]:checked').val() == '예측') {
+			let statusSummaryData = {
+				dids: compDeviceArray.join(','),
+				startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+				endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
+				interval: interval
+			};
+
+			option = {
+				url: apiURL + forecast,
+				type: 'get',
+				data: statusSummaryData
+			}
+		} else {
+			let statusSummaryData = {
+				sids: siteArray.join(','),
+				dids: compDeviceArray.join(','),
+				startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+				endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
+				interval: interval,
+				formId: 'v2'
+			};
+
+			option = {
+				url: apiURL + statusSummary,
+				type: 'get',
+				data: statusSummaryData,
+			}
+		}
+
+		$.ajax(option).done(function (data, textStatus, jqXHR) {
+			gridDataMake(data, 'compare', standard);
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.error(jqXHR);
+			console.error(textStatus);
+			console.error(errorThrown);
+
+			alert('처리 중 오류가 발생했습니다.');
+			return false;
+		});
+	}
+
+	let verifyBoolean = false;
+	let compareBoolean = false;
+	let verifyList = new Array();
+	let compareList = new Array();
+	const gridDataMake = (result, type, standard) => {
+		let interval = $('#interval').find('button').data('value');
+
+		let verifyTotal = 0;
+		let compareTotal = 0;
+
+		let verifyObj = new Object();
+		let compareObj = new Object();
+
+		verifyObj['name'] = '검증 설비';
+		verifyObj['color'] = 1;
+
+		compareObj['name'] = '비교 설비';
+		compareObj['color'] = 2;
+
+		if (type == 'verify') {
+			verifyList = result[$(':radio[name="type"]:checked').val()];
+			verifyBoolean = true;
+		} else {
+			if ($(':radio[name="formula"]:checked').val() == '평균') {
+				compareList = result[$(':radio[name="compareType"]:checked').val()];
+			} else {
+				$(':checkbox[name="compDevice"]:checked').each(function () {
+					if (!isEmpty(result.data)) {
+						compareList = compareList.concat(result.data[$(this).val()][0].items);
+					}
+				});
+			}
+
+			compareBoolean = true;
+		}
+
+		// 두 값이 다 들어오면.
+		if (verifyBoolean && compareBoolean) {
+			let tableData = new Array();
+			standard.forEach((stnd, j) => {
+				if (interval == 'day') {
+					stnd += '000000';
+				} else if (interval == 'month') {
+					stnd += '01000000';
+				}
+
+				//검증 장비
+				verifyList.forEach(el => {
+					if (stnd == el.basetime) {
+						verifyObj[stnd] = eval('el.mean.' + $('[name="attr"]:checked').val());
+					}
+				});
+
+				//비교 장비
+				compareList.forEach(el => {
+					if (stnd == el.basetime) {
+						if (compareObj[stnd] == undefined) {
+							if ($(':radio[name="formula"]:checked').val() == '평균') {
+								compareObj[stnd] = Number(eval('el.mean.' + $('[name="compAttr"]:checked').val()));
+							} else {
+								compareObj[stnd] = Number(el.energy);
+							}
+						} else {
+							if ($(':radio[name="formula"]:checked').val() == '평균') {
+								compareObj[stnd] += Number(eval('el.mean.' + $('[name="compAttr"]:checked').val()));
+								compareObj[stnd] = compareObj[stnd] / $(':checkbox[name="compDevice"]:checked').length;
+							} else {
+								compareObj[stnd] = Number(el.energy);
+								compareObj[stnd] = compareObj[stnd] / $(':checkbox[name="compDevice"]:checked').length;
+							}
+
+						}
+					}
+				});
+
+				if (verifyObj[stnd] == undefined) {
+					verifyObj[stnd] = '-';
+				} else {
+					if (verifyObj[stnd] != 0) {
+						verifyObj[stnd] = benchmarkProcess(verifyObj[stnd], 'verify');
+						verifyTotal += verifyObj[stnd] == '-' ? 0 : Number(verifyObj[stnd]);
+					}
+				}
+
+				if (compareObj[stnd] == undefined) {
+					compareObj[stnd] = '-';
+				} else {
+					if (compareObj[stnd] != 0) {
+						compareObj[stnd] = benchmarkProcess(compareObj[stnd], 'compare');
+						compareTotal += compareObj[stnd] == '-' ? 0 :Number(compareObj[stnd]);
+					}
+				}
+			});
+
+			verifyTotal = (verifyTotal / verifyList.length).toFixed(2);
+			compareTotal = (compareTotal / compareList.length).toFixed(2);
+
+			$('.value_area').eq(0).find('p.value_num').eq(0).text(verifyTotal);
+			$('.value_area').eq(0).find('p.value_num').eq(1).text((verifyTotal - compareTotal).toFixed(2));
+
+			$('.value_area').eq(1).find('p.value_num').eq(0).text(compareTotal);
+			$('.value_area').eq(1).find('p.value_num').eq(1).text((compareTotal - verifyTotal).toFixed(2));
+
+			tableData.push(verifyObj); //
+			tableData.push(compareObj); //
+			$('[id^="table_"]').each(function () {
+				setMakeList(tableData, $(this).prop('id'), {'dataFunction': {}});
+			});
+
+			chartMakeData(tableData, standard);
+		}
+	}
+
+	const benchmarkProcess = (data, type) => {
+		const benchmark = $(':radio[name="benchmark"]:checked').val();
+		const unit = $(':radio[name="unit"]:checked').val();
+		const reference = $('[name="reference"]').val();
+
+		let compDeviceArray = new Array();
+		// 비교설비
+		$(':checkbox[name="compDevice"]:checked').each(function () {
+			compDeviceArray.push($(this).val());
+		});
+
+		if (benchmark == undefined) {
+			return data.toFixed(2);
+		} else {
+			if (unit == 'relative') { //상대
+				let capacity = 0;
+				if (type == 'verify') { //검증
+					deviceList.forEach(el => {
+						if (el.did = $(':radio[name="deviceNm"]:checked').val()) {
+							capacity += Number(el.capacity);
+						}
+					});
+				} else { //비교
+					deviceList.forEach(el => {
+						if ($.inArray(el.did, compDeviceArray) >= 0) {
+							capacity += el.capacity;
+						}
+					});
+				}
+
+				let benchmarkValue = (data / capacity) * 100;
+				if (benchmark == 'up') {
+					if (benchmarkValue >= Number(reference)) {
+						return '-';
+					} else {
+						return data.toFixed(2);
+					}
+				} else {
+					if (benchmarkValue <= Number(reference)) {
+						return '-';
+					} else {
+						return data.toFixed(2);
+					}
+				}
+			} else { //절대
+				if (benchmark == 'up') {
+					if (data >= Number(reference)) {
+						return '-';
+					} else {
+						return data.toFixed(2);
+					}
+				} else {
+					if (data <= Number(reference)) {
+						return '-';
+					} else {
+						return data.toFixed(2);
+					}
+				}
+			}
+		}
+	}
+
+	const makeStandard = (interval) => {
+		let standard = new Array();
+		let sDate = $('#fromDate').datepicker('getDate').format('yyyyMMdd')
+		let eDate = $('#toDate').datepicker('getDate').format('yyyyMMdd')
+
+		if (interval == 'day') {
+			let diffDay = getDiff(eDate, sDate, 'day');
+			for (let j = 0; j < diffDay; j++) {
+				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
+				sDateTime.setDate(Number(sDateTime.getDate()) + j);
+				let toDate = sDateTime.format('yyyyMMdd');
+				standard.push(toDate);
+			}
+		} else if (interval == 'month') {
+			let diffMonth = getDiff(eDate, sDate, 'month');
+			for (let j = 0; j < diffMonth; j++) {
+				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) + j - 1, 1);
+				let toDate = sDateTime.format('yyyyMM');
+				standard.push(toDate);
+			}
+		} else {
+			let diffDay = getDiff(eDate, sDate, 'day');
+			//diffDay 1보다 크면 시작일과 종료일이 다르다.
+			for (let j = 0; j < diffDay; j++) {
+				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
+				sDateTime.setDate(sDateTime.getDate() + j);
+				let toDate = sDateTime.format('yyyyMMdd');
+
+				for (let i = 0; i < 24; i++) {
+					if (interval == '15min') { //15분
+						if (String(i).length == 1) {
+							standard.push(toDate + '0' + i + '0000');
+							standard.push(toDate + '0' + i + '1500');
+							standard.push(toDate + '0' + i + '3000');
+							standard.push(toDate + '0' + i + '4500');
+						} else {
+							standard.push(toDate + i + '0000');
+							standard.push(toDate + i + '1500');
+							standard.push(toDate + i + '3000');
+							standard.push(toDate + i + '4500');
+						}
+					} else if (interval == '30min') { //30분
+						if (String(i).length == 1) {
+							standard.push(toDate + '0' + i + '0000');
+							standard.push(toDate + '0' + i + '3000');
+						} else {
+							standard.push(toDate + i + '0000');
+							standard.push(toDate + i + '3000');
+						}
+					} else { //시간
+						if (String(i).length == 1) {
+							standard.push(toDate + '0' + i + '0000');
+						} else {
+							standard.push(toDate + i + '0000');
+						}
+					}
+				}
+			}
+		}
+
+		return standard;
+	}
+
+	//두기간 사이 차이 구하기.
+	const getDiff = (eDate, sDate, type) => {
+		eDate = new Date(eDate.substring(2, 4), eDate.substring(4, 6) - 1, eDate.substring(6, 8));
+		sDate = new Date(sDate.substring(2, 4), sDate.substring(4, 6) - 1, sDate.substring(6, 8));
+		if (type == 'day') {
+			return (((((eDate - sDate) / 1000) / 60) / 60) / 24) + 1;
+		} else if (type == 'month') {
+			if (eDate.format('yyyyMMdd').substring(0, 4) == sDate.format('yyyyMMdd').substring(0, 4)) {
+				return (eDate.format('yyyyMMdd').substring(4, 6) * 1 - sDate.format('yyyyMMdd').substring(4, 6) * 1) + 1;
+			} else {
+				return Math.round((eDate - sDate) / (1000 * 60 * 60 * 24 * 365 / 12)) + 1;
+			}
+		}
+	}
+
+	//선택된 디바이스 유형별로 테이블을 생성한다.
+	const makeTableTemplate = (standard) => {
+		$('#datatable').empty();
+		let interval = $('#interval').find('button').data('value');
+		let index = 0;
+
+		let targetTable = document.createElement('table');
+		let thead = targetTable.createTHead();
+		let tbody = targetTable.createTBody();
+		let hRow = thead.insertRow();
+		let bRow = tbody.insertRow();
+
+		let hCell;
+		let bCell;
+
+		targetTable.setAttribute('class', 'his_tbl');
+		tbody.setAttribute('id', 'table_' + index);
+
+		let stdDate = '';
+		let color = 1;
+		standard.forEach((stnd, j) => {
+			if (stdDate == '') {
+				if (interval == 'day') {
+					stdDate = stnd.substring(0, 6);
+
+					hCell = document.createElement("TH");
+					hCell.innerHTML = stnd.substring(0, 4) + '-' + stnd.substring(4, 6);
+					;
+					hRow.appendChild(hCell);
+
+					hCell = document.createElement("TH");
+					hCell.innerHTML = stnd.substring(6, 8);
+					hRow.appendChild(hCell);
+
+					bCell = bRow.insertCell();
+					bCell.innerHTML = '<span class="bu t[color]">[name]</span>';
+
+					bCell = bRow.insertCell();
+					bCell.innerHTML = '[' + stnd + '000000]';
+				} else if (interval == 'month') {
+					stdDate = stnd.substring(0, 4);
+
+					hCell = document.createElement("TH");
+					hCell.innerHTML = stdDate;
+					hRow.appendChild(hCell);
+
+					hCell = document.createElement("TH");
+					hCell.innerHTML = stnd.substring(4, 6);
+					hRow.appendChild(hCell);
+
+					bCell = bRow.insertCell();
+					bCell.innerHTML = '<span class="bu t[color]">[name]</span>';
+
+					bCell = bRow.insertCell();
+					bCell.innerHTML = '[' + stnd + '01000000]';
+				} else {
+					stdDate = stnd.substring(0, 8);
+
+					hCell = document.createElement("TH");
+					hCell.innerHTML = stnd.substring(0, 4) + '-' + stnd.substring(4, 6) + '-' + stnd.substring(6, 8);
+					hRow.appendChild(hCell);
+
+					hCell = document.createElement("TH");
+					hCell.innerHTML = stnd.substring(8, 10) + ':' + stnd.substring(10, 12);
+					hRow.appendChild(hCell);
+
+					bCell = bRow.insertCell();
+					bCell.innerHTML = '<span class="bu t[color]">[name]</span>';
+
+					bCell = bRow.insertCell();
+					bCell.innerHTML = '[' + stnd + ']';
+				}
+
+				if (standard.length == j + 1) {
+					let $div = $('<div>').addClass('chart_table');
+					let html = $('<div>').addClass('fold_div').append(targetTable);
+					html.appendTo($div);
+					$('#datatable').append($div);
+					setInitList('table_' + index);
+				}
+			} else if (stdDate != '' && (((interval == '15min' || interval == 'hour')
+				&& stdDate != stnd.substring(0, 8)) || (interval == 'day' && stdDate != stnd.substring(0, 6))
+				|| (interval == 'month' && stdDate != stnd.substring(0, 4))) || standard.length == j + 1) {
+
+				if (standard.length == j + 1) {
+					if (interval == 'day') {
+						hCell = document.createElement("TH");
+						hCell.innerHTML = stnd.substring(6, 8);
+						hRow.appendChild(hCell);
+
+						bCell = bRow.insertCell();
+						bCell.innerHTML = '[' + stnd + '000000]';
+					} else if (interval == 'month') {
+						hCell = document.createElement("TH");
+						hCell.innerHTML = stnd.substring(4, 6);
+						hRow.appendChild(hCell);
+
+						bCell = bRow.insertCell();
+						bCell.innerHTML = '[' + stnd + '01000000]';
+					} else {
+						hCell = document.createElement("TH");
+						hCell.innerHTML = stnd.substring(8, 10) + ':' + stnd.substring(10, 12);
+						hRow.appendChild(hCell);
+
+						bCell = bRow.insertCell();
+						bCell.innerHTML = '[' + stnd + ']';
+					}
+				}
+
+				let $div = $('<div>').addClass('chart_table');
+				let html = $('<div>').addClass('fold_div').append(targetTable);
+				html.appendTo($div);
+				$('#datatable').append($div);
+				setInitList('table_' + index);
+
+				index++
+				if (interval == 'day') {
+					stdDate = stnd.substring(0, 6);
+				} else if (interval == 'month') {
+					stdDate = stnd.substring(0, 4);
+				} else {
+					stdDate = stnd.substring(0, 8);
+				}
+
+				targetTable = document.createElement('table');
+				thead = targetTable.createTHead();
+				tbody = targetTable.createTBody();
+				hRow = thead.insertRow();
+				bRow = tbody.insertRow();
+
+				targetTable.setAttribute('class', 'his_tbl');
+				tbody.setAttribute('id', 'table_' + index);
+
+				if (interval == 'day') {
+					stdDate = stnd.substring(0, 6);
+
+					hCell = document.createElement("TH");
+					hCell.innerHTML = stnd.substring(0, 4) + '-' + stnd.substring(4, 6);
+					hRow.appendChild(hCell);
+
+					hCell = document.createElement("TH");
+					hCell.innerHTML = stnd.substring(6, 8);
+					hRow.appendChild(hCell);
+
+					bCell = bRow.insertCell();
+					bCell.innerHTML = '<span class="bu t[color]">[name]</span>';
+
+					bCell = bRow.insertCell();
+					bCell.innerHTML = '[' + stnd + '000000]';
+				} else if (interval == 'month') {
+					stdDate = stnd.substring(0, 4);
+
+					hCell = document.createElement("TH");
+					hCell.innerHTML = stdDate;
+					hRow.appendChild(hCell);
+
+					hCell = document.createElement("TH");
+					hCell.innerHTML = stnd.substring(4, 6);
+					hRow.appendChild(hCell);
+
+					bCell = bRow.insertCell();
+					bCell.innerHTML = '<span class="bu t[color]">[name]</span>';
+
+					bCell = bRow.insertCell();
+					bCell.innerHTML = '[' + stnd + '01000000]';
+				} else {
+					stdDate = stnd.substring(0, 8);
+
+					hCell = document.createElement("TH");
+					hCell.innerHTML = stnd.substring(0, 4) + '-' + stnd.substring(4, 6) + '-' + stnd.substring(6, 8);
+					hRow.appendChild(hCell);
+
+					hCell = document.createElement("TH");
+					hCell.innerHTML = stnd.substring(8, 10) + ':' + stnd.substring(10, 12);
+					hRow.appendChild(hCell);
+
+					bCell = bRow.insertCell();
+					bCell.innerHTML = '<span class="bu t[color]">[name]</span>';
+
+					bCell = bRow.insertCell();
+					bCell.innerHTML = '[' + stnd + ']';
+				}
+			} else {
+				if (interval == 'day') {
+					hCell = document.createElement("TH");
+					hCell.innerHTML = stnd.substring(6, 8);
+					hRow.appendChild(hCell);
+
+					bCell = bRow.insertCell();
+					bCell.innerHTML = '[' + stnd + '000000]';
+				} else if (interval == 'month') {
+					hCell = document.createElement("TH");
+					hCell.innerHTML = stnd.substring(4, 6);
+					hRow.appendChild(hCell);
+
+					bCell = bRow.insertCell();
+					bCell.innerHTML = '[' + stnd + '01000000]';
+				} else {
+					hCell = document.createElement("TH");
+					hCell.innerHTML = stnd.substring(8, 10) + ':' + stnd.substring(10, 12);
+					hRow.appendChild(hCell);
+
+					bCell = bRow.insertCell();
+					bCell.innerHTML = '[' + stnd + ']';
+				}
+			}
+		});
+	};
+
+	const getFormatDate = (date, split) => {
+		let year = date.getFullYear();
+		let month = (1 + date.getMonth());
+		month = month >= 10 ? month : '0' + month;
+		let day = date.getDate();
+		day = day >= 10 ? day : '0' + day;
+		return year + split + month + split + day;
+	}
+
+	const chartMakeData = (tableData, standard) => {
+		let seriesData = new Array();
+		let colorArr = ['#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787'];
+
+		tableData.forEach((el, index) => {
+			let seriesArray = new Array(),
+				dataName = '';
+			$.map(el, function (val, key) {
+				if (key != 'color' && key != 'INDEX') {
+					if (key == 'name') {
+						dataName = val;
+					} else {
+						seriesArray.push([
+							key, parseFloat(val)
+						])
+					}
+				}
+			});
+
+			seriesArray.sort(function (a, b) {
+				return a[0] - b[0];
+			});
+
+			let $temp = {
+				name: dataName,
+				type: 'column',
+				stack: 0,
+				tooltip: {
+					valueSuffix: 'Wh'
+				},
+				color: colorArr[index],
+				data: seriesArray
+			};
+			seriesData.push($temp);
+		});
+
+		chartDraw(seriesData, standard);
+	}
+
+	/**
+	 * 차트 그리기
+	 *
+	 * @param standard
+	 * @param seriesData
+	 */
+	const chartDraw = function (seriesData, standard) {
+		let chart = $('#chart2').highcharts();
+		if (chart) {
+			chart.destroy();
+		}
+
+		let option = {
+			chart: {
+				renderTo: 'chart2',
+				marginLeft: 60,
+				marginRight: 20,
+				backgroundColor: 'transparent',
+			},
+			navigation: {
+				buttonOptions: {
+					enabled: false /* 메뉴 안보이기 */
+				}
+			},
+			title: {
+				text: ''
+			},
+			subtitle: {
+				text: ''
+			},
+			xAxis: {
+				labels: {
+					align: 'center',
+					style: {
+						color: 'var(--color3)',
+						fontSize: '8px'
+					},
+					y: 50,
+					formatter: function () {
+						return dateFormat(this.value);
+					},
+					enabled: true
+				},
+				categories: standard,
+				tickInterval: 1,
+				/* 눈금의 픽셀 간격 조정 */
+				title: {
+					text: null
+				},
+				crosshair: true /* 포커스 선 */
+			},
+			yAxis: {
+				gridLineWidth: 1,
+				/* 기준선 grid 안보이기/보이기 */
+				min: 0,
+				/* 최소값 지정 */
+				title: {
+					text: '',
+					align: 'low',
+					rotation: 0,
+					/* 타이틀 기울기 */
+					y: 25,
+					/* 타이틀 위치 조정 */
+					x: 5,
+					/* 타이틀 위치 조정 */
+					style: {
+						color: 'var(--color3)',
+						fontSize: '18px'
+					}
+				},
+				labels: {
+					overflow: 'justify',
+					x: -20,
+					/* 그래프와의 거리 조정 */
+					style: {
+						color: 'var(--color3)',
+						fontSize: '10px'
+					}
+				}
+			},
+			/* 범례 */
+			legend: {
+				enabled: true,
+				align: 'right',
+				verticalAlign: 'top',
+				x: -120,
+				itemStyle: {
+					color: 'var(--color3)',
+					fontSize: '10px',
+					fontWeight: 400
+				},
+				itemHoverStyle: {
+					color: '' /* 마우스 오버시 색 */
+				},
+				symbolPadding: 3,
+				/* 심볼 - 텍스트간 거리 */
+				symbolHeight: 8 /* 심볼 크기 */
+			},
+			/* 툴팁 */
+			tooltip: {
+				formatter: function () {
+					return this.points.reduce(function (s, point) {
+						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + Number(point.y).toFixed(2) + point.series.userOptions.tooltip.valueSuffix;
+					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
+				},
+				shared: true /* 툴팁 공유 */
+			},
+			/* 옵션 */
+			plotOptions: {
+				series: {
+					label: {
+						connectorAllowed: false
+					},
+					borderWidth: 0 /* 보더 0 */
+				},
+				line: {
+					marker: {
+						enabled: false /* 마커 안보이기 */
+					}
+				}
+			},
+			/* 출처 */
+			credits: {
+				enabled: false
+			},
+			/* 그래프 스타일 */
+			series: seriesData,
+			/* 반응형 */
+			responsive: {
+				rules: [{
+					condition: {
+						maxWidth: 414 /* 차트 사이즈 */
+					},
+					chartOptions: {
+						chart: {
+							marginLeft: 60,
+							marginTop: 80
+						},
+						xAxis: {
+							labels: {
+								style: {
+									fontSize: '13px'
+								}
+							}
+						},
+						yAxis: {
+							title: {
+								style: {
+									fontSize: '13px'
+								}
+							},
+							labels: {
+								x: -10,
+								/* 그래프와의 거리 조정 */
+								style: {
+									fontSize: '13px'
+								}
+							}
+						},
+						legend: {
+							layout: 'horizontal',
+							verticalAlign: 'bottom',
+							align: 'center',
+							x: 0,
+							itemStyle: {
+								fontSize: '13px'
+							}
+						}
+					}
+				}]
+			}
+		}
+
+		chart = new Highcharts.Chart(option);
+		chart.redraw();
+	}
+
+	function dateFormat(val) {
+		let date = '';
+		if (val != undefined) {
+			if (String(val).length == 4) {
+				date = val.substring(0, 4)
+			} else if (String(val).length == 6) {
+				date = val.substring(0, 4) + '-' + val.substring(4, 6);
+			} else if (String(val).length > 8) {
+				date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8) + ' ' + val.substring(8, 10) + ':' + val.substring(10, 12);
+			} else {
+				date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8);
+			}
+		}
+		return date;
+	}
+</script>
+
+
+<div class="row">
+	<div class="col-12">
+		<h1 class="page-header">이상 분석</h1>
+	</div>
+</div>
+<div class="row">
+	<div id="siteList" class="header_drop_area col-lg-2 col-md-4 col-sm-3">
+		<div class="dropdown" id="selectSiteList">
+			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택해주세요.">
+				선택해주세요.<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="siteULList">
+				<li data-value="[sid]">
+					<a href="javascript:void(0);" tabindex="-1">
+						<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
+						<label for="site_[INDEX]"><span></span>[name]</label>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="col-lg-10 col-md-8 col-sm-9">
+		<div class="compare_area">
+			<div class="dropdown">
+				<button class="btn btn-primary dropdown-toggle bgN" type="button">
+					비교하기<span class="caret"></span>
 				</button>
-                        <ul class="dropdown-menu dropdown-menu-form chk_type"></ul>
-                    </div>
-                </div>
-                <div class="col-lg-10 col-md-8 col-sm-9">
-                    <div class="compare_area">
-                        <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle bgN" type="button">비교하기</button>
-                            <ul class="dropdown-menu chk_type offset_dropdown">
-                                <li>
-                                    <div class="compare_bx">
-                                        <div class="bx_row aN2">
-                                            <div class="bx_align">
-                                                <p class="comp_tit type">검증 설비</p>
-                                                <ul class="comp_ul">
-                                                    <li>
-                                                        <div class="dropdown placeholder">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-														설비 유형<span class="caret"></span>
-													</button>
-                                                            <!-- 라디오 타입 -->
-                                                            <ul class="dropdown-menu rdo_type">
-                                                                <li>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op01" name="rdo_op01">
-																<label for="rdo_op01"><span></span>인버터</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op02" name="rdo_op01">
-																<label for="rdo_op02"><span></span>인버터2</label>
-                                                                    </span>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="dropdown placeholder">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-														설비 명<span class="caret"></span>
-													</button>
-                                                            <!-- 체크박스 타입 -->
-                                                            <ul class="dropdown-menu rdo_type">
-                                                                <li>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op03" name="rdo_op02">
-																<label for="rdo_op03"><span></span>인버터</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op04" name="rdo_op02">
-																<label for="rdo_op04"><span></span>인버터2</label>
-                                                                    </span>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="dropdown placeholder">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-														설비 속성<span class="caret"></span>
-													</button>
-                                                            <ul class="dropdown-menu rdo_type">
-                                                                <li>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op05" name="rdo_op03">
-																<label for="rdo_op05"><span></span>DC 전압</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op06" name="rdo_op03">
-																<label for="rdo_op06"><span></span>DC 전류</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op07" name="rdo_op03">
-																<label for="rdo_op07"><span></span>DC 전력</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op08" name="rdo_op03">
-																<label for="rdo_op08"><span></span>현재 출력</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op09" name="rdo_op03">
-																<label for="rdo_op09"><span></span>금일 발전량</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op10" name="rdo_op03">
-																<label for="rdo_op10"><span></span>누적 발전량</label>
-                                                                    </span><span class="comp_inp">
-																<input type="radio" id="rdo_op11" name="rdo_op03">
-																<label for="rdo_op11"><span></span>AC 전압 R</label>
-                                                                    </span><span class="comp_inp">
-																<input type="radio" id="rdo_op12" name="rdo_op03">
-																<label for="rdo_op12"><span></span>AC 전압 S</label>
-                                                                    </span><span class="comp_inp">
-																<input type="radio" id="rdo_op13" name="rdo_op03">
-																<label for="rdo_op13"><span></span>AC 전압 T</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op14" name="rdo_op03">
-																<label for="rdo_op14"><span></span>역률</label>
-                                                                    </span>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="bx_align">
-                                                <p class="comp_tit type">비교 설비</p>
-                                                <ul class="comp_ul">
-                                                    <li>
-                                                        <div class="dropdown placeholder">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-														설비 유형<span class="caret"></span>
-													</button>
-                                                            <ul class="dropdown-menu rdo_type">
-                                                                <li>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op15" name="rdo_op04">
-																<label for="rdo_op15"><span></span>인버터</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op16" name="rdo_op04">
-																<label for="rdo_op16"><span></span>접속반</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op17" name="rdo_op04">
-																<label for="rdo_op17"><span></span>차단기</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op18" name="rdo_op04">
-																<label for="rdo_op18"><span></span>계량기</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op19" name="rdo_op04">
-																<label for="rdo_op19"><span></span>기상센서</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op20" name="rdo_op04">
-																<label for="rdo_op20"><span></span>기상청 기상정보</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op21" name="rdo_op04">
-																<label for="rdo_op21"><span></span>한전 iSmart</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op22" name="rdo_op04">
-																<label for="rdo_op22"><span></span>KPX 계량포털</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op23" name="rdo_op04">
-																<label for="rdo_op23"><span></span>CCTV</label>
-                                                                    </span>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="dropdown placeholder">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-														설비 명<span class="caret"></span>
-													</button>
-                                                            <ul class="dropdown-menu chk_type">
-                                                                <li>
-                                                                    <span class="comp_inp">
-																<input type="checkbox" id="chk_type01">
-																<label for="chk_type01"><span></span>접속반#1</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="chk_type02" >
-																<label for="chk_type02"><span></span>접속반#2</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="chk_type03" >
-																<label for="chk_type03"><span></span>접속반#3</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="chk_type04" >
-																<label for="chk_type04"><span></span>접속반#4</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="chk_type05" >
-																<label for="chk_type05"><span></span>접속반#5</label>
-                                                                    </span>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="dropdown placeholder">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-														설비 속성<span class="caret"></span>
-													</button>
-                                                            <ul class="dropdown-menu chk_type">
-                                                                <li>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op24" name="rdo_op05">
-																<label for="rdo_op24"><span></span>인버터</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op25" name="rdo_op05">
-																<label for="rdo_op26"><span></span>인버터</label>
-                                                                    </span>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="dropdown placeholder">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-														계산식<span class="caret"></span>
-													</button>
-                                                            <ul class="dropdown-menu rdo_type">
-                                                                <li>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op27" name="rdo_op06">
-																<label for="rdo_op27"><span></span>평균</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op28" name="rdo_op06">
-																<label for="rdo_op28"><span></span>예측</label>
-                                                                    </span>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
+				<ul class="dropdown-menu unused chk_type offset_dropdown">
+					<li>
+						<div class="compare_bx">
+							<div class="bx_row aN2">
+								<div class="bx_align">
+									<p class="comp_tit type">검증 설비</p>
+									<ul class="comp_ul">
+										<li>
+											<div class="dropdown placeholder" id="deviceType">
+												<button class="btn btn-primary dropdown-toggle" type="button"
+												        data-toggle="dropdown" data-name="설비 유형">
+													설비 유형 <span class="caret"></span>
+												</button>
+												<!-- 라디오 타입 -->
+												<ul class="dropdown-menu rdo_type" role="menu" id="typeULList">
+													<li data-type="[type]">
+														<a href="javascript:void(0);" tabindex="-1">
+															<span class="comp_inp">
+																<input type="radio" id="type_[INDEX]" value="[type]"
+																       name="type">
+																<label for="type_[INDEX]"><span></span>[name]</label>
+															</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</li>
+										<li>
+											<div class="dropdown placeholder">
+												<button class="btn btn-primary dropdown-toggle" type="button"
+												        data-toggle="dropdown" data-name="설비 명">
+													설비 명 <span class="caret"></span>
+												</button>
+												<!-- 체크박스 타입 -->
+												<ul class="dropdown-menu rdo_type" id="deviceName">
+													<li data-type="[type]">
+														<a href="javascript:void(0);" tabindex="-1">
+															<span class="comp_inp">
+																<input type="radio" id="deviceNm_[INDEX]"
+																       name="deviceNm" value="[did]"
+																       data-forcasting="[forcasting]"
+																       data-metering="[metering]">
+																<label for="deviceNm_[INDEX]"><span></span>[siteName] - [name]</label>
+															</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</li>
+										<li>
+											<div class="dropdown placeholder">
+												<button class="btn btn-primary dropdown-toggle" type="button"
+												        data-toggle="dropdown" data-name="설비 속성">
+													설비 속성 <span class="caret"></span>
+												</button>
+												<ul class="dropdown-menu rdo_type" role="menu" id="deviceAttribute">
+													<li>
+														<a href="javascript:void(0);" tabindex="-1">
+															<span class="comp_inp">
+																<input type="radio" id="attr_[INDEX]" value="[key]"
+																       name="attr">
+																<label for="attr_[INDEX]"><span></span>[value]</label>
+															</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</li>
+									</ul>
+								</div>
+								<div class="bx_align">
+									<p class="comp_tit type">비교 설비</p>
+									<ul class="comp_ul">
+										<li>
+											<div class="dropdown placeholder" id="compareDeviceType">
+												<button class="btn btn-primary dropdown-toggle" type="button"
+												        data-toggle="dropdown" data-name="설비 유형">
+													설비 유형 <span class="caret"></span>
+												</button>
+												<ul class="dropdown-menu rdo_type" role="menu" id="compareTypeULList">
+													<li data-type="[type]">
+														<a href="javascript:void(0);" tabindex="-1">
+															<span class="comp_inp">
+																<input type="radio" id="compareType_[INDEX]"
+																       value="[type]" name="compareType">
+																<label for="compareType_[INDEX]"><span></span>[name]</label>
+															</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</li>
+										<li>
+											<div class="dropdown placeholder">
+												<button class="btn btn-primary dropdown-toggle" type="button"
+												        data-toggle="dropdown" data-name="설비 명">
+													설비 명 <span class="caret"></span>
+												</button>
+												<ul class="dropdown-menu chk_type" id="compareDeviceName">
+													<li data-type="[type]">
+														<a href="javascript:void(0);" tabindex="-1">
+															<span class="comp_inp">
+																<input type="checkbox" id="compDeviceNm_[INDEX]"
+																       name="compDevice" value="[did]"
+																       data-forcasting="[forcasting]"
+																       data-metering="[metering]">
+																<label for="compDeviceNm_[INDEX]"><span></span>[siteName] - [name]</label>
+															</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</li>
+										<li>
+											<div class="dropdown placeholder">
+												<button class="btn btn-primary dropdown-toggle" type="button"
+												        data-toggle="dropdown" data-name="설비 속성">
+													설비 속성 <span class="caret"></span>
+												</button>
+												<ul class="dropdown-menu rdo_type" role="menu"
+												    id="compareDeviceAttribute">
+													<li>
+														<a href="javascript:void(0);" tabindex="-1">
+															<span class="comp_inp">
+																<input type="radio" id="comp_attr_[INDEX]" value="[key]"
+																       name="compAttr">
+																<label for="comp_attr_[INDEX]"><span></span>[value]</label>
+															</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</li>
+										<li>
+											<div class="dropdown placeholder" id="formula">
+												<button class="btn btn-primary dropdown-toggle" type="button"
+												        data-toggle="dropdown" data-name="계산식">
+													계산식 <span class="caret"></span>
+												</button>
+												<ul class="dropdown-menu rdo_type" id="formulaList">
+													<li>
+														<span class="comp_inp">
+															<input type="radio" id="formula_[INDEX]" name="formula"
+															       value="[name]">
+															<label for="formula_[INDEX]"><span></span>[name]</label>
+														</span>
+													</li>
+												</ul>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
 
-                                        <p class="comp_tit type2">제외값</p>
-                                        <div class="bx_row aN3">
-                                            <div class="bx_align">
-                                                <ul class="comp_ul">
-                                                    <li>
-                                                        <div class="dropdown placeholder">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-														기준<span class="caret"></span>
-													</button>
-                                                            <ul class="dropdown-menu rdo_type">
-                                                                <li>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op29" name="rdo_op07">
-																<label for="rdo_op29"><span></span>이상</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op30" name="rdo_op07">
-																<label for="rdo_op30"><span></span>이하</label>
-                                                                    </span>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="bx_align">
-                                                <ul class="comp_ul">
-                                                    <li>
-                                                        <div class="dropdown placeholder">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-														단위<span class="caret"></span>
-													</button>
-                                                            <ul class="dropdown-menu rdo_type">
-                                                                <li>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op31" name="rdo_op08">
-																<label for="rdo_op31"><span></span>%</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op32" name="rdo_op08">
-																<label for="rdo_op32"><span></span>절대값</label>
-                                                                    </span>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="bx_align">
-                                                <ul class="comp_ul">
-                                                    <li>
-                                                        <div class="tx_inp_type">
-                                                            <input type="text" placeholder="기준 값">
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
+							<p class="comp_tit type2">제외값</p>
+							<div class="bx_row aN3">
+								<div class="bx_align">
+									<ul class="comp_ul">
+										<li>
+											<div class="dropdown placeholder">
+												<button class="btn btn-primary dropdown-toggle" type="button"
+												        data-toggle="dropdown" data-name="기준">
+													기준<span class="caret"></span>
+												</button>
+												<ul class="dropdown-menu rdo_type">
+													<li>
+														<span class="comp_inp">
+															<input type="radio" id="benchmark0" name="benchmark"
+															       value="up">
+															<label for="benchmark0"><span></span>이상</label>
+														</span>
+													</li>
+													<li>
+														<span class="comp_inp">
+															<input type="radio" id="benchmark1" name="benchmark"
+															       value="down">
+															<label for="benchmark1"><span></span>이하</label>
+														</span>
+													</li>
+												</ul>
+											</div>
+										</li>
+									</ul>
+								</div>
+								<div class="bx_align">
+									<ul class="comp_ul">
+										<li>
+											<div class="dropdown placeholder">
+												<button class="btn btn-primary dropdown-toggle" type="button"
+												        data-toggle="dropdown" data-name="단위">
+													단위<span class="caret"></span>
+												</button>
+												<ul class="dropdown-menu rdo_type">
+													<li>
+														<span class="comp_inp">
+															<input type="radio" id="unit0" name="unit" value="relative">
+															<label for="unit0"><span></span>%</label>
+														</span>
+													</li>
+													<li>
+														<span class="comp_inp">
+															<input type="radio" id="unit1" name="unit" value="absolute">
+															<label for="unit1"><span></span>절대값</label>
+														</span>
+													</li>
+												</ul>
+											</div>
+										</li>
+									</ul>
+								</div>
+								<div class="bx_align">
+									<ul class="comp_ul">
+										<li>
+											<div class="tx_inp_type">
+												<input type="text" id="reference" name="reference" value=""
+												       placeholder="기준 값">
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
 
-                                        <p class="comp_tit type2">비교 방법</p>
-                                        <div class="bx_row aN3">
-                                            <div class="bx_align">
-                                                <ul class="comp_ul">
-                                                    <li>
-                                                        <div class="dropdown placeholder">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-														비교식<span class="caret"></span>
-													</button>
-                                                            <ul class="dropdown-menu rdo_type">
-                                                                <li>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op33" name="rdo_op09">
-																<label for="rdo_op33"><span></span>POINT</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op34" name="rdo_op09">
-																<label for="rdo_op34"><span></span>CUSUM</label>
-                                                                    </span>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="bx_align">
-                                                <ul class="comp_ul">
-                                                    <li>
-                                                        <div class="dropdown placeholder">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-														비교 기준<span class="caret"></span>
-													</button>
-                                                            <ul class="dropdown-menu rdo_type">
-                                                                <li>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op35" name="rdo_op10">
-																<label for="rdo_op35"><span></span>절대값</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op36" name="rdo_op10">
-																<label for="rdo_op36"><span></span>상대값(%)</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op37" name="rdo_op10">
-																<label for="rdo_op37"><span></span>abs(절대값)</label>
-                                                                    </span>
-                                                                    <span class="comp_inp">
-																<input type="radio" id="rdo_op38" name="rdo_op10">
-																<label for="rdo_op38"><span></span>abs(상대값) %</label>
-                                                                    </span>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="bx_align">
-                                                <ul class="comp_ul">
-                                                    <li>
-                                                        <div class="tx_inp_type">
-                                                            <input type="text" placeholder="허용치">
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                        <p class="comp_tit type2">비교 기간</p>
-                                        <div class="bx_row aN2">
-                                            <div class="bx_align">
-                                                <ul class="comp_ul">
-                                                    <li>
-                                                        <div class="sel_calendar">
-                                                            <input type="text" id="datepicker1" class="sel" value="" autocomplete="off" placeholder="시작">
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="bx_align">
-                                                <ul class="comp_ul">
-                                                    <li>
-                                                        <div class="sel_calendar">
-                                                            <input type="text" id="datepicker2" class="sel" value="" autocomplete="off" placeholder="종료">
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                        <p class="comp_tit type2">시간 단위</p>
-                                        <div class="bx_row aN2">
-                                            <div class="bx_align">
-                                                <ul class="comp_ul">
-                                                    <li>
-                                                        <div class="dropdown placeholder">
-                                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-														단위<span class="caret"></span>
-													</button>
-                                                            <ul class="dropdown-menu rdo_type">
-                                                                <li>
-                                                                    <a href="#;">1시간</a>
-                                                                    <a href="#;">1일</a>
-                                                                    <a href="#;">1주</a>
-                                                                    <a href="#;">1월</a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="comp_btn_wrap">
-                                        <button type="button" class="btn_type">확인</button>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-2 col-md-4 col-sm-3 use_total">
-                    <div class="indiv">
-                        <h2 class="ntit">이상 비교</h2>
-                        <div class="value_area">
-                            <h3 class="value_tit2">검증 설비</h3>
-                            <h3 class="value_tit">평균</h3>
-                            <p class="value_num">
-                            </p>
-                        </div>
-                        <div class="value_area">
-                            <h3 class="value_tit2">비교 설비</h3>
-                            <h3 class="value_tit">편차</h3>
-                            <p class="value_num">
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-10 col-md-8 col-sm-9">
-                    <div class="indiv usage_chart pv_chart">
-                        <div class="inchart">
-                            <div id="chart2"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row pv_chart_table">
-                <div class="col-lg-12">
-                    <div class="indiv clear">
-                        <div class="tbl_save_bx">
-                            <a href="#" class="save_btn">데이터저장</a>
-                        </div>
-                        <div class="tbl_top clear">
-                            <ul class="fr">
-                                <li><a href="#" class="fold_btn">표접기</a></li>
-                            </ul>
-                        </div>
-                        <div class="tbl_wrap">
-                            <div class="fold_div" id="pc_use">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <%--
-  </body>
-</html>
---%>
+							<p class="comp_tit type2">비교 방법</p>
+							<div class="bx_row aN3">
+								<div class="bx_align">
+									<ul class="comp_ul">
+										<li>
+											<div class="dropdown placeholder">
+												<button class="btn btn-primary dropdown-toggle" type="button"
+												        data-toggle="dropdown" data-name="비교식">
+													비교식<span class="caret"></span>
+												</button>
+												<ul class="dropdown-menu rdo_type">
+													<li>
+														<span class="comp_inp">
+															<input type="radio" id="comparison0" name="comparison">
+															<label for="comparison0"><span></span>POINT</label>
+														</span>
+													</li>
+													<li>
+														<span class="comp_inp">
+															<input type="radio" id="comparison1" name="comparison">
+															<label for="comparison1"><span></span>CUSUM</label>
+														</span>
+													</li>
+												</ul>
+											</div>
+										</li>
+									</ul>
+								</div>
+								<div class="bx_align">
+									<ul class="comp_ul">
+										<li>
+											<div class="dropdown placeholder">
+												<button class="btn btn-primary dropdown-toggle" type="button"
+												        data-toggle="dropdown" data-name="비교 기준">
+													비교 기준 <span class="caret"></span>
+												</button>
+												<ul class="dropdown-menu rdo_type">
+													<li>
+														<span class="comp_inp">
+															<input type="radio" id="criteria0" name="criteria">
+															<label for="criteria0"><span></span>절대값</label>
+														</span>
+													</li>
+													<li>
+														<span class="comp_inp">
+															<input type="radio" id="criteria1" name="criteria">
+															<label for="criteria1"><span></span>상대값(%)</label>
+														</span>
+													</li>
+													<li>
+														<span class="comp_inp">
+															<input type="radio" id="criteria2" name="criteria">
+															<label for="criteria2"><span></span>abs(절대값)</label>
+														</span>
+													</li>
+													<li>
+														<span class="comp_inp">
+															<input type="radio" id="rdo_op38" name="rdo_op10">
+															<label for="rdo_op38"><span></span>abs(상대값) %</label>
+														</span>
+													</li>
+												</ul>
+											</div>
+										</li>
+									</ul>
+								</div>
+								<div class="bx_align">
+									<ul class="comp_ul">
+										<li>
+											<div class="tx_inp_type">
+												<input type="text" id="tolerance" name="tolerance" value=""
+												       placeholder="허용치">
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<p class="comp_tit type2">비교 기간</p>
+							<div class="bx_row aN2 dateField">
+								<div class="sel_calendar">
+									<div class="bx_align">
+										<ul class="comp_ul">
+											<li>
+												<input type="text" id="fromDate" name="fromDate" class="sel fromDate"
+												       value="" autocomplete="off" placeholder="시작">
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div class="sel_calendar">
+									<div class="bx_align">
+										<ul class="comp_ul">
+											<li>
+												<input type="text" id="toDate" name="toDate" class="sel toDate" value=""
+												       autocomplete="off" placeholder="종료">
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<p class="comp_tit type2">시간 단위</p>
+							<div class="bx_row aN2">
+								<div class="bx_align">
+									<ul class="comp_ul">
+										<li>
+											<div class="dropdown placeholder" id="interval">
+												<button class="btn btn-primary dropdown-toggle" type="button"
+												        data-toggle="dropdown" data-value="15min" data-name="15분">
+													15분 <span class="caret"></span>
+												</button>
+												<ul class="dropdown-menu rdo_type">
+													<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
+													<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
+													<li data-value="day"><a href="javascript:void(0);">1일</a></li>
+													<li data-value="month"><a href="javascript:void(0);">1월</a></li>
+												</ul>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="comp_btn_wrap">
+							<button type="button" class="btn_type" id="renderBtn">확인</button>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-2 col-md-4 col-sm-3 use_total">
+		<div class="indiv">
+			<h2 class="ntit">이상 비교</h2>
+			<div class="value_area">
+				<h3 class="value_tit2">검증 설비</h3>
+				<h3 class="value_tit">평균</h3>
+				<p class="value_num"></p>
+				<h3 class="value_tit">편차</h3>
+				<p class="value_num"></p>
+			</div>
+			<div class="value_area">
+				<h3 class="value_tit2">비교 설비</h3>
+				<h3 class="value_tit">평균</h3>
+				<p class="value_num"></p>
+				<h3 class="value_tit">편차</h3>
+				<p class="value_num"></p>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-10 col-md-8 col-sm-9">
+		<div class="indiv usage_chart pv_chart">
+			<div class="inchart">
+				<div id="chart2"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row pv_chart_table">
+	<div class="col-lg-12">
+		<div class="indiv clear">
+			<div class="tbl_save_bx">
+				<a href="javascript:void(0);" class="save_btn">데이터저장</a>
+			</div>
+			<div class="tbl_top clear">
+				<ul class="fr">
+					<li><a href="javascript:void(0);" class="fold_btn">표접기</a></li>
+				</ul>
+			</div>
+			<div class="tbl_wrap" id="datatable">
+				<div class="fold_div" id="pc_use">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
