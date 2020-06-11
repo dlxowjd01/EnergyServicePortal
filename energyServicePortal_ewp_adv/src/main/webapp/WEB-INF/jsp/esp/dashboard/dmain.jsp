@@ -1441,7 +1441,7 @@ $(function(){
 																	<th>SOC</th>
 																	<td>23.20%</td>
 																</tr>
-																<tr>
+					''											<tr>
 																	<th>Cell 온도</th>
 																	<td>23.05℃</td>
 																</tr>
@@ -1457,21 +1457,15 @@ $(function(){
 						</dd>
 					</dl>
 				</div>
-			</div>							
+			</div>
 		</div>
 	</div>
 	<div class="col-lg-4">
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="indiv gmain_alarm">
-					<div class="alarm_stat clear">
-						<div class="a_alert clear">
-							<span>금일 발생 오류</span>
-							<em>5</em>
-						</div>
-						<div class="a_warning clear">
-							<a href="#" class="btn cancel_btn">상세보기</a>
-						</div>
+					<div class="alarm_stat">
+						<div class="a_alert"><span>금일 발생 오류</span><em>5</em></div><div class="a_warning"><a href="#" class="btn cancel_btn">상세보기</a></div>
 					</div>
 					<div class="alarm_notice">
 						<ul>
@@ -1513,7 +1507,7 @@ $(function(){
 								<label><input type="checkbox" name="deviceStatus" value="경고" checked> 경고</label>
 								<label><input type="checkbox" name="deviceStatus" value="이상" checked> 이상</label>
 							</div>
-						</div>									
+						</div>
 					</div>
 					<ul class="type_list">
 						<li>

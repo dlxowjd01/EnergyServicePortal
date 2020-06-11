@@ -1802,13 +1802,7 @@
 		<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
 			<div class="indiv smain_alarm wrap_type">
 				<div class="alarm_stat clear">
-					<div class="a_alert clear">
-						<span>금일 발생 오류</span>
-						<em>0</em>
-					</div>
-					<div class="a_warning clear">
-						<a href="/history/alarmHistory.do?sid=${sid}" class="btn cancel_btn">상세보기</a>
-					</div>
+					<div class="a_alert"><span>금일 발생 오류</span><em>0</em></div><div class="a_warning"><a href="javascript:void(0);" onclick="pageMove('all', 'alarm');" class="btn cancel_btn">상세보기</a></div>
 				</div>
 				<div class="alarm_notice">
 					<ul>

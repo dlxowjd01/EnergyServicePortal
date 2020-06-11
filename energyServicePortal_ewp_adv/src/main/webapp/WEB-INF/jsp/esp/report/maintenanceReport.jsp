@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Youduk
-  Date: 2020/04/21
-  Time: 15:21
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <script>
 	const oid = '${sessionScope.userInfo.oid}';
@@ -217,7 +210,7 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
-			<div class="indiv">
+			<div class="indiv spc_indiv">
 				<div class="btn_wrap_type02">
 					<button type="button" class="btn_type" onclick="location.href='/report/maintenanceReportPost.do'">등록</button>
 				</div>
