@@ -11163,7 +11163,6 @@ button.tx_file {
 
 .spc_tbl th,
 .spc_tbl tbody tr td:first-child {
-  border: solid 1px red;
   white-space: nowrap;
 }
 
