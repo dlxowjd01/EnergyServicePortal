@@ -1265,7 +1265,7 @@
 										<li>
 											<div class="dropdown placeholder" id="deviceType">
 												<button class="btn btn-primary dropdown-toggle" type="button"
-												        data-toggle="dropdown" data-name="설비 유형">
+														data-toggle="dropdown" data-name="설비 유형">
 													설비 유형 <span class="caret"></span>
 												</button>
 												<!-- 라디오 타입 -->
@@ -1274,7 +1274,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="type_[INDEX]" value="[type]"
-																       name="type">
+																	   name="type">
 																<label for="type_[INDEX]"><span></span>[name]</label>
 															</span>
 														</a>
@@ -1285,7 +1285,7 @@
 										<li>
 											<div class="dropdown placeholder">
 												<button class="btn btn-primary dropdown-toggle" type="button"
-												        data-toggle="dropdown" data-name="설비 명">
+														data-toggle="dropdown" data-name="설비 명">
 													설비 명 <span class="caret"></span>
 												</button>
 												<!-- 체크박스 타입 -->
@@ -1294,9 +1294,9 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="deviceNm_[INDEX]"
-																       name="deviceNm" value="[did]"
-																       data-forcasting="[forcasting]"
-																       data-metering="[metering]">
+																	   name="deviceNm" value="[did]"
+																	   data-forcasting="[forcasting]"
+																	   data-metering="[metering]">
 																<label for="deviceNm_[INDEX]"><span></span>[siteName] - [name]</label>
 															</span>
 														</a>
@@ -1307,7 +1307,7 @@
 										<li>
 											<div class="dropdown placeholder">
 												<button class="btn btn-primary dropdown-toggle" type="button"
-												        data-toggle="dropdown" data-name="설비 속성">
+														data-toggle="dropdown" data-name="설비 속성">
 													설비 속성 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type" role="menu" id="deviceAttribute">
@@ -1315,7 +1315,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="attr_[INDEX]" value="[key]"
-																       name="attr">
+																	   name="attr">
 																<label for="attr_[INDEX]"><span></span>[value]</label>
 															</span>
 														</a>
@@ -1331,7 +1331,7 @@
 										<li>
 											<div class="dropdown placeholder" id="compareDeviceType">
 												<button class="btn btn-primary dropdown-toggle" type="button"
-												        data-toggle="dropdown" data-name="설비 유형">
+														data-toggle="dropdown" data-name="설비 유형">
 													설비 유형 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type" role="menu" id="compareTypeULList">
@@ -1339,7 +1339,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="compareType_[INDEX]"
-																       value="[type]" name="compareType">
+																	   value="[type]" name="compareType">
 																<label for="compareType_[INDEX]"><span></span>[name]</label>
 															</span>
 														</a>
@@ -1350,7 +1350,7 @@
 										<li>
 											<div class="dropdown placeholder">
 												<button class="btn btn-primary dropdown-toggle" type="button"
-												        data-toggle="dropdown" data-name="설비 명">
+														data-toggle="dropdown" data-name="설비 명">
 													설비 명 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu chk_type" id="compareDeviceName">
@@ -1358,9 +1358,9 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="checkbox" id="compDeviceNm_[INDEX]"
-																       name="compDevice" value="[did]"
-																       data-forcasting="[forcasting]"
-																       data-metering="[metering]">
+																	   name="compDevice" value="[did]"
+																	   data-forcasting="[forcasting]"
+																	   data-metering="[metering]">
 																<label for="compDeviceNm_[INDEX]"><span></span>[siteName] - [name]</label>
 															</span>
 														</a>
@@ -1371,16 +1371,16 @@
 										<li>
 											<div class="dropdown placeholder">
 												<button class="btn btn-primary dropdown-toggle" type="button"
-												        data-toggle="dropdown" data-name="설비 속성">
+														data-toggle="dropdown" data-name="설비 속성">
 													설비 속성 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type" role="menu"
-												    id="compareDeviceAttribute">
+													id="compareDeviceAttribute">
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="comp_attr_[INDEX]" value="[key]"
-																       name="compAttr">
+																	   name="compAttr">
 																<label for="comp_attr_[INDEX]"><span></span>[value]</label>
 															</span>
 														</a>
@@ -1391,14 +1391,14 @@
 										<li>
 											<div class="dropdown placeholder" id="formula">
 												<button class="btn btn-primary dropdown-toggle" type="button"
-												        data-toggle="dropdown" data-name="계산식">
+														data-toggle="dropdown" data-name="계산식">
 													계산식 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type" id="formulaList">
 													<li>
 														<span class="comp_inp">
 															<input type="radio" id="formula_[INDEX]" name="formula"
-															       value="[name]">
+																   value="[name]">
 															<label for="formula_[INDEX]"><span></span>[name]</label>
 														</span>
 													</li>
@@ -1416,21 +1416,21 @@
 										<li>
 											<div class="dropdown placeholder">
 												<button class="btn btn-primary dropdown-toggle" type="button"
-												        data-toggle="dropdown" data-name="기준">
+														data-toggle="dropdown" data-name="기준">
 													기준<span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type">
 													<li>
 														<span class="comp_inp">
 															<input type="radio" id="benchmark0" name="benchmark"
-															       value="up">
+																   value="up">
 															<label for="benchmark0"><span></span>이상</label>
 														</span>
 													</li>
 													<li>
 														<span class="comp_inp">
 															<input type="radio" id="benchmark1" name="benchmark"
-															       value="down">
+																   value="down">
 															<label for="benchmark1"><span></span>이하</label>
 														</span>
 													</li>
@@ -1444,7 +1444,7 @@
 										<li>
 											<div class="dropdown placeholder">
 												<button class="btn btn-primary dropdown-toggle" type="button"
-												        data-toggle="dropdown" data-name="단위">
+														data-toggle="dropdown" data-name="단위">
 													단위<span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type">
@@ -1470,7 +1470,7 @@
 										<li>
 											<div class="tx_inp_type">
 												<input type="text" id="reference" name="reference" value=""
-												       placeholder="기준 값">
+													   placeholder="기준 값">
 											</div>
 										</li>
 									</ul>
@@ -1484,7 +1484,7 @@
 										<li>
 											<div class="dropdown placeholder">
 												<button class="btn btn-primary dropdown-toggle" type="button"
-												        data-toggle="dropdown" data-name="비교식">
+														data-toggle="dropdown" data-name="비교식">
 													비교식<span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type">
@@ -1510,7 +1510,7 @@
 										<li>
 											<div class="dropdown placeholder">
 												<button class="btn btn-primary dropdown-toggle" type="button"
-												        data-toggle="dropdown" data-name="비교 기준">
+														data-toggle="dropdown" data-name="비교 기준">
 													비교 기준 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type">
@@ -1548,7 +1548,7 @@
 										<li>
 											<div class="tx_inp_type">
 												<input type="text" id="tolerance" name="tolerance" value=""
-												       placeholder="허용치">
+													   placeholder="허용치">
 											</div>
 										</li>
 									</ul>
@@ -1561,7 +1561,7 @@
 										<ul class="comp_ul">
 											<li>
 												<input type="text" id="fromDate" name="fromDate" class="sel fromDate"
-												       value="" autocomplete="off" placeholder="시작">
+													   value="" autocomplete="off" placeholder="시작">
 											</li>
 										</ul>
 									</div>
@@ -1571,7 +1571,7 @@
 										<ul class="comp_ul">
 											<li>
 												<input type="text" id="toDate" name="toDate" class="sel toDate" value=""
-												       autocomplete="off" placeholder="종료">
+													   autocomplete="off" placeholder="종료">
 											</li>
 										</ul>
 									</div>
@@ -1584,7 +1584,7 @@
 										<li>
 											<div class="dropdown placeholder" id="interval">
 												<button class="btn btn-primary dropdown-toggle" type="button"
-												        data-toggle="dropdown" data-value="15min" data-name="15분">
+														data-toggle="dropdown" data-value="15min" data-name="15분">
 													15분 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type">

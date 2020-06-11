@@ -66,7 +66,7 @@
 			} else if (dataValue == 'profit_mm') {
 				let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
 				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 2, 1));
-				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1 , 0));
+				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1, 0));
 			} else {
 				alert('보고서 유형이 선택되지 않았습니다.');
 				return false;
@@ -74,7 +74,7 @@
 		}
 	});
 
-	$(document).on('change', 'input[type="file"]', function() {
+	$(document).on('change', 'input[type="file"]', function () {
 		let uuid = genUuid();
 		let thisId = $(this).prop('id');
 
@@ -85,7 +85,7 @@
 		callAjax({
 			type: 'post',
 			enctype: 'multipart/form-data',
-			url: 'http://iderms.enertalk.com:8443/files/upload?oid='+oid,
+			url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
 			data: new FormData($('#upload')[0]),
 			processData: false,
 			contentType: false,
@@ -115,12 +115,12 @@
 		});
 	}
 
-	$(document).on('keyup', '#key_word', function(e){
-		if(e.keyCode == 13){
+	$(document).on('keyup', '#key_word', function (e) {
+		if (e.keyCode == 13) {
 			getDataList();
 		}
 	})
-	
+
 	const modalInit = function () {
 		callAjax({
 			url: 'http://iderms.enertalk.com:8443/spcs',
@@ -214,14 +214,14 @@
 	}
 
 	function getDataList(page) {
-		if(page == undefined){
+		if (page == undefined) {
 			page = 1;
 		}
 		let type = $('#reportClass button').data('value');
 		let data = {
 			oid: oid
 		}
-		if(type != undefined && type != '') {
+		if (type != undefined && type != '') {
 			data['report_type'] = type;
 		}
 
@@ -264,12 +264,12 @@
 						result.data[i].confirmed_date = confirmed_date + '<label for="cofirmFile' + i + '" class="btn_file fr up"">업로드</label> <input type="file" id="cofirmFile' + i + '" name="cofirmFile' + i + '" class="uploadBtn" style="display:none;">';
 					}
 
-					if(jsonDataFilter(result.data[i])) {
+					if (jsonDataFilter(result.data[i])) {
 						jsonList.push(result.data[i]);
 					}
 				}
 				jsonList = paging(page, jsonList);
-				setMakeList(jsonList, "listData", {"dataFunction": {"INDEX": getNumberIndex}}); //list생성
+				setMakeList(jsonList, "listData", { "dataFunction": { "INDEX": getNumberIndex } }); //list생성
 			},
 			error: function (request, status, error) {
 				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
@@ -277,14 +277,14 @@
 		});
 	}
 
-	function jsonDataFilter(jsonData){
-		var keyWord = $('#key_word').val().trim().toLowerCase(), 
-		bResult = false;
-		
-		if(jsonData['site_name'].toLowerCase().indexOf(keyWord) > -1 || jsonData['spc_name'].toLowerCase().indexOf(keyWord) > -1 || jsonData['updated_by'].toLowerCase().indexOf(keyWord) > -1){			
+	function jsonDataFilter(jsonData) {
+		var keyWord = $('#key_word').val().trim().toLowerCase(),
+			bResult = false;
+
+		if (jsonData['site_name'].toLowerCase().indexOf(keyWord) > -1 || jsonData['spc_name'].toLowerCase().indexOf(keyWord) > -1 || jsonData['updated_by'].toLowerCase().indexOf(keyWord) > -1) {
 			bResult = true;
 		}
-		
+
 		return bResult;
 	}
 
@@ -318,22 +318,22 @@
 			alert("다운로드할 목록을 선택하세요.");
 			return;
 		}
-		
+
 		var urlArr = new Array();
 		var fileNameArr = new Array();
 		for (var i = 0; i < count; i++) {
 			var rowData = checkDataList[i];
 			var fileLink = rowData.file_link.substring(15);
-			var fileLinkUrl = fileLink.substring(0, fileLink.length-1); // 파일링크 (뒤에 쉼표 제거)
+			var fileLinkUrl = fileLink.substring(0, fileLink.length - 1); // 파일링크 (뒤에 쉼표 제거)
 			var orgFileName = JSON.parse(rowData.generated_file_link).orgFileName; // 파일이름
 			urlArr.push(fileLinkUrl);
 			fileNameArr.push(orgFileName);
 		}
-		
-		getZip(urlArr,fileNameArr);
+
+		getZip(urlArr, fileNameArr);
 		getDataList();
 	}
-	
+
 	function setCheckedDataRemove() {
 		var checkDataList = getCheckList("rowCheck");
 		count = checkDataList.length,
@@ -363,8 +363,8 @@
 		getDataList(page);
 	}
 
-	const setUploadAfter = function(result, propName) {
-		if(result.files.length > 0) {
+	const setUploadAfter = function (result, propName) {
+		if (result.files.length > 0) {
 			var checkDataList = $("#listData").data("gridJsonData"),
 				idx = Number(propName.replace('cofirmFile', ''));
 
@@ -396,10 +396,10 @@
 		alert('보고서가 확정 처리 되었습니다.');
 		getDataList(page);
 	}
-	
+
 	//압축
-	const getZip = function (urlArr,fileNameArr) {
-		
+	const getZip = function (urlArr, fileNameArr) {
+
 		var Promise = window.Promise;
 		if (!Promise) {
 			Promise = JSZip.external.Promise;
@@ -407,21 +407,20 @@
 		//압축하기
 		var zip = new JSZip();
 		var url = ''
-		for (var i=0; i<urlArr.length; i++) {
-			zip.file(fileNameArr[i], urlToPromise(urlArr[i]), {binary:true});
+		for (var i = 0; i < urlArr.length; i++) {
+			zip.file(fileNameArr[i], urlToPromise(urlArr[i]), { binary: true });
 		}
-		zip.generateAsync({type:"blob"})
-		.then(function(blob)
-		{
-			saveAs(blob, "엑셀_다운로드.zip");
-		});
+		zip.generateAsync({ type: "blob" })
+			.then(function (blob) {
+				saveAs(blob, "엑셀_다운로드.zip");
+			});
 	}
-	
+
 	//바이너리
-	const urlToPromise = function(url) {
-		return new Promise(function(resolve, reject) {
+	const urlToPromise = function (url) {
+		return new Promise(function (resolve, reject) {
 			JSZipUtils.getBinaryContent(url, function (err, data) {
-				if(err) {
+				if (err) {
 					reject(err);
 				} else {
 					resolve(data);
@@ -449,7 +448,8 @@
 								<div class="flex_wrap">
 									<span class="input_label">SPC</span>
 									<div class="dropdown placeholder" id="spc_id">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="">
+										<button class="btn btn-primary dropdown-toggle" type="button"
+											data-toggle="dropdown" data-name="">
 											선택<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu"></ul>
@@ -458,7 +458,8 @@
 								<div class="flex_wrap">
 									<span class="input_label">보고서 유형</span>
 									<div class="dropdown placeholder" id="report_type">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">
+										<button class="btn btn-primary dropdown-toggle" type="button"
+											data-toggle="dropdown" data-name="선택">
 											선택<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu">
@@ -472,19 +473,23 @@
 								<div class="flex_wrap">
 									<span class="input_label">발전소</span>
 									<div class="dropdown placeholder" id="site_id">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="">
+										<button class="btn btn-primary dropdown-toggle" type="button"
+											data-toggle="dropdown" data-name="">
 											선택<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu"></ul>
 									</div>
 								</div>
-								<div class="add-wrap"><span class="input_label">적용 변수</span><a href="javascript:void(0);" class="btn_add" onclick="addRow('yield_list');">추가</a></div>
+								<div class="add-wrap"><span class="input_label">적용 변수</span><a
+										href="javascript:void(0);" class="btn_add"
+										onclick="addRow('yield_list');">추가</a></div>
 							</div>
 							<div class="col-lg-7 col-sm-12">
 								<div class="flex_wrap">
 									<span class="input_label">발전소</span>
 									<div class="dropdown placeholder" id="site_id">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="">
+										<button class="btn btn-primary dropdown-toggle" type="button"
+											data-toggle="dropdown" data-name="">
 											선택<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu"></ul>
@@ -493,10 +498,12 @@
 								<div class="flex_wrap">
 									<span class="input_label">적용 기간</span>
 									<div class="sel_calendar fl">
-										<input type="text" id="report_data_start" name="report_data_start" value="" class="sel fromDate" autocomplete="off" readonly="" placeholder="날짜 선택">
+										<input type="text" id="report_data_start" name="report_data_start" value=""
+											class="sel fromDate" autocomplete="off" readonly="" placeholder="날짜 선택">
 									</div>
 									<div class="sel_calendar fl ml">
-										<input type="text" id="report_data_end" name="report_data_end" value="" class="sel toDate" autocomplete="off" readonly="" placeholder="날짜 선택">
+										<input type="text" id="report_data_end" name="report_data_end" value=""
+											class="sel toDate" autocomplete="off" readonly="" placeholder="날짜 선택">
 									</div>
 								</div>
 							</div>
@@ -505,9 +512,10 @@
 						<ul class="yield_list" id="yield_list">
 							<li>
 								<div class="dropdown placeholder" id="report_variable_key_[index]">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="">
-								선택<span class="caret"></span>
-							</button>
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
+										data-name="">
+										선택<span class="caret"></span>
+									</button>
 									<ul class="dropdown-menu">
 										<li data-value="수익 배분율"><a href="javascript:void(0);">수익 배분율</a></li>
 										<li data-value="REC 단가"><a href="javascript:void(0);">REC 단가</a></li>
@@ -515,7 +523,8 @@
 									</ul>
 								</div>
 								<div class="tx_inp_type fl">
-									<input type="text" id="report_variable_val_[index]" name="report_variable_val_[index]" placeholder="입력">
+									<input type="text" id="report_variable_val_[index]"
+										name="report_variable_val_[index]" placeholder="입력">
 								</div>
 								<button class="btn_type07">삭제</button>
 							</li>
@@ -623,7 +632,8 @@
 					<thead>
 						<tr>
 							<th>
-								<input type="checkbox" id="chk_header" value="순번" onclick="setCheckedAll(this, 'rowCheck');">
+								<input type="checkbox" id="chk_header" value="순번"
+									onclick="setCheckedAll(this, 'rowCheck');">
 								<label for="chk_header"><span></span>순번</label>
 							</th>
 							<th><button class="btn_align down">SPC명</button></th>
