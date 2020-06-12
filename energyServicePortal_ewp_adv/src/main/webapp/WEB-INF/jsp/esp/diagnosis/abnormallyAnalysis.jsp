@@ -97,7 +97,7 @@
 			$('.offset_dropdown button.btn-primary').each(function() {
 				let divId = $(this).parent().attr('id');
 				if(divId == 'interval') {
-					$(this).data('value', '15min').html('15분 <span class="caret"></span>');
+					$(this).data('value', 'hour').html('1시간 <span class="caret"></span>');
 				} else {
 					$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
 				}
@@ -130,25 +130,25 @@
 		setTypeList($(this)); //설비속성
 	});
 
-	$(document).on('click', '[id$="ttribute"] li', function () {
-		attrSelect($(this));
-	});
-
-	const attrSelect = (obj) => {
-		let value = obj.find('input').val();
-		if (value == 'metering' || value == 'forecasting') {
-			$('#interval button').html('1달 <span class="caret"></span>').data('value', 'month');
-			$('#interval li').each(function () {
-				if ($(this).data('value') != 'month') {
-					$(this).addClass('disabled');
-				}
-			});
-		} else {
-			$('#interval li').each(function () {
-				$(this).removeClass('disabled');
-			});
-		}
-	}
+	// $(document).on('click', '[id$="ttribute"] li', function () {
+	// 	attrSelect($(this));
+	// });
+	//
+	// const attrSelect = (obj) => {
+	// 	let value = obj.find('input').val();
+	// 	if (value == 'metering' || value == 'forecasting') {
+	// 		$('#interval button').html('1달 <span class="caret"></span>').data('value', 'month');
+	// 		$('#interval li').each(function () {
+	// 			if ($(this).data('value') != 'month') {
+	// 				$(this).addClass('disabled');
+	// 			}
+	// 		});
+	// 	} else {
+	// 		$('#interval li').each(function () {
+	// 			$(this).removeClass('disabled');
+	// 		});
+	// 	}
+	// }
 
 	//설비유형 리스트 그리기
 	const deviceType = () => {
@@ -662,7 +662,7 @@
 								}
 							} else {
 								if ($(':radio[name="compAttr"]:checked').val() == 'metering' || $(':radio[name="compAttr"]:checked').val() == 'forecasting') {
-									compareObj[stnd] = Number(el.energy);
+									compareObj[stnd] += Number(el.energy);
 									compareObj[stnd] = compareObj[stnd] / $(':checkbox[name="compDevice"]:checked').length;
 								} else {
 									compareObj[stnd] += Number(eval('el.mean.' + $('[name="compAttr"]:checked').val()));
@@ -1740,8 +1740,8 @@
 									<ul class="comp_ul">
 										<li>
 											<div class="dropdown placeholder" id="interval">
-												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-value="15min" data-name="15분">
-													15분 <span class="caret"></span>
+												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-value="hour" data-name="1시간">
+													1시간 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type">
 													<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
