@@ -9,6 +9,7 @@
 	const configDevice = '/config/orgs/' + oid;
 	const statusRawDid = '/status/raw?dids=';
 	const statusSummary = '/status/summary';
+	const energyDevice = '/energy/devices';
 	const forecast = '/energy/forecasting/devices';
 	const configDeviceData = {
 		includeUsers: false,
@@ -37,12 +38,12 @@
 	let deviceList;
 
 	$(function () {
-		const compareArea = $("#siteList").next().find(".compare_area");
-		const dropdownArea = compareArea.find(".dropdown");
-		const compareSelectBox = compareArea.children().find(".dropdown-toggle.bgN");
-		const modalCompare = compareSelectBox.next("ul");
+		const compareArea = $('#siteList').next().find('.compare_area');
+		const dropdownArea = compareArea.find('.dropdown');
+		const compareSelectBox = compareArea.children().find('.dropdown-toggle.bgN');
+		const modalCompare = compareSelectBox.next('ul');
 		// const innerSelectBox = selectModal.find("btn.dropdown-toggle");
-		const confirmBtn = modalCompare.find("comp_btn_wrap button");
+		const confirmBtn = modalCompare.find('comp_btn_wrap button');
 
 		compareSelectBox.on('click', function () {
 			dropdownArea.toggleClass("open");
@@ -62,8 +63,6 @@
 
 		setInitList('deviceAttribute'); //검증설비 - 설비유형 리스트 초기화
 		setInitList('compareDeviceAttribute'); //검증설비 - 설비유형 리스트 초기화
-
-		setInitList('formulaList');
 
 		$('.fromDate, .toDate').datepicker('setDate', new Date()); //기본값 세팅
 
@@ -108,7 +107,6 @@
 	//검증설비 - 설비유형 선택 시
 	$(document).on('click', '[id$=ypeULList] li', function () {
 		deviceName($(this)); //설비명
-		setCalSumList($(this));//계산식 (예측의평균 ) 제어
 	});
 
 	$(document).on('click', '[id$=eviceName] li', function () {
@@ -121,7 +119,7 @@
 
 	const attrSelect = (obj) => {
 		let value = obj.find('input').val();
-		if (value == 'metering' || value == 'metering') {
+		if (value == 'metering' || value == 'forecasting') {
 			$('#interval button').html('1달 <span class="caret"></span>').data('value', 'month');
 			$('#interval li').each(function () {
 				if ($(this).data('value') != 'month') {
@@ -191,30 +189,21 @@
 		let objType = obj.data('type');
 		let objId = $(obj).parent('ul').attr('id');
 
-		if(objId.match('comp')) {
+		if (objId.match('comp')) {
 			let button = $('#compareDeviceName').closest('.dropdown').find('button');
 			let buttonNm = $('#compareDeviceName').closest('.dropdown').find('button').data('name');
-
 			button.html(buttonNm + '<span class="caret"></span>');
 
 			button = $('#compAttr').closest('.dropdown').find('button');
 			buttonNm = $('#compAttr').closest('.dropdown').find('button').data('name');
-
-			button.html(buttonNm + '<span class="caret"></span>');
-
-			button = $('#formulaList').closest('.dropdown').find('button');
-			buttonNm = $('#formulaList').closest('.dropdown').find('button').data('name');
-
 			button.html(buttonNm + '<span class="caret"></span>');
 		} else {
 			let button = $('#deviceName').closest('.dropdown').find('button');
 			let buttonNm = $('#deviceName').closest('.dropdown').find('button').data('name');
-
 			button.html(buttonNm + '<span class="caret"></span>');
 
 			button = $('#deviceAttribute').closest('.dropdown').find('button');
 			buttonNm = $('#deviceAttribute').closest('.dropdown').find('button').data('name');
-
 			button.html(buttonNm + '<span class="caret"></span>');
 		}
 
@@ -289,25 +278,37 @@
 	const setTypeList = (obj) => {
 		let typeArray = new Array();
 		let thisId = obj.parent('ul').attr('id');
-		let thisForecast = Boolean(obj.find('input').data('forecast'));
+		let thisForecast = Boolean(obj.find('input').data('forcasting'));
 		let thisMetering = Boolean(obj.find('input').data('metering'));
+
+		if (thisId.match('comp')) {
+			let button = $('#compAttr').closest('.dropdown').find('button');
+			let buttonNm = $('#compAttr').closest('.dropdown').find('button').data('name');
+			button.html(buttonNm + '<span class="caret"></span>');
+		} else {
+			let button = $('#attr').closest('.dropdown').find('button');
+			let buttonNm = $('#attr').closest('.dropdown').find('button').data('name');
+			button.html(buttonNm + '<span class="caret"></span>');
+		}
+
+
 		$.map(featureProperties, function (value, key) {
 			if (obj.data('type') == key) {
 				typeArray = Array.from(value);
 			}
 		});
 
-		if (thisForecast) {
-			typeArray.push({
-				key: 'forecast',
-				value: '예측사용량',
-			});
-		}
-
 		if (thisMetering) {
 			typeArray.push({
 				key: 'metering',
-				value: '사용량',
+				value: '계량값',
+			});
+		}
+
+		if (thisForecast) {
+			typeArray.push({
+				key: 'forecasting',
+				value: '예측계량값',
 			});
 		}
 
@@ -315,34 +316,6 @@
 			setMakeList(typeArray, 'deviceAttribute', {'dataFunction': {}});
 		} else {
 			setMakeList(typeArray, 'compareDeviceAttribute', {'dataFunction': {}});
-		}
-	}
-
-	const setCalSumList = (obj) => {
-		let formula = new Array();
-		let foreCasting = true;
-		let objId = $(obj).parent('ul').attr('id');
-		let objType = obj.data('type');
-
-		formula.push({
-			name: '평균'
-		});
-
-		if (objId == 'compareTypeULList') {
-			$.each(deviceList, function (i, el) {
-				if (el.device_type == objType) {
-					if (!el.forecasting) {
-						foreCasting = el.forecasting;
-					}
-				}
-			});
-
-			if (foreCasting) {
-				formula.push({
-					name: '예측'
-				});
-			}
-			setMakeList(formula, 'formulaList', {'dataFunction': {}});
 		}
 	}
 
@@ -409,11 +382,6 @@
 			return false;
 		}
 
-		if ($(':radio[name="formula"]:checked').length <= 0) {
-			alert('계산식을 선택 해 주세요.');
-			return false;
-		}
-
 		if ($(':radio[name="benchmark"]:checked').length > 0 || $(':radio[name="unit"]:checked').length > 0 || $('[name="reference"]').val() != '') {
 			if ($(':radio[name="benchmark"]:checked').length <= 0) {
 				alert('제외 값의 기준을 선택 해 주세요.');
@@ -431,57 +399,135 @@
 			}
 		}
 
-		if ($(':radio[name="comparison"]:checked').length > 0 || $(':radio[name="criteria"]:checked').length > 0 || !isEmpty($('[name="tolerance"]').val())) {
-			if ($(':radio[name="comparison"]:checked').length <= 0) {
+		if (document.querySelector('[name="compare_formula"]:checked') != null || document.querySelector('[name="compare_criterion"]:checked') != null
+			|| !isEmpty(document.querySelector('[name="normality_threshold_lower"]').value) || !isEmpty(document.querySelector('[name="normality_threshold_upper"]').value)) {
+			if (document.querySelector('[name="compare_formula"]:checked') == null) {
 				alert('비교방법의 비교식을 선택 해 주세요.');
 				return false;
 			}
 
-			if ($(':radio[name="criteria"]:checked').length <= 0) {
+			if (document.querySelector('[name="compare_criterion"]:checked') == null) {
 				alert('비교방법의 비교 기준을 선택 해 주세요.');
 				return false;
 			}
 
-			if (isEmpty($('[name="tolerance"]').val())) {
-				alert('비교방법의 허용치를 선택 해 주세요.');
+			if (isEmpty(document.querySelector('[name="normality_threshold_upper"]').value)) {
+				alert('비교방법의 상한 허용치를 선택 해 주세요.');
+				return false;
+			}
+
+			if (isEmpty(document.querySelector('[name="normality_threshold_lower"]').value)) {
+				alert('비교방법의 하한 허용치를 선택 해 주세요.');
 				return false;
 			}
 		}
 
 		$('#siteList').next().find('.compare_area').find('.dropdown').removeClass('open');
 
-		// 검증설비 그리기
-		let statusSummaryData = {
-			sids: siteArray.join(','),
-			dids: deviceArray.join(','),
-			startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
-			endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
-			interval: interval,
-			formId: 'v2'
-		};
-
 		let standard = makeStandard(interval);
 		makeTableTemplate(standard);
 
-		//검증 설비
-		$.ajax({
-			url: apiURL + statusSummary,
-			type: 'get',
-			data: statusSummaryData,
-		}).done(function (data, textStatus, jqXHR) {
-			gridDataMake(data, 'verify', standard);
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.error(jqXHR);
-			console.error(textStatus);
-			console.error(errorThrown);
+		//검증 설비 사용량
+		if ($(':radio[name="attr"]:checked').val() == 'metering') {
+			// 검증설비 그리기
+			let statusSummaryData = {
+				dids: deviceArray.join(','),
+				startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+				endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
+				interval: interval
+			};
 
-			alert('처리 중 오류가 발생했습니다.');
-			return false;
-		});
+			$.ajax({
+				url: apiURL + energyDevice,
+				type: 'get',
+				data: statusSummaryData,
+			}).done(function (data, textStatus, jqXHR) {
+				gridDataMake(data, 'verify', standard);
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.error(jqXHR);
+				console.error(textStatus);
+				console.error(errorThrown);
+
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
+		} else if ($(':radio[name="attr"]:checked').val() == 'forecasting') {
+			// 검증설비 그리기
+			let statusSummaryData = {
+				dids: deviceArray.join(','),
+				startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+				endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
+				interval: interval
+			};
+
+			$.ajax({
+				url: apiURL + forecast,
+				type: 'get',
+				data: statusSummaryData,
+			}).done(function (data, textStatus, jqXHR) {
+				gridDataMake(data, 'verify', standard);
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.error(jqXHR);
+				console.error(textStatus);
+				console.error(errorThrown);
+
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
+		} else {
+			// 검증설비 그리기
+			let statusSummaryData = {
+				sids: siteArray.join(','),
+				dids: deviceArray.join(','),
+				startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+				endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
+				interval: interval,
+				formId: 'v2'
+			};
+
+			$.ajax({
+				url: apiURL + statusSummary,
+				type: 'get',
+				data: statusSummaryData,
+			}).done(function (data, textStatus, jqXHR) {
+				gridDataMake(data, 'verify', standard);
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.error(jqXHR);
+				console.error(textStatus);
+				console.error(errorThrown);
+
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
+		}
 
 		//비교 설비
 		let option = new Object();
-		if ($(':radio[name="formula"]:checked').val() == '예측') {
+		if ($(':radio[name="compAttr"]:checked').val() == 'metering') {
+			let statusSummaryData = {
+				dids: compDeviceArray.join(','),
+				startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+				endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
+				interval: interval
+			};
+
+			option = {
+				url: apiURL + energyDevice,
+				type: 'get',
+				data: statusSummaryData
+			}
+
+			$.ajax(option).done(function (data, textStatus, jqXHR) {
+				gridDataMake(data, 'compare', standard);
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.error(jqXHR);
+				console.error(textStatus);
+				console.error(errorThrown);
+
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
+		} else if ($(':radio[name="compAttr"]:checked').val() == 'forecasting') {
 			let statusSummaryData = {
 				dids: compDeviceArray.join(','),
 				startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
@@ -494,6 +540,17 @@
 				type: 'get',
 				data: statusSummaryData
 			}
+
+			$.ajax(option).done(function (data, textStatus, jqXHR) {
+				gridDataMake(data, 'compare', standard);
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.error(jqXHR);
+				console.error(textStatus);
+				console.error(errorThrown);
+
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
 		} else {
 			let statusSummaryData = {
 				sids: siteArray.join(','),
@@ -509,18 +566,18 @@
 				type: 'get',
 				data: statusSummaryData,
 			}
+
+			$.ajax(option).done(function (data, textStatus, jqXHR) {
+				gridDataMake(data, 'compare', standard);
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.error(jqXHR);
+				console.error(textStatus);
+				console.error(errorThrown);
+
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
 		}
-
-		$.ajax(option).done(function (data, textStatus, jqXHR) {
-			gridDataMake(data, 'compare', standard);
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.error(jqXHR);
-			console.error(textStatus);
-			console.error(errorThrown);
-
-			alert('처리 중 오류가 발생했습니다.');
-			return false;
-		});
 	}
 
 	let verifyBoolean = false;
@@ -543,17 +600,24 @@
 		compareObj['color'] = 2;
 
 		if (type == 'verify') {
-			verifyList = result[$(':radio[name="type"]:checked').val()];
+			if ($(':radio[name="attr"]:checked').val() == 'metering' || $(':radio[name="attr"]:checked').val() == 'forecasting') {
+				if (!isEmpty(result.data)) {
+					verifyList = result.data[$(':radio[name="deviceNm"]:checked').val()][0].items;
+				}
+			} else {
+				verifyList = result[$(':radio[name="type"]:checked').val()];
+			}
+
 			verifyBoolean = true;
 		} else {
-			if ($(':radio[name="formula"]:checked').val() == '평균') {
-				compareList = result[$(':radio[name="compareType"]:checked').val()];
-			} else {
-				$(':checkbox[name="compDevice"]:checked').each(function () {
+			if ($(':radio[name="compAttr"]:checked').val() == 'metering' || $(':radio[name="compAttr"]:checked').val() == 'forecasting') {
+				$(':radio[name="compDevice"]:checked').each(function () {
 					if (!isEmpty(result.data)) {
 						compareList = compareList.concat(result.data[$(this).val()][0].items);
 					}
 				});
+			} else {
+				compareList = result[$(':radio[name="compareType"]:checked').val()];
 			}
 
 			compareBoolean = true;
@@ -570,61 +634,106 @@
 				}
 
 				//검증 장비
-				verifyList.forEach(el => {
-					if (stnd == el.basetime) {
-						verifyObj[stnd] = eval('el.mean.' + $('[name="attr"]:checked').val());
-					}
-				});
+				if (verifyList.length > 0) {
+					verifyList.forEach(el => {
+						if (stnd == el.basetime) {
+							if ($(':radio[name="attr"]:checked').val() == 'metering' || $(':radio[name="attr"]:checked').val() == 'forecasting') {
+								verifyObj[stnd] = Number(el.energy);
+							} else {
+								verifyObj[stnd] = eval('el.mean.' + $('[name="attr"]:checked').val());
+							}
+						}
+					});
+				}
+
 
 				//비교 장비
-				compareList.forEach(el => {
-					if (stnd == el.basetime) {
-						if (compareObj[stnd] == undefined) {
-							if ($(':radio[name="formula"]:checked').val() == '평균') {
-								compareObj[stnd] = Number(eval('el.mean.' + $('[name="compAttr"]:checked').val()));
+				if (compareList.length > 0) {
+					compareList.forEach(el => {
+						if (stnd == el.basetime) {
+							if (compareObj[stnd] == undefined) {
+								if ($(':radio[name="compAttr"]:checked').val() == 'metering' || $(':radio[name="compAttr"]:checked').val() == 'forecasting') {
+									compareObj[stnd] = Number(el.energy);
+								} else {
+									compareObj[stnd] = Number(eval('el.mean.' + $('[name="compAttr"]:checked').val()));
+								}
 							} else {
-								compareObj[stnd] = Number(el.energy);
+								if ($(':radio[name="compAttr"]:checked').val() == 'metering' || $(':radio[name="compAttr"]:checked').val() == 'forecasting') {
+									compareObj[stnd] = Number(el.energy);
+									compareObj[stnd] = compareObj[stnd] / $(':checkbox[name="compDevice"]:checked').length;
+								} else {
+									compareObj[stnd] += Number(eval('el.mean.' + $('[name="compAttr"]:checked').val()));
+									compareObj[stnd] = compareObj[stnd] / $(':checkbox[name="compDevice"]:checked').length;
+								}
 							}
-						} else {
-							if ($(':radio[name="formula"]:checked').val() == '평균') {
-								compareObj[stnd] += Number(eval('el.mean.' + $('[name="compAttr"]:checked').val()));
-								compareObj[stnd] = compareObj[stnd] / $(':checkbox[name="compDevice"]:checked').length;
-							} else {
-								compareObj[stnd] = Number(el.energy);
-								compareObj[stnd] = compareObj[stnd] / $(':checkbox[name="compDevice"]:checked').length;
-							}
-
 						}
-					}
-				});
+					});
+				}
 
-				if (verifyObj[stnd] == undefined) {
+
+				console.log('stnd', stnd);
+				if (verifyObj[stnd] == undefined || compareObj[stnd] == '-') {
 					verifyObj[stnd] = '-';
 				} else {
-					if (verifyObj[stnd] != 0) {
-						verifyObj[stnd] = benchmarkProcess(verifyObj[stnd], 'verify');
-						verifyTotal += verifyObj[stnd] == '-' ? 0 : Number(verifyObj[stnd]);
+					verifyObj[stnd] = benchmarkProcess(verifyObj[stnd], 'verify');
+					if (verifyObj[stnd] == '-') {
+						compareObj[stnd] = '-';
 					}
 				}
 
-				if (compareObj[stnd] == undefined) {
+				if (compareObj[stnd] == undefined || compareObj[stnd] == '-') {
 					compareObj[stnd] = '-';
 				} else {
-					if (compareObj[stnd] != 0) {
-						compareObj[stnd] = benchmarkProcess(compareObj[stnd], 'compare');
-						compareTotal += compareObj[stnd] == '-' ? 0 :Number(compareObj[stnd]);
+					compareObj[stnd] = benchmarkProcess(compareObj[stnd], 'compare');
+					if (compareObj[stnd] == '-') {
+						verifyObj[stnd] = '-';
 					}
 				}
+
+				//합계 만들기
+				verifyTotal += verifyObj[stnd] == '-' ? 0 : parseFloat(verifyObj[stnd]);
+				compareTotal += compareObj[stnd] == '-' ? 0 : parseFloat(compareObj[stnd]);
 			});
 
-			verifyTotal = (verifyTotal / verifyList.length).toFixed(2);
-			compareTotal = (compareTotal / compareList.length).toFixed(2);
+			if (verifyList.length > 0) {
+				verifyTotal = (verifyTotal / verifyList.length).toFixed(2);
 
-			$('.value_area').eq(0).find('p.value_num').eq(0).text(verifyTotal);
-			$('.value_area').eq(0).find('p.value_num').eq(1).text((verifyTotal - compareTotal).toFixed(2));
+				$('.value_area').eq(0).find('p.value_num').eq(0).text(verifyTotal);
+				if (compareList.length > 0) {
+					compareTotal = (compareTotal / compareList.length).toFixed(2);
+					$('.value_area').eq(0).find('p.value_num').eq(1).text((verifyTotal - compareTotal).toFixed(2));
+				} else {
+					$('.value_area').eq(0).find('p.value_num').eq(1).text((verifyTotal).toFixed(2));
+				}
+			} else {
+				$('.value_area').eq(0).find('p.value_num').eq(0).text('-');
+				if (compareList.length > 0) {
+					compareTotal = (compareTotal / compareList.length).toFixed(2);
+					$('.value_area').eq(0).find('p.value_num').eq(1).text((0 - compareTotal).toFixed(2));
+				} else {
+					$('.value_area').eq(0).find('p.value_num').eq(1).text('-');
+				}
+			}
 
-			$('.value_area').eq(1).find('p.value_num').eq(0).text(compareTotal);
-			$('.value_area').eq(1).find('p.value_num').eq(1).text((compareTotal - verifyTotal).toFixed(2));
+			if (compareList.length > 0) {
+				compareTotal = (compareTotal / compareList.length).toFixed(2);
+
+				$('.value_area').eq(1).find('p.value_num').eq(0).text(compareTotal);
+				if (verifyList.length > 0) {
+					verifyTotal = (verifyTotal / verifyList.length).toFixed(2);
+					$('.value_area').eq(1).find('p.value_num').eq(1).text((compareTotal - verifyTotal).toFixed(2));
+				} else {
+					$('.value_area').eq(1).find('p.value_num').eq(1).text((compareTotal).toFixed(2));
+				}
+			} else {
+				$('.value_area').eq(1).find('p.value_num').eq(0).text('-');
+				if (verifyList.length > 0) {
+					verifyTotal = (verifyTotal / verifyList.length).toFixed(2);
+					$('.value_area').eq(1).find('p.value_num').eq(1).text((0 - verifyTotal).toFixed(2));
+				} else {
+					$('.value_area').eq(1).find('p.value_num').eq(1).text('-');
+				}
+			}
 
 			tableData.push(verifyObj); //
 			tableData.push(compareObj); //
@@ -632,7 +741,13 @@
 				setMakeList(tableData, $(this).prop('id'), {'dataFunction': {}});
 			});
 
-			chartMakeData(tableData, standard);
+			if (document.querySelector('[name="compare_formula"]:checked') != null
+				&& document.querySelector('[name="compare_criterion"]:checked') != null
+				&& !isEmpty(document.querySelector('[name="normality_threshold_lower"]').value)
+				&& !isEmpty(document.querySelector('[name="normality_threshold_upper"]').value)) {
+
+				chartMakeData(tableData, standard);
+			}
 		}
 	}
 
@@ -666,14 +781,20 @@
 					});
 				}
 
+				data = data == '-' ? 0 : data;
 				let benchmarkValue = (data / capacity) * 100;
+
+				console.log('benchmarkValue', benchmarkValue);
+				console.log('reference', reference);
 				if (benchmark == 'up') {
+					console.log(type + 'benchmarkValue >= Number(reference)', benchmarkValue >= Number(reference));
 					if (benchmarkValue >= Number(reference)) {
 						return '-';
 					} else {
 						return data.toFixed(2);
 					}
 				} else {
+					console.log(type + 'benchmarkValue <= Number(reference)', benchmarkValue <= Number(reference));
 					if (benchmarkValue <= Number(reference)) {
 						return '-';
 					} else {
@@ -803,7 +924,6 @@
 
 					hCell = document.createElement("TH");
 					hCell.innerHTML = stnd.substring(0, 4) + '-' + stnd.substring(4, 6);
-					;
 					hRow.appendChild(hCell);
 
 					hCell = document.createElement("TH");
@@ -996,41 +1116,91 @@
 
 	const chartMakeData = (tableData, standard) => {
 		let seriesData = new Array();
+		let refineData = new Array();
+		let interval = $('#interval').find('button').data('value');
 		let colorArr = ['#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787'];
 
-		tableData.forEach((el, index) => {
-			let seriesArray = new Array(),
-				dataName = '';
-			$.map(el, function (val, key) {
-				if (key != 'color' && key != 'INDEX') {
-					if (key == 'name') {
-						dataName = val;
-					} else {
-						seriesArray.push([
-							key, parseFloat(val)
-						])
-					}
-				}
-			});
+		standard.forEach(stand => {
+			if (interval == 'day') {
+				stand += '000000';
+			} else if (interval == 'month') {
+				stand += '01000000';
+			}
 
-			seriesArray.sort(function (a, b) {
-				return a[0] - b[0];
-			});
+			let verification = eval('tableData[0][' + stand + ']') == '-' ? null : eval('tableData[0][' + stand + ']');
+			let compare = eval('tableData[0][' + stand + ']') == '-' ? null : eval('tableData[0][' + stand + ']');
 
-			let $temp = {
-				name: dataName,
-				type: 'column',
-				stack: 0,
-				tooltip: {
-					valueSuffix: 'Wh'
-				},
-				color: colorArr[index],
-				data: seriesArray
-			};
-			seriesData.push($temp);
+			if (verification != null && typeof (verification) == 'string') {
+				verification = parseFloat(verification);
+			}
+
+			if (compare != null && typeof (compare) == 'string') {
+				compare = parseFloat(compare);
+			}
+
+			refineData.push([
+				verification, compare
+			]);
 		});
 
-		chartDraw(seriesData, standard);
+		let compareFormula = document.querySelector('[name="compare_formula"]:checked').value; //비교식
+		let compareCriterion = document.querySelector('[name="compare_criterion"]:checked').value; //비교기준
+		let thresholdUpper = document.querySelector('[name="normality_threshold_upper"]').value; //허용치 상한
+		let thresholdLower = document.querySelector('[name="normality_threshold_lower"]').value; //허용치 하한
+
+		let dataCode = {
+			compare_formula: compareFormula,
+			compare_criterion: compareCriterion,
+			normality_threshold_upper: thresholdUpper,
+			normality_threshold_lower: thresholdLower,
+			dt: refineData
+		}
+
+		$.ajax({
+			url: apiURL + '/energy/normality',
+			type: 'post',
+			data: JSON.stringify(dataCode),
+			dataType: 'json',
+			contentType: 'application/json'
+		}).done(function (data, textStatus, jqXHR) {
+			let seriesArray = new Array();
+			if (data.status == 'success') {
+				let dataArray = data.data;
+				dataArray.forEach((el, index) => {
+					let colorOption = '',
+						colorBoolean = Boolean(el[3]);
+					if (colorBoolean) {
+						colorOption = '#26ccc8';
+					} else {
+						colorOption = '#878787';
+					}
+					seriesArray.push({
+						y: parseFloat(el[2]),
+						color: colorOption
+					});
+				});
+
+				seriesData.push({
+					name: '',
+					colorByPoint: true,
+					data: seriesArray,
+					tooltip: {
+						valueSuffix: ''
+					},
+				});
+
+				chartDraw(seriesData, standard);
+			}
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.error(jqXHR);
+			console.error(textStatus);
+			console.error(errorThrown);
+
+			alert('처리 중 오류가 발생했습니다.');
+			return false;
+		});
+
+		//
 	}
 
 	/**
@@ -1050,6 +1220,7 @@
 				renderTo: 'chart2',
 				marginLeft: 60,
 				marginRight: 20,
+				type: 'column',
 				backgroundColor: 'transparent',
 			},
 			navigation: {
@@ -1115,7 +1286,7 @@
 			},
 			/* 범례 */
 			legend: {
-				enabled: true,
+				enabled: false,
 				align: 'right',
 				verticalAlign: 'top',
 				x: -120,
@@ -1135,8 +1306,8 @@
 			tooltip: {
 				formatter: function () {
 					return this.points.reduce(function (s, point) {
-						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + Number(point.y).toFixed(2) + point.series.userOptions.tooltip.valueSuffix;
-					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
+						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span> 비교 결과 : ' + Number(point.y).toFixed(2) + point.series.userOptions.tooltip.valueSuffix;
+					}, '<b>' + dateFormat(this.x) + '</b>');
 				},
 				shared: true /* 툴팁 공유 */
 			},
@@ -1264,8 +1435,7 @@
 									<ul class="comp_ul">
 										<li>
 											<div class="dropdown placeholder" id="deviceType">
-												<button class="btn btn-primary dropdown-toggle" type="button"
-														data-toggle="dropdown" data-name="설비 유형">
+												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 유형">
 													설비 유형 <span class="caret"></span>
 												</button>
 												<!-- 라디오 타입 -->
@@ -1273,8 +1443,7 @@
 													<li data-type="[type]">
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
-																<input type="radio" id="type_[INDEX]" value="[type]"
-																	   name="type">
+																<input type="radio" id="type_[INDEX]" value="[type]" name="type">
 																<label for="type_[INDEX]"><span></span>[name]</label>
 															</span>
 														</a>
@@ -1284,8 +1453,7 @@
 										</li>
 										<li>
 											<div class="dropdown placeholder">
-												<button class="btn btn-primary dropdown-toggle" type="button"
-														data-toggle="dropdown" data-name="설비 명">
+												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 명">
 													설비 명 <span class="caret"></span>
 												</button>
 												<!-- 체크박스 타입 -->
@@ -1293,10 +1461,7 @@
 													<li data-type="[type]">
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
-																<input type="radio" id="deviceNm_[INDEX]"
-																	   name="deviceNm" value="[did]"
-																	   data-forcasting="[forcasting]"
-																	   data-metering="[metering]">
+																<input type="radio" id="deviceNm_[INDEX]" name="deviceNm" value="[did]" data-forcasting="[forcasting]" data-metering="[metering]">
 																<label for="deviceNm_[INDEX]"><span></span>[siteName] - [name]</label>
 															</span>
 														</a>
@@ -1306,8 +1471,7 @@
 										</li>
 										<li>
 											<div class="dropdown placeholder">
-												<button class="btn btn-primary dropdown-toggle" type="button"
-														data-toggle="dropdown" data-name="설비 속성">
+												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 속성">
 													설비 속성 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type" role="menu" id="deviceAttribute">
@@ -1315,7 +1479,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="attr_[INDEX]" value="[key]"
-																	   name="attr">
+																       name="attr">
 																<label for="attr_[INDEX]"><span></span>[value]</label>
 															</span>
 														</a>
@@ -1330,16 +1494,14 @@
 									<ul class="comp_ul">
 										<li>
 											<div class="dropdown placeholder" id="compareDeviceType">
-												<button class="btn btn-primary dropdown-toggle" type="button"
-														data-toggle="dropdown" data-name="설비 유형">
+												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 유형">
 													설비 유형 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type" role="menu" id="compareTypeULList">
 													<li data-type="[type]">
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
-																<input type="radio" id="compareType_[INDEX]"
-																	   value="[type]" name="compareType">
+																<input type="radio" id="compareType_[INDEX]" value="[type]" name="compareType">
 																<label for="compareType_[INDEX]"><span></span>[name]</label>
 															</span>
 														</a>
@@ -1349,18 +1511,14 @@
 										</li>
 										<li>
 											<div class="dropdown placeholder">
-												<button class="btn btn-primary dropdown-toggle" type="button"
-														data-toggle="dropdown" data-name="설비 명">
+												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 명">
 													설비 명 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu chk_type" id="compareDeviceName">
 													<li data-type="[type]">
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
-																<input type="checkbox" id="compDeviceNm_[INDEX]"
-																	   name="compDevice" value="[did]"
-																	   data-forcasting="[forcasting]"
-																	   data-metering="[metering]">
+																<input type="checkbox" id="compDeviceNm_[INDEX]" name="compDevice" value="[did]" data-forcasting="[forcasting]" data-metering="[metering]">
 																<label for="compDeviceNm_[INDEX]"><span></span>[siteName] - [name]</label>
 															</span>
 														</a>
@@ -1370,37 +1528,18 @@
 										</li>
 										<li>
 											<div class="dropdown placeholder">
-												<button class="btn btn-primary dropdown-toggle" type="button"
-														data-toggle="dropdown" data-name="설비 속성">
+												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 속성">
 													설비 속성 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type" role="menu"
-													id="compareDeviceAttribute">
+												    id="compareDeviceAttribute">
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
-																<input type="radio" id="comp_attr_[INDEX]" value="[key]"
-																	   name="compAttr">
+																<input type="radio" id="comp_attr_[INDEX]" value="[key]" name="compAttr">
 																<label for="comp_attr_[INDEX]"><span></span>[value]</label>
 															</span>
 														</a>
-													</li>
-												</ul>
-											</div>
-										</li>
-										<li>
-											<div class="dropdown placeholder" id="formula">
-												<button class="btn btn-primary dropdown-toggle" type="button"
-														data-toggle="dropdown" data-name="계산식">
-													계산식 <span class="caret"></span>
-												</button>
-												<ul class="dropdown-menu rdo_type" id="formulaList">
-													<li>
-														<span class="comp_inp">
-															<input type="radio" id="formula_[INDEX]" name="formula"
-																   value="[name]">
-															<label for="formula_[INDEX]"><span></span>[name]</label>
-														</span>
 													</li>
 												</ul>
 											</div>
@@ -1415,24 +1554,25 @@
 									<ul class="comp_ul">
 										<li>
 											<div class="dropdown placeholder">
-												<button class="btn btn-primary dropdown-toggle" type="button"
-														data-toggle="dropdown" data-name="기준">
+												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="기준">
 													기준<span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type">
 													<li>
-														<span class="comp_inp">
-															<input type="radio" id="benchmark0" name="benchmark"
-																   value="up">
-															<label for="benchmark0"><span></span>이상</label>
-														</span>
+														<a href="javascript:void(0);" tabindex="-1">
+															<span class="comp_inp">
+																<input type="radio" id="benchmark0" name="benchmark" value="up">
+																<label for="benchmark0"><span></span>이상</label>
+															</span>
+														</a>
 													</li>
 													<li>
-														<span class="comp_inp">
-															<input type="radio" id="benchmark1" name="benchmark"
-																   value="down">
-															<label for="benchmark1"><span></span>이하</label>
-														</span>
+														<a href="javascript:void(0);" tabindex="-1">
+															<span class="comp_inp">
+																<input type="radio" id="benchmark1" name="benchmark" value="down">
+																<label for="benchmark1"><span></span>이하</label>
+															</span>
+														</a>
 													</li>
 												</ul>
 											</div>
@@ -1443,22 +1583,25 @@
 									<ul class="comp_ul">
 										<li>
 											<div class="dropdown placeholder">
-												<button class="btn btn-primary dropdown-toggle" type="button"
-														data-toggle="dropdown" data-name="단위">
+												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="단위">
 													단위<span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type">
 													<li>
-														<span class="comp_inp">
-															<input type="radio" id="unit0" name="unit" value="relative">
-															<label for="unit0"><span></span>%</label>
-														</span>
+														<a href="javascript:void(0);" tabindex="-1">
+															<span class="comp_inp">
+																<input type="radio" id="unit0" name="unit" value="relative">
+																<label for="unit0"><span></span>%</label>
+															</span>
+														</a>
 													</li>
 													<li>
-														<span class="comp_inp">
-															<input type="radio" id="unit1" name="unit" value="absolute">
-															<label for="unit1"><span></span>절대값</label>
-														</span>
+														<a href="javascript:void(0);" tabindex="-1">
+															<span class="comp_inp">
+																<input type="radio" id="unit1" name="unit" value="absolute">
+																<label for="unit1"><span></span>절대값</label>
+															</span>
+														</a>
 													</li>
 												</ul>
 											</div>
@@ -1469,8 +1612,7 @@
 									<ul class="comp_ul">
 										<li>
 											<div class="tx_inp_type">
-												<input type="text" id="reference" name="reference" value=""
-													   placeholder="기준 값">
+												<input type="text" id="reference" name="reference" value="" placeholder="기준 상한 값" autocomplete="off">
 											</div>
 										</li>
 									</ul>
@@ -1478,27 +1620,30 @@
 							</div>
 
 							<p class="comp_tit type2">비교 방법</p>
-							<div class="bx_row aN3">
+							<div class="bx_row aN2">
 								<div class="bx_align">
 									<ul class="comp_ul">
 										<li>
 											<div class="dropdown placeholder">
-												<button class="btn btn-primary dropdown-toggle" type="button"
-														data-toggle="dropdown" data-name="비교식">
+												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="비교식">
 													비교식<span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type">
 													<li>
-														<span class="comp_inp">
-															<input type="radio" id="comparison0" name="comparison">
-															<label for="comparison0"><span></span>POINT</label>
-														</span>
+														<a href="javascript:void(0);" tabindex="-1">
+															<span class="comp_inp">
+																<input type="radio" id="comparison0" name="compare_formula" value="point">
+																<label for="comparison0"><span></span>POINT</label>
+															</span>
+														</a>
 													</li>
 													<li>
-														<span class="comp_inp">
-															<input type="radio" id="comparison1" name="comparison">
-															<label for="comparison1"><span></span>CUSUM</label>
-														</span>
+														<a href="javascript:void(0);" tabindex="-1">
+															<span class="comp_inp">
+																<input type="radio" id="comparison1" name="compare_formula" value="cusum">
+																<label for="comparison1"><span></span>CUSUM</label>
+															</span>
+														</a>
 													</li>
 												</ul>
 											</div>
@@ -1509,36 +1654,54 @@
 									<ul class="comp_ul">
 										<li>
 											<div class="dropdown placeholder">
-												<button class="btn btn-primary dropdown-toggle" type="button"
-														data-toggle="dropdown" data-name="비교 기준">
+												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="비교 기준">
 													비교 기준 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type">
 													<li>
-														<span class="comp_inp">
-															<input type="radio" id="criteria0" name="criteria">
-															<label for="criteria0"><span></span>절대값</label>
-														</span>
+														<a href="javascript:void(0);" tabindex="-1">
+															<span class="comp_inp">
+																<input type="radio" id="compare_criterion0" name="compare_criterion" value="absolute">
+																<label for="compare_criterion0"><span></span>절대값</label>
+															</span>
+														</a>
 													</li>
 													<li>
-														<span class="comp_inp">
-															<input type="radio" id="criteria1" name="criteria">
-															<label for="criteria1"><span></span>상대값(%)</label>
-														</span>
+														<a href="javascript:void(0);" tabindex="-1">
+															<span class="comp_inp">
+																<input type="radio" id="compare_criterion1" name="compare_criterion" value="relative">
+																<label for="compare_criterion1"><span></span>상대값(%)</label>
+															</span>
+														</a>
 													</li>
 													<li>
-														<span class="comp_inp">
-															<input type="radio" id="criteria2" name="criteria">
-															<label for="criteria2"><span></span>abs(절대값)</label>
-														</span>
+														<a href="javascript:void(0);" tabindex="-1">
+															<span class="comp_inp">
+																<input type="radio" id="compare_criterion2" name="compare_criterion" value="abs_of_absolute">
+																<label for="compare_criterion2"><span></span>abs(절대값)</label>
+															</span>
+														</a>
 													</li>
 													<li>
-														<span class="comp_inp">
-															<input type="radio" id="rdo_op38" name="rdo_op10">
-															<label for="rdo_op38"><span></span>abs(상대값) %</label>
-														</span>
+														<a href="javascript:void(0);" tabindex="-1">
+															<span class="comp_inp">
+																<input type="radio" id="compare_criterion3" name="compare_criterion" value="abs_of_relative">
+																<label for="compare_criterion3"><span></span>abs(상대값) %</label>
+															</span>
+														</a>
 													</li>
 												</ul>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="bx_row aN2">
+								<div class="bx_align">
+									<ul class="comp_ul">
+										<li>
+											<div class="tx_inp_type">
+												<input type="text" id="normality_threshold_upper" name="normality_threshold_upper" value="" placeholder="상한 허용치" autocomplete="off">
 											</div>
 										</li>
 									</ul>
@@ -1547,8 +1710,7 @@
 									<ul class="comp_ul">
 										<li>
 											<div class="tx_inp_type">
-												<input type="text" id="tolerance" name="tolerance" value=""
-													   placeholder="허용치">
+												<input type="text" id="normality_threshold_lower" name="normality_threshold_lower" value="" placeholder="하한 허용치" autocomplete="off">
 											</div>
 										</li>
 									</ul>
@@ -1560,8 +1722,7 @@
 									<div class="bx_align">
 										<ul class="comp_ul">
 											<li>
-												<input type="text" id="fromDate" name="fromDate" class="sel fromDate"
-													   value="" autocomplete="off" placeholder="시작">
+												<input type="text" id="fromDate" name="fromDate" class="sel fromDate" value="" autocomplete="off" placeholder="시작">
 											</li>
 										</ul>
 									</div>
@@ -1570,8 +1731,7 @@
 									<div class="bx_align">
 										<ul class="comp_ul">
 											<li>
-												<input type="text" id="toDate" name="toDate" class="sel toDate" value=""
-													   autocomplete="off" placeholder="종료">
+												<input type="text" id="toDate" name="toDate" class="sel toDate" value="" autocomplete="off" placeholder="종료">
 											</li>
 										</ul>
 									</div>
@@ -1583,8 +1743,7 @@
 									<ul class="comp_ul">
 										<li>
 											<div class="dropdown placeholder" id="interval">
-												<button class="btn btn-primary dropdown-toggle" type="button"
-														data-toggle="dropdown" data-value="15min" data-name="15분">
+												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-value="15min" data-name="15분">
 													15분 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type">
