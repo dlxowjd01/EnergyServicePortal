@@ -408,22 +408,6 @@
 		console.log("form init triggered====");
 		const optList = $('#');
 		let deviceOpts = ``;
-		const deviceList = [
-			{ name: "스마트미터", val: "SM" },
-			{ name: "한전아이스마트", val: "SM_ISMART" },
-			{ name: "전력거래소 계량포털", val: "SM_KPX" },
-			{ name: "데이터 수집기", val: "SM_CRAWLING" },
-			{ name: "수기입력", val: "SM_MANUAL" },
-			{ name: "태양광 인버터", val: "INV_PV" },
-			{ name: "풍력 인버터", val: "INV_WIND" },
-			{ name: "ESS PCS", val: "PCS_ESS" },
-			{ name: "BMS 시스템", val: "BMS_SYS" },
-			{ name: "BMS 랙", val: "BMS_RACK" },
-			{ name: "태양광 센서", val: "SENSOR_SOLAR" },
-			{ name: "온습도 센서", val: "SENSOR_TEMP_HUMIDITY" },
-			{ name: "태양광 접속반", val: "COMBINER_BOX" },
-			{ name: "회로 차단기", val: "CIRCUIT_BREAKER" },
-		];
 
 		for (let i = 0; i < deviceList.length; i++) {
 			if (i === 0) {
@@ -1012,16 +996,15 @@
 			return;
 		}
 
+		// 참고용!! 아래부터는 주석 삭제하지 말아주세요.
 		var select_device_type = document.getElementById("addDeviceType");
 		var select_site = document.getElementById("addDeviceSite");
-		var select_displaytype = document.getElementById("addDeviceDisplayType");
+		var select_displaytype = document.getElementById("addDeviceDisplayType"); // 표시 유형 : 대시보드, 매전량 (중복선택 or optional)
 		var display_val = select_displaytype.options[select_displaytype.selectedIndex].value;
-
 		let device_name = $('#addDeviceName').val();
-		let device_parent_did = null;
-		let device_type = select_device_type.options[select_device_type.selectedIndex].value;
-		let metering_type = 0;
-
+		let device_parent_did = null; // 상위 장치 : 장치타입  BMS_SYS=>PCS리스트 중 선택,  BMS_RACK=> BMS_SYS리스트 중 선택
+		let device_type = select_device_type.options[select_device_type.selectedIndex].value; // 장치 타입: device_properties.json 타입들
+		let metering_type = 0; // 계량 유형 0: 계량 안함,  1: 소비, 2: 발전, 3: 충방전 (single selction)
 		let dashboard;
 		let billing;
 
@@ -1036,18 +1019,17 @@
 			billing = false;
 		}
 
-		let forecasting = false;
+		let forecasting = false; // 예측은 계량 유형이 1,2 소비 발전일 때만 보임
 		let detecting = false;
-		let capacity = Number($('#addDeviceCapacity').val());
-		let capacity_unit = "kW";
-
-		let product_name = $('#addDeviceProductName').val();
-		let manufacturer = $('#addDeviceManufacturer').val();
-		let serial_id = $('#addDeviceSerialID').val();
-		let manager = $('#addDeviceManager').val();
-		let contact = $('#addDeviceContact').val();
-		let alarm_code = "alarm";
-		let description = $('#addDeviceDescription').val();
+		let capacity = Number($('#addDeviceCapacity').val()); // 설비 용량
+		let capacity_unit = "kW"; // 설비 용량 단위
+		let product_name = $('#addDeviceProductName').val(); // 제품명
+		let manufacturer = $('#addDeviceManufacturer').val(); // 제조사
+		let serial_id = $('#addDeviceSerialID').val(); //시리얼 ID
+		let manager = $('#addDeviceManager').val(); // 담당자
+		let contact = $('#addDeviceContact').val(); // 담당자 연락처
+		let alarm_code = "alarm"; // 알람코드 리스트 (api 선택)
+		let description = $('#addDeviceDescription').val(); // 메모
 
 		var device = new idermsDevice(device_name, device_parent_did, device_type, metering_type, dashboard, billing, forecasting, detecting, capacity, capacity_unit, product_name, manufacturer, serial_id, manager, contact, alarm_code, description);
 		addDevice(select_site.options[select_site.selectedIndex].value, device);
@@ -1060,4 +1042,3 @@
 		}
 	}
 </script>
-<!-- ###### Popup End ###### -->
