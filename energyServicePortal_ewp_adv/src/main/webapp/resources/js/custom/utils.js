@@ -881,7 +881,13 @@ function setDataMapping($selecter, json, prop) {
 		var _Type = $element.attr("type");
 
 		if (_Type == "text" || _Type == "hidden" || _Type == "password") {
-			$element.val(json[prop]);
+			if (String(json[prop]).match(/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(\.\d+)?(([+-]\d\d:\d\d)|Z)?$/i)) {
+				let newDate = new Date(json[prop]);
+				$element.val(newDate.format('yyyy-MM-dd'));
+			} else {
+				$element.val(json[prop]);
+			}
+//			$element.val(json[prop]);
 		} else if (_Type == "radio") {
 			var _Name = $element.attr("name");
 			$selecter.find("[name='" + _Name + "'][value='" + json[prop] + "']").prop("checked", true);
