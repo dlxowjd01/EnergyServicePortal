@@ -21,7 +21,7 @@ $(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown
 			$selector.find(':checkbox').prop('checked', true);
 		}
 	}
-
+	
 	if ($selector.find(':radio').length > 0 || $selector.find(':checkbox').length > 0) {
 		displayDropdown($dropdown);
 	} else {
@@ -38,7 +38,6 @@ $(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown
 		}
 	}
 
-
 	if(typeof(rtnDropdown) == 'function') {
 		rtnDropdown($dropdownId);
 	}
@@ -48,7 +47,7 @@ const displayDropdown = ($selector) => {
 	let $displayButton = $selector.find('button'),
 		$displayData = '',
 		$displayText = '';
-
+	
 	if ($selector.find(':radio').length > 0) {
 		$displayText = $selector.find('input[type="radio"]:checked').next().text();
 	} else if ($selector.find(':checkbox').length > 0) {
