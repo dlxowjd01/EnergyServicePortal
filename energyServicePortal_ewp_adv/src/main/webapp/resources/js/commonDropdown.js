@@ -43,6 +43,11 @@ $(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown
 	}
 });
 
+/**
+ * 선택된 값 표시
+ *
+ * @param $selector
+ */
 const displayDropdown = ($selector) => {
 	let $displayButton = $selector.find('button'),
 		$displayData = '',
@@ -75,4 +80,14 @@ const displayDropdown = ($selector) => {
 			$displayButton.data(key, val);
 		});
 	}
+}
+
+/**
+ *
+ * @param $selector
+ */
+const dropDownInit = ($selector) => {
+	let button = $selector.closest('.dropdown').find('button');
+	let buttonNm = $selector.closest('.dropdown').find('button').data('name');
+	button.html(buttonNm + '<span class="caret"></span>');
 }

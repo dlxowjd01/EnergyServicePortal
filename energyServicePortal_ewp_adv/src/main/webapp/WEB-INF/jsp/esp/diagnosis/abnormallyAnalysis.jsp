@@ -92,6 +92,23 @@
 	const rtnDropdown = function ($selectId) {
 		if ($selectId == 'selectSiteList') {
 			deviceType();
+
+			//사이트 변경시 선택 초기화
+			$('.offset_dropdown button.btn-primary').each(function() {
+				let divId = $(this).parent().attr('id');
+				if(divId == 'interval') {
+					$(this).data('value', '15min').html('15분 <span class="caret"></span>');
+				} else {
+					$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
+				}
+			});
+
+			$('#reference').val('');
+			$('#normality_threshold_upper').val('');
+			$('#normality_threshold_lower').val('');
+
+			$('.fromDate, .toDate').datepicker('setDate', new Date()); //기본값 세팅
+
 		}
 //                 else if ($selectId == 'typeULList' || $selectId == 'compareTypeULList') {
 //                     deviceName($selectId); //설비명
@@ -190,21 +207,11 @@
 		let objId = $(obj).parent('ul').attr('id');
 
 		if (objId.match('comp')) {
-			let button = $('#compareDeviceName').closest('.dropdown').find('button');
-			let buttonNm = $('#compareDeviceName').closest('.dropdown').find('button').data('name');
-			button.html(buttonNm + '<span class="caret"></span>');
-
-			button = $('#compAttr').closest('.dropdown').find('button');
-			buttonNm = $('#compAttr').closest('.dropdown').find('button').data('name');
-			button.html(buttonNm + '<span class="caret"></span>');
+			dropDownInit($('#compareDeviceName'));
+			dropDownInit($('#compareDeviceAttribute'));
 		} else {
-			let button = $('#deviceName').closest('.dropdown').find('button');
-			let buttonNm = $('#deviceName').closest('.dropdown').find('button').data('name');
-			button.html(buttonNm + '<span class="caret"></span>');
-
-			button = $('#deviceAttribute').closest('.dropdown').find('button');
-			buttonNm = $('#deviceAttribute').closest('.dropdown').find('button').data('name');
-			button.html(buttonNm + '<span class="caret"></span>');
+			dropDownInit($('#deviceName'));
+			dropDownInit($('#deviceAttribute'));
 		}
 
 		let deviceNameArr = new Array();
@@ -282,13 +289,9 @@
 		let thisMetering = Boolean(obj.find('input').data('metering'));
 
 		if (thisId.match('comp')) {
-			let button = $('#compAttr').closest('.dropdown').find('button');
-			let buttonNm = $('#compAttr').closest('.dropdown').find('button').data('name');
-			button.html(buttonNm + '<span class="caret"></span>');
+			dropDownInit($('#compareDeviceAttribute'));
 		} else {
-			let button = $('#attr').closest('.dropdown').find('button');
-			let buttonNm = $('#attr').closest('.dropdown').find('button').data('name');
-			button.html(buttonNm + '<span class="caret"></span>');
+			dropDownInit($('#deviceAttribute'));
 		}
 
 
@@ -611,7 +614,7 @@
 			verifyBoolean = true;
 		} else {
 			if ($(':radio[name="compAttr"]:checked').val() == 'metering' || $(':radio[name="compAttr"]:checked').val() == 'forecasting') {
-				$(':radio[name="compDevice"]:checked').each(function () {
+				$(':checkbox[name="compDevice"]:checked').each(function () {
 					if (!isEmpty(result.data)) {
 						compareList = compareList.concat(result.data[$(this).val()][0].items);
 					}
@@ -670,8 +673,6 @@
 					});
 				}
 
-
-				console.log('stnd', stnd);
 				if (verifyObj[stnd] == undefined || compareObj[stnd] == '-') {
 					verifyObj[stnd] = '-';
 				} else {
@@ -696,40 +697,39 @@
 			});
 
 			if (verifyList.length > 0) {
-				verifyTotal = (verifyTotal / verifyList.length).toFixed(2);
+				verifyTotal = (Number(verifyTotal) / verifyList.length).toFixed(2);
+			}
 
+			if (verifyList.length > 0) {
+				compareTotal = (Number(compareTotal) / compareList.length).toFixed(2);
+			}
+
+			if (verifyList.length > 0) {
 				$('.value_area').eq(0).find('p.value_num').eq(0).text(verifyTotal);
 				if (compareList.length > 0) {
-					compareTotal = (compareTotal / compareList.length).toFixed(2);
-					$('.value_area').eq(0).find('p.value_num').eq(1).text((verifyTotal - compareTotal).toFixed(2));
+					$('.value_area').eq(0).find('p.value_num').eq(1).text((Number(verifyTotal) - Number(compareTotal)).toFixed(2));
 				} else {
-					$('.value_area').eq(0).find('p.value_num').eq(1).text((verifyTotal).toFixed(2));
+					$('.value_area').eq(0).find('p.value_num').eq(1).text(verifyTotal);
 				}
 			} else {
 				$('.value_area').eq(0).find('p.value_num').eq(0).text('-');
 				if (compareList.length > 0) {
-					compareTotal = (compareTotal / compareList.length).toFixed(2);
-					$('.value_area').eq(0).find('p.value_num').eq(1).text((0 - compareTotal).toFixed(2));
+					$('.value_area').eq(0).find('p.value_num').eq(1).text((0 - Number(compareTotal)).toFixed(2));
 				} else {
 					$('.value_area').eq(0).find('p.value_num').eq(1).text('-');
 				}
 			}
-
 			if (compareList.length > 0) {
-				compareTotal = (compareTotal / compareList.length).toFixed(2);
-
 				$('.value_area').eq(1).find('p.value_num').eq(0).text(compareTotal);
 				if (verifyList.length > 0) {
-					verifyTotal = (verifyTotal / verifyList.length).toFixed(2);
-					$('.value_area').eq(1).find('p.value_num').eq(1).text((compareTotal - verifyTotal).toFixed(2));
+					$('.value_area').eq(1).find('p.value_num').eq(1).text((Number(compareTotal) - Number(verifyTotal)).toFixed(2));
 				} else {
-					$('.value_area').eq(1).find('p.value_num').eq(1).text((compareTotal).toFixed(2));
+					$('.value_area').eq(1).find('p.value_num').eq(1).text(compareTotal);
 				}
 			} else {
 				$('.value_area').eq(1).find('p.value_num').eq(0).text('-');
 				if (verifyList.length > 0) {
-					verifyTotal = (verifyTotal / verifyList.length).toFixed(2);
-					$('.value_area').eq(1).find('p.value_num').eq(1).text((0 - verifyTotal).toFixed(2));
+					$('.value_area').eq(1).find('p.value_num').eq(1).text((0 - Number(verifyTotal)).toFixed(2));
 				} else {
 					$('.value_area').eq(1).find('p.value_num').eq(1).text('-');
 				}
@@ -740,6 +740,7 @@
 			$('[id^="table_"]').each(function () {
 				setMakeList(tableData, $(this).prop('id'), {'dataFunction': {}});
 			});
+
 
 			if (document.querySelector('[name="compare_formula"]:checked') != null
 				&& document.querySelector('[name="compare_criterion"]:checked') != null
@@ -769,7 +770,7 @@
 				let capacity = 0;
 				if (type == 'verify') { //검증
 					deviceList.forEach(el => {
-						if (el.did = $(':radio[name="deviceNm"]:checked').val()) {
+						if (el.did == $(':radio[name="deviceNm"]:checked').val()) {
 							capacity += Number(el.capacity);
 						}
 					});
@@ -784,17 +785,13 @@
 				data = data == '-' ? 0 : data;
 				let benchmarkValue = (data / capacity) * 100;
 
-				console.log('benchmarkValue', benchmarkValue);
-				console.log('reference', reference);
 				if (benchmark == 'up') {
-					console.log(type + 'benchmarkValue >= Number(reference)', benchmarkValue >= Number(reference));
 					if (benchmarkValue >= Number(reference)) {
 						return '-';
 					} else {
 						return data.toFixed(2);
 					}
 				} else {
-					console.log(type + 'benchmarkValue <= Number(reference)', benchmarkValue <= Number(reference));
 					if (benchmarkValue <= Number(reference)) {
 						return '-';
 					} else {
