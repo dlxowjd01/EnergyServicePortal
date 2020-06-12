@@ -37,7 +37,6 @@
 		let dataValue = $(this).data('value');
 		let dataText = $(this).text();
 		let id = $(this).parents('.dropdown').prop('id');
-
 		$(this).parents('.dropdown').find('button').html(dataText + '<span class="caret"></span>').data('value', dataValue);
 
 		if (id == 'spc_id') {
@@ -50,27 +49,15 @@
 				}
 			}, setSpcGen);
 		} else if (id == 'report_type') {
-			if (dataValue == 'regular_mm') {
-				let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 2, 1));
-				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1, 0));
-			} else if (dataValue == 'regular_qt') {
-				var quarter = Math.floor((today.getMonth() - 3) / 3);
-				prevtq = new Date(today.getFullYear(), quarter * 3, 1);
-				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), quarter * 3, 1));
-				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), (quarter + 1) * 3, 0));
-			} else if (dataValue == 'regular_yy') {
-				let reportDate = new Date(today.getFullYear() - 1, 0, 1);
-				$('.fromDate').datepicker('setDate', new Date(today.getFullYear() - 1, 0, 1));
-				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), 0, 0));
-			} else if (dataValue == 'profit_mm') {
-				let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 2, 1));
-				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1, 0));
-			} else {
-				alert('보고서 유형이 선택되지 않았습니다.');
-				return false;
-			}
+			let spcid = $('#spc_id button').data('value');
+			callAjax({
+				url: 'http://iderms.enertalk.com:8443/spcs/' + spcid,
+				type: 'get',
+				data: {
+					oid: oid,
+					includeGens: true
+				}
+			}, setSpcGenReport);
 		}
 	});
 
@@ -141,6 +128,7 @@
 		}
 
 		$('#spc_id ul').empty().append(html);
+		$('#site_id ul').empty();
 
 		delRow('yield_list');
 
@@ -168,6 +156,70 @@
 		}
 
 		$('#site_id ul').empty().append(html);
+	}
+	
+	const setSpcGenReport = function (data){
+		let spcIdList = data.data[0].spcGens;
+		let siteName = $('#site_id button').text();
+		let dataValue = $('#report_type button').data('value');
+		let managePeriod = "";
+		
+		for (let i in spcIdList){
+			let contractInfo = JSON.parse(spcIdList[i].contract_info);
+			if(siteName == spcIdList[i].name){
+				managePeriod = contractInfo.관리_운영_기간.trim();
+			}
+		}
+		
+		let startMonth = managePeriod.substring(5,7);
+		let startDay = managePeriod.substring(8,10); 
+		
+		if(managePeriod.length > 20){
+			if (dataValue == 'regular_mm') {
+				let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() -1, startDay));
+				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth(), startDay-1));
+			} else if (dataValue == 'regular_qt') {
+				var quarter = Math.floor((startMonth - 3) / 3);
+				prevtq = new Date(today.getFullYear(), quarter * 3, 1);
+				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), quarter * 3, startDay));
+				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), (quarter + 1) * 3, startDay-1));
+			} else if (dataValue == 'regular_yy') {
+				let reportDate = new Date(today.getFullYear() - 1, 0, 1);
+				$('.fromDate').datepicker('setDate', new Date(today.getFullYear() - 1, startMonth -1, startDay));
+				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), startMonth -1, startDay-1));
+			} else if (dataValue == 'profit_mm') {
+				let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() -1, startDay));
+				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth(), startDay-1));
+			} else {
+				alert('보고서 유형이 선택되지 않았습니다.');
+				return false;
+			}
+		}else{
+			if (dataValue == 'regular_mm') {
+				let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 2, 1));
+				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1, 0));
+			} else if (dataValue == 'regular_qt') {
+				var quarter = Math.floor((today.getMonth() - 3) / 3);
+				prevtq = new Date(today.getFullYear(), quarter * 3, 1);
+				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), quarter * 3, 1));
+				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), (quarter + 1) * 3, 0));
+			} else if (dataValue == 'regular_yy') {
+				let reportDate = new Date(today.getFullYear() - 1, 0, 1);
+				$('.fromDate').datepicker('setDate', new Date(today.getFullYear() - 1, 0, 1));
+				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), 0, 0));
+			} else if (dataValue == 'profit_mm') {
+				let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 2, 1));
+				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1, 0));
+			} else {
+				alert('보고서 유형이 선택되지 않았습니다.');
+				return false;
+			}
+		}
+		
 	}
 
 	//보고서 생성
@@ -470,16 +522,6 @@
 										</ul>
 									</div>
 								</div>
-								<div class="flex_wrap">
-									<span class="input_label">발전소</span>
-									<div class="dropdown placeholder" id="site_id">
-										<button class="btn btn-primary dropdown-toggle" type="button"
-											data-toggle="dropdown" data-name="">
-											선택<span class="caret"></span>
-										</button>
-										<ul class="dropdown-menu"></ul>
-									</div>
-								</div>
 								<div class="add-wrap"><span class="input_label">적용 변수</span><a
 										href="javascript:void(0);" class="btn_add"
 										onclick="addRow('yield_list');">추가</a></div>
@@ -666,10 +708,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="paging_wrap">
-				<a href="#;" class="btn_prev">prev</a>
-				<strong>1</strong>
-				<a href="#;" class="btn_next">next</a>
+			<div class="paging_wrap" id="paging">
 			</div>
 		</div>
 	</div>
