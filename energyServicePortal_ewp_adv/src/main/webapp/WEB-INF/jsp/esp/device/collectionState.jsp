@@ -13,17 +13,16 @@
 		</div>
 	</div>
 	<div class="col-12">
-		<div class="dropdown fl">
-			<button id="siteSummary" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-				<span class="caret"></span>
+		<div class="dropdown fl" id="selectSiteList">
+			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택해주세요.">
+				선택해주세요.<span class="caret"></span>
 			</button>
-			<ul class="dropdown-menu dropdown-menu-form chk_type">
-				<li class="dropdown_cov clear">
-					<div class="sec_li_bx">
-						<p class="tx_li_tit">사업소 별</p>
-						<ul id="siteList">
-						</ul>
-					</div>
+			<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="siteULList">
+				<li data-value="[sid]">
+					<a href="javascript:void(0);" tabindex="-1">
+						<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
+						<label for="site_[INDEX]"><span></span>[name]</label>
+					</a>
 				</li>
 			</ul>
 		</div>
@@ -347,145 +346,160 @@
 	</div>
 </div>
 <script type="text/javascript">
+	const siteList = JSON.parse('${siteList}');
+
+	//사업소 정보 받아오기
+	const oid = "spower";
+	const now = new Date();
+	const nowLocal = now.format("yyyyMMddhhmmss");
+	const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours() - 1, now.getMinutes(), now.getSeconds()).format("yyyyMMddhhmmss");
+	const searchFilter = JSON.stringify({ "include": [{ "relation": "rtus" }] });
+
 	$(function () {
-		//사업소 정보 받아오기
-		const oid = "spower";
+		setInitList('siteULList'); //사업소 리스트 초기화
+		siteMakeList(); //사업소 리스트 그리기
+		
+		getRtuDataList(); //RTU 데이터리스트
+	})
+	
+	//사업소 조회
+	const siteMakeList = () => {
+		setMakeList(siteList, 'siteULList', {'dataFunction': {}}); //list생성
+	};
+
+	function selectLog(rids, startTime, endTime, limit = 5, page = 1) {
 		const now = new Date();
 		const nowLocal = now.format("yyyyMMddhhmmss");
 		const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours() - 1, now.getMinutes(), now.getSeconds()).format("yyyyMMddhhmmss");
-		const searchFilter = JSON.stringify({ "include": [{ "relation": "rtus" }] });
 
-		function selectLog(rids, startTime, endTime, limit = 5, page = 1) {
-			const now = new Date();
-			const nowLocal = now.format("yyyyMMddhhmmss");
-			const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours() - 1, now.getMinutes(), now.getSeconds()).format("yyyyMMddhhmmss");
-
-			if (startTime === undefined) startTime = beforeHour;
-			if (endTime === undefined) endTime = nowLocal;
-			$.ajax({
-				url: "http://iderms.enertalk.com:8443/log",
-				type: "get",
-				async: false,
-				data: {
-					rids,
-					startTime,
-					endTime,
-					limit,
-					page
-				},
-				success: function (result) {
-					//데이터 세팅
-					let logTable = $("#logTable").find("tbody");
-					let str = ``;
-					logTable.empty();
-					result.logs.forEach((log, logIdx) => {
-						str = `
-							<tr>
-								<td>${'${log.sName}'}</td>
-								<td>${'${log.rName}'}</td>
-								<td>${'${log.dName}'}</td>
-								<td>${'${log.dTimestamp}'}</td>
-								<td>${'${log.dLocaltime}'}</td>
-								<td>${'${log.dOperation}'}</td>
-								<td class="ellipsis">${'${log.log}'}</td>
-							</tr>
-						`;
-						logTable.append(str);
-					})
-				},
-				error: function (error) {
-					console.error(error);
-				}
-			})
-		};
-
+		if (startTime === undefined) startTime = beforeHour;
+		if (endTime === undefined) endTime = nowLocal;
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/config/sites",
+			url: "http://iderms.enertalk.com:8443/log",
 			type: "get",
 			async: false,
 			data: {
-				oid,
-				filter: JSON.stringify({ "include": [{ "relation": "rtus" }] })
+				rids,
+				startTime,
+				endTime,
+				limit,
+				page
 			},
-			success: function (sites) {
-				const siteSum = $('#siteSummary');
-				const tableData = $('#PV_INVERTER').find("tbody");
-				const arrIcon = '<span class="caret"></span>';
-				const siteList = $('#siteList');
-				const dateFilter = $('#selectLogByDate');
-
-				siteSum.text(`${'${sites[0].name}'} 외 ${'${sites.length-1}개'}`).append(arrIcon);
-				siteList.empty();
-				tableData.empty();
-
-				let logList = ``;
-				let rtuInfo = ``;
-				// console.log("item===", sites);
-				for (let i = 0; i < sites.length; i++) {
-					let optionList = `
-						<li>
-							<a href="#" data-value="option${'${sites[i]}'}" tabindex="-1">
-								<input type="checkbox" id="chk_op${'${sites[i].siteIdx}'}" value="${'${sites[i].name}'}" name="${'${i}'}">
-								<label for="chk_op0${'${i}'}"><span></span>${'${sites[i].name}'}</label>
-							</a>
-						</li>
+			success: function (result) {
+				//데이터 세팅
+				let logTable = $("#logTable").find("tbody");
+				let str = ``;
+				logTable.empty();
+				result.logs.forEach((log, logIdx) => {
+					str = `
+						<tr>
+							<td>${'${log.sName}'}</td>
+							<td>${'${log.rName}'}</td>
+							<td>${'${log.dName}'}</td>
+							<td>${'${log.dTimestamp}'}</td>
+							<td>${'${log.dLocaltime}'}</td>
+							<td>${'${log.dOperation}'}</td>
+							<td class="ellipsis">${'${log.log}'}</td>
+						</tr>
 					`;
-					siteList.append(optionList);
-
-					if (sites[i].rtus) {
-						let rtuDate = new Date(sites[i].rtus[0].createdAt).format("yyyy-MM-dd");
-						let rtuArr = sites[i].rtus;
-
-						if (sites[i].rtus.length > 1) {
-							// TO DO!!!!!!!!!!!!! 사이트 당 rtu 가 1개 이상일 경우 nested for loop 으로 처리 예정
-						} else if (sites[i].rtus.length > 0 && sites[i].rtus.length === 1) {
-							let serialId = `#${'${sites[i].rtus[0].serialNumber}'}`
-
-							rtuInfo =
-								`	<tr id="${'${sites[i].rtus[0].serialNumber}'}">
-									<td>${'${sites[i].name}'}</td>
-									<td>${'${sites[i].rtus[0].name}'}</td>
-									<td>${'${sites[i].rtus[0].serialNumber}'}</td>
-									<td>${'${rtuDate}'}</td>
-								</tr>
-							`
-							tableData.append(rtuInfo);
-
-							$(serialId).on('click', () => {
-								selectLog(sites[i].rtus[0].rid);
-								console.log("ri===", sites[i].rtus[0])
-								$("#selectedRTU").text("[ " + sites[i].rtus[0].name + " ]");
-							});
-
-							dateFilter.on('click', () => {
-								const datePicker1 = $('#datepicker1');
-								const datePicker2 = $('#datepicker2');
-
-								let start_yy = datePicker1.val().slice(0, 4);
-								let start_mm = Number(datePicker1.val().slice(5, 7)) - 1;
-								let start_dd = datePicker1.val().slice(8, 10);
-								let start_hr = datePicker1.val().slice(0, 2);
-								let start_min = datePicker1.val().slice(5, 7);
-
-								let end_yy = datePicker2.val().slice(0, 4);
-								let end_mm = Number(datePicker2.val().slice(5, 7)) - 1;
-								let end_dd = datePicker2.val().slice(8, 10);
-								let end_hr = datePicker2.val().slice(0, 2);
-								let end_min = datePicker2.val().slice(5, 7);
-
-								const start = new Date(start_yy, start_mm, start_dd, start_hr, start_min, 0).format("yyyyMMddhhmmss");
-								const end = new Date(end_yy, end_mm, end_dd, end_hr, end_min, 0).format("yyyyMMddhhmmss");
-
-								selectLog(sites[i].rtus[0].rid, start, end);
-							});
-						}
-					}
-				}
-
+					logTable.append(str);
+				})
 			},
 			error: function (error) {
 				console.error(error);
 			}
-		});
-	})
+		})
+	};
+	
+	//RTU 조회
+	const getRtuDataList = function () {
+		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
+			function () {
+				return $(this).val();
+			}
+			)
+		);
+		
+		if (siteArray.length > 0) {
+			$.ajax({
+				url: "http://iderms.enertalk.com:8443/config/sites",
+				type: "get",
+				async: false,
+				data: {
+					oid,
+					filter: JSON.stringify({ "include": [{ "relation": "rtus" }] })
+				},
+				success: function (sites) {
+					const tableData = $('#PV_INVERTER').find("tbody");
+					const dateFilter = $('#selectLogByDate');
+
+					tableData.empty();
+
+					let logList = ``;
+					let rtuInfo = ``;
+					// console.log("item===", sites);
+					for (let i = 0; i < sites.length; i++) {
+						if(sites[i].rtus && $.inArray(sites[i].sid, siteArray) >= 0) {
+							let rtuDate = new Date(sites[i].rtus[0].createdAt).format("yyyy-MM-dd");
+							let rtuArr = sites[i].rtus;
+
+							if (sites[i].rtus.length > 1) {
+								// TO DO!!!!!!!!!!!!! 사이트 당 rtu 가 1개 이상일 경우 nested for loop 으로 처리 예정
+							} else if (sites[i].rtus.length > 0 && sites[i].rtus.length === 1) {
+								let serialId = `#${'${sites[i].rtus[0].serialNumber}'}`
+
+								rtuInfo =
+									`	<tr id="${'${sites[i].rtus[0].serialNumber}'}">
+										<td>${'${sites[i].name}'}</td>
+										<td>${'${sites[i].rtus[0].name}'}</td>
+										<td>${'${sites[i].rtus[0].serialNumber}'}</td>
+										<td>${'${rtuDate}'}</td>
+									</tr>
+								`
+								tableData.append(rtuInfo);
+
+								$(serialId).on('click', () => {
+									selectLog(sites[i].rtus[0].rid);
+									console.log("ri===", sites[i].rtus[0])
+									$("#selectedRTU").text("[ " + sites[i].rtus[0].name + " ]");
+								});
+
+								dateFilter.on('click', () => {
+									const datePicker1 = $('#datepicker1');
+									const datePicker2 = $('#datepicker2');
+
+									let start_yy = datePicker1.val().slice(0, 4);
+									let start_mm = Number(datePicker1.val().slice(5, 7)) - 1;
+									let start_dd = datePicker1.val().slice(8, 10);
+									let start_hr = datePicker1.val().slice(0, 2);
+									let start_min = datePicker1.val().slice(5, 7);
+
+									let end_yy = datePicker2.val().slice(0, 4);
+									let end_mm = Number(datePicker2.val().slice(5, 7)) - 1;
+									let end_dd = datePicker2.val().slice(8, 10);
+									let end_hr = datePicker2.val().slice(0, 2);
+									let end_min = datePicker2.val().slice(5, 7);
+
+									const start = new Date(start_yy, start_mm, start_dd, start_hr, start_min, 0).format("yyyyMMddhhmmss");
+									const end = new Date(end_yy, end_mm, end_dd, end_hr, end_min, 0).format("yyyyMMddhhmmss");
+
+									selectLog(sites[i].rtus[0].rid, start, end);
+								});
+							}
+						}
+					}
+
+				},
+				error: function (error) {
+					console.error(error);
+				}
+			});
+		}
+	}
+	
+	const rtnDropdown = function ($selectId) {
+		if ($selectId == 'selectSiteList') {
+			getRtuDataList();
+		}
+	}
 </script>
