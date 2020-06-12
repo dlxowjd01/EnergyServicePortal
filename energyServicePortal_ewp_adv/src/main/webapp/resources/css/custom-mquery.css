@@ -1853,6 +1853,13 @@
 
 
 /* Small laptop, Tablet and Mobile screen sizes */
+@media all and (max-width: 1700px) {
+	.indiv.usage_chart.pv_chart .chart_top.clear,
+	.indiv.usage_chart.pv_chart .chart_top.clear > div {
+		display: table;
+		width: 100%;
+	}
+}
 
 @media all and (max-width: 1199px) {
     .w_type {
@@ -1924,8 +1931,22 @@
 
     .local_info.s_center {
         margin-top: 15px;
-    }
+	}
+	.indiv.usage_chart.pv_chart .chart_top.clear .inline_flex {
+		display: flex;
+		align-items: end;
+		flex-wrap: wrap;
+	}
+	.indiv.usage_chart.pv_chart .chart_top.clear .btn_type {
+		margin-top: 16px;
+	}
+	.indiv.usage_chart.pv_chart .chart_top.clear > div,
+	.indiv.usage_chart.pv_chart .chart_top.clear .inline_flex > div {
+		margin-left: 0;
+		margin-right: 0;
+	}
 }
+
 
 
 /* Tablet && Mobile screen sizes */
@@ -2036,7 +2057,7 @@
 
     .di_btm_sec .bx_top .inchart {
         height: 200px;
-    }
+	}
 }
 
 

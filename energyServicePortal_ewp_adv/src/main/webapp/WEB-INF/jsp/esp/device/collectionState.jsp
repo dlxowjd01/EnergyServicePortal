@@ -10,7 +10,7 @@
 			<em class="currTime">${nowTime}</em>
 			<span>DATA BASE TIME</span>
 			<em class="dbTime">2020-04-23 14:01:02</em>
-			</div>
+		</div>
 	</div>
 	<div class="col-12">
 		<div class="dropdown fl">
@@ -33,7 +33,7 @@
 	</div>
 </div>
 
-<div class="modal fade" id="addDeviceModal" role="dialog">
+<div class="modal fade" id="addRtuModal" role="dialog">
 	<div class="modal-dialog modal-md">
 		<div class="modal-content collection_modal_content">
 			<div class="modal-header">
@@ -41,7 +41,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="input-group inline-flex">
-					<label for="siteName" class="input-name">사이트</label>
+					<label for="siteName" class="input_label">사이트</label>
 					<div id="siteName" class="dropdown">
 						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 							선택해주세요.<span class="caret"></span>
@@ -50,20 +50,20 @@
 					</div>
 				</div>
 				<div class="input-group inline-flex">
-					<label for="siteName" class="input-name">시리얼 번호</label>
+					<label for="siteName" class="input_label">시리얼 번호</label>
 					<input type="text" name="serialNum" id="serialNum" class="input text_input">
 				</div>
 				<div class="input-group inline-flex">
-					<label for="siteName" class="input-name">RTU 이름</label>
+					<label for="siteName" class="input_label">RTU 이름</label>
 					<input type="text" name="rtuName" id="rtuName" class="input text_input">
 				</div>
 				<div class="input-group inline-flex">
-					<label for="siteName" class="input-name">메모</label>
+					<label for="siteName" class="input_label">메모</label>
 					<textarea class="textarea"></textarea>
 				</div>
 				<div class="btn_wrap_type02">
-					<button type="button" class="btn_type03" data-dismiss="modal" onclick="closeModal()">취소</button>
-					<button type="button" class="btn_type" data-dismiss="modal">확인</button>
+					<button type="button" class="btn_type03" data-dismiss="modal">취소</button>
+					<button type="submit" class="btn_type">확인</button>
 				</div>
 			</div>
 		</div>
@@ -75,7 +75,7 @@
 		<div class="indiv collect_box">
 			<div class="tbl_top clear">
 				<h2 class="ntit fl">RTU</h2>
-				<button type="button" class="btn_type fr" data-toggle="modal" data-target="#addDeviceModal">등록</button>
+				<button type="button" class="btn_type fr" data-toggle="modal" data-target="#addRtuModal">등록</button>
 			</div>
 			<div class="tbl_wrap_type collect_wrap">
 				<table class="his_tbl scroll" id="PV_INVERTER">
@@ -246,15 +246,15 @@
 						<div class="sel_calendar">
 							<input type="text" id="datepicker1" class="sel" value="" autocomplete="off">
 							<em></em>
-							<input type="text" id="timepicker1" name="timepicker1" class="sel timepicker"/>
+							<input type="text" id="timepicker1" name="timepicker1" class="sel timepicker" />
 							<em></em>
 							<input type="text" id="datepicker2" class="sel" value="" autocomplete="off">
 							<em></em>
-							<input type="text" id="timepicker2" name="timepicker2" class="sel timepicker"/>
+							<input type="text" id="timepicker2" name="timepicker2" class="sel timepicker" />
 							<script>
-								$('.timepicker').wickedpicker({twentyFour: true});
-								$('#datepicker1').datepicker({ dateFormat: 'yy-mm-dd'}).datepicker("setDate", new Date()); //데이트 피커 기본
-								$('#datepicker2').datepicker({ dateFormat: 'yy-mm-dd'}).datepicker("setDate", new Date()); //데이트 피커 기본
+								$('.timepicker').wickedpicker({ twentyFour: true });
+								$('#datepicker1').datepicker({ dateFormat: 'yy-mm-dd' }).datepicker("setDate", new Date()); //데이트 피커 기본
+								$('#datepicker2').datepicker({ dateFormat: 'yy-mm-dd' }).datepicker("setDate", new Date()); //데이트 피커 기본
 							</script>
 						</div>
 					</div>
@@ -264,13 +264,13 @@
 				</div>
 				<table class="his_tbl" id="logTable">
 					<colgroup>
-					<col style="width:10%">
-					<col style="width:10%">
-					<col style="width:10%">
-					<col style="width:12%">
-					<col style="width:12%">
-					<col style="width:10%">
-					<col>
+						<col style="width:10%">
+						<col style="width:10%">
+						<col style="width:10%">
+						<col style="width:12%">
+						<col style="width:12%">
+						<col style="width:10%">
+						<col>
 					</colgroup>
 					<thead>
 						<tr>
@@ -347,21 +347,21 @@
 	</div>
 </div>
 <script type="text/javascript">
-	$(function(){
+	$(function () {
 		//사업소 정보 받아오기
 		const oid = "spower";
 		const now = new Date();
 		const nowLocal = now.format("yyyyMMddhhmmss");
-		const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours()-1, now.getMinutes(), now.getSeconds()).format("yyyyMMddhhmmss");
+		const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours() - 1, now.getMinutes(), now.getSeconds()).format("yyyyMMddhhmmss");
 		const searchFilter = JSON.stringify({ "include": [{ "relation": "rtus" }] });
 
-		function selectLog(rids, startTime, endTime, limit=5, page=1){
+		function selectLog(rids, startTime, endTime, limit = 5, page = 1) {
 			const now = new Date();
 			const nowLocal = now.format("yyyyMMddhhmmss");
-			const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours()-1, now.getMinutes(), now.getSeconds()).format("yyyyMMddhhmmss");
+			const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours() - 1, now.getMinutes(), now.getSeconds()).format("yyyyMMddhhmmss");
 
-			if(startTime === undefined) startTime = beforeHour;
-			if(endTime === undefined) endTime = nowLocal;
+			if (startTime === undefined) startTime = beforeHour;
+			if (endTime === undefined) endTime = nowLocal;
 			$.ajax({
 				url: "http://iderms.enertalk.com:8443/log",
 				type: "get",
@@ -373,12 +373,12 @@
 					limit,
 					page
 				},
-				success: function (result){
+				success: function (result) {
 					//데이터 세팅
 					let logTable = $("#logTable").find("tbody");
 					let str = ``;
 					logTable.empty();
-					result.logs.forEach((log,logIdx)=>{
+					result.logs.forEach((log, logIdx) => {
 						str = `
 							<tr>
 								<td>${'${log.sName}'}</td>
@@ -393,19 +393,19 @@
 						logTable.append(str);
 					})
 				},
-				error: function (error){
+				error: function (error) {
 					console.error(error);
 				}
 			})
 		};
-		
+
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/config/sites",
 			type: "get",
 			async: false,
 			data: {
 				oid,
-				filter : JSON.stringify({ "include": [{ "relation": "rtus" }] })
+				filter: JSON.stringify({ "include": [{ "relation": "rtus" }] })
 			},
 			success: function (sites) {
 				const siteSum = $('#siteSummary');
@@ -421,7 +421,7 @@
 				let logList = ``;
 				let rtuInfo = ``;
 				// console.log("item===", sites);
-				for(let i=0; i<sites.length; i++) {
+				for (let i = 0; i < sites.length; i++) {
 					let optionList = `
 						<li>
 							<a href="#" data-value="option${'${sites[i]}'}" tabindex="-1">
@@ -432,17 +432,17 @@
 					`;
 					siteList.append(optionList);
 
-					if(sites[i].rtus) {
+					if (sites[i].rtus) {
 						let rtuDate = new Date(sites[i].rtus[0].createdAt).format("yyyy-MM-dd");
 						let rtuArr = sites[i].rtus;
 
-						if(sites[i].rtus.length > 1) {
-						// TO DO!!!!!!!!!!!!! 사이트 당 rtu 가 1개 이상일 경우 nested for loop 으로 처리 예정
-						} else if (sites[i].rtus.length > 0 && sites[i].rtus.length === 1){
+						if (sites[i].rtus.length > 1) {
+							// TO DO!!!!!!!!!!!!! 사이트 당 rtu 가 1개 이상일 경우 nested for loop 으로 처리 예정
+						} else if (sites[i].rtus.length > 0 && sites[i].rtus.length === 1) {
 							let serialId = `#${'${sites[i].rtus[0].serialNumber}'}`
 
 							rtuInfo =
-							`	<tr id="${'${sites[i].rtus[0].serialNumber}'}">
+								`	<tr id="${'${sites[i].rtus[0].serialNumber}'}">
 									<td>${'${sites[i].name}'}</td>
 									<td>${'${sites[i].rtus[0].name}'}</td>
 									<td>${'${sites[i].rtus[0].serialNumber}'}</td>
@@ -451,7 +451,7 @@
 							`
 							tableData.append(rtuInfo);
 
-							$(serialId).on('click', () =>{
+							$(serialId).on('click', () => {
 								selectLog(sites[i].rtus[0].rid);
 								console.log("ri===", sites[i].rtus[0])
 								$("#selectedRTU").text("[ " + sites[i].rtus[0].name + " ]");
@@ -461,20 +461,20 @@
 								const datePicker1 = $('#datepicker1');
 								const datePicker2 = $('#datepicker2');
 
-								let start_yy = datePicker1.val().slice(0,4);
-								let start_mm = Number(datePicker1.val().slice(5,7))-1;
-								let start_dd = datePicker1.val().slice(8,10);
-								let start_hr = datePicker1.val().slice(0,2);
-								let start_min = datePicker1.val().slice(5,7);
+								let start_yy = datePicker1.val().slice(0, 4);
+								let start_mm = Number(datePicker1.val().slice(5, 7)) - 1;
+								let start_dd = datePicker1.val().slice(8, 10);
+								let start_hr = datePicker1.val().slice(0, 2);
+								let start_min = datePicker1.val().slice(5, 7);
 
-								let end_yy = datePicker2.val().slice(0,4);
-								let end_mm = Number(datePicker2.val().slice(5,7))-1;
-								let end_dd = datePicker2.val().slice(8,10);
-								let end_hr = datePicker2.val().slice(0,2);
-								let end_min = datePicker2.val().slice(5,7);
+								let end_yy = datePicker2.val().slice(0, 4);
+								let end_mm = Number(datePicker2.val().slice(5, 7)) - 1;
+								let end_dd = datePicker2.val().slice(8, 10);
+								let end_hr = datePicker2.val().slice(0, 2);
+								let end_min = datePicker2.val().slice(5, 7);
 
-								const start = new Date(start_yy, start_mm, start_dd, start_hr, start_min, 0 ).format("yyyyMMddhhmmss");
-								const end = new Date(end_yy, end_mm, end_dd, end_hr, end_min, 0 ).format("yyyyMMddhhmmss");
+								const start = new Date(start_yy, start_mm, start_dd, start_hr, start_min, 0).format("yyyyMMddhhmmss");
+								const end = new Date(end_yy, end_mm, end_dd, end_hr, end_min, 0).format("yyyyMMddhhmmss");
 
 								selectLog(sites[i].rtus[0].rid, start, end);
 							});
@@ -483,7 +483,7 @@
 				}
 
 			},
-			error: function (error){
+			error: function (error) {
 				console.error(error);
 			}
 		});
