@@ -354,10 +354,11 @@
 	//const sid = '<c:out value="${param.sid}" escapeXml="false"/>';
 	let dataList = [];
 	let changeTablegird = null;
-// 	let s = [];
 	let ticketFileList = new Array();
 	let ticketLogList = new Array();
 	let confirmstate = "";
+	const sidparam = "${param.sid}";
+	let sites = JSON.parse('${siteList}');
 
 	const deviceTemplate = {
 		'SM': '스마트미터',
@@ -398,8 +399,6 @@
 		'closed': '처리 완료',
 	};
 	$(function() {
-		const sidparam = "${param.sid}";
-		let sites = JSON.parse('${siteList}');
 		siteList(sites, sidparam);
 		if (sidparam != "") {
 			deviceTypeList(sidparam);
@@ -1473,7 +1472,16 @@
 
 			/* 툴팁 */
 			tooltip: {
-				shared: true /* 툴팁 공유 */
+				formatter: function () {
+					return this.points.reduce(function (s, point) {
+						let displayValue = displayNumberFixedDecimal(point.y);
+						let displayNumber = displayValue[0] == undefined ? '' : displayValue[0];
+						let displayUnit = displayValue[1] == undefined ? '' : '건';
+						console.log(displayUnit);
+						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + displayNumber + displayUnit;
+					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
+				},
+				shared: true
 			},
 
 			/* 옵션 */

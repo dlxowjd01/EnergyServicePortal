@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
+<script src="/js/commonDropdown.js"></script>
 <script>
 	const siteList = JSON.parse('${siteList}');
 	let iderms = null;
@@ -15,12 +16,14 @@
 	$(document).ready(function () {
 		iderms = new IdermsClass(iderms_oid, iderms_login_id, iderms_password);
 		iderms_token = iderms.postAuthLogin();
-		//                 iderms_site_list = iderms.getSites(iderms_oid);
 		iderms_site_list = JSON.parse('${siteList}');
+		
+		setInitList('siteULList'); //사업소 리스트 초기화
+		siteMakeList(); //사업소 리스트 그리기
+		
 		if (iderms_site_list != null) {
-			putSiteListToSelectBox();
 			putSiteListToPopupAddDeviceSelectBox();
-			getDeviceList(iderms_oid, iderms_sid);
+			getDeviceList(iderms_oid);
 		}
 	});
 
@@ -99,50 +102,47 @@
 	function getDeviceList(oid, sid) {
 		let myMap = new Map();
 		myMap.set('INV_PV', new Array());
+		
+		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
+			function () {
+				return $(this).val();
+			}
+			)
+		);
 
 		var result = null; //iderms.getDevices(oid, sid);
 
-		if (sid === 'all_sites') {
-
+		if (siteArray.length > 0) {
 			if (iderms_site_list != null && iderms_site_list.length > 0) {
 				for (var i = 0; i < iderms_site_list.length; i++) {
-
+					
 					sid = iderms_site_list[i].sid;
-					result = iderms.getDevices(oid, sid);
-
-					for (var k = 0; k < result.length; k++) {
-						if (myMap.has(result[k].device_type)) {
-							let array = myMap.get(result[k].device_type);
-							array.push(result[k]);
-						} else {
-							let arr = new Array();
-							arr.push(result[k]);
-							myMap.set(result[k].device_type, arr);
+					if ($.inArray(sid, siteArray) >= 0) {
+						
+						result = iderms.getDevices(oid, sid);
+						for (var k = 0; k < result.length; k++) {
+							
+							if (myMap.has(result[k].device_type)) {
+								
+								let array = myMap.get(result[k].device_type);
+								array.push(result[k]);
+								
+							} else {
+								
+								let arr = new Array();
+								arr.push(result[k]);
+								myMap.set(result[k].device_type, arr);
+								
+							}
+							
 						}
+						
 					}
-					myMap.forEach(function (value, key) {
-						console.log("mymap foreach======", key + ' = ' + value);
-					});
+					
 				}
 			}
-		} else {
-			result = iderms.getDevices(oid, sid);
-
-			for (var i = 0; i < result.length; i++) {
-				if (myMap.has(result[i].device_type)) {
-					let array = myMap.get(result[i].device_type);
-					array.push(result[i]);
-				} else {
-					let arr = new Array();
-					arr.push(result[i]);
-					myMap.set(result[i].device_type, arr);
-				}
-			}
-
-			myMap.forEach(function (value, key) {
-				console.log(key + ' = ' + value);
-			});
 		}
+		
 
 		var $eqListDiv = $(".row.scroll").find(".col-lg-12");
 		$eqListDiv.empty();
@@ -289,48 +289,6 @@
 		});
 	}
 
-
-	// site 리스트를 selectbox에 담기
-	function putSiteListToSelectBox() {
-		const $tbody = $('#site_list1');
-		const $siteOpts = $('#siteName');
-		$tbody.empty();
-		$siteOpts.empty();
-		let tbodyStr = ``;
-
-		if (iderms_site_list != null && iderms_site_list.length > 0) {
-			for (var i = 0; i < iderms_site_list.length; i++) {
-				if (i == 0) {
-					tbodyStr += '<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="site_list_id">';
-					tbodyStr += iderms_site_list[i].name;
-					tbodyStr += '<span class=' + "caret" + '></span></button>';
-					tbodyStr += '<ul class="dropdown-menu">';
-					tbodyStr += '<li class="on"><a href="#">전체</a></li>';
-					tbodyStr += '<li><a href="#">';
-					tbodyStr += iderms_site_list[i].name;
-					tbodyStr += '</a></li>';
-
-					//("dongseo", "72303fa5-990b-44fb-ab7f-8f27a41db446");
-					iderms_sid = iderms_site_list[i].sid;
-					// 	    				getDeviceList(iderms_oid, iderms_sid);
-
-				} else {
-					tbodyStr += '<li><a href="#">';
-					tbodyStr += iderms_site_list[i].name;
-					tbodyStr += '</a></li>';
-				}
-			}
-			tbodyStr += '</ul>';
-
-		} else {
-			$('#site_list1').empty();
-			$('#siteName').empty();
-		}
-
-		$tbody.append(tbodyStr);
-		$siteOpts.append(tbodyStr);
-	}
-
 	//site 리스트를 popup add device selectbox에 담기
 	function putSiteListToPopupAddDeviceSelectBox() {
 		const $tbody = $('#addDeviceSite');
@@ -356,46 +314,30 @@
 
 		$tbody.append(tbodyStr);
 	}
+	
+	//사업소 조회
+	const siteMakeList = () => {
+		setMakeList(iderms_site_list, 'siteULList', {'dataFunction': {}}); //list생성
+	};
+	
+	const rtnDropdown = function ($selectId) {
+		if ($selectId == 'site_list1') {
+			getDeviceList(iderms_oid);
+			
+			let site_name = '';
+
+//			사이트 복수 체크 가능하여 해당 기능 수정 필요
+// 			const $tbody = $('#site_list_id');
+// 			$tbody.empty();
+// 			let tbodyStr = ``;
+// 			tbodyStr += site_name;
+// 			tbodyStr += '<span class="caret"></span></button>';
+// 			$tbody.append(tbodyStr);
+		}
+	}
 </script>
 <script type="text/javascript">
 
-	$(function () {
-		// 사업소 선택
-		$("#site_list1 ul li").on("click", function (e) {
-			var $this = $(this);
-			var site_name = $this.text();
-
-			getSiteDeviceList(site_name);
-
-			const $tbody = $('#site_list_id');
-			$tbody.empty();
-			let tbodyStr = ``;
-			tbodyStr += site_name;
-			tbodyStr += '<span class="caret"></span></button>';
-			$tbody.append(tbodyStr);
-		});
-	});
-
-	function getSiteDeviceList(site_name) {
-		var sid = null;
-
-		if (site_name === "전체") {
-			iderms_sid = 'all_sites';
-		} else {
-			if (iderms_site_list != null && iderms_site_list.length > 0) {
-				for (var i = 0; i < iderms_site_list.length; i++) {
-
-					if (iderms_site_list[i].name === site_name) {
-						iderms_sid = iderms_site_list[i].sid;
-						break;
-					}
-				}
-			}
-		}
-
-		getDeviceList(iderms_oid, iderms_sid);
-
-	}
 	// 안쓰이고 있음!!!!!
 	function callback_getSiteDeviceList(result) {
 		var deviceTypeList = result.deviceTypeList; // 설비타입리스트
@@ -585,8 +527,16 @@
 	<div class="col-lg-3 col-md-4 col-sm-6">
 		<div class="header_drop_area w_type">
 			<div class="dropdown" id="site_list1">
-				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"></button>
-				<ul class="dropdown-menu dropdown-menu-form">
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택해주세요.">
+					선택해주세요.<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="siteULList">
+					<li data-value="[sid]">
+						<a href="javascript:void(0);" tabindex="-1">
+							<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
+							<label for="site_[INDEX]"><span></span>[name]</label>
+						</a>
+					</li>
 				</ul>
 			</div>
 		</div>
