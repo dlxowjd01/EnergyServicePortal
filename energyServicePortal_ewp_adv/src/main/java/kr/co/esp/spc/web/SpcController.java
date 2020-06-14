@@ -49,6 +49,30 @@ public class SpcController {
         return "esp/spc/balanceSheetPost";
     }
 
+    @RequestMapping(value = "/spc/transactionSheet.do")
+    public String spcTransactionSheet(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/transactionSheet.do");
+        return "esp/spc/transactionSheet";
+    }
+
+    @RequestMapping(value = "/spc/transactionHistory.do")
+    public String spcTransactionHistory(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/transactionHistory.do");
+        return "esp/spc/transactionHistory";
+    }
+
+  	@RequestMapping(value = "/spc/transactionReqEdit.do")
+    public String spcTransactionReqEdit(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/transactionReqEdit.do");
+        return "esp/spc/transactionReqEdit";
+    }
+
+	@RequestMapping(value = "/spc/transactionReqReview.do")
+    public String spcTransactionReqReview(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/transactionReqReview.do");
+        return "esp/spc/transactionReqReview";
+    }
+
     @RequestMapping(value = "/spc/maintenanceSchedule.do")
     public String spcMaintenanceSchedule(HttpServletRequest request, HttpSession session, Model model) {
         logger.debug("/spc/maintenanceSchedule.do");

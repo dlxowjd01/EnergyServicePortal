@@ -14,7 +14,7 @@
 				<p class="tx_line1">"확인" 처리 하시겠습니까?</p>
 			</div>
 			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" data-dismiss="modal">아니오</button>
+				<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">아니오</button>
 				<button type="button" class="btn_type" onclick="alarmConfirmProcess();">예</button>
 			</div>
 		</div>
@@ -37,11 +37,11 @@
 						<span class="input_label">사진 올리기</span>
 						<div class="tx_inp_type">
 							<input type="text" id="photoFile" name="photoFile" placeholder="사진 파일 이름" readonly=""
-							       autocomplete="off">
+								autocomplete="off">
 						</div>
 						<div class="type">
 							<button id="fileUpload" type="button" class="btn_type">업로드</button>
-							<input type="file" id="picture" name="filename" class="uploadBtn" style="display:none"/>
+							<input type="file" id="picture" name="filename" class="uploadBtn" style="display:none" />
 						</div>
 					</div>
 
@@ -56,7 +56,7 @@
 						<span class="input_label">조치 여부</span>
 						<div class="dropdown placeholder" id="ticket_status">
 							<button class="btn btn-primary dropdown-toggle required" type="button" placeholder="선택"
-							        data-toggle="dropdown"><span class="caret"></span></button>
+								data-toggle="dropdown"><span class="caret"></span></button>
 							<ul class="dropdown-menu">
 								<li data-value="new"><a href="javascript:void(0);">신규</a></li>
 								<li data-value="open"><a href="javascript:void(0);">작업 처리 중</a></li>
@@ -73,13 +73,13 @@
 						<span class="input_label">담당자</span>
 						<div class="dropdown placeholder" id="userlist">
 							<button class="btn btn-primary dropdown-toggle required" type="button"
-							        data-toggle="dropdown">선택<span class="caret"></span></button>
+								data-toggle="dropdown">선택<span class="caret"></span></button>
 							<ul class="dropdown-menu">
 							</ul>
 						</div>
 						<div class="tx_inp_type ml-12">
 							<input type="text" id="ticket_user_id" name="ticket_user_id" placeholder="직접 입력" readonly
-							       autocomplete="off">
+								autocomplete="off">
 						</div>
 					</div>
 
@@ -120,8 +120,8 @@
 				<span class="tx_tit">설비 유형</span>
 				<div id="equipmentList" class="sa_select">
 					<div class="dropdown">
-						<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown" data-name="선택">선택<span
-								class="caret"></span></button>
+						<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown"
+							data-name="선택">선택<span class="caret"></span></button>
 						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="device">
 						</ul>
 					</div>
@@ -131,7 +131,8 @@
 				<span class="tx_tit">알람 타입</span>
 				<div class="sa_select">
 					<div class="dropdown">
-						<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown" data-name="선택" >전체
+						<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown"
+							data-name="선택">전체
 							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu chk_type" role="menu">
@@ -179,7 +180,8 @@
 				<span class="tx_tit">알람 상태</span>
 				<div class="sa_select">
 					<div class="dropdown" id="alarmstatus">
-						<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown" data-name="선택">전체
+						<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown"
+							data-name="선택">전체
 							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu chk_type" role="menu" id="alstatus">
@@ -203,7 +205,8 @@
 				<span class="tx_tit">조치 상태</span>
 				<div class="sa_select">
 					<div class="dropdown">
-						<button class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown" data-name="선택">전체
+						<button class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown"
+							data-name="선택">전체
 							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu chk_type" role="menu" id="status">
@@ -283,9 +286,7 @@
 				<div class="sa_select">
 					<div class="dropdown">
 						<button class="btn btn-primary dropdown-toggle w3 interval" type="button" data-toggle="dropdown"
-						        aria-expanded="false">
-							기간<span class="caret"></span>
-						</button>
+							aria-expanded="false">선택<span class="caret"></span></button>
 						<ul class="dropdown-menu" id="detailterm">
 							<li class="on"><a href="javascript:void(0);">15분</a></li>
 							<li><a href="javascript:void(0);">1시간</a></li>
@@ -309,14 +310,14 @@
 				<h2 class="s_tit">알람 현황</h2>
 				<div class="his_inp_bx">
 					<div class="rdo_type his_rdo_bx" id="chartType">
-                        <span>
-                    <input type="radio" id="rdo03_1" name="chartType" value="type" checked>
-                    <label for="rdo03_1"><span></span>설비 타입</label>
-                        </span>
 						<span>
-                    <input type="radio" id="rdo03_2" name="chartType" value="alarm">
-                    <label for="rdo03_2"><span></span>알람 타입</label>
-                        </span>
+							<input type="radio" id="rdo03_1" name="chartType" value="type" checked>
+							<label for="rdo03_1"><span></span>설비 타입</label>
+						</span>
+						<span>
+							<input type="radio" id="rdo03_2" name="chartType" value="alarm">
+							<label for="rdo03_2"><span></span>알람 타입</label>
+						</span>
 					</div>
 				</div>
 			</div>
@@ -330,9 +331,7 @@
 			<div class="inchart">
 				<div id="hchart2_2"></div>
 			</div>
-			<div class="chart_legend_area">
-				<ul class="chart_legend col">
-				</ul>
+			<div id="legendArea" class="chart_legend_area">
 			</div>
 		</div>
 	</div>
@@ -404,17 +403,17 @@
 			deviceTypeList(sidparam);
 		}
 		//사이트 선택시
-		
+
 		$('#datepicker1').datepicker('setDate', 'today');
 		$('#datepicker2').datepicker('setDate', 'today');
 
-		$('.rdo_type').on('click', function() {
-			if ($(this).find('input').is(':checked')) {} else {
+		$('.rdo_type').on('click', function () {
+			if ($(this).find('input').is(':checked')) { } else {
 				$(this).find('input').prop('checked', true);
 			}
 		});
 
-		$('#term li').on('click', function() {
+		$('#term li').on('click', function () {
 			if ($(this).data('value') == 'setup') {
 				$('#dateArea').show();
 			} else {
@@ -437,29 +436,29 @@
 			fetchCharts();
 			$('#search').trigger('click');
 		}
-		$('#search').on('click', function() {
+		$('#search').on('click', function () {
 			let period = $('#term').prev().text();
 			let detailperiod = $('#detailterm').prev().text().trim();
-			if(detailperiod =='기간'){
+			if (detailperiod == '선택' || detailperiod == '' || detailperiod == "undefined") {
 				alert('시간단위를 선택해주세요.');
 				return false;
-			}else{
+			} else {
 				periodData();
 				fetchCharts();
 			}
 		});
 
-		$('#chartType input').on('click', function() {
+		$('#chartType input').on('click', function () {
 			fetchCharts();
 		});
 
-		$('#fileUpload').on('click', function() {
+		$('#fileUpload').on('click', function () {
 			$('#picture').trigger('click');
 		});
 
 	});
 
-	$(document).on('change', 'input[type="file"]', function() {
+	$(document).on('change', 'input[type="file"]', function () {
 		let uuid = genUuid();
 		let liStr = '';
 		$('#picupload').empty();
@@ -473,7 +472,7 @@
 			async: false,
 			processData: false,
 			contentType: false,
-			success: function(result) {
+			success: function (result) {
 				if (result.files.length > 0) {
 					liStr += '<li><span class="pt_tx"><a href="http://iderms.enertalk.com:8443/files/download/' + result.files[0].fieldname + '?oid=' + oid + '&orgFilename=' + result.files[0].originalname + '">' + result.files[0].originalname + '</a></span>';
 					liStr += '<button class="btn_del" data-time="' + new Date().toISOString() + '" value="' + result.files[0].fieldname + '" name="file_original_name">삭제</button></li>';
@@ -484,17 +483,17 @@
 					$('.photo_load_wrap').show();
 				}
 			},
-			error: function(error) {
+			error: function (error) {
 				console.error(error);
 			}
 		});
 	});
 
-	$(document).on('click', 'button[name="file_original_name"]', function() {
+	$(document).on('click', 'button[name="file_original_name"]', function () {
 		$(this).parent().remove();
 	});
 
-	$(document).on('click', '#userlist li', function() {
+	$(document).on('click', '#userlist li', function () {
 		if ($(this).text() == '직접 입력') {
 			$('#ticket_user_id').val('').prop('readonly', false);
 		} else {
@@ -502,13 +501,13 @@
 		}
 	});
 
-	const rtnDropdown = function(id){
-		if(id=='site'){
+	const rtnDropdown = function (id) {
+		if (id == 'site') {
 			deviceTypeList();
 		}
 	}
-	
-	const siteList = function(sites, sidparam) {
+
+	const siteList = function (sites, sidparam) {
 		$('#site > ul').empty();
 		let str = '';
 		sites.forEach((site, index) => {
@@ -525,7 +524,7 @@
 		$('#site>ul').append(str);
 	};
 
-	const deviceTypeList = function(sidparam) {
+	const deviceTypeList = function (sidparam) {
 		$('#equipmentList > div > ul').empty();
 		let str = '';
 		let sites = JSON.parse('${siteList}');
@@ -546,7 +545,7 @@
 		$('#equipmentList>div>ul').append(str);
 	};
 
-	const periodData = function() {
+	const periodData = function () {
 		$('.tbl_wrap_type').empty();
 
 		if ($(':checkbox[name="deviceType"]:checked').length == 0) {
@@ -566,13 +565,13 @@
 		let alarmArray = new Array();
 		let statusArray = new Array();
 
-		$(':checkbox[name="deviceType"]:checked').each(function() {
+		$(':checkbox[name="deviceType"]:checked').each(function () {
 			deviceArray.push($(this).val());
 		});
-		$(':checkbox[name="alarm"]:checked').each(function() {
+		$(':checkbox[name="alarm"]:checked').each(function () {
 			alarmArray.push($(this).val());
 		});
-		$(':checkbox[name="status"]:checked').each(function() {
+		$(':checkbox[name="status"]:checked').each(function () {
 			statusArray.push($(this).val());
 		});
 		if ($(':checkbox[name="confirm"]:checked').length == 2) {
@@ -603,28 +602,28 @@
 			type: 'get',
 			async: false,
 			data: alarmData,
-			success: function(result) {
+			success: function (result) {
 				var data = result;
 				let filterdata = [];
 				// console.log(data);
 				statusFilter(filterdata, statusArray, data);
 
 				$('.his_tbl').remove();
-				$.each(deviceArray, function(i, el) {
+				$.each(deviceArray, function (i, el) {
 					makeDiv(el);
 					makeTableHead(el);
 				});
 
 				if (filterdata.length > 0) {
-					$.each(filterdata, function(i, el) {
-						$.each(deviceArray, function(j, e2) {
+					$.each(filterdata, function (i, el) {
+						$.each(deviceArray, function (j, e2) {
 							if (el.device_type === e2) {
 								tablegrid(e2, el, i);
 							}
 						})
 					})
 				}
-				$.each(deviceArray, function(i, el) {
+				$.each(deviceArray, function (i, el) {
 					if ($('#' + el + ' tbody td').length == 0) {
 						tdStr = '<th><td></td></th>';
 						$('#' + el + ' tbody').append(tdStr);
@@ -635,7 +634,7 @@
 			dataType: 'json'
 		});
 	}
-	const makeDiv = function(deviceType) {
+	const makeDiv = function (deviceType) {
 		let divStr = '';
 		divStr += '<div class="tbl_top clear">';
 		divStr += '<h2 class="ntit fl">' + deviceTemplate[deviceType] + '</h2>';
@@ -643,7 +642,7 @@
 		divStr += '</div>';
 		$(".tbl_wrap_type").append(divStr);
 	}
-	const makeTableHead = function(deviceType) {
+	const makeTableHead = function (deviceType) {
 		let newHeadTable = document.createElement('table');
 		let colList = ['사업소', '장치명', '알람 시간', '알람 타입', '알람 메세지', '확인 여부', '조치 상태', '최종 업데이트 시간'];
 		let thead = newHeadTable.createTHead();
@@ -664,7 +663,7 @@
 		newHeadTable.setAttribute('id', deviceType);
 		$(".tbl_wrap_type").append(newHeadTable);
 	}
-	const tablegrid = function(tableId, el, i) {
+	const tablegrid = function (tableId, el, i) {
 		let tbodyStr = "";
 		const Selector = '#' + tableId + ' tbody';
 		tbodyStr += '<tr>';
@@ -695,13 +694,13 @@
 		$(Selector).append(tbodyStr);
 	}
 
-	const createAck = function(alarmId) {
+	const createAck = function (alarmId) {
 		$('#alarmMeasure').modal('show').data('value', alarmId).data('ticket', '');
 		ackStatusInit();
 		confirmstate = alarmIdAjax(alarmId);
 	}
 
-	const alarmIdAjax = function(alarmId) {
+	const alarmIdAjax = function (alarmId) {
 		let confirmData = "";
 
 		$.ajax({
@@ -711,7 +710,7 @@
 			data: {
 				alarmId: alarmId
 			},
-			success: function(result) {
+			success: function (result) {
 				confirmData = {
 					localtime: result.localtime,
 					confirm: result.confirm,
@@ -738,7 +737,7 @@
 				}
 			},
 			dataType: 'json',
-			error: function(error) {
+			error: function (error) {
 				console.error(error);
 			}
 		});
@@ -746,7 +745,7 @@
 	}
 
 	//조치상태 팝업 초기화
-	const ackStatusInit = function() {
+	const ackStatusInit = function () {
 		$('.photo_load_wrap').hide().find('li').remove();
 		$('#ticket_log').empty();
 		$('#memo').val('');
@@ -757,7 +756,7 @@
 		userListRender(oid); //OID에 속한 사용자 리스트
 	}
 
-	const updateAck = function(alarmId, ticketId) {
+	const updateAck = function (alarmId, ticketId) {
 		$('#alarmMeasure').modal('show').data('value', alarmId).data('ticket', ticketId);
 		ackStatusInit();
 
@@ -774,7 +773,7 @@
 			type: 'get',
 			async: false,
 			data: ticketArray,
-			success: function(result) {
+			success: function (result) {
 				let data = result.data[0];
 
 				if (data.pic_file_link != '') {
@@ -784,9 +783,9 @@
 				if (!isEmpty(data.ticket_log)) {
 					ticketLogList = JSON.parse(data.ticket_log);
 
-					$.each(ticketLogList, function(i, el) {
+					$.each(ticketLogList, function (i, el) {
 						let memoDate = '';
-						if (typeof(el.memo_dt) == 'number') {
+						if (typeof (el.memo_dt) == 'number') {
 							memoDate = dateFormat(String(el.memo_dt));
 						} else {
 							memoDate = new Date(el.memo_dt).format('yyyy-MM-dd hh:mm:ss');
@@ -813,7 +812,7 @@
 					ticketLogList = [];
 				}
 
-				$.each(ticketFileList, function(i, el) {
+				$.each(ticketFileList, function (i, el) {
 					let liStr = '';
 					if (ticketFileList.length > 0) {
 						liStr += '<li><span class="pt_tx"><a href="http://iderms.enertalk.com:8443/files/download/' + el.file_key + '?oid=' + oid + '&orgFilename=' + el.file_original_name + '">' + el.file_original_name + '</a></span>';
@@ -829,7 +828,7 @@
 				$('#ticket_status button').html(statusTemplate[data.ticket_status] + '&nbsp;<span class="caret"></span>').data('value', data.ticket_status);
 
 				//유져리스트
-				const userIdArray = $.makeArray($('#userlist li').map(function() {
+				const userIdArray = $.makeArray($('#userlist li').map(function () {
 					return $(this).data('value');
 				}));
 
@@ -842,13 +841,13 @@
 				}
 
 			},
-			error: function(error) {
+			error: function (error) {
 				console.error(error);
 			}
 		});
 	}
 
-	const ackProcess = function() {
+	const ackProcess = function () {
 		let ticketUserId = "";
 		let ticketPerson = "";
 		if ($('#ticket_status button').data('value') == '') {
@@ -872,7 +871,7 @@
 
 		let pic_file_link = new Array();
 		let fileMemo = '';
-		$(':button[name="file_original_name"]').each(function(i) {
+		$(':button[name="file_original_name"]').each(function (i) {
 			pic_file_link.push({
 				update_dt: $(this).data('time'),
 				file_key: $(this).val(),
@@ -932,13 +931,13 @@
 					async: false,
 					contentType: 'application/json',
 					data: JSON.stringify(alarmData),
-					success: function(result) {
+					success: function (result) {
 						console.log(result);
 						alert('저장에 성공했습니다.', '저장');
 						$('#alarmMeasure').modal('hide');
 						periodData();
 					},
-					error: function(error) {
+					error: function (error) {
 						console.error(error);
 					}
 				});
@@ -965,11 +964,11 @@
 				type: 'get',
 				async: false,
 				data: ticketArray,
-				success: function(result) {
+				success: function (result) {
 					let data = result.data[0];
 					ticketLogList = JSON.parse(data.ticket_log);
 				},
-				error: function(error) {
+				error: function (error) {
 					console.error(error);
 				}
 			});
@@ -1003,13 +1002,13 @@
 					async: false,
 					contentType: 'application/json',
 					data: JSON.stringify(upAlarmData),
-					success: function(result) {
+					success: function (result) {
 						console.log(result)
 						alert('저장에 성공했습니다.');
 						$('#alarmMeasure').modal('hide');
 						periodData();
 					},
-					error: function(error) {
+					error: function (error) {
 						console.error(error);
 						ticketLogList.splice(ticketLogList.length - 1, 1);
 					}
@@ -1020,11 +1019,11 @@
 		}
 	}
 
-	const measurePopup = function() {
+	const measurePopup = function () {
 		$('#myModal01').modal('show');
 	}
 
-	const userListRender = function(oid) {
+	const userListRender = function (oid) {
 		$('#userlist ul').empty().append('<li data-value="직접 입력"><a href="javascript:void(0)">직접 입력</a></li>');
 		$.ajax({
 			url: 'http://iderms.enertalk.com:8443/config/users',
@@ -1034,21 +1033,21 @@
 			data: {
 				oid: oid
 			},
-			success: function(result) {
+			success: function (result) {
 				let data = result;
-				$.each(data, function(i, el) {
+				$.each(data, function (i, el) {
 					let liStr = '';
 					liStr += '<li data-value="' + el.login_id + '"><a href="javascript:void(0)">' + el.name + '</a></li>';
 					$('#userlist ul').append(liStr);
 				})
 			},
-			error: function(error) {
+			error: function (error) {
 				console.error(error);
 			}
 		});
 	}
 
-	const dataFilter = function(array, key) {
+	const dataFilter = function (array, key) {
 		let filterArray = [];
 		for (let i = 0; i < array.length; i++) {
 			let data = array[i];
@@ -1061,9 +1060,9 @@
 		return filterArray;
 	}
 
-	const statusFilter = function(filterdata, statusArray, data) {
-		$.each(data, function(i, el) {
-			$.each(statusArray, function(j, e2) {
+	const statusFilter = function (filterdata, statusArray, data) {
+		$.each(data, function (i, el) {
+			$.each(statusArray, function (j, e2) {
 				if (e2 == 'null') {
 					e2 = null;
 				}
@@ -1074,14 +1073,14 @@
 			})
 		})
 	}
-	const deviceType = function(sites, sidparam) {
+	const deviceType = function (sites, sidparam) {
 		if (sidparam != "" || sidparam != undefined) {
 			$('#equipmentList button').empty().append('전체<span class="caret"></span>');
 		} else {
 			$('#equipmentList button').empty().append('설비유형<span class="caret"></span>');
 		}
 		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
-			function() {
+			function () {
 				return $(this).val();
 			}
 		));
@@ -1098,9 +1097,9 @@
 		return deviceTypes;
 	}
 
-	const deviceInternet = function(siteArray, oid) {
+	const deviceInternet = function (siteArray, oid) {
 		let arr = [];
-		$.each(siteArray, function(i, site) {
+		$.each(siteArray, function (i, site) {
 			$.ajax({
 				url: 'http://iderms.enertalk.com:8443/config/devices/',
 				type: 'get',
@@ -1109,10 +1108,10 @@
 					oid: oid,
 					sid: site
 				},
-				success: function(data) {
+				success: function (data) {
 					arr = arr.concat(data);
 				},
-				error: function(error) {
+				error: function (error) {
 					console.error(error);
 				},
 				dataType: 'json'
@@ -1122,45 +1121,45 @@
 		return arr;
 	}
 	let dateArr = new Array();
-	var fetchCharts = function() {
 
+	var fetchCharts = function () {
 		dateArr = new Array();
-
 		let period = $('#term').prev().text();
 		let detailperiod = $('#detailterm').prev().text();
 		let interval = "";
+
 		if (period == '1일') {
-			if(detailperiod == '15분'){
+			if (detailperiod == '15분') {
 				interval = '15min';
-			} else if(detailperiod == '1시간') {
+			} else if (detailperiod == '1시간') {
 				interval = 'hour';
-			} else{
+			} else {
 				interval = 'day';
 			}
 		} else if (period == '1주') {
-			if(detailperiod == '15분'){
+			if (detailperiod == '15분') {
 				interval = '15min';
-			} else if(detailperiod == '1시간') {
+			} else if (detailperiod == '1시간') {
 				interval = 'hour';
-			} else{
+			} else {
 				interval = 'day';
 			}
 		} else if (period == '1월') {
-			if(detailperiod == '15분'){
+			if (detailperiod == '15분') {
 				interval = '15min';
-			} else if(detailperiod == '1시간') {
+			} else if (detailperiod == '1시간') {
 				interval = 'hour';
-			} else{
+			} else {
 				interval = 'day';
 			}
 		} else if (period == 'year') {
 			interval = 'month';
 		} else {
-			if(detailperiod == '15분'){
+			if (detailperiod == '15분') {
 				interval = '15min';
-			} else if(detailperiod == '1시간') {
+			} else if (detailperiod == '1시간') {
 				interval = 'hour';
-			} else{
+			} else {
 				interval = 'day';
 			}
 		}
@@ -1256,32 +1255,32 @@
 		let colorArr = (gr_type == true) ? typeColorArr : alarmColorArr;
 		var num = 0;
 
-		dataMap.forEach(function(v, k) {
-			data.sort(function(a, b) {
+		dataMap.forEach(function (v, k) {
+			data.sort(function (a, b) {
 				return a['localtime'] - b['localtime'];
 			});
 
 			var vMap = new Map();
-			$.each(dateArr, function(j, stnd) {
+			$.each(dateArr, function (j, stnd) {
 				let stndTime = stnd.substring(0, substringCnt); //각 날짜 스트링
 				var tpCntArr = new Map(); //타입 선택후 날짜별 타입현황 인덱스는 종류를 나타냄
-				$.each(v, function(i, el) {
+				$.each(v, function (i, el) {
 					var type = (gr_type == true) ? el.device_type : el.level;
 					if (tpCntArr.get(type) == undefined) tpCntArr.set(type, 0);
 					let base = String(el.localtime);
 					if (stndTime == base.substring(0, substringCnt) && substringCnt < 12) {
 						var cnt = tpCntArr.get(type) + 1;
 						tpCntArr.set(type, cnt);
-					}else{
+					} else {
 						base = dateFilter(base.substring(0, substringCnt));
-						if(stndTime == base){
+						if (stndTime == base) {
 							var cnt = tpCntArr.get(type) + 1;
 							tpCntArr.set(type, cnt);
 						}
 					}
 				});
 
-				tpCntArr.forEach(function(val, key) {
+				tpCntArr.forEach(function (val, key) {
 					var arr = new Array();
 
 					if (vMap.get(key) != undefined) {
@@ -1296,13 +1295,13 @@
 				});
 			});
 
-			vMap.forEach(function(val, key) {
-				if(val.length > 1000){
+			vMap.forEach(function (val, key) {
+				if (val.length > 1000) {
 					alert('조회 단위 대비 조회기간이 너무 길어 차트가 생성이 안될 수 있으니 기간을 조정하여 다시 조회 해주세요');
 				}
 				var typeNm = key;
 
-				$(':checkbox[name="' + chartTypeNm + '"]:checked').each(function() {
+				$(':checkbox[name="' + chartTypeNm + '"]:checked').each(function () {
 					if (key == $(this).val()) {
 						typeNm = $(this).next('label').text();
 					}
@@ -1324,13 +1323,13 @@
 		});
 
 		pieMap = new Map();
-		$.each(data, function(i, el) {
+		$.each(data, function (i, el) {
 			let tp = '';
 			var type = (gr_type == true) ? el.device_type : el.level;
 			let equalTy = '';
 			let pieCnt = 0;
 
-			$(':checkbox[name="' + chartTypeNm + '"]:checked').each(function() {
+			$(':checkbox[name="' + chartTypeNm + '"]:checked').each(function () {
 				tp = $(this).val();
 				if (tp == type) {
 					pieCnt++;
@@ -1348,11 +1347,18 @@
 		});
 
 		pieSeriesData = new Array();
-		$('.chart_legend').empty();
+
 		var num2 = 0;
-		pieMap.forEach(function(val, key) {
+		var legendInner = $('#legendArea');
+		var wrapper = `
+			<ul class="chart_legend col"></ul>
+		`;
+		legendInner.empty();
+		legendInner.append(wrapper);
+
+		pieMap.forEach(function (val, key, legendAreaCopy) {
 			var typeNm = key;
-			$(':checkbox[name="' + chartTypeNm + '"]:checked').each(function() {
+			$(':checkbox[name="' + chartTypeNm + '"]:checked').each(function () {
 				if (key == $(this).val()) typeNm = $(this).next('label').text();
 			});
 			if (val != undefined) {
@@ -1366,15 +1372,15 @@
 				};
 				pieSeriesData.push($temp);
 				num2++
-				var liStr = '<li><div><p class="bu t1">' + key + '</p><span class="value">' + val + '건</span></div></li>';
-				$('.chart_legend').append(liStr);
+				var liStr = '<li><span class="bu t1">' + key + '</span><span class="legend_val">' + val + '건</span></li>';
+				legendInner.find("ul").append(liStr);
 			}
 		});
 
 		chartDraw(columnSeriesData, pieSeriesData);
 	}
 
-	const chartDraw = function(columnSeriesData, pieSeriesData) {
+	const chartDraw = function (columnSeriesData, pieSeriesData) {
 		let chart = $('#hchart2').highcharts();
 		if (chart) {
 			chart.destroy();
@@ -1408,7 +1414,7 @@
 						fontSize: '8px'
 					},
 					y: 40,
-					formatter: function() {
+					formatter: function () {
 						return dateFormat(this.value);
 					}
 				},
@@ -1477,7 +1483,7 @@
 						let displayValue = displayNumberFixedDecimal(point.y);
 						let displayNumber = displayValue[0] == undefined ? '' : displayValue[0];
 						let displayUnit = displayValue[1] == undefined ? '' : '건';
-						console.log(displayUnit);
+						// console.log(displayUnit);
 						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + displayNumber + displayUnit;
 					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
 				},
@@ -1600,23 +1606,23 @@
 
 	}
 
-	const dateFilter = function(base){
+	const dateFilter = function (base) {
 		let newbaseTime = '';
-		let minute = Number(base.substring(10,12));
-		if (minute >= 0 && minute < 15){
-			newbaseTime = base.substring(0,10) + '00';
-		}else if(minute >= 15 && minute < 30){
-			newbaseTime = base.substring(0,10) + '15';
-		}else if(minute >= 30 && minute < 45){
-			newbaseTime = base.substring(0,10) + '30';
-		}else{
-			newbaseTime = base.substring(0,10) + '45';
+		let minute = Number(base.substring(10, 12));
+		if (minute >= 0 && minute < 15) {
+			newbaseTime = base.substring(0, 10) + '00';
+		} else if (minute >= 15 && minute < 30) {
+			newbaseTime = base.substring(0, 10) + '15';
+		} else if (minute >= 30 && minute < 45) {
+			newbaseTime = base.substring(0, 10) + '30';
+		} else {
+			newbaseTime = base.substring(0, 10) + '45';
 		}
 		return newbaseTime;
 	}
 
 	//두기간 사이 차이 구하기.
-	const getDiff = function(eDate, sDate, type) {
+	const getDiff = function (eDate, sDate, type) {
 		eDate = new Date(eDate.substring(2, 4), eDate.substring(4, 6), eDate.substring(6, 8));
 		sDate = new Date(sDate.substring(2, 4), sDate.substring(4, 6), sDate.substring(6, 8));
 		if (type == 'day') {
@@ -1631,7 +1637,7 @@
 	}
 
 	//날짜포멧 변경(yyyyMMddHHmmss형)
-	var dateFormat = function(val) {
+	var dateFormat = function (val) {
 		if ((val != undefined && val != 0)) {
 			if (String(val).length == 4) {
 				date = val.substring(0, 4)
@@ -1648,11 +1654,11 @@
 		return date;
 	}
 
-	const alarmConfirm = function(alarmId, ticketId) {
+	const alarmConfirm = function (alarmId, ticketId) {
 		$('#alarmConfirm').modal('show').data('value', alarmId).data('ticket', ticketId);
 	}
 
-	const alarmConfirmCheckAll = function(tableId) {
+	const alarmConfirmCheckAll = function (tableId) {
 		if ($('#' + tableId + '> thead tr :checkbox:checked').length == 0) {
 			$('#' + tableId + '> tbody tr :checkbox').prop('checked', false);
 		} else {
@@ -1660,13 +1666,13 @@
 		}
 	}
 
-	const alarmConfirmAll = function(tableId) {
+	const alarmConfirmAll = function (tableId) {
 		if ($('#' + tableId + '> tbody tr :checkbox:checked').length == 0) {
 			alert('확인할 알람이 선택되지않았습니다.');
 			return false;
 		} else {
 			let cnt = 0;
-			$('#' + tableId + '> tbody tr :checkbox:checked').each(function() {
+			$('#' + tableId + '> tbody tr :checkbox:checked').each(function () {
 				let data = {
 					confirm: true
 				}
@@ -1678,7 +1684,7 @@
 					async: false,
 					contentType: 'application/json',
 					data: JSON.stringify(data),
-					success: function(result) {
+					success: function (result) {
 						cnt++;
 					}
 				});
@@ -1689,7 +1695,7 @@
 		}
 	}
 
-	const alarmConfirmProcess = function() {
+	const alarmConfirmProcess = function () {
 		let alarmId = $('#alarmConfirm').data('value');
 		let ticketId = Number($('#alarmConfirm').data('ticket'));
 		let preStatus = "";
@@ -1715,7 +1721,7 @@
 				type: 'get',
 				async: false,
 				data: ticketArray,
-				success: function(result) {
+				success: function (result) {
 					let data = result.data[0];
 					// console.log(data);
 					ticketLogList = JSON.parse(data.ticket_log);
@@ -1727,7 +1733,7 @@
 						file_at_memo: ticketLogList[0].file_at_memo
 					}
 				},
-				error: function(error) {
+				error: function (error) {
 					console.error(error);
 				}
 			});
@@ -1759,10 +1765,10 @@
 				async: false,
 				contentType: 'application/json',
 				data: JSON.stringify(upAlarmData),
-				success: function(result) {
+				success: function (result) {
 					console.log(result)
 				},
-				error: function(error) {
+				error: function (error) {
 					console.error(error);
 					ticketLogList.splice(ticketLogList.length - 1, 1);
 				}
@@ -1778,7 +1784,7 @@
 			dataType: 'json',
 			contentType: 'application/json',
 			data: JSON.stringify(data),
-			success: function(result) {
+			success: function (result) {
 				alert('확인 처리 되었습니다.');
 				$('#alarmConfirm').modal('hide').data('value', '');
 				$('#search').trigger('click');

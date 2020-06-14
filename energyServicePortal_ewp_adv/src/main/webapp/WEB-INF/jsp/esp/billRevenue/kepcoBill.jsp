@@ -6,8 +6,8 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-lg-2 use_total">
-						<div class="indiv">
+					<div class="col-lg-2">
+						<div class="indiv fixed_height">
 							<h2 class="ntit">한전 요금 합계</h2>
 							<ul class="chart_total">
 								<li class="ctt1">

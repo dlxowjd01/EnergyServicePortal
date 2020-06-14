@@ -1075,10 +1075,10 @@
 </div>
 <div class="row">
 	<div class="col-12">
-		<div class="inline-wrapper">
+		<div class="flex_wrapper">
 			<div class="search-select dropdown" id="siteList">
 				<button type="button" class="btn btn-primary dropdown-toggle w1" data-toggle="dropdown"
-					data-name="사업소">선택해주세요.</button>
+					data-name="사업소">선택해주세요.<span class="caret"></span></button>
 				<ul class="dropdown-menu chk_type" role="menu" id="siteULList">
 					<li data-value="[sid]">
 						<a href="javascript:void(0);" tabindex="-1">
@@ -1179,7 +1179,7 @@
 			<div class="his_chart_top clear">
 				<!-- 기본 항목 -->
 				<div class="clear">
-					<div class="fl" id="analyzeDiv1">
+					<div class="fl mr-12" id="analyzeDiv1">
 						<div class="sa_select">
 							<div class="dropdown" id="chartDid">
 								<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown"

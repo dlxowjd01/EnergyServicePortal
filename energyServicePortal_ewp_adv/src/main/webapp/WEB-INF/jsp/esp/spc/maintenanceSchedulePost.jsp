@@ -25,10 +25,8 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="indiv">
-				<div class="btn_wrap_type03">
-					<button type="button" class="btn_type">등록</button>
-				</div>
-				<div class="spc_tbl02_row regist_ver">			
+				<button type="button" class="btn_type fr">등록</button>
+				<div class="regist_ver">
 					<table>
 						<colgroup>
 						<col style="width:15%">

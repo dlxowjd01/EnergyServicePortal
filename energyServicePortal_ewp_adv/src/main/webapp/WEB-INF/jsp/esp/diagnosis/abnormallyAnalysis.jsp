@@ -110,15 +110,15 @@
 			$('.fromDate, .toDate').datepicker('setDate', new Date()); //기본값 세팅
 
 		}
-//                 else if ($selectId == 'typeULList' || $selectId == 'compareTypeULList') {
-//                     deviceName($selectId); //설비명
-//                     setTypeList($selectId); //설비속성
-//                 }
+		//                 else if ($selectId == 'typeULList' || $selectId == 'compareTypeULList') {
+		//                     deviceName($selectId); //설비명
+		//                     setTypeList($selectId); //설비속성
+		//                 }
 	}
 
 	//사업소 조회
 	const siteMakeList = () => {
-		setMakeList(siteList, 'siteULList', {'dataFunction': {}}); //list생성
+		setMakeList(siteList, 'siteULList', { 'dataFunction': {} }); //list생성
 	};
 
 	//검증설비 - 설비유형 선택 시
@@ -160,7 +160,7 @@
 			function () {
 				return $(this).val();
 			}
-			)
+		)
 		);
 
 		if (siteArray.length > 0) {
@@ -190,8 +190,8 @@
 						}
 					});
 
-					setMakeList(deviceType, 'typeULList', {'dataFunction': {}});
-					setMakeList(deviceType, 'compareTypeULList', {'dataFunction': {}});
+					setMakeList(deviceType, 'typeULList', { 'dataFunction': {} });
+					setMakeList(deviceType, 'compareTypeULList', { 'dataFunction': {} });
 				},
 				dataType: 'json'
 			});
@@ -244,9 +244,9 @@
 				});
 			});
 			if (objId == 'typeULList') {
-				setMakeList(deviceNameArr, 'deviceName', {'dataFunction': {}});
+				setMakeList(deviceNameArr, 'deviceName', { 'dataFunction': {} });
 			} else if (objId == 'compareTypeULList') {
-				setMakeList(deviceNameArr, 'compareDeviceName', {'dataFunction': {}});
+				setMakeList(deviceNameArr, 'compareDeviceName', { 'dataFunction': {} });
 			}
 		}
 	}
@@ -316,9 +316,9 @@
 		}
 
 		if (!thisId.match('comp')) {
-			setMakeList(typeArray, 'deviceAttribute', {'dataFunction': {}});
+			setMakeList(typeArray, 'deviceAttribute', { 'dataFunction': {} });
 		} else {
-			setMakeList(typeArray, 'compareDeviceAttribute', {'dataFunction': {}});
+			setMakeList(typeArray, 'compareDeviceAttribute', { 'dataFunction': {} });
 		}
 	}
 
@@ -738,7 +738,7 @@
 			tableData.push(verifyObj); //
 			tableData.push(compareObj); //
 			$('[id^="table_"]').each(function () {
-				setMakeList(tableData, $(this).prop('id'), {'dataFunction': {}});
+				setMakeList(tableData, $(this).prop('id'), { 'dataFunction': {} });
 			});
 
 
@@ -1207,18 +1207,19 @@
 	 * @param seriesData
 	 */
 	const chartDraw = function (seriesData, standard) {
-		let chart = $('#chart2').highcharts();
+		let chart = $('#chart_analysis').highcharts();
 		if (chart) {
 			chart.destroy();
 		}
 
 		let option = {
 			chart: {
-				renderTo: 'chart2',
+				renderTo: 'chart_analysis',
 				marginLeft: 60,
 				marginRight: 20,
 				type: 'column',
 				backgroundColor: 'transparent',
+				height: 470
 			},
 			navigation: {
 				buttonOptions: {
@@ -1498,8 +1499,10 @@
 													<li data-type="[type]">
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
-																<input type="radio" id="compareType_[INDEX]" value="[type]" name="compareType">
-																<label for="compareType_[INDEX]"><span></span>[name]</label>
+																<input type="radio" id="compareType_[INDEX]"
+																	value="[type]" name="compareType">
+																<label
+																	for="compareType_[INDEX]"><span></span>[name]</label>
 															</span>
 														</a>
 													</li>
@@ -1765,8 +1768,8 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-2 col-md-4 col-sm-3 use_total">
-		<div class="indiv">
+	<div class="col-lg-2 col-md-4 col-sm-3">
+		<div class="indiv analysis_chart">
 			<h2 class="ntit">이상 비교</h2>
 			<div class="value_area">
 				<h3 class="value_tit2">검증 설비</h3>
@@ -1785,10 +1788,8 @@
 		</div>
 	</div>
 	<div class="col-lg-10 col-md-8 col-sm-9">
-		<div class="indiv usage_chart pv_chart">
-			<div class="inchart">
-				<div id="chart2"></div>
-			</div>
+		<div class="indiv analysis_chart">
+			<div id="chart_analysis"></div>
 		</div>
 	</div>
 </div>

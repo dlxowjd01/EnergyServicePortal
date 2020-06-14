@@ -315,16 +315,14 @@ $("#excel_dataDiv").html(tbodyStr);
 }
 </script>
 <div class="row">
-	<div class="col-lg-12">
+	<div class="col-12">
 		<h1 class="page-header">피크 전력 현황</h1>
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-2 use_total">
-		<div class="indiv">
-			<h2 class="ntit">
-				피크 전력 
-			</h2>							
+	<div class="col-lg-2">
+		<div class="indiv fixed_height">
+			<h2 class="ntit">피크 전력</h2>
 			<ul class="chart_total">
 				<li class="pk1">
 					<div class="ctit pk1"><span>최대 피크 전력</span></div>
@@ -552,10 +550,8 @@ $("#excel_dataDiv").html(tbodyStr);
 			</div>	
 		</div>
 	</div>
-</div>
-<div class="row peak_chart_table">
-	<div class="col-lg-12">
-		<div class="indiv">
+	<div class="col-12">
+		<div class="indiv peak_chart_table">
 			<div class="tbl_top clear">
 				<h2 class="ntit fl">피크 전력 도표</h2>
 				<ul class="fr">

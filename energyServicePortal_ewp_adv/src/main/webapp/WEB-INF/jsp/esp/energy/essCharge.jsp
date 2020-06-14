@@ -19,8 +19,8 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-2 use_total">
-		<div class="indiv">
+	<div class="col-lg-2">
+		<div class="indiv fixed_height">
 			<h2 class="ntit">충•방전량 합계</h2>
 			<ul class="chart_total">
 				<li class="es1">
@@ -69,12 +69,14 @@
 						</ul>
 					</div>
 				</div>
-				<div class="sel_calendar fl">
-					<span>기간설정</span>
-					<input type="text" id="datepicker1" class="sel" value="" autocomplete="off">
-					<span>-</span>
-					<input type="text" id="datepicker2" class="sel" value="" autocomplete="off">
-					<button type="submit">조회</button>
+				<div class="duration" id="dateArea">
+					<span class="tx_tit">기간설정</span>
+					<div class="sel_calendar fl">
+						<input type="text" id="datepicker1" class="sel" value="" autocomplete="off">
+						<span>-</span>
+						<input type="text" id="datepicker2" class="sel" value="" autocomplete="off">
+						<button type="submit">조회</button>
+					</div>
 				</div>
 				<div class="meter fl">
 					<span class="fl">계량값</span>

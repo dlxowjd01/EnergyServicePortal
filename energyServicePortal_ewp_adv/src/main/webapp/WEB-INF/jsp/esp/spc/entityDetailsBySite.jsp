@@ -240,7 +240,7 @@
 				</div>
 			</div>
 			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type" data-dismiss="modal">확인</button>
+				<button type="button" class="btn_type" data-dismiss="modal" aria-label="Close">확인</button>
 			</div>
 		</div>
 	</div>
