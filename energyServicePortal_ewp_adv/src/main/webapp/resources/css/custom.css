@@ -651,6 +651,9 @@ textarea::placeholder {
 	margin-left: 30px;
 }
 
+.mb-24 {
+	margin-bottom: 24px;
+}
 /* 백그라운드 마스크 */
 
 #mask {
@@ -3331,7 +3334,6 @@ h1.stit {
 }
 
 /* 표 접기/펼치기 */
-
 .fold_btn {
 	display: inline-block;
 	background: url("../img/sel_down.png") no-repeat center center;
@@ -9652,15 +9654,6 @@ button.big {
 	width: 102px;
 }
 
-.btn_type,
-.btn_type02,
-.btn_type03,
-.btn_type04 {
-	height: 36px;
-	line-height: 33px;
-	border-radius: 4px;
-}
-
 .btn_type {
 	outline-style: none;
 	border: 0;
@@ -9682,6 +9675,40 @@ button.big {
 	margin-left: 8px;
 }
 
+.btn_type,
+.btn_text,
+.btn_type02,
+.btn_type03,
+.btn_type04 {
+	height: 36px;
+	line-height: 33px;
+	border-radius: 4px;
+}
+
+.btn_text {
+	font-size: 15px;
+	font-weight: 500;
+	color: var(--color8);
+	background: none;
+	border: none;
+}
+.btn_text:before {
+	content: "";
+	float: left;
+	width: 24px;
+	height: 24px;
+	margin: 5px 3px 0 0;
+	background: url(../img/expand_arrow_light.png) no-repeat;
+	background-color: var(--vivid-blue);
+}
+.btn_text[aria-expanded="true"]:before {
+	transform: rotateX(180deg);
+}
+html.darkmode .btn_text:before {
+	width: 24px;
+	height: 24px;
+	background: url(../img/expand_arrow_dark.png) no-repeat;
+}
 .btn_type02 {
 	font-size: 13px;
 	font-weight: 500;
@@ -11531,6 +11558,19 @@ th .btn_align {
 	background: var(--box-color5);
 }
 
+/* spc 입출금 */
+
+.spc_transaction .indiv.collapse {
+	margin-bottom: 24px;
+}
+.spc_transaction .indiv.collapse table{
+	margin: 15px 0;
+}
+
+.spc_transaction .indiv {
+	margin-bottom: 0;
+	padding: 30px;
+}
 /* 작업보고서 등록/수정 */
 
 .sel_calendar.edit {
