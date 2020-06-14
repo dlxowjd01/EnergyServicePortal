@@ -1848,6 +1848,11 @@
 }
 
 
+@media all and (max-width: 1280px) {
+	.indiv.diagnosis_chart .chart_top .inline_flex .duration {
+		display: none;
+	}
+}
 @media all and (max-width: 1199px) {
     .w_type {
         width: 100%
@@ -1923,7 +1928,6 @@
 		margin-top: 16px;
 	}
 }
-
 
 
 /* Tablet && Mobile screen sizes */
@@ -3319,7 +3323,20 @@
 @media all and (max-width: 487px) {
     .gmain_table .gtbl_wrap .intable {
         max-height: 400px;
-    }
+	}
+	.indiv.diagnosis_chart .inline_flex {
+		flex-wrap: wrap;
+	}
+	.indiv.diagnosis_chart .chart_top  {
+		width: calc(100% - 60px);
+		margin-left: -14px;
+	}
+	.indiv.diagnosis_chart .chart_top span:not(.caret) {
+		width: 45px;
+	}
+	.indiv.diagnosis_chart .chart_top .btn_type {
+		margin-left: 62px;
+	}
 }
 
 

@@ -1,4 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ include file="/decorators/include/taglibs.jsp"%>
+
 <script>
 	const oid = "${sessionScope.userInfo.oid}";
 	const loginId = "${sessionScope.userInfo.login_id}";
@@ -195,7 +197,7 @@
 		</div>
 	</div>-->
 <div class="row">
-	<div class="co-12">
+	<div class="col-12">
 		<div class="indiv" id="work_info">
 			<div class="tbl_top">
 				<h2 class="ntit mt25">출장 이력</h2>

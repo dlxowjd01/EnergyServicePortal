@@ -141,7 +141,7 @@
 </script>
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">입출금 관리 내역</h1>
+		<h1 class="page-header">출금요청서 수정 </h1>
 		<div class="time fr">
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>

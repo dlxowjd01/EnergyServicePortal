@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<%@ include file="/decorators/include/taglibs.jsp" %>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ include file="/decorators/include/taglibs.jsp"%>
 
 <div class="row header-wrapper">
 	<div class="col-12">
@@ -225,7 +225,6 @@
 		});
 
 		$('#period li').on('click', function () {
-			$('#dateArea').css("display", "none");
 			if ($(this).data('value') == 'today') { //오늘
 				// $('#cycle').
 				$('#datepicker1').datepicker('setDate', 'today'); //데이트 피커 기본

@@ -158,6 +158,7 @@ html.darkmode:root {
 	--active2: #131319;
 	--scroll-color: #676767;
 	--scroll-color2: #444;
+	--list-active : #0000003d;
 	--color-calendar-today: rgba(255, 255, 255, 0.1);
 	--color1: #6b6b6b;
 	--color2: #e1e1e1;
@@ -430,6 +431,10 @@ a:hover,
 a:active {
 	text-decoration: none;
 	outline: none;
+}
+
+a:link:hover {
+	opacity: 0.8;
 }
 
 select::-ms-expand {
@@ -3041,6 +3046,8 @@ h1.stit {
 
 .chart_top .sel_calendar {
 	font-size: 0;
+	display: flex;
+	flex-wrap: nowrap;
 }
 
 .chart_top .sel_calendar>* {
@@ -3511,9 +3518,28 @@ h1.stit {
 }
 
 .indiv.diagnosis_chart {
-	height: 777px;
+	min-height: 475px;
 }
-
+.indiv.diagnosis_table {
+	display: none;
+}
+.indiv.diagnosis_table.fixed {
+	display: block;
+}
+.indiv.diagnosis_chart.fixed {
+	height: 550px;
+}
+.indiv.diagnosis_table.fixed {
+	height: 700px;
+}
+.indiv.diagnosis_table .tbl_wrap {
+	max-height: 570px;
+	overflow: scroll;
+}
+.indiv.diagnosis_table .tbl_wrap .fold_div {
+	overflow: scroll;
+	display: table;
+}
 .indiv.pv_chart {
 	min-height: 139px;
 }
@@ -3527,12 +3553,7 @@ h1.stit {
 	overflow: scroll;
 }
 
-.indiv.pv_chart .value_area>* {
-	text-align: left;
-}
-
-.indiv.pv_chart .chart_top,
-.indiv.diagnosis_chart .chart_top {
+.indiv.pv_chart .chart_top {
 	float: left;
 	display: flex;
 	justify-content: flex-start;
@@ -3541,14 +3562,39 @@ h1.stit {
 	margin: 0 -12px;
 }
 
+.indiv.diagnosis_chart .chart_top {
+	display: flex;
+	justify-content: normal;
+	flex-wrap: wrap;
+	width: calc(100% - 200px);
+	margin-left: -17px;
+}
+.indiv.diagnosis_chart .chart_top span:not(.caret) {
+	width: 50px;
+	text-align: right;
+}
+.indiv.diagnosis_chart .inline_flex .duration {
+	margin: auto 20px;
+}
 .indiv.pv_chart .sel_calendar,
 .indiv.pv_chart .flex_group,
-.indiv.diagnosis_chart .inline_flex {
+.indiv.diagnosis_chart .inline_flex .duration {
 	display: inline-flex;
 	flex-wrap: nowrap;
 	align-items: center;
 }
 
+.indiv.diagnosis_chart .inline_flex {
+	display: inline-flex;
+	/* flex-wrap: nowrap; */
+	align-items: center;
+}
+
+.indiv.diagnosis_chart .chart_change_column {
+	position: absolute;
+	right: 45px;
+	top: 35px;
+}
 .indiv.pv_chart .flex_group:not(.sel_calendar) {
 	margin: 0 0 12px 12px;
 }
@@ -3563,12 +3609,15 @@ h1.stit {
 	display: flex;
 	flex-wrap: nowrap;
 }
-
+.indiv.diagnosis_chart .chart_top .btn_type {
+	white-space: nowrap;
+}
 .indiv.pv_chart .end {
 	float: right;
 }
 
-.indiv.diagnosis_chart .chart_top .inline_flex>div:first-of-type {
+.indiv.diagnosis_chart .chart_top> div:first-child,
+.indiv.diagnosis_chart .chart_top .inline_flex>div {
 	margin-bottom: 12px;
 	flex-wrap: nowrap;
 	display: inline-flex;
@@ -10457,19 +10506,22 @@ button.big {
 	text-align: right;
 }
 
-.align_type th,
-.align_type td {
-	text-align: left !important;
+.spc_tbl.align_type td,
+.spc_tbl.align_type th,
+.chk_type.align_type td,
+.chk_type.align_type th,
+.rdo_type.align_type td, 
+.rdo_type.align_type th {
+	padding: 0 10px;
+	text-align: left;
 }
 
-.align_type .right {
-	text-align: right !important;
+.spc_tbl.align_type .right,
+.chk_type.align_type .right,
+.rdo_type.align_type .right {
+	text-align: right;
 }
 
-.align_type td,
-.align_type th {
-	padding: 0 10px !important;
-}
 
 .tbl_link,
 .tbl_link:link,
@@ -10591,7 +10643,8 @@ button.tx_file {
 
 .img_bx>* {
 	vertical-align: middle;
-	width: 400px;
+	width: 40%;
+	height: auto;
 	vertical-align: top;
 }
 
@@ -10801,14 +10854,19 @@ html.darkmode .sch_top_info .sch_btn .btn_next_mon {
 .sch_btm_area table th:last-child {
 	border-radius: 0 4px 4px 0;
 }
-
+.sch_btm_area table tr {
+	border-bottom: 1px solid var(--box-color2);
+}
 .sch_btm_area table td {
 	overflow: hidden;
 	height: 130px;
 	padding: 10px;
 	vertical-align: top;
 }
-
+.sch_btm_area table td a {
+	color: var(--color8);
+	font-size: 14px;
+}
 .sch_btm_area table td.today {
 	background: var(--bg-color2);
 }
@@ -10821,15 +10879,16 @@ html.darkmode .sch_top_info .sch_btn .btn_next_mon {
 	line-height: 20px;
 	white-space: wrap;
 }
-
+.sch_btm_area .bu:first-of-type {
+	margin-top: 12px;
+}
 .sch_btm_area .bu:before {
 	display: inline-block;
-	margin: 8px 13px 0 0;
+	margin: 0 13px 0 0;
 	font-size: 13px;
 	width: 8px;
 	height: 8px;
 	border-radius: 4px;
-	vertical-align: top;
 	content: "";
 }
 
@@ -10869,7 +10928,7 @@ html.darkmode .sch_top_info .sch_btn .btn_next_mon {
 	top: 0px;
 	z-index: 2000;
 }
-
+/* spc 입출금 관리 */
 .popover_modal {
 	display: none;
 }
@@ -10888,27 +10947,59 @@ html.darkmode .sch_top_info .sch_btn .btn_next_mon {
 .spc_modal_content {
 	width: 100%;
 }
+
+.modal-content.spc_detail_content {
+	padding: 30px 16px;
+}
+.modal-content.spc_detail_content .modal-body {
+	padding-top: 0;
+}
+
+.modal-content.spc_detail_content .modal-header {
+	padding: 30px 7px 0;
+}
+.modal-content.spc_detail_content {
+	padding-top: 5px;
+}
 .modal-content.spc_detail_content li.single_item {
-	margin-bottom: 10px;
+	padding: 5px 7px;
+}
+
+.modal-content.spc_detail_content li.single_item:hover,
+.modal-content.spc_detail_content li.single_item:hover,
+.modal-content.spc_detail_content li.single_item:link,
+.modal-content.spc_detail_content li.single_item:active {
+	background: var(--box-color5);
 }
 .modal-content.spc_detail_content li.single_item a {
 	color: var(--color8);
 }
 
+.modal-content.spc_detail_content li.single_item a .btn_next {
+	background: url(../img/btn_next_wh.png) no-repeat;
+	width: 24px;
+	height: 24px;
+	display: inline-block;
+}
+
+html.darkmode .modal-content.spc_detail_content li.single_item a .btn_next {
+	background: url(../img/btn_next.png) no-repeat;
+}
+
 .single_item .bu {
 	display: inline-block;
 	font-size: 13px;
-	line-height: 18px;
+	line-height: 24px;
 }
 
 .single_item .bu:before {
 	display: inline-block;
-	margin: 4px 13px 0 0;
+	margin: 0 13px 0 0;
 	font-size: 13px;
 	width: 8px;
 	height: 8px;
 	border-radius: 4px;
-	vertical-align: top;
+	vertical-align: middle;
 	content: "";
 }
 
@@ -11326,7 +11417,11 @@ html.darkmode .sch_top_info .sch_btn .btn_next_mon {
 	width: 100%;
 	table-layout: fixed;
 }
-
+/* TO DO !!!!!!!! */
+.spc_tbl.align_type .sort_table.chk_type th,
+.spc_tbl.align_type .sort_table.chk_type td {
+	padding: 0 10px;
+}
 th .btn_align {
 	background-color: var(--box-color5);
 }

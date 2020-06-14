@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-pageEncoding="utf-8"%> <%@ include file="/decorators/include/taglibs.jsp"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ include file="/decorators/include/taglibs.jsp"%>
 
 <div class="row">
 	<div class="col-lg-12">
@@ -16,7 +16,7 @@ pageEncoding="utf-8"%> <%@ include file="/decorators/include/taglibs.jsp"%>
 </div>
 <div class="row">
 	<div class="col-lg-3 col-md-4">
-		<div class="indiv fixed_height">
+		<div class="indiv diagnosis_chart">
 			<h2 class="ntit">예측 요약</h2>
 			<div class="value_area">
 				<h3 class="value_tit">측정값</h3>
@@ -85,7 +85,7 @@ pageEncoding="utf-8"%> <%@ include file="/decorators/include/taglibs.jsp"%>
 	</div>
 	<div class="col-lg-9 col-md-8">
 		<div class="indiv diagnosis_chart">
-			<div class="chart_top clear">
+			<div class="chart_top">
 				<div id="deviceType">
 					<span class="tx_tit">계량값</span>
 					<div class="sa_select">
@@ -155,10 +155,7 @@ pageEncoding="utf-8"%> <%@ include file="/decorators/include/taglibs.jsp"%>
 					<button type="button" class="btn_type" id="renderBtn">조회</button>
 				</div>
 			</div>
-			<div class="end">
-				<a href="#" class="chart_change_column" id="changeChart">그래프</a>
-			</div>
-
+			<a href="#" class="chart_change_column" id="changeChart">그래프</a>
 			<div class="inchart">
 				<p class="tx_time">2020-03-06 22:00:09</p>
 				<div id="chart2"></div>
@@ -170,7 +167,7 @@ pageEncoding="utf-8"%> <%@ include file="/decorators/include/taglibs.jsp"%>
 
 <div class="row pv_chart_table">
 	<div class="col-lg-12">
-		<div class="indiv clear">
+		<div class="indiv diagnosis_table">
 			<div class="tbl_save_bx">
 				<a href="#" class="save_btn">데이터저장</a>
 			</div>
@@ -698,6 +695,7 @@ pageEncoding="utf-8"%> <%@ include file="/decorators/include/taglibs.jsp"%>
 		}
 	}
 
+// ###########################################################################
 	let responseCnt = 0;
 	let accociation = new Map();
 	let dup = false;
@@ -1070,7 +1068,8 @@ pageEncoding="utf-8"%> <%@ include file="/decorators/include/taglibs.jsp"%>
 				}
 			});
 		}
-
+		$(".indiv.diagnosis_chart").addClass("fixed");
+		$(".indiv.diagnosis_table").addClass("fixed");
 		chartMakeData(interval);
 		dup = false;
 	}
