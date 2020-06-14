@@ -400,7 +400,7 @@
 		<!-- Modal content-->
 		<div class="modal-content">
 			<div class="modal-header" style="padding:25px 30px;">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
 				<h4><i class="glyphicon glyphicon-user"></i> MODIFY</h4>
 			</div>
 			<form id="modifyUserForm" name="modifyUserForm">
@@ -411,7 +411,7 @@
 					<div class="rowBox joinBox">
 						<div class="unit clear">
 							<div class="unit_tit">
-								<span class="sTit">사용자 정보</span>
+								<span id="modifyModal" class="sTit">사용자 정보</span>
 							</div>
 							<div class="unit_cont lineBox">
 								<table class="tableStyle formStyle left">

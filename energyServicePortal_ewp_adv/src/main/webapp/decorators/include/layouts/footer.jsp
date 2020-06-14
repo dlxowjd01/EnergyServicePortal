@@ -16,13 +16,13 @@
 
 
 <!-- 서비스 소개 //////////////////// -->
-<div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-labelledby="serviceModal" aria-hidden="true">
+<div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-labelledby="aboutService" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<!-- Modal content-->
 		<div class="modal-content" style="max-width:800px;">
 			<div class="modal-header" style="padding:25px 30px;">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4>서비스 소개</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+				<h4 id="aboutService">서비스 소개</h4>
 			</div>
 			<div class="modal-body" style="padding:20px 30px;">
 

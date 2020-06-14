@@ -526,7 +526,7 @@
         <div class="modal-dialog modal-md">
 			<div class="login-modal-content modal-content">
 				<div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
 	                <h1>FIND ID</h1>
 	            </div>
 			    <form id="findForm" name="findForm">
@@ -678,7 +678,7 @@
 	    <div class="join_dialog modal-dialog modal-md">
 	        <div class="modal-content step1">
 	            <div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
 	                <h1 class="modal_title">JOIN</h1>
 	            </div>
 	            <div class="modal-body">
@@ -802,7 +802,7 @@
 	    <div class="join_dialog modal-dialog modal-md">
 			<div class="modal-content step2">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
 					<h1 class="modal_title"> JOIN</h1>
 				</div>
 				<form id="joinForm" name="joinForm">
@@ -902,8 +902,8 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="cancel_btn w80" data-dismiss="modal">취소</button>
-						<button type="submit" class="join2nextBtn default_btn w80" data-dismiss="modal">확인</button>
+						<button type="button" class="cancel_btn w80" data-dismiss="modal" aria-label="Close">취소</button>
+						<button type="submit" class="join2nextBtn default_btn w80">확인</button>
 					</div>
 				</form>
 			</div>
@@ -914,7 +914,7 @@
 	    <div class="join_dialog modal-dialog modal-md">
 			<div class="modal-content step3">
 				<div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
 	                <h1 class="modal_title"> JOIN</h1>
 	            </div>
 	            <div class="modal-body">

@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Youduk
-  Date: 2020/04/18
-  Time: 15:55
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <script>
 	$(function () {
@@ -14,7 +7,7 @@
 		getDataSpcGen();
 	});
 
-	function init(){
+	function init() {
 		setInitList("addList01");
 		setInitList("addList02");
 		setInitList("addList03");
@@ -35,54 +28,54 @@
 		setInitList("addFileList10");
 	}
 
-	function getAttachFileDisplay(attachement_info){
+	function getAttachFileDisplay(attachement_info) {
 		var spcId = "${param.spc_id}",
 			genId = "${param.gen_id}",
 			oid = "${param.oid}";
 
-		var	addFileList01 = [],addFileList02 = [],addFileList03 = [],addFileList04 = [],addFileList05 = [],
-			addFileList06 = [],addFileList07 = [],addFileList08 = [],addFileList09 = [],addFileList10 = [];
+		var addFileList01 = [], addFileList02 = [], addFileList03 = [], addFileList04 = [], addFileList05 = [],
+			addFileList06 = [], addFileList07 = [], addFileList08 = [], addFileList09 = [], addFileList10 = [];
 
-		for(var i = 0, count = attachement_info.length; i < count; i++){
-			if(attachement_info[i].fieldname =="spc_file_01_" + spcId + "_" + genId){
+		for (var i = 0, count = attachement_info.length; i < count; i++) {
+			if (attachement_info[i].fieldname == "spc_file_01_" + spcId + "_" + genId) {
 				addFileList01.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_02_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname == "spc_file_02_" + spcId + "_" + genId) {
 				addFileList02.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_03_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname == "spc_file_03_" + spcId + "_" + genId) {
 				addFileList03.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_04_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname == "spc_file_04_" + spcId + "_" + genId) {
 				addFileList04.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_05_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname == "spc_file_05_" + spcId + "_" + genId) {
 				addFileList05.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_06_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname == "spc_file_06_" + spcId + "_" + genId) {
 				addFileList06.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_07_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname == "spc_file_07_" + spcId + "_" + genId) {
 				addFileList07.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_08_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname == "spc_file_08_" + spcId + "_" + genId) {
 				addFileList08.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_09_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname == "spc_file_09_" + spcId + "_" + genId) {
 				addFileList09.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_10_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname == "spc_file_10_" + spcId + "_" + genId) {
 				addFileList10.push(attachement_info[i]);
 			}
 		}
 
-		setMakeList(addFileList01, "addFileList01", {"dataFunction" : {}});
-		setMakeList(addFileList02, "addFileList02", {"dataFunction" : {}});
-		setMakeList(addFileList03, "addFileList03", {"dataFunction" : {}});
-		setMakeList(addFileList04, "addFileList04", {"dataFunction" : {}});
-		setMakeList(addFileList05, "addFileList05", {"dataFunction" : {}});
-		setMakeList(addFileList06, "addFileList06", {"dataFunction" : {}});
-		setMakeList(addFileList07, "addFileList07", {"dataFunction" : {}});
-		setMakeList(addFileList08, "addFileList08", {"dataFunction" : {}});
-		setMakeList(addFileList09, "addFileList09", {"dataFunction" : {}});
-		setMakeList(addFileList10, "addFileList10", {"dataFunction" : {}});
+		setMakeList(addFileList01, "addFileList01", { "dataFunction": {} });
+		setMakeList(addFileList02, "addFileList02", { "dataFunction": {} });
+		setMakeList(addFileList03, "addFileList03", { "dataFunction": {} });
+		setMakeList(addFileList04, "addFileList04", { "dataFunction": {} });
+		setMakeList(addFileList05, "addFileList05", { "dataFunction": {} });
+		setMakeList(addFileList06, "addFileList06", { "dataFunction": {} });
+		setMakeList(addFileList07, "addFileList07", { "dataFunction": {} });
+		setMakeList(addFileList08, "addFileList08", { "dataFunction": {} });
+		setMakeList(addFileList09, "addFileList09", { "dataFunction": {} });
+		setMakeList(addFileList10, "addFileList10", { "dataFunction": {} });
 	}
 
-	function getGenData(){
+	function getGenData() {
 		var genId = "${param.gen_id}";
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/config/sites/"+ genId,
+			url: "http://iderms.enertalk.com:8443/config/sites/" + genId,
 			type: "get",
 			async: false,
 			data: {},
@@ -98,7 +91,7 @@
 		});
 	}
 
-	function getDataSpcBasic(){
+	function getDataSpcBasic() {
 		var spcId = "${param.spc_id}",
 			oid = "${param.oid}";
 
@@ -106,11 +99,11 @@
 			url: "http://iderms.enertalk.com:8443/spcs/" + spcId,
 			type: "get",
 			async: false,
-			data: {"oid" : oid},
+			data: { "oid": oid },
 			success: function (json) {
-				if(json.data.length > 0){
+				if (json.data.length > 0) {
 					setJsonAutoMapping(json.data[0], "spc_info");
-				}else{
+				} else {
 					alert("등록된 데이터가 없습니다.");
 				}
 			},
@@ -120,7 +113,7 @@
 		});
 	}
 
-	function getDataSpcGen(){
+	function getDataSpcGen() {
 		var spcId = "${param.spc_id}",
 			genId = "${param.gen_id}",
 			oid = "${param.oid}";
@@ -129,9 +122,9 @@
 			url: "http://iderms.enertalk.com:8443/spcs/" + spcId + "/gens/" + genId,
 			type: "get",
 			async: false,
-			data: {"oid" : oid},
+			data: { "oid": oid },
 			success: function (json) {
-				if(json.data.length > 0){
+				if (json.data.length > 0) {
 					setJsonAutoMapping(JSON.parse(json.data[0].contract_info), "contract_info");
 					setJsonAutoMapping(JSON.parse(json.data[0].device_info), "device_info");
 					setJsonAutoMapping(JSON.parse(json.data[0].finance_info), "finance_info");
@@ -141,15 +134,15 @@
 					getAttachFileDisplay(JSON.parse(json.data[0].attachement_info));
 
 					var device_info = JSON.parse(json.data[0].device_info);
-					setMakeList(device_info["addList01"], "addList01", {"dataFunction" : {}});
-					setMakeList(device_info["addList02"], "addList02", {"dataFunction" : {}});
-					setMakeList(device_info["addList03"], "addList03", {"dataFunction" : {}});
-					setMakeList(device_info["addList04"], "addList04", {"dataFunction" : {}});
-					setMakeList(device_info["addList05"], "addList05", {"dataFunction" : {}});
-					setMakeList(device_info["addList06"], "addList06", {"dataFunction" : {}});
-					setMakeList(device_info["addList07"], "addList07", {"dataFunction" : {}});
+					setMakeList(device_info["addList01"], "addList01", { "dataFunction": {} });
+					setMakeList(device_info["addList02"], "addList02", { "dataFunction": {} });
+					setMakeList(device_info["addList03"], "addList03", { "dataFunction": {} });
+					setMakeList(device_info["addList04"], "addList04", { "dataFunction": {} });
+					setMakeList(device_info["addList05"], "addList05", { "dataFunction": {} });
+					setMakeList(device_info["addList06"], "addList06", { "dataFunction": {} });
+					setMakeList(device_info["addList07"], "addList07", { "dataFunction": {} });
 
-				}else{
+				} else {
 					alert("등록된 데이터가 없습니다.");
 				}
 			},
@@ -159,20 +152,20 @@
 		});
 	}
 
-	function goMoveList(){
+	function goMoveList() {
 		location.href = "/spc/entityInformation.do";
 	}
 
-	function setCheckedDataEdit(){
+	function setCheckedDataEdit() {
 		var spcId = "${param.spc_id}",
 			genId = "${param.gen_id}";
 
-		location.href='/spc/entityInformationEdit.do?spc_id=' + spcId + "&gen_id="+genId;
+		location.href = '/spc/entityInformationEdit.do?spc_id=' + spcId + "&gen_id=" + genId;
 	}
-	
-	function getExcelDown(){
+
+	function getExcelDown() {
 		let excelName = 'spc_info_list';
-		
+
 		var excelHtml = '';
 		excelHtml += $('#spc_info .spc_tbl_row').html();
 		excelHtml += $('#contract_info .spc_tbl_row').html();
@@ -181,12 +174,12 @@
 		excelHtml += $('#warranty_info .spc_tbl_row').html();
 		excelHtml += $('#coefficient_info .spc_tbl_row').html();
 		excelHtml += $('#attachement_info .spc_tbl_row').html();
-		
+
 		$('#excelList').html(excelHtml);
-		
-        if (confirm('엑셀로 저장하시겠습니까?')) {
-            tableToExcel('excelList', excelName);
-        }
+
+		if (confirm('엑셀로 저장하시겠습니까?')) {
+			tableToExcel('excelList', excelName);
+		}
 	}
 </script>
 <div class="row">
@@ -301,16 +294,16 @@
 					</colgroup>
 					<tr>
 						<th>모듈 제조사 / 모델</th>
-						<td id="addList01" >
-							[모듈_제조사] / [모듈_제조사_모델]<br/>
+						<td id="addList01">
+							[모듈_제조사] / [모듈_제조사_모델]<br />
 						</td>
 						<th>설치 용량</th>
 						<td> <span id="설치_용량_KW"></span> kW / <span id="설치_용량_매"></span> 매</td>
 					</tr>
 					<tr>
 						<th>모듈 설치 각도</th>
-						<td id="addList02" >
-							[모듈_설치_각도]<span>︒</span><br/>
+						<td id="addList02">
+							[모듈_설치_각도]<span>︒</span><br />
 						</td>
 						<th>모듈 설치 방식</th>
 						<td>
@@ -321,22 +314,22 @@
 					</tr>
 					<tr>
 						<th>인버터 제조사 / 모델</th>
-						<td id="addList03" >
-							[인버터_제조사] / [인버터_제조사_모델]<br/>
+						<td id="addList03">
+							[인버터_제조사] / [인버터_제조사_모델]<br />
 						</td>
 						<th>인버터 용량 / 대수</th>
-						<td id="addList04" >
-							[인버터_용량] kW / [인버터_용량_대수] 대<br/>
+						<td id="addList04">
+							[인버터_용량] kW / [인버터_용량_대수] 대<br />
 						</td>
 					</tr>
 					<tr>
 						<th>접속반 제조사 / 모델</th>
-						<td id="addList05" >
-							[접속반_제조사] / [접속반_제조사_모델]<br/>
+						<td id="addList05">
+							[접속반_제조사] / [접속반_제조사_모델]<br />
 						</td>
 						<th>접속반 채널 / 대수</th>
-						<td id="addList06" >
-							[접속반_채널] Ch / [접속반_채널_대수] 대<br/>
+						<td id="addList06">
+							[접속반_채널] Ch / [접속반_채널_대수] 대<br />
 						</td>
 					</tr>
 					<tr>
@@ -345,8 +338,8 @@
 							<span id="접속반_용량">100</span> kW / <span id="통신방식"></span>
 						</td>
 						<th>수배전반 제조사 / 모델</th>
-						<td id="addList07" >
-							[수배전반_제조사] / [수배전반_제조사_모델]<br/>
+						<td id="addList07">
+							[수배전반_제조사] / [수배전반_제조사_모델]<br />
 						</td>
 					</tr>
 					<tr>
@@ -409,7 +402,7 @@
 					</tr>
 					<tr>
 						<th>기준 단가</th>
-						<td><span id="기준_단가"></span><span id="기준_단가_원"></span> 원  / kW</td>
+						<td><span id="기준_단가"></span><span id="기준_단가_원"></span> 원 / kW</td>
 						<th>현재 적용 연차</th>
 						<td><span id="현재_적용_연차">3</span> 년차</td>
 					</tr>
@@ -525,52 +518,92 @@
 					</colgroup>
 					<tr>
 						<th>현장 사진</th>
-						<td id="addFileList01"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
+						<td id="addFileList01">
+							<p class="tx_file"><a
+									href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+							</p>
+						</td>
 						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>수배전반</th>
-						<td id="addFileList02"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
+						<td id="addFileList02">
+							<p class="tx_file"><a
+									href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+							</p>
+						</td>
 						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>케이블</th>
-						<td id="addFileList03"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
+						<td id="addFileList03">
+							<p class="tx_file"><a
+									href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+							</p>
+						</td>
 						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>모듈</th>
-						<td id="addFileList04"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
+						<td id="addFileList04">
+							<p class="tx_file"><a
+									href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+							</p>
+						</td>
 						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>인버터</th>
-						<td id="addFileList05"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
+						<td id="addFileList05">
+							<p class="tx_file"><a
+									href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+							</p>
+						</td>
 						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>결선도</th>
-						<td  id="addFileList06"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
+						<td id="addFileList06">
+							<p class="tx_file"><a
+									href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+							</p>
+						</td>
 						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>토목</th>
-						<td id="addFileList07"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
+						<td id="addFileList07">
+							<p class="tx_file"><a
+									href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+							</p>
+						</td>
 						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>구조물</th>
-						<td id="addFileList08"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
+						<td id="addFileList08">
+							<p class="tx_file"><a
+									href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+							</p>
+						</td>
 						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>접속반</th>
-						<td id="addFileList09"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
+						<td id="addFileList09">
+							<p class="tx_file"><a
+									href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+							</p>
+						</td>
 						<td><button class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>기타설비</th>
-						<td id="addFileList10"><p class="tx_file"><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a></p></td>
+						<td id="addFileList10">
+							<p class="tx_file"><a
+									href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+							</p>
+						</td>
 						<td><button class="btn_file down"></button></td>
 					</tr>
 				</table>

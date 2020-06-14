@@ -17,17 +17,16 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-2 col-md-5 col-sm-12 use_total">
-		<div class="indiv">
+	<div class="col-2">
+		<div class="indiv pv_chart">
 			<h2 class="ntit">발전량 합계</h2>
-			<div class="value_area">
-			</div>
+			<div class="value_area"></div>
 		</div>
 	</div>
-	<div class="col-lg-10 col-md-7 col-sm-12">
-		<div class="indiv usage_chart pv_chart">
-			<div class="chart_top clear">
-				<div id="deviceType">
+	<div class="col-10">
+		<div class="indiv pv_chart">
+			<div class="chart_top">
+				<div id="deviceType" class="flex_group">
 					<span class="tx_tit">계량값</span>
 					<div class="sa_select">
 						<div class="dropdown">
@@ -50,45 +49,43 @@
 						</div>
 					</div>
 				</div>
-				<div class="inline_flex">
-					<div class="period">
-						<span class="tx_tit">기간</span>
-						<div class="sa_select">
-							<div class="dropdown" id="period">
-								<button class="btn btn-primary dropdown-toggle" type="button"
-									data-toggle="dropdown">오늘<span class="caret"></span></button>
-								<ul class="dropdown-menu">
-									<li data-value="today" class="on"><a href="#">오늘</a></li>
-									<li data-value="week"><a href="#">이번 주</a></li>
-									<li data-value="month"><a href="#">이번 달</a></li>
-									<li data-value="setup"><a href="#">직접 선택</a></li>
-								</ul>
-							</div>
+				<div class="flex_group period">
+					<span class="tx_tit">기간</span>
+					<div class="sa_select">
+						<div class="dropdown" id="period">
+							<button class="btn btn-primary dropdown-toggle" type="button"
+								data-toggle="dropdown">오늘<span class="caret"></span></button>
+							<ul class="dropdown-menu">
+								<li data-value="today" class="on"><a href="#">오늘</a></li>
+								<li data-value="week"><a href="#">이번 주</a></li>
+								<li data-value="month"><a href="#">이번 달</a></li>
+								<li data-value="setup"><a href="#">직접 선택</a></li>
+							</ul>
 						</div>
 					</div>
-					<div class="duration" id="dateArea">
-						<span class="tx_tit">날짜입력</span>
-						<div class="sel_calendar">
-							<input type="text" id="datepicker1" class="sel" value="" autocomplete="off" readonly>
-							<em></em>
-							<input type="text" id="datepicker2" class="sel" value="" autocomplete="off" readonly>
-						</div>
+				</div>
+				<div class="flex_group duration" id="dateArea">
+					<span class="tx_tit">날짜입력</span>
+					<div class="sel_calendar">
+						<input type="text" id="datepicker1" class="sel" value="" autocomplete="off" readonly>
+						<em></em>
+						<input type="text" id="datepicker2" class="sel" value="" autocomplete="off" readonly>
 					</div>
-					<div class="unit" id="cycle">
-						<span class="tx_tit">단위</span>
-						<div class="sa_select">
-							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle interval" type="button"
-									data-toggle="dropdown">
-									기간<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu">
-									<li class="on"><a href="#">15분</a></li>
-									<li><a href="#">1시간</a></li>
-									<li><a href="#">1일</a></li>
-									<li><a href="#">1월</a></li>
-								</ul>
-							</div>
+				</div>
+				<div class="flex_group unit" id="cycle">
+					<span class="tx_tit">단위</span>
+					<div class="sa_select">
+						<div class="dropdown">
+							<button class="btn btn-primary dropdown-toggle interval" type="button"
+								data-toggle="dropdown">
+								선택<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li class="on"><a href="#">15분</a></li>
+								<li><a href="#">1시간</a></li>
+								<li><a href="#">1일</a></li>
+								<li><a href="#">1월</a></li>
+							</ul>
 						</div>
 					</div>
 					<button type="button" class="btn_type" id="renderBtn">조회</button>
@@ -116,7 +113,7 @@
 					</div>
 				</div>
 			</div>
-
+			<br>
 			<p class="tx_time"></p>
 			<div class="inchart">
 				<div id="chart2"></div>
@@ -124,15 +121,14 @@
 		</div>
 	</div>
 </div>
+
 <div class="row pv_chart_table" style="display:none;">
 	<div class="col-12">
-		<div class="indiv clear">
-			<div class="tbl_save_bx">
-				<a href="#;" class="save_btn">데이터저장</a>
-			</div>
+		<div class="indiv pv_chart table_box">
 			<div class="tbl_top clear">
 				<h2 class="ntit fl">발전량 도표</h2>
 				<ul class="fr">
+					<li><span class="tbl_save_bx"> <a href="#;" class="save_btn">데이터 저장</a></li>
 					<li><a href="#;" class="fold_btn">표접기</a></li>
 				</ul>
 			</div>
@@ -229,22 +225,17 @@
 		});
 
 		$('#period li').on('click', function () {
-			if ($(this).data('value') == 'setup') {
-				$('#dateArea').css("display", "block");
-			} else {
-				$('#dateArea').css("display", "none");
-				if ($(this).data('value') == 'today') { //오늘
-					// $('#cycle').
-					$('#datepicker1').datepicker('setDate', 'today'); //데이트 피커 기본
-					$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
-				} else if ($(this).data('value') == 'week') { //이번주
-					$('#datepicker1').datepicker('setDate', '-6'); //데이트 피커 기본
-					$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
-				} else { //이번달
-					$('#datepicker1').datepicker('setDate', '-30'); //데이트 피커 기본
-					$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
-				}
-				// $('#dateArea').hide();
+			$('#dateArea').css("display", "none");
+			if ($(this).data('value') == 'today') { //오늘
+				// $('#cycle').
+				$('#datepicker1').datepicker('setDate', 'today'); //데이트 피커 기본
+				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+			} else if ($(this).data('value') == 'week') { //이번주
+				$('#datepicker1').datepicker('setDate', '-6'); //데이트 피커 기본
+				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+			} else { //이번달
+				$('#datepicker1').datepicker('setDate', '-30'); //데이트 피커 기본
+				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
 			}
 		});
 
@@ -1202,7 +1193,8 @@
 
 	const chartDraw = function (standard, seriesData) {
 		let chart = $('#chart2').highcharts();
-
+		$(".indiv.pv_chart").addClass("fixed");
+		
 		if (chart) {
 			chart.destroy();
 		}
@@ -1212,7 +1204,8 @@
 				renderTo: 'chart2',
 				marginLeft: 60,
 				marginRight: 20,
-				backgroundColor: 'transparent'
+				backgroundColor: 'transparent',
+				height: 500
 			},
 			navigation: {
 				buttonOptions: {

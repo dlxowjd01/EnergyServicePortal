@@ -32,7 +32,6 @@
 	function addDevice(select_sid, device) {
 		if (confirm("장치를 정말 추가하시겠습니까?")) {
 			var result = iderms.postDevices(iderms_oid, select_sid, device); //("dongseo", "72303fa5-990b-44fb-ab7f-8f27a41db446", device);
-
 			if (result != null) {
 				alert('장치 추가 성공하였습니다.');
 				$("#addDeviceModal").modal("hide");
@@ -238,7 +237,7 @@
 			liStr += strFor;
 
 			liStr += '			<li class=\"eq_add\">';
-			liStr += '				<a href="javascript:addDeviceForm(' + '\'' + deviceType + '\'' + ',' + '\'' + sid + '\'' + initModalForm + ');">추가</a>';
+			liStr += '				<a href="javascript:addDeviceForm(' + '\'' + deviceType + '\'' + ',' + '\'' + sid + '\'' + ');">추가</a>';
 			liStr += '			</li>';
 			liStr += '		</ul>';
 			liStr += '	</div>';
@@ -338,6 +337,45 @@
 </script>
 <script type="text/javascript">
 
+	$(function () {
+		// TEST ONLY!!!!!! popup open on window load
+		// $("#manualAddDeviceModal").modal("show")
+		// 사업소 선택
+		$("#site_list1 ul li").on("click", function (e) {
+			var $this = $(this);
+			var site_name = $this.text();
+
+			getSiteDeviceList(site_name);
+
+			const $tbody = $('#site_list_id');
+			$tbody.empty();
+			let tbodyStr = ``;
+			tbodyStr += site_name;
+			tbodyStr += '<span class="caret"></span></button>';
+			$tbody.append(tbodyStr);
+		});
+	});
+
+	function getSiteDeviceList(site_name) {
+		var sid = null;
+
+		if (site_name === "전체") {
+			iderms_sid = 'all_sites';
+		} else {
+			if (iderms_site_list != null && iderms_site_list.length > 0) {
+				for (var i = 0; i < iderms_site_list.length; i++) {
+
+					if (iderms_site_list[i].name === site_name) {
+						iderms_sid = iderms_site_list[i].sid;
+						break;
+					}
+				}
+			}
+		}
+
+		getDeviceList(iderms_oid, iderms_sid);
+
+	}
 	// 안쓰이고 있음!!!!!
 	function callback_getSiteDeviceList(result) {
 		var deviceTypeList = result.deviceTypeList; // 설비타입리스트
@@ -346,14 +384,14 @@
 
 	}
 
-	function initModalForm() {
-		console.log("form init triggered====");
-		const optList = $('#');
+	function openAddModal(type, site) {
+		$("#deviceForm1")[0].reset();
+		type === "SM_MANUAL" ? $("#manualAddDeviceModal").modal("show") : $("#addDeviceModal").modal("show");
 		let deviceOpts = ``;
 
 		for (let i = 0; i < deviceList.length; i++) {
 			if (i === 0) {
-				deviceOpts += '<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="site_list_id">';
+				deviceOpts += '<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="deviceId">';
 				deviceOpts += deviceList[i].name;
 				deviceOpts += '<span class=' + "caret" + '></span></button>';
 				deviceOpts += '<ul class="dropdown-menu">';
@@ -368,13 +406,13 @@
 			}
 		}
 		deviceOpts += '</ul>';
+
+
 	}
-	function addDeviceForm(devicetype, sid, callback) {
+	function addDeviceForm(devicetype, sid) {
 		$('#addDeviceSite').val(sid).attr("selected", "selected");
 		$('#addDeviceType').val(devicetype).attr("selected", "selected");
-
-		$("#deviceForm1")[0].reset();
-		callback();
+		openAddModal(devicetype, sid);
 	}
 
 	function deviceDetailView(did) {
@@ -512,6 +550,7 @@
 		return $("#schForm").serializeObject();
 	}
 </script>
+<div class="loading"><img class="loading-image" src="/img/loading_icon.gif" alt="Loading..." /></div>
 <div class="row header-wrapper">
 	<div class="col-12">
 		<h1 class="page-header fl">설비 구성</h1>
@@ -688,11 +727,12 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="site_name mr-10" class="input_label">장치명</label>
-								<input class="input tx_inp_type" type="text" name="deviceName" id="addDeviceName">
+								<label for="deviceName" class="input_label">장치명</label>
+								<input class="input tx_inp_type" type="text" name="deviceName" id="addDeviceName"
+									placeholder="입력">
 							</div>
 							<div class="input-group inline-flex">
-								<label for="site_name mr-10" class="input_label">장치 타입</label>
+								<label for="site_name" class="input_label">장치 타입</label>
 								<div id="deviceType" class="dropdown">
 									<button class="btn btn-primary dropdown-toggle" type="button"
 										data-toggle="dropdown">
@@ -741,17 +781,12 @@
 								<label class="input_label">예측</label>
 								<input class="styled-checkbox" id="predictionData" type="checkbox" value="1"
 									name="predicted">
-								<label class="styled-checkbox-label" for="predictionData"><span></span></label>
+								<label for="predictionData"><span></span></label>
 							</div>
 							<div class="input-group inline-flex">
 								<label for="addDeviceSerialID" class="input_label">장치 ID</label>
-								<div id="addDeviceSerialID" class="dropdown">
-									<button class="btn btn-primary dropdown-toggle" type="button"
-										data-toggle="dropdown">
-										선택해주세요.<span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu dropdown-menu-form"></ul>
-								</div>
+								<input class="input tx_inp_type" type="text" name="deviceID" id="addDeviceSerialID"
+									placeholder="입력">
 							</div>
 							<div class="input-group inline-flex">
 								<label for="site_name" class="input_label">상위 장치</label>
@@ -783,7 +818,7 @@
 					<div class="row">
 						<div class="col-12">
 							<div class="input-group inline-flex">
-								<label for="site_name mr-10" class="input_label">설명</label>
+								<label for="" class="input_label">설명</label>
 								<textarea name="addDeviceDescription" id="addDeviceDescription"
 									class="textarea"></textarea>
 							</div>
@@ -791,15 +826,15 @@
 					</div>
 				</form>
 				<div class="btn_wrap_type02">
-					<button type="button" class="btn_type03" data-dismiss="modal">취소</button>
+					<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
 					<button type="submit" class="btn_type" id="registerBtn">등록</button>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="manualAddModal" role="dialog">
-	<div class="modal-dialog modal-lg">
+<div class="modal fade" id="manualAddDeviceModal" role="dialog">
+	<div class="modal-dialog md_modal">
 		<div class="modal-content device_modal_content">
 			<div class="modal-header stit">
 				<h2>수기 입력</h2>
@@ -807,9 +842,9 @@
 			<div class="modal-body">
 				<form id="deviceForm2" action="#" method="post" name="deviceForm" novalidate>
 					<div class="row">
-						<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+						<div class="col-12">
 							<div class="input-group inline-flex">
-								<label for="site_name" class="input_label">사업소</label>
+								<label for="deviceType" class="input_label">구분</label>
 								<div id="siteName" class="dropdown">
 									<button class="btn btn-primary dropdown-toggle" type="button"
 										data-toggle="dropdown">
@@ -819,110 +854,129 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="site_name mr-10" class="input_label">장치명</label>
-								<input class="input tx_inp_type" type="text" name="deviceName" id="addDeviceName">
+								<label for="timeInterval" class="input_label">입력 단위</label>
+								<input class="input tx_inp_type" type="text" name="timeUnit" id="timeUnit">
 							</div>
+
 							<div class="input-group inline-flex">
-								<label for="site_name mr-10" class="input_label">장치 타입</label>
-								<div id="siteName" class="dropdown">
-									<button class="btn btn-primary dropdown-toggle" type="button"
-										data-toggle="dropdown">
-										선택해주세요.<span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu dropdown-menu-form chk_type"></ul>
+								<label class="input_label">시작</label>
+								<div class="sel_calendar">
+									<input type="text" id="datepicker1" class="sel" value="" autocomplete="off"
+										readonly>
+								</div>
+								<div class="dropdown" id="hour">
+									<button class="btn btn-primary dropdown-toggle w3 interval" type="button"
+										data-toggle="dropdown"><span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li data-value="" class="on"><a href="#">0시</a></li>
+									</ul>
+								</div>
+								<div class="dropdown" id="minute">
+									<button class="btn btn-primary dropdown-toggle w3 interval" type="button"
+										data-toggle="dropdown"><span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li data-value="" class="on"><a href="#">0분</a></li>
+									</ul>
 								</div>
 							</div>
+
 							<div class="input-group inline-flex">
-								<label for="site_name" class="input_label">계량 유형</label>
-								<div id="siteName" class="dropdown">
-									<button class="btn btn-primary dropdown-toggle" type="button"
-										data-toggle="dropdown">
-										선택해주세요.<span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu dropdown-menu-form chk_type"></ul>
+								<label class="input_label">종료</label>
+								<div class="sel_calendar">
+									<input type="text" id="datepicker1" class="sel" value="" autocomplete="off"
+										readonly>
 								</div>
-							</div>
-							<div class="input-group inline-flex">
-								<label for="site_name" class="input_label">설비 용량(kW)</label>
-								<input class="input tx_inp_type" type="text" name="deviceCapacity"
-									id="addDeviceCapacity">
-							</div>
-							<div class="input-group inline-flex">
-								<label for="site_name" class="input_label">제조사</label>
-								<input class="input tx_inp_type" type="text" name="deviceManufacturer"
-									id="addDeviceManufacturer">
-							</div>
-							<div class="input-group inline-flex">
-								<label for="addDeviceManager" class="input_label">담당자</label>
-								<input class="input tx_inp_type" type="text" name="deviceManager" id="addDeviceManager">
-							</div>
-							<div class="input-group inline-flex">
-								<label for="" class="input_label">알림 코드</label>
-								<div id="siteName" class="dropdown">
-									<button class="btn btn-primary dropdown-toggle" type="button"
-										data-toggle="dropdown">
-										선택해주세요.<span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu dropdown-menu-form chk_type"></ul>
+								<div class="dropdown" id="hour">
+									<button class="btn btn-primary dropdown-toggle w3 interval" type="button"
+										data-toggle="dropdown"><span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li data-value="" class="on"><a href="#">0시</a></li>
+									</ul>
 								</div>
-							</div>
-						</div>
-						<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-							<div class="input-group inline-flex chk_type">
-								<label class="input_label">예측</label>
-								<input class="styled-checkbox" id="predictionData" type="checkbox" value="1"
-									name="predicted">
-								<label class="styled-checkbox-label" for="predictionData"><span></span></label>
-							</div>
-							<div class="input-group inline-flex">
-								<label for="addDeviceSerialID" class="input_label">장치 ID</label>
-								<div id="addDeviceSerialID" class="dropdown">
-									<button class="btn btn-primary dropdown-toggle" type="button"
-										data-toggle="dropdown">
-										선택해주세요.<span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu dropdown-menu-form chk_type"></ul>
+								<div class="dropdown" id="minute">
+									<button class="btn btn-primary dropdown-toggle w3 interval" type="button"
+										data-toggle="dropdown"><span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li data-value="" class="on"><a href="#">0분</a></li>
+									</ul>
 								</div>
-							</div>
-							<div class="input-group inline-flex">
-								<label for="site_name" class="input_label">상위 장치</label>
-								<div id="siteName" class="dropdown">
-									<button class="btn btn-primary dropdown-toggle" type="button"
-										data-toggle="dropdown">
-										선택해주세요.<span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu dropdown-menu-form chk_type"></ul>
-								</div>
-							</div>
-							<div class="input-group inline-flex">
-								<label for="site_name" class="input_label">표시 유형</label>
-								<input class="input tx_inp_type" type="text" name="" id="site_name">
-							</div>
-							<div class="input-group inline-flex">
-								<label for="addDeviceProductName" class="input_label">제품명</label>
-								<input class="input tx_inp_type" type="text" name="productName"
-									id="addDeviceProductName">
-							</div>
-							<div class="input-group inline-flex">
-								<label for="addDeviceContact" class="input_label">담당자 연락처</label>
-								<input class="input tx_inp_type" type="text" name="addDeviceContact"
-									id="addDeviceContact">
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-12">
 							<div class="input-group inline-flex">
-								<label for="site_name mr-10" class="input_label">설명</label>
-								<textarea name="addDeviceDescription" id="addDeviceDescription"
-									class="textarea"></textarea>
+								<label class="input_label">데이터 확인</label>
+								<button class="btn_type03 end">입력 초기화</button>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-4">
+							<div class="spc_tbl">
+								<table class="ly_type">
+									<thead>
+										<th>15분 단위</th>
+										<th>데이터 값</th>
+									</thead>
+									<tbody id="">
+										<tr>
+											<td>2020-05-01 01:00 </td>
+											<td>value </td>
+										</tr>
+										<tr>
+											<td>2020-05-01 01:15 </td>
+											<td>value </td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="col-4">
+							<div class="spc_tbl">
+								<table class="ly_type">
+									<thead>
+										<th>1시간 단위</th>
+										<th>데이터 값</th>
+									</thead>
+									<tbody id="">
+										<tr>
+											<td>2020-05-01 01:00 </td>
+											<td>value </td>
+										</tr>
+										<tr>
+											<td>2020-05-01 02:00 </td>
+											<td>value </td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="col-4">
+							<div class="spc_tbl">
+								<table class="ly_type">
+									<thead>
+										<th>1일 단위</th>
+										<th>데이터 값</th>
+									</thead>
+									<tbody id="">
+										<tr>
+											<td>2020-05-01 01:00 </td>
+											<td>value </td>
+										</tr>
+										<tr>
+											<td>2020-05-02 01:00 </td>
+											<td>value </td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
 				</form>
 				<div class="btn_wrap_type02">
 					<button type="button" class="btn_type03" data-dismiss="modal">취소</button>
-					<button type="submit" class="btn_type" id="registerBtn">등록</button>
+					<button type="submit" class="btn_type" id="registerBtn">저장</button>
 				</div>
 			</div>
 		</div>

@@ -463,138 +463,188 @@ const repeatEnd = function(selectedDate) {
 }
 </script>
 
-<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="registerModal" tabindex="-1" role="form" aria-labelledby="myModalLabel">
+    <div class="modal-dialog spc_modal_lg" role="modal">
         <div class="modal-content spc_modal_content">
             <div class="modal-header">
                 <h2>점검계획 등록</h2>
             </div>
             <div class="modal-body">
-                <div class="ly_wrap container-fluid">
-                    <div class="flex_wrap_top">
-                        <span class="input_label">발전소 선택</span>
-                        <div class="tx_inp_type">
-                            <input type="text" id="siteName" name="siteName" placeholder="입력" class="ui-autocomplete-input required" autocomplete="false">
-                            <input type="hidden" id="site_id" name="site_id">
-                        </div>
-                        <button type="submit" class="btn_type">검색</button>
-                    </div>
-                    <div class="flex_wrap_top">
-                        <span class="input_label">점검 구분</span>
-                        <div class="dropdown placeholder" id="job_type">
-                            <button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="점검 계획 항목 선택">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li data-value="1"><a href="#">정기 점검</a></li>
-                                <li data-value="2"><a href="#">구조물 안전진단</a></li>
-                                <li data-value="3"><a href="#">소방점검</a></li>
-                                <li data-value="4"><a href="#">등기이사 기간만료</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="flex_wrap_top">
-                        <span class="input_label">점검 주기</span>
-                        <div class="dropdown fl" id="repeat_yn">
-                            <button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="점검 선택">점검 선택<span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li data-value="Y"><a href="#">정기 점검</a></li>
-                                <li data-value="N"><a href="#">일시 점검</a></li>
-                            </ul>
-                        </div>
-
-                        <div class="tx_inp_type fl" style="display:none;">
-                            <input type="text" id="repeat_interval" name="repeat_interval" placeholder="입력">
-                        </div>
-
-                        <div class="dropdown fl" style="display:none;" id="repeat_unit">
-                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="주기 선택">주기 선택<span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li data-value="year"><a href="#">년</a></li>
-                                <li data-value="half_year"><a href="#">반기</a></li>
-                                <li data-value="quarter_year"><a href="#">분기</a></li>
-                                <li data-value="month"><a href="#">월</a></li>
-                                <li data-value="day_of_week"><a href="#">주</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="flex_wrap_top">
-                        <span class="input_label">기준 일자</span>
-                        <div class="sel_calendar">
-                            <input type="text" id="job_date" name="job_date" class="sel datepicker required" value="" autocomplete="off" style="width:100%" readonly>
-                        </div>
-                    </div>
-                    <div class="flex_wrap_top">
-                        <span class="input_label">다음 검사 일자</span>
-                        <div class="tx_inp_type">
-                            <input type="text" id="repeat_end" name="repeat_end" class="required" value="자동 계산" readonly>
-                        </div>
-                    </div>
-                    <div class="flex_wrap_top">
-                        <span class="input_label">공휴일 처리</span>
-                        <div class="dropdown placeholder" id="repeat_before_after_holiday">
-                            <button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="공휴일 처리 선택"><span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li data-value="N"><a href="#">처리 안함</a></li>
-                                <li data-value="B"><a href="#">공휴일 직전 영업일</a></li>
-                                <li data-value="A"><a href="#">공휴일 직후 영업일</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="flex_wrap_top">
-                        <span class="input_label">내용</span>
-                        <textarea id="description" name="description" placeholder="입력"></textarea>
-                    </div>
-                    <div class="flex_wrap_top">
-                        <span class="input_label">작업자</span>
-                        <div class="tx_inp_type">
-                            <input type="text" id="worker" name="worker" placeholder="입력">
-                        </div>
-                    </div>
-                    <div class="flex_wrap_top">
-                        <span class="input_label">비고</span>
-                        <div class="tx_inp_type">
-                            <input type="text" id="note" name="note" placeholder="입력">
-                        </div>
-                    </div>
-                    <div class="flex_wrap_top">
-                        <span class="input_label">알림 설정</span>
-                        <div class="tx_inp_type">
-                            <input type="text" id="note" name="note" placeholder="입력">
-                        </div>
-                        <div class="dropdown fl" id="alarmSetup" style="width:160px">
-                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="알림 일시 선택"><span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li data-value="1"><a href="#">1일 전</a></li>
-                                <li data-value="3"><a href="#">3일 전</a></li>
-                                <li data-value="7"><a href="#">7일 전</a></li>
-                                <li data-value="직접 설정"><a href="#">직접 설정</a></li>
-                            </ul>
-                        </div>
-                        <div class="sel_calendar fl ml" style="width:160px">
-                            <input type="text" id="alarmDate" name="alarmDate" value="" class="sel" autocomplete="off" readonly>
-                        </div>
-                    </div>
-                    <div class="flex_wrap_top">
-                        <span class="input_label">알림 시간</span>
-                        <div class="dropdown placeholder fl" style="width:160px" id="alarmTime">
-                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="알림 시간 선택"><span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <c:forEach var="time" begin="0" end="23">
-                                    <li data-value="${time}"><a href="#">${time}시</a></li>
-                                </c:forEach>
-                            </ul>
-                        </div>
-                        <div class="tx_inp_type fl ml" style="width:160px">
-                            <input type="text" id="alarmPhone" name="alarmPhone" placeholder="수신 번호">
-                        </div>
-                    </div>
-                    <div class="btn_wrap_type02">
-                        <button type="button" class="btn_type04" style="display:none;">삭제</button>
-                        <button type="button" class="btn_type03" data-dismiss="modal">취소</button>
-                        <button type="button" class="btn_type">등록</button>
-                    </div>
-                </div>
+				<div class="container-fluid">
+					<form id="" method="post">
+						<div class="row">
+							<div class="col-lg-2 col-md-2 col-sm-3">
+								<span class="input_label">발전소 선택</span>
+							</div>
+							<div class="col-lg-10 col-md-10 col-sm-9 flex_start">
+								<div class="tx_inp_type mr-12">
+									<input type="text" id="siteName" name="siteName" placeholder="입력" class=" required" autocomplete="false">
+									<input type="hidden" id="site_id" name="site_id">
+								</div>
+								<button type="submit" class="btn_type">검색</button>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-2 col-md-2 col-sm-3">
+								<span class="input_label">점검 구분</span>
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-9 flex_start">
+								<div class="dropdown placeholder" id="job_type">
+									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="점검 계획 항목 선택">
+										<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu">
+										<li data-value="1"><a href="#">정기 점검</a></li>
+										<li data-value="2"><a href="#">구조물 안전진단</a></li>
+										<li data-value="3"><a href="#">소방점검</a></li>
+										<li data-value="4"><a href="#">등기이사 기간만료</a></li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-3">
+								<span class="input_label">점검 주기</span>
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-9 flex_start3">
+								<div class="dropdown" id="repeat_yn">
+									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="점검 선택">점검 선택<span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li data-value="Y"><a href="#">정기 점검</a></li>
+										<li data-value="N"><a href="#">일시 점검</a></li>
+									</ul>
+								</div>
+								<div class="tx_inp_type" style="display:none;">
+									<input type="text" id="repeat_interval" name="repeat_interval" placeholder="입력">
+								</div>
+								<div class="dropdown" style="display:none;" id="repeat_unit">
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="주기">주기<span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li data-value="year"><a href="#">년</a></li>
+										<li data-value="half_year"><a href="#">반기</a></li>
+										<li data-value="quarter_year"><a href="#">분기</a></li>
+										<li data-value="month"><a href="#">월</a></li>
+										<li data-value="day_of_week"><a href="#">주</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-2 col-md-2 col-sm-3">
+								<span class="input_label">기준 일자</span>
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-9 flex_start">
+								<div class="sel_calendar">
+									<input type="text" id="job_date" name="job_date" class="sel datepicker required" value="" autocomplete="off" style="width:100%" readonly>
+								</div>
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-3">
+								<span class="input_label">다음 검사 일자</span>
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-9 flex_start">
+								<div class="tx_inp_type">
+									<input type="text" id="repeat_end" name="repeat_end" class="required" value="자동 계산" readonly>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-2 col-md-2 col-sm-3">
+								<span class="input_label">공휴일 처리</span>
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-9 flex_start">
+								<div class="dropdown placeholder" id="repeat_before_after_holiday">
+									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="공휴일 처리 선택"><span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li data-value="N"><a href="#">처리 안함</a></li>
+										<li data-value="B"><a href="#">공휴일 직전 영업일</a></li>
+										<li data-value="A"><a href="#">공휴일 직후 영업일</a></li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-3">
+								<span class="input_label">공휴일 처리</span>
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-9 flex_start">
+								<div class="dropdown placeholder" id="repeat_before_after_holiday">
+									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="공휴일 처리 선택"><span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li data-value="N"><a href="#">처리 안함</a></li>
+										<li data-value="B"><a href="#">공휴일 직전 영업일</a></li>
+										<li data-value="A"><a href="#">공휴일 직후 영업일</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-2 col-md-2 col-sm-3">
+								<span class="input_label">내용</span>
+							</div>
+							<div class="col-lg-10 col-md-10 col-sm-9 flex_start">
+								<textarea class="textarea" id="description" name="description" placeholder="입력"></textarea>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-2 col-md-2 col-sm-3">
+								<span class="input_label">작업자</span>	
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-9 flex_start">
+								<div class="tx_inp_type">
+									<input type="text" id="worker" name="worker" placeholder="입력">
+								</div>
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-3">
+								<span class="input_label">비고</span>	
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-9 flex_start">
+								<div class="tx_inp_type">
+									<input type="text" id="note" name="note" placeholder="입력">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-2 col-md-2 col-sm-3">
+								<span class="input_label">알림 설정</span>
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-9 flex_start2">
+								<div class="dropdown mr-12" id="alarmSetup">
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="일시"><span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li data-value="1"><a href="#">1일 전</a></li>
+										<li data-value="3"><a href="#">3일 전</a></li>
+										<li data-value="7"><a href="#">7일 전</a></li>
+										<li data-value="직접 설정"><a href="#">직접 설정</a></li>
+									</ul>
+								</div>
+								<div class="sel_calendar">
+									<input type="text" id="datepicker1" class="sel" value="" autocomplete="off" readonly>
+								</div>
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-3">
+								<span class="input_label">알림 시간</span>
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-9 flex_start2">
+								<div class="dropdown placeholder mr-12" id="alarmTime">
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="시간"><span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<c:forEach var="time" begin="0" end="23">
+											<li data-value="${time}"><a href="#">${time}시</a></li>
+										</c:forEach>
+									</ul>
+								</div>
+								<div class="tx_inp_type">
+									<input type="text" id="alarmPhone" name="alarmPhone" placeholder="수신 번호">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12 end">
+								<div class="btn_wrap_type02">
+									<button type="button" class="btn_type04" style="display:none;">삭제</button>
+									<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
+									<button type="button" class="btn_type">등록</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
             </div>
         </div>
     </div>
@@ -724,4 +774,3 @@ const repeatEnd = function(selectedDate) {
         </div>
     </div>
 </div>
-<ul id="ui-id-1" tabindex="0" class="ui-menu ui-widget ui-widget-content ui-autocomplete ui-front" style="display: none;"></ul>

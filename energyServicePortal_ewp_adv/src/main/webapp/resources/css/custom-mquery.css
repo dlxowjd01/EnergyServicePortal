@@ -653,10 +653,6 @@
         font-size: 21px;
     }
 
-    .col-lg-2.use_total .indiv {
-        min-height: calc(100vh - 408px);
-    }
-
     .col-lg-2.dr_total .indiv {
         min-height: calc(100vh - 406px);
     }
@@ -1852,15 +1848,6 @@
 }
 
 
-/* Small laptop, Tablet and Mobile screen sizes */
-@media all and (max-width: 1700px) {
-	.indiv.usage_chart.pv_chart .chart_top.clear,
-	.indiv.usage_chart.pv_chart .chart_top.clear > div {
-		display: table;
-		width: 100%;
-	}
-}
-
 @media all and (max-width: 1199px) {
     .w_type {
         width: 100%
@@ -1872,7 +1859,6 @@
 	} */
     nav .all-menu .menu-group>ul>li.lo-type {
         display: inline-block;
-        float: left;
         width: auto;
     }
 
@@ -1932,18 +1918,9 @@
     .local_info.s_center {
         margin-top: 15px;
 	}
-	.indiv.usage_chart.pv_chart .chart_top.clear .inline_flex {
-		display: flex;
-		align-items: end;
-		flex-wrap: wrap;
-	}
-	.indiv.usage_chart.pv_chart .chart_top.clear .btn_type {
+
+	.indiv.diagnosis_chart .chart_top.clear .btn_type {
 		margin-top: 16px;
-	}
-	.indiv.usage_chart.pv_chart .chart_top.clear > div,
-	.indiv.usage_chart.pv_chart .chart_top.clear .inline_flex > div {
-		margin-left: 0;
-		margin-right: 0;
 	}
 }
 
@@ -2057,6 +2034,15 @@
 
     .di_btm_sec .bx_top .inchart {
         height: 200px;
+	}
+	.modal-dialog.spc_modal_lg {
+		width: 90vw;
+	}
+
+	.flex_start,
+	.flex_start2,
+	.flex_start3 {
+		flex-wrap: wrap;
 	}
 }
 
@@ -2231,23 +2217,65 @@
     /********************************************************************************
 							indiv(box-container), modal, alarm
 	*********************************************************************************/
-    .indiv {
-        padding: 20px;
+    .page-header {
+        text-align: center;
+	}
+	.indiv {
+        padding: 19px 20px;
     }
-
     .indiv.wrap_type {
         padding: 0;
     }
 
-    .modal-dialog {
-        display: initial;
-        text-align: initial;
-        vertical-align: initial;
-    }
+	.modal-dialog {
+		height: 500px;
+		overflow: auto;
+	}
+	.modal-dialog .modal-content {
+		padding: 30px;
+	}
+	.modal-dialog.spc_modal_lg {
+		width: 85vw;
+	}
+	.spc_modal_content .input_label {
+		white-space: normal;
+	}
+	.spc_modal_content .flex_start2 .sel_calendar,
+	.spc_modal_content .flex_start2 .sel {
+		width: 120px;
+	}
+	.spc_modal_content .flex_start .textarea {
+		width: calc(100% - 85px);
+	}
+/* 
+	.spc_modal_content .flex_start .sel_calendar,
+	.spc_modal_content .flex_start .tx_inp_type,
+	.spc_modal_content .flex_start .dropdown .btn {
+		width: 200px;
+	}
+	
 
-    .page-header {
-        text-align: center;
-    }
+	
+	.spc_modal_content .flex_start2 .sel_calendar,
+	.spc_modal_content .flex_start2 .sel {
+		width: 130px;
+	}
+	.spc_modal_content .flex_start2 .dropdown .btn {
+		width: 90px;
+	}
+	.spc_modal_content .flex_start2 .tx_inp_type,
+	.spc_modal_content .flex_start3 .dropdown .btn {
+		width: 120px;
+	}
+	
+	.spc_modal_content .flex_start3 .dropdown .btn:last-of-type {
+		width: 90px;
+	}
+	
+	.spc_modal_content .flex_start3 .tx_inp_type {
+		width: 90px;
+		margin: auto 12px;
+	} */
 
     .alarm {
         min-height: initial;
@@ -2474,38 +2502,6 @@
     }
 
     /********************************************************************************
-										usage_chart
-	*********************************************************************************/
-    .usage_chart .chart_top .sel_calendar *,
-    .usage_chart_table {
-        display: none;
-    }
-
-    .usage_chart .chart_top .sel_calendar {
-        margin-left: 0;
-    }
-
-    .usage_chart .chart_top .sel_calendar button {
-        display: inline-block;
-    }
-
-    /********************************************************************************
-										peak_chart
-	*********************************************************************************/
-    .peak_chart .chart_top .sel_calendar *,
-    .peak_chart_table {
-        display: none;
-    }
-
-    .peak_chart .chart_top .sel_calendar {
-        margin-left: 0;
-    }
-
-    .peak_chart .chart_top .sel_calendar button {
-        display: inline-block;
-    }
-
-    /********************************************************************************
 										ess_chart
 	*********************************************************************************/
     .ess_chart .chart_top .sel_calendar *,
@@ -2524,7 +2520,10 @@
     /********************************************************************************
 										pv_chart
 	*********************************************************************************/
-    .pv_chart .chart_top .sel_calendar *,
+	.indiv.pv_chart .chart_top {
+		width: calc(100% - 160px);
+	}
+    .pv_chart .chart_top .duration,
     .pv_chart_table {
         display: none;
     }
@@ -2534,22 +2533,6 @@
     }
 
     .pv_chart .chart_top .sel_calendar button {
-        display: inline-block;
-    }
-
-    /********************************************************************************
-										cusage_chart
-	*********************************************************************************/
-    .cusage_chart .chart_top .sel_calendar *,
-    .cusage_chart_table {
-        display: none;
-    }
-
-    .cusage_chart .chart_top .sel_calendar {
-        margin-left: 0;
-    }
-
-    .cusage_chart .chart_top .sel_calendar button {
         display: inline-block;
     }
 
@@ -2578,7 +2561,6 @@
     .page-device .default_tbl table td {
         border-radius: 0;
     }
-
     /********************************************************************************
 										device_group
 	*********************************************************************************/

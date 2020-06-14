@@ -32,11 +32,11 @@
 	</div>
 </div>
 
-<div class="modal fade" id="addRtuModal" role="dialog">
+<div class="modal fade" id="addRtuModal" aria-labelledby="RTU_Register" role="dialog">
 	<div class="modal-dialog modal-md">
 		<div class="modal-content collection_modal_content">
 			<div class="modal-header">
-				<h4 class="modal-title">RTU 등록</h4>
+				<h4 id="RTU_Register" class="modal-title">RTU 등록</h4>
 			</div>
 			<div class="modal-body">
 				<div class="input-group inline-flex">
@@ -50,18 +50,18 @@
 				</div>
 				<div class="input-group inline-flex">
 					<label for="siteName" class="input_label">시리얼 번호</label>
-					<input type="text" name="serialNum" id="serialNum" class="input text_input">
+					<input type="text" name="serialNum" id="serialNum" class="input tx_inp_type text_input">
 				</div>
 				<div class="input-group inline-flex">
 					<label for="siteName" class="input_label">RTU 이름</label>
-					<input type="text" name="rtuName" id="rtuName" class="input text_input">
+					<input type="text" name="rtuName" id="rtuName" class="input tx_inp_type text_input">
 				</div>
 				<div class="input-group inline-flex">
 					<label for="siteName" class="input_label">메모</label>
 					<textarea class="textarea"></textarea>
 				</div>
 				<div class="btn_wrap_type02">
-					<button type="button" class="btn_type03" data-dismiss="modal">취소</button>
+					<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
 					<button type="submit" class="btn_type">확인</button>
 				</div>
 			</div>

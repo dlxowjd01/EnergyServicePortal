@@ -15,8 +15,8 @@ pageEncoding="utf-8"%> <%@ include file="/decorators/include/taglibs.jsp"%>
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-2 use_total">
-		<div class="indiv">
+	<div class="col-lg-3 col-md-4">
+		<div class="indiv fixed_height">
 			<h2 class="ntit">예측 요약</h2>
 			<div class="value_area">
 				<h3 class="value_tit">측정값</h3>
@@ -50,7 +50,7 @@ pageEncoding="utf-8"%> <%@ include file="/decorators/include/taglibs.jsp"%>
 						</ul>
 					</div>
 					<p class="tb_tx">오차 계산 데이터 필터</p>
-					<div class="dropdown" id="ignore_ref">
+					<div class="dropdown mb-10" id="ignore_ref">
 						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 							용량 대비 발전량 % 이상<span class="caret"></span>
 						</button>
@@ -66,12 +66,12 @@ pageEncoding="utf-8"%> <%@ include file="/decorators/include/taglibs.jsp"%>
 							</li>
 						</ul>
 					</div>
-					<div class="inp_btm_area">
-						<div class="tx_inp_type unit fixed_type">
+					<div class="flex_wrapper">
+						<div class="tx_inp_type unit">
 							<input type="number" name="ignore_tolerance1" />
 							<span>%</span>
 						</div>
-						<div class="tx_inp_type unit t1 flex_type">
+						<div class="tx_inp_type unit t1">
 							<input type="number" name="ignore_tolerance2" />
 							<span>kWh</span>
 						</div>
@@ -83,8 +83,8 @@ pageEncoding="utf-8"%> <%@ include file="/decorators/include/taglibs.jsp"%>
 			</div>
 		</div>
 	</div>
-	<div class="col-lg-10">
-		<div class="indiv usage_chart pv_chart">
+	<div class="col-lg-9 col-md-8">
+		<div class="indiv diagnosis_chart">
 			<div class="chart_top clear">
 				<div id="deviceType">
 					<span class="tx_tit">계량값</span>
@@ -248,22 +248,15 @@ pageEncoding="utf-8"%> <%@ include file="/decorators/include/taglibs.jsp"%>
 		});
 
 		$('#period li').on('click', function () {
-			if ($(this).data('value') == 'setup') {
-				$('#dateArea').css("display", "block");
-			} else {
-				$('#dateArea').css("display", "none");
-				if ($(this).data('value') == 'today') { //오늘
-					// $('#cycle').
-					$('#datepicker1').datepicker('setDate', 'today'); //데이트 피커 기본
-					$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
-				} else if ($(this).data('value') == 'week') { //이번주
-					$('#datepicker1').datepicker('setDate', '-6'); //데이트 피커 기본
-					$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
-				} else { //이번달
-					$('#datepicker1').datepicker('setDate', '-30'); //데이트 피커 기본
-					$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
-				}
-				// $('#dateArea').hide();
+			if ($(this).data('value') == 'today') { //오늘
+				$('#datepicker1').datepicker('setDate', 'today'); //데이트 피커 기본
+				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+			} else if ($(this).data('value') == 'week') { //이번주
+				$('#datepicker1').datepicker('setDate', '-6'); //데이트 피커 기본
+				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+			} else { //이번달
+				$('#datepicker1').datepicker('setDate', '-30'); //데이트 피커 기본
+				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
 			}
 		});
 
