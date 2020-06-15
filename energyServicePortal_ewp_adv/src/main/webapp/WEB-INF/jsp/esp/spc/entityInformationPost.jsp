@@ -1,11 +1,6 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Youduk
-  Date: 2020/05/14
-  Time: 15:48
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ include file="/decorators/include/taglibs.jsp"%>
+
 <script>
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';

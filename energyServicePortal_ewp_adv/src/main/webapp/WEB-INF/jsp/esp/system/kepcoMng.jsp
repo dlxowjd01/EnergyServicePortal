@@ -193,11 +193,11 @@
 													<select name="planType" id="planType" class="sel">
 														<option value="">일반용</option>
 													</select>
-													<span class="ml20"><strong>구분2</strong></span>
+													<span class="ml-20"><strong>구분2</strong></span>
 													<select name="planType2" id="planType2" class="sel">
 														<option value="">전력(갑) II</option>
 													</select>
-													<span class="ml20"><strong>구분3</strong></span>
+													<span class="ml-20"><strong>구분3</strong></span>
 													<select name="planType3" id="planType3" class="sel">
 														<option value="">고압C 선택 III</option>
 													</select>

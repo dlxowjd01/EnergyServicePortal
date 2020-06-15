@@ -1424,7 +1424,7 @@
 				<button class="btn btn-primary dropdown-toggle bgN" type="button">
 					비교하기<span class="caret"></span>
 				</button>
-				<ul class="dropdown-menu unused chk_type offset_dropdown">
+				<ul class="dropdown-menu unused">
 					<li>
 						<div class="compare_bx">
 							<div class="bx_row aN2">
