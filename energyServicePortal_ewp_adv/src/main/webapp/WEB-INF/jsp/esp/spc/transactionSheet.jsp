@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<%@ include file="/decorators/include/taglibs.jsp" %>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ include file="/decorators/include/taglibs.jsp"%>
 
 <script type="text/javascript">
 	let today = new Date();
@@ -14,7 +14,7 @@
 		// 사용자 === 자산운영사 => show() : requestBtn
 		// 임시로 사무수탁사 버튼
 		// oid === "" ? $("#writeBtn").show() : $("#requestBtn").show();
-		$("#requestBtn").hide();
+
 		//전월
 		$('.btn_prev_mon').on('click', function () {
 			const prevMonth = today.getMonth() - 1;
@@ -40,10 +40,6 @@
 
 		$('#register').on('click', function () {
 			modalPopInit();
-		});
-
-		$('#popoverModal li').on('hover', function () {
-			
 		});
 
 		$('#repeat_interval, #repeat_unit').on('click change', function () {
@@ -96,13 +92,12 @@
 		$('#searchName').on('keyup', function () {
 			checkCalendarVisual();
 		});
-		
-		$('#detailModalTrigger').click(function(){
-			$("#detailInfoModal").toggleClass("active");
+		$('body').click(function() {
+
 		});
-		$('#closeDetailModal').on("click", function(){
-			console.log("close===");
-			$("#detailInfoModal").removeClass("active");
+
+		$('#detailModalTrigger').on("click", function(){
+			$("#detailInfoModal").toggleClass("active");
 		});
 	});
 
@@ -227,7 +222,6 @@
 				}
 			} else {
 				maintenance('get');
-				$('#popoverModal').modal('hide');
 			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			alert('처리 중 오류가 발생했습니다.');
@@ -292,7 +286,7 @@
 				let sid = v.site_id;
 				let job_info = JSON.parse(v.job_info);
 				let tableStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '"><p class="bu t' + job_type + '">[' + job_info.siteName + ']' + job_Name(job_type) + '</p></a>';
-				let modalStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');"><p class="bu t' + job_type + '">[ ' + job_info.siteName + ' ] ' + job_Name(job_type) + '</p></a>';
+				let modalStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');"><span class="bu t' + job_type + '">[ ' + job_info.siteName + ' ] ' + job_Name(job_type) + '</span><span class="fr btn_next"></span></a>';
 
 				calendar.eq(Number(job_date) - 1).append(tableStr);
 				modalData.append(
@@ -302,6 +296,13 @@
 						+ ''
 					+'</li>'
 				)
+			});
+			calendar.find("p.bu").each(function () {
+				$(this).on("mouseover click", function(){
+					$("#popoverModal").addClass("active");
+				}).on("mouseleave", function(){
+					$("#popoverModal").removeClass("active");
+				})
 			});
 		}
 
@@ -333,7 +334,6 @@
 	};
 
 	const modalPopInit = function (data) {
-		console.log=("data----", data)
 		let modalData = $("#popoverModal").find("ul.detail_list");
 		if (data == undefined) {
 			modalData.empty();
@@ -342,8 +342,6 @@
 			setJsonAutoMapping(data[0], 'popoverModal');
 			setJsonAutoMapping(JSON.parse(data[0].job_info), 'popoverModal');
 		}
-
-		$('#popoverModal').addClass("active");
 	}
 
 	const job_Name = function (type) {
@@ -433,7 +431,7 @@
 		<h2 class="popover_title"></h2>
 	</div>
 	<div class="modal-body">
-		<ul class="">
+		<ul class="detail_list">
 
 		</ul>
 	</div>
@@ -567,9 +565,9 @@
 							</div>
 						</div>
 					</div>
-					<div class="fr btn_wrap_type02">
-						<a href="/spc/maintenanceSchedulePost.do" class="btn_type fr" id="writeBtn">출금 요청서 작성</a>
-						<a href="/spc/maintenanceSchedulePost.do" class="btn_type fr" id="requestBtn">출금 요청서 신청</a>
+					<div class="btn_wrap_type03">
+						<a href="/spc/transactionHistory.do" class="btn btn_type03" id="writeBtn">입출금 관리 내역</a>
+						<a href="/spc/withdrawReqWrite.do" class="btn btn_type" id="requestBtn">출금 요청서 신청</a>
 					</div>
 				</div>
 				<div class="sch_btm_area">

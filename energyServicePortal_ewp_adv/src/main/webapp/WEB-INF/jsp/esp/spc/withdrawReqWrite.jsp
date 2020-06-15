@@ -6,10 +6,17 @@
 	const loginId = '${sessionScope.userInfo.login_id}';
 
 	$(function() {
-		// setInitList("listData");
+		// setInitList("listData"); //리스트초기화
+
 		// getDataList(page);
 
 	});
+
+	$(document).on('keyup', '#key_word', function(e) {
+		if (e.keyCode == 13) {
+			getDataList(page);
+		}
+	})
 
 	function nvl(value, str) {
 		if (isEmpty(value)) {
@@ -108,6 +115,7 @@
 									}
 								});
 							}
+							
 						}
 
 					}

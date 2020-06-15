@@ -61,16 +61,22 @@ public class SpcController {
         return "esp/spc/transactionHistory";
     }
 
-  	@RequestMapping(value = "/spc/transactionReqEdit.do")
-    public String spcTransactionReqEdit(HttpServletRequest request, HttpSession session, Model model) {
-        logger.debug("/spc/transactionReqEdit.do");
-        return "esp/spc/transactionReqEdit";
+  	@RequestMapping(value = "/spc/withdrawReqWrite.do")
+    public String spcWithdrawReqWrite(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/withdrawReqWrite.do");
+        return "esp/spc/withdrawReqWrite";
     }
 
-	@RequestMapping(value = "/spc/transactionReqReview.do")
-    public String spcTransactionReqReview(HttpServletRequest request, HttpSession session, Model model) {
-        logger.debug("/spc/transactionReqReview.do");
-        return "esp/spc/transactionReqReview";
+	@RequestMapping(value = "/spc/withdrawReqEdit.do")
+    public String spcWithdrawReqEdit(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/withdrawReqEdit.do");
+        return "esp/spc/withdrawReqEdit";
+    }
+
+	@RequestMapping(value = "/spc/withdrawReqStatus.do")
+    public String spcWithdrawReqStatus(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/withdrawReqStatus.do");
+        return "esp/spc/withdrawReqStatus";
     }
 
     @RequestMapping(value = "/spc/maintenanceSchedule.do")

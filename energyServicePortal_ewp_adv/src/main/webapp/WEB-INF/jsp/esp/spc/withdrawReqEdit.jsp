@@ -6,10 +6,17 @@
 	const loginId = '${sessionScope.userInfo.login_id}';
 
 	$(function() {
-		// setInitList("listData");
-		// getDataList(page);
+		setInitList("listData"); //리스트초기화
+
+		getDataList(page);
 
 	});
+
+	$(document).on('keyup', '#key_word', function(e) {
+		if (e.keyCode == 13) {
+			getDataList(page);
+		}
+	})
 
 	function nvl(value, str) {
 		if (isEmpty(value)) {
@@ -108,6 +115,7 @@
 									}
 								});
 							}
+							
 						}
 
 					}
@@ -131,10 +139,9 @@
 		return index + 1;
 	}
 </script>
-
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">입출금 관리 내역</h1>
+		<h1 class="page-header">출금요청서 수정 </h1>
 		<div class="time fr">
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>
@@ -143,13 +150,13 @@
 		</div>
 	</div>
 </div>
-
 <div class="row">
-	<div class="col-10">
-		<span class="tx_tit">SPC 선택</span>
-		<div class="sa_select">
+	<div class="col-lg-3 col-md-4 col-sm-4">
+		<div class="tx_btn_area">
 			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">전체 <span class="caret"></span></button>
+				<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
+					전체 <span class="caret"></span>
+				</button>
 				<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
 					<li>
 						<a href="#" data-value="INV_PV" tabindex="-1">
@@ -171,19 +178,20 @@
 					</li>
 				</ul>
 			</div>
+			<button class="btn_type" onclick="getDataList();">조회</button>
 		</div>
 	</div>
-	<div class="col-2">
-		<button type="button" id="collapseBtn" class="btn_text fr"
-			data-toggle="collapse" data-target="#searchOption"><span class="arrow_btn"></span>상세조희</button>
-	</div>
+	<!-- <div class="col-lg-9 col-md-8 col-sm-8">
+		<div class="right">
+			<a href="#;" class="save_btn" onclick="getCsvDown();">CSV 다운로드</a>
+		</div>
+	</div> -->
 </div>
-
-<div class="row content-wrapper spc_transaction">
-	<div class="col-12">
-		<div class="indiv collapse" id="searchOption">
-			<div class="spc_tbl">
-				<table class="sort_table chk_type">
+<div class="row">
+	<div class="col-lg-12">
+		<div class="indiv">
+			<div class="spc_tbl align_type">
+				<table class="sort_table chk_type mt30">
 					<thead>
 						<tr>
 							<th>
@@ -204,69 +212,12 @@
 						<tr>
 							<td><strong>입출금 구분</strong></td>
 							<td>계좌 구분</td>
-							<td>계좌 구분</td>
 							<td class="right">선택</td>
 						</tr>
 					</tbody>
 				</table>
-				
-				<button class="btn_type fr" onclick="getDataList();">조회</button>
 			</div>
-		</div>
-	</div>
-</div>
-
-<div class="row content-wrapper spc_transaction">
-	<div class="col-12">
-		<div class="indiv">
-			<div class="spc_tbl">
-				<table class="sort_table chk_type">
-					<thead> 
-						<tr>
-							<th><button class="btn_align down">기간</button></th>
-							<th><button class="btn_align down">입출금 구분</button></th>
-							<th><button class="btn_align down">계좌 구분</button></th>
-							<th><button class="btn_align down">금액</button></th>
-							<th><button class="btn_align down">최종 업데이트</button></th>
-							<th>요창자</th>
-							<th>승인자</th>
-							<th><button class="btn_align down">상태 </button></th>
-						</tr>
-					</thead>
-					<tbody id="listData">
-						<tr>
-							<td>2020-04-08</td>
-							<td>원리금</td>
-							<td>계좌 구분</td>
-							<td>200,000,000 </td>
-							<td>2020-05-08 16:43</td>
-							<td>TRUST/홍길동</td>
-							<td>신한BNPP/이신한</td>
-							<td>승인 완료</td>
-						</tr>
-						<tr>
-							<td>2020-04-08</td>
-							<td>원리금</td>
-							<td>계좌 구분</td>
-							<td>200,000,000 </td>
-							<td>2020-05-08 16:43</td>
-							<td>TRUST/홍길동</td>
-							<td>신한BNPP/이신한</td>
-							<td>승인 완료</td>
-						</tr>
-						<tr>
-							<td>2020-04-08</td>
-							<td>원리금</td>
-							<td>계좌 구분</td>
-							<td>200,000,000 </td>
-							<td>2020-05-08 16:43</td>
-							<td>TRUST/홍길동</td>
-							<td>신한BNPP/이신한</td>
-							<td>승인 완료</td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="paging_wrap" id="paging"></div>
+			<div class="paging_wrap" id="paging">
 			</div>
 		</div>
 	</div>
