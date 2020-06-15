@@ -1,0 +1,998 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.esp.system.service.impl.CmpyGrpSiteMngMapper">
+	
+	<select id="getCmpyList" parameterType="hashMap" resultType="hashMap">
+		/* 회사 목록 조회 */
+		select * from (
+			select
+				@rownum := @rownum + 1 as rnum,
+				page_tb.*
+			from (
+				select
+					comp_idx, user_idx, comp_id, comp_name, del_yn, reg_uid, reg_date, mod_uid, mod_date
+				from tb_company
+				where del_yn = 'N'
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and comp_idx = #{compIdx }
+				</if>
+			) page_tb
+			, ( select @rownum := 0 ) r
+			order by reg_date desc
+		) f_tb
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(startNum)">
+			limit #{startNum }, #{pageRowCnt }
+		</if>
+	</select>
+
+	<select id="getCmpyListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+		/* 회사 목록 건수 조회 */
+		select 
+			count(*) as listCnt 
+		from (
+			select 
+				@rownum := @rownum + 1 as rnum,
+				page_tb.*
+			from (
+					select 
+						comp_idx, user_idx, comp_id, comp_name, del_yn, reg_uid, reg_date, mod_uid, mod_date
+					from tb_company
+					where del_yn = 'N'
+			) page_tb
+			,  ( select @rownum := 0 ) r
+		) f_tb
+	</select>
+
+	<select id="getGroupList" parameterType="hashMap" resultType="hashMap">
+		/* 그룹 목록 조회 */
+		select * from (
+			select
+				@rownum := @rownum + 1 as rnum,
+				page_tb.*
+			from (
+				select
+					a.site_grp_idx, a.user_idx, a.site_grp_id, a.site_grp_name, a.comp_idx, b.comp_id, b.comp_name,
+					a.site_grp_img_path, a.site_grp_img_sname, a.site_grp_img_rname,
+					a.del_yn, a.reg_uid, a.reg_date, a.mod_uid, a.mod_date
+				from tb_site_group a, tb_company b
+				where a.comp_idx = b.comp_idx
+				and a.del_yn = 'N'
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and a.comp_idx = #{compIdx }
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and a.site_grp_idx = #{siteGrpIdx }
+				</if>
+			) page_tb
+			, ( select @rownum := 0 ) r
+			order by reg_date desc
+		) f_tb
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(startNum)">
+			limit #{startNum }, #{pageRowCnt }
+		</if>
+	</select>
+
+	<select id="getGroupListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+		/* 그룹 목록 건수 조회 */
+		select
+			count(*) as listCnt
+		from (
+			select
+				@rownum := @rownum + 1 as rnum,
+				page_tb.*
+			from (
+				select
+					a.site_grp_idx, a.user_idx, a.site_grp_id, a.site_grp_name, a.comp_idx, b.comp_id, b.comp_name,
+					a.site_grp_img_path, a.site_grp_img_sname, a.site_grp_img_rname,
+					a.del_yn, a.reg_uid, a.reg_date, a.mod_uid, a.mod_date
+				from tb_site_group a, tb_company b
+				where a.comp_idx = b.comp_idx
+				and a.del_yn = 'N'
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and a.comp_idx = #{compIdx }
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and a.site_grp_idx = #{siteGrpIdx }
+				</if>
+			) page_tb
+			, ( select @rownum := 0 ) r
+		) f_tb
+	</select>
+
+	<select id="getSiteList" parameterType="hashMap" resultType="hashMap">
+		/* 사이트 목록 조회 */
+		select * from (
+		select
+		@rownum := @rownum + 1 as rnum,
+		page_tb.*
+		from (
+		select
+		a.site_id, a.user_idx, a.site_name, a.site_grp_idx, a.area_type, a.`time_zone`,
+		a.local_ems_addr, a.local_ems_key, a.local_ems_api_ver, a.comp_idx, a.del_yn, a.reg_uid, a.reg_date, a.mod_uid,
+		a.mod_date
+		, b.site_grp_name, c.device_type_nms
+		from tb_site a
+		left outer join tb_site_group b
+		on a.site_grp_idx = b.site_grp_idx
+		left outer join (
+		select site_id, group_concat(device_type_nm SEPARATOR ', ') as device_type_nms
+		from (
+		select
+		site_id, device_type,
+		case device_type when 1 then 'PCS'
+		when 2 then 'BMS'
+		when 3 then 'PV'
+		when 4 then '부하측정기기'
+		when 5 then 'PV모니터링기기'
+		when 6 then 'ESS모니터링기기'
+		when 7 then 'iSmart'
+		when 8 then '총량기기'
+		else '' end as device_type_nm
+		from tb_device
+		group by site_id, device_type
+		) a
+		group by site_id
+		) c
+		on a.site_id = c.site_id
+		where a.del_yn = 'N'
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+			and a.comp_idx = #{compIdx }
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+			and a.site_grp_idx = #{siteGrpIdx }
+		</if>
+		) page_tb
+		, ( select @rownum := 0 ) r
+		order by reg_date desc
+		) f_tb
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(startNum)">
+			limit #{startNum }, #{pageRowCnt }
+		</if>
+	</select>
+
+	<select id="getSiteListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+		/* 사이트 목록 건수 조회 */
+		select
+		count(*) as listCnt
+		from (
+		select
+		@rownum := @rownum + 1 as rnum,
+		page_tb.*
+		from (
+		select
+		a.site_id, a.user_idx, a.site_name, a.site_grp_idx, a.area_type, a.`time_zone`,
+		a.local_ems_addr, a.local_ems_key, a.comp_idx, a.del_yn, a.reg_uid, a.reg_date, a.mod_uid, a.mod_date
+		, b.site_grp_name, c.device_type_nms
+		from tb_site a
+		left outer join tb_site_group b
+		on a.site_grp_idx = b.site_grp_idx
+		left outer join (
+		select site_id, group_concat(device_type_nm) as device_type_nms
+		from (
+		select
+		site_id, device_type,
+		case device_type when 1 then 'PCS'
+		when 2 then 'BMS'
+		when 3 then 'PV'
+		when 4 then '부하측정기기'
+		when 5 then 'PV모니터링기기'
+		when 6 then 'ESS모니터링기기'
+		when 7 then 'iSmart'
+		when 8 then '총량기기'
+		else '' end as device_type_nm
+		from tb_device
+		group by site_id, device_type
+		) a
+		group by site_id
+		) c
+		on a.site_id = c.site_id
+		where a.del_yn = 'N'
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+			and a.comp_idx = #{compIdx }
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+			and a.site_grp_idx = #{siteGrpIdx }
+		</if>
+		) page_tb
+		, ( select @rownum := 0 ) r
+		) f_tb
+	</select>
+
+	<select id="getGroupPopupList" parameterType="hashMap" resultType="hashMap">
+		/* 회사 내 그룹 목록(팝업) 조회 */
+		select
+		a.site_grp_idx, a.user_idx, a.site_grp_id, a.site_grp_name, a.comp_idx, b.comp_id, b.comp_name,
+		a.site_grp_img_path, a.site_grp_img_sname, a.site_grp_img_rname,
+		a.del_yn, a.reg_uid, a.reg_date, a.mod_uid, a.mod_date
+		from tb_site_group a, tb_company b
+		where a.comp_idx = b.comp_idx
+		and a.del_yn = 'N'
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+			and a.comp_idx = #{compIdx }
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+			and a.site_grp_idx = #{siteGrpIdx }
+		</if>
+		order by a.site_grp_name
+	</select>
+
+	<select id="getGrpSiteList" parameterType="hashMap" resultType="hashMap">
+		/* 사이트 목록(사이트그룹 내) 조회 */
+		select
+		site_id, user_idx, site_name, site_grp_idx, area_type, `time_zone`,
+		local_ems_addr, local_ems_key, comp_idx, del_yn, reg_uid, reg_date, mod_uid, mod_date
+		from tb_site
+		where del_yn = 'N'
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+			and comp_idx = #{compIdx}
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+			and site_grp_idx = #{siteGrpIdx }
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteId)">
+			and site_id = #{siteId }
+		</if>
+		order by reg_date
+	</select>
+
+	<select id="getAllSiteList" parameterType="hashMap" resultType="hashMap">
+		/* 사이트 목록(고객사 전체중 특정사이트그룹 제외) 조회 */
+		select
+		site_id, user_idx, site_name, site_grp_idx, area_type, `time_zone`,
+		local_ems_addr, local_ems_key, comp_idx, del_yn, reg_uid, reg_date, mod_uid, mod_date
+		from tb_site
+		where del_yn = 'N'
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+			and comp_idx = #{compIdx}
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+			and user_idx = #{userIdx }
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+			and (site_grp_idx != #{siteGrpIdx } or site_grp_idx is null)
+		</if>
+		order by reg_date
+	</select>
+
+	<select id="getUserGroupList" parameterType="hashMap" resultType="hashMap">
+		/* 상단 사이트그룹 목록 조회 */
+		select
+		site_grp_idx, user_idx, site_grp_id, site_grp_name, comp_idx
+		from tb_site_group
+		where del_yn = 'N'
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+			and comp_idx = #{compIdx}
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+			and site_grp_idx = #{siteGrpIdx}
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+			and user_idx = #{userIdx}
+		</if>
+		order by site_grp_name
+	</select>
+
+	<select id="getUserSiteList" parameterType="hashMap" resultType="hashMap">
+		/* 상단 사이트 목록 조회 */
+		select
+		a.site_id, a.site_name, a.site_grp_idx, a.comp_idx
+		from tb_site a, tb_site_group b
+		where a.site_grp_idx = b.site_grp_idx
+		and a.del_yn = 'N'
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+			and a.comp_idx = #{compIdx}
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+			and a.site_grp_idx = #{siteGrpIdx}
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+			and a.user_idx = #{userIdx}
+		</if>
+		order by a.site_name
+	</select>
+
+	<select id="getGMainSiteRankingList" parameterType="hashMap" resultType="hashMap">
+		/* 군관리메인 사이트 사용량 순위 목록 조회 */
+		select * from (
+		select
+		a.site_id, a.site_name,
+		ifnull(c.usg_val, 0) as "usage",
+		ifnull(d.charge, 0) as charge,
+		ifnull(e.gen_val, 0) as gen,
+		ifnull(f.reward, 0) as reward,
+		ifnull(g.usage_plan, 0) as usage_plan,
+		ifnull(h.charge_plan, 0) as charge_plan
+		from tb_site a
+		left outer join (select site_id, ifnull(sum(usg_val), 0) as usg_val from tb_usage where std_date between
+		str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) c
+		on a.site_id = c.site_id
+		left outer join (select site_id, (ifnull(sum(chg_val), 0) + ifnull(sum(dischg_val), 0)) as charge from
+		tb_ess_charge where std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+		str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) d
+		on a.site_id = d.site_id
+		left outer join (select site_id, ifnull(sum(gen_val), 0) as gen_val from tb_pv_gen where std_date between
+		str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) e
+		on a.site_id = e.site_id
+		left outer join (
+		select
+		site_id, ifnull(sum(ess_chg_incen+ess_dischg_incen), 0) as reward from tb_bill_day
+		where svc_stimestamp between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+		str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+		group by site_id
+		<!-- (select ifnull(sum(off_peak_rate + mid_peak_rate + max_peak_rate), 0) from tb_bill where site_id = a.site_id and bill_yearm between #{selTermFrom } and #{selTermTo }) +
+		(select ifnull(sum(tot_price), 0) from tb_gen_revenue where site_id = a.site_id and gen_type = '1' and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) +
+		(select cap_amt+( reduct_amt*reduce_hour*smp ) from (
+			select
+				dr_revn_idx, site_id, std_yearm, std_timestamp, std_date, reduct_cap, basic_price, max_reduct_ratio, min_reduct_ratio, profit_ratio,
+				tot_pay, basic_pay, reduct_stimestamp, reduct_etimestamp, reduct_sdate, reduct_edate, cbl_amt, act_amt, reduct_amt, smp,
+				cast(date_format(TIMEDIFF(reduct_etimestamp, reduct_stimestamp),'%H') as unsigned INTEGER) as reduce_hour,
+				( reduct_amt/reduct_cap )*100 as reduct_cap_per, ( reduct_amt*reduct_cap ) as cap_amt
+			from tb_dr_revenue ) a where site_id = a.site_id and std_yearm between #{selTermFrom } and #{selTermTo }
+		) -->
+		) f
+		on a.site_id = f.site_id
+		left outer join (select site_id, ifnull(sum(pre_usg_val), 0) as usage_plan from tb_predict_usage where std_date
+		between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by
+		site_id) g
+		on a.site_id = g.site_id
+		left outer join (select site_id, ifnull(sum(chg_val), 0) + ifnull(sum(dischg_val), 0) as charge_plan from
+		tb_ess_charge_plan where std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+		str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) h
+		on a.site_id = h.site_id
+		, tb_site_group b
+		where a.site_grp_idx = b.site_grp_idx
+		and a.del_yn = 'N'
+		<choose>
+			<when test="mapGroup == 'map'">
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+					and a.user_idx = #{userIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and a.comp_idx = #{compIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and a.site_grp_idx = #{siteGrpIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(areaType)">
+					and a.area_type = #{areaType}
+				</if>
+			</when>
+			<otherwise>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(grpIdx)">
+					and b.site_grp_idx = #{grpIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+					and b.user_idx = #{userIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and b.comp_idx = #{compIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and b.site_grp_idx = #{siteGrpIdx}
+				</if>
+			</otherwise>
+		</choose>
+		) f_tb
+		order by #{rankType} desc
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(startNum)">
+			limit #{startNum }, #{pageRowCnt }
+		</if>
+	</select>
+
+	<select id="getGMainSiteRankingListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+		/* 군관리메인 사이트 사용량 순위 목록 건수 조회 (군관리메인 사이트 목록 건수 조회와 동일) */
+		select
+		count(*) as listCnt
+		from (
+		select
+		a.site_id, a.site_name
+		from tb_site a, tb_site_group b
+		where a.site_grp_idx = b.site_grp_idx
+		and a.del_yn = 'N'
+		<choose>
+			<when test="mapGroup == 'map'">
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+					and a.user_idx = #{userIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and a.comp_idx = #{compIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and a.site_grp_idx = #{siteGrpIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(areaType)">
+					and a.area_type = #{areaType}
+				</if>
+			</when>
+			<otherwise>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(grpIdx)">
+					and b.site_grp_idx = #{grpIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+					and b.user_idx = #{userIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and b.comp_idx = #{compIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and b.site_grp_idx = #{siteGrpIdx}
+				</if>
+			</otherwise>
+		</choose>
+		) f_tb
+	</select>
+
+	<select id="getGMainAreaSiteCntList" parameterType="hashMap" resultType="hashMap">
+		/* 군관리메인 지역별 사이트 건수 목록 조회 */
+		select
+		a.area_type, count(*) cnt
+		from tb_site a, tb_site_group b
+		where a.site_grp_idx = b.site_grp_idx
+		and a.del_yn = 'N'
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+			and a.user_idx = #{userIdx}
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+			and a.comp_idx = #{compIdx}
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+			and a.site_grp_idx = #{siteGrpIdx}
+		</if>
+		group by a.area_type
+	</select>
+
+	<select id="getGMainSiteList" parameterType="hashMap" resultType="hashMap">
+		/* 군관리메인 사이트 목록 조회 */
+		select * from (
+		select
+		a.site_id, a.site_name, b.site_grp_idx,
+		(select count( case when device_type in ('4', '6', '7', '8') then 1 end ) from tb_device where site_id =
+		a.site_id) ioe,
+		(select count( case when device_type = '1' then 1 end ) from tb_device where site_id = a.site_id) pcs,
+		(select count( case when device_type = '2' then 1 end ) from tb_device where site_id = a.site_id) bms,
+		(select count( case when device_type in ('3', '5') then 1 end ) from tb_device where site_id = a.site_id) pv,
+		ifnull(c.usg_val, 0) as usg,
+		ifnull(d.charge, 0) as charge,
+		ifnull(e.gen_val, 0) as gen,
+		ifnull(f.reward, 0) as reward
+		from tb_site a
+		left outer join (select site_id, ifnull(sum(usg_val), 0) as usg_val from tb_usage where std_date between
+		str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) c
+		on a.site_id = c.site_id
+		left outer join (select site_id, (ifnull(sum(chg_val), 0) + ifnull(sum(dischg_val), 0)) as charge from
+		tb_ess_charge where std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+		str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) d
+		on a.site_id = d.site_id
+		left outer join (select site_id, ifnull(sum(gen_val), 0) as gen_val from tb_pv_gen where std_date between
+		str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) e
+		on a.site_id = e.site_id
+		left outer join (
+		select
+		site_id, ifnull(sum(ess_chg_incen+ess_dischg_incen), 0) as reward from tb_bill_day
+		where svc_stimestamp between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+		str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+		group by site_id
+		<!-- (select ifnull(sum(off_peak_rate + mid_peak_rate + max_peak_rate), 0) from tb_bill where site_id = a.site_id and bill_yearm between #{selTermFrom } and #{selTermTo }) +
+		(select ifnull(sum(tot_price), 0) from tb_gen_revenue where site_id = a.site_id and gen_type = '1' and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) +
+		(select cap_amt+( reduct_amt*reduce_hour*smp ) from (
+			select
+				dr_revn_idx, site_id, std_yearm, std_timestamp, std_date, reduct_cap, basic_price, max_reduct_ratio, min_reduct_ratio, profit_ratio,
+				tot_pay, basic_pay, reduct_stimestamp, reduct_etimestamp, reduct_sdate, reduct_edate, cbl_amt, act_amt, reduct_amt, smp,
+				cast(date_format(TIMEDIFF(reduct_etimestamp, reduct_stimestamp),'%H') as unsigned INTEGER) as reduce_hour,
+				( reduct_amt/reduct_cap )*100 as reduct_cap_per, ( reduct_amt*reduct_cap ) as cap_amt
+			from tb_dr_revenue ) a where site_id = a.site_id and std_yearm between #{selTermFrom } and #{selTermTo }
+		) -->
+		) f
+		on a.site_id = f.site_id
+		, tb_site_group b
+		where a.site_grp_idx = b.site_grp_idx
+		and a.del_yn = 'N'
+		<choose>
+			<when test="mapGroup == 'map'">
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+					and a.user_idx = #{userIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and a.comp_idx = #{compIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and a.site_grp_idx = #{siteGrpIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(areaType)">
+					and a.area_type = #{areaType}
+				</if>
+			</when>
+			<otherwise>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(grpIdx)">
+					and b.site_grp_idx = #{grpIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+					and b.user_idx = #{userIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and b.comp_idx = #{compIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and b.site_grp_idx = #{siteGrpIdx}
+				</if>
+			</otherwise>
+		</choose>
+		) f_tb
+		order by usg desc
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(startNum)">
+			limit #{startNum }, #{pageRowCnt }
+		</if>
+	</select>
+
+	<select id="getGMainSiteListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+		/* 군관리메인 사이트 목록 건수 조회 */
+		select
+		count(*) as listCnt
+		from (
+		select
+		a.site_id, a.site_name, b.site_grp_idx
+		from tb_site a, tb_site_group b
+		where a.site_grp_idx = b.site_grp_idx
+		and a.del_yn = 'N'
+		<choose>
+			<when test="mapGroup == 'map'">
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+					and a.user_idx = #{userIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and a.comp_idx = #{compIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and a.site_grp_idx = #{siteGrpIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(areaType)">
+					and a.area_type = #{areaType}
+				</if>
+			</when>
+			<otherwise>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(grpIdx)">
+					and b.site_grp_idx = #{grpIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+					and b.user_idx = #{userIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and b.comp_idx = #{compIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and b.site_grp_idx = #{siteGrpIdx}
+				</if>
+			</otherwise>
+		</choose>
+		) f_tb
+	</select>
+
+	<select id="getGMainGroupList" parameterType="hashMap" resultType="hashMap">
+		/* 군관리메인 사이트그룹 목록 조회 */
+		select
+		site_grp_idx, user_idx, site_grp_id, site_grp_name
+		from tb_site_group
+		where del_yn = 'N'
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+			and user_idx = #{userIdx}
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+			and comp_idx = #{compIdx}
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+			and site_grp_idx = #{siteGrpIdx}
+		</if>
+		order by site_grp_name
+	</select>
+
+	<select id="getCmpyDetail" parameterType="hashMap" resultType="hashMap">
+		/* 회사 한건 조회 */
+		select 
+			comp_idx, user_idx, comp_id, comp_name, del_yn, reg_uid, reg_date, mod_uid, mod_date
+		from tb_company
+		where del_yn = 'N'
+		and comp_idx = #{compIdx }
+	</select>
+
+	<select id="getGroupDetail" parameterType="hashMap" resultType="hashMap">
+		/* 그룹 한건 조회 */
+		select 
+			site_grp_idx, user_idx, site_grp_id, site_grp_name, comp_idx, site_grp_img_path, site_grp_img_sname, site_grp_img_rname, del_yn, reg_uid, reg_date, mod_uid, mod_date 
+		from tb_site_group
+		where del_yn = 'N'
+		and site_grp_idx = #{siteGrpIdx }
+	</select>
+
+	<select id="getSiteGroupIdChk" parameterType="hashMap" resultType="java.lang.Integer">
+		/* 그룹ID 중복여부 체크 */
+		select 
+			count(*) as cnt 
+		from tb_site_group
+		where site_grp_id = #{siteGrpId }
+	</select>
+
+	<select id="getSiteDetail" parameterType="hashMap" resultType="hashMap">
+		/* 사이트 한건 조회 */
+		select 
+			site_id, user_idx, site_name, site_grp_idx, area_type, `time_zone`, 
+			local_ems_addr, local_ems_key, local_ems_api_ver, comp_idx, del_yn, reg_uid, reg_date, mod_uid, mod_date
+		from tb_site
+		where del_yn = 'N'
+		and site_id = #{siteId }
+	</select>
+
+	<!-- greatman detail begin -->
+	<select id="getGMainSiteRankingTotalDetail" parameterType="hashMap" resultType="hashMap">
+		/* 군관리메인 사이트 사용량 순위 누적/예상 총합 조회 */
+		select
+		sum(usg_val) "usage",
+		sum(charge) charge,
+		sum(gen) gen,
+		sum(reward) reward,
+		sum(usage_plan) usage_plan,
+		sum(charge_plan) charge_plan
+		from (
+		select
+		ifnull(c.usg_val, 0) as usg_val,
+		ifnull(d.charge, 0) as charge,
+		ifnull(e.gen_val, 0) as gen,
+		ifnull(f.reward, 0) as reward,
+		ifnull(g.usage_plan, 0) as usage_plan,
+		ifnull(h.charge_plan, 0) as charge_plan
+		from tb_site a
+		left outer join (select site_id, ifnull(sum(usg_val), 0) as usg_val from tb_usage where std_date between
+		str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) c
+		on a.site_id = c.site_id
+		left outer join (select site_id, (ifnull(sum(chg_val), 0) + ifnull(sum(dischg_val), 0)) as charge from
+		tb_ess_charge where std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+		str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) d
+		on a.site_id = d.site_id
+		left outer join (select site_id, ifnull(sum(gen_val), 0) as gen_val from tb_pv_gen where std_date between
+		str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) e
+		on a.site_id = e.site_id
+		left outer join (
+		select
+		site_id, ifnull(sum(ess_chg_incen+ess_dischg_incen), 0) as reward from tb_bill_day
+		where svc_stimestamp between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+		str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+		group by site_id
+		<!-- (select ifnull(sum(off_peak_rate + mid_peak_rate + max_peak_rate), 0) from tb_bill where site_id = a.site_id and bill_yearm between #{selTermFrom } and #{selTermTo }) +
+		(select ifnull(sum(tot_price), 0) from tb_gen_revenue where site_id = a.site_id and gen_type = '1' and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) +
+		(select cap_amt+( reduct_amt*reduce_hour*smp ) from (
+			select
+				dr_revn_idx, site_id, std_yearm, std_timestamp, std_date, reduct_cap, basic_price, max_reduct_ratio, min_reduct_ratio, profit_ratio,
+				tot_pay, basic_pay, reduct_stimestamp, reduct_etimestamp, reduct_sdate, reduct_edate, cbl_amt, act_amt, reduct_amt, smp,
+				cast(date_format(TIMEDIFF(reduct_etimestamp, reduct_stimestamp),'%H') as unsigned INTEGER) as reduce_hour,
+				( reduct_amt/reduct_cap )*100 as reduct_cap_per, ( reduct_amt*reduct_cap ) as cap_amt
+			from tb_dr_revenue ) a where site_id = a.site_id and std_yearm between #{selTermFrom } and #{selTermTo }
+		) -->
+		) f
+		on a.site_id = f.site_id
+		left outer join (select site_id, ifnull(sum(pre_usg_val), 0) as usage_plan from tb_predict_usage where std_date
+		between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by
+		site_id) g
+		on a.site_id = g.site_id
+		left outer join (select site_id, ifnull(sum(chg_val), 0) + ifnull(sum(dischg_val), 0) as charge_plan from
+		tb_ess_charge_plan where std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+		str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) h
+		on a.site_id = h.site_id
+		, tb_site_group b
+		where a.site_grp_idx = b.site_grp_idx
+		and a.del_yn = 'N'
+		<choose>
+			<when test="mapGroup == 'map'">
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+					and a.user_idx = #{userIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and a.comp_idx = #{compIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and a.site_grp_idx = #{siteGrpIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(areaType)">
+					and a.area_type = #{areaType}
+				</if>
+			</when>
+			<otherwise>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(grpIdx)">
+					and b.site_grp_idx = #{grpIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+					and b.user_idx = #{userIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and b.comp_idx = #{compIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and b.site_grp_idx = #{siteGrpIdx}
+				</if>
+			</otherwise>
+		</choose>
+		) f_tb
+	</select>
+
+	<select id="getGMainSiteTotalDetail" parameterType="hashMap" resultType="hashMap">
+		/* 군관리메인 사이트 사용량 총합계 조회 */
+		select
+		site_grp_name, site_grp_img_path, site_grp_img_sname,
+		sum(usg_val) "usage",
+		sum(charge) charge,
+		sum(gen) gen,
+		sum(reward) reward
+		from
+		(
+		select
+		b.site_grp_name, b.site_grp_img_path, b.site_grp_img_sname,
+		ifnull(c.usg_val, 0) as usg_val,
+		ifnull(d.charge, 0) as charge,
+		ifnull(e.gen_val, 0) as gen,
+		ifnull(f.reward, 0) as reward
+		from tb_site a
+		left outer join (select site_id, ifnull(sum(usg_val), 0) as usg_val from tb_usage where std_date between
+		str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) c
+		on a.site_id = c.site_id
+		left outer join (select site_id, (ifnull(sum(chg_val), 0) + ifnull(sum(dischg_val), 0)) as charge from
+		tb_ess_charge where std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+		str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) d
+		on a.site_id = d.site_id
+		left outer join (select site_id, ifnull(sum(gen_val), 0) as gen_val from tb_pv_gen where std_date between
+		str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s') group by site_id) e
+		on a.site_id = e.site_id
+		left outer join (
+		select
+		site_id, ifnull(sum(ess_chg_incen+ess_dischg_incen), 0) as reward from tb_bill_day
+		where svc_stimestamp between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+		str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+		group by site_id
+		<!-- (select ifnull(sum(off_peak_rate + mid_peak_rate + max_peak_rate), 0) from tb_bill where site_id = a.site_id and bill_yearm between #{selTermFrom } and #{selTermTo }) +
+		(select ifnull(sum(tot_price), 0) from tb_gen_revenue where site_id = a.site_id and gen_type = '1' and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and str_to_date(#{selTermTo },'%Y%m%d%H%i%s')) +
+		(select cap_amt+( reduct_amt*reduce_hour*smp ) from (
+			select
+				dr_revn_idx, site_id, std_yearm, std_timestamp, std_date, reduct_cap, basic_price, max_reduct_ratio, min_reduct_ratio, profit_ratio,
+				tot_pay, basic_pay, reduct_stimestamp, reduct_etimestamp, reduct_sdate, reduct_edate, cbl_amt, act_amt, reduct_amt, smp,
+				cast(date_format(TIMEDIFF(reduct_etimestamp, reduct_stimestamp),'%H') as unsigned INTEGER) as reduce_hour,
+				( reduct_amt/reduct_cap )*100 as reduct_cap_per, ( reduct_amt*reduct_cap ) as cap_amt
+			from tb_dr_revenue ) a where site_id = a.site_id and std_yearm between #{selTermFrom } and #{selTermTo }
+		) -->
+		) f
+		on a.site_id = f.site_id
+		, tb_site_group b
+		where a.site_grp_idx = b.site_grp_idx
+		and a.del_yn = 'N'
+		<choose>
+			<when test="mapGroup == 'map'">
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+					and a.user_idx = #{userIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and a.comp_idx = #{compIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and a.site_grp_idx = #{siteGrpIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(areaType)">
+					and a.area_type = #{areaType}
+				</if>
+			</when>
+			<otherwise>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(grpIdx)">
+					and b.site_grp_idx = #{grpIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(userIdx)">
+					and b.user_idx = #{userIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+					and b.comp_idx = #{compIdx}
+				</if>
+				<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+					and b.site_grp_idx = #{siteGrpIdx}
+				</if>
+			</otherwise>
+		</choose>
+		) f_tb
+	</select>
+
+	<insert id="insertCmpy" parameterType="hashMap">
+		/* 회사 등록 */
+		insert into tb_company (
+			user_idx, /* 사용자식별자 */
+			comp_name,   /* 회사명 */
+			comp_id,   /* 회사ID */
+			del_yn, 
+			reg_uid, 
+			reg_date
+		)
+		values (
+			#{userIdx }, 
+			#{compName }, 
+			#{compId }, 
+			'N', 
+			#{regUid }, 
+			now()
+		)
+	</insert>
+
+	<insert id="insertGroup" parameterType="hashMap">
+		/* 그룹 등록 */
+		insert into tb_site_group (
+		user_idx, /* 사용자식별자 */
+		site_grp_id, /* 사이트그룹ID */
+		site_grp_name, /* 사이트그룹명 */
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+			comp_idx, /* 회사식별자 */
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpImgPath)">
+			site_grp_img_path, /* 사이트그룹 이미지경로 */
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpImgSname)">
+			site_grp_img_sname, /* 사이트그룹 저장이미지명 */
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpImgRname)">
+			site_grp_img_rname, /* 사이트그룹 실제이미지명 */
+		</if>
+		del_yn,
+		reg_uid,
+		reg_date
+		)
+		values (
+		#{userIdx },
+		#{siteGrpId },
+		#{siteGrpName },
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+			#{compIdx }, /* 회사식별자 */
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpImgPath)">
+			#{siteGrpImgPath }, /* 사이트그룹 이미지경로 */
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpImgSname)">
+			#{siteGrpImgSname }, /* 사이트그룹 저장이미지명 */
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpImgRname)">
+			#{siteGrpImgRname }, /* 사이트그룹 실제이미지명 */
+		</if>
+		'N',
+		#{regUid },
+		now()
+		)
+	</insert>
+
+	<insert id="insertSite" parameterType="hashMap">
+		/* 사이트 등록 */
+		insert into tb_site (
+			site_id,   /* 사이트ID */
+			user_idx,   /* 사용자식별자 */
+			site_name,   /* 사이트명 */
+			site_grp_idx,   /* 사이트그룹식별자 */
+			area_type,   /* 지역구분(01:서울,02:부산,03:대구,04:인천,05:광주,06:대전,07:울산,08:세종,09:경기,10:강원,11:충북,12:충남,13:전북,14:전남,15:경북,16:경남,17:제주) */
+			`time_zone`,   /* 타임Zone(예:GMT+8) */
+			local_ems_addr,   /* Local EMS 주소 */
+			local_ems_key,   /* Local EMS 암호키 */
+			local_ems_api_ver,   /* Local EMS api 버전 */
+			comp_idx,   /* 회사식별자 */
+			del_yn, 
+			reg_uid, 
+			reg_date
+		)
+		values (
+			#{siteId }, 
+			#{userIdx }, 
+			#{siteName }, 
+			#{siteGrpIdx }, 
+			#{areaType }, 
+			'GMT+8', 
+			#{localEmsAddr }, 
+			#{localEmsKey }, 
+			#{localEmsApiVer }, 
+			#{compIdx }, 
+			'N', 
+			#{regUid }, 
+			now()
+		)
+	</insert>
+
+	<update id="updateCmpy" parameterType="hashMap">
+		/* 회사 정보 수정 */
+		update tb_company
+		set
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compName)">
+			comp_name = #{compName }, /* 회사명 */
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compId)">
+			comp_id = #{compId }, /* 회사ID */
+		</if>
+		mod_uid = #{modUid },
+		mod_date = now()
+		where comp_idx = #{compIdx }
+	</update>
+
+	<update id="updateGroup" parameterType="hashMap">
+		/* 그룹 정보 수정 */
+		update tb_site_group
+		set
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpId)">
+			site_grp_id = #{siteGrpId }, /* 사이트그룹ID */
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpName)">
+			site_grp_name = #{siteGrpName }, /* 사이트그룹명 */
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+			comp_idx = #{compIdx }, /* 회사식별자 */
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpImgPath)">
+			site_grp_img_path = #{siteGrpImgPath }, /* 사이트그룹 이미지경로 */
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpImgSname)">
+			site_grp_img_sname = #{siteGrpImgSname }, /* 사이트그룹 저장이미지명 */
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpImgRname)">
+			site_grp_img_rname = #{siteGrpImgRname }, /* 사이트그룹 실제이미지명 */
+		</if>
+		mod_uid = #{modUid },
+		mod_date = now()
+		where site_grp_idx = #{siteGrpIdx }
+	</update>
+
+	<update id="updateSite" parameterType="hashMap">
+		/* 사이트 정보 수정 */
+		update tb_site
+		set
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteName)">
+			site_name = #{siteName }, /* 사이트명 */
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteGrpIdx)">
+			site_grp_idx = #{siteGrpIdx }, /* 사이트그룹식별자 */
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(areaType)">
+			area_type = #{areaType }, /*
+			지역구분(01:서울,02:부산,03:대구,04:인천,05:광주,06:대전,07:울산,08:세종,09:경기,10:강원,11:충북,12:충남,13:전북,14:전남,15:경북,16:경남,17:제주)
+			*/
+		</if>
+		<!-- `time_zone`	= '',   /* 타임Zone(예:GMT+8) */ -->
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(localEmsAddr)">
+			local_ems_addr = #{localEmsAddr }, /* Local EMS 주소 */
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(localEmsKey)">
+			local_ems_key = #{localEmsKey }, /* Local EMS 암호키 */
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(localEmsApiVer)">
+			local_ems_api_ver = #{localEmsApiVer }, /* Local EMS 암호키 */
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(compIdx)">
+			comp_idx = #{compIdx }, /* 회사식별자 */
+		</if>
+		mod_uid = #{modUid },
+		mod_date =now()
+		where site_id = #{siteId }
+	</update>
+
+	<update id="deleteCmpy" parameterType="hashMap">
+		/* 회사 삭제 */
+		update tb_company
+		set 
+			del_yn		= 'Y', 
+			mod_uid	   = #{modUid }, 
+			mod_date	  = now()
+		where comp_idx = #{compIdx }
+	</update>
+
+	<update id="deleteGroup" parameterType="hashMap">
+		/* 그룹 삭제 */
+		delete from tb_site_group
+		where site_grp_idx = #{siteGrpIdx }
+	</update>
+
+	<update id="deleteSiteSet" parameterType="hashMap">
+		/* 사이트설정 삭제 */
+		delete from tb_site_set
+		where site_id = #{siteId }
+	</update>
+
+	<update id="deleteSite" parameterType="hashMap">
+		/* 사이트 삭제 */
+		delete from tb_site
+		where site_id = #{siteId }
+	</update>
+
+</mapper>
