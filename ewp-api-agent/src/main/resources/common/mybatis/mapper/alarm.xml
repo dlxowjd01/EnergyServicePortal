@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.ewp.api.dao.AlarmDao">
+    <resultMap type="Alarm" id="AlarmRM">
+        <id property="alarmIdx" column="alarm_idx" javaType="Long"></id><!--알람식별자-->
+        <result property="siteId" column="site_id" javaType="String"></result><!--사이트ID-->
+        <result property="deviceId" column="device_id" javaType="String"></result><!--장치ID-->
+        <result property="deviceType" column="device_type" javaType="String"></result><!--장치구분(1:부하측정기기,2:PV모니터링기기,3:ESS모니터링기기,4:PCS,5:BMS,6:PV)-->
+        <result property="stdTimestamp" column="std_timestamp" javaType="String"></result><!--기준타임스탬프-->
+        <result property="stdDate" column="std_date" javaType="Date"></result><!--기준일시-->
+        <result property="alarmType" column="alarm_type" javaType="String"></result><!--알람구분(1:비상,2:주의)-->
+        <result property="alarmCfmYn" column="alarm_cfm_yn" javaType="String"></result><!--알람확인여부(Y:예,N:아니오)-->
+        <result property="alarmCfmDate" column="alarm_cfm_date" javaType="Date"></result><!--알람확인일시-->
+        <result property="alarmCfmUid" column="alarm_cfm_uid" javaType="String"></result><!--알람확인자ID-->
+        <result property="alarmNote" column="alarm_note" javaType="String"></result><!--알람조치내역-->
+        <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
+    </resultMap>
+    <insert id="insert" parameterType="Alarm">
+        /* 알람 등록 */
+        INSERT INTO tb_alarm (
+               site_id,
+               device_id,
+               device_type,
+               std_timestamp,
+               std_date,
+               alarm_type,
+               alarm_cfm_yn,
+               alarm_cfm_date,
+               alarm_cfm_uid,
+               alarm_note,
+               reg_date
+             ) VALUES (
+               #{entity.siteId},
+               #{entity.deviceId},
+               #{entity.deviceType},
+               #{entity.stdTimestamp},
+               #{entity.stdDate},
+               #{entity.alarmType},
+               #{entity.alarmCfmYn},
+               #{entity.alarmCfmDate},
+               #{entity.alarmCfmUid},
+               #{entity.alarmNote},
+               #{entity.regDate})
+        <selectKey resultType="Long" keyProperty="entity.alarmIdx">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <update id="update" parameterType="Alarm">
+        /* 알람 수정 */
+        UPDATE tb_alarm 
+               <set>
+               <if test="entity.siteId != null">
+               site_id = #{entity.siteId},
+               </if>
+               <if test="entity.deviceId != null">
+               device_id = #{entity.deviceId},
+               </if>
+               <if test="entity.deviceType != null">
+               device_type = #{entity.deviceType},
+               </if>
+               <if test="entity.stdTimestamp != null">
+               std_timestamp = #{entity.stdTimestamp},
+               </if>
+               <if test="entity.stdDate != null">
+               std_date = #{entity.stdDate},
+               </if>
+               <if test="entity.alarmType != null">
+               alarm_type = #{entity.alarmType},
+               </if>
+               <if test="entity.alarmCfmYn != null">
+               alarm_cfm_yn = #{entity.alarmCfmYn},
+               </if>
+               <if test="entity.alarmCfmDate != null">
+               alarm_cfm_date = #{entity.alarmCfmDate},
+               </if>
+               <if test="entity.alarmCfmUid != null">
+               alarm_cfm_uid = #{entity.alarmCfmUid},
+               </if>
+               <if test="entity.alarmNote != null">
+               alarm_note = #{entity.alarmNote},
+               </if>
+               <if test="entity.regDate != null">
+               reg_date = #{entity.regDate},
+               </if>
+               </set>
+         WHERE alarm_idx = #{entity.alarmIdx}
+    </update>
+    <delete id="delete" parameterType="Alarm">
+        /* 알람 삭제 */
+        DELETE FROM tb_alarm 
+         WHERE alarm_idx = #{alarmIdx}
+    </delete>
+    <select id="selectOne" resultMap="AlarmRM">
+        /* 알람 상세조회 */
+        SELECT alarm_idx,
+               site_id,
+               device_id,
+               device_type,
+               std_timestamp,
+               std_date,
+               alarm_type,
+               alarm_cfm_yn,
+               alarm_cfm_date,
+               alarm_cfm_uid,
+               alarm_note,
+               reg_date
+          FROM tb_alarm
+         WHERE alarm_idx = #{alarmIdx}
+    </select>
+    <select id="selectList" resultMap="AlarmRM">
+        /* 알람 목록조회 */
+        SELECT alarm_idx,
+               site_id,
+               device_id,
+               device_type,
+               std_timestamp,
+               std_date,
+               alarm_type,
+               alarm_cfm_yn,
+               alarm_cfm_date,
+               alarm_cfm_uid,
+               alarm_note,
+               reg_date
+          FROM tb_alarm
+               <if test="pageable != null">
+         WHERE LIMIT #{pageable.start}, #{pageable.end}
+               </if>
+    </select>
+    <select id="selectListCount" resultType="int">
+        /* 알람 전체 개수 조회 */
+        SELECT COUNT(*) AS CNT
+          FROM tb_alarm
+         WHERE alarm_idx = #{alarmIdx}
+    </select>
+</mapper>

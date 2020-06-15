@@ -17,29 +17,66 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: circleci-demo-java-spring-{{ checksum "energyServicePortal_ewp_adv/pom.xml" }}
+          key: circleci-demo-java-spring-{{ checksum "ewpsp/pom.xml" }}-{{ checksum "ewp-api-agent/pom.xml" }}
 
-      - run: mvn -f energyServicePortal_ewp_adv/pom.xml dependency:go-offline
+      - run: mvn -f ewpsp/pom.xml dependency:go-offline
+
+      - run: mvn -f ewp-api-agent/pom.xml dependency:go-offline
 
       - save_cache:
           paths:
             - ~/.m2
-          key: circleci-demo-java-spring-{{ checksum "energyServicePortal_ewp_adv/pom.xml" }}
+          key: circleci-demo-java-spring-{{ checksum "ewpsp/pom.xml" }}-{{ checksum "ewp-api-agent/pom.xml" }}
 
       # run tests!
+      #- run: mvn integration-test
+      - run:
+          name: static code analysis
+          command: |
+            mv settings.xml ~/.m2/settings.xml
+            mvn -f ewpsp/pom.xml clean package sonar:sonar
+            mvn -f ewp-api-agent/pom.xml clean package sonar:sonar
 
-      - run: mvn -f energyServicePortal_ewp_adv/pom.xml clean package -DskipTests=true
+      - run: mvn -f ewpsp/pom.xml package clean package -DskipTests=true
+
+      - run: mvn -f ewp-api-agent/pom.xml clean package -DskipTests=true
 
       - setup_remote_docker:
           docker_layer_caching: true
 
       - run:
-          name: Move build files from target directory to root
+          name: Build and push SP Docker image (war)
           command: |
-            cp energyServicePortal_ewp_adv/target/energyServicePortal-1.0.0.war .
+            cp ewpsp/target/ewpsp.war .
+            DOCKERHUB_REPO=enertalk/ewp
+            IMAGE_TAG=ewpsp-$CIRCLE_SHA1
+            IMAGE_DEFAULT_TAG=ewpsp-latest
+            IMAGE_NAME=$DOCKERHUB_REPO:$IMAGE_TAG
+            IMAGE_DEFAULT_NAME=$DOCKERHUB_REPO:$IMAGE_DEFAULT_TAG
+            docker build -t $IMAGE_NAME -t $IMAGE_DEFAULT_NAME -f ~/circleci-demo-java-spring/docker/ewpsp/Dockerfile .
+            docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
+            docker push $IMAGE_NAME
+            docker push $IMAGE_DEFAULT_NAME
+
+      - run:
+          name: Build and push SP Docker image (jar)
+          command: |
+            cp ewp-api-agent/target/ewp-api-0.0.1-SNAPSHOT.jar .
+            DOCKERHUB_REPO=enertalk/ewp
+            IMAGE_TAG=ewp-api-$CIRCLE_SHA1
+            IMAGE_DEFAULT_TAG=ewp-api-latest
+            IMAGE_NAME=$DOCKERHUB_REPO:$IMAGE_TAG
+            IMAGE_DEFAULT_NAME=$DOCKERHUB_REPO:$IMAGE_DEFAULT_TAG
+            docker build -t $IMAGE_NAME -t $IMAGE_DEFAULT_NAME -f ~/circleci-demo-java-spring/docker/ewp-api/Dockerfile .
+            docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
+            docker push $IMAGE_NAME
+            docker push $IMAGE_DEFAULT_NAME
 
       - store_artifacts:
-          path: energyServicePortal_ewp_adv/target/energyServicePortal-1.0.0.war
+          path: ewpsp/target/ewpsp.war
+
+      - store_artifacts:
+          path: ewp-api-agent/target/ewp-api-0.0.1-SNAPSHOT.jar
 
       - store_artifacts:
           path: scripts/deploy.sh
@@ -53,7 +90,8 @@ jobs:
       - persist_to_workspace:
           root: ~/circleci-demo-java-spring
           paths:
-            - energyServicePortal-1.0.0.war
+            - ewpsp.war
+            - ewp-api-0.0.1-SNAPSHOT.jar
             - scripts/deploy.sh
             - scripts/health-check.sh
             - sitespeed.io/login.js
@@ -68,37 +106,16 @@ jobs:
           name: Generate ssh key
           command: |
             mkdir ~/.ssh
-            chmod 700 ~/.ssh
-            echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-            if [ "$CIRCLE_BRANCH" = "khnp" ] || [ "$CIRCLE_BRANCH" = "iDERMS-SaaS" ]; then
-              echo -e "id_rsa file is created in $CIRCLE_BRANCH branch"
-              echo -e $SSH_PRIVATE_KEY_KHNP > ~/.ssh/id_rsa
-            else
-              echo -e $SSH_PRIVATE_KEY > ~/.ssh/id_rsa
-            fi
-            chmod 600 ~/.ssh/id_rsa
+            echo -e $SSH_PRIVATE_KEY > ~/.ssh/ewp.pem
+            chmod 600 ~/.ssh/ewp.pem
       - run:
           name: Build and push SP Docker image (jar)
           command: |
-            if [ "$CIRCLE_BRANCH" = "khnp" ]; then
-              REMOTE_SERVER=$SSH_USER@$SSH_HOST_KHNP
-              scp ~/circleci-demo-java-spring/ewpsp.war $REMOTE_SERVER:/home/ubuntu/build
-              scp ~/circleci-demo-java-spring/ewp-api-0.0.1-SNAPSHOT.jar $REMOTE_SERVER:/home/ubuntu/build
-              scp ~/circleci-demo-java-spring/scripts/*.sh $REMOTE_SERVER:/home/ubuntu/
-              ssh $REMOTE_SERVER 'chmod 755 ./deploy.sh; ./deploy.sh; chmod 755 ./health-check.sh; ./health-check.sh'
-            elif [ "$CIRCLE_BRANCH" = "iDERMS-SaaS" ]; then
-              echo -e "build in iDERMS-SaaS"
-              REMOTE_SERVER=$SSH_USER_SAAS@$SSH_HOST_SAAS
-              scp ~/circleci-demo-java-spring/energyServicePortal-1.0.0.war $REMOTE_SERVER:/usr/local/apache-tomcat-9.0.34/webapps
-              scp ~/circleci-demo-java-spring/scripts/*.sh $REMOTE_SERVER:/home/ec2-user/
-              ssh $REMOTE_SERVER 'chmod 755 ./deploy.sh; ./deploy.sh; chmod 755 ./health-check.sh; ./health-check.sh'
-            else
-              REMOTE_SERVER=$SSH_USER@$SSH_HOST
-              scp -i ~/.ssh/ewp.pem -o StrictHostKeyChecking=no ~/circleci-demo-java-spring/ewpsp.war $REMOTE_SERVER:/home/ubuntu/build
-              scp -i ~/.ssh/ewp.pem -o StrictHostKeyChecking=no ~/circleci-demo-java-spring/ewp-api-0.0.1-SNAPSHOT.jar $REMOTE_SERVER:/home/ubuntu/build
-              scp -i ~/.ssh/ewp.pem -o StrictHostKeyChecking=no ~/circleci-demo-java-spring/scripts/*.sh $SSH_USER@$SSH_HOST:/home/ubuntu/
-              ssh -i ~/.ssh/ewp.pem -o StrictHostKeyChecking=no $REMOTE_SERVER 'chmod 755 ./deploy.sh; ./deploy.sh;'
-            fi
+            REMOTE_SERVER=$SSH_USER@$SSH_HOST
+            scp -i ~/.ssh/ewp.pem -o StrictHostKeyChecking=no ~/circleci-demo-java-spring/ewpsp.war $REMOTE_SERVER:/home/ubuntu/build
+            scp -i ~/.ssh/ewp.pem -o StrictHostKeyChecking=no ~/circleci-demo-java-spring/ewp-api-0.0.1-SNAPSHOT.jar $REMOTE_SERVER:/home/ubuntu/build
+            scp -i ~/.ssh/ewp.pem -o StrictHostKeyChecking=no ~/circleci-demo-java-spring/scripts/*.sh $SSH_USER@$SSH_HOST:/home/ubuntu/
+            ssh -i ~/.ssh/ewp.pem -o StrictHostKeyChecking=no $REMOTE_SERVER 'chmod 755 ./deploy.sh; ./deploy.sh; chmod 755 ./health-check.sh; ./health-check.sh'
 
   test-sitespeed:
     machine: true
@@ -141,10 +158,7 @@ workflows:
             - build
           filters:
             branches:
-              only:
-                - master
-                - khnp
-                - iDERMS-SaaS
+              only: master
       - test-sitespeed:
           requires:
             - build

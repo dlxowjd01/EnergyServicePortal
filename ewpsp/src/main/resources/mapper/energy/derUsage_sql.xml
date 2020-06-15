@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="derUsage">
+    <select id="getESSUsageList" resultType="hashMap">
+        /* ess 사용량 조회 */
+        select
+        site_id, std_timestamp, sum(dischg_val) as usg_val
+        from (
+        select
+        ess_chg_idx, site_id, device_id, std_timestamp, std_date, chg_val, dischg_val, reg_date
+        from tb_ess_charge
+        where site_id = #{siteId }
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
+            and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+            str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+        </if>
+        ) a
+        group by site_id, std_timestamp
+        order by std_timestamp
+    </select>
+
+    <select id="getPVUsageList" resultType="hashMap">
+        /* pv 사용량 조회 */
+        select
+        site_id, std_timestamp, sum(usg_val) as usg_val
+        from (
+        select
+        pv_usg_idx, site_id, device_id, std_timestamp, std_date, usg_val, reg_date, mod_date
+        from tb_pv_usage
+        where site_id = #{siteId }
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
+            and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+            str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+        </if>
+        ) a
+        group by site_id, std_timestamp
+        order by std_timestamp
+    </select>
+
+</mapper>

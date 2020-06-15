@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="RECDao">
+    <!--시간대별 SMP 마켓 가격-->
+    <select id="getCurrentRECMarketPrice" parameterType="Map" resultType="java.util.LinkedHashMap">
+        SELECT *
+        FROM tb_spot_market
+        WHERE market_id = #{market_id}
+        ORDER BY price_time;
+    </select>
+    <select id="getSiteRECIssued" parameterType="Map" resultType="java.util.LinkedHashMap">
+        SELECT *
+        FROM tb_site_rec_issued
+        WHERE site_id = #{site_id}
+        ORDER BY reg_time;
+    </select>
+    <select id="getSiteRECBook" parameterType="Map" resultType="java.util.LinkedHashMap">
+        SELECT *
+        FROM tb_site_rec_book
+        WHERE site_id = #{site_id}
+        ORDER BY reg_time;
+    </select>
+    <select id="getIssuedRECInThisMonth" parameterType="Map" resultType="java.lang.Integer">
+        <![CDATA[
+        SELECT
+            SUM(PV_GEN.gen_val) / 1000
+        FROM
+            (
+                SELECT *
+                FROM tb_pv_gen
+                WHERE site_id = #{site_id}
+                  AND YEAR(std_date) = YEAR(NOW())
+                  AND MONTH(std_date) = MONTH(NOW())
+            )                                      as PV_GEN
+                LEFT OUTER JOIN tb_site_rec_issued as REC_issued
+                                ON PV_GEN.std_date >= REC_issued.rec_issued_power_from
+                                    AND PV_GEN.std_date < REC_issued.rec_issued_power_to
+        ]]>
+    </select>
+    <select id="getSoldRECInThisDay" parameterType="Map" resultType="java.util.LinkedHashMap">
+        SELECT
+            SUM(sell_rec_num)   AS sell_rec_num,
+            SUM(sell_rec_value) AS sell_rec_value
+        FROM tb_site_rec_book
+        WHERE site_id = #{site_id}
+          AND YEAR(sell_rec_time) = YEAR(NOW())
+          AND MONTH(sell_rec_time) = MONTH(NOW())
+          AND DAY(sell_rec_time) = DAY(NOW())
+    </select>
+    <select id="getSoldRECInThisMonth" parameterType="Map" resultType="java.util.LinkedHashMap">
+        SELECT
+            SUM(sell_rec_num)   AS sell_rec_num,
+            SUM(sell_rec_value) AS sell_rec_value
+        FROM tb_site_rec_book
+        WHERE site_id = #{site_id}
+          AND YEAR(sell_rec_time) = YEAR(NOW())
+          AND MONTH(sell_rec_time) = MONTH(NOW())
+    </select>
+    <select id="getSoldRECInLastMonth" parameterType="Map" resultType="java.util.LinkedHashMap">
+        SELECT
+            SUM(sell_rec_num)   AS sell_rec_num,
+            SUM(sell_rec_value) AS sell_rec_value
+        FROM tb_site_rec_book
+        WHERE site_id = #{site_id}
+            AND YEAR(sell_rec_time) = YEAR(NOW() - INTERVAL 1 MONTH)
+            AND MONTH(sell_rec_time) = MONTH(NOW() - INTERVAL 1 MONTH)
+    </select>
+    <select id="getSoldRECInThisYear" parameterType="Map" resultType="java.util.LinkedHashMap">
+        SELECT
+            SUM(sell_rec_num)   AS sell_rec_num,
+            SUM(sell_rec_value) AS sell_rec_value
+        FROM tb_site_rec_book
+        WHERE site_id = #{site_id}
+          AND YEAR(sell_rec_time) = YEAR(NOW())
+    </select>
+    <select id="getSoldRECInLastYear" parameterType="Map" resultType="java.util.LinkedHashMap">
+        SELECT
+            SUM(sell_rec_num)   AS sell_rec_num,
+            SUM(sell_rec_value) AS sell_rec_value
+        FROM tb_site_rec_book
+        WHERE site_id = #{site_id}
+          AND YEAR(sell_rec_time) = YEAR(NOW()-INTERVAL 1 YEAR)
+    </select>
+    <select id="getSoldRECInThisYearMonthly" parameterType="Map" resultType="java.util.LinkedHashMap">
+        SELECT
+            UNIX_TIMESTAMP(DATE_FORMAT(MAX(sell_rec_time), '%Y-%m-%d')) * 1000 AS price_time,
+            SUM(sell_rec_num)                                                  AS sell_rec_num,
+            SUM(sell_rec_value)                                                AS sell_rec_value
+        FROM tb_site_rec_book
+        WHERE site_id = #{site_id}
+          AND YEAR(sell_rec_time) = YEAR(NOW())
+        GROUP BY MONTH(sell_rec_time)
+    </select>
+    <select id="getTradingVolumeByDay" parameterType="Map" resultType="java.util.LinkedHashMap">
+        SELECT
+            UNIX_TIMESTAMP(DATE_FORMAT(MAX(price_time), '%Y-%m-%d')) * 1000 AS price_time,
+            MAX(accum_trading_vol) - MIN(accum_trading_vol)                 AS accum_trading_vol
+        FROM tb_spot_market
+        group by YEAR(price_time), MONTH(price_time), DAY(price_time)
+        order by price_time desc
+    </select>
+    <select id="getTransactionPriceByDay" parameterType="Map" resultType="java.util.LinkedHashMap">
+        SELECT
+            UNIX_TIMESTAMP(DATE_FORMAT(B.last_time, '%Y-%m-%d')) * 1000 as price_time,
+            A.open_price,
+            B.highest_price,
+            B.lowest_price,
+            A.close_price
+        FROM
+            tb_spot_market as A,
+            (
+                SELECT
+                    MAX(highest_price) AS highest_price,
+                    MIN(lowest_price)  AS lowest_price,
+                    MAX(price_time)    AS last_time
+                FROM tb_spot_market
+                GROUP BY YEAR(price_time), MONTH(price_time), DAY(price_time)
+            )              as B
+        WHERE A.price_time = B.last_time
+    </select>
+</mapper>

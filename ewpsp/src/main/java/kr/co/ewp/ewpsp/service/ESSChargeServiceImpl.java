@@ -1,0 +1,93 @@
+package kr.co.ewp.ewpsp.service;
+
+import kr.co.ewp.ewpsp.common.energy.PeriodDataSetting;
+import kr.co.ewp.ewpsp.dao.ESSChargeDao;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service("essChargeService")
+public class ESSChargeServiceImpl implements ESSChargeService {
+
+    @Resource(name = "essChargeDao")
+    private ESSChargeDao essChargeDao;
+
+    public Map getESSChargeSum(HashMap param) throws Exception {
+        param.put("substringIdx", "dd");
+        Map todaySum = essChargeDao.getESSChargeSum(param);
+        param.put("substringIdx", "MM");
+        Map monthSum = essChargeDao.getESSChargeSum(param);
+        param.put("substringIdx", "yyyy");
+        Map yearSum = essChargeDao.getESSChargeSum(param);
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("todaySum", todaySum);
+        resultMap.put("monthSum", monthSum);
+        resultMap.put("yearSum", yearSum);
+
+        return resultMap;
+
+    }
+
+    public Map getESSChargeRealList(HashMap param, HttpServletRequest request) throws Exception {
+        List list = essChargeDao.getESSChargeRealList(param);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        if (list == null || list.size() == 0) {
+            Map<String, Object> chgMap = new HashMap<String, Object>();
+            chgMap.put("sheetList", null);
+            chgMap.put("chartList", null);
+            Map<String, Object> dischgMap = new HashMap<String, Object>();
+            dischgMap.put("sheetList", null);
+            dischgMap.put("chartList", null);
+
+            resultMap.put("chgMap", chgMap);
+            resultMap.put("dischgMap", dischgMap);
+
+            return resultMap;
+        } else {
+            Map<String, Object> chgMap = new HashMap<String, Object>();
+            Map<String, Object> dischgMap = new HashMap<String, Object>();
+            chgMap = PeriodDataSetting.dataSetting(request, param, list, "std_timestamp", "chg_val", 1);
+            dischgMap = PeriodDataSetting.dataSetting(request, param, list, "std_timestamp", "dischg_val", 1);
+
+            resultMap.put("chgMap", chgMap);
+            resultMap.put("dischgMap", dischgMap);
+
+            return resultMap;
+        }
+    }
+
+    public Map getESSChargeFutureList(HashMap param, HttpServletRequest request) throws Exception {
+        List list = essChargeDao.getESSChargeFutureList(param);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        if (list == null || list.size() == 0) {
+            Map<String, Object> chgMap = new HashMap<String, Object>();
+            chgMap.put("sheetList", null);
+            chgMap.put("chartList", null);
+            Map<String, Object> dischgMap = new HashMap<String, Object>();
+            dischgMap.put("sheetList", null);
+            dischgMap.put("chartList", null);
+
+            resultMap.put("chgMap", chgMap);
+            resultMap.put("dischgMap", dischgMap);
+
+            return resultMap;
+        } else {
+            Map<String, Object> chgMap = new HashMap<String, Object>();
+            Map<String, Object> dischgMap = new HashMap<String, Object>();
+            chgMap = PeriodDataSetting.dataSetting(request, param, list, "std_timestamp", "chg_val", 1);
+            dischgMap = PeriodDataSetting.dataSetting(request, param, list, "std_timestamp", "dischg_val", 1);
+
+            resultMap.put("chgMap", chgMap);
+            resultMap.put("dischgMap", dischgMap);
+
+            return resultMap;
+        }
+    }
+
+
+}

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.ewp.api.dao.DeviceBmsDao">
+    <resultMap type="DeviceBms" id="DeviceBmsRM">
+        <id property="deviceBmsIdx" column="device_bms_idx" javaType="Long"></id><!--BMS장치식별자-->
+        <result property="siteId" column="site_id" javaType="String"></result><!--사이트ID-->
+        <result property="deviceId" column="device_id" javaType="String"></result><!--장치ID-->
+        <result property="deviceName" column="device_name" javaType="String"></result><!--장치명-->
+        <result property="deviceStat" column="device_stat" javaType="String"></result><!--충방전상태-->
+        <result property="alarmMsg" column="alarm_msg" javaType="String"></result><!--알람메시지-->
+        <result property="sysSoc" column="sys_soc" javaType="Integer"></result><!--SOC(단위:%)-->
+        <result property="currSoc" column="curr_soc" javaType="Integer"></result><!--SOC현재(단위:kWh)-->
+        <result property="sysSoh" column="sys_soh" javaType="Integer"></result><!--SOH(단위:%)-->
+        <result property="sysVoltage" column="sys_voltage" javaType="Integer"></result><!--출력전압(단위:V)-->
+        <result property="sysCurrent" column="sys_current" javaType="Integer"></result><!--출력전류(단위:A)-->
+        <result property="dod" column="dod" javaType="Integer"></result><!--DoD(단위:%)-->
+        <result property="stdDate" column="std_date" javaType="Date"></result><!--기준일시-->
+        <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
+    </resultMap>
+    <insert id="insert" parameterType="DeviceBms">
+        /* BMS장치 등록 */
+        INSERT INTO tb_device_bms (
+               site_id,
+               device_id,
+               device_name,
+               device_stat,
+               alarm_msg,
+               sys_soc,
+               curr_soc,
+               sys_soh,
+               sys_voltage,
+               sys_current,
+               dod,
+               std_date,
+               reg_date
+             ) VALUES (
+               #{entity.siteId},
+               #{entity.deviceId},
+               #{entity.deviceName},
+               #{entity.deviceStat},
+               #{entity.alarmMsg},
+               #{entity.sysSoc},
+               #{entity.currSoc},
+               #{entity.sysSoh},
+               #{entity.sysVoltage},
+               #{entity.sysCurrent},
+               #{entity.dod},
+               #{entity.stdDate},
+               NOW())
+        <selectKey resultType="Long" keyProperty="entity.deviceBmsIdx">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <update id="update" parameterType="DeviceBms">
+        /* BMS장치 수정 */
+        UPDATE tb_device_bms 
+               <set>
+               <if test="entity.siteId != null">
+               site_id = #{entity.siteId},
+               </if>
+               <if test="entity.deviceId != null">
+               device_id = #{entity.deviceId},
+               </if>
+               <if test="entity.deviceName != null">
+               device_name = #{entity.deviceName},
+               </if>
+               <if test="entity.deviceStat != null">
+               device_stat = #{entity.deviceStat},
+               </if>
+               <if test="entity.alarmMsg != null">
+               alarm_msg = #{entity.alarmMsg},
+               </if>
+               <if test="entity.sysSoc != null">
+               sys_soc = #{entity.sysSoc},
+               </if>
+               <if test="entity.currSoc != null">
+               curr_soc = #{entity.currSoc},
+               </if>
+               <if test="entity.sysSoh != null">
+               sys_soh = #{entity.sysSoh},
+               </if>
+               <if test="entity.sysVoltage != null">
+               sys_voltage = #{entity.sysVoltage},
+               </if>
+               <if test="entity.sysCurrent != null">
+               sys_current = #{entity.sysCurrent},
+               </if>
+               <if test="entity.dod != null">
+               dod = #{entity.dod},
+               </if>
+               <if test="entity.stdDate != null">
+               std_date = #{entity.stdDate},
+               </if>
+               <if test="entity.regDate != null">
+               reg_date = #{entity.regDate},
+               </if>
+               </set>
+         WHERE device_bms_idx = #{entity.deviceBmsIdx}
+    </update>
+    <delete id="delete" parameterType="DeviceBms">
+        /* BMS장치 삭제 */
+        DELETE FROM tb_device_bms 
+         WHERE device_bms_idx = #{deviceBmsIdx}
+    </delete>
+    <select id="selectOne" resultMap="DeviceBmsRM">
+        /* BMS장치 상세조회 */
+        SELECT device_bms_idx,
+               site_id,
+               device_id,
+               device_name,
+               device_stat,
+               alarm_msg,
+               sys_soc,
+               curr_soc,
+               sys_soh,
+               sys_voltage,
+               sys_current,
+               dod,
+               std_date,
+               reg_date
+          FROM tb_device_bms
+         WHERE device_bms_idx = #{deviceBmsIdx}
+    </select>
+    <select id="selectList" resultMap="DeviceBmsRM">
+        /* BMS장치 목록조회 */
+        SELECT device_bms_idx,
+               site_id,
+               device_id,
+               device_name,
+               device_stat,
+               alarm_msg,
+               sys_soc,
+               curr_soc,
+               sys_soh,
+               sys_voltage,
+               sys_current,
+               dod,
+               std_date,
+               reg_date
+          FROM tb_device_bms
+               <if test="pageable != null">
+         WHERE LIMIT #{pageable.start}, #{pageable.end}
+               </if>
+    </select>
+    <select id="selectListCount" resultType="int">
+        /* BMS장치 전체 개수 조회 */
+        SELECT COUNT(*) AS CNT
+          FROM tb_device_bms
+         WHERE device_bms_idx = #{deviceBmsIdx}
+    </select>
+</mapper>

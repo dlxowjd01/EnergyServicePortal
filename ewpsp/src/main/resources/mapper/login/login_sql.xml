@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="login">
+
+    <select id="getUserDetail" parameterType="hashMap" resultType="hashMap">
+		/* 사용자 한건 조회 */
+		select 
+			user_idx, user_id, user_pw, user_type, main_user_idx, main_user_yn, auth_type, lang_type, 
+			comp_idx, co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, site_grp_idx, site_id,
+			del_yn, reg_uid, reg_date, mod_uid, mod_date 
+		from tb_user
+		where del_yn = 'N'
+		and user_id = #{userId }
+		and user_pw = sha2(#{userPw }, 256)
+	</select>
+
+    <select id="getUserDetailPlain" parameterType="hashMap" resultType="hashMap">
+		/* 사용자 한건 조회 */
+		select 
+			user_idx, user_id, user_pw, user_type, main_user_idx, main_user_yn, auth_type, lang_type, 
+			comp_idx, co_name, co_tel, co_email, psn_name, psn_dept, psn_tel, psn_mobile, psn_email, note, site_grp_idx, site_id,
+			del_yn, reg_uid, reg_date, mod_uid, mod_date 
+		from tb_user
+		where del_yn = 'N'
+		and user_id = #{userId }
+		and user_pw = #{userPw }
+	</select>
+
+    <select id="findUserId" parameterType="hashMap" resultType="hashMap">
+		/* 아이디 찾기 */
+		select 
+			user_id
+		from tb_user
+		where del_yn = 'N'
+		and psn_name = #{psnName}
+		and psn_mobile = #{psnMobile}
+	</select>
+
+    <select id="findUserPw" parameterType="hashMap" resultType="hashMap">
+		/* 비번 찾기 */
+		select 
+			user_pw
+		from tb_user
+		where del_yn = 'N'
+		and user_id = #{userId}
+		and psn_name = #{psnName}
+		and psn_mobile = #{psnMobile}
+	</select>
+
+    <select id="checkUserId" parameterType="hashMap" resultType="hashMap">
+		/* 아이디 중복 조회 */
+		select 
+			user_idx, user_id
+		from tb_user
+		where del_yn = 'N'
+		and user_id = #{userId }
+	</select>
+
+    <insert id="insertUser" parameterType="hashMap">
+        /* 사용자 등록 */
+        insert into tb_user (
+        <!-- user_idx,   /* 사용자식별자 */ -->
+        user_id, /* 아이디 */
+        user_pw,
+        user_type, /* 사용자구분(1:동서발전,2:고객사) */
+        main_user_idx, /* 주사용자식별자 */
+        main_user_yn, /* 주사용자여부(Y:예,N:아니오) */
+        auth_type, /* 권한구분(1:포털관리자,2:고객사관리자,3:그룹관리자,4:사이트관리자,5:사이트이용자) */
+        lang_type, /* 언어구분(1:한국어,2:영어,3:일본어) */
+        <!--
+                    comp_idx, /* 회사식별자 */
+                    co_name,   /* 고객사명 */
+                    co_tel,   /* 회사전화번호 */
+                    co_email,   /* 회사이메일주소 */
+        -->
+        psn_name, /* 담당자명 */
+        <!--
+                    psn_dept,   /* 담당자부서 */
+                    psn_tel,   /* 담당자전화번호 */
+        -->
+        psn_mobile, /* 담당자휴대폰번호 */
+        psn_email, /* 담당자이메일주소 */
+        <!--
+                    note,   /* 비고 */
+                    site_grp_idx, /* 사이트그룹식별자 */
+                    site_id, /* 사이트ID */
+        -->
+        del_yn,
+        reg_uid,
+        reg_date
+        )
+        values (
+        <!-- #{user_idx },  -->
+        #{userId },
+        sha2(#{userPw }, 256),
+        '2',
+        '1',
+        'N',
+        '',
+        '1',
+        <!--
+                    #{compIdx },
+                    #{coName },
+                    #{coTel },
+                    #{coEmail },
+        -->
+        #{psnName },
+        <!--
+                    #{psnDept },
+                    #{psnTel },
+        -->
+        #{psnMobile },
+        #{psnEmail },
+        <!--
+                    #{note },
+                    #{siteGrpIdx },
+                    #{siteId },
+        -->
+        'N',
+        #{userId },
+        now()
+        )
+    </insert>
+
+    <update id="updateUser" parameterType="hashMap">
+        /* 사용자 수정 */
+        update tb_user
+        set
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(userPw)">
+            user_pw = sha2(#{userPw }, 256), /* 패스워드 */
+        </if>
+        psn_mobile = #{psnMobile }, /* 담당자휴대폰번호 */
+        psn_email = #{psnEmail }, /* 담당자이메일주소 */
+        mod_uid = #{modUid },
+        mod_date = now()
+        where del_yn = 'N'
+        and user_idx = #{userIdx }
+    </update>
+
+    <update id="updateUserPw" parameterType="hashMap">
+		/* 임시비번으로 변경 */
+		update tb_user
+		set 
+			user_pw    = sha2(#{userPw}, 256)
+		where del_yn   = 'N'
+		and user_id    = #{userId}
+		and psn_name   = #{psnName}
+		and psn_mobile = #{psnMobile}
+	</update>
+
+    <update id="deleteUser" parameterType="hashMap">
+		/* 사용자 삭제 */
+		update tb_user
+		set 
+		    del_yn        = 'Y', 
+		    mod_uid       = #{modUid }, 
+		    mod_date      = now()
+		where user_idx = #{userIdx }
+	</update>
+
+</mapper>

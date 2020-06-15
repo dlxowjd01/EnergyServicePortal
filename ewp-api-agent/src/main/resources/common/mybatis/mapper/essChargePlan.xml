@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.ewp.api.dao.EssChargePlanDao">
+    <resultMap type="EssChargePlan" id="EssChargePlanRM">
+        <id property="essChgPlanIdx" column="ess_chg_plan_idx" javaType="Long"></id><!--ESS충방전량계획식별자-->
+        <result property="siteId" column="site_id" javaType="String"></result><!--사이트ID-->
+        <result property="deviceId" column="device_id" javaType="String"></result><!--장치ID-->
+        <result property="stdTimestamp" column="std_timestamp" javaType="Date"></result><!--기준타임스탬프-->
+        <result property="stdDate" column="std_date" javaType="Date"></result><!--기준일시-->
+        <result property="chgVal" column="chg_val" javaType="Float"></result><!--충전계획량(단위:kWh -> Wh)-->
+        <result property="dischgVal" column="dischg_val" javaType="Float"></result><!--방전계획량(단위:kWh -> Wh)-->
+        <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
+        <result property="modDate" column="mod_date" javaType="Date"></result><!--최종수정일시-->
+    </resultMap>
+    <insert id="insert" parameterType="EssChargePlan">
+        /* ESS충방전량계획 등록 */
+        INSERT INTO tb_ess_charge_plan (
+               site_id,
+               device_id,
+               std_timestamp,
+               std_date,
+               chg_val,
+               dischg_val,
+               reg_date
+             ) VALUES (
+               #{entity.siteId},
+               #{entity.deviceId},
+               #{entity.stdTimestamp},
+               #{entity.stdDate},
+               #{entity.chgVal},
+               #{entity.dischgVal},
+               NOW())
+        <selectKey resultType="Long" keyProperty="entity.essChgPlanIdx">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <update id="update" parameterType="EssChargePlan">
+        /* ESS충방전량계획 수정 */
+        UPDATE tb_ess_charge_plan 
+               <set>
+               <if test="entity.siteId != null">
+               site_id = #{entity.siteId},
+               </if>
+               <if test="entity.deviceId != null">
+               device_id = #{entity.deviceId},
+               </if>
+               <if test="entity.stdTimestamp != null">
+               std_timestamp = #{entity.stdTimestamp},
+               </if>
+               <if test="entity.stdDate != null">
+               std_date = #{entity.stdDate},
+               </if>
+               <if test="entity.chgVal != null">
+               chg_val = #{entity.chgVal},
+               </if>
+               <if test="entity.dischgVal != null">
+               dischg_val = #{entity.dischgVal},
+               </if>
+               mod_date = NOW(),
+               </set>
+         WHERE ess_chg_plan_idx = #{entity.essChgPlanIdx}
+    </update>
+    <delete id="delete" parameterType="EssChargePlan">
+        /* ESS충방전량계획 삭제 */
+        DELETE FROM tb_ess_charge_plan 
+         WHERE ess_chg_plan_idx = #{essChgPlanIdx}
+    </delete>
+    <select id="selectOne" resultMap="EssChargePlanRM">
+        /* ESS충방전량계획 상세조회 */
+        SELECT ess_chg_plan_idx,
+               site_id,
+               device_id,
+               std_timestamp,
+               std_date,
+               chg_val,
+               dischg_val,
+               reg_date,
+               mod_date
+          FROM tb_ess_charge_plan
+         WHERE ess_chg_plan_idx = #{essChgPlanIdx}
+    </select>
+    <select id="selectList" resultMap="EssChargePlanRM">
+        /* ESS충방전량계획 목록조회 */
+        SELECT ess_chg_plan_idx,
+               site_id,
+               device_id,
+               std_timestamp,
+               std_date,
+               chg_val,
+               dischg_val,
+               reg_date,
+               mod_date
+          FROM tb_ess_charge_plan
+               <if test="pageable != null">
+         WHERE LIMIT #{pageable.start}, #{pageable.end}
+               </if>
+    </select>
+    <select id="selectListCount" resultType="int">
+        /* ESS충방전량계획 전체 개수 조회 */
+        SELECT COUNT(*) AS CNT
+          FROM tb_ess_charge_plan
+         WHERE ess_chg_plan_idx = #{essChgPlanIdx}
+    </select>
+    <select id="selectOneLast" resultMap="EssChargePlanRM">
+        /* 마지막 ESS충방전량계획 상세조회 */
+        SELECT ess_chg_plan_idx,
+               site_id,
+               device_id,
+               std_timestamp,
+               std_date,
+               chg_val,
+               dischg_val,
+               reg_date,
+               mod_date
+          FROM tb_ess_charge_plan
+         WHERE site_id = #{siteId}
+           AND device_id = #{deviceId}
+         ORDER BY std_timestamp DESC
+         LIMIT 1
+    </select>
+    <select id="selectOneByUnique" resultMap="EssChargePlanRM">
+        /* ESS충방전량계획 상세조회ByUnique */
+        SELECT ess_chg_plan_idx,
+               site_id,
+               device_id,
+               std_timestamp,
+               std_date,
+               chg_val,
+               dischg_val,
+               reg_date,
+               mod_date
+          FROM tb_ess_charge_plan
+         WHERE site_id = #{siteId}
+           AND device_id = #{deviceId}
+           AND std_timestamp = #{stdTimestamp}
+    </select>
+</mapper>

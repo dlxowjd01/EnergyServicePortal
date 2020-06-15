@@ -1,0 +1,43 @@
+package kr.co.ewp.ewpsp.service;
+
+import kr.co.ewp.ewpsp.dao.ApiDao;
+import kr.co.ewp.ewpsp.entity.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
+
+@Service
+public class ApiServiceImpl implements ApiService {
+    @Autowired
+    private ApiDao apiDao;
+
+    public SiteSet getSiteSet(String siteId) throws Exception {
+        return apiDao.getSiteSet(siteId);
+    }
+
+    public List<Usage> getUsageListBySiteId(String siteId, Date begin, Date end) throws Exception {
+        return apiDao.getUsageListBySiteId(siteId, begin, end);
+    }
+
+    public List<Reactive> getReactiveListBySiteId(String siteId, Date beginDate, Date endDate) throws Exception {
+        return apiDao.getReactiveListBySiteId(siteId, beginDate, endDate);
+    }
+
+    public List<EssUsage> getEssUsageListBySiteId(String siteId, Date beginDate, Date endDate) throws Exception {
+        return apiDao.getEssUsageListBySiteId(siteId, beginDate, endDate);
+    }
+
+    public List<EssCharge> getEssChargeListBySiteId(String siteId, Date beginDate, Date endDate) throws Exception {
+        return apiDao.getEssChargeListBySiteId(siteId, beginDate, endDate);
+    }
+
+    public Site getSite(String siteId) throws Exception {
+        return apiDao.getSite(siteId);
+    }
+
+    public List<Site> getSiteList() throws Exception {
+        return apiDao.getSiteList();
+    }
+}

@@ -1,0 +1,1102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="deviceMonitoring">
+    <select id="getDeviceIOEList" parameterType="hashMap" resultType="java.util.LinkedHashMap">
+        /* IOE장치 목록 조회 */
+        select
+        rnum, device_ioe_idx, device_name, device_id, concat('(', inst_type_nm, ')', device_type_nm) as device_type_nm,
+        device_type, site_id, device_stat_name, upload_timestamp
+        from (
+        select
+        @rownum := @rownum + 1 as rnum,
+        page_tb.*
+        from (
+        select
+        a.device_id, a.device_name, a.site_id, a.device_type,
+        case a.device_type when 1 then 'PCS'
+        when 2 then 'BMS'
+        when 3 then 'PV'
+        when 4 then '부하측정기기'
+        when 5 then 'PV모니터링기기'
+        when 6 then 'ESS모니터링기기'
+        when 7 then 'iSmart'
+        when 8 then '총량기기'
+        when 9 then 'AMI'
+        else '' end as device_type_nm
+        , case a.inst_type when 1 then '에너톡'
+        when 2 then '로컬EMS'
+        else '' end as inst_type_nm
+        , b.device_ioe_idx, b.upload_timestamp, b.device_stat_name
+        from tb_device a
+        left outer join (
+        select
+		device_ioe_idx, site_id, device_id, device_name, device_reg_id, serial_no, inst_type, inst_purpose, data_period, data_cnt,
+		ct_capacity, ct_capacity_list, pw_capacity, ch_cnt, ch_purpose, provider,
+        vr_device_id, vr_device_grp_id, vr_owner_id, vr_action, vr_stat, vr_mod_date, vr_error,
+        tm_voltage, tm_pulse, tm_ct_ratio, tm_pt_tatio,
+        network_conf, options, create_timestamp, create_date, upload_timestamp, upload_date, device_stat, reg_date
+        , case device_stat when 1 then 'connect'
+        else 'disconnect' end as device_stat_name
+        from tb_device_ioe
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_ioe
+        group by site_id, device_id
+        )
+        ) b
+        on a.site_id = b.site_id
+        and a.device_id = b.device_id
+        where a.device_type in (4, 6, 7, 8)
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+
+        union all
+        select
+        a.device_id, a.device_name, a.site_id, a.device_type,
+        case a.device_type when 1 then 'PCS'
+        when 2 then 'BMS'
+        when 3 then 'PV'
+        when 4 then '부하측정기기'
+        when 5 then 'PV모니터링기기'
+        when 6 then 'ESS모니터링기기'
+        when 7 then 'iSmart'
+        when 8 then '총량기기'
+        when 9 then 'AMI'
+        else '' end as device_type_nm
+        , case a.inst_type when 1 then '에너톡'
+        when 2 then '로컬EMS'
+        else '' end as inst_type_nm
+        , b.device_ioe_idx, b.upload_timestamp, b.device_stat_name
+        from tb_device a
+        left outer join (
+        select
+        device_ami_idx as device_ioe_idx, site_id, device_id, device_name, device_stat, alarmMsg,
+        voltage_r, voltage_s, voltage_t, current_r, current_s, current_t, frequency,
+        active_power_r, active_power_s, active_power_t,
+        reactive_power_lagging_r, reactive_power_lagging_s, reactive_power_lagging_t,
+        reactive_power_leading_r, reactive_power_leading_s, reactive_power_leading_t,
+        accum_active_power_r, accum_active_power_s, accum_active_power_t,
+        accum_reactive_power_lagging_r, accum_reactive_power_lagging_s, accum_reactive_power_lagging_t,
+        accum_reactive_power_leading_r, accum_reactive_power_leading_s, accum_reactive_power_leading_t,
+        std_date as upload_timestamp, reg_date
+        , case device_stat when 0 then 'Stop'
+        when 1 then 'Run'
+        when 2 then 'Fault'
+        when 3 then 'Warning'
+        else 'disconnect' end as device_stat_name
+        from tb_device_ami
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_ami
+        group by site_id, device_id
+        )
+        ) b
+        on a.site_id = b.site_id
+        and a.device_id = b.device_id
+        where a.device_type = 9
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+
+        ) page_tb
+        , ( select @rownum := 0 ) r
+        ) f_tb
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)">
+            limit #{startNum }, #{pageRowCnt }
+        </if>
+    </select>
+
+    <select id="getDeviceIOEListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+        /* IOE장치 목록 건수 조회 */
+        select
+        count(*) as listCnt
+        from (
+        select
+        @rownum := @rownum + 1 as rnum,
+        page_tb.*
+        from (
+        select
+        a.device_id, a.device_name, a.site_id, a.device_type,
+        case a.device_type when 1 then 'PCS'
+        when 2 then 'BMS'
+        when 3 then 'PV'
+        when 4 then '부하측정기기'
+        when 5 then 'PV모니터링기기'
+        when 6 then 'ESS모니터링기기'
+        when 7 then 'iSmart'
+        when 8 then '총량기기'
+        else '' end as device_type_nm
+        , case a.inst_type when 1 then '에너톡'
+        when 2 then '로컬EMS'
+        else '' end as inst_type_nm
+        , b.device_ioe_idx, b.upload_timestamp, b.device_stat_name
+        from tb_device a
+        left outer join (
+        select
+		device_ioe_idx, site_id, device_id, device_name, device_reg_id, serial_no, inst_type, inst_purpose, data_period, data_cnt,
+        ct_capacity, ct_capacity_list, pw_capacity, ch_cnt, ch_purpose, provider,
+        vr_device_id, vr_device_grp_id, vr_owner_id, vr_action, vr_stat, vr_mod_date, vr_error,
+        tm_voltage, tm_pulse, tm_ct_ratio, tm_pt_tatio,
+        network_conf, options, create_timestamp, create_date, upload_timestamp, upload_date, device_stat, reg_date
+        , case device_stat when 1 then 'connect'
+        else 'disconnect' end as device_stat_name
+        from tb_device_ioe
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_ioe
+        group by site_id, device_id
+        )
+        ) b
+        on a.site_id = b.site_id
+        and a.device_id = b.device_id
+        where a.device_type in (4, 6, 7, 8)
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+
+        union all
+        select
+        a.device_id, a.device_name, a.site_id, a.device_type,
+        case a.device_type when 1 then 'PCS'
+        when 2 then 'BMS'
+        when 3 then 'PV'
+        when 4 then '부하측정기기'
+        when 5 then 'PV모니터링기기'
+        when 6 then 'ESS모니터링기기'
+        when 7 then 'iSmart'
+        when 8 then '총량기기'
+        when 9 then 'AMI'
+        else '' end as device_type_nm
+        , case a.inst_type when 1 then '에너톡'
+        when 2 then '로컬EMS'
+        else '' end as inst_type_nm
+        , b.device_ioe_idx, b.upload_timestamp, b.device_stat_name
+        from tb_device a
+        left outer join (
+        select
+        device_ami_idx as device_ioe_idx, site_id, device_id, device_name, device_stat, alarmMsg,
+        voltage_r, voltage_s, voltage_t, current_r, current_s, current_t, frequency,
+        accum_active_power_r, accum_active_power_s, accum_active_power_t,
+        accum_reactive_power_lagging_r, accum_reactive_power_lagging_s, accum_reactive_power_lagging_t,
+        accum_reactive_power_leading_r, accum_reactive_power_leading_s, accum_reactive_power_leading_t,
+        std_date as upload_timestamp, reg_date
+        , case device_stat when 0 then 'Stop'
+        when 1 then 'Run'
+        when 2 then 'Fault'
+        when 3 then 'Warning'
+        else 'disconnect' end as device_stat_name
+        from tb_device_ami
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_ami
+        group by site_id, device_id
+        )
+        ) b
+        on a.site_id = b.site_id
+        and a.device_id = b.device_id
+        where a.device_type = 9
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+
+        ) page_tb
+        , ( select @rownum := 0 ) r
+        ) f_tb
+    </select>
+
+    <select id="getDeviceIOEDetail" parameterType="hashMap" resultType="hashMap">
+		/* IOE장치 상세 조회 */
+		select 
+			a.device_id, a.site_id, a.device_name, site.site_name, a.device_grp_name, 
+			a.device_type, concat('(', a.inst_type_nm, ')', a.device_type_nm) as device_type_nm
+			, b.upload_timestamp, b.upload_date, b.device_stat, b.device_ioe_idx
+		from (
+				select 
+					device.device_id, device.site_id, device.user_idx, device.device_name, device.device_grp_idx, 
+					device.device_type, device.inst_type, 
+					case device_type when 1 then 'PCS'
+						when 2 then 'BMS'
+						when 3 then 'PV'
+						when 4 then '부하측정기기'
+						when 5 then 'PV모니터링기기'
+						when 6 then 'ESS모니터링기기'
+						when 7 then 'iSmart'
+						when 8 then '총량기기'
+						when 9 then 'AMI'
+						else '' end as device_type_nm
+					, case inst_type when 1 then '에너톡'
+						when 2 then '로컬EMS'
+						else '' end as inst_type_nm
+					, device_grp_name
+				from tb_device device
+				left outer join tb_device_group deviceGroup
+				on device.device_grp_idx = deviceGroup.device_grp_idx
+		) a
+		left outer join (
+				select 
+					device_ioe_idx, site_id, device_id, device_name, device_reg_id, serial_no, inst_type, inst_purpose, data_period, data_cnt, 
+					ct_capacity, ct_capacity_list, pw_capacity, ch_cnt, ch_purpose, provider, 
+					vr_device_id, vr_device_grp_id, vr_owner_id, vr_action, vr_stat, vr_mod_date, vr_error, 
+					tm_voltage, tm_pulse, tm_ct_ratio, tm_pt_tatio, 
+					network_conf, options, create_timestamp, create_date, upload_timestamp, upload_date, device_stat, reg_date
+				from tb_device_ioe
+				where (site_id, device_id, reg_date) in (
+					select 
+						site_id, device_id, max(reg_date) reg_date 
+					from tb_device_ioe
+					group by site_id, device_id
+				)
+		) b
+		on a.site_id = b.site_id
+		and a.device_id = b.device_id
+		, tb_site site
+		where a.site_id = site.site_id
+		and a.site_id = #{siteId }
+		and a.device_id = #{deviceId }
+		and a.device_type = #{deviceType }
+	</select>
+
+    <select id="getDevicePCSList" parameterType="hashMap" resultType="java.util.LinkedHashMap">
+        /* PCS장치 목록 조회 */
+        select
+        rnum, device_pcs_idx, device_name, device_id, concat('(', inst_type_nm, ')', device_type_nm) as device_type_nm,
+        device_type, site_id, pcs_status_name, alarm_msg, std_date
+        from (
+        select
+        @rownum := @rownum + 1 as rnum,
+        page_tb.*
+        from (
+        select
+        a.device_id, a.device_name, a.site_id, a.device_type,
+        case a.device_type when 1 then 'PCS'
+        when 2 then 'BMS'
+        when 3 then 'PV'
+        when 4 then '부하측정기기'
+        when 5 then 'PV모니터링기기'
+        when 6 then 'ESS모니터링기기'
+        when 7 then 'iSmart'
+        when 8 then '총량기기'
+        when 9 then 'AMI'
+        else '' end as device_type_nm
+        , case a.inst_type when 1 then '에너톡'
+        when 2 then '로컬EMS'
+        else '' end as inst_type_nm
+        , b.device_pcs_idx, b.device_stat_name, b.pcs_status_name,
+        b.alarm_msg, b.std_date
+        from tb_device a
+        left outer join (
+        select
+        device_pcs_idx, site_id, device_id, device_name, device_stat, alarm_msg,
+        ac_voltage, ac_power, ac_current, ac_freq, ac_set_power, ac_pf,
+        dc_voltage, dc_power, dc_current, dc_freq, dc_set_power, dc_pf, std_date, reg_date
+        , case device_stat when 1 then 'Schedule'
+        when 2 then 'Command'
+        else 'disconnect' end as device_stat_name
+        , pcs_status
+        , case pcs_status when 0 then 'Off'
+        when 1 then 'On'
+        when 2 then 'Fault'
+        when 3 then 'Warning'
+        else 'disconnect' end as pcs_status_name
+        from tb_device_pcs
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_pcs
+        group by site_id, device_id
+        )
+        ) b
+        on a.site_id = b.site_id
+        and a.device_id = b.device_id
+        where a.device_type = 1
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+        order by a.device_id
+        ) page_tb
+        , ( select @rownum := 0 ) r
+        ) f_tb
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)">
+            limit #{startNum }, #{pageRowCnt }
+        </if>
+    </select>
+
+    <select id="getDevicePCSListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+        /* PCS장치 목록 건수 조회 */
+        select
+        count(*) as listCnt
+        from (
+        select
+        @rownum := @rownum + 1 as rnum,
+        page_tb.*
+        from (
+        select
+        a.device_id, a.device_name, a.site_id, a.device_type,
+        case a.device_type when 1 then 'PCS'
+        when 2 then 'BMS'
+        when 3 then 'PV'
+        when 4 then '부하측정기기'
+        when 5 then 'PV모니터링기기'
+        when 6 then 'ESS모니터링기기'
+        when 7 then 'iSmart'
+        when 8 then '총량기기'
+        when 9 then 'AMI'
+        else '' end as device_type_nm
+        , case a.inst_type when 1 then '에너톡'
+        when 2 then '로컬EMS'
+        else '' end as inst_type_nm
+        , b.device_pcs_idx, b.device_stat_name,
+        b.alarm_msg, b.std_date
+        from tb_device a
+        left outer join (
+        select
+        device_pcs_idx, site_id, device_id, device_name, device_stat, alarm_msg,
+        ac_voltage, ac_power, ac_current, ac_freq, ac_set_power, ac_pf,
+        dc_voltage, dc_power, dc_current, dc_freq, dc_set_power, dc_pf, std_date, reg_date
+        , case device_stat when 1 then 'Schedule'
+        when 2 then 'Command'
+        else 'disconnect' end as device_stat_name
+        , "" as cd_status
+        , pcs_status
+        , case pcs_status when 0 then 'Off'
+        when 1 then 'On'
+        when 2 then 'Fault'
+        when 3 then 'Warning'
+        else 'disconnect' end as pcs_status_name
+        from tb_device_pcs
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_pcs
+        group by site_id, device_id
+        )
+        ) b
+        on a.site_id = b.site_id
+        and a.device_id = b.device_id
+        where a.device_type = 1
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+        ) page_tb
+        , ( select @rownum := 0 ) r
+        ) f_tb
+    </select>
+
+    <select id="getDevicePCSDetail" parameterType="hashMap" resultType="hashMap">
+		/* PCS장치 상세 조회 */
+		select 
+			a.device_id, a.site_id, a.device_name, site.site_name, a.device_grp_name, 
+			a.device_type, concat('(', a.inst_type_nm, ')', a.device_type_nm) as device_type_nm
+			, b.device_pcs_idx, b.std_date, b.device_stat, b.alarm_msg, 
+			b.ac_voltage, b.ac_power, b.ac_current, b.ac_freq, b.ac_set_power, b.ac_pf, 
+			b.dc_voltage, b.dc_power, b.dc_current, b.dc_freq, b.dc_set_power, b.dc_pf,
+			b.pcs_status, b.pcs_status_nm, b.pcs_command, b.pcs_command_nm, b.today_c_energy, b.today_d_energy
+		from (
+				select 
+					device_id, device.site_id, device.user_idx, device_name, device.device_grp_idx, device_type, inst_type, 
+					case device_type when 1 then 'PCS'
+						when 2 then 'BMS'
+						when 3 then 'PV'
+						when 4 then '부하측정기기'
+						when 5 then 'PV모니터링기기'
+						when 6 then 'ESS모니터링기기'
+						when 7 then 'iSmart'
+						when 8 then '총량기기'
+						when 9 then 'AMI'
+						else '' end as device_type_nm
+					, case inst_type when 1 then '에너톡'
+						when 2 then '로컬EMS'
+						else '' end as inst_type_nm
+					, device_grp_name
+				from tb_device device
+				left outer join tb_device_group deviceGroup
+				on device.device_grp_idx = deviceGroup.device_grp_idx
+		) a
+		left outer join (
+				select 
+					device_pcs_idx, site_id, device_id, device_name, device_stat, alarm_msg, 
+					ac_voltage, ac_power, ac_current, ac_freq, ac_set_power, ac_pf, 
+					dc_voltage, dc_power, dc_current, dc_freq, dc_set_power, dc_pf, std_date, reg_date
+					, pcs_status, remote_mode, pcs_command, today_d_energy, today_c_energy, total_d_energy, total_c_energe 
+					, case pcs_status when 0 then 'OFF'
+						when 1 then 'ON'
+						when 2 then 'Fault'
+						when 3 then 'Warning'
+						else '' end as pcs_status_nm
+					, case pcs_command when 0 then 'Stop'
+						when 1 then 'Run'
+						else '' end as pcs_command_nm
+				from tb_device_pcs
+				where (site_id, device_id, reg_date) in (
+					select 
+						site_id, device_id, max(reg_date) reg_date 
+					from tb_device_pcs
+					group by site_id, device_id
+				)
+		) b
+		on a.site_id = b.site_id
+		and a.device_id = b.device_id
+		, tb_site site
+		where a.site_id = site.site_id
+		and a.site_id = #{siteId }
+		and a.device_id = #{deviceId }
+		and a.device_type = #{deviceType }
+	</select>
+
+    <select id="getDeviceBMSList" parameterType="hashMap" resultType="java.util.LinkedHashMap">
+        /* BMS장치 목록 조회 */
+        select
+        rnum, device_bms_idx, device_name, device_id, concat('(', inst_type_nm, ')', device_type_nm) as device_type_nm,
+        device_type, site_id, device_stat_name, alarm_msg, std_date
+        from (
+        select
+        @rownum := @rownum + 1 as rnum,
+        page_tb.*
+        from (
+        select
+        a.device_id, a.device_name, a.site_id, a.device_type,
+        case a.device_type when 1 then 'PCS'
+        when 2 then 'BMS'
+        when 3 then 'PV'
+        when 4 then '부하측정기기'
+        when 5 then 'PV모니터링기기'
+        when 6 then 'ESS모니터링기기'
+        when 7 then 'iSmart'
+        when 8 then '총량기기'
+        when 9 then 'AMI'
+        else '' end as device_type_nm
+        , case a.inst_type when 1 then '에너톡'
+        when 2 then '로컬EMS'
+        else '' end as inst_type_nm
+        , b.device_bms_idx, b.device_stat_name,
+        b.alarm_msg, b.std_date
+        from tb_device a
+        left outer join (
+        select
+        device_bms_idx, site_id, device_id, device_name, device_stat,
+        sys_soc, curr_soc, sys_soh, sys_voltage, sys_current, dod, std_date, reg_date
+        , case device_stat when 0 then 'Idle'
+        when 1 then 'Charge'
+        when 2 then 'Discharge'
+        when 3 then 'MainS/W on/off'
+        when 4 then 'Off-line'
+        when 5 then 'Ready'
+        else 'disconnect' end as device_stat_name
+        , alarm_msg
+        from tb_device_bms
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_bms
+        group by site_id, device_id
+        )
+        ) b
+        on a.site_id = b.site_id
+        and a.device_id = b.device_id
+        where a.device_type = 2
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+        order by a.device_id
+        ) page_tb
+        , ( select @rownum := 0 ) r
+        ) f_tb
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)">
+            limit #{startNum }, #{pageRowCnt }
+        </if>
+    </select>
+
+    <select id="getDeviceBMSListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+        /* BMS장치 건수 조회 */
+        select
+        count(*) as listCnt
+        from (
+        select
+        @rownum := @rownum + 1 as rnum,
+        page_tb.*
+        from (
+        select
+        a.device_id, a.device_name, a.site_id, a.device_type,
+        case a.device_type when 1 then 'PCS'
+        when 2 then 'BMS'
+        when 3 then 'PV'
+        when 4 then '부하측정기기'
+        when 5 then 'PV모니터링기기'
+        when 6 then 'ESS모니터링기기'
+        when 7 then 'iSmart'
+        when 8 then '총량기기'
+        when 9 then 'AMI'
+        else '' end as device_type_nm
+        , case a.inst_type when 1 then '에너톡'
+        when 2 then '로컬EMS'
+        else '' end as inst_type_nm
+        , b.device_bms_idx, b.device_stat_name,
+        b.alarm_msg, b.std_date
+        from tb_device a
+        left outer join (
+        select
+        device_bms_idx, site_id, device_id, device_name, device_stat,
+        sys_soc, curr_soc, sys_soh, sys_voltage, sys_current, dod, std_date, reg_date
+        , case device_stat when 0 then 'Idle'
+        when 1 then 'Charge'
+        when 2 then 'Discharge'
+        when 3 then 'MainS/W on/off'
+        when 4 then 'Off-line'
+        when 5 then 'Ready'
+        else 'disconnect' end as device_stat_name
+        , alarm_msg
+        from tb_device_bms
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_bms
+        group by site_id, device_id
+        )
+        ) b
+        on a.site_id = b.site_id
+        and a.device_id = b.device_id
+        where a.device_type = 2
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+        ) page_tb
+        , ( select @rownum := 0 ) r
+        ) f_tb
+    </select>
+
+    <select id="getDeviceBMSDetail" parameterType="hashMap" resultType="hashMap">
+		/* BMS장치 상세 조회 */
+		select 
+			a.device_id, a.site_id, a.device_name, site.site_name, a.device_grp_name, 
+			a.device_type, concat('(', a.inst_type_nm, ')', a.device_type_nm) as device_type_nm
+			, b.device_bms_idx, b.std_date, b.device_stat, b.device_stat_nm, 
+			b.sys_soc, b.curr_soc, b.sys_soh, b.sys_soh, b.sys_voltage, b.sys_current, b.dod
+		from (
+				select 
+					device_id, device.site_id, device.user_idx, device_name, device.device_grp_idx, device_type, inst_type, 
+					case device_type when 1 then 'PCS'
+						when 2 then 'BMS'
+						when 3 then 'PV'
+						when 4 then '부하측정기기'
+						when 5 then 'PV모니터링기기'
+						when 6 then 'ESS모니터링기기'
+						when 7 then 'iSmart'
+						when 8 then '총량기기'
+						when 9 then 'AMI'
+						else '' end as device_type_nm
+					, case inst_type when 1 then '에너톡'
+						when 2 then '로컬EMS'
+						else '' end as inst_type_nm
+					, device_grp_name
+				from tb_device device
+				left outer join tb_device_group deviceGroup
+				on device.device_grp_idx = deviceGroup.device_grp_idx
+		) a
+		left outer join (
+				select 
+					device_bms_idx, site_id, device_id, device_name, device_stat, 
+					sys_soc, curr_soc, sys_soh, sys_voltage, sys_current, dod, std_date, reg_date
+					,case device_stat when 0 then 'Idle'
+						when 1 then 'Charge'
+						when 2 then 'Discharge'
+						when 3 then 'MainS/W on/off'
+						when 4 then 'Off-line'
+						when 5 then 'Ready'
+						when 6 then 'Fault'
+						when 7 then 'Warning'
+						else '' end as device_stat_nm
+				from tb_device_bms
+				where (site_id, device_id, reg_date) in (
+					select 
+						site_id, device_id, max(reg_date) reg_date 
+					from tb_device_bms
+					group by site_id, device_id
+				)
+		) b
+		on a.site_id = b.site_id 
+		and a.device_id = b.device_id
+		, tb_site site
+		where a.site_id = site.site_id
+		and a.site_id = #{siteId }
+		and a.device_id = #{deviceId }
+		and a.device_type = #{deviceType }
+	</select>
+
+    <select id="getDevicePVList" parameterType="hashMap" resultType="java.util.LinkedHashMap">
+        /* PV장치 목록 조회 */
+        select
+        rnum, device_pv_idx, device_name, device_id, concat('(', inst_type_nm, ')', device_type_nm) as device_type_nm,
+        device_type, site_id, device_stat_name, temp, alarm_msg, std_date
+        from (
+        select
+        @rownum := @rownum + 1 as rnum,
+        page_tb.*
+        from (
+        select
+        a.device_id, a.device_name, a.site_id, a.device_type,
+        case a.device_type when 1 then 'PCS'
+        when 2 then 'BMS'
+        when 3 then 'PV'
+        when 4 then '부하측정기기'
+        when 5 then 'PV모니터링기기'
+        when 6 then 'ESS모니터링기기'
+        when 7 then 'iSmart'
+        when 8 then '총량기기'
+        when 9 then 'AMI'
+        else '' end as device_type_nm
+        , case a.inst_type when 1 then '에너톡'
+        when 2 then '로컬EMS'
+        else '' end as inst_type_nm
+        , b.device_pv_idx, b.device_stat_name,
+        b.alarm_msg, b.std_date, b.temp
+        from tb_device a
+        left outer join (
+        select
+        device_pv_idx, site_id, device_id, device_name, device_stat, alarm_msg, temp, tot_power, std_date, reg_date
+        , case device_stat when 0 then 'Stop'
+        when 1 then 'Run'
+        else 'disconnect' end as device_stat_name
+        from tb_device_pv
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_pv
+        group by site_id, device_id
+        )
+        ) b
+        on a.site_id = b.site_id
+        and a.device_id = b.device_id
+        where a.device_type in (3, 5)
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+        order by a.device_id
+        ) page_tb
+        , ( select @rownum := 0 ) r
+        ) f_tb
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)">
+            limit #{startNum }, #{pageRowCnt }
+        </if>
+    </select>
+
+    <select id="getDevicePVListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+        /* PV장치 건수 조회 */
+        select
+        count(*) as listCnt
+        from (
+        select
+        @rownum := @rownum + 1 as rnum,
+        page_tb.*
+        from (
+        select
+        a.device_id, a.device_name, a.site_id, device_type,
+        case a.device_type when 1 then 'PCS'
+        when 2 then 'BMS'
+        when 3 then 'PV'
+        when 4 then '부하측정기기'
+        when 5 then 'PV모니터링기기'
+        when 6 then 'ESS모니터링기기'
+        when 7 then 'iSmart'
+        when 8 then '총량기기'
+        when 9 then 'AMI'
+        else '' end as device_type_nm
+        , case a.inst_type when 1 then '에너톡'
+        when 2 then '로컬EMS'
+        else '' end as inst_type_nm
+        , b.device_pv_idx, b.device_stat_name,
+        b.alarm_msg, b.std_date, b.temp
+        from tb_device a
+        left outer join (
+        select
+        device_pv_idx, site_id, device_id, device_name, device_stat, alarm_msg, temp, tot_power, std_date, reg_date
+        , case device_stat when 0 then 'Stop'
+        when 1 then 'Run'
+        else 'disconnect' end as device_stat_name
+        from tb_device_pv
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_pv
+        group by site_id, device_id
+        )
+        ) b
+        on a.site_id = b.site_id
+        and a.device_id = b.device_id
+        where a.device_type in (3, 5)
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+        ) page_tb
+        , ( select @rownum := 0 ) r
+        ) f_tb
+    </select>
+
+    <select id="getDevicePVDetail" parameterType="hashMap" resultType="hashMap">
+		/* PV장치 상세 조회 */
+		select 
+			a.device_id, a.site_id, a.device_name, site.site_name, a.device_grp_name, 
+			a.device_type, concat('(', a.inst_type_nm, ')', a.device_type_nm) as device_type_nm
+			, b.device_pv_idx, b.std_date, b.device_stat, b.device_stat_nm, 
+			b.alarm_msg, b.temp, b.tot_power
+		from (
+				select 
+					device_id, device.site_id, device.user_idx, device_name, device.device_grp_idx, device_type, inst_type, 
+					case device_type when 1 then 'PCS'
+						when 2 then 'BMS'
+						when 3 then 'PV'
+						when 4 then '부하측정기기'
+						when 5 then 'PV모니터링기기'
+						when 6 then 'ESS모니터링기기'
+						when 7 then 'iSmart'
+						when 8 then '총량기기'
+						when 9 then 'AMI'
+						else '' end as device_type_nm
+					, case inst_type when 1 then '에너톡'
+						when 2 then '로컬EMS'
+						else '' end as inst_type_nm
+					, device_grp_name
+				from tb_device device
+				left outer join tb_device_group deviceGroup
+				on device.device_grp_idx = deviceGroup.device_grp_idx
+		) a
+		left outer join (
+				select 
+					device_pv_idx, site_id, device_id, device_name, device_stat, alarm_msg, temp, tot_power, std_date, reg_date
+					, case device_stat when 0 then 'Stop'
+						when 1 then 'Run'
+						when 2 then 'Fault'
+						when 3 then 'Warning'
+						else '' end as device_stat_nm
+				from tb_device_pv
+				where (site_id, device_id, reg_date) in (
+					select 
+						site_id, device_id, max(reg_date) reg_date 
+					from tb_device_pv
+					group by site_id, device_id
+				)
+		) b
+		on a.site_id = b.site_id 
+		and a.device_id = b.device_id
+		, tb_site site
+		where a.site_id = site.site_id
+		and a.site_id = #{siteId }
+		and a.device_id = #{deviceId }
+		and a.device_type = #{deviceType }
+	</select>
+
+    <select id="getDeviceList" parameterType="hashMap" resultType="hashMap">
+        /* 장치 목록 조회 */
+        select * from (
+        select
+        @rownum := @rownum + 1 as rnum,
+        page_tb.*
+        from (
+        select
+        a.device_id, a.site_id, a.user_idx, a.device_name, a.device_grp_idx,
+        a.device_type, a.inst_type,
+        ioe.upload_date, ioe.device_stat as ioe_device_stat,
+        pcs.ac_power, pcs.dc_power, pcs.pcs_status as pcs_device_stat,
+        bms.sys_soc, bms.device_stat as bms_device_stat,
+        pv.tot_power, pv.device_stat as pv_device_stat,
+        ami.device_stat as ami_device_stat,
+        a.del_yn, a.reg_uid, a.reg_date, a.mod_uid, a.mod_date
+        from tb_device a
+        left outer join (
+        select
+		device_ioe_idx, site_id, device_id, device_name, device_reg_id, serial_no, inst_type, inst_purpose, data_period, data_cnt,
+        ct_capacity, ct_capacity_list, pw_capacity, ch_cnt, ch_purpose, provider,
+        vr_device_id, vr_device_grp_id, vr_owner_id, vr_action, vr_stat, vr_mod_date, vr_error,
+        tm_voltage, tm_pulse, tm_ct_ratio, tm_pt_tatio,
+        network_conf, options, create_timestamp, create_date, upload_timestamp, upload_date, device_stat, reg_date
+        from tb_device_ioe
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_ioe
+        group by site_id, device_id
+        )
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and site_id = #{siteId }
+        </if>
+        order by device_id
+        ) ioe
+        on a.device_id = ioe.device_id and a.device_type in (4, 6, 7, 8)
+        left outer join (
+        select
+        device_pcs_idx, site_id, device_id, device_name, device_stat, alarm_msg,
+        ac_voltage, ac_power, ac_current, ac_freq, ac_set_power, ac_pf,
+        dc_voltage, dc_power, dc_current, dc_freq, dc_set_power, dc_pf, pcs_status, std_date, reg_date
+        from tb_device_pcs
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_pcs
+        group by site_id, device_id
+        )
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and site_id = #{siteId }
+        </if>
+        order by device_id
+        ) pcs
+        on a.device_id = pcs.device_id and a.device_type = 1
+        left outer join (
+        select
+        device_bms_idx, site_id, device_id, device_name, device_stat,
+        sys_soc, curr_soc, sys_soh, sys_voltage, sys_current, dod, std_date, reg_date
+        from tb_device_bms
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_bms
+        group by site_id, device_id
+        )
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and site_id = #{siteId }
+        </if>
+        order by device_id
+        ) bms
+        on a.device_id = bms.device_id and a.device_type = 2
+        left outer join (
+        select
+        device_pv_idx, site_id, device_id, device_name, device_stat, alarm_msg, temp, tot_power, std_date, reg_date
+        from tb_device_pv
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_pv
+        group by site_id, device_id
+        )
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and site_id = #{siteId }
+        </if>
+        order by device_id
+        ) pv
+        on a.device_id = pv.device_id and a.device_type = 3
+        left outer join (
+        select
+        device_ami_idx, site_id, device_id, device_name, device_stat, alarmMsg,
+        voltage_r, voltage_s, voltage_t, current_r, current_s, current_t, frequency,
+        accum_active_power_r, accum_active_power_s, accum_active_power_t,
+        accum_reactive_power_lagging_r, accum_reactive_power_lagging_s, accum_reactive_power_lagging_t,
+        accum_reactive_power_leading_r, accum_reactive_power_leading_s, accum_reactive_power_leading_t,
+        std_date, reg_date
+        from tb_device_ami
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_ami
+        group by site_id, device_id
+        )
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and site_id = #{siteId }
+        </if>
+        order by device_id
+        ) ami
+        on a.device_id = ami.device_id and a.device_type = 9
+        where a.del_yn = 'N'
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+        order by a.device_id
+        ) page_tb
+        , ( select @rownum := 0 ) r
+        ) f_tb
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(startNum)">
+            limit #{startNum }, #{pageRowCnt }
+        </if>
+    </select>
+
+    <select id="getDeviceListCnt" parameterType="hashMap" resultType="java.lang.Integer">
+        /* 장치 건수 조회 */
+        select
+        count(*) as listCnt
+        from (
+        select
+        @rownum := @rownum + 1 as rnum,
+        page_tb.*
+        from (
+        select
+        a.device_id, a.site_id, a.user_idx, a.device_name, a.device_grp_idx,
+        a.device_type, a.inst_type,
+        ioe.upload_date, ioe.device_stat, pcs.ac_power, pcs.dc_power, bms.sys_soc, pv.tot_power,
+        ami.device_stat as ami_device_stat,
+        a.del_yn, a.reg_uid, a.reg_date, a.mod_uid, a.mod_date
+        from tb_device a
+        left outer join (
+        select
+		device_ioe_idx, site_id, device_id, device_name, device_reg_id, serial_no, inst_type, inst_purpose, data_period, data_cnt,
+        ct_capacity, ct_capacity_list, pw_capacity, ch_cnt, ch_purpose, provider,
+        vr_device_id, vr_device_grp_id, vr_owner_id, vr_action, vr_stat, vr_mod_date, vr_error,
+        tm_voltage, tm_pulse, tm_ct_ratio, tm_pt_tatio,
+        network_conf, options, create_timestamp, create_date, upload_timestamp, upload_date, device_stat, reg_date
+        from tb_device_ioe
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_ioe
+        group by site_id, device_id
+        )
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and site_id = #{siteId }
+        </if>
+        order by device_id
+        ) ioe
+        on a.device_id = ioe.device_id and a.device_type in (4, 6, 7, 8)
+        left outer join (
+        select
+        device_pcs_idx, site_id, device_id, device_name, device_stat, alarm_msg,
+        ac_voltage, ac_power, ac_current, ac_freq, ac_set_power, ac_pf,
+        dc_voltage, dc_power, dc_current, dc_freq, dc_set_power, dc_pf, std_date, reg_date
+        from tb_device_pcs
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_pcs
+        group by site_id, device_id
+        )
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and site_id = #{siteId }
+        </if>
+        order by device_id
+        ) pcs
+        on a.device_id = pcs.device_id and a.device_type = 1
+        left outer join (
+        select
+        device_bms_idx, site_id, device_id, device_name, device_stat,
+        sys_soc, curr_soc, sys_soh, sys_voltage, sys_current, dod, std_date, reg_date
+        from tb_device_bms
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_bms
+        group by site_id, device_id
+        )
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and site_id = #{siteId }
+        </if>
+        order by device_id
+        ) bms
+        on a.device_id = bms.device_id and a.device_type = 2
+        left outer join (
+        select
+        device_pv_idx, site_id, device_id, device_name, device_stat, alarm_msg, temp, tot_power, std_date, reg_date
+        from tb_device_pv
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_pv
+        group by site_id, device_id
+        )
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and site_id = #{siteId }
+        </if>
+        order by device_id
+        ) pv
+        on a.device_id = pv.device_id and a.device_type = 3
+        left outer join (
+        select
+        device_ami_idx, site_id, device_id, device_name, device_stat, alarmMsg,
+        voltage_r, voltage_s, voltage_t, current_r, current_s, current_t, frequency,
+        accum_active_power_r, accum_active_power_s, accum_active_power_t,
+        accum_reactive_power_lagging_r, accum_reactive_power_lagging_s, accum_reactive_power_lagging_t,
+        accum_reactive_power_leading_r, accum_reactive_power_leading_s, accum_reactive_power_leading_t,
+        std_date, reg_date
+        from tb_device_ami
+        where (site_id, device_id, reg_date) in (
+        select
+        site_id, device_id, max(reg_date) reg_date
+        from tb_device_ami
+        group by site_id, device_id
+        )
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and site_id = #{siteId }
+        </if>
+        order by device_id
+        ) ami
+        on a.device_id = ami.device_id and a.device_type = 9
+        where a.del_yn = 'N'
+        <if test="@kr.co.ewp.ewpsp.common.util.CommonUtils@isNotEmpty(siteId)">
+            and a.site_id = #{siteId }
+        </if>
+        order by a.device_id
+        ) page_tb
+        , ( select @rownum := 0 ) r
+        ) f_tb
+    </select>
+
+    <select id="getDevice" parameterType="hashMap" resultType="hashMap">
+		/* 장치 상세 조회 */
+		select 
+			device_id, site_id, user_idx, device_name, device_grp_idx, 
+			device_type, inst_type, del_yn, reg_uid, reg_date, mod_uid, mod_date
+		from tb_device
+		where site_id = #{siteId} 
+		and device_id = #{deviceId}
+		and device_type = #{deviceType}
+	</select>
+	
+    <select id="getDeviceAMIDetail" parameterType="hashMap" resultType="hashMap">
+		/* AMI장치 상세 조회 */
+		select 
+			a.device_id, a.site_id, a.device_name, site.site_name, a.device_grp_name, 
+			a.device_type, concat('(', a.inst_type_nm, ')', a.device_type_nm) as device_type_nm, 
+			b.device_stat,
+			b.voltage_r, b.voltage_s, b.voltage_t, b.current_r, b.current_s, b.current_t, b.frequency, 
+			b.accum_active_power_r, b.accum_active_power_s, b.accum_active_power_t, 
+			b.accum_reactive_power_lagging_r, b.accum_reactive_power_lagging_s, b.accum_reactive_power_lagging_t, 
+			b.accum_reactive_power_leading_r, b.accum_reactive_power_leading_s, b.accum_reactive_power_leading_t,  
+			b.device_ami_idx
+		from (
+				select 
+					device.device_id, device.site_id, device.user_idx, device.device_name, device.device_grp_idx, 
+					device.device_type, device.inst_type, 
+					case device_type when 1 then 'PCS'
+						when 2 then 'BMS'
+						when 3 then 'PV'
+						when 4 then '부하측정기기'
+						when 5 then 'PV모니터링기기'
+						when 6 then 'ESS모니터링기기'
+						when 7 then 'iSmart'
+						when 8 then '총량기기'
+						when 9 then 'AMI'
+						else '' end as device_type_nm
+					, case inst_type when 1 then '에너톡'
+						when 2 then '로컬EMS'
+						else '' end as inst_type_nm
+					, device_grp_name
+				from tb_device device
+				left outer join tb_device_group deviceGroup
+				on device.device_grp_idx = deviceGroup.device_grp_idx
+		) a
+		left outer join (
+				select 
+					device_ami_idx, site_id, device_id, device_name, device_stat, alarmMsg, 
+					voltage_r, voltage_s, voltage_t, current_r, current_s, current_t, frequency, 
+					accum_active_power_r, accum_active_power_s, accum_active_power_t, 
+					accum_reactive_power_lagging_r, accum_reactive_power_lagging_s, accum_reactive_power_lagging_t, 
+					accum_reactive_power_leading_r, accum_reactive_power_leading_s, accum_reactive_power_leading_t, 
+					std_date, reg_date 
+				from tb_device_ami
+				where (site_id, device_id, reg_date) in (
+					select 
+						site_id, device_id, max(reg_date) reg_date 
+					from tb_device_ami
+					group by site_id, device_id
+				)
+		) b
+		on a.site_id = b.site_id
+		and a.device_id = b.device_id
+		, tb_site site
+		where a.site_id = site.site_id
+		and a.site_id = #{siteId }
+		and a.device_id = #{deviceId }
+		and a.device_type = #{deviceType }
+	</select>
+
+</mapper>

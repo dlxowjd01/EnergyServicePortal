@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.ewp.api.dao.PvGenDao">
+    <resultMap type="PvGen" id="PvGenRM">
+        <id property="pvGenIdx" column="pv_gen_idx" javaType="Long"></id><!--PV발전량식별자-->
+        <result property="siteId" column="site_id" javaType="String"></result><!--사이트ID-->
+        <result property="deviceId" column="device_id" javaType="String"></result><!--장치ID-->
+        <result property="stdDate" column="std_date" javaType="Date"></result><!--기준일시-->
+        <result property="genVal" column="gen_val" javaType="Float"></result><!--발전량(단위:mWh -> Wh)-->
+        <result property="temp" column="temp" javaType="Integer"></result><!--온도(단위:℃)-->
+        <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
+        <result property="modDate" column="mod_date" javaType="Date"></result><!--최종수정일시-->
+    </resultMap>
+    <insert id="insert" parameterType="PvGen">
+        /* PV발전량 등록 */
+        INSERT INTO tb_pv_gen (
+               site_id,
+               device_id,
+               std_date,
+               gen_val,
+               temp,
+               reg_date
+             ) VALUES (
+               #{entity.siteId},
+               #{entity.deviceId},
+               #{entity.stdDate},
+               #{entity.genVal},
+               #{entity.temp},
+               NOW())
+        <selectKey resultType="Long" keyProperty="entity.pvGenIdx">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <update id="update" parameterType="PvGen">
+        /* PV발전량 수정 */
+        UPDATE tb_pv_gen 
+               <set>
+               <if test="entity.siteId != null">
+               site_id = #{entity.siteId},
+               </if>
+               <if test="entity.deviceId != null">
+               device_id = #{entity.deviceId},
+               </if>
+               <if test="entity.stdDate != null">
+               std_date = #{entity.stdDate},
+               </if>
+               <if test="entity.genVal != null">
+               gen_val = #{entity.genVal},
+               </if>
+               <if test="entity.temp != null">
+               temp = #{entity.temp},
+               </if>
+               mod_date = NOW(),
+               </set>
+         WHERE pv_gen_idx = #{entity.pvGenIdx}
+    </update>
+    <delete id="delete" parameterType="PvGen">
+        /* PV발전량 삭제 */
+        DELETE FROM tb_pv_gen 
+         WHERE pv_gen_idx = #{pvGenIdx}
+    </delete>
+    <select id="selectOne" resultMap="PvGenRM">
+        /* PV발전량 상세조회 */
+        SELECT pv_gen_idx,
+               site_id,
+               device_id,
+               std_date,
+               gen_val,
+               temp,
+               reg_date,
+               mod_date
+          FROM tb_pv_gen
+         WHERE pv_gen_idx = #{pvGenIdx}
+    </select>
+    <select id="selectList" resultMap="PvGenRM">
+        /* PV발전량 목록조회 */
+        SELECT pv_gen_idx,
+               site_id,
+               device_id,
+               std_date,
+               gen_val,
+               temp,
+               reg_date,
+               mod_date
+          FROM tb_pv_gen
+               <if test="pageable != null">
+         WHERE LIMIT #{pageable.start}, #{pageable.end}
+               </if>
+    </select>
+    <select id="selectListCount" resultType="int">
+        /* PV발전량 전체 개수 조회 */
+        SELECT COUNT(*) AS CNT
+          FROM tb_pv_gen
+         WHERE pv_gen_idx = #{pvGenIdx}
+    </select>
+    <select id="selectOneLast" resultMap="PvGenRM">
+        /* 마지막 PV발전량 상세조회 */
+        SELECT pv_gen_idx,
+               site_id,
+               device_id,
+               std_date,
+               gen_val,
+               temp,
+               reg_date,
+               mod_date
+          FROM tb_pv_gen
+         WHERE site_id = #{siteId}
+           AND device_id = #{deviceId}
+         ORDER BY std_date DESC
+         LIMIT 1
+    </select>
+    <select id="selectOneByUnique" resultMap="PvGenRM">
+        /* PV발전량 상세조회ByUnique */
+        SELECT pv_gen_idx,
+               site_id,
+               device_id,
+               std_date,
+               gen_val,
+               temp,
+               reg_date,
+               mod_date
+          FROM tb_pv_gen
+         WHERE site_id = #{siteId}
+           AND device_id = #{deviceId}
+           AND std_date = #{stdDate}
+    </select>
+    <select id="selectPvGenListBySiteId" resultMap="PvGenRM">
+        /* PV발전량 목록조회 */
+        SELECT site_id,
+               std_date,
+               SUM(gen_val) gen_val
+          FROM tb_pv_gen
+         WHERE site_id = #{siteId}
+           AND std_date BETWEEN #{beginDate} AND #{endDate}
+         GROUP BY site_id, std_date
+    </select>
+</mapper>

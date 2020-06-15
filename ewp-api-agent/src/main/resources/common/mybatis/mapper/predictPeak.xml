@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.ewp.api.dao.PredictPeakDao">
+    <resultMap type="PredictPeak" id="PredictPeakRM">
+        <id property="prePeakIdx" column="pre_peak_idx" javaType="Long"></id><!--예측피크식별자-->
+        <result property="siteId" column="site_id" javaType="String"></result><!--사이트ID-->
+        <result property="stdTimestamp" column="std_timestamp" javaType="Date"></result><!--기준타임스탬프-->
+        <result property="stdDate" column="std_date" javaType="Date"></result><!--기준일시-->
+        <result property="peakVal" column="peak_val" javaType="Float"></result><!--최대수요(단위:kW -> W)-->
+        <result property="peakTimestamp" column="peak_timestamp" javaType="Date"></result><!--최대수요발생타임스탬프-->
+        <result property="peakDate" column="peak_date" javaType="Date"></result><!--최대수요발생일시-->
+        <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
+        <result property="modDate" column="mod_date" javaType="Date"></result><!--최종수정일시-->
+    </resultMap>
+    <insert id="insert" parameterType="PredictPeak">
+        /* 예측피크 등록 */
+        INSERT INTO tb_predict_peak (
+               site_id,
+               std_timestamp,
+               std_date,
+               peak_val,
+               peak_timestamp,
+               peak_date,
+               reg_date
+             ) VALUES (
+               #{entity.siteId},
+               #{entity.stdTimestamp},
+               #{entity.stdDate},
+               #{entity.peakVal},
+               #{entity.peakTimestamp},
+               #{entity.peakDate},
+               NOW())
+        <selectKey resultType="Long" keyProperty="entity.prePeakIdx">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <update id="update" parameterType="PredictPeak">
+        /* 예측피크 수정 */
+        UPDATE tb_predict_peak 
+               <set>
+               <if test="entity.siteId != null">
+               site_id = #{entity.siteId},
+               </if>
+               <if test="entity.stdTimestamp != null">
+               std_timestamp = #{entity.stdTimestamp},
+               </if>
+               <if test="entity.stdDate != null">
+               std_date = #{entity.stdDate},
+               </if>
+               <if test="entity.peakVal != null">
+               peak_val = #{entity.peakVal},
+               </if>
+               <if test="entity.peakTimestamp != null">
+               peak_timestamp = #{entity.peakTimestamp},
+               </if>
+               <if test="entity.peakDate != null">
+               peak_date = #{entity.peakDate},
+               </if>
+               mod_date = NOW()
+               </set>
+         WHERE pre_peak_idx = #{entity.prePeakIdx}
+    </update>
+    <delete id="delete" parameterType="PredictPeak">
+        /* 예측피크 삭제 */
+        DELETE FROM tb_predict_peak 
+         WHERE pre_peak_idx = #{prePeakIdx}
+    </delete>
+    <select id="selectOne" resultMap="PredictPeakRM">
+        /* 예측피크 상세조회 */
+        SELECT pre_peak_idx,
+               site_id,
+               std_timestamp,
+               std_date,
+               peak_val,
+               peak_timestamp,
+               peak_date,
+               reg_date,
+               mod_date
+          FROM tb_predict_peak
+         WHERE pre_peak_idx = #{prePeakIdx}
+    </select>
+    <select id="selectList" resultMap="PredictPeakRM">
+        /* 예측피크 목록조회 */
+        SELECT pre_peak_idx,
+               site_id,
+               std_timestamp,
+               std_date,
+               peak_val,
+               peak_timestamp,
+               peak_date,
+               reg_date,
+               mod_date
+          FROM tb_predict_peak
+               <if test="pageable != null">
+         WHERE LIMIT #{pageable.start}, #{pageable.end}
+               </if>
+    </select>
+    <select id="selectListCount" resultType="int">
+        /* 예측피크 전체 개수 조회 */
+        SELECT COUNT(*) AS CNT
+          FROM tb_predict_peak
+         WHERE pre_peak_idx = #{prePeakIdx}
+    </select>
+    
+    <select id="selectOneLastPredictPeak" resultMap="PredictPeakRM">
+        /* 마지막 예측피크 상세조회 */
+        SELECT pre_peak_idx,
+               site_id,
+               std_timestamp,
+               std_date,
+               peak_val,
+               peak_timestamp,
+               peak_date,
+               reg_date,
+               mod_date
+          FROM tb_predict_peak
+         WHERE site_id = #{siteId}
+         ORDER BY std_timestamp DESC
+         LIMIT 1
+    </select>
+    <select id="selectOneByUnique" resultMap="PredictPeakRM">
+        /* 예측피크 상세조회 */
+        SELECT pre_peak_idx,
+               site_id,
+               std_timestamp,
+               std_date,
+               peak_val,
+               peak_timestamp,
+               peak_date,
+               reg_date,
+               mod_date
+          FROM tb_predict_peak
+         WHERE site_id = #{siteId}
+           AND std_timestamp = #{stdTimestamp}
+    </select>
+</mapper>

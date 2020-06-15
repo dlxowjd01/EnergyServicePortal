@@ -1,0 +1,17 @@
+#  gitignore
+# Expo
+.expo
+__generated_
+# Node
+node_modules
+*.log
+# Android Studio
+*.iml
+.gradle
+.idea/
+# Xcode
+*.pbxuser
+!default.pbxuser
+*.xccheckout
+*.xcscmblueprint
+xcuserdata

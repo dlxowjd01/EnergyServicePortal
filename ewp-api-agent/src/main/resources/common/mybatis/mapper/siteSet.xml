@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.ewp.api.dao.SiteSetDao">
+    <resultMap type="SiteSet" id="SiteSetRM">
+        <id property="siteSetIdx" column="site_set_idx" javaType="Long"></id><!--사이트설정식별자-->
+        <result property="siteId" column="site_id" javaType="String"></result><!--사이트ID-->
+        <result property="custNum" column="cust_num" javaType="String"></result><!--고객 번호-->
+        <result property="useElecAddr" column="use_elec_addr" javaType="String"></result><!--전기사용 장소-->
+        <result property="meterNum" column="meter_num" javaType="String"></result><!--계량기 번호-->
+        <result property="meterSf" column="meter_sf" javaType="String"></result><!--계량기 배수-->
+        <result property="planType" column="plan_type" javaType="String"></result><!--요금제구분(general_A1_low_voltage_A 외. bill_api.pdf 참조요망)-->
+        <result property="planType2" column="plan_type2" javaType="String"></result><!--요금제구분2(general_A1_low_voltage_A 외. bill_api.pdf 참조요망)-->
+        <result property="planType3" column="plan_type3" javaType="String"></result><!--요금제구분3(general_A1_low_voltage_A 외. bill_api.pdf 참조요망)-->
+        <result property="planName" column="plan_name" javaType="String"></result><!--요금제(일반용 전력 (갑)I 저압전력 외. bill_api.pdf 참조요망)-->
+        <result property="contractPower" column="contract_power" javaType="Long"></result><!--계약전력(단위:KW -> W)-->
+        <result property="meterReadDay" column="meter_read_day" javaType="Long"></result><!--검침일(단위:일)-->
+        <result property="chargeYearmd" column="charge_yearmd" javaType="String"></result><!--요금적용기준년월(형식:YYYYMM)-->
+        <result property="chargePower" column="charge_power" javaType="Long"></result><!--요금적용전력(단위:KW -> W)-->
+        <result property="chargeRate" column="charge_rate" javaType="Long"></result><!--요금적용전력대비(단위:%)-->
+        <result property="goalPower" column="goal_power" javaType="Long"></result><!--목표전력(단위:KW -> W)-->
+        <result property="reduceAmt" column="reduce_amt" javaType="Long"></result><!--감축용량(단위:kW -> W)-->
+        <result property="smpRate" column="smp_rate" javaType="Double"></result><!--SMP단가(System Marginal Price)(단위:원)-->
+        <result property="recRate" column="rec_rate" javaType="Double"></result><!--REC단가(단위:원)-->
+        <result property="recWeight" column="rec_weight" javaType="Double"></result><!--REC가중치-->
+        <result property="profitRatio" column="profit_ratio" javaType="Double"></result><!--수익배분 비율-->
+        <result property="delYn" column="del_yn" javaType="String"></result><!--삭제여부(Y:예,N:아니오)-->
+        <result property="regUid" column="reg_uid" javaType="String"></result><!--등록자ID-->
+        <result property="regDate" column="reg_date" javaType="Date"></result><!--등록일시-->
+        <result property="modUid" column="mod_uid" javaType="String"></result><!--최종수정자ID-->
+        <result property="modDate" column="mod_date" javaType="Date"></result><!--최종수정일시-->
+    </resultMap>
+    <insert id="insert" parameterType="SiteSet">
+        /* 사이트설정 등록 */
+        INSERT INTO tb_site_set (
+               site_id,
+               cust_num,
+               use_elec_addr,
+               meter_num,
+               meter_sf,
+               plan_type,
+               plan_type2,
+               plan_type3,
+               plan_name,
+               contract_power,
+               meter_read_day,
+               charge_yearmd,
+               charge_power,
+               charge_rate,
+               goal_power,
+               reduce_amt,
+               smp_rate,
+               rec_rate,
+               rec_weight,
+               profit_ratio,
+               del_yn,
+               reg_uid,
+               reg_date,
+               mod_uid,
+               mod_date
+             ) VALUES (
+               #{entity.siteId},
+               #{entity.custNum},
+               #{entity.useElecAddr},
+               #{entity.meterNum},
+               #{entity.meterSf},
+               #{entity.planType},
+               #{entity.planType2},
+               #{entity.planType3},
+               #{entity.planName},
+               #{entity.chargeType},
+               #{entity.contractPower},
+               #{entity.meterReadDay},
+               #{entity.chargeYearmd},
+               #{entity.chargePower},
+               #{entity.chargeRate},
+               #{entity.goalPower},
+               #{entity.reduceAmt},
+               #{entity.smpRate},
+               #{entity.recRate},
+               #{entity.recWeight},
+               #{entity.profitRatio},
+               #{entity.delYn},
+               #{entity.regUid},
+               #{entity.regDate},
+               #{entity.modUid},
+               #{entity.modDate})
+        <selectKey resultType="Long" keyProperty="entity.siteSetIdx">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <update id="update" parameterType="SiteSet">
+        /* 사이트설정 수정 */
+        UPDATE tb_site_set 
+               <set>
+               <if test="entity.siteId != null">
+               site_id = #{entity.siteId},
+               </if>
+               <if test="entity.custNum != null">
+               cust_num = #{entity.custNum},
+               </if>
+               <if test="entity.useElecAddr != null">
+               use_elec_addr = #{entity.useElecAddr},
+               </if>
+               <if test="entity.meterNum != null">
+               meter_num = #{entity.meterNum},
+               </if>
+               <if test="entity.meterSf != null">
+               meter_sf = #{entity.meterSf},
+               </if>
+               <if test="entity.planType != null">
+               plan_type = #{entity.planType},
+               </if>
+               <if test="entity.planType2 != null">
+               plan_type2 = #{entity.planType2},
+               </if>
+               <if test="entity.plan_type3 != null">
+               plan_type3 = #{entity.planType3},
+               </if>
+               <if test="entity.planName != null">
+               plan_name = #{entity.planName},
+               </if>
+               <if test="entity.contractPower != null">
+               contract_power = #{entity.contractPower},
+               </if>
+               <if test="entity.meterReadDay != null">
+               meter_read_day = #{entity.meterReadDay},
+               </if>
+               <if test="entity.chargeYearmd != null">
+               charge_yearmd = #{entity.chargeYearmd},
+               </if>
+               <if test="entity.chargePower != null">
+               charge_power = #{entity.chargePower},
+               </if>
+               <if test="entity.chargeRate != null">
+               charge_rate = #{entity.chargeRate},
+               </if>
+               <if test="entity.goalPower != null">
+               goal_power = #{entity.goalPower},
+               </if>
+               <if test="entity.reduceAmt != null">
+               reduce_amt = #{entity.reduceAmt},
+               </if>
+               <if test="entity.smpRate != null">
+               smp_rate = #{entity.smpRate},
+               </if>
+               <if test="entity.recRate != null">
+               rec_rate = #{entity.recRate},
+               </if>
+               <if test="entity.recWeight != null">
+               rec_weight = #{entity.recWeight},
+               </if>
+               <if test="entity.profitRatio != null">
+               profit_ratio = #{entity.profitRatio},
+               </if>
+               <if test="entity.delYn != null">
+               del_yn = #{entity.delYn},
+               </if>
+               <if test="entity.regUid != null">
+               reg_uid = #{entity.regUid},
+               </if>
+               <if test="entity.regDate != null">
+               reg_date = #{entity.regDate},
+               </if>
+               <if test="entity.modUid != null">
+               mod_uid = #{entity.modUid},
+               </if>
+               <if test="entity.modDate != null">
+               mod_date = #{entity.modDate},
+               </if>
+               </set>
+         WHERE site_set_idx = #{entity.siteSetIdx}
+    </update>
+    <delete id="delete" parameterType="SiteSet">
+        /* 사이트설정 삭제 */
+        DELETE FROM tb_site_set 
+         WHERE site_set_idx = #{siteSetIdx}
+    </delete>
+    <select id="selectOne" resultMap="SiteSetRM">
+        /* 사이트설정 상세조회 */
+        SELECT site_set_idx,
+               site_id,
+               cust_num,
+               use_elec_addr,
+               meter_num,
+               meter_sf,
+               plan_type,
+               plan_type2,
+               plan_type3,
+               plan_name,
+               contract_power,
+               meter_read_day,
+               charge_yearmd,
+               charge_power,
+               charge_rate,
+               goal_power,
+               reduce_amt,
+               smp_rate,
+               rec_rate,
+               rec_weight,
+               profit_ratio,
+               del_yn,
+               reg_uid,
+               reg_date,
+               mod_uid,
+               mod_date
+          FROM tb_site_set
+         WHERE site_id = #{id}
+    </select>
+    <select id="selectList" resultMap="SiteSetRM">
+        /* 사이트설정 목록조회 */
+        SELECT site_set_idx,
+               site_id,
+               cust_num,
+               use_elec_addr,
+               meter_num,
+               meter_sf,
+               plan_type,
+               plan_type2,
+               plan_type3,
+               plan_name,
+               contract_power,
+               meter_read_day,
+               charge_yearmd,
+               charge_power,
+               charge_rate,
+               goal_power,
+               reduce_amt,
+               smp_rate,
+               rec_rate,
+               rec_weight,
+               profit_ratio,
+               del_yn,
+               reg_uid,
+               reg_date,
+               mod_uid,
+               mod_date
+          FROM tb_site_set
+               <if test="pageable != null">
+         WHERE LIMIT #{pageable.start}, #{pageable.end}
+               </if>
+    </select>
+    <select id="selectListCount" resultType="int">
+        /* 사이트설정 전체 개수 조회 */
+        SELECT COUNT(*) AS CNT
+          FROM tb_site_set
+         WHERE site_set_idx = #{siteSetIdx}
+    </select>
+</mapper>
