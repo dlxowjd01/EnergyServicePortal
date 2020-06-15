@@ -15,13 +15,13 @@ $(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown
 	if ($selector.find(':radio').length > 0) {
 		$selector.find(':radio').prop('checked', true);
 	} else if ($selector.find(':checkbox').length > 0) {
-		if($selector.find(':checkbox').prop('checked')) {
+		if ($selector.find(':checkbox').prop('checked')) {
 			$selector.find(':checkbox').prop('checked', false);
 		} else {
 			$selector.find(':checkbox').prop('checked', true);
 		}
 	}
-	
+
 	if ($selector.find(':radio').length > 0 || $selector.find(':checkbox').length > 0) {
 		displayDropdown($dropdown);
 	} else {
@@ -31,14 +31,14 @@ $(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown
 		$displayButton.eq(0).html($displayText + '<span class="caret"></span>');
 
 		//data Setting
-		if(!isEmpty($displayData)) {
-			$.map($displayData, function(val, key) {
+		if (!isEmpty($displayData)) {
+			$.map($displayData, function (val, key) {
 				$displayButton.data(key, val);
 			});
 		}
 	}
 
-	if(typeof(rtnDropdown) == 'function') {
+	if (typeof (rtnDropdown) == 'function') {
 		rtnDropdown($dropdownId);
 	}
 });
@@ -52,19 +52,19 @@ const displayDropdown = ($selector) => {
 	let $displayButton = $selector.find('button'),
 		$displayData = '',
 		$displayText = '';
-	
+
 	if ($selector.find(':radio').length > 0) {
 		$displayText = $selector.find('input[type="radio"]:checked').next().text();
 	} else if ($selector.find(':checkbox').length > 0) {
 		let checkedboxLength = $selector.find('input[type="checkbox"]:checked').length;
 		let checkboxLength = $selector.find('input[type="checkbox"]').length;
 
-		if(checkedboxLength == checkboxLength) {
+		if (checkedboxLength == checkboxLength) {
 			$displayText = '전체';
 		} else {
-			if(checkedboxLength > 1) {
+			if (checkedboxLength > 1) {
 				$displayText = $selector.find('input[type="checkbox"]:checked:eq(0)').next().text() + '외 ' + (checkedboxLength - 1) + '개';
-			} else if(checkedboxLength == 0) {
+			} else if (checkedboxLength == 0) {
 				$displayText = $displayButton.data('name');
 			} else {
 				$displayText = $selector.find('input[type="checkbox"]:checked:eq(0)').next().text();
@@ -75,19 +75,33 @@ const displayDropdown = ($selector) => {
 	$displayButton.eq(0).html($displayText + '<span class="caret"></span>');
 
 	//data Setting
-	if(!isEmpty($displayData)) {
-		$.map($displayData, function(val, key) {
+	if (!isEmpty($displayData)) {
+		$.map($displayData, function (val, key) {
 			$displayButton.data(key, val);
 		});
 	}
 }
 
 /**
+ * dropDown 초기화 함수
  *
  * @param $selector
  */
 const dropDownInit = ($selector) => {
-	let button = $selector.closest('.dropdown').find('button');
-	let buttonNm = $selector.closest('.dropdown').find('button').data('name');
+	let button = $selector.find('button'),
+		buttonNm = $selector.find('button').data('name'),
+		ul = $selector.find('ul');
 	button.html(buttonNm + '<span class="caret"></span>');
+
+	//데이터에 저장된 정보가 있으면 동적 항목이라 보고 초기화
+	if ($.data(document, ul.prop('id'))) {
+		setMakeList(new Array(), ul.prop('id'), {'dataFunction': {}});
+	} else { //동적 생성된 항목이 아니고. 다중선택형일경우 선택 초기화
+		if (ul.find('input').length > 0) {
+			let inputType = ul.find('input').eq(0).prop('type');
+			if (inputType == 'checkbox' || inputType == 'radio') {
+				ul.find('input').prop('checked', false);
+			}
+		}
+	}
 }

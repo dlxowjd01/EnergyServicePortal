@@ -5,6 +5,7 @@
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const apiURL = 'http://iderms.enertalk.com:8443';
 	const siteList = JSON.parse('${siteList}');
+	let deviceList;
 
 	const configDevice = '/config/orgs/' + oid;
 	const statusRawDid = '/status/raw?dids=';
@@ -34,8 +35,6 @@
 		'SENSOR_TEMP_HUMIDITY': '온습도 센서',
 		'CCTV': 'CCTV'
 	};
-
-	let deviceList;
 
 	$(function () {
 		const compareArea = $('#siteList').next().find('.compare_area');
@@ -73,7 +72,6 @@
 			searchGrid();
 		});
 
-
 		$('.save_btn').on('click', function (e) {
 			let excelName = '이상분석';
 			let $val = $('#datatable').find('tbody');
@@ -89,17 +87,18 @@
 		});
 	});
 
-	const rtnDropdown = function ($selectId) {
+	const rtnDropdown = ($selectId) => {
 		if ($selectId == 'selectSiteList') {
 			deviceType();
 
 			//사이트 변경시 선택 초기화
-			$('.offset_dropdown button.btn-primary').each(function() {
-				let divId = $(this).parent().attr('id');
-				if(divId == 'interval') {
+			$('.offset_dropdown button.btn-primary').each(function () {
+				let divObj = $(this).parent(),
+					divId = divObj.attr('id');
+				if (divId == 'interval') {
 					$(this).data('value', 'hour').html('1시간 <span class="caret"></span>');
 				} else {
-					$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
+					dropDownInit(divObj);
 				}
 			});
 
@@ -109,31 +108,21 @@
 
 			$('.fromDate, .toDate').datepicker('setDate', new Date()); //기본값 세팅
 
+		} else if ($selectId == 'typeList' || $selectId == 'compareTypeList') {
+			deviceName($selectId); //설비명
+		} else if ($selectId == 'deviceList' || $selectId == 'compareDeviceList') {
+			setTypeList($selectId); //설비속성
+		} else if ($selectId == 'attrList' || $selectId == 'compareAttrList') {
+			//attrSelect($selectId);
 		}
-		//                 else if ($selectId == 'typeULList' || $selectId == 'compareTypeULList') {
-		//                     deviceName($selectId); //설비명
-		//                     setTypeList($selectId); //설비속성
-		//                 }
 	}
 
 	//사업소 조회
 	const siteMakeList = () => {
-		setMakeList(siteList, 'siteULList', { 'dataFunction': {} }); //list생성
+		setMakeList(siteList, 'siteULList', {'dataFunction': {}}); //list생성
 	};
 
-	//검증설비 - 설비유형 선택 시
-	$(document).on('click', '[id$=ypeULList] li', function () {
-		deviceName($(this)); //설비명
-	});
-
-	$(document).on('click', '[id$=eviceName] li', function () {
-		setTypeList($(this)); //설비속성
-	});
-
-	// $(document).on('click', '[id$="ttribute"] li', function () {
-	// 	attrSelect($(this));
-	// });
-	//
+	// 추후에도 쓸일 없다면 삭제 요망. 2020.06.12
 	// const attrSelect = (obj) => {
 	// 	let value = obj.find('input').val();
 	// 	if (value == 'metering' || value == 'forecasting') {
@@ -152,78 +141,81 @@
 
 	//설비유형 리스트 그리기
 	const deviceType = () => {
-
-		$('#deviceType button').empty().append('설비유형<span class="caret"></span>');
-		$('#compareDeviceType button').empty().append('설비유형<span class="caret"></span>');
-
+		let deviceType = new Array();
 		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
 			function () {
 				return $(this).val();
 			}
-		)
+			)
 		);
 
 		if (siteArray.length > 0) {
 			$.ajax({
 				url: apiURL + configDevice,
 				type: 'get',
-				async: false,
-				data: configDeviceData,
-				success: function (result) {
-					deviceList = result.devices;
-					let deviceType = new Array();
-
-					$.each(deviceList, function (i, el) {
-						if ($.inArray(el.sid, siteArray) >= 0) {
-							if ($.inArray(el.device_type, deviceType) === -1) {
-								deviceType.push(el.device_type);
-							}
+				data: configDeviceData
+			}).done(function (data, textStatus, jqXHR) {
+				deviceList = data.devices;
+				deviceList.forEach(el => {
+					if ($.inArray(el.sid, siteArray) >= 0) {
+						if ($.inArray(el.device_type, deviceType) === -1) {
+							deviceType.push(el.device_type);
 						}
-					});
+					}
+				});
 
-					deviceType.sort(); //정렬
+				deviceType.sort(); //정렬
 
-					$.each(deviceType, function (i, el) {
-						deviceType[i] = {
-							name: deviceTemplate[el],
-							type: el
-						}
-					});
+				deviceType.forEach((el, idx) => {
+					deviceType[idx] = {
+						name: deviceTemplate[el],
+						type: el
+					}
+				});
 
-					setMakeList(deviceType, 'typeULList', { 'dataFunction': {} });
-					setMakeList(deviceType, 'compareTypeULList', { 'dataFunction': {} });
-				},
-				dataType: 'json'
+				setMakeList(deviceType, 'typeULList', {'dataFunction': {}});
+				setMakeList(deviceType, 'compareTypeULList', {'dataFunction': {}});
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.error(jqXHR);
+				console.error(textStatus);
+				console.error(errorThrown);
+
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
 			});
 		} else {
-			$('#deviceType ul').empty();
-			$('#compareDeviceType ul').empty();
+			setMakeList(deviceType, 'typeULList', {'dataFunction': {}});
+			setMakeList(deviceType, 'compareTypeULList', {'dataFunction': {}});
 		}
 	};
 
 	//설비명 그리기
-	const deviceName = (obj) => {
-		let objType = obj.data('type');
-		let objId = $(obj).parent('ul').attr('id');
+	const deviceName = ($selectId) => {
+		let objType,
+			targetId = 'deviceName',
+			deviceNameArr = new Array();
 
-		if (objId.match('comp')) {
-			dropDownInit($('#compareDeviceName'));
-			dropDownInit($('#compareDeviceAttribute'));
+		if ($selectId.match('comp')) {
+			dropDownInit($('#compareDeviceList'));
+			dropDownInit($('#compareAttrList'));
+
+			objType = $(':radio[name="compareType"]:checked').val();
+			targetId = 'compareDeviceName';
 		} else {
-			dropDownInit($('#deviceName'));
-			dropDownInit($('#deviceAttribute'));
-		}
+			dropDownInit($('#deviceList'));
+			dropDownInit($('#attrList'));
 
-		let deviceNameArr = new Array();
-		let deviceNameArrCnt = 0;
+			objType = $(':radio[name="type"]:checked').val();
+			targetId = 'deviceName';
+		}
 
 		if (deviceList.length > 0) {
 			//선택된 사이트를 기준으로 한다.
 			$(':checkbox[name="site"]:checked').each(function () {
-				let siteNm = $(this).next().text()
-					, siteId = $(this).val();
+				let siteNm = $(this).next().text(),
+					siteId = $(this).val();
 
-				$.each(deviceList, function (i, el) {
+				deviceList.forEach(el => {
 					if (el.sid == siteId) {
 						if (objType == el.device_type) {
 							let metering = false;
@@ -243,12 +235,9 @@
 					}
 				});
 			});
-			if (objId == 'typeULList') {
-				setMakeList(deviceNameArr, 'deviceName', { 'dataFunction': {} });
-			} else if (objId == 'compareTypeULList') {
-				setMakeList(deviceNameArr, 'compareDeviceName', { 'dataFunction': {} });
-			}
 		}
+
+		setMakeList(deviceNameArr, targetId, {'dataFunction': {}});
 	}
 
 	//설비 속성 템플릿
@@ -257,7 +246,6 @@
 		$.ajax({
 			url: apiURL + '/config/view/device_properties',
 			type: 'get',
-			async: false,
 			data: {},
 			success: function (result) {
 				$.map(result, function (val, key) {
@@ -271,6 +259,7 @@
 							let unit = (v.unit != null && v.unit != '') ? '(' + v.unit + ')' : '';
 							tempObj['key'] = k;
 							tempObj['value'] = v.name.kr + unit;
+							tempObj['suffix'] = unit;
 							tempFeature.push(tempObj);
 						}
 					});
@@ -282,21 +271,43 @@
 	};
 
 	// 설비속성 그리기
-	const setTypeList = (obj) => {
-		let typeArray = new Array();
-		let thisId = obj.parent('ul').attr('id');
-		let thisForecast = Boolean(obj.find('input').data('forcasting'));
-		let thisMetering = Boolean(obj.find('input').data('metering'));
+	const setTypeList = ($selectId) => {
+		let typeArray = new Array(),
+			targetId = 'deviceAttribute',
+			thisForecast = true,
+			thisMetering = true, obj;
 
-		if (thisId.match('comp')) {
-			dropDownInit($('#compareDeviceAttribute'));
+		if ($selectId.match('comp')) {
+			dropDownInit($('#compareAttrList'));
+			obj = $(':radio[name="compareType"]:checked');
+			targetId = 'compareDeviceAttribute';
+
+			const type = $(':checkbox[name="compDevice"]:checked');
+			if(type.length > 0) {
+				type.each(function() {
+					if(!Boolean($(this).data('forcasting'))) {
+						thisForecast = false;
+					}
+
+					if(!Boolean($(this).data('metering'))) {
+						thisMetering = false
+					}
+				});
+			} else {
+				return; //설비 선택 전부 해제시에는 다음동작없음
+			}
 		} else {
-			dropDownInit($('#deviceAttribute'));
+			dropDownInit($('#attrList'));
+			obj = $(':radio[name="type"]:checked');
+			targetId = 'deviceAttribute';
+
+			const type = $(':radio[name="deviceNm"]:checked');
+			thisForecast = Boolean(type.data('forcasting'));
+			thisMetering = Boolean(type.data('metering'));
 		}
 
-
 		$.map(featureProperties, function (value, key) {
-			if (obj.data('type') == key) {
+			if (obj.val() == key) {
 				typeArray = Array.from(value);
 			}
 		});
@@ -305,6 +316,7 @@
 			typeArray.push({
 				key: 'metering',
 				value: '계량값',
+				suffix: 'W'
 			});
 		}
 
@@ -312,14 +324,11 @@
 			typeArray.push({
 				key: 'forecasting',
 				value: '예측계량값',
+				suffix: 'W'
 			});
 		}
 
-		if (!thisId.match('comp')) {
-			setMakeList(typeArray, 'deviceAttribute', { 'dataFunction': {} });
-		} else {
-			setMakeList(typeArray, 'compareDeviceAttribute', { 'dataFunction': {} });
-		}
+		setMakeList(typeArray, targetId, {'dataFunction': {}});
 	}
 
 	//조회
@@ -428,7 +437,7 @@
 		$('#siteList').next().find('.compare_area').find('.dropdown').removeClass('open');
 
 		let standard = makeStandard(interval);
-		makeTableTemplate(standard);
+		makeTableTemplate(standard, interval);
 
 		//검증 설비 사용량
 		if ($(':radio[name="attr"]:checked').val() == 'metering') {
@@ -589,10 +598,8 @@
 	let compareList = new Array();
 	const gridDataMake = (result, type, standard) => {
 		let interval = $('#interval').find('button').data('value');
-
 		let verifyTotal = 0;
 		let compareTotal = 0;
-
 		let verifyObj = new Object();
 		let compareObj = new Object();
 
@@ -641,14 +648,13 @@
 					verifyList.forEach(el => {
 						if (stnd == el.basetime) {
 							if ($(':radio[name="attr"]:checked').val() == 'metering' || $(':radio[name="attr"]:checked').val() == 'forecasting') {
-								verifyObj[stnd] = Number(el.energy);
+								verifyObj[stnd] = Number(el.energy) / 1000;
 							} else {
-								verifyObj[stnd] = eval('el.mean.' + $('[name="attr"]:checked').val());
+								verifyObj[stnd] = eval('el.mean.' + $('[name="attr"]:checked').val()) / 1000;
 							}
 						}
 					});
 				}
-
 
 				//비교 장비
 				if (compareList.length > 0) {
@@ -656,17 +662,17 @@
 						if (stnd == el.basetime) {
 							if (compareObj[stnd] == undefined) {
 								if ($(':radio[name="compAttr"]:checked').val() == 'metering' || $(':radio[name="compAttr"]:checked').val() == 'forecasting') {
-									compareObj[stnd] = Number(el.energy);
+									compareObj[stnd] = Number(el.energy) / 1000;
 								} else {
-									compareObj[stnd] = Number(eval('el.mean.' + $('[name="compAttr"]:checked').val()));
+									compareObj[stnd] = Number(eval('el.mean.' + $('[name="compAttr"]:checked').val())) / 1000;
 								}
 							} else {
 								if ($(':radio[name="compAttr"]:checked').val() == 'metering' || $(':radio[name="compAttr"]:checked').val() == 'forecasting') {
-									compareObj[stnd] += Number(el.energy);
+									compareObj[stnd] += Number(el.energy) / 1000;
 									compareObj[stnd] = compareObj[stnd] / $(':checkbox[name="compDevice"]:checked').length;
 								} else {
-									compareObj[stnd] += Number(eval('el.mean.' + $('[name="compAttr"]:checked').val()));
-									compareObj[stnd] = compareObj[stnd] / $(':checkbox[name="compDevice"]:checked').length;
+									compareObj[stnd] += Number(eval('el.mean.' + $('[name="compAttr"]:checked').val())) / 1000;
+									compareObj[stnd] = (compareObj[stnd] / $(':checkbox[name="compDevice"]:checked').length);
 								}
 							}
 						}
@@ -738,7 +744,7 @@
 			tableData.push(verifyObj); //
 			tableData.push(compareObj); //
 			$('[id^="table_"]').each(function () {
-				setMakeList(tableData, $(this).prop('id'), { 'dataFunction': {} });
+				setMakeList(tableData, $(this).prop('id'), {'dataFunction': {}});
 			});
 
 
@@ -783,7 +789,7 @@
 				}
 
 				data = data == '-' ? 0 : data;
-				let benchmarkValue = (data / capacity) * 100;
+				let benchmarkValue = (data / (capacity /1000)) * 100;
 
 				if (benchmark == 'up') {
 					if (benchmarkValue >= Number(reference)) {
@@ -816,301 +822,6 @@
 		}
 	}
 
-	const makeStandard = (interval) => {
-		let standard = new Array();
-		let sDate = $('#fromDate').datepicker('getDate').format('yyyyMMdd')
-		let eDate = $('#toDate').datepicker('getDate').format('yyyyMMdd')
-
-		if (interval == 'day') {
-			let diffDay = getDiff(eDate, sDate, 'day');
-			for (let j = 0; j < diffDay; j++) {
-				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
-				sDateTime.setDate(Number(sDateTime.getDate()) + j);
-				let toDate = sDateTime.format('yyyyMMdd');
-				standard.push(toDate);
-			}
-		} else if (interval == 'month') {
-			let diffMonth = getDiff(eDate, sDate, 'month');
-			for (let j = 0; j < diffMonth; j++) {
-				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) + j - 1, 1);
-				let toDate = sDateTime.format('yyyyMM');
-				standard.push(toDate);
-			}
-		} else {
-			let diffDay = getDiff(eDate, sDate, 'day');
-			//diffDay 1보다 크면 시작일과 종료일이 다르다.
-			for (let j = 0; j < diffDay; j++) {
-				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
-				sDateTime.setDate(sDateTime.getDate() + j);
-				let toDate = sDateTime.format('yyyyMMdd');
-
-				for (let i = 0; i < 24; i++) {
-					if (interval == '15min') { //15분
-						if (String(i).length == 1) {
-							standard.push(toDate + '0' + i + '0000');
-							standard.push(toDate + '0' + i + '1500');
-							standard.push(toDate + '0' + i + '3000');
-							standard.push(toDate + '0' + i + '4500');
-						} else {
-							standard.push(toDate + i + '0000');
-							standard.push(toDate + i + '1500');
-							standard.push(toDate + i + '3000');
-							standard.push(toDate + i + '4500');
-						}
-					} else if (interval == '30min') { //30분
-						if (String(i).length == 1) {
-							standard.push(toDate + '0' + i + '0000');
-							standard.push(toDate + '0' + i + '3000');
-						} else {
-							standard.push(toDate + i + '0000');
-							standard.push(toDate + i + '3000');
-						}
-					} else { //시간
-						if (String(i).length == 1) {
-							standard.push(toDate + '0' + i + '0000');
-						} else {
-							standard.push(toDate + i + '0000');
-						}
-					}
-				}
-			}
-		}
-
-		return standard;
-	}
-
-	//두기간 사이 차이 구하기.
-	const getDiff = (eDate, sDate, type) => {
-		eDate = new Date(eDate.substring(2, 4), eDate.substring(4, 6) - 1, eDate.substring(6, 8));
-		sDate = new Date(sDate.substring(2, 4), sDate.substring(4, 6) - 1, sDate.substring(6, 8));
-		if (type == 'day') {
-			return (((((eDate - sDate) / 1000) / 60) / 60) / 24) + 1;
-		} else if (type == 'month') {
-			if (eDate.format('yyyyMMdd').substring(0, 4) == sDate.format('yyyyMMdd').substring(0, 4)) {
-				return (eDate.format('yyyyMMdd').substring(4, 6) * 1 - sDate.format('yyyyMMdd').substring(4, 6) * 1) + 1;
-			} else {
-				return Math.round((eDate - sDate) / (1000 * 60 * 60 * 24 * 365 / 12)) + 1;
-			}
-		}
-	}
-
-	//선택된 디바이스 유형별로 테이블을 생성한다.
-	const makeTableTemplate = (standard) => {
-		$('#datatable').empty();
-		let interval = $('#interval').find('button').data('value');
-		let index = 0;
-
-		let targetTable = document.createElement('table');
-		let thead = targetTable.createTHead();
-		let tbody = targetTable.createTBody();
-		let hRow = thead.insertRow();
-		let bRow = tbody.insertRow();
-
-		let hCell;
-		let bCell;
-
-		targetTable.setAttribute('class', 'his_tbl');
-		tbody.setAttribute('id', 'table_' + index);
-
-		let stdDate = '';
-		let color = 1;
-		standard.forEach((stnd, j) => {
-			if (stdDate == '') {
-				if (interval == 'day') {
-					stdDate = stnd.substring(0, 6);
-
-					hCell = document.createElement("TH");
-					hCell.innerHTML = stnd.substring(0, 4) + '-' + stnd.substring(4, 6);
-					hRow.appendChild(hCell);
-
-					hCell = document.createElement("TH");
-					hCell.innerHTML = stnd.substring(6, 8);
-					hRow.appendChild(hCell);
-
-					bCell = bRow.insertCell();
-					bCell.innerHTML = '<span class="bu t[color]">[name]</span>';
-
-					bCell = bRow.insertCell();
-					bCell.innerHTML = '[' + stnd + '000000]';
-				} else if (interval == 'month') {
-					stdDate = stnd.substring(0, 4);
-
-					hCell = document.createElement("TH");
-					hCell.innerHTML = stdDate;
-					hRow.appendChild(hCell);
-
-					hCell = document.createElement("TH");
-					hCell.innerHTML = stnd.substring(4, 6);
-					hRow.appendChild(hCell);
-
-					bCell = bRow.insertCell();
-					bCell.innerHTML = '<span class="bu t[color]">[name]</span>';
-
-					bCell = bRow.insertCell();
-					bCell.innerHTML = '[' + stnd + '01000000]';
-				} else {
-					stdDate = stnd.substring(0, 8);
-
-					hCell = document.createElement("TH");
-					hCell.innerHTML = stnd.substring(0, 4) + '-' + stnd.substring(4, 6) + '-' + stnd.substring(6, 8);
-					hRow.appendChild(hCell);
-
-					hCell = document.createElement("TH");
-					hCell.innerHTML = stnd.substring(8, 10) + ':' + stnd.substring(10, 12);
-					hRow.appendChild(hCell);
-
-					bCell = bRow.insertCell();
-					bCell.innerHTML = '<span class="bu t[color]">[name]</span>';
-
-					bCell = bRow.insertCell();
-					bCell.innerHTML = '[' + stnd + ']';
-				}
-
-				if (standard.length == j + 1) {
-					let $div = $('<div>').addClass('chart_table');
-					let html = $('<div>').addClass('fold_div').append(targetTable);
-					html.appendTo($div);
-					$('#datatable').append($div);
-					setInitList('table_' + index);
-				}
-			} else if (stdDate != '' && (((interval == '15min' || interval == 'hour')
-				&& stdDate != stnd.substring(0, 8)) || (interval == 'day' && stdDate != stnd.substring(0, 6))
-				|| (interval == 'month' && stdDate != stnd.substring(0, 4))) || standard.length == j + 1) {
-
-				if (standard.length == j + 1) {
-					if (interval == 'day') {
-						hCell = document.createElement("TH");
-						hCell.innerHTML = stnd.substring(6, 8);
-						hRow.appendChild(hCell);
-
-						bCell = bRow.insertCell();
-						bCell.innerHTML = '[' + stnd + '000000]';
-					} else if (interval == 'month') {
-						hCell = document.createElement("TH");
-						hCell.innerHTML = stnd.substring(4, 6);
-						hRow.appendChild(hCell);
-
-						bCell = bRow.insertCell();
-						bCell.innerHTML = '[' + stnd + '01000000]';
-					} else {
-						hCell = document.createElement("TH");
-						hCell.innerHTML = stnd.substring(8, 10) + ':' + stnd.substring(10, 12);
-						hRow.appendChild(hCell);
-
-						bCell = bRow.insertCell();
-						bCell.innerHTML = '[' + stnd + ']';
-					}
-				}
-
-				let $div = $('<div>').addClass('chart_table');
-				let html = $('<div>').addClass('fold_div').append(targetTable);
-				html.appendTo($div);
-				$('#datatable').append($div);
-				setInitList('table_' + index);
-
-				index++
-				if (interval == 'day') {
-					stdDate = stnd.substring(0, 6);
-				} else if (interval == 'month') {
-					stdDate = stnd.substring(0, 4);
-				} else {
-					stdDate = stnd.substring(0, 8);
-				}
-
-				targetTable = document.createElement('table');
-				thead = targetTable.createTHead();
-				tbody = targetTable.createTBody();
-				hRow = thead.insertRow();
-				bRow = tbody.insertRow();
-
-				targetTable.setAttribute('class', 'his_tbl');
-				tbody.setAttribute('id', 'table_' + index);
-
-				if (interval == 'day') {
-					stdDate = stnd.substring(0, 6);
-
-					hCell = document.createElement("TH");
-					hCell.innerHTML = stnd.substring(0, 4) + '-' + stnd.substring(4, 6);
-					hRow.appendChild(hCell);
-
-					hCell = document.createElement("TH");
-					hCell.innerHTML = stnd.substring(6, 8);
-					hRow.appendChild(hCell);
-
-					bCell = bRow.insertCell();
-					bCell.innerHTML = '<span class="bu t[color]">[name]</span>';
-
-					bCell = bRow.insertCell();
-					bCell.innerHTML = '[' + stnd + '000000]';
-				} else if (interval == 'month') {
-					stdDate = stnd.substring(0, 4);
-
-					hCell = document.createElement("TH");
-					hCell.innerHTML = stdDate;
-					hRow.appendChild(hCell);
-
-					hCell = document.createElement("TH");
-					hCell.innerHTML = stnd.substring(4, 6);
-					hRow.appendChild(hCell);
-
-					bCell = bRow.insertCell();
-					bCell.innerHTML = '<span class="bu t[color]">[name]</span>';
-
-					bCell = bRow.insertCell();
-					bCell.innerHTML = '[' + stnd + '01000000]';
-				} else {
-					stdDate = stnd.substring(0, 8);
-
-					hCell = document.createElement("TH");
-					hCell.innerHTML = stnd.substring(0, 4) + '-' + stnd.substring(4, 6) + '-' + stnd.substring(6, 8);
-					hRow.appendChild(hCell);
-
-					hCell = document.createElement("TH");
-					hCell.innerHTML = stnd.substring(8, 10) + ':' + stnd.substring(10, 12);
-					hRow.appendChild(hCell);
-
-					bCell = bRow.insertCell();
-					bCell.innerHTML = '<span class="bu t[color]">[name]</span>';
-
-					bCell = bRow.insertCell();
-					bCell.innerHTML = '[' + stnd + ']';
-				}
-			} else {
-				if (interval == 'day') {
-					hCell = document.createElement("TH");
-					hCell.innerHTML = stnd.substring(6, 8);
-					hRow.appendChild(hCell);
-
-					bCell = bRow.insertCell();
-					bCell.innerHTML = '[' + stnd + '000000]';
-				} else if (interval == 'month') {
-					hCell = document.createElement("TH");
-					hCell.innerHTML = stnd.substring(4, 6);
-					hRow.appendChild(hCell);
-
-					bCell = bRow.insertCell();
-					bCell.innerHTML = '[' + stnd + '01000000]';
-				} else {
-					hCell = document.createElement("TH");
-					hCell.innerHTML = stnd.substring(8, 10) + ':' + stnd.substring(10, 12);
-					hRow.appendChild(hCell);
-
-					bCell = bRow.insertCell();
-					bCell.innerHTML = '[' + stnd + ']';
-				}
-			}
-		});
-	};
-
-	const getFormatDate = (date, split) => {
-		let year = date.getFullYear();
-		let month = (1 + date.getMonth());
-		month = month >= 10 ? month : '0' + month;
-		let day = date.getDate();
-		day = day >= 10 ? day : '0' + day;
-		return year + split + month + split + day;
-	}
-
 	const chartMakeData = (tableData, standard) => {
 		let seriesData = new Array();
 		let refineData = new Array();
@@ -1125,7 +836,7 @@
 			}
 
 			let verification = eval('tableData[0][' + stand + ']') == '-' ? null : eval('tableData[0][' + stand + ']');
-			let compare = eval('tableData[0][' + stand + ']') == '-' ? null : eval('tableData[0][' + stand + ']');
+			let compare = eval('tableData[1][' + stand + ']') == '-' ? null : eval('tableData[1][' + stand + ']');
 
 			if (verification != null && typeof (verification) == 'string') {
 				verification = parseFloat(verification);
@@ -1148,10 +859,10 @@
 		let dataCode = {
 			compare_formula: compareFormula,
 			compare_criterion: compareCriterion,
-			normality_threshold_upper: thresholdUpper,
-			normality_threshold_lower: thresholdLower,
+			normality_threshold_upper: Number(thresholdUpper),
+			normality_threshold_lower: Number(thresholdLower),
 			dt: refineData
-		}
+		};
 
 		$.ajax({
 			url: apiURL + '/energy/normality',
@@ -1432,7 +1143,7 @@
 									<p class="comp_tit type">검증 설비</p>
 									<ul class="comp_ul">
 										<li>
-											<div class="dropdown placeholder" id="deviceType">
+											<div class="dropdown placeholder" id="typeList">
 												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 유형">
 													설비 유형 <span class="caret"></span>
 												</button>
@@ -1450,7 +1161,7 @@
 											</div>
 										</li>
 										<li>
-											<div class="dropdown placeholder">
+											<div class="dropdown placeholder" id="deviceList">
 												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 명">
 													설비 명 <span class="caret"></span>
 												</button>
@@ -1468,7 +1179,7 @@
 											</div>
 										</li>
 										<li>
-											<div class="dropdown placeholder">
+											<div class="dropdown placeholder" id="attrList">
 												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 속성">
 													설비 속성 <span class="caret"></span>
 												</button>
@@ -1476,8 +1187,7 @@
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
-																<input type="radio" id="attr_[INDEX]" value="[key]"
-																       name="attr">
+																<input type="radio" id="attr_[INDEX]" value="[key]" name="attr" data-suffix="[suffix]">
 																<label for="attr_[INDEX]"><span></span>[value]</label>
 															</span>
 														</a>
@@ -1491,7 +1201,7 @@
 									<p class="comp_tit type">비교 설비</p>
 									<ul class="comp_ul">
 										<li>
-											<div class="dropdown placeholder" id="compareDeviceType">
+											<div class="dropdown placeholder" id="compareTypeList">
 												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 유형">
 													설비 유형 <span class="caret"></span>
 												</button>
@@ -1499,10 +1209,8 @@
 													<li data-type="[type]">
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
-																<input type="radio" id="compareType_[INDEX]"
-																	value="[type]" name="compareType">
-																<label
-																	for="compareType_[INDEX]"><span></span>[name]</label>
+																<input type="radio" id="compareType_[INDEX]" value="[type]" name="compareType">
+																<label for="compareType_[INDEX]"><span></span>[name]</label>
 															</span>
 														</a>
 													</li>
@@ -1510,7 +1218,7 @@
 											</div>
 										</li>
 										<li>
-											<div class="dropdown placeholder">
+											<div class="dropdown placeholder" id="compareDeviceList">
 												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 명">
 													설비 명 <span class="caret"></span>
 												</button>
@@ -1527,16 +1235,15 @@
 											</div>
 										</li>
 										<li>
-											<div class="dropdown placeholder">
+											<div class="dropdown placeholder" id="compareAttrList">
 												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 속성">
 													설비 속성 <span class="caret"></span>
 												</button>
-												<ul class="dropdown-menu rdo_type" role="menu"
-												    id="compareDeviceAttribute">
+												<ul class="dropdown-menu rdo_type" role="menu" id="compareDeviceAttribute">
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
-																<input type="radio" id="comp_attr_[INDEX]" value="[key]" name="compAttr">
+																<input type="radio" id="comp_attr_[INDEX]" value="[key]" name="compAttr" data-suffix="[suffix]">
 																<label for="comp_attr_[INDEX]"><span></span>[value]</label>
 															</span>
 														</a>
@@ -1612,7 +1319,7 @@
 									<ul class="comp_ul">
 										<li>
 											<div class="tx_inp_type">
-												<input type="text" id="reference" name="reference" value="" placeholder="기준 상한 값" autocomplete="off">
+												<input type="text" id="reference" name="reference" value="" placeholder="기준 값" autocomplete="off" onkeydown="onlyDecimal(event);">
 											</div>
 										</li>
 									</ul>
@@ -1701,7 +1408,7 @@
 									<ul class="comp_ul">
 										<li>
 											<div class="tx_inp_type">
-												<input type="text" id="normality_threshold_upper" name="normality_threshold_upper" value="" placeholder="상한 허용치" autocomplete="off">
+												<input type="text" id="normality_threshold_lower" name="normality_threshold_lower" value="" placeholder="하한 허용치" autocomplete="off" onkeydown="onlyDecimal(event);">
 											</div>
 										</li>
 									</ul>
@@ -1710,7 +1417,7 @@
 									<ul class="comp_ul">
 										<li>
 											<div class="tx_inp_type">
-												<input type="text" id="normality_threshold_lower" name="normality_threshold_lower" value="" placeholder="하한 허용치" autocomplete="off">
+												<input type="text" id="normality_threshold_upper" name="normality_threshold_upper" value="" placeholder="상한 허용치" autocomplete="off" onkeydown="onlyDecimal(event);">
 											</div>
 										</li>
 									</ul>
