@@ -19,10 +19,9 @@
 
 	function getGenData() {
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/config/sites",
+			url: 'http://iderms.enertalk.com:8443/auth/me/sites',
 			type: "get",
 			async: false,
-			data: { "oid": oid },
 			success: function (json) {
 				setInitList("genList");
 				setMakeList(json, "genList", { "dataFunction": {} });
