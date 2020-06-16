@@ -697,7 +697,7 @@
 	}
 
 	//선택된 디바이스 유형별로 테이블을 생성한다.
-	const makeTableTemplate = function () {
+	const makeTableTemplateDevice = function () {
 		$('#datatable').empty();
 
 		$(':checkbox[name="type"]:checked').each(function () {
@@ -762,7 +762,7 @@
 			deviceArray.push($(this).val());
 		});
 
-		makeTableTemplate();
+		makeTableTemplateDevice();
 
 		$('[id^="chartDid"]').each(function () {
 			$(this).find('button').html($(this).find('button').data('name') + '<span class="caret"></span>').data('value', '');
