@@ -13,7 +13,7 @@
 		// 사용자 === 사무수탁사 => show() : writeBtn
 		// 사용자 === 자산운영사 => show() : requestBtn
 		// 임시로 사무수탁사 버튼
-		// oid === "" ? $("#writeBtn").show() : $("#requestBtn").show();
+		// oid === "" ? $("#requestBtn").text("출금요청서 신청") : $("#requestBtn").text("출금요청서 작성");
 
 		//전월
 		$('.btn_prev_mon').on('click', function () {
@@ -565,9 +565,9 @@
 							</div>
 						</div>
 					</div>
-					<div class="btn_wrap_type03">
-						<a href="/spc/transactionHistory.do" class="btn btn_type03" id="writeBtn">입출금 관리 내역</a>
-						<a href="/spc/withdrawReqWrite.do" class="btn btn_type" id="requestBtn">출금 요청서 신청</a>
+					<div class="btn_wrap_type02 btn_wrap_fixed">
+						<a href="/spc/transactionHistory.do" class="btn btn_type03 mr-12" id="writeBtn">입출금 관리 내역</a><a
+							href="/spc/withdrawReqWrite.do" class="btn btn_type" id="requestBtn">출금 요청서 신청</a>
 					</div>
 				</div>
 				<div class="sch_btm_area">

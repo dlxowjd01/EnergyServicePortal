@@ -79,6 +79,12 @@ public class SpcController {
         return "esp/spc/withdrawReqStatus";
     }
 
+	@RequestMapping(value = "/spc/withdrawReqDetail.do")
+		public String spcWithdrawReqDetail(HttpServletRequest request, HttpSession session, Model model) {
+		logger.debug("/spc/withdrawReqDetail.do");
+		return "esp/spc/withdrawReqDetail";
+    }
+
     @RequestMapping(value = "/spc/maintenanceSchedule.do")
     public String spcMaintenanceSchedule(HttpServletRequest request, HttpSession session, Model model) {
         logger.debug("/spc/maintenanceSchedule.do");

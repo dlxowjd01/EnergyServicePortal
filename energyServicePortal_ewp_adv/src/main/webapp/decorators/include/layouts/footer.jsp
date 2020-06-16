@@ -6,7 +6,7 @@
 	<%--					<a href="/board/faq.do"><spring:message code="ewp.bot.FAQ"/></a>--%>
 	<%--					<a href="/board/refer.do">자료실</a>--%>
 	<%--				</div>--%>
-	<div class="copyright fr ml20">
+	<div class="copyright fr ml-20">
 		COPYRIGHT &copy; 2020 2020 Encored Technologies, Inc. All rights reserved.
 	</div>
 	<div class="copyright fr">

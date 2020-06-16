@@ -6,12 +6,20 @@
 	const loginId = '${sessionScope.userInfo.login_id}';
 
 	$(function() {
-		setInitList("listData"); //리스트초기화
+		// setInitList("listData"); //리스트초기화
 
-		getDataList(page);
+		// getDataList(page);
 
 	});
 
+	function editRow(){
+		if(oid===""){
+			
+		}
+	}
+	function deleteRow(){
+		
+	}
 	$(document).on('keyup', '#key_word', function(e) {
 		if (e.keyCode == 13) {
 			getDataList(page);
@@ -139,9 +147,10 @@
 		return index + 1;
 	}
 </script>
+
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">출금요청서 검토</h1>
+		<h1 class="page-header">출금 요청서 검토</h1>
 		<div class="time fr">
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>
@@ -150,75 +159,129 @@
 		</div>
 	</div>
 </div>
-<div class="row">
-	<div class="col-lg-3 col-md-4 col-sm-4">
-		<div class="tx_btn_area">
+<div class="row spc_search_bar">
+	<div class="col-12">
+		<span class="tx_tit">검토 상태</span><div class="sa_select mr-16">
 			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
-					전체 <span class="caret"></span>
-				</button>
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">전체 <span class="caret"></span></button>
 				<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
 					<li>
-						<a href="#" data-value="INV_PV" tabindex="-1">
-							<input type="checkbox" id="allSpc" value="all" checked>
-							<label for="allSpc"><span></span>전체</label>
+						<a class="chk_group" href="#" tabindex="-1">
+							<input type="checkbox" id="statusOnWait" value="wait" name="wait">
+							<label for="statusOnWait"><span></span>검토 대기</label>
 						</a>
 					</li>
 					<li>
-						<a href="#" data-value="INV_PV" tabindex="-1">
-							<input type="checkbox" id="spc1" value="정상" checked>
-							<label for="spc1"><span></span>SPC1</label>
+						<a class="chk_group" href="#" tabindex="-1">
+							<input type="checkbox" id="statusInProgress" value="progress" name="progress">
+							<label for="statusInProgress"><span></span>검토 중</label>
 						</a>
 					</li>
 					<li>
-						<a href="#" data-value="INV_PV" tabindex="-1">
-							<input type="checkbox" id="spc2" value="트립" checked>
-							<label for="spc2"><span></span>SPC2</label>
+						<a class="chk_group" href="#" tabindex="-1">
+							<input type="checkbox" id="statusComplete" value="complete" name="complete">
+							<label for="statusComplete"><span></span>승인 완료</label>
 						</a>
 					</li>
 				</ul>
 			</div>
-			<button class="btn_type" onclick="getDataList();">조회</button>
 		</div>
+		<form id="spc_form" class="tx_btn_area">
+			<div class="tx_inp_type">
+				<input type="text" id="key_word" placeholder="입력">
+			</div>
+			<button type="button" class="btn_type">검색</button>
+		</form>
 	</div>
-	<!-- <div class="col-lg-9 col-md-8 col-sm-8">
-		<div class="right">
-			<a href="#;" class="save_btn" onclick="getCsvDown();">CSV 다운로드</a>
-		</div>
-	</div> -->
 </div>
 <div class="row">
 	<div class="col-lg-12">
-		<div class="indiv">
-			<div class="spc_tbl align_type">
-				<table class="sort_table chk_type mt30">
-					<thead>
-						<tr>
-							<th>
-								<strong>조회 기간</strong>
-							</th>
-							<th><button class="btn_align down">선택</button></th>
-							<th><button class="btn_align down">상태</button></th>
-							<th><button class="btn_align down">승인 대기, 승인 중</button></th>
-						</tr>
-					</thead>
-					<tbody id="listData">
-						<tr>
-							<td><stron>단위</stron></td>
-							<td>선택</td>
-							<td>계좌 구분</td>
-							<td class="right">선택</td>
-						</tr>
-						<tr>
-							<td><strong>입출금 구분</strong></td>
-							<td>계좌 구분</td>
-							<td class="right">선택</td>
-						</tr>
-					</tbody>
-				</table>
+		<div class="indiv no_border spc_bal_post">
+			<div class="btn_wrap_type01">
+				<button type="button" class="btn_type">선택 인쇄</button>
 			</div>
-			<div class="paging_wrap" id="paging">
-			</div>
+			<table class="sort_table">
+				<colgroup>
+					<col style="width:3%">
+					<col style="width:9%">
+					<col style="width:10%">
+					<col style="width:10%">
+					<col style="width:14%">
+					<col style="width:10%">
+					<col style="width:10%">
+					<col style="width:10%">
+					<col style="width:10%">
+					<col style="width:14%">
+					<col>
+				</colgroup>
+				<thead>
+				<tr>
+					<th></th>
+					<th>
+						<button class="btn_align down">출금 일자</button>
+					</th>
+					<th>
+						<button class="btn_align down">SPC 명</button>
+					</th>
+					<th>
+						<button class="btn_align down">금액</button>
+					</th>
+					<th>
+						<button class="btn_align down">요청/수정일</button>
+					</th>
+					<th>
+						<button class="btn_align down">사무 수탁사</button>
+					</th>
+					<th>
+						<button class="btn_align down">담당자</button>
+					</th>
+					<th>
+						<button class="btn_align down">상태</button>
+					</th>
+
+					<th>
+						<button class="btn_align down">승인자</button>
+					</th>
+					<th>
+						<button class="btn_align down">승인일</button>
+					</th>
+				</tr>
+				</thead>
+				<tbody id="spcStatusTable">
+					<tr>
+						<td><a class="chk_type select_row">
+							<input type="checkbox" id="chk02" name="chk02">
+							<label for="chk02"><span></span></label>
+						</a></td>
+						<td>2020-04-08</td>
+						<td>SPC1</td>
+						<td>200,000,000</td>
+						<td>2020-05-29 16:43</td>
+						<td>TRUST</td>
+						<td>이종목</td>
+						<%-- <td><a class="tbl_link" href="spc/widthdrawReqStatusDetail.do">승인완료</a></td> --%>
+						<td><a href="#" class="tbl_link" >승인완료</a></td>
+						<td>이효섭</td>
+						<td>2020-06-02 12:43</td>
+					</tr>
+					<tr>
+						<td><a class="chk_type select_row">
+							<input type="checkbox" id="chk02" name="chk02">
+							<label for="chk02"><span></span></label>
+						</a></td>
+						<td>2020-04-08</td>
+						<td>SPC2</td>
+						<td>500,000,000</td>
+						<td>2020-06-09 12:43</td>
+						<td>MSI</td>
+						<td>홍길동</td>
+						<td><a href="#" class="tbl_link" >검토중</a></td>
+						<td>김길중</td>
+						<td>검토중</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="paging_wrap" id="paging"><a href="javascript:void(0);" class="btn_prev first_prev">prev</a><a href="javascript:getDataList(1);"><strong>1</strong></a><a href="javascript:void(0);" class="btn_next larst_next">next</a></div>
 		</div>
 	</div>
 </div>

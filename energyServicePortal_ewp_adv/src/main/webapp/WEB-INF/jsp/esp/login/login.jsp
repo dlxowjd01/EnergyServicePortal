@@ -507,7 +507,7 @@
 						  	<div class="mt15"><input type="password" id="loginUserPw" name="password" class="lfinp" placeholder=<spring:message code="ewp.login.Password"/>></div>
 						    <div class="mt30">
 						    	<a href="#" class="findidBtn arrbtn"><spring:message code="ewp.login.Forgot_account"/></a>
-						    	<a href="#" class="findpassBtn arrbtn ml30"><spring:message code="ewp.login.Forgot_password"/></a>
+						    	<a href="#" class="findpassBtn arrbtn ml-30"><spring:message code="ewp.login.Forgot_password"/></a>
 						    </div>
 						</div>
 						<div class="lf_bottom">

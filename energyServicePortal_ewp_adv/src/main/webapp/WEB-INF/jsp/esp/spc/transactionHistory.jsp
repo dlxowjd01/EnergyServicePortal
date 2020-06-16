@@ -144,12 +144,12 @@
 	</div>
 </div>
 
-<div class="row">
-	<div class="col-10">
-		<span class="tx_tit">SPC 선택</span>
-		<div class="sa_select">
+<div class="row spc_search_bar">
+	<div class="col-12"> 
+		<span class="tx_tit">SPC 선택</span><div
+			class="sa_select">
 			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">전체 <span class="caret"></span></button>
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">전체 <span class="caret"></span></button>
 				<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
 					<li>
 						<a href="#" data-value="INV_PV" tabindex="-1">
@@ -172,56 +172,177 @@
 				</ul>
 			</div>
 		</div>
-	</div>
-	<div class="col-2">
-		<button type="button" id="collapseBtn" class="btn_text fr"
-			data-toggle="collapse" data-target="#searchOption"><span class="arrow_btn"></span>상세조희</button>
-	</div>
-</div>
+		<div class="dropdown">
+			<button type="button" id="collapseBtn" class="btn btn-primary dropdown-toggle no_bg ml-24" data-toggle="collapse" data-target="#searchOption">상세 검색<span class="caret"></span></button>
+			<ul id="searchOption" class="collapse dropdown-menu unused">
+				<li>
+					<div class="bx_row aN2">
+						<h2 class="comp_tit">비교 기간</h2>
+						<div class="bx_align dropdown">
+							<input type="text" id="fromDate" name="fromDate" class="sel fromDate" value="" autocomplete="off" placeholder="시작">
+						</div>
+						<div class="bx_align dropdown">
+							<input type="text" id="toDate" name="toDate" class="sel toDate" value="" autocomplete="off" placeholder="종료">
+						</div>
+					</div>
 
-<div class="row content-wrapper spc_transaction">
-	<div class="col-12">
-		<div class="indiv collapse" id="searchOption">
-			<div class="spc_tbl">
-				<table class="sort_table chk_type">
-					<thead>
-						<tr>
-							<th>
-								<strong>조회 기간</strong>
-							</th>
-							<th><button class="btn_align down">선택</button></th>
-							<th><button class="btn_align down">상태</button></th>
-							<th><button class="btn_align down">승인 대기, 승인 중</button></th>
-						</tr>
-					</thead>
-					<tbody id="listData">
-						<tr>
-							<td><stron>단위</stron></td>
-							<td>선택</td>
-							<td>계좌 구분</td>
-							<td class="right">선택</td>
-						</tr>
-						<tr>
-							<td><strong>입출금 구분</strong></td>
-							<td>계좌 구분</td>
-							<td>계좌 구분</td>
-							<td class="right">선택</td>
-						</tr>
-					</tbody>
-				</table>
-				
-				<button class="btn_type fr" onclick="getDataList();">조회</button>
-			</div>
+					<div class="bx_row aN2">
+						<h2 class="comp_tit">상태</h2>
+						<div class="bx_align dropdown">
+							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+							<ul class="dropdown-menu dropdown-menu-form chk_type dropdown_offset" role="menu">
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="allSpc" value="all" checked>
+										<label for="allSpc"><span></span>전체</label>
+									</a>
+								</li>
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="allSpc" value="all" checked>
+										<label for="allSpc"><span></span>승인 완료</label>
+									</a>
+								</li>
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="allSpc" value="all" checked>
+										<label for="allSpc"><span></span>승인 대기</label>
+									</a>
+								</li>
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="allSpc" value="all" checked>
+										<label for="allSpc"><span></span>승인 중</label>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="bx_row aN3">
+						<div class="bx_align dropdown">
+							<h2 class="comp_tit">단위</h2>
+							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="단위">
+								단위<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-form chk_type dropdown_offset" role="menu">
+								<li>
+									<a href="#" data-value="timeUnit" tabindex="-1">
+										<input type="checkbox" id="searchAllTime" value="all" name="all" checked>
+										<label for="searchAllTime"><span></span>전체</label>
+									</a>
+								</li>
+								<li>
+									<a href="#" data-value="timeUnit" tabindex="-1">
+										<input type="checkbox" id="searchYearly" value="year" name="time" checked>
+										<label for="searchYearly"><span></span>년</label>
+									</a>
+								</li>
+								<li>
+									<a href="#" data-value="timeUnit" tabindex="-1">
+										<input type="checkbox" id="searchMonthly" value="month" name="time" checked>
+										<label for="searchMonthly"><span></span>월</label>
+									</a>
+								</li>
+								<li>
+									<a href="#" data-value="timeUnit" tabindex="-1">
+										<input type="checkbox" id="searchDaily" value="date" name="time" checked>
+										<label for="searchDaily"><span></span>일</label>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="bx_align dropdown">
+							<h2 class="comp_tit">입출금 구분</h2>
+							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="입출금">
+								선택<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-form chk_type dropdown_offset" role="menu">
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="allSpc" value="all" checked>
+										<label for="allSpc"><span></span>입금</label>
+									</a>
+								</li>
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="allSpc" value="all" checked>
+										<label for="allSpc"><span></span>출금</label>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="bx_align dropdown">
+							<h2 class="comp_tit">용도 구분</h2>
+							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="용도구분">
+								선택<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-form chk_type dropdown_offset" role="menu">
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="allSpc" value="all" checked>
+										<label for="allSpc"><span></span>전체</label>
+									</a>
+								</li>
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="allSpc" value="all" checked>
+										<label for="allSpc"><span></span>전력판매대금</label>
+									</a>
+								</li>
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="allSpc" value="all" checked>
+										<label for="allSpc"><span></span>RFC 판매대금</label>
+									</a>
+								</li>
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="allSpc" value="all" checked>
+										<label for="allSpc"><span></span>관리운영비</label>
+									</a>
+								</li>
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="allSpc" value="all" checked>
+										<label for="allSpc"><span></span>일반 렌탈</label>
+									</a>
+								</li>
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="allSpc" value="all" checked>
+										<label for="allSpc"><span></span>전력 중개 수수료</label>
+									</a>
+								</li>
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="allSpc" value="all" checked>
+										<label for="allSpc"><span></span>전기 요금</label>
+									</a>
+								</li>
+								<li>
+									<a href="#" data-value="INV_PV" tabindex="-1">
+										<input type="checkbox" id="allSpc" value="all" checked>
+										<label for="allSpc"><span></span>원리금</label>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="btn_wrap_type03 searc">
+						<button type="button" class="btn_type" id="renderBtn">확인</button>
+					</div>
+				</li>
+			</ul>
 		</div>
 	</div>
 </div>
 
-<div class="row content-wrapper spc_transaction">
+<div class="row spc_transaction">
 	<div class="col-12">
 		<div class="indiv">
 			<div class="spc_tbl">
 				<table class="sort_table chk_type">
-					<thead> 
+					<thead>
 						<tr>
 							<th><button class="btn_align down">기간</button></th>
 							<th><button class="btn_align down">입출금 구분</button></th>
@@ -242,7 +363,7 @@
 							<td>2020-05-08 16:43</td>
 							<td>TRUST/홍길동</td>
 							<td>신한BNPP/이신한</td>
-							<td>승인 완료</td>
+							<td class="left">승인 완료</td>
 						</tr>
 						<tr>
 							<td>2020-04-08</td>
@@ -252,7 +373,7 @@
 							<td>2020-05-08 16:43</td>
 							<td>TRUST/홍길동</td>
 							<td>신한BNPP/이신한</td>
-							<td>승인 완료</td>
+							<td class="left">승인 완료</td>
 						</tr>
 						<tr>
 							<td>2020-04-08</td>
@@ -262,11 +383,11 @@
 							<td>2020-05-08 16:43</td>
 							<td>TRUST/홍길동</td>
 							<td>신한BNPP/이신한</td>
-							<td>승인 완료</td>
+							<td class="left">승인 대기<span class="icon_edit hidden"></span><span class="icon_delete hidden"></span></td>
 						</tr>
 					</tbody>
 				</table>
-				<div class="paging_wrap" id="paging"></div>
+				<div class="paging_wrap" id="paging"><a href="javascript:void(0);" class="btn_prev first_prev">prev</a><a href="javascript:getDataList(1);"><strong>1</strong></a><a href="javascript:void(0);" class="btn_next larst_next">next</a></div>
 			</div>
 		</div>
 	</div>

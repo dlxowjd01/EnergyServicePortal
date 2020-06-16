@@ -268,9 +268,7 @@
 								<label for="chk_header"><span></span>순번</label>
 							</th>
 							<th>
-								<button class="btn_align down">
-									보고서 구분
-								</button>
+								<button class="btn_align down">보고서 구분</button>
 							</th>
 							<th>
 								<button class="btn_align down">문서번호</button>
