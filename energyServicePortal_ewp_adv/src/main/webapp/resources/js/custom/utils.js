@@ -237,6 +237,29 @@ function onlyNum(event) {
 	event.preventDefault();
 }
 
+/**
+ * 정수와 소수
+ * 만을 입력 할 수 있게 한다.
+ *
+ * @param event
+ */
+const onlyDecimal = (event) => {
+	let code = event.keyCode;
+	let key = event.key;
+	let regExp =  /^[0-9]+$/;
+	if ((code > 47 && code < 58) || (code > 95 && code < 106)) { // 숫자 허용(오른쪽키패트 포함)
+		if(key.match(regExp)) {
+			return;
+		}
+	}
+
+	if (code === 9 || code === 36 || code === 35 || code === 37 ||
+		code === 39 || code === 8 || code === 46 || code == 189 ||code == 190 || code == 110) { // 특수문자 허용
+		return;
+	}
+	event.preventDefault();
+}
+
 //////////////////////////////////////////////날짜관련//////////////////////////////////////////////
 
 // 날짜에 utc 적용여부
@@ -375,19 +398,25 @@ function chkHoliday(_date) {
 	}
 }
 
-
 // 두개의 날짜를 비교하여 차이를 알려준다.
-function dateDiff(_date1, _date2) {
-	var diffDate_1 = _date1 instanceof Date ? _date1 : new Date(_date1);
-	var diffDate_2 = _date2 instanceof Date ? _date2 : new Date(_date2);
+const dateDiff = (eDate, sDate, type) => {
+	eDate = eDate instanceof Date ? eDate : new Date(eDate.substring(2, 4), eDate.substring(4, 6) - 1, eDate.substring(6, 8));
+	sDate = sDate instanceof Date ? sDate : new Date(sDate.substring(2, 4), sDate.substring(4, 6) - 1, sDate.substring(6, 8));
 
-	diffDate_1 = new Date(diffDate_1.getFullYear(), diffDate_1.getMonth() + 1, diffDate_1.getDate());
-	diffDate_2 = new Date(diffDate_2.getFullYear(), diffDate_2.getMonth() + 1, diffDate_2.getDate());
-
-	var diff = Math.abs(diffDate_2.getTime() - diffDate_1.getTime());
-	diff = Math.ceil(diff / (1000 * 3600 * 24));
-
-	return diff;
+	if (type == undefined) {
+		let diff = Math.abs(diffDate_2.getTime() - diffDate_1.getTime());
+		return Math.ceil(diff / (1000 * 3600 * 24));
+	} else {
+		if (type == 'day') {
+			return (((((eDate - sDate) / 1000) / 60) / 60) / 24) + 1;
+		} else if (type == 'month') {
+			if (eDate.format('yyyyMMdd').substring(0, 4) == sDate.format('yyyyMMdd').substring(0, 4)) {
+				return (eDate.format('yyyyMMdd').substring(4, 6) * 1 - sDate.format('yyyyMMdd').substring(4, 6) * 1) + 1;
+			} else {
+				return Math.round((eDate - sDate) / (1000 * 60 * 60 * 24 * 365 / 12)) + 1;
+			}
+		}
+	}
 }
 
 // 이번주 시작일자를 구한다
@@ -1301,7 +1330,7 @@ const setttingSuffix = function(keyText) {
 
 $(function() {
 	$(document).on('click', '.sort_table', function(i){
-		let tables = $(this);	
+		let tables = $(this);
 		for (var i = 0; i < tables.length; ++i) {
 			var headers = tables[i].getElementsByTagName('th');
 			for (var j = 0; j < headers.length; ++j) {
@@ -1336,49 +1365,49 @@ $(function() {
 });
 
 function SortTable(table, n, sort) {
-		// table 에 tbody tag 가 반드시 존재한다고 가정한다.
-		let tbody = table.tBodies[0];
-		let rows = tbody.querySelectorAll('tr');
-		let rows2 = tbody.querySelectorAll('tr.detail_info');
-		rows = Array.prototype.slice.call(rows, 0);
-		rows.sort(function (row1, row2) {
-			var cell1 = row1.getElementsByTagName("td")[n];
-			var cell2 = row2.getElementsByTagName("td")[n];
-			var value1 = cell1.textContent || cell1.innerText;
-			var value2 = cell2.textContent || cell2.innerText;
-			
-			if(value1 == '-'){
-				return 1;
-			}else{
-				value1 = String(value1).replace(/^\s+|\s+$/g, "");
-				value2 = String(value2).replace(/^\s+|\s+$/g, "");
+	// table 에 tbody tag 가 반드시 존재한다고 가정한다.
+	let tbody = table.tBodies[0];
+	let rows = tbody.querySelectorAll('tr');
+	let rows2 = tbody.querySelectorAll('tr.detail_info');
+	rows = Array.prototype.slice.call(rows, 0);
+	rows.sort(function (row1, row2) {
+		var cell1 = row1.getElementsByTagName("td")[n];
+		var cell2 = row2.getElementsByTagName("td")[n];
+		var value1 = cell1.textContent || cell1.innerText;
+		var value2 = cell2.textContent || cell2.innerText;
 
-				if (isNumberic(value1) && isNumberic(value2)) {
-					value1 = Number(value1.replace(/[^0-9]/g, ''));
-					value2 = Number(value2.replace(/[^0-9]/g, ''));
-				}
+		if(value1 == '-'){
+			return 1;
+		}else{
+			value1 = String(value1).replace(/^\s+|\s+$/g, "");
+			value2 = String(value2).replace(/^\s+|\s+$/g, "");
 
-				if (sort == 'up') {
-					if (value1 < value2) return -1;
-					if (value1 > value2) return 1;
-				} else {
-					if (value1 < value2) return 1;
-					if (value1 > value2) return -1;
-				}
+			if (isNumberic(value1) && isNumberic(value2)) {
+				value1 = Number(value1.replace(/[^0-9]/g, ''));
+				value2 = Number(value2.replace(/[^0-9]/g, ''));
 			}
 
-			return 0;
-		});
+			if (sort == 'up') {
+				if (value1 < value2) return -1;
+				if (value1 > value2) return 1;
+			} else {
+				if (value1 < value2) return 1;
+				if (value1 > value2) return -1;
+			}
+		}
+
+		return 0;
+	});
 
 
-		// 정렬된 배열로 row 를 다시 저장한다. 문서에 이미 존재하는 node 는 삽입하면 해당 node 는 자동으로 제거되고 새 위치에 저장된다.
-		for (var i = 0; i < rows.length; ++i) {
-			let flag = rows[i].classList[1];
-			tbody.appendChild(rows[i]);
+	// 정렬된 배열로 row 를 다시 저장한다. 문서에 이미 존재하는 node 는 삽입하면 해당 node 는 자동으로 제거되고 새 위치에 저장된다.
+	for (var i = 0; i < rows.length; ++i) {
+		let flag = rows[i].classList[1];
+		tbody.appendChild(rows[i]);
 
-			for (var j = 0; j < rows2.length; j++) {
-				if (rows2[j].classList.contains(flag)) {
-					tbody.appendChild(rows2[j]);
+		for (var j = 0; j < rows2.length; j++) {
+			if (rows2[j].classList.contains(flag)) {
+				tbody.appendChild(rows2[j]);
 			}
 		}
 	}
@@ -1394,7 +1423,7 @@ function isNumberic(num) {
 	}
 }
 
-function paging(page, jsonList){
+function paging(page, jsonList) {
 	let totalPage = Math.ceil(jsonList.length/pagePerData);
 	let totalnav = Math.ceil(totalPage/navCount);
 	let startNum = (pagePerData*(page-1));
@@ -1404,30 +1433,249 @@ function paging(page, jsonList){
 	return jsonList;
 }
 
-function makeNavigation (page, totalPage){
+function makeNavigation (page, totalPage) {
 	$('#paging').empty();
 	let pageStr = '';
 	let navgroup = Math.floor((page-1)/navCount)+1;
 	let startPage = ((navgroup-1)*navCount)+1;
 	let totalnav = Math.ceil(totalPage/navCount);
 	let endPage = ((startPage + navCount-1) > totalPage)? totalPage : (startPage + navCount-1);
-	
-	if( navgroup == 1 ){
+
+	if (navgroup == 1) {
 		pageStr += '<a href="javascript:void(0);" class="btn_prev first_prev">prev</a>';
-	}else{
-		pageStr += '<a href="javascript:getDataList(' + Number(startPage-1) + ');" class="btn_prev">prev</a>';			
+	} else{
+		pageStr += '<a href="javascript:getDataList(' + Number(startPage-1) + ');" class="btn_prev">prev</a>';
 	}
-    for(let i = startPage ; i <= endPage; i++){
-    	if(i==page){
-    		pageStr += '<a href="javascript:getDataList('+i+');"><strong>'+i+'</strong></a>';
-    	}else{
-    		pageStr += '<a href="javascript:getDataList('+i+');">'+i+'</a>';
-    	}
-    }
-    if( navgroup <totalnav ){
-    	pageStr += '<a href="javascript:getDataList(' + Number(endPage+1) + ');"  class="btn_next">next</a>';	    	
-    }else{
-    	pageStr += '<a href="javascript:void(0);"  class="btn_next larst_next">next</a>';
-    }
-    $('#paging').append(pageStr);
+
+	for (let i = startPage ; i <= endPage; i++) {
+		if (i==page) {
+			pageStr += '<a href="javascript:getDataList('+i+');"><strong>'+i+'</strong></a>';
+		} else {
+			pageStr += '<a href="javascript:getDataList('+i+');">'+i+'</a>';
+		}
+	}
+
+	if (navgroup <totalnav) {
+		pageStr += '<a href="javascript:getDataList(' + Number(endPage+1) + ');"  class="btn_next">next</a>';
+	} else {
+		pageStr += '<a href="javascript:void(0);"  class="btn_next larst_next">next</a>';
+	}
+
+	$('#paging').append(pageStr);
+}
+
+/**
+ * 조회한 기간의 기준일 배열을 만든다.
+ *
+ * @param interval
+ * @returns {any[]}
+ */
+const makeStandard = (interval) => {
+	let standard = new Array();
+	let sDate = $('#fromDate').datepicker('getDate').format('yyyyMMdd')
+	let eDate = $('#toDate').datepicker('getDate').format('yyyyMMdd')
+
+	if (interval == 'day') {
+		let diffDay = dateDiff(eDate, sDate, 'day');
+		for (let j = 0; j < diffDay; j++) {
+			let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
+			sDateTime.setDate(Number(sDateTime.getDate()) + j);
+			let toDate = sDateTime.format('yyyyMMdd');
+			standard.push(toDate);
+		}
+	} else if (interval == 'month') {
+		let diffMonth = dateDiff(eDate, sDate, 'month');
+		for (let j = 0; j < diffMonth; j++) {
+			let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) + j - 1, 1);
+			let toDate = sDateTime.format('yyyyMM');
+			standard.push(toDate);
+		}
+	} else {
+		let diffDay = dateDiff(eDate, sDate, 'day');
+		//diffDay 1보다 크면 시작일과 종료일이 다르다.
+		for (let j = 0; j < diffDay; j++) {
+			let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
+			sDateTime.setDate(sDateTime.getDate() + j);
+			let toDate = sDateTime.format('yyyyMMdd');
+
+			for (let i = 0; i < 24; i++) {
+				if (interval == '15min') { //15분
+					if (String(i).length == 1) {
+						standard.push(toDate + '0' + i + '0000');
+						standard.push(toDate + '0' + i + '1500');
+						standard.push(toDate + '0' + i + '3000');
+						standard.push(toDate + '0' + i + '4500');
+					} else {
+						standard.push(toDate + i + '0000');
+						standard.push(toDate + i + '1500');
+						standard.push(toDate + i + '3000');
+						standard.push(toDate + i + '4500');
+					}
+				} else if (interval == '30min') { //30분
+					if (String(i).length == 1) {
+						standard.push(toDate + '0' + i + '0000');
+						standard.push(toDate + '0' + i + '3000');
+					} else {
+						standard.push(toDate + i + '0000');
+						standard.push(toDate + i + '3000');
+					}
+				} else { //시간
+					if (String(i).length == 1) {
+						standard.push(toDate + '0' + i + '0000');
+					} else {
+						standard.push(toDate + i + '0000');
+					}
+				}
+			}
+		}
+	}
+
+	return standard;
+}
+
+/**
+ * 날짜 기준값을 받아서 테이블을 생성한다.
+ *
+ * @param standard
+ * @param interval
+ */
+const makeTableTemplate = (standard, interval) => {
+	$('#datatable').empty();
+	let index = 0;
+
+	let targetTable = document.createElement('table');
+	let thead = targetTable.createTHead();
+	let tbody = targetTable.createTBody();
+	let hRow = thead.insertRow();
+	let bRow = tbody.insertRow();
+
+	let hCell, firstTh = '', firstTd = '', thText = '', tdText = '', stdDate = '';
+
+	targetTable.setAttribute('class', 'his_tbl');
+	tbody.setAttribute('id', 'table_' + index);
+
+	standard.forEach((stnd, idx) => {
+		if (stdDate != ''
+			&& (((interval == '15min' || interval == 'hour') && stdDate != stnd.substring(0, 8))
+				|| (interval == 'day' && stdDate != stnd.substring(0, 6))
+				|| (interval == 'month' && stdDate != stnd.substring(0, 4)))
+			|| standard.length == idx + 1) {
+
+			if (standard.length == idx + 1) {
+				if (interval == 'day') {
+					thText = stnd.substring(6, 8);
+					tdText = stnd + '000000';
+				} else if (interval == 'month') {
+					thText = stnd.substring(4, 6);
+					tdText = stnd + '01000000';
+				} else {
+					thText = stnd.substring(8, 10) + ':' + stnd.substring(10, 12);
+					tdText = stnd;
+				}
+				makeTableCell(hRow, hCell, bRow, thText, tdText);
+			}
+
+			let $div = $('<div>').addClass('chart_table');
+			let html = $('<div>').addClass('fold_div').append(targetTable);
+			html.appendTo($div);
+			$('#datatable').append($div);
+			setInitList('table_' + index);
+
+			index++
+			targetTable = document.createElement('table');
+			thead = targetTable.createTHead();
+			tbody = targetTable.createTBody();
+			hRow = thead.insertRow();
+			bRow = tbody.insertRow();
+			targetTable.setAttribute('class', 'his_tbl');
+			tbody.setAttribute('id', 'table_' + index);
+
+			if (interval == 'day') {
+				stdDate = stnd.substring(0, 6);
+				firstTh = stdDate.replace(/(\d{4})(\d{2})/, '$1-$2');
+				firstTd = '[name]';
+				thText = stnd.substring(6, 8);
+				tdText = stnd + '000000';
+			} else if (interval == 'month') {
+				stdDate = stnd.substring(0, 4);
+				firstTh = stdDate;
+				firstTd = 'name';
+				thText = stnd.substring(4, 6);
+				tdText = stnd + '01000000';
+			} else {
+				stdDate = stnd.substring(0, 8);
+				firstTh = stdDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+				firstTd = 'name';
+				thText = stnd.substring(8, 10) + ':' + stnd.substring(10, 12);
+				tdText = stnd;
+			}
+			makeTableCell(hRow, hCell, bRow, firstTh, firstTd);
+			makeTableCell(hRow, hCell, bRow, thText, tdText);
+		} else {
+			if(idx == 0) {
+				if (interval == 'day') {
+					stdDate = stnd.substring(0, 6);
+					firstTh = stdDate.replace(/(\d{4})(\d{2})/, '$1-$2');
+					firstTd = '[name]';
+					thText = stnd.substring(6, 8);
+					tdText = stnd + '000000';
+				} else if (interval == 'month') {
+					stdDate = stnd.substring(0, 4);
+					firstTh = stdDate;
+					firstTd = 'name';
+					thText = stnd.substring(4, 6);
+					tdText = stnd + '01000000';
+				} else {
+					stdDate = stnd.substring(0, 8);
+					firstTh = stdDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+					firstTd = 'name';
+					thText = stnd.substring(8, 10) + ':' + stnd.substring(10, 12);
+					tdText = stnd;
+				}
+				makeTableCell(hRow, hCell, bRow, firstTh, firstTd);
+				makeTableCell(hRow, hCell, bRow, thText, tdText);
+
+				if (standard.length == idx + 1) {
+					let $div = $('<div>').addClass('chart_table');
+					let html = $('<div>').addClass('fold_div').append(targetTable);
+					html.appendTo($div);
+					$('#datatable').append($div);
+					setInitList('table_' + index);
+				}
+			} else {
+				if (interval == 'day') {
+					thText = stnd.substring(6, 8);
+					tdText = stnd + '000000';
+				} else if (interval == 'month') {
+					thText = stnd.substring(4, 6);
+					tdText = stnd + '01000000';
+				} else {
+					thText = stnd.substring(8, 10) + ':' + stnd.substring(10, 12);
+					tdText = stnd;
+				}
+
+				makeTableCell(hRow, hCell, bRow, thText, tdText);
+			}
+		}
+	});
+};
+
+/**
+ * 테이블 헤더 셀
+ * 테이블 바디 셀
+ * 생성
+ *
+ * @param headerRow
+ * @param headerCell
+ * @param bodyRow
+ * @param headerText
+ * @param contentText
+ */
+const makeTableCell = (headerRow, headerCell, bodyRow, headerText, bodyText) => {
+	headerCell = document.createElement('TH');
+	headerCell.innerHTML = headerText;
+	headerRow.appendChild(headerCell);
+
+	let bodyCell = bodyRow.insertCell();
+	bodyCell.innerHTML = '[' + bodyText + ']';
 }

@@ -3568,12 +3568,10 @@ h1.stit {
 	max-height: 570px;
 	overflow: scroll;
 }
-
 .indiv.diagnosis_table .tbl_wrap .fold_div {
 	overflow: scroll;
 	display: table;
 }
-
 .indiv.pv_chart {
 	min-height: 139px;
 }
@@ -3603,7 +3601,6 @@ h1.stit {
 	width: calc(100% - 200px);
 	margin-left: -17px;
 }
-
 .indiv.diagnosis_chart .chart_top span:not(.caret) {
 	width: 50px;
 	text-align: right;
@@ -3632,7 +3629,6 @@ h1.stit {
 	right: 45px;
 	top: 35px;
 }
-
 .indiv.pv_chart .flex_group:not(.sel_calendar) {
 	margin: 0 0 12px 12px;
 }
@@ -10908,12 +10904,10 @@ html.darkmode .sch_top_info .sch_btn .btn_next_mon {
 	padding: 10px;
 	vertical-align: top;
 }
-
 .sch_btm_area table td a {
 	color: var(--color8);
 	font-size: 14px;
 }
-
 .sch_btm_area table td.today {
 	background: var(--bg-color2);
 }
@@ -11316,13 +11310,11 @@ html.darkmode .sch_top_info .sch_btn .btn_next_mon {
 	width: 100%;
 	table-layout: fixed;
 }
-
 /* TO DO !!!!!!!! */
 .spc_tbl.align_type .sort_table.chk_type th,
 .spc_tbl.align_type .sort_table.chk_type td {
 	padding: 0 10px;
 }
-
 th .btn_align {
 	background-color: var(--box-color5);
 }
