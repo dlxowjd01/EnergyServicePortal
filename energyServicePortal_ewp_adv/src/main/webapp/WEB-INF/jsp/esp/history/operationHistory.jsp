@@ -425,7 +425,8 @@
 
 
 			} else {
-				show = false;
+				show = true;
+				categories = new Array();
 				if ($('#analyzeTag2 span').length <= 0) {
 					alert('한개이상 항목을 선택해 주세요.');
 					return false;
@@ -497,6 +498,7 @@
 						});
 
 						dataArr.push([x, y]);
+						categories.push(String(x));
 					});
 
 					chartSeries.push({
@@ -510,7 +512,6 @@
 					});
 				});
 
-				categories = new Array();
 			}
 
 			chartDraw(chartSeries, categories, show);
