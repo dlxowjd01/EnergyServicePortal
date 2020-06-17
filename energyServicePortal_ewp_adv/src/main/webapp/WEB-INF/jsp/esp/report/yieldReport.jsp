@@ -296,7 +296,7 @@
 					result.data[i].report_date = report_data_start + '~' + report_data_end;
 
 					if (temp.generated_at != null) {
-						let generated_date = (new Date(temp.generated_at)).format('yyyy-MM-dd');
+						let generated_date = (new Date(temp.generated_at)).format('yyyy-MM-dd hh:mm:ss');
 						result.data[i].generated_date = generated_date;
 					}
 
@@ -307,7 +307,7 @@
 
 
 					if (temp.confirmed_at != null) {
-						let confirmed_date = (new Date(temp.confirmed_at)).format('yyyy-MM-dd');
+						let confirmed_date = (new Date(temp.confirmed_at)).format('yyyy-MM-dd hh:mm:ss');
 						let linkData = JSON.parse(temp.confirmed_file_link);
 						let file_link = 'location.href=\'http://iderms.enertalk.com:8443/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
 						result.data[i].confirmed_date = confirmed_date + '<button class="btn_file fr down" onclick="' + file_link + '">다운로드</button>';
