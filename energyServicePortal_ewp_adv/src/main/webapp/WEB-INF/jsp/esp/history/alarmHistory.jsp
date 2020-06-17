@@ -110,10 +110,17 @@
 		<div class="search_filter_row his_chart_top clear">
 			<div class="sa_select fl">
 				<div class="dropdown" id="site">
-					<button class="btn btn-primary dropdown-toggle w10" type="button" data-toggle="dropdown">
+					<button class="btn btn-primary dropdown-toggle w10" type="button" data-toggle="dropdown" data-name="선택해주세요.">
 						선택해주세요.<span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu"></ul>
+					<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="siteList">
+						<li data-value="[sid]">
+						<a href="javascript:void(0);" tabindex="-1">
+							<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
+							<label for="site_[INDEX]"><span></span>[name]</label>
+						</a>
+					</li>
+					</ul>
 				</div>
 			</div>
 			<div class="fl">
@@ -123,6 +130,12 @@
 						<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown"
 							data-name="선택">선택<span class="caret"></span></button>
 						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="device">
+							<li data-value="[type]">
+								<a href="javascript:void(0);" tabindex="-1">
+									<input type="checkbox" id="type_[INDEX]" value="[type]" name="deviceType">
+									<label for="type_[INDEX]"><span></span>[name]</label>
+								</a>
+							</li>
 						</ul>
 					</div>
 				</div>
@@ -350,7 +363,6 @@
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
-	//const sid = '<c:out value="${param.sid}" escapeXml="false"/>';
 	let dataList = [];
 	let changeTablegird = null;
 	let ticketFileList = new Array();
@@ -398,7 +410,9 @@
 		'closed': '처리 완료',
 	};
 	$(function() {
-		siteList(sites, sidparam);
+		setInitList('siteList');
+		setInitList('device');
+		siteList(sidparam);
 		if (sidparam != "") {
 			deviceTypeList(sidparam);
 		}
@@ -506,43 +520,59 @@
 			deviceTypeList();
 		}
 	}
-
-	const siteList = function (sites, sidparam) {
-		$('#site > ul').empty();
-		let str = '';
-		sites.forEach((site, index) => {
-			str += '<li>';
-			str += '<a href="javascript:void(0)" data-value="' + site.sid + '" tabindex="-1">';
-			if (site.sid == sidparam || sidparam == 'all') {
-				str += '<input type="checkbox" id="' + site.sid + '" value="' + site.sid + '" name="site" checked>';
-			} else {
-				str += '<input type="checkbox" id="' + site.sid + '" value="' + site.sid + '" name="site">';
-			}
-			str += '<label for="' + site.sid + '"><span></span>' + site.name + '</label></a></li>';
-		});
-		$('#site button').data('name', '발전소');
-		$('#site>ul').append(str);
+	
+	const siteList = function (sidparam) {
+		let siteList = [];
+		setMakeList(sites, 'siteList', {
+			'dataFunction': {}
+		});	//list생성
+		
+		if (sidparam == '' || sidparam == undefined) {
+			$(':checkbox[name="site"]').prop('checked', false);
+		} else if(sidparam == 'all'){
+			$(':checkbox[name="site"]').prop('checked', true);
+		} else{
+			$.each(sites, function(i, el){
+				let checkcnt = '';
+				if(el.sid == sidparam){
+					$(':checkbox[name="site"]').eq(i).prop('checked', true);
+				}
+			});
+		}
+		
 	};
 
 	const deviceTypeList = function (sidparam) {
 		$('#equipmentList > div > ul').empty();
-		let str = '';
+		let deviceList = [];
 		let sites = JSON.parse('${siteList}');
 		dataList = deviceType(sites, sidparam);
-		const deviceTypes = dataList[0];
-
-		deviceTypes.forEach((deviceTypes, index) => {
-			const deviceRender = eval('deviceTemplate.' + deviceTypes);
-			str += '<li><a href="javascript:void(0)" data-value="' + index + '" tabindex="-1">';
-			if (sidparam == "" || sidparam == undefined) {
-				str += '<input type="checkbox" id="' + index + '" value="' + deviceTypes + '" name="deviceType">';
-			} else {
-				str += '<input type="checkbox" id="' + index + '" value="' + deviceTypes + '" name="deviceType" checked>';
-			}
-			str += '<label for="' + index + '"><span></span>' + deviceRender + '</label>';
-			str += '</a></li>';
+		
+		$.each(dataList[0], function(i, deviceName){
+			const kdeviceName = eval('deviceTemplate.' + deviceName);
+			deviceList.push({name:kdeviceName, type:deviceName});
 		});
-		$('#equipmentList>div>ul').append(str);
+		console.log(deviceList);
+		deviceList.sort(function(a, b){
+			let atype = a['type'].toUpperCase();
+			let btype = b['type'].toUpperCase();
+			if(atype > btype){
+				return 1;
+			}
+			if(btype > atype){
+				return -1;
+			}
+			return 0;
+		});
+		console.log(deviceList);
+		setMakeList(deviceList, 'device', {
+			'dataFunction': {}
+		});
+		if (sidparam == '' || sidparam == undefined) {
+			$(':checkbox[name="deviceType"]').prop('checked', false);
+		} else {
+			$(':checkbox[name="deviceType"]').prop('checked', true);
+		}
 	};
 
 	const periodData = function () {
@@ -603,37 +633,69 @@
 			async: false,
 			data: alarmData,
 			success: function (result) {
-				var data = result;
-				let filterdata = [];
+				let data = [];
+				let jsonList = [];
 				// console.log(data);
-				statusFilter(filterdata, statusArray, data);
-
+				gridDataFilter(data, statusArray, alarmArray, result); //알람 및 조치상태 필터링
+				
+				changeTablegird = data;
+				
+				for(let i in deviceArray){
+					jsonList.push(new Array());
+				}
+				
 				$('.his_tbl').remove();
+				
+				for(let i in data){
+					var temp = data[i];
+					
+					data[i].localtime = temp.localtime; // 알람발생시간
+					data[i].tlocaltime = dateFormat(String(temp.localtime)); // 테이블에 보여질 알람발생시간
+					data[i].alarmtype = ((isEmpty(temp.level)) ? '-' : levelTemplate[temp.level]); // 테이블에 보여질 알람타입;
+					data[i].level = temp.level; // 알람타입
+					data[i].message = ((isEmpty(temp.message)) ? "" : temp.message); // 알람메시지
+					
+					if (temp.confirm == false) {
+						data[i].confirm  = '<a href="javascript:alarmConfirm(\'' + temp.alarm_id + '\',\'' + temp.ticket_id + '\');" class="tbl_link" >미확인</a>'; // 알람상태
+					} else {
+						data[i].confirm = '확인'; // 알람상태
+					}
+					
+					if (!(isEmpty(temp.status))) {
+						data[i].status = '<a href="javascript:updateAck(\'' + temp.alarm_id + '\',\'' + temp.ticket_id + '\');" class="tbl_link" >' + statusTemplate[temp.status] + '</a>'; // 조치상태
+					} else {
+						data[i].status = '<a href="javascript:createAck(\'' + temp.alarm_id + '\');" class="tbl_link" >신규</a>'; // 조치상태
+					}
+					
+					if (!(isEmpty(temp.status_timestamp))) {
+						data[i].status_timestamp = new Date(temp.status_timestamp).format('yyyy-MM-dd HH:mm:ss'); // 최종업데이트 시간
+					} else {
+						data[i].status_timestamp = '';
+					}
+				}
+				
+				$.each(data, function(i, datalist){
+					$.each(deviceArray, function (j, e2) {
+						if(datalist.device_type == e2){
+							jsonList[j].push(data[i]);
+						}
+					})
+				})
 				$.each(deviceArray, function (i, el) {
 					makeDiv(el);
 					makeTableHead(el);
+					setInitList(el);
+					setMakeList(jsonList[i], el, { 'dataFunction': { 'INDEX': getNumberIndex } }); //list생성
 				});
-
-				if (filterdata.length > 0) {
-					$.each(filterdata, function (i, el) {
-						$.each(deviceArray, function (j, e2) {
-							if (el.device_type === e2) {
-								tablegrid(e2, el, i);
-							}
-						})
-					})
-				}
-				$.each(deviceArray, function (i, el) {
-					if ($('#' + el + ' tbody td').length == 0) {
-						tdStr = '<th><td></td></th>';
-						$('#' + el + ' tbody').append(tdStr);
-					}
-				});
-				changeTablegird = filterdata;
 			},
 			dataType: 'json'
 		});
 	}
+	
+	const getNumberIndex = function(index) {
+		return index + 1;
+	}
+	
 	const makeDiv = function (deviceType) {
 		let divStr = '';
 		divStr += '<div class="tbl_top clear">';
@@ -642,12 +704,15 @@
 		divStr += '</div>';
 		$(".tbl_wrap_type").append(divStr);
 	}
+	
 	const makeTableHead = function (deviceType) {
 		let newHeadTable = document.createElement('table');
 		let colList = ['사업소', '장치명', '알람 시간', '알람 타입', '알람 메세지', '확인 여부', '조치 상태', '최종 업데이트 시간'];
+		let tdList = ['[site_name]', '[device_name]', '[tlocaltime]', '[alarmtype]', '[message]', '[confirm]', '[status]', '[status_timestamp]'];
 		let thead = newHeadTable.createTHead();
 		let tbody = newHeadTable.createTBody();
 		let tRow = thead.insertRow();
+		let bRow = tbody.insertRow();
 
 		for (let i = 0; i < colList.length + 1; i++) {
 			let hCell = document.createElement("th");
@@ -659,41 +724,24 @@
 				tRow.appendChild(hCell);
 			}
 		}
+		
+		for (let i = 0; i < tdList.length + 1; i++) {
+			let dCell = document.createElement("td");
+			if (i == 0) {
+				dCell.innerHTML = '<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value=""><label for="chk_op[INDEX]"><span></span>[INDEX]</label>';
+				bRow.appendChild(dCell);
+			} else {
+				dCell.innerHTML =  tdList[i - 1];
+				bRow.appendChild(dCell);
+			}
+		}
+		
 		newHeadTable.setAttribute('class', 'sort_table his_tbl chk_type');
-		newHeadTable.setAttribute('id', deviceType);
+// 		newHeadTable.setAttribute('id', deviceType);
+		tbody.setAttribute('id', deviceType);
 		$(".tbl_wrap_type").append(newHeadTable);
 	}
-	const tablegrid = function (tableId, el, i) {
-		let tbodyStr = "";
-		const Selector = '#' + tableId + ' tbody';
-		tbodyStr += '<tr>';
-		tbodyStr += '<td><input type="checkbox" value="' + el.alarm_id + '"id="chk' + i + '"><label for="chk' + i + '"><span></span></label></td>'
-		tbodyStr += '	<td>' + el.site_name + '</td>'; // 장비타입
-		tbodyStr += '	<td>' + el.device_name + '</td>'; // 장치명
-		tbodyStr += '	<td>' + dateFormat(String(el.localtime)) + '</td>'; // 알람발생시간
-		tbodyStr += '	<td>' + ((isEmpty(el.level)) ? '-' : levelTemplate[el.level]) + '</td>'; // 알람타입
-		tbodyStr += '	<td>' + ((isEmpty(el.message)) ? "" : el.message) + '</td>'; // 알람메시지
-		if (el.confirm == false) {
-			tbodyStr += '	<td><a href="javascript:alarmConfirm(\'' + el.alarm_id + '\',\'' + el.ticket_id + '\');" class="tbl_link" >미확인</a></td>'; // 알람상태
-		} else {
-			tbodyStr += '	<td>확인</td>'; // 알람상태
-		}
-
-		if (!(isEmpty(el.status))) { // 조치사항이 존재할 경우
-			tbodyStr += '	<td><a href="javascript:updateAck(\'' + el.alarm_id + '\',\'' + el.ticket_id + '\');" class="tbl_link" >' + statusTemplate[el.status] + '</a></td>'; // 조치상태
-		} else {
-			tbodyStr += '	<td><a href="javascript:createAck(\'' + el.alarm_id + '\');" class="tbl_link" >신규</a></td>'; // 조치상태
-		}
-
-		if (!(isEmpty(el.status_timestamp))) {
-			tbodyStr += '   <td>' + new Date(el.status_timestamp).format('yyyy-MM-dd HH:mm:ss') + '</td>'; // 최종업데이트 시간
-		} else {
-			tbodyStr += '<td></td>';
-		}
-		tbodyStr += '</tr>';
-		$(Selector).append(tbodyStr);
-	}
-
+	
 	const createAck = function (alarmId) {
 		$('#alarmMeasure').modal('show').data('value', alarmId).data('ticket', '');
 		ackStatusInit();
@@ -1060,19 +1108,29 @@
 		return filterArray;
 	}
 
-	const statusFilter = function (filterdata, statusArray, data) {
-		$.each(data, function (i, el) {
+	const gridDataFilter = function (data, statusArray, alarmArray, result) {
+		let filterArray = [];
+		
+		$.each(result, function (i, el) {
 			$.each(statusArray, function (j, e2) {
 				if (e2 == 'null') {
 					e2 = null;
 				}
-
-				if (el.status === e2) {
-					filterdata.push(data[i])
+				if (el.status == e2) {
+					filterArray.push(result[i]);
 				}
 			})
-		})
+		});
+		
+		$.each(filterArray, function(k, filterData){
+			$.each(alarmArray, function(i, checkalarm){
+				if(filterData.level == Number(checkalarm)){
+					data.push(filterArray[k]);
+				}
+			})
+		});
 	}
+	
 	const deviceType = function (sites, sidparam) {
 		if (sidparam != "" || sidparam != undefined) {
 			$('#equipmentList button').empty().append('전체<span class="caret"></span>');
@@ -1254,7 +1312,6 @@
 		let alarmColorArr = ['#b0e9e8', '#F75C4A', '#F49E34', '#84848F', '#438fd7', '#13af67', '#f75c4a', '#84848f', '#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787', '#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787'];
 		let colorArr = (gr_type == true) ? typeColorArr : alarmColorArr;
 		var num = 0;
-
 		dataMap.forEach(function (v, k) {
 			data.sort(function (a, b) {
 				return a['localtime'] - b['localtime'];

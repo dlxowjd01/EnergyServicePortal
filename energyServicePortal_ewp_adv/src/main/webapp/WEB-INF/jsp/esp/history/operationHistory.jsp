@@ -425,7 +425,8 @@
 
 
 			} else {
-				show = false;
+				show = true;
+				categories = new Array();
 				if ($('#analyzeTag2 span').length <= 0) {
 					alert('한개이상 항목을 선택해 주세요.');
 					return false;
@@ -497,6 +498,7 @@
 						});
 
 						dataArr.push([x, y]);
+						categories.push(String(x));
 					});
 
 					chartSeries.push({
@@ -510,7 +512,6 @@
 					});
 				});
 
-				categories = new Array();
 			}
 
 			chartDraw(chartSeries, categories, show);
@@ -697,7 +698,7 @@
 	}
 
 	//선택된 디바이스 유형별로 테이블을 생성한다.
-	const makeTableTemplate = function () {
+	const makeTableTemplateDevice = function () {
 		$('#datatable').empty();
 
 		$(':checkbox[name="type"]:checked').each(function () {
@@ -762,7 +763,7 @@
 			deviceArray.push($(this).val());
 		});
 
-		makeTableTemplate();
+		makeTableTemplateDevice();
 
 		$('[id^="chartDid"]').each(function () {
 			$(this).find('button').html($(this).find('button').data('name') + '<span class="caret"></span>').data('value', '');

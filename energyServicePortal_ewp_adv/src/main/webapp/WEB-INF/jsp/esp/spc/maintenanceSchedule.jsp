@@ -9,6 +9,19 @@ const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="fal
 $(function() {
     pageInit();
 
+    //날짜 셀렉트박스 클릭 시
+    $('.sch_sel_area ul li').on('click', function() {
+    	var thisVal = $(this).data('value');
+    	var thisId = $(this).parent().parent().attr('id');
+    	
+    	if ( thisId == 'year' ) {
+    		today = new Date(thisVal, today.getMonth(), today.getDate());
+    	} else {
+    		today = new Date(today.getFullYear(), thisVal-1, today.getDate());
+    	}
+    	buildCalendar();
+    });
+    
     //전월
     $('.btn_prev_mon').on('click', function() {
         today = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());

@@ -262,11 +262,7 @@
 				<table class="sort_table chk_type">
 					<thead>
 						<tr>
-							<th>
-								<input type="checkbox" id="chk_header" value="순번"
-									onclick="setCheckedAll(this, 'rowCheck');" />
-								<label for="chk_header"><span></span>순번</label>
-							</th>
+							<th>순번</th>
 							<th>
 								<button class="btn_align down">보고서 구분</button>
 							</th>
@@ -289,10 +285,7 @@
 					</thead>
 					<tbody id="listData">
 						<tr>
-							<td>
-								<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="" />
-								<label for="chk_op[INDEX]"><span></span>[INDEX]</label>
-							</td>
+							<td>[INDEX]</td>
 							<td>[report_type]</td>
 							<td>[report_id]</td>
 							<td>
