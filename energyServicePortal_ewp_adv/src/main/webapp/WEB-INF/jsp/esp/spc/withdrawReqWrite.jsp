@@ -32,15 +32,6 @@
 		}
 	})
 
-	function unCheckAll(){ 
-      var w = document.getElementsByTagName('input'); 
-		for(var i = 0; i < w.length; i++){ 
-			if(w[i].type=='checkbox'){ 
-			w[i].checked = false; 
-			}
-		}
-	}
-	
 	function nvl(value, str) {
 		if (isEmpty(value)) {
 			return str;
@@ -166,7 +157,7 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">출금 요청서 작성</h1>
+		<h1 class="page-header">출금 요청서 신청</h1>
 		<div class="time fr">
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>
@@ -269,7 +260,7 @@
 <div class="row content-wrapper spc_transaction">
 	<div class="col-12">
 		<div class="indiv spc_bal_post">
-			<table>
+			<table class="table_footer">
 				<colgroup>
 					<col style="width:4%">
 					<col style="width:16%">
@@ -455,7 +446,9 @@
 					<tr>
 						<td></td>
 						<td>합계</td>
-						<td colspan="4">100,000,000</td>
+						<td></td>
+						<td>100,000,000</td>
+						<td colspan="2"></td>
 					</tr>
 				</tfoot>
 			</table>

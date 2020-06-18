@@ -130,9 +130,7 @@
 				includeGens: true
 			},
 			success: function (result) {
-				// console.log('result===', result)
-
-				setMakeList(setJsonDataFormat(result, page), "listData", {
+			setMakeList(setJsonDataFormat(result, page), "listData", {
 					"dataFunction": {
 						"INDEX": getNumberIndex
 					}
@@ -257,22 +255,30 @@
 			</div>
 			<div class="spc_tbl align_type" id="excelList">
 				<table class="sort_table chk_type">
+					<colgroup>
+						<col style="width:8%">
+						<col style="width:8%">
+						<col style="width:18%">
+						<col style="width:8%">
+						<col style="width:20%">
+						<col style="width:8%">
+						<col style="width:10%">
+						<col style="width:10%">
+						<col style="width:10%">
+						<col>
+					</colgroup>
 					<thead>
 						<tr>
-							<th>
-								<input type="checkbox" id="chk_header" value="순번"
-									onclick="setCheckedAll(this, 'rowCheck');">
-								<label for="chk_header"><span></span>순번</label>
-							</th>
+							<th><input
+								type="checkbox" id="chk_header" value="순번"
+								onclick="setCheckedAll(this, 'rowCheck');"><label for="chk_header"><span></span>순번</label></th>
 							<th><button class="btn_align down">SPC명</button></th>
 							<th><button class="btn_align down">발전소 명</button></th>
 							<th><button class="btn_align down">연차</button></th>
 							<th><button class="btn_align down">관리 운영기간</button></th>
 							<th><button class="btn_align down">보증</button></th>
-							<th class="right"><button class="btn_align down">보증 값</button>
-							</th>
-							<th class="right"><button class="btn_align down">감소율</button>
-							</th>
+							<th class="right"><button class="btn_align down">보증 값</button></th>
+							<th class="right"><button class="btn_align down">감소율</button></th>
 							<th><button class="btn_align down">- 추가보수</button></th>
 						</tr>
 					</thead>

@@ -8,6 +8,7 @@
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 
 	$(function () {
+		unCheckAll();
 		pageInit();
 		// TO DO!!!!!
 		// 사용자 === 사무수탁사 => show() : writeBtn
@@ -99,6 +100,10 @@
 		$('#detailModalTrigger').on("click", function(){
 			$("#detailInfoModal").toggleClass("active");
 		});
+		$('#confirmBtn').on("click", function(){
+			$("#detailInfoModal").toggleClass("active");
+		});
+		
 	});
 
 	//기본세팅
@@ -107,6 +112,7 @@
 		let year = today.getFullYear();
 		let month = today.getMonth() + 1;
 
+		$("#detailInfoModal").addClass("active");
 		$('#datepicker1').datepicker('setDate', 'today');
 		$('#year > button').html(year + '년<span class="caret"></span>').data('value', year);
 		$('#month > button').html(month + '월<span class="caret"></span>').data('value', month);
@@ -297,6 +303,7 @@
 					+'</li>'
 				)
 			});
+			// TO DO!!!!!!!!!  show more btn
 			calendar.find("p.bu").each(function () {
 				$(this).on("mouseover click", function(){
 					$("#popoverModal").addClass("active");
@@ -440,7 +447,7 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header fl">SPC 입출금 관리</h1>
+		<h1 class="page-header fl">월간 입출금 일정</h1>
 		<div class="time fr">
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>
@@ -552,16 +559,19 @@
 						<button type="button" class="btn_type03 active">오늘</button>
 						<button type="button" class="btn_prev_mon">prev</button>
 						<button type="button" class="btn_next_mon">next</button>
-						<button type="button" id="detailModalTrigger" class="btn_type03 active"></button>
+						<button type="button" id="detailModalTrigger" class="btn_type03"></button>
 					</div>
 					<div class="dropdown_modal modal-dialog" id="detailInfoModal">
 						<div class="modal-content spc_detail_content">
-							<div class="modal-header">
+							<div class="modal-header pt-20">
 								<h2 id="modalTitle" class="fl"></h2>
 								<a href="#" class="btn_type02 fr">상세보기</a>
 							</div>
 							<div class="modal-body">
 								<ul class="detail_list"></ul>
+							</div>
+							<div class="btn_wrap_type05">
+								<button type="button" id="confirmBtn" class="btn_type">확인</button>
 							</div>
 						</div>
 					</div>

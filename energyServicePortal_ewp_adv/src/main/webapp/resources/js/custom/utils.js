@@ -1209,6 +1209,27 @@ function addRowTable(tblId) {
 	}
 }
 
+function addEmptyRowTable(tblId) {
+	var table = document.getElementById(tblId);
+	var objTable = $('#' + tblId);
+	var rowClone = table.rows[table.rows.length - 1];
+	var row = table.insertRow(-1);
+	var trLength = objTable.find('tbody tr').length;
+	console.log("rowClone", rowClone)
+	
+	// var empty = $(row).last("input")("input").val("");
+
+	copyAttribute(rowClone, row);
+
+	for (var i = 0; i < table.rows[table.rows.length - 2].cells.length; i++) {
+		var cellClone = rowClone.cells[i];
+		console.log("cellClone==", cellClone)
+		var cell = row.insertCell();
+		cell.innerHTML = cellClone.innerHTML;
+		copyAttribute(cellClone, attributeVary(cell, trLength));
+	}
+}
+
 /**
  * 각 셀의 input id, name도 row에 따라 증가하도록 수정
  *

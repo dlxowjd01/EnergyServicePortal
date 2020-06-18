@@ -779,7 +779,7 @@
 						<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
 							<div class="input-group inline-flex chk_type">
 								<label class="input_label">예측</label>
-								<input class="styled-checkbox" id="predictionData" type="checkbox" value="1"
+								<input class="input tx_inp_type" id="predictionData" type="checkbox" value="1"
 									name="predicted">
 								<label for="predictionData"><span></span></label>
 							</div>
