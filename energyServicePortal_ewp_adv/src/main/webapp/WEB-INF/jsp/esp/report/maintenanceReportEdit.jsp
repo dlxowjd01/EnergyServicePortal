@@ -200,7 +200,7 @@
 			}),
 			success: function (result) {
 				alert("수정되었습니다.");
-				goMoveList();
+				goNowPage(reportId);
 			},
 			error: function (request, status, error) {
 				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
@@ -208,6 +208,10 @@
 		});
 	}
 
+	function goNowPage(reportId) {
+		location.href = "/report/maintenanceReportDetails.do?report_id=" + reportId;	
+	}
+	
 	function goMoveList() {
 		location.href = "/report/maintenanceReport.do";
 	}

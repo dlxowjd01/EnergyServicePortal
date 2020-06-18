@@ -12,10 +12,10 @@
 	let repeat_type_method = 'post';
 	let repeatCoastNumber = new Object();
 	let reportType = {
-		regular_mm: '월간 발전량',
-		regular_qt: '분기 발전량',
-		regular_yy: '년간 발전량',
-		profit_mm: '월간 수익보고서'
+		regular_mm: '월간 실적',
+		regular_qt: '분기 실적',
+		regular_yy: '년간 실적',
+		profit_mm: '수익보고서'
 	}
 
 	$(function () {
@@ -64,7 +64,6 @@
 	$(document).on('change', 'input[type="file"]', function () {
 		let uuid = genUuid();
 		let thisId = $(this).prop('id');
-
 		$('#upload').empty();
 		$(this).clone().appendTo('#upload');
 		$('#upload').find('input').attr('name', uuid).attr('id', uuid);
@@ -285,7 +284,6 @@
 			success: function (result) {
 				var jsonList = [],
 					keyWord = $('#key_word').val();
-
 				for (var i in result.data) {
 					var temp = result.data[i],
 						reportTypeName = reportType[temp.report_type],
@@ -330,16 +328,57 @@
 	}
 
 	function jsonDataFilter(jsonData) {
-		var keyWord = $('#key_word').val().trim().toLowerCase(),
-			bResult = false;
-
+		let keyWord = $('#key_word').val().trim().toLowerCase(),
+			bResult = false, dResult = true, sResult = false;
+		
+		dResult = dateFilter(jsonData, dResult);
+		
 		if (jsonData['site_name'].toLowerCase().indexOf(keyWord) > -1 || jsonData['spc_name'].toLowerCase().indexOf(keyWord) > -1 || jsonData['updated_by'].toLowerCase().indexOf(keyWord) > -1) {
+			sResult = true;
+		}
+		
+		if(sResult && dResult){
 			bResult = true;
 		}
 
 		return bResult;
 	}
 
+	function dateFilter(jsonData, dResult){
+		let selectYear = '';
+		let selectMonth = '';
+		
+		if($('#year button').text().trim() == '전체'){
+			selectYear = ''; 
+		}else{
+			selectYear = $('#year button').text().trim().replace('년','');
+		}
+		if($('#month button').text().trim() == '전체'){
+			selectMonth = '';
+		}else{
+			selectMonth = $('#month button').text().trim().replace('월','');
+		}
+		
+		let	reportYear = jsonData.report_date.substring(0,4);
+		let	reportMonth = jsonData.report_date.substring(5,7);
+		
+		if(reportMonth.indexOf(0) > -1){
+			reportMonth = reportMonth.replace('0','');
+		}
+		
+		if(selectYear != '' && selectMonth != ''){
+			if(selectYear != reportYear || selectMonth != reportMonth){
+				dResult = false;
+			}
+		}else if(selectYear != '' || selectMonth != ''){
+			if(selectYear != reportYear && selectMonth != reportMonth){
+				dResult = false;
+			}
+		}
+		
+		return dResult;
+	}
+	
 	function getNumberIndex(index) {
 		return index + 1;
 	}
@@ -419,28 +458,43 @@
 		if (result.files.length > 0) {
 			var checkDataList = $("#listData").data("gridJsonData"),
 				idx = Number(propName.replace('cofirmFile', ''));
+			let fileLen = result.files[0].originalname.length;
+			let fileNameDot = result.files[0].originalname.lastIndexOf('.');
+			let fileExt = result.files[0].originalname.substring(fileNameDot, fileLen).toLowerCase();
+			let newPageCnt = Math.floor((idx-1)/pagePerData);
+			
+			if(fileExt == '.pdf'){
+				
+				if(newPageCnt > 0){
+					idx = idx - pagePerData * newPageCnt; 
+				}
+				console.log(idx);
+				let confirmed_file_link = {
+					fileKey: result.files[0].fieldname,
+					orgFileName: result.files[0].originalname
+				}
+			
+				let data = {
+					confirmed_file_link: JSON.stringify(confirmed_file_link),
+					confirmed_by: loginId,
+					confirmed_at: new Date().toISOString()
+				}
+			
+				let option = {
+					url: 'http://iderms.enertalk.com:8443/reports/performance/' + checkDataList[idx-1].id + '?oid=' + oid,
+					method: 'patch',
+					dataType: 'json',
+					contentType: "application/json",
+					traditional: true,
+					data: JSON.stringify(data)
+				};
 
-			let confirmed_file_link = {
-				fileKey: result.files[0].fieldname,
-				orgFileName: result.files[0].originalname
+				callAjax(option, confirmUpload);
+				
+			}else{
+				alert('확장자가 pdf인 파일만 업로드가 가능 합니다.');
+				return false;
 			}
-
-			let data = {
-				confirmed_file_link: JSON.stringify(confirmed_file_link),
-				confirmed_by: loginId,
-				confirmed_at: new Date().toISOString()
-			}
-
-			let option = {
-				url: 'http://iderms.enertalk.com:8443/reports/performance/' + checkDataList[idx].id + '?oid=' + oid,
-				method: 'patch',
-				dataType: 'json',
-				contentType: "application/json",
-				traditional: true,
-				data: JSON.stringify(data)
-			};
-
-			callAjax(option, confirmUpload);
 		}
 	}
 
@@ -655,7 +709,7 @@
 			</div>
 		</div>
 		<div class="fl">
-			<button type="submit" class="btn_type" onclick="getDataList();">검색</button>
+			<button type="submit" class="btn_type" onclick="getDataList(page);">검색</button>
 		</div>
 	</div>
 </div>
