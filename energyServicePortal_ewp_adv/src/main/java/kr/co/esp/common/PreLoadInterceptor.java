@@ -147,6 +147,8 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				for (Map<String, Object> site : siteOriginList) {
 					if (sid.equals(site.get("sid"))) {
 						siteName = (String) site.get("name");
+						jsonArray = new JSONArray();
+						jsonArray.put(jsonParser(site));
 						break;
 					} else {
 						continue;
@@ -155,6 +157,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 				request.setAttribute("sid", sid);
 				request.setAttribute("siteName", siteName);
+				request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
 			} else {
 				if (systemValue != null && !"".equals(systemValue)) {
 					session.removeAttribute("sessionSiteList");
