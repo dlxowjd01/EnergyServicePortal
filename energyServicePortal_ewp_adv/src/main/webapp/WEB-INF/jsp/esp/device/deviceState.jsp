@@ -388,31 +388,31 @@
 
 	function openAddModal(type, site) {
 		$("#deviceForm1")[0].reset();
-		const manualTable = $(".indiv.eq_card").parent("div[data-dvtype='SM_MANUAL']");
-		const modifyBtn = manualTable.children(".eq_btn_bx .btn_type03:first-of-type");
+		// const manualTable = $(".indiv.eq_card").parent("div[data-dvtype='SM_MANUAL']");
+		// const modifyBtn = manualTable.children(".eq_btn_bx .btn_type03:first-of-type");
 
-		console.log("modifyBtn---", modifyBtn);
-		type === "SM_MANUAL" ? modifyBtn.text("수기입력") : $("#addDeviceModal").modal("show");
+		// console.log("modifyBtn---", modifyBtn);
+		// type === "SM_MANUAL" ? modifyBtn.text("수기입력") : $("#addDeviceModal").modal("show");
 
 		let deviceOpts = ``;
 
-		// for (let i = 0; i < deviceList.length; i++) {
-		// 	if (i === 0) {
-		// 		deviceOpts += '<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="deviceId">';
-		// 		deviceOpts += deviceList[i].name;
-		// 		deviceOpts += '<span class=' + "caret" + '></span></button>';
-		// 		deviceOpts += '<ul class="dropdown-menu">';
-		// 		deviceOpts += '<li class="on"><a href="#">전체</a></li>';
-		// 		deviceOpts += '<li><a href="#">';
-		// 		deviceOpts += deviceList[i].name;
-		// 		deviceOpts += '</a></li>';
-		// 	} else {
-		// 		deviceOpts += '<li><a href="#">';
-		// 		deviceOpts += deviceList[i].name;
-		// 		deviceOpts += '</a></li>';
-		// 	}
-		// }
-		// deviceOpts += '</ul>';
+		for (let i = 0; i < deviceList.length; i++) {
+			if (i === 0) {
+				deviceOpts += '<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="deviceId">';
+				deviceOpts += deviceList[i].name;
+				deviceOpts += '<span class=' + "caret" + '></span></button>';
+				deviceOpts += '<ul class="dropdown-menu">';
+				deviceOpts += '<li class="on"><a href="#">전체</a></li>';
+				deviceOpts += '<li><a href="#">';
+				deviceOpts += deviceList[i].name;
+				deviceOpts += '</a></li>';
+			} else {
+				deviceOpts += '<li><a href="#">';
+				deviceOpts += deviceList[i].name;
+				deviceOpts += '</a></li>';
+			}
+		}
+		deviceOpts += '</ul>';
 
 
 	}
