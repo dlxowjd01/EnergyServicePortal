@@ -194,7 +194,7 @@
 				<div class="sa_select">
 					<div class="dropdown" id="alarmstatus">
 						<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown"
-							data-name="선택">전체
+							data-name="선택">미확인
 							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu chk_type" role="menu" id="alstatus">
@@ -552,7 +552,7 @@
 			const kdeviceName = eval('deviceTemplate.' + deviceName);
 			deviceList.push({name:kdeviceName, type:deviceName});
 		});
-		console.log(deviceList);
+		
 		deviceList.sort(function(a, b){
 			let atype = a['type'].toUpperCase();
 			let btype = b['type'].toUpperCase();
@@ -564,10 +564,11 @@
 			}
 			return 0;
 		});
-		console.log(deviceList);
+		
 		setMakeList(deviceList, 'device', {
 			'dataFunction': {}
 		});
+		
 		if (sidparam == '' || sidparam == undefined) {
 			$(':checkbox[name="deviceType"]').prop('checked', false);
 		} else {
@@ -1467,7 +1468,7 @@
 				labels: {
 					align: 'center',
 					style: {
-						// color: 'var(--color3)',
+						color: 'var(--color3)',
 						fontSize: '8px'
 					},
 					y: 40,

@@ -583,8 +583,8 @@
 								<input type="text" id="정기_검사_주기" placeholder="주기">
 							</div>
 							<div class="sel_calendar edit twin clear fl">
-								<input type="text" id="정기_검사_from" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="월 선택">
-								<input type="text" id="정기_검사_to" class="sel datepicker toDate" value="" autocomplete="off" placeholder="일 선택">
+								<input type="text" id="정기_검사_from" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일">
+								<input type="text" id="정기_검사_to" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일">
 							</div>
 						</td>
 						<th></th>

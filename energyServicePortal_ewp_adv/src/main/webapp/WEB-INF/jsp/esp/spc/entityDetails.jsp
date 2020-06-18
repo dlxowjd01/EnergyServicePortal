@@ -70,6 +70,11 @@
 		setMakeList(addFileList08, "addFileList08", { "dataFunction": {} });
 		setMakeList(addFileList09, "addFileList09", { "dataFunction": {} });
 		setMakeList(addFileList10, "addFileList10", { "dataFunction": {} });
+		
+		let noData = $('#attachement_info .spc_tbl_row .no-data').parent().next().children();
+		for(let i in noData){
+			noData.hide();
+		}
 	}
 
 	function getGenData() {

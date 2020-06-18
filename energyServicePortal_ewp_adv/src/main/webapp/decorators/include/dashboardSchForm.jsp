@@ -44,11 +44,22 @@
       lastDay = (new Date(today.getFullYear(), today.getMonth() + 1, 0)).getDate();
       endDate = new Date(today.getFullYear(), today.getMonth(), lastDay, 23, 59, 59);
       $("#selTerm").val("month");
+    } else if (termType === 'beforeMonth') {
+      // 이번달 1일 000000 부터
+      startDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+      lastDay = (new Date(today.getFullYear(), today.getMonth(), 0)).getDate();
+      endDate = new Date(today.getFullYear(), today.getMonth() - 1, lastDay, 23, 59, 59);
+      $("#selTerm").val("beforeMonth");
     } else if (termType === 'year') {
       // 이번년 1일 000000 부터
       startDate = new Date(today.getFullYear(), 0, 1);
       endDate = new Date(today.getFullYear(), 11, 31, 23, 59, 59);
       $("#selTerm").val("year");
+    } else if (termType === 'beforeYear') {
+      // 이번년 1일 000000 부터
+      startDate = new Date(today.getFullYear() - 1, 0, 1);
+      endDate = new Date(today.getFullYear() - 1, 11, 31, 23, 59, 59);
+      $("#selTerm").val("beforeYear");
     }
     
     startDate = startDate.format("yyyyMMddHHmmss");

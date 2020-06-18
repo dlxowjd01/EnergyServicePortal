@@ -346,13 +346,17 @@
 			}),
 			success: function (json) {
 				alert("수정되었습니다.");
-				goMoveList();
+				goNowPage(spcId, genId);
 			},
 			error: function (request, status, error) {
 				alert('처리 중 오류가 발생했습니다.');
 				return false;
 			}
 		});
+	}
+	
+	function goNowPage(spcId, genId){
+		location.href = "/spc/entityDetails.do?spc_id=" + spcId + "&gen_id=" + genId + "&oid=" + oid;
 	}
 
 	function goMoveList(){

@@ -61,7 +61,7 @@
 			bReportType = false,
 			bWriteDate = false,
 			bKeyWord = false;
-		bResult = false;
+			bResult = false;
 		//보고서 구분
 		if ("" != report_type && report_type == jsonData.report_type) {
 			bReportType = true;

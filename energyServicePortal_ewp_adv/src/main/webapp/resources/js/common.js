@@ -410,11 +410,9 @@ $(function() {
 
 
 /* type_list slideToggle */
-$(function(){
-    $(".type_list .chart_top").click(function() {
-        $(this).next(".type_list_detail").slideToggle();
-        return false;
-    });
+$(document).on('click', ".type_list .chart_top", function() {
+    $(this).next(".type_list_detail").slideToggle();
+    return false;
 });
 
 

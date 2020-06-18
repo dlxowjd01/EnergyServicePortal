@@ -1041,7 +1041,6 @@ function setMakeList(jsonData, listId, opts) {
 		jsonData[i]["INDEX"] = i;
 		tmpHtml = rowHtml;
 		for (var j = 0; j < columLength; j++) {
-
 			if (opts.dataFunction[arr_column[j]]) {
 				tmpHtml = tmpHtml.split(col_left + arr_column[j] + col_right).join(opts.dataFunction[arr_column[j]](jsonData[i][arr_column[j]]));
 			} else {
@@ -1051,6 +1050,8 @@ function setMakeList(jsonData, listId, opts) {
 
 		if(opts.dataFunction['align']) {
 			tmpHtml = alignFunc(tmpHtml);
+		} else if(opts.dataFunction['setNull']) {
+			tmpHtml = setNull(tmpHtml);
 		}
 		arrTagInfo.push(tmpHtml);
 	}
@@ -1068,6 +1069,10 @@ function alignFunc(tmpHtml) {
 	});
 
 	return $div.html();
+}
+
+function setNull(tmpHtml) {
+	return tmpHtml.replace(/\[(.*?)\]/g, '-');
 }
 
 //작성일 : 2020-05-14

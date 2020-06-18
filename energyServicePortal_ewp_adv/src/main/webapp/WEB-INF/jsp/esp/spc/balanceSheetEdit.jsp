@@ -99,6 +99,11 @@
 	const list = function () {
 		location.href = '/spc/balanceSheet.do';
 	}
+	
+	//수정시 현재 페이지 이동
+	const nowPage = function () {
+		location.href = '/spc/entityDetailsBySite.do?spc_id=' + spc_id + '&site_id=' + site_id + '&balance_yyyy=' + yyyymm;
+	}
 
 	//등록
 	const register = function () {
@@ -156,7 +161,7 @@
 
 	const saveToList = function() {
 		alert('저장이 완료되었습니다.');
-		list();
+		nowPage();
 		return false;
 	}
 

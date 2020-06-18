@@ -12,7 +12,7 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 	let whUnit = ['W', 'kW', 'MW', 'GW'];
 
 	if(isEmpty(number)) {
-		return rtnValue;
+		return ['-', unit];
 	} else {
 		if(unit == 'Wh' || unit == 'W') {
 
@@ -26,9 +26,6 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 					if(str.length > 3 && v != 'GW') {
 						number = number / 1000;
 					} else {
-						if(v == 'GW') {
-							number = number / 1000;
-						}
 						if(unit.endsWith('h')) {
 							rtnValue = [numberComma((number).toFixed(decimalChipher)), v + 'h'];
 						} else {
@@ -40,10 +37,6 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 					if(str.length > intChipher && v != 'GW') {
 						number = number / 1000;
 					} else {
-						if(v == 'GW') {
-							number = number / 1000;
-						}
-
 						if(unit.endsWith('h')) {
 							rtnValue = [numberComma((number).toFixed(decimalChipher)), v + 'h'];
 						} else {
@@ -115,7 +108,7 @@ const displayNumberFixedUnit = function(input_num, input_unit, fixed_unit, num_f
 	];
 
 	if(isEmpty(input_num)) {
-		rtnValue = [input_num, input_unit];
+		rtnValue = ['-', input_unit];
 		return rtnValue;
 	} else {
 		if(input_unit == 'Wh' || input_unit == 'W') {
