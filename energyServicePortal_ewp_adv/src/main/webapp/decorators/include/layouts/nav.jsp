@@ -128,16 +128,7 @@
 				<div class="sub_layer">
 					<ul>
 						<li><a href="/dashboard/gmain.do">통합관리 대시보드</a></li>
-						<%--<li>--%>
-						<%--  <a href="#;">사업소 대시보드</a>--%>
-						<%--  <div>--%>
-						<%--    <p><a href="/dashboard/smain.do">신재생발전 대시보드</a></p>--%>
-						<%--    <p><a href="/dashboard/emain.do">피크저감ESS 대시보드</a></p>--%>
-						<%--    <p><a href="/dashboard/dmain.do">신재생발전+신재생 연계 ESS</a></p>--%>
-						<%--  </div>--%>
-						<%--</li>--%>
 						<li><a href="/dashboard/jmain.do">중개거래 대시보드</a></li>
-						<!-- <li><a href="">수요자원 대시보드</a></li> -->
 					</ul>
 				</div>
 			</li>
@@ -164,9 +155,6 @@
 				<div class="sub_layer">
 					<ul>
 						<li><a href="/energy/pvGen.do">발전이력</a></li>
-						<%--<li><a href="/energy/essCharge.do">피크저감 ESS</a></li>--%>
-						<!-- <li><a href="/energy/sub01.html">수요</a></li> -->
-						<%--<li><a href="/energy/drResult.do">수요자원<!-- DR --></a></li>--%>
 					</ul>
 				</div>
 			</li>
@@ -175,21 +163,10 @@
 				<div class="sub_layer">
 					<ul>
 						<li><a href="/diagnosis/generation.do">발전예측</a></li>
-						<%--<li><a href="">수요예측</a></li>--%>
 						<li><a href="/diagnosis/abnormallyAnalysis.do">이상분석</a></li>
 					</ul>
 				</div>
 			</li>
-			<!--<li class="smn8">
-        <a href="#;">BOM관리</a>
-        <div class="sub_layer">
-          <ul>
-            <li><a href="/bom/faultHistory.do">고장이력</a></li>
-            <li><a href="/bom/replacement.do">변경이력</a></li>
-            <li><a href="/bom/partManagement.do">부품관리</a></li>
-          </ul>
-        </div>
-      </li>-->
 			<li class="smn7 menu-item">
 				<a href="#;">보고서</a>
 				<div class="sub_layer">
@@ -205,9 +182,11 @@
 					<ul>
 						<li><a href="/spc/entityInformation.do">기본정보</a></li>
 						<li><a href="/spc/balanceSheet.do">금융관리</a></li>
-						<li><a href="/spc/transactionSheet.do">입출금 관리</a></li>
+						<li><a href="/spc/transactionSheet.do">입출금 관리 (사무수탁사)</a></li>
+						<li><a href="/spc/transactionSheet2.do">입출금 관리 (자산운용사)</a></li>
 						<li><a href="/spc/maintenanceSchedule.do">점검계획</a></li>
 						<li><a href="/spc/supplementaryDocuments.do">이관자료</a></li>
+
 					</ul>
 				</div>
 			</li>
@@ -306,6 +285,8 @@
 				<ul>
 					<li><a href="/spc/entityInformation.do">기본정보</a></li>
 					<li><a href="/spc/balanceSheet.do">원가관리</a></li>
+					<li><a href="/spc/transactionSheet.do">입출금 관리 (사무수탁사)</a></li>
+					<li><a href="/spc/transactionSheet2.do">입출금 관리 (자산운용사)</a></li>
 					<li><a href="/spc/maintenanceSchedule.do">점검계획</a></li>
 					<li><a href="/spc/supplementaryDocuments.do">이관자료</a></li>
 				</ul>
@@ -327,4 +308,3 @@
 		</ol>
 	</div>
 </div>
-<!-- } 모바일용 카테고리 -->

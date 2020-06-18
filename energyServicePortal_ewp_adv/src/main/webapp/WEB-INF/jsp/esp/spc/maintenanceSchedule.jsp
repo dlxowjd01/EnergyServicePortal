@@ -488,54 +488,10 @@
 						<div class="col-lg-2 col-md-2 col-sm-3">
 							<span class="input_label">발전소 선택</span>
 						</div>
-<<<<<<< Updated upstream
 						<div class="col-lg-10 col-md-10 col-sm-9 flex_start">
 							<div class="tx_inp_type mr-12">
 								<input type="text" id="siteName" name="siteName" placeholder="입력" class="required" autocomplete="off">
 								<input type="hidden" id="site_id" name="site_id">
-=======
-						<div class="row">
-							<div class="col-lg-2 col-md-2 col-sm-3">
-								<span class="input_label">점검 구분</span>
-							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex_start">
-								<div class="dropdown placeholder" id="job_type">
-									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="점검 계획 항목 선택">
-										<span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu">
-										<li data-value="1"><a href="#">정기 점검</a></li>
-										<li data-value="2"><a href="#">구조물 안전진단</a></li>
-										<li data-value="3"><a href="#">소방점검</a></li>
-										<li data-value="4"><a href="#">등기이사 기간만료</a></li>
-									</ul>
-								</div>
-							</div>
-							<div class="col-lg-2 col-md-2 col-sm-3">
-								<span class="input_label">점검 주기</span>
-							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex_start">
-								<div class="dropdown" id="repeat_yn">
-									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="점검 선택">점검 선택<span class="caret"></span></button>
-									<ul class="dropdown-menu">
-										<li data-value="Y"><a href="#">정기 점검</a></li>
-										<li data-value="N"><a href="#">일시 점검</a></li>
-									</ul>
-								</div>
-								<div class="tx_inp_type" style="display:none;">
-									<input type="text" id="repeat_interval" name="repeat_interval" placeholder="입력">
-								</div>
-								<div class="dropdown" style="display:none;" id="repeat_unit">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="주기">주기<span class="caret"></span></button>
-									<ul class="dropdown-menu">
-										<li data-value="year"><a href="#">년</a></li>
-										<li data-value="half_year"><a href="#">반기</a></li>
-										<li data-value="quarter_year"><a href="#">분기</a></li>
-										<li data-value="month"><a href="#">월</a></li>
-										<li data-value="day_of_week"><a href="#">주</a></li>
-									</ul>
-								</div>
->>>>>>> Stashed changes
 							</div>
 							<button type="submit" class="btn_type">검색</button>
 						</div>

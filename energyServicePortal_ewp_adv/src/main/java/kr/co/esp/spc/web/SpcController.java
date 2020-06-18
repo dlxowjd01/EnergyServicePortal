@@ -55,12 +55,12 @@ public class SpcController {
         return "esp/spc/transactionSheet";
     }
 
-    @RequestMapping(value = "/spc/transactionSheet2.do")
+   @RequestMapping(value = "/spc/transactionSheet2.do")
     public String spcTransactionSheet2(HttpServletRequest request, HttpSession session, Model model) {
         logger.debug("/spc/transactionSheet2.do");
         return "esp/spc/transactionSheet2";
     }
-
+	
     @RequestMapping(value = "/spc/transactionHistory.do")
     public String spcTransactionHistory(HttpServletRequest request, HttpSession session, Model model) {
         logger.debug("/spc/transactionHistory.do");
