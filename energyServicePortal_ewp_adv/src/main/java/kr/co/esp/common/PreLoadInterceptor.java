@@ -330,6 +330,9 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				List<Map<String, Object>> objectArr = (List<Map<String, Object>>) elem.getValue();
 				for(Map<String, Object> el : objectArr) {
 					JSONObject jsonObject = new JSONObject(el);
+
+					jsonObject.remove("alarm_to");
+
 					ja.put(jsonObject);
 				}
 
@@ -341,6 +344,9 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			}
 		}
 
+		jo.remove("utility");
+		jo.remove("dr_info");
+		jo.remove("power_market");
 		return jo;
 	}
 }

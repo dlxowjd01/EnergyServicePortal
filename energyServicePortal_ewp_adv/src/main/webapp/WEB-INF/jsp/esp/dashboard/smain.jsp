@@ -535,7 +535,7 @@
 		);
 
 		if (keyoard != '') {
-			if(dname.match(keyoard)) {
+			if(dname.toUpperCase().match(keyoard.toUpperCase())) {
 				if ($.inArray(String(operation), deviceStatusArray) >= 0) {
 					searchBoolean = true;
 				} else {
@@ -563,183 +563,186 @@
 			});
 		}
 
-		$.ajax({
-			url: apiURL + apiStatusRaw,
-			type: 'get',
-			dataType: 'json',
-			data: {
-				dids: deviceArray.join(',')
-			}
-		}).done(function (data, textStatus, jqXHR) {
-			let deviceType = new Array();
-			$.map(data, function(val, key) {
-				if ($.inArray(val.device_type, deviceType) === -1) {
-					deviceType.push(val.device_type);
+		if(deviceArray.length > 0) {
+			$.ajax({
+				url: apiURL + apiStatusRaw,
+				type: 'get',
+				dataType: 'json',
+				data: {
+					dids: deviceArray.join(',')
 				}
-			});
-
-			deviceType.sort();
-			$.each(deviceType, function (i, el) {
-				if (el == 'SM_MANUAL') el = 'SM';
-				deviceType[i] = {
-					name: featurePropertiesSub[el].name,
-					type: el,
-					head: featureProperties[el].prop,
-					body: {
-						type: el,
-						prop: featurePropertiesSub[el].prop
-					}
-				}
-			});
-
-			setMakeList(deviceType, 'typeList', {'dataFunction': {'head': makeHeadTable, 'body': makeBodyTable}});
-
-			$.each(deviceType, function (i, el) {
-				let deviceType = el.type, operationNormal = 0,
-					operationError = 0, operationAlert = 0,
-					headerDataObject = new Object();
-				if (el.type == 'SM_MANUAL') deviceType = 'SM';
-				setInitList('table_' + deviceType);
-
-				let tableArray = new Array();
+			}).done(function (data, textStatus, jqXHR) {
+				let deviceType = new Array();
 				$.map(data, function(val, key) {
-					let dname = val.dname;
-					if (val.device_type == deviceType) {
-						let rowData = val.data,
-							operation = rowData[0]['operation'];
-						if(operation == '1') {
-							operationNormal++;
-						} else if(operation == '2') {
-							operationError++;
-						} else {
-							operationAlert++;
+					if ($.inArray(val.device_type, deviceType) === -1) {
+						deviceType.push(val.device_type);
+					}
+				});
+
+				deviceType.sort();
+				$.each(deviceType, function (i, el) {
+					if (el == 'SM_MANUAL') el = 'SM';
+					deviceType[i] = {
+						name: featurePropertiesSub[el].name,
+						type: el,
+						head: featureProperties[el].prop,
+						body: {
+							type: el,
+							prop: featurePropertiesSub[el].prop
 						}
+					}
+				});
 
-						rowData[0]['dname'] = dname;
+				setMakeList(deviceType, 'typeList', {'dataFunction': {'head': makeHeadTable, 'body': makeBodyTable}});
 
-						$.map(featureProperties, function(val, key) {
-							let headerData = new Object();
-							if(!isEmpty(headerDataObject[key])) {
-								headerData = headerDataObject[key];
+				$.each(deviceType, function (i, el) {
+					let deviceType = el.type, operationNormal = 0,
+						operationError = 0, operationAlert = 0,
+						headerDataObject = new Object();
+					if (el.type == 'SM_MANUAL') deviceType = 'SM';
+					setInitList('table_' + deviceType);
+
+					let tableArray = new Array();
+
+					$.map(data, function(val, key) {
+						let dname = val.dname;
+						if (val.device_type == deviceType) {
+							let rowData = val.data,
+								operation = rowData[0]['operation'];
+							if(operation == '1') {
+								operationNormal++;
+							} else if(operation == '2') {
+								operationError++;
+							} else {
+								operationAlert++;
 							}
-							if (key == deviceType) {
-								$.each(val.prop, function(i, el) {
-									let value = rowData[0][el.key],
-										tmpObj = new Object();
-									if(isEmpty(headerData[el.key])) {
-										tmpObj['reducer'] = el.reducer;
-									} else {
-										tmpObj = headerData[el.key];
-									}
 
-									if(isEmpty(value)) {
-										value = '-';
-									} else {
-										if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
-											value = Number(value);
-										} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
-											value = Number(value);
-										}
-									}
+							rowData[0]['dname'] = dname;
 
-									if(value == '-') {
-										if(!isEmpty(headerData['value'])) {
-											tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
+							$.map(featureProperties, function(val, key) {
+								let headerData = new Object();
+								if(!isEmpty(headerDataObject[key])) {
+									headerData = headerDataObject[key];
+								}
+								if (key == deviceType) {
+									$.each(val.prop, function(i, el) {
+										let value = rowData[0][el.key],
+											tmpObj = new Object();
+										if(isEmpty(headerData[el.key])) {
+											tmpObj['reducer'] = el.reducer;
 										} else {
-											tmpObj['value'] = '-';
-											tmpObj['cnt'] = 1;
+											tmpObj = headerData[el.key];
 										}
-									} else {
-										if(!isEmpty(headerData['value'])) {
-											tmpObj['value'] = Number(value) + Number(tmpObj['value']);
-											tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
+
+										if(isEmpty(value)) {
+											value = '-';
 										} else {
-											tmpObj['value'] = Number(value);
-											tmpObj['cnt'] = 1;
+											if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
+												value = Number(value);
+											} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
+												value = Number(value);
+											}
 										}
 
-										tmpObj['suffix'] = el.suffix;
-									}
+										if(value == '-') {
+											if(!isEmpty(headerData[el.key])) {
+												tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
+											} else {
+												tmpObj['value'] = '-';
+												tmpObj['cnt'] = 1;
+											}
+										} else {
+											if(!isEmpty(headerData[el.key])) {
+												tmpObj['value'] = Number(value) + Number(tmpObj['value']);
+												tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
+											} else {
+												tmpObj['value'] = Number(value);
+												tmpObj['cnt'] = 1;
+											}
 
-									headerData[el.key] = tmpObj;
-								});
-								headerDataObject[key] = headerData;
-							}
-						});
+											tmpObj['suffix'] = el.suffix;
+										}
 
-						$.map(featurePropertiesSub, function(val, key) {
-							if (key == deviceType) {
-								$.each(val.prop, function(i, el) {
-									let value = rowData[0][el.key];
+										headerData[el.key] = tmpObj;
+									});
+									headerDataObject[key] = headerData;
+								}
+							});
 
-									if(isEmpty(value)) {
-										rowData[0][el.key] = '-';
-									} else {
-										if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
-											let dummy = displayNumberFixedUnit(value, 'W', 'kW', 2);
-											rowData[0][el.key] = dummy[0];
-										} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
-											if(!isEmpty(value)) {
+							$.map(featurePropertiesSub, function(val, key) {
+								if (key == deviceType) {
+									$.each(val.prop, function(i, el) {
+										let value = rowData[0][el.key];
+
+										if(isEmpty(value)) {
+											rowData[0][el.key] = '-';
+										} else {
+											if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
+												let dummy = displayNumberFixedUnit(value, 'W', 'kW', 2);
+												rowData[0][el.key] = dummy[0];
+											} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
+												rowData[0][el.key] = value.toFixed(2);
+											} else if(el.suffix.match('V')) {
 												rowData[0][el.key] = value.toFixed(2);
 											}
 										}
-									}
-								});
-							}
-						});
+									});
+								}
+							});
 
-						if (deviceSearch(dname, operation)) {
-							if(isEmpty(tableArray)) {
-								let rowData = val.data;
-								rowData[0]['dname'] = dname;
-								tableArray = rowData;
-							} else {
-								let rowData = val.data;
-								rowData[0]['dname'] = dname;
-								tableArray.concat(rowData);
+							if (deviceSearch(dname, operation)) {
+								if(isEmpty(tableArray)) {
+									let rowData = val.data;
+									rowData[0]['dname'] = dname;
+									tableArray = rowData;
+								} else {
+									let rowData = val.data;
+									rowData[0]['dname'] = dname;
+									tableArray = tableArray.concat(rowData);
+								}
 							}
 						}
-					}
-				});
-
-				$.map(headerDataObject, function(el, device) {
-					let deviceType = device;
-
-					$.map(el, function(element, key) {
-						let textValue = element.value,
-							suffix = element.suffix;
-						if(textValue != '-') {
-							if(element.reducer == 'avg') {
-								textValue =  textValue / element.cnt;
-							}
-
-							textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
-
-							$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue[0]);
-							if(suffix == 'W' || suffix == 'Wh') {
-								$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(2)').html(textValue[1]);
-							}
-						} else {
-							$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue);
-						}
-
 					});
-				});
-				let deviceCnt = tableArray.length;
-				$('#typeList').find('.' + deviceType).find('.ntit span').html(deviceCnt);
-				$('#typeList').find('.' + deviceType).find('.alert_icon .inv_normail span').html(operationNormal);
-				$('#typeList').find('.' + deviceType).find('.alert_icon .inv_error span').html(operationError);
-				$('#typeList').find('.' + deviceType).find('.alert_icon .inv_alert span').html(operationAlert);
-				setMakeList(tableArray, 'table_' + deviceType, {'dataFunction': {'operation': setOperation}});
-			});
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.error(jqXHR);
-			console.error(textStatus);
-			console.error(errorThrown);
 
-			alert('처리 중 오류가 발생했습니다.');
-			return false;
-		});
+					$.map(headerDataObject, function(el, device) {
+						let deviceType = device;
+
+						$.map(el, function(element, key) {
+							let textValue = element.value,
+								suffix = element.suffix;
+							if(textValue != '-') {
+								if(element.reducer == 'avg') {
+									textValue =  textValue / element.cnt;
+								}
+
+								textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
+
+								$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue[0]);
+								if(suffix == 'W' || suffix == 'Wh' || suffix == 'V' || suffix == 'A') {
+									$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(2)').html(textValue[1]);
+								}
+							} else {
+								$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue);
+							}
+
+						});
+					});
+					let deviceCnt = tableArray.length;
+					$('#typeList').find('.' + deviceType).find('.ntit span').html(deviceCnt);
+					$('#typeList').find('.' + deviceType).find('.alert_icon .inv_normail span').html(operationNormal);
+					$('#typeList').find('.' + deviceType).find('.alert_icon .inv_error span').html(operationError);
+					$('#typeList').find('.' + deviceType).find('.alert_icon .inv_alert span').html(operationAlert);
+					setMakeList(tableArray, 'table_' + deviceType, {'dataFunction': {'operation': setOperation}});
+				});
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.error(jqXHR);
+				console.error(textStatus);
+				console.error(errorThrown);
+
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
+		}
 	}
 
 	const setOperation = (operation) => {
@@ -1086,12 +1089,6 @@
 				fontSize: '12px'
 			}
 		});
-
-		// let nowEnergyYear = displayNumberFixedDecimal(nowEnergyYear, 'Wh', 3, 2);
-		// $('#yearEnergyValue').html('<span class="pv">' + nowEnergyYear[0] + "</span><em>nowEnergyYear[1]</em>");
-		//
-		// let nowEnergyMonth = displayNumberFixedDecimal(nowEnergyMonth, 'Wh', 3, 2);
-		// $('#monthEnergyValue').html('<span class="pv">' + nowEnergyMonth[0] + '</span><em>nowEnergyMonth[1]</em>');
 	}
 
 	const chargeChart = Highcharts.chart('schart1', {
