@@ -101,7 +101,7 @@
 											<button type="submit" class="btn_type03">모두 해제</button>
 										</div>
 										<div class="end">
-											<button type="submit" class="btn_type">적용</button>
+											<button type="submit" class="btn_type fr">적용</button>
 										</div>
 									</div>
 								</li>
@@ -128,11 +128,10 @@
 
 					<div class="duration" id="dateArea">
 						<span class="tx_tit">기간 설정</span>
-						<div class="sel_calendar">
-							<input type="text" id="datepicker1" class="sel" value="" autocomplete="off" readonly />
-							<em></em>
-							<input type="text" id="datepicker2" class="sel" value="" autocomplete="off" readonly />
-						</div>
+						<div class="sel_calendar"><input type="text"
+							id="datepicker1" class="sel" value="" autocomplete="off" readonly /></div>
+						<div class="sel_calendar"><input type="text"
+							id="datepicker2" class="sel" value="" autocomplete="off" readonly /></div>
 					</div>
 
 					<div class="unit" id="cycle">

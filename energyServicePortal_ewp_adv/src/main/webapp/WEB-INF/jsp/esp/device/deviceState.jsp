@@ -147,7 +147,6 @@
 		$eqListDiv.empty();
 
 		myMap.forEach(function (value, key) {
-
 			let deviceTypeName = getDeviceTypeName(key);
 
 			let normalCnt = 0;
@@ -187,6 +186,7 @@
 				strFor += '	<span style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">' + list[i].name + '</span>';
 				strFor += '	<span>' + ((isEmpty(list[i].capacity)) ? '-' : list[i].capacity) + ((isEmpty(list[i].capacity_unit)) ? '' : list[i].capacity_unit) + '</span>';
 
+				console.log("deviceTypeName===", deviceTypeName)
 				if (deviceInfo[list[i].did].device_type == "INV_PV") {
 					if (!isEmpty(deviceInfo[list[i].did].data)) {
 						var acPowerMap = null,
@@ -277,10 +277,14 @@
 			liStr += '			</ul>';
 			liStr += '		</div>';
 			liStr += '		<div class="eq_btn_bx">';
-			liStr += '			<button type="button" class="btn_type04">변경 이력 조회</button>';
-			liStr += '			<button type="button" class="btn_type04">운영 이력 조회</button>';
-			liStr += '		</div>';
-			liStr += '	</div>';
+			if(deviceInfo == "수기입력") {
+				liStr += '<button type="button" class="btn_type04">수기입력</button>';
+			} else {
+				liStr += '<button type="button" class="btn_type04">변경 이력 조회</button>';
+			}
+			liStr += '<button type="button" class="btn_type04">운영 이력 조회</button>';
+			liStr += '</div>';
+			liStr += '</div>';
 			liStr += '</div>';
 
 			$eqListDiv.append(liStr);
@@ -314,7 +318,7 @@
 		$tbody.append(tbodyStr);
 	}
 	
-	//사업소 조회
+	//사업소 조회 (dropdown list items)
 	const siteMakeList = () => {
 		setMakeList(iderms_site_list, 'siteULList', {'dataFunction': {}}); //list생성
 	};
@@ -338,8 +342,6 @@
 <script type="text/javascript">
 
 	$(function () {
-		// TEST ONLY!!!!!! popup open on window load
-		// $("#manualAddDeviceModal").modal("show")
 		// 사업소 선택
 		$("#site_list1 ul li").on("click", function (e) {
 			var $this = $(this);
@@ -386,7 +388,12 @@
 
 	function openAddModal(type, site) {
 		$("#deviceForm1")[0].reset();
-		type === "SM_MANUAL" ? $("#manualAddDeviceModal").modal("show") : $("#addDeviceModal").modal("show");
+		// const manualTable = $(".indiv.eq_card").parent("div[data-dvtype='SM_MANUAL']");
+		// const modifyBtn = manualTable.children(".eq_btn_bx .btn_type03:first-of-type");
+
+		// console.log("modifyBtn---", modifyBtn);
+		// type === "SM_MANUAL" ? modifyBtn.text("수기입력") : $("#addDeviceModal").modal("show");
+
 		let deviceOpts = ``;
 
 		for (let i = 0; i < deviceList.length; i++) {
@@ -779,7 +786,7 @@
 						<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
 							<div class="input-group inline-flex chk_type">
 								<label class="input_label">예측</label>
-								<input class="styled-checkbox" id="predictionData" type="checkbox" value="1"
+								<input class="input tx_inp_type" id="predictionData" type="checkbox" value="1"
 									name="predicted">
 								<label for="predictionData"><span></span></label>
 							</div>

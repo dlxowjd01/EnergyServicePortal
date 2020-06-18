@@ -130,9 +130,7 @@
 				includeGens: true
 			},
 			success: function (result) {
-				// console.log('result===', result)
-
-				setMakeList(setJsonDataFormat(result, page), "listData", {
+			setMakeList(setJsonDataFormat(result, page), "listData", {
 					"dataFunction": {
 						"INDEX": getNumberIndex
 					}
@@ -233,15 +231,56 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-3 col-md-4 col-sm-6">
-		<form id="spc_form" class="tx_btn_area">
-			<div class="tx_inp_type mr-12">
-				<input type="text" id="key_word" placeholder="입력">
+	<div class="col-10">
+		<form id="spc_form">
+			<div class="flex_start">
+				<label for="operation_select" class="tx_tit">운영 여부</label>
+				<div class="dropdown sa_select mr-16" id="operation_select">
+					<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">전체<span class="caret"></span></button>
+					<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="operationList">
+						<li data-value="operation_[INDEX]">
+							<a href="javascript:void(0);" tabindex="-1">
+								<input type="checkbox" id="operation_[INDEX]" value="operation_[INDEX]" name="operation_opt">
+								<label for="operation_[INDEX]"><span></span>[name]</label>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<label for="warranty_select" class="tx_tit">보증 방식</label>
+				<div class="dropdown sa_select mr-16" id="warranty_select">
+					<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">전체<span class="caret"></span></button>
+					<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="warrantyList">
+						<li data-value="[sid]">
+							<a href="javascript:void(0);" tabindex="-1">
+								<input type="checkbox" id="warranty_[INDEX]" value="warranty_[INDEX]" name="warranty_opt">
+								<label for="warranty_[INDEX]"><span></span>[name]</label>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<label for="contract_select" class="tx_tit">계약 구분</label>
+				<div class="dropdown sa_select mr-24" id="contract_select">
+					<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">전체<span class="caret"></span></button>
+					<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="contractList">
+						<li data-value="[sid]">
+							<a href="javascript:void(0);" tabindex="-1">
+								<input type="checkbox" id="contract_[INDEX]" value="[sid]" name="contract_opt">
+								<label for="contract_[INDEX]"><span></span>[name]</label>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<div class="tx_inp_type mr-12">
+					<input type="text" id="key_word" placeholder="입력">
+				</div>
+				<button class="btn_type">검색</button>
 			</div>
-			<button class="btn_type">검색</button>
 		</form>
 	</div>
-	<div class="col-lg-9 col-md-8 col-sm-6">
+	<div class="col-2">
 		<div class="right">
 			<a href="#;" class="save_btn">엑셀 다운로드</a>
 		</div>
@@ -257,22 +296,30 @@
 			</div>
 			<div class="spc_tbl align_type" id="excelList">
 				<table class="sort_table chk_type">
+					<colgroup>
+						<col style="width:8%">
+						<col style="width:8%">
+						<col style="width:18%">
+						<col style="width:8%">
+						<col style="width:20%">
+						<col style="width:8%">
+						<col style="width:10%">
+						<col style="width:10%">
+						<col style="width:10%">
+						<col>
+					</colgroup>
 					<thead>
 						<tr>
-							<th>
-								<input type="checkbox" id="chk_header" value="순번"
-									onclick="setCheckedAll(this, 'rowCheck');">
-								<label for="chk_header"><span></span>순번</label>
-							</th>
+							<th><input
+								type="checkbox" id="chk_header" value="순번"
+								onclick="setCheckedAll(this, 'rowCheck');"><label for="chk_header"><span></span>순번</label></th>
 							<th><button class="btn_align down">SPC명</button></th>
 							<th><button class="btn_align down">발전소 명</button></th>
 							<th><button class="btn_align down">연차</button></th>
 							<th><button class="btn_align down">관리 운영기간</button></th>
 							<th><button class="btn_align down">보증</button></th>
-							<th class="right"><button class="btn_align down">보증 값</button>
-							</th>
-							<th class="right"><button class="btn_align down">감소율</button>
-							</th>
+							<th class="right"><button class="btn_align down">보증 값</button></th>
+							<th class="right"><button class="btn_align down">감소율</button></th>
 							<th><button class="btn_align down">- 추가보수</button></th>
 						</tr>
 					</thead>

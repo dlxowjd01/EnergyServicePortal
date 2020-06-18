@@ -21,6 +21,15 @@ function selectBoxTextApply(obj) {
 	$(obj).closest('.dropdown').find('[data-toggle="dropdown"]').html(txt+'<span class="caret"></span>').data('value', $(obj).parents().data('value'));
 }
 
+function unCheckAll(){
+	var w = document.getElementsByTagName('input');
+	for(var i = 0; i < w.length; i++){
+		if(w[i].type=='checkbox'){
+			w[i].checked = false;
+		}
+	}
+}
+
 function getPdfDownload() {
 	html2canvas(document.getElementById("layerbox"), {
 		onrendered: function (canvas) {

@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Youduk
-  Date: 2020/05/14
-  Time: 15:48
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <script>
 	const oid = '${sessionScope.userInfo.oid}';
@@ -1042,8 +1035,8 @@
 				<div class="spc_tbl_row">
 					<table>
 						<colgroup>
-							<col style="width:15%">
 							<col style="width:20%">
+							<col style="width:80%">
 							<col>
 						</colgroup>
 						<tr>

@@ -286,13 +286,23 @@
 		$('#calendar td a').remove();
 		modalData.empty();
 		if (data.length > 0) {
+			console.log("data---", data)
 			data.forEach(function (v, k) {
 				let job_date = new Date(v.job_date).format('dd');
 				let job_type = v.job_type;
 				let sid = v.site_id;
 				let job_info = JSON.parse(v.job_info);
-				let tableStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '"><p class="bu t' + job_type + '">[' + job_info.siteName + ']' + job_Name(job_type) + '</p></a>';
-				let modalStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');"><span class="bu t' + job_type + '">[ ' + job_info.siteName + ' ] ' + job_Name(job_type) + '</span><span class="fr btn_next"></span></a>';
+				let tableStr = "";
+				let modalStr = "";
+				if(job_type == 1) {
+					tableStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '"><p class="bu t' + job_type + '">[ SPC' + job_type + ' ] 출금 - 승인완료</p></a>';
+					modalStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');"><span class="bu t' + job_type + '">[ SPC' + job_type + ' ] 출금 - 승인완료</span><span class="fr btn_next"></span></a>';
+				} else {
+					tableStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '"><p class="bu t' + job_type + '">[SPC' + job_type + '] 출금 - 승인대기</p></a>';
+					modalStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');"><span class="bu t' + job_type + '">[ SPC' + job_type + ' ] 출금 - 승인대기</span><span class="fr btn_next"></span></a>';
+				}
+				// let tableStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '"><p class="bu t' + job_type + '">[' + job_info.siteName + ']' + job_Name(job_type) + '</p></a>';
+				// let modalStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');"><span class="bu t' + job_type + '">[ ' + job_info.siteName + ' ] ' + job_Name(job_type) + '</span><span class="fr btn_next"></span></a>';
 
 				calendar.eq(Number(job_date) - 1).append(tableStr);
 				modalData.append(
@@ -303,14 +313,15 @@
 					+'</li>'
 				)
 			});
+
 			// TO DO!!!!!!!!!  show more btn
-			calendar.find("p.bu").each(function () {
-				$(this).on("mouseover click", function(){
-					$("#popoverModal").addClass("active");
-				}).on("mouseleave", function(){
-					$("#popoverModal").removeClass("active");
-				})
-			});
+			// calendar.find("p.bu").each(function () {
+			// 	$(this).on("mouseover click", function(){
+			// 		$("#popoverModal").addClass("active");
+			// 	}).on("mouseleave", function(){
+			// 		$("#popoverModal").removeClass("active");
+			// 	})
+			// });
 		}
 
 	};
@@ -577,7 +588,7 @@
 					</div>
 					<div class="btn_wrap_type02 btn_wrap_fixed">
 						<a href="/spc/transactionHistory.do" class="btn btn_type03 mr-12" id="writeBtn">입출금 관리 내역</a><a
-							href="/spc/withdrawReqWrite.do" class="btn btn_type" id="requestBtn">출금 요청서 신청</a>
+							href="/spc/withdrawReqStatus.do" class="btn btn_type" id="requestBtn">출금 요청서 검토</a>
 					</div>
 				</div>
 				<div class="sch_btm_area">
