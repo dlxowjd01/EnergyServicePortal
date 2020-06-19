@@ -88,48 +88,13 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-						</tr>
-						<tr>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-						</tr>
-						<tr>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-						</tr>
-						<tr>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-						</tr>
-						<tr>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-						</tr>
-						<tr>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
+							<td colspan="4">해당 RTU 사이트를 위에서 선택해 주세요.</td>
 						</tr>
 					</tbody>
 				</table>
 				<div class="paging_wrap">
 					<a href="#;" class="btn_prev">prev</a>
 					<strong>1</strong>
-					<%--<a href="#;">2</a>--%>
-					<%--<a href="#;">3</a>--%>
 					<a href="#;" class="btn_next">next</a>
 				</div>
 			</div>
@@ -138,72 +103,34 @@
 	<div class="col-xl-7 col-lg-6 col-md-6 col-sm-12">
 		<div class="indiv collect_box">
 			<div class="tbl_top clear">
-				<h2 class="ntit fl">RTU 상세정보 <span id="selectedRTU"></span></h2>
-				<button type="button" class="btn_type fr">삭제</button>
-			</div>
-			<div class="row">
-				<div class="col-6 pt-0">
-					<header class="list_title">기기정보</header>
-				</div>
-				<div class="col-6 pt-0">
-					<header class="list_title">기기정보</header>
+				<h2 class="ntit fl"><span id="selectedRTU">RTU</span> 상세정보</h2>
+				<div class="btn_wrap_type02 fr">
+					<button type="button" class="btn_type03 delete_btn">삭제</button>
+					<button type="button" class="btn_type modify_btn">수정</button>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-lg-3 pt-0">
-					<ul class="device_list">
-						<li>
-							<td>RTU 이름</td>
-							<span></span>
-						</li>
-						<li>
-							<td>시리얼 번호</td>
-							<span></span>
-						</li>
+				<div class="w-50">
+					<h2 class="list_title">기기정보</h2>
+					<ul id="rtuDeviceInfo" class="device_list">
+						<li>시리얼 번호<span class="data_val"></span></li>
+						<li>코드 버전<span class="data_val"></span></li>
 					</ul>
 				</div>
-				<div class="col-lg-3  pt-0">
-					<ul class="device_list">
-						<li>
-							<td>디스트 사용량</td>
-							<span></span>
-						</li>
-						<li>
-							<td>코드 버전</td>
-							<span></span>
-						</li>
-					</ul>
-				</div>
-				<div class="col-lg-3 pt-0">
-					<ul class="device_list">
-						<li>
-							<td>CPU 사용량</td>
-							<span></span>
-						</li>
-						<li>
-							<td>메모리 사용량</td>
-							<span></span>
-						</li>
-					</ul>
-				</div>
-				<div class="col-lg-3 pt-0">
-					<ul class="device_list">
-						<li>
-							<td>디스트 사용량</td>
-							<span></span>
-						</li>
-						<li>
-							<td>기기 온도</td>
-							<span></span>
-						</li>
+				<div class="w-50">
+					<h2 class="list_title">기기상태</h2>
+					<ul id="deviceStatus" class="device_list">
+						<li>CPU 사용량<span class="data_val"></span></li>
+						<li>메모리 사용량<span class="data_val"></span></li>
+						<li>디스크 사용량<span class="data_val"></span></li>
+						<li>기기 온도<span class="data_val"></span></li>
 					</ul>
 				</div>
 			</div>
-			<div class="tbl_top clear">
-				<h2 class="ntit fl">연결 설비</h2>
-			</div>
+
+			<div class="tbl_top clear"><h2 class="ntit fl">연결 설비</h2></div>
 			<div class="collect_wrap table_scroll">
-				<table class="his_tbl">
+				<table id="detailInfoTable" class="his_tbl">
 					<thead>
 						<tr>
 							<th>설비 타입</th>
@@ -215,19 +142,16 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td colspan="6">왼쪽 표에서 조회하고자 하는 RTU를 클릭해 주세요.</td>
-						</tr>
+						<tr><td colspan="6">왼쪽 표에서 조회하고자 하는 RTU를 클릭해 주세요.</td></tr>
 					</tbody>
 				</table>
 			</div>
 			<div class="paging_wrap">
 				<a href="#;" class="btn_prev">prev</a>
 				<strong>1</strong>
-				<%--<a href="#;">2</a>--%>
-				<%--<a href="#;">3</a>--%>
 				<a href="#;" class="btn_next">next</a>
 			</div>
+
 		</div>
 	</div>
 </div>
@@ -286,59 +210,11 @@
 						<tr>
 							<td colspan="7">위의 표에서 조회하고자 사이트 혹은 RTU를 클릭해 주세요.</td>
 						</tr>
-						<!--
-						<tr>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td class="ellipsis">-</td>
-						</tr>
-						<tr>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td class="ellipsis">-</td>
-						</tr>
-						<tr>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td class="ellipsis">-</td>
-						</tr>
-						<tr>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td class="ellipsis">-</td>
-						</tr>
-						<tr>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td>-</td>
-							<td class="ellipsis">-</td>
-						</tr> -->
 					</tbody>
 				</table>
 				<div class="paging_wrap">
 					<a href="#;" class="btn_prev">prev</a>
 					<strong>1</strong>
-					<%--<a href="#;">2</a>--%>
-					<%--<a href="#;">3</a>--%>
 					<a href="#;" class="btn_next">next</a>
 				</div>
 			</div>
@@ -358,10 +234,9 @@
 	$(function () {
 		setInitList('siteULList'); //사업소 리스트 초기화
 		siteMakeList(); //사업소 리스트 그리기
-		
 		getRtuDataList(); //RTU 데이터리스트
 	})
-	
+
 	//사업소 조회
 	const siteMakeList = () => {
 		setMakeList(siteList, 'siteULList', {'dataFunction': {}}); //list생성
@@ -371,6 +246,87 @@
 		const now = new Date();
 		const nowLocal = now.format("yyyyMMddhhmmss");
 		const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours() - 1, now.getMinutes(), now.getSeconds()).format("yyyyMMddhhmmss");
+		// START: rtu Detail info setting
+		const rtuInfo = [
+			{
+				url: 'http://iderms.enertalk.com:8443/config/rtus/'+rids,
+				type: 'get',
+				dataType: 'json',
+				data: {
+					includeDevices: true
+				}
+			},
+			{
+				url: 'http://iderms.enertalk.com:8443/status/raw',
+				type: 'get',
+				dataType: 'json',
+				data: {
+					dids: rids,
+					isRtu: true
+				}
+			}
+		];
+		// END
+
+		$.when($.ajax(rtuInfo[0]), $.ajax(rtuInfo[1])).done(function(result1, result2){
+			if(result1[0]) {
+				const basic = result1[0];
+				const info = $("#rtuDeviceInfo").find(".data_val");
+				const table = $("#detailInfoTable").find("tbody");
+				const device = basic.devices;
+				info.eq(0).text(result1[0].serialNumber);
+				basic.version ? info.eq(1).text(basic.version) : info.eq(1).addClass("no_val").text("-");
+				table.empty();
+
+				let str = ``;
+				console.log("device--", device)
+				for(let i=0; i<device.length; i++){
+					let comType = '';
+					let baudRate = '';
+					let capacity = '';
+					let description = '';
+					let rtuComm = device[i].rtu_details;
+
+					if(rtuComm) {
+						let newJson = JSON.parse(rtuComm);
+						comType = newJson["com-type"];
+						baudRate = newJson["baud-rate"];
+					} else {
+						comType = "-";
+						baudRate = "-"
+					}
+					// TO DO!!!! convert with common library!!!!!
+					device[i].capacity ? ( capacity = device[i].capacity ): ( capacity = "-" );
+					// END
+					device[i].description ? ( description = device[i].description ): ( description = "-" );
+					str = `
+						<tr>
+							<td>${'${device[i].device_type}'}</td>
+							<td>${'${device[i].name}'}</td>
+							<td>${'${comType}'}</td>
+							<td>${'${baudRate}'}</td>
+							<td>${'${capacity}'}</td>
+							<td>${'${description}'}</td>
+						</tr>
+					`
+					table.append(str);
+				}
+			} else {
+				return false;
+			}
+
+			if(result2[0][rids]) {
+				const detail = result2[0][rids].data[0];
+				const status = $("#deviceStatus").find(".data_val");
+				status.eq(0).text(detail.cpu.toFixed(2)+" %");
+				status.eq(1).text(detail.mem.toFixed(2)+" %");
+				status.eq(2).text(detail.disk.toFixed(2)+" %");
+				status.eq(3).html(`${'${detail.temperature.toFixed(2)}'}&#8451;`);
+			} else {
+				return false;
+			}
+
+		});
 
 		if (startTime === undefined) startTime = beforeHour;
 		if (endTime === undefined) endTime = nowLocal;
@@ -409,17 +365,15 @@
 				console.error(error);
 			}
 		})
+
 	};
-	
+
 	//RTU 조회
 	const getRtuDataList = function () {
-		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
-			function () {
+		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(function () {
 				return $(this).val();
-			}
-			)
+			})
 		);
-		
 		if (siteArray.length > 0) {
 			$.ajax({
 				url: "http://iderms.enertalk.com:8443/config/sites",
@@ -432,12 +386,9 @@
 				success: function (sites) {
 					const tableData = $('#PV_INVERTER').find("tbody");
 					const dateFilter = $('#selectLogByDate');
-
 					tableData.empty();
-
 					let logList = ``;
 					let rtuInfo = ``;
-					// console.log("item===", sites);
 					for (let i = 0; i < sites.length; i++) {
 						if(sites[i].rtus && $.inArray(sites[i].sid, siteArray) >= 0) {
 							let rtuDate = new Date(sites[i].rtus[0].createdAt).format("yyyy-MM-dd");
@@ -459,15 +410,14 @@
 								tableData.append(rtuInfo);
 
 								$(serialId).on('click', () => {
+									const rtuName = $("#selectedRTU");
 									selectLog(sites[i].rtus[0].rid);
-									console.log("ri===", sites[i].rtus[0])
-									$("#selectedRTU").text("[ " + sites[i].rtus[0].name + " ]");
+									rtuName.text(sites[i].rtus[0].name);
 								});
 
 								dateFilter.on('click', () => {
 									const datePicker1 = $('#datepicker1');
 									const datePicker2 = $('#datepicker2');
-
 									let start_yy = datePicker1.val().slice(0, 4);
 									let start_mm = Number(datePicker1.val().slice(5, 7)) - 1;
 									let start_dd = datePicker1.val().slice(8, 10);
@@ -496,7 +446,7 @@
 			});
 		}
 	}
-	
+
 	const rtnDropdown = function ($selectId) {
 		if ($selectId == 'selectSiteList') {
 			getRtuDataList();
