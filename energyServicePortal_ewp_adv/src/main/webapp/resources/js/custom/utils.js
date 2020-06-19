@@ -404,7 +404,7 @@ const dateDiff = (eDate, sDate, type) => {
 	sDate = sDate instanceof Date ? sDate : new Date(sDate.substring(2, 4), sDate.substring(4, 6) - 1, sDate.substring(6, 8));
 
 	if (type == undefined) {
-		let diff = Math.abs(diffDate_2.getTime() - diffDate_1.getTime());
+		let diff = Math.abs(eDate.getTime() - sDate.getTime());
 		return Math.ceil(diff / (1000 * 3600 * 24));
 	} else {
 		if (type == 'day') {
