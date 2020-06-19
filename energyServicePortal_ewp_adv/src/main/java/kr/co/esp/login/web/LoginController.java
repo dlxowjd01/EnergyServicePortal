@@ -56,7 +56,6 @@ public class LoginController {
 		Locale locale = (Locale) session.getAttribute("sessionLocale");
 
 		String serverName = request.getServerName();
-		System.out.println("serverName : " + serverName);
 		String oid = "encored";
 		if("localhost".equals(serverName) || "spower.iderms.ai".equals(serverName) || "13.114.199.169".equals(serverName)) {
 			oid = "spower";

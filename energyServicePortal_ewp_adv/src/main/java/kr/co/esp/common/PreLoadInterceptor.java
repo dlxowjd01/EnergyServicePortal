@@ -321,6 +321,12 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 		return list;
 	}
 
+	/**
+	 *
+	 *
+	 * @param target
+	 * @return
+	 */
 	public JSONObject jsonParser(Map<String, Object> target) {
 		JSONObject jo = new JSONObject(target);
 
@@ -329,24 +335,31 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				JSONArray ja = new JSONArray();
 				List<Map<String, Object>> objectArr = (List<Map<String, Object>>) elem.getValue();
 				for(Map<String, Object> el : objectArr) {
-					JSONObject jsonObject = new JSONObject(el);
-
-					jsonObject.remove("alarm_to");
-
-					ja.put(jsonObject);
+					ja.put(jsonParser(el));
 				}
 
 				try {
 					jo.put(elem.getKey(), ja);
 				} catch (JSONException e) {
-					e.printStackTrace();
+					jo.remove(elem.getKey());
+				}
+			} else if (elem.getValue() instanceof HashMap) {
+				try {
+					jo.put(elem.getKey(), jsonParser((Map<String, Object>) elem));
+				} catch (JSONException e) {
+					jo.remove(elem.getKey());
+				}
+			} else if (elem.getValue() instanceof String) {
+				if (((String) elem.getValue()).startsWith("{") && ((String) elem.getValue()).endsWith("}")) {
+					try {
+						jo.put(elem.getKey(), new JSONObject(String.valueOf(elem)));
+					} catch (JSONException e) {
+						jo.remove(elem.getKey());
+					}
 				}
 			}
 		}
 
-		jo.remove("utility");
-		jo.remove("dr_info");
-		jo.remove("power_market");
 		return jo;
 	}
 }
