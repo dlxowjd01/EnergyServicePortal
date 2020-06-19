@@ -60,28 +60,30 @@
 			addFileList06 = [],addFileList07 = [],addFileList08 = [],addFileList09 = [],addFileList10 = [];
 
 		for(var i = 0, count = attachement_info.length; i < count; i++){
-			if(attachement_info[i].fieldname =="spc_file_01_" + spcId + "_" + genId){
+			if (attachement_info[i].fieldname.substring(0, 11) == "spc_file_01") {
 				addFileList01.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_02_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname.substring(0, 11) == "spc_file_02") {
 				addFileList02.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_03_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname.substring(0, 11) == "spc_file_03") {
 				addFileList03.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_04_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname.substring(0, 11) == "spc_file_04") {
 				addFileList04.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_05_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname.substring(0, 11) == "spc_file_05") {
 				addFileList05.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_06_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname.substring(0, 11) == "spc_file_06") {
 				addFileList06.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_07_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname.substring(0, 11) == "spc_file_07") {
 				addFileList07.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_08_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname.substring(0, 11) == "spc_file_08") {
 				addFileList08.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_09_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname.substring(0, 11) == "spc_file_09") {
 				addFileList09.push(attachement_info[i]);
-			}else if(attachement_info[i].fieldname =="spc_file_10_" + spcId + "_" + genId){
+			} else if (attachement_info[i].fieldname.substring(0, 11) == "spc_file_10") {
 				addFileList10.push(attachement_info[i]);
 			}
 		}
+
+			
 
 		setMakeList(addFileList01, "fileList01", {"dataFunction" : {}});
 		setMakeList(addFileList02, "fileList02", {"dataFunction" : {}});
@@ -105,6 +107,14 @@
 	function addList(addId){
 		var $selecter = $("#" + addId);
 		$selecter.append($selecter.data("form"));
+		if(addId.indexOf('addFileList') > -1){
+			if($selecter.find('input').length >1){
+				for(let i = 0; i < $selecter.find('input').length; i++){
+					let nowName = $selecter.find('input').eq(i).attr('name');
+					$selecter.find('input').eq(i).attr('name', nowName + '_'+ i);
+				}
+			}
+		}
 	}
 	
 	function removeList(obj){
