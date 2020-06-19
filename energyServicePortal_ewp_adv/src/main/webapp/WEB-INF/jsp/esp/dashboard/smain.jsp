@@ -575,13 +575,14 @@
 				let deviceType = new Array();
 				$.map(data, function(val, key) {
 					if ($.inArray(val.device_type, deviceType) === -1) {
+						if (val.device_type == 'SM_MANUAL') return false;
 						deviceType.push(val.device_type);
 					}
 				});
 
 				deviceType.sort();
 				$.each(deviceType, function (i, el) {
-					if (el == 'SM_MANUAL') el = 'SM';
+					if (el == 'SM_MANUAL') return false;
 					deviceType[i] = {
 						name: featurePropertiesSub[el].name,
 						type: el,
@@ -599,7 +600,7 @@
 					let deviceType = el.type, operationNormal = 0,
 						operationError = 0, operationAlert = 0,
 						headerDataObject = new Object();
-					if (el.type == 'SM_MANUAL') deviceType = 'SM';
+					if (el.type == 'SM_MANUAL') return false;
 					setInitList('table_' + deviceType);
 
 					let tableArray = new Array();
