@@ -225,38 +225,32 @@
 						<ul class="dropdown-menu chk_type" role="menu" id="status">
 							<li>
 								<a href="javascript:void(0)" tabindex="-1">
-									<input type="checkbox" id="status1" name="status" value="null" checked>
+									<input type="checkbox" id="status1" name="status" value="new" checked>
 									<label for="status1"><span></span>신규</label>
 								</a>
 							</li>
 							<li>
 								<a href="javascript:void(0)" tabindex="-1">
-									<input type="checkbox" id="status2" name="status" value="new" checked>
-									<label for="status2"><span></span>신규</label>
+									<input type="checkbox" id="status2" name="status" value="open" checked>
+									<label for="status2"><span></span>작업처리중</label>
 								</a>
 							</li>
 							<li>
 								<a href="javascript:void(0)" tabindex="-1">
-									<input type="checkbox" id="status3" name="status" value="open" checked>
-									<label for="status3"><span></span>작업처리중</label>
+									<input type="checkbox" id="status3" name="status" value="on-hold" checked>
+									<label for="status3"><span></span>추가 정보 대기</label>
 								</a>
 							</li>
 							<li>
 								<a href="javascript:void(0)" tabindex="-1">
-									<input type="checkbox" id="status4" name="status" value="pending" checked>
-									<label for="status4"><span></span>추가 정보 대기</label>
+									<input type="checkbox" id="status4" name="status" value="resolved" checked>
+									<label for="status4"><span></span>현장 조치 완료</label>
 								</a>
 							</li>
 							<li>
 								<a href="javascript:void(0)" tabindex="-1">
-									<input type="checkbox" id="status5" name="status" value="resolved" checked>
-									<label for="status5"><span></span>현장 조치 완료</label>
-								</a>
-							</li>
-							<li>
-								<a href="javascript:void(0)" tabindex="-1">
-									<input type="checkbox" id="status6" name="status" value="on-hold" checked>
-									<label for="status6"><span></span>처리 결과 확인</label>
+									<input type="checkbox" id="status5" name="status" value="pending" checked>
+									<label for="status5"><span></span>처리 결과 확인</label>
 								</a>
 							</li>
 							<li>
@@ -981,7 +975,6 @@
 					contentType: 'application/json',
 					data: JSON.stringify(alarmData),
 					success: function (result) {
-						console.log(result);
 						alert('저장에 성공했습니다.', '저장');
 						$('#alarmMeasure').modal('hide');
 						periodData();
@@ -1114,11 +1107,14 @@
 		
 		$.each(result, function (i, el) {
 			$.each(statusArray, function (j, e2) {
-				if (e2 == 'null') {
-					e2 = null;
-				}
-				if (el.status == e2) {
-					filterArray.push(result[i]);
+				if (e2 == 'new') {
+					if(el.status == null || el.status == 'new'){
+						filterArray.push(result[i]);
+					}
+				}else{
+					if (el.status == e2) {
+						filterArray.push(result[i]);
+					}
 				}
 			})
 		});
