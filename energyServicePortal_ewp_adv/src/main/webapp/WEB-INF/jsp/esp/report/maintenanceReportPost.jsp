@@ -38,14 +38,14 @@
 	}
 
 	function addList(addId) {
-		var $selecter = $("#" + addId);
-		// 	$selecter.append($selecter.data("form"));
+		var $selector = $("#" + addId);
+		// 	$selector.append($selector.data("form"));
 
 		if (addId == 'addFileList01') {
-			$selecter.append('<input name="work_report_file_01' + addListCnt1 + '" type="file" >')
+			$selector.append('<input name="work_report_file_01' + addListCnt1 + '" type="file" class="hidden" id="work_report_file_'+addListCnt1+'"><label for="work_report_file_'+addListCnt1+'" class="btn file_upload">파일 선택</label>')
 			addListCnt1++;
 		} else if (addId == 'addFileList02') {
-			$selecter.append('<input name="work_report_file_02' + addListCnt2 + '" type="file" >')
+			$selector.append('<input name="work_report_file_02' + addListCnt1 + '" type="file" class="hidden" id="work_report_file_'+addListCnt2+'"><label for="work_report_file_'+addListCnt2+'" class="btn file_upload">파일 선택</label>')
 			addListCnt2++;
 		}
 	}
@@ -310,7 +310,9 @@
 							<th class="vert_type">현장 점검<a href="javascript:addList('addFileList01')"
 									class="btn_add fr">추가</a></th>
 							<td id="addFileList01">
-								<input name="work_report_file_01" type="file">
+								<input type="file" name="work_report_file_01" class="hidden" id="work_report_file_01">
+								<label for="work_report_file_01" class="btn file_upload">파일 선택</label>
+								<span class="upload_text ml-16"></span>
 							</td>
 						</tr>
 						<tr>
@@ -341,7 +343,9 @@
 							<th class="hei_type">첨부 파일<a href="javascript:addList('addFileList02')"
 									class="btn_add fr">추가</a></th>
 							<td id="addFileList02">
-								<input name="work_report_file_02" type="file">
+								<input name="work_report_file_02" type="file" class="hidden" id="work_report_file_02">
+								<label for="work_report_file_02" class="btn file_upload">파일 선택</label>
+								<span class="upload_text ml-16"></span>
 							</td>
 						</tr>
 					</table>

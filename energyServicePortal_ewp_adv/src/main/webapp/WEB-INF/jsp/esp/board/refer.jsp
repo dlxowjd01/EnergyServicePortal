@@ -658,7 +658,9 @@
 							<tr>
 								<th><span>파일첨부</span></th>
 								<td>
-									<input multiple="multiple" type="file" id="referFiles" name="referFiles" style="width:100%" />
+									<input multiple="multiple" type="file" class="hidden" name="referFiles" id="referFiles" style="width:100%" />
+									<label for="referFiles" class="btn file_upload">파일 선택</label>
+									<span class="upload_text ml-16"></span>
 								</td>
 							</tr>
 							<tr>

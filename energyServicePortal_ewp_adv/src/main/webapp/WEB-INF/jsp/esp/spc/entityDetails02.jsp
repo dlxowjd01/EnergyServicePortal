@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Youduk
-  Date: 2020/04/18
-  Time: 15:55
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
   <head>
@@ -25,7 +18,7 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="indiv">
-				<div class="spc_tbl_row">			
+				<div class="spc_tbl_row">
 					<table>
 						<colgroup>
 						<col style="width:15%">
@@ -45,14 +38,14 @@
 							<th></th>
 							<td></td>
 						</tr>
-					</table>	
+					</table>
 				</div>
 			</div>
 			<div class="indiv mt25">
 				<div class="tbl_top">
 					<h2 class="ntit mt25">운영 정보</h2>
 				</div>
-				<div class="spc_tbl_row">			
+				<div class="spc_tbl_row">
 					<table>
 						<colgroup>
 						<col style="width:15%">
@@ -102,7 +95,7 @@
 							<th></th>
 							<td></td>
 						</tr>
-					</table>	
+					</table>
 				</div>
 				<div class="btn_wrap_type02">
 					<a href="/spc/entityInformationEdit.do">수정</a>
@@ -113,7 +106,7 @@
 				<div class="tbl_top">
 					<h2 class="ntit mt25">설비 정보</h2>
 				</div>
-				<div class="spc_tbl_row">			
+				<div class="spc_tbl_row">
 					<table>
 						<colgroup>
 						<col style="width:15%">
@@ -157,7 +150,7 @@
 							<th></th>
 							<td></td>
 						</tr>
-					</table>	
+					</table>
 				</div>
 				<div class="btn_wrap_type02">
 					<a href="/spc/entityInformationEdit.do">수정</a>
@@ -168,7 +161,7 @@
 				<div class="tbl_top">
 					<h2 class="ntit mt25">금융 정보</h2>
 				</div>
-				<div class="spc_tbl_row">			
+				<div class="spc_tbl_row">
 					<table>
 						<colgroup>
 						<col style="width:15%">
@@ -182,7 +175,7 @@
 							<th>관련 보험사</th>
 							<td>-</td>
 						</tr>
-					</table>	
+					</table>
 				</div>
 				<div class="btn_wrap_type02">
 					<a href="/spc/entityInformationEdit.do">수정</a>
@@ -193,7 +186,7 @@
 				<div class="tbl_top">
 					<h2 class="ntit mt25">보증 정보</h2>
 				</div>
-				<div class="spc_tbl_row">			
+				<div class="spc_tbl_row">
 					<table>
 						<colgroup>
 						<col style="width:15%">
@@ -237,7 +230,7 @@
 							<th>전력요금 종별</th>
 							<td>일반용(갑) kW</td>
 						</tr>
-					</table>	
+					</table>
 				</div>
 				<div class="btn_wrap_type02">
 					<a href="/spc/entityInformationEdit.do">수정</a>
@@ -248,7 +241,7 @@
 				<div class="tbl_top">
 					<h2 class="ntit mt25">환경 변수</h2>
 				</div>
-				<div class="spc_tbl_row">			
+				<div class="spc_tbl_row">
 					<table>
 						<colgroup>
 						<col style="width:15%">
@@ -280,7 +273,7 @@
 							<th>System Availability</th>
 							<td>99 %</td>
 						</tr>
-					</table>	
+					</table>
 				</div>
 				<div class="btn_wrap_type02">
 					<a href="/spc/entityInformationEdit.do">수정</a>
@@ -291,7 +284,7 @@
 				<div class="tbl_top">
 					<h2 class="ntit mt25">관련 정보</h2>
 				</div>
-				<div class="spc_tbl_row">			
+				<div class="spc_tbl_row">
 					<table>
 						<colgroup>
 						<col style="width:15%">
@@ -323,18 +316,18 @@
 							<th>시공사</th>
 							<td>S-power</td>
 						</tr>
-					</table>	
+					</table>
 				</div>
 				<div class="btn_wrap_type02">
 					<a href="/spc/entityInformationEdit.do">수정</a>
 					<button type="button" class="btn_type03">목록</button>
 				</div>
 			</div>
-			<div class="indiv mt25">
+			<div class="indiv spc_detail02 mt25">
 				<div class="tbl_top">
 					<h2 class="ntit mt25">첨부 파일</h2>
 				</div>
-				<div class="spc_tbl_row">			
+				<div class="spc_tbl_row">
 					<table>
 						<colgroup>
 						<col style="width:10%">
@@ -391,7 +384,7 @@
 							<td></td>
 							<td><button class="btn_file down">다운로드</button></td>
 						</tr>
-					</table>	
+					</table>
 				</div>
 				<div class="btn_wrap_type02">
 					<a href="/spc/entityInformationEdit.do">수정</a>

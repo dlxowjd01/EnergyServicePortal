@@ -650,11 +650,11 @@
 												<option value="019">019</option>
 											<select>
 											<span class="inline center fl mt10"> - </span>
-															<input type="text" id="findPwMobile2" class="inp fl" maxlength="4"/>
-															<span class="inline center fl mt10"> - </span>
-															<input type="text" id="findPwMobile3" class="inp fl" maxlength="4"/>
-															<span class="inline center fl"> &nbsp; </span>
-															<button type="button" class="btnstyle middle white fl" id="findPwAuthCodeBtn">인증번호 받기</button>	
+											<input type="text" id="findPwMobile2" class="inp fl" maxlength="4"/>
+											<span class="inline center fl mt10"> - </span>
+											<input type="text" id="findPwMobile3" class="inp fl" maxlength="4"/>
+											<span class="inline center fl"> &nbsp; </span>
+											<button type="button" class="btnstyle middle white fl" id="findPwAuthCodeBtn">인증번호 받기</button>	
 										</div>
 			  	    				</td>
 			  	    			</tr>

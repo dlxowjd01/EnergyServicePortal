@@ -193,7 +193,7 @@
 </script>
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">보고서</h1>
+		<h1 class="page-header">작업 보고서</h1>
 		<div class="time fr">
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>
@@ -252,7 +252,7 @@
 </div>
 <div class="row">
 	<div class="col-lg-12">
-		<div class="indiv spc_indiv">
+		<div class="indiv report maintenance_report">
 			<div class="btn_wrap_type02">
 				<button type="button" class="btn_type" onclick="location.href='/report/maintenanceReportPost.do'">
 					등록

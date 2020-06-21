@@ -322,488 +322,502 @@
 
 <div class="row content-wrapper spc_transaction">
 	<div class="col-12">
-		<div class="content-wrapper spc_transaction">
-			<form action="#" method="post" id="spcReqEdit">
-				<div class="indiv spc_bal_post">
-					<table class="table_footer">
+		<form action="#" method="post" id="spcReqEdit">
+			<div class="indiv spc_bal_post">
+				<table class="table_footer">
+					<colgroup>
+						<col style="width:4%">
+						<col style="width:16%">
+						<col style="width:15%">
+						<col style="width:20%">
+						<col style="width:30%">
+						<col style="width:15%">
+						<col>
+					</colgroup>
+					<thead>
+					<tr>
+						<th></th>
+						<th>출금 요청 일자</th>
+						<th>용도 구분</th>
+						<th>요청 금액</th>
+						<th>입금 계좌 번호</th>
+						<th>비고</th>
+					</tr>
+					</thead>
+					<tbody id="firstTable">
+						<tr>
+							<td>
+								<a class="chk_type select_row">
+									<input type="checkbox" id="chk01" name="chk01">
+									<label for="chk01"><span></span></label>
+								</a>
+							</td>
+							<td>
+								<div class="sel_calendar">
+									<input type="text" id="enforce_1" name="enforce_1" class="sel fromDate" value=""
+										autocomplete="off"
+										readonly
+										placeholder="선택">
+								</div>
+							</td>
+							<td>
+								<div class="sa_select">
+									<div class="dropdown placeholder" id="spc">
+										<button class="btn btn-primary dropdown-toggle" type="button"
+												data-toggle="dropdown">선택
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu chk_type" role="menu">
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountNum1" value="accountTypes1" name="accountTypes">
+													<label for="accountNum1"><span></span>관리 운영비</label>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountNum2" value="accountTypes2" name="accountTypes">
+													<label for="accountNum2"><span></span>사무 수탁비</label>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountTypes3" value="accountTypes3" name="accountTypes">
+													<label for="accountTypes3"><span></span>기타</label>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</td>
+							<td class="reqFee">
+								<div class="tx_inp_type">
+									<input type="text" id="reqFee2" name="reqFee2" placeholder="직접 입력">
+								</div>
+							</td>
+							<td>
+								<div class="sa_select">
+									<div class="dropdown placeholder" id="accountNum4">
+										<button class="btn btn-primary dropdown-toggle" type="button"
+												data-toggle="dropdown">KB 120-634348-12-339
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu chk_type" role="menu">
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountNum4" value="accountNum" name="accountNum11">
+													<label for="accountNum11"><span></span>신한 650-665568-12-339</label>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountNum5" value="accountNum" name="accountNum12">
+													<label for="accountNum12"><span></span>KB 650-665568-12-339</label>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</td>
+							<td>
+								<div class="tx_inp_type">
+									<input type="text" id="interestRate_1" name="interestRate_1" placeholder="직접 입력">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="javascript:void(0);" class="chk_type select_row">
+									<input type="checkbox" id="chk02" name="chk02">
+									<label for="chk02"><span></span></label>
+								</a>
+							</td>
+							<td>
+								<div class="sel_calendar">
+									<input type="text" id="date2" name="date2" class="sel fromDate" value=""
+										autocomplete="off"
+										readonly
+										placeholder="선택">
+								</div>
+							</td>
+							<td>
+								<div class="sa_select">
+									<div class="dropdown placeholder" id="spc">
+										<button class="btn btn-primary dropdown-toggle" type="button"
+												data-toggle="dropdown">선택
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu chk_type" role="menu">
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountNum6" value="accountTypes1" name="accountTypes">
+													<label for="accountNum1"><span></span>관리 운영비</label>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountNum7" value="accountTypes2" name="accountTypes">
+													<label for="accountNum2"><span></span>사무 수탁비</label>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountTypes8" value="accountTypes3" name="accountTypes">
+													<label for="accountTypes3"><span></span>기타</label>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</td>
+							<td class="reqFee">
+								<div class="tx_inp_type">
+									<input type="text" id="reqFee3" name="reqFee3" placeholder="직접 입력">
+								</div>
+							</td>
+							<td>
+								<div class="sa_select">
+									<div class="dropdown placeholder" id="accountNum5">
+										<button class="btn btn-primary dropdown-toggle" type="button"
+												data-toggle="dropdown">기업 650-665568-12-339
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu chk_type" role="menu">
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountNum9" value="accountNum3" name="accountNum3">
+													<label for="accountNum3"><span></span>신한 650-665568-12-339</label>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountNum10" value="accountNum4" name="accountNum4">
+													<label for="accountNum4"><span></span>KB 650-665568-12-339</label>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</td>
+							<td>
+								<div class="tx_inp_type">
+									<input type="text" id="interestRate_2" name="interestRate_2" placeholder="직접 입력">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="javascript:void(0);" class="chk_type select_row">
+									<input type="checkbox" id="chk03" name="chk03">
+									<label for="chk03"><span></span></label>
+								</a>
+							</td>
+							<td>
+								<div class="sel_calendar">
+									<input type="text" id="date4" name="date4" class="sel fromDate" value=""
+										autocomplete="off"
+										readonly
+										placeholder="선택">
+								</div>
+							</td>
+							<td>
+								<div class="sa_select">
+									<div class="dropdown placeholder" id="spc">
+										<button class="btn btn-primary dropdown-toggle" type="button"
+												data-toggle="dropdown">선택
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu chk_type" role="menu">
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountTypes11" value="accountTypes1" name="accountTypes">
+													<label for="accountTypes11"><span></span>관리 운영비</label>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountNum12" value="accountTypes12" name="accountTypes">
+													<label for="accountTypes12"><span></span>사무 수탁비</label>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountTypes3" value="accountTypes13" name="accountTypes">
+													<label for="accountTypes13"><span></span>기타</label>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</td>
+							<td class="reqFee">
+								<div class="tx_inp_type">
+									<input type="text" id="reqFee4" name="reqFee4" placeholder="직접 입력">
+								</div>
+							</td>
+							<td>
+								<div class="sa_select">
+									<div class="dropdown placeholder" id="accountNumGroup1">
+										<button class="btn btn-primary dropdown-toggle" type="button"
+												data-toggle="dropdown">KB 120-634348-12-339
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu chk_type" role="menu">
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountNum21" value="accountNum3" name="accountNum3">
+													<label for="accountNum21"><span></span>신한 650-665568-12-339</label>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountNum2" value="accountNum22" name="accountNum4">
+													<label for="accountNum22"><span></span>KB 650-665568-12-339</label>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</td>
+							<td>
+								<div class="tx_inp_type">
+									<input type="text" id="interestRate_3" name="interestRate_3" placeholder="직접 입력">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="javascript:void(0);" class="chk_type select_row">
+									<input type="checkbox" id="chk04" name="chk04">
+									<label for="chk04"><span></span></label>
+								</a>
+							</td>
+							<td>
+								<div class="sel_calendar">
+									<input type="text" id="date1" name="date1" class="sel fromDate" value=""
+										autocomplete="off"
+										readonly
+										placeholder="선택">
+								</div>
+							</td>
+							<td>
+								<div class="sa_select">
+									<div class="dropdown placeholder" id="spc">
+										<button class="btn btn-primary dropdown-toggle" type="button"
+												data-toggle="dropdown">선택
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu chk_type" role="menu">
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountType4" value="accountTypes21" name="accountTypes">
+													<label for="accountTypes21"><span></span>관리 운영비</label>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountType5" value="accountTypes22" name="accountTypes">
+													<label for="accountTypes22"><span></span>사무 수탁비</label>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountType6" value="accountTypes23" name="accountTypes">
+													<label for="accountTypes23"><span></span>기타</label>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</td>
+							<td class="reqFee">
+								<div class="tx_inp_type">
+									<input type="text" id="reqFee5" name="reqFee5" placeholder="직접 입력">
+								</div>
+							</td>
+							<td>
+								<div class="sa_select">
+									<div class="dropdown placeholder" id="accountNumGroup3">
+										<button class="btn btn-primary dropdown-toggle" type="button"
+												data-toggle="dropdown">기업 650-665568-12-339
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu chk_type" role="menu">
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountNum30" value="accountNum3" name="accountNum3">
+													<label for="accountNum30"><span></span>신한 650-665568-12-339</label>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountNum31" value="accountNum4" name="accountNum4">
+													<label for="accountNum31"><span></span>KB 650-665568-12-339</label>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</td>
+							<td>
+								<div class="tx_inp_type">
+									<input type="text" id="interestRate_5" name="interestRate_5" placeholder="직접 입력">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="javascript:void(0);" class="chk_type select_row">
+									<input type="checkbox" id="chk05" name="chk05">
+									<label for="chk05"><span></span></label>
+								</a>
+							</td>
+							<td>
+								<div class="sel_calendar">
+									<input type="text" id="date3" name="date3" class="sel fromDate" value=""
+										autocomplete="off"
+										readonly
+										placeholder="선택">
+								</div>
+							</td>
+							<td>
+								<div class="sa_select">
+									<div class="dropdown placeholder" id="spc">
+										<button class="btn btn-primary dropdown-toggle" type="button"
+												data-toggle="dropdown">선택
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu chk_type" role="menu">
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountTypes40" value="accountTypes1" name="accountTypes">
+													<label for="accountTypes40"><span></span>관리 운영비</label>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountNum2" value="accountTypes42" name="accountTypes">
+													<label for="accountTypes42"><span></span>사무 수탁비</label>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountTypes3" value="accountTypes43" name="accountTypes">
+													<label for="accountTypes43"><span></span>기타</label>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</td>
+							<td class="reqFee">
+								<div class="tx_inp_type">
+									<input type="text" id="reqFee6" name="reqFee6" placeholder="직접 입력">
+								</div>
+							</td>
+							<td>
+								<div class="sa_select">
+									<div class="dropdown placeholder" id="accountNumGroup2">
+										<button class="btn btn-primary dropdown-toggle" type="button"
+												data-toggle="dropdown">KB 120-634348-12-339
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu chk_type" role="menu">
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountNum50" value="accountNum3" name="accountNum3">
+													<label for="accountNum50"><span></span>신한 650-665568-12-339</label>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="accountNum51" value="accountNum4" name="accountNum4">
+													<label for="accountNum51"><span></span>KB 650-665568-12-339</label>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</td>
+							<td>
+								<div class="tx_inp_type">
+									<input type="text" id="interestRate_5" name="interestRate_5" placeholder="직접 입력">
+								</div>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td></td>
+							<td>합계</td>
+							<td></td>
+							<td>1,240,000,000</td>
+							<td colspan="2"></td>
+						</tr>
+					</tfoot>
+				</table>
+				<div class="btn_wrap_type">
+					<a href="#;" class="btn_type07" id="deleteBtn">선택 삭제</a>
+					<a href="javascript:void(0);" class="btn_add"
+						onclick="addEmptyRowTable('firstTable'); return false;">열 추가</a>
+				</div>
+			</div>
+			<div class="indiv mt25">
+				<div class="spc_tbl_row">
+					<table id="secondTable">
 						<colgroup>
-							<col style="width:4%">
-							<col style="width:16%">
 							<col style="width:15%">
 							<col style="width:20%">
-							<col style="width:30%">
-							<col style="width:15%">
 							<col>
 						</colgroup>
-						<thead>
 						<tr>
-							<th></th>
-							<th>출금 요청 일자</th>
-							<th>용도 구분</th>
-							<th>요청 금액</th>
-							<th>입금 계좌 번호</th>
-							<th>비고</th>
+							<th class="th_type">증빙 첨부<a href="javascript:addRowTable('secondTable')" class="btn_add fr">추가</a></th>
+							<td id="addFileList01">
+								<input type="file" id="spc_file_01" class="hidden" name="spc_file_01" accept=".gif, .jpg, .png">
+								<label for="spc_file_01" class="btn file_upload">파일 선택</label>
+								<span class="upload_text ml-16"></span>
+							</td>
+							<td></td>
 						</tr>
-						</thead>
-						<tbody id="firstTable">
-							<tr>
-								<td>
-									<a class="chk_type select_row">
-										<input type="checkbox" id="chk01" name="chk01">
-										<label for="chk01"><span></span></label>
-									</a>
-								</td>
-								<td>
-									<div class="sel_calendar">
-										<input type="text" id="enforce_1" name="enforce_1" class="sel fromDate" value=""
-											autocomplete="off"
-											readonly
-											placeholder="선택">
-									</div>
-								</td>
-								<td>
-									<div class="sa_select">
-										<div class="dropdown placeholder" id="spc">
-											<button class="btn btn-primary dropdown-toggle" type="button"
-													data-toggle="dropdown">선택
-												<span class="caret"></span>
-											</button>
-											<ul class="dropdown-menu chk_type" role="menu">
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountNum1" value="accountTypes1" name="accountTypes">
-														<label for="accountNum1"><span></span>관리 운영비</label>
-													</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountNum2" value="accountTypes2" name="accountTypes">
-														<label for="accountNum2"><span></span>사무 수탁비</label>
-													</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountTypes3" value="accountTypes3" name="accountTypes">
-														<label for="accountTypes3"><span></span>기타</label>
-													</a>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</td>
-								<td class="reqFee">
-									<div class="tx_inp_type">
-										<input type="text" id="reqFee2" name="reqFee2" placeholder="직접 입력">
-									</div>
-								</td>
-								<td>
-									<div class="sa_select">
-										<div class="dropdown placeholder" id="accountNum4">
-											<button class="btn btn-primary dropdown-toggle" type="button"
-													data-toggle="dropdown">KB 120-634348-12-339
-												<span class="caret"></span>
-											</button>
-											<ul class="dropdown-menu chk_type" role="menu">
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountNum4" value="accountNum" name="accountNum11">
-														<label for="accountNum11"><span></span>신한 650-665568-12-339</label>
-													</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountNum5" value="accountNum" name="accountNum12">
-														<label for="accountNum12"><span></span>KB 650-665568-12-339</label>
-													</a>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div class="tx_inp_type">
-										<input type="text" id="interestRate_1" name="interestRate_1" placeholder="직접 입력">
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<a href="javascript:void(0);" class="chk_type select_row">
-										<input type="checkbox" id="chk02" name="chk02">
-										<label for="chk02"><span></span></label>
-									</a>
-								</td>
-								<td>
-									<div class="sel_calendar">
-										<input type="text" id="date2" name="date2" class="sel fromDate" value=""
-											autocomplete="off"
-											readonly
-											placeholder="선택">
-									</div>
-								</td>
-								<td>
-									<div class="sa_select">
-										<div class="dropdown placeholder" id="spc">
-											<button class="btn btn-primary dropdown-toggle" type="button"
-													data-toggle="dropdown">선택
-												<span class="caret"></span>
-											</button>
-											<ul class="dropdown-menu chk_type" role="menu">
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountNum6" value="accountTypes1" name="accountTypes">
-														<label for="accountNum1"><span></span>관리 운영비</label>
-													</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountNum7" value="accountTypes2" name="accountTypes">
-														<label for="accountNum2"><span></span>사무 수탁비</label>
-													</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountTypes8" value="accountTypes3" name="accountTypes">
-														<label for="accountTypes3"><span></span>기타</label>
-													</a>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</td>
-								<td class="reqFee">
-									<div class="tx_inp_type">
-										<input type="text" id="reqFee3" name="reqFee3" placeholder="직접 입력">
-									</div>
-								</td>
-								<td>
-									<div class="sa_select">
-										<div class="dropdown placeholder" id="accountNum5">
-											<button class="btn btn-primary dropdown-toggle" type="button"
-													data-toggle="dropdown">기업 650-665568-12-339
-												<span class="caret"></span>
-											</button>
-											<ul class="dropdown-menu chk_type" role="menu">
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountNum9" value="accountNum3" name="accountNum3">
-														<label for="accountNum3"><span></span>신한 650-665568-12-339</label>
-													</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountNum10" value="accountNum4" name="accountNum4">
-														<label for="accountNum4"><span></span>KB 650-665568-12-339</label>
-													</a>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div class="tx_inp_type">
-										<input type="text" id="interestRate_2" name="interestRate_2" placeholder="직접 입력">
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<a href="javascript:void(0);" class="chk_type select_row">
-										<input type="checkbox" id="chk03" name="chk03">
-										<label for="chk03"><span></span></label>
-									</a>
-								</td>
-								<td>
-									<div class="sel_calendar">
-										<input type="text" id="date4" name="date4" class="sel fromDate" value=""
-											autocomplete="off"
-											readonly
-											placeholder="선택">
-									</div>
-								</td>
-								<td>
-									<div class="sa_select">
-										<div class="dropdown placeholder" id="spc">
-											<button class="btn btn-primary dropdown-toggle" type="button"
-													data-toggle="dropdown">선택
-												<span class="caret"></span>
-											</button>
-											<ul class="dropdown-menu chk_type" role="menu">
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountTypes11" value="accountTypes1" name="accountTypes">
-														<label for="accountTypes11"><span></span>관리 운영비</label>
-													</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountNum12" value="accountTypes12" name="accountTypes">
-														<label for="accountTypes12"><span></span>사무 수탁비</label>
-													</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountTypes3" value="accountTypes13" name="accountTypes">
-														<label for="accountTypes13"><span></span>기타</label>
-													</a>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</td>
-								<td class="reqFee">
-									<div class="tx_inp_type">
-										<input type="text" id="reqFee4" name="reqFee4" placeholder="직접 입력">
-									</div>
-								</td>
-								<td>
-									<div class="sa_select">
-										<div class="dropdown placeholder" id="accountNumGroup1">
-											<button class="btn btn-primary dropdown-toggle" type="button"
-													data-toggle="dropdown">KB 120-634348-12-339
-												<span class="caret"></span>
-											</button>
-											<ul class="dropdown-menu chk_type" role="menu">
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountNum21" value="accountNum3" name="accountNum3">
-														<label for="accountNum21"><span></span>신한 650-665568-12-339</label>
-													</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountNum2" value="accountNum22" name="accountNum4">
-														<label for="accountNum22"><span></span>KB 650-665568-12-339</label>
-													</a>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div class="tx_inp_type">
-										<input type="text" id="interestRate_3" name="interestRate_3" placeholder="직접 입력">
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<a href="javascript:void(0);" class="chk_type select_row">
-										<input type="checkbox" id="chk04" name="chk04">
-										<label for="chk04"><span></span></label>
-									</a>
-								</td>
-								<td>
-									<div class="sel_calendar">
-										<input type="text" id="date1" name="date1" class="sel fromDate" value=""
-											autocomplete="off"
-											readonly
-											placeholder="선택">
-									</div>
-								</td>
-								<td>
-									<div class="sa_select">
-										<div class="dropdown placeholder" id="spc">
-											<button class="btn btn-primary dropdown-toggle" type="button"
-													data-toggle="dropdown">선택
-												<span class="caret"></span>
-											</button>
-											<ul class="dropdown-menu chk_type" role="menu">
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountType4" value="accountTypes21" name="accountTypes">
-														<label for="accountTypes21"><span></span>관리 운영비</label>
-													</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountType5" value="accountTypes22" name="accountTypes">
-														<label for="accountTypes22"><span></span>사무 수탁비</label>
-													</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountType6" value="accountTypes23" name="accountTypes">
-														<label for="accountTypes23"><span></span>기타</label>
-													</a>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</td>
-								<td class="reqFee">
-									<div class="tx_inp_type">
-										<input type="text" id="reqFee5" name="reqFee5" placeholder="직접 입력">
-									</div>
-								</td>
-								<td>
-									<div class="sa_select">
-										<div class="dropdown placeholder" id="accountNumGroup3">
-											<button class="btn btn-primary dropdown-toggle" type="button"
-													data-toggle="dropdown">기업 650-665568-12-339
-												<span class="caret"></span>
-											</button>
-											<ul class="dropdown-menu chk_type" role="menu">
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountNum30" value="accountNum3" name="accountNum3">
-														<label for="accountNum30"><span></span>신한 650-665568-12-339</label>
-													</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountNum31" value="accountNum4" name="accountNum4">
-														<label for="accountNum31"><span></span>KB 650-665568-12-339</label>
-													</a>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div class="tx_inp_type">
-										<input type="text" id="interestRate_5" name="interestRate_5" placeholder="직접 입력">
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<a href="javascript:void(0);" class="chk_type select_row">
-										<input type="checkbox" id="chk05" name="chk05">
-										<label for="chk05"><span></span></label>
-									</a>
-								</td>
-								<td>
-									<div class="sel_calendar">
-										<input type="text" id="date3" name="date3" class="sel fromDate" value=""
-											autocomplete="off"
-											readonly
-											placeholder="선택">
-									</div>
-								</td>
-								<td>
-									<div class="sa_select">
-										<div class="dropdown placeholder" id="spc">
-											<button class="btn btn-primary dropdown-toggle" type="button"
-													data-toggle="dropdown">선택
-												<span class="caret"></span>
-											</button>
-											<ul class="dropdown-menu chk_type" role="menu">
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountTypes40" value="accountTypes1" name="accountTypes">
-														<label for="accountTypes40"><span></span>관리 운영비</label>
-													</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountNum2" value="accountTypes42" name="accountTypes">
-														<label for="accountTypes42"><span></span>사무 수탁비</label>
-													</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountTypes3" value="accountTypes43" name="accountTypes">
-														<label for="accountTypes43"><span></span>기타</label>
-													</a>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</td>
-								<td class="reqFee">
-									<div class="tx_inp_type">
-										<input type="text" id="reqFee6" name="reqFee6" placeholder="직접 입력">
-									</div>
-								</td>
-								<td>
-									<div class="sa_select">
-										<div class="dropdown placeholder" id="accountNumGroup2">
-											<button class="btn btn-primary dropdown-toggle" type="button"
-													data-toggle="dropdown">KB 120-634348-12-339
-												<span class="caret"></span>
-											</button>
-											<ul class="dropdown-menu chk_type" role="menu">
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountNum50" value="accountNum3" name="accountNum3">
-														<label for="accountNum50"><span></span>신한 650-665568-12-339</label>
-													</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" tabindex="-1">
-														<input type="checkbox" id="accountNum51" value="accountNum4" name="accountNum4">
-														<label for="accountNum51"><span></span>KB 650-665568-12-339</label>
-													</a>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div class="tx_inp_type">
-										<input type="text" id="interestRate_5" name="interestRate_5" placeholder="직접 입력">
-									</div>
-								</td>
-							</tr>
-						</tbody>
-						<tfoot>
-							<tr>
-								<td></td>
-								<td>합계</td>
-								<td></td>
-								<td>1,240,000,000</td>
-								<td colspan="2"></td>
-							</tr>
-						</tfoot>
+						<tr>
+							<td></td>
+							<td id="addFileList02">
+								<input type="file" id="spc_file_02" class="hidden" name="spc_file_02" accept=".gif, .jpg, .png">
+								<label for="spc_file_02" class="btn file_upload">파일 선택</label>
+								<span class="upload_text ml-16"></span>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td id="addFileList03">
+								<input type="file" id="spc_file_03" class="hidden" name="spc_file_03"  accept=".gif, .jpg, .png">
+								<label for="spc_file_03" class="btn file_upload">파일 선택</label>
+								<span class="upload_text ml-16"></span>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td id="addFileList04">
+								<input type="file" id="spc_file_04" class="hidden" name="spc_file_04"  accept=".gif, .jpg, .png">
+								<label for="spc_file_04" class="btn file_upload">파일 선택</label>
+								<span class="upload_text ml-16"></span>
+							</td>
+							<td></td>
+						</tr>
 					</table>
-					<div class="btn_wrap_type">
-						<a href="#;" class="btn_type07" id="deleteBtn">선택 삭제</a>
-						<a href="javascript:void(0);" class="btn_add"
-							onclick="addEmptyRowTable('firstTable'); return false;">열 추가</a>
-					</div>
 				</div>
-				<div class="indiv mt25">
-					<div class="spc_tbl_row">
-						<table id="secondTable">
-							<colgroup>
-								<col style="width:15%">
-								<col style="width:20%">
-								<col>
-							</colgroup>
-							<tr>
-								<th class="th_type">증빙 첨부<a href="javascript:addRowTable('secondTable')" class="btn_add fr">추가</a></th>
-								<td id="addFileList01"><input name="spc_file_01" type="file" accept=".gif, .jpg, .png"></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td id="addFileList02"><input name="spc_file_02" type="file"></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td id="addFileList03"><input name="spc_file_03" type="file"></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td id="addFileList04"><input name="spc_file_04" type="file"></td>
-								<td></td>
-							</tr>
-						</table>
-					</div>
-					<div class="btn_wrap_type05">
-						<a class="chk_type mr-24">
-							<input type="checkbox" id="chk02" name="chk02">
-							<label for="chk02"><span></span>증빙 첨부 포함</label>
-						</a>
-						<button type="button" class="btn btn_type03 mr-12" id="writeBtn">다운로드</button>
-						<button type="submit" class="btn btn_type">제출</button>
-					</div>
+				<div class="btn_wrap_type05">
+					<a class="chk_type mr-24">
+						<input type="checkbox" id="chk02" name="chk02">
+						<label for="chk02"><span></span>증빙 첨부 포함</label>
+					</a>
+					<button type="button" class="btn btn_type03 mr-12" id="writeBtn">다운로드</button>
+					<button type="submit" class="btn btn_type">제출</button>
 				</div>
-			</form>
-		</div>
+			</div>
+		</form>
 	</div>
 </div>
 

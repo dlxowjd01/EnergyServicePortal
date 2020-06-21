@@ -2,7 +2,7 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 
 <script src="/js/commonDropdown.js"></script>
-<div class="row">
+<div class="row header-wrapper">
 	<div class="col-12">
 		<h1 class="page-header fl">수집 현황</h1>
 		<div class="time fr">
@@ -12,11 +12,11 @@
 			<em class="dbTime">2020-04-23 14:01:02</em>
 		</div>
 	</div>
+</div>
+<div class="row">
 	<div class="col-12">
 		<div class="dropdown fl" id="selectSiteList">
-			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택해주세요.">
-				선택해주세요.<span class="caret"></span>
-			</button>
+			<button class="btn btn-primary dropdown-toggle w10" type="button" data-toggle="dropdown" data-name="선택해주세요.">선택해주세요.<span class="caret"></span></button>
 			<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="siteULList">
 				<li data-value="[sid]">
 					<a href="javascript:void(0);" tabindex="-1">
@@ -26,9 +26,7 @@
 				</li>
 			</ul>
 		</div>
-		<div class="collect_btn fr">
-			<a href="#" class="btn_type02">로그 저장</a>
-		</div>
+		<a href="#" class="btn_type02 collect_btn fr">로그 저장</a>
 	</div>
 </div>
 
@@ -42,19 +40,17 @@
 				<div class="input-group inline-flex">
 					<label for="siteName" class="input_label">사이트</label>
 					<div id="siteName" class="dropdown">
-						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-							선택해주세요.<span class="caret"></span>
-						</button>
+						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택해주세요.<span class="caret"></span></button>
 						<ul class="dropdown-menu dropdown-menu-form chk_type"></ul>
 					</div>
 				</div>
 				<div class="input-group inline-flex">
 					<label for="siteName" class="input_label">시리얼 번호</label>
-					<input type="text" name="serialNum" id="serialNum" class="input tx_inp_type text_input">
+					<input type="text" name="serialNum" id="serialNum" class="tx_inp_type text_input">
 				</div>
 				<div class="input-group inline-flex">
 					<label for="siteName" class="input_label">RTU 이름</label>
-					<input type="text" name="rtuName" id="rtuName" class="input tx_inp_type text_input">
+					<input type="text" name="rtuName" id="rtuName" class="tx_inp_type text_input">
 				</div>
 				<div class="input-group inline-flex">
 					<label for="siteName" class="input_label">메모</label>

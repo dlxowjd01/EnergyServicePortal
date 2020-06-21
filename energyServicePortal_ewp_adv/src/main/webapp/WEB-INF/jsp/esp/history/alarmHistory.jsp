@@ -41,7 +41,8 @@
 						</div>
 						<div class="type">
 							<button id="fileUpload" type="button" class="btn_type">업로드</button>
-							<input type="file" id="picture" name="filename" class="uploadBtn" style="display:none" />
+							<input type="file" id="picture" name="filename" class="uploadBtn hidden"/>
+							<span class="upload_text ml-16"></span>
 						</div>
 					</div>
 
