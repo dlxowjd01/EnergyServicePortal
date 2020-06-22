@@ -1043,8 +1043,65 @@ const getAlarmInfo = function () {
 	})
 }
 
-let toDayEnergy = 0;
-let toDayRaw = 0;
+const beforeTodayTotal = function () {
+	let countPromise = 0;
+	siteList.forEach((site, siteIdx) => {
+		beforeTodayTotalPromise(site).then(rtnValue => {
+			siteList[siteIdx]['acPowerSum'] = rtnValue.acPowerSum;
+			siteList[siteIdx]['capacity'] = rtnValue.capacity;
+			countPromise++;
+		}).catch(error => {
+			siteList[siteIdx]['acPowerSum'] = 0;
+			siteList[siteIdx]['capacity'] = 0;
+			countPromise++;
+		}).finally(() => {
+			if(siteList.length == countPromise) {
+				getTodayTotalDetail();
+				searchSiteList();
+			}
+		});
+	});
+}
+
+const beforeTodayTotalPromise = (site) => {
+	return new Promise((resolve, reject) => {
+		$.ajax({
+			url: 'http://iderms.enertalk.com:8443/status/raw/site',
+			type: 'get',
+			data: {
+				sid: site.sid,
+				formId: 'v2'
+			},
+		}).done(function (data, textStatus, jqXHR) {
+			let acPowerSum = null,
+				capacity = 0;
+
+			let resolveObj = new Object();
+
+			$.map(data, function (val, key) {
+				if (key.match('INV')) {
+					if (!isEmpty(val.activePower)) {
+						acPowerSum += val.activePower;
+					}
+
+					if (!isEmpty(val.capacity)) {
+						capacity += val.capacity;
+					}
+				}
+			});
+
+			resolveObj['acPowerSum'] = acPowerSum;
+			resolveObj['capacity'] = capacity;
+			resolve(resolveObj);
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.error(jqXHR);
+			console.error(textStatus);
+			console.error(errorThrown);
+		});
+	});
+}
+
+
 const getTodayTotalDetail = function () {
 
 	$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(0);
@@ -1057,91 +1114,40 @@ const getTodayTotalDetail = function () {
 	$('#centerTbody tr td:nth-child(4) span').text('');
 	$('#centerTbody tr td:nth-child(5) span').text('');
 
-	let acPowerSum = 0;
+
 	let co2Sum = 0;
-
-	toDayEnergy = 0;
-	toDayRaw = 0;
-
+	let acPowerSum = 0;
 	let capacity = 0;
 	siteList.forEach((site, siteIdx) => {
-		if (site.devices != undefined) {
-			site.devices.forEach(device => {
-				capacity += device.capacity;
-			});
+		let siteAcPowerSum = site.acPowerSum;
+		let siteCapacity = site.capacity;
+
+		if(!isEmpty(siteAcPowerSum)) {
+			acPowerSum += siteAcPowerSum;
+		}
+
+		if(!isEmpty(siteCapacity)) {
+			capacity += siteCapacity;
 		}
 	});
 
+	pieChart.setTitle({text: Math.floor(acPowerSum / 1000) + 'kW'});
+
+	let usage = Math.floor((acPowerSum / capacity) * 100);
+	let other = 100 - usage;
+
+	pieChart.series[0].data.forEach((e, idx) => {
+		if (e.name === "태양광") {
+			e.update({y: usage});
+		} else if (e.name === "미사용량") {
+			e.update({y: other});
+		} else {
+			e.update({y: 0});
+		}
+	});
+	pieChart.redraw();
+
 	siteList.forEach((site, siteIdx) => {
-		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/energy/sites',
-			type: 'get',
-			data: {
-				sid: site.sid,
-				startTime: formData.startTime,
-				endTime: formData.endTime,
-				interval: '15min'
-			},
-		}).done(function (data, textStatus, jqXHR) {
-			let generationSum = 0;
-			let moneySum = 0;
-			data.data[0].generation.items.map((e) => {
-				generationSum += e.energy;
-			});
-			data.data[0].generation.items.map((e) => moneySum += e.money);
-
-			pieChart.series[0].data.forEach((e, idx) => {
-				if (e.name === '태양광') {
-					e.update({y: Math.floor(generationSum / 100)});
-				} else if (e.name === '미사용량') {
-					e.update({y: Math.floor((generationSum / capacity) / 100)});
-				} else {
-					e.update({y: 0});
-				}
-			});
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.error(jqXHR);
-			console.error(textStatus);
-			console.error(errorThrown);
-
-			alert('처리 중 오류가 발생했습니다.');
-			return false;
-		}).always(function (jqXHR, textStatus) {
-			setDrawPieChart('energy');
-		});
-
-		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/status/raw/site',
-			type: 'get',
-			data: {
-				sid: site.sid,
-				formId: 'v2'
-			},
-		}).done(function (data, textStatus, jqXHR) {
-			$.map(data, function (val, key) {
-				if (key == 'INV_PV') {
-					acPowerSum += val.activePower;
-
-					pieChart.setTitle({text: Math.floor(acPowerSum / 1000) + 'kW'});
-					pieChart.series[0].data.forEach((e, idx) => {
-						if (e.name === "태양광") {
-							e.update({y: Math.floor(acPowerSum / 1000)});
-						} else if (e.name === "미사용량") {
-							e.update({y: Math.floor((capacity - acPowerSum) / 1000)});
-						} else {
-							e.update({y: 0});
-						}
-					});
-				}
-			});
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.error(jqXHR);
-			console.error(textStatus);
-			console.error(errorThrown);
-		}).always(function (jqXHR, textStatus) {
-			setDrawPieChart('raw');
-		});
-
 		$.ajax({
 			url: 'http://iderms.enertalk.com:8443/energy/forecasting/sites',
 			type: 'get',
@@ -1192,8 +1198,6 @@ const getTodayTotalDetail = function () {
 
 		if (site.devices != undefined) {
 			site.devices.forEach(device => {
-				let capacity = Number($('#centerTbody tr td:nth-child(3) span').text().replace(/[^0-9]/g, '')) + Math.round(device.capacity / 1000);
-				$('#centerTbody tr td:nth-child(3) span').text(numberComma(capacity));
 				if (device.device_type.match('INV')) {
 					let inverterCount = Number($('#centerTbody tr td:nth-child(2) span').text().replace(/[^0-9]/g, '')) + 1;
 					$('#centerTbody tr td:nth-child(2) span').text(numberComma(inverterCount));
@@ -1203,19 +1207,10 @@ const getTodayTotalDetail = function () {
 				}
 			});
 		}
+
+		let capacity = Number($('#centerTbody tr td:nth-child(3) span').text().replace(/[^0-9]/g, '')) + Math.round(site.capacity / 1000);
+		$('#centerTbody tr td:nth-child(3) span').text(numberComma(capacity));
 	});
-}
-
-const setDrawPieChart = function (type) {
-	if (type = 'energy') {
-		toDayEnergy++;
-	} else {
-		toDayRaw++;
-	}
-
-	if (toDayEnergy == siteList.length && toDayRaw == siteList.length) {
-		pieChart.redraw();
-	}
 }
 
 var pieChart = Highcharts.chart('pie_chart', {
@@ -1235,7 +1230,7 @@ var pieChart = Highcharts.chart('pie_chart', {
 		}
 	},
 	title: {
-		text: '- Wh', // 총용량 표기
+		text: '- kW', // 총용량 표기
 		align: 'center',
 		verticalAlign: 'middle',
 		y: 10,
@@ -1330,23 +1325,16 @@ const searchSiteList = function () {
 	siteListActive = 0;
 
 	siteList.forEach((site, siteIdx) => {
-		let capacity = 0;
 		let inverterCount = 0;
 		if (site.devices != undefined) {
 			site.devices.forEach(device => {
-				capacity += device.capacity;
-
 				if (device.device_type.match('INV')) {
 					inverterCount++;
 				}
 			});
-
-			siteList[siteIdx].capacity = displayNumberFixedUnit(capacity, 'W', 'kW', 0)[0];
-			siteList[siteIdx].inverterCount = inverterCount;
-		} else {
-			siteList[siteIdx].capacity = '-';
-			siteList[siteIdx].inverterCount = 0;
 		}
+
+		siteList[siteIdx].inverterCount = inverterCount;
 		siteArray.push(site.sid);
 
 		$.ajax({
@@ -1601,7 +1589,7 @@ const searchSite = function () {
 		}
 	});
 
-	setMakeList(refineList, 'siteList', {'dataFunction': {'align': alignFunc}}); //list생성
+	setMakeList(refineList, 'siteList', {'dataFunction': {'align': alignFunc, 'capacity': setUnit}}); //list생성
 
 	if (typeof (geocodeAddress) == 'function') {
 		map = new google.maps.Map(document.getElementById('gMainMap'), {
@@ -1628,7 +1616,7 @@ const searchSite = function () {
 
 	setTimeout(function () {
 		refineList.forEach((site, siteIdx) => {
-			let capacity = (site.capacity == '-' || site.capacity == 0) ? 0 : Number(site.capacity.replace(/[^0-9]/g, ''));
+			let capacity = (site.capacity == '-' || site.capacity == 0) ? 0 :site.capacity / 1000;
 			let activePower = (site.activePower == '-' || site.activePower == 0) ? 0 : Number(site.activePower.replace(/[^0-9]/g, ''));
 
 			let activePercent = Math.floor((activePower / capacity) * 100);
@@ -1663,6 +1651,10 @@ const searchSite = function () {
 			siteListChart('type_chart' + siteIdx, series, title);
 		});
 	}, 500);
+}
+
+const setUnit = (capacity) => {
+	return displayNumberFixedUnit(capacity, 'W', 'kW', 0)[0];
 }
 
 /**
