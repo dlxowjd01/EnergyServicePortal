@@ -158,6 +158,39 @@ nav .lang.login_lang {
     line-height: 44px;
 }
 
+.btnstyle,
+.btnstyle:hover {
+	display: inline-block;
+	text-align: center;
+	position: relative;
+	cursor: pointer;
+	text-decoration: none !important;
+	vertical-align: middle;
+	border-radius: 1px;
+	letter-spacing: -0.01em;
+}
+
+.btnstyle.white {
+	background: var(--white);
+	border: 1px solid #aaaaaa;
+	color: #555555 !important;
+}
+
+.btnstyle.white:hover,
+.btnstyle.white:focus {
+	background: var(--white);
+	border-color: #777777;
+	color: #000000 !important;
+}
+
+.btnstyle.middle {
+	font-size: 13px;
+	height: 30px;
+	line-height: 28px;
+	padding: 0px 10px;
+	font-weight: 500;
+}
+
 .lf_body {
     padding: 60px;
     background: var(--box-color);
