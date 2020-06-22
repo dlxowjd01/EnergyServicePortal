@@ -930,8 +930,12 @@ function setDataMapping($selecter, json, prop) {
 		$element.val(json[prop]);
 	} else if (_TagName == "DIV") {
 		$.each($element.find('li'), function () {
-			if ($(this).data('value') == json[prop]) {
-				$element.find('button').html($(this).text() + '<span class="caret"></span>').data('value', json[prop]);
+			if (isEmpty(json[prop])) {
+				$element.find('button').html($element.find('button').data('name') + '<span class="caret"></span>').data('value', '');
+			} else {
+				if ($(this).data('value') == json[prop]) {
+					$element.find('button').html($(this).text() + '<span class="caret"></span>').data('value', json[prop]);
+				}
 			}
 		});
 	} else {

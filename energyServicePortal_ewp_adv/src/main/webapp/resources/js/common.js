@@ -44,6 +44,10 @@ $(function() {
         dateFormat: 'yy-mm-dd',
         onClose: function(selectedDate) {
             $(this).closest('.dateField').find('.toDate').datepicker('option', 'minDate', selectedDate);
+
+            if (typeof afterDatePick == 'function') {
+                afterDatePick();
+            }
         }
     });
 

@@ -608,98 +608,100 @@
 					$.map(data, function(val, key) {
 						let dname = val.dname;
 						if (val.device_type == deviceType) {
-							let rowData = val.data,
-								operation = rowData[0]['operation'];
-							if(operation == '1') {
-								operationNormal++;
-							} else if(operation == '2') {
-								operationError++;
-							} else {
-								operationAlert++;
-							}
-
-							rowData[0]['dname'] = dname;
-
-							$.map(featureProperties, function(val, key) {
-								let headerData = new Object();
-								if(!isEmpty(headerDataObject[key])) {
-									headerData = headerDataObject[key];
-								}
-								if (key == deviceType) {
-									$.each(val.prop, function(i, el) {
-										let value = rowData[0][el.key],
-											tmpObj = new Object();
-										if(isEmpty(headerData[el.key])) {
-											tmpObj['reducer'] = el.reducer;
-										} else {
-											tmpObj = headerData[el.key];
-										}
-
-										if(isEmpty(value)) {
-											value = '-';
-										} else {
-											if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
-												value = Number(value);
-											} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
-												value = Number(value);
-											}
-										}
-
-										if(value == '-') {
-											if(!isEmpty(headerData[el.key])) {
-												tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
-											} else {
-												tmpObj['value'] = '-';
-												tmpObj['cnt'] = 1;
-											}
-										} else {
-											if(!isEmpty(headerData[el.key])) {
-												tmpObj['value'] = Number(value) + Number(tmpObj['value']);
-												tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
-											} else {
-												tmpObj['value'] = Number(value);
-												tmpObj['cnt'] = 1;
-											}
-
-											tmpObj['suffix'] = el.suffix;
-										}
-
-										headerData[el.key] = tmpObj;
-									});
-									headerDataObject[key] = headerData;
-								}
-							});
-
-							$.map(featurePropertiesSub, function(val, key) {
-								if (key == deviceType) {
-									$.each(val.prop, function(i, el) {
-										let value = rowData[0][el.key];
-
-										if(isEmpty(value)) {
-											rowData[0][el.key] = '-';
-										} else {
-											if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
-												let dummy = displayNumberFixedUnit(value, 'W', 'kW', 2);
-												rowData[0][el.key] = dummy[0];
-											} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
-												rowData[0][el.key] = value.toFixed(2);
-											} else if(el.suffix.match('V')) {
-												rowData[0][el.key] = value.toFixed(2);
-											}
-										}
-									});
-								}
-							});
-
-							if (deviceSearch(dname, operation)) {
-								if(isEmpty(tableArray)) {
-									let rowData = val.data;
-									rowData[0]['dname'] = dname;
-									tableArray = rowData;
+							let rowData = val.data;
+							if(!isEmpty(rowData)) {
+								let operation = rowData[0]['operation'];
+								if(operation == '1') {
+									operationNormal++;
+								} else if(operation == '2') {
+									operationError++;
 								} else {
-									let rowData = val.data;
-									rowData[0]['dname'] = dname;
-									tableArray = tableArray.concat(rowData);
+									operationAlert++;
+								}
+
+								rowData[0]['dname'] = dname;
+
+								$.map(featureProperties, function(val, key) {
+									let headerData = new Object();
+									if(!isEmpty(headerDataObject[key])) {
+										headerData = headerDataObject[key];
+									}
+									if (key == deviceType) {
+										$.each(val.prop, function(i, el) {
+											let value = rowData[0][el.key],
+												tmpObj = new Object();
+											if(isEmpty(headerData[el.key])) {
+												tmpObj['reducer'] = el.reducer;
+											} else {
+												tmpObj = headerData[el.key];
+											}
+
+											if(isEmpty(value)) {
+												value = '-';
+											} else {
+												if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
+													value = Number(value);
+												} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
+													value = Number(value);
+												}
+											}
+
+											if(value == '-') {
+												if(!isEmpty(headerData[el.key])) {
+													tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
+												} else {
+													tmpObj['value'] = '-';
+													tmpObj['cnt'] = 1;
+												}
+											} else {
+												if(!isEmpty(headerData[el.key])) {
+													tmpObj['value'] = Number(value) + Number(tmpObj['value']);
+													tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
+												} else {
+													tmpObj['value'] = Number(value);
+													tmpObj['cnt'] = 1;
+												}
+
+												tmpObj['suffix'] = el.suffix;
+											}
+
+											headerData[el.key] = tmpObj;
+										});
+										headerDataObject[key] = headerData;
+									}
+								});
+
+								$.map(featurePropertiesSub, function(val, key) {
+									if (key == deviceType) {
+										$.each(val.prop, function(i, el) {
+											let value = rowData[0][el.key];
+
+											if(isEmpty(value)) {
+												rowData[0][el.key] = '-';
+											} else {
+												if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
+													let dummy = displayNumberFixedUnit(value, 'W', 'kW', 2);
+													rowData[0][el.key] = dummy[0];
+												} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
+													rowData[0][el.key] = value.toFixed(2);
+												} else if(el.suffix.match('V')) {
+													rowData[0][el.key] = value.toFixed(2);
+												}
+											}
+										});
+									}
+								});
+
+								if (deviceSearch(dname, operation)) {
+									if(isEmpty(tableArray)) {
+										let rowData = val.data;
+										rowData[0]['dname'] = dname;
+										tableArray = rowData;
+									} else {
+										let rowData = val.data;
+										rowData[0]['dname'] = dname;
+										tableArray = tableArray.concat(rowData);
+									}
 								}
 							}
 						}
@@ -1922,7 +1924,9 @@
 	//기상정보 반복없음.
 	const meteorological = () => {
 		const fromDate = new Date();
-		const toDate = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate() + 2);
+		const toDate = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate() + 3);
+
+		const timeFromDate = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate() - 2);
 		const formData = getSiteMainSchCollection('day');
 
 		let weekWeather = {
@@ -1943,8 +1947,8 @@
 			dataType: 'json',
 			data: {
 				sid: siteId,
-				startTime: formData.startTime,
-				endTime: formData.endTime,
+				startTime: timeFromDate.format('yyyyMMdd') + '000000',
+				endTime: fromDate.format('yyyyMMdd') + '235959',
 				interval: 'hour'
 			}
 		}

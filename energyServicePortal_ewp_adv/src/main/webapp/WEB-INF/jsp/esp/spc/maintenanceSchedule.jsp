@@ -51,37 +51,44 @@
 
 			if (buttonId == 'repeat_yn') {
 				if (value == 'Y') {
-					$(this).parents(".flex_start3").addClass("short");
-					$(this).parents('div.dropdown').siblings().show();
+					$(this).parents('.flex_start3').addClass('short');
+					$(this).parents('div.dropdown').siblings().removeClass('hidden');
+
+					$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
 				} else {
-					$(this).parents(".flex_start3").removeClass("short");
-					$(this).parents('div.dropdown').siblings().hide();
-					repeatEnd();
+					$(this).parents('.flex_start3').removeClass('short');
+					$(this).parents('div.dropdown').siblings().addClass('hidden');
+
+					$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
 				}
+				repeatEnd();
 			} else if (buttonId == 'alarmSetup') {
 				if ($('#alarmDate').hasClass('hasDatepicker')) {
 					$('#alarmDate').datepicker('destroy').removeClass('hasDatepicker');
 				}
 				if (value != '직접 설정') {
-					if ($('#repeat_end').val() != '') {
-						let endDate = new Date($('#repeat_end').val());
-						if (endDate != '') {
-							endDate.setDate(endDate.getDate() - value);
-							$('#alarmDate').val(endDate.format('yyyy-MM-dd'));
-						} else {
-							$('#alarmDate').val('');
-						}
-					} else {
+					let jobDate = $('#job_date').datepicker('getDate');
+					if (isEmpty($('#job_date').val())) {
 						$('#alarmDate').val('');
+					} else {
+						jobDate.setDate(jobDate.getDate() - value);
+						$('#alarmDate').val(jobDate.format('yyyy-MM-dd'));
 					}
 				} else {
 					$('#alarmDate').datepicker({
 						showOn: "both",
 						buttonImageOnly: true,
 						dateFormat: 'yy-mm-dd',
-						beforeShow: function (input, inst) {
-							let maxDate = new Date($('#repeat_end').val())
-							$('#alarmDate').datepicker('option', 'maxDate', maxDate);
+						beforeShow: function () {
+							let minDate = $('#job_date').datepicker('getDate');
+							if (minDate != '') {
+								$('#alarmDate').datepicker('option', 'minDate', minDate);
+							}
+
+							let maxDate = $('#repeat_end').datepicker('getDate');
+							if (maxDate != '') {
+								$('#alarmDate').datepicker('option', 'maxDate', maxDate);
+							}
 						}
 					})
 					$('#alarmDate').val('');
@@ -210,6 +217,10 @@
 			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
 			let url = '';
 			if (action == 'patch') {
+				if (!confirm('수정된 정보로 변경 하시겠습니까?')) {
+					return false;
+				}
+
 				url = 'http://iderms.enertalk.com:8443/spcs/maintenance/' + jobId + '?oid=' + oid + jobText;
 				delete data.site_id;
 			} else {
@@ -239,6 +250,11 @@
 				option.data.jobId = jobId;
 			}
 		} else {
+
+			if (!confirm('삭제 하시겠습니까?')) {
+				return false;
+			}
+
 			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
 			option = {
 				url: 'http://iderms.enertalk.com:8443/spcs/maintenance/' + jobId + '?oid=' + oid + jobText,
@@ -316,6 +332,12 @@
 		let calendar = $('#calendar .date');
 		$('#calendar td a').remove();
 
+		const checkType = $.makeArray($(':checkbox[name="type"]:checked').map(
+			function () {
+				return $(this).val();
+			}
+		));
+
 		if (data.length > 0) {
 			data.forEach(function (v, k) {
 				let job_date = new Date(v.job_date).format('dd');
@@ -323,8 +345,10 @@
 				let sid = v.site_id;
 				let job_info = JSON.parse(v.job_info);
 
+				let visual = 'hidden';
+				if ($.inArray(job_type, checkType) > -1) { visual = ''; }
 				calendar.eq(Number(job_date) - 1).append(
-					'<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '"><p class="bu t' + job_type + '">[' + job_info.siteName + ']' + job_Name(job_type) + '</p></a>'
+					'<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '" class="' + visual + '" ><p class="bu t' + job_type + '">[' + job_info.siteName + ']' + job_Name(job_type) + '</p></a>'
 				);
 			});
 		}
@@ -335,40 +359,42 @@
 		const checkType = $.makeArray($(':checkbox[name="type"]:checked').map(
 			function () {
 				return $(this).val();
-			}));
+			}
+		));
 
 		$('#calendar td a p.bu').each(function () {
 			let clsName = $(this).attr('class').replace('bu t', '').trim();
 			let siteName = $(this).html().match(/\[(.*?)\]/)[1];
 			if ($.inArray(clsName, checkType) > -1) {
 				if ($('#searchName').val() == '') {
-					$(this).parent().show();
+					$(this).parent().removeClass('hidden');
 				} else {
 					if (siteName.match($('#searchName').val())) {
-						$(this).parent().show();
+						$(this).parent().removeClass('hidden');
 					} else {
-						$(this).parent().hide();
+						$(this).parent().addClass('hidden');
 					}
 				}
 			} else {
-				$(this).parent().hide();
+				$(this).parent().addClass('hidden');;
 			}
 		});
 	};
 
 	const modalPopInit = function (data) {
-		const modal = $("#registerModal");
-		const title = modal.find("h2");
-		const input = modal.find("input");
-		const dropDown = modal.find("button.btn-primary");
-		const repeat_wrapper = $("#repeat_yn").parents(".flex_start3");
-		const repeat_cycle = $("#repeat_yn button");
+		const modal = $('#registerModal');
+		const title = modal.find('h2');
+		const input = modal.find('input');
+		const dropDown = modal.find('button.btn-primary');
+		const repeat_wrapper = $('#repeat_yn').parents('.flex_start3');
+		const repeat_cycle = $('#repeat_yn button');
 		const addScheduleBtn = $('#addScheduleBtn');
 		const deleteScheduleBtn = $('#deleteScheduleBtn');
 
 		repeat_cycle.data('value', '');
-		repeat_cycle.parents('div.dropdown').siblings().hide();
+		repeat_cycle.parents('div.dropdown').siblings().addClass('hidden');
 		repeat_wrapper.removeClass("short");
+		$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
 
 		if (data == undefined) {
 			title.text('점검계획 등록');
@@ -382,9 +408,8 @@
 				$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
 			});
 
-			deleteScheduleBtn.addClass("hidden");
+			deleteScheduleBtn.addClass('hidden');
 			addScheduleBtn.attr('onclick', 'maintenance(\'post\');').text('등록');
-
 		} else {
 			title.text('점검계획 수정');
 			setJsonAutoMapping(data[0], 'registerModal');
@@ -392,11 +417,40 @@
 
 			let jobDate = new Date(data[0].job_date);
 			$('#job_date').datepicker('setDate', jobDate);
-			console.log("data yes val")
+
 			let repeatEnd = new Date(data[0].repeat_end);
 			$('#repeat_end').val(repeatEnd.format('yyyy-MM-dd'));
 
-			deleteScheduleBtn.removeClass("hidden").attr('onclick', 'maintenance(\'delete\', \'' + data[0].id + '\' );');
+			if ($('#repeat_yn button').data('value') == 'N') {
+				$('#repeat_end').val('').datepicker('destroy').removeClass('sel');
+				$('#repeat_end').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+
+				$('#repeat_yn').parents('.flex_start3').removeClass('short');
+				$('#repeat_yn').siblings().addClass('hidden');
+
+				$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+			} else {
+				$('#repeat_yn').parents('.flex_start3').addClass('short');
+				$('#repeat_yn').siblings().removeClass('hidden');
+
+				$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
+				$('#repeat_end').datepicker({
+					showOn: 'both',
+					buttonImageOnly: true,
+					dateFormat: 'yy-mm-dd',
+					beforeShow: function () {
+						let fromDate = $(this).closest('.dateField').find('.fromDate').datepicker('getDate');
+						if (fromDate != '') {
+							$(this).datepicker('option', 'minDate', fromDate.format('yyyy-MM-dd'));
+						}
+					},
+					onClose: function (selected) {
+						$(this).closest('.dateField').find('.fromDate').datepicker('option', 'maxDate', selected);
+					}
+				});
+			}
+
+			deleteScheduleBtn.removeClass('hidden').attr('onclick', 'maintenance(\'delete\', \'' + data[0].id + '\' );');
 			addScheduleBtn.attr('onclick', 'maintenance(\'patch\', \'' + data[0].id + '\' );').text('수정');
 		}
 
@@ -423,7 +477,6 @@
 	};
 
 	const repeatEnd = function (selectedDate) {
-
 		if (selectedDate == undefined && $('#job_date').datepicker('getDate') != null) {
 			selectedDate = $('#job_date').datepicker('getDate');
 		} else if (selectedDate == undefined && $('#job_date').datepicker('getDate') == null) {
@@ -432,55 +485,35 @@
 
 		if ($('#repeat_yn button').data('value') == '') {
 			return false;
-		}
-
-		if ($('#repeat_yn button').data('value') == 'N') {
-			$('#repeat_end').val(selectedDate);
-
-			if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
-				selectedDate.setDate(selectedDate.getDate() - Number($('#alarmSetup button').data('value')));
-				$('#alarmDate').val(selectedDate.format('yyyy-MM-dd'));
-			}
+		} else if ($('#repeat_yn button').data('value') == 'N') {
+			$('#repeat_end').val('').datepicker('destroy').removeClass('sel');
+			$('#repeat_end').parent().removeClass('sel_calendar').addClass('tx_inp_type');
 		} else {
-			let repeatVal = $('#repeat_interval').val();
-			let repeatUnit = $('#repeat_unit button').data('value');
-			if (selectedDate != null && selectedDate != '' && repeatVal != '' && repeatUnit != '') {
-				let unit = 1;
-
-				if (repeatUnit == 'year') {
-					unit = '12';
-				} else if (repeatUnit == 'half_year') {
-					unit = '6';
-				} else if (repeatUnit == 'quarter_year') {
-					unit = '3';
-				} else {
-					unit = '1';
-				}
-
-				let selDate = new Date(selectedDate);
-				if (repeatUnit != 'day_of_week') {
-					let setDay = selDate.getDate()
-					selDate.setMonth(selDate.getMonth() + (unit * repeatVal));
-					if (setDay != selDate.getDate()) {
-						alert('잘못된 날짜를 선택하셨습니다.');
-						$('#job_date').val('');
-						$('#repeat_end').val('');
-						return false;
+			$('#repeat_end').datepicker({
+				showOn: 'both',
+				buttonImageOnly: true,
+				dateFormat: 'yy-mm-dd',
+				beforeShow: function () {
+					let fromDate = $(this).closest('.dateField').find('.fromDate').datepicker('getDate');
+					if (fromDate != '') {
+						$(this).datepicker('option', 'minDate', fromDate.format('yyyy-MM-dd'));
 					}
-				} else {
-					selDate.setDate(selDate.getDate() + 7);
+				},
+				onClose: function (selected) {
+					$(this).closest('.dateField').find('.fromDate').datepicker('option', 'maxDate', selected);
 				}
-
-				$('#repeat_end').val(selDate.format('yyyy-MM-dd'));
-
-
-				if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
-					selDate.setDate(selDate.getDate() - Number($('#alarmSetup button').data('value')));
-					$('#alarmDate').val(selDate.format('yyyy-MM-dd'));
-				}
-			}
+			});
+			$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
 		}
 
+		if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
+			selectedDate.setDate(selectedDate.getDate() - Number($('#alarmSetup button').data('value')));
+			$('#alarmDate').val(selectedDate.format('yyyy-MM-dd'));
+		}
+	}
+
+	const afterDatePick = function() {
+		repeatEnd();
 	}
 </script>
 
@@ -530,10 +563,10 @@
 									<li data-value="N"><a href="javascript:void(0);">일시 점검</a></li>
 								</ul>
 							</div>
-							<div class="tx_inp_type" style="display:none;">
-								<input type="text" id="repeat_interval" name="repeat_interval" placeholder="입력">
+							<div class="tx_inp_type hidden">
+								<input type="text" id="repeat_interval" name="repeat_interval" placeholder="입력" onkeydown="onlyNum(event);" maxlength="2" autocomplete="off">
 							</div>
-							<div class="dropdown" style="display:none;" id="repeat_unit">
+							<div class="dropdown hidden" id="repeat_unit">
 								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="주기">주기<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="year"><a href="javascript:void(0);">년</a></li>
@@ -545,21 +578,21 @@
 							</div>
 						</div>
 					</div>
-					<div class="row">
+					<div class="row dateField">
 						<div class="col-lg-2 col-md-2 col-sm-3">
 							<span class="input_label">기준 일자</span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 							<div class="sel_calendar">
-								<input type="text" id="job_date" name="job_date" class="sel datepicker required" value="" autocomplete="off" style="width:100%" readonly>
+								<input type="text" id="job_date" name="job_date" class="sel fromDate required" value="" autocomplete="off" style="width:100%" readonly>
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input_label">다음 검사 일자</span>
+							<span class="input_label">반복 종료일</span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 							<div class="tx_inp_type">
-								<input type="text" id="repeat_end" name="repeat_end" class="required" value="자동 계산" readonly>
+								<input type="text" id="repeat_end" name="repeat_end" class="required datepicker toDate" value="자동 계산" readonly>
 							</div>
 						</div>
 					</div>
@@ -592,7 +625,7 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 							<div class="tx_inp_type">
-								<input type="text" id="worker" name="worker" placeholder="입력">
+								<input type="text" id="worker" name="worker" placeholder="입력" maxlength="10">
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
@@ -600,7 +633,7 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 							<div class="tx_inp_type">
-								<input type="text" id="note" name="note" placeholder="입력">
+								<input type="text" id="note" name="note" placeholder="입력" maxlength="50">
 							</div>
 						</div>
 					</div>
@@ -635,7 +668,7 @@
 								</ul>
 							</div>
 							<div class="tx_inp_type">
-								<input type="text" id="alarmPhone" name="alarmPhone" placeholder="수신 번호">
+								<input type="text" id="alarmPhone" name="alarmPhone" placeholder="수신 번호" maxlength="12" onkeydown="onlyNum(event)">
 							</div>
 						</div>
 					</div>
