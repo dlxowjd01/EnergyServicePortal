@@ -345,7 +345,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="btn_wrap_type02">
+			<div class="btn_wrap_type02 mt30">
 				<%--				<button type="button" class="btn_type03" onclick="setCheckedDataEdit();">선택 수정</button>--%>
 				<button type="button" class="btn_type03" onclick="setCheckedDataRemove();">선택 삭제</button>
 			</div>

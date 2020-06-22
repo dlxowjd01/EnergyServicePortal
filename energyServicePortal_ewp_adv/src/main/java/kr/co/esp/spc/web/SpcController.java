@@ -133,9 +133,9 @@ public class SpcController {
         return "esp/spc/entityDetailsBySite";
     }
 
-	@RequestMapping(value = "/spc/noticeBoard.do")
-	public String spcNoticeBoard(HttpServletRequest request, HttpSession session, Model model) {
-		logger.debug("/spc/noticeBoard.do");
-		return "esp/spc/noticeBoard";
+	@RequestMapping(value = "/spc/notice.do")
+	public String spcNotice(HttpServletRequest request, HttpSession session, Model model) {
+		logger.debug("/spc/notice.do");
+		return "esp/spc/notice";
 	}
 }

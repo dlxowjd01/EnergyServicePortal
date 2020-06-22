@@ -198,7 +198,7 @@
 		</div>
 	</div>
 </div>
-<div class="row">
+<div class="row entity_detail">
 	<div class="col-lg-12">
 		<div class="indiv" id="spc_info">
 			<div class="spc_tbl_row">
@@ -228,7 +228,7 @@
 				</table>
 			</div>
 		</div>
-		<div class="indiv mt25" id="contract_info">
+		<div class="indiv" id="contract_info">
 			<div class="tbl_top">
 				<h2 class="ntit mt25">운영 정보</h2>
 			</div>
@@ -285,7 +285,7 @@
 				</table>
 			</div>
 		</div>
-		<div class="indiv mt25" id="device_info">
+		<div class="indiv" id="device_info">
 			<div class="tbl_top">
 				<h2 class="ntit mt25">설비 정보</h2>
 			</div>
@@ -360,7 +360,7 @@
 				</table>
 			</div>
 		</div>
-		<div class="indiv mt25" id="finance_info">
+		<div class="indiv" id="finance_info">
 			<div class="tbl_top">
 				<h2 class="ntit mt25">금융 정보</h2>
 			</div>
@@ -381,7 +381,7 @@
 				</table>
 			</div>
 		</div>
-		<div class="indiv mt25" id="warranty_info">
+		<div class="indiv" id="warranty_info">
 			<div class="tbl_top">
 				<h2 class="ntit mt25">보증 정보</h2>
 			</div>
@@ -432,7 +432,7 @@
 				</table>
 			</div>
 		</div>
-		<div class="indiv mt25" id="coefficient_info">
+		<div class="indiv" id="coefficient_info">
 			<div class="tbl_top">
 				<h2 class="ntit mt25">환경 변수</h2>
 			</div>
@@ -471,7 +471,7 @@
 				</table>
 			</div>
 		</div>
-		<div class="indiv mt25" id="contact_info">
+		<div class="indiv" id="contact_info">
 			<div class="tbl_top">
 				<h2 class="ntit mt25">관련 정보</h2>
 			</div>
@@ -510,7 +510,7 @@
 				</table>
 			</div>
 		</div>
-		<div class="indiv mt25" id="attachement_info">
+		<div class="indiv" id="attachement_info">
 			<div class="tbl_top">
 				<h2 class="ntit mt25">첨부 파일</h2>
 			</div>
@@ -525,7 +525,7 @@
 						<th>현장 사진</th>
 						<td id="addFileList01">
 							<p class="tx_file"><a
-									href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button class="btn_file down"></button></td>

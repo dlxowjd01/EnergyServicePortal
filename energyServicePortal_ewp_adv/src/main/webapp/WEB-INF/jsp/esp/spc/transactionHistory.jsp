@@ -170,7 +170,7 @@
 		</div>
 		<div class="dropdown">
 			<button type="button" id="collapseBtn" class="btn btn-primary dropdown-toggle no_bg ml-24" data-toggle="collapse" data-target="#searchOption">상세 검색<span class="caret"></span></button>
-			<form id="spcTransactionSearch" class="search_filter" action="#" method="post">
+			<form id="spcTransactionSearch" action="#" method="post">
 				<ul id="searchOption" class="collapse dropdown-menu unused">
 					<li>
 						<div class="bx_row aN2">
