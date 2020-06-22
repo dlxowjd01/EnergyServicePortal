@@ -1839,6 +1839,9 @@
 	.indiv.diagnosis_chart .chart_top .inline_flex .duration {
 		display: none;
 	}
+	.entity_wrap.post .indiv .spc_tbl_row th {
+		white-space: wrap;
+	}
 }
 @media all and (max-width: 1199px) {
     .w_type {

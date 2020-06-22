@@ -167,9 +167,19 @@
 </div>
 <div class="row">
 	<div class="col-lg-12">
-		<div class="indiv">
+		<div class="indiv supplementary_docs">
 			<div class="spc_tbl align_type">
-				<table class="sort_table chk_type mt30">
+				<table class="sort_table chk_type">
+					<colgroup>
+						<col style="width:5%">
+						<col style="width:15%">
+						<col style="width:15%">
+						<col style="width:15%">
+						<col style="width:20%">
+						<col style="width:10%">
+						<col style="width:20%">
+						<col>
+					</colgroup>
 					<thead>
 						<tr>
 							<th>
@@ -178,9 +188,9 @@
 							</th>
 							<th><button class="btn_align down">SPC명</button></th>
 							<th><button class="btn_align down">발전소 명</button></th>
-							<th><button class="btn_align down">용량(kW)</button></th>
+							<th class="right"><button class="btn_align down">용량(kW)</button></th>
 							<th><button class="btn_align down">관리 운영기간</button></th>
-							<th><button class="btn_align down">이관자료</button></th>
+							<th class="right"><button class="btn_align down">이관자료</button></th>
 							<th class="right"><button class="btn_align up">첨부파일</button></th>
 						</tr>
 					</thead>

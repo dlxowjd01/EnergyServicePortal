@@ -311,7 +311,7 @@
 						result.data[i].confirmed_date = confirmed_date + '<button class="btn_file fr down" onclick="' + file_link + '">다운로드</button>';
 					} else {
 						let confirmed_date = '확정 보고서 업로드';
-						result.data[i].confirmed_date = confirmed_date + '<label for="cofirmFile' + i + '" class="btn_file fr up"">업로드</label> <input type="file" id="cofirmFile' + i + '" name="cofirmFile' + i + '" class="uploadBtn" style="display:none;">';
+						result.data[i].confirmed_date = confirmed_date + '<label for="confirmFile' + i + '" class="btn_file fr up"">업로드</label> <input type="file" id="confirmFile' + i + '" name="confirmFile' + i + '" class="uploadBtn" style="display:none;">';
 					}
 
 					if (jsonDataFilter(result.data[i])) {
@@ -457,7 +457,7 @@
 	const setUploadAfter = function (result, propName) {
 		if (result.files.length > 0) {
 			var checkDataList = $("#listData").data("gridJsonData"),
-				idx = Number(propName.replace('cofirmFile', ''));
+				idx = Number(propName.replace('confirmFile', ''));
 			let fileLen = result.files[0].originalname.length;
 			let fileNameDot = result.files[0].originalname.lastIndexOf('.');
 			let fileExt = result.files[0].originalname.substring(fileNameDot, fileLen).toLowerCase();
@@ -715,12 +715,12 @@
 </div>
 <div class="row">
 	<div class="col-12">
-		<div class="indiv spc_indiv">
+		<div class="indiv report yield_report">
 			<div class="btn_wrap_type01">
-				<button type="button" class="btn_type03" onclick="setCheckedDataExcelDown();">선택 다운로드</button>
-				<button type="button" class="btn_type03" onclick="setCheckedDataRemove();">선택 삭제</button>
-				<button type="button" class="btn_type" onclick="modalInit();">신규 생성</button>
-			</div>
+				<button type="button" class="btn_type03" onclick="setCheckedDataExcelDown();">선택 다운로드
+				</button><button type="button" class="btn_type03" onclick="setCheckedDataRemove();">선택 삭제
+				</button><button type="button" class="btn_type" onclick="modalInit();">신규 생성
+				</button></div>
 			<div class="spc_tbl align_type">
 				<table class="sort_table chk_type">
 					<thead>

@@ -312,7 +312,7 @@
 						<tr>
 							<th><input
 								type="checkbox" id="chk_header" value="순번"
-								onclick="setCheckedAll(this, 'rowCheck');"><label for="chk_header"><span></span>순번</label></th>
+								onclick="setCheckedAll(this, 'rowCheck');"><label for="chk_header">순번</label></th>
 							<th><button class="btn_align down">SPC명</button></th>
 							<th><button class="btn_align down">발전소 명</button></th>
 							<th><button class="btn_align down">연차</button></th>

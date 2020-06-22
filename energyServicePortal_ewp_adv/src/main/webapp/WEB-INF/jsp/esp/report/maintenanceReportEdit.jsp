@@ -117,10 +117,10 @@
 		// 	$selecter.append($selecter.data("form"));
 
 		if (addId == 'addFileList01') {
-			$selecter.append('<input name="work_report_file_01' + addListCnt1 + '" type="file" >')
+			$selecter.append('<input name="work_report_file_01' + addListCnt1 + '" type="file" class="hidden" id="work_report_file_'+addListCnt1+'"><label for="work_report_file_'+addListCnt1+'" class="btn file_upload">파일 선택</label>')
 			addListCnt1++;
 		} else if (addId == 'addFileList02') {
-			$selecter.append('<input name="work_report_file_02' + addListCnt2 + '" type="file" >')
+			$selecter.append('<input name="work_report_file_02' + addListCnt2 + '" type="file" class="hidden" id="work_report_file_'+addListCnt2+'"><label for="work_report_file_'+addListCnt2+'" class="btn file_upload">파일 선택</label>')
 			addListCnt2++;
 		}
 	}
@@ -360,7 +360,11 @@
 											onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
 									</p>
 								</div>
-								<div id="addFileList01"><input name="work_report_file_01" type="file"></div>
+								<div id="addFileList01">
+									<input type="file" name="work_report_file_01" class="hidden" id="work_report_file_01">
+									<label for="work_report_file_01" class="btn file_upload">파일 선택</label>
+									<span class="upload_text ml-16"></span>
+								</div>
 							</td>
 						</tr>
 						<tr>
@@ -399,7 +403,10 @@
 											onclick="setRemoveFileList('fileList02', [INDEX]);">삭제</button>
 									</p>
 								</div>
-								<div id="addFileList02"><input name="work_report_file_02" type="file"></div>
+								<div id="addFileList02">
+									<input type="file" name="work_report_file_02" class="hidden" id="work_report_file_02">
+									<label for="work_report_file_02" class="btn file_upload">파일 선택</label>
+								</div>
 							</td>
 						</tr>
 					</table>

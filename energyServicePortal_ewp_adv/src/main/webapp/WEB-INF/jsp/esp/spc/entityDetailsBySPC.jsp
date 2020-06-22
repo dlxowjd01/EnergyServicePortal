@@ -248,6 +248,32 @@
 			location.href = "/spc/supplementaryDocuments.do";
 		}
 
+		function initAddListHtml(){
+			$("#addList01").data("form", $("#addList01").html()).data("count", ($("#addList01").html().match(/input/g) || []).length);
+			$("#addList02").data("form", $("#addList02").html()).data("count", ($("#addList02").html().match(/input/g) || []).length);
+			$("#addList03").data("form", $("#addList03").html()).data("count", ($("#addList03").html().match(/input/g) || []).length);
+			$("#addList04").data("form", $("#addList04").html()).data("count", ($("#addList04").html().match(/input/g) || []).length);
+			$("#addList05").data("form", $("#addList05").html()).data("count", ($("#addList05").html().match(/input/g) || []).length);
+			$("#addList06").data("form", $("#addList06").html()).data("count", ($("#addList06").html().match(/input/g) || []).length);
+			$("#addList07").data("form", $("#addList07").html()).data("count", ($("#addList07").html().match(/input/g) || []).length);
+
+			$("#addFileList01").data("form", $("#addFileList01").html());
+			$("#addFileList02").data("form", $("#addFileList02").html());
+			$("#addFileList03").data("form", $("#addFileList03").html());
+			$("#addFileList04").data("form", $("#addFileList04").html());
+			$("#addFileList05").data("form", $("#addFileList05").html());
+			$("#addFileList06").data("form", $("#addFileList06").html());
+			$("#addFileList07").data("form", $("#addFileList07").html());
+			$("#addFileList08").data("form", $("#addFileList08").html());
+			$("#addFileList09").data("form", $("#addFileList09").html());
+			$("#addFileList10").data("form", $("#addFileList10").html());
+		}
+
+		function addList(addId){
+			var $selecter = $("#" + addId);
+			$selecter.append($selecter.data("form"));
+		}
+
 	</script>
 
 	<form id="upload" name="upload" method="multipart/form-data" style="display:none;">
@@ -295,17 +321,19 @@
 							<col>
 							<col>
 							<col>
+							<col>
 						</colgroup>
 						<tr>
 							<th>구분</th>
 							<th></th>
-							<th>첨부파일</th>
+							<th>파일이름</th>
 							<th></th>
+							<th>다운로드</th>
 							<th>발급일자</th>
-							<th style="padding-left: 55px">비고</th>
+							<th>파일첨부</th>
 						</tr>
 						<tr>
-							<td>사업조직도</td>
+							<th>사업조직도</th>
 							<td></td>
 							<td>
 								<input type="file" id="사업조직도" class="uploadBtn">
@@ -316,16 +344,17 @@
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
+							<td>0</td>
 							<td>
 								<input type="hidden" id="사업조직도_regDt" value="">
 							</td>
 							<td>
-								<label for="사업조직도" class="btn_type06">추가</label>
+								<label for="사업조직도" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
 						<tr>
-							<td>설치 업체 담당자 연락처</td>
+							<th>설치 업체 담당자 연락처</th>
 							<td></td>
 							<td>
 								<input type="file" id="설치_업체_담당자_연락처" class="uploadBtn">
@@ -336,16 +365,17 @@
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
+							<td>0</td>
 							<td>
 								<input type="hidden" id="설치_업체_담당자_연락처_regDt" value="">
 							</td>
 							<td>
-								<label for="설치_업체_담당자_연락처" class="btn_type06">추가</label>
+								<label for="설치_업체_담당자_연락처" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
 						<tr>
-							<td>투자/계약 심의</td>
+							<th>투자/계약 심의</th>
 							<td></td>
 							<td>
 								<input type="file" id="투자_계약_심의" class="uploadBtn">
@@ -356,16 +386,17 @@
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
+							<td>0</td>
 							<td>
 								<input type="hidden" id="투자_계약_심의_regDt" value="">
 							</td>
 							<td>
-								<label for="투자_계약_심의" class="btn_type06">추가</label>
+								<label for="투자_계약_심의" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
 						<tr>
-							<td>사업자 등록증</td>
+							<th>사업자 등록증</th>
 							<td></td>
 							<td>
 								<input type="file" id="사업자_등록증" class="uploadBtn">
@@ -376,16 +407,17 @@
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
+							<td></td>
 							<td>
 								<input type="hidden" id="사업자_등록증_regDt" value="">
 							</td>
 							<td>
-								<label for="사업자_등록증" class="btn_type06">추가</label>
+								<label for="사업자_등록증" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
 						<tr>
-							<td>발전사업 허가증</td>
+							<th>발전사업 허가증</th>
 							<td></td>
 							<td>
 								<input type="file" id="발전사업_허가증" class="uploadBtn">
@@ -396,16 +428,17 @@
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
+							<td></td>
 							<td>
 								<input type="hidden" id="발전사업_허가증_regDt" value="">
 							</td>
 							<td>
-								<label for="발전사업_허가증" class="btn_type06">추가</label>
+								<label for="발전사업_허가증" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
 						<tr>
-							<td>토지 및 건물 등기부등록</td>
+							<th>토지 및 건물 등기부등록</th>
 							<td></td>
 							<td>
 								<input type="file" id="토지_및_건물_등기부등록" class="uploadBtn">
@@ -416,16 +449,17 @@
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
+							<td></td>
 							<td>
 								<input type="hidden" id="토지_및_건물_등기부등록_regDt" value="">
 							</td>
 							<td>
-								<label for="토지_및_건물_등기부등록" class="btn_type06">추가</label>
+								<label for="토지_및_건물_등기부등록" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
 						<tr>
-							<td>토지대장 및 건물도면</td>
+							<th>토지대장 및 건물도면</th>
 							<td></td>
 							<td>
 								<input type="file" id="토지대장_및_건물도면" class="uploadBtn">
@@ -436,16 +470,17 @@
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
+							<td></td>
 							<td>
 								<input type="hidden" id="토지대장_및_건물도면_regDt" value="">
 							</td>
 							<td>
-								<label for="토지대장_및_건물도면" class="btn_type06">추가</label>
+								<label for="토지대장_및_건물도면" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
 						<tr>
-							<td>원도급 계약서</td>
+							<th>원도급 계약서</th>
 							<td>실사 협약서</td>
 							<td>
 								<input type="file" id="원도급_계약서_실사_협약서" class="uploadBtn">
@@ -456,16 +491,17 @@
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
+							<td>0</td>
 							<td>
 								<input type="hidden" id="원도급_계약서_실사_협약서_regDt" value="">
 							</td>
 							<td>
-								<label for="원도급_계약서_실사_협약서" class="btn_type06">추가</label>
+								<label for="원도급_계약서_실사_협약서" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
 						<tr>
-							<td></td>
+							<th></th>
 							<td>토지이용 허가서</td>
 							<td>
 								<input type="file" id="원도급_계약서_토지이용_허가서" class="uploadBtn">
@@ -480,12 +516,12 @@
 								<input type="hidden" id="원도급_계약서_토지이용_허가서_regDt" value="">
 							</td>
 							<td>
-								<label for="원도급_계약서_토지이용_허가서" class="btn_type06">추가</label>
+								<label for="원도급_계약서_토지이용_허가서" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
 						<tr>
-							<td>하도급 계약서</td>
+							<th>하도급 계약서</th>
 							<td>공사도급 계약서</td>
 							<td>
 								<input type="file" id="하도급_계약서_공사도급_계약서" class="uploadBtn">
@@ -496,16 +532,17 @@
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
+							<td></td>
 							<td>
 								<input type="hidden" id="하도급_계약서_공사도급_계약서_regDt" value="">
 							</td>
 							<td>
-								<label for="하도급_계약서_공사도급_계약서" class="btn_type06">추가</label>
+								<label for="하도급_계약서_공사도급_계약서" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
 						<tr>
-							<td></td>
+							<th></th>
 							<td>설계용역 계약서</td>
 							<td>
 								<input type="file" id="하도급_계약서_설계용역_계약서" class="uploadBtn">
@@ -516,16 +553,17 @@
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
+							<td></td>
 							<td>
 								<input type="hidden" id="하도급_계약서_설계용역_계약서_regDt" value="">
 							</td>
 							<td>
-								<label for="하도급_계약서_설계용역_계약서" class="btn_type06">추가</label>
+								<label for="하도급_계약서_설계용역_계약서" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
 						<tr>
-							<td></td>
+							<th></th>
 							<td>감리용역 계약서</td>
 							<td>
 								<input type="file" id="하도급_계약서_감리용역_계약서" class="uploadBtn">
@@ -536,16 +574,17 @@
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
+							<td>0</td>
 							<td>
 								<input type="hidden" id="하도급_계약서_감리용역_계약서_regDt" value="">
 							</td>
 							<td>
-								<label for="하도급_계약서_감리용역_계약서" class="btn_type06">추가</label>
+								<label for="하도급_계약서_감리용역_계약서" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
 						<tr>
-							<td>기자재 시험 성적서</td>
+							<th>기자재 시험 성적서</th>
 							<td>인버터</td>
 							<td>
 								<input type="file" id="기자재_시험_성적서_인버터" class="uploadBtn">
@@ -556,16 +595,17 @@
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
+							<td>0</td>
 							<td>
 								<input type="hidden" id="기자재_시험_성적서_인버터_regDt" value="">
 							</td>
 							<td>
-								<label for="기자재_시험_성적서_인버터" class="btn_type06">추가</label>
+								<label for="기자재_시험_성적서_인버터" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
 						<tr>
-							<td></td>
+							<th></th>
 							<td>모듈</td>
 							<td>
 								<input type="file" id="기자재_시험_성적서_모듈" class="uploadBtn">
@@ -576,16 +616,17 @@
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
+							<td></td>
 							<td>
 								<input type="hidden" id="기자재_시험_성적서_모듈_regDt" value="">
 							</td>
 							<td>
-								<label for="기자재_시험_성적서_모듈" class="btn_type06">추가</label>
+								<label for="기자재_시험_성적서_모듈" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
 						<tr>
-							<td></td>
+							<th></th>
 							<td>변압기</td>
 							<td>
 								<input type="file" id="기자재_시험_성적서_변압기" class="uploadBtn">
@@ -596,16 +637,17 @@
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
+							<td></td>
 							<td>
 								<input type="hidden" id="기자재_시험_성적서_변압기_regDt" value="">
 							</td>
 							<td>
-								<label for="기자재_시험_성적서_변압기" class="btn_type06">추가</label>
+								<label for="기자재_시험_성적서_변압기" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
 						<tr>
-							<td></td>
+							<th></th>
 							<td>수배전반</td>
 							<td>
 								<input type="file" id="기자재_시험_성적서_수배전반" class="uploadBtn">
@@ -616,16 +658,17 @@
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
+							<td></td>
 							<td>
 								<input type="hidden" id="기자재_시험_성적서_수배전반_regDt" value="">
 							</td>
 							<td>
-								<label for="기자재_시험_성적서_수배전반" class="btn_type06">추가</label>
+								<label for="기자재_시험_성적서_수배전반" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
 						<tr>
-							<td>모듈 Inspection Sheet</td>
+							<th>모듈 Inspection Sheet</th>
 							<td></td>
 							<td>
 								<input type="file" id="모듈_Inspection_Sheet" class="uploadBtn">
@@ -636,59 +679,41 @@
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
+							<td></td>
 							<td>
 								<input type="hidden" id="모듈_Inspection_Sheet_regDt" value="">
 							</td>
 							<td>
-								<label for="모듈_Inspection_Sheet" class="btn_type06">추가</label>
+								<label for="모듈_Inspection_Sheet" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
 						<tr>
-							<td>이관자료</td>
-							<td>테스트1</td>
-							<td>
-								<input type="file" id="이관자료_테스트1" class="uploadBtn">
-								<input type="text" class="fileName tx_file" readonly="readonly">
-								<input type="hidden" id="이관자료_테스트1_originalName" value="">
-								<input type="hidden" id="이관자료_테스트1_filedName" value="">
+							<th>추가항목</th>
+							<td><a href="javascript:addList('addList01');" class="btn_add">추가</a></td>
+							<td id="addList01" class="group_type">
+								<div class="tx_inp_type edit">
+									<input type="text" id="name" placeholder="인감 증명">
+								</div>
+								<button class="btn_type07 fr"></button>
 							</td>
+
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
+							<td></td>
 							<td>
 								<input type="hidden" id="이관자료_테스트1_regDt" value="">
 							</td>
 							<td>
-								<label for="이관자료_테스트1" class="btn_type06">추가</label>
+								<label for="이관자료_테스트1" class="btn_type_attachment">추가</label>
 								<button class="btn_type07">삭제</button>
 							</td>
 						</tr>
-						<tr>
-							<td></td>
-							<td>테스트2</td>
-							<td>
-								<input type="file" id="이관자료_테스트2" class="uploadBtn">
-								<input type="text" class="fileName tx_file" readonly="readonly">
-								<input type="hidden" id="이관자료_테스트2_originalName" value="">
-								<input type="hidden" id="이관자료_테스트2_filedName" value="">
-							</td>
-							<td>
-								<button class="btn_file down">다운로드</button>
-							</td>
-							<td>
-								<input type="hidden" id="이관자료_테스트2_regDt" value="">
-							</td>
-							<td>
-								<label for="이관자료_테스트2" class="btn_type06">추가</label>
-								<button class="btn_type07">삭제</button>
-							</td>
-						</tr>
+
 					</table>
 				</div>
-				<div class="btn_wrap_type02">
-					<button type="button" class="btn_type03" onclick="goMoveList();">목록</button>
-			</div>
+				<div class="btn_wrap_type02 mt30"><button type="button" class="btn_type03" onclick="goMoveList();">목록</button></div>
 			</div>
 		</div>
 	</div>

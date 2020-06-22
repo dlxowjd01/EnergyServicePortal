@@ -259,7 +259,7 @@
 			}, setUploadAfter, thisId);
 		});
 
-		$('button.btn_clse').on('click', function() {
+		$('button.btn_close').on('click', function() {
 			setDefaultFile($(this));
 		});
 
@@ -845,7 +845,7 @@
 		if(data.files.length > 0) {
 			let prop = $('#'+propName);
 			prop.parents('tr').find('label').hide();
-			prop.parents('tr').find('.btn_clse').show();
+			prop.parents('tr').find('.btn_close').show();
 
 
 			let linkUrl = 'http://iderms.enertalk.com:8443/files/download/'+data.files[0].fieldname+'?oid='+oid + '&orgFilename' + data.files[0].originalname;
@@ -861,7 +861,7 @@
 		let tr = obj.parents('tr.th_span');
 		tr.find('p.tx_file').remove();
 		tr.find('label').show();
-		tr.find('button.btn_clse').hide();
+		tr.find('button.btn_close').hide();
 
 		tr.find('input[name$="_originalname"]').val('');
 		tr.find('input[name$="_fieldname"]').val('');
@@ -1511,14 +1511,14 @@
 						<td colspan="2">
 							<input type="file" id="income" name="income" class="uploadBtn" style="display:none;">
 						</td>
-						<td><button class="btn_clse" style="display:none;">삭제</button></td>
+						<td><button class="btn_close" style="display:none;">삭제</button></td>
 					</tr>
 					<tr class="th_span">
 						<th>세무 조정 계산<label for="taxAdjustment" class="btn_add fr">추가</label></th>
 						<td colspan="2">
 							<input type="file" id="taxAdjustment" name="taxAdjustment" class="uploadBtn" style="display:none;">
 						</td>
-						<td><button class="btn_clse" style="display:none;">삭제</button></td>
+						<td><button class="btn_close" style="display:none;">삭제</button></td>
 					</tr>
 				</table>
 			</div>

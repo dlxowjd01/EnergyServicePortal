@@ -257,11 +257,22 @@
 			</div>
 			<div class="spc_tbl align_type" id="excelList">
 				<table class="sort_table chk_type">
+					<colgroup>
+						<col width="6%">
+						<col width="10%">
+						<col width="12%">
+						<col width="12%">
+						<col width="15%">
+						<col width="15%">
+						<col width="15%">
+						<col width="15%">
+						<col>
+					</colgroup>
 					<thead>
 						<tr>
 							<th>
 								<input type="checkbox" id="chk_op01" value="순번">
-								<label for="chk_op01"><span></span>순번</label>
+								<label for="chk_op01">순번</label>
 							</th>
 							<th><button class="btn_align down">SPC명</button></th>
 							<th><button class="btn_align down">발전소 명</button></th>
@@ -276,7 +287,7 @@
 						<tr>
 							<td>
 								<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="">
-								<label for="chk_op[INDEX]"><span></span>[INDEX]</label>
+								<label for="chk_op[INDEX]">[INDEX]</label>
 							</td>
 							<td><a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=&balance_yyyy=[balance_yyyymm]"
 									class="tbl_link">[spc_name]</a></td>

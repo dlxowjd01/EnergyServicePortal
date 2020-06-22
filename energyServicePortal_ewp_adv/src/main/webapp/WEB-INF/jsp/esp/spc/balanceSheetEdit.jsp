@@ -50,7 +50,7 @@
 			}, setUploadAfter, thisId);
 		});
 
-		$('button.btn_clse').on('click', function() {
+		$('button.btn_close').on('click', function() {
 			setDefaultFile($(this));
 		});
 
@@ -265,8 +265,8 @@
 	const setUploadAfter = function(data, propName) {
 		if(data.files.length > 0) {
 			let prop = $('#'+propName);
-			prop.parents('tr').find('label').hide();
-			prop.parents('tr').find('.btn_clse').show();
+			prop.parents('tr').find('label').addClass("hidden");
+			prop.parents('tr').find('.btn_close').removeClass("hidden");
 
 
 			let linkUrl = 'http://iderms.enertalk.com:8443/files/download/'+data.files[0].fieldname+'?oid='+oid + '&orgFilename' + data.files[0].originalname;
@@ -282,7 +282,7 @@
 		let tr = obj.parents('tr.th_span');
 		tr.find('p.tx_file').remove();
 		tr.find('label').show();
-		tr.find('button.btn_clse').hide();
+		tr.find('button.btn_close').addClass("hidden");
 
 		tr.find('input[name$="_originalname"]').val('');
 		tr.find('input[name$="_fieldname"]').val('');
@@ -522,26 +522,26 @@
 					<tr class="th_span">
 						<th>손익 계산서 <label for="income" class="btn_add fr">추가</label></th>
 						<td colspan="2">
-							<input type="file" id="income" name="income" class="uploadBtn" style="display:none;">
+							<input type="file" id="income" name="income" class="uploadBtn hidden">
 							<p class="tx_file">
 								<a href="javascript:void(0);" class="filedown"></a>
 							</p>
 						</td>
-						<td><button class="btn_clse" style="display:none;">삭제</button></td>
+						<td><button class="btn_close hidden">삭제</button></td>
 					</tr>
 					<tr class="th_span">
 						<th>세무 조정 계산<label for="taxAdjustment" class="btn_add fr">추가</label></th>
 						<td colspan="2">
-							<input type="file" id="taxAdjustment" name="taxAdjustment" class="uploadBtn" style="display:none;">
+							<input type="file" id="taxAdjustment" name="taxAdjustment" class="uploadBtn hidden">
 							<p class="tx_file">
 								<a href="javascript:void(0);" class="filedown"></a>
 							</p>
 						</td>
-						<td><button class="btn_clse" style="display:none;">삭제</button></td>
+						<td><button class="btn_close hidden">삭제</button></td>
 					</tr>
 				</table>
 			</div>
-			<div class="btn_wrap_type02">
+			<div class="btn_wrap_type02 mt-25">
 				<button type="button" class="btn_type03" onclick="list()">목록</button>
 				<button type="button" class="btn_type" onclick="register()">수정</button>
 			</div>
