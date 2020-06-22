@@ -17,13 +17,16 @@
 		iderms = new IdermsClass(iderms_oid, iderms_login_id, iderms_password);
 		iderms_token = iderms.postAuthLogin();
 		iderms_site_list = JSON.parse('${siteList}');
-		console.log("iderms_site_list===", iderms_site_list)
 		const timeOpt = $("#timeInterval").find(".dropdown-menu li")
 		timeOpt.on("click", function(){
-			if( $(this).data("value") === "quarterly") {
+			if( $(this).data("value") == "quarterly") {
+				console.log("qua===", $(this).data("value"))
+				$("#manualCalendar").addClass("short03");
 				$("#manual_min").removeClass("hidden");
-				$("#manual_hour").addClass("hidden");
-			} else if($(this).data("value") === "hourly") {
+				$("#manual_hour").removeClass("hidden");
+			} else if($(this).data("value") == "hourly") {
+				console.log("hr===", $(this).data("value"))
+				$("#manualCalendar").addClass("short02");
 				$("#manual_hour").removeClass("hidden");
 				$("#manual_min").addClass("hidden");
 			} else {
@@ -880,30 +883,30 @@
 							</div>
 
 							<div class="input-group inline-flex">
-								<label class="input_label">시작</label>
-								<div class="sel_calendar">
+								<label for="datepicker1" class="input_label">시작</label>
+								<div id="manualCalendar" class="sel_calendar">
 									<input type="text" id="datepicker1" class="sel" value="" autocomplete="off">
 								</div>
-								<div class="dropdown interval hidden" id="manual_hour">
-									<button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown"><span class="caret"></span></button>
+								<div class="dropdown hidden" id="manual_hour">
+									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown"><span class="caret"></span></button>
 									<!-- 개발시에 1 ~ 12시 부분 동적으로 처리!!! -->
 									<ul class="dropdown-menu">
-										<li data-value="" class="on"><a href="#">1시간</a></li>
+										<li data-value="hourly" class="on"><a href="#">1시간</a></li>
 									</ul>
 								</div>
-								<div class="dropdown interval hidden" id="manual_min">
-									<button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown"><span class="caret"></span></button>
+								<div class="dropdown hidden" id="manual_min">
+									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown"><span class="caret"></span></button>
 									<!-- 개발시에 15, 30, 45 분 동적으로 처리!!! -->
 									<ul class="dropdown-menu">
-										<li data-value="" class="on"><a href="#">15분</a></li>
+										<li data-value="quarterly" class="on"><a href="#">15분</a></li>
 									</ul>
 								</div>
 							</div>
 
 							<div class="input-group inline-flex">
-								<label class="input_label">종료</label>
+								<label for="datepicker2" class="input_label">종료</label>
 								<div class="sel_calendar">
-									<input type="text" id="datepicker1" class="sel" value="" autocomplete="off"
+									<input type="text" id="datepicker2" class="sel" value="" autocomplete="off"
 										readonly>
 								</div>
 								<div class="dropdown hidden" id="hour">
@@ -967,12 +970,30 @@
 </div>
 <script>
 	$(function () {
-		$("#registerBtn").click(function () {
+		$("#registerBtn").on("click", function () {
 			checkAddDevice();
 			return false;
 		});
-	});
 
+	});
+	const modalPopInit = function() {
+		const manualModal = $("#manualAddDeviceModal")
+		const timeOpt = $("#timeInterval").find("li");
+		timeOpt.on("click", function(){
+			console.log("d===", $(this).data("value"));
+			let timeVal = $(this).data("value");
+
+			if ( timeVal == 'quarterly') {
+				
+			} else if( timeVal == 'hourly'){
+
+			} else if( timeVal == 'daily'){
+				
+			} else if( timeVal == 'monthly'){
+				
+			}
+		})
+	}
 	function checkAddDevice() {
 		if (emptyAlert('#addDeviceName')) {
 			alert('장치명을 입력하세요');

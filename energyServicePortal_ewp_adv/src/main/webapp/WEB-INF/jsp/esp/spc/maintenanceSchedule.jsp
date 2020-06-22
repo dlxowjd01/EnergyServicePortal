@@ -543,9 +543,7 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 							<div class="dropdown placeholder" id="job_type">
-								<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="점검 계획 항목 선택">
-									<span class="caret"></span>
-								</button>
+								<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="점검 계획 항목 선택"><span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="1"><a href="javascript:void(0);">정기 점검</a></li>
 									<li data-value="2"><a href="javascript:void(0);">구조물 안전진단</a></li>

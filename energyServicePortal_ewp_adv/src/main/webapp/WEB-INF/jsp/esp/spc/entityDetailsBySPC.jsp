@@ -335,7 +335,7 @@
 						<tr>
 							<th>사업조직도</th>
 							<td></td>
-							<td>
+							<td class="px-0">
 								<input type="file" id="사업조직도" class="uploadBtn">
 								<input type="text" class="fileName tx_file" readonly="readonly">
 								<input type="hidden" id="사업조직도_originalName" value="">
@@ -689,15 +689,14 @@
 							</td>
 						</tr>
 						<tr>
-							<th>추가항목</th>
-							<td><a href="javascript:addList('addList01');" class="btn_add">추가</a></td>
-							<td id="addList01" class="group_type">
+							<th>추가항목<a href="javascript:addList('addList01');" class="btn_add fr">추가</a></th>
+							<td id="addList01" class="group_type flex_start">
 								<div class="tx_inp_type edit">
 									<input type="text" id="name" placeholder="인감 증명">
 								</div>
-								<button class="btn_type07 fr"></button>
+								<button class="btn_type07">삭제</button>
 							</td>
-
+							<td></td>
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>

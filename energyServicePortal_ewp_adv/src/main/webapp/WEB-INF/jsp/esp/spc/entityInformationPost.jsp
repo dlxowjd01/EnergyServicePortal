@@ -31,6 +31,7 @@
 		$("#countryList").on("click", "li", conntryListChange);
 		$("#sidoList").on("click", "li", sidoListChange);
 		$("#unitPriceList").on("click", "li", unitPriceListChange);
+
 	});
 
 	$(document).on('click', '.dropdown li', function () {
@@ -48,23 +49,18 @@
 
 	function initAddListHtml(){
 		$("#addList01").data("form", $("#addList01").html()).data("count", ($("#addList01").html().match(/input/g) || []).length);
-		$("#addList02").data("form", $("#addList02").html()).data("count", ($("#addList02").html().match(/input/g) || []).length);
-		$("#addList03").data("form", $("#addList03").html()).data("count", ($("#addList03").html().match(/input/g) || []).length);
-		$("#addList04").data("form", $("#addList04").html()).data("count", ($("#addList04").html().match(/input/g) || []).length);
-		$("#addList05").data("form", $("#addList05").html()).data("count", ($("#addList05").html().match(/input/g) || []).length);
-		$("#addList06").data("form", $("#addList06").html()).data("count", ($("#addList06").html().match(/input/g) || []).length);
-		$("#addList07").data("form", $("#addList07").html()).data("count", ($("#addList07").html().match(/input/g) || []).length);
+		// $("#addList02").data("form", $("#addList02").html()).data("count", ($("#addList02").html().match(/input/g) || []).length);
+		// $("#addList03").data("form", $("#addList03").html()).data("count", ($("#addList03").html().match(/input/g) || []).length);
+		// $("#addList04").data("form", $("#addList04").html()).data("count", ($("#addList04").html().match(/input/g) || []).length);
+		// $("#addList05").data("form", $("#addList05").html()).data("count", ($("#addList05").html().match(/input/g) || []).length);
+		// $("#addList06").data("form", $("#addList06").html()).data("count", ($("#addList06").html().match(/input/g) || []).length);
 
 		$("#addFileList01").data("form", $("#addFileList01").html());
-		$("#addFileList02").data("form", $("#addFileList02").html());
-		$("#addFileList03").data("form", $("#addFileList03").html());
-		$("#addFileList04").data("form", $("#addFileList04").html());
-		$("#addFileList05").data("form", $("#addFileList05").html());
-		$("#addFileList06").data("form", $("#addFileList06").html());
-		$("#addFileList07").data("form", $("#addFileList07").html());
-		$("#addFileList08").data("form", $("#addFileList08").html());
-		$("#addFileList09").data("form", $("#addFileList09").html());
-		$("#addFileList10").data("form", $("#addFileList10").html());
+		// $("#addFileList02").data("form", $("#addFileList02").html());
+		// $("#addFileList03").data("form", $("#addFileList03").html());
+		// $("#addFileList04").data("form", $("#addFileList04").html());
+		// $("#addFileList05").data("form", $("#addFileList05").html());
+		// $("#addFileList06").data("form", $("#addFileList06").html());
 	}
 
 	function addList(addId){
@@ -430,7 +426,7 @@
 	</div>
 </div>
 
-<div class="row">
+<div class="row entity_wrap_header">
 	<div class="col-lg-12">
 		<h1 class="page-header">SPC 신규 등록</h1>
 		<div class="time fr">
@@ -442,13 +438,13 @@
 	</div>
 </div>
 
-<div class="row entity_wrap post content-wrapper">
-	<div class="col-lg-12">
-		<div class="indiv" id="basic_info">
-			<div class="tbl_top">
-				<h2 class="ntit mt25">기본 정보</h2>
-			</div>
-			<div class="spc_tbl_row st_edit">
+<form id="upload" name="upload" method="multipart/form-data"></form>
+
+<div class="row entity_wrap post panel-group" id="accordion">
+	<div class="col-12">
+		<div class="indiv panel panel-default" id="basicInfo">
+			<div class="tbl_top panel-heading"><h2 class="ntit mt25">기본 정보</h2><a role="button" href="#basicInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a></div>
+			<div id="basicInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -465,48 +461,43 @@
 									<li data-value="[spc_id]"><a href="javascript:void(0);" >[name]</a></li>
 								</ul>
 							</div>
-							<div class="tx_inp_type edit">
-								<input type="text" id="name" placeholder="SPC명 입력">
-							</div>
+							<div class="tx_inp_type edit"><!--
+							--><label for="spcName" class="sr-only">SPC명 입력</label><!--
+							--><input type="text" id="name" placeholder="SPC명 입력"><!--
+						--></div>
 						</td>
-						<th>대표자</th>
-						<td class="group_type">
-							<div class="dropdown placeholder edit">
-								<button id="spc" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">SPC<span class="caret"></span></button>
-								<ul id="spcList" class="dropdown-menu" role="menu">
-									<li data-value="[spc_id]"><a href="javascript:void(0);" >[name]</a></li>
-								</ul>
-							</div>
+						<th><label for="name">대표자</label></th>
+						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="name" placeholder="SPC명 입력">
+								<input type="text" id="name" name="name" placeholder="직접 입력">
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th><label for="business_license_num">사업자등록번호</label></th>
+						<th><label for="businessLicenseNum">사업자등록번호</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="business_license_num">
+								<input type="text" id="businessLicenseNum" name="business_license_num" placeholder="직접 입력">
 							</div>
 						</td>
-						<th><label for="legal_license_num">법인등록번호</label></th>
+						<th><label for="legalLicenseNum">법인등록번호</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="legal_license_num">
+								<input type="text" id="legalLicenseNum" name="legal_license_num" placeholder="직접 입력">
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th>발전소명</th>
+						<th><label for="genName">발전소명</label></th>
 						<td class="group_type">
 							<div class="dropdown placeholder edit">
-								<button id="spc" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">SPC<span class="caret"></span></button>
-								<ul id="spcList" class="dropdown-menu" role="menu">
-									<li data-value="[spc_id]"><a href="javascript:void(0);" >[name]</a></li>
+								<button id="gen" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">SPC<span class="caret"></span></button>
+								<ul id="genList" class="dropdown-menu" role="menu">
+									<li data-value="[sid]"><a href="javascript:void(0);" >[name]</a></li>
 								</ul>
 							</div>
 							<div class="tx_inp_type edit">
-								<input type="text" id="name" placeholder="발전소명 입력">
+								<input type="text" id="genName" name="power_plant_name" placeholder="발전소명 입력">
 							</div>
 						</td>
 						<th></th>
@@ -518,104 +509,104 @@
 						<th>주소</th>
 						<td class="group_type">
 							<div class="dropdown placeholder edit">
-								<button id="country" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+								<button id="country" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">국가 선택<span class="caret"></span></button>
 								<ul id="countryList" class="dropdown-menu" role="menu">
 									<li><a href="javascript:void(0);">대한민국</a></li>
 									<li><a href="javascript:void(0);">일본</a></li>
 								</ul>
 							</div>
 							<div class="dropdown placeholder edit mr-12">
-								<button id="sido" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+								<button id="sido" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">시/도 선택<span class="caret"></span></button>
 								<ul id="sidoList" class="dropdown-menu" role="menu">
 									<li><a href="javascript:void(0);">서울특별시</a></li>
 									<li><a href="javascript:void(0);">부산광역시</a></li>
 								</ul>
 							</div>
 						</td>
-						<th><label for="address"></label></th>
+						<th><label for="address">상세 주소</label></th>
 						<td>
 							<div class="tx_inp_type edit">
 								<input type="hidden" id="countryValue" value="">
 								<input type="hidden" id="sidoValue" value="">
-								<input type="text" id="address" placeholder="상세 주소">
+								<input type="text" id="address" name="minor_address" placeholder="상세 주소">
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th><label for="address">사업명</label></th>
+						<th><label for="businessName">사업명</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="address" placeholder="직접 입력">
+								<input type="text" id="businessName" name="business_name" placeholder="직접 입력">
 							</div>
 						</td>	
-						<th><label for="address">펀드명</label></th>
+						<th><label for="fundName">펀드명</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="address" placeholder="직접 입력">
+								<input type="text" id="fundName" name="fund_name" placeholder="직접 입력">
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th><label for="address">금융사</label></th>
+						<th><label for="financeCompany">금융사</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="address" placeholder="직접 입력">
+								<input type="text" id="financeCompany" placeholder="직접 입력">
 							</div>
 						</td>	
-						<th><label for="address">담당자(연락처)</label></th>
+						<th><label for="financeContact">담당자(연락처)</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="address" placeholder="직접 입력">
+								<input type="text" id="financeContact" name="finance_contact" placeholder="직접 입력">
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th><label for="address">시공사</label></th>
+						<th><label for="constructionCompany">시공사</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="address" placeholder="직접 입력">
+								<input type="text" id="constructionCompany" name="construction_company" placeholder="직접 입력">
 							</div>
 						</td>	
-						<th><label for="address">담당자(연락처)</label></th>
+						<th><label for="constructionContact">담당자(연락처)</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="address" placeholder="직접 입력">
+								<input type="text" id="constructionContact" name="construction_contact" placeholder="직접 입력">
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th><label for="address">사무위탁사</label></th>
+						<th><label for="custodianAgent">사무위탁사</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="address" placeholder="직접 입력">
+								<input type="text" id="custodianAgent" name="custodian_agent" placeholder="직접 입력">
 							</div>
 						</td>	
-						<th><label for="address">담당자(연락처)</label></th>
+						<th><label for="custodianContact">담당자(연락처)</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="address" placeholder="직접 입력">
+								<input type="text" id="custodianContact" name="custodian_contact" placeholder="직접 입력">
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th><label for="address">괸리 운영사</label></th>
+						<th><label for="managementAgent">괸리 운영사</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="address" placeholder="직접 입력">
+								<input type="text" id="managementAgent" name="management_agent" placeholder="직접 입력">
 							</div>
 						</td>	
-						<th><label for="address">담당자(연락처)</label></th>
+						<th><label for="managementContact">담당자(연락처)</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="address" placeholder="직접 입력">
+								<input type="text" id="managementContact" name="management_contact" placeholder="직접 입력">
 							</div>
-						</td>
+					</td>
 					</tr>
 					<tr>
-						<th><label for="legal_seal_stamp">SPC 법인 인감</label></th>
+						<th>SPC 법인 인감</th>
 						<td>
-							<input type="file" id="legal_seal_stamp" class="hidden" name="seal_01" accept=".jpg, .png .pdf">
-							<label for="legal_seal_stamp" class="btn file_upload">파일 선택</label>
+							<input type="file" id="legalSealStamp" class="hidden" name="seal_01" accept=".jpg, .png, .pdf">
+							<label for="legalSealStamp" class="btn file_upload">파일 선택</label>
 							<span class="upload_text ml-16"></span>
 						</td>
 						<th></th>
@@ -626,11 +617,10 @@
 				</table>
 			</div>
 		</div>
-		<div class="indiv mt25" id="maintenance_info">
-			<div class="tbl_top">
-				<h2 class="ntit mt25">관리 운영 정보</h2>
-			</div>
-			<div class="spc_tbl_row st_edit">
+
+		<div class="indiv panel panel-default" id="maintenanceInfo">
+			<div class="tbl_top panel-heading"><h2 class="ntit mt25">관리 운영 정보</h2><a href="#maintenanceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a></div>
+			<div id="maintenanceInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -639,62 +629,70 @@
 						<col style="width:35%">
 					</colgroup>
 					<tr>
-						<th><label for="">설치 용량</label></th>
-						<td class="group_type">
-							<div class="tx_inp_type edit unit t1">
-								<input type="text" id="설치_용량">
-								<span>kW</span>
-							</div>
-							<div class="tx_inp_type edit">
-								<input type="text" id="설치_용량_기타" placeholder="태양광,ESS">
-							</div>
+						<th>설치 용량</th>
+						<td>
+							<fieldset>
+								<legend class="sr-only">설치 용량 및 설치 용량 기타</legend>
+								<div class="group_type">
+									<div class="tx_inp_type edit unit t1">
+										<input type="text" id="설치_용량">
+										<span>kW</span>
+									</div>
+									<div class="tx_inp_type edit">
+										<input type="text" id="설치_용량_기타" placeholder="태양광">
+									</div>
+								</div>
+							</fieldset>
 						</td>
 						<th>관리 운영 기간</th>
-						<td class="group_type">
-							<div class="dropdown placeholder edit">
-								<button id="country" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
-								<ul id="countryList" class="dropdown-menu" role="menu">
-									<li><a href="javascript:void(0);">[value]</a></li>
-								</ul>
-							</div>
-							<div class="dropdown placeholder edit mr-12">
-								<button id="sido" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
-								<ul id="sidoList" class="dropdown-menu" role="menu">
-									<li><a href="javascript:void(0);">[value]</a></li>
-								</ul>
-							</div>
+						<td>
+							<fieldset class="sel_calendar edit twin clear">
+								<legend class="sr-only">관리 운영 기간</legend>
+								<input type="text" id="하자_보증기간(토목)_from" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일">
+								<input type="text" id="하자_보증기간(토목)_to" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일">
+							</fieldset>
 						</td>
 					</tr>
 					<tr>
-						<th><label for="">기상 관측 지점</label></th>
+						<th><label for="기상_관측_지점">기상 관측 지점</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="담당부서" placeholder="부서 명">
+								<input type="text" id="기상_관측_지점" name="기상_관측_지점" placeholder="직접 입력">
 							</div>
 						</td>
 						<th>하자 보증기간(전기)</th>
-						<td class="group_type">
-							<div class="dropdown placeholder edit">
-								<button id="country" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
-								<ul id="countryList" class="dropdown-menu" role="menu">
-									<li><a href="javascript:void(0);">[value]</a></li>
-								</ul>
-							</div>
-							<div class="dropdown placeholder edit mr-12">
-								<button id="sido" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
-								<ul id="sidoList" class="dropdown-menu" role="menu">
-									<li><a href="javascript:void(0);">[value]</a></li>
-								</ul>
-							</div>
+						<td>
+							<fieldset class="sel_calendar edit twin clear">
+								<legend class="sr-only">하자 보증기간(전기)</legend>
+								<input type="text" id="하자_보증기간(전기)_from" name="power_warranty_start_date" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일">
+								<input type="text" id="하자_보증기간(전기)_to" name="power_warranty_end_date" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일">
+							</fieldset>
 						</td>
 					</tr>
 					<tr>
-						<th><label for="">정기 검사</label></th>
+						<th><label for="사용_전_검사_완료일">사용 전 검사 완료일</label></th>
 						<td>
-							<div class="sel_calendar edit twin clear">
-								<input type="text" id="하자_보증기간(토목)_from" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일">
-								<input type="text" id="하자_보증기간(토목)_to" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일">
+							<div class="sel_calendar edit">
+								<input type="text" id="사용_전_검사_완료일" class="sel datepicker" value="" autocomplete="off" placeholder="날짜 선택">
 							</div>
+						</td>
+						<th>하자 보증기간(토목)</th>
+						<td>
+							<fieldset class="sel_calendar edit twin clear">
+								<legend class="sr-only">하자 보증기간(토목)</legend>
+								<input type="text" id="하자_보증기간(토목)_from" name="civil_warranty_start_date" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일">
+								<input type="text" id="하자_보증기간(토목)_to" name="civil_warranty_end_date" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일">
+							</fieldset>
+						</td>
+					</tr>
+					<tr>
+						<th>정기 검사</th>
+						<td>
+							<fieldset class="sel_calendar edit twin clear">
+								<legend class="sr-only">정기 검사</legend>
+								<input type="text" id="정기_검사_from" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일">
+								<input type="text" id="정기_검사_to" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일">
+							</fieldset>
 						</td>
 						<th></th>
 						<td>
@@ -704,134 +702,177 @@
 					<tr>
 						<th>등기이사 소속 / 등기 이사 명</th>
 						<td class="group_type">
-							<div class="dropdown placeholder edit">
-								<button id="country" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
-								<ul id="countryList" class="dropdown-menu" role="menu">
-									<li><a href="javascript:void(0);">[value]</a></li>
-								</ul>
-							</div>
-							<div class="dropdown placeholder edit mr-12">
-								<button id="sido" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
-								<ul id="sidoList" class="dropdown-menu" role="menu">
-									<li><a href="javascript:void(0);">[value]</a></li>
-								</ul>
-							</div>
-						</td>
-						<th><label for="">등기 기간</label></th>
-						<td>
-							<div class="sel_calendar edit twin clear">
-								<input type="text" id="하자_보증기간(토목)_from" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일">
-								<input type="text" id="하자_보증기간(토목)_to" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일">
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<th><label for="">계약 단가</label></th>
-						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="하자_보증기간(전기)" placeholder="직접 입력">
-							</div>
-						</td>
-						<th>상업 운전 개시일</th>
-						<td>
-							<div class="sel_calendar edit twin clear">
-								<input type="text" id="하자_보증기간(토목)_from" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일">
-								<input type="text" id="하자_보증기간(토목)_to" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일">
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<th><label for="">부지 소유 / 임대 구분</label></th>
-						<td>
-							<div class="rdo_type align_type">
-								<fieldset>
-									<legend sr-only="부지 소유 혹은 임대 구분"></legend>
-									<input type="radio" id="properted" name="ownership" value="properted">
-									<label for="properted"><span></span>소유</label>
-									<input type="radio" id="rented" name="ownership" value="rented">
-									<label class="ml-24" for="rented"><span></span>임대</label>
-								</fieldset>
-							</div>
-						</td>
-						<th>개발행위필증 교부 여부</th>
-						<td>
-							<div class="rdo_type align_type">
-								<fieldset>
-									<legend sr-only="부지 소유 혹은 임대 구분"></legend>
-									<input type="radio" id="properted" name="ownership" value="properted">
-									<label for="properted"><span></span>소유</label>
-									<input type="radio" id="rented" name="ownership" value="rented">
-									<label class="ml-24" for="rented"><span></span>임대</label>
-								</fieldset>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<th>지상권 및 지상권부근저당 설정 여부</th>
-						<td class="group_type">
-							<div class="tx_inp_type edit">
-								<input type="text" id="등기이사_소속" placeholder="등기이사 소속">
+								<label for="등기이사_소속" class="sr-only">등기이사 소속 / 등기 이사 명</label>
+								<input type="text" id="등기이사_소속" name="director_affiliation" placeholder="등기이사 소속">
 							</div>
 							<div class="tx_inp_type edit">
-								<input type="text" id="등기이사_명" placeholder="등기이사 명">
+								<label for="등기이사_명" class="sr-only"></label>
+								<input type="text" id="등기이사_명" name="director_name" placeholder="등기 이사 명">
 							</div>
 						</td>
-						<th>통산담보표지판 설정 여부</th>
-						<td class="flex_wrapper">
-							<div class="sel_calendar edit twin">
+						<th>등기 기간</th>
+						<td class="flex_start">
+							<fieldset class="sel_calendar edit twin clear">
+								<legend class="sr-only">등기 기간</legend>
 								<input type="text" id="등기_기간_from" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일">
 								<input type="text" id="등기_기간_to" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일">
-							</div>
-							<div class="chk_type align_type">
-								<input type="checkbox" id="등기_이사_만료_알림" name="chk_04_op01" value="Y">
+							</fieldset>
+							<div class="chk_type align_type ml-38">
+								<input type="checkbox" id="등기_이사_만료_알림" name="end_notice" value="Y">
 								<label for="등기_이사_만료_알림"><span></span>등기이사 만료 알림</label>
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th>자가부지공장근저당 목록 설정 여부</th>
+						<th><label for="계약_단가">계약 단가</label></th>
 						<td>
 							<div class="tx_inp_type edit unit t1">
-								<input type="text" id="계약_단가">
-								<span>원</span>
+								<input type="text" id="계약_단가" name="base_contract_price" placeholder="직접 입력"><!--
+							--><span>원</span>
 							</div>
 						</td>
-						<th>권리증 보유 현황</th>
+						<th>상업 운전 개시일</th>
 						<td>
-							<div class="sel_calendar edit twin clear fl">
-								<input type="text" id="commercial_opening_month" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일">
-								<input type="text" id="commercial_opening_date" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일">
-							</div>
+							<fieldset class="sel_calendar edit twin clear">
+								<legend class="sr-only">상업 운전 개시일</legend>
+								<input type="text" id="commercialOperationStartDate" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일">
+								<input type="text" id="commercialOperationEndDate" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일">
+							</fieldset>
 						</td>
 					</tr>
 					<tr>
-						<th><label for="registeredSeal">운영 여부</label></th>
+						<th><label for="">부지 소유 / 임대 구분</label></th>
 						<td>
-							<input type="file" id="registeredSeal" class="hidden" name="seal_01" accept=".jpg, .png .pdf">
-							<label for="registeredSeal" class="btn file_upload">파일 선택</label>
-							<span class="upload_text ml-16"></span>
+							<fieldset class="rdo_type flex_start">
+								<legend sr-only="부지 소유 혹은 임대 구분"></legend>
+								<div class="radio_group">
+									<input type="radio" id="privateProperty" name="ownership_opt" value="p">
+									<label for="propertied"><span></span>소유</label>
+								</div>
+								<div class="radio_group">
+									<input type="radio" id="rental" name="ownership_opt" value="r">
+									<label class="ml-24" for="rental"><span></span>임대</label>
+								</div>
+							</fieldset>
 						</td>
-						<th><label for="">관리 계약 구분</label></th>
+						<th>개발행위필증 교부 여부</th>
 						<td>
-							<div class="rdo_type align_type">
-								<fieldset>
-									<legend sr-only="부지 소유 혹은 임대 구분"></legend>
-									<input type="radio" id="properted" name="ownership" value="properted">
-									<label for="properted"><span></span>소유</label>
+							<fieldset class="rdo_type flex_start">
+								<legend sr-only="개발행위필증 교부 여부"></legend>
+								<div class="radio_group">
+									<input type="radio" id="issued" name="issued_opt" value="issued">
+									<label for="issued"><span></span>교부함</label>
+								</div>
+								<div class="radio_group">
+									<input type="radio" id="notApplicable" name="issued_opt" value="n/a">
+									<label class="ml-24" for="notApplicable"><span></span>해당 없음</label>
+								</div>
+							</fieldset>
+						</td>
+					</tr>
+					<tr>
+						<th>지상권 및 지상권부근저당 설정 여부</th>
+						<td>
+							<fieldset class="rdo_type flex_start">
+								<legend sr-only="지상권 및 지상권부근저당 설정 여부"></legend>
+								<div class="radio_group">
+									<input type="radio" id="superficies" name="superficies_opt" value="superficies">
+									<label for="superficies"><span></span>지상권</label>
+								</div>
+								<div class="radio_group">
+									<input type="radio" id="rightOfSuperficies" name="superficies_opt" value="s">
+									<label class="ml-24" for="rightOfSuperficies"><span></span>지상관부근저당</label>
+								</div>
+							</fieldset>
+						</td>
+						<th>통신담보표지판 설정 여부</th>
+						<td>
+							<fieldset class="rdo_type flex_start">
+								<legend sr-only="통신담보표지판 설정 여부"></legend>
+								<div class="radio_group">
+									<input type="radio" id="" name="settings" value="settings">
+									<label for="settings"><span></span>설정함</label>
+								</div>
+								<div class="radio_group">
 									<input type="radio" id="rented" name="ownership" value="rented">
-									<label class="ml-24" for="rented"><span></span>임대</label>
-								</fieldset>
+									<label class="ml-24" for="rented"><span></span>해당 없음</label>
+								</div>
+							</fieldset>
+						</td>
+					</tr>
+					<tr>
+						<th>자가부지공장근저당 목록 설정 여부</th>
+						<td>
+							<fieldset class="rdo_type flex_start">
+								<legend sr-only="자가부지공장근저당 목록 설정 여부"></legend>
+								<div class="radio_group">
+									<input type="radio" id="properted" name="ownership" value="properted">
+									<label for="properted"><span></span>설정함</label>
+								</div>
+								<div class="radio_group">
+									<input type="radio" id="rented" name="ownership" value="rented">
+									<label class="ml-24" for="rented"><span></span>해당 없음</label>
+								</div>
+							</fieldset>
+						</td>
+						<th>권리증 보유 현황</th>
+						<td>
+							<fieldset class="rdo_type flex_start">
+								<legend sr-only="부지 소유 혹은 임대 구분"></legend>
+								<div class="radio_group">
+									<input type="radio" id="properted" name="ownership" value="properted">
+									<label for="properted"><span></span>사무위탁사</label>
+								</div>
+								<div class="radio_group">
+									<input type="radio" id="rented" name="ownership" value="rented">
+									<label class="ml-24" for="rented"><span></span>자산운영사</label>
+								</div>
+							</fieldset>
+						</td>
+					</tr>
+					<tr>
+						<th>운영 여부</th>
+						<td>
+							<fieldset class="rdo_type flex_start">
+								<legend sr-only="운영 여부"></legend>
+								<div class="radio_group">
+									<input type="radio" id="operating" name="operationAvailability" value="yes">
+									<label for="properted"><span></span>운영중</label>
+								</div>
+								<div class="radio_group">
+									<input type="radio" id="toBe" name="operationAvailability" value="tobe">
+									<label class="ml-24" for="rented"><span></span>운영 예정</label>
+								</div>
+								<div class="radio_group">
+									<input type="radio" id="notAvailable" name="operationAvailability" value="no">
+									<label class="ml-24" for="rented"><span></span>해지</label>
+								</div>
+							</fieldset>
+						</td>
+						<th>관리 계약 구분</th>
+						<td>
+							<div class="dropdown placeholder edit mr-12 w300" id="managementContract">
+								<button id="contract_type" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+								<ul id="contractList" class="dropdown-menu dropdown-menu-form chk_type" role="menu">
+									<!-- [name] list => 전체, 종합, 일반관리, 사무수탁, 보험, 안전관리자 -->
+									<li data-value="[sid]"><!--
+										--><a href="javascript:void(0);" tabindex="-1"><!--
+										--><input type="checkbox" id="contract_[INDEX]" value="[sid]" name="site"><!--
+										--><label for="contract_[INDEX]">[name]</label><!--
+									--></a>
+									</li>
+								</ul>
 							</div>
 						</td>
 					</tr>
 				</table>
 			</div>
 		</div>
-		<div class="indiv mt25" id="account_info">
-			<div class="tbl_top">
-				<h2 class="ntit mt25">계정 정보</h2>
-			</div>
-			<div class="spc_tbl_row st_edit">
+
+		<div class="indiv panel panel-default" id="accountInfo">
+			<div class="tbl_top panel-heading"><h2 class="ntit mt25">계정 정보</h2><a role="button" href="#accountInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a></div>
+			<div id="accountInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -840,24 +881,24 @@
 						<col style="width:35%">
 					</colgroup>
 					<tr>
-						<th><label for="">RPS 시스템 ID</label></th>
+						<th><label for="rpsId">RPS 시스템 ID</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="name" placeholder="">
+								<input type="text" id="rpsId" name="rps_id" placeholder="직접 입력">
 							</div>
 						</td>
-						<th><label for="">PW</label></th>
+						<th><label for="rpsPassword">PW</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="name" placeholder="직접 입력">
+								<input type="text" id="rpsPassword" name="rps_password" placeholder="직접 입력">
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th><label for="">전력 거래소 ID</label></th>
+						<th><label for="powerTraderId">전력 거래소 ID</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="name" placeholder="">
+								<input type="text" id="name" placeholder="직접 입력">
 							</div>
 						</td>
 						<th><label for="">PW</label></th>
@@ -871,7 +912,7 @@
 						<th><label for="">발전사명</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="name" placeholder="">
+								<input type="text" id="name" placeholder="직접 입력">
 							</div>
 						</td>
 						<th></th>
@@ -881,11 +922,9 @@
 			</div>
 		</div>
 
-		<div class="indiv mt25" id="finance_info">
-			<div class="tbl_top">
-				<h2 class="ntit mt25">금융 정보</h2>
-			</div>
-			<div class="spc_tbl_row st_edit">
+		<div class="indiv panel panel-default" id="financeInfo">
+			<div class="tbl_top panel-heading"><h2 class="ntit mt25">금융 정보</h2><a role="button" href="#financeInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a></div>
+			<div id="financeInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -912,8 +951,9 @@
 						</td>
 						<th><label for="loan_commitment_fee">대출 약정액</label></th>
 						<td>
-							<div class="tx_inp_type edit">
-								<input type="text" id="loan_commitment_fee" name="loan_commitment_fee" placeholder="직접 입력">
+							<div class="tx_inp_type edit unit t1">
+								<input type="text" id="loan_commitment_fee" class="right" name="loan_commitment_fee"><!--
+							--><span>원</span>
 							</div>
 						</td>
 					</tr>
@@ -949,7 +989,7 @@
 						<th>
 							<div class="fixed_height">은행 계좌</div>
 							<a href="javascript:addList('addList01');" class="btn_add fr mt-offset-10">추가</a>
-							<div class="fixed_height">예금주</div>
+							<div class="fixed_height"><label for="예금주">예금주</label></div>
 						</th>
 						<td id="addList01">
 							<div class="fixed_height group_type">
@@ -973,18 +1013,22 @@
 									</ul>
 								</div>
 							</div>
+							<div class="fixed_height">
+								<div class="tx_inp_type edit">
+									<input type="text" id="예금주" name="account_holder" placeholder="직접 입력">
+								</div>
+							</div>
 						</td>
 						<th>
-							<div class="fixed_height">
-								<label for="account_num">계좌 번호</label>
-							</div>
-							<div class="fixed_height">
-								<label for="account_num">계좌개설 은행(지점)</label>
-							</div>
+							<div class="fixed_height"><label for="account_num">계좌 번호</label></div>
+							<div class="fixed_height"><label for="account_setup_bank">계좌개설 은행(지점)</label></div>
 						</th>
 						<td>
 							<div class="tx_inp_type edit">
 								<input type="text" id="account_num" name="account_num" placeholder="직접 입력">
+							</div>
+							<div class="tx_inp_type edit">
+								<input type="text" id="account_setup_bank" name="account_setup_bank" placeholder="직접 입력">
 							</div>
 						</td>
 					</tr>
@@ -1030,81 +1074,77 @@
 							<div class="fixed_height"><label for="repair_cost">대수선비</label></div>
 							<div class="fixed_height"><label for="custodian_fee">사무 수탁비</label></div>
 							<div class="fixed_height"><label for="rental_cost">임대료</label></div>
+							<div class="fixed_height"><label for="custodian_fee">SMP</label></div>
+							<div class="fixed_height"><label for="rental_cost">REC</label></div>
 						</th>
 						<td>
 							<div class="fixed_height"></div>
 
 							<div class="flex_start">
 								<div class="tx_inp_type edit unit t1 mr-30">
-									<input type="text" id="total_volume" name="total_volume" placeholder="직접 입력">
-									<span>MW</span>
+									<input type="text" id="total_volume" class="right" name="total_volume" placeholder="">
+									<span>원</span>
 								</div>
-								<span class="fixed_height">(자동계산)원/MW</span>
+								<span class="fixed_height"><span class="auto_price">[value]</span>원/MW</span>
 							</div>
 							<div class="flex_start">
 								<div class="tx_inp_type edit unit t1 mr-30">
-									<input type="text" id="maintenance_cost" name="maintenance_cost" placeholder="직접 입력">
-									<span>MW</span>
+									<input type="text" id="maintenance_cost" class="right" name="maintenance_cost" placeholder="">
+									<span>원</span>
 								</div>
-								<span class="fixed_height">(자동계산)원/MW</span>
+								<span class="fixed_height"><span class="auto_price">[value]</span>원/MW</span>
 							</div>
 							<div class="flex_start">
 								<div class="tx_inp_type edit unit t1 mr-30">
-									<input type="text" id="repair_cost" name="repair_cost" placeholder="직접 입력">
-									<span>MW</span>
+									<input type="text" id="repair_cost" class="right" name="repair_cost" placeholder="">
+									<span>원</span>
 								</div>
-								<span class="fixed_height">(자동계산)원/MW</span>
+								<span class="fixed_height"><span class="auto_price">[value]</span>원/MW</span>
 							</div>
 							<div class="flex_start">
 								<div class="tx_inp_type edit unit t1 mr-30">
-									<input type="text" id="custodian_fee" name="custodian_fee" placeholder="직접 입력">
-									<span>MW</span>
+									<input type="text" id="custodian_fee" class="right" name="custodian_fee" placeholder="">
+									<span>원</span>
 								</div>
-								<span class="fixed_height">(자동계산)원/MW</span>
+								<span class="fixed_height"><span class="auto_price">[value]</span>원/MW</span>
 							</div>
 							<div class="flex_start">
 								<div class="tx_inp_type edit unit t1 mr-30">
-									<input type="text" id="rental_cost" name="rental_cost" placeholder="직접 입력">
-									<span>MW</span>
+									<input type="text" id="rental_cost" name="rental_cost" placeholder="">
+									<span>원</span>
 								</div>
-								<span class="fixed_height">(자동계산)원/MW</span>
+								<span class="fixed_height"><span class="auto_price">[value]</span>원/MW</span>
 							</div>
 						</td>
-						<th class="th_align_top">
+						<th>
+							<div class="fixed_height"></div>
 							<div class="fixed_height"></div>
 							<div class="fixed_height"></div>
 							<div class="fixed_height"></div>
 							<div class="fixed_height"></div>
 							<div class="fixed_height"><label for="insurance_company">임대료 지급일</label></div>
-						</th>
-						<td>
 							<div class="fixed_height"></div>
-							<div class="tx_inp_type edit">
-								<input type="text" id="insurance_company" name="insurance_company" placeholder="직접 입력">
-							</div>
-							<div class="tx_inp_type edit">
-								<input type="text" id="insurance_company" name="insurance_company" placeholder="직접 입력">
-							</div>
-							<div class="tx_inp_type edit">
-								<input type="text" id="insurance_company" name="insurance_company" placeholder="직접 입력">
-							</div>
-							<div class="tx_inp_type edit">
-								<input type="text" id="insurance_company" name="insurance_company" placeholder="직접 입력">
-							</div>
+							<div class="fixed_height"></div>
+						</th>
+						<td class="align_top">
+							<div class="fixed_height"></div>
+							<div class="fixed_height"></div>
+							<div class="fixed_height"></div>
+							<div class="fixed_height"></div>
+							<div class="fixed_height"></div>
 							<div class="sel_calendar edit">
 								<input type="text" id="insurance_renewal_date" class="sel datepicker" name="insurance_renewal_date" value="" autocomplete="off" placeholder="날짜 선택">
 							</div>
+							<div class="fixed_height"></div>
 						</td>
 					</tr>
 				</table>
 			</div>
 		</div>
 
-		<div class="indiv mt25" id="finance_info">
-			<div class="tbl_top">
-				<h2 class="ntit mt25">시공 계약 정보</h2>
-			</div>
-			<div class="spc_tbl_row st_edit">
+		<div class="indiv panel panel-default" id="contractInfo">
+			<div class="tbl_top panel-heading"><h2 class="ntit mt25">시공 계약 정보</h2><a role="button" href="#contractInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a></div>
+			<div id="contractInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -1181,7 +1221,7 @@
 						<td></td>
 					</tr>
 					<tr>
-						<th>								
+						<th>
 							<div class="fixed_height"><label for="fixed_amount">지급 약정</label></div>
 							<div class="fixed_height"><label for="fixed_amount">계약서 명시 인출일</label><span class="fr fixed_height">1차</span></div>
 							<div class="fixed_height"><span class="fr fixed_height">2차</span></div>
@@ -1224,16 +1264,18 @@
 									<input type="text" name="모듈_제조사" placeholder="직접 입력">
 								</div>
 							</div>
-							<div class="fixed_height w-90">자동 계산<span class="fr">원</span></div>
+							<div class="fixed_height w300">
+								<span class="text">자동 계산</span>
+								<span class="fr">원</span>
+							</div>
 						</td>
-						<th class="th_align_top">
+						<th class="align_top">
 							<div class="fixed_height"></div>
-							<div class="fixed_height"><label for="insurance_company">실 지급일</label></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
+							<div class="fixed_height"><label for="insurance_company">실 지급일</label><span class="fr fixed_height">1차</span></div>
+							<div class="fixed_height"><span class="fr fixed_height">2차</span></div>
+							<div class="fixed_height"><span class="fr fixed_height">3차</span></div>
 						</th>
-						<td>
+						<td class="align_top">
 							<div class="fixed_height"></div>
 							<div class="flex_start">
 								<div class="sel_calendar edit">
@@ -1255,13 +1297,13 @@
 				</table>
 			</div>
 		</div>
-		<div class="indiv mt25" id="insurance_info">
-			<div class="tbl_top">
-				<h2 class="ntit mt25">보험 정보
-					<a href="javascript:addList('addList06');" class="btn_add ml-24">추가</a>
-				</h2>
-			</div>
-			<div class="spc_tbl_row st_edit">
+
+		<div class="indiv panel panel-default" id="insuranceInfo">
+			<div class="tbl_top panel-heading">
+				<h2 class="ntit mt25">보험 정보<a role="button" href="javascript:addList('addList06');" class="btn_add ml-24">추가</a></h2><!--
+				--><a role="button" href="#insuranceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a><!--
+		--></div>
+			<div id="insuranceInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
 				<table id="addList06">
 					<colgroup>
 						<col style="width:15%">
@@ -1273,64 +1315,62 @@
 						<th>보험 정보</th>
 						<td id="addList04">
 							<fieldset class="group_type">
-								<div class="rdo_type align_type">
-									<fieldset>
-										<legend sr-only="보험 정보"></legend>
-										<input type="radio" id="rdo_insurance_opt1" name="rdo_insurance" value="rdo_insurance">
-										<label for="rdo_insurance_opt1"><span></span>조립 보험</label>
-										<input type="radio" id="rdo_insurance_opt2" name="rdo_insurance" value="비통신">
-										<label class="ml-24" for="rdo_insurance_opt2"><span></span>CMI</label>
-										<input type="radio" id="rdo_insurance_opt3" name="rdo_insurance" value="CGL">
-										<label class="ml-24" for="rdo_insurance_opt3"><span></span>CGL</label>
-									</fieldset>
+								<legend sr-only="보험 정보"></legend>
+								<div class="rdo_type flex_start">
+									<input type="radio" id="rdo_insurance_opt1" name="rdo_insurance" value="rdo_insurance">
+									<label for="rdo_insurance_opt1"><span></span>조립 보험</label>
+									<input type="radio" id="rdo_insurance_opt2" name="rdo_insurance" value="cmi">
+									<label class="ml-24" for="rdo_insurance_opt2"><span></span>CMI</label>
+									<input type="radio" id="rdo_insurance_opt3" name="rdo_insurance" value="cgl">
+									<label class="ml-24" for="rdo_insurance_opt3"><span></span>CGL</label>
 								</div>
 							</fieldset>
 						</td>
 						<th></th>
 						<td></td>
-
 					</tr>
 					<tr>
-						<th><label for="installAngle">보험사</label></th>
+						<th><label for="insuranceCompany">보험사</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="installAngle" name="모듈_설치_각도" placeholder="직접 입력">
+								<input type="text" id="insuranceCompany" name="insurance_company" placeholder="직접 입력">
 							</div>
 						</td>
-						<th><label for="installAngle">보험 중개사</label></th>
+						<th><label for="insuranceAgent">보험 중개사</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="installAngle" name="모듈_설치_각도" placeholder="직접 입력">
+								<input type="text" id="insuranceAgent" name="insurance_agent" placeholder="직접 입력">
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th><label for="installAngle">보험 기간</label></th>
+						<th><label for="insurancePeriod">보험 기간</label></th>
 						<td class="group_type">
-							<div class="sel_calendar edit">
-								<input type="text" id="interest_payment_date" class="sel datepicker fromDate" name="interest_payment_date" value="" autocomplete="off" placeholder="시작일">
-								<input type="text" id="interest_payment_date" class="sel datepicker toDate" name="interest_payment_date" value="" autocomplete="off" placeholder="종료일">
-							</div>
+							<legend class="sr-only">보험 기간</legend>
+							<fieldset class="sel_calendar edit twin clear">
+								<input type="text" id="interestStartDate" class="sel datepicker fromDate" name="insurance_start_date" value="" autocomplete="off" placeholder="시작일">
+								<input type="text" id="interestEndDate" class="sel datepicker toDate" name="insurance_end_date" value="" autocomplete="off" placeholder="종료일">
+							</fieldset>
 						</td>
-						<th><label for="installAngle">보험료</label></th>
+						<th><label for="insuranceFee">보험료</label></th>
 						<td>
 							<div class="tx_inp_type edit unit t1">
-								<input type="text" name="">
-								<span>원</span>
+								<input type="text" id="insuranceFee" name="insurance_fee"><!--
+							--><span>원</span>
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th><label for="installAngle">자가부담금</label></th>
+						<th><label for="deductible">자가부담금</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" name="" placeholder="직접 입력">
+								<input type="text" id="deductible" name="deductible" placeholder="직접 입력">
 							</div>
 						</td>
-						<th><label for="installAngle">보험가액</label></th>
+						<th><label for="insuranceValue">보험가액</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" name="" placeholder="직접 입력">
+								<input type="text" id="insuranceValue" name="" placeholder="직접 입력">
 							</div>
 						</td>
 					</tr>
@@ -1363,35 +1403,10 @@
 				</table>
 			</div>
 		</div>
-	<div class="indiv mt25" id="device_info">
-		<div class="tbl_top">
-			<h2 class="ntit mt25">보증 정보</h2>
-		</div>
-		<div class="spc_tbl_row st_edit">
-			<table>
-				<colgroup>
-					<col style="width:15%">
-					<col style="width:35%">
-					<col style="width:15%">
-					<col style="width:35%">
-				</colgroup>
-				<tr>
-					<th>PR 보증치</th>
-					<td>
-						<div class="tx_inp_type edit unit t1">
-							<input type="text" id="pr">
-							<span>%</span>
-						</div>
-					</td>
-				</tr>
-			</table>
-		</div>
-	</div>
-		<div class="indiv mt25" id="device_info">
-			<div class="tbl_top">
-				<h2 class="ntit mt25">설비 정보</h2>
-			</div>
-			<div class="spc_tbl_row st_edit">
+
+		<div class="indiv panel panel-default" id="deviceInfo">
+			<div class="tbl_top panel-heading"><h2 class="ntit mt25">설비 정보</h2><a role="button" href="#deviceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a></div>
+			<div id="deviceInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -1404,9 +1419,11 @@
 						<td id="addList01">
 							<div class="group_type">
 								<div class="tx_inp_type edit">
-									<input type="text" name="모듈_제조사" placeholder="제조사">
+									<label class="sr-only">모듈 제조사</label>
+									<input type="text" id="module_manufacturer" name="모듈_제조사" placeholder="제조사">
 								</div>
 								<div class="tx_inp_type edit">
+									<label class="sr-only">모듈 제조사 모델</label>
 									<input type="text" name="모듈_제조사_모델" placeholder="모델">
 								</div>
 								<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
@@ -1415,20 +1432,20 @@
 						<th>설치 용량</th>
 						<td class="group_type">
 							<div class="tx_inp_type edit unit t1">
-								<input type="text" id="설치_용량_KW">
-								<span>kW</span>
-							</div>
+								<label class="sr-only">설치 용량 (KW)</label>
+								<input type="text" id="설치_용량_KW"><span>kW</span><!--
+						--></div>
 							<div class="tx_inp_type edit unit t1">
-								<input type="text" id="설치_용량_매">
-								<span>매</span>
-							</div>
+								<label class="sr-only">설치 용량(매)</label>
+								<input type="text" id="설치_용량_매"><span>매</span><!--
+						--></div>
 						</td>
 					</tr>
 					<tr>
 						<th><label for="installAngle">모듈 설치 각도</label><a href="javascript:addList('addList02');" class="btn_add fr">추가</a></th>
 						<td id="addList02">
 							<div class="tx_inp_type edit unit t1 fl">
-								<input type="text" name="모듈_설치_각도" id="installAngle">&ensp;&deg;
+								<input type="text" id="installAngle" name="모듈_설치_각도">&ensp;&deg;
 							</div>
 							<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
 						</td>
@@ -1464,13 +1481,11 @@
 							<fieldset class="group_type">
 								<legend sr-only="인버터 용량 / 대수"></legend>
 								<div class="tx_inp_type edit unit t1">
-									<input type="text" name="인버터_용량">
-									<span>kW</span>
-								</div>
+									<input type="text" id="인버터_용량" name="인버터_용량"><span>kW</span><!--
+							--></div>
 								<div class="tx_inp_type edit unit t1">
-									<input type="text" name="인버터_용량_대수">
-									<span>대</span>
-								</div>
+									<input type="text" id="인버터_용량_대수" name="인버터_용량_대수"><span>대</span><!--
+								--></div>
 								<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
 							</fieldset>
 						</td>
@@ -1492,13 +1507,11 @@
 						<td id="addList06">
 								<div class="group_type">
 								<div class="tx_inp_type edit unit t1">
-									<input type="text" name="접속반_채널">
-									<span>Ch</span>
-								</div>
+									<input type="text" name="접속반_채널"><span>Ch</span><!--
+							--></div>
 								<div class="tx_inp_type edit unit t1">
-									<input type="text" name="접속반_채널_대수">
-									<span>대</span>
-								</div>
+									<input type="text" name="접속반_채널_대수"><span>대</span><!--
+							--></div>
 								<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
@@ -1510,10 +1523,14 @@
 								<input type="text" id="접속반_용량">
 								<span>kW</span>
 							</div>
-							<div class="rdo_type align_type">
+							<div class="rdo_type flex_start">
 								<fieldset>
-								<legend sr-only="통신 방식"></legend>
-								<input type="radio" id="rdo_03_op01" name="통신방식" value="통신"><label for="rdo_03_op01"><span></span>통신</label><input type="radio" id="rdo_03_op02" name="통신방식" value="비통신"><label class="ml-24" for="rdo_03_op02"><span></span>비통신</label></fieldset>
+									<legend sr-only="통신 방식"></legend><!--
+								--><input type="radio" id="rdo_03_op01" name="통신방식" value="통신"><!--
+								--><label for="rdo_03_op01"><span></span>통신</label><!--
+								--><input type="radio" id="rdo_03_op02" name="통신방식" value="비통신"><!--
+								--><label class="ml-24" for="rdo_03_op02"><span></span>비통신</label><!--
+							--></fieldset>
 							</div>
 						</td>
 						<th></th>
@@ -1524,30 +1541,45 @@
 						<td>
 							<div class="chk_type align_type">
 								<fieldset>
-									<legend sr-only="설치 타입"></legend>
-									<input type="checkbox" id="설치_타입_그라운드" name="chk_op2" value="그라운드">
-									<label for="설치_타입_그라운드"><span></span>그라운드</label>
-
-									<input type="checkbox" id="설치_타입_루프탑" name="chk_op2" value="루프탑">
-									<label class="ml-24" for="설치_타입_루프탑"><span></span>루프탑</label>
-
-									<input type="checkbox" id="설치_타입_수상" name="chk_op2" value="수상">
-									<label class="ml-24" for="설치_타입_수상"><span></span>수상</label>
-								</fieldset>
+									<legend sr-only="설치 타입"></legend><!--
+								--><input type="checkbox" id="설치_타입_그라운드" name="chk_op2" value="그라운드"><!--
+								--><label for="설치_타입_그라운드"><span></span>그라운드</label><!--
+								--><input type="checkbox" id="설치_타입_루프탑" name="chk_op2" value="루프탑"><!--
+								--><label class="ml-24" for="설치_타입_루프탑"><span></span>루프탑</label><!--
+								--><input type="checkbox" id="설치_타입_수상" name="chk_op2" value="수상"><!--
+								--><label class="ml-24" for="설치_타입_수상"><span></span>수상</label><!--
+							--></fieldset>
 							</div>
 						</td>
-						<th></th>
-						<td></td>
+						<th>수배전반 제조사 / 모델<a href="javascript:addList('addList06');" class="btn_add fr">추가</a></th>
+						<td id="addList06">
+							<div class="group_type">
+								<div class="tx_inp_type edit">
+									<input type="text" name="접속반_채널" placeholder="제조사">
+								</div>
+								<div class="tx_inp_type edit">
+									<input type="text" name="모델" placeholder="모델">
+								</div>
+								<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
+							</div>
+							<div class="group_type">
+								<div class="tx_inp_type edit">
+									<input type="text" name="접속반_채널" placeholder="제조사">
+								</div>
+								<div class="tx_inp_type edit">
+									<input type="text" name="모델" placeholder="모델">
+								</div>
+								<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
+							</div>
+						</td>
 					</tr>
 				</table>
 			</div>
 		</div>
 
-		<div class="indiv mt25" id="warranty_info">
-			<div class="tbl_top">
-				<h2 class="ntit mt25">보증 정보</h2>
-			</div>
-			<div class="spc_tbl_row st_edit">
+		<div class="indiv panel panel-default" id="warrantyInfo">
+			<div class="tbl_top panel-heading"><h2 class="ntit mt25">보증 정보</h2><a role="button" href="#warrantyInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a></div>
+			<div id="warrantyInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -1558,15 +1590,15 @@
 					<tr>
 						<th>보증 방식</th>
 						<td>
-							<fieldset class="rdo_type align_type">
-								<legend sr-only="보증 방식"></legend>
-								<input type="radio" id="rdo_op01" name="보증_방식" value="PR">
-								<label for="rdo_op01"><span></span>PR</label>
-								<input type="radio" id="rdo_op02" name="보증_방식" value="발전 시간">
-								<label for="rdo_op02"><span></span>발전 시간</label>
-								<input type="radio" id="rdo_op03" name="보증_방식" value="PR + 발전시간">
-								<label for="rdo_op03"><span></span>PR + 발전 시간</label>
-							</fieldset>
+							<fieldset class="rdo_type flex_start"><!--
+							--><legend sr-only="보증 방식"></legend><!--
+								--><input type="radio" id="rdo_op01" name="보증_방식" value="PR"><!--
+								--><label for="rdo_op01"><span></span>PR</label><!--
+								--><input type="radio" id="rdo_op02" name="보증_방식" value="발전 시간"><!--
+								--><label for="rdo_op02"><span></span>발전 시간</label><!--
+								--><input type="radio" id="rdo_op03" name="보증_방식" value="PR + 발전시간"><!--
+								--><label for="rdo_op03"><span></span>PR + 발전 시간</label><!--
+							--></fieldset>
 						</td>
 						<th>PR 보증치</th>
 						<td>
@@ -1600,23 +1632,23 @@
 						</td>
 						<th>현재 적용 연차</th>
 						<td>
-							<div class="tx_inp_type edit unit t1"><input type="text" id="현재_적용_연차"><span>년차</span></div>
+							<div class="tx_inp_type edit unit t1"><input type="text" id="현재_적용_연차" name="latestYearOff"><span>년차</span></div>
 						</td>
 					</tr>
 					<tr>
 						<th>년간 관리 운영비 (1년차)</th>
 						<td>
-							<div class="tx_inp_type edit unit t1"><input type="text" id="년간_관리_운영비"><span>만원</span></div>
+							<div class="tx_inp_type edit unit t1"><input type="text" id="년간_관리_운영비" name="annualManagementCost"><span>만원</span></div>
 						</td>
 						<th>물가 반영 비율</th>
 						<td>
-							<div class="tx_inp_type edit unit t1"><input type="text" id="물가_반영_비율"><span>%</span></div>
+							<div class="tx_inp_type edit unit t1"><input type="text" id="물가_반영_비율" name="inflationRatio"><span>%</span></div>
 						</td>
 					</tr>
 					<tr>
 						<th>추가 보수</th>
 						<td>
-							<fieldset class="rdo_type align_type">
+							<fieldset class="rdo_type flex_start">
 								<legend sr-only="추가 보수"></legend>
 								<input type="radio" id="rdo_op2_01" name="추가_보수" value="유">
 								<label for="rdo_op2_01"><span></span>유</label>
@@ -1646,11 +1678,10 @@
 				</table>
 			</div>
 		</div>
-		<div class="indiv mt25" id="coefficient_info">
-			<div class="tbl_top">
-				<h2 class="ntit mt25">환경 변수</h2>
-			</div>
-			<div class="spc_tbl_row st_edit">
+
+		<div class="indiv panel panel-default" id="coefficientInfo">
+			<div class="tbl_top panel-heading"><h2 class="ntit mt25">환경 변수</h2><a href="#coefficientInfoToggle" data-toggle="collapse" class="collapse_arrow"></a></div>
+			<div id="coefficientInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -1661,10 +1692,7 @@
 					<tr>
 						<th>Annual Variability</th>
 						<td>
-							<div class="tx_inp_type edit unit t1">
-								<input type="text" id="Annual">
-								<span>%</span>
-							</div>
+							<div class="tx_inp_type edit unit t1"><input type="text" id="Annual"><span>%</span></div>
 						</td>
 						<th>PV modul modeling/params</th>
 						<td>
@@ -1682,11 +1710,11 @@
 						</td>
 					</tr>
 					<tr>
-						<th>Degradation estimation</th>
+						<th><label for="degradationEstimation">Degradation estimation</label></th>
 						<td>
-							<div class="tx_inp_type edit unit t1"><input type="text" id="Degradation"><span>%</span></div>
+							<div class="tx_inp_type edit unit t1"><input type="text" id="degradationEstimation" name="degradation_estimation"><span>%</span></div>
 						</td>
-						<th>Resulting ann, Variability(sigma)</th>
+						<th><label for="degradationEstimation">Resulting ann, Variability(sigma)</label></th>
 						<td>
 							<div class="tx_inp_type edit unit t1">
 								<input type="text" id="Resulting_ann">
@@ -1697,21 +1725,20 @@
 					<tr>
 						<th>System Degradation</th>
 						<td>
-							<div class="tx_inp_type edit unit t1"><input type="text" id="Degradation"><span>%</span></div>
+							<div class="tx_inp_type edit unit t1"><input type="text" id="Degradation" name="system_degradation"><span>%</span></div>
 						</td>
 						<th>System Availability</th>
 						<td>
-							<div class="tx_inp_type edit unit t1"><input type="text" id="Availability"><span>%</span></div>
+							<div class="tx_inp_type edit unit t1"><input type="text" id="Availability" name="system_availability"><span>%</span></div>
 						</td>
 					</tr>
 				</table>
 			</div>
 		</div>
-		<div class="indiv mt25" id="contact_info">
-			<div class="tbl_top">
-				<h2 class="ntit mt25">관련 정보</h2>
-			</div>
-			<div class="spc_tbl_row st_edit">
+
+		<div class="indiv panel panel-default" id="associatedInfo">
+			<div class="tbl_top panel-heading"><h2 class="ntit mt25">관련 정보</h2><a href="#associatedInfoToggle" data-toggle="collapse" class="collapse_arrow"></a></div>
+			<div id="associatedInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -1720,53 +1747,39 @@
 						<col style="width:35%">
 					</colgroup>
 					<tr>
-						<th>전기안전 관리 회사명</th>
+						<th><label for="전기안전_관리_회사명">전기안전 관리 회사명</label></th>
 						<td>
-							<div class="tx_inp_type edit">
-								<input type="text" id="전기안전_관리_회사명" placeholder="직접 입력">
-							</div>
+							<div class="tx_inp_type edit"><input type="text" id="전기안전_관리_회사명" name="power_safety_company" placeholder="직접 입력"></div>
 						</td>
-						<th>회사 연락처</th>
+						<th><label for="회사_연락처"></label>회사 연락처</th>
 						<td>
-							<div class="tx_inp_type edit">
-								<input type="text" id="회사_연락처" placeholder="직접 입력">
-							</div>
+							<div class="tx_inp_type edit"><input type="text" id="회사_연락처" name="power_safety_contact" placeholder="직접 입력"></div>
 						</td>
 					</tr>
 					<tr>
-						<th>전기안전 관리 대표자명</th>
+						<th><label for="전기안전_관리_대표자명">전기안전 관리 대표자명</label></th>
 						<td>
-							<div class="tx_inp_type edit">
-								<input type="text" id="전기안전_관리_대표자명" placeholder="직접 입력">
-							</div>
+							<div class="tx_inp_type edit"><input type="text" id="전기안전_관리_대표자명" name="power_safety_representative" placeholder="직접 입력"></div>
 						</td>
 						<th>대표자 연락처</th>
 						<td>
-							<div class="tx_inp_type edit">
-								<input type="text" id="대표자_연락처" placeholder="직접 입력">
-							</div>
+							<div class="tx_inp_type edit"><input type="text" id="" placeholder="직접 입력"></div>
 						</td>
 					</tr>
 					<tr>
-						<th>전기안전 관리 담당자명</th>
+						<th><label for="전기안전_관리_담당자명">전기안전 관리 담당자명</label></th>
 						<td>
-							<div class="tx_inp_type edit">
-								<input type="text" id="전기안전_관리_담당자명" placeholder="직접 입력">
-							</div>
+							<div class="tx_inp_type edit"><input type="text" id="전기안전_관리_담당자명" name="power_safety_manager" placeholder="직접 입력"></div>
 						</td>
-						<th>담당자 연락처</th>
+						<th><label for="담당자_연락처">담당자 연락처</label></th>
 						<td>
-							<div class="tx_inp_type edit">
-								<input type="text" id="담당자_연락처" placeholder="직접 입력">
-							</div>
+							<div class="tx_inp_type edit"><input type="text" id="담당자_연락처" placeholder="직접 입력"></div>
 						</td>
 					</tr>
 					<tr>
-						<th>현장 잠금장치 비밀번호</th>
+						<th><label for="현장_잠금장치_비밀번호">현장 잠금장치 비밀번호</label></th>
 						<td>
-							<div class="tx_inp_type edit">
-								<input type="text" id="현장_잠금장치_비밀번호" placeholder="직접 입력">
-							</div>
+							<div class="tx_inp_type edit"><input type="text" id="현장_잠금장치_비밀번호" name="site_security_code" placeholder="직접 입력"></div>
 						</td>
 						<th></th>
 						<td></td>
@@ -1775,115 +1788,124 @@
 			</div>
 		</div>
 
-		<form id="attachement_info" name="attachement_info">
-			<div class="indiv attachement mt25">
-				<div class="tbl_top">
-					<h2 class="ntit mt25">첨부 파일</h2>
-				</div>
-				<div class="spc_tbl_row">
+		<div class="indiv panel panel-default attachement">
+			<div class="tbl_top panel-heading"><h2 class="ntit mt25">첨부 파일</h2><a href="#attachementInfoToggle" data-toggle="collapse" class="collapse_arrow"></a></div>
+				<div id="attachementInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in">
 					<table>
 						<colgroup>
 							<col style="width:15%">
-							<col style="width:85%">
+							<col style="width:55%">
+							<col style="width:30%">
 							<col>
 						</colgroup>
 						<tr>
-							<th>현장 사진<a href="javascript:addList('addFileList09')" class="btn_add fr">추가</a></th>
-							<td id="addFileList09">
-								<input type="file" id="spc_site_pic_file" class="hidden" name="spc_file_01" accept=".gif, .jpg, .png">
-								<label for="spc_site_pic_file" class="btn file_upload">파일 선택</label>
-								<span class="upload_text ml-16"></span>
-							</td>
+							<th>현장 사진<a href="javascript:addList('addFileList01')" class="btn_add fr">추가</a></th>
+							<td id="addFileList01"><!--
+								--><input type="file" id="spc_site_pic_file" class="hidden" name="spc_file_01" accept=".gif, .jpg, .png"><!--
+								--><label for="spc_site_pic_file" class="btn file_upload">파일 선택</label><!--
+								--><span class="upload_text ml-16"></span><!--
+							--></td>
+							<th></th>
 							<td></td>
 						</tr>
 						<tr>
 							<th>수배전반<a href="javascript:addList('addFileList10')" class="btn_add fr">추가</a></th>
 							<td id="addFileList10">
 								<input type="file" id="spc_incoming_panel_file" class="hidden" name="spc_file_02" accept=".gif, .jpg, .png">
-								<label for="spc_incoming_panel_file" class="btn file_upload">파일 선택</label>
-								<span class="upload_text ml-16">암사 아리수 정수센터 수배전반 외형도.xlxs</span>
-							</td>
+								<label for="spc_incoming_panel_file" class="btn file_upload">파일 선택</label><!--
+							--><span class="upload_text ml-16">암사 아리수 정수센터 수배전반 외형도.xlxs</span><!--
+						--></td>
+							<th></th>
 							<td></td>
 						</tr>
 						<tr>
 							<th>케이블<a href="javascript:addList('addFileList11')" class="btn_add fr">추가</a></th>
 							<td id="addFileList11">
-								<input type="file" id="spc_cable_file" class="hidden" name="spc_file_03">
-								<label for="spc_cable_file" class="btn file_upload">파일 선택</label>
-								<span class="upload_text ml-16"></span>
-							</td>
+								<input type="file" id="spc_cable_file" class="hidden" name="spc_file_03"><!--
+							--><label for="spc_cable_file" class="btn file_upload">파일 선택</label><!--
+							--><span class="upload_text ml-16"></span><!--
+						--></td>
+							<th></th>
 							<td></td>
 						</tr>
 						<tr>
 							<th>모듈<a href="javascript:addList('addFileList12')" class="btn_add fr">추가</a></th>
 							<td id="addFileList12">
-								<input type="file" id="spc_module_file" class="hidden" name="file">
-								<label for="spc_module_file" class="btn file_upload">파일 선택</label>
-								<span class="upload_text ml-16"></span>
-							</td>
-							<td></td>
+								<input type="file" id="spc_module_file" class="hidden" name="file"><!--
+							--><label for="spc_module_file" class="btn file_upload">파일 선택</label><!--
+							--><span class="upload_text ml-16"></span><!--
+						--></td>
+						<th></th>
+						<td></td>
 						</tr>
 						<tr>
 							<th>인버터<a href="javascript:addList('addFileList13')" class="btn_add fr">추가</a></th>
 							<td id="addFileList13">
-								<input type="file" id="spc_inverter_file" class="hidden" name="spc_file_05" >
-								<label for="spc_inverter_file" class="btn file_upload">파일 선택</label>
-								<span class="upload_text ml-16"></span>
-							</td>
+								<input type="file" id="spc_inverter_file" class="hidden" name="spc_file_05"><!--
+							--><label for="spc_inverter_file" class="btn file_upload">파일 선택</label><!--
+							--><span class="upload_text ml-16"></span><!--
+						--></td>
+							<th></th>
 							<td></td>
 						</tr>
 						<tr>
 							<th>결선도<a href="javascript:addList('addFileList14')" class="btn_add fr">추가</a></th>
 							<td id="addFileList14">
-								<input type="file" id="spc_wiring_diagram_file" class="hidden" name="spc_file_06">
-								<label for="spc_wiring_diagram_file" class="btn file_upload">파일 선택</label>
-								<span class="upload_text ml-16"></span>
-							</td>
+								<input type="file" id="spc_wiring_diagram_file" class="hidden" name="spc_file_06"><!--
+							--><label for="spc_wiring_diagram_file" class="btn file_upload">파일 선택</label><!--
+							--><span class="upload_text ml-16"></span><!--
+						--></td>
+							<th></th>
 							<td></td>
 						</tr>
 						<tr>
 							<th>토목<a href="javascript:addList('addFileList15')" class="btn_add fr">추가</a></th>
-							<td id="addFileList15">
-								<input type="file" id="spc_civil_file" class="hidden" name="spc_civil_file">
-								<label for="spc_civil_file" class="btn file_upload">파일 선택</label>
-								<span class="upload_text ml-16"></span>
-							</td>
+							<td id="addFileList15"><!--
+							--><input type="file" id="spc_civil_file" class="hidden" name="spc_civil_file"><!--
+							--><label for="spc_civil_file" class="btn file_upload">파일 선택</label><!--
+							--><span class="upload_text ml-16"></span><!--
+						--></td>
+							<th></th>
 							<td></td>
 						</tr>
 						<tr>
 							<th>구조물<a href="javascript:addList('addFileList16')" class="btn_add fr">추가</a></th>
-							<td id="addFileList16">
-								<input type="file" id="spc_construct_file" class="hidden" name="spc_file_08">
-								<label for="spc_construct_file" class="btn file_upload">파일 선택</label>
-								<span class="upload_text ml-16"></span>
-							</td>
+							<td id="addFileList16"><!--
+							--><input type="file" id="spc_construct_file" class="hidden" name="spc_file_08"><!--
+							--><label for="spc_construct_file" class="btn file_upload">파일 선택</label><!--
+							--><span class="upload_text ml-16"></span><!--
+						--></td>
 							<th></th>
 							<td></td>
 						</tr>
 						<tr>
 							<th>접속반<a href="javascript:addList('addFileList17')" class="btn_add fr">추가</a></th>
-							<td id="addFileList17">
-								<input type="file" id="spc_connection_board_file" class="hidden" name="spc_connection_board_file_09">
-								<label for="spc_connection_board_file" class="btn file_upload">파일 선택</label>
-								<span class="upload_text ml-16"></span>
-							</td>
+							<td id="addFileList17"><!--
+							--><input type="file" id="spc_connection_board_file" class="hidden" name="spc_connection_board_file_09"><!--
+							--><label for="spc_connection_board_file" class="btn file_upload">파일 선택</label><!--
+							--><span class="upload_text ml-16"></span><!--
+						--></td>
+							<th></th>
 							<td></td>
 						</tr>
 						<tr>
 							<th>기타설비<a href="javascript:addList('addFileList19')" class="btn_add fr">추가</a></th>
-							<td id="addFileList19">
-								<input type="file" id="spc_misc_device" class="hidden" name="spc_file_10">
-								<label for="spc_misc_device" class="btn file_upload">파일 선택</label>
-								<span class="upload_text ml-16"></span>
-							</td>
+							<td id="addFileList19"><!--
+								--><input type="file" id="spc_misc_device" class="hidden" name="spc_file_10"><!--
+								--><label for="spc_misc_device" class="btn file_upload">파일 선택</label><!--
+								--><span class="upload_text ml-16"></span><!--
+							--></td>
+							<th></th>
 							<td></td>
 						</tr>
 					</table>
 				</div>
 			</div>
-		</form>
-		<div class="btn_wrap_type04">
-			<button type="button" class="btn_type big" onclick="setSaveData();">등록</button>
+		</div>
+
+		<div class="btn_wrap_type_right">
+			<a href="/spc/entityDetails.do" class="btn btn_type03">목록</a><!--
+		--><button type="button" class="btn_type big" onclick="setSaveData();">등록</button>
 		</div>
 	</div>
 </div>
