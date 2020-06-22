@@ -11159,6 +11159,23 @@ th .btn_align {
 .spc_tbl .btn_file {
 	margin-top: 12px;
 }
+/* SPC 기본정보 신규 등록 */
+.entity_wrap.post .indiv {
+	overflow: hidden;
+}
+.entity_wrap.post .indiv .spc_tbl_row.st_edit {
+	overflow: scroll;
+}
+.entity_wrap.post .indiv 
+.entity_wrap.post input+label,
+.entity_wrap.edit input+label {
+	color: var(--color4);
+}
+
+.entity_wrap.post input:checked+label,
+.entity_wrap.edit input:checked+label {
+	color: var(--color8);
+}
 
 /* SPC 테이블 */
 
@@ -11170,6 +11187,9 @@ th .btn_align {
 .spc_tbl_row td {
 	color: var(--color8);
 }
+.spc_tbl_row td.group_type03 > div + div,
+.spc_tbl_row td .sel_calendar.edit.twin .sel:nth-of-type(2) {
+	margin-left: 12px;
 
 .spc_tbl_row td.group_type02 .sel_calendar.edit.twin .sel {
 	width: 35.5%;

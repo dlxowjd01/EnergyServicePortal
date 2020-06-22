@@ -352,7 +352,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			} else if (elem.getValue() instanceof String) {
 				if (((String) elem.getValue()).startsWith("{") && ((String) elem.getValue()).endsWith("}")) {
 					try {
-						jo.put(elem.getKey(), new JSONObject(String.valueOf(elem)));
+						jo.put(elem.getKey(), new JSONObject((String) elem.getValue()));
 					} catch (JSONException e) {
 						jo.remove(elem.getKey());
 					}
