@@ -17,23 +17,23 @@
 		iderms = new IdermsClass(iderms_oid, iderms_login_id, iderms_password);
 		iderms_token = iderms.postAuthLogin();
 		iderms_site_list = JSON.parse('${siteList}');
-		const timeOpt = $("#timeInterval").find(".dropdown-menu li")
+		const timeOpt = $("#timeInterval").find(".dropdown-menu li");
+		const timeStartGroup = $("#timeStartGroup").find(".dropdown");
+		const timeEndGroup = $("#timeEndGroup").find(".dropdown");
+
 		timeOpt.on("click", function(){
 			if( $(this).data("value") == "quarterly") {
-				console.log("qua===", $(this).data("value"))
-				$("#manualCalendar").addClass("short03");
-				$("#manual_min").removeClass("hidden");
-				$("#manual_hour").removeClass("hidden");
+				timeStartGroup.removeClass("hidden");
+				timeEndGroup.removeClass("hidden");
 			} else if($(this).data("value") == "hourly") {
-				console.log("hr===", $(this).data("value"))
-				$("#manualCalendar").addClass("short02");
-				$("#manual_hour").removeClass("hidden");
-				$("#manual_min").addClass("hidden");
+				timeStartGroup.first().addClass("hidden").siblings().removeClass("hidden");
+				timeEndGroup.first().addClass("hidden").siblings().removeClass("hidden");
 			} else {
-				$("#manual_hour").addClass("hidden");
-				$("#manual_min").addClass("hidden");
+				timeStartGroup.addClass("hidden");
+				timeEndGroup.addClass("hidden");
 			}
 		});
+
 		// 아래 모달만 테스트 할 시에 주석 풀면 바로 띄울 수 있습니다.
 		// $("#manualAddDeviceModal").modal("show");
 		// $("#addDeviceModal").modal("show");
@@ -725,8 +725,8 @@
 	</div>
 </div>
 <div class="modal fade" id="addDeviceModal" role="dialog">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content device_modal_content">
+	<div class="modal-dialog device_modal modal-lg">
+		<div class="modal-content new_device">
 			<div class="modal-header stit">
 				<h2>신규 장치 등록</h2>
 			</div>
@@ -853,7 +853,7 @@
 </div>
 <div class="modal fade" id="manualAddDeviceModal" role="dialog">
 	<div class="modal-dialog device_modal">
-		<div class="modal-content device_modal_content">
+		<div class="modal-content manual_input">
 			<div class="modal-header stit"><h2>수기 입력</h2></div>
 			<div class="modal-body">
 				<form id="deviceForm2" action="#" method="post" name="deviceForm" novalidate>
@@ -882,45 +882,33 @@
 								</div>
 							</div>
 
-							<div class="input-group inline-flex">
+							<div id="timeStartGroup" class="input-group inline-flex">
 								<label for="datepicker1" class="input_label">시작</label>
-								<div id="manualCalendar" class="sel_calendar">
-									<input type="text" id="datepicker1" class="sel" value="" autocomplete="off">
-								</div>
-								<div class="dropdown hidden" id="manual_hour">
+								<div class="sel_calendar"><input type="text" id="datepicker1" class="sel" value="" autocomplete="off"></div>
+								<div class="dropdown hidden">
 									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown"><span class="caret"></span></button>
 									<!-- 개발시에 1 ~ 12시 부분 동적으로 처리!!! -->
-									<ul class="dropdown-menu">
-										<li data-value="hourly" class="on"><a href="#">1시간</a></li>
-									</ul>
+									<ul class="dropdown-menu"><li data-value="hourly" class="on"><a href="#">1시간</a></li></ul>
 								</div>
-								<div class="dropdown hidden" id="manual_min">
+								<div class="dropdown hidden">
 									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown"><span class="caret"></span></button>
 									<!-- 개발시에 15, 30, 45 분 동적으로 처리!!! -->
-									<ul class="dropdown-menu">
-										<li data-value="quarterly" class="on"><a href="#">15분</a></li>
-									</ul>
+									<ul class="dropdown-menu"><li data-value="quarterly" class="on"><a href="#">15분</a></li></ul>
 								</div>
 							</div>
 
-							<div class="input-group inline-flex">
+							<div id="timeEndGroup" class="input-group inline-flex">
 								<label for="datepicker2" class="input_label">종료</label>
-								<div class="sel_calendar">
-									<input type="text" id="datepicker2" class="sel" value="" autocomplete="off"
-										readonly>
+								<div class="sel_calendar"><input type="text" id="datepicker2" class="sel" value="" autocomplete="off" readonly></div>
+								<div class="dropdown hidden">
+									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown"><span class="caret"></span></button>
+									<!-- 개발시에 1 ~ 12시 부분 동적으로 처리!!! -->
+									<ul class="dropdown-menu"><li data-value="hourly" class="on"><a href="#">1시간</a></li></ul>
 								</div>
-								<div class="dropdown hidden" id="hour">
-									<button class="btn btn-primary dropdown-toggle w3 interval" type="button"
-										data-toggle="dropdown"><span class="caret"></span></button>
-									<ul class="dropdown-menu">
-										<li data-value="" class="on"><a href="#">0시</a></li>
-									</ul>
-								</div>
-								<div class="dropdown hidden" id="minute">
-									<button class="btn btn-primary dropdown-toggle w3 interval" type="button" data-toggle="dropdown"><span class="caret"></span></button>
-									<ul class="dropdown-menu">
-										<li data-value="" class="on"><a href="#">0분</a></li>
-									</ul>
+								<div class="dropdown hidden">
+									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown"><span class="caret"></span></button>
+									<!-- 개발시에 15, 30, 45 분 동적으로 처리!!! -->
+									<ul class="dropdown-menu"><li data-value="quarterly" class="on"><a href="#">15분</a></li></ul>
 								</div>
 							</div>
 						</div>
@@ -931,7 +919,7 @@
 								<label class="input_label">데이터 확인</label>
 								<button class="btn_type03 end">입력 초기화</button>
 							</div>
-							<div class="spc_tbl">
+							<div class="spc_tbl mt20">
 								<table class="ly_type">
 									<thead>
 										<th>15분 단위</th>
