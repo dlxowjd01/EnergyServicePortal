@@ -266,7 +266,7 @@
 			<li class="gmn5">
 				<a href="javascript:void(0);">예측/진단</a>
 				<ul>
-					<li><a href="/energy/pvGen.do">발전예측</a></li>
+					<li><a href="/diagnosis/generation.do">발전예측</a></li>
 					<li><a href="/diagnosis/abnormallyAnalysis.do">이상분석</a></li>
 				</ul>
 			</li>
