@@ -521,6 +521,7 @@
 	
 	const siteList = function (sidparam) {
 		let siteList = [];
+		console.log(sidparam);
 		setMakeList(sites, 'siteList', {
 			'dataFunction': {}
 		});	//list생성
