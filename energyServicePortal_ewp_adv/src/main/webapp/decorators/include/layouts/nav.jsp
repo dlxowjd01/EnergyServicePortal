@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-<script>
+<script type="text/javascript">
 	function gMainSelectSite(siteId) {
 		$('#smainNavLink').attr('href', '/main/siteMain.do?siteId=' + siteId);
 		$('#energyNavLink').attr('href', '/energy/usage.do?siteId=' + siteId);
@@ -26,6 +26,7 @@
 		$('#kepcoMngNavLink').attr('href', '/system/kepcoMng.do?siteId=' + siteId);
 		$('#gmainAlarmLink').attr('onclick', "location.href='/alarm/alarmMng.do?siteId=" + siteId + "'");
 	}
+
 	function navAddClass(linkGbn) {
 		// listItem.removeClass("on");
 		switch (linkGbn) {
@@ -40,9 +41,11 @@
 		}
 		// upperMenu.first().addClass("active");
 	}
+
 	function pleaseSelectSite() {
 		alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');
 	}
+
 	$(function () {
 		const sideBar = $("#sidebar"),
 			menuItem = sideBar.find("li"),
@@ -58,6 +61,7 @@
 				$(this).parents(".menu-item").addClass("active").siblings().removeClass("active");
 			}
 		});
+
 		window.onload = function (e) {
 			let reloading = sessionStorage.getItem("reloading");
 			if (path.includes("dashboard")) {
@@ -67,12 +71,15 @@
 				sessionStorage.removeItem("reloading");
 			}
 		}
+
 		upperMenuLink.click(function (e) {
 			$(this).parent("li").toggleClass('on');
 		});
+
 		sideBar.mouseleave(function () {
 			menuItem.removeClass('on');
 		});
+
 		$('#sidebar:after').css('display', 'none') ? menuItemLink.removeClass('on') : null;
 		// document.addEventListener('readystatechange', function(){
 		//   console.log("ready state changed====")
@@ -116,15 +123,13 @@
 		// (function(){
 		// })();
 	});
-
-
 </script>
 
 <div id="sidebar">
 	<c:if test="${not empty userInfo}">
 		<ul>
 			<li class="smn1 menu-item">
-				<a href="#;">대시보드</a>
+				<a href="javascript:void(0);">대시보드</a>
 				<div class="sub_layer">
 					<ul>
 						<li><a href="/dashboard/gmain.do">통합관리 대시보드</a></li>
@@ -133,7 +138,7 @@
 				</div>
 			</li>
 			<li class="smn2 menu-item">
-				<a href="#;">설비 현황</a>
+				<a href="javascript:void(0);">설비 현황</a>
 				<div class="sub_layer">
 					<ul>
 						<li><a href="/device/deviceState.do">설비구성</a></li>
@@ -142,7 +147,7 @@
 				</div>
 			</li>
 			<li class="smn3 menu-item">
-				<a href="#;">설비 이력</a>
+				<a href="javascript:void(0);">설비 이력</a>
 				<div class="sub_layer">
 					<ul>
 						<li><a href="/history/operationHistory.do">상태이력</a></li>
@@ -151,7 +156,7 @@
 				</div>
 			</li>
 			<li class="smn4 menu-item">
-				<a href="#;">자원 분석</a>
+				<a href="javascript:void(0);">자원 분석</a>
 				<div class="sub_layer">
 					<ul>
 						<li><a href="/energy/pvGen.do">발전이력</a></li>
@@ -159,7 +164,7 @@
 				</div>
 			</li>
 			<li class="smn5 menu-item">
-				<a href="#;">예측/진단</a>
+				<a href="javascript:void(0);">예측/진단</a>
 				<div class="sub_layer">
 					<ul>
 						<li><a href="/diagnosis/generation.do">발전예측</a></li>
@@ -168,7 +173,7 @@
 				</div>
 			</li>
 			<li class="smn7 menu-item">
-				<a href="#;">보고서</a>
+				<a href="javascript:void(0);">보고서</a>
 				<div class="sub_layer">
 					<ul>
 						<li><a href="/report/yieldReport.do">수익보고서</a></li>
@@ -177,7 +182,7 @@
 				</div>
 			</li>
 			<li class="smn9 menu-item">
-				<a href="#;">SPC관리</a>
+				<a href="javascript:void(0);">SPC관리</a>
 				<div class="sub_layer">
 					<ul>
 						<li><a href="/spc/entityInformation.do">기본정보</a></li>
@@ -191,7 +196,7 @@
 				</div>
 			</li>
 			<li class="smn6 menu-item">
-				<a href="#;">설정</a>
+				<a href="javascript:void(0);">설정</a>
 				<div class="sub_layer">
 					<ul>
 						<li><a href="/system/basicInformation.do">기본정보</a></li>
@@ -213,18 +218,18 @@
 <div id="gnb">
 	<div class="g_top">
 		<div class="w100">
-			<h1 class="g_logo"><a href="#;"><img src="/img/s-power_logo_dark.png" class="로고"></a></h1>
-			<a href="#;" class="category_close"><img src="/img/gnb_close.png" width="17" alt="닫기"></a>
+			<h1 class="g_logo"><a href="javascript:void(0);"><img src="/img/s-power_logo_dark.png" class="로고"></a></h1>
+			<a href="javascript:void(0);" class="category_close"><img src="/img/gnb_close.png" width="17" alt="닫기"></a>
 		</div>
 	</div>
 	<div class="g_menu w100">
 		<ul>
 			<li class="gmn1">
-				<a href="#;">대시보드</a>
+				<a href="javascript:void(0);">대시보드</a>
 				<ul>
 					<li><a href="/dashboard/gmain.do">통합관리 대시보드</a></li>
 					<%--<li>--%>
-					<%--  <a href="#;">사업소 대시보드</a>--%>
+					<%--  <a href="javascript:void(0);">사업소 대시보드</a>--%>
 					<%--  <div>--%>
 					<%--    <p><a href="/dashboard/smain.do">신재생발전 대시보드</a></p>--%>
 					<%--    <p><a href="/dashboard/emain.do">피크저감ESS 대시보드</a></p>--%>
@@ -236,21 +241,21 @@
 				</ul>
 			</li>
 			<li class="gmn2">
-				<a href="#;">설비현황</a>
+				<a href="javascript:void(0);">설비현황</a>
 				<ul>
 					<li><a href="/device/deviceState.do">설비구성</a></li>
 					<li><a href="/device/collectionState.do">수집현황</a></li>
 				</ul>
 			</li>
 			<li class="gmn3">
-				<a href="#;">설비 이력</a>
+				<a href="javascript:void(0);">설비 이력</a>
 				<ul>
 					<li><a href="/history/operationHistory.do">상태이력</a></li>
 					<li><a href="/history/alarmHistory.do">알람이력</a></li>
 				</ul>
 			</li>
 			<li class="gmn4">
-				<a href="#;">자원분석</a>
+				<a href="javascript:void(0);">자원분석</a>
 				<ul>
 					<li><a href="/energy/pvGen.do">발전이력</a></li>
 					<%--<li><a href="/energy/essCharge.do">피크저감 ESS</a></li>--%>
@@ -259,14 +264,14 @@
 				</ul>
 			</li>
 			<li class="gmn5">
-				<a href="#;">예측/진단</a>
+				<a href="javascript:void(0);">예측/진단</a>
 				<ul>
-					<li><a href="">발전</a></li>
-					<li><a href="">수요</a></li>
+					<li><a href="/energy/pvGen.do">발전예측</a></li>
+					<li><a href="/diagnosis/abnormallyAnalysis.do">이상분석</a></li>
 				</ul>
 			</li>
 			<!--<li class="gmn8">
-        <a href="#;">BOM관리</a>
+        <a href="javascript:void(0);">BOM관리</a>
         <ul>
           <li><a href="/bom/faultHistory.do">고장이력</a></li>
             <li><a href="/bom/replacement.do">변경이력</a></li>
@@ -274,14 +279,14 @@
         </ul>
       </li>-->
 			<li class="gmn7">
-				<a href="#;">보고서</a>
+				<a href="javascript:void(0);">보고서</a>
 				<ul>
 					<li><a href="/report/yieldReport.do">수익보고서</a></li>
 					<li><a href="/report/maintenanceReport.do">작업보고서</a></li>
 				</ul>
 			</li>
 			<li class="gmn9">
-				<a href="#;">SPC관리</a>
+				<a href="javascript:void(0);">SPC관리</a>
 				<ul>
 					<li><a href="/spc/entityInformation.do">기본정보</a></li>
 					<li><a href="/spc/balanceSheet.do">원가관리</a></li>
@@ -292,7 +297,7 @@
 				</ul>
 			</li>
 			<li class="gmn6">
-				<a href="#;">설정</a>
+				<a href="javascript:void(0);">설정</a>
 				<ul>
 					<li><a href="/system/basicInformation.do">기본정보</a></li>
 					<li><a href="/system/userMng.do">사용자관리</a></li>
