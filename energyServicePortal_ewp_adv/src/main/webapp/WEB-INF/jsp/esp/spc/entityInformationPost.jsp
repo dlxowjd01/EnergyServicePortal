@@ -4,6 +4,9 @@
 <script>
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
+	let templateList = '';
+	let cnt = 0;
+	let sectionId = [];
 	var countryList = [{"value" : "대한민국"}];
 	var sidoList = [
 		{"value" :"서울"},{"value" :"부산"},{"value" :"대구"},{"value" :"인천"},{"value" :"광주"},
@@ -26,12 +29,19 @@
 
 	$(function () {
 		initProcess();
+		cloneHtml();
 		$("#spcList").on("click", "li", spcListChange);
 		$("#genList").on("click", "li", genListChange);
 		$("#countryList").on("click", "li", conntryListChange);
 		$("#sidoList").on("click", "li", sidoListChange);
 		$("#unitPriceList").on("click", "li", unitPriceListChange);
+		$("#recCalcList").find("li a").on("click", function(){
+			if($(this).parent("li").data("value")==3){
+				$("#recCalcVal").val("-        ")
+			} else {
 
+			}
+		})
 	});
 
 	$(document).on('click', '.dropdown li', function () {
@@ -39,7 +49,11 @@
 			dataText = $(this).text();
 		$(this).parents('.dropdown').find('button').html(dataText + '<span class="caret"></span>').data('value', dataValue);
 	});
+	function cloneHtml(){
+		templateList = $("#insuranceInfo").find("template.copy_list").clone().html();
+		$("#insuranceInfo").find("template.copy_list").remove();
 
+	}
 	function initProcess(){
 		initAddListHtml(); //추가 기능 관련 초기화
 		setComboBoxData(); //시도 설정
@@ -49,14 +63,16 @@
 
 	function initAddListHtml(){
 		$("#addList01").data("form", $("#addList01").html()).data("count", ($("#addList01").html().match(/input/g) || []).length);
-		// $("#addList02").data("form", $("#addList02").html()).data("count", ($("#addList02").html().match(/input/g) || []).length);
+		$("#insuranceInfo").data("form", $("#insuranceInfo").html()).data("count", ($("#insuranceInfo").html().match(/input/g) || []).length);
+		$("#addList02").data("form", $("#addList02").html()).data("count", ($("#addList02").html().match(/input/g) || []).length);
 		// $("#addList03").data("form", $("#addList03").html()).data("count", ($("#addList03").html().match(/input/g) || []).length);
 		// $("#addList04").data("form", $("#addList04").html()).data("count", ($("#addList04").html().match(/input/g) || []).length);
 		// $("#addList05").data("form", $("#addList05").html()).data("count", ($("#addList05").html().match(/input/g) || []).length);
 		// $("#addList06").data("form", $("#addList06").html()).data("count", ($("#addList06").html().match(/input/g) || []).length);
 
 		$("#addFileList01").data("form", $("#addFileList01").html());
-		// $("#addFileList02").data("form", $("#addFileList02").html());
+		$("#insuranceInfo").data("form", $("#insuranceInfo").html());
+		$("#addFileList02").data("form", $("#addFileList02").html());
 		// $("#addFileList03").data("form", $("#addFileList03").html());
 		// $("#addFileList04").data("form", $("#addFileList04").html());
 		// $("#addFileList05").data("form", $("#addFileList05").html());
@@ -65,9 +81,34 @@
 
 	function addList(addId){
 		var $selector = $("#" + addId);
-		$selector.append($selector.data("form"));
+		let copySelector = $selector.clone();
+		cnt += 1;
+
+		if(addId == "insuranceInfo"){
+			let copy = $(templateList);
+			// 아래 3줄은 꺽 필요하진 않을 수도 => html 에 바로 삭제 하는 부분 처리.
+			sectionId[cnt] = "insuranceSection"+cnt;
+			copy.attr("id", sectionId[cnt]);
+			copy.find(".delete_icon").attr("id", sectionId[cnt]);
+
+			copy.find("input").each(function(){
+				let newId = $(this).attr("id") + cnt;
+				$(this).attr("id", newId);
+			});
+
+			$selector.append(copy);
+		} else {
+			copySelector.find("input:text").each(function() {
+				$(this).val('');
+			});
+			copySelector.find(".btn_type07").removeClass("hidden");
+			copySelector.insertAfter($selector);
+		}
 	}
 	
+	function deleteInfo(e){
+		console.log("delete===", e);
+	}
 	function removeList(obj){
 		if( $(obj).parent().parent().find(".group_type").length > 1){
 			$(obj).parent().remove();	
@@ -105,22 +146,27 @@
 	function spcListChange(){
 		var txt = $(this).find("a").text(),
 			idx = $("#spcList").find("li").index(this),
-			jsonData = $("#spcList").data("gridJsonData")[idx];
+			jsonData = $("#spcList").data("gridJsonData")[idx],
+			disabledInput = $("#name").parents(".tx_inp_type.edit");
 
 		if(jsonData.spc_id == ""){
 			$("#name").val("").prop("readonly", false);
+			disabledInput.removeClass("disabled");
 		}else{
 			$("#name").val(jsonData["name"]).prop("readonly", true);
+			disabledInput.addClass("disabled");
 		}
 	}
 
 	function genListChange(){
 		var txt = $(this).find("a").text(),
 			idx = $("#genList").find("li").index(this),
-			jsonData = $("#genList").data("gridJsonData")[idx];
+			jsonData = $("#genList").data("gridJsonData")[idx],
+			disabledInput = $("#name").parents(".tx_inp_type.edit");
 
+		disabledInput.addClass("disabled");
 		$("#genName").val(jsonData.name);
-		//발전소에 국가정보없는데 뭔...
+
 		//$("#countryValue").val(jsonData["countryValue"]);
 		//setDropDownValue("countryList", jsonData["countryValue"]);
 		$("#countryValue").val("대한민국");
@@ -461,7 +507,7 @@
 									<li data-value="[spc_id]"><a href="javascript:void(0);" >[name]</a></li>
 								</ul>
 							</div>
-							<div class="tx_inp_type edit"><!--
+							<div class="tx_inp_type edit disabled"><!--
 							--><label for="spcName" class="sr-only">SPC명 입력</label><!--
 							--><input type="text" id="name" placeholder="SPC명 입력"><!--
 						--></div>
@@ -985,14 +1031,14 @@
 							</div>
 						</td>
 					</tr>
-					<tr>
+					<tr id="addList01">
 						<th>
 							<div class="fixed_height">은행 계좌</div>
 							<a href="javascript:addList('addList01');" class="btn_add fr mt-offset-10">추가</a>
 							<div class="fixed_height"><label for="예금주">예금주</label></div>
 						</th>
-						<td id="addList01">
-							<div class="fixed_height group_type">
+						<td>
+							<div class="fixed_height group_type short">
 								<div class="dropdown placeholder edit">
 									<button id="transaction_opt" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">입출금 구분<span class="caret"></span></button>
 									<ul id="transaction_type" class="dropdown-menu" role="menu">
@@ -1001,7 +1047,7 @@
 									</ul>
 								</div>
 								<div class="dropdown placeholder edit">
-									<button id="bankOpt" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">은행 리스트<span class="caret"></span></button>
+									<button id="bankOpt" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">계좌구분<span class="caret"></span></button>
 									<ul id="bankList" class="dropdown-menu" role="menu">
 										<li data-value="shinhan"><a href="javascript:void(0);">신한</a></li>
 									</ul>
@@ -1027,6 +1073,7 @@
 							<div class="tx_inp_type edit">
 								<input type="text" id="account_num" name="account_num" placeholder="직접 입력">
 							</div>
+							<button class="btn_type07 mt-offset-10 hidden fr" onclick="$(this).parents().closest('tr').remove()"></button>
 							<div class="tx_inp_type edit">
 								<input type="text" id="account_setup_bank" name="account_setup_bank" placeholder="직접 입력">
 							</div>
@@ -1077,9 +1124,8 @@
 							<div class="fixed_height"><label for="custodian_fee">SMP</label></div>
 							<div class="fixed_height"><label for="rental_cost">REC</label></div>
 						</th>
-						<td>
+						<td class="align_top">
 							<div class="fixed_height"></div>
-
 							<div class="flex_start">
 								<div class="tx_inp_type edit unit t1 mr-30">
 									<input type="text" id="total_volume" class="right" name="total_volume" placeholder="">
@@ -1114,6 +1160,36 @@
 									<span>원</span>
 								</div>
 								<span class="fixed_height"><span class="auto_price">[value]</span>원/MW</span>
+							</div>
+							<div class="group_type">
+								<div class="dropdown placeholder edit">
+									<button id="smpCalcOpt" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">선택<span class="caret"></span></button>
+									<ul id="smpCalcList" class="dropdown-menu" role="menu">
+										<li data-value="1"><a href="javascript:void(0);">고정가</a></li>
+										<li data-value="2"><a href="javascript:void(0);">월 가중 평균</a></li>
+										<li data-value="3"><a href="javascript:void(0);">실시간</a></li>
+									</ul>
+								</div>
+								<div class="tx_inp_type edit unit t1 mr-30">
+									<input type="text" id="rental_cost" name="rental_cost" placeholder="">
+									<span>원</span>
+								</div>
+								<span class="fixed_height"><span class="auto_price">[value]</span>원/kWh</span>
+							</div>
+							<div class="group_type">
+								<div class="dropdown placeholder edit">
+									<button id="recCalcOpt" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">고정가<span class="caret"></span></button>
+									<ul id="recCalcList" class="dropdown-menu" role="menu">
+										<li data-value="1"><a href="javascript:void(0);">고정가</a></li>
+										<li data-value="2"><a href="javascript:void(0);">SMP + REC</a></li>
+										<li data-value="3"><a href="javascript:void(0);">월별 추후 산정</a></li>
+									</ul>
+								</div>
+								<div class="tx_inp_type edit unit t1 mr-30">
+									<input type="text" id="recCalcVal" class="right" name="rental_cost" placeholder="">
+									<span>원</span>
+								</div>
+								<span class="fixed_height"><span class="auto_price">[value]</span>원/kWh</span>
 							</div>
 						</td>
 						<th>
@@ -1300,11 +1376,11 @@
 
 		<div class="indiv panel panel-default" id="insuranceInfo">
 			<div class="tbl_top panel-heading">
-				<h2 class="ntit mt25">보험 정보<a role="button" href="javascript:addList('addList06');" class="btn_add ml-24">추가</a></h2><!--
+				<h2 class="ntit mt25">보험 정보<a role="button" href="javascript:addList('insuranceInfo');" class="btn_add ml-24">추가</a></h2><!--
 				--><a role="button" href="#insuranceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a><!--
 		--></div>
 			<div id="insuranceInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
-				<table id="addList06">
+				<table>
 					<colgroup>
 						<col style="width:15%">
 						<col style="width:35%">
@@ -1313,14 +1389,18 @@
 					</colgroup>
 					<tr>
 						<th>보험 정보</th>
-						<td id="addList04">
-							<fieldset class="group_type">
+						<td>
+							<fieldset class="rdo_type flex_start">
 								<legend sr-only="보험 정보"></legend>
-								<div class="rdo_type flex_start">
+								<div class="radio_group">
 									<input type="radio" id="rdo_insurance_opt1" name="rdo_insurance" value="rdo_insurance">
 									<label for="rdo_insurance_opt1"><span></span>조립 보험</label>
+								</div>
+								<div class="radio_group">
 									<input type="radio" id="rdo_insurance_opt2" name="rdo_insurance" value="cmi">
 									<label class="ml-24" for="rdo_insurance_opt2"><span></span>CMI</label>
+								</div>
+								<div class="radio_group">
 									<input type="radio" id="rdo_insurance_opt3" name="rdo_insurance" value="cgl">
 									<label class="ml-24" for="rdo_insurance_opt3"><span></span>CGL</label>
 								</div>
@@ -1402,6 +1482,115 @@
 					</tr>
 				</table>
 			</div>
+
+			<template class="copy_list">
+				<section>
+					<div class="tbl_top flex_wrapper mt-offset-10"><h2 class="ntit">보험 정보</h2><button class="delete_icon btn_type07" onclick="$(this).parents().find('section').remove()"></button></div>
+					<div class="spc_tbl_row st_edit">
+						<table>
+							<colgroup>
+								<col style="width:15%">
+								<col style="width:35%">
+								<col style="width:15%">
+								<col style="width:35%">
+							</colgroup>
+							<tr>
+								<th>보험 정보</th>
+								<td>
+									<fieldset class="rdo_type flex_start">
+										<legend sr-only="보험 정보"></legend>
+										<div class="radio_group">
+											<input type="radio" id="rdo_opt_" name="rdo_opt_" value="rdo_insurance">
+											<label for="rdo_opt_"><span></span>조립 보험</label>
+										</div>
+										<div class="radio_group">
+											<input type="radio" id="rdo_opt_" name="rdo_opt_" value="cmi">
+											<label class="ml-24" for="rdo_opt_"><span></span>CMI</label>
+										</div>
+										<div class="radio_group">
+											<input type="radio" id="rdo_opt_" name="rdo_opt_" value="cgl">
+											<label class="ml-24" for="rdo_opt_"><span></span>CGL</label>
+										</div>
+									</fieldset>
+								</td>
+								<th></th>
+								<td></td>
+							</tr>
+							<tr>
+								<th><label for="insuranceCompany">보험사</label></th>
+								<td>
+									<div class="tx_inp_type edit">
+										<input type="text" id="insuranceCompany" name="insurance_company" placeholder="직접 입력">
+									</div>
+								</td>
+								<th><label for="insuranceAgent">보험 중개사</label></th>
+								<td>
+									<div class="tx_inp_type edit">
+										<input type="text" id="insuranceAgent" name="insurance_agent" placeholder="직접 입력">
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th><label for="insurancePeriod">보험 기간</label></th>
+								<td class="group_type">
+									<legend class="sr-only">보험 기간</legend>
+									<fieldset class="sel_calendar edit twin clear">
+										<input type="text" id="interestStartDate" class="sel datepicker fromDate" name="insurance_start_date" value="" autocomplete="off" placeholder="시작일">
+										<input type="text" id="interestEndDate" class="sel datepicker toDate" name="insurance_end_date" value="" autocomplete="off" placeholder="종료일">
+									</fieldset>
+								</td>
+								<th><label for="insuranceFee">보험료</label></th>
+								<td>
+									<div class="tx_inp_type edit unit t1">
+										<input type="text" id="insuranceFee" name="insurance_fee"><!--
+									--><span>원</span>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th><label for="deductible">자가부담금</label></th>
+								<td>
+									<div class="tx_inp_type edit">
+										<input type="text" id="deductible" name="deductible" placeholder="직접 입력">
+									</div>
+								</td>
+								<th><label for="insuranceValue">보험가액</label></th>
+								<td>
+									<div class="tx_inp_type edit">
+										<input type="text" id="insuranceValue" name="" placeholder="직접 입력">
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th><label for="installAngle">시작일</label></th>
+								<td>
+									<div class="sel_calendar edit">
+										<input type="text" id="interest_payment_date" class="sel datepicker fromDate" name="start_date" value="" autocomplete="off" placeholder="날짜 선택">
+									</div>
+								</td>
+								<th><label for="installAngle">종료일</label></th>
+								<td class="flex_start">
+									<div class="sel_calendar edit mr-24">
+										<input type="text" id="interest_payment_date" class="sel datepicker toDate" name="end_date" value="" autocomplete="off" placeholder="날짜 선택">
+									</div>
+									<span class="fixed_height">XX일 남음</span>
+								</td>
+							</tr>
+							<tr>
+								<th></th>
+								<td></td>
+								<th><label for="mature_date">만기일</label></th>
+								<td class="flex_start">
+									<div class="sel_calendar edit mr-24">
+										<input type="text" id="mature_date" class="sel datepicker toDate" name="mature_date" value="" autocomplete="off" placeholder="날짜 선택">
+									</div>
+									<span class="fixed_height">XX일 남음</span>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</section>
+			</template>
 		</div>
 
 		<div class="indiv panel panel-default" id="deviceInfo">
@@ -1505,7 +1694,7 @@
 						</td>
 						<th>접속반 채널 / 대수<a href="javascript:addList('addList06');" class="btn_add fr">추가</a></th>
 						<td id="addList06">
-								<div class="group_type">
+							<div class="group_type">
 								<div class="tx_inp_type edit unit t1">
 									<input type="text" name="접속반_채널"><span>Ch</span><!--
 							--></div>
@@ -1523,15 +1712,17 @@
 								<input type="text" id="접속반_용량">
 								<span>kW</span>
 							</div>
-							<div class="rdo_type flex_start">
-								<fieldset>
-									<legend sr-only="통신 방식"></legend><!--
+							<fieldset class="rdo_type flex_start2">
+								<legend sr-only="통신 방식"></legend><!--
+							--><div class="radio_group"><!--
 								--><input type="radio" id="rdo_03_op01" name="통신방식" value="통신"><!--
 								--><label for="rdo_03_op01"><span></span>통신</label><!--
+							--></div><!--
+							--><div class="radio_group"><!--
 								--><input type="radio" id="rdo_03_op02" name="통신방식" value="비통신"><!--
 								--><label class="ml-24" for="rdo_03_op02"><span></span>비통신</label><!--
-							--></fieldset>
-							</div>
+							--></div><!--
+						--></fieldset>
 						</td>
 						<th></th>
 						<td></td>
@@ -1591,13 +1782,18 @@
 						<th>보증 방식</th>
 						<td>
 							<fieldset class="rdo_type flex_start"><!--
-							--><legend sr-only="보증 방식"></legend><!--
+							--><legend sr-only="보증 방식"></legend>
+								<div class="radio_group"><!--
 								--><input type="radio" id="rdo_op01" name="보증_방식" value="PR"><!--
 								--><label for="rdo_op01"><span></span>PR</label><!--
+							--></div><!--
+							--><div class="radio_group"><!--
 								--><input type="radio" id="rdo_op02" name="보증_방식" value="발전 시간"><!--
 								--><label for="rdo_op02"><span></span>발전 시간</label><!--
+							--><div class="radio_group"><!--
 								--><input type="radio" id="rdo_op03" name="보증_방식" value="PR + 발전시간"><!--
 								--><label for="rdo_op03"><span></span>PR + 발전 시간</label><!--
+							--></div><!--
 							--></fieldset>
 						</td>
 						<th>PR 보증치</th>
@@ -1650,11 +1846,14 @@
 						<td>
 							<fieldset class="rdo_type flex_start">
 								<legend sr-only="추가 보수"></legend>
-								<input type="radio" id="rdo_op2_01" name="추가_보수" value="유">
-								<label for="rdo_op2_01"><span></span>유</label>
-
-								<input type="radio" id="rdo_op2_02" name="추가_보수" value="무">
-								<label for="rdo_op2_02"><span></span>무</label>
+								<div class="radio_group">
+									<input type="radio" id="rdo_op2_01" name="추가_보수" value="유">
+									<label for="rdo_op2_01"><span></span>유</label>
+								</div>
+								<div class="radio_group">
+									<input type="radio" id="rdo_op2_02" name="추가_보수" value="무">
+									<label for="rdo_op2_02"><span></span>무</label>
+								</div>
 							</fieldset>
 						</td>
 						<th>추가 보수 용량</th>

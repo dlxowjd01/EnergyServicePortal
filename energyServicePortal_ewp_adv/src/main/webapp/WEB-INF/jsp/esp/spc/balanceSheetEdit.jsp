@@ -541,7 +541,7 @@
 					</tr>
 				</table>
 			</div>
-			<div class="btn_wrap_type02 mt-25">
+			<div class="btn_wrap_type02 mt30">
 				<button type="button" class="btn_type03" onclick="list()">목록</button>
 				<button type="button" class="btn_type" onclick="register()">수정</button>
 			</div>

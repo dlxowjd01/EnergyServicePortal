@@ -31,7 +31,7 @@
 </div>
 
 <div class="modal fade" id="addRtuModal" aria-labelledby="RTU_Register" role="dialog">
-	<div class="modal-dialog modal-md">
+	<div class="modal-dialog">
 		<div class="modal-content collection_modal_content">
 			<div class="modal-header">
 				<h4 id="RTU_Register" class="modal-title">RTU 등록</h4>
