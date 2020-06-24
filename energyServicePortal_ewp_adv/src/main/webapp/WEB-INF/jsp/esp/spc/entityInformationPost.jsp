@@ -32,7 +32,7 @@
 		cloneHtml();
 		$("#spcList").on("click", "li", spcListChange);
 		$("#genList").on("click", "li", genListChange);
-		$("#countryList").on("click", "li", conntryListChange);
+		$("#countryList").on("click", "li", countryListChange);
 		$("#sidoList").on("click", "li", sidoListChange);
 		$("#unitPriceList").on("click", "li", unitPriceListChange);
 		$("#recCalcList").find("li a").on("click", function(){
@@ -62,21 +62,23 @@
 	}
 
 	function initAddListHtml(){
-		$("#addList01").data("form", $("#addList01").html()).data("count", ($("#addList01").html().match(/input/g) || []).length);
 		$("#insuranceInfo").data("form", $("#insuranceInfo").html()).data("count", ($("#insuranceInfo").html().match(/input/g) || []).length);
-		$("#addList02").data("form", $("#addList02").html()).data("count", ($("#addList02").html().match(/input/g) || []).length);
-		// $("#addList03").data("form", $("#addList03").html()).data("count", ($("#addList03").html().match(/input/g) || []).length);
-		// $("#addList04").data("form", $("#addList04").html()).data("count", ($("#addList04").html().match(/input/g) || []).length);
-		// $("#addList05").data("form", $("#addList05").html()).data("count", ($("#addList05").html().match(/input/g) || []).length);
-		// $("#addList06").data("form", $("#addList06").html()).data("count", ($("#addList06").html().match(/input/g) || []).length);
+		$("#addList_module_info").data("form", $("#addList_module_info").html()).data("count", ($("#addList_module_info").html().match(/input/g) || []).length);
+		$("#addList_module_angle").data("form", $("#addList_module_angle").html()).data("count", ($("#addList_module_angle").html().match(/input/g) || []).length);
+		$("#addList_inverter").data("form", $("#addList_inverter").html()).data("count", ($("#addList_inverter").html().match(/input/g) || []).length);
+		$("#addList_inverter_vol").data("form", $("#addList_inverter_vol").html()).data("count", ($("#addList_inverter_vol").html().match(/input/g) || []).length);
+		$("#addList_manufacturer").data("form", $("#addList_manufacturer").html()).data("count", ($("#addList_manufacturer").html().match(/input/g) || []).length);
+		$("#addList_connection").data("form", $("#addList_connection").html()).data("count", ($("#addList_connection").html().match(/input/g) || []).length);
+		$("#addList_switch_gear").data("form", $("#addList_switch_gear").html()).data("count", ($("#addList_switch_gear").html().match(/input/g) || []).length);
 
-		$("#addFileList01").data("form", $("#addFileList01").html());
 		$("#insuranceInfo").data("form", $("#insuranceInfo").html());
-		$("#addFileList02").data("form", $("#addFileList02").html());
-		// $("#addFileList03").data("form", $("#addFileList03").html());
-		// $("#addFileList04").data("form", $("#addFileList04").html());
-		// $("#addFileList05").data("form", $("#addFileList05").html());
-		// $("#addFileList06").data("form", $("#addFileList06").html());
+		$("#addList_module_info").data("form", $("#addList_module_info").html());
+		$("#addList_module_angle").data("form", $("#addList_module_angle").html());
+		$("#addList_inverter").data("form", $("#addList_inverter").html());
+		$("#addList_inverter_vol").data("form", $("#addList_inverter_vol").html());
+		$("#addList_manufacturer").data("form", $("#addList_manufacturer").html());
+		$("#addList_connection").data("form", $("#addList_connection").html());
+		$("#addList_switch_gear").data("form", $("#addList_switch_gear").html());
 	}
 
 	function addList(addId){
@@ -86,10 +88,10 @@
 
 		if(addId == "insuranceInfo"){
 			let copy = $(templateList);
-			// 아래 3줄은 꺽 필요하진 않을 수도 => html 에 바로 삭제 하는 부분 처리.
+			// 아래 3줄은 꼭 필요하진 않을 수도 => html 에 바로 삭제 하는 부분 처리.
 			sectionId[cnt] = "insuranceSection"+cnt;
 			copy.attr("id", sectionId[cnt]);
-			copy.find(".delete_icon").attr("id", sectionId[cnt]);
+			copy.find(".btn_close").attr("id", sectionId[cnt]);
 
 			copy.find("input").each(function(){
 				let newId = $(this).attr("id") + cnt;
@@ -98,10 +100,12 @@
 
 			$selector.append(copy);
 		} else {
+			let newId = addId+'_'+cnt;
+			copySelector.attr("id", newId)
 			copySelector.find("input:text").each(function() {
 				$(this).val('');
 			});
-			copySelector.find(".btn_type07").removeClass("hidden");
+			copySelector.find(".btn_close").removeClass("hidden");
 			copySelector.insertAfter($selector);
 		}
 	}
@@ -109,6 +113,7 @@
 	function deleteInfo(e){
 		console.log("delete===", e);
 	}
+
 	function removeList(obj){
 		if( $(obj).parent().parent().find(".group_type").length > 1){
 			$(obj).parent().remove();	
@@ -183,7 +188,7 @@
 		}
 	}
 
-	function conntryListChange(){
+	function countryListChange(){
 		var txt = $(this).find("a").text(),
 			idx = $("#countryList").find("li").index(this);
 
@@ -278,7 +283,6 @@
 			return false;
 		}	
 		
-		//직접입력 발전소 등록..(이걸왜 여기서 하지? 발전소 관리 화면냅두고 직접입력 선택 시 사이트관리 화면 팝업을 띄우던가..ㅉㅉ)
 		if(genId == ""){
 			var bError = false;
 			$.ajax({
@@ -384,13 +388,41 @@
 		});
 	}
 
+	// ##############  sendSpcAttchFilePost 할 때, 아래 부분 사용해서 인풋 가공 해 주세요 #################
+	function uploadTest(){
+
+		console.log("new===", new FormData($('#attachement_info')[0]) );
+
+		// var genId = $("#gen").data("value");
+		// var spcId = $("#spc").data("value");
+
+		// let newArr = [];
+		// let input = $("#attachement_info").find("input[type=file]");
+
+		// $("#attachement_info").find("input[type=file]").each(function(index, value){
+		// 	if($(this).attr("name").length>1){
+		// 		let singleArr = [];
+		// 		let singleInput = $(this).attr("name");
+
+		// 		singleArr = $(this).attr("name").split(",");
+				
+		// 		for(let i=0; i<singleArr.length; i++){
+		// 			let newName = singleArr[i] + "_" + spcId +"_" + genId;
+		// 			newArr.push(newName);
+		// 		};
+		// 	}
+		// });
+		// console.log("newArr===", newArr)
+	}
+	// ##############################################################################
+
 	function sendSpcAttchFilePost(spcId){
 		var genId = $("#gen").data("value");
 
 		$("#attachement_info").find("input[type=file]").each(function(){
 			$(this).attr("name", this.name + "_" + spcId +"_" + genId);
 		});
-
+		console.log("data---", new FormData($('#attachement_info')[0]))
 		$.ajax({
 			type: 'post',
 			enctype: 'multipart/form-data',
@@ -1073,7 +1105,7 @@
 							<div class="tx_inp_type edit">
 								<input type="text" id="account_num" name="account_num" placeholder="직접 입력">
 							</div>
-							<button class="btn_type07 mt-offset-10 hidden fr" onclick="$(this).parents().closest('tr').remove()"></button>
+							<button class="btn_close mt-offset-10 hidden fr" onclick="$(this).parents().closest('tr').remove()"></button>
 							<div class="tx_inp_type edit">
 								<input type="text" id="account_setup_bank" name="account_setup_bank" placeholder="직접 입력">
 							</div>
@@ -1485,7 +1517,7 @@
 
 			<template class="copy_list">
 				<section>
-					<div class="tbl_top flex_wrapper mt-offset-10"><h2 class="ntit">보험 정보</h2><button class="delete_icon btn_type07" onclick="$(this).parents().find('section').remove()"></button></div>
+					<div class="tbl_top flex_wrapper mt-offset-10"><h2 class="ntit">보험 정보</h2><button class="btn_close" onclick="removeList(this.parents().find('section'))"></button></div>
 					<div class="spc_tbl_row st_edit">
 						<table>
 							<colgroup>
@@ -1604,9 +1636,9 @@
 						<col style="width:35%">
 					</colgroup>
 					<tr>
-						<th>모듈 제조사 / 모델<a href="javascript:addList('addList01');" class="btn_add fr">추가</a></th>
-						<td id="addList01">
-							<div class="group_type">
+						<th>모듈 제조사 / 모델<a href="javascript:addList('addList_module_info');" class="btn_add fr">추가</a></th>
+						<td>
+							<div id="addList_module_info" class="group_type">
 								<div class="tx_inp_type edit">
 									<label class="sr-only">모듈 제조사</label>
 									<input type="text" id="module_manufacturer" name="모듈_제조사" placeholder="제조사">
@@ -1631,12 +1663,12 @@
 						</td>
 					</tr>
 					<tr>
-						<th><label for="installAngle">모듈 설치 각도</label><a href="javascript:addList('addList02');" class="btn_add fr">추가</a></th>
-						<td id="addList02">
-							<div class="tx_inp_type edit unit t1 fl">
+						<th><label for="installAngle">모듈 설치 각도</label><a href="javascript:addList('addList_module_angle');" class="btn_add fr">추가</a></th>
+						<td>
+							<div id="addList_module_angle" class="tx_inp_type edit unit t1 fl">
 								<input type="text" id="installAngle" name="모듈_설치_각도">&ensp;&deg;
+								<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
 							</div>
-							<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
 						</td>
 						<th>모듈 설치 방식</th>
 						<td>
@@ -1652,37 +1684,39 @@
 						</td>
 					</tr>
 					<tr>
-						<th>인버터 제조사 / 모델<a href="javascript:addList('addList03');" class="btn_add fr">추가</a></th>
-						<td id="addList03">
-							<fieldset class="group_type">
-								<legend sr-only="인버터 제조사/모델"></legend>
-								<div class="tx_inp_type edit">
-									<input type="text" name="인버터_제조사" placeholder="제조사">
-								</div>
-								<div class="tx_inp_type edit">
-									<input type="text" name="인버터_제조사_모델" placeholder="모델">
-								</div>
+						<th>인버터 제조사 / 모델<a href="javascript:addList('addList_inverter');" class="btn_add fr">추가</a></th>
+						<td>
+							<div id="addList_inverter" class="flex_start">
+								<fieldset class="group_type">
+									<legend sr-only="인버터 제조사/모델"></legend>
+									<div class="tx_inp_type edit">
+										<input type="text" name="인버터_제조사" placeholder="제조사">
+									</div>
+									<div class="tx_inp_type edit">
+										<input type="text" name="인버터_제조사_모델" placeholder="모델">
+									</div>
+								</fieldset>
 								<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
-							</fieldset>
+							</div>
 						</td>
-						<th>인버터 용량 / 대수<a href="javascript:addList('addList04');" class="btn_add fr">추가</a></th>
-						<td id="addList04">
-							<fieldset class="group_type">
+						<th>인버터 용량 / 대수<a href="javascript:addList('addList_inverter_vol');" class="btn_add fr">추가</a></th>
+						<td>
+							<fieldset id="addList_inverter_vol" class="group_type">
 								<legend sr-only="인버터 용량 / 대수"></legend>
 								<div class="tx_inp_type edit unit t1">
 									<input type="text" id="인버터_용량" name="인버터_용량"><span>kW</span><!--
 							--></div>
 								<div class="tx_inp_type edit unit t1">
 									<input type="text" id="인버터_용량_대수" name="인버터_용량_대수"><span>대</span><!--
-								--></div>
-								<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
+								--><button class="btn_close hidden" onclick="removeList(this);">삭제</button><!--									
+							--></div>
 							</fieldset>
 						</td>
 					</tr>
 					<tr>
-						<th><label for="manufacturerInfo">접속반 제조사 / 모델</label><a href="javascript:addList('addList05');" class="btn_add fr">추가</a></th>
-						<td id="addList05">
-							<div class="group_type">
+						<th><label for="manufacturerInfo">접속반 제조사 / 모델</label><a href="javascript:addList('addList_manufacturer');" class="btn_add fr">추가</a></th>
+						<td>
+							<div id="addList_manufacturer" class="group_type">
 								<div class="tx_inp_type edit">
 									<input type="text" placeholder="제조사" name="접속반_제조사" id="manufacturerInfo">
 								</div>
@@ -1692,9 +1726,9 @@
 								<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
-						<th>접속반 채널 / 대수<a href="javascript:addList('addList06');" class="btn_add fr">추가</a></th>
-						<td id="addList06">
-							<div class="group_type">
+						<th>접속반 채널 / 대수<a href="javascript:addList('addList_connection');" class="btn_add fr">추가</a></th>
+						<td>
+							<div id="addList_connection" class="group_type">
 								<div class="tx_inp_type edit unit t1">
 									<input type="text" name="접속반_채널"><span>Ch</span><!--
 							--></div>
@@ -1742,18 +1776,9 @@
 							--></fieldset>
 							</div>
 						</td>
-						<th>수배전반 제조사 / 모델<a href="javascript:addList('addList06');" class="btn_add fr">추가</a></th>
-						<td id="addList06">
-							<div class="group_type">
-								<div class="tx_inp_type edit">
-									<input type="text" name="접속반_채널" placeholder="제조사">
-								</div>
-								<div class="tx_inp_type edit">
-									<input type="text" name="모델" placeholder="모델">
-								</div>
-								<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
-							</div>
-							<div class="group_type">
+						<th>수배전반 제조사 / 모델<a href="javascript:addList('addList_switch_gear');" class="btn_add fr">추가</a></th>
+						<td>
+							<div id="addList_switch_gear" class="group_type">
 								<div class="tx_inp_type edit">
 									<input type="text" name="접속반_채널" placeholder="제조사">
 								</div>
@@ -1986,121 +2011,123 @@
 				</table>
 			</div>
 		</div>
+		<!-- TO 개발자님 : 아래 파일 선택은 multiple select 로 폼-->
 
-		<div class="indiv panel panel-default attachement">
-			<div class="tbl_top panel-heading"><h2 class="ntit mt25">첨부 파일</h2><a href="#attachementInfoToggle" data-toggle="collapse" class="collapse_arrow"></a></div>
-				<div id="attachementInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in">
-					<table>
-						<colgroup>
-							<col style="width:15%">
-							<col style="width:55%">
-							<col style="width:30%">
-							<col>
-						</colgroup>
-						<tr>
-							<th>현장 사진<a href="javascript:addList('addFileList01')" class="btn_add fr">추가</a></th>
-							<td id="addFileList01"><!--
-								--><input type="file" id="spc_site_pic_file" class="hidden" name="spc_file_01" accept=".gif, .jpg, .png"><!--
+			<div class="indiv panel panel-default attachment">
+				<div class="tbl_top panel-heading"><h2 class="ntit mt25">첨부 파일</h2><a href="#attachementInfoToggle" data-toggle="collapse" class="collapse_arrow"></a></div>
+				<form id="attachement_info" name="attachement_info" class="mt-25">
+					<div id="attachementInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in">
+						<table>
+							<colgroup>
+								<col style="width:15%">
+								<col style="width:55%">
+								<col style="width:30%">
+								<col>
+							</colgroup>
+							<tr>
+								<th>현장 사진 <button class="btnSubmit" type="button" onclick="uploadTest()">테스트</button></th>
+								<td class="flex_start_td"><!--
+								--><input type="file" id="spc_site_pic_file" class="hidden" name="" accept=".gif, .jpg, .png" multiple=""><!--
 								--><label for="spc_site_pic_file" class="btn file_upload">파일 선택</label><!--
-								--><span class="upload_text ml-16"></span><!--
-							--></td>
+								--><div class="file_list ml-16"><ul><li>No Files Selected</li></ul></div>
+								</td>
+								<th></th>
+								<td></td>
+							</tr>
+							<tr>
+								<th>수배전반</th>
+								<td class="flex_start_td"><!--
+								--><input type="file" id="spc_incoming_panel_file" class="hidden" name="spc_file_02" accept=".gif, .jpg, .png" multiple=""><!--
+								--><label for="spc_incoming_panel_file" class="btn file_upload">파일 선택</label><!--
+								--><div class="file_list ml-16"><ul><li class="upload_text">암사 아리수 정수센터 수배전반 외형도.xlxs</li></ul></div>
+								</td>
+								<th></th>
+								<td></td>
+							</tr>
+							<tr>
+								<th>케이블</th>
+								<td class="flex_start_td"><!--
+								--><input type="file" id="spc_cable_file" class="hidden" name="spc_file_03" accept=".gif, .jpg, .png" multiple=""><!--
+								--><label for="spc_cable_file" class="btn file_upload">파일 선택</label><!--
+								--><div class="file_list ml-16"><ul><li>No Files Selected</li></ul></div>
+								</td>
+								<th></th>
+								<td></td>
+							</tr>
+							<tr>
+								<th>모듈</th>
+								<td class="flex_start_td"><!--
+								--><input type="file" id="spc_module_file" class="hidden" name="file" accept=".gif, .jpg, .png" multiple=""><!--
+								--><label for="spc_module_file" class="btn file_upload">파일 선택</label><!--
+								--><div class="file_list ml-16"><ul><li>No Files Selected</li></ul></div>
+								</td>
 							<th></th>
 							<td></td>
-						</tr>
-						<tr>
-							<th>수배전반<a href="javascript:addList('addFileList10')" class="btn_add fr">추가</a></th>
-							<td id="addFileList10">
-								<input type="file" id="spc_incoming_panel_file" class="hidden" name="spc_file_02" accept=".gif, .jpg, .png">
-								<label for="spc_incoming_panel_file" class="btn file_upload">파일 선택</label><!--
-							--><span class="upload_text ml-16">암사 아리수 정수센터 수배전반 외형도.xlxs</span><!--
-						--></td>
-							<th></th>
-							<td></td>
-						</tr>
-						<tr>
-							<th>케이블<a href="javascript:addList('addFileList11')" class="btn_add fr">추가</a></th>
-							<td id="addFileList11">
-								<input type="file" id="spc_cable_file" class="hidden" name="spc_file_03"><!--
-							--><label for="spc_cable_file" class="btn file_upload">파일 선택</label><!--
-							--><span class="upload_text ml-16"></span><!--
-						--></td>
-							<th></th>
-							<td></td>
-						</tr>
-						<tr>
-							<th>모듈<a href="javascript:addList('addFileList12')" class="btn_add fr">추가</a></th>
-							<td id="addFileList12">
-								<input type="file" id="spc_module_file" class="hidden" name="file"><!--
-							--><label for="spc_module_file" class="btn file_upload">파일 선택</label><!--
-							--><span class="upload_text ml-16"></span><!--
-						--></td>
-						<th></th>
-						<td></td>
-						</tr>
-						<tr>
-							<th>인버터<a href="javascript:addList('addFileList13')" class="btn_add fr">추가</a></th>
-							<td id="addFileList13">
-								<input type="file" id="spc_inverter_file" class="hidden" name="spc_file_05"><!--
-							--><label for="spc_inverter_file" class="btn file_upload">파일 선택</label><!--
-							--><span class="upload_text ml-16"></span><!--
-						--></td>
-							<th></th>
-							<td></td>
-						</tr>
-						<tr>
-							<th>결선도<a href="javascript:addList('addFileList14')" class="btn_add fr">추가</a></th>
-							<td id="addFileList14">
-								<input type="file" id="spc_wiring_diagram_file" class="hidden" name="spc_file_06"><!--
-							--><label for="spc_wiring_diagram_file" class="btn file_upload">파일 선택</label><!--
-							--><span class="upload_text ml-16"></span><!--
-						--></td>
-							<th></th>
-							<td></td>
-						</tr>
-						<tr>
-							<th>토목<a href="javascript:addList('addFileList15')" class="btn_add fr">추가</a></th>
-							<td id="addFileList15"><!--
-							--><input type="file" id="spc_civil_file" class="hidden" name="spc_civil_file"><!--
-							--><label for="spc_civil_file" class="btn file_upload">파일 선택</label><!--
-							--><span class="upload_text ml-16"></span><!--
-						--></td>
-							<th></th>
-							<td></td>
-						</tr>
-						<tr>
-							<th>구조물<a href="javascript:addList('addFileList16')" class="btn_add fr">추가</a></th>
-							<td id="addFileList16"><!--
-							--><input type="file" id="spc_construct_file" class="hidden" name="spc_file_08"><!--
-							--><label for="spc_construct_file" class="btn file_upload">파일 선택</label><!--
-							--><span class="upload_text ml-16"></span><!--
-						--></td>
-							<th></th>
-							<td></td>
-						</tr>
-						<tr>
-							<th>접속반<a href="javascript:addList('addFileList17')" class="btn_add fr">추가</a></th>
-							<td id="addFileList17"><!--
-							--><input type="file" id="spc_connection_board_file" class="hidden" name="spc_connection_board_file_09"><!--
-							--><label for="spc_connection_board_file" class="btn file_upload">파일 선택</label><!--
-							--><span class="upload_text ml-16"></span><!--
-						--></td>
-							<th></th>
-							<td></td>
-						</tr>
-						<tr>
-							<th>기타설비<a href="javascript:addList('addFileList19')" class="btn_add fr">추가</a></th>
-							<td id="addFileList19"><!--
-								--><input type="file" id="spc_misc_device" class="hidden" name="spc_file_10"><!--
-								--><label for="spc_misc_device" class="btn file_upload">파일 선택</label><!--
-								--><span class="upload_text ml-16"></span><!--
-							--></td>
-							<th></th>
-							<td></td>
-						</tr>
-					</table>
-				</div>
+							</tr>
+							<tr>
+								<th>인버터</th>
+								<td class="flex_start_td"><!--
+								--><input type="file" id="spc_inverter_file" class="hidden" name="spc_file_05" accept=".gif, .jpg, .png" multiple=""><!--
+								--><label for="spc_inverter_file" class="btn file_upload">파일 선택</label><!--
+								--><div class="file_list ml-16"><ul><li>No Files Selected</li></ul></div>
+								</td>
+								<th></th>
+								<td></td>
+							</tr>
+							<tr>
+								<th>결선도</th>
+								<td class="flex_start_td"><!--
+								--><input type="file" id="spc_wiring_diagram_file" class="hidden" name="spc_file_06" accept=".gif, .jpg, .png" multiple=""><!--
+								--><label for="spc_wiring_diagram_file" class="btn file_upload">파일 선택</label><!--
+								--><div class="file_list ml-16"><ul><li>No Files Selected</li></ul></div>
+								</td>
+								<th></th>
+								<td></td>
+							</tr>
+							<tr>
+								<th>토목</th>
+								<td class="flex_start_td"><!--
+								--><input type="file" id="spc_civil_file" class="hidden" name="spc_civil_file" accept=".gif, .jpg, .png" multiple=""><!--
+								--><label for="spc_civil_file" class="btn file_upload">파일 선택</label><!--
+								--><div class="file_list ml-16"><ul><li>No Files Selected</li></ul></div>
+								</td>
+								<th></th>
+								<td></td>
+							</tr>
+							<tr>
+								<th>구조물</th>
+								<td class="flex_start_td"><!--
+								--><input type="file" id="spc_construct_file" class="hidden" name="spc_file_08" accept=".gif, .jpg, .png" multiple=""><!--
+								--><label for="spc_construct_file" class="btn file_upload">파일 선택</label><!--
+								--><div class="file_list ml-16"><ul><li>No Files Selected</li></ul></div>
+								</td>
+								<th></th>
+								<td></td>
+							</tr>
+							<tr>
+								<th>접속반</th>
+								<td class="flex_start_td"><!--
+								--><input type="file" id="spc_connection_board_file" class="hidden" name="spc_connection_board_file_09" accept=".gif, .jpg, .png" multiple=""><!--
+								--><label for="spc_connection_board_file" class="btn file_upload">파일 선택</label><!--
+								--><div class="file_list ml-16"><ul><li>No Files Selected</li></ul></div>
+								</td>
+								<th></th>
+								<td></td>
+							</tr>
+							<tr>
+								<th>기타설비</th>
+								<td class="flex_start_td"><!--
+									--><input type="file" id="spc_misc_device" class="hidden" name="spc_file_10" accept=".gif, .jpg, .png" multiple=""><!--
+									--><label for="spc_misc_device" class="btn file_upload">파일 선택</label><!--
+									--><div class="file_list ml-16"><ul><li>No Files Selected</li></ul></div>
+								</td>
+								<th></th>
+								<td></td>
+							</tr>
+						</table>
+					</div>
+				</form>
 			</div>
-		</div>
 
 		<div class="btn_wrap_type_right">
 			<a href="/spc/entityDetails.do" class="btn btn_type03">목록</a><!--

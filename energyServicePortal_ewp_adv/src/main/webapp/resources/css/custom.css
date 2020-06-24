@@ -11353,6 +11353,14 @@ th .btn_align {
 	white-space: nowrap;
 }
 
+.spc_tbl_row td.flex_start_td {
+	display: flex;
+	justify-content: flex-start;
+	align-items: first baseline;
+	height: 100%;
+	padding: 16px 0 16px 50px;
+}
+
 .spc_tbl_row td+th {
 	padding: 0 0 0 36px;
 }
@@ -11868,7 +11876,9 @@ html.darkmode .modal-content.spc_detail_content li.single_item a .btn_next {
 .entity_wrap.post .indiv .spc_tbl_row.st_edit {
 	padding-bottom: 60px;
 }
-
+.entity_wrap.post .indiv .spc_tbl_row.st_edit.panel-collapse {
+	overflow: auto;
+}
 .entity_wrap.post .rdo_type.flex_start {
 	display: inline-block;
 }
@@ -11923,7 +11933,7 @@ html.darkmode .modal-content.spc_detail_content li.single_item a .btn_next {
 	color: var(--color8);
 }
 
-.entity_wrap.post .indiv.attachement th {
+.entity_wrap.post .indiv.attachment th {
 	display: table-cell;
 }
 
@@ -11943,6 +11953,10 @@ html.darkmode .modal-content.spc_detail_content li.single_item a .btn_next {
 .entity_wrap.post .indiv .spc_tbl_row th.th_align_top a.btn_add {
 	display: block;
 	float: right;
+}
+.entity_wrap.post .indiv .spc_tbl_row .btn_close {
+	margin-left: 24px;
+	margin-top: -8px;
 }
 
 .entity_wrap.post .upload_text {

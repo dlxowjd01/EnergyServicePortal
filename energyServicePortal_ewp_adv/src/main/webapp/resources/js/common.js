@@ -222,15 +222,42 @@ $(function(){
     });
 });
 
-/* input[file] label */
+/* input[file] multi-select || single select label */
 $(function() {
     $('input[type=file]').change(function(){
         var t = $(this).val();
 		var labelText = 'File : ' + t.substr(12, t.length);
-		$(this).prev('label').text(labelText);
-		$(this).parent().find(".upload_text").text(labelText);
+
+		if($(this).attr("multiple")){
+			let list = $(this).parent().find(".file_list ul");
+			let item = list.find("li");
+			let arr = [];
+			let listItem = ``;
+
+			item.text("");
+
+			for (var i = 0; i < $(this).get(0).files.length; ++i) {
+				listItem = `<li class="upload_text">${$(this).get(0).files[i].name}<li>`
+				list.append(listItem);
+				arr.push($(this).get(0).files[i].name);
+			}
+			$(this).attr("name", arr); 
+		} else {
+			$(this).prev('label').text(labelText);
+			$(this).parent().find(".upload_text").text(labelText);
+		}
     })
 });
+
+// $(function() {
+//     $('input[type=file]').change(function(){
+//         var t = $(this).val();
+// 		var labelText = 'File : ' + t.substr(12, t.length);
+
+// 		$(this).prev('label').text(labelText);
+// 		$(this).parent().find(".upload_text").text(labelText);
+//     })
+// });
 
 /* 장치 그룹 현황 슬라이드 */
 $(function() {

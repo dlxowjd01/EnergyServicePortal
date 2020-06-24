@@ -282,7 +282,7 @@
 		$("#attachement_info").find("input[type=file]").each(function(){
 			$(this).attr("name", this.name + "_" + spcId +"_" + genId);
 		});
-
+		console.log("new===", new FormData($('#attachement_info')[0]) )
 		$.ajax({
 			type: 'patch',
 			enctype: 'multipart/form-data',
