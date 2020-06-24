@@ -9,6 +9,7 @@
 		const spcOpt = $("#spcList").parents(".input-group");
 		setInitList("listData"); //리스트초기화
 		getDataList(page);
+		navAddClass("notice");
 
 		disclosureOpt.on("click", function(){
 			if($(this).parents("li").data("value")=="assetManager") {

@@ -420,9 +420,7 @@
 	<div class="col-lg-12">
 		<div class="indiv">
 			<div class="btn_wrap_type01">
-				<button type="button" class="btn_type" onclick="location.href='/spc/entityInformationPost.do'">
-					신규 등록
-				</button>
+				<button type="button" class="btn_type big" onclick="location.href='/spc/entityInformationPost.do'">신규 등록</button>
 			</div>
 			<div class="spc_tbl align_type" id="excelList">
 				<table class="sort_table chk_type">

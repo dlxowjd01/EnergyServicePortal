@@ -1431,7 +1431,7 @@
 				};
 				pieSeriesData.push($temp);
 				num2++
-				var liStr = '<li><span class="bu t1">' + key + '</span><span class="legend_val">' + val + '건</span></li>';
+				var liStr = '<li><span class="bu t5">' + key + '</span><span class="legend_val">' + val + '건</span></li>';
 				legendInner.find("ul").append(liStr);
 			}
 		});
