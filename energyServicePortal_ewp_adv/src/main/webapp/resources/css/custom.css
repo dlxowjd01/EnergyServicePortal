@@ -2321,6 +2321,7 @@ footer .copyright {
 
 .modal-dialog.his_alarm .modal-content .btn_wrap_type02 {
 	padding-right: 0;
+<<<<<<< HEAD
 }
 
 .modal-dialog.alarm_modal {
@@ -2333,6 +2334,20 @@ footer .copyright {
 	display: table
 }
 
+=======
+}
+
+.modal-dialog.alarm_modal {
+	width: 80%;
+	z-index: 9999;
+}
+
+/* 설비 / 수집현황 모달 */
+.device_modal .modal-content {
+	display: table
+}
+
+>>>>>>> 626d28c51e5904fe1d16374038e7636b663c7d08
 .device_modal .modal-content .input-group {
 	margin: 40px 20px 40px 0;
 }
@@ -11902,16 +11917,22 @@ html.darkmode .modal-content.spc_detail_content li.single_item a .btn_next {
 .entity_wrap.post .indiv .spc_tbl_row.st_edit {
 	padding-bottom: 60px;
 }
+<<<<<<< HEAD
 .entity_wrap.post .indiv .spc_tbl_row.st_edit.panel-collapse table {
 	table-layout: fixed;
 }
 
 .entity_wrap.post fieldset.flex_start,
 .entity_wrap.post fieldset.flex_start3  {
+=======
+
+.entity_wrap.post .rdo_type.flex_start {
+>>>>>>> 626d28c51e5904fe1d16374038e7636b663c7d08
 	display: inline-block;
 }
 .entity_wrap.post .rdo_type .radio_group {
 	display: inline-flex;
+<<<<<<< HEAD
 	white-space: nowrap;
 }
 
@@ -11930,6 +11951,15 @@ html.darkmode .modal-content.spc_detail_content li.single_item a .btn_next {
 	width: 90px;
 }
 .entity_wrap.post .rdo_type.flex_start .radio_group:not(:first-of-type) {
+=======
+}
+
+.entity_wrap.post .rdo_type .radio_group:first-child {
+	width: 124px;
+}
+
+.entity_wrap.post .rdo_type.flex_start .radio_group:not(:first-child) {
+>>>>>>> 626d28c51e5904fe1d16374038e7636b663c7d08
 	width: 96px;
 }
 .entity_wrap.post .group_type .rdo_type.flex_start2 {

@@ -262,7 +262,7 @@
 			<div class="indiv smain_alarm wrap_type">
 				<div class="alarm_stat clear">
 					<div class="a_alert"><span>금일 발생 오류</span><em>0</em></div>
-					<div class="a_warning"><a href="javascript:void(0);" onclick="pageMove('all', 'alarm');" class="btn cancel_btn">상세보기</a></div>
+					<div class="a_warning"><a href="javascript:void(0);" onclick="pageMove('', 'alarm');" class="btn cancel_btn">상세보기</a></div>
 				</div>
 				<div class="alarm_notice">
 					<ul id="alarmNotice">
@@ -2036,6 +2036,8 @@
 
 	const pageMove = (id, action) => {
 		let $form = $('#linkSiteForm');
+
+		id = id == '' ? siteId : id;
 		let $inp = $('<input>').attr('type', 'hidden').attr('name', 'sid').val(id);
 
 		$form.append($inp);

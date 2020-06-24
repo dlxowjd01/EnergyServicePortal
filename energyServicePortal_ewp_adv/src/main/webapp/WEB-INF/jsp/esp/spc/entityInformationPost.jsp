@@ -132,6 +132,9 @@
 		}
 	}
 	
+	function deleteInfo(e){
+		console.log("delete===", e);
+	}
 	function removeList(obj){
 		if( $(obj).parent().parent().find(".group_type").length > 1){
 			$(obj).parent().remove();	

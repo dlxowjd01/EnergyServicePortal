@@ -2,6 +2,7 @@
 <script>
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
+	const searchCnt = 0;
 
 	$(function () {
 		var spcFrom = document.getElementById("spc_form");
@@ -18,7 +19,7 @@
 		spcFrom.addEventListener("submit", function (e) {
 			e.preventDefault();
 			(!keyWord.value || !keyWord.value.trim()) ? (keyWord.value = '') : (keyWord.value === keyWord.value);
-			getDataList(page);
+			getDataList(page, searchCnt);
 		});
 
 		setInitList("listData"); //리스트초기화
@@ -66,26 +67,89 @@
 		}
 	}
 
-	function jsonDataFilter(jsonData) {
-		var keyWord = $("#key_word").val().trim().toLowerCase(),
-			bResult = false;
-
-		if (jsonData["name"].toLowerCase().indexOf(keyWord) > -1 || jsonData["발전소_명"].toLowerCase().indexOf(keyWord) > -1) {
-			bResult = true;
+	function jsonDataFilter(jsonData, searchCnt) {
+		let keyWord = $("#key_word").val().trim().toLowerCase(),
+			kResult = false, bResult = false , wResult = false, oResult = false, cResult = false
+		
+		if(searchCnt == 0){
+			wResult = warrantyFilter(jsonData, wResult);
+// 			oResult = operationFilter(jsonData, oResult);
+// 			cResult = contractFilter(jsonData, cResult);
+			
+			if (jsonData["name"].toLowerCase().indexOf(keyWord) > -1 || jsonData["발전소_명"].toLowerCase().indexOf(keyWord) > -1) {
+				kResult = true;
+			}
+			
+			if(wResult && kResult){
+				bResult = true;
+			}
+			
+			return bResult;
+			
+		}else{
+			if (jsonData["name"].toLowerCase().indexOf(keyWord) > -1 || jsonData["발전소_명"].toLowerCase().indexOf(keyWord) > -1) {
+				kResult = true;
+			}
+			return kResult;
+			
 		}
 
-		return bResult;
 	}
 
-	function setJsonDataFormat(result, page) {
-
+	function operationFilter(jsonData, oResult) {
+		let operArray = [];
+		$(":checkbox[name='operation_opt']:checked").each(function() {
+			operArray.push($(this).val());	
+		});
+		
+		$.each(operArray, function(i, operation){
+			if(jsonData["운영_여부"] == operation){
+				oResult = true;
+			}
+		});
+		
+		return oResult;
+	}
+	
+	function warrantyFilter(jsonData, wResult){
+		let warrantyArray = [];
+		
+		$(":checkbox[name='warranty_opt']:checked").each(function() {
+			warrantyArray.push($(this).val());	
+		});
+		
+		$.each(warrantyArray, function(i, warranty){
+			if(jsonData["보증_방식"] == warranty){
+				wResult = true;
+			}
+		});
+		
+		return wResult;
+	}
+	
+	function contractFilter(jsonData, cResult){
+		let contractArray = [];
+		
+		$(":checkbox[name='contract_opt']:checked").each(function() {
+			contractArray.push($(this).val());	
+		});
+		
+		$.each(contractArray, function(i, contract){
+			if(jsonData["계약_구분"] == contract){
+				cResult = true;
+			}
+		});
+		
+		return wResult;
+	}
+	
+	function setJsonDataFormat(result, page, searchCnt) {
 		var jsonList = [],
 			keyWord = $("#key_word").val();
 
 		for (var i = 0, count = result.data.length; i < count; i++) {
 
 			var spcGensList = result.data[i].spcGens;
-
 			if (spcGensList !== undefined && spcGensList.length > 0) {
 				for (var j = 0, jcount = spcGensList.length; j < jcount; j++) {
 
@@ -105,7 +169,7 @@
 					newData["추가_보수"] = nvl(warrantyInfo["추가_보수"], "-");
 
 					//키워드 검색 조건 필터 처리
-					if (jsonDataFilter(newData)) {
+					if (jsonDataFilter(newData, searchCnt)) {
 						jsonList.push(newData)
 					}
 				}
@@ -115,7 +179,7 @@
 		return jsonList;
 	}
 
-	function getDataList(page) {
+	function getDataList(page , searchCnt) {
 
 		if (page == undefined) {
 			page = 1;
@@ -130,7 +194,7 @@
 				includeGens: true
 			},
 			success: function (result) {
-			setMakeList(setJsonDataFormat(result, page), "listData", {
+			setMakeList(setJsonDataFormat(result, page, searchCnt), "listData", {
 					"dataFunction": {
 						"INDEX": getNumberIndex
 					}
@@ -238,10 +302,28 @@
 				<div class="dropdown sa_select mr-16" id="operation_select">
 					<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">전체<span class="caret"></span></button>
 					<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="operationList">
-						<li data-value="operation_[INDEX]">
+						<li>
 							<a href="javascript:void(0);" tabindex="-1">
-								<input type="checkbox" id="operation_[INDEX]" value="operation_[INDEX]" name="operation_opt">
-								<label for="operation_[INDEX]"><span></span>[name]</label>
+								<input type="checkbox" id="operation_0" value="operation_0" name="operation_opt">
+								<label for="operation_0"><span></span>전체</label>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);" tabindex="-1">
+								<input type="checkbox" id="operation_1" value="operation_1" name="operation_opt">
+								<label for="operation_1"><span></span>운영중</label>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);" tabindex="-1">
+								<input type="checkbox" id="operation_2" value="operation_1" name="operation_opt">
+								<label for="operation_2"><span></span>운영 예정</label>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);" tabindex="-1">
+								<input type="checkbox" id="operation_3" value="operation_1" name="operation_opt">
+								<label for="operation_3"><span></span>해지</label>
 							</a>
 						</li>
 					</ul>
@@ -251,10 +333,28 @@
 				<div class="dropdown sa_select mr-16" id="warranty_select">
 					<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">전체<span class="caret"></span></button>
 					<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="warrantyList">
-						<li data-value="[sid]">
+						<li>
 							<a href="javascript:void(0);" tabindex="-1">
-								<input type="checkbox" id="warranty_[INDEX]" value="warranty_[INDEX]" name="warranty_opt">
-								<label for="warranty_[INDEX]"><span></span>[name]</label>
+								<input type="checkbox" id="warranty_0" value="전체" name="warranty_opt">
+								<label for="warranty_0"><span></span>전체</label>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);" tabindex="-1">
+								<input type="checkbox" id="warranty_1" value="PR" name="warranty_opt">
+								<label for="warranty_1"><span></span>PR</label>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);" tabindex="-1">
+								<input type="checkbox" id="warranty_2" value="발전 시간" name="warranty_opt">
+								<label for="warranty_2"><span></span>발전 시간</label>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);" tabindex="-1">
+								<input type="checkbox" id="warranty_3" value="PR + 발전시간" name="warranty_opt">
+								<label for="warranty_3"><span></span>PR + 발전시간</label>
 							</a>
 						</li>
 					</ul>
@@ -264,10 +364,40 @@
 				<div class="dropdown sa_select mr-24" id="contract_select">
 					<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">전체<span class="caret"></span></button>
 					<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="contractList">
-						<li data-value="[sid]">
+						<li>
 							<a href="javascript:void(0);" tabindex="-1">
-								<input type="checkbox" id="contract_[INDEX]" value="[sid]" name="contract_opt">
-								<label for="contract_[INDEX]"><span></span>[name]</label>
+								<input type="checkbox" id="contract_0" value="contract_0" name="contract_opt">
+								<label for="contract_0"><span></span>전체</label>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);" tabindex="-1">
+								<input type="checkbox" id="contract_1" value="contract_1" name="contract_opt">
+								<label for="contract_1"><span></span>종합</label>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);" tabindex="-1">
+								<input type="checkbox" id="contract_2" value="contract_2" name="contract_opt">
+								<label for="contract_2"><span></span>일반관리</label>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);" tabindex="-1">
+								<input type="checkbox" id="contract_3" value="contract_3" name="contract_opt">
+								<label for="contract_3"><span></span>사무수탁</label>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);" tabindex="-1">
+								<input type="checkbox" id="contract_4" value="contract_4" name="contract_opt">
+								<label for="contract_4"><span></span>보험</label>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);" tabindex="-1">
+								<input type="checkbox" id="contract_5" value="contract_5" name="contract_opt">
+								<label for="contract_5"><span></span>안전관리자</label>
 							</a>
 						</li>
 					</ul>

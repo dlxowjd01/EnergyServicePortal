@@ -1570,6 +1570,9 @@ const searchSite = function () {
 					refineList.push(site);
 				} else {
 					deviceStatus.some(status => {
+						if(site.operation[0] == undefined){
+							site.operation.push(0);
+						}
 						if ($.inArray(Number(status), site.operation) != -1) {
 							return refineList.push(site);
 						}
@@ -1581,6 +1584,9 @@ const searchSite = function () {
 				refineList.push(site);
 			} else {
 				deviceStatus.some(status => {
+					if(site.operation[0] == undefined){
+						site.operation.push(0);
+					}
 					if ($.inArray(Number(status), site.operation) != -1) {
 						return refineList.push(site);
 					}
