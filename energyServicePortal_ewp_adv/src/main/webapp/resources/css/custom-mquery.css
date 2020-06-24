@@ -7,7 +7,7 @@
 
     .spc_dialog {
         width: 1092px;
-    }
+	}
 }
 
 
@@ -74,11 +74,46 @@
 	.indiv.diagnosis_chart .chart_top .inline_flex .duration {
 		display: none;
 	}
-	.entity_wrap.post .indiv .spc_tbl_row th {
-		white-space: wrap;
+	.entity_wrap.post .indiv .spc_tbl_row.st_edit .tx_inp_type.edit,
+	.entity_wrap.post .indiv .spc_tbl_row.st_edit .sel_calendar.edit{
+		max-width: 300px;
+		width: 100%;
+	}
+	.entity_wrap.post .indiv .spc_tbl_row th,
+	.entity_wrap.post .indiv .spc_tbl_row td {
+		white-space: normal;
+	}
+	.entity_wrap.post .indiv .spc_tbl_row .sel_calendar.edit.twin .sel {
+		width: 100%;
+		float: none;
 	}
 }
+
 @media all and (max-width: 1199px) {
+	.group_type.short .dropdown.edit,
+	.group_type.short .dropdown.edit:nth-child(2) {
+		width: 100%;
+	}
+	.entity_wrap.post .indiv .spc_tbl_row.st_edit .group_type > div + div {
+		margin-left: 0;
+		float: left;
+		clear: both;
+		content: "";
+	}
+	.entity_wrap.post .indiv .spc_tbl_row td.flex_start .sel_calendar.twin {
+		padding-top: 49px;
+		width: 70%;
+	}
+	.entity_wrap.post .indiv .spc_tbl_row td.flex_start .chk_type.ml-38 {
+		margin: 10px 0 10px 15px;
+		padding-top: 45px;
+		white-space: normal;
+	}
+	.group_type > div, .group_type > div.tx_inp_type,
+	.dropup.edit,
+	.dropdown.edit {
+		width: 100%;
+	}
     .w_type {
         width: 100%
     }
@@ -158,7 +193,17 @@
 /* Tablet && Mobile screen sizes */
 
 @media all and (max-width: 992px) {
-
+	.entity_wrap.post .indiv .spc_tbl_row td.flex_start {
+		display: table-cell;
+	}
+	.entity_wrap.post .indiv .spc_tbl_row td.flex_start .sel_calendar.twin {
+		padding-top: 0;
+		width: 100%;
+	}
+	.entity_wrap.post .indiv .spc_tbl_row td.flex_start .chk_type.ml-38 {
+		padding-top: 0;
+		margin: 10px 0 10px 0px;
+	}
     /* 전체메뉴 레이어 조정 */
     nav .all-menu .menu-group>ul>li:nth-child(4) {
         border-left: solid 1px #4a73bd;
@@ -180,15 +225,6 @@
 	*********************************************************************************/
     .alarm_notice li:not(:last-child) {
         margin-bottom: 10px;
-    }
-
-    .alarm_notice li span {
-        width: auto;
-    }
-
-    .alarm_notice li span.err_time {
-        float: left;
-        text-indent: 24px;
     }
 
     /********************************************************************************

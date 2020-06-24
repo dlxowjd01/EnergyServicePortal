@@ -233,8 +233,9 @@ $(function() {
 			let item = list.find("li");
 			let arr = [];
 			let listItem = ``;
-
-			item.text("");
+			if(!item.hasClass("upload_text")){
+				item.text("");
+			}
 
 			for (var i = 0; i < $(this).get(0).files.length; ++i) {
 				listItem = `<li class="upload_text">${$(this).get(0).files[i].name}<li>`

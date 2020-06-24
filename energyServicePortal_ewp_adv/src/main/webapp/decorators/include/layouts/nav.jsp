@@ -37,6 +37,7 @@
 			case "setting": $(".smn7").addClass("on"); break;
 			case "main": $(".smn0").addClass("on"); break;
 			case "commonCode": $(".smn9").addClass("on"); break;
+			case "notice": $(".smn10").addClass("on"); break;
 		}
 		// upperMenu.first().addClass("active");
 	}
@@ -205,6 +206,7 @@
 			</li>
 		</ul>
 		<ol>
+			<li class="smn10"><a href="/spc/notice.do">공지사항</a></li>
 			<li class="smn8"><a href="/logout.do">로그아웃</a></li>
 		</ol>
 	</c:if>
@@ -304,6 +306,7 @@
 			</li>
 		</ul>
 		<ol>
+			<li class="gmn10"><a href="/spc/notice.do">공지사항</a></li>
 			<li class="gmn8"><a href="/logout.do">로그아웃</a></li>
 		</ol>
 	</div>
