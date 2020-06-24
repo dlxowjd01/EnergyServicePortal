@@ -737,7 +737,7 @@
 		}
 		
 		newHeadTable.setAttribute('class', 'sort_table his_tbl chk_type');
-// 		newHeadTable.setAttribute('id', deviceType);
+		newHeadTable.setAttribute('id', deviceType+'Table');
 		tbody.setAttribute('id', deviceType);
 		$(".tbl_wrap_type").append(newHeadTable);
 	}
@@ -1718,12 +1718,13 @@
 	}
 
 	const alarmConfirmCheckAll = function (tableId) {
-		if ($('#' + tableId + '> thead tr :checkbox:checked').length == 0) {
-			$('#' + tableId + '> tbody tr :checkbox').prop('checked', false);
+		if ($('#' + tableId + "Table" + '> thead tr :checkbox:checked').length == 0) {
+			$('#' + tableId + "Table" + '> tbody tr :checkbox').prop('checked', false);
 		} else {
-			$('#' + tableId + '> tbody tr :checkbox').prop('checked', true);
+			$('#' + tableId + "Table" + '> tbody tr :checkbox').prop('checked', true);
 		}
 	}
+	
 
 	const alarmConfirmAll = function (tableId) {
 		if ($('#' + tableId + '> tbody tr :checkbox:checked').length == 0) {

@@ -1562,6 +1562,7 @@ const searchSite = function () {
 		})
 	);
 	let refineList = new Array();
+
 	siteList.forEach((site, siteIdx) => {
 		if (!isEmpty(searchName)) {
 			if (site.name.match(searchName) || site.address.match(searchName)) {
@@ -1569,7 +1570,7 @@ const searchSite = function () {
 					refineList.push(site);
 				} else {
 					deviceStatus.some(status => {
-						if(site.operation == undefined){
+						if(site.operation[0] == undefined){
 							site.operation.push(0);
 						}
 						if ($.inArray(Number(status), site.operation) != -1) {
@@ -1583,7 +1584,7 @@ const searchSite = function () {
 				refineList.push(site);
 			} else {
 				deviceStatus.some(status => {
-					if(site.operation == undefined){
+					if(site.operation[0] == undefined){
 						site.operation.push(0);
 					}
 					if ($.inArray(Number(status), site.operation) != -1) {
