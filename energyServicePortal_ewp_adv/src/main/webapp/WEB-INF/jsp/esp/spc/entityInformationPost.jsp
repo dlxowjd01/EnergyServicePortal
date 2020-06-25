@@ -1364,7 +1364,7 @@
 								<input type="text" id="" class="sel datepicker" name="" value="" autocomplete="off" placeholder="날짜 선택">
 							</div>
 						</td>
-						<th><label for="">실 사용전 검사일자</label></th>
+						<th><label for="">(실제) 사용전 검사일자</label></th>
 						<td>
 							<div class="sel_calendar edit">
 								<input type="text" id="" class="sel datepicker" name="" value="" autocomplete="off" placeholder="날짜 선택">
@@ -1378,7 +1378,7 @@
 								<input type="text" id="" class="sel datepicker" name="" value="" autocomplete="off" placeholder="날짜 선택">
 							</div>
 						</td>
-						<th><label for="">실 준공일</label></th>
+						<th><label for="">(실제) 준공일</label></th>
 						<td>
 							<div class="sel_calendar edit">
 								<input type="text" id="" class="sel datepicker" name="" value="" autocomplete="off" placeholder="날짜 선택">
