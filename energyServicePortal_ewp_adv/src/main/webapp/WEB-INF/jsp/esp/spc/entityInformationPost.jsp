@@ -998,7 +998,7 @@
 						<th><label for="rpsId">RPS 시스템 ID</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="rpsId" name="rps_id" placeholder="">
+								<input type="text" id="rpsId" name="rps_id" placeholder="직접 입력">
 							</div>
 						</td>
 						<th><label for="rpsPassword">PW</label></th>
@@ -1012,7 +1012,7 @@
 						<th><label for="powerTraderId">전력 거래소 ID</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="name" placeholder="">
+								<input type="text" id="name" placeholder="직접 입력">
 							</div>
 						</td>
 						<th><label for="">PW</label></th>
@@ -1023,14 +1023,18 @@
 						</td>
 					</tr>
 					<tr>
-						<th><label for="">REC 발전사명 ID</label></th>
+						<th><label for="">REC 발전사 ID</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="text" id="name" placeholder="">
+								<input type="text" id="name" placeholder="직접 입력">
 							</div>
 						</td>
-						<th></th>
-						<td></td>
+						<th><label for="">발전사명</label></th>
+						<td>
+							<div class="tx_inp_type edit">
+								<input type="text" id="name" placeholder="직접 입력">
+							</div>
+						</td>
 					</tr>
 				</table>
 			</div>
@@ -1170,10 +1174,10 @@
 						<th></th>
 						<td></td>
 					</tr>
-					<tr>
+					<tr id="addList_certificate_registration">
 						<th class="group_type">공인인증서 등록<a href="javascript:addList('addList_certificate_registration');" class="btn_add fr">추가</a></th>
 						<td>
-							<div id="addList_certificate_registration" class="group_type flex_start">
+							<div class="group_type flex_start">
 								<div class="dropdown placeholder edit">
 									<button id="certificateOpt" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">용도 선택<span class="caret"></span></button>
 									<ul id="certificateList" class="dropdown-menu" role="menu">
@@ -1185,14 +1189,16 @@
 									<input type="file" id="certificate_registration" class="hidden" name="banking_file" accept=".jpg, .png">
 									<label for="certificate_registration" class="btn file_upload">파일 선택</label>
 									<span class="upload_text ml-16">등록 파일 이름</span>
-									<button class="btn_close hidden" onclick="$(this).parents().closest('.group_type').remove()"></button>
 								</div>
 							</div>
 						</td>
 						<th><label for="certificate_password">인증서 비밀번호</label></th>
-						<td>
+						<td class="flex_wrapper">
 							<div class="tx_inp_type edit">
 								<input type="text" id="certificate_password" name="certificate_password" placeholder="비밀번호를 입력해 주세요.">
+							</div>
+							<div class="fr fixed_height mt5 mr-12">
+								<button class="btn_close hidden" onclick="$(this).parents().closest('tr').remove()"></button>								
 							</div>
 						</td>
 					</tr>
@@ -1222,9 +1228,8 @@
 							<div class="flex_start">
 								<div class="tx_inp_type edit unit t1 mr-30">
 									<input type="text" id="total_volume" class="right" name="total_volume" placeholder="">
-									<span>원</span>
+									<span>MW</span>
 								</div>
-								<span class="fixed_height"><span class="auto_price">[value]</span>원/MW</span>
 							</div>
 							<div class="flex_start">
 								<div class="tx_inp_type edit unit t1 mr-30">
