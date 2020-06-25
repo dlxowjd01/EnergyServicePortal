@@ -11,7 +11,7 @@
 		getDataList(page);
 
 		disclosureOpt.on("click", function(){
-			if($(this).parents("li").data("value")=="assetManager") {
+			if($(this).parents("li").data("value")=="spcCustodian") {
 				spcOpt.removeClass("hidden");
 			}
 		})
