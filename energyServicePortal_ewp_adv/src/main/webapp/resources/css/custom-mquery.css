@@ -75,7 +75,8 @@
 		display: none;
 	}
 	.entity_wrap.post .indiv .spc_tbl_row.st_edit .tx_inp_type.edit,
-	.entity_wrap.post .indiv .spc_tbl_row.st_edit .sel_calendar.edit{
+	.entity_wrap.post .indiv .spc_tbl_row.st_edit .sel_calendar.edit,
+	.entity_wrap.post .indiv .spc_tbl_row.st_edit .fixed_heightw300{
 		max-width: 300px;
 		width: 100%;
 	}
