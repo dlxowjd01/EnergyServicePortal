@@ -1078,16 +1078,17 @@
 	<div class="col-12">
 		<form id="operationSearchForm" class="chart_top w-90">
 			<div class="dropdown sa_select pb-10" id="siteList">
-				<button type="button" class="btn btn-primary dropdown-toggle w1" data-toggle="dropdown" data-name="사업소 선택">사업소 선택<span class="caret"></span></button>
-				<ul class="dropdown-menu chk_type" role="menu" id="siteULList">
-					<li data-value="[sid]">
-						<a href="javascript:void(0);" tabindex="-1">
-							<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
-							<label for="site_[INDEX]"><span></span>[name]</label>
-						</a>
-					</li>
-				</ul>
-			</div><div class="sa_select pb-10"><span class="tx_tit">설비 타입</span><div class="sa_select">
+				<button type="button" class="btn btn-primary dropdown-toggle w1" data-toggle="dropdown" data-name="사업소 선택">사업소 선택<span class="caret"></span></button><!--
+			--><ul class="dropdown-menu chk_type" role="menu" id="siteULList"><!--
+				--><li data-value="[sid]"><!--
+					--><a href="javascript:void(0);" tabindex="-1"><!--
+						--><input type="checkbox" id="site_[INDEX]" value="[sid]" name="site"><!--
+						--><label for="site_[INDEX]"><span></span>[name]</label><!--
+					--></a><!--
+				--></li><!--
+			--></ul>
+			</div>
+			<div class="sa_select pb-10"><span class="tx_tit">설비 타입</span><div class="sa_select">
 					<div class="dropdown" id="deviceType">
 						<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비유형 선택">
 							설비유형 선택<span class="caret"></span>
@@ -1197,7 +1198,7 @@
 								<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown" data-vlue="mean" data-name="평균">
 									평균 <span class="caret"></span>
 								</button>
-								<ul class="dropdown-menu rdo_type " role="menu">
+								<ul class="dropdown-menu rdo_type" role="menu">
 									<li data-value="max">
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="radio" id="rdValue1" name="rdValue" value="max">

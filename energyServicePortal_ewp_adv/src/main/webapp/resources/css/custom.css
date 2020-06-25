@@ -11566,7 +11566,9 @@ table.table_footer tfoot td {
 }
 
 .spc_search_bar .collapse.dropdown-menu .bx_row.aN3 .bx_align:not(:last-of-type) {
-	width: 28%;
+	/* width: 28%; */
+	width: 132px;
+	margin-right: 15px;
 }
 
 .spc_search_bar .collapse.dropdown-menu .bx_row.aN3 .bx_align:last-of-type {
@@ -11574,7 +11576,7 @@ table.table_footer tfoot td {
 }
 
 .spc_search_bar .collapse.dropdown-menu .bx_row.aN3 .bx_align:not(:last-of-type) button.dropdown-toggle {
-	width: 132px;
+	width: 100%;
 }
 
 .spc_search_bar .collapse.dropdown-menu .bx_row.aN3 .bx_align:last-of-type button.dropdown-toggle {

@@ -1,12 +1,7 @@
-<%@ page contentType="text/html; charset=utf-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-<html>
 
-<head>
-	<title>Title</title>
-</head>
-
-<body>
+	<script src="/js/commonDropdown.js"></script>
 	<script type="text/javascript">
 		const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 		const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
@@ -716,6 +711,3 @@
 			</div>
 		</div>
 	</div>
-</body>
-
-</html>

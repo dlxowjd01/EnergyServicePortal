@@ -1,10 +1,13 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-  <head>
-    <title>Title</title>
-  </head>
-  <body>
-    <div class="row">
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ include file="/decorators/include/taglibs.jsp" %>
+<script src="/js/commonDropdown.js"></script>
+<script type="text/javascript">
+	$(function () {
+	
+	});
+</script>
+
+	<div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header">보고서</h1>
 			<div class="time fr">
@@ -36,9 +39,9 @@
 			<div class="fl">
 				<span class="tx_tit">작성 일자</span>
 				<div class="sel_calendar">
-				  <input type="text" id="datepicker1" class="sel" value="" autocomplete="off">
-				  <em></em>
-				  <input type="text" id="datepicker2" class="sel" value="" autocomplete="off">
+					<input type="text" id="datepicker1" class="sel" value="" autocomplete="off">
+					<em></em>
+					<input type="text" id="datepicker2" class="sel" value="" autocomplete="off">
 				</div>
 			</div>
 			<div class="fl">
@@ -186,5 +189,3 @@
 			</div>
 		</div>
 	</div>
-  </body>
-</html>

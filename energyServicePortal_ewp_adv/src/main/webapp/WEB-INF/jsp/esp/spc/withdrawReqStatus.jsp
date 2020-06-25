@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
-
+<script src="/js/commonDropdown.js"></script>
 <script>
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
@@ -37,7 +37,7 @@
 					<li class="chk_group" tabindex="-1" data-value="1"><!--
 					--><a class="chk_group" href="javascript:void(0);"><!--
 						--><input type="checkbox" id="statusOnWait" value="1"><!--
-						--><label for="statusOnWait">검토 대기</label><!--
+						--><label for="statusOnWait">검토 중</label><!--
 					--></a><!--
 				--></li>
 					<li class="chk_group" tabindex="-1" data-value="2"><!--
@@ -188,7 +188,7 @@
 						<td>2020-06-09 12:43</td>
 						<td>TRUST</td>
 						<td>나희연</td>
-						<td><a href="/spc/withdrawReqDetail.do" class="tbl_link" >검토중</a></td>
+						<td><a href="/spc/withdrawReqDetail.do" class="tbl_link">검토 대기</a></td>
 						<td>-</td>
 						<td>-</td>
 					</tr>
@@ -203,7 +203,7 @@
 						<td>2020-05-21 12:43</td>
 						<td>MSI</td>
 						<td>김민국</td>
-						<td><a href="/spc/withdrawReqDetail.do" class="tbl_link" >검토중</a></td>
+						<td><a href="/spc/withdrawReqDetail.do" class="tbl_link">검토 대기</a></td>
 						<td>-</td>
 						<td>-</td>
 					</tr>

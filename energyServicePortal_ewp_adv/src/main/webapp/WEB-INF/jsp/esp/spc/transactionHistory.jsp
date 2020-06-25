@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
-
+<script src="/js/commonDropdown.js"></script>
 <script>
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
@@ -159,12 +159,27 @@
 	<div class="col-12">
 		<span class="tx_tit">SPC 선택</span><div
 			class="sa_select">
-			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">전체 <span class="caret"></span></button>
-				<ul class="dropdown-menu" role="menu">
-					<li data-value="allSPC"><a href="javascript:void(0)" tabindex="-1">전체</a></li>
-					<li data-value="SPC1"><a href="javascript:void(0)" tabindex="-1">SPC1</a></li>
-					<li data-value="SPC2"><a href="javascript:void(0)" tabindex="-1">SPC2</a></li>
+			<div class="dropdown" id="spcOpt">
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-value="" data-name="">전체<span class="caret"></span></button>
+				<ul class="dropdown-menu chk_type" role="menu">
+					<li data-value="allSPC">
+						<a href="javascript:void(0)" tabindex="-1">
+							<input type="checkbox" id="allSelect" value="all" name="spc_opt">
+							<label for="allSelect">전체</label>
+						</a>
+					</li>
+					<li data-value="SPC1">
+						<a href="javascript:void(0)" tabindex="-1">
+							<input type="checkbox" id="spc1" value="spc1" name="spc_opt">
+							<label for="spc1">SPC1</label>
+						</a>
+					</li>
+					<li data-value="SPC2">
+						<a href="javascript:void(0)" tabindex="-1">
+							<input type="checkbox" id="sp2" value="spc2" name="spc_opt">
+							<label for="sp2">SPC2</label>
+						</a>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -174,7 +189,7 @@
 				<ul id="searchOption" class="collapse dropdown-menu unused">
 					<li>
 						<div class="bx_row aN2">
-							<h2 class="comp_tit">비교 기간</h2>
+							<h2 class="comp_tit">조회 기간</h2>
 							<div class="bx_align dropdown">
 								<input type="text" id="fromDate" name="fromDate" class="sel fromDate" value="" autocomplete="off" placeholder="시작">
 							</div>
@@ -193,25 +208,25 @@
 									<li data-value="allSelect">
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="allSelect" value="allSelect" name="approvalStatus">
-											<label for="allSelect"><span></span>전체</label>
+											<label for="allSelect">전체</label>
 										</a>
 									</li>
 									<li data-value="approved">
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="approved" value="approved" name="approvalStatus">
-											<label for="approved"><span></span>승인 완료</label>
+											<label for="approved">승인 완료</label>
 										</a>
 									</li>
 									<li data-value="onHold">
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="onHold" value="onHold" name="approvalStatus">
-											<label for="onHold"><span></span>승인 대기</label>
+											<label for="onHold">승인 대기</label>
 										</a>
 									</li>
 									<li data-value="inProgress">
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="inProgress" value="inProgress" name="approvalStatus">
-											<label for="inProgress"><span></span>승인 중</label>
+											<label for="inProgress">승인 중</label>
 										</a>
 									</li>
 								</ul>
@@ -222,32 +237,30 @@
 						<div class="bx_row aN3">
 							<div class="bx_align dropdown">
 								<h2 class="comp_tit">단위</h2>
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="단위">
-									단위<span class="caret"></span>
-								</button>
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">단위<span class="caret"></span></button>
 								<ul class="dropdown-menu chk_type dropdown_offset" role="menu">
 									<li data-value="searchAllTime">
-										<a href="javascript:void(0)"tabindex="-1">
+										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="searchAllTime" value="searchAllTime" name="timeUnit">
-											<label for="searchAllTime"><span></span>전체</label>
+											<label for="searchAllTime">전체</label>
 										</a>
 									</li>
 									<li data-value="searchYearly">
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="searchYearly" value="year" name="timeUnit">
-											<label for="searchYearly"><span></span>년</label>
+											<label for="searchYearly">년</label>
 										</a>
 									</li>
 									<li data-value="searchMonthly">
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="searchMonthly" value="month" name="timeUnit">
-											<label for="searchMonthly"><span></span>월</label>
+											<label for="searchMonthly">월</label>
 										</a>
 									</li>
 									<li data-value="searchDaily">
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="searchDaily" value="date" name="timeUnit">
-											<label for="searchDaily"><span></span>일</label>
+											<label for="searchDaily">일</label>
 										</a>
 									</li>
 								</ul>
@@ -255,23 +268,9 @@
 							<div class="bx_align dropdown">
 								<h2 class="comp_tit">입출금 구분</h2>
 								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
-								<ul class="dropdown-menu chk_type dropdown_offset" role="menu">
-									<li data-value="deposit">
-										<a href="javascript:void(0)" tabindex="-1">
-											<input type="checkbox" id="allTransaction" value="allTransaction" name="transactionType">
-											<label for="allTransaction"><span></span>전체</label>
-										</a>
-										<a href="javascript:void(0)" tabindex="-1">
-											<input type="checkbox" id="deposit" value="deposit" name="transactionType">
-											<label for="deposit"><span></span>입금</label>
-										</a>
-									</li>
-									<li data-value="withdraw">
-										<a href="javascript:void(0)" tabindex="-1">
-											<input type="checkbox" id="withdraw" value="withdraw" name="transactionType">
-											<label for="withdraw"><span></span>출금</label>
-										</a>
-									</li>
+								<ul class="dropdown-menu dropdown_offset" role="menu">
+									<li data-value="deposit"><a href="javascript:void(0)" tabindex="-1">입금</a></li>
+									<li data-value="withdraw"><a href="javascript:void(0)" tabindex="-1">출금</a></li>
 								</ul>
 							</div>
 							<div class="bx_align">
@@ -282,49 +281,49 @@
 										<li data-value="allPurpose">
 											<a href="javascript:void(0)" tabindex="-1">
 												<input type="checkbox" id="allPurpose" value="allPurpose" name="purpose">
-												<label for="allPurpose"><span></span>전체</label>
+												<label for="allPurpose">전체</label>
 											</a>
 										</li>
 										<li data-value="electricitySalesPrice">
 											<a href="javascript:void(0)"tabindex="-1">
 												<input type="checkbox" id="electricitySalesPrice" value="electricitySalesPrice" name="purpose">
-												<label for="electricitySalesPrice"><span></span>전력판매대금</label>
+												<label for="electricitySalesPrice">전력판매대금</label>
 											</a>
 										</li>
 										<li data-value="rfcSalesPrice">
 											<a href="javascript:void(0)" tabindex="-1">
 												<input type="checkbox" id="rfcSalesPrice" value="rfcSalesPrice" name="purpose">
-												<label for="rfcSalesPrice"><span></span>RFC 판매대금</label>
+												<label for="rfcSalesPrice">RFC 판매대금</label>
 											</a>
 										</li>
 										<li data-value="operationFee">
 											<a href="javascript:void(0)" tabindex="-1">
 												<input type="checkbox" id="operationFee" value="operationFee" name="purpose">
-												<label for="operationFee"><span></span>관리운영비</label>
+												<label for="operationFee">관리운영비</label>
 											</a>
 										</li>
 										<li data-value="rentalFee">
 											<a href="javascript:void(0)" tabindex="-1">
 												<input type="checkbox" id="rentalFee" value="rentalFee" name="purpose">
-												<label for="rentalFee"><span></span>일반 렌탈</label>
+												<label for="rentalFee">일반 렌탈</label>
 											</a>
 										</li>
 										<li data-value="commissionFee">
 											<a href="javascript:void(0)" tabindex="-1">
 												<input type="checkbox" id="commissionFee" value="commissionFee" name="purpose">
-												<label for="commissionFee"><span></span>전력 중개 수수료</label>
+												<label for="commissionFee">전력 중개 수수료</label>
 											</a>
 										</li>
 										<li data-value="electricityBill">
 											<a href="javascript:void(0)" tabindex="-1">
 												<input type="checkbox" id="electricityBill" value="electricityBill" name="purpose">
-												<label for="electricityBill"><span></span>전기 요금</label>
+												<label for="electricityBill">전기 요금</label>
 											</a>
 										</li>
 										<li data-value="principalCap">
 											<a href="javascript:void(0)" tabindex="-1">
 												<input type="checkbox" id="principalCap" value="principalCap" name="purpose">
-												<label for="principalCap"><span></span>원리금</label>
+												<label for="principalCap">원리금</label>
 											</a>
 										</li>
 									</ul>
@@ -334,7 +333,7 @@
 					</li>
 					<li class="btn_wrap_type03 btn_wrap_border">
 						<button type="button" data-toggle="collapse" data-target="#searchOption" class="btn_type03" id="closeDropdown">취소</button>
-						<button type="submit" class="btn_type ml-6" id="renderBtn">등록</button>
+						<button type="submit" class="btn_type ml-6" id="renderBtn">검색</button>
 					</li>
 				</ul>
 			</form>
