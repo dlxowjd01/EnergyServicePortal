@@ -318,6 +318,11 @@
 						jsonList.push(result.data[i]);
 					}
 				}
+				jsonList.sort(function(a,b){
+					let dateA = new Date(a.generated_date).getTime();
+					let dateB = new Date(b.generated_date).getTime();
+					return dateA < dateB ? 1 : -1;
+				});
 				jsonList = paging(page, jsonList);
 				setMakeList(jsonList, "listData", { "dataFunction": { "INDEX": getNumberIndex } }); //list생성
 			},
