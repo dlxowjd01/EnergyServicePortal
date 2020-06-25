@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.esp.energy.service.impl.PeakMapper">
+    <select id="getPeakRealList" parameterType="hashMap" resultType="hashMap">
+        /* peak 조회 */
+        select
+        site_id, std_timestamp, sum(peak_val) as peak_val
+        from (
+        select
+        peak_idx, site_id, std_timestamp, std_date, peak_val, peak_timestamp, peak_date, reg_date, mod_date
+        from tb_peak
+        where site_id = #{siteId }
+        <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(selTermFrom)">
+            and std_date between str_to_date(#{selTermFrom },'%Y%m%d%H%i%s') and
+            str_to_date(#{selTermTo },'%Y%m%d%H%i%s')
+        </if>
+        ) a
+        group by site_id, std_timestamp
+        order by std_timestamp
+    </select>
+
+</mapper>

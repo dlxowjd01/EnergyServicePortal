@@ -10,3 +10,4 @@ ewpsp/Dev
 ewpsp/target/
 ewp-api-agent/target/
 *.iml
+*.metadata

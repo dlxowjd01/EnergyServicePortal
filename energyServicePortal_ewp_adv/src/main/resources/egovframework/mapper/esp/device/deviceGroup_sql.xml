@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.esp.device.service.impl.DeviceGroupMapper">
+
+	<select id="getDeviceGroupList" parameterType="hashMap" resultType="hashMap">
+		/* 장치그룹목록 조회 */
+		select 
+			device_grp_idx, site_id, user_idx, device_grp_name, del_yn, reg_uid, reg_date, mod_uid, mod_date 
+		from tb_device_group
+		where del_yn = 'N'
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteId)">
+		and site_id = #{siteId }
+		</if>
+	</select>
+	
+	<select id="getDvInDeviceGroupList" parameterType="hashMap" resultType="hashMap">
+		/* 장치그룹내 장치목록 조회 */
+		select 
+			device_id, site_id, user_idx, device_name, device_grp_idx, device_type, inst_type, del_yn, reg_uid, reg_date, mod_uid, mod_date 
+		from tb_device
+		where del_yn = 'N' 
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteId)">
+		and site_id =  #{siteId }
+		</if>
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(deviceGrpIdx)">
+		and device_grp_idx =  #{deviceGrpIdx }
+		</if>
+	</select>
+	
+	<select id="getDeviceGrpAlarmList" parameterType="hashMap" resultType="hashMap">
+		/* 장치그룹내 장치들의 알람(미조치건) 조회 */
+		select 
+			b.site_id, b.device_id, b.device_type, a.alarm_type, a.cnt, b.device_name
+		from (
+			select 
+				site_id, device_id, device_type, alarm_type, count(*) as cnt
+			from tb_alarm
+			where alarm_act_yn = 'N'
+			and alarm_type = #{alarmType }
+			group by site_id, device_id, device_type, alarm_type
+		) a left outer join tb_device b
+		on a.site_id = b.site_id
+		and a.device_id = b.device_id
+		and a.device_type = b.device_type
+		where b.site_id = #{siteId }
+		and b.device_grp_idx = #{deviceGrpIdx }
+	</select>
+	
+	<select id="getAllDvInSiteList" parameterType="hashMap" resultType="hashMap">
+		/* 장치목록(사이트 전체 장치 중 특정 장치그룹 제외) 조회 */
+		select 
+			device_id, site_id, user_idx, device_name, device_grp_idx, device_type, inst_type, del_yn, reg_uid, reg_date, mod_uid, mod_date 
+		from tb_device
+		where del_yn = 'N'
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(siteId)">
+		and site_id =  #{siteId }
+		</if> 
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(deviceGrpIdx)">
+		and (device_grp_idx !=  #{deviceGrpIdx } or device_grp_idx is null)
+		</if>
+	</select>
+	
+	<select id="getDeviceNotInGroupList" parameterType="hashMap" resultType="hashMap">
+		/* 장치목록(사이트 전체 장치 중 장치그룹에 속하지 않은 장치) 조회 */
+		select 
+			device_id, site_id, user_idx, device_name, device_grp_idx, device_type, inst_type, del_yn, reg_uid, reg_date, mod_uid, mod_date 
+		from tb_device
+		where del_yn = 'N'
+		and site_id =  #{siteId }
+		and (device_grp_idx is null or device_grp_idx = 0)
+	</select>
+
+	<insert id="insertDeviceGroup" parameterType="hashMap">
+		/* 장치그룹 등록 */
+		insert into tb_device_group (
+	        site_id,
+	        user_idx,
+	        device_grp_name,
+	        del_yn,
+	        reg_uid,
+	        reg_date
+	    ) values (
+	        #{siteId },
+	        #{userIdx },
+	        #{deviceGrpName },
+	        'N',
+	        #{regUid },
+	        now()
+	    )
+	</insert>
+
+	<update id="updateDeviceGroup" parameterType="hashMap">
+		/* 장치 수정 */
+		update tb_device_group
+		set
+		<if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(deviceGrpName)">
+			device_grp_name    = #{deviceGrpName },
+		</if>
+		mod_uid        = #{modUid },
+		mod_date       = now()
+		where device_grp_idx = #{deviceGrpIdx }
+	</update>
+
+	<delete id="deleteDeviceGroup" parameterType="hashMap">
+		/* 장치그룹 삭제 */
+		delete from tb_device_group
+		where device_grp_idx = #{deviceGrpIdx }
+	</delete>
+
+	<select id="getDeviceChk" parameterType="hashMap" resultType="java.lang.Integer">
+		/* 장치 중복여부 체크 */
+		select 
+			count(*) as cnt 
+		from tb_device
+		where site_id = #{siteId }
+		and device_id = #{deviceId }
+		and device_type = #{deviceType }
+	</select>
+	
+	<insert id="insertDevice" parameterType="hashMap">
+		/* 장치 등록 */
+		insert into tb_device (
+			device_id, /* 장치ID */
+			site_id, /* 사이트ID */
+			user_idx, /* 사용자식별자 */
+			device_name, /* 장치명 */
+			device_grp_idx, /* 장치그룹식별자 */
+			device_type, /* 장치출처구분(1:PCS,2:BMS,3:PV,4:부하측정기기,5:PV모니터링기기,6:ESS모니터링기기) */
+			inst_type, /* 설치구분(1:에너톡,2:로컬EMS) */
+			del_yn, /* 삭제여부(Y:예,N:아니오) */
+			reg_uid, /* 등록자ID */
+			reg_date /* 등록일시 */
+		) values (
+			#{deviceId },
+			#{siteId },
+			#{userIdx },
+			#{deviceName },
+			#{deviceGrpIdx },
+			#{deviceType },
+			#{instType },
+			'N',
+			#{regUid },
+			now()
+		)
+	</insert>
+	
+	<update id="updateDevice" parameterType="hashMap">
+		/* 장치 수정 */
+		update tb_device
+		set 
+		    <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(deviceName)"> 
+		    device_name    = #{deviceName }, 
+		    </if>
+		    <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(deviceGrpIdx)"> 
+		    device_grp_idx = #{deviceGrpIdx }, 
+		    </if>
+		    <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(deviceType)"> 
+		    device_type    = #{deviceType }, 
+		    </if>
+		    <if test="@kr.co.esp.common.util.CommonUtils@isNotEmpty(instType)"> 
+		    inst_type      = #{instType }, 
+		    </if>
+		    mod_uid        = #{modUid }, 
+		    mod_date       = now()
+		where site_id = #{siteId }
+		and device_id = #{deviceId }
+		and device_type = #{deviceType }
+	</update>
+	
+	<delete id="deleteDevice" parameterType="hashMap">
+		/* 장치 삭제 */
+		delete from tb_device
+		where site_id = #{siteId }
+		and device_id = #{deviceId }
+		and device_type = #{deviceType }
+	</delete>
+	
+</mapper>

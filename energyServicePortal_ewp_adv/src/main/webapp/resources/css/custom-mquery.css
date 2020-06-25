@@ -1,0 +1,1604 @@
+/* ~ Laptop */
+
+@media all and (min-width: 1200px) and (max-width: 2999px) {
+    .group_wrap {
+        height: 522px;
+    }
+
+    .spc_dialog {
+        width: 1092px;
+	}
+}
+
+
+/* Laptop ~ Desktop screen sizes */
+
+@media all and (min-width: 993px) and (max-width: 1199px) {
+    .gmain_chart1 #monthlyChart {
+        height: 285px;
+    }
+
+    .gmain_chart2 #dailyChart {
+        height: 323px;
+    }
+}
+
+
+/* col-md size */
+
+@media all and (min-width: 769px) and (max-width: 992px) {
+
+    .gmain_chart1,
+    .gmain_chart4 {
+        height: 533px;
+    }
+
+    .gmain_chart1 #monthlyChart {
+        height: 450px;
+    }
+
+    .gmain_chart2,
+    .gmain_chart.jmain_center2 {
+        height: 400px;
+    }
+
+    .gmain_chart2 #dailyChart {
+        height: 315px;
+    }
+
+    .gmain_chart3,
+    .jmain_center3 {
+        min-height: auto;
+        height: 450px;
+    }
+
+    .gmain_chart3 .inchart {
+        height: 355px;
+    }
+
+    .gmain_chart3 #gchart3 {
+        height: 355px;
+    }
+
+    .jmain_center3 .realtime_wrap .inchart {
+        height: 365px;
+    }
+
+    .jmain_center3 .realtime_wrap .inchart #rchart3 {
+        height: 365px;
+	}
+}
+
+
+@media all and (max-width: 1280px) {
+	.indiv.diagnosis_chart .chart_top .inline_flex .duration {
+		display: none;
+	}
+	.entity_wrap.post .indiv .spc_tbl_row.st_edit .tx_inp_type.edit,
+	.entity_wrap.post .indiv .spc_tbl_row.st_edit .sel_calendar.edit,
+	.entity_wrap.post .indiv .spc_tbl_row.st_edit .fixed_heightw300{
+		max-width: 300px;
+		width: 100%;
+	}
+	.entity_wrap.post .indiv .spc_tbl_row th,
+	.entity_wrap.post .indiv .spc_tbl_row td {
+		white-space: normal;
+	}
+	.entity_wrap.post .indiv .spc_tbl_row .sel_calendar.edit.twin .sel {
+		width: 100%;
+		float: none;
+	}
+}
+
+@media all and (max-width: 1199px) {
+	.group_type.short .dropdown.edit,
+	.group_type.short .dropdown.edit:nth-child(2) {
+		width: 100%;
+	}
+	.entity_wrap.post .indiv .spc_tbl_row.st_edit .group_type > div + div {
+		margin-left: 0;
+		float: left;
+		clear: both;
+		content: "";
+	}
+	.entity_wrap.post .indiv .spc_tbl_row td.flex_start .sel_calendar.twin {
+		padding-top: 49px;
+		width: 70%;
+	}
+	.entity_wrap.post .indiv .spc_tbl_row td.flex_start .chk_type.ml-38 {
+		margin: 10px 0 10px 15px;
+		padding-top: 45px;
+		white-space: normal;
+	}
+	.group_type > div, .group_type > div.tx_inp_type,
+	.dropup.edit,
+	.dropdown.edit {
+		width: 100%;
+	}
+    .w_type {
+        width: 100%
+    }
+
+    /* 전체메뉴 레이어 조정 */
+    /* nav .all-menu .menu-group {
+		padding-bottom: 70px;
+	} */
+    nav .all-menu .menu-group>ul>li.lo-type {
+        display: inline-block;
+        width: auto;
+    }
+
+    nav .all-menu .menu-group>ul>li:nth-child(6) {
+        border-left: solid 1px #4a73bd;
+    }
+
+    .gmain_map .chart_info>div.ci_left {
+        margin: 0 auto;
+        /* display: table-caption; */
+    }
+
+    .gmain_map.smain_circle .chart_info .ci_left {
+        display: table;
+        width: auto;
+        padding: 0;
+    }
+
+    .gmain_map .chart_info>div {
+        display: block;
+    }
+
+    .gmain_chart .chart_top {
+        margin-bottom: 0;
+    }
+
+    .gmain_chart.gmain_chart1,
+    .gmain_chart.gmain_chart2,
+    .gmain_chart.gmain_chart3 {
+        height: 60px;
+    }
+
+    .gmain_chart.gmain_chart1 .chart_top .ntit,
+    .gmain_chart.gmain_chart2 .chart_top .ntit,
+    .gmain_chart.gmain_chart3 .chart_top .ntit {
+        margin: 0 auto;
+    }
+
+    .gmain_chart.gmain_chart1>.inchart,
+    .gmain_chart.gmain_chart1 .term,
+    .gmain_chart.gmain_chart2 .term,
+    .gmain_chart.gmain_chart3 .term,
+    .gmain_chart.gmain_chart2>.inchart,
+    .gmain_chart.gmain_chart3>.tblDisplay {
+        display: none;
+    }
+
+    .gmain_map.gmain_chart.gmain_chart4,
+    .gmain_alarm {
+        height: 520px;
+    }
+
+    .jmain_alarm {
+        height: 520px;
+    }
+
+    .local_info.s_center {
+        margin-top: 15px;
+	}
+
+	.indiv.diagnosis_chart .chart_top.clear .btn_type {
+		margin-top: 16px;
+	}
+}
+
+
+/* Tablet && Mobile screen sizes */
+
+@media all and (max-width: 992px) {
+	.entity_wrap.post .indiv .spc_tbl_row td.flex_start {
+		display: table-cell;
+	}
+	.entity_wrap.post .indiv .spc_tbl_row td.flex_start .sel_calendar.twin {
+		padding-top: 0;
+		width: 100%;
+	}
+	.entity_wrap.post .indiv .spc_tbl_row td.flex_start .chk_type.ml-38 {
+		padding-top: 0;
+		margin: 10px 0 10px 0px;
+	}
+    /* 전체메뉴 레이어 조정 */
+    nav .all-menu .menu-group>ul>li:nth-child(4) {
+        border-left: solid 1px #4a73bd;
+    }
+
+    nav .all-menu .menu-group>ul>li:nth-child(3),
+    nav .all-menu .menu-group>ul>li:nth-child(4) {
+        display: inline-block;
+        float: left;
+        width: auto;
+    }
+
+    nav .all-menu .menu-group>ul>li:nth-child(5) {
+        padding-top: 30px;
+    }
+
+    /********************************************************************************
+										alarm
+	*********************************************************************************/
+    .alarm_notice li:not(:last-child) {
+        margin-bottom: 10px;
+    }
+
+    /********************************************************************************
+										gmain
+	*********************************************************************************/
+    .gmain_map2 {
+        margin-bottom: 20px;
+    }
+
+    .gmain_map2,
+    .gmain_map2 .map_wrap {
+        height: 380px;
+        width: 100%;
+    }
+
+    .gmain_map2_content {
+        width: 100%;
+    }
+
+    .gmain_map .chart_info>div {
+        display: block;
+        width: 100%
+    }
+
+    .gmain_map.gmain_chart.gmain_chart4,
+    .gmain_alarm {
+        height: 533px;
+    }
+
+    .jmain_alarm {
+        height: 533px;
+    }
+
+    .gmain_map.gmain_chart.gmain_chart4 {
+        overflow: hidden;
+    }
+
+    .gmain_map.gmain_chart.gmain_chart4 .local_info.s_center {
+        overflow: scroll;
+        height: 100px;
+    }
+
+    .gmain_table .gtbl_wrap .intable {
+        max-height: 425px;
+    }
+
+    .gmain_table {
+        display: block;
+        height: 874px;
+    }
+
+    .gmain_table.jmain_table .gtbl_wrap .intable {
+        max-height: 760px;
+    }
+
+    .gmain_chart .chart_top .ntit {
+        margin: 6px 0 10px;
+    }
+
+    .gmain_map .chart_info>div.ci_left {
+        padding: 0;
+    }
+
+    .gmain_map .chart_info>div.ci_left>.inchart {
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    .di_btm_sec .bx_top {
+        margin: 20px auto -30px;
+    }
+
+    .di_btm_sec .bx_top .inchart {
+        height: 200px;
+	}
+	.modal-dialog.spc_modal_lg {
+		width: 90vw;
+	}
+
+	.flex_start,
+	.flex_start2,
+	.flex_start3 {
+		flex-wrap: wrap;
+	}
+	/********************************************************************************
+								device / collection modal
+	*********************************************************************************/
+	.modal-content {
+		width: 90vw;
+	}
+	.device_modal .modal-content.new_device  {
+		display: block;
+		margin: 0 auto;
+	}
+	.device_modal .modal-content.new_device .textarea {
+		width: 250px;
+	}
+}
+
+
+/* Mobile (horizontal) screen sizes */
+
+@media all and (max-width: 768px) {
+
+    /********************************************************************************
+							common ( page-wrapeer, nav, sidebar )
+	*********************************************************************************/
+    #page-wrapper {
+        margin: 0;
+        padding: 0 16px;
+    }
+
+    #page-wrapper>.nav {
+        height: 115px;
+    }
+
+	.g_menu > ul > li > a,
+	.g_menu > ol > li > a {
+		color: var(--color2);
+		padding-left: 60px;
+	}
+    nav {
+        padding: 0 0 8px 0;
+        height: 110px;
+    }
+
+    nav .nav_theme {
+        position: relative;
+        top: 15px;
+        right: auto;
+        text-align: center;
+        transform: none;
+    }
+
+    nav .lang {
+        top: 19px;
+        right: 10px;
+        float: right;
+        transform: none;
+    }
+
+    nav .nav_brand {
+        margin-top: 0;
+        padding-top: 20px;
+        float: none;
+        text-align: center;
+    }
+
+    nav .category {
+        display: block;
+        top: 21px;
+        left: 20px
+    }
+
+    nav .site {
+        float: none;
+        display: block;
+        text-align: center;
+        margin: 20px 0 0 0;
+    }
+
+    nav .nav_right {
+        float: none;
+        width: 100%;
+        text-align: center;
+    }
+
+    nav .nav_right li.member {
+        position: absolute;
+        top: 4px;
+        right: 15px;
+    }
+
+    nav .nav_right li.member .fl {
+        float: none;
+        /*display:inline-block;*/
+        display: none;
+    }
+
+    nav .nav_right li.member .fr {
+        float: none;
+        margin-top: 3px;
+        display: inline-block;
+        text-align: center;
+        vertical-align: top;
+    }
+
+    nav .all-menu {
+        position: absolute;
+        display: block;
+        /* text-align: right; */
+        top: 0;
+        left: 70px;
+        /* margin    : 20px 0 0 0; */
+    }
+
+    nav .all-menu .menu-group {
+        width: 80vw;
+        top: 50px;
+        left: 0;
+        z-index: 100;
+    }
+
+    nav .all-menu>a.on+.menu-group {
+        width: 100%;
+    }
+
+    nav .all-menu .menu-group>ul+ul {
+        margin-left: 0
+    }
+
+    nav .all-menu:before {
+        display: none
+    }
+
+    nav .all-menu .menu-group>ul {
+        width: 33.3%
+    }
+
+    nav .all-menu>a {
+        text-align: left;
+        width: 66px;
+        background: var(--box-color) var(--expand-arrow) no-repeat right 7px center
+    }
+
+    nav .all-menu>a.on {
+        background: var(--active) var(--expand-arrow) no-repeat right 7px center
+    }
+
+    .nav_right .nav_theme {
+        top: 0;
+        width: 100%;
+    }
+
+    nav .nav_right li {
+        display: block;
+    }
+
+    nav .nav_right li+li {
+        margin: 10px 0 0 0;
+    }
+
+    nav .all-menu .menu-group {
+        /* width: 100%; */
+        overflow: hidden
+    }
+
+    nav .all-menu .menu-group>ul>li {
+        display: block;
+        width: 100%;
+        float: none;
+        padding-top: 0px;
+        border-left: 0;
+    }
+
+    nav .all-menu .menu-group>ul>li:nth-child(3),
+    nav .all-menu .menu-group>ul>li:nth-child(5) {
+        margin-top: 30px;
+    }
+
+    #sidebar {
+        display: none;
+    }
+
+    .header-wrapper {
+        height: auto;
+    }
+
+    /********************************************************************************
+							indiv(box-container), modal, alarm
+	*********************************************************************************/
+    .page-header {
+        text-align: center;
+	}
+	.indiv {
+        padding: 19px 20px;
+    }
+    .indiv.wrap_type {
+        padding: 0;
+    }
+
+	.modal-dialog {
+		height: 500px;
+		overflow: auto;
+	}
+	.modal-dialog .modal-content {
+		padding: 30px;
+	}
+	.modal-dialog.spc_modal_lg {
+		width: 85vw;
+	}
+	.spc_modal_content .input_label {
+		white-space: normal;
+	}
+	.spc_modal_content .flex_start2 .sel_calendar,
+	.spc_modal_content .flex_start2 .sel {
+		width: 120px;
+	}
+	.spc_modal_content .flex_start .textarea {
+		width: calc(100% - 85px);
+	}
+	.modal-content.spc_detail_content {
+		width: 300px;
+	}
+    .alarm {
+        min-height: initial;
+    }
+
+    .alarm_notice {
+        margin-top: 10px;
+        padding-right: 0;
+        height: auto;
+        overflow-y: inherit;
+    }
+
+    .chart_top .meter {
+        clear: both;
+        margin-left: 0;
+        font-size: 0;
+        float: none;
+    }
+
+    .chart_top .meter>span {
+        display: inline-block;
+        height: 36px;
+        line-height: 36px;
+        font-size: 14px;
+        color: #3d4250;
+        font-weight: bold;
+        margin-right: 15px;
+    }
+
+    .chart_top .meter>* {
+        margin-top: 10px;
+    }
+
+    /********************************************************************************
+								table ( tbl_wrap_type )
+	*********************************************************************************/
+    .tbl_wrap_type.collect_wrap {
+        overflow-y: auto
+    }
+
+    .spc_tbl_row {
+        overflow-y: auto
+    }
+
+    .spc_tbl_row::-webkit-scrollbar-track {
+        border-radius: 2px;
+        background-color: var(--scroll-color2)
+    }
+
+    .spc_tbl_row::-webkit-scrollbar {
+        height: 8px;
+        border-radius: 2px;
+        background-color: var(--scroll-color2);
+    }
+
+    .spc_tbl_row::-webkit-scrollbar-corner {
+        background-color: var(--scroll-color2);
+    }
+
+    .spc_tbl_row::-webkit-scrollbar-thumb {
+        border-radius: 2px;
+        background-color: var(--scroll-color);
+    }
+
+    /********************************************************************************
+								control chart
+	*********************************************************************************/
+    .control .chart_top .sel_calendar {
+        margin-left: 0;
+    }
+
+    .control .chart_top .sel_calendar * {
+        display: none;
+    }
+
+    .control .chart_top .sel_calendar button {
+        display: inline-block;
+    }
+
+    .control .c_board ul li div.fl {
+        float: none;
+        width: 100%;
+        height: 130px;
+        background-position: center 70%;
+    }
+
+    .control .c_board ul li div.fr {
+        float: none;
+        width: 100%;
+        height: 80px;
+    }
+
+    .c_tbl_wrap .default_tbl th,
+    .c_tbl_wrap .default_tbl td {
+        border-radius: 0;
+    }
+
+    /********************************************************************************
+									Income chart
+	*********************************************************************************/
+    .income_kt_chart .chart_top .sel_calendar *,
+    .income_kt_chart_table {
+        display: none;
+    }
+
+    .income_kt_chart .chart_top .sel_calendar {
+        margin-left: 0;
+    }
+
+    .income_kt_chart .chart_top .sel_calendar button {
+        display: inline-block;
+    }
+
+    .income_ess_chart .chart_top .sel_calendar *,
+    .income_ess_table {
+        display: none;
+    }
+
+    .income_ess_chart .chart_top .sel_calendar button {
+        display: inline-block;
+    }
+
+    .income_dr_chart .chart_top .sel_calendar *,
+    .income_dr_table {
+        display: none;
+    }
+
+    .income_dr_chart .chart_top .sel_calendar button {
+        display: inline-block;
+    }
+
+    .income_pv_chart .chart_top .sel_calendar *,
+    .income_pv_table {
+        display: none;
+    }
+
+    .income_pv_chart .chart_top .sel_calendar button {
+        display: inline-block;
+    }
+
+    /********************************************************************************
+										faq_table
+	*********************************************************************************/
+    .faq .search_box div.infield {
+        width: 85%;
+    }
+
+    .faq .faq_table .faq_list>li>a.question {
+        padding: 10px 30px 10px 10px;
+    }
+
+    .faq .faq_table .faq_list>li>a.question span.gubun {
+        display: block;
+        width: 100%;
+        height: auto;
+        text-align: left;
+        font-size: 13px;
+    }
+
+    .faq .faq_table .faq_list>li>a.question span.sbj {
+        display: block;
+        width: 100%;
+        height: auto;
+        padding: 5px 20px;
+    }
+
+    .faq .faq_table .faq_list>li>div.answer {
+        padding: 0 20px 0 30px;
+    }
+
+    .faq .faq_bottom,
+    .faq .faq_table .faq_list>li>div.answer .edit_btn {
+        display: none;
+    }
+
+    footer .ft_menu,
+    footer .copyright {
+        float: none;
+        text-align: center;
+    }
+
+    footer .copyright {
+        margin: 15px 0 30px;
+    }
+
+    /********************************************************************************
+										dr_chart
+	*********************************************************************************/
+    .dr_chart .chart_top .dropdown {
+        margin-top: 10px;
+    }
+
+    .dr_chart_table {
+        display: none;
+    }
+
+    .dr_chart .chart_top .ntit,
+    .dr_chart .chart_top .term,
+    .dr_chart .chart_top .today_date,
+    .dr_chart .chart_top .search_opt,
+    .dr_chart .chart_top .checkbox {
+        float: none;
+        margin: 10px 0 0;
+        text-align: left;
+    }
+
+    .dr_chart .chart_top .ntit {
+        margin-bottom: 30px;
+    }
+
+    .dr_chart .chart_top .term {
+        margin-left: 64px;
+    }
+
+    .dr_chart .chart_top .today_date span,
+    .dr_chart .chart_top .search_opt span {
+        font-size: 11px;
+    }
+
+    .dr_chart .chart_top .today_date span:first-child {
+        margin: 0;
+        padding-left: 5px;
+        width: 64px;
+    }
+
+    /********************************************************************************
+										ess_chart
+	*********************************************************************************/
+    .ess_chart .chart_top .sel_calendar *,
+    .ess_chart_table {
+        display: none;
+    }
+
+    .ess_chart .chart_top .sel_calendar {
+        margin-left: 0;
+    }
+
+    .ess_chart .chart_top .sel_calendar button {
+        display: inline-block;
+    }
+
+    /********************************************************************************
+										pv_chart
+	*********************************************************************************/
+	.indiv.pv_chart .chart_top {
+		width: calc(100% - 160px);
+	}
+    .pv_chart .chart_top .duration,
+    .pv_chart_table {
+        display: none;
+    }
+
+    .pv_chart .chart_top .sel_calendar {
+        margin-left: 0;
+    }
+
+    .pv_chart .chart_top .sel_calendar button {
+        display: inline-block;
+    }
+
+    /********************************************************************************
+										page-device
+	*********************************************************************************/
+    .page-device .tab_menu {
+        margin-right: 0;
+    }
+
+    .page-device .tab_menu li+li {
+        margin-left: 10px;
+    }
+
+    .page-device .tbl_top .button_area {
+        display: none;
+    }
+
+    .page-device .default_tbl table colgroup col:last-child,
+    .page-device .default_tbl table thead tr th:last-child,
+    .page-device .default_tbl table tbody tr td:last-child {
+        display: none;
+    }
+
+    .page-device .default_tbl table th,
+    .page-device .default_tbl table td {
+        border-radius: 0;
+    }
+    /********************************************************************************
+										device_group
+	*********************************************************************************/
+    .device_group .dg_wrap {
+        padding-right: 0;
+        max-height: initial;
+        overflow-y: initial;
+    }
+
+    .device_group .dg_top .fr {
+        display: none;
+    }
+
+    .device_group .dg_wrap .dsec {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .device_group .dg_wrap .dsec>div {
+        margin-left: 0;
+    }
+
+    .device_group .dg_wrap .dsec>div.fl {
+        width: 100%;
+        padding: 20px 40px 20px 40px;
+    }
+
+    .device_group .dg_wrap .dsec>div.fl .bx-controls-direction .bx-prev {
+        left: -30px;
+    }
+
+    .device_group .dg_wrap .dsec>div.fl .bx-controls-direction .bx-next {
+        right: -30px;
+    }
+
+    .device_group .dg_wrap .dsec>div.fl .new_add {
+        display: none;
+    }
+
+    .device_group .dg_wrap .dsec>div.fr {
+        display: none;
+    }
+
+    /* *************************************************
+			prev => max-width : 481px from below
+	************************************************* */
+    .g_menu>ol>li.gmn7 {
+        display: none;
+    }
+
+    .g_menu>ol>li:last-child {
+        border-top: 0;
+    }
+
+    .wt_table_wrap,
+    .wt_list_wrap {
+        width: 100%
+    }
+
+    .weater_wrap .wt_table_wrap .wt_table {
+        margin-right: 0
+    }
+
+    .weater_wrap .wt_list_wrap {
+        margin-left: 0
+    }
+
+    .control .c_board ul li div.fl {
+        font-size: 14px;
+        background-size: 60%;
+        background-position: center 75%;
+        height: 100px;
+    }
+
+    .control .c_board ul li div.fr {
+        font-size: 30px;
+    }
+
+    .soc .charge_dis dt span {
+        float: none;
+        display: block;
+        margin-top: 10px;
+    }
+
+    .device li {
+        width: 47.5%;
+        margin: 10px 0 0 2.5%;
+    }
+
+    .chart_notice span {
+        display: block;
+        margin-top: 5px;
+    }
+
+    .der .chart_footer ul {
+        font-size: 0;
+        text-align: left;
+        margin-left: 50px;
+    }
+
+    .der .chart_footer ul li:first-child {
+        float: none;
+        margin-left: 0;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    /* *************************************************
+						local_info
+	************************************************* */
+    .local_info h2 {
+        font-size: 22px;
+    }
+
+    .local_info div ul:first-child {
+        padding-right: 12px;
+    }
+
+    .local_info div ul:last-child {
+        padding-left: 12px;
+    }
+
+    .local_info div ul li {
+        padding-top: 15px;
+    }
+
+    .local_info div ul li strong {
+        font-size: 13px;
+    }
+
+    .local_info div ul li span {
+        font-size: 14px;
+    }
+
+    .local_info div ul li em {
+        font-size: 11px;
+        font-weight: normal;
+    }
+
+    .local_info table th {
+        font-size: 13px;
+    }
+
+    .local_info table td {
+        font-size: 13px;
+    }
+
+    .local_info table th,
+    .local_info table td {
+        height: 40px;
+        line-height: 2.5;
+        padding: 5px;
+    }
+
+    .local_info.s_center table,
+    .local_info.s_center thead,
+    .local_info.s_center tbody,
+    .local_info.s_center th,
+    .local_info.s_center td,
+    .local_info.s_center tr {
+        display: block;
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    .local_info.s_center thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    .local_info.s_center tr {
+        margin: 0 0 1rem 0;
+    }
+
+    .local_info.s_center td {
+        border: none;
+        border-bottom: 1px solid #4c5260;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+        vertical-align: top;
+    }
+
+    .local_info.s_center td:before {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 6px;
+        width: 50%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        color: #8e95a1;
+    }
+
+    /* Label the data */
+    .local_info.s_center td:nth-of-type(1):before {
+        content: "총 사업소";
+    }
+
+    .local_info.s_center td:nth-of-type(2):before {
+        content: "총 설비(인버터,PCS)";
+    }
+
+    .local_info.s_center td:nth-of-type(3):before {
+        content: "총 설비용량";
+    }
+
+    .local_info.s_center td:nth-of-type(4):before {
+        content: "금일 CO2저감량";
+    }
+
+    .local_info.s_center td:nth-of-type(5):before {
+        content: "금일 누적수익";
+    }
+
+    .local_info.emain.s_center td:nth-of-type(1):before {
+        content: "오늘 누적 충전량";
+    }
+
+    .local_info.emain.s_center td:nth-of-type(2):before {
+        content: "오늘 충전 계획";
+    }
+
+    .local_info.emain.s_center td:nth-of-type(3):before {
+        content: "오늘 누적 방전량";
+    }
+
+    .local_info.emain.s_center td:nth-of-type(4):before {
+        content: "오늘 방전 계획";
+    }
+
+    .local_info.jmain.s_center td:nth-of-type(1):before {
+        content: "총 사업소";
+    }
+
+    .local_info.jmain.s_center td:nth-of-type(2):before {
+        content: "총 설비수";
+    }
+
+    .local_info.jmain.s_center td:nth-of-type(3):before {
+        content: "총 출력용량";
+    }
+
+    .local_info.jmain.s_center td:nth-of-type(4):before {
+        content: "금일 예상출력";
+    }
+
+    .local_info.jmain.s_center td:nth-of-type(5):before {
+        content: "금일 누적출력";
+    }
+
+    .local_info.smain.s_center td {
+        font-size: 13px;
+    }
+
+    .local_info.smain.s_center td span {
+        font-size: 14px;
+    }
+
+    /* Label the data */
+    .local_info.smain.s_center td:nth-of-type(1):before {
+        content: "PV 용량";
+    }
+
+    .local_info.smain.s_center td:nth-of-type(2):before {
+        content: "오늘 누적 발전량";
+    }
+
+    .local_info.smain.s_center td:nth-of-type(3):before {
+        content: "오늘 발전 예측";
+    }
+
+    .local_info.smain.s_center td:nth-of-type(4):before {
+        content: "SMP 수익 예상";
+    }
+
+    /* *************************************************
+						group_wrap
+	************************************************* */
+    .group_wrap {
+        min-height: initial;
+        display: none;
+    }
+
+    .group_info h2 {
+        font-size: 22px;
+    }
+
+    .group_info div ul:first-child {
+        padding-right: 12px;
+    }
+
+    .group_info div ul:last-child {
+        padding-left: 12px;
+    }
+
+    .group_info div ul li {
+        padding-top: 15px;
+    }
+
+    .group_info div ul li strong {
+        font-size: 13px;
+    }
+
+    .group_info div ul li span {
+        font-size: 14px;
+    }
+
+    .group_info div ul li em {
+        font-size: 11px;
+        font-weight: normal;
+    }
+
+    /* *************************************************
+						type_list_detail
+	************************************************* */
+    .type_list_detail .local_info th {
+        line-height: 1.3;
+    }
+
+    .type_list_detail .local_info td {
+        padding: 5px 2px;
+    }
+
+    .chart_top .ntit+.alert_icon {
+        margin-top: 0
+    }
+
+    /* *************************************************
+
+	************************************************* */
+    .not_top span {
+        font-size: 12px;
+    }
+
+    .not_top span+span {
+        margin-left: 5px;
+    }
+
+    .w_type {
+        width: 100%
+    }
+
+    /* *************************************************
+							gmain
+	************************************************* */
+    .indiv.gmain_chart:not(:last-of-type) {
+        margin-bottom: 12px;
+    }
+
+    .gmain_row1 {
+        display: table;
+        margin-bottom: 12px;
+    }
+
+    .gmain_alarm {
+        height: 280px;
+        overflow: auto;
+    }
+
+    .gmain_map.gmain_chart.gmain_chart4,
+    .gmain_alarm {
+        margin: auto 0 12px;
+    }
+
+    .gmain_table.smain {
+        height: auto;
+        max-height: inherit;
+    }
+
+    .gmain_table.smain .chart_top h2.ntit {
+        font-size: 14px;
+        margin: 3px 0 10px
+    }
+
+    .gmain_table.smain .local_info table td {
+        padding: 0;
+        height: 25px;
+        line-height: 25px;
+    }
+
+    .gmain_table.smain .gtbl_wrap {
+        margin-top: 5px;
+        height: calc(100vh - 285px);
+    }
+
+    .gmain_map.emain .chart_info .ci_center.ct1 {
+        margin-top: -80px;
+    }
+
+    .gmain_map.emain .chart_info .ci_right {
+        margin-top: 20px;
+    }
+
+    .gmain_map.emain .chart_info .ci_right .soc {
+        text-align: center;
+    }
+
+    .gmain_map.emain .chart_info .ci_right .soc .battery {
+        margin: 10px auto 0;
+        width: 120px;
+        height: 44px;
+        background-size: 120px 44px;
+    }
+
+    .gmain_map.emain .chart_info .ci_right .soc .battery span {
+        height: 44px;
+    }
+
+    .gmain_map.emain .chart_info .ci_center.ct2 {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .gmain_alarm .alarm_stat>div span,
+    .jmain_alarm .alarm_stat>div span {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .gmain_alarm .alarm_stat>div em,
+    .jmain_alarm .alarm_stat>div em {
+        font-size: 16px;
+        line-height: 30px;
+        margin-top: 0;
+    }
+
+    .gmain_alarm .alarm_stat>div.a_warning a,
+    .jmain_alarm .alarm_stat>div.a_warning a {
+        height: 30px;
+        line-height: 30px;
+        font-size: 12px;
+    }
+
+    .gmain_alarm,
+    .jmain_alarm {
+        min-height: initial;
+    }
+
+    .gmain_chart .gchart_top h2 {
+        float: none;
+        text-align: center;
+    }
+
+    .gmain_chart .gchart_top ul {
+        float: none;
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    .gmain_chart .gchart_top ul li:first-child {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .gmain_chart .gchart_top ul li:first-child:after {
+        display: none;
+    }
+
+    .gmain_chart .sa_chart {
+        height: auto;
+        overflow-y: inherit;
+        padding-right: 0px;
+        min-height: 181px;
+        max-height: inherit;
+    }
+
+    .gmain_chart .sa_chart.type-table {
+        display: block;
+    }
+
+    .gmain_chart .sa_chart.type-table .type-left {
+        display: block;
+        width: 100%;
+        padding-right: 0px;
+    }
+
+    .gmain_chart .sa_chart.type-table .type-right {
+        display: block;
+        width: 100%;
+    }
+
+    .gmain_map .chart_box {
+        height: auto;
+    }
+
+    .gmain_map .chart_info>div {
+        display: block;
+    }
+
+    .gmain_map .chart_info>div.ci_right ul li {
+        line-height: 1.5;
+        font-size: 14px;
+    }
+
+    .gmain_map .chart_info>div.ci_right ul li span {
+        font-size: 16px;
+    }
+
+    .gmain_map .chart_info>div.ci_right ul li em {
+        font-size: 12px;
+    }
+
+    .gmain_table {
+        min-height: initial;
+    }
+
+    .gmain_table .term_menu>ul {
+        float: none;
+        text-align: center;
+    }
+
+    .gmain_table .term_menu>ol {
+        float: none;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .gmain_table .gtbl_wrap {
+        height: auto;
+    }
+
+    .gmain_table .gtbl_wrap table th,
+    .gmain_table .gtbl_wrap table td {
+        height: 45px;
+        font-size: 12px;
+    }
+
+    .gmain_table .gtbl_wrap table td a {
+        font-size: 12px;
+    }
+
+    .gmain_table .gtbl_wrap table tbody td .eq_icon span {
+        height: 14px;
+        width: 14px;
+        background-size: 90%;
+    }
+
+    .gmain_table .gtbl_wrap table tbody td .eq_icon span+span {
+        margin-left: 0px;
+    }
+
+    .gmain_table .gtbl_top .fl .check-option {
+        display: block;
+        margin-top: 15px;
+    }
+
+    .gmain_group {
+        min-height: initial;
+    }
+
+    .gmain_chart.jmain3 .gtab_menu li a {
+        font-size: 13px;
+    }
+
+    .gmain_map.dmain .chart_box {
+        height: auto;
+    }
+
+    /* *************************************************
+							dmain
+	************************************************* */
+    .dmain .chart_info>div {
+        width: 100%;
+    }
+
+    .dmain .chart_info>div.ci_left {
+        height: 120px;
+    }
+
+    .dmain .pchart_info {
+        margin-top: 15px;
+    }
+
+    .dmain .pchart_info>div {
+        float: none;
+        padding-left: 0;
+        width: 100%;
+        text-align: right;
+    }
+
+    .dmain .pchart_info>div strong {
+        display: inline-block;
+        width: 60%;
+        float: left;
+        text-align: left;
+    }
+
+    .dmain.dminfo {
+        display: block;
+        margin-top: 15px;
+    }
+
+    .dmain.dminfo .tfl {
+        display: block;
+        width: 100%;
+    }
+
+    .dmain.dminfo .tfr {
+        display: block;
+        width: 100%;
+    }
+
+    .dmain.dminfo>div.tfl>div {
+        line-height: 1.6;
+    }
+
+    .dmain.dminfo>div.tfl>div strong {
+        padding-left: 0;
+    }
+
+    .dmain.dminfo>div.tfr {
+        margin-top: 15px;
+        padding-left: 0;
+    }
+
+    /* *************************************************
+						emain
+	************************************************* */
+    .emain .ci_center dl {
+        display: table;
+        width: 100%;
+    }
+
+    .emain .ci_center dl+dl {
+        margin-top: 0;
+    }
+
+    .emain .ci_center dt {
+        display: table-cell;
+        width: 50%;
+    }
+
+    .emain .ci_center dd {
+        display: table-cell;
+        width: 50%;
+        text-align: right;
+    }
+
+    /* *************************************************
+						smain
+	************************************************* */
+    .smain_pv ul li {
+        line-height: 1.5;
+        font-size: 14px;
+    }
+
+    .smain_pv ul li>div {
+        padding-left: 10px;
+    }
+
+    .smain_pv ul li>div:last-child {
+        font-size: 13px;
+    }
+
+    .smain_pv ul li strong {
+        margin-right: 10px;
+    }
+
+    .smain_pv ul li span {
+        font-size: 16px;
+    }
+
+    .smain_pv ul li em {
+        font-size: 12px;
+    }
+
+    .smain_cal {
+        min-height: auto;
+    }
+
+    .smain_cal .calendar tr td {
+        height: auto;
+        padding: 5px;
+    }
+
+    .smain_cal .calendar tr td div {
+        /* margin-top: 15px; */
+        display: block;
+        position: relative;
+        top: inherit;
+        right: inherit;
+    }
+
+    .smain_cal .calendar tr td div strong {
+        font-size: 12px;
+    }
+
+    .smain_cal .calendar tr td span {
+        /* margin-top: 15px; */
+        margin-top: 0;
+        display: block;
+        position: relative;
+        bottom: inherit;
+        right: inherit;
+        text-align: center;
+    }
+
+    .smain_cal .calendar tr td span strong {
+        display: block;
+        font-size: 12px;
+    }
+
+    .smain.weather .weater_wrap .fl {
+        float: none;
+        display: block;
+        width: auto
+    }
+
+    .smain.weather .weater_wrap .fl table {
+        width: 100%;
+    }
+
+    .smain.weather .weater_wrap .fl dl dd table th,
+    .smain.weather .weater_wrap .fl dl dd table td {
+        padding: 5px 5px;
+        text-align: center;
+    }
+
+    .smain.weather .weater_wrap .fr {
+        float: none;
+        display: block;
+        width: auto
+    }
+
+    .smain.weather .weater_wrap .fr table {
+        width: 100%;
+    }
+
+    /* *************************************************
+						scontrol
+	************************************************* */
+    .scontrol {
+        margin-top: 15px;
+    }
+
+    .scontrol dd ul li {
+        width: 98%;
+    }
+
+    .scontrol dd ul li .sbj {
+        font-size: 12px;
+    }
+
+    .scontrol dd ul li .sbj .fr {
+        float: none;
+        display: inline-block;
+    }
+
+    .scontrol dd ul li .cont .tfr {
+        padding-left: 5px;
+    }
+}
+
+@media all and (max-width: 487px) {
+    .gmain_table .gtbl_wrap .intable {
+        max-height: 400px;
+	}
+	.indiv.diagnosis_chart .inline_flex {
+		flex-wrap: wrap;
+	}
+	.indiv.diagnosis_chart .chart_top  {
+		width: calc(100% - 60px);
+		margin-left: -14px;
+	}
+	.indiv.diagnosis_chart .chart_top span:not(.caret) {
+		width: 45px;
+	}
+	.indiv.diagnosis_chart .chart_top .btn_type {
+		margin-left: 62px;
+	}
+}
+
+
+/* print preview bcg */
+
+@media print {
+    .totaldprint .lbody table.tbl th {
+        background-color: #eaeaea;
+        -webkit-print-color-adjust: exact;
+    }
+
+    .dprint .lbody table.tbl th {
+        background-color: #eaeaea;
+        -webkit-print-color-adjust: exact;
+    }
+}
