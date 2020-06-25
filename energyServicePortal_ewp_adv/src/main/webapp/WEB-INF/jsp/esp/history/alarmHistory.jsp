@@ -521,7 +521,6 @@
 	
 	const siteList = function (sidparam) {
 		let siteList = [];
-		console.log(sidparam);
 		setMakeList(sites, 'siteList', {
 			'dataFunction': {}
 		});	//list생성
@@ -1303,15 +1302,27 @@
 
 		let columnSeriesData = new Array();
 		let typeColorArr = [
-			'#009389',
-			'#b0e9e8',
-			'#26ccc8',
-			'#50b5ff',
-			'#5269ef',
-			'#274dea',
+			'var(--powder-blue)',
+			'var(--light-blue)',
+			'var(--turquoise)',
+			'var(--blueberry)',
+			'var(--teal)',
+			'var(--royal-blue)',
+			'var(--sunglow)',
+			'var(--sandy-brown)',
+			'var(--grey)'
 		];
-// 		let typeColorArr = ['#b0e9e8', '#F75C4A', '#F49E34', '#84848F', '#438fd7', '#13af67', '#f75c4a', '#84848f', '#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787', '#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787'];
-		let alarmColorArr = ['#009389', '#b0e9e8', '#26ccc8', '#50b5ff', '#5269ef', '#274dea', '#f75c4a', '#84848f', '#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787', '#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787'];
+		let alarmColorArr = [
+			'var(--powder-blue)',
+			'var(--light-blue)',
+			'var(--turquoise)',
+			'var(--blueberry)',
+			'var(--teal)',
+			'var(--royal-blue)',
+			'var(--sunglow)',
+			'var(--sandy-brown)',
+			'var(--grey)'
+		];
 		let colorArr = (gr_type == true) ? typeColorArr : alarmColorArr;
 		var num = 0;
 		dataMap.forEach(function (v, k) {

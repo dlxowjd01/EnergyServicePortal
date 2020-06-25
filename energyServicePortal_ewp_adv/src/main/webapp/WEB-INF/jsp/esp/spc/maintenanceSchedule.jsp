@@ -549,6 +549,16 @@
 									<li data-value="2"><a href="javascript:void(0);">구조물 안전진단</a></li>
 									<li data-value="3"><a href="javascript:void(0);">소방점검</a></li>
 									<li data-value="4"><a href="javascript:void(0);">등기이사 기간만료</a></li>
+									<li data-value="5"><a href="javascript:void(0);">모듈점검</a></li>
+									<li data-value="6"><a href="javascript:void(0);">케이블점검</a></li>
+									<li data-value="7"><a href="javascript:void(0);">구조물점검</a></li>
+									<li data-value="8"><a href="javascript:void(0);">접속함점검</a></li>
+									<li data-value="9"><a href="javascript:void(0);">인버터점검</a></li>
+									<li data-value="10"><a href="javascript:void(0);">수배전반점검</a></li>
+									<li data-value="11"><a href="javascript:void(0);">부지점검</a></li>
+									<li data-value="12"><a href="javascript:void(0);">열화상점검</a></li>
+									<li data-value="13"><a href="javascript:void(0);">소모품점검</a></li>
+									<li data-value="14"><a href="javascript:void(0);">기타점검</a></li>
 								</ul>
 							</div>
 						</div>
