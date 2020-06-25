@@ -1562,7 +1562,6 @@ const searchSite = function () {
 		})
 	);
 	let refineList = new Array();
-
 	siteList.forEach((site, siteIdx) => {
 		if (!isEmpty(searchName)) {
 			if (site.name.match(searchName) || site.address.match(searchName)) {
