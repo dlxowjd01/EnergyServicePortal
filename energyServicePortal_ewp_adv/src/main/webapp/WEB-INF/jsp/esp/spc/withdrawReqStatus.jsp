@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
-
+<script src="/js/commonDropdown.js"></script>
 <script>
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
@@ -29,28 +29,29 @@
 			<div id="reqStatus" class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">전체 <span class="caret"></span></button>
 				<ul class="dropdown-menu chk_type" role="menu">
-					<li class="chk_group" tabindex="-1" data-value="0">
-						<input type="checkbox" id="statusAll" value="0">
-						<label for="statusAll"><span></span>전체</label>
+					<li class="chk_group" tabindex="-1" data-value="0"><!--
+					--><a class="chk_group" href="javascript:void(0);"><!--
+						--><input type="checkbox" id="statusAll" value="0"><label for="statusAll">전체</label><!--
+					--></a><!--
+				--></li>
+					<li class="chk_group" tabindex="-1" data-value="1"><!--
+					--><a class="chk_group" href="javascript:void(0);"><!--
+						--><input type="checkbox" id="statusOnWait" value="1"><!--
+						--><label for="statusOnWait">검토 중</label><!--
+					--></a><!--
+				--></li>
+					<li class="chk_group" tabindex="-1" data-value="2"><!--
+					--><a href="javascript:void(0);"><!--
+						--><input type="checkbox" id="statusInProgress" value="2"><!--
+						--><label for="statusInProgress">검토 대기</label><!--
+					--></a>
 					</li>
-					<li class="chk_group" tabindex="-1" data-value="1">
-						<!-- <a class="chk_group" href="javascript:void(0);" tabindex="-1" data-value="1"> -->
-							<input type="checkbox" id="statusOnWait" value="1">
-							<label for="statusOnWait"><span></span>검토 대기</label>
-						<!-- </a> -->
-					</li>
-					<li class="chk_group" tabindex="-1" data-value="2">
-						<a class="chk_group" href="javascript:void(0);" tabindex="-1" data-value="2">
-							<input type="checkbox" id="statusInProgress" value="2">
-							<label for="statusInProgress"><span></span>검토 중</label>
-						</a>
-					</li>
-					<li class="chk_group" tabindex="-1" data-value="3">
-						<!-- <a class="chk_group" href="javascript:void(0);" tabindex="-1" data-value="3"> -->
-							<input type="checkbox" id="statusComplete" value="3">
-							<label for="statusComplete"><span></span>승인 완료</label>
-						<!-- </a> -->
-					</li>
+					<li class="chk_group" tabindex="-1" data-value="3"><!--
+					--><a class="chk_group" href="javascript:void(0);"><!--
+						--><input type="checkbox" id="statusComplete" value="3"><!--
+						--><label for="statusComplete">승인 완료</label><!--
+					--></a><!--
+				--></li>
 				</ul>
 			</div>
 		</div>
@@ -187,7 +188,7 @@
 						<td>2020-06-09 12:43</td>
 						<td>TRUST</td>
 						<td>나희연</td>
-						<td><a href="/spc/withdrawReqDetail.do" class="tbl_link" >검토중</a></td>
+						<td><a href="/spc/withdrawReqDetail.do" class="tbl_link">검토 대기</a></td>
 						<td>-</td>
 						<td>-</td>
 					</tr>
@@ -202,7 +203,7 @@
 						<td>2020-05-21 12:43</td>
 						<td>MSI</td>
 						<td>김민국</td>
-						<td><a href="/spc/withdrawReqDetail.do" class="tbl_link" >검토중</a></td>
+						<td><a href="/spc/withdrawReqDetail.do" class="tbl_link">검토 대기</a></td>
 						<td>-</td>
 						<td>-</td>
 					</tr>

@@ -342,6 +342,11 @@
         height: 115px;
     }
 
+	.g_menu > ul > li > a,
+	.g_menu > ol > li > a {
+		color: var(--color2);
+		padding-left: 60px;
+	}
     nav {
         padding: 0 0 8px 0;
         height: 110px;
@@ -371,7 +376,7 @@
 
     nav .category {
         display: block;
-        top: 20px;
+        top: 21px;
         left: 20px
     }
 
@@ -447,11 +452,7 @@
     }
 
     nav .all-menu>a.on {
-        background: var(--active) url('../img/expand_arrow_up_light.png') no-repeat right 7px center
-    }
-
-    .darkmode nav .all-menu>a.on {
-        background: var(--active) url('../img/expand_arrow_up_dark.png') no-repeat right 7px center
+        background: var(--active) var(--expand-arrow) no-repeat right 7px center
     }
 
     .nav_right .nav_theme {
@@ -526,36 +527,9 @@
 	.spc_modal_content .flex_start .textarea {
 		width: calc(100% - 85px);
 	}
-/* 
-	.spc_modal_content .flex_start .sel_calendar,
-	.spc_modal_content .flex_start .tx_inp_type,
-	.spc_modal_content .flex_start .dropdown .btn {
-		width: 200px;
+	.modal-content.spc_detail_content {
+		width: 300px;
 	}
-	
-
-	
-	.spc_modal_content .flex_start2 .sel_calendar,
-	.spc_modal_content .flex_start2 .sel {
-		width: 130px;
-	}
-	.spc_modal_content .flex_start2 .dropdown .btn {
-		width: 90px;
-	}
-	.spc_modal_content .flex_start2 .tx_inp_type,
-	.spc_modal_content .flex_start3 .dropdown .btn {
-		width: 120px;
-	}
-	
-	.spc_modal_content .flex_start3 .dropdown .btn:last-of-type {
-		width: 90px;
-	}
-	
-	.spc_modal_content .flex_start3 .tx_inp_type {
-		width: 90px;
-		margin: auto 12px;
-	} */
-
     .alarm {
         min-height: initial;
     }

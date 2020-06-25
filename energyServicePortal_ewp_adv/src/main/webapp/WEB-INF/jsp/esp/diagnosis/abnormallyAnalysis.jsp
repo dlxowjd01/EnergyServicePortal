@@ -1453,7 +1453,7 @@
 												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-value="hour" data-name="1시간">
 													1시간 <span class="caret"></span>
 												</button>
-												<ul class="dropdown-menu rdo_type">
+												<ul class="dropdown-menu">
 													<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
 													<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
 													<li data-value="day"><a href="javascript:void(0);">1일</a></li>

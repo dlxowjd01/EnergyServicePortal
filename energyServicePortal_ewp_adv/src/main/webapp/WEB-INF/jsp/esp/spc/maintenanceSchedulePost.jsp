@@ -1,9 +1,12 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-  <head>
-    <title>Title</title>
-  </head>
-  <body>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ include file="/decorators/include/taglibs.jsp"%>
+
+<script src="/js/commonDropdown.js"></script>
+<script>
+	$(function() {
+	});
+</script>
+
     <div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header">SPC 점검계획</h1>
@@ -104,5 +107,3 @@
 			</div>
 		</div>
 	</div>
-  </body>
-</html>

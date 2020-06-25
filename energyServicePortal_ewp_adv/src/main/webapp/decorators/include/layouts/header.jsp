@@ -265,8 +265,8 @@
 					</li>
 				</ul>
 				<div class="menu_btm_bx">
-					<button type="button" class="btn_type03" id="systemInit">초기화</button>
-					<button type="button" class="btn_type" id="systemApply">적용</button>
+					<button type="button" class="btn_type03" id="systemInit">초기화</button><!--
+					--><button type="button" class="btn_type ml-12" id="systemApply">적용</button>
 				</div>
 				<script type="text/javascript">
 					$('#systemInit').on('click', function() {

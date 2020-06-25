@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
+
+<script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	let today = new Date();
 	let date = new Date();
@@ -13,7 +15,7 @@
 		$('.sch_sel_area ul li').on('click', function () {
 			var thisVal = $(this).data('value');
 			var thisId = $(this).parent().parent().attr('id');
-
+			
 			if (thisId == 'year') {
 				today = new Date(thisVal, today.getMonth(), today.getDate());
 			} else {
@@ -517,7 +519,7 @@
 	}
 </script>
 
-<div class="modal fade" id="registerModal" tabindex="-1" role="form" aria-labelledby="myModalLabel">
+<div class="modal fade" id="registerModal" tabindex="-1" role="form">
 	<div class="modal-dialog spc_modal_lg" role="modal">
 		<div class="modal-content spc_modal_content">
 			<div class="modal-header">
@@ -594,7 +596,7 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 							<div class="sel_calendar">
-								<input type="text" id="job_date" name="job_date" class="sel fromDate required" value="" autocomplete="off" style="width:100%" readonly>
+								<input type="text" id="job_date" name="job_date" class="sel fromDate required w-100" value="" autocomplete="off" readonly>
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
@@ -602,7 +604,7 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 							<div class="tx_inp_type">
-								<input type="text" id="repeat_end" name="repeat_end" class="required datepicker toDate" value="자동 계산" readonly>
+								<input type="text" id="repeat_end" name="repeat_end" class="required toDate w-100" placeholder="자동 계산" value="자동 계산" disabled readonly>
 							</div>
 						</div>
 					</div>

@@ -12,7 +12,7 @@
 		</div>
 	</div>
 </div>
-<div class="row content-wrapper">
+<div class="row">
 	<div class="col-lg-3 col-md-4 col-sm-6">
 		<div class="header_drop_area w_type">
 			<div class="dropdown" id="siteList">
@@ -31,7 +31,7 @@
 		</div>
 	</div>
 </div>
-<div class="row scroll">
+<div class="row content-wrapper device_row scroll">
 	<div class="col-lg-12" id="deviceStateTypeList">
 		<div class="row" id="[typeId]">
 			<div class="col-lg-8">
