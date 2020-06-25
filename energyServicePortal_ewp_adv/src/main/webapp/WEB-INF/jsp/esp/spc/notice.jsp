@@ -185,7 +185,7 @@
 									<ul id="disclosurePersons" class="dropdown-menu"><!--
 									--><li data-value="all"><a href="javascript:void(0)">전체</a></li><!--
 									--><li data-value="assetManager"><a href="javascript:void(0)">자산 운용사</a></li><!--
-									--><li data-value="spcCustodian"><a href="javascript:void(0)">선택 SPC 담당 사무수탁사</a></li><!--
+									--><li data-value="spcCustodian"><a href="javascript:void(0)">SPC 담당 사무수탁사</a></li><!--
 								--></ul>
 								</div>
 							</div>
@@ -193,8 +193,8 @@
 						<div class="col-lg-6 col-sm-12">
 							<div class="input-group inline-flex hidden"><!--
 							--><h2 class="input_label">SPC 선택</h2><!--
-							--><div class="dropdown"><!--
-								--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+							--><div class="dropdown w-100"><!--
+								--><button class="btn btn-primary dropdown-toggle w-100" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
 									<ul id="spcList" class="dropdown-menu"><!--
 									--><li data-value="spc1"><a href="javascript:void(0)">SPC1</a></li><!--
 									--><li data-value="spc2"><a href="javascript:void(0)">SPC2</a></li><!--
