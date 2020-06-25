@@ -490,14 +490,15 @@
 					</table>
 				</div>
 			</form>
-			<div class="btn_wrap_type05">
-				<a class="chk_type mr-24">
-					<input type="checkbox" id="chk02" name="chk02">
-					<label for="chk02"><span></span>증빙 첨부 포함</label>
-				</a>
-				<a href="/spc/transactionHistory.do" class="btn btn_type03 mr-12" id="writeBtn">다운로드</a><a
-					href="/spc/withdrawReqWrite.do" class="btn btn_type" id="requestBtn">제출</a>
-			</div>
+			<div class="btn_wrap_type05"><!--
+				--><a class="chk_type mr-24"><!--
+					--><input type="checkbox" id="chk02" name="chk02"><!--
+					--><label for="chk02"><span></span>증빙 첨부 포함</label><!--
+				--></a><!--
+				--><a href="/spc/transactionHistory.do" class="btn btn_type03 mr-12" id="writeBtn">PDF</a><!--
+				--><a href="/spc/transactionHistory.do" class="btn btn_type03 mr-12" id="writeBtn">EXCEL</a><!--
+				--><a href="/spc/withdrawReqWrite.do" class="btn btn_type" id="requestBtn">제출</a><!--
+		--></div>
 		</div>
 	</div>
 </div>

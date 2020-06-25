@@ -9,7 +9,6 @@
 		const spcOpt = $("#spcList").parents(".input-group");
 		setInitList("listData"); //리스트초기화
 		getDataList(page);
-		navAddClass("notice");
 
 		disclosureOpt.on("click", function(){
 			if($(this).parents("li").data("value")=="assetManager") {
@@ -37,12 +36,6 @@
 		}
 	}
 
-	function getCsvDown() {
-		var column = ["name", "발전소_명", "설치_용량", "관리_운영_기간", "", ""], //json Key
-			header = ["SPC명", "발전소 명", "용량", "관리 운영기간	", "이관자료", "첨부파일"]; //csv 파일 헤더
-
-		getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
-	}
 
 	function getDataList(page) {
 		if(page == undefined){
@@ -73,7 +66,6 @@
 								contractInfo = JSON.parse(spcGensRow.contract_info),
 								deviceInfo = JSON.parse(spcGensRow.device_info),
 								originFile = new Array();
-
 							$.ajax({
 								url: "http://iderms.enertalk.com:8443/spcs/" + rowData.spc_id + "/gens/" + spcGensRow.gen_id + "/supplement?oid=" + rowData.oid,
 								type: "get",
@@ -81,17 +73,32 @@
 								async: false,
 								contentType: "application/json",
 								success: function(json) {
-
+									let title=[
+										"일부 자발적 기한 전 조기상황 요청 공문",
+										"출자자 변경 승인 요청 공문",
+										"1차 인출요청서"
+									]
+									let writtenBy=[
+										"김기중",
+										"이서진",
+										"박상목"
+									]
 									if (isEmpty(json.data[0])) {
-										newData["파일_총_개수"] = '-';
-										newData["파일_현재_개수"] = '-';
+										newData["name"] = '-';
+										newData["제목"] = '-';
 										newData["첨부파일"] = '-';
-									} else {
-										newData["파일_총_개수"] = json.data[0].file_count_all;
-										newData["파일_현재_개수"] = json.data[0].file_count_now;
-										newData["첨부파일"] = json.data[0].file_count_now;
+										newData["작성자"] = '-';
+										newData["updatedAt"] = '-';
 										
+									} else {
+										let time = "";
+										time=json.data[0].updated_at.substring(0, 10)+ " " +json.data[0].updated_at.substring(11, 19);
+										newData["제목"] = title[j];
+										newData["첨부파일"] = json.data[0].file_count_now;
+										newData["updatedAt"] = time;
+											newData["작성자"] = writtenBy[j];
 										var supplementInfo = JSON.parse(json.data[0].supplement_info)
+
 										var keys = Object.keys(supplementInfo);
 										for ( var i in keys ) {
 											if ( keys[i] != 'null' ) {
@@ -113,6 +120,7 @@
 							newData["oid"] = rowData.oid;
 							newData["spc_id"] = rowData.spc_id;
 							newData["관리_운영_기간"] = nvl(contractInfo["관리_운영_기간"], "-");
+
 							//키워드 검색 조건 필터 처리
 							if (newData["name"].toLowerCase().indexOf(keyWord) > -1 || newData["발전소_명"].toLowerCase().indexOf(keyWord) > -1) {
 								jsonList.push(newData)
@@ -146,6 +154,7 @@
 		return index + 1;
 	}
 </script>
+<form id="upload" name="upload" method="multipart/form-data"></form>
 
 <div class="modal fade" id="addNotice" role="dialog">
 	<div class="modal-dialog modal-lg">
@@ -171,8 +180,8 @@
 						<div class="col-lg-6 col-sm-12">
 							<div class="input-group inline-flex"><!--
 							--><h2 class="input_label">설명</h2><!--
-							--><div class="dropdown"><!--
-								--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+							--><div class="dropdown w-100"><!--
+								--><button class="btn btn-primary dropdown-toggle w-100" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
 									<ul id="disclosurePersons" class="dropdown-menu"><!--
 									--><li data-value="all"><a href="javascript:void(0)">전체</a></li><!--
 									--><li data-value="assetManager"><a href="javascript:void(0)">자산 운용사</a></li><!--
@@ -197,14 +206,12 @@
 					</div>
 					<div class="row">
 						<div class="col-12">
-							<div class="input-group inline-flex"><!--
+							<div class="input-group flex_align_top"><!--
 								--><h2 class="input_label">첨부 파일</h2><!--
-								--><a href="javascript:addList('addFileList12')" class="btn_add">추가</a><!--
-								--><input type="file" id="noticeFile" class="hidden" name="notice_file01" accept=".jpg, .png, .pdf"><!--
-								--><label for="noticeFile" class="btn file_upload ml-32">파일 선택</label><!--
-								--><span class="upload_text"></span><!--
-							--></ul>
-							<button class="btn_type07 ml-16 hidden"></button>
+								--><input type="file" id="spc_site_pic_file" class="hidden" name="" accept=".gif, .jpg, .png" multiple=""><!--
+								--><label for="spc_site_pic_file" class="btn file_upload ml-20">파일 선택</label><!--
+								--><div class="file_list ml-16"><ul><li class="upload_text"></li></ul></div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -259,16 +266,16 @@
 							<th>제목</th>
 							<th>첨부 파일</th>
 							<th>작성자 </th>
-							<th class="right">작성일</th>
+							<th class="left">작성일</th>
 						</tr>
 					</thead>
 					<tbody id="listData">
 						<tr>
 							<td><a href="/spc/entityDetailsBySPC.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">[name]</a></td>
 							<td class="left">[제목]</td>
-							<td>[첨부파일]</td>
+							<td>[첨부파일]건</td>
 							<td class="left">[작성자]</td>
-							<td class="right">[첨부파일]건</td>
+							<td class="right">[updatedAt]</td>
 						</tr>
 					</tbody>
 				</table>
