@@ -7,6 +7,7 @@
 	$(function() {
 		const disclosureOpt = $("#disclosurePersons").find("li a");
 		const spcOpt = $("#spcList").parents(".input-group");
+
 		setInitList("listData"); //리스트초기화
 		getDataList(page);
 
@@ -23,6 +24,7 @@
 			getDataList(page);
 		}
 	})
+	
 
 	function modalOpen(){
 		const addNotice = $("#addNotice");
@@ -119,6 +121,8 @@
 							newData["name"] = rowData.name;
 							newData["oid"] = rowData.oid;
 							newData["spc_id"] = rowData.spc_id;
+							newData["gen_id"] = spcGensRow.gen_id;
+							newData["발전소_명"] = spcGensRow.name;
 							newData["관리_운영_기간"] = nvl(contractInfo["관리_운영_기간"], "-");
 
 							//키워드 검색 조건 필터 처리
