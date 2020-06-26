@@ -838,43 +838,43 @@
 			<div class="sch_inp_area">
 				<div class="chk_type c1">
 					<input type="checkbox" id="chk_op01" name="type" value="1" checked>
-					<label for="chk_op01"><span></span>출금 - 승인 완료</label>
+					<label for="chk_op01">출금 - 승인 완료</label>
 				</div>
 				<div class="chk_type c2">
 					<input type="checkbox" id="chk_op02" name="type" value="2" checked>
-					<label for="chk_op02"><span></span>출금 - 승인 대기</label>
+					<label for="chk_op02">출금 - 승인 대기</label>
 				</div>
 				<div class="chk_type c3">
 					<input type="checkbox" id="chk_op03" name="type" value="3" checked>
-					<label for="chk_op03"><span></span>입금</label>
+					<label for="chk_op03">입금</label>
 				</div>
 				<div class="chk_type c4">
 					<input type="checkbox" id="chk_op04" name="type" value="4" checked>
-					<label for="chk_op04"><span></span>이자 지급일</label>
+					<label for="chk_op04">이자 지급일</label>
 				</div>
 				<div class="chk_type c5">
 					<input type="checkbox" id="chk_op05" name="type" value="5" checked>
-					<label for="chk_op05"><span></span>보장발전시간 정산일</label>
+					<label for="chk_op05">보장발전시간 정산일</label>
 				</div>
 				<div class="chk_type c6">
 					<input type="checkbox" id="chk_op06" name="type" value="6" checked>
-					<label for="chk_op06"><span></span>보험 갱신일</label>
+					<label for="chk_op06">보험 갱신일</label>
 				</div>
 				<div class="chk_type c7">
 					<input type="checkbox" id="chk_op07" name="type" value="7" checked>
-					<label for="chk_op07"><span></span>보험 납부일</label>
+					<label for="chk_op07">보험 납부일</label>
 				</div>
 				<div class="chk_type c8">
 					<input type="checkbox" id="chk_op08" name="type" value="8" checked>
-					<label for="chk_op08"><span></span>임대료 지급일</label>
+					<label for="chk_op08">임대료 지급일</label>
 				</div>
 				<div class="chk_type c9">
 					<input type="checkbox" id="chk_op09" name="type" value="9" checked>
-					<label for="chk_op09"><span></span>대리기관수수료 지급일</label>
+					<label for="chk_op09">대리기관수수료 지급일</label>
 				</div>
 				<div class="chk_type c10">
 					<input type="checkbox" id="chk_op10" name="type" value="10" checked>
-					<label for="chk_op10"><span></span>대출상환 만기일</label>
+					<label for="chk_op10">대출상환 만기일</label>
 				</div>
 			</div>
 			<div class="sch_inp_area">

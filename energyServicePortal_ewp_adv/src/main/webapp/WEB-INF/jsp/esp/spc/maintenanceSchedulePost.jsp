@@ -59,11 +59,11 @@
 							<td>
 								<div class="rdo_type">
 									<input type="radio" id="radio_op01" name="radio_op" value="정기 점검">
-									<label for="radio_op01"><span></span>정기 점검</label>
+									<label for="radio_op01">정기 점검</label>
 								</div>
 								<div class="rdo_type">
 									<input type="radio" id="radio_op02" name="radio_op" value="일시 점검">
-									<label for="radio_op02"><span></span>일시 점검</label>
+									<label for="radio_op02">일시 점검</label>
 								</div>
 							</td>
 						</tr>

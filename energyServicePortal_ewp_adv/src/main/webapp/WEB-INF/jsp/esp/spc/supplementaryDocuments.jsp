@@ -184,7 +184,7 @@
 						<tr>
 							<th>
 								<input type="hidden" id="chk_header" value="순번">
-								<label for="chk_header"><span></span>순번</label>
+								<label for="chk_header">순번</label>
 							</th>
 							<th><button class="btn_align down">SPC명</button></th>
 							<th><button class="btn_align down">발전소 명</button></th>
@@ -198,7 +198,7 @@
 						<tr>
 							<td>
 								<input type="hidden" id="chk_op[INDEX]" name="rowCheck" value="1">
-								<label for="chk_op[INDEX]"><span></span>[INDEX]</label>
+								<label for="chk_op[INDEX]">[INDEX]</label>
 							</td>
 							<td><a href="/spc/entityDetailsBySPC.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">[name]</a></td>
 							<td><a href="/spc/entityDetailsBySPC.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">[발전소_명]</a></td>

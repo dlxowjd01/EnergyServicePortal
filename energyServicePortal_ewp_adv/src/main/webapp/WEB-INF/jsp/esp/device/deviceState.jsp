@@ -23,7 +23,7 @@
 					<li>
 						<a href="javascript:void(0);" tabindex="-1">
 							<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
-							<label for="site_[INDEX]"><span></span>[name]</label>
+							<label for="site_[INDEX]">[name]</label>
 						</a>
 					</li>
 				</ul>
@@ -162,7 +162,7 @@
 										<li>
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="checkbox" id="alarmMsg_[INDEX]" value="[sid]" name="site">
-												<label for="alarmMsg_[INDEX]"><span></span>[name]</label>
+												<label for="alarmMsg_[INDEX]">[name]</label>
 											</a>
 										</li>
 									</ul>
@@ -173,7 +173,7 @@
 							<div class="input-group inline-flex chk_type">
 								<label for="predictionData" class="input_label">예측</label>
 								<input class="input tx_inp_type" id="predictionData" type="checkbox" value="1" name="predicted">
-								<label for="predictionData"><span></span></label>
+								<label for="predictionData"></label>
 							</div>
 							<div class="input-group inline-flex">
 								<label for="addDeviceSerialID" class="input_label">RTU명</label>
@@ -198,13 +198,13 @@
 										<li>
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="checkbox" id="addDeviceDisplayType0" value="dashboard" name="addDeviceDisplayType">
-												<label for="addDeviceDisplayType0"><span></span>대시보드</label>
+												<label for="addDeviceDisplayType0">대시보드</label>
 											</a>
 										</li>
 										<li>
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="checkbox" id="addDeviceDisplayType1" value="billing" name="addDeviceDisplayType">
-												<label for="addDeviceDisplayType1"><span></span>매전량</label>
+												<label for="addDeviceDisplayType1">매전량</label>
 											</a>
 										</li>
 									</ul>

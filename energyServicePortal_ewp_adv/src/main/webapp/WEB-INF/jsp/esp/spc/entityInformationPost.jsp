@@ -835,7 +835,7 @@
 							</fieldset>
 							<div class="chk_type align_type ml-38">
 								<input type="checkbox" id="등기_이사_만료_알림" name="end_notice" value="Y">
-								<label for="등기_이사_만료_알림"><span></span>등기이사 만료 알림</label>
+								<label for="등기_이사_만료_알림">등기이사 만료 알림</label>
 							</div>
 						</td>
 					</tr>
@@ -863,11 +863,11 @@
 								<legend sr-only="부지 소유 혹은 임대 구분"></legend>
 								<div class="radio_group">
 									<input type="radio" id="privateProperty" name="ownership_opt" value="p">
-									<label for="privateProperty"><span></span>소유</label>
+									<label for="privateProperty">소유</label>
 								</div>
 								<div class="radio_group">
 									<input type="radio" id="rental" name="ownership_opt" value="r">
-									<label for="rental"><span></span>임대</label>
+									<label for="rental">임대</label>
 								</div>
 							</fieldset>
 						</td>
@@ -877,11 +877,11 @@
 								<legend sr-only="개발행위필증 교부 여부"></legend>
 								<div class="radio_group">
 									<input type="radio" id="issued" name="issued_opt" value="issued">
-									<label for="issued"><span></span>교부함</label>
+									<label for="issued">교부함</label>
 								</div>
 								<div class="radio_group">
 									<input type="radio" id="notApplicable" name="issued_opt" value="n/a">
-									<label for="notApplicable"><span></span>해당 없음</label>
+									<label for="notApplicable">해당 없음</label>
 								</div>
 							</fieldset>
 						</td>
@@ -893,11 +893,11 @@
 								<legend sr-only="지상권 및 지상권부근저당 설정 여부"></legend>
 								<div class="radio_group">
 									<input type="radio" id="superficies" name="superficies_opt" value="superficies">
-									<label for="superficies"><span></span>지상권</label>
+									<label for="superficies">지상권</label>
 								</div>
 								<div class="radio_group">
 									<input type="radio" id="rightOfSuperficies" name="superficies_opt" value="s">
-									<label for="rightOfSuperficies"><span></span>지상관부근저당</label>
+									<label for="rightOfSuperficies">지상관부근저당</label>
 								</div>
 							</fieldset>
 						</td>
@@ -907,11 +907,11 @@
 								<legend sr-only="통신담보표지판 설정 여부"></legend>
 								<div class="radio_group">
 									<input type="radio" id="settings1" name="signage_settings" value="1">
-									<label for="settings1"><span></span>설정함</label>
+									<label for="settings1">설정함</label>
 								</div>
 								<div class="radio_group">
 									<input type="radio" id="settings2" name="signage_settings" value="0">
-									<label for="settings2"><span></span>해당 없음</label>
+									<label for="settings2">해당 없음</label>
 								</div>
 							</fieldset>
 						</td>
@@ -923,11 +923,11 @@
 								<legend sr-only="자가부지공장근저당 목록 설정 여부"></legend>
 								<div class="radio_group">
 									<input type="radio" id="list_settings1" name="list_settings" value="1">
-									<label for="list_settings1"><span></span>설정함</label>
+									<label for="list_settings1">설정함</label>
 								</div>
 								<div class="radio_group">
 									<input type="radio" id="list_settings2" name="list_settings" value="0">
-									<label for="list_settings2"><span></span>해당 없음</label>
+									<label for="list_settings2">해당 없음</label>
 								</div>
 							</fieldset>
 						</td>
@@ -937,11 +937,11 @@
 								<legend sr-only="부지 소유 혹은 임대 구분"></legend>
 								<div class="radio_group">
 									<input type="radio" id="custodian" name="license" value="s">
-									<label for="custodian"><span></span>사무위탁사</label>
+									<label for="custodian">사무위탁사</label>
 								</div>
 								<div class="radio_group">
 									<input type="radio" id="assetManager" name="license" value="c">
-									<label for="assetManager"><span></span>자산운영사</label>
+									<label for="assetManager">자산운영사</label>
 								</div>
 							</fieldset>
 						</td>
@@ -953,15 +953,15 @@
 								<legend sr-only="운영 여부"></legend>
 								<div class="radio_group">
 									<input type="radio" id="operating" name="operationAvailability" value="yes">
-									<label for="operating"><span></span>운영중</label>
+									<label for="operating">운영중</label>
 								</div>
 								<div class="radio_group">
 									<input type="radio" id="toBe" name="operationAvailability" value="tobe">
-									<label for="toBe"><span></span>운영 예정</label>
+									<label for="toBe">운영 예정</label>
 								</div>
 								<div class="radio_group">
 									<input type="radio" id="notAvailable" name="operationAvailability" value="no">
-									<label for="notAvailable"><span></span>해지</label>
+									<label for="notAvailable">해지</label>
 								</div>
 							</fieldset>
 						</td>
@@ -1198,7 +1198,7 @@
 							<div class="tx_inp_type edit">
 								<input type="text" id="certificate_password" name="certificate_password" placeholder="비밀번호를 입력해 주세요.">
 							</div>
-							<div class="fr fixed_height mt5 mr-12">
+							<div class="fixed_height fr mr-12">
 								<button class="btn_close hidden" onclick="$(this).parents().closest('tr').remove()"></button>								
 							</div>
 						</td>
@@ -1494,15 +1494,15 @@
 								<legend sr-only="보험 정보"></legend>
 								<div class="radio_group">
 									<input type="radio" id="rdo_insurance_opt1" name="rdo_insurance" value="rdo_insurance">
-									<label for="rdo_insurance_opt1"><span></span>조립 보험</label>
+									<label for="rdo_insurance_opt1">조립 보험</label>
 								</div>
 								<div class="radio_group">
 									<input type="radio" id="rdo_insurance_opt2" name="rdo_insurance" value="cmi">
-									<label for="rdo_insurance_opt2"><span></span>CMI</label>
+									<label for="rdo_insurance_opt2">CMI</label>
 								</div>
 								<div class="radio_group">
 									<input type="radio" id="rdo_insurance_opt3" name="rdo_insurance" value="cgl">
-									<label for="rdo_insurance_opt3"><span></span>CGL</label>
+									<label for="rdo_insurance_opt3">CGL</label>
 								</div>
 							</fieldset>
 						</td>
@@ -1601,15 +1601,15 @@
 										<legend sr-only="보험 정보"></legend>
 										<div class="radio_group">
 											<input type="radio" id="rdo_opt_" name="rdo_opt_" value="rdo_insurance">
-											<label for="rdo_opt_"><span></span>조립 보험</label>
+											<label for="rdo_opt_">조립 보험</label>
 										</div>
 										<div class="radio_group">
 											<input type="radio" id="rdo_opt_" name="rdo_opt_" value="cmi">
-											<label for="rdo_opt_"><span></span>CMI</label>
+											<label for="rdo_opt_">CMI</label>
 										</div>
 										<div class="radio_group">
 											<input type="radio" id="rdo_opt_" name="rdo_opt_" value="cgl">
-											<label for="rdo_opt_"><span></span>CGL</label>
+											<label for="rdo_opt_">CGL</label>
 										</div>
 									</fieldset>
 								</td>
@@ -1743,11 +1743,11 @@
 							<fieldset class="chk_type align_type">
 								<legend sr-only="인버터 제조사/모델"></legend>
 								<input type="checkbox" id="모듈_설치_방식_고정" name="chk_op" value="고정 가변식">
-								<label for="모듈_설치_방식_고정" class="mr-24"><span></span>고정 가변식</label>
+								<label for="모듈_설치_방식_고정" class="mr-24">고정 가변식</label>
 								<input type="checkbox" id="모듈_설치_방식_트래커" name="chk_op" value="트래커">
-								<label for="모듈_설치_방식_트래커" class="mr-24"><span></span>트래커</label>
+								<label for="모듈_설치_방식_트래커" class="mr-24">트래커</label>
 								<input type="checkbox" id="모듈_설치_방식_경사고정형" name="chk_op" value="경사 고정형">
-								<label for="모듈_설치_방식_경사고정형"><span></span>경사 고정형</label>
+								<label for="모듈_설치_방식_경사고정형">경사 고정형</label>
 							</fieldset>
 						</td>
 					</tr>
@@ -1818,11 +1818,11 @@
 								<legend sr-only="통신 방식"></legend><!--
 							--><div class="radio_group"><!--
 								--><input type="radio" id="rdo_03_op01" name="통신방식" value="통신"><!--
-								--><label for="rdo_03_op01"><span></span>통신</label><!--
+								--><label for="rdo_03_op01">통신</label><!--
 							--></div><!--
 							--><div class="radio_group"><!--
 								--><input type="radio" id="rdo_03_op02" name="통신방식" value="비통신"><!--
-								--><label for="rdo_03_op02"><span></span>비통신</label><!--
+								--><label for="rdo_03_op02">비통신</label><!--
 							--></div><!--
 						--></fieldset>
 						</td>
@@ -1836,17 +1836,17 @@
 								<fieldset class="flex_start3">
 									<legend sr-only="설치 타입"></legend><!--
 								--><input type="checkbox" id="설치_타입_그라운드" name="chk_op2" value="그라운드"><!--
-								--><label class="custom_checkbox" for="설치_타입_그라운드"><span></span>그라운드</label><!--
+								--><label class="custom_checkbox" for="설치_타입_그라운드">그라운드</label><!--
 								--><input type="checkbox" id="설치_타입_루프탑" name="chk_op2" value="루프탑"><!--
-								--><label class="custom_checkbox" for="설치_타입_루프탑"><span></span>루프탑</label><!--
+								--><label class="custom_checkbox" for="설치_타입_루프탑">루프탑</label><!--
 								--><input type="checkbox" id="설치_타입_수상" name="chk_op2" value="수상"><!--
-								--><label class="custom_checkbox" for="설치_타입_수상"><span></span>수상</label><!--
+								--><label class="custom_checkbox" for="설치_타입_수상">수상</label><!--
 							--></fieldset>
 							</div>
 						</td>
 						<th>수배전반 제조사 / 모델<a href="javascript:addList('addList_switch_gear');" class="btn_add fr">추가</a></th>
 						<td>
-							<div id="addList_switch_gear" class="group_type">
+							<div id="addList_switch_gear" class="group_type fixed_height">
 								<div class="tx_inp_type edit">
 									<input type="text" name="접속반_채널" placeholder="제조사">
 								</div>
@@ -1878,15 +1878,15 @@
 							--><legend sr-only="보증 방식"></legend>
 								<div class="radio_group"><!--
 								--><input type="radio" id="rdo_op01" name="보증_방식" value="PR"><!--
-								--><label for="rdo_op01"><span></span>PR</label><!--
+								--><label for="rdo_op01">PR</label><!--
 							--></div><!--
 							--><div class="radio_group"><!--
 								--><input type="radio" id="rdo_op02" name="보증_방식" value="발전 시간"><!--
-								--><label for="rdo_op02"><span></span>발전 시간</label><!--
+								--><label for="rdo_op02">발전 시간</label><!--
 							--></div>
 								<div class="radio_group"><!--
 								--><input type="radio" id="rdo_op03" name="보증_방식" value="PR + 발전시간"><!--
-								--><label for="rdo_op03"><span></span>PR + 발전 시간</label><!--
+								--><label for="rdo_op03">PR + 발전 시간</label><!--
 							--></div><!--
 						--></fieldset>
 						</td>
@@ -1942,11 +1942,11 @@
 								<legend sr-only="추가 보수"></legend>
 								<div class="radio_group">
 									<input type="radio" id="rdo_op2_01" name="추가_보수" value="유">
-									<label for="rdo_op2_01"><span></span>유</label>
+									<label for="rdo_op2_01">유</label>
 								</div>
 								<div class="radio_group">
 									<input type="radio" id="rdo_op2_02" name="추가_보수" value="무">
-									<label for="rdo_op2_02"><span></span>무</label>
+									<label for="rdo_op2_02">무</label>
 								</div>
 							</fieldset>
 						</td>
@@ -2088,8 +2088,7 @@
 						<table>
 							<colgroup>
 								<col style="width:15%">
-								<col style="width:55%">
-								<col style="width:30%">
+								<col style="width:85%">
 								<col>
 							</colgroup>
 							<tr>

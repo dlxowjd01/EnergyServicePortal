@@ -1123,7 +1123,7 @@
 				<li data-value="[sid]">
 					<a href="javascript:void(0);" tabindex="-1">
 						<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
-						<label for="site_[INDEX]"><span></span>[name]</label>
+						<label for="site_[INDEX]">[name]</label>
 					</a>
 				</li>
 			</ul>
@@ -1153,7 +1153,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="type_[INDEX]" value="[type]" name="type">
-																<label for="type_[INDEX]"><span></span>[name]</label>
+																<label for="type_[INDEX]">[name]</label>
 															</span>
 														</a>
 													</li>
@@ -1171,7 +1171,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="deviceNm_[INDEX]" name="deviceNm" value="[did]" data-forcasting="[forcasting]" data-metering="[metering]">
-																<label for="deviceNm_[INDEX]"><span></span>[siteName] - [name]</label>
+																<label for="deviceNm_[INDEX]">[siteName] - [name]</label>
 															</span>
 														</a>
 													</li>
@@ -1188,7 +1188,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="attr_[INDEX]" value="[key]" name="attr" data-suffix="[suffix]">
-																<label for="attr_[INDEX]"><span></span>[value]</label>
+																<label for="attr_[INDEX]">[value]</label>
 															</span>
 														</a>
 													</li>
@@ -1210,7 +1210,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="compareType_[INDEX]" value="[type]" name="compareType">
-																<label for="compareType_[INDEX]"><span></span>[name]</label>
+																<label for="compareType_[INDEX]">[name]</label>
 															</span>
 														</a>
 													</li>
@@ -1227,7 +1227,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="checkbox" id="compDeviceNm_[INDEX]" name="compDevice" value="[did]" data-forcasting="[forcasting]" data-metering="[metering]">
-																<label for="compDeviceNm_[INDEX]"><span></span>[siteName] - [name]</label>
+																<label for="compDeviceNm_[INDEX]">[siteName] - [name]</label>
 															</span>
 														</a>
 													</li>
@@ -1244,7 +1244,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="comp_attr_[INDEX]" value="[key]" name="compAttr" data-suffix="[suffix]">
-																<label for="comp_attr_[INDEX]"><span></span>[value]</label>
+																<label for="comp_attr_[INDEX]">[value]</label>
 															</span>
 														</a>
 													</li>
@@ -1269,7 +1269,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="benchmark0" name="benchmark" value="up">
-																<label for="benchmark0"><span></span>이상</label>
+																<label for="benchmark0">이상</label>
 															</span>
 														</a>
 													</li>
@@ -1277,7 +1277,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="benchmark1" name="benchmark" value="down">
-																<label for="benchmark1"><span></span>이하</label>
+																<label for="benchmark1">이하</label>
 															</span>
 														</a>
 													</li>
@@ -1298,7 +1298,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="unit0" name="unit" value="relative">
-																<label for="unit0"><span></span>%</label>
+																<label for="unit0">%</label>
 															</span>
 														</a>
 													</li>
@@ -1306,7 +1306,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="unit1" name="unit" value="absolute">
-																<label for="unit1"><span></span>절대값</label>
+																<label for="unit1">절대값</label>
 															</span>
 														</a>
 													</li>
@@ -1340,7 +1340,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="comparison0" name="compare_formula" value="point">
-																<label for="comparison0"><span></span>POINT</label>
+																<label for="comparison0">POINT</label>
 															</span>
 														</a>
 													</li>
@@ -1348,7 +1348,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="comparison1" name="compare_formula" value="cusum">
-																<label for="comparison1"><span></span>CUSUM</label>
+																<label for="comparison1">CUSUM</label>
 															</span>
 														</a>
 													</li>
@@ -1369,7 +1369,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="compare_criterion0" name="compare_criterion" value="absolute">
-																<label for="compare_criterion0"><span></span>절대값</label>
+																<label for="compare_criterion0">절대값</label>
 															</span>
 														</a>
 													</li>
@@ -1377,7 +1377,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="compare_criterion1" name="compare_criterion" value="relative">
-																<label for="compare_criterion1"><span></span>상대값(%)</label>
+																<label for="compare_criterion1">상대값(%)</label>
 															</span>
 														</a>
 													</li>
@@ -1385,7 +1385,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="compare_criterion2" name="compare_criterion" value="abs_of_absolute">
-																<label for="compare_criterion2"><span></span>abs(절대값)</label>
+																<label for="compare_criterion2">abs(절대값)</label>
 															</span>
 														</a>
 													</li>
@@ -1393,7 +1393,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="comp_inp">
 																<input type="radio" id="compare_criterion3" name="compare_criterion" value="abs_of_relative">
-																<label for="compare_criterion3"><span></span>abs(상대값) %</label>
+																<label for="compare_criterion3">abs(상대값) %</label>
 															</span>
 														</a>
 													</li>

@@ -56,19 +56,19 @@
 									<li>
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="radio" id="radio_t1" name="radio_t" value="1" checked>
-											<label for="radio_t1"><span></span>PR</label>
+											<label for="radio_t1">PR</label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="radio" id="radio_t2" name="radio_t" value="2">
-											<label for="radio_t2"><span></span>발전시간</label>
+											<label for="radio_t2">발전시간</label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="radio" id="radio_t3" name="radio_t" value="3">
-											<label for="radio_t3"><span></span>매전량</label>
+											<label for="radio_t3">매전량</label>
 										</a>
 									</li>
 								</ul>
@@ -187,10 +187,10 @@
 						</thead>
 						<tbody id="centerTbody">
 						<tr>
-							<td><span></span><em>&nbsp;&nbsp;kW</em></td>
-							<td><span></span><em>&nbsp;&nbsp;kWh</em></td>
-							<td><span></span><em>&nbsp;&nbsp;kWh</em></td>
-							<td><span></span><em>&nbsp;&nbsp;천원</em></td>
+							<td><em>&nbsp;&nbsp;kW</em></td>
+							<td><em>&nbsp;&nbsp;kWh</em></td>
+							<td><em>&nbsp;&nbsp;kWh</em></td>
+							<td><em>&nbsp;&nbsp;천원</em></td>
 						</tr>
 						</tbody>
 					</table>
@@ -291,19 +291,19 @@
 									<li>
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="checkbox" id="deviceStatus1" name="deviceStatus" value="0" checked>
-											<label for="deviceStatus1"><span></span>중지</label>
+											<label for="deviceStatus1">중지</label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="checkbox" id="deviceStatus2" name="deviceStatus" value="1" checked>
-											<label for="deviceStatus2"><span></span>정상</label>
+											<label for="deviceStatus2">정상</label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="checkbox" id="deviceStatus3" name="deviceStatus" value="2" checked>
-											<label for="deviceStatus3"><span></span>트립</label>
+											<label for="deviceStatus3">트립</label>
 										</a>
 									</li>
 								</ul>
@@ -787,7 +787,7 @@
 
 			let bodyCell = bRow.insertCell();
 			bodyCell.setAttribute('class', el.key);
-			bodyCell.innerHTML = '<span></span><span>' + el.suffix + '</span>'
+			bodyCell.innerHTML = '<span>' + el.suffix + '</span>'
 		});
 
 		return targetTable.outerHTML;

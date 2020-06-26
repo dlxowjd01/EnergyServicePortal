@@ -211,7 +211,7 @@
 				<h2 class="heading">메모</h2>
 				<a class="chk_type">
 					<input type="checkbox" id="chk02" name="chk02">
-					<label for="chk02"><span></span>사무수탁사 함께 보기</label>
+					<label for="chk02">사무수탁사 함께 보기</label>
 				</a>
 			</div>
 			<div class="textarea_container mt20">

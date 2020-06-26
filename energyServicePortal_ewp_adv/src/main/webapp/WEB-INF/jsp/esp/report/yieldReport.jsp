@@ -657,9 +657,7 @@
 			<span class="tx_tit">유형</span>
 			<div class="sa_select">
 				<div class="dropdown" id="reportClass">
-					<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">
-						전체<span class="caret"></span>
-					</button>
+					<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">전체<span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu">
 						<li data-value=""><a href="javascript:void(0);">전체</a></li>
 						<li data-value="regular_mm"><a href="javascript:void(0);">월간실적</a></li>
@@ -674,9 +672,7 @@
 			<span class="tx_tit">적용 시작 월</span>
 			<div class="sa_select">
 				<div class="dropdown" id="year">
-					<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">
-						2020년<span class="caret"></span>
-					</button>
+					<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">2020년<span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu">
 						<li><a href="javascript:void(0);">전체</a></li>
 						<li><a href="javascript:void(0);">2020년</a></li>
@@ -687,9 +683,7 @@
 			</div>
 			<div class="sa_select">
 				<div class="dropdown" id="month">
-					<button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown">
-						전체<span class="caret"></span>
-					</button>
+					<button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown">전체<span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu">
 						<li><a href="javascript:void(0);">전체</a></li>
 						<li><a href="javascript:void(0);">1월</a></li>
@@ -709,31 +703,28 @@
 			</div>
 		</div>
 		<div class="fl">
-			<div class="tx_inp_type">
-				<input type="text" id="key_word" placeholder="입력">
-			</div>
+			<div class="tx_inp_type"><input type="text" id="key_word" placeholder="입력"></div>
 		</div>
-		<div class="fl">
-			<button type="submit" class="btn_type" onclick="getDataList(page);">검색</button>
-		</div>
+		<div class="fl"><button type="submit" class="btn_type" onclick="getDataList(page);">검색</button></div>
 	</div>
 </div>
 <div class="row">
 	<div class="col-12">
 		<div class="indiv report yield_report">
-			<div class="btn_wrap_type01">
-				<button type="button" class="btn_type03" onclick="setCheckedDataExcelDown();">선택 다운로드
-				</button><button type="button" class="btn_type03" onclick="setCheckedDataRemove();">선택 삭제
-				</button><button type="button" class="btn_type" onclick="modalInit();">신규 생성
-				</button></div>
+			<div class="flex_wrapper mb-20">
+				<div><!--
+					--><button type="button" class="btn_type03 big mr-12" onclick="setCheckedDataExcelDown();">선택 다운로드</button><!--
+					--><button type="button" class="btn_type03 big" onclick="setCheckedDataRemove();">선택 삭제</button><!--
+			--></div>
+				<div><button type="button" class="btn_type" onclick="modalInit();">신규 생성</button></div>
+			</div>
 			<div class="spc_tbl align_type">
 				<table class="sort_table chk_type">
 					<thead>
 						<tr>
 							<th>
-								<input type="checkbox" id="chk_header" value="순번"
-									onclick="setCheckedAll(this, 'rowCheck');">
-								<label for="chk_header"><span></span>순번</label>
+								<input type="checkbox" id="chk_header" value="순번" onclick="setCheckedAll(this, 'rowCheck');">
+								<label for="chk_header">순번</label>
 							</th>
 							<th><button class="btn_align down">SPC명</button></th>
 							<th><button class="btn_align down">발전소명</button></th>
@@ -749,7 +740,7 @@
 						<tr>
 							<td>
 								<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="">
-								<label for="chk_op[INDEX]"><span></span>[INDEX]</label>
+								<label for="chk_op[INDEX]">[INDEX]</label>
 							</td>
 							<td>[spc_name]</td>
 							<td>[site_name]</td>

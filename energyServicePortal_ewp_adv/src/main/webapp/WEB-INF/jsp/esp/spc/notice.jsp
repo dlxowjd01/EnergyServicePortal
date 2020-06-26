@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
+
 <script src="/js/commonDropdown.js"></script>
 <script>
 	const oid = '${sessionScope.userInfo.oid}';
@@ -56,12 +57,12 @@
 					keyWord = $("#key_word").val().trim().toLowerCase();
 
 				for (var i = 0, count = result.data.length; i < count; i++) {
-
+				
 					var spcGensList = result.data[i].spcGens;
-
+			
 					if (spcGensList !== undefined && spcGensList.length > 0) {
-
-						for (var j = 0, jcount = spcGensList.length; j < jcount; j++) {
+	
+						for (var j = 0, jcount = spcGensList.length; j < jcount; j++ ) {
 							var spcGensRow = spcGensList[j],
 								rowData = result.data[i],
 								newData = {},
@@ -75,26 +76,42 @@
 								async: false,
 								contentType: "application/json",
 								success: function(json) {
-									let title=[
+				
+									let spcName = [
+										"SPC1",
+										"SPC2",
+										"SPC3"
+									];
+									let title = [
 										"일부 자발적 기한 전 조기상황 요청 공문",
 										"출자자 변경 승인 요청 공문",
 										"1차 인출요청서"
-									]
-									let writtenBy=[
+									];
+									let attachment = [
+										"5",
+										"10",
+										"7"
+									];
+									let writtenBy = [
 										"김기중",
 										"이서진",
 										"박상목"
-									]
+									];
+									let fakeDate = [
+										"2020-05-18 12:05:10",
+										"2020-05-25 14:05:10",
+										"2020-06-18 16:05:10",
+									];
 									if (isEmpty(json.data[0])) {
 										newData["name"] = '-';
-										newData["제목"] = '-';
-										newData["첨부파일"] = '-';
+										newData["제목"] =  '-';
+										newData["첨부파일"] =  '-';
 										newData["작성자"] = '-';
-										newData["updatedAt"] = '-';
+										newData["updatedAt"] =  '-';
 										
 									} else {
-										let time = "";
-										time=json.data[0].updated_at.substring(0, 10)+ " " +json.data[0].updated_at.substring(11, 19);
+										let time = '';
+										time=json.data[0].updated_at.substring(0, 10)+ ' ' +json.data[0].updated_at.substring(11, 19);
 										newData["제목"] = title[j];
 										newData["첨부파일"] = json.data[0].file_count_now;
 										newData["updatedAt"] = time;
@@ -215,7 +232,6 @@
 								--><input type="file" id="spc_site_pic_file" class="hidden" name="" accept=".gif, .jpg, .png" multiple=""><!--
 								--><label for="spc_site_pic_file" class="btn file_upload ml-20">파일 선택</label><!--
 								--><div class="file_list ml-16"><ul><li class="upload_text"></li></ul></div>
-								</div>
 							</div>
 						</div>
 					</div>

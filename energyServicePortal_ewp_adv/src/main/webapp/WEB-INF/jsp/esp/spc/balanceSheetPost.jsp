@@ -1041,7 +1041,7 @@
 							<td>
 								<div class="chk_type">
 									<input type="checkbox" id="chk01">
-									<label for="chk01"><span></span></label>
+									<label for="chk01"></label>
 								</div>
 							</td>
 							<td>A</td>
@@ -1074,19 +1074,19 @@
 							<td>
 								<div class="rdo_type">
 									<input type="radio" id="repayType01_1" name="repayType_1" value="1">
-									<label for="repayType01_1"><span></span></label>
+									<label for="repayType01_1"></label>
 								</div>
 							</td>
 							<td>
 								<div class="rdo_type">
 									<input type="radio" id="repayType02_1" name="repayType_1" value="2">
-									<label for="repayType02_1"><span></span></label>
+									<label for="repayType02_1"></label>
 								</div>
 							</td>
 							<td>
 								<div class="rdo_type">
 									<input type="radio" id="repayType03_1" name="repayType_1" value="3">
-									<label for="repayType03_1"><span></span></label>
+									<label for="repayType03_1"></label>
 								</div>
 							</td>
 							<td>
@@ -1145,7 +1145,7 @@
 							<td>
 								<div class="chk_type">
 									<input type="checkbox" id="chk02">
-									<label for="chk02"><span></span></label>
+									<label for="chk02"></label>
 								</div>
 							</td>
 							<td>A</td>
@@ -1166,13 +1166,13 @@
 							<td>
 								<div class="rdo_type">
 									<input type="radio" id="chk_bal01_1" name="contract_1" value="1">
-									<label for="chk_bal01_1"><span></span></label>
+									<label for="chk_bal01_1"></label>
 								</div>
 							</td>
 							<td>
 								<div class="rdo_type">
 									<input type="radio" id="chk_bal02_1" name="contract_1" value="2">
-									<label for="chk_bal02_1"><span></span></label>
+									<label for="chk_bal02_1"></label>
 								</div>
 							</td>
 							<td>
@@ -1221,7 +1221,7 @@
 							<td>
 								<div class="chk_type">
 									<input type="checkbox" id="chk03">
-									<label for="chk03"><span></span></label>
+									<label for="chk03"></label>
 								</div>
 							</td>
 							<td>A</td>
@@ -1242,13 +1242,13 @@
 							<td>
 								<div class="rdo_type">
 									<input type="radio" id="chk_bal01_2" name="contract_2" value="1">
-									<label for="chk_bal01_2"><span></span></label>
+									<label for="chk_bal01_2"></label>
 								</div>
 							</td>
 							<td>
 								<div class="rdo_type">
 									<input type="radio" id="chk_bal02_2" name="contract_2" value="2">
-									<label for="chk_bal02_2"><span></span></label>
+									<label for="chk_bal02_2"></label>
 								</div>
 							</td>
 							<td>
@@ -1323,7 +1323,7 @@
 							<td>
 								<div class="chk_type">
 									<input type="checkbox" id="chk04">
-									<label for="chk04"><span></span></label>
+									<label for="chk04"></label>
 								</div>
 							</td>
 							<td></td>
@@ -1393,7 +1393,7 @@
 					<p class="tx_type fl">단위:원</p>
 					<div class="chk_type fl">
 						<input type="checkbox" id="noteDown" name="noteDown" value="1">
-						<label for="noteDown"><span></span>수기입력 활성화</label>
+						<label for="noteDown">수기입력 활성화</label>
 					</div>
 				</div>
 			</div>

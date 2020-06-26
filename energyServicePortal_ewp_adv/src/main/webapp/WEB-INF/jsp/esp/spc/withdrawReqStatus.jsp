@@ -120,7 +120,7 @@
 					<tr>
 						<td><a class="chk_type select_row">
 							<input type="checkbox" id="chk02" name="chk02">
-							<label for="chk02"><span></span></label>
+							<label for="chk02"></label>
 						</a></td>
 						<td>2020-01-03</td>
 						<td>SPC1</td>
@@ -135,7 +135,7 @@
 					<tr>
 						<td><a class="chk_type select_row">
 							<input type="checkbox" id="chk02" name="chk02">
-							<label for="chk02"><span></span></label>
+							<label for="chk02"></label>
 						</a></td>
 						<td>2020-01-04</td>
 						<td>SPC2</td>
@@ -150,7 +150,7 @@
 					<tr>
 						<td><a class="chk_type select_row">
 							<input type="checkbox" id="chk02" name="chk02">
-							<label for="chk02"><span></span></label>
+							<label for="chk02"></label>
 						</a></td>
 						<td>2020-01-18</td>
 						<td>SPC3</td>
@@ -165,7 +165,7 @@
 					<tr>
 						<td><a class="chk_type select_row">
 							<input type="checkbox" id="chk02" name="chk02">
-							<label for="chk02"><span></span></label>
+							<label for="chk02"></label>
 						</a></td>
 						<td>2020-02-02</td>
 						<td>SPC4</td>
@@ -180,7 +180,7 @@
 					<tr>
 						<td><a class="chk_type select_row">
 							<input type="checkbox" id="chk02" name="chk02">
-							<label for="chk02"><span></span></label>
+							<label for="chk02"></label>
 						</a></td>
 						<td>2020-02-08</td>
 						<td>SPC5</td>
@@ -195,7 +195,7 @@
 					<tr>
 						<td><a class="chk_type select_row">
 							<input type="checkbox" id="chk02" name="chk02">
-							<label for="chk02"><span></span></label>
+							<label for="chk02"></label>
 						</a></td>
 						<td>2020-05-08</td>
 						<td>SPC6</td>

@@ -168,53 +168,26 @@
 </div>
 
 <div class="row spc_search_bar">
-	<div class="col-12">
-		<span class="tx_tit">SPC 선택</span><div class="sa_select mr-16">
+	<div class="col-12"><!--
+	--><span class="tx_tit">SPC 선택</span><!--
+	 --><div class="sa_select mr-16">
 			<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">전체 <span class="caret"></span></button>
-				<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
-					<li>
-						<a class="chk_group" href="#" tabindex="-1">
-							<input type="checkbox" id="allSpc" value="all">
-							<label for="allSpc"><span></span>전체</label>
-						</a>
-					</li>
-					<li>
-						<a class="chk_group" href="#" tabindex="-1">
-							<input type="checkbox" id="spc1" value="spc1">
-							<label for="spc1"><span></span>SPC1</label>
-						</a>
-					</li>
-					<li>
-						<a class="chk_group" href="#" tabindex="-1">
-							<input type="checkbox" id="spc2" value="spc2">
-							<label for="spc2"><span></span>SPC2</label>
-						</a>
-					</li>
-					<li>
-						<a class="chk_group" href="#" tabindex="-1">
-							<input type="checkbox" id="spc3" value="spc3">
-							<label for="spc3"><span></span>SPC2</label>
-						</a>
-					</li>
+				<ul class="dropdown-menu">
+					<li data-value="spc1"><a href="#" tabindex="-1">SPC1</a></li>
+					<li data-value="spc2"><a href="#" tabindex="-1">SPC2</a></li>
+					<li data-value="spc3"><a href="#" tabindex="-1">SPC3</a></li>
 				</ul>
 			</div>
-		</div><span class="tx_tit ml-12">출금 계좌번호</span><div class="sa_select">
+		</div>
+		
+		<span class="tx_tit ml-12">출금 계좌번호</span>
+		<div class="sa_select">
 			<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">전체 <span class="caret"></span></button>
-				<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
-					<li>
-						<a class="chk_group" href="#" tabindex="-1">
-							<input type="checkbox" id="accountSelect1" value="kb">
-							<label for="accountSelect1"><span></span>KB 120-634348-12-339</label>
-						</a>
-					</li>
-					<li>
-						<a class="chk_group" href="#" tabindex="-1">
-							<input type="checkbox" id="accountSelect2" value="ibk">
-							<label for="accountSelect2"><span></span>기업 650-665568-12-339</label>
-						</a>
-					</li>
+				<ul class="dropdown-menu" role="menu">
+					<li data-value="kb"><a href="#" tabindex="-1">KB 120-634348-12-339</a></li>
+					<li data-value="ibk"><a href="#" tabindex="-1">기업 650-665568-12-339</a></li>
 				</ul>
 			</div>
 		</div>
@@ -285,16 +258,11 @@
 						<td>
 							<a class="chk_type select_row">
 								<input type="checkbox" id="chk02" name="chk02">
-								<label for="chk02"><span></span></label>
+								<label for="chk02"></label>
 							</a>
 						</td>
 						<td>
-							<div class="sel_calendar">
-								<input type="text" id="enforce_1" name="enforce_1" class="sel fromDate" value=""
-									   autocomplete="off"
-									   readonly
-									   placeholder="선택">
-							</div>
+							<div class="sel_calendar"><input type="text" id="enforce_1" name="enforce_1" class="sel fromDate" value="" autocomplete="off" readonly placeholder="선택"></div>
 						</td>
 						<td>
 							<div class="sa_select">
@@ -307,19 +275,19 @@
 										<li>
 											<a href="#" tabindex="-1">
 												<input type="checkbox" id="accountNum1" value="accountTypes1" name="accountTypes">
-												<label for="accountNum1"><span></span>관리 운영비</label>
+												<label for="accountNum1">관리 운영비</label>
 											</a>
 										</li>
 										<li>
 											<a href="#" tabindex="-1">
 												<input type="checkbox" id="accountNum2" value="accountTypes2" name="accountTypes">
-												<label for="accountNum2"><span></span>사무 수탁비</label>
+												<label for="accountNum2">사무 수탁비</label>
 											</a>
 										</li>
 										<li>
 											<a href="#" tabindex="-1">
 												<input type="checkbox" id="accountTypes3" value="accountTypes3" name="accountTypes">
-												<label for="accountTypes3"><span></span>기타</label>
+												<label for="accountTypes3">기타</label>
 											</a>
 										</li>
 									</ul>
@@ -338,68 +306,47 @@
 											data-toggle="dropdown">KB 120-634348-12-339
 										<span class="caret"></span>
 									</button>
-									<ul class="dropdown-menu chk_type" role="menu">
-										<li>
-											<a href="#" tabindex="-1">
-												<input type="checkbox" id="accountNum1" value="accountNum" name="accountNum1">
-												<label for="accountNum1"><span></span>신한 650-665568-12-339</label>
-											</a>
-										</li>
-										<li>
-											<a href="#" tabindex="-1">
-												<input type="checkbox" id="accountNum2" value="accountNum" name="accountNum2">
-												<label for="accountNum2"><span></span>KB 650-665568-12-339</label>
-											</a>
-										</li>
+									<ul class="dropdown-menu">
+										<li data-value="accountNum"><a href="#" tabindex="-1">신한 650-665568-12-339</a></li>
+										<li data-value="accountNum"><a href="#" tabindex="-1">KB 650-665568-12-339</a></li>
 									</ul>
 								</div>
 							</div>
 						</td>
 						<td>
-							<div class="tx_inp_type">
-								<input type="text" id="interestRate_1" name="interestRate_1" placeholder="직접 입력">
-							</div>
+							<div class="tx_inp_type"><input type="text" id="interestRate_1" name="interestRate_1" placeholder="직접 입력"></div>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<a href="#" class="chk_type select_row">
-								<input type="checkbox" id="chk01" name="chk01">
-								<label for="chk01"><span></span></label>
-							</a>
+							<a href="#" class="chk_type select_row"><input type="checkbox" id="chk01" name="chk01"><label for="chk01"></label></a>
 						</td>
 						<td>
 							<div class="sel_calendar">
-								<input type="text" id="enforce_1" name="enforce_1" class="sel fromDate" value=""
-									   autocomplete="off"
-									   readonly
-									   placeholder="선택">
+								<input type="text" id="enforce_1" name="enforce_1" class="sel fromDate" value="" autocomplete="off" readonly placeholder="선택">
 							</div>
 						</td>
 						<td>
 							<div class="sa_select">
 								<div class="dropdown placeholder" id="spc">
-									<button class="btn btn-primary dropdown-toggle" type="button"
-											data-toggle="dropdown">선택
-										<span class="caret"></span>
-									</button>
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu chk_type" role="menu">
 										<li>
 											<a href="#" tabindex="-1">
 												<input type="checkbox" id="accountNum1" value="accountTypes1" name="accountTypes">
-												<label for="accountNum1"><span></span>관리 운영비</label>
+												<label for="accountNum1">관리 운영비</label>
 											</a>
 										</li>
 										<li>
 											<a href="#" tabindex="-1">
 												<input type="checkbox" id="accountNum2" value="accountTypes2" name="accountTypes">
-												<label for="accountNum2"><span></span>사무 수탁비</label>
+												<label for="accountNum2">사무 수탁비</label>
 											</a>
 										</li>
 										<li>
 											<a href="#" tabindex="-1">
 												<input type="checkbox" id="accountTypes3" value="accountTypes3" name="accountTypes">
-												<label for="accountTypes3"><span></span>기타</label>
+												<label for="accountTypes3">기타</label>
 											</a>
 										</li>
 									</ul>
@@ -422,13 +369,13 @@
 										<li>
 											<a class="chk_group" href="#" tabindex="-1">
 												<input type="checkbox" id="accountNum3" value="accountNum3" name="accountNum3">
-												<label for="accountNum3"><span></span>신한 650-665568-12-339</label>
+												<label for="accountNum3">신한 650-665568-12-339</label>
 											</a>
 										</li>
 										<li>
 											<a class="chk_group" href="#" tabindex="-1">
 												<input type="checkbox" id="accountNum4" value="accountNum4" name="accountNum4">
-												<label for="accountNum4"><span></span>KB 650-665568-12-339</label>
+												<label for="accountNum4">KB 650-665568-12-339</label>
 											</a>
 										</li>
 									</ul>
@@ -493,7 +440,7 @@
 			<div class="btn_wrap_type05"><!--
 				--><a class="chk_type mr-24"><!--
 					--><input type="checkbox" id="chk02" name="chk02"><!--
-					--><label for="chk02"><span></span>증빙 첨부 포함</label><!--
+					--><label for="chk02">증빙 첨부 포함</label><!--
 				--></a><!--
 				--><a href="/spc/transactionHistory.do" class="btn btn_type03 mr-12" id="writeBtn">PDF</a><!--
 				--><a href="/spc/transactionHistory.do" class="btn btn_type03 mr-12" id="writeBtn">EXCEL</a><!--
