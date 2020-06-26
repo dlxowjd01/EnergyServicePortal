@@ -33,9 +33,19 @@
 		getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
 	}
 
-	function getDataList(page) {
+	function getDataList(page, n, sort) {
 		if(page == undefined){
 			page = 1;
+		}else{
+			if(isEmpty(n) && isEmpty(sort)) {
+				$('.sort_table > thead').find('button').each(function(){
+					if($(this).attr('class') != 'btn_align'){
+						n = $(this).data('colname');
+						sort = $(this).data('classname');
+					}
+				});
+				
+			}
 		}
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/spcs",
@@ -121,6 +131,8 @@
 					}
 
 				}
+				$(".sort_table").data("nowjsp", "supplementary");
+				jsonListSort(n, sort, jsonList);
 				jsonList = paging(page, jsonList);
 				setMakeList(jsonList, "listData", {
 					"dataFunction": {

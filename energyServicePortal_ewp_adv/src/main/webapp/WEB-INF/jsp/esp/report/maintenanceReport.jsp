@@ -102,7 +102,7 @@
 		return bResult;
 	}
 
-	function setJsonDataFormat(result, page) {
+	function setJsonDataFormat(result, page , n, sort) {
 		var jsonList = [];
 
 		for (var i = 0, count = result.data.length; i < count; i++) {
@@ -131,13 +131,25 @@
 				jsonList.push(rowData);
 			}
 		}
+		$(".sort_table").data("nowjsp", "maintenance");
+		jsonListSort(n, sort, jsonList);
 		jsonList = paging(page, jsonList);
 		return jsonList;
 	}
 
-	function getDataList(page) {
+	function getDataList(page, n, sort) {
 		if (page == undefined) {
 			page = 1;
+		}else{
+			if(isEmpty(n) && isEmpty(sort)) {
+				$('.sort_table > thead').find('button').each(function(){
+					if($(this).attr('class') != 'btn_align'){
+						n = $(this).data('colname');
+						sort = $(this).data('classname');
+					}
+				});
+				
+			}
 		}
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/reports/remote_work",
@@ -145,7 +157,8 @@
 			async: false,
 			data: { oid: oid },
 			success: function (result) {
-				setMakeList(setJsonDataFormat(result, page), "listData", {
+				
+				setMakeList(setJsonDataFormat(result, page, n, sort), "listData", {
 					dataFunction: {
 						INDEX: getNumberIndex,
 						report_type: getReportTypeName,

@@ -264,10 +264,21 @@
 		getDataList(page);
 	}
 
-	function getDataList(page) {
+	function getDataList(page, n, sort) {
 		if (page == undefined) {
 			page = 1;
+		} else {
+			if(isEmpty(n) && isEmpty(sort)) {
+				$('.sort_table > thead').find('button').each(function(){
+					if($(this).attr('class') != 'btn_align'){
+						n = $(this).data('colname');
+						sort = $(this).data('classname');
+					}
+				});
+				
+			}
 		}
+		
 		let type = $('#reportClass button').data('value');
 		let data = {
 			oid: oid
@@ -303,7 +314,6 @@
 						result.data[i].file_link = 'location.href=\'http://iderms.enertalk.com:8443/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
 					}
 
-
 					if (temp.confirmed_at != null) {
 						let confirmed_date = (new Date(temp.confirmed_at)).format('yyyy-MM-dd hh:mm:ss');
 						let linkData = JSON.parse(temp.confirmed_file_link);
@@ -318,11 +328,14 @@
 						jsonList.push(result.data[i]);
 					}
 				}
-				jsonList.sort(function(a,b){
-					let dateA = new Date(a.generated_date).getTime();
-					let dateB = new Date(b.generated_date).getTime();
-					return dateA < dateB ? 1 : -1;
-				});
+				
+// 				jsonList.sort(function(a,b){
+// 					let dateA = new Date(a.generated_date).getTime();
+// 					let dateB = new Date(b.generated_date).getTime();
+// 					return dateA < dateB ? 1 : -1;
+// 				});
+				$(".sort_table").data("nowjsp", "yield");
+				jsonListSort(n, sort, jsonList);
 				jsonList = paging(page, jsonList);
 				setMakeList(jsonList, "listData", { "dataFunction": { "INDEX": getNumberIndex } }); //list생성
 			},
@@ -331,7 +344,7 @@
 			}
 		});
 	}
-
+	
 	function jsonDataFilter(jsonData) {
 		let keyWord = $('#key_word').val().trim().toLowerCase(),
 			bResult = false, dResult = true, sResult = false;
@@ -473,7 +486,7 @@
 				if(newPageCnt > 0){
 					idx = idx - pagePerData * newPageCnt; 
 				}
-				console.log(idx);
+				
 				let confirmed_file_link = {
 					fileKey: result.files[0].fieldname,
 					orgFileName: result.files[0].originalname
@@ -727,7 +740,7 @@
 				</button><button type="button" class="btn_type" onclick="modalInit();">신규 생성
 				</button></div>
 			<div class="spc_tbl align_type">
-				<table class="sort_table chk_type">
+				<table class="sort_table chk_type" id="yield_table">
 					<thead>
 						<tr>
 							<th>
@@ -739,7 +752,7 @@
 							<th><button class="btn_align down">발전소명</button></th>
 							<th><button class="btn_align down">보고서 유형</button></th>
 							<th><button class="btn_align down">적용기간</button></th>
-							<th><button class="btn_align down">다운로드</button></th>
+							<th>다운로드</th>
 							<th><button class="btn_align down">보고서 생성 시간</button></th>
 							<th><button class="btn_align down">보고서 확정</button></th>
 							<th><button class="btn_align down">최종 작업자</button></th>

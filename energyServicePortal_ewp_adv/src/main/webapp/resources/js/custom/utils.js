@@ -1361,32 +1361,55 @@ const setttingSuffix = function(keyText) {
 $(function() {
 	$(document).on('click', '.sort_table', function(i){
 		let tables = $(this);
+		const tableBodyId = tables.find('tbody').prop('id');
+		let tableBodyTemp = $.data(document, tableBodyId);
+		tableBodyTemp = tableBodyTemp.replace(/<(\/a|a)([^>]*)>/gi,'');
+		tableBodyTemp = tableBodyTemp.replace(/ name="aTagTd01"| name="aTagTd02"| class="right"| %/gi,'');
+		let tableColumnArray = (tableBodyTemp.match(/(?<=<td>\[)(.*?)(?=]<\/td>)/g) || []);
+		if($('.sort_table').data('nowjsp') == 'balance'){
+			tableColumnArray.splice(3, 0, '-');
+		}else if(($('.sort_table').data('nowjsp') == 'supplementary')){
+			tableColumnArray[4] = '파일_현재_개수';
+		}else if(($('.sort_table').data('nowjsp') == 'entityinformation')){
+			tableColumnArray.splice(2, 0, '연차');
+		}else if(($('.sort_table').data('nowjsp') == 'maintenance')){
+			tableColumnArray = tableColumnArray.slice(1,5);
+			tableColumnArray.splice(2, 0, 'report_name');
+		}
+		
 		for (var i = 0; i < tables.length; ++i) {
-			var headers = tables[i].getElementsByTagName('th');
+			var headers = tables[i].querySelectorAll('th button');
 			for (var j = 0; j < headers.length; ++j) {
 				// 지역 유효범위에 생성할 중첩 함수
 				(function (table, n) {
 					headers[j].onclick = function () {
 						let sort = 'down';
-						if (this.getElementsByTagName('button')[0].classList.length == 1) {
-							this.getElementsByTagName('button')[0].classList.add('down');
+						if (this.classList.length == 1) {
+							this.classList.add('down');
 							sort = 'down';
 						} else {
-							if (this.getElementsByTagName('button')[0].classList[1] == 'up') {
-								this.getElementsByTagName('button')[0].classList.replace('up', 'down');
+							if (this.classList[1] == 'up') {
+								this.classList.replace('up', 'down');
 								sort = 'down';
 							} else {
-								this.getElementsByTagName('button')[0].classList.replace('down', 'up');
+								this.classList.replace('down', 'up');
 								sort = 'up';
 							}
 						}
-						for (var k = 1; k < headers.length; k++) {
+						$(this).data('colname' , tableColumnArray[n]);
+						$(this).data('classname' , sort);
+						for (var k = 0; k < headers.length; k++) {
 							if (n != k) {
-								headers[k].getElementsByTagName('button')[0].classList.remove('up');
-								headers[k].getElementsByTagName('button')[0].classList.remove('down');
+								headers[k].classList.remove('up');
+								headers[k].classList.remove('down');
 							}
 						}
-						SortTable(table, n, sort)
+						
+						if(typeof getDataList == 'function') {
+							getDataList(Number($('#paging > a > strong').text()), tableColumnArray[n], sort);
+						} else{
+							SortTable(table, n, sort);
+						}
 					};
 				}(tables[i], j));
 			}
@@ -1401,16 +1424,16 @@ function SortTable(table, n, sort) {
 	let rows2 = tbody.querySelectorAll('tr.detail_info');
 	rows = Array.prototype.slice.call(rows, 0);
 	rows.sort(function (row1, row2) {
-		var cell1 = row1.getElementsByTagName("td")[n];
-		var cell2 = row2.getElementsByTagName("td")[n];
+		var cell1 = row1.getElementsByTagName('td')[n+1];
+		var cell2 = row2.getElementsByTagName('td')[n+1];
 		var value1 = cell1.textContent || cell1.innerText;
 		var value2 = cell2.textContent || cell2.innerText;
 
 		if(value1 == '-'){
 			return 1;
 		}else{
-			value1 = String(value1).replace(/^\s+|\s+$/g, "");
-			value2 = String(value2).replace(/^\s+|\s+$/g, "");
+			value1 = String(value1).replace(/^\s+|\s+$/g, '');
+			value2 = String(value2).replace(/^\s+|\s+$/g, '');
 
 			if (isNumberic(value1) && isNumberic(value2)) {
 				value1 = Number(value1.replace(/[^0-9]/g, ''));
@@ -1429,7 +1452,6 @@ function SortTable(table, n, sort) {
 		return 0;
 	});
 
-
 	// 정렬된 배열로 row 를 다시 저장한다. 문서에 이미 존재하는 node 는 삽입하면 해당 node 는 자동으로 제거되고 새 위치에 저장된다.
 	for (var i = 0; i < rows.length; ++i) {
 		let flag = rows[i].classList[1];
@@ -1441,6 +1463,52 @@ function SortTable(table, n, sort) {
 			}
 		}
 	}
+}
+
+function jsonListSort(n, sort, jsonList){
+	if(n == '-'){
+		return false;
+	}
+	let nowJspPage = $(".sort_table").data("nowjsp");
+	if(nowJspPage == "yield"){
+		n = isEmpty(n) ? 'generated_date' : n;
+	}else if(nowJspPage == "maintenance"){
+		n = isEmpty(n) ? 'write_date' : n;
+	}else if(nowJspPage == 'supplementary'){
+		n = isEmpty(n) ? '관리_운영_기간' : n;
+	}else if(nowJspPage == 'balance'){
+		n = isEmpty(n) ? 'balance_yyyymm' : n;
+	}else{
+		n= isEmpty(n) ? '관리_운영_기간' : n;
+	}
+	
+	jsonList.sort(function(a, b) {
+		var cell1 = a[n];
+		var cell2 = b[n];
+		var value1 = cell1.textContent || cell1.innerText;
+		var value2 = cell2.textContent || cell2.innerText;
+
+		if(cell1 == '-'){
+			return 1;
+		}else{
+			cell1 = String(cell1).replace(/^\s+|\s+$/g, '');
+			cell2 = String(cell2).replace(/^\s+|\s+$/g, '');
+
+			if (isNumberic(cell1) && isNumberic(cell2)) {
+				cell1 = Number(cell1.replace(/[^0-9]/g, ''));
+				cell2 = Number(cell2.replace(/[^0-9]/g, ''));
+			}
+			if (sort == 'up') {
+				if (cell1 < cell2) return -1;
+				if (cell1 > cell2) return 1;
+			} else {
+				if (cell1 < cell2) return 1;
+				if (cell1 > cell2) return -1;
+			}
+		}
+
+		return 0;
+	});
 }
 
 function isNumberic(num) {
@@ -1490,7 +1558,6 @@ function makeNavigation (page, totalPage) {
 	} else {
 		pageStr += '<a href="javascript:void(0);"  class="btn_next larst_next">next</a>';
 	}
-
 	$('#paging').append(pageStr);
 }
 
