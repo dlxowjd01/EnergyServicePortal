@@ -481,70 +481,7 @@
 		return rtn;
 	};
 
-	// const repeatEnd = function (selectedDate) {
-
-	// 	if (selectedDate == undefined && $('#job_date').datepicker('getDate') != null) {
-	// 		selectedDate = $('#job_date').datepicker('getDate');
-	// 	} else if (selectedDate == undefined && $('#job_date').datepicker('getDate') == null) {
-	// 		return false;
-	// 	}
-
-	// 	if ($('#repeat_yn button').data('value') == '') {
-	// 		return false;
-	// 	}
-
-	// 	if ($('#repeat_yn button').data('value') == 'N') {
-	// 		$('#repeat_end').val(selectedDate);
-
-	// 		if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
-	// 			selectedDate.setDate(selectedDate.getDate() - Number($('#alarmSetup button').data('value')));
-	// 			$('#alarmDate').val(selectedDate.format('yyyy-MM-dd'));
-	// 		}
-	// 	} else {
-	// 		let repeatVal = $('#repeat_interval').val();
-	// 		let repeatUnit = $('#repeat_unit button').data('value');
-	// 		if (selectedDate != null && selectedDate != '' && repeatVal != '' && repeatUnit != '') {
-	// 			let unit = 1;
-
-	// 			if (repeatUnit == 'year') {
-	// 				unit = '12';
-	// 			} else if (repeatUnit == 'half_year') {
-	// 				unit = '6';
-	// 			} else if (repeatUnit == 'quarter_year') {
-	// 				unit = '3';
-	// 			} else {
-	// 				unit = '1';
-	// 			}
-
-	// 			let selDate = new Date(selectedDate);
-	// 			if (repeatUnit != 'day_of_week') {
-	// 				let setDay = selDate.getDate()
-	// 				selDate.setMonth(selDate.getMonth() + (unit * repeatVal));
-	// 				if (setDay != selDate.getDate()) {
-	// 					alert('잘못된 날짜를 선택하셨습니다.');
-	// 					$('#job_date').val('');
-	// 					$('#repeat_end').val('');
-	// 					return false;
-	// 				}
-	// 			} else {
-	// 				selDate.setDate(selDate.getDate() + 7);
-	// 			}
-
-	// 			$('#repeat_end').val(selDate.format('yyyy-MM-dd'));
-
-
-	// 			if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
-	// 				selDate.setDate(selDate.getDate() - Number($('#alarmSetup button').data('value')));
-	// 				$('#alarmDate').val(selDate.format('yyyy-MM-dd'));
-	// 			}
-	// 		}
-	// 	}
-
-	// }
-
-	
-
-	function repeatEnd (selectedDate) {
+	const repeatEnd = function (selectedDate) {
 		if (selectedDate == undefined && $('#job_date').datepicker('getDate') != null) {
 			selectedDate = $('#job_date').datepicker('getDate');
 		} else if (selectedDate == undefined && $('#job_date').datepicker('getDate') == null) {
@@ -557,53 +494,17 @@
 			$('#repeat_end').val('').datepicker('destroy').removeClass('sel');
 			$('#repeat_end').parent().removeClass('sel_calendar').addClass('tx_inp_type');
 		} else {
-			// START: 날짜 자동 변경 안되는 것 같아 이전 소스 보고 복구 하였습니다. 위에 예전 소스 그대로 카피본 있습니다. 
-			// => 해당 개발자분 검토 부탁드립니다.
-			let repeatVal = $('#repeat_interval').val();
-			let repeatUnit = $('#repeat_unit button').data('value');
-
-			if (selectedDate != null && selectedDate != '' && repeatVal != '' && repeatUnit != '') {
-				let unit = "";
-				let selDate = new Date(selectedDate);
-
-				if (repeatUnit == 'year') {
-					unit = '12';
-				} else if (repeatUnit == 'half_year') {
-					unit = '6';
-				} else if (repeatUnit == 'quarter_year') {
-					unit = '3';
-				} else {
-					unit = '1';
-				}
-				if (repeatUnit != 'day_of_week') {
-					let setDay = selDate.getDate()
-					selDate.setMonth(selDate.getMonth() + (unit * repeatVal));
-					if (setDay != selDate.getDate()) {
-						alert('잘못된 날짜를 선택하셨습니다.');
-						$('#job_date').val('');
-						$('#repeat_end').val('');
-						return false;
-					}
-				} else {
-					selDate.setDate(selDate.getDate() + 7);
-				}
-				$('#repeat_end').val(selDate.format('yyyy-MM-dd'));
-
-			}
-			// END
-
 			$('#repeat_end').datepicker({
 				showOn: 'both',
 				buttonImageOnly: true,
 				dateFormat: 'yy-mm-dd',
-				beforeShow: function (data) {
+				beforeShow: function () {
 					let fromDate = $(this).closest('.dateField').find('.fromDate').datepicker('getDate');
 					if (fromDate != '') {
 						$(this).datepicker('option', 'minDate', fromDate.format('yyyy-MM-dd'));
 					}
 				},
 				onClose: function (selected) {
-					console.log("onClose===", selected)
 					$(this).closest('.dateField').find('.fromDate').datepicker('option', 'maxDate', selected);
 				}
 			});
@@ -698,7 +599,7 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 							<div class="sel_calendar">
-								<input type="text" id="job_date" name="job_date" class="sel datepicker fromDate required w-100" value="" autocomplete="off" readonly>
+								<input type="text" id="job_date" name="job_date" class="sel fromDate required w-100" value="" autocomplete="off" readonly>
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
