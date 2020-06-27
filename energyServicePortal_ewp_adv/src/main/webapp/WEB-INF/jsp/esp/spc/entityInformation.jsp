@@ -319,25 +319,25 @@
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="operation_0" value="operation_0" name="operation_opt">
-								<label for="operation_0"><span></span>전체</label>
+								<label for="operation_0">전체</label>
 							</a>
 						</li>
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="operation_1" value="operation_1" name="operation_opt">
-								<label for="operation_1"><span></span>운영중</label>
+								<label for="operation_1">운영중</label>
 							</a>
 						</li>
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="operation_2" value="operation_1" name="operation_opt">
-								<label for="operation_2"><span></span>운영 예정</label>
+								<label for="operation_2">운영 예정</label>
 							</a>
 						</li>
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="operation_3" value="operation_1" name="operation_opt">
-								<label for="operation_3"><span></span>해지</label>
+								<label for="operation_3">해지</label>
 							</a>
 						</li>
 					</ul>
@@ -350,25 +350,25 @@
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="warranty_0" value="전체" name="warranty_opt">
-								<label for="warranty_0"><span></span>전체</label>
+								<label for="warranty_0">전체</label>
 							</a>
 						</li>
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="warranty_1" value="PR" name="warranty_opt">
-								<label for="warranty_1"><span></span>PR</label>
+								<label for="warranty_1">PR</label>
 							</a>
 						</li>
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="warranty_2" value="발전 시간" name="warranty_opt">
-								<label for="warranty_2"><span></span>발전 시간</label>
+								<label for="warranty_2">발전 시간</label>
 							</a>
 						</li>
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="warranty_3" value="PR + 발전시간" name="warranty_opt">
-								<label for="warranty_3"><span></span>PR + 발전시간</label>
+								<label for="warranty_3">PR + 발전시간</label>
 							</a>
 						</li>
 					</ul>
@@ -381,37 +381,37 @@
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="contract_0" value="contract_0" name="contract_opt">
-								<label for="contract_0"><span></span>전체</label>
+								<label for="contract_0">전체</label>
 							</a>
 						</li>
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="contract_1" value="contract_1" name="contract_opt">
-								<label for="contract_1"><span></span>종합</label>
+								<label for="contract_1">종합</label>
 							</a>
 						</li>
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="contract_2" value="contract_2" name="contract_opt">
-								<label for="contract_2"><span></span>일반관리</label>
+								<label for="contract_2">일반관리</label>
 							</a>
 						</li>
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="contract_3" value="contract_3" name="contract_opt">
-								<label for="contract_3"><span></span>사무수탁</label>
+								<label for="contract_3">사무수탁</label>
 							</a>
 						</li>
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="contract_4" value="contract_4" name="contract_opt">
-								<label for="contract_4"><span></span>보험</label>
+								<label for="contract_4">보험</label>
 							</a>
 						</li>
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="contract_5" value="contract_5" name="contract_opt">
-								<label for="contract_5"><span></span>안전관리자</label>
+								<label for="contract_5">안전관리자</label>
 							</a>
 						</li>
 					</ul>
@@ -469,7 +469,7 @@
 						<tr>
 							<td>
 								<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="">
-								<label for="chk_op[INDEX]"><span></span>[INDEX]</label>
+								<label for="chk_op[INDEX]">[INDEX]</label>
 							</td>
 							<td name="aTagTd01"><a
 									href="/spc/entityDetails.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]"

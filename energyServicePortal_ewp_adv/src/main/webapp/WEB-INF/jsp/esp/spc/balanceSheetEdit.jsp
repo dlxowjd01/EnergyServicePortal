@@ -406,7 +406,7 @@
 					<p class="tx_type fl">단위:원</p>
 					<div class="chk_type fl">
 						<input type="checkbox" id="noteDown" name="noteDown" value="1">
-						<label for="noteDown"><span></span>수기입력 활성화</label>
+						<label for="noteDown">수기입력 활성화</label>
 					</div>
 				</div>
 			</div>

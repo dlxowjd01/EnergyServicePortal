@@ -275,25 +275,25 @@
 					<li data-value="14">
 						<a href="javascript:void(0);" tabindex="-1">
 							<input type="checkbox" id="allSpc" value="all" name="spcName">
-							<label for="allSpc"><span></span>전체</label>
+							<label for="allSpc">전체</label>
 						</a>
 					</li>
 					<li data-value="15">
 						<a href="javascript:void(0);" tabindex="-1">
 							<input type="checkbox" id="spc1" value="spc1" name="spcName">
-							<label for="spc1"><span></span>SPC1</label>
+							<label for="spc1">SPC1</label>
 						</a>
 					</li>
 					<li data-value="16">
 						<a href="javascript:void(0);" tabindex="-1">
 							<input type="checkbox" id="spc2" value="spc2" name="spcName">
-							<label for="spc2"><span></span>SPC2</label>
+							<label for="spc2">SPC2</label>
 						</a>
 					</li>
 					<li data-value="17">
 						<a href="javascript:void(0);" tabindex="-1">
 							<input type="checkbox" id="spc3" value="spc3" name="spcName">
-							<label for="spc3"><span></span>SPC2</label>
+							<label for="spc3">SPC2</label>
 						</a>
 					</li>
 				</ul>
@@ -305,13 +305,13 @@
 					<li>
 						<a href="javascript:void(0);">
 							<input type="checkbox" id="accountSelect1" value="kb" name="account_select">
-							<label for="accountSelect1"><span></span>KB 120-634348-12-339</label>
+							<label for="accountSelect1">KB 120-634348-12-339</label>
 						</a>
 					</li>
 					<li>
 						<a href="javascript:void(0);">
 							<input type="checkbox" id="accountSelect2" value="ibk" name="account_select">
-							<label for="accountSelect2"><span></span>기업 650-665568-12-339</label>
+							<label for="accountSelect2">기업 650-665568-12-339</label>
 						</a>
 					</li>
 				</ul>
@@ -349,7 +349,7 @@
 							<td>
 								<a class="chk_type select_row">
 									<input type="checkbox" id="chk01" name="chk01">
-									<label for="chk01"><span></span></label>
+									<label for="chk01"></label>
 								</a>
 							</td>
 							<td>
@@ -371,19 +371,19 @@
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountNum1" value="accountTypes1" name="accountTypes">
-													<label for="accountNum1"><span></span>관리 운영비</label>
+													<label for="accountNum1">관리 운영비</label>
 												</a>
 											</li>
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountNum2" value="accountTypes2" name="accountTypes">
-													<label for="accountNum2"><span></span>사무 수탁비</label>
+													<label for="accountNum2">사무 수탁비</label>
 												</a>
 											</li>
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountTypes3" value="accountTypes3" name="accountTypes">
-													<label for="accountTypes3"><span></span>기타</label>
+													<label for="accountTypes3">기타</label>
 												</a>
 											</li>
 										</ul>
@@ -406,13 +406,13 @@
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountNum4" value="accountNum" name="accountNum11">
-													<label for="accountNum11"><span></span>신한 650-665568-12-339</label>
+													<label for="accountNum11">신한 650-665568-12-339</label>
 												</a>
 											</li>
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountNum5" value="accountNum" name="accountNum12">
-													<label for="accountNum12"><span></span>KB 650-665568-12-339</label>
+													<label for="accountNum12">KB 650-665568-12-339</label>
 												</a>
 											</li>
 										</ul>
@@ -429,7 +429,7 @@
 							<td>
 								<a href="javascript:void(0);" class="chk_type select_row">
 									<input type="checkbox" id="chk02" name="chk02">
-									<label for="chk02"><span></span></label>
+									<label for="chk02"></label>
 								</a>
 							</td>
 							<td>
@@ -451,19 +451,19 @@
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountNum6" value="accountTypes1" name="accountTypes">
-													<label for="accountNum1"><span></span>관리 운영비</label>
+													<label for="accountNum1">관리 운영비</label>
 												</a>
 											</li>
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountNum7" value="accountTypes2" name="accountTypes">
-													<label for="accountNum2"><span></span>사무 수탁비</label>
+													<label for="accountNum2">사무 수탁비</label>
 												</a>
 											</li>
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountTypes8" value="accountTypes3" name="accountTypes">
-													<label for="accountTypes3"><span></span>기타</label>
+													<label for="accountTypes3">기타</label>
 												</a>
 											</li>
 										</ul>
@@ -486,13 +486,13 @@
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountNum9" value="accountNum3" name="accountNum3">
-													<label for="accountNum3"><span></span>신한 650-665568-12-339</label>
+													<label for="accountNum3">신한 650-665568-12-339</label>
 												</a>
 											</li>
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountNum10" value="accountNum4" name="accountNum4">
-													<label for="accountNum4"><span></span>KB 650-665568-12-339</label>
+													<label for="accountNum4">KB 650-665568-12-339</label>
 												</a>
 											</li>
 										</ul>
@@ -509,7 +509,7 @@
 							<td>
 								<a href="javascript:void(0);" class="chk_type select_row">
 									<input type="checkbox" id="chk03" name="chk03">
-									<label for="chk03"><span></span></label>
+									<label for="chk03"></label>
 								</a>
 							</td>
 							<td>
@@ -531,19 +531,19 @@
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountTypes11" value="accountTypes1" name="accountTypes">
-													<label for="accountTypes11"><span></span>관리 운영비</label>
+													<label for="accountTypes11">관리 운영비</label>
 												</a>
 											</li>
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountNum12" value="accountTypes12" name="accountTypes">
-													<label for="accountTypes12"><span></span>사무 수탁비</label>
+													<label for="accountTypes12">사무 수탁비</label>
 												</a>
 											</li>
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountTypes3" value="accountTypes13" name="accountTypes">
-													<label for="accountTypes13"><span></span>기타</label>
+													<label for="accountTypes13">기타</label>
 												</a>
 											</li>
 										</ul>
@@ -566,13 +566,13 @@
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountNum21" value="accountNum3" name="accountNum3">
-													<label for="accountNum21"><span></span>신한 650-665568-12-339</label>
+													<label for="accountNum21">신한 650-665568-12-339</label>
 												</a>
 											</li>
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountNum2" value="accountNum22" name="accountNum4">
-													<label for="accountNum22"><span></span>KB 650-665568-12-339</label>
+													<label for="accountNum22">KB 650-665568-12-339</label>
 												</a>
 											</li>
 										</ul>
@@ -589,7 +589,7 @@
 							<td>
 								<a href="javascript:void(0);" class="chk_type select_row">
 									<input type="checkbox" id="chk04" name="chk04">
-									<label for="chk04"><span></span></label>
+									<label for="chk04"></label>
 								</a>
 							</td>
 							<td>
@@ -611,19 +611,19 @@
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountType4" value="accountTypes21" name="accountTypes">
-													<label for="accountTypes21"><span></span>관리 운영비</label>
+													<label for="accountTypes21">관리 운영비</label>
 												</a>
 											</li>
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountType5" value="accountTypes22" name="accountTypes">
-													<label for="accountTypes22"><span></span>사무 수탁비</label>
+													<label for="accountTypes22">사무 수탁비</label>
 												</a>
 											</li>
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountType6" value="accountTypes23" name="accountTypes">
-													<label for="accountTypes23"><span></span>기타</label>
+													<label for="accountTypes23">기타</label>
 												</a>
 											</li>
 										</ul>
@@ -646,13 +646,13 @@
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountNum30" value="accountNum3" name="accountNum3">
-													<label for="accountNum30"><span></span>신한 650-665568-12-339</label>
+													<label for="accountNum30">신한 650-665568-12-339</label>
 												</a>
 											</li>
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountNum31" value="accountNum4" name="accountNum4">
-													<label for="accountNum31"><span></span>KB 650-665568-12-339</label>
+													<label for="accountNum31">KB 650-665568-12-339</label>
 												</a>
 											</li>
 										</ul>
@@ -669,7 +669,7 @@
 							<td>
 								<a href="javascript:void(0);" class="chk_type select_row">
 									<input type="checkbox" id="chk05" name="chk05">
-									<label for="chk05"><span></span></label>
+									<label for="chk05"></label>
 								</a>
 							</td>
 							<td>
@@ -691,19 +691,19 @@
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountTypes40" value="accountTypes1" name="accountTypes">
-													<label for="accountTypes40"><span></span>관리 운영비</label>
+													<label for="accountTypes40">관리 운영비</label>
 												</a>
 											</li>
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountNum2" value="accountTypes42" name="accountTypes">
-													<label for="accountTypes42"><span></span>사무 수탁비</label>
+													<label for="accountTypes42">사무 수탁비</label>
 												</a>
 											</li>
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountTypes3" value="accountTypes43" name="accountTypes">
-													<label for="accountTypes43"><span></span>기타</label>
+													<label for="accountTypes43">기타</label>
 												</a>
 											</li>
 										</ul>
@@ -726,13 +726,13 @@
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountNum50" value="accountNum3" name="accountNum3">
-													<label for="accountNum50"><span></span>신한 650-665568-12-339</label>
+													<label for="accountNum50">신한 650-665568-12-339</label>
 												</a>
 											</li>
 											<li>
 												<a href="javascript:void(0);" tabindex="-1">
 													<input type="checkbox" id="accountNum51" value="accountNum4" name="accountNum4">
-													<label for="accountNum51"><span></span>KB 650-665568-12-339</label>
+													<label for="accountNum51">KB 650-665568-12-339</label>
 												</a>
 											</li>
 										</ul>
@@ -811,7 +811,7 @@
 				<div class="btn_wrap_type05">
 					<a class="chk_type mr-24">
 						<input type="checkbox" id="chk02" name="chk02">
-						<label for="chk02"><span></span>증빙 첨부 포함</label>
+						<label for="chk02">증빙 첨부 포함</label>
 					</a>
 					<button type="button" class="btn btn_type03 mr-12" id="writeBtn">다운로드</button>
 					<button type="submit" class="btn btn_type">제출</button>

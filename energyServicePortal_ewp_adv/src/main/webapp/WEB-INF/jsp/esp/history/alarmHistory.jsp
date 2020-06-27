@@ -106,215 +106,204 @@
 	</div>
 </div>
 
-<form id="alarmHistorySearchForm">
-	<div class="row history_search">
-		<div class="col-12">
-			<div class="chart_top mb-10">
-				<div class="sa_select pb-10">
-					<div class="dropdown" id="site">
-						<button class="btn btn-primary dropdown-toggle w10" type="button" data-toggle="dropdown" data-name="선택해주세요.">
-							선택해주세요.<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="siteList">
-							<li data-value="[sid]">
+
+<div class="row history_search">
+	<div class="col-12">
+		<form id="alarmHistorySearchForm">
+			<div class="sa_select">
+				<div class="dropdown" id="site">
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택해주세요.">선택해주세요<span class="caret"></span></button>
+					<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="siteList">
+						<li data-value="[sid]">
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
-								<label for="site_[INDEX]"><span></span>[name]</label>
+								<label for="site_[INDEX]">[name]</label>
 							</a>
 						</li>
-						</ul>
-					</div>
-				</div>
-				<div class="sa_select pb-10">
-					<span class="tx_tit">설비 유형</span>
-					<div id="equipmentList" class="sa_select">
-						<div class="dropdown">
-							<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown"
-								data-name="선택">선택<span class="caret"></span></button>
-							<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="device">
-								<li data-value="[type]">
-									<a href="javascript:void(0);" tabindex="-1">
-										<input type="checkbox" id="type_[INDEX]" value="[type]" name="deviceType">
-										<label for="type_[INDEX]"><span></span>[name]</label>
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div class="sa_select pb-10">
-					<span class="tx_tit">알람 타입</span>
-					<div class="sa_select">
-						<div class="dropdown">
-							<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown"
-								data-name="선택">전체
-								<span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu chk_type" role="menu">
-								<li>
-									<a href="javascript:void(0)" tabindex="-1">
-										<input type="checkbox" id="alarm1" value="9" name="alarm" checked>
-										<label for="alarm1"><span></span>알수없음</label>
-									</a>
-								</li>
-								<li>
-									<a href="javascript:void(0)" tabindex="-1">
-										<input type="checkbox" id="alarm2" value="0" name="alarm" checked>
-										<label for="alarm2"><span></span>정보</label>
-									</a>
-								</li>
-								<li>
-									<a href="javascript:void(0)" tabindex="-1">
-										<input type="checkbox" id="alarm3" value="1" name="alarm" checked>
-										<label for="alarm3"><span></span>경고</label>
-									</a>
-								</li>
-								<li>
-									<a href="javascript:void(0)" tabindex="-1">
-										<input type="checkbox" id="alarm4" value="2" name="alarm" checked>
-										<label for="alarm4"><span></span>이상</label>
-									</a>
-								</li>
-								<li>
-									<a href="javascript:void(0)" tabindex="-1">
-										<input type="checkbox" id="alarm5" value="3" name="alarm" checked>
-										<label for="alarm5"><span></span>트립</label>
-									</a>
-								</li>
-								<li>
-									<a href="javascript:void(0)" tabindex="-1">
-										<input type="checkbox" id="alarm6" value="4" name="alarm" checked>
-										<label for="alarm6"><span></span>정상</label>
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div class="sa_select pb-10">
-					<span class="tx_tit">알람 상태</span>
-					<div class="sa_select">
-						<div class="dropdown" id="alarmstatus">
-							<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown"
-								data-name="선택">미확인
-								<span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu chk_type" role="menu" id="alstatus">
-								<li>
-									<a href="javascript:void(0)" tabindex="-1">
-										<input type="checkbox" id="alstatus1" name="confirm">
-										<label for="alstatus1"><span></span>확인</label>
-									</a>
-								</li>
-								<li>
-									<a href="javascript:void(0)" tabindex="-1">
-										<input type="checkbox" id="alstatus2" name="confirm" checked>
-										<label for="alstatus2"><span></span>미확인</label>
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div class="sa_select pb-10">
-					<span class="tx_tit">조치 상태</span>
-					<div class="sa_select">
-						<div class="dropdown">
-							<button class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown"
-								data-name="선택">전체
-								<span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu chk_type" role="menu" id="status">
-								<li>
-									<a href="javascript:void(0)" tabindex="-1">
-										<input type="checkbox" id="status1" name="status" value="new" checked>
-										<label for="status1"><span></span>신규</label>
-									</a>
-								</li>
-								<li>
-									<a href="javascript:void(0)" tabindex="-1">
-										<input type="checkbox" id="status2" name="status" value="open" checked>
-										<label for="status2"><span></span>작업처리중</label>
-									</a>
-								</li>
-								<li>
-									<a href="javascript:void(0)" tabindex="-1">
-										<input type="checkbox" id="status3" name="status" value="on-hold" checked>
-										<label for="status3"><span></span>추가 정보 대기</label>
-									</a>
-								</li>
-								<li>
-									<a href="javascript:void(0)" tabindex="-1">
-										<input type="checkbox" id="status4" name="status" value="resolved" checked>
-										<label for="status4"><span></span>현장 조치 완료</label>
-									</a>
-								</li>
-								<li>
-									<a href="javascript:void(0)" tabindex="-1">
-										<input type="checkbox" id="status5" name="status" value="pending" checked>
-										<label for="status5"><span></span>처리 결과 확인</label>
-									</a>
-								</li>
-								<li>
-									<a href="javascript:void(0)" tabindex="-1">
-										<input type="checkbox" id="status7" name="status" value="closed" checked>
-										<label for="status7"><span></span>처리 완료</label>
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
+					</ul>
 				</div>
 			</div>
 
-			<div class="chart_top">
-				<div class="sa_select pb-10">
-					<span class="tx_tit">조회 기간</span>
-					<div class="sa_select">
-						<div class="dropdown">
-							<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">1일
-								<span class="caret"></span></button>
-							<ul class="dropdown-menu" id="term">
-								<li data-value="day"><a href="javascript:void(0)">1일</a></li>
-								<li class="on" data-value="week"><a href="javascript:void(0)">1주</a></li>
-								<li data-value="month"><a href="javascript:void(0)">1월</a></li>
-								<li data-value="setup"><a href="javascript:void(0)">기간설정</a></li>
-							</ul>
+			<div id="searchDetail" class="search_expand sa_select">
+				<button type="button" class="btn bgN" data-target="#searchDropdown" data-name="상세 조건" onclick="$('#searchDetail').toggleClass('open')">상세 검색<span class="caret"></span></button>
+				<div id="searchDropdown" class="dropdown-menu search_dropdown">
+					<div class="flex_start3">
+						<div class="sa_select">
+							<h2 class="tx_tit">설비 유형</h2>
+							<div id="equipmentList" class="dropdown">
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+								<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="device">
+									<li data-value="[type]">
+										<a href="javascript:void(0);" tabindex="-1">
+											<input type="checkbox" id="type_[INDEX]" value="[type]" name="deviceType">
+											<label for="type_[INDEX]">[name]</label>
+										</a>
+									</li>
+								</ul>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="sa_select pb-10">
-					<fieldset class="sel_calendar">
-						<legend class="tx_tit fl" id="dateArea">기간 설정</legend>
-							<label for="fromDate" class="tx_tit sr-only">시작일</label>
+					<div class="flex_start3">
+						<div class="sa_select">
+							<h2 class="tx_tit">알람 종류</h2>
+							<div class="dropdown">
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">전체<span class="caret"></span></button>
+								<ul class="dropdown-menu chk_type" role="menu">
+									<li>
+										<a href="javascript:void(0)" tabindex="-1">
+											<input type="checkbox" id="alarm1" value="9" name="alarm" checked>
+											<label for="alarm1">알수없음</label>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)" tabindex="-1">
+											<input type="checkbox" id="alarm2" value="0" name="alarm" checked>
+											<label for="alarm2">정보</label>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)" tabindex="-1">
+											<input type="checkbox" id="alarm3" value="1" name="alarm" checked>
+											<label for="alarm3">경고</label>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)" tabindex="-1">
+											<input type="checkbox" id="alarm4" value="2" name="alarm" checked>
+											<label for="alarm4">이상</label>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)" tabindex="-1">
+											<input type="checkbox" id="alarm5" value="3" name="alarm" checked>
+											<label for="alarm5">트립</label>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)" tabindex="-1">
+											<input type="checkbox" id="alarm6" value="4" name="alarm" checked>
+											<label for="alarm6">정상</label>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="sa_select">
+							<h2 class="tx_tit">알람 상태</h2>
+							<div class="dropdown short" id="alarmstatus">	
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">미확인<span class="caret"></span></button>
+								<ul class="dropdown-menu chk_type" role="menu" id="alstatus">
+									<li>
+										<a href="javascript:void(0)" tabindex="-1">
+											<input type="checkbox" id="alstatus1" name="confirm">
+											<label for="alstatus1">확인</label>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)" tabindex="-1">
+											<input type="checkbox" id="alstatus2" name="confirm" checked>
+											<label for="alstatus2">미확인</label>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="sa_select">
+							<h2 class="tx_tit">조치 상태</h2>
+							<div class="dropdown">
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">전체<span class="caret"></span></button>
+								<ul class="dropdown-menu chk_type" role="menu" id="status">
+									<li>
+										<a href="javascript:void(0)" tabindex="-1">
+											<input type="checkbox" id="status1" name="status" value="new" checked>
+											<label for="status1">신규</label>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)" tabindex="-1">
+											<input type="checkbox" id="status2" name="status" value="open" checked>
+											<label for="status2">작업처리중</label>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)" tabindex="-1">
+											<input type="checkbox" id="status3" name="status" value="on-hold" checked>
+											<label for="status3">추가 정보 대기</label>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)" tabindex="-1">
+											<input type="checkbox" id="status4" name="status" value="resolved" checked>
+											<label for="status4">현장 조치 완료</label>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)" tabindex="-1">
+											<input type="checkbox" id="status5" name="status" value="pending" checked>
+											<label for="status5">처리 결과 확인</label>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)" tabindex="-1">
+											<input type="checkbox" id="status7" name="status" value="closed" checked>
+											<label for="status7">처리 완료</label>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="flex_start3">
+						<div class="sa_select">
+							<h2 class="tx_tit">조회 기간</h2>
+							<div class="dropdown short">
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">1일<span class="caret"></span></button>
+								<ul class="dropdown-menu" role="menu" id="term">
+									<li data-value="day"><a href="javascript:void(0)">1일</a></li>
+									<li class="on" data-value="week"><a href="javascript:void(0)">1주</a></li>
+									<li data-value="month"><a href="javascript:void(0)">1월</a></li>
+									<li data-value="setup"><a href="javascript:void(0)">기간설정</a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="sa_select">
+							<label class="tx_tit" id="dateArea">기간 설정</label>
 							<input type="text" id="datepicker1" name="fromDate" class="sel fromDate" value="" autocomplete="off">
-							<label for="toDate" class="tx_tit sr-only">마지막일</label>
+						</div>
+						<div class="sa_select">
+							<label for="toDate" class="tx_tit"></label>
 							<input type="text" id="datepicker2" name="toDate" class="sel toDate" value="" autocomplete="off">
-					</fieldset>
-				</div>
-				<div class="sa_select pb-10" id="cycle">
-					<span class="tx_tit">단위</span>
-					<div class="sa_select">
-						<div class="dropdown">
-							<button class="btn btn-primary dropdown-toggle w3 interval" type="button" data-toggle="dropdown"
-								aria-expanded="false">선택<span class="caret"></span></button>
-							<ul class="dropdown-menu" id="detailterm">
-								<li class="on"><a href="javascript:void(0);">15분</a></li>
-								<li><a href="javascript:void(0);">1시간</a></li>
-								<li><a href="javascript:void(0);">1일</a></li>
-								<li><a href="javascript:void(0);">1월</a></li>
-							</ul>
+						</div>
+						<div class="sa_select">
+							<h2 class="tx_tit">단위</h2>
+							<div id="cycle" class="dropdown short">
+								<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+								<ul class="dropdown-menu" id="detailterm">
+									<li class="on"><a href="javascript:void(0);">15분</a></li>
+									<li><a href="javascript:void(0);">1시간</a></li>
+									<li><a href="javascript:void(0);">1일</a></li>
+									<li><a href="javascript:void(0);">1월</a></li>
+								</ul>
+							</div>
 						</div>
 					</div>
+										
+					<div class="btn_wrap_type05">
+						<button type="button" class="btn_type03 w80" onclick="$('#searchDetail').removeClass('open')">취소</button><!--
+					--><button type="button" class="btn_type w80 ml-12" onclick="$('#searchDetail').removeClass('open')">적용</button>
+					</div>
 				</div>
-				<div class="sa_select pb-10">
-					<button type="button" id="search" class="btn_type">조회</button>
+
+				<div class="sa_select">
+					<button type="button" id="search" class="btn_type ml-6">조회</button>
 				</div>
 			</div>
-		</div>
+		</form>			
 	</div>
-</form>
-<div class="row content-wrapper">
+</div>
+
+
+<div class="row">
 	<div class="col-xl-8 col-lg-9 col-md-6 col-sm-12">
 		<div class="indiv alarm_stat_wrapper">
 			<div class="alarm_header">
@@ -323,11 +312,11 @@
 					<div class="rdo_type his_rdo_bx" id="chartType">
 						<span>
 							<input type="radio" id="rdo03_1" name="chartType" value="type" checked>
-							<label for="rdo03_1"><span></span>설비 타입</label>
+							<label for="rdo03_1">설비 타입</label>
 						</span>
 						<span>
 							<input type="radio" id="rdo03_2" name="chartType" value="alarm">
-							<label for="rdo03_2"><span></span>알람 타입</label>
+							<label for="rdo03_2">알람 타입</label>
 						</span>
 					</div>
 				</div>
@@ -716,7 +705,7 @@
 		for (let i = 0; i < colList.length + 1; i++) {
 			let hCell = document.createElement("th");
 			if (i == 0) {
-				hCell.innerHTML = '<input type="checkbox" id="alarmConfirmCheck' + deviceType + '" onclick="alarmConfirmCheckAll(\'' + deviceType + '\');"><label for="alarmConfirmCheck' + deviceType + '"><span></span></label>';
+				hCell.innerHTML = '<input type="checkbox" id="alarmConfirmCheck' + deviceType + '" onclick="alarmConfirmCheckAll(\'' + deviceType + '\');"><label for="alarmConfirmCheck' + deviceType + '"></label>';
 				tRow.appendChild(hCell);
 			} else {
 				hCell.innerHTML = '<button class="btn_align">' + colList[i - 1] + '</button>';
@@ -727,7 +716,7 @@
 		for (let i = 0; i < tdList.length + 1; i++) {
 			let dCell = document.createElement("td");
 			if (i == 0) {
-				dCell.innerHTML = '<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value=""><label for="chk_op[INDEX]"><span></span>[INDEX]</label>';
+				dCell.innerHTML = '<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value=""><label for="chk_op[INDEX]">[INDEX]</label>';
 				bRow.appendChild(dCell);
 			} else {
 				dCell.innerHTML =  tdList[i - 1];

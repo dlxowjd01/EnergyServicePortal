@@ -412,7 +412,7 @@
 			str += `<li>
 				<a href="#" data-value="${'${site.sid}'}" tabindex="-1">
 					<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
-					<label for="${'${site.sid}'}"><span></span>${'${site.name}'}</label>
+					<label for="${'${site.sid}'}">${'${site.name}'}</label>
 				</a>
 			</li>`;
 		});

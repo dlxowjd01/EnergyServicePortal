@@ -151,11 +151,11 @@
 						</thead>
 						<tbody id="centerTbody">
 						<tr>
-							<td><span></span><em>&nbsp;&nbsp;개소</em></td>
-							<td><span></span><em>&nbsp;&nbsp;대</em></td>
-							<td><span></span><em>&nbsp;&nbsp;kW</em></td>
-							<td><span></span><em>&nbsp;&nbsp;kg</em></td>
-							<td><span></span><em>&nbsp;&nbsp;천원</em></td>
+							<td><em>&nbsp;&nbsp;개소</em></td>
+							<td><em>&nbsp;&nbsp;대</em></td>
+							<td><em>&nbsp;&nbsp;kW</em></td>
+							<td><em>&nbsp;&nbsp;kg</em></td>
+							<td><em>&nbsp;&nbsp;천원</em></td>
 						</tr>
 						</tbody>
 					</table>
@@ -200,19 +200,19 @@
 										<li data-value="0">
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="checkbox" id="deviceStatus1" name="deviceStatus" value="0" checked>
-												<label for="deviceStatus1"><span></span>중지</label>
+												<label for="deviceStatus1">중지</label>
 											</a>
 										</li>
 										<li data-value="1">
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="checkbox" id="deviceStatus2" name="deviceStatus" value="1" checked>
-												<label for="deviceStatus2"><span></span>정상</label>
+												<label for="deviceStatus2">정상</label>
 											</a>
 										</li>
 										<li data-value="2">
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="checkbox" id="deviceStatus3" name="deviceStatus" value="2" checked>
-												<label for="deviceStatus3"><span></span>트립</label>
+												<label for="deviceStatus3">트립</label>
 											</a>
 										</li>
 									</ul>

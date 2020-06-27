@@ -664,7 +664,7 @@
 								let str = `<li>
 								<a href="javascript:void(0);" data-value="${'${el.did}'}" tabindex="-1">
 									<input type="checkbox" id="device_${'${i}'}" name="device" value="${'${el.did}'}" data-sid="${'${el.sid}'}" data-type="${'${el.device_type}'}">
-									<label for="device_${'${i}'}"><span></span>${'${el.name}'}</label>
+									<label for="device_${'${i}'}">${'${el.name}'}</label>
 								</a>
 							</li>`
 								siteGrp.find('ul').append(str);
@@ -1069,152 +1069,127 @@
 		return date;
 	}
 </script>
-<div class="row header-wrapper">
+
+<div class="row header-wrapper"><div class="col-12"><h1 class="page-header">상태 이력</h1></div></div>
+
+<div class="row">
 	<div class="col-12">
-		<h1 class="page-header">상태 이력</h1>
-	</div>
-</div>
-<div class="row history_search">
-	<div class="col-12">
-		<form id="operationSearchForm" class="chart_top w-90">
-			<div class="dropdown sa_select pb-10" id="siteList">
-				<button type="button" class="btn btn-primary dropdown-toggle w1" data-toggle="dropdown" data-name="사업소 선택">사업소 선택<span class="caret"></span></button><!--
-			--><ul class="dropdown-menu chk_type" role="menu" id="siteULList"><!--
-				--><li data-value="[sid]"><!--
-					--><a href="javascript:void(0);" tabindex="-1"><!--
-						--><input type="checkbox" id="site_[INDEX]" value="[sid]" name="site"><!--
-						--><label for="site_[INDEX]"><span></span>[name]</label><!--
-					--></a><!--
-				--></li><!--
-			--></ul>
-			</div>
-			<div class="sa_select pb-10"><span class="tx_tit">설비 타입</span><div class="sa_select">
-					<div class="dropdown" id="deviceType">
-						<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비유형 선택">
-							설비유형 선택<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu chk_type" role="menu" id="typeULList">
-							<li data-value="[type]">
-								<a href="javascript:void(0);" tabindex="-1">
-									<input type="checkbox" id="type_[INDEX]" value="[type]" name="type">
-									<label for="type_[INDEX]"><span></span>[name]</label>
-								</a>
-							</li>
-						</ul>
+		<form id="operationSearchForm">
+			<div class="dropdown sa_select" id="siteList"><!--
+			--><button type="button" class="btn btn-primary dropdown-toggle w1" data-toggle="dropdown" data-name="사업소 선택">사업소 선택<span class="caret"></span></button><!--
+			--><ul class="dropdown-menu chk_type" role="menu" id="siteULList"><li data-value="[sid]"><a href="javascript:void(0);" tabindex="-1"><input type="checkbox" id="site_[INDEX]" value="[sid]" name="site"><label for="site_[INDEX]">[name]</label></a></li></ul><!--
+		 --></div><!--
+		
+		--><div id="searchDetail" class="search_expand sa_select">
+				<button type="button" class="btn bgN" data-target="#searchDropdown" data-name="상세 검색" onclick="$('#searchDetail').toggleClass('open')">상세 검색<span class="caret"></span></button>
+				<div id="searchDropdown" class="dropdown-menu search_dropdown">
+					<h2 class="tx_tit">설비 타입</h2>
+					<div class="flex_start">
+						<div class="dropdown" id="deviceType"><!--
+						--><button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비유형 선택">설비유형 선택<span class="caret"></span></button><!--
+						--><ul class="dropdown-menu chk_type" role="menu" id="typeULList">
+								<li data-value="[type]">
+									<a href="javascript:void(0);" tabindex="-1">
+										<input type="checkbox" id="type_[INDEX]" value="[type]" name="type">
+										<label for="type_[INDEX]">[name]</label>
+									</a>
+								</li>
+							</ul><!--
+					--></div>
+						<div class="dropdown" id="devices"><!--
+						--><button class="btn btn-primary dropdown-toggle w1" type="button" data-toggle="dropdown" data-name="복수 선택">복수 선택<span class="caret"></span></button><!--
+						--><ul class="dropdown-menu dropdown-menu-form chk_type"><!--
+							--><li class="dropdown_cov clear"><!--
+								--><div class="li_btn_bx clear"><!--
+									--><div class="fl"><!--
+										--><button type="button" class="btn_type03">모두 선택</button><!--
+										--><button type="button" class="btn_type03">모두 해제</button><!--
+									--></div>
+										<div class="fr"><button type="button" class="btn_type">적용</button></div>
+									</div>
+								</li>
+							</ul>
+						</div>
 					</div>
-				</div><div class="sa_select pb-10">
-					<div class="dropdown" id="devices">
-						<button class="btn btn-primary dropdown-toggle w1" type="button" data-toggle="dropdown" data-name="복수 선택">
-							복수 선택<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu dropdown-menu-form chk_type">
-							<li class="dropdown_cov clear">
-								<div class="li_btn_bx clear">
-									<div class="fl">
-										<button type="button" class="btn_type03">모두 선택</button>
-										<button type="button" class="btn_type03">모두 해제</button>
-									</div>
-									<div class="fr">
-										<button type="button" class="btn_type">적용</button>
-									</div>
-								</div>
-							</li>
-						</ul>
+
+					<div class="flex_start2">
+						<div class="sa_select">
+							<h2 class="tx_tit">기간 설정</h2>
+							<label for="fromDate" class="tx_tit sr-only">시작일</label>
+							<input type="text" id="fromDate" name="fromDate" class="sel fromDate" value="" autocomplete="off">
+						</div>
+						<div class="sa_select">
+							<h2 class="tx_tit"></h2>
+							<label for="toDate" class="tx_tit sr-only">마지막일</label>
+							<input type="text" id="toDate" name="toDate" class="sel toDate" value="" autocomplete="off">
+						</div>
+						<div class="dropdown ml-16" id="interval">
+							<h2 class="tx_tit">단위</h2>
+							<button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown" data-value="15min" data-name="15분">15분<span class="caret"></span></button>
+							<ul class="dropdown-menu">
+								<li data-value="1min"><a href="javascript:void(0);">1분</a></li>
+								<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
+								<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
+								<li data-value="day"><a href="javascript:void(0);">1일</a></li>
+								<li data-value="week"><a href="javascript:void(0);">1주</a></li>
+								<li data-value="month"><a href="javascript:void(0);">1월</a></li>
+							</ul>
+						</div>
+					</div>
+					
+					<div class="btn_wrap_type05">
+						<button type="button" class="btn_type03 w80" onclick="$('#searchDetail').removeClass('open')">취소</button><!--
+					--><button type="button" class="btn_type w80 ml-12" onclick="$('#searchDetail').removeClass('open')">적용</button>
 					</div>
 				</div>
-			</div><div class="sa_select pb-10">
-				<fieldset class="sel_calendar">
-					<legend class="tx_tit fl" aria-label="">기간 설정</legend>
-					<label for="fromDate" class="tx_tit sr-only">시작일</label>
-					<input type="text" id="fromDate" name="fromDate" class="sel fromDate" value="" autocomplete="off">
-					<label for="toDate" class="tx_tit sr-only">마지막일</label>
-					<input type="text" id="toDate" name="toDate" class="sel toDate" value="" autocomplete="off">
-				</fieldset>
-			</div><div class="sa_select pb-10">
-				<span class="tx_tit">단위</span>
-				<div class="sa_select">
-					<div class="dropdown" id="interval">
-						<button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown" data-value="15min" data-name="15분">
-							15분<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu">
-							<li data-value="1min"><a href="javascript:void(0);">1분</a></li>
-							<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
-							<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
-							<li data-value="day"><a href="javascript:void(0);">1일</a></li>
-							<li data-value="week"><a href="javascript:void(0);">1주</a></li>
-							<li data-value="month"><a href="javascript:void(0);">1월</a></li>
-						</ul>
-					</div>
-				</div>
-				<button type="button" id="search" class="btn_type pb-10">조회</button>
 			</div>
+		
+			<button type="button" id="search" class="btn_type ml-6">조회</button>
+			<a href="#;" class="save_btn fr">데이터저장</a>		
 		</form>
-		<a href="#;" class="save_btn fr pb-10">데이터저장</a>
 	</div>
 </div>
-<div class="row content-wrapper">
+
+<div class="row">
 	<div class="col-12">
 		<div class="indiv operation_table_wrap">
-			<div class="header-wrapper">
-				<h2 class="fl s_tit">분석 기준 설비 선택</h2>
-				<a href="javascript:void(0);" class="btn_type02 fr">분석 조건 저장</a>
-			</div>
+			<div class="header-wrapper"><h2 class="fl s_tit">분석 기준 설비 선택</h2><a href="javascript:void(0);" class="btn_type02 fr">분석 조건 저장</a></div>
 			<div class="his_chart_top clear">
 				<!-- 기본 항목 -->
 				<div class="clear">
 					<div class="fl mr-12" id="analyzeDiv1">
 						<div class="sa_select pb-10">
 							<div class="dropdown" id="chartDid">
-								<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비명 선택">
-									설비명 선택<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu" id="chartDidUl">
-									<li data-value="[val]" data-sid="[sid]" data-type="[type]">
-										<a href="javascript:void(0);">
-											[siteDevice]
-										</a>
-									</li>
-								</ul>
+								<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비명 선택">설비명 선택<span class="caret"></span></button>
+								<ul class="dropdown-menu" id="chartDidUl"><li data-value="[val]" data-sid="[sid]" data-type="[type]"><a href="javascript:void(0);">[siteDevice]</a></li></ul>
 							</div>
 						</div>
 						<div class="sa_select pb-10">
 							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비속성 선택">
-									설비속성 선택<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu rdo_type" role="menu" id="columnLi">
-									<li data-value="[key]">
-										<a href="javascript:void(0);" tabindex="-1">
-											<input type="radio" id="column[INDEX]" name="column" value="[key]">
-											<label for="column[INDEX]"><span></span>[value]</label>
-										</a>
-									</li>
-								</ul>
+								<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비속성 선택">설비속성 선택<span class="caret"></span></button>
+								<ul class="dropdown-menu rdo_type" role="menu" id="columnLi"><li data-value="[key]"><a href="javascript:void(0);" tabindex="-1"><input type="radio" id="column[INDEX]" name="column" value="[key]"><label for="column[INDEX]">[value]</label></a></li></ul>
 							</div>
 						</div>
 						<div class="sa_select pb-10">
 							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown" data-vlue="mean" data-name="평균">
-									평균 <span class="caret"></span>
-								</button>
+								<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown" data-vlue="mean" data-name="평균">평균 <span class="caret"></span></button>
 								<ul class="dropdown-menu rdo_type" role="menu">
 									<li data-value="max">
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="radio" id="rdValue1" name="rdValue" value="max">
-											<label for="rdValue1"><span></span>최대</label>
+											<label for="rdValue1">최대</label>
 										</a>
 									</li>
 									<li data-value="min">
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="radio" id="rdValue2" name="rdValue" value="min">
-											<label for="rdValue2"><span></span>최소</label>
+											<label for="rdValue2">최소</label>
 										</a>
 									</li>
 									<li data-value="avg">
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="radio" id="rdValue3" name="rdValue" value="mean" checked>
-											<label for="rdValue3"><span></span>평균</label>
+											<label for="rdValue3">평균</label>
 										</a>
 									</li>
 								</ul>
@@ -1222,9 +1197,7 @@
 						</div>
 						<div class="sa_select pb-10">
 							<div class="dropdown" id="way">
-								<button class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown" data-name="선택">
-									선택<span class="caret"></span>
-								</button>
+								<button class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="l"><a href="javascript:void(0);">y-좌</a></li>
 									<li data-value="r"><a href="javascript:void(0);">y-우</a></li>
@@ -1232,31 +1205,26 @@
 							</div>
 						</div>
 					</div>
+
 					<div id="analyzeDiv2" style="display:none;">
 						<div class="fl">
 							<span class="tx_tit">x축</span>
 							<div class="sa_select">
 								<div class="dropdown" id="chartDid2">
-									<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비명 선택">
-										설비명 선택<span class="caret"></span>
-									</button>
+									<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비명 선택">설비명 선택<span class="caret"></span></button>
 									<ul class="dropdown-menu" id="chartDidUl2">
-										<li data-value="[val]" data-sid="[sid]" data-type="[type]">
-											<a>[siteDevice]</a>
-										</li>
+										<li data-value="[val]" data-sid="[sid]" data-type="[type]"><a>[siteDevice]</a></li>
 									</ul>
 								</div>
 							</div>
 							<div class="sa_select">
 								<div class="dropdown" id="columnDrop2">
-									<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비속성 선택">
-										설비속성 선택<span class="caret"></span>
-									</button>
+									<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비속성 선택">설비속성 선택<span class="caret"></span></button>
 									<ul class="dropdown-menu chk_type" role="menu" id="columnLi2">
 										<li data-value="[key]">
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="radio" id="column02_[INDEX]" name="column2" value="[key]">
-												<label for="column02_[INDEX]"><span></span>[value]</label>
+												<label for="column02_[INDEX]">[value]</label>
 											</a>
 										</li>
 									</ul>
@@ -1264,34 +1232,30 @@
 							</div>
 							<div class="sa_select">
 								<div class="dropdown">
-									<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown" data-value="mean" data-name="평균">
-										평균<span class="caret"></span>
-									</button>
+									<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown" data-value="mean" data-name="평균">평균<span class="caret"></span></button>
 									<ul class="dropdown-menu rdo_type " role="menu">
 										<li data-value="max">
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="radio" id="rdValue2_01" name="rdValue2" value="max">
-												<label for="rdValue2_01"><span></span>최대</label>
+												<label for="rdValue2_01">최대</label>
 											</a>
 										</li>
 										<li data-value="min">
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="radio" id="rdValue2_02" name="rdValue2" value="min">
-												<label for="rdValue2_02"><span></span>최소</label>
+												<label for="rdValue2_02">최소</label>
 											</a>
 										</li>
 										<li data-value="mean">
 											<a href="javascript:void(0);" tabindex="-1">
-												<input type="radio" id="rdValue2_03" name="rdValue2" value="mean"
-												       checked>
-												<label for="rdValue2_03"><span></span>평균</label>
+												<input type="radio" id="rdValue2_03" name="rdValue2" value="mean" checked>
+												<label for="rdValue2_03">평균</label>
 											</a>
 										</li>
 									</ul>
 								</div>
 							</div>
 						</div>
-
 						<div class="fl">
 							<span class="tx_tit">y축</span>
 							<div class="sa_select">
@@ -1300,24 +1264,18 @@
 										설비명 선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" id="chartDidUl3">
-										<li data-value="[val]" data-sid="[sid]" data-type="[type]">
-											<a href="javascript:void(0);">
-												[siteDevice]
-											</a>
-										</li>
+										<li data-value="[val]" data-sid="[sid]" data-type="[type]"><a href="javascript:void(0);">[siteDevice]</a></li>
 									</ul>
 								</div>
 							</div>
 							<div class="sa_select">
 								<div class="dropdown" id="columnDrop3">
-									<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비속성 선택">
-										설비속성 선택<span class="caret"></span>
-									</button>
+									<button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비속성 선택">설비속성 선택<span class="caret"></span></button>
 									<ul class="dropdown-menu chk_type" role="menu" id="columnLi3">
 										<li>
 											<a href="javascript:void(0);" data-value="[key]" tabindex="-1">
 												<input type="radio" id="column03_[INDEX]" name="column3" value="[key]">
-												<label for="column03_[INDEX]"><span></span>[value]</label>
+												<label for="column03_[INDEX]">[value]</label>
 											</a>
 										</li>
 									</ul>
@@ -1325,27 +1283,24 @@
 							</div>
 							<div class="sa_select">
 								<div class="dropdown">
-									<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown" data-value="mean" data-name="평균">
-										평균<span class="caret"></span>
-									</button>
+									<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown" data-value="mean" data-name="평균">평균<span class="caret"></span></button>
 									<ul class="dropdown-menu rdo_type" role="menu">
 										<li data-value="max">
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="radio" id="rdValue3_1" name="rdValue3" value="max">
-												<label for="rdValue3_1"><span></span>최대</label>
+												<label for="rdValue3_1">최대</label>
 											</a>
 										</li>
 										<li data-value="min">
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="radio" id="rdValue3_2" name="rdValue3" value="min">
-												<label for="rdValue3_2"><span></span>최소</label>
+												<label for="rdValue3_2">최소</label>
 											</a>
 										</li>
 										<li data-value="mean">
 											<a href="javascript:void(0);" tabindex="-1">
-												<input type="radio" id="rdValue3_3" name="rdValue3" value="mean"
-												       checked>
-												<label for="rdValue3_3"><span></span>평균</label>
+												<input type="radio" id="rdValue3_3" name="rdValue3" value="mean" checked>
+												<label for="rdValue3_3">평균</label>
 											</a>
 										</li>
 									</ul>
@@ -1365,78 +1320,69 @@
 						<div class="rdo_type his_rdo_bx">
 							<span>
 								<input type="radio" id="analyze1" name="analyze" value="시계열 분석" checked>
-								<label for="analyze1"><span></span>시계열 분석</label>
+								<label for="analyze1">시계열 분석</label>
 							</span>
 							<span>
 								<input type="radio" id="analyze2" name="analyze" value="상관 분석">
-								<label for="analyze2"><span></span>상관 분석</label>
+								<label for="analyze2">상관 분석</label>
 							</span>
 						</div>
 
 						<div class="sa_select">
 							<div class="dropdown" id="summation">
-								<button class="btn btn-primary dropdown-toggle w6" type="button" data-toggle="dropdown" data-value="siteAccrue">
-									선택안함<span class="caret"></span>
-								</button>
+								<button class="btn btn-primary dropdown-toggle w6" type="button" data-toggle="dropdown" data-value="siteAccrue">선택안함<span class="caret"></span></button>
 								<ul class="dropdown-menu rdo_type">
 									<li>
 										<a href="javascript:void(0);" data-value="option1" tabindex="-1">
 											<input type="radio" id="summation1" name="summation" value="siteAccrue">
-											<label for="summation1"><span></span>사이트별 누적</label>
+											<label for="summation1">사이트별 누적</label>
 										</a>
 									</li>
 									<%--											<li>--%>
 									<%--												<a href="javascript:void(0);" data-value="option2" tabindex="-1">--%>
 									<%--													<input type="radio" id="summation2" name="summation" value="siteAverage">--%>
-									<%--													<label for="summation2"><span></span>사이트별 평균</label>--%>
+									<%--													<label for="summation2">사이트별 평균</label>--%>
 									<%--												</a>--%>
 									<%--											</li>--%>
 									<li>
 										<a href="javascript:void(0);" data-value="option3" tabindex="-1">
 											<input type="radio" id="summation3" name="summation" value="deviceAccrue">
-											<label for="summation3"><span></span>설비별 누적</label>
+											<label for="summation3">설비별 누적</label>
 										</a>
 									</li>
 									<%--											<li>--%>
 									<%--												<a href="javascript:void(0);" data-value="option4" tabindex="-1">--%>
 									<%--													<input type="radio" id="summation4" name="summation" value="deviceAverage">--%>
-									<%--													<label for="summation4"><span></span>설비별 평균</label>--%>
+									<%--													<label for="summation4">설비별 평균</label>--%>
 									<%--												</a>--%>
 									<%--											</li>--%>
 									<li>
 										<a href="javascript:void(0);" data-value="option5" tabindex="-1">
 											<input type="radio" id="summation5" name="summation" value="" checked>
-											<label for="summation5"><span></span>선택안함</label>
+											<label for="summation5">선택안함</label>
 										</a>
 									</li>
 								</ul>
 							</div>
 						</div>
 					</div>
+
 				</div>
 				<br>
 				<!-- 시계열 분석 -->
 				<div class="tag_bx clear" id="analyzeTag1">
-					<div class="fl">
-						<span class="tx_tit">y-좌</span>
-					</div>
-					<div class="fl">
-						<span class="tx_tit">y-우</span>
-					</div>
+					<div class="fl"><span class="tx_tit">y-좌</span></div>
+					<div class="fl"><span class="tx_tit">y-우</span></div>
 				</div>
 				<!-- 상관 분석 -->
 				<div class="tag_bx clear" id="analyzeTag2">
-					<div class="fl">
-					</div>
+					<div class="fl"></div>
 				</div>
 			</div>
-			<div class="inchart">
-				<div id="hchart2"></div>
-			</div>
+			<div class="inchart"><div id="hchart2"></div></div>
 		</div>
 		<div class="indiv operation_table_wrap">
-			<div class="usage_chart_table" id="datatable">
-			</div>
+			<div class="usage_chart_table" id="datatable"></div>
 		</div>
 	</div>
 </div>

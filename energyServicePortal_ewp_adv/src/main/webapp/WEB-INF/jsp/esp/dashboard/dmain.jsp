@@ -460,19 +460,19 @@ $(function(){
 								</td>
 								<td class="disabled">
 									<em>1</em>
-									<span></span>
+									
 								</td>
 								<td class="disabled">
 									<em>2</em>
-									<span></span>
+									
 								</td>
 								<td class="disabled">
 									<em>3</em>
-									<span></span>
+									
 								</td>
 								<td class="disabled">
 									<em>4</em>
-									<span></span>
+									
 								</td>
 							</tr>
 						</table>

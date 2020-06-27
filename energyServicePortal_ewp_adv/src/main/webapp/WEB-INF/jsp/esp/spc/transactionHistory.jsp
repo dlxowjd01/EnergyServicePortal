@@ -346,6 +346,18 @@
 		<div class="indiv">
 			<div class="spc_tbl">
 				<table class="sort_table chk_type table_footer">
+					<colgroup>
+						<col style="width:10%">
+						<col style="width:10%">
+						<col style="width:10%">
+						<col style="width:10%">
+						<col style="width:12%">
+						<col style="width:12%">
+						<col style="width:12%">
+						<col style="width:12%">
+						<col style="width:12%">
+						<col>
+					</colgroup>
 					<thead>
 						<tr>
 							<th><button class="btn_align down">기간</button></th>
@@ -356,7 +368,7 @@
 							<th><button class="btn_align down">최종 업데이트</button></th>
 							<th>요청자</th>
 							<th>승인자</th>
-							<th><button class="btn_align down">상태 </button></th>
+							<th class="left"><button class="btn_align down">상태</button></th>
 						</tr>
 					</thead>
 					<tbody id="listData">
@@ -391,7 +403,7 @@
 							<td>2020-05-08 16:43</td>
 							<td>TRUST/홍길동</td>
 							<td>신한BNPP/이신한</td>
-							<td class="left">승인 대기<a href="/spc/withdrawReqEdit.do" class="icon_edit"></a><a href="#" class="icon_delete"></a></td>
+							<td class="left"><div class="fl">승인 대기</div><div class="fr"><a href="/spc/withdrawReqEdit.do" class="icon_edit"></a><a href="#" class="icon_delete"></a></div></td>
 						</tr>
 						<tr>
 							<td>2020-04-08</td>
@@ -402,7 +414,7 @@
 							<td>2020-05-08 16:43</td>
 							<td>TRUST/김길중</td>
 							<td>신한BNPP/이신한</td>
-							<td class="left">승인 대기<a href="/spc/withdrawReqEdit.do" class="icon_edit"></a><a href="#" class="icon_delete"></a></td>
+							<td class="left"><div class="fl">승인 대기</div><div class="fr"><a href="/spc/withdrawReqEdit.do" class="icon_edit"></a><a href="#" class="icon_delete"></a></div></td>
 						</tr>
 					</tbody>
 					<tfoot>

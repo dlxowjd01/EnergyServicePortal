@@ -692,9 +692,9 @@
 								<fieldset>
 									<legend sr-only="부지 소유 혹은 임대 구분"></legend>
 									<input type="radio" id="properted" name="ownership" value="properted">
-									<label for="properted"><span></span>소유</label>
+									<label for="properted">소유</label>
 									<input type="radio" id="rented" name="ownership" value="rented">
-									<label class="ml-24" for="rented"><span></span>임대</label>
+									<label class="ml-24" for="rented">임대</label>
 								</fieldset>
 							</div>
 						</td>
@@ -704,9 +704,9 @@
 								<fieldset>
 									<legend sr-only="부지 소유 혹은 임대 구분"></legend>
 									<input type="radio" id="properted" name="ownership" value="properted">
-									<label for="properted"><span></span>소유</label>
+									<label for="properted">소유</label>
 									<input type="radio" id="rented" name="ownership" value="rented">
-									<label class="ml-24" for="rented"><span></span>임대</label>
+									<label class="ml-24" for="rented">임대</label>
 								</fieldset>
 							</div>
 						</td>
@@ -729,7 +729,7 @@
 							</div>
 							<div class="chk_type align_type">
 								<input type="checkbox" id="등기_이사_만료_알림" name="chk_04_op01" value="Y">
-								<label for="등기_이사_만료_알림"><span></span>등기이사 만료 알림</label>
+								<label for="등기_이사_만료_알림">등기이사 만료 알림</label>
 							</div>
 						</td>
 					</tr>
@@ -762,9 +762,9 @@
 								<fieldset>
 									<legend sr-only="부지 소유 혹은 임대 구분"></legend>
 									<input type="radio" id="properted" name="ownership" value="properted">
-									<label for="properted"><span></span>소유</label>
+									<label for="properted">소유</label>
 									<input type="radio" id="rented" name="ownership" value="rented">
-									<label class="ml-24" for="rented"><span></span>임대</label>
+									<label class="ml-24" for="rented">임대</label>
 								</fieldset>
 							</div>
 						</td>
@@ -1239,11 +1239,11 @@
 									<fieldset>
 										<legend sr-only="보험 정보"></legend>
 										<input type="radio" id="rdo_insurance_opt1" name="rdo_insurance" value="rdo_insurance">
-										<label for="rdo_insurance_opt1"><span></span>조립 보험</label>
+										<label for="rdo_insurance_opt1">조립 보험</label>
 										<input type="radio" id="rdo_insurance_opt2" name="rdo_insurance" value="비통신">
-										<label class="ml-24" for="rdo_insurance_opt2"><span></span>CMI</label>
+										<label class="ml-24" for="rdo_insurance_opt2">CMI</label>
 										<input type="radio" id="rdo_insurance_opt3" name="rdo_insurance" value="CGL">
-										<label class="ml-24" for="rdo_insurance_opt3"><span></span>CGL</label>
+										<label class="ml-24" for="rdo_insurance_opt3">CGL</label>
 									</fieldset>
 								</div>
 							</fieldset>
@@ -1409,11 +1409,11 @@
 							<fieldset class="chk_type align_type">
 								<legend sr-only="인버터 제조사/모델"></legend>
 								<input type="checkbox" id="모듈_설치_방식_고정" name="chk_op" value="고정 가변식">
-								<label for="모듈_설치_방식_고정" class="mr-24"><span></span>고정 가변식</label>
+								<label for="모듈_설치_방식_고정" class="mr-24">고정 가변식</label>
 								<input type="checkbox" id="모듈_설치_방식_트래커" name="chk_op" value="트래커">
-								<label for="모듈_설치_방식_트래커" class="mr-24"><span></span>트래커</label>
+								<label for="모듈_설치_방식_트래커" class="mr-24">트래커</label>
 								<input type="checkbox" id="모듈_설치_방식_경사고정형" name="chk_op" value="경사 고정형">
-								<label for="모듈_설치_방식_경사고정형"><span></span>경사 고정형</label>
+								<label for="모듈_설치_방식_경사고정형">경사 고정형</label>
 							</fieldset>
 						</td>
 					</tr>
@@ -1485,7 +1485,7 @@
 							<div class="rdo_type align_type">
 								<fieldset>
 								<legend sr-only="통신 방식"></legend>
-								<input type="radio" id="rdo_03_op01" name="통신방식" value="통신"><label for="rdo_03_op01"><span></span>통신</label><input type="radio" id="rdo_03_op02" name="통신방식" value="비통신"><label class="ml-24" for="rdo_03_op02"><span></span>비통신</label></fieldset>
+								<input type="radio" id="rdo_03_op01" name="통신방식" value="통신"><label for="rdo_03_op01">통신</label><input type="radio" id="rdo_03_op02" name="통신방식" value="비통신"><label class="ml-24" for="rdo_03_op02">비통신</label></fieldset>
 							</div>
 						</td>
 						<th></th>
@@ -1498,13 +1498,13 @@
 								<fieldset>
 									<legend sr-only="설치 타입"></legend>
 									<input type="checkbox" id="설치_타입_그라운드" name="chk_op2" value="그라운드">
-									<label for="설치_타입_그라운드"><span></span>그라운드</label>
+									<label for="설치_타입_그라운드">그라운드</label>
 
 									<input type="checkbox" id="설치_타입_루프탑" name="chk_op2" value="루프탑">
-									<label class="ml-24" for="설치_타입_루프탑"><span></span>루프탑</label>
+									<label class="ml-24" for="설치_타입_루프탑">루프탑</label>
 
 									<input type="checkbox" id="설치_타입_수상" name="chk_op2" value="수상">
-									<label class="ml-24" for="설치_타입_수상"><span></span>수상</label>
+									<label class="ml-24" for="설치_타입_수상">수상</label>
 								</fieldset>
 							</div>
 						</td>
@@ -1537,11 +1537,11 @@
 							<fieldset class="rdo_type align_type">
 								<legend sr-only="보증 방식"></legend>
 								<input type="radio" id="rdo_op01" name="보증_방식" value="PR">
-								<label for="rdo_op01"><span></span>PR</label>
+								<label for="rdo_op01">PR</label>
 								<input type="radio" id="rdo_op02" name="보증_방식" value="발전 시간">
-								<label for="rdo_op02"><span></span>발전 시간</label>
+								<label for="rdo_op02">발전 시간</label>
 								<input type="radio" id="rdo_op03" name="보증_방식" value="PR + 발전시간">
-								<label for="rdo_op03"><span></span>PR + 발전 시간</label>
+								<label for="rdo_op03">PR + 발전 시간</label>
 							</fieldset>
 						</td>
 						<th>PR 보증치</th>
@@ -1595,10 +1595,10 @@
 							<fieldset class="rdo_type align_type">
 								<legend sr-only="추가 보수"></legend>
 								<input type="radio" id="rdo_op2_01" name="추가_보수" value="유">
-								<label for="rdo_op2_01"><span></span>유</label>
+								<label for="rdo_op2_01">유</label>
 
 								<input type="radio" id="rdo_op2_02" name="추가_보수" value="무">
-								<label for="rdo_op2_02"><span></span>무</label>
+								<label for="rdo_op2_02">무</label>
 							</fieldset>
 						</td>
 						<th>추가 보수 용량</th>

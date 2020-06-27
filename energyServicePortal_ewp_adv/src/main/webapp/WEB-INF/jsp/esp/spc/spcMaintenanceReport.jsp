@@ -69,7 +69,7 @@
 							<tr>
 								<th>
 									<input type="checkbox" id="chk_op01" value="순번">
-									<label for="chk_op01"><span></span>순번</label>
+									<label for="chk_op01">순번</label>
 								</th>
 								<th>보고서 구분</th>
 								<th>문서번호</th>
@@ -83,7 +83,7 @@
 							<tr>
 								<td>
 									<input type="checkbox" id="chk_op02" value="1">
-									<label for="chk_op02"><span></span>1</label>
+									<label for="chk_op02">1</label>
 								</td>
 								<td>OCI 서울</td>
 								<td>SPW-TR1912-18</td>
@@ -95,7 +95,7 @@
 							<tr>
 								<td>
 									<input type="checkbox" id="chk_op02" value="1">
-									<label for="chk_op02"><span></span>1</label>
+									<label for="chk_op02">1</label>
 								</td>
 								<td>OCI 서울</td>
 								<td>SPW-TR1912-18</td>

@@ -323,6 +323,14 @@
 	.device_modal .modal-content.new_device .textarea {
 		width: 250px;
 	}
+
+	.dropdown_modal.modal-dialog .modal-content {
+		padding: 20px;
+	}
+	.dropdown_modal {
+		display: none;
+		width: 300px;
+	}
 }
 
 

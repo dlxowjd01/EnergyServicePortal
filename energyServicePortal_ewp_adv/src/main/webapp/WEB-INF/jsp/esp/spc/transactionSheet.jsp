@@ -14,7 +14,7 @@
 		
 		$('#addAlarmBtn').on('click', function () {
 			let target = $(this).data("target");
-			console.log("detail--", $("#detailInfoModal").attr("class"))
+			// console.log("detail--", $("#detailInfoModal").attr("class"))
 			$("#detailInfoModal").removeClass("active");
 
 			modalPopInit();
@@ -124,10 +124,6 @@
 					$('#alarmDate').val('');
 				}
 			}
-		});
-
-		$('#repeat_interval, #repeat_unit').on('click change', function () {
-			repeatEnd();
 		});
 
 		$('#repeat_interval, #repeat_unit').on('click change', function () {
@@ -266,10 +262,10 @@
 			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
 			let url = '';
 			if (action == 'patch') {
-				url = 'http://iderms.enertalk.com:8443/spcs/maintenance/' + jobId + '?oid=' + oid + jobText;
+				url = 'http://iderms.enertalk.com:8443/spcs/bankbook/' + jobId + '?oid=' + oid + jobText;
 				delete data.site_id;
 			} else {
-				url = 'http://iderms.enertalk.com:8443/spcs/maintenance?oid=' + oid;
+				url = 'http://iderms.enertalk.com:8443/spcs/bankbook?oid=' + oid;
 			}
 
 			option = {
@@ -282,7 +278,7 @@
 			};
 		} else if (action == 'get') {
 			option = {
-				url: 'http://iderms.enertalk.com:8443/spcs/maintenance',
+				url: 'http://iderms.enertalk.com:8443/spcs/bankbook',
 				type: action,
 				dataType: 'json',
 				data: {
@@ -297,7 +293,7 @@
 		} else {
 			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
 			option = {
-				url: 'http://iderms.enertalk.com:8443/spcs/maintenance/' + jobId + '?oid=' + oid + jobText,
+				url: 'http://iderms.enertalk.com:8443/spcs/bankbook/' + jobId + '?oid=' + oid + jobText,
 				type: action,
 				data: {
 					oid: oid,
@@ -307,6 +303,7 @@
 		}
 
 		$.ajax(option).done(function (data, textStatus, jqXHR) {
+			console.log("data===", data)
 			if (action == 'get') {
 				if (jobId != undefined) {
 					modalPopInit(data.data);
@@ -328,7 +325,7 @@
 		let job_info = {};
 		let job_info_Array = ['worker', 'note', 'description', 'alarmDate', 'alarmTime', 'alarmPhone', 'alarmSetup'];
 
-		$('#popoverModal input, textarea').each(function () {
+		$('#spcAlarmModal input, textarea').each(function () {
 			if ($.inArray($(this).prop('name'), job_info_Array) > -1) {
 				job_info[$(this).prop('name')] = String($(this).val());
 			} else {
@@ -345,7 +342,7 @@
 			}
 		});
 
-		$('#popoverModal button.btn-primary').each(function () {
+		$('#spcAlarmModal button.btn-primary').each(function () {
 			if ($.inArray($(this).parent().prop('id'), job_info_Array) > -1) {
 				job_info[$(this).parent().prop('id')] = String($(this).data('value'));
 			} else {
@@ -373,6 +370,7 @@
 		$('#calendar td a').remove();
 		modalData.empty();
 		if (data.length > 0) {
+			console.log("data---", data)
 			data.forEach(function (v, k) {
 				let job_date = new Date(v.job_date).format('dd');
 				let job_type = v.job_type;
@@ -428,7 +426,7 @@
 	};
 
 	const modalPopInit = function (data) {
-		const modal = $('#registerModal');
+		const modal = $('#spcAlarmModal');
 		const title = modal.find('h2');
 		const input = modal.find('input');
 		const dropDown = modal.find('button.btn-primary');
@@ -446,7 +444,7 @@
 
 		if (data == undefined) {
 			modalData.empty();
-			title.text('점검계획 등록');
+			title.text('주요 일정 알림 등록');
 			//팝업 오픈시 value 초기화
 			input.each(function () {
 				$(this).val('');
@@ -461,9 +459,9 @@
 			addScheduleBtn.attr('onclick', 'maintenance(\'post\');').text('등록');
 		} else {
 			
-			title.text('점검계획 수정');
-			setJsonAutoMapping(data[0], 'registerModal');
-			setJsonAutoMapping(JSON.parse(data[0].job_info), 'registerModal');
+			title.text('주요 일정 알림 수정');
+			setJsonAutoMapping(data[0], 'spcAlarmModal');
+			setJsonAutoMapping(JSON.parse(data[0].job_info), 'spcAlarmModal');
 
 			let jobDate = new Date(data[0].job_date);
 			$('#job_date').datepicker('setDate', jobDate);
@@ -512,16 +510,16 @@
 		let rtn = '';
 		switch (type) {
 			case '1':
-				rtn = '정기점검'
+				rtn = '출금-승인완료'
 				break;
 			case '2':
-				rtn = '구조물 안전진단'
+				rtn = '출금-승인대기'
 				break;
 			case '3':
-				rtn = '소방점검'
+				rtn = '출금-승인중'
 				break;
 			default:
-				rtn = '등기이사 기간만료'
+				rtn = '출금-승인완료'
 				break;
 		}
 		return rtn;
@@ -687,10 +685,10 @@
 							<div class="dropdown placeholder" id="job_type">
 								<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="점검 계획 항목 선택"><span class="caret"></span></button>
 								<ul class="dropdown-menu">
-									<li data-value="1"><a href="javascript:void(0);">정기 점검</a></li>
-									<li data-value="2"><a href="javascript:void(0);">구조물 안전진단</a></li>
-									<li data-value="3"><a href="javascript:void(0);">소방점검</a></li>
-									<li data-value="4"><a href="javascript:void(0);">등기이사 기간만료</a></li>
+									<li data-value="1"><a href="javascript:void(0);">출금-승인완료</a></li>
+									<li data-value="2"><a href="javascript:void(0);">출금-승인대기</a></li>
+									<li data-value="3"><a href="javascript:void(0);">출금-승인중</a></li>
+									<li data-value="4"><a href="javascript:void(0);">입급</a></li>
 								</ul>
 							</div>
 						</div>
@@ -726,7 +724,7 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 							<div class="sel_calendar">
-								<input type="text" id="job_date" name="job_date" class="sel fromDate required w-100" value="" autocomplete="off" readonly>
+								<input type="text" id="job_date" name="job_date" class="sel datepicker fromDate required w-100" value="" autocomplete="off" readonly>
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
@@ -838,43 +836,43 @@
 			<div class="sch_inp_area">
 				<div class="chk_type c1">
 					<input type="checkbox" id="chk_op01" name="type" value="1" checked>
-					<label for="chk_op01"><span></span>출금 - 승인 완료</label>
+					<label for="chk_op01">출금 - 승인 완료</label>
 				</div>
 				<div class="chk_type c2">
 					<input type="checkbox" id="chk_op02" name="type" value="2" checked>
-					<label for="chk_op02"><span></span>출금 - 승인 대기</label>
+					<label for="chk_op02">출금 - 승인 대기</label>
 				</div>
 				<div class="chk_type c3">
 					<input type="checkbox" id="chk_op03" name="type" value="3" checked>
-					<label for="chk_op03"><span></span>입금</label>
+					<label for="chk_op03">입금</label>
 				</div>
 				<div class="chk_type c4">
 					<input type="checkbox" id="chk_op04" name="type" value="4" checked>
-					<label for="chk_op04"><span></span>이자 지급일</label>
+					<label for="chk_op04">이자 지급일</label>
 				</div>
 				<div class="chk_type c5">
 					<input type="checkbox" id="chk_op05" name="type" value="5" checked>
-					<label for="chk_op05"><span></span>보장발전시간 정산일</label>
+					<label for="chk_op05">보장발전시간 정산일</label>
 				</div>
 				<div class="chk_type c6">
 					<input type="checkbox" id="chk_op06" name="type" value="6" checked>
-					<label for="chk_op06"><span></span>보험 갱신일</label>
+					<label for="chk_op06">보험 갱신일</label>
 				</div>
 				<div class="chk_type c7">
 					<input type="checkbox" id="chk_op07" name="type" value="7" checked>
-					<label for="chk_op07"><span></span>보험 납부일</label>
+					<label for="chk_op07">보험 납부일</label>
 				</div>
 				<div class="chk_type c8">
 					<input type="checkbox" id="chk_op08" name="type" value="8" checked>
-					<label for="chk_op08"><span></span>임대료 지급일</label>
+					<label for="chk_op08">임대료 지급일</label>
 				</div>
 				<div class="chk_type c9">
 					<input type="checkbox" id="chk_op09" name="type" value="9" checked>
-					<label for="chk_op09"><span></span>대리기관수수료 지급일</label>
+					<label for="chk_op09">대리기관수수료 지급일</label>
 				</div>
 				<div class="chk_type c10">
 					<input type="checkbox" id="chk_op10" name="type" value="10" checked>
-					<label for="chk_op10"><span></span>대출상환 만기일</label>
+					<label for="chk_op10">대출상환 만기일</label>
 				</div>
 			</div>
 			<div class="sch_inp_area">

@@ -25,98 +25,91 @@
 	</div>
 	<div class="col-10">
 		<div class="indiv pv_chart">
-			<div class="chart_top">
-				<div id="deviceType" class="flex_group">
-					<span class="tx_tit">계량값</span>
-					<div class="sa_select">
-						<div class="dropdown">
-							<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">복수
-								선택<span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu dropdown-menu-form chk_type">
-								<li class="dropdown_cov clear selectDevices">
-									<div class="li_btn_bx clear">
-										<div class="fl">
-											<button type="button" class="btn_type03">모두 선택</button>
-											<button type="button" class="btn_type03">모두 해제</button>
+			<div class="flex_wrapper">
+				<div class="chart_top">
+					<div id="deviceType" class="flex_group">
+						<span class="tx_tit">계량값</span>
+						<div class="sa_select">
+							<div class="dropdown">
+								<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">복수
+									선택<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu dropdown-menu-form chk_type">
+									<li class="dropdown_cov clear selectDevices">
+										<div class="li_btn_bx clear">
+											<div class="fl">
+												<button type="button" class="btn_type03">모두 선택</button>
+												<button type="button" class="btn_type03">모두 해제</button>
+											</div>
+											<div class="fr">
+												<button type="button" class="btn_type">적용</button>
+											</div>
 										</div>
-										<div class="fr">
-											<button type="button" class="btn_type">적용</button>
-										</div>
-									</div>
-								</li>
-							</ul>
+									</li>
+								</ul>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="flex_group period">
-					<span class="tx_tit">기간</span>
-					<div class="sa_select">
-						<div class="dropdown" id="period">
-							<button class="btn btn-primary dropdown-toggle" type="button"
-								data-toggle="dropdown">오늘<span class="caret"></span></button>
-							<ul class="dropdown-menu">
-								<li data-value="today" class="on"><a href="#">오늘</a></li>
-								<li data-value="week"><a href="#">이번 주</a></li>
-								<li data-value="month"><a href="#">이번 달</a></li>
-								<li data-value="setup"><a href="#">직접 선택</a></li>
-							</ul>
+					<div class="flex_group period">
+						<span class="tx_tit">기간</span>
+						<div class="sa_select">
+							<div class="dropdown" id="period">
+								<button class="btn btn-primary dropdown-toggle" type="button"
+									data-toggle="dropdown">오늘<span class="caret"></span></button>
+								<ul class="dropdown-menu">
+									<li data-value="today" class="on"><a href="#">오늘</a></li>
+									<li data-value="week"><a href="#">이번 주</a></li>
+									<li data-value="month"><a href="#">이번 달</a></li>
+									<li data-value="setup"><a href="#">직접 선택</a></li>
+								</ul>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="flex_group duration" id="dateArea">
-					<span class="tx_tit">날짜입력</span>
-					<div class="sel_calendar">
-						<input type="text" id="datepicker1" class="sel" value="" autocomplete="off" readonly>
-						<em></em>
-						<input type="text" id="datepicker2" class="sel" value="" autocomplete="off" readonly>
-					</div>
-				</div>
-				<div class="flex_group unit" id="cycle">
-					<span class="tx_tit">단위</span>
-					<div class="sa_select">
-						<div class="dropdown">
-							<button class="btn btn-primary dropdown-toggle interval" type="button"
-								data-toggle="dropdown">
-								선택<span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu">
-								<li class="on"><a href="#">15분</a></li>
-								<li><a href="#">1시간</a></li>
-								<li><a href="#">1일</a></li>
-								<li><a href="#">1월</a></li>
-							</ul>
+					<div class="flex_group duration" id="dateArea">
+						<span class="tx_tit">날짜입력</span>
+						<div class="sel_calendar">
+							<input type="text" id="datepicker1" class="sel" value="" autocomplete="off" readonly>
+							<em></em>
+							<input type="text" id="datepicker2" class="sel" value="" autocomplete="off" readonly>
 						</div>
 					</div>
-					<button type="button" class="btn_type" id="renderBtn">조회</button>
+					<div class="flex_group unit" id="cycle">
+						<span class="tx_tit">단위</span>
+						<div class="sa_select">
+							<div class="dropdown">
+								<button class="btn btn-primary dropdown-toggle interval" type="button"
+									data-toggle="dropdown">
+									선택<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li class="on"><a href="#">15분</a></li>
+									<li><a href="#">1시간</a></li>
+									<li><a href="#">1일</a></li>
+									<li><a href="#">1월</a></li>
+								</ul>
+							</div>
+						</div>
+						<button type="button" class="btn_type" id="renderBtn">조회</button>
+					</div>
 				</div>
-			</div>
-			<div class="end">
-				<span class="tx_tit">그래프</span>
-				<div class="sa_select">
-					<div class="dropdown" id="chartStyle">
-						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
-							data-value="each">
-							개별 막대<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu">
-							<li data-value="allSum">
-								<a href="#">전체 합산</a>
-							</li>
-							<li data-value="siteSum">
-								<a href="#">사이트별 합산</a>
-							</li>
-							<li data-value="each" class="on">
-								<a href="#">개별 막대</a>
-							</li>
-						</ul>
+				<div class="end"><span class="tx_tit">그래프</span><!--
+				--><div class="sa_select">
+						<div class="dropdown" id="chartStyle"><!--
+						--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-value="each">개별 막대<span class="caret"></span></button><!--
+						--><ul class="dropdown-menu"><!--
+							--><li data-value="allSum"><a href="#">전체 합산</a></li><!--
+							--><li data-value="siteSum"><a href="#">사이트별 합산</a></li><!--
+							--><li data-value="each" class="on"><a href="#">개별 막대</a></li><!--
+						--></ul>
+						</div>
 					</div>
 				</div>
 			</div>
-			<br>
-			<p class="tx_time"></p>
-			<div class="inchart">
-				<div id="chart2"></div>
+			<!-- 쓰이지 않는듯 해서 주석처리 <p class="tx_time"></p> -->
+			<div class="row">
+				<div class="inchart">
+					<div id="chart2"></div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -271,7 +264,7 @@
 			str += `<li>
             <a href="#" data-value="${'${site.sid}'}" tabindex="-1">
                 <input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
-                <label for="${'${site.sid}'}"><span></span>${'${site.name}'}</label>
+                <label for="${'${site.sid}'}">${'${site.name}'}</label>
             </a>
         </li>`;
 		});
@@ -529,9 +522,9 @@
 		}
 	}
 
-	function drawPage() {
+	function drawPage() {      
 		$('table.pc_use tbody').empty();
-
+		$('.no-data').addClass('hidden');
 		let sDate = $('#datepicker1').val().replace(/-/g, '');
 		let eDate = $('#datepicker2').val().replace(/-/g, '');
 		let interval = '';
@@ -1201,10 +1194,10 @@
 		let option = {
 			chart: {
 				renderTo: 'chart2',
+				marginTop: 70,
 				marginLeft: 60,
-				marginRight: 20,
+				marginRight: 40,
 				backgroundColor: 'transparent',
-				height: 500
 			},
 			navigation: {
 				buttonOptions: {
@@ -1254,7 +1247,7 @@
 					/* 타이틀 위치 조정 */
 					style: {
 						color: 'var(--color3)',
-						fontSize: '18px'
+						fontSize: '8px'
 					}
 				},
 				labels: {
@@ -1272,8 +1265,9 @@
 			legend: {
 				enabled: true,
 				align: 'right',
-				verticalAlign: 'top',
+				margin: -40,
 				x: -120,
+
 				itemStyle: {
 					color: 'var(--color3)',
 					fontSize: '10px',
@@ -1330,12 +1324,12 @@
 			responsive: {
 				rules: [{
 					condition: {
-						maxWidth: 414 /* 차트 사이즈 */
+						// minWidth: 900
 					},
 					chartOptions: {
 						chart: {
-							marginLeft: 60,
-							marginTop: 80
+							// marginLeft: 60,
+							// marginTop: 80
 						},
 						xAxis: {
 							labels: {

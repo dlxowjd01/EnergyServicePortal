@@ -23,7 +23,7 @@
 				<li data-value="[sid]">
 					<a href="javascript:void(0);" tabindex="-1">
 						<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
-						<label for="site_[INDEX]"><span></span>[name]</label>
+						<label for="site_[INDEX]">[name]</label>
 					</a>
 				</li>
 			</ul>
