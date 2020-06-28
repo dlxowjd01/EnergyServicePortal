@@ -316,7 +316,7 @@
 						<div class="chart_top clear">
 							<h2 class="ntit">[name] (<span>0</span>)</h2>
 							<div class="alert_icon fr">
-								<span class="inv_normail">정상 (<span>0</span>)</span>
+								<span class="inv_normal">정상 (<span>0</span>)</span>
 								<span class="inv_error">트립 (<span>0</span>)</span>
 								<span class="inv_alert">중지 (<span>0</span>)</span>
 							</div>
@@ -732,7 +732,7 @@
 					});
 					let deviceCnt = tableArray.length;
 					$('#typeList').find('.' + deviceType).find('.ntit span').html(deviceCnt);
-					$('#typeList').find('.' + deviceType).find('.alert_icon .inv_normail span').html(operationNormal);
+					$('#typeList').find('.' + deviceType).find('.alert_icon .inv_normal span').html(operationNormal);
 					$('#typeList').find('.' + deviceType).find('.alert_icon .inv_error span').html(operationError);
 					$('#typeList').find('.' + deviceType).find('.alert_icon .inv_alert span').html(operationAlert);
 					setMakeList(tableArray, 'table_' + deviceType, {'dataFunction': {'operation': setOperation}});

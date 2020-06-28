@@ -828,12 +828,12 @@
 						</td>
 						<th>등기 기간</th>
 						<td class="flex_start">
-							<fieldset class="sel_calendar edit twin clear">
+							<fieldset class="sel_calendar edit twin clear mr-38">
 								<legend class="sr-only">등기 기간</legend>
 								<input type="text" id="등기_기간_from" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일">
 								<input type="text" id="등기_기간_to" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일">
 							</fieldset>
-							<div class="chk_type align_type ml-38">
+							<div class="chk_type align_type">
 								<input type="checkbox" id="등기_이사_만료_알림" name="end_notice" value="Y">
 								<label for="등기_이사_만료_알림">등기이사 만료 알림</label>
 							</div>

@@ -9,7 +9,6 @@
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 
 	$(function () {
-		unCheckAll();
 		pageInit();
 
 		//날짜 셀렉트박스 클릭 시

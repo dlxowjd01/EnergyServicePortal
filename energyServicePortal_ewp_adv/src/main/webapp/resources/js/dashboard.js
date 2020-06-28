@@ -1,9 +1,9 @@
 //대시보드 먼슬리 && 데일리 차트 시리증 설정.
 const seriesArray = [
-	{name: '충전', type: 'column', color: '#2BEEE9', data: 'chargeList', suffix: 'kWh'},
-	{name: '방전', type: 'column', color: '#878787', data: 'dischargeList', suffix: 'kWh'},
-	{name: '태양광', type: 'column', color: '#9363FD', data: 'pvList', suffix: 'kWh'},
-	{name: '정산금', type: 'spline', color: 'var(--color3)', data: 'payList', suffix: '천원'},
+	{name: '충전', type: 'column', color: 'var(--circle-charge)', data: 'chargeList', suffix: 'kWh'},
+	{name: '방전', type: 'column', color: 'var(--grey)', data: 'dischargeList', suffix: 'kWh'},
+	{name: '태양광', type: 'column', color: 'var(--circle-solar-power)', data: 'pvList', suffix: 'kWh'},
+	{name: '정산금', type: 'spline', color: 'var(--inverse-grey)', data: 'payList', suffix: '천원'},
 ];
 
 const sitePieSeries = [
@@ -259,7 +259,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		backgroundColor: 'var(--bg-color)',
 		padding: 16,
 		style: {
-			color: 'var(--color3)'
+			color: 'var(--chart-grey)'
 		}
 	},
 	/* 범례 */
@@ -902,7 +902,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			align: 'left',
 			reserveSpace: true,
 			style: {
-				color: '#a4aebf',
+				color: 'var(--color4)',
 				fontSize: '12px'
 			}
 		},
@@ -924,7 +924,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		title: {
 			text: '',
 			style: {
-				color: '#a4aebf',
+				color: 'var(--color4)',
 				fontSize: '12px'
 			}
 		},
@@ -932,7 +932,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			overflow: 'justify',
 			x: -10, /* 그래프와의 거리 조정 */
 			style: {
-				color: '#a4aebf',
+				color: 'var(--color4)',
 				fontSize: '12px'
 			}
 		}

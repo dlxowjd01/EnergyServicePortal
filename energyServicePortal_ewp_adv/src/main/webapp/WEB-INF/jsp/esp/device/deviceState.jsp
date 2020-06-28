@@ -39,7 +39,7 @@
 					<div class="chart_top clear">
 						<h2 class="ntit fl">[typeName]</h2>
 						<div class="eq_icon fr">
-							<span class="eq_normail">정상([normail])</span>
+							<span class="eq_normal">정상([normail])</span>
 							<span class="eq_alert">중지([alert])</span>
 							<span class="eq_error">트립([error])</span>
 						</div>
@@ -505,7 +505,7 @@
 
 							$li.data('dvtype', el.device_type).data('did', el.did).attr('onclick', 'deviceDetailView(\'' + el.did + '\')');
 							$a.attr('href', 'javascript:void(0);');
-							$('<span>').attr('style', 'text-overflow: ellipsis; white-space: nowrap; overflow: hidden;').text(el.dname).appendTo($li);
+							$('<span>').text(el.dname).appendTo($li);
 							$('<span>').text(capacity).appendTo($li);
 							$('<em>').text(activePower + '  ' + dcPower).appendTo($li);
 							$a.appendTo($li);
@@ -553,7 +553,7 @@
 
 			let $li = $('<li>'),
 				$a = $('<a>');
-			$a.attr('href', 'javascript:addDeviceForm();').text('추가');
+			$a.attr('href', 'javascript:addDeviceForm();');
 			$li.addClass('eq_add').append($a);
 			deviceList.append($li);
 
