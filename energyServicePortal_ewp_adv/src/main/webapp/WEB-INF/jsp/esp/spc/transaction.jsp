@@ -278,6 +278,7 @@
 		}
 
 		$.ajax(option).done(function (data, textStatus, jqXHR) {
+			console.log("data===", data)
 			if (action == 'get') {
 				if (jobId != undefined) {
 					modalPopInit(data.data);
@@ -345,6 +346,7 @@
 		$('#calendar td a').remove();
 		modalData.empty();
 		if (data.length > 0) {
+			console.log("data---", data)
 			data.forEach(function (v, k) {
 				const filterArr = ["1", "2", "3"];
 				let job_date = new Date(v.job_date).format('dd');

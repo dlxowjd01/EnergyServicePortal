@@ -11746,7 +11746,9 @@ table.table_footer tfoot td {
 .spc_modal_lg {
 	width: 950px;
 }
-
+/* .modal-content .tx_inp_type {
+	text-indent: 10px;
+} */
 .modal-content.spc_detail_content .modal-body {
 	max-height: 200px;
 	overflow: auto;

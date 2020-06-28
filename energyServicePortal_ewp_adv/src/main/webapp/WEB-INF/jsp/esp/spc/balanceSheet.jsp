@@ -56,9 +56,19 @@
 		}
 	}
 
-	function getDataList(page) {
+	function getDataList(page ,n, sort) {
 		if (page == undefined) {
 			page = 1;
+		}else{
+			if(isEmpty(n) && isEmpty(sort)) {
+				$('.sort_table > thead').find('button').each(function(){
+					if($(this).attr('class') != 'btn_align'){
+						n = $(this).data('colname');
+						sort = $(this).data('classname');
+					}
+				});
+				
+			}
 		}
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/spcs/balance/month",
@@ -90,6 +100,8 @@
 						jsonList.push(result.data[i]);
 					}
 				}
+				$(".sort_table").data("nowjsp", "balance");
+				jsonListSort(n, sort, jsonList)
 				jsonList = paging(page, jsonList);
 				setMakeList(jsonList, "listData", { "dataFunction": { "INDEX": getNumberIndex } }); //list생성
 

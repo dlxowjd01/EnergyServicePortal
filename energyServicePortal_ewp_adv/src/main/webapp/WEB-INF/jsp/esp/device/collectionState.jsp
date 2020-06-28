@@ -218,10 +218,7 @@
 					</tr>
 					</tbody>
 				</table>
-				<div class="paging_wrap">
-					<a href="#;" class="btn_prev">prev</a>
-					<strong>1</strong>
-					<a href="#;" class="btn_next">next</a>
+				<div class="paging_wrap" id="paging">
 				</div>
 			</div>
 		</div>
@@ -309,8 +306,48 @@
 	const siteMakeList = () => {
 		setMakeList(siteList, 'siteULList', {'dataFunction': {}}); //list생성
 	};
+	
+	const logPaging = (rids, page, jsonList ,startTime , endTime) => {
+		let totalPage = Math.ceil(jsonList.length/pagePerData);
+		let totalnav = Math.ceil(totalPage/navCount);
+		let startNum = (pagePerData*(page-1));
+		let endNum = ((pagePerData*page)>= jsonList.length)? jsonList.length : (pagePerData*page);
+		jsonList = jsonList.slice(startNum, endNum);
+		logMakeNavigation(rids, page, totalPage, startTime , endTime);
+		return jsonList;
+	};
 
-	function selectLog(rids, startTime, endTime, limit = 5, page = 1) {
+	const logMakeNavigation = (rids, page, totalPage, startTime , endTime) => {
+		$('#paging').empty();
+		let pageStr = '';
+		let navgroup = Math.floor((page-1)/navCount)+1;
+		let startPage = ((navgroup-1)*navCount)+1;
+		let totalnav = Math.ceil(totalPage/navCount);
+		let endPage = ((startPage + navCount-1) > totalPage)? totalPage : (startPage + navCount-1);
+
+		if (navgroup == 1) {
+			pageStr += '<a href="javascript:void(0);" class="btn_prev first_prev">prev</a>';
+		} else{
+			pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'' + Number(startPage-1) + '\',\'' + startTime + '\',\'' + endTime + '\');" class="btn_prev">prev</a>';
+		}
+
+		for (let i = startPage ; i <= endPage; i++) {
+			if (i==page) {
+				pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'' + i + '\',\'' + startTime + '\',\'' + endTime + '\');"><strong>'+i+'</strong></a>';
+			} else {
+				pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'' + i + '\',\'' + startTime + '\',\'' + endTime + '\');">'+i+'</a>';
+			}
+		}
+
+		if (navgroup <totalnav) {
+			pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'' + Number(endPage+1) + '\',\'' + startTime + '\',\'' + endTime + '\');"  class="btn_next">next</a>';
+		} else {
+			pageStr += '<a href="javascript:void(0);"  class="btn_next larst_next">next</a>';
+		}
+		$('#paging').append(pageStr);
+	}
+	
+	function selectLog(rids, nowPage, startTime, endTime, limit = 5, page = 1) {
 		const now = new Date();
 		const nowLocal = now.format('yyyyMMddhhmmss');
 		const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours() - 1, now.getMinutes(), now.getSeconds()).format('yyyyMMddhhmmss');
@@ -414,6 +451,7 @@
 				let logTable = $('#logTable').find('tbody');
 				let str = ``;
 				logTable.empty();
+				result.logs = logPaging(rids, nowPage, result.logs ,startTime , endTime);
 				result.logs.forEach((log, logIdx) => {
 					let dTimestamp = new Date(log.dTimestamp).format('yyyy-MM-dd HH:mm:ss');
 					let dLocaltime = String(log.dLocaltime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
@@ -507,7 +545,7 @@
 
 									$(serialId).on('click', () => {
 										const rtuName = $('#selectedRTU');
-										selectLog(el.rid);
+										selectLog(el.rid, page);
 										rtuName.text(el.name).data('rid', el.rid);
 									});
 
@@ -529,7 +567,7 @@
 										const start = new Date(start_yy, start_mm, start_dd, start_hr, start_min, 0).format('yyyyMMddhhmmss');
 										const end = new Date(end_yy, end_mm, end_dd, end_hr, end_min, 0).format('yyyyMMddhhmmss');
 
-										selectLog(el.rid, start, end);
+										selectLog(el.rid, page, start, end);
 									});
 								});
 							}

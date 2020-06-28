@@ -145,7 +145,7 @@
 		return wResult;
 	}
 	
-	function setJsonDataFormat(result, page, searchCnt) {
+	function setJsonDataFormat(result, page, n, sort, searchCnt) {
 		var jsonList = [],
 			keyWord = $("#key_word").val();
 
@@ -177,14 +177,26 @@
 				}
 			}
 		}
+		$(".sort_table").data("nowjsp", "entityinformation");
+		jsonListSort(n, sort, jsonList);
 		jsonList = paging(page, jsonList);
 		return jsonList;
 	}
 
-	function getDataList(page , searchCnt) {
+	function getDataList(page ,n, sort, searchCnt) {
 
 		if (page == undefined) {
 			page = 1;
+		}else{
+			if(isEmpty(n) && isEmpty(sort)) {
+				$('.sort_table > thead').find('button').each(function(){
+					if($(this).attr('class') != 'btn_align'){
+						n = $(this).data('colname');
+						sort = $(this).data('classname');
+					}
+				});
+				
+			}
 		}
 
 		$.ajax({
@@ -196,7 +208,7 @@
 				includeGens: true
 			},
 			success: function (result) {
-			setMakeList(setJsonDataFormat(result, page, searchCnt), "listData", {
+			setMakeList(setJsonDataFormat(result, page, n, sort, searchCnt), "listData", {
 					"dataFunction": {
 						"INDEX": getNumberIndex
 					}
