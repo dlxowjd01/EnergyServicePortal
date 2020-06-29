@@ -86,7 +86,7 @@
 			}
 		}
 
-			
+
 
 		setMakeList(addFileList01, "fileList01", {"dataFunction" : {}});
 		setMakeList(addFileList02, "fileList02", {"dataFunction" : {}});
@@ -119,12 +119,12 @@
 			}
 		}
 	}
-	
+
 	function removeList(obj){
 		if( $(obj).parent().parent().find(".group_type").length > 1){
-			$(obj).parent().remove();	
-		};	
-	}	
+			$(obj).parent().remove();
+		};
+	}
 
 	function setAddListParam(addId){
 		var param = [],
@@ -360,7 +360,7 @@
 			}
 		});
 	}
-	
+
 	function goNowPage(spcId, genId){
 		location.href = "/spc/entityDetails.do?spc_id=" + spcId + "&gen_id=" + genId + "&oid=" + oid;
 	}
@@ -488,7 +488,7 @@
 							<div class="tx_inp_type edit">
 								<input type="text" id="address" placeholder="직접 입력">
 							</div>
-						</td>	
+						</td>
 						<th><label for="address">펀드명</label></th>
 						<td>
 							<div class="tx_inp_type edit">
@@ -502,7 +502,7 @@
 							<div class="tx_inp_type edit">
 								<input type="text" id="address" placeholder="직접 입력">
 							</div>
-						</td>	
+						</td>
 						<th><label for="address">담당자(연락처)</label></th>
 						<td>
 							<div class="tx_inp_type edit">
@@ -516,7 +516,7 @@
 							<div class="tx_inp_type edit">
 								<input type="text" id="address" placeholder="직접 입력">
 							</div>
-						</td>	
+						</td>
 						<th><label for="address">담당자(연락처)</label></th>
 						<td>
 							<div class="tx_inp_type edit">
@@ -530,7 +530,7 @@
 							<div class="tx_inp_type edit">
 								<input type="text" id="address" placeholder="직접 입력">
 							</div>
-						</td>	
+						</td>
 						<th><label for="address">담당자(연락처)</label></th>
 						<td>
 							<div class="tx_inp_type edit">
@@ -544,7 +544,7 @@
 							<div class="tx_inp_type edit">
 								<input type="text" id="address" placeholder="직접 입력">
 							</div>
-						</td>	
+						</td>
 						<th><label for="address">담당자(연락처)</label></th>
 						<td>
 							<div class="tx_inp_type edit">
@@ -1138,7 +1138,7 @@
 						<td></td>
 					</tr>
 					<tr>
-						<th>								
+						<th>
 							<div class="fixed_height"><label for="fixed_amount">지급 약정</label></div>
 							<div class="fixed_height"><label for="fixed_amount">계약서 명시 인출일</label><span class="fr fixed_height">1차</span></div>
 							<div class="fixed_height"><span class="fr fixed_height">2차</span></div>
