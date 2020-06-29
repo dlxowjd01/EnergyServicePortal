@@ -9,7 +9,6 @@
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 
 	$(function () {
-		unCheckAll();
 		pageInit();
 
 		//날짜 셀렉트박스 클릭 시
@@ -443,7 +442,6 @@
 					dateFormat: 'yy-mm-dd',
 					beforeShow: function () {
 						let fromDate = $(this).closest('.dateField').find('.fromDate').datepicker('getDate');
-						console.log("repeatEnd---", fromDate)
 						if (fromDate != '') {
 							$(this).datepicker('option', 'minDate', fromDate.format('yyyy-MM-dd'));
 						}
@@ -504,7 +502,6 @@
 					}
 				},
 				onClose: function (selected) {
-					console.log("onClose===", selected)
 					$(this).closest('.dateField').find('.fromDate').datepicker('option', 'maxDate', selected);
 				}
 			});
