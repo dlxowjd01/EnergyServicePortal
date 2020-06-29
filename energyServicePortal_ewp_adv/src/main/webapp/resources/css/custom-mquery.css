@@ -355,6 +355,13 @@
 		color: var(--color2);
 		padding-left: 60px;
 	}
+	
+	.g_menu>ul>li ul li a:before {
+		display: inline-block;
+		content: "";
+		margin: auto 0 28px auto;
+	}
+
     nav {
         padding: 0 0 8px 0;
         height: 110px;

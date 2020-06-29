@@ -9,7 +9,6 @@
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 
 	$(function () {
-		unCheckAll();
 		pageInit();
 
 		//날짜 셀렉트박스 클릭 시
@@ -442,9 +441,7 @@
 					buttonImageOnly: true,
 					dateFormat: 'yy-mm-dd',
 					beforeShow: function () {
-						
 						let fromDate = $(this).closest('.dateField').find('.fromDate').datepicker('getDate');
-						console.log("repeatEnd---", fromDate)
 						if (fromDate != '') {
 							$(this).datepicker('option', 'minDate', fromDate.format('yyyy-MM-dd'));
 						}
@@ -522,7 +519,7 @@
 	}
 </script>
 
-<div class="modal fade" id="registerModal" tabindex="-1" role="form">
+<div class="modal fade" id="registerModal" tabindex="-1" role="form" aria-labelledby="myModalLabel">
 	<div class="modal-dialog spc_modal_lg" role="modal">
 		<div class="modal-content spc_modal_content">
 			<div class="modal-header">
@@ -599,7 +596,7 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 							<div class="sel_calendar">
-								<input type="text" id="job_date" name="job_date" class="sel fromDate required w-100" value="" autocomplete="off" readonly>
+								<input type="text" id="job_date" name="job_date" class="sel datepicker fromDate required w-100" value="" autocomplete="off" readonly>
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">

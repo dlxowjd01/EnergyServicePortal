@@ -49,16 +49,16 @@ public class SpcController {
         return "esp/spc/balanceSheetPost";
     }
 
-    @RequestMapping(value = "/spc/transactionSheet.do")
-    public String spcTransactionSheet(HttpServletRequest request, HttpSession session, Model model) {
-        logger.debug("/spc/transactionSheet.do");
-        return "esp/spc/transactionSheet";
+    @RequestMapping(value = "/spc/transaction.do")
+    public String spcTransaction(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/transaction.do");
+        return "esp/spc/transaction";
     }
 
-   @RequestMapping(value = "/spc/transactionSheet2.do")
-    public String spcTransactionSheet2(HttpServletRequest request, HttpSession session, Model model) {
-        logger.debug("/spc/transactionSheet2.do");
-        return "esp/spc/transactionSheet2";
+   @RequestMapping(value = "/spc/transaction2.do")
+    public String spcTransaction2(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/transaction2.do");
+        return "esp/spc/transaction2";
     }
 	
     @RequestMapping(value = "/spc/transactionHistory.do")

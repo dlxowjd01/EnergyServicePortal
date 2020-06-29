@@ -526,7 +526,7 @@
         <div class="modal-dialog modal-md">
 			<div class="login-modal-content modal-content">
 				<div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+	                
 	                <h1>FIND ID</h1>
 	            </div>
 			    <form id="findForm" name="findForm">
@@ -541,7 +541,7 @@
 			  	    		<tbody>
 			  	    			<tr>
 			  	    				<th>이름</th>
-			  	    				<td><input type="text" id="findPsnName" name="psnName" placeholder=""></td>
+			  	    				<td><input type="text" name="psnName" id="findPsnName" class="w-100" placeholder=""></td>
 			  	    			</tr>
 			  	    			<tr>
 			  	    				<th>이동통신사</th>
@@ -560,23 +560,20 @@
 			  	    				</td>
 			  	    			</tr>
 			  	    			<tr>
-			  	    				<th>휴대폰번호</th>
+			  	    				<th>휴대폰 번호</th>
 			  	    				<td>
-			  	    					<div class="inputGroup">
-			  	    						<select id="findMobile1" class="inp fl">
+										<div class="flex_start3">
+											<select id="findMobile1" class="inp">
 												<option value="">선택</option>
 												<option value="010">010</option>
 												<option value="011">011</option>
 												<option value="016">016</option>
 												<option value="017">017</option>
 												<option value="019">019</option>
-											<select>
-											<span class="inline center fl mt10"> - </span>
-											<input type="text" id="findMobile2" class="inp fl" maxlength="4">
-											<span class="inline center fl mt10"> - </span>
-											<input type="text" id="findMobile3" class="inp fl" maxlength="4"/>
-											<span class="inline center fl"> &nbsp; </span>
-											<button type="button" class="btnstyle middle white fl" id="findAuthCodeBtn">인증번호 받기 </button>	
+											<select><!--
+										--><input type="text" id="findMobile2" class="inp ml-6" maxlength="4"/><!--
+										--><input type="text" id="findMobile3" class="inp" maxlength="4"/><!--
+										--><button type="button" class="btn btn_type04" id="findAuthCodeBtn">인증번호 받기</button>	
 										</div>
 			  	    				</td>
 			  	    			</tr>
@@ -640,23 +637,20 @@
 			  	    			<tr>
 			  	    				<th>휴대폰번호</th>
 			  	    				<td>
-			  	    					<div class="inputGroup">
-			  	    						<select id="findPwMobile1" class="inp fl">
-												<option value="">선택</option>
-												<option value="010">010</option>
-												<option value="011">011</option>
-												<option value="016">016</option>
-												<option value="017">017</option>
-												<option value="019">019</option>
-											<select>
-											<span class="inline center fl mt10"> - </span>
-											<input type="text" id="findPwMobile2" class="inp fl" maxlength="4"/>
-											<span class="inline center fl mt10"> - </span>
-											<input type="text" id="findPwMobile3" class="inp fl" maxlength="4"/>
-											<span class="inline center fl"> &nbsp; </span>
-											<button type="button" class="btnstyle middle white fl" id="findPwAuthCodeBtn">인증번호 받기</button>	
+										<select id="findPwMobile1" class="inp">
+											<option value="">선택</option>
+											<option value="010">010</option>
+											<option value="011">011</option>
+											<option value="016">016</option>
+											<option value="017">017</option>
+											<option value="019">019</option>
+										<select>
+										<div class="flex_start">
+											<input type="text" id="findPwMobile2" class="inp type02" maxlength="4"/>
+											<input type="text" id="findPwMobile3" class="inp type02" maxlength="4"/>
+											<button type="button" class="btn btn_type04" id="findPwAuthCodeBtn">인증번호 받기</button>	
 										</div>
-			  	    				</td>
+			  	</td>
 			  	    			</tr>
 			  	    			<tr>
 			  	    				<th>인증번호</th>
@@ -677,19 +671,16 @@
 	<div class="modal fade" id="joinModal1" tabindex="-1" role="dialog" aria-labelledby="joinModal" aria-hidden="true">
 	    <div class="join_dialog modal-dialog modal-md">
 	        <div class="modal-content step1">
-	            <div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
-	                <h1 class="modal_title">JOIN</h1>
-	            </div>
+	            <div class="modal-header lftit"><h1>JOIN</h1></div>
 	            <div class="modal-body">
-					<div id="joinStep01" class="rowBox joinBox joinStep01">
+					<div id="joinStep01" class="join_container">
 						<div class="unit">
 							<div class="unit_tit clear">
 								<span class="sTit">S-POWER iDERMS 서비스 이용약관</span>
 
 								<div class="etcText fr mt5">
-									<span class="checkbox">
-										<input type="checkbox" id="agree01" class="styled"/>
+									<span class="chk_type c12">
+										<input type="checkbox" id="agree01" name="type" value="1" checked>
 										<label for="agree01">동의합니다</label>
 									</span>
 								</div>
@@ -775,13 +766,12 @@
 						<div class="unit mt5">
 							<div class="unit_tit clear">
 								<span class="sTit">개인정보 수집, 제공 및 활용 동의</span>
-
-								<div class="etcText fr mt5">
-									<span class="checkbox">
-										<input type="checkbox" id="agree02" class="styled"/>
-										<label for="agree02">동의합니다</label>
-									</span>
-								</div>
+								<div class="etcText fr mt5"><!--
+								--><span class="chk_type c12"><!--
+								--><input type="checkbox" id="agree02" name="type" value="1" checked><!--
+								--><label for="agree02">동의합니다</label><!--
+								--></span><!--
+							--></div>
 							</div>
 							<div class="unit_cont mt5">
 								<div class="termBox">
@@ -801,15 +791,12 @@
 	<div class="modal fade" id="joinModal2" tabindex="-1" role="dialog" aria-labelledby="joinModal" aria-hidden="true">
 	    <div class="join_dialog modal-dialog modal-md">
 			<div class="modal-content step2">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
-					<h1 class="modal_title"> JOIN</h1>
-				</div>
+				<div class="modal-header lftit"><h1>JOIN</h1></div>
 				<form id="joinForm" name="joinForm">
 					<input type="hidden" id="joinPsnEmail" name="psnEmail"/>
 					<input type="hidden" id="joinPsnMobile" name="psnMobile"/>
 					<div class="modal-body">
-						<div id="joinStep02" class="rowBox joinBox joinStep02">
+						<div id="joinStep02" class="join_container">
 							<div class="unit clear">
 								<div class="unit_tit">
 									<span class="sTit">정보입력</span>
@@ -817,38 +804,36 @@
 								<div class="unit_cont lineBox">
 									<table class="tableStyle formStyle left">
 										<colgroup>
-											<col>
+											<col style="width:25%">
+											<col style="width:75%">
 											<col>
 										</colgroup>
 										<tbody>
 											<tr>
 												<th>아이디</th>
-												<td>
-													<div class="inputGroup">
-														<input type="text" id="joinUserId" name="userId" class="inp fl" maxlength="20"/>
-														<span class="inline center fl">&nbsp;</span>
-														<button type="button" class="btnstyle middle white fl" id="duplicateBtn">중복확인</button>	
-													</div>
+												<td class="flex_start">
+													<input type="text" id="joinUserId" name="userId" class="inp" maxlength="20"/>
+													<button type="button" class="btn btn_type03 ml-12" id="duplicateBtn">중복확인</button>	</div>
 													<span class="helpCont">아이디를 입력하세요</span>
 												</td>
 											</tr>
 											<tr>
 												<th>비밀번호</th>
-												<td>
+												<td class="flex_start">
 													<input type="password" id="joinUserPw" name="userPw" class="inp" maxlength="100"/>
 													<span class="helpCont">비밀번호를 입력하세요</span>
 												</td>
 											</tr>
 											<tr>
 												<th>비밀번호확인</th>
-												<td>
+												<td class="flex_start">
 													<input type="password" id="joinUserPw2" class="inp" maxlength="100"/>
 													<span class="helpCont">비밀번호를 입력하세요</span>
 												</td>
 											</tr>
 											<tr>
 												<th>이름</th>
-												<td>
+												<td class="flex_start">
 													<input type="text" id="joinPsnName" name="psnName" class="inp"/>
 													<span class="helpCont">이름을 입력하세요</span>
 												</td>
@@ -856,44 +841,38 @@
 											<tr>
 												<th>이메일 주소</th>
 												<td>
-													<div class="inputGroup">
-														<input type="text" id="joinEmail1" class="inp fl" maxlength="25"/>
-														<span class="inline center fl">@</span>
-														<input type="text" id="joinEmail3" class="inp fl" maxlength="25"/>
-														<select id="joinEmail2" class="inp fl">
-															<option value="">=선택=</option>
+													<div class="flex_start3">
+														<input type="text" id="joinEmail1" class="inp" maxlength="25"/>
+														<span class="center">@</span>
+														<input type="text" id="joinEmail3" class="inp ml-6" maxlength="25"/>
+														<select id="joinEmail2" class="inp ml-6">
+															<option value="">선택</option>
 															<option value="naver.com">naver.com</option>
 															<option value="hanmail.net">hanmail.net</option>
 															<option value="nate.com">nate.com</option>
 															<option value="gmail.com">gmail.com</option>
 															<option value="manual">직접입력</option>
-															<select>
-													</div>
+														<select>
+									</div>
 													<span class="helpCont">email을 입력하세요</span>
 												</td>
 											</tr>
 											<tr>
 												<th>휴대폰 번호</th>
 												<td>
-													<div class="inputGroup">
-														<input type="text" id="joinMobile1" class="inp fl" maxlength="3"/>
-														<span class="inline center fl">-</span>
-														<input type="text" id="joinMobile2" class="inp fl" maxlength="4"/>
-														<span class="inline center fl">-</span>
-														<input type="text" id="joinMobile3" class="inp fl" maxlength="4"/>
+													<div class="flex_start3">
+														<input type="text" id="joinMobile1" class="inp" maxlength="3"/>
+														<input type="text" id="joinMobile2" class="inp" maxlength="4"/>
+														<input type="text" id="joinMobile3" class="inp" maxlength="4"/>
+														<button type="button" class="btn btn_type04" id="joinAuthCodeBtn">인증번호 받기</button>
 													</div>
-													<span class="helpCont">휴대폰번호를 입력해 주세요</span>
-													<span class="helpCont">숫자를 입력해 주세요</span>
-													<span class="inline center fl"> &nbsp; </span>
-													<button type="button" class="btnstyle middle white fl" id="joinAuthCodeBtn">인증번호 받기 </button>
+													<small class="helpCont">휴대폰번호를 입력해 주세요</small>
+													<small class="helpCont">숫자를 입력해 주세요</small>
 												</td>
 											</tr>
 											<tr>
 												<th>인증번호</th>
-												<td>
-													<input type="text" id="joinAuthCode" name="authCode"
-															placeholder="">
-												</td>
+												<td class="flex_start"><input type="text" name="authCode" id="joinAuthCode" class="inp" placeholder=""></td>
 											</tr>
 										</tbody>
 									</table>
@@ -913,12 +892,8 @@
 	<div class="modal fade" id="joinModal3" tabindex="-1" role="dialog" aria-labelledby="joinModal" aria-hidden="true">
 	    <div class="join_dialog modal-dialog modal-md">
 			<div class="modal-content step3">
-				<div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
-	                <h1 class="modal_title"> JOIN</h1>
-	            </div>
 	            <div class="modal-body">
-					<div id="joinStep03" class="rowBox joinBox joinStep03">
+					<div id="joinStep03" class="join_container">
 						<div class="joinEndText">
 							<strong>"축하합니다"</strong>
 							회원가입이 완료되었습니다.

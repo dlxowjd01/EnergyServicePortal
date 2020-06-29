@@ -399,7 +399,7 @@
 	<div class="modal-dialog modal-md">
 		<!-- Modal content-->
 		<div class="modal-content">
-			<div class="modal-header" style="padding:25px 30px;">
+			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
 				<h4><i class="glyphicon glyphicon-user"></i> MODIFY</h4>
 			</div>
@@ -407,7 +407,7 @@
 				<input type="hidden" id="modUserIdx" name="userIdx"/>
 				<input type="hidden" id="modPsnEmail" name="psnEmail"/>
 				<input type="hidden" id="modPsnMobile" name="psnMobile"/>
-				<div class="modal-body" style="padding:20px 30px;">
+				<div class="modal-body">
 					<div class="rowBox joinBox">
 						<div class="unit clear">
 							<div class="unit_tit">
@@ -422,28 +422,27 @@
 									<tbody>
 									<tr>
 										<th>아이디</th>
-										<td align="left" id="modUserId">
+										<td class="left" id="modUserId">
 											gildong
 										</td>
 									</tr>
 									<tr>
 										<th>이름</th>
-										<td align="left" id="modPsnName">
+										<td class="left" id="modPsnName">
 											홍길동
 										</td>
 									</tr>
 									<tr>
 										<th>비밀번호</th>
 										<td>
-											<input type="password" id="modUserPw" name="userPw" class="inp"
-											       style="width:100%;"/>
+											<input type="password" id="modUserPw" name="userPw" class="inp"/>
 											<span class="helpCont">비밀번호를 입력하세요</span>
 										</td>
 									</tr>
 									<tr>
 										<th>비밀번호확인</th>
 										<td>
-											<input type="password" id="modUserPw2" class="inp" style="width:100%;"/>
+											<input type="password" id="modUserPw2" class="inp"/>
 											<span class="helpCont">비밀번호확인이 일치하지 않습니다</span>
 										</td>
 									</tr>
@@ -451,12 +450,11 @@
 										<th>이메일 주소</th>
 										<td>
 											<div class="inputGroup">
-												<input type="text" id="modEmail1" class="inp fl" style="width:30%;"
+												<input type="text" id="modEmail1" class="inp"
 												       maxlength="25"/>
-												<span class="inline center fl" style="width:5%;">@</span>
-												<input type="text" id="modEmail3" class="inp fl"
-												       style="width:27%; margin-right:10px;" maxlength="25"/>
-												<select id="modEmail2" class="inp fl" style="width:35%;">
+												<span class="inline center fl">@</span>
+												<input type="text" id="modEmail3" class="inp" maxlength="25"/>
+												<select id="modEmail2" class="inp" style="width:35%;">
 													<option value="">=선택=</option>
 													<option value="naver.com">naver.com</option>
 													<option value="hanmail.net">hanmail.net</option>
@@ -472,14 +470,11 @@
 										<th>휴대폰 번호</th>
 										<td>
 											<div class="inputGroup">
-												<input type="text" id="modMobile1" class="inp fl" style="width:30%;"
-												       maxlength="3"/>
+												<input type="text" id="modMobile1" class="inp" maxlength="3"/>
+												<span class="inline center fl">-</span>
+												<input type="text" id="modMobile2" class="inp" maxlength="4"/>
 												<span class="inline center fl" style="width:5%;">-</span>
-												<input type="text" id="modMobile2" class="inp fl" style="width:30%;"
-												       maxlength="4"/>
-												<span class="inline center fl" style="width:5%;">-</span>
-												<input type="text" id="modMobile3" class="inp fl" style="width:30%;"
-												       maxlength="4"/>
+												<input type="text" id="modMobile3" class="inp" maxlength="4"/>
 											</div>
 											<span class="helpCont">휴대폰번호를 입력해 주세요</span>
 											<span class="helpCont">숫자를 입력해 주세요</span>
@@ -492,7 +487,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<div style="padding:5px 20px;text-align:right;">
+					<div>
 						<button type="button" class="memberout_btn w80 fl" id="removeUserBtn">탈퇴</button>
 						<button type="button" class="cancel_btn w80" data-dismiss="modal">취소</button>
 						<button type="submit" class="default_btn w80" data-dismiss="modal" id="modifyUserBtn">확인

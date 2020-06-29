@@ -67,11 +67,11 @@
 						</ul>
 					</div>
 					<div class="flex_wrapper">
-						<div class="tx_inp_type unit">
+						<div class="tx_inp_type unit w-100">
 							<input type="number" name="ignore_tolerance1" />
 							<span>%</span>
 						</div>
-						<div class="tx_inp_type unit t1">
+						<div class="tx_inp_type unit t1 w-100">
 							<input type="number" name="ignore_tolerance2" />
 							<span>kWh</span>
 						</div>

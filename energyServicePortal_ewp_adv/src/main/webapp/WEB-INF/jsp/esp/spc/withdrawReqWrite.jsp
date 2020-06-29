@@ -411,27 +411,16 @@
 					<table id="secondTable">
 						<colgroup>
 							<col style="width:15%">
-							<col style="width:20%">
+							<col style="width:85%">
 							<col>
 						</colgroup>
 						<tr>
-							<th class="th_type">증빙 첨부<a href="javascript:addRowTable('secondTable')" class="btn_add fr">추가</a></th>
-							<td id="addFileList01"><input name="spc_file_01" type="file" accept=".gif, .jpg, .png"></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td id="addFileList02"><input name="spc_file_02" type="file"></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td id="addFileList03"><input name="spc_file_03" type="file"></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td id="addFileList04"><input name="spc_file_04" type="file"></td>
+							<th class="th_type">증빙 첨부</th>
+							<td id="addFileList01" class="flex_start_td"><!--
+								--><input type="file" id="red_write_attachment" class="hidden" name="red_write_attachment" accept=".gif, .jpg, .png" multiple=""><!--
+								--><label for="red_write_attachment" class="btn file_upload">파일 선택</label><!--
+								--><div class="file_list ml-16"><ul><li>No Files Selected</li></ul></div>
+							</td>
 							<td></td>
 						</tr>
 					</table>

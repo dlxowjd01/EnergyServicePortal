@@ -1514,7 +1514,7 @@ $(function(){
 							<div class="chart_top clear">
 								<h2 class="ntit">PCS(10)</h2>
 								<div class="alert_icon fr">
-									<span class="inv_normail">정상 9</span> 
+									<span class="inv_normal">정상 9</span> 
 									<span class="inv_error">이상 1</span>
 									<span class="inv_alert">경고 2</span>
 								</div>
@@ -1658,7 +1658,7 @@ $(function(){
 							<div class="chart_top clear">
 								<h2 class="ntit">BMS(10)</h2>
 								<div class="alert_icon fr">
-									<span class="inv_normail">정상 8</span> 
+									<span class="inv_normal">정상 8</span> 
 									<span class="inv_error">이상 1</span>
 									<span class="inv_alert">경고 1</span>
 								</div>
@@ -1699,7 +1699,7 @@ $(function(){
 							<div class="chart_top clear">
 								<h2 class="ntit">계량기(18)</h2>
 								<div class="alert_icon fr">
-									<span class="inv_normail">정상 18</span>
+									<span class="inv_normal">정상 18</span>
 								</div>
 							</div>
 							<div class="type_list_detail">
@@ -1735,7 +1735,7 @@ $(function(){
 							<div class="chart_top clear">
 								<h2 class="ntit">환경센서(2)</h2>
 								<div class="alert_icon fr">
-									<span class="inv_normail">정상 2</span>
+									<span class="inv_normal">정상 2</span>
 								</div>
 							</div>
 							<div class="type_list_detail">
