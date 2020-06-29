@@ -35,7 +35,10 @@
 :root {
 	/* ********* light theme ONLY ******* */
 	--title-text: #3c3c3c;
-	--check-box-border: #969696;
+	--radio-border: #a9a9a9;
+	--radio-active: #666;
+	--check-box-border: #a9a9a9;
+	--check-active: #666;
 	--input-border: rgba(0, 0, 0, 0.2);
 	--active: #fff;
 	--active2: #fff;
@@ -65,7 +68,6 @@
 
 	/* ********* common ********* */
 	--box-shadow:rgba(0, 0, 0, 0.5);
-	--rose-of-sharon: #bc5100;
 	--box-border: rgba(255, 255, 255, 0.25);
 	--nav-menu-color: rgba(255, 255, 255, 0.5);
 	--nav-border: rgba(255, 255, 255, 0.15);
@@ -93,6 +95,7 @@
 	--salmon-pearl: #f3524f;
 	--alarm: #c41d27;
 	--error: #b61827;
+	--rose-of-sharon: #bc5100;
 	--old-brick: #961f2a;
 	--powder-blue: #b0e9e8;
 	--yellow-green: #7ed321;
@@ -178,7 +181,10 @@
 html.darkmode:root {
 	/* ********* dark theme ONLY ******* */
 	--title-text: rgba(255, 255, 255, 0.6);
+	--radio-border: rgba(255, 255, 255, 0.6);;
+	--radio-active: #e4e4e4;
 	--check-box-border: rgba(255, 255, 255, 0.6);
+	--check-active: rgba(255, 255, 255, 0.87);
 	--input-border: rgba(255,255,255,0);
 	--active: #363636;
 	--active2: #131319;
@@ -1074,7 +1080,7 @@ button:hover {
 
 .switcher {
 	display: inline-block;
-	height: 100%;
+	height: 38px;
 	margin-top: 3px;
 	padding: 4px;
 	background: var(--bg-color);
@@ -1090,12 +1096,10 @@ button:hover {
 .switcher__label {
 	float: left;
 	width: 50%;
-	font-size: 12px;
 	line-height: 30px;
+	font-size: 12px;
 	color: var(--color3);
 	text-align: center;
-	cursor: pointer;
-	position: inherit;
 	z-index: 10;
 	transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 	will-change: transform;
@@ -9101,36 +9105,73 @@ div.di_wrap dl .link a {
 	padding: 7px 12px;
 }
 
-.rdo_type input[type="radio"] {
+.rdo_type [type="radio"] {
 	display: none;
 }
 
-.rdo_type input[type="radio"]+label span {
+.rdo_type [type="radio"]:checked,
+.rdo_type [type="radio"]:not(:checked) {
+    position: absolute;
+    left: -9999px;
+}
+
+.rdo_type [type="radio"]:checked + label,
+.rdo_type [type="radio"]:not(:checked) + label {
+    position: relative;
+    cursor: pointer;
 	display: inline-block;
-	width: 24px;
-	height: 24px;
-	margin: 0 7px 0 0;
-	vertical-align: top;
-	background: url(../img/btn_radio_wh.png) no-repeat;
-	cursor: pointer;
-}
-
-.rdo_type input[type="radio"]:checked+label span {
-	background: url(../img/btn_radio_on_wh.png) no-repeat;
-}
-
-.rdo_type input[type="radio"]+label {
-	font-size: 13px;
 	line-height: 24px;
-	vertical-align: top;
+	height: 24px;
 }
 
-.darkmode .rdo_type input[type="radio"]+label span {
-	background: url(../img/btn_radio.png) no-repeat;
+.rdo_type [type="radio"]:checked + label,
+.rdo_type [type="radio"]:not(:checked) + label {
+    padding-left: 28px;
 }
 
-.darkmode .rdo_type input[type="radio"]:checked+label span {
-	background: url(../img/btn_radio_on.png) no-repeat;
+.rdo_type [type="radio"]:checked + label:before,
+.rdo_type [type="radio"]:not(:checked) + label:before {
+	content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+	height: 20px;
+	border-radius: 100%;
+    background: none;
+}
+
+.rdo_type [type="radio"]:checked + label:before {
+	border: 2px solid var(--radio-active);
+}
+
+.rdo_type [type="radio"]:not(:checked) + label:before {
+    border: 2px solid var(--radio-border);
+}
+
+.rdo_type [type="radio"]:checked + label:after,
+.rdo_type [type="radio"]:not(:checked) + label:after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: var(--radio-active);
+    position: absolute;
+    top: 5px;
+	left: 5px;
+    border-radius: 100%;
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+
+.rdo_type [type="radio"]:not(:checked) + label:after {
+    opacity: 0;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+}
+.rdo_type [type="radio"]:checked + label:after {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
 }
 
 .rdo_type.align_type td,
@@ -9143,17 +9184,6 @@ div.di_wrap dl .link a {
 .chk_type.align_type .right,
 .rdo_type.align_type .right {
 	text-align: right;
-}
-
-.rdo_type.align_type>span,
-.chk_type.align_type>span {
-	display: inline-block;
-	vertical-align: middle;
-}
-
-.rdo_type.align_type>span+span,
-.chk_type.align_type>span+span {
-	margin-left: 25px;
 }
 
 .rdo_type.align_type input+label,
@@ -9186,7 +9216,7 @@ div.di_wrap dl .link a {
 
 /*** test ***/
 
-
+/* 
 .chk_type.styled label > input[type="checkbox"] {
 	position: relative;
 	padding: 0;
@@ -9205,7 +9235,7 @@ div.di_wrap dl .link a {
 	height: 18px;
 	border: 2px solid var(--check-box-border);
 	border-radius: 2px;
-}
+} */
 
 /* ********************************************* */
 
@@ -9269,9 +9299,10 @@ div.di_wrap dl .link a {
 	border-color: var(--vivid-blue);
 }
 
+/* ******************** checked ******************** */
 .chk_type input[type="checkbox"]:checked+label:before {
-	background: var(--color2);
-	border: 2px solid var(--color2);
+	background: var(--check-active);
+	border: 2px solid var(--check-active);
 }
 
 .chk_type.c1 input[type="checkbox"]:checked+label:before {
@@ -11997,7 +12028,7 @@ html.darkmode .modal-content.spc_detail_content li.single_item a .btn_next {
 }
 
 .entity_wrap.post .group_type .rdo_type.flex_start2 .radio_group {
-	width: 44%
+	width: 60%
 }
 .entity_wrap.post .flex_start3 .radio_group {
 	width: 90px;
