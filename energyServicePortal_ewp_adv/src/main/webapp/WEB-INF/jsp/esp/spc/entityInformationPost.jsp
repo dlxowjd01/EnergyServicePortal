@@ -35,6 +35,9 @@
 		initRow('addList_affiliation', 'class');
 		addRow('addList_affiliation', 'class');
 
+		initRow('addList_affiliation2', 'class');
+		addRow('addList_affiliation2', 'class');
+
 		initRow('addList_payroll_date');
 		addRow('addList_payroll_date');
 
@@ -46,6 +49,9 @@
 
 		initRow('addList_certificate_registration', 'class');
 		addRow('addList_certificate_registration', 'class');
+
+		initRow('addList_certificate_registration2', 'class');
+		addRow('addList_certificate_registration2', 'class');
 
 		initRow('addList_account_holder', 'class');
 		addRow('addList_account_holder', 'class');
@@ -131,48 +137,18 @@
 		$("#addList_switch_gear").data("form", $("#addList_switch_gear").html());
 	}
 
-	function removeList(obj) {
-		if ($(obj).parent().parent().find(".group_type").length > 1) {
-			$(obj).parent().remove();
-		}
-	}
-
-	function setAddListParam(addId) {
-		var param = new Array(),
-			$selector = $('#' + addId),
-			rowInputCount = $selector.data('count'),
-			allInputCount = $selector.find('input').length,
-			dropdownCount = $selector.find('.dropdown').length;
-
-		for (var i = 0, count = allInputCount / rowInputCount; i < count; i++) {
-			var rowData = new Array();
-			for (var j = i * rowInputCount; j < i * rowInputCount + rowInputCount; j++) {
-				var $input = $selector.find('input').eq(j),
-					$inputType = $input.attr('type');
-
-				if ($inputType == 'text' || $inputType == 'password') {
-					rowData[$input.attr('name')] = $input.val();
-				} else {
-					if (isEmpty(rowData[$input.attr('name')])) {
-						var checkedVal = $('[name="' + $input.attr('name') + '"]:checked').val();
-						rowData[$input.attr('name')] = checkedVal;
-					}
-				}
+	function removeList(obj, type) {
+		if(isEmpty(type)) {
+			if ($(obj).parent().parent().find('.group_type').length > 1) {
+				$(obj).parent().remove();
 			}
-
-			for (var j = 0, count = dropdownCount; j < count; j++) {
-				var dropdown = $selector.find('.dropdown').eq(j),
-					$inputCnt = dropdown.find('input').length;
-
-				if ($inputCnt == 0) {
-					rowData[dropdown.attr('id')] = dropdown.find('button').data('value');
-				}
+		} else {
+			if ($(obj).parents('.entity').find('.group_type').length > 1) {
+				var index = $(obj).parents('.entity').find('.group_type').index($(obj).parent().parent());
+				$(obj).parents('tr').find('.entity').eq(0).find('.group_type').eq(index).remove();
+				$(obj).parent().parent().remove();
 			}
-
-			param.push(rowData);
 		}
-
-		return param;
 	}
 
 	function setDropDownValue(id, data) {
@@ -515,7 +491,7 @@
 			account_info = setAreaParamData('accountInfo'),
 			finance_info = setAreaParamData('financeInfo', 'dropdown'),
 			contract_info = setAreaParamData('contractInfo'),
-			addlist_insurance_info = setAreaParamData('addList_insuranceInfo'),
+			addlist_insurance_info = setAreaParamData('insuranceInfo');,
 			device_info = setAreaParamData('deviceInfo'),
 			warranty_info = setAreaParamData('warrantyInfo', 'dropdown'),
 			coefficient_info = setAreaParamData('coefficientInfo'),
@@ -942,12 +918,12 @@
 						</td>
 					</tr>
 
-					<tr class="addList_affiliation entity">
+					<tr>
 						<th>
 							<span class="">등기이사 소속</span>
-							<a href="javascript:addRow('addList_affiliation', 'next');" class="btn_add fr">추가</a>
+							<a href="javascript:addRow('addList_affiliation', 'class');addRow('addList_affiliation2', 'class');" class="btn_add fr">추가</a>
 						</th>
-						<td>
+						<td class="addList_affiliation entity">
 							<div class="group_type">
 								<div class="dropdown placeholder edit" id="등기이사_소속[index]">
 									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
@@ -978,19 +954,20 @@
 									<label for="등기이사_명[index]" class="sr-only"></label>
 									<input type="text" id="등기이사_명[index]" name="등기이사_명[index]" placeholder="이름 직접 입력">
 								</div>
-								<button class="btn_close hidden fixed_height mt-0" onclick="$(this).parents().closest('tr').remove()"></button>
 							</div>
 						</td>
 						<th>등기 기간</th>
-						<td class="flex_start">
-							<fieldset class="sel_calendar edit twin clear mr-38 dateField">
-								<legend class="sr-only">등기 기간</legend>
-								<input type="text" id="등기_기간_from[index]" name="등기_기간_from[index]" class="sel fromDate" value="" autocomplete="off" placeholder="시작일" readonly>
-								<input type="text" id="등기_기간_to[index]" name="등기_기간_to[index]" class="sel toDate" value="" autocomplete="off" placeholder="종료일" readonly>
-							</fieldset>
-							<div class="chk_type align_type">
-								<input type="checkbox" id="등기_이사_만료_알림[index]" name="등기_이사_만료_알림" value="Y">
-								<label for="등기_이사_만료_알림[index]"><span></span>등기이사 만료 알림</label>
+						<td class="addList_affiliation2 entity">
+							<div class="group_type flex_start">
+								<fieldset class="sel_calendar edit twin clear dateField">
+									<legend class="sr-only">등기 기간</legend>
+									<input type="text" id="등기_기간_from[index]" name="등기_기간_from[index]" class="sel fromDate" value="" autocomplete="off" placeholder="시작일" readonly>
+									<input type="text" id="등기_기간_to[index]" name="등기_기간_to[index]" class="sel toDate" value="" autocomplete="off" placeholder="종료일" readonly>
+								</fieldset>
+
+								<div class="fr fixed_height mt5 mr-12">
+									<button type="button" class="btn_close hidden" onclick="removeList(this, 'dual')"></button>
+								</div>
 							</div>
 						</td>
 					</tr>
@@ -1369,7 +1346,7 @@
 								<div class="tx_inp_type edit">
 									<input type="text" id="계좌_번호[index]" name="계좌_번호[index]" placeholder="직접 입력">
 								</div>
-								<button class="btn_close mr-12 hidden fr" onclick="$(this).parents().closest('tr').remove()"></button>
+								<button class="btn_close hidden mr-12 fr" onclick="$(this).parents().closest('tr').remove()"></button>
 								<div class="tx_inp_type edit">
 									<input type="text" id="계좌개설_은행(지점)[index]" name="계좌개설_은행(지점)[index]" placeholder="직접 입력">
 								</div>
@@ -1385,11 +1362,11 @@
 							<th></th>
 							<td></td>
 						</tr>
-						<tr class="addList_certificate_registration entity">
+						<tr>
 							<th class="group_type">
-								공인인증서 등록 <a href="javascript:addRow('addList_certificate_registration', 'next');" class="btn_add fr">추가</a>
+								공인인증서 등록 <a href="javascript:addRow('addList_certificate_registration', 'class'); addRow('addList_certificate_registration2', 'class');" class="btn_add fr">추가</a>
 							</th>
-							<td>
+							<td class="addList_certificate_registration entity">
 								<div class="group_type flex_start">
 									<div class="dropdown placeholder edit" id="용도 선택[index]">
 										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
@@ -1405,19 +1382,21 @@
 										</ul>
 									</div>
 									<div class="fixed_height">
-										<input type="file" id="공인인증서_등록_이미지[index]" class="hidden" name="공인인증서_등록_이미지" accept=".jpg, .png">
+										<input type="file" id="공인인증서_등록_이미지[index]" class="hidden" name="공인인증서_등록_이미지[index]" accept=".jpg, .png">
 										<label for="공인인증서_등록_이미지[index]" class="btn file_upload">파일 선택</label>
 										<span class="upload_text ml-16">등록 파일 이름</span>
 									</div>
 								</div>
 							</td>
 							<th><label for="인증서_비밀번호[index]">인증서 비밀번호</label></th>
-							<td class="flex_wrapper">
-								<div class="tx_inp_type edit">
-									<input type="text" id="인증서_비밀번호[index]" name="인증서_비밀번호[index]" placeholder="비밀번호를 입력해 주세요.">
-								</div>
-								<div class="fr fixed_height mt5 mr-12">
-									<button class="btn_close hidden" onclick="$(this).parents().closest('tr').remove()"></button>
+							<td class="addList_certificate_registration2 entity">
+								<div class="group_type flex_start">
+									<div class="tx_inp_type edit">
+										<input type="text" id="인증서_비밀번호[index]" name="인증서_비밀번호[index]" placeholder="비밀번호를 입력해 주세요.">
+									</div>
+									<div class="fr fixed_height mt5 mr-12">
+										<button type="button" class="btn_close hidden" onclick="removeList(this, 'dual')"></button>
+									</div>
 								</div>
 							</td>
 						</tr>
@@ -1704,7 +1683,7 @@
 			</div>
 		</div>
 
-		<div class="indiv panel panel-default">
+		<div class="indiv panel panel-default" id="insuranceInfo">
 			<div class="tbl_top panel-heading">
 				<h2 class="ntit mt25">보험 정보<a role="button" href="javascript:addRow('insuranceInfoToggle');" class="btn_add ml-24">추가</a></h2>
 				<a role="button" href="#insuranceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a>
@@ -1757,7 +1736,7 @@
 						<th><label for="보험_기간_from[index]">보험 기간</label></th>
 						<td class="group_type">
 							<legend class="sr-only">보험 기간</legend>
-							<fieldset class="sel_calendar edit twin clear">
+							<fieldset class="sel_calendar edit twin clear dateField">
 								<input type="text" id="보험_기간_from[index]" class="sel fromDate" name="보험_기간_from[index]" value="" autocomplete="off" placeholder="시작일" readonly>
 								<input type="text" id="보험_기간_to[index]" class="sel toDate" name="보험_기간_to[index]" value="" autocomplete="off" placeholder="종료일" readonly>
 							</fieldset>
@@ -1784,7 +1763,7 @@
 							</div>
 						</td>
 					</tr>
-					<tr>
+					<tr class="dateField">
 						<th><label for="보험_시작일[index]">시작일</label></th>
 						<td>
 							<div class="sel_calendar edit">
@@ -1805,7 +1784,7 @@
 						<th><label for="보험_만기일[index]">만기일</label></th>
 						<td class="flex_start">
 							<div class="sel_calendar edit mr-24">
-								<input type="text" id="보험_만기일[index]" class="sel toDate" name="보험_만기일v" value="" autocomplete="off" placeholder="날짜 선택" readonly>
+								<input type="text" id="보험_만기일[index]" class="sel toDate" name="보험_만기일[index]" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 							</div>
 							<span class="fixed_height">XX일 남음</span>
 						</td>

@@ -1378,7 +1378,13 @@ const addRow = function (listId, type, nextIdx) {
 
 	if (type == 'next') {
 		if(sTagName  == 'TR') {
-			$selecter.eq($selecter.length -1).after('<tr class="' + classes + '">' + rowHtml + '</tr>');
+			var $tr = $('<tr>');
+			$tr.append(rowHtml);
+
+			if ($selecter.hasClass('entity')) {
+				$tr.find('.btn_add').remove();
+			}
+			$selecter.eq($selecter.length - 1).after($tr);
 		} else {
 			$selecter.eq($selecter.length -1).after('<div class="' + classes + '">' + rowHtml + '</div>');
 		}
