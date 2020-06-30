@@ -1438,7 +1438,10 @@ $(function() {
 		let tableBodyTemp = $.data(document, tableBodyId);
 		tableBodyTemp = tableBodyTemp.replace(/<(\/a|a)([^>]*)>/gi,'');
 		tableBodyTemp = tableBodyTemp.replace(/ name="aTagTd01"| name="aTagTd02"| class="right"| %/gi,'');
-		let tableColumnArray = (tableBodyTemp.match(/(?<=<td>\[)(.*?)(?=]<\/td>)/g) || []);
+		let tableColumnArray = (tableBodyTemp.match(/(?:\[)(.*?)(?=]<\/td>)/g) || []);
+		tableColumnArray.forEach(function(el, index) {
+			tableColumnArray[index] = el.replace('[', '');
+		});
 		if($('.sort_table').data('nowjsp') == 'balance'){
 			tableColumnArray.splice(3, 0, '-');
 		}else if(($('.sort_table').data('nowjsp') == 'supplementary')){
