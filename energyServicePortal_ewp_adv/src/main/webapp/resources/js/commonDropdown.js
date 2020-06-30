@@ -56,17 +56,20 @@ const displayDropdown = ($selector) => {
 	if ($selector.find(':radio').length > 0) {
 		$displayText = $selector.find('input[type="radio"]:checked').next().text();
 	} else if ($selector.find(':checkbox').length > 0) {
+		let checked = $selector.find('input[type="checkbox"]:checked').val();
+		let checkbox = $selector.find(':checkbox');
 		let checkedboxLength = $selector.find('input[type="checkbox"]:checked').length;
 		let checkboxLength = $selector.find('input[type="checkbox"]').length;
-
-		if (checkedboxLength == checkboxLength) {
+		
+		if(checkedboxLength == checkboxLength || checked == "전체"){
 			$displayText = '전체';
+			checkbox.prop('checked', true);
 		} else {
-			if (checkedboxLength > 1) {
-				$displayText = $selector.find('input[type="checkbox"]:checked:eq(0)').next().text() + '외 ' + (checkedboxLength - 1) + '개';
-			} else if (checkedboxLength == 0) {
+			if (checkedboxLength == 0){
 				$displayText = $displayButton.data('name');
-			} else {
+			} else if (checkedboxLength > 1) {
+				$displayText = $selector.find('input[type="checkbox"]:checked:eq(0)').next().text() + ' 외 ' + (checkedboxLength - 1) + '개';
+			} else if(checkedboxLength == 1) {
 				$displayText = $selector.find('input[type="checkbox"]:checked:eq(0)').next().text();
 			}
 		}

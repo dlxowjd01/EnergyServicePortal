@@ -231,8 +231,8 @@
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 	const now = new Date();
-	const nowLocal = now.format('yyyyMMddhhmmss');
-	const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours() - 1, now.getMinutes(), now.getSeconds()).format("yyyyMMddhhmmss");
+	const nowLocal = now.format('yyyyMMddHHmmss');
+	const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours() - 1, now.getMinutes(), now.getSeconds()).format("yyyyMMddHHmmss");
 	const searchFilter = JSON.stringify({'include': [{'relation': 'rtus'}]});
 
 	$(function () {
@@ -251,7 +251,7 @@
 
 			if (isEmpty(rid)) {
 				alert('RTU 정보가 확인되지 않습니다.');
-				return false;
+				return false;	
 			}
 
 			if (!confirm('RTU 정보를 삭제하시겠습니까?')) {
@@ -275,6 +275,20 @@
 					return false;
 				}
 			});
+		});
+		
+		$('.btn_type02').on('click', function(e){
+			let excelName = '수집현황';
+			let $val = $('#logTable').find('tbody');
+			let cnt = $val.length;
+			
+			if(cnt > 0){
+				if(confirm('저장 하시겠습니까?')){
+					tableToExcel('logTable', excelName, e);
+				}
+			}else{
+				alert('저장할 데이터가 없습니다.');
+			}
 		});
 
 		$('.modify_btn').on('click', function () {
@@ -303,16 +317,15 @@
 	})
 
 	//사업소 조회
-	const siteMakeList = () => {
+	function siteMakeList () {
 		setMakeList(siteList, 'siteULList', {'dataFunction': {}}); //list생성
 	};
-	
-	const logPaging = (rids, page, jsonList ,startTime , endTime) => {
-		let totalPage = Math.ceil(jsonList.length/pagePerData);
+
+	function logPaging (rids, page, totalCount, jsonList ,startTime , endTime) {
+		let totalPage = Math.ceil(totalCount/pagePerData);
 		let totalnav = Math.ceil(totalPage/navCount);
 		let startNum = (pagePerData*(page-1));
-		let endNum = ((pagePerData*page)>= jsonList.length)? jsonList.length : (pagePerData*page);
-		jsonList = jsonList.slice(startNum, endNum);
+		let endNum = ((pagePerData*page)>= totalCount)? totalCount : (pagePerData*page);
 		logMakeNavigation(rids, page, totalPage, startTime , endTime);
 		return jsonList;
 	};
@@ -328,29 +341,31 @@
 		if (navgroup == 1) {
 			pageStr += '<a href="javascript:void(0);" class="btn_prev first_prev">prev</a>';
 		} else{
-			pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'' + Number(startPage-1) + '\',\'' + startTime + '\',\'' + endTime + '\');" class="btn_prev">prev</a>';
+			pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'\',\'\',\'5\',\'' + (startPage -1) + '\');" class="btn_prev">prev</a>';
 		}
 
 		for (let i = startPage ; i <= endPage; i++) {
 			if (i==page) {
-				pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'' + i + '\',\'' + startTime + '\',\'' + endTime + '\');"><strong>'+i+'</strong></a>';
+				pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'\',\'\',\'5\',\'' + i + '\');"><strong>'+i+'</strong></a>';
 			} else {
-				pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'' + i + '\',\'' + startTime + '\',\'' + endTime + '\');">'+i+'</a>';
+				pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'\',\'\',\'5\',\'' + i + '\');">'+i+'</a>';
 			}
 		}
 
 		if (navgroup <totalnav) {
-			pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'' + Number(endPage+1) + '\',\'' + startTime + '\',\'' + endTime + '\');"  class="btn_next">next</a>';
+			pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'\',\'\',\'5\',\'' + (endPage +1) + '\');"  class="btn_next">next</a>';
 		} else {
 			pageStr += '<a href="javascript:void(0);"  class="btn_next larst_next">next</a>';
 		}
 		$('#paging').append(pageStr);
 	}
 	
-	function selectLog(rids, nowPage, startTime, endTime, limit = 5, page = 1) {
+	function selectLog(rids, startTime, endTime, limit, page) {
+		limit = isEmpty(limit) ? 5 : limit;
+		page = isEmpty(page) ? 1 : page;
 		const now = new Date();
-		const nowLocal = now.format('yyyyMMddhhmmss');
-		const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours() - 1, now.getMinutes(), now.getSeconds()).format('yyyyMMddhhmmss');
+		const nowLocal = now.format('yyyyMMddHHmmss');
+		const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours() - 1, now.getMinutes(), now.getSeconds()).format('yyyyMMddHHmmss');
 		// START: rtu Detail info setting
 		const rtuInfo = [
 			{
@@ -433,8 +448,8 @@
 			}
 		});
 
-		if (startTime === undefined) startTime = beforeHour;
-		if (endTime === undefined) endTime = nowLocal;
+		if (isEmpty(startTime)) startTime = beforeHour;
+		if (isEmpty(endTime)) endTime = nowLocal;
 		$.ajax({
 			url: 'http://iderms.enertalk.com:8443/log',
 			type: 'get',
@@ -451,7 +466,7 @@
 				let logTable = $('#logTable').find('tbody');
 				let str = ``;
 				logTable.empty();
-				result.logs = logPaging(rids, nowPage, result.logs ,startTime , endTime);
+				result.logs = logPaging(rids, page, result.count, result.logs ,startTime , endTime);
 				result.logs.forEach((log, logIdx) => {
 					let dTimestamp = new Date(log.dTimestamp).format('yyyy-MM-dd HH:mm:ss');
 					let dLocaltime = String(log.dLocaltime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
@@ -545,7 +560,7 @@
 
 									$(serialId).on('click', () => {
 										const rtuName = $('#selectedRTU');
-										selectLog(el.rid, page);
+										selectLog(el.rid);
 										rtuName.text(el.name).data('rid', el.rid);
 									});
 
@@ -564,10 +579,10 @@
 										let end_hr = datePicker2.val().slice(0, 2);
 										let end_min = datePicker2.val().slice(5, 7);
 
-										const start = new Date(start_yy, start_mm, start_dd, start_hr, start_min, 0).format('yyyyMMddhhmmss');
-										const end = new Date(end_yy, end_mm, end_dd, end_hr, end_min, 0).format('yyyyMMddhhmmss');
+										const start = new Date(start_yy, start_mm, start_dd, start_hr, start_min, 0).format('yyyyMMddHHmmss');
+										const end = new Date(end_yy, end_mm, end_dd, end_hr, end_min, 0).format('yyyyMMddHHmmss');
 
-										selectLog(el.rid, page, start, end);
+										selectLog(el.rid, start, end);
 									});
 								});
 							}

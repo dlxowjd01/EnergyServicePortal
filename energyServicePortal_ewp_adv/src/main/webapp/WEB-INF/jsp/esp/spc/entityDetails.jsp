@@ -1163,11 +1163,13 @@
 			</div>
 		</div>
 
-		<div class="indiv" id="attachement_info">
-			<div class="tbl_top">
+		<div class="indiv panel panel-default attachment">
+			<div class="tbl_top panel-heading">
 				<h2 class="ntit mt25">첨부 파일</h2>
+				<a href="#attachementInfoToggle" data-toggle="collapse" class="collapse_arrow"></a>
 			</div>
-			<div class="spc_tbl_row">
+			<form id="attachement_info" name="attachement_info" class="mt-25">
+				<div id="attachementInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -1265,12 +1267,13 @@
 						<td><button class="btn_file down"></button></td>
 					</tr>
 				</table>
-			</div>
-			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" onclick="getExcelDown();">엑셀 다운로드</button>
-				<button type="button" class="btn_type03" onclick="setCheckedDataEdit();">수정</button>
-				<button type="button" class="btn_type03" onclick="goMoveList();">목록</button>
-			</div>
+				</div>
+			</form>
+		</div>
+		<div class="btn_wrap_type02">
+			<button type="button" class="btn_type03" onclick="getExcelDown();">엑셀 다운로드</button>
+			<button type="button" class="btn_type03" onclick="setCheckedDataEdit();">수정</button>
+			<button type="button" class="btn_type03" onclick="goMoveList();">목록</button>
 		</div>
 		<div id="excelList" style="display:none;">
 		</div>

@@ -273,39 +273,28 @@
 			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
 			let url = '';
 
-			option = {
-				url: 'http://iderms.enertalk.com:8443/spcs/bankbook?oid=' + oid,
-				dataType: 'json',
-				type: action,
-				contentType: "application/json",
-				traditional: true,
-				data: JSON.stringify(data)
-			};
-			console.log("setData---", option.data)
-			// if (action == 'patch') {
-			// 	option = {
-			// 		url: 'http://iderms.enertalk.com:8443/spcs/bankbook/' + jobId + '?oid=' + oid + jobText,
-			// 		dataType: 'json',
-			// 		type: action,
-			// 		contentType: "application/json",
-			// 		traditional: true,
-			// 		data: JSON.stringify(data)
-			// 	};
-			// 	// url = 'http://iderms.enertalk.com:8443/spcs/bankbook/' + jobId + '?oid=' + oid + jobText;
-			// 	delete data.spc_id;
-			// } else {
-			// 	option = {
-			// 		url: 'http://iderms.enertalk.com:8443/spcs/bankbook?oid=' + oid,
-			// 		dataType: 'json',
-			// 		type: action,
-			// 		contentType: "application/json",
-			// 		traditional: true,
-			// 		data: JSON.stringify(data)
-			// 	};
-			// 	// url = 'http://iderms.enertalk.com:8443/spcs/bankbook';
-			// 	// console.log("post url===", url)
-			// }
-			
+			if (action == 'patch') {
+				option = {
+					url: 'http://iderms.enertalk.com:8443/spcs/bankbook/' + jobId + '?oid=' + oid + jobText,
+					dataType: 'json',
+					type: action,
+					contentType: "application/json",
+					traditional: true,
+					data: JSON.stringify(data)
+				};
+				// url = 'http://iderms.enertalk.com:8443/spcs/bankbook/' + jobId + '?oid=' + oid + jobText;
+				delete data.spc_id;
+			} else {
+				option = {
+					url: 'http://iderms.enertalk.com:8443/spcs/bankbook?oid=' + oid,
+					dataType: 'json',
+					type: action,
+					contentType: "application/json",
+					traditional: true,
+					data: JSON.stringify(data)
+				};
+			}
+
 		} else if (action == 'get') {
 			option = {
 				url: 'http://iderms.enertalk.com:8443/spcs/bankbook',
@@ -413,37 +402,30 @@
 				let job_type = v.job_type;
 				let sid = v.spc_id;
 				let job_info = '';
-				// let job_info = JSON.parse(v.job_info);
 				let tableStr = '';
 				let modalStr = '';
 
-				try { 
-					JSON.parse(v.job_info);
-					job_info = JSON.parse(v.job_info);
-				} catch (objError) {
-					job_info = v.job_info
-					if (objError instanceof SyntaxError) {
-						console.error(objError.name);
+				Promise.resolve(JSON.parse(v.job_info)).then(function() {
+					return job_info = JSON.parse(v.job_info);
+				}).then(function() {
+					if (filterArr.indexOf(job_type)>-1){
+						tableStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '" class="disabled"><p class="bu t' + job_type + '">[' + job_info.spcName + ']' + job_Name(job_type) + '</p></a>';
 					} else {
-						console.error(objError.message);
+						tableStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '"><p class="bu t' + job_type + '">[' + job_info.spcName + ']' + job_Name(job_type) + '</p></a>';
 					}
-				}
-				console.log("job_info===", v);
-
-				if (filterArr.indexOf(job_type)>-1){
-					tableStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '" class="disabled"><p class="bu t' + job_type + '">[' + job_info.spcName + ']' + job_Name(job_type) + '</p></a>';
-				} else {
-					tableStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '"><p class="bu t' + job_type + '">[' + job_info.spcName + ']' + job_Name(job_type) + '</p></a>';
-				}
-				modalStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');"><span class="bu t' + job_type + '">[ ' + job_info.spcName + ' ] ' + job_Name(job_type) + '</span><span class="fr btn_next"></span></a>';
-				calendar.eq(Number(job_date) - 1).append(tableStr);
-				modalData.append(
-					'<li class="single_item" data-id="'+v.id+'">'
-						+ modalStr
-						+ '<br>'
-						+ ''
-					+'</li>'
-				)
+					modalStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');"><span class="bu t' + job_type + '">[ ' + job_info.spcName + ' ] ' + job_Name(job_type) + '</span><span class="fr btn_next"></span></a>';
+					calendar.eq(Number(job_date) - 1).append(tableStr);
+					modalData.append(
+						'<li class="single_item" data-id="'+v.id+'">'
+							+ modalStr
+							+ '<br>'
+							+ ''
+						+'</li>'
+					)
+				}).catch(function(e) {
+						//jQuery doesn't throw real errors so use catch-all
+						console.log(e);
+				});
 			});
 			// TO DO!!!!!!!!!  show more btn
 			// calendar.find("p.bu").each(function () {
@@ -518,55 +500,47 @@
 			addScheduleBtn.attr('onclick', 'maintenance(\'post\');').text('등록');
 
 		} else {
-			// const filterArr = ["1", "2", "3"];
+			title.text('주요 일정 알림 수정');
+			setJsonAutoMapping(data[0], 'spcAlarmModal');
+			setJsonAutoMapping(JSON.parse(data[0].job_info), 'spcAlarmModal');
 
-			// if (filterArr.indexOf(data[0].job_type)<0){
-				title.text('주요 일정 알림 수정');
-				setJsonAutoMapping(data[0], 'spcAlarmModal');
-				setJsonAutoMapping(JSON.parse(data[0].job_info), 'spcAlarmModal');
+			let jobDate = new Date(data[0].job_date);
+			$('#job_date').datepicker('setDate', jobDate);
 
-				let jobDate = new Date(data[0].job_date);
-				$('#job_date').datepicker('setDate', jobDate);
+			let repeatEnd = new Date(data[0].repeat_end);
+			$('#repeat_end').val(repeatEnd.format('yyyy-MM-dd'));
 
-				let repeatEnd = new Date(data[0].repeat_end);
-				$('#repeat_end').val(repeatEnd.format('yyyy-MM-dd'));
+			if ($('#repeat_yn button').data('value') == 'N') {
+				$('#repeat_end').val('').datepicker('destroy').removeClass('sel');
+				$('#repeat_end').parent().removeClass('sel_calendar').addClass('tx_inp_type');
 
-				if ($('#repeat_yn button').data('value') == 'N') {
-					$('#repeat_end').val('').datepicker('destroy').removeClass('sel');
-					$('#repeat_end').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+				$('#repeat_yn').parents('.flex_start3').removeClass('short');
+				$('#repeat_yn').siblings().addClass('hidden');
 
-					$('#repeat_yn').parents('.flex_start3').removeClass('short');
-					$('#repeat_yn').siblings().addClass('hidden');
+				$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+			} else {
+				$('#repeat_yn').parents('.flex_start3').addClass('short');
+				$('#repeat_yn').siblings().removeClass('hidden');
 
-					$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
-				} else {
-					$('#repeat_yn').parents('.flex_start3').addClass('short');
-					$('#repeat_yn').siblings().removeClass('hidden');
-
-					$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
-					$('#repeat_end').datepicker({
-						showOn: 'both',
-						buttonImageOnly: true,
-						dateFormat: 'yy-mm-dd',
-						beforeShow: function () {
-							let fromDate = $(this).closest('.dateField').find('.fromDate').datepicker('getDate');
-							if (fromDate != '') {
-								$(this).datepicker('option', 'minDate', fromDate.format('yyyy-MM-dd'));
-							}
-						},
-						onClose: function (selected) {
-							$(this).closest('.dateField').find('.fromDate').datepicker('option', 'maxDate', selected);
+				$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
+				$('#repeat_end').datepicker({
+					showOn: 'both',
+					buttonImageOnly: true,
+					dateFormat: 'yy-mm-dd',
+					beforeShow: function () {
+						let fromDate = $(this).closest('.dateField').find('.fromDate').datepicker('getDate');
+						if (fromDate != '') {
+							$(this).datepicker('option', 'minDate', fromDate.format('yyyy-MM-dd'));
 						}
-					});
-				}
+					},
+					onClose: function (selected) {
+						$(this).closest('.dateField').find('.fromDate').datepicker('option', 'maxDate', selected);
+					}
+				});
+			}
 
-				deleteScheduleBtn.removeClass('hidden').attr('onclick', 'maintenance(\'delete\', \'' + data[0].id + '\' );');
-				addScheduleBtn.attr('onclick', 'maintenance(\'patch\', \'' + data[0].id + '\' );').text('수정');
-
-			// } else {
-			// 	return false;
-			// }
-
+			deleteScheduleBtn.removeClass('hidden').attr('onclick', 'maintenance(\'delete\', \'' + data[0].id + '\' );');
+			addScheduleBtn.attr('onclick', 'maintenance(\'patch\', \'' + data[0].id + '\' );').text('수정');
 		}
 		modal.modal();
 

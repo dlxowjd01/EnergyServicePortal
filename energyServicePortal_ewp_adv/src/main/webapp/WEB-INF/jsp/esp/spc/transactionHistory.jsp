@@ -4,18 +4,19 @@
 <script>
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
+	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
 
 	$(function() {
 		const tableList = $('#tableBody');
-		const tableBody = tableList.find("template.table_body").clone();
-		const tableFooter = tableList.find("template.table_footer").clone();
+		const tableBody = tableList.find("template.table_body").clone().html();
+		const tableFooter = tableList.find("template.table_footer").clone().html();
 		const searchBar = $('.spc_search_bar');
-		const checkList = $('.dropdown-menu.chk_type').find('li');
+		const searchForm = $('#spcTransactionSearch');
+		const dropdownOpt = $('#searchOption').find('.dropdown-menu:not(.chk_type) li');
 		tableList.find("template").remove();
 
 		let action = 'get';
 		let syncOpt = true;
-
 		let options = [
 			{
 				url: "http://iderms.enertalk.com:8443/spcs?oid="+oid,
@@ -32,27 +33,48 @@
 		unCheckAll(searchBar);
 		getSpcList(options);
 
-		$('#spcTransactionSearch').on('submit', function(e){
+		dropdownOpt.each(function(index, element) {
+			$(this).on("click", function() {
+				let val = $(this).data('value');
+				$(this).parent().prev(".dropdown-toggle").attr('value', val);
+			});
+		});
+
+		searchForm.on('submit', function(e){
 			e.preventDefault();
-			console.log("e===", e)
-			let period = $('#term').prev().text();
-			let detailperiod = $('#detailterm').prev().text().trim();
-			if (detailperiod == '선택' || detailperiod == '' || detailperiod == "undefined") {
-				alert('시간단위를 선택해주세요.');
-				return false;
-			} else {
-				periodData();
-				fetchCharts();
+
+			let spcOpts = $('#spcList').find("input:checked");
+			let fromDate = $('#fromDate');
+			let toDate = $('#toDate');
+			let spcStatus = $('#spcStatus').parent().find("input:checked");
+			let unitOpt = $('#unitOpt').parent().find('.dropdown-toggle');
+			let transactionType = $('#transactionType').parent().find('.dropdown-toggle');
+			let purpose = $('#purpose').find("input:checked");
+			let warning = $('.warning');
+			let formArr = [];
+
+			warning.addClass('hidden');
+			formArr.push(spcOpts, fromDate, toDate, spcStatus, unitOpt, transactionType, purpose);
+
+			$.each(formArr, function(index, value){
+				if(value.val() ==  undefined ||  value.val() == "선택" || value.val() == "" ) {
+					warning.eq(index).removeClass('hidden');
+				} else {
+					warning.eq(index).addClass('hidden');
+				}
+			});
+			if(searchForm.find('.warning.hidden').length == formArr.length){
+				getDataList(1); 
 			}
 			// getDataList(1); 
 		});
 
-		checkList.each(function(){
-			$(this).on('click', function() {
-				let input = $(this).children('input[type="checkbox"]');
-				$(this).children('label').toggleClass('active');
-			});
-		});
+		// checkList.each(function(){
+		// 	$(this).on('click', function() {
+		// 		let input = $(this).children('input[type="checkbox"]');
+		// 		$(this).children('label').toggleClass('active');
+		// 	});
+		// });
 
 		// function nvl(value, str) {
 		// 	if (isEmpty(value)) {
@@ -69,21 +91,27 @@
 		// 	getJsonCsvDownload($('#listData').data('gridJsonData'), column, header, 'spc_spower.csv'); // json list, 컬럼, 헤더명, 파일명
 		// }
 
-
 		function getSpcList(options) {
+			const spcList = $('#spcList');
+			const cloned = spcList.clone().html();
+
 			$.ajax(options[0]).done(function (json, textStatus, jqXHR) {
-				json.data.unshift({"spc_id": "", "name": "전체"});
+				spcList.empty();
+				json.data.unshift({"spc_id": "전체", "name": "전체"});
 				json.data.forEach((item, index) => {
+					// console.log("cloned===", cloned)
+					let listItem = '';
 					if(item.name == ""){
-						item.name = "spc"+ index;
+						listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, "spc_no_name"+ index);
+					} else {
+						listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, item.name);
 					}
+					spcList.append($(listItem));
 				});
 
-				// setMakeList(json.data, "spcList", {"dataFunction": {}});
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				alert('처리 중 오류가 발생했습니다.');
 				return false;
-				
 			});
 		}
 
@@ -96,7 +124,7 @@
 				type: 'get',
 				async: false,
 				success: function(json) {
-
+					console.log("bankbook===", json)
 
 				},
 				error: function(request, status, error) {
@@ -108,6 +136,7 @@
 		function getNumberIndex(index) {
 			return index + 1;
 		}
+
 	});
 </script>
 
@@ -125,57 +154,59 @@
 
 <div class='row spc_search_bar'>
 	<div class='col-12'><!--
-	--><span class='tx_tit'>SPC 선택</span><!--
-	--><div class='sa_select'>
-			<div class='dropdown'>
-				<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown'>전체<span class='caret'></span></button>
-				<ul id='spcList' class='dropdown-menu chk_type' role='menu'>
-					<li><!--
-					--><a href="javascript:void(0);" tabindex="-1"><!--
-						--><input type="checkbox" id="spc_[index]" value="[spc_id]" name="[spc_id]"><!--
-						--><label for="spc_[index]">[name]</label><!--
-					--></a><!--
-				--></li><!--
-			 --></ul>
+	--><form id='spcTransactionSearch'><!--
+		--><span class='tx_tit'>SPC 선택</span><!--
+		--><div class='sa_select'>
+				<div class='dropdown'>
+					<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택해 주세요" value="">선택<span class='caret'></span></button>
+					<ul id='spcList' class='dropdown-menu chk_type' role='menu'>
+						<li><!--
+						--><a href="javascript:void(0);" tabindex="-1"><!--
+							--><input type="checkbox" id="*spcName*" value="*spcId*" name="*spcName*"><!--
+							--><label for="*spcName*">*spcName*</label><!--
+						--></a><!--
+					--></li><!--
+				--></ul>
+					<small class="hidden warning">선택해 주세요.</small>
+				</div>
 			</div>
-		</div>
-		<div class='dropdown'>
-			<button type='button' id='collapseBtn' class='btn btn-primary dropdown-toggle no_bg ml-24' data-toggle='collapse' data-target='#searchOption'>상세 검색<span class='caret'></span></button>
-			<form id='spcTransactionSearch' action='#' method='post'>
+			<div class='dropdown'>
+				<button type='button' id='collapseBtn' class='btn btn-primary dropdown-toggle no_bg ml-24' data-toggle='collapse' data-target='#searchOption'>상세 조건<span class='caret'></span></button>
 				<ul id='searchOption' class='collapse dropdown-menu unused'>
 					<li>
 						<div class='bx_row aN2'>
 							<h2 class='comp_tit'>조회 기간</h2>
 							<div class='bx_align dropdown'>
 								<input type='text' id='fromDate' name='fromDate' class='sel fromDate' value='' autocomplete='off' placeholder='시작'>
+								<small class="hidden warning">선택해 주세요.</small>
 							</div>
 							<div class='bx_align dropdown'>
 								<input type='text' id='toDate' name='toDate' class='sel toDate' value='' autocomplete='off' placeholder='종료'>
+								<small class="hidden warning">선택해 주세요.</small>
 							</div>
 						</div>
 					</li>
-					
 					<li>
 						<div class='bx_row aN2'>
 							<h2 class='comp_tit'>상태</h2>
 							<div class='bx_align dropdown'>
-								<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown'>선택<span class='caret'></span></button>
-								<ul class='dropdown-menu chk_type dropdown_offset' role='menu'>
+								<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택" value="">선택<span class='caret'></span></button>
+								<ul id="spcStatus" class='dropdown-menu chk_type dropdown_offset' role='menu'>
 									<li data-value='allSelect'>
 										<a href='javascript:void(0)' tabindex='-1'>
-											<input type='checkbox' id='allSelect' value='allSelect' name='approvalStatus'>
+											<input type='checkbox' id='allSelect' value='전체' name=''>
 											<label for='allSelect'>전체</label>
 										</a>
 									</li>
 									<li data-value='approved'>
 										<a href='javascript:void(0)' tabindex='-1'>
-											<input type='checkbox' id='approved' value='approved' name='approvalStatus'>
+											<input type='checkbox' id='approved' value='approved' name=''>
 											<label for='approved'>승인 완료</label>
 										</a>
 									</li>
 									<li data-value='onHold'>
 										<a href='javascript:void(0)' tabindex='-1'>
-											<input type='checkbox' id='onHold' value='onHold' name='approvalStatus'>
+											<input type='checkbox' id='onHold' value='onHold' name=''>
 											<label for='onHold'>승인 대기</label>
 										</a>
 									</li>
@@ -186,6 +217,7 @@
 										</a>
 									</li>
 								</ul>
+								<small class="hidden warning">선택해 주세요.</small>
 							</div>
 						</div>
 					</li>
@@ -193,50 +225,32 @@
 						<div class='bx_row aN3'>
 							<div class='bx_align dropdown'>
 								<h2 class='comp_tit'>단위</h2>
-								<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown'>단위<span class='caret'></span></button>
-								<ul class='dropdown-menu chk_type dropdown_offset' role='menu'>
-									<li data-value='searchAllTime'>
-										<a href='javascript:void(0)' tabindex='-1'>
-											<input type='checkbox' id='searchAllTime' value='searchAllTime' name='timeUnit'>
-											<label for='searchAllTime'>전체</label>
-										</a>
-									</li>
-									<li data-value='searchYearly'>
-										<a href='javascript:void(0)' tabindex='-1'>
-											<input type='checkbox' id='searchYearly' value='year' name='timeUnit'>
-											<label for='searchYearly'>년</label>
-										</a>
-									</li>
-									<li data-value='searchMonthly'>
-										<a href='javascript:void(0)' tabindex='-1'>
-											<input type='checkbox' id='searchMonthly' value='month' name='timeUnit'>
-											<label for='searchMonthly'>월</label>
-										</a>
-									</li>
-									<li data-value='searchDaily'>
-										<a href='javascript:void(0)' tabindex='-1'>
-											<input type='checkbox' id='searchDaily' value='date' name='timeUnit'>
-											<label for='searchDaily'>일</label>
-										</a>
-									</li>
+								<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택" value="선택">선택<span class='caret'></span></button>
+								<ul id="unitOpt" class='dropdown-menu dropdown_offset' role='menu'>
+									<li data-value="yearly"><a href='javascript:void(0)' tabindex='-1'>년</a></li>
+									<li data-value="monthly"><a href='javascript:void(0)' tabindex='-1'>월</a></li>
+									<li data-value="daily"><a href='javascript:void(0)' tabindex='-1'>일</a></li>
 								</ul>
+								<small class="hidden warning">선택해 주세요.</small>
 							</div>
+
 							<div class='bx_align dropdown'>
 								<h2 class='comp_tit'>입출금 구분</h2>
-								<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown'>선택<span class='caret'></span></button>
-								<ul class='dropdown-menu dropdown_offset' role='menu'>
+								<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' value="">선택<span class='caret'></span></button>
+								<ul id="transactionType" class='dropdown-menu dropdown_offset' role='menu'>
 									<li data-value='deposit'><a href='javascript:void(0)' tabindex='-1'>입금</a></li>
 									<li data-value='withdraw'><a href='javascript:void(0)' tabindex='-1'>출금</a></li>
 								</ul>
+								<small class="hidden warning">선택해 주세요.</small>
 							</div>
 							<div class='bx_align'>
 								<h2 class='comp_tit'>용도 구분</h2>
 								<div class='dropdown'>
-									<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown'>선택<span class='caret'></span></button>
-									<ul class='dropdown-menu chk_type dropdown_offset' role='menu'>
+									<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택">선택<span class='caret'></span></button>
+									<ul id="purpose" class='dropdown-menu chk_type dropdown_offset' role='menu'>
 										<li data-value='allPurpose'>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='allPurpose' value='allPurpose' name='purpose'>
+												<input type='checkbox' id='allPurpose' value='전체' name='purpose'>
 												<label for='allPurpose'>전체</label>
 											</a>
 										</li>
@@ -283,6 +297,7 @@
 											</a>
 										</li>
 									</ul>
+									<small class="hidden warning">선택해 주세요.</small>
 								</div>
 							</div>
 						</div>
@@ -292,8 +307,8 @@
 						<button type='submit' class='btn_type ml-6' id='renderBtn'>검색</button>
 					</li>
 				</ul>
-			</form>
-		</div>
+			</div>
+		</form>
 	</div>
 </div>
 
@@ -342,50 +357,6 @@
 								<td class='left'><span>*status*</span><span class='*status*'><a href='/spc/withdrawReqEdit.do' class='icon_edit'></a><a href='#' class='icon_delete'></a></span></td>
 							</tr>
 						</template>
-						<!-- <tr>
-							<td>2020-04-08</td>
-							<td>출금</td>
-							<td>원리금</td>
-							<td>계좌 구분</td>
-							<td>250,000,000 </td>
-							<td>2020-05-08 16:43</td>
-							<td>TRUST/홍길동</td>
-							<td>신한BNPP/이신한</td>
-							<td class='left'>승인 완료</td>
-						</tr>
-						<tr>
-							<td>2020-04-08</td>
-							<td>출금</td>
-							<td>원리금</td>
-							<td>계좌 구분</td>
-							<td>500,000,000 </td>
-							<td>2020-05-08 16:43</td>
-							<td>TRUST/홍길동</td>
-							<td>신한BNPP/이신한</td>
-							<td class='left'>승인 완료</td>
-						</tr>
-						<tr>
-							<td>2020-04-08</td>
-							<td>출금</td>
-							<td>원리금</td>
-							<td>계좌 구분</td>
-							<td>200,000,000 </td>
-							<td>2020-05-08 16:43</td>
-							<td>TRUST/홍길동</td>
-							<td>신한BNPP/이신한</td>
-							<td class='left'><div class='fl'>승인 대기</div><div class='fr'><a href='/spc/withdrawReqEdit.do' class='icon_edit'></a><a href='#' class='icon_delete'></a></div></td>
-						</tr>
-						<tr>
-							<td>2020-04-08</td>
-							<td>출금</td>
-							<td>원리금</td>
-							<td>계좌 구분</td>
-							<td>150,000,000 </td>
-							<td>2020-05-08 16:43</td>
-							<td>TRUST/김길중</td>
-							<td>신한BNPP/이신한</td>
-							<td class='left'><div class='fl'>승인 대기</div><div class='fr'><a href='/spc/withdrawReqEdit.do' class='icon_edit'></a><a href='#' class='icon_delete'></a></div></td>
-						</tr> -->
 					</tbody>
 					<tfoot>
 						<tr>

@@ -1378,7 +1378,13 @@ const addRow = function (listId, type, nextIdx) {
 
 	if (type == 'next') {
 		if(sTagName  == 'TR') {
-			$selecter.eq($selecter.length -1).after('<tr class="' + classes + '">' + rowHtml + '</tr>');
+			var $tr = $('<tr>');
+			$tr.append(rowHtml);
+
+			if ($selecter.hasClass('entity')) {
+				$tr.find('.btn_add').remove();
+			}
+			$selecter.eq($selecter.length - 1).after($tr);
 		} else {
 			$selecter.eq($selecter.length -1).after('<div class="' + classes + '">' + rowHtml + '</div>');
 		}
@@ -1438,7 +1444,10 @@ $(function() {
 		let tableBodyTemp = $.data(document, tableBodyId);
 		tableBodyTemp = tableBodyTemp.replace(/<(\/a|a)([^>]*)>/gi,'');
 		tableBodyTemp = tableBodyTemp.replace(/ name="aTagTd01"| name="aTagTd02"| class="right"| %/gi,'');
-		let tableColumnArray = (tableBodyTemp.match(/(?<=<td>\[)(.*?)(?=]<\/td>)/g) || []);
+		let tableColumnArray = (tableBodyTemp.match(/(?:\[)(.*?)(?=]<\/td>)/g) || []);
+		tableColumnArray.forEach(function(el, index) {
+			tableColumnArray[index] = el.replace('[', '');
+		});
 		if($('.sort_table').data('nowjsp') == 'balance'){
 			tableColumnArray.splice(3, 0, '-');
 		}else if(($('.sort_table').data('nowjsp') == 'supplementary')){
