@@ -9,7 +9,7 @@
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 
 	$(function () {
-		unCheckAll();
+		// unCheckAll();
 		pageInit();
 		
 		$('#addAlarmBtn').on('click', function () {

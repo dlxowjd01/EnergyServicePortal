@@ -307,7 +307,7 @@
 	<div class="col-xl-8 col-lg-9 col-md-6 col-sm-12">
 		<div class="indiv alarm_stat_wrapper">
 			<div class="alarm_header">
-				<h2 class="s_tit">알람 현황</h2>
+				<h2 class="ntit fl">알람 현황</h2>
 				<div class="his_inp_bx">
 					<div class="rdo_type his_rdo_bx" id="chartType">
 						<span>

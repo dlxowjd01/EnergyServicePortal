@@ -39,7 +39,7 @@ $(function() {
     });
 
     $('.fromDate').datepicker({
-        showOn: "both",
+        showOn: 'both',
         buttonImageOnly: true,
         dateFormat: 'yy-mm-dd',
         onClose: function(selectedDate) {
@@ -52,7 +52,7 @@ $(function() {
     });
 
     $('.toDate').datepicker({
-        showOn: "both",
+        showOn: 'both',
         buttonImageOnly: true,
         dateFormat: 'yy-mm-dd',
         onClose: function(selectedDate) {
@@ -224,7 +224,7 @@ $(function(){
 
 /* input[file] multi-select || single select label */
 $(function() {
-    $('input[type=file]').change(function(){
+    $(document).on('change', 'input[type=file]', function(){
         var t = $(this).val();
 		var labelText = 'File : ' + t.substr(12, t.length);
 
@@ -238,11 +238,11 @@ $(function() {
 			}
 
 			for (var i = 0; i < $(this).get(0).files.length; ++i) {
-				listItem = `<li class="upload_text">${$(this).get(0).files[i].name}<button type='button' class='btn_close icon_btn' onclick='$(this).parent().remove()'></button><li>`
+				listItem = `<li class="upload_text">${$(this).get(0).files[i].name}<li>`
 				list.append(listItem);
 				arr.push($(this).get(0).files[i].name);
 			}
-			$(this).attr("name", arr); 
+			//$(this).attr("name", arr);
 		} else {
 			$(this).prev('label').text(labelText);
 			$(this).parent().find(".upload_text").text(labelText);

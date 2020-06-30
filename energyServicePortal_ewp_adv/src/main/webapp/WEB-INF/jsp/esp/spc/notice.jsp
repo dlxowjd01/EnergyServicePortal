@@ -283,7 +283,7 @@
 					<thead>
 						<tr>
 							<th>SPC명</th>
-							<th>제목</th>
+							<th class="left">제목</th>
 							<th>첨부 파일</th>
 							<th>작성자 </th>
 							<th class="left">작성일</th>

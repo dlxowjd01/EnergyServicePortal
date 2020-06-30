@@ -214,18 +214,27 @@ nav .lang.login_lang {
 }
 
 .lf_body .lfinp {
+	background-color: transparent;
+}
+
+.lf_body .lfinp {
 	border: 0;
-	border-bottom: solid 1px #333;
+    outline: 0;
+    border-bottom: 1px solid var(--color2);
 	width: 100%;
 	height: 50px;
 	line-height: 50px;
 	background-color: var(--box-color);
+	color: var(--color6);
 }
 
-.lf_body input:focus {
-	border: 0;
-	border-bottom: solid 1px #333;
-	outline-style: none;
+.lf_body :-webkit-autofill,
+.lf_body :-webkit-autofill:hover, 
+.lf_body :-webkit-autofill:focus, 
+.lf_body :-webkit-autofill:active {
+	-webkit-box-shadow: 0 0 0 1000px var(--box-color) inset !important;
+	-webkit-text-fill-color: var(--color6) !important;
+	transition: background-color 5000s ease-in-out 0s;
 }
 
 .lf_body .arrbtn {
@@ -233,7 +242,7 @@ nav .lang.login_lang {
 	padding-right: 30px;
 	background: var(--login-arr) no-repeat right center;
 	font-size: 14px;
-	color: #777;
+	color: var(--color2)
 }
 
 .lf_bottom {

@@ -1152,8 +1152,16 @@ function setAreaParamData(areaId, type) {
 
 	$area.find(":checkbox").each(function(){
 		var obj = this;
-		if(obj.checked == true){
-			param[obj.getAttribute("id")] = obj.value;
+		if(obj.checked == true) {
+			if (param[obj.getAttribute("name")] == undefined) {
+				param[obj.getAttribute("name")] = obj.value;
+			} else {
+				var valArray = new Array();
+				valArray.push(param[obj.getAttribute("name")]);
+				valArray.push(obj.value);
+
+				param[obj.getAttribute("name")] = valArray;
+			}
 		}
 	});
 
@@ -1299,10 +1307,18 @@ function genUuid() {
  *
  * @param listId
  */
-const initRow = function (listId) {
-	let listRowTag = document.getElementById(listId).innerHTML.replace(/\t/g, '');
-	$.data(document, listId, listRowTag);
-	$('#' + listId).removeData().html('');
+const initRow = function (listId, type) {
+	let listRowTag = '';
+	if (type == 'class') {
+		listRowTag = document.querySelector('.' + listId).innerHTML.replace(/\t/g, '');
+		$.data(document, listId, listRowTag);
+		$('.' + listId).removeData().html('');
+	} else {
+		listRowTag = document.getElementById(listId).innerHTML.replace(/\t/g, '');
+		$.data(document, listId, listRowTag);
+		$('#' + listId).removeData().html('');
+	}
+
 }
 
 /**
@@ -1310,22 +1326,79 @@ const initRow = function (listId) {
  *
  * @param listId
  */
-const addRow = function (listId) {
+const addRow = function (listId, type, nextIdx) {
 	let rowHtml = $.data(document, listId),
 		$selecter = $('#' + listId),
-		sTagName = $selecter.prop("tagName"),
+		sTagName = $selecter.prop('tagName'),
+		classes = '';
 		listLength = 0,
-		col_left = "[",
-		col_right = "]";
+		col_left = '[',
+		col_right = ']';
+
+	if(type == 'next' || type == 'class') {
+		$selecter = $('.' + listId),
+		sTagName = $selecter.prop('tagName'),
+		classes = $selecter.prop('class');
+	}
 
 	if ('TABLE' == sTagName) {
 		listLength = $selecter.find('tbody').children().length;
 	} else {
-		listLength = $selecter.children().length;
+		if (type == 'next') {
+			listLength = $selecter.length;
+		} else {
+			if (listId == 'insuranceInfoToggle' && type != 'first') {
+				listLength = 0;
+				let section = $selecter.find('section');
+				if (section.length <= 0) {
+					listLength = 1;
+				} else {
+					section.forEach(function(el) {
+						let index = Number(el.attr('id').replace(/[^0-9]/, '')) + 1;
+						if (index > listLength) {
+							listLength = index;
+						}
+					});
+				}
+			} else {
+				listLength = $selecter.children().length;
+			}
+		}
 	}
 
-	rowHtml = rowHtml.split(col_left + 'index' + col_right).join(listLength);
-	$selecter.append(rowHtml);
+	if (isEmpty(nextIdx)) {
+		rowHtml = rowHtml.split(col_left + 'index' + col_right).join(listLength);
+	} else {
+		rowHtml = rowHtml.split(col_left + 'index' + col_right).join(nextIdx);
+	}
+
+	if ($selecter.hasClass('entity') && listLength > 0) {
+		rowHtml = rowHtml.replace(/\bbtn_close hidden\b/g, 'btn_close');
+	}
+
+	if (type == 'next') {
+		if(sTagName  == 'TR') {
+			$selecter.eq($selecter.length -1).after('<tr class="' + classes + '">' + rowHtml + '</tr>');
+		} else {
+			$selecter.eq($selecter.length -1).after('<div class="' + classes + '">' + rowHtml + '</div>');
+		}
+	} else {
+		if (listId == 'insuranceInfoToggle' && listLength >= 1) {
+			var section = '<section id="insuranceSection' + listLength + '">';
+			section += '<div class="tbl_top flex_wrapper mt-offset-10"><h2 class="ntit">보험 정보</h2><button class="btn_close" onclick="$(this).parents().closest(\'section\').remove()"></button></div>';
+			section += '<div class="spc_tbl_row st_edit">';
+			section += rowHtml;
+			section += '</div>';
+			section += '</section>';
+			$selecter.after(section);
+		} else {
+			$selecter.append(rowHtml);
+		}
+	}
+
+	if (typeof addDatePicker == 'function') {
+		addDatePicker();
+	}
 }
 
 /**
@@ -1376,7 +1449,7 @@ $(function() {
 			tableColumnArray = tableColumnArray.slice(1,5);
 			tableColumnArray.splice(2, 0, 'report_name');
 		}
-		
+
 		for (var i = 0; i < tables.length; ++i) {
 			var headers = tables[i].querySelectorAll('th button');
 			for (var j = 0; j < headers.length; ++j) {
@@ -1404,7 +1477,7 @@ $(function() {
 								headers[k].classList.remove('down');
 							}
 						}
-						
+
 						if(typeof getDataList == 'function') {
 							getDataList(Number($('#paging > a > strong').text()), tableColumnArray[n], sort);
 						} else{
@@ -1481,7 +1554,7 @@ function jsonListSort(n, sort, jsonList){
 	}else{
 		n= isEmpty(n) ? '관리_운영_기간' : n;
 	}
-	
+
 	jsonList.sort(function(a, b) {
 		var cell1 = a[n];
 		var cell2 = b[n];
