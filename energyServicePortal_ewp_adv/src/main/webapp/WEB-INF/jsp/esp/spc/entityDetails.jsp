@@ -823,6 +823,27 @@
 								<span id="실_지급일_3차"></span>
 							</div>
 						</td>
+						<th class="align_top">
+							<div class="fixed_height"></div>
+							<div class="fixed_height"></div>
+							<div class="fixed_height"></div>
+							<div class="fixed_height"></div>
+							<div class="fixed_height"></div>
+							<div class="fixed_height flex_wrap_center">임대료 지급일</div>
+							<div class="fixed_height"></div>
+							<div class="fixed_height"></div>
+						</th>
+						<td class="align_top">
+							<div class="fixed_height"></div>
+							<div class="fixed_height"></div>
+							<div class="fixed_height"></div>
+							<div class="fixed_height"></div>
+							<div class="fixed_height"></div>
+							<div class="sel_calendar group_type edit addList_rental_deduction entity">
+								<span id="임대료_지급일[index]"></span>
+							</div>
+							<div class="fixed_height"></div>
+						</td>
 					</tr>
 				</table>
 			</div>
@@ -882,6 +903,44 @@
 						<th>만기일</th>
 						<td class="flex_start">
 							<span id="보험_만기일[index]"></span>
+							<span class="fixed_height">XX일 남음</span>
+						</td>
+					</tr>
+					<tr>
+						<th>보험사</th>
+						<td id="보험사"></td>
+						<th>보험 중개사</th>
+						<td id="보험_중개사"></td>
+					</tr>
+					<tr>
+						<th>보험 기간</th>
+						<td class="group_type">
+							<span id="보험_기간_from"></span> ~ <span id="보험_기간_to"></span>
+						</td>
+						<th><label for="보험료">보험료</label></th>
+						<td id="보험료"></td>
+					</tr>
+					<tr>
+						<th>자가부담금</th>
+						<td id="자가부담금"></td>
+						<th>보험가액</th>
+						<td id="보험가액"></td>
+					</tr>
+					<tr>
+						<th>시작일</th>
+						<td id="보험_시작일"></td>
+						<th>종료일</th>
+						<td class="flex_start">
+							<span id="보험_종료일"></span>
+							<span class="fixed_height">XX일 남음</span>
+						</td>
+					</tr>
+					<tr>
+						<th></th>
+						<td></td>
+						<th>만기일</th>
+						<td class="flex_start">
+							<span id="보험_만기일"></span>
 							<span class="fixed_height">XX일 남음</span>
 						</td>
 					</tr>
