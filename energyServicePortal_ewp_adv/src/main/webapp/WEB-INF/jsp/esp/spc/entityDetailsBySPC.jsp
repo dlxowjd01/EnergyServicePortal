@@ -12,7 +12,9 @@
 		let supInfoLength = "";
 
 		$(function () {
-
+			initRow("addList");
+			addRow('addList');
+			
 			//SPC명 가져오기
 			$.ajax({
 				url: "http://iderms.enertalk.com:8443/spcs/" + spc_id,
@@ -50,62 +52,17 @@
 			});
 
 			// 이관자료 가져오기
-			$.ajax({
-				url: "http://iderms.enertalk.com:8443/spcs/" + spc_id + "/gens/" + gen_id + "/supplement?oid=" + oid,
-				type: "get",
-				dataType: 'json',
-				async: false,
-				contentType: "application/json",
-				success: function (json) {
-
-					$('button.btn_type07').hide(); // 삭제버튼 비활성 초기화
-					$('button.down').hide(); // 다운로드 버튼 비활성 초기화
-
-					supInfoLength = json.data.length;
-
-					// 이관자료가 기존에 존재하면 테이블에 매칭
-					if (supInfoLength > 0) {
-						var linkDownUrl = 'http://iderms.enertalk.com:8443/files/download/';
-						var supplementList = json.data[0].supplement_info
-						supplementInfo = JSON.parse(supplementList)
-
-						var keys = Object.keys(supplementInfo);
-						for (var i in keys) {
-							if (keys[i] != 'null') {
-								var subStrOriginalName = keys[i].substring(0, keys[i].indexOf("_originalName"));
-								var subStrFiledName = keys[i].substring(0, keys[i].indexOf("_filedName"));
-								var subStrRegDt = keys[i].substring(0, keys[i].indexOf("_regDt"));
-
-								$('#' + keys[i]).val(supplementInfo[keys[i]]);
-
-								if (subStrOriginalName != '') {
-									var originalData = "";
-									$('#' + subStrOriginalName).next().val(supplementInfo[keys[i]]);
-									originalData += supplementInfo[keys[i]];
-								} else if (subStrFiledName != '') {
-									if (originalData.length != 0) {
-										linkDownUrl += supplementInfo[keys[i]] + '?oid=' + oid + '&orgFilename=' + originalData;
-										$('#' + subStrFiledName).parents('tr').find('.down').attr('onclick', 'location.href=\"' + linkDownUrl + '\"');
-										linkDownUrl = "http://iderms.enertalk.com:8443/files/download/";
-
-										$('#' + subStrFiledName).parents('tr').find('.btn_type07').show(); //삭제버튼 활성화
-										$('#' + subStrFiledName).parents('tr').find('.down').show(); //다운로드 버튼 활성화
-									}
-								} else if (subStrRegDt != '') {
-									$('#' + subStrRegDt + '_regDt').after(supplementInfo[keys[i]]); //다운로드 버튼 활성화
-								}
-							}
-						}
-					}
-				},
-				error: function (request, status, error) {
-					alert('처리 중 오류가 발생했습니다.');
-					return false;
-				}
-			});
-
+			supInfoLength = getGridList(supInfoLength);	
 			// 파일 추가
-			$('input[type="file"]').on('change', function () {
+			$(document).on('change', 'input[type="file"]', function(e) {
+				e.preventDefault();
+				if(($(this).attr('name')).match('custom')){
+					if(isEmpty($(this).prev().val())){
+						alert('추가 항목명을 입력하고 파일을 추가해야 합니다.');
+						supInfoLength = getGridList(supInfoLength);
+						return false;
+					}
+				}
 				let uuid = genUuid();
 				let thisId = $(this).prop('id');
 
@@ -125,10 +82,14 @@
 			});
 
 
-
+			$(document).on('click', 'button[name="rowDelete"]', function(){
+				var result = confirm("삭제하시겠습니까?");
+				$(this).parents('tr').remove();
+				
+				sendSupplementPatch();
+			});
 			// 삭제버튼 클릭
-			$('button.btn_type07').on('click', function () {
-
+			$(document).on('click', 'button.btn_img', function(){
 				var result = confirm("삭제하시겠습니까?");
 				if (result) {
 					let tr = $(this).parents('tr');
@@ -145,8 +106,76 @@
 
 		});
 
+		const getGridList = function(supInfoLength){
+			$.ajax({
+				url: "http://iderms.enertalk.com:8443/spcs/" + spc_id + "/gens/" + gen_id + "/supplement?oid=" + oid,
+				type: "get",
+				dataType: 'json',
+				async: false,
+				contentType: "application/json",
+				success: function (json) {
+					$('button.btn_type07').hide(); // 삭제버튼 비활성 초기화
+					$('button.down').hide(); // 다운로드 버튼 비활성 초기화
+					supInfoLength = json.data.length;
+					// 이관자료가 기존에 존재하면 테이블에 매칭
+					if (supInfoLength > 0) {
+						var linkDownUrl = 'http://iderms.enertalk.com:8443/files/download/';
+						var supplementList = json.data[0].supplement_info
+						supplementInfo = JSON.parse(supplementList)
+						var keys = Object.keys(supplementInfo);
+						for (var i in keys) {
+							if (keys[i] != 'null') {
+								var subStrOriginalName = keys[i].substring(0, keys[i].indexOf("_originalName"));
+								var subStrFiledName = keys[i].substring(0, keys[i].indexOf("_filedName"));
+								var subStrRegDt = keys[i].substring(0, keys[i].indexOf("_regDt"));
+								$('#' + keys[i]).val(supplementInfo[keys[i]]);
+								if(subStrOriginalName.indexOf('사용자정의') > -1) {
+									var customIndex = Number(subStrOriginalName.replace(/[^0-9]/g, ''));
+									if ($('#' + subStrOriginalName).length <= 0) {
+										addRow('addList', 'escalation', customIndex);
+									}
+									
+									if (subStrOriginalName != '') {
+										var originalData = "";
+										$('#' + subStrOriginalName).parents('tr').find('.fileName').val(supplementInfo[keys[i]]);
+										originalData += supplementInfo[keys[i]];
+										$('#사용자정의명' + customIndex).val(supplementInfo['사용자정의명' + customIndex]);
+										$('#사용자정의' + customIndex + '_originalName').val(supplementInfo['사용자정의' + customIndex + '_originalName']);
+									}
+								} else {
+									if (subStrOriginalName != '') {
+										var originalData = "";
+										$('#' + subStrOriginalName).next().val(supplementInfo[keys[i]]);
+										originalData += supplementInfo[keys[i]];
+									} else if (subStrFiledName != '') {
+										if (originalData.length != 0) {
+											linkDownUrl += supplementInfo[keys[i]] + '?oid=' + oid + '&orgFilename=' + originalData;
+											$('#' + subStrFiledName).parents('tr').find('.down').attr('onclick', 'location.href=\"' + linkDownUrl + '\"');
+											linkDownUrl = "http://iderms.enertalk.com:8443/files/download/";
+											$('#' + subStrFiledName).parents('tr').find('.btn_type07').show(); //삭제버튼 활성화
+											$('#' + subStrFiledName).parents('tr').find('.down').show(); //다운로드 버튼 활성화
+										}
+									} else if (subStrRegDt != '') {
+										$('#' + subStrRegDt + '_regDt').after(supplementInfo[keys[i]]); //다운로드 버튼 활성화
+									}
+								}
+							}
+						}
+						
+					}
+				},
+				error: function (request, status, error) {
+					alert('처리 중 오류가 발생했습니다.');
+					return false;
+				}
+			});
+			return supInfoLength;
+		}
+		
 		const callAjax = function (option, callBack, param) {
+			console.log(option);
 			$.ajax(option).done(function (data, textStatus, jqXHR) {
+				console.log(data);
 				if (typeof callBack == 'function') {
 					callBack.call(this, data, param);
 				} else if (typeof callBack == 'string') {
@@ -168,7 +197,6 @@
 				let prop = $('#' + propName);
 				prop.parents('tr').find('.btn_type07').show(); //삭제버튼 활성화
 				prop.parents('tr').find('.down').show(); //다운로드 버튼 활성화
-
 				let linkUrl = 'http://iderms.enertalk.com:8443/files/download/' + data.files[0].fieldname + '?oid=' + oid + '&orgFilename=' + data.files[0].originalname;
 				prop.parents('tr').find('.down').attr('onclick', 'location.href=\"' + linkUrl + '\"');
 
@@ -178,7 +206,7 @@
 				$('#' + propName + '_regDt').val(currentTime.split(" ")[0]); // 발급일자 추가
 
 				// 수정과 등록 분기
-				if (supInfoLength > 0) {
+				if (supInfoLength > 0){
 					sendSupplementPatch(); // 수정
 				} else {
 					sendSupplementPost(); // 등록
@@ -190,7 +218,6 @@
 		// 이관자료 전체 등록
 		function sendSupplementPost() {
 			var supplement_info = setAreaParamData("supplement_info");
-
 			$.ajax({
 				url: "http://iderms.enertalk.com:8443/spcs/" + spc_id + "/gens/" + gen_id + "/supplement?oid=" + oid,
 				type: "post",
@@ -215,9 +242,7 @@
 		// 이관자료 전체 수정
 		function sendSupplementPatch() {
 			var supplement_info = setAreaParamData("supplement_info");
-
 			console.log(supplement_info);
-
 			$.ajax({
 				url: "http://iderms.enertalk.com:8443/spcs/" + spc_id + "/gens/" + gen_id + "/supplement?oid=" + oid,
 				type: "patch",
@@ -264,11 +289,25 @@
 			$("#addFileList10").data("form", $("#addFileList10").html());
 		}
 
-		function addList(addId){
-			var $selecter = $("#" + addId);
-			$selecter.append($selecter.data("form"));
+		function addListPost(addId){
+			let trLength = $("#supplement_info table").find("tr").length;
+			let $selecter = $("#supplement_info table").find("tr").eq(trLength-1);
+			
+			let tdStr = "";
+			 	tdStr += "<tr>";
+			 	tdStr += "<th></th>";
+			for(let i = 0; i < $("#" + addId).find("td").length; i++){
+				if(i==0){
+					tdStr += "<td id='td'" +addId+ "'_'"+i+" class='group_type flex_start'>" + $("#" + addId).find("td").eq(i).html() +"</td>";
+				}else{
+					tdStr += "<td>" + $("#" + addId).find("td").eq(i).html() +"</td>";
+				}
+			}
+				tdStr += "</tr>";
+			$selecter.parent().append(tdStr);
+			$("#supplement_info table").find("tr").eq(trLength).find("input").attr("placeholder", "직접 입력");
 		}
-
+		
 	</script>
 
 	<form id="upload" name="upload" method="multipart/form-data" style="display:none;">
@@ -345,7 +384,7 @@
 							</td>
 							<td>
 								<label for="사업조직도" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
 						<tr>
@@ -366,7 +405,7 @@
 							</td>
 							<td>
 								<label for="설치_업체_담당자_연락처" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
 						<tr>
@@ -387,7 +426,7 @@
 							</td>
 							<td>
 								<label for="투자_계약_심의" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
 						<tr>
@@ -408,7 +447,7 @@
 							</td>
 							<td>
 								<label for="사업자_등록증" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
 						<tr>
@@ -429,7 +468,7 @@
 							</td>
 							<td>
 								<label for="발전사업_허가증" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
 						<tr>
@@ -450,7 +489,7 @@
 							</td>
 							<td>
 								<label for="토지_및_건물_등기부등록" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
 						<tr>
@@ -471,7 +510,7 @@
 							</td>
 							<td>
 								<label for="토지대장_및_건물도면" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
 						<tr>
@@ -492,7 +531,7 @@
 							</td>
 							<td>
 								<label for="원도급_계약서_실사_협약서" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
 						<tr>
@@ -512,7 +551,7 @@
 							</td>
 							<td>
 								<label for="원도급_계약서_토지이용_허가서" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
 						<tr>
@@ -533,7 +572,7 @@
 							</td>
 							<td>
 								<label for="하도급_계약서_공사도급_계약서" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
 						<tr>
@@ -554,7 +593,7 @@
 							</td>
 							<td>
 								<label for="하도급_계약서_설계용역_계약서" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
 						<tr>
@@ -575,7 +614,7 @@
 							</td>
 							<td>
 								<label for="하도급_계약서_감리용역_계약서" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
 						<tr>
@@ -596,7 +635,7 @@
 							</td>
 							<td>
 								<label for="기자재_시험_성적서_인버터" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
 						<tr>
@@ -617,7 +656,7 @@
 							</td>
 							<td>
 								<label for="기자재_시험_성적서_모듈" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
 						<tr>
@@ -638,7 +677,7 @@
 							</td>
 							<td>
 								<label for="기자재_시험_성적서_변압기" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
 						<tr>
@@ -659,7 +698,7 @@
 							</td>
 							<td>
 								<label for="기자재_시험_성적서_수배전반" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
 						<tr>
@@ -680,31 +719,34 @@
 							</td>
 							<td>
 								<label for="모듈_Inspection_Sheet" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
-						<tr>
-							<th>추가항목<a href="javascript:addList('addList01');" class="btn_add fr">추가</a></th>
-							<td id="addList01" class="group_type flex_start">
+						<tr id="addList">
+							<th>추가항목<a href="javascript:addRow('addList', 'escalation');" class="btn_add fr">추가</a></th>
+							<td class="group_type flex_start">
 								<div class="tx_inp_type edit">
-									<input type="text" id="name" placeholder="인감 증명">
+									<input type="text" id="사용자정의명[index]" name="사용자정의명[index]" placeholder="직접 입력">
+									<input type="file" id="사용자정의[index]" name="사용자정의[index]" class="uploadBtn">
+									<input type="hidden" id="사용자정의[index]_originalName" name="사용자정의[index]_originalName" value="">
+									<input type="hidden" id="사용자정의[index]_filedName" name="사용자정의[index]_filedName" value="">
+									
 								</div>
-								<button class="btn_type07">삭제</button>
+								<button class="btn_type07 hidden" name="rowDelete">삭제</button>
 							</td>
-							<td></td>
+							<td><input type="text" class="fileName tx_file" readonly="readonly"></td>
 							<td>
 								<button class="btn_file down">다운로드</button>
 							</td>
 							<td></td>
 							<td>
-								<input type="hidden" id="이관자료_테스트1_regDt" value="">
+								<input type="hidden" id="사용자정의[index]_regDt" value="">
 							</td>
 							<td>
-								<label for="이관자료_테스트1" class="btn_type_attachment">추가</label>
-								<button class="btn_type07">삭제</button>
+								<label for="사용자정의[index]" class="btn_type_attachment">추가</label>
+								<button class="btn_type07 btn_img">삭제</button>
 							</td>
 						</tr>
-
 					</table>
 				</div>
 				<div class="btn_wrap_type02 mt30"><button type="button" class="btn_type03" onclick="goMoveList();">목록</button></div>

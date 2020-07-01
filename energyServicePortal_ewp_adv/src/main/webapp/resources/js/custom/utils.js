@@ -1346,6 +1346,22 @@ const addRow = function (listId, type, nextIdx) {
 	} else {
 		if (type == 'next') {
 			listLength = $selecter.length;
+		} else if(type == 'escalation') {
+			if(isEmpty(nextIdx)) {
+				var dummyIdx = 0;
+				$('[id^="' + listId + '"]').each(function() {
+					var tempIdx = Number($(this).attr('id').replace(/[^0-9]/g, ''));
+					if(!isNaN(tempIdx)) {
+						if(tempIdx > dummyIdx) {
+							dummyIdx = tempIdx;
+						}
+					}
+				});
+				listLength = dummyIdx + 1;
+			} else {
+				listLength = nextIdx;
+			}
+			
 		} else {
 			if (listId == 'insuranceInfoToggle' && type != 'first') {
 				listLength = 0;
@@ -1365,7 +1381,6 @@ const addRow = function (listId, type, nextIdx) {
 			}
 		}
 	}
-
 	if (isEmpty(nextIdx)) {
 		rowHtml = rowHtml.split(col_left + 'index' + col_right).join(listLength);
 	} else {
@@ -1389,6 +1404,7 @@ const addRow = function (listId, type, nextIdx) {
 			$selecter.eq($selecter.length -1).after('<div class="' + classes + '">' + rowHtml + '</div>');
 		}
 	} else {
+		let trowStr = '';
 		if (listId == 'insuranceInfoToggle' && listLength >= 1) {
 			var section = '<section id="insuranceSection' + listLength + '">';
 			section += '<div class="tbl_top flex_wrapper mt-offset-10"><h2 class="ntit">보험 정보</h2><button class="btn_close" onclick="$(this).parents().closest(\'section\').remove()"></button></div>';
@@ -1397,8 +1413,19 @@ const addRow = function (listId, type, nextIdx) {
 			section += '</div>';
 			section += '</section>';
 			$selecter.after(section);
-		} else {
-			$selecter.append(rowHtml);
+		} else { 
+			if(sTagName == 'TR' && listLength > 0) {
+				rowHtml = rowHtml.replace(/<(\/th|th).*([^>])>/gi, '<th></th>');
+				let $tr = $('<tr>').append(rowHtml);
+				$tr.attr('id',  listId + listLength);
+				
+				$tr.find('button').eq(0).removeClass('hidden');	// 삭제버튼 비활성 초기화
+				$tr.find('button').eq(1).hide();	// 다운로드 버튼 비활성 초기화
+				
+				 $('[id^="' + listId + '"]').eq($('[id^="' + listId + '"]').length - 1).after($tr);
+			} else {
+				$selecter.append(rowHtml);
+			}
 		}
 	}
 
