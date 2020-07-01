@@ -276,23 +276,13 @@
 			genId = $('#genId button').data('value'),
 			genName = $('#genName').val();
 
-		if (isEmpty(spcId)) {
+		if (isEmpty(spcId) && isEmpty(spcName)) {
 			alert('SPC명을 선택하세요.');
 			return false;
 		}
 
-		if (isEmpty(genId)) {
+		if (isEmpty(genId) && isEmpty(genName)) {
 			alert('발전소를 선택하세요.');
-			return false;
-		}
-
-		if (isEmpty(spcName)) {
-			alert('SPC명을 입력하세요.');
-			return false;
-		}
-
-		if (isEmpty(genName)) {
-			alert('발전소명을 입력하세요.');
 			return false;
 		}
 
@@ -491,7 +481,7 @@
 			account_info = setAreaParamData('accountInfo'),
 			finance_info = setAreaParamData('financeInfo', 'dropdown'),
 			contract_info = setAreaParamData('contractInfo'),
-			addlist_insurance_info = setAreaParamData('insuranceInfo');,
+			addlist_insurance_info = setAreaParamData('insuranceInfo'),
 			device_info = setAreaParamData('deviceInfo'),
 			warranty_info = setAreaParamData('warrantyInfo', 'dropdown'),
 			coefficient_info = setAreaParamData('coefficientInfo'),
