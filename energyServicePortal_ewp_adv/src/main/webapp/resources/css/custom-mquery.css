@@ -275,7 +275,6 @@
     .gmain_table {
         display: block;
         height: 874px;
-        overflow: auto;
     }
 
     .gmain_table.jmain_table .gtbl_wrap .intable {
