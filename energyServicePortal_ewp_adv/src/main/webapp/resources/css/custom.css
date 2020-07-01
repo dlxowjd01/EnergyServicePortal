@@ -161,7 +161,7 @@
 	--expand-arrow-down: url("../img/expand_arrow_light.png");
 	--expand-arrow-up: url("../img/expand_arrow_up_light.png");
 
-	--collapse-arrow: url("../img/sel_down_dark.png");
+	--collapse-arrow: url("../img/sel_down.png");
 	--right-arrow: url("../img/arrow_right_light.png");
 	--down-arrow: url("../img/arrow_down_light.png");
 
@@ -8751,7 +8751,6 @@ div.di_wrap dl .link a {
 .eq_card .eq_card_ul .t_value {
 	margin-top: 8px;
 	line-height: 20px;
-	color: var(--light-grey);
 	font-size: 20px;
 }
 

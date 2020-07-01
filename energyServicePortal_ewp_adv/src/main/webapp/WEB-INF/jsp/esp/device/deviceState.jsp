@@ -604,7 +604,7 @@
 
 			let $li = $('<li>'),
 				$a = $('<a>');
-			$a.attr('href', 'javascript:addDeviceForm("' + key + '");').text('추가');
+			$a.attr('href', 'javascript:addDeviceForm("' + key + '");');
 			$li.addClass('eq_add').append($a);
 			deviceList.append($li);
 
