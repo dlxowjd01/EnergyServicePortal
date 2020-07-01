@@ -11574,17 +11574,24 @@ table.table_footer tfoot tr:first-child td {
 	box-shadow: inset 0px 1px 0px 0px var(--color9);
 }
 
-table.table_footer tfoot td {
+table.table_footer tfoot td:not(.light) {
 	font-weight: bold;
 	color: var(--color8);
 }
-
+table.table_footer tfoot td.light {
+	color: var(--color8);
+}
 .spc_transaction .spc_bal_post .btn_type07 {
 	line-height: 24px;
 
 }
 .spc_transaction .sort_table th.left,
 .spc_transaction .sort_table td.left {
+	text-align: left;
+}
+.spc_transaction .sort_table td.left .icon_header {
+	display: inline-block;
+	width: 50px;
 	text-align: left;
 }
 .spc_transaction .sort_table .icon_edit {
@@ -11804,6 +11811,21 @@ table.table_footer tfoot td {
 	width: 100%;
 }
 
+.spc_modal_content .textarea{
+	padding: 12px 10px;
+}
+.spc_modal_content .warning {
+	padding-top: 5px;
+	padding-bottom: 10px;
+	margin-bottom: auto;
+}
+.spc_modal_content .col-lg-4 {
+	align-self: baseline;
+}
+.spc_modal_content .dropdown-menu + .warning,
+.spc_modal_content .sel_calendar .warning {
+	padding-bottom: 0;
+}
 .modal-content.spc_detail_content {
 	padding: 30px 16px;
 }
@@ -12110,7 +12132,7 @@ html.darkmode .modal-content.spc_detail_content li.single_item a .btn_next {
 }
 
 .entity_wrap .tx_inp_type.unit.t1 {
-	padding-right: 10px;
+	padding-right: 24px;
 }
 
 .entity_wrap.post .indiv .spc_tbl_row th.th_align_top {

@@ -108,3 +108,28 @@ const dropDownInit = ($selector) => {
 		}
 	}
 }
+
+/**
+ * dropDown toggle init
+ *
+ * @param $selector
+ */
+const initDropdownValue = ($selector) => {
+	$selector.each(function(index, element) {
+		$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
+	});
+}
+
+/**
+ * dropDown value change
+ *
+ * @param $selector
+ */
+const setDropdownValue = ($selector) => {
+	$selector.each(function(index, element) {
+		$(this).on("click", function() {
+			let val = $(this).data('value');
+			$(this).parent().prev(".dropdown-toggle").attr('value', val);
+		});
+	});
+}

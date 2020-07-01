@@ -17,6 +17,16 @@
 		// 임시로 사무수탁사 버튼
 		// oid === "" ? $("#requestBtn").text("출금요청서 신청") : $("#requestBtn").text("출금요청서 작성");
 
+		const dropdownOpt = $('#spcAlarmForm').find('.dropdown-menu:not(.chk_type) li');
+
+		setDropdownValue(dropdownOpt);
+		// dropdownOpt.each(function(index, element) {
+		// 	$(this).on("click", function() {
+		// 		let val = $(this).data('value');
+		// 		$(this).parent().prev(".dropdown-toggle").attr('value', val);
+		// 	});
+		// });
+
 		//날짜 셀렉트박스 클릭 시
 		$('.sch_sel_area ul li').on('click', function () {
 			var thisVal = $(this).data('value');
@@ -325,6 +335,8 @@
 			};
 		}
 		$.ajax(option).done(function (data, textStatus, jqXHR) {
+			$("#spcAlarmModal").removeClass("active");
+			console.log("data==", data)
 			if (action == 'get') {
 				if (jobId != undefined) {
 					modalPopInit(data.data);
@@ -333,34 +345,40 @@
 				}
 			} else {
 				maintenance('get');
-				$("#spcAlarmModal").removeClass("active");
 			}
-			$("#spcAlarmModal").removeClass("active");
-	}).fail(function (jqXHR, textStatus, errorThrown) {
-			alert('처리 중 오류가 발생했습니다.');
-			return false;
-		});
-	};
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
+		};
 
 	//등록&수정 용 데이터 세팅
 	const setData = function () {
 		let jsonData = {};
 		let job_info = {};
 		let job_info_Array = ['spcName', 'worker', 'note', 'description', 'alarmDate', 'alarmTime', 'alarmPhone', 'alarmSetup'];
+		let warning = $('#spcAlarmModal').find('.warning');
 
-		$('#spcAlarmModal input, textarea').each(function () {
+		$('#spcAlarmModal input, textarea').each(function (index, element) {
 			if ($.inArray($(this).prop('name'), job_info_Array) > -1) {
 				job_info[$(this).prop('name')] = String($(this).val());
+
+				if ($(this).prop('name') == 'spcName') {
+					$(this).val() != '' ? $(this).parent().find('.warning').addClass('hidden') : $(this).parent().find('.warning').removeClass('hidden');
+				}
+				if ($(this).prop('name') == 'worker'){
+					$(this).val() != '' ? $(this).parent().find('.warning').addClass('hidden') : $(this).parent().find('.warning').removeClass('hidden');
+				}
+
 			} else {
 				if ($(this).prop('name') == 'job_date') {
 					let jobDate = $(this).datepicker('getDate');
+					$(this).val() != '' ? $(this).parent().find('.warning').addClass('hidden') : $(this).parent().find('.warning').removeClass('hidden');
 					jsonData[$(this).prop('name')] = jobDate.toISOString();
 				} else if ($(this).prop('name').match('alarm')) {
 					jsonData.job_info[$(this).prop('name')] = String($(this).val());
 				} else if ($(this).prop('name') == 'repeat_end') {
 					jsonData[$(this).prop('name')] = new Date($(this).val()).toISOString();
-				} else if ($(this).prop('name') == 'spcName') {
-					jsonData[$(this).prop('name')] = $(this).val();
 				} else {
 					jsonData[$(this).prop('name')] = String($(this).val());
 				}
@@ -378,13 +396,14 @@
 				}
 			}
 		});
-
+	
+		// if($(this).prop('name') == 'worker') {
+		// 		$(this).val() != '' ? $(this).parent().find('.warning').addClass('hidden') : $(this).parent().find('.warning').removeClass('hidden');
+		// 	}
 		jsonData.spc_id = Number(jsonData.spc_id);
 		jsonData.job_info = JSON.stringify(job_info);
 		jsonData.repeat_interval = Number(jsonData.repeat_interval);
 		jsonData.updated_by = loginId;
-
-		delete jsonData.spcName;
 
 		return jsonData;
 	};
@@ -405,9 +424,14 @@
 				let tableStr = '';
 				let modalStr = '';
 
-				Promise.resolve(JSON.parse(v.job_info)).then(function() {
-					return job_info = JSON.parse(v.job_info);
-				}).then(function() {
+				return new Promise((resolve, reject) => {
+					resolve(JSON.parse(v.job_info))
+				}).then(result => {
+					job_info = result;
+				}).catch(function(e) {
+						//jQuery doesn't throw real errors so use catch-all
+						console.log(e);
+				}).finally(()=> {
 					if (filterArr.indexOf(job_type)>-1){
 						tableStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '" class="disabled"><p class="bu t' + job_type + '">[' + job_info.spcName + ']' + job_Name(job_type) + '</p></a>';
 					} else {
@@ -422,9 +446,6 @@
 							+ ''
 						+'</li>'
 					)
-				}).catch(function(e) {
-						//jQuery doesn't throw real errors so use catch-all
-						console.log(e);
 				});
 			});
 			// TO DO!!!!!!!!!  show more btn
@@ -474,6 +495,7 @@
 		const repeat_cycle = $('#repeat_yn button');
 		const addScheduleBtn = $('#addScheduleBtn');
 		const deleteScheduleBtn = $('#deleteScheduleBtn');
+		const warning = $('#spcAlarmModal').find('.warning');
 		// let modalData = $("#popoverModal").find("ul.detail_list");
 
 		repeat_cycle.data('value', '');
@@ -482,7 +504,7 @@
 
 		$('#detailInfoModal').removeClass('active')
 		$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
-
+		warning.addClass('hidden');
 		if (data == undefined) {
 			// modalData.empty();
 			unCheckAll(modalForm);
@@ -491,10 +513,10 @@
 				$(this).val('');
 			});
 			//팝업 오픈시 value 초기화
-
-			dropDown.each(function () {
-				$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
-			});
+			initDropdownValue(dropDown);
+			// dropDown.each(function () {
+			// 	$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
+			// });
 
 			deleteScheduleBtn.addClass('hidden');
 			addScheduleBtn.attr('onclick', 'maintenance(\'post\');').text('등록');
@@ -725,6 +747,7 @@
 								<div class="tx_inp_type mr-12">
 									<input type="text" id="spcName" name="spcName" value="" placeholder="입력" class="required" autocomplete="off">
 									<input type="hidden" id="spc_id" name="spc_id">
+									<small class="hidden warning">SPC를 선택해 주세요</small>
 								</div>
 								<!-- <button type="button" class="btn_type">검색</button> -->
 							</div>
@@ -750,6 +773,7 @@
 										<li data-value="2"><a href="javascript:void(0);">출금-승인중</a></li>
 										<li data-value="3"><a href="javascript:void(0);">입급</a></li> -->
 									</ul>
+									<small class="hidden warning">항목을 선택해 주세요</small>
 								</div>
 							</div>
 							<div class="col-lg-2 col-md-2 col-sm-3">
@@ -785,6 +809,7 @@
 							<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 								<div class="sel_calendar">
 									<input type="text" id="job_date" name="job_date" class="sel datepicker fromDate required w-100" value="" autocomplete="off" readonly>
+									<small class="hidden warning">기준일을 선택해 주세요</small>
 								</div>
 							</div>
 							<div class="col-lg-2 col-md-2 col-sm-3">
@@ -826,6 +851,7 @@
 							<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 								<div class="tx_inp_type">
 									<input type="text" id="worker" name="worker" placeholder="입력" maxlength="10">
+									<small class="hidden warning">항목을 선택해 주세요</small>
 								</div>
 							</div>
 							<div class="col-lg-2 col-md-2 col-sm-3">

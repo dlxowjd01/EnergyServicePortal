@@ -32,13 +32,8 @@
 
 		unCheckAll(searchBar);
 		getSpcList(options);
-
-		dropdownOpt.each(function(index, element) {
-			$(this).on("click", function() {
-				let val = $(this).data('value');
-				$(this).parent().prev(".dropdown-toggle").attr('value', val);
-			});
-		});
+		setDropdownValue(dropdownOpt);
+		getDataList();
 
 		searchForm.on('submit', function(e){
 			e.preventDefault();
@@ -65,7 +60,8 @@
 			});
 			if(searchForm.find('.warning.hidden').length == formArr.length){
 				formArr.length = 0;
-				formArr.push(spcOpts.val(), fromDate.val(), toDate.val(), spcStatus.val(), unitOpt.val(), transactionType.val(), purpose.val())
+				formArr.push(spcOpts.val(), fromDate.val(), toDate.val(), spcStatus.val(), unitOpt.val(), transactionType.val(), purpose.val());
+				console.log("formArr--", formArr)
 				getDataList(1,formArr); 
 			}
 			// getDataList(1); 
@@ -117,13 +113,15 @@
 		}
 
 		function getDataList(page, arr) {
+			let spcId = '';
 			if(page == undefined){
 				page = 1;
 			}
-			console.log("spcInd===", arr[0])
+			arr==undefined ? spcId = 18 : spcId = arr[0];
+			// console.log("spcInd===", arr[0])
 			$.ajax({
-				// url: 'http://iderms.enertalk.com:8443/spcs/' + arr[0] + '/gens?oid=' + oid,
-				url: 'http://iderms.enertalk.com:8443/spcs/18/gens?oid=' + oid,
+				url: 'http://iderms.enertalk.com:8443/spcs/' + spcId + '/gens?oid=' + oid,
+				// url: 'http://iderms.enertalk.com:8443/spcs/18/gens?oid=' + oid,
 				type: 'get',
 				async: false,
 				success: function(json) {
@@ -144,7 +142,8 @@
 							}).finally(() => {
 								let newTime = v.updated_at.substring(0, 10) + ' ' + v.updated_at.substring(11, 19);
 								let latest = finance["계약_체결일"].substring(0, 10) + ' ' + finance["계약_체결일"].substring(11, 19)
-								console.log("finance---", finance)
+								let statusList = ["승인완료", "승인 대기", "승인 증"]
+								let assetManager = ["자산운용사A", "자산운용사B", "자산운용사C"]
 
 								str = tableCloned.replace(/\*updated_at\*/g, newTime)
 									.replace(/\*transaction_type\*/g, finance["입출금_구분0"])
@@ -153,7 +152,8 @@
 									.replace(/\*amount\*/g, finance["대출_약정액"] )
 									.replace(/\*latest_update\*/g, latest)
 									.replace(/\*updated_by\*/g, loginId)
-									.replace(/\*status\*/g, v.updated_by)
+									.replace(/\*approved_by\*/g, assetManager[k])
+									.replace(/\*status\*/g, statusList[k])
 								tableList.append(str)
 							});
 						});
@@ -350,14 +350,14 @@
 			<div class='spc_tbl'>
 				<table class='sort_table table_footer'>
 					<colgroup>
-						<col style='width:10%'>
-						<col style='width:10%'>
-						<col style='width:10%'>
+						<col style='width:16%'>
+						<col style='width:8%'>
+						<col style='width:8%'>
 						<col style='width:10%'>
 						<col style='width:12%'>
-						<col style='width:12%'>
-						<col style='width:12%'>
-						<col style='width:12%'>
+						<col style='width:14%'>
+						<col style='width:10%'>
+						<col style='width:10%'>
 						<col style='width:12%'>
 						<col>
 					</colgroup>
@@ -385,8 +385,8 @@
 								<td>*amount*</td>
 								<td>*latest_update*</td>
 								<td>*updated_by*</td>
-								<td>*status*</td>
-								<td class='left'><span>*status*</span><span class='*status*'><a href='/spc/withdrawReqEdit.do' class='icon_edit'></a><a href='#' class='icon_delete'></a></span></td>
+								<td>*approved_by*</td>
+								<td class='left'><span class="icon_header">*status*</span><span><a href='/spc/withdrawReqEdit.do' class='icon_edit'></a><a href='#' class='icon_delete'></a></span></td>
 							</tr>
 						</template>
 					</tbody>
