@@ -28,7 +28,7 @@
 				</li>
 			</ul>
 		</div>
-		<a href="#" class="btn_type02 collect_btn fr">로그 저장</a>
+		<a href="javascript:void(0);" class="btn_type02 collect_btn fr" id="excelDown">로그 저장</a>
 	</div>
 </div>
 
@@ -180,28 +180,24 @@
 							<input type="text" id="datepicker2" class="sel" value="" autocomplete="off">
 							<em></em>
 							<input type="text" id="timepicker2" name="timepicker2" class="sel timepicker"/>
-							<script>
-								$('.timepicker').wickedpicker({twentyFour: true});
-								$('#datepicker1').datepicker({dateFormat: 'yy-mm-dd'}).datepicker("setDate", new Date()); //데이트 피커 기본
-								$('#datepicker2').datepicker({dateFormat: 'yy-mm-dd'}).datepicker("setDate", new Date()); //데이트 피커 기본
-							</script>
 						</div>
 					</div>
 					<div class="fl">
 						<button type="submit" class="btn_type" id="selectLogByDate">검색</button>
 					</div>
 				</div>
-				<table class="his_tbl" id="logTable">
-					<colgroup>
-						<col style="width:10%">
-						<col style="width:10%">
-						<col style="width:10%">
-						<col style="width:12%">
-						<col style="width:12%">
-						<col style="width:10%">
-						<col>
-					</colgroup>
-					<thead>
+				<div id="logTableDiv">
+					<table class="his_tbl" id="logTable">
+						<colgroup>
+							<col style="width:10%">
+							<col style="width:10%">
+							<col style="width:10%">
+							<col style="width:12%">
+							<col style="width:12%">
+							<col style="width:10%">
+							<col>
+						</colgroup>
+						<thead>
 						<tr>
 							<th>사이트 ID</th>
 							<th>수집 타입 ID</th>
@@ -211,13 +207,14 @@
 							<th>상태</th>
 							<th>수신 데이터</th>
 						</tr>
-					</thead>
-					<tbody>
-					<tr>
-						<td colspan="7">위의 표에서 조회하고자 사이트 혹은 RTU를 클릭해 주세요.</td>
-					</tr>
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+						<tr>
+							<td colspan="7">위의 표에서 조회하고자 사이트 혹은 RTU를 클릭해 주세요.</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
 				<div class="paging_wrap" id="paging">
 				</div>
 			</div>
@@ -240,6 +237,10 @@
 		setInitList('rtuSiteULList');
 		siteMakeList(); //사업소 리스트 그리기
 		getRtuDataList(); //RTU 데이터리스트
+
+		$('.timepicker').wickedpicker({twentyFour: true});
+		$('#datepicker1').datepicker({dateFormat: 'yy-mm-dd'}).datepicker('setDate', new Date()); //데이트 피커 기본
+		$('#datepicker2').datepicker({dateFormat: 'yy-mm-dd'}).datepicker('setDate', new Date()); //데이트 피커 기본
 
 		//RTU 등록 페이지
 		$('#showRegRtu').on('click', function () {
@@ -277,14 +278,14 @@
 			});
 		});
 		
-		$('.btn_type02').on('click', function(e){
+		$('#excelDown').on('click', function(e){
 			let excelName = '수집현황';
-			let $val = $('#logTable').find('tbody');
+			let $val = $('#logTableDiv').find('tbody');
 			let cnt = $val.length;
 			
 			if(cnt > 0){
 				if(confirm('저장 하시겠습니까?')){
-					tableToExcel('logTable', excelName, e);
+					tableToExcel('logTableDiv', excelName, e);
 				}
 			}else{
 				alert('저장할 데이터가 없습니다.');
@@ -363,6 +364,19 @@
 	function selectLog(rids, startTime, endTime, limit, page) {
 		limit = isEmpty(limit) ? 5 : limit;
 		page = isEmpty(page) ? 1 : page;
+
+		if (isEmpty(startTime) || isEmpty(endTime)) {
+			const datePicker1 = $('#datepicker1').datepicker('getDate');
+			const datePicker2 = $('#datepicker2').datepicker('getDate');
+			const start = datePicker1.format('yyyyMMdd');
+			const end = datePicker2.format('yyyyMMdd');
+			const startTimepicker = $('#timepicker1').wickedpicker('time').replace(/[^0-9]/g, '');
+			const endTimepicker = $('#timepicker2').wickedpicker('time').replace(/[^0-9]/g, '');
+
+			startTime = start + startTimepicker + '00';
+			endTime = end + endTimepicker + '00';
+		}
+
 		const now = new Date();
 		const nowLocal = now.format('yyyyMMddHHmmss');
 		const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours() - 1, now.getMinutes(), now.getSeconds()).format('yyyyMMddHHmmss');
@@ -565,24 +579,22 @@
 									});
 
 									dateFilter.on('click', () => {
-										const datePicker1 = $('#datepicker1');
-										const datePicker2 = $('#datepicker2');
-										let start_yy = datePicker1.val().slice(0, 4);
-										let start_mm = Number(datePicker1.val().slice(5, 7)) - 1;
-										let start_dd = datePicker1.val().slice(8, 10);
-										let start_hr = datePicker1.val().slice(0, 2);
-										let start_min = datePicker1.val().slice(5, 7);
+										const datePicker1 = $('#datepicker1').datepicker('getDate');
+										const datePicker2 = $('#datepicker2').datepicker('getDate');
+										if(datePicker1 != null && datePicker2 != null) {
+											const start = datePicker1.format('yyyyMMdd');
+											const end = datePicker2.format('yyyyMMdd');
+											const startTimepicker = $('#timepicker1').wickedpicker('time').replace(/[^0-9]/g, '');
+											const endTimepicker = $('#timepicker2').wickedpicker('time').replace(/[^0-9]/g, '');
 
-										let end_yy = datePicker2.val().slice(0, 4);
-										let end_mm = Number(datePicker2.val().slice(5, 7)) - 1;
-										let end_dd = datePicker2.val().slice(8, 10);
-										let end_hr = datePicker2.val().slice(0, 2);
-										let end_min = datePicker2.val().slice(5, 7);
+											const startDate = start + startTimepicker + '00';
+											const endDate = end + endTimepicker + '00';
 
-										const start = new Date(start_yy, start_mm, start_dd, start_hr, start_min, 0).format('yyyyMMddHHmmss');
-										const end = new Date(end_yy, end_mm, end_dd, end_hr, end_min, 0).format('yyyyMMddHHmmss');
-
-										selectLog(el.rid, start, end);
+											selectLog(el.rid, startDate, endDate);
+										} else {
+											alert('검색 시작일과 종료일을 확인해 주세요.');
+											return false;
+										}
 									});
 								});
 							}
