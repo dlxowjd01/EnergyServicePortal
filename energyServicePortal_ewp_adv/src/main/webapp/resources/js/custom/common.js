@@ -22,18 +22,23 @@ function selectBoxTextApply(obj) {
 }
 
 function unCheckAll(data){
-	var input = data.find('input');
-	var textArea = data.find("textarea");
-
-	textArea.each(function(){
-		$(this).val("");
-	})
+	if(data){
+		var input = data.find('input');
+		var textArea = data.find("textarea");
 	
-	for(var i = 0; i < input.length; i++){
-		if(input[i].type=='checkbox'){
-			input[i].checked = false;
+		textArea.each(function(){
+			$(this).val("");
+		})
+		
+		for(var i = 0; i < input.length; i++){
+			if(input[i].type=='checkbox'){
+				input[i].checked = false;
+			}
 		}
+	} else {
+		return false;
 	}
+
 }
 
 function getPdfDownload() {

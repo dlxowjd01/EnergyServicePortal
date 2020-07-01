@@ -13,7 +13,7 @@
 		const deleteBtn = $("#deleteBtn");
 		const checkBoxes = $(firstTable).find('.select_row input[type="checkbox"]');
 		
-		unCheckAll();
+		// unCheckAll();
 
 		deleteBtn.on("click", function (){
 			checkBoxes.each(function(){
@@ -271,25 +271,10 @@
 											data-toggle="dropdown">선택
 										<span class="caret"></span>
 									</button>
-									<ul class="dropdown-menu chk_type" role="menu">
-										<li>
-											<a href="#" tabindex="-1">
-												<input type="checkbox" id="accountNum1" value="accountTypes1" name="accountTypes">
-												<label for="accountNum1">관리 운영비</label>
-											</a>
-										</li>
-										<li>
-											<a href="#" tabindex="-1">
-												<input type="checkbox" id="accountNum2" value="accountTypes2" name="accountTypes">
-												<label for="accountNum2">사무 수탁비</label>
-											</a>
-										</li>
-										<li>
-											<a href="#" tabindex="-1">
-												<input type="checkbox" id="accountTypes3" value="accountTypes3" name="accountTypes">
-												<label for="accountTypes3">기타</label>
-											</a>
-										</li>
+									<ul class="dropdown-menu" role="menu">
+										<li><a href="#" tabindex="-1">관리 운영비</a></li>
+										<li><a href="#" tabindex="-1">사무 수탁비</a></li>
+										<li><a href="#" tabindex="-1">기타</a></li>
 									</ul>
 								</div>
 							</div>
@@ -394,8 +379,9 @@
 						<td></td>
 						<td>합계</td>
 						<td></td>
-						<td>100,000,000</td>
-						<td colspan="2"></td>
+						<td>100,000,000 원</td>
+						<td></td>
+						<td class="light">잔액<span class="ml-20">300,000,000 원</span></td>
 					</tr>
 				</tfoot>
 			</table>

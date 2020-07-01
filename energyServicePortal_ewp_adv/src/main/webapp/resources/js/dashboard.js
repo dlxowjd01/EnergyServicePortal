@@ -259,7 +259,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		backgroundColor: 'var(--bg-color)',
 		padding: 16,
 		style: {
-			color: 'var(--chart-grey)'
+			color: 'var(--color3)'
 		}
 	},
 	/* 범례 */

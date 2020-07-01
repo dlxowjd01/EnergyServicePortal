@@ -284,10 +284,10 @@
 			genId = $('#genId button').data('value'),
 			genName = $('#genName').val();
 
-		if (isEmpty(spcId) && isEmpty(spcName)) {
-			alert('SPC명을 선택하세요.');
-			return false;
-		}
+		// if (isEmpty(spcId)) {
+		// 	alert('SPC명을 선택하세요.');
+		// 	return false;
+		// }
 
 		if (isEmpty(genId) && isEmpty(genName)) {
 			alert('발전소를 선택하세요.');
@@ -1513,7 +1513,7 @@
 								</div>
 								<div class="flex_start">
 									<div class="tx_inp_type edit unit t1 mr-30">
-										<input type="text" id="임대료" name="임대료" placeholder="">
+										<input type="text" id="임대료" class="right" name="임대료" placeholder="">
 										<span>원</span>
 									</div>
 									<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
@@ -1530,7 +1530,7 @@
 										</ul>
 									</div>
 									<div class="tx_inp_type edit unit t1 mr-30">
-										<input type="text" id="SMP원" name="SMP원" placeholder="">
+										<input type="text" id="SMP원" class="right" name="SMP원" placeholder="">
 										<span>원</span>
 									</div>
 									<span class="fixed_height"><span class="auto_price"></span>원/kWh</span>
@@ -1654,11 +1654,12 @@
 					</tr>
 					<tr>
 						<th><label for="인출_가능_기한">인출 가능 기한</label></th>
-						<td>
+						<td class="flex_start">
 							<div class="sel_calendar edit">
 								<input type="text" id="인출_가능_기한" class="sel datepicker" name="인출_가능_기한" value="" autocomplete="off" placeholder="날짜 선택" readonly>
-							</div>
-						</td>
+							</div><!--
+							--><span class="fixed_height">XX일 남음</span><!--
+					--></td>
 						<th></th>
 						<td></td>
 					</tr>

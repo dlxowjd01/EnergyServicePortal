@@ -143,9 +143,6 @@
 	--sidebar-spc-off: url("../img/sidebar_spc_light_off.png");
 	--sidebar-spc-on: url("../img/sidebar_spc_light_on.png");
 
-	--expand-arrow-down: url("../img/expand_arrow_light.png");
-	--expand-arrow-up: url("../img/expand_arrow_up_light.png");
-
 	--icon-inverter: url('../img/ico_inverter_on.png');
 	--icon-connector: url('../img/ico_connector_on.png');
 	--icon-disconnect: url("../img/ico_disconnector_on.png");
@@ -160,9 +157,15 @@
 	--status-charging: url("../img/status_charging_light.png");
 	--status-discharging: url("../img/status_discharging_light.png");
 
-	--collapse-arrow: url("../img/sel_down.png");
+	--nav-arrow-down: url("../img/expand_arrow_light.png");
+	--expand-arrow-down: url("../img/expand_arrow_light.png");
+	--expand-arrow-up: url("../img/expand_arrow_up_light.png");
+
+	--collapse-arrow: url("../img/sel_down_dark.png");
 	--right-arrow: url("../img/arrow_right_light.png");
 	--down-arrow: url("../img/arrow_down_light.png");
+
+
 	--ico-battery: url("../img/ico_battery.png");
 	--ico-solar: url("../img/ico_solar.png");
 	--ico-water: url("../img/ico_water.png");
@@ -239,9 +242,6 @@ html.darkmode:root {
 	--sidebar-spc-off: url("../img/sidebar_spc_dark_off.png");
 	--sidebar-spc-on: url("../img/sidebar_spc_dark_on.png");
 
-	--expand-arrow-down: url("../img/expand_arrow_dark.png");
-	--expand-arrow-up: url('../img/expand_arrow_up_dark.png');
-
 	--icon-inverter: url('../img/ico_inverter.png');
 	--icon-connector: url('../img/ico_connector.png');
 
@@ -255,9 +255,14 @@ html.darkmode:root {
 	--status-charging: url("../img/status_charging_dark.png");
 	--status-discharging: url("../img/status_discharging_dark.png");
 
+	--nav-arrow-down: url("../img/expand_arrow_dark.png");
+	--expand-arrow-down: url("../img/expand_arrow_dark.png");
+	--expand-arrow-up: url('../img/expand_arrow_up_dark.png');
+
 	--collapse-arrow: url("../img/sel_down_dark.png");
 	--right-arrow: url("../img/arrow_right_dark.png");
 	--down-arrow: url("../img/arrow_down_dark.png");
+
 	--ico-battery: url("../img/ico_battery_dark.png");
 	--ico-solar: url("../img/ico_solar_dark.png");
 	--ico-water: url("../img/ico_water_dark.png");
@@ -862,6 +867,13 @@ table input[type="text"] {
 	display: none;
 }
 
+.warning {
+	display: table;
+	padding-top: 12px;
+	margin-bottom: -12px;
+	font-size: 12px;
+	color: var(--alarm);
+}
 /* loading icon */
 
 .loading {
@@ -1024,17 +1036,14 @@ table input[type="text"] {
 	color: var(--vivid-blue);
 }
 
-html.darkmode input:-webkit-autofill,
-html.darkmode input:-webkit-autofill:hover,
-html.darkmode input:-webkit-autofill:focus,
-html.darkmode input:-webkit-autofill:active {
-	transition: var(--box-color) 5000s ease-in-out 0s;
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active  {
+	-webkit-box-shadow: 0 0 0 1000px var(--box-color) inset !important;
+	-webkit-text-fill-color: var(--color6) !important;
+	transition: background-color 5000s ease-in-out 0s;
 }
-
-html.darkmode input:-webkit-autofill {
-	-webkit-text-fill-color: var(--color3) !important;
-}
-
 .outer-wrapper {
 	position: relative;
 	height: 100%;
@@ -1099,6 +1108,7 @@ button:hover {
 	line-height: 30px;
 	font-size: 12px;
 	color: var(--color3);
+	border-radius: 30px;
 	text-align: center;
 	z-index: 10;
 	transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1113,8 +1123,6 @@ button:hover {
 	font-size: 12px;
 	line-height: 30px;
 	cursor: pointer;
-	background-color: var(--active);
-	border-radius: 30px;
 	left: 5px;
 	top: 4px;
 	transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1123,6 +1131,7 @@ button:hover {
 
 .switcher__input:checked+.switcher__label {
 	color: var(--color3);
+	background-color: var(--active);
 }
 
 .switcher__input--dark:checked~.switcher__toggle {
@@ -1438,6 +1447,7 @@ li.on .sub_layer>ul {
 #sidebar>ol>li.smn8>a {
 	height: 62px;
 	font-size: 0;
+	color: var(--color2);
 	background: var(--sidebar-logout-off) no-repeat center center;
 }
 
@@ -2066,16 +2076,16 @@ footer .copyright {
 
 /* jquery auto-complete customization */
 ul.ui-autocomplete.highlight {
-	margin: 1px 0 0 -4px;
+	margin: -4px 0 0 -8px;
 	color: var(--color8);
 	background-color: var(--box-color);
     display: none;
     padding: 0;
     list-style: none;
     border-color: transparent;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
     -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
@@ -5862,8 +5872,10 @@ nav .lang.dropdown .dropdown-menu>li>a:hover {
 }
 
 nav .lang.dropdown .btn .caret {
+	background: var(--nav-arrow-down) no-repeat;
+	background-position: center;
+	top: 12px;
 	right: 0;
-	background: url("../img/select_down.png") no-repeat 0 0;
 }
 
 /* Legacy */
@@ -9120,8 +9132,8 @@ div.di_wrap dl .link a {
     position: relative;
     cursor: pointer;
 	display: inline-block;
-	line-height: 24px;
-	height: 24px;
+	line-height: 20px;
+	height: 20px;
 }
 
 .rdo_type [type="radio"]:checked + label,
@@ -11364,6 +11376,10 @@ html.darkmode .sch_top_info .sch_btn .btn_next_mon {
 	table-layout: fixed;
 }
 
+.spc_tbl table.sort_table td.no-data.center:first-of-type {
+	text-align: center;
+}
+
 .spc_tbl table.sort_table.chk_type th:first-child,
 .spc_tbl table.sort_table.chk_type td:first-of-type {
 	text-align: left;
@@ -11558,17 +11574,24 @@ table.table_footer tfoot tr:first-child td {
 	box-shadow: inset 0px 1px 0px 0px var(--color9);
 }
 
-table.table_footer tfoot td {
+table.table_footer tfoot td:not(.light) {
 	font-weight: bold;
 	color: var(--color8);
 }
-
+table.table_footer tfoot td.light {
+	color: var(--color8);
+}
 .spc_transaction .spc_bal_post .btn_type07 {
 	line-height: 24px;
 
 }
 .spc_transaction .sort_table th.left,
 .spc_transaction .sort_table td.left {
+	text-align: left;
+}
+.spc_transaction .sort_table td.left .icon_header {
+	display: inline-block;
+	width: 50px;
 	text-align: left;
 }
 .spc_transaction .sort_table .icon_edit {
@@ -11788,6 +11811,21 @@ table.table_footer tfoot td {
 	width: 100%;
 }
 
+.spc_modal_content .textarea{
+	padding: 12px 10px;
+}
+.spc_modal_content .warning {
+	padding-top: 5px;
+	padding-bottom: 10px;
+	margin-bottom: auto;
+}
+.spc_modal_content .col-lg-4 {
+	align-self: baseline;
+}
+.spc_modal_content .dropdown-menu + .warning,
+.spc_modal_content .sel_calendar .warning {
+	padding-bottom: 0;
+}
 .modal-content.spc_detail_content {
 	padding: 30px 16px;
 }
@@ -11846,7 +11884,14 @@ html.darkmode .modal-content.spc_detail_content li.single_item a .btn_next {
 	vertical-align: middle;
 	content: "";
 }
-
+.spc_modal_content .search_expand .btn,
+.spc_modal_content .dropdown .btn,
+.spc_modal_content .sel {
+	padding: 0 36px 0 10px;
+}
+.spc_modal_content .tx_inp_type > input[type="text"]{
+	text-indent: 8px;
+}
 .spc_modal_content .fixed_width {
 	width: 345px;
 }
@@ -12087,7 +12132,7 @@ html.darkmode .modal-content.spc_detail_content li.single_item a .btn_next {
 }
 
 .entity_wrap .tx_inp_type.unit.t1 {
-	padding-right: 10px;
+	padding-right: 24px;
 }
 
 .entity_wrap.post .indiv .spc_tbl_row th.th_align_top {
