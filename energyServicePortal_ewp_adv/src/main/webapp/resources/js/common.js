@@ -46,7 +46,7 @@ $(function() {
             $(this).closest('.dateField').find('.toDate').datepicker('option', 'minDate', selectedDate);
 
             if (typeof afterDatePick == 'function') {
-                afterDatePick();
+                afterDatePick($(this).attr('name'));
             }
         }
     });
@@ -57,6 +57,10 @@ $(function() {
         dateFormat: 'yy-mm-dd',
         onClose: function(selectedDate) {
             $(this).closest('.dateField').find('.fromDate').datepicker('option', 'maxDate', selectedDate);
+
+            if (typeof afterDatePick == 'function') {
+                afterDatePick($(this).attr('name'));
+            }
         }
     });
 });
