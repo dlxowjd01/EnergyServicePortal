@@ -276,10 +276,17 @@
 			genId = $('#genId button').data('value'),
 			genName = $('#genName').val();
 
+<<<<<<< Updated upstream
 		if (isEmpty(spcId) && isEmpty(spcName)) {
 			alert('SPC명을 선택하세요.');
 			return false;
 		}
+=======
+		// if (isEmpty(spcId)) {
+		// 	alert('SPC명을 선택하세요.');
+		// 	return false;
+		// }
+>>>>>>> Stashed changes
 
 		if (isEmpty(genId) && isEmpty(genName)) {
 			alert('발전소를 선택하세요.');
@@ -1442,7 +1449,7 @@
 								</div>
 								<div class="flex_start">
 									<div class="tx_inp_type edit unit t1 mr-30">
-										<input type="text" id="임대료" name="임대료" placeholder="">
+										<input type="text" id="임대료" class="right" name="임대료" placeholder="">
 										<span>원</span>
 									</div>
 									<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
@@ -1459,7 +1466,7 @@
 										</ul>
 									</div>
 									<div class="tx_inp_type edit unit t1 mr-30">
-										<input type="text" id="SMP원" name="SMP원" placeholder="">
+										<input type="text" id="SMP원" class="right" name="SMP원" placeholder="">
 										<span>원</span>
 									</div>
 									<span class="fixed_height"><span class="auto_price"></span>원/kWh</span>

@@ -335,8 +335,8 @@
 				maintenance('get');
 				$("#spcAlarmModal").removeClass("active");
 			}
-			// $("#spcAlarmModal").removeClass("active");
-		}).fail(function (jqXHR, textStatus, errorThrown) {
+			$("#spcAlarmModal").removeClass("active");
+	}).fail(function (jqXHR, textStatus, errorThrown) {
 			alert('처리 중 오류가 발생했습니다.');
 			return false;
 		});

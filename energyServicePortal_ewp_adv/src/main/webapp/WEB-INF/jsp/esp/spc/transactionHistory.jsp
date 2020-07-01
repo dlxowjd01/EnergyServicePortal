@@ -8,7 +8,7 @@
 
 	$(function() {
 		const tableList = $('#tableBody');
-		const tableBody = tableList.find("template.table_body").clone().html();
+		const tableCloned = tableList.find("template.table_body").clone().html();
 		const tableFooter = tableList.find("template.table_footer").clone().html();
 		const searchBar = $('.spc_search_bar');
 		const searchForm = $('#spcTransactionSearch');
@@ -64,7 +64,9 @@
 				}
 			});
 			if(searchForm.find('.warning.hidden').length == formArr.length){
-				getDataList(1); 
+				formArr.length = 0;
+				formArr.push(spcOpts.val(), fromDate.val(), toDate.val(), spcStatus.val(), unitOpt.val(), transactionType.val(), purpose.val())
+				getDataList(1,formArr); 
 			}
 			// getDataList(1); 
 		});
@@ -99,7 +101,6 @@
 				spcList.empty();
 				json.data.unshift({"spc_id": "전체", "name": "전체"});
 				json.data.forEach((item, index) => {
-					// console.log("cloned===", cloned)
 					let listItem = '';
 					if(item.name == ""){
 						listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, "spc_no_name"+ index);
@@ -115,17 +116,48 @@
 			});
 		}
 
-		function getDataList(page) {
+		function getDataList(page, arr) {
 			if(page == undefined){
 				page = 1;
 			}
+			console.log("spcInd===", arr[0])
 			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/spcs/bankbook?oid=' + oid,
+				// url: 'http://iderms.enertalk.com:8443/spcs/' + arr[0] + '/gens?oid=' + oid,
+				url: 'http://iderms.enertalk.com:8443/spcs/18/gens?oid=' + oid,
 				type: 'get',
 				async: false,
 				success: function(json) {
-					console.log("bankbook===", json)
+					$('#searchOption').removeClass('in');
+					tableList.empty();
+					let data = json.data;
+					if (data.length > 0) {
+						data.forEach(function (v, k) {
+							let str = '';
+							let finance = ''
+							return new Promise((resolve, reject) => {
+								resolve(JSON.parse(v.finance_info))
+							}).then(data => {
+								finance = data;
+							}).catch(error => {
+								console.log(error);
+								
+							}).finally(() => {
+								let newTime = v.updated_at.substring(0, 10) + ' ' + v.updated_at.substring(11, 19);
+								let latest = finance["계약_체결일"].substring(0, 10) + ' ' + finance["계약_체결일"].substring(11, 19)
+								console.log("finance---", finance)
 
+								str = tableCloned.replace(/\*updated_at\*/g, newTime)
+									.replace(/\*transaction_type\*/g, finance["입출금_구분0"])
+									.replace(/\*purpose\*/g, v.updated_by)
+									.replace(/\*account_type\*/g, finance["계좌구분0"])
+									.replace(/\*amount\*/g, finance["대출_약정액"] )
+									.replace(/\*latest_update\*/g, latest)
+									.replace(/\*updated_by\*/g, loginId)
+									.replace(/\*status\*/g, v.updated_by)
+								tableList.append(str)
+							});
+						});
+					};
 				},
 				error: function(request, status, error) {
 					alert('오류가 발생하였습니다. \n관리자에게 문의하세요.');
@@ -346,14 +378,14 @@
 						<tr><td colspan='9' class='no-data center'>데이터가 없습니다.</td></tr></tr>
 						<template class='table_body'>
 							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
+								<td>*updated_at*</td>
+								<td>*transaction_type*</td>
+								<td>*purpose*</td>
+								<td>*account_type*</td>
+								<td>*amount*</td>
+								<td>*latest_update*</td>
+								<td>*updated_by*</td>
+								<td>*status*</td>
 								<td class='left'><span>*status*</span><span class='*status*'><a href='/spc/withdrawReqEdit.do' class='icon_edit'></a><a href='#' class='icon_delete'></a></span></td>
 							</tr>
 						</template>
