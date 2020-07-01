@@ -284,10 +284,10 @@
 			genId = $('#genId button').data('value'),
 			genName = $('#genName').val();
 
-		// if (isEmpty(spcId)) {
-		// 	alert('SPC명을 선택하세요.');
-		// 	return false;
-		// }
+		if (isEmpty(spcId) && isEmpty(spcName)) {
+			alert('SPC명을 선택하세요.');
+			return false;
+		}
 
 		if (isEmpty(genId) && isEmpty(genName)) {
 			alert('발전소를 선택하세요.');
@@ -1657,9 +1657,9 @@
 						<td class="flex_start">
 							<div class="sel_calendar edit">
 								<input type="text" id="인출_가능_기한" class="sel datepicker" name="인출_가능_기한" value="" autocomplete="off" placeholder="날짜 선택" readonly>
-							</div><!--
-							--><span class="fixed_height">XX일 남음</span><!--
-					--></td>
+							</div>
+							<span class="fixed_height">XX일 남음</span>
+						</td>
 						<th></th>
 						<td></td>
 					</tr>

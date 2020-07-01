@@ -5,6 +5,12 @@
 <script>
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
+	const countryList = [{'value': '대한민국'}];
+	const sidoList = [
+		{'value': '서울'}, {'value': '부산'}, {'value': '대구'}, {'value': '인천'}, {'value': '광주'},
+		{'value': '울산'}, {'value': '세종'}, {'value': '경기'}, {'value': '강원'}, {'value': '충북'}, {'value': '충남'},
+		{'value': '전북'}, {'value': '전남'}, {'value': '경북'}, {'value': '경남'}, {'value': '제주'}
+	];
 
 	$(function () {
 		initProcess();
@@ -86,6 +92,15 @@
 
 	function initProcess(){
 		getSpcAndGenData(); //저장되어있는 spc정보조회
+		setComboBoxData();
+	}
+
+	function setComboBoxData() {
+		setInitList("countryList");
+		setMakeList(countryList, "countryList", {"dataFunction": {}});
+
+		setInitList("sidoList");
+		setMakeList(sidoList, "sidoList", {"dataFunction": {}});
 	}
 
 	function getAttachFileDisplay(attachement_info){
@@ -247,8 +262,13 @@
 			data: {},
 			success: function (json) {
 				$('#genName').text(json.name);
+
+				$('#country').html('대한민국 <span class="caret"></span>' )
 				$('#countryValue').text('대한민국');
+
 				$('#sidoValue').text(json.location);
+				$('#sido').html(json.location +  '<span class="caret"></span>');
+
 				$('#address').text(json.address)
 			},
 			error: function (request, status, error) {
@@ -1413,7 +1433,7 @@
 								</div>
 								<div class="flex_start">
 									<div class="tx_inp_type edit unit t1 mr-30">
-										<input type="text" id="임대료" name="임대료" placeholder="">
+										<input type="text" id="임대료" class="right" name="임대료" placeholder="">
 										<span>원</span>
 									</div>
 									<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
@@ -1430,7 +1450,7 @@
 										</ul>
 									</div>
 									<div class="tx_inp_type edit unit t1 mr-30">
-										<input type="text" id="SMP원" name="SMP원" placeholder="">
+										<input type="text" id="SMP원" class="right" name="SMP원" placeholder="">
 										<span>원</span>
 									</div>
 									<span class="fixed_height"><span class="auto_price"></span>원/kWh</span>
