@@ -15,30 +15,9 @@
 		const dropdownOpt = $('#searchOption').find('.dropdown-menu:not(.chk_type) li');
 		tableList.find("template").remove();
 
-		let action = 'get';
-		let syncOpt = true;
-		let options = [
-			{
-				url: "http://iderms.enertalk.com:8443/spcs?oid="+oid,
-				type: action,
-				async: syncOpt
-			},
-			{
-				url: 'http://iderms.enertalk.com:8443/spcs/bankbook?oid=' + oid,
-				type: action,
-				async: syncOpt
-			},
-			{
-				url: 'http://iderms.enertalk.com:8443/spcs/transaction?oid=' + oid,
-				type: 'post',
-				async: syncOpt
-			},
-		];
-
 		unCheckAll(searchBar);
-		getSpcList(options);
+		getSpcList();
 		selectAll($("#spcList"));
-		getDataList();
 		setDropdownValue(dropdownOpt);
 
 		searchForm.on('submit', function(e){
@@ -84,12 +63,19 @@
 
 		// 	getJsonCsvDownload($('#listData').data('gridJsonData'), column, header, 'spc_spower.csv'); // json list, 컬럼, 헤더명, 파일명
 		// }
-
-		function getSpcList(options) {
+		function getSpcList() {
 			const spcList = $('#spcList');
 			const cloned = spcList.clone().html();
 
-			$.ajax(options[0]).done(function (json, textStatus, jqXHR) {
+			let action = 'get';
+			let syncOpt = true;
+			let option = {
+				url: "http://iderms.enertalk.com:8443/spcs?oid="+oid,
+				type: action,
+				async: syncOpt
+			}
+			$.ajax(option).done(function (json, textStatus, jqXHR) {
+				let spcArr = [];
 				spcList.empty();
 				json.data.unshift({"spc_id": "allSelect", "name": "전체"});
 				json.data.forEach((item, index) => {
@@ -100,70 +86,176 @@
 						listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, item.name).replace(/\*uniqName\*/g, item.spc_id + '_'+index);
 					}
 					spcList.append($(listItem));
+					spcArr.push(item.spc_id);
 				});
-				
+				spcArr.shift();
 				spcList.find('input').prop("checked", true);
+				getDataList(1, spcArr)
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
+		}
+	
+		function getDataList(page, spcId) {
+			page == undefined ? page = 1 : page = page;
+			spcId == undefined ? null : spcId = spcId.toString();
+			var sortList = [];
+			var totalPage = 0;
+			let action = 'get';
+			let syncOpt = true;
+			let option= {
+				url: 'http://iderms.enertalk.com:8443/spcs/transactions',
+				type: action,
+				data: {
+					'oid' : oid,
+					'spcIds' : spcId
+				},
+				async: syncOpt
+			}
+
+			$.ajax(option).done(function (json, textStatus, jqXHR) {
+				$('#searchOption').removeClass('in');
+				tableList.empty();
+				if (json.data.length > 0) {
+					let data = json.data;
+
+					// object shallow copy below
+					// data.map(item => {item.to_account = '' }); 
+					json.data.map(item => {
+						return new Promise((resolve, reject) => {
+							// typeof v.to_account !== "string" ? JSON.parse(v.to_account) : v.to_account = v.to_account
+							resolve(JSON.parse(item.to_account))
+							}).then(res => {
+							let popObj =  Object.assign({}, item);
+							delete(popObj.to_account);
+							
+							res.map(innerItem => {
+								let str = '';
+								let newObj = {...innerItem, ...popObj}
+
+								let period = newObj.created_at.substring(0, 10) + '~' + newObj.updated_at.substring(0, 10);
+								let reqDate = newObj.requested_at.substring(0, 10) + ' ' + newObj.requested_at.substring(11, 19);
+								let transactionType = '';
+								let purpose = '';
+								let purposeList = [ 
+									{ label: "출금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
+									{ label: "입금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대 수선비", "배당금 적림", "일반 지출" ]},
+								];
+								let accountType = newObj.desc;
+								let amount = parseInt(newObj.amount);
+								let updatedAt = newObj.updated_at.substring(0, 10) + ' ' + newObj.updated_at.substring(11, 19)
+								let requestedBy = '';
+								let approvedBy = '';
+								let status = '';
+								let statusList = ["승인완료", "승인 대기", "승인 증"]
+
+								newObj.purpose <= 5 ? ( transactionType = '출금', purpose = purposeList[0].value[newObj.purpose]
+									) : ( transactionType = '입금', purpose = purposeList[1].value[newObj.purpose] )
+									
+
+								amount = newObj.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+								newObj.requested_by ? requestedBy = newObj.requested_by : requestedBy = '-'
+								newObj.status_changed_by ? approvedBy = newObj.status_changed_by : approvedBy = '-'
+								
+								status = statusList[newObj.status];
+								
+								str = tableCloned.replace(/\*  \*/g, reqDate)
+									.replace(/\*period\*/g, period)
+									.replace(/\*transaction_type\*/g, transactionType)
+									.replace(/\*purpose\*/g, purpose)
+									.replace(/\*account_type\*/g, accountType)
+									.replace(/\*amount\*/g, amount )
+									.replace(/\*latest_update\*/g, updatedAt)
+									.replace(/\*updated_by\*/g, requestedBy)
+									.replace(/\*approved_by\*/g, approvedBy)
+									.replace(/\*status\*/g, status)
+								tableList.append(str);
+
+								let sortObj = {};
+								sortObj["기간"] = period;
+								sortObj["입출금_구분"] = transactionType;
+								sortObj["용도_구분"] = purpose;
+								sortObj["계좌_구분"] = accountType;
+								sortObj["금액"] = amount;
+								sortObj["최종_업데이트"] = updatedAt;
+								sortObj["상태"] = status;
+								sortList.push(sortObj);
+							});
+							makeNavigation(page, totalPage);
+						}).catch(error => {
+							console.log(error);
+						}).finally(() => {
+						});
+					});
+				} else {
+					return false;
+				}
+				totalPage = Math.ceil(sortList.length/pagePerData);
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				alert('처리 중 오류가 발생했습니다.');
 				return false;
 			});
 		}
 
-		function getDataList(page, arr) {
-			let spcId = '';
-			if(page == undefined){
-				page = 1;
+		function makeNavigation (page, totalPage) {
+			$('#paging').empty();
+			let pageStr = '';
+			let navgroup = Math.floor((page-1)/navCount)+1;
+			let startPage = ((navgroup-1)*navCount)+1;
+			let totalnav = Math.ceil(totalPage/navCount);
+			let endPage = ((startPage + navCount-1) > totalPage)? totalPage : (startPage + navCount-1);
+			
+			console.log("nav===", page, "page===", navgroup);
+			if (navgroup == 1) {
+				pageStr += '<a href="javascript:void(0);" class="btn_prev first_prev">prev</a><strong>'+page+'</strong>';
+			} else{
+				pageStr += '<a href="javascript:getDataList(' + Number(startPage-1) + ');" class="btn_prev">prev</a>';
 			}
-			arr==undefined ? spcId = 18 : spcId = arr[0];
-			// console.log("spcInd===", arr[0])
-			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/spcs/' + spcId + '/gens?oid=' + oid,
-				// url: 'http://iderms.enertalk.com:8443/spcs/18/gens?oid=' + oid,
-				type: 'get',
-				async: false,
-				success: function(json) {
-					$('#searchOption').removeClass('in');
-					tableList.empty();
-					let data = json.data;
-					if (data.length > 0) {
-						data.forEach(function (v, k) {
-							let str = '';
-							let finance = ''
-							return new Promise((resolve, reject) => {
-								resolve(JSON.parse(v.finance_info))
-							}).then(data => {
-								finance = data;
-							}).catch(error => {
-								console.log(error);
-								
-							}).finally(() => {
-								let newTime = v.updated_at.substring(0, 10) + ' ' + v.updated_at.substring(11, 19);
-								let latest = finance["계약_체결일"].substring(0, 10) + ' ' + finance["계약_체결일"].substring(11, 19)
-								let statusList = ["승인완료", "승인 대기", "승인 증"]
-								let assetManager = ["자산운용사A", "자산운용사B", "자산운용사C"]
 
-								str = tableCloned.replace(/\*updated_at\*/g, newTime)
-									.replace(/\*transaction_type\*/g, finance["입출금_구분0"])
-									.replace(/\*purpose\*/g, v.updated_by)
-									.replace(/\*account_type\*/g, finance["계좌구분0"])
-									.replace(/\*amount\*/g, finance["대출_약정액"] )
-									.replace(/\*latest_update\*/g, latest)
-									.replace(/\*updated_by\*/g, loginId)
-									.replace(/\*approved_by\*/g, assetManager[k])
-									.replace(/\*status\*/g, statusList[k])
-								tableList.append(str)
-							});
-						});
-					};
-				},
-				error: function(request, status, error) {
-					alert('오류가 발생하였습니다. \n관리자에게 문의하세요.');
+			for (let i = startPage ; i <= endPage; i++) {
+				console.log("i===", i)
+				if (i==page) {
+					pageStr += '<a href="javascript:getDataList('+i+');"><strong>'+i+'</strong></a>';
+				} else {
+					pageStr += '<a href="javascript:getDataList('+i+');">'+i+'</a>';
 				}
-			});
+			}
+
+			if (navgroup <totalnav) {
+				pageStr += '<a href="javascript:getDataList(' + Number(endPage+1) + ');"  class="btn_next">next</a>';
+			} else {
+				pageStr += '<a href="javascript:void(0);"  class="btn_next">next</a>';
+			}
+			$('#paging').append(pageStr);
 		}
 
 		function getNumberIndex(index) {
 			return index + 1;
+		}
+
+		$('.sort_table th button').click(function(){
+			var table = $(this).parents('table').eq(0)
+			var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+			this.asc = !this.asc
+			if (!this.asc){
+				rows = rows.reverse();
+				$(this).addClass('down').removeClass('up');
+			} else {
+				$(this).removeClass('down').addClass('up');
+			}
+			for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+		});
+
+		function comparer(index) {
+			return function(a, b) {
+				var valA = getCellValue(a, index), valB = getCellValue(b, index)
+				return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+			}
+		}
+
+		function getCellValue(row, index){
+			return $(row).children('td').eq(index).text()
 		}
 
 	});
@@ -345,7 +437,7 @@
 	<div class='col-12'>
 		<div class='indiv'>
 			<div class='spc_tbl'>
-				<table class='sort_table table_footer'>
+				<table class='sort_table transaction-table'>
 					<colgroup>
 						<col style='width:16%'>
 						<col style='width:8%'>
@@ -375,7 +467,7 @@
 						<tr><td colspan='9' class='no-data center'>데이터가 없습니다.</td></tr></tr>
 						<template class='table-body'>
 							<tr>
-								<td>*updated_at*</td>
+								<td>*period*</td>
 								<td>*transaction_type*</td>
 								<td>*purpose*</td>
 								<td>*account_type*</td>
@@ -398,7 +490,7 @@
 						</tr>
 					</tfoot>
 				</table>
-				<div class='paging_wrap' id='paging'><a href='javascript:void(0);' class='btn_prev first_prev'>prev</a><a href='javascript:getDataList(1);'><strong>1</strong></a><a href='javascript:void(0);' class='btn_next larst_next'>next</a></div>
+				<div class='paging_wrap' id='paging'></div>
 			</div>
 		</div>
 	</div>

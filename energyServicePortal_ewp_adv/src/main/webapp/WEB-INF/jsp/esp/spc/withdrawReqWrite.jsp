@@ -30,8 +30,6 @@
 
 		unCheckAll(tableBody);
 		setDropdownValue(dropdownOpt);
-		setDropdownValue(dropdownOpt);
-
 		getSpcList(options);
 
 		deleteBtn.on("click", function (){
@@ -147,26 +145,29 @@
 
 <form id="withdrawForm" name="withdraw_form">
 	<div class="row spc-search-bar">
-		<div class="col-12">
-			<div class='sa_select'><!--
+		<div class="col-10">
+			<div class="sa_select"><!--
 			--><span class='tx_tit'>SPC 선택</span><!--
-			--><div class='dropdown'>
-					<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택" value="">선택<span class='caret'></span></button>
+			--><div class='dropdown'><!--
+				--><button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택" value="">선택<span class='caret'></span></button>
 					<ul id='spcList' class='dropdown-menu' role='menu'><li id="*spcName*" value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul>
 					<small class="hidden warning">선택해 주세요.</small>
 				</div>
 			</div>
-
 			<div class="sa_select"><!--
 			--><span class="tx_tit">출금 계좌번호</span><!--
-			--><div class="dropdown">
-					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+			--><div class="dropdown"><!--
+				--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu"><li data-value=""><a href="#" tabindex="-1">*withdraw*</a></li></ul>
 				</div>
 			</div>
-			<div class="fr">
-				<span class="amount">계좌 잔액</span>
+			<div class="sa_select"><!--
+			--><label for="availableAmount" class="tx_tit">계좌 잔액</label><!--
+			--><div class="tx_inp_type"><input type="text" id="" name="availableAmount" disabled='' readonly=''></div>
 			</div>
+		</div>
+		<div class="col-2">
+			<div class="fr"><a href="#;" class="save_btn">엑셀 다운로드</a></div>
 		</div>
 	</div>
 
@@ -279,7 +280,6 @@
 						--><label for="file">증빙 첨부 포함</label><!--
 					--></a><!--
 					--><a href="/spc/transactionHistory.do" class="btn btn_type03 mr-12" id="writeBtn">PDF</a><!--
-					--><a href="/spc/transactionHistory.do" class="btn btn_type03 mr-12" id="writeBtn">EXCEL</a><!--
 					--><a href="/spc/withdrawReqWrite.do" class="btn btn_type" id="requestBtn">제출</a><!--
 			--></div>
 			</div>

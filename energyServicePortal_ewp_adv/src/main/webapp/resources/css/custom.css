@@ -11652,8 +11652,20 @@ table.table_footer tfoot td.light {
 }
 
 /* 입출금 관리 내역 (검색) */
-.spc-search-bar .dropdown:first-of-type>button {
+.spc-search-bar .dropdown > button {
 	width: 280px;
+}
+.spc-search-bar .tx_inp_type input {
+	width: 180px;
+}
+.spc-search-bar .sa_select {
+	display: inline-flex;
+	align-items: center;
+	margin-bottom: 10px;
+	
+}
+.spc-search-bar .sa_select + .sa_select {
+	margin: 0 0 10px 16px;
 }
 
 .spc-search-bar .dropdown .collapse.dropdown-menu {
@@ -11667,9 +11679,6 @@ table.table_footer tfoot td.light {
 	padding: 0 0 10px 0
 }
 
-.spc-search-bar .sa_select {
-	margin-bottom: 10px;
-}
 
 .spc-search-bar .btn_wrap_border {
 	margin-top: 24px;

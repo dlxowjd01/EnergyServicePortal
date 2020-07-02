@@ -332,7 +332,7 @@
 		width: 300px;
 	}
 	.spc-search-bar .sa_select + .sa_select {
-		margin-left: 0;
+		margin: 0 0 10px;
 	}
 	.spc-search-bar .tx_tit {
 		min-width: 80px;

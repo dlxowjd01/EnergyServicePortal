@@ -1299,39 +1299,6 @@ function attributeVary(cell, rowNum) {
 	return cell;
 }
 
-
-/**
- * 셀 input field copy with options
- *
- * @param source
- * @param target
- */
-function customAttributeCopy(cell, rowNum) {
-	if (cell.innerHTML != '' && cell.getElementsByTagName('input')[0] != undefined) {
-		var inpAttr = cell.getElementsByTagName('input')[0].attributes;
-		for (var i = 0; i < inpAttr.length; i++) {
-			var attrib = inpAttr[i];
-			if (attrib.name == 'id' || attrib.name == 'name') {
-				var attVal = attrib.value.split('_')[0];
-				cell.getElementsByTagName('input')[0].setAttribute(attrib.name, attVal + '_' + rowNum);
-			}
-		}
-	}
-
-	if (cell.innerHTML != '' && cell.getElementsByTagName('label')[0] != undefined) {
-		var lebelAttr = cell.getElementsByTagName('label')[0].attributes;
-		for (var i = 0; i < lebelAttr.length; i++) {
-			var attrib = lebelAttr[i];
-			if (attrib.name == 'for') {
-				var attVal = attrib.value.split('_')[0];
-				cell.getElementsByTagName('label')[0].setAttribute(attrib.name, attVal + '_' + rowNum);
-			}
-		}
-	}
-
-	return cell;
-}
-
 /**
  * 셀 속성 복사 (아직 작업중)
  *
@@ -1339,26 +1306,6 @@ function customAttributeCopy(cell, rowNum) {
  * @param target
  */
 function copyAttribute(source, target) {
-	var attr = source.attributes;
-	for (var i = 0; i < attr.length; i++) {
-		var attrib = attr[i];
-		if (attrib.specified) {
-			target.setAttribute(attrib.name, attrib.value);
-		}
-	}
-
-	if (source.style.cssText != '') target.style.cssText = source.style.cssText;
-	if (source.className != '') target.className = source.className;
-
-}
-
-/**
- * 셀 속성 복사 (아직 작업중)
- *
- * @param source
- * @param target
- */
-function copyCustomAttribute(source, target) {
 	var attr = source.attributes;
 	for (var i = 0; i < attr.length; i++) {
 		var attrib = attr[i];
@@ -1542,7 +1489,7 @@ const setttingSuffix = function(keyText) {
 }
 
 $(function() {
-	$(document).on('click', '.sort_table', function(i){
+	$(document).on('click', '.sort_table:not(".transaction-table")', function(i){
 		let tables = $(this);
 		const tableBodyId = tables.find('tbody').prop('id');
 		let tableBodyTemp = $.data(document, tableBodyId);
@@ -1664,7 +1611,10 @@ function jsonListSort(n, sort, jsonList){
 		n = isEmpty(n) ? '관리_운영_기간' : n;
 	}else if(nowJspPage == 'balance'){
 		n = isEmpty(n) ? 'balance_yyyymm' : n;
-	}else{
+	} else if(nowJspPage == 'transaction'){
+		console.log("d---", n)
+		// n = isEmpty(n) ? 'balance_yyyymm' : n;
+	} else{
 		n= isEmpty(n) ? '관리_운영_기간' : n;
 	}
 
