@@ -218,13 +218,15 @@
 						{name: '임대료_지급일', id: 'addList_rental_deduction', next: 'next'},
 					];
 					setMakeTag(financeRepeatItem, finance_info, 'financeInfo'); //금융태그 생성
-					console.log('finance_info', finance_info);
 					setJsonAutoMapping(finance_info, 'financeInfo');
 
 					setJsonAutoMapping(contract_info, 'contractInfo'); //반복없음
 
-					console.log(addlist_insurance_info);
-					setJsonAutoMapping(addlist_insurance_info, 'addlist_insuranceInfo'); //보험정보 전체 반복
+					const insuranceRepeatItem = [
+						{name: '보험구분', id: 'insuranceInfoToggle', next: ''}
+					];
+					setMakeTag(insuranceRepeatItem, addlist_insurance_info, 'insuranceInfo'); //금융태그 생성
+					setJsonAutoMapping(addlist_insurance_info, 'insuranceInfo'); //보험정보 전체 반복
 
 					const deviceRepeatItem = [
 						{name: '모듈_제조사/모델', id: 'addList_module_info', next: ''},
@@ -849,7 +851,7 @@
 			</div>
 		</div>
 
-		<div class="indiv panel panel-default">
+		<div class="indiv panel panel-default" id="insuranceInfo">
 			<div class="tbl_top panel-heading">
 				<h2 class="ntit mt25">보험 정보</h2>
 				<a role="button" href="#insuranceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a>
@@ -903,44 +905,6 @@
 						<th>만기일</th>
 						<td class="flex_start">
 							<span id="보험_만기일[index]"></span>
-							<span class="fixed_height">XX일 남음</span>
-						</td>
-					</tr>
-					<tr>
-						<th>보험사</th>
-						<td id="보험사"></td>
-						<th>보험 중개사</th>
-						<td id="보험_중개사"></td>
-					</tr>
-					<tr>
-						<th>보험 기간</th>
-						<td class="group_type">
-							<span id="보험_기간_from"></span> ~ <span id="보험_기간_to"></span>
-						</td>
-						<th><label for="보험료">보험료</label></th>
-						<td id="보험료"></td>
-					</tr>
-					<tr>
-						<th>자가부담금</th>
-						<td id="자가부담금"></td>
-						<th>보험가액</th>
-						<td id="보험가액"></td>
-					</tr>
-					<tr>
-						<th>시작일</th>
-						<td id="보험_시작일"></td>
-						<th>종료일</th>
-						<td class="flex_start">
-							<span id="보험_종료일"></span>
-							<span class="fixed_height">XX일 남음</span>
-						</td>
-					</tr>
-					<tr>
-						<th></th>
-						<td></td>
-						<th>만기일</th>
-						<td class="flex_start">
-							<span id="보험_만기일"></span>
 							<span class="fixed_height">XX일 남음</span>
 						</td>
 					</tr>

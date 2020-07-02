@@ -321,23 +321,21 @@
 						result.data[i].confirmed_date = confirmed_date + '<button class="btn_file fr down" onclick="' + file_link + '">다운로드</button>';
 					} else {
 						let confirmed_date = '확정 보고서 업로드';
-						result.data[i].confirmed_date = confirmed_date + '<label for="confirmFile' + i + '" class="btn_file fr up"">업로드</label> <input type="file" id="confirmFile' + i + '" name="confirmFile' + i + '" class="uploadBtn" style="display:none;">';
+						result.data[i].confirmed_date = confirmed_date + '<label for="confirmFile' + temp.id + '" class="btn_file fr up"">업로드</label> <input type="file" id="confirmFile' + temp.id + '" name="confirmFile' + temp.id + '" class="uploadBtn hidden">';
 					}
 
 					if (jsonDataFilter(result.data[i])) {
 						jsonList.push(result.data[i]);
 					}
 				}
-				
-// 				jsonList.sort(function(a,b){
-// 					let dateA = new Date(a.generated_date).getTime();
-// 					let dateB = new Date(b.generated_date).getTime();
-// 					return dateA < dateB ? 1 : -1;
-// 				});
+
 				$(".sort_table").data("nowjsp", "yield");
 				jsonListSort(n, sort, jsonList);
 				jsonList = paging(page, jsonList);
 				setMakeList(jsonList, "listData", { "dataFunction": { "INDEX": getNumberIndex } }); //list생성
+
+				const now = new Date();
+				$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 			},
 			error: function (request, status, error) {
 				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
@@ -419,8 +417,8 @@
 	}
 
 	function setCheckedDataExcelDown() {
-		var checkDataList = getCheckList("rowCheck");
-		count = checkDataList.length,
+		var checkDataList = getCheckList("rowCheck"),
+			count = checkDataList.length,
 			sucessCnt = 0;
 
 		if (count == 0) {
@@ -436,7 +434,14 @@
 			var fileLinkUrl = fileLink.substring(0, fileLink.length - 1); // 파일링크 (뒤에 쉼표 제거)
 			var orgFileName = JSON.parse(rowData.generated_file_link).orgFileName; // 파일이름
 			urlArr.push(fileLinkUrl);
-			fileNameArr.push(orgFileName);
+
+			if ($.inArray(orgFileName, fileNameArr) === -1) {
+				fileNameArr.push(orgFileName);
+			} else {
+				let tempName = orgFileName.split('.');
+				fileNameArr.push( tempName[0] + '_' + i + '.' + tempName[1]);
+			}
+
 		}
 
 		getZip(urlArr, fileNameArr);
@@ -450,6 +455,11 @@
 
 		if (count == 0) {
 			alert("삭제 할 목록을 선택하세요.");
+			return;
+		}
+
+		let delPrompt = prompt(count + '건을 삭제하시겠습니까? \n삭제를 원하시면 아래 "삭제"라고 입력하고 확인을 눌러 주세요.', '');
+		if (delPrompt != '삭제') {
 			return;
 		}
 
@@ -475,18 +485,25 @@
 	const setUploadAfter = function (result, propName) {
 		if (result.files.length > 0) {
 			var checkDataList = $("#listData").data("gridJsonData"),
-				idx = Number(propName.replace('confirmFile', ''));
+				resultId = Number(propName.replace('confirmFile', '')),
+				idx = 0;
 			let fileLen = result.files[0].originalname.length;
 			let fileNameDot = result.files[0].originalname.lastIndexOf('.');
 			let fileExt = result.files[0].originalname.substring(fileNameDot, fileLen).toLowerCase();
 			let newPageCnt = Math.floor((idx-1)/pagePerData);
-			
-			if(fileExt == '.pdf'){
-				
-				if(newPageCnt > 0){
-					idx = idx - pagePerData * newPageCnt; 
+
+			checkDataList.forEach(function(el) {
+				if (el.id == resultId) {
+					idx = el.INDEX;
 				}
-				
+			});
+
+			if(fileExt == '.pdf'){
+
+				if(newPageCnt > 0){
+					idx = idx - pagePerData * newPageCnt;
+				}
+
 				let confirmed_file_link = {
 					fileKey: result.files[0].fieldname,
 					orgFileName: result.files[0].originalname
@@ -499,7 +516,7 @@
 				}
 			
 				let option = {
-					url: 'http://iderms.enertalk.com:8443/reports/performance/' + checkDataList[idx-1].id + '?oid=' + oid,
+					url: 'http://iderms.enertalk.com:8443/reports/performance/' + checkDataList[idx].id + '?oid=' + oid,
 					method: 'patch',
 					dataType: 'json',
 					contentType: "application/json",
@@ -571,8 +588,7 @@
 							<div class="flex_wrap">
 								<span class="input_label">SPC</span>
 								<div class="dropdown placeholder" id="spc_id">
-									<button class="btn btn-primary dropdown-toggle" type="button"
-										data-toggle="dropdown" data-name="">
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="">
 										선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu"></ul>
@@ -581,8 +597,7 @@
 							<div class="flex_wrap">
 								<span class="input_label">보고서 유형</span>
 								<div class="dropdown placeholder" id="report_type">
-									<button class="btn btn-primary dropdown-toggle" type="button"
-										data-toggle="dropdown" data-name="선택">
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">
 										선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu">
@@ -593,16 +608,16 @@
 									</ul>
 								</div>
 							</div>
-							<div class="add-wrap"><span class="input_label">적용 변수</span><a
-									href="javascript:void(0);" class="btn_add"
-									onclick="addRow('yield_list');">추가</a></div>
+							<div class="add-wrap">
+								<span class="input_label">적용 변수</span>
+								<a href="javascript:void(0);" class="btn_add" onclick="addRow('yield_list');">추가</a>
+							</div>
 						</div>
 						<div class="col-lg-7 col-sm-12">
 							<div class="flex_wrap">
 								<span class="input_label">발전소</span>
 								<div class="dropdown placeholder" id="site_id">
-									<button class="btn btn-primary dropdown-toggle" type="button"
-										data-toggle="dropdown" data-name="">
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="">
 										선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu"></ul>
@@ -611,12 +626,10 @@
 							<div class="flex_wrap">
 								<span class="input_label">적용 기간</span>
 								<div class="sel_calendar fl">
-									<input type="text" id="report_data_start" name="report_data_start" value=""
-										class="sel fromDate" autocomplete="off" readonly="" placeholder="날짜 선택">
+									<input type="text" id="report_data_start" name="report_data_start" value="" class="sel fromDate" autocomplete="off" readonly="" placeholder="날짜 선택">
 								</div>
 								<div class="sel_calendar fl ml">
-									<input type="text" id="report_data_end" name="report_data_end" value=""
-										class="sel toDate" autocomplete="off" readonly="" placeholder="날짜 선택">
+									<input type="text" id="report_data_end" name="report_data_end" value="" class="sel toDate" autocomplete="off" readonly="" placeholder="날짜 선택">
 								</div>
 							</div>
 						</div>
@@ -625,8 +638,7 @@
 					<ul class="yield_list" id="yield_list">
 						<li>
 							<div class="dropdown placeholder" id="report_variable_key_[index]">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
-									data-name="">
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="">
 									선택<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu">
@@ -636,8 +648,7 @@
 								</ul>
 							</div>
 							<div class="tx_inp_type fl">
-								<input type="text" id="report_variable_val_[index]"
-									name="report_variable_val_[index]" placeholder="입력">
+								<input type="text" id="report_variable_val_[index]" name="report_variable_val_[index]" placeholder="입력">
 							</div>
 							<button class="btn_type07">삭제</button>
 						</li>
@@ -650,6 +661,7 @@
 			</div>
 		</div>
 	</div>
+
 </div>
 
 
@@ -725,10 +737,10 @@
 	<div class="col-12">
 		<div class="indiv report yield_report">
 			<div class="flex_wrapper mb-20">
-				<div><!--
-					--><button type="button" class="btn_type03 big mr-12" onclick="setCheckedDataExcelDown();">선택 다운로드</button><!--
-					--><button type="button" class="btn_type03 big" onclick="setCheckedDataRemove();">선택 삭제</button><!--
-			--></div>
+				<div>
+					<button type="button" class="btn_type03 big mr-12" onclick="setCheckedDataExcelDown();">선택 다운로드</button>
+					<button type="button" class="btn_type03 big" onclick="setCheckedDataRemove();">선택 삭제</button>
+				</div>
 				<div><button type="button" class="btn_type" onclick="modalInit();">신규 생성</button></div>
 			</div>
 			<div class="spc_tbl align_type">

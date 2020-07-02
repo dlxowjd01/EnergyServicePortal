@@ -266,7 +266,7 @@
 	</div>
 </div>
 
-<div class="row spc_search_bar">
+<div class="row spc-search-bar">
 	<div class="col-12">
 		<span class="tx_tit">SPC 선택</span><div class="sa_select mr-16">
 			<div class="dropdown">

@@ -695,9 +695,7 @@
 		<div class="sch_sel_area">
 			<div class="sch_sel_item">
 				<div class="dropdown" id="year">
-					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-						<span class="caret"></span>
-					</button>
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="caret"></span></button>
 					<ul class="dropdown-menu">
 						<li><a href="#">2020</a></li>
 						<li><a href="#">2019</a></li>
@@ -707,9 +705,7 @@
 			</div>
 			<div class="sch_sel_item">
 				<div class="dropdown" id="month">
-					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-						<span class="caret"></span>
-					</button>
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="caret"></span></button>
 					<ul class="dropdown-menu">
 						<li data-value="1"><a href="#">1월</a></li>
 						<li data-value="2"><a href="#">2월</a></li>

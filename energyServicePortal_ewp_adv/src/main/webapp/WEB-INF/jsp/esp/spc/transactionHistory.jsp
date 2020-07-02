@@ -8,10 +8,10 @@
 
 	$(function() {
 		const tableList = $('#tableBody');
-		const tableCloned = tableList.find("template.table_body").clone().html();
+		const tableCloned = tableList.find("template.table-body").clone().html();
 		const tableFooter = tableList.find("template.table_footer").clone().html();
-		const searchBar = $('.spc_search_bar');
-		const searchForm = $('#spcTransactionSearch');
+		const searchBar = $('.spc-search-bar');
+		const searchForm = $('#transactionForm');
 		const dropdownOpt = $('#searchOption').find('.dropdown-menu:not(.chk_type) li');
 		tableList.find("template").remove();
 
@@ -28,12 +28,18 @@
 				type: action,
 				async: syncOpt
 			},
+			{
+				url: 'http://iderms.enertalk.com:8443/spcs/transaction?oid=' + oid,
+				type: 'post',
+				async: syncOpt
+			},
 		];
 
 		unCheckAll(searchBar);
 		getSpcList(options);
-		setDropdownValue(dropdownOpt);
+		selectAll($("#spcList"));
 		getDataList();
+		setDropdownValue(dropdownOpt);
 
 		searchForm.on('submit', function(e){
 			e.preventDefault();
@@ -49,30 +55,20 @@
 			let formArr = [];
 
 			warning.addClass('hidden');
-			formArr.push(spcOpts, fromDate, toDate, spcStatus, unitOpt, transactionType, purpose);
+			formArr.push(spcOpts.val(), fromDate.val(), toDate.val(), spcStatus.val(), unitOpt.val(), transactionType.val(), purpose.val());
 
 			$.each(formArr, function(index, value){
-				if(value.val() ==  undefined ||  value.val() == "선택" || value.val() == "" ) {
+				if(value ==  undefined ||  value == "선택" || value == "" ) {
 					warning.eq(index).removeClass('hidden');
 				} else {
 					warning.eq(index).addClass('hidden');
 				}
 			});
 			if(searchForm.find('.warning.hidden').length == formArr.length){
-				formArr.length = 0;
-				formArr.push(spcOpts.val(), fromDate.val(), toDate.val(), spcStatus.val(), unitOpt.val(), transactionType.val(), purpose.val());
-				console.log("formArr--", formArr)
 				getDataList(1,formArr); 
 			}
 			// getDataList(1); 
 		});
-
-		// checkList.each(function(){
-		// 	$(this).on('click', function() {
-		// 		let input = $(this).children('input[type="checkbox"]');
-		// 		$(this).children('label').toggleClass('active');
-		// 	});
-		// });
 
 		// function nvl(value, str) {
 		// 	if (isEmpty(value)) {
@@ -95,17 +91,18 @@
 
 			$.ajax(options[0]).done(function (json, textStatus, jqXHR) {
 				spcList.empty();
-				json.data.unshift({"spc_id": "전체", "name": "전체"});
+				json.data.unshift({"spc_id": "allSelect", "name": "전체"});
 				json.data.forEach((item, index) => {
 					let listItem = '';
 					if(item.name == ""){
 						listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, "spc_no_name"+ index);
 					} else {
-						listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, item.name);
+						listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, item.name).replace(/\*uniqName\*/g, item.spc_id + '_'+index);
 					}
 					spcList.append($(listItem));
 				});
-
+				
+				spcList.find('input').prop("checked", true);
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				alert('처리 중 오류가 발생했습니다.');
 				return false;
@@ -184,17 +181,17 @@
 	</div>
 </div>
 
-<div class='row spc_search_bar'>
+<div class='row spc-search-bar'>
 	<div class='col-12'><!--
-	--><form id='spcTransactionSearch'><!--
+	--><form id='transactionForm'><!--
 		--><span class='tx_tit'>SPC 선택</span><!--
 		--><div class='sa_select'>
 				<div class='dropdown'>
-					<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택해 주세요" value="">선택<span class='caret'></span></button>
+					<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택" value="">선택<span class='caret'></span></button>
 					<ul id='spcList' class='dropdown-menu chk_type' role='menu'>
 						<li><!--
 						--><a href="javascript:void(0);" tabindex="-1"><!--
-							--><input type="checkbox" id="*spcName*" value="*spcId*" name="*spcName*"><!--
+							--><input type="checkbox" id="*spcName*" value="*spcId*" name="*uniqName*"><!--
 							--><label for="*spcName*">*spcName*</label><!--
 						--></a><!--
 					--></li><!--
@@ -376,7 +373,7 @@
 					</thead>
 					<tbody id='tableBody'>
 						<tr><td colspan='9' class='no-data center'>데이터가 없습니다.</td></tr></tr>
-						<template class='table_body'>
+						<template class='table-body'>
 							<tr>
 								<td>*updated_at*</td>
 								<td>*transaction_type*</td>

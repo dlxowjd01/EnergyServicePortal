@@ -1221,25 +1221,49 @@ function addRowTable(tblId) {
 	}
 }
 
-function addEmptyRowTable(tblId) {
-	var table = document.getElementById(tblId);
-	var objTable = $('#' + tblId);
-	var rowClone = table.rows[table.rows.length - 1];
-	var row = table.insertRow(-1);
-	var trLength = objTable.find('tbody tr').length;
-	console.log("rowClone", rowClone)
+/**
+ * add table row with configurable options
+ *
+ * @param tbody
+ * @param options
+ */
+
+function addCustomRow(tbody, options) {
+	let lastRow = tbody.find("tr:last-of-type");
+	let copy = lastRow.clone();
+	let keep = options;
+	let cnt = 0;
+	cnt +=1;
+	let toggle = copy.find('.dropdown-menu');
+
+	toggle.each(function(index, element){
+		let oldId = $(this).attr("id");
+		let newId = oldId + cnt;
+		$(this).attr("id", newId);
+	});
+
+	copy.find('input').each(function(index, element){
+		if($(this).is(':checkbox')){
+			let oldId = $(this).attr("id");
+			let newId = oldId + cnt;
+			$(this).attr({"id": newId, ":checked": false});
+			$(this).next("label").attr("for", newId);
+		} else {
+			let oldAttr = $(this).attr("id");
+			let newAttr = oldAttr + cnt;
+
+			$(this).attr({"id": newAttr, "name": newAttr});
+			if(keep == "first") {
+				if(index != 1 ) {
+					$(this).val("");
+				} else {
+					$(this).prop('disabled', true);
+				}
+			}
+		}
+	});
 	
-	// var empty = $(row).last("input")("input").val("");
-
-	copyAttribute(rowClone, row);
-
-	for (var i = 0; i < table.rows[table.rows.length - 2].cells.length; i++) {
-		var cellClone = rowClone.cells[i];
-		console.log("cellClone==", cellClone)
-		var cell = row.insertCell();
-		cell.innerHTML = cellClone.innerHTML;
-		copyAttribute(cellClone, attributeVary(cell, trLength));
-	}
+	tbody.append(copy);
 }
 
 /**
@@ -1275,6 +1299,39 @@ function attributeVary(cell, rowNum) {
 	return cell;
 }
 
+
+/**
+ * 셀 input field copy with options
+ *
+ * @param source
+ * @param target
+ */
+function customAttributeCopy(cell, rowNum) {
+	if (cell.innerHTML != '' && cell.getElementsByTagName('input')[0] != undefined) {
+		var inpAttr = cell.getElementsByTagName('input')[0].attributes;
+		for (var i = 0; i < inpAttr.length; i++) {
+			var attrib = inpAttr[i];
+			if (attrib.name == 'id' || attrib.name == 'name') {
+				var attVal = attrib.value.split('_')[0];
+				cell.getElementsByTagName('input')[0].setAttribute(attrib.name, attVal + '_' + rowNum);
+			}
+		}
+	}
+
+	if (cell.innerHTML != '' && cell.getElementsByTagName('label')[0] != undefined) {
+		var lebelAttr = cell.getElementsByTagName('label')[0].attributes;
+		for (var i = 0; i < lebelAttr.length; i++) {
+			var attrib = lebelAttr[i];
+			if (attrib.name == 'for') {
+				var attVal = attrib.value.split('_')[0];
+				cell.getElementsByTagName('label')[0].setAttribute(attrib.name, attVal + '_' + rowNum);
+			}
+		}
+	}
+
+	return cell;
+}
+
 /**
  * 셀 속성 복사 (아직 작업중)
  *
@@ -1282,6 +1339,26 @@ function attributeVary(cell, rowNum) {
  * @param target
  */
 function copyAttribute(source, target) {
+	var attr = source.attributes;
+	for (var i = 0; i < attr.length; i++) {
+		var attrib = attr[i];
+		if (attrib.specified) {
+			target.setAttribute(attrib.name, attrib.value);
+		}
+	}
+
+	if (source.style.cssText != '') target.style.cssText = source.style.cssText;
+	if (source.className != '') target.className = source.className;
+
+}
+
+/**
+ * 셀 속성 복사 (아직 작업중)
+ *
+ * @param source
+ * @param target
+ */
+function copyCustomAttribute(source, target) {
 	var attr = source.attributes;
 	for (var i = 0; i < attr.length; i++) {
 		var attrib = attr[i];
@@ -1346,6 +1423,22 @@ const addRow = function (listId, type, nextIdx) {
 	} else {
 		if (type == 'next') {
 			listLength = $selecter.length;
+		} else if(type == 'escalation') {
+			if(isEmpty(nextIdx)) {
+				var dummyIdx = 0;
+				$('[id^="' + listId + '"]').each(function() {
+					var tempIdx = Number($(this).attr('id').replace(/[^0-9]/g, ''));
+					if(!isNaN(tempIdx)) {
+						if(tempIdx > dummyIdx) {
+							dummyIdx = tempIdx;
+						}
+					}
+				});
+				listLength = dummyIdx + 1;
+			} else {
+				listLength = nextIdx;
+			}
+			
 		} else {
 			if (listId == 'insuranceInfoToggle' && type != 'first') {
 				listLength = 0;
@@ -1365,7 +1458,6 @@ const addRow = function (listId, type, nextIdx) {
 			}
 		}
 	}
-
 	if (isEmpty(nextIdx)) {
 		rowHtml = rowHtml.split(col_left + 'index' + col_right).join(listLength);
 	} else {
@@ -1389,6 +1481,7 @@ const addRow = function (listId, type, nextIdx) {
 			$selecter.eq($selecter.length -1).after('<div class="' + classes + '">' + rowHtml + '</div>');
 		}
 	} else {
+		let trowStr = '';
 		if (listId == 'insuranceInfoToggle' && listLength >= 1) {
 			var section = '<section id="insuranceSection' + listLength + '">';
 			section += '<div class="tbl_top flex_wrapper mt-offset-10"><h2 class="ntit">보험 정보</h2><button class="btn_close" onclick="$(this).parents().closest(\'section\').remove()"></button></div>';
@@ -1397,8 +1490,19 @@ const addRow = function (listId, type, nextIdx) {
 			section += '</div>';
 			section += '</section>';
 			$selecter.after(section);
-		} else {
-			$selecter.append(rowHtml);
+		} else { 
+			if(sTagName == 'TR' && listLength > 0) {
+				rowHtml = rowHtml.replace(/<(\/th|th).*([^>])>/gi, '<th></th>');
+				let $tr = $('<tr>').append(rowHtml);
+				$tr.attr('id',  listId + listLength);
+				
+				$tr.find('button').eq(0).removeClass('hidden');	// 삭제버튼 비활성 초기화
+				$tr.find('button').eq(1).hide();	// 다운로드 버튼 비활성 초기화
+				
+				 $('[id^="' + listId + '"]').eq($('[id^="' + listId + '"]').length - 1).after($tr);
+			} else {
+				$selecter.append(rowHtml);
+			}
 		}
 	}
 

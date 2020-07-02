@@ -28,6 +28,7 @@
 			}
 		});
 
+		setInitList('genList');
 
 		initRow('addList_registered_seal');
 		addRow('addList_registered_seal');
@@ -94,7 +95,6 @@
 		initAddListHtml(); //추가 기능 관련 초기화
 		setComboBoxData(); //시도 설정
 		getSpcData();//SPC명 설정
-		getgenIdData();//발전소명 설정
 	}
 
 	function initAddListHtml() {
@@ -138,7 +138,7 @@
 	}
 
 	function removeList(obj, type) {
-		if(isEmpty(type)) {
+		if (isEmpty(type)) {
 			if ($(obj).parent().parent().find('.group_type').length > 1) {
 				$(obj).parent().remove();
 			}
@@ -194,8 +194,8 @@
 		setDropDownValue("sidoList", jsonData.location);
 		$("#address").val(jsonData.address);
 
-		if (jsonData.sid == "") {
-			$("#genName").prop("readonly", false);
+		if (jsonData.gen_id == "") {
+			$("#genName").prop("readonly", false).val('');
 		} else {
 			$("#genName").prop("readonly", true);
 		}
@@ -230,14 +230,15 @@
 
 	function getSpcData() {
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/spcs",
-			type: "get",
+			url: 'http://iderms.enertalk.com:8443/spcs',
+			type: 'get',
 			async: false,
-			data: {"oid": oid},
+			data: {oid: oid},
 			success: function (json) {
-				setInitList("spcList");
-				json.data.push({"spc_id": "", "name": "직접입력"});
-				setMakeList(json.data, "spcList", {"dataFunction": {}});
+				setInitList('spcList');
+				json.data.push({spc_id: '', name: '직접입력'});
+
+				setMakeList(json.data, 'spcList', {'dataFunction': {}});
 			},
 			error: function (request, status, error) {
 
@@ -246,15 +247,22 @@
 	}
 
 	function getgenIdData() {
+		let spcId = $('#spcId button').data('value');
+
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/config/sites",
-			type: "get",
+			url: 'http://iderms.enertalk.com:8443/spcs/' + spcId,
+			type: 'get',
 			async: false,
-			data: {"oid": oid},
+			data: {oid: oid, includeGens: true},
 			success: function (json) {
-				setInitList("genList");
-				json.push({"sid": "", "name": "직접입력", "location": "", "address": ""});
-				setMakeList(json, "genList", {"dataFunction": {}});
+				let spcGens = new Array();
+				if(!isEmpty(json.data[0].spcGens)) {
+					spcGens = json.data[0].spcGens;
+				}
+
+				spcGens.push({gen_id: '', name: '직접입력', location: '', address: ''});
+				setMakeList(spcGens, 'genList', {'dataFunction': {}});
+
 			},
 			error: function (request, status, error) {
 
@@ -287,6 +295,12 @@
 		}
 
 		if (isEmpty(genId)) {
+
+			if(isEmpty($('#sidoValue').val()) || isEmpty($('#address').val())) {
+				alert('발전소 신규 입력시에는 주소가 필수 입니다.');
+				return false;
+			}
+
 			let bError = false;
 			$.ajax({
 				url: 'http://iderms.enertalk.com:8443/config/sites?oid=' + oid,
@@ -563,6 +577,10 @@
 			dateFormat: 'yy-mm-dd',
 			onClose: function (selectedDate) {
 				$(this).closest('.dateField').find('.toDate').datepicker('option', 'minDate', selectedDate);
+
+				if (typeof afterDatePick == 'function') {
+					afterDatePick($(this).attr('name'));
+				}
 			}
 		});
 
@@ -572,6 +590,10 @@
 			dateFormat: 'yy-mm-dd',
 			onClose: function (selectedDate) {
 				$(this).closest('.dateField').find('.fromDate').datepicker('option', 'maxDate', selectedDate);
+
+				if (typeof afterDatePick == 'function') {
+					afterDatePick($(this).attr('name'));
+				}
 			}
 		});
 
@@ -580,6 +602,55 @@
 			buttonImageOnly: true,
 			dateFormat: 'yy-mm-dd'
 		});
+	}
+
+	function afterDatePick(thisName) {
+		var idx = thisName.replace(/[^0-9]/g, '');
+		if (thisName.match('보험_시작일')) {
+			var open = $('#' + thisName).datepicker('getDate'),
+				close = $('#보험_종료일' + idx).datepicker('getDate'),
+				expiry = $('#보험_만기일' + idx).datepicker('getDate');
+
+			//보험 종료일 차이 구하기
+			if (close != null && open != null) {
+				var diff = dateDiff(close, oepn, 'day');
+				$('#보험_종료일' + idx).parent().next('span').html(diff + '일 남음');
+				$('#보험_종료일_차이' + idx).val(diff + '일 남음');
+			}
+
+			//보험 만료일 차이 구하기
+			if (expiry != null && open != null) {
+				var diff = dateDiff(expiry, open, 'day');
+				$('#보험_만기일' + idx).parent().next('span').html(diff + '일 남음');
+				$('#보험_만기일_차이' + idx).val(diff + '일 남음');
+			}
+		} else if (thisName.match('보험_종료일')) {
+			var close = $('#' + thisName).datepicker('getDate'),
+				open = $('#보험_시작일' + idx).datepicker('getDate');
+
+			//보험 종료일 차이 구하기
+			if (close != null && open != null) {
+				var diff = dateDiff(close, open, 'day');
+				$('#' + thisName).parent().next('span').html(diff + '일 남음');
+				$('#보험_종료일_차이' + idx).val(diff + '일 남음');
+			}
+		} else if (thisName.match('보험_만기일')) {
+			var expiry = $('#' + thisName).datepicker('getDate'),
+				open = $('#보험_시작일' + idx).datepicker('getDate');
+
+			//보험 종료일 차이 구하기
+			if (expiry != null && open != null) {
+				var diff = dateDiff(expiry, oepn, 'day');
+				$('#' + thisName).parent().next('span').html(diff + '일 남음');
+				$('#보험_만기일_차이' + idx).val(diff + '일 남음');
+			}
+		}
+	}
+
+	function rtnDropdown($dropdownId) {
+		if($dropdownId == 'spcId') {
+			getgenIdData();
+		}
 	}
 </script>
 
@@ -670,7 +741,7 @@
 										발전소명 선택<span class="caret"></span>
 									</button>
 									<ul id="genList" class="dropdown-menu" role="menu">
-										<li data-value="[sid]">
+										<li data-value="[gen_id]">
 											<a href="javascript:void(0);">[name]</a>
 										</li>
 									</ul>
@@ -1586,9 +1657,9 @@
 						<td class="flex_start">
 							<div class="sel_calendar edit">
 								<input type="text" id="인출_가능_기한" class="sel datepicker" name="인출_가능_기한" value="" autocomplete="off" placeholder="날짜 선택" readonly>
-							</div><!--
-							--><span class="fixed_height">XX일 남음</span><!--
-					--></td>
+							</div>
+							<span class="fixed_height">XX일 남음</span>
+						</td>
 						<th></th>
 						<td></td>
 					</tr>
@@ -1693,15 +1764,15 @@
 							<fieldset class="rdo_type flex_start">
 								<legend sr-only="보험 정보"></legend>
 								<div class="radio_group">
-									<input type="radio" id="보험구분_조립_보험[index]" name="보험구분[index]" value="rdo_insurance">
+									<input type="radio" id="보험구분_조립_보험[index]" name="보험구분[index]" value="조립보험">
 									<label for="보험구분_조립_보험[index]">조립 보험</label>
 								</div>
 								<div class="radio_group">
-									<input type="radio" id="보험구분_CMI[index]" name="보험구분[index]" value="cmi">
+									<input type="radio" id="보험구분_CMI[index]" name="보험구분[index]" value="CMI">
 									<label for="보험구분_CMI[index]">CMI</label>
 								</div>
 								<div class="radio_group">
-									<input type="radio" id="보험구분_CGL[index]" name="보험구분[index]" value="cgl">
+									<input type="radio" id="보험구분_CGL[index]" name="보험구분[index]" value="CGL">
 									<label for="보험구분_CGL[index]">CGL</label>
 								</div>
 							</fieldset>
@@ -1765,6 +1836,7 @@
 						<td class="flex_start">
 							<div class="sel_calendar edit mr-24">
 								<input type="text" id="보험_종료일[index]" class="sel toDate" name="보험_종료일[index]" value="" autocomplete="off" placeholder="날짜 선택" readonly>
+								<input type="hidden" id="보험_종료일_차이[index]" name="보험_종료일_차이[index]" value="">
 							</div>
 							<span class="fixed_height">XX일 남음</span>
 						</td>
@@ -1776,6 +1848,7 @@
 						<td class="flex_start">
 							<div class="sel_calendar edit mr-24">
 								<input type="text" id="보험_만기일[index]" class="sel toDate" name="보험_만기일[index]" value="" autocomplete="off" placeholder="날짜 선택" readonly>
+								<input type="hidden" id="보험_만기일_차이[index]" name="보험_만기일_차이[index]" value="">
 							</div>
 							<span class="fixed_height">XX일 남음</span>
 						</td>

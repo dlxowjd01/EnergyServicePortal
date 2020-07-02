@@ -269,7 +269,7 @@
     }
 
     .gmain_table .gtbl_wrap .intable {
-        max-height: 425px;
+        max-height: 365px;
     }
 
     .gmain_table {
@@ -331,6 +331,13 @@
 		display: none;
 		width: 300px;
 	}
+	.spc-search-bar .sa_select + .sa_select {
+		margin-left: 0;
+	}
+	.spc-search-bar .tx_tit {
+		min-width: 80px;
+	}
+	
 }
 
 
@@ -881,7 +888,11 @@
 
     .g_menu>ol>li:last-child {
         border-top: 0;
-    }
+	}
+	
+	.wrap_type .alarm_notice {
+		max-height: 186px;
+	}
 
     .wt_table_wrap,
     .wt_list_wrap {
@@ -1346,10 +1357,6 @@
         float: none;
         margin-top: 10px;
         text-align: center;
-    }
-
-    .gmain_table .gtbl_wrap {
-        height: auto;
     }
 
     .gmain_table .gtbl_wrap table th,

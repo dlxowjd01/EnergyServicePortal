@@ -69,8 +69,8 @@
 						</ul>
 					</div>
 					<div class="eq_btn_bx">
-						<button type="button" class="btn_type04">설비 정보 수정</button>
-						<button type="button" class="btn_type04">운영 이력 조회</button>
+						<button type="button" class="btn_type04" onclick="alert('선택된 설비가 없습니다.'); return false;">설비 정보 수정</button>
+						<button type="button" class="btn_type04" onclick="alert('선택된 설비가 없습니다.'); return false;">운영 이력 조회</button>
 					</div>
 				</div>
 			</div>
@@ -102,16 +102,16 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="addDeviceName" class="input_label">장치명</label>
-								<input class="input tx_inp_type" type="text" name="deviceName" id="addDeviceName" placeholder="입력">
+								<label for="name" class="input_label">장치명</label>
+								<input class="input tx_inp_type" type="text" name="name" id="name" placeholder="입력" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
-								<label for="addDeviceType" class="input_label">장치 타입</label>
-								<div class="dropdown" id="addDeviceType">
+								<label for="device_type" class="input_label">장치 타입</label>
+								<div class="dropdown" id="device_type">
 									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="타입 선택">
 										타입 선택<span class="caret"></span>
 									</button>
-									<ul class="dropdown-menu chk_type">
+									<ul class="dropdown-menu" id="device_typeList">
 										<li data-value="[type]">
 											<a href="javascript:void(0);" tabindex="-1">[name]</a>
 										</li>
@@ -119,8 +119,8 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="mensuration" class="input_label">계량 유형</label>
-								<div class="dropdown" id="mensuration">
+								<label for="metering_type" class="input_label">계량 유형</label>
+								<div class="dropdown" id="metering_type">
 									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="유형 선택">
 										유형 선택<span class="caret"></span>
 									</button>
@@ -141,24 +141,33 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="addDeviceCapacity" class="input_label">설비 용량(kW)</label>
-								<input class="input tx_inp_type" type="text" name="deviceCapacity" id="addDeviceCapacity">
+								<label for="manufacturer" class="input_label">제조사</label>
+								<div class="dropdown" id="manufacturer">
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="제조사 선택">
+										제조사 선택<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" id="manufacturerList">
+										<li data-value="[manufacturer]">
+											<a href="javascript:void(0);" tabindex="-1">[manufacturer]</a>
+										</li>
+									</ul>
+								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="addDeviceManufacturer" class="input_label">제조사</label>
-								<input class="input tx_inp_type" type="text" name="deviceManufacturer" id="addDeviceManufacturer">
+								<label for="capacity" class="input_label">설비 용량(kW)</label>
+								<input class="input tx_inp_type" type="text" name="capacity" id="capacity" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
-								<label for="addDeviceManager" class="input_label">담당자</label>
-								<input class="input tx_inp_type" type="text" name="deviceManager" id="addDeviceManager">
+								<label for="manager" class="input_label">담당자</label>
+								<input class="input tx_inp_type" type="text" name="manager" id="manager" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
-								<label for="alarmMsg" class="input_label">알림 코드</label>
-								<div class="dropdown" id="alarmMsg">
+								<label for="alarm_code" class="input_label">알림 코드</label>
+								<div class="dropdown" id="alarm_code">
 									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="장치 알람 메세지 설정">
 										장치 알람 메세지 설정<span class="caret"></span>
 									</button>
-									<ul class="dropdown-menu">
+									<ul class="dropdown-menu chk_type" id="alarm_codeList">
 										<li>
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="checkbox" id="alarmMsg_[INDEX]" value="[sid]" name="site">
@@ -171,21 +180,34 @@
 						</div>
 						<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
 							<div class="input-group inline-flex chk_type">
-								<label for="predictionData" class="input_label">예측</label>
-								<input class="input tx_inp_type" id="predictionData" type="checkbox" value="1" name="predicted">
-								<label for="predictionData"></label>
+								<label for="forecasting" class="input_label">예측</label>
+								<input type="checkbox" class="input tx_inp_type" id="forecasting" value="1" name="forecasting">
+								<label for="forecasting"></label>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="addDeviceSerialID" class="input_label">RTU명</label>
-								<input class="input tx_inp_type" type="text" name="deviceID" id="addDeviceSerialID" placeholder="입력">
-							</div>
-							<div class="input-group inline-flex">
-								<label for="advancedDevice" class="input_label">상위 장치</label>
-								<div id="advancedDevice" class="dropdown">
+								<label for="rid" class="input_label">RTU명</label>
+								<div id="rid" class="dropdown">
 									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="장치 선택">
 										장치 선택<span class="caret"></span>
 									</button>
-									<ul class="dropdown-menu"></ul>
+									<ul class="dropdown-menu" id="ridList">
+										<li data-value="[rid]">
+											<a href="javascript:void(0);" tabindex="-1">[name]</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="input-group inline-flex">
+								<label for="parent_did" class="input_label">상위 장치</label>
+								<div id="parent_did" class="dropdown">
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="장치 선택">
+										장치 선택<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" id="parent_didList">
+										<li data-value="[did]">
+											<a href="javascript:void(0);" tabindex="-1">[name]</a>
+										</li>
+									</ul>
 								</div>
 							</div>
 							<div class="input-group inline-flex">
@@ -194,7 +216,7 @@
 									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="유형 선택">
 										유형 선택<span class="caret"></span>
 									</button>
-									<ul class="dropdown-menu">
+									<ul class="dropdown-menu chk_type">
 										<li>
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="checkbox" id="addDeviceDisplayType0" value="dashboard" name="addDeviceDisplayType">
@@ -211,20 +233,33 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="addDeviceProductName" class="input_label">제품명</label>
-								<input class="input tx_inp_type" type="text" name="productName" id="addDeviceProductName">
+								<label for="product_name" class="input_label">제품명</label>
+								<div class="dropdown" id="product_name">
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="제조사 선택">
+										제품명 선택<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" id="product_nameList">
+										<li data-value="[set_id]">
+											<a href="javascript:void(0);" tabindex="-1">[model]_[version]</a>
+										</li>
+									</ul>
+								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="addDeviceContact" class="input_label">담당자 연락처</label>
-								<input class="input tx_inp_type" type="text" name="addDeviceContact" id="addDeviceContact">
+								<label for="serial_id" class="input_label">시리얼 ID</label>
+								<input class="input tx_inp_type" type="text" name="serial_id" id="serial_id" autocomplete="off">
+							</div>
+							<div class="input-group inline-flex">
+								<label for="contact" class="input_label">담당자 연락처</label>
+								<input class="input tx_inp_type" type="text" name="contact" id="contact" autocomplete="off">
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-12">
 							<div class="input-group inline-flex">
-								<label for="addDeviceDescription" class="input_label">설명</label>
-								<textarea name="addDeviceDescription" id="addDeviceDescription" class="textarea"></textarea>
+								<label for="description" class="input_label">설명</label>
+								<textarea name="addDeviceDescription" id="description" class="textarea"></textarea>
 							</div>
 						</div>
 					</div>
@@ -274,12 +309,16 @@
 								<div class="dropdown hidden">
 									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown"><span class="caret"></span></button>
 									<!-- 개발시에 1 ~ 12시 부분 동적으로 처리!!! -->
-									<ul class="dropdown-menu"><li data-value="hourly" class="on"><a href="#">1시간</a></li></ul>
+									<ul class="dropdown-menu">
+										<li data-value="hourly" class="on"><a href="#">1시간</a></li>
+									</ul>
 								</div>
 								<div class="dropdown hidden">
 									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown"><span class="caret"></span></button>
 									<!-- 개발시에 15, 30, 45 분 동적으로 처리!!! -->
-									<ul class="dropdown-menu"><li data-value="quarterly" class="on"><a href="#">15분</a></li></ul>
+									<ul class="dropdown-menu">
+										<li data-value="quarterly" class="on"><a href="#">15분</a></li>
+									</ul>
 								</div>
 							</div>
 
@@ -342,6 +381,9 @@
 		</div>
 	</div>
 </div>
+<form id="pageMove" name="pageMove" method="post">
+	<input type="hidden" id="did" name="did" value="">
+</form>
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	const siteList = JSON.parse('${siteList}');
@@ -352,6 +394,11 @@
 	const apiDeviceProperties = '/config/view/device_properties';
 	const apiStatusRawSite = '/status/raw/site';
 	const apiStatusRaw = '/status/raw';
+	const apiConfigRtus = '/config/rtus';
+	const apiConfigDevices = '/config/devices';
+	const apiAlarmCodeSets = '/alarms/code_sets';
+
+	let codeSetList = new Array();
 
 	$(function () {
 		deviceProperties();
@@ -371,6 +418,10 @@
 	const rtnDropdown = ($dropdownId) => {
 		if ($dropdownId == 'siteList') {
 			getDeviceList();
+		} else if ($dropdownId == 'addSiteList') {
+			getRtusList();
+		} else if ($dropdownId == 'device_type') {
+			setParentDevice();
 		}
 	}
 
@@ -505,7 +556,7 @@
 
 							$li.data('dvtype', el.device_type).data('did', el.did).attr('onclick', 'deviceDetailView(\'' + el.did + '\')');
 							$a.attr('href', 'javascript:void(0);');
-							$('<span>').text(el.dname).appendTo($li);
+							$('<span>').attr('style', 'text-overflow: ellipsis; white-space: nowrap; overflow: hidden;').text(el.dname).appendTo($li);
 							$('<span>').text(capacity).appendTo($li);
 							$('<em>').text(activePower + '  ' + dcPower).appendTo($li);
 							$a.appendTo($li);
@@ -553,7 +604,7 @@
 
 			let $li = $('<li>'),
 				$a = $('<a>');
-			$a.attr('href', 'javascript:addDeviceForm();');
+			$a.attr('href', 'javascript:addDeviceForm("' + key + '");');
 			$li.addClass('eq_add').append($a);
 			deviceList.append($li);
 
@@ -616,7 +667,6 @@
 
 		typeList.sort((a, b) => {
 			return a.typeId < b.typeId ? -1 : a.typeId > b.typeId ? 1 : 0;
-			;
 		});
 
 		setMakeList(typeList, 'deviceStateTypeList', {'dataFunction': {}});
@@ -660,6 +710,8 @@
 				$(this).find('.di_li_tx').text(dValue);
 			});
 
+			$('#' + dType + ' .eq_card .eq_btn_bx button').eq(0).attr('onclick', 'addDeviceForm("' + dType + '", "' + did + '")'); //설비 수정
+			$('#' + dType + ' .eq_card .eq_btn_bx button').eq(1).attr('onclick', 'moveOperation("' + did + '");'); //상태이력으로 이동
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
@@ -667,8 +719,13 @@
 		});
 	}
 
-	const addDeviceForm = (devicetype) => {
+	const addDeviceForm = (devicetype, did) => {
 		setInitList('addSiteUlList'); //사업소 리스트
+		setInitList('device_typeList');
+		setInitList('ridList');
+		setInitList('parent_didList');
+		setInitList('product_nameList');
+		setInitList('manufacturerList');
 
 		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
 			function () {
@@ -680,6 +737,112 @@
 		);
 		setMakeList(siteArray, 'addSiteUlList', {'dataFunction': {}});
 
+		let deviceTypeList = new Array();
+		$.map(featureProperties, function (val, key) {
+			deviceTypeList.push({
+				type: key,
+				name: val.name
+			});
+		});
+		setMakeList(deviceTypeList, 'device_typeList', {'dataFunction': {}});
+
+
+
 		$('#addDeviceModal').modal('show');
+	}
+
+	const costSetList = () => {
+		return new Promise((resolve, reject) => {
+			$.ajax({
+				url: apiURL + apiAlarmCodeSets,
+				type: 'get',
+				dataType: 'json',
+				async: false,
+				data: { includeCodes: true }
+			}).done(function (data, textStatus, jqXHR) {
+				codeSetList = data.data;
+				resolve(data.data);
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.error(jqXHR);
+				console.error(textStatus);
+				console.error(errorThrown);
+				reject(error);
+			});
+		});
+	}
+
+	const moveOperation = (did) => {
+		let pageForm = $('#pageMove');
+
+		pageForm.find('input[name="did"]').val(did);
+		pageForm.attr('action', '/history/operationHistory.do').submit();
+	}
+
+	const getRtusList = () => {
+		const sid = $('#addSiteList button').data('value');
+
+		$.ajax({
+			url: apiURL + apiConfigRtus,
+			type: 'get',
+			dataType: 'json',
+			data: {
+				oid: oid,
+				sid: sid,
+				filter: {}
+			}
+		}).done(function (data, textStatus, jqXHR) {
+			setMakeList(data, 'ridList', {'dataFunction': {}});
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.error(jqXHR);
+			console.error(textStatus);
+			console.error(errorThrown);
+
+			setMakeList(new Array(), 'ridList', {'dataFunction': {}});
+		});
+	}
+
+	const setParentDevice = () => {
+		const sid = $('#addSiteList button').data('value');
+		const device_type = $('#device_type button').data('value');
+		dropDownInit($('#parent_did'));
+
+		let parentDidList = new Array();
+
+		if (device_type == 'BMS_SYS' || device_type == 'BMS_RACK') {
+			$.ajax({
+				url: apiURL + apiConfigDevices,
+				type: 'get',
+				dataType: 'json',
+				data: {
+					oid: oid,
+					sid: sid,
+					filter: {}
+				}
+			}).done(function (data, textStatus, jqXHR) {
+				data.forEach(el => {
+					if (device_type == 'BMS_SYS' && el.device_type == 'PCS_ESS') {
+						parentDidList.push({
+							did: el.did,
+							name: el.name
+						});
+					} else if (device_type == 'BMS_RACK' && el.device_type == 'BMS_SYS') {
+						parentDidList.push({
+							did: el.did,
+							name: el.name
+						});
+					}
+				});
+
+				setMakeList(parentDidList, 'parent_didList', {'dataFunction': {}});
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.error(jqXHR);
+				console.error(textStatus);
+				console.error(errorThrown);
+
+				setMakeList(parentDidList, 'parent_didList', {'dataFunction': {}});
+			});
+		} else {
+			setMakeList(parentDidList, 'parent_didList', {'dataFunction': {}});
+		}
 	}
 </script>
