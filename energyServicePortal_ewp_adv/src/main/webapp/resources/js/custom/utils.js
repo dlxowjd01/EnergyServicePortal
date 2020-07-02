@@ -1059,6 +1059,7 @@ function setMakeList(jsonData, listId, opts) {
 		}
 		arrTagInfo.push(tmpHtml);
 	}
+
 	$selecter.html(arrTagInfo.join(""));
 }
 
