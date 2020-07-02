@@ -39,7 +39,7 @@
 					<div class="chart_top clear">
 						<h2 class="ntit fl">[typeName]</h2>
 						<div class="eq_icon fr">
-							<span class="eq_normal">정상([normail])</span>
+							<span class="eq_normal">정상([normal])</span>
 							<span class="eq_alert">중지([alert])</span>
 							<span class="eq_error">트립([error])</span>
 						</div>
@@ -170,8 +170,8 @@
 									<ul class="dropdown-menu chk_type" id="alarm_codeList">
 										<li>
 											<a href="javascript:void(0);" tabindex="-1">
-												<input type="checkbox" id="alarmMsg_[INDEX]" value="[sid]" name="site">
-												<label for="alarmMsg_[INDEX]">[name]</label>
+												<input type="checkbox" id="alarm_code_[INDEX]" value="[code]" name="alarm_code">
+												<label for="alarm_code_[INDEX]">[code]</label>
 											</a>
 										</li>
 									</ul>
@@ -181,7 +181,7 @@
 						<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
 							<div class="input-group inline-flex chk_type">
 								<label for="forecasting" class="input_label">예측</label>
-								<input type="checkbox" class="input tx_inp_type" id="forecasting" value="1" name="forecasting">
+								<input type="checkbox" class="input tx_inp_type" id="forecasting" value="true" name="forecasting">
 								<label for="forecasting"></label>
 							</div>
 							<div class="input-group inline-flex">
@@ -219,31 +219,32 @@
 									<ul class="dropdown-menu chk_type">
 										<li>
 											<a href="javascript:void(0);" tabindex="-1">
-												<input type="checkbox" id="addDeviceDisplayType0" value="dashboard" name="addDeviceDisplayType">
-												<label for="addDeviceDisplayType0">대시보드</label>
+												<input type="checkbox" id="dashboard" value="true" name="dashboard">
+												<label for="dashboard">대시보드</label>
 											</a>
 										</li>
 										<li>
 											<a href="javascript:void(0);" tabindex="-1">
-												<input type="checkbox" id="addDeviceDisplayType1" value="billing" name="addDeviceDisplayType">
-												<label for="addDeviceDisplayType1">매전량</label>
+												<input type="checkbox" id="billing" value="true" name="billing">
+												<label for="billing">매전량</label>
 											</a>
 										</li>
 									</ul>
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="product_name" class="input_label">제품명</label>
-								<div class="dropdown" id="product_name">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="제조사 선택">
+								<label for="alarm_set_id" class="input_label">제품명</label>
+								<div class="dropdown" id="alarm_set_id">
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="제품명 선택">
 										제품명 선택<span class="caret"></span>
 									</button>
-									<ul class="dropdown-menu" id="product_nameList">
+									<ul class="dropdown-menu" id="alarmSetIdList">
 										<li data-value="[set_id]">
 											<a href="javascript:void(0);" tabindex="-1">[model]_[version]</a>
 										</li>
 									</ul>
 								</div>
+								<input type="hidden" id="product_name" name="product_name" value="">
 							</div>
 							<div class="input-group inline-flex">
 								<label for="serial_id" class="input_label">시리얼 ID</label>
@@ -272,6 +273,7 @@
 		</div>
 	</div>
 </div>
+
 <div class="modal fade" id="manualAddDeviceModal" role="dialog">
 	<div class="modal-dialog device_modal">
 		<div class="modal-content manual_input">
@@ -285,8 +287,12 @@
 								<div id="deviceType" class="dropdown">
 									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
-										<li data-value="solar_opt"><a href="javascript:void(0)">태양광</a></li>
-										<li data-value="wind_opt"><a href="javascript:void(0)">풍력</a></li>
+										<li data-value="solar_opt">
+											<a href="javascript:void(0)">태양광</a>
+										</li>
+										<li data-value="wind_opt">
+											<a href="javascript:void(0)">풍력</a>
+										</li>
 									</ul>
 								</div>
 							</div>
@@ -342,7 +348,7 @@
 						<div class="col-12">
 							<div class="input-group inline-flex">
 								<label class="input_label">데이터 확인</label>
-								<button class="btn_type03 end">입력 초기화</button>
+								<button type="button" class="btn_type03 end">입력 초기화</button>
 							</div>
 							<div class="spc_tbl mt20">
 								<table class="ly_type">
@@ -351,22 +357,6 @@
 									<th>데이터 값</th>
 									</thead>
 									<tbody id="manualModalTable">
-									<tr>
-										<td>2020-05-01 01:00</td>
-										<td>
-											<div class="tx_inp_type center edit">
-												<input id="dataValue" type="text" name="dataValue" value=""/>
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<td>2020-05-01 01:15</td>
-										<td>
-											<div class="tx_inp_type center edit">
-												<input id="dataValue" type="text" name="dataValue" value=""/>
-											</div>
-										</td>
-									</tr>
 									</tbody>
 								</table>
 							</div>
@@ -407,6 +397,14 @@
 		siteMakeList();
 
 		setInitList('deviceStateTypeList'); //장비 리스트
+
+		setInitList('addSiteUlList'); //사업소 리스트
+		setInitList('device_typeList');
+		setInitList('ridList');
+		setInitList('parent_didList');
+		setInitList('alarmSetIdList');
+		setInitList('manufacturerList');
+		setInitList('alarm_codeList');
 	});
 
 	//사업소 조회
@@ -422,6 +420,33 @@
 			getRtusList();
 		} else if ($dropdownId == 'device_type') {
 			setParentDevice();
+		} else if ($dropdownId == 'manufacturer') {
+			let productList = new Array();
+			const manufacturerName = $('#manufacturer button').data('value');
+			dropDownInit($('#alarm_set_id'));
+			dropDownInit($('#alarm_code'));
+			codeSetList.forEach(function (el) {
+				if(el.manufacturer == manufacturerName) {
+					productList.push(el);
+				}
+			});
+
+			setMakeList(productList, 'alarmSetIdList', {'dataFunction': {}});
+		} else if ($dropdownId == 'alarm_set_id') {
+			const manufacturerName = $('#manufacturer button').data('value');
+			const alarmSetId = $('#alarm_set_id button').data('value');
+			dropDownInit($('#alarm_code'));
+
+			codeSetList.forEach(function (el) {
+				if(el.manufacturer == manufacturerName && el.set_id == alarmSetId) {
+					if (!isEmpty(el.codes)) {
+						setMakeList(el.codes, 'alarm_codeList', {'dataFunction': {}});
+					} else {
+						setMakeList(new Array(), 'alarm_codeList', {'dataFunction': {}});
+					}
+					$('#product_name').val(el.model);
+				}
+			});
 		}
 	}
 
@@ -493,38 +518,69 @@
 		if (siteArray.length > 0) {
 			let promiseCnt = 0;
 			siteArray.forEach(el => {
-				return new Promise((resolve, reject) => {
-					$.ajax({
-						url: apiURL + apiStatusRawSite,
-						type: 'get',
-						dataType: 'json',
-						data: {
-							sid: el,
-							formId: 'v2'
-						}
-					}).done(function (data, textStatus, jqXHR) {
-						resolve(data);
-					}).fail(function (jqXHR, textStatus, errorThrown) {
-						console.error(jqXHR);
-						console.error(textStatus);
-						console.error(errorThrown);
+				const getDevice = {
+					url: apiURL + apiConfigDevices,
+					type: 'get',
+					dataType: 'json',
+					data: {
+						sid: el,
+						formId: 'v2'
+					}
+				};
 
-						reject({error: textStatus});
-					});
-				}).then(data => {
-					$.map(data, (val, key) => {
-						if (isEmpty(deviceMap[key])) {
-							deviceMap[key] = new Array(val);
-						} else {
-							deviceMap[key] = deviceMap[key].concat(new Array(val));
+				const rawSiteDevice = {
+					url: apiURL + apiStatusRawSite,
+					type: 'get',
+					dataType: 'json',
+					data: {
+						sid: el,
+						formId: 'v2'
+					}
+				};
+
+				$.when($.ajax(getDevice), $.ajax(rawSiteDevice))
+				.done(function (getDeviceData, rawSiteDeviceData) {
+					if (getDeviceData[1] == 'success') {
+						const devcieArray = getDeviceData[0];
+						devcieArray.forEach(function(el) {
+							if (isEmpty(deviceMap[el.device_type])) {
+								deviceMap[el.device_type] = new Array(el);
+							} else {
+								deviceMap[el.device_type] = deviceMap[el.device_type].concat(new Array(el));
+							}
+						});
+
+						if (rawSiteDeviceData[1] == 'success') {
+							const rawDevice = rawSiteDeviceData[0];
+							$.map(rawDevice, (val, key) => {
+								if (isEmpty(deviceMap[key])) {
+									deviceMap[key] = new Array(val);
+								} else {
+									deviceMap[key].forEach(function(el, index) {
+										if (!isEmpty(val.devices)) {
+											val.devices.forEach(function(element) {
+												if(el.did == element.did) {
+													const mergeObj = $.extend({}, el, element);
+													deviceMap[key][index] = mergeObj;
+												}
+											});
+										}
+									});
+								}
+							});
 						}
-					});
+					}
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					console.error(jqXHR);
+					console.error(textStatus);
+					console.error(errorThrown);
+
+					alert('처리 중 오류가 발생했습니다.');
+					return false;
+				}).always(function(jqXHR, textStatus) {
 					promiseCnt++;
-				}).catch(error => {
-					console.log(error);
-					promiseCnt++;
-				}).finally(() => {
 					if (siteArray.length == promiseCnt) {
+						console.log(deviceMap);
 						makeDeviceList(deviceMap);
 					}
 				});
@@ -539,45 +595,46 @@
 	const makeDeviceList = (deviceMap) => {
 		let typeList = new Array();
 		$.map(deviceMap, (val, key) => {
-			if (isEmpty(featureProperties[key])) return false;
-
-			let normail = 0, alert = 0, error = 0, deviceList = $('<div>');
+			let normal = 0, alert = 0, error = 0, deviceList = $('<div>'), operation = '';
 			//배열로 디바이스 상태 수집
 			if (!isEmpty(val)) {
-				val.forEach(typeEl => {
-					if (!isEmpty(typeEl) && !isEmpty(typeEl.devices)) {
-						typeEl.devices.forEach(el => {
-							let $li = $('<li>'),
-								$a = $('<a>'),
-								capacity = isEmpty(el.capacity) ? '-' : displayNumberFixedUnit(el.capacity, el.capacity_unit, 'kW', 2)[0] + 'kW',
-								activePower = isEmpty(el.activePower) ? '-' : displayNumberFixedUnit(el.activePower, 'W', 'kW', 2)[0] + 'kW',
-								dcPower = isEmpty(el.dcPower) ? '-' : displayNumberFixedUnit(el.dcPower, 'W', 'kW', 2)[0] + 'kW';
+				val.forEach(el => {
+					let $li = $('<li>'),
+						$a = $('<a>'),
+						capacity = isEmpty(el.capacity) ? '-' : displayNumberFixedUnit(el.capacity, el.capacity_unit, 'kW', 2)[0] + 'kW',
+						activePower = isEmpty(el.activePower) ? '-' : displayNumberFixedUnit(el.activePower, 'W', 'kW', 2)[0] + 'kW',
+						dcPower = isEmpty(el.dcPower) ? '-' : displayNumberFixedUnit(el.dcPower, 'W', 'kW', 2)[0] + 'kW',
+						operation = el.operation;
 
+					$li.data('dvtype', el.device_type).data('did', el.did).attr('onclick', 'deviceDetailView(\'' + el.did + '\')');
+					$a.attr('href', 'javascript:void(0);');
+					$('<span>').attr('style', 'text-overflow: ellipsis; white-space: nowrap; overflow: hidden;').text(el.name).appendTo($li);
+					$('<span>').text(capacity).appendTo($li);
+					$('<em>').text(activePower + '  ' + dcPower).appendTo($li);
+					$('<button>').attr('type', 'button').attr('onclick', 'deviceProcess("delete", "' + el.did + '");').text('삭제').appendTo($li);
+					$a.appendTo($li);
 
-							$li.data('dvtype', el.device_type).data('did', el.did).attr('onclick', 'deviceDetailView(\'' + el.did + '\')');
-							$a.attr('href', 'javascript:void(0);');
-							$('<span>').attr('style', 'text-overflow: ellipsis; white-space: nowrap; overflow: hidden;').text(el.dname).appendTo($li);
-							$('<span>').text(capacity).appendTo($li);
-							$('<em>').text(activePower + '  ' + dcPower).appendTo($li);
-							$a.appendTo($li);
-							deviceList.append($li);
-
-							switch (el.operation) {
-								case 0:
-									alert++;
-									break;
-								case 1:
-									normail++;
-									break;
-								case 2:
-									error++;
-									break;
-								default:
-									alert++;
-									break;
-							}
-						});
+					switch (el.operation) {
+						case 0:
+							alert++;
+							operation = 'st_alert';
+							break;
+						case 1:
+							normal++;
+							operation = '';
+							break;
+						case 2:
+							error++;
+							operation = 'st_error';
+							break;
+						default:
+							alert++;
+							operation = 'st_alert';
+							break;
 					}
+
+					$li.addClass(operation);
+					deviceList.append($li);
 				});
 			}
 
@@ -585,22 +642,25 @@
 			let featureBody1 = '';
 			let featureBody2 = '';
 			if (!isEmpty(featureProperties[key])) {
-				let prop = featureProperties[key].prop;
-				prop.forEach(el => {
-					featureHead += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><p class="t_ti">' + el.value + '</p><p class="t_value"></p></li>';
-				});
+				if (!isEmpty(featureProperties[key])) {
+					let prop = featureProperties[key].prop;
+					prop.forEach(el => {
+						featureHead += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><p class="t_ti">' + el.value + '</p><p class="t_value"></p></li>';
+					});
+				}
+
+				if (!isEmpty(featurePropertiesSub[key])) {
+					let prop = featurePropertiesSub[key].prop;
+					prop.forEach((el, idx) => {
+						if (idx % 2 == 0) {
+							featureBody1 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di_li_tit">' + el.value + '</span><span class="di_li_tx"></span></li>';
+						} else {
+							featureBody2 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di_li_tit">' + el.value + '</span><span class="di_li_tx"></span></li>';
+						}
+					});
+				}
 			}
 
-			if (!isEmpty(featurePropertiesSub[key])) {
-				let prop = featurePropertiesSub[key].prop;
-				prop.forEach((el, idx) => {
-					if (idx % 2 == 0) {
-						featureBody1 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di_li_tit">' + el.value + '</span><span class="di_li_tx"></span></li>';
-					} else {
-						featureBody2 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di_li_tit">' + el.value + '</span><span class="di_li_tx"></span></li>';
-					}
-				});
-			}
 
 			let $li = $('<li>'),
 				$a = $('<a>');
@@ -651,12 +711,19 @@
 					break;
 			}
 
+			let typeName = '';
+			if (key == 'SM_MANUAL') {
+				typeName = '수기입력';
+			} else {
+				typeName = featureProperties[key].name;
+			}
+
 			typeList.push({
-				typeName: featureProperties[key].name,
+				typeName: typeName,
 				typeId: key,
 				alert: alert,
 				error: error,
-				normail: normail,
+				normal: normal,
 				deviceList: deviceList.html(),
 				featureHead: featureHead,
 				featureBody1: featureBody1,
@@ -670,6 +737,12 @@
 		});
 
 		setMakeList(typeList, 'deviceStateTypeList', {'dataFunction': {}});
+
+		$('#deviceStateTypeList div.row').each(function() {
+			if ($(this).prop('id') == 'SM_MANUAL') {
+				$(this).find('.eq_card .eq_btn_bx button').eq(0).html('데이터 입력');
+			}
+		});
 	}
 
 	const deviceDetailView = (did) => {
@@ -695,9 +768,13 @@
 				if (liData == 'dname') {
 					$(this).find('.t_value').text(dName);
 				} else {
-					let dValue = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
-					dValue = dValue[0] != '-' ? dValue.join(' ') : dValue[0];
-					$(this).find('.t_value').text(dValue);
+					if (!isEmpty(resultData) && !isEmpty(resultData[liData])) {
+						let dValue = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
+						dValue = dValue[0] != '-' ? dValue.join(' ') : dValue[0];
+						$(this).find('.t_value').text(dValue);
+					} else {
+						$(this).find('.t_value').text('-');
+					}
 				}
 			});
 
@@ -705,12 +782,21 @@
 				let liData = $(this).data('key'),
 					suffix = $(this).data('suffix');
 
-				let dValue = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
-				dValue = dValue[0] != '-' ? dValue.join(' ') : dValue[0];
-				$(this).find('.di_li_tx').text(dValue);
+				if (!isEmpty(resultData) && !isEmpty(resultData[liData])) {
+					let dValue = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
+					dValue = dValue[0] != '-' ? dValue.join(' ') : dValue[0];
+					$(this).find('.di_li_tx').text(dValue);
+				} else {
+					$(this).find('.di_li_tx').text('-');
+				}
+
 			});
 
-			$('#' + dType + ' .eq_card .eq_btn_bx button').eq(0).attr('onclick', 'addDeviceForm("' + dType + '", "' + did + '")'); //설비 수정
+			if (dType == 'SM_MANUAL') {
+				$('#' + dType + ' .eq_card .eq_btn_bx button').eq(0).attr('onclick', 'addManualForm("' + did + '")'); //설비 수정
+			} else {
+				$('#' + dType + ' .eq_card .eq_btn_bx button').eq(0).attr('onclick', 'addDeviceForm("' + dType + '", "' + did + '")'); //설비 수정
+			}
 			$('#' + dType + ' .eq_card .eq_btn_bx button').eq(1).attr('onclick', 'moveOperation("' + did + '");'); //상태이력으로 이동
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
@@ -719,13 +805,16 @@
 		});
 	}
 
+	const addManualForm = (did) => {
+		$('#manualAddDeviceModal').modal('show');
+	}
+
 	const addDeviceForm = (devicetype, did) => {
-		setInitList('addSiteUlList'); //사업소 리스트
-		setInitList('device_typeList');
-		setInitList('ridList');
-		setInitList('parent_didList');
-		setInitList('product_nameList');
-		setInitList('manufacturerList');
+		initDropdownValue($('#addDeviceModal button.btn-primary'));
+
+		$('#addDeviceModal input').each(function() {
+			$(this).val('');
+		});
 
 		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
 			function () {
@@ -746,28 +835,178 @@
 		});
 		setMakeList(deviceTypeList, 'device_typeList', {'dataFunction': {}});
 
+		costSetList();
 
-
-		$('#addDeviceModal').modal('show');
-	}
-
-	const costSetList = () => {
-		return new Promise((resolve, reject) => {
+		//did가 있으면 수정
+		if (!isEmpty(did)) {
 			$.ajax({
-				url: apiURL + apiAlarmCodeSets,
+				url: apiURL + apiConfigDevices + '/' + did,
 				type: 'get',
 				dataType: 'json',
 				async: false,
-				data: { includeCodes: true }
+				data: {},
 			}).done(function (data, textStatus, jqXHR) {
-				codeSetList = data.data;
-				resolve(data.data);
+				setJsonAutoMapping(data, 'addDeviceModal', 'dropdown');
+
+				let propArray = ['dashboard', 'billing', 'forecasting', 'manufacturer', 'alarm_set_id', 'alarm_code'];
+				let alarm_code = new Array();
+				$.map(data, function(val, key) {
+					if ($.inArray(key, propArray) >= 0) {
+						if (key == 'dashboard' || key == 'billing' || key == 'forecasting') {
+							$('#' + key).prop('checked', val);
+						} else {
+							if (key == 'manufacturer') {
+								$('#manufacturer button').html(val + '<span class="caret"></span>').data('value', val);
+							} else if (key == 'alarm_set_id') {
+								let codeList = new Array();
+								codeSetList.forEach(function(el) {
+									if (el.set_id == val) {
+										codeList.push(el);
+										$('#alarm_set_id button').html(el.model + '_' + el.version + '<span class="caret"></span>').data('value', val);
+										setMakeList(codeList, 'alarmSetIdList', {'dataFunction': {}});
+
+										if(!isEmpty(el.codes)) {
+											setMakeList(el.codes, 'alarm_codeList', {'dataFunction': {}});
+										} else {
+											setMakeList(new Array(), 'alarm_codeList', {'dataFunction': {}});
+										}
+									}
+								});
+							} else if (key == 'alarm_code') {
+								if (!isEmpty(val)) {
+									alarm_code = val.split(',');
+								}
+							}
+						}
+					}
+				});
+
+				$('#alarm_codeList input').each(function() {
+					let thisVal = $(this).val();
+					if ($.inArray(thisVal, alarm_code) >= 0) {
+						$(this).prop('checked', true);
+					}
+				});
+
+				displayDropdown($('#alarm_code'));
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.error(jqXHR);
 				console.error(textStatus);
 				console.error(errorThrown);
-				reject(error);
+
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
 			});
+
+			$('#addDevice').attr('onclick', 'deviceProcess("patch", "' + did + '")');
+		} else {
+			$('#addDevice').attr('onclick', 'deviceProcess("post")');
+		}
+
+		$('#addDeviceModal').modal('show');
+	}
+
+	//등록&수정&삭제
+	const deviceProcess = (method, did) => {
+		let areaData = setAreaParamData('addDeviceModal', 'dropdown');
+		let alertPreffix = '등록';
+		let urlSufffix = '';
+		if (method == 'patch' || method == 'delete') {
+			urlSufffix = '/' + did;
+
+			if (method == 'patch') {
+				alertPreffix = '수정';
+				if (!confirm('설비정보를 수정하시겠습니까?')) {
+					return false;
+				}
+			}
+
+			if (method == 'delete') {
+				alertPreffix = '삭제';
+				let delPrompt = prompt('해당설비를 삭제하시겠습니까? \n삭제를 원하시면 아래 "삭제"라고 입력하고 확인을 눌러 주세요.', '');
+				if (delPrompt != '삭제') {
+					return false;
+				}
+			}
+		} else {
+			urlSufffix = '?oid=' + oid + '&sid=' + $('#addSiteList button').data('value');
+		}
+
+		if (method != 'delete') {
+			const alarmArray = $.makeArray($(':checkbox[name="alarm_code"]:checked').map(
+				function () {
+					return $(this).val();
+				})
+			);
+
+			areaData['forecasting'] = $('#forecasting').is(':checked');
+			areaData['dashboard'] = $('#dashboard').is(':checked');
+			areaData['billing'] = $('#billing').is(':checked');
+			if (!isEmpty(alarmArray)) {
+				areaData['alarm_code'] = alarmArray.join(',');
+			}
+			areaData['capacity'] = Number(areaData['capacity']);
+			areaData['capacity_unit'] = 'kW';
+
+			if (isEmpty(areaData['parent_did'])) {
+				delete areaData['parent_did'];
+			}
+
+			delete areaData['addDeviceDisplayType'];
+			delete areaData['addSiteList'];
+		}
+
+		$.ajax({
+			url: apiURL + apiConfigDevices + urlSufffix,
+			type: method,
+			dataType: 'json',
+			async: false,
+			contentType: 'application/json',
+			data: JSON.stringify(areaData),
+		}).done(function (data, textStatus, jqXHR) {
+			alert(alertPreffix + ' 되었습니다.');
+
+			$('#addDeviceModal').modal('hide');
+			getDeviceList();
+			return false;
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.error(jqXHR);
+			console.error(textStatus);
+			console.error(errorThrown);
+
+			alert('처리 중 오류가 발생했습니다.');
+			return false;
+		});
+	}
+
+	const costSetList = () => {
+		$.ajax({
+			url: apiURL + apiAlarmCodeSets,
+			type: 'get',
+			dataType: 'json',
+			async: false,
+			data: { includeCodes: true }
+		}).done(function (data, textStatus, jqXHR) {
+			codeSetList = data.data;
+			let manufacturerList = new Array();
+			codeSetList.forEach(function (el) {
+				let tempManu = el.manufacturer,
+					dup = false;
+				manufacturerList.forEach(function (element) {
+					if (tempManu == element.manufacturer) dup = true;
+				});
+				if(!dup) {
+					manufacturerList.push({
+						manufacturer: tempManu
+					});
+				}
+			});
+			setMakeList(manufacturerList, 'manufacturerList', {'dataFunction': {}})
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.error(jqXHR);
+			console.error(textStatus);
+			console.error(errorThrown);
+			reject(error);
 		});
 	}
 
@@ -791,6 +1030,14 @@
 				filter: {}
 			}
 		}).done(function (data, textStatus, jqXHR) {
+			const siteId = $('#addSiteList button').data('value');
+			let rtuList = new Array();
+			data.forEach(function(el) {
+				if (el.sid == siteId) {
+					rtuList.push(el);
+				}
+			});
+
 			setMakeList(data, 'ridList', {'dataFunction': {}});
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);

@@ -103,6 +103,11 @@ const displayNumberFixedUnit = function(input_num, input_unit, fixed_unit, num_f
 		rtnValue = ['-', input_unit];
 		return rtnValue;
 	} else {
+		if (input_unit == fixed_unit) {
+			rtnValue = [numberComma((input_num).toFixed(num_frac)), fixed_unit];
+			return rtnValue;
+		}
+
 		if(input_unit == 'Wh' || input_unit == 'W') {
 
 			if(isEmpty(num_frac)) {
