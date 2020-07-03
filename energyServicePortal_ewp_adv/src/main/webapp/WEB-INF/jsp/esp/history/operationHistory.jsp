@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	let today = new Date();
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
+	const searchDid = '<c:out value="${param.did}" escapeXml="false" />';
 	const siteList = JSON.parse('${siteList}');
 
 	const apiURL = 'http://iderms.enertalk.com:8443';
@@ -39,6 +39,8 @@
 	let gridList;
 
 	$(function () {
+		$('.fromDate, .toDate').datepicker('setDate', new Date()); //기본값 세팅
+
 		setInitList('siteULList'); //사업소 리스트
 		setInitList('typeULList'); //디바이스 리스트
 		siteMakeList();
@@ -50,8 +52,6 @@
 		setInitList('chartDidUl'); //차트 디바이스 선택
 		setInitList('chartDidUl2'); //차트 디바이스 선택
 		setInitList('chartDidUl3'); //차트 디바이스 선택
-
-		$('.fromDate, .toDate').datepicker('setDate', new Date()); //기본값 세팅
 
 		//검색
 		$('#search').on('click', function () {
@@ -532,6 +532,29 @@
 		});
 
 		deviceProperties();
+
+		window.onload = function() {
+			if (!isEmpty(searchDid)) {
+				siteList.forEach(function(site) {
+					let devices = site.devices;
+					if (!isEmpty(devices)) {
+						devices.forEach(function(device) {
+							if(device.did == searchDid) {
+								let choiceSid = device.sid,
+									deviceTp = device.device_type;
+								$(':checkbox[name="site"]').each(function() {
+									if($(this).val() == choiceSid) {
+										$(this).prop('checked', true);
+										displayDropdown($('#siteList'));
+										deviceType(deviceTp);
+									}
+								});
+							}
+						});
+					}
+				});
+			}
+		}
 	});
 
 	const getNumberIndex = function (index) {
@@ -580,13 +603,11 @@
 
 	//사업소 조회
 	const siteMakeList = function () {
-		setMakeList(siteList, 'siteULList', {
-			'dataFunction': {}
-		}); //list생성
+		setMakeList(siteList, 'siteULList', {'dataFunction': {}});
 	};
 
 	//선택한 SID에 해당하는 유형의 타입을 보여준다.
-	const deviceType = function () {
+	const deviceType = function (deviceTp) {
 		$('#deviceType button').empty().append('설비유형<span class="caret"></span>');
 
 		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
@@ -621,9 +642,17 @@
 						}
 					})
 
-					setMakeList(deviceType, 'typeULList', {
-						'dataFunction': {}
-					});
+					setMakeList(deviceType, 'typeULList', {'dataFunction': {}});
+
+					if (!isEmpty(deviceTp)) {
+						$(':checkbox[name="type"]').each(function() {
+							if($(this).val() == deviceTp) {
+								$(this).prop('checked', true);
+								displayDropdown($('#deviceType'));
+								device();
+							}
+						});
+					}
 				},
 				dataType: 'json'
 			});
@@ -674,6 +703,17 @@
 				});
 
 				$('#devices li.dropdown_cov').prepend(siteGrp);
+			});
+		}
+
+		if (!isEmpty(searchDid)) {
+			$(':checkbox[name="device"]').each(function() {
+				if($(this).val() == searchDid) {
+					$(this).prop('checked', true);
+					displayDropdown($('#device'));
+					$('#interval button').html('15분 <span class="caret"></span>').data('value', '15min');
+					searchGrid();
+				}
 			});
 		}
 	}
@@ -1075,12 +1115,21 @@
 <div class="row">
 	<div class="col-12">
 		<form id="operationSearchForm">
-			<div class="dropdown sa_select" id="siteList"><!--
-			--><button type="button" class="btn btn-primary dropdown-toggle w1" data-toggle="dropdown" data-name="사업소 선택">사업소 선택<span class="caret"></span></button><!--
-			--><ul class="dropdown-menu chk_type" role="menu" id="siteULList"><li data-value="[sid]"><a href="javascript:void(0);" tabindex="-1"><input type="checkbox" id="site_[INDEX]" value="[sid]" name="site"><label for="site_[INDEX]">[name]</label></a></li></ul><!--
-		 --></div><!--
-		
-		--><div id="searchDetail" class="search_expand sa_select">
+			<div class="dropdown sa_select" id="siteList">
+				<button type="button" class="btn btn-primary dropdown-toggle w1" data-toggle="dropdown" data-name="사업소 선택">
+					사업소 선택<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu chk_type" role="menu" id="siteULList">
+					<li data-value="[sid]">
+						<a href="javascript:void(0);" tabindex="-1">
+							<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
+							<label for="site_[INDEX]">[name]</label>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<div id="searchDetail" class="search_expand sa_select">
 				<button type="button" class="btn bgN" data-target="#searchDropdown" data-name="상세 검색" onclick="$('#searchDetail').toggleClass('open')">상세 검색<span class="caret"></span></button>
 				<div id="searchDropdown" class="dropdown-menu search_dropdown">
 					<h2 class="tx_tit">설비 타입</h2>
@@ -1131,8 +1180,8 @@
 								<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
 								<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
 								<li data-value="day"><a href="javascript:void(0);">1일</a></li>
-								<li data-value="week"><a href="javascript:void(0);">1주</a></li>
-								<li data-value="month"><a href="javascript:void(0);">1월</a></li>
+<%--								<li data-value="week"><a href="javascript:void(0);">1주</a></li>--%>
+<%--								<li data-value="month"><a href="javascript:void(0);">1월</a></li>--%>
 							</ul>
 						</div>
 					</div>
@@ -1145,7 +1194,7 @@
 			</div>
 		
 			<button type="button" id="search" class="btn_type ml-6">조회</button>
-			<a href="#;" class="save_btn fr">데이터저장</a>		
+			<a href="#;" class="save_btn fr">데이터저장</a>
 		</form>
 	</div>
 </div>
