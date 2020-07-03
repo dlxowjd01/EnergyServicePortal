@@ -47,6 +47,7 @@
 				
 			}
 		}
+
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/spcs",
 			type: "get",
