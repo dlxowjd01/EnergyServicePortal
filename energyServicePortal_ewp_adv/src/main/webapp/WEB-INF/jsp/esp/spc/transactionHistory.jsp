@@ -46,7 +46,6 @@
 			if(searchForm.find('.warning.hidden').length == formArr.length){
 				getDataList(1,formArr); 
 			}
-			// getDataList(1); 
 		});
 
 		// function nvl(value, str) {
@@ -96,7 +95,20 @@
 				return false;
 			});
 		}
-	
+
+		function uniqByKeepFirst(a, key) {
+			let seen = new Set();
+			return a.filter(item => {
+				let k = key(item);
+				return seen.has(k) ? false : seen.add(k);
+			});
+		}
+		function remove_duplicates_es6(arr) {
+			let s = new Set(arr);
+			let it = s.values();
+			return Array.from(it);
+		}
+
 		function getDataList(page, spcId) {
 			page == undefined ? page = 1 : page = page;
 			spcId == undefined ? null : spcId = spcId.toString();
@@ -119,70 +131,70 @@
 				tableList.empty();
 				if (json.data.length > 0) {
 					let data = json.data;
-
 					// object shallow copy below
 					// data.map(item => {item.to_account = '' }); 
 					json.data.map(item => {
 						return new Promise((resolve, reject) => {
+			
 							// typeof v.to_account !== "string" ? JSON.parse(v.to_account) : v.to_account = v.to_account
-							resolve(JSON.parse(item.to_account))
+								resolve(JSON.parse(item.to_account))
 							}).then(res => {
-							let popObj =  Object.assign({}, item);
-							delete(popObj.to_account);
-							
-							res.map(innerItem => {
+								console.log("res===", res.length)
+								let cnt = 0;
 								let str = '';
-								let newObj = {...innerItem, ...popObj}
-
-								let period = newObj.created_at.substring(0, 10) + '~' + newObj.updated_at.substring(0, 10);
-								let reqDate = newObj.requested_at.substring(0, 10) + ' ' + newObj.requested_at.substring(11, 19);
+								let popObj = Object.assign({}, item);
+								let compareArr =[];
+								delete(popObj.to_account);
+								let withdrawDay = popObj.withdraw_day.substring(0, 10) + ' ' + popObj.withdraw_day.substring(11, 19);
 								let transactionType = '';
-								let purpose = '';
-								let purposeList = [ 
-									{ label: "출금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
-									{ label: "입금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대 수선비", "배당금 적림", "일반 지출" ]},
-								];
-								let accountType = newObj.desc;
-								let amount = parseInt(newObj.amount);
-								let updatedAt = newObj.updated_at.substring(0, 10) + ' ' + newObj.updated_at.substring(11, 19)
+								res.length > 0 ? ( transactionType = '출금 외 +'+ (res.length-1) + '건' ) : ( transactionType = '-' );
+								let amount = '';
+								let updatedAt = ''
 								let requestedBy = '';
 								let approvedBy = '';
 								let status = '';
 								let statusList = ["승인완료", "승인 대기", "승인 증"]
-
-								newObj.purpose <= 5 ? ( transactionType = '출금', purpose = purposeList[0].value[newObj.purpose]
-									) : ( transactionType = '입금', purpose = purposeList[1].value[newObj.purpose] )
-									
-
-								amount = newObj.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-								newObj.requested_by ? requestedBy = newObj.requested_by : requestedBy = '-'
-								newObj.status_changed_by ? approvedBy = newObj.status_changed_by : approvedBy = '-'
+								let purposeList = [ 
+									{ label: "출금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
+									{ label: "입금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대 수선비", "배당금 적림", "일반 지출" ]},
+								];
+								let accountTypeList = [  "전력 판매대금", "REC 판매대금", "관리 운영비", "일반 렌탈", "전력중개 수수료", "전기 요금", "원리금" ];
+								let purpose = ''
+								const p = [];
+								let size = '';
 								
-								status = statusList[newObj.status];
-								
-								str = tableCloned.replace(/\*  \*/g, reqDate)
-									.replace(/\*period\*/g, period)
+								for(let i=0; i<res.length; i++){
+									p.push(res[i].purpose);
+								}
+								let uniqSet = new Set(p);
+									if( uniqSet.size === 0 ) {
+										purpose = '-'
+									} else if( uniqSet.size == 1 ) {
+										purpose = ( purposeList[0].value[p[0]] )
+									} else {
+										purpose = ( purposeList[0].value[p[0]] ) + '건 외' + ( uniqSet.size-1 );
+									}
+						
+									console.log('---', popObj.requested_by)
+								status = statusList[popObj.status];
+								popObj.total_amount ? ( amount = popObj.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원') : amount = '-';
+								( ( popObj.requested_by !== undefined ) && ( popObj.requested_by != "string") ) ? ( requestedBy = popObj.requested_by ) : ( requestedBy = '-' )
+								popObj.status_changed_at ? ( updatedAt = ( popObj.status_changed_at.substring(0, 10) + ' ' + popObj.status_changed_at.substring(11, 19)) ) : updatedAt = '-'
+								popObj.status_changed_by ? ( approvedBy = popObj.status_changed_by ) : ( approvedBy = '-');
+
+
+								// res.to_account_bank.locale
+								str = tableCloned.replace(/\*withdraw_day\*/g, withdrawDay)
 									.replace(/\*transaction_type\*/g, transactionType)
 									.replace(/\*purpose\*/g, purpose)
-									.replace(/\*account_type\*/g, accountType)
-									.replace(/\*amount\*/g, amount )
+									.replace(/\*account_type\*/g, accountTypeList[res.length])
+									.replace(/\*amount\*/g, amount)
 									.replace(/\*latest_update\*/g, updatedAt)
 									.replace(/\*updated_by\*/g, requestedBy)
 									.replace(/\*approved_by\*/g, approvedBy)
 									.replace(/\*status\*/g, status)
-								tableList.append(str);
-
-								let sortObj = {};
-								sortObj["기간"] = period;
-								sortObj["입출금_구분"] = transactionType;
-								sortObj["용도_구분"] = purpose;
-								sortObj["계좌_구분"] = accountType;
-								sortObj["금액"] = amount;
-								sortObj["최종_업데이트"] = updatedAt;
-								sortObj["상태"] = status;
-								sortList.push(sortObj);
-							});
-							makeNavigation(page, totalPage);
+								tableList.append($(str));
+								
 						}).catch(error => {
 							console.log(error);
 						}).finally(() => {
@@ -206,7 +218,7 @@
 			let totalnav = Math.ceil(totalPage/navCount);
 			let endPage = ((startPage + navCount-1) > totalPage)? totalPage : (startPage + navCount-1);
 			
-			console.log("nav===", page, "page===", navgroup);
+			// console.log("nav===", page, "page===", navgroup);
 			if (navgroup == 1) {
 				pageStr += '<a href="javascript:void(0);" class="btn_prev first_prev">prev</a><strong>'+page+'</strong>';
 			} else{
@@ -439,9 +451,9 @@
 			<div class='spc_tbl'>
 				<table class='sort_table transaction-table'>
 					<colgroup>
-						<col style='width:16%'>
-						<col style='width:8%'>
-						<col style='width:8%'>
+						<col style='width:12%'>
+						<col style='width:10%'>
+						<col style='width:10%'>
 						<col style='width:10%'>
 						<col style='width:12%'>
 						<col style='width:14%'>
@@ -452,7 +464,7 @@
 					</colgroup>
 					<thead>
 						<tr>
-							<th><button class='btn_align down'>기간</button></th>
+							<th><button class='btn_align down'>출금 일자</button></th>
 							<th><button class='btn_align down'>입출금 구분</button></th>
 							<th><button class='btn_align down'>용도 구분</button></th>
 							<th><button class='btn_align down'>계좌 구분</button></th>
@@ -467,11 +479,11 @@
 						<tr><td colspan='9' class='no-data center'>데이터가 없습니다.</td></tr></tr>
 						<template class='table-body'>
 							<tr>
-								<td>*period*</td>
+								<td>*withdraw_day*</td>
 								<td>*transaction_type*</td>
 								<td>*purpose*</td>
 								<td>*account_type*</td>
-								<td>*amount*</td>
+								<td class="right">*amount*</td>
 								<td>*latest_update*</td>
 								<td>*updated_by*</td>
 								<td>*approved_by*</td>

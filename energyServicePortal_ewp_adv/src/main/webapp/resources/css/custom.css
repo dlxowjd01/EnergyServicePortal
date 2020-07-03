@@ -637,7 +637,6 @@ table input[type="text"] {
 	height: 36px;
 	line-height: 36px;
 	font-family: "Roboto", sans-serif;
-	color: var(--dark-grey);
 	font-size: 13px;
 	border-radius: 2px;
 	outline-style: none;
@@ -11296,7 +11295,11 @@ html.darkmode .sch_top_info .sch_btn .btn_next_mon {
 	text-align: center;
 	background: none;
 }
-
+.spc_tbl td.right,
+.spc_bal_post .tx_inp_type input.right {
+	text-align: right;
+	padding: 0 16px;
+}
 .spc_bal_post .sel {
 	padding: 0;
 	width: 100%;

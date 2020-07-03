@@ -11,52 +11,156 @@
 		const withdrawForm = $('#withdrawForm');
 		const checkBoxes = withdrawForm.find('input[type="checkbox"]');
 		const tableBody = $("#tableBody");
+		const firstRow = tableBody.find("tr:first-child")
 		const deleteBtn = $("#deleteBtn");
 		const dropdownOpt = tableBody.find('.dropdown-menu:not(.chk_type) li');
+		const spcList = $('#spcList');
+		const cloned = spcList.clone().html();
+		const copyWithdrawList = $("#withdrawList").clone().html();
+		const copyReceiveList = $("#receiveList").clone().html();
+		let sum = 0;
 
-		let syncOpt = true;
-		let options = [
-			{
-				url: "http://iderms.enertalk.com:8443/spcs?oid=" + oid,
-				type: 'get',
-				async: syncOpt
-			},
-			{
-				url: 'http://iderms.enertalk.com:8443/spcs/transaction?oid=' + oid,
-				type: 'post',
-				async: syncOpt
-			},
-		];
+		spcList.empty();
+		$("#withdrawList").empty();
+		$("#receiveList").empty();
 
 		unCheckAll(tableBody);
 		setDropdownValue(dropdownOpt);
-		getSpcList(options);
+		getSpcList();
 
 		deleteBtn.on("click", function (){
-			checkBoxes.each(function(){
-				if($(this).prop("checked")){
-					$(this).closest("tr").remove();
-				} else {
-					return
+			checkBoxes.each(function(index, element){
+				if( $(this).is(":checked") ) {
+					console.log(element)
 				}
 			});
 		});
+
+		tableBody.find(".auto-update").on("input", function(){
+			sum = 0;
+			$(this).each(function(){
+				sum += $(this).val();
+			})
+			$("#total").text(sum.replace(/\D/gi, ''));
+		});
+
+		function getSpcList() {
+			let action = 'get';
+			let syncOpt = true;
+			let option = {
+				url: "http://iderms.enertalk.com:8443/spcs?oid="+oid,
+				type: action,
+				async: syncOpt
+			}
+
+			$.ajax(option).done(function (json, textStatus, jqXHR) {
+				spcList.empty();
+				json.data.forEach((item, index) => {
+					let listItem = '';
+					if(item.name == ""){
+						listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, "spc_noName"+ '_' + index);
+					} else {
+						listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, item.name);
+					}
+					spcList.append($(listItem));
+				});
+				$('#spcList').find("li a").on("click", function(){
+					getWithDrawAccount($(this).parent().val())
+				});
+
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
+		}
+
+		// deleteBtn.on("click", function (){
+		// 	checkBoxes.each(function(){
+		// 		if($(this).prop("checked")){
+		// 			$(this).closest("tr").remove();
+		// 		} else {
+		// 			return
+		// 		}
+		// 	});
+		// });
+		function getWithDrawAccount (id) {
+			$("#withdrawList").empty();
+			$("#receiveList").empty();
+			if (id == undefined || id == '') {
+				return;
+			}
+			let action = 'get';
+			let syncOpt = true;
+			let option= {
+				url: 'http://iderms.enertalk.com:8443/spcs/transactions',
+				type: action,
+				data: {
+					'oid' : oid,
+					'spcIds' : id
+				},
+				async: syncOpt
+			}
+			$.ajax(option).done(function (json, textStatus, jqXHR) {
+				let sending = '';
+				let receiving = '';
+				if (json.data.length > 0) {
+					json.data.map(item => {
+						let data = json.data;
+						console.log("item===", item)
+						sending = copyWithdrawList.replace(/\*withdraw_account\*/g, item.withdraw_account_no).replace(/\*account_num\*/g, item.withdraw_bank);
+						$("#withdrawList").append($(sending));
+						return new Promise((resolve, reject) => {
+							resolve(JSON.parse(item.to_account))
+							}).then(res => {
+								res.map(d => {
+									// console.log('d===000', d);
+									receiving = copyReceiveList.replace(/\*to_account\*/g, d.to_account_no);
+									$("#receiveList").append($(receiving));
+								});
+							}).catch(error => {
+								console.log(error);
+							});
+						});
+				} else {
+					console.log("copy---",copyWithdrawList )
+					sending = copyWithdrawList.replace(/\*withdraw_account\*/g, '등록된 출금 계좌가 없습니다.').replace(/\*account_num\*/g, '');
+					receiving = copyReceiveList.replace(/\*to_account\*/g, '등록된 입금 계좌가 없습니다.');
+					$("#withdrawList").append($(sending));
+					$("#receiveList").append($(receiving));
+				}
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
+		}
+
+		$(".auto-update").each(function() {
+			$(this).on('keyup', function() {
+				this.value = this.value.replace(/\D/gi, '');
+			});
+		});
+
+		
 		$("#addRow").on("click", function(){
 			addCustomRow(tableBody, 'first');
 		});
 
 		withdrawForm.on('submit', function(e){
 			e.preventDefault();
-
-			let spcOpts = $('#spcList').find("li");
-			let fromDate = $('#fromDate');
-
-			let transactionType = $('#transactionType').parent().find('.dropdown-toggle');
-
-			let formArr = [];
+			let date = new Date();
+			let data = {}
+			data.spc_id = $('#spcList').prev().val();
+			data.withdraw_bank = $("#withdrawList").find("li").data('value');
+			data.withdraw_account_no = $("#withdrawList").prev().val();
+			data.withdraw_day = $("#requestedDate").val();
+			data.total_amount = sum;
+			data.status = "승인 대기";
+			data.status_changed_by = "";
+			data.status_changed_at = "";
+			data.requested_by = loginName;
+			data.requested_at = date.getFullYear() + "-" + month + "-" + day + "_" +  hour + ":" + min + ":" + sec;
 
 			warning.addClass('hidden');
-			formArr.push(spcOpts.val(), fromDate.val(), toDate.val(), spcStatus.val(), unitOpt.val(), transactionType.val(), purpose.val());
 
 			$.each(formArr, function(index, value){
 				if(value ==  undefined ||  value == "선택" || value == "" ) {
@@ -70,41 +174,6 @@
 			}
 			// getDataList(1); 
 		});
-
-		function getSpcList(options) {
-			const spcList = $('#spcList');
-			const cloned = spcList.clone().html();
-
-			$.ajax(options[0]).done(function (json, textStatus, jqXHR) {
-				spcList.empty();
-				json.data.forEach((item, index) => {
-					let listItem = '';
-					if(item.name == ""){
-						listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, "spc_noName"+ '_' + index);
-					} else {
-						listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, item.name);
-					}
-					spcList.append($(listItem));
-				});
-
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				alert('처리 중 오류가 발생했습니다.');
-				return false;
-			});
-		}
-
-		function getDataList(page) {
-			if(page == undefined){
-				page = 1;
-			}
-			$.ajax(options[0]).done(function (json, textStatus, jqXHR) {
-				console.log("json===", json)
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				alert('처리 중 오류가 발생했습니다.');
-				return false;
-			});
-		}
-
 
 		function nvl (value, str) {
 			if (isEmpty(value)) {
@@ -128,6 +197,7 @@
 
 	});
 
+
 </script>
 
 
@@ -145,12 +215,12 @@
 
 <form id="withdrawForm" name="withdraw_form">
 	<div class="row spc-search-bar">
-		<div class="col-10">
+		<div class="col-11">
 			<div class="sa_select"><!--
 			--><span class='tx_tit'>SPC 선택</span><!--
 			--><div class='dropdown'><!--
 				--><button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택" value="">선택<span class='caret'></span></button>
-					<ul id='spcList' class='dropdown-menu' role='menu'><li id="*spcName*" value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul>
+					<ul id='spcList' class='dropdown-menu unused' role='menu'><li id="*spcName*" value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul>
 					<small class="hidden warning">선택해 주세요.</small>
 				</div>
 			</div>
@@ -158,7 +228,7 @@
 			--><span class="tx_tit">출금 계좌번호</span><!--
 			--><div class="dropdown"><!--
 				--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-					<ul class="dropdown-menu" role="menu"><li data-value=""><a href="#" tabindex="-1">*withdraw*</a></li></ul>
+					<ul id="withdrawList" class="dropdown-menu unused" role="menu"><li data-value="*account_num*"><a href="#" tabindex="-1">*withdraw_account*</a></li></ul>
 				</div>
 			</div>
 			<div class="sa_select"><!--
@@ -166,7 +236,7 @@
 			--><div class="tx_inp_type"><input type="text" id="" name="availableAmount" disabled='' readonly=''></div>
 			</div>
 		</div>
-		<div class="col-2">
+		<div class="col-1">
 			<div class="fr"><a href="#;" class="save_btn">엑셀 다운로드</a></div>
 		</div>
 	</div>
@@ -210,25 +280,23 @@
 									<div class="dropdown placeholder">
 										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택 <span class="caret"></span></button>
 										<ul id="purposeList" class="dropdown-menu" role="menu">
-											<li><a href="#" tabindex="-1">관리 운영비</a></li>
-											<li><a href="#" tabindex="-1">사무 수탁비</a></li>
-											<li><a href="#" tabindex="-1">기타</a></li>
+											<li data-value=""><a href="#" tabindex="-1">관리 운영비</a></li>
+											<li data-value=""><a href="#" tabindex="-1">사무 수탁비</a></li>
+											<li data-value=""><a href="#" tabindex="-1">기타</a></li>
 										</ul>
 									</div>
 								</div>
 							</td>
 							<td>
 								<div class="tx_inp_type">
-									<input type="text" id="transferAmount" name="transfer_amount" placeholder="직접 입력">
+									<input type="text" id="transferAmount" class="auto-update right" name="transfer_amount" placeholder="직접 입력">
 								</div>
 							</td>
 							<td>
 								<div class="sa_select">
 									<div class="dropdown placeholder">
 										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-										<ul id="toSendList" class="dropdown-menu" role="menu">
-											<li><a href="#" tabindex="-1"></a></li>
-										</ul>
+										<ul id="receiveList" class="dropdown-menu" role="menu"><li data-value="*to_account*"><a href="#" tabindex="-1">*to_account*</a></li></ul>
 									</div>
 								</div>
 							</td>
@@ -242,14 +310,14 @@
 							<td></td>
 							<td>합계</td>
 							<td></td>
-							<td>100,000,000 원</td>
+							<td id="total" class="total"></td>
 							<td></td>
 							<td></td>
 						</tr>
 					</tfoot>
 				</table>
 				<div class="btn_wrap_type">
-					<button type="button" class="btn_type07" id="deleteBtn">선택 삭제</button>
+					<button type="button" id="deleteBtn" class="btn_type07" onclick="deleteRow()">선택 삭제</button>
 					<button type="button" id="addRow" class="btn-text-blue">열 추가</button>
 				</div>
 			</div>
