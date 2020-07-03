@@ -188,8 +188,8 @@
 					<ul>
 						<li><a href="/spc/entityInformation.do">기본정보</a></li>
 						<li><a href="/spc/balanceSheet.do">금융관리</a></li>
-						<li><a href="/spc/transaction.do">입출금 관리 (사무수탁사)</a></li>
-						<li><a href="/spc/transaction2.do">입출금 관리 (자산운용사)</a></li>
+						<li><a href="/spc/transaction.do">입출금 관리</a></li>
+						<!-- <li><a href="/spc/transaction2.do">입출금 관리 (자산운용사)</a></li> -->
 						<li><a href="/spc/maintenanceSchedule.do">점검계획</a></li>
 						<li><a href="/spc/supplementaryDocuments.do">이관자료</a></li>
 
@@ -292,8 +292,8 @@
 				<ul>
 					<li><a href="/spc/entityInformation.do">기본정보</a></li>
 					<li><a href="/spc/balanceSheet.do">원가관리</a></li>
-					<li><a href="/spc/transaction.do">입출금 관리 (사무수탁사)</a></li>
-					<li><a href="/spc/transaction2.do">입출금 관리 (자산운용사)</a></li>
+					<li><a href="/spc/transaction.do">입출금 관리</a></li>
+					<!-- <li><a href="/spc/transaction2.do">입출금 관리 (자산운용사)</a></li> -->
 					<li><a href="/spc/maintenanceSchedule.do">점검계획</a></li>
 					<li><a href="/spc/supplementaryDocuments.do">이관자료</a></li>
 				</ul>

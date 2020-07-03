@@ -33,6 +33,8 @@ function unCheckAll(data){
 		for(var i = 0; i < input.length; i++){
 			if(input[i].type=='checkbox'){
 				input[i].checked = false;
+			} else {
+				input.val('');
 			}
 		}
 	} else {

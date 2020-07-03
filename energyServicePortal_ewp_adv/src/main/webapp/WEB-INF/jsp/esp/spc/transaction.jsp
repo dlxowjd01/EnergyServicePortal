@@ -4,12 +4,14 @@
 <script type="text/javascript">
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
+
 	let today = new Date();
 	let date = new Date();
 
 	var spcArr = [];
 
 	$(function () {
+		(loginId == "test_spc_a" || loginId == "spadmin") ? ( $("#requestBtnReview").addClass('hidden'), $("#requestBtn").removeClass('hidden') ) : ( $("#requestBtnReview").removeClass('hidden'), $("#requestBtn").addClass('hidden') );
 		pageInit();
 		// TO DO!!!!!
 		// 사용자 === 사무수탁사 => show() : writeBtn
@@ -285,7 +287,7 @@
 
 			if (action == 'patch') {
 				option = {
-					url: 'http://iderms.enertalk.com:8443/spcs/bankbook/' + jobId + '?oid=' + oid + jobText,
+					url: 'http://iderms.enertalk.com:8443/spcs/maintenance/'  + jobId + '?oid=' + oid,
 					dataType: 'json',
 					type: action,
 					contentType: "application/json",
@@ -296,7 +298,7 @@
 				delete data.spc_id;
 			} else {
 				option = {
-					url: 'http://iderms.enertalk.com:8443/spcs/bankbook?oid=' + oid,
+					url: 'http://iderms.enertalk.com:8443/spcs/maintenance?oid=' + oid,
 					dataType: 'json',
 					type: action,
 					contentType: "application/json",
@@ -307,11 +309,12 @@
 
 		} else if (action == 'get') {
 			option = {
-				url: 'http://iderms.enertalk.com:8443/spcs/bankbook',
+				url: 'http://iderms.enertalk.com:8443/spcs/maintenance',
 				type: action,
 				dataType: 'json',
 				data: {
 					oid: oid,
+					type: "money",
 					like_yyyymm: $('#year button').data('value') + ('0' + $('#month button').data('value')).slice(-2)
 				}
 			};
@@ -326,15 +329,16 @@
 
 			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
 			option = {
-				url: 'http://iderms.enertalk.com:8443/spcs/bankbook/' + jobId + '?oid=' + oid + jobText,
+				url: 'http://iderms.enertalk.com:8443/spcs/maintenance/' + jobId + '?oid=' + oid,
 				type: action,
 				data: {
 					oid: oid,
-					jobId: jobId
+					jobId: jobId,
 				}
 			};
 		}
 		$.ajax(option).done(function (data, textStatus, jqXHR) {
+			console.log('data----', data)
 			$("#spcAlarmModal").removeClass("active");
 			if (action == 'get') {
 				if (jobId != undefined) {
@@ -403,7 +407,9 @@
 		jsonData.job_info = JSON.stringify(job_info);
 		jsonData.repeat_interval = Number(jsonData.repeat_interval);
 		jsonData.updated_by = loginId;
-
+		jsonData.type = "money";
+		
+		console.log('jsonData===', jsonData)
 		return jsonData;
 	};
 
@@ -999,10 +1005,11 @@
 							</div>
 						</div>
 					</div>
-					<div class="btn_wrap_type02 btn_wrap_fixed">
-						<a href="/spc/transactionHistory.do" class="btn btn_type03 mr-12" id="writeBtn">입출금 관리 내역</a><a
-							href="/spc/withdrawReqWrite.do" class="btn btn_type" id="requestBtn">출금 요청서 신청</a>
-					</div>
+					<div class="btn_wrap_type02 btn_wrap_fixed"><!--
+					--><a href="/spc/transactionHistory.do" class="btn btn_type03 mr-12" id="writeBtn">입출금 관리 내역</a><!--
+					--><a href="/spc/withdrawReqWrite.do" class="btn btn_type" id="requestBtn">출금 요청서 신청</a><!--
+					--><a href="/spc/withdrawReqStatus.do" class="btn btn_type" id="requestBtnReview">출금 요청서 검토</a><!--
+					--></div>
 				</div>
 				<div class="sch_btm_area">
 					<table id="calendar">

@@ -1617,7 +1617,7 @@ function jsonListSort(n, sort, jsonList) {
 	} else if(nowJspPage == 'balance') {
 		n = isEmpty(n) ? 'balance_yyyymm' : n;
 	} else if(nowJspPage == 'transaction') {
-		console.log("d---", n)
+		// console.log("d---", n)
 		// n = isEmpty(n) ? 'balance_yyyymm' : n;
 	} else {
 		n= isEmpty(n) ? '관리_운영_기간' : n;
