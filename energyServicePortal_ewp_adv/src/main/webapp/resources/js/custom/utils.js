@@ -1139,10 +1139,12 @@ function setAreaParamData(areaId, type) {
 	$area.find(":text,:password").each(function(){
 		var obj = this;
 
-		if($.inArray("hasDatepicker", obj.classList) > -1 && $(this).datepicker('getDate') != null){
-			param[obj.getAttribute("id")] = $(this).datepicker('getDate').toISOString();
-		} else {
-			param[obj.getAttribute("id")] = obj.value;
+		if (obj.getAttribute("id") != null) {
+			if($.inArray("hasDatepicker", obj.classList) > -1 && $(this).datepicker('getDate') != null){
+				param[obj.getAttribute("id")] = $(this).datepicker('getDate').toISOString();
+			} else {
+				param[obj.getAttribute("id")] = obj.value;
+			}
 		}
 	});
 
@@ -1445,7 +1447,8 @@ const addRow = function (listId, type, nextIdx) {
 				$tr.attr('id',  listId + listLength);
 				
 				$tr.find('button').eq(0).removeClass('hidden');	// 삭제버튼 비활성 초기화
-				$tr.find('button').eq(1).hide();	// 다운로드 버튼 비활성 초기화
+				$tr.find('button').eq(1).addClass('hidden');	// 다운로드 버튼 비활성 초기화
+				$tr.find('button').eq(2).addClass('hidden');	// 다운로드 버튼 비활성 초기화
 				
 				 $('[id^="' + listId + '"]').eq($('[id^="' + listId + '"]').length - 1).after($tr);
 			} else {
@@ -1496,7 +1499,7 @@ $(function() {
 		let tableBodyTemp = $.data(document, tableBodyId);
 		tableBodyTemp = tableBodyTemp.replace(/<(\/a|a)([^>]*)>/gi,'');
 		tableBodyTemp = tableBodyTemp.replace(/ name="aTagTd01"| name="aTagTd02"| class="right"| %/gi,'');
-		let tableColumnArray = (tableBodyTemp.match(/(?:\[)(.*?)(?=]<\/td>)/g) || []);
+		let tableColumnArray = (tableBodyTemp.match(/(?:\[)(.*?)(?=].?<\/td>)/g) || []);;
 		tableColumnArray.forEach(function(el, index) {
 			tableColumnArray[index] = el.replace('[', '');
 		});
@@ -1563,25 +1566,25 @@ function SortTable(table, n, sort) {
 		var value1 = cell1.textContent || cell1.innerText;
 		var value2 = cell2.textContent || cell2.innerText;
 
-		if(value1 == '-'){
-			return 1;
-		}else{
-			value1 = String(value1).replace(/^\s+|\s+$/g, '');
-			value2 = String(value2).replace(/^\s+|\s+$/g, '');
+		if (value1 == '-') value1 = -100;
+		if (value2 == '-') value2 = -100;
 
-			if (isNumberic(value1) && isNumberic(value2)) {
-				value1 = Number(value1.replace(/[^0-9]/g, ''));
-				value2 = Number(value2.replace(/[^0-9]/g, ''));
-			}
+		value1 = String(value1).replace(/^\s+|\s+$/g, '');
+		value2 = String(value2).replace(/^\s+|\s+$/g, '');
 
-			if (sort == 'up') {
-				if (value1 < value2) return -1;
-				if (value1 > value2) return 1;
-			} else {
-				if (value1 < value2) return 1;
-				if (value1 > value2) return -1;
-			}
+		if (isNumberic(value1) && isNumberic(value2)) {
+			value1 = Number(value1.replace(/[^0-9]/g, ''));
+			value2 = Number(value2.replace(/[^0-9]/g, ''));
 		}
+
+		if (sort == 'up') {
+			if (value1 < value2) return -1;
+			if (value1 > value2) return 1;
+		} else {
+			if (value1 < value2) return 1;
+			if (value1 > value2) return -1;
+		}
+
 
 		return 0;
 	});
@@ -1599,23 +1602,24 @@ function SortTable(table, n, sort) {
 	}
 }
 
-function jsonListSort(n, sort, jsonList){
-	if(n == '-'){
+function jsonListSort(n, sort, jsonList) {
+	if(n == '-') {
 		return false;
 	}
+
 	let nowJspPage = $(".sort_table").data("nowjsp");
-	if(nowJspPage == "yield"){
+	if(nowJspPage == "yield") {
 		n = isEmpty(n) ? 'generated_date' : n;
-	}else if(nowJspPage == "maintenance"){
+	} else if(nowJspPage == "maintenance") {
 		n = isEmpty(n) ? 'write_date' : n;
-	}else if(nowJspPage == 'supplementary'){
+	} else if(nowJspPage == 'supplementary') {
 		n = isEmpty(n) ? '관리_운영_기간' : n;
-	}else if(nowJspPage == 'balance'){
+	} else if(nowJspPage == 'balance') {
 		n = isEmpty(n) ? 'balance_yyyymm' : n;
-	} else if(nowJspPage == 'transaction'){
-		console.log("d---", n)
+	} else if(nowJspPage == 'transaction') {
+		// console.log("d---", n)
 		// n = isEmpty(n) ? 'balance_yyyymm' : n;
-	} else{
+	} else {
 		n= isEmpty(n) ? '관리_운영_기간' : n;
 	}
 
@@ -1625,23 +1629,23 @@ function jsonListSort(n, sort, jsonList){
 		var value1 = cell1.textContent || cell1.innerText;
 		var value2 = cell2.textContent || cell2.innerText;
 
-		if(cell1 == '-'){
-			return 1;
-		}else{
-			cell1 = String(cell1).replace(/^\s+|\s+$/g, '');
-			cell2 = String(cell2).replace(/^\s+|\s+$/g, '');
+		if (value1 == '-') value1 = -100;
+		if (value2 == '-') value2 = -100;
 
-			if (isNumberic(cell1) && isNumberic(cell2)) {
-				cell1 = Number(cell1.replace(/[^0-9]/g, ''));
-				cell2 = Number(cell2.replace(/[^0-9]/g, ''));
-			}
-			if (sort == 'up') {
-				if (cell1 < cell2) return -1;
-				if (cell1 > cell2) return 1;
-			} else {
-				if (cell1 < cell2) return 1;
-				if (cell1 > cell2) return -1;
-			}
+		cell1 = String(cell1).replace(/^\s+|\s+$/g, '');
+		cell2 = String(cell2).replace(/^\s+|\s+$/g, '');
+
+		if (isNumberic(cell1) && isNumberic(cell2)) {
+			cell1 = Number(cell1.replace(/[^0-9]/g, ''));
+			cell2 = Number(cell2.replace(/[^0-9]/g, ''));
+		}
+
+		if (sort == 'up') {
+			if (cell1 < cell2) return -1;
+			if (cell1 > cell2) return 1;
+		} else {
+			if (cell1 < cell2) return 1;
+			if (cell1 > cell2) return -1;
 		}
 
 		return 0;
