@@ -56,25 +56,21 @@ const displayDropdown = ($selector) => {
 	if ($selector.find(':radio').length > 0) {
 		$displayText = $selector.find('input[type="radio"]:checked').next().text();
 	} else if ($selector.find(':checkbox').length > 0) {
-		let checked = $selector.find('input[type="checkbox"]:checked').val();
-		let checkbox = $selector.find(':checkbox');
 		let checkedboxLength = $selector.find('input[type="checkbox"]:checked').length;
 		let checkboxLength = $selector.find('input[type="checkbox"]').length;
-		
-		if(checkedboxLength == checkboxLength || checked == "전체"){
+
+		if(checkedboxLength == checkboxLength){
 			$displayText = '전체';
-			checkbox.prop('checked', true);
 		} else {
 			if (checkedboxLength == 0){
 				$displayText = $displayButton.data('name');
 			} else if (checkedboxLength > 1) {
 				$displayText = $selector.find('input[type="checkbox"]:checked:eq(0)').next().text() + ' 외 ' + (checkedboxLength - 1) + '개';
-			} else if(checkedboxLength == 1) {
+			} else {
 				$displayText = $selector.find('input[type="checkbox"]:checked:eq(0)').next().text();
 			}
 		}
 	}
-
 	$displayButton.eq(0).html($displayText + '<span class="caret"></span>');
 
 	//data Setting
@@ -83,6 +79,30 @@ const displayDropdown = ($selector) => {
 			$displayButton.data(key, val);
 		});
 	}
+}
+
+/**
+ * dropDown selectAll
+ *
+ * @param $selector
+ */
+const selectAll = ($selector) => {
+	let itemGroup = $selector.find('li');
+	let item = itemGroup.find('input[type="checkbox"]');
+	let firstCheckbox = itemGroup.first();
+	let firstInput = firstCheckbox.find('input[type="checkbox"]');
+
+	firstCheckbox.on('click', function() {
+		$(this).toggleClass('active');
+		if( $(this).hasClass('active') ) {
+			item.prop("checked", false);
+			firstInput.prop('checked', true);
+		} else {
+			item.prop("checked", true);
+			firstInput.prop('checked', false);
+		}
+	});
+
 }
 
 /**

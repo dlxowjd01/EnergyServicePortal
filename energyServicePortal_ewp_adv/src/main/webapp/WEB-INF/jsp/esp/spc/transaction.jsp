@@ -336,7 +336,6 @@
 		}
 		$.ajax(option).done(function (data, textStatus, jqXHR) {
 			$("#spcAlarmModal").removeClass("active");
-			console.log("data==", data)
 			if (action == 'get') {
 				if (jobId != undefined) {
 					modalPopInit(data.data);
@@ -695,9 +694,7 @@
 		<div class="sch_sel_area">
 			<div class="sch_sel_item">
 				<div class="dropdown" id="year">
-					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-						<span class="caret"></span>
-					</button>
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="caret"></span></button>
 					<ul class="dropdown-menu">
 						<li><a href="#">2020</a></li>
 						<li><a href="#">2019</a></li>
@@ -707,9 +704,7 @@
 			</div>
 			<div class="sch_sel_item">
 				<div class="dropdown" id="month">
-					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-						<span class="caret"></span>
-					</button>
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="caret"></span></button>
 					<ul class="dropdown-menu">
 						<li data-value="1"><a href="#">1월</a></li>
 						<li data-value="2"><a href="#">2월</a></li>
@@ -901,7 +896,7 @@
 						<div class="row">
 							<div class="col-12 end">
 								<div class="btn_wrap_type02">
-									<button type="button" id="deleteScheduleBtn" class="btn_type04 hidden" onclick="maintenance('delete', $('#spc_id').val() );">삭제</button>
+									<button type="button" id="deleteScheduleBtn" class="btn_type04 fl hidden" onclick="maintenance('delete', $('#spc_id').val() );">삭제</button>
 									<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
 									<button type="button" id="addScheduleBtn" class="btn_type">등록</button>
 								</div>

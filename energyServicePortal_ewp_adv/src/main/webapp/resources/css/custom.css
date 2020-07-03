@@ -143,13 +143,6 @@
 	--sidebar-spc-off: url("../img/sidebar_spc_light_off.png");
 	--sidebar-spc-on: url("../img/sidebar_spc_light_on.png");
 
-	--icon-inverter: url('../img/ico_inverter_on.png');
-	--icon-connector: url('../img/ico_connector_on.png');
-	--icon-disconnect: url("../img/ico_disconnector_on.png");
-
-	--icon-pv: url("../img/icon_pv_light.png");
-	--icon-wind: url("../img/icon_wind_light.png");
-	--icon-water: url("../img/icon_water_light.png");
 	--status-error: url("../img/status_error_light.png");
 	--status-drive: url("../img/status_drive_light.png");
 	--status-hold: url("../img/status_hold_light.png");
@@ -165,7 +158,14 @@
 	--right-arrow: url("../img/arrow_right_light.png");
 	--down-arrow: url("../img/arrow_down_light.png");
 
-
+	--ico-add: url("../img/ico_add.png");
+	--ico-add-blue: url("../img/btn_add.png");
+	--icon-inverter: url('../img/ico_inverter_on.png');
+	--icon-connector: url('../img/ico_connector_on.png');
+	--icon-disconnect: url("../img/ico_disconnector_on.png");
+	--icon-pv: url("../img/icon_pv_light.png");
+	--icon-wind: url("../img/icon_wind_light.png");
+	--icon-water: url("../img/icon_water_light.png");
 	--ico-battery: url("../img/ico_battery.png");
 	--ico-solar: url("../img/ico_solar.png");
 	--ico-water: url("../img/ico_water.png");
@@ -242,9 +242,17 @@ html.darkmode:root {
 	--sidebar-spc-off: url("../img/sidebar_spc_dark_off.png");
 	--sidebar-spc-on: url("../img/sidebar_spc_dark_on.png");
 
+	--nav-arrow-down: url("../img/expand_arrow_dark.png");
+	--expand-arrow-down: url("../img/expand_arrow_dark.png");
+	--expand-arrow-up: url('../img/expand_arrow_up_dark.png');
+
+	--collapse-arrow: url("../img/sel_down_dark.png");
+	--right-arrow: url("../img/arrow_right_dark.png");
+	--down-arrow: url("../img/arrow_down_dark.png");
+
+	--ico-add: url("../img/ico_add2_wh.png");
 	--icon-inverter: url('../img/ico_inverter.png');
 	--icon-connector: url('../img/ico_connector.png');
-
 	--icon-pv: url("../img/icon_pv.png");
 	--icon-wind: url("../img/icon_wind.png");
 	--icon-water: url("../img/water.svg");
@@ -254,14 +262,6 @@ html.darkmode:root {
 	--status-stop: url("../img/status_stop_dark.png");
 	--status-charging: url("../img/status_charging_dark.png");
 	--status-discharging: url("../img/status_discharging_dark.png");
-
-	--nav-arrow-down: url("../img/expand_arrow_dark.png");
-	--expand-arrow-down: url("../img/expand_arrow_dark.png");
-	--expand-arrow-up: url('../img/expand_arrow_up_dark.png');
-
-	--collapse-arrow: url("../img/sel_down_dark.png");
-	--right-arrow: url("../img/arrow_right_dark.png");
-	--down-arrow: url("../img/arrow_down_dark.png");
 
 	--ico-battery: url("../img/ico_battery_dark.png");
 	--ico-solar: url("../img/ico_solar_dark.png");
@@ -2036,10 +2036,18 @@ footer .copyright {
 	width: auto;
 	min-width: 100%;
 	height: auto;
+	border: 0;
+	border-radius: 2px;
 	background-color: var(--active);
 	color: var(--color3);
-	border: 0;
 	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+}
+
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:focus,
+.dropdown-menu > .active > a:hover {
+	color: var(--color6);
+	background-color: var(--color7) !important;
 }
 
 .dropdown-menu.dropdown-menu-form.chk_type .dropdown_cov .sec_li_bx {
@@ -2188,7 +2196,7 @@ ul.ui-autocomplete.highlight  > li > .ui-menu-item-wrapper.ui-state-active {
 .alarm_notice {
 	margin-top: 10px;
 	padding-right: 10px;
-	height: calc(100% - 120px);
+	height: calc(100% - 100px);
 	overflow-y: auto;
 }
 
@@ -9756,21 +9764,6 @@ a.btn.btn_type03:hover {
 	background: none;
 }
 
-.btn_type05:before {
-	display: inline-block;
-	margin: 2px 3px 0 0;
-	width: 18px;
-	height: 18px;
-	vertical-align: top;
-	background: url(../img/ico_add2_wh.png) no-repeat;
-	content: "";
-}
-
-.darkmode .btn_type05:before,
-.darkmode .btn_type06:before {
-	background: url(../img/ico_add2.png) no-repeat;
-}
-
 .btn_type06 {
 	padding: 0 12px 0 6px;
 	font-size: 12px;
@@ -9782,13 +9775,53 @@ a.btn.btn_type03:hover {
 	cursor: pointer;
 }
 
+.btn_type05:before,
 .btn_type06:before {
 	display: inline-block;
 	margin: 2px 3px 0 0;
 	width: 18px;
 	height: 18px;
+	background: var(--ico-add) no-repeat;	
 	vertical-align: top;
-	background: url(../img/ico_add2_wh.png) no-repeat;
+	content: "";
+	cursor: pointer;
+}
+
+.btn-text-blue {
+	padding: 0 10px 0 0;
+	background: none;
+	outline-style: none;
+	border: none;
+	color: var(--vivid-blue);
+	font-size: 13px;
+	line-height: 24px;
+	font-weight: 500;
+	cursor: pointer;
+}
+
+.btn-text-blue:before  {
+	display: inline-block;
+	margin: 0 3px 0 0;
+	width: 18px;
+	height: 18px;
+	vertical-align: top;
+	background: var(--ico-add-blue) no-repeat 0 2px;
+	content: "";
+	cursor: pointer;
+}
+
+.btn_type06+.btn_type07 {
+	position: relative;
+	padding-left: 15px;
+}
+
+.btn_type06+.btn_type07:after {
+	position: absolute;
+	top: 4px;
+	left: 0;
+	width: 1px;
+	height: 14px;
+	background: rgba(255, 255, 255, 0.25);
 	content: "";
 }
 
@@ -11221,6 +11254,7 @@ html.darkmode .sch_top_info .sch_btn .btn_next_mon {
 
 .spc_bal_post th,
 .spc_bal_post td {
+	box-sizing: unset;
 	vertical-align: middle;
 	text-align: center;
 	font-size: 13px;
@@ -11564,6 +11598,7 @@ th .btn_align {
 
 .sort_table.table_footer {
 	border-collapse: collapse;
+	border: 0;
 }
 
 table.table_footer tfoot tr:first-child td {
@@ -11617,29 +11652,42 @@ table.table_footer tfoot td.light {
 }
 
 /* 입출금 관리 내역 (검색) */
-.spc_search_bar .dropdown:first-of-type>button {
+.spc-search-bar .dropdown > button {
 	width: 280px;
 }
+.spc-search-bar .tx_inp_type input {
+	width: 180px;
+}
+.spc-search-bar .sa_select {
+	display: inline-flex;
+	align-items: center;
+	margin-bottom: 10px;
+	
+}
+.spc-search-bar .sa_select + .sa_select {
+	margin: 0 0 10px 16px;
+}
 
-.spc_search_bar .dropdown .collapse.dropdown-menu {
+.spc-search-bar .dropdown .collapse.dropdown-menu {
 	width: 570px;
 	padding: 0 32px 10px 32px;
 	margin-left: 32px;
 	overflow: visible;
 }
 
-.spc_search_bar .comp_tit {
+.spc-search-bar .comp_tit {
 	padding: 0 0 10px 0
 }
 
-.spc_search_bar .btn_wrap_border {
+
+.spc-search-bar .btn_wrap_border {
 	margin-top: 24px;
 	padding-top: 18px;
 	border-top: 1px solid var(--box-color7)
 }
 
-.spc_search_bar .collapse.dropdown-menu .bx_row.aN2 input:not([type="checkbox"]),
-.spc_search_bar .collapse.dropdown-menu .bx_row.aN2 .dropdown-toggle {
+.spc-search-bar .collapse.dropdown-menu .bx_row.aN2 input:not([type="checkbox"]),
+.spc-search-bar .collapse.dropdown-menu .bx_row.aN2 .dropdown-toggle {
 	width: 243px;
 }
 
@@ -11647,52 +11695,52 @@ table.table_footer tfoot td.light {
 	padding: 0 25px;
 }
 
-.spc_search_bar .collapse.dropdown-menu .bx_row.aN3 .bx_align:not(:last-of-type) {
+.spc-search-bar .collapse.dropdown-menu .bx_row.aN3 .bx_align:not(:last-of-type) {
 	/* width: 28%; */
 	width: 132px;
 	margin-right: 15px;
 }
 
-.spc_search_bar .collapse.dropdown-menu .bx_row.aN3 .bx_align:last-of-type {
+.spc-search-bar .collapse.dropdown-menu .bx_row.aN3 .bx_align:last-of-type {
 	width: 40%;
 }
 
-.spc_search_bar .collapse.dropdown-menu .bx_row.aN3 .bx_align:not(:last-of-type) button.dropdown-toggle {
+.spc-search-bar .collapse.dropdown-menu .bx_row.aN3 .bx_align:not(:last-of-type) button.dropdown-toggle {
 	width: 100%;
 }
 
-.spc_search_bar .collapse.dropdown-menu .bx_row.aN3 .bx_align:last-of-type button.dropdown-toggle {
+.spc-search-bar .collapse.dropdown-menu .bx_row.aN3 .bx_align:last-of-type button.dropdown-toggle {
 	width: 210px;
 }
 
 
-.spc_search_bar .dropdown ul.collapse .dropdown_offset {
+.spc-search-bar .dropdown ul.collapse .dropdown_offset {
 	top: 100%;
 }
 
-.spc_search_bar .dropdown .collapse.dropdown-menu .btn_type03,
-.spc_search_bar .dropdown .collapse.dropdown-menu .btn_type {
+.spc-search-bar .dropdown .collapse.dropdown-menu .btn_type03,
+.spc-search-bar .dropdown .collapse.dropdown-menu .btn_type {
 	width: 150px;
 }
 
-.spc_search_bar .dropdown {
+.spc-search-bar .dropdown {
 	display: inline-block;
 }
 
-.spc_search_bar .dropdown button.no_bg {
+.spc-search-bar .dropdown button.no_bg {
 	background: none;
 }
 
 /* 출금 요청서 검토 */
-.spc_search_bar .tx_btn_area {
+.spc-search-bar .tx_btn_area {
 	display: inline-block;
 }
 
-.spc_search_bar input {
+.spc-search-bar input {
 	width: 370px;
 }
 
-.spc_search_bar .tx_btn_area {
+.spc-search-bar .tx_btn_area {
 	padding-right: 88px;
 }
 
@@ -12452,21 +12500,6 @@ html.darkmode .modal-content.spc_detail_content li.single_item a .btn_next {
 	overflow: hidden;
 	clip: rect(0, 0, 0, 0);
 	border: 0;
-}
-
-.btn_type06+.btn_type07 {
-	position: relative;
-	padding-left: 15px;
-}
-
-.btn_type06+.btn_type07:after {
-	position: absolute;
-	top: 4px;
-	left: 0;
-	width: 1px;
-	height: 14px;
-	background: rgba(255, 255, 255, 0.25);
-	content: "";
 }
 
 /* 수익보고서 등록 팝업 */

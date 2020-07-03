@@ -284,10 +284,10 @@
 			genId = $('#genId button').data('value'),
 			genName = $('#genName').val();
 
-		if (isEmpty(spcId) && isEmpty(spcName)) {
-			alert('SPC명을 선택하세요.');
-			return false;
-		}
+		// if (isEmpty(spcId)) {
+		// 	alert('SPC명을 선택하세요.');
+		// 	return false;
+		// }
 
 		if (isEmpty(genId) && isEmpty(genName)) {
 			alert('발전소를 선택하세요.');

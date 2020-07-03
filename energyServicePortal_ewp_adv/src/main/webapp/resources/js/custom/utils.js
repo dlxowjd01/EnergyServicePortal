@@ -1222,25 +1222,49 @@ function addRowTable(tblId) {
 	}
 }
 
-function addEmptyRowTable(tblId) {
-	var table = document.getElementById(tblId);
-	var objTable = $('#' + tblId);
-	var rowClone = table.rows[table.rows.length - 1];
-	var row = table.insertRow(-1);
-	var trLength = objTable.find('tbody tr').length;
-	console.log("rowClone", rowClone)
+/**
+ * add table row with configurable options
+ *
+ * @param tbody
+ * @param options
+ */
+
+function addCustomRow(tbody, options) {
+	let lastRow = tbody.find("tr:last-of-type");
+	let copy = lastRow.clone();
+	let keep = options;
+	let cnt = 0;
+	cnt +=1;
+	let toggle = copy.find('.dropdown-menu');
+
+	toggle.each(function(index, element){
+		let oldId = $(this).attr("id");
+		let newId = oldId + cnt;
+		$(this).attr("id", newId);
+	});
+
+	copy.find('input').each(function(index, element){
+		if($(this).is(':checkbox')){
+			let oldId = $(this).attr("id");
+			let newId = oldId + cnt;
+			$(this).attr({"id": newId, ":checked": false});
+			$(this).next("label").attr("for", newId);
+		} else {
+			let oldAttr = $(this).attr("id");
+			let newAttr = oldAttr + cnt;
+
+			$(this).attr({"id": newAttr, "name": newAttr});
+			if(keep == "first") {
+				if(index != 1 ) {
+					$(this).val("");
+				} else {
+					$(this).prop('disabled', true);
+				}
+			}
+		}
+	});
 	
-	// var empty = $(row).last("input")("input").val("");
-
-	copyAttribute(rowClone, row);
-
-	for (var i = 0; i < table.rows[table.rows.length - 2].cells.length; i++) {
-		var cellClone = rowClone.cells[i];
-		console.log("cellClone==", cellClone)
-		var cell = row.insertCell();
-		cell.innerHTML = cellClone.innerHTML;
-		copyAttribute(cellClone, attributeVary(cell, trLength));
-	}
+	tbody.append(copy);
 }
 
 /**
@@ -1466,7 +1490,7 @@ const setttingSuffix = function(keyText) {
 }
 
 $(function() {
-	$(document).on('click', '.sort_table', function(i){
+	$(document).on('click', '.sort_table:not(".transaction-table")', function(i){
 		let tables = $(this);
 		const tableBodyId = tables.find('tbody').prop('id');
 		let tableBodyTemp = $.data(document, tableBodyId);
@@ -1588,7 +1612,10 @@ function jsonListSort(n, sort, jsonList){
 		n = isEmpty(n) ? '관리_운영_기간' : n;
 	}else if(nowJspPage == 'balance'){
 		n = isEmpty(n) ? 'balance_yyyymm' : n;
-	}else{
+	} else if(nowJspPage == 'transaction'){
+		console.log("d---", n)
+		// n = isEmpty(n) ? 'balance_yyyymm' : n;
+	} else{
 		n= isEmpty(n) ? '관리_운영_기간' : n;
 	}
 
