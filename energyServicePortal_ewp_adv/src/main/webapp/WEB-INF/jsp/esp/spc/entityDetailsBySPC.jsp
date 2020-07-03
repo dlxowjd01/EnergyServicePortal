@@ -54,7 +54,7 @@
 		// 파일 추가
 		$(document).on('change', 'input[type="file"]', function(e) {
 			e.preventDefault();
-			if(($(this).attr('name')).match('custom')){
+			if(($(this).attr('id')).match('사용자정의')){
 				if(isEmpty($(this).prev().val())){
 					alert('추가 항목명을 입력하고 파일을 추가해야 합니다.');
 					supInfoLength = getGridList(supInfoLength);
@@ -134,9 +134,9 @@
 							if (customIndex != 0) {
 								if ($.inArray(customIndex, customArray) === -1) customArray.push(customIndex);
 							}
-						} else if (key.match('_filedName')) {
-							let keyName = key.replace('_filedName', '');
-							supplementInfo[keyName + '_fieldName'] = val;
+						} else if (key.match('_fieldName')) {
+							let keyName = key.replace('_fieldName', '');
+							supplementInfo[keyName + '_filedName'] = val;
 						}
 					}
 
@@ -203,12 +203,13 @@
 			let prop = $('#' + propName);
 
 			$('#' + propName + '_originalName').val(data.files[0].originalname);
-			$('#' + propName + '_fieldName').val(data.files[0].fieldname);
+			$('#' + propName + '_filedName').val(data.files[0].fieldname);
+			$('#' + propName + '_다운로드').val(0);
 			$('#' + propName + '_regDt').val((new Date()).format('yyyy-MM-dd')); // 발급일자 추가
 
 			if (propName.match('사용자정의')) {
 				let custumIdx = Number(propName.replace(/[/^0-9]/, ''));
-				$('#' + propName + '_fieldName').parents('td').next().find('input').val(data.files[0].originalname);
+				$('#' + propName + '_filedName').parents('td').next().find('input').val(data.files[0].originalname);
 				if (custumIdx == 0) {
 					prop.parents('tr').find('.btn_type07').eq(1).removeClass('hidden'); //삭제버튼 활성화
 				} else {
@@ -397,7 +398,7 @@
 						<td class="px-0">
 							<input type="file" id="사업조직도" class="uploadBtn">
 							<input type="text" id="사업조직도_originalName" value="" class="fileName tx_file" readonly>
-							<input type="hidden" id="사업조직도_fieldName" value="">
+							<input type="hidden" id="사업조직도_filedName" value="">
 						</td>
 						<td>
 							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
@@ -419,7 +420,7 @@
 						<td class="px-0">
 							<input type="file" id="설치_업체_담당자_연락처" class="uploadBtn">
 							<input type="text" id="설치_업체_담당자_연락처_originalName" value="" class="fileName tx_file" readonly>
-							<input type="hidden" id="설치_업체_담당자_연락처_fieldName" value="">
+							<input type="hidden" id="설치_업체_담당자_연락처_filedName" value="">
 						</td>
 						<td>
 							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
@@ -441,7 +442,7 @@
 						<td class="px-0">
 							<input type="file" id="투자_계약_심의" class="uploadBtn">
 							<input type="text" id="투자_계약_심의_originalName" value="" class="fileName tx_file" readonly>
-							<input type="hidden" id="투자_계약_심의_fieldName" value="">
+							<input type="hidden" id="투자_계약_심의_filedName" value="">
 						</td>
 						<td>
 							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
@@ -463,7 +464,7 @@
 						<td class="px-0">
 							<input type="file" id="사업자_등록증" class="uploadBtn">
 							<input type="text" id="사업자_등록증_originalName" value="" class="fileName tx_file" readonly>
-							<input type="hidden" id="사업자_등록증_fieldName" value="">
+							<input type="hidden" id="사업자_등록증_filedName" value="">
 						</td>
 						<td>
 							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
@@ -485,7 +486,7 @@
 						<td class="px-0">
 							<input type="file" id="발전사업_허가증" class="uploadBtn">
 							<input type="text" id="발전사업_허가증_originalName" value="" class="fileName tx_file" readonly>
-							<input type="hidden" id="발전사업_허가증_fieldName" value="">
+							<input type="hidden" id="발전사업_허가증_filedName" value="">
 						</td>
 						<td>
 							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
@@ -507,7 +508,7 @@
 						<td class="px-0">
 							<input type="file" id="토지_및_건물_등기부등록" class="uploadBtn">
 							<input type="text" id="토지_및_건물_등기부등록_originalName" value="" class="fileName tx_file" readonly>
-							<input type="hidden" id="토지_및_건물_등기부등록_fieldName" value="">
+							<input type="hidden" id="토지_및_건물_등기부등록_filedName" value="">
 						</td>
 						<td>
 							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
@@ -529,7 +530,7 @@
 						<td class="px-0">
 							<input type="file" id="토지대장_및_건물도면" class="uploadBtn">
 							<input type="text" id="토지대장_및_건물도면_originalName" value="" class="fileName tx_file" readonly>
-							<input type="hidden" id="토지대장_및_건물도면_fieldName" value="">
+							<input type="hidden" id="토지대장_및_건물도면_filedName" value="">
 						</td>
 						<td>
 							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
@@ -551,7 +552,7 @@
 						<td class="px-0">
 							<input type="file" id="원도급_계약서_실사_협약서" class="uploadBtn">
 							<input type="text" id="원도급_계약서_실사_협약서_originalName" value="" class="fileName tx_file" readonly>
-							<input type="hidden" id="원도급_계약서_실사_협약서_fieldName" value="">
+							<input type="hidden" id="원도급_계약서_실사_협약서_filedName" value="">
 						</td>
 						<td>
 							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
@@ -573,7 +574,7 @@
 						<td class="px-0">
 							<input type="file" id="원도급_계약서_토지이용_허가서" class="uploadBtn">
 							<input type="text" id="원도급_계약서_토지이용_허가서_originalName" value="" class="fileName tx_file" readonly>
-							<input type="hidden" id="원도급_계약서_토지이용_허가서_fieldName" value="">
+							<input type="hidden" id="원도급_계약서_토지이용_허가서_filedName" value="">
 						</td>
 						<td>
 							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
@@ -595,7 +596,7 @@
 						<td class="px-0">
 							<input type="file" id="하도급_계약서_공사도급_계약서" class="uploadBtn">
 							<input type="text" id="하도급_계약서_공사도급_계약서_originalName" value="" class="fileName tx_file" readonly>
-							<input type="hidden" id="하도급_계약서_공사도급_계약서_fieldName" value="">
+							<input type="hidden" id="하도급_계약서_공사도급_계약서_filedName" value="">
 						</td>
 						<td>
 							<button class="btn_file down">다운로드</button>
@@ -617,7 +618,7 @@
 						<td class="px-0">
 							<input type="file" id="하도급_계약서_설계용역_계약서" class="uploadBtn">
 							<input type="text" id="하도급_계약서_설계용역_계약서_originalName" value="" class="fileName tx_file" readonly>
-							<input type="hidden" id="하도급_계약서_설계용역_계약서_fieldName" value="">
+							<input type="hidden" id="하도급_계약서_설계용역_계약서_filedName" value="">
 						</td>
 						<td>
 							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
@@ -639,7 +640,7 @@
 						<td class="px-0">
 							<input type="file" id="하도급_계약서_감리용역_계약서" class="uploadBtn">
 							<input type="text" id="하도급_계약서_감리용역_계약서_originalName" value="" class="fileName tx_file" readonly>
-							<input type="hidden" id="하도급_계약서_감리용역_계약서_fieldName" value="">
+							<input type="hidden" id="하도급_계약서_감리용역_계약서_filedName" value="">
 						</td>
 						<td>
 							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
@@ -661,7 +662,7 @@
 						<td>
 							<input type="file" id="기자재_시험_성적서_인버터" class="uploadBtn">
 							<input type="text" id="기자재_시험_성적서_인버터_originalName" value="" class="fileName tx_file" readonly>
-							<input type="hidden" id="기자재_시험_성적서_인버터_fieldName" value="">
+							<input type="hidden" id="기자재_시험_성적서_인버터_filedName" value="">
 						</td>
 						<td>
 							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
@@ -683,7 +684,7 @@
 						<td class="px-0">
 							<input type="file" id="기자재_시험_성적서_모듈" class="uploadBtn">
 							<input type="text" id="기자재_시험_성적서_모듈_originalName" value="" class="fileName tx_file" readonly>
-							<input type="hidden" id="기자재_시험_성적서_모듈_fieldName" value="">
+							<input type="hidden" id="기자재_시험_성적서_모듈_filedName" value="">
 						</td>
 						<td>
 							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
@@ -705,7 +706,7 @@
 						<td class="px-0">
 							<input type="file" id="기자재_시험_성적서_변압기" class="uploadBtn">
 							<input type="text" id="기자재_시험_성적서_변압기_originalName" value="" class="fileName tx_file" readonly>
-							<input type="hidden" id="기자재_시험_성적서_변압기_fieldName" value="">
+							<input type="hidden" id="기자재_시험_성적서_변압기_filedName" value="">
 						</td>
 						<td>
 							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
@@ -727,7 +728,7 @@
 						<td class="px-0">
 							<input type="file" id="기자재_시험_성적서_수배전반" class="uploadBtn">
 							<input type="text" id="기자재_시험_성적서_수배전반_originalName" value="" class="fileName tx_file" readonly>
-							<input type="hidden" id="기자재_시험_성적서_수배전반_fieldName" value="">
+							<input type="hidden" id="기자재_시험_성적서_수배전반_filedName" value="">
 						</td>
 						<td>
 							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
@@ -749,7 +750,7 @@
 						<td class="px-0">
 							<input type="file" id="모듈_Inspection_Sheet" class="uploadBtn">
 							<input type="text" id="모듈_Inspection_Sheet_originalName" value="" class="fileName tx_file" readonly>
-							<input type="hidden" id="모듈_Inspection_Sheet_fieldName" value="">
+							<input type="hidden" id="모듈_Inspection_Sheet_filedName" value="">
 						</td>
 						<td>
 							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
@@ -772,7 +773,7 @@
 								<input type="file" id="사용자정의[index]" name="사용자정의[index]" class="uploadBtn">
 								<input type="text" id="사용자정의명[index]" name="사용자정의명[index]" placeholder="직접 입력">
 								<input type="hidden" id="사용자정의[index]_originalName" name="사용자정의[index]_originalName" value="" class="fileName tx_file" readonly>
-								<input type="hidden" id="사용자정의[index]_fieldName" name="사용자정의[index]_fieldName" value="">
+								<input type="hidden" id="사용자정의[index]_filedName" name="사용자정의[index]_filedName" value="">
 
 							</div>
 							<button class="btn_type07 hidden" name="rowDelete">삭제</button>
