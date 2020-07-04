@@ -11358,13 +11358,11 @@ html.darkmode .sch_top_info .sch_btn .btn_next_mon {
 	text-align: center;
 	background: none;
 }
-
 .spc_tbl td.right,
 .spc_bal_post .tx_inp_type input.right {
 	text-align: right;
 	padding: 0 16px;
 }
-
 .spc_bal_post .sel {
 	padding: 0;
 	width: 100%;
