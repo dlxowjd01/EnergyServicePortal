@@ -24,6 +24,7 @@
 		$('#addNotice div.file_list ul').html('<li class="upload_text"></li>');
 		initDropdownValue($('#addNotice button.btn-primary'));
 		$('#modi_attachement_info').addClass('hidden');
+		$('#spc_id').parent().addClass('hidden');
 
 		if (boardId != undefined) {
 			$('#viewNotice').modal('hide');
@@ -44,9 +45,15 @@
 				const result = data.data[0];
 				if (!isEmpty(result)) {
 					setJsonAutoMapping(result, 'addNotice');
-					getSpcData();
 
-					$('#addNotice #spc_id button').html(result.spc_name + '<span class="caret"></span>').data('value', result.spc_id);
+					if (!isEmpty(result.level) && result.level == '2') {
+						$('#spc_id').parent().removeClass('hidden');
+						getSpcData();
+
+						$('#addNotice #spc_id button').html(result.spc_name + '<span class="caret"></span>').data('value', result.spc_id);
+					} else {
+						$('#spc_id').parent().addClass('hidden');
+					}
 
 					const attachement = result.attachement_info;
 					if (!isEmpty(attachement)) {
@@ -92,6 +99,7 @@
 		let preffix = '';
 		let urlSuffix = '';
 		let areaData = setAreaParamData('addNotice', 'dropdown');
+
 		if (method == 'patch') {
 			urlSuffix = '/' + id + '?oid=' + oid;
 			preffix = '수정';
@@ -101,6 +109,10 @@
 			preffix = '등록';
 		}
 		areaData['kind'] = 1;
+
+		if (isEmpty(areaData['spc_id'])) {
+			delete areaData['spc_id'];
+		}
 
 		$('#addNotice').find('input[type="file"]').each(function () {
 			$(this).attr('name', this.name + '_' + genUuid());
@@ -227,6 +239,13 @@
 						} else {
 							setMakeList(new Array(), 'view_' + key, {'dataFunction': {}});
 						}
+					} else if (key == 'spc_name') {
+						console.log(val);
+						if (isEmpty(val)) {
+							$('#view_' + key).parents('.input-group').addClass('hidden');
+						} else {
+							$('#view_' + key).text(val).parents('.input-group').removeClass('hidden');
+						}
 					} else {
 						$viewObj.text(val);
 					}
@@ -300,7 +319,13 @@
 
 	function rtnDropdown($dropdownId) {
 		if ($dropdownId == 'level') {
-			getSpcData();
+			if($('#level button').data('value') == '2') {
+				getSpcData();
+				$('#spc_id').parent().removeClass('hidden');
+			} else {
+				$('#spc_id').parent().addClass('hidden');
+				dropDownInit($('#spc_id'));
+			}
 		}
 	}
 
@@ -324,7 +349,7 @@
 							<div class="col-12">
 								<div class="input-group inline-flex">
 									<label for="subject" class="input_label">제목</label>
-									<input type="text" id="subject" class="input tx_inp_type w-100" name="subject" placeholder="입력">
+									<input type="text" id="subject" class="input tx_inp_type w-100" name="subject" placeholder="입력" autocomplete="off">
 								</div>
 								<div class="input-group inline-flex top">
 									<label for="contents" class="input_label">내용</label>
@@ -355,7 +380,7 @@
 								</div>
 							</div>
 							<div class="col-lg-6 col-sm-12">
-								<div class="input-group inline-flex">
+								<div class="input-group inline-flex hidden">
 									<h2 class="input_label">SPC 선택</h2>
 									<div class="dropdown w-100" id="spc_id">
 										<button class="btn btn-primary dropdown-toggle w-100" type="button" data-toggle="dropdown" data-name="SPC 선택">
