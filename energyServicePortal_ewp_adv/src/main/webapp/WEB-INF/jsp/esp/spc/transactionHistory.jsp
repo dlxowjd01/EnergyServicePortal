@@ -9,7 +9,7 @@
 	$(function() {
 		const tableList = $('#tableBody');
 		const tableCloned = tableList.find("template.table-body").clone().html();
-		const tableFooter = tableList.find("template.table_footer").clone().html();
+		const tableFooter = tableList.find("template.table-footer").clone().html();
 		const searchBar = $('.spc-search-bar');
 		const searchForm = $('#transactionForm');
 		const dropdownOpt = $('#searchOption').find('.dropdown-menu:not(.chk_type) li');
@@ -139,7 +139,6 @@
 							// typeof v.to_account !== "string" ? JSON.parse(v.to_account) : v.to_account = v.to_account
 								resolve(JSON.parse(item.to_account))
 							}).then(res => {
-								console.log("res===", res.length)
 								let cnt = 0;
 								let str = '';
 								let popObj = Object.assign({}, item);
@@ -147,7 +146,7 @@
 								delete(popObj.to_account);
 								let withdrawDay = popObj.withdraw_day.substring(0, 10) + ' ' + popObj.withdraw_day.substring(11, 19);
 								let transactionType = '';
-								res.length > 0 ? ( transactionType = '출금 외 +'+ (res.length-1) + '건' ) : ( transactionType = '-' );
+								res.length > 0 ? ( transactionType = '출금 외  '+ (res.length-1) + '건' ) : ( transactionType = '-' );
 								let amount = '';
 								let updatedAt = ''
 								let requestedBy = '';
@@ -167,20 +166,22 @@
 									p.push(res[i].purpose);
 								}
 								let uniqSet = new Set(p);
-									if( uniqSet.size === 0 ) {
-										purpose = '-'
-									} else if( uniqSet.size == 1 ) {
-										purpose = ( purposeList[0].value[p[0]] )
-									} else {
-										purpose = ( purposeList[0].value[p[0]] ) + '건 외' + ( uniqSet.size-1 );
-									}
-						
-									console.log('---', popObj.requested_by)
+								if( uniqSet.size === 0 ) {
+									purpose = '-'
+								} else if( uniqSet.size == 1 ) {
+									purpose = ( purposeList[0].value[p[0]] )
+								} else {
+									purpose = ( purposeList[0].value[p[0]] ) + '건 외  ' + ( uniqSet.size - 1 ) + '건';
+								}
 								status = statusList[popObj.status];
-								popObj.total_amount ? ( amount = popObj.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원') : amount = '-';
-								( ( popObj.requested_by !== undefined ) && ( popObj.requested_by != "string") ) ? ( requestedBy = popObj.requested_by ) : ( requestedBy = '-' )
-								popObj.status_changed_at ? ( updatedAt = ( popObj.status_changed_at.substring(0, 10) + ' ' + popObj.status_changed_at.substring(11, 19)) ) : updatedAt = '-'
-								popObj.status_changed_by ? ( approvedBy = popObj.status_changed_by ) : ( approvedBy = '-');
+
+								popObj.total_amount ? ( amount = popObj.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원' ) : amount = '-';
+								
+								( ( popObj.requested_by !== undefined ) && ( popObj.requested_by != "string" ) ) ? ( requestedBy = popObj.requested_by ) : ( requestedBy = '-' );
+
+								popObj.status_changed_at ? ( updatedAt = (popObj.status_changed_at.substring(0, 10) + ' ' + popObj.status_changed_at.substring(11, 19)) ) : ( updatedAt = '-' );
+
+								popObj.status_changed_by ? ( approvedBy = popObj.status_changed_by ) : ( approvedBy = '-' );
 
 
 								// res.to_account_bank.locale
@@ -445,7 +446,7 @@
 	</div>
 </div>
 
-<div class='row spc_transaction'>
+<div class='row spc-transaction'>
 	<div class='col-12'>
 		<div class='indiv'>
 			<div class='spc_tbl'>
@@ -493,7 +494,7 @@
 					</tbody>
 					<tfoot>
 						<tr>
-							<template class='table_footer'>
+							<template class='table-footer'>
 								<td>합계</td>
 								<td colspan='3'></td>
 								<td>*total*</td>

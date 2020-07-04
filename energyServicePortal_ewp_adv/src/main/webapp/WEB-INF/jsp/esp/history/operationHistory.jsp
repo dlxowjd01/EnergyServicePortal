@@ -608,8 +608,7 @@
 
 	//선택한 SID에 해당하는 유형의 타입을 보여준다.
 	const deviceType = function (deviceTp) {
-		$('#deviceType button').empty().append('설비유형<span class="caret"></span>');
-
+		$('#deviceType button').text().replace(/<[^>]+>/g, '설비유형');
 		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
 			function () {
 				return $(this).val();
@@ -663,7 +662,7 @@
 
 	//설비타입 디바이스타입 설정한다.
 	const device = function () {
-		$('#devices button.btn-primary').empty().append('복수 선택').append('<span class="caret"></span>');
+		$('#devices button.btn-primary').text().replace(/<[^>]+>/g, '복수 선택');
 
 		const typeArray = $.makeArray(
 			$(':checkbox[name="type"]:checked').map(
@@ -674,13 +673,13 @@
 		);
 
 		if (typeArray.length > 0 && deviceList.length > 0) {
-			$('#devices div.sec_li_bx').remove();
+			$('#devices dropdown_cov').empty();
 
 			//선택된 사이트를 기준으로 한다.
 			$(':checkbox[name="site"]:checked').each(function () {
 				let siteNm = $(this).next().text(),
 					siteId = $(this).val(),
-					siteGrp = $('<div>').addClass('sec_li_bx');
+					siteGrp = $('<li>').addClass('sec_li_bx');
 
 				siteGrp.append('<p>');
 				siteGrp.find('p').addClass('tx_li_tit').text(siteNm);
@@ -702,7 +701,7 @@
 					}
 				});
 
-				$('#devices li.dropdown_cov').prepend(siteGrp);
+				$('#devices .dropdown_cov').prepend(siteGrp);
 			});
 		}
 
@@ -711,7 +710,7 @@
 				if($(this).val() == searchDid) {
 					$(this).prop('checked', true);
 					displayDropdown($('#device'));
-					$('#interval button').html('15분 <span class="caret"></span>').data('value', '15min');
+					$('#interval button').text().replace(/<[^>]+>/g, '15분').data('value', '15min');
 					searchGrid();
 				}
 			});
@@ -724,8 +723,7 @@
 		if (obj.length > 8) {
 			idNum = obj.slice(-1);
 		}
-
-		$('#' + 'columnLi' + idNum).prev().html($('#' + 'columnLi' + idNum).prev().data('name') + '<span class="caret"></span>');
+		$('#' + 'columnLi' + idNum).prev().text().replace(/<[^>]+>/g, $('#' + 'columnLi' + idNum).prev().data('name'));
 		$.map(featureProperties, function (value, key) {
 			if (type == key) {
 				setMakeList(value, 'columnLi' + idNum, {
@@ -806,11 +804,10 @@
 		makeTableTemplateDevice();
 
 		$('[id^="chartDid"]').each(function () {
-			$(this).find('button').html($(this).find('button').data('name') + '<span class="caret"></span>').data('value', '');
+			$(this).find('button').text().replace(/<[^>]+>/g, $(this).find('button').data('name')).data('value', '');
 		});
 
-		$('#way button').html($('#way button').data('name') + '<span class="caret"></span>');
-
+		$('#way button').text().replace(/<[^>]+>/g, $('#way button').data('name'));
 		let statusSummaryData = {
 			sids: siteArray.join(','),
 			dids: deviceArray.join(','),
@@ -830,8 +827,7 @@
 				let chart = $('#hchart2').highcharts();
 				if (chart) {
 					chart.destroy();
-
-					$('[id^=columnLi]').empty().prev().html('선택 <span class="caret"></span>');
+					$('[id^=columnLi]').empty().prev().text().replace(/<[^>]+>/g, '선택');
 				}
 
 				$.map(result, function (value, key) {
@@ -1116,9 +1112,7 @@
 	<div class="col-12">
 		<form id="operationSearchForm">
 			<div class="dropdown sa_select" id="siteList">
-				<button type="button" class="btn btn-primary dropdown-toggle w1" data-toggle="dropdown" data-name="사업소 선택">
-					사업소 선택<span class="caret"></span>
-				</button>
+				<button type="button" class="btn btn-primary dropdown-toggle w1" data-toggle="dropdown" data-name="사업소 선택">사업소 선택<span class="caret"></span></button>
 				<ul class="dropdown-menu chk_type" role="menu" id="siteULList">
 					<li data-value="[sid]">
 						<a href="javascript:void(0);" tabindex="-1">
@@ -1147,17 +1141,16 @@
 					--></div>
 						<div class="dropdown" id="devices"><!--
 						--><button class="btn btn-primary dropdown-toggle w1" type="button" data-toggle="dropdown" data-name="복수 선택">복수 선택<span class="caret"></span></button><!--
-						--><ul class="dropdown-menu dropdown-menu-form chk_type"><!--
-							--><li class="dropdown_cov clear"><!--
-								--><div class="li_btn_bx clear"><!--
-									--><div class="fl"><!--
-										--><button type="button" class="btn_type03">모두 선택</button><!--
-										--><button type="button" class="btn_type03">모두 해제</button><!--
-									--></div>
-										<div class="fr"><button type="button" class="btn_type">적용</button></div>
-									</div>
-								</li>
-							</ul>
+						--><div class="dropdown-menu dropdown-menu-form chk_type"><!--
+							 --><ul class="dropdown_cov clear"></ul>
+								<div class="li_btn_bx clear"><!--
+								--><div class="fl"><!--
+									--><button type="button" class="btn_type03">모두 선택</button><!--
+									--><button type="button" class="btn_type03">모두 해제</button><!--
+								--></div>
+									<div class="fr"><button type="button" class="btn_type">적용</button></div>
+								</div>
+							</div>
 						</div>
 					</div>
 

@@ -4,21 +4,12 @@
 <script type="text/javascript">
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
-
 	let today = new Date();
 	let date = new Date();
-
 	var spcArr = [];
-
+	(loginId == "spadmin") ? ( $("#requestBtnReview").removeClass('hidden'), $("#requestBtn").removeClass('hidden') ) : ( (loginId == "test_spc_a") ? ( $("#requestBtnReview").addClass('hidden'), $("#requestBtn").removeClass('hidden') ) : ( $("#requestBtnReview").removeClass('hidden'), $("#requestBtn").addClass('hidden') ) );
 	$(function () {
-		(loginId == "test_spc_a" || loginId == "spadmin") ? ( $("#requestBtnReview").addClass('hidden'), $("#requestBtn").removeClass('hidden') ) : ( $("#requestBtnReview").removeClass('hidden'), $("#requestBtn").addClass('hidden') );
 		pageInit();
-		// TO DO!!!!!
-		// 사용자 === 사무수탁사 => show() : writeBtn
-		// 사용자 === 자산운영사 => show() : requestBtn
-		// 임시로 사무수탁사 버튼
-		// oid === "" ? $("#requestBtn").text("출금요청서 신청") : $("#requestBtn").text("출금요청서 작성");
-
 		const dropdownOpt = $('#spcAlarmForm').find('.dropdown-menu:not(.chk_type) li');
 
 		setDropdownValue(dropdownOpt);
@@ -297,6 +288,7 @@
 				// url = 'http://iderms.enertalk.com:8443/spcs/bankbook/' + jobId + '?oid=' + oid + jobText;
 				delete data.spc_id;
 			} else {
+				// POST req
 				option = {
 					url: 'http://iderms.enertalk.com:8443/spcs/maintenance?oid=' + oid,
 					dataType: 'json',
@@ -308,6 +300,7 @@
 			}
 
 		} else if (action == 'get') {
+			// GET req
 			option = {
 				url: 'http://iderms.enertalk.com:8443/spcs/maintenance',
 				type: action,
@@ -323,10 +316,10 @@
 				option.data.jobId = jobId;
 			}
 		} else {
+			// DELETE req
 			if (!confirm('삭제 하시겠습니까?')) {
 				return false;
 			}
-
 			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
 			option = {
 				url: 'http://iderms.enertalk.com:8443/spcs/maintenance/' + jobId + '?oid=' + oid,
@@ -339,7 +332,6 @@
 		}
 		$.ajax(option).done(function (data, textStatus, jqXHR) {
 			console.log('data----', data)
-			$("#spcAlarmModal").removeClass("active");
 			if (action == 'get') {
 				if (jobId != undefined) {
 					modalPopInit(data.data);
@@ -348,6 +340,7 @@
 				}
 			} else {
 				maintenance('get');
+				$("#spcAlarmModal").removeClass("active");
 			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 				alert('처리 중 오류가 발생했습니다.');

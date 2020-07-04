@@ -59,7 +59,7 @@
 		})
 		form.on("submit", function(e){
 			e.preventDefault();
-				// window.locationtransactionHistory.do
+				// window.location = transactionHistory.do
 
 		})
 
@@ -290,11 +290,11 @@
 	</div>
 </div>
 
-<div class="row content-wrapper spc_transaction">
+<div class="row content-wrapper spc-transaction">
 	<div class="col-12">
 		<form action="#" method="post" id="spcReqEdit">
 			<div class="indiv spc_bal_post">
-				<table class="table_footer">
+				<table class="table-footer">
 					<colgroup>
 						<col style="width:4%">
 						<col style="width:16%">

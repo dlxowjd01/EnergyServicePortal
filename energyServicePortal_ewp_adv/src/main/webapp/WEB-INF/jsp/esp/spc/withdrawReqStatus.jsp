@@ -69,7 +69,7 @@
 			<div class="btn_wrap_type01">
 				<button type="button" class="btn_type">선택 인쇄</button>
 			</div>
-			<table class="sort_table table_footer">
+			<table class="sort_table table-footer">
 				<colgroup>
 					<col style="width:6%">
 					<col style="width:9%">

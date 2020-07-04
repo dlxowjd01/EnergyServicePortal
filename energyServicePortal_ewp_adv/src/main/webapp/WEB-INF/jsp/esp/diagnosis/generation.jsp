@@ -90,22 +90,19 @@
 					<span class="tx_tit">계량값</span>
 					<div class="sa_select">
 						<div class="dropdown">
-							<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">
-								복수 선택<span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu dropdown-menu-form chk_type">
-								<li class="dropdown_cov clear selectDevices">
-									<div class="li_btn_bx clear">
-										<div class="fl">
-											<button type="submit" class="btn_type03">모두 선택</button>
-											<button type="submit" class="btn_type03">모두 해제</button>
-										</div>
-										<div class="end">
-											<button type="submit" class="btn_type fr">적용</button>
-										</div>
+							<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">복수 선택<span class="caret"></span></button>
+							<div class="dropdown-menu dropdown-menu-form chk_type"><!--
+							--><ul class="dropdown_cov clear selectDevices"></ul><!--
+							--><div class="li_btn_bx clear">
+									<div class="fl">
+										<button type="submit" class="btn_type03">모두 선택</button>
+										<button type="submit" class="btn_type03">모두 해제</button>
 									</div>
-								</li>
-							</ul>
+									<div class="end">
+										<button type="submit" class="btn_type fr">적용</button>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -423,12 +420,7 @@
 		$('#deviceType button.btn-primary').empty().append('복수 선택').append('<span class="caret"></span>');
 
 		if ($(':checkbox[name="site"]:checked').length > 0) {
-			var size = 380 + (Number($(':checkbox[name="site"]:checked').length - 2) * 170);
-			if (size < 380) {
-				size = 380;
-			}
-			$('#deviceType li.selectDevices').css('width', size);
-			$('#deviceType div.sec_li_bx').remove();
+			$('#deviceType .sec_li_bx').remove();
 			$(':checkbox[name="site"]:checked').each(function () {
 				let sid = $(this).val(),
 					sNm = $(this).next('label').text();
@@ -467,7 +459,7 @@
 								});
 							});
 
-							$('#deviceType li.selectDevices').prepend(siteGrp);
+							$('#deviceType .selectDevices').prepend(siteGrp);
 
 							let deviceHtml1 = $('<li>').append('<a>');
 							deviceHtml1.find('a').attr('href', '#').attr('tabindex', '-1');
