@@ -28,8 +28,8 @@ $(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown
 		let $displayData = $selector.data();
 		let $displayText = $selector.text();
 
-		$displayButton.eq(0).html($displayText + '<span class="caret"></span>');
-
+		// $displayButton.eq(0).html($displayText + '<span class="caret"></span>');
+		$displayButton.eq(0).text().replace(/<[^>]+>/g, $displayText);
 		//data Setting
 		if (!isEmpty($displayData)) {
 			$.map($displayData, function (val, key) {
@@ -71,7 +71,8 @@ const displayDropdown = ($selector) => {
 			}
 		}
 	}
-	$displayButton.eq(0).html($displayText + '<span class="caret"></span>');
+	// $displayButton.eq(0).html($displayText + '<span class="caret"></span>');
+	$displayButton.eq(0).text().replace(/<[^>]+>/g, $displayText);
 
 	//data Setting
 	if (!isEmpty($displayData)) {
@@ -114,8 +115,8 @@ const dropDownInit = ($selector) => {
 	let button = $selector.find('button'),
 		buttonNm = $selector.find('button').data('name'),
 		ul = $selector.find('ul');
-	button.html(buttonNm + '<span class="caret"></span>').data('value', '');
-
+	// button.html(buttonNm + '<span class="caret"></span>');
+	button.text().replace(/<[^>]+>/g, $buttonNm);
 	//데이터에 저장된 정보가 있으면 동적 항목이라 보고 초기화
 	if ($.data(document, ul.prop('id'))) {
 		setMakeList(new Array(), ul.prop('id'), {'dataFunction': {}});
@@ -136,12 +137,13 @@ const dropDownInit = ($selector) => {
  */
 const initDropdownValue = ($selector) => {
 	$selector.each(function(index, element) {
-		$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
+		// $(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
+		$(this).data('value', '').text().replace(/<[^>]+>/g, $(this).data('name'));
 	});
 }
 
 /**
- * dropDown value change
+ * dropDown value change (NOT suitable for ajax updated dropdown)
  *
  * @param $selector
  */
@@ -149,7 +151,7 @@ const setDropdownValue = ($selector) => {
 	$selector.each(function(index, element) {
 		$(this).on("click", function() {
 			let val = $(this).data('value');
-			$(this).parent().prev(".dropdown-toggle").attr('value', val);
+			$(this).parents().find(".dropdown-toggle").data('value', val);
 		});
 	});
 }

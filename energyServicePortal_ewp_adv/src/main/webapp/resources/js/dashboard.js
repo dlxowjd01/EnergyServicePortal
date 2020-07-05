@@ -874,7 +874,7 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 	chart: {
 		marginTop: 0,
-		marginRight: 0,
+		marginRight: 16,
 		backgroundColor: 'transparent',
 		type: 'bar',
 		// height: 300
@@ -970,8 +970,8 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 				connectorAllowed: true
 			},
 			borderWidth: 0, /* 보더 0 */
-			borderRadiusTopLeft: 5, /* 막대 모서리 둥글게 효과 */
-			borderRadiusTopRight: 5, /* 막대 모서리 둥글게 효과 */
+			// borderRadiusTopLeft: 1, /* 막대 모서리 둥글게 효과 */
+			// borderRadiusTopRight: 1, /* 막대 모서리 둥글게 효과 */
 			pointWidth: 15, /* 막대 두께 */
 			groupPadding: 0.1,
 			pointPadding: 0

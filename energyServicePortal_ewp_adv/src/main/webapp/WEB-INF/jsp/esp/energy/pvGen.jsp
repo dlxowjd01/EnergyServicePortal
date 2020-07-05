@@ -9,9 +9,7 @@
 <div class="row content-wrapper">
 	<div id="siteList" class="col-lg-2 col-md-4 col-sm-6 header_drop_area">
 		<div class="dropdown">
-			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-				선택해주세요.<span class="caret"></span>
-			</button>
+			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택해주세요.<span class="caret"></span></button>
 			<ul class="dropdown-menu dropdown-menu-form chk_type"></ul>
 		</div>
 	</div>
@@ -31,22 +29,17 @@
 						<span class="tx_tit">계량값</span>
 						<div class="sa_select">
 							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">복수
-									선택<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu dropdown-menu-form chk_type">
-									<li class="dropdown_cov clear selectDevices">
-										<div class="li_btn_bx clear">
-											<div class="fl">
-												<button type="button" class="btn_type03">모두 선택</button>
-												<button type="button" class="btn_type03">모두 해제</button>
-											</div>
-											<div class="fr">
-												<button type="button" class="btn_type">적용</button>
-											</div>
-										</div>
-									</li>
-								</ul>
+								<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">복수 선택<span class="caret"></span></button>
+								<div class="dropdown-menu dropdown-menu-form chk_type"><!--
+								--><ul class="dropdown_cov clear selectDevices"></ul><!--
+								 --><div class="li_btn_bx clear">
+										<div class="fl"><!-- 
+										--><button type="button" class="btn_type03">모두 선택</button><!-- 
+										--><button type="button" class="btn_type03">모두 해제</button><!-- 
+									--></div>
+										<div class="fr"><button type="button" class="btn_type">적용</button></div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -54,8 +47,7 @@
 						<span class="tx_tit">기간</span>
 						<div class="sa_select">
 							<div class="dropdown" id="period">
-								<button class="btn btn-primary dropdown-toggle" type="button"
-									data-toggle="dropdown">오늘<span class="caret"></span></button>
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">오늘<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="today" class="on"><a href="#">오늘</a></li>
 									<li data-value="week"><a href="#">이번 주</a></li>
@@ -77,10 +69,7 @@
 						<span class="tx_tit">단위</span>
 						<div class="sa_select">
 							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle interval" type="button"
-									data-toggle="dropdown">
-									선택<span class="caret"></span>
-								</button>
+								<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li class="on"><a href="#">15분</a></li>
 									<li><a href="#">1시간</a></li>
@@ -186,17 +175,17 @@
 					extendText = '외 ' + Number($(':checkbox[name="site"]:checked').length - 1) + '개';
 				}
 				//첫 번째 값 + 외 몇개로 표기
-				$('#siteList button').html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
+				$('#siteList button').text().replace(/<[^>]+>/g, $(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;');
 			} else {
 				if ($(':checkbox[name="site"]:checked').length == 0) {
-					$('#siteList button').html('선택해주세요.' + '<span class="caret"></span>')
+					$('#siteList button').text().replace(/<[^>]+>/g, '선택해주세요.');
 				} else {
 					let extendText = '';
 					if ($(':checkbox[name="site"]:checked').length > 1) {
 						extendText = '외 ' + Number($(':checkbox[name="site"]:checked').length - 1) + '개';
 					}
 					//첫 번째 값 + 외 몇개로 표기
-					$('#siteList button').html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
+					$('#siteList button').text().replace(/<[^>]+>/g, $(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;');
 				}
 			}
 			device();
@@ -272,15 +261,9 @@
 	};
 
 	const device = function () {
-		$('#deviceType button.btn-primary').empty().append('복수 선택').append('<span class="caret"></span>');
-
+		$('#devices button.btn-primary').text().replace(/<[^>]+>/g, '복수 선택');
 		if ($(':checkbox[name="site"]:checked').length > 0) {
-			let size = 380 + (Number($(':checkbox[name="site"]:checked').length - 2) * 170);
-			if (size < 380) {
-				size = 380;
-			}
-			$('#deviceType li.selectDevices').css('width', size);
-			$('#deviceType div.sec_li_bx').remove();
+			$('#deviceType .sec_li_bx').remove();
 			$(':checkbox[name="site"]:checked').each(function () {
 				let sid = $(this).val()
 				let sNm = $(this).next('label').text();
@@ -318,7 +301,7 @@
 								});
 							});
 
-							$('#deviceType li.selectDevices').prepend(siteGrp);
+							$('#deviceType .selectDevices').prepend(siteGrp);
 
 							let deviceHtml1 = $('<li>').append('<a>');
 							deviceHtml1.find('a').attr('href', '#').attr('tabindex', '-1');

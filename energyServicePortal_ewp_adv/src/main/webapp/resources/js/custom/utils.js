@@ -1242,6 +1242,7 @@ function addCustomRow(tbody, options) {
 	toggle.each(function(index, element){
 		let oldId = $(this).attr("id");
 		let newId = oldId + cnt;
+		$(this).prev().text().replace(/<[^>]+>/g, '');
 		$(this).attr("id", newId);
 	});
 
@@ -1249,6 +1250,7 @@ function addCustomRow(tbody, options) {
 		if($(this).is(':checkbox')){
 			let oldId = $(this).attr("id");
 			let newId = oldId + cnt;
+			$(this).prop("checked", false);
 			$(this).attr({"id": newId, ":checked": false});
 			$(this).next("label").attr("for", newId);
 		} else {

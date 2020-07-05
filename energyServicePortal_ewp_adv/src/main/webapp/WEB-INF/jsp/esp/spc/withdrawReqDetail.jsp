@@ -140,7 +140,7 @@
 			</div>
 
 			<div class="tbl_wrap_type collect_wrap mt30">
-				<table class="his_tbl table_footer">
+				<table class="his_tbl table-footer">
 					<thead>
 						<tr>
 							<th>출금일자</th>
