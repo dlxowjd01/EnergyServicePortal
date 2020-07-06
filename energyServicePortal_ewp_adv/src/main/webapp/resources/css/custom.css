@@ -2098,6 +2098,7 @@ footer .copyright {
 	display: flex;
 	width: 360px;
 	padding: 10px 10px 5px;
+	flex-wrap: wrap;
 }
 
 .dropdown_cov.type {

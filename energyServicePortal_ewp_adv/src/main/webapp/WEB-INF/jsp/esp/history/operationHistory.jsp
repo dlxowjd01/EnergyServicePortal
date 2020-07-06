@@ -673,7 +673,7 @@
 		);
 
 		if (typeArray.length > 0 && deviceList.length > 0) {
-			$('#devices dropdown_cov').empty();
+			$('#devices .dropdown_cov').empty();
 
 			//선택된 사이트를 기준으로 한다.
 			$(':checkbox[name="site"]:checked').each(function () {
@@ -691,8 +691,8 @@
 							if (elm == el.device_type) {
 								let str = `<li>
 								<a href="javascript:void(0);" data-value="${'${el.did}'}" tabindex="-1">
-									<input type="checkbox" id="device_${'${i}'}" name="device" value="${'${el.did}'}" data-sid="${'${el.sid}'}" data-type="${'${el.device_type}'}">
-									<label for="device_${'${i}'}">${'${el.name}'}</label>
+									<input type="checkbox" id="device_${'${el.did}'}" name="device" value="${'${el.did}'}" data-sid="${'${el.sid}'}" data-type="${'${el.device_type}'}">
+									<label for="device_${'${el.did}'}">${'${el.name}'}</label>
 								</a>
 							</li>`
 								siteGrp.find('ul').append(str);

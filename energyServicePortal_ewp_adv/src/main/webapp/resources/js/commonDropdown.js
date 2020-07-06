@@ -5,7 +5,7 @@
  *
  */
 //드롭 다운 공통 동작 작업 -- 디스에이블이 아닌 항목에 대해서 작동함.
-$(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown_cov)', function (e) {
+$(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown_cov .sec_li_bx)', function (e) {
 	e.preventDefault(); //다른 드롭 다운 동작 막기
 	let $selector = $(this),
 		$dropdown = $selector.closest('.dropdown'),
@@ -157,7 +157,7 @@ const dropDownInit = ($selector) => {
 		buttonNm = $selector.find('button').data('name'),
 		ul = $selector.find('ul');
 	// button.html(buttonNm + '<span class="caret"></span>');
-	button.text().replace(/<[^>]+>/g, $buttonNm);
+	button.text().replace(/<[^>]+>/g, buttonNm);
 	//데이터에 저장된 정보가 있으면 동적 항목이라 보고 초기화
 	if ($.data(document, ul.prop('id'))) {
 		setMakeList(new Array(), ul.prop('id'), {'dataFunction': {}});

@@ -1448,10 +1448,10 @@
 	const getTodayTotalDetail = function () {
 		const formData = getSiteMainSchCollection('day');
 
-		$('#centerTbody tr td:nth-child(1) span').text('');
-		$('#centerTbody tr td:nth-child(2) span').text('');
-		$('#centerTbody tr td:nth-child(3) span').text('');
-		$('#centerTbody tr td:nth-child(4) span').text('');
+		$('#centerTbody tr td:nth-child(1)').html('<em>&nbsp;&nbsp;kW</em>');
+		$('#centerTbody tr td:nth-child(2)').html('<em>&nbsp;&nbsp;kWh</em>');
+		$('#centerTbody tr td:nth-child(3)').html('<em>&nbsp;&nbsp;kWh</em>');
+		$('#centerTbody tr td:nth-child(4)').html('<em>&nbsp;&nbsp;천원</em>');
 
 		let capacity = 0;
 		if (siteList[0].devices != undefined) {
@@ -1497,8 +1497,8 @@
 				let nowEnergyDay = data.energy;
 				let nowBillingDay = data.money;
 
-				$('#centerTbody tr td:nth-child(2) span').text(displayNumberFixedUnit(nowEnergyDay, 'Wh', 'kWh', 2)[0]);
-				$('#centerTbody tr td:nth-child(4) span').text(displayNumberFixedUnit(nowBillingDay, '원', '천원', 0)[0]);
+				$('#centerTbody tr td:nth-child(2) em').before(displayNumberFixedUnit(nowEnergyDay, 'Wh', 'kWh', 2)[0]);
+				$('#centerTbody tr td:nth-child(4) em').before(displayNumberFixedUnit(nowBillingDay, 'Wh', 'kWh', 2)[0]);
 			}
 
 			if (siteForeEnergyData[1] == 'success') {
@@ -1510,7 +1510,7 @@
 					});
 				}
 
-				$('#centerTbody tr td:nth-child(3) span').text(displayNumberFixedUnit(totDayForeEnergy, 'Wh', 'kWh', 2)[0]);
+				$('#centerTbody tr td:nth-child(3) em').before(displayNumberFixedUnit(totDayForeEnergy, 'Wh', 'kWh', 2)[0]);
 			}
 
 			if (statusRawSiteData[1] == 'success') {
@@ -1541,7 +1541,7 @@
 				$('#siteDcPower').text(displayNumberFixedUnit(itemDcPower, 'W', 'kW', 1)[0]);
 				$('#siteAcPower').text(displayNumberFixedUnit(itemAcPower, 'W', 'kW', 1)[0]);
 
-				$('#centerTbody tr td:nth-child(1) span').text(displayNumberFixedUnit(itemCapacity, 'W', 'kW', 1)[0]);
+				$('#centerTbody tr td:nth-child(1) em').before(displayNumberFixedUnit(itemCapacity, 'W', 'kW', 1)[0]);
 
 				let pie1Data = Math.round(itemEfficiency);
 				let pie2Data = 100 - pie1Data;

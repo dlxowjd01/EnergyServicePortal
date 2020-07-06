@@ -10,7 +10,7 @@
 	<div id="siteList" class="col-lg-2 col-md-4 col-sm-6 header_drop_area">
 		<div class="dropdown">
 			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택해주세요.<span class="caret"></span></button>
-			<ul class="dropdown-menu dropdown-menu-form chk_type"></ul>
+			<ul class="dropdown-menu chk_type"></ul>
 		</div>
 	</div>
 </div>
@@ -30,7 +30,7 @@
 						<div class="sa_select">
 							<div class="dropdown">
 								<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">복수 선택<span class="caret"></span></button>
-								<div class="dropdown-menu dropdown-menu-form chk_type"><!--
+								<div class="dropdown-menu chk_type"><!--
 								--><ul class="dropdown_cov clear selectDevices"></ul><!--
 								 --><div class="li_btn_bx clear">
 										<div class="fl"><!-- 
@@ -279,7 +279,7 @@
 					success: function (result) {
 						let devices = result;
 						if (devices.length > 0) {
-							let siteGrp = $('<div>').addClass('sec_li_bx');
+							let siteGrp = $('<li>').addClass('sec_li_bx');
 							siteGrp.append('<p>');
 							siteGrp.find('p').addClass('tx_li_tit').text(sNm);
 							siteGrp.append('<ul>');
