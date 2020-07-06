@@ -49,10 +49,10 @@ public class SpcController {
         return "esp/spc/balanceSheetPost";
     }
 
-    @RequestMapping(value = "/spc/transaction.do")
-    public String spcTransaction(HttpServletRequest request, HttpSession session, Model model) {
-        logger.debug("/spc/transaction.do");
-        return "esp/spc/transaction";
+    @RequestMapping(value = "/spc/transactionCalendar.do")
+    public String spcTransactionCalendar(HttpServletRequest request, HttpSession session, Model model) {
+        logger.debug("/spc/transactionCalendar.do");
+        return "esp/spc/transactionCalendar";
     }
 
    @RequestMapping(value = "/spc/transaction2.do")
@@ -85,10 +85,10 @@ public class SpcController {
         return "esp/spc/withdrawReqStatus";
     }
 
-	@RequestMapping(value = "/spc/withdrawReqDetail.do")
-		public String spcWithdrawReqDetail(HttpServletRequest request, HttpSession session, Model model) {
-		logger.debug("/spc/withdrawReqDetail.do");
-		return "esp/spc/withdrawReqDetail";
+	@RequestMapping(value = "/spc/withdrawReqStatusDetail.do")
+		public String spcWithdrawReqStatusDetail(HttpServletRequest request, HttpSession session, Model model) {
+		logger.debug("/spc/withdrawReqStatusDetail.do");
+		return "esp/spc/withdrawReqStatusDetail";
     }
 
     @RequestMapping(value = "/spc/maintenanceSchedule.do")

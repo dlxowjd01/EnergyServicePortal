@@ -469,7 +469,30 @@ a:active {
 a:link:hover {
 	opacity: 0.8;
 }
+a.text-link{
+	text-decoration: underline;
+	border: none;
+	color: var(--check-active);
+}
 
+a.disabled{
+	text-decoration: none;
+	background: none;
+	color: var(--check-active);
+	cursor: text;
+}
+
+a.disabled.text_blue{
+	text-decoration: none;
+	background: none;
+	color: var(--vivid-blue);
+	cursor: text;
+}
+
+a.disabled:hover,
+a.disabled:focus{
+	opacity: 1;
+}
 select::-ms-expand {
 	display: none;
 }
@@ -11704,7 +11727,7 @@ table.table-footer tfoot td.light {
 	text-align: left;
 }
 
-.spc-transaction .sort_table td.left .icon_header {
+.spc-transaction .sort_table td.left .icon-header {
 	display: inline-block;
 	width: 50px;
 	text-align: left;
