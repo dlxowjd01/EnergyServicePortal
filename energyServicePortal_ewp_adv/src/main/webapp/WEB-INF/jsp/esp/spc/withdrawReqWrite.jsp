@@ -1,8 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<%@ include file="/decorators/include/taglibs.jsp"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ include file="/decorators/include/taglibs.jsp" %>
 
 <script src="/js/commonDropdown.js"></script>
-<script>
+<script type="text/javascript">
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
 	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
@@ -30,12 +30,12 @@
 		getSpcList();
 		
 		let pList = [ 
-			{ name: "REC 수익", val: 1 },
+			{ name: "REC 수익", val: 0 },
 			{ name: "SMP 수익", val: 1 },
-			{ name: "DSRA 적립", val: 1 },
-			{ name: "유보 계좌", val: 1 },
-			{ name: "운영 계좌", val: 1 },
-			{ name: "기타", val: 1 },
+			{ name: "DSRA 적립", val: 2 },
+			{ name: "유보 계좌", val: 3 },
+			{ name: "운영 계좌", val: 4 },
+			{ name: "기타", val: 5 },
 		];
 		for(let i=0; i<pList.length; i++){
 			let str = copyPurposeList.replace(/\*purpose_title\*/g, pList[i].name).replace(/\*purpose_value\*/g, pList[i].val);
@@ -143,40 +143,28 @@
 		}
 
 		withdrawForm.on('submit', function(e){
-			console.log("pb===")
 			e.preventDefault();
 			let warning = withdrawForm.find(".warning");
 			let checkboxes = tableBody.find("[type='checkbox']");
 			let tr = tableBody.find("tr");
 			let jsonData = {}
 			let arr =[];
-			// data = {
-			// 	spc_id: spcList.prev().data("value"),
-			// 	withdraw_bank: withdrawList.prev().data("value"),
-			// 	withdraw_account_no: withdrawList.prev().text(),
-			// 	withdraw_day: $("#requestedDate").val(),
-			// 	to_account: "",
-			// 	total_amount: 5000000,
-			// 	status: 1,
-			// 	status_changed_by: loginName,
-			// 	status_changed_at: new Date().toISOString(),
-			// 	requested_by: 'S-POWER',
-			// 	requested_at: '2020-07-04T19:31:04.048Z'
-			// }
+
 			jsonData.spc_id = spcList.prev().data("value");
+			// from
 			jsonData.withdraw_bank = withdrawList.prev().data("value");
 			jsonData.withdraw_account_no = withdrawList.prev().text();
 			jsonData.withdraw_day = $("#requestedDate").val();
 			// to
 			jsonData.to_account = "";
-			jsonData.total_amount = 5000000;
+			jsonData.total_amount = "";
 			// status
 			jsonData.status = 1;
 			jsonData.status_changed_by = loginName;
 			jsonData.status_changed_at = new Date().toISOString();
 			jsonData.requested_by = loginName;
 			jsonData.requested_at = new Date().toISOString();
-
+			jsonData.transfer_agent = "tester2"
 			// console.log("w---", data.to_account)
 			checkboxes.each(function(index, element){
 				if($(this).is(":checked")) {
@@ -189,62 +177,50 @@
 					obj.amount = Number(amountOpt.eq(index).val());
 					obj.to_account_bank = accOpt.eq(index).data("name");
 					obj.to_account_no = accOpt.eq(index).data("value");
-						// desc: descOpt.eq(index).val(),
+					obj.desc = descOpt.eq(index).val();
 					arr.push(obj);
 				}
 			});
-			jsonData.to_account = arr;
-			// let formArr = [ data.spc_id, data.withdraw_bank, data.withdraw_day, data.to_account ];
-
-			// $.each(formArr, function(index, value){
-			// 	if($('input[type="checkbox"]:checked').length > 0) {
-			// 		if(index < 2) {
-			// 			if(value == undefined ||  value == "선택" || value == "") {
-			// 				warning.eq(index).removeClass('hidden');
-			// 				console.log("warning---", )
-			// 			} else {
-			// 				warning.eq(index).addClass('hidden');
-			// 			}
-			// 		} else {
-			// 			if(value == undefined ||  value == "선택" || value == "") {
-			// 				warning.eq(2).removeClass('hidden');
-			// 			} else {
-			// 				warning.eq(2).addClass('hidden');
-			// 			}
-			// 		}
-			// 	} else {
-			// 		warning.eq(2).removeClass('hidden');
-			// 	}
-			// });
-
-			let newObj = {
-				"spc_id": 24,
-				"withdraw_bank": "우체국",
-				"withdraw_account_no": "출금계좌번호",
-				"withdraw_day": "20200703",
-				"total_amount": 30000,
-				"to_account": "[{\"purpose\":1,\"amount\":10000,\"to_account_bank\":\"기업\",\"to_account_no\":\"123-123-123\",\"desc\":\"테스트계좌1\"},{\"purpose\":1,\"amount\":20000,\"to_account_bank\":\"국민\",\"to_account_no\":\"000-000-000\",\"desc\":\"테스트계좌2\"}]",
-
-				"status": 1,
-				"status_changed_by": "string",
-				"status_changed_at": "2020-07-03T10:42:17.400Z",
-				"requested_by": "string",
-				"requested_at": "2020-07-03T10:42:17.400Z",
-				"transfer_agent": "string"
-			}
+			jsonData.to_account = JSON.stringify(arr);
 			let newJson = JSON.stringify(jsonData);
+
+			let formArr = [ jsonData.spc_id, jsonData.withdraw_bank, jsonData.withdraw_day, jsonData.to_account ];
+
+			$.each(formArr, function(index, value){
+				if($('input[type="checkbox"]:checked').length > 0) {
+					if(index < 2) {
+						if(value == undefined ||  value == "선택" || value == "") {
+							warning.eq(index).removeClass('hidden');
+							console.log("warning---", )
+						} else {
+							warning.eq(index).addClass('hidden');
+						}
+					} else {
+						if(value == undefined ||  value == "선택" || value == "") {
+							warning.eq(2).removeClass('hidden');
+						} else {
+							warning.eq(2).addClass('hidden');
+						}
+					}
+				} else {
+					warning.eq(2).removeClass('hidden');
+				}
+			});
+
 			if( withdrawForm.find(".warning.hidden").length == 4){
 				let opt = {
 					url: 'http://iderms.enertalk.com:8443/spcs/transactions?oid='+oid,
-					type: 'post',
+					type: "POST",
 					async: true,
-					data: newJson
+					dataType: 'json',
+					contentType: "application/json",
+					data: JSON.stringify(jsonData)
 				};
-				console.log("newJson===", newJson );
 				$.ajax(opt).done(function (json, textStatus, jqXHR) {
 					window.location.href = window.location.origin + '/spc/transactionHistory.do'
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					alert('처리 중 오류가 발생했습니다.');
+					console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
 					return false;
 				});
 				// getDataList(1,formArr); 
@@ -315,12 +291,7 @@
 <div class="row header-wrapper">
 	<div class="col-12">
 		<h1 class="page-header">출금 요청서 신청</h1>
-		<div class="time fr">
-			<span>CURRENT TIME</span>
-			<em class="currTime">${nowTime}</em>
-			<span>DATA BASE TIME</span>
-			<em class="dbTime">2018-07-27 17:01:02</em>
-		</div>
+		<div class="time fr"><span>CURRENT TIME</span><em class="currTime">${nowTime}</em><span>DATA BASE TIME</span><em class="dbTime"></em></div>
 	</div>
 </div>
 
@@ -330,9 +301,9 @@
 			<div class="sa_select"><!--
 			--><span class="tx_tit">SPC 선택</span><!--
 			--><div class="dropdown"><!--
-				--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button>
-					<ul id="spcList" class="dropdown-menu unused center" role="menu"><li id="*spcName*" data-value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul>
-					<small class="hidden warning">SPC를 선택해 주세요.</small>
+				--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button><!--
+				--><ul id="spcList" class="dropdown-menu unused center" role="menu"><li id="*spcName*" data-value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul><!--
+				--><small class="hidden warning">SPC를 선택해 주세요.</small>
 				</div>
 			</div>
 			<div class="sa_select"><!--

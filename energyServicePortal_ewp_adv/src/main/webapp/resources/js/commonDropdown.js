@@ -28,8 +28,8 @@ $(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown
 		let $displayData = $selector.data();
 		let $displayText = $selector.text();
 
-		// $displayButton.eq(0).html($displayText + '<span class="caret"></span>');
-		$displayButton.eq(0).text().replace(/<[^>]+>/g, $displayText);
+		$displayButton.eq(0).html($displayText + '<span class="caret"></span>');
+		// $displayButton.eq(0).text().replace(/<[^>]+>/g, $displayText);
 		//data Setting
 		if (!isEmpty($displayData)) {
 			$.map($displayData, function (val, key) {
@@ -71,8 +71,8 @@ const displayDropdown = ($selector) => {
 			}
 		}
 	}
-	// $displayButton.eq(0).html($displayText + '<span class="caret"></span>');
-	$displayButton.eq(0).text().replace(/<[^>]+>/g, $displayText);
+	$displayButton.eq(0).html($displayText + '<span class="caret"></span>');
+	// $displayButton.eq(0).text().replace(/<[^>]+>/g, $displayText);   <== 이 부분 적용시 '외' 의 텍스트가 나오지 않음.
 
 	//data Setting
 	if (!isEmpty($displayData)) {
@@ -103,8 +103,49 @@ const selectAll = ($selector) => {
 			firstInput.prop('checked', false);
 		}
 	});
-
 }
+
+
+/**
+ * dropDown selectAll group (IN PROGRESS!!!!!)
+ *
+ * @param $selector
+ */
+const selectAllGroup = ($selector) => {
+	let group = $selector.find('.dropdown-menu.chk_type');
+	$.each(group, function(){
+		let item = $(this).find("li");
+		let firstCheckbox = item.first();
+		let input = item.find('input[type="checkbox"]');
+		let firstInput = firstCheckbox.find('input[type="checkbox"]');
+
+		// item.on("click", function(){
+		// 	if($(this).index() == 0) {
+		// 		if($(this).find("input[type='checkbox']").is(':checked')) {
+		// 			input.prop("checked", true);
+		// 		} else {
+		// 			input.prop("checked", false);
+		// 		}
+		// 	} else {
+		// 		// if($(this).find("input[type='checkbox']").is(':checked')) {
+		// 		// 	item.first().find("input[type='checkbox']").prop("checked", false);
+		// 		// }
+		// 	}
+		// });
+		firstCheckbox.on("click", function(){
+			console.log("item---", $(this))
+			$(this).toggleClass('active');
+			if( $(this).hasClass('active') ) {
+				input.prop("checked", false);
+				firstInput.prop('checked', true);
+			} else {
+				input.prop("checked", true);
+				firstInput.prop('checked', false);
+			}
+		})
+	})
+}
+
 
 /**
  * dropDown 초기화 함수
@@ -143,13 +184,29 @@ const initDropdownValue = ($selector) => {
 }
 
 /**
- * dropDown value change (NOT suitable for ajax updated dropdown)
+ * dropdown value change (NOT suitable for ajax updated dropdown)
  *
  * @param $selector
  */
 const setDropdownValue = ($selector) => {
 	$selector.each(function(index, element) {
 		$(this).on("click", function() {
+			let val = $(this).data('value');
+			$(this).parents().find(".dropdown-toggle").data('value', val);
+		});
+	});
+}
+
+/**
+ * single select dropdown groups
+ *
+ * @param $selector
+ */
+const setSingleSelectDropdown = ($selector) => {
+	let btn = $selector.find(".dropdown-menu:not('.chk_type')");
+	$.each(btn, function(index, element) {
+		let item = $(this).find("li");
+		item.on("click", function() {
 			let val = $(this).data('value');
 			$(this).parents().find(".dropdown-toggle").data('value', val);
 		});

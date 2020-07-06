@@ -1,252 +1,304 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
+
 <script src="/js/commonDropdown.js"></script>
-<script>
+<script type="text/javascript">
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
+	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
+	const spcId = '${param.review_spc_id}';
+	const reqId = '${param.req_id}';
 
 	$(function() {
-		const form = $("#spcReqEdit");
-		const fistTable = $("#firstTable");
-		const deleteBtn = $("#deleteBtn");
-		const checkBoxes = fistTable.find('.select_row input[type="checkbox"]');
-		const calendar = $(".sel_calendar");
-		const dropdown = $("#spc button.dropdown-toggle");
-		const opt1 = "관리운영비<span class='caret'></span>";
-		const opt2 = "사무수탁비<span class='caret'></span>";
-		const textInput = fistTable.find(".reqFee");
-		const note = fistTable.find("td:not('.reqFee')");
-		
-		note.val("");
-		unCheckAll();
-
-		textInput.each(function(index){
-			if(index % 2 == 0) {
-				$(this).find("input").val("400,000,00");
-			} else {
-				$(this).find("input").val("20,000,00");
-			}
-		});
-
-		dropdown.each(function(index){
-			if(index % 2 == 0) {
-				$(this).html(opt1);
-			} else {
-				$(this).html(opt2);
-			}
-
-		});
-
-		calendar.each(function(index){
-			let fullDate = ""
-			let yy_mm = "2020-05-0";
-			let dd = 2;
-			dd+=(index+2);
-			let d = dd.toString();
-			fullDate = yy_mm+d;
-
-			$(this).find("input").val(fullDate);
-		})
-
-		deleteBtn.on("click", function (){
-			checkBoxes.each(function(){
-				if($(this).prop("checked")){
-					$(this).closest("tr").remove();
-				} else {
-					return
-				}
-			});
-		})
-		form.on("submit", function(e){
-			e.preventDefault();
-				// window.location = transactionHistory.do
-
-		})
-
-		$("#writeBtn").on("click", function(){
-			downloadFile
-		})
-			// onclick="location.href='http://iderms.enertalk.com:8443/files/download/5c71e049-f73c-2bf9-a9a0-2f91d067ef11?oid=spower&orgFilename=수익보고서_20200526100755.pdf'"
+		const withdrawForm = $('#withdrawForm');
+		const spcList = $('#spcList');
+		const withdrawList = $('#withdrawList');
+		const tableBody = $("#tableBody");
+		const purposeList = $("#purposeList");
+		const receiveList = $("#receiveList");
+		const firstRow = tableBody.find("tr:first-child")
+		const dropdownOpt = withdrawForm.find('.dropdown-menu:not(.chk_type)');
+		const cloned = spcList.clone().html();
+		const copyWithdrawList = $("#withdrawList").clone().html();
+		const copyReceiveList = $("#receiveList").clone().html();
+		const copyPurposeList = $("#purposeList").clone().html();
 	
-		function setSaveData(){
-			var spcId = $("#spc").data("value"),
-				spcName = $("#name").val(),
-				genId = $("#gen").data("value"),
-				genName = $("#genName").val();
+		spcList.empty();
+		withdrawList.empty();
+		receiveList.empty();
+		purposeList.empty();
 
-			if(spcId === undefined){
-				alert("SCP명을 선택하세요.");
-				return false;
+		unCheckAll(tableBody);
+		getSpcList();
+		// getAccountInfo(spcInfo);
+		
+		let pList = [ 
+			{ name: "REC 수익", val: 1 },
+			{ name: "SMP 수익", val: 1 },
+			{ name: "DSRA 적립", val: 1 },
+			{ name: "유보 계좌", val: 1 },
+			{ name: "운영 계좌", val: 1 },
+			{ name: "기타", val: 1 },
+		];
+		for(let i=0; i<pList.length; i++){
+			let str = copyPurposeList.replace(/\*purpose_title\*/g, pList[i].name).replace(/\*purpose_value\*/g, pList[i].val);
+			purposeList.append($(str));
+		}
+
+		purposeList.find("li a").on("click", function(){
+			let val = $(this).parent().data("value");
+			purposeList.prev().data("value", val);
+		});
+
+		function getSpcList() {
+			let action = 'get';
+			let syncOpt = true;
+			let option = {
+				url: "http://iderms.enertalk.com:8443/spcs/" + spcId + "?oid=" + oid,
+				type: action,
+				async: syncOpt
 			}
 
-			if(genId === undefined){
-				alert("발전소를 선택하세요.");
-				return false;
-			}
-
-			if(spcId == "" && spcName == ""){
-				alert("SCP명을 입력하세요.");
-				return false;
-			}
-			
-			if(genId == "" && genName == ""){
-				alert("발전소명을 입력하세요.");
-				return false;
-			}	
-			
-			//직접입력 발전소 등록..(이걸왜 여기서 하지? 발전소 관리 화면냅두고 직접입력 선택 시 사이트관리 화면 팝업을 띄우던가..ㅉㅉ)
-			if(genId == ""){
-				var bError = false;
-				$.ajax({
-					url: "http://iderms.enertalk.com:8443/config/sites?oid="+oid,
-					type: "post",
-					dataType: 'json',
-					async: false,
-					contentType: "application/json",
-					data: JSON.stringify({
-						"name": $("#genName").val(),
-						"location": $("#sidoValue").val(),
-						"address": $("#address").val(),
-						"resource_type" : 0
-					}),
-					success: function (json) {
-						$("#gen").data("value", json.sid);
-					},
-					error: function (request, status, error) {
-						alert('처리 중 오류가 발생했습니다.');
-						bError = true;
-						return false;
+			$.ajax(option).done(function (json, textStatus, jqXHR) {
+				spcList.empty();
+				if(json.data.length >0){
+					let data = json.data[0];
+					let listItem = '';
+					if(data.name == ""){
+						listItem = cloned.replace(/\*spcId\*/g, data.spc_id).replace(/\*spcName\*/g, "no_name" + " [ " + new Date().toISOString().substring(2, 10) + " ]");
+						$("#spcList").prev().text().replace(/<[^>]+>/g, "no_name" + new Date().toISOString().substring(2, 10));
+					} else {
+						listItem = cloned.replace(/\*spcId\*/g, data.spc_id).replace(/\*spcName\*/g, data.name);
+						$("#spcList").prev().text().replace(/<[^>]+>/g, data.name);
 					}
+					spcList.append($(listItem));
+				}
+				let selected = spcList.find("li a").first();
+				let val = spcList.find("li").first().data("value");
+				spcList.prev().html( selected.text() + '<span class="caret"></span>');
+				$("#spcList").prev().data("value", val);
+				getAccountInfo(val);
+
+				spcList.find("li a").on("click", function(){
+					let v = $(this).parent().data("value");
+					$("#spcList").prev().data("value", v);
+					// $("#withdrawList").empty();
+					// $("#withdrawList").prev().text().replace(/<[^>]+>/g, '선택');
+					// getAccountInfo(val);
 				});
-				
-				if(bError){
-					return false;
-				}
-			}	
-			
-			$.ajax({
-				url: "http://iderms.enertalk.com:8443/spcs",
-				type: "get",
-				async: true,
-				data: {"oid": oid, includeGens: true},
-				success: function (result) {
-					var checkCountSpc = 0, checkCountGen = 0;
-
-					for(var i = 0, count = result.data.length; i < count; i++){
-						var rowData = result.data[i];
-						var spcGensList = rowData.spcGens;
-
-						if(rowData.name == spcName && spcId == ""){
-							checkCountSpc++;
-							break;
-						}
-
-						if(spcGensList !== undefined && spcGensList.length > 0){
-							for(var j = 0, jcount = spcGensList.length; j < jcount; j++){
-								if(genId == spcGensList[j].gen_id){
-									checkCountGen++;
-									break;
-								}
-							}
-						}
-					}
-
-					if( checkCountSpc > 0 ){
-						alert("중복되는 SPC명이 존재 합니다.");
-						return false;
-					}
-
-					if( checkCountGen > 0 ){
-						alert("SPC에 등록된 발전소 입니다.");
-						return false;
-					}
-
-					$("#sendSpcPostModal").modal(); // 처리중 모달띄우기
-					
-					//신규 spc 일떄..
-					if(spcId == ""){
-						sendSpcPost();
-					}else{
-						sendSpcAttchFilePost(spcId);
-					}
-				},
-				error: function (request, status, error) {
-					alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
-				}
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
 			});
 		}
 
-
-		function downloadFile(spcId){
-			var genId = $("#gen").data("value");
-
-			form.find("input[type=file]").each(function(){
-				$(this).attr("name", this.name + "_" + spcId +"_" + genId);
-			});
-
-			$.ajax({
-				type: 'post',
-				enctype: 'multipart/form-data',
-				url: 'http://iderms.enertalk.com:8443/files/upload?oid='+oid,
-				data: new FormData(form),
-				processData: false,
-				contentType: false,
-				cache: false,
-				timeout: 600000,
-				success: function (result) {
-					console.log("form file submitted===", result)
-					// sendSpcGenPost(spcId, result.files);
+		function getAccountInfo (id) {
+			$("#receiveList").empty();
+			$("#receiveList").prev().text().replace(/<[^>]+>/g, '선택');
+			if (id == undefined || id == '') {
+				return;
+			}
+			let action = 'get';
+			let syncOpt = true;
+			let option= {
+				url: 'http://iderms.enertalk.com:8443/spcs/transactions',
+				type: action,
+				data: {
+					'oid' : oid,
+					'spcIds' : id
 				},
-				error: function (request, status, error) {
-					alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+				async: syncOpt
+			}
+			$.ajax(option).done(function (json, textStatus, jqXHR) {
+				let sending = '';
+				let receiving = '';
+				if (json.data.length > 0) {
+					json.data.map(item => {
+						let data = json.data;
+						// console.log("item===", item)
+						sending = copyWithdrawList.replace(/\*withdraw_account\*/g, item.withdraw_account_no).replace(/\*account_num\*/g, item.withdraw_bank);
+						withdrawList.append($(sending));
+						return new Promise((resolve, reject) => {
+							resolve(JSON.parse(item.to_account))
+							}).then(res => {
+								res.map(d => {
+									// console.log('d===000', d);
+									receiving = copyReceiveList.replace(/\*to_account_bank_name\*/g, d.to_account_bank).replace(/\*to_account_no\*/g, d.to_account_no);
+									receiveList.append($(receiving));
+								});
+							}).catch(error => {
+								console.log(error);
+							})
+						});
+						withdrawList.find("li a").on("click", function(){
+							let val = $(this).parent().data("value");
+							let name = $(this).parent().data("name");
+							withdrawList.prev().data("value", val);
+						});
+						receiveList.find("li a").on("click", function(){
+							let val = $(this).parent().data("value");
+							let name = $(this).parent().data("name");
+							receiveList.prev().data("value", val);
+							receiveList.prev().data("name", name);
+						});
+				} else {
+					sending = copyWithdrawList.replace(/\*withdraw_account\*/g, '등록된 출금 계좌가 없습니다.').replace(/\*account_num\*/g, '');
+					receiving = copyReceiveList.replace(/\*to_account_bank_name\*/g, '등록된 입금 계좌가 없습니다.').replace(/\*to_account_no\*/g, '');
+					withdrawList.append($(sending));
+					receiveList.append($(receiving));
 				}
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
 			});
 		}
 
-		function sendSpcGenPost(spcId, files){
-			var genId = $("#gen").data("value");
+		withdrawForm.on('submit', function(e){
+			e.preventDefault();
+			let warning = withdrawForm.find(".warning");
+			let checkboxes = tableBody.find("[type='checkbox']");
+			let tr = tableBody.find("tr");
+			let jsonData = {}
+			let arr =[];
+			let sum = "";
+			jsonData.spc_id = spcList.prev().data("value");
+			// from
+			jsonData.withdraw_bank = withdrawList.prev().data("value");
+			jsonData.withdraw_account_no = withdrawList.prev().text();
+			jsonData.withdraw_day = $("#requestedDate").val();
+			// to
+			jsonData.to_account = "";
+			// status
+			jsonData.status = 1;
+			jsonData.status_changed_by = loginName;
+			jsonData.status_changed_at = new Date().toISOString();
+			jsonData.requested_by = loginName;
+			jsonData.requested_at = new Date().toISOString();
+			jsonData.transfer_agent = "tester2"
+			// console.log("w---", data.to_account)
+			checkboxes.each(function(index, element){
+				if($(this).is(":checked")) {
+					let purposeOpt = $("#tableBody").find("td:nth-of-type(3) .dropdown-toggle");
+					let amountOpt = $("#tableBody").find("td:nth-of-type(4) input");
+					let accOpt = $("#tableBody").find("td:nth-of-type(5) .dropdown-toggle");
+					let descOpt = $("#tableBody").find("td:nth-of-type(6) input[name='note']");
+					let obj = {};
+					obj.purpose = purposeOpt.eq(index).data("value");
+					obj.amount = Number(amountOpt.eq(index).val());
+					obj.to_account_bank = accOpt.eq(index).data("name");
+					obj.to_account_no = accOpt.eq(index).data("value");
+					obj.desc = descOpt.eq(index).val();
+					arr.push(obj);
+					sum += Number(amountOpt.eq(index).val())
+				}
+			});
+			jsonData.total_amount = Number(sum);
+			jsonData.to_account = JSON.stringify(arr);
+			let formArr = [ jsonData.spc_id, jsonData.withdraw_bank, jsonData.withdraw_day, jsonData.to_account ];
 
-			var contract_info = setAreaParamData("contract_info"),
-				device_info = setAreaParamData("device_info"),
-				finance_info = setAreaParamData("finance_info"),
-				warranty_info = setAreaParamData("warranty_info"),
-				coefficient_info = setAreaParamData("coefficient_info"),
-				contact_info = setAreaParamData("contact_info"),
-				attachement_info = files;
+			$.each(formArr, function(index, value){
+				if($('input[type="checkbox"]:checked').length > 0) {
+					if(index == 1 ) {
+						if(isEmpty(value)) {
+							warning.eq(index).removeClass('hidden');
+						} else {
+							warning.eq(index).addClass('hidden');
+						}
+					} else if (index == 2 ) {
+						if(isEmpty(value)) {
+							warning.eq(3).removeClass('hidden');
+							console.log("val---", value)
+							console.log("warning---", formArr)
+						} else {
+							warning.eq(3).addClass('hidden');
+						}
+					} else {
+						if(value == "undefined") {
+							warning.eq(3).removeClass('hidden');
+						} else {
+							warning.eq(3).addClass('hidden');
+						}
+					}
+				} else {
+					warning.eq(2).removeClass('hidden');
+				}
+			});
 
-			device_info["addList01"] = setAddListParam("addList01");
-			device_info["addList02"] = setAddListParam("addList02");
-			device_info["addList03"] = setAddListParam("addList03");
-			device_info["addList04"] = setAddListParam("addList04");
-			device_info["addList05"] = setAddListParam("addList05");
-			device_info["addList06"] = setAddListParam("addList06");
-			device_info["addList07"] = setAddListParam("addList07");
-
-			$.ajax({
-				url: "http://iderms.enertalk.com:8443/spcs/" + spcId +"/gens?oid=" + oid +"&gen_id=" + genId,
-				type: "post",
-				async: true,
-				contentType: "application/json",
-				data: JSON.stringify({
-					"contract_info": JSON.stringify(contract_info),
-					"device_info" : JSON.stringify(device_info),
-					"finance_info" : JSON.stringify(finance_info),
-					"warranty_info" : JSON.stringify(warranty_info),
-					"coefficient_info" : JSON.stringify(coefficient_info),
-					"contact_info" : JSON.stringify(contact_info),
-					"attachement_info" : JSON.stringify(attachement_info),
-					"updated_by" : loginId,
-					"del_yn": "N"
-				}),
-				success: function (json) {
-					alert("등록되었습니다.");
-					goMoveList();
-				},
-				error: function (request, status, error) {
+			if( withdrawForm.find(".warning.hidden").length == 4){
+				let data = JSON.stringify(jsonData);
+				let opt = {
+					url: 'http://iderms.enertalk.com:8443/spcs/transactions?oid='+oid,
+					type: "POST",
+					async: true,
+					dataType: 'json',
+					contentType: "application/json",
+					data: data
+				};
+				console.log("json---", data)
+				$.ajax(opt).done(function (json, textStatus, jqXHR) {
+					window.location.href = window.location.origin + '/spc/transactionHistory.do'
+				}).fail(function (jqXHR, textStatus, errorThrown) {
 					alert('처리 중 오류가 발생했습니다.');
+				console.log("j===", jqXHR, " textStatus==",  textStatus )
+					return false;
+				});
+				// getDataList(1,formArr); 
+			} else {
+				// console.log("warning length===", withdrawForm.find(".warning.hidden') )
+			}
+		// getDataList(1); 
+		});
+
+
+		// amount number trim event
+		$(".auto-update").each(function() {
+			let sum = '';
+			$(this).on('keypress', function(e) {
+				if (e.which == "0".charCodeAt(0) && $(this).val().trim() == "") {
 					return false;
 				}
 			});
+			$(this).on('keyup', function() {
+				this.value = this.value.replace(/\D/gi, '');
+			});
+			// tableBody.find(".auto-update").on("input", function(){
+			// 	$(this).each(function(){
+			// 		sum += $(this).val();
+			// 	})
+			// 	// $("#total").text(sum.replace(/\D/gi, ''));
+			// });
+		});
+
+		$("#addRowBtn").on("click", function(){
+			addCustomRow(tableBody, 'first');
+		});
+
+		$("#deleteRowBtn").on("click", function(){
+			let checkboxes = tableBody.find("input[type='checkbox']");
+			checkboxes.each(function(index, element){
+				if($(this).is(":checked") && index>0){
+					$("#tableBody").find("tr").eq(index).remove();
+				}
+			});
+		});
+
+		// function nvl (value, str) {
+		// 	if (isEmpty(value)) {
+		// 		return str;
+		// 	} else {
+		// 		return value;
+		// 	}
+		// }
+
+		// function getCsvDown() {
+		// 	var column = ["name", "발전소_명", "설치_용량", "관리_운영_기간", "", ""], //json Key
+		// 		header = ["SPC명", "발전소 명", "용량", "관리 운영기간	", "이관자료", "첨부파일"]; //csv 파일 헤더
+
+		// 	getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
+		// }
+
+		function getNumberIndex (index) {
+			return index + 1;
 		}
 
 	});
@@ -266,33 +318,37 @@
 	</div>
 </div>
 
-<div class="row spc-search-bar">
-	<div class="col-12">
-		<span class="tx_tit">SPC 선택</span><div class="sa_select mr-16">
-			<div class="dropdown">
-				<button type="button" id="spc" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">전체<span class="caret"></span></button>
-				<ul id="spcList" class="dropdown-menu" role="menu">
-					<li data-value="14"><a href="javascript:void(0);" tabindex="-1">전체</a></li>
-					<li data-value="15"><a href="javascript:void(0);" tabindex="-1">SPC1</a></li>
-					<li data-value="16"><a href="javascript:void(0);" tabindex="-1">SPC2</a></li>
-					<li data-value="17"><a href="javascript:void(0);" tabindex="-1">SPC3</a></li>
-				</ul>
+<form id="withdrawForm" name="withdraw_form" action="#" method="post">
+	<div class="row spc-search-bar">
+		<div class="col-11">
+			<div class="sa_select"><!--
+			--><span class="tx_tit">SPC 선택</span><!--
+			--><div class="dropdown"><!--
+				--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택" data-value=""><span class="caret"></span></button><!--
+				--><ul id="spcList" class="dropdown-menu unused center" role="menu"><li id="*spcName*" data-value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul><!--
+				--><small class="hidden warning">SPC를 선택해 주세요.</small>
+				</div>
 			</div>
-		</div><span class="tx_tit ml-12">출금 계좌번호</span><div class="sa_select">
-			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
-				<ul class="dropdown-menu chk_type" role="menu">
-					<li><a href="javascript:void(0);">KB 120-634348-12-339</a></li>
-					<li><a href="javascript:void(0);">기업 650-665568-12-339</a></li>
-				</ul>
+			<div class="sa_select"><!--
+			--><span class="tx_tit">출금 계좌번호</span><!--
+			--><div class="dropdown"><!--
+				--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button>
+					<ul id="withdrawList" class="dropdown-menu unused center" role="menu"><li data-value="*account_num*"><a href="#" tabindex="-1">*withdraw_account*</a></li></ul>
+					<small class="hidden warning">출금 요청 계좌를 선택해 주세요.</small>
+				</div>
+			</div>
+			<div class="sa_select"><!--
+			--><label for="availableAmount" class="tx_tit">계좌 잔액</label><!--
+			--><div class="tx_inp_type"><input type="text" id="" name="availableAmount" disabled="" readonly=""></div>
 			</div>
 		</div>
+		<div class="col-1">
+			<div class="fr"><a href="#;" class="save_btn">엑셀 다운로드</a></div>
+		</div>
 	</div>
-</div>
 
-<div class="row content-wrapper spc-transaction">
-	<div class="col-12">
-		<form action="#" method="post" id="spcReqEdit">
+	<div class="row content-wrapper spc-transaction">
+		<div class="col-12">
 			<div class="indiv spc_bal_post">
 				<table class="table-footer">
 					<colgroup>
@@ -314,60 +370,42 @@
 						<th>비고</th>
 					</tr>
 					</thead>
-					<tbody id="firstTable">
+					<tbody id="tableBody">
 						<tr>
 							<td>
 								<a class="chk_type select_row">
-									<input type="checkbox" id="chk01" name="chk01">
-									<label for="chk01"></label>
+									<input type="checkbox" id="apply" name="apply">
+									<label for="apply"></label>
 								</a>
 							</td>
 							<td>
-								<div class="sel_calendar">
-									<input type="text" id="enforce_1" name="enforce_1" class="sel fromDate" value=""
-										autocomplete="off"
-										readonly
-										placeholder="선택">
-								</div>
+								<div class="sel_calendar"><input type="text" id="requestedDate" name="requestedDate" class="sel fromDate" value="" autocomplete="off" placeholder="선택"></div>
 							</td>
 							<td>
 								<div class="sa_select">
-									<div class="dropdown placeholder" id="spc">
-										<button class="btn btn-primary dropdown-toggle" type="button"
-												data-toggle="dropdown">선택
-											<span class="caret"></span>
-										</button>
-										<ul class="dropdown-menu chk_type" role="menu">
-											<li><a href="javascript:void(0);" tabindex="-1">관리 운영비</a></li>
-											<li><a href="javascript:void(0);" tabindex="-1">사무 수탁비</a></li>
-											<li><a href="javascript:void(0);" tabindex="-1">기타</a></li>
-										</ul>
-									</div>
-								</div>
-							</td>
-							<td class="reqFee">
-								<div class="tx_inp_type">
-									<input type="text" id="reqFee2" name="reqFee2" placeholder="직접 입력">
-								</div>
-							</td>
-							<td>
-								<div class="sa_select">
-									<div class="dropdown placeholder" id="accountNum4">
-										<button class="btn btn-primary dropdown-toggle" type="button"
-												data-toggle="dropdown">KB 120-634348-12-339
-											<span class="caret"></span>
-										</button>
-										<ul class="dropdown-menu chk_type" role="menu">
-											<li><a href="javascript:void(0);" tabindex="-1">신한 650-665568-12-339</a></li>
-											<li><a href="javascript:void(0);" tabindex="-1">KB 650-665568-12-339</a></li>
+									<div class="dropdown placeholder">
+										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="" data-value="">선택<span class="caret"></span></button>
+										<ul id="purposeList" class="dropdown-menu" role="menu">
+											<li data-value="*purpose_value*"><a href="#" tabindex="-1">*purpose_title*</a></li>
 										</ul>
 									</div>
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type">
-									<input type="text" id="interestRate_1" name="interestRate_1" placeholder="직접 입력">
+								<div class="tx_inp_type"><!-- 
+								--><input type="text" id="transferAmount" class="auto-update right" name="transfer_amount" placeholder="직접 입력"><!--
+							--></div><!--
+						--></td>
+							<td>
+								<div class="sa_select">
+									<div class="dropdown placeholder">
+										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="">선택<span class="caret"></span></button>
+										<ul id="receiveList" class="dropdown-menu" role="menu"><li data-name="*to_account_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_account_bank_name* *to_account_no*</a></li></ul>
+									</div>
 								</div>
+							</td>
+							<td>
+								<div class="tx_inp_type"><input type="text" id="note" name="note" placeholder="직접 입력"></div>
 							</td>
 						</tr>
 					</tbody>
@@ -376,107 +414,50 @@
 							<td></td>
 							<td>합계</td>
 							<td></td>
-							<td>1,240,000,000</td>
+							<td id="total" class="total"></td>
 							<td></td>
-							<td class="light">잔액<span class="ml-20">300,000,000 원</span></td>
+							<td></td>
 						</tr>
 					</tfoot>
 				</table>
 				<div class="btn_wrap_type">
-					<a href="#;" class="btn_type07" id="deleteBtn">선택 삭제</a>
-					<a href="javascript:void(0);" class="btn_add"
-						onclick="addEmptyRowTable('firstTable'); return false;">열 추가</a>
-				</div>
+					<div class="fl"><!--
+					--><small class="hidden warning">요청서를 신청하실 체크박스를 선택해 주세요.</small><!--
+					--><small class="hidden warning">출금 요청 정보를 기입해 주세요.</small><!--
+				--></div><!--
+				--><button type="button" id="deleteRowBtn" class="btn_type07">선택 삭제</button><!--
+				--><button type="button" id="addRowBtn" class="btn-text-blue">열 추가</button><!--
+			--></div>
 			</div>
 			<div class="indiv mt25">
 				<div class="spc_tbl_row">
 					<table id="secondTable">
 						<colgroup>
 							<col style="width:15%">
-							<col style="width:20%">
+							<col style="width:85%">
 							<col>
 						</colgroup>
 						<tr>
-							<th class="th_type">증빙 첨부<a href="javascript:addRowTable('secondTable')" class="btn_add fr">추가</a></th>
-							<td id="addFileList01">
-								<input type="file" id="spc_file_01" class="hidden" name="spc_file_01" accept=".gif, .jpg, .png">
-								<label for="spc_file_01" class="btn file_upload">파일 선택</label>
-								<span class="upload_text ml-16"></span>
-							</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td id="addFileList02">
-								<input type="file" id="spc_file_02" class="hidden" name="spc_file_02" accept=".gif, .jpg, .png">
-								<label for="spc_file_02" class="btn file_upload">파일 선택</label>
-								<span class="upload_text ml-16"></span>
-							</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td id="addFileList03">
-								<input type="file" id="spc_file_03" class="hidden" name="spc_file_03"  accept=".gif, .jpg, .png">
-								<label for="spc_file_03" class="btn file_upload">파일 선택</label>
-								<span class="upload_text ml-16"></span>
-							</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td id="addFileList04">
-								<input type="file" id="spc_file_04" class="hidden" name="spc_file_04"  accept=".gif, .jpg, .png">
-								<label for="spc_file_04" class="btn file_upload">파일 선택</label>
-								<span class="upload_text ml-16"></span>
+							<th class="th_type">증빙 첨부</th>
+							<td id="addFileList01" class="flex_start_td"><!--
+								--><input type="file" id="red_write_attachment" class="hidden" name="red_write_attachment" accept=".gif, .jpg, .png" multiple=""><!--
+								--><label for="red_write_attachment" class="btn file_upload">파일 선택</label><!--
+								--><div class="file_list ml-16"><ul><li>No Files Selected</li></ul></div>
 							</td>
 							<td></td>
 						</tr>
 					</table>
 				</div>
-				<div class="btn_wrap_type05">
-					<a class="chk_type mr-24">
-						<input type="checkbox" id="chk02" name="chk02">
-						<label for="chk02">증빙 첨부 포함</label>
-					</a>
-					<button type="button" class="btn btn_type03 mr-12" id="writeBtn">다운로드</button>
-					<button type="submit" class="btn btn_type">제출</button>
-				</div>
-			</div>
-		</form>
-	</div>
-</div>
 
-<%--
-<div class="indiv collapse" id="searchOption">
-	<div class="spc_tbl">
-		<table class="sort_table chk_type">
-			<thead>
-				<tr>
-					<th>
-						<strong>조회 기간</strong>
-					</th>
-					<th><button class="btn_align down">선택</button></th>
-					<th><button class="btn_align down">상태</button></th>
-					<th><button class="btn_align down">승인 대기, 승인 중</button></th>
-				</tr>
-			</thead>
-			<tbody id="listData">
-				<tr>
-					<td><strong>단위</strong></td>
-					<td>선택</td>
-					<td>계좌 구분</td>
-					<td class="right">선택</td>
-				</tr>
-				<tr>
-					<td><strong>입출금 구분</strong></td>
-					<td>계좌 구분</td>
-					<td>계좌 구분</td>
-					<td class="right">선택</td>
-				</tr>
-			</tbody>
-		</table>
-		<button class="btn_type fr" onclick="getDataList();">조회</button>
+				<div class="btn_wrap_type05"><!--
+				--><a class="chk_type mr-24"><!--
+					--><input type="checkbox" id="file" name="file"><!--
+					--><label for="file">증빙 첨부 포함</label><!--
+				--></a><!--
+				--><button type="button" class="btn btn_type03 mr-12" id="writeBtn">PDF</button><!--
+				--><button type="submit" class="btn btn_type">제출</button><!--
+			--></div>
+			</div>
+		</div>
 	</div>
-</div>
---%>
+</form>

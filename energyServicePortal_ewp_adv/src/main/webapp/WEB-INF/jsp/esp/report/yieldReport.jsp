@@ -737,10 +737,10 @@
 	<div class="col-12">
 		<div class="indiv report yield_report">
 			<div class="flex_wrapper mb-20">
-				<div>
-					<button type="button" class="btn_type03 big mr-12" onclick="setCheckedDataExcelDown();">선택 다운로드</button>
-					<button type="button" class="btn_type03 big" onclick="setCheckedDataRemove();">선택 삭제</button>
-				</div>
+				<div><!-- 
+					--><button type="button" class="btn_type03 big" onclick="setCheckedDataExcelDown();">선택 다운로드</button><!-- 
+					--><button type="button" class="btn_type03 big" onclick="setCheckedDataRemove();">선택 삭제</button><!-- 
+				--></div>
 				<div><button type="button" class="btn_type" onclick="modalInit();">신규 생성</button></div>
 			</div>
 			<div class="spc_tbl align_type">
