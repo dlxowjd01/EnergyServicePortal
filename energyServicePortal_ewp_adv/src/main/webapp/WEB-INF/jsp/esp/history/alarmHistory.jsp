@@ -269,11 +269,11 @@
 							</div>
 						</div>
 						<div class="sa_select">
-							<label class="tx_tit" id="dateArea">기간 설정</label>
+							<label class="tx_tit" for="datepicker1">기간 설정</label>
 							<input type="text" id="datepicker1" name="fromDate" class="sel fromDate" value="" autocomplete="off">
 						</div>
 						<div class="sa_select">
-							<label for="toDate" class="tx_tit"></label>
+							<label for="datepicker2" class="tx_tit"></label>
 							<input type="text" id="datepicker2" name="toDate" class="sel toDate" value="" autocomplete="off">
 						</div>
 						<div class="sa_select">
@@ -718,7 +718,7 @@
 		for (let i = 0; i < tdList.length + 1; i++) {
 			let dCell = document.createElement("td");
 			if (i == 0) {
-				dCell.innerHTML = '<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value=""><label for="chk_op[INDEX]">[INDEX]</label>';
+				dCell.innerHTML = '<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="[alarm_id]"><label for="chk_op[INDEX]">[INDEX]</label>';
 				bRow.appendChild(dCell);
 			} else {
 				dCell.innerHTML =  tdList[i - 1];
@@ -1729,12 +1729,12 @@
 	
 
 	const alarmConfirmAll = function (tableId) {
-		if ($('#' + tableId + '> tbody tr :checkbox:checked').length == 0) {
+		if ($('#' + tableId + 'Table > tbody tr :checkbox:checked').length == 0) {
 			alert('확인할 알람이 선택되지않았습니다.');
 			return false;
 		} else {
 			let cnt = 0;
-			$('#' + tableId + '> tbody tr :checkbox:checked').each(function () {
+			$('#' + tableId + 'Table > tbody tr :checkbox:checked').each(function () {
 				let data = {
 					confirm: true
 				}

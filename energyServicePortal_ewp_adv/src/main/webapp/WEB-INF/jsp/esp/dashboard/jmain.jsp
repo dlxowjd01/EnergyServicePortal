@@ -189,7 +189,7 @@
 		<div class="indiv gmain_table jmain_table">
 			<div class="gtbl_top clear">
 				<div class="input_group1">
-					<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색">
+					<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색" onkeyup="if (event.keyCode == 13) searchSiteList();">
 					<button type="button" onclick="searchSite();">적용</button>
 				</div>
 				<div class="input_group2">

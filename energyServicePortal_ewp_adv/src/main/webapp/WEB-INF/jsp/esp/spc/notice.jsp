@@ -262,7 +262,8 @@
 							$('#view_' + key).text(val).parents('.input-group').removeClass('hidden');
 						}
 					} else {
-						$viewObj.text(val);
+						val.replace(/\n/g, '<br/>');
+						$viewObj.html(val);
 					}
 				}
 			});
@@ -452,7 +453,7 @@
 						</div>
 						<div class="input-group inline-flex top">
 							<h2 class="input_label">내용</h2>
-							<div id="view_contents"></div>
+							<pre id="view_contents"></pre>
 						</div>
 					</div>
 				</div>

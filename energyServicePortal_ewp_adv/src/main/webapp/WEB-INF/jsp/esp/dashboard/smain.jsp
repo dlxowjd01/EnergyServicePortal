@@ -1552,6 +1552,9 @@
 		}).fail(function () {
 			console.log('rejected');
 		});
+
+		const now = new Date();
+		$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 	}
 
 	var pieChart = Highcharts.chart('pie_chart', {

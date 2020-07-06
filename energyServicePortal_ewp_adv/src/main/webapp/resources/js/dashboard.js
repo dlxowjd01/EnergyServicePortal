@@ -1556,15 +1556,16 @@ const setSiteList = function (type) {
  * 사이트명 && 작동상태로 검색 기능 작동
  */
 const searchSite = function () {
-	let searchName = $('#searchName').val();
+	let searchName = $('#searchName').val().trim();
 	let deviceStatus = $.makeArray($(':checkbox[name="deviceStatus"]:checked').map(function () {
 			return $(this).val();
 		})
 	);
+
 	let refineList = new Array();
 	siteList.forEach((site, siteIdx) => {
 		if (!isEmpty(searchName)) {
-			if (site.name.match(searchName) || site.address.match(searchName)) {
+			if ((site.name.toUpperCase()).match(searchName.toUpperCase()) || (site.address.toUpperCase()).match(searchName.toUpperCase())) {
 				if (deviceStatus.length == 3) {
 					refineList.push(site);
 				} else {
