@@ -140,10 +140,13 @@
 				if (maintenanceInfo['관리_계약_구분'] === undefined) {
 					cResult = false;
 				} else {
+					let contractList = maintenanceInfo['관리_계약_구분'];
 					$.each(contractArray, function (i, contract) {
-						if (maintenanceInfo['관리_계약_구분'].match(contract)) {
-							cResult = true;
-						}
+						contractList.forEach(function(el) {
+							if (el.match(contract)) {
+								cResult = true;
+							}
+						});
 					});
 				}
 			} else {

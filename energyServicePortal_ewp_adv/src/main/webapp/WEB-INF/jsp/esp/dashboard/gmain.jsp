@@ -381,6 +381,8 @@
 	let geocoder = new google.maps.Geocoder();
 	let infowindow = new google.maps.InfoWindow();
 
+	let first = true;
+
 	$(function () {
 		setInitList('alarmNotice'); //알람 공지 세팅
 		setInitList('siteList'); //사이트 리스트
@@ -395,7 +397,10 @@
 		getYearGenData();
 		getDailyGenData();
 		getGenDataBySiteYesterday();
-		// searchSiteList();
+
+		if (!first) {
+			searchSiteList();
+		}
 
 		const now = new Date();
 		$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));

@@ -204,6 +204,11 @@
 						addRow('addList_affiliation', 'next', index);
 					});
 					setJsonAutoMapping(maintenance_info, 'maintenanceInfo');
+
+					if (maintenance_info['관리_계약_구분'] != undefined && maintenance_info['관리_계약_구분'].length > 0) {
+						$('#maintenanceInfo #관리_계약_구분').html(maintenance_info['관리_계약_구분'].join(','));
+					}
+
 					//기본정보
 
 					setJsonAutoMapping(account_info, 'accountInfo'); //계정 정보

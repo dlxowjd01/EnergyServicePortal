@@ -381,11 +381,16 @@
 	let pvListHourly = new Array();
 	let pvListForecastingHourly = new Array();
 
+	let first = true;
+
 	function fn_cycle_1hour() {
 		getYearGenData();
 		getDailyGenData();
 		getGenDataBySiteYesterday();
-		searchSiteList();
+
+		if (!first) {
+			searchSiteList();
+		}
 
 		const now = new Date();
 		$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
@@ -775,10 +780,10 @@
 			labels: {
 				align: 'center',
 				reserveSpace: true,
-				y: 27, /* 그래프와 거리 */
+				y: 37, /* 그래프와 거리 */
 				style: {
 					color: 'var(--color4)',
-					fontSize: '12px'
+					fontSize: '10px'
 				}
 			},
 			tickInterval: 1, /* 눈금의 픽셀 간격 조정 */

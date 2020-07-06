@@ -1057,7 +1057,9 @@ const beforeTodayTotal = function () {
 		}).finally(() => {
 			if(siteList.length == countPromise) {
 				getTodayTotalDetail();
-				searchSiteList();
+				if (first) {
+					searchSiteList();
+				}
 			}
 		});
 	});
@@ -1657,6 +1659,8 @@ const searchSite = function () {
 			siteListChart('type_chart' + siteIdx, series, title);
 		});
 	}, 500);
+
+	first = false;
 }
 
 const setUnit = (capacity) => {
