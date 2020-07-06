@@ -1108,11 +1108,11 @@ const getTodayTotalDetail = function () {
 	$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(0);
 
 	const formData = getSiteMainSchCollection('day');
-	$('#centerTbody tr td:nth-child(1) span').text(Math.floor(siteList.length));
-	$('#centerTbody tr td:nth-child(2) span').text('');
-	$('#centerTbody tr td:nth-child(3) span').text('');
-	$('#centerTbody tr td:nth-child(4) span').text('');
-	$('#centerTbody tr td:nth-child(5) span').text('');
+	$('#centerTbody tr td:nth-child(1)').html(Math.floor(siteList.length) + '<em>&nbsp;&nbsp;개소</em>');
+	$('#centerTbody tr td:nth-child(2)').text('');
+	$('#centerTbody tr td:nth-child(3)').text('');
+	$('#centerTbody tr td:nth-child(4)').text('');
+	$('#centerTbody tr td:nth-child(5)').text('');
 
 
 	let co2Sum = 0;
@@ -1184,11 +1184,11 @@ const getTodayTotalDetail = function () {
 				co2Sum += Math.floor(data.data[site.sid].co2);
 				let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
 				$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal += (data.data[site.sid].energy / 1000))));
-				$('#centerTbody tr td:nth-child(4) span').text(numberComma(Math.floor(co2Sum / 1000)));
+				$('#centerTbody tr td:nth-child(4)').html(numberComma(Math.floor(co2Sum / 1000)) + '<em>&nbsp;&nbsp;kg</em>');
 
-				let prevPay = Number($('#centerTbody tr td:nth-child(5)  span').text().replace(/[^0-9]/g, ''));
+				let prevPay = Number($('#centerTbody tr td:nth-child(5)').text().replace(/[^0-9]/g, ''));
 				let money = Math.floor(data.data[site.sid].money / 1000);
-				$('#centerTbody tr td:nth-child(5) span').text(numberComma(prevPay + money));
+				$('#centerTbody tr td:nth-child(5)').html(numberComma(prevPay + money) + '<em>&nbsp;&nbsp;천원</em>');
 			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
@@ -1199,17 +1199,17 @@ const getTodayTotalDetail = function () {
 		if (site.devices != undefined) {
 			site.devices.forEach(device => {
 				if (device.device_type.match('INV')) {
-					let inverterCount = Number($('#centerTbody tr td:nth-child(2) span').text().replace(/[^0-9]/g, '')) + 1;
-					$('#centerTbody tr td:nth-child(2) span').text(numberComma(inverterCount));
+					let inverterCount = Number($('#centerTbody tr td:nth-child(2)').text().replace(/[^0-9]/g, '')) + 1;
+					$('#centerTbody tr td:nth-child(2)').html(numberComma(inverterCount) + '<em>&nbsp;&nbsp;대</em>');
 				} else {
-					let inverterCount = Number($('#centerTbody tr td:nth-child(2) span').text().replace(/[^0-9]/g, ''));
-					$('#centerTbody tr td:nth-child(2) span').text(numberComma(inverterCount));
+					let inverterCount = Number($('#centerTbody tr td:nth-child(2)').text().replace(/[^0-9]/g, ''));
+					$('#centerTbody tr td:nth-child(2)').html(numberComma(inverterCount) + '<em>&nbsp;&nbsp;대</em>');
 				}
 			});
 		}
 
-		let capacity = Number($('#centerTbody tr td:nth-child(3) span').text().replace(/[^0-9]/g, '')) + Math.round(site.capacity / 1000);
-		$('#centerTbody tr td:nth-child(3) span').text(numberComma(capacity));
+		let capacity = Number($('#centerTbody tr td:nth-child(3)').text().replace(/[^0-9]/g, '')) + Math.round(site.capacity / 1000);
+		$('#centerTbody tr td:nth-child(3)').html(numberComma(capacity) + '<em>&nbsp;&nbsp;kW</em>');
 	});
 }
 

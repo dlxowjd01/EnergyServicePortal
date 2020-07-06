@@ -392,7 +392,8 @@
 	}
 
 	function fn_cycle_1min() {
-		getTodayTotalDetail();
+		//getTodayTotalDetail();
+		beforeTodayTotal();
 		getAlarmInfo();
 		realtimeRecord();
 
