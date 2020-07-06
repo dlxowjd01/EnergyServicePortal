@@ -780,10 +780,11 @@
 			labels: {
 				align: 'center',
 				//reserveSpace: true,
+				rotation: 0,
 				y: 27, /* 그래프와 거리 */
 				style: {
 					color: 'var(--color4)',
-					fontSize: '12px'
+					fontSize: '10px'
 				}
 			},
 			tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
