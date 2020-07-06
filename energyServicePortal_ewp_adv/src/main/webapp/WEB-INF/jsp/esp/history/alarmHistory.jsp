@@ -79,8 +79,7 @@
 							</ul>
 						</div>
 						<div class="tx_inp_type ml-12">
-							<input type="text" id="ticket_user_id" name="ticket_user_id" placeholder="직접 입력" readonly
-								autocomplete="off">
+							<input type="text" id="ticket_user_id" name="ticket_user_id" placeholder="직접 입력" readonly autocomplete="off">
 						</div>
 					</div>
 
@@ -281,10 +280,10 @@
 							<div id="cycle" class="dropdown short">
 								<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu" id="detailterm">
-									<li class="on"><a href="javascript:void(0);">15분</a></li>
-									<li><a href="javascript:void(0);">1시간</a></li>
-									<li><a href="javascript:void(0);">1일</a></li>
-									<li><a href="javascript:void(0);">1월</a></li>
+									<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
+									<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
+									<li data-value="day"><a href="javascript:void(0);">1일</a></li>
+									<li data-value="month"><a href="javascript:void(0);">1월</a></li>
 								</ul>
 							</div>
 						</div>
@@ -377,12 +376,8 @@
 		'SENSOR_TEMP_HUMIDITY': '온습도 센서',
 		'CCTV': 'CCTV'
 	};
+
 	const levelTemplate = {
-		//			0: 'unknown',
-		//			1: 'emergency',
-		//			2: 'critical' ,
-		//			3: 'warning',
-		//			4: 'info'
 		9: '알수없음',
 		0: '정보',
 		1: '경고',
@@ -1174,48 +1169,10 @@
 
 	var fetchCharts = function () {
 		dateArr = new Array();
-		let period = $('#term').prev().text();
-		let detailperiod = $('#detailterm').prev().text();
-		let interval = "";
-
-		if (period == '1일') {
-			if (detailperiod == '15분') {
-				interval = '15min';
-			} else if (detailperiod == '1시간') {
-				interval = 'hour';
-			} else {
-				interval = 'day';
-			}
-		} else if (period == '1주') {
-			if (detailperiod == '15분') {
-				interval = '15min';
-			} else if (detailperiod == '1시간') {
-				interval = 'hour';
-			} else {
-				interval = 'day';
-			}
-		} else if (period == '1월') {
-			if (detailperiod == '15분') {
-				interval = '15min';
-			} else if (detailperiod == '1시간') {
-				interval = 'hour';
-			} else {
-				interval = 'day';
-			}
-		} else if (period == 'year') {
-			interval = 'month';
-		} else {
-			if (detailperiod == '15분') {
-				interval = '15min';
-			} else if (detailperiod == '1시간') {
-				interval = 'hour';
-			} else {
-				interval = 'day';
-			}
-		}
-
+		let interval = $('#cycle button').data('value');
 		let sDate = $('#datepicker1').val().replace(/-/g, '');
 		let eDate = $('#datepicker2').val().replace(/-/g, '');
+
 		if (interval == 'day') {
 			let diffDay = getDiff(eDate, sDate, 'day');
 			for (let j = 0; j < diffDay; j++) {
