@@ -646,8 +646,8 @@
 
 				//rchart1 변경
 				siteArray.push(site.name);
-				siteArray.push(10);
-				siteArray.push(10);
+				siteArray.push(ratioHourly);
+				siteArray.push(ratioDaily);
 				seriesData.push(siteArray);
 			});
 
