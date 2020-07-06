@@ -779,11 +779,11 @@
 			}],
 			labels: {
 				align: 'center',
-				reserveSpace: true,
-				y: 37, /* 그래프와 거리 */
+				//reserveSpace: true,
+				y: 27, /* 그래프와 거리 */
 				style: {
 					color: 'var(--color4)',
-					fontSize: '10px'
+					fontSize: '12px'
 				}
 			},
 			tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
