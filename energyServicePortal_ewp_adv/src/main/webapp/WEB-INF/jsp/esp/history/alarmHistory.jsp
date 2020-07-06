@@ -113,7 +113,7 @@
 			<div class="sa_select">
 				<div class="dropdown" id="site">
 					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택해주세요.">선택해주세요<span class="caret"></span></button>
-					<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="siteList">
+					<ul class="dropdown-menu chk_type" role="menu" id="siteList">
 						<li data-value="[sid]">
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
@@ -131,8 +131,10 @@
 						<div class="sa_select">
 							<h2 class="tx_tit">설비 유형</h2>
 							<div id="equipmentList" class="dropdown">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-								<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="device">
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">
+									선택<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu chk_type" role="menu" id="device">
 									<li data-value="[type]">
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="checkbox" id="type_[INDEX]" value="[type]" name="deviceType">
@@ -1122,7 +1124,7 @@
 	}
 	
 	const deviceType = function (sites, sidparam) {
-		if (sidparam != "" || sidparam != undefined) {
+		if (sidparam != undefined && sidparam != "") {
 			$('#equipmentList button').empty().append('전체<span class="caret"></span>');
 		} else {
 			$('#equipmentList button').empty().append('설비유형<span class="caret"></span>');

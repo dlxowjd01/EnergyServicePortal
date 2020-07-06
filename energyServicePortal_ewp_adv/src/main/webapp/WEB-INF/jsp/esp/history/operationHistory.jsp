@@ -608,7 +608,8 @@
 
 	//선택한 SID에 해당하는 유형의 타입을 보여준다.
 	const deviceType = function (deviceTp) {
-		$('#deviceType button').text().replace(/<[^>]+>/g, '설비유형');
+		$('#deviceType button').empty().append('설비유형<span class="caret"></span>');
+
 		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
 			function () {
 				return $(this).val();
@@ -710,7 +711,7 @@
 				if($(this).val() == searchDid) {
 					$(this).prop('checked', true);
 					displayDropdown($('#device'));
-					$('#interval button').text().replace(/<[^>]+>/g, '15분').data('value', '15min');
+					$('#interval button').html('15분 <span class="caret"></span>').data('value', '15min');
 					searchGrid();
 				}
 			});
@@ -723,7 +724,8 @@
 		if (obj.length > 8) {
 			idNum = obj.slice(-1);
 		}
-		$('#' + 'columnLi' + idNum).prev().text().replace(/<[^>]+>/g, $('#' + 'columnLi' + idNum).prev().data('name'));
+
+		$('#' + 'columnLi' + idNum).prev().html($('#' + 'columnLi' + idNum).prev().data('name') + '<span class="caret"></span>');
 		$.map(featureProperties, function (value, key) {
 			if (type == key) {
 				setMakeList(value, 'columnLi' + idNum, {
@@ -804,10 +806,11 @@
 		makeTableTemplateDevice();
 
 		$('[id^="chartDid"]').each(function () {
-			$(this).find('button').text().replace(/<[^>]+>/g, $(this).find('button').data('name')).data('value', '');
+			$(this).find('button').html($(this).find('button').data('name') + '<span class="caret"></span>').data('value', '');
 		});
 
-		$('#way button').text().replace(/<[^>]+>/g, $('#way button').data('name'));
+		$('#way button').html($('#way button').data('name') + '<span class="caret"></span>');
+
 		let statusSummaryData = {
 			sids: siteArray.join(','),
 			dids: deviceArray.join(','),
@@ -827,7 +830,8 @@
 				let chart = $('#hchart2').highcharts();
 				if (chart) {
 					chart.destroy();
-					$('[id^=columnLi]').empty().prev().text().replace(/<[^>]+>/g, '선택');
+
+					$('[id^=columnLi]').empty().prev().html('선택 <span class="caret"></span>');
 				}
 
 				$.map(result, function (value, key) {
