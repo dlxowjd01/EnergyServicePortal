@@ -1127,6 +1127,51 @@ function getJsonCsvDownload(jsonData, column, header, fileName) {
 
 //작성일 : 2020-05-14
 //작성자 : lee sang o
+//기능 : json list값  csv파일 생성
+function getJsonExcelDownload(jsonData, column, header, fileName) {
+	var csvData = [],
+		headerData = [],
+		exportedFilenmae = 'csv_download.csv';
+
+	if (fileName !== undefined) {
+		exportedFilenmae = fileName;
+	}
+
+	//헤더처리
+	for (var i = 0, count = header.length; i < count; i++) {
+		headerData.push(header[i]);
+	}
+	csvData.push(headerData.join(","));
+
+	//내용처리
+	for (var i = 0, count = jsonData.length; i < count; i++) {
+		var rowData = [];
+		for (var j = 0, colSize = column.length; j < colSize; j++) {
+			rowData.push(jsonData[i][column[j]]);
+		}
+		csvData.push(rowData.join(","));
+	}
+
+
+	var blob = new Blob(['\uFEFF' + csvData.join("\r\n")], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8;'});
+	if (navigator.msSaveBlob) { // IE 10+
+		navigator.msSaveBlob(blob, exportedFilenmae);
+	} else {
+		var link = document.createElement("a");
+		if (link.download !== undefined) {
+			var url = URL.createObjectURL(blob);
+			link.setAttribute("href", url);
+			link.setAttribute("download", exportedFilenmae);
+			link.style.visibility = 'hidden';
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		}
+	}
+}
+
+//작성일 : 2020-05-14
+//작성자 : lee sang o
 //기능 : 특정영역 input 값들 id 기준으로 json 데이터 생성
 function setAreaParamData(areaId, type) {
 	var $area, param = {};

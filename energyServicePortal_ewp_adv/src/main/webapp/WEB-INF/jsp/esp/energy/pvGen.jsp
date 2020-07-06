@@ -158,6 +158,7 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	let standard = new Array(); //기준일
 	let accociation = new Map(); //응답 데이터

@@ -278,18 +278,47 @@
 			});
 		});
 		
-		$('#excelDown').on('click', function(e){
-			let excelName = '수집현황';
-			let $val = $('#logTableDiv').find('tbody');
-			let cnt = $val.length;
-			
-			if(cnt > 0){
-				if(confirm('저장 하시겠습니까?')){
-					tableToExcel('logTableDiv', excelName, e);
+		$('#excelDown').on('click', function() {
+			const rids = $('#selectedRTU').data('rid');
+			const datePicker1 = $('#datepicker1').datepicker('getDate');
+			const datePicker2 = $('#datepicker2').datepicker('getDate');
+			const start = datePicker1.format('yyyyMMdd');
+			const end = datePicker2.format('yyyyMMdd');
+			const startTimepicker = $('#timepicker1').wickedpicker('time').replace(/[^0-9]/g, '');
+			const endTimepicker = $('#timepicker2').wickedpicker('time').replace(/[^0-9]/g, '');
+
+			let startTime = start + startTimepicker + '00';
+			let endTime = end + endTimepicker + '00';
+
+			$.ajax({
+				url: 'http://iderms.enertalk.com:8443/log',
+				type: 'get',
+				async: false,
+				data: {
+					rids,
+					startTime,
+					endTime
+				},
+				success: function (result) {
+					var column = ['sName','rName','dName','dTimestamp','dLocaltime','dOperation','log'], //json Key
+						header = ['사이트ID','수집 타입 ID','수집기 ID','송신 시간','수신 시간' ,'상태', '수신 데이터']; //csv 파일 헤더
+
+					let logList = result.logs;
+
+					logList.forEach((log, logIdx) => {
+						logList[logIdx]['dTimestamp'] = new Date(log.dTimestamp).format('yyyy-MM-dd HH:mm:ss');
+						logList[logIdx]['dLocaltime'] = String(log.dLocaltime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+					})
+
+					if(confirm('저장 하시겠습니까?')) {
+						getJsonExcelDownload(logList, column, header, '수집현황.xls'); // json list, 컬럼, 헤더명, 파일명
+					}
+				},
+				error: function (error) {
+					console.error(error);
 				}
-			}else{
-				alert('저장할 데이터가 없습니다.');
-			}
+			});
+
 		});
 
 		$('.modify_btn').on('click', function () {
