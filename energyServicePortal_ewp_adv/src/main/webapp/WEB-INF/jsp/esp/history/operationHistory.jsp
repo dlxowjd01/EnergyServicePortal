@@ -488,17 +488,17 @@
 
 						$.each(typeXArray, function (j, elx) {
 							if (elx.time == el) {
-								x = elx.data;
+								x = parseFloat(elx.data.toFixed(2));
 							}
 						});
 						$.each(typeYArray, function (k, ely) {
 							if (ely.time == el) {
-								y = ely.data;
+								y = parseFloat(ely.data.toFixed(2));
 							}
 						});
 
 						dataArr.push([x, y]);
-						categories.push(String(x));
+						categories.push(parseFloat(x.toFixed(2)));
 					});
 
 					chartSeries.push({
@@ -514,7 +514,7 @@
 
 			}
 
-			chartDraw(chartSeries, categories, show);
+			chartDraw(chartSeries, null, show);
 		});
 
 		$('.save_btn').on('click', function (e) {
@@ -866,7 +866,7 @@
 		let chartDid = new Array();
 
 		$(':checkbox[name="device"]:checked').each(function () {
-			let siteNm = $(this).parents('div.sec_li_bx').find('p.tx_li_tit').text().trim(); //사이트명
+			let siteNm = $(this).parents('li.sec_li_bx').find('p.tx_li_tit').text().trim(); //사이트명
 			let deviceNm = $(this).next().text().trim();
 
 			chartDid.push({
@@ -954,7 +954,7 @@
 						color: 'var(--color3)',
 						fontSize: '8px'
 					},
-					enabled: show
+					enabled: show,
 				},
 				categories: categories,
 				tickInterval: 1,
@@ -1199,7 +1199,10 @@
 <div class="row">
 	<div class="col-12">
 		<div class="indiv operation_table_wrap">
-			<div class="header-wrapper"><h2 class="fl s_tit">분석 기준 설비 선택</h2><a href="javascript:void(0);" class="btn_type02 fr">분석 조건 저장</a></div>
+			<div class="header-wrapper">
+				<h2 class="fl s_tit">분석 기준 설비 선택</h2>
+<%--				<a href="javascript:void(0);" class="btn_type02 fr">분석 조건 저장</a>--%>
+			</div>
 			<div class="his_chart_top clear">
 				<!-- 기본 항목 -->
 				<div class="clear">
