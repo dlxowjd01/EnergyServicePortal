@@ -646,8 +646,8 @@
 
 				//rchart1 변경
 				siteArray.push(site.name);
-				siteArray.push(ratioHourly);
-				siteArray.push(ratioDaily);
+				siteArray.push(10);
+				siteArray.push(10);
 				seriesData.push(siteArray);
 			});
 
@@ -753,7 +753,7 @@
 			zoomType: 'xy',
 			backgroundColor: 'transparent',
 			type: 'variwide',
-			height: 280
+			height: 255
 		},
 		navigation: {
 			buttonOptions: {
