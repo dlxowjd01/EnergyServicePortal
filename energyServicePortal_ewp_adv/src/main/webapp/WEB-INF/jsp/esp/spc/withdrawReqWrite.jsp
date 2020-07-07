@@ -250,32 +250,17 @@
 					let val = $(this).val();
 
 					if (evt.which == "0".charCodeAt(0) && val.trim() == "") {
-						console.log("start from 0====")
 						return false;
 					}
 				
 					if (evt.which < 48 || evt.which > 57) {
-						console.log("string====")
 						return false;
 					}
-					// if( totalAmount ==  NaN ) {
-					// 	totalAmount = totalAmount
-					// } else {
-					// 	totalAmount += Number(val);
-					// 	$("#total").val(totalAmount);
-					// }
-				});
-				$(this).on('focus', function(e) {
-					console.log("focus--", this.value)
-					// totalAmount = totalAmount - Number(this.value);
-					// totalAmount = 0;
-					// this.value = "";
 				});
 			});
 		}
 
 		$(document).on("change", ".amount", function(evt) {
-			console.log("each===", $(this).val() );
 			let val = $(this).val();
 			if (evt.which < 48 || evt.which > 57) { evt.preventDefault(); }
 			totalAmount ==  NaN ? ( totalAmount = totalAmount ) : ( (totalAmount += Number(val)), $("#total").val(totalAmount));
@@ -407,7 +392,7 @@
 							</td>
 							<td>
 								<div class="tx_inp_type"><!-- 
-								--><input type="text" id="transferAmount" class="amount right" name="transfer_amount" placeholder="직접 입력" required><!--
+								--><input type="text" id="transferAmount" class="amount right" name="transfer_amount" placeholder="직접 입력"><!--
 							--></div><!--
 						--></td>
 							<td>

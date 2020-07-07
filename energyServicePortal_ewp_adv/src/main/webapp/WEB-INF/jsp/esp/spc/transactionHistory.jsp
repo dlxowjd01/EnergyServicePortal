@@ -245,29 +245,28 @@
 								} else {
 									purpose = ( purposeList[0].value[p[0]] ) + '건 외  ' + ( uniqSet.size - 1 ) + '건';
 								}
-								// console.log("status--", popObj.status)
+								transaction_spc_id = popObj.spc_id;
+								transaction_req_id = popObj.request_id;
 								if(popObj.status == 0) {
-									status=""
-									status_val = ""
-									edit_icons = "";
-									link_attr = "";
+									status="반송"
+									status_val = "0"
+									edit_icons = "show";
+									link_attr = "text-link";
 								} else if(popObj.status == 1) {
 									status="승인 대기"
 									status_val = "1"
-									edit_icons = "";
-									link_attr = "";
-									transaction_spc_id = popObj.spc_id;
-									transaction_req_id = popObj.request_id;
+									edit_icons = "show";
+									link_attr = "text-link";
 								} else if (popObj.status == 2) {
 									status="승인 중"
 									status_val = "2"
+									link_attr = "text-link";
 									edit_icons = "hidden";
-									link_attr = "";
 								} else if(popObj.status == 3) {
 									status="승인 완료"
 									status_val = "3"
 									edit_icons = "hidden";
-									link_attr = "text_blue";
+									link_attr = "text-blue";
 								}
 								popObj.total_amount ? ( amount = popObj.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원' ) : amount = '-';
 
@@ -364,11 +363,15 @@
 		$("#detailSpcId").val(spcId);
 		$("#detailReqId").val(reqId);
 
+		// [사무수탁사]
+		// "반송" : 0, "승인 중" : "2", "승인완료": "3"	 => /spc/withdrawReqStatusDetail.do
+		// "승인 대기" : 1" 						  => /spc/withdrawReqEdit.do
 
-		console.log("self=====", self.data("id"), 'id===0',  self.data("value"))
-		// 사무수탁사일 경우:[ 
-		//	{ "???" : 0  , "승인 대기" : 1" => do nothing, "승인 중" : "2" => withdrawReqStatusDetail, "승인완료": "3"
-		$("#transactionDetailForm").submit();
+		if(self.parent().data("value")==1) {
+			$("#transactionDetailForm").submit();
+		} else {
+			$("#transactionEditForm").submit();
+		}
 	}
 	function deleteRow(selector) {
 		$(selector).parents().closest("tr").css("border", "solid 1px #fff");
@@ -570,7 +573,15 @@
 	</div>
 </div>
 
-<form id="transactionDetailForm" class="" action="/spc/withdrawReqEdit.do" method="post">
+
+<form id="transactionEditForm" class="" action="/spc/withdrawReqEdit.do" method="post">
+	<input type="hidden" id="detailSpcId" name="spc_info" value=''/>
+	<input type="hidden" id="detailReqId" name="req_info" value=''/>
+	<!-- <button id="forwardDetailBtn" type="submit" class="hidden"></button> -->
+</form>
+
+
+<form id="transactionDetailForm" class="" action="/spc/withdrawReqStatus.do" method="post">
 	<input type="hidden" id="detailSpcId" name="spc_info" value=''/>
 	<input type="hidden" id="detailReqId" name="req_info" value=''/>
 	<!-- <button id="forwardDetailBtn" type="submit" class="hidden"></button> -->
@@ -619,12 +630,8 @@
 								<td>*requestedBy*</td>
 								<td>*approvedBy*</td>
 								<td class='left' data-value="*statusVal*"><!--
-								--><span class="*linkAttr*">*status*</span><!--
-								--><span class="*editIcons*"><!--
-									--><a href="javascript:void(0);" class='icon_edit' data-id="*transactionSpcId*" data-value="*transactionReqId*" onclick="goToDetail($(this))"><!--
-									--></a><!--
-									--><a href="javascript:void(0);" onclick="deleteRow(this)" class='icon_delete'></a><!--
-								--></span><!--
+								--><a href="javascript:void(0);" class="*linkAttr*" data-id="*transactionSpcId*" data-value="*transactionReqId*" onclick="goToDetail($(this))">*status*</a><!--
+								--><a href="javascript:void(0);" onclick="deleteRow(this)" class='icon_delete *editIcons*'></a></span><!--
 							--></td>
 							</tr>
 						</template>

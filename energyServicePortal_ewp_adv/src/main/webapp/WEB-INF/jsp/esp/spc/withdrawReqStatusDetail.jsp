@@ -5,9 +5,10 @@
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
 	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
-	
+
 	// param: withdrawReqStatus.do
 	const status = '${param.review_status}';
+	const statusVal = '${param.review_status_val}';
 	const spcId = '${param.review_spc_id}';
 	const spcName = '${param.review_spc_name}';
 	const reqId = '${param.review_req_id}'; 
@@ -20,112 +21,19 @@
 
 		const txtArea = $("textarea.textarea");
 		const btnArea = $(".spc-detail .spc-btn-group");
+		const btnPrint = $(".btn-print");
 
 		if( isEmpty(spcName) || spcName == ("-")){
 			$("#spcName").text("spc_no_name");
 		}	else {
 			$("#spcName").text(spcName);
 		}
-		( status == "승인 완료" ) ? btnArea.addClass('hidden') : btnArea.removeClass('hidden');
+
+		( ( statusVal == 0 ), ( statusVal == 3 ) ) ? ( (btnArea.addClass('hidden')),(btnPrint.addClass('hidden')) ) : ( (btnArea.removeClass('hidden')), (btnPrint.removeClass('hidden')) );
 		// txtArea.eq(0).val();
 		unCheckAll();
 		getDataList();
 		initTextArea();
-
-		$("#attachedFileForm").on("submit", function(e){
-			e.preventDefault();
-			let obj = {}
-			let newData = {}
-			newData.status = 3;
-			newData.status_changed_by = loginName;
-			newData.status_changed_at = new Date().toISOString();
-			newData.attachement_info = '';
-			newData.requested_by = loginName;
-			newData.requested_at = new Date().toISOString();
-			newData.memo = $("#tempMemo").val();
-
-			let opt = {
-				url: 'http://iderms.enertalk.com:8443/spcs/transactions/' + reqId + '?oid=' + oid,
-				type: "patch",
-				async: true,
-				dataType: 'json',
-				contentType: "application/json",
-				data: JSON.stringify(newData)
-			};
-			$.ajax(opt).done(function (json, textStatus, jqXHR) {
-				console.log("success===");
-				window.location.href = window.location.origin + '/spc/withdrawReqStatus.do'  
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				alert('처리 중 오류가 발생했습니다.');
-				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
-				return false;
-			});
-		})
-
-		$("#txt2").keyup(function(){
-			let preserved = $("#txt1").val();
-			let val = $(this).val();
-			$("#txt1").val(preserved += val);
-		});
-
-		$("#saveBtn").on("click", function(){
-			let preserved = $("#txt1").val();
-			let val = $("#txt2").val();
-			if(isEmpty(val)){
-				$("#warningModal").modal("show");
-			} else {
-				let preserved = $("#txt1").val();
-				$("#tempMemo").val(val);
-				$("#txt1").val(preserved += val);
-			}
-			eraseText();
-		});
-
-		function eraseText() {
-			document.getElementById("txt2").value = "";
-		}
-
-		$("#rejectBtn").on('click', function(e){
-			e.preventDefault();
-			let jsonData = {}
-
-			jsonData.spc_id = spcList.prev().data("value");
-			// from
-			jsonData.withdraw_bank = withdrawList.prev().data("value");
-			jsonData.withdraw_account_no = withdrawList.prev().text();
-			jsonData.withdraw_day = $("#requestedDate").val();
-			// to
-			jsonData.to_account = "";
-			jsonData.total_amount = "";
-			// status
-			jsonData.status = 1;
-			jsonData.status_changed_by = loginName;
-			jsonData.status_changed_at = new Date().toISOString();
-			jsonData.requested_by = loginName;
-			jsonData.requested_at = new Date().toISOString();
-			jsonData.memo = $("#tempMemo").val();
-
-			console.log("json====", jsonData.memo);
-			let opt = {
-				url: 'http://iderms.enertalk.com:8443/spcs/transactions?oid='+oid,
-				type: "POST",
-				async: true,
-				dataType: 'json',
-				contentType: "application/json",
-				data: JSON.stringify(jsonData)
-			}
-			$.ajax(opt).done(function (json, textStatus, jqXHR) {
-				window.location.href = window.location.origin + '/spc/transactionHistory.do'
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				alert('처리 중 오류가 발생했습니다.');
-			console.log("j===", jqXHR, " textStatus==",  textStatus )
-				return false;
-			});
-
-		// getDataList(1); 
-		});
-
-
 		function getDataList(page) {
 			page == undefined ? page = 1 : page = page;
 			var sortList = [];
@@ -154,7 +62,7 @@
 							// typeof v.to_account !== "string" ? JSON.parse(v.to_account) : v.to_account = v.to_account
 								resolve(JSON.parse(item.to_account))
 							}).then(res => {
-								console.log("res===", res)
+								// console.log("res===", res)
 								res.map( x => {
 									let popObj = Object.assign({}, item);
 									delete(popObj.to_account);
@@ -191,6 +99,81 @@
 			});
 		}
 
+		$("#txt2").keyup(function(){
+			let preserved = $("#txt1").val();
+			let val = $(this).val();
+			$("#txt1").val(preserved += val);
+		});
+
+		// approval => status: 3
+		$("#attachedFileForm").on("submit", function(e){
+			e.preventDefault();
+			const newStatus = 3;
+			handleReq(newStatus, updateReq);
+		})
+		// saving only => status: null
+		$("#saveBtn").on("click", function(){
+			const newStatus = null;
+			let val = $("#txt2").val();
+
+			if(isEmpty(val)){
+				$("#warningModal").modal("show");
+			} else {
+				handleReq(newStatus, updateReq);
+			}
+		});
+		// rejection => status: 0
+		$("#rejectBtn").on('click', function(e){
+			e.preventDefault();
+			const newStatus = 0;
+			handleReq(newStatus, updateReq);
+		});
+
+		function handleReq(newStatus, callback){
+			let memoStr = '';
+			let preserved = $("#txt1").val();
+			let val = $("#txt2").val();
+			$("#txt1").val(preserved += val);
+
+			if ( $("#memoOpt").is(":checked") ){
+				let memoObj = {};
+				memoObj.opt = 1;
+				memoObj.desc = (preserved += val);
+				memoStr = JSON.stringify(memoObj);
+			} else {
+				memoStr = (preserved += val);
+			}
+
+			callback(newStatus, memoStr);
+		}
+
+		function updateReq(newStatus, memoStr){
+			let newData = {}
+			newStatus ? ( newData.status = newStatus ) : null;
+			newData.status_changed_by = loginName;
+			newData.status_changed_at = new Date().toISOString();
+			newData.requested_by = loginName;
+			newData.requested_at = new Date().toISOString();
+			newData.memo = memoStr;
+
+			let opt = {
+				url: 'http://iderms.enertalk.com:8443/spcs/transactions/' + reqId + '?oid=' + oid,
+				type: "patch",
+				async: true,
+				dataType: 'json',
+				contentType: "application/json",
+				data: JSON.stringify(newData)
+			};
+			$.ajax(opt).done(function (json, textStatus, jqXHR) {
+				console.log("success===");
+				window.location.href = window.location.origin + '/spc/withdrawReqStatus.do' ;
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				$("#warningModal .modal-title").text('처리 중 오류가 발생했습니다.');
+				$("#warningModal").modal("show");
+				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
+				return false;
+			});
+		}
 	});
 
 
@@ -266,7 +249,7 @@
 		<div class="indiv spc-detail">
 			<div class="flex_wrapper">
 				<h2 class="ntit">출금 요청서</h2>
-				<span class="tx_tit blue_text">상태: ${param.review_status}</span>
+				<span id="statusName" class="tx_tit blue_text">상태: ${param.review_status}</span>
 			</div>
 			<div class="flex_start">
 				<h2 class="tx_tit">SPC 명</h2>
@@ -328,14 +311,14 @@
 				<div class="flex_wrapper">
 					<h2 class="heading">출금 요청서 + 증빙</h2>
 					<div class="fr">
-						<button type="button" class="btn_type03">인쇄</button><button 
+						<button type="button" class="btn-print btn_type03">인쇄</button><button 
 							type="button" class="btn_type ml-12">다운로드</button>
 					</div>
 				</div>
 				<div class="flex_wrapper border mt20">
 					<h2 class="heading">출금 요청서</h2>
 					<div class="fr">
-						<button type="button" class="btn_type03">인쇄</button><button 
+						<button type="button" class="btn-print btn_type03">인쇄</button><button 
 						type="button" class="btn_type ml-12">다운로드</button>
 					</div>
 				</div>
@@ -344,12 +327,9 @@
 				</div>
 
 				<div class="flex_wrapper">
-					<h2 class="heading">메모</h2>
-					<a class="chk_type">
-						<input type="checkbox" id="chk02" name="chk02">
-						<label for="chk02">사무수탁사 함께 보기</label>
-					</a>
-				</div>
+					<h2 class="heading">메모</h2><!--
+					--><a class="chk_type" href="javascript:void(0);"><input type="checkbox" id="memoOpt" name="memo_opt"><label for="memoOpt">사무수탁사 함께 보기</label></a><!--
+				--></div>
 				<div class="textarea-container mt20">
 					<button type="button" id="saveBtn" class="btn_type03 fixed_btn">저장</button>
 					<textarea placeholder="직접입력" id="txt2" class="textarea w-100"></textarea>
