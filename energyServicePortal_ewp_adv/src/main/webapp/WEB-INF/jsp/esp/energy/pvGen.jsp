@@ -7,8 +7,8 @@
 	</div>
 </div>
 <div class="row content-wrapper">
-	<div id="siteList" class="col-lg-2 col-md-4 col-sm-6 header_drop_area">
-		<div class="dropdown">
+	<div class="col-lg-2 col-md-4 col-sm-6 header_drop_area">
+		<div class="dropdown" id="siteList">
 			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택해주세요.<span class="caret"></span></button>
 			<ul class="dropdown-menu chk_type"></ul>
 		</div>
@@ -165,32 +165,30 @@
 	let responseCnt = 0; //응답 갯수
 	let dup = false; //중복처리 방지
 
+	function rtnDropdown($dropdownId) {
+		if ($dropdownId == 'siteList') {
+			device();
+		} else if ($dropdownId == 'period') {
+			let period = $('#period button').data('value');
+			if (period == 'today') { //오늘
+				// $('#cycle').
+				$('#datepicker1').datepicker('setDate', 'today'); //데이트 피커 기본
+				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+			} else if (period == 'week') { //이번주
+				$('#datepicker1').datepicker('setDate', '-6'); //데이트 피커 기본
+				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+			} else { //이번달
+				$('#datepicker1').datepicker('setDate', '-30'); //데이트 피커 기본
+				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+			}
+		} else if ($dropdownId == 'chartStyle') {
+			chartDataDraw();
+		}
+	}
+
+
 	$(function () {
 		siteList(); //사이트 조회
-
-		//사이트 선택시
-		$(document).on('click', ':checkbox[name="site"]', function () {
-			if ($(this).is(':checked')) {
-				let extendText = '';
-				if ($(':checkbox[name="site"]:checked').length > 1) {
-					extendText = '외 ' + Number($(':checkbox[name="site"]:checked').length - 1) + '개';
-				}
-				//첫 번째 값 + 외 몇개로 표기
-				$('#siteList button').text().replace(/<[^>]+>/g, $(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;');
-			} else {
-				if ($(':checkbox[name="site"]:checked').length == 0) {
-					$('#siteList button').text().replace(/<[^>]+>/g, '선택해주세요.');
-				} else {
-					let extendText = '';
-					if ($(':checkbox[name="site"]:checked').length > 1) {
-						extendText = '외 ' + Number($(':checkbox[name="site"]:checked').length - 1) + '개';
-					}
-					//첫 번째 값 + 외 몇개로 표기
-					$('#siteList button').text().replace(/<[^>]+>/g, $(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;');
-				}
-			}
-			device();
-		});
 
 		//전체 선택/전체 해제
 		$('#deviceType button.btn_type03').on('click', function (e) {
@@ -205,25 +203,6 @@
 
 		$('#renderBtn').on('click', function () {
 			fetchGenData();
-		});
-
-		$('#period li').on('click', function () {
-			if ($(this).data('value') == 'today') { //오늘
-				// $('#cycle').
-				$('#datepicker1').datepicker('setDate', 'today'); //데이트 피커 기본
-				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
-			} else if ($(this).data('value') == 'week') { //이번주
-				$('#datepicker1').datepicker('setDate', '-6'); //데이트 피커 기본
-				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
-			} else { //이번달
-				$('#datepicker1').datepicker('setDate', '-30'); //데이트 피커 기본
-				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
-			}
-		});
-
-		$('#chartStyle li').on('click', function () {
-			$(this).parents('ul').prev('button').data('value', $(this).data('value'));
-			chartDataDraw();
 		});
 
 		$('.save_btn').on('click', function (e) {
@@ -246,7 +225,7 @@
 
 	//사업소 호출
 	const siteList = function () {
-		$('#siteList > div > ul').empty();
+		$('#siteList > ul').empty();
 
 		let str = '';
 		let sites = JSON.parse('${siteList}');
@@ -258,7 +237,7 @@
             </a>
         </li>`;
 		});
-		$('#siteList>div>ul').append(str);
+		$('#siteList>ul').append(str);
 	};
 
 	const device = function () {
