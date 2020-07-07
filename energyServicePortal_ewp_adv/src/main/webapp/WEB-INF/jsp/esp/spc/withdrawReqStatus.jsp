@@ -5,7 +5,9 @@
 <script type="text/javascript">
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
-		// unCheckAll($("#reqStatus"));
+	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
+
+	// unCheckAll($("#reqStatus"));
 	selectAll($("#reqStatus"));
 	setDropdownValue($("#reqStatus").find("li"));
 	$(function() {
@@ -17,7 +19,8 @@
 		var spcArr = [];
 		tableList.find("template").remove();
 
-
+		$("#warningModal .modal-title").text('처리 중 오류가 발생했습니다.');
+				$("#warningModal").modal("show");
 		getSpcList();
 
 		$(document).on('keyup', '#key_word', function (e) {
@@ -26,8 +29,8 @@
 			}
 		})
 
-		// 자산운용사일 경우:[ 
-		//	{ "반송" : 0 => redEdit.jsp , "검토 대기" : 1" => do nothing, "검토중" : "2" => withdrawReqStatusDetail, "승인완료": "3"
+		// [자산운용사]
+		// "반송" : 0 => redEdit.jsp , "검토 대기" : 1" => do nothing, "검토중" : "2" => withdrawReqStatusDetail, "검토 완료": "3"
 
 		function getSpcList() {
 			let action = 'get';
@@ -87,7 +90,7 @@
 						let status_changed_by = '';
 						// status
 						let status = '';
-						let status_link = '';
+						let status_val = '';
 						let link_attr = '';
 						// dates
 						let withdraw_day = item.withdraw_day.substring(0, 10).replace(/-/g, '') + ' ' + item.withdraw_day.substring(11, 19).replace(/-/g, '');
@@ -112,29 +115,24 @@
 								if(index==0) {
 									total_amount = item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원'
 								} else if(index==1){
-									spc_name = spcArr[found].spc_name
+									spc_name = spcArr[found].spc_name;
 								} else if(index==2) {
 									if (item.status == 0 ) {
 										status="반송";
-										status_link="";
-										// status_link="/spc/transactionHistory.do";
 										link_attr = "text-link";
+										status_val = 0;
 									} else if (item.status == 1) {
 										status="검토 대기";
-										status_link="/spc/withdrawReqStatusDetail.do";
 										link_attr = "text-link";
+										status_val = 1;
 									} else if (item.status == 2) {
 										status="검토 중";
-										status_link="/spc/withdrawReqStatusDetail.do";
 										link_attr = "text-link";
+										status_val = 2;
 									} else if (item.status==3 ) {
 										status="승인 완료";
-										status_link="#";
-										link_attr = "text_blue";
-									} else {
-										status="-";
-										status_link="-";
-										link_attr = "disabled";
+										link_attr = "text-blue";
+										status_val = 3;
 									}
 								} else if(index == 3) {
 									requested_at = item.requested_at.substring(0, 10) + ' ' + item.requested_at.substring(11, 19);
@@ -154,7 +152,6 @@
 									spc_name = '-'
 								} else if(index==2) {
 									status = '-';
-									status_link = '-';
 									link_attr = '-';
 								} else if(index == 3) {
 									requested_at = '-';
@@ -177,11 +174,12 @@
 							.replace(/\*withdrawAccountInfo\*/g, withdraw_account_info)
 							.replace(/\*chkOpt\*/g, 'chkOpt_'+ index).replace(/\*reviewOpt\*/g, 'review_opt_'+ index)
 							.replace(/\*withdrawDay\*/g, withdraw_day)
-							.replace(/\*spcName\*/g, spc_name )
-							.replace(/\*totalAmount\*/g, total_amount )
+							.replace(/\*spcName\*/g, spc_name)
+							.replace(/\*statusVal\*/g, status_val)
+							.replace(/\*totalAmount\*/g, total_amount)
 							.replace(/\*requestedAt\*/g, requested_at).replace(/\*statusChangedAt\*/g, status_changed_at)
 							.replace(/\*transferAgent\*/g, transfer_agent).replace(/\*requestedBy\*/g, requested_by)
-							.replace(/\*statusChangedBy\*/g, status_changed_by).replace(/\*statusLink\*/g, status_link).replace(/\*status\*/g, status).replace(/\*linkAttr\*/g, link_attr)
+							.replace(/\*statusChangedBy\*/g, status_changed_by).replace(/\*status\*/g, status).replace(/\*linkAttr\*/g, link_attr)
 						tableList.append($(str));
 					});	
 				} else {
@@ -268,22 +266,56 @@
 		let reqId = self.data("id");
 		let accNum = self.data("value");
 		let status = self.text();
+		let statusVal = self.parent().data("value");
 
 		$("#reviewStatus").val(status);
+		$("#reviewStatusVal").val(statusVal);
+
 		$("#reviewSpcId").val(spcId);
 		$("#reviewSpcName").val(spcName);
 		$("#reviewReqId").val(reqId);
 		$("#reviewAccountInfo").val(accNum);
 		console.log("status---", status)
-		// 사무수탁사일 경우
-		// { "???" : 0  , "승인 대기" : 1" => do nothing, "승인 중" : "2" => withdrawReqStatusDetail, "승인완료": "3"
-		$("#reviewDetailForm").submit();
+		// [자산 운용사]
+		// "반송" : 0, "검토 중" : "2", "승인완료": "3"	 => /spc/withdrawReqStatusDetail.do
+		// "검토 대기" : 1" 						  => /spc/withdrawReqEdit.do
+		if(self.parent().data("value")===1) {
+			let newData = {}
+			newData.status = 2;
+			newData.status_changed_by = loginName;
+			newData.status_changed_at = new Date().toISOString();
+			newData.requested_by = loginName;
+			newData.requested_at = new Date().toISOString();
+
+			let opt = {
+				url: 'http://iderms.enertalk.com:8443/spcs/transactions/' + reqId + '?oid=' + oid,
+				type: "patch",
+				async: true,
+				dataType: 'json',
+				contentType: "application/json",
+				data: JSON.stringify(newData)
+			};
+			$.ajax(opt).done(function (json, textStatus, jqXHR) {
+				console.log("success===");
+				$("#reviewDetailForm").submit();
+				
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				$("#warningModal .modal-title").text('처리 중 오류가 발생했습니다.');
+				$("#warningModal").modal("show");
+				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
+				return false;
+			});
+		} else {
+			$("#reviewDetailForm").submit();
+		}
+
 	}
 
 </script>
 
 <form id="reviewDetailForm" class="" action="/spc/withdrawReqStatusDetail.do" method="post">
 	<input type="hidden" id="reviewStatus" name="review_status" value=''/>
+	<input type="hidden" id="reviewStatusVal" name="review_status_val" value=''/>
 	<input type="hidden" id="reviewSpcId" name="review_spc_id" value=''/>
 	<input type="hidden" id="reviewSpcName" name="review_spc_name" value=''/>
 	<input type="hidden" id="reviewReqId" name="review_req_id" value=''/>
@@ -387,7 +419,7 @@
 							<td>*requestedAt*</td>
 							<td>*requestedBy*</td>
 							<td>*transferAgent*</td>
-							<td data-id="*transactionSpcId*" data-name="*spcName*"><a href="javascript:void(0);" data-value="*withdrawAccountInfo*" data-id="*transactionReqId*" onclick="goToDetail($(this))" class="*linkAttr*">*status*</a></td>
+							<td data-id="*transactionSpcId*" data-name="*spcName*" data-value="*statusVal*"><a href="javascript:void(0);" data-value="*withdrawAccountInfo*" data-id="*transactionReqId*" onclick="goToDetail($(this))" class="*linkAttr*">*status*</a></td>
 							<td>*statusChangedBy*</td>
 							<td>*statusChangedAt*</td>
 						</tr>

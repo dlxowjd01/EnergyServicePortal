@@ -997,7 +997,7 @@
 					<div class="btn_wrap_type02 btn_wrap_fixed"><!--
 					--><a href="/spc/transactionHistory.do" class="btn btn_type03 mr-12" id="writeBtn">입출금 관리 내역</a><!--
 					--><a href="/spc/withdrawReqWrite.do" class="btn btn_type" id="requestBtn">출금 요청서 신청</a><!--
-					--><a href="/spc/withdrawReqStatus.do" class="btn btn_type" id="requestBtnReview">출금 요청서 검토</a><!--
+					--><a href="/spc/withdrawReqStatus.do" class="btn btn_type" id="requestBtnReview">출금 요청서 목록</a><!--
 					--></div>
 				</div>
 				<div class="sch_btm_area">

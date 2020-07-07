@@ -469,10 +469,12 @@ a:active {
 a:link:hover {
 	opacity: 0.8;
 }
+
 a.text-link{
-	text-decoration: underline;
-	border: none;
 	color: var(--check-active);
+	background: none;
+	border-bottom: solid 1px var(--check-active);
+	text-decoration: none;
 }
 
 a.disabled{
@@ -481,13 +483,6 @@ a.disabled{
 	color: var(--check-active);
 	cursor: text;
 }
-
-/* a.disabled.text_blue{
-	text-decoration: none;
-	background: none;
-	color: var(--vivid-blue);
-	cursor: text;
-} */
 
 a.disabled:hover,
 a.disabled:focus{
@@ -515,6 +510,11 @@ select {
 input::placeholder,
 textarea::placeholder {
 	color: var(--color9);
+}
+
+input:focus, textarea:focus, select:focus {
+	outline-offset: 0px !important;
+	outline: none !important;
 }
 
 input[type="text"] {
@@ -1066,7 +1066,7 @@ table input[type="text"] {
 	padding-left: 0 !important;
 }
 
-.text_blue {
+.text-blue {
 	color: var(--vivid-blue);
 }
 
@@ -2527,7 +2527,7 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 
 .modal-dialog.alarm_modal {
 	width: 80%;
-	z-index: 9999;
+	/* z-index: 9999; */
 }
 
 /* 설비 / 수집현황 모달 */
@@ -11740,27 +11740,11 @@ table.table-footer tfoot td.light {
 	text-align: left;
 }
 
-.spc-transaction .sort_table td.left .icon-header {
-	display: inline-block;
-	width: 50px;
-	text-align: left;
-}
-
-.spc-transaction .sort_table .icon_edit {
+.spc-transaction .sort_table .icon-delete {
+	float: left;
 	width: 13px;
 	height: 13px;
-	margin: 0 2px 0 8px;
-	display: inline-block;
-	background: url("../img/icon_edit.svg") no-repeat;
-	/* background: url("../img/edit@3x.png") no-repeat; */
-	background-size: 15px 15px;
-}
-
-.spc-transaction .sort_table .icon_delete {
-	width: 13px;
-	height: 13px;
-	margin: 0 0 0 5px;
-	display: inline-block;
+	margin: 16px 10px 0;
 	background: var(--btn-close-svg) no-repeat;
 	background-size: 15px 15px;
 }

@@ -196,7 +196,7 @@
 					</ul>
 				</div>
 			</li>
-			<li class="smn6 menu-item">
+			<li class="smn6 menu-item hidden">
 				<a href="javascript:void(0);">설정</a>
 				<div class="sub_layer">
 					<ul>
@@ -297,7 +297,7 @@
 					<li><a href="/spc/supplementaryDocuments.do">이관자료</a></li>
 				</ul>
 			</li>
-			<li class="gmn6">
+			<li class="gmn6 hidden">
 				<a href="javascript:void(0);">설정</a>
 				<ul>
 					<li><a href="/system/basicInformation.do">기본정보</a></li>
