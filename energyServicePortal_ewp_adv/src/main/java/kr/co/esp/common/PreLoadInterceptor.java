@@ -3,6 +3,7 @@ package kr.co.esp.common;
 import egovframework.com.cmm.service.EgovProperties;
 import kr.co.esp.common.util.UserUtil;
 import kr.co.esp.system.service.CmpyGrpSiteMngService;
+import org.apache.poi.ss.formula.functions.T;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -187,6 +188,32 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 						//그룹 대시보드는 처음 진입시 들어오는 화면이라 파라미터가 없을경우는 사용자가 볼수있는 모든 사이트가 대상이다.
 						request.setAttribute("sgid", "");
 						request.setAttribute("siteName", "전체");
+						session.setAttribute("sessionSiteList", jsonArray);
+					} else if ("/dashboard/jmain.do".equals(request.getRequestURI())) {
+						session.removeAttribute("systemLoc");
+						session.removeAttribute("systemTp");
+						session.removeAttribute("sessionSiteList");
+
+						String siteName = "";
+						if (groupMap != null && !groupMap.isEmpty()) {
+							if (groupMap.get("vpp_group") != null) {
+								List<Map<String, Object>> vppList = (List<Map<String, Object>>) groupMap.get("vpp_group");
+								vgid = (String) vppList.get(0).get("vgid");
+								siteName = (String) vppList.get(0).get("name");
+								refineList = (List<Map<String, Object>>) vppList.get(0).get("sites");
+							}
+						}
+
+						if (refineList != null && refineList.size() > 0) {
+							jsonArray = new JSONArray();
+							for (Map<String, Object> refineMap : refineList) {
+								jsonArray.put(jsonParser(refineMap));
+							}
+						}
+						request.setAttribute("vgid", vgid);
+						request.setAttribute("siteName", siteName);
+						request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
+
 						session.setAttribute("sessionSiteList", jsonArray);
 					} else {
 						if (jsonArray == null) {

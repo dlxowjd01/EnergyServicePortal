@@ -142,16 +142,17 @@
 							</div>
 							<div class="input-group inline-flex">
 								<label for="manufacturer" class="input_label">제조사</label>
-								<div class="dropdown" id="manufacturer">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="제조사 선택">
-										제조사 선택<span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu" id="manufacturerList">
-										<li data-value="[manufacturer]">
-											<a href="javascript:void(0);" tabindex="-1">[manufacturer]</a>
-										</li>
-									</ul>
-								</div>
+<%--								<div class="dropdown" id="manufacturer">--%>
+<%--									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="제조사 선택">--%>
+<%--										제조사 선택<span class="caret"></span>--%>
+<%--									</button>--%>
+<%--									<ul class="dropdown-menu" id="manufacturerList">--%>
+<%--										<li data-value="[manufacturer]">--%>
+<%--											<a href="javascript:void(0);" tabindex="-1">[manufacturer]</a>--%>
+<%--										</li>--%>
+<%--									</ul>--%>
+<%--								</div>--%>
+								<input type="text" id="manufacturer" name="manufacturer" class="input tx_inp_type" placeholder="제조사" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
 								<label for="capacity" class="input_label">설비 용량(kW)</label>
@@ -233,18 +234,18 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="alarm_set_id" class="input_label">제품명</label>
-								<div class="dropdown" id="alarm_set_id">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="제품명 선택">
-										제품명 선택<span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu" id="alarmSetIdList">
-										<li data-value="[set_id]">
-											<a href="javascript:void(0);" tabindex="-1">[model]_[version]</a>
-										</li>
-									</ul>
-								</div>
-								<input type="hidden" id="product_name" name="product_name" value="">
+								<label for="product_name" class="input_label">제품명</label>
+<%--								<div class="dropdown" id="alarm_set_id">--%>
+<%--									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="제품명 선택">--%>
+<%--										제품명 선택<span class="caret"></span>--%>
+<%--									</button>--%>
+<%--									<ul class="dropdown-menu" id="alarmSetIdList">--%>
+<%--										<li data-value="[set_id]">--%>
+<%--											<a href="javascript:void(0);" tabindex="-1">[model]_[version]</a>--%>
+<%--										</li>--%>
+<%--									</ul>--%>
+<%--								</div>--%>
+								<input type="text" id="product_name" name="product_name" class="input tx_inp_type" value="" placeholder="제품명" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
 								<label for="serial_id" class="input_label">시리얼 ID</label>
@@ -285,7 +286,7 @@
 							<div class="input-group inline-flex">
 								<label for="deviceType" class="input_label">구분</label>
 								<div id="deviceType" class="dropdown">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li data-value="solar_opt">
 											<a href="javascript:void(0)">태양광</a>
@@ -299,10 +300,10 @@
 							<div class="input-group inline-flex">
 								<label for="timeInterval" class="input_label">입력 단위</label>
 								<div id="timeInterval" class="dropdown">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
-										<li data-value="quarterly"><a href="javascript:void(0)">15분</a></li>
-										<li data-value="hourly"><a href="javascript:void(0)">1시간</a></li>
+										<li data-value="15min"><a href="javascript:void(0)">15분</a></li>
+										<li data-value="hour"><a href="javascript:void(0)">1시간</a></li>
 										<li data-value="daily"><a href="javascript:void(0)">1일</a></li>
 										<li data-value="monthly"><a href="javascript:void(0)">1개월</a></li>
 									</ul>
@@ -311,35 +312,19 @@
 
 							<div id="timeStartGroup" class="input-group inline-flex">
 								<label for="datepicker1" class="input_label">시작</label>
-								<div class="sel_calendar"><input type="text" id="datepicker1" class="sel" value="" autocomplete="off"></div>
-								<div class="dropdown hidden">
-									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown"><span class="caret"></span></button>
-									<!-- 개발시에 1 ~ 12시 부분 동적으로 처리!!! -->
-									<ul class="dropdown-menu">
-										<li data-value="hourly" class="on"><a href="#">1시간</a></li>
-									</ul>
-								</div>
-								<div class="dropdown hidden">
-									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown"><span class="caret"></span></button>
-									<!-- 개발시에 15, 30, 45 분 동적으로 처리!!! -->
-									<ul class="dropdown-menu">
-										<li data-value="quarterly" class="on"><a href="#">15분</a></li>
-									</ul>
+								<div class="sel_calendar">
+									<input type="text" id="datepicker1" name="datepicker1" class="sel w-80 manualFrom" value="" autocomplete="off" readonly>
+									<em></em>
+									<input type="text" id="timepicker1" name="timepicker1" class="sel w-40 timepicker" readonly>
 								</div>
 							</div>
 
 							<div id="timeEndGroup" class="input-group inline-flex">
 								<label for="datepicker2" class="input_label">종료</label>
 								<div class="sel_calendar">
-									<input type="text" id="datepicker2" class="sel" value="" autocomplete="off"
-									       readonly>
-								</div>
-								<div class="dropdown hidden" id="hour">
-									<button class="btn btn-primary dropdown-toggle w3 interval" type="button"
-									        data-toggle="dropdown"><span class="caret"></span></button>
-									<ul class="dropdown-menu">
-										<li data-value="" class="on"><a href="#">0시</a></li>
-									</ul>
+									<input type="text" id="datepicker2" name="datepicker2"class="sel w-80 manualEnd" value="" autocomplete="off" readonly>
+									<em></em>
+									<input type="text" id="timepicker2" name="timepicker2" class="sel w-40 timepicker hidden" readonly>
 								</div>
 							</div>
 						</div>
@@ -402,9 +387,11 @@
 		setInitList('device_typeList');
 		setInitList('ridList');
 		setInitList('parent_didList');
-		setInitList('alarmSetIdList');
-		setInitList('manufacturerList');
+		// setInitList('alarmSetIdList');
+		// setInitList('manufacturerList');
 		setInitList('alarm_codeList');
+
+		$('.timepicker').wickedpicker({twentyFour: true});
 	});
 
 	//사업소 조회
@@ -420,34 +407,35 @@
 			getRtusList();
 		} else if ($dropdownId == 'device_type') {
 			setParentDevice();
-		} else if ($dropdownId == 'manufacturer') {
-			let productList = new Array();
-			const manufacturerName = $('#manufacturer button').data('value');
-			dropDownInit($('#alarm_set_id'));
-			dropDownInit($('#alarm_code'));
-			codeSetList.forEach(function (el) {
-				if(el.manufacturer == manufacturerName) {
-					productList.push(el);
-				}
-			});
-
-			setMakeList(productList, 'alarmSetIdList', {'dataFunction': {}});
-		} else if ($dropdownId == 'alarm_set_id') {
-			const manufacturerName = $('#manufacturer button').data('value');
-			const alarmSetId = $('#alarm_set_id button').data('value');
-			dropDownInit($('#alarm_code'));
-
-			codeSetList.forEach(function (el) {
-				if(el.manufacturer == manufacturerName && el.set_id == alarmSetId) {
-					if (!isEmpty(el.codes)) {
-						setMakeList(el.codes, 'alarm_codeList', {'dataFunction': {}});
-					} else {
-						setMakeList(new Array(), 'alarm_codeList', {'dataFunction': {}});
-					}
-					$('#product_name').val(el.model);
-				}
-			});
 		}
+		// else if ($dropdownId == 'manufacturer') {
+		// 	let productList = new Array();
+		// 	const manufacturerName = $('#manufacturer button').data('value');
+		// 	dropDownInit($('#alarm_set_id'));
+		// 	dropDownInit($('#alarm_code'));
+		// 	codeSetList.forEach(function (el) {
+		// 		if(el.manufacturer == manufacturerName) {
+		// 			productList.push(el);
+		// 		}
+		// 	});
+		//
+		// 	setMakeList(productList, 'alarmSetIdList', {'dataFunction': {}});
+		// } else if ($dropdownId == 'alarm_set_id') {
+		// 	const manufacturerName = $('#manufacturer button').data('value');
+		// 	const alarmSetId = $('#alarm_set_id button').data('value');
+		// 	dropDownInit($('#alarm_code'));
+		//
+		// 	codeSetList.forEach(function (el) {
+		// 		if(el.manufacturer == manufacturerName && el.set_id == alarmSetId) {
+		// 			if (!isEmpty(el.codes)) {
+		// 				setMakeList(el.codes, 'alarm_codeList', {'dataFunction': {}});
+		// 			} else {
+		// 				setMakeList(new Array(), 'alarm_codeList', {'dataFunction': {}});
+		// 			}
+		// 			$('#product_name').val(el.model);
+		// 		}
+		// 	});
+		// }
 	}
 
 	//설비 속성 템플릿
@@ -735,7 +723,7 @@
 
 		$('#deviceStateTypeList div.row').each(function() {
 			if ($(this).prop('id') == 'SM_MANUAL') {
-				$(this).find('.eq_card .eq_btn_bx button').eq(0).html('데이터 입력');
+				$(this).find('.eq_card .eq_btn_bx button').eq(1).html('데이터 입력');
 			}
 		});
 	}
@@ -788,11 +776,11 @@
 			});
 
 			if (dType == 'SM_MANUAL') {
-				$('#' + dType + ' .eq_card .eq_btn_bx button').eq(0).attr('onclick', 'addManualForm("' + did + '")'); //설비 수정
+				$('#' + dType + ' .eq_card .eq_btn_bx button').eq(1).attr('onclick', 'alert("아직 준비중입니다.");'); //설비 수정
 			} else {
-				$('#' + dType + ' .eq_card .eq_btn_bx button').eq(0).attr('onclick', 'addDeviceForm("' + dType + '", "' + did + '")'); //설비 수정
+				$('#' + dType + ' .eq_card .eq_btn_bx button').eq(1).attr('onclick', 'moveOperation("' + did + '");'); //상태이력으로 이동
 			}
-			$('#' + dType + ' .eq_card .eq_btn_bx button').eq(1).attr('onclick', 'moveOperation("' + did + '");'); //상태이력으로 이동
+			$('#' + dType + ' .eq_card .eq_btn_bx button').eq(0).attr('onclick', 'addDeviceForm("' + dType + '", "' + did + '")'); //설비 수정
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
@@ -801,7 +789,18 @@
 	}
 
 	const addManualForm = (did) => {
-		$('#manualAddDeviceModal').modal('show');
+
+		$('[class^="manual"]').each(function() {
+			$(this).removeClass('w-40');
+
+			if (!$(this).hasClass('w-80')) {
+				$(this).addClass('w-80');
+			}
+		});
+		$('.timepicker').addClass('hidden');
+
+
+		$('#manualAddDeviceModal').data('did', did).modal('show');
 	}
 
 	const addDeviceForm = (devicetype, did) => {
@@ -830,7 +829,7 @@
 		});
 		setMakeList(deviceTypeList, 'device_typeList', {'dataFunction': {}});
 
-		costSetList();
+		//costSetList();
 
 		//did가 있으면 수정
 		if (!isEmpty(did)) {
@@ -841,49 +840,65 @@
 				async: false,
 				data: {},
 			}).done(function (data, textStatus, jqXHR) {
+
 				setJsonAutoMapping(data, 'addDeviceModal', 'dropdown');
 
-				let propArray = ['dashboard', 'billing', 'forecasting', 'manufacturer', 'alarm_set_id', 'alarm_code'];
+				const sid = data.sid;
+				const rid = data.rid;
+				getRtusList(sid, rid);
+
+				$('#addSiteUlList li').each(function() {
+					if ($(this).data('value') == sid) {
+						const text = $(this).text();
+						$(this).parents('.dropdown').find('button').html(text + '<span class="caret"></span>').data('value', 'sid');
+					}
+				});
+
+				dropDownInit($('#alarm_code'));
+
+				// let propArray = ['dashboard', 'billing', 'forecasting', 'manufacturer', 'alarm_set_id', 'alarm_code'];
+				let propArray = ['dashboard', 'billing', 'forecasting'];
 				let alarm_code = new Array();
 				$.map(data, function(val, key) {
 					if ($.inArray(key, propArray) >= 0) {
 						if (key == 'dashboard' || key == 'billing' || key == 'forecasting') {
 							$('#' + key).prop('checked', val);
-						} else {
-							if (key == 'manufacturer') {
-								$('#manufacturer button').html(val + '<span class="caret"></span>').data('value', val);
-							} else if (key == 'alarm_set_id') {
-								let codeList = new Array();
-								codeSetList.forEach(function(el) {
-									if (el.set_id == val) {
-										codeList.push(el);
-										$('#alarm_set_id button').html(el.model + '_' + el.version + '<span class="caret"></span>').data('value', val);
-										setMakeList(codeList, 'alarmSetIdList', {'dataFunction': {}});
-
-										if(!isEmpty(el.codes)) {
-											setMakeList(el.codes, 'alarm_codeList', {'dataFunction': {}});
-										} else {
-											setMakeList(new Array(), 'alarm_codeList', {'dataFunction': {}});
-										}
-									}
-								});
-							} else if (key == 'alarm_code') {
-								if (!isEmpty(val)) {
-									alarm_code = val.split(',');
-								}
-							}
 						}
+						// else {
+						// 	if (key == 'manufacturer') {
+						// 		$('#manufacturer button').html(val + '<span class="caret"></span>').data('value', val);
+						// 	} else if (key == 'alarm_set_id') {
+						// 		let codeList = new Array();
+						// 		codeSetList.forEach(function(el) {
+						// 			if (el.set_id == val) {
+						// 				codeList.push(el);
+						// 				$('#alarm_set_id button').html(el.model + '_' + el.version + '<span class="caret"></span>').data('value', val);
+						// 				setMakeList(codeList, 'alarmSetIdList', {'dataFunction': {}});
+						//
+						// 				if(!isEmpty(el.codes)) {
+						// 					setMakeList(el.codes, 'alarm_codeList', {'dataFunction': {}});
+						// 				} else {
+						// 					setMakeList(new Array(), 'alarm_codeList', {'dataFunction': {}});
+						// 				}
+						// 			}
+						// 		});
+						// 	} else if (key == 'alarm_code') {
+						// 		if (!isEmpty(val)) {
+						// 			alarm_code = val.split(',');
+						// 		}
+						// 	}
+						// }
 					}
 				});
 
-				$('#alarm_codeList input').each(function() {
-					let thisVal = $(this).val();
-					if ($.inArray(thisVal, alarm_code) >= 0) {
-						$(this).prop('checked', true);
-					}
-				});
+				// $('#alarm_codeList input').each(function() {
+				// 	let thisVal = $(this).val();
+				// 	if ($.inArray(thisVal, alarm_code) >= 0) {
+				// 		$(this).prop('checked', true);
+				// 	}
+				// });
 
-				displayDropdown($('#alarm_code'));
+				// displayDropdown($('#alarm_code'));
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.error(jqXHR);
 				console.error(textStatus);
@@ -1012,8 +1027,13 @@
 		pageForm.attr('action', '/history/operationHistory.do').submit();
 	}
 
-	const getRtusList = () => {
-		const sid = $('#addSiteList button').data('value');
+	const getRtusList = (siteId, rid) => {
+		let sid = '';
+		if(isEmpty(siteId)) {
+			sid = $('#addSiteList button').data('value');
+		} else {
+			sid = siteId;
+		}
 
 		$.ajax({
 			url: apiURL + apiConfigRtus,
@@ -1025,7 +1045,7 @@
 				filter: {}
 			}
 		}).done(function (data, textStatus, jqXHR) {
-			const siteId = $('#addSiteList button').data('value');
+
 			let rtuList = new Array();
 			data.forEach(function(el) {
 				if (el.sid == siteId) {
@@ -1034,6 +1054,15 @@
 			});
 
 			setMakeList(data, 'ridList', {'dataFunction': {}});
+
+			if (!isEmpty(rid)) {
+				$('#ridList li').each(function() {
+					if ($(this).data('value') == rid) {
+						const text = $(this).text();
+						$(this).parents('.dropdown').find('button').html(text + '<span class="caret"></span>').data('value', 'sid');
+					}
+				});
+			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
