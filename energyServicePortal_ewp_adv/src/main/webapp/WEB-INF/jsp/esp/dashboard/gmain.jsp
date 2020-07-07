@@ -399,11 +399,10 @@
 	});
 
 	function fn_cycle_1hour() {
-		getYearGenData();
-		getDailyGenData();
-		getGenDataBySiteYesterday();
-
 		if (!first) {
+			getYearGenData();
+			getDailyGenData();
+			getGenDataBySiteYesterday();
 			searchSiteList();
 		}
 
@@ -420,32 +419,36 @@
 		$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 	}
 
-	const geocodeAddress = (siteAddr, siteId, siteName) => {
-		var address = siteAddr;
-		geocoder.geocode({'address': address}, function (results, status) {
-			if (status === 'OK') {
-				makerObject[siteId] = new google.maps.Marker({
-										map: map,
-										title: siteName,
-										position: results[0].geometry.location,
-										title: siteName
-									});
+	const geocodeAddress = (siteAddr, siteId, siteName, siteLatlng) => {
+		let latLng = new Object(),
+			dummy = siteLatlng.split(',');
+		latLng['lat'] = Number(dummy[0]);
+		latLng['lng'] = Number(dummy[1]);
 
-				var infowindow = new google.maps.InfoWindow({
-					content: siteName
-				});
+		makerObject[siteId] = new google.maps.Marker({
+			map: map,
+			title: siteName,
+			position: latLng,
+			title: siteName
+		});
+
+		var infowindow = new google.maps.InfoWindow({
+			content: siteName
+		});
+		infowindow.open(map, makerObject[siteId]);
+
+		google.maps.event.addListener(makerObject[siteId], 'click', (function (makerArray, siteId) {
+			return function () {
 				infowindow.open(map, makerObject[siteId]);
+				list_detail_open_main(siteId);
+			}
+		})(makerObject, siteId));
+	}
 
-				google.maps.event.addListener(makerObject[siteId], 'click', (function (makerArray, siteId) {
-					return function () {
-						infowindow.open(map, makerObject[siteId]);
-						var num = i + 1;
-						var str = 'list' + num;
-						list_detail_open(str);
-					}
-				})(makerObject, siteId));
-			} else {
-				map.setCenter({lat: 37.549012, lng: 126.988546});
+	const list_detail_open_main = (sid) => {
+		$('.dbclickopen').each(function() {
+			if ($(this).data('sid') == sid) {
+				$(this).next().find('.di_wrap').slideToggle();
 			}
 		});
 	}

@@ -384,11 +384,10 @@
 	let first = true;
 
 	function fn_cycle_1hour() {
-		getYearGenData();
-		getDailyGenData();
-		getGenDataBySiteYesterday();
-
 		if (!first) {
+			getYearGenData();
+			getDailyGenData();
+			getGenDataBySiteYesterday();
 			searchSiteList();
 		}
 

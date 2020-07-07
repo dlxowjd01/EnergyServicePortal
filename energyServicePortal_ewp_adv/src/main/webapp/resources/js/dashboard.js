@@ -22,7 +22,7 @@ let dailyNow = 0;
 /**
  * 대쉬보드 먼슬리 차트 그리기
  */
-const getYearGenData = function () {
+const getYearGenData = async function () {
 	const formData = getSiteMainSchCollection('year');//api에 맞게 수정 필요
 
 	monthlyBefore = 0;
@@ -397,7 +397,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	}
 });
 
-const getDailyGenData = function () {
+const getDailyGenData = async function () {
 	const today = new Date();
 	const lastDay = new Date(today.getFullYear(), today.getMonth() + 2, 0);
 	const formData = getSiteMainSchCollection("month");//api에 맞게 수정 필요
@@ -730,7 +730,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 
 let yesterDayGen = 0;
 let yesterDayFore = 0;
-const getGenDataBySiteYesterday = function () { //3번째 indiv 사업소별 탭
+const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소별 탭
 	const formData = getSiteMainSchCollection('yesterday');
 	const yesterday = new Date();
 	let siteGenArray = new Array(siteList.length).fill(0);
@@ -1059,7 +1059,15 @@ const beforeTodayTotal = function () {
 		}).finally(() => {
 			if(siteList.length == countPromise) {
 				getTodayTotalDetail();
+
+				siteList.sort(function(a, b) {
+					return b['capacity'] - a['capacity'];
+				});
+
 				if (first) {
+					getYearGenData();
+					getDailyGenData();
+					getGenDataBySiteYesterday();
 					searchSiteList();
 				}
 			}
@@ -1106,7 +1114,7 @@ const beforeTodayTotalPromise = (site) => {
 }
 
 
-const getTodayTotalDetail = function () {
+const getTodayTotalDetail = async function () {
 
 	$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(0);
 	$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(0);
@@ -1318,7 +1326,7 @@ let siteListAlarm = false;
 let siteListForeCnt = 0;
 let siteListWeatherCnt = 0;
 let siteListActive = 0;
-const searchSiteList = function () {
+const searchSiteList = async function () {
 	const formData = getSiteMainSchCollection('day');
 	let siteArray = new Array();
 
@@ -1616,7 +1624,7 @@ const searchSite = function () {
 
 			refineList.forEach((site, idx) => {
 				if (site.latlng != null) {
-					geocodeAddress(site.address, site.sid, site.name);
+					geocodeAddress(site.address, site.sid, site.name, site.latlng);
 				} else {
 					makerObject[site.sid] = new Object();
 				}
