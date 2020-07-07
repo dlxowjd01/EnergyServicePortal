@@ -608,7 +608,7 @@
 
 					$li.data('dvtype', el.device_type).data('did', el.did).attr('onclick', 'deviceDetailView(\'' + el.did + '\')');
 					$a.attr('href', 'javascript:void(0);');
-					$('<span>').attr('style', 'text-overflow: ellipsis; white-space: nowrap; overflow: hidden;').text(el.name).appendTo($li);
+					$('<span>').text(el.name).appendTo($li);
 					$('<span>').text(capacity).appendTo($li);
 					$('<em>').text(activePower + '  ' + dcPower).appendTo($li);
 					$('<button>').attr('type', 'button').attr('onclick', 'deviceProcess("delete", "' + el.did + '");').text('삭제').appendTo($li);
