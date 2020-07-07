@@ -275,7 +275,6 @@
 		$("#reviewSpcName").val(spcName);
 		$("#reviewReqId").val(reqId);
 		$("#reviewAccountInfo").val(accNum);
-
 		// [자산 운용사]
 		// "반송" : 0, "검토 중" : "2", "승인완료": "3"	 => /spc/withdrawReqStatusDetail.do
 		// "검토 대기" : 1" 						  => /spc/withdrawReqEdit.do
