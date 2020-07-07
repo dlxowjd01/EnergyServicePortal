@@ -94,6 +94,7 @@
 				totalPage = Math.ceil(sortList.length/pagePerData);
 				
 			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.log("error===", jqXHR, "text000", textStatus )
 				alert('처리 중 오류가 발생했습니다.');
 				return false;
 			});

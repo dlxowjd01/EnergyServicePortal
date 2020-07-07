@@ -133,7 +133,7 @@ const selectAllGroup = ($selector) => {
 		// 	}
 		// });
 		firstCheckbox.on("click", function(){
-			console.log("item---", $(this))
+			// console.log("item---", $(this))
 			$(this).toggleClass('active');
 			if( $(this).hasClass('active') ) {
 				input.prop("checked", false);
