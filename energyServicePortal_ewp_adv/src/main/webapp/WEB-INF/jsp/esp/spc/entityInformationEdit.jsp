@@ -632,6 +632,7 @@
 								<div class="tx_inp_type edit disabled">
 									<label for="spcName" class="sr-only">SPC명 입력</label>
 									<input type="text" id="spcName" name="spcName" placeholder="SPC명 입력" readonly>
+									<input type="hidden" id="spcId" name="spcId" readonly>
 								</div>
 							</td>
 							<th><label for="대표자">대표자</label></th>
@@ -660,6 +661,7 @@
 							<td class="group_type">
 								<div class="tx_inp_type edit">
 									<input type="text" id="genName" name="power_plant_name" placeholder="발전소명 입력">
+									<input type="hidden" id="genId" name="genId">
 								</div>
 							</td>
 							<th></th>

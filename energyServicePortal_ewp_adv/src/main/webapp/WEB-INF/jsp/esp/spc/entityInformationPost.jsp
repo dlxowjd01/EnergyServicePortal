@@ -247,20 +247,18 @@
 	}
 
 	function getgenIdData() {
-		let spcId = $('#spcId button').data('value');
-
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/spcs/' + spcId,
+			url: 'http://iderms.enertalk.com:8443/config/sites/',
 			type: 'get',
 			async: false,
-			data: {oid: oid, includeGens: true},
+			data: {oid: oid},
 			success: function (json) {
 				let spcGens = new Array();
-				if(!isEmpty(json.data[0].spcGens)) {
-					spcGens = json.data[0].spcGens;
+				if (!isEmpty(json)) {
+					spcGens = json;
 				}
 
-				spcGens.push({gen_id: '', name: '직접입력', location: '', address: ''});
+				spcGens.push({sid: '', name: '직접입력', location: '', address: ''});
 				setMakeList(spcGens, 'genList', {'dataFunction': {}});
 
 			},
@@ -707,6 +705,8 @@
 										<li data-value="[spc_id]"><a href="javascript:void(0);">[name]</a></li>
 									</ul>
 								</div>
+
+
 								<div class="tx_inp_type edit disabled">
 									<label for="spcName" class="sr-only">SPC명 입력</label>
 									<input type="text" id="spcName" name="spcName" placeholder="SPC명 입력" readonly>
@@ -741,7 +741,7 @@
 										발전소명 선택<span class="caret"></span>
 									</button>
 									<ul id="genList" class="dropdown-menu" role="menu">
-										<li data-value="[gen_id]">
+										<li data-value="[sid]">
 											<a href="javascript:void(0);">[name]</a>
 										</li>
 									</ul>
