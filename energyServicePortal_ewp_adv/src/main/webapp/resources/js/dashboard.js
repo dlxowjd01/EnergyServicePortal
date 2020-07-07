@@ -978,11 +978,10 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 				format: '{y} kWh', /* 단위 넣기 */
 				style: {
 					color: 'var(--color3)',
-					fontSize: '12px',
+					fontSize: '8px',
 					fontWeight: 400,
 					textOutline: 0,
-					textShadow: true,
-					
+					textShadow: true
 				}
 			},
 		},
@@ -1028,12 +1027,16 @@ const getAlarmInfo = function () {
 		});
 
 		//데이터 세팅
+		let alarmList = new Array();
 		data.forEach((element, index) => {
-			let localTime = (element.localtime != null && element.localtime != '') ? String(element.localtime) : '';
-			data[index].standardTime = localTime.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+			if(element.level != 0) {
+				let localTime = (element.localtime != null && element.localtime != '') ? String(element.localtime) : '';
+				data[index].standardTime = localTime.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+				alarmList.push(element);
+			}
 		});
 
-		setMakeList(data, 'alarmNotice', {'dataFunction': {}}); //list생성
+		setMakeList(alarmList, 'alarmNotice', {'dataFunction': {}}); //list생성
 	}).fail(function (jqXHR, textStatus, errorThrown) {
 		console.error(jqXHR);
 		console.error(textStatus);
