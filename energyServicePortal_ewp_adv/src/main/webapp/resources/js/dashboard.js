@@ -870,7 +870,7 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 	}
 }
 
-
+// 전날: bar chart option
 const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 	chart: {
 		marginTop: 0,
@@ -967,7 +967,9 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		series: {
 			label: {
 				connectorAllowed: true
-			}
+			},
+			borderWidth: 0,
+        	borderColor: 'transparent'
 		},
 		bar: {
 			dataLabels: {
@@ -978,15 +980,15 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 					color: 'var(--color3)',
 					fontSize: '12px',
 					fontWeight: 400,
-					// borderWidth: 1,
-					// remove label stroke
 					textOutline: 0,
-					textShadow: true
+					textShadow: true,
+					
 				}
 			},
 			stacking: 'normal'
 		},
-		borderWidth: 0, /* 보더 0 */
+		// borderWidth: 0, /* 보더 0 */
+		// borderColor:'#ccc',
 		// borderRadiusTopLeft: 1, /* 막대 모서리 둥글게 효과 */
 		// borderRadiusTopRight: 1, /* 막대 모서리 둥글게 효과 */
 		pointWidth: 15, /* 막대 두께 */

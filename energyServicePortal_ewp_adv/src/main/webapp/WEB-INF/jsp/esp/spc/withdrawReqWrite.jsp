@@ -20,7 +20,7 @@
 		const copyWithdrawList = $("#withdrawList").clone().html();
 		const copyReceiveList = $("#receiveList").clone().html();
 		const copyPurposeList = $("#purposeList").clone().html();
-
+		let totalAmount = 0;
 		spcList.empty();
 		withdrawList.empty();
 		receiveList.empty();
@@ -28,7 +28,10 @@
 
 		unCheckAll(tableBody);
 		getSpcList();
-		
+		calcTotal();
+
+		$("#total").val(totalAmount);
+
 		let pList = [ 
 			{ name: "REC 수익", val: 0 },
 			{ name: "SMP 수익", val: 1 },
@@ -71,8 +74,8 @@
 					console.log("onclick---")
 					let val = $(this).parent().data("value");
 					$("#spcList").prev().data("value", val);
+					$("#withdrawList").prev().html('선택<span class="caret">');
 					$("#withdrawList").empty();
-					$("#withdrawList").prev().text().replace(/<[^>]+>/g, '선택');
 					getAccountInfo(val);
 				});
 			}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -82,8 +85,8 @@
 		}
 
 		function getAccountInfo (id) {
-			$("#receiveList").empty();
-			$("#receiveList").prev().text().replace(/<[^>]+>/g, '선택');
+			$(".receive-list").empty();
+			$(".receive-list").prev().html('선택<span class="caret">');
 			if (id == undefined || id == '') {
 				return;
 			}
@@ -102,9 +105,10 @@
 				let sending = '';
 				let receiving = '';
 				if (json.data.length > 0) {
+					let receiveGroupList = $(".receive-list")
 					json.data.map(item => {
 						let data = json.data;
-						// console.log("item===", item)
+						console.log("receiveGroupList===", receiveGroupList)
 						sending = copyWithdrawList.replace(/\*withdraw_account\*/g, item.withdraw_account_no).replace(/\*account_num\*/g, item.withdraw_bank);
 						withdrawList.append($(sending));
 						return new Promise((resolve, reject) => {
@@ -113,7 +117,10 @@
 								res.map(d => {
 									// console.log('d===000', d);
 									receiving = copyReceiveList.replace(/\*to_account_bank_name\*/g, d.to_account_bank).replace(/\*to_account_no\*/g, d.to_account_no);
-									receiveList.append($(receiving));
+									receiveGroupList.each(function(){
+										console.log("this---", $(this))
+										$(this).append($(receiving));
+									});
 								});
 							}).catch(error => {
 								console.log(error);
@@ -124,11 +131,13 @@
 							let name = $(this).parent().data("name");
 							withdrawList.prev().data("value", val);
 						});
-						receiveList.find("li a").on("click", function(){
-							let val = $(this).parent().data("value");
-							let name = $(this).parent().data("name");
-							receiveList.prev().data("value", val);
-							receiveList.prev().data("name", name);
+						$(".receive-list").find("li a").each(function(){
+							$(this).on("click", function(){
+								let val = $(this).parent().data("value");
+								let name = $(this).parent().data("name");
+								receiveList.prev().data("value", val);
+								receiveList.prev().data("name", name);
+							});
 						});
 				} else {
 					sending = copyWithdrawList.replace(/\*withdraw_account\*/g, '등록된 출금 계좌가 없습니다.').replace(/\*account_num\*/g, '');
@@ -149,7 +158,7 @@
 			let tr = tableBody.find("tr");
 			let jsonData = {}
 			let arr =[];
-
+			let sum = 0;
 			jsonData.spc_id = spcList.prev().data("value");
 			// from
 			jsonData.withdraw_bank = withdrawList.prev().data("value");
@@ -157,7 +166,6 @@
 			jsonData.withdraw_day = $("#requestedDate").val();
 			// to
 			jsonData.to_account = "";
-			jsonData.total_amount = "";
 			// status
 			jsonData.status = 1;
 			jsonData.status_changed_by = loginName;
@@ -167,27 +175,31 @@
 			jsonData.transfer_agent = "tester2"
 			// console.log("w---", data.to_account)
 			checkboxes.each(function(index, element){
-				if($(this).is(":checked")) {
-					let purposeOpt = $("#tableBody").find("td:nth-of-type(3) .dropdown-toggle");
-					let amountOpt = $("#tableBody").find("td:nth-of-type(4) input");
-					let accOpt = $("#tableBody").find("td:nth-of-type(5) .dropdown-toggle");
-					let descOpt = $("#tableBody").find("td:nth-of-type(6) input[name='note']");
-					let obj = {};
-					obj.purpose = purposeOpt.eq(index).data("value");
-					obj.amount = Number(amountOpt.eq(index).val());
-					obj.to_account_bank = accOpt.eq(index).data("name");
-					obj.to_account_no = accOpt.eq(index).data("value");
-					obj.desc = descOpt.eq(index).val();
-					arr.push(obj);
-				}
+				// if($(this).is(":checked")) {
+				let purposeOpt = $("#tableBody").find("td:nth-of-type(3) .dropdown-toggle");
+				let amountOpt = $("#tableBody").find("td:nth-of-type(4) input");
+				let accOpt = $("#tableBody").find("td:nth-of-type(5) .dropdown-toggle");
+				let descOpt = $("#tableBody").find("td:nth-of-type(6) input[name='note']");
+				let obj = {};
+				obj.purpose = purposeOpt.eq(index).data("value");
+				obj.amount = Number(amountOpt.eq(index).val());
+				obj.to_account_bank = accOpt.eq(index).data("name");
+				obj.to_account_no = accOpt.eq(index).data("value");
+				obj.desc = descOpt.eq(index).val();
+				arr.push(obj);
+				sum += obj.amount;
+				// }
 			});
+			console.log("sum===", sum);
+			jsonData.total_amount = sum;
+
 			jsonData.to_account = JSON.stringify(arr);
 			let newJson = JSON.stringify(jsonData);
 
 			let formArr = [ jsonData.spc_id, jsonData.withdraw_bank, jsonData.withdraw_day, jsonData.to_account ];
 
 			$.each(formArr, function(index, value){
-				if($('input[type="checkbox"]:checked').length > 0) {
+				// if($('input[type="checkbox"]:checked').length > 0) {
 					if(index < 2) {
 						if(value == undefined ||  value == "선택" || value == "") {
 							warning.eq(index).removeClass('hidden');
@@ -202,9 +214,9 @@
 							warning.eq(2).addClass('hidden');
 						}
 					}
-				} else {
-					warning.eq(2).removeClass('hidden');
-				}
+				// } else {
+				// 	warning.eq(2).removeClass('hidden');
+				// }
 			});
 
 			if( withdrawForm.find(".warning.hidden").length == 4){
@@ -232,33 +244,57 @@
 
 
 		// amount number trim event
-		$(".auto-update").each(function() {
-			let sum = '';
-			$(this).on('keypress', function(e) {
-				if (e.which == "0".charCodeAt(0) && $(this).val().trim() == "") {
-					return false;
-				}
+		function calcTotal() {
+			$(".amount").each(function() {
+				$(this).on('keypress', function(evt) {
+					let val = $(this).val();
+
+					if (evt.which == "0".charCodeAt(0) && val.trim() == "") {
+						console.log("start from 0====")
+						return false;
+					}
+				
+					if (evt.which < 48 || evt.which > 57) {
+						console.log("string====")
+						return false;
+					}
+					// if( totalAmount ==  NaN ) {
+					// 	totalAmount = totalAmount
+					// } else {
+					// 	totalAmount += Number(val);
+					// 	$("#total").val(totalAmount);
+					// }
+				});
+				$(this).on('focus', function(e) {
+					console.log("focus--", this.value)
+					// totalAmount = totalAmount - Number(this.value);
+					// totalAmount = 0;
+					// this.value = "";
+				});
 			});
-			$(this).on('keyup', function() {
-				this.value = this.value.replace(/\D/gi, '');
-			});
-			// tableBody.find(".auto-update").on("input", function(){
-			// 	$(this).each(function(){
-			// 		sum += $(this).val();
-			// 	})
-			// 	// $("#total").text(sum.replace(/\D/gi, ''));
-			// });
+		}
+
+		$(document).on("change", ".amount", function(evt) {
+			console.log("each===", $(this).val() );
+			let val = $(this).val();
+			if (evt.which < 48 || evt.which > 57) { evt.preventDefault(); }
+			totalAmount ==  NaN ? ( totalAmount = totalAmount ) : ( (totalAmount += Number(val)), $("#total").val(totalAmount));
+			// remove all white spaces
+			// $(this).val().replace(/\D/gi, '');
 		});
 
-		$("#addRowBtn").on("click", function(){
+		$("#addRowBtn").on("click", calcTotal, function(){
 			addCustomRow(tableBody, 'first');
+			calcTotal();
 		});
 
 		$("#deleteRowBtn").on("click", function(){
 			let checkboxes = tableBody.find("input[type='checkbox']");
 			checkboxes.each(function(index, element){
 				if($(this).is(":checked") && index>0){
-					$("#tableBody").find("tr").eq(index).remove();
+					let row = $("#tableBody").find("tr").eq(index);
+					row.remove();
+					calcTotal();
 				}
 			});
 		});
@@ -278,6 +314,7 @@
 		// 	getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
 		// }
 
+	
 		function getNumberIndex (index) {
 			return index + 1;
 		}
@@ -370,14 +407,14 @@
 							</td>
 							<td>
 								<div class="tx_inp_type"><!-- 
-								--><input type="text" id="transferAmount" class="auto-update right" name="transfer_amount" placeholder="직접 입력"><!--
+								--><input type="text" id="transferAmount" class="amount right" name="transfer_amount" placeholder="직접 입력" required><!--
 							--></div><!--
 						--></td>
 							<td>
 								<div class="sa_select">
 									<div class="dropdown placeholder">
 										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="">선택<span class="caret"></span></button>
-										<ul id="receiveList" class="dropdown-menu" role="menu"><li data-name="*to_account_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_account_bank_name* *to_account_no*</a></li></ul>
+										<ul id="receiveList" class="receive-list dropdown-menu" role="menu"><li data-name="*to_account_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_account_bank_name* *to_account_no*</a></li></ul>
 									</div>
 								</div>
 							</td>
@@ -391,7 +428,7 @@
 							<td></td>
 							<td>합계</td>
 							<td></td>
-							<td id="total" class="total"></td>
+							<td><input type="text" id="total" class="clear-input right" readonly disabled required pattern="[0-9\.]+"></td>
 							<td></td>
 							<td></td>
 						</tr>
@@ -417,7 +454,7 @@
 						<tr>
 							<th class="th_type">증빙 첨부</th>
 							<td id="addFileList01" class="flex_start_td"><!--
-								--><input type="file" id="red_write_attachment" class="hidden" name="red_write_attachment" accept=".gif, .jpg, .png" multiple=""><!--
+								--><input type="file" id="red_write_attachment" class="hidden" name="red_write_attachment" accept=".pdf" multiple=""><!--
 								--><label for="red_write_attachment" class="btn file_upload">파일 선택</label><!--
 								--><div class="file_list ml-16"><ul><li>No Files Selected</li></ul></div>
 							</td>

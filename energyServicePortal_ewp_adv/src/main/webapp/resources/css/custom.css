@@ -482,12 +482,12 @@ a.disabled{
 	cursor: text;
 }
 
-a.disabled.text_blue{
+/* a.disabled.text_blue{
 	text-decoration: none;
 	background: none;
 	color: var(--vivid-blue);
 	cursor: text;
-}
+} */
 
 a.disabled:hover,
 a.disabled:focus{
@@ -532,10 +532,39 @@ input[type="file"]+.file_upload {
 	background-color: var(--white);
 }
 
+.input {
+	padding: 0 20px;
+	height: 36px;
+	line-height: 36px;
+	font-family: "Roboto", sans-serif;
+	font-size: 13px;
+	border-radius: 2px;
+	outline-style: none;
+	vertical-align: middle;
+}
+
+.textarea {
+	background: var(--box-color7);
+	padding: 20px;
+	height: 150px;
+	line-height: 1.4;
+	font-family: "Roboto", sans-serif;
+	color: var(--color2);
+	font-size: 13px;
+	border: 1px solid var(--input-border);
+	border-color: transparent;
+	border-radius: 4px;
+	outline-style: none;
+	vertical-align: middle;
+}
+
 table input[type="text"] {
 	padding-right: 0;
 }
-
+.clear-input {
+	background: none;
+	border: none;
+}
 .tx_inp_type {
 	background: var(--box-color7);
 	padding: 0;
@@ -657,32 +686,6 @@ table input[type="text"] {
 	display: inline-block;
 	font-size: 12px;
 	margin: 0 5px;
-}
-
-.input {
-	padding: 0 20px;
-	height: 36px;
-	line-height: 36px;
-	font-family: "Roboto", sans-serif;
-	font-size: 13px;
-	border-radius: 2px;
-	outline-style: none;
-	vertical-align: middle;
-}
-
-.textarea {
-	background: var(--box-color7);
-	padding: 20px;
-	height: 150px;
-	line-height: 1.4;
-	font-family: "Roboto", sans-serif;
-	color: var(--color2);
-	font-size: 13px;
-	border: 1px solid var(--input-border);
-	border-color: transparent;
-	border-radius: 4px;
-	outline-style: none;
-	vertical-align: middle;
 }
 
 /* 달력 이미지 */
@@ -2398,11 +2401,16 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 }
 
 /* Modal */
-
+.wickedpicker {
+	z-index: 300;
+}
 .modal {
 	text-align: center;
+	z-index: 200;
 }
-
+.modal-backdrop {
+	z-index: 180;
+}
 .modal.fade.in {
 	padding: 0 !important;
 }
@@ -8642,6 +8650,7 @@ div.di_wrap dl .link a {
 	text-align: left;
 	padding: 40px 12px 12px 12px;
 	background: url("../img/eq_inverter.png") no-repeat 12px 14px var(--box-color6);
+	cursor: pointer;
 }
 
 .eq_list li span {
@@ -11695,6 +11704,10 @@ th .btn_align {
 .spc-transaction .table-footer .sa_select .dropdown-toggle {
 	width: 95%;
 }
+.spc-transaction .table-footer .clear-input {
+	width: 100%;
+	padding-right: 16px;
+}
 
 .spc-transaction .table-footer .sa_select .dropdown-toggle,
 .spc-transaction .table-footer .sa_select .dropdown-toggle+.dropdown-menu {
@@ -11853,73 +11866,79 @@ table.table-footer tfoot td.light {
 }
 
 /* spc 출금 요청 검토 상세 */
-.indiv.spc_detail {
+.indiv.spc-detail {
 	height: 835px;
 	overflow: auto;
 }
 
-.indiv.spc_detail .his_tbl td {
+.indiv.spc-detail .his_tbl td {
 	padding: 10px 15px;
 	height: 56px;
 	max-height: 100%;
 	white-space: normal;
 }
 
-.indiv.spc_detail .his_tbl tfoot td {
+.indiv.spc-detail .his_tbl tfoot td {
 	text-align: center;
 	font-weight: bold;
 }
 
-.indiv.spc_detail>.flex_wrapper:first-child {
+.indiv.spc-detail>.flex_wrapper:first-child {
 	margin-bottom: 44px;
 }
 
-.indiv.spc_detail .flex_wrapper {
+.indiv.spc-detail .flex_wrapper {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 }
 
-.indiv.spc_detail .flex_wrapper.border {
+.indiv.spc-detail .flex_wrapper.border {
 	border-bottom: 1px solid var(--box-color2);
 	padding-bottom: 28px;
 	margin-bottom: 28px;
 }
 
-.indiv.spc_detail .flex_wrapper .btn_type02 {
+.indiv.spc-detail .flex_wrapper .btn_type02 {
 	line-height: 43px;
 }
 
-.indiv.spc_detail .flex_start h2 {
+.indiv.spc-detail .flex_start h2 {
 	width: 152px;
 }
 
-.indiv.spc_detail .flex_start+.flex_start {
+.indiv.spc-detail .flex_start+.flex_start {
 	margin-top: 10px;
 }
 
-.indiv.spc_detail h2.heading {
+.indiv.spc-detail h2.heading {
 	font-size: 14px;
 	color: var(--color8);
 }
 
-.indiv.spc_detail .btn_group {
+.indiv.spc-detail .spc-btn-group {
 	text-align: right;
 }
 
-.indiv.spc_detail .textarea_container {
+.indiv.spc-detail .textarea {
+	padding: 12px 16px;
+	font-size: 14px;
+	color: var(--color4);
+}
+
+.indiv.spc-detail .textarea-container {
 	position: relative;
 	width: 100%;
 	height: 150px;
 }
 
-.indiv.spc_detail .textarea_container .fixed_btn {
+.indiv.spc-detail .textarea-container .fixed_btn {
 	position: absolute;
 	bottom: 10px;
 	right: 20px;
 }
 
-.indiv.spc_detail02 .img_bx>* {
+.indiv.spc-detail02 .img_bx>* {
 	width: 100%;
 }
 
@@ -11959,7 +11978,7 @@ table.table-footer tfoot td.light {
 /* .modal-content .tx_inp_type {
 	text-indent: 10px;
 } */
-.modal-content.spc_detail_content .modal-body {
+.modal-content.spc-detail_content .modal-body {
 	max-height: 200px;
 	overflow: auto;
 }
@@ -11987,45 +12006,45 @@ table.table-footer tfoot td.light {
 	padding-bottom: 0;
 }
 
-.modal-content.spc_detail_content {
+.modal-content.spc-detail_content {
 	padding: 30px 16px;
 }
 
-.modal-content.spc_detail_content .modal-body {
+.modal-content.spc-detail_content .modal-body {
 	padding-top: 0;
 }
 
-.modal-content.spc_detail_content .modal-header {
+.modal-content.spc-detail_content .modal-header {
 	padding: 30px 7px 0;
 }
 
-.modal-content.spc_detail_content {
+.modal-content.spc-detail_content {
 	padding-top: 5px;
 }
 
-.modal-content.spc_detail_content li.single_item {
+.modal-content.spc-detail_content li.single_item {
 	padding: 5px 7px;
 }
 
-.modal-content.spc_detail_content li.single_item:hover,
-.modal-content.spc_detail_content li.single_item:hover,
-.modal-content.spc_detail_content li.single_item:link,
-.modal-content.spc_detail_content li.single_item:active {
+.modal-content.spc-detail_content li.single_item:hover,
+.modal-content.spc-detail_content li.single_item:hover,
+.modal-content.spc-detail_content li.single_item:link,
+.modal-content.spc-detail_content li.single_item:active {
 	background: var(--box-color5);
 }
 
-.modal-content.spc_detail_content li.single_item a {
+.modal-content.spc-detail_content li.single_item a {
 	color: var(--color8);
 }
 
-.modal-content.spc_detail_content li.single_item a .btn_next {
+.modal-content.spc-detail_content li.single_item a .btn_next {
 	background: url(../img/btn_next_wh.png) no-repeat;
 	width: 24px;
 	height: 24px;
 	display: inline-block;
 }
 
-html.darkmode .modal-content.spc_detail_content li.single_item a .btn_next {
+html.darkmode .modal-content.spc-detail_content li.single_item a .btn_next {
 	background: url(../img/btn_next.png) no-repeat;
 }
 

@@ -10,7 +10,7 @@
 	const status = '${param.review_status}';
 	const spcId = '${param.review_spc_id}';
 	const spcName = '${param.review_spc_name}';
-	const reqId = '${param.review_req_id}';
+	const reqId = '${param.review_req_id}'; 
 	const accNum = '${param.review_acc_info}';
 
 	$(function() {
@@ -19,20 +19,22 @@
 		tableList.find("template").remove();
 
 		const txtArea = $("textarea.textarea");
+		const btnArea = $(".spc-detail .spc-btn-group");
 
 		if( isEmpty(spcName) || spcName == ("-")){
 			$("#spcName").text("spc_no_name");
 		}	else {
 			$("#spcName").text(spcName);
 		}
+		( status == "승인 완료" ) ? btnArea.addClass('hidden') : btnArea.removeClass('hidden');
 		// txtArea.eq(0).val();
 		unCheckAll();
 		getDataList();
 		initTextArea();
+
 		$("#attachedFileForm").on("submit", function(e){
 			e.preventDefault();
 			let obj = {}
-
 			let newData = {}
 			newData.status = 3;
 			newData.status_changed_by = loginName;
@@ -51,7 +53,8 @@
 				data: JSON.stringify(newData)
 			};
 			$.ajax(opt).done(function (json, textStatus, jqXHR) {
-				console.log("success===")
+				console.log("success===");
+				window.location.href = window.location.origin + '/spc/withdrawReqStatus.do'  
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				alert('처리 중 오류가 발생했습니다.');
 				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
@@ -59,28 +62,27 @@
 			});
 		})
 
-		$("#txt").keyup(function(){
-			var currentText = $(this).val();
-			$("#txt1").text(currentText);
-
+		$("#txt2").keyup(function(){
+			let preserved = $("#txt1").val();
+			let val = $(this).val();
+			$("#txt1").val(preserved += val);
 		});
 
 		$("#saveBtn").on("click", function(){
-			var input = document.getElementById("txt").value;
-			var text2 = document.getElementById("txt1");
-			text2.value = input;
-			if (input.length === 0) {
-				alert("Please enter a valid input");
-				return;
+			let preserved = $("#txt1").val();
+			let val = $("#txt2").val();
+			if(isEmpty(val)){
+				$("#warningModal").modal("show");
 			} else {
-				$("#tempMemo").val(input);
-				console.log("val===", $("#tempMemo").val(input))
+				let preserved = $("#txt1").val();
+				$("#tempMemo").val(val);
+				$("#txt1").val(preserved += val);
 			}
 			eraseText();
 		});
 
 		function eraseText() {
-			document.getElementById("txt").value = "";
+			document.getElementById("txt2").value = "";
 		}
 
 		$("#rejectBtn").on('click', function(e){
@@ -101,9 +103,9 @@
 			jsonData.status_changed_at = new Date().toISOString();
 			jsonData.requested_by = loginName;
 			jsonData.requested_at = new Date().toISOString();
-			jsonData.transfer_agent = "tester2"
+			jsonData.memo = $("#tempMemo").val();
 
-
+			console.log("json====", jsonData.memo);
 			let opt = {
 				url: 'http://iderms.enertalk.com:8443/spcs/transactions?oid='+oid,
 				type: "POST",
@@ -193,7 +195,12 @@
 
 
 	function initTextArea(){
-		$(".textarea").val("");
+		let preserved = "";
+		let d = new Date();
+
+		preserved = d.toISOString().substring(0, 10) + ' ' +  d.toLocaleTimeString().substr(0, d.toLocaleTimeString().length-2) + '/ ' + loginName + ' / 메모 히스토리'
+		$("#txt1").val(preserved);
+		$("#txt2").val("")
 		$("#tempMemo").val("")
 	}
 
@@ -216,7 +223,7 @@
 			cache: false,
 			timeout: 600000,
 			success: function (result) {
-				console.log
+				// console.log
 				// sendSpcGenPost(spcId, result.files);
 			},
 			error: function (request, status, error) {
@@ -227,6 +234,22 @@
 
 </script>
 
+<div class="modal fade" id="warningModal" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content collection_modal_content">
+			<div class="modal-header">
+				<h4 lass="modal-title">저장 하실 내용을 입력해 주세요.</h4>
+			</div>
+			<div class="modal-footer">
+				<div class="btn_wrap_type02">
+					<button type="button" data-dismiss="modal" class="btn_type" aria-label="Close">확인</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <div class="row header-wrapper">
 	<div class="col-12">
 		<h1 class="page-header">출금 요청서 검토</h1>
@@ -234,13 +257,13 @@
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>
 			<span>DATA BASE TIME</span>
-			<em class="dbTime">2018-07-27 17:01:02</em>
+			<em class="dbTime"></em>
 		</div>
 	</div>
 </div>
 <div class="row">
 	<div class="col-xl-8 col-lg-7 col-md-6 col-sm-12">
-		<div class="indiv spc_detail">
+		<div class="indiv spc-detail">
 			<div class="flex_wrapper">
 				<h2 class="ntit">출금 요청서</h2>
 				<span class="tx_tit blue_text">상태: ${param.review_status}</span>
@@ -293,7 +316,7 @@
 	<div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
 		<form id="attachedFileForm" name="attached_file_form" action="#" method="post">
 			<input type="hidden" id="tempMemo" name="tempMemo"/>
-			<div class="indiv spc_detail">
+			<div class="indiv spc-detail">
 				<div class="flex_wrapper">
 					<h2 class="ntit">증빙 서류</h2>
 				</div>
@@ -327,12 +350,12 @@
 						<label for="chk02">사무수탁사 함께 보기</label>
 					</a>
 				</div>
-				<div class="textarea_container mt20">
+				<div class="textarea-container mt20">
 					<button type="button" id="saveBtn" class="btn_type03 fixed_btn">저장</button>
-					<textarea placeholder="직접입력" id="txt" class="textarea w-100"></textarea>
+					<textarea placeholder="직접입력" id="txt2" class="textarea w-100"></textarea>
 				</div>
 
-				<div class="btn_group mt20"><!--
+				<div class="spc-btn-group mt20"><!--
 				--><button type="button" id="rejectBtn" class="btn_type03 w80">반송</button><!--
 				--><button type="submit" class="btn_type ml-12">승인</button><!--
 			--></div>

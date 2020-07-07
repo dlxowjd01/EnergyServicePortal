@@ -323,7 +323,7 @@
 					<button type="button" class="btn_type03">목록</button>
 				</div>
 			</div>
-			<div class="indiv spc_detail02 mt25">
+			<div class="indiv spc-detail02 mt25">
 				<div class="tbl_top">
 					<h2 class="ntit mt25">첨부 파일</h2>
 				</div>
