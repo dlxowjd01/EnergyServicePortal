@@ -488,17 +488,17 @@
 
 						$.each(typeXArray, function (j, elx) {
 							if (elx.time == el) {
-								x = elx.data;
+								x = parseFloat(elx.data.toFixed(2));
 							}
 						});
 						$.each(typeYArray, function (k, ely) {
 							if (ely.time == el) {
-								y = ely.data;
+								y = parseFloat(ely.data.toFixed(2));
 							}
 						});
 
 						dataArr.push([x, y]);
-						categories.push(String(x));
+						categories.push(parseFloat(x.toFixed(2)));
 					});
 
 					chartSeries.push({
@@ -514,7 +514,7 @@
 
 			}
 
-			chartDraw(chartSeries, categories, show);
+			chartDraw(chartSeries, null, show);
 		});
 
 		$('.save_btn').on('click', function (e) {
@@ -608,7 +608,8 @@
 
 	//선택한 SID에 해당하는 유형의 타입을 보여준다.
 	const deviceType = function (deviceTp) {
-		$('#deviceType button').text().replace(/<[^>]+>/g, '설비유형');
+		$('#deviceType button').empty().append('설비유형<span class="caret"></span>');
+
 		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
 			function () {
 				return $(this).val();
@@ -673,7 +674,7 @@
 		);
 
 		if (typeArray.length > 0 && deviceList.length > 0) {
-			$('#devices dropdown_cov').empty();
+			$('#devices .dropdown_cov').empty();
 
 			//선택된 사이트를 기준으로 한다.
 			$(':checkbox[name="site"]:checked').each(function () {
@@ -691,8 +692,8 @@
 							if (elm == el.device_type) {
 								let str = `<li>
 								<a href="javascript:void(0);" data-value="${'${el.did}'}" tabindex="-1">
-									<input type="checkbox" id="device_${'${i}'}" name="device" value="${'${el.did}'}" data-sid="${'${el.sid}'}" data-type="${'${el.device_type}'}">
-									<label for="device_${'${i}'}">${'${el.name}'}</label>
+									<input type="checkbox" id="device_${'${el.did}'}" name="device" value="${'${el.did}'}" data-sid="${'${el.sid}'}" data-type="${'${el.device_type}'}">
+									<label for="device_${'${el.did}'}">${'${el.name}'}</label>
 								</a>
 							</li>`
 								siteGrp.find('ul').append(str);
@@ -710,7 +711,7 @@
 				if($(this).val() == searchDid) {
 					$(this).prop('checked', true);
 					displayDropdown($('#device'));
-					$('#interval button').text().replace(/<[^>]+>/g, '15분').data('value', '15min');
+					$('#interval button').html('15분 <span class="caret"></span>').data('value', '15min');
 					searchGrid();
 				}
 			});
@@ -723,7 +724,8 @@
 		if (obj.length > 8) {
 			idNum = obj.slice(-1);
 		}
-		$('#' + 'columnLi' + idNum).prev().text().replace(/<[^>]+>/g, $('#' + 'columnLi' + idNum).prev().data('name'));
+
+		$('#' + 'columnLi' + idNum).prev().html($('#' + 'columnLi' + idNum).prev().data('name') + '<span class="caret"></span>');
 		$.map(featureProperties, function (value, key) {
 			if (type == key) {
 				setMakeList(value, 'columnLi' + idNum, {
@@ -804,10 +806,11 @@
 		makeTableTemplateDevice();
 
 		$('[id^="chartDid"]').each(function () {
-			$(this).find('button').text().replace(/<[^>]+>/g, $(this).find('button').data('name')).data('value', '');
+			$(this).find('button').html($(this).find('button').data('name') + '<span class="caret"></span>').data('value', '');
 		});
 
-		$('#way button').text().replace(/<[^>]+>/g, $('#way button').data('name'));
+		$('#way button').html($('#way button').data('name') + '<span class="caret"></span>');
+
 		let statusSummaryData = {
 			sids: siteArray.join(','),
 			dids: deviceArray.join(','),
@@ -827,7 +830,8 @@
 				let chart = $('#hchart2').highcharts();
 				if (chart) {
 					chart.destroy();
-					$('[id^=columnLi]').empty().prev().text().replace(/<[^>]+>/g, '선택');
+
+					$('[id^=columnLi]').empty().prev().html('선택 <span class="caret"></span>');
 				}
 
 				$.map(result, function (value, key) {
@@ -862,7 +866,7 @@
 		let chartDid = new Array();
 
 		$(':checkbox[name="device"]:checked').each(function () {
-			let siteNm = $(this).parents('div.sec_li_bx').find('p.tx_li_tit').text().trim(); //사이트명
+			let siteNm = $(this).parents('li.sec_li_bx').find('p.tx_li_tit').text().trim(); //사이트명
 			let deviceNm = $(this).next().text().trim();
 
 			chartDid.push({
@@ -950,7 +954,7 @@
 						color: 'var(--color3)',
 						fontSize: '8px'
 					},
-					enabled: show
+					enabled: show,
 				},
 				categories: categories,
 				tickInterval: 1,
@@ -1195,7 +1199,10 @@
 <div class="row">
 	<div class="col-12">
 		<div class="indiv operation_table_wrap">
-			<div class="header-wrapper"><h2 class="fl s_tit">분석 기준 설비 선택</h2><a href="javascript:void(0);" class="btn_type02 fr">분석 조건 저장</a></div>
+			<div class="header-wrapper">
+				<h2 class="fl s_tit">분석 기준 설비 선택</h2>
+<%--				<a href="javascript:void(0);" class="btn_type02 fr">분석 조건 저장</a>--%>
+			</div>
 			<div class="his_chart_top clear">
 				<!-- 기본 항목 -->
 				<div class="clear">

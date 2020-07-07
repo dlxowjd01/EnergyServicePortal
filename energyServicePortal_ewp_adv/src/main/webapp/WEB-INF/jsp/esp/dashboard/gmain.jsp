@@ -185,7 +185,7 @@
 				<div class="gmain_map2_content">
 					<div class="gtbl_top clear">
 						<div class="input_group1">
-							<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색">
+							<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색" onkeyup="if (event.keyCode == 13) searchSiteList();">
 							<button type="button" onclick="searchSite();">적용</button>
 						</div>
 						<div class="input_group2">
@@ -381,6 +381,8 @@
 	let geocoder = new google.maps.Geocoder();
 	let infowindow = new google.maps.InfoWindow();
 
+	let first = true;
+
 	$(function () {
 		setInitList('alarmNotice'); //알람 공지 세팅
 		setInitList('siteList'); //사이트 리스트
@@ -395,7 +397,10 @@
 		getYearGenData();
 		getDailyGenData();
 		getGenDataBySiteYesterday();
-		// searchSiteList();
+
+		if (!first) {
+			searchSiteList();
+		}
 
 		const now = new Date();
 		$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));

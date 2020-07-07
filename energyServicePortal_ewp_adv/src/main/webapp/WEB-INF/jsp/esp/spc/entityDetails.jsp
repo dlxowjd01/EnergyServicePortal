@@ -204,6 +204,11 @@
 						addRow('addList_affiliation', 'next', index);
 					});
 					setJsonAutoMapping(maintenance_info, 'maintenanceInfo');
+
+					if (maintenance_info['관리_계약_구분'] != undefined && maintenance_info['관리_계약_구분'].length > 0) {
+						$('#maintenanceInfo #관리_계약_구분').html(maintenance_info['관리_계약_구분'].join(','));
+					}
+
 					//기본정보
 
 					setJsonAutoMapping(account_info, 'accountInfo'); //계정 정보
@@ -300,16 +305,20 @@
 	}
 
 	function getExcelDown() {
-		let excelName = 'spc_info_list';
+		let genName = $('#genName').text();
+		let excelName = 'spc_' + genName + '_';
 
 		var excelHtml = '';
-		excelHtml += $('#spc_info .spc_tbl_row').html();
-		excelHtml += $('#contract_info .spc_tbl_row').html();
-		excelHtml += $('#device_info .spc_tbl_row').html();
-		excelHtml += $('#finance_info .spc_tbl_row').html();
-		excelHtml += $('#warranty_info .spc_tbl_row').html();
-		excelHtml += $('#coefficient_info .spc_tbl_row').html();
-		excelHtml += $('#attachement_info .spc_tbl_row').html();
+		excelHtml += $('#basicInfo #basicInfoToggle').html();
+		excelHtml += $('#maintenanceInfo #maintenanceInfoToggle').html();
+		excelHtml += $('#accountInfo #accountInfoToggle').html();
+		excelHtml += $('#financeInfo #financeInfoToggle').html();
+		excelHtml += $('#contractInfo #contractInfoToggle').html();
+		excelHtml += $('#insuranceInfo #insuranceInfoToggle').html();
+		excelHtml += $('#deviceInfo #deviceInfoToggle').html();
+		excelHtml += $('#warrantyInfo #warrantyInfoToggle').html();
+		excelHtml += $('#coefficientInfo #coefficientInfoToggle').html();
+		excelHtml += $('#attachement_info #attachementInfoToggle').html();
 
 		$('#excelList').html(excelHtml);
 

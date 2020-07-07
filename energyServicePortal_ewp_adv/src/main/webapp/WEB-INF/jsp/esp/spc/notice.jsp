@@ -164,17 +164,32 @@
 	}
 
 	function getNoticeList(page) {
+		const range = $('#range button').data('value'),
+			searchWord = $('#search').val().trim();
+
+		let data = {
+			oid: oid,
+			kind: 1,
+			limit: pagePerData,
+			page: page,
+			includeDeleted: false
+		}
+
+		if (!isEmpty(searchWord)) {
+			if (isEmpty(range)) {
+				alert('검색 구분을 선택해 주세요.');
+				return false;
+			}
+
+			data['search'] = searchWord;
+			data['range'] = range;
+		}
+
 		$.ajax({
 			url: apiURL + boardURL,
 			type: 'get',
 			dataType: 'json',
-			data: {
-				oid: oid,
-				kind: 1,
-				limit: 15,
-				page: page,
-				includeDeleted: false
-			}
+			data: data
 		}).done(function (data, textStatus, jqXHR) {
 			const result = data.data;
 
@@ -191,7 +206,7 @@
 			const now = new Date();
 			$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 
-			logMakeNavigation(page, result.length)
+			makeNavigation(page, data.count)
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
@@ -247,7 +262,8 @@
 							$('#view_' + key).text(val).parents('.input-group').removeClass('hidden');
 						}
 					} else {
-						$viewObj.text(val);
+						val.replace(/\n/g, '<br/>');
+						$viewObj.html(val);
 					}
 				}
 			});
@@ -285,7 +301,7 @@
 		});
 	}
 
-	function logMakeNavigation(page, totalCount) {
+	function makeNavigation(page, totalCount) {
 		$('#paging').empty();
 
 		let pageStr = '';
@@ -437,7 +453,7 @@
 						</div>
 						<div class="input-group inline-flex top">
 							<h2 class="input_label">내용</h2>
-							<div id="view_contents"></div>
+							<pre id="view_contents"></pre>
 						</div>
 					</div>
 				</div>
@@ -489,12 +505,23 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-3">
-		<div class="tx_btn_area">
-			<div class="tx_inp_type">
-				<input type="text" id="key_word" placeholder="입력">
+	<div class="col-10">
+		<div class="flex_start">
+			<label for="range" class="tx_tit">검색 구분</label>
+			<div class="dropdown sa_select mr-16" id="range">
+				<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown" data-name="구분 선택" data-value="">
+					구분 선택<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu chk_type" role="menu" id="operationList">
+					<li data-value="3"><a href="javascript:void(0);">전체</a></li>
+					<li data-value="1"><a href="javascript:void(0);">제목</a></li>
+					<li data-value="2"><a href="javascript:void(0);">내용</a></li>
+				</ul>
 			</div>
-			<button class="btn_type" onclick="getDataList();">검색</button>
+			<div class="tx_inp_type mr-12">
+				<input type="text" id="search" name="search" placeholder="입력">
+			</div>
+			<button class="btn_type" onclick="getNoticeList(1);">검색</button>
 		</div>
 	</div>
 </div>

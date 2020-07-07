@@ -79,8 +79,7 @@
 							</ul>
 						</div>
 						<div class="tx_inp_type ml-12">
-							<input type="text" id="ticket_user_id" name="ticket_user_id" placeholder="직접 입력" readonly
-								autocomplete="off">
+							<input type="text" id="ticket_user_id" name="ticket_user_id" placeholder="직접 입력" readonly autocomplete="off">
 						</div>
 					</div>
 
@@ -113,7 +112,7 @@
 			<div class="sa_select">
 				<div class="dropdown" id="site">
 					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택해주세요.">선택해주세요<span class="caret"></span></button>
-					<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="siteList">
+					<ul class="dropdown-menu chk_type" role="menu" id="siteList">
 						<li data-value="[sid]">
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
@@ -131,8 +130,10 @@
 						<div class="sa_select">
 							<h2 class="tx_tit">설비 유형</h2>
 							<div id="equipmentList" class="dropdown">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-								<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="device">
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">
+									선택<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu chk_type" role="menu" id="device">
 									<li data-value="[type]">
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="checkbox" id="type_[INDEX]" value="[type]" name="deviceType">
@@ -267,11 +268,11 @@
 							</div>
 						</div>
 						<div class="sa_select">
-							<label class="tx_tit" id="dateArea">기간 설정</label>
+							<label class="tx_tit" for="datepicker1">기간 설정</label>
 							<input type="text" id="datepicker1" name="fromDate" class="sel fromDate" value="" autocomplete="off">
 						</div>
 						<div class="sa_select">
-							<label for="toDate" class="tx_tit"></label>
+							<label for="datepicker2" class="tx_tit"></label>
 							<input type="text" id="datepicker2" name="toDate" class="sel toDate" value="" autocomplete="off">
 						</div>
 						<div class="sa_select">
@@ -279,10 +280,10 @@
 							<div id="cycle" class="dropdown short">
 								<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu" id="detailterm">
-									<li class="on"><a href="javascript:void(0);">15분</a></li>
-									<li><a href="javascript:void(0);">1시간</a></li>
-									<li><a href="javascript:void(0);">1일</a></li>
-									<li><a href="javascript:void(0);">1월</a></li>
+									<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
+									<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
+									<li data-value="day"><a href="javascript:void(0);">1일</a></li>
+									<li data-value="month"><a href="javascript:void(0);">1월</a></li>
 								</ul>
 							</div>
 						</div>
@@ -375,12 +376,8 @@
 		'SENSOR_TEMP_HUMIDITY': '온습도 센서',
 		'CCTV': 'CCTV'
 	};
+
 	const levelTemplate = {
-		//			0: 'unknown',
-		//			1: 'emergency',
-		//			2: 'critical' ,
-		//			3: 'warning',
-		//			4: 'info'
 		9: '알수없음',
 		0: '정보',
 		1: '경고',
@@ -716,7 +713,7 @@
 		for (let i = 0; i < tdList.length + 1; i++) {
 			let dCell = document.createElement("td");
 			if (i == 0) {
-				dCell.innerHTML = '<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value=""><label for="chk_op[INDEX]">[INDEX]</label>';
+				dCell.innerHTML = '<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="[alarm_id]"><label for="chk_op[INDEX]">[INDEX]</label>';
 				bRow.appendChild(dCell);
 			} else {
 				dCell.innerHTML =  tdList[i - 1];
@@ -1122,7 +1119,7 @@
 	}
 	
 	const deviceType = function (sites, sidparam) {
-		if (sidparam != "" || sidparam != undefined) {
+		if (sidparam != undefined && sidparam != "") {
 			$('#equipmentList button').empty().append('전체<span class="caret"></span>');
 		} else {
 			$('#equipmentList button').empty().append('설비유형<span class="caret"></span>');
@@ -1172,48 +1169,10 @@
 
 	var fetchCharts = function () {
 		dateArr = new Array();
-		let period = $('#term').prev().text();
-		let detailperiod = $('#detailterm').prev().text();
-		let interval = "";
-
-		if (period == '1일') {
-			if (detailperiod == '15분') {
-				interval = '15min';
-			} else if (detailperiod == '1시간') {
-				interval = 'hour';
-			} else {
-				interval = 'day';
-			}
-		} else if (period == '1주') {
-			if (detailperiod == '15분') {
-				interval = '15min';
-			} else if (detailperiod == '1시간') {
-				interval = 'hour';
-			} else {
-				interval = 'day';
-			}
-		} else if (period == '1월') {
-			if (detailperiod == '15분') {
-				interval = '15min';
-			} else if (detailperiod == '1시간') {
-				interval = 'hour';
-			} else {
-				interval = 'day';
-			}
-		} else if (period == 'year') {
-			interval = 'month';
-		} else {
-			if (detailperiod == '15분') {
-				interval = '15min';
-			} else if (detailperiod == '1시간') {
-				interval = 'hour';
-			} else {
-				interval = 'day';
-			}
-		}
-
+		let interval = $('#cycle button').data('value');
 		let sDate = $('#datepicker1').val().replace(/-/g, '');
 		let eDate = $('#datepicker2').val().replace(/-/g, '');
+
 		if (interval == 'day') {
 			let diffDay = getDiff(eDate, sDate, 'day');
 			for (let j = 0; j < diffDay; j++) {
@@ -1727,12 +1686,12 @@
 	
 
 	const alarmConfirmAll = function (tableId) {
-		if ($('#' + tableId + '> tbody tr :checkbox:checked').length == 0) {
+		if ($('#' + tableId + 'Table > tbody tr :checkbox:checked').length == 0) {
 			alert('확인할 알람이 선택되지않았습니다.');
 			return false;
 		} else {
 			let cnt = 0;
-			$('#' + tableId + '> tbody tr :checkbox:checked').each(function () {
+			$('#' + tableId + 'Table > tbody tr :checkbox:checked').each(function () {
 				let data = {
 					confirm: true
 				}

@@ -189,7 +189,7 @@
 		<div class="indiv gmain_table jmain_table">
 			<div class="gtbl_top clear">
 				<div class="input_group1">
-					<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색">
+					<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색" onkeyup="if (event.keyCode == 13) searchSiteList();">
 					<button type="button" onclick="searchSite();">적용</button>
 				</div>
 				<div class="input_group2">
@@ -381,11 +381,16 @@
 	let pvListHourly = new Array();
 	let pvListForecastingHourly = new Array();
 
+	let first = true;
+
 	function fn_cycle_1hour() {
 		getYearGenData();
 		getDailyGenData();
 		getGenDataBySiteYesterday();
-		searchSiteList();
+
+		if (!first) {
+			searchSiteList();
+		}
 
 		const now = new Date();
 		$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
@@ -748,7 +753,7 @@
 			zoomType: 'xy',
 			backgroundColor: 'transparent',
 			type: 'variwide',
-			height: 280
+			height: 255
 		},
 		navigation: {
 			buttonOptions: {
@@ -774,11 +779,12 @@
 			}],
 			labels: {
 				align: 'center',
-				reserveSpace: true,
+				//reserveSpace: true,
+				rotation: 0,
 				y: 27, /* 그래프와 거리 */
 				style: {
 					color: 'var(--color4)',
-					fontSize: '12px'
+					fontSize: '10px'
 				}
 			},
 			tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
