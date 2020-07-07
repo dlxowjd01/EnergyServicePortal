@@ -981,7 +981,7 @@
 						<button type="button" id="detailModalTrigger" class="btn_type03" onclick="$('#detailInfoModal').toggleClass('active')"></button>
 					</div>
 					<div class="dropdown_modal modal-dialog active" id="detailInfoModal">
-						<div class="modal-content spc-detail_content">
+						<div class="modal-content spc-detail-content">
 							<div class="modal-header">
 								<h2 id="modalTitle" class="fl"></h2>
 								<a href="#" class="btn_type02 fr">상세보기</a>

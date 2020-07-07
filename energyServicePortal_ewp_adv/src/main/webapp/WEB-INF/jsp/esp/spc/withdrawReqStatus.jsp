@@ -275,7 +275,7 @@
 		$("#reviewSpcName").val(spcName);
 		$("#reviewReqId").val(reqId);
 		$("#reviewAccountInfo").val(accNum);
-		console.log("status---", status)
+
 		// [자산 운용사]
 		// "반송" : 0, "검토 중" : "2", "승인완료": "3"	 => /spc/withdrawReqStatusDetail.do
 		// "검토 대기" : 1" 						  => /spc/withdrawReqEdit.do
@@ -314,12 +314,12 @@
 </script>
 
 <form id="reviewDetailForm" class="" action="/spc/withdrawReqStatusDetail.do" method="post">
-	<input type="hidden" id="reviewStatus" name="review_status" value=''/>
-	<input type="hidden" id="reviewStatusVal" name="review_status_val" value=''/>
 	<input type="hidden" id="reviewSpcId" name="review_spc_id" value=''/>
 	<input type="hidden" id="reviewSpcName" name="review_spc_name" value=''/>
 	<input type="hidden" id="reviewReqId" name="review_req_id" value=''/>
 	<input type="hidden" id="reviewAccountInfo" name="review_acc_info" value=''/>
+	<input type="hidden" id="reviewStatus" name="review_status" value=''/>
+	<input type="hidden" id="reviewStatusVal" name="review_status_val" value=''/>
 	<!-- <input type="hidden" id="reqDate" name="req_date" value=''/>
 	<input type="hidden" id="reqAmount" name="req_amount" value=''/>
 	<input type="hidden" id="accountNum" name="account_num" value=''/>

@@ -13,6 +13,7 @@
 		const searchBar = $('.spc-search-bar');
 		const searchForm = $('#transactionForm');
 		const dropdownOpt = $('#searchOption').find('.dropdown-menu:not(.chk_type) li');
+		var spcInfoArr = [];
 		tableList.find("template").remove();
 
 		unCheckAll(searchBar);
@@ -26,7 +27,6 @@
 		$('#toDate').datepicker('setDate', 'today');
 
 		$('#unitOpt').find("li").on('click', function () {
-			console.log("unit----")
 			$('#toDate').datepicker('setDate', 'today')
 			if ($(this).data('value') == 'daily') {
 				$('#fromDate').datepicker('setDate', 'today');
@@ -90,9 +90,12 @@
 					warning.eq(index).addClass('hidden');
 				}
 			});
-			console.log("data---", formArr)
+			// console.log("data---", formArr)
 			if(searchForm.find('.warning.hidden').length == formArr.length){
-				getDataList(1,formArr);
+				getDataList(1,selectedSpc);
+				console.log("length equal===")
+			} else {
+				return false;
 			}
 		});
 
@@ -114,6 +117,11 @@
 				json.data.forEach((item, index) => {
 					let listItem = '';
 					let uniq = item.spc_id + '_' + index;
+					let spcObj = {
+						spc_id: item.spc_id,
+						spc_name: item.name
+					}
+					spcInfoArr.push(spcObj);
 					if(item.name == ""){
 						listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, "spc_no_name"+ index).replace(/\*uniqName\*/g, uniq);
 					} else {
@@ -176,6 +184,7 @@
 		}
 
 		function getDataList(page, spcId) {
+			console.log("getDAtalist----", spcId)
 			page == undefined ? page = 1 : page = page;
 			spcId == undefined ? null : spcId = spcId.toString();
 			var sortList = [];
@@ -206,12 +215,18 @@
 							}).then(res => {
 								let popObj = Object.assign({}, item);
 								delete(popObj.to_account);
-
+								const found = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
+								
 								let str = '';
+								
 								let transaction_spc_id = '';
 								let transaction_req_id = '';
-
+								let transaction_spc_name = ''
+								transaction_spc_name = spcInfoArr[found].spc_name;
 								let withdraw_day = popObj.withdraw_day.substring(0, 10) + ' ' + popObj.withdraw_day.substring(11, 19);
+								let withdraw_account_info = '';
+								withdraw_account_info = item.withdraw_bank+item.withdraw_account_no;
+
 								let transaction_type = '';
 								res.length > 0 ? ( res.length ==1 ? ( transaction_type = '출금' ) : ( transaction_type = '출금 외 +'+ (res.length-1) + '건' ) ): ( transaction_type = '-' );
 								let amount = '';
@@ -279,8 +294,10 @@
 
 								// res.to_account_bank.locale
 								str = tableCloned.replace(/\*transactionSpcId\*/g, transaction_spc_id)
+									.replace(/\*transactionSpcName\*/g, transaction_spc_name)
 									.replace(/\*transactionReqId\*/g, transaction_req_id)
 									.replace(/\*withdrawDay\*/g, withdraw_day)
+									.replace(/\*withdrawAccountInfo\*/g, withdraw_account_info)
 									.replace(/\*transactionType\*/g, transaction_type)
 									.replace(/\*purpose\*/g, purpose)
 									.replace(/\*accountType\*/g, account_type_list[res.length])
@@ -357,22 +374,6 @@
 
 	});
 
-	function goToDetail(self) {
-		let spcId = self.data("id");
-		let reqId = self.data("value");
-		$("#detailSpcId").val(spcId);
-		$("#detailReqId").val(reqId);
-
-		// [사무수탁사]
-		// "반송" : 0, "승인 중" : "2", "승인완료": "3"	 => /spc/withdrawReqStatusDetail.do
-		// "승인 대기" : 1" 						  => /spc/withdrawReqEdit.do
-
-		if(self.parent().data("value")==1) {
-			$("#transactionDetailForm").submit();
-		} else {
-			$("#transactionEditForm").submit();
-		}
-	}
 	function deleteRow(selector) {
 		$(selector).parents().closest("tr").css("border", "solid 1px #fff");
 		$("#warningModal").modal("show");
@@ -383,7 +384,55 @@
 		$(selector).parents().closest("tr").css("border", "none");
 		// console.log("tr===", $(selector).parents().closest("tr"))
 	}
+
+	function goToDetail(self) {
+		let spcId = $(self).parent().data("id");
+		let spcName = $(self).parent().data("name");
+		let reqId = self.data("id");
+		let accNum = self.data("value");
+		let status = self.text();
+		let statusVal = self.parent().data("value");
+
+		$("#transactionSpcId").val(spcId);
+		$("#transactionSpcName").val(spcName);
+		$("#transactionReqId").val(reqId);
+		$("#transactionAccountInfo").val(accNum);
+		$("#transactionStatus").val(status);
+		$("#transactionStatusVal").val(statusVal);
+
+		// [사무수탁사]
+		// "반송" : 0, "승인 중" : "2", "승인완료": "3"	 => /spc/withdrawReqStatusDetail.do
+		// "승인 대기" : 1" 						  => /spc/withdrawReqEdit.do
+
+		if(self.parent().data("value")==1) {
+			$("#transactionEditForm").submit();
+		} else {
+			console.log("detail===")
+			$("#transactionDetailForm").submit();
+		}
+	}
 </script>
+
+<form id="transactionDetailForm" class="" action="/spc/withdrawReqStatusDetail.do" method="post">
+	<input type="hidden" id="transactionSpcId" name="review_spc_id" value=''/>
+	<input type="hidden" id="transactionSpcName" name="review_spc_name" value=''/>
+	<input type="hidden" id="transactionReqId" name="review_req_id" value=''/>
+	<input type="hidden" id="transactionAccountInfo" name="review_acc_info" value=''/>
+	<input type="hidden" id="transactionStatus" name="review_status" value=''/>
+	<input type="hidden" id="transactionStatusVal" name="review_status_val" value=''/>
+	<!-- <button id="forwardDetailBtn" type="submit" class="hidden"></button> -->
+</form>
+
+
+<form id="transactionEditForm" class="" action="/spc/withdrawReqEdit.do" method="post">
+	<input type="hidden" id="transactionSpcId" name="review_spc_id" value=''/>
+	<input type="hidden" id="transactionSpcName" name="review_spc_name" value=''/>
+	<input type="hidden" id="transactionReqId" name="review_req_id" value=''/>
+	<input type="hidden" id="transactionAccountInfo" name="review_acc_info" value=''/>
+	<input type="hidden" id="transactionStatus" name="review_status" value=''/>
+	<input type="hidden" id="transactionStatusVal" name="review_status_val" value=''/>
+	<!-- <button id="forwardDetailBtn" type="submit" class="hidden"></button> -->
+</form>
 
 <div class="modal fade" id="warningModal" role="dialog">
 	<div class="modal-dialog">
@@ -574,18 +623,6 @@
 </div>
 
 
-<form id="transactionEditForm" class="" action="/spc/withdrawReqEdit.do" method="post">
-	<input type="hidden" id="detailSpcId" name="spc_info" value=''/>
-	<input type="hidden" id="detailReqId" name="req_info" value=''/>
-	<!-- <button id="forwardDetailBtn" type="submit" class="hidden"></button> -->
-</form>
-
-
-<form id="transactionDetailForm" class="" action="/spc/withdrawReqStatus.do" method="post">
-	<input type="hidden" id="detailSpcId" name="spc_info" value=''/>
-	<input type="hidden" id="detailReqId" name="req_info" value=''/>
-	<!-- <button id="forwardDetailBtn" type="submit" class="hidden"></button> -->
-</form>
 
 <div class='row spc-transaction'>
 	<div class='col-12'>
@@ -629,8 +666,8 @@
 								<td>*updatedAt*</td>
 								<td>*requestedBy*</td>
 								<td>*approvedBy*</td>
-								<td class='left' data-value="*statusVal*"><!--
-								--><a href="javascript:void(0);" class="*linkAttr*" data-id="*transactionSpcId*" data-value="*transactionReqId*" onclick="goToDetail($(this))">*status*</a><!--
+								<td class='left' data-id="*transactionSpcId*" data-name="*transactionSpcName*" data-value="*statusVal*"><!--
+								--><a href="javascript:void(0);" class="*linkAttr*" data-value="*withdrawAccountInfo*" data-id="*transactionReqId*" onclick="goToDetail($(this))">*status*</a><!--
 								--><a href="javascript:void(0);" onclick="deleteRow(this)" class='icon_delete *editIcons*'></a></span><!--
 							--></td>
 							</tr>
