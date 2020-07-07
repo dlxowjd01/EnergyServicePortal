@@ -33,9 +33,9 @@
 								<div class="dropdown-menu chk_type"><!--
 								--><ul class="dropdown_cov clear selectDevices"></ul><!--
 								 --><div class="li_btn_bx clear">
-										<div class="fl"><!-- 
-										--><button type="button" class="btn_type03">모두 선택</button><!-- 
-										--><button type="button" class="btn_type03">모두 해제</button><!-- 
+										<div class="fl"><!--
+										--><button type="button" class="btn_type03">모두 선택</button><!--
+										--><button type="button" class="btn_type03">모두 해제</button><!--
 									--></div>
 										<div class="fr"><button type="button" class="btn_type">적용</button></div>
 									</div>
@@ -485,7 +485,7 @@
 		}
 	}
 
-	function drawPage() {      
+	function drawPage() {
 		$('table.pc_use tbody').empty();
 		$('.no-data').addClass('hidden');
 		let sDate = $('#datepicker1').val().replace(/-/g, '');
@@ -1149,7 +1149,7 @@
 	const chartDraw = function (standard, seriesData) {
 		let chart = $('#chart2').highcharts();
 		$(".indiv.pv_chart").addClass("fixed");
-		
+
 		if (chart) {
 			chart.destroy();
 		}
@@ -1228,9 +1228,8 @@
 			legend: {
 				enabled: true,
 				align: 'right',
-				margin: -40,
+				verticalAlign: 'top',
 				x: -120,
-
 				itemStyle: {
 					color: 'var(--color3)',
 					fontSize: '10px',
@@ -1287,7 +1286,7 @@
 			responsive: {
 				rules: [{
 					condition: {
-						// minWidth: 900
+						maxWidth: 414 /* 차트 사이즈 */
 					},
 					chartOptions: {
 						chart: {
@@ -1308,8 +1307,7 @@
 								}
 							},
 							labels: {
-								x: -10,
-								/* 그래프와의 거리 조정 */
+								x: -10, /* 그래프와의 거리 조정 */
 								style: {
 									fontSize: '13px'
 								}

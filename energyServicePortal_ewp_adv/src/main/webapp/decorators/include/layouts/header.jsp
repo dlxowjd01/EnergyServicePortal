@@ -140,11 +140,7 @@
 													<c:set var="groupSites" value="${group.sites}"/>
 													<c:forEach var="groupSiteList" items="${groupSites}">
 														<li>
-															<c:forEach var="site" items="${siteList}">
-																<c:if test="${groupSiteList.sid eq site.sid}">
-																	<a href="javascript:void(0);" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}');">${site.name}</a>
-																</c:if>
-															</c:forEach>
+															<a href="javascript:void(0);" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}');">${groupSiteList.name}</a>
 														</li>
 													</c:forEach>
 												</ul>
@@ -172,11 +168,7 @@
 														<c:set var="groupSites" value="${vpp.sites}"/>
 														<c:forEach var="groupSiteList" items="${groupSites}">
 															<li>
-																<c:forEach var="site" items="${siteList}">
-																	<c:if test="${groupSiteList.sid eq site.sid}">
-																		<a href="javascript:void(0);" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}');">${site.name}</a>
-																	</c:if>
-																</c:forEach>
+																<a href="javascript:void(0);" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}');">${groupSiteList.name}</a>
 															</li>
 														</c:forEach>
 													</ul>

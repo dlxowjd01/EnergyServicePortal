@@ -156,8 +156,8 @@ const dropDownInit = ($selector) => {
 	let button = $selector.find('button'),
 		buttonNm = $selector.find('button').data('name'),
 		ul = $selector.find('ul');
-	// button.html(buttonNm + '<span class="caret"></span>');
-	button.text().replace(/<[^>]+>/g, buttonNm);
+	button.html(buttonNm + '<span class="caret"></span>');
+	//button.text().replace(/<[^>]+>/g, buttonNm);
 	//데이터에 저장된 정보가 있으면 동적 항목이라 보고 초기화
 	if ($.data(document, ul.prop('id'))) {
 		setMakeList(new Array(), ul.prop('id'), {'dataFunction': {}});

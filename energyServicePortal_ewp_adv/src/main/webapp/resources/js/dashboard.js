@@ -22,7 +22,7 @@ let dailyNow = 0;
 /**
  * 대쉬보드 먼슬리 차트 그리기
  */
-const getYearGenData = function () {
+const getYearGenData = async function () {
 	const formData = getSiteMainSchCollection('year');//api에 맞게 수정 필요
 
 	monthlyBefore = 0;
@@ -397,7 +397,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	}
 });
 
-const getDailyGenData = function () {
+const getDailyGenData = async function () {
 	const today = new Date();
 	const lastDay = new Date(today.getFullYear(), today.getMonth() + 2, 0);
 	const formData = getSiteMainSchCollection("month");//api에 맞게 수정 필요
@@ -730,7 +730,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 
 let yesterDayGen = 0;
 let yesterDayFore = 0;
-const getGenDataBySiteYesterday = function () { //3번째 indiv 사업소별 탭
+const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소별 탭
 	const formData = getSiteMainSchCollection('yesterday');
 	const yesterday = new Date();
 	let siteGenArray = new Array(siteList.length).fill(0);
@@ -985,7 +985,6 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 					
 				}
 			},
-			stacking: 'normal'
 		},
 		// borderWidth: 0, /* 보더 0 */
 		// borderColor:'#ccc',
@@ -1059,13 +1058,79 @@ const beforeTodayTotal = function () {
 		}).finally(() => {
 			if(siteList.length == countPromise) {
 				getTodayTotalDetail();
+
+				let siteArray = new Array();
+				siteList.forEach(site => {
+					siteArray.push(site.sid);
+				});
+
+				$.ajax({
+					url: 'http://iderms.enertalk.com:8443/energy/now/sites',
+					type: 'get',
+					async: false,
+					data: {
+						sids: siteArray.join(','),
+						metering_type: '2',
+						interval: 'day'
+					}
+				}).done(function (data, textStatus, jqXHR) {
+					let resultData = data.data;
+					siteList.forEach((site, siteIdx) => {
+						let siteId = site.sid,
+							idx = siteIdx;
+
+						$.map(resultData, function (el, key) {
+							if (siteId == key) {
+								if (isEmpty(el)) {
+									siteList[idx].accumulate = 0;
+								} else {
+									siteList[idx].accumulate = el.energy;
+								}
+							}
+						});
+					});
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					console.error(jqXHR);
+					console.error(textStatus);
+					console.error(errorThrown);
+				});
+
+				siteList.sort(
+					firstBy(function(a, b) {return Number(b['accumulate']) - Number(a['accumulate']);})
+					.thenBy(function(a, b) {return Number(b['capacity']) - Number(a['capacity']);})
+				);
+
+				// siteList.sort(function(a, b) {
+				// 	return Number(b['accumulate']) - Number(a['accumulate']);
+				// })
+
+
 				if (first) {
+					getYearGenData();
+					getDailyGenData();
+					getGenDataBySiteYesterday();
 					searchSiteList();
 				}
 			}
 		});
 	});
 }
+
+const firstBy = (function() {
+	function extend(f) {
+		f.thenBy = tb;
+		return f;
+	}
+
+	function tb(y) {
+		var x = this;
+		return extend(function(a, b) {
+			return x(a, b) || y(a, b);
+		});
+	}
+
+	return extend;
+})();
 
 const beforeTodayTotalPromise = (site) => {
 	return new Promise((resolve, reject) => {
@@ -1106,7 +1171,7 @@ const beforeTodayTotalPromise = (site) => {
 }
 
 
-const getTodayTotalDetail = function () {
+const getTodayTotalDetail = async function () {
 
 	$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(0);
 	$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(0);
@@ -1318,7 +1383,7 @@ let siteListAlarm = false;
 let siteListForeCnt = 0;
 let siteListWeatherCnt = 0;
 let siteListActive = 0;
-const searchSiteList = function () {
+const searchSiteList = async function () {
 	const formData = getSiteMainSchCollection('day');
 	let siteArray = new Array();
 
@@ -1476,9 +1541,9 @@ const searchSiteList = function () {
 			$.map(resultData, function (el, key) {
 				if (siteId == key) {
 					if (isEmpty(el)) {
-						siteList[idx].accumulate = '-';
+						siteList[idx].accumulate = 0;
 					} else {
-						siteList[idx].accumulate = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 0)[0];
+						siteList[idx].accumulate = el.energy;
 					}
 				}
 			});
@@ -1551,7 +1616,7 @@ const setSiteList = function (type) {
 		siteListAlarm = true;
 	}
 
-	if (siteListNow && siteListAlarm && siteListForeCnt == siteList.length && yesterDayGen == siteList.length && siteListActive == siteList.length) {
+	if (siteListNow && siteListAlarm && siteListForeCnt == siteList.length && siteListWeatherCnt == siteList.length && siteListActive == siteList.length) {
 		searchSite();
 	}
 }
@@ -1599,6 +1664,14 @@ const searchSite = function () {
 		}
 	});
 
+	refineList.forEach((site, siteIdx) => {
+		if (site.accumulate == 0) {
+			refineList[siteIdx].accumulate = '-';
+		} else {
+			refineList[siteIdx].accumulate = displayNumberFixedUnit(site.accumulate, 'Wh', 'kWh', 0)[0];
+		}
+	});
+
 	setMakeList(refineList, 'siteList', {'dataFunction': {'align': alignFunc, 'capacity': setUnit}}); //list생성
 
 	if (typeof (geocodeAddress) == 'function') {
@@ -1616,7 +1689,7 @@ const searchSite = function () {
 
 			refineList.forEach((site, idx) => {
 				if (site.latlng != null) {
-					geocodeAddress(site.address, site.sid, site.name);
+					geocodeAddress(site.address, site.sid, site.name, site.latlng);
 				} else {
 					makerObject[site.sid] = new Object();
 				}
