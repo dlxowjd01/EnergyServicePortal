@@ -8693,19 +8693,18 @@ div.di_wrap dl .link a {
 	opacity: 0.6;
 }
 
-.eq_list li button {
+.eq_list li .delete {
 	display: none;
+	float: right;
+	margin-top: -86px;
 	font-size: 0;
-	position: absolute;
-	top: 2px;
-	right: 2px;
 	width: 16px;
 	height: 16px;
 	outline-style: none;
 	border: 0;
 }
 
-.eq_list li:hover button {
+.eq_list li:hover .delete {
 	display: block;
 	background: rgba(53, 58, 83, 0.3) url("../img/btn_close.png") no-repeat center;
 	z-index: 2;
