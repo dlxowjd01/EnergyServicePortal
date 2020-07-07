@@ -87,12 +87,9 @@ public class LoginController {
 			if(userInfoMap.get("auth_type") == null && "".equals(userInfoMap.get("auth_type"))) {
 				model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", locale));
 				return "esp/login/login";
-			} else if("1".equals(userInfoMap.get("auth_type"))) {
+			} else if("1".equals(userInfoMap.get("auth_type")) || "2".equals(userInfoMap.get("auth_type"))) {
 				session.setAttribute(UserUtil.USER_SESSION_ID, userInfoMap);
 				return "redirect:/dashboard/gmain.do";
-			} else if("2".equals(userInfoMap.get("auth_type"))) {
-				session.setAttribute(UserUtil.USER_SESSION_ID, userInfoMap);
-				return "redirect:/dashboard/smain.do";
 			} else {
 				model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", locale));
 				return "esp/login/login";
