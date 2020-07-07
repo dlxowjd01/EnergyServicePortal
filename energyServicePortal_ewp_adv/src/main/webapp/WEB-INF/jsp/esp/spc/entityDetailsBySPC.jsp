@@ -326,10 +326,10 @@
 
 	function downloadFile($selector) {
 		var $selectorTr = $selector.parents('tr'),
-			fieldName = $selectorTr.find('[id$="_fieldName"]').val(),
+			filedName = $selectorTr.find('[id$="_filedName"]').val(),
 			originalName = $selectorTr.find('[id$="_originalName"]').val(),
 			downCount = $selectorTr.find('[id$="_다운로드"]').val();
-		location.href = 'http://iderms.enertalk.com:8443/files/download/' + fieldName + '?oid=' + oid + '&orgFilename=' + originalName;
+		location.href = 'http://iderms.enertalk.com:8443/files/download/' + filedName + '?oid=' + oid + '&orgFilename=' + originalName;
 
 		$selectorTr.find('[id$="_다운로드"]').val(Number(downCount) + 1);
 

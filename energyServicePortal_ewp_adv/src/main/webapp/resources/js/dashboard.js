@@ -1060,9 +1060,51 @@ const beforeTodayTotal = function () {
 			if(siteList.length == countPromise) {
 				getTodayTotalDetail();
 
-				siteList.sort(function(a, b) {
-					return b['capacity'] - a['capacity'];
+				let siteArray = new Array();
+				siteList.forEach(site => {
+					siteArray.push(site.sid);
 				});
+
+				$.ajax({
+					url: 'http://iderms.enertalk.com:8443/energy/now/sites',
+					type: 'get',
+					async: false,
+					data: {
+						sids: siteArray.join(','),
+						metering_type: '2',
+						interval: 'day'
+					}
+				}).done(function (data, textStatus, jqXHR) {
+					let resultData = data.data;
+					siteList.forEach((site, siteIdx) => {
+						let siteId = site.sid,
+							idx = siteIdx;
+
+						$.map(resultData, function (el, key) {
+							if (siteId == key) {
+								if (isEmpty(el)) {
+									siteList[idx].accumulate = 0;
+								} else {
+									siteList[idx].accumulate = el.energy;
+								}
+							}
+						});
+					});
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					console.error(jqXHR);
+					console.error(textStatus);
+					console.error(errorThrown);
+				});
+
+				siteList.sort(
+					firstBy(function(a, b) {return Number(b['accumulate']) - Number(a['accumulate']);})
+					.thenBy(function(a, b) {return Number(b['capacity']) - Number(a['capacity']);})
+				);
+
+				// siteList.sort(function(a, b) {
+				// 	return Number(b['accumulate']) - Number(a['accumulate']);
+				// })
+
 
 				if (first) {
 					getYearGenData();
@@ -1074,6 +1116,22 @@ const beforeTodayTotal = function () {
 		});
 	});
 }
+
+const firstBy = (function() {
+	function extend(f) {
+		f.thenBy = tb;
+		return f;
+	}
+
+	function tb(y) {
+		var x = this;
+		return extend(function(a, b) {
+			return x(a, b) || y(a, b);
+		});
+	}
+
+	return extend;
+})();
 
 const beforeTodayTotalPromise = (site) => {
 	return new Promise((resolve, reject) => {
@@ -1321,7 +1379,6 @@ var pieChart = Highcharts.chart('pie_chart', {
 });
 
 //우측 사이트 리스트 세팅
-let siteListNow = false;
 let siteListAlarm = false;
 let siteListForeCnt = 0;
 let siteListWeatherCnt = 0;
@@ -1330,7 +1387,6 @@ const searchSiteList = async function () {
 	const formData = getSiteMainSchCollection('day');
 	let siteArray = new Array();
 
-	siteListNow = false;
 	siteListAlarm = false;
 	siteListForeCnt = 0;
 	siteListWeatherCnt = 0;
@@ -1466,39 +1522,6 @@ const searchSiteList = async function () {
 		});
 	})
 
-
-	$.ajax({
-		url: 'http://iderms.enertalk.com:8443/energy/now/sites',
-		type: 'get',
-		data: {
-			sids: siteArray.join(','),
-			metering_type: '2',
-			interval: 'day'
-		}
-	}).done(function (data, textStatus, jqXHR) {
-		let resultData = data.data;
-		siteList.forEach((site, siteIdx) => {
-			let siteId = site.sid,
-				idx = siteIdx;
-
-			$.map(resultData, function (el, key) {
-				if (siteId == key) {
-					if (isEmpty(el)) {
-						siteList[idx].accumulate = '-';
-					} else {
-						siteList[idx].accumulate = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 0)[0];
-					}
-				}
-			});
-		});
-	}).fail(function (jqXHR, textStatus, errorThrown) {
-		console.error(jqXHR);
-		console.error(textStatus);
-		console.error(errorThrown);
-	}).always(function (jqXHR, textStatus) {
-		setSiteList('now');
-	});
-
 	$.ajax({
 		url: 'http://iderms.enertalk.com:8443/alarms',
 		type: 'get',
@@ -1547,9 +1570,7 @@ const searchSiteList = async function () {
  * @param type
  */
 const setSiteList = function (type) {
-	if (type == 'now') {
-		siteListNow = true;
-	} else if (type == 'weather') {
+	if (type == 'weather') {
 		siteListWeatherCnt++;
 	} else if (type == 'fore') {
 		siteListForeCnt++;
@@ -1559,7 +1580,7 @@ const setSiteList = function (type) {
 		siteListAlarm = true;
 	}
 
-	if (siteListNow && siteListAlarm && siteListForeCnt == siteList.length && yesterDayGen == siteList.length && siteListActive == siteList.length) {
+	if (siteListAlarm && siteListForeCnt == siteList.length && yesterDayGen == siteList.length && siteListActive == siteList.length) {
 		searchSite();
 	}
 }
@@ -1604,6 +1625,14 @@ const searchSite = function () {
 					}
 				});
 			}
+		}
+	});
+
+	refineList.forEach((site, siteIdx) => {
+		if (site.accumulate == 0) {
+			refineList[siteIdx].accumulate = '-';
+		} else {
+			refineList[siteIdx].accumulate = displayNumberFixedUnit(site.accumulate, 'Wh', 'kWh', 0)[0];
 		}
 	});
 
