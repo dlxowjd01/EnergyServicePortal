@@ -124,9 +124,10 @@ $(function() {
     $(document).on('click','.dbclickopen', function () {
 
         if(typeof(smoothZoom) == 'function') {
-            let idx = $('.dbclickopen').index($(this));
-            let marker = makerArray[idx];
-            if(marker != null) {
+            let idx = $('.dbclickopen').index($(this)),
+                sid = $(this).data('sid');
+            let marker = makerObject[sid];
+            if(!isEmpty(marker)) {
                 map = marker.getMap();
 
                 if($(this).next().find('.di_wrap').css('display') == 'block') {
@@ -151,7 +152,7 @@ $(function() {
             if(((new Date().getTime())-touchtime) < 800) {
                 //double click occurred
                 touchtime = 0;
-                if(href != undefined) {
+                if(!isEmpty(href)) {
                     window.location = $(this).find("a").attr(href);
                 }
             } else {

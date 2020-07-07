@@ -257,7 +257,7 @@
 								</thead>
 								<tbody id="siteList">
 									<!-- [D] 상태별 배경 : 't1' or 't2' 클래스 추가 -->
-									<tr class="dbclickopen flag[INDEX]">
+									<tr class="dbclickopen flag[INDEX]" data-sid="[sid]">
 										<td class="first_td">
 											<%--<span class="status status_err" title="통신이상">통신이상</span>--%>
 											<span class="status status_drv" title="[status]">[status]</span>
@@ -368,7 +368,7 @@
 	const sgid = '<c:out value="${sgid}" escapeXml="false" />';
 	const today = new Date();
 
-	let makerArray = new Array(siteList.length).fill(new Object());
+	let makerObject = new Object();
 
 	let map = new google.maps.Map(document.getElementById('gMainMap'), {
 		mapTypeId: 'satellite',
@@ -415,32 +415,30 @@
 		$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 	}
 
-	const geocodeAddress = (siteAddr, siteId, siteName, i) => {
+	const geocodeAddress = (siteAddr, siteId, siteName) => {
 		var address = siteAddr;
 		geocoder.geocode({'address': address}, function (results, status) {
 			if (status === 'OK') {
-				makerArray[i] = (
-					new google.maps.Marker({
-						map: map,
-						title: siteName,
-						position: results[0].geometry.location,
-						title: siteName
-					})
-				);
+				makerObject[siteId] = new google.maps.Marker({
+										map: map,
+										title: siteName,
+										position: results[0].geometry.location,
+										title: siteName
+									});
 
 				var infowindow = new google.maps.InfoWindow({
 					content: siteName
 				});
-				infowindow.open(map, makerArray[i]);
+				infowindow.open(map, makerObject[siteId]);
 
-				google.maps.event.addListener(makerArray[i], 'click', (function (makerArray, i) {
+				google.maps.event.addListener(makerObject[siteId], 'click', (function (makerArray, siteId) {
 					return function () {
-						infowindow.open(map, makerArray[i]);
+						infowindow.open(map, makerObject[siteId]);
 						var num = i + 1;
 						var str = 'list' + num;
 						list_detail_open(str);
 					}
-				})(makerArray, i));
+				})(makerObject, siteId));
 			} else {
 				map.setCenter({lat: 37.549012, lng: 126.988546});
 			}

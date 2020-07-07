@@ -1610,13 +1610,13 @@ const searchSite = function () {
 		});
 
 		if (refineList.length > 0) {
-			makerArray = new Array(refineList.length).fill(new Object());
+			makerObject = new Object();
 
 			refineList.forEach((site, idx) => {
 				if (site.latlng != null) {
-					geocodeAddress(site.address, site.sid, site.name, idx);
+					geocodeAddress(site.address, site.sid, site.name);
 				} else {
-					makerArray[idx] = null;
+					makerObject[site.sid] = new Object();
 				}
 			});
 		}

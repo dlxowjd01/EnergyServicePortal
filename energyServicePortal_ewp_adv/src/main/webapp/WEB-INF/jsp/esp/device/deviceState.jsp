@@ -599,20 +599,10 @@
 			//배열로 디바이스 상태 수집
 			if (!isEmpty(val)) {
 				val.forEach(el => {
-					let $li = $('<li>'),
-						$a = $('<a>'),
-						capacity = isEmpty(el.capacity) ? '-' : displayNumberFixedUnit(el.capacity, el.capacity_unit, 'kW', 2)[0] + 'kW',
+					let capacity = isEmpty(el.capacity) ? '-' : displayNumberFixedUnit(el.capacity, el.capacity_unit, 'kW', 2)[0] + 'kW',
 						activePower = isEmpty(el.activePower) ? '-' : displayNumberFixedUnit(el.activePower, 'W', 'kW', 2)[0] + 'kW',
 						dcPower = isEmpty(el.dcPower) ? '-' : displayNumberFixedUnit(el.dcPower, 'W', 'kW', 2)[0] + 'kW',
 						operation = el.operation;
-
-					$li.data('dvtype', el.device_type).data('did', el.did).attr('onclick', 'deviceDetailView(\'' + el.did + '\')');
-					$a.attr('href', 'javascript:void(0);');
-					$('<span>').text(el.name).appendTo($li);
-					$('<span>').text(capacity).appendTo($li);
-					$('<em>').text(activePower + '  ' + dcPower).appendTo($li);
-					$('<button>').attr('type', 'button').attr('onclick', 'deviceProcess("delete", "' + el.did + '");').text('삭제').appendTo($li);
-					$a.appendTo($li);
 
 					switch (el.operation) {
 						case 0:
@@ -633,8 +623,13 @@
 							break;
 					}
 
-					$li.addClass(operation);
-					deviceList.append($li);
+					let deviceStr = `<li class="${'${operation}'}" onclick="deviceDetailView('${'${el.did}'}')">
+										<span>${'${el.name}'}</span>
+										<span>${'${capacity}'}</span><em>${'${activePower}'}  ${'${dcPower}'}</em>
+										<button type="button" onclick="deviceProcess('delete', '${'${el.did}'}');" class="delete">삭제</button>
+										<a href="javascript:void(0);"></a>
+									</li>`;
+					deviceList.append(deviceStr);
 				});
 			}
 
