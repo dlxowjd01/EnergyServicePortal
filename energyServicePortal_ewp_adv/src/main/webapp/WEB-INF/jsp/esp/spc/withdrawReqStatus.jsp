@@ -130,7 +130,7 @@
 									} else if (item.status==3 ) {
 										status="승인 완료";
 										status_link="#";
-										link_attr = "disabled text_blue";
+										link_attr = "text_blue";
 									} else {
 										status="-";
 										status_link="-";
@@ -274,9 +274,9 @@
 		$("#reviewSpcName").val(spcName);
 		$("#reviewReqId").val(reqId);
 		$("#reviewAccountInfo").val(accNum);
-
-		// 사무수탁사일 경우:[ 
-		//	{ "???" : 0  , "승인 대기" : 1" => do nothing, "승인 중" : "2" => withdrawReqStatusDetail, "승인완료": "3"
+		console.log("status---", status)
+		// 사무수탁사일 경우
+		// { "???" : 0  , "승인 대기" : 1" => do nothing, "승인 중" : "2" => withdrawReqStatusDetail, "승인완료": "3"
 		$("#reviewDetailForm").submit();
 	}
 

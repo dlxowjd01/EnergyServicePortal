@@ -125,7 +125,7 @@
 </div>
 <div class="row">
 	<div class="col-xl-8 col-lg-7 col-md-6 col-sm-12">
-		<div class="indiv spc_detail">
+		<div class="indiv spc-detail">
 			<div class="flex_wrapper">
 				<h2 class="ntit">출금 요청서</h2>
 				<span class="tx_tit blue_text">상태: 검토중</span>
@@ -180,7 +180,7 @@
 		</div>
 	</div>
 	<div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
-		<div class="indiv spc_detail">
+		<div class="indiv spc-detail">
 			<div class="flex_wrapper">
 				<h2 class="ntit">증빙 서류</h2>
 			</div>
@@ -214,12 +214,12 @@
 					<label for="chk02">사무수탁사 함께 보기</label>
 				</a>
 			</div>
-			<div class="textarea_container mt20">
+			<div class="textarea-container mt20">
 				<button type="button" class="btn_type03 fixed_btn" onclick="tempSave()">저장</button>
 				<textarea placeholder="직접입력" class="textarea w-100"></textarea>
 			</div>
 
-			<div class="btn_group mt20">
+			<div class="spc-btn-group mt20">
 				<button type="button" class="btn_type03 w80">반송</button><button
 					type="button" class="btn_type ml-12">승인</button>
 			</div>
