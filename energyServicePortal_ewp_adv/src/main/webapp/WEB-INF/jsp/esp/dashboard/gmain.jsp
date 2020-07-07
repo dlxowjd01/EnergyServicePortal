@@ -387,10 +387,15 @@
 		setInitList('alarmNotice'); //알람 공지 세팅
 		setInitList('siteList'); //사이트 리스트
 
-		fn_cycle_1hour();
-		fn_cycle_1min();
-		setInterval(() => fn_cycle_1hour(), 60 * 60 * 1000);
-		setInterval(() => fn_cycle_1min(), 60 * 1000);
+		if (!isEmpty(siteList) && siteList.length > 0) {
+			fn_cycle_1hour();
+			fn_cycle_1min();
+			setInterval(() => fn_cycle_1hour(), 60 * 60 * 1000);
+			setInterval(() => fn_cycle_1min(), 60 * 1000);
+		} else {
+			alert('해당 그룹에 등록 된 사이트가 존재하지 않습니다.');
+			return false;
+		}
 	});
 
 	function fn_cycle_1hour() {

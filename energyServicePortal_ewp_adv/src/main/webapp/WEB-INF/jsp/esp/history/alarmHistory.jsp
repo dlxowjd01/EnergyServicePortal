@@ -427,13 +427,14 @@
 				}
 			}
 		});
+
 		if (sidparam != '') {
-			$('#site button').html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + '&nbsp;<span class="caret"></span>');
 			$('#detailterm').prev().html('1일 &nbsp;<span class="caret"></span>');
 			periodData();
 			fetchCharts();
 			$('#search').trigger('click');
 		}
+
 		$('#search').on('click', function () {
 			let period = $('#term').prev().text();
 			let detailperiod = $('#detailterm').prev().text().trim();
@@ -523,7 +524,8 @@
 				}
 			});
 		}
-		
+
+		displayDropdown($('#site'));
 	};
 
 	const deviceTypeList = function (sidparam) {
