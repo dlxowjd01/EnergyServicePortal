@@ -773,7 +773,7 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 			});
 
 			siteGenSum = displayNumberFixedUnit(siteGenSum, 'Wh', 'kWh', 0)[0];
-			siteGenArray[siteIdx] = parseFloat(siteGenSum);
+			siteGenArray[siteIdx] = Number(String(siteGenSum).replace(/[^0-9]/g, ''));
 
 			if (siteGenSum > 0) {
 				siteList[siteIdx].beforeDay = siteGenSum;
@@ -816,7 +816,7 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 			});
 
 			siteForeGenSum = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 0)[0];
-			siteForeGenArray[siteIdx] = parseFloat(siteForeGenSum);
+			siteForeGenArray[siteIdx] = Number(String(siteForeGenSum).replace(/[^0-9]/g, ''));
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
@@ -844,6 +844,7 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 			typeSiteCurrent.series[i].remove();
 		}
 
+		console.log(siteGenArray);
 		let tmepGenArray = new Array();
 		let tempForeArray = new Array();
 		for (var i = 0; i < siteGenArray.length; i++) {
@@ -853,6 +854,7 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 			}
 		}
 
+		console.log(tmepGenArray);
 		typeSiteCurrent.addSeries({
 			name: '발전',
 			color: '#25CCC8',
