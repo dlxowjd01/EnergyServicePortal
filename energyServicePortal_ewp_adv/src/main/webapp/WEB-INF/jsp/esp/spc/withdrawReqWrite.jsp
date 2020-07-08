@@ -163,7 +163,7 @@
 			// from
 			jsonData.withdraw_bank = withdrawList.prev().data("value");
 			jsonData.withdraw_account_no = withdrawList.prev().text();
-			jsonData.withdraw_day = $("#requestedDate").val();
+			jsonData.withdraw_day = $("#requestedDate").val().replace(/-/g, "");
 			// to
 			jsonData.to_account = "";
 			// status
@@ -228,13 +228,13 @@
 					contentType: "application/json",
 					data: JSON.stringify(jsonData)
 				};
-				$.ajax(opt).done(function (json, textStatus, jqXHR) {
-					window.location.href = window.location.origin + '/spc/transactionHistory.do'
-				}).fail(function (jqXHR, textStatus, errorThrown) {
-					alert('처리 중 오류가 발생했습니다.');
-					console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
-					return false;
-				});
+				// $.ajax(opt).done(function (json, textStatus, jqXHR) {
+				// 	window.location.href = window.location.origin + '/spc/transactionHistory.do'
+				// }).fail(function (jqXHR, textStatus, errorThrown) {
+				// 	alert('처리 중 오류가 발생했습니다.');
+				// 	console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
+				// 	return false;
+				// });
 				// getDataList(1,formArr); 
 			} else {
 				// console.log("warning length===", withdrawForm.find(".warning.hidden') )
