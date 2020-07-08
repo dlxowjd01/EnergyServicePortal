@@ -1005,6 +1005,10 @@ table input[type="text"] {
 	width: 25% !important;
 }
 
+.w-33 {
+	width: 33% !important;
+}
+
 .w-35 {
 	width: 35% !important;
 }
@@ -11740,12 +11744,16 @@ table.table-footer tfoot td.light {
 	text-align: left;
 }
 
+.spc-transaction .sort_table .text-link {
+	height: 35px;
+	margin-top: -18px;
+}
+
 .spc-transaction .sort_table .icon-delete {
-	float: left;
 	width: 13px;
 	height: 13px;
-	margin: 16px 10px 0;
-	background: var(--btn-close-svg) no-repeat;
+	margin: -5px 0 0 8px;
+	background: var(--btn-close-svg) no-repeat center;
 	background-size: 15px 15px;
 }
 

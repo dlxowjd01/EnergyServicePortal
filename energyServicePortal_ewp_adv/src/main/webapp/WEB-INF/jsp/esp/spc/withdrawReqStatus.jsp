@@ -209,7 +209,7 @@
 			}
 
 			for (let i = startPage ; i <= endPage; i++) {
-				console.log("i===", i)
+				// console.log("i===", i)
 				if (i==page) {
 					pageStr += '<a href="javascript:getDataList('+i+');"><strong>'+i+'</strong></a>';
 				} else {
@@ -241,7 +241,7 @@
 		}
 
 		$('.sort_table th button').on("click", function(){
-			console.log("sorting---")
+			// console.log("sorting---")
 			var table = $(this).parents('.sort_table.transaction-table');
 			var rows = table.find('#tableBody tr').toArray().sort(comparer($(this).index()))
 			this.asc = !this.asc
@@ -295,9 +295,8 @@
 				data: JSON.stringify(newData)
 			};
 			$.ajax(opt).done(function (json, textStatus, jqXHR) {
-				console.log("success===");
 				$("#reviewDetailForm").submit();
-				
+
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				$("#warningModal .modal-title").text('처리 중 오류가 발생했습니다.');
 				$("#warningModal").modal("show");
@@ -319,11 +318,6 @@
 	<input type="hidden" id="reviewAccountInfo" name="review_acc_info" value=''/>
 	<input type="hidden" id="reviewStatus" name="review_status" value=''/>
 	<input type="hidden" id="reviewStatusVal" name="review_status_val" value=''/>
-	<!-- <input type="hidden" id="reqDate" name="req_date" value=''/>
-	<input type="hidden" id="reqAmount" name="req_amount" value=''/>
-	<input type="hidden" id="accountNum" name="account_num" value=''/>
-	<input type="hidden" id="reqNote" name="req_note" value=''/> -->
-	<!-- <button id="forwardDetailBtn" type="submit" class="hidden"></button> -->
 </form>
 
 <div class="row header-wrapper">

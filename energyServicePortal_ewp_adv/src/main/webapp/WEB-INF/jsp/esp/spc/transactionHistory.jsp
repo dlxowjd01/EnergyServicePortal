@@ -25,6 +25,7 @@
 
 		$('#fromDate').datepicker('setDate', 'today');
 		$('#toDate').datepicker('setDate', 'today');
+		// $('#toDate').datepicker( "option", "maxDate", new Date());
 
 		$('#unitOpt').find("li").on('click', function () {
 			$('#toDate').datepicker('setDate', 'today')
@@ -52,6 +53,7 @@
 
 		searchForm.on('submit', function(e){
 			e.preventDefault();
+			let page = 1;
 			let formArr = [];
 
 			let spcOpts = $('#spcList').find("input:checked");
@@ -66,22 +68,27 @@
 			let warning = $('.warning');
 
 			let selectedSpc = [];
+
 			spcOpts.each(function(){
 				selectedSpc.push($(this).data("value"));
 			});
 
 			let selectedPurpose= [];
 			spcPurpose.each(function(){
-				selectedPurpose.push($(this).data("name"));
+				selectedPurpose.push($(this).data("value"));
 			});
 
 			let selectedStatus = [];
+			selectedStatus.length == 0;
 			spcStatus.each(function(){
 				selectedStatus.push($(this).data("value"));
 			});
+			let newStartDate = fromDate.val().replace(/-/g, '');
+			let newEndDate = toDate.val().replace(/-/g, '');
 
 			warning.addClass('hidden');
-			formArr.push(selectedSpc.toString(), fromDate.val(), toDate.val(), selectedStatus.toString(), transactionType.data("value"), selectedPurpose.toString());
+			formArr.length == 0;
+			formArr.push(selectedSpc.toString(), newStartDate, newEndDate, selectedStatus.toString(), transactionType.data("value"), selectedPurpose.toString());
 
 			$.each(formArr, function(index, value){
 				if(value ==  undefined ||  value == "선택" || value == "" ) {
@@ -90,10 +97,8 @@
 					warning.eq(index).addClass('hidden');
 				}
 			});
-			// console.log("data---", formArr)
 			if(searchForm.find('.warning.hidden').length == formArr.length){
-				getDataList(1,selectedSpc);
-				console.log("length equal===")
+				getDataList(page,formArr);
 			} else {
 				return false;
 			}
@@ -102,7 +107,7 @@
 		function getSpcList() {
 			const spcList = $('#spcList');
 			const cloned = spcList.clone().html();
-
+			let page = 1;
 			let action = 'get';
 			let syncOpt = true;
 			let option = {
@@ -112,6 +117,7 @@
 			}
 			$.ajax(option).done(function (json, callBack, param) {
 				let spcArr = [];
+				let searchArr = [];
 				spcList.empty();
 				json.data.unshift({"spc_id": "allSelect", "name": "전체"});
 				json.data.forEach((item, index) => {
@@ -134,13 +140,318 @@
 				spcArr.shift();
 				selectAll($("#spcList"));
 				setDropdownValue(spcList.find("li"));
-				getDataList(1, spcArr)
+				searchArr.push(spcArr.toString())
+				getDataList(page, searchArr)
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				alert('처리 중 오류가 발생했습니다.');
 				return false;
 			});
 		}
 
+		// const filtering = (predicate) => (reducing) => (acc, input) => (predicate(input) ? reducing(acc, input): acc)
+		
+		function getDataList(page, arr) {
+			page == undefined ? page = 1 : page = page;
+			console.log("arr---", arr)
+			if(!isEmpty(arr[0])) {
+				var sortList = [];
+				var totalPage = 0;
+				let action = 'get';
+				let syncOpt = true;
+				let option = {};
+				if(arr.length>1){
+					option= {
+						url: 'http://iderms.enertalk.com:8443/spcs/transactions',
+						type: action,
+						data: {
+							'oid' : oid,
+							'spcIds' : arr[0],
+							'startDay' : arr[1],
+							'endDay' : arr[2]
+						},
+						async: syncOpt
+					}
+				} else {
+					option= {
+						url: 'http://iderms.enertalk.com:8443/spcs/transactions',
+						type: action,
+						data: {
+							'oid' : oid,
+							'spcIds' : arr[0]
+						},
+						async: syncOpt
+					}
+				}
+
+				$.ajax(option).done(function (json, textStatus, jqXHR) {
+					$('#searchOption').removeClass('in');
+					tableList.empty();
+					if (json.data.length > 0) {
+						if(arr.length>1){
+							let statusOpt = [...arr[3].split(",")];
+							let newData = json.data.filter(x => {
+								return statusOpt.indexOf(x.status.toString()) > -1
+							});
+							ajaxCallback(newData, arr);
+						} else {
+							ajaxCallback(json.data);
+						}
+
+						// newData.map(item => {
+						// 	console.log("newData---", item.status)
+						// 	return new Promise((resolve, reject) => {
+						// 		// typeof v.to_account !== "string" ? JSON.parse(v.to_account) : v.to_account = v.to_account	
+						// 			resolve(JSON.parse(item.to_account))
+						// 		}).then(res => {
+						// 			let popObj = Object.assign({}, item);
+						// 			// console.log("statusOpt==", statusOpt)
+						// 			delete(popObj.to_account);
+
+						// 			const spcMatch = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
+
+						// 			let str = '';
+						// 			let transaction_spc_id = '';
+						// 			let transaction_req_id = '';
+						// 			let transaction_spc_name = ''
+						// 			transaction_spc_name = spcInfoArr[spcMatch].spc_name;
+						// 			let withdraw_day = popObj.withdraw_day.substring(0, 4) + '-' + popObj.withdraw_day.substring(4, 6) + '-' + popObj.withdraw_day.substring(6, 8);
+						// 			let withdraw_account_info = '';
+						// 			withdraw_account_info = item.withdraw_bank+item.withdraw_account_no;
+
+						// 			let transaction_type = '';
+						// 			res.length > 0 ? ( res.length ==1 ? ( transaction_type = '출금' ) : ( transaction_type = '출금 외 +'+ (res.length-1) + '건' ) ): ( transaction_type = '-' );
+						// 			let amount = '';
+						// 			let updated_at = ''
+						// 			let requested_by = '';
+						// 			let approved_by = '';
+						// 			let status_changed_by = '';
+						// 			// status
+						// 			let status = '';
+						// 			let status_val = '';
+
+
+						// 			let edit_icons = '';
+						// 			let link_attr = '';
+						// 			let purposeList = [
+						// 				{ label: "출금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
+						// 				{ label: "입금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대 수선비", "배당금 적림", "일반 지출" ]},
+						// 			];
+						// 			let account_type_list = [  "전력 판매대금", "REC 판매대금", "관리 운영비", "일반 렌탈", "전력중개 수수료", "전기 요금", "원리금" ];
+						// 			let purpose = '';
+
+						// 			const p = [];
+						// 			let size = '';
+
+						// 			for(let i=0; i<res.length; i++){
+						// 				p.push(res[i].purpose);
+						// 			}
+						// 			let uniqSet = new Set(p);
+						// 			if( uniqSet.size === 0 ) {
+						// 				purpose = '-'
+						// 			} else if( uniqSet.size == 1 ) {
+						// 			purpose = ( purposeList[0].value[p[0]] )
+						// 			} else {
+						// 				purpose = ( purposeList[0].value[p[0]] ) + ' 외 +' + ( uniqSet.size - 1 ) + '건';
+						// 			}
+						// 			transaction_spc_id = popObj.spc_id;
+						// 			transaction_req_id = popObj.request_id;
+						// 			console.log("popObj---", popObj.status)
+						// 			if(popObj.status == 0) {
+						// 				status="반송"
+						// 				status_val = "0"
+						// 				edit_icons = "show";
+						// 				link_attr = "text-link";
+						// 			} else if(popObj.status == 1) {
+						// 				status="승인 대기"
+						// 				status_val = "1"
+						// 				edit_icons = "show";
+						// 				link_attr = "text-link";
+						// 			} else if (popObj.status == 2) {
+						// 				status="승인 중"
+						// 				status_val = "2"
+						// 				link_attr = "text-link";
+						// 				edit_icons = "hidden";
+						// 			} else if(popObj.status == 3) {
+						// 				status="승인 완료"
+						// 				status_val = "3"
+						// 				edit_icons = "hidden";
+						// 				link_attr = "text-blue";
+						// 			}
+						// 			popObj.total_amount ? ( amount = popObj.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원' ) : amount = '-';
+
+						// 			( ( popObj.requested_by !== undefined ) && ( popObj.requested_by != "string" ) ) ? ( requested_by = popObj.requested_by ) : ( requested_by = '-' );
+
+						// 			popObj.status_changed_at ? ( updated_at = (popObj.status_changed_at.substring(0, 10) + ' ' + popObj.status_changed_at.substring(11, 19)) ) : ( updated_at = '-' );
+
+						// 			popObj.status_changed_by ? ( approved_by = popObj.status_changed_by ) : ( approved_by = '-' );
+
+
+						// 			// res.to_account_bank.locale
+						// 			str = tableCloned.replace(/\*transactionSpcId\*/g, transaction_spc_id)
+						// 				.replace(/\*transactionSpcName\*/g, transaction_spc_name)
+						// 				.replace(/\*transactionReqId\*/g, transaction_req_id)
+						// 				.replace(/\*withdrawDay\*/g, withdraw_day)
+						// 				.replace(/\*withdrawAccountInfo\*/g, withdraw_account_info)
+						// 				.replace(/\*transactionType\*/g, transaction_type)
+						// 				.replace(/\*purpose\*/g, purpose)
+						// 				.replace(/\*accountType\*/g, account_type_list[res.length])
+						// 				.replace(/\*amount\*/g, amount)
+						// 				.replace(/\*updatedAt\*/g, updated_at)
+						// 				.replace(/\*requestedBy\*/g, requested_by)
+						// 				.replace(/\*approvedBy\*/g, approved_by)
+						// 				.replace(/\*status\*/g, status)
+						// 				.replace(/\*statusVal\*/g, status_val)
+						// 				.replace(/\*linkAttr\*/g, link_attr).replace(/\*editIcons\*/g, edit_icons)
+						// 				.replace(/\*statusChangedBy\*/g, status_changed_by)
+						// 			tableList.append($(str));
+						// 	}).catch(error => {
+						// 			console.log(error);
+						// 		}).finally(() => {
+						// 		});
+							// });
+
+						// const accountMatch = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
+						// const purposeMatch = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
+					}
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					alert('처리 중 오류가 발생했습니다.');
+					return false;
+				});
+			} else {
+				$("#warningModal .modal-title").text("검색된 SPC 가 없습니다. 페이지를 다시 로딩해 주세요.");
+				$("#warningModal").modal("show");
+			}
+		}
+
+		function ajaxCallback (newData, arr) {
+
+			newData.map(item => {
+				if(!isEmpty(arr)) {
+					item.opt = arr;	
+				}
+				return new Promise((resolve, reject) => {
+					// typeof v.to_account !== "string" ? JSON.parse(v.to_account) : v.to_account = v.to_account	
+						resolve(JSON.parse(item.to_account))
+					}).then(res => {
+						let popObj = Object.assign({}, item);
+						// console.log("statusOpt==", statusOpt)
+						delete(popObj.to_account);
+
+						const spcMatch = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
+
+						let str = '';
+						let transaction_spc_id = '';
+						let transaction_req_id = '';
+						let transaction_spc_name = ''
+						transaction_spc_name = spcInfoArr[spcMatch].spc_name;
+						let withdraw_day = popObj.withdraw_day.substring(0, 4) + '-' + popObj.withdraw_day.substring(4, 6) + '-' + popObj.withdraw_day.substring(6, 8);
+						let withdraw_account_info = '';
+						withdraw_account_info = item.withdraw_bank+item.withdraw_account_no;
+
+						let transaction_type = '';
+						res.length > 0 ? ( res.length ==1 ? ( transaction_type = '출금' ) : ( transaction_type = '출금 '+ (res.length) + '건' ) ): ( transaction_type = '-' );
+						let amount = '';
+						let updated_at = ''
+						let requested_by = '';
+						let approved_by = '';
+						let status_changed_by = '';
+						// status
+						let status = '';
+						let status_val = '';
+
+
+						let edit_icons = '';
+						let link_attr = '';
+						let purposeList = [
+							{ label: "출금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
+							{ label: "입금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대 수선비", "배당금 적림", "일반 지출" ]},
+						];
+						let account_type_list = [ "전력 판매대금", "REC 판매대금", "관리 운영비", "일반 렌탈", "전력중개 수수료", "전기 요금", "원리금" ];
+						let purpose = '';
+
+						const p = [];
+						let size = '';
+
+						for(let i=0; i<res.length; i++){
+							p.push(res[i].purpose);
+						}
+
+						if(!isEmpty(item.opt)){
+							let acc = [...item.opt[5].split(',')];
+							res.filter(x => {
+								let match = acc.indexOf(x.purpose.toString()) > -1;
+								console.log("x===", x)
+								return acc.indexOf(x.purpose.toString()) > -1;
+							});
+							// statusOpt.indexOf(x.status.toString()) > -1
+
+							// console.log("res===", res)
+						}
+						// console.log("res===", res)
+						let uniqSet = new Set(p);
+						if( uniqSet.size === 0 ) {
+							purpose = '-'
+						} else if( uniqSet.size == 1 ) {
+						purpose = ( purposeList[0].value[p[0]] )
+						} else {
+							purpose = ( purposeList[0].value[p[0]] ) + ' 외 +' + ( uniqSet.size - 1 ) + '건';
+						}
+						transaction_spc_id = popObj.spc_id;
+						transaction_req_id = popObj.request_id;
+						if(popObj.status == 0) {
+							status="반송"
+							status_val = "0"
+							edit_icons = "show";
+							link_attr = "text-link";
+						} else if(popObj.status == 1) {
+							status="승인 대기"
+							status_val = "1"
+							edit_icons = "show";
+							link_attr = "text-link";
+						} else if (popObj.status == 2) {
+							status="승인 중"
+							status_val = "2"
+							link_attr = "text-link";
+							edit_icons = "hidden";
+						} else if(popObj.status == 3) {
+							status="승인 완료"
+							status_val = "3"
+							edit_icons = "hidden";
+							link_attr = "text-blue";
+						}
+						popObj.total_amount ? ( amount = popObj.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원' ) : amount = '-';
+
+						( ( popObj.requested_by !== undefined ) && ( popObj.requested_by != "string" ) ) ? ( requested_by = popObj.requested_by ) : ( requested_by = '-' );
+
+						popObj.status_changed_at ? ( updated_at = (popObj.status_changed_at.substring(0, 10) + ' ' + popObj.status_changed_at.substring(11, 19)) ) : ( updated_at = '-' );
+
+						popObj.status_changed_by ? ( approved_by = popObj.status_changed_by ) : ( approved_by = '-' );
+
+
+						// res.to_account_bank.locale
+						str = tableCloned.replace(/\*transactionSpcId\*/g, transaction_spc_id)
+							.replace(/\*transactionSpcName\*/g, transaction_spc_name)
+							.replace(/\*transactionReqId\*/g, transaction_req_id)
+							.replace(/\*withdrawDay\*/g, withdraw_day)
+							.replace(/\*withdrawAccountInfo\*/g, withdraw_account_info)
+							.replace(/\*transactionType\*/g, transaction_type)
+							.replace(/\*purpose\*/g, purpose)
+							.replace(/\*accountType\*/g, account_type_list[res.length])
+							.replace(/\*amount\*/g, amount)
+							.replace(/\*updatedAt\*/g, updated_at)
+							.replace(/\*requestedBy\*/g, requested_by)
+							.replace(/\*approvedBy\*/g, approved_by)
+							.replace(/\*status\*/g, status)
+							.replace(/\*statusVal\*/g, status_val)
+							.replace(/\*linkAttr\*/g, link_attr).replace(/\*editIcons\*/g, edit_icons)
+							.replace(/\*statusChangedBy\*/g, status_changed_by)
+						tableList.append($(str));
+				}).catch(error => {
+						console.log(error);
+				}).finally(() => {
+				});
+			});
+		}
 		// function nvl(value, str) {
 		// 	if (isEmpty(value)) {
 		// 		return str;
@@ -177,153 +488,13 @@
 				return seen.has(k) ? false : seen.add(k);
 			});
 		}
+		
 		function remove_duplicates_es6(arr) {
 			let s = new Set(arr);
 			let it = s.values();
 			return Array.from(it);
 		}
 
-		function getDataList(page, spcId) {
-			console.log("getDAtalist----", spcId)
-			page == undefined ? page = 1 : page = page;
-			spcId == undefined ? null : spcId = spcId.toString();
-			var sortList = [];
-			var totalPage = 0;
-			let action = 'get';
-			let syncOpt = true;
-			let option= {
-				url: 'http://iderms.enertalk.com:8443/spcs/transactions',
-				type: action,
-				data: {
-					'oid' : oid,
-					'spcIds' : spcId
-				},
-				async: syncOpt
-			}
-
-			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				$('#searchOption').removeClass('in');
-				tableList.empty();
-				if (json.data.length > 0) {
-					let data = json.data;
-					// object shallow copy below  =>  data.map(item => {item.to_account = '' }); 
-					json.data.map(item => {
-						console.log("item===", item)
-						return new Promise((resolve, reject) => {
-							// typeof v.to_account !== "string" ? JSON.parse(v.to_account) : v.to_account = v.to_account
-								resolve(JSON.parse(item.to_account))
-							}).then(res => {
-								let popObj = Object.assign({}, item);
-								delete(popObj.to_account);
-								const found = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
-								
-								let str = '';
-								
-								let transaction_spc_id = '';
-								let transaction_req_id = '';
-								let transaction_spc_name = ''
-								transaction_spc_name = spcInfoArr[found].spc_name;
-								let withdraw_day = popObj.withdraw_day.substring(0, 10) + ' ' + popObj.withdraw_day.substring(11, 19);
-								let withdraw_account_info = '';
-								withdraw_account_info = item.withdraw_bank+item.withdraw_account_no;
-
-								let transaction_type = '';
-								res.length > 0 ? ( res.length ==1 ? ( transaction_type = '출금' ) : ( transaction_type = '출금 외 +'+ (res.length-1) + '건' ) ): ( transaction_type = '-' );
-								let amount = '';
-								let updated_at = ''
-								let requested_by = '';
-								let approved_by = '';
-								let status_changed_by = '';
-								// status
-								let status = '';
-								let status_val = '';
-								let edit_icons = '';
-								let link_attr = '';
-								let purposeList = [
-									{ label: "출금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
-									{ label: "입금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대 수선비", "배당금 적림", "일반 지출" ]},
-								];
-								let account_type_list = [  "전력 판매대금", "REC 판매대금", "관리 운영비", "일반 렌탈", "전력중개 수수료", "전기 요금", "원리금" ];
-								let purpose = '';
-
-								const p = [];
-								let size = '';
-
-								for(let i=0; i<res.length; i++){
-									p.push(res[i].purpose);
-								}
-								let uniqSet = new Set(p);
-								if( uniqSet.size === 0 ) {
-									purpose = '-'
-								} else if( uniqSet.size == 1 ) {
-								purpose = ( purposeList[0].value[p[0]] )
-								} else {
-									purpose = ( purposeList[0].value[p[0]] ) + '건 외  ' + ( uniqSet.size - 1 ) + '건';
-								}
-								transaction_spc_id = popObj.spc_id;
-								transaction_req_id = popObj.request_id;
-								if(popObj.status == 0) {
-									status="반송"
-									status_val = "0"
-									edit_icons = "show";
-									link_attr = "text-link";
-								} else if(popObj.status == 1) {
-									status="승인 대기"
-									status_val = "1"
-									edit_icons = "show";
-									link_attr = "text-link";
-								} else if (popObj.status == 2) {
-									status="승인 중"
-									status_val = "2"
-									link_attr = "text-link";
-									edit_icons = "hidden";
-								} else if(popObj.status == 3) {
-									status="승인 완료"
-									status_val = "3"
-									edit_icons = "hidden";
-									link_attr = "text-blue";
-								}
-								popObj.total_amount ? ( amount = popObj.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원' ) : amount = '-';
-
-								( ( popObj.requested_by !== undefined ) && ( popObj.requested_by != "string" ) ) ? ( requested_by = popObj.requested_by ) : ( requested_by = '-' );
-
-								popObj.status_changed_at ? ( updated_at = (popObj.status_changed_at.substring(0, 10) + ' ' + popObj.status_changed_at.substring(11, 19)) ) : ( updated_at = '-' );
-
-								popObj.status_changed_by ? ( approved_by = popObj.status_changed_by ) : ( approved_by = '-' );
-
-
-								// res.to_account_bank.locale
-								str = tableCloned.replace(/\*transactionSpcId\*/g, transaction_spc_id)
-									.replace(/\*transactionSpcName\*/g, transaction_spc_name)
-									.replace(/\*transactionReqId\*/g, transaction_req_id)
-									.replace(/\*withdrawDay\*/g, withdraw_day)
-									.replace(/\*withdrawAccountInfo\*/g, withdraw_account_info)
-									.replace(/\*transactionType\*/g, transaction_type)
-									.replace(/\*purpose\*/g, purpose)
-									.replace(/\*accountType\*/g, account_type_list[res.length])
-									.replace(/\*amount\*/g, amount)
-									.replace(/\*updatedAt\*/g, updated_at)
-									.replace(/\*requestedBy\*/g, requested_by)
-									.replace(/\*approvedBy\*/g, approved_by)
-									.replace(/\*status\*/g, status)
-									.replace(/\*statusVal\*/g, status_val)
-									.replace(/\*linkAttr\*/g, link_attr).replace(/\*editIcons\*/g, edit_icons)
-									.replace(/\*statusChangedBy\*/g, status_changed_by)
-								tableList.append($(str));
-						}).catch(error => {
-							console.log(error);
-						}).finally(() => {
-						});
-					});
-				} else {
-					return false;
-				}
-				totalPage = Math.ceil(sortList.length/pagePerData);
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				alert('처리 중 오류가 발생했습니다.');
-				return false;
-			});
-		}
 
 		function makeNavigation (page, totalPage) {
 			$('#paging').empty();
@@ -356,6 +527,8 @@
 			}
 			$('#paging').append(pageStr);
 		}
+
+
 
 		function getNumberIndex(index) {
 			return index + 1;
@@ -479,22 +652,30 @@
 				<button type='button' id='collapseBtn' class='btn btn-primary dropdown-toggle no_bg w-100 ml-24' data-toggle='collapse' data-target='#searchOption'>상세 조건<span class='caret'></span></button>
 				<ul id='searchOption' class='collapse dropdown-menu unused'>
 					<li>
-						<div class='bx_row aN2'>
-							<h2 class='comp_tit'>조회 기간</h2>
-							<div class='bx_align dropdown'>
-								<input type='text' id='fromDate' name='fromDate' class='sel fromDate' value='' autocomplete='off' placeholder='시작'>
-								<small class="hidden warning">선택해 주세요.</small>
+						<div class='bx_row aN3'>
+							<h2 class='comp_tit'>입출금 조회 기간</h2>
+							<div class='bx_align mr-30 dropdown'>
+								<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="" value="">선택<span class='caret'></span></button>
+								<ul id="unitOpt" class='dropdown-menu dropdown_offset' role='menu'>
+									<li data-value="yearly"><a href='javascript:void(0)' tabindex='-1'>년</a></li>
+									<li data-value="monthly"><a href='javascript:void(0)' tabindex='-1'>월</a></li>
+									<li data-value="daily"><a href='javascript:void(0)' tabindex='-1'>일</a></li>
+								</ul>
 							</div>
-							<div class='bx_align dropdown'>
-								<input type='text' id='toDate' name='toDate' class='sel toDate' value='' autocomplete='off' placeholder='종료'>
+							<div class='w-33 dropdown'>
+								<input type='text' id='fromDate' name='fromDate' class='sel fromDate w-100' value='' autocomplete='off' placeholder='시작'>
+								<small class="hidden warning">선택해 주세요.</small>
+							</div><!--
+						--><div class='w-33 ml-12 dropdown'>
+								<input type='text' id='toDate' name='toDate' class='sel toDate w-100' value='' autocomplete='off' placeholder='종료'>
 								<small class="hidden warning">선택해 주세요.</small>
 							</div>
 						</div>
 					</li>
 					<li>
-						<div class='bx_row aN2'>
-							<h2 class='comp_tit'>상태</h2>
+						<div class='bx_row aN3'>
 							<div class='bx_align dropdown'>
+								<h2 class='comp_tit'>상태</h2>
 								<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택" value="">선택<span class='caret'></span></button>
 								<ul id="spcStatus" class='dropdown-menu chk_type dropdown_offset' role='menu'>
 									<li>
@@ -522,28 +703,14 @@
 										</a>
 									</li>
 									<li>
-										<a href='javascript:void(0)' tabindex='-1' data-value='0'>
-											<input type='checkbox' id='rejected' value='' name='approvalStatus'>
-											<label for='inProgress'>반송</label>
+										<a href='javascript:void(0)' tabindex='-1'>
+											<input type='checkbox' id='rejected' value='' data-value='0' name='approvalStatus'>
+											<label for='rejected'>반송</label>
 										</a>
 									</li>
 								</ul>
 								<small class="hidden warning">선택해 주세요.</small>
 							</div>
-						</div>
-					</li>
-					<li>
-						<div class='bx_row aN3'>
-							<div class='bx_align dropdown'>
-								<h2 class='comp_tit'>단위</h2>
-								<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="" value="">선택<span class='caret'></span></button>
-								<ul id="unitOpt" class='dropdown-menu dropdown_offset' role='menu'>
-									<li data-value="yearly"><a href='javascript:void(0)' tabindex='-1'>년</a></li>
-									<li data-value="monthly"><a href='javascript:void(0)' tabindex='-1'>월</a></li>
-									<li data-value="daily"><a href='javascript:void(0)' tabindex='-1'>일</a></li>
-								</ul>
-							</div>
-
 							<div class='bx_align dropdown'>
 								<h2 class='comp_tit'>입출금 구분</h2>
 								<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' value="">선택<span class='caret'></span></button>
@@ -560,50 +727,44 @@
 									<ul id="spcPurposeList" class='dropdown-menu chk_type dropdown_offset' role='menu'>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='allPurpose' data-value='0' data-name="전체" name='spcPurpose'>
+												<input type='checkbox' id='allPurpose' data-value='10' data-name="전체" name='spcPurpose'>
 												<label for='allPurpose'>전체</label>
 											</a>
 										</li>
 										<li>
 											<a href='javascript:void(0)'tabindex='-1'>
-												<input type='checkbox' id='electricitySalesPrice' data-value='1' data-name="전력판매대금" name='spcPurpose'>
-												<label for='electricitySalesPrice'>전력판매대금</label>
+												<input type='checkbox' id='electricitySalesPrice' data-value='0' data-name="REC 수익" name='spcPurpose'>
+												<label for='electricitySalesPrice'>REC 수익</label>
 											</a>
 										</li>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='rfcSalesPrice' data-value='2' data-name="RFC판매대금" name='spcPurpose'>
-												<label for='rfcSalesPrice'>RFC 판매대금</label>
+												<input type='checkbox' id='rfcSalesPrice' data-value='1' data-name="SMP 수익" name='spcPurpose'>
+												<label for='rfcSalesPrice'>SMP 수익</label>
 											</a>
 										</li>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='operationFee' data-value='3' data-name="관리운영비" name='spcPurpose'>
-												<label for='operationFee'>관리운영비</label>
+												<input type='checkbox' id='operationFee' data-value='2' data-name="DSRA 적립" name='spcPurpose'>
+												<label for='operationFee'>DSRA 적립</label>
 											</a>
 										</li>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='rentalFee' data-value='4' data-name="일반렌탈" name='spcPurpose'>
-												<label for='rentalFee'>일반 렌탈</label>
+												<input type='checkbox' id='rentalFee' data-value='3' data-name="기타" name='spcPurpose'>
+												<label for='rentalFee'>기타</label>
 											</a>
 										</li>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='commissionFee' data-value='5' data-name="전력중개수수료" name='spcPurpose'>
-												<label for='commissionFee'>전력 중개 수수료</label>
+												<input type='checkbox' id='commissionFee' data-value='4' data-name="유보 계좌" name='spcPurpose'>
+												<label for='commissionFee'>유보 계좌</label>
 											</a>
 										</li>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='electricityBill' data-value='6' data-name="전기요금" name='spcPurpose'>
-												<label for='electricityBill'>전기 요금</label>
-											</a>
-										</li>
-										<li>
-											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='principalCap' data-value='7' data-name="원리금" name='spcPurpose'>
-												<label for='principalCap'>원리금</label>
+												<input type='checkbox' id='electricityBill' data-value='5' data-name="운영 계좌" name='spcPurpose'>
+												<label for='electricityBill'>운영 계좌</label>
 											</a>
 										</li>
 									</ul>
@@ -643,7 +804,7 @@
 					</colgroup>
 					<thead>
 						<tr>
-							<th><button class='btn_align down'>출금 일자</button></th>
+							<th><button class='btn_align down'>입출금 일자</button></th>
 							<th><button class='btn_align down'>입출금 구분</button></th>
 							<th><button class='btn_align down'>용도 구분</button></th>
 							<th><button class='btn_align down'>계좌 구분</button></th>
@@ -667,9 +828,10 @@
 								<td>*requestedBy*</td>
 								<td>*approvedBy*</td>
 								<td class='left' data-id="*transactionSpcId*" data-name="*transactionSpcName*" data-value="*statusVal*"><!--
-								--><a href="javascript:void(0);" class="*linkAttr*" data-value="*withdrawAccountInfo*" data-id="*transactionReqId*" onclick="goToDetail($(this))">*status*</a><!--
-								--><a href="javascript:void(0);" onclick="deleteRow(this)" class='icon_delete *editIcons*'></a></span><!--
-							--></td>
+								--><div class="flex_start"><a href="javascript:void(0);" class="*linkAttr*" data-value="*withdrawAccountInfo*" data-id="*transactionReqId*" onclick="goToDetail($(this))">*status*</a><!--
+									--><a href="javascript:void(0);" onclick="deleteRow(this)" class='icon-delete *editIcons*'></a><!--
+								--></div>
+								</td>
 							</tr>
 						</template>
 					</tbody>

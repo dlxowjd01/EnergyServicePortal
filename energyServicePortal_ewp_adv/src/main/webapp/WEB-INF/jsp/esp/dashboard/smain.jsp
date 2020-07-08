@@ -2021,16 +2021,12 @@
 			});
 
 			//데이터 세팅
-			let alarmList = new Array();
 			data.forEach((element, index) => {
-				if(element.level != 0) {
-					let localTime = (element.localtime != null && element.localtime != '') ? String(element.localtime) : '';
-					data[index].standardTime = localTime.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
-					alarmList.push(element);
-				}
+				let localTime = (element.localtime != null && element.localtime != '') ? String(element.localtime) : '';
+				data[index].standardTime = localTime.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
 			});
 
-			setMakeList(alarmList, 'alarmNotice', {'dataFunction': {}}); //list생성
+			setMakeList(data, 'alarmNotice', {'dataFunction': {}}); //list생성
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);

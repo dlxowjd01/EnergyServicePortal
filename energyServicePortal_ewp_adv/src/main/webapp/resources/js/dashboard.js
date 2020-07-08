@@ -773,8 +773,12 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 			});
 
 			siteGenSum = displayNumberFixedUnit(siteGenSum, 'Wh', 'kWh', 0)[0];
-			siteGenArray[siteIdx] = Number(String(siteGenSum).replace(/[^0-9]/g, ''));
-
+			// siteGenArray[siteIdx] = parseFloat(siteGenSum);
+			console.log('siteGenSum===', siteGenSum)
+			let newVal = siteGenSum.toString();
+			newVal = newVal.replace(/,/g, '');
+			siteGenArray[siteIdx] = parseFloat(Number(newVal));
+			siteGenSum = newVal;
 			if (siteGenSum > 0) {
 				siteList[siteIdx].beforeDay = siteGenSum;
 			} else {
@@ -816,7 +820,10 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 			});
 
 			siteForeGenSum = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 0)[0];
-			siteForeGenArray[siteIdx] = Number(String(siteForeGenSum).replace(/[^0-9]/g, ''));
+			let newVal = siteForeGenSum.toString();
+			newVal = newVal.replace(/,/g, '');
+			siteForeGenArray[siteIdx] = parseFloat(Number(newVal));
+
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
@@ -831,7 +838,7 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 }
 
 const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray, categories) {
-
+	// console.log("inner func----", siteGenArray) 
 	if (type == 'energy') {
 		yesterDayGen++;
 	} else {
@@ -840,25 +847,15 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 
 	if (yesterDayGen == siteList.length && yesterDayFore == siteList.length) {
 		let seriesLength = typeSiteCurrent.series.length;
+		
 		for (let i = seriesLength - 1; i > -1; i--) {
 			typeSiteCurrent.series[i].remove();
 		}
 
-		console.log(siteGenArray);
-		let tmepGenArray = new Array();
-		let tempForeArray = new Array();
-		for (var i = 0; i < siteGenArray.length; i++) {
-			if (!isEmpty(siteGenArray[i]) && siteGenArray[i] > 0) {
-				tmepGenArray.push(siteGenArray[i]);
-				tempForeArray.push(siteForeGenArray[i]);
-			}
-		}
-
-		console.log(tmepGenArray);
 		typeSiteCurrent.addSeries({
 			name: '발전',
 			color: '#25CCC8',
-			data: tmepGenArray,
+			data: siteGenArray,
 			tooltip: {
 				valueSuffix: 'kWh'
 			}
@@ -867,7 +864,7 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 		typeSiteCurrent.addSeries({
 			name: '발전 예측',
 			color: '#878787',
-			data: tempForeArray,
+			data: siteForeGenArray,
 			tooltip: {
 				valueSuffix: 'kWh'
 			}
@@ -884,6 +881,8 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 // 전날: bar chart option
 const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 	chart: {
+		renderTo: 'typeSiteCurrent',
+		// height: series.length * 20 + 30,
 		marginTop: 0,
 		marginRight: 16,
 		backgroundColor: 'transparent',
@@ -992,7 +991,8 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 					fontSize: '12px',
 					fontWeight: 400,
 					textOutline: 0,
-					textShadow: true
+					textShadow: true,
+					
 				}
 			},
 		},
@@ -1038,16 +1038,12 @@ const getAlarmInfo = function () {
 		});
 
 		//데이터 세팅
-		let alarmList = new Array();
 		data.forEach((element, index) => {
-			if(element.level != 0) {
-				let localTime = (element.localtime != null && element.localtime != '') ? String(element.localtime) : '';
-				data[index].standardTime = localTime.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
-				alarmList.push(element);
-			}
+			let localTime = (element.localtime != null && element.localtime != '') ? String(element.localtime) : '';
+			data[index].standardTime = localTime.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
 		});
 
-		setMakeList(alarmList, 'alarmNotice', {'dataFunction': {}}); //list생성
+		setMakeList(data, 'alarmNotice', {'dataFunction': {}}); //list생성
 	}).fail(function (jqXHR, textStatus, errorThrown) {
 		console.error(jqXHR);
 		console.error(textStatus);
