@@ -773,8 +773,12 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 			});
 
 			siteGenSum = displayNumberFixedUnit(siteGenSum, 'Wh', 'kWh', 0)[0];
-			siteGenArray[siteIdx] = parseFloat(siteGenSum);
-
+			// siteGenArray[siteIdx] = parseFloat(siteGenSum);
+			console.log('siteGenSum===', siteGenSum)
+			let newVal = siteGenSum.toString();
+			newVal = newVal.replace(/,/g, '');
+			siteGenArray[siteIdx] = parseFloat(Number(newVal));
+			siteGenSum = newVal;
 			if (siteGenSum > 0) {
 				siteList[siteIdx].beforeDay = siteGenSum;
 			} else {
@@ -816,7 +820,10 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 			});
 
 			siteForeGenSum = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 0)[0];
-			siteForeGenArray[siteIdx] = parseFloat(siteForeGenSum);
+			let newVal = siteForeGenSum.toString();
+			newVal = newVal.replace(/,/g, '');
+			siteForeGenArray[siteIdx] = parseFloat(Number(newVal));
+
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
@@ -831,7 +838,7 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 }
 
 const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray, categories) {
-
+	// console.log("inner func----", siteGenArray) 
 	if (type == 'energy') {
 		yesterDayGen++;
 	} else {
@@ -840,6 +847,7 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 
 	if (yesterDayGen == siteList.length && yesterDayFore == siteList.length) {
 		let seriesLength = typeSiteCurrent.series.length;
+		
 		for (let i = seriesLength - 1; i > -1; i--) {
 			typeSiteCurrent.series[i].remove();
 		}
@@ -873,6 +881,8 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 // 전날: bar chart option
 const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 	chart: {
+		renderTo: 'typeSiteCurrent',
+		// height: series.length * 20 + 30,
 		marginTop: 0,
 		marginRight: 16,
 		backgroundColor: 'transparent',
