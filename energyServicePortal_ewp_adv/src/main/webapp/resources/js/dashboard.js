@@ -844,10 +844,19 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 			typeSiteCurrent.series[i].remove();
 		}
 
+		let tmepGenArray = new Array();
+		let tempForeArray = new Array();
+		for (var i = 0; i < siteGenArray.length; i++) {
+			if (!isEmpty(siteGenArray[i]) && siteGenArray[i] > 0) {
+				tmepGenArray.push(siteGenArray[i]);
+				tempForeArray.push(siteForeGenArray[i]);
+			}
+		}
+
 		typeSiteCurrent.addSeries({
 			name: '발전',
 			color: '#25CCC8',
-			data: siteGenArray,
+			data: tmepGenArray,
 			tooltip: {
 				valueSuffix: 'kWh'
 			}
@@ -856,7 +865,7 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 		typeSiteCurrent.addSeries({
 			name: '발전 예측',
 			color: '#878787',
-			data: siteForeGenArray,
+			data: tempForeArray,
 			tooltip: {
 				valueSuffix: 'kWh'
 			}
@@ -978,7 +987,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 				format: '{y} kWh', /* 단위 넣기 */
 				style: {
 					color: 'var(--color3)',
-					fontSize: '8px',
+					fontSize: '12px',
 					fontWeight: 400,
 					textOutline: 0,
 					textShadow: true
