@@ -7,6 +7,14 @@
 	const loginId = '${sessionScope.userInfo.login_id}';
 	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
 
+	// param: withdrawReqStatus.do
+	const status = '${param.transaction_status}';
+	const statusVal = '${param.transaction_status_val}';
+	const spcId = '${param.transaction_spc_id}';
+	const spcName = '${param.transaction_spc_name}';
+	const reqId = '${param.transaction_req_info}'; 
+	const accNum = '${param.transaction_acc_info}';
+	
 	$(function() {
 		const withdrawForm = $('#withdrawForm');
 		const spcList = $('#spcList');
