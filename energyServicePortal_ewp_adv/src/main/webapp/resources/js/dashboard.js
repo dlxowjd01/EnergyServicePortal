@@ -249,7 +249,13 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		opposite: true
 	}],
 	tooltip: {
-		shared: true,
+		formatter: function () {
+			return this.points.reduce(function (s, point) {
+				let suffix = point.series.userOptions.tooltip.valueSuffix;
+				return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
+			}, '<b>' + this.x + '</b>');
+		},
+		shared: true, /* 툴팁 공유 */
 		borderColor: 'none',
 		backgroundColor: 'var(--bg-color)',
 		padding: 16,
@@ -632,6 +638,12 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		opposite: true
 	}],
 	tooltip: {
+		formatter: function () {
+			return this.points.reduce(function (s, point) {
+				let suffix = point.series.userOptions.tooltip.valueSuffix;
+				return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
+			}, '<b>' + this.x + '</b>');
+		},
 		shared: true,
 		borderColor: 'none',
 		backgroundColor: 'var(--bg-color)',
@@ -826,7 +838,6 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 }
 
 const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray, categories) {
-	// console.log("inner func----", siteGenArray) 
 	if (type == 'energy') {
 		yesterDayGen++;
 	} else {
@@ -961,14 +972,19 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		symbolHeight: 7 /* 심볼 크기 */
 	},
 	tooltip: {
-		shared: true,
+		formatter: function () {
+			return this.points.reduce(function (s, point) {
+				let suffix = point.series.userOptions.tooltip.valueSuffix;
+				return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
+			}, '<b>' + this.x + '</b>');
+		},
+		shared: true, /* 툴팁 공유 */
 		borderColor: 'none',
 		backgroundColor: 'var(--bg-color)',
 		padding: 16,
 		style: {
 			color: 'var(--color3)'
-		},
-		valueSuffix: ' kwh'
+		}
 	},
 	plotOptions: {
 		series: {
@@ -1702,7 +1718,16 @@ const searchSite = function () {
 
 			refineList.forEach((site, idx) => {
 				if (site.latlng != null) {
-					geocodeAddress(site.address, site.sid, site.name, site.latlng);
+					let operationColor = 'var(--jordy-blue)';
+					if(site.operation == '0') {
+						operationColor = '#f2a363';
+					} else if(site.operation == '1') {
+						operationColor = '#90caf3';
+					} else {
+						operationColor = '#e97373';
+					}
+
+					geocodeAddress(site.address, site.sid, site.name, site.latlng, operationColor);
 				} else {
 					makerObject[site.sid] = new Object();
 				}
