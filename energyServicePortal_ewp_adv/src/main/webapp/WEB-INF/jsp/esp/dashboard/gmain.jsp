@@ -419,7 +419,7 @@
 		$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 	}
 
-	const geocodeAddress = (siteAddr, siteId, siteName, siteLatlng) => {
+	const geocodeAddress = (siteAddr, siteId, siteName, siteLatlng, siteColor) => {
 		let latLng = new Object(),
 			dummy = siteLatlng.split(',');
 		latLng['lat'] = Number(dummy[0]);
@@ -429,20 +429,32 @@
 			map: map,
 			title: siteName,
 			position: latLng,
-			title: siteName
+			title: siteName,
+			icon: pinSymbol(siteColor),
 		});
 
 		var infowindow = new google.maps.InfoWindow({
 			content: siteName
 		});
-		infowindow.open(map, makerObject[siteId]);
+		infowindow.close(map, makerObject[siteId]);
 
 		google.maps.event.addListener(makerObject[siteId], 'click', (function (makerArray, siteId) {
 			return function () {
-				infowindow.open(map, makerObject[siteId]);
+				infowindow.close(map, makerObject[siteId]);
 				list_detail_open_main(siteId);
 			}
 		})(makerObject, siteId));
+	}
+
+	const pinSymbol = (color) => {
+		return {
+			path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0',
+			fillColor: color,
+			fillOpacity: 1,
+			strokeColor: '#000',
+			strokeWeight: 2,
+			scale: 1,
+		};
 	}
 
 	const list_detail_open_main = (sid) => {

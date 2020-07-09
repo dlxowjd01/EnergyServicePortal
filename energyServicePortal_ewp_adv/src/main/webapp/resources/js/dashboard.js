@@ -6,11 +6,6 @@ const seriesArray = [
 	{name: '정산금', type: 'spline', color: 'var(--inverse-grey)', data: 'payList', suffix: '천원'},
 ];
 
-const sitePieSeries = [
-	{color: '#26ccc8', name: '총 설비용량'},
-	{color: '#84848f', name: '미설비용량'}
-];
-
 const keyArray = ['battery', 'generation'];
 
 let monthlyBefore = 0;
@@ -254,7 +249,13 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		opposite: true
 	}],
 	tooltip: {
-		shared: true,
+		formatter: function () {
+			return this.points.reduce(function (s, point) {
+				let suffix = point.series.userOptions.tooltip.valueSuffix;
+				return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
+			}, '<b>' + this.x + '</b>');
+		},
+		shared: true, /* 툴팁 공유 */
 		borderColor: 'none',
 		backgroundColor: 'var(--bg-color)',
 		padding: 16,
@@ -637,6 +638,12 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		opposite: true
 	}],
 	tooltip: {
+		formatter: function () {
+			return this.points.reduce(function (s, point) {
+				let suffix = point.series.userOptions.tooltip.valueSuffix;
+				return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
+			}, '<b>' + this.x + '</b>');
+		},
 		shared: true,
 		borderColor: 'none',
 		backgroundColor: 'var(--bg-color)',
@@ -773,12 +780,8 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 			});
 
 			siteGenSum = displayNumberFixedUnit(siteGenSum, 'Wh', 'kWh', 0)[0];
-			// siteGenArray[siteIdx] = parseFloat(siteGenSum);
-			console.log('siteGenSum===', siteGenSum)
-			let newVal = siteGenSum.toString();
-			newVal = newVal.replace(/,/g, '');
-			siteGenArray[siteIdx] = parseFloat(Number(newVal));
-			siteGenSum = newVal;
+			siteGenArray[siteIdx] = Number(String(siteGenSum).replace(/[^0-9]/g, ''));
+
 			if (siteGenSum > 0) {
 				siteList[siteIdx].beforeDay = siteGenSum;
 			} else {
@@ -820,10 +823,7 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 			});
 
 			siteForeGenSum = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 0)[0];
-			let newVal = siteForeGenSum.toString();
-			newVal = newVal.replace(/,/g, '');
-			siteForeGenArray[siteIdx] = parseFloat(Number(newVal));
-
+			siteForeGenArray[siteIdx] = Number(String(siteForeGenSum).replace(/[^0-9]/g, ''));
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
@@ -838,7 +838,6 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 }
 
 const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray, categories) {
-	// console.log("inner func----", siteGenArray) 
 	if (type == 'energy') {
 		yesterDayGen++;
 	} else {
@@ -852,10 +851,19 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 			typeSiteCurrent.series[i].remove();
 		}
 
+		let tmepGenArray = new Array();
+		let tempForeArray = new Array();
+		for (var i = 0; i < siteGenArray.length; i++) {
+			if (!isEmpty(siteGenArray[i]) && siteGenArray[i] > 0) {
+				tmepGenArray.push(siteGenArray[i]);
+				tempForeArray.push(siteForeGenArray[i]);
+			}
+		}
+
 		typeSiteCurrent.addSeries({
 			name: '발전',
 			color: '#25CCC8',
-			data: siteGenArray,
+			data: tmepGenArray,
 			tooltip: {
 				valueSuffix: 'kWh'
 			}
@@ -864,7 +872,7 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 		typeSiteCurrent.addSeries({
 			name: '발전 예측',
 			color: '#878787',
-			data: siteForeGenArray,
+			data: tempForeArray,
 			tooltip: {
 				valueSuffix: 'kWh'
 			}
@@ -964,14 +972,19 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		symbolHeight: 7 /* 심볼 크기 */
 	},
 	tooltip: {
-		shared: true,
+		formatter: function () {
+			return this.points.reduce(function (s, point) {
+				let suffix = point.series.userOptions.tooltip.valueSuffix;
+				return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
+			}, '<b>' + this.x + '</b>');
+		},
+		shared: true, /* 툴팁 공유 */
 		borderColor: 'none',
 		backgroundColor: 'var(--bg-color)',
 		padding: 16,
 		style: {
 			color: 'var(--color3)'
-		},
-		valueSuffix: ' kwh'
+		}
 	},
 	plotOptions: {
 		series: {
@@ -1029,21 +1042,23 @@ const getAlarmInfo = function () {
 			confirm: false
 		},
 	}).done(function (data, textStatus, jqXHR) {
-
-		$('.a_alert').find('em').text(data.length);
-
 		//localtime 오름차순 정렬
 		data.sort((a, b) => {
 			return a.localtime > b.localtime ? -1 : a.localtime < b.localtime ? 1 : 0;
 		});
 
 		//데이터 세팅
+		let alarmList = new Array();
 		data.forEach((element, index) => {
-			let localTime = (element.localtime != null && element.localtime != '') ? String(element.localtime) : '';
-			data[index].standardTime = localTime.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+			if(element.level != 0) {
+				let localTime = (element.localtime != null && element.localtime != '') ? String(element.localtime) : '';
+				data[index].standardTime = localTime.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+				alarmList.push(element);
+			}
 		});
 
-		setMakeList(data, 'alarmNotice', {'dataFunction': {}}); //list생성
+		$('.a_alert').find('em').text(alarmList.length);
+		setMakeList(alarmList, 'alarmNotice', {'dataFunction': {}}); //list생성
 	}).fail(function (jqXHR, textStatus, errorThrown) {
 		console.error(jqXHR);
 		console.error(textStatus);
@@ -1675,10 +1690,12 @@ const searchSite = function () {
 	});
 
 	refineList.forEach((site, siteIdx) => {
-		if (site.accumulate == 0) {
-			refineList[siteIdx].accumulate = '-';
-		} else {
-			refineList[siteIdx].accumulate = displayNumberFixedUnit(site.accumulate, 'Wh', 'kWh', 0)[0];
+		if(typeof site.accumulate !== 'string') {
+			if (site.accumulate == 0) {
+				refineList[siteIdx].accumulate = '-';
+			} else {
+				refineList[siteIdx].accumulate = displayNumberFixedUnit(site.accumulate, 'Wh', 'kWh', 0)[0];
+			}
 		}
 	});
 
@@ -1699,7 +1716,16 @@ const searchSite = function () {
 
 			refineList.forEach((site, idx) => {
 				if (site.latlng != null) {
-					geocodeAddress(site.address, site.sid, site.name, site.latlng);
+					let operationColor = 'var(--jordy-blue)';
+					if(site.operation == '0') {
+						operationColor = '#f2a363';
+					} else if(site.operation == '1') {
+						operationColor = '#90caf3';
+					} else {
+						operationColor = '#e97373';
+					}
+
+					geocodeAddress(site.address, site.sid, site.name, site.latlng, operationColor);
 				} else {
 					makerObject[site.sid] = new Object();
 				}

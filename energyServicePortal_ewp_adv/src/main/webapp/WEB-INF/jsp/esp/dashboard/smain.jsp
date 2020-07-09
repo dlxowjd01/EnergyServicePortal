@@ -2012,21 +2012,23 @@
 				confirm: false
 			},
 		}).done(function (data, textStatus, jqXHR) {
-
-			$('.a_alert').find('em').text(data.length);
-
 			//localtime 오름차순 정렬
 			data.sort((a, b) => {
 				return a.localtime > b.localtime ? -1 : a.localtime < b.localtime ? 1 : 0;
 			});
 
 			//데이터 세팅
+			let alarmList = new Array();
 			data.forEach((element, index) => {
-				let localTime = (element.localtime != null && element.localtime != '') ? String(element.localtime) : '';
-				data[index].standardTime = localTime.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+				if(element.level != 0) {
+					let localTime = (element.localtime != null && element.localtime != '') ? String(element.localtime) : '';
+					data[index].standardTime = localTime.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+					alarmList.push(element);
+				}
 			});
 
-			setMakeList(data, 'alarmNotice', {'dataFunction': {}}); //list생성
+			$('.a_alert').find('em').text(alarmList.length);
+			setMakeList(alarmList, 'alarmNotice', {'dataFunction': {}}); //list생성
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);

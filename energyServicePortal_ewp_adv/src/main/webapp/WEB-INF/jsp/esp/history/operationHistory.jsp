@@ -423,7 +423,7 @@
 					chartSeries.push(temp);
 				});
 
-
+				chartDraw(chartSeries, categories, show);
 			} else {
 				show = true;
 				categories = new Array();
@@ -511,10 +511,8 @@
 						data: dataArr
 					});
 				});
-
+				chartDraw(chartSeries, null, show);
 			}
-
-			chartDraw(chartSeries, null, show);
 		});
 
 		$('.save_btn').on('click', function (e) {
