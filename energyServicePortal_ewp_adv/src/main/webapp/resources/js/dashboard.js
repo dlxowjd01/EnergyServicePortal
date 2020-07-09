@@ -6,11 +6,6 @@ const seriesArray = [
 	{name: '정산금', type: 'spline', color: 'var(--inverse-grey)', data: 'payList', suffix: '천원'},
 ];
 
-const sitePieSeries = [
-	{color: '#26ccc8', name: '총 설비용량'},
-	{color: '#84848f', name: '미설비용량'}
-];
-
 const keyArray = ['battery', 'generation'];
 
 let monthlyBefore = 0;
@@ -857,7 +852,7 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 		typeSiteCurrent.addSeries({
 			name: '발전',
 			color: '#25CCC8',
-			data: siteGenArray,
+			data: tmepGenArray,
 			tooltip: {
 				valueSuffix: 'kWh'
 			}
@@ -866,7 +861,7 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 		typeSiteCurrent.addSeries({
 			name: '발전 예측',
 			color: '#878787',
-			data: siteForeGenArray,
+			data: tempForeArray,
 			tooltip: {
 				valueSuffix: 'kWh'
 			}
@@ -1681,10 +1676,12 @@ const searchSite = function () {
 	});
 
 	refineList.forEach((site, siteIdx) => {
-		if (site.accumulate == 0) {
-			refineList[siteIdx].accumulate = '-';
-		} else {
-			refineList[siteIdx].accumulate = displayNumberFixedUnit(site.accumulate, 'Wh', 'kWh', 0)[0];
+		if(typeof site.accumulate !== 'string') {
+			if (site.accumulate == 0) {
+				refineList[siteIdx].accumulate = '-';
+			} else {
+				refineList[siteIdx].accumulate = displayNumberFixedUnit(site.accumulate, 'Wh', 'kWh', 0)[0];
+			}
 		}
 	});
 
