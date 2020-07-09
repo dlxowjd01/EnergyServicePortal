@@ -2012,9 +2012,6 @@
 				confirm: false
 			},
 		}).done(function (data, textStatus, jqXHR) {
-
-			$('.a_alert').find('em').text(data.length);
-
 			//localtime 오름차순 정렬
 			data.sort((a, b) => {
 				return a.localtime > b.localtime ? -1 : a.localtime < b.localtime ? 1 : 0;
@@ -2030,6 +2027,7 @@
 				}
 			});
 
+			$('.a_alert').find('em').text(alarmList.length);
 			setMakeList(alarmList, 'alarmNotice', {'dataFunction': {}}); //list생성
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);

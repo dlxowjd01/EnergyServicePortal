@@ -358,10 +358,10 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 		JSONObject jo = new JSONObject(target);
 
 		for (Map.Entry<String, Object> elem : target.entrySet()) {
-			if(elem.getValue() instanceof ArrayList) {
+			if (elem.getValue() instanceof ArrayList) {
 				JSONArray ja = new JSONArray();
 				List<Map<String, Object>> objectArr = (List<Map<String, Object>>) elem.getValue();
-				for(Map<String, Object> el : objectArr) {
+				for (Map<String, Object> el : objectArr) {
 					ja.put(jsonParser(el));
 				}
 
@@ -377,16 +377,22 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 					jo.remove(elem.getKey());
 				}
 			} else if (elem.getValue() instanceof String) {
-				if (((String) elem.getValue()).startsWith("{") && ((String) elem.getValue()).endsWith("}")) {
+				String dataValue = (String) elem.getValue();
+				if (dataValue.startsWith("{") && dataValue.endsWith("}")) {
 					try {
 						jo.put(elem.getKey(), new JSONObject((String) elem.getValue()));
+					} catch (JSONException e) {
+						jo.remove(elem.getKey());
+					}
+				} else if (dataValue.contains(System.getProperty("line.separator"))){
+					try {
+						jo.put(elem.getKey(), new JSONObject(((String) elem.getValue()).replaceAll(System.getProperty("line.separator"), "")));
 					} catch (JSONException e) {
 						jo.remove(elem.getKey());
 					}
 				}
 			}
 		}
-
 		return jo;
 	}
 }

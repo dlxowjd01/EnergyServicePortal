@@ -429,7 +429,7 @@
 		});
 
 		if (sidparam != '') {
-			$('#detailterm').prev().html('1일 &nbsp;<span class="caret"></span>');
+			$('#detailterm').prev().html('1일 &nbsp;<span class="caret"></span>').data('value', 'day');
 			periodData();
 			fetchCharts();
 			$('#search').trigger('click');
@@ -1274,16 +1274,17 @@
 			'var(--grey)'
 		];
 		let colorArr = (gr_type == true) ? typeColorArr : alarmColorArr;
-		var num = 0;
+		let num = 0;
 		dataMap.forEach(function (v, k) {
 			data.sort(function (a, b) {
 				return a['localtime'] - b['localtime'];
 			});
 
-			var vMap = new Map();
+			let vMap = new Map();
 			$.each(dateArr, function (j, stnd) {
 				let stndTime = stnd.substring(0, substringCnt); //각 날짜 스트링
 				var tpCntArr = new Map(); //타입 선택후 날짜별 타입현황 인덱스는 종류를 나타냄
+
 				$.each(v, function (i, el) {
 					var type = (gr_type == true) ? el.device_type : el.level;
 					if (tpCntArr.get(type) == undefined) tpCntArr.set(type, 0);
