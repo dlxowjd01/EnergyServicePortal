@@ -20,7 +20,10 @@
 		const copyWithdrawList = $("#withdrawList").clone().html();
 		const copyReceiveList = $("#receiveList").clone().html();
 		const copyPurposeList = $("#purposeList").clone().html();
+		let fileList = [];
+		// let uploadForm = $("#uploadForm")[0];
 		let totalAmount = 0;
+
 		spcList.empty();
 		withdrawList.empty();
 		receiveList.empty();
@@ -31,6 +34,14 @@
 		calcTotal();
 
 		$("#total").val(totalAmount);
+
+
+		$("#fileInput").change(function(){
+			fileList = [];
+			for(let i = 0; i<$(this)[0].files.length; i++){
+				fileList.push($(this)[0].files[i]);
+			}
+		});
 
 		let pList = [ 
 			{ name: "REC 수익", val: 0 },
@@ -71,7 +82,6 @@
 					spcList.append($(listItem));
 				});
 				spcList.find("li a").on("click", function(){
-					console.log("onclick---")
 					let val = $(this).parent().data("value");
 					$("#spcList").prev().data("value", val);
 					$("#withdrawList").prev().html('선택<span class="caret">');
@@ -108,14 +118,12 @@
 					let receiveGroupList = $(".receive-list")
 					json.data.map(item => {
 						let data = json.data;
-						console.log("receiveGroupList===", receiveGroupList)
 						sending = copyWithdrawList.replace(/\*withdraw_account\*/g, item.withdraw_account_no).replace(/\*account_num\*/g, item.withdraw_bank);
 						withdrawList.append($(sending));
 						return new Promise((resolve, reject) => {
 							resolve(JSON.parse(item.to_account))
 							}).then(res => {
 								res.map(d => {
-									// console.log('d===000', d);
 									receiving = copyReceiveList.replace(/\*to_account_bank_name\*/g, d.to_account_bank).replace(/\*to_account_no\*/g, d.to_account_no);
 									receiveGroupList.each(function(){
 										console.log("this---", $(this))
@@ -151,6 +159,7 @@
 			});
 		}
 
+	
 		withdrawForm.on('submit', function(e){
 			e.preventDefault();
 			let warning = withdrawForm.find(".warning");
@@ -158,6 +167,7 @@
 			let tr = tableBody.find("tr");
 			let jsonData = {}
 			let arr =[];
+			let fileArr = [];
 			let sum = 0;
 			jsonData.spc_id = spcList.prev().data("value");
 			// from
@@ -173,9 +183,21 @@
 			jsonData.requested_by = loginName;
 			jsonData.requested_at = new Date().toISOString();
 			jsonData.transfer_agent = "tester2"
-			// console.log("w---", data.to_account)
+
+			if($("#fileCheckbox").is(":checked")) {
+				let fileNames = $("#addFileList").find("li.upload_text");
+
+				$.each(fileNames, function(index, element){
+					let obj = {};
+					obj.originalName = $(this).text();
+					obj.filedName = genUuid();
+					fileArr.push(obj);
+				});
+				jsonData.attachement_info = JSON.stringify(fileArr);
+				console.log("json--", jsonData.attachement_info)
+			}
+
 			checkboxes.each(function(index, element){
-				// if($(this).is(":checked")) {
 				let purposeOpt = $("#tableBody").find("td:nth-of-type(3) .dropdown-toggle");
 				let amountOpt = $("#tableBody").find("td:nth-of-type(4) input");
 				let accOpt = $("#tableBody").find("td:nth-of-type(5) .dropdown-toggle");
@@ -190,9 +212,7 @@
 				sum += obj.amount;
 				// }
 			});
-			console.log("sum===", sum);
 			jsonData.total_amount = sum;
-
 			jsonData.to_account = JSON.stringify(arr);
 			let newJson = JSON.stringify(jsonData);
 
@@ -219,6 +239,14 @@
 				// }
 			});
 
+			if($("#fileCheckbox").is(":checked")){
+				$.each(fileList, function(index, element){
+					let name = fileArr[index].filedName;
+					$("#fileInput")[0].files[index].name = name;
+					uploadFile('post', $("#fileInput")[0].files[index], name)
+				});
+			};
+			
 			if( withdrawForm.find(".warning.hidden").length == 4){
 				let opt = {
 					url: 'http://iderms.enertalk.com:8443/spcs/transactions?oid='+oid,
@@ -228,31 +256,64 @@
 					contentType: "application/json",
 					data: JSON.stringify(jsonData)
 				};
-				// $.ajax(opt).done(function (json, textStatus, jqXHR) {
-				// 	window.location.href = window.location.origin + '/spc/transactionHistory.do'
-				// }).fail(function (jqXHR, textStatus, errorThrown) {
-				// 	alert('처리 중 오류가 발생했습니다.');
-				// 	console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
-				// 	return false;
-				// });
-				// getDataList(1,formArr); 
+
+				$.ajax(opt).done(function (json, textStatus, jqXHR) {
+					if($("#fileCheckbox").is(":checked")){
+						$.each(fileList, function(index, element){
+							let name = fileArr[index].filedName;
+							$("#fileInput")[0].files[index].name = name;
+							uploadFile('post', $("#fileInput")[0].files[index], name)
+						});
+					};
+					// window.location.href = window.location.origin + '/spc/transactionHistory.do'
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					alert('처리 중 오류가 발생했습니다.');
+					console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
+					return false;
+				});
 			} else {
 				// console.log("warning length===", withdrawForm.find(".warning.hidden') )
-			}
-		// getDataList(1); 
+			} 
 		});
 
+		function uploadFile(action, file, newName){
+			let formData = new FormData($('#fileUploadForm')[0]);
+			// formData.set('file', file)
+			formData.append(newName, file);
+
+			let option= {
+				type: action,
+				enctype: 'multipart/form-data',
+				url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
+				processData: false,  // Important!
+				contentType: false,
+				cache: false,
+				timeout: 600000,
+				async: false,
+				data: formData,
+			}
+			// formData.append("file", this.fileObj);
+			$.ajax(option).done(function (json, textStatus, jqXHR) {
+				console.log("success===", json)
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
+
+			// $("#addFileList").find("li:not(:first-child)").each(function() {
+			// 	let name = $(this).text()+genUuid();
+			// 	fileList+= name + ','
+			// });
+		}
 
 		// amount number trim event
 		function calcTotal() {
 			$(".amount").each(function() {
 				$(this).on('keypress', function(evt) {
 					let val = $(this).val();
-
 					if (evt.which == "0".charCodeAt(0) && val.trim() == "") {
 						return false;
 					}
-				
 					if (evt.which < 48 || evt.which > 57) {
 						return false;
 					}
@@ -261,11 +322,31 @@
 		}
 
 		$(document).on("change", ".amount", function(evt) {
-			let val = $(this).val();
-			if (evt.which < 48 || evt.which > 57) { evt.preventDefault(); }
-			totalAmount ==  NaN ? ( totalAmount = totalAmount ) : ( (totalAmount += Number(val)), $("#total").val(totalAmount));
-			// remove all white spaces
+			let comma = this.value;
+			let newVal = this.value;
+			let displayVal = this.value;
+			let total = document.getElementById("total");
+			totalAmount = 0;
+			comma = this.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			this.value = comma;
+			console.log("this---", comma)
+			if(newVal != "") {
+				console.log("newVal---", newVal)
+				if (evt.which < 48 || evt.which > 57) { evt.preventDefault(); }
+				console.log("tota1===", totalAmount)
+				$(".amount").each(function(){
+					let toAdd = Number(this.value.replace(/,/g,""));
+					console.log("toAdd---", toAdd, "total---", totalAmount)
+					totalAmount += toAdd;
+				});
+				console.log("tota2===", totalAmount)
+				total.value = totalAmount.toLocaleString() + ' 원';
+
+				displayVal = this.value.toLocaleString();
+			}
 			// $(this).val().replace(/\D/gi, '');
+
+				
 		});
 
 		$("#addRowBtn").on("click", calcTotal, function(){
@@ -283,7 +364,11 @@
 				}
 			});
 		});
-
+		
+		
+		function getNumberIndex (index) {
+			return index + 1;
+		}
 		// function nvl (value, str) {
 		// 	if (isEmpty(value)) {
 		// 		return str;
@@ -300,15 +385,12 @@
 		// }
 
 	
-		function getNumberIndex (index) {
-			return index + 1;
-		}
+
 
 	});
 
 
 </script>
-
 
 <div class="row header-wrapper">
 	<div class="col-12">
@@ -345,7 +427,6 @@
 			<div class="fr"><a href="#;" class="save_btn">엑셀 다운로드</a></div>
 		</div>
 	</div>
-
 	<div class="row content-wrapper spc-transaction">
 		<div class="col-12">
 			<div class="indiv spc_bal_post">
@@ -438,10 +519,12 @@
 						</colgroup>
 						<tr>
 							<th class="th_type">증빙 첨부</th>
-							<td id="addFileList01" class="flex_start_td"><!--
-								--><input type="file" id="red_write_attachment" class="hidden" name="red_write_attachment" accept=".pdf" multiple=""><!--
-								--><label for="red_write_attachment" class="btn file_upload">파일 선택</label><!--
-								--><div class="file_list ml-16"><ul><li>No Files Selected</li></ul></div>
+							<td id="addFileList" class="flex_start_td">
+								<form id="fileUploadForm" name="fileUploadForm" action="#" method="multipart/form-data"><!--
+									--><input type="file" name="file" id="fileInput" class="hidden" accept=".pdf" multiple=""><!--
+									--><label for="fileInput" class="btn file_upload">파일 선택</label><!--
+									--><div class="file_list ml-16"><ul><li>No Files Selected</li></ul></div>
+								</form>
 							</td>
 							<td></td>
 						</tr>
@@ -450,8 +533,8 @@
 
 				<div class="btn_wrap_type05"><!--
 				--><a class="chk_type mr-24"><!--
-					--><input type="checkbox" id="file" name="file"><!--
-					--><label for="file">증빙 첨부 포함</label><!--
+					--><input type="checkbox" id="fileCheckbox" name="file_checkbox"><!--
+					--><label for="fileCheckbox">증빙 첨부 포함</label><!--
 				--></a><!--
 				--><button type="button" class="btn btn_type03 mr-12" id="writeBtn">PDF</button><!--
 				--><button type="submit" class="btn btn_type">제출</button><!--
