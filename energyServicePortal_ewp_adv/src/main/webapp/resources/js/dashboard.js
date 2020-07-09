@@ -773,12 +773,8 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 			});
 
 			siteGenSum = displayNumberFixedUnit(siteGenSum, 'Wh', 'kWh', 0)[0];
-			// siteGenArray[siteIdx] = parseFloat(siteGenSum);
-			console.log('siteGenSum===', siteGenSum)
-			let newVal = siteGenSum.toString();
-			newVal = newVal.replace(/,/g, '');
-			siteGenArray[siteIdx] = parseFloat(Number(newVal));
-			siteGenSum = newVal;
+			siteGenArray[siteIdx] = Number(String(siteGenSum).replace(/[^0-9]/g, ''));
+
 			if (siteGenSum > 0) {
 				siteList[siteIdx].beforeDay = siteGenSum;
 			} else {
@@ -820,10 +816,7 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 			});
 
 			siteForeGenSum = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 0)[0];
-			let newVal = siteForeGenSum.toString();
-			newVal = newVal.replace(/,/g, '');
-			siteForeGenArray[siteIdx] = parseFloat(Number(newVal));
-
+			siteForeGenArray[siteIdx] = Number(String(siteForeGenSum).replace(/[^0-9]/g, ''));
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
@@ -850,6 +843,15 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 		
 		for (let i = seriesLength - 1; i > -1; i--) {
 			typeSiteCurrent.series[i].remove();
+		}
+
+		let tmepGenArray = new Array();
+		let tempForeArray = new Array();
+		for (var i = 0; i < siteGenArray.length; i++) {
+			if (!isEmpty(siteGenArray[i]) && siteGenArray[i] > 0) {
+				tmepGenArray.push(siteGenArray[i]);
+				tempForeArray.push(siteForeGenArray[i]);
+			}
 		}
 
 		typeSiteCurrent.addSeries({
@@ -1038,12 +1040,16 @@ const getAlarmInfo = function () {
 		});
 
 		//데이터 세팅
+		let alarmList = new Array();
 		data.forEach((element, index) => {
-			let localTime = (element.localtime != null && element.localtime != '') ? String(element.localtime) : '';
-			data[index].standardTime = localTime.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+			if(element.level != 0) {
+				let localTime = (element.localtime != null && element.localtime != '') ? String(element.localtime) : '';
+				data[index].standardTime = localTime.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+				alarmList.push(element);
+			}
 		});
 
-		setMakeList(data, 'alarmNotice', {'dataFunction': {}}); //list생성
+		setMakeList(alarmList, 'alarmNotice', {'dataFunction': {}}); //list생성
 	}).fail(function (jqXHR, textStatus, errorThrown) {
 		console.error(jqXHR);
 		console.error(textStatus);

@@ -435,11 +435,11 @@
 		var infowindow = new google.maps.InfoWindow({
 			content: siteName
 		});
-		infowindow.open(map, makerObject[siteId]);
+		infowindow.close(map, makerObject[siteId]);
 
 		google.maps.event.addListener(makerObject[siteId], 'click', (function (makerArray, siteId) {
 			return function () {
-				infowindow.open(map, makerObject[siteId]);
+				infowindow.close(map, makerObject[siteId]);
 				list_detail_open_main(siteId);
 			}
 		})(makerObject, siteId));

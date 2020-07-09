@@ -140,7 +140,6 @@ $(function() {
             }
         }
 
-
         if(touchtime == 0) {
             //set first click
             touchtime = new Date().getTime();
@@ -169,20 +168,12 @@ $(function() {
     });
 });
 
-
 /* 알람 리스트 클릭시 사업소 상세정보 열기 */
 function list_detail_open(list_number) {
     var target = list_number;
     //alert(list_number);
     $("."+target+"").find(".di_wrap").slideToggle();
 }
-
-
-
-
-
-
-
 
 /* FAQ slideToggle */
 $(function(){
@@ -243,7 +234,7 @@ $(function() {
 			}
 
 			for (var i = 0; i < $(this).get(0).files.length; ++i) {
-				listItem = `<li class="upload_text">${$(this).get(0).files[i].name}<li>`
+				listItem = `<li class="upload_text">${$(this).get(0).files[i].name}<button type='button' class='btn_close icon_btn' onclick='$(this).parent().remove()'></button><li>`
 				list.append(listItem);
 				arr.push($(this).get(0).files[i].name);
 			}
