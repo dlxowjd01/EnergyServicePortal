@@ -196,122 +196,6 @@
 						} else {
 							ajaxCallback(json.data);
 						}
-
-						// newData.map(item => {
-						// 	console.log("newData---", item.status)
-						// 	return new Promise((resolve, reject) => {
-						// 		// typeof v.to_account !== "string" ? JSON.parse(v.to_account) : v.to_account = v.to_account	
-						// 			resolve(JSON.parse(item.to_account))
-						// 		}).then(res => {
-						// 			let popObj = Object.assign({}, item);
-						// 			// console.log("statusOpt==", statusOpt)
-						// 			delete(popObj.to_account);
-
-						// 			const spcMatch = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
-
-						// 			let str = '';
-						// 			let transaction_spc_id = '';
-						// 			let transaction_req_id = '';
-						// 			let transaction_spc_name = ''
-						// 			transaction_spc_name = spcInfoArr[spcMatch].spc_name;
-						// 			let withdraw_day = popObj.withdraw_day.substring(0, 4) + '-' + popObj.withdraw_day.substring(4, 6) + '-' + popObj.withdraw_day.substring(6, 8);
-						// 			let withdraw_account_info = '';
-						// 			withdraw_account_info = item.withdraw_bank+item.withdraw_account_no;
-
-						// 			let transaction_type = '';
-						// 			res.length > 0 ? ( res.length ==1 ? ( transaction_type = '출금' ) : ( transaction_type = '출금 외 +'+ (res.length-1) + '건' ) ): ( transaction_type = '-' );
-						// 			let amount = '';
-						// 			let updated_at = ''
-						// 			let requested_by = '';
-						// 			let approved_by = '';
-						// 			let status_changed_by = '';
-						// 			// status
-						// 			let status = '';
-						// 			let status_val = '';
-
-
-						// 			let edit_icons = '';
-						// 			let link_attr = '';
-						// 			let purposeList = [
-						// 				{ label: "출금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
-						// 				{ label: "입금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대 수선비", "배당금 적림", "일반 지출" ]},
-						// 			];
-						// 			let account_type_list = [  "전력 판매대금", "REC 판매대금", "관리 운영비", "일반 렌탈", "전력중개 수수료", "전기 요금", "원리금" ];
-						// 			let purpose = '';
-
-						// 			const p = [];
-						// 			let size = '';
-
-						// 			for(let i=0; i<res.length; i++){
-						// 				p.push(res[i].purpose);
-						// 			}
-						// 			let uniqSet = new Set(p);
-						// 			if( uniqSet.size === 0 ) {
-						// 				purpose = '-'
-						// 			} else if( uniqSet.size == 1 ) {
-						// 			purpose = ( purposeList[0].value[p[0]] )
-						// 			} else {
-						// 				purpose = ( purposeList[0].value[p[0]] ) + ' 외 +' + ( uniqSet.size - 1 ) + '건';
-						// 			}
-						// 			transaction_spc_id = popObj.spc_id;
-						// 			transaction_req_id = popObj.request_id;
-						// 			console.log("popObj---", popObj.status)
-						// 			if(popObj.status == 0) {
-						// 				status="반송"
-						// 				status_val = "0"
-						// 				edit_icons = "show";
-						// 				link_attr = "text-link";
-						// 			} else if(popObj.status == 1) {
-						// 				status="승인 대기"
-						// 				status_val = "1"
-						// 				edit_icons = "show";
-						// 				link_attr = "text-link";
-						// 			} else if (popObj.status == 2) {
-						// 				status="승인 중"
-						// 				status_val = "2"
-						// 				link_attr = "text-link";
-						// 				edit_icons = "hidden";
-						// 			} else if(popObj.status == 3) {
-						// 				status="승인 완료"
-						// 				status_val = "3"
-						// 				edit_icons = "hidden";
-						// 				link_attr = "text-blue";
-						// 			}
-						// 			popObj.total_amount ? ( amount = popObj.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원' ) : amount = '-';
-
-						// 			( ( popObj.requested_by !== undefined ) && ( popObj.requested_by != "string" ) ) ? ( requested_by = popObj.requested_by ) : ( requested_by = '-' );
-
-						// 			popObj.status_changed_at ? ( updated_at = (popObj.status_changed_at.substring(0, 10) + ' ' + popObj.status_changed_at.substring(11, 19)) ) : ( updated_at = '-' );
-
-						// 			popObj.status_changed_by ? ( approved_by = popObj.status_changed_by ) : ( approved_by = '-' );
-
-
-						// 			// res.to_account_bank.locale
-						// 			str = tableCloned.replace(/\*transactionSpcId\*/g, transaction_spc_id)
-						// 				.replace(/\*transactionSpcName\*/g, transaction_spc_name)
-						// 				.replace(/\*transactionReqId\*/g, transaction_req_id)
-						// 				.replace(/\*withdrawDay\*/g, withdraw_day)
-						// 				.replace(/\*withdrawAccountInfo\*/g, withdraw_account_info)
-						// 				.replace(/\*transactionType\*/g, transaction_type)
-						// 				.replace(/\*purpose\*/g, purpose)
-						// 				.replace(/\*accountType\*/g, account_type_list[res.length])
-						// 				.replace(/\*amount\*/g, amount)
-						// 				.replace(/\*updatedAt\*/g, updated_at)
-						// 				.replace(/\*requestedBy\*/g, requested_by)
-						// 				.replace(/\*approvedBy\*/g, approved_by)
-						// 				.replace(/\*status\*/g, status)
-						// 				.replace(/\*statusVal\*/g, status_val)
-						// 				.replace(/\*linkAttr\*/g, link_attr).replace(/\*editIcons\*/g, edit_icons)
-						// 				.replace(/\*statusChangedBy\*/g, status_changed_by)
-						// 			tableList.append($(str));
-						// 	}).catch(error => {
-						// 			console.log(error);
-						// 		}).finally(() => {
-						// 		});
-							// });
-
-						// const accountMatch = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
-						// const purposeMatch = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
 					}
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					alert('처리 중 오류가 발생했습니다.');
@@ -324,7 +208,6 @@
 		}
 
 		function ajaxCallback (newData, arr) {
-
 			newData.map(item => {
 				if(!isEmpty(arr)) {
 					item.opt = arr;	
