@@ -109,7 +109,7 @@
 							item.status_changed_by,
 							item.transfer_agent,
 						];
-						
+
 						$.each(dataArr, function(index, element){
 							if((!isEmpty(element)) && element != "string") {
 								if(index==0) {

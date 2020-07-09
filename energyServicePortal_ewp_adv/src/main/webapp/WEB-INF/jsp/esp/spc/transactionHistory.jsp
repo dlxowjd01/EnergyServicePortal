@@ -152,7 +152,6 @@
 		
 		function getDataList(page, arr) {
 			page == undefined ? page = 1 : page = page;
-			console.log("arr---", arr)
 			if(!isEmpty(arr[0])) {
 				var sortList = [];
 				var totalPage = 0;
@@ -187,6 +186,7 @@
 					$('#searchOption').removeClass('in');
 					tableList.empty();
 					if (json.data.length > 0) {
+						console.log("data---", json.data)
 						if(arr.length>1){
 							let statusOpt = [...arr[3].split(",")];
 							let newData = json.data.filter(x => {
