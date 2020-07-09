@@ -630,8 +630,8 @@
 							<th>SPC명</th>
 							<td class="group_type">
 								<div class="tx_inp_type edit disabled">
-									<label for="spcName" class="sr-only">SPC명 입력</label>
-									<input type="text" id="spcName" name="spcName" placeholder="SPC명 입력" readonly>
+									<label for="name" class="sr-only">SPC명 입력</label>
+									<input type="text" id="name" name="name" placeholder="SPC명 입력" readonly>
 									<input type="hidden" id="spcId" name="spcId" readonly>
 								</div>
 							</td>
@@ -659,8 +659,8 @@
 						<tr>
 							<th><label for="genName">발전소명</label></th>
 							<td class="group_type">
-								<div class="tx_inp_type edit">
-									<input type="text" id="genName" name="power_plant_name" placeholder="발전소명 입력">
+								<div class="tx_inp_type edit disabled">
+									<input type="text" id="genName" name="genName" placeholder="발전소명 입력" readonly>
 									<input type="hidden" id="genId" name="genId">
 								</div>
 							</td>
@@ -2442,7 +2442,7 @@
 		</div>
 
 		<div class="btn_wrap_type_right">
-			<a href="/spc/entityDetails.do" class="btn btn_type03">목록</a>
+			<a href="/spc/entityInformation.do" class="btn btn_type03">목록</a>
 			<button type="button" class="btn_type big" onclick="setSaveData();">수정</button>
 		</div>
 	</div>

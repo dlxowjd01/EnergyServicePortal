@@ -221,7 +221,7 @@
 						</div>
 					</div>
 					<div class="gtbl_wrap">
-						<div class="intable">
+						<div class="intable" id="statusSiteList">
 							<table>
 								<caption>(단위: kWh)</caption>
 								<thead>
@@ -247,10 +247,10 @@
 									<th>
 										<button class="btn_align">누적</button>
 									</th>
-									<th>
+									<th class="ESS">
 										<button class="btn_align">충전</button>
 									</th>
-									<th>
+									<th class="ESS">
 										<button class="btn_align">방전</button>
 									</th>
 								</tr>
@@ -269,8 +269,8 @@
 										<td class="right">[capacity]</td>
 										<td class="right">[forecast]</td>
 										<td class="right">[accumulate]</td>
-										<td>-</td>
-										<td>-</td>
+										<td class="ESS">-</td>
+										<td class="ESS">-</td>
 									</tr>
 									<tr class="detail_info list[INDEX] flag[INDEX]">
 										<td colspan="9">
@@ -385,8 +385,8 @@
 
 	$(function () {
 		setInitList('alarmNotice'); //알람 공지 세팅
-		setInitList('siteList'); //사이트 리스트
 
+		makeSiteList();
 		if (!isEmpty(siteList) && siteList.length > 0) {
 			fn_cycle_1hour();
 			fn_cycle_1min();
@@ -461,6 +461,9 @@
 		$('.dbclickopen').each(function() {
 			if ($(this).data('sid') == sid) {
 				$(this).next().find('.di_wrap').slideToggle();
+
+				var offset = $(this).next().find('.di_wrap').offset();
+				$('div.gtbl_wrap').animate({scrollTop : offset.top}, 400);
 			}
 		});
 	}
@@ -490,7 +493,7 @@
 			if (cnt <= max) {
 				return;
 			} else {
-				z = google.maps.event.addListener(map, 'zoom_changed', function (event) {
+				z = google.maps.event.addLizstener(map, 'zoom_changed', function (event) {
 					google.maps.event.removeListener(z);
 					smoothZoom(map, max, cnt - 1, false);
 				});
