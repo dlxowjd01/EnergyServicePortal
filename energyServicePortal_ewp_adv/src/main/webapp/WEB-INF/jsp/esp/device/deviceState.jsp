@@ -282,7 +282,7 @@
 			<div class="modal-body">
 				<form id="deviceForm2" action="#" method="post" name="deviceForm" novalidate>
 					<div class="row">
-						<div class="col-12">
+						<div class="col-12 dateField">
 							<div class="input-group inline-flex">
 								<label for="deviceType" class="input_label">구분</label>
 								<div id="deviceType" class="dropdown">
@@ -311,20 +311,92 @@
 							</div>
 
 							<div id="timeStartGroup" class="input-group inline-flex">
-								<label for="datepicker1" class="input_label">시작</label>
+								<label for="start" class="input_label">시작</label>
 								<div class="sel_calendar">
-									<input type="text" id="datepicker1" name="datepicker1" class="sel w-80 manualFrom" value="" autocomplete="off" readonly>
-									<em></em>
-									<input type="text" id="timepicker1" name="timepicker1" class="sel w-40 timepicker" readonly>
+									<input type="text" id="start" name="start" class="sel customFromDate" value="" autocomplete="off" readonly>
+								</div>
+								<div class="dropdown hidden" id="startHour">
+									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li data-value="0"><a href="javascript:void(0);">0시</a></li>
+										<li data-value="1"><a href="javascript:void(0);">1시</a></li>
+										<li data-value="2"><a href="javascript:void(0);">2시</a></li>
+										<li data-value="3"><a href="javascript:void(0);">3시</a></li>
+										<li data-value="4"><a href="javascript:void(0);">4시</a></li>
+										<li data-value="5"><a href="javascript:void(0);">5시</a></li>
+										<li data-value="6"><a href="javascript:void(0);">6시</a></li>
+										<li data-value="7"><a href="javascript:void(0);">7시</a></li>
+										<li data-value="8"><a href="javascript:void(0);">8시</a></li>
+										<li data-value="9"><a href="javascript:void(0);">9시</a></li>
+										<li data-value="10"><a href="javascript:void(0);">10시</a></li>
+										<li data-value="11"><a href="javascript:void(0);">11시</a></li>
+										<li data-value="12"><a href="javascript:void(0);">12시</a></li>
+										<li data-value="13"><a href="javascript:void(0);">13시</a></li>
+										<li data-value="14"><a href="javascript:void(0);">14시</a></li>
+										<li data-value="15"><a href="javascript:void(0);">15시</a></li>
+										<li data-value="16"><a href="javascript:void(0);">16시</a></li>
+										<li data-value="17"><a href="javascript:void(0);">17시</a></li>
+										<li data-value="18"><a href="javascript:void(0);">18시</a></li>
+										<li data-value="19"><a href="javascript:void(0);">19시</a></li>
+										<li data-value="20"><a href="javascript:void(0);">20시</a></li>
+										<li data-value="21"><a href="javascript:void(0);">22시</a></li>
+										<li data-value="22"><a href="javascript:void(0);">23시</a></li>
+										<li data-value="23"><a href="javascript:void(0);">21시</a></li>
+									</ul>
+								</div>
+								<div class="dropdown hidden" id="startMin">
+									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li data-value="0"><a href="javascript:void(0);">15분</a></li>
+										<li data-value="15"><a href="javascript:void(0);">15분</a></li>
+										<li data-value="30"><a href="javascript:void(0);">15분</a></li>
+										<li data-value="45"><a href="javascript:void(0);">15분</a></li>
+									</ul>
 								</div>
 							</div>
 
 							<div id="timeEndGroup" class="input-group inline-flex">
-								<label for="datepicker2" class="input_label">종료</label>
+								<label for="end" class="input_label">종료</label>
 								<div class="sel_calendar">
-									<input type="text" id="datepicker2" name="datepicker2"class="sel w-80 manualEnd" value="" autocomplete="off" readonly>
-									<em></em>
-									<input type="text" id="timepicker2" name="timepicker2" class="sel w-40 timepicker hidden" readonly>
+									<input type="text" id="end" name="end"class="sel customToDate" value="" autocomplete="off" readonly>
+								</div>
+								<div class="dropdown hidden" id="endHour">
+									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li data-value="0"><a href="javascript:void(0);">0시</a></li>
+										<li data-value="1"><a href="javascript:void(0);">1시</a></li>
+										<li data-value="2"><a href="javascript:void(0);">2시</a></li>
+										<li data-value="3"><a href="javascript:void(0);">3시</a></li>
+										<li data-value="4"><a href="javascript:void(0);">4시</a></li>
+										<li data-value="5"><a href="javascript:void(0);">5시</a></li>
+										<li data-value="6"><a href="javascript:void(0);">6시</a></li>
+										<li data-value="7"><a href="javascript:void(0);">7시</a></li>
+										<li data-value="8"><a href="javascript:void(0);">8시</a></li>
+										<li data-value="9"><a href="javascript:void(0);">9시</a></li>
+										<li data-value="10"><a href="javascript:void(0);">10시</a></li>
+										<li data-value="11"><a href="javascript:void(0);">11시</a></li>
+										<li data-value="12"><a href="javascript:void(0);">12시</a></li>
+										<li data-value="13"><a href="javascript:void(0);">13시</a></li>
+										<li data-value="14"><a href="javascript:void(0);">14시</a></li>
+										<li data-value="15"><a href="javascript:void(0);">15시</a></li>
+										<li data-value="16"><a href="javascript:void(0);">16시</a></li>
+										<li data-value="17"><a href="javascript:void(0);">17시</a></li>
+										<li data-value="18"><a href="javascript:void(0);">18시</a></li>
+										<li data-value="19"><a href="javascript:void(0);">19시</a></li>
+										<li data-value="20"><a href="javascript:void(0);">20시</a></li>
+										<li data-value="21"><a href="javascript:void(0);">22시</a></li>
+										<li data-value="22"><a href="javascript:void(0);">23시</a></li>
+										<li data-value="23"><a href="javascript:void(0);">21시</a></li>
+									</ul>
+								</div>
+								<div class="dropdown hidden" id="endMin">
+									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li data-value="0"><a href="javascript:void(0);">15분</a></li>
+										<li data-value="15"><a href="javascript:void(0);">15분</a></li>
+										<li data-value="30"><a href="javascript:void(0);">15분</a></li>
+										<li data-value="45"><a href="javascript:void(0);">15분</a></li>
+									</ul>
 								</div>
 							</div>
 						</div>
@@ -332,8 +404,12 @@
 					<div class="row">
 						<div class="col-12">
 							<div class="input-group inline-flex">
-								<label class="input_label">데이터 확인</label>
-								<button type="button" class="btn_type03 end">입력 초기화</button>
+								<label class="input_label">
+									<a href="javascript:void(0);" onclick="setManualForm();">
+										데이터 확인
+									</a>
+								</label>
+								<button type="button" class="btn_type03 end" onclick="initManualForm();">입력 초기화</button>
 							</div>
 							<div class="spc_tbl mt20">
 								<table class="ly_type">
@@ -350,7 +426,7 @@
 				</form>
 				<div class="btn_wrap_type02">
 					<button type="button" class="btn_type03" data-dismiss="modal">취소</button>
-					<button type="submit" class="btn_type" id="registerBtn">저장</button>
+					<button type="button" class="btn_type" onclick="saveManualForm();">저장</button>
 				</div>
 			</div>
 		</div>
@@ -372,6 +448,7 @@
 	const apiConfigRtus = '/config/rtus';
 	const apiConfigDevices = '/config/devices';
 	const apiAlarmCodeSets = '/alarms/code_sets';
+	const apiEnergyManual = '/energy/manual/input';
 
 	let codeSetList = new Array();
 
@@ -391,7 +468,31 @@
 		// setInitList('manufacturerList');
 		setInitList('alarm_codeList');
 
-		$('.timepicker').wickedpicker({twentyFour: true});
+		$('.customFromDate').datepicker({
+			showOn: 'both',
+			buttonImageOnly: true,
+			dateFormat: 'yy-mm-dd',
+			onClose: function(selectedDate) {
+				$(this).closest('.dateField').find('.customToDate').datepicker('option', 'minDate', selectedDate);
+
+				if (typeof afterDatePick == 'function') {
+					afterDatePick($(this).attr('name'));
+				}
+			}
+		});
+
+		$('.customToDate').datepicker({
+			showOn: 'both',
+			buttonImageOnly: true,
+			dateFormat: 'yy-mm-dd',
+			onClose: function(selectedDate) {
+				$(this).closest('.dateField').find('.customFromDate').datepicker('option', 'maxDate', selectedDate);
+
+				if (typeof afterDatePick == 'function') {
+					afterDatePick($(this).attr('name'));
+				}
+			}
+		});
 	});
 
 	//사업소 조회
@@ -407,6 +508,20 @@
 			getRtusList();
 		} else if ($dropdownId == 'device_type') {
 			setParentDevice();
+		} else if ($dropdownId == 'timeInterval') {
+			let std = $('#timeInterval button').data('value');
+
+			if (std == '15min') {
+				$('#startHour').removeClass('hidden');
+				$('#startMin').removeClass('hidden');
+				$('#endHour').removeClass('hidden');
+				$('#endMin').removeClass('hidden');
+			} else {
+				$('#startHour').addClass('hidden');
+				$('#startMin').addClass('hidden');
+				$('#endHour').addClass('hidden');
+				$('#endMin').addClass('hidden');
+			}
 		}
 		// else if ($dropdownId == 'manufacturer') {
 		// 	let productList = new Array();
@@ -776,7 +891,7 @@
 			});
 
 			if (dType == 'SM_MANUAL') {
-				$('#' + dType + ' .eq_card .eq_btn_bx button').eq(1).attr('onclick', 'alert("아직 준비중입니다.");'); //설비 수정
+				$('#' + dType + ' .eq_card .eq_btn_bx button').eq(1).attr('onclick', 'addManualForm("' + did + '")'); //설비 수정
 			} else {
 				$('#' + dType + ' .eq_card .eq_btn_bx button').eq(1).attr('onclick', 'moveOperation("' + did + '");'); //상태이력으로 이동
 			}
@@ -790,17 +905,228 @@
 
 	const addManualForm = (did) => {
 
-		$('[class^="manual"]').each(function() {
-			$(this).removeClass('w-40');
+		// $('[class^="manual"]').each(function() {
+		// 	$(this).removeClass('w-40');
+		//
+		// 	if (!$(this).hasClass('w-80')) {
+		// 		$(this).addClass('w-80');
+		// 	}
+		// });
+		dropDownInit($('#deviceType'));
+		dropDownInit($('#timeInterval'));
 
-			if (!$(this).hasClass('w-80')) {
-				$(this).addClass('w-80');
-			}
-		});
-		$('.timepicker').addClass('hidden');
+		$('#startHour').addClass('hidden');
+		$('#startMin').addClass('hidden');
+		$('#endHour').addClass('hidden');
+		$('#endMin').addClass('hidden');
+
+		$('#manualModalTable').empty();
+
+		$('.customFromDate').datepicker('setDate', new Date());
+		$('.customToDate').datepicker('setDate', new Date());
 
 
 		$('#manualAddDeviceModal').data('did', did).modal('show');
+	}
+
+	const setManualForm = () => {
+		const timeInterval = $('#timeInterval button').data('value'),
+			timeIntervalTxt = $('#timeInterval button').text(),
+			startDate = $('#start').datepicker('getDate'),
+			endDate = $('#end').datepicker('getDate');
+		let dateArr = new Array();
+
+		$('#manualModalTable').empty();
+		$('#manualModalTable').parents('table').find('thead th:first-child').text(timeIntervalTxt + '단위');
+		if(!isEmpty(timeInterval) && startDate != null && endDate != null) {
+			let sDate = startDate.format('yyyyMMdd'),
+				eDate = endDate.format('yyyyMMdd');
+
+			if (timeInterval == 'daily') {
+				let diffDay = dateDiff(eDate, sDate, 'day');
+				for (let j = 0; j < diffDay; j++) {
+					let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
+					sDateTime.setDate(Number(sDateTime.getDate()) + j);
+					let toDate = sDateTime.format('yyyyMMdd');
+					dateArr.push(toDate);
+				}
+			} else if (timeInterval == 'monthly') {
+				let diffMonth = dateDiff(eDate, sDate, 'month');
+				for (let j = 0; j < diffMonth; j++) {
+					let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) + j - 1, 1);
+					let toDate = sDateTime.format('yyyyMM');
+					dateArr.push(toDate);
+				}
+			} else {
+				let diffDay = dateDiff(eDate, sDate, 'day');
+				//diffDay 1보다 크면 시작일과 종료일이 다르다.
+				for (let j = 0; j < diffDay; j++) {
+					let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
+					sDateTime.setDate(sDateTime.getDate() + j);
+					let toDate = sDateTime.format('yyyyMMdd');
+
+					let startHour = $('#startHour button').data('value');
+					let startMin = $('#startMin button').data('value');
+					let endHour = $('#endHour button').data('value');
+					let endMin = $('#endMin button').data('value');
+
+					for (let i = 0; i < 24; i++) {
+						if (timeInterval == '15min') { //15분
+							if (String(i).length == 1) {
+								dateArr.push(toDate + '0' + i + '0000');
+								dateArr.push(toDate + '0' + i + '1500');
+								dateArr.push(toDate + '0' + i + '3000');
+								dateArr.push(toDate + '0' + i + '4500');
+							} else {
+								dateArr.push(toDate + i + '0000');
+								dateArr.push(toDate + i + '1500');
+								dateArr.push(toDate + i + '3000');
+								dateArr.push(toDate + i + '4500');
+							}
+						} else if (timeInterval == '30min') { //30분
+							if (String(i).length == 1) {
+								dateArr.push(toDate + '0' + i + '0000');
+								dateArr.push(toDate + '0' + i + '3000');
+							} else {
+								dateArr.push(toDate + i + '0000');
+								dateArr.push(toDate + i + '3000');
+							}
+						} else { //시간
+							if (String(i).length == 1) {
+								dateArr.push(toDate + '0' + i + '0000');
+							} else {
+								dateArr.push(toDate + i + '0000');
+							}
+						}
+					}
+				}
+			}
+
+			dateArr.forEach(date => {
+				let textDate = '';
+				if (timeInterval == '15min' || timeInterval == 'hour') {
+					textDate = date.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+				} else if (timeInterval == 'daily') {
+					textDate = date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+				} else {
+					textDate = date.replace(/(\d{4})(\d{2})/, '$1-$2');
+				}
+
+				let manualTemplate = `
+									<tr>
+										<td>${'${textDate}'}</td>
+										<td>
+											<div class="tx_inp_type center edit">
+												<input id="${'${date}'}" type="text" name="${'${date}'}" value="">
+											</div>
+										</td>
+									</tr>`;
+				$('#manualModalTable').append(manualTemplate);
+			});
+			$('#manualModalTable').data('startDate', startDate.format('yyyyMMdd'));
+			$('#manualModalTable').data('endDate', endDate.format('yyyyMMdd'));
+		} else {
+			alert('입력 단위를 선택해 주세요.');
+			return false;
+		}
+	}
+
+	const initManualForm = () => {
+		$('#manualModalTable input').each(function() {
+			$(this).val('');
+		});
+	}
+
+	const saveManualForm = () => {
+		const timeInterval = $('#timeInterval button').data('value'),
+			startDate = $('#manualModalTable').data('startDate'),
+			endDate = $('#manualModalTable').data('endDate'),
+			did = $('#manualAddDeviceModal').data('did');
+
+		let postData = new Object();
+		let data = new Array();
+		let items = new Array();
+
+		if (timeInterval != '15min') {
+			alert('현재 15분 단위만 입력 가능합니다.');
+			return false;
+		}
+
+		let stdDate = '';
+		$('#manualModalTable input').each(function() {
+			let index = $('#manualModalTable input').index(this),
+				length = $('#manualModalTable input').length,
+				thisName = $(this).attr('id'),
+				thisKey = '',
+				thisStdDate = '';
+
+			if (timeInterval == 'daily') {
+				thisStdDate = thisName.substring(0, 6);
+				thisKey = thisName.substring(6, 8);
+			} else if (timeInterval == 'monthly') {
+				thisStdDate = thisName.substring(0, 4);
+				thisKey = thisName.substring(4, 6);
+			} else {
+				thisStdDate = thisName.substring(0, 8);
+				thisKey = thisName.substring(8, 12);
+			}
+
+			if (stdDate == '') {
+				stdDate = thisStdDate;
+
+				items.push({
+					basetime: thisKey,
+					energy: $(this).val()
+				});
+			} else if (stdDate != thisStdDate) {
+				data.push({
+					date: stdDate,
+					items: items
+				});
+
+				stdDate = thisStdDate;
+				items = new Array();
+
+				items.push({
+					basetime: thisKey,
+					energy: $(this).val()
+				});
+			} else {
+				items.push({
+					basetime: thisKey,
+					energy: $(this).val()
+				});
+			}
+
+			if ((index + 1) == length) {
+				data.push({
+					date: stdDate,
+					items: items
+				});
+			}
+		});
+
+		postData['start'] = startDate;
+		postData['end'] = endDate;
+		postData['data'] = data;
+
+		$.ajax({
+			url: apiURL + apiEnergyManual + '?oid=' + oid + '&did=' + did + '&interval=' + timeInterval,
+			type: 'post',
+			dataType: 'json',
+			contentType: 'application/json',
+			data: JSON.stringify(postData)
+		}).done(function (data, textStatus, jqXHR) {
+			alert('등록되었습니다.');
+			return false;
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.error(jqXHR);
+			console.error(textStatus);
+			console.error(errorThrown);
+
+			alert('처리 중 오류가 발생했습니다.');
+			return false;
+		});
 	}
 
 	const addDeviceForm = (devicetype, did) => {
@@ -857,12 +1183,20 @@
 				dropDownInit($('#alarm_code'));
 
 				// let propArray = ['dashboard', 'billing', 'forecasting', 'manufacturer', 'alarm_set_id', 'alarm_code'];
-				let propArray = ['dashboard', 'billing', 'forecasting'];
+				let propArray = ['dashboard', 'billing', 'forecasting', 'capacity'];
 				let alarm_code = new Array();
 				$.map(data, function(val, key) {
 					if ($.inArray(key, propArray) >= 0) {
 						if (key == 'dashboard' || key == 'billing' || key == 'forecasting') {
 							$('#' + key).prop('checked', val);
+						} else if (key == 'capacity') {
+							let unit = data['capacity_unit'];
+							if (unit == 'W') {
+								let capacity = Math.floor(val / 1000)
+								$('#' + key).val(capacity);
+							}  else {
+								$('#' + key).val(val);
+							}
 						}
 						// else {
 						// 	if (key == 'manufacturer') {

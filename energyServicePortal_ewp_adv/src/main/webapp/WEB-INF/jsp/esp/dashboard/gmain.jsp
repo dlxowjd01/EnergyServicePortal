@@ -493,7 +493,7 @@
 			if (cnt <= max) {
 				return;
 			} else {
-				z = google.maps.event.addLizstener(map, 'zoom_changed', function (event) {
+				z = google.maps.event.addListener(map, 'zoom_changed', function (event) {
 					google.maps.event.removeListener(z);
 					smoothZoom(map, max, cnt - 1, false);
 				});
