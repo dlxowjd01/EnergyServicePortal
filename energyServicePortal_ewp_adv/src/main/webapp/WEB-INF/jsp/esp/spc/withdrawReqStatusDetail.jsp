@@ -328,7 +328,11 @@
 					<div class="fr"><button type="button" class="btn_type ml-12">다운로드</button></div>
 				</div>
 				<div class="flex_wrapper">
+<<<<<<< HEAD
 					<h2 class="heading">메모 히스토리</h2>
+=======
+					<h2 class="heading">변경 내역</h2>
+>>>>>>> a5a14a2bb43860b7276305c3d29f7901b522dd22
 				</div>
 				<div class="flex_wrapper border mt20">
 					<textarea id="txt1" class="textarea w-100" readonly></textarea>

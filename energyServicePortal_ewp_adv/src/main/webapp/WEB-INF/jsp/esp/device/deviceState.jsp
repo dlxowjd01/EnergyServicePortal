@@ -304,8 +304,8 @@
 									<ul class="dropdown-menu">
 										<li data-value="15min"><a href="javascript:void(0)">15분</a></li>
 										<li data-value="hour"><a href="javascript:void(0)">1시간</a></li>
-										<li data-value="daily"><a href="javascript:void(0)">1일</a></li>
-										<li data-value="monthly"><a href="javascript:void(0)">1개월</a></li>
+										<li data-value="day"><a href="javascript:void(0)">1일</a></li>
+										<li data-value="month"><a href="javascript:void(0)">1개월</a></li>
 									</ul>
 								</div>
 							</div>
@@ -315,44 +315,44 @@
 								<div class="sel_calendar">
 									<input type="text" id="start" name="start" class="sel customFromDate" value="" autocomplete="off" readonly>
 								</div>
-								<div class="dropdown hidden" id="startHour">
-									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-									<ul class="dropdown-menu">
-										<li data-value="0"><a href="javascript:void(0);">0시</a></li>
-										<li data-value="1"><a href="javascript:void(0);">1시</a></li>
-										<li data-value="2"><a href="javascript:void(0);">2시</a></li>
-										<li data-value="3"><a href="javascript:void(0);">3시</a></li>
-										<li data-value="4"><a href="javascript:void(0);">4시</a></li>
-										<li data-value="5"><a href="javascript:void(0);">5시</a></li>
-										<li data-value="6"><a href="javascript:void(0);">6시</a></li>
-										<li data-value="7"><a href="javascript:void(0);">7시</a></li>
-										<li data-value="8"><a href="javascript:void(0);">8시</a></li>
-										<li data-value="9"><a href="javascript:void(0);">9시</a></li>
-										<li data-value="10"><a href="javascript:void(0);">10시</a></li>
-										<li data-value="11"><a href="javascript:void(0);">11시</a></li>
-										<li data-value="12"><a href="javascript:void(0);">12시</a></li>
-										<li data-value="13"><a href="javascript:void(0);">13시</a></li>
-										<li data-value="14"><a href="javascript:void(0);">14시</a></li>
-										<li data-value="15"><a href="javascript:void(0);">15시</a></li>
-										<li data-value="16"><a href="javascript:void(0);">16시</a></li>
-										<li data-value="17"><a href="javascript:void(0);">17시</a></li>
-										<li data-value="18"><a href="javascript:void(0);">18시</a></li>
-										<li data-value="19"><a href="javascript:void(0);">19시</a></li>
-										<li data-value="20"><a href="javascript:void(0);">20시</a></li>
-										<li data-value="21"><a href="javascript:void(0);">22시</a></li>
-										<li data-value="22"><a href="javascript:void(0);">23시</a></li>
-										<li data-value="23"><a href="javascript:void(0);">21시</a></li>
-									</ul>
-								</div>
-								<div class="dropdown hidden" id="startMin">
-									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-									<ul class="dropdown-menu">
-										<li data-value="0"><a href="javascript:void(0);">15분</a></li>
-										<li data-value="15"><a href="javascript:void(0);">15분</a></li>
-										<li data-value="30"><a href="javascript:void(0);">15분</a></li>
-										<li data-value="45"><a href="javascript:void(0);">15분</a></li>
-									</ul>
-								</div>
+<%--								<div class="dropdown hidden" id="startHour">--%>
+<%--									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>--%>
+<%--									<ul class="dropdown-menu">--%>
+<%--										<li data-value="0"><a href="javascript:void(0);">0시</a></li>--%>
+<%--										<li data-value="1"><a href="javascript:void(0);">1시</a></li>--%>
+<%--										<li data-value="2"><a href="javascript:void(0);">2시</a></li>--%>
+<%--										<li data-value="3"><a href="javascript:void(0);">3시</a></li>--%>
+<%--										<li data-value="4"><a href="javascript:void(0);">4시</a></li>--%>
+<%--										<li data-value="5"><a href="javascript:void(0);">5시</a></li>--%>
+<%--										<li data-value="6"><a href="javascript:void(0);">6시</a></li>--%>
+<%--										<li data-value="7"><a href="javascript:void(0);">7시</a></li>--%>
+<%--										<li data-value="8"><a href="javascript:void(0);">8시</a></li>--%>
+<%--										<li data-value="9"><a href="javascript:void(0);">9시</a></li>--%>
+<%--										<li data-value="10"><a href="javascript:void(0);">10시</a></li>--%>
+<%--										<li data-value="11"><a href="javascript:void(0);">11시</a></li>--%>
+<%--										<li data-value="12"><a href="javascript:void(0);">12시</a></li>--%>
+<%--										<li data-value="13"><a href="javascript:void(0);">13시</a></li>--%>
+<%--										<li data-value="14"><a href="javascript:void(0);">14시</a></li>--%>
+<%--										<li data-value="15"><a href="javascript:void(0);">15시</a></li>--%>
+<%--										<li data-value="16"><a href="javascript:void(0);">16시</a></li>--%>
+<%--										<li data-value="17"><a href="javascript:void(0);">17시</a></li>--%>
+<%--										<li data-value="18"><a href="javascript:void(0);">18시</a></li>--%>
+<%--										<li data-value="19"><a href="javascript:void(0);">19시</a></li>--%>
+<%--										<li data-value="20"><a href="javascript:void(0);">20시</a></li>--%>
+<%--										<li data-value="21"><a href="javascript:void(0);">22시</a></li>--%>
+<%--										<li data-value="22"><a href="javascript:void(0);">23시</a></li>--%>
+<%--										<li data-value="23"><a href="javascript:void(0);">21시</a></li>--%>
+<%--									</ul>--%>
+<%--								</div>--%>
+<%--								<div class="dropdown hidden" id="startMin">--%>
+<%--									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>--%>
+<%--									<ul class="dropdown-menu">--%>
+<%--										<li data-value="0"><a href="javascript:void(0);">15분</a></li>--%>
+<%--										<li data-value="15"><a href="javascript:void(0);">15분</a></li>--%>
+<%--										<li data-value="30"><a href="javascript:void(0);">15분</a></li>--%>
+<%--										<li data-value="45"><a href="javascript:void(0);">15분</a></li>--%>
+<%--									</ul>--%>
+<%--								</div>--%>
 							</div>
 
 							<div id="timeEndGroup" class="input-group inline-flex">
@@ -360,44 +360,44 @@
 								<div class="sel_calendar">
 									<input type="text" id="end" name="end"class="sel customToDate" value="" autocomplete="off" readonly>
 								</div>
-								<div class="dropdown hidden" id="endHour">
-									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-									<ul class="dropdown-menu">
-										<li data-value="0"><a href="javascript:void(0);">0시</a></li>
-										<li data-value="1"><a href="javascript:void(0);">1시</a></li>
-										<li data-value="2"><a href="javascript:void(0);">2시</a></li>
-										<li data-value="3"><a href="javascript:void(0);">3시</a></li>
-										<li data-value="4"><a href="javascript:void(0);">4시</a></li>
-										<li data-value="5"><a href="javascript:void(0);">5시</a></li>
-										<li data-value="6"><a href="javascript:void(0);">6시</a></li>
-										<li data-value="7"><a href="javascript:void(0);">7시</a></li>
-										<li data-value="8"><a href="javascript:void(0);">8시</a></li>
-										<li data-value="9"><a href="javascript:void(0);">9시</a></li>
-										<li data-value="10"><a href="javascript:void(0);">10시</a></li>
-										<li data-value="11"><a href="javascript:void(0);">11시</a></li>
-										<li data-value="12"><a href="javascript:void(0);">12시</a></li>
-										<li data-value="13"><a href="javascript:void(0);">13시</a></li>
-										<li data-value="14"><a href="javascript:void(0);">14시</a></li>
-										<li data-value="15"><a href="javascript:void(0);">15시</a></li>
-										<li data-value="16"><a href="javascript:void(0);">16시</a></li>
-										<li data-value="17"><a href="javascript:void(0);">17시</a></li>
-										<li data-value="18"><a href="javascript:void(0);">18시</a></li>
-										<li data-value="19"><a href="javascript:void(0);">19시</a></li>
-										<li data-value="20"><a href="javascript:void(0);">20시</a></li>
-										<li data-value="21"><a href="javascript:void(0);">22시</a></li>
-										<li data-value="22"><a href="javascript:void(0);">23시</a></li>
-										<li data-value="23"><a href="javascript:void(0);">21시</a></li>
-									</ul>
-								</div>
-								<div class="dropdown hidden" id="endMin">
-									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-									<ul class="dropdown-menu">
-										<li data-value="0"><a href="javascript:void(0);">15분</a></li>
-										<li data-value="15"><a href="javascript:void(0);">15분</a></li>
-										<li data-value="30"><a href="javascript:void(0);">15분</a></li>
-										<li data-value="45"><a href="javascript:void(0);">15분</a></li>
-									</ul>
-								</div>
+<%--								<div class="dropdown hidden" id="endHour">--%>
+<%--									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>--%>
+<%--									<ul class="dropdown-menu">--%>
+<%--										<li data-value="0"><a href="javascript:void(0);">0시</a></li>--%>
+<%--										<li data-value="1"><a href="javascript:void(0);">1시</a></li>--%>
+<%--										<li data-value="2"><a href="javascript:void(0);">2시</a></li>--%>
+<%--										<li data-value="3"><a href="javascript:void(0);">3시</a></li>--%>
+<%--										<li data-value="4"><a href="javascript:void(0);">4시</a></li>--%>
+<%--										<li data-value="5"><a href="javascript:void(0);">5시</a></li>--%>
+<%--										<li data-value="6"><a href="javascript:void(0);">6시</a></li>--%>
+<%--										<li data-value="7"><a href="javascript:void(0);">7시</a></li>--%>
+<%--										<li data-value="8"><a href="javascript:void(0);">8시</a></li>--%>
+<%--										<li data-value="9"><a href="javascript:void(0);">9시</a></li>--%>
+<%--										<li data-value="10"><a href="javascript:void(0);">10시</a></li>--%>
+<%--										<li data-value="11"><a href="javascript:void(0);">11시</a></li>--%>
+<%--										<li data-value="12"><a href="javascript:void(0);">12시</a></li>--%>
+<%--										<li data-value="13"><a href="javascript:void(0);">13시</a></li>--%>
+<%--										<li data-value="14"><a href="javascript:void(0);">14시</a></li>--%>
+<%--										<li data-value="15"><a href="javascript:void(0);">15시</a></li>--%>
+<%--										<li data-value="16"><a href="javascript:void(0);">16시</a></li>--%>
+<%--										<li data-value="17"><a href="javascript:void(0);">17시</a></li>--%>
+<%--										<li data-value="18"><a href="javascript:void(0);">18시</a></li>--%>
+<%--										<li data-value="19"><a href="javascript:void(0);">19시</a></li>--%>
+<%--										<li data-value="20"><a href="javascript:void(0);">20시</a></li>--%>
+<%--										<li data-value="21"><a href="javascript:void(0);">22시</a></li>--%>
+<%--										<li data-value="22"><a href="javascript:void(0);">23시</a></li>--%>
+<%--										<li data-value="23"><a href="javascript:void(0);">21시</a></li>--%>
+<%--									</ul>--%>
+<%--								</div>--%>
+<%--								<div class="dropdown hidden" id="endMin">--%>
+<%--									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>--%>
+<%--									<ul class="dropdown-menu">--%>
+<%--										<li data-value="0"><a href="javascript:void(0);">15분</a></li>--%>
+<%--										<li data-value="15"><a href="javascript:void(0);">15분</a></li>--%>
+<%--										<li data-value="30"><a href="javascript:void(0);">15분</a></li>--%>
+<%--										<li data-value="45"><a href="javascript:void(0);">15분</a></li>--%>
+<%--									</ul>--%>
+<%--								</div>--%>
 							</div>
 						</div>
 					</div>
@@ -449,6 +449,7 @@
 	const apiConfigDevices = '/config/devices';
 	const apiAlarmCodeSets = '/alarms/code_sets';
 	const apiEnergyManual = '/energy/manual/input';
+	const apiEnergyDevices = '/energy/devices';
 
 	let codeSetList = new Array();
 
@@ -555,7 +556,6 @@
 
 	//설비 속성 템플릿
 	const featureProperties = new Object();
-	const featurePropertiesSub = new Object();
 	const deviceProperties = () => {
 		$.ajax({
 			url: apiURL + apiDeviceProperties,
@@ -569,6 +569,12 @@
 				let tempFeature = new Array();
 				let tempFeature2 = new Array();
 
+				featureProperties[key] = {
+					name: val.name.kr,
+					headerProp: null,
+					bodyProp: null
+				}
+
 				$.map(propList, function (v, k) {
 					if (v.status_head) {
 						let tempObj = new Object();
@@ -579,10 +585,7 @@
 						tempObj['reducer'] = v.dashboard_head_reducer;
 						tempFeature.push(tempObj);
 
-						featureProperties[deviceName] = {
-							name: val.name.kr,
-							prop: tempFeature
-						};
+						featureProperties[deviceName]['headerProp'] = tempFeature;
 					}
 
 					if (v.status_detail) {
@@ -593,10 +596,7 @@
 						tempObj2['suffix'] = unit;
 						tempFeature2.push(tempObj2);
 
-						featurePropertiesSub[deviceName] = {
-							name: val.name.kr,
-							prop: tempFeature2
-						};
+						featureProperties[deviceName]['bodyProp'] = tempFeature2;
 					}
 				});
 			});
@@ -741,21 +741,25 @@
 			let featureBody2 = '';
 			if (!isEmpty(featureProperties[key])) {
 				if (!isEmpty(featureProperties[key])) {
-					let prop = featureProperties[key].prop;
-					prop.forEach(el => {
-						featureHead += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><p class="t_ti">' + el.value + '</p><p class="t_value"></p></li>';
-					});
+					if (!isEmpty(featureProperties[key].headerProp)) {
+						let prop = featureProperties[key].headerProp;
+						prop.forEach(el => {
+							featureHead += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><p class="t_ti">' + el.value + '</p><p class="t_value"></p></li>';
+						});
+					}
 				}
 
-				if (!isEmpty(featurePropertiesSub[key])) {
-					let prop = featurePropertiesSub[key].prop;
-					prop.forEach((el, idx) => {
-						if (idx % 2 == 0) {
-							featureBody1 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di_li_tit">' + el.value + '</span><span class="di_li_tx"></span></li>';
-						} else {
-							featureBody2 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di_li_tit">' + el.value + '</span><span class="di_li_tx"></span></li>';
-						}
-					});
+				if (!isEmpty(featureProperties[key])) {
+					if (!isEmpty(featureProperties[key].bodyProp)) {
+						let prop = featureProperties[key].bodyProp;
+						prop.forEach((el, idx) => {
+							if (idx % 2 == 0) {
+								featureBody1 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di_li_tit">' + el.value + '</span><span class="di_li_tx"></span></li>';
+							} else {
+								featureBody2 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di_li_tit">' + el.value + '</span><span class="di_li_tx"></span></li>';
+							}
+						});
+					}
 				}
 			}
 
@@ -810,11 +814,7 @@
 			}
 
 			let typeName = '';
-			if (key == 'SM_MANUAL') {
-				typeName = '수기입력';
-			} else {
-				typeName = featureProperties[key].name;
-			}
+			typeName = featureProperties[key].name;
 
 			typeList.push({
 				typeName: typeName,
@@ -933,7 +933,9 @@
 		const timeInterval = $('#timeInterval button').data('value'),
 			timeIntervalTxt = $('#timeInterval button').text(),
 			startDate = $('#start').datepicker('getDate'),
-			endDate = $('#end').datepicker('getDate');
+			endDate = $('#end').datepicker('getDate'),
+			did = $('#manualAddDeviceModal').data('did');
+
 		let dateArr = new Array();
 
 		$('#manualModalTable').empty();
@@ -942,7 +944,7 @@
 			let sDate = startDate.format('yyyyMMdd'),
 				eDate = endDate.format('yyyyMMdd');
 
-			if (timeInterval == 'daily') {
+			if (timeInterval == 'day') {
 				let diffDay = dateDiff(eDate, sDate, 'day');
 				for (let j = 0; j < diffDay; j++) {
 					let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
@@ -950,7 +952,7 @@
 					let toDate = sDateTime.format('yyyyMMdd');
 					dateArr.push(toDate);
 				}
-			} else if (timeInterval == 'monthly') {
+			} else if (timeInterval == 'month') {
 				let diffMonth = dateDiff(eDate, sDate, 'month');
 				for (let j = 0; j < diffMonth; j++) {
 					let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) + j - 1, 1);
@@ -972,17 +974,53 @@
 
 					for (let i = 0; i < 24; i++) {
 						if (timeInterval == '15min') { //15분
-							if (String(i).length == 1) {
-								dateArr.push(toDate + '0' + i + '0000');
-								dateArr.push(toDate + '0' + i + '1500');
-								dateArr.push(toDate + '0' + i + '3000');
-								dateArr.push(toDate + '0' + i + '4500');
-							} else {
-								dateArr.push(toDate + i + '0000');
-								dateArr.push(toDate + i + '1500');
-								dateArr.push(toDate + i + '3000');
-								dateArr.push(toDate + i + '4500');
-							}
+							// if (j == 0) {
+							// 	if (Number(startHour) == i) {
+							// 		if (String(i).length == 1) {
+							// 			for (let minute = 1; minute < 4; minute++) {
+							// 				let setMinute = Number(startMin) * minute;
+							// 				if (setMinute == 0) {
+							// 					dateArr.push(toDate + '0' + i + '0000');
+							// 				} else if (setMinute <= 60) {
+							// 					dateArr.push(toDate + '0' + i + String(setMinute) + '00');
+							// 				}
+							// 			}
+							// 		} else {
+							// 			for (let minute = 1; minute < 4; minute++) {
+							// 				let setMinute = Number(startMin) * minute;
+							// 				if (setMinute == 0) {
+							// 					dateArr.push(toDate + '0' + i + '0000');
+							// 				} else if (setMinute <= 60) {
+							// 					dateArr.push(toDate + '0' + i + String(setMinute) + '00');
+							// 				}
+							// 			}
+							// 		}
+							// 	} else if (Number(startHour) < i) {
+							// 		if (String(i).length == 1) {
+							// 			dateArr.push(toDate + '0' + i + '0000');
+							// 			dateArr.push(toDate + '0' + i + '1500');
+							// 			dateArr.push(toDate + '0' + i + '3000');
+							// 			dateArr.push(toDate + '0' + i + '4500');
+							// 		} else {
+							// 			dateArr.push(toDate + i + '0000');
+							// 			dateArr.push(toDate + i + '1500');
+							// 			dateArr.push(toDate + i + '3000');
+							// 			dateArr.push(toDate + i + '4500');
+							// 		}
+							// 	}
+							// } else {
+								if (String(i).length == 1) {
+									dateArr.push(toDate + '0' + i + '0000');
+									dateArr.push(toDate + '0' + i + '1500');
+									dateArr.push(toDate + '0' + i + '3000');
+									dateArr.push(toDate + '0' + i + '4500');
+								} else {
+									dateArr.push(toDate + i + '0000');
+									dateArr.push(toDate + i + '1500');
+									dateArr.push(toDate + i + '3000');
+									dateArr.push(toDate + i + '4500');
+								}
+							// }
 						} else if (timeInterval == '30min') { //30분
 							if (String(i).length == 1) {
 								dateArr.push(toDate + '0' + i + '0000');
@@ -1006,8 +1044,8 @@
 				let textDate = '';
 				if (timeInterval == '15min' || timeInterval == 'hour') {
 					textDate = date.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
-				} else if (timeInterval == 'daily') {
-					textDate = date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+				} else if (timeInterval == 'day') {
+					textDate = date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3') + '000000';
 				} else {
 					textDate = date.replace(/(\d{4})(\d{2})/, '$1-$2');
 				}
@@ -1025,6 +1063,39 @@
 			});
 			$('#manualModalTable').data('startDate', startDate.format('yyyyMMdd'));
 			$('#manualModalTable').data('endDate', endDate.format('yyyyMMdd'));
+
+			$.ajax({
+				url: apiURL + apiEnergyDevices,
+				type: 'get',
+				dataType: 'json',
+				async: false,
+				data: {
+					dids: did,
+					startTime: startDate.format('yyyyMMdd') + '000000',
+					endTime: endDate.format('yyyyMMdd') + '235959',
+					interval: timeInterval
+				},
+			}).done(function (data, textStatus, jqXHR) {
+				let resultData = data.data;
+				if (!isEmpty(resultData)) {
+					let result = resultData[did][0].items,
+						manualObj = new Object();
+					console.log(result);
+					result.forEach(manual => {
+						manualObj[manual.basetime] = Number(manual.energy);
+					});
+
+					setJsonAutoMapping(manualObj, 'manualModalTable');
+				}
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.error(jqXHR);
+				console.error(textStatus);
+				console.error(errorThrown);
+
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
+
 		} else {
 			alert('입력 단위를 선택해 주세요.');
 			return false;
@@ -1060,10 +1131,10 @@
 				thisKey = '',
 				thisStdDate = '';
 
-			if (timeInterval == 'daily') {
+			if (timeInterval == 'day') {
 				thisStdDate = thisName.substring(0, 6);
 				thisKey = thisName.substring(6, 8);
-			} else if (timeInterval == 'monthly') {
+			} else if (timeInterval == 'month') {
 				thisStdDate = thisName.substring(0, 4);
 				thisKey = thisName.substring(4, 6);
 			} else {
