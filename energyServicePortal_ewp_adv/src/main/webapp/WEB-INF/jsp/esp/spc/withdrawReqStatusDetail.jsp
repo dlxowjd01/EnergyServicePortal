@@ -33,7 +33,7 @@
 		// txtArea.eq(0).val();
 		unCheckAll();
 		getDataList();
-		initTextArea();
+
 		function getDataList(page) {
 			page == undefined ? page = 1 : page = page;
 			var sortList = [];
@@ -54,16 +54,17 @@
 				tableList.empty();
 				if (json.data.length > 0) {
 					json.data.map(item => {
-						console.log("item===", item)
 						let data = json.data;
 						let sum = 0;
 						$("#total").text(item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원');
-						return new Promise((resolve, reject) => {
-							// typeof v.to_account !== "string" ? JSON.parse(v.to_account) : v.to_account = v.to_account
-								resolve(JSON.parse(item.to_account))
-							}).then(res => {
-								// console.log("res===", res)
-								res.map( x => {
+						const promiseAccount = Promise.resolve(JSON.parse(item.to_account));
+						const promiseMemo = Promise.resolve(JSON.parse(item.memo));
+
+						Promise.all([promiseAccount, promiseMemo]).then(res => {
+								$("#txt1").val(res[1].desc);
+								$("#txt2").val("");
+								res[0].map( x => {
+									console.log("x==", x)
 									let popObj = Object.assign({}, item);
 									delete(popObj.to_account);
 
@@ -82,12 +83,11 @@
 										.replace(/\*amount\*/g, amount)
 										.replace(/\*toAccountNum\*/g, to_account_no)
 									tableList.append($(str));
-								})	
-						}).catch(error => {
-							console.log(error);
-						}).finally(() => {
+								});
+							}).catch(error => {
+								console.log(error);
+							});
 						});
-					});
 				} else {
 					return false;
 				}
@@ -100,11 +100,11 @@
 			});
 		}
 
-		$("#txt2").keyup(function(){
-			let preserved = $("#txt1").val();
-			let val = $(this).val();
-			$("#txt1").val(preserved += val);
-		});
+		// $("#txt2").keyup(function(){
+		// 	let preserved = $("#txt1").val();
+		// 	let val = $(this).val();
+		// 	$("#txt1").val(preserved += val);
+		// });
 
 		// approval => status: 3
 		$("#attachedFileForm").on("submit", function(e){
@@ -115,12 +115,23 @@
 		// saving only => status: null
 		$("#saveBtn").on("click", function(){
 			const newStatus = null;
-			let val = $("#txt2").val();
+			let input = $("#txt2").val();
+			let d = new Date();
+			let prefix = '\n'
+				+ d.toISOString().substring(0, 10) + ' '
+				+  d.toLocaleTimeString().substr(0, d.toLocaleTimeString().length-2)
+				+ '/ '
+				+ loginName;
 
-			if(isEmpty(val)){
+				console.log("prefix---", prefix)
+			if(isEmpty(input)){
 				$("#warningModal").modal("show");
 			} else {
-				handleReq(newStatus, updateReq);
+				let preserved = $("#txt1").val();
+				let val = prefix + input;
+				$("#txt1").val(preserved += val);
+			
+				// handleReq(newStatus, updateReq);
 			}
 		});
 		// rejection => status: 0
@@ -179,13 +190,13 @@
 
 
 	function initTextArea(){
-		let preserved = "";
-		let d = new Date();
+		// let preserved = "";
+		// let d = new Date();
 
-		preserved = d.toISOString().substring(0, 10) + ' ' +  d.toLocaleTimeString().substr(0, d.toLocaleTimeString().length-2) + '/ ' + loginName + ' / 메모 히스토리'
-		$("#txt1").val(preserved);
+		// preserved = d.toISOString().substring(0, 10) + ' ' +  d.toLocaleTimeString().substr(0, d.toLocaleTimeString().length-2) + '/ ' + loginName + ' / 메모 히스토리'
+		$("#txt1").val("");
 		$("#txt2").val("")
-		$("#tempMemo").val("")
+
 	}
 
 	// onclick="location.href='http://iderms.enertalk.com:8443/files/download/5c71e049-f73c-2bf9-a9a0-2f91d067ef11?oid=spower&orgFilename=수익보고서_20200526100755.pdf'"
@@ -299,7 +310,6 @@
 	</div>
 	<div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
 		<form id="attachedFileForm" name="attached_file_form" action="#" method="post">
-			<input type="hidden" id="tempMemo" name="tempMemo"/>
 			<div class="indiv spc-detail">
 				<div class="flex_wrapper">
 					<h2 class="ntit">증빙 서류</h2>
@@ -310,21 +320,15 @@
 				</div>
 				
 				<div class="flex_wrapper">
-					<h2 class="heading">출금 요청서 + 증빙</h2>
-					<div class="fr">
-						<button type="button" class="btn-print btn_type03">인쇄</button><button 
-							type="button" class="btn_type ml-12">다운로드</button>
-					</div>
+					<h2 class="heading">출금 요청서</h2>
+					<div class="fr"><button type="button" class="btn_type ml-12">다운로드</button></div>
 				</div>
 				<div class="flex_wrapper border mt20">
-					<h2 class="heading">출금 요청서</h2>
-					<div class="fr">
-						<button type="button" class="btn-print btn_type03">인쇄</button><button 
-						type="button" class="btn_type ml-12">다운로드</button>
-					</div>
+					<h2 class="heading">증빙 서류</h2>
+					<div class="fr"><button type="button" class="btn_type ml-12">다운로드</button></div>
 				</div>
 				<div class="flex_wrapper">
-					<h2 class="heading">변경 내역</h2>
+					<h2 class="heading">메모 히스토리</h2>
 				</div>
 				<div class="flex_wrapper border mt20">
 					<textarea id="txt1" class="textarea w-100" readonly></textarea>
