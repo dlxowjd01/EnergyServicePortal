@@ -323,14 +323,16 @@
 						type="button" class="btn_type ml-12">다운로드</button>
 					</div>
 				</div>
-				<div class="flex_wrapper border">
+				<div class="flex_wrapper">
+					<h2 class="heading">변경 내역</h2>
+				</div>
+				<div class="flex_wrapper border mt20">
 					<textarea id="txt1" class="textarea w-100" readonly></textarea>
 				</div>
-
 				<div class="flex_wrapper">
 					<h2 class="heading">메모</h2><!--
 					--><a class="chk_type" href="javascript:void(0);"><input type="checkbox" id="memoOpt" name="memo_opt"><label for="memoOpt">사무수탁사 함께 보기</label></a><!--
-				--></div>
+			--></div>
 				<div class="textarea-container mt20">
 					<button type="button" id="saveBtn" class="btn_type03 fixed_btn">저장</button>
 					<textarea placeholder="직접입력" id="txt2" class="textarea w-100"></textarea>

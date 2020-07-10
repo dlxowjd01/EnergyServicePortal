@@ -220,31 +220,46 @@ $(function(){
 
 /* input[file] multi-select || single select label */
 $(function() {
+	var clone='';
     $(document).on('change', 'input[type=file]', function(){
         var t = $(this).val();
 		var labelText = 'File : ' + t.substr(12, t.length);
 
 		if($(this).attr("multiple")){
 			let list = $(this).parent().find(".file_list ul");
-			let item = list.find("li");
+			let item = $(this).get(0).files;
+			// let noFile = list.find(".no-file");
 			let arr = [];
-			let listItem = ``;
-			if(!item.hasClass("upload_text")){
-				item.text("");
-			}
-
-			for (var i = 0; i < $(this).get(0).files.length; ++i) {
-				listItem = `<li class="upload_text">${$(this).get(0).files[i].name}<button type='button' class='btn_close icon_btn' onclick='$(this).parent().remove()'></button><li>`
+			list.empty();
+			$.each(item, function(index, element) {
+				let listItem = ``;
+				let dataId = genUuid();
+				listItem = `
+					<li class='upload_text' data-id="${dataId}">
+						${element.name}
+						<button type='button' class='btn_close icon_btn' onclick='deleteFile($(this))'></button>
+					</li>
+				`
 				list.append(listItem);
-				arr.push($(this).get(0).files[i].name);
-			}
+				arr.push(element.name);
+			});
 			//$(this).attr("name", arr);
 		} else {
 			$(this).prev('label').text(labelText);
 			$(this).parent().find(".upload_text").text(labelText);
 		}
-    })
+	});
+
 });
+function deleteFile(self){
+	let ul =  self.parents(".file_list ul");
+	self.parent(".upload_text").remove();
+	if(ul.children().length<=0){
+		let item = '';
+		item = '<li class="no-file">선택된 파일이 없습니다.</li>'
+		ul.append(item);
+	}
+}
 
 // $(function() {
 //     $('input[type=file]').change(function(){

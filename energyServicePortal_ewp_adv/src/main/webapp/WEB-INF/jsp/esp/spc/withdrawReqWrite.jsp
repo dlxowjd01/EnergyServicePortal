@@ -43,14 +43,45 @@
 			});
 		});
 
+		var dfd = $.Deferred();
+ 
 		$("#fileInput").change(function(){
 			fileList = [];
 			for(let i = 0; i<$(this)[0].files.length; i++){
 				fileList.push($(this)[0].files[i]);
 			}
+			console.log("fileLost===", fileList)
 		});
 
-		let pList = [ 
+		$("#pdfBtn").on("click", function(e){
+			e.preventDefault();
+			let warning = $(".spc-search-bar").find(".warning");
+			console.log("warning---", warning);
+			if(isEmpty(spcList.prev().data("value"))){
+				warning.eq(0).removeClass("hidden");
+			} else if (isEmpty(withdrawList.prev().data("value")) ) {
+				warning.eq(1).removeClass("hidden");
+				console.log("withdrawList===", withdrawList.prev().data("value") )
+			} else {
+				warning.addClass("hidden");
+				let item = $("#addFileList").find("li.upload_text");
+				item.each(function(index, element){
+					let dataId = $(this).data("id");
+					console.log("dataId---", fileList[index] );
+					downloadFile('get', fileList[index].name, dataId );
+				});
+			}
+
+			// $.each(fileList, function(index, element){
+				// let name = $(this).filedName;
+				// console.log("name===", name)
+				// $("#fileInput")[0].files[index].name = name;
+				// uploadFile('post', $("#fileInput")[0].files[index], name)
+			// });
+			// downloadFile('get');
+		});
+
+		let pList = [
 			{ name: "REC 수익", val: 0 },
 			{ name: "SMP 수익", val: 1 },
 			{ name: "DSRA 적립", val: 2 },
@@ -174,7 +205,8 @@
 			let tr = tableBody.find("tr");
 			let jsonData = {}
 			let arr =[];
-			let fileArr = [];
+			let finalNameList = [];
+
 			jsonData.spc_id = spcList.prev().data("value");
 			// from
 			jsonData.withdraw_bank = withdrawList.prev().data("value");
@@ -192,15 +224,13 @@
 
 			if($("#fileCheckbox").is(":checked")) {
 				let fileNames = $("#addFileList").find("li.upload_text");
-
 				$.each(fileNames, function(index, element){
 					let obj = {};
 					obj.originalName = $(this).text();
-					obj.filedName = genUuid();
-					fileArr.push(obj);
+					obj.filedName = $(this).data("id");
+					finalNameList.push(obj);
 				});
-				jsonData.attachement_info = JSON.stringify(fileArr);
-				console.log("json--", jsonData.attachement_info)
+				jsonData.attachement_info = JSON.stringify(finalNameList);
 			}
 
 			checkboxes.each(function(index, element){
@@ -219,7 +249,7 @@
 			jsonData.total_amount = totalAmount;
 			jsonData.to_account = JSON.stringify(arr);
 
-			console.log("jdonDA---", jsonData)
+			// console.log("jdonDA---", jsonData)
 			let newJson = JSON.stringify(jsonData);
 
 			let formArr = [ jsonData.spc_id, jsonData.withdraw_bank, jsonData.withdraw_day, jsonData.to_account ];
@@ -246,14 +276,14 @@
 			});
 
 			if($("#fileCheckbox").is(":checked")){
+				console.log("fileList", fileList);
+				console.log("finalNameList", finalNameList)
 				$.each(fileList, function(index, element){
-					let name = fileArr[index].filedName;
-					$("#fileInput")[0].files[index].name = name;
-					uploadFile('post', $("#fileInput")[0].files[index], name)
+					uploadFile('post', $("#fileInput")[0].files[index], finalNameList[index].filedName);
 				});
 			};
 			
-			if( withdrawForm.find(".warning.hidden").length == 4){
+			if( withdrawForm.find(".warning.hidden").length == 4 ){
 				let opt = {
 					url: 'http://iderms.enertalk.com:8443/spcs/transactions?oid='+oid,
 					type: "POST",
@@ -266,9 +296,7 @@
 				$.ajax(opt).done(function (json, textStatus, jqXHR) {
 					if($("#fileCheckbox").is(":checked")){
 						$.each(fileList, function(index, element){
-							let name = fileArr[index].filedName;
-							$("#fileInput")[0].files[index].name = name;
-							uploadFile('post', $("#fileInput")[0].files[index], name)
+							uploadFile('post', $("#fileInput")[0].files[index], finalNameList[index].filedName);
 						});
 					};
 					window.location.href = window.location.origin + '/spc/transactionHistory.do'
@@ -278,14 +306,45 @@
 					return false;
 				});
 			} else {
-				// console.log("warning length===", withdrawForm.find(".warning.hidden') )
-			} 
+				console.log("warning length===" )
+			}
 		});
 
-		function uploadFile(action, file, newName){
+		function downloadFile(action, originalName, fakeName){
+			console.log("downloadFile--", action)
+			console.log("fakeName==", fakeName, "originalName===", originalName);
+
+
+			var element = document.createElement('a');
+			element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(originalName));
+			element.setAttribute('download', originalName);
+
+			element.style.display = 'none';
+			document.body.appendChild(element);
+
+			element.click();
+
+			document.body.removeChild(element);
+			
+			// let option= {
+			// 	type: action,
+			// 	url: 'http://iderms.enertalk.com:8443/files/download?oid=' + oid,
+			// 	data: {
+			// 		fileKey: fakeName,
+			// 		orgFilename: originalName
+			// 	},
+			// }
+			// $.ajax(option).done(function (json, textStatus, jqXHR) {
+			// 	console.log("success===", json)
+			// }).fail(function (jqXHR, textStatus, errorThrown) {
+			// 	alert('처리 중 오류가 발생했습니다.');
+			// 	return false;
+			// });
+		}
+
+		function uploadFile(action, file, filedName){
 			let formData = new FormData($('#fileUploadForm')[0]);
-			// formData.set('file', file)
-			formData.append(newName, file);
+			formData.append(filedName, file);
 
 			let option= {
 				type: action,
@@ -298,7 +357,7 @@
 				async: false,
 				data: formData,
 			}
-			// formData.append("file", this.fileObj);
+
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				console.log("success===", json)
 			}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -325,7 +384,7 @@
 					}
 				});
 			});
-	}
+		}
 
 		$(document).on("change", ".amount", function(evt) {
 			let newVal = this.value;
@@ -350,17 +409,13 @@
 		});
 
 		$("#deleteRowBtn").on("click", function(){
-			let checkboxes = tableBody.find("input[type='checkbox']");
-			checkboxes.each(function(index, element){
-				if($(this).is(":checked") && index>0){
-					let row = $("#tableBody").find("tr").eq(index);
-					row.remove();
-					calcTotal();
-				}
-			});
+			$("#tableBody tr:not(:first-child)").find('td input:checked').closest('tr').remove();
 		});
 		
-		
+		$("#selectAll").on("click", function(){
+			$("#tableBody").find('input:checkbox').prop('checked', this.checked);
+		});
+
 		function getNumberIndex (index) {
 			return index + 1;
 		}
@@ -394,6 +449,7 @@
 	</div>
 </div>
 
+<form id="fileUploadForm" name="fileUploadForm"></form>
 <form id="withdrawForm" name="withdraw_form" action="#" method="post">
 	<div class="row spc-search-bar">
 		<div class="col-11">
@@ -437,7 +493,12 @@
 					</colgroup>
 					<thead>
 					<tr>
-						<th></th>
+						<th>
+							<a class="chk_type select_row">
+								<input type="checkbox" id="selectAll" name="select_all">
+								<label for="selectAll"></label>
+							</a>
+						</th>
 						<th>출금 요청 일자</th>
 						<th>용도 구분</th>
 						<th>요청 금액</th>
@@ -514,12 +575,10 @@
 						</colgroup>
 						<tr>
 							<th class="th_type">증빙 첨부</th>
-							<td id="addFileList" class="flex_start_td">
-								<form id="fileUploadForm" name="fileUploadForm" action="#" method="multipart/form-data"><!--
-									--><input type="file" name="file" id="fileInput" class="hidden" accept=".pdf" multiple=""><!--
-									--><label for="fileInput" class="btn file_upload">파일 선택</label><!--
-									--><div class="file_list ml-16"><ul><li>No Files Selected</li></ul></div>
-								</form>
+							<td id="addFileList" class="flex_start_td"><!--
+								--><input type="file" name="file" id="fileInput" class="uploadBtn hidden" accept=".pdf" multiple><!--
+								--><label for="fileInput" class="btn file_upload">파일 선택</label><!--
+								--><div class="file_list ml-16"><ul><li>선택된 파일이 없습니다.</li></ul></div>
 							</td>
 							<td></td>
 						</tr>
