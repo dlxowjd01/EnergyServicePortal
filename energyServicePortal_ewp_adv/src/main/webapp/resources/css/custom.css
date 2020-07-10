@@ -11394,11 +11394,11 @@ html.darkmode .sch_top_info .sch_btn .btn_next_mon {
 	text-align: center;
 	background: none;
 }
-.spc_tbl td.right,
-.spc_bal_post .tx_inp_type input.right {
-	text-align: right;
+.spc_tbl td.right {
 	padding: 0 16px;
+	text-align: right;
 }
+
 .spc_bal_post .sel {
 	padding: 0;
 	width: 100%;
@@ -11693,7 +11693,6 @@ th .btn_align {
 	margin: 15px 0;
 }
 
-
 /* spc 출금 요청서 작성||수정 */
 .spc-transaction .spc_bal_post table {
 	border-collapse: collapse;
@@ -11704,13 +11703,19 @@ th .btn_align {
 	border: 0;
 }
 
+.spc-transaction .table-footer .tx_inp_type input.right {
+	padding: 0 16px;
+	width: 99%;
+	text-align: right;
+}
+
 .spc-transaction .table-footer .sa_select,
 .spc-transaction .table-footer .sa_select .dropdown-toggle {
 	width: 95%;
 }
 .spc-transaction .table-footer .clear-input {
 	width: 100%;
-	padding-right: 4px;
+	padding-right: 5px;
 }
 
 .spc-transaction .table-footer .sa_select .dropdown-toggle,
