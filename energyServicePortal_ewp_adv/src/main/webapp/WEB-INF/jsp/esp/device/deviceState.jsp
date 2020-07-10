@@ -556,7 +556,6 @@
 
 	//설비 속성 템플릿
 	const featureProperties = new Object();
-	const featurePropertiesSub = new Object();
 	const deviceProperties = () => {
 		$.ajax({
 			url: apiURL + apiDeviceProperties,
@@ -570,6 +569,12 @@
 				let tempFeature = new Array();
 				let tempFeature2 = new Array();
 
+				featureProperties[key] = {
+					name: val.name.kr,
+					headerProp: null,
+					bodyProp: null
+				}
+
 				$.map(propList, function (v, k) {
 					if (v.status_head) {
 						let tempObj = new Object();
@@ -580,10 +585,7 @@
 						tempObj['reducer'] = v.dashboard_head_reducer;
 						tempFeature.push(tempObj);
 
-						featureProperties[deviceName] = {
-							name: val.name.kr,
-							prop: tempFeature
-						};
+						featureProperties[deviceName]['headerProp'] = tempFeature;
 					}
 
 					if (v.status_detail) {
@@ -594,10 +596,7 @@
 						tempObj2['suffix'] = unit;
 						tempFeature2.push(tempObj2);
 
-						featurePropertiesSub[deviceName] = {
-							name: val.name.kr,
-							prop: tempFeature2
-						};
+						featureProperties[deviceName]['bodyProp'] = tempFeature2;
 					}
 				});
 			});
@@ -742,21 +741,25 @@
 			let featureBody2 = '';
 			if (!isEmpty(featureProperties[key])) {
 				if (!isEmpty(featureProperties[key])) {
-					let prop = featureProperties[key].prop;
-					prop.forEach(el => {
-						featureHead += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><p class="t_ti">' + el.value + '</p><p class="t_value"></p></li>';
-					});
+					if (!isEmpty(featureProperties[key].headerProp)) {
+						let prop = featureProperties[key].headerProp;
+						prop.forEach(el => {
+							featureHead += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><p class="t_ti">' + el.value + '</p><p class="t_value"></p></li>';
+						});
+					}
 				}
 
-				if (!isEmpty(featurePropertiesSub[key])) {
-					let prop = featurePropertiesSub[key].prop;
-					prop.forEach((el, idx) => {
-						if (idx % 2 == 0) {
-							featureBody1 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di_li_tit">' + el.value + '</span><span class="di_li_tx"></span></li>';
-						} else {
-							featureBody2 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di_li_tit">' + el.value + '</span><span class="di_li_tx"></span></li>';
-						}
-					});
+				if (!isEmpty(featureProperties[key])) {
+					if (!isEmpty(featureProperties[key].bodyProp)) {
+						let prop = featureProperties[key].bodyProp;
+						prop.forEach((el, idx) => {
+							if (idx % 2 == 0) {
+								featureBody1 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di_li_tit">' + el.value + '</span><span class="di_li_tx"></span></li>';
+							} else {
+								featureBody2 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di_li_tit">' + el.value + '</span><span class="di_li_tx"></span></li>';
+							}
+						});
+					}
 				}
 			}
 
@@ -811,15 +814,7 @@
 			}
 
 			let typeName = '';
-			if(isEmpty(featureProperties[key])) {
-				if (key == 'SM_MANUAL') {
-					typeName = '수기입력';
-				} else if (key == 'SM_ISMART') {
-					typeName = 'iSmart';
-				}
-			} else {
-				typeName = featureProperties[key].name;
-			}
+			typeName = featureProperties[key].name;
 
 			typeList.push({
 				typeName: typeName,
