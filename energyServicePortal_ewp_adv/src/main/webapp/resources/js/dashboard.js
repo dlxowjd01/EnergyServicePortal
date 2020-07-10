@@ -1031,7 +1031,6 @@ const getAlarmInfo = function () {
 		siteArray.push(site.sid);
 	});
 
-
 	$.ajax({
 		url: 'http://iderms.enertalk.com:8443/alarms',
 		type: 'get',
@@ -1124,11 +1123,6 @@ const beforeTodayTotal = function () {
 					firstBy(function(a, b) {return Number(b['accumulate']) - Number(a['accumulate']);})
 					.thenBy(function(a, b) {return Number(b['capacity']) - Number(a['capacity']);})
 				);
-
-				// siteList.sort(function(a, b) {
-				// 	return Number(b['accumulate']) - Number(a['accumulate']);
-				// })
-
 
 				if (first) {
 					getYearGenData();
@@ -1947,4 +1941,25 @@ function SortTable(table, n, sort) {
 			}
 		}
 	}
+}
+
+const makeSiteList = () => {
+	let ess = false;
+	siteList.forEach(site => {
+		if (site.devices != null) {
+			const devices = site.devices;
+			devices.forEach(device => {
+				console.log(device.device_type);
+				if ((device.device_type.toUpperCase()).match('ESS')) {
+					ess = true;
+				}
+			});
+		}
+	});
+
+	if (!ess) {
+		$('#statusSiteList').find('.ESS').remove();
+	}
+
+	setInitList('siteList'); //사이트 리스트
 }

@@ -1302,7 +1302,8 @@
 				</div>
 			</form>
 		</div>
-		<div class="btn_wrap_type02">
+
+		<div class="btn_wrap_type_right">
 			<button type="button" class="btn_type03" onclick="getExcelDown();">엑셀 다운로드</button>
 			<button type="button" class="btn_type03" onclick="setCheckedDataEdit();">수정</button>
 			<button type="button" class="btn_type03" onclick="goMoveList();">목록</button>

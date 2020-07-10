@@ -225,7 +225,7 @@
 				</div>
 			</div>
 			<div class="gtbl_wrap">
-				<div class="intable">
+				<div class="intable" id="statusSiteList">
 					<table>
 						<caption>(단위: kWh)</caption>
 						<thead>
@@ -251,10 +251,10 @@
 							<th>
 								<button class="btn_align">금일누적</button>
 							</th>
-							<th>
+							<th class="ESS">
 								<button class="btn_align">금일충전</button>
 							</th>
-							<th>
+							<th class="ESS">
 								<button class="btn_align">금일방전</button>
 							</th>
 						</tr>
@@ -273,8 +273,8 @@
 								<td class="right">[capacity]</td>
 								<td class="right">[forecast]</td>
 								<td class="right">[accumulate]</td>
-								<td>-</td>
-								<td>-</td>
+								<td class="ESS">-</td>
+								<td class="ESS">-</td>
 							</tr>
 							<tr class="detail_info list[INDEX] flag[INDEX]">
 								<td colspan="9">
@@ -1274,8 +1274,8 @@
 
 	$(function () {
 		setInitList('alarmNotice'); //알람 공지 세팅
-		setInitList('siteList'); //사이트 리스트
 
+		makeSiteList();
 		if (!isEmpty(siteList) && siteList.length > 0) {
 			fn_cycle_1hour();
 			fn_cycle_1min();
