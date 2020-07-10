@@ -249,8 +249,8 @@ $(function() {
 			$(this).parent().find(".upload_text").text(labelText);
 		}
 	});
-
 });
+
 function deleteFile(self){
 	let ul =  self.parents(".file_list ul");
 	self.parent(".upload_text").remove();

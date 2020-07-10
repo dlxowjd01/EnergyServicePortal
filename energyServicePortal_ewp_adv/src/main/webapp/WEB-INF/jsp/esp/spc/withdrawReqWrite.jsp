@@ -275,13 +275,11 @@
 				// }
 			});
 
-			if($("#fileCheckbox").is(":checked")){
-				console.log("fileList", fileList);
-				console.log("finalNameList", finalNameList)
-				$.each(fileList, function(index, element){
-					uploadFile('post', $("#fileInput")[0].files[index], finalNameList[index].filedName);
-				});
-			};
+			// if($("#fileCheckbox").is(":checked")){
+			// 	console.log("fileList", fileList);
+			// 	console.log("finalNameList", finalNameList)
+			
+			// };
 			
 			if( withdrawForm.find(".warning.hidden").length == 4 ){
 				let opt = {
@@ -452,7 +450,7 @@
 <form id="fileUploadForm" name="fileUploadForm"></form>
 <form id="withdrawForm" name="withdraw_form" action="#" method="post">
 	<div class="row spc-search-bar">
-		<div class="col-11">
+		<div class="col-12">
 			<div class="sa_select"><!--
 			--><span class="tx_tit">SPC 선택</span><!--
 			--><div class="dropdown"><!--
@@ -473,9 +471,6 @@
 			--><label for="availableAmount" class="tx_tit">계좌 잔액</label><!--
 			--><div class="tx_inp_type"><input type="text" id="" name="availableAmount" disabled="" readonly=""></div>
 			</div>
-		</div>
-		<div class="col-1">
-			<div class="fr"><a href="#;" class="save_btn">엑셀 다운로드</a></div>
 		</div>
 	</div>
 	<div class="row content-wrapper spc-transaction">
@@ -586,11 +581,6 @@
 				</div>
 
 				<div class="btn_wrap_type05"><!--
-				--><a class="chk_type mr-24"><!--
-					--><input type="checkbox" id="fileCheckbox" name="file_checkbox"><!--
-					--><label for="fileCheckbox">증빙 첨부 포함</label><!--
-				--></a><!--
-				--><button type="button" class="btn btn_type03 mr-12" id="pdfBtn">PDF</button><!--
 				--><button type="submit" class="btn btn_type">제출</button><!--
 			--></div>
 			</div>
