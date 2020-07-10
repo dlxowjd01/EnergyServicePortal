@@ -35,6 +35,13 @@
 
 		$("#total").val(totalAmount);
 
+		$("#requestedDate").change(function(){
+			let val = $(this).val();
+			let d = $("#tableBody").find(".fromDate");
+			d.each(function(){
+				$(this).val(val);
+			});
+		});
 
 		$("#fileInput").change(function(){
 			fileList = [];
@@ -168,7 +175,6 @@
 			let jsonData = {}
 			let arr =[];
 			let fileArr = [];
-			let sum = 0;
 			jsonData.spc_id = spcList.prev().data("value");
 			// from
 			jsonData.withdraw_bank = withdrawList.prev().data("value");
@@ -204,16 +210,16 @@
 				let descOpt = $("#tableBody").find("td:nth-of-type(6) input[name='note']");
 				let obj = {};
 				obj.purpose = purposeOpt.eq(index).data("value");
-				obj.amount = Number(amountOpt.eq(index).val());
+				obj.amount = Number(amountOpt.eq(index).val().replace(/,/g, ''));
 				obj.to_account_bank = accOpt.eq(index).data("name");
 				obj.to_account_no = accOpt.eq(index).data("value");
 				obj.desc = descOpt.eq(index).val();
 				arr.push(obj);
-				sum += obj.amount;
-				// }
 			});
-			jsonData.total_amount = sum;
+			jsonData.total_amount = totalAmount;
 			jsonData.to_account = JSON.stringify(arr);
+
+			console.log("jdonDA---", jsonData)
 			let newJson = JSON.stringify(jsonData);
 
 			let formArr = [ jsonData.spc_id, jsonData.withdraw_bank, jsonData.withdraw_day, jsonData.to_account ];
@@ -265,7 +271,7 @@
 							uploadFile('post', $("#fileInput")[0].files[index], name)
 						});
 					};
-					// window.location.href = window.location.origin + '/spc/transactionHistory.do'
+					window.location.href = window.location.origin + '/spc/transactionHistory.do'
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					alert('처리 중 오류가 발생했습니다.');
 					console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
@@ -319,34 +325,23 @@
 					}
 				});
 			});
-		}
+	}
 
 		$(document).on("change", ".amount", function(evt) {
-			let comma = this.value;
 			let newVal = this.value;
-			let displayVal = this.value;
 			let total = document.getElementById("total");
 			totalAmount = 0;
-			comma = this.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-			this.value = comma;
-			console.log("this---", comma)
+			newVal = this.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			this.value = newVal;
 			if(newVal != "") {
-				console.log("newVal---", newVal)
 				if (evt.which < 48 || evt.which > 57) { evt.preventDefault(); }
-				console.log("tota1===", totalAmount)
 				$(".amount").each(function(){
 					let toAdd = Number(this.value.replace(/,/g,""));
-					console.log("toAdd---", toAdd, "total---", totalAmount)
 					totalAmount += toAdd;
 				});
-				console.log("tota2===", totalAmount)
 				total.value = totalAmount.toLocaleString() + ' 원';
-
-				displayVal = this.value.toLocaleString();
+				newVal = this.value.toLocaleString();
 			}
-			// $(this).val().replace(/\D/gi, '');
-
-				
 		});
 
 		$("#addRowBtn").on("click", calcTotal, function(){
@@ -472,7 +467,7 @@
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type"><!-- 
+								<div class="tx_inp_type"><!--
 								--><input type="text" id="transferAmount" class="amount right" name="transfer_amount" placeholder="직접 입력"><!--
 							--></div><!--
 						--></td>
@@ -536,7 +531,7 @@
 					--><input type="checkbox" id="fileCheckbox" name="file_checkbox"><!--
 					--><label for="fileCheckbox">증빙 첨부 포함</label><!--
 				--></a><!--
-				--><button type="button" class="btn btn_type03 mr-12" id="writeBtn">PDF</button><!--
+				--><button type="button" class="btn btn_type03 mr-12" id="pdfBtn">PDF</button><!--
 				--><button type="submit" class="btn btn_type">제출</button><!--
 			--></div>
 			</div>
