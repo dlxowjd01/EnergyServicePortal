@@ -158,6 +158,9 @@
 	--right-arrow: url("../img/arrow_right_light.png");
 	--down-arrow: url("../img/arrow_down_light.png");
 
+	--ico-sort-up: url("../img/sorting_up_wh.png");
+	--ico-sort-down: url("../img/sorting_down_wh.png");
+
 	--ico-add: url("../img/ico_add.png");
 	--ico-add-blue: url("../img/btn_add.png");
 	--icon-inverter: url('../img/ico_inverter_on.png');
@@ -185,7 +188,6 @@ html.darkmode:root {
 	/* ********* dark theme ONLY ******* */
 	--title-text: rgba(255, 255, 255, 0.6);
 	--radio-border: rgba(255, 255, 255, 0.6);
-	;
 	--radio-active: #e4e4e4;
 	--check-box-border: rgba(255, 255, 255, 0.6);
 	--check-active: rgba(255, 255, 255, 0.87);
@@ -250,6 +252,9 @@ html.darkmode:root {
 	--collapse-arrow: url("../img/sel_down_dark.png");
 	--right-arrow: url("../img/arrow_right_dark.png");
 	--down-arrow: url("../img/arrow_down_dark.png");
+
+	--ico-sort-up: url("../img/sorting_up.png");
+	--ico-sort-down: url("../img/sorting_down.png");
 
 	--ico-add: url("../img/ico_add2_wh.png");
 	--icon-inverter: url('../img/ico_inverter.png');
@@ -10014,31 +10019,19 @@ a.btn.btn_type03:hover {
 	font-size: 13px;
 	color: var(--color2);
 	font-weight: normal;
-	background: var(--box-color);
 	vertical-align: middle;
 	text-align: center;
 }
 
-.btn_align.down,
-.btn_align.up {
-	background: url(../img/sorting_down.png) no-repeat 0 1px;
+
+.btn_align.down {
+	background: var(--ico-sort-down) no-repeat 0 1px;
 	padding: 0 0 0 20px;
 }
 
-.btn_align.down {
-	background-image: url(../img/sorting_down_wh.png);
-}
-
 .btn_align.up {
-	background-image: url(../img/sorting_up_wh.png);
-}
-
-.darkmode .btn_align.down {
-	background-image: url(../img/sorting_down.png);
-}
-
-.darkmode .btn_align.up {
-	background-image: url(../img/sorting_up.png);
+	background: var(--ico-sort-up) no-repeat 0 1px;
+	padding: 0 0 0 20px;
 }
 
 /* 발전 */
