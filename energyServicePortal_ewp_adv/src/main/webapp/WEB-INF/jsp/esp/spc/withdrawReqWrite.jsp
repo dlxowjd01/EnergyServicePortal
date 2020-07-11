@@ -47,7 +47,7 @@
  
 		$("#fileInput").change(function(){
 			fileList = [];
-			for(let i = 0; i<$(this)[0].files.length; i++){
+			for(let i = 0, fileLength = $(this)[0].files.length; i < fileLength; i++){
 				fileList.push($(this)[0].files[i]);
 			}
 			console.log("fileLost===", fileList)

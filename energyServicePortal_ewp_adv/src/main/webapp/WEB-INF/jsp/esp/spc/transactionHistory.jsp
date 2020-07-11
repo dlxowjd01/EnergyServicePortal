@@ -56,7 +56,7 @@
 			} else {
 				$(this).removeClass('down').addClass('up');
 			}
-			for (var i = 0; i < rows.length; i++){
+			for (var i = 0, rowLength = rows.length; i<rowLength; i++){
 				// TO DO !!!!! sorting json data
 				tableBody.append(rows[i])
 			}
@@ -165,7 +165,33 @@
 		}
 
 		// const filtering = (predicate) => (reducing) => (acc, input) => (predicate(input) ? reducing(acc, input): acc)
-		
+		// var xhr = new XMLHttpRequest();
+		// xhr.open('GET', 'myservice/username?id=some-unique-id');
+		// xhr.onload = function() {
+		// 	if (xhr.status === 200) {
+		// 		alert('User\'s name is ' + xhr.responseText);
+		// 	}
+		// 	else {
+		// 		alert('Request failed.  Returned status of ' + xhr.status);
+		// 	}
+		// };
+		// xhr.send();
+
+		// var xhr = new XMLHttpRequest();
+		// xhr.open('PUT', 'myservice/user/1234');
+		// xhr.setRequestHeader('Content-Type', 'application/json');
+		// xhr.onload = function() {
+		//     if (xhr.status === 200) {
+		//         var userInfo = JSON.parse(xhr.responseText);
+		//     }
+		// };
+		// xhr.send(JSON.stringify({
+		//     name: 'John Smith',
+		//     age: 34
+		// }));
+
+
+
 		function getDataList(page, searchOptArr) {
 			page == undefined ? page = 1 : page = page;
 			if(!isEmpty(searchOptArr)) {
@@ -185,7 +211,7 @@
 						async: syncOpt
 					}
 				} else {
-					option= {
+					option = {
 						url: 'http://iderms.enertalk.com:8443/spcs/transactions',
 						type: action,
 						data: {
@@ -280,7 +306,7 @@
 						const p = [];
 						let size = '';
 
-						for(let i=0; i<res.length; i++){
+						for(let i=0, arrayLength =res.length; i<arrayLength; i++){
 							p.push(res[i].purpose);
 						}
 
@@ -442,15 +468,15 @@
 			for (let i = startPage ; i <= endPage; i++) {
 				console.log("startPage===", startPage)
 				if (i==page) {
-					pageStr += '<a href="javascript:void(0);"><strong>'+i+'</strong></a>';
+					pageStr += '<a href="javascript:void(0);" class="active" data-value="'+ i +'">'+i+'</a>';
 				} else {
-					pageStr += '<a href="javascript:void(0);">'+i+'</a>';
+					pageStr += '<a href="javascript:void(0)" data-value="'+ i +'">'+i+'</a>';
 				}
 			}
 
 			if (navGroup < totalNav) {
 				let current = startPage -1;
-				pageStr += '<a href="javascript:void(0);" class="btn_next">next</a>';
+				pageStr += '<a href="javascript:void(0);" data-value="'+ (endPage +1) +'" class="btn_next">next</a>';
 			} else {
 				pageStr += '<a href="javascript:void(0);" class="btn_next larst_next">next</a>';
 			}

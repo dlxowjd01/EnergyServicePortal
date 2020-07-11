@@ -11,13 +11,13 @@
 	selectAll($("#reqStatus"));
 	setDropdownValue($("#reqStatus").find("li"));
 	$(function() {
-		const tableList = $('#tableBody');
-		const tableCloned = tableList.find("template.table-body").clone().html();
+		const tableBody = $('#tableBody');
+		const tableCloned = tableBody.find("template.table-body").clone().html();
 		const searchBar = $('.spc-search-bar');
 		const searchBtn = $('#searchBtn');
 		const dropdownOpt = $('#searchOption').find('.dropdown-menu:not(.chk_type) li');
 		var spcArr = [];
-		tableList.find("template").remove();
+		tableBody.find("template").remove();
 
 		$("#warningModal .modal-title").text('처리 중 오류가 발생했습니다.');
 				$("#warningModal").modal("show");
@@ -72,7 +72,7 @@
 				async: syncOpt
 			}
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				tableList.empty();
+				tableBody.empty();
 				if (json.data.length > 0) {
 					// console.log("arr===", spcArr)
 					json.data.map((item, index) => {
@@ -180,7 +180,7 @@
 							.replace(/\*requestedAt\*/g, requested_at).replace(/\*statusChangedAt\*/g, status_changed_at)
 							.replace(/\*transferAgent\*/g, transfer_agent).replace(/\*requestedBy\*/g, requested_by)
 							.replace(/\*statusChangedBy\*/g, status_changed_by).replace(/\*status\*/g, status).replace(/\*linkAttr\*/g, link_attr)
-						tableList.append($(str));
+						tableBody.append($(str));
 					});	
 				} else {
 					return false;
@@ -244,18 +244,21 @@
 			$("#tableBody").find('input:checkbox').prop('checked', this.checked);
 		});
 		
-		$('.sort_table th button').on("click", function(){
-			// console.log("sorting---")
-			var table = $(this).parents('.sort_table.transaction-table');
-			var rows = table.find('#tableBody tr').toArray().sort(comparer($(this).index()))
-			this.asc = !this.asc
+
+		$('.sort_table th button').click(function(){
+			var table = $(this).parents("table");
+			var rows = tableBody.find('tr').toArray().sort(comparer($(this).index()))
+			this.asc = !this.asc;
 			if (!this.asc){
 				rows = rows.reverse();
-				$(this).removeClass('down').addClass('up');
-			} else {
 				$(this).addClass('down').removeClass('up');
+			} else {
+				$(this).removeClass('down').addClass('up');
 			}
-			for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+			for (var i = 0, rowLength = rows.length; i<rowLength; i++){
+				// TO DO !!!!! sorting json data
+				tableBody.append(rows[i])
+			}
 		});
 
 		searchBtn.on("click", function(){
