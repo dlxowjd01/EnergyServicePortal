@@ -15,6 +15,7 @@
 		const searchForm = $('#transactionForm');
 		const dropdownOpt = $('#searchOption').find('.dropdown-menu:not(.chk_type) li');
 		const sumOptList = $('#sumOptList');
+		const perPage = 14;
 
 		var spcInfoArr = [];
 		// var totalAmount = 0;
@@ -167,7 +168,6 @@
 		
 		function getDataList(page, searchOptArr) {
 			page == undefined ? page = 1 : page = page;
-
 			if(!isEmpty(searchOptArr[0])) {
 				let action = 'get';
 				let syncOpt = true;
@@ -201,7 +201,6 @@
 					tableBody.empty();
 					tableFooter.empty();
 					if (json.data.length > 0) {
-						let perPage = 14;
 						let startPage = (page - 1) * perPage;
 						let endPage = page * perPage + 1;
 						// console.log("start---", startPage, "end===", endPage)
@@ -211,13 +210,13 @@
 							let newData = json.data.filter(x => {
 								return statusOpt.indexOf(x.status.toString()) > -1
 							});
-							ajaxCallback(newData.slice(startPage, endPage), searchOptArr);
-							makeNavigation(page, startPage, endPage, newData.length)
+							ajaxCallback(page, newData.slice(startPage, endPage), searchOptArr);
+							makeNavigation( page, newData.length)
 							// let tfootStr = tfootClone.replace(/\*total\*/g, totalAmount);
 							// tableBody.next().append($(tfootStr));
 						} else {
-							ajaxCallback(json.data.slice(startPage, endPage))
-							makeNavigation(page, startPage, endPage, json.data.length)
+							ajaxCallback(page, json.data.slice(startPage, endPage))
+							makeNavigation( page, json.data.length)
 						}
 					}
 				}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -230,8 +229,9 @@
 			}
 		}
 
-		function ajaxCallback(newData, arr) {
+		function ajaxCallback(page, newData, arr) {
 			let totalAmount = 0;
+
 			newData.map((item, index) => {
 				// console.log("item---", item)
 				totalAmount += item.total_amount;
@@ -422,37 +422,38 @@
 			return Array.from(it);
 		}
 
-
-		function makeNavigation (page, startPage, endPage, totalCount) {
+		function makeNavigation (page, dataLength) {
 			$('#pagination').empty();
 			let pageStr = '';
-			let totalPage = Math.ceil( totalCount / 15 );
-			let navGroup = Math.floor((page - 1) / 15) + 1;
-			let totalNav = Math.ceil(totalPage / 15);
-			let endPage = ((startPage + 15 - 1) > totalPage) ? totalPage : (startPage + navCount - 1);
+			let totalPage = Math.ceil( dataLength / perPage );
+			let navGroup = Math.floor((page - 1) / perPage) + 1;
+			let startPage = ((navGroup - 1) * perPage) + 1;
+			let totalNav = Math.ceil(totalPage / perPage);
+			let endPage = ((startPage + perPage - 1) > totalPage) ? totalPage : (startPage + navCount - 1);
 
-			let endPage = (totalCount<=15) ? ( endPage = 1 ) : ( endPage = totalPage );
-			
-			// console.log("nav===", page, "page===", navGroup);
+			console.log("totalNav===", totalNav, "navGroup===", navGroup);
+
 			if (navGroup == 1) {
-				pageStr += '<a href="javascript:void(0);" class="btn_prev first_prev">prev</a><strong>' + page + '</strong>';
-			} else{
-				pageStr += '<a href="javascript:getDataList(' + Number(startPage) + ');" class="btn_prev">prev</a>';
+				pageStr += '<a href="javascript:void(0);" class="btn_prev first_prev">prev</a>';
+			} else {
+				let current = startPage -1;
+				pageStr += '<a href="javascript:void(0);" class="btn_prev">prev</a>';
 			}
 
 			for (let i = startPage ; i <= endPage; i++) {
-				console.log("i===", i)
+				console.log("startPage===", startPage)
 				if (i==page) {
-					pageStr += '<a href="javascript:getDataList('+i+');"><strong>'+i+'</strong></a>';
+					pageStr += '<a href="javascript:void(0);"><strong>'+i+'</strong></a>';
 				} else {
-					pageStr += '<a href="javascript:getDataList('+i+');">'+i+'</a>';
+					pageStr += '<a href="javascript:void(0);">'+i+'</a>';
 				}
 			}
 
-			if (navGroup <totalNav) {
-				pageStr += '<a href="javascript:getDataList(' + Number(endPage) + ');"  class="btn_next">next</a>';
+			if (navGroup < totalNav) {
+				let current = startPage -1;
+				pageStr += '<a onclick="javascript:void(0);" class="btn_next">next</a>';
 			} else {
-				pageStr += '<a href="javascript:void(0);"  class="btn_next">next</a>';
+				pageStr += '<a href="javascript:void(0);" class="btn_next larst_next">next</a>';
 			}
 			$('#pagination').append(pageStr);
 		}
