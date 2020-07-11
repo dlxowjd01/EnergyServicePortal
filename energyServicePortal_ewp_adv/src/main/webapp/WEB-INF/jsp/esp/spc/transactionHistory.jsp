@@ -114,7 +114,7 @@
 				}
 			});
 			if(searchForm.find('.warning.hidden').length == formArr.length){
-				getDataList(page,formArr);
+				getDataList(page, formArr);
 			} else {
 				return false;
 			}
@@ -168,7 +168,7 @@
 		
 		function getDataList(page, searchOptArr) {
 			page == undefined ? page = 1 : page = page;
-			if(!isEmpty(searchOptArr[0])) {
+			if(!isEmpty(searchOptArr)) {
 				let action = 'get';
 				let syncOpt = true;
 				let option = {};
@@ -210,13 +210,13 @@
 							let newData = json.data.filter(x => {
 								return statusOpt.indexOf(x.status.toString()) > -1
 							});
-							ajaxCallback(page, newData.slice(startPage, endPage), searchOptArr);
-							makeNavigation( page, newData.length)
+							ajaxCallback(newData.slice(startPage, endPage), searchOptArr);
+							makeNavigation(page, newData.length)
 							// let tfootStr = tfootClone.replace(/\*total\*/g, totalAmount);
 							// tableBody.next().append($(tfootStr));
 						} else {
-							ajaxCallback(page, json.data.slice(startPage, endPage))
-							makeNavigation( page, json.data.length)
+							ajaxCallback(json.data.slice(startPage, endPage));
+							makeNavigation(page, json.data.length)
 						}
 					}
 				}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -229,9 +229,8 @@
 			}
 		}
 
-		function ajaxCallback(page, newData, arr) {
+		function ajaxCallback(newData, arr) {
 			let totalAmount = 0;
-
 			newData.map((item, index) => {
 				// console.log("item---", item)
 				totalAmount += item.total_amount;
@@ -371,7 +370,7 @@
 			// console.log("total---", sum)
 			let tfootStr = '';
 			tfootStr = tfootClone.replace(/\*total\*/g, totalAmount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
-			tableFooter.append($(tfootStr))
+			tableFooter.append($(tfootStr));
 		}
 
 		// function setTotal(sum) {
@@ -437,7 +436,7 @@
 				pageStr += '<a href="javascript:void(0);" class="btn_prev first_prev">prev</a>';
 			} else {
 				let current = startPage -1;
-				pageStr += '<a href="javascript:void(0);" class="btn_prev">prev</a>';
+				pageStr += '<a href="javascript:void(0);" class="btn_prev">prev</button>';
 			}
 
 			for (let i = startPage ; i <= endPage; i++) {
@@ -451,7 +450,7 @@
 
 			if (navGroup < totalNav) {
 				let current = startPage -1;
-				pageStr += '<a onclick="javascript:void(0);" class="btn_next">next</a>';
+				pageStr += '<a href="javascript:void(0);" class="btn_next">next</a>';
 			} else {
 				pageStr += '<a href="javascript:void(0);" class="btn_next larst_next">next</a>';
 			}
@@ -541,7 +540,7 @@
 	<div class="modal-dialog">
 		<div class="modal-content collection_modal_content">
 			<div class="modal-header">
-				<h4 lass="modal-title">해당 내역을 정말 삭제 하시겠습니까?</h4>
+				<h4 lass="modal-title">조회된 데이터가 없습니다.</h4>
 			</div>
 			<div class="modal-footer">
 				<div class="btn_wrap_type02">
@@ -744,7 +743,7 @@
 					</colgroup>
 					<thead>
 						<tr>
-							<th><button class='btn_align down'>No</button></th>
+							<th><button class='btn_align down'>순번</button></th>
 							<th><button class='btn_align down'>입출금 일자</button></th>
 							<th><button class='btn_align down'>입출금 구분</button></th>
 							<th><button class='btn_align down'>용도 구분</button></th>
