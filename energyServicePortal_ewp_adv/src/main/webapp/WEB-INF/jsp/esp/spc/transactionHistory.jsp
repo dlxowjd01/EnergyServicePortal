@@ -459,10 +459,10 @@
 			console.log("totalNav===", totalNav, "navGroup===", navGroup);
 
 			if (navGroup == 1) {
-				pageStr += '<a href="javascript:void(0);" class="btn_prev first_prev">prev</a>';
+				pageStr += '<button type="button" class="prev-btn btn_prev"></button>';
 			} else {
 				let current = startPage -1;
-				pageStr += '<a href="javascript:void(0);" class="btn_prev">prev</button>';
+				pageStr += '<button type="button" class="prev-btn btn_prev"></button>';
 			}
 
 			for (let i = startPage ; i <= endPage; i++) {
@@ -476,9 +476,9 @@
 
 			if (navGroup < totalNav) {
 				let current = startPage -1;
-				pageStr += '<a href="javascript:void(0);" data-value="'+ (endPage +1) +'" class="btn_next">next</a>';
+				pageStr += '<button type="button" class="next-btn btn_next" data-value="'+ (endPage +1) +'></button>';
 			} else {
-				pageStr += '<a href="javascript:void(0);" class="btn_next larst_next">next</a>';
+				pageStr += '<button type="button" class="next-btn btn_next"></button>';
 			}
 			$('#pagination').append(pageStr);
 		}

@@ -2855,11 +2855,20 @@ input.inp[readonly]:focus {
 	margin: 34px 0 0;
 	text-align: center;
 }
-
+.prev-btn,
+.next-btn {
+	width: 40px;
+	height: 24px;
+	vertical-align: bottom;
+	outline-style: none;
+	border: none;
+}
 .paging_wrap a,
 .paging_wrap strong {
 	display: inline-block;
 	width: 40px;
+	height: 24px;
+	line-height: 22px;
 	text-align: center;
 	font-size: 13px;
 }
@@ -2867,8 +2876,6 @@ input.inp[readonly]:focus {
 .paging_wrap a {
 	color: var(--color4);
 	vertical-align: baseline;
-	height: 20px;
-	line-height: 20px;
 }
 
 .paging_wrap a.active,
