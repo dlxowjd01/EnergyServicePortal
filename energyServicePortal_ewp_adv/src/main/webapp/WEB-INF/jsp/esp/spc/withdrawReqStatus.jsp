@@ -240,6 +240,10 @@
 			return $(row).children('td').eq(index).text()
 		}
 
+		$("#selectAll").on("click", function(){
+			$("#tableBody").find('input:checkbox').prop('checked', this.checked);
+		});
+		
 		$('.sort_table th button').on("click", function(){
 			// console.log("sorting---")
 			var table = $(this).parents('.sort_table.transaction-table');
@@ -322,7 +326,7 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">출금 요청서 검토</h1>
+		<h1 class="page-header">출금 요청서 목록</h1>
 		<div class="time fr"><span>CURRENT TIME</span><em class="currTime">${nowTime}</em><span>DATA BASE TIME</span><em class="dbTime"></em></div>
 	</div>
 </div>
@@ -370,7 +374,12 @@
 				</colgroup>
 				<thead>
 				<tr>
-					<th></th>
+					<th>
+						<a class="chk_type select_row">
+							<input type="checkbox" id="selectAll" name="select_all">
+							<label for="selectAll"></label>
+						</a>
+					</th>
 					<th>
 						<button class="btn_align down">출금 일자</button>
 					</th>

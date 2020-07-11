@@ -11708,7 +11708,7 @@ th .btn_align {
 }
 .spc-transaction .table-footer .clear-input {
 	width: 100%;
-	padding-right: 5px;
+	padding-right: 6px;
 }
 
 .spc-transaction .table-footer .sa_select .dropdown-toggle,
@@ -11857,7 +11857,7 @@ table.table-footer tfoot td.light {
 
 /* spc 출금 요청 검토 상세 */
 .indiv.spc-detail {
-	height: 835px;
+	height: 865px;
 	overflow: auto;
 }
 
@@ -11885,8 +11885,8 @@ table.table-footer tfoot td.light {
 
 .indiv.spc-detail .flex_wrapper.border {
 	border-bottom: 1px solid var(--box-color2);
-	padding-bottom: 28px;
-	margin-bottom: 28px;
+	padding-bottom: 32px;
+	margin-bottom: 25px;
 }
 
 .indiv.spc-detail .flex_wrapper .btn_type02 {

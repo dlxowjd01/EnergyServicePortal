@@ -18,11 +18,11 @@
 		const tableList = $('#tableBody');
 		const tableCloned = tableList.find("template.table-body").clone().html();
 		tableList.find("template").remove();
-
+		const memoOpt = $("#memoOpt");
 		const txtArea = $("textarea.textarea");
 		const btnArea = $(".spc-detail .spc-btn-group");
 		const btnPrint = $(".btn-print");
-
+		const noHistory = "메모 히스토리가 없습니다."
 		if( isEmpty(spcName) || spcName == ("-")){
 			$("#spcName").text("spc_no_name");
 		}	else {
@@ -31,7 +31,7 @@
 
 		( ( statusVal == 0 ), ( statusVal == 3 ) ) ? ( (btnArea.addClass('hidden')),(btnPrint.addClass('hidden')) ) : ( (btnArea.removeClass('hidden')), (btnPrint.removeClass('hidden')) );
 		// txtArea.eq(0).val();
-		unCheckAll();
+		unCheckAll(memoOpt);
 		getDataList();
 
 		function getDataList(page) {
@@ -52,18 +52,59 @@
 			}
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				tableList.empty();
+				console.log("json===", json)
 				if (json.data.length > 0) {
 					json.data.map(item => {
 						let data = json.data;
 						let sum = 0;
 						$("#total").text(item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원');
-						const promiseAccount = Promise.resolve(JSON.parse(item.to_account));
-						const promiseMemo = Promise.resolve(JSON.parse(item.memo));
+						if(typeof item.memo == "string"){
+							$("#txt1").val(item.memo);
+							$("#txt2").val("");
+							return new Promise((resolve, reject) => {
+									// typeof v.to_account !== "string" ? JSON.parse(v.to_account) : v.to_account = v.to_account	
+										resolve(JSON.parse(item.to_account))
+									}).then(res => {
+										res.map(x => {
+											console.log("x==", x)
+											let popObj = Object.assign({}, item);
+											delete(popObj.to_account);
 
-						Promise.all([promiseAccount, promiseMemo]).then(res => {
-								$("#txt1").val(res[1].desc);
-								$("#txt2").val("");
-								res[0].map( x => {
+											let purposeList = [
+												{ label: "출금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
+												{ label: "입금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대 수선비", "배당금 적림", "일반 지출" ]},
+											];
+											let purpose = purposeList[0].value[x.purpose];
+											let withdraw_day = popObj.withdraw_day.substring(0, 10) + ' ' + popObj.withdraw_day.substring(11, 19);
+											let amount = x.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원';
+											let to_account_no = x.to_account_no;
+											// let account_type_list = [  "전력 판매대금", "REC 판매대금", "관리 운영비", "일반 렌탈", "전력중개 수수료", "전기 요금", "원리금" ];
+											let str = '';
+											str = tableCloned.replace(/\*withdrawDay\*/g, withdraw_day)
+												.replace(/\*purpose\*/g, purpose)
+												.replace(/\*amount\*/g, amount)
+												.replace(/\*toAccountNum\*/g, to_account_no)
+											tableList.append($(str));
+										});
+							}, function(error) {
+								if (error) {
+									reject(Error("It broke"));
+									console.log(error);
+								}
+							});
+						} else {
+							const promiseMemo = Promise.resolve(JSON.parse(item.memo));
+							const promiseAccount = Promise.resolve(JSON.parse(item.to_account));
+							return Promise.all([promiseAccount, promiseMemo]).then(res => {
+								if(res[1]){
+									$("#txt1").val(res[1].desc);
+									$("#txt2").val("");
+								} else {
+									console.log("no memo===");
+									$("#txt1").val(noHistory);
+								}
+
+								res[0].map(x => {
 									console.log("x==", x)
 									let popObj = Object.assign({}, item);
 									delete(popObj.to_account);
@@ -87,7 +128,8 @@
 							}).catch(error => {
 								console.log(error);
 							});
-						});
+						}
+					});
 				} else {
 					return false;
 				}
@@ -100,12 +142,6 @@
 			});
 		}
 
-		// $("#txt2").keyup(function(){
-		// 	let preserved = $("#txt1").val();
-		// 	let val = $(this).val();
-		// 	$("#txt1").val(preserved += val);
-		// });
-
 		// approval => status: 3
 		$("#attachedFileForm").on("submit", function(e){
 			e.preventDefault();
@@ -117,18 +153,25 @@
 			const newStatus = null;
 			let input = $("#txt2").val();
 			let d = new Date();
-			let prefix = '\n'
-				+ d.toISOString().substring(0, 10) + ' '
+			let prefix = d.toISOString().substring(0, 10) + ' '
 				+  d.toLocaleTimeString().substr(0, d.toLocaleTimeString().length-2)
 				+ '/ '
-				+ loginName;
+				+ loginName
+				+ '\n';
 
 				console.log("prefix---", prefix)
 			if(isEmpty(input)){
 				$("#warningModal").modal("show");
 			} else {
+				let val = '';
+				if($("#txt1").val() == noHistory){
+					$("#txt1").val("");
+					val = prefix + input;
+				} else {
+					val = '\n' + prefix + input;
+				}
+			
 				let preserved = $("#txt1").val();
-				let val = prefix + input;
 				$("#txt1").val(preserved += val);
 			
 				// handleReq(newStatus, updateReq);
@@ -146,7 +189,7 @@
 			let preserved = $("#txt1").val();
 			let val = $("#txt2").val();
 			$("#txt1").val(preserved += val);
-
+			// memoObj.opt => 1: 사무수탁사 같이 보기  0: 자산운용사만
 			if ( $("#memoOpt").is(":checked") ){
 				let memoObj = {};
 				memoObj.opt = 1;

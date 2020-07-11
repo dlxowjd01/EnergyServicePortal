@@ -85,22 +85,21 @@ const displayDropdown = ($selector) => {
 /**
  * dropDown selectAll
  *
- * @param $selector
+ * @param $selector 
  */
 const selectAll = ($selector) => {
-	let itemGroup = $selector.find('li');
-	let item = itemGroup.find('input[type="checkbox"]');
-	let firstCheckbox = itemGroup.first();
-	let firstInput = firstCheckbox.find('input[type="checkbox"]');
+	var itemGroup = $selector.find('li');
+	var item = itemGroup.find('input[type="checkbox"]');
+	var allChecked = true;
 
-	firstCheckbox.on('click', function() {
-		$(this).toggleClass('active');
-		if( $(this).hasClass('active') ) {
-			item.prop("checked", false);
-			firstInput.prop('checked', true);
+	itemGroup.find('input[type="checkbox"]').first().on('click', function() {
+		if($(this).is(":checked")){
+			console.log("checked===");
+			itemGroup.find('input[type="checkbox"]').prop("checked", "false")
+			// item.not($(this)).prop('checked', true);
 		} else {
-			item.prop("checked", true);
-			firstInput.prop('checked', false);
+			console.log("not checked===")
+			// item.not($(this)).prop('checked', false);
 		}
 	});
 }
@@ -133,14 +132,16 @@ const selectAllGroup = ($selector) => {
 		// 	}
 		// });
 		firstCheckbox.on("click", function(){
-			// console.log("item---", $(this))
+			console.log("item---", $(this))
 			$(this).toggleClass('active');
 			if( $(this).hasClass('active') ) {
-				input.prop("checked", false);
-				firstInput.prop('checked', true);
-			} else {
 				input.prop("checked", true);
-				firstInput.prop('checked', false);
+				// input.not($(this)).prop("checked", false);
+				// firstInput.prop('checked', true);
+			} else {
+				input.prop("checked", false);
+				// input.not($(this)).prop("checked", true);
+				// firstInput.prop('checked', false);
 			}
 		})
 	})
