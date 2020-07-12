@@ -59,8 +59,8 @@
 					success: function (data) {
 						response(
 							$.map(data, function (item) {
-								let siteNm = $('[name="siteName"]').val();
-								if (item.name.match(siteNm)) {
+								let siteNm = $('[name="siteName"]').val().toUpperCase();
+								if ((item.toUpperCase()).name.match(siteNm)) {
 									return {
 										label: item.name,
 										value: item.sid
@@ -243,15 +243,13 @@
 			if ($.inArray($(this).prop('name'), job_info_Array) > -1) {
 				job_info[$(this).prop('name')] = String($(this).val());
 			} else {
-				if ($(this).prop('name') == 'job_date') {
-					let jobDate = $(this).datepicker('getDate');
-					jsonData[$(this).prop('name')] = jobDate.toISOString();
-				} else if ($(this).prop('name').match('alarm')) {
-					jsonData.job_info[$(this).prop('name')] = String($(this).val());
-				} else if ($(this).prop('name') == 'repeat_end') {
-					jsonData[$(this).prop('name')] = new Date($(this).val()).toISOString();
+				if ($(this).hasClass('hasDatepicker')) {
+					let pickedDate = $(this).datepicker('getDate');
+					if (pickedDate != null) {
+						jsonData[$(this).prop('name')] = pickedDate.toISOString();
+					}
 				} else {
-					jsonData[$(this).prop('name')] = String($(this).val());
+					jsonData[$(this).prop('name')] = $(this).val();
 				}
 			}
 		});
@@ -260,13 +258,14 @@
 			if ($.inArray($(this).parent().prop('id'), job_info_Array) > -1) {
 				job_info[$(this).parent().prop('id')] = String($(this).data('value'));
 			} else {
-				if ($(this).prop('id') == 'repeat_interval') {
-					jsonData[$(this).parent().prop('id')] = Number($(this).data('value'));
-				} else {
-					jsonData[$(this).parent().prop('id')] = String($(this).data('value'));
-				}
+				jsonData[$(this).parent().prop('id')] = String($(this).data('value'));
 			}
 		});
+
+		//일시점검일 경우 종료일은 점검 기준일자와 동일하다.
+		if ($('#repeat_yn button').data('value') == 'N') {
+			jsonData['repeat_end'] = jsonData['job_date'];
+		}
 
 		job_info.siteName = jsonData.siteName;
 		jsonData.job_info = JSON.stringify(job_info);
@@ -287,7 +286,7 @@
 				return $(this).val();
 			}
 		));
-
+		const jobName = ['정기점검', '구조물 안전진단', '소방점검', '등기이사 기간만료', '모듈점검', '케이블점검', '구조물점검', '접속함점검', '인버터점검', '수배전반점검', '부자점검', '열화상점검', '소모품점검', '기타점검'];
 		if (data.length > 0) {
 			data.forEach(function (v, k) {
 				let job_date = new Date(v.job_date).format('dd');
@@ -298,7 +297,7 @@
 				let visual = 'hidden';
 				if ($.inArray(job_type, checkType) > -1) { visual = ''; }
 				calendar.eq(Number(job_date) - 1).append(
-					'<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '" class="' + visual + '" ><p class="bu t' + job_type + '">[' + job_info.siteName + ']' + job_Name(job_type) + '</p></a>'
+					'<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '" class="' + visual + '" ><p class="bu t' + job_type + '">[' + job_info.siteName + ']' + jobName[Number(job_type) - 1] + '</p></a>'
 				);
 			});
 		}
@@ -391,7 +390,7 @@
 					dateFormat: 'yy-mm-dd',
 					beforeShow: function () {
 						let fromDate = $(this).closest('.dateField').find('.fromDate').datepicker('getDate');
-						if (!isEmpty(fromDate)) {
+						if (fromDate != null) {
 							$(this).datepicker('option', 'minDate', fromDate.format('yyyy-MM-dd'));
 						}
 					},
@@ -407,25 +406,6 @@
 
 		modal.modal();
 	}
-
-	const job_Name = function (type) {
-		let rtn = '';
-		switch (type) {
-			case '1':
-				rtn = '정기점검'
-				break;
-			case '2':
-				rtn = '구조물 안전진단'
-				break;
-			case '3':
-				rtn = '소방점검'
-				break;
-			default:
-				rtn = '등기이사 기간만료'
-				break;
-		}
-		return rtn;
-	};
 
 	const repeatEnd = function (selectedDate) {
 		if (selectedDate == undefined && $('#job_date').datepicker('getDate') != null) {
@@ -444,7 +424,7 @@
 				dateFormat: 'yy-mm-dd',
 				beforeShow: function () {
 					let fromDate = $(this).closest('.dateField').find('.fromDate').datepicker('getDate');
-					if (!isEmpty(fromDate)) {
+					if (fromDate != null) {
 						$(this).datepicker('option', 'minDate', fromDate.format('yyyy-MM-dd'));
 					}
 				},
@@ -461,8 +441,12 @@
 		}
 	}
 
-	const afterDatePick = function () {
-		repeatEnd();
+	const afterDatePick = function (inputName) {
+		if(inputName == 'job_date') {
+			rtnDropdown('alarmSetup');
+		} else {
+			repeatEnd();
+		}
 	}
 
 	const rtnDropdown = function (buttonId) {
@@ -472,25 +456,26 @@
 			if (val == 'Y') {
 				obj.parents('.flex_start3').addClass('short');
 				obj.siblings().removeClass('hidden');
-
+				obj.next('.tx_inp_type').find('input').val('');
 				$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
 			} else {
 				obj.parents('.flex_start3').removeClass('short');
 				obj.siblings().addClass('hidden');
-
+				obj.next('.tx_inp_type').find('input').val(0);
 				$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
 			}
+			dropDownInit($('#repeat_unit'));
 			repeatEnd();
 		} else if (buttonId == 'alarmSetup') {
 			if ($('#alarmDate').hasClass('hasDatepicker')) {
-				$('#alarmDate').datepicker('destroy').removeClass('hasDatepicker');
+				$('#alarmDate').datepicker('destroy').removeClass('hasDatepicker').addClass('disabled').removeAttr('placeholder');
 			}
 			if (val != '직접 설정') {
 				let jobDate = $('#job_date').datepicker('getDate');
-				if (isEmpty($('#job_date').val())) {
+				if (jobDate == null) {
 					$('#alarmDate').val('');
 				} else {
-					jobDate.setDate(jobDate.getDate() - value);
+					jobDate.setDate(jobDate.getDate() - val);
 					$('#alarmDate').val(jobDate.format('yyyy-MM-dd'));
 				}
 			} else {
@@ -509,7 +494,7 @@
 							$('#alarmDate').datepicker('option', 'maxDate', maxDate);
 						}
 					}
-				})
+				}).removeClass('disabled').attr('placeholder', '직접선택');
 				$('#alarmDate').val('');
 			}
 		}
@@ -762,6 +747,46 @@
 				<div class="chk_type c4">
 					<input type="checkbox" id="chk_op04" name="type" value="4" checked>
 					<label for="chk_op04">등기이사 기간만료</label>
+				</div>
+				<div class="chk_type c5">
+					<input type="checkbox" id="chk_op05" name="type" value="5" checked>
+					<label for="chk_op05">모듈점검</label>
+				</div>
+				<div class="chk_type c6">
+					<input type="checkbox" id="chk_op06" name="type" value="6" checked>
+					<label for="chk_op06">케이블점검</label>
+				</div>
+				<div class="chk_type c7">
+					<input type="checkbox" id="chk_op07" name="type" value="7" checked>
+					<label for="chk_op07">구조물점검</label>
+				</div>
+				<div class="chk_type c8">
+					<input type="checkbox" id="chk_op08" name="type" value="8" checked>
+					<label for="chk_op08">접속함점검</label>
+				</div>
+				<div class="chk_type c9">
+					<input type="checkbox" id="chk_op09" name="type" value="9" checked>
+					<label for="chk_op09">인버터점검</label>
+				</div>
+				<div class="chk_type c10">
+					<input type="checkbox" id="chk_op10" name="type" value="10" checked>
+					<label for="chk_op10">수배전반점검</label>
+				</div>
+				<div class="chk_type c11">
+					<input type="checkbox" id="chk_op11" name="type" value="11" checked>
+					<label for="chk_op11">부자점검</label>
+				</div>
+				<div class="chk_type c12">
+					<input type="checkbox" id="chk_op12" name="type" value="12" checked>
+					<label for="chk_op12">열화상점검</label>
+				</div>
+				<div class="chk_type c13">
+					<input type="checkbox" id="chk_op13" name="type" value="13" checked>
+					<label for="chk_op13">소모품점검</label>
+				</div>
+				<div class="chk_type c14">
+					<input type="checkbox" id="chk_op14" name="type" value="14" checked>
+					<label for="chk_op14">기타점검</label>
 				</div>
 			</div>
 
