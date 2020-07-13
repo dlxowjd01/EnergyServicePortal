@@ -1457,9 +1457,13 @@ const addRow = function (listId, type, nextIdx) {
 	}
 	if (isEmpty(nextIdx)) {
 		rowHtml = rowHtml.split(col_left + 'index' + col_right).join(listLength);
+		rowHtml = rowHtml.split(col_left + 'alphabet' + col_right).join(String.fromCharCode(Number(listLength) + 65));
 	} else {
 		rowHtml = rowHtml.split(col_left + 'index' + col_right).join(nextIdx);
+		rowHtml = rowHtml.split(col_left + 'alphabet' + col_right).join(String.fromCharCode(Number(nextIdx) + 65));
 	}
+
+
 
 	if ($selecter.hasClass('entity') && listLength > 0) {
 		rowHtml = rowHtml.replace(/\bbtn_close hidden\b/g, 'btn_close');
@@ -1467,7 +1471,7 @@ const addRow = function (listId, type, nextIdx) {
 
 	if (type == 'next') {
 		if(sTagName  == 'TR') {
-			var $tr = $('<tr>');
+			var $tr = $('<tr>').addClass(listId);
 			$tr.append(rowHtml);
 
 			if ($selecter.hasClass('entity')) {
