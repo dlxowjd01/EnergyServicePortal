@@ -467,7 +467,7 @@
 </head>
 <body>
 	<div class="outer-wrapper">
-		<div class="login_wrapper">
+		<div class="login-wrapper">
 			<nav class="clear">
 				<c:choose>
 					<c:when test="${pageContext.request.serverName eq 'spower.iderms.ai' or pageContext.request.serverName eq '13.114.199.169' or pageContext.request.serverName eq 'localhost'}">
@@ -477,6 +477,7 @@
 						<div class="nav_brand"><a href="#">Encored</a></div>
 					</c:otherwise>
 				</c:choose>
+				<%--	
 				<div class="nav_theme">
 					<div class="switcher">
 						<input type="radio" name="balance" value="light" id="light" class="switcher__input switcher__input--light" checked="" onClick="userTheme('light');">
@@ -486,7 +487,8 @@
 						<span class="switcher__toggle"></span>
 					</div>
 				</div>
-				<div class="lang login_lang dropdown">
+				--%>
+				<div class="lang login-lang dropdown">
 				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">${sessionScope.sessionLangNm }
 				    <span class="caret"></span></button>
 				    <ul class="dropdown-menu">
@@ -499,21 +501,25 @@
 				<div class="loginForm">
 					<form id="loginForm" name="loginForm" action="/loginUser.do" method="post" onsubmit="return checkLogin(this)">
 						<input type="hidden" id="language" name="language"/>
-						<div class="lf_body">
-							<div class="lftit">
-				                <h1>LOGIN</h1>
-				            </div>
+						<div class="lf-body">
+							<div class="lftit"></div>
 						    <div class="mt10"><input type="text" id="loginUserId" name="login_id" class="lfinp" placeholder=<spring:message code="ewp.login.ID"/>></div>
-						  	<div class="mt15"><input type="password" id="loginUserPw" name="password" class="lfinp" placeholder=<spring:message code="ewp.login.Password"/>></div>
-						    <div class="mt30">
-						    	<a href="#" class="findidBtn arrbtn"><spring:message code="ewp.login.Forgot_account"/></a>
-						    	<a href="#" class="findpassBtn arrbtn ml-30"><spring:message code="ewp.login.Forgot_password"/></a>
-						    </div>
+							<div class="mt15"><input type="password" id="loginUserPw" name="password" class="lfinp" placeholder=<spring:message code="ewp.login.Password"/>></div>
+							<div class="mt15"><a class="chk_type"><input type="checkbox" id="saveLogin" name="save_login"><label for="saveLogin">로그인 유지</label></a></div>
+
+							<div class="lf-btn-wrap">
+								<%--
+								<a href="#" class="joinBtn"><spring:message code="ewp.login.Singup"/></a> 
+								--%>
+								<input type="submit" name="login" value="<spring:message code="ewp.login.Signin" />">
+							</div>
+
+							<div class="lf-desc">
+								<p class="center">회원 가입 및 회원 정보 문의<strong class="">070-4949-5500</strong></p>
+								<p class="center copy-right">COPYRIGHT © 2019-2020 Encored Technologies, Inc. All rights reserved.</p>
+							</div>
 						</div>
-						<div class="lf_bottom">
-							<a href="#" class="joinBtn"><spring:message code="ewp.login.Singup"/></a>
-							<input type="submit" name="login" value="<spring:message code="ewp.login.Signin" />">
-						</div>
+					
 					</form>
 				</div>
 
@@ -522,6 +528,13 @@
 		</div>
 	</div>
 
+
+	<%--						
+	<div class="mt30">
+		<a href="#" class="findidBtn arrbtn"><spring:message code="ewp.login.Forgot_account"/></a>
+		<a href="#" class="findpassBtn arrbtn ml-30"><spring:message code="ewp.login.Forgot_password"/></a>
+	</div>
+	--%>
 	<div class="modal fade" id="findidModal" tabindex="-1" role="dialog" aria-labelledby="findidModal" aria-hidden="true">
         <div class="modal-dialog modal-md">
 			<div class="login-modal-content modal-content">
@@ -532,7 +545,7 @@
 			    <form id="findForm" name="findForm">
 			    <input type="hidden" id="findPsnMobile" name="psnMobile"/>
 			    <div class="modal-body">
-			  	    <div class="md_tbl">
+			  	    <div class="md-tbl">
 			  	    	<table>
 			  	    		<colgroup>
 			  	    			<col width="100">
@@ -603,7 +616,7 @@
 			    <form id="findPwForm" name="findPwForm">
 			    <input type="hidden" id="findPwPsnMobile" name="psnMobile"/>
 			    <div class="modal-body">
-			  	    <div class="md_tbl">
+			  	    <div class="md-tbl">
 			  	    	<table>
 			  	    		<colgroup>
 			  	    			<col width="100">
@@ -669,13 +682,13 @@
 	</div>
 
 	<div class="modal fade" id="joinModal1" tabindex="-1" role="dialog" aria-labelledby="joinModal" aria-hidden="true">
-	    <div class="join_dialog modal-dialog modal-md">
+	    <div class="join-dialog modal-dialog modal-md">
 	        <div class="modal-content step1">
 	            <div class="modal-header lftit"><h1>JOIN</h1></div>
 	            <div class="modal-body">
-					<div id="joinStep01" class="join_container">
+					<div id="joinStep01" class="join-container">
 						<div class="unit">
-							<div class="unit_tit clear">
+							<div class="unit-tit clear">
 								<span class="sTit">S-POWER iDERMS 서비스 이용약관</span>
 
 								<div class="etcText fr mt5">
@@ -764,7 +777,7 @@
 						</div>
 
 						<div class="unit mt5">
-							<div class="unit_tit clear">
+							<div class="unit-tit clear">
 								<span class="sTit">개인정보 수집, 제공 및 활용 동의</span>
 								<div class="etcText fr mt5"><!--
 								--><span class="chk_type c12"><!--
@@ -789,16 +802,16 @@
 	</div>
 
 	<div class="modal fade" id="joinModal2" tabindex="-1" role="dialog" aria-labelledby="joinModal" aria-hidden="true">
-	    <div class="join_dialog modal-dialog modal-md">
+	    <div class="join-dialog modal-dialog modal-md">
 			<div class="modal-content step2">
 				<div class="modal-header lftit"><h1>JOIN</h1></div>
 				<form id="joinForm" name="joinForm">
 					<input type="hidden" id="joinPsnEmail" name="psnEmail"/>
 					<input type="hidden" id="joinPsnMobile" name="psnMobile"/>
 					<div class="modal-body">
-						<div id="joinStep02" class="join_container">
+						<div id="joinStep02" class="join-container">
 							<div class="unit clear">
-								<div class="unit_tit">
+								<div class="unit-tit">
 									<span class="sTit">정보입력</span>
 								</div>
 								<div class="unit_cont lineBox">
@@ -890,10 +903,10 @@
 	</div>
 
 	<div class="modal fade" id="joinModal3" tabindex="-1" role="dialog" aria-labelledby="joinModal" aria-hidden="true">
-	    <div class="join_dialog modal-dialog modal-md">
+	    <div class="join-dialog modal-dialog modal-md">
 			<div class="modal-content step3">
 	            <div class="modal-body">
-					<div id="joinStep03" class="join_container">
+					<div id="joinStep03" class="join-container">
 						<div class="joinEndText">
 							<strong>"축하합니다"</strong>
 							회원가입이 완료되었습니다.
@@ -910,6 +923,10 @@
 
 	<script>
 		$(function(){
+			window.__THEME_MODE = 'dark'
+			document.getElementsByTagName('html')[0].classList[window.__THEME_MODE === 'dark' ? 'add' : 'remove']('darkmode');
+
+
 			// Sign Up btn click
 			$(".joinBtn").click(function(){
 				$("#loginModal").modal("hide");

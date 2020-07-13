@@ -23,7 +23,11 @@ function selectBoxTextApply(obj) {
 
 function unCheckAll(data){
 	if(data){
-		var input = data.find('input');
+		if(data.is("input[type='checkbox']")){
+			var input = data
+		} else {
+			var input = data.find('input');
+		}
 		var textArea = data.find("textarea");
 	
 		textArea.each(function(){

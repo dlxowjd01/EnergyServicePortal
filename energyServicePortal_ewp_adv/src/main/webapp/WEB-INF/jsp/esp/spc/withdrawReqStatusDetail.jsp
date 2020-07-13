@@ -18,11 +18,11 @@
 		const tableList = $('#tableBody');
 		const tableCloned = tableList.find("template.table-body").clone().html();
 		tableList.find("template").remove();
-
+		const memoOpt = $("#memoOpt");
 		const txtArea = $("textarea.textarea");
 		const btnArea = $(".spc-detail .spc-btn-group");
 		const btnPrint = $(".btn-print");
-
+		const noHistory = "메모 히스토리가 없습니다."
 		if( isEmpty(spcName) || spcName == ("-")){
 			$("#spcName").text("spc_no_name");
 		}	else {
@@ -31,7 +31,7 @@
 
 		( ( statusVal == 0 ), ( statusVal == 3 ) ) ? ( (btnArea.addClass('hidden')),(btnPrint.addClass('hidden')) ) : ( (btnArea.removeClass('hidden')), (btnPrint.removeClass('hidden')) );
 		// txtArea.eq(0).val();
-		unCheckAll();
+		unCheckAll(memoOpt);
 		getDataList();
 
 		function getDataList(page) {
@@ -50,21 +50,88 @@
 				},
 				async: syncOpt
 			}
+			console.log("spc===", spcId)
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				tableList.empty();
+				// console.log("json===", json)
 				if (json.data.length > 0) {
 					json.data.map(item => {
 						let data = json.data;
 						let sum = 0;
 						$("#total").text(item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원');
-						const promiseAccount = Promise.resolve(JSON.parse(item.to_account));
-						const promiseMemo = Promise.resolve(JSON.parse(item.memo));
+						if(typeof item.memo == "string"){
+							$("#txt1").val(item.memo);
+							$("#txt2").val("");
+							return new Promise((resolve, reject) => {
+									// typeof v.to_account !== "string" ? JSON.parse(v.to_account) : v.to_account = v.to_account	
+										resolve(JSON.parse(item.to_account))
+									}).then(res => {
+										res.map(x => {
+											let popObj = Object.assign({}, item);
+											delete(popObj.to_account);
 
-						Promise.all([promiseAccount, promiseMemo]).then(res => {
-								$("#txt1").val(res[1].desc);
-								$("#txt2").val("");
-								res[0].map( x => {
-									console.log("x==", x)
+											let purposeList = [
+												{ label: "출금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
+												{ label: "입금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대 수선비", "배당금 적림", "일반 지출" ]},
+											];
+											let purpose = '';
+											let withdraw_day = '';
+											let to_account_no = '';
+											let amount = '';
+											let desc = '';
+											if(!isEmpty(purposeList[0].value[x.purpose])){
+												purpose = purposeList[0].value[x.purpose];
+											} else {
+												purpose = '-'
+											}
+											if(!isEmpty(popObj.withdraw_day)){
+												withdraw_day = popObj.withdraw_day.substring(0, 10) + ' ' + popObj.withdraw_day.substring(11, 19);
+											} else {
+												withdraw_day = '-'
+											}
+											if(!isEmpty(to_account_no)){
+												to_account_no = x.to_account_no;
+											} else {
+												to_account_no = '-'
+											}
+											if(!isEmpty(x.amount)){
+												amount = x.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원';
+											} else {
+												amount = '-'
+											}
+											if(!isEmpty(x.desc)){
+												desc = x.desc;
+											} else {
+												desc = '-'
+											}
+											// let account_type_list = [  "전력 판매대금", "REC 판매대금", "관리 운영비", "일반 렌탈", "전력중개 수수료", "전기 요금", "원리금" ];
+											let str = '';
+											str = tableCloned.replace(/\*withdrawDay\*/g, withdraw_day)
+												.replace(/\*purpose\*/g, purpose)
+												.replace(/\*amount\*/g, amount)
+												.replace(/\*toAccountNum\*/g, to_account_no)
+												.replace(/\*description\*/g, desc)
+											tableList.append($(str));
+										});
+							}, function(error) {
+								if (error) {
+									reject(Error("It broke"));
+									console.log(error);
+								}
+							});
+						} else {
+							const promiseMemo = Promise.resolve(JSON.parse(item.memo));
+							const promiseAccount = Promise.resolve(JSON.parse(item.to_account));
+							return Promise.all([promiseAccount, promiseMemo]).then(res => {
+								if(res[1]){
+									$("#txt1").val(res[1].desc);
+									$("#txt2").val("");
+								} else {
+									console.log("no memo===");
+									$("#txt1").val(noHistory);
+								}
+
+								res[0].map(x => {
 									let popObj = Object.assign({}, item);
 									delete(popObj.to_account);
 
@@ -72,22 +139,50 @@
 										{ label: "출금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
 										{ label: "입금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대 수선비", "배당금 적림", "일반 지출" ]},
 									];
-									let purpose = purposeList[0].value[x.purpose];
-									let withdraw_day = popObj.withdraw_day.substring(0, 10) + ' ' + popObj.withdraw_day.substring(11, 19);
-									let amount = x.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원';
-									let to_account_no = x.to_account_no;
+									let purpose = '';
+									let withdraw_day = '';
+									let to_account_no = '';
+									let amount = '';
+									let desc = '';
+									if(!isEmpty(purposeList[0].value[x.purpose])){
+										purpose = purposeList[0].value[x.purpose];
+									} else {
+										purpose = '-'
+									}
+									if(!isEmpty(popObj.withdraw_day)){
+										withdraw_day = popObj.withdraw_day.substring(0, 10) + ' ' + popObj.withdraw_day.substring(11, 19);
+									} else {
+										withdraw_day = '-'
+									}
+									if(!isEmpty(to_account_no)){
+										to_account_no = x.to_account_no;
+									} else {
+										to_account_no = '-'
+									}
+									if(!isEmpty(x.amount)){
+										amount = x.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원';
+									} else {
+										amount = '-'
+									}
+									if(!isEmpty(x.desc)){
+										desc = x.desc;
+									} else {
+										desc = '-'
+									}
 									// let account_type_list = [  "전력 판매대금", "REC 판매대금", "관리 운영비", "일반 렌탈", "전력중개 수수료", "전기 요금", "원리금" ];
 									let str = '';
 									str = tableCloned.replace(/\*withdrawDay\*/g, withdraw_day)
 										.replace(/\*purpose\*/g, purpose)
 										.replace(/\*amount\*/g, amount)
 										.replace(/\*toAccountNum\*/g, to_account_no)
+										.replace(/\*description\*/g, desc)
 									tableList.append($(str));
 								});
 							}).catch(error => {
 								console.log(error);
 							});
-						});
+						}
+					});
 				} else {
 					return false;
 				}
@@ -95,16 +190,11 @@
 				
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.log("error===", jqXHR, "text000", textStatus )
-				alert('처리 중 오류가 발생했습니다.');
+				$("#warningModal .modal-title").text('처리 중 오류가 발생했습니다.');
+				$("#warningModal").modal("show");
 				return false;
 			});
 		}
-
-		// $("#txt2").keyup(function(){
-		// 	let preserved = $("#txt1").val();
-		// 	let val = $(this).val();
-		// 	$("#txt1").val(preserved += val);
-		// });
 
 		// approval => status: 3
 		$("#attachedFileForm").on("submit", function(e){
@@ -117,18 +207,25 @@
 			const newStatus = null;
 			let input = $("#txt2").val();
 			let d = new Date();
-			let prefix = '\n'
-				+ d.toISOString().substring(0, 10) + ' '
+			let prefix = d.toISOString().substring(0, 10) + ' '
 				+  d.toLocaleTimeString().substr(0, d.toLocaleTimeString().length-2)
 				+ '/ '
-				+ loginName;
+				+ loginName
+				+ '\n';
 
 				console.log("prefix---", prefix)
 			if(isEmpty(input)){
 				$("#warningModal").modal("show");
 			} else {
+				let val = '';
+				if($("#txt1").val() == noHistory){
+					$("#txt1").val("");
+					val = prefix + input;
+				} else {
+					val = '\n' + prefix + input;
+				}
+			
 				let preserved = $("#txt1").val();
-				let val = prefix + input;
 				$("#txt1").val(preserved += val);
 			
 				// handleReq(newStatus, updateReq);
@@ -146,7 +243,7 @@
 			let preserved = $("#txt1").val();
 			let val = $("#txt2").val();
 			$("#txt1").val(preserved += val);
-
+			// memoObj.opt => 1: 사무수탁사 같이 보기  0: 자산운용사만
 			if ( $("#memoOpt").is(":checked") ){
 				let memoObj = {};
 				memoObj.opt = 1;
@@ -161,7 +258,7 @@
 
 		function updateReq(newStatus, memoStr){
 			let newData = {}
-			newStatus ? ( newData.status = newStatus ) : null;
+			newStatus || newStatus == 0 ? ( newData.status = newStatus ) : null;
 			newData.status_changed_by = loginName;
 			newData.status_changed_at = new Date().toISOString();
 			newData.requested_by = loginName;
@@ -177,7 +274,6 @@
 				data: JSON.stringify(newData)
 			};
 			$.ajax(opt).done(function (json, textStatus, jqXHR) {
-				console.log("success===");
 				window.location.href = window.location.origin + '/spc/withdrawReqStatus.do' ;
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				$("#warningModal .modal-title").text('처리 중 오류가 발생했습니다.');
@@ -189,43 +285,99 @@
 	});
 
 
-	function initTextArea(){
-		// let preserved = "";
-		// let d = new Date();
-
-		// preserved = d.toISOString().substring(0, 10) + ' ' +  d.toLocaleTimeString().substr(0, d.toLocaleTimeString().length-2) + '/ ' + loginName + ' / 메모 히스토리'
-		$("#txt1").val("");
-		$("#txt2").val("")
-
-	}
-
 	// onclick="location.href='http://iderms.enertalk.com:8443/files/download/5c71e049-f73c-2bf9-a9a0-2f91d067ef11?oid=spower&orgFilename=수익보고서_20200526100755.pdf'"
 
-	function downloadFile(spcId){
-		var genId = $("#gen").data("value");
+	function downloadFile(self){
+		console.log("spcId===", spcId)
+		if($(self).data("name") == "receipt") {
 
-		$("#attachement_info").find("input[type=file]").each(function(){
-			$(this).attr("name", this.name + "_" + spcId +"_" + genId);
-		});
+		} else if($(self).data("name") == "reqDoc"){
 
-		$.ajax({
-			type: 'post',
-			enctype: 'multipart/form-data',
-			url: 'http://iderms.enertalk.com:8443/files/upload?oid='+oid,
-			data: new FormData($('#attachement_info')[0]),
-			processData: false,
-			contentType: false,
-			cache: false,
-			timeout: 600000,
-			success: function (result) {
-				// console.log
-				// sendSpcGenPost(spcId, result.files);
-			},
-			error: function (request, status, error) {
-				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
-			}
-		});
+		} else if($(self).data("name") == "proof"){
+			
+		};
+		// var a = document.createElement('a');
+		// const url = 'http://iderms.enertalk.com:8443/spcs/transactions/download/request?oid='+ oid + '&spc_id=' + spcId + '&request_id=' + reqId;
+	
+		// let account = $("#tableBody").find("tr:first-child td:nth-child(2)").text().replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+		// let d = new Date();
+		// d = d.toISOString().substring(0, 10).replace(/-/g, "");
+		// let name = d + '_' + spcName + '_' + account + '.pdf';
+		// var link = window.URL.createObjectURL(url);
+		// a.href = link;
+		// a.download = name;
+		// document.body.append(a);
+		// a.click();
+		// a.remove();
+		// var link = window.URL.createObjectURL(data);
+		// console.log("acc---", account)
+		// window.URL.revokeObjectURL(link);
+
+		console.log("download---", name)
+		// window.location= url;
+		// document.location.assign(a.href);
+
+			$.ajax({
+				url: 'http://iderms.enertalk.com:8443/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId,
+				method: 'GET',
+				xhrFields: {
+					responseType: 'blob'
+				},
+				// dataType: 'binary',
+				success: function(data) {
+					console.log("data---", data)
+					let account = $("#tableBody").find("tr:first-child td:nth-child(2)").text().replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+					let d = new Date();
+					d = d.toISOString().substring(0, 10).replace(/-/g, "");
+					let name = d + '_' + spcName + '_' + account + '.pdf';
+					var a = document.createElement('a');
+					var url = window.URL.createObjectURL(data);
+					a.href = url;
+					a.download = name;
+					document.body.append(a);
+					a.click();
+					a.remove();
+					window.URL.revokeObjectURL(url);
+				}
+			});
+				
 	}
+
+
+
+	// function downloadFile(action, originalName, fakeName){
+	// 		console.log("downloadFile--", action)
+	// 		console.log("fakeName==", fakeName, "originalName===", originalName);
+
+
+	// 		var element = document.createElement('a');
+	// 		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(originalName));
+	// 		element.setAttribute('download', originalName);
+
+	// 		element.style.display = 'none';
+	// 		document.body.appendChild(element);
+
+	// 		element.click();
+
+	// 		document.body.removeChild(element);
+			
+	// 		// let option= {
+	// 		// 	type: action,
+	// 		// 	url: 'http://iderms.enertalk.com:8443/files/download?oid=' + oid,
+	// 		// 	data: {
+	// 		// 		fileKey: fakeName,
+	// 		// 		orgFilename: originalName
+	// 		// 	},
+	// 		// }
+	// 		// $.ajax(option).done(function (json, textStatus, jqXHR) {
+	// 		// 	console.log("success===", json)
+	// 		// }).fail(function (jqXHR, textStatus, errorThrown) {
+	// 		// 	alert('처리 중 오류가 발생했습니다.');
+	// 		// 	return false;
+	// 		// });
+	// 	}
+
+
 
 </script>
 
@@ -291,7 +443,7 @@
 								<td>*purpose*</td>
 								<td>*amount*</td>
 								<td>*toAccountNum*</td>
-								<td></td>
+								<td>*description*</td>
 							</tr>
 						</template>
 					</tbody>
@@ -316,16 +468,16 @@
 				</div>
 				<div class="flex_wrapper border">
 					<a id="file_name" href="#" class="btn_type02">거래 내역서.pdf</a>
-					<a onclick="downloadFile('spc_name')" class="save_btn"></a>
+					<a onclick="downloadFile(this)" data-name="receipt" class="save_btn"></a>
 				</div>
 				
 				<div class="flex_wrapper">
 					<h2 class="heading">출금 요청서</h2>
-					<div class="fr"><button type="button" class="btn_type ml-12">다운로드</button></div>
+					<div class="fr"><button type="button" class="btn_type ml-12" onclick="downloadFile(this)" data-name="reqDoc">다운로드</button></div>
 				</div>
 				<div class="flex_wrapper border mt20">
 					<h2 class="heading">증빙 서류</h2>
-					<div class="fr"><button type="button" class="btn_type ml-12">다운로드</button></div>
+					<div class="fr"><button type="button" class="btn_type ml-12" onclick="downloadFile(this)" data-name="proof" >다운로드</button></div>
 				</div>
 				<div class="flex_wrapper">
 					<h2 class="heading">메모 히스토리</h2>

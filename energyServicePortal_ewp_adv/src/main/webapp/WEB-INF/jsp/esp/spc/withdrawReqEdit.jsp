@@ -48,7 +48,7 @@
 			{ name: "운영 계좌", val: 4 },
 			{ name: "기타", val: 5 },
 		];
-		for(let i=0; i<pList.length; i++){
+		for(let i=0, pLength =pList.length; i<pLength; i++){
 			let str = copyPurposeList.replace(/\*purpose_title\*/g, pList[i].name).replace(/\*purpose_value\*/g, pList[i].val);
 			purposeList.append($(str));
 		}

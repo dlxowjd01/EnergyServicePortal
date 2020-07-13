@@ -2,29 +2,31 @@ body {
 	background: none;
 }
 
-nav .lang.login_lang {
+nav .lang.login-lang {
 	display: block;
 	top: 19px;
 	right: 20px;
 	float: right;
 }
 
-.login_wrapper {
+.login-wrapper {
 	margin: 0;
 	padding: 0;
 	height: 100%;
+	background:  linear-gradient(119deg, #0c0c0c, #363636);
 }
 
-.login_wrapper .login {
+.login-wrapper .login {
 	position: relative;
 	margin: 0;
 	min-height: 800px;
 	height: calc(100% - 144px);
-	background: var(--bg-img) repeat center bottom;
-	background-size: cover;
+	/* background:  linear-gradient(119deg, #0c0c0c, #363636); */
+	/* background: var(--bg-img) repeat center bottom;
+	background-size: cover; */
 }
 
-.login_wrapper>footer {
+.login-wrapper>footer {
 	margin: 0;
 	height: 80px;
 	padding: 32px 32px;
@@ -35,7 +37,7 @@ nav .lang.login_lang {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	width: 520px;
+	width: 500px;
 	padding: 0;
 	background-color: rgba(255, 255, 255, 0.08);
 	-webkit-box-shadow: 0px 5px 18px 0px rgba(0, 0, 0, 0.27);
@@ -124,11 +126,11 @@ nav .lang.login_lang {
 	cursor: pointer;
 }
 
-.md_tbl table {
+.md-tbl table {
 	width: 100%;
 }
 
-.md_tbl table th {
+.md-tbl table th {
 	height: 50px;
 	vertical-align: middle;
 	font-size: 14px;
@@ -137,7 +139,7 @@ nav .lang.login_lang {
 	text-align: left;
 }
 
-.md_tbl table td {
+.md-tbl table td {
 	height: 50px;
 	vertical-align: middle;
 	font-size: 14px;
@@ -146,7 +148,7 @@ nav .lang.login_lang {
 	text-align: left;
 }
 
-.md_tbl .inp {
+.md-tbl .inp {
 	height: 36px;
 	line-height: 36px;
 }
@@ -155,7 +157,7 @@ nav .lang.login_lang {
 	width: 85px;
 }
 
-.md_tbl .btnstyle.middle {
+.md-tbl .btnstyle.middle {
 	padding: 0;
 	text-align: center;
 	height: 36px;
@@ -195,14 +197,14 @@ nav .lang.login_lang {
 	font-weight: 500;
 }
 
-.lf_body {
-	padding: 60px;
+.lf-body {
+	padding: 70px 24px 30px;
 	background: var(--box-color);
 }
 
 .lftit {
 	padding-top: 110px;
-	background: url('../img/login_people.png') no-repeat center 0;
+	background: url('../img/login-logo.svg') no-repeat center 0;
 	text-align: center;
 }
 
@@ -215,31 +217,30 @@ nav .lang.login_lang {
 	font-weight: 500;
 }
 
-.lf_body .lfinp {
+.lf-body .lfinp {
 	background-color: transparent;
 }
 
-.lf_body .lfinp {
+.lf-body .lfinp {
 	border: 0;
 	outline: 0;
-	border-bottom: 1px solid var(--color2);
+	border-bottom: 1px solid var(--color9);
 	width: 100%;
 	height: 50px;
 	line-height: 50px;
-	background-color: var(--box-color);
 	color: var(--color6);
 }
 
-.lf_body :-webkit-autofill,
-.lf_body :-webkit-autofill:hover,
-.lf_body :-webkit-autofill:focus,
-.lf_body :-webkit-autofill:active {
+.lf-body :-webkit-autofill,
+.lf-body :-webkit-autofill:hover,
+.lf-body :-webkit-autofill:focus,
+.lf-body :-webkit-autofill:active {
 	-webkit-box-shadow: 0 0 0 1000px var(--box-color) inset !important;
 	-webkit-text-fill-color: var(--color6) !important;
 	transition: background-color 5000s ease-in-out 0s;
 }
 
-.lf_body .arrbtn {
+.lf-body .arrbtn {
 	display: inline-block;
 	padding-right: 30px;
 	background: var(--login-arr) no-repeat right center;
@@ -247,18 +248,19 @@ nav .lang.login_lang {
 	color: var(--color2)
 }
 
-.lf_bottom {
+.lf-btn-wrap {
 	font-size: 0;
+	margin: 56px auto 24px;
 	width: 100%;
 	display: table;
 }
 
-.lf_bottom>* {
+.lf-btn-wrap > * {
 	display: inline-block;
-	width: 50%;
+	width: 100%;
 	border: 0;
 	outline-style: none;
-	height: 60px;
+	height: 48px;
 	font-size: 18px;
 	color: #fff;
 	font-weight: bold;
@@ -266,20 +268,31 @@ nav .lang.login_lang {
 	vertical-align: top;
 }
 
-.lf_bottom>*:hover {
+.lf-btn-wrap>*:hover {
 	color: #fff;
 }
 
-.lf_bottom>a {
-	background: #555;
-	line-height: 60px;
+.lf-btn-wrap>input {
+	background: var(--vivid-blue);
+	line-height: 48px;
+	border-radius: 4px;
 }
 
-.lf_bottom>input {
-	background: #438fd7;
-	line-height: 55px;
+.lf-desc {
+	font-size: 16px;
+	color: var(--color4);
+	border-top: 1px solid var(--color9)
 }
-
+.lf-desc .center strong {
+	color: var(--color2);
+	padding-left: 8px;
+}
+.lf-desc .center:not(.copy-right) {
+	margin: 30px auto 50px;
+}
+.lf-desc .center.copy-right {
+	font-size: 12px;
+}
 /* 회원 가입 */
 
 
@@ -310,22 +323,22 @@ nav .lang.login_lang {
 	display: block;
 }
 
-.unit_tit {
+.unit-tit {
 	display: block;
 	clear: both;
 	margin-bottom: 2px;
 	min-height: 30px;
 }
 
-.unit_cont {
+.unit-cont {
 	display: block;
 	clear: both;
 	margin-bottom: 5px;
 }
 
 .unit:after,
-.unit_tit:after,
-.unit_cont:after {
+.unit-tit:after,
+.unit-cont:after {
 	display: block;
 	content: "";
 	height: 0;
@@ -339,15 +352,15 @@ nav .lang.login_lang {
 	border: 1px solid #ccc;
 }
 
-.join_dialog .modal-content {
+.join-dialog .modal-content {
 	padding: 20px 30px;
 }
 
-.join_container .unit {
+.join-container .unit {
 	margin-bottom: 10px;
 }
 
-.join_container .unit .sTit {
+.join-container .unit .sTit {
 	display: inline-block;
 	font-size: 14px;
 	font-weight: 500;
@@ -358,7 +371,7 @@ nav .lang.login_lang {
 	float: left;
 }
 
-.join_container .unit .sTit:before {
+.join-container .unit .sTit:before {
 	display: inline-block;
 	content: "";
 	width: 6px;
@@ -372,44 +385,44 @@ nav .lang.login_lang {
 	margin-top: -3px;
 }
 
-.join_container .lineBox {
+.join-container .lineBox {
 	background: var(--white);
 }
 
-.join_container .lineBox>table {
+.join-container .lineBox>table {
 	border-top: 0 !important;
 }
 
-.join_container .lineBox>table tr:last-child th,
-.join_container .lineBox>table tr:last-child td {
+.join-container .lineBox>table tr:last-child th,
+.join-container .lineBox>table tr:last-child td {
 	border-bottom: 0 !important;
 }
 
-.join_container .inp {
+.join-container .inp {
 	display: flex;
 	height: 36px;
 }
 
-.join_container .flex_start .inp {
+.join-container .flex_start .inp {
 	width: 196px;
 }
 
-.join_container .flex_start3 .inp {
+.join-container .flex_start3 .inp {
 	margin-right: 6px;
 }
 
 @media all and (max-width:768px) {
-	.login_wrapper>nav {
+	.login-wrapper>nav {
 		padding: 0 15px;
 		height: 115px;
 	}
 
-	.login_wrapper .login {
+	.login-wrapper .login {
 		padding: 0 10px;
 		min-height: 650px;
 	}
 
-	.login_wrapper .login .loginForm {
+	.login-wrapper .login .loginForm {
 		position: absolute;
 		top: 50%;
 		left: 50%;
@@ -417,7 +430,7 @@ nav .lang.login_lang {
 		width: 95%;
 	}
 
-	.lf_body .arrbtn {
+	.lf-body .arrbtn {
 		display: block;
 		margin-bottom: 15px;
 		margin-left: 0 !important;
@@ -429,7 +442,7 @@ nav .lang.login_lang {
 		bottom: auto;
 	}
 
-	.join_dialog {
+	.join-dialog {
 		display: block;
 		width: calc(100% - 29px);
 		margin: 50% auto;

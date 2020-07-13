@@ -116,12 +116,12 @@
 	--blue-yonder: #7e89c9;
 	--blueberry: #5269ef;
 	--royal-blue: #274dea;
-
-	/* ********* images ********* */
+	/* ********* login page & logo images ********* */
 	--bg-img: url("../img/login_bg.jpg");
 	--login-arr: url("../img/login_arr.gif");
 	--encored-logo: url("../img/encored_logo.png");
 	--spower-logo: url("../img/s-power_logo_light.png");
+	/* ********* sidebar images ********* */
 	--sidebar-dashboard-off: url("../img/sidebar_dashboard_light_off.png");
 	--sidebar-dashboard-on: url("../img/sidebar_dashboard_light_on_dark_off.png");
 	--sidebar-status-off: url("../img/sidebar_status_light_off.png");
@@ -142,25 +142,25 @@
 	--sidebar-maintenance-on: url("../img/sidebar_maintenance_light_on_dark_off.png");
 	--sidebar-spc-off: url("../img/sidebar_spc_light_off.png");
 	--sidebar-spc-on: url("../img/sidebar_spc_light_on.png");
-
+	/* ********* status images ********* */
 	--status-error: url("../img/status_error_light.png");
 	--status-drive: url("../img/status_drive_light.png");
 	--status-hold: url("../img/status_hold_light.png");
 	--status-stop: url("../img/status_stop_light.png");
 	--status-charging: url("../img/status_charging_light.png");
 	--status-discharging: url("../img/status_discharging_light.png");
-
+	/* ********* sidebar arrow icon images ********* */
 	--nav-arrow-down: url("../img/expand_arrow_light.png");
 	--expand-arrow-down: url("../img/expand_arrow_light.png");
 	--expand-arrow-up: url("../img/expand_arrow_up_light.png");
-
+	/* ********* collapse arrow icon images ********* */
 	--collapse-arrow: url("../img/sel_down.png");
 	--right-arrow: url("../img/arrow_right_light.png");
 	--down-arrow: url("../img/arrow_down_light.png");
-
+	/* ********* sorting arrow icon images ********* */
 	--ico-sort-up: url("../img/sorting_up_wh.png");
 	--ico-sort-down: url("../img/sorting_down_wh.png");
-
+	/* ********* other icon images ********* */
 	--ico-add: url("../img/ico_add.png");
 	--ico-add-blue: url("../img/btn_add.png");
 	--icon-inverter: url('../img/ico_inverter_on.png');
@@ -174,14 +174,18 @@
 	--ico-water: url("../img/ico_water.png");
 	--ico-wind: url("../img/ico_wind.png");
 	--ico-delete: url("../img/close_btn_md_dark.svg");
-	/* --ico-delete: url("../img/delete_wh.png"); */
-	--ico-delete-new: url("../img/delete_new.svg");
-	--bg-battery-cover: url("../img/battary_cover_dark.png");
-	--btn-close: url("../img/icon_close_wh.png");
-	--btn-close-svg: url("../img/icon_delete.svg");
-	--btn-attachment: url("../img/attachment_light.svg");
+	/* ********* light mode ONLY ********* */
 	--ico-notification: url("../img/notification.svg");
 	--ico-notification-new: url("../img/notification_active.svg");
+	--btn-close-svg: url("../img/icon_delete.svg");
+	--btn-attachment: url("../img/attachment_light.svg");
+	/* ********* light mode ONLY ********* */
+	--ico-prev-active: url("../img/btn-prev-active.svg");
+	--ico-next-active: url("../img/btn-next-active.svg");
+	--ico-prev-page: url("../img/btn-prev.svg");
+	--ico-next-page: url("../img/btn-next.svg");
+	--bg-battery-cover: url("../img/battary_cover_dark.png");
+	--btn-close: url("../img/icon_close_wh.png");
 }
 
 html.darkmode:root {
@@ -218,12 +222,12 @@ html.darkmode:root {
 	--box-color5: #282828;
 	--box-color6: #2d2e2e;
 	--box-color7: rgba(255, 255, 255, 0.12);
-
-	/* ************* images ********* */
+	/* ********* login page & logo images ********* */
 	--bg-img: url("../img/login_bg_black.jpg");
 	--login-arr: url("../img/login_arr_black.png");
 	--encored-logo: url("../img/encored_logo_white.png");
 	--spower-logo: url("../img/s-power_logo_dark.png");
+	/* ********* sidebar images ********* */
 	--sidebar-dashboard-off: url("../img/sidebar_dashboard_light_on_dark_off.png");
 	--sidebar-dashboard-on: url("../img/sidebar_dashboard_dark_on.png");
 	--sidebar-status-off: url("../img/sidebar_status_light_on_dark_off.png");
@@ -244,37 +248,36 @@ html.darkmode:root {
 	--sidebar-maintenance-on: url("../img/sidebar_maintenance_dark_on.png");
 	--sidebar-spc-off: url("../img/sidebar_spc_dark_off.png");
 	--sidebar-spc-on: url("../img/sidebar_spc_dark_on.png");
-
-	--nav-arrow-down: url("../img/expand_arrow_dark.png");
-	--expand-arrow-down: url("../img/expand_arrow_dark.png");
-	--expand-arrow-up: url('../img/expand_arrow_up_dark.png');
-
-	--collapse-arrow: url("../img/sel_down_dark.png");
-	--right-arrow: url("../img/arrow_right_dark.png");
-	--down-arrow: url("../img/arrow_down_dark.png");
-
-	--ico-sort-up: url("../img/sorting_up.png");
-	--ico-sort-down: url("../img/sorting_down.png");
-
-	--ico-add: url("../img/ico_add2_wh.png");
-	--icon-inverter: url('../img/ico_inverter.png');
-	--icon-connector: url('../img/ico_connector.png');
-	--icon-pv: url("../img/icon_pv.png");
-	--icon-wind: url("../img/icon_wind.png");
-	--icon-water: url("../img/water.svg");
+	/* ********* status images ********* */
 	--status-error: url("../img/status_error_dark.png");
 	--status-drive: url("../img/status_drive_dark.png");
 	--status-hold: url("../img/status_hold_dark.png");
 	--status-stop: url("../img/status_stop_dark.png");
 	--status-charging: url("../img/status_charging_dark.png");
 	--status-discharging: url("../img/status_discharging_dark.png");
-
+	/* ********* sidebar arrow icon images ********* */
+	--nav-arrow-down: url("../img/expand_arrow_dark.png");
+	--expand-arrow-down: url("../img/expand_arrow_dark.png");
+	--expand-arrow-up: url('../img/expand_arrow_up_dark.png');
+	/* ********* collapse arrow icon images ********* */
+	--collapse-arrow: url("../img/sel_down_dark.png");
+	--right-arrow: url("../img/arrow_right_dark.png");
+	--down-arrow: url("../img/arrow_down_dark.png");
+	/* ********* sorting arrow icon images ********* */
+	--ico-sort-up: url("../img/sorting_up.png");
+	--ico-sort-down: url("../img/sorting_down.png");
+	/* ********* other icon images ********* */
+	--ico-add: url("../img/ico_add2_wh.png");
+	--icon-inverter: url('../img/ico_inverter.png');
+	--icon-connector: url('../img/ico_connector.png');
+	--icon-pv: url("../img/icon_pv.png");
+	--icon-wind: url("../img/icon_wind.png");
+	--icon-water: url("../img/water.svg");
 	--ico-battery: url("../img/ico_battery_dark.png");
 	--ico-solar: url("../img/ico_solar_dark.png");
 	--ico-water: url("../img/ico_water_dark.png");
 	--ico-wind: url("../img/ico_wind_dark.png");
 	--ico-delete: url("../img/close_btn_md.svg");
-	/* --ico-delete: url("../img/delete.png"); */
 	--bg-battery-cover: url("../img/battary_cover_dark.png");
 	--btn-close: url("../img/icon_close_wh.png");
 }
@@ -2842,54 +2845,81 @@ input.inp[readonly]:focus {
 	border: 1px solid var(--silver);
 }
 
-/* 페이징 */
+/* pagination new & old */
 
-.paging {
-	width: auto;
-	margin: 40px auto 20px;
+.pagination {
+	width: 100%;
+	margin: 34px auto 0;
 	text-align: center;
 }
 
-.paging span {
+.pagination a {
 	display: inline-block;
-	vertical-align: middle;
+	vertical-align: top;
+	width: 40px;
+	height: 24px;
+	line-height: 24px;
+	color: var(--color4);
+	text-align: center;
+	font-size: 13px;	
 }
 
-.paging a {
-	display: inline-block;
-	width: 28px;
-	height: 28px;
-	font-size: 0;
-	vertical-align: middle;
-}
 
-.paging a.prev {
-	margin-right: 20px;
-	background: url("../img/prev.png") no-repeat 0 0;
-}
-
-.paging a.prev:hover {
-	background: url("../img/prev_on.png") no-repeat 0 0;
-}
-
-.paging a.next {
-	margin-left: 20px;
-	background: url("../img/next.png") no-repeat 0 0;
-}
-
-.paging a.next:hover {
-	background: url("../img/next_on.png") no-repeat 0 0;
-}
-
-.paging span {
-	font-family: "Roboto", sans-serif;
-	font-size: 12px;
-	color: var(--color1);
-}
-
-.paging span strong {
+.pagination a.active {
+	font-weight: bold;
 	color: var(--color2);
-	font-weight: normal;
+}
+
+.pagination .btn-prev {
+	background: var(--ico-prev-active) no-repeat center center;
+	opacity: 0.4;
+}
+
+.pagination .btn-next {
+	background: var(--ico-next-active) no-repeat center center;
+	opacity: 0.4;
+}
+
+
+/* old pagination TO BE DELETED!!! */
+.paging_wrap {
+	margin: 34px 0 0;
+	text-align: center;
+}
+
+
+.paging_wrap a,
+.paging_wrap strong {
+	display: inline-block;
+	width: 40px;
+	height: 24px;
+	line-height: 22px;
+	text-align: center;
+	font-size: 13px;
+}
+
+.paging_wrap a {
+	color: var(--color4);
+	vertical-align: baseline;
+}
+
+.paging_wrap a strong,
+.paging_wrap a:hover {
+	font-weight: bold;
+	color: var(--color2);
+}
+
+.paging_wrap .btn_next,
+.paging_wrap .btn_prev {
+	text-indent: -9999px;
+}
+
+.paging_wrap .btn_prev {
+	background: var(--ico-prev-page) no-repeat center center;
+}
+
+.paging_wrap .btn_next {
+	background: var(--ico-next-page) no-repeat center center;
 }
 
 /* 에너지 정보 조회 */
@@ -5939,13 +5969,14 @@ nav .lang {
 
 nav .lang.dropdown .btn-primary {
 	border: 0 !important;
+	border-radius: 4px;
 	font-size: 18px !important;
 	font-weight: 400 !important;
 	color: var(--color3);
 }
 
 nav .lang.dropdown .btn {
-	padding: 0 30px 0 10px;
+	padding: 2px 30px 10px;
 	height: auto;
 }
 
@@ -10647,52 +10678,6 @@ a.btn.btn_type03:hover {
 	text-decoration: underline;
 }
 
-.paging_wrap {
-	margin: 34px 0 0;
-	text-align: center;
-}
-
-.paging_wrap a,
-.paging_wrap strong {
-	display: inline-block;
-	width: 40px;
-	height: 24px;
-	line-height: 22px;
-	text-align: center;
-	font-size: 13px;
-}
-
-.paging_wrap a {
-	color: var(--color4);
-}
-
-.paging_wrap strong,
-.paging_wrap a:hover {
-	font-weight: bold;
-	color: var(--color2);
-}
-
-.paging_wrap .btn_next,
-.paging_wrap .btn_prev {
-	text-indent: -9999px;
-}
-
-.paging_wrap .btn_prev {
-	background: url(../img/btn_prev_wh.png) no-repeat center center;
-}
-
-.paging_wrap .btn_next {
-	background: url(../img/btn_next_wh.png) no-repeat center center;
-}
-
-.darkmode .paging_wrap .btn_prev {
-	background-image: url(../img/btn_prev.png);
-}
-
-.darkmode .paging_wrap .btn_next {
-	background-image: url(../img/btn_next.png);
-}
-
 .btn_file {
 	display: block;
 	width: 24px;
@@ -10947,19 +10932,11 @@ button.tx_file {
 }
 
 .sch_top_info .sch_btn .btn_prev_mon {
-	background: url(../img/btn_prev_wh.png) no-repeat;
-}
-
-html.darkmode .sch_top_info .sch_btn .btn_prev_mon {
-	background: url(../img/btn_prev2.png) no-repeat;
+	background: var(--ico-prev-active) no-repeat;
 }
 
 .sch_top_info .sch_btn .btn_next_mon {
-	background: url(../img/btn_next_wh.png) no-repeat;
-}
-
-html.darkmode .sch_top_info .sch_btn .btn_next_mon {
-	background: url(../img/btn_next2.png) no-repeat;
+	background: var(--ico-next-active) no-repeat;
 }
 
 .sch_top_info .sch_btn strong {
@@ -11708,7 +11685,7 @@ th .btn_align {
 }
 .spc-transaction .table-footer .clear-input {
 	width: 100%;
-	padding-right: 5px;
+	padding-right: 6px;
 }
 
 .spc-transaction .table-footer .sa_select .dropdown-toggle,
@@ -11857,7 +11834,7 @@ table.table-footer tfoot td.light {
 
 /* spc 출금 요청 검토 상세 */
 .indiv.spc-detail {
-	height: 835px;
+	height: 865px;
 	overflow: auto;
 }
 
@@ -11885,8 +11862,8 @@ table.table-footer tfoot td.light {
 
 .indiv.spc-detail .flex_wrapper.border {
 	border-bottom: 1px solid var(--box-color2);
-	padding-bottom: 28px;
-	margin-bottom: 28px;
+	padding-bottom: 32px;
+	margin-bottom: 25px;
 }
 
 .indiv.spc-detail .flex_wrapper .btn_type02 {

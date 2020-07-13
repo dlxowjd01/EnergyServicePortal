@@ -7,14 +7,20 @@
 	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
 
 	$(function() {
-		const tableList = $('#tableBody');
-		const tableCloned = tableList.find("template.table-body").clone().html();
-		const tableFooter = tableList.find("template.table-footer").clone().html();
+		const tableBody = $('#tableBody');
+		const tableFooter = $('#tableFooter')
+		const tbodyClone = tableBody.find("template.table-body").clone().html();
+		const tfootClone = tableFooter.find("template.table-footer").clone().html();
 		const searchBar = $('.spc-search-bar');
 		const searchForm = $('#transactionForm');
 		const dropdownOpt = $('#searchOption').find('.dropdown-menu:not(.chk_type) li');
+		const sumOptList = $('#sumOptList');
+		const perPage = 14;
+
 		var spcInfoArr = [];
-		tableList.find("template").remove();
+		// var totalAmount = 0;
+		tableBody.find("template").remove();
+		tableFooter.find("template").remove();
 
 		unCheckAll(searchBar);
 		getSpcList();
@@ -22,6 +28,7 @@
 		// selectAll($("#spcStatus"));
 		selectAllGroup($("#searchOption"));
 		setSingleSelectDropdown($("#searchOption"))
+		setSingleSelectDropdown(sumOptList);
 
 		$('#fromDate').datepicker('setDate', 'today');
 		$('#toDate').datepicker('setDate', 'today');
@@ -36,20 +43,31 @@
 			} else if ($(this).data('value') == 'yearly') {
 				$('#fromDate').datepicker('setDate', '-365');
 			}
+			return false;
 		});
 
 		$('.sort_table th button').click(function(){
-			var table = $(this).parents('table').eq(0)
-			var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
-			this.asc = !this.asc
+			var table = $(this).parents("table");
+			var rows = tableBody.find('tr').toArray().sort(comparer($(this).index()))
+			this.asc = !this.asc;
 			if (!this.asc){
 				rows = rows.reverse();
 				$(this).addClass('down').removeClass('up');
 			} else {
 				$(this).removeClass('down').addClass('up');
 			}
-			for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+			for (var i = 0, rowLength = rows.length; i<rowLength; i++){
+				// TO DO !!!!! sorting json data
+				tableBody.append(rows[i])
+			}
+			return false;
 		});
+
+		// sumOptList.find('li').on('click', function(){
+		// 	console.log("val---", $(this).data("value"))
+		// 	let val = $(this).data("value");
+		// 	return false;
+		// });
 
 		searchForm.on('submit', function(e){
 			e.preventDefault();
@@ -98,7 +116,7 @@
 				}
 			});
 			if(searchForm.find('.warning.hidden').length == formArr.length){
-				getDataList(page,formArr);
+				getDataList(page, formArr);
 			} else {
 				return false;
 			}
@@ -115,7 +133,7 @@
 				type: action,
 				async: syncOpt
 			}
-			$.ajax(option).done(function (json, callBack, param) {
+			$.ajax(option).done(function (json) {
 				let spcArr = [];
 				let searchArr = [];
 				spcList.empty();
@@ -128,7 +146,7 @@
 						spc_name: item.name
 					}
 					spcInfoArr.push(spcObj);
-					if(item.name == ""){
+					if(isEmpty(item.name)){
 						listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, "spc_no_name"+ index).replace(/\*uniqName\*/g, uniq);
 					} else {
 						listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, item.name).replace(/\*uniqName\*/g, uniq);
@@ -149,52 +167,86 @@
 		}
 
 		// const filtering = (predicate) => (reducing) => (acc, input) => (predicate(input) ? reducing(acc, input): acc)
-		
-		function getDataList(page, arr) {
-			page == undefined ? page = 1 : page = page;
-			if(!isEmpty(arr[0])) {
-				var sortList = [];
-				var totalPage = 0;
+		// var xhr = new XMLHttpRequest();
+		// xhr.open('GET', 'myservice/username?id=some-unique-id');
+		// xhr.onload = function() {
+		// 	if (xhr.status === 200) {
+		// 		alert('User\'s name is ' + xhr.responseText);
+		// 	}
+		// 	else {
+		// 		alert('Request failed.  Returned status of ' + xhr.status);
+		// 	}
+		// };
+		// xhr.send();
+
+		// var xhr = new XMLHttpRequest();
+		// xhr.open('PUT', 'myservice/user/1234');
+		// xhr.setRequestHeader('Content-Type', 'application/json');
+		// xhr.onload = function() {
+		//     if (xhr.status === 200) {
+		//         var userInfo = JSON.parse(xhr.responseText);
+		//     }
+		// };
+		// xhr.send(JSON.stringify({
+		//     name: 'John Smith',
+		//     age: 34
+		// }));
+
+
+		function getDataList(page, searchOptArr) {
+			var currentPage = '';
+			page == undefined ? currentPage = "1" : currentPage = page;
+
+			if(!isEmpty(searchOptArr)) {
 				let action = 'get';
 				let syncOpt = true;
 				let option = {};
-				if(arr.length>1){
+				if(searchOptArr.length>1){
 					option= {
 						url: 'http://iderms.enertalk.com:8443/spcs/transactions',
 						type: action,
 						data: {
 							'oid' : oid,
-							'spcIds' : arr[0],
-							'startDay' : arr[1],
-							'endDay' : arr[2]
+							'spcIds' : searchOptArr[0],
+							'startDay' : searchOptArr[1],
+							'endDay' : searchOptArr[2]
 						},
 						async: syncOpt
 					}
 				} else {
-					option= {
+					option = {
 						url: 'http://iderms.enertalk.com:8443/spcs/transactions',
 						type: action,
 						data: {
 							'oid' : oid,
-							'spcIds' : arr[0]
+							'spcIds' : searchOptArr[0]
 						},
 						async: syncOpt
 					}
 				}
-
+	
 				$.ajax(option).done(function (json, textStatus, jqXHR) {
 					$('#searchOption').removeClass('in');
-					tableList.empty();
+					tableBody.empty();
+					tableFooter.empty();
+					// console.log("json---", json.data)
 					if (json.data.length > 0) {
-						console.log("data---", json.data)
-						if(arr.length>1){
-							let statusOpt = [...arr[3].split(",")];
+						// console.log("json.data---", json.data)
+						let perPage = 14;
+						let startNum = (Number(currentPage) - 1) * perPage;
+						let endNum = Number(currentPage) * perPage + 1;
+						// console.log("start---", startNum, "end===", endNum)
+
+						if(searchOptArr.length>1){
+							let statusOpt = [...searchOptArr[3].split(",")];
 							let newData = json.data.filter(x => {
 								return statusOpt.indexOf(x.status.toString()) > -1
 							});
-							ajaxCallback(newData, arr);
+							ajaxCallback(Number(currentPage), newData.slice(startNum, endNum), searchOptArr);
+							makeNavigation(Number(currentPage), searchOptArr[0], newData.length)
 						} else {
-							ajaxCallback(json.data);
+							ajaxCallback(Number(currentPage), json.data.slice(startNum, endNum));
+							makeNavigation(Number(currentPage), searchOptArr[0], json.data.length);
 						}
 					}
 				}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -202,13 +254,16 @@
 					return false;
 				});
 			} else {
-				$("#warningModal .modal-title").text("검색된 SPC 가 없습니다. 페이지를 다시 로딩해 주세요.");
+				$("#warningModal .modal-title").text("검색된 SPC 가 없습니다.");
 				$("#warningModal").modal("show");
 			}
 		}
 
-		function ajaxCallback (newData, arr) {
-			newData.map(item => {
+		function ajaxCallback(currentPage, newData, arr) {
+			let totalAmount = 0;
+			var page = currentPage;
+			newData.map((item, index) => {
+				totalAmount += item.total_amount;
 				if(!isEmpty(arr)) {
 					item.opt = arr;	
 				}
@@ -216,18 +271,18 @@
 					// typeof v.to_account !== "string" ? JSON.parse(v.to_account) : v.to_account = v.to_account	
 						resolve(JSON.parse(item.to_account))
 					}).then(res => {
-						let popObj = Object.assign({}, item);
+						// let item = Object.assign({}, item);
 						// console.log("statusOpt==", statusOpt)
-						delete(popObj.to_account);
-
+						// delete(item.to_account);
 						const spcMatch = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
-
-						let str = '';
+						let perPage = 14;
+						let tbodyStr = '';
 						let transaction_spc_id = '';
 						let transaction_req_id = '';
 						let transaction_spc_name = ''
 						transaction_spc_name = spcInfoArr[spcMatch].spc_name;
-						let withdraw_day = popObj.withdraw_day.substring(0, 4) + '-' + popObj.withdraw_day.substring(4, 6) + '-' + popObj.withdraw_day.substring(6, 8);
+						// withdraw date
+						let withdraw_day = item.withdraw_day.substring(0, 4) + '-' + item.withdraw_day.substring(4, 6) + '-' + item.withdraw_day.substring(6, 8);
 						let withdraw_account_info = '';
 						withdraw_account_info = item.withdraw_bank+item.withdraw_account_no;
 
@@ -241,9 +296,8 @@
 						// status
 						let status = '';
 						let status_val = '';
-
-
-						let edit_icons = '';
+						// delete icon
+						let visibility = '';
 						let link_attr = '';
 						let purposeList = [
 							{ label: "출금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
@@ -255,7 +309,7 @@
 						const p = [];
 						let size = '';
 
-						for(let i=0; i<res.length; i++){
+						for(let i=0, arrayLength =res.length; i<arrayLength; i++){
 							p.push(res[i].purpose);
 						}
 
@@ -279,40 +333,42 @@
 						} else {
 							purpose = ( purposeList[0].value[p[0]] ) + ' 외 +' + ( uniqSet.size - 1 ) + '건';
 						}
-						transaction_spc_id = popObj.spc_id;
-						transaction_req_id = popObj.request_id;
-						if(popObj.status == 0) {
+						transaction_spc_id = item.spc_id;
+						transaction_req_id = item.request_id;
+
+						if(item.status == 0) {
 							status="반송"
 							status_val = "0"
-							edit_icons = "show";
+							visibility = "show";
 							link_attr = "text-link";
-						} else if(popObj.status == 1) {
+						} else if(item.status == 1) {
 							status="승인 대기"
 							status_val = "1"
-							edit_icons = "show";
+							visibility = "show";
 							link_attr = "text-link";
-						} else if (popObj.status == 2) {
+						} else if (item.status == 2) {
 							status="승인 중"
 							status_val = "2"
 							link_attr = "text-link";
-							edit_icons = "hidden";
-						} else if(popObj.status == 3) {
+							visibility = "hidden";
+						} else if(item.status == 3) {
 							status="승인 완료"
 							status_val = "3"
-							edit_icons = "hidden";
+							visibility = "hidden";
 							link_attr = "text-blue";
 						}
-						popObj.total_amount ? ( amount = popObj.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원' ) : amount = '-';
+						
+						item.total_amount ? ( amount = item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원' ) : amount = '-';
 
-						( ( popObj.requested_by !== undefined ) && ( popObj.requested_by != "string" ) ) ? ( requested_by = popObj.requested_by ) : ( requested_by = '-' );
+						( ( item.requested_by !== undefined ) && ( item.requested_by != "string" ) ) ? ( requested_by = item.requested_by ) : ( requested_by = '-' );
 
-						popObj.status_changed_at ? ( updated_at = (popObj.status_changed_at.substring(0, 10) + ' ' + popObj.status_changed_at.substring(11, 19)) ) : ( updated_at = '-' );
+						item.status_changed_at ? ( updated_at = (item.status_changed_at.substring(0, 10) + ' ' + item.status_changed_at.substring(11, 19)) ) : ( updated_at = '-' );
 
-						popObj.status_changed_by ? ( approved_by = popObj.status_changed_by ) : ( approved_by = '-' );
-
+						item.status_changed_by ? ( approved_by = item.status_changed_by ) : ( approved_by = '-' );
 
 						// res.to_account_bank.locale
-						str = tableCloned.replace(/\*transactionSpcId\*/g, transaction_spc_id)
+						tbodyStr = tbodyClone.replace(/\*index\*/g, (Number(page)-1)*perPage + Number(index)+1 )
+							.replace(/\*transactionSpcId\*/g, transaction_spc_id)
 							.replace(/\*transactionSpcName\*/g, transaction_spc_name)
 							.replace(/\*transactionReqId\*/g, transaction_req_id)
 							.replace(/\*withdrawDay\*/g, withdraw_day)
@@ -326,15 +382,32 @@
 							.replace(/\*approvedBy\*/g, approved_by)
 							.replace(/\*status\*/g, status)
 							.replace(/\*statusVal\*/g, status_val)
-							.replace(/\*linkAttr\*/g, link_attr).replace(/\*editIcons\*/g, edit_icons)
-							.replace(/\*statusChangedBy\*/g, status_changed_by)
-						tableList.append($(str));
-				}).catch(error => {
-						console.log(error);
-				}).finally(() => {
-				});
-			});
+							.replace(/\*linkAttr\*/g, link_attr).replace(/\*visibility\*/g, visibility)
+							.replace(/\*statusChangedBy\*/g, status_changed_by);
+						tableBody.append($(tbodyStr));
+					}).then(result => {
+						// console.log('result==', result); // 3
+					}, function(error){
+						if(error){
+							console.log("error", error);
+							reject(error)
+						};
+					});
+			})
+			// let sum = totalAmount.toLocaleString('kr-KO');
+			let str = totalAmount.toString();
+			// str = sum.replace(/\d(?=(\d{3})+\.)/g, '$&,')
+			// console.log("total---", sum)
+			let tfootStr = '';
+			tfootStr = tfootClone.replace(/\*total\*/g, totalAmount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
+			tableFooter.append($(tfootStr));
 		}
+
+		// function setTotal(sum) {
+		// 	console.log("sum---", sum)
+		// }
+
+		
 		// function nvl(value, str) {
 		// 	if (isEmpty(value)) {
 		// 		return str;
@@ -364,53 +437,70 @@
 			}
 		}
 
-		function uniqByKeepFirst(a, key) {
-			let seen = new Set();
-			return a.filter(item => {
-				let k = key(item);
-				return seen.has(k) ? false : seen.add(k);
-			});
-		}
-		
-		function remove_duplicates_es6(arr) {
-			let s = new Set(arr);
-			let it = s.values();
-			return Array.from(it);
-		}
-
-
-		function makeNavigation (page, totalPage) {
-			$('#paging').empty();
+		function makeNavigation (currentPage, spcId, dataLength) {
+			// console.log("spc===", spcId)
+			$('#pagination').empty();
 			let pageStr = '';
-			let navgroup = Math.floor((page-1)/navCount)+1;
-			let startPage = ((navgroup-1)*navCount)+1;
-			let totalnav = Math.ceil(totalPage/navCount);
-			let endPage = ((startPage + navCount-1) > totalPage)? totalPage : (startPage + navCount-1);
-			
-			// console.log("nav===", page, "page===", navgroup);
-			if (navgroup == 1) {
-				pageStr += '<a href="javascript:void(0);" class="btn_prev first_prev">prev</a><strong>'+page+'</strong>';
-			} else{
-				pageStr += '<a href="javascript:getDataList(' + Number(startPage-1) + ');" class="btn_prev">prev</a>';
+			let totalPage = Math.ceil( dataLength / perPage );
+			let navGroup = Math.floor((page - 1) / perPage) + 1;
+			let startPage = ((navGroup - 1) * perPage) + 1;
+			let totalNav = Math.ceil(totalPage / perPage);
+			let endPage = ((startPage + perPage - 1) > totalPage) ? totalPage : (startPage + navCount - 1);
+
+			console.log("totalNav===", totalNav, "navGroup===", navGroup);
+
+			if (navGroup == 1) {
+				pageStr += '<a href="javascript:void(0);" data-value="1" class="btn-prev first-arrow"></a>';
+			} else {
+				let current = startPage -1;
+				console.log("totoalPAge===", totalPage)
+				pageStr += '<a href="javascript:void(0);" data-value="' + totalPage + '" class="btn-prev last-arrow"></a>';
 			}
 
 			for (let i = startPage ; i <= endPage; i++) {
-				console.log("i===", i)
-				if (i==page) {
-					pageStr += '<a href="javascript:getDataList('+i+');"><strong>'+i+'</strong></a>';
+				// console.log("startPage===", startPage)
+				if (i==currentPage) {
+					pageStr += '<a href="javascript:void(0);" class="active" data-value="'+ i +'">'+i+'</a>';
 				} else {
-					pageStr += '<a href="javascript:getDataList('+i+');">'+i+'</a>';
+					pageStr += '<a href="javascript:void(0)" class="" data-value="'+ i +'">'+i+'</a>';
 				}
 			}
 
-			if (navgroup <totalnav) {
-				pageStr += '<a href="javascript:getDataList(' + Number(endPage+1) + ');"  class="btn_next">next</a>';
+			if (navGroup < totalNav) {
+				console.log("navGroup < totalNav===", totalNav, "endPage===", endPage)
+				let current = currentPage + 1;
+				pageStr += '<a href="javascript:void(0);" class="btn-next" data-value="'+ current +'></a>';
 			} else {
-				pageStr += '<a href="javascript:void(0);"  class="btn_next">next</a>';
+				let current = currentPage + 1;
+				console.log("navGroup > totalNav===", totalNav, "endPage===", currentPage + 1)
+				pageStr += '<a href="javascript:void(0);" class="btn-next" data-value="' + current + '"></a>';
 			}
-			$('#paging').append(pageStr);
+			$('#pagination').append(pageStr);
+
+			$('#pagination a').on("click", function(){
+
+				let page = $(this).data("value");
+				if(currentPage == page) {
+					return false;
+				}
+
+				spcInfoArr.shift();
+				let newArr = [];
+				newArr.push(spcInfoArr.map(x=> x.spc_id).join());
+
+				// let join = spcId.join();
+				// newArr.push(join);
+				// console.log("newArr----", newArr)
+				// console.log("newArr----", newArr)
+				getDataList(page, newArr);
+				return false;
+			});
+
 		}
 
+		function searchByPage(){
+			
+		}
 
 
 		function getNumberIndex(index) {
@@ -431,13 +521,13 @@
 	});
 
 	function deleteRow(selector) {
-		$(selector).parents().closest("tr").css("border", "solid 1px #fff");
+		// $(selector).parents().closest("tr").css("border", "solid 1px #fff");
 		$("#warningModal").modal("show");
 		$("#confirmBtn").on("click", function(){
 			$("#warningModal").modal("hide");
 			$(selector).parents().closest("tr").remove();
 		})
-		$(selector).parents().closest("tr").css("border", "none");
+		// $(selector).parents().closest("tr").css("border", "none");
 		// console.log("tr===", $(selector).parents().closest("tr"))
 	}
 
@@ -494,7 +584,7 @@
 	<div class="modal-dialog">
 		<div class="modal-content collection_modal_content">
 			<div class="modal-header">
-				<h4 lass="modal-title">해당 내역을 정말 삭제 하시겠습니까?</h4>
+				<h4 lass="modal-title">조회된 데이터가 없습니다.</h4>
 			</div>
 			<div class="modal-footer">
 				<div class="btn_wrap_type02">
@@ -513,8 +603,8 @@
 	</div>
 </div>
 
-<div class='row spc-search-bar'>
-	<div class='col-12'><!--
+<div class='row spc-search-bar header-wrapper'>
+	<div class='col-11'><!--
 	--><form id='transactionForm'><!--
 		--><span class='tx_tit'>SPC 선택</span><!--
 		--><div class='sa_select'>
@@ -530,11 +620,11 @@
 				--></ul>
 					<small class="hidden warning">선택해 주세요.</small>
 				</div>
-			</div>
-			<div class='dropdown'>
+			</div><!--
+		--><div class='dropdown'>
 				<button type='button' id='collapseBtn' class='btn btn-primary dropdown-toggle no_bg w-100 ml-24' data-toggle='collapse' data-target='#searchOption'>상세 조건<span class='caret'></span></button>
 				<ul id='searchOption' class='collapse dropdown-menu unused'>
-					<li>
+					<li class="ml-6">
 						<div class='bx_row aN3'>
 							<h2 class='comp_tit'>입출금 조회 기간</h2>
 							<div class='bx_align mr-30 dropdown'>
@@ -555,7 +645,7 @@
 							</div>
 						</div>
 					</li>
-					<li>
+					<li class="ml-6">
 						<div class='bx_row aN3'>
 							<div class='bx_align dropdown'>
 								<h2 class='comp_tit'>상태</h2>
@@ -610,44 +700,44 @@
 									<ul id="spcPurposeList" class='dropdown-menu chk_type dropdown_offset' role='menu'>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='allPurpose' data-value='10' data-name="전체" name='spcPurpose'>
+												<input type='checkbox' id='allPurpose' data-value='all' data-name="selectAll" name='spcPurpose'>
 												<label for='allPurpose'>전체</label>
 											</a>
 										</li>
 										<li>
 											<a href='javascript:void(0)'tabindex='-1'>
-												<input type='checkbox' id='electricitySalesPrice' data-value='0' data-name="REC 수익" name='spcPurpose'>
-												<label for='electricitySalesPrice'>REC 수익</label>
+												<input type='checkbox' id='recMargin' data-value='0' data-name="REC 수익" name='spcPurpose'>
+												<label for='recMargin'>REC 수익</label>
 											</a>
 										</li>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='rfcSalesPrice' data-value='1' data-name="SMP 수익" name='spcPurpose'>
-												<label for='rfcSalesPrice'>SMP 수익</label>
+												<input type='checkbox' id='smpMargin' data-value='1' data-name="SMP 수익" name='spcPurpose'>
+												<label for='smpMargin'>SMP 수익</label>
 											</a>
 										</li>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='operationFee' data-value='2' data-name="DSRA 적립" name='spcPurpose'>
-												<label for='operationFee'>DSRA 적립</label>
+												<input type='checkbox' id='dsraSaving' data-value='2' data-name="DSRA 적립" name='spcPurpose'>
+												<label for='dsraSaving'>DSRA 적립</label>
 											</a>
 										</li>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='rentalFee' data-value='3' data-name="기타" name='spcPurpose'>
-												<label for='rentalFee'>기타</label>
+												<input type='checkbox' id='etc' data-value='3' data-name="기타" name='spcPurpose'>
+												<label for='etc'>기타</label>
 											</a>
 										</li>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='commissionFee' data-value='4' data-name="유보 계좌" name='spcPurpose'>
-												<label for='commissionFee'>유보 계좌</label>
+												<input type='checkbox' id='pendingAccount' data-value='4' data-name="유보 계좌" name='spcPurpose'>
+												<label for='pendingAccount'>유보 계좌</label>
 											</a>
 										</li>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='electricityBill' data-value='5' data-name="운영 계좌" name='spcPurpose'>
-												<label for='electricityBill'>운영 계좌</label>
+												<input type='checkbox' id='activeAccount' data-value='5' data-name="운영 계좌" name='spcPurpose'>
+												<label for='activeAccount'>운영 계좌</label>
 											</a>
 										</li>
 									</ul>
@@ -658,28 +748,38 @@
 					</li>
 					<li class='btn_wrap_type03 btn_wrap_border'>
 						<button type='button' data-toggle='collapse' data-target='#searchOption' class='btn_type03' id='closeDropdown'>취소</button>
-						<button type='submit' class='btn_type ml-6' id='renderBtn'>검색</button>
+						<button type='submit' class='btn_type ml-6'>검색</button>
 					</li>
 				</ul>
 			</div>
 		</form>
 	</div>
+	<div class="col-1">
+		<div class='dropdown fr'><!--
+		--><button class="btn btn-primary dropdown-toggle w-100" type="button" data-toggle="dropdown" value="" aria-expanded="true">건 별<span class="caret"></span></button><!-- 
+		--><ul id='sumOptList' class='dropdown-menu' role='menu'><!--
+			--><li data-value="noSum"><a href="javascript:void(0)" tabindex="-1">건 별</a></li><!--
+			--><li data-value="monthSum"><a href="javascript:void(0)" tabindex="-1">월 별</a></li><!--
+			--><li data-value="yearSum"><a href="javascript:void(0)" tabindex="-1">년 별</a></li><!--
+		--></ul>
+		</div>
+	</div>
 </div>
-
 
 
 <div class='row spc-transaction'>
 	<div class='col-12'>
 		<div class='indiv'>
 			<div class='spc_tbl'>
-				<table class='sort_table transaction-table'>
+				<table class='sort_table table-footer transaction-table'>
 					<colgroup>
+						<col style='width:5%'>
+						<col style='width:10%'>
+						<col style='width:9%'>
+						<col style='width:10%'>
+						<col style='width:10%'>
 						<col style='width:12%'>
-						<col style='width:10%'>
-						<col style='width:10%'>
-						<col style='width:10%'>
 						<col style='width:12%'>
-						<col style='width:14%'>
 						<col style='width:10%'>
 						<col style='width:10%'>
 						<col style='width:12%'>
@@ -687,6 +787,8 @@
 					</colgroup>
 					<thead>
 						<tr>
+							<!-- <th><button class='btn_align down'>순번</button></th> -->
+							<th>순번</th>
 							<th><button class='btn_align down'>입출금 일자</button></th>
 							<th><button class='btn_align down'>입출금 구분</button></th>
 							<th><button class='btn_align down'>용도 구분</button></th>
@@ -702,6 +804,7 @@
 						<tr><td colspan='9' class='no-data center'>데이터가 없습니다.</td></tr></tr>
 						<template class='table-body'>
 							<tr>
+								<td>*index*</td>
 								<td>*withdrawDay*</td>
 								<td>*transactionType*</td>
 								<td>*purpose*</td>
@@ -712,24 +815,25 @@
 								<td>*approvedBy*</td>
 								<td class='left' data-id="*transactionSpcId*" data-name="*transactionSpcName*" data-value="*statusVal*"><!--
 								--><div class="flex_start"><a href="javascript:void(0);" class="*linkAttr*" data-value="*withdrawAccountInfo*" data-id="*transactionReqId*" onclick="goToDetail($(this))">*status*</a><!--
-									--><a href="javascript:void(0);" onclick="deleteRow(this)" class='icon-delete *editIcons*'></a><!--
+									--><a href="javascript:void(0);" onclick="deleteRow(this)" class='icon-delete *visibility*'></a><!--
 								--></div>
 								</td>
 							</tr>
 						</template>
 					</tbody>
-					<tfoot>
-						<tr>
-							<template class='table-footer'>
+					<tfoot id="tableFooter">
+						<template class='table-footer'>
+							<tr>
+								<td></td>
 								<td>합계</td>
 								<td colspan='3'></td>
-								<td>*total*</td>
+								<td>*total* 원</td>
 								<td colspan='4'></td>
-							</template>
-						</tr>
+							</tr>
+						</template>
 					</tfoot>
 				</table>
-				<div class='paging_wrap' id='paging'></div>
+				<div class='pagination' id='pagination'></div>
 			</div>
 		</div>
 	</div>
