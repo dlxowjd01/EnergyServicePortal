@@ -1,26 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-<script src="/js/commonDropdown.js"></script>
-
-<script>
+<script type="text/javascript" src="/js/commonDropdown.js"></script>
+<script type="text/javascript">
 	let today = new Date();
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 	const siteList = JSON.parse('${siteList}');
 
 	$(function () {
-
 		setInitList("listData"); //리스트초기화
-		
 		getDataList(page);
-
-		$(document).on('click', '.dropdown li', function () {
-			let dataValue = $(this).data('value');
-			let dataText = $(this).text();
-			let id = $(this).parents('.dropdown').prop('id');
-
-			$(this).parents('.dropdown').find('button').html(dataText + '<span class="caret"></span>').data('value', dataValue);
-		});
 	});
 
 	$(document).on('keyup', '#key_word', function (e) {
@@ -38,11 +27,6 @@
 	}
 
 	function getCsvDown() {
-		//         var column = ["spc_name", "name", "start_yyyymm", "", "cash_in", "cash_out", "balance"], //json Key
-		//             header = ["SPC명", "발전소 명", "기준년월", "용량", "현금유입(원)", "현금유(원)", "기말 현금흐름(원)"]; //csv 파일 헤더
-
-		//         getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
-
 		let excelName = 'spc_info_list';
 		let $val = $('#excelList').find('tbody');
 		let cnt = $val.length;
@@ -227,8 +211,8 @@
 		<div class="time fr">
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>
-			<span>DATA BASE TIME</span>
-			<em class="dbTime">2018-07-27 17:01:02</em>
+<%--			<span>DATA BASE TIME</span>--%>
+<%--			<em class="dbTime">2018-07-27 17:01:02</em>--%>
 		</div>
 	</div>
 </div>
@@ -273,10 +257,10 @@
 				<table class="sort_table chk_type">
 					<colgroup>
 						<col width="6%">
-						<col width="10%">
-						<col width="12%">
-						<col width="12%">
 						<col width="15%">
+						<col width="17%">
+						<col width="17%">
+<%--						<col width="15%">--%>
 						<col width="15%">
 						<col width="15%">
 						<col width="15%">
@@ -291,7 +275,7 @@
 							<th><button class="btn_align down">SPC명</button></th>
 							<th><button class="btn_align down">발전소 명</button></th>
 							<th><button class="btn_align down">기준년월</button></th>
-							<th class="right"><button class="btn_align down">용량(kW)</button></th>
+<%--							<th class="right"><button class="btn_align down">용량(kW)</button></th>--%>
 							<th class="right"><button class="btn_align down">현금유입(원)</button></th>
 							<th class="right"><button class="btn_align down">현금유출(원)</button></th>
 							<th class="right"><button class="btn_align down">기말 현금흐름(원)</button></th>
@@ -303,12 +287,14 @@
 								<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="">
 								<label for="chk_op[INDEX]">[INDEX]</label>
 							</td>
-							<td><a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=&balance_yyyy=[balance_yyyymm]"
-									class="tbl_link">[spc_name]</a></td>
-							<td><a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=[site_id]&balance_yyyy=[balance_yyyymm]"
-									class="tbl_link">[name]</a></td>
+							<td>
+								<a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=&balance_yyyy=[balance_yyyymm]" class="tbl_link">[spc_name]</a>
+							</td>
+							<td>
+								<a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=[site_id]&balance_yyyy=[balance_yyyymm]" class="tbl_link">[name]</a>
+							</td>
 							<td>[balance_yyyymm]</td>
-							<td class="right">-</td>
+<%--							<td class="right">-</td>--%>
 							<td class="right">[inflowOfCash]</td>
 							<td class="right">[outflowOfCash]</td>
 							<td class="right">[endOfTermFlow]</td>

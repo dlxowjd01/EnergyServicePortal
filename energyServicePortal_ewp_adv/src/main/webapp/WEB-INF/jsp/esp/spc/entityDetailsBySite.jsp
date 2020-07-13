@@ -104,27 +104,28 @@
 		$('[id^="loan_"]:not(:eq(0))').remove();
 		$('[id^="interestCost_"]:not(:eq(0))').remove();
 
-		for(var i = 0; i < dataInfo.length; i++) {
-			let balanceyyyymm = dataInfo[i].balance_yyyymm;
-			let mm = Number(balanceyyyymm.slice(-2));
-			let balanceInfo = JSON.parse(dataInfo[i].balance_info);
+		console.log(dataInfo);
 
-			let num = 0;
+		let indexArray = new Array();
+		for(var i = 0; i < dataInfo.length; i++) {
+			let balanceInfo = JSON.parse(dataInfo[i].balance_info);
 			$.map(balanceInfo, function(v, k){
 				if(k.match('loan')) {
-					let keyName = k.split('_');
-					if(num < Number(keyName[1])) {
-						num = Number(keyName[1]);
-					}
+					let keyName = k.replace(/[^0-9]/g, '');
+					if ($.inArray(keyName, indexArray) === -1) indexArray.push(keyName);
 				}
 			});
+		}
 
-			if(num > 1) {
-				for(let i = 2; i <= num; i++) {
-					let tr = $('<tr>').attr('id', 'loan_' + i);
-					for(let j = 0; j <= 13; j++) {
-						if(j == 0) {
-							tr.append('<td class="sub_td">차입금 상환(' + String.fromCharCode(num + 64) + ')</td>')
+		if(indexArray.length > 0) {
+			indexArray.sort();
+			indexArray.forEach(index => {
+				if (index != 0) {
+					let tr = $('<tr>').attr('id', 'loan_' + index);
+
+					for (let j = 0; j <= 13; j++) {
+						if (j == 0) {
+							tr.append('<td class="sub_td">차입금 상환(' + String.fromCharCode(Number(index) + 65) + ')</td>')
 						} else {
 							tr.append('<td>-</td>');
 						}
@@ -132,19 +133,25 @@
 
 					$('[id^="loan_"]').eq($('[id^="interestCost_"]').length - 1).after(tr);
 
-					tr = $('<tr>').attr('id', 'interestCost_' + i);
-					for(let j = 0; j <= 13; j++) {
-						if(j == 0) {
-							tr.append('<td class="sub_td">이자 비용(' + String.fromCharCode(num + 64) + ')</td>')
+					tr = $('<tr>').attr('id', 'interestCost_' + index);
+					for (let j = 0; j <= 13; j++) {
+						if (j == 0) {
+							tr.append('<td class="sub_td">이자 비용(' + String.fromCharCode(Number(index) + 65) + ')</td>')
 						} else {
 							tr.append('<td>-</td>');
 						}
 					}
 					$('[id^="interestCost_"]').eq($('[id^="interestCost_"]').length - 1).after(tr);
 				}
-			}
+			});
+		}
 
-			$.map(balanceInfo, function(v, k){
+		for(var i = 0; i < dataInfo.length; i++) {
+			let balanceyyyymm = dataInfo[i].balance_yyyymm;
+			let mm = Number(balanceyyyymm.slice(-2));
+			let balanceInfo = JSON.parse(dataInfo[i].balance_info);
+
+			$.map(balanceInfo, function(v, k) {
 				let val = Math.round(v.replace(/[^0-9.-]/g, ''));
 				$('#'+k).find('td').eq(mm).html(numberComma(Number(val)));
 			});
@@ -249,12 +256,12 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">SPC 원가관리</h1>
+		<h1 class="page-header">SPC 금융관리</h1>
 		<div class="time fr">
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>
-			<span>DATA BASE TIME</span>
-			<em class="dbTime">2018-07-27 17:01:02</em>
+<%--			<span>DATA BASE TIME</span>--%>
+<%--			<em class="dbTime">2018-07-27 17:01:02</em>--%>
 		</div>
 	</div>
 </div>
@@ -389,7 +396,7 @@
 						<td>-</td>
 						<td>-</td>
 					</tr>
-					<tr id="loan_1">
+					<tr id="loan_0">
 						<td class="sub_td">차입금 상환(A)</td>
 						<td>-</td>
 						<td>-</td>
@@ -405,7 +412,7 @@
 						<td>-</td>
 						<td>-</td>
 					</tr>
-					<tr id="interestCost_1">
+					<tr id="interestCost_0">
 						<td class="sub_td">이자 비용(A)</td>
 						<td>-</td>
 						<td>-</td>
@@ -421,7 +428,7 @@
 						<td>-</td>
 						<td>-</td>
 					</tr>
-					<tr id="conversionCharge_1">
+					<tr id="conversionCharge_0">
 						<td class="sub_td">대리 기관 수수료</td>
 						<td>-</td>
 						<td>-</td>
@@ -437,7 +444,7 @@
 						<td>-</td>
 						<td>-</td>
 					</tr>
-					<tr id="managementCharge_1">
+					<tr id="managementCharge_0">
 						<td class="sub_td">관리 운영 수수료</td>
 						<td>-</td>
 						<td>-</td>

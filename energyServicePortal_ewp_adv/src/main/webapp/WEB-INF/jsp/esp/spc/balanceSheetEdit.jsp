@@ -196,12 +196,11 @@
 			let taxAdjustment = new Object();
 
 			let num = 0;
+			let indexArray = new Array();
 			$.map(balanceInfo, function(v, k){
 				if(k.match('loan')) {
-					let keyName = k.split('_');
-					if(num < Number(keyName[1])) {
-						num = Number(keyName[1]);
-					}
+					let keyName = k.replace(/[^0-9]/g, '');
+					if ($.inArray(keyName, indexArray) === -1) indexArray.push(keyName);
 				}
 
 				//세금계산서
@@ -223,18 +222,21 @@
 				}
 			});
 
-			if(num > 1) {
-				for(let i = 2; i <= num; i++) {
-					let tr = $('<tr>').addClass('interestTr');
-					tr.append('<th>차입금 상환(' + String.fromCharCode(num + 64) + ')</th>');
-					tr.append('<td>').find('td').append('<div>').find('div').addClass('tx_inp_type').addClass('read');
-					tr.find('div.tx_inp_type').append('<input type="text" id="loan_' + i + '" name="loan_' + i + '" placeholder="자동 입력" readonly>');
-					tr.append('<th>이자 비용(' + String.fromCharCode(num + 64) + ')</th>');
-					tr.append('<td>').find('td:eq(1)').append('<div>').find('div').addClass('tx_inp_type').addClass('read');
-					tr.find('div:eq(1).tx_inp_type').append('<input type="text" id="interestCost_' + i + '" name="interestCost_' + i + '" placeholder="자동 입력" readonly>');
+			if(indexArray.length > 0) {
+				indexArray.sort();
+				indexArray.forEach(index => {
+					if (index != 0) {
+						let tr = $('<tr>').addClass('interestTr');
+						tr.append('<th>차입금 상환(' + String.fromCharCode(Number(index) + 65) + ')</th>');
+						tr.append('<td>').find('td').append('<div>').find('div').addClass('tx_inp_type').addClass('read');
+						tr.find('div.tx_inp_type').append('<input type="text" id="loan_' + index + '" name="loan_' + index + '" placeholder="자동 입력" readonly>');
+						tr.append('<th>이자 비용(' + String.fromCharCode(Number(index) + 65) + ')</th>');
+						tr.append('<td>').find('td:eq(1)').append('<div>').find('div').addClass('tx_inp_type').addClass('read');
+						tr.find('div:eq(1).tx_inp_type').append('<input type="text" id="interestCost_' + index + '" name="interestCost_' + index + '" placeholder="자동 입력" readonly>');
 
-					$('tr.interestTr').eq($('tr.interestTr').length - 1).after(tr);
-				}
+						$('tr.interestTr').eq($('tr.interestTr').length - 1).after(tr);
+					}
+				});
 			}
 
 			if(!isEmpty(income)) {
@@ -342,7 +344,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">SPC 원가관리 수정</h1>
+		<h1 class="page-header">SPC 금융관리 수정</h1>
 		<div class="time fr">
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>
@@ -437,14 +439,13 @@
 						<th>차임금 상환(A)</th>
 						<td>
 							<div class="tx_inp_type read">
-								<input type="text" id="loan_1" name="loan_1" value="" placeholder="자동 입력" readonly>
+								<input type="text" id="loan_0" name="loan_0" value="" placeholder="자동 입력" readonly>
 							</div>
 						</td>
 						<th>이자 비용(A)</th>
 						<td>
 							<div class="tx_inp_type read">
-								<input type="text" id="interestCost_1" name="interestCost_1" value=""
-								       placeholder="자동 입력" readonly>
+								<input type="text" id="interestCost_0" name="interestCost_0" value="" placeholder="자동 입력" readonly>
 							</div>
 						</td>
 					</tr>
@@ -452,15 +453,13 @@
 						<th>대리기관 수수료</th>
 						<td>
 							<div class="tx_inp_type read">
-								<input type="text" id="conversionCharge_1" name="conversionCharge_1" value=""
-								       placeholder="자동 입력" readonly>
+								<input type="text" id="conversionCharge_0" name="conversionCharge_0" value="" placeholder="자동 입력" readonly>
 							</div>
 						</td>
 						<th>관리 운영 수수료</th>
 						<td>
 							<div class="tx_inp_type read">
-								<input type="text" id="managementCharge_1" name="managementCharge_1" value=""
-								       placeholder="자동 입력" readonly>
+								<input type="text" id="managementCharge_0" name="managementCharge_0" value="" placeholder="자동 입력" readonly>
 							</div>
 						</td>
 					</tr>
