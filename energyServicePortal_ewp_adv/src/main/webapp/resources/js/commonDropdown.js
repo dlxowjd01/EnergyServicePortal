@@ -196,6 +196,7 @@ const setDropdownValue = ($selector) => {
 			$(this).parents().find(".dropdown-toggle").data('value', val);
 		});
 	});
+	return false;
 }
 
 /**
@@ -212,4 +213,5 @@ const setSingleSelectDropdown = ($selector) => {
 			$(this).parents().find(".dropdown-toggle").data('value', val);
 		});
 	});
+	return false;
 }

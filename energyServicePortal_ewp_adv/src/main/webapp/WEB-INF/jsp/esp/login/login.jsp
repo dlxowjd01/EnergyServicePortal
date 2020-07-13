@@ -477,6 +477,7 @@
 						<div class="nav_brand"><a href="#">Encored</a></div>
 					</c:otherwise>
 				</c:choose>
+				<%--	
 				<div class="nav_theme">
 					<div class="switcher">
 						<input type="radio" name="balance" value="light" id="light" class="switcher__input switcher__input--light" checked="" onClick="userTheme('light');">
@@ -486,6 +487,7 @@
 						<span class="switcher__toggle"></span>
 					</div>
 				</div>
+				--%>
 				<div class="lang login_lang dropdown">
 				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">${sessionScope.sessionLangNm }
 				    <span class="caret"></span></button>
@@ -910,6 +912,10 @@
 
 	<script>
 		$(function(){
+			window.__THEME_MODE = 'dark'
+			document.getElementsByTagName('html')[0].classList[window.__THEME_MODE === 'dark' ? 'add' : 'remove']('darkmode');
+
+
 			// Sign Up btn click
 			$(".joinBtn").click(function(){
 				$("#loginModal").modal("hide");

@@ -180,10 +180,10 @@
 	--btn-close-svg: url("../img/icon_delete.svg");
 	--btn-attachment: url("../img/attachment_light.svg");
 	/* ********* light mode ONLY ********* */
-	--ico-prev-active: url("../img/btn_prev_wh.png");
-	--ico-prev-page: url("../img/btn_prev_wh.png");
-	--ico-next-page: url("../img/btn_next_wh.png");
-	--ico-next-active: url("../img/btn_next2.png");
+	--ico-prev-active: url("../img/btn-prev-active.svg");
+	--ico-next-active: url("../img/btn-next-active.svg");
+	--ico-prev-page: url("../img/btn-prev.svg");
+	--ico-next-page: url("../img/btn-next.svg");
 	--bg-battery-cover: url("../img/battary_cover_dark.png");
 	--btn-close: url("../img/icon_close_wh.png");
 }
@@ -278,10 +278,6 @@ html.darkmode:root {
 	--ico-water: url("../img/ico_water_dark.png");
 	--ico-wind: url("../img/ico_wind_dark.png");
 	--ico-delete: url("../img/close_btn_md.svg");
-	--ico-prev-active: url("../img/btn_prev2.png");
-	--ico-next-active: url("../img/btn_next2.png");
-	--ico-prev-page: url("../img/btn_prev.png");
-	--ico-next-page: url("../img/btn_next.png");
 	--bg-battery-cover: url("../img/battary_cover_dark.png");
 	--btn-close: url("../img/icon_close_wh.png");
 }
@@ -2849,20 +2845,49 @@ input.inp[readonly]:focus {
 	border: 1px solid var(--silver);
 }
 
-/* 페이징 */
+/* pagination new & old */
 
+.pagination {
+	width: 100%;
+	margin: 34px auto 0;
+	text-align: center;
+}
+
+.pagination a {
+	display: inline-block;
+	vertical-align: top;
+	width: 40px;
+	height: 24px;
+	line-height: 24px;
+	color: var(--color4);
+	text-align: center;
+	font-size: 13px;	
+}
+
+
+.pagination a.active {
+	font-weight: bold;
+	color: var(--color2);
+}
+
+.pagination .btn-prev {
+	background: var(--ico-prev-active) no-repeat center center;
+	opacity: 0.4;
+}
+
+.pagination .btn-next {
+	background: var(--ico-next-active) no-repeat center center;
+	opacity: 0.4;
+}
+
+
+/* old pagination TO BE DELETED!!! */
 .paging_wrap {
 	margin: 34px 0 0;
 	text-align: center;
 }
-.prev-btn,
-.next-btn {
-	width: 40px;
-	height: 24px;
-	vertical-align: bottom;
-	outline-style: none;
-	border: none;
-}
+
+
 .paging_wrap a,
 .paging_wrap strong {
 	display: inline-block;
@@ -2878,7 +2903,6 @@ input.inp[readonly]:focus {
 	vertical-align: baseline;
 }
 
-.paging_wrap a.active,
 .paging_wrap a strong,
 .paging_wrap a:hover {
 	font-weight: bold;

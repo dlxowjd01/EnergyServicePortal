@@ -56,7 +56,6 @@
 		$("#pdfBtn").on("click", function(e){
 			e.preventDefault();
 			let warning = $(".spc-search-bar").find(".warning");
-			console.log("warning---", warning);
 			if(isEmpty(spcList.prev().data("value"))){
 				warning.eq(0).removeClass("hidden");
 			} else if (isEmpty(withdrawList.prev().data("value")) ) {
@@ -132,59 +131,100 @@
 			});
 		}
 
-		function getAccountInfo (id) {
-			$(".receive-list").empty();
-			$(".receive-list").prev().html('선택<span class="caret">');
-			if (id == undefined || id == '') {
-				return;
+		function removeDuplicates(arr) {
+			var newArray = [];
+			var lookupObject  = {};
+
+			for(var i in originalArray) {
+				lookupObject[originalArray[i][prop]] = originalArray[i];
 			}
+
+			for(i in lookupObject) {
+				newArray.push(lookupObject[i]);
+			}
+			return newArray;
+		}
+
+		function getAccountInfo (id) {
+			if (isEmpty(id)) return false;
+			
 			let action = 'get';
 			let syncOpt = true;
 			let option= {
-				url: 'http://iderms.enertalk.com:8443/spcs/transactions',
+				url: 'http://iderms.enertalk.com:8443/spcs/' + id + '?oid=' + oid + "&includeGens=true",
 				type: action,
-				data: {
-					'oid' : oid,
-					'spcIds' : id
-				},
 				async: syncOpt
 			}
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				let sending = '';
 				let receiving = '';
-				if (json.data.length > 0) {
-					let receiveGroupList = $(".receive-list")
-					json.data.map(item => {
-						let data = json.data;
-						sending = copyWithdrawList.replace(/\*withdraw_account\*/g, item.withdraw_account_no).replace(/\*account_num\*/g, item.withdraw_bank);
-						withdrawList.append($(sending));
-						return new Promise((resolve, reject) => {
-							resolve(JSON.parse(item.to_account))
-							}).then(res => {
-								res.map(d => {
-									receiving = copyReceiveList.replace(/\*to_account_bank_name\*/g, d.to_account_bank).replace(/\*to_account_no\*/g, d.to_account_no);
-									receiveGroupList.each(function(){
-										console.log("this---", $(this))
-										$(this).append($(receiving));
-									});
-								});
-							}).catch(error => {
-								console.log(error);
-							})
-						});
-						withdrawList.find("li a").on("click", function(){
-							let val = $(this).parent().data("value");
-							let name = $(this).parent().data("name");
-							withdrawList.prev().data("value", val);
-						});
-						$(".receive-list").find("li a").each(function(){
-							$(this).on("click", function(){
-								let val = $(this).parent().data("value");
-								let name = $(this).parent().data("name");
-								receiveList.prev().data("value", val);
-								receiveList.prev().data("name", name);
+				if (json.data[0].spcGens && json.data[0].spcGens.length > 0 ) {
+					let gensInfo = json.data[0].spcGens;
+					var tempArr = [];
+					var promises = [];
+
+					$.each(gensInfo, function(index, element){
+						promises.push(Promise.resolve(JSON.parse(element.finance_info)));
+						// promises.push(resolve(JSON.parse(element)));
+					});
+					Promise.all(promises).then(res => {
+						$(".receive-list").empty();
+						$(".receive-list").prev().html('선택<span class="caret">');
+
+						// mergeArr(result)
+						res.map(x => {
+							Object.entries(x).map((item, index) => {
+								const strAccType = "입출금_구분";
+								const strAccNum = "계좌_번호";
+								const bankName = "은행_리스트"
+								if(item[0].match(strAccType)){
+									let n = item[0].replace(strAccType, '');
+									let myObj = {};
+									console.log("item-==", item)
+									myObj.accCategory = item[0];
+									myObj.accType = item[1];
+									myObj.accNum = x[strAccNum+n];
+									myObj.bankName = x[bankName+n];
+									tempArr.push(myObj);
+								}
+
 							});
 						});
+						// console.log("tempArr---", tempArr)
+					}).then(() => {
+						$(".receive-list").empty();
+						$(".receive-list").prev().html('선택<span class="caret">');
+
+						const filteredArr = tempArr.reduce((acc, current) => {
+							// comparison 1. 은행 이름
+							const x = acc.find(item => item.accNum === current.accNum);
+							// comparison 2.입금 || 출금 계좌
+							const y = acc.find(item => item.accType === current.accType);
+							if (!x) {
+								return acc.concat([current]);
+							} else {
+								return acc;
+							}
+						}, []);
+						
+						filteredArr.map(v => {
+							let sending = '';
+							let receiving = '';
+							if(v.accType.match("출금")){
+								console.log("v===", v);
+								let val = v.bankName + ' ' + v.accNum;
+								sending = copyWithdrawList.replace(/\*withdraw_account\*/g, v.accType).replace(/\*account_num\*/g, val);
+								withdrawList.append($(sending));
+							} else {
+								let val = v.bankName + ' ' + v.accNum;
+								receiving = copyReceiveList.replace(/\*to_account_bank_name\*/g, v.accType).replace(/\*to_account_no\*/g, val);
+								$(".receive-list").each(function(){
+									$(this).append($(receiving));
+								});
+							}
+						});
+
+					});
 				} else {
 					sending = copyWithdrawList.replace(/\*withdraw_account\*/g, '등록된 출금 계좌가 없습니다.').replace(/\*account_num\*/g, '');
 					receiving = copyReceiveList.replace(/\*to_account_bank_name\*/g, '등록된 입금 계좌가 없습니다.').replace(/\*to_account_no\*/g, '');
@@ -197,7 +237,14 @@
 			});
 		}
 
-	
+		function uniqBy(a, key) {
+			var seen = {};
+			return a.filter(function(item) {
+				var k = key(item);
+				return seen.hasOwnProperty(k) ? false : (seen[k] = true);
+			})
+		}
+
 		withdrawForm.on('submit', function(e){
 			e.preventDefault();
 			let warning = withdrawForm.find(".warning");
@@ -308,6 +355,8 @@
 			}
 		});
 
+		
+
 		function downloadFile(action, originalName, fakeName){
 			console.log("downloadFile--", action)
 			console.log("fakeName==", fakeName, "originalName===", originalName);
@@ -374,12 +423,52 @@
 			$(".amount").each(function() {
 				$(this).on('keypress', function(evt) {
 					let val = $(this).val();
+					
 					if (evt.which == "0".charCodeAt(0) && val.trim() == "") {
 						return false;
 					}
 					if (evt.which < 48 || evt.which > 57) {
 						return false;
 					}
+				});
+
+				$(this).on('keyup', function(evt, limit) {
+					// let key = evt.which || evt.keyCode;
+					// let key = evt.target.value;
+					if( $(this).val().match(/[^\x00-\x80]/) ){
+						$(this).val("");
+					}
+						// console.log("key===", key)
+
+					// if (key >= 0xAC00 && key <= 0xD7A3) {
+					// 	console.log("key22222===", key)
+
+					// 	evt.preventDefault();
+					// }
+
+					// // Hangul Jamo
+					// if (key >= 0x1100 && key <= 0x11FF) {
+					// 	console.log("key22222===", key)
+					// 	evt.preventDefault();
+					// }
+
+					// // Hangul Compatibility Jamo 
+					// if (key >= 0x3130 && key <= 0x318F) {
+					// 	console.log("key22222===", key)
+					// 	evt.preventDefault();
+					// }
+
+					// // Hangul Jamo Extended-A
+					// if (key >= 0xA960 && key <= 0xA97F) {
+					// 	console.log("key22222===", key)
+					// 	evt.preventDefault();
+					// }
+
+					// // Hangul Jamo Extended-B 
+					// if (key >= 0xD7B0 && key <= 0xD7FF) {
+					// 	console.log("key22222===", key)
+					// 	evt.preventDefault();
+					// }
 				});
 			});
 		}
@@ -390,7 +479,9 @@
 			totalAmount = 0;
 			newVal = this.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 			this.value = newVal;
+			console.log("document on change===", evt)
 			if(newVal != "") {
+				// if ( (keyCode != 8 || keyCode ==32 ) && (keyCode < 48 || keyCode > 57)) { evt.preventDefault(); }
 				if (evt.which < 48 || evt.which > 57) { evt.preventDefault(); }
 				$(".amount").each(function(){
 					let toAdd = Number(this.value.replace(/,/g,""));
@@ -398,6 +489,8 @@
 				});
 				total.value = totalAmount.toLocaleString() + ' 원';
 				newVal = this.value.toLocaleString();
+			} else {
+				total.value = 0 + " 원";
 			}
 		});
 
@@ -414,9 +507,10 @@
 			$("#tableBody").find('input:checkbox').prop('checked', this.checked);
 		});
 
-		function getNumberIndex (index) {
-			return index + 1;
-		}
+
+		// function getNumberIndex (index) {
+		// 	return index + 1;
+		// }
 		// function nvl (value, str) {
 		// 	if (isEmpty(value)) {
 		// 		return str;
@@ -432,7 +526,25 @@
 		// 	getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
 		// }
 
-	
+	//      function getObjects(obj, key, val) {
+	// 		var objects = [];
+	// 		for (var i in obj) {
+	// 			if (!obj.hasOwnProperty(i)) continue;
+	// 			if (typeof obj[i] == 'object') {
+	// 				objects = objects.concat(getObjects(obj[i], key, val));    
+	// 			} else 
+	// 			//if key matches and value matches or if key matches and value is not passed (eliminating the case where key matches but passed value does not)
+	// 			if (i == key && obj[i] == val || i == key && val == '') { //
+	// 				objects.push(obj);
+	// 			} else if (obj[i] == val && key == ''){
+	// 				//only add if the object is not already in the array
+	// 				if (objects.lastIndexOf(obj) == -1){
+	// 					objects.push(obj);
+	// 				}
+	// 			}
+	// 		}
+	// 		return objects;
+	// 	}
 
 
 	});
@@ -463,7 +575,7 @@
 			--><span class="tx_tit">출금 계좌번호</span><!--
 			--><div class="dropdown"><!--
 				--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button>
-					<ul id="withdrawList" class="dropdown-menu unused center" role="menu"><li data-value="*account_num*"><a href="#" tabindex="-1">*withdraw_account*</a></li></ul>
+					<ul id="withdrawList" class="dropdown-menu unused center" role="menu"><li data-value="*account_num*"><a href="#" tabindex="-1">*account_num*</a></li></ul>
 					<small class="hidden warning">출금 요청 계좌를 선택해 주세요.</small>
 				</div>
 			</div>
@@ -531,7 +643,7 @@
 								<div class="sa_select">
 									<div class="dropdown placeholder">
 										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="">선택<span class="caret"></span></button>
-										<ul id="receiveList" class="receive-list dropdown-menu" role="menu"><li data-name="*to_account_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_account_bank_name* *to_account_no*</a></li></ul>
+										<ul id="receiveList" class="receive-list dropdown-menu" role="menu"><li data-name="*to_account_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_account_no*</a></li></ul>
 									</div>
 								</div>
 							</td>

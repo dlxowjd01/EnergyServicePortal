@@ -304,6 +304,7 @@
 				</c:choose>
 			</div>
 		</li>
+		<%--	
 		<li>
 			<!-- 테마 선택 -->
 			<div class="nav_theme">
@@ -320,6 +321,7 @@
 				</div>
 			</div>
 		</li>
+		--%>
 		<li>
 			<!-- PC용 언어 선택 -->
 			<%@ include file="/decorators/include/selectLang.jsp" %>

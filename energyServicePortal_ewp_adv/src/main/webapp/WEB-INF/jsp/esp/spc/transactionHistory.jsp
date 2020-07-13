@@ -30,7 +30,6 @@
 		setSingleSelectDropdown($("#searchOption"))
 		setSingleSelectDropdown(sumOptList);
 
-
 		$('#fromDate').datepicker('setDate', 'today');
 		$('#toDate').datepicker('setDate', 'today');
 		// $('#toDate').datepicker( "option", "maxDate", new Date());
@@ -44,6 +43,7 @@
 			} else if ($(this).data('value') == 'yearly') {
 				$('#fromDate').datepicker('setDate', '-365');
 			}
+			return false;
 		});
 
 		$('.sort_table th button').click(function(){
@@ -60,12 +60,14 @@
 				// TO DO !!!!! sorting json data
 				tableBody.append(rows[i])
 			}
+			return false;
 		});
 
-		sumOptList.find('li').on('click', function(){
-			console.log("val---", $(this).data("value"))
-			let val = $(this).data("value");
-		});
+		// sumOptList.find('li').on('click', function(){
+		// 	console.log("val---", $(this).data("value"))
+		// 	let val = $(this).data("value");
+		// 	return false;
+		// });
 
 		searchForm.on('submit', function(e){
 			e.preventDefault();
@@ -191,9 +193,10 @@
 		// }));
 
 
-
 		function getDataList(page, searchOptArr) {
-			page == undefined ? page = 1 : page = page;
+			var currentPage = '';
+			page == undefined ? currentPage = "1" : currentPage = page;
+
 			if(!isEmpty(searchOptArr)) {
 				let action = 'get';
 				let syncOpt = true;
@@ -221,28 +224,29 @@
 						async: syncOpt
 					}
 				}
-
+	
 				$.ajax(option).done(function (json, textStatus, jqXHR) {
 					$('#searchOption').removeClass('in');
 					tableBody.empty();
 					tableFooter.empty();
+					// console.log("json---", json.data)
 					if (json.data.length > 0) {
-						let startPage = (page - 1) * perPage;
-						let endPage = page * perPage + 1;
-						// console.log("start---", startPage, "end===", endPage)
+						// console.log("json.data---", json.data)
+						let perPage = 14;
+						let startNum = (Number(currentPage) - 1) * perPage;
+						let endNum = Number(currentPage) * perPage + 1;
+						// console.log("start---", startNum, "end===", endNum)
 
 						if(searchOptArr.length>1){
 							let statusOpt = [...searchOptArr[3].split(",")];
 							let newData = json.data.filter(x => {
 								return statusOpt.indexOf(x.status.toString()) > -1
 							});
-							ajaxCallback(newData.slice(startPage, endPage), searchOptArr);
-							makeNavigation(page, newData.length)
-							// let tfootStr = tfootClone.replace(/\*total\*/g, totalAmount);
-							// tableBody.next().append($(tfootStr));
+							ajaxCallback(Number(currentPage), newData.slice(startNum, endNum), searchOptArr);
+							makeNavigation(Number(currentPage), searchOptArr[0], newData.length)
 						} else {
-							ajaxCallback(json.data.slice(startPage, endPage));
-							makeNavigation(page, json.data.length)
+							ajaxCallback(Number(currentPage), json.data.slice(startNum, endNum));
+							makeNavigation(Number(currentPage), searchOptArr[0], json.data.length);
 						}
 					}
 				}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -250,15 +254,15 @@
 					return false;
 				});
 			} else {
-				$("#warningModal .modal-title").text("검색된 SPC 가 없습니다. 페이지를 다시 로딩해 주세요.");
+				$("#warningModal .modal-title").text("검색된 SPC 가 없습니다.");
 				$("#warningModal").modal("show");
 			}
 		}
 
-		function ajaxCallback(newData, arr) {
+		function ajaxCallback(currentPage, newData, arr) {
 			let totalAmount = 0;
+			var page = currentPage;
 			newData.map((item, index) => {
-				// console.log("item---", item)
 				totalAmount += item.total_amount;
 				if(!isEmpty(arr)) {
 					item.opt = arr;	
@@ -270,9 +274,8 @@
 						// let item = Object.assign({}, item);
 						// console.log("statusOpt==", statusOpt)
 						// delete(item.to_account);
-		
 						const spcMatch = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
-
+						let perPage = 14;
 						let tbodyStr = '';
 						let transaction_spc_id = '';
 						let transaction_req_id = '';
@@ -332,6 +335,7 @@
 						}
 						transaction_spc_id = item.spc_id;
 						transaction_req_id = item.request_id;
+
 						if(item.status == 0) {
 							status="반송"
 							status_val = "0"
@@ -363,7 +367,7 @@
 						item.status_changed_by ? ( approved_by = item.status_changed_by ) : ( approved_by = '-' );
 
 						// res.to_account_bank.locale
-						tbodyStr = tbodyClone.replace(/\*index\*/g, index+1)
+						tbodyStr = tbodyClone.replace(/\*index\*/g, (Number(page)-1)*perPage + Number(index)+1 )
 							.replace(/\*transactionSpcId\*/g, transaction_spc_id)
 							.replace(/\*transactionSpcName\*/g, transaction_spc_name)
 							.replace(/\*transactionReqId\*/g, transaction_req_id)
@@ -433,21 +437,8 @@
 			}
 		}
 
-		function uniqByKeepFirst(a, key) {
-			let seen = new Set();
-			return a.filter(item => {
-				let k = key(item);
-				return seen.has(k) ? false : seen.add(k);
-			});
-		}
-		
-		function removeDuplicates(arr) {
-			let s = new Set(arr);
-			let it = s.values();
-			return Array.from(it);
-		}
-
-		function makeNavigation (page, dataLength) {
+		function makeNavigation (currentPage, spcId, dataLength) {
+			// console.log("spc===", spcId)
 			$('#pagination').empty();
 			let pageStr = '';
 			let totalPage = Math.ceil( dataLength / perPage );
@@ -459,30 +450,57 @@
 			console.log("totalNav===", totalNav, "navGroup===", navGroup);
 
 			if (navGroup == 1) {
-				pageStr += '<button type="button" class="prev-btn btn_prev"></button>';
+				pageStr += '<a href="javascript:void(0);" data-value="1" class="btn-prev first-arrow"></a>';
 			} else {
 				let current = startPage -1;
-				pageStr += '<button type="button" class="prev-btn btn_prev"></button>';
+				console.log("totoalPAge===", totalPage)
+				pageStr += '<a href="javascript:void(0);" data-value="' + totalPage + '" class="btn-prev last-arrow"></a>';
 			}
 
 			for (let i = startPage ; i <= endPage; i++) {
-				console.log("startPage===", startPage)
-				if (i==page) {
+				// console.log("startPage===", startPage)
+				if (i==currentPage) {
 					pageStr += '<a href="javascript:void(0);" class="active" data-value="'+ i +'">'+i+'</a>';
 				} else {
-					pageStr += '<a href="javascript:void(0)" data-value="'+ i +'">'+i+'</a>';
+					pageStr += '<a href="javascript:void(0)" class="" data-value="'+ i +'">'+i+'</a>';
 				}
 			}
 
 			if (navGroup < totalNav) {
-				let current = startPage -1;
-				pageStr += '<button type="button" class="next-btn btn_next" data-value="'+ (endPage +1) +'></button>';
+				console.log("navGroup < totalNav===", totalNav, "endPage===", endPage)
+				let current = currentPage + 1;
+				pageStr += '<a href="javascript:void(0);" class="btn-next" data-value="'+ current +'></a>';
 			} else {
-				pageStr += '<button type="button" class="next-btn btn_next"></button>';
+				let current = currentPage + 1;
+				console.log("navGroup > totalNav===", totalNav, "endPage===", currentPage + 1)
+				pageStr += '<a href="javascript:void(0);" class="btn-next" data-value="' + current + '"></a>';
 			}
 			$('#pagination').append(pageStr);
+
+			$('#pagination a').on("click", function(){
+
+				let page = $(this).data("value");
+				if(currentPage == page) {
+					return false;
+				}
+
+				spcInfoArr.shift();
+				let newArr = [];
+				newArr.push(spcInfoArr.map(x=> x.spc_id).join());
+
+				// let join = spcId.join();
+				// newArr.push(join);
+				// console.log("newArr----", newArr)
+				// console.log("newArr----", newArr)
+				getDataList(page, newArr);
+				return false;
+			});
+
 		}
 
+		function searchByPage(){
+			
+		}
 
 
 		function getNumberIndex(index) {
@@ -503,13 +521,13 @@
 	});
 
 	function deleteRow(selector) {
-		$(selector).parents().closest("tr").css("border", "solid 1px #fff");
+		// $(selector).parents().closest("tr").css("border", "solid 1px #fff");
 		$("#warningModal").modal("show");
 		$("#confirmBtn").on("click", function(){
 			$("#warningModal").modal("hide");
 			$(selector).parents().closest("tr").remove();
 		})
-		$(selector).parents().closest("tr").css("border", "none");
+		// $(selector).parents().closest("tr").css("border", "none");
 		// console.log("tr===", $(selector).parents().closest("tr"))
 	}
 
@@ -769,7 +787,8 @@
 					</colgroup>
 					<thead>
 						<tr>
-							<th><button class='btn_align down'>순번</button></th>
+							<!-- <th><button class='btn_align down'>순번</button></th> -->
+							<th>순번</th>
 							<th><button class='btn_align down'>입출금 일자</button></th>
 							<th><button class='btn_align down'>입출금 구분</button></th>
 							<th><button class='btn_align down'>용도 구분</button></th>
@@ -814,7 +833,7 @@
 						</template>
 					</tfoot>
 				</table>
-				<div class='paging_wrap' id='pagination'></div>
+				<div class='pagination' id='pagination'></div>
 			</div>
 		</div>
 	</div>
