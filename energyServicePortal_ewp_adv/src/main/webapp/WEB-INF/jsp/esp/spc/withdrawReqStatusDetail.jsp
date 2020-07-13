@@ -181,12 +181,8 @@
 							}).catch(error => {
 								console.log(error);
 							});
-<<<<<<< HEAD
 						}
 					});
-=======
-						});
->>>>>>> 60a90ba44597af6100f8383596de4e0ace4556c5
 				} else {
 					return false;
 				}
