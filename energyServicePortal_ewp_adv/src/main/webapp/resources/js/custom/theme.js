@@ -1,6 +1,4 @@
-function userTheme(toggle = false) {
-	window.__THEME_MODE = 'dark'
-	document.getElementsByTagName('html')[0].classList[window.__THEME_MODE === 'dark' ? 'add' : 'remove']('darkmode');
+// function userTheme(toggle = false) {
 
 	// window.__THEME_MODE = 'dark'
 //   let userMode = localStorage.userThemeMode || 'auto';
@@ -28,7 +26,7 @@ function userTheme(toggle = false) {
 //     document.getElementById('dark').checked = true;
 //   }
 //   document.getElementsByTagName('html')[0].classList[window.__THEME_MODE === 'dark' ? 'add' : 'remove']('darkmode');
-}
+// }
 
 // if (!!window.matchMedia) {
 //   ['light', 'dark'].forEach(mode => {

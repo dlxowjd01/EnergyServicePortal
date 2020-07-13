@@ -5969,13 +5969,14 @@ nav .lang {
 
 nav .lang.dropdown .btn-primary {
 	border: 0 !important;
+	border-radius: 4px;
 	font-size: 18px !important;
 	font-weight: 400 !important;
 	color: var(--color3);
 }
 
 nav .lang.dropdown .btn {
-	padding: 0 30px 0 10px;
+	padding: 2px 30px 10px;
 	height: auto;
 }
 

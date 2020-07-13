@@ -646,7 +646,8 @@
 			}
 		});
 	}
+	document.getElementsByTagName('html')[0].classList['add']('darkmode');
 
-	userTheme();
+	// userTheme();
 </script>
 <!-- //정보수정 -->
