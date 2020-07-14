@@ -6260,6 +6260,7 @@ nav .lang.dropdown .btn .caret {
 	text-align: center;
 }
 
+
 .no-data span {
 	position: absolute;
 	width: 100%;
@@ -9339,6 +9340,11 @@ div.di_wrap dl .link a {
 	text-align: left;
 }
 
+.spc_tbl.align_type.left table th,
+.spc_tbl.align_type.left table td {
+	text-align: left;
+}
+
 .spc_tbl.align_type .right,
 .chk_type.align_type .right,
 .rdo_type.align_type .right {
@@ -12200,7 +12206,12 @@ html.darkmode .modal-content.spc-detail-content li.single_item a .btn_next {
 .entity_wrap.post .indiv .spc_tbl_row.st_edit.panel-collapse table {
 	table-layout: fixed;
 }
-
+.entity_wrap.post table .no-data {
+	text-align: left;
+}
+.entity_wrap.post table .tx_file {
+	margin: 5px auto;
+}
 .entity_wrap.post fieldset.flex_start,
 .entity_wrap.post fieldset.flex_start3 {
 	display: inline-block;
