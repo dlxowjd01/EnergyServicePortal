@@ -337,6 +337,7 @@
 		const modal = $('#registerModal');
 		const title = modal.find('h2');
 		const input = modal.find('input');
+		const textarea = modal.find('textarea');
 		const dropDown = modal.find('button.btn-primary');
 		const repeat_wrapper = $('#repeat_yn').parents('.flex_start3');
 		const repeat_cycle = $('#repeat_yn button');
@@ -356,6 +357,7 @@
 				$(this).val('');
 			});
 			//팝업 오픈시 value 초기화
+			textarea.val('');
 
 			dropDown.each(function () {
 				$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');

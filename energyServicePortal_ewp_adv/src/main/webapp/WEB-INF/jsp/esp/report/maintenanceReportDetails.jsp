@@ -109,13 +109,15 @@
 		// 	var reportId = "${param.report_id}";
 		var fileList01 = [],
 			fileList02 = [];
-		for (var i = 0, count = files.length; i < count; i++) {
-			if (files[i].fieldname.substring(0, 19) == "work_report_file_01") {
-				fileList01.push(files[i]);
-			} else if (
-				files[i].fieldname.substring(0, 19) == "work_report_file_02"
-			) {
-				fileList02.push(files[i]);
+		if (!isEmpty(files)) {
+			for (var i = 0, count = files.length; i < count; i++) {
+				if(files[i] != null) {
+					if (files[i].fieldname.match('work_report_file_01')) {
+						fileList01.push(files[i]);
+					} else if (files[i].fieldname.match('work_report_file_02')) {
+						fileList02.push(files[i]);
+					}
+				}
 			}
 		}
 
@@ -259,14 +261,9 @@
 						<td>
 							<div id="fileList01">
 								<p class="tx_file">
-									<%--
-									<a
-										href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]"
-										>[originalname]</a
-									>
-									--%>
-									<img src="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]"
-										alt="[originalname]" />
+									<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">
+										<img src="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]" alt="[originalname]" />
+									</a>
 								</p>
 							</div>
 						</td>
@@ -296,8 +293,7 @@
 						<td>
 							<div id="fileList02">
 								<p class="tx_file">
-									<a
-										href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+									<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 								</p>
 							</div>
 						</td>

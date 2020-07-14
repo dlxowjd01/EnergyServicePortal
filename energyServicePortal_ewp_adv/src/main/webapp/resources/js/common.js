@@ -255,15 +255,6 @@ $(function() {
 		}
 	});
 });
-function deleteFile(self){
-	let ul =  self.parents(".file_list ul");
-	self.parent(".upload_text").remove();
-	if(ul.children().length<=0){
-		let item = '';
-		item = '<li class="no-file">선택된 파일이 없습니다.</li>'
-		ul.append(item);
-	}
-}
 
 function deleteFile(self){
 	let ul =  self.parents(".file_list ul");

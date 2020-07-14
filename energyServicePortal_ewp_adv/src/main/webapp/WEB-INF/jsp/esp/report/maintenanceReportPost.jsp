@@ -1,171 +1,149 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<script>
+<script type="text/javascript" src="/js/commonDropdown.js"></script>
+<script type="text/javascript">
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
-
 	let addListCnt1 = 0; // 첨부하는 파일 추가할 경우 카운트 1씩 증가 ( 현장점검 )
 	let addListCnt2 = 0; // 첨부하는 파일 추가할 경우 카운트 1씩 증가 ( 첨부파일 )
 
 	$(function () {
+		setInitList('genList');
+
 		initAddListHtml();
 		getGenData();
 	});
 
-	$(document).on('click', '.dropdown li', function () {
-		var dataValue = $(this).data('value'),
-			dataText = $(this).text();
-		$(this).parents('.dropdown').find('button').html(dataText + '<span class="caret"></span>').data('value', dataValue);
-	});
-
-	function getGenData() {
+	const getGenData = () => {
 		$.ajax({
 			url: 'http://iderms.enertalk.com:8443/auth/me/sites',
-			type: "get",
+			type: 'get',
 			async: false,
 			success: function (json) {
-				setInitList("genList");
-				setMakeList(json, "genList", { "dataFunction": {} });
+				setMakeList(json, 'genList', {'dataFunction': {}});
 			},
 			error: function (request, status, error) {
-
+				console.error(error);
 			}
 		});
 	}
 
-	function initAddListHtml() {
-		$("#addFileList01").data("form", $("#addFileList01").html());
-		$("#addFileList02").data("form", $("#addFileList02").html());
+	const initAddListHtml = () => {
+		$('#addFileList01').data('form', $('#addFileList01').html());
+		$('#addFileList02').data('form', $('#addFileList02').html());
 	}
 
-	function addList(addId) {
-		var $selector = $("#" + addId);
-		// 	$selector.append($selector.data("form"));
+	const setSaveData = () => {
+		const report_type = $('#report_type button').data('value'),
+			report_name = $('#report_name').val(),
+			site_id = $('#gen button').data('value');
 
-		if (addId == 'addFileList01') {
-			$selector.append('<input name="work_report_file_01' + addListCnt1 + '" type="file" class="hidden" id="work_report_file_'+addListCnt1+'"><label for="work_report_file_'+addListCnt1+'" class="btn file_upload">파일 선택</label>')
-			addListCnt1++;
-		} else if (addId == 'addFileList02') {
-			$selector.append('<input name="work_report_file_02' + addListCnt1 + '" type="file" class="hidden" id="work_report_file_'+addListCnt2+'"><label for="work_report_file_'+addListCnt2+'" class="btn file_upload">파일 선택</label>')
-			addListCnt2++;
-		}
-	}
-
-	function setSaveData() {
-		var report_type = $("#report_type").data("value").toString(),
-			report_name = $("#report_name").val(),
-			site_id = $("#gen").data("value");
-
-		if (report_type === undefined || report_type == "") {
-			alert("보고서 구분을 선택하세요.");
+		if (isEmpty(report_type)) {
+			alert('보고서 구분을 선택하세요.');
 			return false;
 		}
 
-		if (report_name == "") {
-			alert("보고서 명을 입력하세요.");
+		if (isEmpty(report_name)) {
+			alert('보고서 명을 입력하세요.');
 			return false;
 		}
 
-		if (site_id == "") {
-			alert("발전소를 선택하세요.");
+		if (isEmpty(site_id)) {
+			alert('발전소를 선택하세요.');
 			return false;
 		}
-
 
 		setInsertReportData();
 	}
 
-	function setFileUpload(reportId) {
+	function loopFile(target, index, fileList) {
+		if (fileList[index] != undefined) {
+			if (target.textContent.trim() != fileList[index].name) {
+				fileList.splice(index, 1);
+				loopFile(target, index, fileList);
+			}
+		}
+	}
 
-		$("#work_detail_info").find("input[type=file]").each(function () {
-			$(this).attr("name", this.name + "_" + reportId);
+	const setInsertReportData = () => {
+		const work_info = setAreaParamData('work_info'),
+			work_detail_info = setAreaParamData('work_detail_info'),
+			report_type = $('#report_type button').data('value'),
+			report_name = $('#report_name').val(),
+			site_id = $('#gen button').data('value');
+		let resultFiles = new Array();
+
+		$('#insertReportModal').modal(); // 처리중 모달띄우기
+
+		$('#work_detail_info').find('input[type="file"]').each(function () {
+			const liList =$(this).parent().find('.file_list li');
+			let fileList = Array.from($(this)[0].files);
+
+			liList.each(function(index, target) {
+				loopFile(target, index, fileList);
+			});
+
+			if (fileList.length > 0) {
+				let formData = new FormData($('#fileUploadForm')[0]),
+					filedName = $(this).attr('name') + '_' + genUuid();
+				fileList.forEach(function(file) {
+					formData.append(filedName, file);
+				});
+
+				$.ajax({
+					url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
+					type: 'post',
+					enctype: 'multipart/form-data',
+					data: formData,
+					processData: false,
+					contentType: false,
+					cache: false,
+					timeout: 600000,
+					async: false,
+					success: function (result) {
+						resultFiles = resultFiles.concat(result.files);
+					},
+					error: function (request, status, error) {
+						alert('오류가 발생하였습니다. \n관리자에게 문의하세요.');
+					}
+				});
+			}
 		});
 
+		if (!isEmpty(resultFiles)) {
+			work_detail_info['files'] = resultFiles;
+		}
+
 		$.ajax({
+			url: 'http://iderms.enertalk.com:8443/reports/remote_work?oid=' + oid,
 			type: 'post',
-			enctype: 'multipart/form-data',
-			url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
-			data: new FormData($('#work_detail_info')[0]),
-			processData: false,
-			contentType: false,
-			cache: false,
-			timeout: 600000,
-			success: function (result) {
-				setUpdateReportData(reportId, result.files);
-			},
-			error: function (request, status, error) {
-				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
-			}
-		});
-	}
-
-	function setInsertReportData() {
-		var work_info = setAreaParamData("work_info"),
-			work_detail_info = setAreaParamData("work_detail_info"),
-			report_type = $("#report_type").data("value").toString(),
-			report_name = $("#report_name").val(),
-			site_id = $("#gen").data("value");
-
-		$("#insertReportModal").modal(); // 처리중 모달띄우기
-
-		$.ajax({
-			url: "http://iderms.enertalk.com:8443/reports/remote_work?oid=" + oid,
-			type: "post",
 			dataType: 'json',
 			async: false,
-			contentType: "application/json",
+			contentType: 'application/json',
 			data: JSON.stringify({
-				"report_type": report_type,
-				"report_name": report_name,
-				"site_id": site_id,
-				"work_info": JSON.stringify(work_info),
-				"work_detail_info": JSON.stringify(work_detail_info),
-				"updated_by": loginId
+				report_type: String(report_type),
+				report_name: report_name,
+				site_id: site_id,
+				work_info: JSON.stringify(work_info),
+				work_detail_info: JSON.stringify(work_detail_info),
+				updated_by: loginId
 			}),
 			success: function (result) {
-				setFileUpload(result.data[0].report_id)
-			},
-			error: function (request, status, error) {
-				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
-			}
-		});
-	}
-
-	function setUpdateReportData(reportId, files) {
-		var work_info = setAreaParamData("work_info"),
-			work_detail_info = setAreaParamData("work_detail_info"),
-			report_name = $("#report_name").val(),
-			site_id = $("#gen").data("value");
-
-		work_detail_info["files"] = files;
-
-		$.ajax({
-			url: "http://iderms.enertalk.com:8443/reports/remote_work/" + reportId + "?oid=" + oid,
-			type: "patch",
-			dataType: 'json',
-			async: false,
-			contentType: "application/json",
-			data: JSON.stringify({
-				"report_name": report_name,
-				"site_id": site_id,
-				"work_info": JSON.stringify(work_info),
-				"work_detail_info": JSON.stringify(work_detail_info),
-				"updated_by": loginId
-			}),
-			success: function (result) {
-				alert("등록되었습니다.");
+				alert('등록되었습니다.');
 				goMoveList();
 			},
 			error: function (request, status, error) {
-				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+				alert('오류가 발생하였습니다. \n관리자에게 문의하세요.');
+				return false;
 			}
 		});
 	}
 
 	function goMoveList() {
-		location.href = "/report/maintenanceReport.do";
+		location.href = '/report/maintenanceReport.do';
 	}
 </script>
 
+<form id="fileUploadForm" name="fileUploadForm"></form>
 <!-- Modal (처리 중 모달)-->
 <div id="insertReportModal" class="modal fade" role="dialog">
 	<div class="modal-dialog his_alarm">
@@ -181,12 +159,12 @@
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">출장/조치 보고서 </h1>
-		<div class="time fr">
-			<span>CURRENT TIME</span>
-			<em class="currTime">${nowTime}</em>
-			<span>DATA BASE TIME</span>
-			<em class="dbTime">2020-04-06 17:01:02</em>
-		</div>
+		<%--		<div class="time fr">--%>
+		<%--			<span>CURRENT TIME</span>--%>
+		<%--			<em class="currTime">${nowTime}</em>--%>
+		<%--			<span>DATA BASE TIME</span>--%>
+		<%--			<em class="dbTime">2020-04-06 17:01:02</em>--%>
+		<%--		</div>--%>
 	</div>
 </div>
 <div class="row">
@@ -194,12 +172,11 @@
 		<div>
 			<span class="tx_tit">보고서 구분</span>
 			<div class="sa_select">
-				<div class="dropdown">
-					<button id="report_type" class="btn btn-primary dropdown-toggle w9" type="button"
-						data-toggle="dropdown" data-value="">선택
-						<span class="caret"></span>
+				<div class="dropdown" id="report_type">
+					<button class="btn btn-primary dropdown-toggle w9" type="button" data-toggle="dropdown" data-value="">
+						선택<span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu chk_type" role="menu" id="type">
+					<ul class="dropdown-menu chk_type" role="menu">
 						<li data-value="1"><a href="javascript:void(0);">출장/조치 보고서</a></li>
 						<li data-value="2"><a href="javascript:void(0);">QC 보고서</a></li>
 					</ul>
@@ -231,10 +208,9 @@
 						</td>
 						<th>발전소</th>
 						<td>
-							<div class="dropdown placeholder edit">
-								<button id="gen" class="btn btn-primary dropdown-toggle" type="button"
-									data-toggle="dropdown" data-value="">선택
-									<span class="caret"></span>
+							<div class="dropdown placeholder edit" id="gen" >
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-value="">
+									선택 <span class="caret"></span>
 								</button>
 								<ul id="genList" class="dropdown-menu" role="menu">
 									<li data-value="[sid]"><a href="javascript:void(0);">[name]</a></li>
@@ -246,10 +222,8 @@
 						<th>출장 시기</th>
 						<td>
 							<div class="sel_calendar edit twin clear">
-								<input type="text" id="출장_시기_from" class="sel datepicker fromDate" value=""
-									autocomplete="off" placeholder="시작일">
-								<input type="text" id="출장_시기_to" class="sel datepicker toDate" value=""
-									autocomplete="off" placeholder="종료일">
+								<input type="text" id="출장_시기_from" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일">
+								<input type="text" id="출장_시기_to" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일">
 							</div>
 						</td>
 						<th>출장 장소</th>
@@ -263,8 +237,7 @@
 						<th>작성 일자</th>
 						<td>
 							<div class="sel_calendar edit">
-								<input type="text" id="작성_일자" class="sel datepicker" value="" autocomplete="off"
-									placeholder="날짜 선택">
+								<input type="text" id="작성_일자" class="sel datepicker" value="" autocomplete="off" placeholder="날짜 선택">
 							</div>
 						</td>
 						<th>출장 목적</th>
@@ -307,12 +280,15 @@
 							</td>
 						</tr>
 						<tr>
-							<th class="vert_type">현장 점검<a href="javascript:addList('addFileList01')"
-									class="btn_add fr">추가</a></th>
+							<th class="vert_type">현장 점검</th>
 							<td id="addFileList01">
-								<input type="file" name="work_report_file_01" class="hidden" id="work_report_file_01">
+								<input type="file" name="work_report_file_01" class="hidden" id="work_report_file_01" multiple>
 								<label for="work_report_file_01" class="btn file_upload">파일 선택</label>
-								<span class="upload_text ml-16"></span>
+								<div class="file_list ml-16">
+									<ul>
+										<li class="upload_text"></li>
+									</ul>
+								</div>
 							</td>
 						</tr>
 						<tr>
@@ -340,12 +316,15 @@
 							</td>
 						</tr>
 						<tr>
-							<th class="hei_type">첨부 파일<a href="javascript:addList('addFileList02')"
-									class="btn_add fr">추가</a></th>
+							<th class="hei_type">첨부 파일</th>
 							<td id="addFileList02">
-								<input name="work_report_file_02" type="file" class="hidden" id="work_report_file_02">
+								<input name="work_report_file_02" type="file" class="hidden" id="work_report_file_02" multiple>
 								<label for="work_report_file_02" class="btn file_upload">파일 선택</label>
-								<span class="upload_text ml-16"></span>
+								<div class="file_list ml-16">
+									<ul>
+										<li class="upload_text"></li>
+									</ul>
+								</div>
 							</td>
 						</tr>
 					</table>
