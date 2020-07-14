@@ -840,7 +840,7 @@
 							<div class="fixed_height"></div>
 							<div class="fixed_height"></div>
 							<div class="fixed_height"></div>
-							<div class="fixed_height flex_wrap_center">임대료 지급일</div>
+							<div class="fixed_height"></div>
 							<div class="fixed_height"></div>
 							<div class="fixed_height"></div>
 						</th>

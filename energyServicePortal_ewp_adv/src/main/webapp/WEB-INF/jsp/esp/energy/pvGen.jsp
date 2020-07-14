@@ -68,13 +68,15 @@
 					<div class="flex_group unit" id="cycle">
 						<span class="tx_tit">단위</span>
 						<div class="sa_select">
-							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+							<div class="dropdown" id="interval">
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">
+									선택 <span class="caret"></span>
+								</button>
 								<ul class="dropdown-menu">
-									<li class="on"><a href="#">15분</a></li>
-									<li><a href="#">1시간</a></li>
-									<li><a href="#">1일</a></li>
-									<li><a href="#">1월</a></li>
+									<li data-value="15min"><a href="#">15분</a></li>
+									<li data-value="hour"><a href="#">1시간</a></li>
+									<li data-value="day"><a href="#">1일</a></li>
+									<li data-value="month"><a href="#">1월</a></li>
 								</ul>
 							</div>
 						</div>
@@ -97,6 +99,7 @@
 			<!-- 쓰이지 않는듯 해서 주석처리 <p class="tx_time"></p> -->
 			<div class="row">
 				<div class="inchart">
+					<p class="tx_time"></p>
 					<div id="chart2"></div>
 				</div>
 			</div>
@@ -199,6 +202,8 @@
 			} else {
 				$(':checkbox[name="device"]').prop('checked', false);
 			}
+
+			displayDropdown($('#deviceType'));
 		});
 
 		$('#renderBtn').on('click', function () {
@@ -225,19 +230,19 @@
 
 	//사업소 호출
 	const siteList = function () {
-		$('#siteList > ul').empty();
+		$('#siteList ul').empty();
 
 		let str = '';
 		let sites = JSON.parse('${siteList}');
 		sites.forEach((site, index) => {
 			str += `<li>
-            <a href="#" data-value="${'${site.sid}'}" tabindex="-1">
-                <input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
-                <label for="${'${site.sid}'}">${'${site.name}'}</label>
-            </a>
-        </li>`;
+						<a href="#" data-value="${'${site.sid}'}" tabindex="-1">
+							<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
+							<label for="${'${site.sid}'}">${'${site.name}'}</label>
+						</a>
+					</li>`;
 		});
-		$('#siteList>ul').append(str);
+		$('#siteList ul').append(str);
 	};
 
 	const device = function () {
@@ -308,27 +313,7 @@
 		const startTime = $('#datepicker1').val().replace(/-/g, '') + "000000";
 		const endTime = $('#datepicker2').val().replace(/-/g, '') + "235959";
 		//주기 확인
-		let interval = '';
-		switch ($('button.interval').text()) {
-			case '15분':
-				interval = '15min';
-				break;
-			case '30분':
-				interval = '30min';
-				break;
-			case '1시간':
-				interval = 'hour';
-				break;
-			case '1일':
-				interval = 'day';
-				break;
-			case '1월':
-				interval = 'month';
-				break;
-			default:
-				interval = 'hour';
-				break;
-		}
+		const interval = $('#interval button').data('value');
 
 		const billingSites = $.makeArray($(':checkbox[id^="device_billing_"]:checked').map(
 			function () {
@@ -350,6 +335,16 @@
 				}
 			}
 		));
+
+		if (billingSites.length <= 0 && dashSites.length <= 0 && checkedDevices.length <= 0) {
+			alert('계량값을 선택해 주세요.');
+			return false;
+		}
+
+		if (isEmpty(interval)) {
+			alert('단위를 선택해 주세요.');
+			return false;
+		}
 
 		responseCnt = 0;
 		accociation = new Map();
@@ -490,27 +485,7 @@
 		$('.no-data').addClass('hidden');
 		let sDate = $('#datepicker1').val().replace(/-/g, '');
 		let eDate = $('#datepicker2').val().replace(/-/g, '');
-		let interval = '';
-		switch ($('button.interval').text()) {
-			case '15분':
-				interval = '15min';
-				break;
-			case '30분':
-				interval = '30min';
-				break;
-			case '1시간':
-				interval = 'hour';
-				break;
-			case '1일':
-				interval = 'day';
-				break;
-			case '1월':
-				interval = 'month';
-				break;
-			default:
-				interval = 'hour';
-				break;
-		}
+		let interval = $('#interval button').data('value');
 
 		standard = new Array();
 		if (interval == 'day') {
@@ -1146,8 +1121,6 @@
 				}
 			});
 
-			console.log(totalArr);
-
 			$.each(totalArr, function (i, el) {
 				let totTitle = '<h3 class="value_tit">' + el.name + '</h3>';
 				let refined = displayNumberFixedDecimal(el.totVal, 'Wh');
@@ -1155,6 +1128,9 @@
 				$('.value_area').append(totTitle);
 			});
 		}
+
+		const now = new Date();
+		$('.tx_time').text(now.format('yyyy-MM-dd HH:mm:ss'));
 	}
 
 	const chartDraw = function (standard, seriesData) {
@@ -1195,7 +1171,8 @@
 					formatter: function () {
 						return dateFormat(this.value);
 					},
-					enabled: true
+					enabled: true,
+					rotation: -45
 				},
 				categories: standard,
 				tickInterval: 1,
