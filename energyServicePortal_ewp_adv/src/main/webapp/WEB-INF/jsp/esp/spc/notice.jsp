@@ -521,23 +521,23 @@
 	<div class="col-lg-12">
 		<div class="indiv supplementary_docs">
 			<div class="btn_wrap_type01"><button type="button" class="btn_type big" onclick="modalOpen()">작성</button></div>
-			<div class="spc_tbl align_type">
+			<div class="spc_tbl align_type left">
 				<table class="sort_table chk_type">
 					<colgroup>
 						<col style="width:15%">
 						<col style="width:40%">
+						<col style="width:12%">
 						<col style="width:15%">
-						<col style="width:15%">
-						<col style="width:15%">
+						<col style="width:18%">
 						<col>
 					</colgroup>
 					<thead>
 						<tr>
 							<th>SPC명</th>
-							<th class="left">제목</th>
+							<th>제목</th>
 							<th>첨부 파일</th>
 							<th>작성자 </th>
-							<th class="left">작성일</th>
+							<th>작성일</th>
 						</tr>
 					</thead>
 					<tbody id="listData">
@@ -547,14 +547,14 @@
 									[spc_name]
 								</a>
 							</td>
-							<td class="left">
+							<td>
 								<a href="javascript:void(0);" onclick="getDetailNotice('[id]');" class="tbl_link">
 									[subject]
 								</a>
 							</td>
 							<td>[attachment] 건</td>
-							<td class="left">[created_by]</td>
-							<td class="right">[updatedAt]</td>
+							<td>[created_by]</td>
+							<td>[updatedAt]</td>
 						</tr>
 					</tbody>
 				</table>
