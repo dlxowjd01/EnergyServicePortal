@@ -40,6 +40,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 		if (userInfo != null) {
 			String token = (String) userInfo.get("token");
+			String mode = (String) session.getAttribute("mode");
 
 			String[] systemLoc = request.getParameterValues("systemLoc");
 			String[] systemType = request.getParameterValues("systemType");
@@ -48,11 +49,16 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			String vgid = request.getParameter("vgid");
 			String sid = request.getParameter("sid");
 
-
 			Map<String, String> parameters = new HashMap<String, String>();
 			parameters.put("includeDevices", "true");
 
-			Map<String, Object> siteMap = get("/auth/me/sites", parameters, token); //사이트 리스트 정보
+			if (mode != null && "test".equals(mode)) {
+				session.setAttribute("apiHost", "http://iderms-test.enertalk.com:8443");
+			} else {
+				session.setAttribute("apiHost", "http://iderms.enertalk.com:8443");
+			}
+
+			Map<String, Object> siteMap = get("/auth/me/sites", mode, parameters, token); //사이트 리스트 정보
 			if (200 == (int) siteMap.get("code")) {
 				siteOriginList = (List<Map<String, Object>>) siteMap.get("data");
 				request.setAttribute("siteHeaderList", siteOriginList); //사이트 리스트 세팅
@@ -70,7 +76,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			parameters.put("includeSites", "true");
 			parameters.put("includeDevices", "true");
 
-			Map<String, Object> userSiteGroupSearch = get("/auth/me/groups", parameters, token); //그룹화되어있는 사이트 리스트 정보
+			Map<String, Object> userSiteGroupSearch = get("/auth/me/groups", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
 			if (200 == (int) userSiteGroupSearch.get("code")) {
 				groupMap = (Map<String, Object>) userSiteGroupSearch.get("data");
 
@@ -232,7 +238,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 			parameters.clear();
 			parameters.put("types", "resource,location");
-			Map<String, Object> typeProperties = get("/config/view/properties", parameters, token); //그룹화되어있는 사이트 리스트 정보
+			Map<String, Object> typeProperties = get("/config/view/properties", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
 			if (200 == (int) typeProperties.get("code")) {
 				Map<String, Object> typeMap = (Map<String, Object>) typeProperties.get("data");
 

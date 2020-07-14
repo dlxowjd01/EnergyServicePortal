@@ -20,16 +20,23 @@ public class RestApiUtil {
 	 * @param parameters
 	 * @return
 	 */
-	public static Map<String, Object> get(String strUrl, Map<String, String> parameters) {
-		return get(strUrl, parameters, null);
+	public static Map<String, Object> get(String strUrl, String mode, Map<String, String> parameters) {
+		return get(strUrl, mode, parameters, null);
 	}
 
-	public static Map<String, Object> get(String strUrl, Map<String, String> parameters, String token) {
+	public static Map<String, Object> get(String strUrl, String mode, Map<String, String> parameters, String token) {
 		Map<String, Object> rtnMap = new HashMap<String, Object>();
 
 		try {
-			URI uri = new URI("http://iderms.enertalk.com:8443" + strUrl);
-			if(parameters != null) {
+			URI uri;
+			if (mode != null && "test".equals(mode)) {
+				//uri = new URI("http://iderms-test.enertalk.com:8443" + strUrl);
+				uri = new URI("http://iderms.enertalk.com:8443" + strUrl);
+			} else {
+				uri = new URI("http://iderms.enertalk.com:8443" + strUrl);
+			}
+
+			if (parameters != null) {
 				uri = applyParameters(uri, parameters);
 			}
 
@@ -87,8 +94,8 @@ public class RestApiUtil {
 	 * @param jsonMessage
 	 * @return
 	 */
-	public static Map<String, Object> post(String strUrl, String jsonMessage) {
-		return post(strUrl, jsonMessage, null);
+	public static Map<String, Object> post(String strUrl, String mode, String jsonMessage) {
+		return post(strUrl, mode, jsonMessage, null);
 	}
 
 	/**
@@ -98,11 +105,15 @@ public class RestApiUtil {
 	 * @param jsonMessage
 	 * @return
 	 */
-	public static Map<String, Object> post(String strUrl, String jsonMessage, String token) {
+	public static Map<String, Object> post(String strUrl, String mode, String jsonMessage, String token) {
 		Map<String, Object> rtnMap = new HashMap<String, Object>();
 
 		try {
-			URL url = new URL("http://iderms.enertalk.com:8443" + strUrl);
+			String postUrl = "http://iderms.enertalk.com:8443";
+//			if (mode != null && "test".equals(mode)) {
+//				postUrl = "http://iderms.enertalk-test.com:8443";
+//			}
+			URL url = new URL(postUrl + strUrl);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
 			con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
@@ -165,7 +176,7 @@ public class RestApiUtil {
 		StringBuilder query = new StringBuilder();
 
 		for (Map.Entry<String, String> elem : urlParameters.entrySet()) {
-			if(query.length() > 1) {
+			if (query.length() > 1) {
 				query.append("&");
 			}
 			query.append(elem.getKey()).append("=").append(elem.getValue());
