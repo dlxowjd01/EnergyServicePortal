@@ -1529,7 +1529,7 @@
 											<li data-value="실시간"><a href="javascript:void(0);">실시간</a></li>
 										</ul>
 									</div>
-									<div class="tx_inp_type edit unit">
+									<div class="tx_inp_type edit unit t1">
 										<input type="text" id="SMP원" class="right" name="SMP원" placeholder="">
 										<span>원</span>
 									</div>
@@ -1546,7 +1546,7 @@
 											<li data-value="월별_추후_산정"><a href="javascript:void(0);">월별 추후 산정</a></li>
 										</ul>
 									</div>
-									<div class="tx_inp_type edit unit">
+									<div class="tx_inp_type edit unit t1">
 										<input type="text" id="REC원" class="right" name="REC원" placeholder="">
 										<span>원</span>
 									</div>
