@@ -21,9 +21,10 @@ nav .lang.login-lang {
 	margin: 0;
 	min-height: 800px;
 	height: calc(100% - 144px);
-	/* background:  linear-gradient(119deg, #0c0c0c, #363636); */
-	/* background: var(--bg-img) repeat center bottom;
-	background-size: cover; */
+}
+
+.login-wrapper nav .nav_brand {
+	display: none !important;
 }
 
 .login-wrapper>footer {
@@ -34,7 +35,7 @@ nav .lang.login-lang {
 
 .loginForm {
 	position: absolute;
-	top: 50%;
+	top: 420px;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	width: 500px;
