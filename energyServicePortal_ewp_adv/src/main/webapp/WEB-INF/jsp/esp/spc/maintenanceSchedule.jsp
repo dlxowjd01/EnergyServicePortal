@@ -108,6 +108,9 @@
 		$('#year > button').html(year + '년<span class="caret"></span>').data('value', year);
 		$('#month > button').html(month + '월<span class="caret"></span>').data('value', month);
 
+		let bfYear = new Date(year + 1, month + 1);
+		html += '<li data-value="' + bfYear.getFullYear() + '"><a href="javascript:void(0);">' + bfYear.getFullYear() + '년 </a></li>';
+
 		for (let i = 0; i < 5; i++) {
 			let bfYear = new Date(year - i, month + 1);
 			let select = i == 0 ? 'on' : '';

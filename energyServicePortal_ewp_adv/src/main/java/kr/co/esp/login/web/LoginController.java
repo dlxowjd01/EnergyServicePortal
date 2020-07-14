@@ -57,12 +57,23 @@ public class LoginController {
 
 		String serverName = request.getServerName();
 		String oid = "encored";
-		if("localhost".equals(serverName) || "spower.iderms.ai".equals(serverName) || "13.114.199.169".equals(serverName)) {
+		String mode = "test"; //운영 스테이징 구분
+
+		if (serverName.contains("trust")) {
+			oid = "trust";
+		} else if (serverName.contains("spower") || "localhost".equals(serverName)) {
 			oid = "spower";
-		} else if("ewp.iderms.ai".equals(serverName)) {
+		} else if (serverName.contains("ewp")) {
 			oid = "ewp";
 		} else {
 			oid = "encored";
+		}
+
+		//운영 스테이징 구분
+		if (serverName.contains("test") || serverName.contains("local") || "127.0.0.1".equals(serverName)) {
+			mode = "test";
+		} else {
+			mode = "real";
 		}
 
 		JSONObject obj = new JSONObject();
@@ -71,11 +82,11 @@ public class LoginController {
 		obj.put("password", param.get("password"));
 
 		Map<String, Object> userInfoMap = new HashMap<String, Object>();
-		Map<String, Object> tokenMap = RestApiUtil.post("/auth/login", obj.toString());
+		Map<String, Object> tokenMap = RestApiUtil.post("/auth/login", mode, obj.toString());
 		if(200 == (int) tokenMap.get("code")) {
 			userInfoMap.putAll((Map<String, Object>) tokenMap.get("data"));
 
-			Map<String, Object> meMap = RestApiUtil.get("/auth/me", null, (String) userInfoMap.get("token"));
+			Map<String, Object> meMap = RestApiUtil.get("/auth/me", mode,null, (String) userInfoMap.get("token"));
 			if(200 == (int) meMap.get("code")) {
 				userInfoMap.putAll((Map<String, Object>) meMap.get("data"));
 				String auth_type = String.valueOf(userInfoMap.get("role"));
@@ -89,6 +100,7 @@ public class LoginController {
 				return "esp/login/login";
 			} else if("1".equals(userInfoMap.get("auth_type")) || "2".equals(userInfoMap.get("auth_type"))) {
 				session.setAttribute(UserUtil.USER_SESSION_ID, userInfoMap);
+				session.setAttribute("mode", mode); //운영 / 스테이징 구분
 				return "redirect:/dashboard/gmain.do";
 			} else {
 				model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", locale));

@@ -996,6 +996,10 @@ table input[type="text"] {
 	width: 80px !important;
 }
 
+.w200 {
+	width: 200px !important;
+}
+
 .w300 {
 	width: 300px;
 }
