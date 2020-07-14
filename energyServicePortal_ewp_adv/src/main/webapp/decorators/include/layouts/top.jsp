@@ -81,7 +81,7 @@
 
 		var timeOffset = '${timeOffset}';
 		$(document).ready(function () {
-			<c:if test="${pageContext.request.serverName ne 'spower.iderms.ai' and pageContext.request.serverName ne '13.114.199.169'}">
+			<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
 				changeFavicon('/img/logo-only.ico');
 			</c:if>
 

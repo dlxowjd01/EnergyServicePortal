@@ -163,27 +163,30 @@
 		});
 	}
 
+	function pressEnter() {
+		if (event.keyCode == 13) {
+			getNoticeList(1);
+		}
+	}
+
 	function getNoticeList(page) {
-		const range = $('#range button').data('value'),
-			searchWord = $('#search').val().trim();
+		const searchWord = $('#search').val().trim();
 
 		let data = {
 			oid: oid,
 			kind: 1,
 			limit: pagePerData,
 			page: page,
-			includeDeleted: false
+			includeDeleted: false,
+			range: 0,
+			search: searchWord
 		}
 
 		if (!isEmpty(searchWord)) {
-			if (isEmpty(range)) {
-				alert('검색 구분을 선택해 주세요.');
-				return false;
-			}
-
+			data['range'] = 0;
 			data['search'] = searchWord;
-			data['range'] = range;
 		}
+
 
 		$.ajax({
 			url: apiURL + boardURL,
@@ -507,19 +510,8 @@
 <div class="row">
 	<div class="col-10">
 		<div class="flex_start">
-			<label for="range" class="tx_tit">검색 구분</label>
-			<div class="dropdown sa_select mr-16" id="range">
-				<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown" data-name="구분 선택" data-value="">
-					구분 선택<span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu chk_type" role="menu" id="operationList">
-					<li data-value="3"><a href="javascript:void(0);">전체</a></li>
-					<li data-value="1"><a href="javascript:void(0);">제목</a></li>
-					<li data-value="2"><a href="javascript:void(0);">내용</a></li>
-				</ul>
-			</div>
 			<div class="tx_inp_type mr-12">
-				<input type="text" id="search" name="search" placeholder="입력">
+				<input type="text" id="search" name="search" placeholder="입력" onKeyDown="pressEnter()">
 			</div>
 			<button class="btn_type" onclick="getNoticeList(1);">검색</button>
 		</div>

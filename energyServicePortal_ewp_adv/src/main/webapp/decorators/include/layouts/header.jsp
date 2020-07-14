@@ -90,11 +90,11 @@
 		</ul>
 	</div>
 	<c:choose>
-		<c:when test="${pageContext.request.serverName eq 'spower.iderms.ai' or pageContext.request.serverName eq '13.114.199.169' or pageContext.request.serverName eq 'localhost'}">
+		<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
 			<div class="nav_brand spower"><a href="/dashboard/gmain.do">Spower</a></div>
 		</c:when>
 		<c:otherwise>
-			<div class="nav_brand"><a href="#">Encored</a></div>
+			<div class="nav_brand"><a href="/dashboard/gmain.do">Encored</a></div>
 		</c:otherwise>
 	</c:choose>
 
