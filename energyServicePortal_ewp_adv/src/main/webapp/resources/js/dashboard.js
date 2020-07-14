@@ -147,7 +147,7 @@ const monthlyChartDraw = function (type, chargeList, dischargeList, pvList, payL
 const monthlyChart = Highcharts.chart('monthlyChart', {
 	chart: {
 		marginTop: 40,
-		marginLeft: 55,
+		marginLeft: 70,
 		marginRight: 55,
 		backgroundColor: 'transparent',
 		zoomType: 'xy'

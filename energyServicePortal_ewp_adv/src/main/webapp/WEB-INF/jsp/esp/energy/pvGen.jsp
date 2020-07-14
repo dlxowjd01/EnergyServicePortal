@@ -1003,7 +1003,18 @@
 		let num = 0;
 		let stack = 0;
 		let seriesData = new Array();
-		let colorArr = ['#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787', '#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787'];
+		let colorArr = ['var(--turquoise)',
+						'var(--sandy-brown)',
+						'var(--cream-can)',
+						'var(--summer-sky)',
+						'var(--orange-red)',
+						'var(--blue-yonder)',
+						'var(--eucalyptus)',
+						'var(--yellow-green)',
+						'var(--sea-pink)',
+						'var(--deep-lilac)',
+						'var(--grey)',
+						'var(--vivid-blue)'];
 		let chartStyle = $('#chartStyle button').data('value'); //현재 선택된 스타일
 
 		accociation.forEach(function (v, k) {
