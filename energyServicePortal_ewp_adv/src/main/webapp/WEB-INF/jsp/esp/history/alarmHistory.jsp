@@ -78,7 +78,7 @@
 							<ul class="dropdown-menu">
 							</ul>
 						</div>
-						<div class="tx_inp_type ml-12">
+						<div class="tx_inp_type ml-12 w200">
 							<input type="text" id="ticket_user_id" name="ticket_user_id" placeholder="직접 입력" readonly autocomplete="off">
 						</div>
 					</div>

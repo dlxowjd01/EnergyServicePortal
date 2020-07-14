@@ -51,57 +51,67 @@
 
 		// 이관자료 가져오기
 		supInfoLength = getGridList(supInfoLength);
-		// 파일 추가
-		$(document).on('change', 'input[type="file"]', function(e) {
-			e.preventDefault();
-			if(($(this).attr('id')).match('사용자정의')){
-				if(isEmpty($(this).prev().val())){
-					alert('추가 항목명을 입력하고 파일을 추가해야 합니다.');
-					supInfoLength = getGridList(supInfoLength);
-					return false;
-				}
+	});
+
+	// 파일 추가
+	$(document).on('change', 'input[type="file"]', function(e) {
+		e.preventDefault();
+		if(($(this).attr('id')).match('사용자정의')){
+			if(isEmpty($(this).next().val())){
+				alert('추가 항목명을 입력하고 파일을 추가해야 합니다.');
+				supInfoLength = getGridList(supInfoLength);
+				return false;
 			}
-			let uuid = genUuid();
-			let thisId = $(this).prop('id');
+		}
+		let uuid = genUuid();
+		let thisId = $(this).prop('id');
 
-			$(this).clone().appendTo('#upload');
-			$('#upload').find('input').attr('name', uuid).attr('id', uuid);
+		$(this).clone().appendTo('#upload');
+		$('#upload').find('input').attr('name', uuid).attr('id', uuid);
 
-			callAjax({
-				type: 'post',
-				enctype: 'multipart/form-data',
-				url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
-				data: new FormData($('#upload')[0]),
-				processData: false,
-				contentType: false,
-				cache: false,
-				timeout: 600000
-			}, setUploadAfter, thisId);
-		});
+		callAjax({
+			type: 'post',
+			enctype: 'multipart/form-data',
+			url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
+			data: new FormData($('#upload')[0]),
+			processData: false,
+			contentType: false,
+			cache: false,
+			timeout: 600000
+		}, setUploadAfter, thisId);
+	});
 
 
-		$(document).on('click', 'button[name="rowDelete"]', function(){
-			var result = confirm("삭제하시겠습니까?");
-			$(this).parents('tr').remove();
+	$(document).on('click', 'button[name="rowDelete"]', function(){
+		let result = confirm("삭제하시겠습니까?");
+		$(this).parents('tr').remove();
+
+		sendSupplementPatch();
+	});
+
+	// 삭제버튼 클릭
+	$(document).on('click', 'button.btn_img', function(){
+		var result = confirm("삭제하시겠습니까?");
+		if (result) {
+			let tr = $(this).parents('tr');
+			tr.next().val('');
+			tr.find('input[type="text"]').val('')
+			tr.find('input[type="hidden"]').val('')
+			tr.find('.down').removeAttr('onclick');
+			tr.find('.down').addClass('hidden');
+			$(this).hide();
 
 			sendSupplementPatch();
-		});
-		// 삭제버튼 클릭
-		$(document).on('click', 'button.btn_img', function(){
-			var result = confirm("삭제하시겠습니까?");
-			if (result) {
-				let tr = $(this).parents('tr');
-				tr.next().val('');
-				tr.find('input[type="text"]').val('')
-				tr.find('input[type="hidden"]').val('')
-				tr.find('.down').removeAttr('onclick');
-				tr.find('.down').addClass('hidden');
-				$(this).hide();
+		}
+	});
 
-				sendSupplementPatch();
-			}
-		});
-
+	$(document).on('blur', '[id^=사용자정의]', function() {
+		// 수정과 등록 분기
+		if (supInfoLength > 0){
+			sendSupplementPatch(); // 수정
+		} else {
+			sendSupplementPost(); // 등록
+		}
 	});
 
 	const getGridList = function(supInfoLength){
@@ -219,6 +229,10 @@
 			} else {
 				prop.parents('tr').find('.btn_type07').removeClass('hidden'); //삭제버튼 활성화
 				prop.parents('tr').find('.down').removeClass('hidden'); //다운로드 버튼 활성화
+
+				if (prop.parents('tr').find('.btn_type07').css('display') != '') {
+					prop.parents('tr').find('.btn_type07').removeAttr('style');
+				}
 			}
 
 			// 수정과 등록 분기
@@ -227,7 +241,6 @@
 			} else {
 				sendSupplementPost(); // 등록
 			}
-
 		}
 	}
 
@@ -245,7 +258,7 @@
 				"updated_by": loginId
 			}),
 			success: function (json) {
-				console.log("등록성공 : " + json);
+				$(document).find('input[type="file"]').val('');
 				//location.reload();
 			},
 			error: function (request, status, error) {
@@ -258,7 +271,6 @@
 	// 이관자료 전체 수정
 	function sendSupplementPatch() {
 		var supplement_info = setAreaParamData("supplement_info");
-		console.log(supplement_info);
 		$.ajax({
 			url: "http://iderms.enertalk.com:8443/spcs/" + spc_id + "/gens/" + gen_id + "/supplement?oid=" + oid,
 			type: "patch",
@@ -270,7 +282,7 @@
 				"updated_by": loginId
 			}),
 			success: function (json) {
-				console.log("수정성공 : " + json);
+				$(document).find('input[type="file"]').val('');
 				//location.reload();
 			},
 			error: function (request, status, error) {
@@ -426,7 +438,7 @@
 							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
-							<input type="text" id="설치_업체_담당자_다운로드" name="설치_업체_담당자_다운로드" class="fileName tx_file w50" readonly>
+							<input type="text" id="설치_업체_담당자_연락처_다운로드" name="설치_업체_담당자_연락처_다운로드" class="fileName tx_file w50" readonly>
 						</td>
 						<td class="px-0">
 							<input type="text" id="설치_업체_담당자_연락처_regDt" value="" class="fileName tx_file w80" readonly>
@@ -599,7 +611,7 @@
 							<input type="hidden" id="하도급_계약서_공사도급_계약서_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down">다운로드</button>
+							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="하도급_계약서_공사도급_계약서_다운로드" name="하도급_계약서_공사도급_계약서_다운로드" class="fileName tx_file w50" readonly>
@@ -659,7 +671,7 @@
 					<tr>
 						<th>기자재 시험 성적서</th>
 						<td>인버터</td>
-						<td>
+						<td class="px-0">
 							<input type="file" id="기자재_시험_성적서_인버터" class="uploadBtn">
 							<input type="text" id="기자재_시험_성적서_인버터_originalName" value="" class="fileName tx_file" readonly>
 							<input type="hidden" id="기자재_시험_성적서_인버터_filedName" value="">
@@ -758,7 +770,7 @@
 						<td class="px-0">
 							<input type="text" id="모듈_Inspection_Sheet_다운로드" name="모듈_Inspection_Sheet_다운로드" class="fileName tx_file w50" readonly>
 						</td>
-						<td>
+						<td class="px-0">
 							<input type="text" id="모듈_Inspection_Sheet_regDt" value="" class="fileName tx_file w80" readonly>
 						</td>
 						<td class="px-0">
