@@ -228,8 +228,10 @@ $(function() {
 		if($(this).attr("multiple")){
 			let list = $(this).parent().find(".file_list ul");
 			let item = $(this).get(0).files;
-			// let noFile = list.find(".no-file");
 			let arr = [];
+			if($(this).parent().find(".no-data")){
+				$(this).parent().find(".no-data").addClass("hidden");
+			}
 			list.empty();
 			$.each(item, function(index, element) {
 				let listItem = ``;
@@ -247,6 +249,9 @@ $(function() {
 		} else {
 			$(this).prev('label').text(labelText);
 			$(this).parent().find(".upload_text").text(labelText);
+			if($(this).parent().find(".btn_close")){
+				$(this).parent().find(".btn_close").removeClass('hidden')
+			}
 		}
 	});
 });

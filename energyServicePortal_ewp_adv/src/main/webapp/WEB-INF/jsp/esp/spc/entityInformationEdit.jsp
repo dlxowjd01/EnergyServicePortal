@@ -790,17 +790,15 @@
 								<a href="javascript:addRow('addList_registered_seal');" class="btn_add fr">추가</a>
 							</th>
 							<td id="addList_registered_seal" class="entity">
-								<div id="SPC_법인_인감">
-									<p class="tx_file">
-										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[SPC_법인_인감_유형] - [originalname]</a>
-										<button class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
-									</p>
+								<div id="SPC_법인_인감" class="hide-no-data">
+									<p class="tx_file"><!--
+									--><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[SPC_법인_인감_유형] - [originalname]</a><!--
+									--><button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button><!--
+								--></p>
 								</div>
 								<div class="group_type">
 									<div class="dropdown placeholder edit" id="spcSeal[index]">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-											인감 선택<span class="caret"></span>
-										</button>
+										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">인감 선택<span class="caret"></span></button>
 										<ul class="dropdown-menu" role="menu">
 											<li data-value="사용_인감">
 												<a href="javascript:void(0);">사용 인감</a>
@@ -826,10 +824,10 @@
 					</table>
 				</form>
 			</div>
-			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" onclick="goMoveList();">목록</button>
-				<button type="button" class="btn_type ml-16" onclick="setSaveData();">수정</button>
-			</div>
+			<div class="btn_wrap_type02"><!--
+			--><button type="button" class="btn_type03" onclick="goMoveList();">목록</button><!--
+			--><button type="button" class="btn_type ml-16" onclick="setSaveData();">수정</button><!--
+			--></div>
 		</div>
 
 		<div class="indiv panel panel-default" id="maintenanceInfo">
@@ -911,7 +909,7 @@
 						<td class="addList_affiliation entity">
 							<div class="group_type">
 								<div class="dropdown placeholder edit" id="등기이사_소속[index]">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+									<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 										소속 선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu chk_type" role="menu">
@@ -1085,7 +1083,7 @@
 						<th>관리 계약 구분</th>
 						<td>
 							<div class="dropdown placeholder edit mr-12 w300" id="관리_계약_구분">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+								<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 									선택<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu chk_type" role="menu">
@@ -1255,7 +1253,7 @@
 									<div class="sel_calendar edit">
 										<input type="text" id="이자_지급일[index]" class="sel datepicker" name="이자_지급일[index]" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 									</div>
-									<button class="btn_close hidden fr" onclick="removeList(this)"></button>
+									<button type="button" class="btn_close hidden fr" onclick="removeList(this)"></button>
 								</div>
 							</td>
 						</tr>
@@ -1269,7 +1267,7 @@
 									<div class="sel_calendar edit">
 										<input type="text" id="보장발전시간_정산일[index]" class="sel datepicker" name="보장발전시간_정산일[index]" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 									</div>
-									<button class="btn_close hidden fr" onclick="removeList(this)"></button>
+									<button type="button" class="btn_close hidden fr" onclick="removeList(this)"></button>
 								</div>
 							</td>
 							<th>
@@ -1281,7 +1279,7 @@
 									<div class="sel_calendar edit">
 										<input type="text" id="대리기관_수수료_지급일[index]" class="sel datepicker" name="대리기관_수수료_지급일[index]" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 									</div>
-									<button class="btn_close hidden fr" onclick="removeList(this)"></button>
+									<button type="button" class="btn_close hidden fr" onclick="removeList(this)"></button>
 								</div>
 							</td>
 						</tr>
@@ -1293,42 +1291,34 @@
 							</th>
 							<td>
 								<div class="fixed_height group_type short">
-									<div class="dropdown placeholder edit" id="입출금_구분[index]">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-											입출금 구분<span class="caret"></span>
-										</button>
-										<ul class="dropdown-menu" role="menu">
-											<li data-value="입금"><a href="javascript:void(0);">입금</a></li>
-											<li data-value="출금"><a href="javascript:void(0);">출금</a></li>
-										</ul>
-									</div>
-									<div class="dropdown placeholder edit" id="계좌구분[index]">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-											계좌구분<span class="caret"></span>
-										</button>
-										<ul class="dropdown-menu" role="menu">
-											<li data-value="유보계좌"><a href="javascript:void(0);">유보계좌</a></li>
-											<li data-value="부채상환"><a href="javascript:void(0);">부채상환</a></li>
-											<li data-value="대수선비"><a href="javascript:void(0);">대수선비</a></li>
-											<li data-value="배당금 적립"><a href="javascript:void(0);">배당금 적립</a></li>
-											<li data-value="지출"><a href="javascript:void(0);">지출</a></li>
-											<li data-value="기타"><a href="javascript:void(0);">기타</a></li>
-										</ul>
-									</div>
-									<div class="dropdown placeholder edit" id="은행_리스트[index]">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-											은행 리스트<span class="caret"></span>
-										</button>
-										<ul class="dropdown-menu" role="menu">
-											<li data-value="신한"><a href="javascript:void(0);">신한</a></li>
-											<li data-value="기업"><a href="javascript:void(0);">기업</a></li>
-										</ul>
-									</div>
+									<div class="dropdown placeholder edit" id="입출금_구분[index]"><!--
+										--><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">입출금 구분<span class="caret"></span></button><!--
+										--><ul class="dropdown-menu" role="menu"><!--
+											--><li data-value="입금"><a href="javascript:void(0);">입금</a></li><!--
+											--><li data-value="출금"><a href="javascript:void(0);">출금</a></li><!--
+										--></ul><!--
+									--></div>
+									<div class="dropdown placeholder edit" id="계좌구분[index]"><!--
+									--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">계좌구분<span class="caret"></span></button><!--
+									--><ul class="dropdown-menu" role="menu"><!--
+										--><li data-value="유보계좌"><a href="javascript:void(0);">유보계좌</a></li><!--
+										--><li data-value="부채상환"><a href="javascript:void(0);">부채상환</a></li><!--
+										--><li data-value="대수선비"><a href="javascript:void(0);">대수선비</a></li><!--
+										--><li data-value="배당금 적립"><a href="javascript:void(0);">배당금 적립</a></li><!--
+										--><li data-value="지출"><a href="javascript:void(0);">지출</a></li><!--
+										--><li data-value="기타"><a href="javascript:void(0);">기타</a></li><!--
+									--></ul><!--
+								--></div>
+									<div class="dropdown placeholder edit" id="은행_리스트[index]"><!--
+										--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">은행 리스트<span class="caret"></span></button><!--
+										--><ul class="dropdown-menu" role="menu"><!--
+											--><li data-value="신한"><a href="javascript:void(0);">신한</a></li><!--
+											--><li data-value="기업"><a href="javascript:void(0);">기업</a></li><!--
+										--></ul><!--
+									--></div>
 								</div>
 								<div class="fixed_height">
-									<div class="tx_inp_type edit">
-										<input type="text" id="예금주[index]" name="예금주[index]" placeholder="직접 입력">
-									</div>
+									<div class="tx_inp_type edit"><input type="text" id="예금주[index]" name="예금주[index]" placeholder="직접 입력"></div>
 								</div>
 							</td>
 							<th>
@@ -1461,11 +1451,10 @@
 											<li data-value="실시간"><a href="javascript:void(0);">실시간</a></li>
 										</ul>
 									</div>
-									<div class="tx_inp_type edit unit t1 mr-30">
+									<div class="tx_inp_type edit unit t1">
 										<input type="text" id="SMP원" class="right" name="SMP원" placeholder="">
 										<span>원</span>
 									</div>
-									<span class="fixed_height"><span class="auto_price"></span>원/kWh</span>
 								</div>
 								<div class="group_type">
 									<div class="dropdown placeholder edit" id="REC">
@@ -1478,11 +1467,10 @@
 											<li data-value="월별_추후_산정"><a href="javascript:void(0);">월별 추후 산정</a></li>
 										</ul>
 									</div>
-									<div class="tx_inp_type edit unit t1 mr-30">
+									<div class="tx_inp_type edit unit t1">
 										<input type="text" id="REC원" class="right" name="REC원" placeholder="">
 										<span>원</span>
 									</div>
-									<span class="fixed_height"><span class="auto_price"></span>원/kWh</span>
 								</div>
 							</td>
 							<th class="align_top">
@@ -1822,7 +1810,7 @@
 									<label class="sr-only">모듈 제조사 모델</label>
 									<input type="text" name="모듈_제조사_모델[index]" placeholder="모델">
 								</div>
-								<button class="btn_close hidden fixed_height" onclick="removeList(this);">삭제</button>
+								<button type="button" class="btn_close fixed_height hidden" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 						<th>설치 용량</th>
@@ -1845,7 +1833,7 @@
 						<td id="addList_module_angle" class="entity">
 							<div class="tx_inp_type edit unit t1 fl">
 								<input type="text" id="모듈_설치_각도[index]" name="모듈_설치_각도[index]">&ensp;&deg;
-								<button class="btn_close hidden" onclick="$(this).parent().remove()">삭제</button>
+								<button type="button" class="btn_close hidden" onclick="$(this).parent().remove()"></button>
 							</div>
 						</td>
 						<th>모듈 설치 방식</th>
@@ -1886,9 +1874,9 @@
 								</div>
 								<div class="tx_inp_type edit unit t1">
 									<input type="text" id="인버터_용량_대수[index]" name="인버터_용량_대수[index]"><span>대</span>
-
-									<button class="btn_close hidden" onclick="$(this).parents('.group_type').remove();">삭제</button>
+									<!-- <button type="button" class="btn_close fixed_height hidden" onclick="$(this).parents('.group_type').remove();">삭제</button> -->
 								</div>
+								<button type="button" class="btn_close fixed_height hidden" onclick="$(this).parents('.group_type').remove();">삭제</button>
 							</fieldset>
 						</td>
 					</tr>
@@ -1902,7 +1890,7 @@
 								<div class="tx_inp_type edit">
 									<input type="text" placeholder="모델" id="접속반_제조사_모델[index]" name="접속반_제조사_모델[index]">
 								</div>
-								<button class="btn_close hidden fixed_height mt-0" onclick="removeList(this);">삭제</button>
+								<button type="button" class="btn_close fixed_height hidden mt-0" onclick="removeList(this);"></button>
 							</div>
 						</td>
 						<th>접속반 채널 / 대수<a href="javascript:addRow('addList_connection');" class="btn_add fr">추가</a></th>
@@ -1914,7 +1902,7 @@
 								<div class="tx_inp_type edit unit t1">
 									<input type="text" id="접속반_채널_대수[index]" name="접속반_채널_대수[index]"><span>대</span>
 								</div>
-								<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
+								<button type="button" class="btn_close fixed_height hidden" onclick="removeList(this);"></button>
 							</div>
 						</td>
 					</tr>
@@ -1966,7 +1954,7 @@
 								<div class="tx_inp_type edit">
 									<input type="text" id="수배전반_모델" name="수배전반_모델" placeholder="모델">
 								</div>
-								<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
+								<button type="button" class="btn_close fixed_height hidden" onclick="removeList(this);"></button>
 							</div>
 						</td>
 					</tr>
@@ -2232,7 +2220,7 @@
 								<div id="fileList01">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2253,7 +2241,7 @@
 								<div id="fileList02">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2274,7 +2262,7 @@
 								<div id="fileList03">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2295,7 +2283,7 @@
 								<div id="fileList04">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2316,7 +2304,7 @@
 								<div id="fileList05">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2337,7 +2325,7 @@
 								<div id="fileList06">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2358,7 +2346,7 @@
 								<div id="fileList07">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2379,7 +2367,7 @@
 								<div id="fileList08">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2400,7 +2388,7 @@
 								<div id="fileList09">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2421,7 +2409,7 @@
 								<div id="fileList10">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2441,9 +2429,9 @@
 			</form>
 		</div>
 
-		<div class="btn_wrap_type_right">
-			<a href="/spc/entityInformation.do" class="btn btn_type03">목록</a>
-			<button type="button" class="btn_type big" onclick="setSaveData();">수정</button>
-		</div>
+		<div class="btn_wrap_type_right"><!--
+		--><a href="/spc/entityInformation.do" class="btn btn_type03">목록</a><!--
+		--><button type="submit" class="btn_type big" onclick="setSaveData();">수정</button><!--
+	--></div>
 	</div>
 </div>
