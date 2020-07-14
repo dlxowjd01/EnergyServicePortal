@@ -149,13 +149,13 @@
 			success: function (json) {
 				if (json.data.length > 0) {
 					setJsonAutoMapping(json.data[0], 'basicInfo');
-					const spc_info = JSON.parse(json.data[0].spc_info);
-					if (!isEmpty(spc_info)) {
-						setJsonAutoMapping(spc_info, 'basicInfo');
-						const fileList = spc_info['SPC_법인_인감'];
-
-						console.log(fileList);
-						setMakeList(fileList, 'SPC_법인_인감', {'dataFunction': {}});
+					if (!isEmpty(json.data[0].spc_info)) {
+						const spc_info = JSON.parse(json.data[0].spc_info);
+						if (!isEmpty(spc_info)) {
+							setJsonAutoMapping(spc_info, 'basicInfo');
+							const fileList = spc_info['SPC_법인_인감'];
+							setMakeList(fileList, 'SPC_법인_인감', {'dataFunction': {}});
+						}
 					}
 				} else {
 					alert('등록된 데이터가 없습니다.');
@@ -205,8 +205,10 @@
 					});
 					setJsonAutoMapping(maintenance_info, 'maintenanceInfo');
 
-					if (maintenance_info['관리_계약_구분'] != undefined && maintenance_info['관리_계약_구분'].length > 0) {
-						$('#maintenanceInfo #관리_계약_구분').html(maintenance_info['관리_계약_구분'].join(','));
+					if (maintenance_info != null) {
+						if (maintenance_info['관리_계약_구분'] != undefined && maintenance_info['관리_계약_구분'].length > 0) {
+							$('#maintenanceInfo #관리_계약_구분').html(maintenance_info['관리_계약_구분'].join(','));
+						}
 					}
 
 					//기본정보
