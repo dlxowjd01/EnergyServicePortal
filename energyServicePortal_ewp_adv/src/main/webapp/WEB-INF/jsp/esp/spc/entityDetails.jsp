@@ -207,7 +207,11 @@
 
 					if (maintenance_info != null) {
 						if (maintenance_info['관리_계약_구분'] != undefined && maintenance_info['관리_계약_구분'].length > 0) {
-							$('#maintenanceInfo #관리_계약_구분').html(maintenance_info['관리_계약_구분'].join(','));
+							if (typeof maintenance_info['관리_계약_구분'] === 'string') {
+								$('#maintenanceInfo #관리_계약_구분').html(maintenance_info['관리_계약_구분']);
+							} else {
+								$('#maintenanceInfo #관리_계약_구분').html(maintenance_info['관리_계약_구분'].join(','));
+							}
 						}
 					}
 
