@@ -43,41 +43,12 @@
 			});
 		});
 
-		var dfd = $.Deferred();
- 
 		$("#fileInput").change(function(){
 			fileList = [];
 			for(let i = 0, fileLength = $(this)[0].files.length; i < fileLength; i++){
 				fileList.push($(this)[0].files[i]);
 			}
 			console.log("fileLost===", fileList)
-		});
-
-		$("#pdfBtn").on("click", function(e){
-			e.preventDefault();
-			let warning = $(".spc-search-bar").find(".warning");
-			if(isEmpty(spcList.prev().data("value"))){
-				warning.eq(0).removeClass("hidden");
-			} else if (isEmpty(withdrawList.prev().data("value")) ) {
-				warning.eq(1).removeClass("hidden");
-				console.log("withdrawList===", withdrawList.prev().data("value") )
-			} else {
-				warning.addClass("hidden");
-				let item = $("#addFileList").find("li.upload_text");
-				item.each(function(index, element){
-					let dataId = $(this).data("id");
-					console.log("dataId---", fileList[index] );
-					downloadFile('get', fileList[index].name, dataId );
-				});
-			}
-
-			// $.each(fileList, function(index, element){
-				// let name = $(this).filedName;
-				// console.log("name===", name)
-				// $("#fileInput")[0].files[index].name = name;
-				// uploadFile('post', $("#fileInput")[0].files[index], name)
-			// });
-			// downloadFile('get');
 		});
 
 		let pList = [
@@ -248,7 +219,6 @@
 		withdrawForm.on('submit', function(e){
 			e.preventDefault();
 			let warning = withdrawForm.find(".warning");
-			let checkboxes = tableBody.find("[type='checkbox']");
 			let tr = tableBody.find("tr");
 			let jsonData = {}
 			let arr =[];
@@ -269,18 +239,16 @@
 			jsonData.requested_at = new Date().toISOString();
 			jsonData.transfer_agent = "tester2"
 
-			if($("#fileCheckbox").is(":checked")) {
-				let fileNames = $("#addFileList").find("li.upload_text");
-				$.each(fileNames, function(index, element){
-					let obj = {};
-					obj.originalName = $(this).text();
-					obj.filedName = $(this).data("id");
-					finalNameList.push(obj);
-				});
-				jsonData.attachement_info = JSON.stringify(finalNameList);
-			}
+			let fileNames = $("#addFileList").find("li.upload_text");
+			$.each(fileNames, function(index, element){
+				let obj = {};
+				obj.originalName = $(this).text();
+				obj.filedName = $(this).data("id");
+				finalNameList.push(obj);
+			});
+			jsonData.attachement_info = JSON.stringify(finalNameList);
 
-			checkboxes.each(function(index, element){
+			tr.each(function(index, element){
 				let purposeOpt = $("#tableBody").find("td:nth-of-type(3) .dropdown-toggle");
 				let amountOpt = $("#tableBody").find("td:nth-of-type(4) input");
 				let accOpt = $("#tableBody").find("td:nth-of-type(5) .dropdown-toggle");
@@ -296,38 +264,26 @@
 			jsonData.total_amount = totalAmount;
 			jsonData.to_account = JSON.stringify(arr);
 
-			// console.log("jdonDA---", jsonData)
 			let newJson = JSON.stringify(jsonData);
-
 			let formArr = [ jsonData.spc_id, jsonData.withdraw_bank, jsonData.withdraw_day, jsonData.to_account ];
 
 			$.each(formArr, function(index, value){
-				// if($('input[type="checkbox"]:checked').length > 0) {
-					if(index < 2) {
-						if(value == undefined ||  value == "선택" || value == "") {
-							warning.eq(index).removeClass('hidden');
-							console.log("warning---", )
-						} else {
-							warning.eq(index).addClass('hidden');
-						}
+				if(index < 2) {
+					if(value == undefined ||  value == "선택" || value == "") {
+						warning.eq(index).removeClass('hidden');
+						console.log("warning---", )
 					} else {
-						if(value == undefined ||  value == "선택" || value == "") {
-							warning.eq(2).removeClass('hidden');
-						} else {
-							warning.eq(2).addClass('hidden');
-						}
+						warning.eq(index).addClass('hidden');
 					}
-				// } else {
-				// 	warning.eq(2).removeClass('hidden');
-				// }
+				} else {
+					if(value == undefined ||  value == "선택" || value == "") {
+						warning.eq(2).removeClass('hidden');
+					} else {
+						warning.eq(2).addClass('hidden');
+					}
+				}
 			});
 
-			// if($("#fileCheckbox").is(":checked")){
-			// 	console.log("fileList", fileList);
-			// 	console.log("finalNameList", finalNameList)
-			
-			// };
-			
 			if( withdrawForm.find(".warning.hidden").length == 4 ){
 				let opt = {
 					url: 'http://iderms.enertalk.com:8443/spcs/transactions?oid='+oid,
@@ -339,11 +295,9 @@
 				};
 
 				$.ajax(opt).done(function (json, textStatus, jqXHR) {
-					if($("#fileCheckbox").is(":checked")){
-						$.each(fileList, function(index, element){
-							uploadFile('post', $("#fileInput")[0].files[index], finalNameList[index].filedName);
-						});
-					};
+					$.each(fileList, function(index, element){
+						uploadFile('post', $("#fileInput")[0].files[index], finalNameList[index].filedName);
+					});
 					window.location.href = window.location.origin + '/spc/transactionHistory.do'
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					alert('처리 중 오류가 발생했습니다.');
@@ -354,40 +308,6 @@
 				console.log("warning length===" )
 			}
 		});
-
-		
-
-		function downloadFile(action, originalName, fakeName){
-			console.log("downloadFile--", action)
-			console.log("fakeName==", fakeName, "originalName===", originalName);
-
-
-			var element = document.createElement('a');
-			element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(originalName));
-			element.setAttribute('download', originalName);
-
-			element.style.display = 'none';
-			document.body.appendChild(element);
-
-			element.click();
-
-			document.body.removeChild(element);
-			
-			// let option= {
-			// 	type: action,
-			// 	url: 'http://iderms.enertalk.com:8443/files/download?oid=' + oid,
-			// 	data: {
-			// 		fileKey: fakeName,
-			// 		orgFilename: originalName
-			// 	},
-			// }
-			// $.ajax(option).done(function (json, textStatus, jqXHR) {
-			// 	console.log("success===", json)
-			// }).fail(function (jqXHR, textStatus, errorThrown) {
-			// 	alert('처리 중 오류가 발생했습니다.');
-			// 	return false;
-			// });
-		}
 
 		function uploadFile(action, file, filedName){
 			let formData = new FormData($('#fileUploadForm')[0]);
@@ -411,11 +331,6 @@
 				alert('처리 중 오류가 발생했습니다.');
 				return false;
 			});
-
-			// $("#addFileList").find("li:not(:first-child)").each(function() {
-			// 	let name = $(this).text()+genUuid();
-			// 	fileList+= name + ','
-			// });
 		}
 
 		// amount number trim event
@@ -433,42 +348,9 @@
 				});
 
 				$(this).on('keyup', function(evt, limit) {
-					// let key = evt.which || evt.keyCode;
-					// let key = evt.target.value;
 					if( $(this).val().match(/[^\x00-\x80]/) ){
 						$(this).val("");
 					}
-						// console.log("key===", key)
-
-					// if (key >= 0xAC00 && key <= 0xD7A3) {
-					// 	console.log("key22222===", key)
-
-					// 	evt.preventDefault();
-					// }
-
-					// // Hangul Jamo
-					// if (key >= 0x1100 && key <= 0x11FF) {
-					// 	console.log("key22222===", key)
-					// 	evt.preventDefault();
-					// }
-
-					// // Hangul Compatibility Jamo 
-					// if (key >= 0x3130 && key <= 0x318F) {
-					// 	console.log("key22222===", key)
-					// 	evt.preventDefault();
-					// }
-
-					// // Hangul Jamo Extended-A
-					// if (key >= 0xA960 && key <= 0xA97F) {
-					// 	console.log("key22222===", key)
-					// 	evt.preventDefault();
-					// }
-
-					// // Hangul Jamo Extended-B 
-					// if (key >= 0xD7B0 && key <= 0xD7FF) {
-					// 	console.log("key22222===", key)
-					// 	evt.preventDefault();
-					// }
 				});
 			});
 		}
@@ -546,6 +428,86 @@
 	// 		return objects;
 	// 	}
 
+
+	// function downloadFile(action, originalName, fakeName){
+	// 	console.log("downloadFile--", action)
+	// 	console.log("fakeName==", fakeName, "originalName===", originalName);
+
+	// 	var element = document.createElement('a');
+	// 	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(originalName));
+	// 	element.setAttribute('download', originalName);
+	// 	element.style.display = 'none';
+	// 	document.body.appendChild(element);
+	// 	element.click();
+	// 	document.body.removeChild(element);
+	// 	// let option= {
+	// 	// 	type: action,
+	// 	// 	url: 'http://iderms.enertalk.com:8443/files/download?oid=' + oid,
+	// 	// 	data: {
+	// 	// 		fileKey: fakeName,
+	// 	// 		orgFilename: originalName
+	// 	// 	},
+	// 	// }
+	// 	// $.ajax(option).done(function (json, textStatus, jqXHR) {
+	// 	// 	console.log("success===", json)
+	// 	// }).fail(function (jqXHR, textStatus, errorThrown) {
+	// 	// 	alert('처리 중 오류가 발생했습니다.');
+	// 	// 	return false;
+	// 	// });
+	// }
+
+
+	// console.log("key===", key)
+
+	// if (key >= 0xAC00 && key <= 0xD7A3) {
+	// 	console.log("key22222===", key)
+
+	// 	evt.preventDefault();
+	// }
+
+	// // Hangul Jamo
+	// if (key >= 0x1100 && key <= 0x11FF) {
+	// 	console.log("key22222===", key)
+	// 	evt.preventDefault();
+	// }
+
+	// // Hangul Compatibility Jamo 
+	// if (key >= 0x3130 && key <= 0x318F) {
+	// 	console.log("key22222===", key)
+	// 	evt.preventDefault();
+	// }
+
+	// // Hangul Jamo Extended-A
+	// if (key >= 0xA960 && key <= 0xA97F) {
+	// 	console.log("key22222===", key)
+	// 	evt.preventDefault();
+	// }
+
+	// // Hangul Jamo Extended-B 
+	// if (key >= 0xD7B0 && key <= 0xD7FF) {
+	// 	console.log("key22222===", key)
+	// 	evt.preventDefault();
+	// }
+
+
+	// $("#pdfBtn").on("click", function(e){
+	// 	e.preventDefault();
+	// 	let warning = $(".spc-search-bar").find(".warning");
+	// 	if(isEmpty(spcList.prev().data("value"))){
+	// 		warning.eq(0).removeClass("hidden");
+	// 	} else if (isEmpty(withdrawList.prev().data("value")) ) {
+	// 		warning.eq(1).removeClass("hidden");
+	// 		console.log("withdrawList===", withdrawList.prev().data("value") )
+	// 	} else {
+	// 		warning.addClass("hidden");
+	// 		let item = $("#addFileList").find("li.upload_text");
+	// 		item.each(function(index, element){
+	// 			let dataId = $(this).data("id");
+	// 			console.log("dataId---", fileList[index] );
+	// 			downloadFile('get', fileList[index].name, dataId );
+	// 		});
+	// 	}
+	// });
 
 	});
 

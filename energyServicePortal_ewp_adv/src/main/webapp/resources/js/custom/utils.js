@@ -1000,7 +1000,11 @@ function setInitList(listId) {
 	} else if ("SELECT" == sTagName) {
 		sEmptyMsg = "";
 	} else {
-		sEmptyMsg = '<div class=' + '"no-data"'+ '>조회 데이터가 없습니다.</div>';
+		if($("#" + listId).is(".hide-no-data")) {
+			sEmptyMsg = sEmptyMsg;
+		} else {
+			sEmptyMsg = '<div class=' + '"no-data"'+ '>조회 데이터가 없습니다.</div>';
+		}
 	}
 
 	$selecter.removeData().html(sEmptyMsg);
@@ -1036,7 +1040,11 @@ function setMakeList(jsonData, listId, opts) {
 		} else if ("SELECT" == sTagName) {
 			arrTagInfo.push("");
 		} else {
-			arrTagInfo.push('<div class=' + '"no-data"'+ '>조회 데이터가 없습니다.</div>');
+			if($("#" + listId).is(".hide-no-data")) {
+				// arrTagInfo.push("");
+			} else {
+				arrTagInfo.push('<div class=' + '"no-data"'+ '>조회 데이터가 없습니다.</div>');
+			}
 		}
 	}
 
@@ -1466,7 +1474,11 @@ const addRow = function (listId, type, nextIdx) {
 
 
 	if ($selecter.hasClass('entity') && listLength > 0) {
-		rowHtml = rowHtml.replace(/\bbtn_close hidden\b/g, 'btn_close');
+		if($('#' + listId).find(".btn_close").is(".fixed_height")){
+			rowHtml = rowHtml.replace(/\bbtn_close fixed_height hidden\b/g, 'btn_close fixed_height');
+		} else {
+			rowHtml = rowHtml.replace(/\bbtn_close hidden\b/g, 'btn_close');
+		}
 	}
 
 	if (type == 'next') {

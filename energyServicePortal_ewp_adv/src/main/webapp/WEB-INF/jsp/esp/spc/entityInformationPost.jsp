@@ -193,8 +193,8 @@
 		$("#sidoValue").val(jsonData.location);
 		setDropDownValue("sidoList", jsonData.location);
 		$("#address").val(jsonData.address);
-
-		if (jsonData.gen_id == "") {
+		console.log("val---", $(this).data("value"))
+		if (jsonData.gen_id == "" || $(this).data("value") == "") {
 			$("#genName").prop("readonly", false).val('');
 		} else {
 			$("#genName").prop("readonly", true);
@@ -894,7 +894,7 @@
 										<input type="file" id="SPC_법인_인감_파일[index]" class="hidden" name="SPC_법인_인감_파일" accept=".jpg, .png, .pdf">
 										<label for="SPC_법인_인감_파일[index]" class="btn file_upload">파일 선택</label>
 										<span class="upload_text ml-16"></span>
-										<button class="btn_close hidden fixed_height mt-0" onclick="$(this).parents().closest('.group_type').remove()"></button>
+										<button class="btn_close fixed_height hidden mt-0" onclick="$(this).parents().closest('.group_type').remove()"></button>
 									</div>
 								</div>
 							</td>
@@ -1529,11 +1529,11 @@
 											<li data-value="실시간"><a href="javascript:void(0);">실시간</a></li>
 										</ul>
 									</div>
-									<div class="tx_inp_type edit unit t1 mr-30">
+									<div class="tx_inp_type edit unit">
 										<input type="text" id="SMP원" class="right" name="SMP원" placeholder="">
 										<span>원</span>
 									</div>
-									<span class="fixed_height"><span class="auto_price"></span>원/kWh</span>
+
 								</div>
 								<div class="group_type">
 									<div class="dropdown placeholder edit" id="REC">
@@ -1546,11 +1546,10 @@
 											<li data-value="월별_추후_산정"><a href="javascript:void(0);">월별 추후 산정</a></li>
 										</ul>
 									</div>
-									<div class="tx_inp_type edit unit t1 mr-30">
+									<div class="tx_inp_type edit unit">
 										<input type="text" id="REC원" class="right" name="REC원" placeholder="">
 										<span>원</span>
 									</div>
-									<span class="fixed_height"><span class="auto_price"></span>원/kWh</span>
 								</div>
 							</td>
 							<th class="align_top">

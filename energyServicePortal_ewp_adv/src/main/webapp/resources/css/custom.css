@@ -12206,12 +12206,30 @@ html.darkmode .modal-content.spc-detail-content li.single_item a .btn_next {
 .entity_wrap.post .indiv .spc_tbl_row.st_edit.panel-collapse table {
 	table-layout: fixed;
 }
+
+.entity_wrap.post table .no-data,
+.entity_wrap.post table .tx_file {
+	min-width: 12vw;
+	padding-right: 10%;
+}
+
 .entity_wrap.post table .no-data {
 	text-align: left;
 }
+
 .entity_wrap.post table .tx_file {
-	margin: 5px auto;
+	color: var(--vivid-blue);
 }
+
+.entity_wrap.post table .tx_file > a {
+	color: var(--vivid-blue);
+}
+
+
+.entity_wrap.post table .tx_file a + button {
+	float: right;
+}
+
 .entity_wrap.post fieldset.flex_start,
 .entity_wrap.post fieldset.flex_start3 {
 	display: inline-block;
@@ -12299,6 +12317,9 @@ html.darkmode .modal-content.spc-detail-content li.single_item a .btn_next {
 	padding-right: 24px;
 }
 
+.entity_wrap.post .indiv .spc_tbl_row th .btn_add {
+	width: 18px;
+}
 .entity_wrap.post .indiv .spc_tbl_row th.th_align_top {
 	display: block;
 	padding-top: 14px;
