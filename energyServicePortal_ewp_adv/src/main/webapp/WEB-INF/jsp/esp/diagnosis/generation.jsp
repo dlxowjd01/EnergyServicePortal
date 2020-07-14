@@ -5,8 +5,8 @@
 	<div class="col-lg-12">
 		<h1 class="page-header">발전 예측</h1>
 	</div>
-	<div id="siteList" class="header_drop_area col-lg-2">
-		<div class="dropdown">
+	<div class="header_drop_area col-lg-2">
+		<div class="dropdown" id="siteList">
 			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 				선택해주세요.<span class="caret"></span>
 			</button>
@@ -153,7 +153,7 @@
 			</div>
 			<a href="#" class="chart_change_column" id="changeChart">그래프</a>
 			<div class="inchart">
-				<p class="tx_time">2020-03-06 22:00:09</p>
+				<p class="tx_time"></p>
 				<div id="chart2"></div>
 			</div>
 		</div>
@@ -168,7 +168,7 @@
 				<a href="#" class="save_btn">데이터저장</a>
 			</div>
 			<div class="tbl_top clear">
-				<h2 class="ntit fl">예측 결과 도포</h2>
+				<h2 class="ntit fl">예측 결과 도표</h2>
 				<ul class="fr">
 					<li><a href="#" class="fold_btn">표접기</a></li>
 				</ul>
@@ -189,6 +189,7 @@
 	<input type="hidden" name="ignore_tolerance" />
 	<input type="hidden" name="interval" />
 </form>
+<script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	let standard = new Array();
 	let applicationData = {
@@ -200,30 +201,6 @@
 
 	$(function () {
 		siteList(); //사이트 조회
-
-		//사이트 선택시
-		$(document).on('click', ':checkbox[name="site"]', function () {
-			if ($(this).is(':checked')) {
-				let extendText = '';
-				if ($(':checkbox[name="site"]:checked').length > 1) {
-					extendText = '외 ' + Number($(':checkbox[name="site"]:checked').length - 1) + '개';
-				}
-				//첫 번째 값 + 외 몇개로 표기
-				$('#siteList button').html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
-			} else {
-				if ($(':checkbox[name="site"]:checked').length == 0) {
-					$('#siteList button').html('선택해주세요.' + '<span class="caret"></span>')
-				} else {
-					let extendText = '';
-					if ($(':checkbox[name="site"]:checked').length > 1) {
-						extendText = '외 ' + Number($(':checkbox[name="site"]:checked').length - 1) + '개';
-					}
-					//첫 번째 값 + 외 몇개로 표기
-					$('#siteList button').html($(':checkbox[name="site"]:checked').eq(0).next('label').text() + extendText + '&nbsp;<span class="caret"></span>');
-				}
-			}
-			device();
-		});
 
 		//전체 선택/전체 해제
 		$('#deviceType button.btn_type03').on('click', function (e) {
@@ -327,6 +304,28 @@
 		$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
 	});
 
+	const rtnDropdown = ($dropdownId) => {
+		if ($dropdownId == 'siteList') {
+			device();
+		} else if ($dropdownId == 'period') {
+			let period = $('#period button').data('value');
+			if (period == 'today') { //오늘
+				// $('#cycle').
+				$('#datepicker1').datepicker('setDate', 'today'); //데이트 피커 기본
+				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+			} else if (period == 'week') { //이번주
+				$('#datepicker1').datepicker('setDate', '-6'); //데이트 피커 기본
+				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+			} else { //이번달
+				$('#datepicker1').datepicker('setDate', '-30'); //데이트 피커 기본
+				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+			}
+		} else if ($dropdownId == 'chartStyle') {
+			chartDataDraw();
+		}
+	}
+
+
 	const application = function (stat) {
 
 		const sites = $.makeArray($(':checkbox[name="site"]:checked').map(
@@ -401,19 +400,19 @@
 
 	//사업소 호출
 	const siteList = function () {
-		$('#siteList > div > ul').empty();
+		$('#siteList ul').empty();
 
 		let str = '';
 		let sites = JSON.parse('${siteList}');
 		sites.forEach((site, index) => {
 			str += `<li>
-				<a href="#" data-value="${'${site.sid}'}" tabindex="-1">
-					<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
-					<label for="${'${site.sid}'}">${'${site.name}'}</label>
-				</a>
-			</li>`;
+						<a href="#" data-value="${'${site.sid}'}" tabindex="-1">
+							<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
+							<label for="${'${site.sid}'}">${'${site.name}'}</label>
+						</a>
+					</li>`;
 		});
-		$('#siteList>div>ul').append(str);
+		$('#siteList ul').append(str);
 	};
 
 	const device = function () {
@@ -508,6 +507,16 @@
 			}
 		));
 
+		if (billingSites.length <= 0 && dashSites.length <= 0 && checkedDevices.length <= 0) {
+			alert('계량값을 선택해 주세요.');
+			return false;
+		}
+
+		if (isEmpty(interval)) {
+			alert('단위를 선택해 주세요.');
+			return false;
+		}
+
 		responseCnt = 0;
 		accociation = new Map();
 
@@ -527,17 +536,14 @@
 					formId: 'v2'
 				},
 				success: function (data) {
-					console.log(1);
 					association(data, '1');
 				},
 				error: function (error) {
 					console.error(error);
-					console.log(1);
 					association(null, '1');
 				}
 			})
 		} else {
-			console.log(1);
 			association(null, '1');
 		}
 
@@ -557,17 +563,14 @@
 					formId: 'v2'
 				},
 				success: function (data) {
-					console.log(4);
 					association(data, '4');
 				},
 				error: function (error) {
 					console.error(error);
-					console.log(4);
 					association(null, '4');
 				}
 			})
 		} else {
-			console.log(4);
 			association(null, '4');
 		}
 
@@ -587,17 +590,14 @@
 					formId: 'v2'
 				},
 				success: function (data) {
-					console.log(2);
 					association(data, '2');
 				},
 				error: function (error) {
 					console.error(error);
-					console.log(2);
 					association(null, '2');
 				}
 			})
 		} else {
-			console.log(2);
 			association(null, '2');
 		}
 
@@ -617,17 +617,14 @@
 					formId: 'v2'
 				},
 				success: function (data) {
-					console.log(5);
 					association(data, '5');
 				},
 				error: function (error) {
 					console.error(error);
-					console.log(5);
 					association(null, '5');
 				}
 			})
 		} else {
-			console.log(5);
 			association(null, '5');
 		}
 
@@ -644,17 +641,14 @@
 					interval: interval
 				},
 				success: function (data) {
-					console.log(3);
 					association(data, '3');
 				},
 				error: function (error) {
 					console.error(error);
-					console.log(3);
 					association(null, '3');
 				}
 			});
 		} else {
-			console.log(3);
 			association(null, '3');
 		}
 
@@ -671,17 +665,14 @@
 					interval: interval
 				},
 				success: function (data) {
-					console.log(6);
 					association(data, '6');
 				},
 				error: function (error) {
 					console.error(error);
-					console.log(6);
 					association(null, '6');
 				}
 			});
 		} else {
-			console.log(6);
 			association(null, '6');
 		}
 	}
@@ -705,9 +696,7 @@
 							let bt = elj.basetime;
 							$.each(accociation.get('actual'), function (k, elk) {
 								if (elk.basetime == bt) {
-									console.log('1', elk.energy);
 									elk.energy += elj.energy;
-									console.log('2', elk.energy);
 									elk.money += elj.money;
 									dupData = true;
 								}
@@ -1168,7 +1157,18 @@
 	const chartMakeData = function (type) {
 		let seriesData = new Array();
 		let num = 0;
-		let colorArr = ['#5269ef', '#50b5ff', '#26ccc8', '#009389', '#878787'];
+		let colorArr = ['var(--turquoise)',
+						'var(--sandy-brown)',
+						'var(--cream-can)',
+						'var(--summer-sky)',
+						'var(--orange-red)',
+						'var(--blue-yonder)',
+						'var(--eucalyptus)',
+						'var(--yellow-green)',
+						'var(--sea-pink)',
+						'var(--deep-lilac)',
+						'var(--grey)',
+						'var(--vivid-blue)'];
 
 		accociation.forEach(function (val, key) {
 			if (val != undefined) {
@@ -1189,7 +1189,7 @@
 						$.each(arr, function (k, elk) {
 							let basetime = String(elk.basetime);
 							if (basetime.match(stnd)) {
-								timeValue = elk.energy;
+								timeValue = Number(displayNumberFixedUnit(elk.energy, 'Wh', 'kWh', 2)[0]);
 								total += elk.energy;
 							}
 						});
@@ -1205,7 +1205,7 @@
 								type: applicationData.observedType,
 								stack: 0,
 								tooltip: {
-									valueSuffix: 'Wh'
+									valueSuffix: 'kWh'
 								},
 								color: colorArr[0],
 								data: arrDevice
@@ -1220,7 +1220,7 @@
 								type: applicationData.forecastedType,
 								stack: 1,
 								tooltip: {
-									valueSuffix: 'Wh'
+									valueSuffix: 'kWh'
 								},
 								color: colorArr[1],
 								data: arrDevice
@@ -1235,7 +1235,7 @@
 					$.each(arr, function (k, elk) {
 						let basetime = String(elk.basetime);
 						if (basetime.match(stnd)) {
-							timeValue = elk.energy;
+							timeValue = Number(displayNumberFixedUnit(elk.energy, 'Wh', 'kWh', 2)[0]);
 							total += elk.energy;
 						}
 					});
@@ -1256,6 +1256,9 @@
 		chartDraw(seriesData);
 
 		application('basic');
+
+		const now = new Date();
+		$('.tx_time').text(now.format('yyyy-MM-dd HH:mm:ss'));
 	}
 
 	/**

@@ -60,7 +60,7 @@
 						response(
 							$.map(data, function (item) {
 								let siteNm = $('[name="siteName"]').val().toUpperCase();
-								if ((item.toUpperCase()).name.match(siteNm)) {
+								if ((item.name.toUpperCase()).match(siteNm)) {
 									return {
 										label: item.name,
 										value: item.sid
