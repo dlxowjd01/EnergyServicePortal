@@ -13,7 +13,7 @@ nav .lang.login-lang {
 	margin: 0;
 	padding: 0;
 	height: 100%;
-	background:  linear-gradient(119deg, #0c0c0c, #363636);
+	background: linear-gradient(119deg, #0c0c0c, #363636);
 }
 
 .login-wrapper .login {
@@ -255,7 +255,7 @@ nav .lang.login-lang {
 	display: table;
 }
 
-.lf-btn-wrap > * {
+.lf-btn-wrap>* {
 	display: inline-block;
 	width: 100%;
 	border: 0;
@@ -281,18 +281,22 @@ nav .lang.login-lang {
 .lf-desc {
 	font-size: 16px;
 	color: var(--color4);
-	border-top: 1px solid var(--color9)
+	border-top: 1px solid var(--box-border);
 }
+
 .lf-desc .center strong {
 	color: var(--color2);
 	padding-left: 8px;
 }
+
 .lf-desc .center:not(.copy-right) {
 	margin: 30px auto 50px;
 }
+
 .lf-desc .center.copy-right {
 	font-size: 12px;
 }
+
 /* 회원 가입 */
 
 

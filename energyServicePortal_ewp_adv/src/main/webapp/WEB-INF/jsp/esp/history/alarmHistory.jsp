@@ -1251,25 +1251,35 @@
 		dataMap.set(dataList[1], data);
 
 		let columnSeriesData = new Array();
+		//  ORIGINAL!!!
+		//  'var(--turquoise)',
+		// 	'var(--light-blue)',
+		// 	'var(--turquoise)',
+		// 	'var(--blueberry)',
+		// 	'var(--teal)',
+		// 	'var(--royal-blue)',
+		// 	'var(--sunglow)',
+		// 	'var(--sandy-brown)',
+		// 	'var(--grey)'
 		let typeColorArr = [
-			'var(--powder-blue)',
-			'var(--light-blue)',
 			'var(--turquoise)',
-			'var(--blueberry)',
-			'var(--teal)',
-			'var(--royal-blue)',
-			'var(--sunglow)',
+			'var(--sandy-brown)',
+			'var(--cream-can)',
+			'var(--summer-sky)',
+			'var(--orange-red)',
+			'var(--blue-yonder)',
+			'var(--eucalyptus)',
 			'var(--sandy-brown)',
 			'var(--grey)'
 		];
 		let alarmColorArr = [
-			'var(--powder-blue)',
-			'var(--light-blue)',
 			'var(--turquoise)',
-			'var(--blueberry)',
-			'var(--teal)',
-			'var(--royal-blue)',
-			'var(--sunglow)',
+			'var(--sandy-brown)',
+			'var(--cream-can)',
+			'var(--summer-sky)',
+			'var(--orange-red)',
+			'var(--blue-yonder)',
+			'var(--eucalyptus)',
 			'var(--sandy-brown)',
 			'var(--grey)'
 		];
