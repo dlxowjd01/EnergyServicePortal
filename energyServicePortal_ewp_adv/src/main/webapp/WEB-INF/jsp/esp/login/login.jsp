@@ -524,7 +524,6 @@
 				</div>
 
 			</div>
-			<%@ include file="/decorators/include/layouts/footer.jsp"%>
 		</div>
 	</div>
 

@@ -478,14 +478,14 @@ a:link:hover {
 	opacity: 0.8;
 }
 
-a.text-link{
+a.text-link {
 	color: var(--check-active);
 	background: none;
 	border-bottom: solid 1px var(--check-active);
 	text-decoration: none;
 }
 
-a.disabled{
+a.disabled {
 	text-decoration: none;
 	background: none;
 	color: var(--check-active);
@@ -493,9 +493,10 @@ a.disabled{
 }
 
 a.disabled:hover,
-a.disabled:focus{
+a.disabled:focus {
 	opacity: 1;
 }
+
 select::-ms-expand {
 	display: none;
 }
@@ -520,13 +521,19 @@ textarea::placeholder {
 	color: var(--color9);
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
 	outline-offset: 0px !important;
 	outline: none !important;
 }
 
 input[type="text"] {
 	padding-right: 20px;
+}
+
+input[type="number"] {
+	text-indent: 10px;
 }
 
 input[type="file"]+.file_upload {
@@ -569,10 +576,12 @@ input[type="file"]+.file_upload {
 table input[type="text"] {
 	padding-right: 0;
 }
+
 .clear-input {
 	background: none;
 	border: none;
 }
+
 .tx_inp_type {
 	background: var(--box-color7);
 	padding: 0;
@@ -2420,13 +2429,16 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 .wickedpicker {
 	z-index: 300;
 }
+
 .modal {
 	text-align: center;
 	z-index: 200;
 }
+
 .modal-backdrop {
 	z-index: 180;
 }
+
 .modal.fade.in {
 	padding: 0 !important;
 }
@@ -2865,7 +2877,7 @@ input.inp[readonly]:focus {
 	line-height: 24px;
 	color: var(--color4);
 	text-align: center;
-	font-size: 13px;	
+	font-size: 13px;
 }
 
 
@@ -5980,8 +5992,8 @@ nav .lang.dropdown .btn-primary {
 }
 
 nav .lang.dropdown .btn {
-    padding: 0 30px 0 10px;
-    height: 28px;
+	padding: 0 30px 0 10px;
+	height: 28px;
 }
 
 nav .lang.dropdown .dropdown-menu>li>a,
@@ -9443,7 +9455,15 @@ div.di_wrap dl .link a {
 }
 
 .chk_type.c12 input[type="checkbox"]+label:before {
-	border-color: var(--vivid-blue);
+	border-color: var(--malibu);
+}
+
+.chk_type.c13 input[type="checkbox"]+label:before {
+	border-color: var(--blueberry);
+}
+
+.chk_type.c14 input[type="checkbox"]+label:before {
+	border-color: var(--royal-blue);
 }
 
 /* ******************** checked ******************** */
@@ -9508,8 +9528,19 @@ div.di_wrap dl .link a {
 }
 
 .chk_type.c12 input[type="checkbox"]:checked+label:before {
-	background-color: var(--vivid-blue);
-	border-color: var(--vivid-blue);
+	background-color: var(--malibu);
+	border-color: var(--malibu);
+}
+
+.chk_type.c13 input[type="checkbox"]:checked+label:before {
+	background-color: var(--blueberry);
+	border-color: var(--blueberry);
+}
+
+.chk_type.c14 input[type="checkbox"]:checked+label:before {
+	background-color: var(--royal-blue);
+	border-color: var(--royal-blue);
+	;
 }
 
 .chk_type input[type="checkbox"]:checked+label:after {
@@ -9582,7 +9613,17 @@ div.di_wrap dl .link a {
 }
 
 .chk_type.c12 input[type="checkbox"]:checked+label:after {
-	background-color: var(--vivid-blue);
+	background-color: var(--malibu);
+	border-color: var(--white);
+}
+
+.chk_type.c13 input[type="checkbox"]:checked+label:after {
+	background-color: var(--blueberry);
+	border-color: var(--white);
+}
+
+.chk_type.c14 input[type="checkbox"]:checked+label:after {
+	background-color: var(--royal-blue);
 	border-color: var(--white);
 }
 
@@ -9796,9 +9837,10 @@ div.di_wrap dl .link a {
 	color: var(--color6);
 }
 
-.dropdown_cov + .li_btn_bx {
+.dropdown_cov+.li_btn_bx {
 	padding: 0 20px 5px;
 }
+
 .dropdown_cov .sec_li_bx+.li_btn_bx {
 	margin-top: 0;
 }
@@ -10179,26 +10221,6 @@ a.btn.btn_type03:hover {
 	content: "";
 }
 
-.chart_table .bu.t1:before {
-	background: var(---blueberry);
-}
-
-.chart_table .bu.t2:before {
-	background: var(--light-blue);
-}
-
-.chart_table .bu.t3:before {
-	background: var(--turquoise);
-}
-
-.chart_table .bu.t4:before {
-	background: var(--teal);
-}
-
-.chart_table .bu.t5:before {
-	background: var(--grey);
-}
-
 /* 통합 대시보드 */
 
 .page_view_bx {
@@ -10550,42 +10572,6 @@ a.btn.btn_type03:hover {
 	line-height: 20px;
 	font-size: 13px;
 	font-weight: 300;
-}
-
-.chart_legend .bu.t1:before {
-	background-color: var(--powder-blue);
-}
-
-.chart_legend .bu.t2:before {
-	background-color: var(--light-blue);
-}
-
-.chart_legend .bu.t3:before {
-	background-color: var(--turquoise);
-}
-
-.chart_legend .bu.t4:before {
-	background-color: var(--blueberry);
-}
-
-.chart_legend .bu.t5:before {
-	background-color: var(--teal);
-}
-
-.chart_legend .bu.t6:before {
-	background-color: var(--royal-blue);
-}
-
-.chart_legend .bu.t7:before {
-	background-color: var(--sunglow);
-}
-
-.chart_legend .bu.t8:before {
-	background-color: var(--sandy-brown);
-}
-
-.chart_legend .bu.t9:before {
-	background-color: var(--grey);
 }
 
 .tbl_wrap_type {
@@ -11028,65 +11014,62 @@ button.tx_file {
 	content: "";
 }
 
-.single_item a .bu.t1:before,
-.sch_btm_area .bu.t1:before {
+.bu.t1:before {
 	background: var(--turquoise);
 }
 
-.single_item a .bu.t2:before,
-.sch_btm_area .bu.t2:before {
-	background: var(--sandy-brown);
+.bu.t2:before {
+	background: var(--orange-peel);
 }
 
-.single_item a .bu.t3:before,
-.sch_btm_area .bu.t3:before {
+.bu.t3:before {
 	background: var(--cream-can);
 	/* background: var(--sunglow); */
 }
 
-.single_item a .bu.t4:before,
-.sch_btm_area .bu.t4:before {
+.bu.t4:before {
 	background: var(--summer-sky);
 }
 
-.single_item a .bu.t5:before,
-.sch_btm_area .bu.t5:before {
+.bu.t5:before {
 	background: var(--orange-red);
 }
 
-.single_item a .bu.t6:before,
-.sch_btm_area .bu.t6:before {
+
+.bu.t6:before {
 	background: var(--blue-yonder);
 }
 
-.single_item a .bu.t7:before,
-.sch_btm_area .bu.t7:before {
+.bu.t7:before {
 	background: var(--eucalyptus);
 }
 
-.single_item a .bu.t8:before,
-.sch_btm_area .bu.t8:before {
+.bu.t8:before {
 	background: var(--yellow-green);
 }
 
-.single_item a .bu.t9:before,
-.sch_btm_area .bu.t9:before {
+.bu.t9:before {
 	background: var(--sea-pink);
 }
 
-.single_item a .bu.t10:before,
-.sch_btm_area .bu.t10:before {
+.bu.t10:before {
 	background: var(--deep-lilac);
 }
 
-.single_item a .bu.t11:before,
-.sch_btm_area .bu.t11:before {
+.bu.t11:before {
 	background: var(--grey);
 }
 
-.single_item a .bu.t12:before,
-.sch_btm_area .bu.t11:before {
-	background: var(--vivid-blue);
+.bu.t12:before {
+	background: var(--malibu);
+}
+
+.bu.t13:before {
+	background: var(--blueberry);
+}
+
+.bu.t14:before {
+	background: var(--royal-blue);
 }
 
 
@@ -11368,6 +11351,7 @@ button.tx_file {
 	text-align: center;
 	background: none;
 }
+
 .spc_tbl td.right {
 	padding: 0 16px;
 	text-align: right;
@@ -11687,6 +11671,7 @@ th .btn_align {
 .spc-transaction .table-footer .sa_select .dropdown-toggle {
 	width: 95%;
 }
+
 .spc-transaction .table-footer .clear-input {
 	width: 100%;
 	padding-right: 6px;
