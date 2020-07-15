@@ -4,30 +4,15 @@
 <script type="text/javascript">
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
-	var transactionInfo;
-	var spcPair = [];
+
 	let today = new Date();
 	let date = new Date();
 
 	(loginId == "spadmin") ? ( $("#requestBtnReview").removeClass('hidden'), $("#requestBtn").removeClass('hidden') ) : ( (loginId == "test_spc_a") ? ( $("#requestBtnReview").addClass('hidden'), $("#requestBtn").removeClass('hidden') ) : ( $("#requestBtnReview").removeClass('hidden'), $("#requestBtn").addClass('hidden') ) );
+
 	$(function () {
 		const modalForm = $("#spcAlarmForm");
-		const dropdownOpt = modalForm.find('.dropdown-menu:not(.chk_type) li');
-		const clone = $("#spcList").clone().html();
-		$("#spcList").empty();
-
-		getSpcList(clone);
-		setDropdownValue(dropdownOpt);
-		// console.log("spcList===", spcList);
-		// $.each(spcList, function(){
-
-		// });
-		// dropdownOpt.each(function(index, element) {
-		// 	$(this).on("click", function() {
-		// 		let val = $(this).data('value');
-		// 		$(this).parent().prev(".dropdown-toggle").attr('value', val);
-		// 	});
-		// });
+		pageInit();
 
 		//날짜 셀렉트박스 클릭 시
 		$('.sch_sel_area ul li').on('click', function () {
@@ -41,7 +26,7 @@
 			}
 			buildCalendar();
 		});
-
+		console.log("apiHost===", apiHost)
 		//전월
 		$('.btn_prev_mon').on('click', function () {
 			const prevMonth = today.getMonth() - 1;
@@ -65,68 +50,72 @@
 			buildCalendar();
 		});
 
-		$('#spcAlarmModal li').on('click', function () {
-			let value = $(this).data('value');
-			let buttonId = $(this).parents('div').prop('id');
-			$(this).parents('div.dropdown').find('button').data('value', value);
-
-			if (buttonId == 'repeat_yn') {
-				if (value == 'Y') {
-					$(this).parents('.flex_start3').addClass('short');
-					$(this).parents('div.dropdown').siblings().removeClass('hidden');
-
-					$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
-				} else {
-					$(this).parents('.flex_start3').removeClass('short');
-					$(this).parents('div.dropdown').siblings().addClass('hidden');
-
-					$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
-				}
-				repeatEnd();
-			} else if (buttonId == 'alarmSetup') {
-				if ($('#alarmDate').hasClass('hasDatepicker')) {
-					$('#alarmDate').datepicker('destroy').removeClass('hasDatepicker');
-				}
-				if (value != '직접 설정') {
-					let jobDate = $('#job_date').datepicker('getDate');
-					if (isEmpty($('#job_date').val())) {
-						$('#alarmDate').val('');
-					} else {
-						jobDate.setDate(jobDate.getDate() - value);
-						$('#alarmDate').val(jobDate.format('yyyy-MM-dd'));
-					}
-				} else {
-					$('#alarmDate').datepicker({
-						showOn: "both",
-						buttonImageOnly: true,
-						dateFormat: 'yy-mm-dd',
-						beforeShow: function () {
-							let minDate = $('#job_date').datepicker('getDate');
-							if (minDate != '') {
-								$('#alarmDate').datepicker('option', 'minDate', minDate);
-							}
-
-							let maxDate = $('#repeat_end').datepicker('getDate');
-							if (maxDate != '') {
-								$('#alarmDate').datepicker('option', 'maxDate', maxDate);
-							}
-						}
-					})
-					$('#alarmDate').val('');
-				}
-			}
+		$('#repeat_interval, #repeat_unit').on('click change', function () {
+			repeatEnd();
 		});
+
+		// $('#spcAlarmModal li').on('click', function () {
+		// 	let value = $(this).data('value');
+		// 	let buttonId = $(this).parents('div').prop('id');
+		// 	$(this).parents('div.dropdown').find('button').data('value', value);
+
+		// 	if (buttonId == 'repeat_yn') {
+		// 		if (value == 'Y') {
+		// 			$(this).parents('.flex_start3').addClass('short');
+		// 			$(this).parents('div.dropdown').siblings().removeClass('hidden');
+
+		// 			$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
+		// 		} else {
+		// 			$(this).parents('.flex_start3').removeClass('short');
+		// 			$(this).parents('div.dropdown').siblings().addClass('hidden');
+
+		// 			$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+		// 		}
+		// 		repeatEnd();
+		// 	} else if (buttonId == 'alarmSetup') {
+		// 		if ($('#alarmDate').hasClass('hasDatepicker')) {
+		// 			$('#alarmDate').datepicker('destroy').removeClass('hasDatepicker');
+		// 		}
+		// 		if (value != '직접 설정') {
+		// 			let jobDate = $('#job_date').datepicker('getDate');
+		// 			if (isEmpty($('#job_date').val())) {
+		// 				$('#alarmDate').val('');
+		// 			} else {
+		// 				jobDate.setDate(jobDate.getDate() - value);
+		// 				$('#alarmDate').val(jobDate.format('yyyy-MM-dd'));
+		// 			}
+		// 		} else {
+		// 			$('#alarmDate').datepicker({
+		// 				showOn: "both",
+		// 				buttonImageOnly: true,
+		// 				dateFormat: 'yy-mm-dd',
+		// 				beforeShow: function () {
+		// 					let minDate = $('#job_date').datepicker('getDate');
+		// 					if (minDate != '') {
+		// 						$('#alarmDate').datepicker('option', 'minDate', minDate);
+		// 					}
+
+		// 					let maxDate = $('#repeat_end').datepicker('getDate');
+		// 					if (maxDate != '') {
+		// 						$('#alarmDate').datepicker('option', 'maxDate', maxDate);
+		// 					}
+		// 				}
+		// 			})
+		// 			$('#alarmDate').val('');
+		// 		}
+		// 	}
+		// });
 
 		$('#repeat_interval, #repeat_unit').on('click change', function () {
 			repeatEnd();
 		});
 
 		$(':checkbox[name="type"]').on('change', function () {
-			checkCalendarVisual();
+			searchBySpcName();
 		});
 
 		$('#searchName').on('keyup', function () {
-			checkCalendarVisual();
+			searchBySpcName();
 		});
 		
 		$('body').click(function() {
@@ -137,185 +126,6 @@
 			$("#detailInfoModal").removeClass("active");
 		});
 	});
-
-
-	//기본세팅
-	const pageInit = function () {
-		let html = '';
-		let year = today.getFullYear();
-		let month = today.getMonth() + 1;
-
-		$('#datepicker1').datepicker('setDate', 'today');
-		$('#year > button').html(year + '년<span class="caret"></span>').data('value', year);
-		$('#month > button').html(month + '월<span class="caret"></span>').data('value', month);
-
-		for (let i = 0; i < 5; i++) {
-			let bfYear = new Date(year - i, month + 1);
-			let select = i == 0 ? 'on' : '';
-			html += '<li data-value="' + bfYear.getFullYear() + '" class="' + select + '"><a href="#">' + bfYear.getFullYear() + '년 </a></li>';
-		}
-
-		$('#year ul').empty().append(html);
-
-		buildCalendar();
-	};
-
-	//달력 그리기
-	const buildCalendar = function () { //현재 달 달력 만들기
-		let doMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-		let lastDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-		let tbCalendar = document.getElementById('calendar');
-
-		while (tbCalendar.rows.length > 1) {
-			tbCalendar.deleteRow(tbCalendar.rows.length - 1);
-		}
-
-		let row = tbCalendar.insertRow();
-		let cell = null;
-		let cnt = 0;
-		const thisMonth = doMonth.getMonth() + 1 + '월';
-
-		for (let i = 0; i < doMonth.getDay(); i++) {
-			cell = row.insertCell();
-			cnt = cnt + 1;
-		}
-
-		for (let i = 1; i <= lastDate.getDate(); i++) {
-			cell = row.insertCell();
-			cell.innerHTML = '<span class="date" data-day="' + doMonth.format('yyyyMM') + i + '">' + i;
-			cnt = cnt + 1;
-
-			if (cnt % 7 == 0) {
-				row = calendar.insertRow();
-			}
-			/* today */
-			if (today.getFullYear() == date.getFullYear() &&
-				today.getMonth() == date.getMonth() &&
-				i == date.getDate()) {
-				cell.setAttribute('class', 'today');
-			}
-		}
-
-		$('.sch_btn .btn_type03:last-of-type').text(thisMonth);
-		$('#modalTitle').text(thisMonth);
-		$('#year > button').html(doMonth.getFullYear() + '년<span class="caret"></span>').data('value', doMonth.getFullYear());
-		$('#month > button').html(doMonth.getMonth() + 1 + '월<span class="caret"></span>').data('value', doMonth.getMonth() + 1);
-
-		maintenance('get');
-	};
-	// const getSpcList = function(){
-	// 	// let spcOption = {
-	// 	// 	url: 'http://iderms.enertalk.com:8443/spcs',
-	// 	// 	dataType: 'json',
-	// 	// 	type: 'get',
-	// 	// 	data: {
-	// 	// 		oid: oid
-	// 	// 	},
-	// 	// 	success: data(function(){
-
-	// 	// 	})
-	// 	// };
-	// 	$.ajax({
-	// 		url: 'http://iderms.enertalk.com:8443/spcs',
-	// 		dataType: 'json',
-	// 		type: 'get',
-	// 		async: false,
-	// 		data: {
-	// 			oid: oid
-	// 		},
-	// 		success: function(json){
-	// 			for(let i=0; i<json.data.length; i++){
-	// 				spcArr.push(json.data[i].name);
-	// 			}
-	// 			return spcArr;
-	// 		}
-	// 	});
-	// }
-	const maintenance = function (action, jobId) {
-		let option = {};
-		if (action == 'post' || action == 'patch') {
-			let data = setData();
-			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
-			let url = '';
-
-			if (action == 'patch') {
-				option = {
-					url: 'http://iderms.enertalk.com:8443/spcs/maintenance/'  + jobId + '?oid=' + oid,
-					dataType: 'json',
-					type: action,
-					contentType: "application/json",
-					traditional: true,
-					data: JSON.stringify(data)
-				};
-				// url = 'http://iderms.enertalk.com:8443/spcs/bankbook/' + jobId + '?oid=' + oid + jobText;
-				delete data.spc_id;
-			} else {
-				// POST req
-				option = {
-					url: 'http://iderms.enertalk.com:8443/spcs/maintenance?oid=' + oid,
-					dataType: 'json',
-					type: action,
-					contentType: "application/json",
-					traditional: true,
-					data: JSON.stringify(data)
-				};
-			}
-
-		} else if (action == 'get') {
-			// GET req
-			option = {
-				url: 'http://iderms.enertalk.com:8443/spcs/maintenance',
-				type: action,
-				dataType: 'json',
-				data: {
-					oid: oid,
-					type: "money",
-					like_yyyymm: $('#year button').data('value') + ('0' + $('#month button').data('value')).slice(-2)
-				}
-			};
-
-			if (jobId != undefined) {
-				option.data.jobId = jobId;
-			}
-		} else {
-			// DELETE req
-			if (!confirm('삭제 하시겠습니까?')) {
-				return false;
-			}
-			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
-			option = {
-				url: 'http://iderms.enertalk.com:8443/spcs/maintenance/' + jobId + '?oid=' + oid,
-				type: action,
-				data: {
-					oid: oid,
-					jobId: jobId,
-				}
-			};
-		}
-
-		$.ajax(option).done(function (data, textStatus, jqXHR) {
-			let item = data.data;
-
-			if (action == 'get') {
-				if (jobId != undefined) {
-					modalPopInit(item);
-					console.log("modalpop===")
-				} else {
-					// const spcIdList = item.map(x=> x.spc_id);
-					// const result = 	getDataList(spcIdList.join());
-		
-					fillCalendar(item);
-					
-				}
-			} else {
-				maintenance('get');
-				$("#spcAlarmModal").modal("hide");
-			}
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-				alert('처리 중 오류가 발생했습니다.');
-				return false;
-			});
-		};
 
 	const getSpcList = function(clone){
 		$.ajax({
@@ -362,30 +172,30 @@
 						str = clone.replace(/\*spcName\*/g, obj.spcName).replace(/\*spcId\*/g, spcIdList[i]);
 						$("#spcList").append($(str));
 					});
+					// spcPair = spcNameArr;
+					setDropdownValue($("#spcList"));
+					maintenance(spcNameArr, 'get');
 				});
-				spcPair = spcNameArr;
-				getDataList(spcIdList.join());
+				
+
+				// getDataList(spcIdList.join());
 
 				// Promise.all(promise2).then(res2 => {
 				// 	const arr = [
-				// 		"대리기관_수수료_지급일",
-				// 		"임대료_지급일",
-				// 		"이자_지급일",
-				// 		"상환_만기일",
-				// 		"보장발전시간_정산일",
-				// 		// "대출상환 만기일",
-				// 		// '대리기관수수료 지급일',
-				// 		// '보험 납부일',
+				// "이자_지급일",
+				// "보장발전시간_정산일",
+				// "보험_갱신일",
+				// '보험_납부일',
+				// "임대료_지급일",
+				// "대리기관_수수료_지급일",
+				// "대출상환 만기일",
+				// "상환_만기일",
 				// 	]
 				// 	console.log("res2===", res2)
 				// });
 				
-				$("#spcList").find("li").on("click", function(){
-
-				});
 				// str = clone.replace(/\*spcName\*/g, x.spc_id)
 				// 	.replace(/\*spcId\*/g, x.spc_id);
-
 			}
 		});
 		
@@ -414,86 +224,414 @@
 
 	}
 
-	function getDataList(spcIdArr, dateOpt) {
+	const getDataList = function (spcIdArr, dateOpt) {
 		var transactionInfoList = [];
 		// console.log("spcArr===", spcArr)
-			if(!isEmpty(spcIdArr)) {
-				let action = 'get';
-				let syncOpt = true;
-				let d = new Date();
-				let start = '';
-				let end = '';
-				if(isEmpty(dateOpt)){
-					start = d.toISOString().substring(0, 8).replace(/-/g, '') + '01';
-					end = d.toISOString().substring(0, 8).replace(/-/g, '') + endOfMonth(d).replace(/\//g, '').substring(1,3);
-				}
-
-				let option = {
-					url: 'http://iderms.enertalk.com:8443/spcs/transactions',
-					type: action,
-					data: {
-						'oid' : oid,
-						'spcIds' : spcIdArr,
-						'startDay': start,
-						'endDay' : end
-					},
-					async: true
-				}
-
-				$.ajax(option).done(function (json, textStatus, jqXHR) {
-					if (json.data.length > 0) {
-						let data = json.data;
-						transactionInfo = groupBy(data, "withdraw_day");
-						pageInit();
-						// console.log("byDate===", groupBy(data, "withdraw_day"));
-						// console.log("byId===", groupBy(data, "spc_id"));
-						// console.log("byStatus===", groupBy(data, "status"));
-						// console.log("groupBy===", groupedMap)
-						// data.map(x => {
-
-						// 	const key = keyGetter(x);
-						// 	const collection = map.get(key);
-						// 	console.log("key===", key)
-						// 	// if(!isEmpty(x.status)){
-						// 	// 	let obj = {};
-						// 	// 	if(x.status == 1){
-						// 	// 		obj.id = x.spc_id;
-						// 	// 		obj.status = statusList[0];
-						// 	// 	} else if(x.status == 2){
-						// 	// 		obj.id = x.spc_id;
-						// 	// 		obj.status = statusList[1];
-						// 	// 	} else if(x.status == 3) {
-						// 	// 		obj.id = x.spc_id;
-						// 	// 		obj.status = statusList[2];
-						// 	// 	}
-						// 	// 	transactionInfoList.push(obj);
-						// 	// }
-						// });
-						// console.log("arr===", transactionInfoList);
-					}
-				}).fail(function (jqXHR, textStatus, errorThrown) {
-					alert('처리 중 오류가 발생했습니다.');
-					return false;
-				});
+		if(!isEmpty(spcIdArr)) {
+			let action = 'get';
+			let syncOpt = true;
+			let d = new Date();
+			let startDay = '';
+			let endDay= '';
+			if(isEmpty(dateOpt)){
+				startDay = d.toISOString().substring(0, 8).replace(/-/g, '') + '01';
+				endDay = d.toISOString().substring(0, 8).replace(/-/g, '') + endOfMonth(d).replace(/\//g, '').substring(1,3);
 			} else {
-				// $("#warningModal .modal-title").text("검색된 SPC 가 없습니다.");
-				// $("#warningModal").modal("show");
+				startDay = dateOpt.startDay;
+				endDay = dateOpt.endDay;
+			}
+
+			let option = {
+				url: 'http://iderms.enertalk.com:8443/spcs/transactions',
+				type: action,
+				data: {
+					'oid' : oid,
+					'spcIds' : spcIdArr,
+					'startDay': startDay,
+					'endDay' : endDay
+				},
+				async: true
+			}
+
+			$.ajax(option).done(function (json, textStatus, jqXHR) {
+				if (json.data.length > 0) {
+					let data = json.data;
+					transactionInfo = groupBy(data, "withdraw_day");
+					// console.log("byDate===", groupBy(data, "withdraw_day"));
+					// console.log("byId===", groupBy(data, "spc_id"));
+					// console.log("byStatus===", groupBy(data, "status"));
+					// console.log("groupBy===", groupedMap)
+					// data.map(x => {
+
+					// 	const key = keyGetter(x);
+					// 	const collection = map.get(key);
+					// 	console.log("key===", key)
+					// 	// if(!isEmpty(x.status)){
+					// 	// 	let obj = {};
+					// 	// 	if(x.status == 1){
+					// 	// 		obj.id = x.spc_id;
+					// 	// 		obj.status = statusList[0];
+					// 	// 	} else if(x.status == 2){
+					// 	// 		obj.id = x.spc_id;
+					// 	// 		obj.status = statusList[1];
+					// 	// 	} else if(x.status == 3) {
+					// 	// 		obj.id = x.spc_id;
+					// 	// 		obj.status = statusList[2];
+					// 	// 	}
+					// 	// 	transactionInfoList.push(obj);
+					// 	// }
+					// });
+					// console.log("arr===", transactionInfoList);
+				}
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
+		} else {
+			// $("#warningModal .modal-title").text("검색된 SPC 가 없습니다.");
+			// $("#warningModal").modal("show");
+		}
+	}
+
+	const groupBy = function (objectArray, property) {
+		return objectArray.reduce(function (acc, obj) {
+			var key = obj[property];
+			if (!acc[key]) {
+			acc[key] = [];
+			}
+			acc[key].push(obj);
+			return acc;
+		}, {});
+	}
+		
+	//기본세팅
+	const pageInit = function () {
+		let html = '';
+		let year = today.getFullYear();
+		let month = today.getMonth() + 1;
+
+		$('#datepicker1').datepicker('setDate', 'today');
+		$('#year > button').html(year + '년<span class="caret"></span>').data('value', year);
+		$('#month > button').html(month + '월<span class="caret"></span>').data('value', month);
+
+		for (let i = 0; i < 5; i++) {
+			let bfYear = new Date(year - i, month + 1);
+			let select = i == 0 ? 'on' : '';
+			html += '<li data-value="' + bfYear.getFullYear() + '" class="' + select + '"><a href="#">' + bfYear.getFullYear() + '년 </a></li>';
+		}
+
+		$('#year ul').empty().append(html);
+
+		buildCalendar();
+	};
+
+	// calendar frame ONLY (no data)
+	const buildCalendar = function () { //현재 달 달력 만들기
+		let doMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+		let lastDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+		let tbCalendar = document.getElementById('calendar');
+		const spcOpt = document.getElementById("spcList");
+		const clone = spcOpt.cloneNode(true).innerHTML;
+		document.getElementById("spcList").innerHTML = "";
+
+		getSpcList(clone);
+		// const spcOpt = $("#spcList");
+		// const spcClone = spcOpt.clone().html();
+		// $("#spcList").empty();
+		while (tbCalendar.rows.length > 1) {
+			tbCalendar.deleteRow(tbCalendar.rows.length - 1);
+		}
+
+		let row = tbCalendar.insertRow();
+		let cell = null;
+		let cnt = 0;
+		const thisMonth = doMonth.getMonth() + 1 + '월';
+
+		for (let i = 0; i < doMonth.getDay(); i++) {
+			cell = row.insertCell();
+			cnt = cnt + 1;
+		}
+
+		for (let i = 1; i <= lastDate.getDate(); i++) {
+			cell = row.insertCell();
+			cell.innerHTML = '<h2 class="date" data-day="' + doMonth.format('yyyyMM') + i + '">' + i + '</h2><ul class="alarm-list"></ul>';
+			cnt = cnt + 1;
+
+			if (cnt % 7 == 0) {
+				row = calendar.insertRow();
+			}
+			/* today */
+			if (today.getFullYear() == date.getFullYear() &&
+				today.getMonth() == date.getMonth() &&
+				i == date.getDate()) {
+				cell.setAttribute('class', 'today');
 			}
 		}
 
+		$('.sch_btn .btn_type03:last-of-type').text(thisMonth);
+		$('#modalTitle').text(thisMonth);
+		$('#year > button').html(doMonth.getFullYear() + '년<span class="caret"></span>').data('value', doMonth.getFullYear());
+		$('#month > button').html(doMonth.getMonth() + 1 + '월<span class="caret"></span>').data('value', doMonth.getMonth() + 1);
+	};
 
-		const groupBy = function (objectArray, property) {
-			return objectArray.reduce(function (acc, obj) {
-				var key = obj[property];
-				if (!acc[key]) {
-				acc[key] = [];
+	const maintenance = function (spcNameArr, action, jobId) {
+		let option = {};
+
+		if (action == 'get') {
+			let optTransaction = {};
+			let d = $('#year button').data('value') + ('0' + $('#month button').data('value'))
+			let yyyy = d.slice(0, 4);
+			let mm = d.slice(4, 7);
+			let spcId = '';
+			let endDay = '';
+
+			if(!isEmpty(spcNameArr)){
+				var spcNameList = spcNameArr;
+				if(typeof spcNameArr == 'number' ){
+					spcId = spcNameArr;
+				} else {
+					spcId = spcNameArr.map(x => x.spcId).join();
 				}
-				acc[key].push(obj);
-				return acc;
-			}, {});
+			}
+
+			endDay = yyyy + mm + new Date(yyyy, mm, 0).getDate();
+			startDay = yyyy + mm + '01';
+
+			// GET req
+			option = {
+				url: 'http://iderms.enertalk.com:8443/spcs/maintenance',
+				type: action,
+				dataType: 'json',
+				data: {
+					oid: oid,
+					type: "money",
+					like_yyyymm: yyyy + mm
+				},
+				async: true
+			};
+
+			console.log("option===", option)
+			optTransaction = {
+				url: 'http://iderms.enertalk.com:8443/spcs/transactions',
+				type: action,
+				dataType: 'json',
+				data: {
+					'oid' : oid,
+					'spcIds' : spcId,
+					'startDay': startDay,
+					'endDay' : endDay
+				},
+				async: true
+			};
+
+			if (jobId != undefined) {
+				option.data.jobId = jobId;
+			}
+
+			$.when($.ajax(option),$.ajax(optTransaction)).done(function (result1, result2) {
+				var item1 = result1[0].data;
+				var item2 = groupBy(result2[0].data, "withdraw_day");
+				console.log("item1---", item1)
+				fillCalendar(item1, item2, spcNameList);
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
+
+		} else {
+			// modalPopInit(item1, item2, spcNameList);
+			if (action == 'post' || action == 'patch') {
+				let data = setData();
+				let url = '';
+
+				if (action == 'patch') {
+					let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
+					option = {
+						url: 'http://iderms.enertalk.com:8443/spcs/maintenance/'  + jobId + '?oid=' + oid,
+						dataType: 'json',
+						type: action,
+						contentType: "application/json",
+						traditional: true,
+						data: JSON.stringify(data)
+					};
+					// url = 'http://iderms.enertalk.com:8443/spcs/bankbook/' + jobId + '?oid=' + oid + jobText;
+					delete data.spc_id;
+				} else {
+					// POST req
+					option = {
+						url: 'http://iderms.enertalk.com:8443/spcs/maintenance?oid=' + oid,
+						dataType: 'json',
+						type: action,
+						contentType: "application/json",
+						traditional: true,
+						data: JSON.stringify(data)
+					};
+					console.log("dat---", option.data)
+				}
+			} else {
+				// DELETE req
+				if (!confirm('삭제 하시겠습니까?')) {
+					return false;
+				}
+				let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
+				option = {
+					url: 'http://iderms.enertalk.com:8443/spcs/maintenance/' + jobId + '?oid=' + oid,
+					type: action,
+					data: {
+						oid: oid,
+						jobId: jobId,
+					}
+				};
+			}
+
+			$.ajax(option).done(function (json) {
+				console.log("json---", json)
+				$("#spcAlarmModal").modal("hide");
+				maintenance(spcNameArr, 'get');
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				alert('처리 중 오류가 발생했습니다.');
+				console.log("jqXHR===", jqXHR)
+				return false;
+			});
 		}
 		
-	//등록&수정 용 데이터 세팅
+
+		// let list = $('#calendar .alarm-list').find(".link");
+		// console.log("list---", list)
+		
+	};
+
+	const fillCalendar = function (mData, tData, spcNameList) {
+		var calendar = $('#calendar .alarm-list');
+		var modalData = $('#detailInfoModal').find(".alarm-list");
+		var spcList = spcNameList;
+		calendar.empty();
+		modalData.empty();
+
+		if (mData.length > 0) {
+			mData.forEach(function (v, k) {
+				const filterArr = ["1", "2", "3", "4"];
+				let job_date = new Date(v.job_date).format('dd');
+				let job_type = v.job_type;
+				let sid = v.spc_id;
+				let job_info = '';
+				let tableStr = '';
+				let bulletStr = '';
+
+				// console.log("alarmData===", v)
+				return new Promise((resolve, reject) => {
+					resolve(JSON.parse(v.job_info))
+				}).then(result => {
+					job_info = result;
+				}).catch(function(e) {
+						//jQuery doesn't throw real errors so use catch-all
+						console.log(e);
+				}).finally(()=> {
+					// console.log("job_info===", job_info)
+					// console.log("v.spc_id===", v.spc_id)
+					if (filterArr.indexOf(job_type)>-1){
+						tableStr = '<li data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + job_info.spcName + '" class="link bu t' + job_type + '">[' + job_info.spcName + '] ' + job_Name(job_type) + '</li>';
+					} else {
+						tableStr = '<li data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + job_info.spcName + '" class="link bu t' + job_type + '">[' + job_info.spcName + '] ' + job_Name(job_type) + '</li>';
+					}
+					bulletStr = '<span data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + job_info.spcName + '" class="bu t' + job_type + '">[ ' + job_info.spcName + ' ] ' + job_Name(job_type) + '</span><span class="fr btn_next"></span>';
+					calendar.eq(Number(job_date) - 1).append(tableStr);
+					modalData.append(
+						'<li class="link alarm-item" data-id="'+v.id+'">'
+							+ bulletStr
+							+ '<br>'
+							+ ''
+						+'</li>'
+					)
+				});
+			});
+		}
+
+		if (!isEmpty(tData)) {
+			Object.entries(tData).map((item, index) => {
+				// "반송" : 0,  "승인 대기" : 1", "승인 중" : "2", "승인완료": "3"
+				let statusList = [
+					{ id: 0, val: "출금 - 반송" },
+					{ id: 1, val: "출금 - 승인 대기" },
+					{ id: 2, val: "출금 - 승인 중" },
+					{ id: 3, val: "출금 - 승인 완료" },
+					{ id: 4, val: "입금" }
+				];
+				let tStr = ''
+				let bStr = '';
+				let firstStatus = item[1][0].status;
+				let bulletIdx = '';
+				let d = item[0].slice(-2);
+				let spcName = '';
+
+				// console.log("pair---", spcPair)
+				spcList.some(x => {
+					if(x.spcId === item[1][0].spc_id) {
+						spcName = x.spcName;
+					}
+				});
+				if(item[1][0].status == 1){
+					bulletIdx = "2";
+				} else if(item[1][0].status == 2){
+					bulletIdx = "3";
+				} else if(item[1][0].status == 3) {
+					bulletIdx = "1";
+				}
+				// console.log( 'item[1]===', item[1])
+				//    item[1][0].spc_id
+				if(firstStatus !=0){
+					if(item[1].length>1){
+						tStr = '<li data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + item[1].length + '건</li>';
+						bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + item[1].length + '건</span><span class="fr btn_next"></span>';
+					} else {
+						tStr = '<li data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + '</li>';
+						bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + '</span><span class="fr btn_next"></span>';
+					}
+					calendar.eq(Number(d) - 1).append(tStr);
+					modalData.append(
+						'<li class="alarm-item link">'
+							+ bStr
+							+ '<br>'
+							+ ''
+						+'</li>'
+					)
+				}
+				// console.log("calendar===", calendar.find("li"))
+			}); 
+		}
+
+		setTimeout(function(){
+			console.log("mData===", mData)
+			calendar.find(".link").on("click", function(){
+				var self = $(this);
+				if(isEmpty(self.attr("data-jobId"))){
+					// console.log("No jobId==", self.attr("data-jobId"))
+					modalPopInit();
+				} else {
+					// console.log("YES jobId==", self.attr("data-jobId"))
+					let singleSpcId = self.data("id");
+					let jobId = self.data("jobId");
+					modalPopInit(mData, singleSpcId, jobId);
+					// $("#spcAlarmForm").find(".modal-header").text("주요 일정 알림 수정");
+				}
+				// if($("#detailInfoModal").hasClass("active")) {
+				// 	$("#detailInfoModal").removeClass("active");
+				// }
+				// $("#spcAlarmModal").modal("show");
+			});
+
+			$("#addAlarmBtn").on("click", function(){
+				modalPopInit();
+				// $("#spcAlarmModal").modal("show");
+				// if($("#detailInfoModal").hasClass("active")) {
+				// 	$("#detailInfoModal").removeClass("active");
+				// }
+			});
+		}, 300);
+
+	};
+
+	// 등록 & 수정 용 데이터 세팅
 	const setData = function () {
 		let jsonData = {};
 		let job_info = {};
@@ -503,25 +641,20 @@
 		$('#spcAlarmModal input, textarea').each(function (index, element) {
 			if ($.inArray($(this).prop('name'), job_info_Array) > -1) {
 				job_info[$(this).prop('name')] = String($(this).val());
-
-				if ($(this).prop('name') == 'spcName') {
-					$(this).val() != '' ? $(this).parent().find('.warning').addClass('hidden') : $(this).parent().find('.warning').removeClass('hidden');
-				}
 				if ($(this).prop('name') == 'worker'){
 					$(this).val() != '' ? $(this).parent().find('.warning').addClass('hidden') : $(this).parent().find('.warning').removeClass('hidden');
 				}
-
 			} else {
-				if ($(this).prop('name') == 'job_date') {
-					let jobDate = $(this).datepicker('getDate');
-					$(this).val() != '' ? $(this).parent().find('.warning').addClass('hidden') : $(this).parent().find('.warning').removeClass('hidden');
-					jsonData[$(this).prop('name')] = jobDate.toISOString();
-				} else if ($(this).prop('name').match('alarm')) {
-					jsonData.job_info[$(this).prop('name')] = String($(this).val());
-				} else if ($(this).prop('name') == 'repeat_end') {
-					jsonData[$(this).prop('name')] = new Date($(this).val()).toISOString();
+				// repeat_end
+				if ($(this).hasClass('hasDatepicker')) {
+					let pickedDate = $(this).datepicker('getDate');
+					if (!isEmpty(pickedDate)) {
+						jsonData[$(this).prop('name')] = pickedDate.toISOString();
+					} else {
+						$(this).val() != '' ? $(this).parent().find('.warning').addClass('hidden') : $(this).parent().find('.warning').removeClass('hidden');
+					}
 				} else {
-					jsonData[$(this).prop('name')] = String($(this).val());
+					jsonData[$(this).prop('name')] = $(this).val();
 				}
 			}
 		});
@@ -530,14 +663,18 @@
 			if ($.inArray($(this).parent().prop('id'), job_info_Array) > -1) {
 				job_info[$(this).parent().prop('id')] = String($(this).data('value'));
 			} else {
-				if ($(this).prop('id') == 'repeat_interval') {
-					jsonData[$(this).parent().prop('id')] = Number($(this).data('value'));
+				// console.log("this---", $(this), "val---", $(this).data("value"))
+				if($(this).parent().is("#repeat_yn")){
+					jsonData[$(this).parent().prop('id')] = String($(this).data('value'));
+					// console.log("this---", $(this), "val---", $(this).data("value"))
 				} else {
 					jsonData[$(this).parent().prop('id')] = String($(this).data('value'));
 				}
 			}
 		});
-	
+		if ($('#repeat_yn button').data('value') == 'N') {
+			jsonData['repeat_end'] = jsonData['job_date'];
+		}
 		// if($(this).prop('name') == 'worker') {
 		// 		$(this).val() != '' ? $(this).parent().find('.warning').addClass('hidden') : $(this).parent().find('.warning').removeClass('hidden');
 		// 	}
@@ -547,135 +684,17 @@
 		jsonData.updated_by = loginId;
 		jsonData.type = "money";
 		
-		console.log('jsonData===', jsonData)
+		// console.log('jsonData===', jsonData)
 		return jsonData;
 	};
 
-	//달력에 그린다.
-	const fillCalendar = function (data) {
-		var calendar = $('#calendar .date');
-		var modalData = $('#detailInfoModal').find("ul.detail_list");
-		// "반송" : 0,  "승인 대기" : 1", "승인 중" : "2", "승인완료": "3"
-
-		$('#calendar td a').remove();
-		modalData.empty();
-
-		// t.map(x => {
-		// 	// let obj = {};
-		// 	let statusList = ["출금 - 승인 대기", "출금 - 승인 중", "출금 - 승인 완료"];
-
-		// 	console.log("t===", x)
-		// 	// if(x.status == 1){
-		// 	// 	obj.id = x.spc_id;
-		// 	// 	obj.status = statusList[0];
-		// 	// } else if(x.status == 2){
-		// 	// 	obj.id = x.spc_id;
-		// 	// 	obj.status = statusList[1];
-		// 	// } else if(x.status == 3) {
-		// 	// 	obj.id = x.spc_id;
-		// 	// 	obj.status = statusList[2];
-		// 	// }
-		// });
-
-
-		if (data.length > 0) {
-			let pairArr = spcPair;
-			Object.entries(transactionInfo).map((item, index) => {
-			// console.log("item0---", item[0])
-			// console.log("item1---", item[1][0] )
-				let statusList = ["출금 - 반송", "출금 - 승인 대기", "출금 - 승인 중", "출금 - 승인 완료"];
-				let tStr = ''
-				let bStr = '';
-				let firstStatus = item[1][0].status
-				let d = item[0].slice(-2);
-				let spcName = '';
-				// console.log("pair---", spcPair)
-				spcPair.some(x => {
-					if(x.spcId === item[1][0].spc_id) {
-						spcName = x.spcName;
-	
-					}
-				});
-				console.log( '2===', item[1])
-				//    item[1][0].spc_id
-				if(firstStatus !== 0){
-					if(item[1].length>1){
-						tStr += '<a href="javascript:showMore('+ item[1] +');"><p data-value="' + item[1][0].spc_id + '" class="bu t' + firstStatus + '">[' + spcName + ' ] 외 + ' + item[1].length + '</p></a>';
-						bStr = '<span data-value="' + item[1][0].spc_id + '" class="bu t' + firstStatus + '">[' + spcName + ' ] 외 + ' + item[1].length + '</span><span class="fr btn_next"></span>';
-					} else {
-						tStr += '<p data-value="' + item[1][0].spc_id + '" class="bu t' + firstStatus + '">[' + spcName + ' ]</p>';
-						bStr = '<span data-value="' + item[1][0].spc_id + '" class="bu t' + firstStatus + '">[' + spcName + ' ]</span><span class="fr btn_next"></span>';
-					}
-				}
-				calendar.eq(Number(d) - 1).append(tStr);
-				modalData.append(
-					'<li class="single_item">'
-						+ bStr
-						+ '<br>'
-						+ ''
-					+'</li>'
-				)
-			});
-			data.forEach(function (v, k) {
-				const filterArr = ["1", "2", "3"];
-				let job_date = new Date(v.job_date).format('dd');
-				let job_type = v.job_type;
-				let sid = v.spc_id;
-				let job_info = '';
-				let tableStr = '';
-				let bulletStr = '';
-				let spcStr = '';
-				let t = transactionInfo;
-				// console.log("v==", v.job_date)
-
-				return new Promise((resolve, reject) => {
-					resolve(JSON.parse(v.job_info))
-				}).then(result => {
-					job_info = result;
-				}).catch(function(e) {
-						//jQuery doesn't throw real errors so use catch-all
-						console.log(e);
-				}).finally(()=> {
-					if (filterArr.indexOf(job_type)>-1){
-						tableStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '" class="disabled"><p class="bu t' + job_type + '">[' + job_info.spcName + ']' + job_Name(job_type) + '</p></a>';
-					} else {
-						tableStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '"><p class="bu t' + job_type + '">[' + job_info.spcName + ']' + job_Name(job_type) + '</p></a>';
-					}
-					bulletStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');"><span class="bu t' + job_type + '">[ ' + job_info.spcName + ' ] ' + job_Name(job_type) + '</span><span class="fr btn_next"></span></a>';
-					console.log("job_date===", job_date)
-					calendar.eq(Number(job_date) - 1).append(tableStr);
-					modalData.append(
-						'<li class="single_item" data-id="'+v.id+'">'
-							+ bulletStr
-							+ '<br>'
-							+ ''
-						+'</li>'
-					)
-				});
-			});
-			// TO DO!!!!!!!!!  show more btn
-			// calendar.find("p.bu").each(function () {
-			// 	$(this).on("mouseover click", function(){
-			// 		$("#popoverModal").addClass("active");
-			// 	}).on("mouseleave", function(){
-			// 		$("#popoverModal").removeClass("active");
-			// 	})
-			// });
-			$("#addAlarmBtn").on("click", function(){
-				$("#detailInfoModal").removeClass("active");
-				$("#spcAlarmModal").modal("show");
-			});
-		}
-
-	};
-
-	const checkCalendarVisual = function () {
-		const checkType = $.makeArray($(':checkbox[name="type"]:checked').map(
-			function () {
+	const searchBySpcName = function () {
+		const checkType = $.makeArray($(':checkbox[name="type"]:checked').map(function () {
 				return $(this).val();
-			}));
+			}
+		));
 
-		$('#calendar td a p.bu').each(function () {
+		$('#calendar td .bu').each(function () {
 			let clsName = $(this).attr('class').replace('bu t', '').trim();
 			let spcName = $(this).html().match(/\[(.*?)\]/)[1];
 			if ($.inArray(clsName, checkType) > -1) {
@@ -694,7 +713,7 @@
 		});
 	};
 
-	const modalPopInit = function (data) {
+	const modalPopInit = function (data, spcNameList, jobId) {
 		const modal = $('#spcAlarmModal');
 		const modalForm = $('#spcAlarmForm');
 		const title = modal.find('h2');
@@ -705,18 +724,20 @@
 		const addScheduleBtn = $('#addScheduleBtn');
 		const deleteScheduleBtn = $('#deleteScheduleBtn');
 		const warning = $('#spcAlarmModal').find('.warning');
-		// let modalData = $("#popoverModal").find("ul.detail_list");
+		// let modalData = $("#popoverModal").find("ul.alarm-list");
 
 		repeat_cycle.data('value', '');
 		repeat_cycle.parents('div.dropdown').siblings().addClass('hidden');
 		repeat_wrapper.removeClass("short");
 
-		$('#detailInfoModal').removeClass('active')
+
 		$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
 		warning.addClass('hidden');
 
 		if (data == undefined) {
-			console.log("undefined===", data);
+			$("#spcList").prev().append("<span class='caret'></span>");
+			$("#spcList").removeClass("hidden");
+			console.log("modalPopInit register===");
 			unCheckAll(modalForm);
 			//팝업 오픈시 value 초기화
 			input.each(function () {
@@ -729,13 +750,18 @@
 			// });
 
 			deleteScheduleBtn.addClass('hidden');
-			addScheduleBtn.attr('onclick', 'maintenance(\'post\');').text('등록');
+			addScheduleBtn.text('등록');
+			addScheduleBtn.on("click", function(){
+				maintenance(undefined, 'post');
+			});
+			// addScheduleBtn.attr('onclick', 'maintenance(\'post\');').text('등록');
 		} else {
-			console.log("data===", data);
+			// console.log("data===", data[0]);
 			title.text('주요 일정 알림 수정');
 			setJsonAutoMapping(data[0], 'spcAlarmModal');
 			setJsonAutoMapping(JSON.parse(data[0].job_info), 'spcAlarmModal');
-
+			// $("#spcList").prev().data("value", data[0].spc_id);
+			$("#spcList").addClass("hidden").prev().data("value", data[0].spc_id);
 			let jobDate = new Date(data[0].job_date);
 			$('#job_date').datepicker('setDate', jobDate);
 
@@ -755,7 +781,7 @@
 				$('#repeat_yn').siblings().removeClass('hidden');
 
 				$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
-				$('#repeat_end').datepicker({
+				$('#repeat_end').removeClass('hasDatepicker').datepicker({
 					showOn: 'both',
 					buttonImageOnly: true,
 					dateFormat: 'yy-mm-dd',
@@ -771,11 +797,23 @@
 				});
 			}
 
-			deleteScheduleBtn.removeClass('hidden').attr('onclick', 'maintenance(\'delete\', \'' + data[0].id + '\' );');
-			addScheduleBtn.attr('onclick', 'maintenance(\'patch\', \'' + data[0].id + '\' );').text('수정');
+			// deleteScheduleBtn.removeClass('hidden').attr('onclick', 'maintenance(\'delete\', \'' + data[0].id + '\' );');
+			deleteScheduleBtn.removeClass('hidden');
+			deleteScheduleBtn.on("click", function(){
+				maintenance(spcNameList, 'delete', data[0].id);
+			});
+			addScheduleBtn.text('수정');
+			addScheduleBtn.on("click", function(){
+				console.log("addSchedule====")
+				maintenance(spcNameList, 'patch', data[0].id);
+			});
+			// addScheduleBtn.attr('onclick', 'maintenance(' + spcNameList + '\'patch\', \'' + data[0].id + '\' );').text('수정');
 		}
 		modal.modal();
-
+		$("#spcAlarmModal").modal("show");
+		if($("#detailInfoModal").hasClass("active")) {
+			$("#detailInfoModal").removeClass("active");
+		}
 	}
 
 	const job_Name = function (type) {
@@ -811,7 +849,12 @@
 	};
 
 	const repeatEnd = function (selectedDate) {
+		$('#repeat_yn').find("li").on("click", function(){
+			if($("#repeat_yn").find(".dropdown-toggle").data("value") != $(this).data("value")){
+				$("#repeat_end").val("");
+			}
 
+		})
 		if (selectedDate == undefined && $('#job_date').datepicker('getDate') != null) {
 			selectedDate = $('#job_date').datepicker('getDate');
 		} else if (selectedDate == undefined && $('#job_date').datepicker('getDate') == null) {
@@ -859,7 +902,9 @@
 					selDate.setDate(selDate.getDate() + 7);
 				}
 
-				$('#repeat_end').val(selDate.format('yyyy-MM-dd'));
+				// $('#repeat_end').val(selDate.format('yyyy-MM-dd'));
+
+				$('#repeat_end').val(selDate.toLocaleDateString());
 
 
 				if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
@@ -868,12 +913,67 @@
 				}
 			}
 		}
-
 	}
 
-	const afterDatePick = function() {
-		repeatEnd();
+	const rtnDropdown = function (buttonId) {
+		var obj = $('#' + buttonId),
+			val = obj.find('button').data('value');
+		if (buttonId == 'repeat_yn') {
+			if (val == 'Y') {
+				obj.parents('.flex_start3').addClass('short');
+				obj.siblings().removeClass('hidden');
+				obj.next('.tx_inp_type').find('input').val('');
+				$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
+			} else {
+				obj.parents('.flex_start3').removeClass('short');
+				obj.siblings().addClass('hidden');
+				obj.next('.tx_inp_type').find('input').val(0);
+				$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+			}
+			dropDownInit($('#repeat_unit'));
+			repeatEnd();
+		} else if (buttonId == 'alarmSetup') {
+			if ($('#alarmDate').hasClass('hasDatepicker')) {
+				$('#alarmDate').datepicker('destroy').removeClass('hasDatepicker').addClass('disabled').removeAttr('placeholder');
+			}
+			if (val != '직접 설정') {
+				let jobDate = $('#job_date').datepicker('getDate');
+				if (jobDate == null) {
+					$('#alarmDate').val('');
+				} else {
+					jobDate.setDate(jobDate.getDate() - val);
+					$('#alarmDate').val(jobDate.format('yyyy-MM-dd'));
+				}
+			} else {
+				$('#alarmDate').datepicker({
+					showOn: "both",
+					buttonImageOnly: true,
+					dateFormat: 'yy-mm-dd',
+					beforeShow: function () {
+						let minDate = $('#job_date').datepicker('getDate');
+						if (minDate != '') {
+							$('#alarmDate').datepicker('option', 'minDate', minDate);
+						}
+
+						let maxDate = $('#repeat_end').datepicker('getDate');
+						if (maxDate != '') {
+							$('#alarmDate').datepicker('option', 'maxDate', maxDate);
+						}
+					}
+				}).removeClass('disabled').attr('placeholder', '직접선택');
+				$('#alarmDate').val('');
+			}
+		}
 	}
+
+	const afterDatePick = function (inputName) {
+		if(inputName == 'job_date') {
+			rtnDropdown('alarmSetup');
+		} else {
+			repeatEnd();
+		}
+	}
+
 	function beginningOfMonth(myDate){    
 		let date = new Date(myDate);
 		date.setDate(1)
@@ -900,7 +1000,7 @@
 		<h2 class="popover_title"></h2>
 	</div>
 	<div class="modal-body">
-		<ul class="detail_list">
+		<ul class="alarm-list">
 
 		</ul>
 	</div>
@@ -964,17 +1064,17 @@
 							<div class="col-lg-2 col-md-2 col-sm-3"><span class="input_label">SPC 선택</span></div>
 
 							<div class="col-lg-10 col-md-10 col-sm-9 px-0 flex_start">
-								<div class="dropdown"><!--
-								--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button><!--
+								<div id="spc_id" class="dropdown"><!--
+								--><button name="spcName" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button><!--
 								--><ul id="spcList" class="dropdown-menu unused center" role="menu"><li data-name="*spcName*" data-value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul><!--
 								--><small class="hidden warning">SPC를 선택해 주세요.</small>
 								</div>
 								
-								<div class="tx_inp_type mr-12">
+								<!-- <div class="tx_inp_type mr-12">
 									<input type="text" id="spcName" name="spcName" value="" placeholder="입력" class="required" autocomplete="off">
 									<input type="hidden" id="spc_id" name="spc_id">
 									<small class="hidden warning">SPC를 선택해 주세요</small>
-								</div>
+								</div> -->
 								<!-- <button type="button" class="btn_type">검색</button> -->
 							</div>
 						</div>
@@ -984,9 +1084,8 @@
 							</div>
 							<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 								<div class="dropdown placeholder" id="job_type">
-									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="알림 항목 선택"><span class="caret"></span></button>
+									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="알림 항목 선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
-										<li data-value="4"><a href="javascript:void(0);">입급</a></li>
 										<li data-value="5"><a href="javascript:void(0);">이자 지급일</a></li>
 										<li data-value="6"><a href="javascript:void(0);">보장발전시간 정산일</a></li>
 										<li data-value="7"><a href="javascript:void(0);">보험 갱신일</a></li>
@@ -994,10 +1093,12 @@
 										<li data-value="9"><a href="javascript:void(0);">임대료 지급일</a></li>
 										<li data-value="10"><a href="javascript:void(0);">대리기관 수수료 지급일</a></li>
 										<li data-value="11"><a href="javascript:void(0);">대출상환 만기일</a></li>
-<!-- 
+<!--
 										<li data-value="1"><a href="javascript:void(0);">출금-승인 완료</a></li>
 										<li data-value="2"><a href="javascript:void(0);">출금-승인중</a></li>
-										<li data-value="3"><a href="javascript:void(0);">입급</a></li> -->
+										<li data-value="3"><a href="javascript:void(0);">입급</a></li>
+										<li data-value="4"><a href="javascript:void(0);">입급</a></li>
+-->
 									</ul>
 									<small class="hidden warning">항목을 선택해 주세요</small>
 								</div>
@@ -1007,7 +1108,7 @@
 							</div>
 							<div class="col-lg-4 col-md-4 col-sm-9 flex_start3 px-0">
 								<div class="dropdown" id="repeat_yn">
-									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="점검 선택">알림 종류 선택<span class="caret"></span></button>
+									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="점검 선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li data-value="Y"><a href="javascript:void(0);">정기 알림</a></li>
 										<li data-value="N"><a href="javascript:void(0);">일시 알림</a></li>
@@ -1077,7 +1178,7 @@
 							<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 								<div class="tx_inp_type">
 									<input type="text" id="worker" name="worker" placeholder="입력" maxlength="10">
-									<small class="hidden warning">항목을 선택해 주세요</small>
+									<small class="hidden warning">담당자를 선택해 주세요</small>
 								</div>
 							</div>
 							<div class="col-lg-2 col-md-2 col-sm-3">
@@ -1127,7 +1228,7 @@
 						<div class="row">
 							<div class="col-12 end">
 								<div class="btn_wrap_type02">
-									<button type="button" id="deleteScheduleBtn" class="btn_type04 fl hidden" onclick="maintenance('delete', $('#spc_id').val() );">삭제</button>
+									<button type="button" id="deleteScheduleBtn" class="btn_type04 fl hidden">삭제</button>
 									<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
 									<button type="button" id="addScheduleBtn" class="btn_type">등록</button>
 								</div>
@@ -1159,16 +1260,17 @@
 					<input type="checkbox" id="chk_op03" name="type" value="3" checked>
 					<label for="chk_op03">출금 - 승인 중</label>
 				</div>
+				<div class="chk_type c4">
+					<input type="checkbox" id="chk_op04" name="type" value="4" checked>
+					<label for="chk_op04">입금</label>
+				</div>
 
 				<div class="flex_wrapper mt40">
 					<h2 class="ntit">주요 일정</h2>
 					<button type="button" id="addAlarmBtn" class="btn_add">알림 등록</button>
 				</div>
 
-				<div class="chk_type c4">
-					<input type="checkbox" id="chk_op04" name="type" value="4" checked>
-					<label for="chk_op04">입금</label>
-				</div>
+
 				<div class="chk_type c5">
 					<input type="checkbox" id="chk_op05" name="type" value="5" checked>
 					<label for="chk_op05">이자 지급일</label>
@@ -1198,32 +1300,31 @@
 					<label for="chk_op11">대출상환 만기일</label>
 				</div>
 			</div>
-			<div class="sch_inp_area">
+			<div class="sch_inp_area flex_wrapper">
 				<h2 class="ntit">SPC</h2>
-				<div class="tx_inp_type">
-					<input type="text" id="searchName" name="searchName" placeholder="입력">
-				</div>
+				<span class="desc">spc 이름을 입력해 주세요.</span>
 			</div>
+			<div class="tx_inp_type"><input type="text" id="searchName" name="searchName" placeholder="입력"></div>
 		</div>
 	</div>
 	<div class="col-lg-9 col-md-8 col-sm-12">
 		<div class="indiv pd_type">
 			<div class="schedule_area">
 				<div class="sch_top_info clear">
-					<div class="fl sch_btn">
-						<button type="button" class="btn_type03 active">오늘</button>
-						<button type="button" class="btn_prev_mon">prev</button>
-						<button type="button" class="btn_next_mon">next</button>
-						<button type="button" id="detailModalTrigger" class="btn_type03" onclick="$('#detailInfoModal').toggleClass('active')"></button>
-					</div>
+					<div class="fl sch_btn"><!--
+					--><button type="button" class="btn_type03 active">오늘</button><!--
+					--><button type="button" class="btn_prev_mon">prev</button><!--
+					--><button type="button" class="btn_next_mon">next</button><!--
+					--><button type="button" id="detailModalTrigger" class="btn_type03" onclick="$('#detailInfoModal').toggleClass('active')"></button><!--
+				--></div>
 					<div class="dropdown_modal modal-dialog active" id="detailInfoModal">
 						<div class="modal-content spc-detail-content">
 							<div class="modal-header">
 								<h2 id="modalTitle" class="fl"></h2>
-								<a href="#" class="btn_type02 fr">상세보기</a>
+								<!-- <a href="#" class="btn_type02 fr">상세보기</a> -->
 							</div>
 							<div class="modal-body">
-								<ul class="detail_list"></ul>
+								<ul class="alarm-list"></ul>
 							</div>
 							<div class="btn_wrap_type05">
 								<button type="button" id="confirmBtn" class="btn_type" data-dismiss="modal" data-target="#detailInfoModal">확인</button>

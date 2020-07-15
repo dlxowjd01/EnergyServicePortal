@@ -10985,12 +10985,12 @@ button.tx_file {
 	font-size: 14px;
 }
 
-.sch_btm_area table td a.disabled {
-	cursor: inherit;
+.sch_btm_area table td .link {
+	cursor: pointer;
 }
 
-.sch_btm_area table td a.disabled:hover {
-	opacity: 1;
+.sch_btm_area table td .link:hover {
+	opacity: 0.8;
 }
 
 .sch_btm_area table td.today {
@@ -11657,6 +11657,12 @@ th .btn_align {
 	margin: 15px 0;
 }
 
+.desc {
+	margin-top: 6px;
+	font-size: 12px;
+	color: var(--color4);
+}
+
 /* spc 출금 요청서 작성||수정 */
 .spc-transaction .spc_bal_post table {
 	border-collapse: collapse;
@@ -11977,46 +11983,47 @@ table.table-footer tfoot td.light {
 }
 
 .modal-content.spc-detail-content .modal-header {
-	padding: 30px 7px 0;
+	padding: 30px 7px 15px;
 }
 
 .modal-content.spc-detail-content {
 	padding-top: 5px;
 }
 
-.modal-content.spc-detail-content li.single_item {
+.modal-content.spc-detail-content li.alarm-item {
 	padding: 5px 7px;
+	cursor: pointer;
 }
 
-.modal-content.spc-detail-content li.single_item:hover,
-.modal-content.spc-detail-content li.single_item:hover,
-.modal-content.spc-detail-content li.single_item:link,
-.modal-content.spc-detail-content li.single_item:active {
+.modal-content.spc-detail-content li.alarm-item:hover,
+.modal-content.spc-detail-content li.alarm-item:hover,
+.modal-content.spc-detail-content li.alarm-item:link,
+.modal-content.spc-detail-content li.alarm-item:active {
 	background: var(--box-color5);
 }
 
-.modal-content.spc-detail-content li.single_item a {
+.modal-content.spc-detail-content li.alarm-item a {
 	color: var(--color8);
 }
 
-.modal-content.spc-detail-content li.single_item a .btn_next {
+.modal-content.spc-detail-content li.alarm-item a .btn_next {
 	background: url(../img/btn_next_wh.png) no-repeat;
 	width: 24px;
 	height: 24px;
 	display: inline-block;
 }
 
-html.darkmode .modal-content.spc-detail-content li.single_item a .btn_next {
+html.darkmode .modal-content.spc-detail-content li.alarm-item a .btn_next {
 	background: url(../img/btn_next.png) no-repeat;
 }
 
-.single_item .bu {
+.alarm-item .bu {
 	display: inline-block;
 	font-size: 13px;
 	line-height: 24px;
 }
 
-.single_item .bu:before {
+.alarm-item .bu:before {
 	display: inline-block;
 	margin: 0 13px 0 0;
 	font-size: 13px;

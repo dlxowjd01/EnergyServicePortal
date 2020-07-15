@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="darkmode">
 <head>
 	<%@ include file="/decorators/include/layouts/top.jsp"%>
 		<link href="/css/custom-login.css" rel="stylesheet">
@@ -921,11 +921,11 @@
 	</div>
 
 	<script>
+			// window.__THEME_MODE = 'dark'
+			// document.getElementsByTagName('html')[0].classList['add']('darkmode');
+			// document.getElementsByTagName('html')[0].classList[window.__THEME_MODE === 'dark' ? 'add' : 'remove']('darkmode');
+
 		$(function(){
-			window.__THEME_MODE = 'dark'
-			document.getElementsByTagName('html')[0].classList[window.__THEME_MODE === 'dark' ? 'add' : 'remove']('darkmode');
-
-
 			// Sign Up btn click
 			$(".joinBtn").click(function(){
 				$("#loginModal").modal("hide");

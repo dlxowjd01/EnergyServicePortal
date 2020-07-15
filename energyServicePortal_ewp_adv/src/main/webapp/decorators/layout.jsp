@@ -1,12 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
 <!DOCTYPE html>
-<html>
+<html class="darkmode">
 <head>
 <%@ include file="/decorators/include/layouts/top.jsp"%>
 </head>
-<body>
-
+<body class="dark">
 	<div class="outer-wrapper">
 		<%@ include file="/decorators/include/layouts/header.jsp"%>
 		<div id="page-wrapper">
@@ -24,3 +23,6 @@
 
 </body>
 </html>
+<script>
+	// document.getElementsByTagName('html')[0].classList['add']('darkmode');
+</script>
