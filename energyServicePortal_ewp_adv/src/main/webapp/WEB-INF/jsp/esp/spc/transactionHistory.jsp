@@ -43,7 +43,6 @@
 			} else if ($(this).data('value') == 'yearly') {
 				$('#fromDate').datepicker('setDate', '-365');
 			}
-			return false;
 		});
 
 		$('.sort_table th button').click(function(){
@@ -60,7 +59,7 @@
 				// TO DO !!!!! sorting json data
 				tableBody.append(rows[i])
 			}
-			return false;
+			// return false;
 		});
 
 		// sumOptList.find('li').on('click', function(){
@@ -157,7 +156,6 @@
 				});
 				spcArr.shift();
 				selectAll($("#spcList"));
-				setDropdownValue(spcList.find("li"));
 				searchArr.push(spcArr.toString())
 				getDataList(page, searchArr)
 			}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -627,8 +625,8 @@
 					<li class="ml-6">
 						<div class='bx_row aN3'>
 							<h2 class='comp_tit'>입출금 조회 기간</h2>
-							<div class='bx_align mr-30 dropdown'>
-								<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="" value="">선택<span class='caret'></span></button>
+							<div id="dateTerm" class='bx_align mr-30 dropdown'>
+								<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown' data-target="#dateTerm" data-name="선택" value="">선택<span class='caret'></span></button>
 								<ul id="unitOpt" class='dropdown-menu dropdown_offset' role='menu'>
 									<li data-value="yearly"><a href='javascript:void(0)' tabindex='-1'>년</a></li>
 									<li data-value="monthly"><a href='javascript:void(0)' tabindex='-1'>월</a></li>
@@ -666,13 +664,13 @@
 									<li>
 										<a href='javascript:void(0)' tabindex='-1'>
 											<input type='checkbox' id='onHold' value='' data-value='1' name='approvalStatus'>
-											<label for='onHold'>검토 대기</label>
+											<label for='onHold'>승안 대기</label>
 										</a>
 									</li>
 									<li>
 										<a href='javascript:void(0)' tabindex='-1'>
 											<input type='checkbox' id='inProgress' value='' data-value='2' name='approvalStatus'>
-											<label for='inProgress'>검토 중</label>
+											<label for='inProgress'>승인 중</label>
 										</a>
 									</li>
 									<li>
@@ -686,7 +684,7 @@
 							</div>
 							<div class='bx_align dropdown'>
 								<h2 class='comp_tit'>입출금 구분</h2>
-								<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' value="">선택<span class='caret'></span></button>
+								<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown' value="">선택<span class='caret'></span></button>
 								<ul id="transactionType" class='dropdown-menu dropdown_offset' role='menu'>
 									<li data-value='deposit'><a href='javascript:void(0)' tabindex='-1'>입금</a></li>
 									<li data-value='withdraw'><a href='javascript:void(0)' tabindex='-1'>출금</a></li>

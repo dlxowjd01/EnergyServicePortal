@@ -6,6 +6,8 @@
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
 	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
+	const userToken = '<c:out value="${sessionScope.userInfo.token}" escapeXml="false" />';
+	const userInfo = '<c:out value="${sessionScope.userInfo}" escapeXml="false" />';
 
 	$(function() {
 		const withdrawForm = $('#withdrawForm');
@@ -32,7 +34,6 @@
 		unCheckAll(tableBody);
 		getSpcList();
 		calcTotal();
-
 		$("#total").val(totalAmount);
 
 		$("#requestedDate").change(function(){
@@ -236,6 +237,7 @@
 			jsonData.status_changed_by = loginName;
 			jsonData.status_changed_at = new Date().toISOString();
 			jsonData.requested_by = loginName;
+			jsonData.requested_by_uid = userToken;
 			jsonData.requested_at = new Date().toISOString();
 			jsonData.transfer_agent = "tester2"
 

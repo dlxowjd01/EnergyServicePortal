@@ -191,9 +191,13 @@ const initDropdownValue = ($selector) => {
  */
 const setDropdownValue = ($selector) => {
 	$selector.each(function(index, element) {
-		$(this).on("click", function() {
+		let item = $(this).find("li");
+		let btn = $(this).prev();
+		item.on("click", function() {
+			console.log("btn===", btn)
+			console.log("$(this)===", $(this).data('value'))
 			let val = $(this).data('value');
-			$(this).parents().find(".dropdown-toggle").data('value', val);
+			btn.data('value', val);
 		});
 	});
 	return false;

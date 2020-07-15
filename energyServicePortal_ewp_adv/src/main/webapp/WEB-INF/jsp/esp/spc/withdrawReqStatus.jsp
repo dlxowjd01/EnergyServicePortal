@@ -9,7 +9,7 @@
 
 	// unCheckAll($("#reqStatus"));
 	selectAll($("#reqStatus"));
-	setDropdownValue($("#reqStatus").find("li"));
+	setDropdownValue($("#reqStatus"));
 	$(function() {
 		const tableBody = $('#tableBody');
 		const tableCloned = tableBody.find("template.table-body").clone().html();
