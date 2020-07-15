@@ -201,7 +201,8 @@
 					});
 					repeatNumber.sort(); // index 기준으로 순서대로 생성하기위해서 정렬
 					repeatNumber.forEach(function(index) {
-						addRow('addList_affiliation', 'next', index);
+						addRow('addList_affiliation', 'class', index);
+						addRow('addList_affiliation2', 'class', index);
 					});
 					setJsonAutoMapping(maintenance_info, 'maintenanceInfo');
 
@@ -530,14 +531,14 @@
 
 					<tr class="addList_affiliation">
 						<th>등기이사 소속</th>
-						<td>
+						<td class="addList_affiliation entity flex_start">
 							<div class="group_type">
 								<span id="등기이사_소속_[index]"></span>
 								<span id="등기이사_명[index]"></span>
 							</div>
 						</td>
 						<th>등기 기간</th>
-						<td class="flex_start">
+						<td class="addList_affiliation2 entity flex_start">
 							<span id="등기_기간_from[index]"></span> ~ <span id="등기_기간_to[index]"></span>
 							<span id="등기_이사_만료_알림[index]"></span>
 						</td>

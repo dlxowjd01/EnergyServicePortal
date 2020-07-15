@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
+<c:set var="oid" value="${userInfo.oid}"/> <%-- 메뉴 관리용 OID --%>
+<c:set var="task" value="${userInfo.task}"/> <%-- 메뉴 관리용 Task --%>
 <script type="text/javascript">
 	var selViewSiteName = "";
 	$(function () {
@@ -154,7 +156,7 @@
 				</ul>
 				<c:if test="${fn:length(vppList) > 0 || fn:length(drList) > 0}">
 					<ul>
-						<c:if test="${fn:length(vppList) > 0}">
+						<c:if test="${oid ne 'trust' and fn:length(vppList) > 0}">
 							<li>
 								<dl>
 									<dt>에너지 거래</dt>

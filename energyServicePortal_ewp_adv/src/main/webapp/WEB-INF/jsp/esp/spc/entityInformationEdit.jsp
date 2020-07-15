@@ -306,7 +306,8 @@
 					});
 					repeatNumber.sort(); // index 기준으로 순서대로 생성하기위해서 정렬
 					repeatNumber.forEach(function(index) {
-						addRow('addList_affiliation', 'next', index);
+						addRow('addList_affiliation', 'class', index);
+						addRow('addList_affiliation2', 'class', index);
 					});
 					setJsonAutoMapping(maintenance_info, 'maintenanceInfo');
 
