@@ -646,7 +646,7 @@
 	}
 
 	const sumUnpaid = () => {
-		const contractPay = Number($('#공사_계약_금액').val().replace(/[^0-9]/g, '')),
+		const contractPay = Number($('#도급_계약서_공사_계약_금액').val().replace(/[^0-9]/g, '')),
 			agreementPay = Number($('#약정_금액').val().replace(/[^0-9]/g, '')),
 			paymentsFirst = Number($('#지급금액_1차').val().replace(/[^0-9]/g, '')),
 			paymentsSecond = Number($('#지급금액_2차').val().replace(/[^0-9]/g, '')),

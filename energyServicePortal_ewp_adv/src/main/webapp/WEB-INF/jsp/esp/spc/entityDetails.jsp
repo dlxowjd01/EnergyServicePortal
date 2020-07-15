@@ -266,6 +266,12 @@
 					// setMakeList(device_info["addList05"], "addList05", { "dataFunction": {} });
 					// setMakeList(device_info["addList06"], "addList06", { "dataFunction": {} });
 					// setMakeList(device_info["addList07"], "addList07", { "dataFunction": {} });
+
+					$('[id^=보험_시작일]').each(function() {
+						afterDatePick($(this).attr('id'));
+					});
+
+					sumUnpaid();
 				} else {
 					alert('등록된 데이터가 없습니다.');
 				}
@@ -308,6 +314,44 @@
 			genId = "${param.gen_id}";
 
 		location.href = '/spc/entityInformationEdit.do?spc_id=' + spcId + "&gen_id=" + genId;
+	}
+
+	function afterDatePick(thisName) {
+		var idx = thisName.replace(/[^0-9]/g, '');
+		if (thisName.match('보험_시작일')) {
+			var open = $('#' + thisName).text().trim().split('-'),
+				close = $('#보험_종료일' + idx).text().trim().split('-'),
+				expiry = $('#보험_만기일' + idx).text().trim().split('-');
+
+			open = new Date(open[0], open[1], open[2]),
+			close = new Date(close[0], close[1], close[2]),
+			expiry = new Date(expiry[0], expiry[1], expiry[2])
+
+			//보험 종료일 차이 구하기
+			if (close != null && open != null) {
+				var diff = dateDiff(close, open, 'day');
+				$('#보험_종료일' + idx).parent().next('span').html(diff + '일 남음');
+				$('#보험_종료일_차이' + idx).val(diff + '일 남음');
+			}
+
+			//보험 만료일 차이 구하기
+			if (expiry != null && open != null) {
+				var diff = dateDiff(expiry, open, 'day');
+				$('#보험_만기일' + idx).parent().next('span').html(diff + '일 남음');
+				$('#보험_만기일_차이' + idx).val(diff + '일 남음');
+			}
+		}
+	}
+
+	const sumUnpaid = () => {
+		const contractPay = Number($('#도급_계약서_공사_계약_금액').text().replace(/[^0-9]/g, '')),
+			agreementPay = Number($('#약정_금액').text().replace(/[^0-9]/g, '')),
+			paymentsFirst = Number($('#지급금액_1차').text().replace(/[^0-9]/g, '')),
+			paymentsSecond = Number($('#지급금액_2차').text().replace(/[^0-9]/g, '')),
+			paymentsThird = Number($('#지급금액_3차').text().replace(/[^0-9]/g, ''));
+
+		const sumUnPaidPay = contractPay + agreementPay - paymentsFirst - paymentsSecond - paymentsThird;
+		$('#미지급_금액').text(numberComma(sumUnPaidPay));
 	}
 
 	function getExcelDown() {
@@ -686,8 +730,8 @@
 							<div class="fixed_height">REC</div>
 						</th>
 						<td class="align_top">
-							<div class="fixed_height"></div>
-							<div class="flex_start">
+							<div class="flex_start fixed_height"></div>
+							<div class="flex_start fixed_height">
 								<span id="전체_용량"></span>
 							</div>
 							<div class="flex_start">
@@ -762,21 +806,21 @@
 					</tr>
 					<tr>
 						<th>(도급 계약서) 공사 계약 금액</th>
-						<td id="(도급_계약서)_공사_계약_금액"></td>
+						<td id="도급_계약서_공사_계약_금액"></td>
 						<th>약정 금액</th>
 						<td id="약정_금액"></td>
 					</tr>
 					<tr>
 						<th>(도급 계약서) 사용전 검사일</th>
-						<td id="(도급_계약서)_사용전_검사일"></td>
+						<td id="도급_계약서_사용전_검사일"></td>
 						<th>(실제) 사용전 검사일자</th>
-						<td id="(실제)_사용전_검사일자"></td>
+						<td id="실제_사용전_검사일자"></td>
 					</tr>
 					<tr>
 						<th>(도급 계약서) 준공일</th>
-						<td id="(도급_계약서)_준공일"></td>
+						<td id="도급_계약서_준공일"></td>
 						<th>(실제) 준공일</th>
-						<td id="(실제)_준공일"></td>
+						<td id="실제_준공일"></td>
 					</tr>
 					<tr>
 						<th>인출 가능 기한</th>
@@ -798,27 +842,27 @@
 							</div>
 						</th>
 						<td>
-							<div class="fixed_height"></div>
+							<div class="flex_start fixed_height"></div>
 							<div class="flex_start">
-								<span id="계약서_명시_인출일_1차"></span>
+								<span class="fixed_height" id="계약서_명시_인출일_1차"></span>
 							</div>
 							<div class="flex_start">
-								<span id="계약서_명시_인출일_2차"></span>
+								<span class="fixed_height" id="계약서_명시_인출일_2차"></span>
 							</div>
 							<div class="flex_start">
-								<span id="계약서_명시_인출일_3차"></span>
+								<span class="fixed_height" id="계약서_명시_인출일_3차"></span>
 							</div>
 							<div class="flex_start">
-								<span id="지급금액_1차"></span>
+								<span class="fixed_height" id="지급금액_1차"></span>
 							</div>
 							<div class="flex_start">
-								<span id="지급금액_2차"></span>
+								<span class="fixed_height" id="지급금액_2차"></span>
 							</div>
 							<div class="flex_start">
-								<span id="지급금액_3차"></span>
+								<span class="fixed_height" id="지급금액_3차"></span>
 							</div>
 							<div class="fixed_height w300">
-								<span class="text">자동 계산</span>
+								<span class="text" id="미지급_금액">자동 계산</span>
 								<span class="fr">원</span>
 							</div>
 						</td>
@@ -831,13 +875,13 @@
 						<td class="align_top">
 							<div class="fixed_height"></div>
 							<div class="flex_start">
-								<span id="실_지급일_1차"></span>
+								<span class="fixed_height" id="실_지급일_1차"></span>
 							</div>
 							<div class="flex_start">
-								<span id="실_지급일_2차"></span>
+								<span class="fixed_height" id="실_지급일_2차"></span>
 							</div>
 							<div class="flex_start">
-								<span id="실_지급일_3차"></span>
+								<span class="fixed_height" id="실_지급일_3차"></span>
 							</div>
 						</td>
 						<th class="align_top">
@@ -911,7 +955,8 @@
 						<th>종료일</th>
 						<td class="flex_start">
 							<span id="보험_종료일[index]"></span>
-							<span class="fixed_height">XX일 남음</span>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<span class="fixed_height" id="보험_종료일_차이[index]">XX일 남음</span>
 						</td>
 					</tr>
 					<tr>
@@ -920,7 +965,8 @@
 						<th>만기일</th>
 						<td class="flex_start">
 							<span id="보험_만기일[index]"></span>
-							<span class="fixed_height">XX일 남음</span>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<span class="fixed_height" id="보험_만기일_차이[index]">XX일 남음</span>
 						</td>
 					</tr>
 				</table>
