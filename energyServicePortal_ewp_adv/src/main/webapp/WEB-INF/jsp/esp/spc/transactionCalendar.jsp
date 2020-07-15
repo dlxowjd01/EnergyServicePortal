@@ -4,6 +4,7 @@
 <script type="text/javascript">
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
+	const userInfo = '<c:out value="${sessionScope.userInfo.token}" escapeXml="false" />';
 
 	let today = new Date();
 	let date = new Date();
@@ -26,7 +27,8 @@
 			}
 			buildCalendar();
 		});
-		console.log("apiHost===", apiHost)
+		// console.log("apiHost===", apiHost)
+		// console.log("userInfo===", userInfo)
 		//전월
 		$('.btn_prev_mon').on('click', function () {
 			const prevMonth = today.getMonth() - 1;
@@ -410,7 +412,6 @@
 				async: true
 			};
 
-			console.log("option===", option)
 			optTransaction = {
 				url: 'http://iderms.enertalk.com:8443/spcs/transactions',
 				type: action,
