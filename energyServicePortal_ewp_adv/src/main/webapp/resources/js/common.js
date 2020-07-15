@@ -219,21 +219,22 @@ $(function(){
 });
 
 /* input[file] multi-select || single select label */
-$(function() {
-	var clone='';
-    $(document).on('change', 'input[type=file]', function(){
-        var t = $(this).val();
+$(function () {
+	var clone = '';
+	$(document).on('change', 'input[type=file]', function () {
+		var t = $(this).val();
 		var labelText = 'File : ' + t.substr(12, t.length);
 
-		if($(this).attr("multiple")){
+		if (isEmpty(t)) {return false;}
+		if ($(this).attr("multiple")) {
 			let list = $(this).parent().find(".file_list ul");
 			let item = $(this).get(0).files;
 			let arr = [];
-			if($(this).parent().find(".no-data")){
+			if ($(this).parent().find(".no-data")) {
 				$(this).parent().find(".no-data").addClass("hidden");
 			}
 			list.empty();
-			$.each(item, function(index, element) {
+			$.each(item, function (index, element) {
 				let listItem = ``;
 				let dataId = genUuid();
 				listItem = `
@@ -247,43 +248,31 @@ $(function() {
 			});
 			//$(this).attr("name", arr);
 		} else {
-			$(this).prev('label').text(labelText);
-			$(this).parent().find(".upload_text").text(labelText);
-			if($(this).parent().find(".btn_close")){
-				$(this).parent().find(".btn_close").removeClass('hidden')
-			}
+			let listItem = `${labelText}<button type='button' class='btn_close icon_btn' onclick='deleteFile($(this))'></button>`;
+			// $(this).prev('label').text(listItem);
+			$(this).parent().find(".upload_text").html(listItem);
+			// if ($(this).parent().find(".btn_close")) {
+			// 	$(this).parent().find(".btn_close").removeClass('hidden')
+			// }
 		}
 	});
 });
-function deleteFile(self){
-	let ul =  self.parents(".file_list ul");
-	self.parent(".upload_text").remove();
-	if(ul.children().length<=0){
-		let item = '';
-		item = '<li class="no-file">선택된 파일이 없습니다.</li>'
-		ul.append(item);
+
+function deleteFile(self) {
+	let ul = self.parents(".file_list ul");
+
+	if (ul.length == 0) {
+		self.parent(".upload_text").parent().find('input[type="file"]').val('');
+		self.parent(".upload_text").empty();
+	} else {
+		self.parent(".upload_text").remove();
+		if (ul.children().length <= 0) {
+			let item = '';
+			item = '<li class="no-file">선택된 파일이 없습니다.</li>'
+			ul.append(item);
+		}
 	}
 }
-
-function deleteFile(self){
-	let ul =  self.parents(".file_list ul");
-	self.parent(".upload_text").remove();
-	if(ul.children().length<=0){
-		let item = '';
-		item = '<li class="no-file">선택된 파일이 없습니다.</li>'
-		ul.append(item);
-	}
-}
-
-// $(function() {
-//     $('input[type=file]').change(function(){
-//         var t = $(this).val();
-// 		var labelText = 'File : ' + t.substr(12, t.length);
-
-// 		$(this).prev('label').text(labelText);
-// 		$(this).parent().find(".upload_text").text(labelText);
-//     })
-// });
 
 /* 장치 그룹 현황 슬라이드 */
 $(function() {

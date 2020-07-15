@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<script>
+<script type="text/javascript" src="/js/commonDropdown.js"></script>
+<script type="text/javascript">
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
 
@@ -7,24 +8,20 @@
 	let addListCnt2 = 0; // 첨부하는 파일 추가할 경우 카운트 1씩 증가 ( 첨부파일 )
 
 	$(function () {
+		setInitList("genList");
+
 		initAddListHtml();
 		getGenData();
-	});
-
-	$(document).on('click', '.dropdown li', function () {
-		var dataValue = $(this).data('value'),
-			dataText = $(this).text();
-		$(this).parents('.dropdown').find('button').html(dataText + '<span class="caret"></span>').data('value', dataValue);
 	});
 
 	function getGenData() {
 		$.ajax({
 			url: 'http://iderms.enertalk.com:8443/auth/me/sites',
-			type: "get",
+			type: 'get',
 			async: false,
 			success: function (json) {
-				setInitList("genList");
-				setMakeList(json, "genList", { "dataFunction": {} });
+
+				setMakeList(json, 'genList', { 'dataFunction': {} });
 				getReportData();
 			},
 			error: function (request, status, error) {
@@ -33,24 +30,23 @@
 		});
 	}
 
-
 	function getReportData() {
-		var reportId = "${param.report_id}";
+		var reportId = '${param.report_id}';
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/reports/remote_work?oid=" + oid + "&report_id=" + reportId,
-			type: "get",
+			url: 'http://iderms.enertalk.com:8443/reports/remote_work?oid=' + oid + '&report_id=' + reportId,
+			type: 'get',
 			async: false,
 			data: {},
 			success: function (json) {
-				setDropDownValue("report_type_list", getReportTypeName(json.data[0].report_type));
-				setDropDownValue("genList", json.data[0].site_name);
-				setJsonAutoMapping(json.data[0], "work_info");
-				setJsonAutoMapping(JSON.parse(json.data[0].work_info), "work_info");
-				setJsonAutoMapping(JSON.parse(json.data[0].work_detail_info), "work_detail_info");
+				setDropDownValue('report_type_list', getReportTypeName(json.data[0].report_type));
+				setDropDownValue('genList', json.data[0].site_name);
+				setJsonAutoMapping(json.data[0], 'work_info');
+				setJsonAutoMapping(JSON.parse(json.data[0].work_info), 'work_info');
+				setJsonAutoMapping(JSON.parse(json.data[0].work_detail_info), 'work_detail_info');
 				getAttachFileDisplay(JSON.parse(json.data[0].work_detail_info).files);
 
-				$("#report_type").data("value", json.data[0].report_type);
-				$("#gen").data("value", json.data[0].site_id);
+				$('#report_type').data('value', json.data[0].report_type);
+				$('#gen').data('value', json.data[0].site_id);
 			},
 			error: function (request, status, error) {
 
@@ -59,12 +55,12 @@
 	}
 
 	function getReportTypeName(data) {
-		var result = "";
+		var result = '';
 
-		if ("1" == data) {
-			result = "출장/조치 보고서";
-		} else if ("2" == data) {
-			result = "QC 보고서";
+		if ('1' == data) {
+			result = '출장/조치 보고서';
+		} else if ('2' == data) {
+			result = 'QC 보고서';
 		} else {
 			result = data;
 		}
@@ -75,28 +71,32 @@
 	function getAttachFileDisplay(files) {
 		// 	var reportId = "${param.report_id}";
 		var fileList01 = [], fileList02 = [];
-		for (var i = 0, count = files.length; i < count; i++) {
-			if (files[i].fieldname.substring(0, 19) == "work_report_file_01") {
-				fileList01.push(files[i]);
-			} else if (files[i].fieldname.substring(0, 19) == "work_report_file_02") {
-				fileList02.push(files[i]);
+		if (!isEmpty(files)) {
+			for (var i = 0, count = files.length; i < count; i++) {
+				if(files[i] != null) {
+					if (files[i].fieldname.match('work_report_file_01')) {
+						fileList01.push(files[i]);
+					} else if (files[i].fieldname.match('work_report_file_02')) {
+						fileList02.push(files[i]);
+					}
+				}
 			}
 		}
 
-		setMakeList(fileList01, "fileList01", { "dataFunction": {} });
-		setMakeList(fileList02, "fileList02", { "dataFunction": {} });
+		setMakeList(fileList01, 'fileList01', { 'dataFunction': {} });
+		setMakeList(fileList02, 'fileList02', { 'dataFunction': {} });
 	}
 
 	function setRemoveFileList(fileId, idx) {
-		var jsonList = $("#" + fileId).data("gridJsonData");
+		var jsonList = $('#' + fileId).data('gridJsonData');
 
 		jsonList.splice(idx, 1);
-		setMakeList(jsonList, fileId, { "dataFunction": {} });
+		setMakeList(jsonList, fileId, { 'dataFunction': {} });
 	}
 
 	function setDropDownValue(id, data) {
-		var $selecter = $("#" + id);
-		$selecter.find("li").each(function () {
+		var $selecter = $('#' + id);
+		$selecter.find('li').each(function () {
 			if ($(this).text() == data) {
 				$selecter.parents('.dropdown').find('button').html(data + '<span class="caret"></span>').data('value', data);
 				return false;
@@ -105,11 +105,11 @@
 	}
 
 	function initAddListHtml() {
-		$("#addFileList01").data("form", $("#addFileList01").html());
-		$("#addFileList02").data("form", $("#addFileList02").html());
+		$("#addFileList01").data('form', $("#addFileList01").html());
+		$("#addFileList02").data('form', $("#addFileList02").html());
 
-		setInitList("fileList01");
-		setInitList("fileList02");
+		setInitList('fileList01');
+		setInitList('fileList02');
 	}
 
 	function addList(addId) {
@@ -126,94 +126,113 @@
 	}
 
 	function setSaveData() {
-		var report_type = $("#report_type").data("value").toString(),
-			report_name = $("#report_name").val(),
-			site_id = $("#gen").data("value");
+		var report_type = $('#report_type button').data('value'),
+			report_name = $('#report_name').val(),
+			site_id = $('#gen button').data('value');
 
-		if (report_type === undefined || report_type == "") {
-			alert("보고서 구분을 선택하세요.");
+		if (report_type === undefined || report_type == '') {
+			alert('보고서 구분을 선택하세요.');
 			return false;
 		}
 
-		if (report_name == "") {
-			alert("보고서 명을 입력하세요.");
+		if (report_name == '') {
+			alert('보고서 명을 입력하세요.');
 			return false;
 		}
 
-		if (site_id == "") {
-			alert("발전소를 선택하세요.");
+		if (site_id == '') {
+			alert('발전소를 선택하세요.');
 			return false;
 		}
 
-
-		setFileUpload();
+		setUpdateReportData();
 	}
 
-	function setFileUpload() {
-		var reportId = "${param.report_id}";
+	function loopFile(target, index, fileList) {
+		if (fileList[index] != undefined) {
+			if (target.textContent.trim() != fileList[index].name) {
+				fileList.splice(index, 1);
+				loopFile(target, index, fileList);
+			}
+		}
+	}
 
-		$("#work_detail_info").find("input[type=file]").each(function () {
-			$(this).attr("name", this.name + "_" + reportId);
-		});
+	function setUpdateReportData() {
+		const reportId = '${param.report_id}';
+		let work_info = setAreaParamData('work_info'),
+			work_detail_info = setAreaParamData('work_detail_info'),
+			report_name = $('#report_name').val(),
+			site_id = $('#gen button').data('value');
+		let resultFiles = new Array();
 
-		$.ajax({
-			type: 'post',
-			enctype: 'multipart/form-data',
-			url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
-			data: new FormData($('#work_detail_info')[0]),
-			processData: false,
-			contentType: false,
-			cache: false,
-			timeout: 600000,
-			success: function (result) {
+		$('#work_detail_info').find('input[type="file"]').each(function () {
+			const liList =$(this).parent().find('.file_list li');
+			let fileList = Array.from($(this)[0].files);
 
-				var existFileList = $("#fileList01").data("gridJsonData").concat($("#fileList02").data("gridJsonData"));
+			liList.each(function(index, target) {
+				loopFile(target, index, fileList);
+			});
 
-				setUpdateReportData(reportId, existFileList.concat(result.files));
-			},
-			error: function (request, status, error) {
-				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+			if (fileList.length > 0) {
+				let formData = new FormData($('#fileUploadForm')[0]),
+					filedName = $(this).attr('name') + '_' + genUuid();
+				fileList.forEach(function(file) {
+					formData.append(filedName, file);
+				});
+
+				$.ajax({
+					url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
+					type: 'post',
+					enctype: 'multipart/form-data',
+					data: formData,
+					processData: false,
+					contentType: false,
+					cache: false,
+					timeout: 600000,
+					async: false,
+					success: function (result) {
+						resultFiles = resultFiles.concat(result.files);
+					},
+					error: function (request, status, error) {
+						alert('오류가 발생하였습니다. \n관리자에게 문의하세요.');
+					}
+				});
 			}
 		});
-	}
 
-	function setUpdateReportData(reportId, files) {
-		var work_info = setAreaParamData("work_info"),
-			work_detail_info = setAreaParamData("work_detail_info"),
-			report_name = $("#report_name").val(),
-			site_id = $("#gen").data("value");
-
-		work_detail_info["files"] = files;
+		resultFiles = resultFiles.concat($("#fileList01").data("gridJsonData"));
+		resultFiles = resultFiles.concat($("#fileList02").data("gridJsonData"));
+		work_detail_info['files'] = resultFiles;
 
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/reports/remote_work/" + reportId + "?oid=" + oid,
-			type: "patch",
+			url: 'http://iderms.enertalk.com:8443/reports/remote_work/' + reportId + '?oid=' + oid,
+			type: 'patch',
 			dataType: 'json',
 			async: false,
-			contentType: "application/json",
+			contentType: 'application/json',
 			data: JSON.stringify({
-				"report_name": report_name,
-				"site_id": site_id,
-				"work_info": JSON.stringify(work_info),
-				"work_detail_info": JSON.stringify(work_detail_info),
-				"updated_by": loginId
+				report_name: report_name,
+				site_id: site_id,
+				work_info: JSON.stringify(work_info),
+				work_detail_info: JSON.stringify(work_detail_info),
+				updated_by: loginId
 			}),
 			success: function (result) {
-				alert("수정되었습니다.");
+				alert('수정되었습니다.');
 				goNowPage(reportId);
 			},
 			error: function (request, status, error) {
-				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+				alert('오류가 발생하였습니다. \n관리자에게 문의하세요.');
 			}
 		});
 	}
 
 	function goNowPage(reportId) {
-		location.href = "/report/maintenanceReportDetails.do?report_id=" + reportId;	
+		location.href = '/report/maintenanceReportDetails.do?report_id=' + reportId;
 	}
 	
 	function goMoveList() {
-		location.href = "/report/maintenanceReport.do";
+		location.href = '/report/maintenanceReport.do';
 	}
 </script>
 <div class="row">
@@ -232,12 +251,11 @@
 		<div>
 			<span class="tx_tit">보고서 구분</span>
 			<div class="sa_select">
-				<div class="dropdown">
-					<button id="report_type" class="btn btn-primary dropdown-toggle w9" type="button"
-						data-toggle="dropdown" data-value="">
+				<div class="dropdown" id="report_type">
+					<button class="btn btn-primary dropdown-toggle w9" type="button" data-toggle="dropdown" data-value="">
 						<span class="caret"></span>
 					</button>
-					<ul id="report_type_list" class="dropdown-menu chk_type" role="menu" id="type">
+					<ul id="report_type_list" class="dropdown-menu chk_type" role="menu">
 						<li data-value="1"><a href="javascript:void(0);">출장/조치 보고서</a></li>
 						<li data-value="2"><a href="javascript:void(0);">QC 보고서</a></li>
 					</ul>
@@ -269,10 +287,9 @@
 						</td>
 						<th>발전소</th>
 						<td>
-							<div class="dropdown placeholder edit">
-								<button id="gen" class="btn btn-primary dropdown-toggle" type="button"
-									data-toggle="dropdown" data-value="">선택
-									<span class="caret"></span>
+							<div class="dropdown placeholder edit" id="gen">
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-value="">
+									선택 <span class="caret"></span>
 								</button>
 								<ul id="genList" class="dropdown-menu" role="menu">
 									<li data-value="[sid]"><a href="javascript:void(0);">[name]</a></li>
@@ -284,10 +301,8 @@
 						<th>출장 시기</th>
 						<td>
 							<div class="sel_calendar edit twin clear">
-								<input type="text" id="출장_시기_from" class="sel datepicker fromDate" value=""
-									autocomplete="off" placeholder="시작일">
-								<input type="text" id="출장_시기_to" class="sel datepicker toDate" value=""
-									autocomplete="off" placeholder="종료일">
+								<input type="text" id="출장_시기_from" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일">
+								<input type="text" id="출장_시기_to" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일">
 							</div>
 						</td>
 						<th>출장 장소</th>
@@ -301,8 +316,7 @@
 						<th>작성 일자</th>
 						<td>
 							<div class="sel_calendar edit">
-								<input type="text" id="작성_일자" class="sel datepicker" value="" autocomplete="off"
-									placeholder="날짜 선택">
+								<input type="text" id="작성_일자" class="sel datepicker" value="" autocomplete="off" placeholder="날짜 선택">
 							</div>
 						</td>
 						<th>출장 목적</th>
@@ -349,21 +363,22 @@
 							</td>
 						</tr>
 						<tr>
-							<th class="vert_type">현장 점검<a href="javascript:addList('addFileList01')"
-									class="btn_add fr">추가</a></th>
+							<th class="vert_type">현장 점검<a href="javascript:addList('addFileList01')" class="btn_add fr">추가</a></th>
 							<td>
 								<div id="fileList01">
 									<p class="tx_file">
-										<a
-											href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button class="btn_type07"
-											onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
+										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<button class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
 									</p>
 								</div>
 								<div id="addFileList01">
-									<input type="file" name="work_report_file_01" class="hidden" id="work_report_file_01">
+									<input type="file" name="work_report_file_01" class="hidden" id="work_report_file_01" multiple>
 									<label for="work_report_file_01" class="btn file_upload">파일 선택</label>
-									<span class="upload_text ml-16"></span>
+									<div class="file_list ml-16">
+										<ul>
+											<li class="upload_text"></li>
+										</ul>
+									</div>
 								</div>
 							</td>
 						</tr>
@@ -392,20 +407,22 @@
 							</td>
 						</tr>
 						<tr>
-							<th class="hei_type">첨부 파일<a href="javascript:addList('addFileList02')"
-									class="btn_add fr">추가</a></th>
+							<th class="hei_type">첨부 파일</th>
 							<td>
 								<div id="fileList02">
 									<p class="tx_file">
-										<a
-											href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button class="btn_type07"
-											onclick="setRemoveFileList('fileList02', [INDEX]);">삭제</button>
+										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<button class="btn_type07" onclick="setRemoveFileList('fileList02', [INDEX]);">삭제</button>
 									</p>
 								</div>
 								<div id="addFileList02">
-									<input type="file" name="work_report_file_02" class="hidden" id="work_report_file_02">
+									<input type="file" name="work_report_file_02" class="hidden" id="work_report_file_02" multiple>
 									<label for="work_report_file_02" class="btn file_upload">파일 선택</label>
+									<div class="file_list ml-16">
+										<ul>
+											<li class="upload_text"></li>
+										</ul>
+									</div>
 								</div>
 							</td>
 						</tr>
