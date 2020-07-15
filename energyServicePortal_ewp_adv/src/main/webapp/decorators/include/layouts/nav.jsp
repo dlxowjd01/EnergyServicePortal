@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
+<c:set var="oid" value="${userInfo.oid}"/> <%-- 메뉴 관리용 OID --%>
+<c:set var="task" value="${userInfo.task}"/> <%-- 메뉴 관리용 Task --%>
 <script type="text/javascript">
 	function gMainSelectSite(siteId) {
 		$('#smainNavLink').attr('href', '/main/siteMain.do?siteId=' + siteId);
@@ -134,7 +136,9 @@
 				<div class="sub_layer">
 					<ul>
 						<li><a href="/dashboard/gmain.do">통합관리 대시보드</a></li>
-						<li><a href="/dashboard/jmain.do">중개거래 대시보드</a></li>
+						<c:if test="${oid ne 'trust'}">
+							<li><a href="/dashboard/jmain.do">중개거래 대시보드</a></li>
+						</c:if>
 					</ul>
 				</div>
 			</li>
@@ -164,6 +168,7 @@
 					</ul>
 				</div>
 			</li>
+			<c:if test="${oid ne 'trust'}">
 			<li class="smn5 menu-item">
 				<a href="javascript:void(0);">예측/진단</a>
 				<div class="sub_layer">
@@ -173,6 +178,9 @@
 					</ul>
 				</div>
 			</li>
+			</c:if>
+
+			<c:if test="${oid ne 'trust'}">
 			<li class="smn7 menu-item">
 				<a href="javascript:void(0);">보고서</a>
 				<div class="sub_layer">
@@ -182,6 +190,9 @@
 					</ul>
 				</div>
 			</li>
+			</c:if>
+
+			<c:if test="${(oid ne 'trust') or (oid eq 'trust' and task ne 3)}">
 			<li class="smn9 menu-item">
 				<a href="javascript:void(0);">SPC관리</a>
 				<div class="sub_layer">
@@ -196,7 +207,10 @@
 					</ul>
 				</div>
 			</li>
-			<li class="smn6 menu-item hidden">
+			</c:if>
+
+			<c:if test="${oid eq 'encored'}">
+			<li class="smn6 menu-item">
 				<a href="javascript:void(0);">설정</a>
 				<div class="sub_layer">
 					<ul>
@@ -209,6 +223,7 @@
 					</ul>
 				</div>
 			</li>
+			</c:if>
 		</ul>
 		<ol>
 			<li class="smn10"><a href="/spc/notice.do">공지사항</a></li>
@@ -238,7 +253,9 @@
 					<%--    <p><a href="/dashboard/dmain.do">신재생발전+신재생 연계 ESS</a></p>--%>
 					<%--  </div>--%>
 					<%--</li>--%>
+					<c:if test="${oid ne 'trust' }">
 					<li><a href="/dashboard/jmain.do">중개거래 대시보드</a></li>
+					</c:if>
 					<!-- <li><a href="">수요자원 대시보드</a></li> -->
 				</ul>
 			</li>
@@ -265,6 +282,7 @@
 					<%--<li><a href="/energy/drResult.do">수요자원<!-- DR --></a></li>--%>
 				</ul>
 			</li>
+			<c:if test="${oid ne 'trust'}">
 			<li class="gmn5">
 				<a href="javascript:void(0);">예측/진단</a>
 				<ul>
@@ -272,6 +290,7 @@
 					<li><a href="/diagnosis/abnormallyAnalysis.do">이상분석</a></li>
 				</ul>
 			</li>
+			</c:if>
 			<!--<li class="gmn8">
         <a href="javascript:void(0);">BOM관리</a>
         <ul>
@@ -280,6 +299,7 @@
             <li><a href="/bom/partManagement.do">부품관리</a></li>
         </ul>
       </li>-->
+			<c:if test="${oid ne 'trust'}">
 			<li class="gmn7">
 				<a href="javascript:void(0);">보고서</a>
 				<ul>
@@ -287,6 +307,9 @@
 					<li><a href="/report/maintenanceReport.do">작업보고서</a></li>
 				</ul>
 			</li>
+			</c:if>
+
+			<c:if test="${(oid ne 'trust') or (oid eq 'trust' and task ne 3)}">
 			<li class="gmn9">
 				<a href="javascript:void(0);">SPC관리</a>
 				<ul>
@@ -297,6 +320,8 @@
 					<li><a href="/spc/supplementaryDocuments.do">이관자료</a></li>
 				</ul>
 			</li>
+			</c:if>
+			<c:if test="${oid eq 'encored'}">
 			<li class="gmn6 hidden">
 				<a href="javascript:void(0);">설정</a>
 				<ul>
@@ -308,6 +333,7 @@
 					<li><a href="/system/systemSetting.do">시스템설정</a></li>
 				</ul>
 			</li>
+			</c:if>
 		</ul>
 		<ol>
 			<li class="gmn10"><a href="/spc/notice.do">공지사항</a></li>

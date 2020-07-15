@@ -88,7 +88,7 @@
 		if(operArray.length > 0) {
 			if(jsonData['spcGens'].length > 0) {
 				const maintenanceInfo = JSON.parse(jsonData['spcGens'][0].maintenance_info);
-				if (maintenanceInfo['운영_여부'] === undefined) {
+				if (maintenanceInfo == null || maintenanceInfo['운영_여부'] === undefined) {
 					oResult = false;
 				} else {
 					$.each(operArray, function (i, operation) {
@@ -160,8 +160,7 @@
 	}
 
 	function setJsonDataFormat(result, page, n, sort, searchCnt) {
-		var jsonList = [],
-			keyWord = $('#key_word').val();
+		var jsonList = [];
 
 		for (var i = 0, count = result.data.length; i < count; i++) {
 
@@ -173,11 +172,20 @@
 						rowData = result.data[i],
 						newData = Object.assign({}, rowData),
 						warrantyInfo = JSON.parse(spcGensRow.warranty_info),
-						contractInfo = JSON.parse(spcGensRow.contract_info);
+						maintenanceInfo = JSON.parse(spcGensRow.maintenance_info);
+
+					let termDate = '';
+					if (!isEmpty(maintenanceInfo)) {
+						let mainFrom = maintenanceInfo['관리_운영_기간_from'];
+						let mainTo = maintenanceInfo['관리_운영_기간_to'];
+						if (!isEmpty(mainFrom) && !isEmpty(mainTo)) {
+							termDate = new Date(mainFrom).format('yyyy-MM-dd') + ' ~ ' + new Date(mainTo).format('yyyy-MM-dd')
+						}
+					}
 
 					newData["gen_id"] = spcGensRow.gen_id;
 					newData["발전소_명"] = spcGensRow.name;
-					newData["관리_운영_기간"] = nvl(contractInfo["관리_운영_기간"], "-");
+					newData["관리_운영_기간"] = nvl(termDate, "-");
 					newData["연차"] = nvl(warrantyInfo["현재_적용_연차"], "-");
 					newData["보증_방식"] = nvl(warrantyInfo["보증_방식"], "-");
 					newData["PR_보증치"] = nvl(warrantyInfo["PR_보증치"], "-");
@@ -222,6 +230,10 @@
 				includeGens: true
 			},
 			success: function (result) {
+
+
+
+
 				setMakeList(setJsonDataFormat(result, page, n, sort, searchCnt), "listData", {
 					"dataFunction": {
 						"INDEX": getNumberIndex
@@ -343,7 +355,7 @@
 						</li>
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
-								<input type="checkbox" id="operation_2" value="운영 예정" name="operation_opt">
+								<input type="checkbox" id="operation_2" value="운영예정" name="operation_opt">
 								<label for="operation_2">운영 예정</label>
 							</a>
 						</li>

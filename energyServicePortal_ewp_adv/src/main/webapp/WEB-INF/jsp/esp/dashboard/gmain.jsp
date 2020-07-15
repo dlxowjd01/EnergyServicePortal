@@ -425,7 +425,7 @@
 		latLng['lat'] = Number(dummy[0]);
 		latLng['lng'] = Number(dummy[1]);
 
-		makerObject[siteId] = new google.maps.Marker({
+		let marker = new google.maps.Marker({
 			map: map,
 			title: siteName,
 			position: latLng,
@@ -433,14 +433,21 @@
 			icon: pinSymbol(siteColor),
 		});
 
-		var infowindow = new google.maps.InfoWindow({
+		marker.infowindow = new google.maps.InfoWindow({
 			content: siteName
 		});
-		infowindow.close(map, makerObject[siteId]);
 
+		makerObject[siteId] = marker;
 		google.maps.event.addListener(makerObject[siteId], 'click', (function (makerArray, siteId) {
 			return function () {
-				infowindow.close(map, makerObject[siteId]);
+				$.map(makerObject, function(val, key) {
+					if (!isEmpty(val)) {
+						val.infowindow.close();
+					}
+				});
+
+				makerObject[siteId].infowindow.open(map, makerObject[siteId]);
+
 				list_detail_open_main(siteId);
 			}
 		})(makerObject, siteId));
@@ -460,10 +467,10 @@
 	const list_detail_open_main = (sid) => {
 		$('.dbclickopen').each(function() {
 			if ($(this).data('sid') == sid) {
-				$(this).next().find('.di_wrap').slideToggle();
-
-				var offset = $(this).next().find('.di_wrap').offset();
-				$('div.gtbl_wrap').animate({scrollTop : offset.top}, 400);
+				let target = $(this);
+				target.next().find('.di_wrap').slideDown( function() {
+					$('.gtbl_wrap').animate({scrollTop:target.position().top}, 1000);
+				});
 			}
 		});
 	}
