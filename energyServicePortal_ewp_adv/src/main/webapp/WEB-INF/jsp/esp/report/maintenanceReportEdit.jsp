@@ -98,7 +98,7 @@
 		var $selecter = $('#' + id);
 		$selecter.find('li').each(function () {
 			if ($(this).text() == data) {
-				$selecter.parents('.dropdown').find('button').html(data + '<span class="caret"></span>').data('value', data);
+				$selecter.find('button').html(data + '<span class="caret"></span>').data('value', data);
 				return false;
 			}
 		});
@@ -160,6 +160,7 @@
 	function setUpdateReportData() {
 		const reportId = '${param.report_id}';
 		let work_info = setAreaParamData('work_info'),
+			report_type = $('#report_type button').data('value'),
 			work_detail_info = setAreaParamData('work_detail_info'),
 			report_name = $('#report_name').val(),
 			site_id = $('#gen button').data('value');
@@ -211,6 +212,7 @@
 			async: false,
 			contentType: 'application/json',
 			data: JSON.stringify({
+				report_type: String(report_type),
 				report_name: report_name,
 				site_id: site_id,
 				work_info: JSON.stringify(work_info),

@@ -310,14 +310,16 @@
 					});
 					setJsonAutoMapping(maintenance_info, 'maintenanceInfo');
 
-					if (maintenance_info['관리_계약_구분'] != undefined && maintenance_info['관리_계약_구분'].length > 0) {
-						$('[name="관리_계약_구분"]').each(function() {
-							if ($.inArray($(this).val(), maintenance_info['관리_계약_구분']) >= 0) {
-								$(this).prop('checked', true);
+					if (maintenance_info != null) {
+						if (maintenance_info['관리_계약_구분'] != undefined && maintenance_info['관리_계약_구분'].length > 0) {
+							if (typeof maintenance_info['관리_계약_구분'] === 'string') {
+								$('#maintenanceInfo #관리_계약_구분').html(maintenance_info['관리_계약_구분']);
+							} else {
+								$('#maintenanceInfo #관리_계약_구분').html(maintenance_info['관리_계약_구분'].join(','));
 							}
-						});
 
-						displayDropdown($('#관리_계약_구분'));
+							displayDropdown($('#관리_계약_구분'));
+						}
 					}
 					//기본정보
 
@@ -361,6 +363,13 @@
 
 					getAttachFileDisplay(JSON.parse(json.data[0].attachement_info)); //첨부파일
 
+					addDatePicker();
+
+					$('[id^=보험_시작일]').each(function() {
+						afterDatePick($(this).attr('name'));
+					});
+
+					sumUnpaid();
 				} else {
 					alert('등록된 데이터가 없습니다.');
 				}
@@ -573,6 +582,99 @@
 				return false;
 			}
 		});
+	}
+
+	function addDatePicker() {
+		$(document).find('.fromDate').removeClass('hasDatepicker').datepicker({
+			showOn: "both",
+			buttonImageOnly: true,
+			dateFormat: 'yy-mm-dd',
+			onClose: function (selectedDate) {
+				$(this).closest('.dateField').find('.toDate').datepicker('option', 'minDate', selectedDate);
+
+				if (typeof afterDatePick == 'function') {
+					afterDatePick($(this).attr('name'));
+				}
+			}
+		});
+
+		$(document).find('.toDate').removeClass('hasDatepicker').datepicker({
+			showOn: "both",
+			buttonImageOnly: true,
+			dateFormat: 'yy-mm-dd',
+			onClose: function (selectedDate) {
+				$(this).closest('.dateField').find('.fromDate').datepicker('option', 'maxDate', selectedDate);
+
+				if (typeof afterDatePick == 'function') {
+					afterDatePick($(this).attr('name'));
+				}
+			}
+		});
+
+		$(document).find('.datepicker').removeClass('hasDatepicker').datepicker({
+			showOn: "both",
+			buttonImageOnly: true,
+			dateFormat: 'yy-mm-dd'
+		});
+	}
+
+	function afterDatePick(thisName) {
+		var idx = thisName.replace(/[^0-9]/g, '');
+		if (thisName.match('보험_시작일')) {
+			var open = $('#' + thisName).datepicker('getDate'),
+				close = $('#보험_종료일' + idx).datepicker('getDate'),
+				expiry = $('#보험_만기일' + idx).datepicker('getDate');
+
+			//보험 종료일 차이 구하기
+			if (close != null && open != null) {
+				var diff = dateDiff(close, open, 'day');
+				$('#보험_종료일' + idx).parent().next('span').html(diff + '일 남음');
+				$('#보험_종료일_차이' + idx).val(diff + '일 남음');
+			}
+
+			//보험 만료일 차이 구하기
+			if (expiry != null && open != null) {
+				var diff = dateDiff(expiry, open, 'day');
+				$('#보험_만기일' + idx).parent().next('span').html(diff + '일 남음');
+				$('#보험_만기일_차이' + idx).val(diff + '일 남음');
+			}
+		} else if (thisName.match('보험_종료일')) {
+			var close = $('#' + thisName).datepicker('getDate'),
+				open = $('#보험_시작일' + idx).datepicker('getDate');
+
+			//보험 종료일 차이 구하기
+			if (close != null && open != null) {
+				var diff = dateDiff(close, open, 'day');
+				$('#' + thisName).parent().next('span').html(diff + '일 남음');
+				$('#보험_종료일_차이' + idx).val(diff + '일 남음');
+			}
+		} else if (thisName.match('보험_만기일')) {
+			var expiry = $('#' + thisName).datepicker('getDate'),
+				open = $('#보험_시작일' + idx).datepicker('getDate');
+
+			//보험 종료일 차이 구하기
+			if (expiry != null && open != null) {
+				var diff = dateDiff(expiry, open, 'day');
+				$('#' + thisName).parent().next('span').html(diff + '일 남음');
+				$('#보험_만기일_차이' + idx).val(diff + '일 남음');
+			}
+		}
+	}
+
+	const sumUnpaid = () => {
+		const contractPay = Number($('#공사_계약_금액').val().replace(/[^0-9]/g, '')),
+			agreementPay = Number($('#약정_금액').val().replace(/[^0-9]/g, '')),
+			paymentsFirst = Number($('#지급금액_1차').val().replace(/[^0-9]/g, '')),
+			paymentsSecond = Number($('#지급금액_2차').val().replace(/[^0-9]/g, '')),
+			paymentsThird = Number($('#지급금액_3차').val().replace(/[^0-9]/g, ''));
+
+		const sumUnPaidPay = contractPay + agreementPay - paymentsFirst - paymentsSecond - paymentsThird;
+
+		if (contractPay == 0 && agreementPay == 0 && paymentsFirst == 0 && paymentsSecond == 0 && paymentsThird == 0) {
+			$('#미지급_금액').text('자동 계산');
+		} else {
+			$('#미지급_금액').text(numberComma(sumUnPaidPay));
+		}
 	}
 
 	function goNowPage(spcId, genId){
@@ -1533,10 +1635,10 @@
 						</td>
 					</tr>
 					<tr>
-						<th><label for="(도급_계약서)_공사_계약_금액">(도급 계약서) 공사 계약 금액</label></th>
+						<th><label for="도급_계약서_공사_계약_금액">(도급 계약서) 공사 계약 금액</label></th>
 						<td>
 							<div class="tx_inp_type edit unit t1 mr-30">
-								<input type="text" id="(도급_계약서)_공사_계약_금액" name="(도급_계약서)_공사_계약_금액" placeholder="직접 입력">
+								<input type="text" id="도급_계약서_공사_계약_금액" name="도급_계약서_공사_계약_금액" placeholder="직접 입력">
 								<span>원</span>
 							</div>
 						</td>
@@ -1549,30 +1651,30 @@
 						</td>
 					</tr>
 					<tr>
-						<th><label for="(도급_계약서)_사용전_검사일">(도급 계약서) 사용전 검사일</label></th>
+						<th><label for="도급_계약서_사용전_검사일">(도급 계약서) 사용전 검사일</label></th>
 						<td>
 							<div class="sel_calendar edit">
-								<input type="text" id="(도급_계약서)_사용전_검사일" class="sel datepicker" name="(도급_계약서)_사용전_검사일" value="" autocomplete="off" placeholder="날짜 선택" readonly>
+								<input type="text" id="도급_계약서_사용전_검사일" class="sel datepicker" name="도급_계약서_사용전_검사일" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 							</div>
 						</td>
-						<th><label for="(실제)_사용전_검사일자">(실제) 사용전 검사일자</label></th>
+						<th><label for="실제_사용전_검사일자">(실제) 사용전 검사일자</label></th>
 						<td>
 							<div class="sel_calendar edit">
-								<input type="text" id="(실제)_사용전_검사일자" class="sel datepicker" name="(실제)_사용전_검사일자" value="" autocomplete="off" placeholder="날짜 선택" readonly>
+								<input type="text" id="실제_사용전_검사일자" class="sel datepicker" name="실제_사용전_검사일자" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th><label for="(도급_계약서)_준공일">(도급 계약서) 준공일</label></th>
+						<th><label for="도급_계약서_준공일">(도급 계약서) 준공일</label></th>
 						<td>
 							<div class="sel_calendar edit">
-								<input type="text" id="(도급_계약서)_준공일" class="sel datepicker" name="(도급_계약서)_준공일" value="" autocomplete="off" placeholder="날짜 선택" readonly>
+								<input type="text" id="도급_계약서_준공일" class="sel datepicker" name="도급_계약서_준공일" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 							</div>
 						</td>
-						<th><label for="(실제)_준공일">(실제) 준공일</label></th>
+						<th><label for="실제_준공일">(실제) 준공일</label></th>
 						<td>
 							<div class="sel_calendar edit">
-								<input type="text" id="(실제)_준공일" class="sel datepicker" name="(실제)_준공일" value="" autocomplete="off" placeholder="날짜 선택" readonly>
+								<input type="text" id="실제_준공일" class="sel datepicker" name="실제_준공일" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 							</div>
 						</td>
 					</tr>
@@ -1595,9 +1697,7 @@
 							<div class="fixed_height"><label for="지급금액_1차">지급금액</label><span class="fr fixed_height">1차</span></div>
 							<div class="fixed_height"><span class="fr fixed_height">2차</span></div>
 							<div class="fixed_height"><span class="fr fixed_height">3차</span></div>
-							<div class="fixed_height">
-								미지급액
-							</div>
+							<div class="fixed_height">미지급액</div>
 						</th>
 						<td>
 							<div class="fixed_height"></div>
@@ -1633,7 +1733,7 @@
 								</div>
 							</div>
 							<div class="fixed_height w300">
-								<span class="text">자동 계산</span>
+								<span class="text" id="미지급_금액">자동 계산</span>
 								<span class="fr">원</span>
 							</div>
 						</td>
@@ -2241,7 +2341,7 @@
 								<div id="fileList02">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList02', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2262,7 +2362,7 @@
 								<div id="fileList03">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList03', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2283,7 +2383,7 @@
 								<div id="fileList04">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList04', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2304,7 +2404,7 @@
 								<div id="fileList05">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList05', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2325,7 +2425,7 @@
 								<div id="fileList06">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList06', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2346,7 +2446,7 @@
 								<div id="fileList07">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList07', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2367,7 +2467,7 @@
 								<div id="fileList08">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList08', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2388,7 +2488,7 @@
 								<div id="fileList09">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList09', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2409,7 +2509,7 @@
 								<div id="fileList10">
 									<p class="tx_file">
 										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList10', [INDEX]);"></button>
 									</p>
 								</div>
 

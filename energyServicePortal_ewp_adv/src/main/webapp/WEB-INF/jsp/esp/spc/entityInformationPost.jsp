@@ -611,7 +611,7 @@
 
 			//보험 종료일 차이 구하기
 			if (close != null && open != null) {
-				var diff = dateDiff(close, oepn, 'day');
+				var diff = dateDiff(close, open, 'day');
 				$('#보험_종료일' + idx).parent().next('span').html(diff + '일 남음');
 				$('#보험_종료일_차이' + idx).val(diff + '일 남음');
 			}
@@ -638,11 +638,22 @@
 
 			//보험 종료일 차이 구하기
 			if (expiry != null && open != null) {
-				var diff = dateDiff(expiry, oepn, 'day');
+				var diff = dateDiff(expiry, open, 'day');
 				$('#' + thisName).parent().next('span').html(diff + '일 남음');
 				$('#보험_만기일_차이' + idx).val(diff + '일 남음');
 			}
 		}
+	}
+
+	const sumUnpaid = () => {
+		const contractPay = Number($('#공사_계약_금액').val().replace(/[^0-9]/g, '')),
+			agreementPay = Number($('#약정_금액').val().replace(/[^0-9]/g, '')),
+			paymentsFirst = Number($('#지급금액_1차').val().replace(/[^0-9]/g, '')),
+			paymentsSecond = Number($('#지급금액_2차').val().replace(/[^0-9]/g, '')),
+			paymentsThird = Number($('#지급금액_3차').val().replace(/[^0-9]/g, ''));
+
+		const sumUnPaidPay = contractPay + agreementPay - paymentsFirst - paymentsSecond - paymentsThird;
+		$('#미지급_금액').text(numberComma(sumUnPaidPay));
 	}
 
 	function rtnDropdown($dropdownId) {
@@ -1610,46 +1621,46 @@
 						</td>
 					</tr>
 					<tr>
-						<th><label for="(도급_계약서)_공사_계약_금액">(도급 계약서) 공사 계약 금액</label></th>
+						<th><label for="도급_계약서_공사_계약_금액">(도급 계약서) 공사 계약 금액</label></th>
 						<td>
 							<div class="tx_inp_type edit unit t1 mr-30">
-								<input type="text" id="(도급_계약서)_공사_계약_금액" name="(도급_계약서)_공사_계약_금액" placeholder="직접 입력">
+								<input type="text" id="도급_계약서_공사_계약_금액" name="도급_계약서_공사_계약_금액" placeholder="직접 입력" onkeyup="sumUnpaid();">
 								<span>원</span>
 							</div>
 						</td>
 						<th><label for="약정_금액">약정 금액</label></th>
 						<td>
 							<div class="tx_inp_type edit unit t1 mr-30">
-								<input type="text" id="약정_금액" name="약정_금액" placeholder="직접 입력">
+								<input type="text" id="약정_금액" name="약정_금액" placeholder="직접 입력" onkeyup="sumUnpaid();">
 								<span>원</span>
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th><label for="(도급_계약서)_사용전_검사일">(도급 계약서) 사용전 검사일</label></th>
+						<th><label for="도급_계약서_사용전_검사일">(도급 계약서) 사용전 검사일</label></th>
 						<td>
 							<div class="sel_calendar edit">
-								<input type="text" id="(도급_계약서)_사용전_검사일" class="sel datepicker" name="(도급_계약서)_사용전_검사일" value="" autocomplete="off" placeholder="날짜 선택" readonly>
+								<input type="text" id="도급_계약서_사용전_검사일" class="sel datepicker" name="도급_계약서_사용전_검사일" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 							</div>
 						</td>
-						<th><label for="(실제)_사용전_검사일자">(실제) 사용전 검사일자</label></th>
+						<th><label for="실제_사용전_검사일자">(실제) 사용전 검사일자</label></th>
 						<td>
 							<div class="sel_calendar edit">
-								<input type="text" id="(실제)_사용전_검사일자" class="sel datepicker" name="(실제)_사용전_검사일자" value="" autocomplete="off" placeholder="날짜 선택" readonly>
+								<input type="text" id="실제_사용전_검사일자" class="sel datepicker" name="실제_사용전_검사일자" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th><label for="(도급_계약서)_준공일">(도급 계약서) 준공일</label></th>
+						<th><label for="도급_계약서_준공일">(도급 계약서) 준공일</label></th>
 						<td>
 							<div class="sel_calendar edit">
-								<input type="text" id="(도급_계약서)_준공일" class="sel datepicker" name="(도급_계약서)_준공일" value="" autocomplete="off" placeholder="날짜 선택" readonly>
+								<input type="text" id="도급_계약서_준공일" class="sel datepicker" name="도급_계약서_준공일" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 							</div>
 						</td>
-						<th><label for="(실제)_준공일">(실제) 준공일</label></th>
+						<th><label for="실제_준공일">(실제) 준공일</label></th>
 						<td>
 							<div class="sel_calendar edit">
-								<input type="text" id="(실제)_준공일" class="sel datepicker" name="(실제)_준공일" value="" autocomplete="off" placeholder="날짜 선택" readonly>
+								<input type="text" id="실제_준공일" class="sel datepicker" name="실제_준공일" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 							</div>
 						</td>
 					</tr>
@@ -1673,9 +1684,7 @@
 							<div class="fixed_height"><label for="지급금액_1차">지급금액</label><span class="fr fixed_height">1차</span></div>
 							<div class="fixed_height"><span class="fr fixed_height">2차</span></div>
 							<div class="fixed_height"><span class="fr fixed_height">3차</span></div>
-							<div class="fixed_height">
-								미지급액
-							</div>
+							<div class="fixed_height">미지급액</div>
 						</th>
 						<td>
 							<div class="fixed_height"></div>
@@ -1697,21 +1706,21 @@
 							</div>
 							<div class="flex_start">
 								<div class="tx_inp_type edit">
-									<input type="text" id="지급금액_1차" name="지급금액_1차" placeholder="직접 입력">
+									<input type="text" id="지급금액_1차" name="지급금액_1차" placeholder="직접 입력" onkeyup="sumUnpaid();">
 								</div>
 							</div>
 							<div class="flex_start">
 								<div class="tx_inp_type edit">
-									<input type="text" id="지급금액_2차" name="지급금액_2차" placeholder="직접 입력">
+									<input type="text" id="지급금액_2차" name="지급금액_2차" placeholder="직접 입력" onkeyup="sumUnpaid();">
 								</div>
 							</div>
 							<div class="flex_start">
 								<div class="tx_inp_type edit">
-									<input type="text" id="지급금액_3차" name="지급금액_3차" placeholder="직접 입력">
+									<input type="text" id="지급금액_3차" name="지급금액_3차" placeholder="직접 입력" onkeyup="sumUnpaid();">
 								</div>
 							</div>
 							<div class="fixed_height w300">
-								<span class="text">자동 계산</span>
+								<span class="text" id="미지급_금액">자동 계산</span>
 								<span class="fr">원</span>
 							</div>
 						</td>
