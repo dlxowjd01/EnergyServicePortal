@@ -893,7 +893,9 @@
 									<div class="fixed_height">
 										<input type="file" id="SPC_법인_인감_파일[index]" class="hidden" name="SPC_법인_인감_파일" accept=".jpg, .png, .pdf">
 										<label for="SPC_법인_인감_파일[index]" class="btn file_upload">파일 선택</label>
-										<span class="upload_text ml-16"></span>
+										<span class="upload_text ml-16">
+											<button type='button' class='btn_close icon_btn hidden' onclick='deleteFile($(this))'></button>
+										</span>
 										<button class="btn_close fixed_height hidden mt-0" onclick="$(this).parents().closest('.group_type').remove()"></button>
 									</div>
 								</div>
@@ -1443,7 +1445,7 @@
 										</ul>
 									</div>
 									<div class="fixed_height">
-										<input type="file" id="공인인증서_등록_이미지[index]" class="hidden" name="공인인증서_등록_이미지[index]" accept=".jpg, .png">
+										<input type="file" id="공인인증서_등록_이미지[index]" class="hidden" name="공인인증서_등록_이미지[index]" accept=".der, .cer, .crt, .pfx">
 										<label for="공인인증서_등록_이미지[index]" class="btn file_upload">파일 선택</label>
 										<span class="upload_text ml-16">등록 파일 이름</span>
 									</div>
