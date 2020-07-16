@@ -41,7 +41,7 @@
 			let action = 'get';
 			let syncOpt = true;
 			let option= {
-				url: 'http://iderms.enertalk.com:8443/spcs/transactions',
+				url: apiHost + '/spcs/transactions',
 				type: action,
 				data: {
 					'oid' : oid,
@@ -53,12 +53,22 @@
 			console.log("spc===", spcId)
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				tableList.empty();
-				// console.log("json===", json)
 				if (json.data.length > 0) {
 					json.data.map(item => {
 						let data = json.data;
 						let sum = 0;
+						// console.log("data===", data)
 						$("#total").text(item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원');
+
+						// const attachmentInfo = Promise.resolve(JSON.parse(item.attachement_info));
+				
+						if(item.attachement_info){
+							$("#proofFile").prev().text("증빙서류 이름 : ")
+						} else {
+							console.log("res=== attach", $("#proofFile").prev());
+							$("#proofFile").parents().find(".file-wrapper").empty();
+						}
+							
 						if(typeof item.memo == "string"){
 							$("#txt1").val(item.memo);
 							$("#txt2").val("");
@@ -122,6 +132,7 @@
 						} else {
 							const promiseMemo = Promise.resolve(JSON.parse(item.memo));
 							const promiseAccount = Promise.resolve(JSON.parse(item.to_account));
+
 							return Promise.all([promiseAccount, promiseMemo]).then(res => {
 								if(res[1]){
 									$("#txt1").val(res[1].desc);
@@ -227,7 +238,8 @@
 			
 				let preserved = $("#txt1").val();
 				$("#txt1").val(preserved += val);
-			
+				// console.log("val==", preserved)
+				updateReq(undefined, preserved);
 				// handleReq(newStatus, updateReq);
 			}
 		});
@@ -266,15 +278,21 @@
 			newData.memo = memoStr;
 
 			let opt = {
-				url: 'http://iderms.enertalk.com:8443/spcs/transactions/' + reqId + '?oid=' + oid,
+				url: apiHost + '/spcs/transactions/' + reqId + '?oid=' + oid,
 				type: "patch",
 				async: true,
 				dataType: 'json',
 				contentType: "application/json",
 				data: JSON.stringify(newData)
 			};
+			var reload = newStatus;
 			$.ajax(opt).done(function (json, textStatus, jqXHR) {
-				window.location.href = window.location.origin + '/spc/withdrawReqStatus.do' ;
+				console.log("reload", reload)
+				if(isEmpty(reload)){
+					return false;
+				} else {
+					window.location.href = window.location.origin + '/spc/withdrawReqStatus.do' ;
+				}
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				$("#warningModal .modal-title").text('처리 중 오류가 발생했습니다.');
 				$("#warningModal").modal("show");
@@ -285,7 +303,7 @@
 	});
 
 
-	// onclick="location.href='http://iderms.enertalk.com:8443/files/download/5c71e049-f73c-2bf9-a9a0-2f91d067ef11?oid=spower&orgFilename=수익보고서_20200526100755.pdf'"
+	// onclick="location.href=apiHost + '/files/download/5c71e049-f73c-2bf9-a9a0-2f91d067ef11?oid=spower&orgFilename=수익보고서_20200526100755.pdf'"
 
 	function downloadFile(self){
 		console.log("spcId===", spcId)
@@ -297,7 +315,7 @@
 			
 		};
 		// var a = document.createElement('a');
-		// const url = 'http://iderms.enertalk.com:8443/spcs/transactions/download/request?oid='+ oid + '&spc_id=' + spcId + '&request_id=' + reqId;
+		// const url = apiHost + '/spcs/transactions/download/request?oid='+ oid + '&spc_id=' + spcId + '&request_id=' + reqId;
 	
 		// let account = $("#tableBody").find("tr:first-child td:nth-child(2)").text().replace(/^\s+|\s+$|\s+(?=\s)/g, "");
 		// let d = new Date();
@@ -318,7 +336,7 @@
 		// document.location.assign(a.href);
 
 			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId,
+				url: apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId,
 				method: 'GET',
 				xhrFields: {
 					responseType: 'blob'
@@ -363,7 +381,7 @@
 			
 	// 		// let option= {
 	// 		// 	type: action,
-	// 		// 	url: 'http://iderms.enertalk.com:8443/files/download?oid=' + oid,
+	// 		// 	url: apiHost + '/files/download?oid=' + oid,
 	// 		// 	data: {
 	// 		// 		fileKey: fakeName,
 	// 		// 		orgFilename: originalName
@@ -463,9 +481,7 @@
 	<div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
 		<form id="attachedFileForm" name="attached_file_form" action="#" method="post">
 			<div class="indiv spc-detail">
-				<div class="flex_wrapper">
-					<h2 class="ntit">증빙 서류</h2>
-				</div>
+				<div class="flex_wrapper"><h2 class="ntit">증빙 서류</h2></div>
 				<div class="flex_wrapper border">
 					<a id="file_name" href="#" class="btn_type02">거래 내역서.pdf</a>
 					<a onclick="downloadFile(this)" data-name="receipt" class="save_btn"></a>
@@ -475,8 +491,8 @@
 					<h2 class="heading">출금 요청서</h2>
 					<div class="fr"><button type="button" class="btn_type ml-12" onclick="downloadFile(this)" data-name="reqDoc">다운로드</button></div>
 				</div>
-				<div class="flex_wrapper border mt20">
-					<h2 class="heading">증빙 서류</h2>
+				<div class="flex_wrapper border file-wrapper mt20">
+					<h2 class="heading">증빙 서류</h2><input type="hidden" name="proof_file" id="proofFile" class="sr-only"/>
 					<div class="fr"><button type="button" class="btn_type ml-12" onclick="downloadFile(this)" data-name="proof" >다운로드</button></div>
 				</div>
 				<div class="flex_wrapper">

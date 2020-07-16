@@ -582,6 +582,7 @@
 				} else {
 					// console.log("YES jobId==", self.attr("data-jobId"))
 					let newArr = [];
+					newArr.length = 0;
 					let spcObj = {};
 					spcObj.spcId = self.data("id");
 					spcObj.spcName = self.data("name");
@@ -638,7 +639,6 @@
 			postScheduleBtn.on("click", function(){
 				maintenance(spcIdArr, 'post');
 			});
-
 		} else {
 			console.log("modalPopInit===", data[0]);
 			title.text('주요 일정 알림 수정');
@@ -689,7 +689,7 @@
 				maintenance(spcNameList, 'delete', data[0].id);
 			});
 			// $("#closeBtn").on("click", function(){ return false; })
-			maintenance(spcNameList, 'patch', data[0].id);
+
 			postScheduleBtn.text('수정');
 			postScheduleBtn.on("click", function(){
 				console.log("postScheduleBtn====")
