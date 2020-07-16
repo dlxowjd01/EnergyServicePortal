@@ -67,7 +67,7 @@
 							$('#rejectBtn').parent().addClass('hidden');
 						}
 
-						if(!isEmpty(attachmentInfo)){
+						if(!isEmpty(item.attachmentInfo)){
 							$("#proofFile").prev().text("증빙서류: ")
 							attachmentInfo.forEach(attach => {
 								let downUrl = apiHost + '/files/download/' + attach.filedName + '?oid=' + oid + '&orgFilename=' + attach.originalName.trim();
@@ -239,9 +239,7 @@
 		$("#saveBtn").on("click", function(){
 			const newStatus = null;
 			let input = $("#txt2").val();
-			let d = new Date();
-			let prefix = d.toISOString().substring(0, 10) + ' '
-				+  d.toLocaleTimeString().substr(0, d.toLocaleTimeString().length-2)
+			let prefix = new Date().toLocaleDateString("ja-JP").replace(/\//g, '-') + '&emsp;&emsp;' + new Date(item.status_changed_at).toLocaleTimeString("ja-JP")
 				+ '/ '
 				+ loginName
 				+ '\n';
