@@ -44,30 +44,34 @@
 		// console.log("apiHost===", apiHost)
 		// console.log("userInfo===", userInfo)
 		//전월
-		$('.btn_prev_mon').on('click', function () {
-			const prevMonth = today.getMonth() - 1;
+		$('.btn_prev_mon').click(function () {
+			let prevMonth = today.getMonth() - 1;
 			today = new Date(today.getFullYear(), prevMonth, today.getDate());
 			$('#modalTitle').text(prevMonth);
 			$('#popoverModal').find("h2").text(prevMonth);
 			buildCalendar();
+			return false;
 		});
 
 		//다음월
-		$('.btn_next_mon').on('click', function () {
-			const nextMonth = today.getMonth() + 1;
+		$('.btn_next_mon').click(function () {
+			let nextMonth = today.getMonth() + 1;
 			today = new Date(today.getFullYear(), nextMonth, today.getDate());
 			$('#modalTitle').text(nextMonth);
 			buildCalendar();
+			return false;
 		});
 
 		//요번달
-		$('.btn_type03.active').on('click', function () {
+		$('.btn_type03.active').click(function () {
 			today = new Date();
 			buildCalendar();
+			return false;
 		});
 
 		$('#repeat_interval, #repeat_unit').on('click change', function () {
 			repeatEnd();
+			return false;
 		});
 
 		// $('#spcAlarmModal li').on('click', function () {
@@ -222,6 +226,9 @@
 			type: 'get',
 			async: false,
 			contentType: "application/json",
+			beforeSend: function(){
+				$('.loading').show();
+			},
 			success: function (json) {
 				let data = json.data;
 				var promise = [];
@@ -269,6 +276,7 @@
 					maintenance(spcNameArr, 'get');
 				});
 				
+				$('.loading').hide();
 
 				// getDataList(spcIdList.join());
 
@@ -331,7 +339,7 @@
 
 			if(!isEmpty(spcNameArr)){
 				var spcNameList = spcNameArr;
-				console.log("spcName===", typeof spcNameArr)
+				// console.log("spcName===", typeof spcNameArr)
 				if(typeof spcNameArr == 'number' ){
 					spcId = spcNameArr;
 				} else if (spcNameArr.length) {
@@ -354,7 +362,10 @@
 					type: "money",
 					like_yyyymm: yyyy + mm,
 				},
-				async: true
+				beforeSend: function () {
+					$('.loading').show();
+				},
+				async: false
 			};
 
 			optTransaction = {
@@ -367,7 +378,10 @@
 					'startDay': startDay,
 					'endDay' : endDay
 				},
-				async: false
+				async: false,
+				beforeSend: function () {
+					$('.loading').show();
+				},
 			};
 
 			if (jobId != undefined) {
@@ -377,7 +391,7 @@
 			$.when($.ajax(option),$.ajax(optTransaction)).done(function (result1, result2) {
 				var item1 = result1[0].data;
 				var item2 = groupBy(result2[0].data, "withdraw_day");
-				console.log("item1---", item1);
+				$('.loading').hide();
 				// console.log("item2===", item2)
 				fillCalendar(item1, item2, spcNameList);
 			}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -398,7 +412,10 @@
 						type: action,
 						contentType: "application/json",
 						traditional: true,
-						data: JSON.stringify(data)
+						data: JSON.stringify(data),
+						beforeSend: function() {
+							$('.loading').show();
+						},
 					};
 					// url = apiHost + '/spcs/bankbook/' + jobId + '?oid=' + oid + jobText;
 					delete data.spc_id;
@@ -436,6 +453,7 @@
 			}
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				$("#spcAlarmModal").modal("hide");
+				$('.loading').hide();
 				maintenance(spcIdArr, 'get');
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				showWarningModal("fail");
@@ -579,7 +597,6 @@
 			}); 
 		}
 
-
 		$("#addAlarmBtn").on("click", function(){
 			modalPopInit(undefined, spcNameList);
 			// $("#spcAlarmModal").modal("show");
@@ -711,8 +728,7 @@
 			});
 			// postScheduleBtn.attr('onclick', 'maintenance(' + spcNameList + '\'patch\', \'' + data[0].id + '\' );').text('수정');
 		}
-		modal.modal();
-		$("#spcAlarmModal").modal("show");
+		modal.modal("show");
 		if($("#detailInfoModal").hasClass("active")) {
 			$("#detailInfoModal").removeClass("active");
 		}

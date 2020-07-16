@@ -57,7 +57,7 @@
 					json.data.map(item => {
 						let data = json.data;
 						let sum = 0;
-						// console.log("data===", data)
+						console.log("item.attachement_info===", item.attachement_info)
 						$("#total").text(item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원');
 
 						// const attachmentInfo = Promise.resolve(JSON.parse(item.attachement_info));

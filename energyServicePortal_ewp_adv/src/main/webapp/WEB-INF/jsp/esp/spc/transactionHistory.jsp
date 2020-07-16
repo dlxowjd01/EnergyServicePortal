@@ -5,7 +5,7 @@
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
-
+	console.log("oid---", oid);
 	$(function() {
 		const tableBody = $('#tableBody');
 		const tableFooter = $('#tableFooter')
@@ -261,6 +261,7 @@
 			let totalAmount = 0;
 			var page = currentPage;
 			newData.map((item, index) => {
+				// console.log("item===", item)
 				totalAmount += item.total_amount;
 				if(!isEmpty(arr)) {
 					item.opt = arr;	
@@ -270,7 +271,7 @@
 						resolve(JSON.parse(item.to_account))
 					}).then(res => {
 						// let item = Object.assign({}, item);
-						// console.log("statusOpt==", statusOpt)
+						// console.log("item==", item, "res====", res)
 						// delete(item.to_account);
 						const spcMatch = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
 						let perPage = 14;
@@ -281,9 +282,19 @@
 						transaction_spc_name = spcInfoArr[spcMatch].spc_name;
 						// withdraw date
 						let withdraw_day = item.withdraw_day.substring(0, 4) + '-' + item.withdraw_day.substring(4, 6) + '-' + item.withdraw_day.substring(6, 8);
-						let withdraw_account_info = '';
-						withdraw_account_info = item.withdraw_bank+item.withdraw_account_no;
-
+						let withdraw_bank_name = '';
+						let withdraw_acc_num = '';
+						if(!isEmpty(withdraw_bank_name)) {
+							withdraw_bank_name = item.withdraw_bank;
+						} else {
+							withdraw_bank_name = '-';
+						}
+						if(!isEmpty(withdraw_acc_num)) {
+							withdraw_acc_num = item.withdraw_account_no;
+						} else {
+							withdraw_acc_num = '-'
+						}
+						console.log("withdraw_acc_num==", withdraw_acc_num, "withdraw_bank_name====", withdraw_bank_name)
 						let transaction_type = '';
 						res.length > 0 ? ( res.length ==1 ? ( transaction_type = '출금' ) : ( transaction_type = '출금 '+ (res.length) + '건' ) ): ( transaction_type = '-' );
 						let amount = '';
@@ -370,7 +381,7 @@
 							.replace(/\*transactionSpcName\*/g, transaction_spc_name)
 							.replace(/\*transactionReqId\*/g, transaction_req_id)
 							.replace(/\*withdrawDay\*/g, withdraw_day)
-							.replace(/\*withdrawAccountInfo\*/g, withdraw_account_info)
+							.replace(/\*withdrawBankName\*/g, withdraw_bank_name).replace(/\*withdrawAccountNum\*/g, withdraw_acc_num)
 							.replace(/\*transactionType\*/g, transaction_type)
 							.replace(/\*purpose\*/g, purpose)
 							.replace(/\*accountType\*/g, account_type_list[res.length])
@@ -446,10 +457,10 @@
 			let totalNav = Math.ceil(totalPage / perPage);
 			let endPage = ((startPage + perPage - 1) > totalPage) ? totalPage : (startPage + navCount - 1);
 
-			console.log("dataLength===", dataLength, "endPage===", endPage);
+			// console.log("dataLength===", dataLength, "endPage===", endPage);
 
 			if (navGroup == 1) {
-				console.log("navGroup == 1===")
+				// console.log("navGroup == 1===")
 				pageStr += '<a href="javascript:void(0);" data-value="1" class="btn-prev first-arrow"></a>';
 			} else {
 				let prev = currentPage - 1;
@@ -467,12 +478,12 @@
 			}
 
 			if (navGroup < totalNav) {
-				console.log("navGroup < totalNav===", totalNav, "endPage===", endPage)
+				// console.log("navGroup < totalNav===", totalNav, "endPage===", endPage)
 				let current = currentPage + 1;
 				pageStr += '<a href="javascript:void(0);" class="btn-next" data-value="'+ current +'></a>';
 			} else {
 				let current = currentPage + 1;
-				console.log("navGroup > totalNav===", totalNav, "endPage===", currentPage + 1)
+				// console.log("navGroup > totalNav===", totalNav, "endPage===", currentPage + 1)
 				pageStr += '<a href="javascript:void(0);" class="btn-next" data-value="' + current + '"></a>';
 			}
 			$('#pagination').append(pageStr);
@@ -521,19 +532,34 @@
 	});
 
 	function deleteRow(selector) {
-		// $(selector).parents().closest("tr").css("border", "solid 1px #fff");
-		$("#warningModal").modal("show");
-		$("#confirmBtn").on("click", function(){
-			$("#warningModal").modal("hide");
-			$(selector).parents().closest("tr").remove();
-		})
+		let delPrompt = prompt('해당 요청서를 삭제하시겠습니까? \n삭제를 원하시면 아래 "삭제" 라고 입력하고 확인을 눌러 주세요.', '');
+		if (delPrompt != '삭제') {
+			return false;
+		}
+		let reqId = $(selector).prev().data("id");
+		console.log("reqid---", reqId);
+
+		let option= {
+			url: apiHost + '/spcs/transactions/' + reqId + '?oid=' + oid,
+			type: 'DELETE',
+			async: true
+		}
+		console.log("option---", option)
+
+		$.ajax(option).done(function (json, textStatus, jqXHR) {
+			document.location.reload(true);
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			alert('처리 중 오류가 발생했습니다.');
+			console.log("error===", jqXHR)
+			return false;
+		});
 		// $(selector).parents().closest("tr").css("border", "none");
 		// console.log("tr===", $(selector).parents().closest("tr"))
 	}
 
 	function goToDetail(self) {
-		let spcId = $(self).parent().data("id");
-		let spcName = $(self).parent().data("name");
+		let spcId = $(self).parents().closest("td").data("id");
+		let spcName = $(self).parents().closest("td").data("name");
 		let reqId = self.data("id");
 		let accNum = self.data("value");
 		let status = self.text();
@@ -814,7 +840,7 @@
 								<td>*requestedBy*</td>
 								<td>*approvedBy*</td>
 								<td class='left' data-id="*transactionSpcId*" data-name="*transactionSpcName*" data-value="*statusVal*"><!--
-								--><div class="flex_start"><a href="javascript:void(0);" class="*linkAttr*" data-value="*withdrawAccountInfo*" data-id="*transactionReqId*" onclick="goToDetail($(this))">*status*</a><!--
+								--><div class="flex_start"><a href="javascript:void(0);" class="*linkAttr*" data-name="*withdrawBankName*" data-value="*withdrawAccountNum*" data-id="*transactionReqId*" onclick="goToDetail($(this))">*status*</a><!--
 									--><a href="javascript:void(0);" onclick="deleteRow(this)" class='icon-delete *visibility*'></a><!--
 								--></div>
 								</td>
