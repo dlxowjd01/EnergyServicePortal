@@ -197,6 +197,10 @@ const setDropdownValue = ($selector) => {
 			console.log("btn===", btn)
 			console.log("$(this)===", $(this).data('value'))
 			let val = $(this).data('value');
+			if(!isEmpty($(this).data('name'))){
+				let name = $(this).data('name');
+				btn.data('name', name);
+			}
 			btn.data('value', val);
 		});
 	});
