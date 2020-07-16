@@ -442,7 +442,9 @@
 					</form>
 					<div class="btn_wrap_type02">
 						<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
+						<c:if test="${userInfo.task eq 2 or userInfo.role eq 1}">
 						<button type="button" class="btn_type" id="addBtn">완료</button>
+						</c:if>
 					</div>
 				</div>
 			</div>
@@ -496,9 +498,13 @@
 					</div>
 				</div>
 				<div class="btn_wrap_type02">
+					<c:if test="${userInfo.task eq 2 or userInfo.role eq 1}">
 					<button type="button" class="btn_type04" id="delBtn">삭제</button>
+					</c:if>
 					<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">닫기</button>
+					<c:if test="${userInfo.task eq 2 or userInfo.role eq 1}">
 					<button type="button" class="btn_type" id="chgBtn">수정</button>
+					</c:if>
 				</div>
 			</div>
 		</div>
@@ -529,7 +535,11 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="indiv supplementary_docs">
-			<div class="btn_wrap_type01"><button type="button" class="btn_type big" onclick="modalOpen()">작성</button></div>
+			<div class="btn_wrap_type01">
+				<c:if test="${userInfo.task eq 2 or userInfo.role eq 1}">
+					<button type="button" class="btn_type big" onclick="modalOpen()">작성</button>
+				</c:if>
+			</div>
 			<div class="spc_tbl align_type left">
 				<table class="sort_table chk_type">
 					<colgroup>
