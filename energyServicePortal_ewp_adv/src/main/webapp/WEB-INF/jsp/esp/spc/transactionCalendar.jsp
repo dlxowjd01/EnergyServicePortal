@@ -814,11 +814,11 @@
 
 				// $('#repeat_end').val(selDate.format('yyyy-MM-dd'));
 
-		$('#repeat_end').val(selDate.format('yyyy-MM-dd'));
+		$('#repeat_end').val(selectedDate.format('yyyy-MM-dd'));
 
 		if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
-			selDate.setDate(selDate.getDate() - Number($('#alarmSetup button').data('value')));
-			$('#alarmDate').val(selDate.format('yyyy-MM-dd'));
+			selectedDate.setDate(selectedDate.getDate() - Number($('#alarmSetup button').data('value')));
+			$('#alarmDate').val(selectedDate.format('yyyy-MM-dd'));
 		}
 	}
 
@@ -870,6 +870,14 @@
 				}).removeClass('disabled').attr('placeholder', '직접선택');
 				$('#alarmDate').val('');
 			}
+		}
+	}
+
+	const afterDatePick = function (inputName) {
+		if(inputName == 'job_date') {
+			rtnDropdown('alarmSetup');
+		} else {
+			repeatEnd();
 		}
 	}
 
