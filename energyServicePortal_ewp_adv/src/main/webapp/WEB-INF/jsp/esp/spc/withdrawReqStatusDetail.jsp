@@ -239,7 +239,9 @@
 		$("#saveBtn").on("click", function(){
 			const newStatus = null;
 			let input = $("#txt2").val();
-			let prefix = new Date().toLocaleDateString("ja-JP").replace(/\//g, '-') + '&emsp;&emsp;' + new Date(item.status_changed_at).toLocaleTimeString("ja-JP")
+			let d = new Date();
+			let prefix = d.toISOString().substring(0, 10) + ' '
+				+  d.toLocaleTimeString().substr(0, d.toLocaleTimeString().length-2)
 				+ '/ '
 				+ loginName
 				+ '\n';
@@ -256,15 +258,11 @@
 					val = '\n' + prefix + input;
 				}
 			
-				let preserved = $("#txt1").data('memo');
-				let preserved2 = $("#txt1").data('commonMemo');
-				$("#txt1").val(preserved += val);
+				let preserved = (isEmpty($("#txt1").data('memo')) ? '' : $("#txt1").data('memo')) ;
+				let preserved2 = isEmpty($("#txt1").data('commonMemo')) ? '' : $("#txt1").data('commonMemo');
+				$("#txt1").val(preserved += val).data('memo', preserved);
 				if ($("#memoOpt").is(":checked")) {
-					if (preserved2 != null) {
-						preserved2 += val;
-					} else {
-						preserved2 = val;
-					}
+					$("#txt1").val(preserved += val).data('commonMemo', preserved2 += val);
 				}
 				// console.log("val==", preserved)
 				updateReq(undefined, preserved, preserved2);
@@ -280,31 +278,22 @@
 		});
 
 		function handleReq(newStatus, callback){
-			let memoStr = '';
-			let preserved = $("#txt1").val();
-			let val = $("#txt2").val();
-			$("#txt1").val(preserved += val);
-			// memoObj.opt => 1: 사무수탁사 같이 보기  0: 자산운용사만
-			if ( $("#memoOpt").is(":checked") ){
-				let memoObj = {};
-				memoObj.opt = 1;
-				memoObj.desc = (preserved += val);
-				memoStr = JSON.stringify(memoObj);
-			} else {
-				memoStr = (preserved += val);
-			}
-
-			callback(newStatus, memoStr);
+			callback(newStatus);
 		}
 
 		function updateReq(newStatus, memoStr, commmonMemo){
 			let newData = {}
 			newStatus || newStatus == 0 ? ( newData.status = newStatus ) : null;
-			newData.status_changed_by = loginName;
-			newData.status_changed_at = new Date().toISOString();
-			newData.requested_by = loginName;
-			newData.requested_at = new Date().toISOString();
-			newData.memo = memoStr;
+
+			if(newStatus != undefined) {
+				newData.status_changed_by = loginName;
+				newData.status_changed_at = new Date().toISOString();
+			}
+
+			if (memoStr != undefined) {
+				newData.memo = memoStr;
+			}
+
 			if (commmonMemo != undefined) {
 				newData.memo_common = commmonMemo;
 			}
