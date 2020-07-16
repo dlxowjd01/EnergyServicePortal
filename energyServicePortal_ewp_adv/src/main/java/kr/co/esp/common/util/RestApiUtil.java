@@ -5,12 +5,19 @@ import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.*;
 import java.net.*;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 public class RestApiUtil {
 	private static final Logger logger = LoggerFactory.getLogger(RestApiUtil.class);
@@ -40,7 +47,17 @@ public class RestApiUtil {
 				uri = applyParameters(uri, parameters);
 			}
 
-			HttpURLConnection con = (HttpURLConnection) uri.toURL().openConnection();
+			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+				public X509Certificate[] getAcceptedIssuers() { return null; }
+				public void checkClientTrusted(X509Certificate[] certs, String authType) { }
+				public void checkServerTrusted(X509Certificate[] certs, String authType) { }
+			}};
+
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new SecureRandom());
+
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+			HttpsURLConnection con = (HttpsURLConnection) new URL("https://iderms-api.iderms.ai" + strUrl).openConnection();
 			con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
 			con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
 			con.setRequestMethod("GET");

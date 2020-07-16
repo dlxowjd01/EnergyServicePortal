@@ -315,7 +315,7 @@
 							let acc = [...item.opt[5].split(',')];
 							res.filter(x => {
 								let match = acc.indexOf(x.purpose.toString()) > -1;
-								console.log("x===", x)
+								// console.log("x===", x)
 								return acc.indexOf(x.purpose.toString()) > -1;
 							});
 							// statusOpt.indexOf(x.status.toString()) > -1
@@ -438,6 +438,7 @@
 		function makeNavigation (currentPage, spcId, dataLength) {
 			// console.log("spc===", spcId)
 			$('#pagination').empty();
+			let maxPages = 5;
 			let pageStr = '';
 			let totalPage = Math.ceil( dataLength / perPage );
 			let navGroup = Math.floor((page - 1) / perPage) + 1;
@@ -445,14 +446,15 @@
 			let totalNav = Math.ceil(totalPage / perPage);
 			let endPage = ((startPage + perPage - 1) > totalPage) ? totalPage : (startPage + navCount - 1);
 
-			console.log("totalNav===", totalNav, "navGroup===", navGroup);
+			console.log("dataLength===", dataLength, "endPage===", endPage);
 
 			if (navGroup == 1) {
+				console.log("navGroup == 1===")
 				pageStr += '<a href="javascript:void(0);" data-value="1" class="btn-prev first-arrow"></a>';
 			} else {
-				let current = startPage -1;
+				let prev = currentPage - 1;
 				console.log("totoalPAge===", totalPage)
-				pageStr += '<a href="javascript:void(0);" data-value="' + totalPage + '" class="btn-prev last-arrow"></a>';
+				pageStr += '<a href="javascript:void(0);" data-value="' + prev + '" class="btn-prev last-arrow"></a>';
 			}
 
 			for (let i = startPage ; i <= endPage; i++) {
