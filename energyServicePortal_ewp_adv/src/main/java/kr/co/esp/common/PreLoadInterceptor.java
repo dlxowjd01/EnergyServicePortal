@@ -52,12 +52,12 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			Map<String, String> parameters = new HashMap<String, String>();
 			parameters.put("includeDevices", "true");
 
-			session.setAttribute("apiHost", "http://iderms.enertalk.com:8443");
-			// if (mode != null && "test".equals(mode)) {
-			// 	session.setAttribute("apiHost", "http://iderms-test.enertalk.com:8443");
-			// } else {
-			// 	session.setAttribute("apiHost", "http://iderms.enertalk.com:8443");
-			// }
+			// session.setAttribute("apiHost", "http://iderms.enertalk.com:8443");
+			if (mode != null && "test".equals(mode)) {
+				session.setAttribute("apiHost", "http://iderms-test.enertalk.com:8443");
+			} else {
+				session.setAttribute("apiHost", "http://iderms.enertalk.com:8443");
+			}
 
 			Map<String, Object> siteMap = get("/auth/me/sites", mode, parameters, token); //사이트 리스트 정보
 			if (200 == (int) siteMap.get("code")) {
