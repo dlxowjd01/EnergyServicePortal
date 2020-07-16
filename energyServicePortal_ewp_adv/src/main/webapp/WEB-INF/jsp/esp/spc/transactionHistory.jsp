@@ -271,6 +271,7 @@
 						resolve(JSON.parse(item.to_account))
 					}).then(res => {
 						// let item = Object.assign({}, item);
+						// console.log("res===", res, "item===", item)
 						// console.log("item==", item, "res====", res)
 						// delete(item.to_account);
 						const spcMatch = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
@@ -371,7 +372,9 @@
 
 						( ( item.requested_by !== undefined ) && ( item.requested_by != "string" ) ) ? ( requested_by = item.requested_by ) : ( requested_by = '-' );
 
-						item.status_changed_at ? ( updated_at = (item.status_changed_at.substring(0, 10) + ' ' + item.status_changed_at.substring(11, 19)) ) : ( updated_at = '-' );
+						// console.log("()===", item.status_changed_at )
+
+						item.status_changed_at ? ( updated_at = ( new Date(item.status_changed_at).toLocaleDateString("ja-JP").replace(/\//g, '-') + '&emsp;&emsp;' + new Date(item.status_changed_at).toLocaleTimeString()) ) : ( updated_at = '-' );
 
 						item.status_changed_by ? ( approved_by = item.status_changed_by ) : ( approved_by = '-' );
 
@@ -399,7 +402,7 @@
 					}, function(error){
 						if(error){
 							console.log("error", error);
-							reject(error)
+							return false;
 						};
 					});
 			})
@@ -508,11 +511,6 @@
 			});
 
 		}
-
-		function searchByPage(){
-			
-		}
-
 
 		function getNumberIndex(index) {
 			return index + 1;
