@@ -575,20 +575,17 @@
 		warning.addClass('hidden');
 
 		if (data == undefined) {
-			$("#spcList").prev().append("<span class='caret'></span>");
-			$("#spcList").removeClass("hidden");
 			// console.log("modalPopInit register===");
 			unCheckAll(modalForm);
 			//팝업 오픈시 value 초기화
 			input.each(function () {
 				$(this).val('');
 			});
-			$("#spcList").prev().data({"value": "", "name" : "" }).html("선택" + '<span class="caret"></span>');
 			//팝업 오픈시 value 초기화
-			// initDropdownValue(dropDown);
 			dropDown.each(function () {
 				$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
 			});
+			$("#spcList").prev().html("선택" + '<span class="caret"></span>').data({"value": "", "name" : "" });
 			deleteScheduleBtn.addClass('hidden');
 			postScheduleBtn.text('등록');
 			postScheduleBtn.on("click", function(){
@@ -1045,7 +1042,7 @@
 								<div class="dropdown" id="repeat_yn">
 									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="점검 선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
-										<li data-value="Y"><a href="javascript:void(0);">정기 알림</a></li>
+<%--										<li data-value="Y"><a href="javascript:void(0);">정기 알림</a></li>--%>
 										<li data-value="N"><a href="javascript:void(0);">일시 알림</a></li>
 									</ul>
 								</div>

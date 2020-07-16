@@ -68,7 +68,7 @@
 
 						const attachmentInfo = Promise.resolve(JSON.parse(item.attachement_info));
 						attachmentInfo.then((attachList) => {
-							$("#proofFile").prev().text("증빙서류: ");
+							$("#proofFile").prev().text("증빙서류");
 							attachList.forEach(attach => {
 								let downUrl = apiHost + '/files/download/' + attach.filedName + '?oid=' + oid + '&orgFilename=' + attach.originalName.trim();
 								let templateAttach = `
@@ -262,7 +262,7 @@
 				let preserved2 = isEmpty($("#txt1").data('commonMemo')) ? '' : $("#txt1").data('commonMemo');
 				$("#txt1").val(preserved += val).data('memo', preserved);
 				if ($("#memoOpt").is(":checked")) {
-					$("#txt1").val(preserved += val).data('commonMemo', preserved2 += val);
+					$("#txt1").data('commonMemo', preserved2 += val);
 				}
 				// console.log("val==", preserved)
 				updateReq(undefined, preserved, preserved2);
@@ -327,13 +327,13 @@
 	// onclick="location.href=apiHost + '/files/download/5c71e049-f73c-2bf9-a9a0-2f91d067ef11?oid=spower&orgFilename=수익보고서_20200526100755.pdf'"
 
 	function downloadFile(self){
-		console.log("spcId===", spcId)
+		let apiUrl = '';
 		if($(self).data("name") == "receipt") {
-			return false;
-		} else if($(self).data("name") == "reqDoc"){
 
+		} else if($(self).data("name") == "reqDoc"){
+			apiUrl = 'request';
 		} else if($(self).data("name") == "proof"){
-			
+			apiUrl = 'evidence';
 		};
 		// var a = document.createElement('a');
 		// const url = apiHost + '/spcs/transactions/download/request?oid='+ oid + '&spc_id=' + spcId + '&request_id=' + reqId;
@@ -357,7 +357,7 @@
 		// document.location.assign(a.href);
 
 			$.ajax({
-				url: apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId,
+				url: apiHost + '/spcs/transactions/download/' + apiUrl + '?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId,
 				method: 'GET',
 				xhrFields: {
 					responseType: 'blob'
