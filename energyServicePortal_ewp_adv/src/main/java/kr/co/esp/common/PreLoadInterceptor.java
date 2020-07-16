@@ -56,7 +56,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				session.setAttribute("apiHost", "http://iderms.enertalk.com:8443");
 			} else {
 //				session.setAttribute("apiHost", "http://iderms.enertalk.com:8443");
-				session.setAttribute("apiHost", " https://iderms-api.iderms.ai");
+				session.setAttribute("apiHost", "https://iderms-api.iderms.ai");
 			}
 
 			Map<String, Object> siteMap = get("/auth/me/sites", mode, parameters, token); //사이트 리스트 정보

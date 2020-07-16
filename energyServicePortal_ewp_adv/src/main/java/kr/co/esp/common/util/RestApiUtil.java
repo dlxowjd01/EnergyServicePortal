@@ -33,7 +33,7 @@ public class RestApiUtil {
 				//uri = new URI("http://iderms-test.enertalk.com:8443" + strUrl);
 				uri = new URI("http://iderms.enertalk.com:8443" + strUrl);
 			} else {
-				uri = new URI("http://iderms.enertalk.com:8443" + strUrl);
+				uri = new URI("https://iderms-api.iderms.ai" + strUrl);
 			}
 
 			if (parameters != null) {
@@ -109,7 +109,7 @@ public class RestApiUtil {
 		Map<String, Object> rtnMap = new HashMap<String, Object>();
 
 		try {
-			String postUrl = "http://iderms.enertalk.com:8443";
+			String postUrl = "https://iderms-api.iderms.ai";
 //			if (mode != null && "test".equals(mode)) {
 //				postUrl = "http://iderms.enertalk-test.com:8443";
 //			}
