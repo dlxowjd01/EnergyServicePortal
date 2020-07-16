@@ -64,7 +64,7 @@
 
 						// const attachmentInfo = Promise.resolve(JSON.parse(item.attachement_info));
 
-						if (item.status == 3) {
+						if (item.status == 3 || item.status == 0) {
 							$('#rejectBtn').parent().addClass('hidden');
 						}
 
@@ -86,7 +86,14 @@
 						}
 							
 						if(typeof item.memo == "string"){
-							$("#txt1").val(item.memo);
+							let showMemo = "";
+							if (userTask == 1) {
+								showMemo = item.memo_common;
+							} else {
+								showMemo = item.memo;
+							}
+
+							$("#txt1").val(showMemo).data('memo', item.memo).data('commonMemo', item.memo_common);
 							$("#txt2").val("");
 							return new Promise((resolve, reject) => {
 									// typeof v.to_account !== "string" ? JSON.parse(v.to_account) : v.to_account = v.to_account	
@@ -252,13 +259,22 @@
 					val = '\n' + prefix + input;
 				}
 			
-				let preserved = $("#txt1").val();
+				let preserved = $("#txt1").data('memo');
+				let preserved2 = $("#txt1").data('commonMemo');
 				$("#txt1").val(preserved += val);
+				if ($("#memoOpt").is(":checked")) {
+					if (preserved2 != null) {
+						preserved2 += val;
+					} else {
+						preserved2 = val;
+					}
+				}
 				// console.log("val==", preserved)
-				updateReq(undefined, preserved);
+				updateReq(undefined, preserved, preserved2);
 				// handleReq(newStatus, updateReq);
 			}
 		});
+
 		// rejection => status: 0
 		$("#rejectBtn").on('click', function(e){
 			e.preventDefault();
@@ -284,7 +300,7 @@
 			callback(newStatus, memoStr);
 		}
 
-		function updateReq(newStatus, memoStr){
+		function updateReq(newStatus, memoStr, commmonMemo){
 			let newData = {}
 			newStatus || newStatus == 0 ? ( newData.status = newStatus ) : null;
 			newData.status_changed_by = loginName;
@@ -292,6 +308,9 @@
 			newData.requested_by = loginName;
 			newData.requested_at = new Date().toISOString();
 			newData.memo = memoStr;
+			if (commmonMemo != undefined) {
+				newData.memo_common = commmonMemo;
+			}
 
 			let opt = {
 				url: apiHost + '/spcs/transactions/' + reqId + '?oid=' + oid,
