@@ -102,7 +102,7 @@
 			$('#popoverModal').find("h2").text(prevMonth);
 			buildCalendar();
 			maintenance(spcPairArr, 'get');
-			return false;
+			// return false;
 		});
 
 		//다음월
@@ -112,7 +112,7 @@
 			$('#modalTitle').text(nextMonth);
 			buildCalendar();
 			maintenance(spcPairArr, 'get');
-			return false;
+			// return false;
 		});
 
 		//요번달
@@ -120,12 +120,12 @@
 			today = new Date();
 			buildCalendar();
 			maintenance(spcPairArr, 'get');
-			return false;
+			// return false;
 		});
 
 		$('#repeat_interval, #repeat_unit').on('click change', function () {
 			repeatEnd();
-			return false;
+			// return false;
 		});
 
 		// $('#spcAlarmModal li').on('click', function () {
@@ -179,10 +179,6 @@
 		// 		}
 		// 	}
 		// });
-
-		$('#repeat_interval, #repeat_unit').on('click change', function () {
-			repeatEnd();
-		});
 
 		$(':checkbox[name="type"]').on('change', function () {
 			searchBySpcName();
@@ -809,10 +805,6 @@
 			});
 			$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
 		}
-
-				// $('#repeat_end').val(selDate.format('yyyy-MM-dd'));
-
-		$('#repeat_end').val(selectedDate.format('yyyy-MM-dd'));
 
 		if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
 			selectedDate.setDate(selectedDate.getDate() - Number($('#alarmSetup button').data('value')));
