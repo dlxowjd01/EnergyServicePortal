@@ -903,7 +903,6 @@
 	}
 
 	const addManualForm = (did) => {
-
 		// $('[class^="manual"]').each(function() {
 		// 	$(this).removeClass('w-40');
 		//
@@ -1200,9 +1199,16 @@
 	}
 
 	const addDeviceForm = (devicetype, did) => {
-		initDropdownValue($('#addDeviceModal button.btn-primary'));
+		const popup = $('#addDeviceModal'),
+			dropDown = popup.find('button.btn-primary'),
+			textArea = popup.find('textarea'),
+			inputArr = popup.find('input');
+		dropDown.each(function () {
+			$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
+		});
 
-		$('#addDeviceModal input').each(function() {
+		textArea.val('');
+		inputArr.each(function() {
 			$(this).val('');
 		});
 

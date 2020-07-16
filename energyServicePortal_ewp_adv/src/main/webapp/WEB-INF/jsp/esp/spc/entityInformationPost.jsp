@@ -293,8 +293,7 @@
 		}
 
 		if (isEmpty(genId)) {
-
-			if(isEmpty($('#sidoValue').val()) || isEmpty($('#address').val())) {
+			if (isEmpty($('#sidoValue').val()) || isEmpty($('#address').val())) {
 				alert('발전소 신규 입력시에는 주소가 필수 입니다.');
 				return false;
 			}
@@ -375,6 +374,7 @@
 			},
 			error: function (request, status, error) {
 				alert('오류가 발생하였습니다. \n관리자에게 문의하세요.');
+				return false;
 			}
 		});
 	}
@@ -467,6 +467,7 @@
 			},
 			error: function (request, status, error) {
 				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+				return false;
 			}
 		});
 	}
@@ -489,7 +490,8 @@
 	 */
 	function sendSpcGenPost(spcId, files) {
 		var genId = $("#genId button").data("value");
-		var maintenance_info = setAreaParamData('maintenanceInfo'),
+		var address_info = setAreaParamData('addressInfo'),
+			maintenance_info = setAreaParamData('maintenanceInfo'),
 			account_info = setAreaParamData('accountInfo'),
 			finance_info = setAreaParamData('financeInfo', 'dropdown'),
 			contract_info = setAreaParamData('contractInfo'),
@@ -540,6 +542,7 @@
 			async: true,
 			contentType: 'application/json',
 			data: JSON.stringify({
+				address: JSON.stringify(address_info),
 				contract_info: JSON.stringify(contract_info),
 				device_info: JSON.stringify(device_info),
 				finance_info: JSON.stringify(finance_info),
@@ -745,64 +748,6 @@
 							</td>
 						</tr>
 						<tr>
-							<th><label for="genName">발전소명</label></th>
-							<td class="group_type">
-								<div class="dropdown placeholder edit" id="genId">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="발전소명 선택">
-										발전소명 선택<span class="caret"></span>
-									</button>
-									<ul id="genList" class="dropdown-menu" role="menu">
-										<li data-value="[sid]">
-											<a href="javascript:void(0);">[name]</a>
-										</li>
-									</ul>
-								</div>
-								<div class="tx_inp_type edit">
-									<input type="text" id="genName" name="power_plant_name" placeholder="발전소명 입력">
-								</div>
-							</td>
-							<th></th>
-							<td>
-								<div class="fixed_height"></div>
-							</td>
-						</tr>
-						<tr>
-							<th>주소</th>
-							<td class="group_type">
-								<div class="dropdown placeholder edit">
-									<button id="country" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-										국가 선택<span class="caret"></span>
-									</button>
-									<ul id="countryList" class="dropdown-menu" role="menu">
-										<li data-value="대한민국">
-											<a href="javascript:void(0);">대한민국</a>
-										</li>
-										<li data-value="일본">
-											<a href="javascript:void(0);">일본</a>
-										</li>
-									</ul>
-								</div>
-								<div class="dropdown placeholder edit mr-12">
-									<button id="sido" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-										시/도 선택<span class="caret"></span>
-									</button>
-									<ul id="sidoList" class="dropdown-menu" role="menu">
-										<li data-value="[value]">
-											<a href="javascript:void(0);">[value]</a>
-										</li>
-									</ul>
-								</div>
-							</td>
-							<th><label for="address">상세 주소</label></th>
-							<td>
-								<div class="tx_inp_type edit">
-									<input type="hidden" id="countryValue" value="">
-									<input type="hidden" id="sidoValue" value="">
-									<input type="text" id="address" name="minor_address" placeholder="상세 주소">
-								</div>
-							</td>
-						</tr>
-						<tr>
 							<th><label for="사업명">사업명</label></th>
 							<td>
 								<div class="tx_inp_type edit">
@@ -845,16 +790,16 @@
 							</td>
 						</tr>
 						<tr>
-							<th><label for="사무위탁사">사무위탁사</label></th>
+							<th><label for="사무수탁사">사무수탁사</label></th>
 							<td>
 								<div class="tx_inp_type edit">
-									<input type="text" id="사무위탁사" name="사무위탁사" placeholder="직접 입력">
+									<input type="text" id="사무수탁사" name="사무수탁사" placeholder="직접 입력">
 								</div>
 							</td>
-							<th><label for="사무위탁사_담당자(연락처)">담당자(연락처)</label></th>
+							<th><label for="사무수탁사_담당자(연락처)">담당자(연락처)</label></th>
 							<td>
 								<div class="tx_inp_type edit">
-									<input type="text" id="사무위탁사_담당자(연락처)" name="사무위탁사_담당자(연락처)" placeholder="직접 입력">
+									<input type="text" id="사무수탁사_담당자(연락처)" name="사무수탁사_담당자(연락처)" placeholder="직접 입력">
 								</div>
 							</td>
 						</tr>
@@ -918,6 +863,81 @@
 						</tr>
 					</table>
 				</form>
+			</div>
+		</div>
+
+		<div class="indiv panel panel-default" id="addressInfo">
+			<div class="tbl_top panel-heading">
+				<h2 class="ntit mt25">발전소 정보</h2>
+				<a role="button" href="#addressInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a>
+			</div>
+			<div id="addressInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
+				<table>
+					<colgroup>
+						<col style="width:15%">
+						<col style="width:35%">
+						<col style="width:15%">
+						<col style="width:35%">
+					</colgroup>
+					<tr>
+						<th><label for="genName">발전소명</label></th>
+						<td class="group_type">
+							<div class="dropdown placeholder edit" id="genId">
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="발전소명 선택">
+									발전소명 선택<span class="caret"></span>
+								</button>
+								<ul id="genList" class="dropdown-menu" role="menu">
+									<li data-value="[sid]">
+										<a href="javascript:void(0);">[name]</a>
+									</li>
+								</ul>
+							</div>
+							<div class="tx_inp_type edit">
+								<input type="text" id="genName" name="power_plant_name" placeholder="발전소명 입력">
+							</div>
+						</td>
+						<th></th>
+						<td>
+							<div class="fixed_height"></div>
+						</td>
+					</tr>
+					<tr>
+						<th>주소</th>
+						<td class="group_type">
+							<div class="dropdown placeholder edit">
+								<button id="country" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+									국가 선택<span class="caret"></span>
+								</button>
+								<ul id="countryList" class="dropdown-menu" role="menu">
+									<li data-value="대한민국">
+										<a href="javascript:void(0);">대한민국</a>
+									</li>
+									<li data-value="일본">
+										<a href="javascript:void(0);">일본</a>
+									</li>
+								</ul>
+							</div>
+							<div class="dropdown placeholder edit mr-12">
+								<button id="sido" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+									시/도 선택<span class="caret"></span>
+								</button>
+								<ul id="sidoList" class="dropdown-menu" role="menu">
+									<li data-value="[value]">
+										<a href="javascript:void(0);">[value]</a>
+									</li>
+								</ul>
+							</div>
+						</td>
+						<th><label for="address">상세 주소</label></th>
+						<td>
+							<div class="tx_inp_type edit">
+								<input type="hidden" id="countryValue" value="">
+								<input type="hidden" id="sidoValue" value="">
+								<input type="text" id="address" name="minor_address" placeholder="상세 주소">
+							</div>
+						</td>
+					</tr>
+				</table>
 			</div>
 		</div>
 
@@ -1302,8 +1322,12 @@
 									<input type="text" id="관련_금융사" placeholder="직접 입력">
 								</div>
 							</td>
-							<th></th>
-							<td></td>
+							<th><label for="금융사_대표자">대표자</label></th>
+							<td>
+								<div class="tx_inp_type edit">
+									<input type="text" id="금융사_대표자" name="금융사_대표자" placeholder="직접 입력">
+								</div>
+							</td>
 						</tr>
 						<tr>
 							<th><label for="계약_체결일">계약 체결일</label></th>

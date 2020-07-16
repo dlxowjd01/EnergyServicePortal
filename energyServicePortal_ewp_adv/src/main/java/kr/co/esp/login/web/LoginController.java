@@ -59,7 +59,9 @@ public class LoginController {
 		String oid = "encored";
 		String mode = "test"; //운영 스테이징 구분
 
-		if (serverName.contains("trust")) {
+		if (serverName.contains("sundream")) {
+			oid = "sundream";
+		} else if (serverName.contains("trust")) {
 			oid = "trust";
 		} else if (serverName.contains("spower") || "localhost".equals(serverName)) {
 			oid = "spower";

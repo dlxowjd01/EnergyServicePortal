@@ -1,8 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<script>
+<script type="text/javascript">
 	$(function () {
 		init();
-		getGenData();
 		getDataSpcBasic();
 		getDataSpcGen();
 	});
@@ -14,6 +13,10 @@
 		//등기이사 소속 반복처리
 		initRow('addList_affiliation', 'class');
 		addRow('addList_affiliation', 'class');
+
+		//등기이사 소속 반복처리
+		initRow('addList_affiliation2', 'class');
+		addRow('addList_affiliation2', 'class');
 
 		initRow('addList_payroll_date');
 		addRow('addList_payroll_date');
@@ -118,25 +121,6 @@
 		}
 	}
 
-	function getGenData() {
-		var genId = "${param.gen_id}";
-		$.ajax({
-			url: "http://iderms.enertalk.com:8443/config/sites/" + genId,
-			type: "get",
-			async: false,
-			data: {},
-			success: function (json) {
-				$("#genName").text(json.name);
-				$("#countryValue").text("대한민국");
-				$("#sidoValue").text(json.location);
-				$("#address").text(json.address)
-			},
-			error: function (request, status, error) {
-
-			}
-		});
-	}
-
 	function getDataSpcBasic() {
 		var spcId = "${param.spc_id}",
 			oid = "${param.oid}";
@@ -180,6 +164,7 @@
 			success: function (json) {
 				if (json.data.length > 0) {
 					//기본정보
+					const address = JSON.parse(json.data[0].address);
 					const maintenance_info = JSON.parse(json.data[0].maintenance_info);
 					const account_info = JSON.parse(json.data[0].account_info);
 					const finance_info = JSON.parse(json.data[0].finance_info);
@@ -190,6 +175,10 @@
 					const coefficient_info = JSON.parse(json.data[0].coefficient_info);
 					const associated_info = JSON.parse(json.data[0].associated_info);
 
+					if (!isEmpty(address)) {
+						setJsonAutoMapping(address, 'addressInfo');
+					}
+
 					let repeatNumber= new Array();
 					$.map(maintenance_info, function(val, key) {
 						if (key.match('등기이사_명')) {
@@ -199,6 +188,7 @@
 							}
 						}
 					});
+
 					repeatNumber.sort(); // index 기준으로 순서대로 생성하기위해서 정렬
 					repeatNumber.forEach(function(index) {
 						addRow('addList_affiliation', 'class', index);
@@ -256,7 +246,6 @@
 					setJsonAutoMapping(coefficient_info, 'coefficientInfo'); //환경변수
 					setJsonAutoMapping(associated_info, 'associatedInfo'); //관련정보
 
-					console.log(json.data[0].attachement_info);
 					getAttachFileDisplay(JSON.parse(json.data[0].attachement_info)); //첨부파일
 
 					// var device_info = JSON.parse(json.data[0].device_info);
@@ -361,6 +350,7 @@
 
 		var excelHtml = '';
 		excelHtml += $('#basicInfo #basicInfoToggle').html();
+		excelHtml += $('#addressInfo #basicInfoToggle').html();
 		excelHtml += $('#maintenanceInfo #maintenanceInfoToggle').html();
 		excelHtml += $('#accountInfo #accountInfoToggle').html();
 		excelHtml += $('#financeInfo #financeInfoToggle').html();
@@ -418,24 +408,6 @@
 						<td id="법인등록번호"></td>
 					</tr>
 					<tr>
-						<th><label for="genName">발전소명</label></th>
-						<td class="group_type" id="genName"></td>
-						<th></th>
-						<td>
-							<div class="fixed_height"></div>
-						</td>
-					</tr>
-					<tr>
-						<th>주소</th>
-						<td>
-							<span id="countryValue"></span>
-							<span id="sidoValue"></span>
-							<span id="address"></span>
-						</td>
-						<th></th>
-						<td></td>
-					</tr>
-					<tr>
 						<th>사업명</th>
 						<td id="사업명"></td>
 						<th>펀드명</th>
@@ -454,10 +426,10 @@
 						<td id="시공사_담당자(연락처)"></td>
 					</tr>
 					<tr>
-						<th>사무위탁사</th>
-						<td id="사무위탁사"></td>
+						<th>사무수탁사</th>
+						<td id="사무수탁사"></td>
 						<th>담당자(연락처)</th>
-						<td id="사무위탁사_담당자(연락처)"></td>
+						<td id="사무수탁사_담당자(연락처)"></td>
 					</tr>
 					<tr>
 						<th>관리 운영사</th>
@@ -476,13 +448,48 @@
 						<th class="group_type">SPC 법인 인감</th>
 						<td id="SPC_법인_인감">
 							<p class="tx_file">
-								<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[SPC_법인_인감_유형] - [originalname]</a>
+								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[SPC_법인_인감_유형] - [originalname]</a>
 							</p>
 						</td>
 						<th></th>
 						<td>
 							<div class="fixed_height"></div>
 						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<div class="indiv panel panel-default" id="addressInfo">
+			<div class="tbl_top panel-heading">
+				<h2 class="ntit mt25">발전소 정보</h2>
+				<a role="button" href="#addressInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a>
+			</div>
+			<div id="addressInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
+				<table>
+					<colgroup>
+						<col style="width:15%">
+						<col style="width:35%">
+						<col style="width:15%">
+						<col style="width:35%">
+					</colgroup>
+					<tr>
+						<th><label for="genName">발전소명</label></th>
+						<td class="group_type" id="genName"></td>
+						<th></th>
+						<td>
+							<div class="fixed_height"></div>
+						</td>
+					</tr>
+					<tr>
+						<th>주소</th>
+						<td>
+							<span id="countryValue"></span>
+							<span id="sidoValue"></span>
+							<span id="address"></span>
+						</td>
+						<th></th>
+						<td></td>
 					</tr>
 				</table>
 			</div>
@@ -529,18 +536,21 @@
 						</td>
 					</tr>
 
-					<tr class="addList_affiliation">
+					<tr>
 						<th>등기이사 소속</th>
-						<td class="addList_affiliation entity flex_start">
-							<div class="group_type">
+						<td class="addList_affiliation entity">
+							<div class="group_type flex_start">
 								<span id="등기이사_소속_[index]"></span>
+								&nbsp;&nbsp;&nbsp;&nbsp;
 								<span id="등기이사_명[index]"></span>
 							</div>
 						</td>
 						<th>등기 기간</th>
-						<td class="addList_affiliation2 entity flex_start">
-							<span id="등기_기간_from[index]"></span> ~ <span id="등기_기간_to[index]"></span>
-							<span id="등기_이사_만료_알림[index]"></span>
+						<td class="addList_affiliation2 entity">
+							<div class="group_type flex_start">
+								<span id="등기_기간_from[index]"></span> ~ <span id="등기_기간_to[index]"></span>&nbsp;&nbsp;&nbsp;&nbsp;
+								<span id="등기_이사_만료_알림[index]"></span>
+							</div>
 						</td>
 					</tr>
 					<tr>
@@ -634,8 +644,8 @@
 					<tr>
 						<th>금융사(자금 운영 기관)</th>
 						<td id="관련_금융사"></td>
-						<th></th>
-						<td></td>
+						<th>대표자</th>
+						<td id="금융사_대표자"></td>
 					</tr>
 					<tr>
 						<th>계약 체결일</th>
