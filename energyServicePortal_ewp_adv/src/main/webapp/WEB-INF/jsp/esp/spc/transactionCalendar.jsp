@@ -376,9 +376,9 @@
 				}
 			} else {
 				// DELETE req
-				// if (!confirm('삭제 하시겠습니까?')) {
-				// 	return false;
-				// }
+				if (!confirm('삭제 하시겠습니까?')) {
+					return false;
+				}
 				if (action == 'delete') {
 					let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
 					option = {
@@ -387,17 +387,15 @@
 						data: {
 							oid: oid,
 							jobId: jobId,
-						},
-						beforeSend: function() {
-							showWarningModal("confirm");
-						},
+						}
 					};
 				}
 			}
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				$("#spcAlarmModal").modal("hide");
 				$('.loading').hide();
-				maintenance(spcIdArr, 'get');
+				document.location.reload(true);
+				// maintenance(spcPairArr, 'get');
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				showWarningModal("fail");
 				console.log("jqXHR===", jqXHR)
@@ -932,7 +930,7 @@
 	<div class="modal-dialog">
 		<div class="modal-content collection_modal_content">
 			<div class="modal-header">
-				<h4 lass="modal-title">조회된 데이터가 없습니다.</h4>
+				<h4 lass="modal-title"></h4>
 			</div>
 			<div class="modal-footer">
 				<div class="btn_wrap_type02">
