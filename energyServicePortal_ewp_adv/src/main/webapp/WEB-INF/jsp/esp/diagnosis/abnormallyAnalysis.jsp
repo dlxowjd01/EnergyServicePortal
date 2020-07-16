@@ -3,7 +3,6 @@
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
-	const apiURL = 'http://iderms.enertalk.com:8443';
 	const siteList = JSON.parse('${siteList}');
 	let deviceList;
 
@@ -151,7 +150,7 @@
 
 		if (siteArray.length > 0) {
 			$.ajax({
-				url: apiURL + configDevice,
+				url: apiHost + configDevice,
 				type: 'get',
 				data: configDeviceData
 			}).done(function (data, textStatus, jqXHR) {
@@ -244,7 +243,7 @@
 	const featureProperties = new Object();
 	const deviceProperties = () => {
 		$.ajax({
-			url: apiURL + '/config/view/device_properties',
+			url: apiHost + '/config/view/device_properties',
 			type: 'get',
 			data: {},
 			success: function (result) {
@@ -450,7 +449,7 @@
 			};
 
 			$.ajax({
-				url: apiURL + energyDevice,
+				url: apiHost + energyDevice,
 				type: 'get',
 				data: statusSummaryData,
 			}).done(function (data, textStatus, jqXHR) {
@@ -473,7 +472,7 @@
 			};
 
 			$.ajax({
-				url: apiURL + forecast,
+				url: apiHost + forecast,
 				type: 'get',
 				data: statusSummaryData,
 			}).done(function (data, textStatus, jqXHR) {
@@ -498,7 +497,7 @@
 			};
 
 			$.ajax({
-				url: apiURL + statusSummary,
+				url: apiHost + statusSummary,
 				type: 'get',
 				data: statusSummaryData,
 			}).done(function (data, textStatus, jqXHR) {
@@ -524,7 +523,7 @@
 			};
 
 			option = {
-				url: apiURL + energyDevice,
+				url: apiHost + energyDevice,
 				type: 'get',
 				data: statusSummaryData
 			}
@@ -548,7 +547,7 @@
 			};
 
 			option = {
-				url: apiURL + forecast,
+				url: apiHost + forecast,
 				type: 'get',
 				data: statusSummaryData
 			}
@@ -574,7 +573,7 @@
 			};
 
 			option = {
-				url: apiURL + statusSummary,
+				url: apiHost + statusSummary,
 				type: 'get',
 				data: statusSummaryData,
 			}
@@ -865,7 +864,7 @@
 		};
 
 		$.ajax({
-			url: apiURL + '/energy/normality',
+			url: apiHost + '/energy/normality',
 			type: 'post',
 			data: JSON.stringify(dataCode),
 			dataType: 'json',

@@ -38,7 +38,7 @@
 
 	const pageInit = function() {
 		callAjax({
-			url: 'http://iderms.enertalk.com:8443/spcs/${param.spc_id}',
+			url: apiHost + '/spcs/${param.spc_id}',
 			type: 'get',
 			data: {
 				oid: oid,
@@ -55,7 +55,7 @@
 		data.year = $('#year button').data('value');
 
 		callAjax({
-			url: 'http://iderms.enertalk.com:8443/spcs/${param.spc_id}/balance/month?oid=' + oid,
+			url: apiHost + '/spcs/${param.spc_id}/balance/month?oid=' + oid,
 			type: 'get',
 			data: data
 		}, setTable);
@@ -190,7 +190,7 @@
 
 	const historyInit = function () {
 		let option = {
-			url: 'http://iderms.enertalk.com:8443/spcs/history',
+			url: apiHost + '/spcs/history',
 			type: 'get',
 			data: {
 				oid: oid,

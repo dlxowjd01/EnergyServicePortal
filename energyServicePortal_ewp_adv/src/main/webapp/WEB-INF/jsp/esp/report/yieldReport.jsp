@@ -41,7 +41,7 @@
 
 		if (id == 'spc_id') {
 			callAjax({
-				url: 'http://iderms.enertalk.com:8443/spcs/' + dataValue,
+				url: apiHost + '/spcs/' + dataValue,
 				type: 'get',
 				data: {
 					oid: oid,
@@ -51,7 +51,7 @@
 		} else if (id == 'report_type') {
 			let spcid = $('#spc_id button').data('value');
 			callAjax({
-				url: 'http://iderms.enertalk.com:8443/spcs/' + spcid,
+				url: apiHost + '/spcs/' + spcid,
 				type: 'get',
 				data: {
 					oid: oid,
@@ -71,7 +71,7 @@
 		callAjax({
 			type: 'post',
 			enctype: 'multipart/form-data',
-			url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
+			url: apiHost + '/files/upload?oid=' + oid,
 			data: new FormData($('#upload')[0]),
 			processData: false,
 			contentType: false,
@@ -109,7 +109,7 @@
 
 	const modalInit = function () {
 		callAjax({
-			url: 'http://iderms.enertalk.com:8443/spcs',
+			url: apiHost + '/spcs',
 			type: 'get',
 			data: {
 				oid: oid
@@ -247,7 +247,7 @@
 		data['generated_at'] = today.toISOString();
 
 		let option = {
-			url: 'http://iderms.enertalk.com:8443/reports/performance?oid=' + oid,
+			url: apiHost + '/reports/performance?oid=' + oid,
 			method: 'post',
 			dataType: 'json',
 			contentType: "application/json",
@@ -288,7 +288,7 @@
 		}
 
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/reports/performance",
+			url: apiHost + '/reports/performance',
 			type: "get",
 			async: false,
 			data: data,
@@ -311,13 +311,13 @@
 
 					if (temp.generated_file_link != null) {
 						let linkData = JSON.parse(temp.generated_file_link);
-						result.data[i].file_link = 'location.href=\'http://iderms.enertalk.com:8443/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
+						result.data[i].file_link = 'location.href=\'' + apiHost + '/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
 					}
 
 					if (temp.confirmed_at != null) {
 						let confirmed_date = (new Date(temp.confirmed_at)).format('yyyy-MM-dd hh:mm:ss');
 						let linkData = JSON.parse(temp.confirmed_file_link);
-						let file_link = 'location.href=\'http://iderms.enertalk.com:8443/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
+						let file_link = 'location.href=\'' + apiHost + '/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
 						result.data[i].confirmed_date = confirmed_date + '<button class="btn_file fr down" onclick="' + file_link + '">다운로드</button>';
 					} else {
 						let confirmed_date = '확정 보고서 업로드';
@@ -466,7 +466,7 @@
 		for (var i = 0; i < count; i++) {
 			var rowData = checkDataList[i];
 			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/reports/performance/' + rowData.id + '?oid=' + oid,
+				url: apiHost + '/reports/performance/' + rowData.id + '?oid=' + oid,
 				type: 'delete',
 				async: false,
 				data: {},
@@ -516,7 +516,7 @@
 				}
 			
 				let option = {
-					url: 'http://iderms.enertalk.com:8443/reports/performance/' + checkDataList[idx].id + '?oid=' + oid,
+					url: apiHost + '/reports/performance/' + checkDataList[idx].id + '?oid=' + oid,
 					method: 'patch',
 					dataType: 'json',
 					contentType: "application/json",

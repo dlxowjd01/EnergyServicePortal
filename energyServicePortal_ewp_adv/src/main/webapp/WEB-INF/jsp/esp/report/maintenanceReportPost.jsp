@@ -15,7 +15,7 @@
 
 	const getGenData = () => {
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/auth/me/sites',
+			url: apiHost + '/auth/me/sites',
 			type: 'get',
 			async: false,
 			success: function (json) {
@@ -90,7 +90,7 @@
 				});
 
 				$.ajax({
-					url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
+					url: apiHost + '/files/upload?oid=' + oid,
 					type: 'post',
 					enctype: 'multipart/form-data',
 					data: formData,
@@ -114,7 +114,7 @@
 		}
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/reports/remote_work?oid=' + oid,
+			url: apiHost + '/reports/remote_work?oid=' + oid,
 			type: 'post',
 			dataType: 'json',
 			async: false,

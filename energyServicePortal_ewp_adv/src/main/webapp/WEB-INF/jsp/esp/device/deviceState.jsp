@@ -441,7 +441,6 @@
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 
-	const apiURL = 'http://iderms.enertalk.com:8443';
 	const apiDeviceProperties = '/config/view/device_properties';
 	const apiStatusRawSite = '/status/raw/site';
 	const apiStatusRaw = '/status/raw';
@@ -558,7 +557,7 @@
 	const featureProperties = new Object();
 	const deviceProperties = () => {
 		$.ajax({
-			url: apiURL + apiDeviceProperties,
+			url: apiHost + apiDeviceProperties,
 			type: 'get',
 			dataType: 'json',
 			data: {},
@@ -622,7 +621,7 @@
 			let promiseCnt = 0;
 			siteArray.forEach(el => {
 				const getDevice = {
-					url: apiURL + apiConfigDevices,
+					url: apiHost + apiConfigDevices,
 					type: 'get',
 					dataType: 'json',
 					data: {
@@ -632,7 +631,7 @@
 				};
 
 				const rawSiteDevice = {
-					url: apiURL + apiStatusRawSite,
+					url: apiHost + apiStatusRawSite,
 					type: 'get',
 					dataType: 'json',
 					data: {
@@ -845,7 +844,7 @@
 
 	const deviceDetailView = (did) => {
 		$.ajax({
-			url: apiURL + apiStatusRaw,
+			url: apiHost + apiStatusRaw,
 			type: 'get',
 			dataType: 'json',
 			data: {
@@ -1065,7 +1064,7 @@
 			$('#manualModalTable').data('endDate', endDate.format('yyyyMMdd'));
 
 			$.ajax({
-				url: apiURL + apiEnergyDevices,
+				url: apiHost + apiEnergyDevices,
 				type: 'get',
 				dataType: 'json',
 				async: false,
@@ -1182,7 +1181,7 @@
 		postData['data'] = data;
 
 		$.ajax({
-			url: apiURL + apiEnergyManual + '?oid=' + oid + '&did=' + did + '&interval=' + timeInterval,
+			url: apiHost + apiEnergyManual + '?oid=' + oid + '&did=' + did + '&interval=' + timeInterval,
 			type: 'post',
 			dataType: 'json',
 			contentType: 'application/json',
@@ -1231,7 +1230,7 @@
 		//did가 있으면 수정
 		if (!isEmpty(did)) {
 			$.ajax({
-				url: apiURL + apiConfigDevices + '/' + did,
+				url: apiHost + apiConfigDevices + '/' + did,
 				type: 'get',
 				dataType: 'json',
 				async: false,
@@ -1372,7 +1371,7 @@
 		}
 
 		$.ajax({
-			url: apiURL + apiConfigDevices + urlSufffix,
+			url: apiHost + apiConfigDevices + urlSufffix,
 			type: method,
 			dataType: 'json',
 			async: false,
@@ -1396,7 +1395,7 @@
 
 	const costSetList = () => {
 		$.ajax({
-			url: apiURL + apiAlarmCodeSets,
+			url: apiHost + apiAlarmCodeSets,
 			type: 'get',
 			dataType: 'json',
 			async: false,
@@ -1441,7 +1440,7 @@
 		}
 
 		$.ajax({
-			url: apiURL + apiConfigRtus,
+			url: apiHost + apiConfigRtus,
 			type: 'get',
 			dataType: 'json',
 			data: {
@@ -1486,7 +1485,7 @@
 
 		if (device_type == 'BMS_SYS' || device_type == 'BMS_RACK') {
 			$.ajax({
-				url: apiURL + apiConfigDevices,
+				url: apiHost + apiConfigDevices,
 				type: 'get',
 				dataType: 'json',
 				data: {

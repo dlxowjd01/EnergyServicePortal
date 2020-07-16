@@ -6,6 +6,8 @@
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
 	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
+	const userToken = '<c:out value="${sessionScope.userInfo.token}" escapeXml="false" />';
+	const userInfo = '<c:out value="${sessionScope.userInfo}" escapeXml="false" />';
 
 	$(function() {
 		const withdrawForm = $('#withdrawForm');

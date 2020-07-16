@@ -828,6 +828,7 @@
 			}
 		});
 
+		})
 		if (selectedDate == undefined && $('#job_date').datepicker('getDate') != null) {
 			selectedDate = $('#job_date').datepicker('getDate');
 		} else if (selectedDate == undefined && $('#job_date').datepicker('getDate') == null) {

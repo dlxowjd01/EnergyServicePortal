@@ -55,7 +55,7 @@
 			}
 		}
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/spcs/balance/month",
+			url: apiHost + '/spcs/balance/month',
 			type: "get",
 			async: false,
 			data: {
@@ -130,7 +130,7 @@
 		for (var i = 0; i < count; i++) {
 			var rowData = checkDataList[i];
 			$.ajax({
-				url: "http://iderms.enertalk.com:8443/spcs/" + rowData.spc_id + "/gens/" + rowData.gen_id,
+				url: apiHost + '/spcs/' + rowData.spc_id + "/gens/" + rowData.gen_id,
 				type: "delete",
 				async: false,
 				data: {},
@@ -183,7 +183,7 @@
 				var rowData = checkDataList[i];
 				var locationUrl = '/spcs/' + rowData.spc_id + '/balance/month?oid=' + oid + '&site_id=' + rowData.site_id + '&yyyymm=' + rowData.balance_yyyymm.replace('-', '');
 				$.ajax({
-					url: 'http://iderms.enertalk.com:8443' + locationUrl,
+					url: apiHost + locationUrl,
 					type: 'delete',
 					async: false,
 					data: {},

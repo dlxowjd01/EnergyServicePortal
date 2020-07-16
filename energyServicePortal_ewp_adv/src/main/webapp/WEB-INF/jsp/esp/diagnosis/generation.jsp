@@ -378,7 +378,7 @@
 		}
 
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/energy/forecasting/error_calculator",
+			url: apiHost + '/energy/forecasting/error_calculator',
 			type: "post",
 			async: false,
 			contentType: "application/json",
@@ -425,7 +425,7 @@
 					sNm = $(this).next('label').text();
 
 				$.ajax({
-					url: 'http://iderms.enertalk.com:8443/config/devices/',
+					url: apiHost + '/config/devices/',
 					type: 'get',
 					async: false,
 					data: {
@@ -524,7 +524,7 @@
 		if (billingSites.length > 0) {
 			//API 호출
 			$.ajax({
-				url: "http://iderms.enertalk.com:8443/energy/sites",
+				url: apiHost + '/energy/sites',
 				type: "get",
 				async: false,
 				data: {
@@ -551,7 +551,7 @@
 		if (billingSites.length > 0) {
 			//API 호출
 			$.ajax({
-				url: "http://iderms.enertalk.com:8443/energy/forecasting/sites",
+				url: apiHost + '/energy/forecasting/sites',
 				type: "get",
 				async: false,
 				data: {
@@ -578,7 +578,7 @@
 		if (dashSites.length > 0) {
 			//API 호출
 			$.ajax({
-				url: "http://iderms.enertalk.com:8443/energy/sites",
+				url: apiHost + 'energy/sites',
 				type: "get",
 				async: false,
 				data: {
@@ -605,7 +605,7 @@
 		if (dashSites.length > 0) {
 			//API 호출
 			$.ajax({
-				url: "http://iderms.enertalk.com:8443/energy/forecasting/sites",
+				url: apiHost + '/energy/forecasting/sites',
 				type: "get",
 				async: false,
 				data: {
@@ -631,7 +631,7 @@
 		if (checkedDevices.length > 0) {
 			//API 호출
 			$.ajax({
-				url: "http://iderms.enertalk.com:8443/energy/devices",
+				url: apiHost + '/energy/devices',
 				type: "get",
 				async: false,
 				data: {
@@ -655,7 +655,7 @@
 		if (checkedDevices.length > 0) {
 			//API 호출
 			$.ajax({
-				url: "http://iderms.enertalk.com:8443/energy/forecasting/devices",
+				url: apiHost + '/energy/forecasting/devices',
 				type: "get",
 				async: false,
 				data: {
