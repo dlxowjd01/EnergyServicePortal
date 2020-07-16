@@ -532,8 +532,8 @@
 	}
 
 	function goToDetail(self) {
-		let spcId = $(self).parent().data("id");
-		let spcName = $(self).parent().data("name");
+		let spcId = $(self).parents('td').data("id");
+		let spcName = $(self).parents('td').data("name");
 		let reqId = self.data("id");
 		let accNum = self.data("value");
 		let status = self.text();

@@ -35,18 +35,6 @@ public class RestApiUtil {
 		Map<String, Object> rtnMap = new HashMap<String, Object>();
 
 		try {
-			URI uri;
-			if (mode != null && "test".equals(mode)) {
-				//uri = new URI("http://iderms-test.enertalk.com:8443" + strUrl);
-				uri = new URI("http://iderms.enertalk.com:8443" + strUrl);
-			} else {
-				uri = new URI("https://iderms-api.iderms.ai" + strUrl);
-			}
-
-			if (parameters != null) {
-				uri = applyParameters(uri, parameters);
-			}
-
 			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
 				public X509Certificate[] getAcceptedIssuers() { return null; }
 				public void checkClientTrusted(X509Certificate[] certs, String authType) { }

@@ -5,6 +5,7 @@
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
 	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
+	const userTask = '<c:out value="${sessionScope.userInfo.task}" escapeXml="false" />';
 
 	// param: withdrawReqStatus.do
 	const status = '${param.review_status}';
@@ -57,13 +58,28 @@
 					json.data.map(item => {
 						let data = json.data;
 						let sum = 0;
+						let attachmentInfo = JSON.parse(item.attachement_info);
 						// console.log("data===", data)
 						$("#total").text(item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원');
 
 						// const attachmentInfo = Promise.resolve(JSON.parse(item.attachement_info));
-				
-						if(item.attachement_info){
-							$("#proofFile").prev().text("증빙서류 이름 : ")
+
+						if (item.status == 3) {
+							$('#rejectBtn').parent().addClass('hidden');
+						}
+
+						if(!isEmpty(attachmentInfo)){
+							$("#proofFile").prev().text("증빙서류: ")
+							attachmentInfo.forEach(attach => {
+								let downUrl = apiHost + '/files/download/' + attach.filedName + '?oid=' + oid + '&orgFilename=' + attach.originalName.trim();
+								let templateAttach = `
+												<div class="flex_wrapper border">
+													<a href="#" class="btn_type02">${'${attach.originalName.trim()}'}</a>
+													<a href="${'${downUrl}'}" class="save_btn"></a>
+												</div>`;
+
+								$('#attachementList').append(templateAttach);
+							});
 						} else {
 							console.log("res=== attach", $("#proofFile").prev());
 							$("#proofFile").parents().find(".file-wrapper").empty();
@@ -308,7 +324,7 @@
 	function downloadFile(self){
 		console.log("spcId===", spcId)
 		if($(self).data("name") == "receipt") {
-
+			return false;
 		} else if($(self).data("name") == "reqDoc"){
 
 		} else if($(self).data("name") == "proof"){
@@ -482,11 +498,9 @@
 		<form id="attachedFileForm" name="attached_file_form" action="#" method="post">
 			<div class="indiv spc-detail">
 				<div class="flex_wrapper"><h2 class="ntit">증빙 서류</h2></div>
-				<div class="flex_wrapper border">
-					<a id="file_name" href="#" class="btn_type02">거래 내역서.pdf</a>
-					<a onclick="downloadFile(this)" data-name="receipt" class="save_btn"></a>
+				<div id="attachementList">
 				</div>
-				
+
 				<div class="flex_wrapper">
 					<h2 class="heading">출금 요청서</h2>
 					<div class="fr"><button type="button" class="btn_type ml-12" onclick="downloadFile(this)" data-name="reqDoc">다운로드</button></div>
@@ -501,6 +515,7 @@
 				<div class="flex_wrapper border mt20">
 					<textarea id="txt1" class="textarea w-100" readonly></textarea>
 				</div>
+				<c:if test="${userInfo.task ne 1}">
 				<div class="flex_wrapper">
 					<h2 class="heading">메모</h2><!--
 					--><a class="chk_type" href="javascript:void(0);"><input type="checkbox" id="memoOpt" name="memo_opt"><label for="memoOpt">사무수탁사 함께 보기</label></a><!--
@@ -514,6 +529,7 @@
 				--><button type="button" id="rejectBtn" class="btn_type03 w80">반송</button><!--
 				--><button type="submit" class="btn_type ml-12">승인</button><!--
 			--></div>
+				</c:if>
 			</div>
 		</form>
 	</div>
