@@ -5,12 +5,27 @@
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 	const userInfo = '<c:out value="${sessionScope.userInfo.token}" escapeXml="false" />';
+	let task = `${ sessionScope.userInfo.task }`;
+	let role = `${ sessionScope.userInfo.role }`;
+
 	let today = new Date();
 	let date = new Date();
 
 	(loginId == "spadmin") ? ( $("#requestBtnReview").removeClass('hidden'), $("#requestBtn").removeClass('hidden') ) : ( (loginId == "test_spc_a") ? ( $("#requestBtnReview").addClass('hidden'), $("#requestBtn").removeClass('hidden') ) : ( $("#requestBtnReview").removeClass('hidden'), $("#requestBtn").addClass('hidden') ) );
 		// console.log("apiHost===", apiHost)
 	$(function () {
+		console.log("role===", role)
+		// task 1: 사무수탁사  2: 자산 운용사  3: 사업주  ||  role 1: encored  2: spc clients
+
+		if(task == 1) {
+			$("#requestBtnReview").remove();
+		} else if(task == 2) {
+			$("#requestBtn").remove() 
+		} else if( task == 3) {
+			$("#requestBtnReview").remove();
+			$("#requestBtn").remove();
+		}
+
 		const modalForm = $("#spcAlarmForm");
 		pageInit();
 		// setSingleSelectDropdown($("#job_type"));
@@ -249,7 +264,7 @@
 					setDropdownValue($("#spcList"));
 					
 					let spcId = spcNameArr.map(x => x.spcId).join();
-					console.log("promise spc==", spcId)
+					// console.log("promise spc==", spcId)
 					// getDataList(spcId, 'get')
 					maintenance(spcNameArr, 'get');
 				});
@@ -486,7 +501,7 @@
 						spcName = "spc_no_name";
 					}
 					
-					console.log("job_type===", job_type);
+					// console.log("job_type===", job_type);
 					if (filterArr.indexOf(job_type)>-1){
 						tableStr = '<li data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="link bu t' + job_type + '">[' + spcName + '] ' + job_Name(job_type) + '</li>';
 					} else {
@@ -640,7 +655,7 @@
 				maintenance(spcIdArr, 'post');
 			});
 		} else {
-			console.log("modalPopInit===", data[0]);
+			// console.log("modalPopInit===", data[0]);
 			title.text('주요 일정 알림 수정');
 			setJsonAutoMapping(data[0], 'spcAlarmModal');
 			setJsonAutoMapping(JSON.parse(data[0].job_info), 'spcAlarmModal');
@@ -691,7 +706,7 @@
 			// $("#closeBtn").on("click", function(){ return false; })
 			postScheduleBtn.text('수정');
 			postScheduleBtn.on("click", function(){
-				console.log("postScheduleBtn====")
+				// console.log("postScheduleBtn====")
 				maintenance(spcNameList, 'patch', data[0].id);
 			});
 			// postScheduleBtn.attr('onclick', 'maintenance(' + spcNameList + '\'patch\', \'' + data[0].id + '\' );').text('수정');
@@ -727,7 +742,7 @@
 					}
 				} else {
 					jsonData[$(this).prop('name')] = $(this).val();
-					console.log("this===", $(this).prop("name"))
+					// console.log("this===", $(this).prop("name"))
 				}
 			}
 		});
@@ -947,7 +962,7 @@
 		if($("#detailInfoModal").hasClass("active")){
 			$("#detailInfoModal").removeClass("active");
 		};
-		console.log("action===", action)
+		// console.log("action===", action)
 		if(action=="confirm"){
 			$("#warningModal .modal-title").text("정말 삭제 하시겠습니까?");
 			$("#warningModal").modal("show");
