@@ -4,19 +4,13 @@
 <script type="text/javascript">
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
-	const userInfo = '<c:out value="${sessionScope.userInfo.token}" escapeXml="false" />';
 	let task = `${ sessionScope.userInfo.task }`;
 	let role = `${ sessionScope.userInfo.role }`;
-
 	let today = new Date();
 	let date = new Date();
-
-	(loginId == "spadmin") ? ( $("#requestBtnReview").removeClass('hidden'), $("#requestBtn").removeClass('hidden') ) : ( (loginId == "test_spc_a") ? ( $("#requestBtnReview").addClass('hidden'), $("#requestBtn").removeClass('hidden') ) : ( $("#requestBtnReview").removeClass('hidden'), $("#requestBtn").addClass('hidden') ) );
-		// console.log("apiHost===", apiHost)
+	var spcPairArr = [];
 	$(function () {
-		console.log("role===", role)
 		// task 1: 사무수탁사  2: 자산 운용사  3: 사업주  ||  role 1: encored  2: spc clients
-
 		if(task == 1) {
 			$("#requestBtnReview").remove();
 		} else if(task == 2) {
@@ -25,24 +19,81 @@
 			$("#requestBtnReview").remove();
 			$("#requestBtn").remove();
 		}
-
 		const modalForm = $("#spcAlarmForm");
+		const clone = $("#spcList").clone().html();
+		$("#spcList").empty();
+
+		getSpcList();
+
 		pageInit();
-		// setSingleSelectDropdown($("#job_type"));
+
+		setTimeout(function(){
+			maintenance(spcPairArr, 'get');
+		}, 300);
+
+
+		function getSpcList (){
+			$.ajax({
+				url: apiHost + '/spcs?oid=' + oid + '&includeGens=true',
+				dataType: 'json',
+				type: 'get',
+				async: false,
+				contentType: "application/json",
+				beforeSend: function(){
+					$('.loading').show();
+				},
+				success: function (json) {
+					let data = json.data;
+					var promise = [];
+					var spcIdList = [];
+					var gensInfoList = [];
+					var spcNameArr = [];
+					console.log("json--", json)
+					data.map(x => {
+						spcIdList.push(x.spc_id);
+						promise.push(Promise.resolve(JSON.parse(x.spc_info)));
+					});
+					// setTimeout(function(){
+						Promise.all(promise).then(res => {
+							console.log("res===", res);
+							var length = res.length;
+							// console.log("length", length)
+							res.map((n, i) => {
+								let str = '';
+								let obj = {};
+								if(n.name){
+									obj.spcName = n.name;
+								} else if(n.spcName){
+									obj.spcName = n.spcName;
+								} else if(isEmpty(n.name) && isEmpty(n.spcName)){
+									obj.spcName = "no_name";
+								}
+								obj.spcId = spcIdList[i];
+								spcPairArr.push(obj);
+								str = clone.replace(/\*spcName\*/g, obj.spcName).replace(/\*spcId\*/g, spcIdList[i]);
+								$("#spcList").append($(str));
+							});
+							setDropdownValue($("#spcList"));
+						});
+
+					// }, 300);
+				}
+			});
+		}
+
 		//날짜 셀렉트박스 클릭 시
 		$('.sch_sel_area ul li').on('click', function () {
 			var thisVal = $(this).data('value');
 			var thisId = $(this).parent().parent().attr('id');
-			
 			if (thisId == 'year') {
 				today = new Date(thisVal, today.getMonth(), today.getDate());
 			} else {
 				today = new Date(today.getFullYear(), thisVal - 1, today.getDate());
 			}
 			buildCalendar();
+			maintenance(spcPairArr, 'get');
 		});
-		// console.log("apiHost===", apiHost)
-		// console.log("userInfo===", userInfo)
+
 		//전월
 		$('.btn_prev_mon').click(function () {
 			let prevMonth = today.getMonth() - 1;
@@ -50,6 +101,7 @@
 			$('#modalTitle').text(prevMonth);
 			$('#popoverModal').find("h2").text(prevMonth);
 			buildCalendar();
+			maintenance(spcPairArr, 'get');
 			return false;
 		});
 
@@ -59,6 +111,7 @@
 			today = new Date(today.getFullYear(), nextMonth, today.getDate());
 			$('#modalTitle').text(nextMonth);
 			buildCalendar();
+			maintenance(spcPairArr, 'get');
 			return false;
 		});
 
@@ -66,6 +119,7 @@
 		$('.btn_type03.active').click(function () {
 			today = new Date();
 			buildCalendar();
+			maintenance(spcPairArr, 'get');
 			return false;
 		});
 
@@ -163,9 +217,7 @@
 			let select = i == 0 ? 'on' : '';
 			html += '<li data-value="' + bfYear.getFullYear() + '" class="' + select + '"><a href="#">' + bfYear.getFullYear() + '년 </a></li>';
 		}
-
 		$('#year ul').empty().append(html);
-
 		buildCalendar();
 	};
 
@@ -174,11 +226,7 @@
 		let doMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 		let lastDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 		let tbCalendar = document.getElementById('calendar');
-		const spcOpt = document.getElementById("spcList");
-		const clone = spcOpt.cloneNode(true).innerHTML;
-		document.getElementById("spcList").innerHTML = "";
 
-		getSpcList(clone);
 		// const spcOpt = $("#spcList");
 		// const spcClone = spcOpt.clone().html();
 		// $("#spcList").empty();
@@ -217,113 +265,6 @@
 		$('#year > button').html(doMonth.getFullYear() + '년<span class="caret"></span>').data('value', doMonth.getFullYear());
 		$('#month > button').html(doMonth.getMonth() + 1 + '월<span class="caret"></span>').data('value', doMonth.getMonth() + 1);
 	};
-
-	
-	const getSpcList = function(clone){
-		$.ajax({
-			url: apiHost + '/spcs?oid=' + oid + '&includeGens=true',
-			dataType: 'json',
-			type: 'get',
-			async: false,
-			contentType: "application/json",
-			beforeSend: function(){
-				$('.loading').show();
-			},
-			success: function (json) {
-				let data = json.data;
-				var promise = [];
-				var promise2 = [];
-				var spcIdList = [];
-				var gensInfoList = [];
-				var spcNameArr = [];
-
-				data.map(x => {
-					spcIdList.push(x.spc_id);
-					promise.push(Promise.resolve(JSON.parse(x.spc_info)));
-					if(x.spcGens){
-						x.spcGens.map(g => {
-							promise2.push(Promise.resolve(JSON.parse(g.finance_info)));
-						});
-					}
-				});
-
-
-				Promise.all(promise).then(res => {
-					// console.log("res===", res);
-					var length = res.length;
-					// console.log("length", length)
-					res.map((n, i) => {
-						let str = '';
-						let obj = {};
-						if(n.name){
-							obj.spcName = n.name;
-						} else if(n.spcName){
-							obj.spcName = n.spcName;
-						} else if(isEmpty(n.name) && isEmpty(n.spcName)){
-							obj.spcName = "no_name";
-						}
-						obj.spcId = spcIdList[i];
-						spcNameArr.push(obj);
-						str = clone.replace(/\*spcName\*/g, obj.spcName).replace(/\*spcId\*/g, spcIdList[i]);
-						$("#spcList").append($(str));
-					});
-					// spcPair = spcNameArr;
-					setDropdownValue($("#spcList"));
-					
-					let spcId = spcNameArr.map(x => x.spcId).join();
-					// console.log("promise spc==", spcId)
-					// getDataList(spcId, 'get')
-					maintenance(spcNameArr, 'get');
-				});
-				
-				$('.loading').hide();
-
-				// getDataList(spcIdList.join());
-
-				// Promise.all(promise2).then(res2 => {
-				// 	const arr = [
-				// "이자_지급일",
-				// "보장발전시간_정산일",
-				// "보험_갱신일",
-				// '보험_납부일',
-				// "임대료_지급일",
-				// "대리기관_수수료_지급일",
-				// "대출상환 만기일",
-				// "상환_만기일",
-				// 	]
-				// 	console.log("res2===", res2)
-				// });
-				
-				// str = clone.replace(/\*spcName\*/g, x.spc_id)
-				// 	.replace(/\*spcId\*/g, x.spc_id);
-			}
-		});
-		
-		// for(let i =0, arrLength =  spcList.length; i<arrLength; i++){
-		// 	let str = '';
-		// 	let str = clone.replace(/\*spcName\*/g, spcList[i].spc_id)
-		// 		.replace(/\*spcId\*/g, pList[i].val);
-		// 	clone.replace()
-			
-		// }
-		// let option = {
-		// 	url: apiHost + '/spcs/maintenance/' + oid,
-		// 	dataType: 'json',
-		// 	type: action,
-		// 	contentType: "application/json",
-		// 	traditional: true,
-		// 	data: JSON.stringify(data)
-		// };
-		// $.ajax(option).done(function (data, textStatus, jqXHR) {
-		// 	let item = data.data;
-		// 	spcList.push(item);
-		// }).fail(function (jqXHR, textStatus, errorThrown) {
-		// 		alert('처리 중 오류가 발생했습니다.');
-		// 		return false;
-		// 	});
-
-	}
-
 
 	const maintenance = function (spcNameArr, action, jobId) {
 		var spcIdArr = spcNameArr;
@@ -476,15 +417,6 @@
 		}, {});
 	}
 
-
-	function getHostname (url) {
-		// use URL constructor and return hostname
-		const matches = url.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
-		console.log("matches===", matches&&matches[1])
-		return matches && matches[1].split('.')[0];
-		// return new URL(url).hostname.split('.')[0];
-	}
-
 	const fillCalendar = function (mData, tData, spcNameList) {
 		var calendar = $('#calendar .alarm-list');
 		var modalData = $('#detailInfoModal').find(".alarm-list");
@@ -538,9 +470,8 @@
 					)
 				}).catch(function(error) {
 					if(error){
-						reject(error);
+						return false;
 					}
-						//jQuery doesn't throw real errors so use catch-all
 					console.log(error);
 				});
 			});
@@ -601,10 +532,6 @@
 
 		$("#addAlarmBtn").on("click", function(){
 			modalPopInit(undefined, spcNameList);
-			// $("#spcAlarmModal").modal("show");
-			// if($("#detailInfoModal").hasClass("active")) {
-			// 	$("#detailInfoModal").removeClass("active");
-			// }
 		});
 
 		setTimeout(function(){
@@ -885,9 +812,13 @@
 			$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
 		}
 
+				// $('#repeat_end').val(selDate.format('yyyy-MM-dd'));
+
+		$('#repeat_end').val(selDate.format('yyyy-MM-dd'));
+
 		if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
-			selectedDate.setDate(selectedDate.getDate() - Number($('#alarmSetup button').data('value')));
-			$('#alarmDate').val(selectedDate.format('yyyy-MM-dd'));
+			selDate.setDate(selDate.getDate() - Number($('#alarmSetup button').data('value')));
+			$('#alarmDate').val(selDate.format('yyyy-MM-dd'));
 		}
 	}
 
@@ -942,13 +873,6 @@
 		}
 	}
 
-	const afterDatePick = function (inputName) {
-		if(inputName == 'job_date') {
-			rtnDropdown('alarmSetup');
-		} else {
-			repeatEnd();
-		}
-	}
 	function showWarningModal(action){
 		if($("#detailInfoModal").hasClass("active")){
 			$("#detailInfoModal").removeClass("active");
@@ -966,24 +890,33 @@
 		}
 	}
 
-	function beginningOfMonth(myDate){
-		let date = new Date(myDate);
-		date.setDate(1)
-		date.setHours(0);
-		date.setMinutes(0);
-		date.setSeconds(0);
-		return date.toLocaleString();
-	}
+	// function beginningOfMonth(myDate){    
+	// 	let date = new Date(myDate);
+	// 	date.setDate(1)
+	// 	date.setHours(0);
+	// 	date.setMinutes(0);
+	// 	date.setSeconds(0);   
+	// 	return date.toLocaleString();     
+	// }
 
-	function endOfMonth(myDate){
-		let date = new Date(myDate);
-		date.setMonth(date.getMonth() +1)
-		date.setDate(0);
-		date.setHours(23);
-		date.setMinutes(59);
-		date.setSeconds(59);
-		return date.toLocaleString();
-	}
+	// function endOfMonth(myDate){
+	// 	let date = new Date(myDate);
+	// 	date.setMonth(date.getMonth() +1)
+	// 	date.setDate(0);
+	// 	date.setHours(23);
+	// 	date.setMinutes(59);
+	// 	date.setSeconds(59);
+	// 	return date.toLocaleString();
+	// }
+
+	// function getHostname (url) {
+	// 	// use URL constructor and return hostname
+	// 	const matches = url.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
+	// 	console.log("matches===", matches&&matches[1])
+	// 	return matches && matches[1].split('.')[0];
+	// 	// return new URL(url).hostname.split('.')[0];
+	// }
+
 </script>
 
 
