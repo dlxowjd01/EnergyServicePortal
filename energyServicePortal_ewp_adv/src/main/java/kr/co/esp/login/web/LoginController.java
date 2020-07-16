@@ -72,7 +72,7 @@ public class LoginController {
 		}
 
 		//운영 스테이징 구분
-		if (serverName.contains("test") || serverName.contains("local") || "127.0.0.1".equals(serverName)) {
+		if (serverName.contains("test") || "127.0.0.1".equals(serverName)) {
 			mode = "test";
 		} else {
 			mode = "real";

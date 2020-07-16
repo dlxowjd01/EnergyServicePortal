@@ -43,6 +43,7 @@
 			}).done(function (data, textStatus, jqXHR) {
 				const result = data.data[0];
 				if (!isEmpty(result)) {
+
 					setJsonAutoMapping(result, 'addNotice');
 
 					if (!isEmpty(result.level) && result.level == '2') {
@@ -229,6 +230,15 @@
 			}
 		}).done(function (data, textStatus, jqXHR) {
 			const result = data.data[0];
+			if (loginId != result.created_by) {
+				$('#delBtn').addClass('hidden');
+				$('#chgBtn').addClass('hidden');
+				$('#view_level').parents('div.row').addClass('hidden');
+			} else {
+				$('#delBtn').removeClass('hidden');
+				$('#chgBtn').removeClass('hidden');
+				$('#view_level').parents('div.row').removeClass('hidden');
+			}
 			$.map(result, function(val, key) {
 				const $view = $('#viewNotice'),
 					$viewObj = $view.find('#view_' + key);

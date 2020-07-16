@@ -35,18 +35,6 @@ public class RestApiUtil {
 		Map<String, Object> rtnMap = new HashMap<String, Object>();
 
 		try {
-			URI uri;
-			if (mode != null && "test".equals(mode)) {
-				//uri = new URI("http://iderms-test.enertalk.com:8443" + strUrl);
-				uri = new URI("http://iderms.enertalk.com:8443" + strUrl);
-			} else {
-				uri = new URI("https://iderms-api.iderms.ai" + strUrl);
-			}
-
-			if (parameters != null) {
-				uri = applyParameters(uri, parameters);
-			}
-
 			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
 				public X509Certificate[] getAcceptedIssuers() { return null; }
 				public void checkClientTrusted(X509Certificate[] certs, String authType) { }
@@ -56,6 +44,18 @@ public class RestApiUtil {
 			SSLContext sc = SSLContext.getInstance("SSL");
 			sc.init(null, trustAllCerts, new SecureRandom());
 
+<<<<<<< HEAD
+			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+				public X509Certificate[] getAcceptedIssuers() { return null; }
+				public void checkClientTrusted(X509Certificate[] certs, String authType) { }
+				public void checkServerTrusted(X509Certificate[] certs, String authType) { }
+			}};
+
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new SecureRandom());
+
+=======
+>>>>>>> 4560ef863b891137a5a43156a7d1bd39a6d32917
 			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 			HttpsURLConnection con = (HttpsURLConnection) new URL("https://iderms-api.iderms.ai" + strUrl).openConnection();
 			con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
@@ -131,7 +131,7 @@ public class RestApiUtil {
 //				postUrl = "http://iderms.enertalk-test.com:8443";
 //			}
 			URL url = new URL(postUrl + strUrl);
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 			con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
 			con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
 			con.setRequestMethod("POST");
