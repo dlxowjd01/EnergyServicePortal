@@ -152,7 +152,7 @@
 			}
 		}
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/reports/remote_work",
+			url: apiHost + "/reports/remote_work",
 			type: "get",
 			async: false,
 			data: { oid: oid },

@@ -229,7 +229,7 @@
 			genId = '${param.gen_id}';
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/spcs/'+ spcId,
+			url: apiHost + '/spcs/'+ spcId,
 			type: 'get',
 			async: true,
 			data: {'oid': oid},
@@ -256,7 +256,7 @@
 		});
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/config/sites/'+ genId,
+			url: apiHost + '/config/sites/'+ genId,
 			type: 'get',
 			async: true,
 			data: {},
@@ -278,7 +278,7 @@
 		});
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/spcs/'+ spcId + '/gens/' + genId,
+			url: apiHost + '/spcs/'+ spcId + '/gens/' + genId,
 			type: 'get',
 			async: true,
 			data: {'oid': oid},
@@ -420,7 +420,7 @@
 		$.ajax({
 			type: 'post',
 			enctype: 'multipart/form-data',
-			url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
+			url: apiHost + '/files/upload?oid=' + oid,
 			data: new FormData($('#basicForm')[0]),
 			processData: false,
 			contentType: false,
@@ -448,7 +448,7 @@
 		});
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/spcs/'+ spcId + '?oid='+oid,
+			url: apiHost + '/spcs/'+ spcId + '?oid='+oid,
 			type: 'patch',
 			dataType: 'json',
 			async: true,
@@ -479,7 +479,7 @@
 		$.ajax({
 			type: 'patch',
 			enctype: 'multipart/form-data',
-			url: 'http://iderms.enertalk.com:8443/files/upload?oid='+oid,
+			url: apiHost + '/files/upload?oid='+oid,
 			data: new FormData($('#attachement_info')[0]),
 			processData: false,
 			contentType: false,
@@ -528,7 +528,7 @@
 		$.ajax({
 			type: 'post',
 			enctype: 'multipart/form-data',
-			url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
+			url: apiHost + '/files/upload?oid=' + oid,
 			data: new FormData($('#financeForm')[0]),
 			processData: false,
 			contentType: false,
@@ -556,7 +556,7 @@
 		});
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/spcs/' + spcId +'/gens/' + genId + '?oid=' + oid,
+			url: apiHost + '/spcs/' + spcId +'/gens/' + genId + '?oid=' + oid,
 			type: 'patch',
 			async: true,
 			contentType: 'application/json',

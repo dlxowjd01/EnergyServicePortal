@@ -37,7 +37,7 @@
 			callAjax({
 				type: 'post',
 				enctype: 'multipart/form-data',
-				url: 'http://iderms.enertalk.com:8443/files/upload?oid='+oid,
+				url: apiHost + '/files/upload?oid='+oid,
 				data: new FormData($('#upload')[0]),
 				processData: false,
 				contentType: false,
@@ -87,7 +87,7 @@
 
 		if ($dropdownId == 'spc') {
 			callAjax({
-				url: 'http://iderms.enertalk.com:8443/spcs/' + dataValue,
+				url: apiHost + '/spcs/' + dataValue,
 				type: 'get',
 				data: {
 					oid: oid,
@@ -102,7 +102,7 @@
 			}
 
 			callAjax({
-				url: 'http://iderms.enertalk.com:8443/spcs/' + $('#spc button').data('value') + '/balance/repeat_cost',
+				url: apiHost + '/spcs/' + $('#spc button').data('value') + '/balance/repeat_cost',
 				type: 'get',
 				data: {
 					oid: oid,
@@ -310,7 +310,7 @@
 		$('#month > button').html(month + '월<span class="caret"></span>').data('value', month);
 
 		callAjax({
-			url: 'http://iderms.enertalk.com:8443/spcs',
+			url: apiHost + '/spcs',
 			type: 'get',
 			data: {
 				oid: oid
@@ -465,7 +465,7 @@
 			}
 
 			option = {
-				url: 'http://iderms.enertalk.com:8443/spcs/' + $('#spc button').data('value') + '/balance/repeat_cost?oid=' + oid + queryId,
+				url: apiHost + '/spcs/' + $('#spc button').data('value') + '/balance/repeat_cost?oid=' + oid + queryId,
 				type: methodType,
 				dataType: 'json',
 				contentType: "application/json",
@@ -496,7 +496,7 @@
 			data.updated_by = loginId;
 
 			option = {
-				url: 'http://iderms.enertalk.com:8443/spcs/' + $('#spc button').data('value') + '/balance/month?oid=' + oid + '&site_id=' + $('#spcGen button').data('value') + '&yyyymm=' + standard,
+				url: apiHost + '/spcs/' + $('#spc button').data('value') + '/balance/month?oid=' + oid + '&site_id=' + $('#spcGen button').data('value') + '&yyyymm=' + standard,
 				type: 'post',
 				dataType: 'json',
 				contentType: "application/json",
@@ -513,7 +513,7 @@
 
 	const checkAfterSave = function () {
 		let option = {
-			url: 'http://iderms.enertalk.com:8443/spcs/' + $('#spc button').data('value') + '/balance/year?oid=' + oid + '&site_id=' + $('#spcGen button').data('value') + '&yyyy=' + $('#year button').data('value'),
+			url: apiHost + '/spcs/' + $('#spc button').data('value') + '/balance/year?oid=' + oid + '&site_id=' + $('#spcGen button').data('value') + '&yyyy=' + $('#year button').data('value'),
 			type: 'get',
 			dataType: 'json',
 			contentType: "application/json",
@@ -539,7 +539,7 @@
 			aJaxdata.updated_by = loginId
 
 			let option = {
-				url: 'http://iderms.enertalk.com:8443/spcs/' + $('#spc button').data('value') + '/balance/year?oid=' + oid + '&site_id=' + $('#spcGen button').data('value') + '&yyyy=' + $('#year button').data('value'),
+				url: apiHost + '/spcs/' + $('#spc button').data('value') + '/balance/year?oid=' + oid + '&site_id=' + $('#spcGen button').data('value') + '&yyyy=' + $('#year button').data('value'),
 				type: 'post',
 				dataType: 'json',
 				contentType: "application/json",
@@ -823,7 +823,7 @@
 			prop.parents('tr').find('.btn_close').show();
 
 
-			let linkUrl = 'http://iderms.enertalk.com:8443/files/download/'+data.files[0].fieldname+'?oid='+oid + '&orgFilename' + data.files[0].originalname;
+			let linkUrl = apiHost + '/files/download/'+data.files[0].fieldname+'?oid='+oid + '&orgFilename' + data.files[0].originalname;
 			let linkTag = $('<a>').prop('href', linkUrl).html(data.files[0].originalname);
 			let pTag = $('<p>').addClass('tx_file').append(linkTag);
 			let inpOgin = $('<input>').prop('type', 'hidden').prop('id', propName + '_originalname').prop('name', propName + '_originalname').val(data.files[0].originalname);
@@ -849,7 +849,7 @@
 		}
 
 		callAjax({
-			url: 'http://iderms.enertalk.com:8443/spcs/' + $('#spc button').data('value') + '/balance/month',
+			url: apiHost + '/spcs/' + $('#spc button').data('value') + '/balance/month',
 			type: 'get',
 			async: false,
 			data: {
@@ -895,7 +895,7 @@
 		let todayYYYMM = today.format('yyyyMM');
 		if (standard == todayYYYMM) { //요번달이면 now 조회
 			callAjax({
-				url: 'http://iderms.enertalk.com:8443/energy/now/sites',
+				url: apiHost + '/energy/now/sites',
 				type: 'get',
 				data: {
 					sids: sid,
@@ -905,7 +905,7 @@
 			}, setSitesNowMoney);
 		} else {
 			callAjax({
-				url: 'http://iderms.enertalk.com:8443/energy/sites',
+				url: apiHost + '/energy/sites',
 				type: 'get',
 				data: {
 					sid: sid,

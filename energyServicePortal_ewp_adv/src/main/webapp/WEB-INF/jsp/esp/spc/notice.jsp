@@ -4,7 +4,6 @@
 <script type="text/javascript">
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
-	const apiURL = 'http://iderms.enertalk.com:8443';
 	const boardURL = '/board';
 	const spcURL = '/spcs';
 	const prop = ['subject', 'contents', 'level', 'spc_id'];
@@ -31,7 +30,7 @@
 			$('#addNotice').find('#addBtn').attr('onclick', 'setNotice("patch", "' + boardId + '")').text('수정');
 
 			$.ajax({
-				url: apiURL + boardURL,
+				url: apiHost + boardURL,
 				type: 'get',
 				dataType: 'json',
 				async: false,
@@ -82,7 +81,7 @@
 
 	function getSpcData() {
 		$.ajax({
-			url: apiURL + spcURL,
+			url: apiHost + spcURL,
 			type: 'get',
 			dataType: 'json',
 			data: { oid: oid }
@@ -121,7 +120,7 @@
 		$.ajax({
 			type: 'post',
 			enctype: 'multipart/form-data',
-			url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
+			url: apiHost + '/files/upload?oid=' + oid,
 			data: new FormData($('#addNoticeForm')[0]),
 			processData: false,
 			contentType: false,
@@ -143,7 +142,7 @@
 		});
 
 		$.ajax({
-			url: apiURL + boardURL + urlSuffix,
+			url: apiHost + boardURL + urlSuffix,
 			type: method,
 			dataType: 'json',
 			contentType: 'application/json',
@@ -189,7 +188,7 @@
 
 
 		$.ajax({
-			url: apiURL + boardURL,
+			url: apiHost + boardURL,
 			type: 'get',
 			dataType: 'json',
 			data: data
@@ -219,7 +218,7 @@
 
 	function getDetailNotice(viewId) {
 		$.ajax({
-			url: apiURL + boardURL,
+			url: apiHost + boardURL,
 			type: 'get',
 			dataType: 'json',
 			data: {
@@ -287,7 +286,7 @@
 
 	function delNotice(viewId) {
 		$.ajax({
-			url: apiURL + boardURL + '/' + viewId + '?oid=' + oid,
+			url: apiHost + boardURL + '/' + viewId + '?oid=' + oid,
 			type: 'delete',
 			dataType: 'json',
 			data: {}
@@ -423,7 +422,7 @@
 									<div class="file_list ml-16"><ul><li class="upload_text"></li></ul></div>
 									<div class="file_list ml-16" id="modi_attachement_info">
 										<p class="tx_file">
-											<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+											<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 											<button class="btn_type07" onclick="setRemoveFileList('modi_attachement_info', [INDEX]);">삭제</button>
 										</p>
 									</div>
@@ -480,7 +479,7 @@
 							<h2 class="input_label">첨부 파일</h2>
 							<div class="file_list ml-16" id="view_attachement_info">
 								<p class="tx_file">
-									<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+									<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 								</p>
 							</div>
 						</div>

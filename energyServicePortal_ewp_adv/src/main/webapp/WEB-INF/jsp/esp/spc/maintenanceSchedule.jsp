@@ -53,7 +53,7 @@
 		$('[name="siteName"]').autocomplete({
 			source: function (request, response) {
 				$.ajax({
-					url: 'http://iderms.enertalk.com:8443/auth/me/sites',
+					url: apiHost + '/auth/me/sites',
 					dataType: 'json',
 					type: "get",
 					success: function (data) {
@@ -174,10 +174,10 @@
 					return false;
 				}
 
-				url = 'http://iderms.enertalk.com:8443/spcs/maintenance/' + jobId + '?oid=' + oid + jobText;
+				url = apiHost + '/spcs/maintenance/' + jobId + '?oid=' + oid + jobText;
 				delete data.site_id;
 			} else {
-				url = 'http://iderms.enertalk.com:8443/spcs/maintenance?oid=' + oid;
+				url = apiHost + '/spcs/maintenance?oid=' + oid;
 			}
 
 			option = {
@@ -190,7 +190,7 @@
 			};
 		} else if (action == 'get') {
 			option = {
-				url: 'http://iderms.enertalk.com:8443/spcs/maintenance',
+				url: apiHost + '/spcs/maintenance',
 				type: action,
 				dataType: 'json',
 				data: {
@@ -210,7 +210,7 @@
 
 			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
 			option = {
-				url: 'http://iderms.enertalk.com:8443/spcs/maintenance/' + jobId + '?oid=' + oid + jobText,
+				url: apiHost + '/spcs/maintenance/' + jobId + '?oid=' + oid + jobText,
 				type: action,
 				data: {
 					oid: oid,

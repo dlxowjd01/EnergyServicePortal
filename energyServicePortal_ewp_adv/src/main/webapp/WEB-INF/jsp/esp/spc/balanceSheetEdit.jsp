@@ -15,7 +15,7 @@
 	$(function () {
 
 		callAjax({
-			url: 'http://iderms.enertalk.com:8443/spcs/${param.spc_id}/balance/month',
+			url: apiHost + '/spcs/${param.spc_id}/balance/month',
 			type: 'get',
 			data: {
 				oid: oid,
@@ -42,7 +42,7 @@
 			callAjax({
 				type: 'post',
 				enctype: 'multipart/form-data',
-				url: 'http://iderms.enertalk.com:8443/files/upload?oid='+oid,
+				url: apiHost + '/files/upload?oid='+oid,
 				data: new FormData($('#upload')[0]),
 				processData: false,
 				contentType: false,
@@ -63,7 +63,7 @@
 			yyyymm = $('#year button').data('value') + ('0' + $('#month button').data('value')).slice(-2);
 
 			callAjax({
-				url: 'http://iderms.enertalk.com:8443/spcs/${param.spc_id}/balance/month',
+				url: apiHost + '/spcs/${param.spc_id}/balance/month',
 				type: 'get',
 				data: {
 					oid: oid,
@@ -125,7 +125,7 @@
 		data.updated_by = loginId;
 
 		option = {
-			url: 'http://iderms.enertalk.com:8443/spcs/${param.spc_id}/balance/month?oid=' + oid + '&site_id=${param.site_id}&yyyymm=${param.yyyymm}',
+			url: apiHost + '/spcs/${param.spc_id}/balance/month?oid=' + oid + '&site_id=${param.site_id}&yyyymm=${param.yyyymm}',
 			type: 'patch',
 			dataType: 'json',
 			contentType: "application/json",
@@ -149,7 +149,7 @@
 		data.user_email = loginMail;
 
 		option = {
-			url: 'http://iderms.enertalk.com:8443/spcs/history?oid=' + oid,
+			url: apiHost + '/spcs/history?oid=' + oid,
 			type: 'post',
 			dataType: 'json',
 			contentType: "application/json",
@@ -272,7 +272,7 @@
 			prop.parents('tr').find('.btn_close').removeClass("hidden");
 
 
-			let linkUrl = 'http://iderms.enertalk.com:8443/files/download/'+data.files[0].fieldname+'?oid='+oid + '&orgFilename' + data.files[0].originalname;
+			let linkUrl = apiHost + '/files/download/'+data.files[0].fieldname+'?oid='+oid + '&orgFilename' + data.files[0].originalname;
 			let linkTag = $('<a>').prop('href', linkUrl).html(data.files[0].originalname);
 			let pTag = $('<p>').addClass('tx_file').append(linkTag);
 			let inpOgin = $('<input>').prop('type', 'hidden').prop('id', propName + '_originalname').prop('name', propName + '_originalname').val(data.files[0].originalname);

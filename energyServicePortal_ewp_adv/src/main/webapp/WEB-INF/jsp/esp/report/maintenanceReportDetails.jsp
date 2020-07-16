@@ -18,8 +18,7 @@
 	function getReportData() {
 		var reportId = "${param.report_id}";
 		$.ajax({
-			url:
-				"http://iderms.enertalk.com:8443/reports/remote_work?oid=" +
+			url: apiHost + "/reports/remote_work?oid=" +
 				oid +
 				"&report_id=" +
 				reportId,
@@ -128,7 +127,7 @@
 	function goMoveDelete() {
 		$.ajax({
 			url:
-				"http://iderms.enertalk.com:8443/reports/remote_work/" +
+				apiHost + "/reports/remote_work/" +
 				"${param.report_id}" +
 				"?oid=" +
 				oid,
@@ -261,8 +260,8 @@
 						<td>
 							<div id="fileList01">
 								<p class="tx_file">
-									<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">
-										<img src="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]" alt="[originalname]" />
+									<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">
+										<img src="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]" alt="[originalname]" />
 									</a>
 								</p>
 							</div>
@@ -293,7 +292,7 @@
 						<td>
 							<div id="fileList02">
 								<p class="tx_file">
-									<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+									<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 								</p>
 							</div>
 						</td>

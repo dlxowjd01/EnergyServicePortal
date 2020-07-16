@@ -8,7 +8,6 @@
 	const searchDid = '<c:out value="${param.did}" escapeXml="false" />';
 	const siteList = JSON.parse('${siteList}');
 
-	const apiURL = 'http://iderms.enertalk.com:8443';
 	const configDevice = '/config/orgs/' + oid;
 	const statusSummary = '/status/summary';
 	const configDeviceData = {
@@ -563,7 +562,7 @@
 	let featureProperties = new Object();
 	const deviceProperties = function () {
 		$.ajax({
-			url: apiURL + '/config/view/device_properties',
+			url: apiHost + '/config/view/device_properties',
 			type: 'get',
 			async: false,
 			data: {},
@@ -616,7 +615,7 @@
 
 		if (siteArray.length > 0) {
 			$.ajax({
-				url: apiURL + configDevice,
+				url: apiHost + configDevice,
 				type: 'get',
 				async: false,
 				data: configDeviceData,
@@ -820,7 +819,7 @@
 		}
 
 		$.ajax({
-			url: apiURL + statusSummary,
+			url: apiHost + statusSummary,
 			type: 'get',
 			async: false,
 			data: statusSummaryData,

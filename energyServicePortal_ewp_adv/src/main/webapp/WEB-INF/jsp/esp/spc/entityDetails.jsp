@@ -142,7 +142,7 @@
 			oid = "${param.oid}";
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/spcs/' + spcId,
+			url: apiHost + '/spcs/' + spcId,
 			type: 'get',
 			async: false,
 			data: { oid: oid },
@@ -173,7 +173,7 @@
 			oid = '${param.oid}';
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/spcs/' + spcId + '/gens/' + genId,
+			url: apiHost + '/spcs/' + spcId + '/gens/' + genId,
 			type: 'get',
 			async: false,
 			data: { 'oid': oid },
@@ -1265,7 +1265,7 @@
 						<th>현장 사진</th>
 						<td id="addFileList01">
 							<p class="tx_file">
-								<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button class="btn_file down"></button></td>
@@ -1274,7 +1274,7 @@
 						<th>수배전반</th>
 						<td id="addFileList02">
 							<p class="tx_file">
-								<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button class="btn_file down"></button></td>
@@ -1283,7 +1283,7 @@
 						<th>케이블</th>
 						<td id="addFileList03">
 							<p class="tx_file">
-								<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button class="btn_file down"></button></td>
@@ -1292,7 +1292,7 @@
 						<th>모듈</th>
 						<td id="addFileList04">
 							<p class="tx_file">
-								<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button class="btn_file down"></button></td>
@@ -1301,7 +1301,7 @@
 						<th>인버터</th>
 						<td id="addFileList05">
 							<p class="tx_file">
-								<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button class="btn_file down"></button></td>
@@ -1310,7 +1310,7 @@
 						<th>결선도</th>
 						<td id="addFileList06">
 							<p class="tx_file">
-								<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button class="btn_file down"></button></td>
@@ -1319,7 +1319,7 @@
 						<th>토목</th>
 						<td id="addFileList07">
 							<p class="tx_file">
-								<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button class="btn_file down"></button></td>
@@ -1328,7 +1328,7 @@
 						<th>구조물</th>
 						<td id="addFileList08">
 							<p class="tx_file">
-								<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button class="btn_file down"></button></td>
@@ -1337,7 +1337,7 @@
 						<th>접속반</th>
 						<td id="addFileList09">
 							<p class="tx_file">
-								<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button class="btn_file down"></button></td>
@@ -1346,7 +1346,7 @@
 						<th>기타설비</th>
 						<td id="addFileList10">
 							<p class="tx_file">
-								<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button class="btn_file down"></button></td>

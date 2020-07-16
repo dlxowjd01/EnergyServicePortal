@@ -230,7 +230,7 @@
 
 	function getSpcData() {
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/spcs',
+			url: apiHost + '/spcs',
 			type: 'get',
 			async: false,
 			data: {oid: oid},
@@ -248,7 +248,7 @@
 
 	function getgenIdData() {
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/config/sites/',
+			url: apiHost + '/config/sites/',
 			type: 'get',
 			async: false,
 			data: {oid: oid},
@@ -301,7 +301,7 @@
 
 			let bError = false;
 			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/config/sites?oid=' + oid,
+				url: apiHost + '/config/sites?oid=' + oid,
 				type: 'post',
 				dataType: 'json',
 				async: false,
@@ -328,7 +328,7 @@
 		}
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/spcs',
+			url: apiHost + '/spcs',
 			type: 'get',
 			async: true,
 			data: {'oid': oid, includeGens: true},
@@ -386,9 +386,9 @@
 		let ajaxUrl = '';
 
 		if (type == 'post') {
-			ajaxUrl = 'http://iderms.enertalk.com:8443/spcs?oid=' + oid;
+			ajaxUrl = apiHost + '/spcs?oid=' + oid;
 		} else {
-			ajaxUrl = 'http://iderms.enertalk.com:8443/spcs/' + spcId + '?oid=' + oid;
+			ajaxUrl = apiHost + '/spcs/' + spcId + '?oid=' + oid;
 		}
 
 		$('#basicForm').find('input[type="file"]').each(function () {
@@ -398,7 +398,7 @@
 		$.ajax({
 			type: 'post',
 			enctype: 'multipart/form-data',
-			url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
+			url: apiHost + '/files/upload?oid=' + oid,
 			data: new FormData($('#basicForm')[0]),
 			processData: false,
 			contentType: false,
@@ -456,7 +456,7 @@
 		$.ajax({
 			type: 'post',
 			enctype: 'multipart/form-data',
-			url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
+			url: apiHost + '/files/upload?oid=' + oid,
 			data: new FormData($('#attachement_info')[0]),
 			processData: false,
 			contentType: false,
@@ -507,7 +507,7 @@
 		$.ajax({
 			type: 'post',
 			enctype: 'multipart/form-data',
-			url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
+			url: apiHost + '/files/upload?oid=' + oid,
 			data: new FormData($('#financeForm')[0]),
 			processData: false,
 			contentType: false,
@@ -535,7 +535,7 @@
 		});
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/spcs/' + spcId + '/gens?oid=' + oid + '&gen_id=' + genId,
+			url: apiHost + '/spcs/' + spcId + '/gens?oid=' + oid + '&gen_id=' + genId,
 			type: 'post',
 			async: true,
 			contentType: 'application/json',

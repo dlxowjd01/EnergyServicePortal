@@ -15,7 +15,7 @@
 
 		//SPC명 가져오기
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/spcs/' + spc_id,
+			url: apiHost + '/spcs/' + spc_id,
 			type: 'get',
 			async: false,
 			data: { oid: oid },
@@ -33,7 +33,7 @@
 
 		//발전소명 가져오기
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/spcs/" + spc_id + "/gens/" + gen_id,
+			url: apiHost + '/spcs/' + spc_id + "/gens/" + gen_id,
 			type: "get",
 			async: false,
 			data: { "oid": oid },
@@ -72,7 +72,7 @@
 		callAjax({
 			type: 'post',
 			enctype: 'multipart/form-data',
-			url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
+			url: apiHost + '/files/upload?oid=' + oid,
 			data: new FormData($('#upload')[0]),
 			processData: false,
 			contentType: false,
@@ -116,7 +116,7 @@
 
 	const getGridList = function(supInfoLength){
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/spcs/" + spc_id + "/gens/" + gen_id + "/supplement?oid=" + oid,
+			url: apiHost + '/spcs/' + spc_id + "/gens/" + gen_id + "/supplement?oid=" + oid,
 			type: "get",
 			dataType: 'json',
 			async: false,
@@ -127,7 +127,7 @@
 				supInfoLength = json.data.length;
 				// 이관자료가 기존에 존재하면 테이블에 매칭
 				if (supInfoLength > 0) {
-					var linkDownUrl = 'http://iderms.enertalk.com:8443/files/download/';
+					var linkDownUrl = apiHost + '/files/download/';
 					var supplementList = json.data[0].supplement_info
 					supplementInfo = JSON.parse(supplementList)
 
@@ -248,7 +248,7 @@
 	function sendSupplementPost() {
 		var supplement_info = setAreaParamData("supplement_info");
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/spcs/" + spc_id + "/gens/" + gen_id + "/supplement?oid=" + oid,
+			url: apiHost + '/spcs/' + spc_id + "/gens/" + gen_id + "/supplement?oid=" + oid,
 			type: "post",
 			dataType: 'json',
 			async: false,
@@ -272,7 +272,7 @@
 	function sendSupplementPatch() {
 		var supplement_info = setAreaParamData("supplement_info");
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/spcs/" + spc_id + "/gens/" + gen_id + "/supplement?oid=" + oid,
+			url: apiHost + '/spcs/' + spc_id + "/gens/" + gen_id + "/supplement?oid=" + oid,
 			type: "patch",
 			dataType: 'json',
 			async: false,
@@ -341,7 +341,7 @@
 			filedName = $selectorTr.find('[id$="_filedName"]').val(),
 			originalName = $selectorTr.find('[id$="_originalName"]').val(),
 			downCount = $selectorTr.find('[id$="_다운로드"]').val();
-		location.href = 'http://iderms.enertalk.com:8443/files/download/' + filedName + '?oid=' + oid + '&orgFilename=' + originalName;
+		location.href = apiHost + '/files/download/' + filedName + '?oid=' + oid + '&orgFilename=' + originalName;
 
 		$selectorTr.find('[id$="_다운로드"]').val(Number(downCount) + 1);
 

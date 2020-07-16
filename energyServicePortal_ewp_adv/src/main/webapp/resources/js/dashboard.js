@@ -30,7 +30,7 @@ const getYearGenData = async function () {
 	$(`.gmain_chart1 span.term`).text(today.getFullYear() + '.1.1 ~ ' + today.getFullYear() + '.' + (Number(today.getMonth()) + 1) + '.' + today.getDate());
 	siteList.forEach(site => {
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/energy/sites',
+			url: apiHost + '/energy/sites',
 			type: 'get',
 			data: {
 				sid: site.sid,
@@ -82,7 +82,7 @@ const getYearGenData = async function () {
 		});
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/energy/now/sites',
+			url: apiHost + '/energy/now/sites',
 			type: 'get',
 			data: {
 				sids: site.sid,
@@ -419,7 +419,7 @@ const getDailyGenData = async function () {
 	$(`.gmain_chart2 span.term`).text(today.format('yyyy.MM') + '.1 ~ ' + today.format('yyyy.MM') + '.' + today.getDate());
 	siteList.forEach(site => {
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/energy/sites',
+			url: apiHost + '/energy/sites',
 			type: 'get',
 			data: {
 				sid: site.sid,
@@ -471,7 +471,7 @@ const getDailyGenData = async function () {
 		});
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/energy/now/sites',
+			url: apiHost + '/energy/now/sites',
 			type: 'get',
 			data: {
 				sids: site.sid,
@@ -757,7 +757,7 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 		categories.push(site.name);
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/energy/sites',
+			url: apiHost + '/energy/sites',
 			type: 'get',
 			data: {
 				sid: site.sid,
@@ -800,7 +800,7 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 		});
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/energy/forecasting/sites',
+			url: apiHost + '/energy/forecasting/sites',
 			type: 'get',
 			data: {
 				sid: site.sid,
@@ -1032,7 +1032,7 @@ const getAlarmInfo = function () {
 	});
 
 	$.ajax({
-		url: 'http://iderms.enertalk.com:8443/alarms',
+		url: apiHost + '/alarms',
 		type: 'get',
 		data: {
 			sids: siteArray.join(','),
@@ -1089,7 +1089,7 @@ const beforeTodayTotal = function () {
 				});
 
 				$.ajax({
-					url: 'http://iderms.enertalk.com:8443/energy/now/sites',
+					url: apiHost + '/energy/now/sites',
 					type: 'get',
 					async: false,
 					data: {
@@ -1154,7 +1154,7 @@ const firstBy = (function() {
 const beforeTodayTotalPromise = (site) => {
 	return new Promise((resolve, reject) => {
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/status/raw/site',
+			url: apiHost + '/status/raw/site',
 			type: 'get',
 			data: {
 				sid: site.sid,
@@ -1237,7 +1237,7 @@ const getTodayTotalDetail = async function () {
 
 	siteList.forEach((site, siteIdx) => {
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/energy/forecasting/sites',
+			url: apiHost + '/energy/forecasting/sites',
 			type: 'get',
 			data: {
 				sid: site.sid,
@@ -1260,7 +1260,7 @@ const getTodayTotalDetail = async function () {
 		});
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/energy/now/sites',
+			url: apiHost + '/energy/now/sites',
 			type: 'get',
 			data: {
 				sids: site.sid,
@@ -1426,7 +1426,7 @@ const searchSiteList = async function () {
 		siteArray.push(site.sid);
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/energy/forecasting/sites',
+			url: apiHost + '/energy/forecasting/sites',
 			type: 'get',
 			data: {
 				sid: site.sid,
@@ -1463,7 +1463,7 @@ const searchSiteList = async function () {
 		});
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/status/raw/site',
+			url: apiHost + '/status/raw/site',
 			type: 'get',
 			data: {
 				sid: site.sid,
@@ -1510,7 +1510,7 @@ const searchSiteList = async function () {
 
 	siteList.forEach((site, siteIdx) => {
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/weather/site',
+			url: apiHost + '/weather/site',
 			type: 'get',
 			data: {
 				sid: site.sid,
@@ -1544,7 +1544,7 @@ const searchSiteList = async function () {
 
 
 	$.ajax({
-		url: 'http://iderms.enertalk.com:8443/energy/now/sites',
+		url: apiHost + '/energy/now/sites',
 		type: 'get',
 		data: {
 			sids: siteArray.join(','),
@@ -1576,7 +1576,7 @@ const searchSiteList = async function () {
 	});
 
 	$.ajax({
-		url: 'http://iderms.enertalk.com:8443/alarms',
+		url: apiHost + '/alarms',
 		type: 'get',
 		data: {
 			sids: siteArray.join(','),

@@ -366,7 +366,6 @@
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 
-	const apiURL = 'http://iderms.enertalk.com:8443';
 	const apiEnergySite = '/energy/sites';
 	const apiEnergyNowSite = '/energy/now/sites';
 	const apiWeather = '/weather/site';
@@ -399,7 +398,7 @@
 
 	const nowEnergy = () => {
 		let nowEnergyDay = {
-			url: apiURL + apiEnergyNowSite,
+			url: apiHost + apiEnergyNowSite,
 				type: 'get',
 			data: {
 				sids: siteId,
@@ -409,7 +408,7 @@
 		};
 
 		let nowEnergyMonth = {
-			url: apiURL + apiEnergyNowSite,
+			url: apiHost + apiEnergyNowSite,
 			type: 'get',
 			data: {
 				sids: siteId,
@@ -419,7 +418,7 @@
 		};
 
 		let nowEnergyYear = {
-			url: apiURL + apiEnergyNowSite,
+			url: apiHost + apiEnergyNowSite,
 			type: 'get',
 			data: {
 				sids: siteId,
@@ -468,7 +467,7 @@
 	const featurePropertiesSub = new Object();
 	const deviceProperties = () => {
 		$.ajax({
-			url: apiURL + apiDeviceProperties,
+			url: apiHost + apiDeviceProperties,
 			type: 'get',
 			dataType: 'json',
 			data: {},
@@ -565,7 +564,7 @@
 
 		if(deviceArray.length > 0) {
 			$.ajax({
-				url: apiURL + apiStatusRaw,
+				url: apiHost + apiStatusRaw,
 				type: 'get',
 				dataType: 'json',
 				data: {
@@ -828,7 +827,7 @@
 		const beforeYearFormData = getSiteMainSchCollection('beforeYear');//api에 맞게 수정 필요
 
 		const monthEnergy = {
-			url: apiURL + apiEnergySite,
+			url: apiHost + apiEnergySite,
 			type: 'get',
 			dataType: 'json',
 			data: {
@@ -841,7 +840,7 @@
 		}
 
 		const nowMonth = {
-			url: apiURL + apiEnergyNowSite,
+			url: apiHost + apiEnergyNowSite,
 			type: 'get',
 			dataType: 'json',
 			data: {
@@ -852,7 +851,7 @@
 		}
 
 		const beforeYear = {
-			url: apiURL + apiEnergySite,
+			url: apiHost + apiEnergySite,
 			type: 'get',
 			dataType: 'json',
 			data: {
@@ -864,7 +863,7 @@
 		}
 
 		const weather = {
-			url: apiURL + apiWeather,
+			url: apiHost + apiWeather,
 			type: 'get',
 			dataType: 'json',
 			data: {
@@ -1321,7 +1320,7 @@
 		const formData = getSiteMainSchCollection('month');//api에 맞게 수정 필요
 
 		const dailyEnergy = {
-			url: apiURL + apiEnergySite,
+			url: apiHost + apiEnergySite,
 			type: 'get',
 			dataType: 'json',
 			data: {
@@ -1333,7 +1332,7 @@
 		};
 
 		const dailyWeather = {
-			url: apiURL + apiWeather,
+			url: apiHost + apiWeather,
 			type: 'get',
 			dataType: 'json',
 			data: {
@@ -1382,7 +1381,7 @@
 
 	const getWCalendarNowEnergyData = () => {
 		$.ajax({
-			url: apiURL + apiEnergyNowSite,
+			url: apiHost + apiEnergyNowSite,
 			type: 'get',
 			dataType: 'json',
 			data: {
@@ -1461,7 +1460,7 @@
 		}
 
 		let siteNowEnergy = {
-			url: apiURL + apiEnergyNowSite,
+			url: apiHost + apiEnergyNowSite,
 			type: 'get',
 			data: {
 				sids: siteId,
@@ -1471,7 +1470,7 @@
 		}
 
 		let siteForeEnergy = {
-			url: apiURL + apiForecastingSite,
+			url: apiHost + apiForecastingSite,
 			type: 'get',
 			data: {
 				sid: siteId,
@@ -1482,7 +1481,7 @@
 		}
 
 		let statusRawSite = {
-			url: apiURL + apiStatusRawSite,
+			url: apiHost + apiStatusRawSite,
 			type: 'get',
 			data: {
 				sid: siteId,
@@ -1661,7 +1660,7 @@
 		let energyData2 = new Array(24).fill(0);
 
 		let gen = {
-			url: apiURL + apiEnergySite,
+			url: apiHost + apiEnergySite,
 			type: 'get',
 			data: {
 				sid: siteId,
@@ -1672,7 +1671,7 @@
 		};
 
 		let foreGen = {
-			url: apiURL + apiForecastingSite,
+			url: apiHost + apiForecastingSite,
 			type: 'get',
 			data: {
 				sid: siteId,
@@ -1683,7 +1682,7 @@
 		};
 
 		const nowMonth = {
-			url: apiURL + apiEnergyNowSite,
+			url: apiHost + apiEnergyNowSite,
 			type: 'get',
 			dataType: 'json',
 			data: {
@@ -1694,7 +1693,7 @@
 		}
 
 		let nowGen = {
-			url: apiURL + apiEnergyNowSite,
+			url: apiHost + apiEnergyNowSite,
 			type: 'get',
 			data: {
 				sids: siteId,
@@ -1933,7 +1932,7 @@
 		const formData = getSiteMainSchCollection('day');
 
 		let weekWeather = {
-			url: apiURL + apiWeather,
+			url: apiHost + apiWeather,
 			type: 'get',
 			dataType: 'json',
 			data: {
@@ -1945,7 +1944,7 @@
 		}
 
 		let weekWeatherTime = {
-			url: apiURL + apiWeather,
+			url: apiHost + apiWeather,
 			type: 'get',
 			dataType: 'json',
 			data: {
@@ -2003,7 +2002,7 @@
 		let siteArray = new Array();
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/alarms',
+			url: apiHost + '/alarms',
 			type: 'get',
 			data: {
 				sids: siteId,

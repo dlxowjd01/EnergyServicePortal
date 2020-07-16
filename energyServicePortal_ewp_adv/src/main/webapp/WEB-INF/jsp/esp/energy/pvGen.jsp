@@ -254,7 +254,7 @@
 				let sNm = $(this).next('label').text();
 
 				$.ajax({
-					url: 'http://iderms.enertalk.com:8443/config/devices/',
+					url: apiHost + '/config/devices/',
 					type: 'get',
 					async: false,
 					data: {
@@ -353,7 +353,7 @@
 		if (billingSites.length > 0) {
 			//API 호출
 			$.ajax({
-				url: "http://iderms.enertalk.com:8443/energy/sites",
+				url: apiHost + '/energy/sites',
 				type: "get",
 				async: false,
 				data: {
@@ -380,7 +380,7 @@
 		if (dashSites.length > 0) {
 			//API 호출
 			$.ajax({
-				url: "http://iderms.enertalk.com:8443/energy/sites",
+				url: apiHost + '/energy/sites',
 				type: "get",
 				async: false,
 				data: {
@@ -406,7 +406,7 @@
 		if (checkedDevices.length > 0) {
 			//API 호출
 			$.ajax({
-				url: "http://iderms.enertalk.com:8443/energy/devices",
+				url: apiHost + '/energy/devices',
 				type: "get",
 				async: false,
 				data: {

@@ -222,7 +222,7 @@
 		}
 
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/spcs",
+			url: apiHost + '/spcs',
 			type: "get",
 			async: true,
 			data: {
@@ -230,10 +230,6 @@
 				includeGens: true
 			},
 			success: function (result) {
-
-
-
-
 				setMakeList(setJsonDataFormat(result, page, n, sort, searchCnt), "listData", {
 					"dataFunction": {
 						"INDEX": getNumberIndex
@@ -288,7 +284,7 @@
 		for (var i = 0; i < count; i++) {
 			var rowData = checkDataList[i];
 			$.ajax({
-				url: "http://iderms.enertalk.com:8443/spcs/" + rowData.spc_id + "/gens/" + rowData.gen_id + "?oid=" + oid,
+				url: apiHost + '/spcs/' + rowData.spc_id + "/gens/" + rowData.gen_id + "?oid=" + oid,
 				type: "delete",
 				dataType: 'json',
 				async: false,

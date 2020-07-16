@@ -465,7 +465,7 @@
 		$('#picupload').find('input').attr('name', uuid).attr('id', uuid);
 		$.ajax({
 			enctype: 'multipart/form-data',
-			url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
+			url: apiHost + '/files/upload?oid=' + oid,
 			data: new FormData($('#picupload')[0]),
 			type: 'post',
 			async: false,
@@ -473,7 +473,7 @@
 			contentType: false,
 			success: function (result) {
 				if (result.files.length > 0) {
-					liStr += '<li><span class="pt_tx"><a href="http://iderms.enertalk.com:8443/files/download/' + result.files[0].fieldname + '?oid=' + oid + '&orgFilename=' + result.files[0].originalname + '">' + result.files[0].originalname + '</a></span>';
+					liStr += '<li><span class="pt_tx"><a href="' + apiHost + '/files/download/' + result.files[0].fieldname + '?oid=' + oid + '&orgFilename=' + result.files[0].originalname + '">' + result.files[0].originalname + '</a></span>';
 					liStr += '<button class="btn_del" data-time="' + new Date().toISOString() + '" value="' + result.files[0].fieldname + '" name="file_original_name">삭제</button></li>';
 				}
 				$('.photo_load_wrap ul').append(liStr);
@@ -615,7 +615,7 @@
 		}
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/alarms',
+			url: apiHost + '/alarms',
 			type: 'get',
 			async: false,
 			data: alarmData,
@@ -739,7 +739,7 @@
 		let confirmData = "";
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/alarms/' + alarmId,
+			url: apiHost + '/alarms/' + alarmId,
 			type: 'get',
 			async: false,
 			data: {
@@ -803,7 +803,7 @@
 		confirmstate = alarmIdAjax(alarmId);
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/alarm_ticket',
+			url: apiHost + '/alarm_ticket',
 			dataType: 'json',
 			type: 'get',
 			async: false,
@@ -850,7 +850,7 @@
 				$.each(ticketFileList, function (i, el) {
 					let liStr = '';
 					if (ticketFileList.length > 0) {
-						liStr += '<li><span class="pt_tx"><a href="http://iderms.enertalk.com:8443/files/download/' + el.file_key + '?oid=' + oid + '&orgFilename=' + el.file_original_name + '">' + el.file_original_name + '</a></span>';
+						liStr += '<li><span class="pt_tx"><a href="' + apiHost + '/files/download/' + el.file_key + '?oid=' + oid + '&orgFilename=' + el.file_original_name + '">' + el.file_original_name + '</a></span>';
 						liStr += '<button class="btn_del" data-time= "' + el.update_dt + '" value="' + el.file_key + '" name="file_original_name">삭제</button></li>';
 					}
 					$('.photo_load_wrap ul').append(liStr);
@@ -960,7 +960,7 @@
 				return false;
 			} else {
 				$.ajax({
-					url: 'http://iderms.enertalk.com:8443/alarm_ticket?oid=' + oid + '&alarm_id=' + $('#alarmMeasure').data('value'),
+					url: apiHost + '/alarm_ticket?oid=' + oid + '&alarm_id=' + $('#alarmMeasure').data('value'),
 					dataType: 'json',
 					type: 'post',
 					async: false,
@@ -993,7 +993,7 @@
 			}
 
 			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/alarm_ticket',
+				url: apiHost + '/alarm_ticket',
 				dataType: 'json',
 				type: 'get',
 				async: false,
@@ -1030,7 +1030,7 @@
 				}
 
 				$.ajax({
-					url: 'http://iderms.enertalk.com:8443/alarm_ticket/' + ticketId + '?oid=' + oid,
+					url: apiHost + '/alarm_ticket/' + ticketId + '?oid=' + oid,
 					dataType: 'json',
 					type: 'patch',
 					async: false,
@@ -1060,7 +1060,7 @@
 	const userListRender = function (oid) {
 		$('#userlist ul').empty().append('<li data-value="직접 입력"><a href="javascript:void(0)">직접 입력</a></li>');
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/config/users',
+			url: apiHost + '/config/users',
 			dataType: 'json',
 			type: 'get',
 			async: false,
@@ -1148,7 +1148,7 @@
 		let arr = [];
 		$.each(siteArray, function (i, site) {
 			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/config/devices/',
+				url: apiHost + '/config/devices/',
 				type: 'get',
 				async: false,
 				data: {
@@ -1710,7 +1710,7 @@
 				}
 
 				$.ajax({
-					url: 'http://iderms.enertalk.com:8443/alarms/' + $(this).val(),
+					url: apiHost + '/alarms/' + $(this).val(),
 					type: 'patch',
 					dataType: 'json',
 					async: false,
@@ -1748,7 +1748,7 @@
 			}
 
 			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/alarm_ticket',
+				url: apiHost + '/alarm_ticket',
 				dataType: 'json',
 				type: 'get',
 				async: false,
@@ -1791,7 +1791,7 @@
 			}
 
 			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/alarm_ticket/' + ticketId + '?oid=' + oid,
+				url: apiHost + '/alarm_ticket/' + ticketId + '?oid=' + oid,
 				dataType: 'json',
 				type: 'patch',
 				async: false,
@@ -1811,7 +1811,7 @@
 			manager: loginName + ',' + loginId
 		}
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/alarms/' + alarmId,
+			url: apiHost + '/alarms/' + alarmId,
 			type: 'patch',
 			dataType: 'json',
 			contentType: 'application/json',

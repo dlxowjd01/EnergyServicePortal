@@ -16,7 +16,7 @@
 
 	function getGenData() {
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/auth/me/sites',
+			url: apiHost + '/auth/me/sites',
 			type: 'get',
 			async: false,
 			success: function (json) {
@@ -33,7 +33,7 @@
 	function getReportData() {
 		var reportId = '${param.report_id}';
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/reports/remote_work?oid=' + oid + '&report_id=' + reportId,
+			url: apiHost + '/reports/remote_work?oid=' + oid + '&report_id=' + reportId,
 			type: 'get',
 			async: false,
 			data: {},
@@ -182,7 +182,7 @@
 				});
 
 				$.ajax({
-					url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
+					url: apiHost + '/files/upload?oid=' + oid,
 					type: 'post',
 					enctype: 'multipart/form-data',
 					data: formData,
@@ -206,7 +206,7 @@
 		work_detail_info['files'] = resultFiles;
 
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/reports/remote_work/' + reportId + '?oid=' + oid,
+			url: apiHost + '/reports/remote_work/' + reportId + '?oid=' + oid,
 			type: 'patch',
 			dataType: 'json',
 			async: false,
@@ -369,7 +369,7 @@
 							<td>
 								<div id="fileList01">
 									<p class="tx_file">
-										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
 									</p>
 								</div>
@@ -413,7 +413,7 @@
 							<td>
 								<div id="fileList02">
 									<p class="tx_file">
-										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button class="btn_type07" onclick="setRemoveFileList('fileList02', [INDEX]);">삭제</button>
 									</p>
 								</div>

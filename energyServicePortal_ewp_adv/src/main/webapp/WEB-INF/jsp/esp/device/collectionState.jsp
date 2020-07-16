@@ -260,7 +260,7 @@
 			}
 
 			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/config/rtus/' + rid,
+				url: apiHost + '/config/rtus/' + rid,
 				type: 'delete',
 				dataType: 'json',
 				contentType: 'application/json',
@@ -291,7 +291,7 @@
 			let endTime = end + endTimepicker + '00';
 
 			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/log',
+				url: apiHost + '/log',
 				type: 'get',
 				async: false,
 				data: {
@@ -330,7 +330,7 @@
 			}
 
 			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/config/rtus/' + rid,
+				url: apiHost + '/config/rtus/' + rid,
 				type: 'get',
 				dataType: 'json',
 				data: {},
@@ -412,7 +412,7 @@
 		// START: rtu Detail info setting
 		const rtuInfo = [
 			{
-				url: 'http://iderms.enertalk.com:8443/config/rtus/' + rids,
+				url: apiHost + '/config/rtus/' + rids,
 				type: 'get',
 				dataType: 'json',
 				data: {
@@ -420,7 +420,7 @@
 				}
 			},
 			{
-				url: 'http://iderms.enertalk.com:8443/status/raw',
+				url: apiHost + '/status/raw',
 				type: 'get',
 				dataType: 'json',
 				data: {
@@ -494,7 +494,7 @@
 		if (isEmpty(startTime)) startTime = beforeHour;
 		if (isEmpty(endTime)) endTime = nowLocal;
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/log',
+			url: apiHost + '/log',
 			type: 'get',
 			async: false,
 			data: {
@@ -567,7 +567,7 @@
 		);
 		if (siteArray.length > 0) {
 			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/config/sites',
+				url: apiHost + '/config/sites',
 				type: 'get',
 				async: false,
 				data: {
@@ -716,10 +716,10 @@
 		}
 
 		if (type == 'post') {
-			ajaxUrl = 'http://iderms.enertalk.com:8443/config/rtus?oid=' + oid + '&sid=' + sid;
+			ajaxUrl = apiHost + '/config/rtus?oid=' + oid + '&sid=' + sid;
 			typeName = '등록';
 		} else {
-			ajaxUrl = 'http://iderms.enertalk.com:8443/config/rtus/' + rid;
+			ajaxUrl = apiHost + '/config/rtus/' + rid;
 			typeName = '수정';
 		}
 
