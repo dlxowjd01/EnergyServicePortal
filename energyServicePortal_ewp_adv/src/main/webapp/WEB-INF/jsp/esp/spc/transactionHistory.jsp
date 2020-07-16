@@ -5,7 +5,7 @@
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
-	console.log("oid---", oid);
+
 	$(function() {
 		const tableBody = $('#tableBody');
 		const tableFooter = $('#tableFooter')

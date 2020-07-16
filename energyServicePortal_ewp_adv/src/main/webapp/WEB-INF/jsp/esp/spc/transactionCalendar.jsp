@@ -265,7 +265,7 @@
 	const maintenance = function (spcNameArr, action, jobId) {
 		var spcIdArr = spcNameArr;
 		let option = {};
-		
+
 		if (action == 'get') {
 			let optTransaction = {};
 			let d = $('#year button').data('value') + ('0' + $('#month button').data('value'))
@@ -805,10 +805,6 @@
 			});
 			$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
 		}
-
-				// $('#repeat_end').val(selDate.format('yyyy-MM-dd'));
-
-		$('#repeat_end').val(selectedDate.format('yyyy-MM-dd'));
 
 		if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
 			selectedDate.setDate(selectedDate.getDate() - Number($('#alarmSetup button').data('value')));

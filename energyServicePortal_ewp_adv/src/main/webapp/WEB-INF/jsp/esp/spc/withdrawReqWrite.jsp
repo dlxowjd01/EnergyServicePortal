@@ -4,9 +4,8 @@
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	const oid = '${sessionScope.userInfo.oid}';
-	const loginId = '${sessionScope.userInfo.login_id}';
+	// const loginId = '${sessionScope.userInfo.login_id}';
 	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
-	const userToken = '<c:out value="${sessionScope.userInfo.token}" escapeXml="false" />';
 	const userInfo = '<c:out value="${sessionScope.userInfo}" escapeXml="false" />';
 
 	$(function() {
@@ -146,18 +145,22 @@
 
 						// mergeArr(result)
 						res.map(x => {
+							// console.log("x===", x)
 							Object.entries(x).map((item, index) => {
 								const strAccType = "입출금_구분";
 								const strAccNum = "계좌_번호";
-								const bankName = "은행_리스트"
+								const bankName = "은행_리스트";
+								const accHolder = "예금주";
+
 								if(item[0].match(strAccType)){
 									let n = item[0].replace(strAccType, '');
 									let myObj = {};
-									console.log("item-==", item)
+									console.log("item=====", item)
 									myObj.accCategory = item[0];
 									myObj.accType = item[1];
 									myObj.accNum = x[strAccNum+n];
 									myObj.bankName = x[bankName+n];
+									myObj.accHolder = x[accHolder+n];
 									tempArr.push(myObj);
 								}
 
@@ -189,13 +192,15 @@
 								console.log("v===", v);
 								bankName = v.bankName;
 								accNum = v.accNum;
+								accHolder = v.accHolder;
 
-								sending = copyWithdrawList.replace(/\*withdraw_account\*/g, v.accType).replace(/\*bank_name\*/g, bankName).replace(/\*acc_num\*/g, accNum);
+								sending = copyWithdrawList.replace(/\*withdraw_account\*/g, v.accType).replace(/\*bank_name\*/g, bankName).replace(/\*acc_num\*/g, accNum).replace(/\*acc_holder\*/g, accHolder);
 								withdrawList.append($(sending));
 							} else {
 								bankName = v.bankName;
 								accNum = v.accNum;
-								receiving = copyReceiveList.replace(/\*to_account_bank_name\*/g, v.accType).replace(/\*to_bank_name\*/g, bankName).replace(/\*to_account_no\*/g, accNum);
+								accHolder = v.accHolder;
+								receiving = copyReceiveList.replace(/\*to_acc_type\*/g, v.accType).replace(/\*to_bank_name\*/g, bankName).replace(/\*to_account_no\*/g, accNum).replace(/\*acc_holder\*/g, accHolder);
 								$(".receive-list").each(function(){
 									$(this).append($(receiving));
 								});
@@ -203,8 +208,8 @@
 						});
 					});
 				} else {
-					sending = copyWithdrawList.replace(/\*withdraw_account\*/g, '등록된 출금 계좌가 없습니다.').replace(/\*acc_num\*/g, '').replace(/\*acc_num\*/g, '');
-					receiving = copyReceiveList.replace(/\*to_account_bank_name\*/g, '등록된 입금 계좌가 없습니다.').replace(/\*to_bank_name\*/g, '').replace(/\*to_account_no\*/g, '');
+					sending = copyWithdrawList.replace(/\*withdraw_account\*/g, '등록된 출금 계좌가 없습니다.').replace(/\*acc_num\*/g, '').replace(/\*acc_num\*/g, '').replace(/\*acc_holder\*/g, '');
+					receiving = copyReceiveList.replace(/\*to_acc_type\*/g, '등록된 입금 계좌가 없습니다.').replace(/\*to_bank_name\*/g, '').replace(/\*to_account_no\*/g, '').replace(/\*acc_holder\*/g, '');
 					withdrawList.append($(sending));
 					receiveList.append($(receiving));
 				}
@@ -214,7 +219,7 @@
 			});
 			setTimeout(function(){
 				withdrawList.find("li").on("click", function(){
-					withdrawList.prev().data({"value": $(this).data("value"), "name": $(this).data("name") });
+					withdrawList.prev().data({"value": $(this).data("value"), "name": $(this).data("name"), "acc-holder" : $(this).data("acc-holder") });
 				});
 				receiveList.find("li").on("click", function(){
 					receiveList.prev().data({"value": $(this).data("value"), "name": $(this).data("name") });
@@ -241,19 +246,19 @@
 			jsonData.spc_id = spcList.prev().data("value");
 			// from
 			jsonData.withdraw_bank = withdrawList.prev().data("name");
-			jsonData.withdraw_account_no = withdrawList.data("value");
-			jsonData.withdraw_account_owner = '-';
+			jsonData.withdraw_account_no = withdrawList.prev().data("value");
+			jsonData.withdraw_account_owner = withdrawList.prev().data("acc-holder");
 			jsonData.withdraw_day = $("#requestedDate").val().replace(/-/g, "");
 			// to
 			jsonData.to_account = "";
 			// status
 			jsonData.status = 1;
 			jsonData.status_changed_by = loginName;
-			jsonData.status_changed_at = new Date().toISOString();
+			jsonData.status_changed_at = new Date().toLocaleDateString("ja-JP");
 			jsonData.requested_by = loginName;
 			jsonData.requested_by_uid = uid;
-			jsonData.requested_at = new Date().toISOString();
-			jsonData.transfer_agent = "tester2"
+			jsonData.requested_at = new Date().toLocaleDateString("ja-JP");
+			jsonData.transfer_agent = loginName;
 
 			let fileNames = $("#addFileList").find("li.upload_text");
 			$.each(fileNames, function(index, element){
@@ -273,14 +278,14 @@
 				obj.purpose = purposeOpt.eq(index).data("value");
 				obj.amount = Number(amountOpt.eq(index).val().replace(/,/g, ''));
 				obj.to_account_bank = accOpt.eq(index).data("name");
-				obj.to_account_owner = '-';
+				obj.to_account_owner = accOpt.eq(index).data("acc-holder");
 				obj.to_account_no = accOpt.eq(index).data("value");
 				obj.desc = descOpt.eq(index).val();
 				arr.push(obj);
 			});
 			jsonData.total_amount = totalAmount;
 			jsonData.to_account = JSON.stringify(arr);
-
+			console.log("json--", jsonData);
 			let newJson = JSON.stringify(jsonData);
 			let formArr = [ jsonData.spc_id, jsonData.withdraw_bank, jsonData.withdraw_day, jsonData.to_account ];
 
@@ -300,7 +305,7 @@
 					}
 				}
 			});
-
+			
 			if( withdrawForm.find(".warning.hidden").length == 4 ){
 				let opt = {
 					url: apiHost + '/spcs/transactions?oid='+oid,
@@ -554,7 +559,7 @@
 			--><span class="tx_tit">출금 계좌번호</span><!--
 			--><div class="dropdown"><!--
 				--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button>
-					<ul id="withdrawList" class="dropdown-menu unused center" role="menu"><li data-name="*bank_name*" data-value="*acc_num*"><a href="#" tabindex="-1">*bank_name* *acc_num*</a></li></ul>
+					<ul id="withdrawList" class="dropdown-menu unused center" role="menu"><li data-acc-holder="*acc_holder*" data-name="*bank_name*" data-value="*acc_num*"><a href="#" tabindex="-1">*bank_name* *acc_num*</a></li></ul>
 					<small class="hidden warning">출금 요청 계좌를 선택해 주세요.</small>
 				</div>
 			</div>
@@ -622,7 +627,7 @@
 								<div class="sa_select">
 									<div class="dropdown placeholder">
 										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="">선택<span class="caret"></span></button>
-										<ul id="receiveList" class="receive-list dropdown-menu" role="menu"><li data-name="*to_account_bank_name*" data-name="*to_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_bank_name* *to_account_no*</a></li></ul>
+										<ul id="receiveList" class="receive-list dropdown-menu" role="menu"><li data-acc-holder="*acc_holder*" data-name="*to_acc_type*" data-name="*to_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_bank_name* *to_account_no*</a></li></ul>
 									</div>
 								</div>
 							</td>
