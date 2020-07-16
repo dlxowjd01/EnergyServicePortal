@@ -66,16 +66,10 @@
 							$('#rejectBtn').parent().addClass('hidden');
 						}
 
-<<<<<<< HEAD
-						if(!isEmpty(item.attachmentInfo)){
-							$("#proofFile").prev().text("증빙서류: ")
-							attachmentInfo.forEach(attach => {
-=======
 						const attachmentInfo = Promise.resolve(JSON.parse(item.attachement_info));
 						attachmentInfo.then((attachList) => {
 							$("#proofFile").prev().text("증빙서류: ");
 							attachList.forEach(attach => {
->>>>>>> 8062341ac31d3712747ac6767f58a33a51687dac
 								let downUrl = apiHost + '/files/download/' + attach.filedName + '?oid=' + oid + '&orgFilename=' + attach.originalName.trim();
 								let templateAttach = `
 												<div class="flex_wrapper border">
