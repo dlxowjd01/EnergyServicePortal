@@ -183,24 +183,28 @@
 						filteredArr.map(v => {
 							let sending = '';
 							let receiving = '';
+							let bankName = '';
+							let accNum = '';
 							if(v.accType.match("출금")){
 								console.log("v===", v);
-								let val = v.bankName + ' ' + v.accNum;
-								sending = copyWithdrawList.replace(/\*withdraw_account\*/g, v.accType).replace(/\*account_num\*/g, val);
+								bankName = v.bankName;
+								accNum = v.accNum;
+
+								sending = copyWithdrawList.replace(/\*withdraw_account\*/g, v.accType).replace(/\*bank_name\*/g, bankName).replace(/\*acc_num\*/g, accNum);
 								withdrawList.append($(sending));
 							} else {
-								let val = v.bankName + ' ' + v.accNum;
-								receiving = copyReceiveList.replace(/\*to_account_bank_name\*/g, v.accType).replace(/\*to_account_no\*/g, val);
+								bankName = v.bankName;
+								accNum = v.accNum;
+								receiving = copyReceiveList.replace(/\*to_account_bank_name\*/g, v.accType).replace(/\*to_bank_name\*/g, bankName).replace(/\*to_account_no\*/g, accNum);
 								$(".receive-list").each(function(){
 									$(this).append($(receiving));
 								});
 							}
 						});
-
 					});
 				} else {
-					sending = copyWithdrawList.replace(/\*withdraw_account\*/g, '등록된 출금 계좌가 없습니다.').replace(/\*account_num\*/g, '');
-					receiving = copyReceiveList.replace(/\*to_account_bank_name\*/g, '등록된 입금 계좌가 없습니다.').replace(/\*to_account_no\*/g, '');
+					sending = copyWithdrawList.replace(/\*withdraw_account\*/g, '등록된 출금 계좌가 없습니다.').replace(/\*acc_num\*/g, '').replace(/\*acc_num\*/g, '');
+					receiving = copyReceiveList.replace(/\*to_account_bank_name\*/g, '등록된 입금 계좌가 없습니다.').replace(/\*to_bank_name\*/g, '').replace(/\*to_account_no\*/g, '');
 					withdrawList.append($(sending));
 					receiveList.append($(receiving));
 				}
@@ -208,6 +212,14 @@
 				alert('처리 중 오류가 발생했습니다.');
 				return false;
 			});
+			setTimeout(function(){
+				withdrawList.find("li").on("click", function(){
+					withdrawList.prev().data({"value": $(this).data("value"), "name": $(this).data("name") });
+				});
+				receiveList.find("li").on("click", function(){
+					receiveList.prev().data({"value": $(this).data("value"), "name": $(this).data("name") });
+				});
+			}, 300);
 		}
 
 		function uniqBy(a, key) {
@@ -228,8 +240,9 @@
 			let uid = `${sessionScope.userInfo.uid}`;
 			jsonData.spc_id = spcList.prev().data("value");
 			// from
-			jsonData.withdraw_bank = withdrawList.prev().data("value");
-			jsonData.withdraw_account_no = withdrawList.prev().text();
+			jsonData.withdraw_bank = withdrawList.prev().data("name");
+			jsonData.withdraw_account_no = withdrawList.data("value");
+			jsonData.withdraw_account_owner = '-';
 			jsonData.withdraw_day = $("#requestedDate").val().replace(/-/g, "");
 			// to
 			jsonData.to_account = "";
@@ -260,6 +273,7 @@
 				obj.purpose = purposeOpt.eq(index).data("value");
 				obj.amount = Number(amountOpt.eq(index).val().replace(/,/g, ''));
 				obj.to_account_bank = accOpt.eq(index).data("name");
+				obj.to_account_owner = '-';
 				obj.to_account_no = accOpt.eq(index).data("value");
 				obj.desc = descOpt.eq(index).val();
 				arr.push(obj);
@@ -540,7 +554,7 @@
 			--><span class="tx_tit">출금 계좌번호</span><!--
 			--><div class="dropdown"><!--
 				--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button>
-					<ul id="withdrawList" class="dropdown-menu unused center" role="menu"><li data-value="*account_num*"><a href="#" tabindex="-1">*account_num*</a></li></ul>
+					<ul id="withdrawList" class="dropdown-menu unused center" role="menu"><li data-name="*bank_name*" data-value="*acc_num*"><a href="#" tabindex="-1">*bank_name* *acc_num*</a></li></ul>
 					<small class="hidden warning">출금 요청 계좌를 선택해 주세요.</small>
 				</div>
 			</div>
@@ -608,7 +622,7 @@
 								<div class="sa_select">
 									<div class="dropdown placeholder">
 										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="">선택<span class="caret"></span></button>
-										<ul id="receiveList" class="receive-list dropdown-menu" role="menu"><li data-name="*to_account_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_account_no*</a></li></ul>
+										<ul id="receiveList" class="receive-list dropdown-menu" role="menu"><li data-name="*to_account_bank_name*" data-name="*to_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_bank_name* *to_account_no*</a></li></ul>
 									</div>
 								</div>
 							</td>
