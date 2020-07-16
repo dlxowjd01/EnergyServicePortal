@@ -61,15 +61,15 @@
 						console.log("item.attachement_info===", item.attachement_info)
 						$("#total").text(item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원');
 
-						// const attachmentInfo = Promise.resolve(JSON.parse(item.attachement_info));
 
 						if (item.status == 3 || item.status == 0) {
 							$('#rejectBtn').parent().addClass('hidden');
 						}
 
-						if(!isEmpty(item.attachmentInfo)){
-							$("#proofFile").prev().text("증빙서류: ")
-							attachmentInfo.forEach(attach => {
+						const attachmentInfo = Promise.resolve(JSON.parse(item.attachement_info));
+						attachmentInfo.then((attachList) => {
+							$("#proofFile").prev().text("증빙서류: ");
+							attachList.forEach(attach => {
 								let downUrl = apiHost + '/files/download/' + attach.filedName + '?oid=' + oid + '&orgFilename=' + attach.originalName.trim();
 								let templateAttach = `
 												<div class="flex_wrapper border">
@@ -79,11 +79,11 @@
 
 								$('#attachementList').append(templateAttach);
 							});
-						} else {
+						}).catch(error => {
 							console.log("res=== attach", $("#proofFile").prev());
 							$("#proofFile").parents().find(".file-wrapper").empty();
-						}
-							
+						})
+
 						if(typeof item.memo == "string"){
 							let showMemo = "";
 							if (userTask == 1) {

@@ -403,9 +403,12 @@
 			if (action == 'post' || action == 'patch') {
 				let data = setData();
 				let url = '';
+				data.spc_id = Number(data.spc_id);
 
 				if (action == 'patch') {
 					let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
+					delete data.spc_id;
+					delete data.type;
 					option = {
 						url: apiHost + '/spcs/maintenance/'  + jobId + '?oid=' + oid,
 						dataType: 'json',
@@ -418,7 +421,6 @@
 						},
 					};
 					// url = apiHost + '/spcs/bankbook/' + jobId + '?oid=' + oid + jobText;
-					delete data.spc_id;
 				} else {
 					// POST req
 					option = {
@@ -499,8 +501,8 @@
 				let job_info = '';
 				let tableStr = '';
 				let bulletStr = '';
-				
-			
+
+
 				// console.log("jov_date===", job_date)
 				// console.log("job_type===", job_type)
 				return new Promise((resolve, reject) => {
@@ -518,7 +520,7 @@
 					if(isEmpty(spcName)){
 						spcName = "spc_no_name";
 					}
-					
+
 					// console.log("job_type===", job_type);
 					if (filterArr.indexOf(job_type)>-1){
 						tableStr = '<li data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="link bu t' + job_type + '">[' + spcName + '] ' + job_Name(job_type) + '</li>';
@@ -594,7 +596,7 @@
 					)
 				}
 				// console.log("calendar===", calendar.find("li"))
-			}); 
+			});
 		}
 
 		$("#addAlarmBtn").on("click", function(){
@@ -604,7 +606,7 @@
 			// 	$("#detailInfoModal").removeClass("active");
 			// }
 		});
-		
+
 		setTimeout(function(){
 			calendar.find(".link").on("click", function(){
 				var self = $(this);
@@ -613,15 +615,12 @@
 					modalPopInit();
 				} else {
 					// console.log("YES jobId==", self.attr("data-jobId"))
-					let newArr = [];
-					newArr.length = 0;
 					let spcObj = {};
 					spcObj.spcId = self.data("id");
 					spcObj.spcName = self.data("name");
-					newArr = newArr.push(spcObj);
-					let jobId = self.data("jobId");
+					let jobId = self.data("jobid");
 
-					modalPopInit(mData, newArr, jobId);
+					modalPopInit(mData, spcObj, jobId);
 					// $("#spcAlarmForm").find(".modal-header").text("주요 일정 알림 수정");
 				}
 				// if($("#detailInfoModal").hasClass("active")) {
@@ -665,7 +664,10 @@
 			});
 			$("#spcList").prev().data({"value": "", "name" : "" }).html("선택" + '<span class="caret"></span>');
 			//팝업 오픈시 value 초기화
-			initDropdownValue(dropDown);
+			// initDropdownValue(dropDown);
+			dropDown.each(function () {
+				$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
+			});
 			deleteScheduleBtn.addClass('hidden');
 			postScheduleBtn.text('등록');
 			postScheduleBtn.on("click", function(){
@@ -673,16 +675,23 @@
 			});
 		} else {
 			// console.log("modalPopInit===", data[0]);
+			let targetDate;
+			data.forEach(temp => {
+				if (temp.id == jobId) {
+					targetDate = temp;
+				}
+			});
+
 			title.text('주요 일정 알림 수정');
-			setJsonAutoMapping(data[0], 'spcAlarmModal');
-			setJsonAutoMapping(JSON.parse(data[0].job_info), 'spcAlarmModal');
+			setJsonAutoMapping(targetDate, 'spcAlarmModal', 'dropdown');
+			setJsonAutoMapping(JSON.parse(targetDate.job_info), 'spcAlarmModal');
 
-			$("#spcList").addClass("hidden").prev().data({"value": data[0].spc_id, "name" : spcNameList.spcName }).text(spcNameList.spcName);
+			$("#spcList").addClass("hidden").prev().data({"value": spcNameList.spcId, "name" : spcNameList.spcName }).text(spcNameList.spcName);
 
-			let jobDate = new Date(data[0].job_date);
+			let jobDate = new Date(targetDate.job_date);
 			$('#job_date').datepicker('setDate', jobDate);
 
-			let repeatEnd = new Date(data[0].repeat_end);
+			let repeatEnd = new Date(targetDate.repeat_end);
 			$('#repeat_end').val(repeatEnd.format('yyyy-MM-dd'));
 
 			if ($('#repeat_yn button').data('value') == 'N') {
@@ -718,13 +727,13 @@
 			deleteScheduleBtn.removeClass('hidden');
 			deleteScheduleBtn.on("click", function(e){
 				// e.preventDefault();
-				maintenance(spcNameList, 'delete', data[0].id);
+				maintenance(spcNameList, 'delete', targetDate.id);
 			});
 			// $("#closeBtn").on("click", function(){ return false; })
 			postScheduleBtn.text('수정');
 			postScheduleBtn.on("click", function(){
 				// console.log("postScheduleBtn====")
-				maintenance(spcNameList, 'patch', data[0].id);
+				maintenance(spcNameList, 'patch', targetDate.id);
 			});
 			// postScheduleBtn.attr('onclick', 'maintenance(' + spcNameList + '\'patch\', \'' + data[0].id + '\' );').text('수정');
 		}
@@ -751,7 +760,7 @@
 				// repeat_end
 				if ($(this).hasClass('hasDatepicker')) {
 					let pickedDate = $(this).datepicker('getDate');
-					if (!isEmpty(pickedDate)) {
+					if (pickedDate != null) {
 						jsonData[$(this).prop('name')] = pickedDate.toISOString();
 					} else {
 						$(this).val() != '' ? $(this).parent().find('.warning').addClass('hidden') : $(this).parent().find('.warning').removeClass('hidden');
@@ -776,10 +785,9 @@
 				}
 			}
 		});
+		//일시점검일 경우 종료일은 점검 기준일자와 동일하다.
 		if ($('#repeat_yn button').data('value') == 'N') {
 			jsonData['repeat_end'] = jsonData['job_date'];
-		} else {
-
 		}
 		// if($(this).prop('name') == 'worker') {
 		// 		$(this).val() != '' ? $(this).parent().find('.warning').addClass('hidden') : $(this).parent().find('.warning').removeClass('hidden');
@@ -850,69 +858,36 @@
 	};
 
 	const repeatEnd = function (selectedDate) {
-		$('#repeat_yn').find("li").on("click", function(){
-			if($("#repeat_yn").find(".dropdown-toggle").data("value") != $(this).data("value")){
-				$("#repeat_end").val("");
-			}
-		});
-
 		if (selectedDate == undefined && $('#job_date').datepicker('getDate') != null) {
 			selectedDate = $('#job_date').datepicker('getDate');
-		} else if (selectedDate == undefined && $('#job_date').datepicker('getDate') == null) {
-			return false;
 		}
 
 		if ($('#repeat_yn button').data('value') == '') {
 			return false;
+		} else if ($('#repeat_yn button').data('value') == 'N') {
+			$('#repeat_end').val('').datepicker('destroy').removeClass('sel');
+			$('#repeat_end').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+		} else {
+			$('#repeat_end').removeClass('hasDatepicker').datepicker({
+				showOn: 'both',
+				buttonImageOnly: true,
+				dateFormat: 'yy-mm-dd',
+				beforeShow: function () {
+					let fromDate = $(this).closest('.dateField').find('.fromDate').datepicker('getDate');
+					if (fromDate != null) {
+						$(this).datepicker('option', 'minDate', fromDate.format('yyyy-MM-dd'));
+					}
+				},
+				onClose: function (selected) {
+					$(this).closest('.dateField').find('.fromDate').datepicker('option', 'maxDate', selected);
+				}
+			});
+			$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
 		}
 
-		if ($('#repeat_yn button').data('value') == 'N') {
-			$('#repeat_end').val(selectedDate.format('yyyy-MM-dd'));
-
-			if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
-				selectedDate.setDate(selectedDate.getDate() - Number($('#alarmSetup button').data('value')));
-				$('#alarmDate').val(selectedDate.format('yyyy-MM-dd'));
-			}
-		} else {
-			let repeatVal = $('#repeat_interval').val();
-			let repeatUnit = $('#repeat_unit button').data('value');
-			if (selectedDate != null && selectedDate != '' && repeatVal != '' && repeatUnit != '') {
-				let unit = 1;
-
-				if (repeatUnit == 'year') {
-					unit = '12';
-				} else if (repeatUnit == 'half_year') {
-					unit = '6';
-				} else if (repeatUnit == 'quarter_year') {
-					unit = '3';
-				} else {
-					unit = '1';
-				}
-
-				let selDate = new Date(selectedDate);
-				if (repeatUnit != 'day_of_week') {
-					let setDay = selDate.getDate()
-					selDate.setMonth(selDate.getMonth() + (unit * repeatVal));
-					if (setDay != selDate.getDate()) {
-						alert('잘못된 날짜를 선택하셨습니다.');
-						$('#job_date').val('');
-						$('#repeat_end').val('');
-						return false;
-					}
-				} else {
-					selDate.setDate(selDate.getDate() + 7);
-				}
-
-				// $('#repeat_end').val(selDate.format('yyyy-MM-dd'));
-
-				$('#repeat_end').val(selDate.format('yyyy-MM-dd'));
-
-
-				if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
-					selDate.setDate(selDate.getDate() - Number($('#alarmSetup button').data('value')));
-					$('#alarmDate').val(selDate.format('yyyy-MM-dd'));
-				}
-			}
+		if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
+			selectedDate.setDate(selectedDate.getDate() - Number($('#alarmSetup button').data('value')));
+			$('#alarmDate').val(selectedDate.format('yyyy-MM-dd'));
 		}
 	}
 
@@ -991,13 +966,13 @@
 		}
 	}
 
-	function beginningOfMonth(myDate){    
+	function beginningOfMonth(myDate){
 		let date = new Date(myDate);
 		date.setDate(1)
 		date.setHours(0);
 		date.setMinutes(0);
-		date.setSeconds(0);   
-		return date.toLocaleString();     
+		date.setSeconds(0);
+		return date.toLocaleString();
 	}
 
 	function endOfMonth(myDate){
@@ -1093,12 +1068,12 @@
 							<div class="col-lg-2 col-md-2 col-sm-3"><span class="input_label">SPC 선택</span></div>
 
 							<div class="col-lg-10 col-md-10 col-sm-9 px-0 flex_start">
-								<div id="spcName" class="dropdown"><!--
+								<div id="spc_id" class="dropdown"><!--
 								--><button name="spcName" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button><!--
 								--><ul id="spcList" class="dropdown-menu unused center" role="menu"><li data-name="*spcName*" data-value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul><!--
 								--><small class="hidden warning">SPC를 선택해 주세요.</small>
 								</div>
-								
+
 								<!-- <div class="tx_inp_type mr-12">
 									<input type="text" id="spcName" name="spcName" value="" placeholder="입력" class="required" autocomplete="off">
 									<input type="hidden" id="spc_id" name="spc_id">
@@ -1173,7 +1148,7 @@
 							</div>
 							<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 								<div class="tx_inp_type">
-									<input type="text" id="repeat_end" name="repeat_end" class="required toDate w-100" placeholder="자동 계산" value="자동 계산" disabled readonly>
+									<input type="text" id="repeat_end" name="repeat_end" class="required toDate w-100" placeholder="반복 종료일" value="" readonly>
 								</div>
 							</div>
 						</div>
