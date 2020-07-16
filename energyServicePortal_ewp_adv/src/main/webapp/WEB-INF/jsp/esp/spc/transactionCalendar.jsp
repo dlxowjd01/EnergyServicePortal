@@ -265,7 +265,7 @@
 	const maintenance = function (spcNameArr, action, jobId) {
 		var spcIdArr = spcNameArr;
 		let option = {};
-		
+
 		if (action == 'get') {
 			let optTransaction = {};
 			let d = $('#year button').data('value') + ('0' + $('#month button').data('value'))
