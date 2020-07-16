@@ -44,18 +44,6 @@ public class RestApiUtil {
 			SSLContext sc = SSLContext.getInstance("SSL");
 			sc.init(null, trustAllCerts, new SecureRandom());
 
-<<<<<<< HEAD
-			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
-				public X509Certificate[] getAcceptedIssuers() { return null; }
-				public void checkClientTrusted(X509Certificate[] certs, String authType) { }
-				public void checkServerTrusted(X509Certificate[] certs, String authType) { }
-			}};
-
-			SSLContext sc = SSLContext.getInstance("SSL");
-			sc.init(null, trustAllCerts, new SecureRandom());
-
-=======
->>>>>>> 4560ef863b891137a5a43156a7d1bd39a6d32917
 			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 			HttpsURLConnection con = (HttpsURLConnection) new URL("https://iderms-api.iderms.ai" + strUrl).openConnection();
 			con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
