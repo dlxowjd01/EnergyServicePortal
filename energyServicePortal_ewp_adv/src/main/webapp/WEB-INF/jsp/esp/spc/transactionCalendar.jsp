@@ -404,23 +404,22 @@
 				// if (!confirm('삭제 하시겠습니까?')) {
 				// 	return false;
 				// }
-
-				let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
-				option = {
-					url: apiHost + '/spcs/maintenance/' + jobId + '?oid=' + oid,
-					type: action,
-					data: {
-						oid: oid,
-						jobId: jobId,
-					},
-					beforeSend: function() {
-						showWarningModal("confirm");
-					},
-				};
-
+				if (action == 'delete') {
+					let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
+					option = {
+						url: apiHost + '/spcs/maintenance/' + jobId + '?oid=' + oid,
+						type: action,
+						data: {
+							oid: oid,
+							jobId: jobId,
+						},
+						beforeSend: function() {
+							showWarningModal("confirm");
+						},
+					};
+				}
 			}
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				console.log("json---", json)
 				$("#spcAlarmModal").modal("hide");
 				maintenance(spcIdArr, 'get');
 			}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -625,7 +624,7 @@
 		if (data == undefined) {
 			$("#spcList").prev().append("<span class='caret'></span>");
 			$("#spcList").removeClass("hidden");
-			console.log("modalPopInit register===");
+			// console.log("modalPopInit register===");
 			unCheckAll(modalForm);
 			//팝업 오픈시 value 초기화
 			input.each(function () {
@@ -687,7 +686,6 @@
 			deleteScheduleBtn.removeClass('hidden');
 			deleteScheduleBtn.on("click", function(e){
 				// e.preventDefault();
-				showWarningModal("confirm")
 				maintenance(spcNameList, 'delete', data[0].id);
 			});
 			// $("#closeBtn").on("click", function(){ return false; })
