@@ -62,7 +62,7 @@
 			let action = 'get';
 			let syncOpt = true;
 			let option = {
-				url: "http://iderms.enertalk.com:8443/spcs?oid="+oid,
+				url: apiHost + "/spcs?oid="+oid,
 				type: action,
 				async: syncOpt
 			}
@@ -101,7 +101,7 @@
 			let action = 'get';
 			let syncOpt = true;
 			let option= {
-				url: 'http://iderms.enertalk.com:8443/spcs/transactions',
+				url: apiHost + '/spcs/transactions',
 				type: action,
 				data: {
 					'oid' : oid,
@@ -229,7 +229,7 @@
 
 			if( withdrawForm.find(".warning.hidden").length == 4){
 				let opt = {
-					url: 'http://iderms.enertalk.com:8443/spcs/transactions?oid='+oid,
+					url: apiHost + '/spcs/transactions?oid='+oid,
 					type: "POST",
 					async: true,
 					dataType: 'json',

@@ -74,7 +74,7 @@
 			let action = 'get';
 			let syncOpt = true;
 			let option = {
-				url: "http://iderms.enertalk.com:8443/spcs?oid="+oid,
+				url: apiHost + "/spcs?oid="+oid,
 				type: action,
 				async: syncOpt
 			}
@@ -130,6 +130,7 @@
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				let sending = '';
 				let receiving = '';
+				console.log("json--", json.data[0].spcGens)
 				if (json.data[0].spcGens && json.data[0].spcGens.length > 0 ) {
 					let gensInfo = json.data[0].spcGens;
 					var tempArr = [];

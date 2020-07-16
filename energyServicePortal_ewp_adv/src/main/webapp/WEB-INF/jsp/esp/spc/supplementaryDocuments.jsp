@@ -49,7 +49,7 @@
 		}
 
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/spcs",
+			url: apiHost + "/spcs",
 			type: "get",
 			async: false,
 			data: {
@@ -75,7 +75,7 @@
 								originFile = new Array();
 
 							$.ajax({
-								url: "http://iderms.enertalk.com:8443/spcs/" + rowData.spc_id + "/gens/" + spcGensRow.gen_id + "/supplement?oid=" + rowData.oid,
+								url: apiHost + "/spcs/" + rowData.spc_id + "/gens/" + spcGensRow.gen_id + "/supplement?oid=" + rowData.oid,
 								type: "get",
 								dataType: 'json',
 								async: false,
