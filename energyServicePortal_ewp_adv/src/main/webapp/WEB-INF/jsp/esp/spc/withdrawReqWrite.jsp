@@ -6,8 +6,6 @@
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
 	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
-	const userToken = '<c:out value="${sessionScope.userInfo.token}" escapeXml="false" />';
-	const userInfo = '<c:out value="${sessionScope.userInfo}" escapeXml="false" />';
 
 	$(function() {
 		const withdrawForm = $('#withdrawForm');
@@ -49,7 +47,7 @@
 			for(let i = 0, fileLength = $(this)[0].files.length; i < fileLength; i++){
 				fileList.push($(this)[0].files[i]);
 			}
-			console.log("fileLost===", fileList)
+			// console.log("fileLost===", fileList)
 		});
 
 		let pList = [
@@ -123,7 +121,7 @@
 			let action = 'get';
 			let syncOpt = true;
 			let option= {
-				url: 'http://iderms.enertalk.com:8443/spcs/' + id + '?oid=' + oid + "&includeGens=true",
+				url: apiHost + '/spcs/' + id + '?oid=' + oid + "&includeGens=true",
 				type: action,
 				async: syncOpt
 			}
@@ -224,7 +222,7 @@
 			let jsonData = {}
 			let arr =[];
 			let finalNameList = [];
-
+			let uid = `${sessionScope.userInfo.uid}`;
 			jsonData.spc_id = spcList.prev().data("value");
 			// from
 			jsonData.withdraw_bank = withdrawList.prev().data("value");
@@ -237,7 +235,7 @@
 			jsonData.status_changed_by = loginName;
 			jsonData.status_changed_at = new Date().toISOString();
 			jsonData.requested_by = loginName;
-			jsonData.requested_by_uid = userToken;
+			jsonData.requested_by_uid = uid;
 			jsonData.requested_at = new Date().toISOString();
 			jsonData.transfer_agent = "tester2"
 
@@ -288,7 +286,7 @@
 
 			if( withdrawForm.find(".warning.hidden").length == 4 ){
 				let opt = {
-					url: 'http://iderms.enertalk.com:8443/spcs/transactions?oid='+oid,
+					url: apiHost + '/spcs/transactions?oid='+oid,
 					type: "POST",
 					async: true,
 					dataType: 'json',
@@ -318,7 +316,7 @@
 			let option= {
 				type: action,
 				enctype: 'multipart/form-data',
-				url: 'http://iderms.enertalk.com:8443/files/upload?oid=' + oid,
+				url: apiHost + '/files/upload?oid=' + oid,
 				processData: false,  // Important!
 				contentType: false,
 				cache: false,
@@ -363,7 +361,7 @@
 			totalAmount = 0;
 			newVal = this.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 			this.value = newVal;
-			console.log("document on change===", evt)
+			// console.log("document on change===", evt)
 			if(newVal != "") {
 				// if ( (keyCode != 8 || keyCode ==32 ) && (keyCode < 48 || keyCode > 57)) { evt.preventDefault(); }
 				if (evt.which < 48 || evt.which > 57) { evt.preventDefault(); }
@@ -444,7 +442,7 @@
 	// 	document.body.removeChild(element);
 	// 	// let option= {
 	// 	// 	type: action,
-	// 	// 	url: 'http://iderms.enertalk.com:8443/files/download?oid=' + oid,
+	// 	// 	url: apiHost + '/files/download?oid=' + oid,
 	// 	// 	data: {
 	// 	// 		fileKey: fakeName,
 	// 	// 		orgFilename: originalName

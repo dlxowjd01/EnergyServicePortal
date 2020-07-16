@@ -201,7 +201,7 @@
 				let option = {};
 				if(searchOptArr.length>1){
 					option= {
-						url: 'http://iderms.enertalk.com:8443/spcs/transactions',
+						url: apiHost + '/spcs/transactions',
 						type: action,
 						data: {
 							'oid' : oid,
@@ -213,7 +213,7 @@
 					}
 				} else {
 					option = {
-						url: 'http://iderms.enertalk.com:8443/spcs/transactions',
+						url: apiHost + '/spcs/transactions',
 						type: action,
 						data: {
 							'oid' : oid,

@@ -221,7 +221,7 @@ html.darkmode:root {
 	--box-color4: #292929;
 	--box-color5: #282828;
 	--box-color6: #2d2e2e;
-	--box-color7: rgba(255, 255, 255, 0.12);
+	--box-color7: rgba(255, 255, 255, 0.2);
 	/* ********* login page & logo images ********* */
 	--bg-img: url("../img/login_bg_black.jpg");
 	--login-arr: url("../img/login_arr_black.png");
