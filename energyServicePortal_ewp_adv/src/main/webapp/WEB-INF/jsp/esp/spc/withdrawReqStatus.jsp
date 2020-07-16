@@ -50,7 +50,7 @@
 			let action = 'get';
 			let syncOpt = true;
 			let option = {
-				url: "http://iderms.enertalk.com:8443/spcs?oid="+oid,
+				url: apiHost + "/spcs?oid="+oid,
 				type: action,
 				async: syncOpt
 			}

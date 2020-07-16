@@ -41,7 +41,7 @@
 		let date = new Date().toISOString().substr(0, 10);
 	}
 
-	// onclick="location.href='http://iderms.enertalk.com:8443/files/download/5c71e049-f73c-2bf9-a9a0-2f91d067ef11?oid=spower&orgFilename=수익보고서_20200526100755.pdf'"
+	// onclick="location.href=apiHost + '/files/download/5c71e049-f73c-2bf9-a9a0-2f91d067ef11?oid=spower&orgFilename=수익보고서_20200526100755.pdf'"
 
 	function downloadFile(spcId){
 		var genId = $("#gen").data("value");
@@ -53,7 +53,7 @@
 		$.ajax({
 			type: 'post',
 			enctype: 'multipart/form-data',
-			url: 'http://iderms.enertalk.com:8443/files/upload?oid='+oid,
+			url: apiHost + '/files/upload?oid='+oid,
 			data: new FormData($('#attachement_info')[0]),
 			processData: false,
 			contentType: false,
@@ -89,7 +89,7 @@
 		device_info["addList07"] = setAddListParam("addList07");
 
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/spcs/" + spcId +"/gens?oid=" + oid +"&gen_id=" + genId,
+			url: apiHost + "/spcs/" + spcId +"/gens?oid=" + oid +"&gen_id=" + genId,
 			type: "post",
 			async: true,
 			contentType: "application/json",
