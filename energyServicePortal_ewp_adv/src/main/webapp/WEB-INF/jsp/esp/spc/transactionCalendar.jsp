@@ -689,7 +689,6 @@
 				maintenance(spcNameList, 'delete', data[0].id);
 			});
 			// $("#closeBtn").on("click", function(){ return false; })
-
 			postScheduleBtn.text('수정');
 			postScheduleBtn.on("click", function(){
 				console.log("postScheduleBtn====")

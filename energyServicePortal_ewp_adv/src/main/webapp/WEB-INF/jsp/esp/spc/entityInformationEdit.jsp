@@ -285,6 +285,7 @@
 			success: function (json) {
 				if (json.data.length > 0) {
 					//기본정보
+					const address = JSON.parse(json.data[0].address);
 					const maintenance_info = JSON.parse(json.data[0].maintenance_info);
 					const account_info = JSON.parse(json.data[0].account_info);
 					const finance_info = JSON.parse(json.data[0].finance_info);
@@ -294,6 +295,8 @@
 					const warranty_info = JSON.parse(json.data[0].warranty_info);
 					const coefficient_info = JSON.parse(json.data[0].coefficient_info);
 					const associated_info = JSON.parse(json.data[0].associated_info);
+
+					setJsonAutoMapping(address, 'addressInfo');
 
 					let repeatNumber= new Array();
 					$.map(maintenance_info, function(val, key) {
@@ -760,55 +763,6 @@
 							</td>
 						</tr>
 						<tr>
-							<th><label for="genName">발전소명</label></th>
-							<td class="group_type">
-								<div class="tx_inp_type edit disabled">
-									<input type="text" id="genName" name="genName" placeholder="발전소명 입력" readonly>
-									<input type="hidden" id="genId" name="genId">
-								</div>
-							</td>
-							<th></th>
-							<td>
-								<div class="fixed_height"></div>
-							</td>
-						</tr>
-						<tr>
-							<th>주소</th>
-							<td class="group_type">
-								<div class="dropdown placeholder edit">
-									<button id="country" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-										국가 선택<span class="caret"></span>
-									</button>
-									<ul id="countryList" class="dropdown-menu" role="menu">
-										<li data-value="대한민국">
-											<a href="javascript:void(0);">대한민국</a>
-										</li>
-										<li data-value="일본">
-											<a href="javascript:void(0);">일본</a>
-										</li>
-									</ul>
-								</div>
-								<div class="dropdown placeholder edit mr-12">
-									<button id="sido" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-										시/도 선택<span class="caret"></span>
-									</button>
-									<ul id="sidoList" class="dropdown-menu" role="menu">
-										<li data-value="[value]">
-											<a href="javascript:void(0);">[value]</a>
-										</li>
-									</ul>
-								</div>
-							</td>
-							<th><label for="address">상세 주소</label></th>
-							<td>
-								<div class="tx_inp_type edit">
-									<input type="hidden" id="countryValue" value="">
-									<input type="hidden" id="sidoValue" value="">
-									<input type="text" id="address" name="minor_address" placeholder="상세 주소">
-								</div>
-							</td>
-						</tr>
-						<tr>
 							<th><label for="사업명">사업명</label></th>
 							<td>
 								<div class="tx_inp_type edit">
@@ -851,16 +805,16 @@
 							</td>
 						</tr>
 						<tr>
-							<th><label for="사무위탁사">사무위탁사</label></th>
+							<th><label for="사무수탁사">사무수탁사</label></th>
 							<td>
 								<div class="tx_inp_type edit">
-									<input type="text" id="사무위탁사" name="사무위탁사" placeholder="직접 입력">
+									<input type="text" id="사무수탁사" name="사무수탁사" placeholder="직접 입력">
 								</div>
 							</td>
-							<th><label for="사무위탁사_담당자(연락처)">담당자(연락처)</label></th>
+							<th><label for="사무수탁사_담당자(연락처)">담당자(연락처)</label></th>
 							<td>
 								<div class="tx_inp_type edit">
-									<input type="text" id="사무위탁사_담당자(연락처)" name="사무위탁사_담당자(연락처)" placeholder="직접 입력">
+									<input type="text" id="사무수탁사_담당자(연락처)" name="사무수탁사_담당자(연락처)" placeholder="직접 입력">
 								</div>
 							</td>
 						</tr>
@@ -931,6 +885,81 @@
 			--><button type="button" class="btn_type03" onclick="goMoveList();">목록</button><!--
 			--><button type="button" class="btn_type ml-16" onclick="setSaveData();">수정</button><!--
 			--></div>
+		</div>
+
+		<div class="indiv panel panel-default" id="addressInfo">
+			<div class="tbl_top panel-heading">
+				<h2 class="ntit mt25">발전소 정보</h2>
+				<a role="button" href="#addressInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a>
+			</div>
+			<div id="addressInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
+				<table>
+					<colgroup>
+						<col style="width:15%">
+						<col style="width:35%">
+						<col style="width:15%">
+						<col style="width:35%">
+					</colgroup>
+					<tr>
+						<th><label for="genName">발전소명</label></th>
+						<td class="group_type">
+							<div class="dropdown placeholder edit" id="genId">
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="발전소명 선택">
+									발전소명 선택<span class="caret"></span>
+								</button>
+								<ul id="genList" class="dropdown-menu" role="menu">
+									<li data-value="[sid]">
+										<a href="javascript:void(0);">[name]</a>
+									</li>
+								</ul>
+							</div>
+							<div class="tx_inp_type edit">
+								<input type="text" id="genName" name="power_plant_name" placeholder="발전소명 입력">
+							</div>
+						</td>
+						<th></th>
+						<td>
+							<div class="fixed_height"></div>
+						</td>
+					</tr>
+					<tr>
+						<th>주소</th>
+						<td class="group_type">
+							<div class="dropdown placeholder edit">
+								<button id="country" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+									국가 선택<span class="caret"></span>
+								</button>
+								<ul id="countryList" class="dropdown-menu" role="menu">
+									<li data-value="대한민국">
+										<a href="javascript:void(0);">대한민국</a>
+									</li>
+									<li data-value="일본">
+										<a href="javascript:void(0);">일본</a>
+									</li>
+								</ul>
+							</div>
+							<div class="dropdown placeholder edit mr-12">
+								<button id="sido" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+									시/도 선택<span class="caret"></span>
+								</button>
+								<ul id="sidoList" class="dropdown-menu" role="menu">
+									<li data-value="[value]">
+										<a href="javascript:void(0);">[value]</a>
+									</li>
+								</ul>
+							</div>
+						</td>
+						<th><label for="address">상세 주소</label></th>
+						<td>
+							<div class="tx_inp_type edit">
+								<input type="hidden" id="countryValue" value="">
+								<input type="hidden" id="sidoValue" value="">
+								<input type="text" id="address" name="minor_address" placeholder="상세 주소">
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
 		</div>
 
 		<div class="indiv panel panel-default" id="maintenanceInfo">
@@ -1322,8 +1351,12 @@
 									<input type="text" id="관련_금융사" placeholder="직접 입력">
 								</div>
 							</td>
-							<th></th>
-							<td></td>
+							<th><label for="금융사_대표자">대표자</label></th>
+							<td>
+								<div class="tx_inp_type edit">
+									<input type="text" id="금융사_대표자" name="금융사_대표자" placeholder="직접 입력">
+								</div>
+							</td>
 						</tr>
 						<tr>
 							<th><label for="계약_체결일">계약 체결일</label></th>
@@ -2320,7 +2353,7 @@
 							<td class="flex_start_td">
 								<div id="fileList01">
 									<p class="tx_file">
-										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2341,7 +2374,7 @@
 							<td class="flex_start_td">
 								<div id="fileList02">
 									<p class="tx_file">
-										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList02', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2362,7 +2395,7 @@
 							<td class="flex_start_td">
 								<div id="fileList03">
 									<p class="tx_file">
-										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList03', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2383,7 +2416,7 @@
 							<td class="flex_start_td">
 								<div id="fileList04">
 									<p class="tx_file">
-										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList04', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2404,7 +2437,7 @@
 							<td class="flex_start_td">
 								<div id="fileList05">
 									<p class="tx_file">
-										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList05', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2425,7 +2458,7 @@
 							<td class="flex_start_td">
 								<div id="fileList06">
 									<p class="tx_file">
-										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList06', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2446,7 +2479,7 @@
 							<td class="flex_start_td">
 								<div id="fileList07">
 									<p class="tx_file">
-										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList07', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2467,7 +2500,7 @@
 							<td class="flex_start_td">
 								<div id="fileList08">
 									<p class="tx_file">
-										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList08', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2488,7 +2521,7 @@
 							<td class="flex_start_td">
 								<div id="fileList09">
 									<p class="tx_file">
-										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList09', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2509,7 +2542,7 @@
 							<td class="flex_start_td">
 								<div id="fileList10">
 									<p class="tx_file">
-										<a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList10', [INDEX]);"></button>
 									</p>
 								</div>
