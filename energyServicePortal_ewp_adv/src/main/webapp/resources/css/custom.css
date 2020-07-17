@@ -576,6 +576,10 @@ input[type="file"]+.file_upload {
 table input[type="text"] {
 	padding-right: 0;
 }
+.clear-btn {
+	background: none;
+	border: none;
+}
 
 .clear-input {
 	background: none;

@@ -1321,7 +1321,7 @@ function addCustomRow(tbody, options) {
 			}
 		}
 	});
-	let dropdown = copy.find('.purpose');
+	let dropdown = copy.find('.dropdown-toggle[data-clone="empty"]');
 	dropdown.each(function(){
 		console.log("dropdown---", $(this))
 		$(this).html('선택<span class="caret"></span>');
