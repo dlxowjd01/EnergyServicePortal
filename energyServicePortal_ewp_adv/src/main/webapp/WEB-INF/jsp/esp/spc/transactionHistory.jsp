@@ -319,7 +319,7 @@
 						let visibility = '';
 						let link_attr = '';
 						let purposeList = [
-							{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대 수선비", "배당금 적림", "일반 지출" ]},
+							{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적림", "일반 지출", "DSRA 적립", "기타", "운영계좌"]},
 							{ label: "입금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
 						];
 						let account_type_list = [ "전력 판매대금", "REC 판매대금", "관리 운영비", "일반 렌탈", "전력중개 수수료", "전기 요금", "원리금" ];
@@ -592,24 +592,12 @@
 		// $("#transactionAccountInfo").val(accInfo);
 		$("#transactionStatus").val(status);
 		$("#transactionStatusVal").val(statusVal);
-		// if(self.parent().data("value")==1) {
-		// 	$("#transactionEditForm").submit();
-		// } else {
-		// 	console.log("detail===")
-		// 	$("#transactionDetailForm").submit();
-		// }
-		
-		
-
-// [사무수탁사]
-// "반송" : 0, "승인 중" : "2", "승인완료": "3"	 => /spc/withdrawReqStatusDetail.do
-// "승인 대기" : 1" 						  => /spc/withdrawReqEdit.do
-
-	
+		// [사무수탁사]
+		// "반송" : 0, "승인 중" : "2", "승인완료": "3"	 => /spc/withdrawReqStatusDetail.do
+		// "승인 대기" : 1" 						  => /spc/withdrawReqEdit.do
 	}
 
 	function submit(opt, accInfo, accNum, statusVal){
-		// console.log("submit===", opt, accInfo, accNum, statusVal)
 		let option = opt;
 		let statusValue = statusVal;
 		let accountInfo = accInfo;
@@ -914,7 +902,7 @@
 								<td>*approvedBy*</td>
 								<td class='left' data-id="*transactionSpcId*" data-name="*transactionSpcName*" data-value="*statusVal*"><!--
 								--><div class="flex_start"><button type="button" class="*linkAttr* clear-btn" data-name="*withdrawBankName*" data-value="*withdrawAccountNum*" data-id="*transactionReqId*" onclick="goToDetail($(this))">*status*</button><!--
-									--><a href="javascript:void(0);" onclick="deleteRow(this)" class='icon-delete *visibility*'></a><!--
+									--><button type="button" onclick="deleteRow(this)" class='icon-delete *visibility* clear-btn'></button><!--
 								--></div>
 								</td>
 							</tr>
