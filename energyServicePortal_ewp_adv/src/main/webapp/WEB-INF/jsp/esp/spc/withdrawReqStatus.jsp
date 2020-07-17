@@ -103,7 +103,7 @@
 						data.filter((item, index) => {
 							filter.status.some(x => {
 								if(x == item.status) {
-							// console.log("item---", item)
+							console.log("item---", item)
 									let found = spcArr.findIndex(x => x.spc_id === item.spc_id);
 									let perPage = 14;
 									let spc_name = ''
