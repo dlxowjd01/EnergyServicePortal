@@ -1313,12 +1313,18 @@ function addCustomRow(tbody, options) {
 			$(this).attr({"id": newAttr, "name": newAttr});
 			if(keep == "first") {
 				if(index != 1 ) {
+					console.log("this---", $(this))
 					$(this).val("");
 				} else {
 					$(this).prop('disabled', true);
 				}
 			}
 		}
+	});
+	let dropdown = copy.find('.purpose');
+	dropdown.each(function(){
+		console.log("dropdown---", $(this))
+		$(this).html('선택<span class="caret"></span>');
 	});
 	
 	tbody.append(copy);
