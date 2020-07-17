@@ -8,8 +8,6 @@
 	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
 
 	// unCheckAll($("#reqStatus"));
-	selectAll($("#reqStatus"));
-	setDropdownValue($("#reqStatus"));
 	$(function() {
 		const tableBody = $('#tableBody');
 		const tableFooter = $('#tableFooter')
@@ -29,6 +27,8 @@
 		unCheckAll($('#tableBody').parents(".sort_table "));
 		getSpcList();
 
+		selectAll($("#reqStatus"));
+		setDropdownValue($("#reqStatus"));
 		// [자산운용사]
 		// "반송" : 0 => redEdit.jsp , "검토 대기" : 1" => do nothing, "검토중" : "2" => withdrawReqStatusDetail, "검토 완료": "3"
 
@@ -37,11 +37,18 @@
 			let searchOpt = {};
 			let checkbox = $("#reqStatus").find("input[type='checkbox']");
 			var status= [];
-			checkbox.each(function(){
-				if($(this).is(":checked")){
+
+			if (checkbox.first().is(':checked')) {
+				checkbox.each(function(){
 					status.push($(this).val())
-				}
-			});
+				});
+			} else {
+				checkbox.each(function(){
+					if($(this).is(":checked")){
+						status.push($(this).val())
+					}
+				});
+			}
 			searchOpt.status = status;
 			searchOpt.keyword = $("#keyword").val().trim().toLowerCase();
 			getDataList(1, searchOpt);
@@ -163,9 +170,9 @@
 															status_val = 3;
 														}
 													} else if(index == 3) {
-														requested_at = item.requested_at.substring(0, 10) + ' ' + item.requested_at.substring(11, 19);
+														requested_at = new Date(item.requested_at).format('yyyy-MM-dd HH:mm:ss');
 													} else if(index == 4) {
-														status_changed_at = item.status_changed_at.substring(0, 10) + ' ' + item.status_changed_at.substring(11, 19);
+														status_changed_at = new Date(item.status_changed_at).format('yyyy-MM-dd HH:mm:ss');
 													} else if(index == 5){
 														requested_by = item.requested_by;
 													} else if(index == 6) {
@@ -210,7 +217,7 @@
 												.replace(/\*statusChangedBy\*/g, status_changed_by).replace(/\*status\*/g, status).replace(/\*linkAttr\*/g, link_attr)
 											tableBody.append($(str));
 									} else {
-										if( dataArr.includes(filter.keyword)) {
+										// if( dataArr.includes(filter.keyword)) {
 											totalAmount += item.total_amount;
 											
 											$.each(data, function(index, element){
@@ -238,9 +245,9 @@
 															status_val = 3;
 														}
 													} else if(index == 3) {
-														requested_at = item.requested_at.substring(0, 10) + ' ' + item.requested_at.substring(11, 19);
+														requested_at = new Date(item.requested_at).format('yyyy-MM-dd HH:mm:ss');
 													} else if(index == 4) {
-														status_changed_at = item.status_changed_at.substring(0, 10) + ' ' + item.status_changed_at.substring(11, 19);
+														status_changed_at = new Date(item.status_changed_at).format('yyyy-MM-dd HH:mm:ss');
 													} else if(index == 5){
 														requested_by = item.requested_by;
 													} else if(index == 6) {
@@ -286,7 +293,7 @@
 											tableBody.append($(str));
 										}
 									}
-								}
+								// }
 							});
 						});
 						let str = totalAmount.toString();
@@ -357,9 +364,9 @@
 											status_val = 3;
 										}
 									} else if(index == 3) {
-										requested_at = item.requested_at.substring(0, 10) + ' ' + item.requested_at.substring(11, 19);
+										requested_at = new Date(item.requested_at).format('yyyy-MM-dd HH:mm:ss');
 									} else if(index == 4) {
-										status_changed_at = item.status_changed_at.substring(0, 10) + ' ' + item.status_changed_at.substring(11, 19);
+										status_changed_at = new Date(item.status_changed_at).format('yyyy-MM-dd HH:mm:ss');
 									} else if(index == 5){
 										requested_by = item.requested_by;
 									} else if(index == 6) {

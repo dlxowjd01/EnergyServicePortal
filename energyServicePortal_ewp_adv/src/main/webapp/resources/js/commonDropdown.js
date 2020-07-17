@@ -89,19 +89,22 @@ const displayDropdown = ($selector) => {
  */
 const selectAll = ($selector) => {
 	var itemGroup = $selector.find('li');
-	var item = itemGroup.find('input[type="checkbox"]');
-	var allChecked = true;
+	let firstCheckbox = itemGroup.first();
+	let input = itemGroup.find('input[type="checkbox"]');
 
-	itemGroup.find('input[type="checkbox"]').first().on('click', function() {
-		if($(this).is(":checked")){
-			console.log("checked===");
-			itemGroup.find('input[type="checkbox"]').prop("checked", "false")
-			// item.not($(this)).prop('checked', true);
+	firstCheckbox.on("click", function(){
+		console.log("item---", $(this))
+		$(this).toggleClass('active');
+		if( $(this).hasClass('active') ) {
+			input.prop("checked", true);
+			// input.not($(this)).prop("checked", false);
+			// firstInput.prop('checked', true);
 		} else {
-			console.log("not checked===")
-			// item.not($(this)).prop('checked', false);
+			input.prop("checked", false);
+			// input.not($(this)).prop("checked", true);
+			// firstInput.prop('checked', false);
 		}
-	});
+	})
 }
 
 

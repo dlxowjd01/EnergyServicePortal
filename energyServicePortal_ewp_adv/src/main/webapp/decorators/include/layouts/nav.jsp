@@ -209,7 +209,7 @@
 			</li>
 			</c:if>
 
-			<c:if test="${oid ne 'trust' and oid ne 'sundream'}">
+			<c:if test="${oid eq 'encored'}">
 			<li class="smn6 menu-item">
 				<a href="javascript:void(0);">설정</a>
 				<div class="sub_layer">
