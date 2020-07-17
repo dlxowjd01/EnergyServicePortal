@@ -50,8 +50,8 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			String vgid = request.getParameter("vgid");
 			String sid = request.getParameter("sid");
 
-			Map<String, String> parameters = new HashMap<String, String>();
-			parameters.put("includeDevices", "true");
+//			Map<String, String> parameters = new HashMap<String, String>();
+//			parameters.put("includeDevices", "true");
 
 			if (mode != null && "test".equals(mode)) {
 				session.setAttribute("apiHost", "http://iderms.enertalk.com:8443");
@@ -59,7 +59,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				session.setAttribute("apiHost", "https://iderms-api.iderms.ai");
 			}
 			
-			Map<String, Object> siteMap = get("/auth/me/sites", mode, "", token); //사이트 리스트 정보
+			Map<String, Object> siteMap = get("/auth/me/sites", mode, "?includeDevices=true", token); //사이트 리스트 정보
 			if (200 == (int) siteMap.get("code")) {
 				siteOriginList = (List<Map<String, Object>>) siteMap.get("data");
 				request.setAttribute("siteHeaderList", siteOriginList); //사이트 리스트 세팅
