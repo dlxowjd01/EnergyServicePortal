@@ -1092,6 +1092,8 @@ table input[type="text"] {
 }
 
 .text-blue {
+	background: none;
+	border: none;
 	color: var(--vivid-blue);
 }
 

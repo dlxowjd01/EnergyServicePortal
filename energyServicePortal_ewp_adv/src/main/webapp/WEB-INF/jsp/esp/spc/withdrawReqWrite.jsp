@@ -289,16 +289,6 @@
 				obj.to_account_owner = accOpt.eq(index).data("acc-holder");
 				obj.to_account_bank = accOpt.eq(index).data("name");
 				obj.to_account_no = accOpt.eq(index).data("value");
-				// if(isEmpty(obj.purpose)){
-				// 	warning.eq(2).removeClass('hidden');
-				// }
-				// if(isEmpty(obj.amount)){
-				// 	warning.eq(2).removeClass('hidden');
-				// }
-				// if(isEmpty(obj.to_account_no)){
-				// 	warning.eq(2).removeClass('hidden');
-				// }
-				
 				obj.desc = descOpt.eq(index).val();
 				arr.push(obj);
 			});
@@ -307,18 +297,6 @@
 			// console.log("json--", jsonData);
 			let newJson = JSON.stringify(jsonData);
 			let formArr = [ jsonData.spc_id, jsonData.withdraw_bank, jsonData.withdraw_day, arr ];
-			// console.log("arr===", arr)
-			// $.each(arr, function(index, element){
-			// 	console.log("element===", element.purpose == "")
-			// 	if(element.purpose == "" || element.purpose == "undefined" ) {
-			// 		warning.eq(2).removeClass('hidden');
-			// 	} else if (element.amount  == 0) {
-			// 		warning.eq(2).removeClass('hidden');
-			// 	}  else if (element.to_account_no == "undefined" ) {
-			// 		console.log(" $(this)===",  element)
-			// 		warning.eq(2).removeClass('hidden');
-			// 	}
-			// });
 
 			$.each(formArr, function(index, value){
 				if(index < 2) {
@@ -329,14 +307,16 @@
 						warning.eq(index).addClass('hidden');
 					}
 				} else if( index == 3) {
-					console.log("index---", value);
 					arr.forEach((item, index) => {
 						if(item.purpose == "" || item.purpose == "undefined" ) {
 							warning.eq(2).removeClass('hidden');
-						} else if (item.amount  == 0) {
+							console.log("purpose====", item.purpose)
+						} else if (item.amount == 0) {
 							warning.eq(2).removeClass('hidden');
 						}  else if (item.to_account_no == "undefined" ) {
 							warning.eq(2).removeClass('hidden');
+						} else {
+							warning.eq(2).addClass('hidden');
 						}
 					});
 
@@ -348,7 +328,7 @@
 					}
 				}
 			});
-			
+
 			if( withdrawForm.find(".warning.hidden").length == 4 ){
 				let opt = {
 					url: apiHost + '/spcs/transactions?oid='+oid,
@@ -374,30 +354,30 @@
 			}
 		});
 
-		function uploadFile(action, file, filedName){
-			let formData = new FormData($('#fileUploadForm')[0]);
-			formData.append(filedName, file);
+		// function uploadFile(action, file, filedName){
+		// 	let formData = new FormData($('#fileUploadForm')[0]);
+		// 	formData.append(filedName, file);
 
-			let option= {
-				type: action,
-				enctype: 'multipart/form-data',
-				url: apiHost + '/files/upload?oid=' + oid,
-				processData: false,  // Important!
-				contentType: false,
-				cache: false,
-				timeout: 600000,
-				async: false,
-				data: formData,
-			}
+		// 	let option= {
+		// 		type: action,
+		// 		enctype: 'multipart/form-data',
+		// 		url: apiHost + '/files/upload?oid=' + oid,
+		// 		processData: false,  // Important!
+		// 		contentType: false,
+		// 		cache: false,
+		// 		timeout: 600000,
+		// 		async: false,
+		// 		data: formData,
+		// 	}
 
-			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				console.log("success===", json)
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.log("jqXHR===", jqXHR)
-				alert('처리 중 오류가 발생했습니다.');
-				return false;
-			});
-		}
+		// 	$.ajax(option).done(function (json, textStatus, jqXHR) {
+		// 		console.log("success===", json)
+		// 	}).fail(function (jqXHR, textStatus, errorThrown) {
+		// 		console.log("jqXHR===", jqXHR)
+		// 		alert('처리 중 오류가 발생했습니다.');
+		// 		return false;
+		// 	});
+		// }
 
 		// amount number trim event
 		function calcTotal() {
@@ -450,131 +430,10 @@
 		$("#deleteRowBtn").on("click", function(){
 			$("#tableBody tr:not(:first-child)").find('td input:checked').closest('tr').remove();
 		});
-		
+
 		$("#selectAll").on("click", function(){
 			$("#tableBody").find('input:checkbox').prop('checked', this.checked);
 		});
-
-
-		// function getNumberIndex (index) {
-		// 	return index + 1;
-		// }
-		// function nvl (value, str) {
-		// 	if (isEmpty(value)) {
-		// 		return str;
-		// 	} else {
-		// 		return value;
-		// 	}
-		// }
-
-		// function getCsvDown() {
-		// 	var column = ["name", "발전소_명", "설치_용량", "관리_운영_기간", "", ""], //json Key
-		// 		header = ["SPC명", "발전소 명", "용량", "관리 운영기간	", "이관자료", "첨부파일"]; //csv 파일 헤더
-
-		// 	getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
-		// }
-
-	//      function getObjects(obj, key, val) {
-	// 		var objects = [];
-	// 		for (var i in obj) {
-	// 			if (!obj.hasOwnProperty(i)) continue;
-	// 			if (typeof obj[i] == 'object') {
-	// 				objects = objects.concat(getObjects(obj[i], key, val));    
-	// 			} else 
-	// 			//if key matches and value matches or if key matches and value is not passed (eliminating the case where key matches but passed value does not)
-	// 			if (i == key && obj[i] == val || i == key && val == '') { //
-	// 				objects.push(obj);
-	// 			} else if (obj[i] == val && key == ''){
-	// 				//only add if the object is not already in the array
-	// 				if (objects.lastIndexOf(obj) == -1){
-	// 					objects.push(obj);
-	// 				}
-	// 			}
-	// 		}
-	// 		return objects;
-	// 	}
-
-
-	// function downloadFile(action, originalName, fakeName){
-	// 	console.log("downloadFile--", action)
-	// 	console.log("fakeName==", fakeName, "originalName===", originalName);
-
-	// 	var element = document.createElement('a');
-	// 	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(originalName));
-	// 	element.setAttribute('download', originalName);
-	// 	element.style.display = 'none';
-	// 	document.body.appendChild(element);
-	// 	element.click();
-	// 	document.body.removeChild(element);
-	// 	// let option= {
-	// 	// 	type: action,
-	// 	// 	url: apiHost + '/files/download?oid=' + oid,
-	// 	// 	data: {
-	// 	// 		fileKey: fakeName,
-	// 	// 		orgFilename: originalName
-	// 	// 	},
-	// 	// }
-	// 	// $.ajax(option).done(function (json, textStatus, jqXHR) {
-	// 	// 	console.log("success===", json)
-	// 	// }).fail(function (jqXHR, textStatus, errorThrown) {
-	// 	// 	alert('처리 중 오류가 발생했습니다.');
-	// 	// 	return false;
-	// 	// });
-	// }
-
-
-	// console.log("key===", key)
-
-	// if (key >= 0xAC00 && key <= 0xD7A3) {
-	// 	console.log("key22222===", key)
-
-	// 	evt.preventDefault();
-	// }
-
-	// // Hangul Jamo
-	// if (key >= 0x1100 && key <= 0x11FF) {
-	// 	console.log("key22222===", key)
-	// 	evt.preventDefault();
-	// }
-
-	// // Hangul Compatibility Jamo 
-	// if (key >= 0x3130 && key <= 0x318F) {
-	// 	console.log("key22222===", key)
-	// 	evt.preventDefault();
-	// }
-
-	// // Hangul Jamo Extended-A
-	// if (key >= 0xA960 && key <= 0xA97F) {
-	// 	console.log("key22222===", key)
-	// 	evt.preventDefault();
-	// }
-
-	// // Hangul Jamo Extended-B 
-	// if (key >= 0xD7B0 && key <= 0xD7FF) {
-	// 	console.log("key22222===", key)
-	// 	evt.preventDefault();
-	// }
-
-
-	// $("#pdfBtn").on("click", function(e){
-	// 	e.preventDefault();
-	// 	let warning = $(".spc-search-bar").find(".warning");
-	// 	if(isEmpty(spcList.prev().data("value"))){
-	// 		warning.eq(0).removeClass("hidden");
-	// 	} else if (isEmpty(withdrawList.prev().data("value")) ) {
-	// 		warning.eq(1).removeClass("hidden");
-	// 		console.log("withdrawList===", withdrawList.prev().data("value") )
-	// 	} else {
-	// 		warning.addClass("hidden");
-	// 		let item = $("#addFileList").find("li.upload_text");
-	// 		item.each(function(index, element){
-	// 			let dataId = $(this).data("id");
-	// 			console.log("dataId---", fileList[index] );
-	// 			downloadFile('get', fileList[index].name, dataId );
-	// 		});
-	// 	}
-	// });
-
 	});
 
 
@@ -655,7 +514,7 @@
 							<td>
 								<div class="sa_select">
 									<div class="dropdown placeholder">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="" data-value="">선택<span class="caret"></span></button>
+										<button class="btn btn-primary dropdown-toggle purpose" type="button" data-toggle="dropdown" data-name="" data-value="">선택<span class="caret"></span></button>
 										<ul id="purposeList" class="dropdown-menu" role="menu">
 											<li data-value="*purpose_value*"><a href="#" tabindex="-1">*purpose_title*</a></li>
 										</ul>
