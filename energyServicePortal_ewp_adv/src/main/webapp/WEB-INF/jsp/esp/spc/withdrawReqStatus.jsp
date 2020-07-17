@@ -536,8 +536,6 @@
 			newData.status = 2;
 			newData.status_changed_by = loginName;
 			newData.status_changed_at = new Date().toISOString();
-			newData.requested_by = loginName;
-			newData.requested_at = new Date().toISOString();
 
 			let opt = {
 				url: apiHost + '/spcs/transactions/' + reqId + '?oid=' + oid,
