@@ -4,6 +4,7 @@
 <script type="text/javascript">
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
+	const role = '${sessionScope.userInfo.role}';
 	const boardURL = '/board';
 	const spcURL = '/spcs';
 	const prop = ['subject', 'contents', 'level', 'spc_id'];
@@ -230,15 +231,16 @@
 			}
 		}).done(function (data, textStatus, jqXHR) {
 			const result = data.data[0];
-			if (loginId != result.created_by) {
-				$('#delBtn').addClass('hidden');
-				$('#chgBtn').addClass('hidden');
-				$('#view_level').parents('div.row').addClass('hidden');
-			} else {
+			if (loginId == result.created_by || role == 1) {
 				$('#delBtn').removeClass('hidden');
 				$('#chgBtn').removeClass('hidden');
 				$('#view_level').parents('div.row').removeClass('hidden');
+			} else {
+				$('#delBtn').addClass('hidden');
+				$('#chgBtn').addClass('hidden');
+				$('#view_level').parents('div.row').addClass('hidden');
 			}
+
 			$.map(result, function(val, key) {
 				const $view = $('#viewNotice'),
 					$viewObj = $view.find('#view_' + key);

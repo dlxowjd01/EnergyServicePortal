@@ -88,7 +88,7 @@ public class LoginController {
 		if(200 == (int) tokenMap.get("code")) {
 			userInfoMap.putAll((Map<String, Object>) tokenMap.get("data"));
 
-			Map<String, Object> meMap = RestApiUtil.get("/auth/me", mode,null, (String) userInfoMap.get("token"));
+			Map<String, Object> meMap = RestApiUtil.get("/auth/me", mode,"", (String) userInfoMap.get("token"));
 			if(200 == (int) meMap.get("code")) {
 				userInfoMap.putAll((Map<String, Object>) meMap.get("data"));
 				String auth_type = String.valueOf(userInfoMap.get("role"));
@@ -103,7 +103,12 @@ public class LoginController {
 			} else if("1".equals(userInfoMap.get("auth_type")) || "2".equals(userInfoMap.get("auth_type"))) {
 				session.setAttribute(UserUtil.USER_SESSION_ID, userInfoMap);
 				session.setAttribute("mode", mode); //운영 / 스테이징 구분
-				return "redirect:/dashboard/gmain.do";
+
+				if (userInfoMap.get("task") != null && ((int) userInfoMap.get("task") == 1 || (int) userInfoMap.get("task") == 2)) {
+					return "redirect:/spc/transactionCalendar.do";
+				} else {
+					return "redirect:/dashboard/gmain.do";
+				}
 			} else {
 				model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", locale));
 				return "esp/login/login";

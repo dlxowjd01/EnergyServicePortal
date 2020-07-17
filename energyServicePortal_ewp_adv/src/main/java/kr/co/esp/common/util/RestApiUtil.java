@@ -27,11 +27,11 @@ public class RestApiUtil {
 	 * @param parameters
 	 * @return
 	 */
-	public static Map<String, Object> get(String strUrl, String mode, Map<String, String> parameters) {
+	public static Map<String, Object> get(String strUrl, String mode, String parameters) {
 		return get(strUrl, mode, parameters, null);
 	}
 
-	public static Map<String, Object> get(String strUrl, String mode, Map<String, String> parameters, String token) {
+	public static Map<String, Object> get(String strUrl, String mode, String parameters, String token) {
 		Map<String, Object> rtnMap = new HashMap<String, Object>();
 
 		try {
@@ -44,8 +44,10 @@ public class RestApiUtil {
 			SSLContext sc = SSLContext.getInstance("SSL");
 			sc.init(null, trustAllCerts, new SecureRandom());
 
+			URL url = new URL("https://iderms-api.iderms.ai" + strUrl);
+
 			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-			HttpsURLConnection con = (HttpsURLConnection) new URL("https://iderms-api.iderms.ai" + strUrl).openConnection();
+			HttpsURLConnection con = (HttpsURLConnection) new URL("https://iderms-api.iderms.ai" + strUrl + parameters).openConnection();
 			con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
 			con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
 			con.setRequestMethod("GET");

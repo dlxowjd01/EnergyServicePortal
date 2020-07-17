@@ -588,6 +588,8 @@
 			$("#spcList").prev().html("선택" + '<span class="caret"></span>').data({"value": "", "name" : "" });
 			deleteScheduleBtn.addClass('hidden');
 			postScheduleBtn.text('등록');
+
+			postScheduleBtn.off('click');
 			postScheduleBtn.on("click", function(){
 				maintenance(spcIdArr, 'post');
 			});
@@ -643,12 +645,16 @@
 
 			// deleteScheduleBtn.removeClass('hidden').attr('onclick', 'maintenance(\'delete\', \'' + data[0].id + '\' );');
 			deleteScheduleBtn.removeClass('hidden');
+
+			deleteScheduleBtn.off('click');
 			deleteScheduleBtn.on("click", function(e){
 				// e.preventDefault();
 				maintenance(spcNameList, 'delete', targetDate.id);
 			});
 			// $("#closeBtn").on("click", function(){ return false; })
 			postScheduleBtn.text('수정');
+
+			postScheduleBtn.off('click');
 			postScheduleBtn.on("click", function(){
 				// console.log("postScheduleBtn====")
 				maintenance(spcNameList, 'patch', targetDate.id);
@@ -726,20 +732,20 @@
 		));
 
 		$('#calendar td .bu').each(function () {
-			let clsName = $(this).attr('class').replace('bu t', '').trim();
+			let clsName = $(this).attr('class').replace('bu t', '').replace('link', '').trim();
 			let spcName = $(this).html().match(/\[(.*?)\]/)[1];
 			if ($.inArray(clsName, checkType) > -1) {
 				if ($('#searchName').val() == '') {
-					$(this).parent().show();
+					$(this).show();
 				} else {
 					if (spcName.match($('#searchName').val())) {
-						$(this).parent().show();
+						$(this).show();
 					} else {
-						$(this).parent().hide();
+						$(this).hide();
 					}
 				}
 			} else {
-				$(this).parent().hide();
+				$(this).hide();
 			}
 		});
 	};
@@ -1192,10 +1198,10 @@
 					<input type="checkbox" id="chk_op03" name="type" value="3" checked>
 					<label for="chk_op03">출금 - 승인 중</label>
 				</div>
-				<div class="chk_type c4">
-					<input type="checkbox" id="chk_op04" name="type" value="4" checked>
-					<label for="chk_op04">입금</label>
-				</div>
+<%--				<div class="chk_type c4">--%>
+<%--					<input type="checkbox" id="chk_op04" name="type" value="4" checked>--%>
+<%--					<label for="chk_op04">입금</label>--%>
+<%--				</div>--%>
 
 				<div class="flex_wrapper mt40">
 					<h2 class="ntit">주요 일정</h2>
