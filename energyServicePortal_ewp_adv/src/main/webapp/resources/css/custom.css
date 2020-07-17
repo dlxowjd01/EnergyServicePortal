@@ -11683,6 +11683,9 @@ th .btn_align {
 	text-align: right;
 }
 
+.sort_table.table-footer th.right > .btn_align {
+	margin-right: 12px;
+}
 .spc-transaction .table-footer .tx_inp_type input.right {
 	padding: 0 16px;
 	width: 99%;
@@ -11738,7 +11741,7 @@ table.table-footer tfoot td.light {
 .spc-transaction .sort_table .icon-delete {
 	width: 13px;
 	height: 13px;
-	margin: -5px 0 0 8px;
+	margin: -5px 0 0 12px;
 	background: var(--btn-close-svg) no-repeat center;
 	background-size: 15px 15px;
 }
@@ -11859,6 +11862,10 @@ table.table-footer tfoot td.light {
 .indiv.spc-detail .his_tbl tfoot td {
 	text-align: center;
 	font-weight: bold;
+}
+
+.indiv.spc-detail .his_tbl tfoot td.right {
+	text-align: right;
 }
 
 .indiv.spc-detail>.flex_wrapper:first-child {
