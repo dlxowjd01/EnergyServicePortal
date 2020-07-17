@@ -280,7 +280,7 @@
 						resolve(JSON.parse(item.to_account))
 					}).then(res => {
 						// let item = Object.assign({}, item);
-						// console.log("res===", res, "item===", item)
+						console.log("res===", res)
 						// console.log("item==", item, "res====", res)
 						// delete(item.to_account);
 						const spcMatch = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
@@ -319,8 +319,8 @@
 						let visibility = '';
 						let link_attr = '';
 						let purposeList = [
-							{ label: "출금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
-							{ label: "입금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대 수선비", "배당금 적림", "일반 지출" ]},
+							{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대 수선비", "배당금 적림", "일반 지출" ]},
+							{ label: "입금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
 						];
 						let account_type_list = [ "전력 판매대금", "REC 판매대금", "관리 운영비", "일반 렌탈", "전력중개 수수료", "전기 요금", "원리금" ];
 						let purpose = '';

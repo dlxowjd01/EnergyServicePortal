@@ -677,7 +677,7 @@
 							<td>*requestedAt*</td>
 							<td>*requestedBy*</td>
 							<td>*transferAgent*</td>
-							<td data-id="*transactionSpcId*" data-name="*spcName*" data-value="*statusVal*"><a href="javascript:void(0);" data-value="*withdrawAccountInfo*" data-id="*transactionReqId*" onclick="goToDetail($(this))" class="*linkAttr*">*status*</a></td>
+							<td data-id="*transactionSpcId*" data-name="*spcName*" data-value="*statusVal*"><button type="button" data-value="*withdrawAccountInfo*" data-id="*transactionReqId*" onclick="goToDetail($(this))" class="*linkAttr* clear-btn">*status*</button></td>
 							<td>*statusChangedBy*</td>
 							<td>*statusChangedAt*</td>
 						</tr>
