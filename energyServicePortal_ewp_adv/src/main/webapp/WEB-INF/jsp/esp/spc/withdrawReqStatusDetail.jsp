@@ -108,7 +108,7 @@
 											];
 											let purpose = '';
 											let withdraw_day = '';
-											let to_account_no = '';
+											let accNum = '';
 											let amount = '';
 											let desc = '';
 											if(!isEmpty(purposeList[0].value[x.purpose])){
@@ -121,10 +121,10 @@
 											} else {
 												withdraw_day = '-'
 											}
-											if(!isEmpty(to_account_no)){
-												to_account_no = x.to_account_no;
+											if(!isEmpty(x.to_account_no)){
+												accNum = x.to_account_no;
 											} else {
-												to_account_no = '-'
+												accNum = '-'
 											}
 											if(!isEmpty(x.amount)){
 												amount = x.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원';
@@ -141,7 +141,7 @@
 											str = tableCloned.replace(/\*withdrawDay\*/g, withdraw_day)
 												.replace(/\*purpose\*/g, purpose)
 												.replace(/\*amount\*/g, amount)
-												.replace(/\*toAccountNum\*/g, to_account_no)
+												.replace(/\*toAccountNum\*/g, accNum)
 												.replace(/\*description\*/g, desc)
 											tableList.append($(str));
 										});
@@ -167,14 +167,14 @@
 								res[0].map(x => {
 									let popObj = Object.assign({}, item);
 									delete(popObj.to_account);
-
+									console.log("x===", x)
 									let purposeList = [
 										{ label: "출금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
 										{ label: "입금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대 수선비", "배당금 적림", "일반 지출" ]},
 									];
 									let purpose = '';
 									let withdraw_day = '';
-									let to_account_no = '';
+									let accNum = '';
 									let amount = '';
 									let desc = '';
 									if(!isEmpty(purposeList[0].value[x.purpose])){
@@ -187,10 +187,10 @@
 									} else {
 										withdraw_day = '-'
 									}
-									if(!isEmpty(to_account_no)){
-										to_account_no = x.to_account_no;
+									if(!isEmpty(x.to_account_no)){
+										accNum = x.to_account_no;
 									} else {
-										to_account_no = '-'
+										accNum = '-'
 									}
 									if(!isEmpty(x.amount)){
 										amount = x.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원';
@@ -207,7 +207,7 @@
 									str = tableCloned.replace(/\*withdrawDay\*/g, withdraw_day)
 										.replace(/\*purpose\*/g, purpose)
 										.replace(/\*amount\*/g, amount)
-										.replace(/\*toAccountNum\*/g, to_account_no)
+										.replace(/\*toAccountNum\*/g, accNum)
 										.replace(/\*description\*/g, desc)
 									tableList.append($(str));
 								});

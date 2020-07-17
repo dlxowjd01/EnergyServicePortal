@@ -246,7 +246,7 @@
 			jsonData.spc_id = spcList.prev().data("value");
 			// from
 			jsonData.withdraw_bank = withdrawList.prev().data("name");
-			jsonData.withdraw_account_no = withdrawList.prev().data("value");
+			jsonData.withdraw_account_no = withdrawList.prev().data("value").toString();
 			jsonData.withdraw_account_owner = withdrawList.prev().data("acc-holder");
 			jsonData.withdraw_day = $("#requestedDate").val().replace(/-/g, "");
 			// to
@@ -254,10 +254,10 @@
 			// status
 			jsonData.status = 1;
 			jsonData.status_changed_by = loginName;
-			jsonData.status_changed_at = new Date().toLocaleDateString("ja-JP");
+			jsonData.status_changed_at = new Date();
 			jsonData.requested_by = loginName;
 			jsonData.requested_by_uid = uid;
-			jsonData.requested_at = new Date().toLocaleDateString("ja-JP");
+			jsonData.requested_at = new Date();
 			jsonData.transfer_agent = loginName;
 
 			let fileNames = $("#addFileList").find("li.upload_text");
@@ -350,6 +350,7 @@
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				console.log("success===", json)
 			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.log("jqXHR===", jqXHR)
 				alert('처리 중 오류가 발생했습니다.');
 				return false;
 			});
