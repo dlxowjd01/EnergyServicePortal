@@ -121,7 +121,7 @@
 									let status_val = '';
 									let link_attr = '';
 									// dates
-									let withdraw_day = item.withdraw_day.substring(0, 10).replace(/-/g, '') + ' ' + item.withdraw_day.substring(11, 19).replace(/-/g, '');
+									let withdraw_day = item.withdraw_day.substring(0, 4) + '-' + item.withdraw_day.substring(4, 6) + '-' + item.withdraw_day.substring(6, 8);
 									let requested_at = ''
 									let status_changed_at = '';
 									let dataArr = [
@@ -314,7 +314,8 @@
 							let status_val = '';
 							let link_attr = '';
 							// dates
-							let withdraw_day = item.withdraw_day.substring(0, 10).replace(/-/g, '') + ' ' + item.withdraw_day.substring(11, 19).replace(/-/g, '');
+							console.log("e----", item.withdraw_day)
+							let withdraw_day = item.withdraw_day.substring(0, 4) + '-' + item.withdraw_day.substring(4, 6) + '-' + item.withdraw_day.substring(6, 8);
 							let requested_at = ''
 							let status_changed_at = '';
 
@@ -634,7 +635,7 @@
 					<th>
 						<button class="btn_align down">SPC 명</button>
 					</th>
-					<th>
+					<th class="right">
 						<button class="btn_align down">금액</button>
 					</th>
 					<th>
@@ -665,7 +666,7 @@
 							<td><a class="chk_type select_row"><input type="checkbox" id="*chkOpt*" name="reviewOpt"><label for="*chkOpt*"></label></a></td>
 							<td>*withdrawDay*</td>
 							<td>*spcName*</td>
-							<td>*totalAmount*</td>
+							<td class="right">*totalAmount*</td>
 							<td>*requestedAt*</td>
 							<td>*requestedBy*</td>
 							<td>*transferAgent*</td>

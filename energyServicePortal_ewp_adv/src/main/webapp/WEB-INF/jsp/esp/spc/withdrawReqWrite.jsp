@@ -273,7 +273,7 @@
 				let purposeOpt = $("#tableBody").find("td:nth-of-type(3) .dropdown-toggle");
 				let amountOpt = $("#tableBody").find("td:nth-of-type(4) input");
 				let accOpt = $("#tableBody").find("td:nth-of-type(5) .dropdown-toggle");
-				let descOpt = $("#tableBody").find("td:nth-of-type(6) input[name='note']");
+				let descOpt = $("#tableBody").find("td:nth-of-type(6) input");
 				let obj = {};
 				obj.purpose = purposeOpt.eq(index).data("value");
 				obj.amount = Number(amountOpt.eq(index).val().replace(/,/g, ''));
@@ -382,7 +382,7 @@
 			let newVal = this.value;
 			let total = document.getElementById("total");
 			totalAmount = 0;
-			newVal = this.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			newVal = this.value.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 			this.value = newVal;
 			// console.log("document on change===", evt)
 			if(newVal != "") {
@@ -621,7 +621,7 @@
 							</td>
 							<td>
 								<div class="tx_inp_type"><!--
-								--><input type="text" id="transferAmount" class="amount right" name="transfer_amount" placeholder="직접 입력"><!--
+								--><input type="text" id="transferAmount" class="amount right" name="transfer_amount" placeholder="직접 입력" maxlength="18"><!--
 							--></div><!--
 						--></td>
 							<td>
