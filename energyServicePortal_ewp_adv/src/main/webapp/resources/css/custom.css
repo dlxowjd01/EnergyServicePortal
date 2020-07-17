@@ -11734,6 +11734,8 @@ table.table-footer tfoot td.light {
 }
 
 .spc-transaction .sort_table .text-link {
+	background: none;
+	border: none;
 	height: 35px;
 	margin-top: -18px;
 }
