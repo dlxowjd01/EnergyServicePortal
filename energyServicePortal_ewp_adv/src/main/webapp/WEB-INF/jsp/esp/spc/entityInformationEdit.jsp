@@ -1436,14 +1436,20 @@
 									--></div>
 									<div class="dropdown placeholder edit" id="계좌구분[index]"><!--
 									--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">계좌구분<span class="caret"></span></button><!--
-									--><ul class="dropdown-menu" role="menu"><!--
-										--><li data-value="유보계좌"><a href="javascript:void(0);">유보계좌</a></li><!--
-										--><li data-value="부채상환"><a href="javascript:void(0);">부채상환</a></li><!--
-										--><li data-value="대수선비"><a href="javascript:void(0);">대수선비</a></li><!--
-										--><li data-value="배당금 적립"><a href="javascript:void(0);">배당금 적립</a></li><!--
-										--><li data-value="지출"><a href="javascript:void(0);">지출</a></li><!--
-										--><li data-value="기타"><a href="javascript:void(0);">기타</a></li><!--
-									--></ul><!--
+									--><ul class="dropdown-menu" role="menu">
+											<li data-group="출금" data-value="관리운영비"><a href="javascript:void(0);">관리 운영비</a></li>
+											<li data-group="출금" data-value="사무수탁비"><a href="javascript:void(0);">사무 수탁비</a></li>
+											<li data-group="출금" data-value="부채상환"><a href="javascript:void(0);">부채 상환</a></li>
+											<li data-group="출금" data-value="대수선비"><a href="javascript:void(0);">대수선비</a></li>
+											<li data-group="출금" data-value="배당금적림"><a href="javascript:void(0);">배당금 적림</a></li>
+											<li data-group="출금" data-value="일반지출"><a href="javascript:void(0);">일반 지출</a></li>
+											<li data-group="입출금" data-value="DSRA적립"><a href="javascript:void(0);">DSRA 적립</a></li>
+											<li data-group="입출금" data-value="기타"><a href="javascript:void(0);">기타</a></li>
+											<li data-group="입금" data-value="REC수익"><a href="javascript:void(0);">REC 수익</a></li>
+											<li data-group="입금" data-value="SMP수익"><a href="javascript:void(0);">SMP 수익</a></li>
+											<li data-group="입금" data-value="유보계좌"><a href="javascript:void(0);">유보계좌</a></li>
+											<li data-group="입출금" data-value="운영계좌"><a href="javascript:void(0);">운영계좌</a></li>
+										</ul><!--
 								--></div>
 									<div class="dropdown placeholder edit" id="은행_리스트[index]"><!--
 										--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">은행 리스트<span class="caret"></span></button><!--
