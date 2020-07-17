@@ -52,13 +52,24 @@
 		});
 
 		let pList = [
-			{ name: "REC 수익", val: 0 },
-			{ name: "SMP 수익", val: 1 },
-			{ name: "DSRA 적립", val: 2 },
-			{ name: "유보 계좌", val: 3 },
-			{ name: "운영 계좌", val: 4 },
-			{ name: "기타", val: 5 },
+			{ name: "관리운영비", val: 0 },
+			{ name: "사무수탁비", val: 1 },
+			{ name: "부채상환", val: 2 },
+			{ name: "대수선비", val: 3 },
+			{ name: "배당금 적립", val: 4 },
+			{ name: "일반 지출", val: 5 },
+			{ name: "DSRA 적립", val: 6 },
+			{ name: "기타", val: 7 },
+			{ name: "운영계좌", val: 8 },
 		];
+		// let pList = [
+		// 	{ name: "REC 수익", val: 0 },
+		// 	{ name: "SMP 수익", val: 1 },
+		// 	{ name: "DSRA 적립", val: 2 },
+		// 	{ name: "유보 계좌", val: 3 },
+		// 	{ name: "운영 계좌", val: 4 },
+		// 	{ name: "기타", val: 5 },
+		// ];
 		for(let i=0; i<pList.length; i++){
 			let str = copyPurposeList.replace(/\*purpose_title\*/g, pList[i].name).replace(/\*purpose_value\*/g, pList[i].val);
 			purposeList.append($(str));
@@ -277,17 +288,39 @@
 				let obj = {};
 				obj.purpose = purposeOpt.eq(index).data("value");
 				obj.amount = Number(amountOpt.eq(index).val().replace(/,/g, ''));
-				obj.to_account_bank = accOpt.eq(index).data("name");
 				obj.to_account_owner = accOpt.eq(index).data("acc-holder");
+				obj.to_account_bank = accOpt.eq(index).data("name");
 				obj.to_account_no = accOpt.eq(index).data("value");
+				// if(isEmpty(obj.purpose)){
+				// 	warning.eq(2).removeClass('hidden');
+				// }
+				// if(isEmpty(obj.amount)){
+				// 	warning.eq(2).removeClass('hidden');
+				// }
+				// if(isEmpty(obj.to_account_no)){
+				// 	warning.eq(2).removeClass('hidden');
+				// }
+				
 				obj.desc = descOpt.eq(index).val();
 				arr.push(obj);
 			});
 			jsonData.total_amount = totalAmount;
 			jsonData.to_account = JSON.stringify(arr);
-			console.log("json--", jsonData);
+			// console.log("json--", jsonData);
 			let newJson = JSON.stringify(jsonData);
-			let formArr = [ jsonData.spc_id, jsonData.withdraw_bank, jsonData.withdraw_day, jsonData.to_account ];
+			let formArr = [ jsonData.spc_id, jsonData.withdraw_bank, jsonData.withdraw_day ];
+			// console.log("arr===", arr)
+			// $.each(arr, function(index, element){
+			// 	console.log("element===", element.purpose == "")
+			// 	if(element.purpose == "" || element.purpose == "undefined" ) {
+			// 		warning.eq(2).removeClass('hidden');
+			// 	} else if (element.amount  == 0) {
+			// 		warning.eq(2).removeClass('hidden');
+			// 	}  else if (element.to_account_no == "undefined" ) {
+			// 		console.log(" $(this)===",  element)
+			// 		warning.eq(2).removeClass('hidden');
+			// 	}
+			// });
 
 			$.each(formArr, function(index, value){
 				if(index < 2) {
@@ -650,7 +683,7 @@
 				</table>
 				<div class="btn_wrap_type">
 					<div class="fl"><!--
-					--><small class="hidden warning">요청서를 신청하실 체크박스를 선택해 주세요.</small><!--
+					--><small class="hidden warning">테이블의 출금 요청 정보를 모두 기입해 주세요.</small><!--
 					--><small class="hidden warning">출금 요청 정보를 기입해 주세요.</small><!--
 				--></div><!--
 				--><button type="button" id="deleteRowBtn" class="btn_type07">선택 삭제</button><!--

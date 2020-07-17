@@ -383,7 +383,7 @@
 
 						// console.log("()===", item.status_changed_at )
 
-						item.status_changed_at ? ( updated_at = ( new Date(item.status_changed_at).toLocaleDateString("ja-JP").replace(/\//g, '-') + '&emsp;&emsp;' + new Date(item.status_changed_at).toLocaleTimeString()) ) : ( updated_at = '-' );
+						item.status_changed_at ? ( updated_at = ( new Date(item.status_changed_at).toLocaleDateString("en-CA").replace(/\//g, '-') + '&emsp;&emsp;' + new Date(item.status_changed_at).toLocaleTimeString()) ) : ( updated_at = '-' );
 
 						item.status_changed_by ? ( approved_by = item.status_changed_by ) : ( approved_by = '-' );
 
@@ -873,15 +873,15 @@
 				<table class='sort_table table-footer transaction-table'>
 					<colgroup>
 						<col style='width:5%'>
-						<col style='width:10%'>
+						<col style='width:8%'>
 						<col style='width:9%'>
-						<col style='width:10%'>
-						<col style='width:10%'>
-						<col style='width:12%'>
 						<col style='width:12%'>
 						<col style='width:10%'>
 						<col style='width:10%'>
+						<col style='width:16%'>
+						<col style='width:10%'>
 						<col style='width:12%'>
+						<col style='width:8%'>
 						<col>
 					</colgroup>
 					<thead>
@@ -892,7 +892,7 @@
 							<th><button class='btn_align down'>입출금 구분</button></th>
 							<th><button class='btn_align down'>용도 구분</button></th>
 							<th><button class='btn_align down'>계좌 구분</button></th>
-							<th><button class='btn_align down'>금액</button></th>
+							<th class="right pr-16"><button class='btn_align down'>금액</button></th>
 							<th><button class='btn_align down'>최종 업데이트</button></th>
 							<th>요청자</th>
 							<th>승인자</th>
@@ -926,7 +926,7 @@
 								<td></td>
 								<td>합계</td>
 								<td colspan='3'></td>
-								<td>*total* 원</td>
+								<td class="right">*total* 원</td>
 								<td colspan='4'></td>
 							</tr>
 						</template>
