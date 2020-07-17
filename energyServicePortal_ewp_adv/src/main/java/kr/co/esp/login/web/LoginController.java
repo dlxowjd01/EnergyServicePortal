@@ -88,7 +88,7 @@ public class LoginController {
 		if(200 == (int) tokenMap.get("code")) {
 			userInfoMap.putAll((Map<String, Object>) tokenMap.get("data"));
 
-			Map<String, Object> meMap = RestApiUtil.get("/auth/me", mode,null, (String) userInfoMap.get("token"));
+			Map<String, Object> meMap = RestApiUtil.get("/auth/me", mode,"", (String) userInfoMap.get("token"));
 			if(200 == (int) meMap.get("code")) {
 				userInfoMap.putAll((Map<String, Object>) meMap.get("data"));
 				String auth_type = String.valueOf(userInfoMap.get("role"));

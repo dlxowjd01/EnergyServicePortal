@@ -59,7 +59,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				session.setAttribute("apiHost", "https://iderms-api.iderms.ai");
 			}
 			
-			Map<String, Object> siteMap = get("/auth/me/sites", mode, parameters, token); //사이트 리스트 정보
+			Map<String, Object> siteMap = get("/auth/me/sites", mode, "", token); //사이트 리스트 정보
 			if (200 == (int) siteMap.get("code")) {
 				siteOriginList = (List<Map<String, Object>>) siteMap.get("data");
 				request.setAttribute("siteHeaderList", siteOriginList); //사이트 리스트 세팅
@@ -72,12 +72,12 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 				return false;
 			}
+//
+//			parameters.clear();
+//			parameters.put("includeSites", "true");
+//			parameters.put("includeDevices", "true");
 
-			parameters.clear();
-			parameters.put("includeSites", "true");
-			parameters.put("includeDevices", "true");
-
-			Map<String, Object> userSiteGroupSearch = get("/auth/me/groups", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
+			Map<String, Object> userSiteGroupSearch = get("/auth/me/groups", mode, "?includeSites=true&includeDevices=true", token); //그룹화되어있는 사이트 리스트 정보
 			if (200 == (int) userSiteGroupSearch.get("code")) {
 				groupMap = (Map<String, Object>) userSiteGroupSearch.get("data");
 
@@ -237,9 +237,9 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				}
 			}
 
-			parameters.clear();
-			parameters.put("types", "resource,location");
-			Map<String, Object> typeProperties = get("/config/view/properties", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
+//			parameters.clear();
+//			parameters.put("types", "resource,location");
+			Map<String, Object> typeProperties = get("/config/view/properties", mode, "?types=resource,location", token); //그룹화되어있는 사이트 리스트 정보
 			if (200 == (int) typeProperties.get("code")) {
 				Map<String, Object> typeMap = (Map<String, Object>) typeProperties.get("data");
 
