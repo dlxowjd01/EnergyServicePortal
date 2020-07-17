@@ -131,7 +131,7 @@
 			let action = 'get';
 			let syncOpt = true;
 			let option = {
-				url: apiHost + "/spcs?oid="+oid,
+				url: apiHost + "/spcs?oid=" + oid,
 				type: action,
 				async: syncOpt
 			}
@@ -197,7 +197,7 @@
 		function getDataList(page, searchOptArr) {
 			var currentPage = '';
 			page == undefined ? currentPage = "1" : currentPage = page;
-
+			console.log("searcg===", searchOptArr)
 			if(!isEmpty(searchOptArr)) {
 				let action = 'get';
 				let syncOpt = true;
@@ -288,12 +288,12 @@
 						let withdraw_day = item.withdraw_day.substring(0, 4) + '-' + item.withdraw_day.substring(4, 6) + '-' + item.withdraw_day.substring(6, 8);
 						let withdraw_bank_name = '';
 						let withdraw_acc_num = '';
-						if(!isEmpty(withdraw_bank_name)) {
+						if(!isEmpty(item.withdraw_bank)) {
 							withdraw_bank_name = item.withdraw_bank;
 						} else {
 							withdraw_bank_name = '-';
 						}
-						if(!isEmpty(withdraw_acc_num)) {
+						if(!isEmpty(item.withdraw_account_no)) {
 							withdraw_acc_num = item.withdraw_account_no;
 						} else {
 							withdraw_acc_num = '-'
@@ -562,31 +562,94 @@
 	}
 
 	function goToDetail(self) {
-		let spcId = $(self).parents().closest("td").data("id");
-		let spcName = $(self).parents().closest("td").data("name");
+		
+		let spcName = self.parents().closest("td").data("name");
 		let reqId = self.data("id");
+		let accInfo = self.data("name") + '  ' + self.data("value");
 		let accNum = self.data("value");
 		let status = self.text();
-		let statusVal = self.parent().data("value");
+		let statusVal = self.parents().closest("td").data("value");
+		let spcId = self.parents().closest("td").data("id");
 
+		let action = 'get';
+		let syncOpt = true;
+		let option = {
+			url: apiHost + '/spcs/' + spcId + '?oid=' + oid + "&includeGens=true",
+			type: action,
+			async: syncOpt
+		}
+
+		submit(option, accInfo, accNum, statusVal)
 		$("#transactionSpcId").val(spcId);
 		$("#transactionSpcName").val(spcName);
 		$("#transactionReqId").val(reqId);
-		$("#transactionAccountInfo").val(accNum);
+		// $("#transactionAccountInfo").val(accInfo);
 		$("#transactionStatus").val(status);
 		$("#transactionStatusVal").val(statusVal);
+		// if(self.parent().data("value")==1) {
+		// 	$("#transactionEditForm").submit();
+		// } else {
+		// 	console.log("detail===")
+		// 	$("#transactionDetailForm").submit();
+		// }
+		
+		
 
-		// [사무수탁사]
-		// "반송" : 0, "승인 중" : "2", "승인완료": "3"	 => /spc/withdrawReqStatusDetail.do
-		// "승인 대기" : 1" 						  => /spc/withdrawReqEdit.do
+// [사무수탁사]
+// "반송" : 0, "승인 중" : "2", "승인완료": "3"	 => /spc/withdrawReqStatusDetail.do
+// "승인 대기" : 1" 						  => /spc/withdrawReqEdit.do
 
-		if(self.parent().data("value")==1) {
-			$("#transactionEditForm").submit();
-		} else {
-			console.log("detail===")
-			$("#transactionDetailForm").submit();
-		}
+	
 	}
+
+	function submit(opt, accInfo, accNum, statusVal){
+		// console.log("submit===", opt, accInfo, accNum, statusVal)
+		let option = opt;
+		let statusValue = statusVal;
+		let accountInfo = accInfo;
+		$.ajax(option).done(function (json, textStatus, jqXHR) {
+			if (json.data[0].spcGens && json.data[0].spcGens.length > 0 ) {
+				let gensInfo = json.data[0].spcGens;
+				var promises = [];
+
+				$.each(gensInfo, function(index, element){
+					promises.push(Promise.resolve(JSON.parse(element.finance_info)));
+				});
+
+				Promise.all(promises).then(res => {
+					// console.log("x===")
+					res.map(x => {
+		
+						Object.entries(x).map((item, index) => {
+							const strAccNum = "계좌_번호";
+							const accHolder = "예금주";
+							const num = accNum;
+						
+							if(item[1] == num.toString()){
+								let txt = item[0];
+								let newTxt = txt.replace(/계좌_번호/g, '');
+								console.log("accountInfo===", accountInfo)
+								let name = accountInfo + '  (' + x[accHolder+newTxt] + ')';
+								console.log("name==", name)
+								$("#transactionAccountInfo").val(name);
+								setTimeout(function(){
+									if(statusValue==1) {
+										$("#transactionDetailForm").submit();
+									} else {
+										$("#transactionDetailForm").submit();
+									}
+								})
+							}
+						});
+					});
+				});
+			}
+		});
+
+		// console.log("submit===", $(self))
+		// let accInfo = self.data("name") + '  ' + self.data("value") + '  (' + name + ')';
+	}
+
 </script>
 
 <form id="transactionDetailForm" class="" action="/spc/withdrawReqStatusDetail.do" method="post">
