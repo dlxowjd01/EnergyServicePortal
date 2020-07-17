@@ -200,11 +200,9 @@
 							let bankName = '';
 							let accNum = '';
 							if(v.accType.match("출금")){
-								console.log("v===", v);
-								bankName = v.bankName;
 								accNum = v.accNum;
 								accHolder = v.accHolder;
-
+								bankName = v.bankName;
 								sending = copyWithdrawList.replace(/\*withdraw_account\*/g, v.accType).replace(/\*bank_name\*/g, bankName).replace(/\*acc_num\*/g, accNum).replace(/\*acc_holder\*/g, accHolder);
 								withdrawList.append($(sending));
 							} else {
@@ -219,8 +217,8 @@
 						});
 					});
 				} else {
-					sending = copyWithdrawList.replace(/\*withdraw_account\*/g, '등록된 출금 계좌가 없습니다.').replace(/\*acc_num\*/g, '').replace(/\*acc_num\*/g, '').replace(/\*acc_holder\*/g, '');
-					receiving = copyReceiveList.replace(/\*to_acc_type\*/g, '등록된 입금 계좌가 없습니다.').replace(/\*to_bank_name\*/g, '').replace(/\*to_account_no\*/g, '').replace(/\*acc_holder\*/g, '');
+					sending = copyWithdrawList.replace(/\*withdraw_account\*/g, '등록된 출금 계좌가 없습니다.').replace(/\*bank_name\*/g, '등록 계좌 없음').replace(/\*acc_num\*/g,'').replace(/\*acc_num\*/g, '').replace(/\*acc_holder\*/g, '');
+					receiving = copyReceiveList.replace(/\*to_acc_type\*/g, '등록된 입금 계좌가 없습니다.').replace(/\*to_bank_name\*/g, '등록 계좌 없음').replace(/\*to_account_no\*/g, '').replace(/\*acc_holder\*/g, '');
 					withdrawList.append($(sending));
 					receiveList.append($(receiving));
 				}
@@ -308,7 +306,7 @@
 			jsonData.to_account = JSON.stringify(arr);
 			// console.log("json--", jsonData);
 			let newJson = JSON.stringify(jsonData);
-			let formArr = [ jsonData.spc_id, jsonData.withdraw_bank, jsonData.withdraw_day ];
+			let formArr = [ jsonData.spc_id, jsonData.withdraw_bank, jsonData.withdraw_day, arr ];
 			// console.log("arr===", arr)
 			// $.each(arr, function(index, element){
 			// 	console.log("element===", element.purpose == "")
@@ -330,6 +328,18 @@
 					} else {
 						warning.eq(index).addClass('hidden');
 					}
+				} else if( index == 3) {
+					console.log("index---", value);
+					arr.forEach((item, index) => {
+						if(item.purpose == "" || item.purpose == "undefined" ) {
+							warning.eq(2).removeClass('hidden');
+						} else if (item.amount  == 0) {
+							warning.eq(2).removeClass('hidden');
+						}  else if (item.to_account_no == "undefined" ) {
+							warning.eq(2).removeClass('hidden');
+						}
+					});
+
 				} else {
 					if(value == undefined ||  value == "선택" || value == "") {
 						warning.eq(2).removeClass('hidden');

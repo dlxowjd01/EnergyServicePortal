@@ -913,7 +913,7 @@
 								<td>*requestedBy*</td>
 								<td>*approvedBy*</td>
 								<td class='left' data-id="*transactionSpcId*" data-name="*transactionSpcName*" data-value="*statusVal*"><!--
-								--><div class="flex_start"><a href="javascript:void(0);" class="*linkAttr*" data-name="*withdrawBankName*" data-value="*withdrawAccountNum*" data-id="*transactionReqId*" onclick="goToDetail($(this))">*status*</a><!--
+								--><div class="flex_start"><button type="button" class="*linkAttr* clear-btn" data-name="*withdrawBankName*" data-value="*withdrawAccountNum*" data-id="*transactionReqId*" onclick="goToDetail($(this))">*status*</button><!--
 									--><a href="javascript:void(0);" onclick="deleteRow(this)" class='icon-delete *visibility*'></a><!--
 								--></div>
 								</td>
