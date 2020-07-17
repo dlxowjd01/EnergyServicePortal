@@ -99,6 +99,7 @@
 										resolve(JSON.parse(item.to_account))
 									}).then(res => {
 										res.map(x => {
+											console.log("x===", x)
 											let popObj = Object.assign({}, item);
 											delete(popObj.to_account);
 
@@ -109,6 +110,7 @@
 											let purpose = '';
 											let withdraw_day = '';
 											let accNum = '';
+											let bankName = '';
 											let amount = '';
 											let desc = '';
 											if(!isEmpty(purposeList[0].value[x.purpose])){
@@ -117,9 +119,14 @@
 												purpose = '-'
 											}
 											if(!isEmpty(popObj.withdraw_day)){
-												withdraw_day = popObj.withdraw_day.substring(0, 10) + ' ' + popObj.withdraw_day.substring(11, 19);
+												withdraw_day = popObj.withdraw_day.substring(0, 4) + '-' + popObj.withdraw_day.substring(4, 6) + '-' + popObj.withdraw_day.substring(6, 8);
 											} else {
 												withdraw_day = '-'
+											}
+											if(!isEmpty(x.to_account_bank)){
+												bankName = x.to_account_bank;
+											} else {
+												bankName = ''
 											}
 											if(!isEmpty(x.to_account_no)){
 												accNum = x.to_account_no;
@@ -141,7 +148,7 @@
 											str = tableCloned.replace(/\*withdrawDay\*/g, withdraw_day)
 												.replace(/\*purpose\*/g, purpose)
 												.replace(/\*amount\*/g, amount)
-												.replace(/\*toAccountNum\*/g, accNum)
+												.replace(/\*toAccBankName\*/g, bankName).replace(/\*toAccountNum\*/g, accNum)
 												.replace(/\*description\*/g, desc)
 											tableList.append($(str));
 										});
@@ -174,6 +181,7 @@
 									];
 									let purpose = '';
 									let withdraw_day = '';
+									let bankName = '';
 									let accNum = '';
 									let amount = '';
 									let desc = '';
@@ -183,9 +191,14 @@
 										purpose = '-'
 									}
 									if(!isEmpty(popObj.withdraw_day)){
-										withdraw_day = popObj.withdraw_day.substring(0, 10) + ' ' + popObj.withdraw_day.substring(11, 19);
+										withdraw_day = popObj.withdraw_day.substring(0, 4) + '-' + popObj.withdraw_day.substring(4, 6) + '-' + popObj.withdraw_day.substring(6, 8);
 									} else {
 										withdraw_day = '-'
+									}
+									if(!isEmpty(x.to_account_bank)){
+										bankName = x.to_account_bank;
+									} else {
+										bankName = ''
 									}
 									if(!isEmpty(x.to_account_no)){
 										accNum = x.to_account_no;
@@ -207,7 +220,7 @@
 									str = tableCloned.replace(/\*withdrawDay\*/g, withdraw_day)
 										.replace(/\*purpose\*/g, purpose)
 										.replace(/\*amount\*/g, amount)
-										.replace(/\*toAccountNum\*/g, accNum)
+										.replace(/\*toAccBankName\*/g, bankName).replace(/\*toAccountNum\*/g, accNum)
 										.replace(/\*description\*/g, desc)
 									tableList.append($(str));
 								});
@@ -469,7 +482,7 @@
 						<tr>
 							<th>출금일자</th>
 							<th>구분</th>
-							<th>요청 금액</th>
+							<th class="right">요청 금액</th>
 							<th>계좌번호</th>
 							<th>비고</th>
 						</tr>
@@ -480,8 +493,8 @@
 							<tr>
 								<td>*withdrawDay*</td>
 								<td>*purpose*</td>
-								<td>*amount*</td>
-								<td>*toAccountNum*</td>
+								<td class="right">*amount*</td>
+								<td>*toAccBankName*  *toAccountNum*</td>
 								<td>*description*</td>
 							</tr>
 						</template>
@@ -490,7 +503,7 @@
 						<tr>
 							<td>합계</td>
 							<td></td>
-							<td id="total"></td>
+							<td id="total" class="right"></td>
 							<td colspan="2"></td>
 						</tr>
 					</tfoot>

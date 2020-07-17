@@ -8506,6 +8506,11 @@ div.di_wrap dl .link a {
 	padding: 0 20px;
 }
 
+.his_tbl th.right,
+.his_tbl td.right {
+	text-align: right;
+}
+
 .his_tbl thead tr th:first-child {
 	border-radius: 3px 0 0 3px;
 }
@@ -11671,6 +11676,11 @@ th .btn_align {
 .sort_table.table-footer {
 	border-collapse: collapse;
 	border: 0;
+}
+
+.sort_table.table-footer th.right,
+.sort_table.table-footer td.right {
+	text-align: right;
 }
 
 .spc-transaction .table-footer .tx_inp_type input.right {
