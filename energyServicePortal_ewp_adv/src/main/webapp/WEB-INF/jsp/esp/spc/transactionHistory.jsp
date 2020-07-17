@@ -396,7 +396,7 @@
 							.replace(/\*withdrawBankName\*/g, withdraw_bank_name).replace(/\*withdrawAccountNum\*/g, withdraw_acc_num)
 							.replace(/\*transactionType\*/g, transaction_type)
 							.replace(/\*purpose\*/g, purpose)
-							.replace(/\*accountType\*/g, account_type_list[res.length])
+							// .replace(/\*accountType\*/g, account_type_list[res.length])
 							.replace(/\*amount\*/g, amount)
 							.replace(/\*updatedAt\*/g, updated_at)
 							.replace(/\*requestedBy\*/g, requested_by)
@@ -861,15 +861,15 @@
 				<table class='sort_table table-footer transaction-table'>
 					<colgroup>
 						<col style='width:5%'>
-						<col style='width:8%'>
-						<col style='width:9%'>
-						<col style='width:12%'>
 						<col style='width:10%'>
 						<col style='width:10%'>
-						<col style='width:16%'>
+						<col style='width:15%'>
+						<!-- <col style='width:10%'> -->
 						<col style='width:10%'>
-						<col style='width:12%'>
-						<col style='width:8%'>
+						<col style='width:15%'>
+						<col style='width:10%'>
+						<col style='width:15%'>
+						<col style='width:10%'>
 						<col>
 					</colgroup>
 					<thead>
@@ -879,7 +879,7 @@
 							<th><button class='btn_align down'>입출금 일자</button></th>
 							<th><button class='btn_align down'>입출금 구분</button></th>
 							<th><button class='btn_align down'>용도 구분</button></th>
-							<th><button class='btn_align down'>계좌 구분</button></th>
+							<!-- <th><button class='btn_align down'>계좌 구분</button></th> -->
 							<th class="right pr-16"><button class='btn_align down'>금액</button></th>
 							<th><button class='btn_align down'>최종 업데이트</button></th>
 							<th>요청자</th>
@@ -895,14 +895,14 @@
 								<td>*withdrawDay*</td>
 								<td>*transactionType*</td>
 								<td>*purpose*</td>
-								<td>*accountType*</td>
+								<!-- <td>*accountType*</td> -->
 								<td class="right">*amount*</td>
 								<td>*updatedAt*</td>
 								<td>*requestedBy*</td>
 								<td>*approvedBy*</td>
 								<td class='left' data-id="*transactionSpcId*" data-name="*transactionSpcName*" data-value="*statusVal*"><!--
 								--><div class="flex_start"><button type="button" class="*linkAttr* clear-btn" data-name="*withdrawBankName*" data-value="*withdrawAccountNum*" data-id="*transactionReqId*" onclick="goToDetail($(this))">*status*</button><!--
-									--><button type="button" onclick="deleteRow(this)" class='icon-delete *visibility* clear-btn'></button><!--
+									--><a href="javascript:void(0)" onclick="deleteRow(this)" class='icon-delete *visibility*'></a><!--
 								--></div>
 								</td>
 							</tr>
@@ -913,7 +913,7 @@
 							<tr>
 								<td></td>
 								<td>합계</td>
-								<td colspan='3'></td>
+								<td colspan='2'></td>
 								<td class="right">*total* 원</td>
 								<td colspan='4'></td>
 							</tr>
