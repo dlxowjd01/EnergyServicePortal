@@ -354,30 +354,30 @@
 			}
 		});
 
-		function uploadFile(action, file, filedName){
-			let formData = new FormData($('#fileUploadForm')[0]);
-			formData.append(filedName, file);
+		// function uploadFile(action, file, filedName){
+		// 	let formData = new FormData($('#fileUploadForm')[0]);
+		// 	formData.append(filedName, file);
 
-			let option= {
-				type: action,
-				enctype: 'multipart/form-data',
-				url: apiHost + '/files/upload?oid=' + oid,
-				processData: false,  // Important!
-				contentType: false,
-				cache: false,
-				timeout: 600000,
-				async: false,
-				data: formData,
-			}
+		// 	let option= {
+		// 		type: action,
+		// 		enctype: 'multipart/form-data',
+		// 		url: apiHost + '/files/upload?oid=' + oid,
+		// 		processData: false,  // Important!
+		// 		contentType: false,
+		// 		cache: false,
+		// 		timeout: 600000,
+		// 		async: false,
+		// 		data: formData,
+		// 	}
 
-			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				console.log("success===", json)
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.log("jqXHR===", jqXHR)
-				alert('처리 중 오류가 발생했습니다.');
-				return false;
-			});
-		}
+		// 	$.ajax(option).done(function (json, textStatus, jqXHR) {
+		// 		console.log("success===", json)
+		// 	}).fail(function (jqXHR, textStatus, errorThrown) {
+		// 		console.log("jqXHR===", jqXHR)
+		// 		alert('처리 중 오류가 발생했습니다.');
+		// 		return false;
+		// 	});
+		// }
 
 		// amount number trim event
 		function calcTotal() {
