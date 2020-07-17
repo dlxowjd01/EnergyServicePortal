@@ -1198,10 +1198,10 @@
 					<input type="checkbox" id="chk_op03" name="type" value="3" checked>
 					<label for="chk_op03">출금 - 승인 중</label>
 				</div>
-				<div class="chk_type c4">
-					<input type="checkbox" id="chk_op04" name="type" value="4" checked>
-					<label for="chk_op04">입금</label>
-				</div>
+<%--				<div class="chk_type c4">--%>
+<%--					<input type="checkbox" id="chk_op04" name="type" value="4" checked>--%>
+<%--					<label for="chk_op04">입금</label>--%>
+<%--				</div>--%>
 
 				<div class="flex_wrapper mt40">
 					<h2 class="ntit">주요 일정</h2>

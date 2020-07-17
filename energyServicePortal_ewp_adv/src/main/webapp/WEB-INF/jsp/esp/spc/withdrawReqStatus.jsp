@@ -478,7 +478,10 @@
 
 		function comparer(index) {
 			return function(a, b) {
-				var valA = getCellValue(a, index), valB = getCellValue(b, index)
+				var valA = getCellValue(a, index), valB = getCellValue(b, index);
+				if (index == 3) {
+					valA = valA.replace(/[^0-9]/g, ''), valB = valB.replace(/[^0-9]/g, '')
+				}
 				return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
 			}
 		}
@@ -491,19 +494,21 @@
 			$("#tableBody").find('input:checkbox').prop('checked', this.checked);
 		});
 
-		$('.sort_table th button').click(function(){
-			var table = $(this).parents("table");
-			var rows = tableBody.find('tr').toArray().sort(comparer($(this).index()))
-			this.asc = !this.asc;
-			if (!this.asc){
-				rows = rows.reverse();
-				$(this).addClass('down').removeClass('up');
-			} else {
-				$(this).removeClass('down').addClass('up');
-			}
-			for (var i = 0, rowLength = rows.length; i<rowLength; i++){
-				// TO DO !!!!! sorting json data
-				tableBody.append(rows[i])
+		$('.sort_table th').click(function(){
+			if ($(this).find('button').length > 0) {
+				var table = $(this).parents("table");
+				var rows = tableBody.find('tr').toArray().sort(comparer($('.sort_table th').index(this)));
+				this.asc = !this.asc;
+				if (!this.asc) {
+					rows = rows.reverse();
+					$(this).addClass('down').removeClass('up');
+				} else {
+					$(this).removeClass('down').addClass('up');
+				}
+				for (var i = 0, rowLength = rows.length; i < rowLength; i++) {
+					// TO DO !!!!! sorting json data
+					tableBody.append(rows[i])
+				}
 			}
 		});
 	});
