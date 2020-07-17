@@ -90,7 +90,13 @@
 			let selectedSpc = [];
 
 			spcOpts.each(function(){
-				selectedSpc.push($(this).data("value"));
+				if($(this).is("#전체")){
+					$('#spcList').find("input").each(function(){
+						selectedSpc.push($(this).data("value"));
+					});
+				} else {
+					selectedSpc.push($(this).data("value"));
+				}
 			});
 
 			let selectedPurpose= [];
