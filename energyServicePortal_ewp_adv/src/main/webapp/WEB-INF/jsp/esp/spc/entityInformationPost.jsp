@@ -28,6 +28,10 @@
 			}
 		});
 
+		$('.account-type').each(function(){
+			$(this).next().find("li[data-default!='select']").addClass("hidden");
+		});
+
 		setInitList('genList');
 
 		initRow('addList_registered_seal');
@@ -152,6 +156,7 @@
 	}
 
 	function setDropDownValue(id, data) {
+		// console.log("id===", id, "data===0", data)
 		var $selector = $("#" + id);
 		$selector.find("li").each(function () {
 			if ($(this).text() == data) {
@@ -664,6 +669,22 @@
 			getgenIdData();
 		}
 	}
+
+	function updateAccList (btnList, accTypeList){
+		$('#' + btnList).find('li').on('click', function(){
+			let item = $('#' + accTypeList).find('li[data-group]');
+			let accBtn = $('#' + accTypeList).prev('.dropdown-toggle');
+			console.log("clicking===", accBtn)
+			accBtn.html('선택<span class="caret"></span>');
+			item.addClass("hidden");
+			$('#' + accTypeList).find("li[data-default]").hide();
+			if($(this).data('value')=='입금'){
+				item.not('[data-group="출금"]').removeClass("hidden");
+			} else {
+				item.not('[data-group="입금"]').removeClass("hidden");
+			}
+		});
+	}
 </script>
 
 <!-- Modal (처리 중 모달)-->
@@ -716,7 +737,7 @@
 										SPC<span class="caret"></span>
 									</button>
 									<ul id="spcList" class="dropdown-menu" role="menu">
-										<li data-value="[spc_id]"><a href="javascript:void(0);">[name]</a></li>
+										<li data-value="[spc_id]"><a href="#">[name]</a></li>
 									</ul>
 								</div>
 
@@ -839,10 +860,10 @@
 										</button>
 										<ul class="dropdown-menu" role="menu">
 											<li data-value="사용_인감">
-												<a href="javascript:void(0);">사용 인감</a>
+												<a href="#">사용 인감</a>
 											</li>
 											<li data-value="법인_인감">
-												<a href="javascript:void(0);">법인 인감</a>
+												<a href="#">법인 인감</a>
 											</li>
 										</ul>
 									</div>
@@ -888,7 +909,7 @@
 								</button>
 								<ul id="genList" class="dropdown-menu" role="menu">
 									<li data-value="[sid]">
-										<a href="javascript:void(0);">[name]</a>
+										<a href="#">[name]</a>
 									</li>
 								</ul>
 							</div>
@@ -910,10 +931,10 @@
 								</button>
 								<ul id="countryList" class="dropdown-menu" role="menu">
 									<li data-value="대한민국">
-										<a href="javascript:void(0);">대한민국</a>
+										<a href="#">대한민국</a>
 									</li>
 									<li data-value="일본">
-										<a href="javascript:void(0);">일본</a>
+										<a href="#">일본</a>
 									</li>
 								</ul>
 							</div>
@@ -923,7 +944,7 @@
 								</button>
 								<ul id="sidoList" class="dropdown-menu" role="menu">
 									<li data-value="[value]">
-										<a href="javascript:void(0);">[value]</a>
+										<a href="#">[value]</a>
 									</li>
 								</ul>
 							</div>
@@ -1025,19 +1046,19 @@
 									</button>
 									<ul class="dropdown-menu chk_type" role="menu">
 										<li>
-											<a href="javascript:void(0);" tabindex="-1">
+											<a href="#" tabindex="-1">
 												<input type="checkbox" id="등기이사_소속0_[index]" value="사내_이사" name="등기이사_소속_[index]">
 												<label for="등기이사_소속0_[index]">사내 이사</label>
 											</a>
 										</li>
 										<li>
-											<a href="javascript:void(0);" tabindex="-1">
+											<a href="#" tabindex="-1">
 												<input type="checkbox" id="등기이사_소속1_[index]" value="사외_이사" name="등기이사_소속_[index]">
 												<label for="등기이사_소속1_[index]">사외 이사</label>
 											</a>
 										</li>
 										<li>
-											<a href="javascript:void(0);" tabindex="-1">
+											<a href="#" tabindex="-1">
 												<input type="checkbox" id="등기이사_소속2_[index]" value="대표_이사" name="등기이사_소속_[index]">
 												<label for="등기이사_소속2_[index]">대표 이사</label>
 											</a>
@@ -1199,37 +1220,37 @@
 								</button>
 								<ul class="dropdown-menu chk_type" role="menu">
 									<li>
-										<a href="javascript:void(0);" tabindex="-1">
+										<a href="#" tabindex="-1">
 											<input type="checkbox" id="관리_계약_구분_전체" value="전체" name="관리_계약_구분">
 											<label for="관리_계약_구분_전체">전체</label>
 										</a>
 									</li>
 									<li>
-										<a href="javascript:void(0);" tabindex="-1">
+										<a href="#" tabindex="-1">
 											<input type="checkbox" id="관리_계약_구분_종합" value="종합" name="관리_계약_구분">
 											<label for="관리_계약_구분_종합">종합</label>
 										</a>
 									</li>
 									<li>
-										<a href="javascript:void(0);" tabindex="-1">
+										<a href="#" tabindex="-1">
 											<input type="checkbox" id="관리_계약_구분_일반관리" value="일반관리" name="관리_계약_구분">
 											<label for="관리_계약_구분_일반관리">일반관리</label>
 										</a>
 									</li>
 									<li>
-										<a href="javascript:void(0);" tabindex="-1">
+										<a href="#" tabindex="-1">
 											<input type="checkbox" id="관리_계약_구분_사무수탁" value="사무수탁" name="관리_계약_구분">
 											<label for="관리_계약_구분_사무수탁">사무수탁</label>
 										</a>
 									</li>
 									<li>
-										<a href="javascript:void(0);" tabindex="-1">
+										<a href="#" tabindex="-1">
 											<input type="checkbox" id="관리_계약_구분_보험" value="보험" name="관리_계약_구분">
 											<label for="관리_계약_구분_보험">보험</label>
 										</a>
 									</li>
 									<li>
-										<a href="javascript:void(0);" tabindex="-1">
+										<a href="#" tabindex="-1">
 											<input type="checkbox" id="관리_계약_구분_안전관리자" value="안전관리자" name="관리_계약_구분">
 											<label for="관리_계약_구분_안전관리자">안전관리자</label>
 										</a>
@@ -1398,43 +1419,65 @@
 							</th>
 							<td>
 								<div class="fixed_height group_type short">
-									<div class="dropdown placeholder edit" id="입출금_구분[index]">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+									<div class="account-type dropdown placeholder edit" id="입출금_구분[index]">
+										<button onclick="updateAccList('계좌구분[index]', '계좌구분리스트[index]')" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 											입출금 구분<span class="caret"></span>
 										</button>
-										<ul class="dropdown-menu" role="menu">
-											<li data-value="입금"><a href="javascript:void(0);">입금</a></li>
-											<li data-value="출금"><a href="javascript:void(0);">출금</a></li>
+										<ul id="계좌구분[index]" class="dropdown-menu" role="menu">
+											<li data-value="입금"><a href="#">입금</a></li>
+											<li data-value="출금"><a href="#">출금</a></li>
 										</ul>
 									</div>
 									<div class="dropdown placeholder edit" id="계좌구분[index]">
-										<button class="btn btn-primary dropdown-toggle accdropdown" type="button" data-toggle="dropdown">
-											계좌구분<span class="caret"></span>
-										</button>
-										<ul class="dropdown-menu" role="menu">
-											<li data-group="출금" data-value="관리운영비"><a href="javascript:void(0);">관리 운영비</a></li>
-											<li data-group="출금" data-value="사무수탁비"><a href="javascript:void(0);">사무 수탁비</a></li>
-											<li data-group="출금" data-value="부채상환"><a href="javascript:void(0);">부채 상환</a></li>
-											<li data-group="출금" data-value="대수선비"><a href="javascript:void(0);">대수선비</a></li>
-											<li data-group="출금" data-value="배당금적림"><a href="javascript:void(0);">배당금 적림</a></li>
-											<li data-group="출금" data-value="일반지출"><a href="javascript:void(0);">일반 지출</a></li>
-											<li data-group="입출금" data-value="DSRA적립"><a href="javascript:void(0);">DSRA 적립</a></li>
-											<li data-group="입출금" data-value="기타"><a href="javascript:void(0);">기타</a></li>
-											<li data-group="입금" data-value="REC수익"><a href="javascript:void(0);">REC 수익</a></li>
-											<li data-group="입금" data-value="SMP수익"><a href="javascript:void(0);">SMP 수익</a></li>
-											<li data-group="입금" data-value="유보계좌"><a href="javascript:void(0);">유보계좌</a></li>
-											<li data-group="입출금" data-value="운영계좌"><a href="javascript:void(0);">운영계좌</a></li>
-										</ul>
-									</div>
+										<button class="btn btn-primary dropdown-toggle accdropdown" type="button" data-toggle="dropdown">계좌구분<span class="caret"></span>
+										</button><!--
+									--><ul id="계좌구분리스트[index]" class="dropdown-menu" role="menu"><!--
+										--><li data-default="select" data-value="select"><a href="#">입출금 구분을 선택해 주세요.</a></li><!--
+										--><li data-group="입금" data-value="관리운영비"><a href="#">관리 운영비</a></li><!--
+										--><li data-group="입금" data-value="사무수탁비"><a href="#">사무 수탁비</a></li><!--
+										--><li data-group="입금" data-value="부채상환"><a href="#">부채 상환</a></li><!--
+										--><li data-group="입금" data-value="대수선비"><a href="#">대수선비</a></li><!--
+										--><li data-group="입금" data-value="배당금적림"><a href="#">배당금 적림</a></li><!--
+										--><li data-group="입금" data-value="일반지출"><a href="#">일반 지출</a></li><!--
+										--><li data-group="입금" data-value="DSRA적립"><a href="#">DSRA 적립</a></li><!--
+										--><li data-group="입금" data-value="운영계좌"><a href="#">운영계좌</a></li><!--
+										--><li data-group="출금" data-value="기타"><a href="#">기타</a></li><!--
+
+										--><li data-group="출금" data-value="REC수익"><a href="#">REC 수익</a></li><!--
+										--><li data-group="출금" data-value="SMP수익"><a href="#">SMP 수익</a></li><!--
+										--><li data-group="출금" data-value="DSRA적립"><a href="#">DSRA 적립</a></li><!--
+										--><li data-group="출금" data-value="운영계좌"><a href="#">운영계좌</a></li><!--
+										--><li data-group="출금" data-value="유보계좌"><a href="#">유보계좌</a></li><!--
+										--><li data-group="출금" data-value="기타"><a href="#">기타</a></li><!--
+									--></ul><!--
+								--></div>
 									<div class="dropdown placeholder edit" id="은행_리스트[index]">
 										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 											은행 리스트<span class="caret"></span>
-										</button>
-										<ul class="dropdown-menu" role="menu">
-											<li data-value="신한"><a href="javascript:void(0);">신한</a></li>
-											<li data-value="기업"><a href="javascript:void(0);">기업</a></li>
-										</ul>
-									</div>
+										</button><!--
+									--><ul class="dropdown-menu" role="menu"><!--
+										--><li data-id="0020" data-value="우리"><a href="#">우리</a></li><!--
+										--><li data-id="0004" data-value="국민"><a href="#">국민</a></li><!--
+										--><li data-id="0003" data-value="기업"><a href="#">기업</a></li><!--
+										--><li data-id="0011" data-value="농협"><a href="#">농협</a></li><!--
+										--><li data-id="0088" data-value="신한"><a href="#">신한</a></li><!--
+										--><li data-id="0081" data-value="KEB하나"><a href="#">KEB하나</a></li><!--
+										--><li data-id="0027" data-value="씨티"><a href="#">한국씨티</a></li><!--
+										--><li data-id="0023" data-value="SC"><a href="#">SC제일</a></li><!--
+										--><li data-id="0039" data-value="경남"><a href="#">경남</a></li><!--
+										--><li data-id="0034" data-value="광주"><a href="#">광주</a></li><!--
+										--><li data-id="0031" data-value="대구"><a href="#">대구</a></li><!--
+										--><li data-id="0032" data-value="부산"><a href="#">부산</a></li><!--
+										--><li data-id="0002" data-value="산업"><a href="#">산업</a></li><!--
+										--><li data-id="0045" data-value="새마을금고"><a href="#">새마을금고</a></li><!--
+										--><li data-id="0007" data-value="수협"><a href="#">수협</a></li><!--
+										--><li data-id="0048" data-value="신협"><a href="#">신협</a></li><!--
+										--><li data-id="0071" data-value="우체국"><a href="#">우체국</a></li><!--
+										--><li data-id="0037" data-value="전북"><a href="#">전북</a></li><!--
+										--><li data-id="0035" data-value="제주"><a href="#">제주</a></li><!--
+										--><li data-id="0089" data-value="K뱅크"><a href="#">K뱅크</a></li><!--
+									--></ul><!--
+								--></div>
 								</div>
 								<div class="fixed_height">
 									<div class="tx_inp_type edit">
@@ -1478,10 +1521,10 @@
 										</button>
 										<ul class="dropdown-menu" role="menu">
 											<li data-value="은행용">
-												<a href="javascript:void(0);">은행용</a>
+												<a href="#">은행용</a>
 											</li>
 											<li data-value="세금_계산서용">
-												<a href="javascript:void(0);">세금 계산서용</a>
+												<a href="#">세금 계산서용</a>
 											</li>
 										</ul>
 									</div>
@@ -1567,9 +1610,9 @@
 											선택<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" role="menu">
-											<li data-value="고정가"><a href="javascript:void(0);">고정가</a></li>
-											<li data-value="월_가중_평균"><a href="javascript:void(0);">월 가중 평균</a></li>
-											<li data-value="실시간"><a href="javascript:void(0);">실시간</a></li>
+											<li data-value="고정가"><a href="#">고정가</a></li>
+											<li data-value="월_가중_평균"><a href="#">월 가중 평균</a></li>
+											<li data-value="실시간"><a href="#">실시간</a></li>
 										</ul>
 									</div>
 									<div class="tx_inp_type edit unit t1">
@@ -1584,9 +1627,9 @@
 											고정가<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" role="menu">
-											<li data-value="고정가"><a href="javascript:void(0);">고정가</a></li>
-											<li data-value="SMP+REC"><a href="javascript:void(0);">SMP + REC</a></li>
-											<li data-value="월별_추후_산정"><a href="javascript:void(0);">월별 추후 산정</a></li>
+											<li data-value="고정가"><a href="#">고정가</a></li>
+											<li data-value="SMP+REC"><a href="#">SMP + REC</a></li>
+											<li data-value="월별_추후_산정"><a href="#">월별 추후 산정</a></li>
 										</ul>
 									</div>
 									<div class="tx_inp_type edit unit t1">
@@ -2121,9 +2164,9 @@
 							<div class="dropdown placeholder edit" id="기준_단가">
 								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">기준 단가 선택<span class="caret"></span></button>
 								<ul class="dropdown-menu" role="menu">
-									<li data-value=""><a href="javascript:void(0);">기준 단가 선택</a></li>
-									<li data-value="FIT 단가"><a href="javascript:void(0);">FIT 단가</a></li>
-									<li data-value="시장정산실적"><a href="javascript:void(0);">시장정산실적</a></li>
+									<li data-value=""><a href="#">기준 단가 선택</a></li>
+									<li data-value="FIT 단가"><a href="#">FIT 단가</a></li>
+									<li data-value="시장정산실적"><a href="#">시장정산실적</a></li>
 								</ul>
 							</div>
 							<div class="tx_inp_type edit unit t2">

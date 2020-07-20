@@ -38,7 +38,7 @@
 		function getDataList(page) {
 			page == undefined ? page = 1 : page = page;
 			var sortList = [];
-			var totalPage = 0;
+			// var totalPage = 0;
 			let action = 'get';
 			let syncOpt = true;
 			let option= {
@@ -51,7 +51,7 @@
 				},
 				async: syncOpt
 			}
-			console.log("spc===", spcId)
+			// console.log("spc===", spcId)
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				tableList.empty();
 				if (json.data.length > 0) {
@@ -231,7 +231,7 @@
 				} else {
 					return false;
 				}
-				totalPage = Math.ceil(sortList.length/pagePerData);
+				// totalPage = Math.ceil(sortList.length/pagePerData);
 				
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.log("error===", jqXHR, "text000", textStatus )
