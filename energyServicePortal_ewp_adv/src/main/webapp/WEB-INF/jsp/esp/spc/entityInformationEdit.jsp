@@ -723,26 +723,6 @@
 		});
 	}
 
-	function updateAccList (btnList, accTypeList){
-		// console.log("updateAccList===", $('#' + btnList).find('li'))
-		setTimeout(function(){
-			let opt = $('#' + btnList).find('li');
-			// console.log("opt====", opt)
-			opt.on('click', function(){
-				console.log("opt clicking---====", opt)
-				let item = $('#' + accTypeList).find('li[data-group]');
-				item.addClass("hidden")
-				$('#' + accTypeList).find("li[data-default]").hide();
-				if($(this).data('value')=='입금'){
-					item.not('[data-group="출금"]').removeClass("hidden");
-				} else {
-					item.not('[data-group="입금"]').removeClass("hidden");
-				}
-			});
-		}, 300);
-
-	}
-
 </script>
 
 <!-- Modal (처리 중 모달)-->
