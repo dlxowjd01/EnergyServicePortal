@@ -1438,11 +1438,11 @@
 											<li data-group="출금" data-value="대수선비"><a href="javascript:void(0);">대수선비</a></li>
 											<li data-group="출금" data-value="일반지출"><a href="javascript:void(0);">일반 지출</a></li>
 											<li data-group="입출금" data-value="운영계좌"><a href="javascript:void(0);">운영계좌</a></li>
+											<li data-group="입금" data-value="유보계좌"><a href="javascript:void(0);">유보계좌</a></li>
 											<li data-group="출금" data-value="배당금적림"><a href="javascript:void(0);">배당금 적림</a></li>
 											<li data-group="입출금" data-value="DSRA적립"><a href="javascript:void(0);">DSRA 적립</a></li>
 											<li data-group="입금" data-value="REC수익"><a href="javascript:void(0);">REC 수익</a></li>
 											<li data-group="입금" data-value="SMP수익"><a href="javascript:void(0);">SMP 수익</a></li>
-											<li data-group="입금" data-value="유보계좌"><a href="javascript:void(0);">유보계좌</a></li>
 											<li data-group="입출금" data-value="기타"><a href="javascript:void(0);">기타</a></li>
 										</ul>
 									</div>
