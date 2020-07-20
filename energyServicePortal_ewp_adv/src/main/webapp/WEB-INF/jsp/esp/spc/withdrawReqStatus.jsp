@@ -582,7 +582,7 @@
 <div class="row header-wrapper">
 	<div class="col-12">
 		<h1 class="page-header">출금 요청서 목록</h1>
-		<div class="time fr"><span>CURRENT TIME</span><em class="currTime">${nowTime}</em><span>DATA BASE TIME</span><em class="dbTime"></em></div>
+		<div class="time fr"><span>CURRENT TIME</span><em class="currTime">${nowTime}</em></div>
 	</div>
 </div>
 
