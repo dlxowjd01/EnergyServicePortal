@@ -12,6 +12,19 @@
 	];
 	let templateList = '', cnt = 0, sectionId = [];
 
+	function updateAccList (btnList, accTypeList){
+		$('#' + btnList).find('li').on('click', function(){
+			let item = $('#' + accTypeList).find('li[data-group]');
+			item.addClass("hidden")
+			$('#' + accTypeList).find("li[data-default]").hide();
+			if($(this).data('value')=='입금'){
+				item.not('[data-group="출금"]').removeClass("hidden");
+			} else {
+				item.not('[data-group="입금"]').removeClass("hidden");
+			}
+		});
+	}
+
 	$(function () {
 		initProcess();
 		cloneHtml();
@@ -26,6 +39,10 @@
 			} else {
 
 			}
+		});
+
+		$('.account-type').each(function(){
+			$(this).next().find("li[data-default!='select']").addClass("hidden");
 		});
 
 		setInitList('genList');
@@ -152,6 +169,7 @@
 	}
 
 	function setDropDownValue(id, data) {
+		// console.log("id===", id, "data===0", data)
 		var $selector = $("#" + id);
 		$selector.find("li").each(function () {
 			if ($(this).text() == data) {
@@ -664,6 +682,7 @@
 			getgenIdData();
 		}
 	}
+
 </script>
 
 <!-- Modal (처리 중 모달)-->
@@ -1398,32 +1417,33 @@
 							</th>
 							<td>
 								<div class="fixed_height group_type short">
-									<div class="dropdown placeholder edit" id="입출금_구분[index]">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+									<div class="account-type dropdown placeholder edit" id="입출금_구분[index]">
+										<button onclick="updateAccList('계좌구분[index]', '계좌구분리스트[index]')" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 											입출금 구분<span class="caret"></span>
 										</button>
-										<ul class="dropdown-menu" role="menu">
-											<li data-value="입금"><a href="javascript:void(0);">입금</a></li>
-											<li data-value="출금"><a href="javascript:void(0);">출금</a></li>
+										<ul id="계좌구분[index]" class="dropdown-menu" role="menu">
+											<li data-value="입금"><a href="#">입금</a></li>
+											<li data-value="출금"><a href="#">출금</a></li>
 										</ul>
 									</div>
 									<div class="dropdown placeholder edit" id="계좌구분[index]">
-										<button class="btn btn-primary dropdown-toggle accdropdown" type="button" data-toggle="dropdown">
+										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 											계좌구분<span class="caret"></span>
 										</button>
-										<ul class="dropdown-menu" role="menu">
+										<ul id="계좌구분리스트[index]" class="dropdown-menu" role="menu">
+											<li data-default="select" data-value="select"><a href="javascript:void(0);">입출금 구분을 선택해 주세요.</a></li>
 											<li data-group="출금" data-value="관리운영비"><a href="javascript:void(0);">관리 운영비</a></li>
 											<li data-group="출금" data-value="사무수탁비"><a href="javascript:void(0);">사무 수탁비</a></li>
 											<li data-group="출금" data-value="부채상환"><a href="javascript:void(0);">부채 상환</a></li>
 											<li data-group="출금" data-value="대수선비"><a href="javascript:void(0);">대수선비</a></li>
-											<li data-group="출금" data-value="배당금적림"><a href="javascript:void(0);">배당금 적림</a></li>
 											<li data-group="출금" data-value="일반지출"><a href="javascript:void(0);">일반 지출</a></li>
+											<li data-group="입출금" data-value="운영계좌"><a href="javascript:void(0);">운영계좌</a></li>
+											<li data-group="출금" data-value="배당금적림"><a href="javascript:void(0);">배당금 적림</a></li>
 											<li data-group="입출금" data-value="DSRA적립"><a href="javascript:void(0);">DSRA 적립</a></li>
-											<li data-group="입출금" data-value="기타"><a href="javascript:void(0);">기타</a></li>
 											<li data-group="입금" data-value="REC수익"><a href="javascript:void(0);">REC 수익</a></li>
 											<li data-group="입금" data-value="SMP수익"><a href="javascript:void(0);">SMP 수익</a></li>
 											<li data-group="입금" data-value="유보계좌"><a href="javascript:void(0);">유보계좌</a></li>
-											<li data-group="입출금" data-value="운영계좌"><a href="javascript:void(0);">운영계좌</a></li>
+											<li data-group="입출금" data-value="기타"><a href="javascript:void(0);">기타</a></li>
 										</ul>
 									</div>
 									<div class="dropdown placeholder edit" id="은행_리스트[index]">
