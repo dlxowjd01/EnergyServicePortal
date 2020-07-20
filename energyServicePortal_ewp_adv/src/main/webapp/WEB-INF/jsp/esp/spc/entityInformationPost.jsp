@@ -1451,8 +1451,26 @@
 											은행 리스트<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" role="menu">
-											<li data-value="신한"><a href="javascript:void(0);">신한</a></li>
-											<li data-value="기업"><a href="javascript:void(0);">기업</a></li>
+											<li data-id="0020" data-value="우리"><a href="javascript:void(0);">우리</a></li>
+											<li data-id="0004" data-value="국민"><a href="javascript:void(0);">국민</a></li>
+											<li data-id="0003" data-value="기업"><a href="javascript:void(0);">기업</a></li>
+											<li data-id="0011" data-value="농협"><a href="javascript:void(0);">농협</a></li>
+											<li data-id="0088" data-value="신한"><a href="javascript:void(0);">신한</a></li>
+											<li data-id="0081" data-value="KEB하나"><a href="javascript:void(0);">KEB하나</a></li>
+											<li data-id="0027" data-value="씨티"><a href="javascript:void(0);">한국씨티</a></li>
+											<li data-id="0023" data-value="SC"><a href="javascript:void(0);">SC제일</a></li>
+											<li data-id="0039" data-value="경남"><a href="javascript:void(0);">경남</a></li>
+											<li data-id="0034" data-value="광주"><a href="javascript:void(0);">광주</a></li>
+											<li data-id="0031" data-value="대구"><a href="javascript:void(0);">대구</a></li>
+											<li data-id="0032" data-value="부산"><a href="javascript:void(0);">부산</a></li>
+											<li data-id="0002" data-value="산업"><a href="javascript:void(0);">산업</a></li>
+											<li data-id="0045" data-value="새마을금고"><a href="javascript:void(0);">새마을금고</a></li>
+											<li data-id="0007" data-value="수협"><a href="javascript:void(0);">수협</a></li>
+											<li data-id="0048" data-value="신협"><a href="javascript:void(0);">신협</a></li>
+											<li data-id="0071" data-value="우체국"><a href="javascript:void(0);">우체국</a></li>
+											<li data-id="0037" data-value="전북"><a href="javascript:void(0);">전북</a></li>
+											<li data-id="0035" data-value="제주"><a href="javascript:void(0);">제주</a></li>
+											<li data-id="0089" data-value="K뱅크"><a href="javascript:void(0);">K뱅크</a></li>
 										</ul>
 									</div>
 								</div>
