@@ -373,6 +373,8 @@
 						afterDatePick($(this).attr('name'));
 					});
 
+					afterDatePick('인출_가능_기한');
+
 					sumUnpaid();
 				} else {
 					alert('등록된 데이터가 없습니다.');
@@ -661,7 +663,12 @@
 		$(document).find('.datepicker').removeClass('hasDatepicker').datepicker({
 			showOn: "both",
 			buttonImageOnly: true,
-			dateFormat: 'yy-mm-dd'
+			dateFormat: 'yy-mm-dd',
+			onClose: function (selectedDate) {
+				if (typeof afterDatePick == 'function') {
+					afterDatePick($(this).attr('name'));
+				}
+			}
 		});
 	}
 
@@ -705,6 +712,19 @@
 				$('#' + thisName).parent().next('span').html(diff + '일 남음');
 				$('#보험_만기일_차이' + idx).val(diff + '일 남음');
 			}
+		}  else if (thisName == '인출_가능_기한') {
+			var close = $('#인출_가능_기한').val().trim().split('-')
+			close = new Date(close[0], close[1], close[2]);
+			let diff = dateDiff(close, new Date(), 'day');
+
+			$('#인출_가능_남은일').html(Math.floor(diff) + '일&nbsp;&nbsp;남음');
+		} else if (thisName == '공사_계약_정보_약정일') {
+			let close = $('#' + thisName).datepicker('getDate');
+			close.setFullYear(close.getFullYear() + 1);
+			let diff = dateDiff(close, new Date(), 'day')
+
+			$('#인출_가능_기한').val(close.format('yyyy-MM-dd'));
+			$('#인출_가능_남은일').html(Math.floor(diff) + '일&nbsp;&nbsp;남음');
 		}
 	}
 
@@ -1786,10 +1806,11 @@
 					</tr>
 					<tr>
 						<th><label for="인출_가능_기한">인출 가능 기한</label></th>
-						<td>
+						<td class="flex_start">
 							<div class="sel_calendar edit">
-								<input type="text" id="인출_가능_기한" class="sel datepicker" name="인출_가능_기한" value="" autocomplete="off" placeholder="날짜 선택" readonly>
+								<input type="text" id="인출_가능_기한" class="sel" name="인출_가능_기한" value="" autocomplete="off" placeholder="자동 입력" readonly>
 							</div>
+							<span class="fixed_height" id="인출_가능_남은일"></span>
 						</td>
 						<th></th>
 						<td></td>
@@ -1971,7 +1992,7 @@
 								<input type="text" id="보험_종료일[index]" class="sel toDate" name="보험_종료일[index]" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 								<input type="hidden" id="보험_종료일_차이[index]" name="보험_종료일_차이[index]" value="">
 							</div>
-							<span class="fixed_height">XX일 남음</span>
+							<span class="fixed_height"></span>
 						</td>
 					</tr>
 					<tr>
@@ -1983,7 +2004,7 @@
 								<input type="text" id="보험_만기일[index]" class="sel toDate" name="보험_만기일[index]" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 								<input type="hidden" id="보험_만기일_차이[index]" name="보험_만기일_차이[index]" value="">
 							</div>
-							<span class="fixed_height">XX일 남음</span>
+							<span class="fixed_height"></span>
 						</td>
 					</tr>
 				</table>
