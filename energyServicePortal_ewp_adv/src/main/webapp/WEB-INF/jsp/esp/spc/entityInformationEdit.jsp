@@ -698,10 +698,11 @@
 	function setDefaultAccList() {
 		$('.account-type').each(function(){
 			let btn = $(this).find(".dropdown-toggle");
+			let accBtn = $(this).next().find(".dropdown-toggle");
 			let accListItem = $(this).next().find('ul li[data-group]');
 			accListItem.addClass("hidden");
+
 			if(btn.text()=="입금"){
-				console.log("입금---", btn.text())
 				accListItem.not('[data-group="출금"]').removeClass("hidden");
 			} else {
 				console.log("출금---", btn.text())
@@ -710,10 +711,11 @@
 
 			let listItem = btn.next().find('li');
 			listItem.on("click", function(){
-				// console.log("list clicking---")
-				accListItem.addClass("hidden")
+				console.log("accBtn---", accBtn)
+				accListItem.addClass("hidden");
+				accBtn.html('선택<span class="caret"></span>');
 				if($(this).text()=="입금"){
-					console.log("deposit---", accListItem.not('[data-group="출금"]'))
+					console.log("deposit---", accListItem.not('[data-group="출금"]'));
 					accListItem.not('[data-group="출금"]').removeClass("hidden");
 				} else {
 					console.log("with---", accListItem.not('[data-group="출금"]'))

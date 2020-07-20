@@ -673,7 +673,10 @@
 	function updateAccList (btnList, accTypeList){
 		$('#' + btnList).find('li').on('click', function(){
 			let item = $('#' + accTypeList).find('li[data-group]');
-			item.addClass("hidden")
+			let accBtn = $('#' + accTypeList).prev('.dropdown-toggle');
+			console.log("clicking===", accBtn)
+			accBtn.html('선택<span class="caret"></span>');
+			item.addClass("hidden");
 			$('#' + accTypeList).find("li[data-default]").hide();
 			if($(this).data('value')=='입금'){
 				item.not('[data-group="출금"]').removeClass("hidden");
@@ -1426,8 +1429,7 @@
 										</ul>
 									</div>
 									<div class="dropdown placeholder edit" id="계좌구분[index]">
-										<button class="btn btn-primary dropdown-toggle accdropdown" type="button" data-toggle="dropdown">
-											계좌구분<span class="caret"></span>
+										<button class="btn btn-primary dropdown-toggle accdropdown" type="button" data-toggle="dropdown">계좌구분<span class="caret"></span>
 										</button><!--
 									--><ul id="계좌구분리스트[index]" class="dropdown-menu" role="menu"><!--
 										--><li data-default="select" data-value="select"><a href="#">입출금 구분을 선택해 주세요.</a></li><!--
