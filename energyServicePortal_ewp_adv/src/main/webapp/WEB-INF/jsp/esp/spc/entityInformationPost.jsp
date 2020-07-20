@@ -1427,7 +1427,7 @@
 										</ul>
 									</div>
 									<div class="dropdown placeholder edit" id="계좌구분[index]">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+										<button class="btn btn-primary dropdown-toggle accdropdown" type="button" data-toggle="dropdown">
 											계좌구분<span class="caret"></span>
 										</button>
 										<ul id="계좌구분리스트[index]" class="dropdown-menu" role="menu">
