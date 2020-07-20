@@ -276,13 +276,8 @@
 					item.opt = arr;	
 				}
 				return new Promise((resolve, reject) => {
-					// typeof v.to_account !== "string" ? JSON.parse(v.to_account) : v.to_account = v.to_account	
 						resolve(JSON.parse(item.to_account))
 					}).then(res => {
-						// let item = Object.assign({}, item);
-						console.log("res===", res)
-						// console.log("item==", item, "res====", res)
-						// delete(item.to_account);
 						const spcMatch = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
 						let perPage = 14;
 						let tbodyStr = '';
@@ -304,7 +299,7 @@
 						} else {
 							withdraw_acc_num = '-'
 						}
-						console.log("withdraw_acc_num==", withdraw_acc_num, "withdraw_bank_name====", withdraw_bank_name)
+						// console.log("withdraw_acc_num==", withdraw_acc_num, "withdraw_bank_name====", withdraw_bank_name)
 						let transaction_type = '';
 						res.length > 0 ? ( res.length ==1 ? ( transaction_type = '출금' ) : ( transaction_type = '출금 '+ (res.length) + '건' ) ): ( transaction_type = '-' );
 						let amount = '';
@@ -317,6 +312,7 @@
 						let status_val = '';
 						// delete icon
 						let visibility = '';
+						let edit_visibility = '';
 						let link_attr = '';
 						let purposeList = [
 							{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적림", "일반 지출", "DSRA 적립", "기타", "운영계좌"]},
@@ -359,21 +355,25 @@
 							status="반송"
 							status_val = "0"
 							visibility = "show";
+							edit_visibility = "hidden";
 							link_attr = "text-link";
 						} else if(item.status == 1) {
 							status="승인 대기"
 							status_val = "1"
 							visibility = "show";
+							edit_visibility = "show";
 							link_attr = "text-link";
 						} else if (item.status == 2) {
 							status="승인 중"
 							status_val = "2"
 							link_attr = "text-link";
 							visibility = "hidden";
+							edit_visibility = "hidden";
 						} else if(item.status == 3) {
 							status="승인 완료"
 							status_val = "3"
 							visibility = "hidden";
+							edit_visibility = "hidden";
 							link_attr = "text-blue";
 						}
 						
@@ -403,7 +403,7 @@
 							.replace(/\*approvedBy\*/g, approved_by)
 							.replace(/\*status\*/g, status)
 							.replace(/\*statusVal\*/g, status_val)
-							.replace(/\*linkAttr\*/g, link_attr).replace(/\*visibility\*/g, visibility)
+							.replace(/\*linkAttr\*/g, link_attr).replace(/\*visibility\*/g, visibility).replace(/\*editVisibility\*/g, edit_visibility)
 							.replace(/\*statusChangedBy\*/g, status_changed_by);
 						tableBody.append($(tbodyStr));
 					}).then(result => {
@@ -547,14 +547,11 @@
 			return false;
 		}
 		let reqId = $(selector).prev().data("id");
-		console.log("reqid---", reqId);
-
 		let option= {
 			url: apiHost + '/spcs/transactions/' + reqId + '?oid=' + oid,
 			type: 'DELETE',
 			async: true
 		}
-		console.log("option---", option)
 
 		$.ajax(option).done(function (json, textStatus, jqXHR) {
 			document.location.reload(true);
@@ -567,8 +564,33 @@
 		// console.log("tr===", $(selector).parents().closest("tr"))
 	}
 
+
+	function goToEdit(self) {
+		let spcId = self.parents().closest("td").data("id");
+		let spcName = self.parents().closest("td").data("name");
+		let reqId = self.data("id");
+		let accInfo = self.data("id");
+
+		let action = 'get';
+		let syncOpt = true;
+		let option = {
+			url: apiHost + '/spcs/' + spcId + '?oid=' + oid + "&includeGens=true",
+			type: action,
+			async: syncOpt
+		}
+
+		$("#reqEditSpcId").val(spcId);
+		$("#reqEditSpcName").val(spcName);
+		$("#reqEditReqId").val(reqId);
+		$("#reqEditForm").submit();
+
+		// [사무수탁사]
+		// "반송" : 0, "승인 중" : "2", "승인완료": "3"	 => /spc/withdrawReqStatusDetail.do
+		// "승인 대기" : 1" 						  => /spc/withdrawReqEdit.do
+	}
+
+
 	function goToDetail(self) {
-		
 		let spcName = self.parents().closest("td").data("name");
 		let reqId = self.data("id");
 		let accInfo = self.data("name") + '  ' + self.data("value");
@@ -585,13 +607,14 @@
 			async: syncOpt
 		}
 
+		$("#reqDetailSpcId").val(spcId);
+		$("#reqDetailSpcName").val(spcName);
+		$("#reqDetailReqId").val(reqId);
+		$("#reqDetailAccountInfo").val(accInfo);
+		$("#reqDetailStatus").val(status);
+		$("#reqDetailStatusVal").val(statusVal);
+
 		submit(option, accInfo, accNum, statusVal)
-		$("#transactionSpcId").val(spcId);
-		$("#transactionSpcName").val(spcName);
-		$("#transactionReqId").val(reqId);
-		// $("#transactionAccountInfo").val(accInfo);
-		$("#transactionStatus").val(status);
-		$("#transactionStatusVal").val(statusVal);
 		// [사무수탁사]
 		// "반송" : 0, "승인 중" : "2", "승인완료": "3"	 => /spc/withdrawReqStatusDetail.do
 		// "승인 대기" : 1" 						  => /spc/withdrawReqEdit.do
@@ -627,18 +650,16 @@
 								console.log("name==", name)
 								$("#transactionAccountInfo").val(name);
 								setTimeout(function(){
-									if(statusValue==1) {
-										$("#transactionDetailForm").submit();
-									} else {
-										$("#transactionDetailForm").submit();
-									}
-								})
+									$("#reqDetailForm").submit();
+								}, 300);
 							}
 						});
 					});
 				});
 			}
-		});
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			return false;
+		});;
 
 		// console.log("submit===", $(self))
 		// let accInfo = self.data("name") + '  ' + self.data("value") + '  (' + name + ')';
@@ -646,24 +667,20 @@
 
 </script>
 
-<form id="transactionDetailForm" class="" action="/spc/withdrawReqStatusDetail.do" method="post">
-	<input type="hidden" id="transactionSpcId" name="review_spc_id" value=''/>
-	<input type="hidden" id="transactionSpcName" name="review_spc_name" value=''/>
-	<input type="hidden" id="transactionReqId" name="review_req_id" value=''/>
-	<input type="hidden" id="transactionAccountInfo" name="review_acc_info" value=''/>
-	<input type="hidden" id="transactionStatus" name="review_status" value=''/>
-	<input type="hidden" id="transactionStatusVal" name="review_status_val" value=''/>
+<form id="reqEditForm" class="" action="/spc/withdrawReqEdit.do" method="post">
+	<input type="hidden" id="reqEditSpcId" name="req_edit_spc_id" value=''/>
+	<input type="hidden" id="reqEditSpcName" name="req_edit_spc_name" value=''/>
+	<input type="hidden" id="reqEditReqId" name="req_edit_req_id" value=''/>
 	<!-- <button id="forwardDetailBtn" type="submit" class="hidden"></button> -->
 </form>
 
-
-<form id="transactionEditForm" class="" action="/spc/withdrawReqEdit.do" method="post">
-	<input type="hidden" id="transactionSpcId" name="review_spc_id" value=''/>
-	<input type="hidden" id="transactionSpcName" name="review_spc_name" value=''/>
-	<input type="hidden" id="transactionReqId" name="review_req_id" value=''/>
-	<input type="hidden" id="transactionAccountInfo" name="review_acc_info" value=''/>
-	<input type="hidden" id="transactionStatus" name="review_status" value=''/>
-	<input type="hidden" id="transactionStatusVal" name="review_status_val" value=''/>
+<form id="reqDetailForm" class="" action="/spc/withdrawReqStatusDetail.do" method="post">
+	<input type="hidden" id="reqDetailSpcId" name="req_detail_spc_id" value=''/>
+	<input type="hidden" id="reqDetailSpcName" name="req_detail_spc_name" value=''/>
+	<input type="hidden" id="reqDetailReqId" name="req_detail_req_id" value=''/>
+	<input type="hidden" id="reqDetailAccountInfo" name="req_detail_acc_info" value=''/>
+	<input type="hidden" id="reqDetailStatus" name="req_detail_status" value=''/>
+	<input type="hidden" id="reqDetailStatusVal" name="req_detail_status_val" value=''/>
 	<!-- <button id="forwardDetailBtn" type="submit" class="hidden"></button> -->
 </form>
 
@@ -686,7 +703,7 @@
 <div class='row header-wrapper'>
 	<div class='col-12'>
 		<h1 class='page-header'>입출금 관리 내역</h1>
-		<div class="time fr"><span>CURRENT TIME</span><em class="currTime">${nowTime}</em><span>DATA BASE TIME</span><em class="dbTime"></em></div>
+		<div class="time fr"><span>CURRENT TIME</span><em class="currTime">${nowTime}</em></div>
 	</div>
 </div>
 
@@ -901,8 +918,10 @@
 								<td>*requestedBy*</td>
 								<td>*approvedBy*</td>
 								<td class='left' data-id="*transactionSpcId*" data-name="*transactionSpcName*" data-value="*statusVal*"><!--
-								--><div class="flex_start"><button type="button" class="*linkAttr* clear-btn" data-name="*withdrawBankName*" data-value="*withdrawAccountNum*" data-id="*transactionReqId*" onclick="goToDetail($(this))">*status*</button><!--
-									--><a href="javascript:void(0)" onclick="deleteRow(this)" class='icon-delete *visibility*'></a><!--
+								--><div class="flex_start"><!--
+									--><button type="button" class="*linkAttr* clear-btn" data-name="*withdrawBankName*" data-value="*withdrawAccountNum*" data-id="*transactionReqId*" onclick="goToDetail($(this))">*status*</button><!--
+									--><a href="#" onclick="goToEdit($(this))" class='icon-edit *editVisibility*' data-id="*transactionReqId*"></a><!--
+									--><a href="#" onclick="deleteRow(this)" class='icon-delete *visibility*'></a><!--
 								--></div>
 								</td>
 							</tr>

@@ -1313,7 +1313,7 @@ function addCustomRow(tbody, options) {
 			$(this).attr({"id": newAttr, "name": newAttr});
 			if(keep == "first") {
 				if(index != 1 ) {
-					console.log("this---", $(this))
+					// console.log("this---", $(this))
 					$(this).val("");
 				} else {
 					$(this).prop('disabled', true);

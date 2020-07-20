@@ -178,14 +178,14 @@
 	--ico-notification: url("../img/notification.svg");
 	--ico-notification-new: url("../img/notification_active.svg");
 	--btn-close-svg: url("../img/icon_delete.svg");
+	--btn-close: url("../img/icon_close_wh.png");
+	--btn-edit-svg: url("../img/icon_edit.svg");
 	--btn-attachment: url("../img/attachment_light.svg");
-	/* ********* light mode ONLY ********* */
 	--ico-prev-active: url("../img/btn-prev-active.svg");
 	--ico-next-active: url("../img/btn-next-active.svg");
 	--ico-prev-page: url("../img/btn-prev.svg");
 	--ico-next-page: url("../img/btn-next.svg");
 	--bg-battery-cover: url("../img/battary_cover_dark.png");
-	--btn-close: url("../img/icon_close_wh.png");
 }
 
 html.darkmode:root {
@@ -468,6 +468,14 @@ a:hover,
 a:active {
 	text-decoration: none;
 	outline: none;
+}
+
+.btn.readonly {
+	cursor: default;
+}
+
+.btn.readonly:hover {
+	opacity: 1;
 }
 
 .btn.focus {
@@ -843,6 +851,11 @@ table input[type="text"] {
 .mx-12 {
 	margin-left: 12px;
 	margin-left: 12px;
+}
+
+.my-20 {
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .mr-12 {
@@ -11754,6 +11767,14 @@ table.table-footer tfoot td.light {
 	background-size: 15px 15px;
 }
 
+.spc-transaction .sort_table .icon-edit {
+	width: 13px;
+	height: 13px;
+	margin: -5px 0 0 12px;
+	background: var(--btn-edit-svg) no-repeat center;
+	background-size: 15px 15px;
+}
+
 .spc-transaction .spc_tbl_row th:first-child {
 	padding: 12px 0 12px 36px;
 }
@@ -11876,8 +11897,9 @@ table.table-footer tfoot td.light {
 	text-align: right;
 }
 
-.indiv.spc-detail>.flex_wrapper:first-child {
-	margin-bottom: 44px;
+.indiv.spc-detail .attachment-list,
+.indiv.spc-detail .attachment-list + .flex_wrapper {
+	margin: 16px 0;
 }
 
 .indiv.spc-detail .flex_wrapper {
@@ -11886,10 +11908,13 @@ table.table-footer tfoot td.light {
 	align-items: center;
 }
 
+.indiv.spc-detail .flex_wrapper + .flex_wrapper {
+	/* padding: 12px 0 16px; */
+}
+
 .indiv.spc-detail .flex_wrapper.border {
 	border-bottom: 1px solid var(--box-color2);
-	padding-bottom: 32px;
-	margin-bottom: 25px;
+	padding: 8px 0 16px;
 }
 
 .indiv.spc-detail .flex_wrapper .btn_type02 {
@@ -11910,7 +11935,8 @@ table.table-footer tfoot td.light {
 }
 
 .indiv.spc-detail .spc-btn-group {
-	text-align: right;
+	display: flex;
+	justify-content: end;
 }
 
 .indiv.spc-detail .textarea {
