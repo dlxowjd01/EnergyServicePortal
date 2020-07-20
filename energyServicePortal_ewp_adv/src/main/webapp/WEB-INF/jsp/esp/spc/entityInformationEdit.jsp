@@ -385,6 +385,7 @@
 		});
 	}
 
+
 	function setMakeTag(repeatItem, infoMap, targetId) {
 		var $selecter = $('#' + targetId);
 		repeatItem.forEach(function(el) {
@@ -412,6 +413,42 @@
 				setDefaultAccList();
 			}, 300);
 		}
+	}
+
+	function setDefaultAccList() {
+		$('.account-type').each(function(){
+			let btn = $(this).find(".dropdown-toggle");
+			let accBtn = $(this).next().find(".dropdown-toggle");
+			let accList = $(this).next().find('ul');
+			let accListItem = $(this).next().find('ul li[data-group]');
+			accListItem.addClass("hidden");
+
+			if(btn.text()=="입금"){
+				accListItem.not('[data-group="출금"]').removeClass("hidden");
+			} else if(btn.text()=="출금") {
+				accListItem.not('[data-group="입금"]').removeClass("hidden");
+			} else {
+				accListItem.addClass("hidden");
+				let str = '<li data-default="select" data-value="select"><a href="#">입출금 구분을 선택해 주세요.</a></li>'
+				accList.append(str)
+			}
+		});
+	}
+
+	function updateAccList (btnList, accTypeList){
+		$('#' + btnList).find('li').on('click', function(){
+			let item = $('#' + accTypeList).find('li[data-group]');
+			let accBtn = $('#' + accTypeList).prev('.dropdown-toggle');
+			accBtn.html('선택<span class="caret"></span>');
+			item.addClass("hidden");
+			$('#' + accTypeList).find("li[data-default]").hide();
+			
+			if($(this).data('value')=='입금'){
+				item.not('[data-group="출금"]').removeClass("hidden");
+			} else {
+				item.not('[data-group="입금"]').removeClass("hidden");
+			}
+		});
 	}
 
 	function setSaveData(){
@@ -693,36 +730,6 @@
 
 	function goMoveList(){
 		location.href = '/spc/entityInformation.do';
-	}
-
-	function setDefaultAccList() {
-		$('.account-type').each(function(){
-			let btn = $(this).find(".dropdown-toggle");
-			let accBtn = $(this).next().find(".dropdown-toggle");
-			let accListItem = $(this).next().find('ul li[data-group]');
-			accListItem.addClass("hidden");
-
-			if(btn.text()=="입금"){
-				accListItem.not('[data-group="출금"]').removeClass("hidden");
-			} else {
-				console.log("출금---", btn.text())
-				accListItem.not('[data-group="입금"]').removeClass("hidden");
-			};
-
-			let listItem = btn.next().find('li');
-			listItem.on("click", function(){
-				console.log("accBtn---", accBtn)
-				accListItem.addClass("hidden");
-				accBtn.html('선택<span class="caret"></span>');
-				if($(this).text()=="입금"){
-					console.log("deposit---", accListItem.not('[data-group="출금"]'));
-					accListItem.not('[data-group="출금"]').removeClass("hidden");
-				} else {
-					console.log("with---", accListItem.not('[data-group="출금"]'))
-					accListItem.not('[data-group="입금"]').removeClass("hidden");
-				}
-			})
-		});
 	}
 
 </script>
@@ -1459,14 +1466,14 @@
 						<tr class="addList_account_holder entity">
 							<th>
 								<div class="fixed_height">은행 계좌</div>
-								<a href="javascript:addRow('addList_account_holder', 'next');" class="btn_add fr mt-offset-10">추가</a>
+								<a href="javascript:addRow('addList_account_holder', 'next'); setDefaultAccList();" class="btn_add fr mt-offset-10">추가</a>
 								<div class="fixed_height"><label for="예금주[index]">예금주</label></div>
 							</th>
 							<td>
 								<div class="fixed_height group_type short">
 									<div class="account-type dropdown placeholder edit" id="입출금_구분[index]"><!--
-										--><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">입출금 구분<span class="caret"></span></button><!--
-										--><ul class="dropdown-menu" role="menu"><!--
+										--><button onclick="updateAccList('계좌구분[index]', '계좌구분리스트[index]')" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">입출금 구분<span class="caret"></span></button><!--
+										--><ul id="계좌구분[index]" class="dropdown-menu" role="menu"><!--
 											--><li data-value="입금"><a href="#">입금</a></li><!--
 											--><li data-value="출금"><a href="#">출금</a></li><!--
 										--></ul><!--
