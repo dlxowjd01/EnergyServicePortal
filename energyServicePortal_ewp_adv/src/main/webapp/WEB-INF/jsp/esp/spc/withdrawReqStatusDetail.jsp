@@ -8,12 +8,12 @@
 	const userTask = '<c:out value="${sessionScope.userInfo.task}" escapeXml="false" />';
 
 	// param: withdrawReqStatus.do
-	const status = '${param.review_status}';
-	const statusVal = '${param.review_status_val}';
-	const spcId = '${param.review_spc_id}';
-	const spcName = '${param.review_spc_name}';
-	const reqId = '${param.review_req_id}'; 
-	const accNum = '${param.review_acc_info}';
+	const spcId = '${param.req_detail_spc_id}';
+	const spcName = '${param.req_detail_spc_name}';
+	const reqId = '${param.req_detail_req_id}'; 
+	const accNum = '${param.req_detail_acc_info}';
+	const status = '${param.req_detail_status}';
+	const statusVal = '${param.req_detail_status_val}';
 
 	$(function() {
 		const tableList = $('#tableBody');
@@ -24,13 +24,16 @@
 		const btnArea = $(".spc-detail .spc-btn-group");
 		const btnPrint = $(".btn-print");
 		const noHistory = "메모 히스토리가 없습니다."
+
 		if( isEmpty(spcName) || spcName == ("-")){
 			$("#spcName").text("spc_no_name");
 		}	else {
 			$("#spcName").text(spcName);
 		}
 
-		( ( statusVal == 0 ), ( statusVal == 3 ) ) ? ( (btnArea.addClass('hidden')),(btnPrint.addClass('hidden')) ) : ( (btnArea.removeClass('hidden')), (btnPrint.removeClass('hidden')) );
+		// statusVal =>  "반송" : 0, "승인 대기" : 1", "승인 중" : "2", "승인완료": "3"
+
+
 		// txtArea.eq(0).val();
 		unCheckAll(memoOpt);
 		getDataList();
@@ -58,9 +61,8 @@
 					json.data.map(item => {
 						let data = json.data;
 						let sum = 0;
-						console.log("item.attachement_info===", item.attachement_info)
+						// console.log("item.attachement_info===", item.attachement_info)
 						$("#total").text(item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원');
-
 
 						if (item.status == 3 || item.status == 0) {
 							$('#rejectBtn').parent().addClass('hidden');
@@ -153,7 +155,7 @@
 										});
 							}, function(error) {
 								if (error) {
-									reject(Error("It broke"));
+									reject(new Error('Fail!'))
 									console.log(error);
 								}
 							});
@@ -246,7 +248,8 @@
 			e.preventDefault();
 			const newStatus = 3;
 			handleReq(newStatus, updateReq);
-		})
+		});
+
 		// saving only => status: null
 		$("#saveBtn").on("click", function(){
 			const newStatus = null;
@@ -282,13 +285,6 @@
 			}
 		});
 
-		// rejection => status: 0
-		$("#rejectBtn").on('click', function(e){
-			e.preventDefault();
-			const newStatus = 0;
-			handleReq(newStatus, updateReq);
-		});
-
 		function handleReq(newStatus, callback){
 			callback(newStatus);
 		}
@@ -320,7 +316,6 @@
 			};
 			var reload = newStatus;
 			$.ajax(opt).done(function (json, textStatus, jqXHR) {
-				console.log("reload", reload)
 				if(isEmpty(reload)){
 					return false;
 				} else {
@@ -333,6 +328,7 @@
 				return false;
 			});
 		}
+	
 	});
 
 
@@ -364,7 +360,6 @@
 		// console.log("acc---", account)
 		// window.URL.revokeObjectURL(link);
 
-		console.log("download---", name)
 		// window.location= url;
 		// document.location.assign(a.href);
 
@@ -462,7 +457,7 @@
 <div class="row">
 	<div class="col-xl-8 col-lg-7 col-md-6 col-sm-12">
 		<div class="indiv spc-detail">
-			<div class="flex_wrapper">
+			<div class="flex_wrapper mb-20">
 				<h2 class="ntit">출금 요청서</h2>
 				<span id="statusName" class="tx_tit blue_text">상태: ${param.review_status}</span>
 			</div>
@@ -515,37 +510,35 @@
 		<form id="attachedFileForm" name="attached_file_form" action="#" method="post">
 			<div class="indiv spc-detail">
 				<div class="flex_wrapper"><h2 class="ntit">증빙 서류</h2></div>
-				<div id="attachementList">
-				</div>
+				<div id="attachementList" class="attachment-list"></div>
 
 				<div class="flex_wrapper">
 					<h2 class="heading">출금 요청서</h2>
 					<div class="fr"><button type="button" class="btn_type ml-12" onclick="downloadFile(this)" data-name="reqDoc">다운로드</button></div>
 				</div>
-				<div class="flex_wrapper border file-wrapper mt20">
+				<div class="flex_wrapper border file-wrapper">
 					<h2 class="heading">증빙 서류</h2><input type="hidden" name="proof_file" id="proofFile" class="sr-only"/>
 					<div class="fr"><button type="button" class="btn_type ml-12" onclick="downloadFile(this)" data-name="proof" >다운로드</button></div>
 				</div>
-				<div class="flex_wrapper">
+				<div class="flex_wrapper mt20">
 					<h2 class="heading">메모 히스토리</h2>
 				</div>
-				<div class="flex_wrapper border mt20">
+				<div class="flex_wrapper border mt12">
 					<textarea id="txt1" class="textarea w-100" readonly></textarea>
 				</div>
 				<c:if test="${userInfo.task ne 1}">
-				<div class="flex_wrapper">
-					<h2 class="heading">메모</h2><!--
-					--><a class="chk_type" href="javascript:void(0);"><input type="checkbox" id="memoOpt" name="memo_opt"><label for="memoOpt">사무수탁사 함께 보기</label></a><!--
-			--></div>
-				<div class="textarea-container mt20">
-					<button type="button" id="saveBtn" class="btn_type03 fixed_btn">저장</button>
-					<textarea placeholder="직접입력" id="txt2" class="textarea w-100"></textarea>
-				</div>
-
-				<div class="spc-btn-group mt20"><!--
-				--><button type="button" id="rejectBtn" class="btn_type03 w80">반송</button><!--
-				--><button type="submit" class="btn_type ml-12">승인</button><!--
-			--></div>
+					<div class="flex_wrapper mt20">
+						<h2 class="heading">메모</h2><!--
+						--><a class="chk_type" href="javascript:void(0);"><input type="checkbox" id="memoOpt" name="memo_opt"><label for="memoOpt">사무수탁사 함께 보기</label></a><!--
+				--></div>
+					<div class="textarea-container mt12">
+						<button type="button" id="saveBtn" class="btn_type03 fixed_btn">저장</button>
+						<textarea placeholder="직접입력" id="txt2" class="textarea w-100"></textarea>
+					</div>
+					<div class="spc-btn-group my-20"><!--
+					--><button type="button" id="rejectBtn" onclick="updateReq(0)" class="btn_type03 w80">반송</button><!--
+					--><button type="submit" class="btn_type ml-12">승인</button><!--
+				--></div>
 				</c:if>
 			</div>
 		</form>
