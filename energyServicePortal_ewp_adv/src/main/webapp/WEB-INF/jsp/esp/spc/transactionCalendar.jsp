@@ -2,10 +2,10 @@
 <%@ include file="/decorators/include/taglibs.jsp"%>
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
-	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
-	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
-	let task = `${ sessionScope.userInfo.task }`;
-	let role = `${ sessionScope.userInfo.role }`;
+	let oid = '${sessionScope.userInfo.oid}';
+	let loginId = '${sessionScope.userInfo.login_id}';
+	let task = '${ sessionScope.userInfo.task }';
+	let role = '${ sessionScope.userInfo.role }';
 	let today = new Date();
 	let date = new Date();
 	var spcPairArr = [];
