@@ -338,9 +338,7 @@
 						{name: '공인인증서_등록', id: 'addList_certificate_registration', next: 'next'},
 						{name: '임대료_지급일', id: 'addList_rental_deduction', next: 'next'},
 					];
-					setMakeTag(financeRepeatItem, finance_info, 'financeInfo', function(){
-						console.log("tag made----")
-					}); //금융태그 생성
+					setMakeTag(financeRepeatItem, finance_info, 'financeInfo'); //금융태그 생성
 					setJsonAutoMapping(finance_info, 'financeInfo');
 
 					setJsonAutoMapping(contract_info, 'contractInfo'); //반복없음
