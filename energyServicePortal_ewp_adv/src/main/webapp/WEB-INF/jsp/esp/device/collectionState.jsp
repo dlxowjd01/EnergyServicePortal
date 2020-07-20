@@ -96,11 +96,7 @@
 					</tr>
 					</tbody>
 				</table>
-				<div class="paging_wrap">
-					<a href="#;" class="btn_prev">prev</a>
-					<strong>1</strong>
-					<a href="#;" class="btn_next">next</a>
-				</div>
+				<div class="paging_wrap" id="paging"></div>
 			</div>
 		</div>
 	</div>
@@ -152,12 +148,6 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="paging_wrap">
-				<a href="#;" class="btn_prev">prev</a>
-				<strong>1</strong>
-				<a href="#;" class="btn_next">next</a>
-			</div>
-
 		</div>
 	</div>
 </div>
@@ -215,7 +205,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div class="paging_wrap" id="paging">
+				<div class="paging_wrap" id="logPaging">
 				</div>
 			</div>
 		</div>
@@ -351,45 +341,6 @@
 		setMakeList(siteList, 'siteULList', {'dataFunction': {}}); //list생성
 	};
 
-	function logPaging (rids, page, totalCount, jsonList ,startTime , endTime) {
-		let totalPage = Math.ceil(totalCount/pagePerData);
-		let totalnav = Math.ceil(totalPage/navCount);
-		let startNum = (pagePerData*(page-1));
-		let endNum = ((pagePerData*page)>= totalCount)? totalCount : (pagePerData*page);
-		logMakeNavigation(rids, page, totalPage, startTime , endTime);
-		return jsonList;
-	};
-
-	const logMakeNavigation = (rids, page, totalPage, startTime , endTime) => {
-		$('#paging').empty();
-		let pageStr = '';
-		let navgroup = Math.floor((page-1)/navCount)+1;
-		let startPage = ((navgroup-1)*navCount)+1;
-		let totalnav = Math.ceil(totalPage/navCount);
-		let endPage = ((startPage + navCount-1) > totalPage)? totalPage : (startPage + navCount-1);
-
-		if (navgroup == 1) {
-			pageStr += '<a href="javascript:void(0);" class="btn_prev first_prev">prev</a>';
-		} else{
-			pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'\',\'\',\'5\',\'' + (startPage -1) + '\');" class="btn_prev">prev</a>';
-		}
-
-		for (let i = startPage ; i <= endPage; i++) {
-			if (i==page) {
-				pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'\',\'\',\'5\',\'' + i + '\');"><strong>'+i+'</strong></a>';
-			} else {
-				pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'\',\'\',\'5\',\'' + i + '\');">'+i+'</a>';
-			}
-		}
-
-		if (navgroup <totalnav) {
-			pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'\',\'\',\'5\',\'' + (endPage +1) + '\');"  class="btn_next">next</a>';
-		} else {
-			pageStr += '<a href="javascript:void(0);"  class="btn_next larst_next">next</a>';
-		}
-		$('#paging').append(pageStr);
-	}
-	
 	function selectLog(rids, startTime, endTime, limit, page) {
 		limit = isEmpty(limit) ? 5 : limit;
 		page = isEmpty(page) ? 1 : page;
@@ -436,44 +387,44 @@
 				const basic = result1[0];
 				const info = $('#rtuDeviceInfo').find('.data_val');
 				const table = $('#detailInfoTable').find('tbody');
-				const device = basic.devices;
+				const devices = basic.devices;
 				info.eq(0).text(result1[0].serialNumber);
 				basic.version ? info.eq(1).text(basic.version) : info.eq(1).addClass('no_val').text("-");
-				table.empty();
+				table.empty().data('deviceList', devices);
 
 				let str = ``;
-				if (!isEmpty(device)) {
-					for (let i = 0; i < device.length; i++) {
+				if (!isEmpty(devices)) {
+					devices.forEach((device, idx) => {
 						let comType = '';
 						let baudRate = '';
 						let capacity = '';
 						let description = '';
-						let rtuComm = device[i].rtu_details;
+						let rtuComm = device.rtu_details;
 
 						if (rtuComm) {
 							let newJson = JSON.parse(rtuComm);
-							comType = newJson["com-type"];
-							baudRate = newJson["baud-rate"];
+							comType = newJson['com-type'];
+							baudRate = newJson['baud-rate'];
 						} else {
-							comType = "-";
-							baudRate = "-"
+							comType = '-';
+							baudRate = '-'
 						}
 						// TO DO!!!! convert with common library!!!!!
-						device[i].capacity ? (capacity = device[i].capacity) : (capacity = "-");
+						device.capacity ? (capacity = device.capacity) : (capacity = '-');
 						// END
-						device[i].description ? (description = device[i].description) : (description = "-");
+						device.description ? (description = device.description) : (description = '-');
 						str = `
 								<tr>
-									<td>${'${device[i].device_type}'}</td>
-									<td>${'${device[i].name}'}</td>
+									<td>${'${device.device_type}'}</td>
+									<td>${'${device.name}'}</td>
 									<td>${'${comType}'}</td>
 									<td>${'${baudRate}'}</td>
 									<td>${'${capacity}'}</td>
 									<td>${'${description}'}</td>
 								</tr>
-							`
+							`;
 						table.append(str);
-					}
+					});
 				}
 			} else {
 				return false;
@@ -507,13 +458,12 @@
 			success: function (result) {
 				//데이터 세팅
 				let logTable = $('#logTable').find('tbody');
-				let str = ``;
-				logTable.empty();
-				result.logs = logPaging(rids, page, result.count, result.logs ,startTime , endTime);
-				result.logs.forEach((log, logIdx) => {
+				logTable.empty()
+				collectionMakeNavigation(rids, page, result.cound);
+				result.logs.forEach(log => {
 					let dTimestamp = new Date(log.dTimestamp).format('yyyy-MM-dd HH:mm:ss');
 					let dLocaltime = String(log.dLocaltime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
-					str = `
+					let str = `
 						<tr>
 							<td>${'${log.sName}'}</td>
 							<td>${'${log.rName}'}</td>
@@ -558,13 +508,13 @@
 
 	//RTU 조회
 	const getRtuDataList = function () {
-
 		initTable();
 
 		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(function () {
 				return $(this).val();
 			})
 		);
+
 		if (siteArray.length > 0) {
 			$.ajax({
 				url: apiHost + '/config/sites',
@@ -578,57 +528,64 @@
 					const tableData = $('#PV_INVERTER').find('tbody');
 					const dateFilter = $('#selectLogByDate');
 					tableData.empty();
-					let logList = ``;
 					let rtuInfo = ``;
-					for (let i = 0; i < sites.length; i++) {
-						if (sites[i].rtus && $.inArray(sites[i].sid, siteArray) >= 0) {
-							let rtuDate = new Date(sites[i].rtus[0].createdAt).format('yyyy-MM-dd');
-							let rtuArr = sites[i].rtus;
-							let siteName = sites[i].name;
+					let rtuList = new Array();
 
-							if (sites[i].rtus.length > 0) {
-								sites[i].rtus.forEach(el => {
-									// TO DO!!!!!!!!!!!!! 사이트 당 rtu 가 1개 이상일 경우 nested for loop 으로 처리 예정
-									let serialId = `#${'${el.serialNumber}'}`
-
-									rtuInfo =
-										`	<tr id="${'${el.serialNumber}'}">
-												<td>${'${siteName}'}</td>
-												<td>${'${el.name}'}</td>
-												<td>${'${el.serialNumber}'}</td>
-												<td>${'${rtuDate}'}</td>
-											</tr>
-										`
-									tableData.append(rtuInfo);
-
-									$(serialId).on('click', () => {
-										const rtuName = $('#selectedRTU');
-										selectLog(el.rid);
-										rtuName.text(el.name).data('rid', el.rid);
-									});
-
-									dateFilter.on('click', () => {
-										const datePicker1 = $('#datepicker1').datepicker('getDate');
-										const datePicker2 = $('#datepicker2').datepicker('getDate');
-										if(datePicker1 != null && datePicker2 != null) {
-											const start = datePicker1.format('yyyyMMdd');
-											const end = datePicker2.format('yyyyMMdd');
-											const startTimepicker = $('#timepicker1').wickedpicker('time').replace(/[^0-9]/g, '');
-											const endTimepicker = $('#timepicker2').wickedpicker('time').replace(/[^0-9]/g, '');
-
-											const startDate = start + startTimepicker + '00';
-											const endDate = end + endTimepicker + '00';
-
-											selectLog(el.rid, startDate, endDate);
-										} else {
-											alert('검색 시작일과 종료일을 확인해 주세요.');
-											return false;
-										}
-									});
-								});
-							}
+					sites.forEach(site => {
+						let siteName = site.name;
+						if (site['rtus'] && $.inArray(site.sid, siteArray) >= 0) {
+							let rtus = site['rtus'];
+							rtus.forEach(rtu => {
+								rtu['siteName'] = siteName;
+								rtuList.push(rtu);
+							});
 						}
-					}
+					});
+
+					tableData.data('dataList', rtuList);
+					rtuList = rtuPaging(1);
+					rtuList.forEach(rtu => {
+						const rtuDate = new Date(rtu.createdAt).format('yyyy-MM-dd'),
+							siteName = rtu.siteName,
+							serialId = `#${'${rtu.serialNumber}'}`;
+
+						rtuInfo =
+							`	<tr id="${'${rtu.serialNumber}'}">
+									<td>${'${siteName}'}</td>
+									<td>${'${rtu.name}'}</td>
+									<td>${'${rtu.serialNumber}'}</td>
+									<td>${'${rtuDate}'}</td>
+								</tr>
+							`
+						tableData.append(rtuInfo);
+
+						$(serialId).off('click');
+						$(serialId).on('click', () => {
+							const rtuName = $('#selectedRTU');
+							selectLog(rtu.rid);
+							rtuName.text(rtu.name).data('rid', rtu.rid);
+						});
+
+						dateFilter.off('click');
+						dateFilter.on('click', () => {
+							const datePicker1 = $('#datepicker1').datepicker('getDate');
+							const datePicker2 = $('#datepicker2').datepicker('getDate');
+							if(datePicker1 != null && datePicker2 != null) {
+								const start = datePicker1.format('yyyyMMdd');
+								const end = datePicker2.format('yyyyMMdd');
+								const startTimepicker = $('#timepicker1').wickedpicker('time').replace(/[^0-9]/g, '');
+								const endTimepicker = $('#timepicker2').wickedpicker('time').replace(/[^0-9]/g, '');
+
+								const startDate = start + startTimepicker + '00';
+								const endDate = end + endTimepicker + '00';
+
+								selectLog(rtu.rid, startDate, endDate);
+							} else {
+								alert('검색 시작일과 종료일을 확인해 주세요.');
+								return false;
+							}
+						});
+					});
 				},
 				error: function (error) {
 					console.error(error);
@@ -647,7 +604,6 @@
 	}
 
 	const showReigister = (data) => {
-
 		//RTU 등록/수정 초기화
 		dropDownInit($('#rtuSite'));
 		$('#rtuName').val('');
@@ -745,5 +701,101 @@
 				return false;
 			}
 		});
+	}
+
+	const rtuPaging = (page) => {
+		const tableData = $('#PV_INVERTER').find('tbody'),
+			pagePer = 8;
+		let jsonList = tableData.data('dataList'),
+			totalCount = jsonList.length;
+		let totalPage = Math.ceil(totalCount / pagePer);
+		let totalnav = Math.ceil(totalPage / navCount);
+		const startNum = (pagePer * (page - 1));
+		const endNum = ((pagePer * page) >= totalCount) ? totalCount : (pagePer * page);
+		jsonList = jsonList.slice(startNum, endNum);
+
+		makeNavigation(page, totalPage);
+		return jsonList;
+	};
+
+	const getDataList = (page) => {
+		const tableData = $('#PV_INVERTER').find('tbody'),
+			dateFilter = $('#selectLogByDate'),
+			rtuList = rtuPaging(page);
+		tableData.empty();
+
+		rtuList.forEach(rtu => {
+			const rtuDate = new Date(rtu.createdAt).format('yyyy-MM-dd'),
+				siteName = rtu.siteName,
+				serialId = `#${'${rtu.serialNumber}'}`;
+
+			rtuInfo =
+				`	<tr id="${'${rtu.serialNumber}'}">
+									<td>${'${siteName}'}</td>
+									<td>${'${rtu.name}'}</td>
+									<td>${'${rtu.serialNumber}'}</td>
+									<td>${'${rtuDate}'}</td>
+								</tr>
+							`
+			tableData.append(rtuInfo);
+
+			$(serialId).off('click');
+			$(serialId).on('click', () => {
+				const rtuName = $('#selectedRTU');
+				selectLog(rtu.rid);
+				rtuName.text(rtu.name).data('rid', rtu.rid);
+			});
+
+			dateFilter.off('click');
+			dateFilter.on('click', () => {
+				const datePicker1 = $('#datepicker1').datepicker('getDate');
+				const datePicker2 = $('#datepicker2').datepicker('getDate');
+				if(datePicker1 != null && datePicker2 != null) {
+					const start = datePicker1.format('yyyyMMdd');
+					const end = datePicker2.format('yyyyMMdd');
+					const startTimepicker = $('#timepicker1').wickedpicker('time').replace(/[^0-9]/g, '');
+					const endTimepicker = $('#timepicker2').wickedpicker('time').replace(/[^0-9]/g, '');
+
+					const startDate = start + startTimepicker + '00';
+					const endDate = end + endTimepicker + '00';
+
+					selectLog(rtu.rid, startDate, endDate);
+				} else {
+					alert('검색 시작일과 종료일을 확인해 주세요.');
+					return false;
+				}
+			});
+		});
+	}
+
+	const collectionMakeNavigation = (rids, page, totalPage) => {
+		$('#logPaging').empty();
+		let pageStr = '';
+		let navgroup = Math.floor((page - 1) / navCount) + 1;
+		let startPage = ((navgroup - 1)*navCount)+1;
+		let totalnav = Math.ceil(totalPage / navCount);
+		let endPage = ((startPage + navCount - 1) > totalPage) ? totalPage : (startPage + navCount - 1);
+
+		if (navgroup == 1) {
+			pageStr += '<a href="javascript:void(0);" class="btn_prev first_prev">prev</a>';
+		} else{
+			pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'\',\'\',\'5\',\'' + (startPage -1) + '\');" class="btn_prev">prev</a>';
+		}
+
+		for (let i = startPage ; i <= endPage; i++) {
+			if (i==page) {
+				pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'\',\'\',\'5\',\'' + i + '\');"><strong>'+i+'</strong></a>';
+			} else {
+				pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'\',\'\',\'5\',\'' + i + '\');">'+i+'</a>';
+			}
+		}
+
+		if (navgroup <totalnav) {
+			pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'\',\'\',\'5\',\'' + (endPage +1) + '\');"  class="btn_next">next</a>';
+		} else {
+			pageStr += '<a href="javascript:void(0);"  class="btn_next larst_next">next</a>';
+		}
+
+		$('#logPaging').append(pageStr);
 	}
 </script>
