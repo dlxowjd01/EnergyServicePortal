@@ -117,17 +117,6 @@
 						var savedTotal = transactionData.total_amount.toLocaleString() + ' 원';
 						Promise.resolve(JSON.parse(transactionData.to_account)).then(res => {
 							$.each(res, function(index, element){
-								let pList = [
-									{ name: "관리운영비", val: 0 },
-									{ name: "사무수탁비", val: 1 },
-									{ name: "부채상환", val: 2 },
-									{ name: "대수선비", val: 3 },
-									{ name: "배당금 적립", val: 4 },
-									{ name: "일반 지출", val: 5 },
-									{ name: "DSRA 적립", val: 6 },
-									{ name: "운영계좌", val: 8 },
-									{ name: "기타", val: 7 },
-								];
 								let tbodyStr = '';
 								let req_date = '';
 								let req_amount = '';
@@ -150,7 +139,7 @@
 								}
 
 								if(!isEmpty(element.purpose)){
-									purpose = pList[Number(element.purpose)].name;
+									purpose = element.purpose;
 									purpose_val = element.purpose;
 								} else {
 									purpose = '-';
@@ -251,7 +240,7 @@
 										$(".receive-list").each(function(){
 											$(this).empty().append($(receiving));
 											$(this).find("li").on("click", function(){
-												console.log("receive list clicking---")
+												// console.log("receive list clicking---")
 												$(this).prev().data({"value": $(this).data("value"), "name": $(this).data("name") });
 											});
 										});
@@ -262,7 +251,7 @@
 						}).then(() => {
 							calcTotal();
 							withdrawList.find("li").on("click", function(){
-								console.log("withdrawList clicking---")
+								// console.log("withdrawList clicking---")
 								withdrawList.prev().data({"value": $(this).data("value"), "name": $(this).data("name"), "acc-holder" : $(this).data("acc-holder") });
 							});
 							
@@ -280,7 +269,7 @@
 				$(".receive-list").each(function(){
 					$(this).empty().append($(receivingNodata));
 					$(this).find("li").on("click", function(){
-						console.log("receive list clicking---")
+						// console.log("receive list clicking---")
 						$(this).prev().data({"value": "", "name": "" });
 					});
 				});
@@ -375,7 +364,7 @@
 			let newJson = JSON.stringify(jsonData);
 			let formArr = [ jsonData.withdraw_day, arr ];
 
-			console.log("formArr===", formArr)
+			// console.log("formArr===", formArr)
 			$.each(formArr, function(index, value){
 				if(index === 0) {
 					arr.forEach((item, index) => {
