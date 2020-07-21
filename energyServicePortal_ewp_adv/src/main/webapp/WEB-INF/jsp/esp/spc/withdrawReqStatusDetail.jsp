@@ -454,7 +454,7 @@
 		<div class="indiv spc-detail">
 			<div class="flex_wrapper mb-20">
 				<h2 class="ntit">출금 요청서</h2>
-				<span id="statusName" class="tx_tit blue_text">상태: ${param.review_status}</span>
+				<span id="statusName" class="tx_tit blue_text">상태: ${param.req_detail_status}</span>
 			</div>
 			<div class="flex_start">
 				<h2 class="tx_tit">SPC 명</h2>
@@ -462,7 +462,7 @@
 			</div>
 			<div class="flex_start">
 				<h2 class="tx_tit">출금 계좌 번호</h2>
-				<span class="tx_tit">${param.review_acc_info}</span>
+				<span class="tx_tit">${param.req_detail_acc_info}</span>
 			</div>
 
 			<div class="tbl_wrap_type collect_wrap mt30">
