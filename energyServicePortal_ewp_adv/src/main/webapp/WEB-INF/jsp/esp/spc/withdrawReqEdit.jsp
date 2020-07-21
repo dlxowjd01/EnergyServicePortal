@@ -10,7 +10,7 @@
 	// param: withdrawReqStatus.do
 	const spcId = '${param.req_edit_spc_id}';
 	const spcName = '${param.req_edit_spc_name}';
-	const reqId = '${param.req_edit_req_id}'; 
+	const reqId = '${param.req_edit_req_id}';
 
 	$(function() {
 		const withdrawForm = $('#withdrawForm');
