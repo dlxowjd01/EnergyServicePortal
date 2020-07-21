@@ -9,6 +9,9 @@
 	let today = new Date();
 	let date = new Date();
 	var spcPairArr = [];
+
+	const contact_phone = '<c:out value="${sessionScope.userInfo.contact_phone}" escapeXml="false" />';
+
 	$(function () {
 		// task 1: 사무수탁사  2: 자산 운용사  3: 사업주  ||  role 1: encored  2: spc clients
 		if(task == 1) {
@@ -339,6 +342,57 @@
 		} else {
 			if (action == 'post' || action == 'patch') {
 				let data = setData();
+				if (isEmpty(data['spc_id'])) {
+					alert('SPC 선택은 필수 값입니다.');
+					return false;
+				}
+
+				if (isEmpty(data['job_type'])) {
+					alert('알림 항목은 필수 값입니다.');
+					return false;
+				}
+
+				if (isEmpty(data['job_date'])) {
+					alert('기준 일자는 필수 값입니다.');
+					return false;
+				}
+
+				if (isEmpty(data['repeat_yn'])) {
+					alert('점검 주기는 필수 값입니다.');
+					return false;
+				} else {
+					if (data['repeat_yn'] == 'Y') {
+						if (isEmpty(data['repeat_interval'])) {
+							alert('정기 점검은 반복 기간은 필수 값입니다.');
+							return false;
+						}
+
+						if (isEmpty(data['repeat_unit'])) {
+							alert('정기 점검 반복 주기는 필수 값입니다.');
+							return false;
+						}
+					}
+				}
+
+				let job_info = JSON.parse(data['job_info']);
+				if (!isEmpty(job_info['alarmSetup'])) {
+
+					if (isEmpty(job_info['alarmDate'])) {
+						alert('알람 설정시 알람 일자는 필수 값입니다.');
+						return false;
+					}
+
+					if (isEmpty(job_info['alarmTime'])) {
+						alert('알람 설정시 알람 시간은 필수 값입니다.');
+						return false;
+					}
+
+					if (isEmpty(job_info['alarmPhone'])) {
+						alert('알람 설정시 알람 수신번호는 필수 값입니다.');
+						return false;
+					}
+				}
+
 				let url = '';
 				data.spc_id = Number(data.spc_id);
 
@@ -585,6 +639,8 @@
 			dropDown.each(function () {
 				$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
 			});
+
+			$('#alarmPhone').val(contact_phone);
 			$("#spcList").prev().html("선택" + '<span class="caret"></span>').data({"value": "", "name" : "" });
 			deleteScheduleBtn.addClass('hidden');
 			postScheduleBtn.text('등록');
@@ -716,7 +772,7 @@
 		// if($(this).prop('name') == 'worker') {
 		// 		$(this).val() != '' ? $(this).parent().find('.warning').addClass('hidden') : $(this).parent().find('.warning').removeClass('hidden');
 		// 	}
-		jsonData.job_date = new Date( $("#job_date").val() );
+
 		jsonData.job_info = JSON.stringify(job_info);
 		jsonData.repeat_interval = Number(jsonData.repeat_interval);
 		jsonData.updated_by = loginId;
@@ -1048,7 +1104,7 @@
 								<div class="dropdown" id="repeat_yn">
 									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="점검 선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
-<%--										<li data-value="Y"><a href="javascript:void(0);">정기 알림</a></li>--%>
+										<li data-value="Y"><a href="javascript:void(0);">정기 알림</a></li>
 										<li data-value="N"><a href="javascript:void(0);">일시 알림</a></li>
 									</ul>
 								</div>
@@ -1073,7 +1129,7 @@
 							</div>
 							<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 								<div class="sel_calendar">
-									<input type="text" id="job_date" name="job_date" class="sel datepicker fromDate required w-100" value="" autocomplete="off" readonly>
+									<input type="text" id="job_date" name="job_date" class="sel datepicker fromDate required w-100" value="" autocomplete="off" readonly placeholder="기준 일자">
 									<small class="hidden warning">기준일을 선택해 주세요</small>
 								</div>
 							</div>

@@ -261,6 +261,8 @@
 						afterDatePick($(this).attr('id'));
 					});
 
+					afterDatePick('인출_가능_기한');
+
 					sumUnpaid();
 				} else {
 					alert('등록된 데이터가 없습니다.');
@@ -330,6 +332,12 @@
 				$('#보험_만기일' + idx).parent().next('span').html(diff + '일 남음');
 				$('#보험_만기일_차이' + idx).val(diff + '일 남음');
 			}
+		} else if (thisName == '인출_가능_기한') {
+			var close = $('#인출_가능_기한').text().trim().split('-')
+			close = new Date(close[0], close[1], close[2]);
+			let diff = dateDiff(close, new Date(), 'day');
+
+			$('#인출_가능_남은일').html(Math.floor(diff) + '일&nbsp;&nbsp;남음');
 		}
 	}
 
@@ -835,7 +843,10 @@
 					</tr>
 					<tr>
 						<th>인출 가능 기한</th>
-						<td id="인출_가능_기한"></td>
+						<td>
+							<span id="인출_가능_기한"></span>
+							<span class="fixed_height" id="인출_가능_남은일">XX일 남음</span>
+						</td>
 						<th></th>
 						<td></td>
 					</tr>
