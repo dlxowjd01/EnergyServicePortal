@@ -7,6 +7,7 @@
 	let date = new Date();
 	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
+	const contact_phone = '<c:out value="${sessionScope.userInfo.contact_phone}" escapeXml="false" />';
 
 	$(function () {
 		pageInit();
@@ -167,6 +168,57 @@
 		let option = {};
 		if (action == 'post' || action == 'patch') {
 			let data = setData();
+			if (isEmpty(data['site_id'])) {
+				alert('발전소명은 필수 값입니다.');
+				return false;
+			}
+
+			if (isEmpty(data['job_type'])) {
+				alert('점검 구분은 필수 값입니다.');
+				return false;
+			}
+
+			if (isEmpty(data['job_date'])) {
+				alert('기준 일자는 필수 값입니다.');
+				return false;
+			}
+
+			if (isEmpty(data['repeat_yn'])) {
+				alert('점검 주기는 필수 값입니다.');
+				return false;
+			} else {
+				if (data['repeat_yn'] == 'Y') {
+					if (isEmpty(data['repeat_interval'])) {
+						alert('정기 점검은 반복 기간은 필수 값입니다.');
+						return false;
+					}
+
+					if (isEmpty(data['repeat_unit'])) {
+						alert('정기 점검 반복 주기는 필수 값입니다.');
+						return false;
+					}
+				}
+			}
+
+			let job_info = JSON.parse(data['job_info']);
+			if (!isEmpty(job_info['alarmSetup'])) {
+
+				if (isEmpty(job_info['alarmDate'])) {
+					alert('알람 설정시 알람 일자는 필수 값입니다.');
+					return false;
+				}
+
+				if (isEmpty(job_info['alarmTime'])) {
+					alert('알람 설정시 알람 시간은 필수 값입니다.');
+					return false;
+				}
+
+				if (isEmpty(job_info['alarmPhone'])) {
+					alert('알람 설정시 알람 수신번호는 필수 값입니다.');
+					return false;
+				}
+			}
+
 			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
 			let url = '';
 			if (action == 'patch') {
@@ -363,6 +415,7 @@
 				$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
 			});
 
+			$('#alarmPhone').val(contact_phone);
 			deleteScheduleBtn.addClass('hidden');
 			addScheduleBtn.attr('onclick', 'maintenance(\'post\');').text('등록');
 		} else {
