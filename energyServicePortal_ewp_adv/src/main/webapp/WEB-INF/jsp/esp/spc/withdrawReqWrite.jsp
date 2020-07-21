@@ -59,8 +59,8 @@
 			{ name: "배당금 적립", val: 4 },
 			{ name: "일반 지출", val: 5 },
 			{ name: "DSRA 적립", val: 6 },
-			{ name: "기타", val: 7 },
 			{ name: "운영계좌", val: 8 },
+			{ name: "기타", val: 7 },
 		];
 		// let pList = [
 		// 	{ name: "REC 수익", val: 0 },
@@ -71,7 +71,7 @@
 		// 	{ name: "기타", val: 5 },
 		// ];
 		for(let i=0; i<pList.length; i++){
-			let str = copyPurposeList.replace(/\*purpose_title\*/g, pList[i].name).replace(/\*purpose_value\*/g, pList[i].val);
+			let str = copyPurposeList.replace(/\*purposeTitle\*/g, pList[i].name).replace(/\*purposeValue\*/g, pList[i].val);
 			purposeList.append($(str));
 		}
 
@@ -179,9 +179,6 @@
 						});
 						// console.log("tempArr---", tempArr)
 					}).then(() => {
-						$(".receive-list").empty();
-						$(".receive-list").prev().html('선택<span class="caret">');
-
 						const filteredArr = tempArr.reduce((acc, current) => {
 							// comparison 1. 은행 이름
 							const x = acc.find(item => item.accNum === current.accNum);
@@ -203,7 +200,7 @@
 								accNum = v.accNum;
 								accHolder = v.accHolder;
 								bankName = v.bankName;
-								sending = copyWithdrawList.replace(/\*withdraw_account\*/g, v.accType).replace(/\*bank_name\*/g, bankName).replace(/\*acc_num\*/g, accNum).replace(/\*acc_holder\*/g, accHolder);
+								sending = copyWithdrawList.replace(/\*bank_name\*/g, bankName).replace(/\*acc_num\*/g, accNum).replace(/\*acc_holder\*/g, accHolder);
 								withdrawList.append($(sending));
 							} else {
 								bankName = v.bankName;
@@ -217,7 +214,7 @@
 						});
 					});
 				} else {
-					sending = copyWithdrawList.replace(/\*withdraw_account\*/g, '등록된 출금 계좌가 없습니다.').replace(/\*bank_name\*/g, '등록 계좌 없음').replace(/\*acc_num\*/g,'').replace(/\*acc_num\*/g, '').replace(/\*acc_holder\*/g, '');
+					sending = copyWithdrawList.replace(/\*bank_name\*/g, '등록 계좌 없음').replace(/\*acc_num\*/g,'').replace(/\*acc_holder\*/g, '');
 					receiving = copyReceiveList.replace(/\*to_acc_type\*/g, '등록된 입금 계좌가 없습니다.').replace(/\*to_bank_name\*/g, '등록 계좌 없음').replace(/\*to_account_no\*/g, '').replace(/\*acc_holder\*/g, '');
 					withdrawList.append($(sending));
 					receiveList.append($(receiving));
@@ -252,6 +249,8 @@
 			let arr =[];
 			let finalNameList = [];
 			let uid = `${sessionScope.userInfo.uid}`;
+
+			warning.addClass("hidden");
 			jsonData.spc_id = spcList.prev().data("value");
 			// from
 			jsonData.withdraw_bank = withdrawList.prev().data("name");
@@ -322,6 +321,7 @@
 
 				} else {
 					if(value == undefined ||  value == "선택" || value == "") {
+						console.log("empty Value====", value)
 						warning.eq(2).removeClass('hidden');
 					} else {
 						warning.eq(2).addClass('hidden');
@@ -442,7 +442,7 @@
 <div class="row header-wrapper">
 	<div class="col-12">
 		<h1 class="page-header">출금 요청서 신청</h1>
-		<div class="time fr"><span>CURRENT TIME</span><em class="currTime">${nowTime}</em><span>DATA BASE TIME</span><em class="dbTime"></em></div>
+		<div class="time fr"><span>CURRENT TIME</span><em class="currTime">${nowTime}</em></div>
 	</div>
 </div>
 
@@ -516,7 +516,7 @@
 									<div class="dropdown placeholder">
 										<button class="btn btn-primary dropdown-toggle" data-clone="empty" type="button" data-toggle="dropdown" data-name="" data-value="">선택<span class="caret"></span></button>
 										<ul id="purposeList" class="dropdown-menu" role="menu">
-											<li data-value="*purpose_value*"><a href="#" tabindex="-1">*purpose_title*</a></li>
+											<li data-value="*purposeValue*"><a href="#" tabindex="-1">*purposeTitle*</a></li>
 										</ul>
 									</div>
 								</div>
