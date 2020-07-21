@@ -70,8 +70,7 @@
 							var spcGensRow = spcGensList[j],
 								rowData = result.data[i],
 								newData = {},
-								contractInfo = JSON.parse(spcGensRow.contract_info),
-								deviceInfo = JSON.parse(spcGensRow.device_info),
+								maintenanceInfo = JSON.parse(spcGensRow.maintenance_info);
 								originFile = new Array();
 
 							$.ajax({
@@ -109,13 +108,22 @@
 								}
 							});
 
+							let termDate = '';
+							if (!isEmpty(maintenanceInfo)) {
+								let mainFrom = maintenanceInfo['관리_운영_기간_from'];
+								let mainTo = maintenanceInfo['관리_운영_기간_to'];
+								if (!isEmpty(mainFrom) && !isEmpty(mainTo)) {
+									termDate = new Date(mainFrom).format('yyyy-MM-dd') + ' ~ ' + new Date(mainTo).format('yyyy-MM-dd')
+								}
+							}
+
 							newData["name"] = rowData.name;
 							newData["oid"] = rowData.oid;
 							newData["spc_id"] = rowData.spc_id;
 							newData["gen_id"] = spcGensRow.gen_id;
 							newData["발전소_명"] = spcGensRow.name;
-							newData["관리_운영_기간"] = nvl(contractInfo["관리_운영_기간"], "-");
-							newData["설치_용량"] = nvl(contractInfo["설치_용량"], "-");
+							newData["관리_운영_기간"] = nvl(termDate, "-");
+							// newData["설치_용량"] = nvl(contractInfo["설치_용량"], "-");
 							//키워드 검색 조건 필터 처리
 							if (newData["name"].toLowerCase().indexOf(keyWord) > -1 || newData["발전소_명"].toLowerCase().indexOf(keyWord) > -1) {
 								jsonList.push(newData)
@@ -181,10 +189,10 @@
 						<col style="width:5%">
 						<col style="width:25%">
 						<col style="width:25%">
-						<col style="width:10%">
-						<col style="width:15%">
-						<col style="width:10%">
-						<col style="width:10%">
+<%--						<col style="width:10%">--%>
+						<col style="width:18%">
+						<col style="width:14%">
+						<col style="width:13%">
 						<col>
 					</colgroup>
 					<thead>
@@ -195,7 +203,7 @@
 							</th>
 							<th><button class="btn_align down">SPC명</button></th>
 							<th><button class="btn_align down">발전소 명</button></th>
-							<th class="right"><button class="btn_align down">용량(kW)</button></th>
+<%--							<th class="right"><button class="btn_align down">용량(kW)</button></th>--%>
 							<th><button class="btn_align down">관리 운영기간</button></th>
 							<th class="right"><button class="btn_align down">이관자료</button></th>
 							<th class="right"><button class="btn_align up">첨부파일</button></th>
@@ -209,7 +217,7 @@
 							</td>
 							<td><a href="/spc/entityDetailsBySPC.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">[name]</a></td>
 							<td><a href="/spc/entityDetailsBySPC.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">[발전소_명]</a></td>
-							<td class="right">[설치_용량]</td>
+<%--							<td class="right">[설치_용량]</td>--%>
 							<td>[관리_운영_기간]</td>
 							<td class="right">[파일_현재_개수] / [파일_총_개수]</td>
 							<td class="right">[첨부파일]건</td>

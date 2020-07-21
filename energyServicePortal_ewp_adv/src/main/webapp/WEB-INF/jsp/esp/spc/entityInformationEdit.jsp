@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
-
 <script src="/js/commonDropdown.js"></script>
 <script>
 	const oid = '${sessionScope.userInfo.oid}';
@@ -713,11 +712,13 @@
 				$('#보험_만기일_차이' + idx).val(diff + '일 남음');
 			}
 		}  else if (thisName == '인출_가능_기한') {
-			var close = $('#인출_가능_기한').val().trim().split('-')
-			close = new Date(close[0], close[1], close[2]);
-			let diff = dateDiff(close, new Date(), 'day');
+			if (!isEmpty($('#인출_가능_기한').text().trim())) {
+				var close = $('#인출_가능_기한').val().trim().split('-')
+				close = new Date(close[0], close[1], close[2]);
+				let diff = dateDiff(close, new Date(), 'day');
 
-			$('#인출_가능_남은일').html(Math.floor(diff) + '일&nbsp;&nbsp;남음');
+				$('#인출_가능_남은일').html(Math.floor(diff) + '일&nbsp;&nbsp;남음');
+			}
 		} else if (thisName == '공사_계약_정보_약정일') {
 			let close = $('#' + thisName).datepicker('getDate');
 			close.setFullYear(close.getFullYear() + 1);
