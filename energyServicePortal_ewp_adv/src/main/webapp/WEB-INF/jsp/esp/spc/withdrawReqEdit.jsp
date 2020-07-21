@@ -240,7 +240,7 @@
 										$(".receive-list").each(function(){
 											$(this).empty().append($(receiving));
 											$(this).find("li").on("click", function(){
-												console.log("receive list clicking---")
+												// console.log("receive list clicking---")
 												$(this).prev().data({"value": $(this).data("value"), "name": $(this).data("name") });
 											});
 										});
@@ -251,7 +251,7 @@
 						}).then(() => {
 							calcTotal();
 							withdrawList.find("li").on("click", function(){
-								console.log("withdrawList clicking---")
+								// console.log("withdrawList clicking---")
 								withdrawList.prev().data({"value": $(this).data("value"), "name": $(this).data("name"), "acc-holder" : $(this).data("acc-holder") });
 							});
 							
@@ -269,7 +269,7 @@
 				$(".receive-list").each(function(){
 					$(this).empty().append($(receivingNodata));
 					$(this).find("li").on("click", function(){
-						console.log("receive list clicking---")
+						// console.log("receive list clicking---")
 						$(this).prev().data({"value": "", "name": "" });
 					});
 				});
@@ -364,7 +364,7 @@
 			let newJson = JSON.stringify(jsonData);
 			let formArr = [ jsonData.withdraw_day, arr ];
 
-			console.log("formArr===", formArr)
+			// console.log("formArr===", formArr)
 			$.each(formArr, function(index, value){
 				if(index === 0) {
 					arr.forEach((item, index) => {
