@@ -10,8 +10,9 @@
 	// param: withdrawReqStatus.do
 	const spcId = '${param.req_detail_spc_id}';
 	const spcName = '${param.req_detail_spc_name}';
-	const reqId = '${param.req_detail_req_id}'; 
-	const accNum = '${param.req_detail_acc_info}';
+	const reqId = '${param.req_detail_req_id}';
+	const accHolder = '${param.req_detail_acc_holder}';
+	const accInfo = '${param.req_detail_acc_info}';
 	const status = '${param.req_detail_status}';
 	const statusVal = '${param.req_detail_status_val}';
 
@@ -101,7 +102,7 @@
 										resolve(JSON.parse(item.to_account))
 									}).then(res => {
 										res.map(x => {
-											console.log("x===", x)
+											// console.log("x===", x)
 											let popObj = Object.assign({}, item);
 											delete(popObj.to_account);
 											let purposeList = [
@@ -175,7 +176,7 @@
 								res[0].map(x => {
 									let popObj = Object.assign({}, item);
 									delete(popObj.to_account);
-									console.log("x===", x)
+									// console.log("x===", x)
 									let purposeList = [
 										{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적림", "일반 지출", "DSRA 적립", "기타", "운영계좌" ]},
 										{ label: "입금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
@@ -236,9 +237,9 @@
 				// totalPage = Math.ceil(sortList.length/pagePerData);
 				
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.log("error===", jqXHR, "text000", textStatus )
-				$("#warningModal .modal-title").text('처리 중 오류가 발생했습니다.');
-				$("#warningModal").modal("show");
+				// console.log("error===", jqXHR, "text000", textStatus )
+				// $("#warningModal .modal-title").text('처리 중 오류가 발생했습니다.');
+				// $("#warningModal").modal("show");
 				return false;
 			});
 		}
@@ -334,59 +335,97 @@
 
 	// onclick="location.href=apiHost + '/files/download/5c71e049-f73c-2bf9-a9a0-2f91d067ef11?oid=spower&orgFilename=수익보고서_20200526100755.pdf'"
 
-	function downloadFile(self){
-		let apiUrl = '';
-		if($(self).data("name") == "receipt") {
-
-		} else if($(self).data("name") == "reqDoc"){
-			apiUrl = 'request';
-		} else if($(self).data("name") == "proof"){
-			apiUrl = 'evidence';
+	function previewPdf(self){
+		let token = '${sessionScope.userInfo.token}'
+		let url = '';
+		if($(self).data("name") == "previewMergeDocs") {
+			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&evidence=true';
+		} else if($(self).data("name") == "previewReqDoc"){
+			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId;
+		} else if($(self).data("name") == "previewProof"){
+			url = apiHost + '/spcs/transactions/download/evidence?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId;
 		};
-		// var a = document.createElement('a');
-		// const url = apiHost + '/spcs/transactions/download/request?oid='+ oid + '&spc_id=' + spcId + '&request_id=' + reqId;
+
+		$.ajax({
+			url: url,
+			method: 'GET',
+			beforeSend: function (jqXHR, settings) {
+				jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+			},
+			// headers: {
+			// 	'Authorization': 'Bearer ' + token,
+			// },
+			xhrFields: {
+				responseType: 'blob'
+			},
+			// dataType: 'binary',
+			success: function(data) {
+				let account = $("#tableBody").find("tr:first-child td:nth-child(2)").text().replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+				let d = new Date().toLocaleDateString("en-CA")  ;
+				let name = d + '_' + spcName + '_' + account + '.pdf';
+				data.name = name;
+
+				let src = window.URL.createObjectURL(data);
+				let wrapper = document.createElement('div');
+				let preview = document.createElement('iframe');
+				let el = document.querySelector(".outer-wrapper");
+
+				wrapper.setAttribute("id", "previewWrapper")
+				wrapper.style.cssText = "position:absolute; top:0px; left:0; right:0; bottom: 0px; margin: 0 auto; width:100%; height:100%;"
+				preview.setAttribute("type", "application/pdf");
+				preview.setAttribute("id", "previewFrame");
+				preview.style.cssText = "position:absolute; top:0px; left:0; right:0; bottom: 20px; margin: 0 auto; padding: 0 20%; width:100%; height:100%; z-index:999999; frameborder: 0"
+				wrapper.appendChild(preview)
+				document.body.insertBefore(wrapper, el);
+				preview.src = src;
+				document.body.querySelector(".outer-wrapper").style.cssText = "filter: blur(4px);"
+
+				$("#previewWrapper").on("click", function(){
+					$(this).remove();
+					document.body.querySelector(".outer-wrapper").style.cssText = "filter: none"
+				})
+			}
+		});
+	}
 	
-		// let account = $("#tableBody").find("tr:first-child td:nth-child(2)").text().replace(/^\s+|\s+$|\s+(?=\s)/g, "");
-		// let d = new Date();
-		// d = d.toISOString().substring(0, 10).replace(/-/g, "");
-		// let name = d + '_' + spcName + '_' + account + '.pdf';
-		// var link = window.URL.createObjectURL(url);
-		// a.href = link;
-		// a.download = name;
-		// document.body.append(a);
-		// a.click();
-		// a.remove();
-		// var link = window.URL.createObjectURL(data);
-		// console.log("acc---", account)
-		// window.URL.revokeObjectURL(link);
+	function downloadFile(self){
+		let token = '${sessionScope.userInfo.token}'
+		let url = '';
+		if($(self).data("name") == "downloadMergeDocs") {
+			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&evidence=true';
+		} else if($(self).data("name") == "downloadReqDoc"){
+			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId;
+		} else if($(self).data("name") == "downloadProof"){
+			url = apiHost + '/spcs/transactions/download/evidence?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId;
+		};
 
-		// window.location= url;
-		// document.location.assign(a.href);
-
-			$.ajax({
-				url: apiHost + '/spcs/transactions/download/' + apiUrl + '?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId,
-				method: 'GET',
-				xhrFields: {
-					responseType: 'blob'
-				},
-				// dataType: 'binary',
-				success: function(data) {
-					console.log("data---", data)
-					let account = $("#tableBody").find("tr:first-child td:nth-child(2)").text().replace(/^\s+|\s+$|\s+(?=\s)/g, "");
-					let d = new Date();
-					d = d.toISOString().substring(0, 10).replace(/-/g, "");
-					let name = d + '_' + spcName + '_' + account + '.pdf';
-					var a = document.createElement('a');
-					var url = window.URL.createObjectURL(data);
-					a.href = url;
-					a.download = name;
-					document.body.append(a);
-					a.click();
+		$.ajax({
+			url: url,
+			method: 'GET',
+			beforeSend: function (jqXHR, settings) {
+				jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+			},
+			xhrFields: {
+				responseType: 'blob'
+			},
+			// dataType: 'binary',
+			success: function(data) {
+				let account = $("#tableBody").find("tr:first-child td:nth-child(2)").text().replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+				let d = new Date();
+				d = d.toISOString().substring(0, 10).replace(/-/g, "");
+				let name = d + '_' + spcName + '_' + account + '.pdf';
+				var a = document.createElement('a');
+				var url = window.URL.createObjectURL(data);
+				a.href = url;
+				a.download = name;
+				document.body.append(a);
+				a.click();
+				setTimeout(function(){
 					a.remove();
 					window.URL.revokeObjectURL(url);
-				}
-			});
-				
+				}, 200);
+			}
+		});
 	}
 
 
@@ -423,9 +462,8 @@
 	// 		// });
 	// 	}
 
-
-
 </script>
+
 
 <div class="modal fade" id="warningModal" role="dialog">
 	<div class="modal-dialog">
@@ -458,11 +496,11 @@
 			</div>
 			<div class="flex_start">
 				<h2 class="tx_tit">SPC 명</h2>
-				<span id="spcName" class="tx_tit"></span>
+				<span id="spcName" class="tx_tit">${param.req_detail_spc_id}</span>
 			</div>
 			<div class="flex_start">
 				<h2 class="tx_tit">출금 계좌 번호</h2>
-				<span class="tx_tit">${param.req_detail_acc_info}</span>
+				<span class="tx_tit">${param.req_detail_acc_info} ${param.req_detail_acc_holder}</span>
 			</div>
 
 			<div class="tbl_wrap_type collect_wrap mt30">
@@ -503,17 +541,30 @@
 	</div>
 	<div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
 		<form id="attachedFileForm" name="attached_file_form" action="#" method="post">
-			<div class="indiv spc-detail">
+			<div class="indiv spc-detail spc-req-status">
 				<div class="flex_wrapper"><h2 class="ntit">증빙 서류</h2></div>
 				<div id="attachementList" class="attachment-list"></div>
 
 				<div class="flex_wrapper">
 					<h2 class="heading">출금 요청서</h2>
-					<div class="fr"><button type="button" class="btn_type ml-12" onclick="downloadFile(this)" data-name="reqDoc">다운로드</button></div>
+					<div class="fr"><!--
+					--><button type="button" class="btn_type03" onclick="previewPdf(this)" data-name="previewReqDoc">미리 보기</button><!--
+					--><button type="button" class="btn_type ml-12" onclick="downloadFile(this)" data-name="downloadReqDoc">다운로드</button><!--
+				--></div>
+				</div>
+				<div class="flex_wrapper file-wrapper">
+					<h2 class="heading">증빙 서류</h2><input type="hidden" name="proof_file" id="proofFile" class="sr-only"/>
+					<div class="fr"><!--
+					--><button type="button" class="btn_type03" onclick="previewPdf(this)" data-name="previewProof">미리 보기</button><!--
+					--><button type="button" class="btn_type ml-12" onclick="downloadFile(this)" data-name="downloadProof" >다운로드</button><!--
+				--></div>
 				</div>
 				<div class="flex_wrapper border file-wrapper">
-					<h2 class="heading">증빙 서류</h2><input type="hidden" name="proof_file" id="proofFile" class="sr-only"/>
-					<div class="fr"><button type="button" class="btn_type ml-12" onclick="downloadFile(this)" data-name="proof" >다운로드</button></div>
+					<h2 class="heading">출금 요청서 + 증빙 서류</h2><input type="hidden" name="proof_file" id="proofFile" class="sr-only"/>
+					<div class="fr"><!--
+					--><button type="button" class="btn_type03" onclick="previewPdf(this)" data-name="previewMergeDocs">미리 보기</button><!--
+					--><button type="button" class="btn_type ml-12" onclick="downloadFile(this)" data-name="downloadMergeDocs" >다운로드</button><!--
+				--></div>
 				</div>
 				<div class="flex_wrapper mt20">
 					<h2 class="heading">메모 히스토리</h2>
