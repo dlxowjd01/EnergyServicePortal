@@ -127,7 +127,7 @@
 								let desc = '';
 								let idx = '';
 								let purposeArr = [
-									{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적림", "일반 지출", "DSRA 적립", "기타", "운영계좌" ]},
+									{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적립", "일반 지출", "DSRA 적립", "기타", "운영계좌" ]},
 									{ label: "입금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
 								];
 								if(index == 0){
@@ -220,6 +220,8 @@
 									let receiving = '';
 									let bankName = '';
 									let accNum = '';
+									let accHolder = '';
+									console.log("v===", v.accHolder)
 									if(v.accType.match("출금")){
 										accNum = v.accNum;
 										accHolder = v.accHolder;
@@ -383,32 +385,43 @@
 			// console.log("json--", jsonData);
 			let newJson = JSON.stringify(jsonData);
 			let formArr = [ jsonData.withdraw_day, arr ];
-
+			var flagArr = [];
+			flagArr.length = 0;
 			// console.log("formArr===", formArr)
 			$.each(formArr, function(index, value){
 				if(index === 0) {
+					console.log("arr===", arr)
 					arr.forEach((item, index) => {
-						if(item.purpose == "" || item.purpose == "undefined" ) {
-							warning.eq(2).removeClass('hidden');
-						} else if (item.amount == 0) {
-							warning.eq(2).removeClass('hidden');
-						}  else if (item.to_account_no == "undefined" ) {
-							warning.eq(2).removeClass('hidden');
-						} else {
-							warning.eq(2).addClass('hidden');
+						if(item.purpose != 0 && item.purpose == "" || item.purpose != 0 && item.purpose == "undefined" ) {
+							let obj = { label: "purposeEmpty", val: 0 }
+							flagArr.push(obj);
+							// warning.eq(2).removeClass('hidden');
+						}
+						if (item.amount == 0) {
+							let obj = { label: "amountEmpty", val: 1 }
+							flagArr.push(obj);
+						}
+						if (item.to_account_no == "undefined" ) {
+							let obj = { label: "accNumEmpty", val: 2 }
+							flagArr.push(obj);
 						}
 					});
-
 				} else {
 					if(value == undefined ||  value == "선택" || value == "") {
-						warning.eq(2).removeClass('hidden');
-					} else {
-						warning.eq(2).addClass('hidden');
+						flagArr.push("withdrawDayEmpty");
+						console.log("withdrawDayEmpty===", item.value)
 					}
 				}
 			});
 
-			if( withdrawForm.find(".warning.hidden").length == 2 ){
+			if(flagArr.length > 0){
+				console.log("flag===", flagArr)
+				warning.removeClass('hidden');
+			} else {
+				warning.addClass('hidden');
+			}
+
+			if( withdrawForm.find(".warning.hidden").length === 1 ){
 				let opt = {
 					url: apiHost + '/spcs/transactions/' + reqId + '?oid=' + oid,
 					type: "patch",
@@ -589,7 +602,7 @@
 								<td>
 									<div class="sa_select">
 										<div class="dropdown placeholder">
-											<button class="btn btn-primary dropdown-toggle" data-clone="empty" type="button" data-toggle="dropdown" data-name="*purposeTitle*" data-value="*purposeVal*">*purposeTitle*<span class="caret"></span></button>
+											<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="*purposeTitle*" data-value="*purposeVal*">*purposeTitle*<span class="caret"></span></button>
 											<ul id="purposeList*index*" class="purpose-list dropdown-menu" role="menu">
 												<li data-value="0"><a href="#" tabindex="-1">관리운영비</a></li>
 												<li data-value="1"><a href="#" tabindex="-1">사무수탁비</a></li>
@@ -612,7 +625,7 @@
 								<td>
 									<div class="sa_select">
 										<div class="dropdown placeholder">
-											<button class="btn btn-primary dropdown-toggle" type="button" data-clone="empty" data-toggle="dropdown" data-name="*bankName*" data-value="*accNum*">*bankName*  *accNum*<span class="caret"></span></button>
+											<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="*bankName*" data-value="*accNum*">*bankName*  *accNum*<span class="caret"></span></button>
 												<ul id="receiveList*index*" class="receive-list dropdown-menu" role="menu">
 													<li data-acc-holder="*acc_holder*" data-acc-type="*to_acc_type*" data-name="*to_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_bank_name* *to_account_no*</a></li>
 												</ul>
@@ -638,7 +651,6 @@
 				</table>
 				<div class="btn_wrap_type">
 					<div class="fl"><!--
-					--><small class="hidden warning">테이블의 출금 요청 정보를 모두 기입해 주세요.</small><!--
 					--><small class="hidden warning">출금 요청 정보를 기입해 주세요.</small><!--
 				--></div><!--
 				--><button type="button" id="deleteRowBtn" class="btn_type07">선택 삭제</button><!--

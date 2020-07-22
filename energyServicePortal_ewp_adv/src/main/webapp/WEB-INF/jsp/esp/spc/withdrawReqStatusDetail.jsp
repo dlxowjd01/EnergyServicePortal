@@ -106,7 +106,7 @@
 											let popObj = Object.assign({}, item);
 											delete(popObj.to_account);
 											let purposeArr = [
-												{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적림", "일반 지출", "DSRA 적립", "기타", "운영계좌" ]},
+												{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적립", "일반 지출", "DSRA 적립", "기타", "운영계좌" ]},
 												{ label: "입금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
 											];
 											let purpose = '';
@@ -178,7 +178,7 @@
 									delete(popObj.to_account);
 									// console.log("x===", x)
 									let purposeArr = [
-										{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적림", "일반 지출", "DSRA 적립", "기타", "운영계좌" ]},
+										{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적립", "일반 지출", "DSRA 적립", "기타", "운영계좌" ]},
 										{ label: "입금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
 									];
 									let purpose = '';
@@ -284,6 +284,10 @@
 				updateReq(undefined, preserved, preserved2);
 				// handleReq(newStatus, updateReq);
 			}
+		});
+
+		$("#rejectBtn").on("click", function() {
+			updateReq(0);
 		});
 
 		function handleReq(newStatus, callback){
@@ -582,7 +586,7 @@
 						<textarea placeholder="직접입력" id="txt2" class="textarea w-100"></textarea>
 					</div>
 					<div class="spc-btn-group my-20"><!--
-					--><button type="button" id="rejectBtn" onclick="updateReq(0)" class="btn_type03 w80">반송</button><!--
+					--><button type="button" id="rejectBtn" class="btn_type03 w80">반송</button><!--
 					--><button type="submit" class="btn_type ml-12">승인</button><!--
 				--></div>
 				</c:if>
