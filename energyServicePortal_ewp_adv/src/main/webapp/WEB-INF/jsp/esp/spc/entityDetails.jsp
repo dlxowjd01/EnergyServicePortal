@@ -333,11 +333,13 @@
 				$('#보험_만기일_차이' + idx).val(diff + '일 남음');
 			}
 		} else if (thisName == '인출_가능_기한') {
-			var close = $('#인출_가능_기한').text().trim().split('-')
-			close = new Date(close[0], close[1], close[2]);
-			let diff = dateDiff(close, new Date(), 'day');
+			if (!isEmpty($('#인출_가능_기한').text().trim())) {
+				var close = $('#인출_가능_기한').text().trim().split('-')
+				close = new Date(close[0], close[1], close[2]);
+				let diff = dateDiff(close, new Date(), 'day');
 
-			$('#인출_가능_남은일').html(Math.floor(diff) + '일&nbsp;&nbsp;남음');
+				$('#인출_가능_남은일').html(Math.floor(diff) + '일&nbsp;&nbsp;남음');
+			}
 		}
 	}
 
@@ -357,16 +359,29 @@
 		let excelName = 'spc_' + genName + '_';
 
 		var excelHtml = '';
+		excelHtml += $('#basicInfo h2').html();
 		excelHtml += $('#basicInfo #basicInfoToggle').html();
-		excelHtml += $('#addressInfo #basicInfoToggle').html();
+		excelHtml += $('#addressInfo h2').html();
+		excelHtml += $('#addressInfo #addressInfoToggle').html();
+		excelHtml += $('#maintenanceInfo h2').html();
 		excelHtml += $('#maintenanceInfo #maintenanceInfoToggle').html();
+		excelHtml += $('#accountInfo h2').html();
 		excelHtml += $('#accountInfo #accountInfoToggle').html();
+		excelHtml += $('#financeInfo h2').html();
 		excelHtml += $('#financeInfo #financeInfoToggle').html();
+		excelHtml += $('#contractInfo h2').html();
 		excelHtml += $('#contractInfo #contractInfoToggle').html();
+		excelHtml += $('#insuranceInfo h2').html();
 		excelHtml += $('#insuranceInfo #insuranceInfoToggle').html();
+		excelHtml += $('#deviceInfo h2').html();
 		excelHtml += $('#deviceInfo #deviceInfoToggle').html();
+		excelHtml += $('#warrantyInfo h2').html();
 		excelHtml += $('#warrantyInfo #warrantyInfoToggle').html();
+		excelHtml += $('#coefficientInfo h2').html();
 		excelHtml += $('#coefficientInfo #coefficientInfoToggle').html();
+		excelHtml += $('#associatedInfo h2').html();
+		excelHtml += $('#associatedInfo #associatedInfoToggle').html();
+		excelHtml += $('.attachment h2').html();
 		excelHtml += $('#attachement_info #attachementInfoToggle').html();
 
 		$('#excelList').html(excelHtml);
@@ -845,7 +860,7 @@
 						<th>인출 가능 기한</th>
 						<td>
 							<span id="인출_가능_기한"></span>
-							<span class="fixed_height" id="인출_가능_남은일">XX일 남음</span>
+							<span class="fixed_height" id="인출_가능_남은일"></span>
 						</td>
 						<th></th>
 						<td></td>
@@ -978,7 +993,7 @@
 						<td class="flex_start">
 							<span id="보험_종료일[index]"></span>
 							&nbsp;&nbsp;&nbsp;&nbsp;
-							<span class="fixed_height" id="보험_종료일_차이[index]">XX일 남음</span>
+							<span class="fixed_height" id="보험_종료일_차이[index]"></span>
 						</td>
 					</tr>
 					<tr>
@@ -988,7 +1003,7 @@
 						<td class="flex_start">
 							<span id="보험_만기일[index]"></span>
 							&nbsp;&nbsp;&nbsp;&nbsp;
-							<span class="fixed_height" id="보험_만기일_차이[index]">XX일 남음</span>
+							<span class="fixed_height" id="보험_만기일_차이[index]"></span>
 						</td>
 					</tr>
 				</table>
@@ -1376,6 +1391,8 @@
 				</div>
 			</form>
 		</div>
+
+
 
 		<div class="btn_wrap_type_right"><!--
 			--><button type="button" class="btn_type03" onclick="getExcelDown();">엑셀 다운로드</button><!--
