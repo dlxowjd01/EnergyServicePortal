@@ -234,8 +234,8 @@
 	
 				$.ajax(option).done(function (json, textStatus, jqXHR) {
 					$('#searchOption').removeClass('in');
-					tableBody.empty();
-					tableFooter.empty();
+					$('#tableBody').empty();
+					$('#tableFooter').empty();
 					// console.log("json---", json.data)
 					if (json.data.length > 0) {
 						// console.log("json.data---", json.data)
@@ -249,11 +249,14 @@
 							let newData = json.data.filter(x => {
 								return statusOpt.indexOf(x.status.toString()) > -1
 							});
-							ajaxCallback(Number(currentPage), newData.slice(startNum, endNum), searchOptArr);
-							makeNavigation(Number(currentPage), searchOptArr[0], newData.length)
+							console.log("search===", )
+							ajaxCallback(Number(currentPage), newData, searchOptArr);
+							// ajaxCallback(Number(currentPage), newData.slice(startNum, endNum), searchOptArr);
+							// makeNavigation(Number(currentPage), searchOptArr[0], newData.length)
 						} else {
-							ajaxCallback(Number(currentPage), json.data.slice(startNum, endNum));
-							makeNavigation(Number(currentPage), searchOptArr[0], json.data.length);
+							ajaxCallback(Number(currentPage), json.data);
+							// ajaxCallback(Number(currentPage), json.data.slice(startNum, endNum));
+							// makeNavigation(Number(currentPage), searchOptArr[0], json.data.length);
 						}
 					}
 				}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -269,8 +272,8 @@
 		function ajaxCallback(currentPage, newData, arr) {
 			let totalAmount = 0;
 			var page = currentPage;
+			console.log("newData===", newData)
 			newData.map((item, index) => {
-				// console.log("item===", item)
 				totalAmount += item.total_amount;
 				if(!isEmpty(arr)) {
 					item.opt = arr;	
@@ -314,7 +317,7 @@
 						let visibility = '';
 						let edit_visibility = '';
 						let link_attr = '';
-						let purposeList = [
+						let purposeArr = [
 							{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적림", "일반 지출", "DSRA 적립", "기타", "운영계좌"]},
 							{ label: "입금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
 						];
@@ -344,9 +347,9 @@
 						if( uniqSet.size === 0 ) {
 							purpose = '-'
 						} else if( uniqSet.size == 1 ) {
-						purpose = ( purposeList[0].value[p[0]] )
+						purpose = ( purposeArr[0].value[p[0]] )
 						} else {
-							purpose = ( purposeList[0].value[p[0]] ) + ' 외 +' + ( uniqSet.size - 1 ) + '건';
+							purpose = ( purposeArr[0].value[p[0]] ) + ' 외 +' + ( uniqSet.size - 1 ) + '건';
 						}
 						transaction_spc_id = item.spc_id;
 						transaction_req_id = item.request_id;
@@ -473,30 +476,30 @@
 
 			if (navGroup == 1) {
 				// console.log("navGroup == 1===")
-				pageStr += '<a href="javascript:void(0);" data-value="1" class="btn-prev first-arrow"></a>';
+				pageStr += '<a href="#" data-value="1" class="btn-prev first-arrow"></a>';
 			} else {
 				let prev = currentPage - 1;
 				console.log("totoalPAge===", totalPage)
-				pageStr += '<a href="javascript:void(0);" data-value="' + prev + '" class="btn-prev last-arrow"></a>';
+				pageStr += '<a href="#" data-value="' + prev + '" class="btn-prev last-arrow"></a>';
 			}
 
 			for (let i = startPage ; i <= endPage; i++) {
 				// console.log("startPage===", startPage)
 				if (i==currentPage) {
-					pageStr += '<a href="javascript:void(0);" class="active" data-value="'+ i +'">'+i+'</a>';
+					pageStr += '<a href="#" class="active" data-value="'+ i +'">'+i+'</a>';
 				} else {
-					pageStr += '<a href="javascript:void(0)" class="" data-value="'+ i +'">'+i+'</a>';
+					pageStr += '<a href="#" class="" data-value="'+ i +'">'+i+'</a>';
 				}
 			}
 
 			if (navGroup < totalNav) {
 				// console.log("navGroup < totalNav===", totalNav, "endPage===", endPage)
 				let current = currentPage + 1;
-				pageStr += '<a href="javascript:void(0);" class="btn-next" data-value="'+ current +'></a>';
+				pageStr += '<a href="#" class="btn-next" data-value="'+ current +'></a>';
 			} else {
 				let current = currentPage + 1;
 				// console.log("navGroup > totalNav===", totalNav, "endPage===", currentPage + 1)
-				pageStr += '<a href="javascript:void(0);" class="btn-next" data-value="' + current + '"></a>';
+				pageStr += '<a href="#" class="btn-next" data-value="' + current + '"></a>';
 			}
 			$('#pagination').append(pageStr);
 
@@ -546,7 +549,7 @@
 		if (delPrompt != '삭제') {
 			return false;
 		}
-		let reqId = $(selector).prev().data("id");
+		let reqId = $(selector).prev().data("req-id");
 		let option= {
 			url: apiHost + '/spcs/transactions/' + reqId + '?oid=' + oid,
 			type: 'DELETE',
@@ -554,6 +557,7 @@
 		}
 
 		$.ajax(option).done(function (json, textStatus, jqXHR) {
+			// console.log("success===", json)
 			document.location.reload(true);
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			alert('처리 중 오류가 발생했습니다.');
@@ -938,7 +942,7 @@
 						</template>
 					</tfoot>
 				</table>
-				<div class='pagination' id='pagination'></div>
+				<!-- <div class='pagination' id='pagination'></div> -->
 			</div>
 		</div>
 	</div>
