@@ -51,7 +51,7 @@
 			// console.log("fileLost===", fileList)
 		});
 
-		let pList = [
+		let purposeArr = [
 			{ name: "관리운영비", val: 0 },
 			{ name: "사무수탁비", val: 1 },
 			{ name: "부채상환", val: 2 },
@@ -59,10 +59,10 @@
 			{ name: "배당금 적립", val: 4 },
 			{ name: "일반 지출", val: 5 },
 			{ name: "DSRA 적립", val: 6 },
-			{ name: "기타", val: 7 },
-			{ name: "운영계좌", val: 8 },
+			{ name: "운영계좌", val: 7 },
+			{ name: "기타", val: 8 },
 		];
-		// let pList = [
+		// let purposeArr = [
 		// 	{ name: "REC 수익", val: 0 },
 		// 	{ name: "SMP 수익", val: 1 },
 		// 	{ name: "DSRA 적립", val: 2 },
@@ -70,8 +70,8 @@
 		// 	{ name: "운영 계좌", val: 4 },
 		// 	{ name: "기타", val: 5 },
 		// ];
-		for(let i=0; i<pList.length; i++){
-			let str = copyPurposeList.replace(/\*purposeTitle\*/g, pList[i].name).replace(/\*purposeValue\*/g, pList[i].val);
+		for(let i=0; i<purposeArr.length; i++){
+			let str = copyPurposeList.replace(/\*purposeTitle\*/g, purposeArr[i].name).replace(/\*purposeValue\*/g, purposeArr[i].val);
 			purposeList.append($(str));
 		}
 
@@ -129,7 +129,6 @@
 
 		function getAccountInfo (id) {
 			if (isEmpty(id)) return false;
-			
 			let action = 'get';
 			let syncOpt = true;
 			let option= {

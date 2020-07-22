@@ -126,7 +126,7 @@
 								let account_num = '';
 								let desc = '';
 								let idx = '';
-								let purposeList = [
+								let purposeArr = [
 									{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적림", "일반 지출", "DSRA 적립", "기타", "운영계좌" ]},
 									{ label: "입금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
 								];
@@ -142,8 +142,8 @@
 								}
 
 								if(!isEmpty(element.purpose)){
-									console.log("element.purpose===", element)
-									purpose = purposeList[0].value[element.purpose];
+									// console.log("element.purpose===", element)
+									purpose = purposeArr[0].value[element.purpose];
 									purpose_val = element.purpose;
 								} else {
 									purpose = '-';
@@ -253,7 +253,7 @@
 							$(".purpose-list").each(function(){
 								let purpose = $(this);
 								$(this).find("li").on("click", function(){
-									console.log("purpose===", purpose)
+									// console.log("purpose===", purpose)
 									purpose.data("value", $(this).data("value"));
 								})
 							});
@@ -352,7 +352,7 @@
 			jsonData.transfer_agent = loginName;
 			jsonData.total_amount = totalAmount;
 			
-			console.log("total---", totalAmount);
+			// console.log("total---", totalAmount);
 
 			let fileNames = $("#addFileList").find("li.upload_text");
 			$.each(fileNames, function(index, element){

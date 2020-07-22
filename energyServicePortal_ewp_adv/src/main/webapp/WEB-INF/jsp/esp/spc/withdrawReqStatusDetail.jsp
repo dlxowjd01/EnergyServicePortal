@@ -105,7 +105,7 @@
 											// console.log("x===", x)
 											let popObj = Object.assign({}, item);
 											delete(popObj.to_account);
-											let purposeList = [
+											let purposeArr = [
 												{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적림", "일반 지출", "DSRA 적립", "기타", "운영계좌" ]},
 												{ label: "입금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
 											];
@@ -115,8 +115,8 @@
 											let bankName = '';
 											let amount = '';
 											let desc = '';
-											if(!isEmpty(purposeList[0].value[x.purpose])){
-												purpose = purposeList[0].value[x.purpose];
+											if(!isEmpty(purposeArr[0].value[x.purpose])){
+												purpose = purposeArr[0].value[x.purpose];
 											} else {
 												purpose = '-'
 											}
@@ -177,7 +177,7 @@
 									let popObj = Object.assign({}, item);
 									delete(popObj.to_account);
 									// console.log("x===", x)
-									let purposeList = [
+									let purposeArr = [
 										{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적림", "일반 지출", "DSRA 적립", "기타", "운영계좌" ]},
 										{ label: "입금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
 									];
@@ -187,8 +187,8 @@
 									let accNum = '';
 									let amount = '';
 									let desc = '';
-									if(!isEmpty(purposeList[0].value[x.purpose])){
-										purpose = purposeList[0].value[x.purpose];
+									if(!isEmpty(purposeArr[0].value[x.purpose])){
+										purpose = purposeArr[0].value[x.purpose];
 									} else {
 										purpose = '-'
 									}

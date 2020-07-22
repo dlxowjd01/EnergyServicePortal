@@ -317,7 +317,7 @@
 						let visibility = '';
 						let edit_visibility = '';
 						let link_attr = '';
-						let purposeList = [
+						let purposeArr = [
 							{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적림", "일반 지출", "DSRA 적립", "기타", "운영계좌"]},
 							{ label: "입금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
 						];
@@ -347,9 +347,9 @@
 						if( uniqSet.size === 0 ) {
 							purpose = '-'
 						} else if( uniqSet.size == 1 ) {
-						purpose = ( purposeList[0].value[p[0]] )
+						purpose = ( purposeArr[0].value[p[0]] )
 						} else {
-							purpose = ( purposeList[0].value[p[0]] ) + ' 외 +' + ( uniqSet.size - 1 ) + '건';
+							purpose = ( purposeArr[0].value[p[0]] ) + ' 외 +' + ( uniqSet.size - 1 ) + '건';
 						}
 						transaction_spc_id = item.spc_id;
 						transaction_req_id = item.request_id;
