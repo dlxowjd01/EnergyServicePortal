@@ -1242,7 +1242,16 @@ function setAreaParamData(areaId, type) {
 	if(type != undefined && type == 'dropdown') {
 		$area.find('button.btn-primary').each(function() {
 			var obj = this;
-			param[obj.parentElement.getAttribute('id')] = $(this).data('value');	// \n 특수기호 처리해야함
+			if (obj.nextElementSibling.querySelectorAll('input[type="checkbox"]').length > 0) {
+				let array = new Array();
+				obj.nextElementSibling.querySelectorAll('input[type="checkbox"]:checked').forEach(el => {
+					array.push(el.value);
+				});
+				param[obj.parentElement.getAttribute('id')] = array;
+			} else {
+				param[obj.parentElement.getAttribute('id')] = $(this).data('value');
+			}
+
 		});
 	}
 

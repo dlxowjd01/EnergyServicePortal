@@ -259,16 +259,25 @@
 					setJsonAutoMapping(addlist_insurance_info, 'insuranceInfo'); //보험정보 전체 반복
 
 					const deviceRepeatItem = [
-						{name: '모듈_제조사/모델', id: 'addList_module_info', next: ''},
+						{name: '모듈_제조사', id: 'addList_module_info', next: ''},
 						{name: '모듈_설치_각도', id: 'addList_module_angle', next: ''},
-						{name: '인버터_제조사/모델', id: 'addList_inverter', next: ''},
-						{name: '접속반_제조사/모델', id: 'addList_manufacturer', next: 'next'},
-						{name: '인버터_용량/대수', id: 'addList_inverter_vol', next: 'next'},
-						{name: '접속반_채널/대수', id: 'addList_connection', next: 'next'},
-						{name: '접속반_채널/대수', id: 'addList_switch_gear', next: 'next'},
+						{name: '인버터_제조사', id: 'addList_inverter', next: ''},
+						{name: '접속반_제조사', id: 'addList_manufacturer', next: ''},
+						{name: '인버터_용량', id: 'addList_inverter_vol', next: ''},
+						{name: '접속반_채널', id: 'addList_connection', next: ''},
+						{name: '수배전반_제조사', id: 'addList_switch_gear', next: ''},
 					];
-					setMakeTag(deviceRepeatItem, device_info);
+					setMakeTag(deviceRepeatItem, device_info, 'deviceInfo');
 					setJsonAutoMapping(device_info, 'deviceInfo'); //설비정보
+
+					if (device_info['설치_타입'] != undefined && device_info['설치_타입'].length > 0) {
+						$('#설치_타입').text(device_info['설치_타입'].join(','));
+					}
+
+					if (device_info['모듈_설치_방식'] != undefined && device_info['모듈_설치_방식'].length > 0) {
+						$('#모듈_설치_방식').text(device_info['모듈_설치_방식'].join(','));
+					}
+
 
 					setJsonAutoMapping(warranty_info, 'warrantyInfo'); //보증정보
 					setJsonAutoMapping(coefficient_info, 'coefficientInfo'); //환경변수
@@ -292,6 +301,7 @@
 					afterDatePick('인출_가능_기한');
 
 					sumUnpaid();
+					financeAuto();
 				} else {
 					alert('등록된 데이터가 없습니다.');
 				}
@@ -417,6 +427,18 @@
 		if (confirm('엑셀로 저장하시겠습니까?')) {
 			tableToExcel('excelList', excelName);
 		}
+	}
+
+	const autoValArr = ['#관리_운영비', '#대수선비', '#사무_수탁비', '#임대료'];
+	const financeAuto = () => {
+		autoValArr.forEach(autoId => {
+			let autoVal = Number($(autoId).text()) / Number($('#전체_용량').text());
+			if (isNaN(autoVal) || !isFinite(autoVal)) {
+				$(autoId).parent().next().find('.auto_price').text('');
+			} else {
+				$(autoId).parent().next().find('.auto_price').text(numberComma(autoVal.toFixed(2)));
+			}
+		});
 	}
 </script>
 <div class="row">
@@ -807,16 +829,32 @@
 								<span id="전체_용량"></span>
 							</div>
 							<div class="flex_start">
-								<span class="fixed_height"><span id="관리_운영비" class="auto_price"></span>원/MW</span>
+								<div class="fixed_height mr-30">
+									<span id="관리_운영비"></span>
+									<span>MW</span>
+								</div>
+								<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
 							</div>
 							<div class="flex_start">
-								<span class="fixed_height"><span id="대수선비" class="auto_price"></span>원/MW</span>
+								<div class="fixed_height mr-30">
+									<span id="대수선비"></span>
+									<span>원</span>
+								</div>
+								<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
 							</div>
 							<div class="flex_start">
-								<span class="fixed_height"><span id="사무_수탁비" class="auto_price"></span>원/MW</span>
+								<div class="fixed_height mr-30">
+									<span id="사무_수탁비"></span>
+									<span>원</span>
+								</div>
+								<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
 							</div>
 							<div class="flex_start">
-								<span class="fixed_height"><span id="임대료" class="auto_price"></span>원/MW</span>
+								<div class="fixed_height mr-30">
+									<span id="임대료"></span>
+									<span>원</span>
+								</div>
+								<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
 							</div>
 							<div class="group_type">
 								<div class="fixed_height">
@@ -975,9 +1013,7 @@
 							<div class="fixed_height"></div>
 							<div class="fixed_height"></div>
 							<div class="fixed_height"></div>
-							<div class="sel_calendar group_type edit addList_rental_deduction entity">
-								<span id="임대료_지급일[index]"></span>
-							</div>
+							<div class="fixed_height"></div>
 							<div class="fixed_height"></div>
 						</td>
 					</tr>
@@ -1064,19 +1100,23 @@
 					<tr>
 						<th>모듈 제조사 / 모델</th>
 						<td id="addList_module_info" class="entity">
-							<span id="모듈_제조사[index]"></span>
-							<span id="모듈_제조사_모델[index]"></span>
+							<div class="flex_start fixed_height">
+								<span id="모듈_제조사[index]" class="mr-30"></span>
+								<span id="모듈_제조사_모델[index]"></span>
+							</div>
 						</td>
 						<th>설치 용량</th>
-						<td class="group_type">
+						<td class="flex_start fixed_height">
 							<span id="설치_용량_KW"></span><span>kW</span>
-							<span id="설치_용량(매)"></span><span>매</span>
+							<span id="설치_용량(매)"class="ml-30"></span><span>매</span>
 						</td>
 					</tr>
 					<tr>
 						<th>모듈 설치 각도</th>
 						<td id="addList_module_angle" class="entity">
-							<span id="모듈_설치_각도[index]"></span>
+							<div class="flex_start fixed_height">
+								<span id="모듈_설치_각도[index]"></span><span>°</span>
+							</div>
 						</td>
 						<th>모듈 설치 방식</th>
 						<td>
@@ -1086,36 +1126,38 @@
 					<tr>
 						<th>인버터 제조사 / 모델</th>
 						<td id="addList_inverter" class="entity">
-							<div class="flex_start">
+							<div class="flex_start fixed_height">
 								<span id="인버터_제조사[index]"></span>
-								<span id="인버터_제조사_모델[index]"></span>
+								<span id="인버터_제조사_모델[index]" class="ml-30"></span>
 							</div>
 						</td>
 						<th>인버터 용량 / 대수</th>
 						<td id="addList_inverter_vol" class="entity">
-							<span id="인버터_용량[index]"></span><span>kW</span>
-							<span id="인버터_용량_대수[index]"></span><span>대</span>
+							<div class="flex_start fixed_height">
+								<span id="인버터_용량[index]"></span><span>kW</span>
+								<span id="인버터_용량_대수[index]" class="ml-30"></span><span>대</span>
+							</div>
 						</td>
 					</tr>
 					<tr>
 						<th>접속반 제조사 / 모델</th>
 						<td id="addList_manufacturer" class="entity">
-							<div class="flex_start group_type">
+							<div class="flex_start fixed_height">
 								<span id="접속반_제조사[index]"></span>
 								<span id="접속반_제조사_모델[index]"></span>
 							</div>
 						</td>
 						<th>접속반 채널 / 대수</th>
 						<td id="addList_connection" class="entity">
-							<div class="group_type">
+							<div class="flex_start fixed_height">
 								<span id="접속반_채널[index]"></span><span>Ch</span>
-								<span id="접속반_채널_대수[index]"></span><span>대</span>
+								<span id="접속반_채널_대수[index]" class="ml-30"></span><span>대</span>
 							</div>
 						</td>
 					</tr>
 					<tr>
 						<th>접속반 용량 / 통신방식</th>
-						<td class="group_type">
+						<td class="flex_start fixed_height">
 							<span id="접속반_용량"></span><span>kW</span>
 							<span id="통신방식"></span>
 						</td>
@@ -1127,8 +1169,10 @@
 						<td id="설치_타입"></td>
 						<th>수배전반 제조사 / 모델</th>
 						<td id="addList_switch_gear" class="entity">
-							<span id="수배전반_제조사"></span>
-							<span id="수배전반_모델"></span>
+							<div class="flex_start fixed_height">
+								<span id="수배전반_제조사[index]"></span>
+								<span id="수배전반_모델[index]" class="ml-30"></span>
+							</div>
 						</td>
 					</tr>
 				</table>

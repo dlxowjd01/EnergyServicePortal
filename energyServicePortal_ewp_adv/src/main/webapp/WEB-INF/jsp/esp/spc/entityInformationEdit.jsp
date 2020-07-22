@@ -83,6 +83,22 @@
 		setInitList("fileList10");
 	});
 
+	const autoValArr = ['#관리_운영비', '#대수선비', '#사무_수탁비', '#임대료'];
+	$(document).on('keyup', '#전체_용량, #관리_운영비, #대수선비, #사무_수탁비, #임대료', function() {
+		financeAuto();
+	});
+
+	const financeAuto = () => {
+		autoValArr.forEach(autoId => {
+			let autoVal = $(autoId).val() / $('#전체_용량').val();
+			if (isNaN(autoVal) || !isFinite(autoVal)) {
+				$(autoId).parent().next().find('.auto_price').text('');
+			} else {
+				$(autoId).parent().next().find('.auto_price').text(numberComma(autoVal.toFixed(2)));
+			}
+		});
+	}
+
 	function initProcess(){
 		getSpcAndGenData(); //저장되어있는 spc정보조회
 		setComboBoxData();
@@ -321,6 +337,31 @@
 					setJsonAutoMapping(maintenance_info, 'maintenanceInfo');
 
 					if (maintenance_info != null) {
+						$('[name^="등기이사_소속_"]').each(function() {
+							let thisName = $(this).attr('name'),
+								thisIdx = thisName.replace(/[^0-9]/g, '');
+
+							if (maintenance_info[thisName] != undefined && maintenance_info[thisName].length > 0) {
+								if (typeof maintenance_info[thisName] === 'string') {
+									$('[name=' + thisName + ']').each(function() {
+										if ($(this).val() == maintenance_info[thisName]) {
+											$(this).prop('checked', true);
+										}
+									});
+									displayDropdown($('#등기이사_소속' + thisIdx));
+								} else {
+									maintenance_info[thisName].forEach(belong => {
+										$('[name=' + thisName + ']').each(function() {
+											if ($(this).val() == belong) {
+												$(this).prop('checked', true);
+											}
+										});
+									});
+									displayDropdown($('#등기이사_소속' + thisIdx));
+								}
+							}
+						});
+
 						if (maintenance_info['관리_계약_구분'] != undefined && maintenance_info['관리_계약_구분'].length > 0) {
 							if (typeof maintenance_info['관리_계약_구분'] === 'string') {
 								$('#maintenanceInfo #관리_계약_구분').html(maintenance_info['관리_계약_구분']);
@@ -356,16 +397,32 @@
 					setJsonAutoMapping(addlist_insurance_info, 'insuranceInfo'); //보험정보 전체 반복
 
 					const deviceRepeatItem = [
-						{name: '모듈_제조사/모델', id: 'addList_module_info', next: ''},
+						{name: '모듈_제조사', id: 'addList_module_info', next: ''},
 						{name: '모듈_설치_각도', id: 'addList_module_angle', next: ''},
-						{name: '인버터_제조사/모델', id: 'addList_inverter', next: ''},
-						{name: '접속반_제조사/모델', id: 'addList_manufacturer', next: 'next'},
-						{name: '인버터_용량/대수', id: 'addList_inverter_vol', next: 'next'},
-						{name: '접속반_채널/대수', id: 'addList_connection', next: 'next'},
-						{name: '접속반_채널/대수', id: 'addList_switch_gear', next: 'next'},
+						{name: '인버터_제조사', id: 'addList_inverter', next: ''},
+						{name: '접속반_제조사', id: 'addList_manufacturer', next: ''},
+						{name: '인버터_용량', id: 'addList_inverter_vol', next: ''},
+						{name: '접속반_채널', id: 'addList_connection', next: ''},
+						{name: '수배전반_제조사', id: 'addList_switch_gear', next: ''},
 					];
 					setMakeTag(deviceRepeatItem, device_info);
 					setJsonAutoMapping(device_info, 'deviceInfo'); //설비정보
+					if (device_info['설치_타입'] != undefined && device_info['설치_타입'].length > 0) {
+						$('[name="설치_타입"]').each(function() {
+							if ($.inArray($(this).val(), device_info['설치_타입']) >= 0) {
+								$(this).prop('checked', true);
+							}
+						});
+					}
+
+					if (device_info['모듈_설치_방식'] != undefined && device_info['모듈_설치_방식'].length > 0) {
+						$('[name="모듈_설치_방식"]').each(function() {
+							if ($.inArray($(this).val(), device_info['모듈_설치_방식']) >= 0) {
+								$(this).prop('checked', true);
+							}
+						});
+					}
+
 
 					setJsonAutoMapping(warranty_info, 'warrantyInfo'); //보증정보
 					setJsonAutoMapping(coefficient_info, 'coefficientInfo'); //환경변수
@@ -382,6 +439,7 @@
 					afterDatePick('인출_가능_기한');
 
 					sumUnpaid();
+					financeAuto();
 				} else {
 					alert('등록된 데이터가 없습니다.');
 				}
@@ -565,7 +623,7 @@
 			genId = '${param.gen_id}';
 
 		var address_info = setAreaParamData('addressInfo', 'dropdown'),
-			maintenance_info = setAreaParamData('maintenanceInfo'),
+			maintenance_info = setAreaParamData('maintenanceInfo', 'dropdown'),
 			account_info = setAreaParamData('accountInfo'),
 			finance_info = setAreaParamData('financeInfo', 'dropdown'),
 			contract_info = setAreaParamData('contractInfo'),
@@ -2065,11 +2123,11 @@
 							<div class="group_type">
 								<div class="tx_inp_type edit">
 									<label class="sr-only">모듈 제조사</label>
-									<input type="text" id="모듈_제조사[index]" name="모듈_제조사" placeholder="제조사">
+									<input type="text" id="모듈_제조사[index]" name="모듈_제조사[index]" placeholder="제조사">
 								</div>
 								<div class="tx_inp_type edit">
 									<label class="sr-only">모듈 제조사 모델</label>
-									<input type="text" name="모듈_제조사_모델[index]" placeholder="모델">
+									<input type="text" id="모듈_제조사_모델[index]" name="모듈_제조사_모델[index]" placeholder="모델">
 								</div>
 								<button type="button" class="btn_close fixed_height hidden" onclick="removeList(this);">삭제</button>
 							</div>
@@ -2210,10 +2268,10 @@
 						<td id="addList_switch_gear" class="entity">
 							<div class="group_type">
 								<div class="tx_inp_type edit">
-									<input type="text" id="수배전반_제조사" name="수배전반_제조사" placeholder="제조사">
+									<input type="text" id="수배전반_제조사[index]" name="수배전반_제조사[index]" placeholder="제조사">
 								</div>
 								<div class="tx_inp_type edit">
-									<input type="text" id="수배전반_모델" name="수배전반_모델" placeholder="모델">
+									<input type="text" id="수배전반_모델[index]" name="수배전반_모델[index]" placeholder="모델">
 								</div>
 								<button type="button" class="btn_close fixed_height hidden" onclick="removeList(this);"></button>
 							</div>
