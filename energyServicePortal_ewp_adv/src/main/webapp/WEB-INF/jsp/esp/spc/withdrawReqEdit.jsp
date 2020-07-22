@@ -114,9 +114,10 @@
 				Promise.all(promises).then(res => {
 					if(transactionData.to_account){
 						var updatedAt = transactionData.updated_at;
+
 						var savedTotal = transactionData.total_amount.toLocaleString() + ' 원';
-						Promise.resolve(JSON.parse(transactionData.to_account)).then(res => {
-							$.each(res, function(index, element){
+						Promise.resolve(JSON.parse(transactionData.to_account)).then(item => {
+							$.each(item, function(index, element){
 								let tbodyStr = '';
 								let req_date = '';
 								let req_amount = '';
@@ -286,20 +287,22 @@
 					$(this).val(val);
 				});
 			});
-			
+
 			if(transactionData.attachement_info){
 				Promise.resolve(JSON.parse(transactionData.attachement_info)).then(res => {
-					let addFileList = $("#addFileList").find(".file_list");
-					addFileList.empty();
-					res.forEach(attach => {
-						let downUrl = apiHost + '/files/download/' + attach.filedName + '?oid=' + oid + '&orgFilename=' + attach.originalName.trim();
-						let templateAttach = `
-							<li class="upload_text" data-id="${'${attach.filedName}'}">${'${attach.originalName.trim()}'}
-								<button type="button" class="btn_close icon_btn" onclick="deleteFile($(this))"></button>
-							</li>
-						`;
-						addFileList.append(templateAttach);
-					});
+					var attachment = ''
+					var addFileList = $("#addFileList").find(".file_list");
+					if(res.length > 0){
+						res.forEach(attach => {
+							let downUrl = apiHost + '/files/download/' + attach.filedName + '?oid=' + oid + '&orgFilename=' + attach.originalName.trim();
+							let templateAttach = `
+								<li class="upload_text" data-id="${'${attach.filedName}'}">${'${attach.originalName.trim()}'}
+									<button type="button" class="btn_close icon_btn" onclick="deleteFile($(this))"></button>
+								</li>
+							`;
+							addFileList.append(templateAttach);
+						});
+					}
 				});
 			}
 		}
@@ -338,7 +341,8 @@
 			jsonData.requested_by_uid = uid;
 			jsonData.requested_at = new Date();
 			jsonData.transfer_agent = loginName;
-
+			jsonData.total_amount = Number(totalAmount);
+			
 			let fileNames = $("#addFileList").find("li.upload_text");
 			$.each(fileNames, function(index, element){
 				let obj = {};
@@ -362,7 +366,8 @@
 				obj.desc = descOpt.eq(index).val();
 				arr.push(obj);
 			});
-			jsonData.total_amount = totalAmount;
+			// console.log("total===0", totalAmount)
+
 			jsonData.to_account = JSON.stringify(arr);
 			// console.log("json--", jsonData);
 			let newJson = JSON.stringify(jsonData);
@@ -564,8 +569,8 @@
 							<tr>
 								<td>
 									<a class="chk_type select_row">
-										<input type="checkbox" id="apply*index*" name="apply">
-										<label for="apply"></label>
+										<input type="checkbox" id="apply*index*" name="apply*index*">
+										<label for="apply*index*"></label>
 									</a>
 								</td>
 								<td>
