@@ -125,6 +125,7 @@
 								let bank_name = '';
 								let account_num = '';
 								let desc = '';
+								let accHolder = '';
 								let idx = '';
 								let purposeArr = [
 									{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적립", "일반 지출", "DSRA 적립", "기타", "운영계좌" ]},
@@ -172,12 +173,20 @@
 								} else {
 									desc = "-";
 								}
+
+								if(!isEmpty(element.to_account_owner) ){
+									accHolder = element.to_account_owner;
+								} else {
+									accHolder = "-";
+								}
+
 								tbodyStr = copyTableRow.replace(/\*index\*/g, idx)
 									.replace(/\*selectedReqDate\*/g, req_date)
 									.replace(/\*purposeVal\*/g, purpose_val)
 									.replace(/\*purposeTitle\*/g, purpose)
 									.replace(/\*reqAmount\*/g, req_amount)
 									.replace(/\*bankName\*/g, bank_name)
+									.replace(/\*accHolder\*/g, accHolder)
 									.replace(/\*accNum\*/g, account_num)
 									.replace(/\*desc\*/g, desc)
 								$("#tableBody").append($(tbodyStr));
@@ -265,6 +274,8 @@
 								// console.log("withdrawList clicking---")
 								withdrawList.prev().data({"value": $(this).data("value"), "name": $(this).data("name"), "acc-holder" : $(this).data("acc-holder") });
 							});
+						}).finally(() => {
+							setDatepicker();
 						});
 					}
 				});
@@ -527,6 +538,17 @@
 		});
 	});
 
+	function setDatepicker() {
+		$(document).find('.fromDate').prop('disabled', true);
+		$(document).find('.fromDate').first().prop('disabled', false).datepicker({
+			showOn: "both",
+			buttonImageOnly: true,
+			dateFormat: 'yy-mm-dd',
+			onClose: function(selectedDate) {
+				$('.fromDate').val(selectedDate);
+			}
+		});
+	}
 
 </script>
 
@@ -625,7 +647,7 @@
 								<td>
 									<div class="sa_select">
 										<div class="dropdown placeholder">
-											<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="*bankName*" data-value="*accNum*">*bankName*  *accNum*<span class="caret"></span></button>
+											<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-acc-holder="*accHolder*" data-name="*bankName*" data-value="*accNum*">*bankName*  *accNum*<span class="caret"></span></button>
 												<ul id="receiveList*index*" class="receive-list dropdown-menu" role="menu">
 													<li data-acc-holder="*acc_holder*" data-acc-type="*to_acc_type*" data-name="*to_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_bank_name* *to_account_no*</a></li>
 												</ul>
