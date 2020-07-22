@@ -342,12 +342,16 @@
 	function previewPdf(self){
 		let token = '${sessionScope.userInfo.token}'
 		let url = '';
+		let account = $("#tableBody").find("tr:first-child td:nth-child(2)").text().replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+		let d = new Date().toLocaleDateString("en-CA")  ;
+		let name = d + '_' + spcName + '_' + account + '.pdf';
+
 		if($(self).data("name") == "previewMergeDocs") {
-			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&evidence=true';
+			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&evidence=true' + '&request_id=' + name;
 		} else if($(self).data("name") == "previewReqDoc"){
-			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId;
+			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&request_id=' + name;;
 		} else if($(self).data("name") == "previewProof"){
-			url = apiHost + '/spcs/transactions/download/evidence?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId;
+			url = apiHost + '/spcs/transactions/download/evidence?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&request_id=' + name;;
 		};
 
 		$.ajax({
@@ -364,11 +368,6 @@
 			},
 			// dataType: 'binary',
 			success: function(data) {
-				let account = $("#tableBody").find("tr:first-child td:nth-child(2)").text().replace(/^\s+|\s+$|\s+(?=\s)/g, "");
-				let d = new Date().toLocaleDateString("en-CA")  ;
-				let name = d + '_' + spcName + '_' + account + '.pdf';
-				data.name = name;
-
 				let src = window.URL.createObjectURL(data);
 				let wrapper = document.createElement('div');
 				let preview = document.createElement('iframe');
