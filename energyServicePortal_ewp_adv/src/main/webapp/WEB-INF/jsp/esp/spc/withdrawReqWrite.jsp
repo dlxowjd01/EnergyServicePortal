@@ -195,6 +195,7 @@
 							let receiving = '';
 							let bankName = '';
 							let accNum = '';
+							let accHolder = '';
 							if(v.accType.match("출금")){
 								accNum = v.accNum;
 								accHolder = v.accHolder;
@@ -283,6 +284,8 @@
 				let descOpt = $("#tableBody").find("td:nth-of-type(6) input");
 				let obj = {};
 				obj.purpose = purposeOpt.eq(index).data("value");
+				console.log("purposeOpt===", purposeOpt.eq(index).data("value"))
+
 				obj.amount = Number(amountOpt.eq(index).val().replace(/,/g, ''));
 				obj.to_account_owner = accOpt.eq(index).data("acc-holder");
 				obj.to_account_bank = accOpt.eq(index).data("name");
@@ -296,6 +299,9 @@
 			let newJson = JSON.stringify(jsonData);
 			let formArr = [ jsonData.spc_id, jsonData.withdraw_bank, jsonData.withdraw_day, arr ];
 
+			var flagArr = [];
+			flagArr.length = 0;
+
 			$.each(formArr, function(index, value){
 				if(index < 2) {
 					if(value == undefined ||  value == "선택" || value == "") {
@@ -306,27 +312,34 @@
 					}
 				} else if( index == 3) {
 					arr.forEach((item, index) => {
-						if(item.purpose == "" || item.purpose == "undefined" ) {
-							warning.eq(2).removeClass('hidden');
-							console.log("purpose====", item.purpose)
-						} else if (item.amount == 0) {
-							warning.eq(2).removeClass('hidden');
-						}  else if (item.to_account_no == "undefined" ) {
-							warning.eq(2).removeClass('hidden');
-						} else {
-							warning.eq(2).addClass('hidden');
+						if(item.purpose != 0 && item.purpose == "" || item.purpose != 0 && item.purpose == "undefined" ) {
+							let obj = { label: "purposeEmpty", val: 0 }
+							flagArr.push(obj);
+							// warning.eq(2).removeClass('hidden');
+						}
+						if (item.amount == 0) {
+							let obj = { label: "amountEmpty", val: 1 }
+							flagArr.push(obj);
+						}
+						if (item.to_account_no == "undefined" ) {
+							let obj = { label: "accNumEmpty", val: 2 }
+							flagArr.push(obj);
 						}
 					});
-
 				} else {
 					if(value == undefined ||  value == "선택" || value == "") {
-						console.log("empty Value====", value)
 						warning.eq(2).removeClass('hidden');
 					} else {
 						warning.eq(2).addClass('hidden');
 					}
 				}
 			});
+			if(flagArr.length > 0){
+				console.log("flag===", flagArr)
+				warning.eq(2).removeClass('hidden');
+			} else {
+				warning.eq(2).addClass('hidden');
+			}
 
 			if( withdrawForm.find(".warning.hidden").length == 4 ){
 				let opt = {

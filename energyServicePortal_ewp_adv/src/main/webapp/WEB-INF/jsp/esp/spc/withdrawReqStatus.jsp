@@ -535,7 +535,17 @@
 		console.log("accInfo===", accInfo);
 
 		$("#reviewStatus").val(status);
-		$("#reviewStatusVal").val(statusVal);
+		if(statusVal == 1){
+			status = "검토 중";
+			statusVal = 2;
+			$("#reviewStatus").val(status);
+			$("#reviewStatusVal").val(statusVal);
+			console.log("reqId===", reqId)
+			updateStatus(statusVal, reqId)
+		} else {
+			$("#reviewStatus").val(status);
+			$("#reviewStatusVal").val(statusVal);
+		}
 		$("#reviewSpcId").val(spcId);
 		$("#reviewSpcName").val(spcName);
 		$("#reviewReqId").val(reqId);
@@ -550,10 +560,35 @@
 			async: syncOpt
 		}
 		submit(option, accInfo, accNum, statusVal);
-
 		// [자산 운용사]
 		// "반송" : 0, "검토 중" : "2", "승인완료": "3"	 => /spc/withdrawReqStatusDetail.do
 		// "검토 대기" : 1" 						  => /spc/withdrawReqEdit.do
+	}
+
+	function updateStatus(newStatus, id) {
+		let jsonData = {};
+		jsonData.status = Number(newStatus);
+		jsonData.status_changed_by = loginName;
+		jsonData.status_changed_at = new Date();
+		jsonData = JSON.stringify(jsonData);
+
+		let action = 'patch';
+		let syncOpt = true;
+		let option = {
+			url: apiHost + '/spcs/transactions/' + id + '?oid=' + oid,
+			type: 'patch',
+			async: true,
+			dataType: 'json',
+			contentType: "application/json",
+			data: jsonData
+		}
+		$.ajax(option).done(function (json, textStatus, jqXHR) {
+			console.log("success---", json)
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.log("error==", jqXHR)
+			return false;
+		});
+
 	}
 
 	function submit(opt, accInfo, accNum, statusVal){
@@ -591,7 +626,7 @@
 			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			return false;
-		});;
+		});
 
 		// console.log("submit===", $(self))
 		// let accInfo = self.data("name") + '  ' + self.data("value") + '  (' + name + ')';

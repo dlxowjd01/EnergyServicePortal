@@ -175,6 +175,7 @@
 	--ico-wind: url("../img/ico_wind.png");
 	--ico-delete: url("../img/close_btn_md_dark.svg");
 	/* ********* light mode ONLY ********* */
+	--ico-warning: url("../img/ico-warning.svg");
 	--ico-notification: url("../img/notification.svg");
 	--ico-notification-new: url("../img/notification_active.svg");
 	--btn-close-svg: url("../img/icon_delete.svg");
@@ -938,10 +939,19 @@ table input[type="text"] {
 	display: table;
 	padding-top: 12px;
 	margin-bottom: -12px;
-	font-size: 12px;
-	color: var(--alarm);
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--sandy-brown);
 }
-
+.warning:before {
+	display: block;
+	float: left;
+	margin-right: 6px;
+	width: 14px;
+	height: 14px;
+	content: '';
+	background: var(--ico-warning) center no-repeat;
+}
 /* loading icon */
 
 .loading {

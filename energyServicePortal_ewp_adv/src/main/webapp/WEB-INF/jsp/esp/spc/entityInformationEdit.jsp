@@ -1506,12 +1506,16 @@
 										--><li data-group="입금" data-value="사무수탁비"><a href="#">사무 수탁비</a></li><!--
 										--><li data-group="입금" data-value="부채상환"><a href="#">부채 상환</a></li><!--
 										--><li data-group="입금" data-value="대수선비"><a href="#">대수선비</a></li><!--
-										--><li data-group="입금" data-value="배당금적림"><a href="#">배당금 적림</a></li><!--
+										--><li data-group="입금" data-value="배당금적림"><a href="#">배당금 적립</a></li><!--
 										--><li data-group="입금" data-value="일반지출"><a href="#">일반 지출</a></li><!--
 										--><li data-group="입금" data-value="DSRA적립"><a href="#">DSRA 적립</a></li><!--
 										--><li data-group="입금" data-value="운영계좌"><a href="#">운영계좌</a></li><!--
 										--><li data-group="입금" data-value="기타"><a href="#">기타</a></li><!--
 
+										--><li data-group="출금" data-value="부채상환"><a href="#">부채 상환</a></li><!--
+										--><li data-group="출금" data-value="대수선비"><a href="#">대수선비</a></li><!--
+										--><li data-group="출금" data-value="배당금적림"><a href="#">배당금 적립</a></li><!--
+										--><li data-group="출금" data-value="일반지출"><a href="#">일반 지출</a></li><!--
 										--><li data-group="출금" data-value="REC수익"><a href="#">REC 수익</a></li><!--
 										--><li data-group="출금" data-value="SMP수익"><a href="#">SMP 수익</a></li><!--
 										--><li data-group="출금" data-value="DSRA적립"><a href="#">DSRA 적립</a></li><!--

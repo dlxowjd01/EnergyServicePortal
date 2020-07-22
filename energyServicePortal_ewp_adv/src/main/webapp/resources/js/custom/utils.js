@@ -1295,7 +1295,8 @@ function addCustomRow(tbody, options) {
 	toggle.each(function(index, element){
 		let oldId = $(this).attr("id");
 		let newId = oldId + cnt;
-		$(this).prev().text().replace(/<[^>]+>/g, '');
+		$(this).prev().html($(this).prev().html().replace($(this).prev().text(),'선택'));
+		$(this).prev().data("value", "");
 		$(this).attr("id", newId);
 	});
 
@@ -1321,12 +1322,6 @@ function addCustomRow(tbody, options) {
 			}
 		}
 	});
-	let dropdown = copy.find('.dropdown-toggle[data-clone="empty"]');
-	dropdown.each(function(){
-		console.log("dropdown---", $(this))
-		$(this).html('선택<span class="caret"></span>');
-	});
-	
 	tbody.append(copy);
 }
 

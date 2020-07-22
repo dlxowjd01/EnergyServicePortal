@@ -286,6 +286,10 @@
 			}
 		});
 
+		$("#rejectBtn").on("click", function() {
+			updateReq(0);
+		});
+
 		function handleReq(newStatus, callback){
 			callback(newStatus);
 		}
@@ -582,7 +586,7 @@
 						<textarea placeholder="직접입력" id="txt2" class="textarea w-100"></textarea>
 					</div>
 					<div class="spc-btn-group my-20"><!--
-					--><button type="button" id="rejectBtn" onclick="updateReq(0)" class="btn_type03 w80">반송</button><!--
+					--><button type="button" id="rejectBtn" class="btn_type03 w80">반송</button><!--
 					--><button type="submit" class="btn_type ml-12">승인</button><!--
 				--></div>
 				</c:if>
