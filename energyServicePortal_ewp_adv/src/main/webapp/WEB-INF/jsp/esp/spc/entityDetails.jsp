@@ -379,6 +379,8 @@
 		excelHtml += $('#warrantyInfo #warrantyInfoToggle').html();
 		excelHtml += $('#coefficientInfo h2').html();
 		excelHtml += $('#coefficientInfo #coefficientInfoToggle').html();
+		excelHtml += $('#associatedInfo h2').html();
+		excelHtml += $('#associatedInfo #associatedInfoToggle').html();
 		excelHtml += $('.attachment h2').html();
 		excelHtml += $('#attachement_info #attachementInfoToggle').html();
 
