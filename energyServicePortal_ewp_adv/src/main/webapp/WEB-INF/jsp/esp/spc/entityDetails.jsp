@@ -177,6 +177,34 @@
 
 					if (!isEmpty(address)) {
 						setJsonAutoMapping(address, 'addressInfo');
+					} else {
+						$.ajax({
+							url: apiHost + '/config/sites/',
+							type: 'get',
+							async: false,
+							data: {oid: oid},
+							success: function (json) {
+								let spcGens = new Array();
+								let addressObj = new Object();
+								if (!isEmpty(json)) {
+									spcGens = json;
+								}
+
+								spcGens.forEach(site => {
+									if (site.sid == genId) {
+										addressObj['genName'] = site.name;
+										addressObj['countryValue'] = '대한민국';
+										addressObj['sidoValue'] = site.location;
+										addressObj['address'] = site.address;
+
+										setJsonAutoMapping(addressObj, 'addressInfo');
+									}
+								});
+							},
+							error: function (request, status, error) {
+
+							}
+						});
 					}
 
 					let repeatNumber= new Array();

@@ -295,7 +295,37 @@
 					const coefficient_info = JSON.parse(json.data[0].coefficient_info);
 					const associated_info = JSON.parse(json.data[0].associated_info);
 
-					setJsonAutoMapping(address, 'addressInfo');
+					if (!isEmpty(address)) {
+						setJsonAutoMapping(address, 'addressInfo');
+					} else {
+						$.ajax({
+							url: apiHost + '/config/sites/',
+							type: 'get',
+							async: false,
+							data: {oid: oid},
+							success: function (json) {
+								let spcGens = new Array();
+								let addressObj = new Object();
+								if (!isEmpty(json)) {
+									spcGens = json;
+								}
+
+								spcGens.forEach(site => {
+									if (site.sid == genId) {
+										addressObj['genName'] = site.name;
+										addressObj['countryValue'] = '대한민국';
+										addressObj['sidoValue'] = site.location;
+										addressObj['address'] = site.address;
+
+										setJsonAutoMapping(addressObj, 'addressInfo');
+									}
+								});
+							},
+							error: function (request, status, error) {
+
+							}
+						});
+					}
 
 					let repeatNumber= new Array();
 					$.map(maintenance_info, function(val, key) {
@@ -557,7 +587,8 @@
 		var spcId = '${param.spc_id}',
 			genId = '${param.gen_id}';
 
-		var maintenance_info = setAreaParamData('maintenanceInfo'),
+		var address_info = setAreaParamData('addressInfo'),
+			maintenance_info = setAreaParamData('maintenanceInfo'),
 			account_info = setAreaParamData('accountInfo'),
 			finance_info = setAreaParamData('financeInfo', 'dropdown'),
 			contract_info = setAreaParamData('contractInfo'),
@@ -608,6 +639,7 @@
 			async: true,
 			contentType: 'application/json',
 			data: JSON.stringify({
+				address: JSON.stringify(address_info),
 				contract_info: JSON.stringify(contract_info),
 				device_info: JSON.stringify(device_info),
 				finance_info: JSON.stringify(finance_info),
@@ -967,19 +999,9 @@
 					</colgroup>
 					<tr>
 						<th><label for="genName">발전소명</label></th>
-						<td class="group_type">
-							<div class="dropdown placeholder edit" id="genId">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="발전소명 선택">
-									발전소명 선택<span class="caret"></span>
-								</button>
-								<ul id="genList" class="dropdown-menu" role="menu">
-									<li data-value="[sid]">
-										<a href="#">[name]</a>
-									</li>
-								</ul>
-							</div>
-							<div class="tx_inp_type edit">
-								<input type="text" id="genName" name="power_plant_name" placeholder="발전소명 입력">
+						<td>
+							<div class="tx_inp_type edit disabled">
+								<input type="text" id="genName" name="genName" placeholder="발전소명 입력" readonly>
 							</div>
 						</td>
 						<th></th>
