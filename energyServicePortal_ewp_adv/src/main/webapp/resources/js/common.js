@@ -274,6 +274,7 @@ function deleteFile(self) {
 			let item = '';
 			item = '<li class="no-file">선택된 파일이 없습니다.</li>'
 			ul.append(item);
+            ul.parents('.file_list').parent().find('input[type="file"]').val('');
 		}
 	}
 }

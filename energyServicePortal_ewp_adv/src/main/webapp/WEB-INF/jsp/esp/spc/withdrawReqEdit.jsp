@@ -535,6 +535,13 @@
 
 		$("#deleteRowBtn").on("click", function(){
 			$("#tableBody tr:not(:first-child)").find('td input:checked').closest('tr').remove();
+			let total = document.getElementById("total");
+			totalAmount = 0;
+			$(".amount").each(function(){
+				let toAdd = Number(this.value.replace(/,/g,""));
+				totalAmount += toAdd;
+			});
+			total.value = totalAmount.toLocaleString() + ' 원';
 		});
 
 		$("#selectAll").on("click", function(){
