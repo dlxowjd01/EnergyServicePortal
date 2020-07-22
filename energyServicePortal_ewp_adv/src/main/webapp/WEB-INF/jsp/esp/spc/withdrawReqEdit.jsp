@@ -549,7 +549,7 @@
 			<div class="sa_select"><!--
 			--><span class="tx_tit">출금 계좌번호</span><!--
 			--><div class="dropdown"><!--
-				--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="" data-value=""><span class="caret"></span></button>
+				--><button class="btn btn-primary dropdown-toggle" type="button" data-acc-holder="*acc_holder*" data-toggle="dropdown" data-name="" data-value=""><span class="caret"></span></button>
 					<ul id="withdrawList" class="dropdown-menu unused center" role="menu"><li data-acc-holder="*acc_holder*" data-name="*bank_name*" data-value="*acc_num*"><a href="#" tabindex="-1">*bank_name* *acc_num*</a></li></ul>
 				</div>
 			</div>
