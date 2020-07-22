@@ -364,9 +364,19 @@
 
 						if (maintenance_info['관리_계약_구분'] != undefined && maintenance_info['관리_계약_구분'].length > 0) {
 							if (typeof maintenance_info['관리_계약_구분'] === 'string') {
-								$('#maintenanceInfo #관리_계약_구분').html(maintenance_info['관리_계약_구분']);
+								$('[name="관리_계약_구분"]').each(function() {
+									if ($(this).val() == maintenance_info['관리_계약_구분']) {
+										$(this).prop('checked', true);
+									}
+								});
 							} else {
-								$('#maintenanceInfo #관리_계약_구분').html(maintenance_info['관리_계약_구분'].join(','));
+								maintenance_info['관리_계약_구분'].forEach(belong => {
+									$('[name="관리_계약_구분"]').each(function() {
+										if ($(this).val() == belong) {
+											$(this).prop('checked', true);
+										}
+									});
+								});
 							}
 
 							displayDropdown($('#관리_계약_구분'));

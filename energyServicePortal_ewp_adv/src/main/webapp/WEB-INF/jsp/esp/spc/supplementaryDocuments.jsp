@@ -155,6 +155,7 @@
 								$.each(originFile, function(k,v){
 									if (v.toLowerCase().indexOf(keyWord) > -1) {
 										jsonList.push(newData);
+										return false;
 									}
 								});
 							}

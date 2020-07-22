@@ -271,11 +271,20 @@
 					setJsonAutoMapping(device_info, 'deviceInfo'); //설비정보
 
 					if (device_info['설치_타입'] != undefined && device_info['설치_타입'].length > 0) {
-						$('#설치_타입').text(device_info['설치_타입'].join(','));
+						if (typeof device_info['설치_타입'] === 'string') {
+							$('#설치_타입').text(device_info['설치_타입']);
+						} else {
+							$('#설치_타입').text(device_info['설치_타입'].join(','));
+						}
+
 					}
 
 					if (device_info['모듈_설치_방식'] != undefined && device_info['모듈_설치_방식'].length > 0) {
-						$('#모듈_설치_방식').text(device_info['모듈_설치_방식'].join(','));
+						if (typeof device_info['모듈_설치_방식'] === 'string') {
+							$('#모듈_설치_방식').text(device_info['모듈_설치_방식']);
+						} else {
+							$('#모듈_설치_방식').text(device_info['모듈_설치_방식'].join(','));
+						}
 					}
 
 
