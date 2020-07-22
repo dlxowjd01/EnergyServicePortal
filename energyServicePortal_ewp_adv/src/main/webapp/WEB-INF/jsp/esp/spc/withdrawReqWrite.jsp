@@ -59,8 +59,8 @@
 			{ name: "배당금 적립", val: 4 },
 			{ name: "일반 지출", val: 5 },
 			{ name: "DSRA 적립", val: 6 },
-			{ name: "운영계좌", val: 8 },
 			{ name: "기타", val: 7 },
+			{ name: "운영계좌", val: 8 },
 		];
 		// let pList = [
 		// 	{ name: "REC 수익", val: 0 },
