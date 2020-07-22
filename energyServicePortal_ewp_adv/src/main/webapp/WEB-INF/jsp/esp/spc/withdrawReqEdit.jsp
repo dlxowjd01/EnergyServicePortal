@@ -410,8 +410,8 @@
 
 			if( withdrawForm.find(".warning.hidden").length == 2 ){
 				let opt = {
-					url: apiHost + '/spcs/transactions?oid='+oid,
-					type: "POST",
+					url: apiHost + '/spcs/transactions/' + reqId + '?oid=' + oid,
+					type: "patch",
 					async: true,
 					dataType: 'json',
 					contentType: "application/json",
