@@ -174,7 +174,7 @@
 								}
 								tbodyStr = copyTableRow.replace(/\*index\*/g, idx)
 									.replace(/\*selectedReqDate\*/g, req_date)
-									.replace(/\*purposeValue\*/g, purpose_val)
+									.replace(/\*purposeVal\*/g, purpose_val)
 									.replace(/\*purposeTitle\*/g, purpose)
 									.replace(/\*reqAmount\*/g, req_amount)
 									.replace(/\*bankName\*/g, bank_name)
@@ -589,7 +589,7 @@
 								<td>
 									<div class="sa_select">
 										<div class="dropdown placeholder">
-											<button class="btn btn-primary dropdown-toggle" data-clone="empty" type="button" data-toggle="dropdown" data-name="" data-value="*purposeTitle*">*purposeTitle*<span class="caret"></span></button>
+											<button class="btn btn-primary dropdown-toggle" data-clone="empty" type="button" data-toggle="dropdown" data-name="*purposeTitle*" data-value="*purposeVal*">*purposeTitle*<span class="caret"></span></button>
 											<ul id="purposeList*index*" class="purpose-list dropdown-menu" role="menu">
 												<li data-value="0"><a href="#" tabindex="-1">관리운영비</a></li>
 												<li data-value="1"><a href="#" tabindex="-1">사무수탁비</a></li>

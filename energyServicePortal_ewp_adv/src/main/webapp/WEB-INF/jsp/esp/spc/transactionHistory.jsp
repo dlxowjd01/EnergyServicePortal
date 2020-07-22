@@ -234,8 +234,8 @@
 	
 				$.ajax(option).done(function (json, textStatus, jqXHR) {
 					$('#searchOption').removeClass('in');
-					tableBody.empty();
-					tableFooter.empty();
+					$('#tableBody').empty();
+					$('#tableFooter').empty();
 					// console.log("json---", json.data)
 					if (json.data.length > 0) {
 						// console.log("json.data---", json.data)
@@ -546,7 +546,7 @@
 		if (delPrompt != '삭제') {
 			return false;
 		}
-		let reqId = $(selector).prev().data("id");
+		let reqId = $(selector).prev().data("req-id");
 		let option= {
 			url: apiHost + '/spcs/transactions/' + reqId + '?oid=' + oid,
 			type: 'DELETE',
@@ -554,6 +554,7 @@
 		}
 
 		$.ajax(option).done(function (json, textStatus, jqXHR) {
+			console.log("success===", json)
 			document.location.reload(true);
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			alert('처리 중 오류가 발생했습니다.');
