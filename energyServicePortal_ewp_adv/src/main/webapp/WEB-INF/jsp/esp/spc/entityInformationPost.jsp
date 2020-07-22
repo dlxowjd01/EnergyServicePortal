@@ -2166,7 +2166,7 @@
 						<td id="addList_switch_gear" class="entity">
 							<div class="group_type">
 								<div class="tx_inp_type edit">
-									<input type="text" id="수배전반_제조사반[index]" name="수배전반_제조사[index]" placeholder="제조사">
+									<input type="text" id="수배전반_제조사[index]" name="수배전반_제조사[index]" placeholder="제조사">
 								</div>
 								<div class="tx_inp_type edit">
 									<input type="text" id="수배전반_모델[index]" name="수배전반_모델[index]" placeholder="모델">

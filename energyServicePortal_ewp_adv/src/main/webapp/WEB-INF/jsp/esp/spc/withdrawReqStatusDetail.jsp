@@ -24,7 +24,7 @@
 		const txtArea = $("textarea.textarea");
 		const btnArea = $(".spc-detail .spc-btn-group");
 		const btnPrint = $(".btn-print");
-		const noHistory = "메모 히스토리가 없습니다."
+		const noHistory = "메모 히스토리가 없습니다.";
 
 		if( isEmpty(spcName) || spcName == ("-")){
 			$("#spcName").text("spc_no_name");

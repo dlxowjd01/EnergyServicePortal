@@ -408,19 +408,35 @@
 					setMakeTag(deviceRepeatItem, device_info);
 					setJsonAutoMapping(device_info, 'deviceInfo'); //설비정보
 					if (device_info['설치_타입'] != undefined && device_info['설치_타입'].length > 0) {
-						$('[name="설치_타입"]').each(function() {
-							if ($.inArray($(this).val(), device_info['설치_타입']) >= 0) {
-								$(this).prop('checked', true);
-							}
-						});
+						if (typeof device_info['설치_타입'] === 'string') {
+							$('[name="설치_타입"]').each(function() {
+								if ($(this).val() == device_info['설치_타입']) {
+									$(this).prop('checked', true);
+								}
+							});
+						} else {
+							$('[name="설치_타입"]').each(function() {
+								if ($.inArray($(this).val(), device_info['설치_타입']) >= 0) {
+									$(this).prop('checked', true);
+								}
+							});
+						}
 					}
 
 					if (device_info['모듈_설치_방식'] != undefined && device_info['모듈_설치_방식'].length > 0) {
-						$('[name="모듈_설치_방식"]').each(function() {
-							if ($.inArray($(this).val(), device_info['모듈_설치_방식']) >= 0) {
-								$(this).prop('checked', true);
-							}
-						});
+						if (typeof device_info['모듈_설치_방식'] === 'string') {
+							$('[name="모듈_설치_방식"]').each(function() {
+								if ($(this).val() == device_info['모듈_설치_방식']) {
+									$(this).prop('checked', true);
+								}
+							});
+						} else {
+							$('[name="모듈_설치_방식"]').each(function() {
+								if ($.inArray($(this).val(), device_info['모듈_설치_방식']) >= 0) {
+									$(this).prop('checked', true);
+								}
+							});
+						}
 					}
 
 

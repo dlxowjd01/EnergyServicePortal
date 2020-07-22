@@ -749,7 +749,7 @@
 							<input type="text" id="기자재_시험_성적서_수배전반_다운로드" name="기자재_시험_성적서_수배전반_다운로드" class="fileName tx_file w50" readonly>
 						</td>
 						<td class="px-0">
-							<input type="hidden" id="기자재_시험_성적서_수배전반_regDt" value="" class="fileName tx_file w80" readonly>
+							<input type="text" id="기자재_시험_성적서_수배전반_regDt" value="" class="fileName tx_file w80" readonly>
 						</td>
 						<td class="px-0">
 							<label for="기자재_시험_성적서_수배전반" class="btn_type_attachment">추가</label>
