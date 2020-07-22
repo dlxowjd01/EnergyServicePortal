@@ -61,7 +61,6 @@
 			{ name: "DSRA 적립", val: 6 },
 			{ name: "기타", val: 7 },
 			{ name: "운영계좌", val: 8 },
-
 		];
 		// let purposeArr = [
 		// 	{ name: "REC 수익", val: 0 },
