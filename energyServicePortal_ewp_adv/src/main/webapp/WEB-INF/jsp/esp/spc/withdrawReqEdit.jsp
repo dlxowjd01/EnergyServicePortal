@@ -114,7 +114,6 @@
 				Promise.all(promises).then(res => {
 					if(transactionData.to_account){
 						var updatedAt = transactionData.updated_at;
-
 						var savedTotal = transactionData.total_amount.toLocaleString() + ' 원';
 						Promise.resolve(JSON.parse(transactionData.to_account)).then(item => {
 							$.each(item, function(index, element){
@@ -143,7 +142,7 @@
 								}
 
 								if(!isEmpty(element.purpose)){
-									// console.log("element.purpose===", element.purpose)
+									console.log("element.purpose===", element)
 									purpose = purposeList[0].value[element.purpose];
 									purpose_val = element.purpose;
 								} else {
@@ -173,8 +172,6 @@
 								} else {
 									desc = "-";
 								}
-								// console.log("purpose===", purpose)
-
 								tbodyStr = copyTableRow.replace(/\*index\*/g, idx)
 									.replace(/\*selectedReqDate\*/g, req_date)
 									.replace(/\*purposeValue\*/g, purpose_val)
@@ -185,7 +182,7 @@
 									.replace(/\*desc\*/g, desc)
 								$("#tableBody").append($(tbodyStr));
 							});
-
+							totalAmount = transactionData.total_amount;
 							$("#total").val(savedTotal);
 						}).then(() => {
 							$.each(res, function(index, element){
@@ -253,15 +250,19 @@
 									}
 								});
 							});
+							$(".purpose-list").each(function(){
+								let purpose = $(this);
+								$(this).find("li").on("click", function(){
+									console.log("purpose===", purpose)
+									purpose.data("value", $(this).data("value"));
+								})
+							});
 						}).then(() => {
 							calcTotal();
 							withdrawList.find("li").on("click", function(){
 								// console.log("withdrawList clicking---")
 								withdrawList.prev().data({"value": $(this).data("value"), "name": $(this).data("name"), "acc-holder" : $(this).data("acc-holder") });
 							});
-							
-				
-
 						});
 					}
 				});
@@ -277,6 +278,13 @@
 						// console.log("receive list clicking---")
 						$(this).prev().data({"value": "", "name": "" });
 					});
+				});
+				$(".purpose-list").each(function(){
+					let purpose = $(this);
+					$(this).find("li").on("click", function(){
+						console.log("purpose===", purpose)
+						purpose.data("value", $(this).data("value"));
+					})
 				});
 			}
 
@@ -342,8 +350,10 @@
 			jsonData.requested_by_uid = uid;
 			jsonData.requested_at = new Date();
 			jsonData.transfer_agent = loginName;
-			jsonData.total_amount = Number(totalAmount);
+			jsonData.total_amount = totalAmount;
 			
+			console.log("total---", totalAmount);
+
 			let fileNames = $("#addFileList").find("li.upload_text");
 			$.each(fileNames, function(index, element){
 				let obj = {};
@@ -453,7 +463,6 @@
 			$(".amount").each(function() {
 				$(this).on('keypress', function(evt) {
 					let val = $(this).val();
-					
 					if (evt.which == "0".charCodeAt(0) && val.trim() == "") {
 						return false;
 					}
@@ -581,7 +590,7 @@
 									<div class="sa_select">
 										<div class="dropdown placeholder">
 											<button class="btn btn-primary dropdown-toggle" data-clone="empty" type="button" data-toggle="dropdown" data-name="" data-value="*purposeTitle*">*purposeTitle*<span class="caret"></span></button>
-											<ul id="purposeList*index*" class="dropdown-menu" role="menu">
+											<ul id="purposeList*index*" class="purpose-list dropdown-menu" role="menu">
 												<li data-value="0"><a href="#" tabindex="-1">관리운영비</a></li>
 												<li data-value="1"><a href="#" tabindex="-1">사무수탁비</a></li>
 												<li data-value="2"><a href="#" tabindex="-1">부채상환</a></li>
