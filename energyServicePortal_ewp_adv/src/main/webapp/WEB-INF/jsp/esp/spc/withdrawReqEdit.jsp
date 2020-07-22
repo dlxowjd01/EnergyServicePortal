@@ -255,7 +255,7 @@
 							$(".purpose-list").each(function(){
 								let purpose = $(this);
 								$(this).find("li").on("click", function(){
-									console.log("purpose===", purpose)
+									// console.log("purpose===", purpose)
 									purpose.data("value", $(this).data("value"));
 								})
 							});

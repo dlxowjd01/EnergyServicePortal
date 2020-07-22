@@ -177,6 +177,34 @@
 
 					if (!isEmpty(address)) {
 						setJsonAutoMapping(address, 'addressInfo');
+					} else {
+						$.ajax({
+							url: apiHost + '/config/sites/',
+							type: 'get',
+							async: false,
+							data: {oid: oid},
+							success: function (json) {
+								let spcGens = new Array();
+								let addressObj = new Object();
+								if (!isEmpty(json)) {
+									spcGens = json;
+								}
+
+								spcGens.forEach(site => {
+									if (site.sid == genId) {
+										addressObj['genName'] = site.name;
+										addressObj['발전소_국가'] = '대한민국';
+										addressObj['발전소_시도'] = site.location;
+										addressObj['발전소_상세정보'] = site.address;
+
+										setJsonAutoMapping(addressObj, 'addressInfo');
+									}
+								});
+							},
+							error: function (request, status, error) {
+
+							}
+						});
 					}
 
 					let repeatNumber= new Array();
@@ -431,6 +459,16 @@
 						<td id="법인등록번호"></td>
 					</tr>
 					<tr>
+						<th>SPC 주소</th>
+						<td>
+							<span id="spcCountry"></span>
+							<span id="spcSido"></span>
+							<span id="spcAddress"></span>
+						</td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
 						<th>사업명</th>
 						<td id="사업명"></td>
 						<th>펀드명</th>
@@ -507,9 +545,9 @@
 					<tr>
 						<th>주소</th>
 						<td>
-							<span id="countryValue"></span>
-							<span id="sidoValue"></span>
-							<span id="address"></span>
+							<span id="발전소_국가"></span>
+							<span id="발전소_시도"></span>
+							<span id="발전소_상세주소"></span>
 						</td>
 						<th></th>
 						<td></td>

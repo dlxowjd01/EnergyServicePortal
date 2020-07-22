@@ -83,20 +83,20 @@
 		setInitList("fileList10");
 	});
 
-	$(document).on('click', '.dropdown li', function () {
-		var dataValue = $(this).data('value'),
-			dataText = $(this).text();
-		$(this).parents('.dropdown').find('button').html(dataText + '<span class="caret"></span>').data('value', dataValue);
-	});
-
 	function initProcess(){
 		getSpcAndGenData(); //저장되어있는 spc정보조회
 		setComboBoxData();
 	}
 
 	function setComboBoxData() {
+		setInitList("spcCountryList");
+		setMakeList(countryList, "spcCountryList", {"dataFunction": {}});
+
 		setInitList("countryList");
 		setMakeList(countryList, "countryList", {"dataFunction": {}});
+
+		setInitList("spcSidoList");
+		setMakeList(sidoList, "spcSidoList", {"dataFunction": {}});
 
 		setInitList("sidoList");
 		setMakeList(sidoList, "sidoList", {"dataFunction": {}});
@@ -255,28 +255,6 @@
 		});
 
 		$.ajax({
-			url: apiHost + '/config/sites/'+ genId,
-			type: 'get',
-			async: true,
-			data: {},
-			success: function (json) {
-				$('#genName').text(json.name);
-
-				$('#country').html('대한민국 <span class="caret"></span>' )
-				$('#countryValue').text('대한민국');
-
-				$('#sidoValue').text(json.location);
-				$('#sido').html(json.location +  '<span class="caret"></span>');
-
-				$('#address').text(json.address)
-			},
-			error: function (request, status, error) {
-				alert('처리 중 오류가 발생했습니다.');
-				return false;
-			}
-		});
-
-		$.ajax({
 			url: apiHost + '/spcs/'+ spcId + '/gens/' + genId,
 			type: 'get',
 			async: true,
@@ -295,7 +273,36 @@
 					const coefficient_info = JSON.parse(json.data[0].coefficient_info);
 					const associated_info = JSON.parse(json.data[0].associated_info);
 
-					setJsonAutoMapping(address, 'addressInfo');
+					if (!isEmpty(address)) {
+						setJsonAutoMapping(address, 'addressInfo');
+					} else {
+						$.ajax({
+							url: apiHost + '/config/sites/',
+							type: 'get',
+							async: false,
+							data: {oid: oid},
+							success: function (json) {
+								let spcGens = new Array();
+								let addressObj = new Object();
+								if (!isEmpty(json)) {
+									spcGens = json;
+								}
+
+								spcGens.forEach(site => {
+									if (site.sid == genId) {
+										addressObj['발전소명'] = site.name;
+										addressObj['발전소_국가'] = '대한민국';
+										addressObj['발전소_시도'] = site.location;
+										addressObj['발전소_상세주소'] = site.address;
+										setJsonAutoMapping(addressObj, 'addressInfo');
+									}
+								});
+							},
+							error: function (request, status, error) {
+
+							}
+						});
+					}
 
 					let repeatNumber= new Array();
 					$.map(maintenance_info, function(val, key) {
@@ -458,7 +465,7 @@
 
 	function sendSpcPatchPost(){
 		var spcId = '${param.spc_id}',
-			spc_info = setAreaParamData('basicInfo');
+			spc_info = setAreaParamData('basicInfo', 'dropdown');
 
 		$('#basicForm').find('input[type="file"]').each(function () {
 			$(this).attr('name', this.name + '_' + genUuid());
@@ -557,7 +564,8 @@
 		var spcId = '${param.spc_id}',
 			genId = '${param.gen_id}';
 
-		var maintenance_info = setAreaParamData('maintenanceInfo'),
+		var address_info = setAreaParamData('addressInfo', 'dropdown'),
+			maintenance_info = setAreaParamData('maintenanceInfo'),
 			account_info = setAreaParamData('accountInfo'),
 			finance_info = setAreaParamData('financeInfo', 'dropdown'),
 			contract_info = setAreaParamData('contractInfo'),
@@ -608,6 +616,7 @@
 			async: true,
 			contentType: 'application/json',
 			data: JSON.stringify({
+				address: JSON.stringify(address_info),
 				contract_info: JSON.stringify(contract_info),
 				device_info: JSON.stringify(device_info),
 				finance_info: JSON.stringify(finance_info),
@@ -828,6 +837,37 @@
 							</td>
 						</tr>
 						<tr>
+							<th>주소</th>
+							<td class="group_type">
+								<div class="dropdown placeholder edit" id="spcCountry">
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+										국가 선택<span class="caret"></span>
+									</button>
+									<ul id="spcCountryList" class="dropdown-menu" role="menu">
+										<li data-value="[value]">
+											<a href="javascript:void(0);">[value]</a>
+										</li>
+									</ul>
+								</div>
+								<div class="dropdown placeholder edit mr-12" id="spcSido">
+									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+										시/도 선택<span class="caret"></span>
+									</button>
+									<ul id="spcSidoList" class="dropdown-menu" role="menu">
+										<li data-value="[value]">
+											<a href="javascript:void(0);">[value]</a>
+										</li>
+									</ul>
+								</div>
+							</td>
+							<th><label for="spcAddress">상세 주소</label></th>
+							<td>
+								<div class="tx_inp_type edit">
+									<input type="text" id="spcAddress" name="spcAddress" placeholder="상세 주소">
+								</div>
+							</td>
+						</tr>
+						<tr>
 							<th><label for="사업명">사업명</label></th>
 							<td>
 								<div class="tx_inp_type edit">
@@ -967,19 +1007,9 @@
 					</colgroup>
 					<tr>
 						<th><label for="genName">발전소명</label></th>
-						<td class="group_type">
-							<div class="dropdown placeholder edit" id="genId">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="발전소명 선택">
-									발전소명 선택<span class="caret"></span>
-								</button>
-								<ul id="genList" class="dropdown-menu" role="menu">
-									<li data-value="[sid]">
-										<a href="#">[name]</a>
-									</li>
-								</ul>
-							</div>
-							<div class="tx_inp_type edit">
-								<input type="text" id="genName" name="power_plant_name" placeholder="발전소명 입력">
+						<td>
+							<div class="tx_inp_type edit disabled">
+								<input type="text" id="genName" name="genName" placeholder="발전소명 입력" readonly>
 							</div>
 						</td>
 						<th></th>
@@ -988,43 +1018,42 @@
 						</td>
 					</tr>
 					<tr>
-						<th>주소</th>
+						<th>발전소 주소</th>
 						<td class="group_type">
-							<div class="dropdown placeholder edit">
-								<button id="country" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+							<div class="dropdown placeholder edit" id="발전소_국가">
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 									국가 선택<span class="caret"></span>
 								</button>
 								<ul id="countryList" class="dropdown-menu" role="menu">
 									<li data-value="대한민국">
-										<a href="#">대한민국</a>
-									</li>
-									<li data-value="일본">
-										<a href="#">일본</a>
+										<a href="javascript:void(0);">대한민국</a>
 									</li>
 								</ul>
 							</div>
-							<div class="dropdown placeholder edit mr-12">
-								<button id="sido" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+							<div class="dropdown placeholder edit mr-12" id="발전소_시도">
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 									시/도 선택<span class="caret"></span>
 								</button>
 								<ul id="sidoList" class="dropdown-menu" role="menu">
 									<li data-value="[value]">
-										<a href="#">[value]</a>
+										<a href="javascript:void(0);">[value]</a>
 									</li>
 								</ul>
 							</div>
 						</td>
-						<th><label for="address">상세 주소</label></th>
+						<th><label for="address">발전소 상세 주소</label></th>
 						<td>
 							<div class="tx_inp_type edit">
-								<input type="hidden" id="countryValue" value="">
-								<input type="hidden" id="sidoValue" value="">
-								<input type="text" id="address" name="minor_address" placeholder="상세 주소">
+								<input type="text" id="발전소_상세주소" name="발전소_상세주소" placeholder="상세 주소">
 							</div>
 						</td>
 					</tr>
 				</table>
 			</div>
+			<div class="btn_wrap_type02"><!--
+			--><button type="button" class="btn_type03" onclick="goMoveList();">목록</button><!--
+			--><button type="button" class="btn_type ml-16" onclick="setSaveData();">수정</button><!--
+			--></div>
 		</div>
 
 		<div class="indiv panel panel-default" id="maintenanceInfo">
