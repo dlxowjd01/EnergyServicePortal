@@ -290,13 +290,17 @@
 			updateReq(0);
 		});
 
+		$("#reviewBtn").on("click", function() {
+			updateReq(1);
+		});
+
 		function handleReq(newStatus, callback){
 			callback(newStatus);
 		}
 
 		function updateReq(newStatus, memoStr, commmonMemo){
 			let newData = {}
-			newStatus || newStatus == 0 ? ( newData.status = newStatus ) : null;
+			newStatus || newStatus == 0 || newStatus == 1 ? ( newData.status = newStatus ) : null;
 
 			if(newStatus != undefined) {
 				newData.status_changed_by = loginName;
@@ -586,6 +590,7 @@
 						<textarea placeholder="직접입력" id="txt2" class="textarea w-100"></textarea>
 					</div>
 					<div class="spc-btn-group my-20"><!--
+					--><button type="button" id="reviewBtn" class="btn_type mr-16">검토대기로 변경</button><!--
 					--><button type="button" id="rejectBtn" class="btn_type03 w80">반송</button><!--
 					--><button type="submit" class="btn_type ml-12">승인</button><!--
 				--></div>

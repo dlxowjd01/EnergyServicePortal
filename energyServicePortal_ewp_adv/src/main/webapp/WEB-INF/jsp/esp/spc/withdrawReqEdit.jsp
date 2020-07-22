@@ -113,7 +113,10 @@
 				});
 				Promise.all(promises).then(res => {
 					if(transactionData.to_account){
-						var updatedAt = transactionData.updated_at;
+						var withdraw_day = transactionData.withdraw_day;
+						if (!isEmpty(withdraw_day) && withdraw_day.length == 8) {
+							withdraw_day = withdraw_day.substring(0, 4)+'-'+withdraw_day.substring(4, 6)+'-'+withdraw_day.substring(6, 8);
+						}
 						var savedTotal = transactionData.total_amount.toLocaleString() + ' 원';
 						Promise.resolve(JSON.parse(transactionData.to_account)).then(item => {
 							$.each(item, function(index, element){
@@ -136,8 +139,8 @@
 								} else {
 									idx = index;
 								}
-								if(!isEmpty(updatedAt)){
-									req_date = new Date(updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-');
+								if(!isEmpty(withdraw_day)){
+									req_date = withdraw_day;
 								} else {
 									req_date = '-';
 								}
@@ -247,11 +250,12 @@
 										accNum = v.accNum;
 										accHolder = v.accHolder;
 
-										let copyReceiveList = $(".receive-list").eq(index).clone().html();
+										let copyReceiveList = '<li data-acc-holder="*acc_holder*" data-acc-type="*to_acc_type*" data-name="*to_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_bank_name* *to_account_no* *acc_holder*</a></li>';
 
 										receiving = copyReceiveList.replace(/\*to_acc_type\*/g, v.accType).replace(/\*to_bank_name\*/g, bankName).replace(/\*to_account_no\*/g, accNum).replace(/\*acc_holder\*/g, accHolder);
+
 										$(".receive-list").each(function(){
-											$(this).empty().append($(receiving));
+											$(this).append($(receiving));
 											$(this).find("li").on("click", function(){
 												// console.log("receive list clicking---")
 												$(this).prev().data({"value": $(this).data("value"), "name": $(this).data("name") });
@@ -647,9 +651,8 @@
 								<td>
 									<div class="sa_select">
 										<div class="dropdown placeholder">
-											<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-acc-holder="*accHolder*" data-name="*bankName*" data-value="*accNum*">*bankName*  *accNum*<span class="caret"></span></button>
+											<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-acc-holder="*accHolder*" data-name="*bankName*" data-value="*accNum*">*bankName*  *accNum* *accHolder*<span class="caret"></span></button>
 												<ul id="receiveList*index*" class="receive-list dropdown-menu" role="menu">
-													<li data-acc-holder="*acc_holder*" data-acc-type="*to_acc_type*" data-name="*to_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_bank_name* *to_account_no*</a></li>
 												</ul>
 										</div>
 									</div>
