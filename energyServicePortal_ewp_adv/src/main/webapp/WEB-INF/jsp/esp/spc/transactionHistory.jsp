@@ -568,7 +568,7 @@
 	function goToEdit(self) {
 		let spcId = self.parents().closest("td").data("id");
 		let spcName = self.parents().closest("td").data("name");
-		let reqId = self.data("id");
+		let reqId = self.data("req-id");
 		let accInfo = self.data("id");
 
 		let action = 'get';
@@ -592,20 +592,12 @@
 
 	function goToDetail(self) {
 		let spcName = self.parents().closest("td").data("name");
-		let reqId = self.data("id");
+		let reqId = self.data("req-id");
 		let accInfo = self.data("name") + '  ' + self.data("value");
 		let accNum = self.data("value");
 		let status = self.text();
 		let statusVal = self.parents().closest("td").data("value");
 		let spcId = self.parents().closest("td").data("id");
-
-		let action = 'get';
-		let syncOpt = true;
-		let option = {
-			url: apiHost + '/spcs/' + spcId + '?oid=' + oid + "&includeGens=true",
-			type: action,
-			async: syncOpt
-		}
 
 		$("#reqDetailSpcId").val(spcId);
 		$("#reqDetailSpcName").val(spcName);
@@ -614,7 +606,14 @@
 		$("#reqDetailStatus").val(status);
 		$("#reqDetailStatusVal").val(statusVal);
 
-		submit(option, accInfo, accNum, statusVal)
+		let action = 'get';
+		let syncOpt = true;
+		let option = {
+			url: apiHost + '/spcs/' + spcId + '?oid=' + oid + "&includeGens=true",
+			type: action,
+			async: syncOpt
+		}
+		submit(option, accInfo, accNum, statusVal);
 		// [사무수탁사]
 		// "반송" : 0, "승인 중" : "2", "승인완료": "3"	 => /spc/withdrawReqStatusDetail.do
 		// "승인 대기" : 1" 						  => /spc/withdrawReqEdit.do
@@ -647,8 +646,8 @@
 								let newTxt = txt.replace(/계좌_번호/g, '');
 								console.log("accountInfo===", accountInfo)
 								let name = accountInfo + '  (' + x[accHolder+newTxt] + ')';
-								console.log("name==", name)
-								$("#transactionAccountInfo").val(name);
+
+								$("#reqDetailAccountInfo").val(name);
 								setTimeout(function(){
 									$("#reqDetailForm").submit();
 								}, 300);
@@ -919,8 +918,8 @@
 								<td>*approvedBy*</td>
 								<td class='left' data-id="*transactionSpcId*" data-name="*transactionSpcName*" data-value="*statusVal*"><!--
 								--><div class="flex_start"><!--
-									--><button type="button" class="*linkAttr* clear-btn" data-name="*withdrawBankName*" data-value="*withdrawAccountNum*" data-id="*transactionReqId*" onclick="goToDetail($(this))">*status*</button><!--
-									--><a href="#" onclick="goToEdit($(this))" class='icon-edit *editVisibility*' data-id="*transactionReqId*"></a><!--
+									--><button type="button" class="*linkAttr* clear-btn" data-name="*withdrawBankName*" data-value="*withdrawAccountNum*" data-req-id="*transactionReqId*" onclick="goToDetail($(this))">*status*</button><!--
+									--><a href="#" onclick="goToEdit($(this))" class='icon-edit *editVisibility*' data-req-id="*transactionReqId*"></a><!--
 									--><a href="#" onclick="deleteRow(this)" class='icon-delete *visibility*'></a><!--
 								--></div>
 								</td>

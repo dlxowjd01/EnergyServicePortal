@@ -1114,6 +1114,10 @@ table input[type="text"] {
 	color: var(--vivid-blue);
 }
 
+.text-red {
+	color: var(--salmon-pearl);
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -11908,8 +11912,8 @@ table.table-footer tfoot td.light {
 	align-items: center;
 }
 
-.indiv.spc-detail .flex_wrapper + .flex_wrapper {
-	/* padding: 12px 0 16px; */
+.indiv.spc-detail.spc-req-status .flex_wrapper + .flex_wrapper {
+	padding: 12px 0 16px;
 }
 
 .indiv.spc-detail .flex_wrapper.border {

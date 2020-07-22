@@ -110,15 +110,16 @@
 						data.filter((item, index) => {
 							filter.status.some(x => {
 								if(x == item.status) {
-							console.log("item---", item)
+							// console.log("item---", item)
 									let found = spcArr.findIndex(x => x.spc_id === item.spc_id);
 									let perPage = 14;
 									let spc_name = ''
 									let total_amount = '';
 									let transaction_spc_id = item.spc_id;
 									let transaction_req_id = item.request_id;
-									let withdraw_account_info = '';
-									withdraw_account_info = item.withdraw_bank+item.withdraw_account_no;
+									let bank_name = item.withdraw_bank;
+									let withdraw_acc_num = item.withdraw_account_no;
+
 									// person
 									let requested_by = '';
 									let transfer_agent = '';
@@ -206,7 +207,7 @@
 											str = tableCloned.replace(/\*transactionSpcId\*/g, transaction_spc_id)
 												.replace(/\*spcName\*/g, spc_name)
 												.replace(/\*transactionReqId\*/g, transaction_req_id)
-												.replace(/\*withdrawAccountInfo\*/g, withdraw_account_info)
+												.replace(/\*bankName\*/g, bank_name).replace(/\*accNum\*/g, withdraw_acc_num)
 												.replace(/\*chkOpt\*/g, 'chkOpt_'+ index).replace(/\*reviewOpt\*/g, 'review_opt_'+ index)
 												.replace(/\*withdrawDay\*/g, withdraw_day)
 												.replace(/\*spcName\*/g, spc_name)
@@ -281,7 +282,7 @@
 											str = tableCloned.replace(/\*transactionSpcId\*/g, transaction_spc_id)
 												.replace(/\*spcName\*/g, spc_name)
 												.replace(/\*transactionReqId\*/g, transaction_req_id)
-												.replace(/\*withdrawAccountInfo\*/g, withdraw_account_info)
+												.replace(/\*bankName\*/g, bank_name).replace(/\*accNum\*/g, withdraw_acc_num)
 												.replace(/\*chkOpt\*/g, 'chkOpt_'+ index).replace(/\*reviewOpt\*/g, 'review_opt_'+ index)
 												.replace(/\*withdrawDay\*/g, withdraw_day)
 												.replace(/\*spcName\*/g, spc_name)
@@ -310,8 +311,9 @@
 							let total_amount = '';
 							let transaction_spc_id = item.spc_id;
 							let transaction_req_id = item.request_id;
-							let withdraw_account_info = '';
-							withdraw_account_info = item.withdraw_bank+item.withdraw_account_no;
+							let bank_name = item.withdraw_bank;
+							let withdraw_acc_num = item.withdraw_account_no;
+
 							// person
 							let requested_by = '';
 							let transfer_agent = '';
@@ -400,7 +402,7 @@
 							str = tableCloned.replace(/\*transactionSpcId\*/g, transaction_spc_id)
 								.replace(/\*spcName\*/g, spc_name)
 								.replace(/\*transactionReqId\*/g, transaction_req_id)
-								.replace(/\*withdrawAccountInfo\*/g, withdraw_account_info)
+								.replace(/\*bankName\*/g, bank_name).replace(/\*accNum\*/g, withdraw_acc_num)
 								.replace(/\*chkOpt\*/g, 'chkOpt_'+ index).replace(/\*reviewOpt\*/g, 'review_opt_'+ index)
 								.replace(/\*withdrawDay\*/g, withdraw_day)
 								.replace(/\*spcName\*/g, spc_name)
@@ -524,59 +526,88 @@
 	function goToDetail(self) {
 		let spcId = $(self).parent().data("id");
 		let spcName = $(self).parent().data("name");
-		let reqId = self.data("id");
+		let reqId = self.data("req-id");
+		let bankName = self.data("name")
 		let accNum = self.data("value");
 		let status = self.text();
 		let statusVal = self.parent().data("value");
+		let accInfo = bankName + ' ' + accNum;
+		console.log("accInfo===", accInfo);
 
 		$("#reviewStatus").val(status);
 		$("#reviewStatusVal").val(statusVal);
-
 		$("#reviewSpcId").val(spcId);
 		$("#reviewSpcName").val(spcName);
 		$("#reviewReqId").val(reqId);
-		$("#reviewAccountInfo").val(accNum);
+		$("#reviewAccountInfo").val(accInfo);
+
+		
+		let action = 'get';
+		let syncOpt = true;
+		let option = {
+			url: apiHost + '/spcs/' + spcId + '?oid=' + oid + "&includeGens=true",
+			type: action,
+			async: syncOpt
+		}
+		submit(option, accInfo, accNum, statusVal);
+
 		// [자산 운용사]
 		// "반송" : 0, "검토 중" : "2", "승인완료": "3"	 => /spc/withdrawReqStatusDetail.do
 		// "검토 대기" : 1" 						  => /spc/withdrawReqEdit.do
-		if(self.parent().data("value")===1) {
-			let newData = {}
-			newData.status = 2;
-			newData.status_changed_by = loginName;
-			newData.status_changed_at = new Date().toISOString();
-
-			let opt = {
-				url: apiHost + '/spcs/transactions/' + reqId + '?oid=' + oid,
-				type: "patch",
-				async: true,
-				dataType: 'json',
-				contentType: "application/json",
-				data: JSON.stringify(newData)
-			};
-			$.ajax(opt).done(function (json, textStatus, jqXHR) {
-				$("#reviewDetailForm").submit();
-
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				$("#warningModal .modal-title").text('처리 중 오류가 발생했습니다.');
-				$("#warningModal").modal("show");
-				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
-				return false;
-			});
-		} else {
-			$("#reviewDetailForm").submit();
-		}
-
 	}
+
+	function submit(opt, accInfo, accNum, statusVal){
+		let option = opt;
+		let statusValue = statusVal;
+		let accountInfo = accInfo;
+		$.ajax(option).done(function (json, textStatus, jqXHR) {
+			if (json.data[0].spcGens && json.data[0].spcGens.length > 0 ) {
+				let gensInfo = json.data[0].spcGens;
+				var promises = [];
+
+				$.each(gensInfo, function(index, element){
+					promises.push(Promise.resolve(JSON.parse(element.finance_info)));
+				});
+
+				Promise.all(promises).then(res => {
+					res.map(x => {
+						Object.entries(x).map((item, index) => {
+							const strAccNum = "계좌_번호";
+							const accHolder = "예금주";
+							const num = accNum;
+						
+							if(item[1] == num.toString()){
+								let txt = item[0];
+								let newTxt = txt.replace(/계좌_번호/g, '');
+								let name = '  (' + x[accHolder+newTxt] + ')';
+								$("#reviewAccountHolder").val(name);
+								setTimeout(function(){
+									$("#reviewDetailForm").submit();
+								}, 300);
+							}
+						});
+					});
+				});
+			}
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			return false;
+		});;
+
+		// console.log("submit===", $(self))
+		// let accInfo = self.data("name") + '  ' + self.data("value") + '  (' + name + ')';
+	}
+
 
 </script>
 
 <form id="reviewDetailForm" class="" action="/spc/withdrawReqStatusDetail.do" method="post">
-	<input type="hidden" id="reviewSpcId" name="review_spc_id" value=''/>
-	<input type="hidden" id="reviewSpcName" name="review_spc_name" value=''/>
-	<input type="hidden" id="reviewReqId" name="review_req_id" value=''/>
-	<input type="hidden" id="reviewAccountInfo" name="review_acc_info" value=''/>
-	<input type="hidden" id="reviewStatus" name="review_status" value=''/>
-	<input type="hidden" id="reviewStatusVal" name="review_status_val" value=''/>
+	<input type="hidden" id="reviewSpcId" name="req_detail_spc_id" value=''/>
+	<input type="hidden" id="reviewSpcName" name="req_detail_spc_name" value=''/>
+	<input type="hidden" id="reviewReqId" name="req_detail_req_id" value=''/>
+	<input type="hidden" id="reviewAccountHolder" name="req_detail_acc_holder" value=''/>
+	<input type="hidden" id="reviewAccountInfo" name="req_detail_acc_info" value=''/>
+	<input type="hidden" id="reviewStatus" name="req_detail_status" value=''/>
+	<input type="hidden" id="reviewStatusVal" name="req_detail_status_val" value=''/>
 </form>
 
 <div class="row header-wrapper">
@@ -610,22 +641,22 @@
 </form>
 <div class="row content-wrapper">
 	<div class="col-lg-12">
-		<div class="indiv no_border spc_bal_post">
+		<div class="indiv no_border spc_tbl">
 			<div class="btn_wrap_type01">
 				<button type="button" class="btn_type">선택 인쇄</button>
 			</div>
 			<table class="sort_table table-footer transaction-table">
 				<colgroup>
-					<col style="width:6%">
-					<col style="width:9%">
+					<col style="width:5%">
 					<col style="width:8%">
 					<col style="width:12%">
-					<col style="width:14%">
+					<col style="width:10%">
+					<col style="width:15%">
 					<col style="width:10%">
 					<col style="width:9%">
+					<col style="width:7%">
 					<col style="width:9%">
-					<col style="width:9%">
-					<col style="width:14%">
+					<col style="width:15%">
 					<col>
 				</colgroup>
 				<thead>
@@ -677,7 +708,7 @@
 							<td>*requestedAt*</td>
 							<td>*requestedBy*</td>
 							<td>*transferAgent*</td>
-							<td data-id="*transactionSpcId*" data-name="*spcName*" data-value="*statusVal*"><button type="button" data-value="*withdrawAccountInfo*" data-id="*transactionReqId*" onclick="goToDetail($(this))" class="*linkAttr* clear-btn">*status*</button></td>
+							<td data-id="*transactionSpcId*" data-name="*spcName*" data-value="*statusVal*"><button type="button" data-name="*bankName*" data-value="*accNum*" data-req-id="*transactionReqId*" onclick="goToDetail($(this))" class="*linkAttr* clear-btn">*status*</button></td>
 							<td>*statusChangedBy*</td>
 							<td>*statusChangedAt*</td>
 						</tr>
