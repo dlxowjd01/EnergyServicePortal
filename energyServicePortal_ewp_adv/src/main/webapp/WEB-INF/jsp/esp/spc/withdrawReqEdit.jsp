@@ -293,6 +293,7 @@
 					var attachment = ''
 					var addFileList = $("#addFileList").find(".file_list");
 					if(res.length > 0){
+						addFileList.find("ul").empty();
 						res.forEach(attach => {
 							let downUrl = apiHost + '/files/download/' + attach.filedName + '?oid=' + oid + '&orgFilename=' + attach.originalName.trim();
 							let templateAttach = `
