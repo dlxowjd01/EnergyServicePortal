@@ -1694,15 +1694,21 @@ nav .nav_right li {
 	letter-spacing: 0.3px;
 }
 
-nav .nav_right li span {
-	display: inline-block;
-	font-family: "Roboto", sans-serif;
-	font-weight: 500;
-	color: var(--color2);
+nav .nav_right li.member {
+	margin-right: 16px;
 }
 
-nav .nav_right li.member {
-	margin-left: 30px;
+nav .nav_right li.member .btn_type03 {
+	height: 28px;
+	line-height: 28px;
+}
+
+nav .nav_right li.member + li {
+	border-left: 1px solid var(--color2);
+}
+
+nav .nav_right li.member + li .lang {
+	padding-left: 16px;
 }
 
 nav .nav_right li.member .fl {
@@ -1717,17 +1723,15 @@ nav .nav_right li.member .fl img {
 
 nav .nav_right li.member .fr {
 	margin-left: 10px;
-	font-size: 11px;
-	color: var(--color2);
+	font-size: 12px;
+	color: var(--color3);
+	font-weight: 500;
 	font-weight: 400;
 	line-height: 1.5;
 }
 
-nav .nav_right li.member .fr span {
-	cursor: pointer;
-	font-size: 13px;
-	color: var(--color3);
-	font-weight: 500;
+nav .nav_right li.member .light {
+	color: var(--color2);
 }
 
 /* custom stye */
@@ -1771,7 +1775,7 @@ nav .all-menu:before {
 	content: "";
 }
 
-nav .all-menu>a {
+nav .all-menu > a {
 	display: inline-block;
 	width: 85px;
 	height: 38px;
@@ -6009,11 +6013,14 @@ input[type="radio"] .styled:checked+label::after {
 
 /* Language Switcher*/
 
-nav .lang {
-	display: none;
+/* nav .lang {
 	position: absolute;
 	top: 20px;
 	right: 20px;
+} */
+
+nav .lang.mobile {
+	display: none;
 }
 
 nav .lang.dropdown .btn-primary {
