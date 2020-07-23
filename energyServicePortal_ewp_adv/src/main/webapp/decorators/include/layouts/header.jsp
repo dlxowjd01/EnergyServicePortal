@@ -70,8 +70,8 @@
 			if(!isEmpty($(this).val())){
 				var kr = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
 				let letters = /^[a-zA-Z ]+$/
-				let kr2 =  /[\uac00-\ud7af]|[\u1100-\u11ff]|[\u3130-\u318f]|[\ua960-\ua97f]|[\ud7b0-\ud7ff]/g
-				let engKr = /[^a-zA-Z0-9\u3130-\u318F\uAC00-\uD7AF]/g
+				// let kr2 =  /[\uac00-\ud7af]|[\u1100-\u11ff]|[\u3130-\u318f]|[\ua960-\ua97f]|[\ud7b0-\ud7ff]/g
+				// let engKr = /[^a-zA-Z0-9\u3130-\u318F\uAC00-\uD7AF]/g
 
 				// console.log("kr===", $(this).val().match(kr))
 				// console.log("kr===", $(this).val().match(kr))
