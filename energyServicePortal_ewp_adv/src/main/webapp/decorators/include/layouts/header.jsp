@@ -75,7 +75,7 @@
 
 				// console.log("kr===", $(this).val().match(kr))
 				// console.log("kr===", $(this).val().match(kr))
-				console.log("letters===", $(this).val().match(letters))
+				// console.log("letters===", $(this).val().match(letters))
 
 				if( $(this).val().match(kr) || $(this).val().match(letters)){
 					$("#isValidName").addClass("hidden");
@@ -105,7 +105,7 @@
 
 		$("#emailAddr").on('keyup', function(evt, limit) {
 			if(!isEmpty($(this).val())){
-				console.log( validateEmail($(this).val())  )
+				// console.log( validateEmail($(this).val())  )
 				if(validateEmail($(this).val()) == false) {
 					$("#isValidEmail").removeClass("hidden");
 				} else {
@@ -152,7 +152,7 @@
 			}
 			// console.log("token===", token)
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				console.log("success===", json);
+				// console.log("success===", json);
 				$("#successMsg1").removeClass("hidden");
 				setTimeout(function(){
 					$("#successMsg1").addClass("hidden");
@@ -199,7 +199,7 @@
 				data: JSON.stringify(value)
 			}
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				console.log("success===", json);
+				// console.log("success===", json);
 				$("#successMsg2").removeClass("hidden");
 				setTimeout(function(){
 					$("#successMsg2").addClass("hidden");
