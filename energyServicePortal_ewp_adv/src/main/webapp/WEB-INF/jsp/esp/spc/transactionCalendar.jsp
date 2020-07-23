@@ -487,7 +487,7 @@
 				let job_info = '';
 				let tableStr = '';
 				let bulletStr = '';
-
+				let hiddenClass = '';
 
 				// console.log("jov_date===", job_date)
 				// console.log("job_type===", job_type)
@@ -495,42 +495,44 @@
 					resolve(JSON.parse(v.job_info))
 				}).then(result => {
 					job_info = result;
-					if ($.inArray(job_type, checkType) >= 0) {
-						let spcName = '';
-						if(spcList.length>0){
-							spcList.some(x => {
-								if(x.spcId === v.spc_id) {
-									spcName = x.spcName;
-								}
-							});
-						}
-
-						if(isEmpty(spcName)){
-							spcName = "spc_no_name";
-						}
-
+					if ($.inArray(job_type, checkType) === -1) {
+						hiddenClass = 'hidden';
+					} else {
 						if (!isEmpty(serachName)) {
 							if ((spcName.match(serachName) || job_Name(job_type).match(serachName)) == null) {
-								return false;
+								hiddenClass = 'hidden';
 							}
 						}
-
-						// console.log("job_type===", job_type);
-						if (filterArr.indexOf(job_type) > -1){
-							tableStr = '<li data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="link bu t' + job_type + '">[' + spcName + '] ' + job_Name(job_type) + '</li>';
-						} else {
-							tableStr = '<li data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="link bu t' + job_type + '">[' + spcName + '] ' + job_Name(job_type) + '</li>';
-						}
-						bulletStr = '<span data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="bu t' + job_type + '">[ ' + spcName + ' ] ' + job_Name(job_type) + '</span><span class="fr btn_next"></span>';
-						calendar.eq(Number(job_date) - 1).append(tableStr);
-						modalData.append(
-							'<li class="link alarm-item" data-id="'+v.id+'">'
-							+ bulletStr
-							+ '<br>'
-							+ ''
-							+'</li>'
-						)
 					}
+
+					let spcName = '';
+					if(spcList.length>0){
+						spcList.some(x => {
+							if(x.spcId === v.spc_id) {
+								spcName = x.spcName;
+							}
+						});
+					}
+
+					if(isEmpty(spcName)){
+						spcName = "spc_no_name";
+					}
+
+					// console.log("job_type===", job_type);
+					if (filterArr.indexOf(job_type) > -1){
+						tableStr = '<li data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="link bu t' + job_type + ' ' + hiddenClass + '">[' + spcName + '] ' + job_Name(job_type) + '</li>';
+					} else {
+						tableStr = '<li data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="link bu t' + job_type + ' ' + hiddenClass + '">[' + spcName + '] ' + job_Name(job_type) + '</li>';
+					}
+					bulletStr = '<span data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="bu t' + job_type + ' ' + hiddenClass + '">[ ' + spcName + ' ] ' + job_Name(job_type) + '</span><span class="fr btn_next"></span>';
+					calendar.eq(Number(job_date) - 1).append(tableStr);
+					modalData.append(
+						'<li class="link alarm-item" data-id="'+v.id+'">'
+						+ bulletStr
+						+ '<br>'
+						+ ''
+						+'</li>'
+					)
 				}).catch(function(error) {
 					if(error){
 						return false;
@@ -556,6 +558,7 @@
 				let bulletIdx = '';
 				let d = item[0].slice(-2);
 				let spcName = '';
+				let hiddenClass = '';
 
 				// console.log("pair---", spcPair)
 				spcList.some(x => {
@@ -570,33 +573,35 @@
 				} else if(item[1][0].status == 3) {
 					bulletIdx = "1";
 				}
-				if ($.inArray(bulletIdx, checkType) >= 0) {
+				if ($.inArray(bulletIdx, checkType) === -1) {
+					hiddenClass = 'hidden';
+				} else {
 					if (!isEmpty(serachName)) {
 						if ((spcName.match(serachName) || (statusList[firstStatus].val).toLowerCase().match(serachName)) == null) {
-							return false;
+							hiddenClass = 'hidden';
 						}
 					}
-					// console.log( 'item[1]===', item[1])
-					//    item[1][0].spc_id
-					if(firstStatus !=0){
-						if(item[1].length>1){
-							tStr = '<li data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + item[1].length + '건</li>';
-							bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + item[1].length + '건</span><span class="fr btn_next"></span>';
-						} else {
-							tStr = '<li data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + '</li>';
-							bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + '</span><span class="fr btn_next"></span>';
-						}
-						calendar.eq(Number(d) - 1).append(tStr);
-						modalData.append(
-							'<li class="alarm-item link">'
-							+ bStr
-							+ '<br>'
-							+ ''
-							+'</li>'
-						)
-					}
-					// console.log("calendar===", calendar.find("li"))
 				}
+				// console.log( 'item[1]===', item[1])
+				//    item[1][0].spc_id
+				if(firstStatus !=0){
+					if(item[1].length>1){
+						tStr = '<li data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + ' ' + hiddenClass + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + item[1].length + '건</li>';
+						bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + ' ' + hiddenClass + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + item[1].length + '건</span><span class="fr btn_next"></span>';
+					} else {
+						tStr = '<li data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + ' ' + hiddenClass + '">[' + spcName + '] ' + statusList[firstStatus].val + '</li>';
+						bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + ' ' + hiddenClass + '">[' + spcName + '] ' + statusList[firstStatus].val + '</span><span class="fr btn_next"></span>';
+					}
+					calendar.eq(Number(d) - 1).append(tStr);
+					modalData.append(
+						'<li class="alarm-item link">'
+						+ bStr
+						+ '<br>'
+						+ ''
+						+'</li>'
+					)
+				}
+				// console.log("calendar===", calendar.find("li"))
 			});
 		}
 
@@ -810,20 +815,20 @@
 		));
 
 		$('#calendar td .bu').each(function () {
-			let clsName = $(this).attr('class').replace('bu t', '').replace('link', '').trim();
+			let clsName = $(this).attr('class').replace(/[^0-9]/g, '').trim();
 			let spcName = $(this).html().match(/\[(.*?)\]/)[1];
 			if ($.inArray(clsName, checkType) > -1) {
 				if ($('#searchName').val() == '') {
-					$(this).show();
+					$(this).removeClass('hidden');
 				} else {
 					if (spcName.match($('#searchName').val())) {
-						$(this).show();
+						$(this).removeClass('hidden');
 					} else {
-						$(this).hide();
+						$(this).addClass('hidden');
 					}
 				}
 			} else {
-				$(this).hide();
+				$(this).addClass('hidden');
 			}
 		});
 	};
