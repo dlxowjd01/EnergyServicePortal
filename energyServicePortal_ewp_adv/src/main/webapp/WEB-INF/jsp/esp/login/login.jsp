@@ -471,10 +471,10 @@
 			<nav class="clear">
 				<c:choose>
 					<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
-						<div class="nav_brand spower"><a href="#">Spower</a></div>
+						<div class="nav-brand spower"><a href="#">Spower</a></div>
 					</c:when>
 					<c:otherwise>
-						<div class="nav_brand"><a href="#">Encored</a></div>
+						<div class="nav-brand"><a href="#">Encored</a></div>
 					</c:otherwise>
 				</c:choose>
 				<%--	

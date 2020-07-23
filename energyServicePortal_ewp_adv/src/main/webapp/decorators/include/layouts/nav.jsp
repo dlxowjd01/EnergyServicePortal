@@ -232,12 +232,19 @@
 	</c:if>
 </div>
 <!-- 모바일용 카테고리 { -->
-<div id="gnb">
-	<div class="g_top">
-		<div class="w100">
-			<h1 class="g_logo"><a href="javascript:void(0);"><img src="/img/s-power_logo_dark.png" class="로고"></a></h1>
-			<a href="javascript:void(0);" class="category_close"><img src="/img/gnb_close.png" width="17" alt="닫기"></a>
-		</div>
+<div id="gnb" class="mobile-nav">
+	<div class="logo-wrapper">
+		<h1 class="mobile-logo">
+			<c:choose>
+				<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
+					<span class="spower mobile"></span>
+				</c:when>
+				<c:otherwise>
+					<span class="mobile"></span>
+				</c:otherwise>
+			</c:choose>
+		</h1>
+		<a href="javascript:void(0);" class="category_close"><img src="/img/gnb_close.png" width="17" alt="닫기"></a>
 	</div>
 	<div class="g_menu w100">
 		<ul>

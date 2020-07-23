@@ -23,7 +23,7 @@ nav .lang.login-lang {
 	height: calc(100% - 144px);
 }
 
-.login-wrapper nav .nav_brand {
+.login-wrapper nav .nav-brand {
 	display: none !important;
 }
 

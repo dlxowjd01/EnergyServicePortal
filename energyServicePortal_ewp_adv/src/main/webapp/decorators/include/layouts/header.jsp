@@ -2,69 +2,266 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <c:set var="oid" value="${userInfo.oid}"/> <%-- 메뉴 관리용 OID --%>
 <c:set var="task" value="${userInfo.task}"/> <%-- 메뉴 관리용 Task --%>
+
 <script type="text/javascript">
-	var selViewSiteName = "";
 	$(function () {
-		// const navLogo = $(".nav_brand.spower");
-		// navLogo.on("click", function(){
-		// 	console.log("logo clicked===")
-		// })
-		refreshCurrTime();
+		// role: 1: 시스템관리자, 2: 일반
+		// task : 0: 일반, 1:사무수탁, 2:자산운용, 3: 사업주
+		
+		// let userInfo = '${userInfo}'
+		// console.log("userinf---", userInfo)
+
+		let userId = '${userInfo.login_id}';
+		let oid = '${userInfo.oid}';
+		let role = '${userInfo.role}';
+		let task = '${userInfo.task}';
+		let fullName = '${userInfo.name}';
+		let emailAddr = '${userInfo.contact_email}';
+		let mobileNum = '${userInfo.contact_phone}';
+
+		let accLevel = "";
+		let taskCategory = "";
+		role == 1 ? accLevel = "시스템관리자" : accLevel = "일반";
+
+		if(task == 0){
+			taskCategory = "일반"
+		} else if(task == 1){
+			taskCategory = "사무수탁"
+		} else if(task == 2){
+			taskCategory = "자산운용"
+		} else if(task == 3){
+			taskCategory = "사업주"
+		}
+
+		if(!isEmpty(userId)) {
+			$("#userId").val(userId);
+		}
+		if(!isEmpty(oid)) {
+			$("#affiliation").val(oid);
+		}
+		if(!isEmpty(accLevel)) {
+			$("#accessLevel").val(accLevel);
+		}
+		if(!isEmpty(taskCategory)) {
+			$("#taskCategory").val(taskCategory);
+		}
+		if(!isEmpty(fullName)) {
+			$("#fullName").val(fullName);
+		}
+		if(!isEmpty(emailAddr)) {
+			$("#taskCategory").val(emailAddr);
+		}
+		if(!isEmpty(mobileNum) && mobileNum != "string") {
+			$("#mobileNum").val(mobileNum);
+		}
+
+		$("#newPwd").on('keyup', ValidatePassword);
+
+
+		// $("#fullName").on('keyup', function(evt, limit) {
+		// 	if(!isEmpty($(this).val())){
+		// 		$("#updateProfileBtn").prop("disabled", false);
+		// 		$("#updateProfileBtn").removeClass("disabled");
+		// 	}
+		// });
+
+		
+		$("#fullName").on('keyup', function(evt) {
+			if(!isEmpty($(this).val())){
+				var kr = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
+				let letters = /^[a-zA-Z ]+$/
+				let kr2 =  /[\uac00-\ud7af]|[\u1100-\u11ff]|[\u3130-\u318f]|[\ua960-\ua97f]|[\ud7b0-\ud7ff]/g
+				let engKr = /[^a-zA-Z0-9\u3130-\u318F\uAC00-\uD7AF]/g
+
+				// console.log("kr===", $(this).val().match(kr))
+				// console.log("kr===", $(this).val().match(kr))
+				console.log("letters===", $(this).val().match(letters))
+
+				if( $(this).val().match(kr) || $(this).val().match(letters)){
+					$("#isValidName").addClass("hidden");
+				} else {
+					$("#isValidName").removeClass("hidden");
+				}
+				$("#updateProfileBtn").prop("disabled", false);
+				$("#updateProfileBtn").removeClass("disabled");
+			}
+		});
+
+		$("#mobileNum").on('keyup', function(evt, limit) {
+			if( $(this).val().match(/[^\x00-\x80]/) ){
+				$(this).val("");
+			}
+			if(!isEmpty($(this).val())){
+				$("#updateProfileBtn").prop("disabled", false);
+				$("#updateProfileBtn").removeClass("disabled");
+			}
+		});
+		$("#mobileNum").on('keypress', function(evt) {
+			let val = $(this).val();
+			if (evt.which < 48 || evt.which > 57) {
+				return false;
+			}
+		});
+
+		$("#emailAddr").on('keyup', function(evt, limit) {
+			if(!isEmpty($(this).val())){
+				console.log( validateEmail($(this).val())  )
+				if(validateEmail($(this).val()) == false) {
+					$("#isValidEmail").removeClass("hidden");
+				} else {
+					$("#isValidEmail").addClass("hidden");
+					return false;
+				}
+				$("#updateProfileBtn").prop("disabled", false);
+				$("#updateProfileBtn").removeClass("disabled");
+			}
+		});
+
+
+		$("#confirmNewPwd").keyup(function() {
+			let password = $("#newPwd").val();
+			password == $(this).val() ? $("#pwdMatched").addClass("hidden") : $("#pwdMatched").removeClass("hidden");
+
+			let validated = $("#pwdMatched").hasClass("hidden");
+			if( $(".tick:not(.checked)").index() == -1 && validated){
+				$("#updatePwdBtn").prop("disabled", false);
+				$("#updatePwdBtn").removeClass("disabled");
+			}
+		});
+
+		$("#pwdForm").on("submit", function(e){
+			e.preventDefault();
+			let uid = '${sessionScope.userInfo.uid}';
+			let token = '${sessionScope.userInfo.token}';
+			let value = {
+				// oldPassword : $("#oldPwd").val(),
+				// newPassword : $("#newPwd").val(),
+				password : $("#newPwd").val()
+			}
+
+			let option = {
+				url: 'https://iderms-api.iderms.ai/config/users/' + uid + '/password',
+				dataType: 'json',
+				type: 'patch',
+				beforeSend: function (jqXHR, settings) {
+					jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+				},
+				async: false,
+				contentType: "application/json",
+				data: JSON.stringify(value)
+			}
+			// console.log("token===", token)
+			$.ajax(option).done(function (json, textStatus, jqXHR) {
+				console.log("success===", json);
+				$("#successMsg1").removeClass("hidden");
+				setTimeout(function(){
+					$("#successMsg1").addClass("hidden");
+				}, 2000);
+
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				alert('처리 중 오류가 발생했습니다.');
+				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
+				return false;
+			});
+		});
+
+		$("#profileForm").on("submit", function(e){
+			e.preventDefault();
+			let value = {};
+
+			if(!isEmpty($("#fullName").val())) {
+				value.name = $("#fullName").val();
+			}
+			if(!isEmpty($("#taskCategory").val())) {
+				value.contact_email = $("#emailAddr").val();
+			}
+			if(!isEmpty($("#mobileNum").val())) {
+				if($("#mobileNum").val().length >= 10){
+					$("#isValidMobileNum").addClass("hidden");
+					value.contact_phone = $("#mobileNum").val();
+				} else {
+					$("#isValidMobileNum").removeClass("hidden");
+				}
+			}
+
+			let uid = '${sessionScope.userInfo.uid}';
+			let token = '${sessionScope.userInfo.token}';
+		
+			let option = {
+				url: 'https://iderms-api.iderms.ai/config/users/' + uid,
+				dataType: 'json',
+				type: 'patch',
+				beforeSend: function (jqXHR, settings) {
+					jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+				},
+				async: false,
+				contentType: "application/json",
+				data: JSON.stringify(value)
+			}
+			$.ajax(option).done(function (json, textStatus, jqXHR) {
+				console.log("success===", json);
+				$("#successMsg2").removeClass("hidden");
+				setTimeout(function(){
+					$("#successMsg2").addClass("hidden");
+				}, 2000);
+
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				alert('처리 중 오류가 발생했습니다.');
+				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
+				return false;
+			});
+		});
+
+		function validateName(name){
+			let re = /\S+@\S+\.\S+/;
+			// let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+
+			return re.test(email);
+		}
+
+		function validateEmail(email){
+			// let re = /\S+@\S+\.\S+/;
+			let re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+			// let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+
+			return re.test(email);
+		}
+
+		function ValidatePassword() {
+			const rules = [
+				{
+					Pattern: "[a-zA-Z]",
+					Target: "hasLetter"
+				},
+				{
+					Pattern: "[0-9]",
+					Target: "hasNumber"
+				},
+				// {
+				// Pattern: "[!@@#$%^&*]",
+				// Target: "Symbols"
+				// }
+			];
+
+			let password = $(this).val();
+			password.length > 6 ? $("#isSixCharLong").addClass("checked") : $(".tick.min-length").removeClass("checked");
+
+			for (var i = 0; i < rules.length; i++) {
+				if( new RegExp(rules[i].Pattern).test(password) ) {
+					$("#" + rules[i].Target).addClass("checked")
+				} else {
+					$("#" + rules[i].Target).removeClass("checked")
+				}
+			}
+
+		}
+
+
 	});
 
-	function refreshCurrTime() {
-		var currEm = $('.currTime');
-		var now = new Date();
-		currEm.text(now.format('yyyy-MM-dd HH:mm:ss'));
-		setTimeout(refreshCurrTime, 1000); // 매초 갱신
-	}
-
-	function addParameterUrl(paramNm, paramVal) {
-		var newUrl = changeParamUrl(window.location.href, paramNm, paramVal, window.location.pathname);
-		location.href = newUrl;
-	}
-
-	function changeParamUrl(url, paramName, paramValue, pathName) {
-		var urlArr = url.split("?");
-		var newParamUrl = "";
-		if (urlArr.length > 1) {
-			var paramArr = urlArr[1].split("&");
-			var separator = "";
-			var ynFlag = false;
-			for (var i in paramArr) {
-				var compareParam = paramArr[i].split("=");
-				if (compareParam[0].indexOf(paramName) > -1) {
-					newParamUrl += separator + paramName + "=" + paramValue;
-					ynFlag = true;
-				} else {
-					newParamUrl += separator + paramArr[i];
-				}
-				separator = "&";
-			}
-
-			if (!ynFlag) {
-				newParamUrl += separator + paramName + "=" + paramValue;
-			}
-		} else {
-			newParamUrl = paramName + "=" + paramValue;
-		}
-
-		var newPathName = pathName;
-		if (pathName != null && pathName != "" && pathName != undefined) {
-			if (pathName == "/main/gMain.do") {
-				if (paramName == "siteId") {
-					newPathName = "/main/siteMain.do";
-				}
-			}
-		}
-
-		return newPathName + "?" + newParamUrl;
-	}
 
 	function dashboardMove(type, key, value) {
-
 		let inp = $('input').attr('type', 'hidden').attr('name', key).attr('value', value);
-
 		if(type == 'group') {
 			$('#dashboardForm').append(inp).attr('action', '/dashboard/gmain.do').submit();
 		} else if(type == 'site') {
@@ -78,25 +275,17 @@
 	}
 
 </script>
-<form id="dashboardForm" name="dashboardForm" method="post">
-</form>
+
+<form id="dashboardForm" name="dashboardForm" method="post"></form>
+
 <nav class="clear">
 	<button type="button" class="category">카테고리</button>
-	<!-- 모바일용 언어 선택 -->
-	<div class="lang dropdown">
-		<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">KO
-			<span class="caret"></span></button>
-		<ul class="dropdown-menu">
-			<li><a href="#">KO</a></li>
-			<li><a href="#">EN</a></li>
-		</ul>
-	</div>
 	<c:choose>
 		<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
-			<div class="nav_brand spower"><a href="/dashboard/gmain.do">Spower</a></div>
+			<div class="nav-brand spower"><a href="/dashboard/gmain.do">${sessionScope.userInfo.login_id}</a></div>
 		</c:when>
 		<c:otherwise>
-			<div class="nav_brand"><a href="/dashboard/gmain.do">Encored</a></div>
+			<div class="nav-brand"><a href="/dashboard/gmain.do">${sessionScope.userInfo.login_id}</a></div>
 		</c:otherwise>
 	</c:choose>
 
@@ -278,32 +467,13 @@
 				</ul>
 			</div>
 		</form>
-	</div><!--// input/dropdown -->
+	</div>
+	<!--// input/dropdown -->
 	<ul class="nav_right">
-		<%--					<li>--%>
-		<%--						<span>CURRENT TIME</span> <em id="currTime">${nowTime}</em>--%>
-		<%--					</li>--%>
-		<%--					<li>--%>
-		<%--						<span>DATA BASE TIME</span> 2018-07-27 17:01:02--%>
-		<%--					</li>--%>
 		<li class="member clear">
 			<div class="fl"><img src="../img/m_member_pic.png" alt=""></div>
 			<div class="fr">
-				<span class="myinfo">
-					<c:choose>
-						<c:when test="${not empty userInfo and not empty userInfo.psn_name}">${userInfo.psn_name}</c:when>
-						<c:when test="${not empty userInfo and empty userInfo.psn_name}">${userInfo.user_id}</c:when>
-					</c:choose>
-				</span><br/>
-				<c:choose>
-					<c:when test="${empty userInfo}">No Permission</c:when>
-					<c:when test="${userInfo.auth_type eq '1'}">Portal Administrator</c:when>
-					<c:when test="${userInfo.auth_type eq '2'}">Customer Administrator</c:when>
-					<c:when test="${userInfo.auth_type eq '3'}">Group Administrator</c:when>
-					<c:when test="${userInfo.auth_type eq '4'}">Site Administrator</c:when>
-					<c:when test="${userInfo.auth_type eq '5'}">Site User</c:when>
-					<c:otherwise>No Permission</c:otherwise>
-				</c:choose>
+				<button type="button" data-toggle="modal" data-target="#updateUserInfoModal" class="btn_type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button>
 			</div>
 		</li>
 		<%--	
@@ -324,332 +494,116 @@
 			</div>
 		</li>
 		--%>
-		<li>
-			<!-- PC용 언어 선택 -->
-			<%@ include file="/decorators/include/selectLang.jsp" %>
-		</li>
+		<li><%@ include file="/decorators/include/selectLang.jsp" %></li>
 	</ul>
 </nav>
-<script type="text/javascript">
-	$(function () {
-		var data = [];
 
-		$('#userGroupList > li').each(function (idx, elmt) {
-			var userGroupLi = $(elmt);
-			var userSiteLiList = userGroupLi.find('li');
-			for (var i = 0; i < userSiteLiList.length; i++) {
-				var userSiteLi = $(userSiteLiList[i]);
-				if (userSiteLi.data('value') == '0') {
-					continue;
-				}
-				data.push({
-					label: userSiteLi.text(),
-					value: userSiteLi.data('value'),
-					category: userGroupLi.children('.groupLink').text()
-				});
-			}
-		});
-
-		$.widget("custom.catcomplete", $.ui.autocomplete, {
-			_create: function () {
-				this._super();
-				this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
-			},
-			_renderMenu: function (ul, items) {
-				var that = this, currentCategory = "";
-				ul.addClass('c_style');
-				$.each(items, function (index, item) {
-					var li;
-					if (item.category != currentCategory) {
-						ul.append("<li class='ui-autocomplete-category'>" + item.category + "</li>");
-						currentCategory = item.category;
-					}
-					li = that._renderItemData(ul, item);
-					if (item.category) {
-						li.attr("aria-label", item.category + " : " + item.label);
-					}
-				});
-			}
-		});
-
-		$('#selSiteBox').catcomplete({
-			source: data,
-			select: function (event, ui) {
-				event.preventDefault();
-				$('#selSiteBox').val(ui.item.label);
-				location.href = '/main/siteMain.do?siteId=' + ui.item.value;
-			},
-			focus: function (event, ui) {
-				event.preventDefault();
-				$('#selSiteBox').val(ui.item.label);
-			}
-		});
-
-		if (selViewSiteName != "") {
-			$("#selSiteBox").val("군관리: " + selViewSiteName);
-		}
-	});
-</script>
-<!-- 정보수정 // -->
-<div class="modal fade" id="modifyModal" tabindex="-1" role="dialog" aria-labelledby="modifyModal" aria-hidden="true">
+<div class="modal fade" id="updateUserInfoModal" tabindex="-1" role="dialog" aria-labelledby="updateUserInfoModal" aria-hidden="true">
 	<div class="modal-dialog modal-md">
-		<!-- Modal content-->
 		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
-				<h4><i class="glyphicon glyphicon-user"></i> MODIFY</h4>
-			</div>
-			<form id="modifyUserForm" name="modifyUserForm">
+			<div class="modal-header"><h2>개인정보 설정</h2></div>
 				<input type="hidden" id="modUserIdx" name="userIdx"/>
 				<input type="hidden" id="modPsnEmail" name="psnEmail"/>
 				<input type="hidden" id="modPsnMobile" name="psnMobile"/>
 				<div class="modal-body">
-					<div class="rowBox joinBox">
-						<div class="unit clear">
-							<div class="unit_tit">
-								<span id="modifyModal" class="sTit">사용자 정보</span>
+					<div class="row">
+						<div class="col-12">
+							<div class="input-group inline-flex">
+								<label for="userId" class="input_label">아이디</label>
+								<input type="text" name="user_id" id="userId" class="input tx_inp_type w-100" readonly="" autocomplete="off">
 							</div>
-							<div class="unit_cont lineBox">
-								<table class="tableStyle formStyle left">
-									<colgroup>
-										<col style="width:20%;">
-										<col style="width:*;">
-									</colgroup>
-									<tbody>
-									<tr>
-										<th>아이디</th>
-										<td class="left" id="modUserId">
-											gildong
-										</td>
-									</tr>
-									<tr>
-										<th>이름</th>
-										<td class="left" id="modPsnName">
-											홍길동
-										</td>
-									</tr>
-									<tr>
-										<th>비밀번호</th>
-										<td>
-											<input type="password" id="modUserPw" name="userPw" class="inp"/>
-											<span class="helpCont">비밀번호를 입력하세요</span>
-										</td>
-									</tr>
-									<tr>
-										<th>비밀번호확인</th>
-										<td>
-											<input type="password" id="modUserPw2" class="inp"/>
-											<span class="helpCont">비밀번호확인이 일치하지 않습니다</span>
-										</td>
-									</tr>
-									<tr>
-										<th>이메일 주소</th>
-										<td>
-											<div class="inputGroup">
-												<input type="text" id="modEmail1" class="inp"
-												       maxlength="25"/>
-												<span class="inline center fl">@</span>
-												<input type="text" id="modEmail3" class="inp" maxlength="25"/>
-												<select id="modEmail2" class="inp" style="width:35%;">
-													<option value="">=선택=</option>
-													<option value="naver.com">naver.com</option>
-													<option value="hanmail.net">hanmail.net</option>
-													<option value="nate.com">nate.com</option>
-													<option value="gmail.com">gmail.com</option>
-													<option value="manual" selected="selected">직접입력</option>
-													<select>
-											</div>
-											<span class="helpCont">email을 입력하세요</span>
-										</td>
-									</tr>
-									<tr>
-										<th>휴대폰 번호</th>
-										<td>
-											<div class="inputGroup">
-												<input type="text" id="modMobile1" class="inp" maxlength="3"/>
-												<span class="inline center fl">-</span>
-												<input type="text" id="modMobile2" class="inp" maxlength="4"/>
-												<span class="inline center fl" style="width:5%;">-</span>
-												<input type="text" id="modMobile3" class="inp" maxlength="4"/>
-											</div>
-											<span class="helpCont">휴대폰번호를 입력해 주세요</span>
-											<span class="helpCont">숫자를 입력해 주세요</span>
-										</td>
-									</tr>
-									</tbody>
-								</table>
+							<div class="input-group inline-flex mt-0">
+								<label for="affiliation" class="input_label">회사 이름</label>
+								<input type="text" name="affiliation" id="affiliation" class="input tx_inp_type w-100" readonly="" autocomplete="off">
+							</div>
+							<div class="input-group inline-flex">
+								<label for="accessLevel" class="input_label">권한 레벨</label>
+								<input type="text" name="access_level" id="accessLevel" class="input tx_inp_type w-100" readonly="" autocomplete="off">
+							</div>
+							<div class="input-group inline-flex">
+								<label for="taskCategory" class="input_label">업무 구분</label>
+								<input type="text" name="task_category" id="taskCategory" class="input tx_inp_type w-100" readonly="" autocomplete="off">
 							</div>
 						</div>
 					</div>
+					<form id="pwdForm" name="pwd_form">
+						<div class="row">
+							<div class="col-12">
+								<h3 class="sub-title mt15">비밀번호</h3>
+								<div class="input-group inline-flex">
+									<label for="oldPwd" class="input_label">기존 비밀번호</label>
+									<input type="password" name="current_pwd" id="oldPwd" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
+
+								</div>
+								<div class="input-group inline-flex">
+									<label for="newPwd" class="input_label">변경 비밀번호</label>
+									<input type="password" name="new_pwd" id="newPwd" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
+								</div>
+								<div class="flex_start warning-wrapper">
+									<small id="hasLetter" class="tick">영문</small>
+									<small id="hasNumber" class="tick">숫자</small>
+									<small id="isSixCharLong" class="tick">6자리 이상</small>
+								</div>
+
+								<div class="input-group inline-flex">
+									<label for="confirmNewPwd" class="input_label">변경 비밀번호 확인</label>
+									<input type="password" name="confirm_new_pwd" id="confirmNewPwd" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
+								</div>
+
+								<div class="flex_start warning-wrapper">
+									<small id="pwdMatched" class="warning-text hidden">비밀번호가 일치하지 않습니다.</small>
+								</div>
+
+								<div class="btn_wrap_type05">
+									<small id="successMsg1" class="text-blue text-sm hidden">비밀번호가 성공적으로 변경 되었습니다.</small>
+									<button type="submit" disabled id="updatePwdBtn" class="btn_type03 disabled">비밀번호 변경</button>
+								</div>
+							</div>
+						</div>
+					</form>
+					<form id="profileForm" name="profile_form">
+						<div class="row">
+							<div class="col-12">
+								<h3 class="sub-title">개인정보</h3>
+								<div class="input-group inline-flex">
+									<label for="fullName" class="input_label">이름</label>
+									<input type="text" name="full_name" id="fullName" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
+								</div>
+
+								<div class="flex_start warning-wrapper">
+									<small id="isValidName" class="warning-text hidden">이름을 입력해 주세요.</small>
+								</div>
+								
+								<div class="input-group inline-flex">
+									<label for="emailAddr" class="input_label">이메일</label>
+									<input type="text" name="email_addr" id="emailAddr" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
+								</div>
+								<div class="flex_start warning-wrapper">
+									<small id="isValidEmail" class="warning-text hidden">유효한 이메일 주소를 입력해 주세요.</small>
+								</div>
+								
+								<div class="input-group inline-flex">
+									<label for="mobileNum" class="input_label">휴대폰</label>
+									<input type="text" name="mobile_num" id="mobileNum" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
+								</div>
+								<div class="flex_start warning-wrapper">
+									<small id="isValidMobileNum" class="warning-text hidden">휴대폰 번호를 입력해 주세요.</small>
+								</div>
+								
+								<div class="btn_wrap_type">
+									<small id="successMsg2" class="text-blue text-sm hidden">개인정보가 성공적으로 변경 되었습니다.</small>
+									<button type="submit" id="updateProfileBtn" disabled class="btn_type03 disabled">개인정보 변경</button>
+								</div>
+							</div>
+						</div>
+					</form>
 				</div>
-				<div class="modal-footer">
-					<div>
-						<button type="button" class="memberout_btn w80 fl" id="removeUserBtn">탈퇴</button>
-						<button type="button" class="cancel_btn w80" data-dismiss="modal">취소</button>
-						<button type="submit" class="default_btn w80" data-dismiss="modal" id="modifyUserBtn">확인
-						</button>
+				<div class="modal-footer border">
+					<div class="btn_wrap_type02">
+						<button type="button" class="btn_type" data-dismiss="modal" aria-label="Close">완료</button>
 					</div>
 				</div>
 			</form>
 		</div>
 	</div>
 </div>
-<script>
-	$(function () {
-		$(".myinfo").click(function () {
-			setModifyUserInfo(sessionUser);
-			$("#modifyModal").modal("show");
-		});
-	});
-
-	// 정보 수정, 탈퇴 시작 (적당한 js파일로 옮겨 주세요.)
-	$(function () {
-		$("#modifyUserBtn").click(function () {
-			checkModify();
-			return false;
-		});
-
-		$("#removeUserBtn").click(function () {
-			if (confirm("탈퇴하시겠습니까?\n탈퇴하면 복구할 수 없습니다.")) {
-				removeUser();
-			}
-		});
-
-		$('#modEmail2').change(function () {
-			var val = $(this).val();
-			if (val === 'manual') {
-				$('#modEmail1').css('width', '30%');
-				$('#modEmail3').show();
-			} else {
-				$('#modEmail1').css('width', '60%');
-				$('#modEmail3').hide();
-			}
-		});
-	});
-
-	function setModifyUserInfo(result) {
-		$('#modUserIdx').val(result.user_idx);
-		$('#modUserId').text(result.user_id);
-		$('#modPsnName').text(result.psn_name);
-
-		$('#modUserPw').val('');
-		$('#modUserPw2').val('');
-
-		var email = result.psn_email;
-		if (email != null && email.indexOf('@') !== -1) {
-			var emails = email.split('@');
-			$('#modEmail1').val(emails[0]);
-			$('#modEmail3').val(emails[1]);
-		}
-
-		var mobile = result.psn_mobile;
-		if (mobile !== null && mobile.indexOf('-') !== -1) {
-			var mobiles = mobile.split('-');
-			$('#modMobile1').val(mobiles[0]);
-			$('#modMobile2').val(mobiles[1]);
-			$('#modMobile3').val(mobiles[2]);
-		}
-
-		$('.helpCont').hide();
-	}
-
-	function checkModify() {
-		var $modUserPw2 = $('#modUserPw2');
-		var $helpCont = $('.helpCont');
-		if ($('#modUserPw').val() !== $modUserPw2.val()) {
-			$helpCont.hide();
-			$modUserPw2.parents('td').children('.helpCont:eq(0)').show();
-			return;
-		}
-		var $modEmail1 = $('#modEmail1');
-		var $modEmail2 = $('#modEmail2');
-		var $modEmail3 = $('#modEmail3');
-		if ($modEmail1.val() === '' || $modEmail2.val() === '') {
-			$helpCont.hide();
-			$modEmail1.parents('td').children('.helpCont:eq(0)').show();
-			return;
-		}
-		if ($modEmail2.val() === 'manual' && $modEmail3.val() === '') {
-			$helpCont.hide();
-			$modEmail1.parents('td').children('.helpCont:eq(0)').show();
-			return;
-		}
-		var $modMobile1 = $('#modMobile1');
-		var $modMobile2 = $('#modMobile2');
-		var $modMobile3 = $('#modMobile3');
-		if ($modMobile1.val() === '' || $modMobile2.val() === '' || $modMobile3.val() === '') {
-			$helpCont.hide();
-			$modMobile1.parents('td').children('.helpCont:eq(0)').show();
-			return;
-		}
-		if (isNaN($modMobile1.val()) || isNaN($modMobile2.val()) || isNaN($modMobile3.val())) {
-			$helpCont.hide();
-			$modMobile1.parents('td').children('.helpCont:eq(1)').show();
-			return;
-		}
-
-		$helpCont.hide();
-
-		if (confirm("수정하시겠습니까?")) {
-			if ($modEmail2.val() !== 'manual') {
-				$('#modPsnEmail').val($modEmail1.val() + '@' + $modEmail2.val());
-			} else {
-				$('#modPsnEmail').val($modEmail1.val() + '@' + $modEmail3.val());
-			}
-			$('#modPsnMobile').val($modMobile1.val() + '-' + $modMobile2.val() + '-' + $modMobile3.val());
-
-			modifyUser();
-		}
-	}
-
-	function modifyUser() {
-		var formData = $("#modifyUserForm").serializeObject();
-		$.ajax({
-			url: "/modifyUser.json",
-			type: 'post',
-			async: false, // 동기로 처리해줌
-			data: formData,
-			success: function (result) {
-				var resultCnt = result.resultCnt;
-				if (resultCnt > 0) {
-					alert('사용자 정보가 수정되었습니다.');
-
-					// Local EMS 회원 연계
-					changeEMSUserDB($("#modUserIdx").val());
-
-					$("#modifyModal").modal("hide");
-					getUserInfo(setSession);
-				} else {
-					alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
-				}
-			}
-		});
-	}
-
-	function removeUser() {
-		var formData = $("#modifyUserForm").serializeObject();
-		$.ajax({
-			url: "/removeUser.json",
-			type: 'post',
-			async: false, // 동기로 처리해줌
-			data: formData,
-			success: function (result) {
-				var resultCnt = result.resultCnt;
-				if (resultCnt > 0) {
-					alert('탈퇴처리 되었습니다.');
-
-					// Local EMS 회원 연계
-					changeEMSUserDB($("#modUserIdx").val());
-
-					location.href = '/login.do';
-				} else {
-					alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
-				}
-			}
-		});
-	}
-	document.getElementsByTagName('html')[0].classList['add']('darkmode');
-
-	// userTheme();
-</script>
-<!-- //정보수정 -->
