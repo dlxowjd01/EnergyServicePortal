@@ -113,6 +113,7 @@
 											let withdraw_day = '';
 											let accNum = '';
 											let bankName = '';
+											let accOwner = '';
 											let amount = '';
 											let desc = '';
 											if(!isEmpty(purposeArr[0].value[x.purpose])){
@@ -135,6 +136,11 @@
 											} else {
 												accNum = '-'
 											}
+											if(!isEmpty(x.to_account_owner)){
+												accOwner = x.to_account_owner;
+											} else {
+												accOwner = ''
+											}
 											if(!isEmpty(x.amount)){
 												amount = x.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원';
 											} else {
@@ -150,7 +156,7 @@
 											str = tableCloned.replace(/\*withdrawDay\*/g, withdraw_day)
 												.replace(/\*purpose\*/g, purpose)
 												.replace(/\*amount\*/g, amount)
-												.replace(/\*toAccBankName\*/g, bankName).replace(/\*toAccountNum\*/g, accNum)
+												.replace(/\*toAccBankName\*/g, bankName).replace(/\*toAccountNum\*/g, accNum).replace(/\*to_account_owner\*/g, accOwner)
 												.replace(/\*description\*/g, desc)
 											tableList.append($(str));
 										});
@@ -185,6 +191,7 @@
 									let withdraw_day = '';
 									let bankName = '';
 									let accNum = '';
+									let accOwner = '';
 									let amount = '';
 									let desc = '';
 									if(!isEmpty(purposeArr[0].value[x.purpose])){
@@ -207,6 +214,11 @@
 									} else {
 										accNum = '-'
 									}
+									if(!isEmpty(x.to_account_owner)){
+										accOwner = x.to_account_owner;
+									} else {
+										accOwner = ''
+									}
 									if(!isEmpty(x.amount)){
 										amount = x.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원';
 									} else {
@@ -222,7 +234,7 @@
 									str = tableCloned.replace(/\*withdrawDay\*/g, withdraw_day)
 										.replace(/\*purpose\*/g, purpose)
 										.replace(/\*amount\*/g, amount)
-										.replace(/\*toAccBankName\*/g, bankName).replace(/\*toAccountNum\*/g, accNum)
+										.replace(/\*toAccBankName\*/g, bankName).replace(/\*toAccountNum\*/g, accNum).replace(/\*to_account_owner\*/g, accOwner)
 										.replace(/\*description\*/g, desc)
 									tableList.append($(str));
 								});
@@ -539,7 +551,7 @@
 								<td>*withdrawDay*</td>
 								<td>*purpose*</td>
 								<td class="right">*amount*</td>
-								<td>*toAccBankName*  *toAccountNum*</td>
+								<td>*toAccBankName*  *toAccountNum* (*to_account_owner*)</td>
 								<td>*description*</td>
 							</tr>
 						</template>

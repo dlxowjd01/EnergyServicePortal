@@ -578,7 +578,7 @@
 
 				});
 
-				spc_info['SPC_법인_인감'] = resultFiles;
+				spc_info['SPC_법인_인감'] = $('#SPC_법인_인감').data('gridJsonData').concat(resultFiles);
 			},
 			error: function (request, status, error) {
 				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
