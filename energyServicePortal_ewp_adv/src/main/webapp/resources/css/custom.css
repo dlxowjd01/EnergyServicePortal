@@ -1010,7 +1010,6 @@ table input[type="text"] {
 .tick.checked:before {
 	opacity: 1;
 }
-
 /* loading icon */
 
 .loading {

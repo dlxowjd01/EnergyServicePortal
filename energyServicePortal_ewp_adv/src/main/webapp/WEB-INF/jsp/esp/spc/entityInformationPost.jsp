@@ -87,6 +87,22 @@
 		addRow('insuranceInfoToggle', 'first');
 	});
 
+	$(document).on('keyup', '#전체_용량, #관리_운영비, #대수선비, #사무_수탁비, #임대료', function() {
+		financeAuto();
+	});
+
+	const autoValArr = ['#관리_운영비', '#대수선비', '#사무_수탁비', '#임대료'];
+	const financeAuto = () => {
+		autoValArr.forEach(autoId => {
+			let autoVal = Number($(autoId).val()) / Number($('#전체_용량').val());
+			if (isNaN(autoVal) || !isFinite(autoVal)) {
+				$(autoId).parent().next().find('.auto_price').text('');
+			} else {
+				$(autoId).parent().next().find('.auto_price').text(numberComma(autoVal.toFixed(2)));
+			}
+		});
+	}
+
 	function cloneHtml() {
 		templateList = $("#addList_insuranceInfo").find("template.copy_list").clone().html();
 		$("#addList_insuranceInfo").find("template.copy_list").remove();
@@ -503,7 +519,7 @@
 	function sendSpcGenPost(spcId, files) {
 		var genId = $("#genId button").data("value");
 		var address_info = setAreaParamData('addressInfo', 'dropdown'),
-			maintenance_info = setAreaParamData('maintenanceInfo'),
+			maintenance_info = setAreaParamData('maintenanceInfo', 'dropdown'),
 			account_info = setAreaParamData('accountInfo'),
 			finance_info = setAreaParamData('financeInfo', 'dropdown'),
 			contract_info = setAreaParamData('contractInfo'),
@@ -2005,11 +2021,11 @@
 							<div class="group_type">
 								<div class="tx_inp_type edit">
 									<label class="sr-only">모듈 제조사</label>
-									<input type="text" id="모듈_제조사[index]" name="모듈_제조사" placeholder="제조사">
+									<input type="text" id="모듈_제조사[index]" name="모듈_제조사[index]" placeholder="제조사">
 								</div>
 								<div class="tx_inp_type edit">
 									<label class="sr-only">모듈 제조사 모델</label>
-									<input type="text" name="모듈_제조사_모델[index]" placeholder="모델">
+									<input type="text" id="모듈_제조사_모델[index]" name="모듈_제조사_모델[index]" placeholder="모델">
 								</div>
 								<button class="btn_close hidden fixed_height" onclick="removeList(this);">삭제</button>
 							</div>
@@ -2150,10 +2166,10 @@
 						<td id="addList_switch_gear" class="entity">
 							<div class="group_type">
 								<div class="tx_inp_type edit">
-									<input type="text" id="수배전반_제조사" name="수배전반_제조사" placeholder="제조사">
+									<input type="text" id="수배전반_제조사[index]" name="수배전반_제조사[index]" placeholder="제조사">
 								</div>
 								<div class="tx_inp_type edit">
-									<input type="text" id="수배전반_모델" name="수배전반_모델" placeholder="모델">
+									<input type="text" id="수배전반_모델[index]" name="수배전반_모델[index]" placeholder="모델">
 								</div>
 								<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
 							</div>

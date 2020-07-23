@@ -542,7 +542,7 @@
 								<div class="sa_select">
 									<div class="dropdown placeholder">
 										<button class="btn btn-primary dropdown-toggle" type="button" data-clone="empty" data-toggle="dropdown" data-name="">선택<span class="caret"></span></button>
-										<ul id="receiveList" class="receive-list dropdown-menu" role="menu"><li data-acc-holder="*acc_holder*" data-acc-type="*to_acc_type*" data-name="*to_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_bank_name* *to_account_no*</a></li></ul>
+										<ul id="receiveList" class="receive-list dropdown-menu" role="menu"><li data-acc-holder="*acc_holder*" data-acc-type="*to_acc_type*" data-name="*to_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_bank_name* *to_account_no* (*acc_holder*)</a></li></ul>
 									</div>
 								</div>
 							</td>
@@ -592,6 +592,7 @@
 				</div>
 
 				<div class="btn_wrap_type05"><!--
+				--><button type="button" onclick="location.href='/spc/transactionCalendar.do'" class="btn btn_type03 w80 mr-12">목록</button><!--
 				--><button type="submit" class="btn btn_type">제출</button><!--
 			--></div>
 			</div>

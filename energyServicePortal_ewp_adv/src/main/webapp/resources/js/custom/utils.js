@@ -1212,11 +1212,19 @@ function setAreaParamData(areaId, type) {
 			if (param[obj.getAttribute("name")] == undefined) {
 				param[obj.getAttribute("name")] = obj.value;
 			} else {
-				var valArray = new Array();
-				valArray.push(param[obj.getAttribute("name")]);
-				valArray.push(obj.value);
+				if (typeof param[obj.getAttribute("name")] === 'string') {
+					var valArray = new Array();
+					valArray.push(param[obj.getAttribute("name")]);
+					valArray.push(obj.value);
 
-				param[obj.getAttribute("name")] = valArray;
+					param[obj.getAttribute("name")] = valArray;
+				} else {
+					var valArray = new Array();
+					valArray = param[obj.getAttribute("name")];
+					valArray.push(obj.value);
+					
+					param[obj.getAttribute("name")] = valArray;
+				}
 			}
 		}
 	});
@@ -1242,7 +1250,16 @@ function setAreaParamData(areaId, type) {
 	if(type != undefined && type == 'dropdown') {
 		$area.find('button.btn-primary').each(function() {
 			var obj = this;
-			param[obj.parentElement.getAttribute('id')] = $(this).data('value');	// \n 특수기호 처리해야함
+			if (obj.nextElementSibling.querySelectorAll('input[type="checkbox"]').length > 0) {
+				let array = new Array();
+				obj.nextElementSibling.querySelectorAll('input[type="checkbox"]:checked').forEach(el => {
+					array.push(el.value);
+				});
+				param[obj.parentElement.getAttribute('id')] = array;
+			} else {
+				param[obj.parentElement.getAttribute('id')] = $(this).data('value');
+			}
+
 		});
 	}
 

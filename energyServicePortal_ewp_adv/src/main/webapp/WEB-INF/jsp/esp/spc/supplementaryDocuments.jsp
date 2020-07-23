@@ -10,6 +10,19 @@
 
 		getDataList(page);
 
+		$('.save_btn').on('click', function (e) {
+			let excelName = 'spc_이관자료_목록';
+			let $val = $('#excelList').find('tbody');
+			let cnt = $val.length;
+
+			if (cnt < 1) {
+				alert('다운받을 데이터가 없습니다.');
+			} else {
+				if (confirm('엑셀로 저장하시겠습니까?')) {
+					tableToExcel('excelList', excelName, e);
+				}
+			}
+		});
 	});
 
 	$(document).on('keyup', '#key_word', function(e) {
@@ -25,13 +38,24 @@
 			return value;
 		}
 	}
-
-	function getCsvDown() {
-		var column = ["name", "발전소_명", "설치_용량", "관리_운영_기간", "", ""], //json Key
-			header = ["SPC명", "발전소 명", "용량", "관리 운영기간	", "이관자료", "첨부파일"]; //csv 파일 헤더
-
-		getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_spower.csv"); // json list, 컬럼, 헤더명, 파일명
-	}
+	//
+	// function getCsvDown() {
+	// 	let excelName = 'spc_" +oid+ "_이관자료';
+	// 	let $val = $('#excelList').find('tbody');
+	// 	let cnt = $val.length;
+	//
+	// 	if (cnt < 1) {
+	// 		alert('다운받을 데이터가 없습니다.');
+	// 	} else {
+	// 		if (confirm('엑셀로 저장하시겠습니까?')) {
+	// 			tableToExcel('excelList', excelName, e);
+	// 		}
+	// 	}
+	// 	// var column = ["name", "발전소_명", "설치_용량", "관리_운영_기간", "", ""], //json Key
+	// 	// 	header = ["SPC명", "발전소 명", "용량", "관리 운영기간	", "이관자료", "첨부파일"]; //csv 파일 헤더
+	// 	//
+	// 	// getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_" +oid+ "_이관자료.csv"); // json list, 컬럼, 헤더명, 파일명
+	// }
 
 	function getDataList(page, n, sort) {
 		if(page == undefined){
@@ -131,6 +155,7 @@
 								$.each(originFile, function(k,v){
 									if (v.toLowerCase().indexOf(keyWord) > -1) {
 										jsonList.push(newData);
+										return false;
 									}
 								});
 							}
@@ -176,14 +201,14 @@
 	</div>
 	<div class="col-lg-9 col-md-8 col-sm-8">
 		<div class="right">
-			<a href="#;" class="save_btn" onclick="getCsvDown();">CSV 다운로드</a>
+			<a href="#;" class="save_btn">엑셀 다운로드</a>
 		</div>
 	</div>
 </div>
 <div class="row">
 	<div class="col-lg-12">
 		<div class="indiv supplementary_docs">
-			<div class="spc_tbl align_type">
+			<div class="spc_tbl align_type" id="excelList">
 				<table class="sort_table chk_type">
 					<colgroup>
 						<col style="width:5%">

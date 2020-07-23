@@ -113,7 +113,10 @@
 				});
 				Promise.all(promises).then(res => {
 					if(transactionData.to_account){
-						var updatedAt = transactionData.updated_at;
+						var withdraw_day = transactionData.withdraw_day;
+						if (!isEmpty(withdraw_day) && withdraw_day.length == 8) {
+							withdraw_day = withdraw_day.substring(0, 4)+'-'+withdraw_day.substring(4, 6)+'-'+withdraw_day.substring(6, 8);
+						}
 						var savedTotal = transactionData.total_amount.toLocaleString() + ' 원';
 						Promise.resolve(JSON.parse(transactionData.to_account)).then(item => {
 							$.each(item, function(index, element){
@@ -125,6 +128,7 @@
 								let bank_name = '';
 								let account_num = '';
 								let desc = '';
+								let accHolder = '';
 								let idx = '';
 								let purposeArr = [
 									{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적립", "일반 지출", "DSRA 적립", "기타", "운영계좌" ]},
@@ -135,8 +139,8 @@
 								} else {
 									idx = index;
 								}
-								if(!isEmpty(updatedAt)){
-									req_date = new Date(updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-');
+								if(!isEmpty(withdraw_day)){
+									req_date = withdraw_day;
 								} else {
 									req_date = '-';
 								}
@@ -172,12 +176,20 @@
 								} else {
 									desc = "-";
 								}
+
+								if(!isEmpty(element.to_account_owner) ){
+									accHolder = element.to_account_owner;
+								} else {
+									accHolder = "-";
+								}
+
 								tbodyStr = copyTableRow.replace(/\*index\*/g, idx)
 									.replace(/\*selectedReqDate\*/g, req_date)
 									.replace(/\*purposeVal\*/g, purpose_val)
 									.replace(/\*purposeTitle\*/g, purpose)
 									.replace(/\*reqAmount\*/g, req_amount)
 									.replace(/\*bankName\*/g, bank_name)
+									.replace(/\*accHolder\*/g, accHolder)
 									.replace(/\*accNum\*/g, account_num)
 									.replace(/\*desc\*/g, desc)
 								$("#tableBody").append($(tbodyStr));
@@ -238,11 +250,12 @@
 										accNum = v.accNum;
 										accHolder = v.accHolder;
 
-										let copyReceiveList = $(".receive-list").eq(index).clone().html();
+										let copyReceiveList = '<li data-acc-holder="*acc_holder*" data-acc-type="*to_acc_type*" data-name="*to_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_bank_name* *to_account_no* *acc_holder*</a></li>';
 
 										receiving = copyReceiveList.replace(/\*to_acc_type\*/g, v.accType).replace(/\*to_bank_name\*/g, bankName).replace(/\*to_account_no\*/g, accNum).replace(/\*acc_holder\*/g, accHolder);
+
 										$(".receive-list").each(function(){
-											$(this).empty().append($(receiving));
+											$(this).append($(receiving));
 											$(this).find("li").on("click", function(){
 												// console.log("receive list clicking---")
 												$(this).prev().data({"value": $(this).data("value"), "name": $(this).data("name") });
@@ -265,6 +278,8 @@
 								// console.log("withdrawList clicking---")
 								withdrawList.prev().data({"value": $(this).data("value"), "name": $(this).data("name"), "acc-holder" : $(this).data("acc-holder") });
 							});
+						}).finally(() => {
+							setDatepicker();
 						});
 					}
 				});
@@ -520,6 +535,13 @@
 
 		$("#deleteRowBtn").on("click", function(){
 			$("#tableBody tr:not(:first-child)").find('td input:checked').closest('tr').remove();
+			let total = document.getElementById("total");
+			totalAmount = 0;
+			$(".amount").each(function(){
+				let toAdd = Number(this.value.replace(/,/g,""));
+				totalAmount += toAdd;
+			});
+			total.value = totalAmount.toLocaleString() + ' 원';
 		});
 
 		$("#selectAll").on("click", function(){
@@ -527,6 +549,17 @@
 		});
 	});
 
+	function setDatepicker() {
+		$(document).find('.fromDate').prop('disabled', true);
+		$(document).find('.fromDate').first().prop('disabled', false).datepicker({
+			showOn: "both",
+			buttonImageOnly: true,
+			dateFormat: 'yy-mm-dd',
+			onClose: function(selectedDate) {
+				$('.fromDate').val(selectedDate);
+			}
+		});
+	}
 
 </script>
 
@@ -625,9 +658,8 @@
 								<td>
 									<div class="sa_select">
 										<div class="dropdown placeholder">
-											<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="*bankName*" data-value="*accNum*">*bankName*  *accNum*<span class="caret"></span></button>
+											<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="*bankName*" data-value="*accNum*">*bankName*  *accNum* (*accHolder*)<span class="caret"></span></button>
 												<ul id="receiveList*index*" class="receive-list dropdown-menu" role="menu">
-													<li data-acc-holder="*acc_holder*" data-acc-type="*to_acc_type*" data-name="*to_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_bank_name* *to_account_no*</a></li>
 												</ul>
 										</div>
 									</div>
@@ -678,6 +710,7 @@
 				</div>
 
 				<div class="btn_wrap_type05"><!--
+				--><button type="button" onclick="location.href='/spc/transactionHistory.do'" class="btn btn_type03 w80 mr-12">목록</button><!--
 				--><button type="submit" class="btn btn_type">제출</button><!--
 			--></div>
 			</div>

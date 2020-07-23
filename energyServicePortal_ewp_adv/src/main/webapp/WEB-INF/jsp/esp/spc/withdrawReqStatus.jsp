@@ -51,7 +51,12 @@
 			}
 			searchOpt.status = status;
 			searchOpt.keyword = $("#keyword").val().trim().toLowerCase();
-			getDataList(1, searchOpt);
+
+			if (isEmpty(searchOpt.status) && isEmpty(searchOpt.keyword)) {
+				getDataList(1, null);
+			} else {
+				getDataList(1, searchOpt);
+			}
 		});
 		function getSpcList() {
 			let action = 'get';
@@ -96,328 +101,151 @@
 
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				if (json.data.length > 0) {
+					let data = json.data;
+
+					if (filter) {
+						data = data.filter(item => {
+							if (!isEmpty(filter.status)) {
+								let found = spcArr.findIndex(x => x.spc_id === item.spc_id);
+								let spc_name = spcArr[found].spc_name;
+								if (!isEmpty(filter.keyword)) {
+									return $.inArray(String(item.status), filter.status) >= 0 && spc_name.toLowerCase().match((filter.keyword)) ;
+								} else {
+									return ($.inArray(String(item.status), filter.status) >= 0);
+								}
+							} else {
+								let found = spcArr.findIndex(x => x.spc_id === item.spc_id);
+								let spc_name = spcArr[found].spc_name;
+								return spc_name.toLowerCase().match((filter.keyword));
+							}
+						});
+					}
+
+					makeNavigation(Number(currentPage), data.length)
 					var totalAmount = 0;
 					let perPage = 14;
 					let startNum = (Number(currentPage) - 1) * perPage;
 					let endNum = Number(currentPage) * perPage + 1;
-					let data = json.data.slice(startNum, endNum);
+					data = data.slice(startNum, endNum);
 
 					tableBody.empty();
 					tableFooter.empty();
 
-					makeNavigation(Number(currentPage), data.length)
-					if(filter){
-						data.filter((item, index) => {
-							filter.status.some(x => {
-								if(x == item.status) {
-							// console.log("item---", item)
-									let found = spcArr.findIndex(x => x.spc_id === item.spc_id);
-									let perPage = 14;
-									let spc_name = ''
-									let total_amount = '';
-									let transaction_spc_id = item.spc_id;
-									let transaction_req_id = item.request_id;
-									let bank_name = item.withdraw_bank;
-									let withdraw_acc_num = item.withdraw_account_no;
+					data.map((item, index) => {
+						totalAmount += item.total_amount;
+						// console.log("item---", item)
+						let found = spcArr.findIndex(x => x.spc_id === item.spc_id);
+						let perPage = 14;
+						let spc_name = ''
+						let total_amount = '';
+						let transaction_spc_id = item.spc_id;
+						let transaction_req_id = item.request_id;
+						let bank_name = item.withdraw_bank;
+						let withdraw_acc_num = item.withdraw_account_no;
 
-									// person
-									let requested_by = '';
-									let transfer_agent = '';
-									let status_changed_by = '';
-									// status
-									let status = '';
-									let status_val = '';
-									let link_attr = '';
-									// dates
-									let withdraw_day = item.withdraw_day.substring(0, 4) + '-' + item.withdraw_day.substring(4, 6) + '-' + item.withdraw_day.substring(6, 8);
-									let requested_at = ''
-									let status_changed_at = '';
-									let dataArr = [
-										item.total_amount,
-										spcArr[found].spc_name,
-										item.status,
+						// person
+						let requested_by = '';
+						let transfer_agent = '';
+						let status_changed_by = '';
+						// status
+						let status = '';
+						let status_val = '';
+						let link_attr = '';
+						// dates
+						// console.log("e----", item.withdraw_day)
+						let withdraw_day = item.withdraw_day.substring(0, 4) + '-' + item.withdraw_day.substring(4, 6) + '-' + item.withdraw_day.substring(6, 8);
+						let requested_at = ''
+						let status_changed_at = '';
 
-										item.requested_at,
-										item.status_changed_at,
+						let dataArr = [
+							item.total_amount,
+							spcArr[found].spc_name,
+							item.status,
 
-										item.requested_by,
-										item.status_changed_by,
-										item.transfer_agent,
-									];
-									if(!isEmpty(filter.keyword)){
-										totalAmount += item.total_amount;
-										$.each(data, function(index, element){
-												if((!isEmpty(element)) && element != "string") {
-													if(index==0) {
-														total_amount = item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원'
-													} else if(index==1){
-														spc_name = spcArr[found].spc_name;
-													} else if(index==2) {
-														if (item.status == 0 ) {
-															status="반송";
-															link_attr = "text-link";
-															status_val = 0;
-														} else if (item.status == 1) {
-															status="검토 대기";
-															link_attr = "text-link";
-															status_val = 1;
-														} else if (item.status == 2) {
-															status="검토 중";
-															link_attr = "text-link";
-															status_val = 2;
-														} else if (item.status==3 ) {
-															status="승인 완료";
-															link_attr = "text-blue";
-															status_val = 3;
-														}
-													} else if(index == 3) {
-														requested_at = new Date(item.requested_at).format('yyyy-MM-dd HH:mm:ss');
-													} else if(index == 4) {
-														status_changed_at = new Date(item.status_changed_at).format('yyyy-MM-dd HH:mm:ss');
-													} else if(index == 5){
-														requested_by = item.requested_by;
-													} else if(index == 6) {
-														status_changed_by = item.status_changed_by;
-													} else if(index == 7) {
-														transfer_agent = item.transfer_agent;
-													}
-												} else {
-													if(index==0) {
-														total_amount = '-';
-													} else if(index==1){
-														spc_name = '-'
-													} else if(index==2) {
-														status = '-';
-														link_attr = '-';
-													} else if(index == 3) {
-														requested_at = '-';
-													} else if(index == 4) {
-														status_changed_at = '-'
-													} else if(index == 5){
-														requested_by = '-'
-													} else if(index == 6) {
-														status_changed_by = '-'
-													} else if(index == 7) {
-														transfer_agent = '-'
-													}
-												}
-											});
+							item.requested_at,
+							item.status_changed_at,
 
-											let str = '';
-											str = tableCloned.replace(/\*transactionSpcId\*/g, transaction_spc_id)
-												.replace(/\*spcName\*/g, spc_name)
-												.replace(/\*transactionReqId\*/g, transaction_req_id)
-												.replace(/\*bankName\*/g, bank_name).replace(/\*accNum\*/g, withdraw_acc_num)
-												.replace(/\*chkOpt\*/g, 'chkOpt_'+ index).replace(/\*reviewOpt\*/g, 'review_opt_'+ index)
-												.replace(/\*withdrawDay\*/g, withdraw_day)
-												.replace(/\*spcName\*/g, spc_name)
-												.replace(/\*statusVal\*/g, status_val)
-												.replace(/\*totalAmount\*/g, total_amount)
-												.replace(/\*requestedAt\*/g, requested_at).replace(/\*statusChangedAt\*/g, status_changed_at)
-												.replace(/\*transferAgent\*/g, transfer_agent).replace(/\*requestedBy\*/g, requested_by)
-												.replace(/\*statusChangedBy\*/g, status_changed_by).replace(/\*status\*/g, status).replace(/\*linkAttr\*/g, link_attr)
-											tableBody.append($(str));
-									} else {
-										// if( dataArr.includes(filter.keyword)) {
-											totalAmount += item.total_amount;
-											
-											$.each(data, function(index, element){
-												if((!isEmpty(element)) && element != "string") {
-													if(index==0) {
-														total_amount = item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원'
-													} else if(index==1){
-														spc_name = spcArr[found].spc_name;
-													} else if(index==2) {
-														if (item.status == 0 ) {
-															status="반송";
-															link_attr = "text-link";
-															status_val = 0;
-														} else if (item.status == 1) {
-															status="검토 대기";
-															link_attr = "text-link";
-															status_val = 1;
-														} else if (item.status == 2) {
-															status="검토 중";
-															link_attr = "text-link";
-															status_val = 2;
-														} else if (item.status==3 ) {
-															status="승인 완료";
-															link_attr = "text-blue";
-															status_val = 3;
-														}
-													} else if(index == 3) {
-														requested_at = new Date(item.requested_at).format('yyyy-MM-dd HH:mm:ss');
-													} else if(index == 4) {
-														status_changed_at = new Date(item.status_changed_at).format('yyyy-MM-dd HH:mm:ss');
-													} else if(index == 5){
-														requested_by = item.requested_by;
-													} else if(index == 6) {
-														status_changed_by = item.status_changed_by;
-													} else if(index == 7) {
-														transfer_agent = item.transfer_agent;
-													}
-												} else {
-													if(index==0) {
-														total_amount = '-';
-													} else if(index==1){
-														spc_name = '-'
-													} else if(index==2) {
-														status = '-';
-														link_attr = '-';
-													} else if(index == 3) {
-														requested_at = '-';
-													} else if(index == 4) {
-														status_changed_at = '-'
-													} else if(index == 5){
-														requested_by = '-'
-													} else if(index == 6) {
-														status_changed_by = '-'
-													} else if(index == 7) {
-														transfer_agent = '-'
-													}
-												}
-											});
+							item.requested_by,
+							item.status_changed_by,
+							item.transfer_agent,
+						];
 
-											let str = '';
-											str = tableCloned.replace(/\*transactionSpcId\*/g, transaction_spc_id)
-												.replace(/\*spcName\*/g, spc_name)
-												.replace(/\*transactionReqId\*/g, transaction_req_id)
-												.replace(/\*bankName\*/g, bank_name).replace(/\*accNum\*/g, withdraw_acc_num)
-												.replace(/\*chkOpt\*/g, 'chkOpt_'+ index).replace(/\*reviewOpt\*/g, 'review_opt_'+ index)
-												.replace(/\*withdrawDay\*/g, withdraw_day)
-												.replace(/\*spcName\*/g, spc_name)
-												.replace(/\*statusVal\*/g, status_val)
-												.replace(/\*totalAmount\*/g, total_amount)
-												.replace(/\*requestedAt\*/g, requested_at).replace(/\*statusChangedAt\*/g, status_changed_at)
-												.replace(/\*transferAgent\*/g, transfer_agent).replace(/\*requestedBy\*/g, requested_by)
-												.replace(/\*statusChangedBy\*/g, status_changed_by).replace(/\*status\*/g, status).replace(/\*linkAttr\*/g, link_attr)
-											tableBody.append($(str));
-										}
+						$.each(dataArr, function(index, element){
+							if((!isEmpty(element)) && element != "string") {
+								if(index==0) {
+									total_amount = item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원'
+								} else if(index==1){
+									spc_name = spcArr[found].spc_name;
+								} else if(index==2) {
+									if (item.status == 0 ) {
+										status="반송";
+										link_attr = "text-link";
+										status_val = 0;
+									} else if (item.status == 1) {
+										status="검토 대기";
+										link_attr = "text-link";
+										status_val = 1;
+									} else if (item.status == 2) {
+										status="검토 중";
+										link_attr = "text-link";
+										status_val = 2;
+									} else if (item.status==3 ) {
+										status="승인 완료";
+										link_attr = "text-blue";
+										status_val = 3;
 									}
-								// }
-							});
-						});
-						let str = totalAmount.toString();
-						let tfootStr = '';
-						tfootStr = tfootClone.replace(/\*total\*/g, totalAmount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
-						tableFooter.append($(tfootStr));
-					} else {
-						data.map((item, index) => {
-							totalAmount += item.total_amount;
-							// console.log("item---", item)
-							let found = spcArr.findIndex(x => x.spc_id === item.spc_id);
-							let perPage = 14;
-							let spc_name = ''
-							let total_amount = '';
-							let transaction_spc_id = item.spc_id;
-							let transaction_req_id = item.request_id;
-							let bank_name = item.withdraw_bank;
-							let withdraw_acc_num = item.withdraw_account_no;
-
-							// person
-							let requested_by = '';
-							let transfer_agent = '';
-							let status_changed_by = '';
-							// status
-							let status = '';
-							let status_val = '';
-							let link_attr = '';
-							// dates
-							console.log("e----", item.withdraw_day)
-							let withdraw_day = item.withdraw_day.substring(0, 4) + '-' + item.withdraw_day.substring(4, 6) + '-' + item.withdraw_day.substring(6, 8);
-							let requested_at = ''
-							let status_changed_at = '';
-
-							let dataArr = [
-								item.total_amount,
-								spcArr[found].spc_name,
-								item.status,
-
-								item.requested_at,
-								item.status_changed_at,
-
-								item.requested_by,
-								item.status_changed_by,
-								item.transfer_agent,
-							];
-
-							$.each(dataArr, function(index, element){
-								if((!isEmpty(element)) && element != "string") {
-									if(index==0) {
-										total_amount = item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원'
-									} else if(index==1){
-										spc_name = spcArr[found].spc_name;
-									} else if(index==2) {
-										if (item.status == 0 ) {
-											status="반송";
-											link_attr = "text-link";
-											status_val = 0;
-										} else if (item.status == 1) {
-											status="검토 대기";
-											link_attr = "text-link";
-											status_val = 1;
-										} else if (item.status == 2) {
-											status="검토 중";
-											link_attr = "text-link";
-											status_val = 2;
-										} else if (item.status==3 ) {
-											status="승인 완료";
-											link_attr = "text-blue";
-											status_val = 3;
-										}
-									} else if(index == 3) {
-										requested_at = new Date(item.requested_at).format('yyyy-MM-dd HH:mm:ss');
-									} else if(index == 4) {
-										status_changed_at = new Date(item.status_changed_at).format('yyyy-MM-dd HH:mm:ss');
-									} else if(index == 5){
-										requested_by = item.requested_by;
-									} else if(index == 6) {
-										status_changed_by = item.status_changed_by;
-									} else if(index == 7) {
-										transfer_agent = item.transfer_agent;
-									}
-								} else {
-									if(index==0) {
-										total_amount = '-';
-									} else if(index==1){
-										spc_name = '-'
-									} else if(index==2) {
-										status = '-';
-										link_attr = '-';
-									} else if(index == 3) {
-										requested_at = '-';
-									} else if(index == 4) {
-										status_changed_at = '-'
-									} else if(index == 5){
-										requested_by = '-'
-									} else if(index == 6) {
-										status_changed_by = '-'
-									} else if(index == 7) {
-										transfer_agent = '-'
-									}
+								} else if(index == 3) {
+									requested_at = new Date(item.requested_at).format('yyyy-MM-dd HH:mm:ss');
+								} else if(index == 4) {
+									status_changed_at = new Date(item.status_changed_at).format('yyyy-MM-dd HH:mm:ss');
+								} else if(index == 5){
+									requested_by = item.requested_by;
+								} else if(index == 6) {
+									status_changed_by = item.status_changed_by;
+								} else if(index == 7) {
+									transfer_agent = item.transfer_agent;
 								}
-							});
-
-							let str = '';
-							str = tableCloned.replace(/\*transactionSpcId\*/g, transaction_spc_id)
-								.replace(/\*spcName\*/g, spc_name)
-								.replace(/\*transactionReqId\*/g, transaction_req_id)
-								.replace(/\*bankName\*/g, bank_name).replace(/\*accNum\*/g, withdraw_acc_num)
-								.replace(/\*chkOpt\*/g, 'chkOpt_'+ index).replace(/\*reviewOpt\*/g, 'review_opt_'+ index)
-								.replace(/\*withdrawDay\*/g, withdraw_day)
-								.replace(/\*spcName\*/g, spc_name)
-								.replace(/\*statusVal\*/g, status_val)
-								.replace(/\*totalAmount\*/g, total_amount)
-								.replace(/\*requestedAt\*/g, requested_at).replace(/\*statusChangedAt\*/g, status_changed_at)
-								.replace(/\*transferAgent\*/g, transfer_agent).replace(/\*requestedBy\*/g, requested_by)
-								.replace(/\*statusChangedBy\*/g, status_changed_by).replace(/\*status\*/g, status).replace(/\*linkAttr\*/g, link_attr)
-							tableBody.append($(str));
+							} else {
+								if(index==0) {
+									total_amount = '-';
+								} else if(index==1){
+									spc_name = '-'
+								} else if(index==2) {
+									status = '-';
+									link_attr = '-';
+								} else if(index == 3) {
+									requested_at = '-';
+								} else if(index == 4) {
+									status_changed_at = '-'
+								} else if(index == 5){
+									requested_by = '-'
+								} else if(index == 6) {
+									status_changed_by = '-'
+								} else if(index == 7) {
+									transfer_agent = '-'
+								}
+							}
 						});
-						let str = totalAmount.toString();
-						let tfootStr = '';
-						tfootStr = tfootClone.replace(/\*total\*/g, totalAmount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
-						tableFooter.append($(tfootStr));
-					}
+
+						let str = '';
+						str = tableCloned.replace(/\*transactionSpcId\*/g, transaction_spc_id)
+						.replace(/\*spcName\*/g, spc_name)
+						.replace(/\*transactionReqId\*/g, transaction_req_id)
+						.replace(/\*bankName\*/g, bank_name).replace(/\*accNum\*/g, withdraw_acc_num)
+						.replace(/\*chkOpt\*/g, 'chkOpt_'+ index).replace(/\*reviewOpt\*/g, 'review_opt_'+ index)
+						.replace(/\*withdrawDay\*/g, withdraw_day)
+						.replace(/\*spcName\*/g, spc_name)
+						.replace(/\*statusVal\*/g, status_val)
+						.replace(/\*totalAmount\*/g, total_amount)
+						.replace(/\*requestedAt\*/g, requested_at).replace(/\*statusChangedAt\*/g, status_changed_at)
+						.replace(/\*transferAgent\*/g, transfer_agent).replace(/\*requestedBy\*/g, requested_by)
+						.replace(/\*statusChangedBy\*/g, status_changed_by).replace(/\*status\*/g, status).replace(/\*linkAttr\*/g, link_attr)
+						tableBody.append($(str));
+					});
+					let str = totalAmount.toString();
+					let tfootStr = '';
+					tfootStr = tfootClone.replace(/\*total\*/g, totalAmount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
+					tableFooter.append($(tfootStr));
 				} else {
 					return false;
 				}
@@ -437,14 +265,11 @@
 			let totalNav = Math.ceil(totalPage / perPage);
 			let endPage = ((startPage + perPage - 1) > totalPage) ? totalPage : (startPage + navCount - 1);
 
-			console.log("totalNav===", totalNav, "navGroup===", navGroup);
-
 			if (navGroup == 1) {
 				pageStr += '<a href="javascript:void(0);" data-value="1" class="btn-prev first-arrow"></a>';
 			} else {
 				let current = startPage -1;
-				console.log("totoalPAge===", totalPage)
-				pageStr += '<a href="javascript:void(0);" data-value="' + totalPage + '" class="btn-prev last-arrow"></a>';
+				pageStr += '<a href="javascript:void(0);" data-value="' + (startPage - 1) + '" class="btn-prev last-arrow"></a>';
 			}
 
 			for (let i = startPage ; i <= endPage; i++) {
@@ -457,13 +282,10 @@
 			}
 
 			if (navGroup < totalNav) {
-				console.log("navGroup < totalNav===", totalNav, "endPage===", endPage)
-				let current = currentPage + 1;
-				pageStr += '<a href="javascript:void(0);" class="btn-next" data-value="'+ current +'></a>';
+				let current = endPage + 1;
+				pageStr += '<a href="javascript:void(0);" class="btn-next" data-value="'+ current +'"></a>';
 			} else {
-				let current = currentPage + 1;
-				console.log("navGroup > totalNav===", totalNav, "endPage===", currentPage + 1)
-				pageStr += '<a href="javascript:void(0);" class="btn-next" data-value="' + current + '"></a>';
+				pageStr += '<a href="javascript:void(0);" class="btn-next" data-value="' + endPage + '"></a>';
 			}
 			$('#pagination').append(pageStr);
 
@@ -473,11 +295,29 @@
 					return false;
 				}
 
-				// let join = spcId.join();
-				// newArr.push(join);
-				// console.log("newArr----", newArr)
-				// console.log("newArr----", newArr)
-				getDataList(page);
+				let searchOpt = {};
+				let checkbox = $("#reqStatus").find("input[type='checkbox']");
+				var status= [];
+
+				if (checkbox.first().is(':checked')) {
+					checkbox.each(function(){
+						status.push($(this).val())
+					});
+				} else {
+					checkbox.each(function(){
+						if($(this).is(":checked")){
+							status.push($(this).val())
+						}
+					});
+				}
+				searchOpt.status = status;
+				searchOpt.keyword = $("#keyword").val().trim().toLowerCase();
+
+				if (isEmpty(searchOpt.status) && isEmpty(searchOpt.keyword)) {
+					getDataList(page, null);
+				} else {
+					getDataList(page, searchOpt);
+				}
 				return false;
 			});
 
@@ -532,7 +372,7 @@
 		let status = self.text();
 		let statusVal = self.parent().data("value");
 		let accInfo = bankName + ' ' + accNum;
-		console.log("accInfo===", accInfo);
+		// console.log("accInfo===", accInfo);
 
 		$("#reviewStatus").val(status);
 		if(statusVal == 1){
@@ -540,7 +380,7 @@
 			statusVal = 2;
 			$("#reviewStatus").val(status);
 			$("#reviewStatusVal").val(statusVal);
-			console.log("reqId===", reqId)
+			// console.log("reqId===", reqId)
 			updateStatus(statusVal, reqId)
 		} else {
 			$("#reviewStatus").val(status);
@@ -583,9 +423,9 @@
 			data: jsonData
 		}
 		$.ajax(option).done(function (json, textStatus, jqXHR) {
-			console.log("success---", json)
+			// console.log("success---", json)
 		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.log("error==", jqXHR)
+			// console.log("error==", jqXHR)
 			return false;
 		});
 
@@ -664,6 +504,7 @@
 					--><li data-value="2" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="wait" name="review_status" value="2"><label for="wait">검토 중</label></a></li><!--
 					--><li data-value="1" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="inProgress" name="review_status" value="1"><label for="inProgress">검토 대기</label></a></li><!--
 					--><li data-value="3" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="complete" name="review_status" value="3"><label for="complete">승인 완료</label></a></li><!--
+					--><li data-value="3" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="reject" name="review_status" value="0"><label for="reject">반송</label></a></li><!--
 				--></ul>
 				</div>
 			</div><!--
@@ -678,7 +519,7 @@
 	<div class="col-lg-12">
 		<div class="indiv no_border spc_tbl">
 			<div class="btn_wrap_type01">
-				<button type="button" class="btn_type">선택 인쇄</button>
+<%--				<button type="button" class="btn_type">선택 인쇄</button>--%>
 			</div>
 			<table class="sort_table table-footer transaction-table">
 				<colgroup>

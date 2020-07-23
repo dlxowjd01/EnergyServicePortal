@@ -262,14 +262,19 @@ function deleteFile(self) {
 	let ul = self.parents(".file_list ul");
 
 	if (ul.length == 0) {
-		self.parent(".upload_text").parent().find('input[type="file"]').val('');
-		self.parent(".upload_text").empty();
+	    if (self.parent('.upload_text').prop('tagName') == 'LI') {
+            self.parent(".upload_text").remove();
+        } else {
+            self.parent(".upload_text").parent().find('input[type="file"]').val('');
+            self.parent(".upload_text").empty();
+        }
 	} else {
 		self.parent(".upload_text").remove();
 		if (ul.children().length <= 0) {
 			let item = '';
 			item = '<li class="no-file">선택된 파일이 없습니다.</li>'
 			ul.append(item);
+            ul.parents('.file_list').parent().find('input[type="file"]').val('');
 		}
 	}
 }

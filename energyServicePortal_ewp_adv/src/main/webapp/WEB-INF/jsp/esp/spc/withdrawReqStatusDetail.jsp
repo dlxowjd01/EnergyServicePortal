@@ -24,7 +24,7 @@
 		const txtArea = $("textarea.textarea");
 		const btnArea = $(".spc-detail .spc-btn-group");
 		const btnPrint = $(".btn-print");
-		const noHistory = "메모 히스토리가 없습니다."
+		const noHistory = "메모 히스토리가 없습니다.";
 
 		if( isEmpty(spcName) || spcName == ("-")){
 			$("#spcName").text("spc_no_name");
@@ -113,6 +113,7 @@
 											let withdraw_day = '';
 											let accNum = '';
 											let bankName = '';
+											let accOwner = '';
 											let amount = '';
 											let desc = '';
 											if(!isEmpty(purposeArr[0].value[x.purpose])){
@@ -135,6 +136,11 @@
 											} else {
 												accNum = '-'
 											}
+											if(!isEmpty(x.to_account_owner)){
+												accOwner = x.to_account_owner;
+											} else {
+												accOwner = ''
+											}
 											if(!isEmpty(x.amount)){
 												amount = x.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원';
 											} else {
@@ -150,7 +156,7 @@
 											str = tableCloned.replace(/\*withdrawDay\*/g, withdraw_day)
 												.replace(/\*purpose\*/g, purpose)
 												.replace(/\*amount\*/g, amount)
-												.replace(/\*toAccBankName\*/g, bankName).replace(/\*toAccountNum\*/g, accNum)
+												.replace(/\*toAccBankName\*/g, bankName).replace(/\*toAccountNum\*/g, accNum).replace(/\*to_account_owner\*/g, accOwner)
 												.replace(/\*description\*/g, desc)
 											tableList.append($(str));
 										});
@@ -185,6 +191,7 @@
 									let withdraw_day = '';
 									let bankName = '';
 									let accNum = '';
+									let accOwner = '';
 									let amount = '';
 									let desc = '';
 									if(!isEmpty(purposeArr[0].value[x.purpose])){
@@ -207,6 +214,11 @@
 									} else {
 										accNum = '-'
 									}
+									if(!isEmpty(x.to_account_owner)){
+										accOwner = x.to_account_owner;
+									} else {
+										accOwner = ''
+									}
 									if(!isEmpty(x.amount)){
 										amount = x.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원';
 									} else {
@@ -222,7 +234,7 @@
 									str = tableCloned.replace(/\*withdrawDay\*/g, withdraw_day)
 										.replace(/\*purpose\*/g, purpose)
 										.replace(/\*amount\*/g, amount)
-										.replace(/\*toAccBankName\*/g, bankName).replace(/\*toAccountNum\*/g, accNum)
+										.replace(/\*toAccBankName\*/g, bankName).replace(/\*toAccountNum\*/g, accNum).replace(/\*to_account_owner\*/g, accOwner)
 										.replace(/\*description\*/g, desc)
 									tableList.append($(str));
 								});
@@ -290,13 +302,27 @@
 			updateReq(0);
 		});
 
+		$("#reviewBtn").on("click", function() {
+			updateReq(1);
+		});
+
+		$("#backList").on("click", function() {
+			if (document.referrer) {
+				if (document.referrer.match("/spc/withdrawReqStatus.do")) {
+					location.href = "/spc/withdrawReqStatus.do";
+				} else if (document.referrer.match("/spc/transactionHistory.do")) {
+					location.href = "/spc/transactionHistory.do";
+				}
+			}
+		});
+
 		function handleReq(newStatus, callback){
 			callback(newStatus);
 		}
 
 		function updateReq(newStatus, memoStr, commmonMemo){
 			let newData = {}
-			newStatus || newStatus == 0 ? ( newData.status = newStatus ) : null;
+			newStatus || newStatus == 0 || newStatus == 1 ? ( newData.status = newStatus ) : null;
 
 			if(newStatus != undefined) {
 				newData.status_changed_by = loginName;
@@ -322,6 +348,8 @@
 			var reload = newStatus;
 			$.ajax(opt).done(function (json, textStatus, jqXHR) {
 				if(isEmpty(reload)){
+					$('#memoOpt').prop('checked', false);
+					$('#txt2').val('');
 					return false;
 				} else {
 					window.location.href = window.location.origin + '/spc/withdrawReqStatus.do' ;
@@ -524,7 +552,7 @@
 								<td>*withdrawDay*</td>
 								<td>*purpose*</td>
 								<td class="right">*amount*</td>
-								<td>*toAccBankName*  *toAccountNum*</td>
+								<td>*toAccBankName*  *toAccountNum* (*to_account_owner*)</td>
 								<td>*description*</td>
 							</tr>
 						</template>
@@ -585,11 +613,15 @@
 						<textarea placeholder="직접입력" id="txt2" class="textarea w-100"></textarea>
 					</div>
 					<div class="spc-btn-group my-20"><!--
+					--><button type="button" id="reviewBtn" class="btn_type mr-16">검토대기로 변경</button><!--
 					--><button type="button" id="rejectBtn" class="btn_type03 w80">반송</button><!--
 					--><button type="submit" class="btn_type ml-12">승인</button><!--
 				--></div>
 				</c:if>
 			</div>
 		</form>
+		<div class="btn_wrap_type05 my-20"><!--
+		--><button type="button" id="backList" class="btn_type03 w80">목록</button><!--
+	--></div>
 	</div>
 </div>
