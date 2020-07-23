@@ -472,6 +472,12 @@
 		calendar.empty();
 		modalData.empty();
 
+		const checkType = $.makeArray($(':checkbox[name="type"]:checked').map(function () {
+				return $(this).val();
+			}
+		));
+		const serachName = $('#searchName').val().trim().toLowerCase();
+
 		if (mData.length > 0) {
 			mData.forEach(function (v, k) {
 				const filterArr = ["1", "2", "3", "4"];
@@ -489,33 +495,42 @@
 					resolve(JSON.parse(v.job_info))
 				}).then(result => {
 					job_info = result;
-					let spcName = '';
-					if(spcList.length>0){
-						spcList.some(x => {
-							if(x.spcId === v.spc_id) {
-								spcName = x.spcName;
-							}
-						});
-					}
-					if(isEmpty(spcName)){
-						spcName = "spc_no_name";
-					}
+					if ($.inArray(job_type, checkType) >= 0) {
+						let spcName = '';
+						if(spcList.length>0){
+							spcList.some(x => {
+								if(x.spcId === v.spc_id) {
+									spcName = x.spcName;
+								}
+							});
+						}
 
-					// console.log("job_type===", job_type);
-					if (filterArr.indexOf(job_type)>-1){
-						tableStr = '<li data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="link bu t' + job_type + '">[' + spcName + '] ' + job_Name(job_type) + '</li>';
-					} else {
-						tableStr = '<li data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="link bu t' + job_type + '">[' + spcName + '] ' + job_Name(job_type) + '</li>';
-					}
-					bulletStr = '<span data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="bu t' + job_type + '">[ ' + spcName + ' ] ' + job_Name(job_type) + '</span><span class="fr btn_next"></span>';
-					calendar.eq(Number(job_date) - 1).append(tableStr);
-					modalData.append(
-						'<li class="link alarm-item" data-id="'+v.id+'">'
+						if(isEmpty(spcName)){
+							spcName = "spc_no_name";
+						}
+
+						if (!isEmpty(serachName)) {
+							if ((spcName.match(serachName) || job_Name(job_type).match(serachName)) == null) {
+								return false;
+							}
+						}
+
+						// console.log("job_type===", job_type);
+						if (filterArr.indexOf(job_type) > -1){
+							tableStr = '<li data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="link bu t' + job_type + '">[' + spcName + '] ' + job_Name(job_type) + '</li>';
+						} else {
+							tableStr = '<li data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="link bu t' + job_type + '">[' + spcName + '] ' + job_Name(job_type) + '</li>';
+						}
+						bulletStr = '<span data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="bu t' + job_type + '">[ ' + spcName + ' ] ' + job_Name(job_type) + '</span><span class="fr btn_next"></span>';
+						calendar.eq(Number(job_date) - 1).append(tableStr);
+						modalData.append(
+							'<li class="link alarm-item" data-id="'+v.id+'">'
 							+ bulletStr
 							+ '<br>'
 							+ ''
-						+'</li>'
-					)
+							+'</li>'
+						)
+					}
 				}).catch(function(error) {
 					if(error){
 						return false;
@@ -555,26 +570,33 @@
 				} else if(item[1][0].status == 3) {
 					bulletIdx = "1";
 				}
-				// console.log( 'item[1]===', item[1])
-				//    item[1][0].spc_id
-				if(firstStatus !=0){
-					if(item[1].length>1){
-						tStr = '<li data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + item[1].length + '건</li>';
-						bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + item[1].length + '건</span><span class="fr btn_next"></span>';
-					} else {
-						tStr = '<li data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + '</li>';
-						bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + '</span><span class="fr btn_next"></span>';
+				if ($.inArray(bulletIdx, checkType) >= 0) {
+					if (!isEmpty(serachName)) {
+						if ((spcName.match(serachName) || (statusList[firstStatus].val).toLowerCase().match(serachName)) == null) {
+							return false;
+						}
 					}
-					calendar.eq(Number(d) - 1).append(tStr);
-					modalData.append(
-						'<li class="alarm-item link">'
+					// console.log( 'item[1]===', item[1])
+					//    item[1][0].spc_id
+					if(firstStatus !=0){
+						if(item[1].length>1){
+							tStr = '<li data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + item[1].length + '건</li>';
+							bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + item[1].length + '건</span><span class="fr btn_next"></span>';
+						} else {
+							tStr = '<li data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + '</li>';
+							bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + '</span><span class="fr btn_next"></span>';
+						}
+						calendar.eq(Number(d) - 1).append(tStr);
+						modalData.append(
+							'<li class="alarm-item link">'
 							+ bStr
 							+ '<br>'
 							+ ''
-						+'</li>'
-					)
+							+'</li>'
+						)
+					}
+					// console.log("calendar===", calendar.find("li"))
 				}
-				// console.log("calendar===", calendar.find("li"))
 			});
 		}
 
@@ -641,7 +663,7 @@
 			});
 
 			$('#alarmPhone').val(contact_phone);
-			$("#spcList").prev().html("선택" + '<span class="caret"></span>').data({"value": "", "name" : "" });
+			$("#spcList").removeClass('hidden').prev().html("선택" + '<span class="caret"></span>').data({"value": "", "name" : "" });
 			deleteScheduleBtn.addClass('hidden');
 			postScheduleBtn.text('등록');
 
@@ -866,6 +888,11 @@
 		}
 
 		if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
+			if (typeof selectedDate === 'string') {
+				let dummyDate = selectedDate.split('-');
+				selectedDate = new Date(Number(dummyDate[0]), Number(dummyDate[1]), Number(dummyDate[2]));
+			}
+
 			selectedDate.setDate(selectedDate.getDate() - Number($('#alarmSetup button').data('value')));
 			$('#alarmDate').val(selectedDate.format('yyyy-MM-dd'));
 		}

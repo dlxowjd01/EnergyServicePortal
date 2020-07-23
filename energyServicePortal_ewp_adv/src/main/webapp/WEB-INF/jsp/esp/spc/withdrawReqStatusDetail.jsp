@@ -348,6 +348,8 @@
 			var reload = newStatus;
 			$.ajax(opt).done(function (json, textStatus, jqXHR) {
 				if(isEmpty(reload)){
+					$('#memoOpt').prop('checked', false);
+					$('#txt2').val('');
 					return false;
 				} else {
 					window.location.href = window.location.origin + '/spc/withdrawReqStatus.do' ;

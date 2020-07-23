@@ -104,23 +104,19 @@
 					let data = json.data;
 
 					if (filter) {
-						data = data.filter((item, index) => {
+						data = data.filter(item => {
 							if (!isEmpty(filter.status)) {
-								filter.status.some(x => {
-									let found = spcArr.findIndex(x => x.spc_id === item.spc_id);
-									let spc_name = spcArr[found].spc_name;
-									if (x == item.status) {
-										if (!isEmpty(filter.keyword) && spc_name.toLowerCase().match((filter.keyword))) {
-											return item;
-										}
-									}
-								});
+								let found = spcArr.findIndex(x => x.spc_id === item.spc_id);
+								let spc_name = spcArr[found].spc_name;
+								if (!isEmpty(filter.keyword)) {
+									return $.inArray(String(item.status), filter.status) >= 0 && spc_name.toLowerCase().match((filter.keyword)) ;
+								} else {
+									return ($.inArray(String(item.status), filter.status) >= 0);
+								}
 							} else {
 								let found = spcArr.findIndex(x => x.spc_id === item.spc_id);
 								let spc_name = spcArr[found].spc_name;
-								if (!isEmpty(filter.keyword) && spc_name.toLowerCase().match((filter.keyword))) {
-									return item;
-								}
+								return spc_name.toLowerCase().match((filter.keyword));
 							}
 						});
 					}
@@ -508,6 +504,7 @@
 					--><li data-value="2" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="wait" name="review_status" value="2"><label for="wait">검토 중</label></a></li><!--
 					--><li data-value="1" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="inProgress" name="review_status" value="1"><label for="inProgress">검토 대기</label></a></li><!--
 					--><li data-value="3" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="complete" name="review_status" value="3"><label for="complete">승인 완료</label></a></li><!--
+					--><li data-value="3" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="reject" name="review_status" value="0"><label for="reject">반송</label></a></li><!--
 				--></ul>
 				</div>
 			</div><!--
@@ -522,7 +519,7 @@
 	<div class="col-lg-12">
 		<div class="indiv no_border spc_tbl">
 			<div class="btn_wrap_type01">
-				<button type="button" class="btn_type">선택 인쇄</button>
+<%--				<button type="button" class="btn_type">선택 인쇄</button>--%>
 			</div>
 			<table class="sort_table table-footer transaction-table">
 				<colgroup>
