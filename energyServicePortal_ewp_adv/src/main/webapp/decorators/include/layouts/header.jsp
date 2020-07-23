@@ -571,7 +571,7 @@
 								</div>
 
 								<div class="flex_start warning-wrapper">
-									<small id="isValidName" class="warning-text hidden">이름을 입력해 주세요.</small>
+									<small id="isValidName" class="warning-text hidden">한글/영문 조합으로 입력해 주세요.</small>
 								</div>
 								
 								<div class="input-group inline-flex">
