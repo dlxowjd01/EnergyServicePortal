@@ -1212,11 +1212,19 @@ function setAreaParamData(areaId, type) {
 			if (param[obj.getAttribute("name")] == undefined) {
 				param[obj.getAttribute("name")] = obj.value;
 			} else {
-				var valArray = new Array();
-				valArray.push(param[obj.getAttribute("name")]);
-				valArray.push(obj.value);
+				if (typeof param[obj.getAttribute("name")] === 'string') {
+					var valArray = new Array();
+					valArray.push(param[obj.getAttribute("name")]);
+					valArray.push(obj.value);
 
-				param[obj.getAttribute("name")] = valArray;
+					param[obj.getAttribute("name")] = valArray;
+				} else {
+					var valArray = new Array();
+					valArray = param[obj.getAttribute("name")];
+					valArray.push(obj.value);
+					
+					param[obj.getAttribute("name")] = valArray;
+				}
 			}
 		}
 	});

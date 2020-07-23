@@ -11,7 +11,7 @@
 		getDataList(page);
 
 		$('.save_btn').on('click', function (e) {
-			let excelName = 'spc_' +oid+ '_이관자료';
+			let excelName = 'spc_이관자료_목록';
 			let $val = $('#excelList').find('tbody');
 			let cnt = $val.length;
 

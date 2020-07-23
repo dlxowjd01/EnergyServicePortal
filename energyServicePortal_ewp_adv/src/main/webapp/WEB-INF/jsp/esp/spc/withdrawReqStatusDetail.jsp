@@ -294,6 +294,16 @@
 			updateReq(1);
 		});
 
+		$("#backList").on("click", function() {
+			if (document.referrer) {
+				if (document.referrer.match("/spc/withdrawReqStatus.do")) {
+					location.href = "/spc/withdrawReqStatus.do";
+				} else if (document.referrer.match("/spc/transactionHistory.do")) {
+					location.href = "/spc/transactionHistory.do";
+				}
+			}
+		});
+
 		function handleReq(newStatus, callback){
 			callback(newStatus);
 		}
@@ -597,5 +607,8 @@
 				</c:if>
 			</div>
 		</form>
+		<div class="btn_wrap_type05 my-20"><!--
+		--><button type="button" id="backList" class="btn_type03 w80">목록</button><!--
+	--></div>
 	</div>
 </div>

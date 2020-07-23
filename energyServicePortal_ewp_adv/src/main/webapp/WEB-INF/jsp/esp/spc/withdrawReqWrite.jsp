@@ -592,6 +592,7 @@
 				</div>
 
 				<div class="btn_wrap_type05"><!--
+				--><button type="button" onclick="location.href='/spc/transactionCalendar.do'" class="btn btn_type03 w80 mr-12">목록</button><!--
 				--><button type="submit" class="btn btn_type">제출</button><!--
 			--></div>
 			</div>
