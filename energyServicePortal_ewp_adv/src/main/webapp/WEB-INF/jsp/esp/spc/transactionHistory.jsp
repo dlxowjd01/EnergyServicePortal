@@ -603,16 +603,16 @@
 		let statusVal = self.parents().closest("td").data("value");
 		let spcId = self.parents().closest("td").data("id");
 
-		("#reqDetailStatus").val(status);
+		$("#reqDetailStatus").val(status);
 		if(statusVal == 1){
 			status = "검토 중";
 			statusVal = 2;
-			("#reqDetailStatus").val(status);
+			$("#reqDetailStatus").val(status);
 			$("#reqDetailStatusVal").val(statusVal);
 			console.log("reqId===", reqId)
 			updateStatus(statusVal, reqId)
 		} else {
-			("#reqDetailStatus").val(status);
+			$("#reqDetailStatus").val(status);
 			$("#reqDetailStatusVal").val(statusVal);
 		}
 		$("#reqDetailSpcId").val(spcId);
