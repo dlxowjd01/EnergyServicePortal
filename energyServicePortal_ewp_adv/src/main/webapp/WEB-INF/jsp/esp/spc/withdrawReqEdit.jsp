@@ -658,7 +658,7 @@
 								<td>
 									<div class="sa_select">
 										<div class="dropdown placeholder">
-											<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="*bankName*" data-value="*accNum*">*bankName*  *accNum* (*accHolder*)<span class="caret"></span></button>
+											<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-acc-holder="*accHolder*" data-name="*bankName*" data-value="*accNum*">*bankName*  *accNum* (*accHolder*)<span class="caret"></span></button>
 												<ul id="receiveList*index*" class="receive-list dropdown-menu" role="menu">
 												</ul>
 										</div>
