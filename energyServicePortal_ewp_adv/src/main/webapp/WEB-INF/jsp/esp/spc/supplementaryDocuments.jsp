@@ -244,7 +244,7 @@
 							<td><a href="/spc/entityDetailsBySPC.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">[발전소_명]</a></td>
 <%--							<td class="right">[설치_용량]</td>--%>
 							<td>[관리_운영_기간]</td>
-							<td class="right">[파일_현재_개수] / [파일_총_개수]</td>
+							<td class="right">[파일_현재_개수]&nbsp;/&nbsp;[파일_총_개수]</td>
 							<td class="right">[첨부파일]건</td>
 						</tr>
 					</tbody>

@@ -836,11 +836,12 @@
 							<div class="flex_start fixed_height"></div>
 							<div class="flex_start fixed_height">
 								<span id="전체_용량"></span>
+								<span>MW</span>
 							</div>
 							<div class="flex_start">
 								<div class="fixed_height mr-30">
 									<span id="관리_운영비"></span>
-									<span>MW</span>
+									<span>원</span>
 								</div>
 								<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
 							</div>
