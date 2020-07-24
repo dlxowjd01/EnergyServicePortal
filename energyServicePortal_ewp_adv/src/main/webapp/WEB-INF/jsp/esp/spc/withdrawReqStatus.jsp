@@ -450,15 +450,19 @@
 							const strAccNum = "계좌_번호";
 							const accHolder = "예금주";
 							const num = accNum;
-						
-							if(item[1] == num.toString()){
-								let txt = item[0];
-								let newTxt = txt.replace(/계좌_번호/g, '');
-								let name = '  (' + x[accHolder+newTxt] + ')';
-								$("#reviewAccountHolder").val(name);
-								setTimeout(function(){
-									$("#reviewDetailForm").submit();
-								}, 300);
+
+							if (typeof item[1] === 'string') {
+								const itmeAcc = item[1].replace(/[^0-9]/g, '');
+
+								if(itmeAcc == num.toString()){
+									let txt = item[0];
+									let newTxt = txt.replace(/계좌_번호/g, '');
+									let name = '  (' + x[accHolder+newTxt] + ')';
+									$("#reviewAccountHolder").val(name);
+									setTimeout(function(){
+										$("#reviewDetailForm").submit();
+									}, 300);
+								}
 							}
 						});
 					});
