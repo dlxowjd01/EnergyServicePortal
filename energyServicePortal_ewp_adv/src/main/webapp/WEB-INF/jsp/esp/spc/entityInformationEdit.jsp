@@ -1039,7 +1039,7 @@
 								<div id="SPC_법인_인감" class="hide-no-data">
 									<p class="tx_file"><!--
 									--><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[SPC_법인_인감_유형] - [originalname]</a><!--
-									--><button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button><!--
+									--><button type="button" class="btn_type07" onclick="setRemoveFileList('SPC_법인_인감', [INDEX]);"></button><!--
 								--></p>
 								</div>
 								<div class="group_type">

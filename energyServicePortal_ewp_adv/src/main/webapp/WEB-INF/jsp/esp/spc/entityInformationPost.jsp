@@ -321,7 +321,7 @@
 		}
 
 		if (isEmpty(genId)) {
-			if (isEmpty($('#발전소_시도').val()) || isEmpty($('#발전소_상세주소').val())) {
+			if (isEmpty($('#발전소_시도 button').data('value')) || isEmpty($('#발전소_상세주소').val())) {
 				alert('발전소 신규 입력시에는 주소가 필수 입니다.');
 				return false;
 			}
@@ -335,7 +335,7 @@
 				contentType: 'application/json',
 				data: JSON.stringify({
 					name: $('#genName').val(),
-					location: $('#발전소_시도').val(),
+					location: $('#발전소_시도 button').data('value'),
 					address: $('#발전소_상세주소').val(),
 					resource_type: 0
 				}),

@@ -248,35 +248,48 @@ $(function () {
 			});
 			//$(this).attr("name", arr);
 		} else {
-			let listItem = `${labelText}<button type='button' class='btn_close icon_btn' onclick='deleteFile($(this))'></button>`;
-			// $(this).prev('label').text(listItem);
-			$(this).parent().find(".upload_text").html(listItem);
-			// if ($(this).parent().find(".btn_close")) {
-			// 	$(this).parent().find(".btn_close").removeClass('hidden')
-			// }
+            let targetId = $(this).attr('id');
+            if (targetId.match('SPC_법인_인감_파일')) {
+                let listItem = `<button type='button' class='btn_close file_del_btn' onclick='deleteFile($(this), "front")'></button>`;
+                $(this).parent().find(".upload_text").next('.file_del_btn').remove();
+                $(this).parent().find(".upload_text").html(labelText).after(listItem);
+            } else {
+                let listItem = `${labelText}<button type='button' class='btn_close icon_btn' onclick='deleteFile($(this))'></button>`;
+                // $(this).prev('label').text(listItem);
+                $(this).parent().find(".upload_text").html(listItem);
+                // if ($(this).parent().find(".btn_close")) {
+                // 	$(this).parent().find(".btn_close").removeClass('hidden')
+                // }
+            }
 		}
 	});
 });
 
-function deleteFile(self) {
-	let ul = self.parents(".file_list ul");
-
-	if (ul.length == 0) {
-	    if (self.parent('.upload_text').prop('tagName') == 'LI') {
-            self.parent(".upload_text").remove();
+function deleteFile(self, type) {
+    if (type === undefined) {
+        let ul = self.parents(".file_list ul");
+        if (ul.length == 0) {
+            if (self.parent('.upload_text').prop('tagName') == 'LI') {
+                self.parent(".upload_text").remove();
+            } else {
+                self.parent(".upload_text").parent().find('input[type="file"]').val('');
+                self.parent(".upload_text").empty();
+            }
         } else {
-            self.parent(".upload_text").parent().find('input[type="file"]').val('');
-            self.parent(".upload_text").empty();
+            self.parent(".upload_text").remove();
+            if (ul.children().length <= 0) {
+                let item = '';
+                item = '<li class="no-file">선택된 파일이 없습니다.</li>'
+                ul.append(item);
+                ul.parents('.file_list').parent().find('input[type="file"]').val('');
+            }
         }
-	} else {
-		self.parent(".upload_text").remove();
-		if (ul.children().length <= 0) {
-			let item = '';
-			item = '<li class="no-file">선택된 파일이 없습니다.</li>'
-			ul.append(item);
-            ul.parents('.file_list').parent().find('input[type="file"]').val('');
-		}
-	}
+    } else {
+        let parent = self.parent();
+        parent.find('span.upload_text').html('');
+        parent.find('input[type="file"]').val('');
+        self.remove();
+    }
 }
 
 /* 장치 그룹 현황 슬라이드 */
