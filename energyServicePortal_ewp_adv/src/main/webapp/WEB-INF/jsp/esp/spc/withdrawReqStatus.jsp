@@ -449,8 +449,7 @@
 						Object.entries(x).map((item, index) => {
 							const strAccNum = "계좌_번호";
 							const accHolder = "예금주";
-							const num = accNum;
-
+							const num = accNum.replace(/[^0-9]/g, '');
 							if (typeof item[1] === 'string') {
 								const itmeAcc = item[1].replace(/[^0-9]/g, '');
 
