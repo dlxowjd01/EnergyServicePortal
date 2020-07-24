@@ -375,11 +375,11 @@
 		let name = d + '_' + spcName + '_' + account + '.pdf';
 
 		if($(self).data("name") == "previewMergeDocs") {
-			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&evidence=true' + '&request_id=' + name;
+			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&evidence=true' + '&output_file_name=' + name;
 		} else if($(self).data("name") == "previewReqDoc"){
-			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&request_id=' + name;;
+			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&output_file_name=' + name;;
 		} else if($(self).data("name") == "previewProof"){
-			url = apiHost + '/spcs/transactions/download/evidence?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&request_id=' + name;;
+			url = apiHost + '/spcs/transactions/download/evidence?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&output_file_name=' + name;;
 		};
 
 		$.ajax({
