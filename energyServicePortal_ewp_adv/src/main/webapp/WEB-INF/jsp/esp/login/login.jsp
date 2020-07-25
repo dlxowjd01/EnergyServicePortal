@@ -512,11 +512,25 @@
 								<a href="#" class="joinBtn"><spring:message code="ewp.login.Singup"/></a> 
 								--%>
 								<input type="submit" name="login" value="<spring:message code="ewp.login.Signin" />">
+								<p class="center">회원 가입 및 회원 정보 문의<strong class="bold">070-4949-5500</strong></p>
 							</div>
 
 							<div class="lf-desc">
-								<p class="center">회원 가입 및 회원 정보 문의<strong class="">070-4949-5500</strong></p>
-								<p class="center copy-right">COPYRIGHT © 2019-2020 Encored Technologies, Inc. All rights reserved.</p>
+								<div class="row center">
+									<div class="col-6">
+										<h3 class="mb-10">카카오톡 문의</h3>
+										<a href="#"><strong class="bold">아이덤스</strong> 채널&친구 추가</a>
+									</div>
+									<div class="col-6 divider">
+										<h3 class="mb-10">데모 요청 이메일</h3>
+										<a href="#" class="bold">esolution@encoredtech.com</a>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-12">
+										<p class="center copy-right">COPYRIGHT © 2019-2020 Encored Technologies, Inc. All rights reserved.</p>
+									</div>
+								</div>
 							</div>
 						</div>
 					

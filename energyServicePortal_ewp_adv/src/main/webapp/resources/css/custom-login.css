@@ -250,33 +250,37 @@ nav .lang.login-lang {
 }
 
 .lf-btn-wrap {
-	font-size: 0;
 	margin: 56px auto 24px;
 	width: 100%;
 	display: table;
 }
 
-.lf-btn-wrap>* {
+.lf-btn-wrap > input {
 	display: inline-block;
-	width: 100%;
-	border: 0;
-	outline-style: none;
-	height: 48px;
-	font-size: 18px;
+	margin-bottom: 30px;
+	background: var(--vivid-blue);
 	color: #fff;
+	width: 100%;
+	height: 48px;
+	line-height: 48px;
+	border: 0;
+	border-radius: 4px;
+	outline-style: none;
+	font-size: 18px;
 	font-weight: bold;
 	text-align: center;
 	vertical-align: top;
 }
 
-.lf-btn-wrap>*:hover {
-	color: #fff;
+.lf-btn-wrap .center:not(.bold) {
+	color: var(--color4);
+	font-weight: normal;
 }
 
-.lf-btn-wrap>input {
-	background: var(--vivid-blue);
-	line-height: 48px;
-	border-radius: 4px;
+.lf-btn-wrap .bold {
+	padding-left: 8px;
+	color: var(--color8);
+	font-weight: 500;
 }
 
 .lf-desc {
@@ -284,14 +288,31 @@ nav .lang.login-lang {
 	color: var(--color4);
 	border-top: 1px solid var(--box-border);
 }
+.lf-desc .col-6 {
+	padding: 0;
+}
+
+.lf-desc .divider {
+	border-left: 1px solid var(--color1);
+}
 
 .lf-desc .center strong {
-	color: var(--color2);
+	color: var(--color8);
 	padding-left: 8px;
 }
 
+.lf-desc a {
+	color: var(--color4);
+}
+
+.lf-desc .bold {
+	color: var(--color8);
+	font-weight: 500;
+	text-decoration: none;
+}
+
 .lf-desc .center:not(.copy-right) {
-	margin: 30px auto 50px;
+	margin: 30px auto 44px;
 }
 
 .lf-desc .center.copy-right {

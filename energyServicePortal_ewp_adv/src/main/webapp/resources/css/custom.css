@@ -1237,7 +1237,7 @@ button:hover {
 } */
 
 /* Toggle switch for theme */
-
+/* 
 .switcher {
 	display: inline-block;
 	height: 38px;
@@ -1287,7 +1287,7 @@ button:hover {
 
 .switcher__input--dark:checked~.switcher__toggle {
 	left: 100px;
-}
+} */
 
 /* 왼쪽 메뉴 */
 
