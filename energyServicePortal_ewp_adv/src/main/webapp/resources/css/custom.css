@@ -176,7 +176,7 @@
 
 	--ico-delete: url("../img/close_btn_md_dark.svg");
 	--btn-close: url("../img/icon_close.png");
-	--btn-edit-svg: url("../img/icon_edit.svg");
+	--btn-edit: url("../img/icon_edit.svg");
 	--btn-trash: url("../img/icon_delete.svg");
 
 	/* ********* light mode ONLY ********* */
@@ -11855,7 +11855,7 @@ table.table-footer tfoot td.light {
 	width: 13px;
 	height: 13px;
 	margin: -5px 0 0 12px;
-	background: var(--btn-edit-svg) no-repeat center;
+	background: var(--btn-edit) no-repeat center;
 	background-size: 15px 15px;
 }
 
