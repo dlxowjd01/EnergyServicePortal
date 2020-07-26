@@ -173,15 +173,17 @@
 	--ico-solar: url("../img/ico_solar.png");
 	--ico-water: url("../img/ico_water.png");
 	--ico-wind: url("../img/ico_wind.png");
+
 	--ico-delete: url("../img/close_btn_md_dark.svg");
+	--btn-close: url("../img/icon_close.png");
+	--btn-edit-svg: url("../img/icon_edit.svg");
+	--btn-trash: url("../img/icon_delete.svg");
+
 	/* ********* light mode ONLY ********* */
 	--ico-warning: url("../img/ico-warning.svg");
 	--ico-notification: url("../img/notification.svg");
 	--ico-notification-new: url("../img/notification_active.svg");
-	--btn-close-svg: url("../img/icon_delete.svg");
-	--btn-close: url("../img/icon_close_wh.png");
-	--btn-trash: url("../img/icon_trash.png");
-	--btn-edit-svg: url("../img/icon_edit.svg");
+
 	--btn-attachment: url("../img/attachment_light.svg");
 	--ico-prev-active: url("../img/btn-prev-active.svg");
 	--ico-next-active: url("../img/btn-next-active.svg");
@@ -280,8 +282,9 @@ html.darkmode:root {
 	--ico-water: url("../img/ico_water_dark.png");
 	--ico-wind: url("../img/ico_wind_dark.png");
 	--ico-delete: url("../img/close_btn_md.svg");
-	--bg-battery-cover: url("../img/battary_cover_dark.png");
 	--btn-close: url("../img/icon_close_wh.png");
+	--bg-battery-cover: url("../img/battary_cover_dark.png");
+
 }
 
 * {
@@ -10803,7 +10806,7 @@ a.btn.btn_type03:hover {
 	border: 0;
 	text-indent: -9999px;
 	vertical-align: middle;
-	background: url(../img/icon_close_wh.png) no-repeat center center;
+	background: var(--btn-close) no-repeat center center;
 	outline: none;
 }
 
@@ -10815,13 +10818,9 @@ a.btn.btn_type03:hover {
 	border: 0;
 	text-indent: -9999px;
 	vertical-align: middle;
-	background: url(../img/icon_close_wh.png) no-repeat center center;
+	background: var(--btn-close) no-repeat center center;
 	background-size: 10px;
 	outline: none;
-}
-
-.darkmode .btn_close {
-	background-image: url(../img/icon_close.png);
 }
 
 .btn_file.down {
@@ -10896,13 +10895,9 @@ button.tx_file {
 	width: 24px;
 	height: 24px;
 	border-radius: 4px;
-	background: url(../img/icon_close_wh.png) no-repeat center center rgba(0, 0, 0, 0.4);
+	background: var(--btn-close) no-repeat center center rgba(0, 0, 0, 0.4);
 	text-indent: -9999px;
 	outline: none;
-}
-
-.darkmode .img_bx .img_group .btn_img_clse {
-	background-image: url(../img/icon_close.png);
 }
 
 .inp_align .fl {
