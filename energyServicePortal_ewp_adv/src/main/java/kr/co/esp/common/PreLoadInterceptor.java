@@ -205,9 +205,11 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 						if (groupMap != null && !groupMap.isEmpty()) {
 							if (groupMap.get("vpp_group") != null) {
 								List<Map<String, Object>> vppList = (List<Map<String, Object>>) groupMap.get("vpp_group");
-								vgid = (String) vppList.get(0).get("vgid");
-								siteName = (String) vppList.get(0).get("name");
-								refineList = (List<Map<String, Object>>) vppList.get(0).get("sites");
+								if (vppList.size() > 0) {
+									vgid = (String) vppList.get(0).get("vgid");
+									siteName = (String) vppList.get(0).get("name");
+									refineList = (List<Map<String, Object>>) vppList.get(0).get("sites");
+								}
 							}
 						}
 
@@ -216,7 +218,10 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 							for (Map<String, Object> refineMap : refineList) {
 								jsonArray.put(jsonParser(refineMap));
 							}
+						} else {
+							jsonArray = new JSONArray();
 						}
+
 						request.setAttribute("vgid", vgid);
 						request.setAttribute("siteName", siteName);
 						request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅

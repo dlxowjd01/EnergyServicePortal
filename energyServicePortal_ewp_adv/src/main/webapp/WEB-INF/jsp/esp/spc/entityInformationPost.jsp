@@ -1539,6 +1539,7 @@
 										--><li data-id="0037" data-value="전북"><a href="#">전북</a></li><!--
 										--><li data-id="0035" data-value="제주"><a href="#">제주</a></li><!--
 										--><li data-id="0089" data-value="K뱅크"><a href="#">K뱅크</a></li><!--
+										--><li data-id="1001" data-value="상호저축"><a href="#">상호저축</a></li><!--
 									--></ul><!--
 								--></div>
 								</div>

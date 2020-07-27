@@ -675,18 +675,25 @@
 						Object.entries(x).map((item, index) => {
 							const strAccNum = "계좌_번호";
 							const accHolder = "예금주";
-							const num = accNum;
-						
-							if(item[1] == num.toString()){
-								let txt = item[0];
-								let newTxt = txt.replace(/계좌_번호/g, '');
-								console.log("accountInfo===", accountInfo)
-								let name = accountInfo + '  (' + x[accHolder+newTxt] + ')';
 
-								$("#reqDetailAccountInfo").val(name);
-								setTimeout(function(){
-									$("#reqDetailForm").submit();
-								}, 300);
+							if (typeof accNum == 'number') {
+								accNum = String(accNum);
+							}
+							const num = accNum.replace(/[^0-9]/g, '');
+							if (typeof item[1] === 'string') {
+								const itmeAcc = item[1].replace(/[^0-9]/g, '');
+
+								if(itmeAcc == num.toString()){
+									let txt = item[0];
+									let newTxt = txt.replace(/계좌_번호/g, '');
+									console.log("accountInfo===", accountInfo)
+									let name = accountInfo + '  (' + x[accHolder+newTxt] + ')';
+
+									$("#reqDetailAccountInfo").val(name);
+									setTimeout(function(){
+										$("#reqDetailForm").submit();
+									}, 300);
+								}
 							}
 						});
 					});
@@ -955,8 +962,10 @@
 								<td class='left' data-id="*transactionSpcId*" data-name="*transactionSpcName*" data-value="*statusVal*"><!--
 								--><div class="flex_start"><!--
 									--><button type="button" class="*linkAttr* clear-btn" data-name="*withdrawBankName*" data-value="*withdrawAccountNum*" data-req-id="*transactionReqId*" onclick="goToDetail($(this))">*status*</button><!--
+									<c:if test="${userInfo.task ne 2}">
 									--><a href="#" onclick="goToEdit($(this))" class='icon-edit *editVisibility*' data-req-id="*transactionReqId*"></a><!--
 									--><a href="#" onclick="deleteRow(this)" class='icon-delete *visibility*'></a><!--
+									</c:if>
 								--></div>
 								</td>
 							</tr>

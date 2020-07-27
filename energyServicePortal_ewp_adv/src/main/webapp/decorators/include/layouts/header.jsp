@@ -7,14 +7,6 @@
 	$(function () {
 		// role: 1: 시스템관리자, 2: 일반
 		// task : 0: 일반, 1:사무수탁, 2:자산운용, 3: 사업주
-		
-		// let userInfo = '${userInfo}'
-		// console.log("userinf---", userInfo)
-
-		// let userId = '${userInfo.login_id}';
-		// let oid = '${userInfo.oid}';
-		// let role = '${userInfo.role}';
-		// let task = '${userInfo.task}';
 		let fullName = '${userInfo.name}';
 		let loginMail = '${userInfo.contact_email}';
 		let mobileNum = '${userInfo.contact_phone}';
@@ -331,7 +323,11 @@
 													<c:set var="groupSites" value="${group.sites}"/>
 													<c:forEach var="groupSiteList" items="${groupSites}">
 														<li>
-															<a href="javascript:void(0);" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}');">${groupSiteList.name}</a>
+															<c:forEach var="site" items="${siteList}">
+																<c:if test="${groupSiteList.sid eq site.sid}">
+																	<a href="javascript:void(0);" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}');">${site.name}</a>
+																</c:if>
+															</c:forEach>
 														</li>
 													</c:forEach>
 												</ul>
@@ -345,7 +341,7 @@
 				</ul>
 				<c:if test="${fn:length(vppList) > 0 || fn:length(drList) > 0}">
 					<ul>
-						<c:if test="${oid ne 'trust' and fn:length(vppList) > 0}">
+						<c:if test="${fn:length(vppList) > 0}">
 							<li>
 								<dl>
 									<dt>에너지 거래</dt>
@@ -359,7 +355,11 @@
 														<c:set var="groupSites" value="${vpp.sites}"/>
 														<c:forEach var="groupSiteList" items="${groupSites}">
 															<li>
-																<a href="javascript:void(0);" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}');">${groupSiteList.name}</a>
+																<c:forEach var="site" items="${siteList}">
+																	<c:if test="${groupSiteList.sid eq site.sid}">
+																		<a href="javascript:void(0);" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}');">${site.name}</a>
+																	</c:if>
+																</c:forEach>
 															</li>
 														</c:forEach>
 													</ul>
