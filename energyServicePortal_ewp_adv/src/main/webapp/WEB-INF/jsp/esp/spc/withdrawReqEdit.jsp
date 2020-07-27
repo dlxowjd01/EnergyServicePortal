@@ -3,10 +3,6 @@
 
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
-	const oid = '${sessionScope.userInfo.oid}';
-	const loginId = '${sessionScope.userInfo.login_id}';
-	const loginName = '${sessionScope.userInfo.name}';
-
 	// param: withdrawReqStatus.do
 	const spcId = '${param.req_edit_spc_id}';
 	const spcName = '${param.req_edit_spc_name}';

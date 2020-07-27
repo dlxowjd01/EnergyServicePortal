@@ -3,10 +3,6 @@
 <script src="/js/commonDropdown.js"></script>
 
 <script type="text/javascript">
-	const oid = '${sessionScope.userInfo.oid}';
-	const loginId = '${sessionScope.userInfo.login_id}';
-	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
-
 	// unCheckAll($("#reqStatus"));
 	$(function() {
 		const tableBody = $('#tableBody');

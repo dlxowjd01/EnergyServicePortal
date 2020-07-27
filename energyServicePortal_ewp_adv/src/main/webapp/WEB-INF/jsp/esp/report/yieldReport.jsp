@@ -6,9 +6,6 @@
 
 <script type="text/javascript">
 	let today = new Date();
-	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
-	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
-
 	let repeat_type_method = 'post';
 	let repeatCoastNumber = new Object();
 	let reportType = {

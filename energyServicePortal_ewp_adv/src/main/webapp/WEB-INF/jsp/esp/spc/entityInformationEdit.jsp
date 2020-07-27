@@ -2,8 +2,6 @@
 <%@ include file="/decorators/include/taglibs.jsp"%>
 <script src="/js/commonDropdown.js"></script>
 <script>
-	const oid = '${sessionScope.userInfo.oid}';
-	const loginId = '${sessionScope.userInfo.login_id}';
 	const countryList = [{'value': '대한민국'}];
 	const sidoList = [
 		{'value': '서울'}, {'value': '부산'}, {'value': '대구'}, {'value': '인천'}, {'value': '광주'},

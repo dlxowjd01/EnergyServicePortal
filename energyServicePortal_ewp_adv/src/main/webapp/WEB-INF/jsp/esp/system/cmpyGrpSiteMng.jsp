@@ -894,7 +894,7 @@
 </script>
 				<div class="row">
 					<div class="col-lg-12">
-						<h1 class="page-header">그룹/사이트 관리</h1>
+						<h1 class="page-header">사이트 관리</h1>
 					</div>
 				</div>
 				<div class="row">

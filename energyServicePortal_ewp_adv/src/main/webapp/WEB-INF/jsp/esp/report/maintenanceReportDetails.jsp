@@ -2,9 +2,6 @@
 <%@ include file="/decorators/include/taglibs.jsp"%>
 
 <script>
-	const oid = "${sessionScope.userInfo.oid}";
-	const loginId = "${sessionScope.userInfo.login_id}";
-
 	$(function () {
 		init();
 		getReportData();

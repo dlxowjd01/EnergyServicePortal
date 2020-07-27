@@ -471,10 +471,10 @@
 			<nav class="clear">
 				<c:choose>
 					<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
-						<div class="nav_brand spower"><a href="#">Spower</a></div>
+						<div class="nav-brand spower"><a href="#">Spower</a></div>
 					</c:when>
 					<c:otherwise>
-						<div class="nav_brand"><a href="#">Encored</a></div>
+						<div class="nav-brand"><a href="#">Encored</a></div>
 					</c:otherwise>
 				</c:choose>
 				<%--	
@@ -502,7 +502,14 @@
 					<form id="loginForm" name="loginForm" action="/loginUser.do" method="post" onsubmit="return checkLogin(this)">
 						<input type="hidden" id="language" name="language"/>
 						<div class="lf-body">
-							<div class="lftit"></div>
+							<c:choose>
+								<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
+									<img src="../img/logo_login_spower.svg" alt="login modal spower logo" class="login-logo center"/>
+								</c:when>
+								<c:otherwise>
+									<img src="../img/logo_iderms.svg" alt="login modal iderms logo" class="login-logo center"/>
+								</c:otherwise>
+							</c:choose>
 						    <div class="mt10"><input type="text" id="loginUserId" name="login_id" class="lfinp" placeholder=<spring:message code="ewp.login.ID"/>></div>
 							<div class="mt15"><input type="password" id="loginUserPw" name="password" class="lfinp" placeholder=<spring:message code="ewp.login.Password"/>></div>
 							<div class="mt15"><a class="chk_type"><input type="checkbox" id="saveLogin" name="save_login"><label for="saveLogin">로그인 유지</label></a></div>
@@ -512,11 +519,25 @@
 								<a href="#" class="joinBtn"><spring:message code="ewp.login.Singup"/></a> 
 								--%>
 								<input type="submit" name="login" value="<spring:message code="ewp.login.Signin" />">
+								<p class="center">회원 가입 및 회원 정보 문의<strong class="bold">070-4949-5500</strong></p>
 							</div>
 
 							<div class="lf-desc">
-								<p class="center">회원 가입 및 회원 정보 문의<strong class="">070-4949-5500</strong></p>
-								<p class="center copy-right">COPYRIGHT © 2019-2020 Encored Technologies, Inc. All rights reserved.</p>
+								<div class="row center">
+									<div class="col-6">
+										<h3 class="mb-10">카카오톡 문의</h3>
+										<a href="#"><strong class="bold">아이덤스</strong> 채널&친구 추가</a>
+									</div>
+									<div class="col-6 divider">
+										<h3 class="mb-10">데모 요청 이메일</h3>
+										<a href="#" class="bold">esolution@encoredtech.com</a>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-12">
+										<p class="center copy-right">COPYRIGHT © 2019-2020 Encored Technologies, Inc. All rights reserved.</p>
+									</div>
+								</div>
 							</div>
 						</div>
 					

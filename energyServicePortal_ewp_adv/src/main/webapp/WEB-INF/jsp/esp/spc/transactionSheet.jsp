@@ -1,13 +1,42 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<%@ include file="/decorators/include/taglibs.jsp" %>
-
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ include file="/decorators/include/taglibs.jsp"%>
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	let today = new Date();
 	let date = new Date();
 
+	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
+	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
+
 	$(function () {
+		unCheckAll();
 		pageInit();
+		
+		$('#addAlarmBtn').on('click', function () {
+			let target = $(this).data("target");
+			console.log("detail--", $("#detailInfoModal").attr("class"))
+			$("#detailInfoModal").removeClass("active");
+
+			modalPopInit();
+		});
+
+		$('#detailModalTrigger').on('click', function () {
+			$("#spcAlarmModal").modal("hide");
+		});
+
+		// $('.modal').on('show.modal', function(event) {
+		// 	console.log("show---", event)
+		// });
+		// $('.modal').on('hide.modal', function(event) {
+		// 	console.log("hide---", event)
+		// });
+
+
+		// TO DO!!!!!
+		// 사용자 === 사무수탁사 => show() : writeBtn
+		// 사용자 === 자산운영사 => show() : requestBtn
+		// 임시로 사무수탁사 버튼
+		// oid === "" ? $("#requestBtn").text("출금요청서 신청") : $("#requestBtn").text("출금요청서 작성");
 
 		//날짜 셀렉트박스 클릭 시
 		$('.sch_sel_area ul li').on('click', function () {
@@ -24,13 +53,18 @@
 
 		//전월
 		$('.btn_prev_mon').on('click', function () {
-			today = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+			const prevMonth = today.getMonth() - 1;
+			today = new Date(today.getFullYear(), prevMonth, today.getDate());
+			$('#modalTitle').text(prevMonth);
+			$('#popoverModal').find("h2").text(prevMonth);
 			buildCalendar();
 		});
 
 		//다음월
 		$('.btn_next_mon').on('click', function () {
-			today = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
+			const nextMonth = today.getMonth() + 1;
+			today = new Date(today.getFullYear(), nextMonth, today.getDate());
+			$('#modalTitle').text(nextMonth);
 			buildCalendar();
 		});
 
@@ -40,8 +74,60 @@
 			buildCalendar();
 		});
 
-		$('#register').on('click', function () {
-			modalPopInit();
+		$('#spcAlarmModal li').on('click', function () {
+			let value = $(this).data('value');
+			let buttonId = $(this).parents('div').prop('id');
+			$(this).parents('div.dropdown').find('button').data('value', value);
+
+			if (buttonId == 'repeat_yn') {
+				if (value == 'Y') {
+					$(this).parents('.flex_start3').addClass('short');
+					$(this).parents('div.dropdown').siblings().removeClass('hidden');
+
+					$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
+				} else {
+					$(this).parents('.flex_start3').removeClass('short');
+					$(this).parents('div.dropdown').siblings().addClass('hidden');
+
+					$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+				}
+				repeatEnd();
+			} else if (buttonId == 'alarmSetup') {
+				if ($('#alarmDate').hasClass('hasDatepicker')) {
+					$('#alarmDate').datepicker('destroy').removeClass('hasDatepicker');
+				}
+				if (value != '직접 설정') {
+					let jobDate = $('#job_date').datepicker('getDate');
+					if (isEmpty($('#job_date').val())) {
+						$('#alarmDate').val('');
+					} else {
+						jobDate.setDate(jobDate.getDate() - value);
+						$('#alarmDate').val(jobDate.format('yyyy-MM-dd'));
+					}
+				} else {
+					$('#alarmDate').datepicker({
+						showOn: "both",
+						buttonImageOnly: true,
+						dateFormat: 'yy-mm-dd',
+						beforeShow: function () {
+							let minDate = $('#job_date').datepicker('getDate');
+							if (minDate != '') {
+								$('#alarmDate').datepicker('option', 'minDate', minDate);
+							}
+
+							let maxDate = $('#repeat_end').datepicker('getDate');
+							if (maxDate != '') {
+								$('#alarmDate').datepicker('option', 'maxDate', maxDate);
+							}
+						}
+					})
+					$('#alarmDate').val('');
+				}
+			}
+		});
+
+		$('#repeat_interval, #repeat_unit').on('click change', function () {
+			repeatEnd();
 		});
 
 		$('#repeat_interval, #repeat_unit').on('click change', function () {
@@ -51,14 +137,14 @@
 		$('[name="siteName"]').autocomplete({
 			source: function (request, response) {
 				$.ajax({
-					url: apiHost + '/auth/me/sites',
+					url: 'http://iderms.enertalk.com:8443/auth/me/sites',
 					dataType: 'json',
 					type: "get",
 					success: function (data) {
 						response(
 							$.map(data, function (item) {
-								let siteNm = $('[name="siteName"]').val().toUpperCase();
-								if ((item.name.toUpperCase()).match(siteNm)) {
+								let siteNm = $('[name="siteName"]').val();
+								if (item.name.match(siteNm)) {
 									return {
 										label: item.name,
 										value: item.sid
@@ -94,6 +180,18 @@
 		$('#searchName').on('keyup', function () {
 			checkCalendarVisual();
 		});
+		
+		$('body').click(function() {
+
+		});
+
+		$('#detailModalTrigger').on("click", function(){
+			$("#detailInfoModal").toggleClass("active");
+		});
+		
+		$('#confirmBtn').on("click", function(){
+			$("#detailInfoModal").toggleClass("active");
+		});
 	});
 
 	//기본세팅
@@ -106,13 +204,10 @@
 		$('#year > button').html(year + '년<span class="caret"></span>').data('value', year);
 		$('#month > button').html(month + '월<span class="caret"></span>').data('value', month);
 
-		let bfYear = new Date(year + 1, month + 1);
-		html += '<li data-value="' + bfYear.getFullYear() + '"><a href="javascript:void(0);">' + bfYear.getFullYear() + '년 </a></li>';
-
 		for (let i = 0; i < 5; i++) {
 			let bfYear = new Date(year - i, month + 1);
 			let select = i == 0 ? 'on' : '';
-			html += '<li data-value="' + bfYear.getFullYear() + '" class="' + select + '"><a href="javascript:void(0);">' + bfYear.getFullYear() + '년 </a></li>';
+			html += '<li data-value="' + bfYear.getFullYear() + '" class="' + select + '"><a href="#">' + bfYear.getFullYear() + '년 </a></li>';
 		}
 
 		$('#year ul').empty().append(html);
@@ -133,6 +228,8 @@
 		let row = tbCalendar.insertRow();
 		let cell = null;
 		let cnt = 0;
+		const thisMonth = doMonth.getMonth() + 1 + '월';
+
 		for (let i = 0; i < doMonth.getDay(); i++) {
 			cell = row.insertCell();
 			cnt = cnt + 1;
@@ -154,7 +251,8 @@
 			}
 		}
 
-		$('.sch_btn > strong').html(doMonth.getMonth() + 1 + '월');
+		$('.sch_btn .btn_type03:last-of-type').text(thisMonth);
+		$('#modalTitle').text(thisMonth);
 		$('#year > button').html(doMonth.getFullYear() + '년<span class="caret"></span>').data('value', doMonth.getFullYear());
 		$('#month > button').html(doMonth.getMonth() + 1 + '월<span class="caret"></span>').data('value', doMonth.getMonth() + 1);
 
@@ -165,68 +263,13 @@
 		let option = {};
 		if (action == 'post' || action == 'patch') {
 			let data = setData();
-			if (isEmpty(data['site_id'])) {
-				alert('발전소명은 필수 값입니다.');
-				return false;
-			}
-
-			if (isEmpty(data['job_type'])) {
-				alert('점검 구분은 필수 값입니다.');
-				return false;
-			}
-
-			if (isEmpty(data['job_date'])) {
-				alert('기준 일자는 필수 값입니다.');
-				return false;
-			}
-
-			if (isEmpty(data['repeat_yn'])) {
-				alert('점검 주기는 필수 값입니다.');
-				return false;
-			} else {
-				if (data['repeat_yn'] == 'Y') {
-					if (isEmpty(data['repeat_interval'])) {
-						alert('정기 점검은 반복 기간은 필수 값입니다.');
-						return false;
-					}
-
-					if (isEmpty(data['repeat_unit'])) {
-						alert('정기 점검 반복 주기는 필수 값입니다.');
-						return false;
-					}
-				}
-			}
-
-			let job_info = JSON.parse(data['job_info']);
-			if (!isEmpty(job_info['alarmSetup'])) {
-
-				if (isEmpty(job_info['alarmDate'])) {
-					alert('알람 설정시 알람 일자는 필수 값입니다.');
-					return false;
-				}
-
-				if (isEmpty(job_info['alarmTime'])) {
-					alert('알람 설정시 알람 시간은 필수 값입니다.');
-					return false;
-				}
-
-				if (isEmpty(job_info['alarmPhone'])) {
-					alert('알람 설정시 알람 수신번호는 필수 값입니다.');
-					return false;
-				}
-			}
-
 			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
 			let url = '';
 			if (action == 'patch') {
-				if (!confirm('수정된 정보로 변경 하시겠습니까?')) {
-					return false;
-				}
-
-				url = apiHost + '/spcs/maintenance/' + jobId + '?oid=' + oid + jobText;
+				url = 'http://iderms.enertalk.com:8443/spcs/maintenance/' + jobId + '?oid=' + oid + jobText;
 				delete data.site_id;
 			} else {
-				url = apiHost + '/spcs/maintenance?oid=' + oid;
+				url = 'http://iderms.enertalk.com:8443/spcs/maintenance?oid=' + oid;
 			}
 
 			option = {
@@ -239,7 +282,7 @@
 			};
 		} else if (action == 'get') {
 			option = {
-				url: apiHost + '/spcs/maintenance',
+				url: 'http://iderms.enertalk.com:8443/spcs/maintenance',
 				type: action,
 				dataType: 'json',
 				data: {
@@ -252,14 +295,9 @@
 				option.data.jobId = jobId;
 			}
 		} else {
-
-			if (!confirm('삭제 하시겠습니까?')) {
-				return false;
-			}
-
 			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
 			option = {
-				url: apiHost + '/spcs/maintenance/' + jobId + '?oid=' + oid + jobText,
+				url: 'http://iderms.enertalk.com:8443/spcs/maintenance/' + jobId + '?oid=' + oid + jobText,
 				type: action,
 				data: {
 					oid: oid,
@@ -277,7 +315,6 @@
 				}
 			} else {
 				maintenance('get');
-				$('#registerModal').modal('hide');
 			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			alert('처리 중 오류가 발생했습니다.');
@@ -291,33 +328,34 @@
 		let job_info = {};
 		let job_info_Array = ['worker', 'note', 'description', 'alarmDate', 'alarmTime', 'alarmPhone', 'alarmSetup'];
 
-		$('#registerModal input, textarea').each(function () {
+		$('#popoverModal input, textarea').each(function () {
 			if ($.inArray($(this).prop('name'), job_info_Array) > -1) {
 				job_info[$(this).prop('name')] = String($(this).val());
 			} else {
-				if ($(this).hasClass('hasDatepicker')) {
-					let pickedDate = $(this).datepicker('getDate');
-					if (pickedDate != null) {
-						jsonData[$(this).prop('name')] = pickedDate.toISOString();
-					}
+				if ($(this).prop('name') == 'job_date') {
+					let jobDate = $(this).datepicker('getDate');
+					jsonData[$(this).prop('name')] = jobDate.toISOString();
+				} else if ($(this).prop('name').match('alarm')) {
+					jsonData.job_info[$(this).prop('name')] = String($(this).val());
+				} else if ($(this).prop('name') == 'repeat_end') {
+					jsonData[$(this).prop('name')] = new Date($(this).val()).toISOString();
 				} else {
-					jsonData[$(this).prop('name')] = $(this).val();
+					jsonData[$(this).prop('name')] = String($(this).val());
 				}
 			}
 		});
 
-		$('#registerModal button.btn-primary').each(function () {
+		$('#popoverModal button.btn-primary').each(function () {
 			if ($.inArray($(this).parent().prop('id'), job_info_Array) > -1) {
 				job_info[$(this).parent().prop('id')] = String($(this).data('value'));
 			} else {
-				jsonData[$(this).parent().prop('id')] = String($(this).data('value'));
+				if ($(this).prop('id') == 'repeat_interval') {
+					jsonData[$(this).parent().prop('id')] = Number($(this).data('value'));
+				} else {
+					jsonData[$(this).parent().prop('id')] = String($(this).data('value'));
+				}
 			}
 		});
-
-		//일시점검일 경우 종료일은 점검 기준일자와 동일하다.
-		if ($('#repeat_yn button').data('value') == 'N') {
-			jsonData['repeat_end'] = jsonData['job_date'];
-		}
 
 		job_info.siteName = jsonData.siteName;
 		jsonData.job_info = JSON.stringify(job_info);
@@ -331,27 +369,35 @@
 	//달력에 그린다.
 	const checkCalendar = function (data) {
 		let calendar = $('#calendar .date');
+		let modalData = $('#detailInfoModal').find("ul.detail_list");
 		$('#calendar td a').remove();
-
-		const checkType = $.makeArray($(':checkbox[name="type"]:checked').map(
-			function () {
-				return $(this).val();
-			}
-		));
-		const jobName = ['정기점검', '구조물 안전진단', '소방점검', '등기이사 기간만료', '모듈점검', '케이블점검', '구조물점검', '접속함점검', '인버터점검', '수배전반점검', '부자점검', '열화상점검', '소모품점검', '기타점검'];
+		modalData.empty();
 		if (data.length > 0) {
 			data.forEach(function (v, k) {
 				let job_date = new Date(v.job_date).format('dd');
 				let job_type = v.job_type;
 				let sid = v.site_id;
 				let job_info = JSON.parse(v.job_info);
+				let tableStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '"><p class="bu t' + job_type + '">[' + job_info.siteName + ']' + job_Name(job_type) + '</p></a>';
+				let modalStr = '<a href="javascript:maintenance(\'get\', \'' + v.id + '\');"><span class="bu t' + job_type + '">[ ' + job_info.siteName + ' ] ' + job_Name(job_type) + '</span><span class="fr btn_next"></span></a>';
 
-				let visual = 'hidden';
-				if ($.inArray(job_type, checkType) > -1) { visual = ''; }
-				calendar.eq(Number(job_date) - 1).append(
-					'<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '" class="' + visual + '" ><p class="bu t' + job_type + '">[' + job_info.siteName + ']' + jobName[Number(job_type) - 1] + '</p></a>'
-				);
+				calendar.eq(Number(job_date) - 1).append(tableStr);
+				modalData.append(
+					'<li class="single_item" data-id="'+v.id+'">'
+						+ modalStr
+						+ '<br>'
+						+ ''
+					+'</li>'
+				)
 			});
+			// TO DO!!!!!!!!!  show more btn
+			// calendar.find("p.bu").each(function () {
+			// 	$(this).on("mouseover click", function(){
+			// 		$("#popoverModal").addClass("active");
+			// 	}).on("mouseleave", function(){
+			// 		$("#popoverModal").removeClass("active");
+			// 	})
+			// });
 		}
 
 	};
@@ -360,24 +406,23 @@
 		const checkType = $.makeArray($(':checkbox[name="type"]:checked').map(
 			function () {
 				return $(this).val();
-			}
-		));
+			}));
 
 		$('#calendar td a p.bu').each(function () {
 			let clsName = $(this).attr('class').replace('bu t', '').trim();
 			let siteName = $(this).html().match(/\[(.*?)\]/)[1];
 			if ($.inArray(clsName, checkType) > -1) {
 				if ($('#searchName').val() == '') {
-					$(this).parent().removeClass('hidden');
+					$(this).parent().show();
 				} else {
 					if (siteName.match($('#searchName').val())) {
-						$(this).parent().removeClass('hidden');
+						$(this).parent().show();
 					} else {
-						$(this).parent().addClass('hidden');
+						$(this).parent().hide();
 					}
 				}
 			} else {
-				$(this).parent().addClass('hidden');;
+				$(this).parent().hide();
 			}
 		});
 	};
@@ -386,36 +431,36 @@
 		const modal = $('#registerModal');
 		const title = modal.find('h2');
 		const input = modal.find('input');
-		const textarea = modal.find('textarea');
 		const dropDown = modal.find('button.btn-primary');
 		const repeat_wrapper = $('#repeat_yn').parents('.flex_start3');
 		const repeat_cycle = $('#repeat_yn button');
 		const addScheduleBtn = $('#addScheduleBtn');
 		const deleteScheduleBtn = $('#deleteScheduleBtn');
+		let modalData = $("#popoverModal").find("ul.detail_list");
 
 		repeat_cycle.data('value', '');
 		repeat_cycle.parents('div.dropdown').siblings().addClass('hidden');
 		repeat_wrapper.removeClass("short");
-		$('#repeat_end').val('').datepicker('destroy').removeClass('sel');
-		$('#repeat_end').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+
+		$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
 
 		if (data == undefined) {
+			modalData.empty();
 			title.text('점검계획 등록');
 			//팝업 오픈시 value 초기화
 			input.each(function () {
 				$(this).val('');
 			});
 			//팝업 오픈시 value 초기화
-			textarea.val('');
 
 			dropDown.each(function () {
 				$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
 			});
 
-			$('#alarmPhone').val(contact_phone);
 			deleteScheduleBtn.addClass('hidden');
 			addScheduleBtn.attr('onclick', 'maintenance(\'post\');').text('등록');
 		} else {
+			
 			title.text('점검계획 수정');
 			setJsonAutoMapping(data[0], 'registerModal');
 			setJsonAutoMapping(JSON.parse(data[0].job_info), 'registerModal');
@@ -439,13 +484,13 @@
 				$('#repeat_yn').siblings().removeClass('hidden');
 
 				$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
-				$('#repeat_end').removeClass('hasDatepicker').datepicker({
+				$('#repeat_end').datepicker({
 					showOn: 'both',
 					buttonImageOnly: true,
 					dateFormat: 'yy-mm-dd',
 					beforeShow: function () {
 						let fromDate = $(this).closest('.dateField').find('.fromDate').datepicker('getDate');
-						if (fromDate != null) {
+						if (fromDate != '') {
 							$(this).datepicker('option', 'minDate', fromDate.format('yyyy-MM-dd'));
 						}
 					},
@@ -460,113 +505,171 @@
 		}
 
 		modal.modal();
+
 	}
 
+	const job_Name = function (type) {
+		let rtn = '';
+		switch (type) {
+			case '1':
+				rtn = '정기점검'
+				break;
+			case '2':
+				rtn = '구조물 안전진단'
+				break;
+			case '3':
+				rtn = '소방점검'
+				break;
+			default:
+				rtn = '등기이사 기간만료'
+				break;
+		}
+		return rtn;
+	};
+
 	const repeatEnd = function (selectedDate) {
+
 		if (selectedDate == undefined && $('#job_date').datepicker('getDate') != null) {
 			selectedDate = $('#job_date').datepicker('getDate');
+		} else if (selectedDate == undefined && $('#job_date').datepicker('getDate') == null) {
+			return false;
 		}
 
 		if ($('#repeat_yn button').data('value') == '') {
 			return false;
-		} else if ($('#repeat_yn button').data('value') == 'N') {
-			$('#repeat_end').val('').datepicker('destroy').removeClass('sel');
-			$('#repeat_end').parent().removeClass('sel_calendar').addClass('tx_inp_type');
-		} else {
-			$('#repeat_end').removeClass('hasDatepicker').datepicker({
-				showOn: 'both',
-				buttonImageOnly: true,
-				dateFormat: 'yy-mm-dd',
-				beforeShow: function () {
-					let fromDate = $(this).closest('.dateField').find('.fromDate').datepicker('getDate');
-					if (fromDate != null) {
-						$(this).datepicker('option', 'minDate', fromDate.format('yyyy-MM-dd'));
-					}
-				},
-				onClose: function (selected) {
-					$(this).closest('.dateField').find('.fromDate').datepicker('option', 'maxDate', selected);
-				}
-			});
-			$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
 		}
 
-		if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
-			selectedDate.setDate(selectedDate.getDate() - Number($('#alarmSetup button').data('value')));
-			$('#alarmDate').val(selectedDate.format('yyyy-MM-dd'));
-		}
-	}
+		if ($('#repeat_yn button').data('value') == 'N') {
+			$('#repeat_end').val(selectedDate);
 
-	const afterDatePick = function (inputName) {
-		if(inputName == 'job_date') {
-			rtnDropdown('alarmSetup');
-		} else {
-			repeatEnd();
-		}
-	}
-
-	const rtnDropdown = function (buttonId) {
-		var obj = $('#' + buttonId),
-			val = obj.find('button').data('value');
-		if (buttonId == 'repeat_yn') {
-			if (val == 'Y') {
-				obj.parents('.flex_start3').addClass('short');
-				obj.siblings().removeClass('hidden');
-				obj.next('.tx_inp_type').find('input').val('');
-				$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
-			} else {
-				obj.parents('.flex_start3').removeClass('short');
-				obj.siblings().addClass('hidden');
-				obj.next('.tx_inp_type').find('input').val(0);
-				$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+			if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
+				selectedDate.setDate(selectedDate.getDate() - Number($('#alarmSetup button').data('value')));
+				$('#alarmDate').val(selectedDate.format('yyyy-MM-dd'));
 			}
-			dropDownInit($('#repeat_unit'));
-			repeatEnd();
-		} else if (buttonId == 'alarmSetup') {
-			if ($('#alarmDate').hasClass('hasDatepicker')) {
-				$('#alarmDate').datepicker('destroy').removeClass('hasDatepicker').addClass('disabled').removeAttr('placeholder');
-			}
-			if (val != '직접 설정') {
-				let jobDate = $('#job_date').datepicker('getDate');
-				if (jobDate == null) {
-					$('#alarmDate').val('');
+		} else {
+			let repeatVal = $('#repeat_interval').val();
+			let repeatUnit = $('#repeat_unit button').data('value');
+			if (selectedDate != null && selectedDate != '' && repeatVal != '' && repeatUnit != '') {
+				let unit = 1;
+
+				if (repeatUnit == 'year') {
+					unit = '12';
+				} else if (repeatUnit == 'half_year') {
+					unit = '6';
+				} else if (repeatUnit == 'quarter_year') {
+					unit = '3';
 				} else {
-					jobDate.setDate(jobDate.getDate() - val);
-					$('#alarmDate').val(jobDate.format('yyyy-MM-dd'));
+					unit = '1';
 				}
-			} else {
-				$('#alarmDate').datepicker({
-					showOn: "both",
-					buttonImageOnly: true,
-					dateFormat: 'yy-mm-dd',
-					beforeShow: function () {
-						let minDate = $('#job_date').datepicker('getDate');
-						if (minDate != '') {
-							$('#alarmDate').datepicker('option', 'minDate', minDate);
-						}
 
-						let maxDate = $('#repeat_end').datepicker('getDate');
-						if (maxDate != '') {
-							$('#alarmDate').datepicker('option', 'maxDate', maxDate);
-						}
+				let selDate = new Date(selectedDate);
+				if (repeatUnit != 'day_of_week') {
+					let setDay = selDate.getDate()
+					selDate.setMonth(selDate.getMonth() + (unit * repeatVal));
+					if (setDay != selDate.getDate()) {
+						alert('잘못된 날짜를 선택하셨습니다.');
+						$('#job_date').val('');
+						$('#repeat_end').val('');
+						return false;
 					}
-				}).removeClass('disabled').attr('placeholder', '직접선택');
-				$('#alarmDate').val('');
+				} else {
+					selDate.setDate(selDate.getDate() + 7);
+				}
+
+				$('#repeat_end').val(selDate.format('yyyy-MM-dd'));
+
+
+				if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
+					selDate.setDate(selDate.getDate() - Number($('#alarmSetup button').data('value')));
+					$('#alarmDate').val(selDate.format('yyyy-MM-dd'));
+				}
 			}
 		}
+
+	}
+
+	const afterDatePick = function() {
+		repeatEnd();
 	}
 </script>
 
-<div class="modal fade" id="registerModal" tabindex="-1" role="form" aria-labelledby="myModalLabel">
+
+<div id="popoverModal" class="popover modal-content popover_modal">
+	<div class="modal-header">
+		<h2 class="popover_title"></h2>
+	</div>
+	<div class="modal-body">
+		<ul class="detail_list">
+
+		</ul>
+	</div>
+</div>
+
+<div class="row header-wrapper">
+	<div class="col-12">
+		<h1 class="page-header fl">월간 입출금 일정</h1>
+		<div class="time fr">
+			<span>CURRENT TIME</span>
+			<em class="currTime">${nowTime}</em>
+			<span>DATA BASE TIME</span>
+			<em class="dbTime">2018-07-27 17:01:02</em>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-2 col-md-4 clear">
+		<div class="sch_sel_area">
+			<div class="sch_sel_item">
+				<div class="dropdown" id="year">
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a href="#">2020</a></li>
+						<li><a href="#">2019</a></li>
+						<li><a href="#">2018</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="sch_sel_item">
+				<div class="dropdown" id="month">
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li data-value="1"><a href="#">1월</a></li>
+						<li data-value="2"><a href="#">2월</a></li>
+						<li data-value="3"><a href="#">3월</a></li>
+						<li data-value="4"><a href="#">4월</a></li>
+						<li data-value="5"><a href="#">5월</a></li>
+						<li data-value="6"><a href="#">6월</a></li>
+						<li data-value="7"><a href="#">7월</a></li>
+						<li data-value="8"><a href="#">8월</a></li>
+						<li data-value="9"><a href="#">9월</a></li>
+						<li data-value="10"><a href="#">10월</a></li>
+						<li data-value="11"><a href="#">11월</a></li>
+						<li data-value="12"><a href="#">12월</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="modal alarm_modal fade" id="spcAlarmModal" tabindex="-1" role="form">
 	<div class="modal-dialog spc_modal_lg" role="modal">
 		<div class="modal-content spc_modal_content">
 			<div class="modal-header">
-				<h2>점검계획 등록</h2>
+				<h2>주요 일정 알림 등록</h2>
 			</div>
 			<div class="modal-body">
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input_label">발전소 선택</span>
+							<span class="input_label">SPC 선택</span>
 						</div>
 						<div class="col-lg-10 col-md-10 col-sm-9 px-0 flex_start">
 							<div class="tx_inp_type mr-12">
@@ -578,7 +681,7 @@
 					</div>
 					<div class="row">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input_label">점검 구분</span>
+							<span class="input_label">알림 항목</span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 							<div class="dropdown placeholder" id="job_type">
@@ -588,21 +691,11 @@
 									<li data-value="2"><a href="javascript:void(0);">구조물 안전진단</a></li>
 									<li data-value="3"><a href="javascript:void(0);">소방점검</a></li>
 									<li data-value="4"><a href="javascript:void(0);">등기이사 기간만료</a></li>
-									<li data-value="5"><a href="javascript:void(0);">모듈점검</a></li>
-									<li data-value="6"><a href="javascript:void(0);">케이블점검</a></li>
-									<li data-value="7"><a href="javascript:void(0);">구조물점검</a></li>
-									<li data-value="8"><a href="javascript:void(0);">접속함점검</a></li>
-									<li data-value="9"><a href="javascript:void(0);">인버터점검</a></li>
-									<li data-value="10"><a href="javascript:void(0);">수배전반점검</a></li>
-									<li data-value="11"><a href="javascript:void(0);">부지점검</a></li>
-									<li data-value="12"><a href="javascript:void(0);">열화상점검</a></li>
-									<li data-value="13"><a href="javascript:void(0);">소모품점검</a></li>
-									<li data-value="14"><a href="javascript:void(0);">기타점검</a></li>
 								</ul>
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input_label">점검 주기</span>
+							<span class="input_label">알림 주기</span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex_start3 px-0">
 							<div class="dropdown" id="repeat_yn">
@@ -633,7 +726,7 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 							<div class="sel_calendar">
-								<input type="text" id="job_date" name="job_date" class="sel fromDate required w-100" placeholder="기준 일자" value="" autocomplete="off" readonly>
+								<input type="text" id="job_date" name="job_date" class="sel fromDate required w-100" value="" autocomplete="off" readonly>
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
@@ -641,7 +734,7 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 							<div class="tx_inp_type">
-								<input type="text" id="repeat_end" name="repeat_end" class="required toDate w-100" placeholder="반복 종료일" value="" readonly>
+								<input type="text" id="repeat_end" name="repeat_end" class="required toDate w-100" placeholder="자동 계산" value="자동 계산" disabled readonly>
 							</div>
 						</div>
 					</div>
@@ -670,7 +763,7 @@
 					</div>
 					<div class="row">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input_label">작업자</span>
+							<span class="input_label">담당자</span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 							<div class="tx_inp_type">
@@ -724,7 +817,6 @@
 					<div class="row">
 						<div class="col-12 end">
 							<div class="btn_wrap_type02">
-								<button type="button" id="deleteScheduleBtn" class="btn_type04 hidden">삭제</button>
 								<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
 								<button type="button" id="addScheduleBtn" class="btn_type">등록</button>
 							</div>
@@ -736,155 +828,104 @@
 	</div>
 </div>
 
-<div class="row header-wrapper">
-	<div class="col-12">
-		<h1 class="page-header">SPC 점검계획</h1>
-	</div>
-</div>
-
 <div class="row">
-	<div class="col-lg-2 clear">
-		<div class="sch_sel_area">
-			<div class="sch_sel_item">
-				<div class="dropdown" id="year">
-					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-						<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu">
-						<li><a href="javascript:void(0);">2020</a></li>
-						<li><a href="javascript:void(0);">2019</a></li>
-						<li><a href="javascript:void(0);">2018</a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="sch_sel_item">
-				<div class="dropdown" id="month">
-					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-						<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu">
-						<li data-value="1"><a href="javascript:void(0);">1월</a></li>
-						<li data-value="2"><a href="javascript:void(0);">2월</a></li>
-						<li data-value="3"><a href="javascript:void(0);">3월</a></li>
-						<li data-value="4"><a href="javascript:void(0);">4월</a></li>
-						<li data-value="5"><a href="javascript:void(0);">5월</a></li>
-						<li data-value="6"><a href="javascript:void(0);">6월</a></li>
-						<li data-value="7"><a href="javascript:void(0);">7월</a></li>
-						<li data-value="8"><a href="javascript:void(0);">8월</a></li>
-						<li data-value="9"><a href="javascript:void(0);">9월</a></li>
-						<li data-value="10"><a href="javascript:void(0);">10월</a></li>
-						<li data-value="11"><a href="javascript:void(0);">11월</a></li>
-						<li data-value="12"><a href="javascript:void(0);">12월</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="row">
-	<div class="col-lg-2 col-md-3 col-sm-4 sch_left">
+	<div class="col-lg-3 col-md-4 col-sm-12 sch_left">
 		<div class="indiv">
-			<h2 class="ntit">점검 구분</h2>
+			<div class="flex_wrapper">
+				<h2 class="ntit">주요 일정</h2>
+				<button type="button" data-toggle="modal" data-target="#spcAlarmModal" id="addAlarmBtn" class="btn btn_type03">알림 등록</button>
+			</div>
 			<div class="sch_inp_area">
 				<div class="chk_type c1">
 					<input type="checkbox" id="chk_op01" name="type" value="1" checked>
-					<label for="chk_op01">정기점검</label>
+					<label for="chk_op01"><span></span>출금 - 승인 완료</label>
 				</div>
 				<div class="chk_type c2">
 					<input type="checkbox" id="chk_op02" name="type" value="2" checked>
-					<label for="chk_op02">구조물 안전진단</label>
+					<label for="chk_op02"><span></span>출금 - 승인 대기</label>
 				</div>
 				<div class="chk_type c3">
 					<input type="checkbox" id="chk_op03" name="type" value="3" checked>
-					<label for="chk_op03">소방점검</label>
+					<label for="chk_op03"><span></span>입금</label>
 				</div>
 				<div class="chk_type c4">
 					<input type="checkbox" id="chk_op04" name="type" value="4" checked>
-					<label for="chk_op04">등기이사 기간만료</label>
+					<label for="chk_op04"><span></span>이자 지급일</label>
 				</div>
 				<div class="chk_type c5">
 					<input type="checkbox" id="chk_op05" name="type" value="5" checked>
-					<label for="chk_op05">모듈점검</label>
+					<label for="chk_op05"><span></span>보장발전시간 정산일</label>
 				</div>
 				<div class="chk_type c6">
 					<input type="checkbox" id="chk_op06" name="type" value="6" checked>
-					<label for="chk_op06">케이블점검</label>
+					<label for="chk_op06"><span></span>보험 갱신일</label>
 				</div>
 				<div class="chk_type c7">
 					<input type="checkbox" id="chk_op07" name="type" value="7" checked>
-					<label for="chk_op07">구조물점검</label>
+					<label for="chk_op07"><span></span>보험 납부일</label>
 				</div>
 				<div class="chk_type c8">
 					<input type="checkbox" id="chk_op08" name="type" value="8" checked>
-					<label for="chk_op08">접속함점검</label>
+					<label for="chk_op08"><span></span>임대료 지급일</label>
 				</div>
 				<div class="chk_type c9">
 					<input type="checkbox" id="chk_op09" name="type" value="9" checked>
-					<label for="chk_op09">인버터점검</label>
+					<label for="chk_op09"><span></span>대리기관수수료 지급일</label>
 				</div>
 				<div class="chk_type c10">
 					<input type="checkbox" id="chk_op10" name="type" value="10" checked>
-					<label for="chk_op10">수배전반점검</label>
-				</div>
-				<div class="chk_type c11">
-					<input type="checkbox" id="chk_op11" name="type" value="11" checked>
-					<label for="chk_op11">부자점검</label>
-				</div>
-				<div class="chk_type c12">
-					<input type="checkbox" id="chk_op12" name="type" value="12" checked>
-					<label for="chk_op12">열화상점검</label>
-				</div>
-				<div class="chk_type c13">
-					<input type="checkbox" id="chk_op13" name="type" value="13" checked>
-					<label for="chk_op13">소모품점검</label>
-				</div>
-				<div class="chk_type c14">
-					<input type="checkbox" id="chk_op14" name="type" value="14" checked>
-					<label for="chk_op14">기타점검</label>
+					<label for="chk_op10"><span></span>대출상환 만기일</label>
 				</div>
 			</div>
-
-			<h2 class="ntit">발전소</h2>
-			<div class="tx_inp_type">
-				<input type="text" id="searchName" name="searchName" placeholder="입력">
+			<div class="sch_inp_area">
+				<h2 class="ntit">SPC</h2>
+				<div class="tx_inp_type">
+					<input type="text" id="searchName" name="searchName" placeholder="입력">
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="col-lg-10 col-md-9 col-sm-8">
+	<div class="col-lg-9 col-md-8 col-sm-12">
 		<div class="indiv pd_type">
 			<div class="schedule_area">
 				<div class="sch_top_info clear">
-					<div class="sch_btn fl">
-						<button class="btn_type03 active">오늘</button>
-						<button class="btn_prev_mon">prev</button>
-						<button class="btn_next_mon">next</button>
-						<strong></strong>
+					<div class="fl sch_btn">
+						<button type="button" class="btn_type03 active">오늘</button>
+						<button type="button" class="btn_prev_mon">prev</button>
+						<button type="button" class="btn_next_mon">next</button>
+						<button type="button" id="detailModalTrigger" class="btn_type03"></button>
 					</div>
-					<a href="javascript:void(0);" class="btn_type fr" id="register">등록</a>
-					<!--<a href="/spc/maintenanceSchedulePost.do" class="btn_type fr">등록</a>-->
+					<div class="dropdown_modal modal-dialog active" id="detailInfoModal">
+						<div class="modal-content spc_detail_content">
+							<div class="modal-header">
+								<h2 id="modalTitle" class="fl"></h2>
+								<a href="#" class="btn_type02 fr">상세보기</a>
+							</div>
+							<div class="modal-body">
+								<ul class="detail_list"></ul>
+							</div>
+							<div class="btn_wrap_type05">
+								<button type="button" id="confirmBtn" class="btn_type">확인</button>
+							</div>
+						</div>
+					</div>
+					<div class="btn_wrap_type02 btn_wrap_fixed">
+						<a href="/spc/transactionHistory.do" class="btn btn_type03 mr-12" id="writeBtn">입출금 관리 내역</a><a
+							href="/spc/withdrawReqWrite.do" class="btn btn_type" id="requestBtn">출금 요청서 신청</a>
+					</div>
 				</div>
 				<div class="sch_btm_area">
 					<table id="calendar">
-						<colgroup>
-							<col style="width:14.28%">
-							<col style="width:14.28%">
-							<col style="width:14.28%">
-							<col style="width:14.28%">
-							<col style="width:14.28%">
-							<col style="width:14.28%">
-							<col>
-						</colgroup>
 						<thead>
-						<tr>
-							<th>일</th>
-							<th>월</th>
-							<th>화</th>
-							<th>수</th>
-							<th>목</th>
-							<th>금</th>
-							<th>토</th>
-						</tr>
+							<tr>
+								<th>일</th>
+								<th>월</th>
+								<th>화</th>
+								<th>수</th>
+								<th>목</th>
+								<th>금</th>
+								<th>토</th>
+							</tr>
 						</thead>
 						<tbody>
 						</tbody>

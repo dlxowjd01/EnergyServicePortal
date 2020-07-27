@@ -363,8 +363,6 @@
 	const pollingTerm = 1000 * 60 * 15;
 	const siteId = '${sid}';
 	const siteList = JSON.parse('${siteList}');
-	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
-	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 
 	const apiEnergySite = '/energy/sites';
 	const apiEnergyNowSite = '/energy/now/sites';

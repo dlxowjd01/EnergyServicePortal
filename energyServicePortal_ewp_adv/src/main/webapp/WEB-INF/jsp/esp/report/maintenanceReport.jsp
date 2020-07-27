@@ -1,8 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <script>
-	const oid = "${sessionScope.userInfo.oid}";
-	const loginId = "${sessionScope.userInfo.login_id}";
-
 	$(function () {
 		setInitList("listData"); //리스트초기화
 		getDataList(page);

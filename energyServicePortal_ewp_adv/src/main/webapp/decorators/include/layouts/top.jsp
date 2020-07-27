@@ -58,7 +58,7 @@
 	<script src="/js/printThis.js"></script>
 	
 	<!-- 다크 모드 지원 -->
-	<script src="/js/custom/theme.js"></script>
+	<!-- <script src="/js/custom/theme.js"></script> -->
 	
 	<!-- 화면 엑셀 다운로드용 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
@@ -68,11 +68,22 @@
 	<!-- timepicker -->
 	<script type="text/javascript" src="/js/wickedpicker.js"></script>
 	<script>
+		// role: 1: 시스템관리자, 2: 일반
+		// task : 0: 일반, 1:사무수탁, 2:자산운용, 3: 사업주
+		const role = '${userInfo.role}';
+		const task = '${userInfo.task}';
+		const oid = '${userInfo.oid}';
+		const loginId = '${userInfo.login_id}';
+		const loginName = '${sessionScope.userInfo.name}';
+		const loginMail = '${sessionScope.userInfo.contact_email}';
+		const contact_phone = '${sessionScope.userInfo.contact_phone}';
+
+
 		const pagePerData = 15; //페이지당 게시글 갯수
 		const navCount = 10; //한 화면당 네비게이션 갯수
 		let page = 1; //현재 페이지
 
-		const apiHost = '<c:out value="${sessionScope.apiHost}" escapeXml="false" />';
+		const apiHost = '${sessionScope.apiHost}';
 
 		//API 토큰 세팅
 		$.ajaxSetup({

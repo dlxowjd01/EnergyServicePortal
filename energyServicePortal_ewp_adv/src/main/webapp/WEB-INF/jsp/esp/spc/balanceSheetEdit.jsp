@@ -3,10 +3,6 @@
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	let today = new Date();
-	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
-	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
-	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
-	const loginMail = '<c:out value="${sessionScope.userInfo.contact_email}" escapeXml="false" />';
 	const siteList = JSON.parse('${siteList}');
 	const site_id = '<c:out value="${param.site_id}" escapeXml="false" />';
 	const spc_id = '<c:out value="${param.spc_id}" escapeXml="false" />';

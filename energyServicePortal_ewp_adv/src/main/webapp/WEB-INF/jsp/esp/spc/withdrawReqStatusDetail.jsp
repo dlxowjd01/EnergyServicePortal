@@ -2,11 +2,6 @@
 <%@ include file="/decorators/include/taglibs.jsp"%>
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
-	const oid = '${sessionScope.userInfo.oid}';
-	const loginId = '${sessionScope.userInfo.login_id}';
-	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
-	const userTask = '<c:out value="${sessionScope.userInfo.task}" escapeXml="false" />';
-
 	// param: withdrawReqStatus.do
 	const spcId = '${param.req_detail_spc_id}';
 	const spcName = '${param.req_detail_spc_name}';
@@ -89,7 +84,7 @@
 
 						if(typeof item.memo == "string"){
 							let showMemo = "";
-							if (userTask == 1) {
+							if (task == 1) {
 								showMemo = item.memo_common;
 							} else {
 								showMemo = item.memo;
@@ -370,12 +365,16 @@
 	function previewPdf(self){
 		let token = '${sessionScope.userInfo.token}'
 		let url = '';
+		let account = $("#tableBody").find("tr:first-child td:nth-child(2)").text().replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+		let d = new Date().toLocaleDateString("en-CA")  ;
+		let name = d + '_' + spcName + '_' + account + '.pdf';
+
 		if($(self).data("name") == "previewMergeDocs") {
-			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&evidence=true';
+			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&evidence=true' + '&output_file_name=' + name;
 		} else if($(self).data("name") == "previewReqDoc"){
-			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId;
+			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&output_file_name=' + name;;
 		} else if($(self).data("name") == "previewProof"){
-			url = apiHost + '/spcs/transactions/download/evidence?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId;
+			url = apiHost + '/spcs/transactions/download/evidence?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&output_file_name=' + name;;
 		};
 
 		$.ajax({
@@ -392,11 +391,6 @@
 			},
 			// dataType: 'binary',
 			success: function(data) {
-				let account = $("#tableBody").find("tr:first-child td:nth-child(2)").text().replace(/^\s+|\s+$|\s+(?=\s)/g, "");
-				let d = new Date().toLocaleDateString("en-CA")  ;
-				let name = d + '_' + spcName + '_' + account + '.pdf';
-				data.name = name;
-
 				let src = window.URL.createObjectURL(data);
 				let wrapper = document.createElement('div');
 				let preview = document.createElement('iframe');
