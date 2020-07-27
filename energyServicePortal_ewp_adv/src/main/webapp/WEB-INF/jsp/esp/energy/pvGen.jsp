@@ -310,8 +310,8 @@
 
 	function fetchGenData() {
 		//기간 설정 확인
-		const startTime = $('#datepicker1').val().replace(/-/g, '') + "000000";
-		const endTime = $('#datepicker2').val().replace(/-/g, '') + "235959";
+		let startTime = $('#datepicker1').val().replace(/-/g, '') + "000000";
+		let endTime = $('#datepicker2').val().replace(/-/g, '') + "235959";
 		//주기 확인
 		const interval = $('#interval button').data('value');
 
@@ -344,6 +344,8 @@
 		if (isEmpty(interval)) {
 			alert('단위를 선택해 주세요.');
 			return false;
+		} else if (interval == 'month') {
+			startTime = startTime.substr(0, 6) + '01000000';
 		}
 
 		responseCnt = 0;
