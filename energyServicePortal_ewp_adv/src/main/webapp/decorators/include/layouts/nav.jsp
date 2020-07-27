@@ -130,110 +130,123 @@
 
 <div id="sidebar">
 	<c:if test="${not empty userInfo}">
-		<ul>
-			<li class="smn1 menu-item">
-				<a href="javascript:void(0);">대시보드</a>
-				<div class="sub_layer">
-					<ul>
-						<li><a href="/dashboard/gmain.do">통합관리 대시보드</a></li>
-						<c:if test="${oid ne 'trust' and oid ne 'sundream'}">
-							<li><a href="/dashboard/jmain.do">중개거래 대시보드</a></li>
-						</c:if>
-					</ul>
-				</div>
-			</li>
-			<li class="smn2 menu-item">
-				<a href="javascript:void(0);">설비 현황</a>
-				<div class="sub_layer">
-					<ul>
-						<li><a href="/device/deviceState.do">설비구성</a></li>
-						<li><a href="/device/collectionState.do">수집현황</a></li>
-					</ul>
-				</div>
-			</li>
-			<li class="smn3 menu-item">
-				<a href="javascript:void(0);">설비 이력</a>
-				<div class="sub_layer">
-					<ul>
-						<li><a href="/history/operationHistory.do">상태이력</a></li>
-						<li><a href="/history/alarmHistory.do">알람이력</a></li>
-					</ul>
-				</div>
-			</li>
-			<li class="smn4 menu-item">
-				<a href="javascript:void(0);">자원 분석</a>
-				<div class="sub_layer">
-					<ul>
-						<li><a href="/energy/pvGen.do">발전이력</a></li>
-					</ul>
-				</div>
-			</li>
-			<li class="smn5 menu-item">
-				<a href="javascript:void(0);">예측/진단</a>
-				<div class="sub_layer">
-					<ul>
-						<li><a href="/diagnosis/generation.do">발전예측</a></li>
-						<li><a href="/diagnosis/abnormallyAnalysis.do">이상분석</a></li>
-					</ul>
-				</div>
-			</li>
-			</c:if>
+	<ul>
+		<li class="smn1 menu-item">
+			<a href="javascript:void(0);">대시보드</a>
+			<div class="sub_layer">
+				<ul>
+					<li><a href="/dashboard/gmain.do">통합관리 대시보드</a></li>
+					<c:if test="${oid ne 'trust' and oid ne 'sundream'}">
+						<li><a href="/dashboard/jmain.do">중개거래 대시보드</a></li>
+					</c:if>
+				</ul>
+			</div>
+		</li>
+		<li class="smn2 menu-item">
+			<a href="javascript:void(0);">설비 현황</a>
+			<div class="sub_layer">
+				<ul>
+					<li><a href="/device/deviceState.do">설비구성</a></li>
+					<li><a href="/device/collectionState.do">수집현황</a></li>
+				</ul>
+			</div>
+		</li>
+		<li class="smn3 menu-item">
+			<a href="javascript:void(0);">설비 이력</a>
+			<div class="sub_layer">
+				<ul>
+					<li><a href="/history/operationHistory.do">상태이력</a></li>
+					<li><a href="/history/alarmHistory.do">알람이력</a></li>
+				</ul>
+			</div>
+		</li>
+		<li class="smn4 menu-item">
+			<a href="javascript:void(0);">자원 분석</a>
+			<div class="sub_layer">
+				<ul>
+					<li><a href="/energy/pvGen.do">발전이력</a></li>
+				</ul>
+			</div>
+		</li>
+		<c:if test="${oid ne 'trust' and oid ne 'sundream'}">
+		<li class="smn5 menu-item">
+			<a href="javascript:void(0);">예측/진단</a>
+			<div class="sub_layer">
+				<ul>
+					<li><a href="/diagnosis/generation.do">발전예측</a></li>
+					<li><a href="/diagnosis/abnormallyAnalysis.do">이상분석</a></li>
+				</ul>
+			</div>
+		</li>
+		</c:if>
 
-			<c:if test="${oid ne 'trust' and oid ne 'sundream'}">
-			<li class="smn7 menu-item">
-				<a href="javascript:void(0);">보고서</a>
-				<div class="sub_layer">
-					<ul>
-						<li><a href="/report/yieldReport.do">수익보고서</a></li>
-						<li><a href="/report/maintenanceReport.do">작업보고서</a></li>
-					</ul>
-				</div>
-			</li>
-			</c:if>
+		<c:if test="${oid ne 'trust' and oid ne 'sundream'}">
+		<li class="smn7 menu-item">
+			<a href="javascript:void(0);">보고서</a>
+			<div class="sub_layer">
+				<ul>
+					<li><a href="/report/yieldReport.do">수익보고서</a></li>
+					<li><a href="/report/maintenanceReport.do">작업보고서</a></li>
+				</ul>
+			</div>
+		</li>
+		</c:if>
 
-			<c:if test="${(oid ne 'trust' and oid ne 'sundream') or (oid eq 'trust' and task ne 3) or (oid eq 'sundream' and task ne 3)}">
-			<li class="smn9 menu-item">
-				<a href="javascript:void(0);">SPC관리</a>
-				<div class="sub_layer">
-					<ul>
-						<li><a href="/spc/entityInformation.do">기본정보</a></li>
-						<li><a href="/spc/balanceSheet.do">금융관리</a></li>
-						<li><a href="/spc/transactionSheet.do">입출금 관리 (사무수탁사)</a></li>
-						<li><a href="/spc/transactionSheet2.do">입출금 관리 (자산운용사)</a></li>
-						<li><a href="/spc/maintenanceSchedule.do">점검계획</a></li>
-						<li><a href="/spc/supplementaryDocuments.do">이관자료</a></li>
+		<c:if test="${(oid ne 'trust' and oid ne 'sundream') or (oid eq 'trust' and task ne 3) or (oid eq 'sundream' and task ne 3)}">
+		<li class="smn9 menu-item">
+			<a href="javascript:void(0);">SPC관리</a>
+			<div class="sub_layer">
+				<ul>
+					<li><a href="/spc/entityInformation.do">기본정보</a></li>
+					<li><a href="/spc/balanceSheet.do">금융관리</a></li>
+					<li><a href="/spc/transactionCalendar.do">입출금 관리</a></li>
+					<li><a href="/spc/maintenanceSchedule.do">점검계획</a></li>
+					<li><a href="/spc/supplementaryDocuments.do">이관자료</a></li>
 
-					</ul>
-				</div>
-			</li>
-			<li class="smn6 menu-item">
-				<a href="javascript:void(0);">설정</a>
-				<div class="sub_layer">
-					<ul>
-						<li><a href="/system/basicInformation.do">기본정보</a></li>
-						<li><a href="/system/userMng.do">사용자관리</a></li>
-						<li><a href="/system/cmpyGrpSiteMng.do">사이트/그룹관리</a></li>
-						<li><a href="/system/alarmManagement.do">알람관리</a></li>
-						<li><a href="/system/systemCode.do">공통코드</a></li>
-						<li><a href="/system/systemSetting.do">시스템설정</a></li>
-					</ul>
-				</div>
-			</li>
-		</ul>
-		<ol>
-			<li class="smn10"><a href="/spc/notice.do">공지사항</a></li>
-			<li class="smn8"><a href="/logout.do">로그아웃</a></li>
-		</ol>
+				</ul>
+			</div>
+		</li>
+		</c:if>
+
+		<c:if test="${oid eq 'encored'}">
+		<li class="smn6 menu-item">
+			<a href="javascript:void(0);">설정</a>
+			<div class="sub_layer">
+				<ul>
+					<li><a href="/system/siteSetting.do">사업소 관리</a></li>
+					<!-- <li><a href="/system/basicInformation.do">기본정보</a></li>
+					<li><a href="/system/userMng.do">사용자관리</a></li>
+					<li><a href="/system/alarmManagement.do">알람관리</a></li>
+					<li><a href="/system/systemCode.do">공통코드</a></li>
+					<li><a href="/system/systemSetting.do">시스템설정</a></li> -->
+				</ul>
+			</div>
+		</li>
+		</c:if>
+	</ul>
+	<ol>
+		<li class="smn10"><a href="/spc/notice.do">공지사항</a></li>
+		<li class="smn8"><a href="/logout.do">로그아웃</a></li>
+	</ol>
 	</c:if>
 </div>
-<!-- 모바일용 카테고리 { -->
-<div id="gnb">
-	<div class="g_top">
-		<div class="w100">
-			<h1 class="g_logo"><a href="javascript:void(0);"><img src="/img/s-power_logo_dark.png" class="로고"></a></h1>
-			<a href="javascript:void(0);" class="category_close"><img src="/img/gnb_close.png" width="17" alt="닫기"></a>
-		</div>
+
+<!-- 모바일용 카테고리 -->
+<div id="gnb" class="mobile-nav">
+	<div class="logo-wrapper">
+		<h1 class="mobile-logo">
+			<c:choose>
+				<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
+					<span class="spower mobile"></span>
+				</c:when>
+				<c:otherwise>
+					<span class="mobile"></span>
+				</c:otherwise>
+			</c:choose>
+		</h1>
+		<a href="javascript:void(0);" class="category_close"><img src="/img/gnb_close.png" width="17" alt="닫기"></a>
 	</div>
+	
 	<div class="g_menu w100">
 		<ul>
 			<li class="gmn1">
@@ -248,7 +261,9 @@
 					<%--    <p><a href="/dashboard/dmain.do">신재생발전+신재생 연계 ESS</a></p>--%>
 					<%--  </div>--%>
 					<%--</li>--%>
+					<c:if test="${oid ne 'trust' and oid ne 'sundream'}">
 					<li><a href="/dashboard/jmain.do">중개거래 대시보드</a></li>
+					</c:if>
 					<!-- <li><a href="">수요자원 대시보드</a></li> -->
 				</ul>
 			</li>
@@ -275,6 +290,7 @@
 					<%--<li><a href="/energy/drResult.do">수요자원<!-- DR --></a></li>--%>
 				</ul>
 			</li>
+			<c:if test="${oid ne 'trust' and oid ne 'sundream'}">
 			<li class="gmn5">
 				<a href="javascript:void(0);">예측/진단</a>
 				<ul>
@@ -282,6 +298,7 @@
 					<li><a href="/diagnosis/abnormallyAnalysis.do">이상분석</a></li>
 				</ul>
 			</li>
+			</c:if>
 			<!--<li class="gmn8">
         <a href="javascript:void(0);">BOM관리</a>
         <ul>
@@ -290,6 +307,7 @@
             <li><a href="/bom/partManagement.do">부품관리</a></li>
         </ul>
       </li>-->
+			<c:if test="${oid ne 'trust' and oid ne 'sundream'}">
 			<li class="gmn7">
 				<a href="javascript:void(0);">보고서</a>
 				<ul>
@@ -297,28 +315,33 @@
 					<li><a href="/report/maintenanceReport.do">작업보고서</a></li>
 				</ul>
 			</li>
+			</c:if>
+
+			<c:if test="${(oid ne 'trust' and oid ne 'sundream') or (oid eq 'trust' and task ne 3) or (oid eq 'sundream' and task ne 3)}">
 			<li class="gmn9">
 				<a href="javascript:void(0);">SPC관리</a>
 				<ul>
 					<li><a href="/spc/entityInformation.do">기본정보</a></li>
 					<li><a href="/spc/balanceSheet.do">원가관리</a></li>
-					<li><a href="/spc/transactionSheet.do">입출금 관리 (사무수탁사)</a></li>
-					<li><a href="/spc/transactionSheet2.do">입출금 관리 (자산운용사)</a></li>
+					<li><a href="/spc/transactionCalendar.do">입출금 관리</a></li>
 					<li><a href="/spc/maintenanceSchedule.do">점검계획</a></li>
 					<li><a href="/spc/supplementaryDocuments.do">이관자료</a></li>
 				</ul>
 			</li>
-			<li class="gmn6">
+			</c:if>
+			<c:if test="${oid eq 'encored'}">
+			<li class="gmn6 hidden">
 				<a href="javascript:void(0);">설정</a>
 				<ul>
-					<li><a href="/system/basicInformation.do">기본정보</a></li>
+					<!-- <li><a href="/system/siteSetting.do">사이트 관리</a></li> -->
+					<!-- <li><a href="/system/basicInformation.do">기본정보</a></li>
 					<li><a href="/system/userMng.do">사용자관리</a></li>
-					<li><a href="/system/cmpyGrpSiteMng.do">사이트/그룹관리</a></li>
 					<li><a href="/system/alarmManagement.do">알람관리</a></li>
 					<li><a href="/system/systemCode.do">공통코드</a></li>
-					<li><a href="/system/systemSetting.do">시스템설정</a></li>
+					<li><a href="/system/systemSetting.do">시스템설정</a></li> -->
 				</ul>
 			</li>
+			</c:if>
 		</ul>
 		<ol>
 			<li class="gmn10"><a href="/spc/notice.do">공지사항</a></li>

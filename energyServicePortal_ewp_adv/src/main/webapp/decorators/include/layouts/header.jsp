@@ -5,16 +5,14 @@
 
 <script type="text/javascript">
 	$(function () {
-		// role: 1: 시스템관리자, 2: 일반
-		// task : 0: 일반, 1:사무수탁, 2:자산운용, 3: 사업주
 		let fullName = '${userInfo.name}';
 		let loginMail = '${userInfo.contact_email}';
 		let mobileNum = '${userInfo.contact_phone}';
-
 		let accLevel = "";
 		let taskCategory = "";
+		// role: 1: 시스템관리자, 2: 일반
 		role == 1 ? accLevel = "시스템관리자" : accLevel = "일반";
-
+		// task : 0: 일반, 1:사무수탁, 2:자산운용, 3: 사업주
 		if(task == 0){
 			taskCategory = "일반"
 		} else if(task == 1){
@@ -41,13 +39,13 @@
 			$("#fullName").val(fullName);
 		}
 		if(!isEmpty(loginMail)) {
-			$("#taskCategory").val(loginMail);
+			$("#emailAddr").val(loginMail);
 		}
 		if(!isEmpty(mobileNum) && mobileNum != "string") {
 			$("#mobileNum").val(mobileNum);
 		}
 
-		$("#newPwd").on('keyup', ValidatePassword);
+		$("#newPwd").on('keyup', validatePassword);
 
 
 		// $("#fullName").on('keyup', function(evt, limit) {
@@ -108,7 +106,9 @@
 				$("#updateProfileBtn").removeClass("disabled");
 			}
 		});
-
+		$("#closeBtn").on("click", function(){
+			$("#closeModal").modal("show");
+		});
 
 		$("#confirmNewPwd").keyup(function() {
 			let password = $("#newPwd").val();
@@ -126,17 +126,16 @@
 			let uid = '${sessionScope.userInfo.uid}';
 			let token = '${sessionScope.userInfo.token}';
 			let value = {
-				// oldPassword : $("#oldPwd").val(),
-				// newPassword : $("#newPwd").val(),
-				password : $("#newPwd").val()
+				old_password : $("#oldPwd").val(),
+				new_password : $("#newPwd").val(),
 			}
-
 			let option = {
 				url: 'https://iderms-api.iderms.ai/config/users/' + uid + '/password',
 				dataType: 'json',
 				type: 'patch',
 				beforeSend: function (jqXHR, settings) {
 					jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+					$('.loading').show();
 				},
 				async: false,
 				contentType: "application/json",
@@ -146,13 +145,18 @@
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				// console.log("success===", json);
 				$("#successMsg1").removeClass("hidden");
+				$('.loading').hide();
 				setTimeout(function(){
 					$("#successMsg1").addClass("hidden");
-				}, 2000);
+				}, 2500);
 
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				alert('처리 중 오류가 발생했습니다.');
-				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
+				if(textStatus == "error"){
+					if(jqXHR.statusText == "Unauthorized" || jqXHR.status == 401){
+						$("#oldPwdErr").removeClass("hidden");
+					}
+					console.log("jqXHR==", jqXHR )
+				}
 				return false;
 			});
 		});
@@ -163,28 +167,39 @@
 
 			if(!isEmpty($("#fullName").val())) {
 				value.name = $("#fullName").val();
+				$("#fullName").val(value.name);
+				$("#userInfoBtn").contents().filter(function(){ return this.nodeType == 3; }).first().replaceWith(value.name);
+			} else {
+					return false;
 			}
-			if(!isEmpty($("#taskCategory").val())) {
+			if(!isEmpty($("#emailAddr").val())) {
 				value.contact_email = $("#emailAddr").val();
+				$("#emailAddr").val(value.contact_email);
+			} else {
+					return false;
 			}
 			if(!isEmpty($("#mobileNum").val())) {
 				if($("#mobileNum").val().length >= 10){
 					$("#isValidMobileNum").addClass("hidden");
 					value.contact_phone = $("#mobileNum").val();
+					$("#mobileNum").val(value.contact_phone);
 				} else {
 					$("#isValidMobileNum").removeClass("hidden");
+					return false;
 				}
+			} else {
+					return false;
 			}
 
 			let uid = '${sessionScope.userInfo.uid}';
 			let token = '${sessionScope.userInfo.token}';
-		
 			let option = {
 				url: 'https://iderms-api.iderms.ai/config/users/' + uid,
 				dataType: 'json',
 				type: 'patch',
 				beforeSend: function (jqXHR, settings) {
 					jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+					$('.loading').show();
 				},
 				async: false,
 				contentType: "application/json",
@@ -193,9 +208,10 @@
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				// console.log("success===", json);
 				$("#successMsg2").removeClass("hidden");
+				$('.loading').hide();
 				setTimeout(function(){
 					$("#successMsg2").addClass("hidden");
-				}, 2000);
+				}, 2500);
 
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				alert('처리 중 오류가 발생했습니다.');
@@ -219,7 +235,7 @@
 			return re.test(email);
 		}
 
-		function ValidatePassword() {
+		function validatePassword() {
 			const rules = [
 				{
 					Pattern: "[a-zA-Z]",
@@ -252,18 +268,20 @@
 	});
 
 
-	function dashboardMove(type, key, value) {
-		let inp = $('input').attr('type', 'hidden').attr('name', key).attr('value', value);
-		if(type == 'group') {
-			$('#dashboardForm').append(inp).attr('action', '/dashboard/gmain.do').submit();
-		} else if(type == 'site') {
-			$('#dashboardForm').append(inp).attr('action', '/dashboard/smain.do').submit();
-		} else if(type == 'vpp') {
-			$('#dashboardForm').append(inp).attr('action', '/dashboard/jmain.do').submit();
-		} else {
-			alert('아직 정의 되지않은 타입입니다.');
-			return;
-		}
+	function resetModal() {
+		console.log("close-===")
+		let pwdInput = $("#pwdForm").find("input");
+		let profileInput = $("#profileForm").find("input");
+		pwdInput.each(function(){
+			$(this).val("");
+			console.log("this---", $(this))
+		});
+		profileInput.each(function(){
+			// $(this).val("");
+		});
+
+		$("#closeModal").modal("hide");
+		$("#updateUserInfoModal").modal("hide");
 	}
 
 </script>
@@ -287,7 +305,7 @@
 	<c:set var="drList" value="${dr_group}"/> <!-- DR거래 별 -->
 
 	<div class="all-menu">
-		<a href="javascript:void(0);">구분</a>
+		<a href="#">구분</a>
 		<form name="menuform" method="post">
 			<div class="menu-group">
 				<ul>
@@ -295,13 +313,13 @@
 						<dl>
 							<dt>사업소 분석</dt>
 							<dd>
-								<a href="javascript:void(0);">사업소별</a>
+								<a href="#">사업소별</a>
 								<ul>
-									<li><a href="javascript:void(0);"  onclick="dashboardMove('group', '', '');">전체</a></li>
+									<li><a href="#"  onclick="dashboardMove('group', '', '');">전체</a></li>
 									<c:if test="${fn:length(siteList) > 0}">
 										<c:forEach var="site" items="${siteList}">
 											<li>
-												<a href="javascript:void(0);" onclick="dashboardMove('site', 'sid', '${site.sid}');">${site.name}</a>
+												<a href="#" onclick="dashboardMove('site', 'sid', '${site.sid}');">${site.name}</a>
 											</li>
 										</c:forEach>
 									</c:if>
@@ -314,20 +332,16 @@
 							<dl>
 								<dt></dt>
 								<dd>
-									<a href="javascript:void(0);">그룹별</a>
+									<a href="#">그룹별</a>
 									<ul>
 										<c:forEach var="group" items="${tagList}">
 											<li>
-												<a href="javascript:void(0);" onclick="dashboardMove('group', 'sgid', '${group.sgid}');">${group.name}</a>
+												<a href="#" onclick="dashboardMove('group', 'sgid', '${group.sgid}');">${group.name}</a>
 												<ul>
 													<c:set var="groupSites" value="${group.sites}"/>
 													<c:forEach var="groupSiteList" items="${groupSites}">
 														<li>
-															<c:forEach var="site" items="${siteList}">
-																<c:if test="${groupSiteList.sid eq site.sid}">
-																	<a href="javascript:void(0);" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}');">${site.name}</a>
-																</c:if>
-															</c:forEach>
+															<a href="#" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}');">${groupSiteList.name}</a>
 														</li>
 													</c:forEach>
 												</ul>
@@ -341,25 +355,21 @@
 				</ul>
 				<c:if test="${fn:length(vppList) > 0 || fn:length(drList) > 0}">
 					<ul>
-						<c:if test="${fn:length(vppList) > 0}">
+						<c:if test="${oid ne 'trust' and fn:length(vppList) > 0}">
 							<li>
 								<dl>
 									<dt>에너지 거래</dt>
 									<dd>
-										<a href="javascript:void(0);">중개거래</a>
+										<a href="#">중개거래</a>
 										<ul>
 											<c:forEach var="vpp" items="${vppList}">
 												<li>
-													<a href="javascript:void(0);" onclick="dashboardMove('vpp', 'vgid', '${vpp.vgid}');">${vpp.name}</a>
+													<a href="#" onclick="dashboardMove('vpp', 'vgid', '${vpp.vgid}');">${vpp.name}</a>
 													<ul>
 														<c:set var="groupSites" value="${vpp.sites}"/>
 														<c:forEach var="groupSiteList" items="${groupSites}">
 															<li>
-																<c:forEach var="site" items="${siteList}">
-																	<c:if test="${groupSiteList.sid eq site.sid}">
-																		<a href="javascript:void(0);" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}');">${site.name}</a>
-																	</c:if>
-																</c:forEach>
+																<a href="#" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}');">${groupSiteList.name}</a>
 															</li>
 														</c:forEach>
 													</ul>
@@ -375,7 +385,7 @@
 								<dl>
 									<dt></dt>
 									<dd>
-										<a href="javascript:void(0);">DR 거래</a>
+										<a href="#">DR 거래</a>
 										<ul>
 											<c:forEach var="dr" items="${drList}">
 												<li><a href="#">${dr.name}</a></li>
@@ -392,12 +402,12 @@
 						<dl>
 							<dt>지역 및 유형 선택</dt>
 							<dd>
-								<a href="javascript:void(0);">지역별</a>
+								<a href="#">지역별</a>
 								<ul>
 									<c:set var="systemLoc" value="${sessionScope.systemLoc}"/>
 									<c:forEach var="loc" items="${location}" varStatus="stat">
 										<li>
-											<a href="javascript:void(0);">${loc.value.name.kr}</a>
+											<a href="#">${loc.value.name.kr}</a>
 											<ul>
 												<c:forEach var="country" items="${loc.value.locations}" varStatus="countryStat">
 													<c:set var="choice" value="false" />
@@ -415,7 +425,6 @@
 												</c:forEach>
 											</ul>
 										</li>
-
 									</c:forEach>
 								</ul>
 							</dd>
@@ -425,7 +434,7 @@
 						<dl>
 							<dt></dt>
 							<dd>
-								<a href="javascript:void(0);">유형별</a>
+								<a href="#">유형별</a>
 								<ul>
 									<c:set var="systemTp" value="${sessionScope.systemTp}"/>
 									<c:forEach var="type" items="${resource}" varStatus="stat">
@@ -468,17 +477,16 @@
 			</div>
 		</form>
 	</div>
-	<!--// input/dropdown -->
+
 	<ul class="nav_right">
 		<li class="member clear">
 			<div class="fl"><img src="../img/m_member_pic.png" alt=""></div>
 			<div class="fr">
-				<button type="button" data-toggle="modal" data-target="#updateUserInfoModal" class="btn_type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button>
+				<button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn_type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button>
 			</div>
 		</li>
 		<%--	
 		<li>
-			<!-- 테마 선택 -->
 			<div class="nav_theme">
 				<div class="switcher">
 					<input type="radio" name="balance" value="light" id="light"
@@ -498,112 +506,130 @@
 	</ul>
 </nav>
 
+
+<div class="modal stack" id="closeModal" tabindex="-1" role="dialog" aria-labelledby="closeModal" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content narrow">
+			<div class="modal-body">
+				<h2>확인을 누르시면, 변경하지 않은 정보는 모두 사라집니다.</h2>
+				<p class="mt8">정말 닫으시겠습니까?</p>
+			</div>
+			<div class="modal-footer">
+				<div class="btn_wrap_type mb-0">
+					<button type="button" class="btn_type03" data-dismiss="modal">취소</button>
+					<button type="button" class="btn_type" onclick="resetModal();">확인</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <div class="modal fade" id="updateUserInfoModal" tabindex="-1" role="dialog" aria-labelledby="updateUserInfoModal" aria-hidden="true">
-	<div class="modal-dialog modal-md">
-		<div class="modal-content">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content settings-content">
 			<div class="modal-header"><h2>개인정보 설정</h2></div>
-				<input type="hidden" id="modUserIdx" name="userIdx"/>
-				<input type="hidden" id="modPsnEmail" name="psnEmail"/>
-				<input type="hidden" id="modPsnMobile" name="psnMobile"/>
-				<div class="modal-body">
-					<div class="row">
-						<div class="col-12">
+			<input type="hidden" id="modUserIdx" name="userIdx"/>
+			<input type="hidden" id="modPsnEmail" name="psnEmail"/>
+			<input type="hidden" id="modPsnMobile" name="psnMobile"/>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-8">
+						<form id="pwdForm" name="pwd_form">
+							<h3 class="sub-title">비밀번호</h3>
 							<div class="input-group inline-flex">
-								<label for="userId" class="input_label">아이디</label>
-								<input type="text" name="user_id" id="userId" class="input tx_inp_type w-100" readonly="" autocomplete="off">
+								<label for="oldPwd" class="input_label bold">기존 비밀번호</label>
+								<input type="password" name="current_pwd" id="oldPwd" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
 							</div>
-							<div class="input-group inline-flex mt-0">
-								<label for="affiliation" class="input_label">회사 이름</label>
-								<input type="text" name="affiliation" id="affiliation" class="input tx_inp_type w-100" readonly="" autocomplete="off">
+								<div class="flex_start warning-wrapper">
+								<small id="oldPwdErr" class="warning-text hidden">기존 비밀번호와 일치 하지 않습니다. 비밀번호 확인 후 재시도 해 주세요.
+									<br><a href="#" class="text-link">비밀번호가 복구 요청</a>
+								</small>
 							</div>
+
 							<div class="input-group inline-flex">
-								<label for="accessLevel" class="input_label">권한 레벨</label>
-								<input type="text" name="access_level" id="accessLevel" class="input tx_inp_type w-100" readonly="" autocomplete="off">
+								<label for="newPwd" class="input_label bold">변경 비밀번호</label>
+								<input type="password" name="new_pwd" id="newPwd" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
 							</div>
+							<div class="flex_start warning-wrapper">
+								<small id="hasLetter" class="tick">영문</small>
+								<small id="hasNumber" class="tick">숫자</small>
+								<small id="isSixCharLong" class="tick">6자리 이상</small>
+							</div>
+
 							<div class="input-group inline-flex">
-								<label for="taskCategory" class="input_label">업무 구분</label>
-								<input type="text" name="task_category" id="taskCategory" class="input tx_inp_type w-100" readonly="" autocomplete="off">
+								<label for="confirmNewPwd" class="input_label bold">변경 비밀번호 확인</label>
+								<input type="password" name="confirm_new_pwd" id="confirmNewPwd" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
 							</div>
+
+							<div class="flex_start warning-wrapper">
+								<small id="pwdMatched" class="warning-text hidden">비밀번호가 일치하지 않습니다.</small>
+							</div>
+
+							<div class="btn_wrap_type">
+								<small id="successMsg1" class="text-blue text-sm left hidden">비밀번호가 성공적으로 변경 되었습니다.<br>수정 내용은 다음 로그인 부터 적용 됩니다.</small>
+								<button type="submit" disabled id="updatePwdBtn" class="btn_type03 disabled">비밀번호 변경</button>
+							</div>
+						</form>
+						<form id="profileForm" name="profile_form">
+							<h3 class="sub-title">개인정보</h3>
+							<div class="input-group inline-flex">
+								<label for="fullName" class="input_label bold">이름</label>
+								<input type="text" name="full_name" id="fullName" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
+							</div>
+
+							<div class="flex_start warning-wrapper">
+								<small id="isValidName" class="warning-text hidden">한글/영문 이름만 가능합니다.</small>
+							</div>
+							
+							<div class="input-group inline-flex">
+								<label for="emailAddr" class="input_label bold">이메일</label>
+								<input type="text" name="email_addr" id="emailAddr" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
+							</div>
+							<div class="flex_start warning-wrapper">
+								<small id="isValidEmail" class="warning-text hidden">유효한 이메일 주소를 입력해 주세요.</small>
+							</div>
+							
+							<div class="input-group inline-flex">
+								<label for="mobileNum" class="input_label bold">휴대폰</label>
+								<input type="text" name="mobile_num" id="mobileNum" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
+							</div>
+							<div class="flex_start warning-wrapper">
+								<small id="isValidMobileNum" class="warning-text hidden">10리 이상의 휴대폰 번호를 입력해 주세요.</small>
+							</div>
+							
+							<div class="btn_wrap_type">
+								<small id="successMsg2" class="text-blue text-sm left hidden">개인정보가 성공적으로 변경 되었습니다.<br>수정 내용은 다음 로그인 부터 적용 됩니다.</small>
+								<button type="submit" id="updateProfileBtn" disabled class="btn_type03 disabled">개인정보 변경</button>
+							</div>
+						</form>
+					</div>
+					<div class="col-1"></div>
+					<div class="col-3">
+						<div class="mb-10">
+							<label for="userId" class="input_label pt-0">아이디</label>
+							<input type="text" name="user_id" id="userId" class="clear-input" readonly="" autocomplete="off">
+						</div>
+						<div class="mb-10">
+							<label for="affiliation" class="input_label bold">회사 이름</label>
+							<input type="text" name="affiliation" id="affiliation" class="clear-input" readonly="" autocomplete="off">
+						</div>
+						<div class="mb-10">
+							<label for="accessLevel" class="input_label bold">권한 레벨</label>
+							<input type="text" name="access_level" id="accessLevel" class="clear-input" readonly="" autocomplete="off">
+						</div>
+						<div class="">
+							<label for="taskCategory" class="input_label bold">업무 구분</label>
+							<input type="text" name="task_category" id="taskCategory" class="clear-input" readonly="" autocomplete="off">
 						</div>
 					</div>
-					<form id="pwdForm" name="pwd_form">
-						<div class="row">
-							<div class="col-12">
-								<h3 class="sub-title mt15">비밀번호</h3>
-								<div class="input-group inline-flex">
-									<label for="oldPwd" class="input_label">기존 비밀번호</label>
-									<input type="password" name="current_pwd" id="oldPwd" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
-
-								</div>
-								<div class="input-group inline-flex">
-									<label for="newPwd" class="input_label">변경 비밀번호</label>
-									<input type="password" name="new_pwd" id="newPwd" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
-								</div>
-								<div class="flex_start warning-wrapper">
-									<small id="hasLetter" class="tick">영문</small>
-									<small id="hasNumber" class="tick">숫자</small>
-									<small id="isSixCharLong" class="tick">6자리 이상</small>
-								</div>
-
-								<div class="input-group inline-flex">
-									<label for="confirmNewPwd" class="input_label">변경 비밀번호 확인</label>
-									<input type="password" name="confirm_new_pwd" id="confirmNewPwd" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
-								</div>
-
-								<div class="flex_start warning-wrapper">
-									<small id="pwdMatched" class="warning-text hidden">비밀번호가 일치하지 않습니다.</small>
-								</div>
-
-								<div class="btn_wrap_type05">
-									<small id="successMsg1" class="text-blue text-sm hidden">비밀번호가 성공적으로 변경 되었습니다.</small>
-									<button type="submit" disabled id="updatePwdBtn" class="btn_type03 disabled">비밀번호 변경</button>
-								</div>
-							</div>
-						</div>
-					</form>
-					<form id="profileForm" name="profile_form">
-						<div class="row">
-							<div class="col-12">
-								<h3 class="sub-title">개인정보</h3>
-								<div class="input-group inline-flex">
-									<label for="fullName" class="input_label">이름</label>
-									<input type="text" name="full_name" id="fullName" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
-								</div>
-
-								<div class="flex_start warning-wrapper">
-									<small id="isValidName" class="warning-text hidden">한글/영문 이름만 가능합니다.</small>
-								</div>
-								
-								<div class="input-group inline-flex">
-									<label for="emailAddr" class="input_label">이메일</label>
-									<input type="text" name="email_addr" id="emailAddr" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
-								</div>
-								<div class="flex_start warning-wrapper">
-									<small id="isValidEmail" class="warning-text hidden">유효한 이메일 주소를 입력해 주세요.</small>
-								</div>
-								
-								<div class="input-group inline-flex">
-									<label for="mobileNum" class="input_label">휴대폰</label>
-									<input type="text" name="mobile_num" id="mobileNum" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
-								</div>
-								<div class="flex_start warning-wrapper">
-									<small id="isValidMobileNum" class="warning-text hidden">휴대폰 번호를 입력해 주세요.</small>
-								</div>
-								
-								<div class="btn_wrap_type">
-									<small id="successMsg2" class="text-blue text-sm hidden">개인정보가 성공적으로 변경 되었습니다.</small>
-									<button type="submit" id="updateProfileBtn" disabled class="btn_type03 disabled">개인정보 변경</button>
-								</div>
-							</div>
-						</div>
-					</form>
 				</div>
-				<div class="modal-footer border">
-					<div class="btn_wrap_type02">
-						<button type="button" class="btn_type" data-dismiss="modal" aria-label="Close">완료</button>
-					</div>
+			</div>
+			<div class="modal-footer border">
+				<div class="btn_wrap_type02">
+					<button type="button" id="closeBtn" class="btn_type" aria-label="Close">완료</button>
 				</div>
-			</form>
+			</div>
 		</div>
 	</div>
 </div>

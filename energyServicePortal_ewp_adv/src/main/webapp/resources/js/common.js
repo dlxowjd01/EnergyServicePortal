@@ -39,24 +39,28 @@ $(function() {
     });
 
     $('.fromDate').datepicker({
-        showOn: "both",
+        showOn: 'both',
         buttonImageOnly: true,
         dateFormat: 'yy-mm-dd',
         onClose: function(selectedDate) {
             $(this).closest('.dateField').find('.toDate').datepicker('option', 'minDate', selectedDate);
 
             if (typeof afterDatePick == 'function') {
-                afterDatePick();
+                afterDatePick($(this).attr('name'));
             }
         }
     });
 
     $('.toDate').datepicker({
-        showOn: "both",
+        showOn: 'both',
         buttonImageOnly: true,
         dateFormat: 'yy-mm-dd',
         onClose: function(selectedDate) {
             $(this).closest('.dateField').find('.fromDate').datepicker('option', 'maxDate', selectedDate);
+
+            if (typeof afterDatePick == 'function') {
+                afterDatePick($(this).attr('name'));
+            }
         }
     });
 });
@@ -120,9 +124,10 @@ $(function() {
     $(document).on('click','.dbclickopen', function () {
 
         if(typeof(smoothZoom) == 'function') {
-            let idx = $('.dbclickopen').index($(this));
-            let marker = makerArray[idx];
-            if(marker != null) {
+            let idx = $('.dbclickopen').index($(this)),
+                sid = $(this).data('sid');
+            let marker = makerObject[sid];
+            if(!isEmpty(marker)) {
                 map = marker.getMap();
 
                 if($(this).next().find('.di_wrap').css('display') == 'block') {
@@ -146,7 +151,7 @@ $(function() {
             if(((new Date().getTime())-touchtime) < 800) {
                 //double click occurred
                 touchtime = 0;
-                if(href != undefined) {
+                if(!isEmpty(href)) {
                     window.location = $(this).find("a").attr(href);
                 }
             } else {
@@ -169,13 +174,6 @@ function list_detail_open(list_number) {
     //alert(list_number);
     $("."+target+"").find(".di_wrap").slideToggle();
 }
-
-
-
-
-
-
-
 
 /* FAQ slideToggle */
 $(function(){
@@ -221,59 +219,95 @@ $(function(){
 });
 
 /* input[file] multi-select || single select label */
-$(function() {
-    $('input[type=file]').change(function(){
-        var t = $(this).val();
+$(function () {
+	var clone = '';
+	$(document).on('change', 'input[type=file]', function () {
+		var t = $(this).val();
 		var labelText = 'File : ' + t.substr(12, t.length);
 
-		if($(this).attr("multiple")){
+		if (isEmpty(t)) {return false;}
+		if ($(this).attr("multiple")) {
 			let list = $(this).parent().find(".file_list ul");
-			let item = list.find("li");
+			let item = $(this).get(0).files;
 			let arr = [];
-			let listItem = ``;
-			if(!item.hasClass("upload_text")){
-				item.text("");
+			if ($(this).parent().find(".no-data")) {
+				$(this).parent().find(".no-data").addClass("hidden");
 			}
-
-			for (var i = 0; i < $(this).get(0).files.length; ++i) {
-				listItem = `<li class="upload_text">${$(this).get(0).files[i].name}<button type='button' class='btn_close icon_btn' onclick='$(this).parent().remove()'></button><li>`
+			list.empty();
+			$.each(item, function (index, element) {
+				let listItem = ``;
+				let dataId = genUuid();
+				listItem = `
+					<li class='upload_text' data-id="${dataId}">
+						${element.name}
+						<button type='button' class='btn_close icon_btn' onclick='deleteFile($(this))'></button>
+					</li>
+				`
 				list.append(listItem);
-				arr.push($(this).get(0).files[i].name);
-			}
-			$(this).attr("name", arr); 
+				arr.push(element.name);
+			});
+			//$(this).attr("name", arr);
 		} else {
-			$(this).prev('label').text(labelText);
-			$(this).parent().find(".upload_text").text(labelText);
+            let targetId = $(this).attr('id');
+            if (targetId.match('SPC_법인_인감_파일')) {
+                let listItem = `<button type='button' class='btn_close file_del_btn' onclick='deleteFile($(this), "front")'></button>`;
+                $(this).parent().find(".upload_text").next('.file_del_btn').remove();
+                $(this).parent().find(".upload_text").html(labelText).after(listItem);
+            } else {
+                let listItem = `${labelText}<button type='button' class='btn_close icon_btn' onclick='deleteFile($(this))'></button>`;
+                // $(this).prev('label').text(listItem);
+                $(this).parent().find(".upload_text").html(listItem);
+                // if ($(this).parent().find(".btn_close")) {
+                // 	$(this).parent().find(".btn_close").removeClass('hidden')
+                // }
+            }
 		}
-    })
+	});
 });
 
-// $(function() {
-//     $('input[type=file]').change(function(){
-//         var t = $(this).val();
-// 		var labelText = 'File : ' + t.substr(12, t.length);
-
-// 		$(this).prev('label').text(labelText);
-// 		$(this).parent().find(".upload_text").text(labelText);
-//     })
-// });
+function deleteFile(self, type) {
+    if (type === undefined) {
+        let ul = self.parents(".file_list ul");
+        if (ul.length == 0) {
+            if (self.parent('.upload_text').prop('tagName') == 'LI') {
+                self.parent(".upload_text").remove();
+            } else {
+                self.parent(".upload_text").parent().find('input[type="file"]').val('');
+                self.parent(".upload_text").empty();
+            }
+        } else {
+            self.parent(".upload_text").remove();
+            if (ul.children().length <= 0) {
+                let item = '';
+                item = '<li class="no-file">선택된 파일이 없습니다.</li>'
+                ul.append(item);
+                ul.parents('.file_list').parent().find('input[type="file"]').val('');
+            }
+        }
+    } else {
+        let parent = self.parent();
+        parent.find('span.upload_text').html('');
+        parent.find('input[type="file"]').val('');
+        self.remove();
+    }
+}
 
 /* 장치 그룹 현황 슬라이드 */
-$(function() {
-    $('.dsec .device').bxSlider({
-        mode:'horizontal',
-        pager:false,
-        slideWidth: 130,
-        slideMargin: 20,
-        minSlides: 1,
-        maxSlides: 8,
-        moveSlides: 1,
-        pause: 4000,
-        auto:false,
-        controls: true,
-        infiniteLoop: false
-    });
-});
+// $(function() {
+//     $('.dsec .device').bxSlider({
+//         mode:'horizontal',
+//         pager:false,
+//         slideWidth: 130,
+//         slideMargin: 20,
+//         minSlides: 1,
+//         maxSlides: 8,
+//         moveSlides: 1,
+//         pause: 4000,
+//         auto:false,
+//         controls: true,
+//         infiniteLoop: false
+//     });
+// });
 
 
 

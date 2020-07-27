@@ -14,14 +14,17 @@
 			<title>Encored iDERMS</title>
 		</c:otherwise>
 	</c:choose>
-	<link href="/css/bootstrap.min.css" rel="stylesheet">
-	<link href="/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
-	<link href="/css/custom.css" rel="stylesheet">
-	<link href="/css/custom-grid.css" rel="stylesheet">
-	<link href="/css/custom-mquery.css" rel="stylesheet">
-	<link rel="stylesheet" href="/css/jquery-ui.css" type="text/css" media="all"> <!-- datapicker용 -->
-	<link rel="stylesheet" href="/css/wickedpicker.css" type="text/css" media="all"> <!-- timepicker용 -->
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="stylesheet" href="/css/custom-grid.min.css">
+	<link rel="stylesheet" href="/css/custom-mquery.css">
+	<link rel="stylesheet" type="text/css" media="all" href="/css/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" media="all" href="/css/wickedpicker.css">
+	<!-- dataTables (work in progress) -->
+	<link rel="stylesheet" type="text/css" href="/css/dataTable/default.css"/>
+	<link rel="stylesheet" type="text/css" href="/css/dataTable/fixed_header.css"/>
 <!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -31,35 +34,37 @@
 	<script src="/js/jquery-ui.js"></script>
 	<script src="/js/jquery-ui-1.12.1.min.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
+	<!-- high-chart -->
 	<script src="/js/highcharts.js"></script>
-	<script src="../js/modules/variwide.js"></script> <!-- Variwide charts -->
-	<!-- 하이차트 데이타 추출용 -->
+	<script src="../js/modules/variwide.js"></script>
 	<script src="/js/modules/data.js"></script>
 	<script src="/js/modules/exporting.js"></script>
 	<script src="/js/modules/export-data.js"></script>  
-	<!-- //하이타트 데이타 추출용 -->
-	<script src="/js/sectionDisplay.js"></script> <!-- 텝메뉴 용 -->
-	<!-- 인쇄 미리보기용 -->
+	<!-- 텝메뉴 용 -->
+	<script src="/js/sectionDisplay.js"></script>
+	<!-- print preview -->
 	<script src="/js/printPreview.js"></script>	
 	<script src="/js/common.js"></script>
-	
-	<!-- 장치 모니터링 현황용 스크립트 -->
-	<script src="/js/jquery.bxslider.js" type="text/javascript"></script>
-	
+
+	<script src="/js/dataTable/default.js" type="text/javascript"></script>
+	<script src="/js/dataTable/fixed_header.js" type="text/javascript"></script>
+
+	<!-- <script src="/js/jquery.bxslider.js" type="text/javascript"></script> -->
+
 	<%--<c:set var="timeOffset"><spring:eval expression="@local.getProperty('server.offset')" /></c:set>--%>
 	<script src="/js/custom/common.js"></script>
 	<script src="/js/custom/lems.js"></script>
 	<script src="/js/custom/searchRequirement.js"></script>
 	<script src="/js/custom/utils.js"></script>
 	<script src="/js/custom/numberFormat.js"></script>
-	
-	<script src="/js/html2canvas.js"></script>	
-	<script src="/js/jspdf.min.js"></script>	
+
+	<script src="/js/html2canvas.js"></script>
+	<script src="/js/jspdf.min.js"></script>
 	<script src="/js/printThis.js"></script>
-	
+
 	<!-- 다크 모드 지원 -->
 	<!-- <script src="/js/custom/theme.js"></script> -->
-	
+
 	<!-- 화면 엑셀 다운로드용 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
@@ -69,8 +74,8 @@
 	<script type="text/javascript" src="/js/wickedpicker.js"></script>
 	<script>
 		// role: 1: 시스템관리자, 2: 일반
-		// task : 0: 일반, 1:사무수탁, 2:자산운용, 3: 사업주
 		const role = '${userInfo.role}';
+		// task : 0: 일반, 1:사무수탁, 2:자산운용, 3:사업주
 		const task = '${userInfo.task}';
 		const oid = '${userInfo.oid}';
 		const loginId = '${userInfo.login_id}';
@@ -92,6 +97,7 @@
 
 		var timeOffset = '${timeOffset}';
 		$(document).ready(function () {
+			console.log("oid===", oid)
 			<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
 				changeFavicon('/img/logo-only.ico');
 			</c:if>

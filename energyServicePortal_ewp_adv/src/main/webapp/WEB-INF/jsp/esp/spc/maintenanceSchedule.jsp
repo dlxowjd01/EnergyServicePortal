@@ -5,7 +5,6 @@
 <script type="text/javascript">
 	let today = new Date();
 	let date = new Date();
-	const contact_phone = '<c:out value="${sessionScope.userInfo.contact_phone}" escapeXml="false" />';
 
 	$(function () {
 		pageInit();

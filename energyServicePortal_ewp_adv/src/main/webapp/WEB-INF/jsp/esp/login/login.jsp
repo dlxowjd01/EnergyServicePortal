@@ -9,73 +9,92 @@
 			$(function () {
 				var lan = location.search.substr(location.search.length - 2, 2);
 				if ( isEmpty(lan) ) {
-					$('#language').val("ko");
+					$("#language").val("ko");
 				} else {
-					$('#language').val(lan);
+					$("#language").val(lan);
 				}
 
-				// 아이디 찾기
-				$('#findAuthCodeBtn').click(function () {
-					if (!checkFind(false)) {
-						return;
-					}
-					getAuthCode();
-				});
+				$("#loginUserId").val("");
+				$("#loginUserPw").val("");
 
-				$('#findBtn').click(function () {
-					if (!checkFind(true)) {
-						return false;
-					}
-					findUserId();
-					$("#findidModal").modal("hide");
-					return false;
-				});
+				$("#loginBtn").prop("disabled", true);
 
-				// 비번 찾기
-				$('#findPwAuthCodeBtn').click(function () {
-					if (!checkFindPw(false)) {
-						return;
-					}
-					sendFindPwAuthCode();
-				});
-
-				$('#findPwBtn').click(function () {
-					if (!checkFindPw(true)) {
-						return false;
-					}
-					findUserPw();
-					$("#findpassModal").modal("hide");
-					return false;
-				});
-
-				// 회원 가입
-				$('#duplicateBtn').click(function () {
-					checkUserId();
-				});
-
-				$('#joinEmail2').change(function () {
-					var val = $(this).val();
-					if (val === 'manual') {
-						$('#joinEmail1').css('width', '30%');
-						$('#joinEmail3').show();
-					} else {
-						$('#joinEmail1').css('width', '60%');
-						$('#joinEmail3').hide();
+				$("#loginUserId").on("keypress", function(){
+					if(!isEmpty($("#loginUserPw").val())){
+						console.log("not empty===")
+						$("#loginBtn").prop("disabled", false);
 					}
 				});
 
-				$('#joinAuthCodeBtn').click(function () {
-					if( isEmpty($('#joinPsnName').val()) ) {
-						alert("이름을 입력하세요");
-						return;
+				$("#loginUserPw").on("keypress", function(){
+					if(!isEmpty($("#loginUserId").val())){
+						console.log("not empty===")
+						$("#loginBtn").prop("disabled", false);
 					}
-
-					if( isEmpty($('#joinMobile1').val()) || isEmpty($('#joinMobile2').val()) || isEmpty($('#joinMobile3').val()) ) {
-						alert('휴대폰번호를 입력해 주세요');
-						return;
-					}
-					sendJoinAuthCode();
 				});
+
+				// // 아이디 찾기
+				// $('#findAuthCodeBtn').click(function () {
+				// 	if (!checkFind(false)) {
+				// 		return;
+				// 	}
+				// 	getAuthCode();
+				// });
+
+				// $('#findBtn').click(function () {
+				// 	if (!checkFind(true)) {
+				// 		return false;
+				// 	}
+				// 	findUserId();
+				// 	$("#findidModal").modal("hide");
+				// 	return false;
+				// });
+
+				// // 비번 찾기
+				// $('#findPwAuthCodeBtn').click(function () {
+				// 	if (!checkFindPw(false)) {
+				// 		return;
+				// 	}
+				// 	sendFindPwAuthCode();
+				// });
+
+				// $('#findPwBtn').click(function () {
+				// 	if (!checkFindPw(true)) {
+				// 		return false;
+				// 	}
+				// 	findUserPw();
+				// 	$("#findpassModal").modal("hide");
+				// 	return false;
+				// });
+
+				// // 회원 가입
+				// $('#duplicateBtn').click(function () {
+				// 	checkUserId();
+				// });
+
+				// $('#joinEmail2').change(function () {
+				// 	var val = $(this).val();
+				// 	if (val === 'manual') {
+				// 		$('#joinEmail1').css('width', '30%');
+				// 		$('#joinEmail3').show();
+				// 	} else {
+				// 		$('#joinEmail1').css('width', '60%');
+				// 		$('#joinEmail3').hide();
+				// 	}
+				// });
+
+				// $('#joinAuthCodeBtn').click(function () {
+				// 	if( isEmpty($('#joinPsnName').val()) ) {
+				// 		alert("이름을 입력하세요");
+				// 		return;
+				// 	}
+
+				// 	if( isEmpty($('#joinMobile1').val()) || isEmpty($('#joinMobile2').val()) || isEmpty($('#joinMobile3').val()) ) {
+				// 		alert('휴대폰번호를 입력해 주세요');
+				// 		return;
+				// 	}
+				// 	sendJoinAuthCode();
+				// });
 			});
 
 			function show_Language(v) {
@@ -90,6 +109,7 @@
 				f.method = "post";
 				f.submit();
 			}
+
 			function checkLogin() {
 				var $userId = $('#loginUserId');
 				var $userPw = $('#loginUserPw');
@@ -108,356 +128,356 @@
 				return true;
 			}
 
-			function getAuthCode() {
-				var $frm = $("#findForm");
-				var formData = $frm.serializeObject();
-				var result = Math.floor(Math.random() * 1000000) + 100000;
-				if (result > 1000000) {
-					result = result - 100000;
-				}
+			// function getAuthCode() {
+			// 	var $frm = $("#findForm");
+			// 	var formData = $frm.serializeObject();
+			// 	var result = Math.floor(Math.random() * 1000000) + 100000;
+			// 	if (result > 1000000) {
+			// 		result = result - 100000;
+			// 	}
 
-				authCode = result.toString();
+			// 	authCode = result.toString();
 
-				formData = $frm.serializeObject();
-				formData.authCode = authCode;
-				console.log(formData);
-				$.ajax({
-					url: "/sendAuthCode.json",
-					type: 'post',
-					async: false, // 동기로 처리해줌
-					data: formData,
-					success: function (result) {
-						var resultCnt = result.resultCnt;
-						if ( isEmpty(resultCnt) ) {
-							alert('<spring:message code="ewp.error.default" />');
-						} else {
-							alert("인증번호가 발송되었습니다.");
-						}
-					}
-				});
+			// 	formData = $frm.serializeObject();
+			// 	formData.authCode = authCode;
+			// 	console.log(formData);
+			// 	$.ajax({
+			// 		url: "/sendAuthCode.json",
+			// 		type: 'post',
+			// 		async: false, // 동기로 처리해줌
+			// 		data: formData,
+			// 		success: function (result) {
+			// 			var resultCnt = result.resultCnt;
+			// 			if ( isEmpty(resultCnt) ) {
+			// 				alert('<spring:message code="ewp.error.default" />');
+			// 			} else {
+			// 				alert("인증번호가 발송되었습니다.");
+			// 			}
+			// 		}
+			// 	});
 
-			}
+			// }
 
-			var authCode = '';
+			// var authCode = '';
 
-			function sendFindPwAuthCode() {
-				var $frm = $("#findPwForm");
-				var formData = $frm.serializeObject();
-				var result = Math.floor(Math.random() * 1000000) + 100000;
-				if (result > 1000000) {
-					result = result - 100000;
-				}
+			// function sendFindPwAuthCode() {
+			// 	var $frm = $("#findPwForm");
+			// 	var formData = $frm.serializeObject();
+			// 	var result = Math.floor(Math.random() * 1000000) + 100000;
+			// 	if (result > 1000000) {
+			// 		result = result - 100000;
+			// 	}
 
-				authCode = result.toString();
+			// 	authCode = result.toString();
 
-				formData = $frm.serializeObject();
-				formData.authCode = authCode;
-				$.ajax({
-					//		url : "/sendFindPwAuthCode",
-					url: "/sendAuthCode.json",
-					type: 'post',
-					async: false, // 동기로 처리해줌
-					data: formData,
-					success: function (result) {
-						var resultCnt = result.resultCnt;
-						if ( isEmpty(resultCnt) ) {
-							alert('<spring:message code="ewp.error.default" />');
-						} else {
-							alert("인증번호가 발송되었습니다.");
-						}
-					}
-				});
-			}
+			// 	formData = $frm.serializeObject();
+			// 	formData.authCode = authCode;
+			// 	$.ajax({
+			// 		//		url : "/sendFindPwAuthCode",
+			// 		url: "/sendAuthCode.json",
+			// 		type: 'post',
+			// 		async: false, // 동기로 처리해줌
+			// 		data: formData,
+			// 		success: function (result) {
+			// 			var resultCnt = result.resultCnt;
+			// 			if ( isEmpty(resultCnt) ) {
+			// 				alert('<spring:message code="ewp.error.default" />');
+			// 			} else {
+			// 				alert("인증번호가 발송되었습니다.");
+			// 			}
+			// 		}
+			// 	});
+			// }
 
-			function sendJoinAuthCode() {
-				var $frm = $("#joinForm");
-				var formData = $frm.serializeObject();
-				var result = Math.floor(Math.random() * 1000000) + 100000;
-				if (result > 1000000) {
-					result = result - 100000;
-				}
+			// function sendJoinAuthCode() {
+			// 	var $frm = $("#joinForm");
+			// 	var formData = $frm.serializeObject();
+			// 	var result = Math.floor(Math.random() * 1000000) + 100000;
+			// 	if (result > 1000000) {
+			// 		result = result - 100000;
+			// 	}
 
-				authCode = result.toString();
+			// 	authCode = result.toString();
 
-				$('#joinPsnMobile').val($('#joinMobile1').val() + '-' + $('#joinMobile2').val() + '-' + $('#joinMobile3').val());
+			// 	$('#joinPsnMobile').val($('#joinMobile1').val() + '-' + $('#joinMobile2').val() + '-' + $('#joinMobile3').val());
 
-				formData = $frm.serializeObject();
-				formData.authCode = authCode;
-				$.ajax({
-					url: "/sendAuthCode.json",
-					type: 'post',
-					async: false, // 동기로 처리해줌
-					data: formData,
-					success: function (result) {
-						var resultCnt = result.resultCnt;
-						if (resultCnt === 40) {
-							alert('문자가 발송되었습니다.');
-						} else {
-							alert('<spring:message code="ewp.error.default" />');
-						}
-					}
-				});
-			}
+			// 	formData = $frm.serializeObject();
+			// 	formData.authCode = authCode;
+			// 	$.ajax({
+			// 		url: "/sendAuthCode.json",
+			// 		type: 'post',
+			// 		async: false, // 동기로 처리해줌
+			// 		data: formData,
+			// 		success: function (result) {
+			// 			var resultCnt = result.resultCnt;
+			// 			if (resultCnt === 40) {
+			// 				alert('문자가 발송되었습니다.');
+			// 			} else {
+			// 				alert('<spring:message code="ewp.error.default" />');
+			// 			}
+			// 		}
+			// 	});
+			// }
 
-			function checkFind(findFlag) {
-				if ( isEmpty($('#findPsnName').val()) ) {
-					alert('이름를 입력하세요');
-					$('#findPsnName').focus();
-					return false;
-				}
-				if ($('#findForm').find('[name=mobileType]:checked').length === 0) {
-					alert('통신사를 선택해 주세요');
-					$('#findForm').find('[name=mobileType]:eq(0)').focus();
-					return false;
-				}
-				var $findMobile1 = $('#findMobile1');
-				var $findMobile2 = $('#findMobile2');
-				var $findMobile3 = $('#findMobile3');
-				if ( isEmpty($findMobile1.val()) || isEmpty($findMobile2.val()) || isEmpty($findMobile3.val()) ) {
-					alert('휴대폰번호를 입력해 주세요');
-					$findMobile2.focus();
-					return false;
-				}
-				if (isNaN($findMobile2.val()) || isNaN($findMobile3.val())) {
-					alert('숫자를 입력해 주세요');
-					$findMobile2.focus();
-					return false;
-				}
-				if (findFlag && $('#findAuthCode').val() !== authCode) {
-					alert('인증코드를 맞게 입력하세요');
-					$('#findAuthCode').focus();
-					return;
-				}
+			// function checkFind(findFlag) {
+			// 	if ( isEmpty($('#findPsnName').val()) ) {
+			// 		alert('이름를 입력하세요');
+			// 		$('#findPsnName').focus();
+			// 		return false;
+			// 	}
+			// 	if ($('#findForm').find('[name=mobileType]:checked').length === 0) {
+			// 		alert('통신사를 선택해 주세요');
+			// 		$('#findForm').find('[name=mobileType]:eq(0)').focus();
+			// 		return false;
+			// 	}
+			// 	var $findMobile1 = $('#findMobile1');
+			// 	var $findMobile2 = $('#findMobile2');
+			// 	var $findMobile3 = $('#findMobile3');
+			// 	if ( isEmpty($findMobile1.val()) || isEmpty($findMobile2.val()) || isEmpty($findMobile3.val()) ) {
+			// 		alert('휴대폰번호를 입력해 주세요');
+			// 		$findMobile2.focus();
+			// 		return false;
+			// 	}
+			// 	if (isNaN($findMobile2.val()) || isNaN($findMobile3.val())) {
+			// 		alert('숫자를 입력해 주세요');
+			// 		$findMobile2.focus();
+			// 		return false;
+			// 	}
+			// 	if (findFlag && $('#findAuthCode').val() !== authCode) {
+			// 		alert('인증코드를 맞게 입력하세요');
+			// 		$('#findAuthCode').focus();
+			// 		return;
+			// 	}
 
-				$('#findPsnMobile').val($findMobile1.val() + '-' + $findMobile2.val() + '-' + $findMobile3.val());
-				return true;
-			}
+			// 	$('#findPsnMobile').val($findMobile1.val() + '-' + $findMobile2.val() + '-' + $findMobile3.val());
+			// 	return true;
+			// }
 
-			function findUserId() {
-				var formData = $("#findForm").serializeObject();
-				$.ajax({
-					url: "/findUserId.json",
-					type: 'post',
-					async: false, // 동기로 처리해줌
-					data: formData,
-					success: function (result) {
-						var userDetail = result.detail;
-						if ( !isEmpty(userDetail) ) {
-							alert('귀하의 아이디는 ' + userDetail.user_id + ' 입니다.');
-						} else {
-							alert('일치하는 정보가 없습니다.');
-						}
-					}
-				});
-			}
+			// function findUserId() {
+			// 	var formData = $("#findForm").serializeObject();
+			// 	$.ajax({
+			// 		url: "/findUserId.json",
+			// 		type: 'post',
+			// 		async: false, // 동기로 처리해줌
+			// 		data: formData,
+			// 		success: function (result) {
+			// 			var userDetail = result.detail;
+			// 			if ( !isEmpty(userDetail) ) {
+			// 				alert('귀하의 아이디는 ' + userDetail.user_id + ' 입니다.');
+			// 			} else {
+			// 				alert('일치하는 정보가 없습니다.');
+			// 			}
+			// 		}
+			// 	});
+			// }
 
-			function checkFindPw(findFlag) {
-				if ( isEmpty($('#findPwPsnName').val()) ) {
-					alert('이름를 입력하세요');
-					$('#findPwPsnName').focus();
-					return false;
-				}
-				if ($('#findPwForm').find('[name=mobileType]:checked').length === 0) {
-					alert('통신사를 선택해 주세요');
-					$('#findPwForm').find('[name=mobileType]:eq(0)').focus();
-					return false;
-				}
-				var $findPwMobile1 = $('#findPwMobile1');
-				var $findPwMobile2 = $('#findPwMobile2');
-				var $findPwMobile3 = $('#findPwMobile3');
-				if ( isEmpty($findPwMobile1.val()) || isEmpty($findPwMobile2.val()) || isEmpty($findPwMobile3.val()) ) {
-					alert('휴대폰번호를 입력해 주세요');
-					$findPwMobile2.focus();
-					return false;
-				}
-				if (isNaN($findPwMobile2.val()) || isNaN($findPwMobile3.val())) {
-					alert('숫자를 입력해 주세요');
-					$findPwMobile2.focus();
-					return false;
-				}
-				if (findFlag && isEmpty($('#findPwAuthCode').val()) ) {
-					alert('인증코드를 입력하세요');
-					$('#findPwAuthCode').focus();
-					return;
-				}
-				if (findFlag && $('#findPwAuthCode').val() !== authCode) {
-					alert('인증코드를 맞게 입력하세요');
-					$('#findPwAuthCode').focus();
-					return;
-				}
+			// function checkFindPw(findFlag) {
+			// 	if ( isEmpty($('#findPwPsnName').val()) ) {
+			// 		alert('이름를 입력하세요');
+			// 		$('#findPwPsnName').focus();
+			// 		return false;
+			// 	}
+			// 	if ($('#findPwForm').find('[name=mobileType]:checked').length === 0) {
+			// 		alert('통신사를 선택해 주세요');
+			// 		$('#findPwForm').find('[name=mobileType]:eq(0)').focus();
+			// 		return false;
+			// 	}
+			// 	var $findPwMobile1 = $('#findPwMobile1');
+			// 	var $findPwMobile2 = $('#findPwMobile2');
+			// 	var $findPwMobile3 = $('#findPwMobile3');
+			// 	if ( isEmpty($findPwMobile1.val()) || isEmpty($findPwMobile2.val()) || isEmpty($findPwMobile3.val()) ) {
+			// 		alert('휴대폰번호를 입력해 주세요');
+			// 		$findPwMobile2.focus();
+			// 		return false;
+			// 	}
+			// 	if (isNaN($findPwMobile2.val()) || isNaN($findPwMobile3.val())) {
+			// 		alert('숫자를 입력해 주세요');
+			// 		$findPwMobile2.focus();
+			// 		return false;
+			// 	}
+			// 	if (findFlag && isEmpty($('#findPwAuthCode').val()) ) {
+			// 		alert('인증코드를 입력하세요');
+			// 		$('#findPwAuthCode').focus();
+			// 		return;
+			// 	}
+			// 	if (findFlag && $('#findPwAuthCode').val() !== authCode) {
+			// 		alert('인증코드를 맞게 입력하세요');
+			// 		$('#findPwAuthCode').focus();
+			// 		return;
+			// 	}
 
-				$('#findPwPsnMobile').val($findPwMobile1.val() + '-' + $findPwMobile2.val() + '-' + $findPwMobile3.val());
-				return true;
-			}
+			// 	$('#findPwPsnMobile').val($findPwMobile1.val() + '-' + $findPwMobile2.val() + '-' + $findPwMobile3.val());
+			// 	return true;
+			// }
 
-			function findUserPw() {
-				var formData = $("#findPwForm").serializeObject();
-				$.ajax({
-					url: "/findUserPw.json",
-					type: 'post',
-					async: false, // 동기로 처리해줌
-					data: formData,
-					success: function (result) {
-						var userDetail = result.detail;
-						if ( !isEmpty(userDetail) ) {
-							alert("임시 비밀번호가 sms로 발송되었습니다.");
-						} else {
-							alert('일치하는 정보가 없습니다.');
-						}
-					}
-				});
-			}
+			// function findUserPw() {
+			// 	var formData = $("#findPwForm").serializeObject();
+			// 	$.ajax({
+			// 		url: "/findUserPw.json",
+			// 		type: 'post',
+			// 		async: false, // 동기로 처리해줌
+			// 		data: formData,
+			// 		success: function (result) {
+			// 			var userDetail = result.detail;
+			// 			if ( !isEmpty(userDetail) ) {
+			// 				alert("임시 비밀번호가 sms로 발송되었습니다.");
+			// 			} else {
+			// 				alert('일치하는 정보가 없습니다.');
+			// 			}
+			// 		}
+			// 	});
+			// }
 
-			function checkAgree() {
-				if (!$('#agree01').prop('checked')) {
-					alert('S-POWER iDERMS 서비스 이용약관에 동의해야 합니다.');
-					$('#agree01').focus();
-					return false;
-				}
-				if (!$('#agree02').prop('checked')) {
-					alert('개인정보 수집, 제공 및 활용 약관에 동의해야 합니다.');
-					$('#agree02').focus();
-					return false;
-				}
+			// function checkAgree() {
+			// 	if (!$('#agree01').prop('checked')) {
+			// 		alert('S-POWER iDERMS 서비스 이용약관에 동의해야 합니다.');
+			// 		$('#agree01').focus();
+			// 		return false;
+			// 	}
+			// 	if (!$('#agree02').prop('checked')) {
+			// 		alert('개인정보 수집, 제공 및 활용 약관에 동의해야 합니다.');
+			// 		$('#agree02').focus();
+			// 		return false;
+			// 	}
 
-				return true;
-			}
+			// 	return true;
+			// }
 
-			function emptyAlert(index) {
-				$('.helpCont').hide();
-				if ($(index).val() === '') {
-					$(index).parents('td').children('.helpCont:eq(0)').show();
-					return true;
-				}
-			}
+			// function emptyAlert(index) {
+			// 	$('.helpCont').hide();
+			// 	if ($(index).val() === '') {
+			// 		$(index).parents('td').children('.helpCont:eq(0)').show();
+			// 		return true;
+			// 	}
+			// }
 
-			function checkJoin() {
-				if (emptyAlert('#joinUserId')) {
-					return;
-				}
-				if (emptyAlert('#joinUserPw')) {
-					return;
-				}
-				if (emptyAlert('#joinUserPw2')) {
-					return;
-				}
-				var $joinUserPw = $('#joinUserPw');
-				var $joinUserPw2 = $('#joinUserPw2');
-				if ($joinUserPw.val() !== $joinUserPw2.val()) {
-					$('.helpCont').hide();
-					$joinUserPw2.parents('td').children('.helpCont:eq(0)').show();
-					return;
-				} else {
-					$('.helpCont').hide();
-				}
-				if (emptyAlert('#joinPsnName')) {
-					return;
-				}
-				var $joinEmail1 = $('#joinEmail1');
-				var $joinEmail2 = $('#joinEmail2');
-				var $joinEmail3 = $('#joinEmail3');
-				if ( isEmpty($joinEmail1.val()) || isEmpty($joinEmail2.val()) ) {
-					$('.helpCont').hide();
-					$joinEmail1.parents('td').children('.helpCont:eq(0)').show();
-					return;
-				} else {
-					$('.helpCont').hide();
-				}
-				if ($joinEmail2.val() === 'manual' && isEmpty($joinEmail3.val())) {
-					$('.helpCont').hide();
-					$joinEmail1.parents('td').children('.helpCont:eq(0)').show();
-					return;
-				} else {
-					$('.helpCont').hide();
-				}
-				var $joinMobile1 = $('#joinMobile1');
-				var $joinMobile2 = $('#joinMobile2');
-				var $joinMobile3 = $('#joinMobile3');
-				if ( isEmpty($joinMobile1.val()) || isEmpty($joinMobile2.val()) || isEmpty($joinMobile3.val()) ) {
-					$('.helpCont').hide();
-					$joinMobile1.parents('td').children('.helpCont:eq(0)').show();
-					return;
-				} else {
-					$('.helpCont').hide();
-				}
-				if (isNaN($joinMobile1.val()) || isNaN($joinMobile2.val()) || isNaN($joinMobile3.val())) {
-					$('.helpCont').hide();
-					$joinMobile1.parents('td').children('.helpCont:eq(1)').show();
-					return;
-				} else {
-					$('.helpCont').hide();
-				}
-				var $joinAuthCode = $('#joinAuthCode');
-				if ( isEmpty($joinAuthCode.val()) ) {
-					alert('인증코드를 입력하세요');
-					$joinAuthCode .focus();
-					return;
-				}
-				if ($joinAuthCode.val() !== authCode) {
-					alert('인증코드를 맞게 입력하세요');
-					$joinAuthCode .focus();
-					return;
-				}
+			// function checkJoin() {
+			// 	if (emptyAlert('#joinUserId')) {
+			// 		return;
+			// 	}
+			// 	if (emptyAlert('#joinUserPw')) {
+			// 		return;
+			// 	}
+			// 	if (emptyAlert('#joinUserPw2')) {
+			// 		return;
+			// 	}
+			// 	var $joinUserPw = $('#joinUserPw');
+			// 	var $joinUserPw2 = $('#joinUserPw2');
+			// 	if ($joinUserPw.val() !== $joinUserPw2.val()) {
+			// 		$('.helpCont').hide();
+			// 		$joinUserPw2.parents('td').children('.helpCont:eq(0)').show();
+			// 		return;
+			// 	} else {
+			// 		$('.helpCont').hide();
+			// 	}
+			// 	if (emptyAlert('#joinPsnName')) {
+			// 		return;
+			// 	}
+			// 	var $joinEmail1 = $('#joinEmail1');
+			// 	var $joinEmail2 = $('#joinEmail2');
+			// 	var $joinEmail3 = $('#joinEmail3');
+			// 	if ( isEmpty($joinEmail1.val()) || isEmpty($joinEmail2.val()) ) {
+			// 		$('.helpCont').hide();
+			// 		$joinEmail1.parents('td').children('.helpCont:eq(0)').show();
+			// 		return;
+			// 	} else {
+			// 		$('.helpCont').hide();
+			// 	}
+			// 	if ($joinEmail2.val() === 'manual' && isEmpty($joinEmail3.val())) {
+			// 		$('.helpCont').hide();
+			// 		$joinEmail1.parents('td').children('.helpCont:eq(0)').show();
+			// 		return;
+			// 	} else {
+			// 		$('.helpCont').hide();
+			// 	}
+			// 	var $joinMobile1 = $('#joinMobile1');
+			// 	var $joinMobile2 = $('#joinMobile2');
+			// 	var $joinMobile3 = $('#joinMobile3');
+			// 	if ( isEmpty($joinMobile1.val()) || isEmpty($joinMobile2.val()) || isEmpty($joinMobile3.val()) ) {
+			// 		$('.helpCont').hide();
+			// 		$joinMobile1.parents('td').children('.helpCont:eq(0)').show();
+			// 		return;
+			// 	} else {
+			// 		$('.helpCont').hide();
+			// 	}
+			// 	if (isNaN($joinMobile1.val()) || isNaN($joinMobile2.val()) || isNaN($joinMobile3.val())) {
+			// 		$('.helpCont').hide();
+			// 		$joinMobile1.parents('td').children('.helpCont:eq(1)').show();
+			// 		return;
+			// 	} else {
+			// 		$('.helpCont').hide();
+			// 	}
+			// 	var $joinAuthCode = $('#joinAuthCode');
+			// 	if ( isEmpty($joinAuthCode.val()) ) {
+			// 		alert('인증코드를 입력하세요');
+			// 		$joinAuthCode .focus();
+			// 		return;
+			// 	}
+			// 	if ($joinAuthCode.val() !== authCode) {
+			// 		alert('인증코드를 맞게 입력하세요');
+			// 		$joinAuthCode .focus();
+			// 		return;
+			// 	}
 
-				$('.helpCont').hide();
+			// 	$('.helpCont').hide();
 
-				if (confirm("가입하시겠습니까?")) {
-					if ($joinEmail2.val() !== 'manual') {
-						$('#joinPsnEmail').val($joinEmail1.val() + '@' + $joinEmail2.val());
-					} else {
-						$('#joinPsnEmail').val($joinEmail1.val() + '@' + $joinEmail3.val());
-					}
-					$('#joinPsnMobile').val($joinMobile1.val() + '-' + $joinMobile2.val() + '-' + $joinMobile3.val());
+			// 	if (confirm("가입하시겠습니까?")) {
+			// 		if ($joinEmail2.val() !== 'manual') {
+			// 			$('#joinPsnEmail').val($joinEmail1.val() + '@' + $joinEmail2.val());
+			// 		} else {
+			// 			$('#joinPsnEmail').val($joinEmail1.val() + '@' + $joinEmail3.val());
+			// 		}
+			// 		$('#joinPsnMobile').val($joinMobile1.val() + '-' + $joinMobile2.val() + '-' + $joinMobile3.val());
 
-					checkUserId(joinUser);
-				}
-			}
+			// 		checkUserId(joinUser);
+			// 	}
+			// }
 
-			function join2next() {
-				$("#joinModal2").modal("hide");
-				$("#joinModal3").modal("show");
-			}
-			// 아이디 중복 체크
-			function checkUserId(fn) {
-				$.ajax({
-					url: "/checkUserId.json",
-					type: 'post',
-					async: false, // 동기로 처리해줌
-					data: {
-						userId: $('#joinUserId').val()
-					},
-					success: function (result) {
-						var userDetail = result.detail;
-						if ( isEmpty(userDetail) ) {
-							if ( !isEmpty(fn) ) {
-								fn();
-							} else {
-								alert($('#joinUserId').val() + ' 아이디는 사용가능 합니다.');
-							}
-						} else {
-							alert($('#joinUserId').val() + ' 아이디는 사용중입니다.\n다른 아이디를 사용하세요.');
-						}
-					}
-				});
-			}
+			// function join2next() {
+			// 	$("#joinModal2").modal("hide");
+			// 	$("#joinModal3").modal("show");
+			// }
+			// // 아이디 중복 체크
+			// function checkUserId(fn) {
+			// 	$.ajax({
+			// 		url: "/checkUserId.json",
+			// 		type: 'post',
+			// 		async: false, // 동기로 처리해줌
+			// 		data: {
+			// 			userId: $('#joinUserId').val()
+			// 		},
+			// 		success: function (result) {
+			// 			var userDetail = result.detail;
+			// 			if ( isEmpty(userDetail) ) {
+			// 				if ( !isEmpty(fn) ) {
+			// 					fn();
+			// 				} else {
+			// 					alert($('#joinUserId').val() + ' 아이디는 사용가능 합니다.');
+			// 				}
+			// 			} else {
+			// 				alert($('#joinUserId').val() + ' 아이디는 사용중입니다.\n다른 아이디를 사용하세요.');
+			// 			}
+			// 		}
+			// 	});
+			// }
 
-			function joinUser() {
-				var formData = $("#joinForm").serializeObject();
-				$.ajax({
-					url: "/joinUser.json",
-					type: 'post',
-					async: false, // 동기로 처리해줌
-					data: formData,
-					success: function (result) {
-						var resultCnt = result.resultCnt;
-						if (resultCnt > 0) {
-							join2next();
-						} else {
-							alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
-						}
-					}
-				});
-			}
+			// function joinUser() {
+			// 	var formData = $("#joinForm").serializeObject();
+			// 	$.ajax({
+			// 		url: "/joinUser.json",
+			// 		type: 'post',
+			// 		async: false, // 동기로 처리해줌
+			// 		data: formData,
+			// 		success: function (result) {
+			// 			var resultCnt = result.resultCnt;
+			// 			if (resultCnt > 0) {
+			// 				join2next();
+			// 			} else {
+			// 				alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
+			// 			}
+			// 		}
+			// 	});
+			// }
 		</script>
 		<script type="text/javascript">
 			<c:if test="${not empty msg}">
@@ -498,8 +518,8 @@
 				</div>
 			</nav>
 			<div class="login container-fluid">
-				<div class="loginForm">
-					<form id="loginForm" name="loginForm" action="/loginUser.do" method="post" onsubmit="return checkLogin(this)">
+				<div class="login-form">
+					<form id="loginForm" name="loginForm" action="/loginUser.do" method="post" onsubmit="checkLogin(this);">
 						<input type="hidden" id="language" name="language"/>
 						<div class="lf-body">
 							<c:choose>
@@ -510,15 +530,15 @@
 									<img src="../img/logo_iderms.svg" alt="login modal iderms logo" class="login-logo center"/>
 								</c:otherwise>
 							</c:choose>
-						    <div class="mt10"><input type="text" id="loginUserId" name="login_id" class="lfinp" placeholder=<spring:message code="ewp.login.ID"/>></div>
-							<div class="mt15"><input type="password" id="loginUserPw" name="password" class="lfinp" placeholder=<spring:message code="ewp.login.Password"/>></div>
+						    <div class="mt10"><input type="text" id="loginUserId" name="login_id" class="clear-input" placeholder=<spring:message code="ewp.login.ID"/>></div>
+							<div class="mt15"><input type="password" id="loginUserPw" name="password" class="clear-input" placeholder=<spring:message code="ewp.login.Password"/>></div>
 							<div class="mt15"><a class="chk_type"><input type="checkbox" id="saveLogin" name="save_login"><label for="saveLogin">로그인 유지</label></a></div>
 
 							<div class="lf-btn-wrap">
 								<%--
 								<a href="#" class="joinBtn"><spring:message code="ewp.login.Singup"/></a> 
 								--%>
-								<input type="submit" name="login" value="<spring:message code="ewp.login.Signin" />">
+								<input type="submit" id="loginBtn" name="login" value="<spring:message code="ewp.login.Signin" />">
 								<p class="center">회원 가입 및 회원 정보 문의<strong class="bold">070-4949-5500</strong></p>
 							</div>
 
@@ -526,11 +546,11 @@
 								<div class="row center">
 									<div class="col-6">
 										<h3 class="mb-10">카카오톡 문의</h3>
-										<a href="#"><strong class="bold">아이덤스</strong> 채널&친구 추가</a>
+										<a href="http://pf.kakao.com/_YDihK" target="_blank"><strong class="bold">아이덤스</strong> 채널&친구 추가</a>
 									</div>
 									<div class="col-6 divider">
 										<h3 class="mb-10">데모 요청 이메일</h3>
-										<a href="#" class="bold">esolution@encoredtech.com</a>
+										<a href="#" target="_blank" class="bold">esolution@encoredtech.com</a>
 									</div>
 								</div>
 								<div class="row">
