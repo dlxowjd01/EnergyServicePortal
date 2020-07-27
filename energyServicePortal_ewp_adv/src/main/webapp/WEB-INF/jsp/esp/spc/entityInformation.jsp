@@ -2,8 +2,6 @@
 
 <script src="/js/commonDropdown.js"></script>
 <script>
-	const oid = '${sessionScope.userInfo.oid}';
-	const loginId = '${sessionScope.userInfo.login_id}';
 	const searchCnt = 0;
 
 	$(function () {

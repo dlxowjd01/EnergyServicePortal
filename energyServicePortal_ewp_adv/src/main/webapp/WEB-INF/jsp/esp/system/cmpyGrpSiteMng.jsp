@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		navAddClass("setting");
@@ -894,7 +895,7 @@
 </script>
 				<div class="row">
 					<div class="col-lg-12">
-						<h1 class="page-header">그룹/사이트 관리</h1>
+						<h1 class="page-header">사이트 관리</h1>
 					</div>
 				</div>
 				<div class="row">

@@ -502,7 +502,14 @@
 					<form id="loginForm" name="loginForm" action="/loginUser.do" method="post" onsubmit="return checkLogin(this)">
 						<input type="hidden" id="language" name="language"/>
 						<div class="lf-body">
-							<div class="lftit"></div>
+							<c:choose>
+								<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
+									<img src="../img/logo_login_spower.svg" alt="login modal spower logo" class="login-logo center"/>
+								</c:when>
+								<c:otherwise>
+									<img src="../img/logo_iderms.svg" alt="login modal iderms logo" class="login-logo center"/>
+								</c:otherwise>
+							</c:choose>
 						    <div class="mt10"><input type="text" id="loginUserId" name="login_id" class="lfinp" placeholder=<spring:message code="ewp.login.ID"/>></div>
 							<div class="mt15"><input type="password" id="loginUserPw" name="password" class="lfinp" placeholder=<spring:message code="ewp.login.Password"/>></div>
 							<div class="mt15"><a class="chk_type"><input type="checkbox" id="saveLogin" name="save_login"><label for="saveLogin">로그인 유지</label></a></div>

@@ -202,10 +202,12 @@ nav .lang.login-lang {
 	padding: 70px 24px 30px;
 	background: var(--box-color);
 }
+.lf-body .login-logo {
+	margin: 0 auto;
+	display: block;
+}
 
 .lftit {
-	padding-top: 110px;
-	background: url('../img/login-logo.svg') no-repeat center 0;
 	text-align: center;
 }
 

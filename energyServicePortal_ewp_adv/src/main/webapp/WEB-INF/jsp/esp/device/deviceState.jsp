@@ -438,9 +438,6 @@
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	const siteList = JSON.parse('${siteList}');
-	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
-	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
-
 	const apiDeviceProperties = '/config/view/device_properties';
 	const apiStatusRawSite = '/status/raw/site';
 	const apiStatusRaw = '/status/raw';

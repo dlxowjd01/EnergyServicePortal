@@ -214,12 +214,14 @@
 				<a href="javascript:void(0);">설정</a>
 				<div class="sub_layer">
 					<ul>
-						<li><a href="/system/basicInformation.do">기본정보</a></li>
+						<li><a href="/system/cmpyGrpSiteMng.do">사이트</a></li>
+						<li><a href="/system/basicInformation.do">그룹관리</a></li>
 						<li><a href="/system/userMng.do">사용자관리</a></li>
-						<li><a href="/system/cmpyGrpSiteMng.do">사이트/그룹관리</a></li>
-						<li><a href="/system/alarmManagement.do">알람관리</a></li>
-						<li><a href="/system/systemCode.do">공통코드</a></li>
+						<li><a href="/system/alarmManagement.do">알람</a></li>
+						<li><a href="/system/systemCode.do">공통코드관리</a></li>
+						<%--
 						<li><a href="/system/systemSetting.do">시스템설정</a></li>
+						--%>
 					</ul>
 				</div>
 			</li>

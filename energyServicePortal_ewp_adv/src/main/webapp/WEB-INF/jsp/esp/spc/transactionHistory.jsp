@@ -2,10 +2,6 @@
 <%@ include file='/decorators/include/taglibs.jsp'%>
 <script src='/js/commonDropdown.js'></script>
 <script type="text/javascript">
-	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
-	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
-	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
-
 	$(function() {
 		const tableBody = $('#tableBody');
 		const tableFooter = $('#tableFooter')

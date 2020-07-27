@@ -3,8 +3,6 @@
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	let today = new Date();
-	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
-	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 	const spcId = '<c:out value="${param.spc_id}" escapeXml="false" />';
 	const siteId = '<c:out value="${param.site_id}" escapeXml="false" />';
 	const balance_yyyy = '<c:out value="${param.balance_yyyy}" escapeXml="false" />';

@@ -349,9 +349,6 @@
 </div>
 
 <script type="text/javascript">
-	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
-	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
-	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
 	let dataList = [];
 	let changeTablegird = null;
 	let ticketFileList = new Array();
@@ -1132,9 +1129,9 @@
 			}
 		));
 		let deviceTypes = [];
-		const oid = sites[0].oid;
+		const siteOid = sites[0].oid;
 		if (siteArray.length > 0) {
-			const arr = deviceInternet(siteArray, oid);
+			const arr = deviceInternet(siteArray, siteOid);
 			const deviceTypeArray = dataFilter(arr, 'device_type');
 			const sidArray = dataFilter(arr, 'sid');
 			deviceTypes.push(deviceTypeArray);

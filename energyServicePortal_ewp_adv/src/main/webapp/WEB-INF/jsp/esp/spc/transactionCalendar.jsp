@@ -2,15 +2,15 @@
 <%@ include file="/decorators/include/taglibs.jsp"%>
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
-	let oid = '${sessionScope.userInfo.oid}';
-	let loginId = '${sessionScope.userInfo.login_id}';
-	let task = '${ sessionScope.userInfo.task }';
-	let role = '${ sessionScope.userInfo.role }';
+	// let oid = '${sessionScope.userInfo.oid}';
+	// let loginId = '${sessionScope.userInfo.login_id}';
+	// let task = '${ sessionScope.userInfo.task }';
+	// let role = '${ sessionScope.userInfo.role }';
 	let today = new Date();
 	let date = new Date();
 	var spcPairArr = [];
 
-	const contact_phone = '<c:out value="${sessionScope.userInfo.contact_phone}" escapeXml="false" />';
+	// const contact_phone = '<c:out value="${sessionScope.userInfo.contact_phone}" escapeXml="false" />';
 
 	$(function () {
 		// task 1: 사무수탁사  2: 자산 운용사  3: 사업주  ||  role 1: encored  2: spc clients

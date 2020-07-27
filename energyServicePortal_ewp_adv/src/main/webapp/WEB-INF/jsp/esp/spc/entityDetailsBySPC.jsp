@@ -2,8 +2,6 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
-	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
-	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 	const spc_id = '<c:out value="${param.spc_id}" escapeXml="false" />';
 	const gen_id = '<c:out value="${param.gen_id}" escapeXml="false" />';
 	const currentTime = '<c:out value="${nowTime}" escapeXml="false" />';

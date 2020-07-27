@@ -5,10 +5,6 @@
 <script type="text/javascript">
 	let today = new Date();
 	let date = new Date();
-	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
-	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
-	const contact_phone = '<c:out value="${sessionScope.userInfo.contact_phone}" escapeXml="false" />';
-
 	$(function () {
 		pageInit();
 

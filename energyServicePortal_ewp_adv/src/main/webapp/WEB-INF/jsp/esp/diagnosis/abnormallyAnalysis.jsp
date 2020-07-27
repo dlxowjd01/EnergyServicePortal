@@ -2,7 +2,6 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
-	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
 	const siteList = JSON.parse('${siteList}');
 	let deviceList;
 

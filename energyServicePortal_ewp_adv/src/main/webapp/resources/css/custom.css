@@ -117,10 +117,10 @@
 	--blueberry: #5269ef;
 	--royal-blue: #274dea;
 	/* ********* login page & logo images ********* */
-	--bg-img: url("../img/login_bg.jpg");
-	--login-arr: url("../img/login_arr.gif");
-	--encored-logo: url("../img/encored_logo.png");
-	--spower-logo: url("../img/s-power_logo_light.png");
+	--encored-logo: url("../img/logo_encored_wh.svg");
+	--iderms-logo: url("../img/logo_iderms.svg");
+	--spower-logo: url("../img/logo_spower_wh.svg");
+
 	/* ********* sidebar images ********* */
 	--sidebar-dashboard-off: url("../img/sidebar_dashboard_light_off.png");
 	--sidebar-dashboard-on: url("../img/sidebar_dashboard_light_on_dark_off.png");
@@ -155,8 +155,6 @@
 	--expand-arrow-up: url("../img/expand_arrow_up_light.png");
 	/* ********* collapse arrow icon images ********* */
 	--collapse-arrow: url("../img/sel_down.png");
-	--right-arrow: url("../img/arrow_right_light.png");
-	--down-arrow: url("../img/arrow_down_light.png");
 	/* ********* sorting arrow icon images ********* */
 	--ico-sort-up: url("../img/sorting_up_wh.png");
 	--ico-sort-down: url("../img/sorting_down_wh.png");
@@ -226,11 +224,7 @@ html.darkmode:root {
 	--box-color5: #282828;
 	--box-color6: #2d2e2e;
 	--box-color7: rgba(255, 255, 255, 0.2);
-	/* ********* login page & logo images ********* */
-	--bg-img: url("../img/login_bg_black.jpg");
-	--login-arr: url("../img/login_arr_black.png");
-	--encored-logo: url("../img/encored_logo_white.png");
-	--spower-logo: url("../img/s-power_logo_dark.png");
+
 	/* ********* sidebar images ********* */
 	--sidebar-dashboard-off: url("../img/sidebar_dashboard_light_on_dark_off.png");
 	--sidebar-dashboard-on: url("../img/sidebar_dashboard_dark_on.png");
@@ -265,8 +259,6 @@ html.darkmode:root {
 	--expand-arrow-up: url('../img/expand_arrow_up_dark.png');
 	/* ********* collapse arrow icon images ********* */
 	--collapse-arrow: url("../img/sel_down_dark.png");
-	--right-arrow: url("../img/arrow_right_dark.png");
-	--down-arrow: url("../img/arrow_down_dark.png");
 	/* ********* sorting arrow icon images ********* */
 	--ico-sort-up: url("../img/sorting_up.png");
 	--ico-sort-down: url("../img/sorting_down.png");
@@ -1714,21 +1706,6 @@ nav .nav-brand.spower a:hover {
 	opacity: 0.7;
 }
 
-/* ewp 로고 */
-
-nav .nav-brand.ewp {
-	margin-top: 35px;
-}
-
-nav .nav-brand.ewp a {
-	display: inline-block;
-	width: 60px;
-	height: 17px;
-	background: url("../img/logo_ewp.png") no-repeat 0 0;
-	vertical-align: top;
-	font-size: 0;
-}
-
 nav .site {
 	float: left;
 	margin: 20px 0 0 40px;
@@ -2828,17 +2805,6 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	font-weight: 400;
 	margin: 20px auto 50px;
 	text-align: center;
-}
-
-.joinEndText:before {
-	display: inline-block;
-	content: "";
-	margin-bottom: 10px;
-	width: 70px;
-	height: 70px;
-	background: url("../img/login_img_join.png") no-repeat;
-	background-size: 70px auto;
-	background-position: 0 -70px;
 }
 
 .joinEndText strong {

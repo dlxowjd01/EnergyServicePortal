@@ -215,8 +215,6 @@
 	const siteList = JSON.parse('${siteList}');
 
 	//사업소 정보 받아오기
-	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
-	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 	const now = new Date();
 	const nowLocal = now.format('yyyyMMddHHmmss');
 	const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours() - 1, now.getMinutes(), now.getSeconds()).format("yyyyMMddHHmmss");

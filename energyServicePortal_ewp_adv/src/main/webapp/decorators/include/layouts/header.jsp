@@ -11,12 +11,12 @@
 		// let userInfo = '${userInfo}'
 		// console.log("userinf---", userInfo)
 
-		let userId = '${userInfo.login_id}';
-		let oid = '${userInfo.oid}';
-		let role = '${userInfo.role}';
-		let task = '${userInfo.task}';
+		// let userId = '${userInfo.login_id}';
+		// let oid = '${userInfo.oid}';
+		// let role = '${userInfo.role}';
+		// let task = '${userInfo.task}';
 		let fullName = '${userInfo.name}';
-		let emailAddr = '${userInfo.contact_email}';
+		let loginMail = '${userInfo.contact_email}';
 		let mobileNum = '${userInfo.contact_phone}';
 
 		let accLevel = "";
@@ -33,8 +33,8 @@
 			taskCategory = "사업주"
 		}
 
-		if(!isEmpty(userId)) {
-			$("#userId").val(userId);
+		if(!isEmpty(loginId)) {
+			$("#userId").val(loginId);
 		}
 		if(!isEmpty(oid)) {
 			$("#affiliation").val(oid);
@@ -48,8 +48,8 @@
 		if(!isEmpty(fullName)) {
 			$("#fullName").val(fullName);
 		}
-		if(!isEmpty(emailAddr)) {
-			$("#taskCategory").val(emailAddr);
+		if(!isEmpty(loginMail)) {
+			$("#taskCategory").val(loginMail);
 		}
 		if(!isEmpty(mobileNum) && mobileNum != "string") {
 			$("#mobileNum").val(mobileNum);

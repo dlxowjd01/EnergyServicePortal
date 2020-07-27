@@ -3,8 +3,6 @@
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	let today = new Date();
-	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
-	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 	const siteList = JSON.parse('${siteList}');
 
 	$(function () {

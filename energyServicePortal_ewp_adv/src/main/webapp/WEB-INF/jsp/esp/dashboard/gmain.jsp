@@ -361,8 +361,6 @@
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript" src="/js/dashboard.js"></script>
 <script type="text/javascript">
-	const oid = '<c:out value="${sessionScope.userInfo.oid}" escapeXml="false" />';
-	const loginId = '<c:out value="${sessionScope.userInfo.login_id}" escapeXml="false" />';
 	const siteList = JSON.parse('${siteList}');
 	const sgid = '<c:out value="${sgid}" escapeXml="false" />';
 	const today = new Date();

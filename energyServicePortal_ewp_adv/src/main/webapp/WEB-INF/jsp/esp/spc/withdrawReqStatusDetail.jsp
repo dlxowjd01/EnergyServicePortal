@@ -2,11 +2,6 @@
 <%@ include file="/decorators/include/taglibs.jsp"%>
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
-	const oid = '${sessionScope.userInfo.oid}';
-	const loginId = '${sessionScope.userInfo.login_id}';
-	const loginName = '<c:out value="${sessionScope.userInfo.name}" escapeXml="false" />';
-	const userTask = '<c:out value="${sessionScope.userInfo.task}" escapeXml="false" />';
-
 	// param: withdrawReqStatus.do
 	const spcId = '${param.req_detail_spc_id}';
 	const spcName = '${param.req_detail_spc_name}';
@@ -89,7 +84,7 @@
 
 						if(typeof item.memo == "string"){
 							let showMemo = "";
-							if (userTask == 1) {
+							if (task == 1) {
 								showMemo = item.memo_common;
 							} else {
 								showMemo = item.memo;
