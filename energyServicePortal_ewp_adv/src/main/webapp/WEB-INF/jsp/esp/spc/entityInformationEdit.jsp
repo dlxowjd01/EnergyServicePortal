@@ -14,6 +14,7 @@
 		$("#unitPriceList").on("click", "li", unitPriceListChange);
 
 		setInitList('SPC_법인_인감');
+		setInitList('공인인증서');
 
 		initRow('addList_registered_seal');
 		addRow('addList_registered_seal');
@@ -394,6 +395,31 @@
 						{name: '임대료_지급일', id: 'addList_rental_deduction', next: 'next'},
 					];
 					setMakeTag(financeRepeatItem, finance_info, 'financeInfo'); //금융태그 생성
+					if (finance_info['공인인증서'] === undefined && finance_info['SPC_법인_인감'] != null) {
+						finance_info['공인인증서'] = finance_info['SPC_법인_인감'];
+					}
+					if(finance_info['공인인증서'].length > 0) {
+						finance_info['공인인증서'].forEach((target, index) => {
+							if (isEmpty(target['용도'])) {
+								if (!isEmpty(finance_info['용도 선택' + index])) {
+									finance_info['공인인증서'][index]['용도'] = finance_info['용도 선택' + index];
+								} else {
+									finance_info['공인인증서'][index]['용도'] = '';
+								}
+							}
+						});
+						setMakeList(finance_info['공인인증서'], '공인인증서', {'dataFunction': {}});
+					} else {
+						setMakeList(new Array(), '공인인증서', {'dataFunction': {}});
+					}
+
+					Object.entries(finance_info).map(obj => {
+						if (obj[0].match('은행_직접입력') && !isEmpty(obj[1])) {
+							const idx = obj[0].replace(/[^0-9]/g, '');
+							finance_info['은행_리스트' + idx] = '직접입력';
+							$('#' + obj[0]).parent().removeClass('hidden');
+						}
+					});
 					setJsonAutoMapping(finance_info, 'financeInfo');
 
 					setJsonAutoMapping(contract_info, 'contractInfo'); //반복없음
@@ -685,10 +711,18 @@
 
 				});
 
-				finance_info['SPC_법인_인감'] = resultFiles;
+				finance_info['공인인증서'] = $('#SPC_법인_인감').data('gridJsonData').concat(resultFiles); resultFiles;
 			},
 			error: function (request, status, error) {
 				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+			}
+		});
+
+		Object.entries(finance_info).map(obj => {
+			if (obj[0].match('은행_리스트') && obj[1] == '직접입력') {
+				const idx = obj[0].replace(/[^0-9]/g, ''),
+					bnkName = finance_info['은행_직접입력' + idx];
+				finance_info[obj[0]] = bnkName;
 			}
 		});
 
@@ -833,6 +867,19 @@
 			$('#미지급_금액').text('자동 계산');
 		} else {
 			$('#미지급_금액').text(numberComma(sumUnPaidPay));
+		}
+	}
+
+	function rtnDropdown($dropdownId) {
+		if ($dropdownId.match('은행_리스트')) {
+			const target = $('#' + $dropdownId),
+				targetInput = target.parents('td').find('[id^=은행_직접입력]');
+			if (target.find('button').data('value') == '직접입력') {
+				targetInput.parent().removeClass('hidden');
+			} else {
+				targetInput.parent().addClass('hidden');
+				targetInput.val('');
+			}
 		}
 	}
 
@@ -1659,11 +1706,19 @@
 										--><li data-id="0035" data-value="제주"><a href="#">제주</a></li><!--
 										--><li data-id="0089" data-value="K뱅크"><a href="#">K뱅크</a></li><!--
 										--><li data-id="1001" data-value="상호저축"><a href="#">상호저축</a></li><!--
+										--><li data-id="0000" data-value="직접입력"><a href="#">직접입력</a></li><!--
 									--></ul><!--
 								--></div>
 								</div>
 								<div class="fixed_height">
-									<div class="tx_inp_type edit"><input type="text" id="예금주[index]" name="예금주[index]" placeholder="직접 입력"></div>
+									<div class="group_type">
+										<div class="tx_inp_type edit unit t1">
+											<input type="text" id="예금주[index]" name="예금주[index]" placeholder="직접 입력">
+										</div>
+										<div class="tx_inp_type edit hidden">
+											<input type="text" id="은행_직접입력[index]" name="은행_직접입력[index]" placeholder="직접 입력">
+										</div>
+									</div>
 								</div>
 							</td>
 							<th>
@@ -1695,8 +1750,14 @@
 								공인인증서 등록 <a href="javascript:addRow('addList_certificate_registration', 'class'); addRow('addList_certificate_registration2', 'class');" class="btn_add fr">추가</a>
 							</th>
 							<td class="addList_certificate_registration entity">
+								<div id="공인인증서" class="hide-no-data">
+									<p class="tx_file"><!--
+									--><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[용도] - [originalname]</a><!--
+									--><button type="button" class="btn_type07" onclick="setRemoveFileList('공인인증서', [INDEX]);"></button><!--
+								--></p>
+								</div>
 								<div class="group_type flex_start">
-									<div class="dropdown placeholder edit" id="용도 선택[index]">
+									<div class="dropdown placeholder edit" id="용도[index]">
 										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
 											용도 선택<span class="caret"></span>
 										</button>

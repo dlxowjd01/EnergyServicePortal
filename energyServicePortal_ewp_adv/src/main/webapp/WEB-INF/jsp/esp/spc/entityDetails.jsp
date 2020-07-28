@@ -9,6 +9,7 @@
 	function init() {
 
 		setInitList('SPC_법인_인감');
+		setInitList('공인인증서');
 
 		//등기이사 소속 반복처리
 		initRow('addList_affiliation', 'class');
@@ -180,9 +181,29 @@
 					objArray.forEach(objName => {
 						let target = eval(objName);
 						Object.entries(target).map((obj) => {
-							if (!obj[0].match('계좌_번호') && !obj[0].match('비밀번호') && !obj[0].match('연락처'))
-							if (isNumberic(obj[1])) {
-								target[obj[0]] = numberComma(obj[1]);
+							if (obj[0].match('통신담보표지판')) {
+								target[obj[0]] = obj[1].replace('통신담보표지판_', '').trim();
+							} else if (obj[0].match('자가부지공장근저당')) {
+								target[obj[0]] = obj[1].replace('자가부지공장근저당_', '').trim();
+							} else if (obj[0].match('권리증_보유_현황')) {
+								target[obj[0]] = obj[1].replace('권리증_보유_현황_', '').trim();
+							} else if (obj[0].match('운영_여부')) {
+								target[obj[0]] = obj[1].replace('운영_여부_', '').trim();
+							} else if (obj[0].match('관리_계약_구분')) {
+								if (obj[1].length > 0) {
+									obj[1].forEach((targetObj, idx) => {
+										obj[1][idx] = targetObj.replace('관리_계약_구분_', '').trim();
+									});
+								}
+								target[obj[0]] = obj[1];
+							} else if (obj[0] == 'SMP' || obj[0] == 'SMP') {
+								target[obj[0]] = obj[1].replace(/\_/g, ' ');
+							} else {
+								if (!obj[0].match('계좌_번호') && !obj[0].match('비밀번호') && !obj[0].match('연락처')) {
+									if (isNumberic(obj[1])) {
+										target[obj[0]] = numberComma(obj[1]);
+									}
+								}
 							}
 						});
 					});
@@ -260,6 +281,23 @@
 						{name: '임대료_지급일', id: 'addList_rental_deduction', next: 'next'},
 					];
 					setMakeTag(financeRepeatItem, finance_info, 'financeInfo'); //금융태그 생성
+					if (finance_info['공인인증서'] === undefined && finance_info['SPC_법인_인감'] != null) {
+						finance_info['공인인증서'] = finance_info['SPC_법인_인감'];
+					}
+					if(finance_info['공인인증서'].length > 0) {
+						finance_info['공인인증서'].forEach((target, index) => {
+							if (isEmpty(target['용도'])) {
+								if (!isEmpty(finance_info['용도 선택' + index])) {
+									finance_info['공인인증서'][index]['용도'] = finance_info['용도 선택' + index];
+								} else {
+									finance_info['공인인증서'][index]['용도'] = '';
+								}
+							}
+						});
+						setMakeList(finance_info['공인인증서'], '공인인증서', {'dataFunction': {}});
+					} else {
+						setMakeList(new Array(), '공인인증서', {'dataFunction': {}});
+					}
 					setJsonAutoMapping(finance_info, 'financeInfo');
 
 					setJsonAutoMapping(contract_info, 'contractInfo'); //반복없음
@@ -820,10 +858,10 @@
 					</tr>
 					<tr class="addList_certificate_registration entity">
 						<th class="group_type">공인인증서 등록</th>
-						<td>
-							<div class="group_type flex_start">
-								<span id="용도 선택[index]"></span>
-							</div>
+						<td id="공인인증서">
+							<p class="tx_file">
+								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[용도] - [originalname]</a>
+							</p>
 						</td>
 						<th>인증서 비밀번호</th>
 						<td class="flex_wrapper">
