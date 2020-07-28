@@ -2,7 +2,6 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
-	const role = '${sessionScope.userInfo.role}';
 	const boardURL = '/board';
 	const spcURL = '/spcs';
 	const prop = ['subject', 'contents', 'level', 'spc_id'];
