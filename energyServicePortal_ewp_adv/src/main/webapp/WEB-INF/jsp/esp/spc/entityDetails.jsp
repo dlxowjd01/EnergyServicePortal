@@ -164,6 +164,8 @@
 			success: function (json) {
 				if (json.data.length > 0) {
 					//기본정보
+					const objArray = ['address', 'maintenance_info', 'account_info', 'finance_info', 'contract_info'
+						, 'addlist_insurance_info', 'device_info', 'warranty_info', 'coefficient_info', 'associated_info'];
 					const address = JSON.parse(json.data[0].address);
 					const maintenance_info = JSON.parse(json.data[0].maintenance_info);
 					const account_info = JSON.parse(json.data[0].account_info);
@@ -174,6 +176,16 @@
 					const warranty_info = JSON.parse(json.data[0].warranty_info);
 					const coefficient_info = JSON.parse(json.data[0].coefficient_info);
 					const associated_info = JSON.parse(json.data[0].associated_info);
+
+					objArray.forEach(objName => {
+						let target = eval(objName);
+						Object.entries(target).map((obj) => {
+							if (!obj[0].match('계좌_번호') && !obj[0].match('비밀번호') && !obj[0].match('연락처'))
+							if (isNumberic(obj[1])) {
+								target[obj[0]] = numberComma(obj[1]);
+							}
+						});
+					});
 
 					if (!isEmpty(address)) {
 						setJsonAutoMapping(address, 'addressInfo');
@@ -311,6 +323,7 @@
 
 					sumUnpaid();
 					financeAuto();
+
 				} else {
 					alert('등록된 데이터가 없습니다.');
 				}
@@ -441,7 +454,9 @@
 	const autoValArr = ['#관리_운영비', '#대수선비', '#사무_수탁비', '#임대료'];
 	const financeAuto = () => {
 		autoValArr.forEach(autoId => {
-			let autoVal = Number($(autoId).text()) / Number($('#전체_용량').text());
+			const totalVal = $('#전체_용량').text().replace(/[^0-9 \-\+]/g, '');
+			const targetVal = $(autoId).text().replace(/[^0-9 \-\+]/g, '');
+			let autoVal = Number(targetVal) / Number(totalVal);
 			if (isNaN(autoVal) || !isFinite(autoVal)) {
 				$(autoId).parent().next().find('.auto_price').text('');
 			} else {
@@ -1483,8 +1498,6 @@
 				</div>
 			</form>
 		</div>
-
-
 
 		<div class="btn_wrap_type_right"><!--
 			--><button type="button" class="btn_type03" onclick="getExcelDown();">엑셀 다운로드</button><!--

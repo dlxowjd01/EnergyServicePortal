@@ -881,7 +881,7 @@
 								let base = String(el.basetime);
 								if (base.match(stnd)) {
 									timeValue = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 2);;
-									total += el.energy;
+									total += Number(timeValue[0]);
 								}
 							});
 						} else if (type == 'day') {
@@ -909,7 +909,7 @@
 								let base = String(el.basetime);
 								if (base.match(stnd)) {
 									timeValue = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 2);
-									total += el.energy;
+									total += Number(timeValue[0]);
 								}
 							});
 						} else {
@@ -937,7 +937,7 @@
 								let base = String(el.basetime);
 								if (base.match(stnd)) {
 									timeValue = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 2);
-									total += el.energy;
+									total += Number(timeValue[0]);
 								}
 							});
 						}
