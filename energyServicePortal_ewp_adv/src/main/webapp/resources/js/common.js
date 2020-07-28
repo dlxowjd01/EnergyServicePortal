@@ -287,7 +287,7 @@ function deleteFile(self, type) {
     } else {
         let parent = self.parent();
         parent.find('span.upload_text').html('');
-        parent.find('input[type="file"]').val('');
+        parent.find('input[type="file"]').val('').removeData('file');
         self.remove();
     }
 }

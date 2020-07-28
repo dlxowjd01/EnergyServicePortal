@@ -10,11 +10,7 @@
 	];
 
 	$(function () {
-		initProcess();
 		$("#unitPriceList").on("click", "li", unitPriceListChange);
-
-		setInitList('SPC_법인_인감');
-		setInitList('공인인증서');
 
 		initRow('addList_registered_seal');
 		addRow('addList_registered_seal');
@@ -80,6 +76,8 @@
 		setInitList("fileList08");
 		setInitList("fileList09");
 		setInitList("fileList10");
+
+		initProcess();
 	});
 
 	const autoValArr = ['#관리_운영비', '#대수선비', '#사무_수탁비', '#임대료'];
@@ -252,14 +250,21 @@
 					setJsonAutoMapping(json.data[0], 'basicInfo');
 					const spc_info = JSON.parse(json.data[0].spc_info);
 					if (!isEmpty(spc_info)) {
-						setJsonAutoMapping(spc_info, 'basicInfo');
 						const fileList = spc_info['SPC_법인_인감'];
-
 						if(fileList.length > 0) {
-							setMakeList(fileList, 'SPC_법인_인감', {'dataFunction': {}});
-						} else {
-							setMakeList(new Array(), 'SPC_법인_인감', {'dataFunction': {}});
+							fileList.forEach((file, index) => {
+								if (index > 0) {
+									addRow('addList_registered_seal');
+								}
+								const seal = file['SPC_법인_인감_유형'];
+								$('#spcSeal' + index + ' button').html(seal.replace(/\_/g, ' ') + '<span class="caret"></span>').data('value', seal);
+								$('#basicInfo input[type="file"]').eq(index).data('file', file);
+								let listItem = `<button type='button' class='btn_close file_del_btn' onclick='deleteFile($(this), "front")'></button>`;
+								$('#basicInfo input[type="file"]').eq(index).parent().find(".upload_text").next('.file_del_btn').remove();
+								$('#basicInfo input[type="file"]').eq(index).parent().find(".upload_text").html(file['originalname']).after(listItem);
+							});
 						}
+						setJsonAutoMapping(spc_info, 'basicInfo');
 					}
 				}
 			},
@@ -394,23 +399,29 @@
 						{name: '공인인증서_등록', id: 'addList_certificate_registration', next: 'next'},
 						{name: '임대료_지급일', id: 'addList_rental_deduction', next: 'next'},
 					];
+
 					setMakeTag(financeRepeatItem, finance_info, 'financeInfo'); //금융태그 생성
 					if (finance_info['공인인증서'] === undefined && finance_info['SPC_법인_인감'] != null) {
 						finance_info['공인인증서'] = finance_info['SPC_법인_인감'];
 					}
+
 					if(finance_info['공인인증서'].length > 0) {
-						finance_info['공인인증서'].forEach((target, index) => {
-							if (isEmpty(target['용도'])) {
-								if (!isEmpty(finance_info['용도 선택' + index])) {
-									finance_info['공인인증서'][index]['용도'] = finance_info['용도 선택' + index];
-								} else {
-									finance_info['공인인증서'][index]['용도'] = '';
-								}
+						finance_info['공인인증서'].forEach((file, index) => {
+							if (index > 0) {
+								addRow('addList_certificate_registration', 'class');
+								addRow('addList_certificate_registration2', 'class');
 							}
+
+							let use = file['용도'];
+							if (isEmpty(use)) {
+								use = file['용도 선택'];
+							}
+							$('#용도' + index + ' button').html(use.replace(/\_/g, ' ') + '<span class="caret"></span>').data('value', use);
+							$('#financeInfo input[type="file"]').eq(index).data('file', file);
+							let listItem = `<button type='button' class='btn_close file_del_btn' onclick='deleteFile($(this), "front")'></button>`;
+							$('#financeInfo input[type="file"]').eq(index).parent().find(".upload_text").next('.file_del_btn').remove();
+							$('#financeInfo input[type="file"]').eq(index).parent().find(".upload_text").html(file['originalname']).after(listItem);
 						});
-						setMakeList(finance_info['공인인증서'], '공인인증서', {'dataFunction': {}});
-					} else {
-						setMakeList(new Array(), '공인인증서', {'dataFunction': {}});
 					}
 
 					Object.entries(finance_info).map(obj => {
@@ -421,7 +432,6 @@
 						}
 					});
 					setJsonAutoMapping(finance_info, 'financeInfo');
-
 					setJsonAutoMapping(contract_info, 'contractInfo'); //반복없음
 
 					const insuranceRepeatItem = [
@@ -472,7 +482,6 @@
 							});
 						}
 					}
-
 
 					setJsonAutoMapping(warranty_info, 'warrantyInfo'); //보증정보
 					setJsonAutoMapping(coefficient_info, 'coefficientInfo'); //환경변수
@@ -590,7 +599,17 @@
 			timeout: 600000,
 			async: false,
 			success: function (result) {
+				let totalFiles = new Array();
 				let resultFiles = result.files;
+
+				//추가
+				$('#basicForm').find('input[type="file"]').each(function () {
+					if (!isEmpty($(this).data('file'))) {
+						totalFiles.push($(this).data('file'));
+					}
+				});
+
+				//신규
 				resultFiles.forEach(function (el) {
 					let fieldname = el.fieldname;
 					$('#basicForm').find('input[type="file"]').each(function () {
@@ -599,10 +618,9 @@
 							el['SPC_법인_인감_유형'] = button;
 						}
 					});
-
 				});
 
-				spc_info['SPC_법인_인감'] = $('#SPC_법인_인감').data('gridJsonData').concat(resultFiles);
+				spc_info['SPC_법인_인감'] = totalFiles.concat(resultFiles);
 			},
 			error: function (request, status, error) {
 				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
@@ -699,19 +717,28 @@
 			timeout: 600000,
 			async: false,
 			success: function (result) {
+				let totalFiles = new Array();
 				let resultFiles = result.files;
+
+				//추가
+				$('#financeInfo').find('input[type="file"]').each(function () {
+					if (!isEmpty($(this).data('file'))) {
+						totalFiles.push($(this).data('file'));
+					}
+				});
+
+				//신규
 				resultFiles.forEach(function (el) {
 					let fieldname = el.fieldname;
 					$('#financeInfo').find('input[type="file"]').each(function () {
 						if (fieldname == $(this).attr('name')) {
 							let button = $(this).parents('div.group_type').find('.dropdown').find('button').data('value');
-							el['용도 선택'] = button;
+							el['SPC_법인_인감_유형'] = button;
 						}
 					});
-
 				});
 
-				finance_info['공인인증서'] = $('#SPC_법인_인감').data('gridJsonData').concat(resultFiles); resultFiles;
+				finance_info['공인인증서'] = totalFiles.concat(resultFiles);
 			},
 			error: function (request, status, error) {
 				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
@@ -1081,12 +1108,6 @@
 								<a href="javascript:addRow('addList_registered_seal');" class="btn_add fr">추가</a>
 							</th>
 							<td id="addList_registered_seal" class="entity">
-								<div id="SPC_법인_인감" class="hide-no-data">
-									<p class="tx_file"><!--
-									--><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[SPC_법인_인감_유형] - [originalname]</a><!--
-									--><button type="button" class="btn_type07" onclick="setRemoveFileList('SPC_법인_인감', [INDEX]);"></button><!--
-								--></p>
-								</div>
 								<div class="group_type">
 									<div class="dropdown placeholder edit" id="spcSeal[index]">
 										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">인감 선택<span class="caret"></span></button>
@@ -1103,7 +1124,7 @@
 										<input type="file" id="SPC_법인_인감_파일[index]" class="hidden" name="SPC_법인_인감_파일" accept=".jpg, .png, .pdf">
 										<label for="SPC_법인_인감_파일[index]" class="btn file_upload">파일 선택</label>
 										<span class="upload_text ml-16"></span>
-										<button class="btn_close hidden fixed_height mt-0" onclick="$(this).parents().closest('.group_type').remove()"></button>
+										<button class="btn_close fixed_height hidden mt-0" onclick="$(this).parents().closest('.group_type').remove()"></button>
 									</div>
 								</div>
 							</td>
@@ -1750,12 +1771,6 @@
 								공인인증서 등록 <a href="javascript:addRow('addList_certificate_registration', 'class'); addRow('addList_certificate_registration2', 'class');" class="btn_add fr">추가</a>
 							</th>
 							<td class="addList_certificate_registration entity">
-								<div id="공인인증서" class="hide-no-data">
-									<p class="tx_file"><!--
-									--><a href="http://iderms.enertalk.com:8443/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[용도] - [originalname]</a><!--
-									--><button type="button" class="btn_type07" onclick="setRemoveFileList('공인인증서', [INDEX]);"></button><!--
-								--></p>
-								</div>
 								<div class="group_type flex_start">
 									<div class="dropdown placeholder edit" id="용도[index]">
 										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
