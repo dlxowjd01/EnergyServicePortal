@@ -249,7 +249,7 @@ $(function () {
 			//$(this).attr("name", arr);
 		} else {
             let targetId = $(this).attr('id');
-            if (targetId.match('SPC_법인_인감_파일')) {
+            if (targetId.match('SPC_법인_인감_파일') || targetId.match('공인인증서_등록_이미지')) {
                 let listItem = `<button type='button' class='btn_close file_del_btn' onclick='deleteFile($(this), "front")'></button>`;
                 $(this).parent().find(".upload_text").next('.file_del_btn').remove();
                 $(this).parent().find(".upload_text").html(labelText).after(listItem);

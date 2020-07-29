@@ -43,10 +43,10 @@
 						</button>
 						<ul class="dropdown-menu">
 							<li data-value="NMAE" class="on">
-								<a href="#">NMAE</a>
+								<a href="javascript:void(0);">NMAE</a>
 							</li>
-							<li data-value="MAPE"><a href="#">MAPE</a></li>
-							<li data-value="RRMSE"><a href="#">RRMSE</a></li>
+							<li data-value="MAPE"><a href="javascript:void(0);">MAPE</a></li>
+							<li data-value="RRMSE"><a href="javascript:void(0);">RRMSE</a></li>
 						</ul>
 					</div>
 					<p class="tb_tx">오차 계산 데이터 필터</p>
@@ -56,13 +56,13 @@
 						</button>
 						<ul class="dropdown-menu">
 							<li data-value="" class="on">
-								<a href="#">모두</a>
+								<a href="javascript:void(0);">모두</a>
 							</li>
 							<li data-value="capacity">
-								<a href="#">용량 대비 발전량 % 이상</a>
+								<a href="javascript:void(0);">용량 대비 발전량 % 이상</a>
 							</li>
 							<li data-value="observation">
-								<a href="#">발전량 kWh 이상</a>
+								<a href="javascript:void(0);">발전량 kWh 이상</a>
 							</li>
 						</ul>
 					</div>
@@ -90,16 +90,18 @@
 					<span class="tx_tit">계량값</span>
 					<div class="sa_select">
 						<div class="dropdown">
-							<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">복수 선택<span class="caret"></span></button>
+							<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown" data-name="복수 선택">
+								복수 선택<span class="caret"></span>
+							</button>
 							<div class="dropdown-menu chk_type"><!--
 							--><ul class="dropdown_cov clear selectDevices"></ul><!--
 							--><div class="li_btn_bx clear">
 									<div class="fl">
-										<button type="submit" class="btn_type03">모두 선택</button>
-										<button type="submit" class="btn_type03">모두 해제</button>
+										<button type="button" class="btn_type03">모두 선택</button>
+										<button type="button" class="btn_type03">모두 해제</button>
 									</div>
 									<div class="end">
-										<button type="submit" class="btn_type fr">적용</button>
+										<button type="button" class="btn_type fr">적용</button>
 									</div>
 								</div>
 							</div>
@@ -111,13 +113,14 @@
 						<span class="tx_tit">기간</span>
 						<div class="sa_select">
 							<div class="dropdown" id="period">
-								<button class="btn btn-primary dropdown-toggle" type="button"
-									data-toggle="dropdown">오늘<span class="caret"></span></button>
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="오늘">
+									오늘<span class="caret"></span>
+								</button>
 								<ul class="dropdown-menu">
-									<li data-value="today" class="on"><a href="#">오늘</a></li>
-									<li data-value="week"><a href="#">이번 주</a></li>
-									<li data-value="month"><a href="#">이번 달</a></li>
-									<li data-value="setup"><a href="#">기간 설정</a></li>
+									<li data-value="today" class="on"><a href="javascript:void(0);">오늘</a></li>
+									<li data-value="week"><a href="javascript:void(0);">이번 주</a></li>
+									<li data-value="month"><a href="javascript:void(0);">이번 달</a></li>
+									<li data-value="setup"><a href="javascript:void(0);">기간 설정</a></li>
 								</ul>
 							</div>
 						</div>
@@ -125,25 +128,24 @@
 
 					<div class="duration" id="dateArea">
 						<span class="tx_tit">기간 설정</span>
-						<div class="sel_calendar"><input type="text"
-							id="datepicker1" class="sel" value="" autocomplete="off" readonly /></div>
-						<div class="sel_calendar"><input type="text"
-							id="datepicker2" class="sel" value="" autocomplete="off" readonly /></div>
+						<div class="sel_calendar">
+							<input type="text" id="fromDate" class="sel fromDate" value="" autocomplete="off" readonly /></div>
+						<div class="sel_calendar">
+							<input type="text" id="toDate" class="sel toDate" value="" autocomplete="off" readonly /></div>
 					</div>
 
 					<div class="unit" id="cycle">
 						<span class="tx_tit">단위</span>
 						<div class="sa_select">
 							<div class="dropdown" id="interval">
-								<button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown"
-									data-value="15min">
+								<button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown">
 									기간<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu">
-									<li data-value="15min" class="on"><a href="#">15분</a></li>
-									<li data-value="hour"><a href="#">1시간</a></li>
-									<li data-value="day"><a href="#">1일</a></li>
-									<li data-value="month"><a href="#">1월</a></li>
+									<li data-value="15min" class="on"><a href="javascript:void(0);">15분</a></li>
+									<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
+									<li data-value="day"><a href="javascript:void(0);">1일</a></li>
+									<li data-value="month"><a href="javascript:void(0);">1월</a></li>
 								</ul>
 							</div>
 						</div>
@@ -151,7 +153,7 @@
 					<button type="button" class="btn_type" id="renderBtn">조회</button>
 				</div>
 			</div>
-			<a href="#" class="chart_change_column" id="changeChart">그래프</a>
+			<a href="javascript:void(0);" class="chart_change_column" id="changeChart">그래프</a>
 			<div class="inchart">
 				<p class="tx_time"></p>
 				<div id="chart2"></div>
@@ -165,12 +167,12 @@
 	<div class="col-lg-12">
 		<div class="indiv diagnosis_table">
 			<div class="tbl_save_bx">
-				<a href="#" class="save_btn">데이터저장</a>
+				<a href="javascript:void(0);" class="save_btn">데이터저장</a>
 			</div>
 			<div class="tbl_top clear">
 				<h2 class="ntit fl">예측 결과 도표</h2>
 				<ul class="fr">
-					<li><a href="#" class="fold_btn">표접기</a></li>
+					<li><a href="javascript:void(0);" class="fold_btn">표접기</a></li>
 				</ul>
 			</div>
 			<div class="tbl_wrap">
@@ -192,6 +194,9 @@
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	let standard = new Array();
+	let deferreds = new Array();
+	let accociation = new Map();
+	let dup = false;
 	let applicationData = {
 		observed: null,
 		observedType: 'column',
@@ -219,14 +224,14 @@
 
 		$('#period li').on('click', function () {
 			if ($(this).data('value') == 'today') { //오늘
-				$('#datepicker1').datepicker('setDate', 'today'); //데이트 피커 기본
-				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+				$('#fromDate').datepicker('setDate', 'today'); //데이트 피커 기본
+				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
 			} else if ($(this).data('value') == 'week') { //이번주
-				$('#datepicker1').datepicker('setDate', '-6'); //데이트 피커 기본
-				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+				$('#fromDate').datepicker('setDate', '-6'); //데이트 피커 기본
+				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
 			} else { //이번달
-				$('#datepicker1').datepicker('setDate', '-30'); //데이트 피커 기본
-				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+				$('#fromDate').datepicker('setDate', '-30'); //데이트 피커 기본
+				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
 			}
 		});
 
@@ -257,8 +262,8 @@
 				$('input[name="ignore_tolerance1"]').prop('disabled', true);
 				$('input[name="ignore_tolerance2"]').prop('disabled', false);
 			} else {
-				$('input[name="ignore_tolerance1"]').prop('disabled', true);
-				$('input[name="ignore_tolerance2"]').prop('disabled', true);
+				$('input[name="ignore_tolerance1"]').prop('disabled', false);
+				$('input[name="ignore_tolerance2"]').prop('disabled', false);
 			}
 		});
 
@@ -300,8 +305,8 @@
 			application();
 		});
 
-		$('#datepicker1').datepicker('setDate', 'today'); //데이트 피커 기본
-		$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+		$('#fromDate').datepicker('setDate', 'today'); //데이트 피커 기본
+		$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
 	});
 
 	const rtnDropdown = ($dropdownId) => {
@@ -311,14 +316,14 @@
 			let period = $('#period button').data('value');
 			if (period == 'today') { //오늘
 				// $('#cycle').
-				$('#datepicker1').datepicker('setDate', 'today'); //데이트 피커 기본
-				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+				$('#fromDate').datepicker('setDate', 'today'); //데이트 피커 기본
+				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
 			} else if (period == 'week') { //이번주
-				$('#datepicker1').datepicker('setDate', '-6'); //데이트 피커 기본
-				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+				$('#fromDate').datepicker('setDate', '-6'); //데이트 피커 기본
+				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
 			} else { //이번달
-				$('#datepicker1').datepicker('setDate', '-30'); //데이트 피커 기본
-				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+				$('#fromDate').datepicker('setDate', '-30'); //데이트 피커 기본
+				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
 			}
 		} else if ($dropdownId == 'chartStyle') {
 			chartDataDraw();
@@ -406,7 +411,7 @@
 		let sites = JSON.parse('${siteList}');
 		sites.forEach((site, index) => {
 			str += `<li>
-						<a href="#" data-value="${'${site.sid}'}" tabindex="-1">
+						<a href="javascript:void(0);" data-value="${'${site.sid}'}" tabindex="-1">
 							<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
 							<label for="${'${site.sid}'}">${'${site.name}'}</label>
 						</a>
@@ -446,7 +451,6 @@
 								'BMS_RACK', 'SENSOR_SOLAR', 'SENSOR_FLAME', 'SENSOR_TEMP_HUMIDITY', 'CCTV', 'COMBINER_BOX', 'CIRCUIT_BREAKER'
 							];
 							$.each(devices, function (i, el) {
-
 								$.each(deviceType, function (j, tp) {
 									if (tp == el.device_type && (el.dashboard || el.billing)) {
 										let deviceHtml = $('<li>').append('<a>');
@@ -482,8 +486,8 @@
 
 	function fetchGenData() {
 		//기간 설정 확인
-		const startTime = $('#datepicker1').val().replace(/-/g, '') + "000000";
-		const endTime = $('#datepicker2').val().replace(/-/g, '') + "235959";
+		const startTime = $('#fromDate').val().replace(/-/g, '') + "000000";
+		const endTime = $('#toDate').val().replace(/-/g, '') + "235959";
 		//주기 확인
 		let interval = $('#interval button').data('value');
 		const billingSites = $.makeArray($(':checkbox[id^="device_billing_"]:checked').map(
@@ -517,13 +521,12 @@
 			return false;
 		}
 
-		responseCnt = 0;
+		let urls = new Array();
 		accociation = new Map();
 
 		//매전량
 		if (billingSites.length > 0) {
-			//API 호출
-			$.ajax({
+			urls.push({
 				url: apiHost + '/energy/sites',
 				type: "get",
 				async: false,
@@ -534,23 +537,13 @@
 					interval: interval,
 					displayType: 'billing',
 					formId: 'v2'
-				},
-				success: function (data) {
-					association(data, '1');
-				},
-				error: function (error) {
-					console.error(error);
-					association(null, '1');
 				}
-			})
-		} else {
-			association(null, '1');
+			});
 		}
 
 		//매전량 예측
 		if (billingSites.length > 0) {
-			//API 호출
-			$.ajax({
+			urls.push({
 				url: apiHost + '/energy/forecasting/sites',
 				type: "get",
 				async: false,
@@ -561,23 +554,13 @@
 					interval: interval,
 					displayType: 'billing',
 					formId: 'v2'
-				},
-				success: function (data) {
-					association(data, '4');
-				},
-				error: function (error) {
-					console.error(error);
-					association(null, '4');
 				}
-			})
-		} else {
-			association(null, '4');
+			});
 		}
 
 		//대시보드
 		if (dashSites.length > 0) {
-			//API 호출
-			$.ajax({
+			urls.push({
 				url: apiHost + 'energy/sites',
 				type: "get",
 				async: false,
@@ -588,23 +571,13 @@
 					interval: interval,
 					displayType: 'dashboard',
 					formId: 'v2'
-				},
-				success: function (data) {
-					association(data, '2');
-				},
-				error: function (error) {
-					console.error(error);
-					association(null, '2');
 				}
-			})
-		} else {
-			association(null, '2');
+			});
 		}
 
 		//대시보드
 		if (dashSites.length > 0) {
-			//API 호출
-			$.ajax({
+			urls.push({
 				url: apiHost + '/energy/forecasting/sites',
 				type: "get",
 				async: false,
@@ -615,22 +588,13 @@
 					interval: interval,
 					displayType: 'dashboard',
 					formId: 'v2'
-				},
-				success: function (data) {
-					association(data, '5');
-				},
-				error: function (error) {
-					console.error(error);
-					association(null, '5');
 				}
-			})
-		} else {
-			association(null, '5');
+			});
 		}
 
 		if (checkedDevices.length > 0) {
 			//API 호출
-			$.ajax({
+			urls.push({
 				url: apiHost + '/energy/devices',
 				type: "get",
 				async: false,
@@ -639,22 +603,12 @@
 					startTime: startTime,
 					endTime: endTime,
 					interval: interval
-				},
-				success: function (data) {
-					association(data, '3');
-				},
-				error: function (error) {
-					console.error(error);
-					association(null, '3');
 				}
 			});
-		} else {
-			association(null, '3');
 		}
 
 		if (checkedDevices.length > 0) {
-			//API 호출
-			$.ajax({
+			urls.push({
 				url: apiHost + '/energy/forecasting/devices',
 				type: "get",
 				async: false,
@@ -663,146 +617,132 @@
 					startTime: startTime,
 					endTime: endTime,
 					interval: interval
-				},
-				success: function (data) {
-					association(data, '6');
-				},
-				error: function (error) {
-					console.error(error);
-					association(null, '6');
 				}
 			});
-		} else {
-			association(null, '6');
 		}
-	}
 
-// ###########################################################################
-	let responseCnt = 0;
-	let accociation = new Map();
-	let dup = false;
+		deferreds = new Array();
+		urls.forEach(function (url) {
+			let deferred = $.Deferred();
+			deferreds.push(deferred);
 
-	function association(map, key) {
-		responseCnt++;
-		if (map != null) {
-			if (key == '1' || key == '2' || key == '3') { //실측
-				let dummy = map.data;
-				$.each(dummy, function (i, el) {
-					if (accociation.get('actual') == undefined) {
-						accociation.set('actual', el[0].items);
-					} else {
-						$.each(el[0].items, function (j, elj) {
-							let dupData = false;
-							let bt = elj.basetime;
-							$.each(accociation.get('actual'), function (k, elk) {
-								if (elk.basetime == bt) {
-									elk.energy += elj.energy;
-									elk.money += elj.money;
-									dupData = true;
+			$.ajax(url).done(function (data) {
+				data['url'] = url['url'];
+				(function (deferred) {
+					return deferred.resolve(data);
+				})(deferred);
+			}).fail(function (error) {
+				console.log(error);
+			});
+		});
+
+		$.when.apply($, deferreds).then(function () {
+			let responseParams = [];
+			for (let index = 0; index < arguments.length; index++) {
+				let data = arguments[index];
+				let genData = data['data'];
+				if (data['url'].match('fore')) {
+					Object.entries(genData).map(el => {
+						if (el[1][0].items) {
+							let energyData = el[1][0].items;
+							if (accociation.get('prediction') == undefined) {
+								accociation.set('prediction', energyData);
+
+								if (accociation.get('actual') === undefined) {
+									let dummy = new Array(energyData.length).fill('');
+									accociation.set('actual', dummy);
 								}
-							});
-							if (!dupData) {
-								accociation.get('actual').push(el);
+							} else {
+								$.each(energyData, function (j, elj) {
+									let dupData = false;
+									let bt = elj.basetime;
+									$.each(accociation.get('prediction'), function (k, elk) {
+										if (elk.basetime == bt) {
+											elk.energy += elj.energy;
+											elk.money += elj.money;
+											dupData = true;
+										}
+									});
+									if (!dupData) {
+										accociation.get('prediction').push(elj);
+									}
+								});
 							}
-						});
-					}
-				});
-			} else { //예측
-				let dummy = map.data;
-				$.each(dummy, function (i, el) {
-					if (accociation.get('prediction') == undefined) {
-						accociation.set('prediction', el[0].items);
-					} else {
-						$.each(el[0].items, function (j, elj) {
-							let dupData = false;
-							let bt = elj.basetime;
-							$.each(accociation.get('prediction'), function (k, elk) {
-								if (elk.basetime == bt) {
-									elk.energy += elj.energy;
-									elk.money += elj.money;
-									dupData = true;
-								}
+						}
+					});
+
+					if (accociation.get('actual') === undefined) {
+						let dummy = new Array();
+						accociation.get('prediction').forEach(gData => {
+							dummy.push({
+								basetime: gData['basetime'],
+								energy: null,
+								money: null,
+								cenergy: null,
+								cmoney: null,
+								denergy: null,
+								dmoney: null
 							});
-							if (!dupData) {
-								accociation.get('prediction').push(el);
-							}
 						});
+						accociation.set('actual', dummy);
 					}
-				});
+				} else {
+					Object.entries(genData).map(el => {
+						if (el[1][0].items) {
+							let energyData = el[1][0].items;
+							if (accociation.get('actual') == undefined) {
+								accociation.set('actual', energyData);
+							} else {
+								$.each(energyData, function (j, elj) {
+									let dupData = false;
+									let bt = elj.basetime;
+									$.each(accociation.get('actual'), function (k, elk) {
+										if (elk.basetime == bt) {
+											elk.energy += elj.energy;
+											elk.money += elj.money;
+											dupData = true;
+										}
+									});
+									if (!dupData) {
+										accociation.get('actual').push(elj);
+									}
+								});
+							}
+						}
+					});
+
+					if (accociation.get('prediction') === undefined) {
+						let dummy = new Array();
+						accociation.get('actual').forEach(gData => {
+							dummy.push({
+								basetime: gData['basetime'],
+								energy: null,
+								money: null,
+								cenergy: null,
+								cmoney: null,
+								denergy: null,
+								dmoney: null
+							});
+						});
+						accociation.set('prediction', dummy);
+					}
+				}
 			}
-		}
 
-		if (responseCnt == 6) {
+			// 순서대로 모아진 결과를 화면에 출력하기
 			if (!dup) {
 				dup = true;
 				drawPage();
 			}
-		}
+		});
 	}
 
 	function drawPage() {
 		$('table.pc_use tbody').empty();
 
-		standard = new Array();
-		let sDate = $('#datepicker1').val().replace(/-/g, '');
-		let eDate = $('#datepicker2').val().replace(/-/g, '');
 		let interval = $('#interval button').data('value');
 
-		if (interval == 'day') {
-			let diffDay = getDiff(eDate, sDate, 'day');
-			for (let j = 0; j < diffDay; j++) {
-				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
-				sDateTime.setDate(Number(sDateTime.getDate()) + j);
-				let toDate = sDateTime.format('yyyyMMdd');
-				standard.push(toDate);
-			}
-		} else if (interval == 'month') {
-			let diffMonth = getDiff(eDate, sDate, 'month');
-			for (let j = 0; j < diffMonth; j++) {
-				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) + j - 1, 1);
-				let toDate = sDateTime.format('yyyyMM');
-				standard.push(toDate);
-			}
-		} else {
-			let diffDay = getDiff(eDate, sDate, 'day');
-			//diffDay 1보다 크면 시작일과 종료일이 다르다.
-			for (let j = 0; j < diffDay; j++) {
-				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
-				sDateTime.setDate(sDateTime.getDate() + j);
-				let toDate = sDateTime.format('yyyyMMdd');
-
-				for (let i = 0; i < 24; i++) {
-					if (interval == '15min') { //15분
-						if (String(i).length == 1) {
-							standard.push(toDate + '0' + i + '0000');
-							standard.push(toDate + '0' + i + '1500');
-							standard.push(toDate + '0' + i + '3000');
-							standard.push(toDate + '0' + i + '4500');
-						} else {
-							standard.push(toDate + i + '0000');
-							standard.push(toDate + i + '1500');
-							standard.push(toDate + i + '3000');
-							standard.push(toDate + i + '4500');
-						}
-					} else if (interval == '30min') { //30분
-						if (String(i).length == 1) {
-							standard.push(toDate + '0' + i + '0000');
-							standard.push(toDate + '0' + i + '3000');
-						} else {
-							standard.push(toDate + i + '0000');
-							standard.push(toDate + i + '3000');
-						}
-					} else { //시간
-						if (String(i).length == 1) {
-							standard.push(toDate + '0' + i + '0000');
-						} else {
-							standard.push(toDate + i + '0000');
-						}
-					}
-				}
-			}
-		}
-
+		standard = makeStandard(interval);
 		let gridData = gridDataMake(interval);
 
 		let totalArr = new Array();
@@ -1138,21 +1078,6 @@
 		return dataArr;
 	}
 
-	//두기간 사이 차이 구하기.
-	function getDiff(eDate, sDate, type) {
-		eDate = new Date(eDate.substring(2, 4), eDate.substring(4, 6) - 1, eDate.substring(6, 8));
-		sDate = new Date(sDate.substring(2, 4), sDate.substring(4, 6) - 1, sDate.substring(6, 8));
-		if (type == 'day') {
-			return (((((eDate - sDate) / 1000) / 60) / 60) / 24) + 1;
-		} else if (type == 'month') {
-			if (eDate.format('yyyyMMdd').substring(0, 4) == sDate.format('yyyyMMdd').substring(0, 4)) {
-				return (eDate.format('yyyyMMdd').substring(4, 6) * 1 - sDate.format('yyyyMMdd').substring(4, 6) * 1) + 1;
-			} else {
-				return Math.round((eDate - sDate) / (1000 * 60 * 60 * 24 * 365 / 12)) + 1;
-			}
-		}
-	}
-
 	//차트
 	const chartMakeData = function (type) {
 		let seriesData = new Array();
@@ -1189,8 +1114,8 @@
 						$.each(arr, function (k, elk) {
 							let basetime = String(elk.basetime);
 							if (basetime.match(stnd)) {
-								timeValue = Number(displayNumberFixedUnit(elk.energy, 'Wh', 'kWh', 2)[0]);
-								total += elk.energy;
+								timeValue = Number((elk.energy / 1000).toFixed(2));
+								total += timeValue;
 							}
 						});
 						arrDevice.push([
@@ -1235,8 +1160,8 @@
 					$.each(arr, function (k, elk) {
 						let basetime = String(elk.basetime);
 						if (basetime.match(stnd)) {
-							timeValue = Number(displayNumberFixedUnit(elk.energy, 'Wh', 'kWh', 2)[0]);
-							total += elk.energy;
+							timeValue = Number((elk.energy / 1000).toFixed(2));
+							total += timeValue;
 						}
 					});
 
@@ -1318,7 +1243,7 @@
 				min: 0,
 				/* 최소값 지정 */
 				title: {
-					text: '(Wh)',
+					text: '(kWh)',
 					align: 'low',
 					rotation: 0,
 					/* 타이틀 기울기 */
@@ -1363,7 +1288,7 @@
 			tooltip: {
 				formatter: function () {
 					return this.points.reduce(function (s, point) {
-						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + Number(point.y).toFixed(2) + point.series.userOptions.tooltip.valueSuffix;
+						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + point.series.userOptions.tooltip.valueSuffix;
 					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
 				},
 				shared: true /* 툴팁 공유 */
@@ -1447,15 +1372,13 @@
 			}
 		}
 
-		let unit = 'Wh';
+		let unit = 'kWh';
 		if (loopCnt == 1) {
-			unit = 'kWh';
-		} else if (loopCnt == 2) {
 			unit = 'MWh';
-		} else if (loopCnt == 3) {
+		} else if (loopCnt == 2) {
 			unit = 'GWh';
 		} else {
-			unit = 'Wh';
+			unit = 'kWh';
 		}
 
 		$('.value_num').eq(type).empty().append('<span class="num">' + total.toFixed(2) + '</span>' + unit);
