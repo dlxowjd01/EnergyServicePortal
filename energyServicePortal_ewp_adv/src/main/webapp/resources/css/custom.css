@@ -627,10 +627,13 @@ table input[type="text"] {
 	padding-right: 0;
 }
 
+<<<<<<< HEAD
 .bold {
 	font-weight: bold;
 }
 
+=======
+>>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 .clear-btn {
 	background: none;
 	border: none;
@@ -1013,15 +1016,24 @@ table input[type="text"] {
 }
 
 .warning-wrapper {
+<<<<<<< HEAD
 	margin: 12px 0 0 124px;
+=======
+	margin: 12px 0 0 128px;
+>>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 }
 
 .text-sm {
 	float: left;
 	font-size: 13px;
 	font-weight: 500;
+<<<<<<< HEAD
 	line-height: 18px;
 	margin: 0 0 20px 120px;
+=======
+	line-height: 36px;
+	padding-left: 120px;
+>>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 }
 
 .tick {
@@ -1733,17 +1745,28 @@ nav .nav-brand {
 
 nav .nav-brand a {
 	display: block;
+<<<<<<< HEAD
 	width: 120px;
 	height: 100%;
 	background: var(--iderms-logo) no-repeat -30px 14px;
 	background-size: 182px 32px;
+=======
+	width: 130px;
+	height: 100%;
+	background: var(--iderms-logo) no-repeat fixed 4px 12px;
+	background-size: 182px 36px;
+>>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 	font-size: 0;
 }
 
 nav .nav-brand.spower a {
 	width: 130px;
 	height: 100%;
+<<<<<<< HEAD
 	background: var(--spower-logo) no-repeat -25px 12px;
+=======
+	background: var(--spower-logo) no-repeat fixed 4px 12px;
+>>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 	background-size: 182px 36px;
 	font-size: 0;
 }
@@ -2613,7 +2636,10 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 
 .modal-body .sub-title {
 	font-size: 14px;
+<<<<<<< HEAD
 	font-weight: bold;
+=======
+>>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 	color: var(--color8);
 }
 
@@ -2675,6 +2701,7 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	margin: 20px 0;
 }
 
+<<<<<<< HEAD
 .settings-content .clear-input {
 	width: 100%;
 	color: var(--color8);
@@ -2682,6 +2709,8 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	font-weight: 500;
 }
 
+=======
+>>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 .modal-body .input-group.inline-flex {
 	margin: 0 0 32px;
 }

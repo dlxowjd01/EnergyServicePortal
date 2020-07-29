@@ -64,7 +64,11 @@
 
 	<!-- 다크 모드 지원 -->
 	<!-- <script src="/js/custom/theme.js"></script> -->
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 	<!-- 화면 엑셀 다운로드용 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
@@ -74,8 +78,13 @@
 	<script type="text/javascript" src="/js/wickedpicker.js"></script>
 	<script>
 		// role: 1: 시스템관리자, 2: 일반
+<<<<<<< HEAD
 		const role = '${userInfo.role}';
 		// task : 0: 일반, 1:사무수탁, 2:자산운용, 3:사업주
+=======
+		// task : 0: 일반, 1:사무수탁, 2:자산운용, 3: 사업주
+		const role = '${userInfo.role}';
+>>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 		const task = '${userInfo.task}';
 		const oid = '${userInfo.oid}';
 		const loginId = '${userInfo.login_id}';

@@ -289,17 +289,17 @@
 	}
 
 	function setComboBoxData() {
-		setInitList("spcCountryList");
-		setMakeList(countryList, "spcCountryList", {"dataFunction": {}});
+		setInitList('spcCountryList');
+		setMakeList(countryList, 'spcCountryList', {'dataFunction': {}});
 
-		setInitList("countryList");
-		setMakeList(countryList, "countryList", {"dataFunction": {}});
+		setInitList('countryList');
+		setMakeList(countryList, 'countryList', {'dataFunction': {}});
 
 		setInitList("spcSidoList");
-		setMakeList(sidoList, "spcSidoList", {"dataFunction": {}});
+		setMakeList(sidoList, 'spcSidoList', {'dataFunction': {}});
 
-		setInitList("sidoList");
-		setMakeList(sidoList, "sidoList", {"dataFunction": {}});
+		setInitList('sidoList');
+		setMakeList(sidoList, 'sidoList', {'dataFunction': {}});
 	}
 
 	function setSaveData() {
@@ -549,16 +549,24 @@
 					$('#financeInfo').find('input[type="file"]').each(function () {
 						if (fieldname == $(this).attr('name')) {
 							let button = $(this).parents('div.group_type').find('.dropdown').find('button').data('value');
-							el['용도 선택'] = button;
+							el['용도'] = button;
 						}
 					});
 
 				});
 
-				finance_info['SPC_법인_인감'] = resultFiles;
+				finance_info['공인인증서'] = resultFiles;
 			},
 			error: function (request, status, error) {
 				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+			}
+		});
+
+		Object.entries(finance_info).map(obj => {
+			if (obj[0].match('은행_리스트') && obj[1] == '직접입력') {
+				const idx = obj[0].replace(/[^0-9]/g, ''),
+					bnkName = finance_info['은행_직접입력' + idx];
+				finance_info[obj[0]] = bnkName;
 			}
 		});
 
@@ -700,6 +708,15 @@
 	function rtnDropdown($dropdownId) {
 		if($dropdownId == 'spcId') {
 			getgenIdData();
+		} else if ($dropdownId.match('은행_리스트')) {
+			const target = $('#' + $dropdownId),
+				targetInput = target.parents('td').find('[id^=은행_직접입력]');
+			if (target.find('button').data('value') == '직접입력') {
+				targetInput.parent().removeClass('hidden');
+			} else {
+				targetInput.parent().addClass('hidden');
+				targetInput.val('');
+			}
 		}
 	}
 
@@ -1540,12 +1557,21 @@
 										--><li data-id="0035" data-value="제주"><a href="#">제주</a></li><!--
 										--><li data-id="0089" data-value="K뱅크"><a href="#">K뱅크</a></li><!--
 										--><li data-id="1001" data-value="상호저축"><a href="#">상호저축</a></li><!--
+<<<<<<< HEAD
+=======
+										--><li data-id="0000" data-value="직접입력"><a href="#">직접입력</a></li><!--
+>>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 									--></ul><!--
 								--></div>
 								</div>
 								<div class="fixed_height">
-									<div class="tx_inp_type edit">
-										<input type="text" id="예금주[index]" name="예금주[index]" placeholder="직접 입력">
+									<div class="group_type">
+										<div class="tx_inp_type edit unit t1">
+											<input type="text" id="예금주[index]" name="예금주[index]" placeholder="직접 입력">
+										</div>
+										<div class="tx_inp_type edit hidden">
+											<input type="text" id="은행_직접입력[index]" name="은행_직접입력[index]" placeholder="직접 입력">
+										</div>
 									</div>
 								</div>
 							</td>
@@ -1579,7 +1605,7 @@
 							</th>
 							<td class="addList_certificate_registration entity">
 								<div class="group_type flex_start">
-									<div class="dropdown placeholder edit" id="용도 선택[index]">
+									<div class="dropdown placeholder edit" id="용도[index]">
 										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
 											용도 선택<span class="caret"></span>
 										</button>

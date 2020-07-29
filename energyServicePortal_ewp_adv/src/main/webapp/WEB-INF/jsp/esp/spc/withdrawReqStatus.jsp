@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
-<script src="/js/commonDropdown.js"></script>
-
+<script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	// unCheckAll($("#reqStatus"));
 	$(function() {
@@ -79,7 +78,7 @@
 			});
 		}
 
-		function getDataList(page, searchOpt) {
+		function getDataList(page, searchOpt, sortOpt) {
 			var sortList = [];
 			var currentPage = '';
 			let action = 'get';
@@ -122,11 +121,11 @@
 					let perPage = 14;
 					let startNum = (Number(currentPage) - 1) * perPage;
 					let endNum = Number(currentPage) * perPage + 1;
-					data = data.slice(startNum, endNum);
 
 					tableBody.empty();
 					tableFooter.empty();
 
+					let refineList = new Array();
 					data.map((item, index) => {
 						totalAmount += item.total_amount;
 						// console.log("item---", item)
@@ -223,21 +222,74 @@
 							}
 						});
 
+						refineList.push({
+							transactionSpcId: transaction_spc_id,
+							spcName: spc_name,
+							transactionReqId: transaction_req_id,
+							bankName: bank_name,
+							accNum: withdraw_acc_num,
+							chkOpt: 'chkOpt_'+ index,
+							reviewOpt: 'review_opt_'+ index,
+							withdrawDay: withdraw_day,
+							statusVal: status_val,
+							totalAmount: total_amount,
+							requestedAt: requested_at,
+							statusChangedAt: status_changed_at,
+							transferAgent: transfer_agent,
+							requestedBy: requested_by,
+							statusChangedBy: status_changed_by,
+							status: status,
+							linkAttr: link_attr
+						});
+					});
+
+					if (sortOpt) {
+						refineList.sort(function(a, b) {
+							var cell1 = a[sortOpt.column];
+							var cell2 = b[sortOpt.column];
+
+							if (sortOpt.column == 'totalAmount') {
+								cell1 = cell1.replace('원', '').trim();
+								cell2 = cell2.replace('원', '').trim();
+							}
+
+							cell1 = String(cell1).replace(/^\s+|\s+$/g, '');
+							cell2 = String(cell2).replace(/^\s+|\s+$/g, '');
+
+							if (isNumberic(cell1) && isNumberic(cell2)) {
+								cell1 = Number(cell1.replace(/[^0-9]/g, ''));
+								cell2 = Number(cell2.replace(/[^0-9]/g, ''));
+							}
+
+							if (sortOpt.sort == 'up') {
+								if (cell1 < cell2) return -1;
+								if (cell1 > cell2) return 1;
+							} else {
+								if (cell1 < cell2) return 1;
+								if (cell1 > cell2) return -1;
+							}
+
+							return 0;
+						});
+					}
+
+					refineList = refineList.slice(startNum, endNum);
+					refineList.forEach(refine => {
 						let str = '';
-						str = tableCloned.replace(/\*transactionSpcId\*/g, transaction_spc_id)
-						.replace(/\*spcName\*/g, spc_name)
-						.replace(/\*transactionReqId\*/g, transaction_req_id)
-						.replace(/\*bankName\*/g, bank_name).replace(/\*accNum\*/g, withdraw_acc_num)
-						.replace(/\*chkOpt\*/g, 'chkOpt_'+ index).replace(/\*reviewOpt\*/g, 'review_opt_'+ index)
-						.replace(/\*withdrawDay\*/g, withdraw_day)
-						.replace(/\*spcName\*/g, spc_name)
-						.replace(/\*statusVal\*/g, status_val)
-						.replace(/\*totalAmount\*/g, total_amount)
-						.replace(/\*requestedAt\*/g, requested_at).replace(/\*statusChangedAt\*/g, status_changed_at)
-						.replace(/\*transferAgent\*/g, transfer_agent).replace(/\*requestedBy\*/g, requested_by)
-						.replace(/\*statusChangedBy\*/g, status_changed_by).replace(/\*status\*/g, status).replace(/\*linkAttr\*/g, link_attr)
+						str = tableCloned.replace(/\*transactionSpcId\*/g, refine.transactionSpcId)
+						.replace(/\*spcName\*/g, refine.spcName)
+						.replace(/\*transactionReqId\*/g, refine.transactionReqId)
+						.replace(/\*bankName\*/g, refine.bankName).replace(/\*accNum\*/g, refine.accNum)
+						.replace(/\*chkOpt\*/g, refine.chkOpt).replace(/\*reviewOpt\*/g, refine.reviewOpt)
+						.replace(/\*withdrawDay\*/g, refine.withdrawDay)
+						.replace(/\*statusVal\*/g, refine.statusVal)
+						.replace(/\*totalAmount\*/g, refine.totalAmount)
+						.replace(/\*requestedAt\*/g, refine.requestedAt).replace(/\*statusChangedAt\*/g, refine.statusChangedAt)
+						.replace(/\*transferAgent\*/g, refine.transferAgent).replace(/\*requestedBy\*/g, refine.requestedBy)
+						.replace(/\*statusChangedBy\*/g, refine.statusChangedBy).replace(/\*status\*/g, refine.status).replace(/\*linkAttr\*/g, refine.linkAttr)
 						tableBody.append($(str));
 					});
+
 					let str = totalAmount.toString();
 					let tfootStr = '';
 					tfootStr = tfootClone.replace(/\*total\*/g, totalAmount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
@@ -309,10 +361,24 @@
 				searchOpt.status = status;
 				searchOpt.keyword = $("#keyword").val().trim().toLowerCase();
 
+				let sortOption = new Object();
+				$('.sort_table th button').each(function() {
+					if ($(this).hasClass('up') || $(this).hasClass('down')) {
+						let columnName = $(this).data('column');
+						if ($(this).hasClass('up')) {
+							sortOption['column'] = columnName;
+							sortOption['sort'] = 'up';
+						} else {
+							sortOption['column'] = columnName;
+							sortOption['sort'] = 'down';
+						}
+					}
+				});
+
 				if (isEmpty(searchOpt.status) && isEmpty(searchOpt.keyword)) {
-					getDataList(page, null);
+					getDataList(page, null, sortOption);
 				} else {
-					getDataList(page, searchOpt);
+					getDataList(page, searchOpt, sortOption);
 				}
 				return false;
 			});
@@ -341,20 +407,47 @@
 		});
 
 		$('.sort_table th').click(function(){
-			if ($(this).find('button').length > 0) {
-				var table = $(this).parents("table");
-				var rows = tableBody.find('tr').toArray().sort(comparer($('.sort_table th').index(this)));
-				this.asc = !this.asc;
-				if (!this.asc) {
-					rows = rows.reverse();
-					$(this).addClass('down').removeClass('up');
+			let thisBtn = $(this).find('button');
+			if (thisBtn.length > 0) {
+				let column = thisBtn.data('column');
+				// var table = $(this).parents("table");
+				// var rows = tableBody.find('tr').toArray().sort(comparer($('.sort_table th').index(this)));
+
+				let searchOpt = {};
+				let checkbox = $("#reqStatus").find("input[type='checkbox']");
+				var status= [];
+
+				if (checkbox.first().is(':checked')) {
+					checkbox.each(function(){
+						status.push($(this).val())
+					});
 				} else {
-					$(this).removeClass('down').addClass('up');
+					checkbox.each(function(){
+						if($(this).is(":checked")){
+							status.push($(this).val())
+						}
+					});
 				}
-				for (var i = 0, rowLength = rows.length; i < rowLength; i++) {
-					// TO DO !!!!! sorting json data
-					tableBody.append(rows[i])
+				searchOpt.status = status;
+				searchOpt.keyword = $("#keyword").val().trim().toLowerCase();
+
+				if (isEmpty(searchOpt.status) && isEmpty(searchOpt.keyword)) {
+					searchOpt = null;
 				}
+
+				if (thisBtn.hasClass('up')) {
+					thisBtn.addClass('down').removeClass('up');
+					getDataList(1, searchOpt, {column: column, sort: 'down'});
+				} else {
+					thisBtn.removeClass('down').addClass('up');
+					getDataList(1, searchOpt, {column: column, sort: 'up'});
+				}
+
+
+				// for (var i = 0, rowLength = rows.length; i < rowLength; i++) {
+				// 	// TO DO !!!!! sorting json data
+				// 	tableBody.append(rows[i])
+				// }
 			}
 		});
 	});
@@ -548,32 +641,32 @@
 						</a>
 					</th>
 					<th>
-						<button class="btn_align down">출금 일자</button>
+						<button class="btn_align" data-column="withdrawDay">출금 일자</button>
 					</th>
 					<th>
-						<button class="btn_align down">SPC 명</button>
+						<button class="btn_align" data-column="spcName">SPC 명</button>
 					</th>
 					<th class="right">
-						<button class="btn_align down">금액</button>
+						<button class="btn_align" data-column="totalAmount">금액</button>
 					</th>
 					<th>
-						<button class="btn_align down">요청/수정일</button>
+						<button class="btn_align" data-column="requestedAt">요청/수정일</button>
 					</th>
 					<th>
-						<button class="btn_align down">사무 수탁사</button>
+						<button class="btn_align" data-column="requestedBy">사무 수탁사</button>
 					</th>
 					<th>
-						<button class="btn_align down">담당자</button>
+						<button class="btn_align" data-column="transferAgent">담당자</button>
 					</th>
 					<th>
-						<button class="btn_align down">상태</button>
+						<button class="btn_align" data-column="status">상태</button>
 					</th>
 
 					<th>
-						<button class="btn_align down">승인자</button>
+						<button class="btn_align" data-column="statusChangedBy">승인자</button>
 					</th>
 					<th>
-						<button class="btn_align down">승인일</button>
+						<button class="btn_align" data-column="statusChangedAt">승인일</button>
 					</th>
 				</tr>
 				</thead>

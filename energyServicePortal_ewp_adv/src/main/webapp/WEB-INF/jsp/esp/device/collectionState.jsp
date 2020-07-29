@@ -226,7 +226,10 @@
 		siteMakeList(); //사업소 리스트 그리기
 		getRtuDataList(); //RTU 데이터리스트
 
-		$('.timepicker').wickedpicker({twentyFour: true});
+		let setNowTime = new Date();
+		setNowTime.setMinutes(setNowTime.getMinutes() - 5);
+		$('#timepicker1').wickedpicker({now: setNowTime.format('HH:mm'), twentyFour: true});
+		$('#timepicker2').wickedpicker({twentyFour: true});
 		$('#datepicker1').datepicker({dateFormat: 'yy-mm-dd'}).datepicker('setDate', new Date()); //데이트 피커 기본
 		$('#datepicker2').datepicker({dateFormat: 'yy-mm-dd'}).datepicker('setDate', new Date()); //데이트 피커 기본
 
@@ -656,8 +659,8 @@
 			name = $('#rtuName').val(),
 			serialNumber = $('#serialNumber').val(),
 			description = $('#description').val(),
-			ajaxUrl = '';
-		typeName = '';
+			ajaxUrl = '',
+			typeName = '';
 
 		if (isEmpty(sid)) {
 			alert('사업소를 선택해 주세요.');
@@ -727,14 +730,13 @@
 				siteName = rtu.siteName,
 				serialId = `#${'${rtu.serialNumber}'}`;
 
-			rtuInfo =
-				`	<tr id="${'${rtu.serialNumber}'}">
-									<td>${'${siteName}'}</td>
-									<td>${'${rtu.name}'}</td>
-									<td>${'${rtu.serialNumber}'}</td>
-									<td>${'${rtuDate}'}</td>
-								</tr>
-							`
+			rtuInfo =`	<tr id="${'${rtu.serialNumber}'}">
+							<td>${'${siteName}'}</td>
+							<td>${'${rtu.name}'}</td>
+							<td>${'${rtu.serialNumber}'}</td>
+							<td>${'${rtuDate}'}</td>
+						</tr>
+					`
 			tableData.append(rtuInfo);
 
 			$(serialId).off('click');
