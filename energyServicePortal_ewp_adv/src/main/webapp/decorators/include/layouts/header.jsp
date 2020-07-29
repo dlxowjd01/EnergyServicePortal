@@ -82,8 +82,15 @@
 				$(this).val("");
 			}
 			if(!isEmpty($(this).val())){
-				$("#updateProfileBtn").prop("disabled", false);
-				$("#updateProfileBtn").removeClass("disabled");
+				console.log("val---", $(this).val().length)
+				if($(this).val().length >= 10) {
+					$("#isValidMobileNum").addClass("hidden");
+					$("#updateProfileBtn").prop("disabled", false);
+					$("#updateProfileBtn").removeClass("disabled");
+				} else {
+					$("#isValidMobileNum").removeClass("hidden");
+				}
+
 			}
 		});
 		$("#mobileNum").on('keypress', function(evt) {
@@ -123,6 +130,10 @@
 
 		$("#pwdForm").on("submit", function(e){
 			e.preventDefault();
+			if($("#updatePwdBtn").is(":disabled") ){
+				console.log("disabled===")
+				return false;
+			}
 			let uid = '${sessionScope.userInfo.uid}';
 			let token = '${sessionScope.userInfo.token}';
 			let value = {
@@ -163,32 +174,24 @@
 
 		$("#profileForm").on("submit", function(e){
 			e.preventDefault();
+			if($("#updateProfileBtn").is(":disabled") ){
+				console.log("disabled===")
+				return false;
+			}
 			let value = {};
 
 			if(!isEmpty($("#fullName").val())) {
 				value.name = $("#fullName").val();
 				$("#fullName").val(value.name);
 				$("#userInfoBtn").contents().filter(function(){ return this.nodeType == 3; }).first().replaceWith(value.name);
-			} else {
-					return false;
 			}
 			if(!isEmpty($("#emailAddr").val())) {
 				value.contact_email = $("#emailAddr").val();
 				$("#emailAddr").val(value.contact_email);
-			} else {
-					return false;
 			}
 			if(!isEmpty($("#mobileNum").val())) {
-				if($("#mobileNum").val().length >= 10){
-					$("#isValidMobileNum").addClass("hidden");
-					value.contact_phone = $("#mobileNum").val();
-					$("#mobileNum").val(value.contact_phone);
-				} else {
-					$("#isValidMobileNum").removeClass("hidden");
-					return false;
-				}
-			} else {
-					return false;
+				value.contact_phone = $("#mobileNum").val();
+				$("#mobileNum").val(value.contact_phone);
 			}
 
 			let uid = '${sessionScope.userInfo.uid}';
