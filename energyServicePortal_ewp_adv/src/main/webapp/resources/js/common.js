@@ -293,21 +293,21 @@ function deleteFile(self, type) {
 }
 
 /* 장치 그룹 현황 슬라이드 */
-$(function() {
-    $('.dsec .device').bxSlider({
-        mode:'horizontal',
-        pager:false,
-        slideWidth: 130,
-        slideMargin: 20,
-        minSlides: 1,
-        maxSlides: 8,
-        moveSlides: 1,
-        pause: 4000,
-        auto:false,
-        controls: true,
-        infiniteLoop: false
-    });
-});
+// $(function() {
+//     $('.dsec .device').bxSlider({
+//         mode:'horizontal',
+//         pager:false,
+//         slideWidth: 130,
+//         slideMargin: 20,
+//         minSlides: 1,
+//         maxSlides: 8,
+//         moveSlides: 1,
+//         pause: 4000,
+//         auto:false,
+//         controls: true,
+//         infiniteLoop: false
+//     });
+// });
 
 
 

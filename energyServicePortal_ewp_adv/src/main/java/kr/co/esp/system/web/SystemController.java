@@ -180,6 +180,12 @@ public class SystemController {
 		return resultMap;
 	}
 
+	// @RequestMapping(value = "/system/siteSetting.do")
+	// public String systemSiteSetting(HttpServletRequest request, HttpSession session, Model model) {
+	// 	System.out.println("/system/siteSetting.do");
+	// 	return "esp/system/siteSetting";
+	// }
+
 	@RequestMapping(value = "/system/basicInformation.do")
 	public String systemBasicInformation(HttpServletRequest request, HttpSession session, Model model) {
 		System.out.println("/system/basicInformation.do");
