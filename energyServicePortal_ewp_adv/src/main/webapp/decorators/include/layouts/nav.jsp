@@ -200,10 +200,6 @@
 					<li><a href="/spc/entityInformation.do">기본정보</a></li>
 					<li><a href="/spc/balanceSheet.do">금융관리</a></li>
 					<li><a href="/spc/transactionCalendar.do">입출금 관리</a></li>
-<<<<<<< HEAD
-=======
-					<!-- <li><a href="/spc/transaction2.do">입출금 관리 (자산운용사)</a></li> -->
->>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 					<li><a href="/spc/maintenanceSchedule.do">점검계획</a></li>
 					<li><a href="/spc/supplementaryDocuments.do">이관자료</a></li>
 
@@ -217,21 +213,12 @@
 			<a href="javascript:void(0);">설정</a>
 			<div class="sub_layer">
 				<ul>
-<<<<<<< HEAD
 					<li><a href="/system/siteSetting.do">사업소 관리</a></li>
 					<!-- <li><a href="/system/basicInformation.do">기본정보</a></li>
 					<li><a href="/system/userMng.do">사용자관리</a></li>
 					<li><a href="/system/alarmManagement.do">알람관리</a></li>
 					<li><a href="/system/systemCode.do">공통코드</a></li>
 					<li><a href="/system/systemSetting.do">시스템설정</a></li> -->
-=======
-					<li><a href="/system/basicInformation.do">기본정보</a></li>
-					<li><a href="/system/userMng.do">사용자관리</a></li>
-					<li><a href="/system/cmpyGrpSiteMng.do">사이트/그룹관리</a></li>
-					<li><a href="/system/alarmManagement.do">알람관리</a></li>
-					<li><a href="/system/systemCode.do">공통코드</a></li>
-					<li><a href="/system/systemSetting.do">시스템설정</a></li>
->>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 				</ul>
 			</div>
 		</li>

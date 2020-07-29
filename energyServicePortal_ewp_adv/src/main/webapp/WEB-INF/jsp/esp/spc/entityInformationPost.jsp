@@ -1557,10 +1557,7 @@
 										--><li data-id="0035" data-value="제주"><a href="#">제주</a></li><!--
 										--><li data-id="0089" data-value="K뱅크"><a href="#">K뱅크</a></li><!--
 										--><li data-id="1001" data-value="상호저축"><a href="#">상호저축</a></li><!--
-<<<<<<< HEAD
-=======
 										--><li data-id="0000" data-value="직접입력"><a href="#">직접입력</a></li><!--
->>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 									--></ul><!--
 								--></div>
 								</div>

@@ -5,7 +5,6 @@
 
 <script type="text/javascript">
 	$(function () {
-<<<<<<< HEAD
 		let fullName = '${userInfo.name}';
 		let loginMail = '${userInfo.contact_email}';
 		let mobileNum = '${userInfo.contact_phone}';
@@ -14,18 +13,6 @@
 		// role: 1: 시스템관리자, 2: 일반
 		role == 1 ? accLevel = "시스템관리자" : accLevel = "일반";
 		// task : 0: 일반, 1:사무수탁, 2:자산운용, 3: 사업주
-=======
-		// role: 1: 시스템관리자, 2: 일반
-		// task : 0: 일반, 1:사무수탁, 2:자산운용, 3: 사업주
-		let fullName = '${userInfo.name}';
-		let loginMail = '${userInfo.contact_email}';
-		let mobileNum = '${userInfo.contact_phone}';
-
-		let accLevel = "";
-		let taskCategory = "";
-		role == 1 ? accLevel = "시스템관리자" : accLevel = "일반";
-
->>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 		if(task == 0){
 			taskCategory = "일반"
 		} else if(task == 1){
@@ -52,21 +39,13 @@
 			$("#fullName").val(fullName);
 		}
 		if(!isEmpty(loginMail)) {
-<<<<<<< HEAD
 			$("#emailAddr").val(loginMail);
-=======
-			$("#taskCategory").val(loginMail);
->>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 		}
 		if(!isEmpty(mobileNum) && mobileNum != "string") {
 			$("#mobileNum").val(mobileNum);
 		}
 
-<<<<<<< HEAD
 		$("#newPwd").on('keyup', validatePassword);
-=======
-		$("#newPwd").on('keyup', ValidatePassword);
->>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 
 
 		// $("#fullName").on('keyup', function(evt, limit) {
@@ -75,7 +54,6 @@
 		// 		$("#updateProfileBtn").removeClass("disabled");
 		// 	}
 		// });
-<<<<<<< HEAD
 
 		
 		$("#fullName").on('keyup', function(evt) {
@@ -89,21 +67,6 @@
 				// console.log("kr===", $(this).val().match(kr))
 				// console.log("letters===", $(this).val().match(letters))
 
-=======
-
-		
-		$("#fullName").on('keyup', function(evt) {
-			if(!isEmpty($(this).val())){
-				var kr = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
-				let letters = /^[a-zA-Z ]+$/
-				// let kr2 =  /[\uac00-\ud7af]|[\u1100-\u11ff]|[\u3130-\u318f]|[\ua960-\ua97f]|[\ud7b0-\ud7ff]/g
-				// let engKr = /[^a-zA-Z0-9\u3130-\u318F\uAC00-\uD7AF]/g
-
-				// console.log("kr===", $(this).val().match(kr))
-				// console.log("kr===", $(this).val().match(kr))
-				// console.log("letters===", $(this).val().match(letters))
-
->>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 				if( $(this).val().match(kr) || $(this).val().match(letters)){
 					$("#isValidName").addClass("hidden");
 				} else {
@@ -143,13 +106,9 @@
 				$("#updateProfileBtn").removeClass("disabled");
 			}
 		});
-<<<<<<< HEAD
 		$("#closeBtn").on("click", function(){
 			$("#closeModal").modal("show");
 		});
-=======
-
->>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 
 		$("#confirmNewPwd").keyup(function() {
 			let password = $("#newPwd").val();
@@ -161,7 +120,6 @@
 				$("#updatePwdBtn").removeClass("disabled");
 			}
 		});
-<<<<<<< HEAD
 
 		$("#pwdForm").on("submit", function(e){
 			e.preventDefault();
@@ -198,131 +156,6 @@
 						$("#oldPwdErr").removeClass("hidden");
 					}
 					console.log("jqXHR==", jqXHR )
-=======
-
-		$("#pwdForm").on("submit", function(e){
-			e.preventDefault();
-			let uid = '${sessionScope.userInfo.uid}';
-			let token = '${sessionScope.userInfo.token}';
-			let value = {
-				// oldPassword : $("#oldPwd").val(),
-				// newPassword : $("#newPwd").val(),
-				password : $("#newPwd").val()
-			}
-
-			let option = {
-				url: 'https://iderms-api.iderms.ai/config/users/' + uid + '/password',
-				dataType: 'json',
-				type: 'patch',
-				beforeSend: function (jqXHR, settings) {
-					jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
-				},
-				async: false,
-				contentType: "application/json",
-				data: JSON.stringify(value)
-			}
-			// console.log("token===", token)
-			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				// console.log("success===", json);
-				$("#successMsg1").removeClass("hidden");
-				setTimeout(function(){
-					$("#successMsg1").addClass("hidden");
-				}, 2000);
-
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				alert('처리 중 오류가 발생했습니다.');
-				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
-				return false;
-			});
-		});
-
-		$("#profileForm").on("submit", function(e){
-			e.preventDefault();
-			let value = {};
-
-			if(!isEmpty($("#fullName").val())) {
-				value.name = $("#fullName").val();
-			}
-			if(!isEmpty($("#taskCategory").val())) {
-				value.contact_email = $("#emailAddr").val();
-			}
-			if(!isEmpty($("#mobileNum").val())) {
-				if($("#mobileNum").val().length >= 10){
-					$("#isValidMobileNum").addClass("hidden");
-					value.contact_phone = $("#mobileNum").val();
-				} else {
-					$("#isValidMobileNum").removeClass("hidden");
-				}
-			}
-
-			let uid = '${sessionScope.userInfo.uid}';
-			let token = '${sessionScope.userInfo.token}';
-		
-			let option = {
-				url: 'https://iderms-api.iderms.ai/config/users/' + uid,
-				dataType: 'json',
-				type: 'patch',
-				beforeSend: function (jqXHR, settings) {
-					jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
-				},
-				async: false,
-				contentType: "application/json",
-				data: JSON.stringify(value)
-			}
-			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				// console.log("success===", json);
-				$("#successMsg2").removeClass("hidden");
-				setTimeout(function(){
-					$("#successMsg2").addClass("hidden");
-				}, 2000);
-
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				alert('처리 중 오류가 발생했습니다.');
-				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
-				return false;
-			});
-		});
-
-		function validateName(name){
-			let re = /\S+@\S+\.\S+/;
-			// let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-
-			return re.test(email);
-		}
-
-		function validateEmail(email){
-			// let re = /\S+@\S+\.\S+/;
-			let re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-			// let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-
-			return re.test(email);
-		}
-
-		function ValidatePassword() {
-			const rules = [
-				{
-					Pattern: "[a-zA-Z]",
-					Target: "hasLetter"
-				},
-				{
-					Pattern: "[0-9]",
-					Target: "hasNumber"
-				},
-				// {
-				// Pattern: "[!@@#$%^&*]",
-				// Target: "Symbols"
-				// }
-			];
-
-			let password = $(this).val();
-			password.length > 6 ? $("#isSixCharLong").addClass("checked") : $(".tick.min-length").removeClass("checked");
-
-			for (var i = 0; i < rules.length; i++) {
-				if( new RegExp(rules[i].Pattern).test(password) ) {
-					$("#" + rules[i].Target).addClass("checked")
-				} else {
-					$("#" + rules[i].Target).removeClass("checked")
->>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 				}
 				return false;
 			});
@@ -345,7 +178,6 @@
 			} else {
 					return false;
 			}
-<<<<<<< HEAD
 			if(!isEmpty($("#mobileNum").val())) {
 				if($("#mobileNum").val().length >= 10){
 					$("#isValidMobileNum").addClass("hidden");
@@ -430,26 +262,6 @@
 				}
 			}
 
-=======
-
-		}
-
-
-	});
-
-
-	function dashboardMove(type, key, value) {
-		let inp = $('input').attr('type', 'hidden').attr('name', key).attr('value', value);
-		if(type == 'group') {
-			$('#dashboardForm').append(inp).attr('action', '/dashboard/gmain.do').submit();
-		} else if(type == 'site') {
-			$('#dashboardForm').append(inp).attr('action', '/dashboard/smain.do').submit();
-		} else if(type == 'vpp') {
-			$('#dashboardForm').append(inp).attr('action', '/dashboard/jmain.do').submit();
-		} else {
-			alert('아직 정의 되지않은 타입입니다.');
-			return;
->>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 		}
 
 
@@ -665,20 +477,11 @@
 			</div>
 		</form>
 	</div>
-<<<<<<< HEAD
-
-=======
-	<!--// input/dropdown -->
->>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 	<ul class="nav_right">
 		<li class="member clear">
 			<div class="fl"><img src="../img/m_member_pic.png" alt=""></div>
 			<div class="fr">
-<<<<<<< HEAD
 				<button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn_type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button>
-=======
-				<button type="button" data-toggle="modal" data-target="#updateUserInfoModal" class="btn_type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button>
->>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 			</div>
 		</li>
 		<%--	
@@ -702,7 +505,6 @@
 	</ul>
 </nav>
 
-<<<<<<< HEAD
 
 <div class="modal stack" id="closeModal" tabindex="-1" role="dialog" aria-labelledby="closeModal" aria-hidden="true">
 	<div class="modal-dialog modal-sm">
@@ -715,118 +517,11 @@
 				<div class="btn_wrap_type mb-0">
 					<button type="button" class="btn_type03" data-dismiss="modal">취소</button>
 					<button type="button" class="btn_type" onclick="resetModal();">확인</button>
-=======
-<div class="modal fade" id="updateUserInfoModal" tabindex="-1" role="dialog" aria-labelledby="updateUserInfoModal" aria-hidden="true">
-	<div class="modal-dialog modal-md">
-		<div class="modal-content">
-			<div class="modal-header"><h2>개인정보 설정</h2></div>
-				<input type="hidden" id="modUserIdx" name="userIdx"/>
-				<input type="hidden" id="modPsnEmail" name="psnEmail"/>
-				<input type="hidden" id="modPsnMobile" name="psnMobile"/>
-				<div class="modal-body">
-					<div class="row">
-						<div class="col-12">
-							<div class="input-group inline-flex">
-								<label for="userId" class="input_label">아이디</label>
-								<input type="text" name="user_id" id="userId" class="input tx_inp_type w-100" readonly="" autocomplete="off">
-							</div>
-							<div class="input-group inline-flex mt-0">
-								<label for="affiliation" class="input_label">회사 이름</label>
-								<input type="text" name="affiliation" id="affiliation" class="input tx_inp_type w-100" readonly="" autocomplete="off">
-							</div>
-							<div class="input-group inline-flex">
-								<label for="accessLevel" class="input_label">권한 레벨</label>
-								<input type="text" name="access_level" id="accessLevel" class="input tx_inp_type w-100" readonly="" autocomplete="off">
-							</div>
-							<div class="input-group inline-flex">
-								<label for="taskCategory" class="input_label">업무 구분</label>
-								<input type="text" name="task_category" id="taskCategory" class="input tx_inp_type w-100" readonly="" autocomplete="off">
-							</div>
-						</div>
-					</div>
-					<form id="pwdForm" name="pwd_form">
-						<div class="row">
-							<div class="col-12">
-								<h3 class="sub-title mt15">비밀번호</h3>
-								<div class="input-group inline-flex">
-									<label for="oldPwd" class="input_label">기존 비밀번호</label>
-									<input type="password" name="current_pwd" id="oldPwd" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
-
-								</div>
-								<div class="input-group inline-flex">
-									<label for="newPwd" class="input_label">변경 비밀번호</label>
-									<input type="password" name="new_pwd" id="newPwd" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
-								</div>
-								<div class="flex_start warning-wrapper">
-									<small id="hasLetter" class="tick">영문</small>
-									<small id="hasNumber" class="tick">숫자</small>
-									<small id="isSixCharLong" class="tick">6자리 이상</small>
-								</div>
-
-								<div class="input-group inline-flex">
-									<label for="confirmNewPwd" class="input_label">변경 비밀번호 확인</label>
-									<input type="password" name="confirm_new_pwd" id="confirmNewPwd" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
-								</div>
-
-								<div class="flex_start warning-wrapper">
-									<small id="pwdMatched" class="warning-text hidden">비밀번호가 일치하지 않습니다.</small>
-								</div>
-
-								<div class="btn_wrap_type05">
-									<small id="successMsg1" class="text-blue text-sm hidden">비밀번호가 성공적으로 변경 되었습니다.</small>
-									<button type="submit" disabled id="updatePwdBtn" class="btn_type03 disabled">비밀번호 변경</button>
-								</div>
-							</div>
-						</div>
-					</form>
-					<form id="profileForm" name="profile_form">
-						<div class="row">
-							<div class="col-12">
-								<h3 class="sub-title">개인정보</h3>
-								<div class="input-group inline-flex">
-									<label for="fullName" class="input_label">이름</label>
-									<input type="text" name="full_name" id="fullName" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
-								</div>
-
-								<div class="flex_start warning-wrapper">
-									<small id="isValidName" class="warning-text hidden">한글/영문 이름만 가능합니다.</small>
-								</div>
-								
-								<div class="input-group inline-flex">
-									<label for="emailAddr" class="input_label">이메일</label>
-									<input type="text" name="email_addr" id="emailAddr" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
-								</div>
-								<div class="flex_start warning-wrapper">
-									<small id="isValidEmail" class="warning-text hidden">유효한 이메일 주소를 입력해 주세요.</small>
-								</div>
-								
-								<div class="input-group inline-flex">
-									<label for="mobileNum" class="input_label">휴대폰</label>
-									<input type="text" name="mobile_num" id="mobileNum" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
-								</div>
-								<div class="flex_start warning-wrapper">
-									<small id="isValidMobileNum" class="warning-text hidden">휴대폰 번호를 입력해 주세요.</small>
-								</div>
-								
-								<div class="btn_wrap_type">
-									<small id="successMsg2" class="text-blue text-sm hidden">개인정보가 성공적으로 변경 되었습니다.</small>
-									<button type="submit" id="updateProfileBtn" disabled class="btn_type03 disabled">개인정보 변경</button>
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer border">
-					<div class="btn_wrap_type02">
-						<button type="button" class="btn_type" data-dismiss="modal" aria-label="Close">완료</button>
-					</div>
->>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<<<<<<< HEAD
 
 
 <div class="modal fade" id="updateUserInfoModal" tabindex="-1" role="dialog" aria-labelledby="updateUserInfoModal" aria-hidden="true">
@@ -937,5 +632,3 @@
 		</div>
 	</div>
 </div>
-=======
->>>>>>> a05322b9d3eea96283279db4eeb558a315bef440
