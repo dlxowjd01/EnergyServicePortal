@@ -1786,7 +1786,7 @@
 										</ul>
 									</div>
 									<div class="fixed_height">
-										<input type="file" id="공인인증서_등록_이미지[index]" class="hidden" name="공인인증서_등록_이미지[index]" accept=".der, .cer, .crt, .pfx">
+										<input type="file" id="공인인증서_등록_이미지[index]" class="hidden" name="공인인증서_등록_이미지[index]" accept=".der, .cer, .crt, .pfx, .key">
 										<label for="공인인증서_등록_이미지[index]" class="btn file_upload">파일 선택</label>
 										<span class="upload_text ml-16">등록 파일 이름</span>
 									</div>

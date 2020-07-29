@@ -209,8 +209,8 @@
 			$('#발전소_시도 button').html('시/도 선택' + '<span class="caret"></span>');
 			$("#발전소_상세주소").val('');
 		} else {
-			$('#발전소_국가 button').html("대한민국" + '<span class="caret"></span>');
-			$('#발전소_시도 button').html(jsonData.location + '<span class="caret"></span>');
+			$('#발전소_국가 button').html("대한민국" + '<span class="caret"></span>').data('value', '대한민국');
+			$('#발전소_시도 button').html(jsonData.location + '<span class="caret"></span>').data('value', jsonData.location);
 			$("#발전소_상세주소").val(jsonData.address);
 		}
 
@@ -1616,7 +1616,7 @@
 										</ul>
 									</div>
 									<div class="fixed_height">
-										<input type="file" id="공인인증서_등록_이미지[index]" class="hidden" name="공인인증서_등록_이미지[index]" accept=".der, .cer, .crt, .pfx">
+										<input type="file" id="공인인증서_등록_이미지[index]" class="hidden" name="공인인증서_등록_이미지[index]" accept=".der, .cer, .crt, .pfx, .key">
 										<label for="공인인증서_등록_이미지[index]" class="btn file_upload">파일 선택</label>
 										<span class="upload_text ml-16">등록 파일 이름</span>
 									</div>
