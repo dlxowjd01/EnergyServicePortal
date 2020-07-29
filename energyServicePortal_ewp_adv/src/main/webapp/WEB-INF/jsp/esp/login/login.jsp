@@ -19,14 +19,14 @@
 
 				$("#loginBtn").prop("disabled", true);
 
-				$("#loginUserId").on("keypress", function(){
+				$("#loginUserId").bind("change keypress", function(){
 					if(!isEmpty($("#loginUserPw").val())){
 						console.log("not empty===")
 						$("#loginBtn").prop("disabled", false);
 					}
 				});
 
-				$("#loginUserPw").on("keypress", function(){
+				$("#loginUserPw").bind("change keypress", function(){
 					if(!isEmpty($("#loginUserId").val())){
 						console.log("not empty===")
 						$("#loginBtn").prop("disabled", false);

@@ -96,7 +96,6 @@
 
 		var timeOffset = '${timeOffset}';
 		$(document).ready(function () {
-			console.log("oid===", oid)
 			<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
 				changeFavicon('/img/logo-only.ico');
 			</c:if>
