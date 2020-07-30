@@ -24,7 +24,7 @@
 	<link rel="stylesheet" type="text/css" media="all" href="/css/wickedpicker.css">
 	<!-- dataTables (work in progress) -->
 	<link rel="stylesheet" type="text/css" href="/css/dataTable/default.css"/>
-	<link rel="stylesheet" type="text/css" href="/css/dataTable/fixed_header.css"/>
+	<link rel="stylesheet" type="text/css" href="/css/dataTable/fixedHeader.css"/>
 <!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -47,7 +47,7 @@
 	<script src="/js/common.js"></script>
 
 	<script src="/js/dataTable/default.js" type="text/javascript"></script>
-	<script src="/js/dataTable/dataTables.fixedHeader.js" type="text/javascript"></script>
+	<script src="/js/dataTable/fixedHeader.js" type="text/javascript"></script>
 
 	<!-- <script src="/js/jquery.bxslider.js" type="text/javascript"></script> -->
 
