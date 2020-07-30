@@ -8,6 +8,7 @@
 	let today = new Date();
 	let repeat_type_method = 'post';
 	let repeatCoastNumber = new Object();
+	let totalCount = 0;
 	let reportType = {
 		regular_mm: '월간 실적',
 		regular_qt: '분기 실적',
@@ -328,6 +329,7 @@
 
 				$(".sort_table").data("nowjsp", "yield");
 				jsonListSort(n, sort, jsonList);
+				totalCount = jsonList.length;
 				jsonList = paging(page, jsonList);
 				setMakeList(jsonList, "listData", { "dataFunction": { "INDEX": getNumberIndex } }); //list생성
 
@@ -393,7 +395,8 @@
 	}
 	
 	function getNumberIndex(index) {
-		return index + 1;
+		let baseNumber = (Number($('#paging strong').text()) - 1) * pagePerData;
+		return index + 1 + baseNumber;
 	}
 
 	function setCheckedAll(obj, chkName) {
@@ -601,7 +604,7 @@
 										<li data-value="regular_mm"><a href="javascript:void(0);">월간 발전량</a></li>
 										<li data-value="regular_qt"><a href="javascript:void(0);">분기 발전량</a></li>
 										<li data-value="regular_yy"><a href="javascript:void(0);">년간 발전량</a></li>
-										<li data-value="profit_mm"><a href="javascript:void(0);">월간 수익보고서</a></li>
+										<li data-value="profit_mm"><a href="javascript:void(0);">수익보고서</a></li>
 									</ul>
 								</div>
 							</div>

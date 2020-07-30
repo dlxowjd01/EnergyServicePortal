@@ -289,8 +289,8 @@
 							if (isEmpty(target['용도'])) {
 								if (!isEmpty(finance_info['용도 선택' + index])) {
 									finance_info['공인인증서'][index]['용도'] = finance_info['용도 선택' + index];
-								} else {
-									finance_info['공인인증서'][index]['용도'] = '';
+								} else if (!isEmpty(finance_info['용도' + index])) {
+									finance_info['공인인증서'][index]['용도'] = finance_info['용도' + index];
 								}
 							}
 						});
@@ -684,15 +684,14 @@
 					<tr>
 						<th>등기이사 소속</th>
 						<td class="addList_affiliation entity">
-							<div class="group_type flex_start">
+							<div class="group_type flex_start fixed_height">
 								<span id="등기이사_소속_[index]"></span>
-								&nbsp;&nbsp;&nbsp;&nbsp;
-								<span id="등기이사_명[index]"></span>
+								<span id="등기이사_명[index]" class="ml-6"></span>
 							</div>
 						</td>
 						<th>등기 기간</th>
 						<td class="addList_affiliation2 entity">
-							<div class="group_type flex_start">
+							<div class="group_type flex_start fixed_height">
 								<span id="등기_기간_from[index]"></span> ~ <span id="등기_기간_to[index]"></span>&nbsp;&nbsp;&nbsp;&nbsp;
 								<span id="등기_이사_만료_알림[index]"></span>
 							</div>
@@ -700,7 +699,12 @@
 					</tr>
 					<tr>
 						<th><label for="계약_단가">계약 단가</label></th>
-						<td id="계약_단가"></td>
+						<td>
+							<div class="flex_start fixed_height">
+								<span id="계약_단가"></span>
+								<span class="ml-6">원</span>
+							</div>
+						</td>
 						<th>상업 운전 개시일</th>
 						<td>
 							<span id="상업 운전 개시일_from"></span> ~ <span id="상업 운전 개시일_to"></span>
@@ -796,7 +800,12 @@
 						<th>계약 체결일</th>
 						<td id="계약_체결일"></td>
 						<th>대출 약정액</th>
-						<td id="대출_약정액"></td>
+						<td>
+							<div class="flex_start fixed_height">
+								<span id="대출_약정액"></span>
+								<span class="ml-6">원</span>
+							</div>
+						</td>
 					</tr>
 					<tr>
 						<th class="group_type">상환 만기일</th>
@@ -811,13 +820,13 @@
 					<tr>
 						<th class="group_type">보장발전시간 정산일</th>
 						<td id="addList_payroll_date" class="entity">
-							<div class="group_type flex_start">
+							<div class="group_type flex_start fixed_height">
 								<span id="보장발전시간_정산일[index]"></span>
 							</div>
 						</td>
 						<th>대리기관 수수료 지급일</th>
 						<td id="addList_commission_payment" class="entity">
-							<div class="group_type flex_start">
+							<div class="group_type flex_start fixed_height">
 								<span id="대리기관_수수료_지급일[index]"></span>
 							</div>
 						</td>
@@ -859,18 +868,25 @@
 					<tr class="addList_certificate_registration entity">
 						<th class="group_type">공인인증서 등록</th>
 						<td id="공인인증서">
-							<p class="tx_file">
-								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[용도] - [originalname]</a>
-							</p>
+							<div class="flex_start fixed_height">
+								<p class="tx_file">
+									<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[용도] - [originalname]</a>
+								</p>
+							</div>
 						</td>
 						<th>인증서 비밀번호</th>
-						<td class="flex_wrapper">
+						<td class="flex_start fixed_height">
 							<span id="인증서_비밀번호[index]"></span>
 						</td>
 					</tr>
 					<tr>
 						<th>DSRA 적립 요구금액</th>
-						<td id="DSRA_적립_요구금액"></td>
+						<td>
+							<div class="flex_start fixed_height">
+								<span id="DSRA_적립_요구금액"></span>
+								<span class="ml-6">원</span>
+							</div>
+						</td>
 						<th></th>
 						<td></td>
 					</tr>
@@ -889,46 +905,48 @@
 							<div class="flex_start fixed_height"></div>
 							<div class="flex_start fixed_height">
 								<span id="전체_용량"></span>
-								<span>MW</span>
+								<span class="ml-6">MW</span>
 							</div>
 							<div class="flex_start">
 								<div class="fixed_height mr-30">
 									<span id="관리_운영비"></span>
-									<span>원</span>
+									<span class="ml-6">원</span>
 								</div>
 								<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
 							</div>
 							<div class="flex_start">
 								<div class="fixed_height mr-30">
 									<span id="대수선비"></span>
-									<span>원</span>
+									<span class="ml-6">원</span>
 								</div>
 								<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
 							</div>
 							<div class="flex_start">
 								<div class="fixed_height mr-30">
 									<span id="사무_수탁비"></span>
-									<span>원</span>
+									<span class="ml-6">원</span>
 								</div>
 								<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
 							</div>
 							<div class="flex_start">
 								<div class="fixed_height mr-30">
 									<span id="임대료"></span>
-									<span>원</span>
+									<span class="ml-6">원</span>
 								</div>
 								<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
 							</div>
 							<div class="group_type">
 								<div class="fixed_height">
 									<span id="SMP"></span>
-									<span id="SMP원"></span>
+									<span id="SMP원" class="ml-6"></span>
+									<span class="ml-6">원</span>
 								</div>
 							</div>
 							<div class="group_type">
 								<div class="fixed_height">
 									<span id="REC"></span>
-									<span id="REC원"></span>
+									<span id="REC원" class="ml-6"></span>
+									<span class="ml-6">원</span>
 								</div>
 							</div>
 						</td>
@@ -949,7 +967,9 @@
 							<div class="fixed_height"></div>
 							<div class="fixed_height"></div>
 							<div class="sel_calendar group_type edit addList_rental_deduction entity">
-								<span id="임대료_지급일[index]"></span>
+								<div  class="fixed_height">
+									<span id="임대료_지급일[index]"></span>
+								</div>
 							</div>
 							<div class="fixed_height"></div>
 						</td>
@@ -979,9 +999,19 @@
 					</tr>
 					<tr>
 						<th>(도급 계약서) 공사 계약 금액</th>
-						<td id="도급_계약서_공사_계약_금액"></td>
+						<td>
+							<div>
+								<span id="도급_계약서_공사_계약_금액"></span>
+								<span class="ml-6">원</span>
+							</div>
+						</td>
 						<th>약정 금액</th>
-						<td id="약정_금액"></td>
+						<td>
+							<div>
+								<span id="약정_금액"></span>
+								<span class="ml-6">원</span>
+							</div>
+						</td>
 					</tr>
 					<tr>
 						<th>(도급 계약서) 사용전 검사일</th>
@@ -1029,13 +1059,26 @@
 								<span class="fixed_height" id="계약서_명시_인출일_3차"></span>
 							</div>
 							<div class="flex_start">
-								<span class="fixed_height" id="지급금액_1차"></span>
+								<div class="fixed_height">
+									<span id="지급금액_1차"></span>
+									<span class="ml-6">원</span>
+								</div>
 							</div>
 							<div class="flex_start">
-								<span class="fixed_height" id="지급금액_2차"></span>
+								<span class="fixed_height">
+									<div class="fixed_height">
+										<span id="지급금액_2차"></span>
+										<span class="ml-6">원</span>
+									</div>
+								</span>
 							</div>
 							<div class="flex_start">
-								<span class="fixed_height" id="지급금액_3차"></span>
+								<span class="fixed_height">
+									<div class="fixed_height">
+										<span id="지급금액_3차"></span>
+										<span class="ml-6">원</span>
+									</div>
+								</span>
 							</div>
 							<div class="fixed_height w300">
 								<span class="text" id="미지급_금액">자동 계산</span>
@@ -1115,13 +1158,28 @@
 							<span id="보험_기간_from[index]"></span> ~ <span id="보험_기간_to[index]"></span>
 						</td>
 						<th>보험료</th>
-						<td id="보험료[index]"></td>
+						<td>
+							<div>
+								<span id="보험료[index]"></span>
+								<span class="ml-6">원</span>
+							</div>
+						</td>
 					</tr>
 					<tr>
 						<th>자가부담금</th>
-						<td id="자가부담금[index]"></td>
+						<td>
+							<div>
+								<span id="자가부담금[index]"></span>
+								<span class="ml-6">원</span>
+							</div>
+						</td>
 						<th>보험가액</th>
-						<td id="보험가액[index]"></td>
+						<td>
+							<div>
+								<span id="보험가액[index]"></span>
+								<span class="ml-6">원</span>
+							</div>
+						</td>
 					</tr>
 					<tr>
 						<th>시작일</th>
@@ -1170,15 +1228,17 @@
 						</td>
 						<th>설치 용량</th>
 						<td class="flex_start fixed_height">
-							<span id="설치_용량_KW"></span><span>kW</span>
-							<span id="설치_용량(매)"class="ml-30"></span><span>매</span>
+							<span id="설치_용량_KW"></span>
+							<span class="ml-6">kW</span>
+							<span id="설치_용량(매)"class="ml-30"></span>
+							<span class="ml-6">매</span>
 						</td>
 					</tr>
 					<tr>
 						<th>모듈 설치 각도</th>
 						<td id="addList_module_angle" class="entity">
 							<div class="flex_start fixed_height">
-								<span id="모듈_설치_각도[index]"></span><span>°</span>
+								<span id="모듈_설치_각도[index]"></span><span class="ml-6">°</span>
 							</div>
 						</td>
 						<th>모듈 설치 방식</th>
@@ -1197,8 +1257,8 @@
 						<th>인버터 용량 / 대수</th>
 						<td id="addList_inverter_vol" class="entity">
 							<div class="flex_start fixed_height">
-								<span id="인버터_용량[index]"></span><span>kW</span>
-								<span id="인버터_용량_대수[index]" class="ml-30"></span><span>대</span>
+								<span id="인버터_용량[index]"></span><span class="ml-6">kW</span>
+								<span id="인버터_용량_대수[index]" class="ml-30"></span><span class="ml-6">대</span>
 							</div>
 						</td>
 					</tr>
@@ -1213,16 +1273,16 @@
 						<th>접속반 채널 / 대수</th>
 						<td id="addList_connection" class="entity">
 							<div class="flex_start fixed_height">
-								<span id="접속반_채널[index]"></span><span>Ch</span>
-								<span id="접속반_채널_대수[index]" class="ml-30"></span><span>대</span>
+								<span id="접속반_채널[index]"></span><span class="ml-6">Ch</span>
+								<span id="접속반_채널_대수[index]" class="ml-30"></span><span class="ml-6">대</span>
 							</div>
 						</td>
 					</tr>
 					<tr>
 						<th>접속반 용량 / 통신방식</th>
 						<td class="flex_start fixed_height">
-							<span id="접속반_용량"></span><span>kW</span>
-							<span id="통신방식"></span>
+							<span id="접속반_용량"></span><span class="ml-6">kW</span>
+							<span id="통신방식" class="ml-6"></span>
 						</td>
 						<th></th>
 						<td></td>
@@ -1260,38 +1320,38 @@
 						<td id="보증_방식"></td>
 						<th>PR 보증치</th>
 						<td>
-							<span id="PR_보증치"></span><span>%</span>
+							<span id="PR_보증치"></span><span class="ml-6">%</span>
 						</td>
 					</tr>
 					<tr>
 						<th>발전시간 보증치</th>
 						<td>
-							<span id="발전시간_보증치"></span><span>h</span>
+							<span id="발전시간_보증치"></span><span class="ml-6">h</span>
 						</td>
 						<th>보증 감소율</th>
 						<td>
-							<span id="보증_감소율"></span><span>년차별 %</span>
+							<span id="보증_감소율"></span><span class="ml-6">년차별 %</span>
 						</td>
 					</tr>
 					<tr>
 						<th>기준 단가</th>
 						<td class="group_type">
 							<span id="기준_단가"></span>
-							<span id="기준_단가_원"></span><span>원 / kW</span>
+							<span id="기준_단가_원"></span><span class="ml-6">원 / kW</span>
 						</td>
 						<th>현재 적용 연차</th>
 						<td>
-							<span id="현재_적용_연차"></span><span>년차</span>
+							<span id="현재_적용_연차"></span><span class="ml-6">년차</span>
 						</td>
 					</tr>
 					<tr>
 						<th>년간 관리 운영비 (1년차)</th>
 						<td>
-							<span id="년간_관리_운영비"></span><span>만원</span>
+							<span id="년간_관리_운영비"></span><span class="ml-6">만원</span>
 						</td>
 						<th>물가 반영 비율</th>
 						<td>
-							<span id="물가_반영_비율"></span><span>%</span>
+							<span id="물가_반영_비율"></span><span class="ml-6">%</span>
 						</td>
 					</tr>
 					<tr>
@@ -1299,18 +1359,18 @@
 						<td id="추가_보수"></td>
 						<th>추가 보수 용량</th>
 						<td>
-							<span id="추가_보수_용량"></span><span>kW 이상</span>
+							<span id="추가_보수_용량"></span><span class="ml-6">kW 이상</span>
 						</td>
 					</tr>
 					<tr>
 						<th>추가 보수 백분율</th>
 						<td>
-							<span id="추가_보수_백분율"></span><span>%</span>
+							<span id="추가_보수_백분율"></span><span class="ml-6">%</span>
 						</td>
 						<th>전력요금 종별</th>
 						<td class="group_type">
 							<span id="전력요금_종별_요금제"></span>
-							<span id="전력요금_종별_계약전력"></span><span>kW</span>
+							<span id="전력요금_종별_계약전력"></span><span class="ml-6">kW</span>
 						</td>
 					</tr>
 				</table>
@@ -1333,41 +1393,41 @@
 					<tr>
 						<th>Annual Variability</th>
 						<td>
-							<span id="annual"></span><span>%</span>
+							<span id="annual"></span><span class="ml-6">%</span>
 						</td>
 						<th>PV modul modeling/params</th>
 						<td>
-							<span id="pv_modul"></span><span>%</span>
+							<span id="pv_modul"></span><span class="ml-6">%</span>
 						</td>
 					</tr>
 					<tr>
 						<th>Inverter efficiency</th>
 						<td>
-							<span id="inverter"></span><span>%</span>
+							<span id="inverter"></span><span class="ml-6">%</span>
 						</td>
 						<th>Soiling, mismatch</th>
 						<td>
-							<span id="soiling"></span><span>%</span>
+							<span id="soiling"></span><span class="ml-6">%</span>
 						</td>
 					</tr>
 					<tr>
 						<th>Degradation estimation</th>
 						<td>
-							<span id="degradationEstimation"></span><span>%</span>
+							<span id="degradationEstimation"></span><span class="ml-6">%</span>
 						</td>
 						<th>Resulting ann, Variability(sigma)</th>
 						<td>
-							<span id="resulting_ann"></span><span>%</span>
+							<span id="resulting_ann"></span><span class="ml-6">%</span>
 						</td>
 					</tr>
 					<tr>
 						<th>System Degradation</th>
 						<td>
-							<span id="system_degradation"></span><span>%</span>
+							<span id="system_degradation"></span><span class="ml-6">%</span>
 						</td>
 						<th>System Availability</th>
 						<td>
-							<span id="system_availability"></span><span>%</span>
+							<span id="system_availability"></span><span class="ml-6">%</span>
 						</td>
 					</tr>
 				</table>

@@ -11,10 +11,8 @@
 		const searchForm = $('#transactionForm');
 		const dropdownOpt = $('#searchOption').find('.dropdown-menu:not(.chk_type) li');
 		const sumOptList = $('#sumOptList');
-		const perPage = 14;
 
 		var spcInfoArr = [];
-		// var totalAmount = 0;
 		tableBody.find("template").remove();
 		tableFooter.find("template").remove();
 
@@ -57,15 +55,7 @@
 					tableBody.append(rows[i])
 				}
 			}
-
-			// return false;
 		});
-
-		// sumOptList.find('li').on('click', function(){
-		// 	console.log("val---", $(this).data("value"))
-		// 	let val = $(this).data("value");
-		// 	return false;
-		// });
 
 		searchForm.on('submit', function(e){
 			e.preventDefault();
@@ -119,6 +109,7 @@
 					warning.eq(index).addClass('hidden');
 				}
 			});
+
 			if(searchForm.find('.warning.hidden').length == formArr.length){
 				getDataList(page, formArr);
 			} else {
@@ -169,37 +160,9 @@
 			});
 		}
 
-		// const filtering = (predicate) => (reducing) => (acc, input) => (predicate(input) ? reducing(acc, input): acc)
-		// var xhr = new XMLHttpRequest();
-		// xhr.open('GET', 'myservice/username?id=some-unique-id');
-		// xhr.onload = function() {
-		// 	if (xhr.status === 200) {
-		// 		alert('User\'s name is ' + xhr.responseText);
-		// 	}
-		// 	else {
-		// 		alert('Request failed.  Returned status of ' + xhr.status);
-		// 	}
-		// };
-		// xhr.send();
-
-		// var xhr = new XMLHttpRequest();
-		// xhr.open('PUT', 'myservice/user/1234');
-		// xhr.setRequestHeader('Content-Type', 'application/json');
-		// xhr.onload = function() {
-		//     if (xhr.status === 200) {
-		//         var userInfo = JSON.parse(xhr.responseText);
-		//     }
-		// };
-		// xhr.send(JSON.stringify({
-		//     name: 'John Smith',
-		//     age: 34
-		// }));
-
-
 		function getDataList(page, searchOptArr) {
 			var currentPage = '';
 			page == undefined ? currentPage = "1" : currentPage = page;
-			console.log("searcg===", searchOptArr)
 			if(!isEmpty(searchOptArr)) {
 				let action = 'get';
 				let syncOpt = true;
@@ -240,19 +203,16 @@
 						let endNum = Number(currentPage) * perPage + 1;
 						// console.log("start---", startNum, "end===", endNum)
 
-						if(searchOptArr.length>1){
-							let statusOpt = [...searchOptArr[3].split(",")];
-							let newData = json.data.filter(x => {
-								return statusOpt.indexOf(x.status.toString()) > -1
-							});
-							console.log("search===", )
-							ajaxCallback(Number(currentPage), newData, searchOptArr);
-							// ajaxCallback(Number(currentPage), newData.slice(startNum, endNum), searchOptArr);
-							// makeNavigation(Number(currentPage), searchOptArr[0], newData.length)
+						if(searchOptArr.length > 1) {
+							if (searchOptArr[4] != 'deposit') {
+								let statusOpt = [...searchOptArr[3].split(",")];
+								let newData = json.data.filter(x => {
+									return statusOpt.indexOf(x.status.toString()) > -1
+								});
+								ajaxCallback(Number(currentPage), newData, searchOptArr);
+							}
 						} else {
 							ajaxCallback(Number(currentPage), json.data);
-							// ajaxCallback(Number(currentPage), json.data.slice(startNum, endNum));
-							// makeNavigation(Number(currentPage), searchOptArr[0], json.data.length);
 						}
 					}
 				}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -331,19 +291,15 @@
 							let acc = [...item.opt[5].split(',')];
 							res.filter(x => {
 								let match = acc.indexOf(x.purpose.toString()) > -1;
-								// console.log("x===", x)
 								return acc.indexOf(x.purpose.toString()) > -1;
 							});
-							// statusOpt.indexOf(x.status.toString()) > -1
-
-							// console.log("res===", res)
 						}
-						// console.log("res===", res)
+
 						let uniqSet = new Set(p);
 						if( uniqSet.size === 0 ) {
 							purpose = '-'
 						} else if( uniqSet.size == 1 ) {
-						purpose = ( purposeArr[0].value[p[0]] )
+							purpose = ( purposeArr[0].value[p[0]] )
 						} else {
 							purpose = ( purposeArr[0].value[p[0]] ) + ' 외 +' + ( uniqSet.size - 1 ) + '건';
 						}
@@ -421,107 +377,6 @@
 			let tfootStr = '';
 			tfootStr = tfootClone.replace(/\*total\*/g, totalAmount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
 			tableFooter.append($(tfootStr));
-		}
-
-		// function setTotal(sum) {
-		// 	console.log("sum---", sum)
-		// }
-
-		
-		// function nvl(value, str) {
-		// 	if (isEmpty(value)) {
-		// 		return str;
-		// 	} else {
-		// 		return value;
-		// 	}
-		// }
-
-		// function getCsvDown() {
-		// 	var column = ['name', '발전소_명', '설치_용량', '관리_운영_기간', '', ''], //json Key
-		// 		header = ['SPC명', '발전소 명', '용량', '관리 운영기간	', '이관자료', '첨부파일']; //csv 파일 헤더
-
-		// 	getJsonCsvDownload($('#listData').data('gridJsonData'), column, header, 'spc_spower.csv'); // json list, 컬럼, 헤더명, 파일명
-		// }
-
-		function getDiff (eDate, sDate, type) {
-			eDate = new Date(eDate.substring(2, 4), eDate.substring(4, 6), eDate.substring(6, 8));
-			sDate = new Date(sDate.substring(2, 4), sDate.substring(4, 6), sDate.substring(6, 8));
-			if (type == 'day') {
-				return (((((eDate - sDate) / 1000) / 60) / 60) / 24) + 1;
-			} else if (type == 'month') {
-				if (eDate.format('yyyyMMdd').substring(0, 4) == sDate.format('yyyyMMdd').substring(0, 4)) {
-					return (eDate.format('yyyyMMdd').substring(4, 6) * 1 - sDate.format('yyyyMMdd').substring(4, 6) * 1) + 1;
-				} else {
-					return Math.round((eDate - sDate) / (1000 * 60 * 60 * 24 * 365 / 12)) + 1;
-				}
-			}
-		}
-
-		function makeNavigation (currentPage, spcId, dataLength) {
-			// console.log("spc===", spcId)
-			$('#pagination').empty();
-			let maxPages = 5;
-			let pageStr = '';
-			let totalPage = Math.ceil( dataLength / perPage );
-			let navGroup = Math.floor((page - 1) / perPage) + 1;
-			let startPage = ((navGroup - 1) * perPage) + 1;
-			let totalNav = Math.ceil(totalPage / perPage);
-			let endPage = ((startPage + perPage - 1) > totalPage) ? totalPage : (startPage + navCount - 1);
-
-			// console.log("dataLength===", dataLength, "endPage===", endPage);
-
-			if (navGroup == 1) {
-				// console.log("navGroup == 1===")
-				pageStr += '<a href="#" data-value="1" class="btn-prev first-arrow"></a>';
-			} else {
-				let prev = currentPage - 1;
-				console.log("totoalPAge===", totalPage)
-				pageStr += '<a href="#" data-value="' + prev + '" class="btn-prev last-arrow"></a>';
-			}
-
-			for (let i = startPage ; i <= endPage; i++) {
-				// console.log("startPage===", startPage)
-				if (i==currentPage) {
-					pageStr += '<a href="#" class="active" data-value="'+ i +'">'+i+'</a>';
-				} else {
-					pageStr += '<a href="#" class="" data-value="'+ i +'">'+i+'</a>';
-				}
-			}
-
-			if (navGroup < totalNav) {
-				// console.log("navGroup < totalNav===", totalNav, "endPage===", endPage)
-				let current = currentPage + 1;
-				pageStr += '<a href="#" class="btn-next" data-value="'+ current +'></a>';
-			} else {
-				let current = currentPage + 1;
-				// console.log("navGroup > totalNav===", totalNav, "endPage===", currentPage + 1)
-				pageStr += '<a href="#" class="btn-next" data-value="' + current + '"></a>';
-			}
-			$('#pagination').append(pageStr);
-
-			$('#pagination a').on("click", function(){
-
-				let page = $(this).data("value");
-				if(currentPage == page) {
-					return false;
-				}
-
-				spcInfoArr.shift();
-				let newArr = [];
-				newArr.push(spcInfoArr.map(x=> x.spc_id).join());
-
-				// let join = spcId.join();
-				// newArr.push(join);
-				// console.log("newArr----", newArr)
-				// console.log("newArr----", newArr)
-				getDataList(page, newArr);
-				return false;
-			});
-
-		}
-
-		function getNumberIndex(index) {
-			return index + 1;
 		}
 
 		function comparer(index) {
@@ -702,11 +557,7 @@
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			return false;
 		});;
-
-		// console.log("submit===", $(self))
-		// let accInfo = self.data("name") + '  ' + self.data("value") + '  (' + name + ')';
 	}
-
 </script>
 
 <form id="reqEditForm" class="" action="/spc/withdrawReqEdit.do" method="post">
@@ -755,7 +606,7 @@
 		--><span class='tx_tit'>SPC 선택</span><!--
 		--><div class='sa_select'>
 				<div class='dropdown'>
-					<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택" data-value="" value="">선택<span class='caret'></span></button>
+					<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택" data-value="">선택<span class='caret'></span></button>
 					<ul id='spcList' class='dropdown-menu chk_type' role='menu'>
 						<li data-value="*spcId*"><!--
 						--><a href="javascript:void(0);" tabindex="-1"><!--
