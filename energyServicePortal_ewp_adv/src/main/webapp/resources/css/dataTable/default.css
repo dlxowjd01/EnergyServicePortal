@@ -41,26 +41,15 @@ html.darkmode:root {
     /* ********* sorting arrow icon images ********* */
     --ico-sort-up: url("/img/sorting_up.png");
     --ico-sort-down: url("/img/sorting_down.png");
-
-    --ico-delete: url("/img/close_btn_md.svg");
-    --btn-close: url("/img/icon_close_wh.png");
-    --bg-battery-cover: url("/img/battary_cover_dark.png");
-
 }
 
 table.dataTable {
-    width: 100%;
-    margin: 0 auto;
+	width: 100% !important;
+	margin: 0;
     padding-top: 20px;
     clear: both;
     border-collapse: separate;
-    border-spacing: 0;
-    /*
-   * Header and footer styles
-   */
-    /*
-   * Body styles
-   */
+	border-spacing: 0;
 }
 
 table.dataTable thead th,
@@ -87,11 +76,11 @@ table.dataTable tfoot td {
     border-top: 1px solid var(--color9);
 }
 
-table.dataTable thead .sorting,
-table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting:not(.no-sorting) {
+/* table.dataTable thead .sorting_asc,
 table.dataTable thead .sorting_desc,
 table.dataTable thead .sorting_asc_disabled,
-table.dataTable thead .sorting_desc_disabled {
+table.dataTable thead .sorting_desc_disabled { */
     cursor: pointer;
     background-repeat: no-repeat;
     background-position: center right;
@@ -99,6 +88,15 @@ table.dataTable thead .sorting_desc_disabled {
 
 table.dataTable thead .sorting {}
 
+table.dataTable thead .no-sorting {
+	cursor: default;
+}
+
+table.dataTable thead .no-sorting.sorting_asc:after,
+table.dataTable thead .no-sorting.sorting_desc:after {
+	background: none;
+	content: "";
+}
 
 table.dataTable thead .sorting_asc:after {
     display: inline-block;

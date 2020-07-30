@@ -47,7 +47,7 @@
 	<script src="/js/common.js"></script>
 
 	<script src="/js/dataTable/default.js" type="text/javascript"></script>
-	<script src="/js/dataTable/fixed_header.js" type="text/javascript"></script>
+	<script src="/js/dataTable/dataTables.fixedHeader.js" type="text/javascript"></script>
 
 	<!-- <script src="/js/jquery.bxslider.js" type="text/javascript"></script> -->
 

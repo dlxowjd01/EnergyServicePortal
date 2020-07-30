@@ -10,6 +10,9 @@
 		let mobileNum = '${userInfo.contact_phone}';
 		let accLevel = "";
 		let taskCategory = "";
+		let pwdFormSubmitted = false;
+		let profileFormSubmitted = false;
+
 		// role: 1: 시스템관리자, 2: 일반
 		role == 1 ? accLevel = "시스템관리자" : accLevel = "일반";
 		// task : 0: 일반, 1:사무수탁, 2:자산운용, 3: 사업주
@@ -131,7 +134,6 @@
 		$("#pwdForm").on("submit", function(e){
 			e.preventDefault();
 			if($("#updatePwdBtn").is(":disabled") ){
-				console.log("disabled===")
 				return false;
 			}
 			let uid = '${sessionScope.userInfo.uid}';
@@ -162,6 +164,7 @@
 				}, 2500);
 
 			}).fail(function (jqXHR, textStatus, errorThrown) {
+				$('.loading').hide();
 				if(textStatus == "error"){
 					if(jqXHR.statusText == "Unauthorized" || jqXHR.status == 401){
 						$("#oldPwdErr").removeClass("hidden");
@@ -217,6 +220,7 @@
 				}, 2500);
 
 			}).fail(function (jqXHR, textStatus, errorThrown) {
+				$('.loading').hide();
 				alert('처리 중 오류가 발생했습니다.');
 				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
 				return false;
@@ -255,7 +259,7 @@
 			];
 
 			let password = $(this).val();
-			password.length > 6 ? $("#isSixCharLong").addClass("checked") : $(".tick.min-length").removeClass("checked");
+			password.length >= 6 ? $("#isSixCharLong").addClass("checked") : $(".tick.min-length").removeClass("checked");
 
 			for (var i = 0; i < rules.length; i++) {
 				if( new RegExp(rules[i].Pattern).test(password) ) {
@@ -275,6 +279,14 @@
 		console.log("close-===")
 		let pwdInput = $("#pwdForm").find("input");
 		let profileInput = $("#profileForm").find("input");
+		let tick = $(".tick");
+
+		tick.each(function(){
+			if($(this).is(".checked")){
+				$(this).removeClass("checked");
+			}
+		});
+		
 		pwdInput.each(function(){
 			$(this).val("");
 			console.log("this---", $(this))
@@ -282,8 +294,6 @@
 		profileInput.each(function(){
 			// $(this).val("");
 		});
-
-		$("#closeModal").modal("hide");
 		$("#updateUserInfoModal").modal("hide");
 	}
 
@@ -545,7 +555,7 @@
 							</div>
 								<div class="flex_start warning-wrapper">
 								<small id="oldPwdErr" class="warning-text hidden">기존 비밀번호와 일치 하지 않습니다. 비밀번호 확인 후 재시도 해 주세요.
-									<br><a href="#" class="text-link">비밀번호가 복구 요청</a>
+									<!-- <br><br><a href="#" class="text-link">비밀번호 복구 요청</a> -->
 								</small>
 							</div>
 
@@ -569,7 +579,7 @@
 							</div>
 
 							<div class="btn_wrap_type">
-								<small id="successMsg1" class="text-blue text-sm left hidden">비밀번호가 성공적으로 변경 되었습니다.<br>수정 내용은 다음 로그인 부터 적용 됩니다.</small>
+								<small id="successMsg1" class="text-blue text-sm left hidden">비밀번호가 성공적으로 변경 되었습니다.</small>
 								<button type="submit" disabled id="updatePwdBtn" class="btn_type03 disabled">비밀번호 변경</button>
 							</div>
 						</form>
@@ -597,11 +607,11 @@
 								<input type="text" name="mobile_num" id="mobileNum" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
 							</div>
 							<div class="flex_start warning-wrapper">
-								<small id="isValidMobileNum" class="warning-text hidden">10리 이상의 휴대폰 번호를 입력해 주세요.</small>
+								<small id="isValidMobileNum" class="warning-text hidden">10자리 이상의 휴대폰 번호를 입력해 주세요.</small>
 							</div>
 							
 							<div class="btn_wrap_type">
-								<small id="successMsg2" class="text-blue text-sm left hidden">개인정보가 성공적으로 변경 되었습니다.<br>수정 내용은 다음 로그인 부터 적용 됩니다.</small>
+								<small id="successMsg2" class="text-blue text-sm left hidden">개인정보가 성공적으로 변경 되었습니다.</small>
 								<button type="submit" id="updateProfileBtn" disabled class="btn_type03 disabled">개인정보 변경</button>
 							</div>
 						</form>
@@ -629,7 +639,8 @@
 			</div>
 			<div class="modal-footer border">
 				<div class="btn_wrap_type02">
-					<button type="button" id="closeBtn" class="btn_type" aria-label="Close">완료</button>
+					<small class="text-blue text-sm left">* 수정하신 정보는 다음 로그인 부터 반영됩니다.</small>
+					<button type="button" class="btn_type" onclick="resetModal();" aria-label="Close">완료</button>
 				</div>
 			</div>
 		</div>
