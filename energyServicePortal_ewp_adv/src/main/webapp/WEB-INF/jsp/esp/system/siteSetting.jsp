@@ -9,7 +9,6 @@
 	
 		getSites(oid);
 		
-
 		function getSites (siteId) {
 			let option = {
 				url: apiHost + "/config/sites",
