@@ -41,9 +41,11 @@
 				// 9. Vpp 자원 코드
 				// 10. 알람 설정
 
-				Promise.all(json.map(x => {
+				Promise.all(json.map( (x, index) => {
+					// console.log("x===", x)
 					let obj = {};
-		
+					obj.sid = x.sid;
+					obj.idx = index;
 					obj.name = x.name;
 					obj.location = x.location;
 					obj.genVol = "TBA"
@@ -86,23 +88,27 @@
 
 				$('#example').dataTable({
 					"aaData": newArr,
+					// "fixedHeader": true,
+					"scrollY":        "400px",
+					"scrollCollapse": true,
+					"initComplete": function(settings, json) {
+						$('.dataTables_scrollBody thead tr').css({"display" : "none" });
+					},
 					columnDefs: [ {
 						orderable: false,
 						className: 'select-checkbox',
 						targets:   0
-					} ],
+					}],
 					order: [[ 1, 'asc' ]],
 					"columns": [
-						// {
-						// 	"data":   "active",
-						// 	render: function ( data, type, row ) {
-						// 		if ( type === 'display' ) {
-						// 			return '<input type="checkbox" class="editor-active">';
-						// 		}
-						// 		return data;
-						// 	},
-						// 	className: "dt-body-center"
-						// },
+						{
+							"data":  "",
+							render: function ( data, type, row ) {
+								// console.log("data--", row, "type===", type)
+								return '<a class="chk_type" href="javascript:void(0);"><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
+							},
+							className: "dt-body-center"
+						},
 						{ "data": "siteType" },
 						{ "data": "name"},
 						{ "data": "location"},
@@ -119,8 +125,8 @@
 						selector: 'td:first-child'
 					},
 					rowCallback: function ( row, data ) {
-						// Set the checked state of the checkbox in the table
-						$('input.editor-active', row).prop( 'checked', data.active == 1 );
+						// console.log("row-selected--", row)
+						// $('input.editor-active', row).prop( 'checked', data.active == 1 );
 					}
 				});
 			}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -248,6 +254,7 @@
 			<table id="example" class="stripe">
 				<thead>
 					<tr>
+						<th></th>
 						<th>사업소 타입</th>
 						<th>사업소명</th>
 						<td>지역</th>
@@ -261,21 +268,10 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
 				</tbody>
 				<tfoot>
 					<tr>
+						<td></td>
 						<td colspan="9"></td>
 						<td></td>
 					</tr>

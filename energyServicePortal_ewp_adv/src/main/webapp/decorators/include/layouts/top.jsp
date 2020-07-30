@@ -46,8 +46,6 @@
 	<script src="/js/printPreview.js"></script>	
 	<script src="/js/common.js"></script>
 
-	<script src="/js/dataTable/default.js" type="text/javascript"></script>
-	<script src="/js/dataTable/fixedHeader.js" type="text/javascript"></script>
 
 	<!-- <script src="/js/jquery.bxslider.js" type="text/javascript"></script> -->
 
@@ -71,6 +69,9 @@
 	<script src="/js/iderms/idermsapi.js"></script>
 	<!-- timepicker -->
 	<script type="text/javascript" src="/js/wickedpicker.js"></script>
+	<script src="/js/dataTable/default.js" type="text/javascript"></script>
+	<script src="/js/dataTable/fixedHeader.js" type="text/javascript"></script>
+
 	<script>
 		// role: 1: 시스템관리자, 2: 일반
 		const role = '${userInfo.role}';
