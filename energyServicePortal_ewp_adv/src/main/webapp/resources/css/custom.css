@@ -275,7 +275,6 @@ html.darkmode:root {
 	--ico-water: url("../img/ico_water_dark.png");
 	--ico-wind: url("../img/ico_wind_dark.png");
 	--ico-delete: url("../img/close_btn_md.svg");
-	--btn-close: url("../img/icon_close_wh.png");
 	--bg-battery-cover: url("../img/battary_cover_dark.png");
 
 }
@@ -1022,6 +1021,10 @@ table input[type="text"] {
 	font-weight: 500;
 	line-height: 18px;
 	margin: 0 0 20px 120px;
+}
+
+.modal-footer .text-sm {
+	margin: 10px 0 0 0;
 }
 
 .tick {
@@ -2122,6 +2125,11 @@ footer .copyright {
 	align-items: center;
 }
 
+.flex-baseline {
+	display: flex;
+	align-items: baseline;
+}
+
 /* dropdown select box component */
 .search_expand .btn,
 .dropdown .dropdown-toggle {
@@ -2584,7 +2592,7 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 
 .modal-content .flex_wrap_top {
 	display: flex;
-	align-items: top;
+	align-items: first baseline;
 	margin: 0 0 15px;
 }
 
@@ -10791,8 +10799,8 @@ a.btn.btn_type03:hover {
 }
 
 .btn_close.icon_btn {
-	margin: 4px 0 0 10px;
 	float: right;
+	margin: 4px 0 0 10px;
 	width: 16px;
 	height: 16px;
 	border: 0;
@@ -10800,6 +10808,18 @@ a.btn.btn_type03:hover {
 	vertical-align: middle;
 	background: var(--btn-close) no-repeat center center;
 	background-size: 10px;
+	outline: none;
+}
+
+.icon-trash {
+	display: inline-block;
+	margin-left: 16px;
+	width: 24px;
+	height: 24px;
+	border: 0;
+	text-indent: -9999px;
+	vertical-align: middle;
+	background: var(--btn-trash) no-repeat center center;
 	outline: none;
 }
 
@@ -12316,7 +12336,8 @@ html.darkmode .modal-content.spc-detail-content li.alarm-item a .btn_next {
 	width: 84px;
 }
 
-.group_type.short .dropdown.edit:nth-child(2) {
+.group_type.short .dropdown.edit:nth-child(2),
+.group_type.md .dropdown.edit {
 	width: 100px;
 }
 
