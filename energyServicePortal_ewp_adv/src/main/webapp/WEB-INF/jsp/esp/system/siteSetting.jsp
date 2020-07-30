@@ -9,6 +9,7 @@
 	
 		getSites(oid);
 		
+
 		function getSites (siteId) {
 			let option = {
 				url: apiHost + "/config/sites",
@@ -89,11 +90,8 @@
 				$('#example').dataTable({
 					"aaData": newArr,
 					// "fixedHeader": true,
-					"scrollY":        "400px",
-					"scrollCollapse": true,
-					"initComplete": function(settings, json) {
-						$('.dataTables_scrollBody thead tr').css({"display" : "none" });
-					},
+					"scrollX": false,
+					"scrollY": "400px",
 					columnDefs: [ {
 						orderable: false,
 						className: 'select-checkbox',

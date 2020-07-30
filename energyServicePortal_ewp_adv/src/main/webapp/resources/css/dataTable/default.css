@@ -406,6 +406,10 @@ table.dataTable td {
     box-sizing: content-box;
 }
 
+.dataTables_scrollBody thead tr[role="row"]{
+    visibility: collapse !important;
+}
+
 /*
  * Control feature layout
  */
