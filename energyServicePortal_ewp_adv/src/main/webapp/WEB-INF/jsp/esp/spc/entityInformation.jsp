@@ -197,7 +197,7 @@
 				}
 			}
 		}
-		$(".sort_table").data("nowjsp", "entityinformation");
+		// $(".sort_table").data("nowjsp", "entityinformation");
 		jsonListSort(n, sort, jsonList);
 		jsonList = paging(page, jsonList);
 		return jsonList;
@@ -244,7 +244,8 @@
 	}
 
 	function getNumberIndex(index) {
-		return index + 1;
+		let baseNumber = (Number($('#paging strong').text()) - 1) * pagePerData;
+		return index + 1 + baseNumber;
 	}
 
 	function setCheckedAll(obj, chkName) {

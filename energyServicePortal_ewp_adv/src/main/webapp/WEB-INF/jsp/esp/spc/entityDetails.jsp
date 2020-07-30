@@ -289,8 +289,8 @@
 							if (isEmpty(target['용도'])) {
 								if (!isEmpty(finance_info['용도 선택' + index])) {
 									finance_info['공인인증서'][index]['용도'] = finance_info['용도 선택' + index];
-								} else {
-									finance_info['공인인증서'][index]['용도'] = '';
+								} else if (!isEmpty(finance_info['용도' + index])) {
+									finance_info['공인인증서'][index]['용도'] = finance_info['용도' + index];
 								}
 							}
 						});

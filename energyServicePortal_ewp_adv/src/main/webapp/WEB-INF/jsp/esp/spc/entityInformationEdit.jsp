@@ -412,11 +412,20 @@
 								addRow('addList_certificate_registration2', 'class');
 							}
 
-							let use = file['용도'];
-							if (isEmpty(use)) {
-								use = file['용도 선택'];
+							let use = '';
+							if (isEmpty(file['용도'])) {
+								if (!isEmpty(finance_info['용도 선택' + index])) {
+									finance_info['공인인증서'][index]['용도'] = finance_info['용도 선택' + index];
+								} else if (!isEmpty(finance_info['용도' + index])) {
+									finance_info['공인인증서'][index]['용도'] = finance_info['용도' + index];
+								}
+							} else {
+								use = file['용도'];
 							}
-							$('#용도' + index + ' button').html(use.replace(/\_/g, ' ') + '<span class="caret"></span>').data('value', use);
+
+							if (!isEmpty(use)) {
+								$('#용도' + index + ' button').html(use.replace(/\_/g, ' ') + '<span class="caret"></span>').data('value', use);
+							}
 							$('#financeInfo input[type="file"]').eq(index).data('file', file);
 							let listItem = `<button type='button' class='btn_close file_del_btn' onclick='deleteFile($(this), "front")'></button>`;
 							$('#financeInfo input[type="file"]').eq(index).parent().find(".upload_text").next('.file_del_btn').remove();
@@ -733,7 +742,7 @@
 					$('#financeInfo').find('input[type="file"]').each(function () {
 						if (fieldname == $(this).attr('name')) {
 							let button = $(this).parents('div.group_type').find('.dropdown').find('button').data('value');
-							el['SPC_법인_인감_유형'] = button;
+							el['용도'] = button;
 						}
 					});
 				});

@@ -1581,7 +1581,7 @@ $(function() {
 		tableBodyTemp = tableBodyTemp.replace(/<(\/a|a)([^>]*)>/gi,'');
 		tableBodyTemp = tableBodyTemp.replace(/ name="aTagTd01"| name="aTagTd02"| class="right"| %/gi,'');
 		tableBodyTemp = tableBodyTemp.replace(/\s/gi, '');
-		let tableColumnArray = (tableBodyTemp.match(/(?:\[(?!INDEX))(.*?)(?=].+?<\/td>)/g) || []);;
+		let tableColumnArray = (tableBodyTemp.match(/(?:\[(?!INDEX))(.*?)(?=].*?<\/td>)/g) || []);;
 		tableColumnArray.forEach(function(el, index) {
 			tableColumnArray[index] = el.replace('[', '');
 		});
