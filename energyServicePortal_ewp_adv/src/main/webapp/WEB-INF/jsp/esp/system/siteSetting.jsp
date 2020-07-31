@@ -5,27 +5,160 @@
 <script type="text/javascript">
 	$(function () {
 		let sList = "${location}"
+
+	
+		getSites(oid);
+		
+		function getSites (siteId) {
+			let option = {
+				url: apiHost + "/config/sites",
+				type: "get",
+				async: true,
+				data: {
+					oid: siteId,
+					filter:
+						{ "includeSites": true },
+						// { "limit": 30 },
+				},
+				beforeSend: function (jqXHR, settings) {
+					let token = '${sessionScope.userInfo.token}';
+					jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+					$('.loading').show();
+				},
+			}
+			$.ajax(option).done(function (json, textStatus, jqXHR) {
+				$('.loading').hide();
+				let data = json;
+				let newArr = [];
+				// 1. 사업소 타입
+				// 2. 사업소명
+				// 3. 지역
+				// 4. 발전원 => 0: MicroGrid, 1: photovoltaic, 2: wind, 3: SmallHydro (hydroelectric power for local community)
+				// 5. 발전 용량
+				// 6. ESS 용량 (PCS)
+				// 7. ESS 용량(BMS)
+				// 8. DR 자원 코드
+				// 9. Vpp 자원 코드
+				// 10. 알람 설정
+
+				Promise.all(json.map( (x, index) => {
+					// console.log("x===", x)
+					let obj = {};
+					obj.sid = x.sid;
+					obj.idx = index;
+					obj.name = x.name;
+					obj.location = x.location;
+					obj.genVol = "TBA"
+					obj.pscVol = "TBA"
+					obj.bmsVol = "TBA"
+					obj.alarmState = "TBA"
+
+					if(x.resource_type === 0) {
+						obj.powerSource = "마이크로 그리드"
+					} else if(x.resource_type === 1){
+						obj.powerSource = "PV"
+					} else if(x.resource_type === 2){
+						obj.powerSource = "풍력"
+					} else if(x.resource_type === 3){
+						obj.powerSource = "소수력"
+					}
+					if(x.ess){
+						if(x.ess === 0) {
+							obj.siteType = "-"
+						} else if(x.ess === 1){
+							obj.siteType = "Demand"
+						} else if(x.ess === 2){
+							obj.siteType = "Generation"
+						}
+					} else {
+						obj.siteType = "-"
+					}
+					if(x.dr_group_id){
+						obj.drId = x.dr_group_id;
+					} else {
+						obj.drId = "-"
+					}
+					if(x.vpp_group_id){
+						obj.vppId = x.vpp_group_id;
+					} else {
+						obj.vppId = "-"
+					}
+					newArr.push(obj);
+				}));
+
+				$('#example').dataTable({
+					"aaData": newArr,
+					// "fixedHeader": true,
+					"scrollX": false,
+					"scrollY": "400px",
+					columnDefs: [ {
+						orderable: false,
+						className: 'select-checkbox',
+						targets:   0
+					}],
+					order: [[ 1, 'asc' ]],
+					"columns": [
+						{
+							"data":  "",
+							render: function ( data, type, row ) {
+								// console.log("data--", row, "type===", type)
+								return '<a class="chk_type" href="javascript:void(0);"><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
+							},
+							className: "dt-body-center"
+						},
+						{ "data": "siteType" },
+						{ "data": "name"},
+						{ "data": "location"},
+						{ "data": "powerSource" },
+						{ "data": "genVol" },
+						{ "data": "pscVol" },
+						{ "data": "bmsVol" },
+						{ "data": "drId" },
+						{ "data": "vppId"},
+						{ "data": "alarmState" },
+					],
+					select: {
+						style:    'os',
+						selector: 'td:first-child'
+					},
+					rowCallback: function ( row, data ) {
+						// console.log("row-selected--", row)
+						// $('input.editor-active', row).prop( 'checked', data.active == 1 );
+					}
+				});
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				$('.loading').hide();
+				if(textStatus == "error"){
+					if(jqXHR.statusText == "Unauthorized" || jqXHR.status == 401){
+						$("#oldPwdErr").removeClass("hidden");
+					}
+					console.log("jqXHR==", jqXHR )
+				}
+				return false;
+			});
+		}
+
 		// let p = JSON.parse(sList);
-		console.log("p---", sList);
+		// console.log("p---", sList);
 		// $.each(p, function(index, element){
 		// 	console.log("elemet---", element)
 		// });
 
-		var table = $('#example').DataTable({
-			fixedHeader: true
-		});
+		// var table = $('#example').DataTable({
+		// 	// "fixedHeader": true
+		// });
 
-		$('#example tbody').on('click', 'tr', function () {
-			var data = table.row( this ).data();
-			alert( data[0]+  ' 열을 클릭 했습니다.' );
-		});
+		// new $.fn.dataTable.FixedHeader( table, {
+		// 	alwaysCloneTop: true
+		// });
+
 	});
 
 </script>
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">사이트 관리</h1>
+		<h1 class="page-header">사업소 관리</h1>
 	</div>
 </div>
 
@@ -111,126 +244,33 @@
 		</div>
 	</div>
 </div>
+
 <div class="row content-wrapper">
 	<div class="col-12">
 		<div class="indiv">
 			<table id="example" class="stripe">
 				<thead>
 					<tr>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Office</th>
-						<th>Age</th>
-						<th>Start date</th>
-						<th>Salary</th>
+						<th></th>
+						<th>사업소 타입</th>
+						<th>사업소명</th>
+						<td>지역</th>
+						<th>발전원</th>
+						<th>발전 용량</th>
+						<th>ESS 용량 (PCS)</th>
+						<th>ESS 용량 (BMS)</th>
+						<th>DR 자원 코드</th>
+						<th>VPP 자원코드</th>
+						<th>알람 설정</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>Tiger Nixon</td>
-						<td>System Architect</td>
-						<td>Edinburgh</td>
-						<td>61</td>
-						<td>2011/04/25</td>
-						<td>$320,800</td>
-					</tr>
-					<tr>
-						<td>Tiger Nixon</td>
-						<td>System Architect</td>
-						<td>Edinburgh</td>
-						<td>61</td>
-						<td>2011/04/25</td>
-						<td>$320,800</td>
-					</tr>
-					<tr>
-						<td>Tiger Nixon</td>
-						<td>System Architect</td>
-						<td>Edinburgh</td>
-						<td>61</td>
-						<td>2011/04/25</td>
-						<td>$320,800</td>
-					</tr>
-					<tr>
-						<td>Tiger Nixon</td>
-						<td>System Architect</td>
-						<td>Edinburgh</td>
-						<td>61</td>
-						<td>2011/04/25</td>
-						<td>$320,800</td>
-					</tr>
-					<tr>
-						<td>Tiger Nixon</td>
-						<td>System Architect</td>
-						<td>Edinburgh</td>
-						<td>61</td>
-						<td>2011/04/25</td>
-						<td>$320,800</td>
-					</tr>
-					<tr>
-						<td>Tiger Nixon</td>
-						<td>System Architect</td>
-						<td>Edinburgh</td>
-						<td>61</td>
-						<td>2011/04/25</td>
-						<td>$320,800</td>
-					</tr>
-					<tr>
-						<td>Tiger Nixon</td>
-						<td>System Architect</td>
-						<td>Edinburgh</td>
-						<td>61</td>
-						<td>2011/04/25</td>
-						<td>$320,800</td>
-					</tr>
-					<tr>
-						<td>Tiger Nixon</td>
-						<td>System Architect</td>
-						<td>Edinburgh</td>
-						<td>61</td>
-						<td>2011/04/25</td>
-						<td>$320,800</td>
-					</tr>
-					<tr>
-						<td>Tiger Nixon</td>
-						<td>System Architect</td>
-						<td>Edinburgh</td>
-						<td>61</td>
-						<td>2011/04/25</td>
-						<td>$320,800</td>
-					</tr>
-					<tr>
-						<td>Tiger Nixon</td>
-						<td>System Architect</td>
-						<td>Edinburgh</td>
-						<td>61</td>
-						<td>2011/04/25</td>
-						<td>$320,800</td>
-					</tr>
-					<tr>
-						<td>Tiger Nixon</td>
-						<td>System Architect</td>
-						<td>Edinburgh</td>
-						<td>61</td>
-						<td>2011/04/25</td>
-						<td>$320,800</td>
-					</tr>
-					<tr>
-						<td>Tiger Nixon</td>
-						<td>System Architect</td>
-						<td>Edinburgh</td>
-						<td>61</td>
-						<td>2011/04/25</td>
-						<td>$320,800</td>
-					</tr>
 				</tbody>
 				<tfoot>
 					<tr>
-						<th>total</th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
+						<td></td>
+						<td colspan="9"></td>
+						<td></td>
 					</tr>
 				</tfoot>
 			</table>

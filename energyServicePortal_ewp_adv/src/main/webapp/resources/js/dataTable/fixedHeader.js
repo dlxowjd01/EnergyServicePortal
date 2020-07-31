@@ -55,6 +55,7 @@ var DataTable = $.fn.dataTable;
 var _instCounter = 0;
 
 var FixedHeader = function ( dt, config ) {
+	console.log("fixed header====", config)
 	// Sanity check - you just know it will happen
 	if ( ! (this instanceof FixedHeader) ) {
 		throw "FixedHeader must be initialised with the 'new' keyword.";
@@ -295,7 +296,7 @@ $.extend( FixedHeader.prototype, {
 
 		if ( ! force && itemDom.floating ) {
 			// existing floating element - reuse it
-			itemDom.floating.removeClass( 'fixedHeader-floating fixedHeader-locked' );
+			itemDom.floating.removeClass( 'fixed-header fixedHeader-locked' );
 		}
 		else {
 			if ( itemDom.floating ) {
@@ -470,7 +471,7 @@ $.extend( FixedHeader.prototype, {
 			this._clone( item, forceChange );
 
 			itemDom.floating
-				.addClass( 'fixedHeader-floating' )
+				.addClass( 'fixed-header' )
 				.css( item === 'header' ? 'top' : 'bottom', this.c[item+'Offset'] )
 				.css( 'left', position.left+'px' );
 
