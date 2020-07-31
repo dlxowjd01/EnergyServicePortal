@@ -6,6 +6,7 @@
 <script type="text/javascript">
 	$(function () {
 		let fullName = '${userInfo.name}';
+		// let affiliation = '${userInfo.org_name}';
 		let loginMail = '${userInfo.contact_email}';
 		let mobileNum = '${userInfo.contact_phone}';
 		let accLevel = "";
@@ -30,6 +31,7 @@
 			$("#userId").val(loginId);
 		}
 		if(!isEmpty(oid)) {
+			// $("#affiliation").val(affiliation);
 			$("#affiliation").val(oid);
 		}
 		if(!isEmpty(accLevel)) {
@@ -85,7 +87,7 @@
 				$(this).val("");
 			}
 			if(!isEmpty($(this).val())){
-				console.log("val---", $(this).val().length)
+				// console.log("val---", $(this).val().length)
 				if($(this).val().length >= 10) {
 					$("#isValidMobileNum").addClass("hidden");
 					$("#updateProfileBtn").prop("disabled", false);
@@ -154,7 +156,6 @@
 				contentType: "application/json",
 				data: JSON.stringify(value)
 			}
-			// console.log("token===", token)
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				// console.log("success===", json);
 				$("#successMsg1").removeClass("hidden");
@@ -166,7 +167,7 @@
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				$('.loading').hide();
 				if(textStatus == "error"){
-					if(jqXHR.statusText == "Unauthorized" || jqXHR.status == 401){
+					if(jqXHR.status == 401){
 						$("#oldPwdErr").removeClass("hidden");
 					}
 					console.log("jqXHR==", jqXHR )
@@ -178,7 +179,6 @@
 		$("#profileForm").on("submit", function(e){
 			e.preventDefault();
 			if($("#updateProfileBtn").is(":disabled") ){
-				console.log("disabled===")
 				return false;
 			}
 			let value = {};
@@ -259,7 +259,7 @@
 			];
 
 			let password = $(this).val();
-			password.length >= 6 ? $("#isSixCharLong").addClass("checked") : $(".tick.min-length").removeClass("checked");
+			password.length >= 6 ? $("#isSixCharLong").addClass("checked") : $("#isSixCharLong").removeClass("checked");
 
 			for (var i = 0; i < rules.length; i++) {
 				if( new RegExp(rules[i].Pattern).test(password) ) {
@@ -276,7 +276,6 @@
 
 
 	function resetModal() {
-		console.log("close-===")
 		let pwdInput = $("#pwdForm").find("input");
 		let profileInput = $("#profileForm").find("input");
 		let tick = $(".tick");
@@ -285,14 +284,6 @@
 			if($(this).is(".checked")){
 				$(this).removeClass("checked");
 			}
-		});
-		
-		pwdInput.each(function(){
-			$(this).val("");
-			console.log("this---", $(this))
-		});
-		profileInput.each(function(){
-			// $(this).val("");
 		});
 		$("#updateUserInfoModal").modal("hide");
 	}

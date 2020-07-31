@@ -14,17 +14,21 @@
 			<title>Encored iDERMS</title>
 		</c:otherwise>
 	</c:choose>
+	
 	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<%--
 	<link rel="stylesheet" href="/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+	<link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400" rel="stylesheet">
+	--%>
+
 	<link rel="stylesheet" href="/css/custom.css">
 	<link rel="stylesheet" href="/css/custom-grid.min.css">
 	<link rel="stylesheet" href="/css/custom-mquery.css">
 	<link rel="stylesheet" type="text/css" media="all" href="/css/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" media="all" href="/css/wickedpicker.css">
 	<!-- dataTables (work in progress) -->
-	<link rel="stylesheet" type="text/css" href="/css/dataTable/default.css"/>
-	<link rel="stylesheet" type="text/css" href="/css/dataTable/fixedHeader.css"/>
+	<link rel="stylesheet" type="text/css" href="/css/data_tables/default.css"/>
 <!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -42,23 +46,27 @@
 	<script src="/js/modules/export-data.js"></script>  
 	<!-- 텝메뉴 용 -->
 	<script src="/js/sectionDisplay.js"></script>
-	<!-- print preview -->
-	<script src="/js/printPreview.js"></script>	
 	<script src="/js/common.js"></script>
 
-
-	<!-- <script src="/js/jquery.bxslider.js" type="text/javascript"></script> -->
-
-	<%--<c:set var="timeOffset"><spring:eval expression="@local.getProperty('server.offset')" /></c:set>--%>
+	<%--
+	<script src="/js/jquery.bxslider.js" type="text/javascript"></script>
+	<c:set var="timeOffset"><spring:eval expression="@local.getProperty('server.offset')" /></c:set>
+	--%>
 	<script src="/js/custom/common.js"></script>
+	<!-- START: 현재 안씀 - 확인 필요 -->
 	<script src="/js/custom/lems.js"></script>
 	<script src="/js/custom/searchRequirement.js"></script>
+	<!-- END -->
 	<script src="/js/custom/utils.js"></script>
 	<script src="/js/custom/numberFormat.js"></script>
 
 	<script src="/js/html2canvas.js"></script>
+	<!-- START: 현재 안씀 - 확인 필요 -->
 	<script src="/js/jspdf.min.js"></script>
-	<script src="/js/printThis.js"></script>
+	<!-- END -->
+	<!-- print preview -->
+	<!-- <script src="/js/printPreview.js"></script> -->
+	<!-- <script src="/js/printThis.js"></script> -->
 
 	<!-- 다크 모드 지원 -->
 	<!-- <script src="/js/custom/theme.js"></script> -->
@@ -69,8 +77,12 @@
 	<script src="/js/iderms/idermsapi.js"></script>
 	<!-- timepicker -->
 	<script type="text/javascript" src="/js/wickedpicker.js"></script>
-	<script src="/js/dataTable/default.js" type="text/javascript"></script>
-	<script src="/js/dataTable/fixedHeader.js" type="text/javascript"></script>
+	<script src="/js/data_tables/default.js" type="text/javascript"></script>
+	<script src="/js/data_tables/extensions/buttons.js" type="text/javascript"></script>
+	<script src="/js/data_tables/extensions/col_reorder.js" type="text/javascript"></script>
+	<script src="/js/data_tables/extensions/pdf_make.js" type="text/javascript"></script>
+	<script src="/js/data_tables/extensions/vfs_fonts_kr.js" type="text/javascript"></script>
+	<script src="/js/data_tables/extensions/select.js" type="text/javascript"></script>
 
 	<script>
 		// role: 1: 시스템관리자, 2: 일반
