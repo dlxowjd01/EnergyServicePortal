@@ -296,7 +296,21 @@
 		});
 		$("#updateUserInfoModal").modal("hide");
 	}
+	function dashboardMove(type, key, value) {
 
+		let inp = $('input').attr('type', 'hidden').attr('name', key).attr('value', value);
+
+		if(type == 'group') {
+			$('#dashboardForm').append(inp).attr('action', '/dashboard/gmain.do').submit();
+		} else if(type == 'site') {
+			$('#dashboardForm').append(inp).attr('action', '/dashboard/smain.do').submit();
+		} else if(type == 'vpp') {
+			$('#dashboardForm').append(inp).attr('action', '/dashboard/jmain.do').submit();
+		} else {
+			alert('아직 정의 되지않은 타입입니다.');
+			return;
+		}
+	}
 </script>
 
 <form id="dashboardForm" name="dashboardForm" method="post"></form>
@@ -328,11 +342,11 @@
 							<dd>
 								<a href="#">사업소별</a>
 								<ul>
-									<li><a href="#"  onclick="dashboardMove('group', '', '');">전체</a></li>
+									<li><a href="#"  onclick="dashboardMove('group', '', ''); return false">전체</a></li>
 									<c:if test="${fn:length(siteList) > 0}">
 										<c:forEach var="site" items="${siteList}">
 											<li>
-												<a href="#" onclick="dashboardMove('site', 'sid', '${site.sid}');">${site.name}</a>
+												<a href="#" onclick="dashboardMove('site', 'sid', '${site.sid}'); return false">${site.name}</a>
 											</li>
 										</c:forEach>
 									</c:if>
@@ -349,12 +363,12 @@
 									<ul>
 										<c:forEach var="group" items="${tagList}">
 											<li>
-												<a href="#" onclick="dashboardMove('group', 'sgid', '${group.sgid}');">${group.name}</a>
+												<a href="#" onclick="dashboardMove('group', 'sgid', '${group.sgid}'); return false">${group.name}</a>
 												<ul>
 													<c:set var="groupSites" value="${group.sites}"/>
 													<c:forEach var="groupSiteList" items="${groupSites}">
 														<li>
-															<a href="#" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}');">${groupSiteList.name}</a>
+															<a href="#" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}'); return false">${groupSiteList.name}</a>
 														</li>
 													</c:forEach>
 												</ul>
@@ -377,12 +391,12 @@
 										<ul>
 											<c:forEach var="vpp" items="${vppList}">
 												<li>
-													<a href="#" onclick="dashboardMove('vpp', 'vgid', '${vpp.vgid}');">${vpp.name}</a>
+													<a href="#" onclick="dashboardMove('vpp', 'vgid', '${vpp.vgid}'); return false">${vpp.name}</a>
 													<ul>
 														<c:set var="groupSites" value="${vpp.sites}"/>
 														<c:forEach var="groupSiteList" items="${groupSites}">
 															<li>
-																<a href="#" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}');">${groupSiteList.name}</a>
+																<a href="#" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}'); return false">${groupSiteList.name}</a>
 															</li>
 														</c:forEach>
 													</ul>
