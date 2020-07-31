@@ -4,7 +4,7 @@
 <!-- 메인페이지용 스타일/스크립트 파일 -->
 <script type="text/javascript" src="/js/modules/rounded-corners.js"></script>
 <script type="text/javascript" src="/js/jquery.rwdImageMaps.min.js"></script>
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyAyGrAQC_675C34l2ZJ5JgEqeEV3gLuY9I"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyAgEDjSwQWd_Q9RF_owO8WkMtf-6lmVSpc"></script>
 <form id="linkSiteForm" name="linkSiteForm" method="post"></form>
 
 <div class="row header-wrapper">
