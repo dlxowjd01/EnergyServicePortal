@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class LoginController {
@@ -59,23 +61,23 @@ public class LoginController {
 		String oid = "encored";
 		String mode = "test"; //운영 스테이징 구분
 
-		if (serverName.contains("sundream")) {
-			oid = "sundream";
-		} else if (serverName.contains("trust")) {
-			oid = "trust";
-		} else if (serverName.contains("spower") || "localhost".equals(serverName)) {
-			oid = "spower";
-		} else if (serverName.contains("ewp")) {
-			oid = "ewp";
+		if (serverName != null && !"".equals(serverName) && !"localhost".equals(serverName)) {
+			Pattern p = Pattern.compile("^(.*?)(?=\\.)");
+			Matcher m = p.matcher(serverName);
+			String targetHost = "";
+			while (m.find()) {
+				targetHost = m.group();
+			}
+			if (targetHost.contains("-")) {
+				oid = targetHost.split("-")[0];
+				mode = "test";
+			} else {
+				oid = targetHost;
+				mode = "real";
+			}
 		} else {
 			oid = "encored";
-		}
-
-		//운영 스테이징 구분
-		if (serverName.contains("test") || "127.0.0.1".equals(serverName)) {
 			mode = "test";
-		} else {
-			mode = "real";
 		}
 
 		JSONObject obj = new JSONObject();

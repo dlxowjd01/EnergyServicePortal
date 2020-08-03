@@ -186,7 +186,7 @@
 			}
 		} else {
 			if ($(obj).parents('.entity').find('.group_type').length > 1) {
-				var index = $(obj).parents('.entity').find('.group_type').index($(obj).parent().parent());
+				let index = $(obj).parents('.entity').find('.group_type').index($(obj).parent().parent());
 				$(obj).parents('tr').find('.entity').eq(0).find('.group_type').eq(index).remove();
 				$(obj).parent().parent().remove();
 			}
@@ -415,17 +415,27 @@
 
 					if(finance_info['공인인증서'].length > 0) {
 						finance_info['공인인증서'].forEach((file, index) => {
-							if (index > 0) {
+							const fileInputList = document.querySelectorAll('#financeInfo input[type="file"]');
+							let dataId = file['fieldname'].replace('공인인증서_등록_이미지', '공인인증서');
+							let dataText = dataId.split('_');
+							let dupIdx = Number(dataText[0].replace('공인인증서', ''));
+							finance_info['공인인증서'][dupIdx]['fieldname'] = dataId;
+
+							if (dupIdx > 0 && (dupIdx + 1) > fileInputList.length) {
 								addRow('addList_certificate_registration', 'class');
 								addRow('addList_certificate_registration2', 'class');
+							} else {
+								fileInputList[dupIdx].dataset.dataId = dataId;
 							}
 
 							let use = '';
 							if (isEmpty(file['용도'])) {
-								if (!isEmpty(finance_info['용도 선택' + index])) {
-									finance_info['공인인증서'][index]['용도'] = finance_info['용도 선택' + index];
+								if (!isEmpty(finance_info['용도 선택' + dupIdx])) {
+									finance_info['공인인증서'][dupIdx]['용도'] = finance_info['용도 선택' + dupIdx];
+									use = file['용도'];
 								} else if (!isEmpty(finance_info['용도' + index])) {
-									finance_info['공인인증서'][index]['용도'] = finance_info['용도' + index];
+									finance_info['공인인증서'][dupIdx]['용도'] = finance_info['용도' + dupIdx];
+									use = file['용도'];
 								}
 							} else {
 								use = file['용도'];
@@ -434,10 +444,30 @@
 							if (!isEmpty(use)) {
 								$('#용도' + index + ' button').html(use.replace(/\_/g, ' ') + '<span class="caret"></span>').data('value', use);
 							}
-							$('#financeInfo input[type="file"]').eq(index).data('file', file);
-							let listItem = `<button type='button' class='btn_close file_del_btn' onclick='deleteFile($(this), "front")'></button>`;
-							$('#financeInfo input[type="file"]').eq(index).parent().find(".upload_text").next('.file_del_btn').remove();
-							$('#financeInfo input[type="file"]').eq(index).parent().find(".upload_text").html(file['originalname']).after(listItem);
+
+							let fileList = $('#financeInfo input[type="file"]').eq(dupIdx).parent().find('.file_list');
+							if (fileList.find('li').length == 1) {
+								if (fileList.find('li').eq(0).text() == '등록 파일 이름') {
+									fileList.empty();
+								}
+							}
+
+							let dataFile = $('#financeInfo input[type="file"]').eq(dupIdx).data('file');
+							if (!isEmpty(dataFile)) {
+								dataFile.push(file);
+								$('#financeInfo input[type="file"]').eq(dupIdx).data('file', dataFile);
+							} else {
+								dataFile = new Array();
+								dataFile.push(file);
+								$('#financeInfo input[type="file"]').eq(dupIdx).data('file', dataFile);
+							}
+
+							let originalName = file['originalname'];
+							let listItem = `<li class='upload_text' data-id="${'${dataId}'}">
+												${'${originalName}'}
+												<button type='button' class='btn_close icon-trash' onclick='deleteFile($(this))'></button>
+											</li>`;
+							fileList.append(listItem);
 						});
 					}
 
@@ -622,7 +652,7 @@
 				//추가
 				$('#basicForm').find('input[type="file"]').each(function () {
 					if (!isEmpty($(this).data('file'))) {
-						totalFiles.push($(this).data('file'));
+						totalFiles = totalFiles.concat($(this).data('file'));
 					}
 				});
 
@@ -740,7 +770,7 @@
 				//추가
 				$('#financeInfo').find('input[type="file"]').each(function () {
 					if (!isEmpty($(this).data('file'))) {
-						totalFiles.push($(this).data('file'));
+						totalFiles = totalFiles.concat($(this).data('file'));
 					}
 				});
 
@@ -880,22 +910,23 @@
 				$('#' + thisName).parent().next('span').html(diff + '일 남음');
 				$('#보험_만기일_차이' + idx).val(diff + '일 남음');
 			}
-		}  else if (thisName == '인출_가능_기한') {
-			if (!isEmpty($('#인출_가능_기한').text().trim())) {
-				var close = $('#인출_가능_기한').val().trim().split('-')
-				close = new Date(close[0], close[1], close[2]);
-				let diff = dateDiff(close, new Date(), 'day');
-
-				$('#인출_가능_남은일').html(Math.floor(diff) + '일&nbsp;&nbsp;남음');
-			}
-		} else if (thisName == '공사_계약_정보_약정일') {
-			let close = $('#' + thisName).datepicker('getDate');
-			close.setFullYear(close.getFullYear() + 1);
-			let diff = dateDiff(close, new Date(), 'day')
-
-			$('#인출_가능_기한').val(close.format('yyyy-MM-dd'));
-			$('#인출_가능_남은일').html(Math.floor(diff) + '일&nbsp;&nbsp;남음');
 		}
+		// else if (thisName == '인출_가능_기한') {
+		// 	if (!isEmpty($('#인출_가능_기한').text().trim())) {
+		// 		var close = $('#인출_가능_기한').val().trim().split('-')
+		// 		close = new Date(close[0], close[1], close[2]);
+		// 		let diff = dateDiff(close, new Date(), 'day');
+		//
+		// 		$('#인출_가능_남은일').html(Math.floor(diff) + '일&nbsp;&nbsp;남음');
+		// 	}
+		// } else if (thisName == '공사_계약_정보_약정일') {
+		// 	let close = $('#' + thisName).datepicker('getDate');
+		// 	close.setFullYear(close.getFullYear() + 1);
+		// 	let diff = dateDiff(close, new Date(), 'day')
+		//
+		// 	$('#인출_가능_기한').val(close.format('yyyy-MM-dd'));
+		// 	$('#인출_가능_남은일').html(Math.floor(diff) + '일&nbsp;&nbsp;남음');
+		// }
 	}
 
 	const sumUnpaid = () => {
@@ -1208,7 +1239,7 @@
 								</ul>
 							</div>
 						</td>
-						<th><label for="address">발전소 상세 주소</label></th>
+						<th><label for="발전소_상세주소">발전소 상세 주소</label></th>
 						<td>
 							<div class="tx_inp_type edit">
 								<input type="text" id="발전소_상세주소" name="발전소_상세주소" placeholder="상세 주소">
@@ -1409,17 +1440,17 @@
 								</div>
 							</fieldset>
 						</td>
-						<th>통산담보표지판 설정 여부</th>
+						<th>동산담보표지판 설정 여부</th>
 						<td>
 							<fieldset class="rdo_type flex_start">
-								<legend sr-only="통신담보표지판 설정 여부"></legend>
+								<legend sr-only="동산담보표지판 설정 여부"></legend>
 								<div class="radio_group">
-									<input type="radio" id="통신담보표지판_설정" name="통신담보표지판_설정_여부" value="통신담보표지판_설정">
-									<label for="통신담보표지판_설정">설정함</label>
+									<input type="radio" id="동산담보표지판_설정" name="동산담보표지판_설정_여부" value="동산담보표지판_설정">
+									<label for="동산담보표지판_설정">설정함</label>
 								</div>
 								<div class="radio_group">
-									<input type="radio" id="통신담보표지판_미설정" name="통신담보표지판_설정_여부" value="통신담보표지판_미설정">
-									<label for="통신담보표지판_미설정">해당 없음</label>
+									<input type="radio" id="동산담보표지판_미설정" name="동산담보표지판_설정_여부" value="동산담보표지판_미설정">
+									<label for="동산담보표지판_미설정">해당 없음</label>
 								</div>
 							</fieldset>
 						</td>
@@ -1789,23 +1820,25 @@
 							</th>
 							<td class="addList_certificate_registration entity">
 								<div class="group_type flex_start">
-									<div class="dropdown placeholder edit" id="용도[index]">
+									<div id="용도[index]" class="dropdown placeholder edit mxw100">
 										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
 											용도 선택<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" role="menu">
 											<li data-value="은행용">
-												<a href="#">은행용</a>
+												<a href="javascript:void(0);">은행용</a>
 											</li>
 											<li data-value="세금_계산서용">
-												<a href="#">세금 계산서용</a>
+												<a href="javascript:void(0);">세금 계산서용</a>
 											</li>
 										</ul>
 									</div>
-									<div class="fixed_height">
-										<input type="file" id="공인인증서_등록_이미지[index]" class="hidden" name="공인인증서_등록_이미지[index]" accept=".der, .cer, .crt, .pfx, .key">
-										<label for="공인인증서_등록_이미지[index]" class="btn file_upload">파일 선택</label>
-										<span class="upload_text ml-16">등록 파일 이름</span>
+									<div class="flex-baseline mt10">
+										<input type="file" id="공인인증서[index]" class="hidden" name="공인인증서[index]" accept=".der, .key" multiple>
+										<label for="공인인증서[index]" class="btn file_upload">파일 선택</label>
+										<ul class="file_list ml-16">
+											<li>등록 파일 이름</li>
+										</ul>
 									</div>
 								</div>
 							</td>

@@ -1,8 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<script src="/js/commonDropdown.js"></script>
-<script>
+<script type="text/javascript" src="/js/commonDropdown.js"></script>
+<script type="text/javascript">
 	const searchCnt = 0;
+	pagePerData = 50;
 
 	$(function () {
 		var spcFrom = document.querySelector('#spc_form button.btn_type');
@@ -197,6 +198,7 @@
 				}
 			}
 		}
+
 		// $(".sort_table").data("nowjsp", "entityinformation");
 		jsonListSort(n, sort, jsonList);
 		jsonList = paging(page, jsonList);
@@ -228,12 +230,7 @@
 				includeGens: true
 			},
 			success: function (result) {
-				setMakeList(setJsonDataFormat(result, page, n, sort, searchCnt), "listData", {
-					"dataFunction": {
-						"INDEX": getNumberIndex
-					}
-				}); //list생성
-
+				setMakeList(setJsonDataFormat(result, page, n, sort, searchCnt), "listData", {"dataFunction": {"INDEX": getNumberIndex}}); //list생성
 				const now = new Date();
 				$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 			},

@@ -645,53 +645,54 @@
 	}
 
 	function afterDatePick(thisName) {
-		var idx = thisName.replace(/[^0-9]/g, '');
+		let idx = thisName.replace(/[^0-9]/g, '');
 		if (thisName.match('보험_시작일')) {
-			var open = $('#' + thisName).datepicker('getDate'),
+			let open = $('#' + thisName).datepicker('getDate'),
 				close = $('#보험_종료일' + idx).datepicker('getDate'),
 				expiry = $('#보험_만기일' + idx).datepicker('getDate');
 
 			//보험 종료일 차이 구하기
 			if (close != null && open != null) {
-				var diff = dateDiff(close, open, 'day');
+				let diff = dateDiff(close, open, 'day');
 				$('#보험_종료일' + idx).parent().next('span').html(diff + '일 남음');
 				$('#보험_종료일_차이' + idx).val(diff + '일 남음');
 			}
 
 			//보험 만료일 차이 구하기
 			if (expiry != null && open != null) {
-				var diff = dateDiff(expiry, open, 'day');
+				let diff = dateDiff(expiry, open, 'day');
 				$('#보험_만기일' + idx).parent().next('span').html(diff + '일 남음');
 				$('#보험_만기일_차이' + idx).val(diff + '일 남음');
 			}
 		} else if (thisName.match('보험_종료일')) {
-			var close = $('#' + thisName).datepicker('getDate'),
+			let close = $('#' + thisName).datepicker('getDate'),
 				open = $('#보험_시작일' + idx).datepicker('getDate');
 
 			//보험 종료일 차이 구하기
 			if (close != null && open != null) {
-				var diff = dateDiff(close, open, 'day');
+				let diff = dateDiff(close, open, 'day');
 				$('#' + thisName).parent().next('span').html(diff + '일 남음');
 				$('#보험_종료일_차이' + idx).val(diff + '일 남음');
 			}
 		} else if (thisName.match('보험_만기일')) {
-			var expiry = $('#' + thisName).datepicker('getDate'),
+			let expiry = $('#' + thisName).datepicker('getDate'),
 				open = $('#보험_시작일' + idx).datepicker('getDate');
 
 			//보험 종료일 차이 구하기
 			if (expiry != null && open != null) {
-				var diff = dateDiff(expiry, open, 'day');
+				let diff = dateDiff(expiry, open, 'day');
 				$('#' + thisName).parent().next('span').html(diff + '일 남음');
 				$('#보험_만기일_차이' + idx).val(diff + '일 남음');
 			}
-		} else if (thisName == '공사_계약_정보_약정일') {
-			let close = $('#' + thisName).datepicker('getDate');
-				close.setFullYear(close.getFullYear() + 1);
-			let diff = dateDiff(close, new Date(), 'day')
-
-			$('#인출_가능_기한').val(close.format('yyyy-MM-dd'));
-			$('#인출_가능_남은일').html(Math.floor(diff) + '&nbsp;&nbsp;남음');
 		}
+		// else if (thisName == '공사_계약_정보_약정일') {
+		// 	let close = $('#' + thisName).datepicker('getDate');
+		// 		close.setFullYear(close.getFullYear() + 1);
+		// 	let diff = dateDiff(close, new Date(), 'day')
+		//
+		// 	$('#인출_가능_기한').val(close.format('yyyy-MM-dd'));
+		// 	$('#인출_가능_남은일').html(Math.floor(diff) + '&nbsp;&nbsp;남음');
+		// }
 	}
 
 	const sumUnpaid = () => {
@@ -1224,17 +1225,17 @@
 								</div>
 							</fieldset>
 						</td>
-						<th>통산담보표지판 설정 여부</th>
+						<th>동산담보표지판 설정 여부</th>
 						<td>
 							<fieldset class="rdo_type flex_start">
-								<legend sr-only="통신담보표지판 설정 여부"></legend>
+								<legend sr-only="동산담보표지판 설정 여부"></legend>
 								<div class="radio_group">
-									<input type="radio" id="통신담보표지판_설정" name="통신담보표지판_설정_여부" value="통신담보표지판_설정">
-									<label for="통신담보표지판_설정">설정함</label>
+									<input type="radio" id="동산담보표지판_설정" name="동산담보표지판_설정_여부" value="동산담보표지판_설정">
+									<label for="동산담보표지판_설정">설정함</label>
 								</div>
 								<div class="radio_group">
-									<input type="radio" id="통신담보표지판_미설정" name="통신담보표지판_설정_여부" value="통신담보표지판_미설정">
-									<label for="통신담보표지판_미설정">해당 없음</label>
+									<input type="radio" id="동산담보표지판_미설정" name="동산담보표지판_설정_여부" value="동산담보표지판_미설정">
+									<label for="동산담보표지판_미설정">해당 없음</label>
 								</div>
 							</fieldset>
 						</td>
@@ -1602,7 +1603,7 @@
 							</th>
 							<td class="addList_certificate_registration entity">
 								<div class="group_type flex_start">
-									<div class="dropdown placeholder edit" id="용도[index]">
+									<div id="용도[index]" class="dropdown placeholder edit mxw100">
 										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
 											용도 선택<span class="caret"></span>
 										</button>
@@ -1615,10 +1616,12 @@
 											</li>
 										</ul>
 									</div>
-									<div class="fixed_height">
-										<input type="file" id="공인인증서_등록_이미지[index]" class="hidden" name="공인인증서_등록_이미지[index]" accept=".der, .key">
+									<div class="flex-baseline mt10">
+										<input type="file" id="공인인증서_등록_이미지[index]" class="hidden" name="공인인증서_등록_이미지[index]" accept=".der, .key" multiple>
 										<label for="공인인증서_등록_이미지[index]" class="btn file_upload">파일 선택</label>
-										<span class="upload_text ml-16">등록 파일 이름</span>
+										<ul class="file_list ml-16">
+											<li>등록 파일 이름</li>
+										</ul>
 									</div>
 								</div>
 							</td>

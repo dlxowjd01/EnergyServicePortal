@@ -856,7 +856,8 @@
 		}).done(function (data, textStatus, jqXHR) {
 			let resultData = data[did].data[0],
 				dType = data[did].device_type,
-				dName = data[did].dname;
+				dName = data[did].dname,
+				operation = 't2';
 
 				console.log("deviceStatus==", deviceStatus);
 				if(deviceStatus == 0){

@@ -1157,7 +1157,9 @@
 			},
 			labels: {
 				formatter: function () {
-					if (String(this.value).length  >= 5) {
+					if (String(this.value).length  >= 7) {
+						return numberComma(this.value / 1000000) + ' G';
+					} else if (String(this.value).length  >= 5) {
 						return numberComma(this.value / 1000) + ' M';
 					} else {
 						return this.value;
@@ -1191,7 +1193,9 @@
 			},
 			labels: {
 				formatter: function () {
-					if (String(this.value).length  >= 5) {
+					if (String(this.value).length  >= 7) {
+						return numberComma(this.value / 1000000) + ' G';
+					} else if (String(this.value).length  >= 5) {
 						return numberComma(this.value / 1000) + ' M';
 					} else {
 						return this.value;
@@ -1205,7 +1209,19 @@
 			opposite: true
 		}],
 		tooltip: {
-			shared: true
+			formatter: function () {
+				return this.points.reduce(function (s, point) {
+					let suffix = point.series.userOptions.tooltip.valueSuffix;
+					return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
+				}, '<b>' + this.x + '</b>');
+			},
+			shared: true, /* 툴팁 공유 */
+			borderColor: 'none',
+			backgroundColor: 'var(--bg-color)',
+			padding: 16,
+			style: {
+				color: 'var(--color3)'
+			}
 		},
 		/* 범례 */
 		legend: {

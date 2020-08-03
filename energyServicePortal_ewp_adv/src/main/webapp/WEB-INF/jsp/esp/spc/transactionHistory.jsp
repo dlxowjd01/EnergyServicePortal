@@ -663,7 +663,7 @@
 									<li>
 										<a href='javascript:void(0)' tabindex='-1'>
 											<input type='checkbox' id='onHold' value='' data-value='1' name='approvalStatus'>
-											<label for='onHold'>승안 대기</label>
+											<label for='onHold'>승인 대기</label>
 										</a>
 									</li>
 									<li>
