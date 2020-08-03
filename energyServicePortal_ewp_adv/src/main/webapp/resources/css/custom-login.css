@@ -309,7 +309,8 @@ input[type="submit"]:disabled {
     color: var(--color8);
     font-weight: 500;
 	text-decoration: none;
-	overflow-wrap: anywhere;
+	word-wrap:break-word;
+	/* overflow-wrap: anywhere; */
 }
 
 .lf-desc .center:not(.copy-right) {

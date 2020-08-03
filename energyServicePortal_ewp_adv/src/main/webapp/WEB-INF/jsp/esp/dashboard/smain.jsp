@@ -1156,7 +1156,13 @@
 				}
 			},
 			labels: {
-				format: '{value}',
+				formatter: function () {
+					if (String(this.value).length  >= 5) {
+						return numberComma(this.value / 1000) + ' M';
+					} else {
+						return this.value;
+					}
+				},
 				style: {
 					color: '#a4aebf',
 					fontSize: '12px'
@@ -1184,7 +1190,13 @@
 				}
 			},
 			labels: {
-				format: '{value}',
+				formatter: function () {
+					if (String(this.value).length  >= 5) {
+						return numberComma(this.value / 1000) + ' M';
+					} else {
+						return this.value;
+					}
+				},
 				style: {
 					color: '#a4aebf',
 					fontSize: '12px'

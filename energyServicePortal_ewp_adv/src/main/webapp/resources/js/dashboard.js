@@ -147,7 +147,7 @@ const monthlyChartDraw = function (type, chargeList, dischargeList, pvList, payL
 const monthlyChart = Highcharts.chart('monthlyChart', {
 	chart: {
 		marginTop: 40,
-		marginLeft: 70,
+		marginLeft: 60,
 		marginRight: 55,
 		backgroundColor: 'transparent',
 		zoomType: 'xy'
@@ -220,7 +220,13 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			}
 		},
 		labels: {
-			format: '{value}',
+			formatter: function () {
+				if (String(this.value).length  >= 5) {
+					return numberComma(this.value / 1000) + ' M';
+				} else {
+					return this.value;
+				}
+			},
 			style: {
 				color: 'var(--color4)',
 				fontSize: '12px'
@@ -240,7 +246,13 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			}
 		},
 		labels: {
-			format: '{value}',
+			formatter: function () {
+				if (String(this.value).length  >= 5) {
+					return numberComma(this.value / 1000) + ' M';
+				} else {
+					return this.value;
+				}
+			},
 			style: {
 				color: 'var(--color4)',
 				fontSize: '12px'
@@ -609,7 +621,13 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			}
 		},
 		labels: {
-			format: '{value}',
+			formatter: function () {
+				if (String(this.value).length  >= 5) {
+					return numberComma(this.value / 1000) + ' M';
+				} else {
+					return this.value;
+				}
+			},
 			style: {
 				color: 'var(--color4)',
 				fontSize: '12px'
@@ -629,7 +647,13 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			}
 		},
 		labels: {
-			format: '{value}',
+			formatter: function () {
+				if (String(this.value).length  >= 5) {
+					return numberComma(this.value / 1000) + ' M';
+				} else {
+					return this.value;
+				}
+			},
 			style: {
 				color: 'var(--color4)',
 				fontSize: '12px'

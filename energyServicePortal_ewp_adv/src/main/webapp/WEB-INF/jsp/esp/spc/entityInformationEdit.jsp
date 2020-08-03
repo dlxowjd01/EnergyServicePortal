@@ -179,10 +179,18 @@
 		}
 	}
 
-	function removeList(obj){
-		if( $(obj).parent().parent().find('.group_type').length > 1){
-			$(obj).parent().remove();
-		};
+	function removeList(obj, type) {
+		if (isEmpty(type)) {
+			if ($(obj).parent().parent().find('.group_type').length > 1) {
+				$(obj).parent().remove();
+			}
+		} else {
+			if ($(obj).parents('.entity').find('.group_type').length > 1) {
+				var index = $(obj).parents('.entity').find('.group_type').index($(obj).parent().parent());
+				$(obj).parents('tr').find('.entity').eq(0).find('.group_type').eq(index).remove();
+				$(obj).parent().parent().remove();
+			}
+		}
 	}
 
 	function setAddListParam(addId){
