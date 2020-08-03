@@ -5,8 +5,7 @@
 	let addListCnt2 = 0; // 첨부하는 파일 추가할 경우 카운트 1씩 증가 ( 첨부파일 )
 
 	$(function () {
-		setInitList("genList");
-
+		setInitList('genList');
 		initAddListHtml();
 		getGenData();
 	});
@@ -17,42 +16,44 @@
 			type: 'get',
 			async: false,
 			success: function (json) {
-
 				setMakeList(json, 'genList', { 'dataFunction': {} });
 				getReportData();
 			},
-			error: function (request, status, error) {
-
-			}
+			error: function (request, status, error) {}
 		});
 	}
 
 	function getReportData() {
-		var reportId = '${param.report_id}';
+		let reportId = '${param.report_id}';
 		$.ajax({
 			url: apiHost + '/reports/remote_work?oid=' + oid + '&report_id=' + reportId,
 			type: 'get',
 			async: false,
 			data: {},
 			success: function (json) {
-				setDropDownValue('report_type_list', getReportTypeName(json.data[0].report_type));
-				setDropDownValue('genList', json.data[0].site_name);
+				const data = json.data[0],
+					workInfo = JSON.parse(data.work_info),
+					workDetailInfo = JSON.parse(data.work_detail_info);
+
+				setDropDownValue('report_type', getReportTypeName(data['report_type']), data['report_type']);
+				setJsonAutoMapping(data, 'work_info');
+				setJsonAutoMapping(workInfo, 'work_info');
+				setJsonAutoMapping(workDetailInfo, 'work_detail_info');
+				getAttachFileDisplay(workDetailInfo['files']);
+
+				setDropDownValue('report_type', getReportTypeName(json.data[0].report_type), json.data[0].report_type);
+				setDropDownValue('gen', json.data[0].site_name, json.data[0].site_id);
 				setJsonAutoMapping(json.data[0], 'work_info');
 				setJsonAutoMapping(JSON.parse(json.data[0].work_info), 'work_info');
 				setJsonAutoMapping(JSON.parse(json.data[0].work_detail_info), 'work_detail_info');
 				getAttachFileDisplay(JSON.parse(json.data[0].work_detail_info).files);
-
-				$('#report_type').data('value', json.data[0].report_type);
-				$('#gen').data('value', json.data[0].site_id);
 			},
-			error: function (request, status, error) {
-
-			}
+			error: function (request, status, error) {}
 		});
 	}
 
 	function getReportTypeName(data) {
-		var result = '';
+		let result = '';
 
 		if ('1' == data) {
 			result = '출장/조치 보고서';
@@ -61,23 +62,21 @@
 		} else {
 			result = data;
 		}
-
 		return result;
 	}
 
 	function getAttachFileDisplay(files) {
-		// 	var reportId = "${param.report_id}";
-		var fileList01 = [], fileList02 = [];
+		let fileList01 = [], fileList02 = [];
 		if (!isEmpty(files)) {
-			for (var i = 0, count = files.length; i < count; i++) {
-				if(files[i] != null) {
-					if (files[i].fieldname.match('work_report_file_01')) {
-						fileList01.push(files[i]);
-					} else if (files[i].fieldname.match('work_report_file_02')) {
-						fileList02.push(files[i]);
+			files.forEach(file => {
+				if (!isEmpty(file)) {
+					if (file['fieldname'].match('work_report_file_01')) {
+						fileList01.push(file);
+					} else if (file['fieldname'].match('work_report_file_02')) {
+						fileList02.push(file);
 					}
 				}
-			}
+			});
 		}
 
 		setMakeList(fileList01, 'fileList01', { 'dataFunction': {} });
@@ -85,33 +84,27 @@
 	}
 
 	function setRemoveFileList(fileId, idx) {
-		var jsonList = $('#' + fileId).data('gridJsonData');
-
+		let jsonList = $('#' + fileId).data('gridJsonData');
 		jsonList.splice(idx, 1);
 		setMakeList(jsonList, fileId, { 'dataFunction': {} });
 	}
 
-	function setDropDownValue(id, data) {
-		var $selecter = $('#' + id);
-		$selecter.find('li').each(function () {
-			if ($(this).text() == data) {
-				$selecter.find('button').html(data + '<span class="caret"></span>').data('value', data);
-				return false;
-			}
-		});
+	function setDropDownValue(id, text, data) {
+		let $selecter = $('#' + id),
+			$button = $selecter.find('button');
+		$button.html(text + '<span class="caret"></span>').data('value', data);
 	}
 
 	function initAddListHtml() {
-		$("#addFileList01").data('form', $("#addFileList01").html());
-		$("#addFileList02").data('form', $("#addFileList02").html());
+		$('#addFileList01').data('form', $('#addFileList01').html());
+		$('#addFileList02').data('form', $('#addFileList02').html());
 
 		setInitList('fileList01');
 		setInitList('fileList02');
 	}
 
 	function addList(addId) {
-		var $selecter = $("#" + addId);
-		// 	$selecter.append($selecter.data("form"));
+		let $selecter = $('#' + addId);
 
 		if (addId == 'addFileList01') {
 			$selecter.append('<input name="work_report_file_01' + addListCnt1 + '" type="file" class="hidden" id="work_report_file_'+addListCnt1+'"><label for="work_report_file_'+addListCnt1+'" class="btn file_upload">파일 선택</label>')
@@ -123,7 +116,7 @@
 	}
 
 	function setSaveData() {
-		var report_type = $('#report_type button').data('value'),
+		let report_type = $('#report_type button').data('value'),
 			report_name = $('#report_name').val(),
 			site_id = $('#gen button').data('value');
 
@@ -240,8 +233,6 @@
 		<div class="time fr">
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>
-			<span>DATA BASE TIME</span>
-			<em class="dbTime">2020-04-06 17:01:02</em>
 		</div>
 	</div>
 </div>
@@ -254,7 +245,7 @@
 					<button class="btn btn-primary dropdown-toggle w9" type="button" data-toggle="dropdown" data-value="">
 						<span class="caret"></span>
 					</button>
-					<ul id="report_type_list" class="dropdown-menu chk_type" role="menu">
+					<ul class="dropdown-menu chk_type" role="menu">
 						<li data-value="1"><a href="javascript:void(0);">출장/조치 보고서</a></li>
 						<li data-value="2"><a href="javascript:void(0);">QC 보고서</a></li>
 					</ul>
@@ -354,7 +345,7 @@
 							<col>
 						</colgroup>
 						<tr>
-							<th>시스템 개요</th>
+							<th class="vert_type">시스템 개요</th>
 							<td>
 								<div class="txarea_inp_type">
 									<textarea placeholder="내용 추가" id="시스템_개요" rows="4"></textarea>
@@ -362,27 +353,25 @@
 							</td>
 						</tr>
 						<tr>
-							<th class="vert_type">현장 점검<a href="javascript:addList('addFileList01')" class="btn_add fr">추가</a></th>
+							<th class="vert_type">현장 점검</th>
 							<td>
-								<div id="fileList01">
+								<div id="fileList01" class="hide-no-data">
 									<p class="tx_file">
 										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
 									</p>
 								</div>
 								<div id="addFileList01">
-									<input type="file" name="work_report_file_01" class="hidden" id="work_report_file_01" multiple>
+									<input type="file" name="work_report_file_01" class="hidden" id="work_report_file_01" accept="image/*" multiple>
 									<label for="work_report_file_01" class="btn file_upload">파일 선택</label>
 									<div class="file_list ml-16">
-										<ul>
-											<li class="upload_text"></li>
-										</ul>
+										<ul></ul>
 									</div>
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<th>특이사항</th>
+							<th class="vert_type">특이사항</th>
 							<td>
 								<div class="txarea_inp_type">
 									<textarea id="특이사항" placeholder="내용 추가" rows="4"></textarea>
@@ -390,7 +379,7 @@
 							</td>
 						</tr>
 						<tr>
-							<th>향후 진행예정 업무</th>
+							<th class="vert_type">향후 진행예정 업무</th>
 							<td>
 								<div class="txarea_inp_type">
 									<textarea id="향후_진행예정_업무" placeholder="내용 추가" rows="4"></textarea>
@@ -398,7 +387,7 @@
 							</td>
 						</tr>
 						<tr>
-							<th>담당자 의견</th>
+							<th class="vert_type">담당자 의견</th>
 							<td>
 								<div class="txarea_inp_type">
 									<textarea id="담당자_의견" placeholder="내용 추가" rows="4"></textarea>
@@ -406,16 +395,16 @@
 							</td>
 						</tr>
 						<tr>
-							<th class="hei_type">첨부 파일</th>
+							<th class="vert_type">첨부 파일</th>
 							<td>
-								<div id="fileList02">
+								<div id="fileList02" class="hide-no-data">
 									<p class="tx_file">
 										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button class="btn_type07" onclick="setRemoveFileList('fileList02', [INDEX]);">삭제</button>
 									</p>
 								</div>
 								<div id="addFileList02">
-									<input type="file" name="work_report_file_02" class="hidden" id="work_report_file_02" multiple>
+									<input type="file" name="work_report_file_02" class="hidden" id="work_report_file_02" accept="image/*" multiple>
 									<label for="work_report_file_02" class="btn file_upload">파일 선택</label>
 									<div class="file_list ml-16">
 										<ul>

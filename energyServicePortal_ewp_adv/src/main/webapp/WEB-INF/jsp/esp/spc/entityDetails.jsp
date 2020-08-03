@@ -196,7 +196,7 @@
 									});
 								}
 								target[obj[0]] = obj[1];
-							} else if (obj[0] == 'SMP' || obj[0] == 'SMP') {
+							} else if (obj[0] == 'SMP' || obj[0] == 'REC') {
 								target[obj[0]] = obj[1].replace(/\_/g, ' ');
 							} else {
 								if (!obj[0].match('계좌_번호') && !obj[0].match('비밀번호') && !obj[0].match('연락처')) {
@@ -719,8 +719,8 @@
 					<tr>
 						<th>지상권 및 지상권부근저당 설정 여부</th>
 						<td id="지상권설정여부"></td>
-						<th>통산담보표지판 설정 여부</th>
-						<td id="통신담보표지판_설정_여부"></td>
+						<th>동산담보표지판 설정 여부</th>
+						<td id="동산담보표지판_설정_여부"></td>
 					</tr>
 					<tr>
 						<th>자가부지공장근저당 목록 설정 여부</th>

@@ -227,30 +227,41 @@ $(function () {
 
 		if (isEmpty(t)) {return false;}
 		if ($(this).attr("multiple")) {
-			let list = $(this).parent().find(".file_list ul");
-			let item = $(this).get(0).files;
-			let arr = [];
-			if ($(this).parent().find(".no-data")) {
-				$(this).parent().find(".no-data").addClass("hidden");
-			}
-			list.empty();
-			$.each(item, function (index, element) {
-				let listItem = ``;
-				let dataId = genUuid();
-				listItem = `
-					<li class='upload_text' data-id="${dataId}">
-						${element.name}
-						<button type='button' class='btn_close icon_btn' onclick='deleteFile($(this))'></button>
-					</li>
-				`
-				list.append(listItem);
-				arr.push(element.name);
-			});
+            let list = $(this).parent().find(".file_list ul");
+            let delBtn = 'icon_btn';
+		    if ($(this).parent().find("ul.file_list").length > 0) {
+                list = $(this).parent().find("ul.file_list");
+                if ($(this).attr('id').match('공인인증서')) {
+                    delBtn = 'icon-trash';
+                }
+            }
+            let item = $(this).get(0).files;
+            let arr = [];
+            if ($(this).parent().find(".no-data")) {
+                $(this).parent().find(".no-data").addClass("hidden");
+            }
+
+            if (list.find('.upload_text').length <= 0) {
+                list.empty();
+            }
+
+            $.each(item, function (index, element) {
+                let listItem = ``;
+                let dataId = genUuid();
+                listItem = `
+                                <li class='upload_text' data-id="${dataId}">
+                                    ${element.name}
+                                    <button type='button' class='btn_close ${delBtn}' onclick='deleteFile($(this))'></button>
+                                </li>
+                            `
+                list.append(listItem);
+                arr.push(element.name);
+            });
 			//$(this).attr("name", arr);
 		} else {
             let targetId = $(this).attr('id');
-            if (targetId.match('SPC_법인_인감_파일') || targetId.match('공인인증서_등록_이미지')) {
-                let listItem = `<button type='button' class='btn_close file_del_btn' onclick='deleteFile($(this), "front")'></button>`;
+            if (targetId.match('SPC_법인_인감_파일')) {
+                let listItem = `<button type='button' class='btn_close icon-trash ' onclick='deleteFile($(this), "front")'></button>`;
                 $(this).parent().find(".upload_text").next('.file_del_btn').remove();
                 $(this).parent().find(".upload_text").html(labelText).after(listItem);
             } else {

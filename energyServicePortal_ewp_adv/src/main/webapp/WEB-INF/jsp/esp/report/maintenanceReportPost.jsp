@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
+	const nowDate = new Date();
 	let addListCnt1 = 0; // 첨부하는 파일 추가할 경우 카운트 1씩 증가 ( 현장점검 )
 	let addListCnt2 = 0; // 첨부하는 파일 추가할 경우 카운트 1씩 증가 ( 첨부파일 )
 
@@ -9,6 +10,8 @@
 
 		initAddListHtml();
 		getGenData();
+
+		$('#출장_시기_from').datepicker('setDate', nowDate);
 	});
 
 	const getGenData = () => {
@@ -157,12 +160,10 @@
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">출장/조치 보고서 </h1>
-		<%--		<div class="time fr">--%>
-		<%--			<span>CURRENT TIME</span>--%>
-		<%--			<em class="currTime">${nowTime}</em>--%>
-		<%--			<span>DATA BASE TIME</span>--%>
-		<%--			<em class="dbTime">2020-04-06 17:01:02</em>--%>
-		<%--		</div>--%>
+		<div class="time fr">
+			<span>CURRENT TIME</span>
+			<em class="currTime">${nowTime}</em>
+		</div>
 	</div>
 </div>
 <div class="row">
@@ -220,8 +221,8 @@
 						<th>출장 시기</th>
 						<td>
 							<div class="sel_calendar edit twin clear">
-								<input type="text" id="출장_시기_from" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일">
-								<input type="text" id="출장_시기_to" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일">
+								<input type="text" id="출장_시기_from" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일" readonly>
+								<input type="text" id="출장_시기_to" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일" readonly>
 							</div>
 						</td>
 						<th>출장 장소</th>
@@ -270,7 +271,7 @@
 				<div class="spc_tbl_row">
 					<table>
 						<tr>
-							<th>시스템 개요</th>
+							<th class="vert_type">시스템 개요</th>
 							<td>
 								<div class="txarea_inp_type">
 									<textarea placeholder="내용 추가" id="시스템_개요" rows="4"></textarea>
@@ -280,7 +281,7 @@
 						<tr>
 							<th class="vert_type">현장 점검</th>
 							<td id="addFileList01">
-								<input type="file" name="work_report_file_01" class="hidden" id="work_report_file_01" multiple>
+								<input type="file" name="work_report_file_01" class="hidden" id="work_report_file_01" accept="image/*" multiple>
 								<label for="work_report_file_01" class="btn file_upload">파일 선택</label>
 								<div class="file_list ml-16">
 									<ul>
@@ -290,7 +291,7 @@
 							</td>
 						</tr>
 						<tr>
-							<th>특이사항</th>
+							<th class="vert_type">특이사항</th>
 							<td>
 								<div class="txarea_inp_type">
 									<textarea id="특이사항" placeholder="내용 추가" rows="4"></textarea>
@@ -298,7 +299,7 @@
 							</td>
 						</tr>
 						<tr>
-							<th>향후 진행예정 업무</th>
+							<th class="vert_type">향후 진행예정 업무</th>
 							<td>
 								<div class="txarea_inp_type">
 									<textarea id="향후_진행예정_업무" placeholder="내용 추가" rows="4"></textarea>
@@ -306,7 +307,7 @@
 							</td>
 						</tr>
 						<tr>
-							<th>담당자 의견</th>
+							<th class="vert_type">담당자 의견</th>
 							<td>
 								<div class="txarea_inp_type">
 									<textarea id="담당자_의견" placeholder="내용 추가" rows="4"></textarea>
@@ -314,9 +315,9 @@
 							</td>
 						</tr>
 						<tr>
-							<th class="hei_type">첨부 파일</th>
+							<th class="vert_type">첨부 파일</th>
 							<td id="addFileList02">
-								<input name="work_report_file_02" type="file" class="hidden" id="work_report_file_02" multiple>
+								<input name="work_report_file_02" type="file" class="hidden" id="work_report_file_02" accept="image/*" multiple>
 								<label for="work_report_file_02" class="btn file_upload">파일 선택</label>
 								<div class="file_list ml-16">
 									<ul>
