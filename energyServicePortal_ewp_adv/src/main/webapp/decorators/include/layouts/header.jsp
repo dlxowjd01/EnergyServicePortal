@@ -488,7 +488,7 @@
 				<button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn_type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button>
 			</div>
 		</li>
-		<%--	
+		<%--
 		<li>
 			<div class="nav_theme">
 				<div class="switcher">
@@ -532,9 +532,6 @@
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content settings-content">
 			<div class="modal-header"><h2>개인정보 설정</h2></div>
-			<input type="hidden" id="modUserIdx" name="userIdx"/>
-			<input type="hidden" id="modPsnEmail" name="psnEmail"/>
-			<input type="hidden" id="modPsnMobile" name="psnMobile"/>
 			<div class="modal-body">
 				<div class="row">
 					<div class="col-8">
@@ -580,11 +577,9 @@
 								<label for="fullName" class="input_label bold">이름</label>
 								<input type="text" name="full_name" id="fullName" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
 							</div>
-
 							<div class="flex_start warning-wrapper">
 								<small id="isValidName" class="warning-text hidden">한글/영문 이름만 가능합니다.</small>
 							</div>
-							
 							<div class="input-group inline-flex">
 								<label for="emailAddr" class="input_label bold">이메일</label>
 								<input type="text" name="email_addr" id="emailAddr" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
@@ -592,7 +587,6 @@
 							<div class="flex_start warning-wrapper">
 								<small id="isValidEmail" class="warning-text hidden">유효한 이메일 주소를 입력해 주세요.</small>
 							</div>
-							
 							<div class="input-group inline-flex">
 								<label for="mobileNum" class="input_label bold">휴대폰</label>
 								<input type="text" name="mobile_num" id="mobileNum" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
@@ -600,7 +594,6 @@
 							<div class="flex_start warning-wrapper">
 								<small id="isValidMobileNum" class="warning-text hidden">10자리 이상의 휴대폰 번호를 입력해 주세요.</small>
 							</div>
-							
 							<div class="btn_wrap_type">
 								<small id="successMsg2" class="text-blue text-sm left hidden">개인정보가 성공적으로 변경 되었습니다.</small>
 								<button type="submit" id="updateProfileBtn" disabled class="btn_type03 disabled">개인정보 변경</button>
