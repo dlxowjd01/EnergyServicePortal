@@ -601,7 +601,6 @@ a.dt-button {
     color: var(--color3);
     white-space: nowrap;
 	overflow: hidden;
-
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
