@@ -207,6 +207,7 @@ input[type="submit"]:disabled {
 	padding: 70px 24px 30px;
 	background: var(--box-color);
 }
+
 .lf-body .login-logo {
 	margin: 0 auto 55px;
 	display: block;
@@ -258,7 +259,7 @@ input[type="submit"]:disabled {
 	display: table;
 }
 
-.lf-btn-wrap > input {
+.lf-btn-wrap>input {
 	display: inline-block;
 	margin-bottom: 30px;
 	background: var(--vivid-blue);
@@ -291,6 +292,7 @@ input[type="submit"]:disabled {
 	color: var(--color4);
 	border-top: 1px solid var(--box-border);
 }
+
 .lf-desc .col-6 {
 	padding: 0;
 }
@@ -299,19 +301,16 @@ input[type="submit"]:disabled {
 	border-left: 1px solid var(--color1);
 }
 
-.lf-desc .center strong {
-	color: var(--color8);
-	padding-left: 8px;
-}
-
 .lf-desc a {
 	color: var(--color4);
 }
 
-.lf-desc .bold {
+.lf-desc .link-bold {
 	color: var(--color8);
 	font-weight: 500;
 	text-decoration: none;
+	word-wrap:break-word;
+	/* overflow-wrap: anywhere; */
 }
 
 .lf-desc .center:not(.copy-right) {
@@ -443,7 +442,7 @@ input[type="submit"]:disabled {
 @media all and (max-width:768px) {
 	.login-wrapper>nav {
 		padding: 0 15px;
-		height: 115px;
+		margin-bottom:  84px;
 	}
 
 	.login-wrapper .login {

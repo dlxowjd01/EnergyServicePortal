@@ -45,14 +45,15 @@
 					var spcIdList = [];
 					var gensInfoList = [];
 					var spcNameArr = [];
-					console.log("json--", json)
+
+					$('.loading').hide();
+					
 					data.map(x => {
 						spcIdList.push(x.spc_id);
 						promise.push(Promise.resolve(JSON.parse(x.spc_info)));
 					});
 					// setTimeout(function(){
 						Promise.all(promise).then(res => {
-							console.log("res===", res);
 							var length = res.length;
 							// console.log("length", length)
 							res.map((n, i) => {
@@ -74,6 +75,10 @@
 						});
 
 					// }, 300);
+				},
+				error: function(request, status, error) {
+					$('.loading').hide();
+					console.log("error===", error)
 				}
 			});
 		}
@@ -329,6 +334,7 @@
 				// console.log("item2===", item2)
 				fillCalendar(item1, item2, spcNameList);
 			}).fail(function (jqXHR, textStatus, errorThrown) {
+				$('.loading').hide();
 				showWarningModal("fail");
 				return false;
 			});
@@ -416,7 +422,6 @@
 						traditional: true,
 						data: JSON.stringify(data)
 					};
-					console.log("dat---", option.data)
 				}
 			} else {
 				// DELETE req
@@ -441,6 +446,7 @@
 				document.location.reload(true);
 				// maintenance(spcPairArr, 'get');
 			}).fail(function (jqXHR, textStatus, errorThrown) {
+				$('.loading').hide();
 				showWarningModal("fail");
 				console.log("jqXHR===", jqXHR)
 				return false;

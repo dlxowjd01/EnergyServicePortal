@@ -16,9 +16,32 @@
 				async: true,
 				data: {
 					oid: siteId,
-					filter:
-						{ "includeSites": true },
-						// { "limit": 30 },
+					filter: { 
+						"limit": 100,
+						"fields": {
+							"sid": true,
+							"oid": true,
+							"name": true,
+							"location": true,
+							"resource_type": true,
+							"ess": true,
+							"vpp_group_id": true,
+							"dr_group_id": true,
+							"market_id": true,
+							"station_id": true,
+							"latlng": true,
+							"tz": true,
+							"address": true,
+							"detail_info": true,
+							// "utility": true,
+							"dr_info": true,
+							"vpp_info": true,
+							"power_market": true,
+							// "cctv_url": true,
+							// "createdAt": true,
+							// "updatedAt": true
+						},
+					}
 				},
 				beforeSend: function (jqXHR, settings) {
 					let token = '${sessionScope.userInfo.token}';
@@ -54,9 +77,9 @@
 					obj.alarmState = "TBA"
 
 					if(x.resource_type === 0) {
-						obj.powerSource = "마이크로 그리드"
+						obj.powerSource = "부하"
 					} else if(x.resource_type === 1){
-						obj.powerSource = "PV"
+						obj.powerSource = "태양광"
 					} else if(x.resource_type === 2){
 						obj.powerSource = "풍력"
 					} else if(x.resource_type === 3){
@@ -91,36 +114,131 @@
 					// "fixedHeader": true,
 					"scrollX": false,
 					"scrollY": "400px",
-					columnDefs: [ {
-						orderable: false,
-						className: 'select-checkbox',
-						targets:   0
-					}],
-					order: [[ 1, 'asc' ]],
-					"columns": [
+					// columnDefs: [ {
+					// 	orderable: true,
+						// className: 'select-checkbox',
+						// targets:   0
+					// }],
+					// order: [[ 1, 'asc' ]],
+					colReorder: {
+						realtime: false
+					},
+					"pagingType": "numbers",
+					// "columns": [
+					// 	{
+					// 		"data":  "",
+					// 		render: function ( data, type, row ) {
+					// 			// console.log("data--", row, "type===", type)
+					// 			return '<a class="chk_type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
+					// 		},
+					// 		className: "dt-body-center"
+					// 	},
+					// 	{ "data": "siteType" },
+					// 	{ "data": "name"},
+					// 	{ "data": "location"},
+					// 	{ "data": "powerSource" },
+					// 	{ "data": "genVol" },
+					// 	{ "data": "pscVol" },
+					// 	{ "data": "bmsVol" },
+					// 	{ "data": "drId" },
+					// 	{ "data": "vppId"},
+					// 	{ "data": "alarmState" },
+					// ],
+
+					"aoColumns": [
 						{
-							"data":  "",
-							render: function ( data, type, row ) {
-								// console.log("data--", row, "type===", type)
-								return '<a class="chk_type" href="javascript:void(0);"><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
+							"sTitle": "",
+							"mData": "",
+							"mRender": function ( data, type, row )  {
+								// console.log('row==', row)
+								return '<a class="chk_type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
 							},
-							className: "dt-body-center"
+							"className": "dt-body-center"
 						},
-						{ "data": "siteType" },
-						{ "data": "name"},
-						{ "data": "location"},
-						{ "data": "powerSource" },
-						{ "data": "genVol" },
-						{ "data": "pscVol" },
-						{ "data": "bmsVol" },
-						{ "data": "drId" },
-						{ "data": "vppId"},
-						{ "data": "alarmState" },
+						{
+							"sTitle": "사업소 타입",
+							"mData": "siteType",
+						
+						},
+						{
+							"sTitle": "사업소명",
+							"mData": "name"
+						},
+						{
+							"sTitle": "지역",
+							"mData":"location",
+						},
+						{
+							"sTitle": "발전원",
+							"mData":"powerSource",
+						},
+						{
+							"sTitle": "발전 용량",
+							"mData":"genVol",
+						},
+						{
+							"sTitle": "ESS 용량 (PCS)",
+							"mData":"pscVol",
+						},
+						{
+							"sTitle": "ESS 용량 (BMS)",
+							"mData":"bmsVol",
+						},
+						{
+							"sTitle": "DR 자원 코드",
+							"mData":"drId",
+						},
+						{
+							"sTitle": "VPP 자원코드",
+							"mData":"vppId",
+						},
+						{
+							"sTitle": "알람 수신",
+							"mData":"alarmState",
+						},
+					],
+					dom: 'Bfrtip',
+					buttons: [
+						{
+							extend: 'copyHtml5',
+							// className: "",
+							text: '데이터 복사',
+						},
+						{
+							extend: 'print',
+							text: '전체 인쇄',
+							exportOptions: {
+								modifier: {
+									selected: null
+								}
+							}
+						},
+						{
+							extend: 'print',
+							text: '선택 인쇄'
+						},
+						{
+							extend: 'excelHtml5',
+							text: 'Excel'
+						},
+						{
+							extend: 'csvHtml5',
+							text: 'CSV'
+						},
+						{
+							extend: 'pdfHtml5',
+							text: 'PDF',
+						}
 					],
 					select: {
-						style:    'os',
-						selector: 'td:first-child'
+						style: 'os',
+						items: 'cell'
 					},
+					// select: true,
+					// select: {
+					// 	style:    'os',
+					// 	selector: 'td:first-child'
+					// },
 					rowCallback: function ( row, data ) {
 						// console.log("row-selected--", row)
 						// $('input.editor-active', row).prop( 'checked', data.active == 1 );
@@ -250,7 +368,7 @@
 		<div class="indiv">
 			<table id="example" class="stripe">
 				<thead>
-					<tr>
+					<!-- <tr>
 						<th></th>
 						<th>사업소 타입</th>
 						<th>사업소명</th>
@@ -262,14 +380,22 @@
 						<th>DR 자원 코드</th>
 						<th>VPP 자원코드</th>
 						<th>알람 설정</th>
-					</tr>
+					</tr> -->
 				</thead>
 				<tbody>
 				</tbody>
 				<tfoot>
 					<tr>
 						<td></td>
-						<td colspan="9"></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
 						<td></td>
 					</tr>
 				</tfoot>
