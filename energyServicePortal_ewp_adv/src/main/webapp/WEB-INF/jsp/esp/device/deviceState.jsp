@@ -850,8 +850,28 @@
 		}).done(function (data, textStatus, jqXHR) {
 			let resultData = data[did].data[0],
 				dType = data[did].device_type,
-				dName = data[did].dname;
+				dName = data[did].dname,
+				operation = 't2';
 
+			if (isEmpty(resultData)) {
+				operation = 't2'
+			} else {
+				switch (resultData.operation) {
+					case 0:
+						operation = '';
+						break;
+					case 1:
+						operation = 't3';
+						break;
+					case 2:
+						operation = 't2';
+						break;
+					default:
+						operation = '';
+						break;
+				}
+			}
+			$('#' + dType + ' .eq_card').removeClass('t2').removeClass('t3').addClass(operation);
 			$('#' + dType + ' .eq_card .ntit').text(dName);
 			$('#' + dType + ' .eq_card .inv_tit').text(dName + ' 현황');
 

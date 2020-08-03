@@ -770,7 +770,7 @@
 				//추가
 				$('#financeInfo').find('input[type="file"]').each(function () {
 					if (!isEmpty($(this).data('file'))) {
-						totalFiles.push($(this).data('file'));
+						totalFiles = totalFiles.concat($(this).data('file'));
 					}
 				});
 
@@ -1238,7 +1238,7 @@
 								</ul>
 							</div>
 						</td>
-						<th><label for="address">발전소 상세 주소</label></th>
+						<th><label for="발전소_상세주소">발전소 상세 주소</label></th>
 						<td>
 							<div class="tx_inp_type edit">
 								<input type="text" id="발전소_상세주소" name="발전소_상세주소" placeholder="상세 주소">
@@ -1442,14 +1442,14 @@
 						<th>동산담보표지판 설정 여부</th>
 						<td>
 							<fieldset class="rdo_type flex_start">
-								<legend sr-only="통신담보표지판 설정 여부"></legend>
+								<legend sr-only="동산담보표지판 설정 여부"></legend>
 								<div class="radio_group">
-									<input type="radio" id="통신담보표지판_설정" name="통신담보표지판_설정_여부" value="통신담보표지판_설정">
-									<label for="통신담보표지판_설정">설정함</label>
+									<input type="radio" id="동산담보표지판_설정" name="동산담보표지판_설정_여부" value="동산담보표지판_설정">
+									<label for="동산담보표지판_설정">설정함</label>
 								</div>
 								<div class="radio_group">
-									<input type="radio" id="통신담보표지판_미설정" name="통신담보표지판_설정_여부" value="통신담보표지판_미설정">
-									<label for="통신담보표지판_미설정">해당 없음</label>
+									<input type="radio" id="동산담보표지판_미설정" name="동산담보표지판_설정_여부" value="동산담보표지판_미설정">
+									<label for="동산담보표지판_미설정">해당 없음</label>
 								</div>
 							</fieldset>
 						</td>

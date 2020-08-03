@@ -262,7 +262,7 @@ $(function () {
             let targetId = $(this).attr('id');
             if (targetId.match('SPC_법인_인감_파일')) {
                 let listItem = `<button type='button' class='btn_close icon-trash ' onclick='deleteFile($(this), "front")'></button>`;
-                $(this).parent().find(".upload_text").next('.file_del_btn').remove();
+                $(this).parent().find(".upload_text").next('.icon-trash').remove();
                 $(this).parent().find(".upload_text").html(labelText).after(listItem);
             } else {
                 let listItem = `${labelText}<button type='button' class='btn_close icon_btn' onclick='deleteFile($(this))'></button>`;

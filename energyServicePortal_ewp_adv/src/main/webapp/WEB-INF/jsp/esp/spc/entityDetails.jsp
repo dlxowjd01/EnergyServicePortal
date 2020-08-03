@@ -181,8 +181,8 @@
 					objArray.forEach(objName => {
 						let target = eval(objName);
 						Object.entries(target).map((obj) => {
-							if (obj[0].match('통신담보표지판')) {
-								target[obj[0]] = obj[1].replace('통신담보표지판_', '').trim();
+							if (obj[0].match('동산담보표지판')) {
+								target[obj[0]] = obj[1].replace('동산담보표지판_', '').trim();
 							} else if (obj[0].match('자가부지공장근저당')) {
 								target[obj[0]] = obj[1].replace('자가부지공장근저당_', '').trim();
 							} else if (obj[0].match('권리증_보유_현황')) {
