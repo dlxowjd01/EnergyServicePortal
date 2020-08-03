@@ -87,7 +87,7 @@
 	--nav-border: rgba(255, 255, 255, 0.15);
 	--white: #fff;
 	--athens-gray: var(--athens-gray);
-	--oil: #251c15;
+	--oil: rgb(37, 28, 21);
 	--black: #000;
 	--circle-charge: #2BEEE9;
 	--circle-solar-power: #9363fd;
@@ -174,16 +174,26 @@
 	--ico-sort-up: url("../img/sorting_up_wh.png");
 	--ico-sort-down: url("../img/sorting_down_wh.png");
 	/* ********* other icon images ********* */
+	--ico-add-svg: url("../img/ico_add_svg.svg");
 	--ico-add: url("../img/ico_add.png");
-	--ico-add-blue: url("../img/btn_add.png");
-	--icon-inverter: url('../img/ico_inverter_on.png');
-	--icon-connector: url('../img/ico_connector_on.png');
-	--icon-disconnect: url("../img/ico_disconnector_on.png");
+	--ico-add-blue: url("../img/btn_blue_add.png");
+
+	--ico-ami: url('../img/ico_inverter.svg');
+
+	--ico-bms-rack: url('../img/ico_bms_rack.svg');
+	--ico-meter: url('../img/ico_meter.svg');
+	--ico-inverter: url('../img/ico_inverter.svg');
+	--ico-pcs: url('../img/ico_power.svg');
+	--ico-battery: url("../img/ico_battery.svg");
+	--ico-bms-rack: url('../img/ico_bms_rack.svg');
+	--ico-sensor: url('../img/ico_sensor.svg');
+	--ico-disconnect: url("../img/ico_disconnector.svg");
+	--ico-connector: url('../img/ico_connector.svg');
+
 	--icon-pv: url("../img/icon_pv_light.png");
 	--icon-wind: url("../img/icon_wind_light.png");
 	--icon-water: url("../img/icon_water_light.png");
-	--ico-battery: url("../img/ico_battery.png");
-	--ico-solar: url("../img/ico_solar.png");
+	--ico-solar: url("../img/ico_solar.svg");
 	--ico-water: url("../img/ico_water.png");
 	--ico-wind: url("../img/ico_wind.png");
 
@@ -279,13 +289,9 @@ html.darkmode:root {
 	--ico-sort-down: url("../img/sorting_down.png");
 	/* ********* other icon images ********* */
 	--ico-add: url("../img/ico_add2_wh.png");
-	--icon-inverter: url('../img/ico_inverter.png');
-	--icon-connector: url('../img/ico_connector.png');
+
 	--icon-pv: url("../img/icon_pv.png");
 	--icon-wind: url("../img/icon_wind.png");
-	--icon-water: url("../img/water.svg");
-	--ico-battery: url("../img/ico_battery_dark.png");
-	--ico-solar: url("../img/ico_solar_dark.png");
 	--ico-water: url("../img/ico_water_dark.png");
 	--ico-wind: url("../img/ico_wind_dark.png");
 	--ico-delete: url("../img/close_btn_md.svg");
@@ -8767,14 +8773,12 @@ div.di_wrap dl .link a {
 	cursor: pointer;
 }
 
-/* 설비현황 > 장치 현황 */
+/* 설비현황 : 장치 현황 */
 
 .eq_wrap .indiv {
 	box-shadow: none;
 	border: solid 1px var(--silver);
 }
-
-/* 경고 아이콘 */
 
 .eq_icon {
 	font-size: 0;
@@ -8794,23 +8798,16 @@ div.di_wrap dl .link a {
 	background: var(--jordy-blue);
 }
 
-/* 정상 */
-
 .eq_icon>span.eq_error {
 	background: var(--sunglow);
 }
-
-/* 이상 */
 
 .eq_icon>span.eq_alert {
 	background: var(--sandy-brown);
 }
 
-/* 경고 */
-
-/* 장치 리스트 */
-
-.eq_list {
+/* device info-summary(left) */
+.device-list {
 	display: flex;
 	flex-wrap: wrap;
 	margin: 0 -12px;
@@ -8818,18 +8815,34 @@ div.di_wrap dl .link a {
 	height: 100%;
 }
 
-.eq_list li:not(.eq_add) {
+.device-list li {
+	position: relative;
+	display: block;
 	margin: 10px 6px;
-	width: 100px;
-	height: 120px;
+	padding: 12px;
+	width: 112px;
+	height: 132px;
 	border-radius: 4px;
 	text-align: left;
-	padding: 40px 12px 12px 12px;
-	background: url("../img/eq_inverter.png") no-repeat 12px 14px var(--box-color6);
-	cursor: pointer;
+	background: var(--box-color6);
 }
 
-.eq_list li span {
+.device-list li:not(.eq_add) {
+	text-align: left;
+	cursor: pointer;
+	opacity: 1;
+}
+
+.device-list li.eq_add a {
+	display: block;
+	margin: 0 auto;
+	width: 48px;
+	height: 100%;
+	background: var(--ico-add-svg) no-repeat center;
+}
+
+
+.device-list li:not(.text-black) span {
 	display: block;
 	font-weight: 400;
 	font-size: 14px;
@@ -8840,12 +8853,12 @@ div.di_wrap dl .link a {
 	text-overflow: ellipsis;
 }
 
-.eq_list li span.tx {
+.device-list li span.tx {
 	margin-top: 8px;
 	font-weight: 600;
 }
 
-.eq_list li em {
+.device-list li em {
 	display: block;
 	margin-top: 10px;
 	font-size: 12px;
@@ -8856,120 +8869,111 @@ div.di_wrap dl .link a {
 	text-overflow: ellipsis;
 }
 
-.eq_list li.eq_add {
-	display: block;
-	margin: 10px 6px;
-	padding: 0;
-	width: 100px;
-	height: 120px;
-	border-radius: 4px;
-	text-align: left;
+.device-list li.normal {
+	background: var(--jordy-blue);
 }
 
-.eq_list li.eq_add a {
-	display: block;
-	width: 100px;
-	height: 120px;
-	border-radius: 4px;
-	background: url("../img/ico_add.png") no-repeat center var(--box-color6);
+.device-list li.alert {
+	background: var(--sandy-brown);
 }
 
-.eq_list li:hover {
+.device-list li.error {
+	background: var(--sunglow);
+}
+
+.device-list li.text-black:before {
+	display: block;
+	margin: 0 0 5px;
+	content: "";
+	width: 24px;
+	height: 24px;
+}
+
+
+.device-list.list-manual li:not(.eq_add) {
+	padding-top: 40px;
+}
+/* TODO: AMI icon update and others double check!!!! */
+.device-list.list-ami li.text-black:before {
+	background: var(--ico-meter) no-repeat 0 0;
+}
+.device-list.list-smart-meter li.text-black:before {
+	background: var(--ico-meter) no-repeat 0 0;
+}
+.device-list.list-inverter li.text-black:before {
+	background: var(--ico-inverter) no-repeat 0 0;
+}
+.device-list.list-pcs li.text-black:before {
+	background: var(--ico-pcs) no-repeat 0 0;
+}
+.device-list.list-bms-sys li.text-black:before {
+	background: var(--ico-battery) no-repeat 0 0;
+}
+.device-list.list-bms-rack li.text-black:before {
+	background: var(--ico-bms-rack) no-repeat 0 0;
+}
+.device-list.list-sensor li.text-black:before {
+	background: var(--ico-sensor) no-repeat 0 0;
+}
+.device-list.list-disconnector li.text-black:before {
+	background: var(--ico-disconnector) no-repeat 0 0;
+}
+.device-list.list-connector li.text-black:before {
+	background: var(--ico-connector) no-repeat 0 0;
+}
+
+.device-list li:hover {
 	opacity: 0.6;
 }
 
-.eq_list li .delete {
+.device-list li .delete {
+	position: absolute;
+	top: 8px;
+	right: 8px;
 	display: none;
-	float: right;
-	margin-top: -86px;
+	width: 20px;
+	height: 20px;
 	font-size: 0;
-	width: 16px;
-	height: 16px;
 	outline-style: none;
 	border: 0;
 }
 
-.eq_list li:hover .delete {
+.device-list li:hover .delete {
 	display: block;
-	background: rgba(53, 58, 83, 0.3) url("../img/btn_close.png") no-repeat center;
+	background: url("../img/btn_close.png") no-repeat center;
 	z-index: 2;
 }
 
-.eq_list li.st_alert {
-	background: var(--sandy-brown) url("../img/ico_inverter_on.png") no-repeat 12px 14px;
+.device-list li.text-black span {
+	color: var(--black);
+	opacity: 0.87;
 }
 
-.eq_list li.st_error {
-	background: var(--sunglow) url("../img/ico_inverter_on.png") no-repeat 12px 14px;
+.device-list li.text-black em {
+	color: var(--black);
+	opacity: 0.6;
 }
 
-.eq_list li.st_alert span,
-.eq_list li.st_error span {
-	color: var(--oil);
-}
-
-.eq_list li.st_alert em,
-.eq_list li.st_error em {
-	color: var(--oil);
-	opacity: 0.8;
-}
-
-.eq_list.eq_li_type01 li:not(.eq_add) {
-	background-image: var(--icon-inverter);
-	opacity: 0.;
-}
-
-.darkmode .eq_list.eq_li_type01 li:not(.eq_add),
-.darkmode .eq_list.eq_li_type02 li:not(.eq_add),
-.darkmode .eq_list.eq_li_type03 li:not(.eq_add) {
-	opacity: 1;
-}
-
-.eq_list.eq_li_type02 li:not(.eq_add) {
-	background-image: var(--icon-connector);
-}
-
-.eq_list.eq_li_type03 li:not(.eq_add) {
-	background-image: var(--icon-disconnect);
-}
-
-.eq_list.eq_li_type01 li.st_alert,
-.eq_list.eq_li_type01 li.st_error {
-	background-image: url(../img/ico_inverter_on.png);
-}
-
-.eq_list.eq_li_type02 li.st_alert,
-.eq_list.eq_li_type02 li.st_error {
-	background-image: url(../img/ico_connector_on.png);
-}
-
-.eq_list.eq_li_type03 li.st_alert,
-.eq_list.eq_li_type03 li.st_error {
-	background-image: url(../img/ico_disconnector_on.png);
-}
-
-/* 장치 카드 */
+/* 장치 카드 : device detail info-card (right) */
 
 .device_row .indiv.clear {
 	height: 100%;
+	border: 0;
 }
 
 .indiv.eq_card {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 	position: relative;
-	padding: 20px 0 10px;
-	background: var(--white);
+	padding: 20px 0 0;
+	background: var(--box-color);
+	/* background: var(--bg-color); */
+	height: 100%;
 	border: 0;
 	box-shadow: none;
 }
 
-.darkmode .indiv.eq_card {
-	background: none;
-}
-
-.eq_card .chart_top .ntit,
-.eq_card_ul {
-	padding: 0 15px;
-}
 
 .eq_card {
 	position: relative;
@@ -8982,28 +8986,40 @@ div.di_wrap dl .link a {
 	left: 0;
 	right: 0;
 	height: 10px;
-	background: var(--sunglow);
 	border-radius: 3px 3px 0 0;
 	content: "";
 }
 
-.eq_card.t2:after {
+.eq_card.alert:after {
 	background: var(--sandy-brown);
 }
 
-.eq_card.t3:after {
+.eq_card.normal:after {
 	background: var(--jordy-blue);
 }
 
-.eq_card .eq_card_ul li {
-	float: left;
-	width: 33.33%;
-	padding-left: 38px;
-	height: 64px;
-	border-left: 1px solid var(--dark-grey);
+.eq_card.error:after {
+	background: var(--sandy-brown);
 }
 
-.eq_card .eq_card_ul li:first-child {
+.eq_card .chart_top .ntit,
+.eq_card_ul {
+	padding: 0 16px;
+}
+
+.eq_card_ul {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.eq_card .eq_card_ul li {
+	width: 148px;
+	margin-bottom: 20px;
+	padding-left: 34px;
+	border-left: 1px solid var(--box-color7);
+}
+
+.eq_card .eq_card_ul li:nth-child(3n + 1) {
 	border-left: 0;
 	padding-left: 0;
 }
@@ -9016,7 +9032,7 @@ div.di_wrap dl .link a {
 }
 
 .eq_card .eq_card_ul .t_value {
-	margin-top: 8px;
+	padding: 8px 20px 0 0;
 	line-height: 20px;
 	font-size: 20px;
 }
@@ -9055,8 +9071,8 @@ div.di_wrap dl .link a {
 }
 
 .eq_btn_bx {
-	float: right;
-	margin: 20px 0 0;
+	text-align: right;
+	margin: 20px 16px 16px;
 }
 
 .eq_btn_bx .btn_type04 {
@@ -10395,18 +10411,22 @@ a.btn.btn_type03:hover {
 }
 
 .di_top_sec .ico.battery {
+	filter: invert(1);
 	background: var(--ico-battery) no-repeat center;
 }
 
 .di_top_sec .ico.solar {
+	filter: invert(1);
 	background: var(--ico-solar) no-repeat center;
 }
 
 .di_top_sec .ico.water {
+	filter: invert(1);
 	background: var(--ico-water) no-repeat center;
 }
 
 .di_top_sec .ico.wind {
+	filter: invert(1);
 	background: var(--ico-wind) no-repeat center;
 }
 
@@ -10508,7 +10528,7 @@ a.btn.btn_type03:hover {
 .di_list {}
 
 .di_list li {
-	padding: 0 12px;
+	padding: 0 16px;
 	border-bottom: 1px solid var(--color1);
 	overflow: hidden;
 }
@@ -11411,7 +11431,7 @@ button.tx_file {
 	display: inline-block;
 	outline-style: none;
 	line-height: 24px;
-	background: url("../img/btn_add.png") no-repeat 0 2px;
+	background: var(--ico-add-blue) no-repeat 0 2px;
 	padding: 0 10px 0 28px;
 	font-size: 13px;
 	color: var(--vivid-blue);

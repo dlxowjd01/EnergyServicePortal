@@ -119,9 +119,10 @@
 						// targets:   0
 					// }],
 					// order: [[ 1, 'asc' ]],
-					colReorder: {
-						realtime: false
-					},
+					// colReorder: {
+					// 	realtime: false
+					// },
+					"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 					"pagingType": "numbers",
 					// "columns": [
 					// 	{
@@ -237,8 +238,8 @@
 							text: '추가',
 							className: "btn_type fr",
 							action: function (e, node, config){
-								console.log("node===")
-								$('##myModal').modal('show');
+								console.log("node===", node, "e---", e, "config===", config)
+								$('#addSiteModal').modal('show');
 							}
 						}
 					],
@@ -412,6 +413,17 @@
 					</tr>
 				</tfoot>
 			</table>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="addSiteModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="setting-modal-content modal-content">
+			<div class="modal-header"><h1>사업소 추가</h1></div>
+			<div class="modal-body">
+				
+			</div>
 		</div>
 	</div>
 </div>

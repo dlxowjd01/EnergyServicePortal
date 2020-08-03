@@ -268,14 +268,21 @@ table.dataTable td {
     background: none;
 }
 
-.dataTables_wrapper .dataTables_length {
-    float: left;
-}
 
 .dataTables_wrapper .dataTables_filter {
-    display: none;
+    /* display: none; */
     float: right;
     text-align: right;
+}
+
+.dataTables_wrapper .dataTables_filter .dataTables_length {
+	/* float: left; */
+	display: block;
+	border: 1px red;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    display: none;
 }
 
 .dataTables_wrapper .dataTables_filter input {
@@ -589,26 +596,6 @@ div.dt-button-collection-title:empty {
     display: none;
 }
 
-button.dt-button,
-div.dt-button,
-a.dt-button {
-    position: relative;
-    display: inline-block;
-    box-sizing: border-box;
-    cursor: pointer;
-	font-size: 14px;
-	line-height: 36px;
-    color: var(--color3);
-    white-space: nowrap;
-	overflow: hidden;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    text-decoration: none;
-    outline: none;
-    text-overflow: ellipsis;
-}
 .dt-button + .dt-button {
 	margin-left: 8px;
 }
@@ -617,15 +604,6 @@ button.dt-button.disabled,
 div.dt-button.disabled,
 a.dt-button.disabled {
     color: var(--color4);
-}
-
-button.dt-button:active:not(.disabled),
-button.dt-button.active:not(.disabled),
-div.dt-button:active:not(.disabled),
-div.dt-button.active:not(.disabled),
-a.dt-button:active:not(.disabled),
-a.dt-button.active:not(.disabled) {
-    /* background: none; */
 }
 
 button.dt-button:active:not(.disabled):hover:not(.disabled),
@@ -644,12 +622,6 @@ a.dt-button:hover {
     text-decoration: none;
 }
 
-button.dt-button:hover:not(.disabled),
-div.dt-button:hover:not(.disabled),
-a.dt-button:hover:not(.disabled) {
-
-}
-
 button.dt-button:focus:not(.disabled),
 div.dt-button:focus:not(.disabled),
 a.dt-button:focus:not(.disabled) {
@@ -662,7 +634,7 @@ a.dt-button:focus:not(.disabled) {
 
 div.dt-buttons {
     position: relative;
-	float: left;
+	width: 100%;
 	margin-bottom: 16px;
 }
 
@@ -702,15 +674,6 @@ div.dt-button-collection a.dt-button {
     width: 100%;
     display: block;
     float: none;
-}
-
-div.dt-button-collection button.dt-button:active:not(.disabled),
-div.dt-button-collection button.dt-button.active:not(.disabled),
-div.dt-button-collection div.dt-button:active:not(.disabled),
-div.dt-button-collection div.dt-button.active:not(.disabled),
-div.dt-button-collection a.dt-button:active:not(.disabled),
-div.dt-button-collection a.dt-button.active:not(.disabled) {
-
 }
 
 div.dt-button-collection.fixed {
@@ -803,33 +766,4 @@ div.dt-button-background {
         float: none !important;
         text-align: center;
     }
-}
-
-button.dt-button.processing,
-div.dt-button.processing,
-a.dt-button.processing {
-    color: rgba(0, 0, 0, 0.2);
-}
-
-button.dt-button.processing:after,
-div.dt-button.processing:after,
-a.dt-button.processing:after {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 16px;
-    height: 16px;
-    margin: -8px 0 0 -8px;
-    box-sizing: border-box;
-    display: block;
-    content: ' ';
-    border: 2px solid #282828;
-    border-radius: 50%;
-    border-left-color: transparent;
-    border-right-color: transparent;
-    animation: dtb-spinner 1500ms infinite linear;
-    -o-animation: dtb-spinner 1500ms infinite linear;
-    -ms-animation: dtb-spinner 1500ms infinite linear;
-    -webkit-animation: dtb-spinner 1500ms infinite linear;
-    -moz-animation: dtb-spinner 1500ms infinite linear;
 }

@@ -44,7 +44,7 @@
 							<span class="eq_error">트립([error])</span>
 						</div>
 					</div>
-					<ul class="eq_list scroll [typeClass]" id="[typeId]_List">
+					<ul class="device-list [typeClass]" id="[typeId]_List">
 						[deviceList]
 					</ul>
 				</div>
@@ -706,23 +706,23 @@
 					switch (el.operation) {
 						case 0:
 							alert++;
-							operation = 'st_alert';
+							operation = 'alert text-black';
 							break;
 						case 1:
 							normal++;
-							operation = '';
+							operation = 'normal text-black';
 							break;
 						case 2:
 							error++;
-							operation = 'st_error';
+							operation = 'error text-black';
 							break;
 						default:
-							alert++;
-							operation = 'st_alert';
+							// alert++;
+							operation = '';
 							break;
 					}
 
-					let deviceStr = `<li class="${'${operation}'}" onclick="deviceDetailView('${'${el.did}'}')">
+					let deviceStr = `<li class="${'${operation}'}" onclick="deviceDetailView('${'${el.did}'}', '${'${el.operation}'}' )">
 										<span>${'${el.name}'}</span>
 										<span>${'${capacity}'}</span><em>${'${activePower}'}  ${'${dcPower}'}</em>
 										<button type="button" onclick="deviceProcess('delete', '${'${el.did}'}');" class="delete">삭제</button>
@@ -767,45 +767,51 @@
 			deviceList.append($li);
 
 			let typeClass;
+			// 1. SM_MANUAL => 수기 입력,
+			// 2. SM_ISMART => iSmart(AMI 검침???),
+			// 3. SM => Smart Meter(전력량계),
+			// 4. INV_PV => 태양광 인버터,
+			// 5. PCS_ESS => Power Conditioning System,
+			// 6. BMS_SYS => Battery Management System,
+			// 7. BMS_RACK => BMS Rack,
+			// 8. SENSOR_SOLAR, SENSOR_TEMPHUMID, SENSOR_WEATHER, SENSOR_FLAME => 센서,
+			// 9. CIRCUIT_BREAKER => 회로 차단기,
+			// 10. COMBINER_BOX => 접속반,
+
+
 			switch (key) {
-				case 'INV_PV':
-					typeClass = 'eq_li_type01';
-					break;
-				case 'SENSOR_SOLAR':
-					typeClass = 'eq_li_type02';
-					break;
 				case 'SM_MANUAL':
-					typeClass = 'eq_li_type03';
+					typeClass = 'device-list list-manual';
+					break;
+				case 'SM_ISMART':
+					typeClass = 'device-list list-ami';
 					break;
 				case 'SM':
-					typeClass = 'eq_li_type03';
+					typeClass = 'device-list list-meter';
+					break;
+				case 'INV_PV':
+					typeClass = 'device-list list-inverter';
 					break;
 				case 'PCS_ESS':
-					typeClass = 'eq_li_type03';
+					typeClass = 'device-list list-pcs';
 					break;
 				case 'BMS_SYS':
-					typeClass = 'eq_li_type03';
+					typeClass = 'device-list list-bms-sys';
 					break;
 				case 'BMS_RACK':
-					typeClass = 'eq_li_type03';
+					typeClass = 'device-list list-bms-rack';
 					break;
-				case 'SENSOR_WEATHER':
-					typeClass = 'eq_li_type03';
-					break;
-				case 'SENSOR_TEMPHUMID':
-					typeClass = 'eq_li_type03';
-					break;
-				case 'SENSOR_FLAME':
-					typeClass = 'eq_li_type03';
+				case 'SENSOR_SOLAR': case 'SENSOR_WEATHER': case 'SENSOR_TEMPHUMID': case 'SENSOR_FLAME':
+					typeClass = 'device-list list-sensor';
 					break;
 				case 'CIRCUIT_BREAKER':
-					typeClass = 'eq_li_type03';
+					typeClass = 'device-list list-disconnector';
 					break;
 				case 'COMBINER_BOX':
-					typeClass = 'eq_li_type03';
+					typeClass = 'device-list list-connector';
 					break;
 				default:
-					typeClass = 'eq_li_type01';
+					typeClass = 'device-list';
 					break;
 			}
 
@@ -839,7 +845,7 @@
 		});
 	}
 
-	const deviceDetailView = (did) => {
+	const deviceDetailView = (did, deviceStatus) => {
 		$.ajax({
 			url: apiHost + apiStatusRaw,
 			type: 'get',
@@ -851,6 +857,18 @@
 			let resultData = data[did].data[0],
 				dType = data[did].device_type,
 				dName = data[did].dname;
+
+				console.log("deviceStatus==", deviceStatus);
+				if(deviceStatus == 0){
+					// 중지
+					$('#' + dType + ' .eq_card').addClass('alert');
+				} else if(deviceStatus == 1){
+					// 정상
+					$('#' + dType + ' .eq_card').addClass('normal');
+				} else if(deviceStatus == 2) {
+					// 트립
+					$('#' + dType + ' .eq_card').addClass('error');
+				}
 
 			$('#' + dType + ' .eq_card .ntit').text(dName);
 			$('#' + dType + ' .eq_card .inv_tit').text(dName + ' 현황');
