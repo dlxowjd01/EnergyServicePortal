@@ -546,7 +546,7 @@
 								<div class="row center">
 									<div class="col-6">
 										<h3 class="mb-10">카카오톡 문의</h3>
-										<a href="http://pf.kakao.com/_YDihK" target="_blank"><strong class="link-bold">아이덤스</strong> 채널&친구 추가</a>
+										<a href="http://pf.kakao.com/_YDihK" target="_blank"><strong class="link-bold">아이덤스</strong> 채널&amp;친구 추가</a>
 									</div>
 									<div class="col-6 divider">
 										<h3 class="mb-10">데모 요청 이메일</h3>
