@@ -3843,7 +3843,7 @@ $.extend( true, DataTable.Buttons.defaults, {
 		},
 		button: {
 			tag: 'button',
-			className: 'btn_type03',
+			// className: 'btn_type03',
 			active: 'secondary'
 		},
 		buttonLiner: {

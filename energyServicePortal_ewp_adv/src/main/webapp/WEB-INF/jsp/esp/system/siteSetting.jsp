@@ -6,9 +6,8 @@
 	$(function () {
 		let sList = "${location}"
 
-	
 		getSites(oid);
-		
+
 		function getSites (siteId) {
 			let option = {
 				url: apiHost + "/config/sites",
@@ -201,12 +200,13 @@
 					buttons: [
 						{
 							extend: 'copyHtml5',
-							// className: "",
+							className: "btn_type03",
 							text: '데이터 복사',
 						},
 						{
 							extend: 'print',
 							text: '전체 인쇄',
+							className: "btn_type03",
 							exportOptions: {
 								modifier: {
 									selected: null
@@ -215,19 +215,31 @@
 						},
 						{
 							extend: 'print',
+							className: "btn_type03",
 							text: '선택 인쇄'
 						},
 						{
 							extend: 'excelHtml5',
+							className: "btn_type03",
 							text: 'Excel'
 						},
 						{
 							extend: 'csvHtml5',
+							className: "btn_type03",
 							text: 'CSV'
 						},
 						{
 							extend: 'pdfHtml5',
+							className: "btn_type03",
 							text: 'PDF',
+						},
+						{
+							text: '추가',
+							className: "btn_type fr",
+							action: function (e, node, config){
+								console.log("node===")
+								$('##myModal').modal('show');
+							}
 						}
 					],
 					select: {
