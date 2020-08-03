@@ -550,7 +550,8 @@
 									</div>
 									<div class="col-6 divider">
 										<h3 class="mb-10">데모 요청 이메일</h3>
-										<a href="#" target="_blank" class="link-bold">esolution@encoredtech.com</a>
+										<a href="javascript:void(0)" class="link-bold">esolution@encoredtech.com</a>
+										<!-- <a href="#" target="_blank" class="link-bold">esolution@encoredtech.com</a> -->
 									</div>
 								</div>
 								<div class="row">
