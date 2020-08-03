@@ -16,7 +16,7 @@
 				data: {
 					oid: siteId,
 					filter: { 
-						"limit": 100,
+						"limit": 200,
 						"fields": {
 							"sid": true,
 							"oid": true,
@@ -123,7 +123,6 @@
 					// 	realtime: false
 					// },
 					"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-					"pagingType": "numbers",
 					// "columns": [
 					// 	{
 					// 		"data":  "",
@@ -197,7 +196,8 @@
 							"mData":"alarmState",
 						},
 					],
-					dom: 'Bfrtip',
+					dom: 'Bfltip',
+					// dom: 'Bfrtip',
 					buttons: [
 						{
 							extend: 'copyHtml5',

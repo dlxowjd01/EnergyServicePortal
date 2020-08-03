@@ -4012,6 +4012,10 @@ h1.stit {
 	margin: 0 6px 12px 6px;
 }
 
+.flex_group:first-of-type {
+	margin: 0 6px 12px 0;
+}
+
 .indiv.pv_chart .chart_top .sa_select+.btn_type {
 	margin-left: 6px;
 }
