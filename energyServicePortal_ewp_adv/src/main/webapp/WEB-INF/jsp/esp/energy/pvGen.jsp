@@ -189,14 +189,12 @@
 		}
 	}
 
-
 	$(function () {
 		siteList(); //사이트 조회
 
 		//전체 선택/전체 해제
 		$('#deviceType button.btn_type03').on('click', function (e) {
-			var idx = $('#deviceType button.btn_type03').index($(this));
-
+			let idx = $('#deviceType button.btn_type03').index($(this));
 			if (idx == 0) {
 				$(':checkbox[name="device"]').prop('checked', true);
 			} else {
@@ -236,7 +234,7 @@
 		let sites = JSON.parse('${siteList}');
 		sites.forEach((site, index) => {
 			str += `<li>
-						<a href="#" data-value="${'${site.sid}'}" tabindex="-1">
+						<a href="javascript:void(0);" data-value="${'${site.sid}'}" tabindex="-1">
 							<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
 							<label for="${'${site.sid}'}">${'${site.name}'}</label>
 						</a>
@@ -860,8 +858,8 @@
 							if (stdDate == '') {
 								stdDate = stnd.substring(0, 8);
 							} else if (stdDate != '' && stdDate != stnd.substring(0, 8)) {
-								let totalValue = displayNumberFixedUnit(total, 'Wh', 'kWh', 2);
-								arrDevice.push(totalValue[0]); //합계.
+								let totalValue = numberComma(total.toFixed(2));
+								arrDevice.push(totalValue); //합계.
 
 								let tempMap = {
 									deviceId: deviceId,
@@ -890,8 +888,8 @@
 							if (stdDate == '') {
 								stdDate = stnd.substring(0, 6);
 							} else if (stdDate != '' && stdDate != stnd.substring(0, 6)) {
-								let totalValue = displayNumberFixedUnit(total, 'Wh', 'kWh', 2);
-								arrDevice.push(totalValue[0]); //합계.
+								let totalValue = numberComma(total.toFixed(2));
+								arrDevice.push(totalValue); //합계.
 
 								let tempMap = {
 									deviceId: deviceId,
@@ -920,8 +918,8 @@
 							if (stdDate == '') {
 								stdDate = stnd.substring(0, 4);
 							} else if (stdDate != '' && stdDate != stnd.substring(0, 4)) {
-								let totalValue = displayNumberFixedUnit(total, 'Wh', 'kWh', 2);
-								arrDevice.push(totalValue[0]); //합계.
+								let totalValue = numberComma(total.toFixed(2));
+								arrDevice.push(totalValue); //합계.
 
 								let tempMap = {
 									deviceId: deviceId,

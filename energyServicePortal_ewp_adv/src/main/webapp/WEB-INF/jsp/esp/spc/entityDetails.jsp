@@ -870,7 +870,7 @@
 						<td id="공인인증서">
 							<div class="flex_start fixed_height">
 								<p class="tx_file">
-									<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[용도] - [originalname]</a>
+									[용도] - [originalname]
 								</p>
 							</div>
 						</td>

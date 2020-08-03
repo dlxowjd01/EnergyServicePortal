@@ -910,22 +910,23 @@
 				$('#' + thisName).parent().next('span').html(diff + '일 남음');
 				$('#보험_만기일_차이' + idx).val(diff + '일 남음');
 			}
-		}  else if (thisName == '인출_가능_기한') {
-			if (!isEmpty($('#인출_가능_기한').text().trim())) {
-				var close = $('#인출_가능_기한').val().trim().split('-')
-				close = new Date(close[0], close[1], close[2]);
-				let diff = dateDiff(close, new Date(), 'day');
-
-				$('#인출_가능_남은일').html(Math.floor(diff) + '일&nbsp;&nbsp;남음');
-			}
-		} else if (thisName == '공사_계약_정보_약정일') {
-			let close = $('#' + thisName).datepicker('getDate');
-			close.setFullYear(close.getFullYear() + 1);
-			let diff = dateDiff(close, new Date(), 'day')
-
-			$('#인출_가능_기한').val(close.format('yyyy-MM-dd'));
-			$('#인출_가능_남은일').html(Math.floor(diff) + '일&nbsp;&nbsp;남음');
 		}
+		// else if (thisName == '인출_가능_기한') {
+		// 	if (!isEmpty($('#인출_가능_기한').text().trim())) {
+		// 		var close = $('#인출_가능_기한').val().trim().split('-')
+		// 		close = new Date(close[0], close[1], close[2]);
+		// 		let diff = dateDiff(close, new Date(), 'day');
+		//
+		// 		$('#인출_가능_남은일').html(Math.floor(diff) + '일&nbsp;&nbsp;남음');
+		// 	}
+		// } else if (thisName == '공사_계약_정보_약정일') {
+		// 	let close = $('#' + thisName).datepicker('getDate');
+		// 	close.setFullYear(close.getFullYear() + 1);
+		// 	let diff = dateDiff(close, new Date(), 'day')
+		//
+		// 	$('#인출_가능_기한').val(close.format('yyyy-MM-dd'));
+		// 	$('#인출_가능_남은일').html(Math.floor(diff) + '일&nbsp;&nbsp;남음');
+		// }
 	}
 
 	const sumUnpaid = () => {
