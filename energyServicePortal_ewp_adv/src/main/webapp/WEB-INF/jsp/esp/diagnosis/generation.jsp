@@ -561,7 +561,7 @@
 		//대시보드
 		if (dashSites.length > 0) {
 			urls.push({
-				url: apiHost + 'energy/sites',
+				url: apiHost + '/energy/sites',
 				type: "get",
 				async: false,
 				data: {
@@ -671,7 +671,7 @@
 						}
 					});
 
-					if (accociation.get('actual') === undefined) {
+					if (accociation.get('prediction') !== undefined && accociation.get('actual') === undefined) {
 						let dummy = new Array();
 						accociation.get('prediction').forEach(gData => {
 							dummy.push({
@@ -711,7 +711,7 @@
 						}
 					});
 
-					if (accociation.get('prediction') === undefined) {
+					if (accociation.get('actual') !== undefined && accociation.get('prediction') === undefined) {
 						let dummy = new Array();
 						accociation.get('actual').forEach(gData => {
 							dummy.push({

@@ -213,7 +213,7 @@
 </div>
 <script type="text/javascript">
 	const siteList = JSON.parse('${siteList}');
-
+	pagePerData = 5;
 	//사업소 정보 받아오기
 	const now = new Date();
 	const nowLocal = now.format('yyyyMMddHHmmss');
@@ -343,7 +343,7 @@
 	};
 
 	function selectLog(rids, startTime, endTime, limit, page) {
-		limit = isEmpty(limit) ? 5 : limit;
+		limit = isEmpty(page) ? pagePerData : limit;
 		page = isEmpty(page) ? 1 : page;
 
 		if (isEmpty(startTime) || isEmpty(endTime)) {
@@ -460,7 +460,8 @@
 				//데이터 세팅
 				let logTable = $('#logTable').find('tbody');
 				logTable.empty()
-				collectionMakeNavigation(rids, page, result.cound);
+				let totalPage = Math.round(result.count / 5);
+				collectionMakeNavigation(rids, page, totalPage);
 				result.logs.forEach(log => {
 					let dTimestamp = new Date(log.dTimestamp).format('yyyy-MM-dd HH:mm:ss');
 					let dLocaltime = String(log.dLocaltime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
@@ -710,7 +711,7 @@
 		let jsonList = tableData.data('dataList'),
 			totalCount = jsonList.length;
 		let totalPage = Math.ceil(totalCount / pagePer);
-		let totalnav = Math.ceil(totalPage / navCount);
+		let totalnav = Math.ceil(totalPage / pagePerData);
 		const startNum = (pagePer * (page - 1));
 		const endNum = ((pagePer * page) >= totalCount) ? totalCount : (pagePer * page);
 		jsonList = jsonList.slice(startNum, endNum);
@@ -771,10 +772,10 @@
 	const collectionMakeNavigation = (rids, page, totalPage) => {
 		$('#logPaging').empty();
 		let pageStr = '';
-		let navgroup = Math.floor((page - 1) / navCount) + 1;
-		let startPage = ((navgroup - 1)*navCount)+1;
-		let totalnav = Math.ceil(totalPage / navCount);
-		let endPage = ((startPage + navCount - 1) > totalPage) ? totalPage : (startPage + navCount - 1);
+		let navgroup = Math.floor((page - 1) / pagePerData) + 1;
+		let startPage = ((navgroup - 1)*pagePerData)+1;
+		let totalnav = Math.ceil(totalPage / pagePerData);
+		let endPage = ((startPage + pagePerData - 1) > totalPage) ? totalPage : (startPage + pagePerData - 1);
 
 		if (navgroup == 1) {
 			pageStr += '<a href="javascript:void(0);" class="btn_prev first_prev">prev</a>';

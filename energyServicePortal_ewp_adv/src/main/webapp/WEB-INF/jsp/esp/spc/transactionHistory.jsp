@@ -455,12 +455,11 @@
 		let spcId = self.parents().closest("td").data("id");
 
 		$("#reqDetailStatus").val(status);
-		if(statusVal == 1){
+		if(statusVal == 1 && task == 2) {
 			status = "검토 중";
 			statusVal = 2;
 			$("#reqDetailStatus").val(status);
 			$("#reqDetailStatusVal").val(statusVal);
-			console.log("reqId===", reqId)
 			updateStatus(statusVal, reqId)
 		} else {
 			$("#reqDetailStatus").val(status);
@@ -534,21 +533,25 @@
 							if (typeof accNum == 'number') {
 								accNum = String(accNum);
 							}
+
 							const num = accNum.replace(/[^0-9]/g, '');
+							let itemAcc = '';
 							if (typeof item[1] === 'string') {
-								const itmeAcc = item[1].replace(/[^0-9]/g, '');
+								itemAcc = item[1].replace(/[^0-9]/g, '');
+							} else if (typeof item[1] === 'number') {
+								itemAcc = item[1];
+							}
 
-								if(itmeAcc == num.toString()){
-									let txt = item[0];
-									let newTxt = txt.replace(/계좌_번호/g, '');
-									console.log("accountInfo===", accountInfo)
-									let name = accountInfo + '  (' + x[accHolder+newTxt] + ')';
+							if(itemAcc == num.toString()){
+								let txt = item[0];
+								let newTxt = txt.replace(/계좌_번호/g, '');
+								console.log("accountInfo===", accountInfo)
+								let name = accountInfo + '  (' + x[accHolder+newTxt] + ')';
 
-									$("#reqDetailAccountInfo").val(name);
-									setTimeout(function(){
-										$("#reqDetailForm").submit();
-									}, 300);
-								}
+								$("#reqDetailAccountInfo").val(name);
+								setTimeout(function(){
+									$("#reqDetailForm").submit();
+								}, 300);
 							}
 						});
 					});

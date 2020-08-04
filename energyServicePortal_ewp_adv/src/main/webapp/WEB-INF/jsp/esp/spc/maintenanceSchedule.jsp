@@ -194,6 +194,11 @@
 						alert('정기 점검 반복 주기는 필수 값입니다.');
 						return false;
 					}
+
+					if (isEmpty(data['repeat_end'])) {
+						alert('정기 점검 반복 종료일 은 필수 값입니다.');
+						return false;
+					}
 				}
 			}
 

@@ -284,7 +284,7 @@
 					if (finance_info['공인인증서'] === undefined && finance_info['SPC_법인_인감'] != null) {
 						finance_info['공인인증서'] = finance_info['SPC_법인_인감'];
 					}
-					if(finance_info['공인인증서'].length > 0) {
+					if(!isEmpty(finance_info['공인인증서']) && finance_info['공인인증서'].length > 0) {
 						finance_info['공인인증서'].forEach((target, index) => {
 							if (isEmpty(target['용도'])) {
 								if (!isEmpty(finance_info['용도 선택' + index])) {
