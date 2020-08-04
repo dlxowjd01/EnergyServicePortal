@@ -53,6 +53,7 @@
 				getDataList(1, searchOpt);
 			}
 		});
+
 		function getSpcList() {
 			let action = 'get';
 			let syncOpt = true;
@@ -464,7 +465,7 @@
 		// console.log("accInfo===", accInfo);
 
 		$("#reviewStatus").val(status);
-		if(statusVal == 1){
+		if(statusVal == 1 && task == 2){
 			status = "검토 중";
 			statusVal = 2;
 			$("#reviewStatus").val(status);
