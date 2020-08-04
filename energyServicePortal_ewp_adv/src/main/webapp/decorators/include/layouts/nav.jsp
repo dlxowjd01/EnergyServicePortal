@@ -192,7 +192,7 @@
 		</li>
 		</c:if>
 
-		<c:if test="${(oid ne 'trust' and oid ne 'sundream') or (oid eq 'trust' and task ne 3) or (oid eq 'sundream' and task ne 3)}">
+		<c:if test="${(oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx') or (oid eq 'trust' and task ne 3) or (oid eq 'sundream' and task ne 3)}">
 		<li class="smn9 menu-item">
 			<a href="javascript:void(0);">SPC관리</a>
 			<div class="sub_layer">
@@ -317,7 +317,7 @@
 			</li>
 			</c:if>
 
-			<c:if test="${(oid ne 'trust' and oid ne 'sundream') or (oid eq 'trust' and task ne 3) or (oid eq 'sundream' and task ne 3)}">
+			<c:if test="${(oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx') or (oid eq 'trust' and task ne 3) or (oid eq 'sundream' and task ne 3)}">
 			<li class="gmn9">
 				<a href="javascript:void(0);">SPC관리</a>
 				<ul>
