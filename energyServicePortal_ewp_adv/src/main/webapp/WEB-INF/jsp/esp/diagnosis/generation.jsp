@@ -213,8 +213,10 @@
 
 			if (idx == 0) {
 				$(':checkbox[name="device"]').prop('checked', true);
+				$('#deviceType button').eq(0).html('전체 <span class="caret"></span>');
 			} else {
 				$(':checkbox[name="device"]').prop('checked', false);
+				$('#deviceType button').eq(0).html('복수 선택 <span class="caret"></span>');
 			}
 		});
 

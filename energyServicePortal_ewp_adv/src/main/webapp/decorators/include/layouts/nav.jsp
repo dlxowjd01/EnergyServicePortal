@@ -136,7 +136,7 @@
 			<div class="sub_layer">
 				<ul>
 					<li><a href="/dashboard/gmain.do">통합관리 대시보드</a></li>
-					<c:if test="${oid ne 'trust' and oid ne 'sundream'}">
+					<c:if test="${oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx'}">
 						<li><a href="/dashboard/jmain.do">중개거래 대시보드</a></li>
 					</c:if>
 				</ul>
@@ -168,7 +168,7 @@
 				</ul>
 			</div>
 		</li>
-		<c:if test="${oid ne 'trust' and oid ne 'sundream'}">
+		<c:if test="${oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx'}">
 		<li class="smn5 menu-item">
 			<a href="javascript:void(0);">예측/진단</a>
 			<div class="sub_layer">
@@ -180,7 +180,7 @@
 		</li>
 		</c:if>
 
-		<c:if test="${oid ne 'trust' and oid ne 'sundream'}">
+		<c:if test="${oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx'}">
 		<li class="smn7 menu-item">
 			<a href="javascript:void(0);">보고서</a>
 			<div class="sub_layer">
@@ -261,7 +261,7 @@
 					<%--    <p><a href="/dashboard/dmain.do">신재생발전+신재생 연계 ESS</a></p>--%>
 					<%--  </div>--%>
 					<%--</li>--%>
-					<c:if test="${oid ne 'trust' and oid ne 'sundream'}">
+					<c:if test="${oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx'}">
 					<li><a href="/dashboard/jmain.do">중개거래 대시보드</a></li>
 					</c:if>
 					<!-- <li><a href="">수요자원 대시보드</a></li> -->
@@ -290,7 +290,7 @@
 					<%--<li><a href="/energy/drResult.do">수요자원<!-- DR --></a></li>--%>
 				</ul>
 			</li>
-			<c:if test="${oid ne 'trust' and oid ne 'sundream'}">
+			<c:if test="${oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx'}">
 			<li class="gmn5">
 				<a href="javascript:void(0);">예측/진단</a>
 				<ul>
@@ -307,7 +307,7 @@
             <li><a href="/bom/partManagement.do">부품관리</a></li>
         </ul>
       </li>-->
-			<c:if test="${oid ne 'trust' and oid ne 'sundream'}">
+			<c:if test="${oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx'}">
 			<li class="gmn7">
 				<a href="javascript:void(0);">보고서</a>
 				<ul>
