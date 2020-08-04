@@ -413,7 +413,7 @@
 						finance_info['공인인증서'] = finance_info['SPC_법인_인감'];
 					}
 
-					if(finance_info['공인인증서'].length > 0) {
+					if(!isEmpty(finance_info['공인인증서']) && finance_info['공인인증서'].length > 0) {
 						finance_info['공인인증서'].forEach((file, index) => {
 							const fileInputList = document.querySelectorAll('#financeInfo input[type="file"]');
 							let dataId = file['fieldname'].replace('공인인증서_등록_이미지', '공인인증서');
@@ -463,7 +463,7 @@
 							}
 
 							let originalName = file['originalname'];
-							let listItem = `<li class='upload_text' data-id="${'${dataId}'}">
+							let listItem = `<li class='upload_text existing' data-id="${'${dataId}'}">
 												${'${originalName}'}
 												<button type='button' class='btn_close icon-trash' onclick='deleteFile($(this))'></button>
 											</li>`;
@@ -696,41 +696,65 @@
 	}
 
 	function sendSpcAttchFilePost(){
-		var spcId = '${param.spc_id}',
+		let spcId = '${param.spc_id}',
 			genId = '${param.gen_id}';
 
-		$('#attachement_info').find('input[type=file]').each(function(){
-			$(this).attr('name', this.name + '_' + spcId +'_' + genId);
-		});
+		let existFileList = $('#fileList01').data('gridJsonData')
+							.concat($('#fileList02').data('gridJsonData'))
+							.concat($('#fileList03').data('gridJsonData'))
+							.concat($('#fileList04').data('gridJsonData'))
+							.concat($('#fileList05').data('gridJsonData'))
+							.concat($('#fileList06').data('gridJsonData'))
+							.concat($('#fileList07').data('gridJsonData'))
+							.concat($('#fileList08').data('gridJsonData'))
+							.concat($('#fileList09').data('gridJsonData'))
+							.concat($('#fileList10').data('gridJsonData'));
 
-		$.ajax({
-			type: 'patch',
-			enctype: 'multipart/form-data',
-			url: apiHost + '/files/upload?oid='+oid,
-			data: new FormData($('#attachement_info')[0]),
-			processData: false,
-			contentType: false,
-			cache: false,
-			timeout: 600000,
-			success: function (result) {
-				var existFileList =
-					$('#fileList01').data('gridJsonData')
-					.concat($('#fileList02').data('gridJsonData'))
-					.concat($('#fileList03').data('gridJsonData'))
-					.concat($('#fileList04').data('gridJsonData'))
-					.concat($('#fileList05').data('gridJsonData'))
-					.concat($('#fileList06').data('gridJsonData'))
-					.concat($('#fileList07').data('gridJsonData'))
-					.concat($('#fileList08').data('gridJsonData'))
-					.concat($('#fileList09').data('gridJsonData'))
-					.concat($('#fileList10').data('gridJsonData'));
+		$('#attachement_info').find('input[type="file"]').each(function () {
+			const liList =$(this).parent().find('.file_list li');
+			let fileList = Array.from($(this)[0].files);
 
-				sendSpcGenPatchPost(existFileList.concat(result.files));
-			},
-			error: function (request, status, error) {
-				alert('오류가 발생하였습니다. \n관리자에게 문의하세요.');
+			liList.each(function(index, target) {
+				loopFile(target, index, fileList);
+			});
+
+			if (fileList.length > 0) {
+				let formData = new FormData($('#fileUploadForm')[0]),
+					filedName = $(this).attr('name') + '_' + genUuid();
+				fileList.forEach(function(file) {
+					formData.append(filedName, file);
+				});
+
+				$.ajax({
+					url: apiHost + '/files/upload?oid=' + oid,
+					type: 'patch',
+					enctype: 'multipart/form-data',
+					data: formData,
+					processData: false,
+					contentType: false,
+					cache: false,
+					timeout: 600000,
+					async: false,
+					success: function (result) {
+						existFileList = existFileList.concat(result.files);
+					},
+					error: function (request, status, error) {
+						alert('오류가 발생하였습니다. \n관리자에게 문의하세요.');
+					}
+				});
 			}
 		});
+
+		sendSpcGenPatchPost(existFileList);
+	}
+
+	function loopFile(target, index, fileList) {
+		if (fileList[index] != undefined) {
+			if (target.textContent.trim() != fileList[index].name) {
+				fileList.splice(index, 1);
+				loopFile(target, index, fileList);
+			}
+		}
 	}
 
 	function sendSpcGenPatchPost(files){
@@ -749,48 +773,65 @@
 			associated_info = setAreaParamData('associatedInfo'),
 			attachement_info = files;
 
+		let certificationFiles = new Array();
+		//추가
 		$('#financeInfo').find('input[type="file"]').each(function () {
-			$(this).attr('name', this.name + '_' + genUuid());
-		});
-
-		$.ajax({
-			type: 'post',
-			enctype: 'multipart/form-data',
-			url: apiHost + '/files/upload?oid=' + oid,
-			data: new FormData($('#financeForm')[0]),
-			processData: false,
-			contentType: false,
-			cache: false,
-			timeout: 600000,
-			async: false,
-			success: function (result) {
-				let totalFiles = new Array();
-				let resultFiles = result.files;
-
-				//추가
-				$('#financeInfo').find('input[type="file"]').each(function () {
-					if (!isEmpty($(this).data('file'))) {
-						totalFiles = totalFiles.concat($(this).data('file'));
-					}
+			if (!isEmpty($(this).data('file'))) {
+				let targetFile = $(this).data('file');
+				let use = $(this).parents('div.group_type').find('button').data('value');
+				targetFile.forEach((file, idx) => {
+					targetFile[idx]['용도'] = use;
 				});
 
-				//신규
-				resultFiles.forEach(function (el) {
-					let fieldname = el.fieldname;
-					$('#financeInfo').find('input[type="file"]').each(function () {
-						if (fieldname == $(this).attr('name')) {
-							let button = $(this).parents('div.group_type').find('.dropdown').find('button').data('value');
-							el['용도'] = button;
-						}
-					});
-				});
-
-				finance_info['공인인증서'] = totalFiles.concat(resultFiles);
-			},
-			error: function (request, status, error) {
-				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+				certificationFiles = certificationFiles.concat(targetFile);
 			}
 		});
+
+		$('#financeInfo').find('input[type="file"]').each(function () {
+			const liList =$(this).parent().find('.file_list li:not(.existing)');
+			let fileList = Array.from($(this)[0].files);
+
+			liList.each(function(index, target) {
+				loopFile(target, index, fileList);
+			});
+
+			if (fileList.length > 0) {
+				let formData = new FormData($('#fileUploadForm')[0]),
+					filedName = $(this).attr('name') + '_' + genUuid();
+				fileList.forEach(function(file) {
+					formData.append(filedName, file);
+				});
+
+				$.ajax({
+					url: apiHost + '/files/upload?oid=' + oid,
+					type: 'patch',
+					enctype: 'multipart/form-data',
+					data: formData,
+					processData: false,
+					contentType: false,
+					cache: false,
+					timeout: 600000,
+					async: false,
+					success: function (result) {
+						let resultFiles = result.files;
+						resultFiles.forEach(function (el) {
+							let fieldname = el.fieldname;
+							$('#financeInfo').find('input[type="file"]').each(function () {
+								if (fieldname.match($(this).attr('name'))) {
+									let button = $(this).parents('div.group_type').find('.dropdown').find('button').data('value');
+									el['용도'] = button;
+								}
+							});
+						});
+						certificationFiles = certificationFiles.concat(resultFiles);
+					},
+					error: function (request, status, error) {
+						alert('오류가 발생하였습니다. \n관리자에게 문의하세요.');
+					}
+				});
+			}
+		});
+		finance_info['공인인증서'] = certificationFiles;
 
 		Object.entries(finance_info).map(obj => {
 			if (obj[0].match('은행_리스트') && obj[1] == '직접입력') {

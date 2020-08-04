@@ -475,27 +475,43 @@
 	function sendSpcAttchFilePost(spcId) {
 		var genId = $("#genId button").data('value');
 
+		let existFileList = new Array();
 		$('#attachement_info').find('input[type="file"]').each(function () {
-			$(this).attr('name', $(this).attr('name') + '_' + genUuid());
-		});
+			const liList =$(this).parent().find('.file_list li');
+			let fileList = Array.from($(this)[0].files);
 
-		$.ajax({
-			type: 'post',
-			enctype: 'multipart/form-data',
-			url: apiHost + '/files/upload?oid=' + oid,
-			data: new FormData($('#attachement_info')[0]),
-			processData: false,
-			contentType: false,
-			cache: false,
-			timeout: 600000,
-			success: function (result) {
-				sendSpcGenPost(spcId, result.files);
-			},
-			error: function (request, status, error) {
-				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
-				return false;
+			liList.each(function(index, target) {
+				loopFile(target, index, fileList);
+			});
+
+			if (fileList.length > 0) {
+				let formData = new FormData($('#fileUploadForm')[0]),
+					filedName = $(this).attr('name') + '_' + genUuid();
+				fileList.forEach(function(file) {
+					formData.append(filedName, file);
+				});
+
+				$.ajax({
+					url: apiHost + '/files/upload?oid=' + oid,
+					type: 'patch',
+					enctype: 'multipart/form-data',
+					data: formData,
+					processData: false,
+					contentType: false,
+					cache: false,
+					timeout: 600000,
+					async: false,
+					success: function (result) {
+						existFileList = existFileList.concat(result.files);
+					},
+					error: function (request, status, error) {
+						alert('오류가 발생하였습니다. \n관리자에게 문의하세요.');
+					}
+				});
 			}
 		});
+
+		sendSpcGenPost(spcId, existFileList);
 	}
 
 	/**
@@ -528,37 +544,50 @@
 			associated_info = setAreaParamData('associatedInfo'),
 			attachement_info = files;
 
+		let certificationFiles = new Array();
 		$('#financeInfo').find('input[type="file"]').each(function () {
-			$(this).attr('name', this.name + '_' + genUuid());
-		});
+			const liList =$(this).parent().find('.file_list li:not(.existing)');
+			let fileList = Array.from($(this)[0].files);
 
-		$.ajax({
-			type: 'post',
-			enctype: 'multipart/form-data',
-			url: apiHost + '/files/upload?oid=' + oid,
-			data: new FormData($('#financeForm')[0]),
-			processData: false,
-			contentType: false,
-			cache: false,
-			timeout: 600000,
-			async: false,
-			success: function (result) {
-				let resultFiles = result.files;
-				resultFiles.forEach(function (el) {
-					let fieldname = el.fieldname;
-					$('#financeInfo').find('input[type="file"]').each(function () {
-						if (fieldname == $(this).attr('name')) {
-							let button = $(this).parents('div.group_type').find('.dropdown').find('button').data('value');
-							el['용도'] = button;
-						}
-					});
+			liList.each(function(index, target) {
+				loopFile(target, index, fileList);
+			});
 
+			if (fileList.length > 0) {
+				let formData = new FormData($('#fileUploadForm')[0]),
+					filedName = $(this).attr('name') + '_' + genUuid();
+				fileList.forEach(function(file) {
+					formData.append(filedName, file);
 				});
 
-				finance_info['공인인증서'] = resultFiles;
-			},
-			error: function (request, status, error) {
-				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+				$.ajax({
+					url: apiHost + '/files/upload?oid=' + oid,
+					type: 'patch',
+					enctype: 'multipart/form-data',
+					data: formData,
+					processData: false,
+					contentType: false,
+					cache: false,
+					timeout: 600000,
+					async: false,
+					success: function (result) {
+						let resultFiles = result.files;
+						resultFiles.forEach(function (el) {
+							let fieldname = el.fieldname;
+							$('#financeInfo').find('input[type="file"]').each(function () {
+								if (fieldname.match($(this).attr('name'))) {
+									let button = $(this).parents('div.group_type').find('.dropdown').find('button').data('value');
+									el['용도'] = button;
+								}
+							});
+						});
+						certificationFiles = certificationFiles.concat(resultFiles);
+						finance_info['공인인증서'] = certificationFiles;
+					},
+					error: function (request, status, error) {
+						alert('오류가 발생하였습니다. \n관리자에게 문의하세요.');
+					}
+				});
 			}
 		});
 
@@ -599,6 +628,15 @@
 				return false;
 			}
 		});
+	}
+
+	function loopFile(target, index, fileList) {
+		if (fileList[index] != undefined) {
+			if (target.textContent.trim() != fileList[index].name) {
+				fileList.splice(index, 1);
+				loopFile(target, index, fileList);
+			}
+		}
 	}
 
 	function goMoveList() {

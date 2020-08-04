@@ -278,9 +278,15 @@ $(function () {
 
 function deleteFile(self, type) {
     if (type === undefined) {
-        let ul = self.parents(".file_list ul");
-        if (ul.length == 0) {
+        let ul = self.parents("ul.file_list");
+        if (ul.length > 0) {
             if (self.parent('.upload_text').prop('tagName') == 'LI') {
+                let file = self.parent().parent().parent().find('input[type="file"]').data('file');
+                if (!isEmpty(file)) {
+                    let idx = self.parents('ul.file_list').find('button').index(self);
+                    file.splice(idx, 1);
+                    self.parent().parent().parent().find('input[type="file"]').data('file', file);
+                }
                 self.parent(".upload_text").remove();
             } else {
                 self.parent(".upload_text").parent().find('input[type="file"]').val('');
