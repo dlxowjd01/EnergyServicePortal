@@ -8967,7 +8967,7 @@ div.di_wrap dl .link a {
 /* 장치 카드 : device detail info-card (right) */
 
 .device_row .indiv.clear {
-	height: 436px;
+	height: 472px;
 	overflow-y: auto;
 	border: 0;
 }
@@ -8980,7 +8980,7 @@ div.di_wrap dl .link a {
 	padding: 20px 24px;
 	background: var(--box-color);
 	/* background: var(--bg-color); */
-	height: 100%;
+	height: 472px;
 	overflow-y: auto;
 	border: 0;
 	box-shadow: none;
@@ -9082,8 +9082,11 @@ div.di_wrap dl .link a {
 }
 
 .eq_btn_bx {
+	position: absolute;
+	bottom: 20px;
+	right: 24px;
 	text-align: right;
-	margin: 20px -8px 0;
+	margin: 20px 0 0;
 }
 
 .eq_btn_bx .btn_type04 {
