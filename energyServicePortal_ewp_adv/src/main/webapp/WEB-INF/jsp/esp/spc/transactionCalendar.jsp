@@ -270,7 +270,7 @@
 
 		if (action == 'get') {
 			let optTransaction = {};
-			let d = $('#year button').data('value') + ('0' + $('#month button').data('value'))
+			let d = $('#year button').data('value') + ('0' + $('#month button').data('value')).slice(-2)
 			let yyyy = d.slice(0, 4);
 			let mm = d.slice(4, 7);
 			let spcId = '';
