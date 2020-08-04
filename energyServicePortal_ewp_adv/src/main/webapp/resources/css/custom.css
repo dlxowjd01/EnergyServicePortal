@@ -1267,7 +1267,7 @@ input:-webkit-autofill:active {
 }
 
 #page-wrapper {
-	margin: 0 72px 0 72px;
+	margin: 0 72px;
 }
 
 /* button */
@@ -2017,8 +2017,13 @@ nav .all-menu .menu-group .btn-group button {
 /* 페이지 하단 */
 
 footer {
-	height: 48px;
-	padding-top: 10px;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	width: 100%;
+	height: 60px;
+	padding: 25px 75px 20px 0;
+	background: var(--bg-color);
 }
 
 footer .ft_menu {
@@ -8814,9 +8819,7 @@ div.di_wrap dl .link a {
 .device-list {
 	display: flex;
 	flex-wrap: wrap;
-	margin: 0 -12px;
-	min-height: 310px;
-	height: 100%;
+	margin: 0 -6px;
 }
 
 .device-list li {
@@ -8824,7 +8827,7 @@ div.di_wrap dl .link a {
 	display: block;
 	margin: 10px 6px;
 	padding: 12px;
-	width: 112px;
+	width: 115px;
 	height: 132px;
 	border-radius: 4px;
 	text-align: left;
@@ -8845,6 +8848,9 @@ div.di_wrap dl .link a {
 	background: var(--ico-add-svg) no-repeat center;
 }
 
+.device-list li.text-black.active {
+	border: 2px solid var(--color8);
+}
 
 .device-list li:not(.text-black) span {
 	display: block;
@@ -8901,7 +8907,7 @@ div.di_wrap dl .link a {
 .device-list.list-ami li.text-black:before {
 	background: var(--ico-meter) no-repeat 0 0;
 }
-.device-list.list-smart-meter li.text-black:before {
+.device-list.list-meter li.text-black:before {
 	background: var(--ico-meter) no-repeat 0 0;
 }
 .device-list.list-inverter li.text-black:before {
@@ -8961,19 +8967,21 @@ div.di_wrap dl .link a {
 /* 장치 카드 : device detail info-card (right) */
 
 .device_row .indiv.clear {
-	height: 100%;
+	height: 436px;
+	overflow-y: auto;
 	border: 0;
 }
 
 .indiv.eq_card {
-	display: flex;
+	/* display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: space-between; */
 	position: relative;
-	padding: 20px 0 0;
+	padding: 20px 24px;
 	background: var(--box-color);
 	/* background: var(--bg-color); */
 	height: 100%;
+	overflow-y: auto;
 	border: 0;
 	box-shadow: none;
 }
@@ -9006,21 +9014,20 @@ div.di_wrap dl .link a {
 	background: var(--sandy-brown);
 }
 
-.eq_card .chart_top .ntit,
-.eq_card_ul {
-	padding: 0 16px;
-}
-
 .eq_card_ul {
 	display: flex;
 	flex-wrap: wrap;
 }
 
 .eq_card .eq_card_ul li {
-	width: 148px;
+	width: 33.3%;
 	margin-bottom: 20px;
-	padding-left: 34px;
+	padding: 0 24px;
 	border-left: 1px solid var(--box-color7);
+}
+
+.eq_card .eq_card_ul li:nth-child(3n) {
+	padding-right: 0;
 }
 
 .eq_card .eq_card_ul li:nth-child(3n + 1) {
@@ -9029,41 +9036,41 @@ div.di_wrap dl .link a {
 }
 
 .eq_card .eq_card_ul .t_ti {
-	margin-top: 8px;
 	font-size: 14px;
 	line-height: 20px;
 	color: var(--grey);
 }
 
 .eq_card .eq_card_ul .t_value {
-	padding: 8px 20px 0 0;
-	line-height: 20px;
+	padding: 8px 0 0 0;
+	line-height: 28px;
 	font-size: 20px;
-}
-
-.inv_sec_bx {
-	margin-top: 20px;
 }
 
 .inv_sec_bx .inv_tit {
 	font-size: 13px;
-	padding-left: 16px;
+	padding: 0 24px;
+	margin: 0 -24px;
 	line-height: 36px;
-	background: var(--box-color5);
+	background: var(--color-calendar-today);
 	color: var(--color6);
 }
 
 .inv_sec_bx .isb_in {
-	margin: 0 -12px;
+	margin: 0 -24px;
 }
 
 .inv_sec_bx .isb_in>li {
 	float: left;
-	width: 50%;
+	width: calc(50% - 36px);
 }
 
-.inv_sec_bx .di_list {
-	margin: 0 12px;
+.inv_sec_bx .isb_in>li:nth-child(1){
+	margin: 0 12px 0 24px;
+}
+
+.inv_sec_bx .isb_in>li:nth-child(2){
+	margin: 0 -24px 0 12px;
 }
 
 .inv_sec_bx .di_list li>span {
@@ -9076,7 +9083,7 @@ div.di_wrap dl .link a {
 
 .eq_btn_bx {
 	text-align: right;
-	margin: 20px 16px 16px;
+	margin: 20px -8px 0;
 }
 
 .eq_btn_bx .btn_type04 {
@@ -10529,10 +10536,8 @@ a.btn.btn_type03:hover {
 	color: var(--color3);
 }
 
-.di_list {}
-
 .di_list li {
-	padding: 0 16px;
+	padding: 0 8px;
 	border-bottom: 1px solid var(--color1);
 	overflow: hidden;
 }

@@ -1,5 +1,4 @@
 /* ~ Laptop */
-
 @media all and (min-width: 1200px) and (max-width: 2999px) {
 	.group_wrap {
 		height: 522px;
@@ -9,7 +8,6 @@
 		width: 1092px;
 	}
 }
-
 
 /* Laptop ~ Desktop screen sizes */
 
@@ -439,29 +437,10 @@
 		text-align: center;
 		margin: 20px 0 0 0;
 	}
+
 	nav .nav_right {
 		margin-right: 20px;
 	}
-	/* nav .nav_right li.member {
-		margin-right: 19px;
-	} */
-
-	/* nav .nav_right li.member .fl {
-		display: none;
-	} */
-
-	/* .nav_right .nav_theme {
-		top: 0;
-		width: 100%;
-	} */
-
-	/* nav .nav_right li {
-		display: block;
-	}
-
-	nav .nav_right li + li {
-		margin: 10px 0 0 0;
-	} */
 
 	nav .all-menu {
 		position: absolute;
