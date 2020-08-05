@@ -244,6 +244,24 @@
 		});
 	}
 
+	function getGenData() {
+		var genId = "${param.gen_id}";
+
+		$.ajax({
+			url: "http://iderms.enertalk.com:8443/config/sites/" + genId,
+			type: "get",
+			async: false,
+			data: {},
+			success: function (json) {
+				$("#genName").val(json.name);
+				// $("#countryValue").text("대한민국");
+				// $("#sidoValue").text(json.location);
+				// $("#address").text(json.address)
+			},
+			error: function (request, status, error) {}
+		});
+	}
+
 	function getSpcAndGenData(){
 		var spcId = '${param.spc_id}',
 			genId = '${param.gen_id}';
@@ -265,7 +283,10 @@
 									addRow('addList_registered_seal');
 								}
 								const seal = file['SPC_법인_인감_유형'];
-								$('#spcSeal' + index + ' button').html(seal.replace(/\_/g, ' ') + '<span class="caret"></span>').data('value', seal);
+								if (!isEmpty(seal)) {
+									$('#spcSeal' + index + ' button').html(seal.replace(/\_/g, ' ') + '<span class="caret"></span>').data('value', seal);
+								}
+
 								$('#basicInfo input[type="file"]').eq(index).data('file', file);
 								let listItem = `<button type='button' class='btn_close file_del_btn' onclick='deleteFile($(this), "front")'></button>`;
 								$('#basicInfo input[type="file"]').eq(index).parent().find(".upload_text").next('.file_del_btn').remove();
@@ -303,33 +324,12 @@
 
 					if (!isEmpty(address)) {
 						setJsonAutoMapping(address, 'addressInfo');
+
+						if (isEmpty(address['genName'])) {
+							getGenData();
+						}
 					} else {
-						$.ajax({
-							url: apiHost + '/config/sites/',
-							type: 'get',
-							async: false,
-							data: {oid: oid},
-							success: function (json) {
-								let spcGens = new Array();
-								let addressObj = new Object();
-								if (!isEmpty(json)) {
-									spcGens = json;
-								}
-
-								spcGens.forEach(site => {
-									if (site.sid == genId) {
-										addressObj['발전소명'] = site.name;
-										addressObj['발전소_국가'] = '대한민국';
-										addressObj['발전소_시도'] = site.location;
-										addressObj['발전소_상세주소'] = site.address;
-										setJsonAutoMapping(addressObj, 'addressInfo');
-									}
-								});
-							},
-							error: function (request, status, error) {
-
-							}
-						});
+						getGenData();
 					}
 
 					let repeatNumber= new Array();
@@ -652,7 +652,10 @@
 				//추가
 				$('#basicForm').find('input[type="file"]').each(function () {
 					if (!isEmpty($(this).data('file'))) {
-						totalFiles = totalFiles.concat($(this).data('file'));
+						let targetFile = $(this).data('file');
+						let button = $(this).parents('div.group_type').find('.dropdown').find('button').data('value');
+						targetFile['SPC_법인_인감_유형'] = button;
+						totalFiles = totalFiles.concat(targetFile);
 					}
 				});
 

@@ -139,6 +139,15 @@
 						if (!isEmpty(spc_info)) {
 							setJsonAutoMapping(spc_info, 'basicInfo');
 							const fileList = spc_info['SPC_법인_인감'];
+
+							if (fileList.length > 0) {
+								fileList.forEach((file, idx) => {
+									if (isEmpty(file['SPC_법인_인감_유형'])) {
+										fileList[idx]['SPC_법인_인감_유형'] = '';
+									}
+								});
+							}
+
 							setMakeList(fileList, 'SPC_법인_인감', {'dataFunction': {}});
 						}
 					}
@@ -149,6 +158,24 @@
 			error: function (request, status, error) {
 				alert('오류가 발생하였습니다. \n관리자에게 문의하세요.');
 			}
+		});
+	}
+
+	function getGenData() {
+		var genId = "${param.gen_id}";
+
+		$.ajax({
+			url: "http://iderms.enertalk.com:8443/config/sites/" + genId,
+			type: "get",
+			async: false,
+			data: {},
+			success: function (json) {
+				$("#genName").text(json.name);
+				// $("#countryValue").text("대한민국");
+				// $("#sidoValue").text(json.location);
+				// $("#address").text(json.address)
+			},
+			error: function (request, status, error) {}
 		});
 	}
 
@@ -210,34 +237,12 @@
 
 					if (!isEmpty(address)) {
 						setJsonAutoMapping(address, 'addressInfo');
+
+						if (isEmpty(address['genName'])) {
+							getGenData();
+						}
 					} else {
-						$.ajax({
-							url: apiHost + '/config/sites/',
-							type: 'get',
-							async: false,
-							data: {oid: oid},
-							success: function (json) {
-								let spcGens = new Array();
-								let addressObj = new Object();
-								if (!isEmpty(json)) {
-									spcGens = json;
-								}
-
-								spcGens.forEach(site => {
-									if (site.sid == genId) {
-										addressObj['genName'] = site.name;
-										addressObj['발전소_국가'] = '대한민국';
-										addressObj['발전소_시도'] = site.location;
-										addressObj['발전소_상세정보'] = site.address;
-
-										setJsonAutoMapping(addressObj, 'addressInfo');
-									}
-								});
-							},
-							error: function (request, status, error) {
-
-							}
-						});
+						getGenData();
 					}
 
 					let repeatNumber= new Array();
