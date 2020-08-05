@@ -10,10 +10,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -28,7 +32,18 @@ public class LoginController {
 	EgovMessageSource egovMessageSource;
 
 	@RequestMapping(value = "/login.do")
-	public String login(HttpSession session, Model model) {
+	public String login(HttpServletRequest request, HttpSession session, Model model) {
+		String msg = request.getParameter("msg");
+
+		if (msg != null && !"".equals(msg)) {
+			try {
+				msg = URLDecoder.decode(msg, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			model.addAttribute("msg", msg);
+		}
+
 		return "esp/login/login";
 	}
 
@@ -39,7 +54,7 @@ public class LoginController {
 	}
 
 	@RequestMapping("/loginUser.do")
-	public String loginUser(HttpServletRequest request, HttpSession session, Model model, @RequestParam Map<String, Object> param) throws Exception {
+	public String loginUser(HttpServletRequest request, HttpSession session, Model model, @RequestParam Map<String, Object> param, RedirectAttributes redirect) throws Exception {
 
 		Locale locale = (Locale) session.getAttribute("sessionLocale");
 
@@ -86,8 +101,8 @@ public class LoginController {
 			}
 
 			if(userInfoMap.get("auth_type") == null && "".equals(userInfoMap.get("auth_type"))) {
-				model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", locale));
-				return "esp/login/login";
+				redirect.addAttribute("msg", URLEncoder.encode(egovMessageSource.getMessage("ewp.error.login_no_user", locale), "UTF-8"));
+				return "redirect:/login.do";
 			} else if("1".equals(userInfoMap.get("auth_type")) || "2".equals(userInfoMap.get("auth_type"))) {
 				session.setAttribute(UserUtil.USER_SESSION_ID, userInfoMap);
 				session.setAttribute("mode", mode); //운영 / 스테이징 구분
@@ -98,12 +113,12 @@ public class LoginController {
 					return "redirect:/dashboard/gmain.do";
 				}
 			} else {
-				model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", locale));
-				return "esp/login/login";
+				redirect.addAttribute("msg", URLEncoder.encode(egovMessageSource.getMessage("ewp.error.login_no_user", locale), "UTF-8"));
+				return "redirect:/login.do";
 			}
 		} else {
-			model.addAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_correct", locale));
-			return "esp/login/login";
+			redirect.addAttribute("msg", URLEncoder.encode(egovMessageSource.getMessage("ewp.error.login_no_correct", locale), "UTF-8"));
+			return "redirect:/login.do";
 		}
 	}
 }
