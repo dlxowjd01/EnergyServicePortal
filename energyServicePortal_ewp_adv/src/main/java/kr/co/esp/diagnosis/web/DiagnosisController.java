@@ -15,13 +15,11 @@ public class DiagnosisController {
 
     @RequestMapping(value = "/diagnosis/generation.do")
     public String diagnosisGeneration(HttpServletRequest request, HttpSession session, Model model) {
-        System.out.println("/diagnosis/generation.do");
         return "esp/diagnosis/generation";
     }
 
     @RequestMapping(value = "/diagnosis/abnormallyAnalysis.do")
     public String diagnosisAbnormallyAnalysis(HttpServletRequest request, HttpSession session, Model model) {
-        System.out.println("/diagnosis/abnormallyAnalysis.do");
         return "esp/diagnosis/abnormallyAnalysis";
     }
 }

@@ -117,9 +117,7 @@ public class RestApiUtil {
 
 		try {
 			String postUrl = "https://iderms-api.iderms.ai";
-//			if (mode != null && "test".equals(mode)) {
-//				postUrl = "http://iderms.enertalk-test.com:8443";
-//			}
+
 			URL url = new URL(postUrl + strUrl);
 			HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 			con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정

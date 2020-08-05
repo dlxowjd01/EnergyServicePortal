@@ -15,23 +15,6 @@
 		includeBtus: false
 	};
 
-	const deviceTemplate = {
-		'SM': '스마트미터',
-		'SM_ISMART': '한전 아이스마트',
-		'SM_KPX': '전력거래소 계량포털',
-		'SM_CRAWLING': '데이터 수집기',
-		'SM_MANUAL': '수기 입력',
-		'INV_PV': '태양광 인버터',
-		'INV_WIND': '풍력 인버터',
-		'PCS_ESS': 'ESS PCS',
-		'BMS_SYS': 'BMS 시스템',
-		'BMS_RACK': 'BMS 랙',
-		'SENSOR_SOLAR': '태양광 센서',
-		'SENSOR_FRAME': '불꽃 센서',
-		'SENSOR_TEMP_HUMIDITY': '온습도 센서',
-		'CCTV': 'CCTV'
-	};
-
 	let deviceList;
 	let gridList;
 
@@ -274,7 +257,6 @@
 				});
 
 				categories.sort(); //시간 정렬
-
 
 				$('#analyzeTag1 .tx_tit').eq(0).find('span').each(function () {
 					let dataArr = new Array();
@@ -556,6 +538,7 @@
 		return index + 1;
 	}
 
+	let deviceTemplate = new Object();
 	let tableProperties = new Object();
 	let featureProperties = new Object();
 	const deviceProperties = function () {
@@ -570,6 +553,8 @@
 					let propList = val.properties;
 					let tempTable = new Array();
 					let tempFeature = new Array();
+
+					deviceTemplate[deviceName] = val.name.kr;
 
 					$.map(propList, function (v, k) {
 						if (v.analysis_table) {
@@ -737,7 +722,6 @@
 		$('#datatable').empty();
 
 		$(':checkbox[name="type"]:checked').each(function () {
-			console.log("checked---")
 			let chkVal = $(this).val();
 			let targetTable = document.createElement('table');
 			let thead = targetTable.createTHead();

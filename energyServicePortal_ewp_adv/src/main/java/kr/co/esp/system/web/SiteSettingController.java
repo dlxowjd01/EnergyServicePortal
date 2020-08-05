@@ -14,7 +14,6 @@ public class SiteSettingController {
 
 	@RequestMapping(value = "/system/siteSetting.do")
 	public String siteSetting(HttpServletRequest request, HttpSession session, Model model) {
-		logger.debug("/system/siteSetting.do");
 		return "esp/system/siteSetting";
 	}
 

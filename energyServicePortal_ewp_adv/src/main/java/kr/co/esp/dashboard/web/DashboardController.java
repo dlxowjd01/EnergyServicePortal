@@ -1,19 +1,12 @@
 package kr.co.esp.dashboard.web;
 
-import kr.co.esp.alarm.service.AlarmService;
-import kr.co.esp.billRevenue.service.DrRevenueService;
-import kr.co.esp.billRevenue.service.EssRevenueService;
-import kr.co.esp.billRevenue.service.PvRevenueService;
 import kr.co.esp.common.util.UserUtil;
-import kr.co.esp.device.service.DeviceMonitoringService;
-import kr.co.esp.energy.service.EssChargeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
@@ -21,26 +14,7 @@ import java.util.*;
 
 @Controller
 public class DashboardController {
-
 	private static final Logger logger = LoggerFactory.getLogger(DashboardController.class);
-
-	@Resource(name="essChargeService")
-	private EssChargeService essChargeService;
-
-	@Resource(name="essRevenueService")
-	private EssRevenueService essRevenueService;
-
-	@Resource(name="pvRevenueService")
-	private PvRevenueService pvRevenueService;
-
-	@Resource(name="drRevenueService")
-	private DrRevenueService drRevenueService;
-
-	@Resource(name="deviceMonitoringService")
-	private DeviceMonitoringService deviceMonitoringService;
-
-	@Resource(name="alarmService")
-	private AlarmService alarmService;
 
 	@RequestMapping(value = "/dashboard/gmain.do")
 	public String gmain(HttpServletRequest request, HttpSession session, Model model) {
