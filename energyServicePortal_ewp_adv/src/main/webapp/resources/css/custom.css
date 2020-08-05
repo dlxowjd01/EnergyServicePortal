@@ -11899,7 +11899,7 @@ table.table-footer tfoot td.light {
 	width: 13px;
 	height: 13px;
 	margin: -5px 0 0 12px;
-	background: var(--btn-close-svg) no-repeat center;
+	background: var(--btn-trash) no-repeat center;
 	background-size: 15px 15px;
 }
 
