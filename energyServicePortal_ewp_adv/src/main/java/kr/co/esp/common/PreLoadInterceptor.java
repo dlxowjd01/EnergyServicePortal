@@ -2,30 +2,22 @@ package kr.co.esp.common;
 
 import egovframework.com.cmm.service.EgovProperties;
 import kr.co.esp.common.util.UserUtil;
-import kr.co.esp.system.service.CmpyGrpSiteMngService;
-import org.apache.poi.ss.formula.functions.T;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.codehaus.jettison.json.JSONTokener;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.HEAD;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static kr.co.esp.common.util.RestApiUtil.*;
+import static kr.co.esp.common.util.RestApiUtil.get;
 
 public class PreLoadInterceptor extends HandlerInterceptorAdapter {
-
-	@Resource(name = "cmpyGrpSiteMngService")
-	private CmpyGrpSiteMngService cmpyGrpSiteMngService;
 
 	// controller보다 먼저 수행
 	@Override
@@ -72,10 +64,6 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 				return false;
 			}
-//
-//			parameters.clear();
-//			parameters.put("includeSites", "true");
-//			parameters.put("includeDevices", "true");
 
 			Map<String, Object> userSiteGroupSearch = get("/auth/me/groups", mode, "?includeSites=true&includeDevices=true", token); //그룹화되어있는 사이트 리스트 정보
 			if (200 == (int) userSiteGroupSearch.get("code")) {
