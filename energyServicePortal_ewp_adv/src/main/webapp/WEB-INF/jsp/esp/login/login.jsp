@@ -1,489 +1,74 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
+<%@ include file="/decorators/include/layouts/top.jsp"%>
 <!DOCTYPE html>
 <html lang="en" class="darkmode">
 <head>
-	<%@ include file="/decorators/include/layouts/top.jsp"%>
-		<link href="/css/custom-login.css" rel="stylesheet">
-		<script type="text/javascript">
-			$(function () {
-				var lan = location.search.substr(location.search.length - 2, 2);
-				if ( isEmpty(lan) ) {
-					$("#language").val("ko");
-				} else {
-					$("#language").val(lan);
+
+	<link href="/css/custom-login.css" rel="stylesheet">
+	<script type="text/javascript">
+		$(function () {
+			var lan = location.search.substr(location.search.length - 2, 2);
+			if ( isEmpty(lan) ) {
+				$("#language").val("ko");
+			} else {
+				$("#language").val(lan);
+			}
+
+			$("#loginUserId").val("");
+			$("#loginUserPw").val("");
+
+			$("#loginBtn").prop("disabled", true);
+
+			$("#loginUserId").bind("change keypress", function(){
+				if(!isEmpty($("#loginUserPw").val())){
+					$("#loginBtn").prop("disabled", false);
 				}
-
-				$("#loginUserId").val("");
-				$("#loginUserPw").val("");
-
-				$("#loginBtn").prop("disabled", true);
-
-				$("#loginUserId").bind("change keypress", function(){
-					if(!isEmpty($("#loginUserPw").val())){
-						console.log("not empty===")
-						$("#loginBtn").prop("disabled", false);
-					}
-				});
-
-				$("#loginUserPw").bind("change keypress", function(){
-					if(!isEmpty($("#loginUserId").val())){
-						console.log("not empty===")
-						$("#loginBtn").prop("disabled", false);
-					}
-				});
-
-				// // 아이디 찾기
-				// $('#findAuthCodeBtn').click(function () {
-				// 	if (!checkFind(false)) {
-				// 		return;
-				// 	}
-				// 	getAuthCode();
-				// });
-
-				// $('#findBtn').click(function () {
-				// 	if (!checkFind(true)) {
-				// 		return false;
-				// 	}
-				// 	findUserId();
-				// 	$("#findidModal").modal("hide");
-				// 	return false;
-				// });
-
-				// // 비번 찾기
-				// $('#findPwAuthCodeBtn').click(function () {
-				// 	if (!checkFindPw(false)) {
-				// 		return;
-				// 	}
-				// 	sendFindPwAuthCode();
-				// });
-
-				// $('#findPwBtn').click(function () {
-				// 	if (!checkFindPw(true)) {
-				// 		return false;
-				// 	}
-				// 	findUserPw();
-				// 	$("#findpassModal").modal("hide");
-				// 	return false;
-				// });
-
-				// // 회원 가입
-				// $('#duplicateBtn').click(function () {
-				// 	checkUserId();
-				// });
-
-				// $('#joinEmail2').change(function () {
-				// 	var val = $(this).val();
-				// 	if (val === 'manual') {
-				// 		$('#joinEmail1').css('width', '30%');
-				// 		$('#joinEmail3').show();
-				// 	} else {
-				// 		$('#joinEmail1').css('width', '60%');
-				// 		$('#joinEmail3').hide();
-				// 	}
-				// });
-
-				// $('#joinAuthCodeBtn').click(function () {
-				// 	if( isEmpty($('#joinPsnName').val()) ) {
-				// 		alert("이름을 입력하세요");
-				// 		return;
-				// 	}
-
-				// 	if( isEmpty($('#joinMobile1').val()) || isEmpty($('#joinMobile2').val()) || isEmpty($('#joinMobile3').val()) ) {
-				// 		alert('휴대폰번호를 입력해 주세요');
-				// 		return;
-				// 	}
-				// 	sendJoinAuthCode();
-				// });
 			});
 
-			function show_Language(v) {
-				var f = document.loginForm;
-
-				if (v === "english") {
-					f.action = "/login.do?lang=en";
-				} else {
-					f.action = "/login.do?lang=ko";
+			$("#loginUserPw").bind("change keypress", function(){
+				if(!isEmpty($("#loginUserId").val())){
+					$("#loginBtn").prop("disabled", false);
 				}
+			});
+		});
 
-				f.method = "post";
-				f.submit();
+		function show_Language(v) {
+			var f = document.loginForm;
+
+			if (v === "english") {
+				f.action = "/login.do?lang=en";
+			} else {
+				f.action = "/login.do?lang=ko";
 			}
 
-			function checkLogin() {
-				var $userId = $('#loginUserId');
-				var $userPw = $('#loginUserPw');
+			f.method = "post";
+			f.submit();
+		}
 
-				if ( isEmpty($userId.val()) ) {
-					alert('<spring:message code="ewp.login.Singup_ID" />');
-					$userId.focus();
-					return false;
-				}
-				if ( isEmpty($userPw.val()) ) {
-					alert('<spring:message code="ewp.login.Singup_PW" />');
-					$userPw.focus();
-					return false;
-				}
+		function checkLogin() {
+			var $userId = $('#loginUserId');
+			var $userPw = $('#loginUserPw');
 
+			if ( isEmpty($userId.val()) ) {
+				alert('<spring:message code="ewp.login.Singup_ID" />');
+				$userId.focus();
+				return false;
+			} else if ( isEmpty($userPw.val()) ) {
+				alert('<spring:message code="ewp.login.Singup_PW" />');
+				$userPw.focus();
+				return false;
+			} else {
 				return true;
 			}
-
-			// function getAuthCode() {
-			// 	var $frm = $("#findForm");
-			// 	var formData = $frm.serializeObject();
-			// 	var result = Math.floor(Math.random() * 1000000) + 100000;
-			// 	if (result > 1000000) {
-			// 		result = result - 100000;
-			// 	}
-
-			// 	authCode = result.toString();
-
-			// 	formData = $frm.serializeObject();
-			// 	formData.authCode = authCode;
-			// 	console.log(formData);
-			// 	$.ajax({
-			// 		url: "/sendAuthCode.json",
-			// 		type: 'post',
-			// 		async: false, // 동기로 처리해줌
-			// 		data: formData,
-			// 		success: function (result) {
-			// 			var resultCnt = result.resultCnt;
-			// 			if ( isEmpty(resultCnt) ) {
-			// 				alert('<spring:message code="ewp.error.default" />');
-			// 			} else {
-			// 				alert("인증번호가 발송되었습니다.");
-			// 			}
-			// 		}
-			// 	});
-
-			// }
-
-			// var authCode = '';
-
-			// function sendFindPwAuthCode() {
-			// 	var $frm = $("#findPwForm");
-			// 	var formData = $frm.serializeObject();
-			// 	var result = Math.floor(Math.random() * 1000000) + 100000;
-			// 	if (result > 1000000) {
-			// 		result = result - 100000;
-			// 	}
-
-			// 	authCode = result.toString();
-
-			// 	formData = $frm.serializeObject();
-			// 	formData.authCode = authCode;
-			// 	$.ajax({
-			// 		//		url : "/sendFindPwAuthCode",
-			// 		url: "/sendAuthCode.json",
-			// 		type: 'post',
-			// 		async: false, // 동기로 처리해줌
-			// 		data: formData,
-			// 		success: function (result) {
-			// 			var resultCnt = result.resultCnt;
-			// 			if ( isEmpty(resultCnt) ) {
-			// 				alert('<spring:message code="ewp.error.default" />');
-			// 			} else {
-			// 				alert("인증번호가 발송되었습니다.");
-			// 			}
-			// 		}
-			// 	});
-			// }
-
-			// function sendJoinAuthCode() {
-			// 	var $frm = $("#joinForm");
-			// 	var formData = $frm.serializeObject();
-			// 	var result = Math.floor(Math.random() * 1000000) + 100000;
-			// 	if (result > 1000000) {
-			// 		result = result - 100000;
-			// 	}
-
-			// 	authCode = result.toString();
-
-			// 	$('#joinPsnMobile').val($('#joinMobile1').val() + '-' + $('#joinMobile2').val() + '-' + $('#joinMobile3').val());
-
-			// 	formData = $frm.serializeObject();
-			// 	formData.authCode = authCode;
-			// 	$.ajax({
-			// 		url: "/sendAuthCode.json",
-			// 		type: 'post',
-			// 		async: false, // 동기로 처리해줌
-			// 		data: formData,
-			// 		success: function (result) {
-			// 			var resultCnt = result.resultCnt;
-			// 			if (resultCnt === 40) {
-			// 				alert('문자가 발송되었습니다.');
-			// 			} else {
-			// 				alert('<spring:message code="ewp.error.default" />');
-			// 			}
-			// 		}
-			// 	});
-			// }
-
-			// function checkFind(findFlag) {
-			// 	if ( isEmpty($('#findPsnName').val()) ) {
-			// 		alert('이름를 입력하세요');
-			// 		$('#findPsnName').focus();
-			// 		return false;
-			// 	}
-			// 	if ($('#findForm').find('[name=mobileType]:checked').length === 0) {
-			// 		alert('통신사를 선택해 주세요');
-			// 		$('#findForm').find('[name=mobileType]:eq(0)').focus();
-			// 		return false;
-			// 	}
-			// 	var $findMobile1 = $('#findMobile1');
-			// 	var $findMobile2 = $('#findMobile2');
-			// 	var $findMobile3 = $('#findMobile3');
-			// 	if ( isEmpty($findMobile1.val()) || isEmpty($findMobile2.val()) || isEmpty($findMobile3.val()) ) {
-			// 		alert('휴대폰번호를 입력해 주세요');
-			// 		$findMobile2.focus();
-			// 		return false;
-			// 	}
-			// 	if (isNaN($findMobile2.val()) || isNaN($findMobile3.val())) {
-			// 		alert('숫자를 입력해 주세요');
-			// 		$findMobile2.focus();
-			// 		return false;
-			// 	}
-			// 	if (findFlag && $('#findAuthCode').val() !== authCode) {
-			// 		alert('인증코드를 맞게 입력하세요');
-			// 		$('#findAuthCode').focus();
-			// 		return;
-			// 	}
-
-			// 	$('#findPsnMobile').val($findMobile1.val() + '-' + $findMobile2.val() + '-' + $findMobile3.val());
-			// 	return true;
-			// }
-
-			// function findUserId() {
-			// 	var formData = $("#findForm").serializeObject();
-			// 	$.ajax({
-			// 		url: "/findUserId.json",
-			// 		type: 'post',
-			// 		async: false, // 동기로 처리해줌
-			// 		data: formData,
-			// 		success: function (result) {
-			// 			var userDetail = result.detail;
-			// 			if ( !isEmpty(userDetail) ) {
-			// 				alert('귀하의 아이디는 ' + userDetail.user_id + ' 입니다.');
-			// 			} else {
-			// 				alert('일치하는 정보가 없습니다.');
-			// 			}
-			// 		}
-			// 	});
-			// }
-
-			// function checkFindPw(findFlag) {
-			// 	if ( isEmpty($('#findPwPsnName').val()) ) {
-			// 		alert('이름를 입력하세요');
-			// 		$('#findPwPsnName').focus();
-			// 		return false;
-			// 	}
-			// 	if ($('#findPwForm').find('[name=mobileType]:checked').length === 0) {
-			// 		alert('통신사를 선택해 주세요');
-			// 		$('#findPwForm').find('[name=mobileType]:eq(0)').focus();
-			// 		return false;
-			// 	}
-			// 	var $findPwMobile1 = $('#findPwMobile1');
-			// 	var $findPwMobile2 = $('#findPwMobile2');
-			// 	var $findPwMobile3 = $('#findPwMobile3');
-			// 	if ( isEmpty($findPwMobile1.val()) || isEmpty($findPwMobile2.val()) || isEmpty($findPwMobile3.val()) ) {
-			// 		alert('휴대폰번호를 입력해 주세요');
-			// 		$findPwMobile2.focus();
-			// 		return false;
-			// 	}
-			// 	if (isNaN($findPwMobile2.val()) || isNaN($findPwMobile3.val())) {
-			// 		alert('숫자를 입력해 주세요');
-			// 		$findPwMobile2.focus();
-			// 		return false;
-			// 	}
-			// 	if (findFlag && isEmpty($('#findPwAuthCode').val()) ) {
-			// 		alert('인증코드를 입력하세요');
-			// 		$('#findPwAuthCode').focus();
-			// 		return;
-			// 	}
-			// 	if (findFlag && $('#findPwAuthCode').val() !== authCode) {
-			// 		alert('인증코드를 맞게 입력하세요');
-			// 		$('#findPwAuthCode').focus();
-			// 		return;
-			// 	}
-
-			// 	$('#findPwPsnMobile').val($findPwMobile1.val() + '-' + $findPwMobile2.val() + '-' + $findPwMobile3.val());
-			// 	return true;
-			// }
-
-			// function findUserPw() {
-			// 	var formData = $("#findPwForm").serializeObject();
-			// 	$.ajax({
-			// 		url: "/findUserPw.json",
-			// 		type: 'post',
-			// 		async: false, // 동기로 처리해줌
-			// 		data: formData,
-			// 		success: function (result) {
-			// 			var userDetail = result.detail;
-			// 			if ( !isEmpty(userDetail) ) {
-			// 				alert("임시 비밀번호가 sms로 발송되었습니다.");
-			// 			} else {
-			// 				alert('일치하는 정보가 없습니다.');
-			// 			}
-			// 		}
-			// 	});
-			// }
-
-			// function checkAgree() {
-			// 	if (!$('#agree01').prop('checked')) {
-			// 		alert('S-POWER iDERMS 서비스 이용약관에 동의해야 합니다.');
-			// 		$('#agree01').focus();
-			// 		return false;
-			// 	}
-			// 	if (!$('#agree02').prop('checked')) {
-			// 		alert('개인정보 수집, 제공 및 활용 약관에 동의해야 합니다.');
-			// 		$('#agree02').focus();
-			// 		return false;
-			// 	}
-
-			// 	return true;
-			// }
-
-			// function emptyAlert(index) {
-			// 	$('.helpCont').hide();
-			// 	if ($(index).val() === '') {
-			// 		$(index).parents('td').children('.helpCont:eq(0)').show();
-			// 		return true;
-			// 	}
-			// }
-
-			// function checkJoin() {
-			// 	if (emptyAlert('#joinUserId')) {
-			// 		return;
-			// 	}
-			// 	if (emptyAlert('#joinUserPw')) {
-			// 		return;
-			// 	}
-			// 	if (emptyAlert('#joinUserPw2')) {
-			// 		return;
-			// 	}
-			// 	var $joinUserPw = $('#joinUserPw');
-			// 	var $joinUserPw2 = $('#joinUserPw2');
-			// 	if ($joinUserPw.val() !== $joinUserPw2.val()) {
-			// 		$('.helpCont').hide();
-			// 		$joinUserPw2.parents('td').children('.helpCont:eq(0)').show();
-			// 		return;
-			// 	} else {
-			// 		$('.helpCont').hide();
-			// 	}
-			// 	if (emptyAlert('#joinPsnName')) {
-			// 		return;
-			// 	}
-			// 	var $joinEmail1 = $('#joinEmail1');
-			// 	var $joinEmail2 = $('#joinEmail2');
-			// 	var $joinEmail3 = $('#joinEmail3');
-			// 	if ( isEmpty($joinEmail1.val()) || isEmpty($joinEmail2.val()) ) {
-			// 		$('.helpCont').hide();
-			// 		$joinEmail1.parents('td').children('.helpCont:eq(0)').show();
-			// 		return;
-			// 	} else {
-			// 		$('.helpCont').hide();
-			// 	}
-			// 	if ($joinEmail2.val() === 'manual' && isEmpty($joinEmail3.val())) {
-			// 		$('.helpCont').hide();
-			// 		$joinEmail1.parents('td').children('.helpCont:eq(0)').show();
-			// 		return;
-			// 	} else {
-			// 		$('.helpCont').hide();
-			// 	}
-			// 	var $joinMobile1 = $('#joinMobile1');
-			// 	var $joinMobile2 = $('#joinMobile2');
-			// 	var $joinMobile3 = $('#joinMobile3');
-			// 	if ( isEmpty($joinMobile1.val()) || isEmpty($joinMobile2.val()) || isEmpty($joinMobile3.val()) ) {
-			// 		$('.helpCont').hide();
-			// 		$joinMobile1.parents('td').children('.helpCont:eq(0)').show();
-			// 		return;
-			// 	} else {
-			// 		$('.helpCont').hide();
-			// 	}
-			// 	if (isNaN($joinMobile1.val()) || isNaN($joinMobile2.val()) || isNaN($joinMobile3.val())) {
-			// 		$('.helpCont').hide();
-			// 		$joinMobile1.parents('td').children('.helpCont:eq(1)').show();
-			// 		return;
-			// 	} else {
-			// 		$('.helpCont').hide();
-			// 	}
-			// 	var $joinAuthCode = $('#joinAuthCode');
-			// 	if ( isEmpty($joinAuthCode.val()) ) {
-			// 		alert('인증코드를 입력하세요');
-			// 		$joinAuthCode .focus();
-			// 		return;
-			// 	}
-			// 	if ($joinAuthCode.val() !== authCode) {
-			// 		alert('인증코드를 맞게 입력하세요');
-			// 		$joinAuthCode .focus();
-			// 		return;
-			// 	}
-
-			// 	$('.helpCont').hide();
-
-			// 	if (confirm("가입하시겠습니까?")) {
-			// 		if ($joinEmail2.val() !== 'manual') {
-			// 			$('#joinPsnEmail').val($joinEmail1.val() + '@' + $joinEmail2.val());
-			// 		} else {
-			// 			$('#joinPsnEmail').val($joinEmail1.val() + '@' + $joinEmail3.val());
-			// 		}
-			// 		$('#joinPsnMobile').val($joinMobile1.val() + '-' + $joinMobile2.val() + '-' + $joinMobile3.val());
-
-			// 		checkUserId(joinUser);
-			// 	}
-			// }
-
-			// function join2next() {
-			// 	$("#joinModal2").modal("hide");
-			// 	$("#joinModal3").modal("show");
-			// }
-			// // 아이디 중복 체크
-			// function checkUserId(fn) {
-			// 	$.ajax({
-			// 		url: "/checkUserId.json",
-			// 		type: 'post',
-			// 		async: false, // 동기로 처리해줌
-			// 		data: {
-			// 			userId: $('#joinUserId').val()
-			// 		},
-			// 		success: function (result) {
-			// 			var userDetail = result.detail;
-			// 			if ( isEmpty(userDetail) ) {
-			// 				if ( !isEmpty(fn) ) {
-			// 					fn();
-			// 				} else {
-			// 					alert($('#joinUserId').val() + ' 아이디는 사용가능 합니다.');
-			// 				}
-			// 			} else {
-			// 				alert($('#joinUserId').val() + ' 아이디는 사용중입니다.\n다른 아이디를 사용하세요.');
-			// 			}
-			// 		}
-			// 	});
-			// }
-
-			// function joinUser() {
-			// 	var formData = $("#joinForm").serializeObject();
-			// 	$.ajax({
-			// 		url: "/joinUser.json",
-			// 		type: 'post',
-			// 		async: false, // 동기로 처리해줌
-			// 		data: formData,
-			// 		success: function (result) {
-			// 			var resultCnt = result.resultCnt;
-			// 			if (resultCnt > 0) {
-			// 				join2next();
-			// 			} else {
-			// 				alert("저장에 실패하였습니다. \n 관리자에게 문의하세요.");
-			// 			}
-			// 		}
-			// 	});
-			// }
-		</script>
-		<script type="text/javascript">
-			<c:if test="${not empty msg}">
-			alert('${msg}');
-			</c:if>
-		</script>
+		}
+	</script>
+	<script type="text/javascript">
+		<c:if test="${not empty msg}">
+		alert('${msg}');
+		history.replaceState({}, null, location.pathname);
+		</c:if>
+	</script>
 </head>
 <body>
 	<div class="outer-wrapper">
@@ -509,17 +94,17 @@
 				</div>
 				--%>
 				<div class="lang login-lang dropdown">
-				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">${sessionScope.sessionLangNm }
-				    <span class="caret"></span></button>
-				    <ul class="dropdown-menu">
-				        <li><a href="javascript:show_Language('korea');">KO</a></li>
-				        <li><a href="javascript:show_Language('english');">EN</a></li>
-				    </ul>
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">${sessionScope.sessionLangNm }
+					<span class="caret"></span></button>
+					<ul class="dropdown-menu">
+						<li><a href="javascript:show_Language('korea');">KO</a></li>
+						<li><a href="javascript:show_Language('english');">EN</a></li>
+					</ul>
 				</div>
 			</nav>
 			<div class="login container-fluid">
 				<div class="login-form">
-					<form id="loginForm" name="loginForm" action="/loginUser.do" method="post" onsubmit="checkLogin(this);">
+					<form id="loginForm" name="loginForm" action="/loginUser.do" method="post" onsubmit="return checkLogin(this);">
 						<input type="hidden" id="language" name="language"/>
 						<div class="lf-body">
 							<c:choose>
@@ -530,7 +115,7 @@
 									<img src="../img/logo_iderms.svg" alt="login modal iderms logo" class="login-logo center"/>
 								</c:otherwise>
 							</c:choose>
-						    <div class="mt10"><input type="text" id="loginUserId" name="login_id" class="clear-input" placeholder=<spring:message code="ewp.login.ID"/>></div>
+							<div class="mt10"><input type="text" id="loginUserId" name="login_id" class="clear-input" placeholder=<spring:message code="ewp.login.ID"/>></div>
 							<div class="mt15"><input type="password" id="loginUserPw" name="password" class="clear-input" placeholder=<spring:message code="ewp.login.Password"/>></div>
 							<div class="mt15"><a class="chk_type"><input type="checkbox" id="saveLogin" name="save_login"><label for="saveLogin">로그인 유지</label></a></div>
 
@@ -568,54 +153,47 @@
 			</div>
 		</div>
 	</div>
-
-
-	<%--						
-	<div class="mt30">
-		<a href="#" class="findidBtn arrbtn"><spring:message code="ewp.login.Forgot_account"/></a>
-		<a href="#" class="findpassBtn arrbtn ml-30"><spring:message code="ewp.login.Forgot_password"/></a>
-	</div>
-	--%>
+	
 	<div class="modal fade" id="findidModal" tabindex="-1" role="dialog" aria-labelledby="findidModal" aria-hidden="true">
-        <div class="modal-dialog modal-md">
+		<div class="modal-dialog modal-md">
 			<div class="login-modal-content modal-content">
 				<div class="modal-header">
-	                
-	                <h1>FIND ID</h1>
-	            </div>
-			    <form id="findForm" name="findForm">
-			    <input type="hidden" id="findPsnMobile" name="psnMobile"/>
-			    <div class="modal-body">
-			  	    <div class="md-tbl">
-			  	    	<table>
-			  	    		<colgroup>
-			  	    			<col width="100">
-			  	    			<col>
-			  	    		</colgroup>
-			  	    		<tbody>
-			  	    			<tr>
-			  	    				<th>이름</th>
-			  	    				<td><input type="text" name="psnName" id="findPsnName" class="w-100" placeholder=""></td>
-			  	    			</tr>
-			  	    			<tr>
-			  	    				<th>이동통신사</th>
-			  	    				<td>
-			  	    					<div class="form-check">
-			  	    						<label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="mobileType"> SKT
-										    </label>
-										    <label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="mobileType"> KTF
-										    </label>
-										    <label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="mobileType"> LG U+
-										    </label>
+					
+					<h1>FIND ID</h1>
+				</div>
+				<form id="findForm" name="findForm">
+				<input type="hidden" id="findPsnMobile" name="psnMobile"/>
+				<div class="modal-body">
+					<div class="md-tbl">
+						<table>
+							<colgroup>
+								<col width="100">
+								<col>
+							</colgroup>
+							<tbody>
+								<tr>
+									<th>이름</th>
+									<td><input type="text" name="psnName" id="findPsnName" class="w-100" placeholder=""></td>
+								</tr>
+								<tr>
+									<th>이동통신사</th>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input type="radio" class="form-check-input" name="mobileType"> SKT
+											</label>
+											<label class="form-check-label">
+												<input type="radio" class="form-check-input" name="mobileType"> KTF
+											</label>
+											<label class="form-check-label">
+												<input type="radio" class="form-check-input" name="mobileType"> LG U+
+											</label>
 										</div>
-			  	    				</td>
-			  	    			</tr>
-			  	    			<tr>
-			  	    				<th>휴대폰 번호</th>
-			  	    				<td>
+									</td>
+								</tr>
+								<tr>
+									<th>휴대폰 번호</th>
+									<td>
 										<div class="flex_start3">
 											<select id="findMobile1" class="inp">
 												<option value="">선택</option>
@@ -629,68 +207,68 @@
 										--><input type="text" id="findMobile3" class="inp" maxlength="4"/><!--
 										--><button type="button" class="btn btn_type04" id="findAuthCodeBtn">인증번호 받기</button>	
 										</div>
-			  	    				</td>
-			  	    			</tr>
-			  	    			<tr>
-			  	    				<th>인증번호</th>
-			  	    				<td>
-			  	    					<input type="text" id="findAuthCode" name="authCode" placeholder="">
-			  	    				</td>
-			  	    			</tr>
-			  	    		</tbody>
-			  	    	</table>
-			  	    </div>
-			  	    <div class="mt20"><input type="submit" name="findpass" class="login login-modal-submit" value="확인" id="findBtn"></div>
-			  	</div>
-			    </form>
+									</td>
+								</tr>
+								<tr>
+									<th>인증번호</th>
+									<td>
+										<input type="text" id="findAuthCode" name="authCode" placeholder="">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="mt20"><input type="submit" name="findpass" class="login login-modal-submit" value="확인" id="findBtn"></div>
+				</div>
+				</form>
 			</div>
 		</div>
 	</div>
 
 	<div class="modal fade" id="findpassModal" tabindex="-1" role="dialog" aria-labelledby="findpassModal" aria-hidden="true">
-        <div class="modal-dialog">
+		<div class="modal-dialog">
 			<div class="login-modal-content">
 				<div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal">&times;</button>
-	                <h1>FIND PASS</h1>
-	            </div>
-			    <form id="findPwForm" name="findPwForm">
-			    <input type="hidden" id="findPwPsnMobile" name="psnMobile"/>
-			    <div class="modal-body">
-			  	    <div class="md-tbl">
-			  	    	<table>
-			  	    		<colgroup>
-			  	    			<col width="100">
-			  	    			<col>
-			  	    		</colgroup>
-			  	    		<tbody>
-			  	    			<tr>
-			  	    				<th>이름</th>
-			  	    				<td><input type="text" id="findPwPsnName" name="psnName" placeholder="">
-			  	    			</tr>
-			  	    			<tr>
-			  	    				<th>ID</th>
-			  	    				<td><input type="text" id="findPwUserId" name="userId" placeholder=""></td>
-			  	    			</tr>
-			  	    			<tr>
-			  	    				<th>이동통신사</th>
-			  	    				<td>
-			  	    					<div class="form-check">
-			  	    						<label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="mobileType"> SKT
-										    </label>
-										    <label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="mobileType"> KT
-										    </label>
-										    <label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="mobileType"> LG U+
-										    </label>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h1>FIND PASS</h1>
+				</div>
+				<form id="findPwForm" name="findPwForm">
+				<input type="hidden" id="findPwPsnMobile" name="psnMobile"/>
+				<div class="modal-body">
+					<div class="md-tbl">
+						<table>
+							<colgroup>
+								<col width="100">
+								<col>
+							</colgroup>
+							<tbody>
+								<tr>
+									<th>이름</th>
+									<td><input type="text" id="findPwPsnName" name="psnName" placeholder="">
+								</tr>
+								<tr>
+									<th>ID</th>
+									<td><input type="text" id="findPwUserId" name="userId" placeholder=""></td>
+								</tr>
+								<tr>
+									<th>이동통신사</th>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input type="radio" class="form-check-input" name="mobileType"> SKT
+											</label>
+											<label class="form-check-label">
+												<input type="radio" class="form-check-input" name="mobileType"> KT
+											</label>
+											<label class="form-check-label">
+												<input type="radio" class="form-check-input" name="mobileType"> LG U+
+											</label>
 										</div>
-			  	    				</td>
-			  	    			</tr>
-			  	    			<tr>
-			  	    				<th>휴대폰번호</th>
-			  	    				<td>
+									</td>
+								</tr>
+								<tr>
+									<th>휴대폰번호</th>
+									<td>
 										<select id="findPwMobile1" class="inp">
 											<option value="">선택</option>
 											<option value="010">010</option>
@@ -704,29 +282,29 @@
 											<input type="text" id="findPwMobile3" class="inp type02" maxlength="4"/>
 											<button type="button" class="btn btn_type04" id="findPwAuthCodeBtn">인증번호 받기</button>	
 										</div>
-			  	</td>
-			  	    			</tr>
-			  	    			<tr>
-			  	    				<th>인증번호</th>
-			  	    				<td>
-			  	    					<input type="text" id="findPwAuthCode" name="authCode" placeholder="">
-			  	    				</td>
-			  	    			</tr>
-			  	    		</tbody>
-			  	    	</table>
-			  	    </div>
-			  	    <div class="mt20"><input type="submit" name="findpass" class="login login-modal-submit" value="확인" id="findPwBtn"></div>
-			  	</div>
-			    </form>
+									</td>
+								</tr>
+								<tr>
+									<th>인증번호</th>
+									<td>
+										<input type="text" id="findPwAuthCode" name="authCode" placeholder="">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="mt20"><input type="submit" name="findpass" class="login login-modal-submit" value="확인" id="findPwBtn"></div>
+				</div>
+				</form>
 			</div>
 		</div>
 	</div>
 
 	<div class="modal fade" id="joinModal1" tabindex="-1" role="dialog" aria-labelledby="joinModal" aria-hidden="true">
-	    <div class="join-dialog modal-dialog modal-md">
-	        <div class="modal-content step1">
-	            <div class="modal-header lftit"><h1>JOIN</h1></div>
-	            <div class="modal-body">
+		<div class="join-dialog modal-dialog modal-md">
+			<div class="modal-content step1">
+				<div class="modal-header lftit"><h1>JOIN</h1></div>
+				<div class="modal-body">
 					<div id="joinStep01" class="join-container">
 						<div class="unit">
 							<div class="unit-tit clear">
@@ -834,16 +412,16 @@
 						</div>
 
 					</div>
-	            </div>
-	            <div class="modal-footer">
-	            	<button type="submit" class="joinnextBtn default_btn w80" data-dismiss="modal">다음</button>
-	            </div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="joinnextBtn default_btn w80" data-dismiss="modal">다음</button>
+				</div>
 			</div>
-	    </div>
+		</div>
 	</div>
 
 	<div class="modal fade" id="joinModal2" tabindex="-1" role="dialog" aria-labelledby="joinModal" aria-hidden="true">
-	    <div class="join-dialog modal-dialog modal-md">
+		<div class="join-dialog modal-dialog modal-md">
 			<div class="modal-content step2">
 				<div class="modal-header lftit"><h1>JOIN</h1></div>
 				<form id="joinForm" name="joinForm">
@@ -940,13 +518,13 @@
 					</div>
 				</form>
 			</div>
-	    </div>
+		</div>
 	</div>
 
 	<div class="modal fade" id="joinModal3" tabindex="-1" role="dialog" aria-labelledby="joinModal" aria-hidden="true">
-	    <div class="join-dialog modal-dialog modal-md">
+		<div class="join-dialog modal-dialog modal-md">
 			<div class="modal-content step3">
-	            <div class="modal-body">
+				<div class="modal-body">
 					<div id="joinStep03" class="join-container">
 						<div class="joinEndText">
 							<strong>"축하합니다"</strong>
@@ -954,15 +532,15 @@
 						</div>
 
 					</div>
-	            </div>
-	            <div class="modal-footer">
-	            	<a href="/login.do" class="default_btn w80">로그인</a>
+				</div>
+				<div class="modal-footer">
+					<a href="/login.do" class="default_btn w80">로그인</a>
 				</div>
 			</div>
-	    </div>
+		</div>
 	</div>
 
-	<script>
+	<script type="text/javascript">
 			// window.__THEME_MODE = 'dark'
 			// document.getElementsByTagName('html')[0].classList['add']('darkmode');
 			// document.getElementsByTagName('html')[0].classList[window.__THEME_MODE === 'dark' ? 'add' : 'remove']('darkmode');
@@ -974,6 +552,7 @@
 				$("#joinModal1").modal("show");
 				$('input[type=checkbox]').prop('checked',false);
 			});
+
 			// Sign Up => step1
 			$(".joinnextBtn").click(function () {
 				if (!checkAgree()) {
@@ -983,21 +562,23 @@
 					$("#joinModal2").modal("show");
 				}
 			});
+
 			// Sign Up => step2
 			$(".join2nextBtn").click(function () {
 				checkJoin();
 				return false;
 			});
+
 			// FIND ID
 			$(".findidBtn").click(function(){
 				$("#loginModal").modal("hide");
 				$("#findidModal").modal("show");
 			});
+
 			// FIND PASS
 			$(".findpassBtn").click(function(){
 			});
 		});
 	</script>
-
 </body>
 </html>
