@@ -127,7 +127,6 @@
 				return false;
 			}
 		}
-		
 		function addParameterUrl(v) {
 			var f = document.loginForm;
 
