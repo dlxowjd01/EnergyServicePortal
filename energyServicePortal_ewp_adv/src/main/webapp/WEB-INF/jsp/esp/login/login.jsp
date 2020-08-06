@@ -1,32 +1,74 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
-
-
+<%@ include file="/decorators/include/layouts/top.jsp"%>
 <!DOCTYPE html>
 <html lang="en" class="darkmode">
 <head>
-	<%--
-	<%@ include file="/decorators/include/layouts/top.jsp"%>
-	--%>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
-	<c:choose>
-		<c:when test="${pageContext.request.serverName eq 'spower.iderms.ai' or pageContext.request.serverName eq '13.114.199.169' or pageContext.request.serverName eq 'localhost'}">
-			<title>S-POWER iDERMS</title>
-		</c:when>
-		<c:otherwise>
-			<title>Encored iDERMS</title>
-		</c:otherwise>
-	</c:choose>
 
-	<link rel="stylesheet" href="/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/css/custom-grid.min.css">
-	<link rel="stylesheet" href="/css/custom-login.css">
+	<link href="/css/custom-login.css" rel="stylesheet">
+	<script type="text/javascript">
+		$(function () {
+			var lan = location.search.substr(location.search.length - 2, 2);
+			if ( isEmpty(lan) ) {
+				$("#language").val("ko");
+			} else {
+				$("#language").val(lan);
+			}
 
-	<script src="/js/jquery.min.js"></script>
-	<script src="/js/bootstrap.min.js"></script>
-	<script src="/js/jquery-ui-1.12.1.min.js"></script>
+			$("#loginUserId").val("");
+			$("#loginUserPw").val("");
+
+			$("#loginBtn").prop("disabled", true);
+
+			$("#loginUserId").bind("change keypress", function(){
+				if(!isEmpty($("#loginUserPw").val())){
+					$("#loginBtn").prop("disabled", false);
+				}
+			});
+
+			$("#loginUserPw").bind("change keypress", function(){
+				if(!isEmpty($("#loginUserId").val())){
+					$("#loginBtn").prop("disabled", false);
+				}
+			});
+		});
+
+		function show_Language(v) {
+			var f = document.loginForm;
+
+			if (v === "english") {
+				f.action = "/login.do?lang=en";
+			} else {
+				f.action = "/login.do?lang=ko";
+			}
+
+			f.method = "post";
+			f.submit();
+		}
+
+		function checkLogin() {
+			var $userId = $('#loginUserId');
+			var $userPw = $('#loginUserPw');
+
+			if ( isEmpty($userId.val()) ) {
+				alert('<spring:message code="ewp.login.Singup_ID" />');
+				$userId.focus();
+				return false;
+			} else if ( isEmpty($userPw.val()) ) {
+				alert('<spring:message code="ewp.login.Singup_PW" />');
+				$userPw.focus();
+				return false;
+			} else {
+				return true;
+			}
+		}
+	</script>
+	<script type="text/javascript">
+		<c:if test="${not empty msg}">
+		alert('${msg}');
+		history.replaceState({}, null, location.pathname);
+		</c:if>
+	</script>
 </head>
 <body>
 	<div class="outer-wrapper">
@@ -42,9 +84,38 @@
 			<%@ include file="/decorators/include/selectLang.jsp" %>
 		</nav>
 		<div class="login-wrapper">
+			<nav class="clear">
+				<c:choose>
+					<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
+						<div class="nav-brand spower"><a href="#">Spower</a></div>
+					</c:when>
+					<c:otherwise>
+						<div class="nav-brand"><a href="#">Encored</a></div>
+					</c:otherwise>
+				</c:choose>
+				<%--	
+				<div class="nav_theme">
+					<div class="switcher">
+						<input type="radio" name="balance" value="light" id="light" class="switcher__input switcher__input--light" checked="" onClick="userTheme('light');">
+						<label for="light" class="switcher__label">Light</label>
+						<input type="radio" name="balance" value="dark" id="dark" class="switcher__input switcher__input--dark" onClick="userTheme('dark');">
+						<label for="dark" class="switcher__label">Dark</label>
+						<span class="switcher__toggle"></span>
+					</div>
+				</div>
+				--%>
+				<div class="lang login-lang dropdown">
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">${sessionScope.sessionLangNm }
+					<span class="caret"></span></button>
+					<ul class="dropdown-menu">
+						<li><a href="javascript:show_Language('korea');">KO</a></li>
+						<li><a href="javascript:show_Language('english');">EN</a></li>
+					</ul>
+				</div>
+			</nav>
 			<div class="login container-fluid">
 				<div class="login-form">
-					<form id="loginForm" name="loginForm" action="/loginUser.do" method="post" onsubmit="checkLogin(this);">
+					<form id="loginForm" name="loginForm" action="/loginUser.do" method="post" onsubmit="return checkLogin(this);">
 						<input type="hidden" id="language" name="language"/>
 						<div class="lf-body">
 							<c:choose>
@@ -55,9 +126,9 @@
 									<img src="../img/logo_iderms.svg" alt="login modal iderms logo" class="login-logo center"/>
 								</c:otherwise>
 							</c:choose>
-						    <div class="mt-10"><input type="text" id="loginUserId" name="login_id" class="clear-input" placeholder=<spring:message code="ewp.login.ID"/>></div>
-							<div class="mt-15"><input type="password" id="loginUserPw" name="password" class="clear-input" placeholder=<spring:message code="ewp.login.Password"/>></div>
-							<div class="mt-15"><a class="chk_type"><input type="checkbox" id="saveLogin" name="save_login"><label for="saveLogin">로그인 유지</label></a></div>
+							<div class="mt10"><input type="text" id="loginUserId" name="login_id" class="clear-input" placeholder=<spring:message code="ewp.login.ID"/>></div>
+							<div class="mt15"><input type="password" id="loginUserPw" name="password" class="clear-input" placeholder=<spring:message code="ewp.login.Password"/>></div>
+							<div class="mt15"><a class="chk_type"><input type="checkbox" id="saveLogin" name="save_login"><label for="saveLogin">로그인 유지</label></a></div>
 
 							<div class="lf-btn-wrap">
 								<%--
@@ -93,53 +164,47 @@
 			</div>
 		</div>
 	</div>
-
-
-	<%--						
-	<div class="mt30">
-		<a href="#" class="findidBtn"><spring:message code="ewp.login.Forgot_account"/></a>
-		<a href="#" class="findpassBtn ml-30"><spring:message code="ewp.login.Forgot_password"/></a>
-	</div>
-	--%>
+	
 	<div class="modal fade" id="findidModal" tabindex="-1" role="dialog" aria-labelledby="findidModal" aria-hidden="true">
-        <div class="modal-dialog modal-md">
+		<div class="modal-dialog modal-md">
 			<div class="login-modal-content modal-content">
 				<div class="modal-header">
-	                <h1>FIND ID</h1>
-	            </div>
-			    <form id="findForm" name="findForm">
-			    <input type="hidden" id="findPsnMobile" name="psnMobile"/>
-			    <div class="modal-body">
-			  	    <div class="md-tbl">
-			  	    	<table>
-			  	    		<colgroup>
-			  	    			<col width="100">
-			  	    			<col>
-			  	    		</colgroup>
-			  	    		<tbody>
-			  	    			<tr>
-			  	    				<th>이름</th>
-			  	    				<td><input type="text" name="psnName" id="findPsnName" class="w-100" placeholder=""></td>
-			  	    			</tr>
-			  	    			<tr>
-			  	    				<th>이동통신사</th>
-			  	    				<td>
-			  	    					<div class="form-check">
-			  	    						<label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="mobileType"> SKT
-										    </label>
-										    <label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="mobileType"> KTF
-										    </label>
-										    <label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="mobileType"> LG U+
-										    </label>
+					
+					<h1>FIND ID</h1>
+				</div>
+				<form id="findForm" name="findForm">
+				<input type="hidden" id="findPsnMobile" name="psnMobile"/>
+				<div class="modal-body">
+					<div class="md-tbl">
+						<table>
+							<colgroup>
+								<col width="100">
+								<col>
+							</colgroup>
+							<tbody>
+								<tr>
+									<th>이름</th>
+									<td><input type="text" name="psnName" id="findPsnName" class="w-100" placeholder=""></td>
+								</tr>
+								<tr>
+									<th>이동통신사</th>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input type="radio" class="form-check-input" name="mobileType"> SKT
+											</label>
+											<label class="form-check-label">
+												<input type="radio" class="form-check-input" name="mobileType"> KTF
+											</label>
+											<label class="form-check-label">
+												<input type="radio" class="form-check-input" name="mobileType"> LG U+
+											</label>
 										</div>
-			  	    				</td>
-			  	    			</tr>
-			  	    			<tr>
-			  	    				<th>휴대폰 번호</th>
-			  	    				<td>
+									</td>
+								</tr>
+								<tr>
+									<th>휴대폰 번호</th>
+									<td>
 										<div class="flex_start3">
 											<select id="findMobile1" class="inp">
 												<option value="">선택</option>
@@ -153,68 +218,68 @@
 										--><input type="text" id="findMobile3" class="inp" maxlength="4"/><!--
 										--><button type="button" class="btn btn_type04" id="findAuthCodeBtn">인증번호 받기</button>	
 										</div>
-			  	    				</td>
-			  	    			</tr>
-			  	    			<tr>
-			  	    				<th>인증번호</th>
-			  	    				<td>
-			  	    					<input type="text" id="findAuthCode" name="authCode" placeholder="">
-			  	    				</td>
-			  	    			</tr>
-			  	    		</tbody>
-			  	    	</table>
-			  	    </div>
-			  	    <div class="mt20"><input type="submit" name="findpass" class="login login-modal-submit" value="확인" id="findBtn"></div>
-			  	</div>
-			    </form>
+									</td>
+								</tr>
+								<tr>
+									<th>인증번호</th>
+									<td>
+										<input type="text" id="findAuthCode" name="authCode" placeholder="">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="mt20"><input type="submit" name="findpass" class="login login-modal-submit" value="확인" id="findBtn"></div>
+				</div>
+				</form>
 			</div>
 		</div>
 	</div>
 
 	<div class="modal fade" id="findpassModal" tabindex="-1" role="dialog" aria-labelledby="findpassModal" aria-hidden="true">
-        <div class="modal-dialog">
+		<div class="modal-dialog">
 			<div class="login-modal-content">
 				<div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal">&times;</button>
-	                <h1>FIND PASS</h1>
-	            </div>
-			    <form id="findPwForm" name="findPwForm">
-			    <input type="hidden" id="findPwPsnMobile" name="psnMobile"/>
-			    <div class="modal-body">
-			  	    <div class="md-tbl">
-			  	    	<table>
-			  	    		<colgroup>
-			  	    			<col width="100">
-			  	    			<col>
-			  	    		</colgroup>
-			  	    		<tbody>
-			  	    			<tr>
-			  	    				<th>이름</th>
-			  	    				<td><input type="text" id="findPwPsnName" name="psnName" placeholder="">
-			  	    			</tr>
-			  	    			<tr>
-			  	    				<th>ID</th>
-			  	    				<td><input type="text" id="findPwUserId" name="userId" placeholder=""></td>
-			  	    			</tr>
-			  	    			<tr>
-			  	    				<th>이동통신사</th>
-			  	    				<td>
-			  	    					<div class="form-check">
-			  	    						<label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="mobileType"> SKT
-										    </label>
-										    <label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="mobileType"> KT
-										    </label>
-										    <label class="form-check-label">
-										        <input type="radio" class="form-check-input" name="mobileType"> LG U+
-										    </label>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h1>FIND PASS</h1>
+				</div>
+				<form id="findPwForm" name="findPwForm">
+				<input type="hidden" id="findPwPsnMobile" name="psnMobile"/>
+				<div class="modal-body">
+					<div class="md-tbl">
+						<table>
+							<colgroup>
+								<col width="100">
+								<col>
+							</colgroup>
+							<tbody>
+								<tr>
+									<th>이름</th>
+									<td><input type="text" id="findPwPsnName" name="psnName" placeholder="">
+								</tr>
+								<tr>
+									<th>ID</th>
+									<td><input type="text" id="findPwUserId" name="userId" placeholder=""></td>
+								</tr>
+								<tr>
+									<th>이동통신사</th>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input type="radio" class="form-check-input" name="mobileType"> SKT
+											</label>
+											<label class="form-check-label">
+												<input type="radio" class="form-check-input" name="mobileType"> KT
+											</label>
+											<label class="form-check-label">
+												<input type="radio" class="form-check-input" name="mobileType"> LG U+
+											</label>
 										</div>
-			  	    				</td>
-			  	    			</tr>
-			  	    			<tr>
-			  	    				<th>휴대폰번호</th>
-			  	    				<td>
+									</td>
+								</tr>
+								<tr>
+									<th>휴대폰번호</th>
+									<td>
 										<select id="findPwMobile1" class="inp">
 											<option value="">선택</option>
 											<option value="010">010</option>
@@ -228,29 +293,29 @@
 											<input type="text" id="findPwMobile3" class="inp type02" maxlength="4"/>
 											<button type="button" class="btn btn_type04" id="findPwAuthCodeBtn">인증번호 받기</button>	
 										</div>
-			  	</td>
-			  	    			</tr>
-			  	    			<tr>
-			  	    				<th>인증번호</th>
-			  	    				<td>
-			  	    					<input type="text" id="findPwAuthCode" name="authCode" placeholder="">
-			  	    				</td>
-			  	    			</tr>
-			  	    		</tbody>
-			  	    	</table>
-			  	    </div>
-			  	    <div class="mt20"><input type="submit" name="findpass" class="login login-modal-submit" value="확인" id="findPwBtn"></div>
-			  	</div>
-			    </form>
+									</td>
+								</tr>
+								<tr>
+									<th>인증번호</th>
+									<td>
+										<input type="text" id="findPwAuthCode" name="authCode" placeholder="">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="mt20"><input type="submit" name="findpass" class="login login-modal-submit" value="확인" id="findPwBtn"></div>
+				</div>
+				</form>
 			</div>
 		</div>
 	</div>
 
 	<div class="modal fade" id="joinModal1" tabindex="-1" role="dialog" aria-labelledby="joinModal" aria-hidden="true">
-	    <div class="join-dialog modal-dialog modal-md">
-	        <div class="modal-content step1">
-	            <div class="modal-header lftit"><h1>JOIN</h1></div>
-	            <div class="modal-body">
+		<div class="join-dialog modal-dialog modal-md">
+			<div class="modal-content step1">
+				<div class="modal-header lftit"><h1>JOIN</h1></div>
+				<div class="modal-body">
 					<div id="joinStep01" class="join-container">
 						<div class="unit">
 							<div class="unit-tit clear">
@@ -358,16 +423,16 @@
 						</div>
 
 					</div>
-	            </div>
-	            <div class="modal-footer">
-	            	<button type="submit" id="joinnextBtn" class="joinnextBtn default_btn w80" data-dismiss="modal">다음</button>
-	            </div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="joinnextBtn default_btn w80" data-dismiss="modal">다음</button>
+				</div>
 			</div>
-	    </div>
+		</div>
 	</div>
 
 	<div class="modal fade" id="joinModal2" tabindex="-1" role="dialog" aria-labelledby="joinModal" aria-hidden="true">
-	    <div class="join-dialog modal-dialog modal-md">
+		<div class="join-dialog modal-dialog modal-md">
 			<div class="modal-content step2">
 				<div class="modal-header lftit"><h1>JOIN</h1></div>
 				<form id="joinForm" name="joinForm">
@@ -464,13 +529,13 @@
 					</div>
 				</form>
 			</div>
-	    </div>
+		</div>
 	</div>
 
 	<div class="modal fade" id="joinModal3" tabindex="-1" role="dialog" aria-labelledby="joinModal" aria-hidden="true">
-	    <div class="join-dialog modal-dialog modal-md">
+		<div class="join-dialog modal-dialog modal-md">
 			<div class="modal-content step3">
-	            <div class="modal-body">
+				<div class="modal-body">
 					<div id="joinStep03" class="join-container">
 						<div class="joinEndText">
 							<strong>"축하합니다"</strong>
@@ -478,40 +543,51 @@
 						</div>
 
 					</div>
-	            </div>
-	            <div class="modal-footer">
-	            	<a href="/login.do" class="default_btn w80">로그인</a>
+				</div>
+				<div class="modal-footer">
+					<a href="/login.do" class="default_btn w80">로그인</a>
 				</div>
 			</div>
-	    </div>
+		</div>
 	</div>
 
 	<script type="text/javascript">
-		$(function () {
-			var lan = location.search.substr(location.search.length - 2, 2);
-			if ( isEmpty(lan) ) {
-				$("#language").val("ko");
-			} else {
-				$("#language").val(lan);
-			}
+			// window.__THEME_MODE = 'dark'
+			// document.getElementsByTagName('html')[0].classList['add']('darkmode');
+			// document.getElementsByTagName('html')[0].classList[window.__THEME_MODE === 'dark' ? 'add' : 'remove']('darkmode');
 
-			$("#loginUserId").val("");
-			$("#loginUserPw").val("");
+		$(function(){
+			// Sign Up btn click
+			$(".joinBtn").click(function(){
+				$("#loginModal").modal("hide");
+				$("#joinModal1").modal("show");
+				$('input[type=checkbox]').prop('checked',false);
+			});
 
-			$("#loginBtn").prop("disabled", true);
-
-			$("#loginUserId").bind("change keypress", function(){
-				if(!isEmpty($("#loginUserPw").val())){
-					console.log("not empty===")
-					$("#loginBtn").prop("disabled", false);
+			// Sign Up => step1
+			$(".joinnextBtn").click(function () {
+				if (!checkAgree()) {
+					return false;
+				} else {
+					$("#joinModal1").modal("hide");
+					$("#joinModal2").modal("show");
 				}
 			});
 
-			$("#loginUserPw").bind("change keypress", function(){
-				if(!isEmpty($("#loginUserId").val())){
-					console.log("not empty===")
-					$("#loginBtn").prop("disabled", false);
-				}
+			// Sign Up => step2
+			$(".join2nextBtn").click(function () {
+				checkJoin();
+				return false;
+			});
+
+			// FIND ID
+			$(".findidBtn").click(function(){
+				$("#loginModal").modal("hide");
+				$("#findidModal").modal("show");
+			});
+
+			// FIND PASS
+			$(".findpassBtn").click(function(){
 			});
 			// // 아이디 찾기
 			// $('#findAuthCodeBtn').click(function () {
@@ -622,35 +698,5 @@
 		alert('${msg}');
 		</c:if>
 	</script>
-
-<!-- 
-	<script type="text/javascript">
-			window.onload = function() {
-				document.getElementById("joinBtn").addEventListener("click", function(){
-					document.getElementById("loginModal").modal("hide");
-					document.getElementById("joinModal1").modal("show");
-					document.getElementById('saveLogin').checked = false;
-				});
-				// Sign Up => step1
-				document.getElementById("joinnextBtn").addEventListener("click", function () {
-					if (!checkAgree()) {
-						return false;
-					} else {
-						document.getElementById("joinModal1").modal("hide");
-						document.getElementById("joinModal2").modal("show");
-					}
-				});
-				// Sign Up => step2
-				document.getElementById("join2nextBtn").addEventListener("click", function () {
-					checkJoin();
-					return false;
-				});
-				// FIND ID
-				document.getElementById("findidBtn").addEventListener("click", function(){
-					document.getElementById("loginModal").modal("hide");
-					document.getElementById("findidModal").modal("show");
-				});
-			};
-	</script> -->
 </body>
 </html>

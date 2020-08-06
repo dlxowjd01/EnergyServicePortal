@@ -529,10 +529,10 @@
 					} else {
 						tableStr = '<li data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="link bu t' + job_type + ' ' + hiddenClass + '">[' + spcName + '] ' + job_Name(job_type) + '</li>';
 					}
-					bulletStr = '<span data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="bu t' + job_type + ' ' + hiddenClass + '">[ ' + spcName + ' ] ' + job_Name(job_type) + '</span><span class="fr btn_next"></span>';
+					bulletStr = '<span data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="bu t' + job_type + '">[ ' + spcName + ' ] ' + job_Name(job_type) + '</span><span class="fr btn_next"></span>';
 					calendar.eq(Number(job_date) - 1).append(tableStr);
 					modalData.append(
-						'<li class="link alarm-item" data-id="'+v.id+'">'
+						'<li class="link alarm-item ' + hiddenClass + '" data-id="'+v.id+'">'
 						+ bulletStr
 						+ '<br>'
 						+ ''
@@ -592,14 +592,14 @@
 				if(firstStatus !=0){
 					if(item[1].length>1){
 						tStr = '<li data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + ' ' + hiddenClass + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + (item[1].length - 1) + '건</li>';
-						bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + ' ' + hiddenClass + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + (item[1].length - 1) + '건</span><span class="fr btn_next"></span>';
+						bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + (item[1].length - 1) + '건</span><span class="fr btn_next"></span>';
 					} else {
 						tStr = '<li data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + ' ' + hiddenClass + '">[' + spcName + '] ' + statusList[firstStatus].val + '</li>';
-						bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + ' ' + hiddenClass + '">[' + spcName + '] ' + statusList[firstStatus].val + '</span><span class="fr btn_next"></span>';
+						bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + '</span><span class="fr btn_next"></span>';
 					}
 					calendar.eq(Number(d) - 1).append(tStr);
 					modalData.append(
-						'<li class="alarm-item link">'
+						'<li class="alarm-item link ' + hiddenClass + '">'
 						+ bStr
 						+ '<br>'
 						+ ''
@@ -818,6 +818,26 @@
 				return $(this).val();
 			}
 		));
+
+		$('#detailInfoModal .alarm-item.link').each(function () {
+			let targetSpan = $(this).find('span.bu');
+			let clsName = targetSpan.attr('class').replace(/[^0-9]/g, '').trim();
+			let spcName = targetSpan.html().match(/\[(.*?)\]/)[1];
+			if ($.inArray(clsName, checkType) > -1) {
+				if ($('#searchName').val() == '') {
+					$(this).removeClass('hidden');
+				} else {
+					if (spcName.match($('#searchName').val())) {
+						$(this).removeClass('hidden');
+					} else {
+						$(this).addClass('hidden');
+					}
+				}
+			} else {
+				$(this).addClass('hidden');
+			}
+		});
+
 
 		$('#calendar td .bu').each(function () {
 			let clsName = $(this).attr('class').replace(/[^0-9]/g, '').trim();

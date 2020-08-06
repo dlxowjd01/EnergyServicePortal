@@ -334,7 +334,6 @@
 
 
 	const application = function (stat) {
-
 		const sites = $.makeArray($(':checkbox[name="site"]:checked').map(
 			function () {
 				return $(this).val();
@@ -371,6 +370,7 @@
 			ignore_ref = null;
 			ignore_tolerance = null;
 		}
+
 
 
 		let data = {
@@ -1110,6 +1110,7 @@
 				let total = 0;
 				$.each(standard, function (j, stnd) {
 					let timeValue = null;
+					let timeValue2 = null;
 					if (stdDate == '') {
 						stdDate = stnd.substring(0, 8);
 					} else if (standard.length == j + 1) {
@@ -1163,6 +1164,7 @@
 						let basetime = String(elk.basetime);
 						if (basetime.match(stnd)) {
 							timeValue = Number((elk.energy / 1000).toFixed(2));
+							timeValue2 = elk.energy;
 							total += timeValue;
 						}
 					});
@@ -1170,7 +1172,7 @@
 					if (timeValue == null || timeValue == '') {
 						dummy.push(0);
 					} else {
-						dummy.push(timeValue);
+						dummy.push(timeValue2);
 					}
 
 					arrDevice.push([
