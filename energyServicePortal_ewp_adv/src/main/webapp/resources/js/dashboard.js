@@ -164,13 +164,13 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		text: ''
 	},
 	xAxis: [{
-		lineColor: 'var(--color1)', /* 눈금선색 */
+		lineColor: 'var(--white87)', /* 눈금선색 */
 		tickWidth: 1,
-		tickColor: 'var(--color1)',
+		tickColor: 'var(--white87)',
 		tickInterval: 1,
-		gridLineColor: 'var(--color1)',
+		gridLineColor: 'var(--white87)',
 		plotLines: [{
-			color: 'var(--color1)',
+			color: 'var(--white87)',
 			width: 1
 		}],
 		type: 'datetime', // 08.20 이우람 추가
@@ -188,7 +188,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			align: 'center',
 			y: 27, /* 그래프와 거리 */
 			style: {
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				fontSize: '12px'
 			}
 		},
@@ -200,12 +200,12 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		crosshair: true
 	}],
 	yAxis: [{ // Primary yAxis
-		lineColor: 'var(--color1)', /* 눈금선색 */
-		tickColor: 'var(--color1)',
-		gridLineColor: 'var(--color1)',
+		lineColor: 'var(--white87)', /* 눈금선색 */
+		tickColor: 'var(--white87)',
+		gridLineColor: 'var(--white87)',
 		gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 		plotLines: [{
-			color: 'var(--color1)',
+			color: 'var(--white87)',
 			width: 1
 		}],
 		title: {
@@ -215,7 +215,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			y: 25, /* 타이틀 위치 조정 */
 			x: 15,
 			style: {
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				fontSize: '12px'
 			}
 		},
@@ -228,7 +228,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 				}
 			},
 			style: {
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				fontSize: '12px'
 			}
 		}
@@ -241,7 +241,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			y: 25, /* 타이틀 위치 조정 */
 			x: -12,
 			style: {
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				fontSize: '12px'
 			}
 		},
@@ -254,7 +254,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 				}
 			},
 			style: {
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				fontSize: '12px'
 			}
 		},
@@ -272,7 +272,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		backgroundColor: 'var(--bg-color)',
 		padding: 16,
 		style: {
-			color: 'var(--color3)'
+			color: 'var(--white)'
 		}
 	},
 	/* 범례 */
@@ -283,7 +283,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		x: 5,
 		y: -15,
 		itemStyle: {
-			color: 'var(--color4)',
+			color: 'var(--white60)',
 			fontSize: '12px',
 			fontWeight: 400
 		},
@@ -337,7 +337,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	}, {
 		name: '정산금',
 		type: 'spline',
-		color: 'var(--color1)',
+		color: 'var(--white87)',
 		dashStyle: 'ShortDash',
 		yAxis: 1,
 		tooltip: {
@@ -565,9 +565,9 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		text: ''
 	},
 	xAxis: [{
-		// lineColor: 'var(--color4)',
+		// lineColor: 'var(--white60)',
 		tickWidth: 1,
-		tickColor: 'var(--color4)',
+		tickColor: 'var(--white60)',
 		plotLines: [{
 			color: 'red',
 			width: 1
@@ -587,12 +587,12 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			align: 'center',
 			y: 27, /* 그래프와 거리 */
 			style: {
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				fontSize: '12px'
 			}
 		},
 		tickWidth: 1,
-		tickColor: 'var(--color1)',
+		tickColor: 'var(--white87)',
 		tickInterval: 1,
 		title: {
 			text: null
@@ -601,12 +601,12 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		crosshair: true
 	}],
 	yAxis: [{ // Primary yAxis
-		lineColor: 'var(--color1)', /* 눈금선색 */
-		tickColor: 'var(--color1)',
-		gridLineColor: 'var(--color1)',
+		lineColor: 'var(--white87)', /* 눈금선색 */
+		tickColor: 'var(--white87)',
+		gridLineColor: 'var(--white87)',
 		gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 		plotLines: [{
-			color: 'var(--color1)',
+			color: 'var(--white87)',
 			width: 1
 		}],
 		title: {
@@ -616,7 +616,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			y: 25, /* 타이틀 위치 조정 */
 			x: 15,
 			style: {
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				fontSize: '12px'
 			}
 		},
@@ -629,7 +629,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 				}
 			},
 			style: {
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				fontSize: '12px'
 			}
 		}
@@ -642,7 +642,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			y: 25, /* 타이틀 위치 조정 */
 			x: -12,
 			style: {
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				fontSize: '12px'
 			}
 		},
@@ -655,7 +655,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 				}
 			},
 			style: {
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				fontSize: '12px'
 			}
 		},
@@ -673,7 +673,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		backgroundColor: 'var(--bg-color)',
 		padding: 16,
 		style: {
-			color: 'var(--color3)'
+			color: 'var(--white)'
 		}
 	},
 	/* 범례 */
@@ -684,7 +684,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		x: 5,
 		y: -15,
 		itemStyle: {
-			color: 'var(--color4)',
+			color: 'var(--white60)',
 			fontSize: '12px',
 			fontWeight: 400
 		},
@@ -704,7 +704,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			events: {
 				legendItemClick: function () {
 					var visibility = this.visible ? 'visible' : 'hidden';
-					this.legendItem.styles.color == 'var(--color4)'
+					this.legendItem.styles.color == 'var(--white60)'
 					// var visibility = this.visible ? 'visible' : 'hidden';
 
 				}
@@ -746,7 +746,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 	}, {
 		name: '정산금',
 		type: 'spline',
-		color: 'var(--color1)',
+		color: 'var(--white87)',
 		dashStyle: 'ShortDash',
 		yAxis: 1,
 		tooltip: {
@@ -943,7 +943,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			align: 'left',
 			reserveSpace: true,
 			style: {
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				fontSize: '12px'
 			}
 		},
@@ -965,7 +965,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		title: {
 			text: '',
 			style: {
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				fontSize: '12px'
 			}
 		},
@@ -973,7 +973,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			overflow: 'justify',
 			x: -10, /* 그래프와의 거리 조정 */
 			style: {
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				fontSize: '12px'
 			}
 		}
@@ -985,7 +985,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		x: 5,
 		y: -10,
 		itemStyle: {
-			color: 'var(--color4)',
+			color: 'var(--white60)',
 			fontSize: '12px',
 			fontWeight: 400
 		},
@@ -1007,7 +1007,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		backgroundColor: 'var(--bg-color)',
 		padding: 16,
 		style: {
-			color: 'var(--color3)'
+			color: 'var(--white)'
 		}
 	},
 	plotOptions: {
@@ -1024,7 +1024,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 				// inside: true, /* 막대 안으로 라벨 수치 넣기 */
 				format: '{y} kWh', /* 단위 넣기 */
 				style: {
-					color: 'var(--color3)',
+					color: 'var(--white)',
 					fontSize: '12px',
 					fontWeight: 400,
 					textOutline: 0,
@@ -1349,7 +1349,7 @@ var pieChart = Highcharts.chart('pie_chart', {
 		x: 0,
 		style: {
 			fontSize: '14px',
-			color: 'var(--color4)'
+			color: 'var(--white60)'
 		}
 	},
 	subtitle: {
@@ -1364,7 +1364,7 @@ var pieChart = Highcharts.chart('pie_chart', {
 		backgroundColor: 'var(--bg-color)',
 		padding: 16,
 		style: {
-			color: 'var(--color3)'
+			color: 'var(--white)'
 		},
 		valueSuffix: ' kwh',
 		pointFormat: '<b>{point.percentage:.0f}%</b>'
@@ -1375,7 +1375,7 @@ var pieChart = Highcharts.chart('pie_chart', {
 				enabled: false,
 				style: {
 					fontWeight: 'bold',
-					color: 'var(--color3)'
+					color: 'var(--white)'
 				}
 			},
 			center: ['40%', '50%'],
@@ -1834,7 +1834,7 @@ const siteListChart = function (selector, seriesData, title) {
 			// y: 200,
 			style: {
 				fontSize: '14px',
-				color: 'var(--color4)'
+				color: 'var(--white60)'
 			}
 		},
 		subtitle: {
@@ -1853,7 +1853,7 @@ const siteListChart = function (selector, seriesData, title) {
 					enabled: false,
 					style: {
 						fontWeight: 'bold',
-						color: 'var(--color3)'
+						color: 'var(--white)'
 					}
 				},
 				startAngle: -90,

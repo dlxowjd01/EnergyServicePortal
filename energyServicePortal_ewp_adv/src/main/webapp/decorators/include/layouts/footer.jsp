@@ -1,11 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <footer class="clear">
-	<%--				<div class="ft_menu fl">--%>
-	<%--					<a href="#;" class="serviceBtn"><spring:message code="ewp.bot.Services"/></a>--%>
-	<%--					<a href="/board/faq.do"><spring:message code="ewp.bot.FAQ"/></a>--%>
-	<%--					<a href="/board/refer.do">자료실</a>--%>
-	<%--				</div>--%>
 	<div class="copyright fr ml-20">
 		COPYRIGHT &copy; 2020 2020 Encored Technologies, Inc. All rights reserved.
 	</div>
@@ -88,6 +83,3 @@
 		});
 	});
 </script>
-<!-- //서비스 소개 -->
-
-<%-- <%@ include file="/decorators/include/popup/totalBillPopup.jsp"%> --%><!-- 필요 시 주석 해제하여 사용 2020.03.17 -->

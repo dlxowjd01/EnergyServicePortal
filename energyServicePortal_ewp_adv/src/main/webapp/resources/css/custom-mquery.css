@@ -368,14 +368,7 @@
 
 	.g_menu>ul>li>a,
 	.g_menu>ol>li>a {
-		color: var(--color2);
-		padding-left: 60px;
-	}
-
-	.g_menu>ul>li ul li a:before {
-		display: inline-block;
-		content: "";
-		margin: auto 0 28px auto;
+		padding-left: 0;
 	}
 
 	nav {
@@ -497,7 +490,7 @@
 		margin-top: 30px;
 	}
 
-	#sidebar {
+	.side-nav {
 		display: none;
 	}
 

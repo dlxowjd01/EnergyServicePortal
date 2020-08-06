@@ -3,48 +3,6 @@
 <c:set var="oid" value="${userInfo.oid}"/> <%-- 메뉴 관리용 OID --%>
 <c:set var="task" value="${userInfo.task}"/> <%-- 메뉴 관리용 Task --%>
 <script type="text/javascript">
-	function gMainSelectSite(siteId) {
-		$('#smainNavLink').attr('href', '/main/siteMain.do?siteId=' + siteId);
-		$('#energyNavLink').attr('href', '/energy/usage.do?siteId=' + siteId);
-		$('#usageNavLink').attr('href', '/energy/usage.do?siteId=' + siteId);
-		$('#peakNavLink').attr('href', '/energy/peak.do?siteId=' + siteId);
-		$('#essNavLink').attr('href', '/energy/essCharge.do?siteId=' + siteId);
-		$('#pvNavLink').attr('href', '/energy/pvGen.do?siteId=' + siteId);
-		$('#drResultNavLink').attr('href', '/energy/drResult.do?siteId=' + siteId);
-		$('#derNavLink').attr('href', '/energy/derUsage.do?siteId=' + siteId);
-		$('#deviceNavLink').attr('href', '/device/deviceMonitoring.do?deviceGbn=IOE&siteId=' + siteId);
-		$('#IOENavLink').attr('href', '/device/deviceMonitoring.do?deviceGbn=IOE&siteId=' + siteId);
-		$('#PCSNavLink').attr('href', '/device/deviceMonitoring.do?deviceGbn=IOE&siteId=' + siteId);
-		$('#BMSNavLink').attr('href', '/device/deviceMonitoring.do?deviceGbn=IOE&siteId=' + siteId);
-		$('#PVNavLink').attr('href', '/device/deviceMonitoring.do?deviceGbn=IOE&siteId=' + siteId);
-		$('#DVgrpNavLink').attr('href', '/device/deviceGroup.do?siteId=' + siteId);
-		$('#alarmNavLink').attr('href', '/alarm/alarmMng.do?siteId=' + siteId);
-		$('#billNavLink').attr('href', '/billRevenue/kepcoBill.do?siteId=' + siteId);
-		$('#kepcoNavLink').attr('href', '/billRevenue/kepcoBill.do?siteId=' + siteId);
-		$('#essBillNavLink').attr('href', '/billRevenue/essRevenue.do?siteId=' + siteId);
-		$('#drBillNavLink').attr('href', '/billRevenue/drRevenue.do?siteId=' + siteId);
-		$('#pvBillNavLink').attr('href', '/billRevenue/pvRevenue.do?siteId=' + siteId);
-		$('#totalBillNavLink').attr('href', 'javascript:totalBill(' + siteId + ');');
-		$('#kepcoMngNavLink').attr('href', '/system/kepcoMng.do?siteId=' + siteId);
-		$('#gmainAlarmLink').attr('onclick', "location.href='/alarm/alarmMng.do?siteId=" + siteId + "'");
-	}
-
-	function navAddClass(linkGbn) {
-		// listItem.removeClass("on");
-		switch (linkGbn) {
-			case "siteMain": sideBar.find(".smn1").addClass("on"); break;
-			case "energy": sideBar.find(".smn2").addClass("on"); break;
-			case "device": $(".smn3").addClass("on"); break;
-			case "alarm": $(".smn4").addClass("on"); break;
-			case "billRevenue": $(".smn5").addClass("on"); break;
-			case "setting": $(".smn7").addClass("on"); break;
-			case "main": $(".smn0").addClass("on"); break;
-			case "commonCode": $(".smn9").addClass("on"); break;
-			case "notice": $(".smn10").addClass("on"); break;
-		}
-		// upperMenu.first().addClass("active");
-	}
-
 	function pleaseSelectSite() {
 		alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');
 	}
@@ -84,51 +42,10 @@
 		});
 
 		$('#sidebar:after').css('display', 'none') ? menuItemLink.removeClass('on') : null;
-		// document.addEventListener('readystatechange', function(){
-		//   console.log("ready state changed====")
-		// });
-		// if(typeof(Storage) !== 'undefined') {
-		//   const origin = document.location.origin;
-		//   const pathname = document.location.pathname;
-
-		//   // Check if it changes here
-		//   const storageOrigin = localStorage.getItem('origin');
-		//   const storagePathname = localStorage.getItem('pathname');
-
-		// upperMenu.each(function(e){
-		//   if($(this).children('a[href="' + path + '"]')){
-		//     console.log('found match====', $(this).children("a"))
-		//   }
-		// })
-		// Check if storageOrigin and storagePathname are not null or undefined.
-		// if (storageOrigin && storagePathname) {
-		//   if (storageOrigin !== origin || storagePathname !== pathname) {
-		//     console.log("storageOrigin !== origin")
-		//     subMenuLink.each(function(e){
-		//       if( $(this).attr("href") === path ){
-		//         // console.log("found the match");
-		//         $(this).parents(".menu-item").addClass("active").siblings().removeClass("active");
-		//       }
-		//     });
-		//   } else {
-		//     console.log("storageOrigin === origin")
-		//     if(path.includes("dashboard")){
-		//       upperMenu.first().css("border", "solid 1px red").addClass("active");
-		//     }
-		//   }
-		// }
-		// console.log("setItem origin=====")
-		//   localStorage.setItem('origin', origin);
-		//   localStorage.setItem('pathname', pathname);
-		// } else {
-		//   console.log('storage origin and path name are null')
-		// }
-		// (function(){
-		// })();
 	});
 </script>
 
-<div id="sidebar">
+<div id="sidebar" class="side-nav">
 	<c:if test="${not empty userInfo}">
 	<ul>
 		<li class="smn1 menu-item">
@@ -181,7 +98,7 @@
 		</c:if>
 
 		<c:if test="${oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx'}">
-		<li class="smn7 menu-item">
+		<li class="smn6 menu-item">
 			<a href="javascript:void(0);">보고서</a>
 			<div class="sub_layer">
 				<ul>
@@ -193,7 +110,7 @@
 		</c:if>
 
 		<c:if test="${(oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx') or (oid eq 'trust' and task ne 3) or (oid eq 'sundream' and task ne 3)}">
-		<li class="smn9 menu-item">
+		<li class="smn7 menu-item">
 			<a href="javascript:void(0);">SPC관리</a>
 			<div class="sub_layer">
 				<ul>
@@ -209,24 +126,19 @@
 		</c:if>
 
 		<c:if test="${oid eq 'encored'}">
-		<li class="smn6 menu-item">
+		<li class="smn8 menu-item">
 			<a href="javascript:void(0);">설정</a>
 			<div class="sub_layer">
 				<ul>
 					<li><a href="/system/siteSetting.do">사업소 관리</a></li>
-					<!-- <li><a href="/system/basicInformation.do">기본정보</a></li>
-					<li><a href="/system/userMng.do">사용자관리</a></li>
-					<li><a href="/system/alarmManagement.do">알람관리</a></li>
-					<li><a href="/system/systemCode.do">공통코드</a></li>
-					<li><a href="/system/systemSetting.do">시스템설정</a></li> -->
 				</ul>
 			</div>
 		</li>
 		</c:if>
 	</ul>
 	<ol>
-		<li class="smn10"><a href="/spc/notice.do">공지사항</a></li>
-		<li class="smn8"><a href="/logout.do">로그아웃</a></li>
+		<li class="smn9"><a href="/spc/notice.do">공지사항</a></li>
+		<li class="smn10"><a href="/logout.do">로그아웃</a></li>
 	</ol>
 	</c:if>
 </div>
@@ -285,9 +197,6 @@
 				<a href="javascript:void(0);">자원분석</a>
 				<ul>
 					<li><a href="/energy/pvGen.do">발전이력</a></li>
-					<%--<li><a href="/energy/essCharge.do">피크저감 ESS</a></li>--%>
-					<!-- <li><a href="/energy/sub01.html">수요</a></li> -->
-					<%--<li><a href="/energy/drResult.do">수요자원<!-- DR --></a></li>--%>
 				</ul>
 			</li>
 			<c:if test="${oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx'}">
@@ -299,14 +208,6 @@
 				</ul>
 			</li>
 			</c:if>
-			<!--<li class="gmn8">
-        <a href="javascript:void(0);">BOM관리</a>
-        <ul>
-          <li><a href="/bom/faultHistory.do">고장이력</a></li>
-            <li><a href="/bom/replacement.do">변경이력</a></li>
-            <li><a href="/bom/partManagement.do">부품관리</a></li>
-        </ul>
-      </li>-->
 			<c:if test="${oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx'}">
 			<li class="gmn7">
 				<a href="javascript:void(0);">보고서</a>
@@ -334,11 +235,6 @@
 				<a href="javascript:void(0);">설정</a>
 				<ul>
 					<!-- <li><a href="/system/siteSetting.do">사이트 관리</a></li> -->
-					<!-- <li><a href="/system/basicInformation.do">기본정보</a></li>
-					<li><a href="/system/userMng.do">사용자관리</a></li>
-					<li><a href="/system/alarmManagement.do">알람관리</a></li>
-					<li><a href="/system/systemCode.do">공통코드</a></li>
-					<li><a href="/system/systemSetting.do">시스템설정</a></li> -->
 				</ul>
 			</li>
 			</c:if>
