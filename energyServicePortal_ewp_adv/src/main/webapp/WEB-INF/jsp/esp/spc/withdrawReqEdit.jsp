@@ -217,11 +217,15 @@
 									// comparison 1. 은행 이름
 									const x = acc.find(item => item.accNum === current.accNum);
 									// comparison 2.입금 || 출금 계좌
-									const y = acc.find(item => item.accType === current.accType);
+									const y = acc.find(item => (item.accNum === current.accNum && item.accType === current.accType));
 									if (!x) {
 										return acc.concat([current]);
 									} else {
-										return acc;
+										if (!y) {
+											return acc.concat([current]);
+										} else {
+											return acc;
+										}
 									}
 								}, []).map((v, i) => {
 									let sending = '';

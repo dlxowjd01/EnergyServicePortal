@@ -320,9 +320,7 @@
 								<input name="work_report_file_02" type="file" class="hidden" id="work_report_file_02" accept="image/*" multiple>
 								<label for="work_report_file_02" class="btn file_upload">파일 선택</label>
 								<div class="file_list ml-16">
-									<ul>
-										<li class="upload_text"></li>
-									</ul>
+									<ul></ul>
 								</div>
 							</td>
 						</tr>
