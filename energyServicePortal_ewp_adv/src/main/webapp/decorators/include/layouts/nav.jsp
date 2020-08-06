@@ -17,6 +17,9 @@
 			subMenuLink = subMenu.find("a"),
 			path = $(location).attr("pathname");
 
+		const mobileMenu = $(".g_menu > ul > li");
+
+
 		subMenuLink.each(function (e) {
 			if ($(this).attr("href") === path) {
 				$(this).parents(".menu-item").addClass("active").siblings().removeClass("active");
@@ -35,6 +38,10 @@
 
 		upperMenuLink.click(function (e) {
 			$(this).parent("li").toggleClass('on');
+		});
+
+		mobileMenu.click(function (e) {
+			$(this).toggleClass('on');
 		});
 
 		sideBar.mouseleave(function () {
@@ -159,7 +166,7 @@
 		<a href="javascript:void(0);" class="category_close"><img src="/img/gnb_close.png" width="17" alt="닫기"></a>
 	</div>
 	
-	<div class="g_menu w100">
+	<div class="g_menu">
 		<ul>
 			<li class="gmn1">
 				<a href="javascript:void(0);">대시보드</a>
@@ -209,7 +216,7 @@
 			</li>
 			</c:if>
 			<c:if test="${oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx'}">
-			<li class="gmn7">
+			<li class="gmn6">
 				<a href="javascript:void(0);">보고서</a>
 				<ul>
 					<li><a href="/report/yieldReport.do">수익보고서</a></li>
@@ -219,7 +226,7 @@
 			</c:if>
 
 			<c:if test="${(oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx') or (oid eq 'trust' and task ne 3) or (oid eq 'sundream' and task ne 3)}">
-			<li class="gmn9">
+			<li class="gmn7">
 				<a href="javascript:void(0);">SPC관리</a>
 				<ul>
 					<li><a href="/spc/entityInformation.do">기본정보</a></li>
@@ -231,7 +238,7 @@
 			</li>
 			</c:if>
 			<c:if test="${oid eq 'encored'}">
-			<li class="gmn6 hidden">
+			<li class="gmn8 hidden">
 				<a href="javascript:void(0);">설정</a>
 				<ul>
 					<!-- <li><a href="/system/siteSetting.do">사이트 관리</a></li> -->
@@ -240,8 +247,8 @@
 			</c:if>
 		</ul>
 		<ol>
-			<li class="gmn10"><a href="/spc/notice.do">공지사항</a></li>
-			<li class="gmn8"><a href="/logout.do">로그아웃</a></li>
+			<li class="gmn9"><a href="/spc/notice.do">공지사항</a></li>
+			<li class="gmn10"><a href="/logout.do">로그아웃</a></li>
 		</ol>
 	</div>
 </div>

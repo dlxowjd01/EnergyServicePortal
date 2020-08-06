@@ -111,17 +111,16 @@
 			<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
 				changeFavicon('/img/logo-only.ico');
 			</c:if>
-
-			<%--sessionUser = JSON.stringify(${userInfo});--%>
-			// getUserInfo(setSession);
-			// var authType = sessionUser.auth_type;
-			// if (authType == '1') {
-			// 	sessionRefresh();
-			// 	setInterval(function () {
-			// 		sessionRefresh();
-			// 	}, 1000 * 60 * 50); // 1000 = 1초, 1000*60 = 1분
-			// }
+			
 			$('.loading').hide();
+			$( window ).resize(function() {
+				if ($(window).width() > 768) {
+					$('#mask').hide();
+					$('body').removeClass("sidenav-no-scroll");
+					$('#gnb').hide();
+				}
+			});
+
 		});
 
 		const changeFavicon = link => {
