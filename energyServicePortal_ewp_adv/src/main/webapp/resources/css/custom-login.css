@@ -57,8 +57,9 @@ body {
 	left: 0;
 	width: 100%;
 	min-height: 100%;
-	height: auto;
+	height: 100%;
 	background: none !important;
+	overflow: hidden;
 }
 
 
@@ -69,6 +70,10 @@ nav {
     height: 64px;
     background-color: var(--box-default);
     z-index: 5;
+}
+
+nav .nav-brand {
+	display: none !important;
 }
 
 input:-webkit-autofill,
@@ -121,16 +126,15 @@ button:active {
 	border: 0;
 }
 
+.clear-btn {
+	color: var(--white87);
+	background: none;
+	border: none;
+	outline: none;
+}
+
 .mb-10 {
 	margin-bottom: 10px;
-}
-
-.mt-10 {
-	margin-top: 10px;
-}
-
-.mt-15 {
-	margin-top: 15px;
 }
 
 .center {
@@ -216,11 +220,6 @@ button:active {
 	padding: 8px 5px 5px;
 }
 
-.clear-input {
-	background: none;
-	border: none;
-}
-
 .chk_type input[type="checkbox"] {
 	display: none;
 	opacity: 0;
@@ -252,12 +251,7 @@ button:active {
 	border-radius: 2px;
 }
 
-.login-wrapper {
-	width: 100%; 
-	height: 100%;
-}
-
-.login-wrapper .login {
+.login {
 	position: absolute; 
 	top: 0; 
 	left: 0; 
@@ -268,10 +262,6 @@ button:active {
 	min-height: 100%;
 	background: linear-gradient(119deg, #0c0c0c, #363636);
 	overflow: auto;
-}
-
-nav .nav-brand {
-	display: none !important;
 }
 
 .login-form {
@@ -297,14 +287,33 @@ nav .nav-brand {
 	display: block;
 }
 
-.inner-wrapper .clear-input {
-	border: 0;
-	outline: 0;
+.input-field {
+	margin-top: 15px;
 	border-bottom: 1px solid var(--white40);
+}
+
+.input-field:first-of-type {
+	margin-top: 10px;
+}
+
+.input-field.no-border {
+	border: none;
+}
+
+.clear-input {
 	width: 100%;
 	height: 50px;
 	line-height: 50px;
+	background: none;
+	border: none;
+	outline: 0;
 	color: var(--white60);
+}
+
+.input-field:nth-of-type(2) {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .btn-wrapper {
@@ -390,15 +399,7 @@ nav .nav-brand {
 		top: 14px;
 	}
 
-	.login-wrapper .login {
-		padding: 0 10px;
-	}
-
-	.login-wrapper .login .login-form {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
+	.login-form {
 		width: 80%;
 	}
 }

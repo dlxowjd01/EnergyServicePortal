@@ -138,6 +138,10 @@
 			<div class="sub_layer">
 				<ul>
 					<li><a href="/system/siteSetting.do">사업소 관리</a></li>
+					<li><a href="/system/groupSetting.do">그룹 관리</a></li>
+					<li><a href="/system/userSetting.do">사용자 관리</a></li>
+					<li><a href="/system/comCodeSetting.do">공통 코드 관리</a></li>
+					<li><a href="/system/batchSetting.do">배치 관리</a></li>
 				</ul>
 			</div>
 		</li>
@@ -150,7 +154,6 @@
 	</c:if>
 </div>
 
-<!-- 모바일용 카테고리 -->
 <div id="gnb" class="mobile-nav">
 	<div class="logo-wrapper">
 		<h1 class="mobile-logo">
@@ -241,7 +244,11 @@
 			<li class="gmn8 hidden">
 				<a href="javascript:void(0);">설정</a>
 				<ul>
-					<!-- <li><a href="/system/siteSetting.do">사이트 관리</a></li> -->
+					<li><a href="/system/siteSetting.do">사업소 관리</a></li>
+					<li><a href="/system/groupSetting.do">그룹 관리</a></li>
+					<li><a href="/system/userSetting.do">사용자 관리</a></li>
+					<li><a href="/system/comCodeSetting.do">공통 코드 관리</a></li>
+					<li><a href="/system/batchSetting.do">배치 관리</a></li>
 				</ul>
 			</li>
 			</c:if>

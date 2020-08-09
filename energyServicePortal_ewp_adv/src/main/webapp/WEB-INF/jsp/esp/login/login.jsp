@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
 
-
 <!DOCTYPE html>
 <html lang="en" class="darkmode">
 <head>
@@ -26,7 +25,7 @@
 	<script src="/js/jquery-ui-1.12.1.min.js"></script>
 </head>
 <body>
-	<div class="outer-wrapper">
+	<div class="container-fluid login">
 		<nav class="clear">
 			<c:choose>
 				<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
@@ -38,53 +37,47 @@
 			</c:choose>
 			<%@ include file="/decorators/include/selectLang.jsp" %>
 		</nav>
-		<div class="login-wrapper">
-			<div class="login container-fluid">
-				<div class="login-form">
-					<form id="loginForm" name="loginForm" action="/loginUser.do" method="post" onsubmit="checkLogin(this);">
-						<input type="hidden" id="language" name="language"/>
-						<div class="inner-wrapper">
-							<c:choose>
-								<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
-									<img src="../img/logo_login_spower.svg" alt="login modal spower logo" class="login-logo center"/>
-								</c:when>
-								<c:otherwise>
-									<img src="../img/logo_iderms.svg" alt="login modal iderms logo" class="login-logo center"/>
-								</c:otherwise>
-							</c:choose>
-						    <div class="mt-10"><input type="text" id="loginUserId" name="login_id" class="clear-input" placeholder=<spring:message code="ewp.login.ID"/>></div>
-							<div class="mt-15"><input type="password" id="loginUserPw" name="password" class="clear-input" placeholder=<spring:message code="ewp.login.Password"/>></div>
-							<div class="mt-15"><a class="chk_type"><input type="checkbox" id="saveLogin" name="save_login"><label for="saveLogin">로그인 유지</label></a></div>
+		<form action="/loginUser.do" method="post" name="loginForm" id="loginForm" class="login-form" onsubmit="checkLogin();">
+			<input type="hidden" id="language" name="language"/>
+			<div class="inner-wrapper">
+				<c:choose>
+					<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
+						<img src="../img/logo_login_spower.svg" alt="login modal spower logo" class="login-logo center"/>
+					</c:when>
+					<c:otherwise>
+						<img src="../img/logo_iderms.svg" alt="login modal iderms logo" class="login-logo center"/>
+					</c:otherwise>
+				</c:choose>
+				<div class="input-field"><input type="text" id="loginUserId" name="login_id" class="clear-input" placeholder=<spring:message code="ewp.login.ID"/>></div>
+				<div class="input-field"><input type="password" id="loginUserPw" name="password" class="clear-input" placeholder=<spring:message code="ewp.login.Password"/>><button type="button" class="clear-btn" onclick="showPwd()">show</button></div>
+				<div class="input-field no-border"><a class="chk_type"><input type="checkbox" id="saveLogin" name="save_login"><label for="saveLogin">로그인 유지</label></a></div>
 
-							<div class="btn-wrapper">
-								<input type="submit" id="loginBtn" name="login" value="<spring:message code="ewp.login.Signin" />">
-								<p class="center">회원 가입 및 회원 정보 문의<strong class="bold">070-4949-5500</strong></p>
-							</div>
+				<div class="btn-wrapper">
+					<input type="submit" id="loginBtn" name="login" value="<spring:message code="ewp.login.Signin" />">
+					<p class="center">회원 가입 및 회원 정보 문의<strong class="bold">070-4949-5500</strong></p>
+				</div>
 
-							<div class="desc">
-								<div class="row center">
-									<div class="col-6">
-										<h3 class="mb-10">카카오톡 문의</h3>
-										<a href="http://pf.kakao.com/_YDihK" target="_blank"><strong class="link-bold">아이덤스</strong> 채널&amp;친구 추가</a>
-									</div>
-									<div class="col-6 divider">
-										<h3 class="mb-10">데모 요청 이메일</h3>
-										<a href="javascript:void(0)" class="link-bold">esolution@encoredtech.com</a>
-										<!-- <a href="#" target="_blank" class="link-bold">esolution@encoredtech.com</a> -->
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-12">
-										<p class="center copy-right">COPYRIGHT © 2019-2020 Encored Technologies, Inc. All rights reserved.</p>
-									</div>
-								</div>
-							</div>
+				<div class="desc">
+					<div class="row center">
+						<div class="col-6">
+							<h3 class="mb-10">카카오톡 문의</h3>
+							<a href="http://pf.kakao.com/_YDihK" target="_blank"><strong class="link-bold">아이덤스</strong> 채널&amp;친구 추가</a>
 						</div>
-					
-					</form>
+						<div class="col-6 divider">
+							<h3 class="mb-10">데모 요청 이메일</h3>
+							<a href="javascript:void(0)" class="link-bold">esolution@encoredtech.com</a>
+							<!-- <a href="#" target="_blank" class="link-bold">esolution@encoredtech.com</a> -->
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<p class="center copy-right">COPYRIGHT © 2019-2020 Encored Technologies, Inc. All rights reserved.</p>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
+		
+		</form>
 	</div>
 
 	<c:if test="${not empty msg}">
@@ -107,14 +100,12 @@
 
 			$("#loginUserId").bind("change keypress", function(){
 				if(!isEmpty($("#loginUserPw").val())){
-					console.log("not empty===")
 					$("#loginBtn").prop("disabled", false);
 				}
 			});
 
 			$("#loginUserPw").bind("change keypress", function(){
 				if(!isEmpty($("#loginUserId").val())){
-					console.log("not empty===")
 					$("#loginBtn").prop("disabled", false);
 				}
 			});
@@ -127,6 +118,7 @@
 				return false;
 			}
 		}
+
 		function addParameterUrl(v) {
 			var f = document.loginForm;
 
@@ -144,7 +136,7 @@
 			let id = document.getElementById('loginUserId');
 			let pwd = document.getElementById('loginUserPw');
 
-			if ( isEmpty(id.value) ) {
+			if (isEmpty(id.value) ) {
 				alert('<spring:message code="ewp.login.Singup_ID" />');
 				id.focus();
 				return false;
@@ -156,6 +148,15 @@
 			}
 
 			return true;
+		}
+
+		function showPwd() {
+			var x = document.getElementById("loginUserPw");
+			if (x.type === "password") {
+				x.type = "text";
+			} else {
+				x.type = "password";
+			}
 		}
 	</script>
 </body>

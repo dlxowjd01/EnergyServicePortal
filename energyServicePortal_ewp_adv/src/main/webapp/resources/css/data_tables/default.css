@@ -37,7 +37,7 @@ table.dataTable thead td {
     height: 48px;
     line-height: 48px;
     padding: 0 10px;
-    background: var(--box-color5);
+    background: var(--white15);
 }
 
 table.dataTable thead th:active,
@@ -48,7 +48,7 @@ table.dataTable thead td:active {
 table.dataTable tfoot th,
 table.dataTable tfoot td {
     padding: 10px 18px 6px 18px;
-    border-top: 1px solid var(--color9);
+    border-top: 1px solid var(--white40);
 }
 
 table.dataTable thead .sorting:not(.no-sorting) {
@@ -114,18 +114,18 @@ table.dataTable.stripe tbody td.selected {
 }
 
 table.dataTable.stripe tbody tr.even td {
-    background: var(--box-color5);
+    background: var(--box-darker);
     font-weight: normal;
 }
 
 table.dataTable.stripe tbody tr.selected td,
 table.dataTable.stripe tbody td.selected {
-    color: var(--color3);
+    color: var(--white);
 }
 
 table.dataTable.stripe tbody td,
 table.dataTable.display tbody td {
-    color: var(--color4);
+    color: var(--white60);
 }
 
 table.dataTable.nowrap th,
@@ -253,14 +253,14 @@ table.dataTable td {
 }
 
 .dataTables_wrapper label {
-    color: var(--title-text);
+    color: var(--white60);
 }
 
 .dataTables_wrapper select {
     margin: 0 10px 20px 0;
     padding: 5px 10px;
     height: 36px;
-    border: 1px solid var(--color2);
+    border: 1px solid var(--white87);
 }
 
 .dataTables_wrapper select option {
@@ -287,11 +287,11 @@ table.dataTable td {
 .dataTables_wrapper .dataTables_filter input {
     display: none;
     margin-left: 0.5em;
-    background: var(--box-color7);
+    background: var(--white);
     padding: 0;
     height: 36px;
 
-    color: var(--color2);
+    color: var(--white87);
     border: 0;
     border-radius: 2px;
     outline: none;
@@ -313,7 +313,7 @@ table.dataTable td {
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button {
-    color: var(--color4);
+    color: var(--white60);
     box-sizing: border-box;
     display: inline-block;
     min-width: 40px;
@@ -328,7 +328,7 @@ table.dataTable td {
 .dataTables_wrapper .dataTables_paginate .paginate_button.current,
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
     opacity: 1;
-    color: var(--color2);
+    color: var(--white87);
     border: 0;
 }
 
@@ -344,7 +344,7 @@ table.dataTable td {
 .dataTables_wrapper .dataTables_paginate .paginate_button.previous {
     opacity: 0.6;
     background: var(--ico-prev) no-repeat center center;
-    color: var(--color4);
+    color: var(--white60);
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.next {
@@ -380,7 +380,7 @@ table.dataTable td {
 .dataTables_wrapper .dataTables_info,
 .dataTables_wrapper .dataTables_processing,
 .dataTables_wrapper .dataTables_paginate {
-    color: var(--title-text);
+    color: var(--white60);
 }
 
 .dataTables_wrapper .dataTables_scroll {
@@ -602,7 +602,7 @@ div.dt-button-collection-title:empty {
 button.dt-button.disabled,
 div.dt-button.disabled,
 a.dt-button.disabled {
-    color: var(--color4);
+    color: var(--white60);
 }
 
 button.dt-button:active:not(.disabled):hover:not(.disabled),

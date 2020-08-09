@@ -113,7 +113,8 @@
 			</c:if>
 			
 			$('.loading').hide();
-			$( window ).resize(function() {
+
+			$(window).resize(function() {
 				if ($(window).width() > 768) {
 					$('#mask').hide();
 					$('body').removeClass("sidenav-no-scroll");
