@@ -1224,7 +1224,7 @@
 				labels: {
 					align: 'center',
 					style: {
-						color: 'var(--color3)',
+						color: 'var(--white)',
 						fontSize: '8px'
 					},
 					y: 50,
@@ -1256,7 +1256,7 @@
 					x: 5,
 					/* 타이틀 위치 조정 */
 					style: {
-						color: 'var(--color3)',
+						color: 'var(--white)',
 						fontSize: '18px'
 					}
 				},
@@ -1265,7 +1265,7 @@
 					x: -20,
 					/* 그래프와의 거리 조정 */
 					style: {
-						color: 'var(--color3)',
+						color: 'var(--white)',
 						fontSize: '10px'
 					}
 				}
@@ -1277,7 +1277,7 @@
 				verticalAlign: 'top',
 				x: -120,
 				itemStyle: {
-					color: 'var(--color3)',
+					color: 'var(--white)',
 					fontSize: '10px',
 					fontWeight: 400
 				},

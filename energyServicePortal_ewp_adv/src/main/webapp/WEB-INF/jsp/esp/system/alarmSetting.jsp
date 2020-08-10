@@ -14,17 +14,14 @@
 					includeCodes : true
 				},
 				beforeSend: function (jqXHR, settings) {
-					let token = '${sessionScope.userInfo.token}';
-					jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
 					$('.loading').show();
 				},
 			}
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				$('.loading').hide();
 				let data = json;
 				let newArr = [];
 
-				data.forEach((item, index) => {
+				$.each(data, function (item, index) {
 					let deviceType = '';
 					console.log("item--", item);
 					if(!isEmpty(item.device_type)){
@@ -166,7 +163,6 @@
 				// });
 
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				$('.loading').hide();
 				if(textStatus == "error"){
 					if(jqXHR.statusText == "Unauthorized" || jqXHR.status == 401){
 						$("#oldPwdErr").removeClass("hidden");

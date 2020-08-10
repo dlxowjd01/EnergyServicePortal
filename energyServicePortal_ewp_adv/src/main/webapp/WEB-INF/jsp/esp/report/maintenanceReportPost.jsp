@@ -160,10 +160,6 @@
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">출장/조치 보고서 </h1>
-		<div class="time fr">
-			<span>CURRENT TIME</span>
-			<em class="currTime">${nowTime}</em>
-		</div>
 	</div>
 </div>
 <div class="row">
@@ -284,9 +280,7 @@
 								<input type="file" name="work_report_file_01" class="hidden" id="work_report_file_01" accept="image/*" multiple>
 								<label for="work_report_file_01" class="btn file_upload">파일 선택</label>
 								<div class="file_list ml-16">
-									<ul>
-										<li class="upload_text"></li>
-									</ul>
+									<ul></ul>
 								</div>
 							</td>
 						</tr>
@@ -320,9 +314,7 @@
 								<input name="work_report_file_02" type="file" class="hidden" id="work_report_file_02" accept="image/*" multiple>
 								<label for="work_report_file_02" class="btn file_upload">파일 선택</label>
 								<div class="file_list ml-16">
-									<ul>
-										<li class="upload_text"></li>
-									</ul>
+									<ul></ul>
 								</div>
 							</td>
 						</tr>

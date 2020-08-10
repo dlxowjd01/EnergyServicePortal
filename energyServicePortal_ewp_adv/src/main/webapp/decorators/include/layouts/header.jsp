@@ -146,7 +146,6 @@
 				dataType: 'json',
 				type: 'patch',
 				beforeSend: function (jqXHR, settings) {
-					jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
 					$('.loading').show();
 				},
 				async: false,
@@ -157,13 +156,11 @@
 				console.log("success===", json);
 				$("#oldPwdErr").addClass("hidden");
 				$("#successMsg1").removeClass("hidden");
-				$('.loading').hide();
 				setTimeout(function(){
 					$("#successMsg1").addClass("hidden");
 				}, 2500);
 
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				$('.loading').hide();
 				if(textStatus == "error"){
 					if(jqXHR.status == 401){
 						$("#oldPwdErr").removeClass("hidden");
@@ -202,7 +199,6 @@
 				dataType: 'json',
 				type: 'patch',
 				beforeSend: function (jqXHR, settings) {
-					jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
 					$('.loading').show();
 				},
 				async: false,
@@ -212,13 +208,11 @@
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				// console.log("success===", json);
 				$("#successMsg2").removeClass("hidden");
-				$('.loading').hide();
 				setTimeout(function(){
 					$("#successMsg2").addClass("hidden");
 				}, 2500);
 
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				$('.loading').hide();
 				alert('처리 중 오류가 발생했습니다.');
 				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
 				return false;

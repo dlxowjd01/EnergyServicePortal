@@ -791,12 +791,6 @@
 <div class="row entity_wrap_header">
 	<div class="col-lg-12">
 		<h1 class="page-header">SPC 신규 등록</h1>
-		<div class="time fr">
-			<span>CURRENT TIME</span>
-			<em class="currTime">${nowTime}</em>
-			<span>DATA BASE TIME</span>
-			<em class="dbTime">2018-07-27 17:01:02</em>
-		</div>
 	</div>
 </div>
 
@@ -990,9 +984,11 @@
 									<div class="fixed_height">
 										<input type="file" id="SPC_법인_인감_파일[index]" class="hidden" name="SPC_법인_인감_파일" accept=".jpg, .png, .pdf">
 										<label for="SPC_법인_인감_파일[index]" class="btn file_upload">파일 선택</label>
-										<span class="upload_text ml-16">
-											<button type='button' class='btn_close icon_btn hidden' onclick='deleteFile($(this))'></button>
-										</span>
+										<span class="upload_text ml-16"></span>
+<%--										<span class="rdo_type">--%>
+<%--											<input type="radio" id="SPC_법인_인감_대표[index]" name="SPC_법인_인감_대표" value="">--%>
+<%--											<label for="SPC_법인_인감_대표[index]">대표 인감</label>--%>
+<%--										</span>--%>
 										<button class="btn_close fixed_height hidden mt-0" onclick="$(this).parents().closest('.group_type').remove()"></button>
 									</div>
 								</div>
@@ -1538,7 +1534,7 @@
 										<button onclick="updateAccList('계좌구분[index]', '계좌구분리스트[index]')" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 											입출금 구분<span class="caret"></span>
 										</button>
-										<ul id="계좌구분[index]" class="dropdown-menu" role="menu">
+										<ul class="dropdown-menu" role="menu">
 											<li data-value="입금"><a href="javascript:void(0);">입금</a></li>
 											<li data-value="출금"><a href="javascript:void(0);">출금</a></li>
 										</ul>

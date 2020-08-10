@@ -177,11 +177,15 @@
 							// comparison 1. 은행 이름
 							const x = acc.find(item => item.accNum === current.accNum);
 							// comparison 2.입금 || 출금 계좌
-							const y = acc.find(item => item.accType === current.accType);
+							const y = acc.find(item => (item.accNum === current.accNum && item.accType === current.accType));
 							if (!x) {
 								return acc.concat([current]);
 							} else {
-								return acc;
+								if (!y) {
+									return acc.concat([current]);
+								} else {
+									return acc;
+								}
 							}
 						}, []);
 						
@@ -449,7 +453,6 @@
 <div class="row header-wrapper">
 	<div class="col-12">
 		<h1 class="page-header">출금 요청서 신청</h1>
-		<div class="time fr"><span>CURRENT TIME</span><em class="currTime">${nowTime}</em></div>
 	</div>
 </div>
 

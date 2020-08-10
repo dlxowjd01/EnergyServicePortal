@@ -381,15 +381,10 @@
 			url: url,
 			method: 'GET',
 			beforeSend: function (jqXHR, settings) {
-				jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
 			},
-			// headers: {
-			// 	'Authorization': 'Bearer ' + token,
-			// },
 			xhrFields: {
 				responseType: 'blob'
 			},
-			// dataType: 'binary',
 			success: function(data) {
 				let src = window.URL.createObjectURL(data);
 				let wrapper = document.createElement('div');
@@ -428,13 +423,9 @@
 		$.ajax({
 			url: url,
 			method: 'GET',
-			beforeSend: function (jqXHR, settings) {
-				jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
-			},
 			xhrFields: {
 				responseType: 'blob'
 			},
-			// dataType: 'binary',
 			success: function(data) {
 				let account = $("#tableBody").find("tr:first-child td:nth-child(2)").text().replace(/^\s+|\s+$|\s+(?=\s)/g, "");
 				let d = new Date();
@@ -450,6 +441,8 @@
 					a.remove();
 					window.URL.revokeObjectURL(url);
 				}, 200);
+			},
+			fail: function(){
 			}
 		});
 	}
@@ -510,7 +503,6 @@
 <div class="row header-wrapper">
 	<div class="col-12">
 		<h1 class="page-header">출금 요청서 검토</h1>
-		<div class="time fr"><span>CURRENT TIME</span><em class="currTime">${nowTime}</em></div>
 	</div>
 </div>
 <div class="row">

@@ -111,7 +111,7 @@
 			<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
 				changeFavicon('/img/logo-only.ico');
 			</c:if>
-			
+
 			$('.loading').hide();
 
 			$(window).resize(function() {
@@ -122,6 +122,14 @@
 				}
 			});
 
+		});
+
+		$(document).ajaxSuccess(function() {
+			$('.loading').hide();
+		});
+
+		$(document).ajaxError(function( event, jqxhr, settings, thrownError ) {
+			$('.loading').hide();
 		});
 
 		const changeFavicon = link => {

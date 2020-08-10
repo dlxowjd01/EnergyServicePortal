@@ -8,7 +8,7 @@
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>
 			<span>DATA BASE TIME</span>
-			<em class="dbTime">2018-07-27 17:01:02</em>
+			<em class="dbTime"></em>
 		</div>
 	</div>
 </div>
@@ -852,6 +852,8 @@
 				$(this).find('.eq_card .eq_btn_bx button').eq(1).html('데이터 입력');
 			}
 		});
+
+		$('.dbTime').text('');
 	}
 
 	const deviceDetailView = (did, deviceStatus, self) => {
@@ -927,6 +929,9 @@
 			console.error(textStatus);
 			console.error(errorThrown);
 		});
+
+		const now = new Date();
+		$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 	}
 
 	const addManualForm = (did) => {

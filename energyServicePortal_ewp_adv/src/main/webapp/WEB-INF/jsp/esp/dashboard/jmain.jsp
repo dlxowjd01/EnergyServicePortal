@@ -767,9 +767,9 @@
 		},
 		xAxis: {
 			type: 'category',
-			lineColor: 'var(--color4)', /* 눈금선색 */
-			tickColor: 'var(--color4)',
-			gridLineColor: 'var(--color4)',
+			lineColor: 'var(--white60)', /* 눈금선색 */
+			tickColor: 'var(--white60)',
+			gridLineColor: 'var(--white60)',
 			plotLines: [{
 				color: 'var(--color1)',
 				width: 1
@@ -780,7 +780,7 @@
 				rotation: 0,
 				y: 27, /* 그래프와 거리 */
 				style: {
-					color: 'var(--color4)',
+					color: 'var(--white60)',
 					fontSize: '10px'
 				}
 			},
@@ -792,12 +792,12 @@
 		yAxis: {
 			min: 0,
 			max: 100,
-			lineColor: 'var(--color4)', /* 눈금선색 */
-			tickColor: 'var(--color4)',
-			gridLineColor: 'var(--color4)',
+			lineColor: 'var(--white60)', /* 눈금선색 */
+			tickColor: 'var(--white60)',
+			gridLineColor: 'var(--white60)',
 			gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 			plotLines: [{
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				width: 1
 			}],
 			scrollbar: {
@@ -811,14 +811,14 @@
 				y: 25, /* 타이틀 위치 조정 */
 				x: 15,
 				style: {
-					color: 'var(--color4)',
+					color: 'var(--white60)',
 					fontSize: '12px'
 				}
 			},
 			labels: {
 				format: '{value}',
 				style: {
-					color: 'var(--color4)',
+					color: 'var(--white60)',
 					fontSize: '12px'
 				},
 				align: 'right',
@@ -896,14 +896,14 @@
 
 		xAxis: {
 			lineColor: '', /* 눈금선색 */
-			tickColor: 'var(--color4)',
-			gridLineColor: 'var(--color4)',
+			tickColor: 'var(--white60)',
+			gridLineColor: 'var(--white60)',
 			labels: {
 				enabled: false,
 				align: 'right',
 				reserveSpace: true,
 				style: {
-					color: 'var(--color4)',
+					color: 'var(--white60)',
 					fontSize: '12px'
 				}
 			},
@@ -916,15 +916,15 @@
 		},
 
 		yAxis: {
-			lineColor: 'var(--color4)',
-			tickColor: 'var(--color4)',
-			gridLineColor: 'var(--color4)',
+			lineColor: 'var(--white60)',
+			tickColor: 'var(--white60)',
+			gridLineColor: 'var(--white60)',
 			gridLineWidth: 0,
 			min: 0,
 			title: {
 				text: '',
 				style: {
-					color: 'var(--color4)',
+					color: 'var(--white60)',
 					fontSize: '12px'
 				}
 			},
@@ -933,7 +933,7 @@
 				overflow: 'justify',
 				x: -10, /* 그래프와의 거리 조정 */
 				style: {
-					color: 'var(--color4)',
+					color: 'var(--white60)',
 					fontSize: '12px'
 				}
 			}
@@ -947,7 +947,7 @@
 			x: 5,
 			y: -10,
 			itemStyle: {
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				fontSize: '12px',
 				fontWeight: 400
 			},
@@ -1108,18 +1108,18 @@
 		},
 
 		xAxis: {
-			lineColor: 'var(--color4)', /* 눈금선색 */
-			tickColor: 'var(--color4)',
-			gridLineColor: 'var(--color4)',
+			lineColor: 'var(--white60)', /* 눈금선색 */
+			tickColor: 'var(--white60)',
+			gridLineColor: 'var(--white60)',
 			plotLines: [{
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				width: 1
 			}],
 			labels: {
 				align: 'center',
 				y: 27, /* 그래프와 거리 */
 				style: {
-					color: 'var(--color4)',
+					color: 'var(--white60)',
 					fontSize: '12px'
 				}
 			},
@@ -1131,11 +1131,11 @@
 		},
 
 		yAxis: {
-			lineColor: 'var(--color4)', /* 눈금선색 */
-			tickColor: 'var(--color4)',
-			gridLineColor: 'var(--color4)',
+			lineColor: 'var(--white60)', /* 눈금선색 */
+			tickColor: 'var(--white60)',
+			gridLineColor: 'var(--white60)',
 			plotLines: [{
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				width: 1
 			}],
 			gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
@@ -1147,7 +1147,7 @@
 				y: 25, /* 타이틀 위치 조정 */
 				x: 10,
 				style: {
-					color: 'var(--color4)',
+					color: 'var(--white60)',
 					fontSize: '12px'
 				}
 			},
@@ -1155,7 +1155,7 @@
 				overflow: 'justify',
 				x: -10, /* 그래프와의 거리 조정 */
 				style: {
-					color: 'var(--color4)',
+					color: 'var(--white60)',
 					fontSize: '12px'
 				}
 			}
@@ -1169,7 +1169,7 @@
 			x: 5,
 			y: -10,
 			itemStyle: {
-				color: 'var(--color4)',
+				color: 'var(--white60)',
 				fontSize: '12px',
 				fontWeight: 400
 			},
@@ -1209,7 +1209,7 @@
 				label: {
 					connectorAllowed: false
 				},
-				borderColor: 'var(--color4)',
+				borderColor: 'var(--white60)',
 				borderWidth: 0 /* 보더 0 */
 			},
 			line: {

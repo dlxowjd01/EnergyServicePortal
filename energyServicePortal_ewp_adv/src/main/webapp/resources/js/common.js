@@ -237,7 +237,12 @@ $(function () {
                 if ($(this).attr('id').match('공인인증서')) {
                     delBtn = 'icon-trash';
                 }
+            } else {
+                if ($(this).attr('id').match('spc_file_')) {
+                    delBtn = 'icon-trash';
+                }
             }
+
             let item = $(this).get(0).files;
             let arr = [];
             if ($(this).parent().find(".no-data")) {

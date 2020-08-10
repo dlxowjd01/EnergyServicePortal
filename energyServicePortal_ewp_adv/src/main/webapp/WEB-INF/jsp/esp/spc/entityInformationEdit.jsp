@@ -288,8 +288,8 @@
 								}
 
 								$('#basicInfo input[type="file"]').eq(index).data('file', file);
-								let listItem = `<button type='button' class='btn_close file_del_btn' onclick='deleteFile($(this), "front")'></button>`;
-								$('#basicInfo input[type="file"]').eq(index).parent().find(".upload_text").next('.file_del_btn').remove();
+								let listItem = `<button type='button' class='btn_close icon-trash ' onclick='deleteFile($(this), "front")'></button>`;
+								//$('#basicInfo input[type="file"]').eq(index).parent().find(".upload_text").next('.file_del_btn').remove();
 								$('#basicInfo input[type="file"]').eq(index).parent().find(".upload_text").html(file['originalname']).after(listItem);
 							});
 						}
@@ -1027,12 +1027,6 @@
 <div class="row entity_wrap_header">
 	<div class="col-lg-12">
 		<h1 class="page-header">SPC 수정</h1>
-		<div class="time fr">
-			<span>CURRENT TIME</span>
-			<em class="currTime">${nowTime}</em>
-			<span>DATA BASE TIME</span>
-			<em class="dbTime">2018-07-27 17:01:02</em>
-		</div>
 	</div>
 </div>
 
@@ -1216,6 +1210,10 @@
 										<input type="file" id="SPC_법인_인감_파일[index]" class="hidden" name="SPC_법인_인감_파일" accept=".jpg, .png, .pdf">
 										<label for="SPC_법인_인감_파일[index]" class="btn file_upload">파일 선택</label>
 										<span class="upload_text ml-16"></span>
+<%--										<span class="rdo_type">--%>
+<%--											<input type="radio" id="SPC_법인_인감_대표[index]" name="SPC_법인_인감_대표" value="">--%>
+<%--											<label for="SPC_법인_인감_대표[index]">대표 인감</label>--%>
+<%--										</span>--%>
 										<button class="btn_close fixed_height hidden mt-0" onclick="$(this).parents().closest('.group_type').remove()"></button>
 									</div>
 								</div>
@@ -1765,7 +1763,7 @@
 								<div class="fixed_height group_type short">
 									<div class="account-type dropdown placeholder edit" id="입출금_구분[index]"><!--
 										--><button onclick="updateAccList('계좌구분[index]', '계좌구분리스트[index]')" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">입출금 구분<span class="caret"></span></button><!--
-										--><ul id="계좌구분[index]" class="dropdown-menu" role="menu"><!--
+										--><ul class="dropdown-menu" role="menu"><!--
 											--><li data-value="입금"><a href="#">입금</a></li><!--
 											--><li data-value="출금"><a href="#">출금</a></li><!--
 										--></ul><!--
@@ -2734,7 +2732,7 @@
 								<div id="fileList01">
 									<p class="tx_file">
 										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
+										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2755,7 +2753,7 @@
 								<div id="fileList02">
 									<p class="tx_file">
 										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList02', [INDEX]);"></button>
+										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList02', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2776,7 +2774,7 @@
 								<div id="fileList03">
 									<p class="tx_file">
 										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList03', [INDEX]);"></button>
+										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList03', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2797,7 +2795,7 @@
 								<div id="fileList04">
 									<p class="tx_file">
 										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList04', [INDEX]);"></button>
+										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList04', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2818,7 +2816,7 @@
 								<div id="fileList05">
 									<p class="tx_file">
 										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList05', [INDEX]);"></button>
+										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList05', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2839,7 +2837,7 @@
 								<div id="fileList06">
 									<p class="tx_file">
 										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList06', [INDEX]);"></button>
+										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList06', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2860,7 +2858,7 @@
 								<div id="fileList07">
 									<p class="tx_file">
 										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList07', [INDEX]);"></button>
+										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList07', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2881,7 +2879,7 @@
 								<div id="fileList08">
 									<p class="tx_file">
 										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList08', [INDEX]);"></button>
+										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList08', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2902,7 +2900,7 @@
 								<div id="fileList09">
 									<p class="tx_file">
 										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList09', [INDEX]);"></button>
+										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList09', [INDEX]);"></button>
 									</p>
 								</div>
 
@@ -2923,7 +2921,7 @@
 								<div id="fileList10">
 									<p class="tx_file">
 										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList10', [INDEX]);"></button>
+										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList10', [INDEX]);"></button>
 									</p>
 								</div>
 

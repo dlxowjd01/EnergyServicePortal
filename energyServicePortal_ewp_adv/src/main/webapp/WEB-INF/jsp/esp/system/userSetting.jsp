@@ -25,7 +25,6 @@
 				},
 			}
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				$('.loading').hide();
 				let data = json;
 				let newArr = [];
 
@@ -204,7 +203,6 @@
 					}
 				});
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				$('.loading').hide();
 				if(textStatus == "error"){
 					if(jqXHR.statusText == "Unauthorized" || jqXHR.status == 401){
 						$("#oldPwdErr").removeClass("hidden");
