@@ -1195,6 +1195,11 @@ const beforeTodayTotalPromise = (site) => {
 					if (!isEmpty(val.capacity)) {
 						capacity += val.capacity;
 					}
+
+					if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < val.timestamp)) {
+						const dbTime = new Date(val.timestamp);
+						$('.dbTime').data('timestamp', val.timestamp).text(dbTime.format('yyyy-MM-dd HH:mm:ss'));
+					}
 				}
 			});
 

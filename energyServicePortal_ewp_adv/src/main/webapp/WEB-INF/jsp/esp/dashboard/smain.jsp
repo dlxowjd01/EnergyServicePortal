@@ -1547,6 +1547,11 @@
 				let itemEfficiency = null;
 
 				$.map(item, function (value, key) {
+					if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < value.timestamp)) {
+						const dbTime = new Date(value.timestamp);
+						$('.dbTime').data('timestamp', value.timestamp).text(dbTime.format('yyyy-MM-dd HH:mm:ss'));
+					}
+					
 					if (!isEmpty(value)) {
 						$.map(value, function(element, k) {
 							if(k == 'capacity') {
