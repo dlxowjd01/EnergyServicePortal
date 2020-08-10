@@ -157,7 +157,7 @@
 				selectAll($("#spcList"));
 				searchArr.push(spcArr.toString())
 				getDataList(page, searchArr)
-
+				spcList.append(`<li class="btn_wrap_type03 btn_wrap_border"><button type="button" class="btn_type mr-16">적용</button></li>`);
 				$('#전체').prop('checked', true);
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				alert('처리 중 오류가 발생했습니다.');
@@ -613,7 +613,7 @@
 		--><span class='tx_tit'>SPC 선택</span><!--
 		--><div class='sa_select'>
 				<div class='dropdown'>
-					<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택" data-value="">전체<span class='caret'></span></button>
+					<button class='btn btn-primary dropdown-toggle noClose' type='button' data-toggle='dropdown' data-name="선택" data-value="">전체<span class='caret'></span></button>
 					<ul id='spcList' class='dropdown-menu chk_type' role='menu'>
 						<li data-value="*spcId*"><!--
 						--><a href="javascript:void(0);" tabindex="-1"><!--
