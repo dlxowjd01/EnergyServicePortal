@@ -22,6 +22,11 @@ public class SystemController {
 		return "esp/system/groupSetting";
 	}
 
+	@RequestMapping(value = "/system/alarmSetting.do")
+	public String alarmSetting(HttpServletRequest request, HttpSession session, Model model) {
+		return "esp/system/alarmSetting";
+	}
+
 	@RequestMapping(value = "/system/userSetting.do")
 	public String userSetting(HttpServletRequest request, HttpSession session, Model model) {
 		return "esp/system/userSetting";
@@ -37,8 +42,4 @@ public class SystemController {
 		return "esp/system/batchSetting";
 	}
 
-	@RequestMapping(value = "/system/alarmSetting.do")
-	public String alarmSetting(HttpServletRequest request, HttpSession session, Model model) {
-		return "esp/system/alarmSetting";
-	}
 }

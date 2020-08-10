@@ -135,14 +135,14 @@
 			if($("#updatePwdBtn").is(":disabled") ){
 				return false;
 			}
-			let uid = '${sessionScope.userInfo.uid}';
+
 			let token = '${sessionScope.userInfo.token}';
 			let value = {
 				old_password : $("#oldPwd").val(),
 				new_password : $("#newPwd").val(),
 			}
 			let option = {
-				url: 'https://iderms-api.iderms.ai/config/users/' + uid + '/password',
+				url: 'https://iderms-api.iderms.ai/config/users/' + userInfoId + '/password',
 				dataType: 'json',
 				type: 'patch',
 				beforeSend: function (jqXHR, settings) {
@@ -192,10 +192,9 @@
 				$("#mobileNum").val(value.contact_phone);
 			}
 
-			let uid = '${sessionScope.userInfo.uid}';
 			let token = '${sessionScope.userInfo.token}';
 			let option = {
-				url: 'https://iderms-api.iderms.ai/config/users/' + uid,
+				url: 'https://iderms-api.iderms.ai/config/users/' + userInfoId,
 				dataType: 'json',
 				type: 'patch',
 				beforeSend: function (jqXHR, settings) {

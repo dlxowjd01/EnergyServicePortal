@@ -172,21 +172,6 @@
 				return false;
 			});
 		}
-
-		// let p = JSON.parse(sList);
-		// console.log("p---", sList);
-		// $.each(p, function(index, element){
-		// 	console.log("elemet---", element)
-		// });
-
-		// var table = $('#example').DataTable({
-		// 	// "fixedHeader": true
-		// });
-
-		// new $.fn.dataTable.FixedHeader( table, {
-		// 	alwaysCloneTop: true
-		// });
-
 	});
 
 </script>
@@ -196,8 +181,6 @@
 		<h1 class="page-header">알람 설정</h1>
 	</div>
 </div>
-
-<c:set var="siteList" value="${siteHeaderList}"/> <!-- 사이트 별 -->
 
 <div class="row">
 	<div class="col-12">
@@ -232,26 +215,6 @@
 				<button class="btn btn-primary dropdown-toggle" type="button"
 					data-toggle="dropdown">선택<span class="caret"></span></button>
 				<ul class="dropdown-menu chk_type" role="menu">
-					<c:set var="systemLoc" value="${sessionScope.systemLoc}"/>
-					<c:forEach var="loc" items="${location}" varStatus="stat">
-						<li><a href="#">${loc.value.name.kr}</a></li>
-						<c:forEach var="country" items="${loc.value.locations}" varStatus="countryStat">
-							<c:set var="choice" value="false" />
-							<c:if test="${fn:length(systemLoc) > 0}">
-								<c:forEach var="selLoc" items="${systemLoc}">
-									<c:if test="${country.value.code eq selLoc}">
-										<c:set var="choice" value="true" />
-									</c:if>
-								</c:forEach>
-							</c:if>
-							<li>
-								<a href="#" tabindex="-1">
-									<input type="checkbox" name="systemLoc" id="location_${countryStat.index}" value="${country.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
-									<label for="location_${countryStat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${country.value.code}</label>
-								</a>
-							</li>
-						</c:forEach>
-					</c:forEach>
 				</ul>
 			</div>
 		</div>
@@ -284,21 +247,7 @@
 	<div class="col-12">
 		<div class="indiv">
 			<table id="example" class="stripe">
-				<thead>
-					<!-- <tr>
-						<th></th>
-						<th>사업소 타입</th>
-						<th>사업소명</th>
-						<td>지역</th>
-						<th>발전원</th>
-						<th>발전 용량</th>
-						<th>ESS 용량 (PCS)</th>
-						<th>ESS 용량 (BMS)</th>
-						<th>DR 자원 코드</th>
-						<th>VPP 자원코드</th>
-						<th>알람 설정</th>
-					</tr> -->
-				</thead>
+				<thead></thead>
 				<tbody>
 				</tbody>
 				<tfoot>

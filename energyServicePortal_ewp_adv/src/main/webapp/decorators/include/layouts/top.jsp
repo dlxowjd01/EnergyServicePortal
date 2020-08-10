@@ -90,6 +90,7 @@
 		const task = '${userInfo.task}';
 		const oid = '${userInfo.oid}';
 		const loginId = '${userInfo.login_id}';
+		const userInfoId = '${sessionScope.userInfo.uid}';
 		const loginName = '${sessionScope.userInfo.name}';
 		const loginMail = '${sessionScope.userInfo.contact_email}';
 		const contact_phone = '${sessionScope.userInfo.contact_phone}';

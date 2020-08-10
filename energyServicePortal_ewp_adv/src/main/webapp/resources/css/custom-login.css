@@ -15,6 +15,8 @@ html.darkmode:root {
 	--border: rgba(107, 107, 107, 0.6);
 	--scroll-track: #444;
 	--dropdown-bg: #363636;
+	--icon-eye: url("/img/icon_eye.svg");
+	--icon-eye-close: url("/img/icon_eye_close.svg");
 }
 
 * {
@@ -127,10 +129,16 @@ button:active {
 }
 
 .clear-btn {
-	color: var(--white87);
-	background: none;
 	border: none;
 	outline: none;
+	font-size: 0;
+	width: 32px;
+	height: 16px;
+	background: var(--icon-eye) no-repeat center;
+}
+
+.clear-btn.close {
+	background: var(--icon-eye-close) no-repeat center;
 }
 
 .mb-10 {
