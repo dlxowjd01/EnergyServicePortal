@@ -105,7 +105,7 @@
 					newArr.push(obj);
 				}));
 
-				$('#example').dataTable({
+				$('#siteTable').dataTable({
 					"aaData": newArr,
 					// "fixedHeader": true,
 					"scrollX": false,
@@ -254,6 +254,7 @@
 						// $('input.editor-active', row).prop( 'checked', data.active == 1 );
 					}
 				});
+			
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				if(textStatus == "error"){
 					if(jqXHR.statusText == "Unauthorized" || jqXHR.status == 401){
@@ -271,7 +272,7 @@
 		// 	console.log("elemet---", element)
 		// });
 
-		// var table = $('#example').DataTable({
+		// var table = $('#siteTable').DataTable({
 		// 	// "fixedHeader": true
 		// });
 
@@ -375,22 +376,8 @@
 <div class="row content-wrapper">
 	<div class="col-12">
 		<div class="indiv">
-			<table id="example" class="stripe">
-				<thead>
-					<!-- <tr>
-						<th></th>
-						<th>사업소 타입</th>
-						<th>사업소명</th>
-						<td>지역</th>
-						<th>발전원</th>
-						<th>발전 용량</th>
-						<th>ESS 용량 (PCS)</th>
-						<th>ESS 용량 (BMS)</th>
-						<th>DR 자원 코드</th>
-						<th>VPP 자원코드</th>
-						<th>알람 설정</th>
-					</tr> -->
-				</thead>
+			<table id="siteTable" class="stripe">
+				<thead></thead>
 				<tbody>
 				</tbody>
 				<tfoot>

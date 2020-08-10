@@ -210,20 +210,6 @@
 			});
 		}
 
-		// let p = JSON.parse(sList);
-		// console.log("p---", sList);
-		// $.each(p, function(index, element){
-		// 	console.log("elemet---", element)
-		// });
-
-		// var table = $('#example').DataTable({
-		// 	// "fixedHeader": true
-		// });
-
-		// new $.fn.dataTable.FixedHeader( table, {
-		// 	alwaysCloneTop: true
-		// });
-
 	});
 
 </script>
@@ -233,8 +219,6 @@
 		<h1 class="page-header">배치 관리 설정</h1>
 	</div>
 </div>
-
-<c:set var="siteList" value="${siteHeaderList}"/> <!-- 사이트 별 -->
 
 <div class="row">
 	<div class="col-12">
@@ -250,16 +234,7 @@
 							<label for="allSites">전체</label>
 						</a>
 					</li>
-					<c:if test="${fn:length(siteList) > 0}">
-						<c:forEach var="site" items="${siteList}">
-							<li>
-								<a href="#" tabindex="-1">
-									<input type="checkbox" name="${site.name}" id="${site.sid}" value="${site.index}">
-									<label for="${site.sid}">${site.name}</label>
-								</a>
-							</li>
-						</c:forEach>
-					</c:if>
+
 				</ul>
 			</div>
 		</div>
@@ -269,26 +244,7 @@
 				<button class="btn btn-primary dropdown-toggle" type="button"
 					data-toggle="dropdown">선택<span class="caret"></span></button>
 				<ul class="dropdown-menu chk_type" role="menu">
-					<c:set var="systemLoc" value="${sessionScope.systemLoc}"/>
-					<c:forEach var="loc" items="${location}" varStatus="stat">
-						<li><a href="#">${loc.value.name.kr}</a></li>
-						<c:forEach var="country" items="${loc.value.locations}" varStatus="countryStat">
-							<c:set var="choice" value="false" />
-							<c:if test="${fn:length(systemLoc) > 0}">
-								<c:forEach var="selLoc" items="${systemLoc}">
-									<c:if test="${country.value.code eq selLoc}">
-										<c:set var="choice" value="true" />
-									</c:if>
-								</c:forEach>
-							</c:if>
-							<li>
-								<a href="#" tabindex="-1">
-									<input type="checkbox" name="systemLoc" id="location_${countryStat.index}" value="${country.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
-									<label for="location_${countryStat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${country.value.code}</label>
-								</a>
-							</li>
-						</c:forEach>
-					</c:forEach>
+					<li><a href="#"></a></li>
 				</ul>
 			</div>
 		</div>

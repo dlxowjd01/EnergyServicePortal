@@ -4,236 +4,193 @@
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	$(function () {
-		getUserList();
+		let option = {
+			url: apiHost + "/config/users/",
+			type: "get",
+			async: true,
+			data: {
+				uid: userInfoId,
+				oid: oid
+			},
+			beforeSend: function (jqXHR, settings) {
+				$('.loading').show();
+			},
+		}
 
-		function getUserList () {
-			let option = {
-				url: apiHost + "/config/sites",
-				type: "get",
-				async: true,
-				data: {
-					oid: oid,
-					filter: { 
-						"limit": 200,
-						"fields": {
+		getUserList(option);
 
-						},
-					}
-				},
-				beforeSend: function (jqXHR, settings) {
-					$('.loading').show();
-				},
-			}
-			$.ajax(option).done(function (json, textStatus, jqXHR) {
+		function getUserList(opt) {
+			$.ajax(opt).done(function (json, textStatus, jqXHR) {
 				let data = json;
 				let newArr = [];
+				// console.log("data---", data);
 
-				Promise.all(json.map( (x, index) => {
-					// console.log("x===", x)
+				data.map((item, index)=> {
+					// console.log("item---", item);
 					let obj = {};
-					obj.sid = x.sid;
-					obj.idx = index;
-					obj.name = x.name;
-					obj.location = x.location;
-					obj.genVol = "TBA"
-					obj.pscVol = "TBA"
-					obj.bmsVol = "TBA"
-					obj.alarmState = "TBA"
+					obj.idx = index + 1;
 
-					if(x.resource_type === 0) {
-						obj.powerSource = "부하"
-					} else if(x.resource_type === 1){
-						obj.powerSource = "태양광"
-					} else if(x.resource_type === 2){
-						obj.powerSource = "풍력"
-					} else if(x.resource_type === 3){
-						obj.powerSource = "소수력"
-					}
-					if(x.ess){
-						if(x.ess === 0) {
-							obj.siteType = "-"
-						} else if(x.ess === 1){
-							obj.siteType = "Demand"
-						} else if(x.ess === 2){
-							obj.siteType = "Generation"
-						}
+					obj.user_id = item.login_id;
+
+					if(!isEmpty(item.name)){
+						obj.name = item.name;
 					} else {
-						obj.siteType = "-"
+						obj.name = "-";
 					}
-					if(x.dr_group_id){
-						obj.drId = x.dr_group_id;
+
+					if(!isEmpty(item.contact_phone)){
+						obj.contact_phone = item.contact_phone;
 					} else {
-						obj.drId = "-"
+						obj.contact_phone = "-";
 					}
-					if(x.vpp_group_id){
-						obj.vppId = x.vpp_group_id;
+
+					if(!isEmpty(item.contact_email)){
+						obj.contact_email = item.contact_email;
 					} else {
-						obj.vppId = "-"
+						obj.contact_email = "-";
+					}
+
+					if(!isEmpty(item.team)){
+						obj.team = item.team;
+					} else {
+						obj.team = "-";
+					}
+				
+					if(item.role == 1){
+						obj.user_role = "조직 관리자"
+					} else {
+						obj.user_role = "일반 사용자"
+					}
+
+					if(item.task == 0){
+						obj.user_task = "일반"
+					} else if(item.task == 1){
+						obj.user_task = "사무 수탁사"
+					} else if(item.task == 2){
+						obj.user_task = "자산 운용사"
+					} else if(item.task == 3){
+						obj.user_task = "사업주"
+					}
+
+					if(!isEmpty(item.createdAt)){
+						let d = new Date(item.createdAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&emsp;&emsp;' + new Date(item.createdAt).toLocaleTimeString();
+						obj.created_at = d;
+					} else {
+						obj.created_at = "-";
+					}
+				
+					if(!isEmpty(item.valid_yn)){
+						obj.valid_yn = item.valid_yn;
+					} else {
+						obj.valid_yn = "-";
 					}
 					newArr.push(obj);
-				}));
+				});
 
-				$('#example').dataTable({
+				$('#userTable').dataTable({
 					"aaData": newArr,
 					// "fixedHeader": true,
 					"scrollX": false,
 					"scrollY": "400px",
-					// columnDefs: [ {
-					// 	orderable: true,
-						// className: 'select-checkbox',
-						// targets:   0
-					// }],
-					// order: [[ 1, 'asc' ]],
-					// colReorder: {
-					// 	realtime: false
-					// },
 					"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-					// "columns": [
-					// 	{
-					// 		"data":  "",
-					// 		render: function ( data, type, row ) {
-					// 			// console.log("data--", row, "type===", type)
-					// 			return '<a class="chk_type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
-					// 		},
-					// 		className: "dt-body-center"
-					// 	},
-					// 	{ "data": "siteType" },
-					// 	{ "data": "name"},
-					// 	{ "data": "location"},
-					// 	{ "data": "powerSource" },
-					// 	{ "data": "genVol" },
-					// 	{ "data": "pscVol" },
-					// 	{ "data": "bmsVol" },
-					// 	{ "data": "drId" },
-					// 	{ "data": "vppId"},
-					// 	{ "data": "alarmState" },
-					// ],
-
 					"aoColumns": [
 						{
 							"sTitle": "",
 							"mData": "",
 							"mRender": function ( data, type, row )  {
 								// console.log('row==', row)
-								return '<a class="chk_type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
+								return '<a class="chk_type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="user_row"><label for="' + row.idx + '" onclick="onlyOne(this)"></label></a>'
 							},
 							"className": "dt-body-center"
 						},
 						{
-							"sTitle": "그룹 타입",
-							"mData": "siteType",
+							"sTitle": "순번",
+							"mData": "idx",
 						
 						},
 						{
-							"sTitle": "그룹명",
-							"mData": "name"
+							"sTitle": "ID",
+							"mData": "user_id"
 						},
 						{
-							"sTitle": "사업소",
-							"mData":"location",
+							"sTitle": "이름",
+							"mData": "name",
 						},
 						{
-							"sTitle": "최종 작업자",
-							"mData":"powerSource",
+							"sTitle": "휴대폰",
+							"mData": "contact_phone",
 						},
 						{
-							"sTitle": "비고",
-							"mData":"genVol",
-						}
+							"sTitle": "이메일",
+							"mData": "contact_email",
+						},
+						{
+							"sTitle": "소속",
+							"mData": "team",
+						},
+						{
+							"sTitle": "권한 등급",
+							"mData": "user_role",
+						},
+						{
+							"sTitle": "업무 구분",
+							"mData": "user_task",
+						},
+						{
+							"sTitle": "등록일자",
+							"mData": "created_at",
+						},
+						{
+							"sTitle": "사용 여부",
+							"mData": "valid_yn",
+						},
 					],
 					dom: 'Bfltip',
 					// dom: 'Bfrtip',
 					buttons: [
 						{
-							extend: 'copyHtml5',
-							className: "btn_type03",
-							text: '데이터 복사',
-						},
-						{
-							extend: 'print',
-							text: '전체 인쇄',
-							className: "btn_type03",
-							exportOptions: {
-								modifier: {
-									selected: null
-								}
-							}
-						},
-						{
-							extend: 'print',
-							className: "btn_type03",
-							text: '선택 인쇄'
-						},
-						{
-							extend: 'excelHtml5',
-							className: "btn_type03",
-							text: 'Excel'
-						},
-						{
-							extend: 'csvHtml5',
-							className: "btn_type03",
-							text: 'CSV'
-						},
-						{
-							extend: 'pdfHtml5',
-							className: "btn_type03",
-							text: 'PDF',
-						},
-						{
 							text: '추가',
 							className: "btn_type fr",
-							action: function (e, node, config){
-								console.log("node===", node, "e---", e, "config===", config)
-								$('#addUserModal').modal('show');
-							}
+							attr:  {
+								"data-toggle": "modal",
+								"data-target": "#addUserModal",
+								"data-backdrop": "static",
+								"data-keyboard": "false"
+							},
+							// action: function (e, node, config){
+							// 	$('#addUserModal').modal('show');
+							// }
 						}
 					],
 					select: {
 						style: 'os',
 						items: 'cell'
 					},
-					// select: true,
-					// select: {
-					// 	style:    'os',
-					// 	selector: 'td:first-child'
-					// },
 					rowCallback: function ( row, data ) {
 						// console.log("row-selected--", row)
 						// $('input.editor-active', row).prop( 'checked', data.active == 1 );
 					}
 				});
+			
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				if(textStatus == "error"){
-					if(jqXHR.statusText == "Unauthorized" || jqXHR.status == 401){
-						$("#oldPwdErr").removeClass("hidden");
-					}
-					console.log("jqXHR==", jqXHR )
-				}
 				return false;
 			});
 		}
-
-		// let p = JSON.parse(sList);
-		// console.log("p---", sList);
-		// $.each(p, function(index, element){
-		// 	console.log("elemet---", element)
-		// });
-
-		// var table = $('#example').DataTable({
-		// 	// "fixedHeader": true
-		// });
-
-		// new $.fn.dataTable.FixedHeader( table, {
-		// 	alwaysCloneTop: true
-		// });
-
 	});
+
+	function onlyOne(checkbox) {
+		console.log("checkbox===")
+		var checkboxes = document.getElementsByName('user_row')
+		checkboxes.forEach((item) => {
+			if (item !== checkbox) item.checked = false
+		})
+	}
 
 </script>
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">사용자 관리 설정</h1>
+		<h1 class="page-header">사용자 관리</h1>
 	</div>
 </div>
 
@@ -245,23 +202,10 @@
 			<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button"
 					data-toggle="dropdown">선택<span class="caret"></span></button>
-				<ul class="dropdown-menu chk_type" role="menu" id="siteList">
-					<li>
-						<a href="#" tabindex="-1">
-							<input type="checkbox" name="allSites" id="allSites" value="all">
-							<label for="allSites">전체</label>
-						</a>
-					</li>
-					<c:if test="${fn:length(siteList) > 0}">
-						<c:forEach var="site" items="${siteList}">
-							<li>
-								<a href="#" tabindex="-1">
-									<input type="checkbox" name="${site.name}" id="${site.sid}" value="${site.index}">
-									<label for="${site.sid}">${site.name}</label>
-								</a>
-							</li>
-						</c:forEach>
-					</c:if>
+				<ul class="dropdown-menu" id="userList">
+					<li><a href="#" tabindex="-1">전체</a></li>
+					<li><a href="#" tabindex="-1">관리자</a></li>
+					<li><a href="#" tabindex="-1">일반 사용자</a></li>
 				</ul>
 			</div>
 		</div>
@@ -280,22 +224,8 @@
 <div class="row content-wrapper">
 	<div class="col-12">
 		<div class="indiv">
-			<table id="example" class="stripe">
-				<thead>
-					<!-- <tr>
-						<th></th>
-						<th>사업소 타입</th>
-						<th>사업소명</th>
-						<td>지역</th>
-						<th>발전원</th>
-						<th>발전 용량</th>
-						<th>ESS 용량 (PCS)</th>
-						<th>ESS 용량 (BMS)</th>
-						<th>DR 자원 코드</th>
-						<th>VPP 자원코드</th>
-						<th>알람 설정</th>
-					</tr> -->
-				</thead>
+			<table id="userTable" class="stripe">
+				<thead></thead>
 				<tbody>
 				</tbody>
 				<tfoot>
@@ -318,12 +248,176 @@
 	</div>
 </div>
 
-<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog">
-	<div class="modal-dialog">
-		<div class="setting-modal-content modal-content">
-			<div class="modal-header"><h1>사업소 추가</h1></div>
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content add-user-content">
+			<div class="modal-header"><h1>사용자 추가</h1></div>
 			<div class="modal-body">
-				
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-lg-2 col-md-2 col-sm-3">
+							<span class="input_label">ID</span>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-9">
+							<div class="tx_inp_type">
+								<input type="text" id="worker" name="worker" placeholder="입력" maxlength="10">
+								<small class="hidden warning">사용자 ID를 입력해 주세요</small>
+							</div>
+						</div>
+						<div class="col-lg-2 col-md-2 col-sm-3">
+							<span class="input_label">비밀번호</span>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-93">
+							<div class="tx_inp_type">
+								<input type="text" id="pwd" name="pwd" placeholder="입력" maxlength="10">
+								<small class="hidden warning">사용자 패스워드를 입력해 주세요</small>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-2 col-md-2 col-sm-3">
+							<span class="input_label">이름</span>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-9">
+							<div class="tx_inp_type">
+								<input type="text" id="fullName" name="full_name" placeholder="입력" maxlength="10">
+								<small class="hidden warning">이름을 입력해 주세요</small>
+							</div>
+						</div>
+						<div class="col-lg-2 col-md-2 col-sm-3">
+							<span class="input_label">권한 등급</span>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-93">
+							<div class="dropdown" id="userPwd">
+								<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+								<ul class="dropdown-menu">
+									<li data-value=""><a href="#">조직 관리자</a></li>
+									<li data-value=""><a href="#">일반 사용자</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-2 col-md-2 col-sm-3">
+							<span class="input_label">휴대폰</span>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-9">
+							<div class="tx_inp_type">
+								<input type="text" id="mobileNum" name="mobil_num" placeholder="입력" minlength="9">
+								<small class="hidden warning">휴대폰 번호를 입력해 주세요</small>
+							</div>
+						</div>
+						<div class="col-lg-2 col-md-2 col-sm-3">
+							<span class="input_label">이메일</span>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-93">
+							<div class="tx_inp_type">
+								<input type="text" id="emailAddr" name="email_addr" placeholder="입력" minlength="9">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-2 col-md-2 col-sm-3">
+							<span class="input_label">소속</span>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-9">
+							<div class="tx_inp_type">
+								<input type="text" id="affiliation" name="affiliation" placeholder="입력" minlength="9">
+							</div>
+						</div>
+						<div class="col-lg-2 col-md-2 col-sm-3">
+							<span class="input_label">업무 구분</span>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-93">
+							<div class="dropdown" id="userPwd">
+								<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+								<ul class="dropdown-menu">
+									<li data-value="0"><a href="#">일반</a></li>
+									<li data-value="1"><a href="#">사무 수탁사</a></li>
+									<li data-value="2"><a href="#">자산 운용사</a></li>
+									<li data-value="3"><a href="#">사업주</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-2 col-md-2 col-sm-3">
+							<span class="input_label">사용 여부</span>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-9">
+							<div class="dropdown" id="userPwd">
+								<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+								<ul class="dropdown-menu">
+									<li data-value="y"><a href="#">Y</a></li>
+									<li data-value="n"><a href="#">N</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-2 col-md-2 col-sm-3">
+							<span class="input_label">설명</span>
+						</div>
+						<div class="col-lg-10 col-md-10 col-sm-9">
+							<textarea name="user_desc" id="userDesc" class="textarea w-100" placeholder="입력"></textarea>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<ul class="nav nav-tabs">
+								<li class="active w-50"><a data-toggle="tab" href="#menu1">사업소</a></li>
+								<li class="w-50"><a data-toggle="tab" href="#menu2">SPC</a></li>
+							  </ul>
+						</div>
+					</div>
+
+					<div class="tab-content">
+						<div id="menu1" class="tab-pane fade in active">
+							<div class="flex_start">
+								<div class="dropdown w-35" id="userPwd">
+									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li data-value="y"><a href="#"></a></li>
+									</ul>
+								</div>
+								<div class="dropdown ml-16 w-25" id="userPwd">
+									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li data-value="y"><a href="#">수정/조회</a></li>
+										<li data-value="n"><a href="#">조회</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div id="menu2" class="tab-pane fade flex_start">
+							<div class="flex_start">
+								<div class="dropdown w-35" id="userPwd">
+									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li data-value="y"><a href="#"></a></li>
+									</ul>
+								</div>
+								<div class="dropdown ml-16 w-25" id="userPwd">
+									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li data-value="y"><a href="#"></a></li>
+										<li data-value="n"><a href="#"></a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-12">
+							<div class="btn_wrap_type02">
+								<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
+								<button type="submit" id="addUserBtn" class="btn_type">확인</button>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

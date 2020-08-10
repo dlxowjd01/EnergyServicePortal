@@ -214,21 +214,6 @@
 				return false;
 			});
 		}
-
-		// let p = JSON.parse(sList);
-		// console.log("p---", sList);
-		// $.each(p, function(index, element){
-		// 	console.log("elemet---", element)
-		// });
-
-		// var table = $('#example').DataTable({
-		// 	// "fixedHeader": true
-		// });
-
-		// new $.fn.dataTable.FixedHeader( table, {
-		// 	alwaysCloneTop: true
-		// });
-
 	});
 
 </script>
@@ -238,8 +223,6 @@
 		<h1 class="page-header">그룹 관리 설정</h1>
 	</div>
 </div>
-
-<c:set var="siteList" value="${siteHeaderList}"/> <!-- 사이트 별 -->
 
 <div class="row">
 	<div class="col-12">

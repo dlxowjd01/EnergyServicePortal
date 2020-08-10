@@ -239,8 +239,6 @@
 	</div>
 </div>
 
-<c:set var="siteList" value="${siteHeaderList}"/> <!-- 사이트 별 -->
-
 <div class="row">
 	<div class="col-3">
 		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
@@ -262,21 +260,7 @@
 		<div class="indiv">
 			<h2 class="tx_tit"></h2>
 			<table id="example" class="stripe">
-				<thead>
-					<!-- <tr>
-						<th></th>
-						<th>사업소 타입</th>
-						<th>사업소명</th>
-						<td>지역</th>
-						<th>발전원</th>
-						<th>발전 용량</th>
-						<th>ESS 용량 (PCS)</th>
-						<th>ESS 용량 (BMS)</th>
-						<th>DR 자원 코드</th>
-						<th>VPP 자원코드</th>
-						<th>알람 설정</th>
-					</tr> -->
-				</thead>
+				<thead></thead>
 				<tbody>
 				</tbody>
 				<tfoot>

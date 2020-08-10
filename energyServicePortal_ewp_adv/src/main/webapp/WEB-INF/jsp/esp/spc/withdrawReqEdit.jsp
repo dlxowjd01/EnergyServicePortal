@@ -348,7 +348,6 @@
 			let jsonData = {}
 			let arr =[];
 			let finalNameList = [];
-			let uid = `${sessionScope.userInfo.uid}`;
 
 			warning.addClass("hidden");
 			jsonData.spc_id = Number($("#selectedSpcId").data("value"));
@@ -364,7 +363,7 @@
 			jsonData.status_changed_by = loginName;
 			jsonData.status_changed_at = new Date();
 			jsonData.requested_by = loginName;
-			jsonData.requested_by_uid = uid;
+			jsonData.requested_by_uid = userInfoId;
 			jsonData.requested_at = new Date();
 			jsonData.transfer_agent = loginName;
 			jsonData.total_amount = totalAmount;
