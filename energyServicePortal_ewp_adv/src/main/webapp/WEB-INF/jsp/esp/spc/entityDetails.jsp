@@ -139,9 +139,19 @@
 						if (!isEmpty(spc_info)) {
 							setJsonAutoMapping(spc_info, 'basicInfo');
 							const fileList = spc_info['SPC_법인_인감'];
+							let spcSealSelected = '';
+							if (spc_info['spcSealSelected'] != undefined) {
+								spcSealSelected = spc_info['spcSealSelected'];
+							}
 
 							if (fileList.length > 0) {
 								fileList.forEach((file, idx) => {
+									if (spcSealSelected != '' && idx == spcSealSelected) {
+										fileList[idx]['SPC_법인_인감_대표'] = '대표 인감';
+									} else {
+										fileList[idx]['SPC_법인_인감_대표'] = '';
+									}
+
 									if (isEmpty(file['SPC_법인_인감_유형'])) {
 										fileList[idx]['SPC_법인_인감_유형'] = '';
 									}
@@ -207,32 +217,34 @@
 
 					objArray.forEach(objName => {
 						let target = eval(objName);
-						Object.entries(target).map((obj) => {
-							if (obj[0].match('동산담보표지판')) {
-								target[obj[0]] = obj[1].replace('동산담보표지판_', '').trim();
-							} else if (obj[0].match('자가부지공장근저당')) {
-								target[obj[0]] = obj[1].replace('자가부지공장근저당_', '').trim();
-							} else if (obj[0].match('권리증_보유_현황')) {
-								target[obj[0]] = obj[1].replace('권리증_보유_현황_', '').trim();
-							} else if (obj[0].match('운영_여부')) {
-								target[obj[0]] = obj[1].replace('운영_여부_', '').trim();
-							} else if (obj[0].match('관리_계약_구분')) {
-								if (obj[1].length > 0) {
-									obj[1].forEach((targetObj, idx) => {
-										obj[1][idx] = targetObj.replace('관리_계약_구분_', '').trim();
-									});
-								}
-								target[obj[0]] = obj[1];
-							} else if (obj[0] == 'SMP' || obj[0] == 'REC') {
-								target[obj[0]] = obj[1].replace(/\_/g, ' ');
-							} else {
-								if (!obj[0].match('계좌_번호') && !obj[0].match('비밀번호') && !obj[0].match('연락처')) {
-									if (isNumberic(obj[1])) {
-										target[obj[0]] = numberComma(obj[1]);
+						if (!isEmpty(target)) {
+							Object.entries(target).map((obj) => {
+								if (obj[0].match('동산담보표지판')) {
+									target[obj[0]] = obj[1].replace('동산담보표지판_', '').trim();
+								} else if (obj[0].match('자가부지공장근저당')) {
+									target[obj[0]] = obj[1].replace('자가부지공장근저당_', '').trim();
+								} else if (obj[0].match('권리증_보유_현황')) {
+									target[obj[0]] = obj[1].replace('권리증_보유_현황_', '').trim();
+								} else if (obj[0].match('운영_여부')) {
+									target[obj[0]] = obj[1].replace('운영_여부_', '').trim();
+								} else if (obj[0].match('관리_계약_구분')) {
+									if (obj[1].length > 0) {
+										obj[1].forEach((targetObj, idx) => {
+											obj[1][idx] = targetObj.replace('관리_계약_구분_', '').trim();
+										});
+									}
+									target[obj[0]] = obj[1];
+								} else if (obj[0] == 'SMP' || obj[0] == 'REC') {
+									target[obj[0]] = obj[1].replace(/\_/g, ' ');
+								} else {
+									if (!obj[0].match('계좌_번호') && !obj[0].match('비밀번호') && !obj[0].match('연락처')) {
+										if (isNumberic(obj[1])) {
+											target[obj[0]] = numberComma(obj[1]);
+										}
 									}
 								}
-							}
-						});
+							});
+						}
 					});
 
 					if (!isEmpty(address)) {
@@ -591,8 +603,9 @@
 					<tr>
 						<th class="group_type">SPC 법인 인감</th>
 						<td id="SPC_법인_인감">
-							<p class="tx_file">
-								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[SPC_법인_인감_유형] - [originalname]</a>
+							<p>
+								<span class="offset-label">[SPC_법인_인감_대표]</span>
+								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]" class="tx_file">[SPC_법인_인감_유형] - [originalname]</a>
 							</p>
 						</td>
 						<th></th>

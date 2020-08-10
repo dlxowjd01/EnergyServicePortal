@@ -24,6 +24,9 @@
 		setSingleSelectDropdown($("#searchOption"))
 		setSingleSelectDropdown(sumOptList);
 
+		$('#allSelect').prop('checked', true);
+		$('#allPurpose').prop('checked', true);
+
 		$('#fromDate').datepicker('setDate', 'today');
 		$('#toDate').datepicker('setDate', 'today');
 		// $('#toDate').datepicker( "option", "maxDate", new Date());
@@ -154,6 +157,8 @@
 				selectAll($("#spcList"));
 				searchArr.push(spcArr.toString())
 				getDataList(page, searchArr)
+				spcList.append(`<li class="btn_wrap_type03 btn_wrap_border"><button type="button" class="btn_type mr-16">적용</button></li>`);
+				$('#전체').prop('checked', true);
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				alert('처리 중 오류가 발생했습니다.');
 				return false;
@@ -608,7 +613,7 @@
 		--><span class='tx_tit'>SPC 선택</span><!--
 		--><div class='sa_select'>
 				<div class='dropdown'>
-					<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택" data-value="">선택<span class='caret'></span></button>
+					<button class='btn btn-primary dropdown-toggle noClose' type='button' data-toggle='dropdown' data-name="선택" data-value="">전체<span class='caret'></span></button>
 					<ul id='spcList' class='dropdown-menu chk_type' role='menu'>
 						<li data-value="*spcId*"><!--
 						--><a href="javascript:void(0);" tabindex="-1"><!--
@@ -648,7 +653,7 @@
 						<div class='bx_row aN3'>
 							<div class='bx_align dropdown'>
 								<h2 class='comp_tit'>상태</h2>
-								<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택" value="">선택<span class='caret'></span></button>
+								<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택" value="">전체<span class='caret'></span></button>
 								<ul id="spcStatus" class='dropdown-menu chk_type dropdown_offset' role='menu'>
 									<li>
 										<a href='javascript:void(0)' tabindex='-1'>
@@ -685,8 +690,9 @@
 							</div>
 							<div class='bx_align dropdown'>
 								<h2 class='comp_tit'>입출금 구분</h2>
-								<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown' value="">선택<span class='caret'></span></button>
+								<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown' value="" data-value="all">전체<span class='caret'></span></button>
 								<ul id="transactionType" class='dropdown-menu dropdown_offset' role='menu'>
+									<li data-value='all'><a href='javascript:void(0)' tabindex='-1'>전체</a></li>
 									<li data-value='deposit'><a href='javascript:void(0)' tabindex='-1'>입금</a></li>
 									<li data-value='withdraw'><a href='javascript:void(0)' tabindex='-1'>출금</a></li>
 								</ul>
@@ -695,11 +701,11 @@
 							<div class='bx_align'>
 								<h2 class='comp_tit'>용도 구분</h2>
 								<div class='dropdown'>
-									<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택">선택<span class='caret'></span></button>
+									<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택">전체<span class='caret'></span></button>
 									<ul id="spcPurposeList" class='dropdown-menu chk_type dropdown_offset' role='menu'>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='allPurpose' data-value='all' data-name="selectAll" name='spcPurpose'>
+												<input type='checkbox' id='allPurpose' data-value='all' data-name="selectAll" name='spcPurpose' checked>
 												<label for='allPurpose'>전체</label>
 											</a>
 										</li>
