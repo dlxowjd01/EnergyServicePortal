@@ -119,10 +119,6 @@
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">출장/조치 보고서</h1>
-		<div class="time fr">
-			<span>CURRENT TIME</span>
-			<em class="currTime">${nowTime}</em>
-		</div>
 	</div>
 </div>
 <div class="row">

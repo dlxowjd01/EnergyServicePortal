@@ -368,7 +368,7 @@
 		<form id="addNoticeForm" name="addNoticeForm">
 			<div class="modal-content device_modal_content">
 				<div class="modal-header stit">
-					<h2>공지 사항 작성 </h2>
+					<h2>공지 사항 작성</h2>
 				</div>
 				<div class="modal-body">
 					<form id="noticeForm" action="#" method="post" name="noticeForm" novalidate>
@@ -513,12 +513,6 @@
 <div class="row header-wrapper">
 	<div class="col-12">
 		<h1 class="page-header">공지 사항</h1>
-		<div class="time fr">
-			<span>CURRENT TIME</span>
-			<em class="currTime">${nowTime}</em>
-			<span>DATA BASE TIME</span>
-			<em class="dbTime">2018-07-27 17:01:02</em>
-		</div>
 	</div>
 </div>
 <div class="row">

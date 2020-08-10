@@ -216,21 +216,24 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 						session.setAttribute("sessionSiteList", jsonArray);
 					} else {
-						systemLoc = (String[]) session.getAttribute("systemLoc");
-						systemType = (String[]) session.getAttribute("systemType");
-
-						jsonArray = new JSONArray();
-						if ((systemLoc != null && !"".equals(systemLoc)) || (systemType != null && !"".equals(systemType))) {
-							refineList = makeSiteList(siteOriginList, groupMap, session, systemLoc, systemType, systemValue);
-							for (Map<String, Object> refineMap : refineList) {
-								jsonArray.put(jsonParser(refineMap));
-							}
-						} else {
+						if (jsonArray == null) {
+							jsonArray = new JSONArray();
 							for (Map<String, Object> refineMap : siteOriginList) {
 								jsonArray.put(jsonParser(refineMap));
 							}
+						} else {
+							for (int i = 0; i < jsonArray.length(); i++) {
+								int index = i;
+								JSONObject tempObj = (JSONObject) jsonArray.get(i);
+
+								for (Map<String, Object> refineMap : siteOriginList) {
+									if (refineMap.get("sid").equals(tempObj.get("sid"))) {
+										jsonArray.put(index, jsonParser(refineMap));
+									}
+								}
+							}
 						}
-						
+
 						session.setAttribute("sessionSiteList", jsonArray);
 					}
 

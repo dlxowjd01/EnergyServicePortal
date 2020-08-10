@@ -9,7 +9,7 @@
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>
 			<span>DATA BASE TIME</span>
-			<em class="dbTime">2020-04-23 14:01:02</em>
+			<em class="dbTime"></em>
 		</div>
 	</div>
 </div>
@@ -566,6 +566,9 @@
 							const rtuName = $('#selectedRTU');
 							selectLog(rtu.rid);
 							rtuName.text(rtu.name).data('rid', rtu.rid);
+
+							const now = new Date();
+							$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 						});
 
 						dateFilter.off('click');
@@ -597,6 +600,8 @@
 			const tableData = $('#PV_INVERTER').find('tbody');
 			tableData.empty();
 		}
+
+		$('.dbTime').text('');
 	}
 
 	const rtnDropdown = function ($selectId) {
