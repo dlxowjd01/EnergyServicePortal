@@ -14,7 +14,7 @@
 </div>
 <div class="row">
 	<div class="col-lg-3 col-md-4 col-sm-6">
-		<div class="header_drop_area w_type">
+		<div class="header_drop_area w-60">
 			<div class="dropdown" id="siteList">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="사업소 선택">
 					사업소 선택<span class="caret"></span>
@@ -31,7 +31,7 @@
 		</div>
 	</div>
 </div>
-<div class="row content-wrapper device_row scroll">
+<div class="row content-wrapper device_row">
 	<div class="col-lg-12" id="deviceStateTypeList">
 		<div class="row" id="[typeId]">
 			<div class="col-lg-8">
@@ -44,21 +44,21 @@
 							<span class="eq_error">트립([error])</span>
 						</div>
 					</div>
-					<ul class="eq_list scroll [typeClass]" id="[typeId]_List">
+					<ul class="device-list [typeClass]" id="[typeId]_List">
 						[deviceList]
 					</ul>
 				</div>
 			</div>
 			<div class="col-lg-4">
-				<div class="indiv eq_card">
+				<div class="indiv eq_card hidden">
 					<div class="chart_top clear">
-						<h2 class="ntit fl">선택 설비명</h2>
+						<h2 class="ntit fl"></h2>
 					</div>
 					<ul class="eq_card_ul clear">
 						[featureHead]
 					</ul>
 					<div class="inv_sec_bx">
-						<p class="inv_tit">선택 설비 현황</p>
+						<p class="inv_tit"></p>
 						<ul class="isb_in clear">
 							<li>
 								<ul class="di_list">[featureBody1]</ul>
@@ -82,7 +82,7 @@
 	<div class="modal-dialog device_modal modal-lg">
 		<div class="modal-content new_device">
 			<div class="modal-header stit">
-				<h2>신규 장치 등록</h2>
+				<h2>설비 정보 수정</h2>
 			</div>
 			<div class="modal-body">
 				<form id="deviceForm1" action="#" method="post" name="deviceForm" novalidate>
@@ -679,7 +679,7 @@
 				}).always(function(jqXHR, textStatus) {
 					promiseCnt++;
 					if (siteArray.length == promiseCnt) {
-						console.log(deviceMap);
+						// console.log("deviceMap===", deviceMap);
 						makeDeviceList(deviceMap);
 					}
 				});
@@ -697,7 +697,8 @@
 			let normal = 0, alert = 0, error = 0, deviceList = $('<div>'), operation = '';
 			//배열로 디바이스 상태 수집
 			if (!isEmpty(val)) {
-				val.forEach(el => {
+				val.forEach((el, index) => {
+					console.log('index--', index);
 					let capacity = isEmpty(el.capacity) ? '-' : displayNumberFixedUnit(el.capacity, el.capacity_unit, 'kW', 2)[0] + 'kW',
 						activePower = isEmpty(el.activePower) ? '-' : displayNumberFixedUnit(el.activePower, 'W', 'kW', 2)[0] + 'kW',
 						dcPower = isEmpty(el.dcPower) ? '-' : displayNumberFixedUnit(el.dcPower, 'W', 'kW', 2)[0] + 'kW',
@@ -706,29 +707,32 @@
 					switch (el.operation) {
 						case 0:
 							alert++;
-							operation = 'st_alert';
+							operation = 'alert text-black';
 							break;
 						case 1:
 							normal++;
-							operation = '';
+							operation = 'normal text-black';
 							break;
 						case 2:
 							error++;
-							operation = 'st_error';
+							operation = 'error text-black';
 							break;
 						default:
-							alert++;
-							operation = 'st_alert';
+							// alert++;
+							operation = '';
 							break;
 					}
 
-					let deviceStr = `<li class="${'${operation}'}" onclick="deviceDetailView('${'${el.did}'}')">
+					let deviceStr = `<li class="${'${operation}'}" onclick="deviceDetailView('${'${el.did}'}', '${'${el.operation}'}', $(this) )">
 										<span>${'${el.name}'}</span>
 										<span>${'${capacity}'}</span><em>${'${activePower}'}  ${'${dcPower}'}</em>
 										<button type="button" onclick="deviceProcess('delete', '${'${el.did}'}');" class="delete">삭제</button>
 										<a href="javascript:void(0);"></a>
 									</li>`;
 					deviceList.append(deviceStr);
+					if(index == 0) {
+						deviceDetailView(el.did, el.operation, $(this))
+					}
 				});
 			}
 
@@ -739,12 +743,17 @@
 				if (!isEmpty(featureProperties[key])) {
 					if (!isEmpty(featureProperties[key].headerProp)) {
 						let prop = featureProperties[key].headerProp;
-						prop.forEach(el => {
-							featureHead += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><p class="t_ti">' + el.value + '</p><p class="t_value"></p></li>';
-						});
-					}
-				}
 
+
+							prop.forEach(el => {
+								console.log("prop---", el.key)
+								if(!(el.key == "dname")) {
+									featureHead += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><p class="t_ti">' + el.value + '</p><p class="t_value"></p></li>';
+								}
+							});
+						}
+
+					}
 				if (!isEmpty(featureProperties[key])) {
 					if (!isEmpty(featureProperties[key].bodyProp)) {
 						let prop = featureProperties[key].bodyProp;
@@ -767,45 +776,51 @@
 			deviceList.append($li);
 
 			let typeClass;
+			// 1. SM_MANUAL => 수기 입력,
+			// 2. SM_ISMART => iSmart(과금 데이터),
+			// 3. SM => Smart Meter(전력량계),
+			// 4. INV_PV => 태양광 인버터,
+			// 5. PCS_ESS => Power Conditioning System,
+			// 6. BMS_SYS => Battery Management System,
+			// 7. BMS_RACK => BMS Rack,
+			// 8. SENSOR_SOLAR, SENSOR_TEMPHUMID, SENSOR_WEATHER, SENSOR_FLAME => 센서,
+			// 9. CIRCUIT_BREAKER => 회로 차단기,
+			// 10. COMBINER_BOX => 접속반,
+
+				
 			switch (key) {
-				case 'INV_PV':
-					typeClass = 'eq_li_type01';
-					break;
-				case 'SENSOR_SOLAR':
-					typeClass = 'eq_li_type02';
-					break;
 				case 'SM_MANUAL':
-					typeClass = 'eq_li_type03';
+					typeClass = 'device-list list-manual';
+					break;
+				case 'SM_ISMART':
+					typeClass = 'device-list list-ami';
 					break;
 				case 'SM':
-					typeClass = 'eq_li_type03';
+					typeClass = 'device-list list-meter';
+					break;
+				case 'INV_PV':
+					typeClass = 'device-list list-inverter';
 					break;
 				case 'PCS_ESS':
-					typeClass = 'eq_li_type03';
+					typeClass = 'device-list list-pcs';
 					break;
 				case 'BMS_SYS':
-					typeClass = 'eq_li_type03';
+					typeClass = 'device-list list-bms-sys';
 					break;
 				case 'BMS_RACK':
-					typeClass = 'eq_li_type03';
+					typeClass = 'device-list list-bms-rack';
 					break;
-				case 'SENSOR_WEATHER':
-					typeClass = 'eq_li_type03';
-					break;
-				case 'SENSOR_TEMPHUMID':
-					typeClass = 'eq_li_type03';
-					break;
-				case 'SENSOR_FLAME':
-					typeClass = 'eq_li_type03';
+				case 'SENSOR_SOLAR': case 'SENSOR_WEATHER': case 'SENSOR_TEMPHUMID': case 'SENSOR_FLAME':
+					typeClass = 'device-list list-sensor';
 					break;
 				case 'CIRCUIT_BREAKER':
-					typeClass = 'eq_li_type03';
+					typeClass = 'device-list list-disconnector';
 					break;
 				case 'COMBINER_BOX':
-					typeClass = 'eq_li_type03';
+					typeClass = 'device-list list-connector';
 					break;
 				default:
-					typeClass = 'eq_li_type01';
+					typeClass = 'device-list';
 					break;
 			}
 
@@ -841,7 +856,7 @@
 		$('.dbTime').text('');
 	}
 
-	const deviceDetailView = (did) => {
+	const deviceDetailView = (did, deviceStatus, self) => {
 		$.ajax({
 			url: apiHost + apiStatusRaw,
 			type: 'get',
@@ -855,25 +870,18 @@
 				dName = data[did].dname,
 				operation = 't2';
 
-			if (isEmpty(resultData)) {
-				operation = 't2'
-			} else {
-				switch (resultData.operation) {
-					case 0:
-						operation = '';
-						break;
-					case 1:
-						operation = 't3';
-						break;
-					case 2:
-						operation = 't2';
-						break;
-					default:
-						operation = '';
-						break;
+				$('#' + dType + ' .eq_card').removeClass("hidden");
+				if(deviceStatus == 0){
+					// 중지
+					$('#' + dType + ' .eq_card').addClass('alert');
+				} else if(deviceStatus == 1){
+					// 정상
+					$('#' + dType + ' .eq_card').addClass('normal');
+				} else if(deviceStatus == 2) {
+					// 트립
+					$('#' + dType + ' .eq_card').addClass('error');
 				}
-			}
-			$('#' + dType + ' .eq_card').removeClass('t2').removeClass('t3').addClass(operation);
+
 			$('#' + dType + ' .eq_card .ntit').text(dName);
 			$('#' + dType + ' .eq_card .inv_tit').text(dName + ' 현황');
 
@@ -914,6 +922,8 @@
 				$('#' + dType + ' .eq_card .eq_btn_bx button').eq(1).attr('onclick', 'moveOperation("' + did + '");'); //상태이력으로 이동
 			}
 			$('#' + dType + ' .eq_card .eq_btn_bx button').eq(0).attr('onclick', 'addDeviceForm("' + dType + '", "' + did + '")'); //설비 수정
+			
+			self.addClass("active").siblings().removeClass("active");
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);

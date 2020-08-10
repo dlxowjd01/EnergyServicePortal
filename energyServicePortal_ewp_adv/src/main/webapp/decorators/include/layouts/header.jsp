@@ -11,8 +11,6 @@
 		let mobileNum = '${userInfo.contact_phone}';
 		let accLevel = "";
 		let taskCategory = "";
-		let pwdFormSubmitted = false;
-		let profileFormSubmitted = false;
 
 		// role: 1: 시스템관리자, 2: 일반
 		role == 1 ? accLevel = "시스템관리자" : accLevel = "일반";
@@ -125,11 +123,10 @@
 		$("#confirmNewPwd").keyup(function() {
 			let password = $("#newPwd").val();
 			password == $(this).val() ? $("#pwdMatched").addClass("hidden") : $("#pwdMatched").removeClass("hidden");
-
 			let validated = $("#pwdMatched").hasClass("hidden");
 			if( $(".tick:not(.checked)").index() == -1 && validated){
-				$("#updatePwdBtn").prop("disabled", false);
 				$("#updatePwdBtn").removeClass("disabled");
+				$("#updatePwdBtn").prop("disabled", false);
 			}
 		});
 
@@ -157,7 +154,8 @@
 				data: JSON.stringify(value)
 			}
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				// console.log("success===", json);
+				console.log("success===", json);
+				$("#oldPwdErr").addClass("hidden");
 				$("#successMsg1").removeClass("hidden");
 				$('.loading').hide();
 				setTimeout(function(){
@@ -582,7 +580,7 @@
 
 							<div class="btn_wrap_type">
 								<small id="successMsg1" class="text-blue text-sm left hidden">비밀번호가 성공적으로 변경 되었습니다.</small>
-								<button type="submit" disabled id="updatePwdBtn" class="btn_type03 disabled">비밀번호 변경</button>
+								<button type="submit" id="updatePwdBtn" class="btn_type03 disabled" disabled>비밀번호 변경</button>
 							</div>
 						</form>
 						<form id="profileForm" name="profile_form">
@@ -610,7 +608,7 @@
 							</div>
 							<div class="btn_wrap_type">
 								<small id="successMsg2" class="text-blue text-sm left hidden">개인정보가 성공적으로 변경 되었습니다.</small>
-								<button type="submit" id="updateProfileBtn" disabled class="btn_type03 disabled">개인정보 변경</button>
+								<button type="submit" id="updateProfileBtn" class="btn_type03 disabled" disabled>개인정보 변경</button>
 							</div>
 						</form>
 					</div>

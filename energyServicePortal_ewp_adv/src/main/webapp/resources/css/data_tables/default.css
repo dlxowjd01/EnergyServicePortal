@@ -37,7 +37,7 @@ table.dataTable thead td {
     height: 48px;
     line-height: 48px;
     padding: 0 10px;
-    background: var(--box-color5);
+    background: var(--white15);
 }
 
 table.dataTable thead th:active,
@@ -48,7 +48,7 @@ table.dataTable thead td:active {
 table.dataTable tfoot th,
 table.dataTable tfoot td {
     padding: 10px 18px 6px 18px;
-    border-top: 1px solid var(--color9);
+    border-top: 1px solid var(--white40);
 }
 
 table.dataTable thead .sorting:not(.no-sorting) {
@@ -114,18 +114,18 @@ table.dataTable.stripe tbody td.selected {
 }
 
 table.dataTable.stripe tbody tr.even td {
-    background: var(--box-color5);
+    background: var(--box-darker);
     font-weight: normal;
 }
 
 table.dataTable.stripe tbody tr.selected td,
 table.dataTable.stripe tbody td.selected {
-    color: var(--color3);
+    color: var(--white);
 }
 
 table.dataTable.stripe tbody td,
 table.dataTable.display tbody td {
-    color: var(--color4);
+    color: var(--white60);
 }
 
 table.dataTable.nowrap th,
@@ -253,39 +253,45 @@ table.dataTable td {
 }
 
 .dataTables_wrapper label {
-    color: var(--title-text);
+    color: var(--white60);
 }
 
-
 .dataTables_wrapper select {
-    margin: 0 10px 20px;
+    margin: 0 10px 20px 0;
     padding: 5px 10px;
     height: 36px;
-    border: 1px solid var(--color2);
+    border: 1px solid var(--white87);
 }
 
 .dataTables_wrapper select option {
     background: none;
 }
 
-.dataTables_wrapper .dataTables_length {
-    float: left;
-}
 
 .dataTables_wrapper .dataTables_filter {
-    display: none;
+    /* display: none; */
     float: right;
     text-align: right;
+}
+
+.dataTables_wrapper .dataTables_filter .dataTables_length {
+	/* float: left; */
+	display: block;
+	border: 1px red;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    display: none;
 }
 
 .dataTables_wrapper .dataTables_filter input {
     display: none;
     margin-left: 0.5em;
-    background: var(--box-color7);
+    background: var(--white);
     padding: 0;
     height: 36px;
 
-    color: var(--color2);
+    color: var(--white87);
     border: 0;
     border-radius: 2px;
     outline: none;
@@ -307,11 +313,11 @@ table.dataTable td {
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button {
-    color: var(--color4);
+    color: var(--white60);
     box-sizing: border-box;
     display: inline-block;
     min-width: 40px;
-    height: 12px;
+    height: 14px;
     text-align: center;
     text-decoration: none !important;
     cursor: pointer;
@@ -322,7 +328,7 @@ table.dataTable td {
 .dataTables_wrapper .dataTables_paginate .paginate_button.current,
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
     opacity: 1;
-    color: var(--color2);
+    color: var(--white87);
     border: 0;
 }
 
@@ -338,7 +344,7 @@ table.dataTable td {
 .dataTables_wrapper .dataTables_paginate .paginate_button.previous {
     opacity: 0.6;
     background: var(--ico-prev) no-repeat center center;
-    color: var(--color4);
+    color: var(--white60);
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.next {
@@ -374,7 +380,7 @@ table.dataTable td {
 .dataTables_wrapper .dataTables_info,
 .dataTables_wrapper .dataTables_processing,
 .dataTables_wrapper .dataTables_paginate {
-    color: var(--title-text);
+    color: var(--white60);
 }
 
 .dataTables_wrapper .dataTables_scroll {
@@ -589,31 +595,6 @@ div.dt-button-collection-title:empty {
     display: none;
 }
 
-button.dt-button,
-div.dt-button,
-a.dt-button {
-    position: relative;
-    display: inline-block;
-    box-sizing: border-box;
-    padding: 0.5em 1em;
-	border: 1px solid var(--color8);
-	border-radius: 4px;
-	padding: 0 25px;
-    cursor: pointer;
-	font-size: 14px;
-	line-height: 36px;
-    color: var(--color3);
-    white-space: nowrap;
-	overflow: hidden;
-	background: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    text-decoration: none;
-    outline: none;
-    text-overflow: ellipsis;
-}
 .dt-button + .dt-button {
 	margin-left: 8px;
 }
@@ -621,16 +602,7 @@ a.dt-button {
 button.dt-button.disabled,
 div.dt-button.disabled,
 a.dt-button.disabled {
-    color: var(--color4);
-}
-
-button.dt-button:active:not(.disabled),
-button.dt-button.active:not(.disabled),
-div.dt-button:active:not(.disabled),
-div.dt-button.active:not(.disabled),
-a.dt-button:active:not(.disabled),
-a.dt-button.active:not(.disabled) {
-    /* background: none; */
+    color: var(--white60);
 }
 
 button.dt-button:active:not(.disabled):hover:not(.disabled),
@@ -649,12 +621,6 @@ a.dt-button:hover {
     text-decoration: none;
 }
 
-button.dt-button:hover:not(.disabled),
-div.dt-button:hover:not(.disabled),
-a.dt-button:hover:not(.disabled) {
-
-}
-
 button.dt-button:focus:not(.disabled),
 div.dt-button:focus:not(.disabled),
 a.dt-button:focus:not(.disabled) {
@@ -667,7 +633,7 @@ a.dt-button:focus:not(.disabled) {
 
 div.dt-buttons {
     position: relative;
-	float: left;
+	width: 100%;
 	margin-bottom: 16px;
 }
 
@@ -690,8 +656,6 @@ div.dt-button-collection {
     width: 150px;
     margin-top: 3px;
     padding: 8px 8px 4px 8px;
-    border: 1px solid #ccc;
-    border: 1px solid rgba(0, 0, 0, 0.4);
 	background: none;
     overflow: hidden;
     z-index: 2002;
@@ -709,15 +673,6 @@ div.dt-button-collection a.dt-button {
     width: 100%;
     display: block;
     float: none;
-}
-
-div.dt-button-collection button.dt-button:active:not(.disabled),
-div.dt-button-collection button.dt-button.active:not(.disabled),
-div.dt-button-collection div.dt-button:active:not(.disabled),
-div.dt-button-collection div.dt-button.active:not(.disabled),
-div.dt-button-collection a.dt-button:active:not(.disabled),
-div.dt-button-collection a.dt-button.active:not(.disabled) {
-
 }
 
 div.dt-button-collection.fixed {
@@ -810,33 +765,4 @@ div.dt-button-background {
         float: none !important;
         text-align: center;
     }
-}
-
-button.dt-button.processing,
-div.dt-button.processing,
-a.dt-button.processing {
-    color: rgba(0, 0, 0, 0.2);
-}
-
-button.dt-button.processing:after,
-div.dt-button.processing:after,
-a.dt-button.processing:after {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 16px;
-    height: 16px;
-    margin: -8px 0 0 -8px;
-    box-sizing: border-box;
-    display: block;
-    content: ' ';
-    border: 2px solid #282828;
-    border-radius: 50%;
-    border-left-color: transparent;
-    border-right-color: transparent;
-    animation: dtb-spinner 1500ms infinite linear;
-    -o-animation: dtb-spinner 1500ms infinite linear;
-    -ms-animation: dtb-spinner 1500ms infinite linear;
-    -webkit-animation: dtb-spinner 1500ms infinite linear;
-    -moz-animation: dtb-spinner 1500ms infinite linear;
 }

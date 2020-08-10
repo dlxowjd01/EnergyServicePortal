@@ -40,7 +40,7 @@
 	<script src="/js/bootstrap.min.js"></script>
 	<!-- high-chart -->
 	<script src="/js/highcharts.js"></script>
-	<script src="../js/modules/variwide.js"></script>
+	<script src="/js/modules/variwide.js"></script>
 	<script src="/js/modules/data.js"></script>
 	<script src="/js/modules/exporting.js"></script>
 	<script src="/js/modules/export-data.js"></script>  
@@ -54,15 +54,15 @@
 	--%>
 	<script src="/js/custom/common.js"></script>
 	<!-- START: 현재 안씀 - 확인 필요 -->
-	<script src="/js/custom/lems.js"></script>
-	<script src="/js/custom/searchRequirement.js"></script>
+	<!-- <script src="/js/custom/lems.js"></script>
+	<script src="/js/custom/searchRequirement.js"></script> -->
 	<!-- END -->
 	<script src="/js/custom/utils.js"></script>
 	<script src="/js/custom/numberFormat.js"></script>
 
 	<script src="/js/html2canvas.js"></script>
 	<!-- START: 현재 안씀 - 확인 필요 -->
-	<script src="/js/jspdf.min.js"></script>
+	<!-- <script src="/js/jspdf.min.js"></script> -->
 	<!-- END -->
 	<!-- print preview -->
 	<!-- <script src="/js/printPreview.js"></script> -->
@@ -74,7 +74,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
 
-	<script src="/js/iderms/idermsapi.js"></script>
 	<!-- timepicker -->
 	<script type="text/javascript" src="/js/wickedpicker.js"></script>
 	<script src="/js/data_tables/default.js" type="text/javascript"></script>
@@ -112,17 +111,17 @@
 			<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
 				changeFavicon('/img/logo-only.ico');
 			</c:if>
-
-			<%--sessionUser = JSON.stringify(${userInfo});--%>
-			// getUserInfo(setSession);
-			// var authType = sessionUser.auth_type;
-			// if (authType == '1') {
-			// 	sessionRefresh();
-			// 	setInterval(function () {
-			// 		sessionRefresh();
-			// 	}, 1000 * 60 * 50); // 1000 = 1초, 1000*60 = 1분
-			// }
+			
 			$('.loading').hide();
+
+			$(window).resize(function() {
+				if ($(window).width() > 768) {
+					$('#mask').hide();
+					$('body').removeClass("sidenav-no-scroll");
+					$('#gnb').hide();
+				}
+			});
+
 		});
 
 		const changeFavicon = link => {

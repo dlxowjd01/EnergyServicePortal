@@ -69,9 +69,12 @@ $(function() {
     ## 모바일 레이아웃 스크립트 ##
 */
 $(function() {
+	if ($(window).width() > 768) {
+		$('#gnb').hide();
+	}
     /* 카테고리 열기 */
     $('.category').click(function(){
-        $('#mask').fadeTo("slow", 0.9);
+        $('#mask').fadeTo("slow", 0.5);
         $('body').addClass("sidenav-no-scroll");
         $('#gnb').show(200);
     });
@@ -84,7 +87,7 @@ $(function() {
     /* 서브메뉴 열기/닫기 */
     $('.g_menu li a').click(function(){
         $(this).siblings("ul").slideToggle(500);
-    });
+	});
 });
 
 /* 표 접기/펼치기 */

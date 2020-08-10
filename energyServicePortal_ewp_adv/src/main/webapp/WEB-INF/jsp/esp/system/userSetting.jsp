@@ -6,7 +6,7 @@
 	$(function () {
 		let sList = "${location}"
 
-		getSites(oid);
+		// getSites(oid);
 
 		function getSites (siteId) {
 			let option = {
@@ -18,27 +18,7 @@
 					filter: { 
 						"limit": 200,
 						"fields": {
-							"sid": true,
-							"oid": true,
-							"name": true,
-							"location": true,
-							"resource_type": true,
-							"ess": true,
-							"vpp_group_id": true,
-							"dr_group_id": true,
-							"market_id": true,
-							"station_id": true,
-							"latlng": true,
-							"tz": true,
-							"address": true,
-							"detail_info": true,
-							// "utility": true,
-							"dr_info": true,
-							"vpp_info": true,
-							"power_market": true,
-							// "cctv_url": true,
-							// "createdAt": true,
-							// "updatedAt": true
+
 						},
 					}
 				},
@@ -52,16 +32,6 @@
 				$('.loading').hide();
 				let data = json;
 				let newArr = [];
-				// 1. 사업소 타입
-				// 2. 사업소명
-				// 3. 지역
-				// 4. 발전원 => 0: MicroGrid, 1: photovoltaic, 2: wind, 3: SmallHydro (hydroelectric power for local community)
-				// 5. 발전 용량
-				// 6. ESS 용량 (PCS)
-				// 7. ESS 용량(BMS)
-				// 8. DR 자원 코드
-				// 9. Vpp 자원 코드
-				// 10. 알람 설정
 
 				Promise.all(json.map( (x, index) => {
 					// console.log("x===", x)
@@ -155,46 +125,26 @@
 							"className": "dt-body-center"
 						},
 						{
-							"sTitle": "사업소 타입",
+							"sTitle": "그룹 타입",
 							"mData": "siteType",
 						
 						},
 						{
-							"sTitle": "사업소명",
+							"sTitle": "그룹명",
 							"mData": "name"
 						},
 						{
-							"sTitle": "지역",
+							"sTitle": "사업소",
 							"mData":"location",
 						},
 						{
-							"sTitle": "발전원",
+							"sTitle": "최종 작업자",
 							"mData":"powerSource",
 						},
 						{
-							"sTitle": "발전 용량",
+							"sTitle": "비고",
 							"mData":"genVol",
-						},
-						{
-							"sTitle": "ESS 용량 (PCS)",
-							"mData":"pscVol",
-						},
-						{
-							"sTitle": "ESS 용량 (BMS)",
-							"mData":"bmsVol",
-						},
-						{
-							"sTitle": "DR 자원 코드",
-							"mData":"drId",
-						},
-						{
-							"sTitle": "VPP 자원코드",
-							"mData":"vppId",
-						},
-						{
-							"sTitle": "알람 수신",
-							"mData":"alarmState",
-						},
+						}
 					],
 					dom: 'Bfltip',
 					// dom: 'Bfrtip',
@@ -239,7 +189,7 @@
 							className: "btn_type fr",
 							action: function (e, node, config){
 								console.log("node===", node, "e---", e, "config===", config)
-								$('#addSiteModal').modal('show');
+								$('#addUserModal').modal('show');
 							}
 						}
 					],
@@ -289,7 +239,7 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">사업소 관리</h1>
+		<h1 class="page-header">사용자 관리</h1>
 	</div>
 </div>
 
@@ -298,7 +248,7 @@
 <div class="row">
 	<div class="col-12">
 		<div class="flex_group">
-			<span class="tx_tit">사업소</span>
+			<span class="tx_tit">사용자 유형</span>
 			<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button"
 					data-toggle="dropdown">선택<span class="caret"></span></button>
@@ -322,50 +272,8 @@
 				</ul>
 			</div>
 		</div>
+
 		<div class="flex_group">
-			<span class="tx_tit">지역</span>
-			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button"
-					data-toggle="dropdown">선택<span class="caret"></span></button>
-				<ul class="dropdown-menu chk_type" role="menu">
-					<c:set var="systemLoc" value="${sessionScope.systemLoc}"/>
-					<c:forEach var="loc" items="${location}" varStatus="stat">
-						<li><a href="#">${loc.value.name.kr}</a></li>
-						<c:forEach var="country" items="${loc.value.locations}" varStatus="countryStat">
-							<c:set var="choice" value="false" />
-							<c:if test="${fn:length(systemLoc) > 0}">
-								<c:forEach var="selLoc" items="${systemLoc}">
-									<c:if test="${country.value.code eq selLoc}">
-										<c:set var="choice" value="true" />
-									</c:if>
-								</c:forEach>
-							</c:if>
-							<li>
-								<a href="#" tabindex="-1">
-									<input type="checkbox" name="systemLoc" id="location_${countryStat.index}" value="${country.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
-									<label for="location_${countryStat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${country.value.code}</label>
-								</a>
-							</li>
-						</c:forEach>
-					</c:forEach>
-				</ul>
-			</div>
-		</div>
-		<div class="flex_group">
-			<span class="tx_tit">발전 자원</span>
-			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button"
-					data-toggle="dropdown">선택<span class="caret"></span></button>
-				<ul class="dropdown-menu">
-					<li data-value="solar" class="on"><a href="#">태양광</a></li>
-					<li data-value="wind"><a href="#">풍력</a></li>
-					<li data-value="wind"><a href="#">소수력</a></li>
-					<li data-value="wind"><a href="#">부하</a></li>
-				</ul>
-			</div>
-		</div>
-		<div class="flex_group">
-			<span class="tx_tit">발전소명</span>
 			<div class="flex_start">
 				<div class="tx_inp_type">
 					<input type="text" id="key_word" placeholder="입력">
@@ -417,7 +325,7 @@
 	</div>
 </div>
 
-<div class="modal fade" id="addSiteModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog">
 		<div class="setting-modal-content modal-content">
 			<div class="modal-header"><h1>사업소 추가</h1></div>

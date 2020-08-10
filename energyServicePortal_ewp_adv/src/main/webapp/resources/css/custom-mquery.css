@@ -1,16 +1,3 @@
-/* ~ Laptop */
-
-@media all and (min-width: 1200px) and (max-width: 2999px) {
-	.group_wrap {
-		height: 522px;
-	}
-
-	.spc_dialog {
-		width: 1092px;
-	}
-}
-
-
 /* Laptop ~ Desktop screen sizes */
 
 @media all and (min-width: 993px) and (max-width: 1199px) {
@@ -368,16 +355,155 @@
 		height: 115px;
 	}
 
+	.sidenav-no-scroll {
+		overflow: hidden !important;
+	}
+
+	.g_menu {
+		position: relative;
+	}
+
+	.g_menu>ul {
+		margin: 12px 0 0 0;
+	}
+
+	.g_menu>ul>li ul {
+		display: none;
+	}
+
+	.g_menu>ul>li ul li a {
+		height: 56px;
+		line-height: 56px;
+		font-size: 14px;
+		color: var(--color60);
+		display: block;
+		padding-left: 88px;
+	}
+
+	.g_menu>ul>li>a:hover,
+	.g_menu>ol>li>a:hover {
+		background: var(--white15);
+	}
+
 	.g_menu>ul>li>a,
 	.g_menu>ol>li>a {
-		color: var(--color2);
-		padding-left: 60px;
+		display: block;
+		padding-left: 26px;
+		height: 50px;
+		line-height: 50px;
+		color: var(--white60);
+		font-size: 15px;
+		font-weight: 600;
 	}
 
 	.g_menu>ul>li ul li a:before {
 		display: inline-block;
 		content: "";
-		margin: auto 0 28px auto;
+		margin-right: 2px;
+	}
+
+	.g_menu>ul>li>a:after {
+		float: right;
+		margin: 22px 26px 0 0;
+		width: 0;
+		height: 0;
+		border-top: 5px solid var(--white60);
+		border-left: 5px solid transparent;
+		border-right: 5px solid transparent;
+		content: "";
+		opacity: 0.6;
+	}
+
+	.g_menu>ul>li.on>a {
+		color: var(--white87);
+	}
+
+	.g_menu>ul>li.on>a:before {
+		filter: invert(0);
+	}
+
+	.g_menu>ul>li.on>a:after {
+		opacity: 1;
+		margin-top: 18px;
+		transform: rotate(180deg);
+	}
+
+	.g_menu>ul>li ul li a~div a {
+		font-size: 13px;
+		padding-left: 30px;
+	}
+
+	.g_menu>ul>li ul li a~div a:before {
+		display: inline-block;
+		content: "";
+		margin-right: 2px;
+	}
+
+	.g_menu>ul>li.gmn1>a:before {
+		background: var(--sidebar-ico1) no-repeat center;
+	}
+
+	.g_menu>ul>li.gmn2>a:before {
+		background: var(--sidebar-ico2) no-repeat center;
+	}
+
+	.g_menu>ul>li.gmn3>a:before {
+		background: var(--sidebar-ico3) no-repeat center;
+	}
+
+	.g_menu>ul>li.gmn4>a:before {
+		background: var(--sidebar-ico4) no-repeat center;
+	}
+
+	.g_menu>ul>li.gmn5>a:before {
+		background: var(--sidebar-ico5) no-repeat center;
+	}
+
+	.g_menu>ul>li.gmn6>a:before {
+		background: var(--sidebar-ico6) no-repeat center;
+	}
+
+	.g_menu>ul>li.gmn7>a:before {
+		background: var(--sidebar-ico7) no-repeat center;
+	}
+	.g_menu>ul>li.gmn8>a:before {
+		background: var(--sidebar-ico8) no-repeat center;
+	}
+
+	.g_menu>ol {
+		margin: 50px 0;
+	}
+
+	.g_menu>ul>li>a:before,
+	.g_menu>ol>li>a:before {
+		content: '';
+		display: block;
+		margin-right: 26px;
+		width: 24px;
+		height: 45px;
+		filter: invert(0.4);
+		float: left;
+	}
+
+	.g_menu>ol>li.gmn9>a:before {
+		background: var(--sidebar-ico9) no-repeat center;
+	}
+
+	.g_menu>ol>li.gmn10>a:before {
+		background: var(--sidebar-ico10) no-repeat center;
+	}
+
+	.g_menu>ol>li ul li a {
+		height: 40px;
+		line-height: 40px;
+		font-size: 13px;
+		color: #cfcfcf;
+		display: block;
+		padding-left: 50px;
+	}
+
+	nav .lang.mobile {
+		display: none;
 	}
 
 	nav {
@@ -390,7 +516,7 @@
 	}
 
 	.mobile-logo {
-		width: 200px;
+		width: 186px;
 		height: 60px;
 	}
 
@@ -439,29 +565,10 @@
 		text-align: center;
 		margin: 20px 0 0 0;
 	}
+
 	nav .nav_right {
 		margin-right: 20px;
 	}
-	/* nav .nav_right li.member {
-		margin-right: 19px;
-	} */
-
-	/* nav .nav_right li.member .fl {
-		display: none;
-	} */
-
-	/* .nav_right .nav_theme {
-		top: 0;
-		width: 100%;
-	} */
-
-	/* nav .nav_right li {
-		display: block;
-	}
-
-	nav .nav_right li + li {
-		margin: 10px 0 0 0;
-	} */
 
 	nav .all-menu {
 		position: absolute;
@@ -518,7 +625,7 @@
 		margin-top: 30px;
 	}
 
-	#sidebar {
+	.side-nav {
 		display: none;
 	}
 
@@ -634,182 +741,14 @@
 		background-color: var(--scroll-color);
 	}
 
-	/********************************************************************************
-								control chart
-	*********************************************************************************/
-	.control .chart_top .sel_calendar {
-		margin-left: 0;
-	}
-
-	.control .chart_top .sel_calendar * {
-		display: none;
-	}
-
-	.control .chart_top .sel_calendar button {
-		display: inline-block;
-	}
-
-	.control .c_board ul li div.fl {
-		float: none;
-		width: 100%;
-		height: 130px;
-		background-position: center 70%;
-	}
-
-	.control .c_board ul li div.fr {
-		float: none;
-		width: 100%;
-		height: 80px;
-	}
-
-	.c_tbl_wrap .default_tbl th,
-	.c_tbl_wrap .default_tbl td {
-		border-radius: 0;
-	}
-
-	/********************************************************************************
-									Income chart
-	*********************************************************************************/
-	.income_kt_chart .chart_top .sel_calendar *,
-	.income_kt_chart_table {
-		display: none;
-	}
-
-	.income_kt_chart .chart_top .sel_calendar {
-		margin-left: 0;
-	}
-
-	.income_kt_chart .chart_top .sel_calendar button {
-		display: inline-block;
-	}
-
-	.income_ess_chart .chart_top .sel_calendar *,
-	.income_ess_table {
-		display: none;
-	}
-
-	.income_ess_chart .chart_top .sel_calendar button {
-		display: inline-block;
-	}
-
-	.income_dr_chart .chart_top .sel_calendar *,
-	.income_dr_table {
-		display: none;
-	}
-
-	.income_dr_chart .chart_top .sel_calendar button {
-		display: inline-block;
-	}
-
-	.income_pv_chart .chart_top .sel_calendar *,
-	.income_pv_table {
-		display: none;
-	}
-
-	.income_pv_chart .chart_top .sel_calendar button {
-		display: inline-block;
-	}
-
-	/********************************************************************************
-										faq_table
-	*********************************************************************************/
-	.faq .search_box div.infield {
-		width: 85%;
-	}
-
-	.faq .faq_table .faq_list>li>a.question {
-		padding: 10px 30px 10px 10px;
-	}
-
-	.faq .faq_table .faq_list>li>a.question span.gubun {
-		display: block;
-		width: 100%;
-		height: auto;
-		text-align: left;
-		font-size: 13px;
-	}
-
-	.faq .faq_table .faq_list>li>a.question span.sbj {
-		display: block;
-		width: 100%;
-		height: auto;
-		padding: 5px 20px;
-	}
-
-	.faq .faq_table .faq_list>li>div.answer {
-		padding: 0 20px 0 30px;
-	}
-
-	.faq .faq_bottom,
-	.faq .faq_table .faq_list>li>div.answer .edit_btn {
-		display: none;
-	}
-
-	footer .ft_menu,
-	footer .copyright {
-		float: none;
-		text-align: center;
+	footer {
+		padding: 25px 20px 20px;
 	}
 
 	footer .copyright {
 		margin: 15px 0 30px;
 	}
 
-	/********************************************************************************
-										dr_chart
-	*********************************************************************************/
-	.dr_chart .chart_top .dropdown {
-		margin-top: 10px;
-	}
-
-	.dr_chart_table {
-		display: none;
-	}
-
-	.dr_chart .chart_top .ntit,
-	.dr_chart .chart_top .term,
-	.dr_chart .chart_top .today_date,
-	.dr_chart .chart_top .search_opt,
-	.dr_chart .chart_top .checkbox {
-		float: none;
-		margin: 10px 0 0;
-		text-align: left;
-	}
-
-	.dr_chart .chart_top .ntit {
-		margin-bottom: 30px;
-	}
-
-	.dr_chart .chart_top .term {
-		margin-left: 64px;
-	}
-
-	.dr_chart .chart_top .today_date span,
-	.dr_chart .chart_top .search_opt span {
-		font-size: 11px;
-	}
-
-	.dr_chart .chart_top .today_date span:first-child {
-		margin: 0;
-		padding-left: 5px;
-		width: 64px;
-	}
-
-	/********************************************************************************
-										ess_chart
-	*********************************************************************************/
-	.ess_chart .chart_top .sel_calendar *,
-	.ess_chart_table {
-		display: none;
-	}
-
-	.ess_chart .chart_top .sel_calendar {
-		margin-left: 0;
-	}
-
-	.ess_chart .chart_top .sel_calendar button {
-		display: inline-block;
-	}
 
 	/********************************************************************************
 										pv_chart
@@ -829,75 +768,6 @@
 
 	.pv_chart .chart_top .sel_calendar button {
 		display: inline-block;
-	}
-
-	/********************************************************************************
-										page-device
-	*********************************************************************************/
-	.page-device .tab_menu {
-		margin-right: 0;
-	}
-
-	.page-device .tab_menu li+li {
-		margin-left: 10px;
-	}
-
-	.page-device .tbl_top .button_area {
-		display: none;
-	}
-
-	.page-device .default_tbl table colgroup col:last-child,
-	.page-device .default_tbl table thead tr th:last-child,
-	.page-device .default_tbl table tbody tr td:last-child {
-		display: none;
-	}
-
-	.page-device .default_tbl table th,
-	.page-device .default_tbl table td {
-		border-radius: 0;
-	}
-
-	/********************************************************************************
-										device_group
-	*********************************************************************************/
-	.device_group .dg_wrap {
-		padding-right: 0;
-		max-height: initial;
-		overflow-y: initial;
-	}
-
-	.device_group .dg_top .fr {
-		display: none;
-	}
-
-	.device_group .dg_wrap .dsec {
-		width: 100%;
-		margin-left: 0;
-	}
-
-	.device_group .dg_wrap .dsec>div {
-		margin-left: 0;
-	}
-
-	.device_group .dg_wrap .dsec>div.fl {
-		width: 100%;
-		padding: 20px 40px 20px 40px;
-	}
-
-	.device_group .dg_wrap .dsec>div.fl .bx-controls-direction .bx-prev {
-		left: -30px;
-	}
-
-	.device_group .dg_wrap .dsec>div.fl .bx-controls-direction .bx-next {
-		right: -30px;
-	}
-
-	.device_group .dg_wrap .dsec>div.fl .new_add {
-		display: none;
-	}
-
-	.device_group .dg_wrap .dsec>div.fr {
-		display: none;
 	}
 
 	/* *************************************************
@@ -926,46 +796,6 @@
 
 	.weater_wrap .wt_list_wrap {
 		margin-left: 0
-	}
-
-	.control .c_board ul li div.fl {
-		font-size: 14px;
-		background-size: 60%;
-		background-position: center 75%;
-		height: 100px;
-	}
-
-	.control .c_board ul li div.fr {
-		font-size: 30px;
-	}
-
-	.soc .charge_dis dt span {
-		float: none;
-		display: block;
-		margin-top: 10px;
-	}
-
-	.device li {
-		width: 47.5%;
-		margin: 10px 0 0 2.5%;
-	}
-
-	.chart_notice span {
-		display: block;
-		margin-top: 5px;
-	}
-
-	.der .chart_footer ul {
-		font-size: 0;
-		text-align: left;
-		margin-left: 50px;
-	}
-
-	.der .chart_footer ul li:first-child {
-		float: none;
-		margin-left: 0;
-		display: block;
-		margin-bottom: 10px;
 	}
 
 	/* *************************************************
@@ -1136,43 +966,6 @@
 
 	.local_info.smain.s_center td:nth-of-type(4):before {
 		content: "SMP 수익 예상";
-	}
-
-	/* *************************************************
-						group_wrap
-	************************************************* */
-	.group_wrap {
-		min-height: initial;
-		display: none;
-	}
-
-	.group_info h2 {
-		font-size: 22px;
-	}
-
-	.group_info div ul:first-child {
-		padding-right: 12px;
-	}
-
-	.group_info div ul:last-child {
-		padding-left: 12px;
-	}
-
-	.group_info div ul li {
-		padding-top: 15px;
-	}
-
-	.group_info div ul li strong {
-		font-size: 13px;
-	}
-
-	.group_info div ul li span {
-		font-size: 14px;
-	}
-
-	.group_info div ul li em {
-		font-size: 11px;
-		font-weight: normal;
 	}
 
 	/* *************************************************

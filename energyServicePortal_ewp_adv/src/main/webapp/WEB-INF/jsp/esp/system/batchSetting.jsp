@@ -6,7 +6,7 @@
 	$(function () {
 		let sList = "${location}"
 
-		getSites(oid);
+		// getSites(oid);
 
 		function getSites (siteId) {
 			let option = {
@@ -289,7 +289,7 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">사업소 관리</h1>
+		<h1 class="page-header">배치 관리</h1>
 	</div>
 </div>
 
