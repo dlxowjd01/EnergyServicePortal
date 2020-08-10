@@ -332,7 +332,6 @@
 		}
 	}
 
-
 	const application = function (stat) {
 		const sites = $.makeArray($(':checkbox[name="site"]:checked').map(
 			function () {
@@ -371,8 +370,6 @@
 			ignore_tolerance = null;
 		}
 
-
-
 		let data = {
 			'observed': applicationData.observed,
 			'forecasted': applicationData.forecasted,
@@ -392,14 +389,19 @@
 			traditional: true,
 			data: JSON.stringify(data),
 			success: function (result) {
+				$('.value_num').eq(2).empty();
 				if (result != null && result != '' && result.message == 'OK') {
 					let calWat = result.value;
 					if (calWat != null) {
-						$('.value_num').eq(2).empty().append('<span class="num">' + calWat.toFixed(2) + '</span>%');
+						$('.value_num').eq(2).append('<span class="num">' + calWat.toFixed(2) + '</span>%');
+					} else {
+						alert('예측 오차 계산의 비교 대상 데이터가 없습니다.');
+						$('.value_num').eq(2).append('<span class="num"> </span>%');
 					}
 				}
 			},
 			error: function (error) {
+				$('.value_num').eq(2).empty();
 				console.error(error);
 			}
 		});
@@ -1185,9 +1187,6 @@
 		chartDraw(seriesData);
 
 		application('basic');
-
-		const now = new Date();
-		$('.tx_time').text(now.format('yyyy-MM-dd HH:mm:ss'));
 	}
 
 	/**

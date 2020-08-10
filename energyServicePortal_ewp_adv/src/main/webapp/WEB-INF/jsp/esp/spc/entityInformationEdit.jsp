@@ -294,6 +294,10 @@
 							});
 						}
 						setJsonAutoMapping(spc_info, 'basicInfo');
+
+						if (spc_info['spcSealSelected'] != undefined) {
+							$(':radio[name="SPC_법인_인감_대표"]:input[value="' + spc_info["spcSealSelected"] + '"]').prop('checked', true);
+						}
 					}
 				}
 			},
@@ -676,6 +680,10 @@
 				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
 			}
 		});
+
+		if ($(':radio[name="SPC_법인_인감_대표"]:checked').val() != undefined) {
+			spc_info['spcSealSelected'] = $(':radio[name="SPC_법인_인감_대표"]:checked').val();
+		}
 
 		$.ajax({
 			url: apiHost + '/spcs/'+ spcId + '?oid='+oid,
@@ -1210,10 +1218,10 @@
 										<input type="file" id="SPC_법인_인감_파일[index]" class="hidden" name="SPC_법인_인감_파일" accept=".jpg, .png, .pdf">
 										<label for="SPC_법인_인감_파일[index]" class="btn file_upload">파일 선택</label>
 										<span class="upload_text ml-16"></span>
-<%--										<span class="rdo_type">--%>
-<%--											<input type="radio" id="SPC_법인_인감_대표[index]" name="SPC_법인_인감_대표" value="">--%>
-<%--											<label for="SPC_법인_인감_대표[index]">대표 인감</label>--%>
-<%--										</span>--%>
+										<span class="rdo_type">
+											<input type="radio" id="SPC_법인_인감_대표[index]" name="SPC_법인_인감_대표" value="[index]">
+											<label for="SPC_법인_인감_대표[index]">대표 인감</label>
+										</span>
 										<button class="btn_close fixed_height hidden mt-0" onclick="$(this).parents().closest('.group_type').remove()"></button>
 									</div>
 								</div>
