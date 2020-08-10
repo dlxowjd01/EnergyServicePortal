@@ -46,8 +46,6 @@
 					var gensInfoList = [];
 					var spcNameArr = [];
 
-					$('.loading').hide();
-					
 					data.map(x => {
 						spcIdList.push(x.spc_id);
 						promise.push(Promise.resolve(JSON.parse(x.spc_info)));
@@ -77,7 +75,6 @@
 					// }, 300);
 				},
 				error: function(request, status, error) {
-					$('.loading').hide();
 					console.log("error===", error)
 				}
 			});
@@ -330,11 +327,9 @@
 			$.when($.ajax(option),$.ajax(optTransaction)).done(function (result1, result2) {
 				var item1 = result1[0].data;
 				var item2 = groupBy(result2[0].data, "withdraw_day");
-				$('.loading').hide();
 				// console.log("item2===", item2)
 				fillCalendar(item1, item2, spcNameList);
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				$('.loading').hide();
 				showWarningModal("fail");
 				return false;
 			});
@@ -447,11 +442,9 @@
 			}
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				$("#spcAlarmModal").modal("hide");
-				$('.loading').hide();
 				document.location.reload(true);
 				// maintenance(spcPairArr, 'get');
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				$('.loading').hide();
 				showWarningModal("fail");
 				console.log("jqXHR===", jqXHR)
 				return false;

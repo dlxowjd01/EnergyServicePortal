@@ -375,7 +375,7 @@
 		height: 56px;
 		line-height: 56px;
 		font-size: 14px;
-		color: var(--color60);
+		color: var(--white60);
 		display: block;
 		padding-left: 88px;
 	}
@@ -723,22 +723,22 @@
 
 	.spc_tbl_row::-webkit-scrollbar-track {
 		border-radius: 2px;
-		background-color: var(--scroll-color2)
+		background-color: var(--scroll-track);
 	}
 
 	.spc_tbl_row::-webkit-scrollbar {
 		height: 8px;
 		border-radius: 2px;
-		background-color: var(--scroll-color2);
+		background-color: var(--scroll-track);
 	}
 
 	.spc_tbl_row::-webkit-scrollbar-corner {
-		background-color: var(--scroll-color2);
+		background-color: var(--scroll-track);
 	}
 
 	.spc_tbl_row::-webkit-scrollbar-thumb {
 		border-radius: 2px;
-		background-color: var(--scroll-color);
+		background-color: var(--white60);
 	}
 
 	footer {

@@ -43,13 +43,10 @@
 					}
 				},
 				beforeSend: function (jqXHR, settings) {
-					let token = '${sessionScope.userInfo.token}';
-					jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
 					$('.loading').show();
 				},
 			}
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				$('.loading').hide();
 				let data = json;
 				let newArr = [];
 				// 1. 사업소 타입
@@ -258,7 +255,6 @@
 					}
 				});
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				$('.loading').hide();
 				if(textStatus == "error"){
 					if(jqXHR.statusText == "Unauthorized" || jqXHR.status == 401){
 						$("#oldPwdErr").removeClass("hidden");
@@ -289,7 +285,7 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">사업소 관리</h1>
+		<h1 class="page-header">사업소 관리 설정</h1>
 	</div>
 </div>
 

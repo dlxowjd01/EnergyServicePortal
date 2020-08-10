@@ -43,70 +43,12 @@
 					}
 				},
 				beforeSend: function (jqXHR, settings) {
-					let token = '${sessionScope.userInfo.token}';
-					jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
 					$('.loading').show();
 				},
 			}
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				$('.loading').hide();
 				let data = json;
 				let newArr = [];
-				// 1. 사업소 타입
-				// 2. 사업소명
-				// 3. 지역
-				// 4. 발전원 => 0: MicroGrid, 1: photovoltaic, 2: wind, 3: SmallHydro (hydroelectric power for local community)
-				// 5. 발전 용량
-				// 6. ESS 용량 (PCS)
-				// 7. ESS 용량(BMS)
-				// 8. DR 자원 코드
-				// 9. Vpp 자원 코드
-				// 10. 알람 설정
-
-				Promise.all(json.map( (x, index) => {
-					// console.log("x===", x)
-					let obj = {};
-					obj.sid = x.sid;
-					obj.idx = index;
-					obj.name = x.name;
-					obj.location = x.location;
-					obj.genVol = "TBA"
-					obj.pscVol = "TBA"
-					obj.bmsVol = "TBA"
-					obj.alarmState = "TBA"
-
-					if(x.resource_type === 0) {
-						obj.powerSource = "부하"
-					} else if(x.resource_type === 1){
-						obj.powerSource = "태양광"
-					} else if(x.resource_type === 2){
-						obj.powerSource = "풍력"
-					} else if(x.resource_type === 3){
-						obj.powerSource = "소수력"
-					}
-					if(x.ess){
-						if(x.ess === 0) {
-							obj.siteType = "-"
-						} else if(x.ess === 1){
-							obj.siteType = "Demand"
-						} else if(x.ess === 2){
-							obj.siteType = "Generation"
-						}
-					} else {
-						obj.siteType = "-"
-					}
-					if(x.dr_group_id){
-						obj.drId = x.dr_group_id;
-					} else {
-						obj.drId = "-"
-					}
-					if(x.vpp_group_id){
-						obj.vppId = x.vpp_group_id;
-					} else {
-						obj.vppId = "-"
-					}
-					newArr.push(obj);
-				}));
 
 				$('#example').dataTable({
 					"aaData": newArr,
@@ -258,7 +200,6 @@
 					}
 				});
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				$('.loading').hide();
 				if(textStatus == "error"){
 					if(jqXHR.statusText == "Unauthorized" || jqXHR.status == 401){
 						$("#oldPwdErr").removeClass("hidden");
@@ -289,7 +230,7 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">배치 관리</h1>
+		<h1 class="page-header">배치 관리 설정</h1>
 	</div>
 </div>
 

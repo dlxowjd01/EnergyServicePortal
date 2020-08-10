@@ -1437,7 +1437,7 @@
 				labels: {
 					align: 'center',
 					style: {
-						color: 'var(--color3)',
+						color: 'var(--white)',
 						fontSize: '8px'
 					},
 					y: 40,
@@ -1469,7 +1469,7 @@
 					y: 25,
 					x: 5,
 					style: {
-						color: 'var(--color4)',
+						color: 'var(--white60)',
 						fontSize: '12px'
 					}
 				},
@@ -1478,7 +1478,7 @@
 					x: -20,
 					/* 그래프와의 거리 조정 */
 					style: {
-						color: 'var(--color4)',
+						color: 'var(--white60)',
 						fontSize: '14px'
 					}
 				}
@@ -1491,7 +1491,7 @@
 				verticalAlign: 'top',
 				x: 10,
 				itemStyle: {
-					color: 'var(--color4)',
+					color: 'var(--white60)',
 					fontSize: '14px',
 					fontWeight: 400
 				},

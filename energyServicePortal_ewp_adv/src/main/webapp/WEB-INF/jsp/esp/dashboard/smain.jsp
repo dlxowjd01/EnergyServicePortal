@@ -1220,7 +1220,7 @@
 			backgroundColor: 'var(--bg-color)',
 			padding: 16,
 			style: {
-				color: 'var(--color3)'
+				color: 'var(--white)'
 			}
 		},
 		/* 범례 */
@@ -1271,7 +1271,7 @@
 		}, {
 			name: 'PR',
 			type: 'spline',
-			color: 'var(--color4)',
+			color: 'var(--white60)',
 			dashStyle: 'ShortDash',
 			yAxis: 1,
 			data: [],
@@ -1606,7 +1606,7 @@
 			x: 0,
 			style: {
 				fontSize: '14px',
-				color: 'var(--color4)'
+				color: 'var(--white60)'
 			}
 		},
 		subtitle: {
@@ -1621,7 +1621,7 @@
 			backgroundColor: 'var(--bg-color)',
 			padding: 16,
 			style: {
-				color: 'var(--color3)'
+				color: 'var(--white)'
 			},
 			valueSuffix: ' kwh',
 			pointFormat: '<b>{point.percentage:.0f}%</b>'
@@ -1632,7 +1632,7 @@
 					enabled: false,
 					style: {
 						fontWeight: 'bold',
-						color: 'var(--color3)'
+						color: 'var(--white)'
 					}
 				},
 				center: ['40%', '50%'],

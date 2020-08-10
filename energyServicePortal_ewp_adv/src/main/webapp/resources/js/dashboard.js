@@ -3,7 +3,7 @@ const seriesArray = [
 	{name: '충전', type: 'column', color: 'var(--circle-charge)', data: 'chargeList', suffix: 'kWh'},
 	{name: '방전', type: 'column', color: 'var(--grey)', data: 'dischargeList', suffix: 'kWh'},
 	{name: '태양광', type: 'column', color: 'var(--circle-solar-power)', data: 'pvList', suffix: 'kWh'},
-	{name: '정산금', type: 'spline', color: 'var(--inverse-grey)', data: 'payList', suffix: '천원'},
+	{name: '정산금', type: 'spline', color: 'var(--white)', data: 'payList', suffix: '천원'},
 ];
 
 const keyArray = ['battery', 'generation'];
@@ -164,13 +164,13 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		text: ''
 	},
 	xAxis: [{
-		lineColor: 'var(--white87)', /* 눈금선색 */
+		lineColor: 'var(--white60)', /* 눈금선색 */
 		tickWidth: 1,
-		tickColor: 'var(--white87)',
+		tickColor: 'var(--white60)',
 		tickInterval: 1,
-		gridLineColor: 'var(--white87)',
+		gridLineColor: 'var(--white60)',
 		plotLines: [{
-			color: 'var(--white87)',
+			color: 'var(--white60)',
 			width: 1
 		}],
 		type: 'datetime', // 08.20 이우람 추가
@@ -200,12 +200,12 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		crosshair: true
 	}],
 	yAxis: [{ // Primary yAxis
-		lineColor: 'var(--white87)', /* 눈금선색 */
-		tickColor: 'var(--white87)',
-		gridLineColor: 'var(--white87)',
+		lineColor: 'var(--white60)', /* 눈금선색 */
+		tickColor: 'var(--white60)',
+		gridLineColor: 'var(--white60)',
 		gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 		plotLines: [{
-			color: 'var(--white87)',
+			color: 'var(--white60)',
 			width: 1
 		}],
 		title: {
@@ -272,7 +272,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		backgroundColor: 'var(--bg-color)',
 		padding: 16,
 		style: {
-			color: 'var(--white)'
+			color: 'var(--white87)'
 		}
 	},
 	/* 범례 */
@@ -313,7 +313,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	series: [{
 		name: '충전',
 		type: 'column',
-		color: '#2BEEE9',
+		color: 'var(--circle-charge)',
 		tooltip: {
 			valueSuffix: 'kWh'
 		}
@@ -321,7 +321,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	}, {
 		name: '방전',
 		type: 'column',
-		color: '#878787',
+		color: 'var(--grey)',
 		tooltip: {
 			valueSuffix: 'kWh'
 		}
@@ -329,7 +329,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	}, {
 		name: '태양광',
 		type: 'column',
-		color: '#9363FD',
+		color: 'var(--circle-solar-power)',
 		tooltip: {
 			valueSuffix: 'kWh'
 		}
@@ -673,7 +673,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		backgroundColor: 'var(--bg-color)',
 		padding: 16,
 		style: {
-			color: 'var(--white)'
+			color: 'var(--white87)'
 		}
 	},
 	/* 범례 */
@@ -722,7 +722,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 	series: [{
 		name: '충전',
 		type: 'column',
-		color: '#2BEEE9',
+		color: 'var(--circle-charge)',
 		tooltip: {
 			valueSuffix: 'kWh'
 		}
@@ -730,7 +730,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 	}, {
 		name: '방전',
 		type: 'column',
-		color: '#878787',
+		color: 'var(--grey)',
 		tooltip: {
 			valueSuffix: 'kWh'
 		}
@@ -738,7 +738,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 	}, {
 		name: '태양광',
 		type: 'column',
-		color: '#9363FD',
+		color: 'var(--circle-solar-power)',
 		tooltip: {
 			valueSuffix: 'kWh'
 		}
@@ -886,7 +886,7 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 
 		typeSiteCurrent.addSeries({
 			name: '발전',
-			color: '#25CCC8',
+			color: 'var(--turquoise)',
 			data: tmepGenArray,
 			tooltip: {
 				valueSuffix: 'kWh'
@@ -895,7 +895,7 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 
 		typeSiteCurrent.addSeries({
 			name: '발전 예측',
-			color: '#878787',
+			color: 'var(--grey)',
 			data: tempForeArray,
 			tooltip: {
 				valueSuffix: 'kWh'
@@ -932,11 +932,11 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		text: ''
 	},
 	xAxis: {
-		lineColor: '#515562', /* 눈금선색 */
-		tickColor: '#515562',
-		gridLineColor: '#515562',
+		lineColor: 'var(--white60)', /* 눈금선색 */
+		tickColor: 'var(--white60)',
+		gridLineColor: 'var(--white60)',
 		plotLines: [{
-			color: '#515562',
+			color: 'var(--white60)',
 			width: 1
 		}],
 		labels: {
@@ -953,11 +953,11 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		}
 	},
 	yAxis: {
-		lineColor: '#515562', /* 눈금선색 */
-		tickColor: '#515562',
-		gridLineColor: '#515562',
+		lineColor: 'var(--white60)', /* 눈금선색 */
+		tickColor: 'var(--white60)',
+		gridLineColor: 'var(--white60)',
 		plotLines: [{
-			color: '#515562',
+			color: 'var(--white60)',
 			width: 1
 		}],
 		gridLineWidth: 0, /* 기준선 grid 안보이기/보이기 */
@@ -1007,7 +1007,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		backgroundColor: 'var(--bg-color)',
 		padding: 16,
 		style: {
-			color: 'var(--white)'
+			color: 'var(--white87)'
 		}
 	},
 	plotOptions: {
@@ -1024,7 +1024,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 				// inside: true, /* 막대 안으로 라벨 수치 넣기 */
 				format: '{y} kWh', /* 단위 넣기 */
 				style: {
-					color: 'var(--white)',
+					color: 'var(--white87)',
 					fontSize: '12px',
 					fontWeight: 400,
 					textOutline: 0,
@@ -1033,10 +1033,6 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 				}
 			},
 		},
-		// borderWidth: 0, /* 보더 0 */
-		// borderColor:'#ccc',
-		// borderRadiusTopLeft: 1, /* 막대 모서리 둥글게 효과 */
-		// borderRadiusTopRight: 1, /* 막대 모서리 둥글게 효과 */
 		pointWidth: 15, /* 막대 두께 */
 		groupPadding: 0.1,
 		pointPadding: 0
@@ -1364,7 +1360,7 @@ var pieChart = Highcharts.chart('pie_chart', {
 		backgroundColor: 'var(--bg-color)',
 		padding: 16,
 		style: {
-			color: 'var(--white)'
+			color: 'var(--white87)'
 		},
 		valueSuffix: ' kwh',
 		pointFormat: '<b>{point.percentage:.0f}%</b>'
@@ -1375,7 +1371,7 @@ var pieChart = Highcharts.chart('pie_chart', {
 				enabled: false,
 				style: {
 					fontWeight: 'bold',
-					color: 'var(--white)'
+					color: 'var(--white87)'
 				}
 			},
 			center: ['40%', '50%'],
@@ -1389,14 +1385,14 @@ var pieChart = Highcharts.chart('pie_chart', {
 		name: '발전량',
 		colorByPoint: true,
 		data: [{
-			color: '#9363FD',
+			color: 'var(--circle-solar-power)',
 			name: '태양광',
 			dataLabels: {
 				enabled: false
 			},
 			y: 60 //60% -- 아래로 총합 100%
 		}, {
-			color: '#878787',
+			color: 'var(--grey)',
 			name: '미사용량',
 			dataLabels: {
 				enabled: false
@@ -1734,7 +1730,7 @@ const searchSite = function () {
 
 			refineList.forEach((site, idx) => {
 				if (site.latlng != null) {
-					let operationColor = 'var(--jordy-blue)';
+					let operationColor = '#90caf3';
 					if(site.operation == '0') {
 						operationColor = '#f2a363';
 					} else if(site.operation == '1') {
@@ -1769,14 +1765,14 @@ const searchSite = function () {
 				name: '설비용량',
 				colorByPoint: true,
 				data: [{
-					color: '#26ccc8',
+					color: 'var(--turquoise)',
 					name: '총 설비용량',
 					dataLabels: {
 						enabled: false
 					},
 					y: activePower
 				}, {
-					color: '#84848f',
+					color: 'var(--grey)',
 					name: '미설비용량',
 					dataLabels: {
 						enabled: false
@@ -1853,7 +1849,7 @@ const siteListChart = function (selector, seriesData, title) {
 					enabled: false,
 					style: {
 						fontWeight: 'bold',
-						color: 'var(--white)'
+						color: 'var(--white87)'
 					}
 				},
 				startAngle: -90,
