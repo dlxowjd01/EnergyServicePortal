@@ -4,43 +4,14 @@
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	$(function () {
-		let sList = "${location}"
-
-		getSites(oid);
-
-		function getSites (siteId) {
+		getDeviceList();
+		function getDeviceList () {
 			let option = {
-				url: apiHost + "/config/sites",
+				url: apiHost + "/alarms/code_sets?",
 				type: "get",
 				async: true,
 				data: {
-					oid: siteId,
-					filter: { 
-						"limit": 200,
-						"fields": {
-							"sid": true,
-							"oid": true,
-							"name": true,
-							"location": true,
-							"resource_type": true,
-							"ess": true,
-							"vpp_group_id": true,
-							"dr_group_id": true,
-							"market_id": true,
-							"station_id": true,
-							"latlng": true,
-							"tz": true,
-							"address": true,
-							"detail_info": true,
-							// "utility": true,
-							"dr_info": true,
-							"vpp_info": true,
-							"power_market": true,
-							// "cctv_url": true,
-							// "createdAt": true,
-							// "updatedAt": true
-						},
-					}
+					includeCodes : true
 				},
 				beforeSend: function (jqXHR, settings) {
 					let token = '${sessionScope.userInfo.token}';
@@ -52,211 +23,148 @@
 				$('.loading').hide();
 				let data = json;
 				let newArr = [];
-				// 1. 사업소 타입
-				// 2. 사업소명
-				// 3. 지역
-				// 4. 발전원 => 0: MicroGrid, 1: photovoltaic, 2: wind, 3: SmallHydro (hydroelectric power for local community)
-				// 5. 발전 용량
-				// 6. ESS 용량 (PCS)
-				// 7. ESS 용량(BMS)
-				// 8. DR 자원 코드
-				// 9. Vpp 자원 코드
-				// 10. 알람 설정
 
-				Promise.all(json.map( (x, index) => {
-					// console.log("x===", x)
-					let obj = {};
-					obj.sid = x.sid;
-					obj.idx = index;
-					obj.name = x.name;
-					obj.location = x.location;
-					obj.genVol = "TBA"
-					obj.pscVol = "TBA"
-					obj.bmsVol = "TBA"
-					obj.alarmState = "TBA"
-
-					if(x.resource_type === 0) {
-						obj.powerSource = "부하"
-					} else if(x.resource_type === 1){
-						obj.powerSource = "태양광"
-					} else if(x.resource_type === 2){
-						obj.powerSource = "풍력"
-					} else if(x.resource_type === 3){
-						obj.powerSource = "소수력"
-					}
-					if(x.ess){
-						if(x.ess === 0) {
-							obj.siteType = "-"
-						} else if(x.ess === 1){
-							obj.siteType = "Demand"
-						} else if(x.ess === 2){
-							obj.siteType = "Generation"
-						}
+				data.forEach((item, index) => {
+					let deviceType = '';
+					console.log("item--", item);
+					if(!isEmpty(item.device_type)){
+						deviceType = item.device_type;
 					} else {
-						obj.siteType = "-"
-					}
-					if(x.dr_group_id){
-						obj.drId = x.dr_group_id;
-					} else {
-						obj.drId = "-"
-					}
-					if(x.vpp_group_id){
-						obj.vppId = x.vpp_group_id;
-					} else {
-						obj.vppId = "-"
-					}
-					newArr.push(obj);
-				}));
-
-				$('#example').dataTable({
-					"aaData": newArr,
-					// "fixedHeader": true,
-					"scrollX": false,
-					"scrollY": "400px",
-					// columnDefs: [ {
-					// 	orderable: true,
-						// className: 'select-checkbox',
-						// targets:   0
-					// }],
-					// order: [[ 1, 'asc' ]],
-					// colReorder: {
-					// 	realtime: false
-					// },
-					"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-					// "columns": [
-					// 	{
-					// 		"data":  "",
-					// 		render: function ( data, type, row ) {
-					// 			// console.log("data--", row, "type===", type)
-					// 			return '<a class="chk_type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
-					// 		},
-					// 		className: "dt-body-center"
-					// 	},
-					// 	{ "data": "siteType" },
-					// 	{ "data": "name"},
-					// 	{ "data": "location"},
-					// 	{ "data": "powerSource" },
-					// 	{ "data": "genVol" },
-					// 	{ "data": "pscVol" },
-					// 	{ "data": "bmsVol" },
-					// 	{ "data": "drId" },
-					// 	{ "data": "vppId"},
-					// 	{ "data": "alarmState" },
-					// ],
-
-					"aoColumns": [
-						{
-							"sTitle": "",
-							"mData": "",
-							"mRender": function ( data, type, row )  {
-								// console.log('row==', row)
-								return '<a class="chk_type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
-							},
-							"className": "dt-body-center"
-						},
-						{
-							"sTitle": "사업소 타입",
-							"mData": "siteType",
-						
-						},
-						{
-							"sTitle": "사업소명",
-							"mData": "name"
-						},
-						{
-							"sTitle": "지역",
-							"mData":"location",
-						},
-						{
-							"sTitle": "발전원",
-							"mData":"powerSource",
-						},
-						{
-							"sTitle": "발전 용량",
-							"mData":"genVol",
-						},
-						{
-							"sTitle": "ESS 용량 (PCS)",
-							"mData":"pscVol",
-						},
-						{
-							"sTitle": "ESS 용량 (BMS)",
-							"mData":"bmsVol",
-						},
-						{
-							"sTitle": "DR 자원 코드",
-							"mData":"drId",
-						},
-						{
-							"sTitle": "VPP 자원코드",
-							"mData":"vppId",
-						},
-						{
-							"sTitle": "알람 수신",
-							"mData":"alarmState",
-						},
-					],
-					dom: 'Bfltip',
-					// dom: 'Bfrtip',
-					buttons: [
-						{
-							extend: 'copyHtml5',
-							className: "btn_type03",
-							text: '데이터 복사',
-						},
-						{
-							extend: 'print',
-							text: '전체 인쇄',
-							className: "btn_type03",
-							exportOptions: {
-								modifier: {
-									selected: null
-								}
-							}
-						},
-						{
-							extend: 'print',
-							className: "btn_type03",
-							text: '선택 인쇄'
-						},
-						{
-							extend: 'excelHtml5',
-							className: "btn_type03",
-							text: 'Excel'
-						},
-						{
-							extend: 'csvHtml5',
-							className: "btn_type03",
-							text: 'CSV'
-						},
-						{
-							extend: 'pdfHtml5',
-							className: "btn_type03",
-							text: 'PDF',
-						},
-						{
-							text: '추가',
-							className: "btn_type fr",
-							action: function (e, node, config){
-								console.log("node===", node, "e---", e, "config===", config)
-								$('#addSiteModal').modal('show');
-							}
-						}
-					],
-					select: {
-						style: 'os',
-						items: 'cell'
-					},
-					// select: true,
-					// select: {
-					// 	style:    'os',
-					// 	selector: 'td:first-child'
-					// },
-					rowCallback: function ( row, data ) {
-						// console.log("row-selected--", row)
-						// $('input.editor-active', row).prop( 'checked', data.active == 1 );
+						deviceType = '';
 					}
 				});
+				// Promise.all(json.map( (x, index) => {
+				// 	newArr.push(obj);
+				// }));
+
+				// $('#example').dataTable({
+				// 	"aaData": newArr,
+				// 	// "fixedHeader": true,
+				// 	"scrollX": false,
+				// 	"scrollY": "400px",
+				// 	// columnDefs: [ {
+				// 	// 	orderable: true,
+				// 		// className: 'select-checkbox',
+				// 		// targets:   0
+				// 	// }],
+				// 	// order: [[ 1, 'asc' ]],
+				// 	// colReorder: {
+				// 	// 	realtime: false
+				// 	// },
+				// 	"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+				// 	"aoColumns": [
+				// 		{
+				// 			"sTitle": "",
+				// 			"mData": "",
+				// 			"mRender": function ( data, type, row )  {
+				// 				return '<a class="chk_type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
+				// 			},
+				// 			"className": "dt-body-center"
+				// 		},
+				// 		{
+				// 			"sTitle": "사업소 타입",
+				// 			"mData": "siteType",
+						
+				// 		},
+				// 		{
+				// 			"sTitle": "사업소명",
+				// 			"mData": "name"
+				// 		},
+				// 		{
+				// 			"sTitle": "지역",
+				// 			"mData":"location",
+				// 		},
+				// 		{
+				// 			"sTitle": "발전원",
+				// 			"mData":"powerSource",
+				// 		},
+				// 		{
+				// 			"sTitle": "발전 용량",
+				// 			"mData":"genVol",
+				// 		},
+				// 		{
+				// 			"sTitle": "ESS 용량 (PCS)",
+				// 			"mData":"pscVol",
+				// 		},
+				// 		{
+				// 			"sTitle": "ESS 용량 (BMS)",
+				// 			"mData":"bmsVol",
+				// 		},
+				// 		{
+				// 			"sTitle": "DR 자원 코드",
+				// 			"mData":"drId",
+				// 		},
+				// 		{
+				// 			"sTitle": "VPP 자원코드",
+				// 			"mData":"vppId",
+				// 		},
+				// 		{
+				// 			"sTitle": "알람 수신",
+				// 			"mData":"alarmState",
+				// 		},
+				// 	],
+				// 	dom: 'Bfltip',
+				// 	// dom: 'Bfrtip',
+				// 	buttons: [
+				// 		{
+				// 			extend: 'copyHtml5',
+				// 			className: "btn_type03",
+				// 			text: '데이터 복사',
+				// 		},
+				// 		{
+				// 			extend: 'print',
+				// 			text: '전체 인쇄',
+				// 			className: "btn_type03",
+				// 			exportOptions: {
+				// 				modifier: {
+				// 					selected: null
+				// 				}
+				// 			}
+				// 		},
+				// 		{
+				// 			extend: 'print',
+				// 			className: "btn_type03",
+				// 			text: '선택 인쇄'
+				// 		},
+				// 		{
+				// 			extend: 'excelHtml5',
+				// 			className: "btn_type03",
+				// 			text: 'Excel'
+				// 		},
+				// 		{
+				// 			extend: 'csvHtml5',
+				// 			className: "btn_type03",
+				// 			text: 'CSV'
+				// 		},
+				// 		{
+				// 			extend: 'pdfHtml5',
+				// 			className: "btn_type03",
+				// 			text: 'PDF',
+				// 		},
+				// 		{
+				// 			text: '추가',
+				// 			className: "btn_type fr",
+				// 			action: function (e, node, config){
+				// 				console.log("node===", node, "e---", e, "config===", config)
+				// 				$('#addSiteModal').modal('show');
+				// 			}
+				// 		}
+				// 	],
+				// 	select: {
+				// 		style: 'os',
+				// 		items: 'cell'
+				// 	},
+				// 	// select: true,
+				// 	// select: {
+				// 	// 	style:    'os',
+				// 	// 	selector: 'td:first-child'
+				// 	// },
+				// 	rowCallback: function ( row, data ) {
+				// 		// console.log("row-selected--", row)
+				// 		// $('input.editor-active', row).prop( 'checked', data.active == 1 );
+				// 	}
+				// });
+
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				$('.loading').hide();
 				if(textStatus == "error"){
@@ -289,7 +197,7 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">알람 메시지 관리</h1>
+		<h1 class="page-header">알람 설정</h1>
 	</div>
 </div>
 
@@ -298,7 +206,7 @@
 <div class="row">
 	<div class="col-12">
 		<div class="flex_group">
-			<span class="tx_tit">사업소</span>
+			<span class="tx_tit">설비 타입</span>
 			<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button"
 					data-toggle="dropdown">선택<span class="caret"></span></button>
@@ -323,7 +231,7 @@
 			</div>
 		</div>
 		<div class="flex_group">
-			<span class="tx_tit">지역</span>
+			<span class="tx_tit">제조사</span>
 			<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button"
 					data-toggle="dropdown">선택<span class="caret"></span></button>
@@ -352,7 +260,7 @@
 			</div>
 		</div>
 		<div class="flex_group">
-			<span class="tx_tit">발전 자원</span>
+			<span class="tx_tit">모델명</span>
 			<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button"
 					data-toggle="dropdown">선택<span class="caret"></span></button>
@@ -365,7 +273,7 @@
 			</div>
 		</div>
 		<div class="flex_group">
-			<span class="tx_tit">발전소명</span>
+			<span class="tx_tit">펌웨어 버전</span>
 			<div class="flex_start">
 				<div class="tx_inp_type">
 					<input type="text" id="key_word" placeholder="입력">

@@ -139,6 +139,7 @@
 				<ul>
 					<li><a href="/system/siteSetting.do">사업소 관리</a></li>
 					<li><a href="/system/groupSetting.do">그룹 관리</a></li>
+					<li><a href="/system/alarmSetting.do">알람 설정 관리</a></li>
 					<li><a href="/system/userSetting.do">사용자 관리</a></li>
 					<li><a href="/system/comCodeSetting.do">공통 코드 관리</a></li>
 					<li><a href="/system/batchSetting.do">배치 관리</a></li>
@@ -247,6 +248,7 @@
 					<li><a href="/system/siteSetting.do">사업소 관리</a></li>
 					<li><a href="/system/groupSetting.do">그룹 관리</a></li>
 					<li><a href="/system/userSetting.do">사용자 관리</a></li>
+					<li><a href="/system/alarmSetting.do">알람 설정 관리</a></li>
 					<li><a href="/system/comCodeSetting.do">공통 코드 관리</a></li>
 					<li><a href="/system/batchSetting.do">배치 관리</a></li>
 				</ul>
