@@ -27,7 +27,7 @@
 		$('#allSelect').prop('checked', true);
 		$('#allPurpose').prop('checked', true);
 
-		$('#fromDate').datepicker('setDate', 'today');
+		$('#fromDate').datepicker('setDate', '-30' );
 		$('#toDate').datepicker('setDate', 'today');
 		// $('#toDate').datepicker( "option", "maxDate", new Date());
 
@@ -156,8 +156,9 @@
 				spcArr.shift();
 				// selectAll($("#spcList"));
 				searchArr.push(spcArr.toString())
-				getDataList(page, searchArr)
 				spcList.append(`<li class="btn_wrap_type03 btn_wrap_border"><button type="button" class="btn_type mr-16">적용</button></li>`);
+
+				searchForm.submit();
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				alert('처리 중 오류가 발생했습니다.');
 				return false;
