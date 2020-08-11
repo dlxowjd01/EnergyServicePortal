@@ -1565,6 +1565,10 @@ table input[type="text"] {
 	padding-left: 0 !important;
 }
 
+.px-12 {
+	padding-right: 12px !important;
+	padding-left: 12px !important;
+}
 
 /* max-width, width */
 
@@ -1818,11 +1822,37 @@ input:-webkit-autofill:active {
 
 .outer-wrapper {
 	position: relative;
-	height: 100%;
+		height: 100%;
 }
 
-#page-wrapper {
-	margin: 0 72px;
+.page-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	min-height: 100vh;
+	margin: 0 58px 0 68px;
+	/* padding-bottom: 63px; */
+	/* height: calc(100% - 63px); */
+}
+
+.container-fluid {
+	flex: 1 0 auto;
+}
+
+footer {
+	flex-shrink: 0;
+	width: 100%;
+	/* padding: 25px 75px 25px 0; */
+	height: 53px;
+	padding-top: 13px;
+}
+
+footer .copyright {
+	font-family: "Roboto", sans-serif;
+	font-size: 10px;
+	font-weight: 500;
+	color: var(--white);
+	letter-spacing: 0.3px;
 }
 
 /* sidebar */
@@ -1841,15 +1871,14 @@ input:-webkit-autofill:active {
 
 .side-nav {
 	position: absolute;
-	top: 0;
+	top: 123px;
 	left: 0;
 	width: 72px;
-	height: 100%;
 	background: transparent;
-	padding-top: 126px;
 	color: var(--white60);
 	z-index: 1200;
 }
+
 
 .side-nav>ul>li {
 	position: relative;
@@ -2021,8 +2050,7 @@ li.on .sub_layer>ul {
 }
 
 .side-nav>ol {
-	position: relative;
-	top: 280px;
+	margin-top: 120px;
 	z-index: 1220;
 }
 
@@ -2332,26 +2360,6 @@ nav .all-menu .menu-group .btn-group button {
 
 .w_type {
 	width: 180px;
-}
-
-/* 페이지 하단 */
-
-footer {
-	position: fixed;
-	bottom: 0;
-	right: 0;
-	width: 100%;
-	/* height: 60px; */
-	padding: 25px 75px 25px 0;
-	background: var(--bg-color);
-}
-
-footer .copyright {
-	font-family: "Roboto", sans-serif;
-	font-size: 10px;
-	font-weight: 500;
-	color: var(--white);
-	letter-spacing: 0.3px;
 }
 
 .time {
@@ -8386,6 +8394,9 @@ div.di_wrap dl .link a {
 	border-radius: 2px;
 } */
 
+.custom-chkbox {
+
+}
 /* ********************************************* */
 
 .chk_type input[type="checkbox"] {

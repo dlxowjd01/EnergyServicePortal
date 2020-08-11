@@ -8,15 +8,14 @@
 <body class="dark">
 	<div class="outer-wrapper">
 		<%@ include file="/decorators/include/layouts/header.jsp"%>
-		<div id="page-wrapper">
-			<%@ include file="/decorators/include/layouts/nav.jsp"%>
-			<div class="container-fluid">
+		<div class="page-wrapper">
+			<div id="innerBody" class="container-fluid">
+				<%@ include file="/decorators/include/layouts/nav.jsp"%>
 				<decorator:body />
 			</div>
 			<%@ include file="/decorators/include/layouts/footer.jsp"%>
 		</div>
 	</div>
-
 <!-- 레이어 팝업 배경 -->
 <div id="mask"></div>
 <div class="loading"><img class="loading-image" src="/img/loading_icon.gif" alt="Loading..." /></div>
