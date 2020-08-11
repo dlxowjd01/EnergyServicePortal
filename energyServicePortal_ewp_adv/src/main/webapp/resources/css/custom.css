@@ -1690,11 +1690,10 @@ table input[type="text"] {
 	bottom: 0;
 	left: 0;
 	right: 0;
-	display: table;
 	width: 100%;
 	font-size: 0;
 	z-index: 90;
-	background-color: var(--box-darker);
+	background-color: var(--black);
 	display: none;
 }
 
@@ -2050,6 +2049,7 @@ li.on .sub_layer>ul {
 }
 
 .side-nav>ol {
+	position: relative;
 	margin-top: 120px;
 	z-index: 1220;
 }
@@ -2774,16 +2774,39 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	white-space: nowrap;
 }
 
+/* 9: 미정의(undefined) : default, 0: 정보(info), 1: 경고(warning), 2: 이상(critical), 3: 트립(shutoff), 4: 긴급 */
+
 .alarm_notice li a:before {
 	display: inline-block;
 	margin-right: 13px;
 	margin-top: 5px;
 	content: "";
-	background: var(--alarm);
+	background: none;
 	width: 8px;
 	height: 8px;
 	border-radius: 4px;
 }
+
+.alarm_notice li a.info:before {
+	background: var(--jordy-blue);
+}
+
+.alarm_notice li a.warning:before {
+	background: var(--sandy-brown);
+}
+
+.alarm_notice li a.critical:before {
+	background: var(--sunglow);
+}
+
+.alarm_notice li a.shutoff:before {
+	background: var(--white60);
+}
+
+.alarm_notice li a.urgent:before {
+	background: var(--alarm);
+}
+
 
 .alarm_notice li span {
 	text-align: right;
