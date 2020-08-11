@@ -9,8 +9,8 @@
 	<div class="outer-wrapper">
 		<%@ include file="/decorators/include/layouts/header.jsp"%>
 		<div class="page-wrapper">
+			<%@ include file="/decorators/include/layouts/nav.jsp"%>
 			<div id="innerBody" class="container-fluid">
-				<%@ include file="/decorators/include/layouts/nav.jsp"%>
 				<decorator:body />
 			</div>
 			<%@ include file="/decorators/include/layouts/footer.jsp"%>
