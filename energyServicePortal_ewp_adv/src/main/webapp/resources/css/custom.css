@@ -1866,7 +1866,7 @@ footer .copyright {
 	height: 100%;
 	background: var(--mobile-nav-bg);
 	overflow-y: auto !important;
-	z-index: 1200;
+	z-index: 1600;
 }
 
 .side-nav {
