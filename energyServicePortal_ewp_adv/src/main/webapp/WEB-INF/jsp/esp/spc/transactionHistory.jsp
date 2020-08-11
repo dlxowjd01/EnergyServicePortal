@@ -16,11 +16,11 @@
 		tableBody.find("template").remove();
 		tableFooter.find("template").remove();
 
-		unCheckAll(searchBar);
+		//unCheckAll(searchBar);
 		getSpcList();
 		// selectAll($("#spcList"));
 		// selectAll($("#spcStatus"));
-		selectAllGroup($("#searchOption"));
+		//selectAllGroup($("#searchOption"));
 		setSingleSelectDropdown($("#searchOption"))
 		setSingleSelectDropdown(sumOptList);
 
@@ -135,7 +135,7 @@
 				let spcArr = [];
 				let searchArr = [];
 				spcList.empty();
-				json.data.unshift({"spc_id": "allSelect", "name": "전체"});
+				// json.data.unshift({"spc_id": "allSelect", "name": "전체"});
 				json.data.forEach((item, index) => {
 					let listItem = '';
 					let uniq = item.spc_id + '_' + index;
@@ -154,11 +154,10 @@
 					// console.log("spcname---", item)
 				});
 				spcArr.shift();
-				selectAll($("#spcList"));
+				// selectAll($("#spcList"));
 				searchArr.push(spcArr.toString())
 				getDataList(page, searchArr)
 				spcList.append(`<li class="btn_wrap_type03 btn_wrap_border"><button type="button" class="btn_type mr-16">적용</button></li>`);
-				$('#전체').prop('checked', true);
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				alert('처리 중 오류가 발생했습니다.');
 				return false;
@@ -617,7 +616,7 @@
 					<ul id='spcList' class='dropdown-menu chk_type' role='menu'>
 						<li data-value="*spcId*"><!--
 						--><a href="javascript:void(0);" tabindex="-1"><!--
-							--><input type="checkbox" id="*spcName*" value="*spcId*" data-value="*spcId*" name="*uniqName*"><!--
+							--><input type="checkbox" id="*spcName*" value="*spcId*" data-value="*spcId*" name="*uniqName*" checked><!--
 							--><label for="*spcName*">*spcName*</label><!--
 						--></a><!--
 					--></li><!--
@@ -657,31 +656,25 @@
 								<ul id="spcStatus" class='dropdown-menu chk_type dropdown_offset' role='menu'>
 									<li>
 										<a href='javascript:void(0)' tabindex='-1'>
-											<input type='checkbox' id='allSelect' value='' data-value='0,1,2,3' name='approvalStatus'>
-											<label for='allSelect'>전체</label>
-										</a>
-									</li>
-									<li>
-										<a href='javascript:void(0)' tabindex='-1'>
-											<input type='checkbox' id='approved' value='' data-value='3' name='approvalStatus'>
+											<input type='checkbox' id='approved' value='' data-value='3' name='approvalStatus' checked>
 											<label for='approved'>승인 완료</label>
 										</a>
 									</li>
 									<li>
 										<a href='javascript:void(0)' tabindex='-1'>
-											<input type='checkbox' id='onHold' value='' data-value='1' name='approvalStatus'>
+											<input type='checkbox' id='onHold' value='' data-value='1' name='approvalStatus' checked>
 											<label for='onHold'>승인 대기</label>
 										</a>
 									</li>
 									<li>
 										<a href='javascript:void(0)' tabindex='-1'>
-											<input type='checkbox' id='inProgress' value='' data-value='2' name='approvalStatus'>
+											<input type='checkbox' id='inProgress' value='' data-value='2' name='approvalStatus' checked>
 											<label for='inProgress'>승인 중</label>
 										</a>
 									</li>
 									<li>
 										<a href='javascript:void(0)' tabindex='-1'>
-											<input type='checkbox' id='rejected' value='' data-value='0' name='approvalStatus'>
+											<input type='checkbox' id='rejected' value='' data-value='0' name='approvalStatus' checked>
 											<label for='rejected'>반송</label>
 										</a>
 									</li>
@@ -704,44 +697,38 @@
 									<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택">전체<span class='caret'></span></button>
 									<ul id="spcPurposeList" class='dropdown-menu chk_type dropdown_offset' role='menu'>
 										<li>
-											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='allPurpose' data-value='all' data-name="selectAll" name='spcPurpose' checked>
-												<label for='allPurpose'>전체</label>
-											</a>
-										</li>
-										<li>
 											<a href='javascript:void(0)'tabindex='-1'>
-												<input type='checkbox' id='recMargin' data-value='0' data-name="REC 수익" name='spcPurpose'>
+												<input type='checkbox' id='recMargin' data-value='0' data-name="REC 수익" name='spcPurpose' checked>
 												<label for='recMargin'>REC 수익</label>
 											</a>
 										</li>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='smpMargin' data-value='1' data-name="SMP 수익" name='spcPurpose'>
+												<input type='checkbox' id='smpMargin' data-value='1' data-name="SMP 수익" name='spcPurpose' checked>
 												<label for='smpMargin'>SMP 수익</label>
 											</a>
 										</li>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='dsraSaving' data-value='2' data-name="DSRA 적립" name='spcPurpose'>
+												<input type='checkbox' id='dsraSaving' data-value='2' data-name="DSRA 적립" name='spcPurpose' checked>
 												<label for='dsraSaving'>DSRA 적립</label>
 											</a>
 										</li>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='etc' data-value='3' data-name="기타" name='spcPurpose'>
+												<input type='checkbox' id='etc' data-value='3' data-name="기타" name='spcPurpose' checked>
 												<label for='etc'>기타</label>
 											</a>
 										</li>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='pendingAccount' data-value='4' data-name="유보 계좌" name='spcPurpose'>
+												<input type='checkbox' id='pendingAccount' data-value='4' data-name="유보 계좌" name='spcPurpose' checked>
 												<label for='pendingAccount'>유보 계좌</label>
 											</a>
 										</li>
 										<li>
 											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='activeAccount' data-value='5' data-name="운영 계좌" name='spcPurpose'>
+												<input type='checkbox' id='activeAccount' data-value='5' data-name="운영 계좌" name='spcPurpose' checked>
 												<label for='activeAccount'>운영 계좌</label>
 											</a>
 										</li>

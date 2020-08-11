@@ -216,6 +216,14 @@
 		});
 	}
 
+	function onlyOne(checkbox) {
+		console.log("checkbox===")
+		var checkboxes = document.getElementsByName('user_row')
+		checkboxes.forEach((item) => {
+			if (item !== checkbox) item.checked = false
+		})
+	}
+
 </script>
 
 <div class="row header-wrapper">

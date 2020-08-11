@@ -438,7 +438,11 @@
 				status.eq(1).text(detail.mem.toFixed(2) + ' %');
 				status.eq(2).text(detail.disk.toFixed(2) + ' %');
 				status.eq(3).html(`${'${detail.temperature.toFixed(2)}'}&#8451;`);
+
+				const dbTime = new Date(detail['timestamp']);
+				$('.dbTime').text(dbTime.format('yyyy-MM-dd HH:mm:ss'));
 			} else {
+				$('.dbTime').text('');
 				return false;
 			}
 		});
@@ -566,9 +570,6 @@
 							const rtuName = $('#selectedRTU');
 							selectLog(rtu.rid);
 							rtuName.text(rtu.name).data('rid', rtu.rid);
-
-							const now = new Date();
-							$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 						});
 
 						dateFilter.off('click');
