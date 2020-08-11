@@ -4,6 +4,7 @@
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	$(function () {
+		// let table = $("#userTable");
 		let option = {
 			url: apiHost + "/config/users/",
 			type: "get",
@@ -18,6 +19,19 @@
 		}
 
 		getUserList(option);
+
+		$("#userTable").on("click", "input[type='checkbox']", function(e, dt, type, indexes ){
+			let tr = $(this).closest("tr");
+			tr.addClass("selected");
+			console.log("tr===", tr.siblings());
+			// table[ type ]( indexes ).nodes().to$().addClass( 'custom-selected' );
+
+		});
+
+		// table.on( 'deselect', function ( e, dt, type, indexes ) {
+		// 	console.log("deselect===");
+		// 	table[ type ]( indexes ).nodes().to$().removeClass( 'custom-selected' );
+		// });
 
 		function getUserList(opt) {
 			$.ajax(opt).done(function (json, textStatus, jqXHR) {
@@ -98,8 +112,11 @@
 							"sTitle": "",
 							"mData": "",
 							"mRender": function ( data, type, row )  {
-								// console.log('row==', row)
-								return '<a class="chk_type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="user_row"><label for="' + row.idx + '" onclick="onlyOne(this)"></label></a>'
+								// onclick="onlyOne(this.children[0]);"
+								// select-checkbox
+								return '<a href="javascript:void(0);" class="select-checkbox"><input type="checkbox" name="user_row" id="' + row.idx + '" class="select-checkbox" onclick="onlyOne(this);"><label for="' + row.idx + '"></label></a>'
+
+								// return '<a href="javascript:void(0);" class="chk_type"><input type="checkbox" name="user_row" id="' + row.idx + '" class="select-checkbox" onclick="onlyOne(this);"><label for="' + row.idx + '"></label></a>'
 							},
 							"className": "dt-body-center"
 						},
@@ -163,20 +180,41 @@
 						}
 					],
 					select: {
-						style: 'os',
-						items: 'cell'
+						// style: 'os',
+						style: 'single',
+						selector: 'td:first-child',
+						// items: 'cell',
+						// items: 'row'
 					},
 					rowCallback: function ( row, data ) {
-						// console.log("row-selected--", row)
-						// $('input.editor-active', row).prop( 'checked', data.active == 1 );
+						// console.log("data--", data)
+						// row.find("input[type='checkbox']").prop( 'checked', true );
+	
+						// $('input[type="checkbox"]', row).prop('checked', data.active == 1 );
 					}
-				});
-			
+				})
+
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				return false;
 			});
 		}
 	});
+
+	function onlyOne(checkbox) {
+		var checkboxes = document.getElementsByName('user_row');
+		var table = $("#userTable");
+
+		checkboxes.forEach((item, index) => {
+			if (item !== checkbox) {
+				item.checked = false;
+			} else {
+				let tr = $(checkbox).closest("tr");
+				// console.log("tr---", tr);
+				// tr.addClass("selected");
+				// tr.siblings().removeClass("selected");
+			}
+		});
+	}
 
 	function onlyOne(checkbox) {
 		console.log("checkbox===")
@@ -374,7 +412,8 @@
 
 					<div class="tab-content">
 						<div id="menu1" class="tab-pane fade in active">
-							<div class="flex_start">
+							<button type="button" class="btn_add" onclick="addRow('pwdList');">추가</button>
+							<div id="pwdList" class="flex_start px-12">
 								<div class="dropdown w-35" id="userPwd">
 									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
@@ -390,8 +429,8 @@
 								</div>
 							</div>
 						</div>
-						<div id="menu2" class="tab-pane fade flex_start">
-							<div class="flex_start">
+						<div id="menu2" class="tab-pane fade">
+							<div class="flex_start px-12">
 								<div class="dropdown w-35" id="userPwd">
 									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">

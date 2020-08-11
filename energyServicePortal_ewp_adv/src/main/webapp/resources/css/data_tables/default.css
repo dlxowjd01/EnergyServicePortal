@@ -110,7 +110,7 @@ table.dataTable.cell-border tbody tr:first-child td {
 
 table.dataTable.stripe tbody tr.selected td,
 table.dataTable.stripe tbody td.selected {
-    background: var(--vivid-blue) !important;
+    background: var(--light-blue) !important;
 }
 
 table.dataTable.stripe tbody tr.even td {

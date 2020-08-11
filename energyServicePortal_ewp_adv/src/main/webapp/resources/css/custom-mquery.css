@@ -121,9 +121,6 @@
 		width: auto;
 	}
 
-	nav .all-menu .menu-group>ul>li:nth-child(6) {
-		border-left: solid 1px #4a73bd;
-	}
 
 	.gmain_map .chart_info>div.ci_left {
 		margin: 0 auto;
@@ -346,13 +343,9 @@
 	/********************************************************************************
 							common ( page-wrapeer, nav, sidebar )
 	*********************************************************************************/
-	#page-wrapper {
+	.page-wrapper {
 		margin: 0;
 		padding: 0 16px;
-	}
-
-	#page-wrapper>.nav {
-		height: 115px;
 	}
 
 	.sidenav-no-scroll {

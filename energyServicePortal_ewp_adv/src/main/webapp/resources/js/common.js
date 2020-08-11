@@ -467,7 +467,7 @@ $(function() {
         $(this).toggleClass("on");
         $(".menu-group").slideToggle();
     });
-    $('#page-wrapper').mouseup(function (e){
+    $('#innerBody').mouseup(function (e){
         var container = $(".menu-group");
         if( container.has(e.target).length === 0)
             container.slideUp();
