@@ -33,17 +33,6 @@ public class LoginController {
 
 	@RequestMapping(value = "/login.do")
 	public String login(HttpServletRequest request, HttpSession session, Model model) {
-		String msg = request.getParameter("msg");
-
-		if (msg != null && !"".equals(msg)) {
-			try {
-				msg = URLDecoder.decode(msg, "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-			model.addAttribute("msg", msg);
-		}
-
 		return "esp/login/login";
 	}
 
@@ -101,7 +90,7 @@ public class LoginController {
 			}
 
 			if(userInfoMap.get("auth_type") == null && "".equals(userInfoMap.get("auth_type"))) {
-				redirect.addAttribute("msg", URLEncoder.encode(egovMessageSource.getMessage("ewp.error.login_no_user", locale), "UTF-8"));
+				redirect.addFlashAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", locale));
 				return "redirect:/login.do";
 			} else if("1".equals(userInfoMap.get("auth_type")) || "2".equals(userInfoMap.get("auth_type"))) {
 				session.setAttribute(UserUtil.USER_SESSION_ID, userInfoMap);
@@ -113,11 +102,11 @@ public class LoginController {
 					return "redirect:/dashboard/gmain.do";
 				}
 			} else {
-				redirect.addAttribute("msg", URLEncoder.encode(egovMessageSource.getMessage("ewp.error.login_no_user", locale), "UTF-8"));
+				redirect.addFlashAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", locale));
 				return "redirect:/login.do";
 			}
 		} else {
-			redirect.addAttribute("msg", URLEncoder.encode(egovMessageSource.getMessage("ewp.error.login_no_correct", locale), "UTF-8"));
+			redirect.addFlashAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_correct", locale));
 			return "redirect:/login.do";
 		}
 	}
