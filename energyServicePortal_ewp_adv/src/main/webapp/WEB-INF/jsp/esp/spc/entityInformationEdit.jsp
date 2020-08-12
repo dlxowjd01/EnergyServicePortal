@@ -1779,8 +1779,12 @@
 									<div class="dropdown placeholder edit" id="계좌구분[index]"><!--
 									--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">계좌구분<span class="caret"></span></button><!--
 									--><ul id="계좌구분리스트[index]" class="dropdown-menu" role="menu"><!--
+										--><li data-default="select" data-value="select"><a href="#">입출금 구분을 선택해 주세요.</a></li><!--
 										--><li data-group="입금" data-value="관리운영비"><a href="#">관리 운영비</a></li><!--
 										--><li data-group="입금" data-value="사무수탁비"><a href="#">사무 수탁비</a></li><!--
+										--><li data-group="입금" data-value="공사비"><a href="#">공사비</a></li><!--
+										--><li data-group="입금" data-value="임대료"><a href="#">임대료</a></li><!--
+										--><li data-group="입금" data-value="대납금"><a href="#">대납금</a></li><!--
 										--><li data-group="입금" data-value="부채상환"><a href="#">부채 상환</a></li><!--
 										--><li data-group="입금" data-value="대수선비"><a href="#">대수선비</a></li><!--
 										--><li data-group="입금" data-value="배당금적립"><a href="#">배당금 적립</a></li><!--
@@ -1789,6 +1793,11 @@
 										--><li data-group="입금" data-value="운영계좌"><a href="#">운영계좌</a></li><!--
 										--><li data-group="입금" data-value="기타"><a href="#">기타</a></li><!--
 
+										--><li data-group="출금" data-value="관리운영비"><a href="#">관리 운영비</a></li><!--
+										--><li data-group="출금" data-value="사무수탁비"><a href="#">사무 수탁비</a></li><!--
+										--><li data-group="출금" data-value="공사비"><a href="#">공사비</a></li><!--
+										--><li data-group="출금" data-value="임대료"><a href="#">임대료</a></li><!--
+										--><li data-group="출금" data-value="대납금"><a href="#">대납금</a></li><!--
 										--><li data-group="출금" data-value="부채상환"><a href="#">부채 상환</a></li><!--
 										--><li data-group="출금" data-value="대수선비"><a href="#">대수선비</a></li><!--
 										--><li data-group="출금" data-value="배당금적립"><a href="#">배당금 적립</a></li><!--

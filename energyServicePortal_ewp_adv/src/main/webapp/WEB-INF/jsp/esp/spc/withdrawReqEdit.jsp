@@ -127,7 +127,7 @@
 								let accHolder = '';
 								let idx = '';
 								let purposeArr = [
-									{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적립", "일반 지출", "DSRA 적립", "기타", "운영계좌" ]},
+									{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적립", "일반 지출", "DSRA 적립", "기타", "운영계좌", "공사비", "임대료", "대납금"]},
 									{ label: "입금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
 								];
 								if(index == 0){
@@ -637,6 +637,9 @@
 											<ul id="purposeList*index*" class="purpose-list dropdown-menu" role="menu">
 												<li data-value="0"><a href="#" tabindex="-1">관리운영비</a></li>
 												<li data-value="1"><a href="#" tabindex="-1">사무수탁비</a></li>
+												<li data-value="9"><a href="#" tabindex="-1">공사비</a></li>
+												<li data-value="10"><a href="#" tabindex="-1">임대료</a></li>
+												<li data-value="11"><a href="#" tabindex="-1">대납금</a></li>
 												<li data-value="2"><a href="#" tabindex="-1">부채상환</a></li>
 												<li data-value="3"><a href="#" tabindex="-1">대수선비</a></li>
 												<li data-value="4"><a href="#" tabindex="-1">배당금 적립</a></li>

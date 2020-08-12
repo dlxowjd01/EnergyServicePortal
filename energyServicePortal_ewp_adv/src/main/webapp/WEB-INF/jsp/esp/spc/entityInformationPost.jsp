@@ -1548,6 +1548,9 @@
 										--><li data-group="입금" data-value="관리운영비"><a href="javascript:void(0);">관리 운영비</a></li><!--
 										--><li data-group="입금" data-value="사무수탁비"><a href="javascript:void(0);">사무 수탁비</a></li><!--
 										--><li data-group="입금" data-value="부채상환"><a href="javascript:void(0);">부채 상환</a></li><!--
+										--><li data-group="입금" data-value="공사비"><a href="javascript:void(0);">공사비</a></li><!--
+										--><li data-group="입금" data-value="임대료"><a href="javascript:void(0);">임대료</a></li><!--
+										--><li data-group="입금" data-value="대납금"><a href="javascript:void(0);">대납금</a></li><!--
 										--><li data-group="입금" data-value="대수선비"><a href="javascript:void(0);">대수선비</a></li><!--
 										--><li data-group="입금" data-value="배당금적립"><a href="javascript:void(0);">배당금 적립</a></li><!--
 										--><li data-group="입금" data-value="일반지출"><a href="javascript:void(0);">일반 지출</a></li><!--
@@ -1555,6 +1558,11 @@
 										--><li data-group="입금" data-value="운영계좌"><a href="javascript:void(0);">운영계좌</a></li><!--
 										--><li data-group="입금" data-value="기타"><a href="javascript:void(0);">기타</a></li><!--
 
+										--><li data-group="출금" data-value="관리운영비"><a href="javascript:void(0);">관리 운영비</a></li><!--
+										--><li data-group="출금" data-value="사무수탁비"><a href="javascript:void(0);">사무 수탁비</a></li><!--
+										--><li data-group="출금" data-value="공사비"><a href="javascript:void(0);">공사비</a></li><!--
+										--><li data-group="출금" data-value="임대료"><a href="javascript:void(0);">임대료</a></li><!--
+										--><li data-group="출금" data-value="대납금"><a href="javascript:void(0);">대납금</a></li><!--
 										--><li data-group="출금" data-value="부채상환"><a href="javascript:void(0);">부채 상환</a></li><!--
 										--><li data-group="출금" data-value="대수선비"><a href="javascript:void(0);">대수선비</a></li><!--
 										--><li data-group="출금" data-value="배당금적립"><a href="javascript:void(0);">배당금 적립</a></li><!--
