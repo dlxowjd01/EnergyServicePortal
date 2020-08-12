@@ -1248,16 +1248,6 @@
 		dataMap.set(dataList[1], data);
 
 		let columnSeriesData = new Array();
-		//  ORIGINAL!!!
-		//  'var(--turquoise)',
-		// 	'var(--light-blue)',
-		// 	'var(--turquoise)',
-		// 	'var(--blueberry)',
-		// 	'var(--teal)',
-		// 	'var(--royal-blue)',
-		// 	'var(--sunglow)',
-		// 	'var(--sandy-brown)',
-		// 	'var(--grey)'
 		let typeColorArr = [
 			'var(--turquoise)',
 			'var(--sandy-brown)',
@@ -1269,17 +1259,15 @@
 			'var(--sandy-brown)',
 			'var(--grey)'
 		];
-		let alarmColorArr = [
-			'var(--turquoise)',
-			'var(--sandy-brown)',
-			'var(--cream-can)',
-			'var(--summer-sky)',
-			'var(--orange-red)',
-			'var(--blue-yonder)',
-			'var(--eucalyptus)',
-			'var(--sandy-brown)',
-			'var(--grey)'
-		];
+		let alarmColorArr = {
+			0: 'var(--jordy-blue)',
+			1: 'var(--sandy-brown)',
+			2: 'var(--sunglow)',
+			3: 'var(--white60)',
+			4: 'var(--alarm)',
+			9: ''
+		};
+
 		let colorArr = (gr_type == true) ? typeColorArr : alarmColorArr;
 		let num = 0;
 		dataMap.forEach(function (v, k) {
@@ -1334,18 +1322,34 @@
 						typeNm = $(this).next('label').text();
 					}
 				});
-				let $temp = {
-					name: typeNm,
-					type: 'column',
-					stack: k,
-					tooltip: {
-						valueSuffix: '건'
-					},
-					color: colorArr[num],
-					data: val
-				};
-				columnSeriesData.push($temp)
-				num++;
+
+				if (gr_type == true) {
+					let $temp = {
+						name: typeNm,
+						type: 'column',
+						stack: k,
+						tooltip: {
+							valueSuffix: '건'
+						},
+						color: colorArr[num],
+						data: val
+					};
+					columnSeriesData.push($temp)
+					num++;
+				} else {
+					let $temp = {
+						name: typeNm,
+						type: 'column',
+						stack: k,
+						tooltip: {
+							valueSuffix: '건'
+						},
+						color: colorArr[key],
+						data: val
+					};
+					columnSeriesData.push($temp)
+					num++;
+				}
 			});
 
 		});

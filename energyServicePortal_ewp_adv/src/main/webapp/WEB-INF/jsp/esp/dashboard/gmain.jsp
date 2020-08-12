@@ -167,7 +167,7 @@
 				<div class="alarm_notice">
 					<ul id="alarmNotice">
 						<li>
-							<a href="javascript:void(0);" onclick="pageMove('[sid]', 'alarm');">
+							<a href="javascript:void(0);" onclick="pageMove('[sid]', 'alarm');" class="[level]">
 								<span class="err_msg">[site_name] - [message]</span>
 								<span class="err_time">[standardTime]</span>
 							</a>

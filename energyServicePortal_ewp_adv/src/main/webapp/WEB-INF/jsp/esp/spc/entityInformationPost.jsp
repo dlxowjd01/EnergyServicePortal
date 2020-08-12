@@ -759,23 +759,22 @@
 				targetInput.parent().addClass('hidden');
 				targetInput.val('');
 			}
-		}
-	}
-
-	function updateAccList (btnList, accTypeList){
-		$('#' + btnList).find('li').on('click', function(){
-			let item = $('#' + accTypeList).find('li[data-group]');
-			let accBtn = $('#' + accTypeList).prev('.dropdown-toggle');
-			console.log("clicking===", accBtn)
+		} else if ($dropdownId.match('입출금_구분')) {
+			const buttonIdx = $dropdownId.replace(/[^0-9]/g, ''),
+				target = $('#계좌구분리스트' + buttonIdx);
+			let item = target.find('li[data-group]');
+			let accBtn = target.prev('.dropdown-toggle');
 			accBtn.html('선택<span class="caret"></span>');
-			item.addClass("hidden");
-			$('#' + accTypeList).find("li[data-default]").hide();
-			if($(this).data('value')=='입금'){
+			item.addClass('hidden');
+
+			target.find("li[data-default]").hide();
+
+			if($('#' + $dropdownId + ' button').data('value')=='입금'){
 				item.not('[data-group="출금"]').removeClass("hidden");
 			} else {
 				item.not('[data-group="입금"]').removeClass("hidden");
 			}
-		});
+		}
 	}
 </script>
 
@@ -1212,8 +1211,7 @@
 						<td>
 							<fieldset class="sel_calendar edit twin clear dateField">
 								<legend class="sr-only">상업 운전 개시일</legend>
-								<input type="text" id="상업 운전 개시일_from" name="상업 운전 개시일_from" class="sel fromDate" value="" autocomplete="off" placeholder="시작일" readonly>
-								<input type="text" id="상업 운전 개시일_to" name="상업 운전 개시일_to" class="sel toDate" value="" autocomplete="off" placeholder="종료일" readonly>
+								<input type="text" id="상업_운전_개시일" name="상업_운전_개시일" class="sel toDate" value="" autocomplete="off" placeholder="상업 운전 개시일" readonly>
 							</fieldset>
 						</td>
 					</tr>
@@ -1534,7 +1532,7 @@
 							<td>
 								<div class="fixed_height group_type short">
 									<div class="account-type dropdown placeholder edit" id="입출금_구분[index]">
-										<button onclick="updateAccList('계좌구분[index]', '계좌구분리스트[index]')" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 											입출금 구분<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" role="menu">
