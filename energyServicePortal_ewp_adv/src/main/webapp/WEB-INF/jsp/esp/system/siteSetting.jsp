@@ -116,7 +116,7 @@
 						// targets:   0
 					// }],
 					// order: [[ 1, 'asc' ]],
-					// colReorder: {
+					colReorder: {
 					// 	realtime: false
 					// },
 					"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],

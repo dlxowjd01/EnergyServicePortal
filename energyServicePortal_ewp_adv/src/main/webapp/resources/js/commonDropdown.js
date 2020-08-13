@@ -200,15 +200,18 @@ const setDropdownValue = ($selector) => {
 	$selector.each(function(index, element) {
 		let item = $(this).find("li");
 		let btn = $(this).prev();
+
 		item.on("click", function() {
-			console.log("btn===", btn)
-			console.log("$(this)===", $(this).data('value'))
 			let val = $(this).data('value');
-			if(!isEmpty($(this).data('name'))){
-				let name = $(this).data('name');
+			let name = $(this).data('name');
+
+			if(!isEmpty(val)){
+				btn.data('value', val);
+			}
+			if(!isEmpty(name)){
 				btn.data('name', name);
 			}
-			btn.data('value', val);
+
 		});
 	});
 	return false;

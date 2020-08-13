@@ -517,7 +517,7 @@
 								<a href="javascript:void(0);" class="filedown"></a>
 							</p>
 						</td>
-						<td><button class="btn_close hidden">삭제</button></td>
+						<td><button type="button" class="btn_close hidden">삭제</button></td>
 					</tr>
 					<tr class="th_span">
 						<th>세무 조정 계산<label for="taxAdjustment" class="btn_add fr">추가</label></th>
@@ -527,7 +527,7 @@
 								<a href="javascript:void(0);" class="filedown"></a>
 							</p>
 						</td>
-						<td><button class="btn_close hidden">삭제</button></td>
+						<td><button type="button" class="btn_close hidden">삭제</button></td>
 					</tr>
 				</table>
 			</div>

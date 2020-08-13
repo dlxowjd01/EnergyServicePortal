@@ -470,8 +470,8 @@
 			contentType: false,
 			success: function (result) {
 				if (result.files.length > 0) {
-					liStr += '<li><span class="pt_tx"><a href="' + apiHost + '/files/download/' + result.files[0].fieldname + '?oid=' + oid + '&orgFilename=' + result.files[0].originalname + '">' + result.files[0].originalname + '</a></span>';
-					liStr += '<button class="btn_del" data-time="' + new Date().toISOString() + '" value="' + result.files[0].fieldname + '" name="file_original_name">삭제</button></li>';
+					liStr += '<li class="flex_start"><span class="pt_tx"><a href="' + apiHost + '/files/download/' + result.files[0].fieldname + '?oid=' + oid + '&orgFilename=' + result.files[0].originalname + '">' + result.files[0].originalname + '</a></span>';
+					liStr += '<button type="button" class="btn_close" data-time="' + new Date().toISOString() + '" value="' + result.files[0].fieldname + '" name="file_original_name">삭제</button></li>';
 				}
 				$('.photo_load_wrap ul').append(liStr);
 
@@ -848,7 +848,7 @@
 					let liStr = '';
 					if (ticketFileList.length > 0) {
 						liStr += '<li><span class="pt_tx"><a href="' + apiHost + '/files/download/' + el.file_key + '?oid=' + oid + '&orgFilename=' + el.file_original_name + '">' + el.file_original_name + '</a></span>';
-						liStr += '<button class="btn_del" data-time= "' + el.update_dt + '" value="' + el.file_key + '" name="file_original_name">삭제</button></li>';
+						liStr += '<button type="button" class="btn_close" data-time= "' + el.update_dt + '" value="' + el.file_key + '" name="file_original_name">삭제</button></li>';
 					}
 					$('.photo_load_wrap ul').append(liStr);
 				})

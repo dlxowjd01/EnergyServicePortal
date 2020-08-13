@@ -1479,6 +1479,10 @@ const addRow = function (listId, type, nextIdx) {
 			} else {
 				listLength = $selecter.children().length;
 			}
+
+			if (listId == 'siteRow' && type != 'first') {
+				rowHtml = rowHtml.replace(/hidden/g, '');
+			}
 		}
 	}
 	if (isEmpty(nextIdx)) {
@@ -1488,8 +1492,6 @@ const addRow = function (listId, type, nextIdx) {
 		rowHtml = rowHtml.split(col_left + 'index' + col_right).join(nextIdx);
 		rowHtml = rowHtml.split(col_left + 'alphabet' + col_right).join(String.fromCharCode(Number(nextIdx) + 65));
 	}
-
-
 
 	if ($selecter.hasClass('entity') && listLength > 0) {
 		if($('#' + listId).find(".btn_close").is(".fixed_height")){

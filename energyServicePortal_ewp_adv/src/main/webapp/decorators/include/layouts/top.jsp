@@ -16,18 +16,13 @@
 	</c:choose>
 	
 	<link rel="stylesheet" href="/css/bootstrap.min.css">
-	<%--
-	<link rel="stylesheet" href="/css/font-awesome.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
-	<link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400" rel="stylesheet">
-	--%>
 
 	<link rel="stylesheet" href="/css/custom.css">
 	<link rel="stylesheet" href="/css/custom-grid.min.css">
 	<link rel="stylesheet" href="/css/custom-mquery.css">
 	<link rel="stylesheet" type="text/css" media="all" href="/css/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" media="all" href="/css/wickedpicker.css">
-	<!-- dataTables (work in progress) -->
+
 	<link rel="stylesheet" type="text/css" href="/css/data_tables/default.css"/>
 <!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -48,28 +43,13 @@
 	<script src="/js/sectionDisplay.js"></script>
 	<script src="/js/common.js"></script>
 
-	<%--
-	<script src="/js/jquery.bxslider.js" type="text/javascript"></script>
-	<c:set var="timeOffset"><spring:eval expression="@local.getProperty('server.offset')" /></c:set>
-	--%>
 	<script src="/js/custom/common.js"></script>
-	<!-- START: 현재 안씀 - 확인 필요 -->
-	<!-- <script src="/js/custom/lems.js"></script>
-	<script src="/js/custom/searchRequirement.js"></script> -->
-	<!-- END -->
+
 	<script src="/js/custom/utils.js"></script>
 	<script src="/js/custom/numberFormat.js"></script>
 
 	<script src="/js/html2canvas.js"></script>
-	<!-- START: 현재 안씀 - 확인 필요 -->
-	<!-- <script src="/js/jspdf.min.js"></script> -->
-	<!-- END -->
-	<!-- print preview -->
-	<!-- <script src="/js/printPreview.js"></script> -->
-	<!-- <script src="/js/printThis.js"></script> -->
 
-	<!-- 다크 모드 지원 -->
-	<!-- <script src="/js/custom/theme.js"></script> -->
 	<!-- 화면 엑셀 다운로드용 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>

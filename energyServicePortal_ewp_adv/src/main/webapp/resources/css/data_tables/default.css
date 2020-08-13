@@ -27,8 +27,13 @@ table.dataTable {
     border-spacing: 0;
 }
 
-table.dataTable thead th,
+table.dataTable thead th {
+	font-size: 13px;
+	font-weight: 500;
+}
+
 table.dataTable tfoot th {
+	font-size: 13px;
     font-weight: bold;
 }
 
@@ -53,8 +58,7 @@ table.dataTable tfoot td {
 
 table.dataTable thead .sorting:not(.no-sorting) {
     cursor: pointer;
-    background-repeat: no-repeat;
-    background-position: center right;
+	white-space: nowrap;
 }
 
 table.dataTable thead .no-sorting {
@@ -396,7 +400,10 @@ table.dataTable td {
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>thead>tr>td,
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>tbody>tr>th,
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>tbody>tr>td {
-    vertical-align: middle;
+	vertical-align: middle;
+	font-size: 13px;
+	font-weight: 500;
+	white-space: nowrap;
 }
 
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>thead>tr>th>div.dataTables_sizing,
@@ -472,14 +479,49 @@ table.fixedHeader-locked {
 /* SELECT ROW */
 
 
-table.dataTable tbody td.select-checkbox,
-table.dataTable tbody th.select-checkbox {
-    position: relative;
+input.select-checkbox {
+	position: absolute;
+	opacity: 0; 
 }
 
-table.dataTable tbody td.select-checkbox:before,
+input.select-checkbox + label {
+	position: relative;
+    cursor: pointer;
+    padding: 0;
+}
+
+input.select-checkbox + label:before {
+	content: '';
+	display: inline-block;
+	vertical-align: text-top;
+	width: 18px;
+	height: 18px;
+	border: 2px solid var(--white60);
+	border-radius: 2px;
+}
+
+input.select-checkbox:checked + label:before {
+	background: var(--white87);
+	border: 2px solid var(--white87);
+}
+
+input.select-checkbox:checked + label:after {
+	content: '';
+	position: absolute;
+    left: 6px;
+    top: 20px;
+	width: 6px;
+	height: 11px;
+	border: solid var(--active);
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+}
+
+ 
+/* 
 table.dataTable tbody td.select-checkbox:after,
-table.dataTable tbody th.select-checkbox:before,
 table.dataTable tbody th.select-checkbox:after {
     display: block;
     position: absolute;
@@ -490,23 +532,25 @@ table.dataTable tbody th.select-checkbox:after {
     box-sizing: border-box;
 }
 
-table.dataTable tbody td.select-checkbox:before,
-table.dataTable tbody th.select-checkbox:before {
-    content: ' ';
+table.dataTable tbody th .select-checkbox:before,
+table.dataTable tbody td .select-checkbox:before {
+	content: ' ';
+	width: 18px;
+	height: 18px;
     margin-top: -6px;
     margin-left: -6px;
-    border: 1px solid black;
-    border-radius: 3px;
+    border: 2px solid var(--white60);
+    border-radius: 2px;
 }
 
-table.dataTable tr.selected td.select-checkbox:after,
-table.dataTable tr.selected th.select-checkbox:after {
+table.dataTable tr.selected td .select-checkbox:after,
+table.dataTable tr.selected th .select-checkbox:after {
     content: '\2714';
     margin-top: -11px;
     margin-left: -4px;
     text-align: center;
     text-shadow: 1px 1px #B0BED9, -1px -1px #B0BED9, 1px -1px #B0BED9, -1px 1px #B0BED9;
-}
+} */
 
 div.dataTables_wrapper span.select-info,
 div.dataTables_wrapper span.select-item {
@@ -588,7 +632,7 @@ div.dt-button-info>div {
 div.dt-button-collection-title {
     text-align: center;
     padding: 0.3em 0 0.5em;
-    font-size: 0.9em;
+	font-size: 13px;
 }
 
 div.dt-button-collection-title:empty {
@@ -658,7 +702,7 @@ div.dt-button-collection {
     padding: 8px 8px 4px 8px;
 	background: none;
     overflow: hidden;
-    z-index: 2002;
+    z-index: 25;
     border-radius: 5px;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
     box-sizing: border-box;
@@ -757,7 +801,7 @@ div.dt-button-background {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2001;
+    z-index: 25;
 }
 
 @media screen and (max-width: 640px) {

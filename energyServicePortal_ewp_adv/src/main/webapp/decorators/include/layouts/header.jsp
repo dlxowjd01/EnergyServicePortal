@@ -323,7 +323,7 @@
 							<dt>사업소 분석</dt>
 							<dd>
 								<a href="#">사업소별</a>
-								<ul>
+								<ul class="overflow-list">
 									<li><a href="#"  onclick="dashboardMove('group', '', ''); return false">전체</a></li>
 									<c:if test="${fn:length(siteList) > 0}">
 										<c:forEach var="site" items="${siteList}">
@@ -342,7 +342,7 @@
 								<dt></dt>
 								<dd>
 									<a href="#">그룹별</a>
-									<ul>
+									<ul class="overflow-list">
 										<c:forEach var="group" items="${tagList}">
 											<li>
 												<a href="#" onclick="dashboardMove('group', 'sgid', '${group.sgid}'); return false">${group.name}</a>
@@ -370,7 +370,7 @@
 									<dt>에너지 거래</dt>
 									<dd>
 										<a href="#">중개거래</a>
-										<ul>
+										<ul class="overflow-list">
 											<c:forEach var="vpp" items="${vppList}">
 												<li>
 													<a href="#" onclick="dashboardMove('vpp', 'vgid', '${vpp.vgid}'); return false">${vpp.name}</a>
@@ -489,9 +489,7 @@
 	<ul class="nav_right">
 		<li class="member clear">
 			<div class="fl"><img src="../img/m_member_pic.png" alt=""></div>
-			<div class="fr">
-				<button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn_type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button>
-			</div>
+			<div class="fr"><button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn_type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button></div>
 		</li>
 		<%--
 		<li>

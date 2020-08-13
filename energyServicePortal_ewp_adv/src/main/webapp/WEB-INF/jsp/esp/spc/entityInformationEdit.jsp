@@ -1848,7 +1848,7 @@
 								<div class="tx_inp_type edit">
 									<input type="text" id="계좌_번호[index]" name="계좌_번호[index]" placeholder="직접 입력">
 								</div>
-								<button class="btn_close hidden mr-12 fr" onclick="$(this).parents().closest('tr').remove()"></button>
+								<button type="button" class="btn_close hidden mr-12 fr" onclick="$(this).parents().closest('tr').remove()"></button>
 								<div class="tx_inp_type edit">
 									<input type="text" id="계좌개설_은행(지점)[index]" name="계좌개설_은행(지점)[index]" placeholder="직접 입력">
 								</div>
@@ -2015,7 +2015,7 @@
 								<div class="fixed_height"></div>
 								<div class="sel_calendar group_type edit addList_rental_deduction entity">
 									<input type="text" id="임대료_지급일[index]" class="sel datepicker" name="임대료_지급일[index]" value="" autocomplete="off" placeholder="날짜 선택" readonly>
-									<button class="btn_close hidden" onclick="removeList(this)"></button>
+									<button type="button" class="btn_close hidden" onclick="removeList(this)"></button>
 								</div>
 								<div class="fixed_height"></div>
 							</td>
@@ -2382,7 +2382,7 @@
 										<input type="text" id="인버터_제조사_모델[index]" name="인버터_제조사_모델[index]" placeholder="모델">
 									</div>
 								</fieldset>
-								<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
+								<button type="button" class="btn_close hidden" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 						<th>인버터 용량 / 대수<a href="javascript:addRow('addList_inverter_vol');" class="btn_add fr">추가</a></th>
