@@ -1,0 +1,13 @@
+package kr.co.esp.login.service;
+
+import org.codehaus.jettison.json.JSONObject;
+
+import java.util.Map;
+
+public interface LoginService {
+
+	Map<String, Object> selectOid(String serverName) throws Exception;
+
+	Map<String, Object> selectAuthLogin(String mode, JSONObject obj) throws Exception;
+
+}
