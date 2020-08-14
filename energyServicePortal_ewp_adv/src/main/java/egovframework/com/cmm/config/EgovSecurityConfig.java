@@ -21,9 +21,14 @@ public class EgovSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/css/**");
-		web.ignoring().antMatchers("/images/**");
+		web.ignoring().antMatchers("/font/**");
+		web.ignoring().antMatchers("/fonts/**");
+		web.ignoring().antMatchers("/img/**");
+		web.ignoring().antMatchers("/img@2x/**");
+		web.ignoring().antMatchers("/img@3x/**");
+		web.ignoring().antMatchers("/img@4x/**");
 		web.ignoring().antMatchers("/js/**");
-		web.ignoring().antMatchers("/resource/**");
+		web.ignoring().antMatchers("/resources/**");
 	}
 
 	@Override
