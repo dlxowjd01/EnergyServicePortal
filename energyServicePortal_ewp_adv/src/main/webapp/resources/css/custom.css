@@ -133,7 +133,6 @@ bootstrap default
 	--nav-menu-color: rgba(255, 255, 255, 0.5);
 	--nav-border: rgba(255, 255, 255, 0.15);
 
-
 	/* ********* Supplementary ********* */
 	--circle-charge: #2BEEE9;
 	--circle-solar-power: #9363fd;
@@ -183,7 +182,7 @@ html.darkmode:root {
 	--sidebar-active: #131319;
 
 	/* Scroll */
-	--scroll-track: #444444;
+	--scroll-track: #444;
 
 	/* Background, Box colors */
 	--bg-color: #000;
@@ -978,6 +977,10 @@ table input[type="text"] {
 	padding-right: 0;
 }
 
+.semi-bold {
+	font-weight: 500;
+}
+
 .bold {
 	font-weight: bold;
 }
@@ -1247,6 +1250,10 @@ table input[type="text"] {
 	margin-bottom: 24px;
 }
 
+.mb-28 {
+	margin-bottom: 28px;
+}
+
 .mx-12 {
 	margin-left: 12px;
 	margin-left: 12px;
@@ -1343,6 +1350,10 @@ table input[type="text"] {
 
 .pb-16 {
 	padding-bottom: 10px;
+}
+
+.pb-32 {
+	padding-bottom: 32px;
 }
 
 .px-0 {
@@ -1483,7 +1494,7 @@ table input[type="text"] {
 }
 
 .require-field {
-	color: var(--sandy-brown);
+	color: var(--vivid-blue);
 	font-size: 13px;
 }
 
@@ -1710,7 +1721,7 @@ footer .copyright {
 .side-nav:hover>ul>li>a {
 	width: 322px;
 	padding: 14px 0;
-	/* line-height: 28px; */
+	line-height: 28px;
 	color: var(--white87);
 	font-size: 16px;
 	font-weight: bold;
@@ -1719,7 +1730,7 @@ footer .copyright {
 /* .side-nav>ul>li>a:before { */
 .side-nav:hover>ul>li>a:before {
 	position: absolute;
-	top: 26px;
+	top: 24px;
 	left: 10px;
 	width: 0;
 	height: 0;
@@ -2771,7 +2782,7 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 
 .modal .modal-md-lg {
 	width: 100%;
-	max-width: 750px
+	max-width: 850px
 }
 
 .modal:before {
@@ -3004,7 +3015,9 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 
 
 /* addUserModal */
-
+.user-modal-content {
+	padding: 40px 48px 42px;
+}
 .user-modal-content .offset-width {
 	width: calc(100% - 74px);
 }
@@ -3063,6 +3076,20 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	line-height: 18px;
 }
 
+.user-modal-content .selected-list li {
+	list-style-type: decimal;
+	list-style-position: inside;
+	font-size: 13px;
+	line-height: 32px;
+	color: var(--white60);
+}
+
+.user-modal-content .selected-list .icon-delete {
+	position: fixed;
+	margin: 5px 0 0 16px;
+	background-size: 10px;
+}
+
 .user-modal-content .text-sm {
 	padding-top: 12px;
 	margin: 0 0 -12px 0;
@@ -3079,10 +3106,6 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 
 .user-modal-content .textarea {
 	height: 100px;
-}
-
-.user-modal-content .icon-delete {
-	background-size: 10px;
 }
 
 /* input */
@@ -3221,22 +3244,26 @@ input.inp[readonly]:focus {
 	border: 1px solid var(--white10);
 }
 
-/* 판넬 제목 */
+.stit {
+	margin: 6px 0 10px;
+	font-size: 13px;
+	color: var(--white87);
+}
 
-h2.ntit {
+.ntit {
 	margin: 6px 0 10px;
 	font-size: 16px;
 	color: var(--white87);
 	font-weight: bold;
 }
 
-h2.ntit:after {
+.ntit:after {
 	display: block;
 	clear: both;
 	content: "";
 }
 
-h2.ntit span.time {
+.ntit span.time {
 	margin-top: 10px;
 	text-align: right;
 	font-family: "Roboto", sans-serif;
@@ -3246,15 +3273,10 @@ h2.ntit span.time {
 	font-weight: normal;
 }
 
-h2.ntit.mt25 {
+.ntit.mt25 {
 	margin-top: 25px;
 }
 
-h1.stit {
-	margin: 6px 0 10px;
-	font-size: 13px;
-	color: var(--white87);
-}
 
 /* 기본 => 피크 전력 */
 
@@ -9200,6 +9222,11 @@ div.di_wrap dl .link a {
 .btn_wrap_type02 button {
 	padding: 0 27px;
 	margin-left: 8px;
+}
+
+.btn_wrap_type02.offset-top {
+	float: right;
+	margin-top: -50px;
 }
 
 .btn_wrap_type02+.spc_tbl.align_type {

@@ -114,7 +114,7 @@ table.dataTable.cell-border tbody tr:first-child td {
 
 table.dataTable.stripe tbody tr.selected td,
 table.dataTable.stripe tbody td.selected {
-    background: var(--light-blue) !important;
+    background: var(--vivid-blue) !important;
 }
 
 table.dataTable.stripe tbody tr.even td {
@@ -250,7 +250,7 @@ table.dataTable td {
 
 /* Control feature layout */
 .dataTables_wrapper {
-    position: relative;
+	position: relative;
     clear: both;
     *zoom: 1;
     zoom: 1;
@@ -261,7 +261,7 @@ table.dataTable td {
 }
 
 .dataTables_wrapper select {
-    margin: 0 10px 20px 0;
+    margin: 0 10px 20px 8px;
     padding: 5px 10px;
     height: 36px;
     border: 1px solid var(--white87);
@@ -304,7 +304,7 @@ table.dataTable td {
 .dataTables_wrapper .dataTables_info {
     clear: both;
     float: left;
-    padding-top: 0.755em;
+    padding-top: 25px;
 }
 
 .dataTables_wrapper .dataTables_paginate {
@@ -317,16 +317,17 @@ table.dataTable td {
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button {
-    color: var(--white60);
-    box-sizing: border-box;
     display: inline-block;
     min-width: 40px;
-    height: 14px;
-    text-align: center;
-    text-decoration: none !important;
-    cursor: pointer;
-    border: 0;
+	height: 12px;
+	vertical-align: top;
+	box-sizing: border-box;
+	border: 0;
     border-radius: 2px;
+    text-align: center;
+	text-decoration: none !important;
+	color: var(--white60);
+    cursor: pointer;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current,
@@ -346,16 +347,18 @@ table.dataTable td {
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.previous {
-    opacity: 0.6;
-    background: var(--ico-prev) no-repeat center center;
-    color: var(--white60);
+	color: var(--white60);
+	background: var(--ico-prev) no-repeat center center;
+	background-size: 18px;
+	opacity: 0.6;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.next {
-    opacity: 0.6;
+	position: absolute;
     background: var(--ico-prev) no-repeat center center;
-    position: absolute;
-    transform: rotate(360deg) scaleX(-1);
+	background-size: 18px;
+	transform: rotate(360deg) scaleX(-1);
+	opacity: 0.6;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button:active {
@@ -384,7 +387,8 @@ table.dataTable td {
 .dataTables_wrapper .dataTables_info,
 .dataTables_wrapper .dataTables_processing,
 .dataTables_wrapper .dataTables_paginate {
-    color: var(--white60);
+	color: var(--white60);
+	font-size: 12px;
 }
 
 .dataTables_wrapper .dataTables_scroll {

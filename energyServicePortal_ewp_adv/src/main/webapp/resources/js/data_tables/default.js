@@ -11506,7 +11506,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfo": "_START_ " + "- "  +  "_END_ / 총 _TOTAL_",
+			"sInfo": "_START_ " + "- "  +  "_END_ / 총 _TOTAL_" + "개",
 	
 	
 			/**
@@ -11667,7 +11667,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sLengthMenu": "_MENU_" + "씩 보기",
+			"sLengthMenu": "열" + "_MENU_" + "씩 보기",
 	
 	
 			/**

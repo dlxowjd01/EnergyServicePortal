@@ -142,7 +142,7 @@
 				new_password : $("#newPwd").val(),
 			}
 			let option = {
-				url: 'https://iderms-api.iderms.ai/config/users/' + userInfoId + '/password',
+				url: apiHost + '/config/users/' + userInfoId + '/password',
 				dataType: 'json',
 				type: 'patch',
 				beforeSend: function (jqXHR, settings) {

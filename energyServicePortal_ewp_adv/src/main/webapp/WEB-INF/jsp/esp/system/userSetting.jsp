@@ -36,8 +36,11 @@
 
 		getSpcList(optionList[1], copySpcList, setDropdownValue);
 
+		$("#newId").on('keyup keydown', function() {
+			$(this).val($(this).val().replace(/\s/g, ''));
+		});
 
-		$("#newId").on('keyup', function() {
+		$("#newId").on('keyup keydown', function() {
 			let warning = $("#newId").parents(".col-lg-4").find(".warning");
 			$("#validId").addClass("hidden")
 
@@ -57,13 +60,15 @@
 				warning.eq(1).addClass("hidden");
 			}
 
-			if( warning.not(".hidden") ){
+			if( warning.not(".hidden").index() == -1 ){
 				$("#newId").parent().next().prop("disabled", false).removeClass("disabled");
+			} else {
+				$("#newId").parent().next().prop("disabled", true).addClass("disabled");
 			}
 
 		});
 
-		$("#newUserPwd").on('keyup', validatePassword);
+		$("#newUserPwd").on('input', validatePassword);
 
 		$("#newFullName").on('input', function(evt) {
 			if( $(this).val().match(/['.,!#$%&"*+/=?^`{|}~;:<>]+$/)){
@@ -139,111 +144,146 @@
 		$("#addUserForm").on("submit", function(e){
 			e.preventDefault();
 
-			let optionList = [
-				{
-					url: apiHost + '/config/users?oid=' + oid,
-					type: 'post',
-					dataType: 'json',
-					data: {
-						oid: oid,
-						type: "money",
-						like_yyyymm: yyyy + mm,
-					},
-					beforeSend: function () {
-						$('.loading').show();
-					},
-					async: true
+			let userObj = {};
+
+			userObj.login_id = $("#newId").val();
+			userObj.name = $("#newFullName").val();
+			userObj.password = $("#newUserPwd").val();
+			userObj.role = Number($("#newAccLevel").prev().data("value"));
+
+			if( !isEmpty( $("#newMobileNum").val() )){
+				userObj.contact_phone = $("#newMobileNum").val();
+			}
+			if( !isEmpty( $("#newAffiliation").val()) ){
+				userObj.team = $("#newAffiliation").val();
+			}
+			if( !isEmpty( $("#newEmailAddr").val() )){
+				userObj.contact_email = $("#newEmailAddr").val();
+			}
+			if( !isEmpty( $("#newTaskList").prev().data("value") )){
+				userObj.task = $("#newTaskList").prev().data("value");
+			}
+			if( !isEmpty( $("#newUseOpt").prev().data("value") )){
+				userObj.valid_yn = $("#newUseOpt").prev().data("value");
+			}
+			if( !isEmpty( $("#newUserDesc").val()) ){
+				userObj.description = JSON.stringify( $("#newUserDesc").val() );
+			}
+
+			let userOption = {
+				url: apiHost + '/config/users?oid=' + oid,
+				type: 'post',
+				beforeSend: function (jqXHR, settings) {
+					$('.loading').show();
 				},
-				{
-					url: apiHost + 'config/user_sites?uid' + userInfoId,
+				async: true,
+				dataType: 'json',
+				contentType: "application/json",
+				data: JSON.stringify(userObj)
+			}
+
+			let siteInfo = $("#selectedSiteList").find("li");
+			let spcInfo = $("#selectedSpcList").find("li");
+
+			$.ajax(userOption).done(function (json, textStatus, jqXHR) {
+				$("#addUserSuccessMsg").removeClass("hidden");
+				$("#resultModal").modal("show");
+				setTimeout(function(){
+					$("#resultModal").modal("hide");
+				}, 3000);
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				$("#addUserFailureMsg").removeClass("hidden");
+				$("#resultModal").modal("show");
+				setTimeout(function(){
+					$("#resultModal").modal("hide");
+				}, 3000);
+				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
+				return false;
+			});
+
+			if( siteInfo.length > 0 || spcInfo.length > 0 ){
+
+				let siteOption = {
+					url: apiHost + '/config/user_sites?uid=' + userInfoId,
 					type: 'post',
 					dataType: 'json',
+					contentType: "application/json",
 					async: true
-				},
-				{
-					url: apiHost + 'config/user_spcs?uid=' + userInfoId,
+				}
+
+				let spcOption = {
+					url: apiHost + '/config/user_spcs?uid=' + userInfoId,
 					type: 'post',
 					dataType: 'json',
+					contentType: "application/json",
 					async: true
+				}
+
+				if(siteInfo.length > 0) {
+					$.each(siteInfo, function(index, element){
+						let siteObj = {
+							sid: $(element).data("sid"),
+							role: Number($(element).data("role"))
+						};
+
+						siteOption.data = JSON.stringify(siteObj);
+
+						// makeAjaxCall(siteOption);
+						console.log("siteOption===", siteOption)
+
+						$.ajax(siteOption).done(function (json, textStatus, jqXHR) {
+							console.log("success===", json)
+						}).fail(function (jqXHR, textStatus, errorThrown) {
+							console.log("fail===", jqXHR)
+							return false;
+						});
+					}).promise().done(function(){
+						console.log("ajax call done===");
+					});
 
 				}
-			];
-			
-			let userObj = {};
-			let formArr = [];
 
-			userObj.newId = $("#newId").val();
-			userObj.newUserPwd = $("#newUserPwd").val();
-			userObj.newFullName = $("#newFullName").val();
-			userObj.newAccLevel = $("#newAccLevel").prev().data("value");
-			userObj.newMobileNum = $("#newMobileNum").val();
-			userObj.newEmailAddr = $("#newEmailAddr").val();
-			userObj.newAffiliation = $("#newAffiliation").val();
-			userObj.newTaskList = $("#newTaskList").prev().data("value");
-			userObj.newUseOpt = $("#newUseOpt").prev().data("value");
-			userObj.newDesc = $("#newUserDesc").val();
+				if(spcInfo.length > 0 ){
+					$.each(spcInfo, function(index, element){
+						let spcObj = {
+							spcid: $(element).data("value"),
+							role: Number($(element).data("role"))
+						};
+
+						spcOption.data = JSON.stringify(spcObj);
+						makeAjaxCall(spcOption);
+					}).promise().done(function(){
+						console.log("ajax call done===")
+					});
+				}
 
 
-			let siteRow = $("#siteRow").find(".flex_start");
-			let siteOpt = $("#siteRow").find(".dropdown-toggle");
-			let siteArr =[];
-
-			$.each(siteRow, function(index, element){
-				let obj = {};
-				let opt = element.find(".dropdown-toggle");
-
-				obj.siteName = opt.eq(0).data("value");
-				obj.newAccLevel = opt.eq(1).data("value");
-				console.log("obj==", obj);
-				siteArr.push(obj);
-			});
-
-			
-			let spcRow = $("#spcRow").find(".flex_start");
-			let spcOpt = $("#spcRow").find(".dropdown-toggle");
-			let spcArr =[];
-
-			$.each(spcRow, function(index, element){
-				let obj = {};
-				let opt = element.find(".dropdown-toggle");
-
-				obj.spcName = opt.eq(0).data("value");
-				obj.newAccLevel = opt.eq(1).data("value");
-				console.log("obj==", obj);
-				spcArr.push(obj);
-			});
-			// siteObj.siteName 
-			
+			}
 
 		});
-		// table.on( 'deselect', function ( e, dt, type, indexes ) {
-		// 	console.log("deselect===");
-		// 	table[ type ]( indexes ).nodes().to$().removeClass( 'custom-selected' );
-		// });
 
 		$('#newAccLevel').find("li").on("click", function(){
-			console.log("button clicked")
-			if( !isEmpty($(this).data("value")) && validateInput() == 1) {
-				$("#addUserBtn").prop("disabled", false).removeClass("disabled");
-			}
-		});
-		$("document").on("change", "#addUserForm", function(e){
-			if(validateInput() == 1) {
+			if( !isEmpty($(this).data("value")) && validateForm() == 1) {
 				$("#addUserBtn").prop("disabled", false).removeClass("disabled");
 			}
 		});
 
-		
-		function validateInput(){
+		$('#addUserForm').on("change", function(e){
+			if(validateForm() == 1) {
+				$("#addUserBtn").prop("disabled", false).removeClass("disabled");
+			} else {
+				$("#addUserBtn").prop("disabled", true).addClass("disabled");
+			}
+		});
 
-			console.log("1---", $("#validId").not(".hidden"))
+		function makeAjaxCall(option){
+			return $.ajax(option).fail(function (jqXHR, textStatus, errorThrown) {
+				return false;
+			});
+		}
 
-			console.log("2---",  $(".tick:not(.checked)").index())
-
-			console.log("3---", $(".warning:not(.hidden)").index() == -1)
-
-
-			if($("#validId").not(".hidden") && ( $(".tick:not(.checked)").index() == -1 ) && ( $(".warning:not(.hidden)").index() == -1 ) ){
+		function validateForm(){
+			if( ( $("#validId:not('.hidden')").length >= 0 ) && ( $("#addUserForm .tick:not('.checked')").index() == -1 ) && ( $(".warning:not(.hidden)").index() == -1 ) && ( !isEmpty($("#newFullName").val() ) ) && ( !isEmpty($("#newAccLevel").prev().data("value")) )){
 				return 1;
 			}
 		}
@@ -285,7 +325,7 @@
 			});
 			$("#updateUserInfoModal").modal("hide");
 		}
-		
+
 		function getUserList(opt) {
 			$.ajax(opt).done(function (json, textStatus, jqXHR) {
 				let data = json;
@@ -322,7 +362,7 @@
 					} else {
 						obj.team = "-";
 					}
-				
+
 					if(item.role == 1){
 						obj.user_role = "조직 관리자"
 					} else {
@@ -347,20 +387,24 @@
 					}
 
 					if(!isEmpty(item.valid_yn)){
-						obj.valid_yn = item.valid_yn;
+						if(item.valid_yn == "Y"){
+							obj.valid_yn = "사용"
+						} else {
+							obj.valid_yn = "중자"
+						}
 					} else {
 						obj.valid_yn = "-";
 					}
 					newArr.push(obj);
 				});
 
-				$('#userTable').dataTable({
-					"aaData": newArr,
+				var table = $('#userTable').dataTable({
+					aaData: newArr,
 					// "fixedHeader": true,
-					"scrollX": false,
-					"scrollY": "400px",
-					"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-					"aoColumns": [
+					scrollX: false,
+					scrollY: "400px",
+					lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+					aoColumns: [
 						{
 							"sTitle": "",
 							"mData": "",
@@ -438,14 +482,24 @@
 						// items: 'cell',
 						// items: 'row'
 					},
+					drawCallback: function () {
+						$('#userTable_wrapper').addClass('mb-28');
+					},
+					initComplete: function(){
+						let str = `
+							<div class="dt-buttons">
+								<button type="button" class="btn_type03" onclick="openEditModal('edit')">선택 수정</button>
+								<button type='button' class='btn_type03' onclick='deleteUser()'>선택 삭제</button>
+							</div>
+						`
+						$("#userTable_wrapper").append($(str));
+					},
 					rowCallback: function ( row, data ) {
 						// console.log("data--", data)
 						// row.find("input[type='checkbox']").prop( 'checked', true );
-	
 						// $('input[type="checkbox"]', row).prop('checked', data.active == 1 );
 					}
-				})
-
+				});
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				return false;
 			});
@@ -460,21 +514,12 @@
 						.replace(/\*spcName\*/g, x.name)
 					$("#spcRow ul").first().append(str);
 				});
-				// init('spcRow');
-				// addRow('spcRow', 'first');
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				return false;
 			});
-			let siteOpt = $("#siteOptList").find("li");
-			let dropdown = $("#addUserForm").find(".dropdown ul:not('#siteOptList')");
+
+			let dropdown = $("#addUserForm").find(".dropdown ul");
 			callback(dropdown);
-
-			siteOpt.on("click", function(){
-				let id = $(this).data("id");
-				let name = $(this).data("name");
-
-				$("#siteOptList").prev().data({ "value" : name, "id" : id });
-			});
 		}
 
 
@@ -496,6 +541,20 @@
 
 	});
 
+
+
+	function openEditModal(option){
+		$('#titleEdit').addClass("hidden");
+		$('#titleEdit').removeClass("hidden");
+		$('#addUserModal').modal('show', {
+			backdrop: 'static', keyboard: false
+		});
+	}
+
+	function deleteUser(row){
+		console.log("deleteuser===")
+	}
+
 	function onlyOne(checkbox) {
 		var checkboxes = document.getElementsByName('user_row');
 		var table = $("#userTable");
@@ -516,9 +575,14 @@
 	function addToList(type) {
 		let html = ``;
 		if(type == 'site') {
-			let name = $("#siteOptList").prev().data("name");
-			let accLevel = $("#siteAccOpt").prev().data("name");
 			let idx = $("#selectedSiteList").find("li").length + 1;
+
+			let name = $("#siteOptList").prev().data("name");
+			let siteVal = $("#siteOptList").prev().data("value");
+
+			let accLevel = $("#siteAccOpt").prev().data("name");
+			let accVal = $("#siteAccOpt").prev().data("value");
+
 			if(isEmpty(name) || isEmpty(accLevel)) {
 				$("#isSiteSelected").removeClass("hidden");
 				setTimeout(function(){
@@ -528,16 +592,20 @@
 			}
 
 			html = `
-				<li class="flex_wrap_center">
-					<h1 class="stit">${'${idx}'}.&emsp;&emsp;${'${name}'}&emsp;(&emsp;${'${accLevel}'}&emsp;)</h1>
+				<li data-sid="${'${siteVal}'}" data-role="${'${accVal}'}">
+					${'${name}'}&emsp;&emsp;(&emsp;${'${accLevel}'}&emsp;)
 					<button type="button" class="icon-delete" onclick="removeList($(this).closest('li'));">삭제</button>
 				</li>
 			`;
 			$("#selectedSiteList").append(html);
 		} else {
-			let name = $("#spcOptList").prev().data("name");
-			let accLevel = $("#spcAccOpt").prev().data("name");
 			let idx = $("#selectedSpcList").find("li").length + 1;
+
+			let name = $("#spcOptList").prev().data("name");
+			let spcVal = $("#spcOptList").prev().data("value");
+
+			let accLevel = $("#spcAccOpt").prev().data("name");
+			let accVal = $("#spcAccOpt").prev().data("value");
 
 			if(isEmpty(name) || isEmpty(accLevel)) {
 				$("#isSpcSelected").removeClass("hidden");
@@ -548,8 +616,8 @@
 			}
 
 			html = `
-				<li class="flex_wrap_center">
-					<h1 class="stit">${'${idx}'}.&emsp;&emsp;${'${name}'}&emsp;(&emsp;${'${accLevel}'}&emsp;)</h1>
+				<li data-spc-id="${'${spcVal}'}" data-role="${'${accVal}'}" class="flex_wrap_center">
+					<h3 class="stit">${'${name}'}&emsp;(&emsp;${'${accLevel}'}&emsp;)</h3>
 					<button type="button" class="icon-delete" onclick="removeList($(this).closest('li'));">삭제</button>
 				</li>
 			`;
@@ -600,17 +668,34 @@
 	}
 
 	function removeList(row){
-		console.log("row===", row);
 		row.remove();
 	}
+
+		// table.on( 'deselect', function ( e, dt, type, indexes ) {
+		// 	console.log("deselect===");
+		// 	table[ type ]( indexes ).nodes().to$().removeClass( 'custom-selected' );
+		// });
+
 </script>
 
 <c:set var="siteList" value="${siteHeaderList}"/> <!-- 사이트 별 -->
 
+<div class="modal fade stack" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header center semi-bold">
+				<h3 id="addUserSuccessMsg" class="text-blue center semi-bold hidden">사용자 추가에 성공했습니다.</h3>
+				<h3 id="addUserFailureMsg" class="hidden">사용자 추가에 실패하였습니다. 다시 시도해 주세요.</h3>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true">
 	<div class="modal-dialog modal-md-lg">
 		<div class="modal-content user-modal-content">
-			<div class="modal-header"><h1>사용자 추가<span class="require-field px-4 fr">*&emsp;필수 입력 항목</span></h1></div>
+			<div class="modal-header"><h1><span id="titleAdd">사용자 추가</span><span id="titleEdit hidden">사용자 정보 변경/삭제</span><span class="require-field px-4 fr">*&emsp;필수 입력 항목</span></h1></div>
 			<div class="modal-body">
 				<div class="container-fluid">
 					<form id="addUserForm" name="add_user_form">
@@ -624,8 +709,8 @@
 									<button type="button" class="btn_type disabled fr" disabled onclick="checkId($('#newId').val())">중복 체크</button>
 								</div>
 								<small class="hidden warning">사용자 ID를 입력해 주세요</small>
-								<small class="hidden warning">5 ~ 15 글자로 입력해 주세요.</small>
-								<small class="hidden warning">특수 문자는 포함될 수 없습니다.</small>
+								<small class="hidden warning">5 ~ 15 글자를 입력해 주세요.</small>
+								<small class="hidden warning">한글,특수 문자, 공백은 포함될 수 없습니다.</small>
 								<small id="invalidId" class="hidden warning">동일한 아이디가 존재합니다.</small>
 								<small id="validId" class="text-blue text-sm hidden">사용 가능한 아이디 입니다.</small>
 							</div>
@@ -644,8 +729,8 @@
 						<div class="row">
 							<div class="col-lg-2 col-sm-3"><span class="input_label required">이름</span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="tx_inp_type"><input type="text" id="newFullName" name="new_full_name" placeholder="입력" maxlength="28"></div>
-								<small class="hidden warning">영문/한글 조합의 이름을 입력해 주세요</small>
+								<div class="tx_inp_type"><input type="text" id="newFullName" name="new_full_name" placeholder="입력" minlength="3" maxlength="28"></div>
+								<small class="hidden warning">영문/한글 조합의 (3~28글자의) 이름을 입력해 주세요</small>
 							</div>
 							<div class="col-lg-2 col-sm-3"><span class="input_label offset required">권한 등급</span></div>
 							<div class="col-lg-4 col-sm-9">
@@ -710,6 +795,7 @@
 								<textarea name="new_user_desc" id="newUserDesc" class="textarea w-100" placeholder="입력"></textarea>
 							</div>
 						</div>
+
 						<div class="row">
 							<div class="col-12">
 								<ul class="nav nav-tabs">
@@ -730,7 +816,7 @@
 													<c:if test="${fn:length(siteList) > 1}">
 														<c:forEach var="site" items="${siteList}">
 															<c:if test="${site.name != '직접입력'}">
-																<li data-name="${site.name}" data-id="${site.sid}"><a href="#" tabindex="-1">${site.name}</a></li>
+																<li data-name="${site.name}" data-value="${site.sid}"><a href="#" tabindex="-1">${site.name}</a></li>
 															</c:if>
 														</c:forEach>
 													</c:if>
@@ -739,15 +825,15 @@
 											<div class="dropdown ml-16 w-25">
 												<button type="button" class="btn btn-primary dropdown-toggle required" data-toggle="dropdown">선택<span class="caret"></span></button>
 												<ul id="siteAccOpt" class="dropdown-menu">
-													<li data-value="1" data-name="수정/조회"><a href="#">수정/조회</a></li>
-													<li data-value="2" data-name="조회"><a href="#">조회</a></li>
+													<li data-value="1" data-name="수정/조회"><a href="#">관리 권한</a></li>
+													<li data-value="2" data-name="조회"><a href="#">조회 권한</a></li>
 												</ul>
 											</div>
 											<button type="button" class="btn-add ml-16" onclick="addToList('site')">추가</button>
 										</div>
 										<small id="isSiteSelected" class="warning hidden">추가하실 사이트의 옵션을 선택해 주세요.</small>
 									</div>
-									<div class="col-lg-4 col-sm-12"><ul id="selectedSiteList" class="selected-list"></ul></div>
+									<div class="col-lg-4 col-sm-12"><h2 class="stit">추가 리스트</h2><ol id="selectedSiteList" class="selected-list"></ol></div>
 								</div>
 							</div>
 							<div id="spcTab" class="tab-pane fade">
@@ -773,7 +859,7 @@
 										</div>
 										<small id="isSpcSelected" class="warning hidden">추가하실 spc 옵션을 선택해 주세요.</small>
 									</div>
-									<div class="col-lg-4 col-sm-12"><ul id="selectedSpcList" class="selected-list"></ul></div>
+									<div class="col-lg-4 col-sm-12"><h2 class="stit">추가 리스트</h2><ul id="selectedSpcList" class="selected-list"></ul></div>
 
 								</div>
 							</div>
@@ -783,7 +869,7 @@
 							<div class="col-12">
 								<div class="btn_wrap_type02">
 									<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
-									<button type="submit" id="addUserBtn" class="btn_type disabled" disabled>확인</button>
+									<button type="submit" id="addUserBtn" class="btn_type disabled" disabled>등록</button>
 									<!-- <button type="submit" id="addUserBtn" class="btn_type">확인</button> -->
 								</div>
 							</div>
