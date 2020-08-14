@@ -36,6 +36,9 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="indiv clear">
+					<div class="chart_top clear">
+						<h2 class="ntit fl">설비 추가</h2>
+					</div>
 					<ul class="device-list">
 						<li class="eq_add">
 							<a href="javascript:addDeviceForm('');"></a>
@@ -698,6 +701,7 @@
 				});
 			});
 		} else {
+			$('#noDevice').addClass('hidden');
 			setMakeList(new Array(), 'deviceStateTypeList', {'dataFunction': {}});
 		}
 	}
@@ -1353,8 +1357,10 @@
 				return false;
 			});
 
+			$('#addDeviceModal .modal-header.stit').text('설비 정보 수정');
 			$('#addDevice').attr('onclick', 'deviceProcess("patch", "' + did + '")');
 		} else {
+			$('#addDeviceModal .modal-header.stit').text('설비 정보 등록');
 			$('#addDevice').attr('onclick', 'deviceProcess("post")');
 		}
 
