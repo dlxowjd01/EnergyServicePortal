@@ -759,23 +759,22 @@
 				targetInput.parent().addClass('hidden');
 				targetInput.val('');
 			}
-		}
-	}
-
-	function updateAccList (btnList, accTypeList){
-		$('#' + btnList).find('li').on('click', function(){
-			let item = $('#' + accTypeList).find('li[data-group]');
-			let accBtn = $('#' + accTypeList).prev('.dropdown-toggle');
-			console.log("clicking===", accBtn)
+		} else if ($dropdownId.match('입출금_구분')) {
+			const buttonIdx = $dropdownId.replace(/[^0-9]/g, ''),
+				target = $('#계좌구분리스트' + buttonIdx);
+			let item = target.find('li[data-group]');
+			let accBtn = target.prev('.dropdown-toggle');
 			accBtn.html('선택<span class="caret"></span>');
-			item.addClass("hidden");
-			$('#' + accTypeList).find("li[data-default]").hide();
-			if($(this).data('value')=='입금'){
+			item.addClass('hidden');
+
+			target.find("li[data-default]").hide();
+
+			if($('#' + $dropdownId + ' button').data('value')=='입금'){
 				item.not('[data-group="출금"]').removeClass("hidden");
 			} else {
 				item.not('[data-group="입금"]').removeClass("hidden");
 			}
-		});
+		}
 	}
 </script>
 
@@ -1212,8 +1211,7 @@
 						<td>
 							<fieldset class="sel_calendar edit twin clear dateField">
 								<legend class="sr-only">상업 운전 개시일</legend>
-								<input type="text" id="상업 운전 개시일_from" name="상업 운전 개시일_from" class="sel fromDate" value="" autocomplete="off" placeholder="시작일" readonly>
-								<input type="text" id="상업 운전 개시일_to" name="상업 운전 개시일_to" class="sel toDate" value="" autocomplete="off" placeholder="종료일" readonly>
+								<input type="text" id="상업_운전_개시일" name="상업_운전_개시일" class="sel toDate" value="" autocomplete="off" placeholder="상업 운전 개시일" readonly>
 							</fieldset>
 						</td>
 					</tr>
@@ -1534,7 +1532,7 @@
 							<td>
 								<div class="fixed_height group_type short">
 									<div class="account-type dropdown placeholder edit" id="입출금_구분[index]">
-										<button onclick="updateAccList('계좌구분[index]', '계좌구분리스트[index]')" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 											입출금 구분<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" role="menu">
@@ -1550,6 +1548,9 @@
 										--><li data-group="입금" data-value="관리운영비"><a href="javascript:void(0);">관리 운영비</a></li><!--
 										--><li data-group="입금" data-value="사무수탁비"><a href="javascript:void(0);">사무 수탁비</a></li><!--
 										--><li data-group="입금" data-value="부채상환"><a href="javascript:void(0);">부채 상환</a></li><!--
+										--><li data-group="입금" data-value="공사비"><a href="javascript:void(0);">공사비</a></li><!--
+										--><li data-group="입금" data-value="임대료"><a href="javascript:void(0);">임대료</a></li><!--
+										--><li data-group="입금" data-value="대납금"><a href="javascript:void(0);">대납금</a></li><!--
 										--><li data-group="입금" data-value="대수선비"><a href="javascript:void(0);">대수선비</a></li><!--
 										--><li data-group="입금" data-value="배당금적립"><a href="javascript:void(0);">배당금 적립</a></li><!--
 										--><li data-group="입금" data-value="일반지출"><a href="javascript:void(0);">일반 지출</a></li><!--
@@ -1557,6 +1558,11 @@
 										--><li data-group="입금" data-value="운영계좌"><a href="javascript:void(0);">운영계좌</a></li><!--
 										--><li data-group="입금" data-value="기타"><a href="javascript:void(0);">기타</a></li><!--
 
+										--><li data-group="출금" data-value="관리운영비"><a href="javascript:void(0);">관리 운영비</a></li><!--
+										--><li data-group="출금" data-value="사무수탁비"><a href="javascript:void(0);">사무 수탁비</a></li><!--
+										--><li data-group="출금" data-value="공사비"><a href="javascript:void(0);">공사비</a></li><!--
+										--><li data-group="출금" data-value="임대료"><a href="javascript:void(0);">임대료</a></li><!--
+										--><li data-group="출금" data-value="대납금"><a href="javascript:void(0);">대납금</a></li><!--
 										--><li data-group="출금" data-value="부채상환"><a href="javascript:void(0);">부채 상환</a></li><!--
 										--><li data-group="출금" data-value="대수선비"><a href="javascript:void(0);">대수선비</a></li><!--
 										--><li data-group="출금" data-value="배당금적립"><a href="javascript:void(0);">배당금 적립</a></li><!--

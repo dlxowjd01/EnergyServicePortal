@@ -80,11 +80,11 @@
 		</form>
 	</div>
 
-	<c:if test="${not empty msg}">
-		alert('${msg}');
-	</c:if>
-
 	<script type="text/javascript">
+		<c:if test="${not empty msg}">
+		alert('${msg}');
+		</c:if>
+
 		$(function () {
 			var lan = location.search.substr(location.search.length - 2, 2);
 			if ( isEmpty(lan) ) {
@@ -133,17 +133,21 @@
 		}
 
 		function checkLogin() {
+			loading.show();
+
 			let id = document.getElementById('loginUserId');
 			let pwd = document.getElementById('loginUserPw');
 
 			if (isEmpty(id.value) ) {
 				alert('<spring:message code="ewp.login.Singup_ID" />');
 				id.focus();
+				loading.hide();
 				return false;
 			}
 			if ( isEmpty(pwd.value) ) {
 				alert('<spring:message code="ewp.login.Singup_PW" />');
 				pwd.focus();
+				loading.hide();
 				return false;
 			}
 

@@ -72,6 +72,10 @@
 				<ul>
 					<li><a href="/device/deviceState.do">설비구성</a></li>
 					<li><a href="/device/collectionState.do">수집현황</a></li>
+					<c:if test="${oid eq 'encored' or oid eq 'kpx'}">
+					<li><a href="/device/certManageList.do">기기인증서 관리</a></li>
+					<li><a href="/device/certApplication.do">기기인증서 신청</a></li>
+					</c:if>
 				</ul>
 			</div>
 		</li>
@@ -195,6 +199,10 @@
 				<ul>
 					<li><a href="/device/deviceState.do">설비구성</a></li>
 					<li><a href="/device/collectionState.do">수집현황</a></li>
+					<c:if test="${oid eq 'encored' or oid eq 'kpx'}">
+					<li><a href="/device/certManageList.do">기기인증서 관리</a></li>
+					<li><a href="/device/certApplication.do">기기인증서 신청</a></li>
+					</c:if>
 				</ul>
 			</li>
 			<li class="gmn3">

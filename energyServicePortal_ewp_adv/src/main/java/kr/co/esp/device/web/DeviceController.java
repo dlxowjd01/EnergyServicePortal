@@ -20,7 +20,14 @@ public class DeviceController {
 	}
 
 	@RequestMapping(value = "/device/collectionState.do")
-	public String collectionState(HttpServletRequest request, HttpSession session, Model model) {
-		return "esp/device/collectionState";
-	}
+	public String collectionState(HttpServletRequest request, HttpSession session, Model model) { return "esp/device/collectionState"; }
+
+	@RequestMapping(value = "/device/certManageList.do")
+	public String certificateManagement(HttpServletRequest request, HttpSession session, Model model) { return "esp/device/certManageList"; }
+
+	@RequestMapping(value = "/device/certManageDetail.do")
+	public String certificateManagementDetail(HttpServletRequest request, HttpSession session, Model model) { return "esp/device/certManageDetail"; }
+
+	@RequestMapping(value = "/device/certApplication.do")
+	public String certificateApplication(HttpServletRequest request, HttpSession session, Model model) { return "esp/device/certApplication"; }
 }

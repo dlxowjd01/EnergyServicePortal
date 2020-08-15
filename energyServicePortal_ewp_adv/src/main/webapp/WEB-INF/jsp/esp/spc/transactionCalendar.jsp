@@ -1178,7 +1178,7 @@
 							</div>
 							<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 								<div class="sel_calendar">
-									<input type="text" id="job_date" name="job_date" class="sel datepicker fromDate required w-100" value="" autocomplete="off" readonly placeholder="기준 일자">
+									<input type="text" id="job_date" name="job_date" class="sel fromDate required w-100" value="" autocomplete="off" readonly placeholder="기준 일자">
 									<small class="hidden warning">기준일을 선택해 주세요</small>
 								</div>
 							</div>

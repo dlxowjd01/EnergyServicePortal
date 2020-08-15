@@ -556,6 +556,11 @@
 
 					deviceTemplate[deviceName] = val.name.kr;
 
+					tempTable.push({
+						key: 'siteName',
+						value: '사이트명'
+					});
+
 					$.map(propList, function (v, k) {
 						if (v.analysis_table) {
 							let tempObj = new Object();
@@ -737,9 +742,12 @@
 					$.each(value, function (idx, valObj) {
 						let hCell = document.createElement("TH");
 						hCell.innerHTML = valObj.value;
+
+						if (idx == 0) { hCell.setAttribute('class', 'hidden'); }
 						hRow.appendChild(hCell);
 
 						let bCell = bRow.insertCell();
+						if (idx == 0) { bCell.setAttribute('class', 'hidden'); }
 						if (valObj.key == 'did') {
 							bCell.innerHTML = '[dname]';
 						} else {
@@ -818,15 +826,26 @@
 						$.each(value, function (idx, valObj) {
 							value[idx].localtime = String(valObj.basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
 							value[idx].timestamp = new Date(value[idx].localtime).getTime();
+
+							const did = value[idx].did;
+							siteList.forEach(site => {
+								const devices = site.devices,
+									siteName = site.name;
+								if (!isEmpty(devices)) {
+									devices.forEach(device => {
+										if (device.did === did) {
+											value[idx]['siteName'] = siteName;
+										}
+									});
+								}
+							});
+
 							$.map(valObj.mean, function (v, k) {
 								valObj[k] = numberComma(v.toFixed(2));
 							});
 						});
 
-						setMakeList(value, key + '_Table', {
-							'dataFunction': {}
-						}); //list생성
-
+						setMakeList(value, key + '_Table', {'dataFunction': {}}); //list생성
 						$('#' + key + '_Table').find('td').each(function () {
 							$(this).html($(this).html().replace(/ *\[[^)]*\] */g, ''));
 						});

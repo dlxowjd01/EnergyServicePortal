@@ -599,30 +599,16 @@
 			let accListItem = $(this).next().find('ul li[data-group]');
 			accListItem.addClass("hidden");
 
-			if(btn.text()=="입금"){
+			if(btn.text() == "입금"){
 				accListItem.not('[data-group="출금"]').removeClass("hidden");
-			} else if(btn.text()=="출금") {
+			} else if(btn.text() == "출금") {
 				accListItem.not('[data-group="입금"]').removeClass("hidden");
 			} else {
 				accListItem.addClass("hidden");
-				let str = '<li data-default="select" data-value="select"><a href="#">입출금 구분을 선택해 주세요.</a></li>'
-				accList.append(str)
-			}
-		});
-	}
-
-	function updateAccList (btnList, accTypeList){
-		$('#' + btnList).find('li').on('click', function(){
-			let item = $('#' + accTypeList).find('li[data-group]');
-			let accBtn = $('#' + accTypeList).prev('.dropdown-toggle');
-			accBtn.html('선택<span class="caret"></span>');
-			item.addClass("hidden");
-			$('#' + accTypeList).find("li[data-default]").hide();
-			
-			if($(this).data('value')=='입금'){
-				item.not('[data-group="출금"]').removeClass("hidden");
-			} else {
-				item.not('[data-group="입금"]').removeClass("hidden");
+				if (accList.find('li[data-default]').length == 0) {
+					let str = '<li data-default="select" data-value="select"><a href="#">입출금 구분을 선택해 주세요.</a></li>'
+					accList.append(str)
+				}
 			}
 		});
 	}
@@ -1006,6 +992,21 @@
 			} else {
 				targetInput.parent().addClass('hidden');
 				targetInput.val('');
+			}
+		} else if ($dropdownId.match('입출금_구분')) {
+			const buttonIdx = $dropdownId.replace(/[^0-9]/g, ''),
+				target = $('#계좌구분리스트' + buttonIdx);
+			let item = target.find('li[data-group]');
+			let accBtn = target.prev('.dropdown-toggle');
+			accBtn.html('선택<span class="caret"></span>');
+			item.addClass('hidden');
+
+			target.find("li[data-default]").hide();
+
+			if($('#' + $dropdownId + ' button').data('value')=='입금'){
+				item.not('[data-group="출금"]').removeClass("hidden");
+			} else {
+				item.not('[data-group="입금"]').removeClass("hidden");
 			}
 		}
 	}
@@ -1440,8 +1441,7 @@
 						<td>
 							<fieldset class="sel_calendar edit twin clear dateField">
 								<legend class="sr-only">상업 운전 개시일</legend>
-								<input type="text" id="상업 운전 개시일_from" name="상업 운전 개시일_from" class="sel fromDate" value="" autocomplete="off" placeholder="시작일" readonly>
-								<input type="text" id="상업 운전 개시일_to" name="상업 운전 개시일_to" class="sel toDate" value="" autocomplete="off" placeholder="종료일" readonly>
+								<input type="text" id="상업_운전_개시일" name="상업_운전_개시일" class="sel toDate" value="" autocomplete="off" placeholder="상업 운전 개시일" readonly>
 							</fieldset>
 						</td>
 					</tr>
@@ -1770,7 +1770,7 @@
 							<td>
 								<div class="fixed_height group_type short">
 									<div class="account-type dropdown placeholder edit" id="입출금_구분[index]"><!--
-										--><button onclick="updateAccList('계좌구분[index]', '계좌구분리스트[index]')" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">입출금 구분<span class="caret"></span></button><!--
+										--><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">입출금 구분<span class="caret"></span></button><!--
 										--><ul class="dropdown-menu" role="menu"><!--
 											--><li data-value="입금"><a href="#">입금</a></li><!--
 											--><li data-value="출금"><a href="#">출금</a></li><!--
@@ -1779,8 +1779,12 @@
 									<div class="dropdown placeholder edit" id="계좌구분[index]"><!--
 									--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">계좌구분<span class="caret"></span></button><!--
 									--><ul id="계좌구분리스트[index]" class="dropdown-menu" role="menu"><!--
+										--><li data-default="select" data-value="select"><a href="#">입출금 구분을 선택해 주세요.</a></li><!--
 										--><li data-group="입금" data-value="관리운영비"><a href="#">관리 운영비</a></li><!--
 										--><li data-group="입금" data-value="사무수탁비"><a href="#">사무 수탁비</a></li><!--
+										--><li data-group="입금" data-value="공사비"><a href="#">공사비</a></li><!--
+										--><li data-group="입금" data-value="임대료"><a href="#">임대료</a></li><!--
+										--><li data-group="입금" data-value="대납금"><a href="#">대납금</a></li><!--
 										--><li data-group="입금" data-value="부채상환"><a href="#">부채 상환</a></li><!--
 										--><li data-group="입금" data-value="대수선비"><a href="#">대수선비</a></li><!--
 										--><li data-group="입금" data-value="배당금적립"><a href="#">배당금 적립</a></li><!--
@@ -1789,6 +1793,11 @@
 										--><li data-group="입금" data-value="운영계좌"><a href="#">운영계좌</a></li><!--
 										--><li data-group="입금" data-value="기타"><a href="#">기타</a></li><!--
 
+										--><li data-group="출금" data-value="관리운영비"><a href="#">관리 운영비</a></li><!--
+										--><li data-group="출금" data-value="사무수탁비"><a href="#">사무 수탁비</a></li><!--
+										--><li data-group="출금" data-value="공사비"><a href="#">공사비</a></li><!--
+										--><li data-group="출금" data-value="임대료"><a href="#">임대료</a></li><!--
+										--><li data-group="출금" data-value="대납금"><a href="#">대납금</a></li><!--
 										--><li data-group="출금" data-value="부채상환"><a href="#">부채 상환</a></li><!--
 										--><li data-group="출금" data-value="대수선비"><a href="#">대수선비</a></li><!--
 										--><li data-group="출금" data-value="배당금적립"><a href="#">배당금 적립</a></li><!--

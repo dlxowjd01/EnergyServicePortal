@@ -11,6 +11,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.HEAD;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -42,16 +43,16 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			String vgid = request.getParameter("vgid");
 			String sid = request.getParameter("sid");
 
-//			Map<String, String> parameters = new HashMap<String, String>();
-//			parameters.put("includeDevices", "true");
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			parameters.put("includeDevices", "true");
 
 			if (mode != null && "test".equals(mode)) {
 				session.setAttribute("apiHost", "http://iderms.enertalk.com:8443");
 			} else {
 				session.setAttribute("apiHost", "https://iderms-api.iderms.ai");
 			}
-			
-			Map<String, Object> siteMap = get("/auth/me/sites", mode, "?includeDevices=true", token); //사이트 리스트 정보
+
+			Map<String, Object> siteMap = get("/auth/me/sites", mode, parameters, token); //사이트 리스트 정보
 			if (200 == (int) siteMap.get("code")) {
 				siteOriginList = (List<Map<String, Object>>) siteMap.get("data");
 				request.setAttribute("siteHeaderList", siteOriginList); //사이트 리스트 세팅
@@ -65,7 +66,11 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				return false;
 			}
 
-			Map<String, Object> userSiteGroupSearch = get("/auth/me/groups", mode, "?includeSites=true&includeDevices=true", token); //그룹화되어있는 사이트 리스트 정보
+			parameters.clear();
+			parameters.put("includeSites", "true");
+			parameters.put("includeDevices", "true");
+
+			Map<String, Object> userSiteGroupSearch = get("/auth/me/groups", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
 			if (200 == (int) userSiteGroupSearch.get("code")) {
 				groupMap = (Map<String, Object>) userSiteGroupSearch.get("data");
 
@@ -241,9 +246,9 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				}
 			}
 
-//			parameters.clear();
-//			parameters.put("types", "resource,location");
-			Map<String, Object> typeProperties = get("/config/view/properties", mode, "?types=resource,location", token); //그룹화되어있는 사이트 리스트 정보
+			parameters.clear();
+			parameters.put("types", "resource,location");
+			Map<String, Object> typeProperties = get("/config/view/properties", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
 			if (200 == (int) typeProperties.get("code")) {
 				Map<String, Object> typeMap = (Map<String, Object>) typeProperties.get("data");
 

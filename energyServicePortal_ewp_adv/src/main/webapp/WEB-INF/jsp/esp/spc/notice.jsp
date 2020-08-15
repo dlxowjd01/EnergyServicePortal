@@ -104,6 +104,7 @@
 		} else {
 			urlSuffix = '?oid=' + oid;
 			areaData['created_by'] = loginId;
+			areaData['created_by_uid'] = userInfoId;
 			preffix = '등록';
 		}
 		areaData['kind'] = 1;
@@ -228,7 +229,7 @@
 			}
 		}).done(function (data, textStatus, jqXHR) {
 			const result = data.data[0];
-			if (loginId == result.created_by || role == 1) {
+			if (userInfoId == result.created_by_uid || role == 1) {
 				$('#delBtn').removeClass('hidden');
 				$('#chgBtn').removeClass('hidden');
 				$('#view_level').parents('div.row').removeClass('hidden');

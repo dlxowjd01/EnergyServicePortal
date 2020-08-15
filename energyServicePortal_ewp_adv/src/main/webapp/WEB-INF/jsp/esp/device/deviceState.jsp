@@ -32,7 +32,24 @@
 	</div>
 </div>
 <div class="row content-wrapper device_row">
-	<div class="col-lg-12" id="deviceStateTypeList">
+	<div class="col-lg-12 hidden" id="noDevice">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="indiv clear">
+					<div class="chart_top clear">
+						<h2 class="ntit fl">설비 추가</h2>
+					</div>
+					<ul class="device-list">
+						<li class="eq_add">
+							<a href="javascript:addDeviceForm('');"></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-lg-12 hide-no-data" id="deviceStateTypeList">
 		<div class="row" id="[typeId]">
 			<div class="col-lg-8">
 				<div class="indiv clear">
@@ -679,12 +696,12 @@
 				}).always(function(jqXHR, textStatus) {
 					promiseCnt++;
 					if (siteArray.length == promiseCnt) {
-						// console.log("deviceMap===", deviceMap);
 						makeDeviceList(deviceMap);
 					}
 				});
 			});
 		} else {
+			$('#noDevice').addClass('hidden');
 			setMakeList(new Array(), 'deviceStateTypeList', {'dataFunction': {}});
 		}
 	}
@@ -693,68 +710,64 @@
 	//operation 0: 중지, 1: 정상, 2: 트립
 	const makeDeviceList = (deviceMap) => {
 		let typeList = new Array();
-		$.map(deviceMap, (val, key) => {
-			let normal = 0, alert = 0, error = 0, deviceList = $('<div>'), operation = '';
-			//배열로 디바이스 상태 수집
-			if (!isEmpty(val)) {
-				val.forEach((el, index) => {
-					console.log('index--', index);
-					let capacity = isEmpty(el.capacity) ? '-' : displayNumberFixedUnit(el.capacity, el.capacity_unit, 'kW', 2)[0] + 'kW',
-						activePower = isEmpty(el.activePower) ? '-' : displayNumberFixedUnit(el.activePower, 'W', 'kW', 2)[0] + 'kW',
-						dcPower = isEmpty(el.dcPower) ? '-' : displayNumberFixedUnit(el.dcPower, 'W', 'kW', 2)[0] + 'kW',
-						operation = el.operation;
+		if (isEmpty(deviceMap)) {
+			$('#noDevice').removeClass('hidden');
+		} else {
+			$('#noDevice').addClass('hidden');
+			$.map(deviceMap, (val, key) => {
+				let normal = 0, alert = 0, error = 0, deviceList = $('<div>'), operation = '';
+				//배열로 디바이스 상태 수집
+				if (!isEmpty(val)) {
+					val.forEach((el, index) => {
+						let capacity = isEmpty(el.capacity) ? '-' : displayNumberFixedUnit(el.capacity, el.capacity_unit, 'kW', 2)[0] + 'kW',
+							activePower = isEmpty(el.activePower) ? '-' : displayNumberFixedUnit(el.activePower, 'W', 'kW', 2)[0] + 'kW',
+							dcPower = isEmpty(el.dcPower) ? '-' : displayNumberFixedUnit(el.dcPower, 'W', 'kW', 2)[0] + 'kW',
+							operation = el.operation;
 
-					switch (el.operation) {
-						case 0:
-							alert++;
-							operation = 'alert text-black';
-							break;
-						case 1:
-							normal++;
-							operation = 'normal text-black';
-							break;
-						case 2:
-							error++;
-							operation = 'error text-black';
-							break;
-						default:
-							// alert++;
-							operation = '';
-							break;
-					}
+						switch (el.operation) {
+							case 0:
+								alert++;
+								operation = 'alert text-black';
+								break;
+							case 1:
+								normal++;
+								operation = 'normal text-black';
+								break;
+							case 2:
+								error++;
+								operation = 'error text-black';
+								break;
+							default:
+								// alert++;
+								operation = '';
+								break;
+						}
 
-					let deviceStr = `<li class="${'${operation}'}" onclick="deviceDetailView('${'${el.did}'}', '${'${el.operation}'}', $(this) )">
+						let deviceStr = `<li class="${'${operation}'}" onclick="deviceDetailView('${'${el.did}'}', '${'${el.operation}'}', $(this) )">
 										<span>${'${el.name}'}</span>
 										<span>${'${capacity}'}</span><em>${'${activePower}'}  ${'${dcPower}'}</em>
 										<button type="button" onclick="deviceProcess('delete', '${'${el.did}'}');" class="delete">삭제</button>
 										<a href="javascript:void(0);"></a>
 									</li>`;
-					deviceList.append(deviceStr);
-					if(index == 0) {
-						deviceDetailView(el.did, el.operation, $(this))
-					}
-				});
-			}
+						deviceList.append(deviceStr);
+						if(index == 0) {
+							deviceDetailView(el.did, el.operation, $(this))
+						}
+					});
+				}
 
-			let featureHead = '';
-			let featureBody1 = '';
-			let featureBody2 = '';
-			if (!isEmpty(featureProperties[key])) {
+				let featureHead = '';
+				let featureBody1 = '';
+				let featureBody2 = '';
 				if (!isEmpty(featureProperties[key])) {
 					if (!isEmpty(featureProperties[key].headerProp)) {
 						let prop = featureProperties[key].headerProp;
-
-
-							prop.forEach(el => {
-								console.log("prop---", el.key)
-								if(!(el.key == "dname")) {
-									featureHead += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><p class="t_ti">' + el.value + '</p><p class="t_value"></p></li>';
-								}
-							});
-						}
-
+						prop.forEach(el => {
+							if (!(el.key == 'dname')) {
+								featureHead += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><p class="t_ti">' + el.value + '</p><p class="t_value"></p></li>';
+							}
+						});
 					}
-				if (!isEmpty(featureProperties[key])) {
 					if (!isEmpty(featureProperties[key].bodyProp)) {
 						let prop = featureProperties[key].bodyProp;
 						prop.forEach((el, idx) => {
@@ -766,80 +779,75 @@
 						});
 					}
 				}
-			}
 
+				let liTemp = `<li class="eq_add"><a href="javascript:addDeviceForm(\'${'${key}'}\');"></a></li>`;
+				deviceList.append(liTemp);
 
-			let $li = $('<li>'),
-				$a = $('<a>');
-			$a.attr('href', 'javascript:addDeviceForm("' + key + '");');
-			$li.addClass('eq_add').append($a);
-			deviceList.append($li);
+				let typeClass;
+				// 1. SM_MANUAL => 수기 입력,
+				// 2. SM_ISMART => iSmart(과금 데이터),
+				// 3. SM => Smart Meter(전력량계),
+				// 4. INV_PV => 태양광 인버터,
+				// 5. PCS_ESS => Power Conditioning System,
+				// 6. BMS_SYS => Battery Management System,
+				// 7. BMS_RACK => BMS Rack,
+				// 8. SENSOR_SOLAR, SENSOR_TEMPHUMID, SENSOR_WEATHER, SENSOR_FLAME => 센서,
+				// 9. CIRCUIT_BREAKER => 회로 차단기,
+				// 10. COMBINER_BOX => 접속반,
 
-			let typeClass;
-			// 1. SM_MANUAL => 수기 입력,
-			// 2. SM_ISMART => iSmart(과금 데이터),
-			// 3. SM => Smart Meter(전력량계),
-			// 4. INV_PV => 태양광 인버터,
-			// 5. PCS_ESS => Power Conditioning System,
-			// 6. BMS_SYS => Battery Management System,
-			// 7. BMS_RACK => BMS Rack,
-			// 8. SENSOR_SOLAR, SENSOR_TEMPHUMID, SENSOR_WEATHER, SENSOR_FLAME => 센서,
-			// 9. CIRCUIT_BREAKER => 회로 차단기,
-			// 10. COMBINER_BOX => 접속반,
+				switch (key) {
+					case 'SM_MANUAL':
+						typeClass = 'device-list list-manual';
+						break;
+					case 'SM_ISMART':
+						typeClass = 'device-list list-ami';
+						break;
+					case 'SM':
+						typeClass = 'device-list list-meter';
+						break;
+					case 'INV_PV':
+						typeClass = 'device-list list-inverter';
+						break;
+					case 'PCS_ESS':
+						typeClass = 'device-list list-pcs';
+						break;
+					case 'BMS_SYS':
+						typeClass = 'device-list list-bms-sys';
+						break;
+					case 'BMS_RACK':
+						typeClass = 'device-list list-bms-rack';
+						break;
+					case 'SENSOR_SOLAR': case 'SENSOR_WEATHER': case 'SENSOR_TEMPHUMID': case 'SENSOR_FLAME':
+						typeClass = 'device-list list-sensor';
+						break;
+					case 'CIRCUIT_BREAKER':
+						typeClass = 'device-list list-disconnector';
+						break;
+					case 'COMBINER_BOX':
+						typeClass = 'device-list list-connector';
+						break;
+					default:
+						typeClass = 'device-list';
+						break;
+				}
 
-				
-			switch (key) {
-				case 'SM_MANUAL':
-					typeClass = 'device-list list-manual';
-					break;
-				case 'SM_ISMART':
-					typeClass = 'device-list list-ami';
-					break;
-				case 'SM':
-					typeClass = 'device-list list-meter';
-					break;
-				case 'INV_PV':
-					typeClass = 'device-list list-inverter';
-					break;
-				case 'PCS_ESS':
-					typeClass = 'device-list list-pcs';
-					break;
-				case 'BMS_SYS':
-					typeClass = 'device-list list-bms-sys';
-					break;
-				case 'BMS_RACK':
-					typeClass = 'device-list list-bms-rack';
-					break;
-				case 'SENSOR_SOLAR': case 'SENSOR_WEATHER': case 'SENSOR_TEMPHUMID': case 'SENSOR_FLAME':
-					typeClass = 'device-list list-sensor';
-					break;
-				case 'CIRCUIT_BREAKER':
-					typeClass = 'device-list list-disconnector';
-					break;
-				case 'COMBINER_BOX':
-					typeClass = 'device-list list-connector';
-					break;
-				default:
-					typeClass = 'device-list';
-					break;
-			}
+				let typeName = '';
+				typeName = featureProperties[key].name;
 
-			let typeName = '';
-			typeName = featureProperties[key].name;
-
-			typeList.push({
-				typeName: typeName,
-				typeId: key,
-				alert: alert,
-				error: error,
-				normal: normal,
-				deviceList: deviceList.html(),
-				featureHead: featureHead,
-				featureBody1: featureBody1,
-				featureBody2: featureBody2,
-				typeClass: typeClass
+				typeList.push({
+					typeName: typeName,
+					typeId: key,
+					alert: alert,
+					error: error,
+					normal: normal,
+					deviceList: deviceList.html(),
+					featureHead: featureHead,
+					featureBody1: featureBody1,
+					featureBody2: featureBody2,
+					typeClass: typeClass
+				});
 			});
-		});
+		}
 
 		typeList.sort((a, b) => {
 			return a.typeId < b.typeId ? -1 : a.typeId > b.typeId ? 1 : 0;
@@ -1110,7 +1118,6 @@
 				if (!isEmpty(resultData)) {
 					let result = resultData[did][0].items,
 						manualObj = new Object();
-					console.log(result);
 					result.forEach(manual => {
 						manualObj[manual.basetime] = Number(manual.energy);
 					});
@@ -1350,8 +1357,10 @@
 				return false;
 			});
 
+			$('#addDeviceModal .modal-header.stit').text('설비 정보 수정');
 			$('#addDevice').attr('onclick', 'deviceProcess("patch", "' + did + '")');
 		} else {
+			$('#addDeviceModal .modal-header.stit').text('설비 정보 등록');
 			$('#addDevice').attr('onclick', 'deviceProcess("post")');
 		}
 

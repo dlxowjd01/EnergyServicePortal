@@ -18,10 +18,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  * @since 2014.09.11
  * @version 3.5
  * @see <pre>
- * web.xml 상에 다음과 같은 Listener 등록 필요
- * &lt;listener&gt;
- *	  &lt;listener-class&gt;org.springframework.web.context.request.RequestContextListener&lt;/listener-class&gt;
- * &lt;/listener&gt;
  * </pre>
  */
 public class EgovHttpRequestHelper {

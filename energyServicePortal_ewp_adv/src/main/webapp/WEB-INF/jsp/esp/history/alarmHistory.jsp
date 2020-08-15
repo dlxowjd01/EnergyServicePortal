@@ -42,7 +42,7 @@
 						<div class="type">
 							<button id="fileUpload" type="button" class="btn_type">업로드</button>
 							<input type="file" id="picture" name="filename" class="uploadBtn hidden"/>
-							<span class="upload_text ml-16"></span>
+							<span class="upload_text ml-16 hidden"></span>
 						</div>
 					</div>
 
@@ -847,7 +847,7 @@
 				$.each(ticketFileList, function (i, el) {
 					let liStr = '';
 					if (ticketFileList.length > 0) {
-						liStr += '<li><span class="pt_tx"><a href="' + apiHost + '/files/download/' + el.file_key + '?oid=' + oid + '&orgFilename=' + el.file_original_name + '">' + el.file_original_name + '</a></span>';
+						liStr += '<li class="flex_start"><span class="pt_tx"><a href="' + apiHost + '/files/download/' + el.file_key + '?oid=' + oid + '&orgFilename=' + el.file_original_name + '">' + el.file_original_name + '</a></span>';
 						liStr += '<button type="button" class="btn_close" data-time= "' + el.update_dt + '" value="' + el.file_key + '" name="file_original_name">삭제</button></li>';
 					}
 					$('.photo_load_wrap ul').append(liStr);
@@ -1248,16 +1248,6 @@
 		dataMap.set(dataList[1], data);
 
 		let columnSeriesData = new Array();
-		//  ORIGINAL!!!
-		//  'var(--turquoise)',
-		// 	'var(--light-blue)',
-		// 	'var(--turquoise)',
-		// 	'var(--blueberry)',
-		// 	'var(--teal)',
-		// 	'var(--royal-blue)',
-		// 	'var(--sunglow)',
-		// 	'var(--sandy-brown)',
-		// 	'var(--grey)'
 		let typeColorArr = [
 			'var(--turquoise)',
 			'var(--sandy-brown)',
@@ -1269,17 +1259,15 @@
 			'var(--sandy-brown)',
 			'var(--grey)'
 		];
-		let alarmColorArr = [
-			'var(--turquoise)',
-			'var(--sandy-brown)',
-			'var(--cream-can)',
-			'var(--summer-sky)',
-			'var(--orange-red)',
-			'var(--blue-yonder)',
-			'var(--eucalyptus)',
-			'var(--sandy-brown)',
-			'var(--grey)'
-		];
+		let alarmColorArr = {
+			0: 'var(--jordy-blue)',
+			1: 'var(--sandy-brown)',
+			2: 'var(--sunglow)',
+			3: 'var(--white60)',
+			4: 'var(--alarm)',
+			9: ''
+		};
+
 		let colorArr = (gr_type == true) ? typeColorArr : alarmColorArr;
 		let num = 0;
 		dataMap.forEach(function (v, k) {
@@ -1334,18 +1322,34 @@
 						typeNm = $(this).next('label').text();
 					}
 				});
-				let $temp = {
-					name: typeNm,
-					type: 'column',
-					stack: k,
-					tooltip: {
-						valueSuffix: '건'
-					},
-					color: colorArr[num],
-					data: val
-				};
-				columnSeriesData.push($temp)
-				num++;
+
+				if (gr_type == true) {
+					let $temp = {
+						name: typeNm,
+						type: 'column',
+						stack: k,
+						tooltip: {
+							valueSuffix: '건'
+						},
+						color: colorArr[num],
+						data: val
+					};
+					columnSeriesData.push($temp)
+					num++;
+				} else {
+					let $temp = {
+						name: typeNm,
+						type: 'column',
+						stack: k,
+						tooltip: {
+							valueSuffix: '건'
+						},
+						color: colorArr[key],
+						data: val
+					};
+					columnSeriesData.push($temp)
+					num++;
+				}
 			});
 
 		});

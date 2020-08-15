@@ -186,8 +186,8 @@ const dropDownInit = ($selector) => {
  */
 const initDropdownValue = ($selector) => {
 	$selector.each(function(index, element) {
-		// $(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
-		$(this).data('value', '').text().replace(/<[^>]+>/g, $(this).data('name'));
+		$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
+		//$(this).data('value', '').text().replace(/<[^>]+>/g, $(this).data('name'));
 	});
 }
 

@@ -267,7 +267,7 @@
 				<div class="alarm_notice">
 					<ul id="alarmNotice">
 						<li>
-							<a href="javascript:void(0);" onclick="pageMove('[sid]', 'alarm');">
+							<a href="javascript:void(0);" onclick="pageMove('[sid]', 'alarm');" class="[level]">
 								<span class="err_msg">[site_name] - [message]</span>
 								<span class="err_time">[standardTime]</span>
 							</a>
@@ -2058,7 +2058,7 @@
 			});
 
 			$('.a_alert').find('em').text(alarmList.length);
-			setMakeList(alarmList, 'alarmNotice', {'dataFunction': {}}); //list생성
+			setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}}); //list생성
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
@@ -2067,6 +2067,31 @@
 			alert('처리 중 오류가 발생했습니다.');
 			return false;
 		})
+	}
+
+	const levelClass = (level) => {
+		let rtnClass = '';
+		switch (level) {
+			case 1 :
+				rtnClass = 'warning';
+				break;
+			case 2 :
+				rtnClass = 'critical';
+				break;
+			case 3 :
+				rtnClass = 'shutoff';
+				break;
+			case 4 :
+				rtnClass = 'urgent';
+				break;
+			case 0 :
+				rtnClass = 'info';
+				break;
+			default :
+				rtnClass = '';
+		}
+
+		return rtnClass;
 	}
 
 	const pageMove = (id, action) => {

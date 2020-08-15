@@ -1,9 +1,6 @@
 package egovframework.com.cmm.config;
 
-import javax.servlet.FilterRegistration;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
+import javax.servlet.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +13,9 @@ import org.springframework.web.multipart.support.MultipartFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import egovframework.com.cmm.filter.HTMLTagFilter;
-import egovframework.com.cmm.service.EgovProperties;
-import egovframework.com.sec.security.filter.EgovSpringSecurityLoginFilter;
-import egovframework.com.sec.security.filter.EgovSpringSecurityLogoutFilter;
-import egovframework.com.uat.uap.filter.EgovLoginPolicyFilter;
 import egovframework.com.utl.wed.filter.CkFilter;
+
+import java.util.EnumSet;
 
 
 /**
@@ -92,46 +87,13 @@ public class EgovWebApplicationInitializer implements WebApplicationInitializer 
 		//dispatcher.addMapping("*.do");
 		dispatcher.addMapping("/"); // Facebook OAuth 사용시 변경
 		dispatcher.setLoadOnStartup(1);
-		
-		if("security".equals(EgovProperties.getProperty("Globals.Auth").trim())) {
-			
-			//-------------------------------------------------------------
-			// springSecurityFilterChain 설정
-			//-------------------------------------------------------------		
-			FilterRegistration.Dynamic springSecurityFilterChain = servletContext.addFilter("springSecurityFilterChain", new DelegatingFilterProxy());
-			springSecurityFilterChain.addMappingForUrlPatterns(null, false, "*");
-			//servletContext.addFilter("springSecurityFilterChain", new DelegatingFilterProxy("springSecurityFilterChain")).addMappingForUrlPatterns(null, false, "/*");
 
-			//-------------------------------------------------------------
-			// HttpSessionEventPublisher 설정
-			//-------------------------------------------------------------	
-			servletContext.addListener(new org.springframework.security.web.session.HttpSessionEventPublisher());
-			
-			//-------------------------------------------------------------
-			// EgovSpringSecurityLoginFilter 설정
-			//-------------------------------------------------------------
-			FilterRegistration.Dynamic egovSpringSecurityLoginFilter = servletContext.addFilter("egovSpringSecurityLoginFilter", new EgovSpringSecurityLoginFilter());
-			//로그인 실패시 반활 될 URL설정
-			egovSpringSecurityLoginFilter.setInitParameter("loginURL", "/uat/uia/egovLoginUsr.do");
-			//로그인 처리 URL설정
-			egovSpringSecurityLoginFilter.setInitParameter("loginProcessURL", "/uat/uia/actionLogin.do");
-			//처리 Url Pattern
-			egovSpringSecurityLoginFilter.addMappingForUrlPatterns(null, false, "*.do");
-			
-			//-------------------------------------------------------------
-			// EgovSpringSecurityLogoutFilter 설정
-			//-------------------------------------------------------------	
-			FilterRegistration.Dynamic egovSpringSecurityLogoutFilter = servletContext.addFilter("egovSpringSecurityLogoutFilter", new EgovSpringSecurityLogoutFilter());
-			egovSpringSecurityLogoutFilter.addMappingForUrlPatterns(null, false, "/uat/uia/actionLogout.do");
-		
-		} else if("session".equals(EgovProperties.getProperty("Globals.Auth").trim())) {
-			//-------------------------------------------------------------
-			// EgovLoginPolicyFilter 설정
-			//-------------------------------------------------------------	
-			FilterRegistration.Dynamic egovLoginPolicyFilter = servletContext.addFilter("LoginPolicyFilter", new EgovLoginPolicyFilter());
-			egovLoginPolicyFilter.addMappingForUrlPatterns(null, false, "/uat/uia/actionLogin.do");
-			
-		}
+		//-------------------------------------------------------------
+		// springSecurityFilterChain 설정
+		//-------------------------------------------------------------
+		DelegatingFilterProxy springSecurityFilterChain = new DelegatingFilterProxy();
+		FilterRegistration.Dynamic springSecurity = servletContext.addFilter("springSecurityFilterChain", springSecurityFilterChain);
+		springSecurity.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
 
 		//-------------------------------------------------------------
 		// CkFilter 설정 (CKEditor 사용시 설정)
