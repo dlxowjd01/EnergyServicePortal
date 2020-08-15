@@ -37,7 +37,7 @@
 	$(function () {
 		const compareArea = $('#siteList').next().find('.compare_area');
 		const dropdownArea = compareArea.find('.dropdown');
-		const compareSelectBox = compareArea.children().find('.dropdown-toggle.bgN');
+		const compareSelectBox = compareArea.find('.dropdown-toggle');
 		const modalCompare = compareSelectBox.next('ul');
 		// const innerSelectBox = selectModal.find("btn.dropdown-toggle");
 		const confirmBtn = modalCompare.find('comp_btn_wrap button');
@@ -1128,10 +1128,10 @@
 	<div class="col-lg-10 col-md-8 col-sm-9">
 		<div class="compare_area">
 			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle bgN" type="button">
+				<button class="btn btn-primary dropdown-toggle" type="button">
 					비교하기<span class="caret"></span>
 				</button>
-				<ul class="dropdown-menu unused">
+				<ul class="dropdown-menu search_dropdown unused">
 					<li>
 						<div class="compare_bx">
 							<div class="bx_row aN2">

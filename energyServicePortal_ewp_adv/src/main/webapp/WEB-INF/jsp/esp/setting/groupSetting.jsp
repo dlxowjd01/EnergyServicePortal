@@ -23,7 +23,7 @@
 					}
 				},
 				beforeSend: function (jqXHR, settings) {
-					$('.loading').show();
+					$('#loadingCircle').show();
 				},
 			}
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
@@ -186,7 +186,7 @@
 							className: "btn_type fr",
 							action: function (e, node, config){
 								console.log("node===", node, "e---", e, "config===", config)
-								$('#addUserModal').modal('show');
+								$('#addGroupModal').modal('show');
 							}
 						}
 					],
@@ -214,62 +214,62 @@
 				return false;
 			});
 		}
-
-		// let p = JSON.parse(sList);
-		// console.log("p---", sList);
-		// $.each(p, function(index, element){
-		// 	console.log("elemet---", element)
-		// });
-
-		// var table = $('#example').DataTable({
-		// 	// "fixedHeader": true
-		// });
-
-		// new $.fn.dataTable.FixedHeader( table, {
-		// 	alwaysCloneTop: true
-		// });
-
 	});
 
 </script>
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">공통 코드 관리 설정</h1>
+		<h1 class="page-header">그룹 관리 설정</h1>
 	</div>
 </div>
 
 <div class="row">
-	<div class="col-3">
-		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-			<div class="panel panel-default">
-			  	<div class="panel-heading active" role="tab" id="headingOne">
-					<h4 class="panel-heading">
-				  		<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="panel-fold"></a>
-					</h4>
-			  	</div>
-			  	<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-					<div class="panel-body">
-
-					</div>
-			  	</div>
+	<div class="col-12">
+		<div class="flex_group">
+			<span class="tx_tit">그룹 유형</span>
+			<div class="dropdown">
+				<button class="btn btn-primary dropdown-toggle" type="button"
+					data-toggle="dropdown">선택<span class="caret"></span></button>
+				<ul class="dropdown-menu chk_type" role="menu" id="siteList">
+					<li>
+						<a href="#" tabindex="-1">
+							<input type="checkbox" name="allSites" id="allSites" value="all">
+							<label for="allSites">전체</label>
+						</a>
+					</li>
+					<li>
+						<a href="#" tabindex="-1">
+							<input type="checkbox" name="general_group" id="generalGroup" value="generalGroup">
+							<label for="allSites">일반 그룹</label>
+						</a>
+					</li>
+					<li>
+						<a href="#" tabindex="-1">
+							<input type="checkbox" name="vpp_group" id="vppGroup" value="vppGroup">
+							<label for="allSites">VPP 그룹</label>
+						</a>
+					</li>
+					<li>
+						<a href="#" tabindex="-1">
+							<input type="checkbox" name="dr_group" id="drGroup" value="drGroup">
+							<label for="allSites">DR 그룹</label>
+						</a>
+					</li>
+				</ul>
 			</div>
-		  </div>
+		</div>
 	</div>
-	<div class="col-9">
+</div>
+
+<div class="row content-wrapper">
+	<div class="col-12">
 		<div class="indiv">
-			<h2 class="tx_tit"></h2>
 			<table id="example" class="stripe">
-				<thead></thead>
 				<tbody>
 				</tbody>
 				<tfoot>
 					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
@@ -282,7 +282,8 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="addSiteModal" tabindex="-1" role="dialog">
+
+<div class="modal fade" id="addGroupModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog">
 		<div class="setting-modal-content modal-content">
 			<div class="modal-header"><h1>사업소 추가</h1></div>

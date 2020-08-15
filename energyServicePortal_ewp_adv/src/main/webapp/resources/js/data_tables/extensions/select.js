@@ -490,11 +490,21 @@ function info ( api )
 	var cells   = api.cells( { selected: true } ).flatten().length;
 
 	var add = function ( el, name, num ) {
-		el.append( $('<span class="select-item"/>').append( api.i18n(
-			'select.'+name+'s',
-			{ _: '%d '+name+'s selected', 0: '', 1: '1 '+name+' selected' },
-			num
-		) ) );
+		if( (name == "row") || (name == "rows") ) {
+			// let newName = "열"
+			// el.append( $('<span class="select-item"/>').append( api.i18n(
+			// 	'select.'+newName+'선택 됨',
+			// 	{ _: '', 0: '', 1: '1 '+newName+' 선택됨' },
+			// 	num
+			// ) ) );
+		} else {
+			el.append( $('<span class="select-item"/>').append( api.i18n(
+				'select.'+name+'선택 됨',
+				{ _: '%d '+name+'', 0: '', 1: '1 '+name+' 선택됨' },
+				num
+			) ) );
+		}
+		
 	};
 
 	// Internal knowledge of DataTables to loop over all information elements

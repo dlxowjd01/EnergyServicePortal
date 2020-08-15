@@ -1,4 +1,4 @@
-package kr.co.esp.system.web;
+package kr.co.esp.setting.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -8,38 +8,38 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class SystemController {
+public class SettingController {
 
-	private static final Logger logger = LoggerFactory.getLogger(SystemController.class);
+	private static final Logger logger = LoggerFactory.getLogger(SettingController.class);
 
-	@RequestMapping(value = "/system/siteSetting.do")
+	@RequestMapping(value = "/setting/siteSetting.do")
 	public String siteSetting(HttpServletRequest request, HttpSession session, Model model) {
-		return "esp/system/siteSetting";
+		return "esp/setting/siteSetting";
 	}
 
-	@RequestMapping(value = "/system/groupSetting.do")
+	@RequestMapping(value = "/setting/groupSetting.do")
 	public String groupSetting(HttpServletRequest request, HttpSession session, Model model) {
-		return "esp/system/groupSetting";
+		return "esp/setting/groupSetting";
 	}
 
-	@RequestMapping(value = "/system/alarmSetting.do")
+	@RequestMapping(value = "/setting/alarmSetting.do")
 	public String alarmSetting(HttpServletRequest request, HttpSession session, Model model) {
-		return "esp/system/alarmSetting";
+		return "esp/setting/alarmSetting";
 	}
 
-	@RequestMapping(value = "/system/userSetting.do")
+	@RequestMapping(value = "/setting/userSetting.do")
 	public String userSetting(HttpServletRequest request, HttpSession session, Model model) {
-		return "esp/system/userSetting";
+		return "esp/setting/userSetting";
 	}
 
-	@RequestMapping(value = "/system/comCodeSetting.do")
+	@RequestMapping(value = "/setting/comCodeSetting.do")
 	public String comCodeSetting(HttpServletRequest request, HttpSession session, Model model) {
-		return "esp/system/comCodeSetting";
+		return "esp/setting/comCodeSetting";
 	}
 
-	@RequestMapping(value = "/system/batchSetting.do")
+	@RequestMapping(value = "/setting/batchSetting.do")
 	public String batchSetting(HttpServletRequest request, HttpSession session, Model model) {
-		return "esp/system/batchSetting";
+		return "esp/setting/batchSetting";
 	}
 
 }

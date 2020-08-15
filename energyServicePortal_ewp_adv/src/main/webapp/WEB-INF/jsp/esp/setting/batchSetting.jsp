@@ -43,7 +43,7 @@
 					}
 				},
 				beforeSend: function (jqXHR, settings) {
-					$('.loading').show();
+					$('#loadingCircle').show();
 				},
 			}
 			$.ajax(option).done(function (json, textStatus, jqXHR) {

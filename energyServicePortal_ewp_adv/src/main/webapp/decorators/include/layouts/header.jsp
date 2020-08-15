@@ -6,7 +6,7 @@
 <script type="text/javascript">
 	$(function () {
 		let fullName = '${userInfo.name}';
-		// let affiliation = '${userInfo.org_name}';
+		let affiliation = '${userInfo.org_name}';
 		let loginMail = '${userInfo.contact_email}';
 		let mobileNum = '${userInfo.contact_phone}';
 		let accLevel = "";
@@ -29,8 +29,7 @@
 			$("#userId").val(loginId);
 		}
 		if(!isEmpty(oid)) {
-			// $("#affiliation").val(affiliation);
-			$("#affiliation").val(oid);
+			$("#affiliation").val(affiliation);
 		}
 		if(!isEmpty(accLevel)) {
 			$("#accessLevel").val(accLevel);
@@ -58,7 +57,15 @@
 		// 	}
 		// });
 
-		
+		$(".nav-brand a").each(function(index, element) {
+			// console.log("window.href===", window.location.pathname)
+			let current = window.location.pathname;
+			let mainPage ='/dashboard/gmain.do'
+			if (current == mainPage) {
+				$(this).on('click', false);
+			}
+		});
+
 		$("#fullName").on('keyup', function(evt) {
 			if(!isEmpty($(this).val())){
 				var kr = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
@@ -146,7 +153,7 @@
 				dataType: 'json',
 				type: 'patch',
 				beforeSend: function (jqXHR, settings) {
-					$('.loading').show();
+					$('#loadingCircle').show();
 				},
 				async: false,
 				contentType: "application/json",
@@ -198,7 +205,7 @@
 				dataType: 'json',
 				type: 'patch',
 				beforeSend: function (jqXHR, settings) {
-					$('.loading').show();
+					$('#loadingCircle').show();
 				},
 				async: false,
 				contentType: "application/json",
@@ -298,7 +305,7 @@
 <form id="dashboardForm" name="dashboardForm" method="post"></form>
 
 <nav class="clear">
-	<button type="button" class="category">카테고리</button>
+	<button type="button" id="mobileNavBtn" class="category">카테고리</button>
 	<c:choose>
 		<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
 			<div class="nav-brand spower"><a href="/dashboard/gmain.do">${sessionScope.userInfo.login_id}</a></div>
@@ -532,12 +539,12 @@
 
 
 <div class="modal fade" id="updateUserInfoModal" tabindex="-1" role="dialog" aria-labelledby="updateUserInfoModal" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content settings-content">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content settings-modal-content">
 			<div class="modal-header"><h2>개인정보 설정</h2></div>
 			<div class="modal-body">
 				<div class="row">
-					<div class="col-8">
+					<div class="col-lg-9 col-md-9 col-sm-12">
 						<form id="pwdForm" name="pwd_form">
 							<h3 class="sub-title">비밀번호</h3>
 							<div class="input-group inline-flex">
@@ -603,8 +610,7 @@
 							</div>
 						</form>
 					</div>
-					<div class="col-1"></div>
-					<div class="col-3">
+					<div class="col-lg-3 col-md-3 col-sm-12">
 						<div class="mb-10">
 							<label for="userId" class="input_label pt-0">아이디</label>
 							<input type="text" name="user_id" id="userId" class="clear-input" readonly="" autocomplete="off">

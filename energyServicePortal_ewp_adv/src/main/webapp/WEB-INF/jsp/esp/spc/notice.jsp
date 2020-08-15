@@ -467,7 +467,7 @@
 						</div>
 						<div class="input-group inline-flex top">
 							<h2 class="input_label">내용</h2>
-							<pre id="view_contents" class="textarea w-100"></pre>
+							<pre id="view_contents"></pre>
 						</div>
 					</div>
 				</div>

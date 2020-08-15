@@ -484,7 +484,7 @@
 </script>
 
 
-<div class="modal fade" id="warningModal" role="dialog">
+<div class="modal fade" id="warningModal" role="dialog" aria-labelledby="warningModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog">
 		<div class="modal-content collection_modal_content">
 			<div class="modal-header">

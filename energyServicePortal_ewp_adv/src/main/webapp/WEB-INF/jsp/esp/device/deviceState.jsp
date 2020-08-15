@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-<div class="loading"><img class="loading-image" src="/img/loading_icon.gif" alt="Loading..."/></div>
 <div class="row header-wrapper">
 	<div class="col-12">
 		<h1 class="page-header fl">설비 구성</h1>

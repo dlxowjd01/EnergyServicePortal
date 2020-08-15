@@ -57,11 +57,13 @@
 	<!-- timepicker -->
 	<script type="text/javascript" src="/js/wickedpicker.js"></script>
 	<script src="/js/data_tables/default.js" type="text/javascript"></script>
+	<script src="/js/data_tables/extensions/responsive.js" type="text/javascript"></script>
 	<script src="/js/data_tables/extensions/buttons.js" type="text/javascript"></script>
 	<script src="/js/data_tables/extensions/col_reorder.js" type="text/javascript"></script>
 	<script src="/js/data_tables/extensions/pdf_make.js" type="text/javascript"></script>
 	<script src="/js/data_tables/extensions/vfs_fonts_kr.js" type="text/javascript"></script>
 	<script src="/js/data_tables/extensions/select.js" type="text/javascript"></script>
+	<script src="/js/data_tables/extensions/fixed_header.js" type="text/javascript"></script>
 
 	<script>
 		// role: 1: 시스템관리자, 2: 일반
@@ -74,13 +76,12 @@
 		const loginName = '${sessionScope.userInfo.name}';
 		const loginMail = '${sessionScope.userInfo.contact_email}';
 		const contact_phone = '${sessionScope.userInfo.contact_phone}';
+		const apiHost = '${sessionScope.apiHost}';
 
-
-		let pagePerData = 15; //페이지당 게시글 갯수
 		const navCount = 10; //한 화면당 네비게이션 갯수
+		let pagePerData = 15; //페이지당 게시글 갯수
 		let page = 1; //현재 페이지
 
-		const apiHost = '${sessionScope.apiHost}';
 
 		//API 토큰 세팅
 		$.ajaxSetup({
@@ -90,36 +91,37 @@
 		var timeOffset = '${timeOffset}';
 		$(document).ready(function () {
 			<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
-				changeFavicon('/img/logo-only.ico');
+				changeFavicon('/resources/favicon_encored.ico');
 			</c:if>
-
-			$('.loading').hide();
+			
+			$('#loadingCircle').hide();
 
 			$(window).resize(function() {
 				if ($(window).width() > 768) {
 					$('#mask').hide();
 					$('body').removeClass("sidenav-no-scroll");
-					$('#gnb').hide();
+					$('#mobileNav').hide();
 				}
 			});
 
 		});
 
 		$(document).ajaxSuccess(function() {
-			$('.loading').hide();
+			$('#loadingCircle').hide();
 		});
 
 		$(document).ajaxError(function( event, jqxhr, settings, thrownError ) {
-			$('.loading').hide();
+			console.log("에러코드:" + jqxhr.status + "\n" + "메세지: " + jqxhr.responseText +"\n" + "에러: " + thrownError);
+			$('#loadingCircle').hide();
+			// setTimeout(function(){
+			// 	console.clear();
+			// }, 1200);
 		});
 
 		const changeFavicon = link => {
-			let $favicon = document.querySelector('link[rel="icon"]')
-			// If a <link rel="icon"> element already exists,
-			// change its href to the given link.
+			let $favicon = document.querySelector('link[rel="icon"]') || document.createElement('link');
 			if ($favicon !== null) {
 				$favicon.href = link
-				// Otherwise, create a new element and append it to <head>.
 			} else {
 				$favicon = document.createElement("link")
 				$favicon.rel = "icon"

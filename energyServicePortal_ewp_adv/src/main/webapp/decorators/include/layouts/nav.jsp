@@ -3,21 +3,15 @@
 <c:set var="oid" value="${userInfo.oid}"/> <%-- 메뉴 관리용 OID --%>
 <c:set var="task" value="${userInfo.task}"/> <%-- 메뉴 관리용 Task --%>
 <script type="text/javascript">
-	function pleaseSelectSite() {
-		alert('선택된 사이트가 없습니다.\n사이트를 선택해 주세요.');
-	}
-
 	$(function () {
 		const sideBar = $("#sidebar"),
 			menuItem = sideBar.find("li"),
 			menuItemLink = menuItem.find("a"),
 			upperMenu = sideBar.find("li.menu-item"),
-			upperMenuLink = upperMenu.find("a"),
 			subMenu = upperMenu.find("li"),
 			subMenuLink = subMenu.find("a"),
+			mobileMenu = $("#mobileNav").find(".menu-item"),
 			path = $(location).attr("pathname");
-
-		const mobileMenu = $(".g_menu > ul > li");
 
 
 		subMenuLink.each(function (e) {
@@ -36,19 +30,42 @@
 			}
 		}
 
-		upperMenuLink.click(function (e) {
-			$(this).parent("li").toggleClass('on');
-		});
-
-		mobileMenu.click(function (e) {
-			$(this).toggleClass('on');
+		upperMenu.click(function (e) {
+			menuItem.not(this).removeClass("on");
+			$(this).toggleClass("on");
 		});
 
 		sideBar.mouseleave(function () {
 			menuItem.removeClass('on');
 		});
 
+		mobileMenu.click(function (e) {
+			mobileMenu.not(this).removeClass("on");
+			$(this).toggleClass('on');
+		});
+
+		if ($(window).width() > 768) {
+			$('#mobileNav').hide();
+		}
+
+		$('#mobileNavBtn').click(function(){
+			$('#mask').fadeTo("slow", 0.8);
+			$('body').addClass("sidenav-no-scroll");
+			$('#mobileNav').show(10);
+		});
+
+		$("#mobileNav").find('.category_close').click(function(){
+			$('#mask').hide();
+			$('body').removeClass("sidenav-no-scroll");
+			$('#mobileNav').hide();
+		});
+		
 		$('#sidebar:after').css('display', 'none') ? menuItemLink.removeClass('on') : null;
+
+		// document.getElementsByTagName('body')[0].onscroll = function() {
+		// 	console.log("scrolling");
+		// 	$("#sidebar").css({ "top" : "100px;"})
+		// };
 	});
 </script>
 
@@ -136,30 +153,28 @@
 		</li>
 		</c:if>
 
-		<!-- <c:if test="${oid eq 'encored'}"> -->
+		<c:if test="${oid eq 'encored'}">
 		<li class="smn8 menu-item">
 			<a href="javascript:void(0);">설정</a>
 			<div class="sub_layer">
 				<ul>
-					<li><a href="/system/siteSetting.do">사업소 관리</a></li>
-					<li><a href="/system/groupSetting.do">그룹 관리</a></li>
-					<li><a href="/system/alarmSetting.do">알람 설정</a></li>
-					<li><a href="/system/userSetting.do">사용자 관리</a></li>
-					<li><a href="/system/comCodeSetting.do">공통 코드 관리</a></li>
-					<li><a href="/system/batchSetting.do">배치 관리</a></li>
+					<li><a href="/setting/siteSetting.do">사업소 관리</a></li>
+					<li><a href="/setting/groupSetting.do">그룹 관리</a></li>
+					<li><a href="/setting/alarmSetting.do">알람 설정</a></li>
+					<li><a href="/setting/userSetting.do">사용자 관리</a></li>
+					<li><a href="/setting/comCodeSetting.do">공통 코드 관리</a></li>
+					<li><a href="/setting/batchSetting.do">배치 관리</a></li>
 				</ul>
 			</div>
 		</li>
-		<!-- </c:if> -->
-	</ul>
-	<ol>
 		<li class="smn9"><a href="/spc/notice.do">공지사항</a></li>
 		<li class="smn10"><a href="/logout.do">로그아웃</a></li>
-	</ol>
+		</c:if>
+	</ul>
 	</c:if>
 </div>
 
-<div id="gnb" class="mobile-nav">
+<div id="mobileNav" class="mobile-nav">
 	<div class="logo-wrapper">
 		<h1 class="mobile-logo">
 			<c:choose>
@@ -175,10 +190,10 @@
 	</div>
 	
 	<div class="g_menu">
-		<ul>
-			<li class="gmn1">
+		<ul class="menu-list">
+			<li class="gmn1 menu-item">
 				<a href="javascript:void(0);">대시보드</a>
-				<ul>
+				<ul class="sub-menu-list">
 					<li><a href="/dashboard/gmain.do">통합관리 대시보드</a></li>
 					<%--<li>--%>
 					<%--  <a href="javascript:void(0);">사업소 대시보드</a>--%>
@@ -194,9 +209,9 @@
 					<!-- <li><a href="">수요자원 대시보드</a></li> -->
 				</ul>
 			</li>
-			<li class="gmn2">
+			<li class="gmn2 menu-item">
 				<a href="javascript:void(0);">설비현황</a>
-				<ul>
+				<ul class="sub-menu-list">
 					<li><a href="/device/deviceState.do">설비구성</a></li>
 					<li><a href="/device/collectionState.do">수집현황</a></li>
 					<c:if test="${oid eq 'encored' or oid eq 'kpx'}">
@@ -205,32 +220,32 @@
 					</c:if>
 				</ul>
 			</li>
-			<li class="gmn3">
+			<li class="gmn3 menu-item">
 				<a href="javascript:void(0);">설비 이력</a>
-				<ul>
+				<ul class="sub-menu-list">
 					<li><a href="/history/operationHistory.do">상태이력</a></li>
 					<li><a href="/history/alarmHistory.do">알람이력</a></li>
 				</ul>
 			</li>
-			<li class="gmn4">
+			<li class="gmn4 menu-item">
 				<a href="javascript:void(0);">자원분석</a>
-				<ul>
+				<ul class="sub-menu-list">
 					<li><a href="/energy/pvGen.do">발전이력</a></li>
 				</ul>
 			</li>
 			<c:if test="${oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx'}">
-			<li class="gmn5">
+			<li class="gmn5 menu-item">
 				<a href="javascript:void(0);">예측/진단</a>
-				<ul>
+				<ul class="sub-menu-list">
 					<li><a href="/diagnosis/generation.do">발전예측</a></li>
 					<li><a href="/diagnosis/abnormallyAnalysis.do">이상분석</a></li>
 				</ul>
 			</li>
 			</c:if>
 			<c:if test="${oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx'}">
-			<li class="gmn6">
+			<li class="gmn6 menu-item">
 				<a href="javascript:void(0);">보고서</a>
-				<ul>
+				<ul class="sub-menu-list">
 					<li><a href="/report/yieldReport.do">수익보고서</a></li>
 					<li><a href="/report/maintenanceReport.do">작업보고서</a></li>
 				</ul>
@@ -238,9 +253,9 @@
 			</c:if>
 
 			<c:if test="${(oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx') or (oid eq 'trust' and task ne 3) or (oid eq 'sundream' and task ne 3)}">
-			<li class="gmn7">
+			<li class="gmn7 menu-item">
 				<a href="javascript:void(0);">SPC관리</a>
-				<ul>
+				<ul class="sub-menu-list">
 					<li><a href="/spc/entityInformation.do">기본정보</a></li>
 					<li><a href="/spc/balanceSheet.do">원가관리</a></li>
 					<li><a href="/spc/transactionCalendar.do">입출금 관리</a></li>
@@ -250,22 +265,20 @@
 			</li>
 			</c:if>
 			<c:if test="${oid eq 'encored'}">
-			<li class="gmn8 hidden">
+			<li class="gmn8 menu-item">
 				<a href="javascript:void(0);">설정</a>
-				<ul>
-					<li><a href="/system/siteSetting.do">사업소 관리</a></li>
-					<li><a href="/system/groupSetting.do">그룹 관리</a></li>
-					<li><a href="/system/alarmSetting.do">알람 설정</a></li>
-					<li><a href="/system/userSetting.do">사용자 관리</a></li>
-					<li><a href="/system/comCodeSetting.do">공통 코드 관리</a></li>
-					<li><a href="/system/batchSetting.do">배치 관리</a></li>
+				<ul class="sub-menu-list">
+					<li><a href="/setting/siteSetting.do">사업소 관리</a></li>
+					<li><a href="/setting/groupSetting.do">그룹 관리</a></li>
+					<li><a href="/setting/alarmSetting.do">알람 설정</a></li>
+					<li><a href="/setting/userSetting.do">사용자 관리</a></li>
+					<li><a href="/setting/comCodeSetting.do">공통 코드 관리</a></li>
+					<li><a href="/setting/batchSetting.do">배치 관리</a></li>
 				</ul>
 			</li>
 			</c:if>
-		</ul>
-		<ol>
 			<li class="gmn9"><a href="/spc/notice.do">공지사항</a></li>
 			<li class="gmn10"><a href="/logout.do">로그아웃</a></li>
-		</ol>
+		</ul>
 	</div>
 </div>

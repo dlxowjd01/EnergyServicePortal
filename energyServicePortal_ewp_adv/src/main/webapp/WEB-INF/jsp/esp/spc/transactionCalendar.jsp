@@ -37,7 +37,7 @@
 				async: false,
 				contentType: "application/json",
 				beforeSend: function(){
-					$('.loading').show();
+					$('#loadingCircle').show();
 				},
 				success: function (json) {
 					let data = json.data;
@@ -299,7 +299,7 @@
 					like_yyyymm: yyyy + mm,
 				},
 				beforeSend: function () {
-					$('.loading').show();
+					$('#loadingCircle').show();
 				},
 				async: false
 			};
@@ -316,7 +316,7 @@
 				},
 				async: false,
 				beforeSend: function () {
-					$('.loading').show();
+					$('#loadingCircle').show();
 				},
 			};
 
@@ -408,7 +408,7 @@
 						traditional: true,
 						data: JSON.stringify(data),
 						beforeSend: function() {
-							$('.loading').show();
+							$('#loadingCircle').show();
 						},
 					};
 					// url = apiHost + '/spcs/bankbook/' + jobId + '?oid=' + oid + jobText;
@@ -1027,7 +1027,7 @@
 </script>
 
 
-<div class="modal fade" id="warningModal" role="dialog">
+<div class="modal fade" id="warningModal" role="dialog" aria-labelledby="warningModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog">
 		<div class="modal-content collection_modal_content">
 			<div class="modal-header">
