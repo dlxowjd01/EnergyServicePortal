@@ -1128,7 +1128,7 @@
 			<div id="searchDetail" class="search_expand sa_select">
 				<button type="button" class="btn bgN" data-target="#searchDropdown" data-name="상세 검색" onclick="$('#searchDetail').toggleClass('open')">상세 검색<span class="caret"></span></button>
 				<div id="searchDropdown" class="dropdown-menu search_dropdown">
-					<h2 class="tx_tit">설비 타입</h2>
+					<h2 class="tx_tit"><fmt:message key="statushistory.1.devicetype" /></h2>
 					<div class="flex_start">
 						<div class="dropdown" id="deviceType"><!--
 						--><button class="btn btn-primary dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비유형 선택">설비유형 선택<span class="caret"></span></button><!--
@@ -1142,15 +1142,15 @@
 							</ul><!--
 					--></div>
 						<div class="dropdown" id="devices"><!--
-						--><button class="btn btn-primary dropdown-toggle w1" type="button" data-toggle="dropdown" data-name="복수 선택">복수 선택<span class="caret"></span></button><!--
+						--><button class="btn btn-primary dropdown-toggle w1" type="button" data-toggle="dropdown" data-name="복수 선택"><fmt:message key="statushistory.1.multiple.select" /><span class="caret"></span></button><!--
 						--><div class="dropdown-menu dropdown-menu-form chk_type"><!--
 							 --><ul class="dropdown_cov clear"></ul>
 								<div class="li_btn_bx clear"><!--
 								--><div class="fl"><!--
-									--><button type="button" class="btn_type03">모두 선택</button><!--
-									--><button type="button" class="btn_type03">모두 해제</button><!--
+									--><button type="button" class="btn_type03"><fmt:message key="statushistory.1.selectall" /></button><!--
+									--><button type="button" class="btn_type03"><fmt:message key="statushistory.1.clearall" /></button><!--
 								--></div>
-									<div class="fr"><button type="button" class="btn_type">적용</button></div>
+									<div class="fr"><button type="button" class="btn_type"><fmt:message key="statushistory.1.apply" /></button></div>
 								</div>
 							</div>
 						</div>
@@ -1158,7 +1158,7 @@
 
 					<div class="flex_start2">
 						<div class="sa_select">
-							<h2 class="tx_tit">기간 설정</h2>
+							<h2 class="tx_tit"><fmt:message key="statushistory.1.timeframe" /></h2>
 							<label for="fromDate" class="tx_tit sr-only">시작일</label>
 							<input type="text" id="fromDate" name="fromDate" class="sel fromDate" value="" autocomplete="off">
 						</div>
@@ -1188,7 +1188,7 @@
 				</div>
 			</div>
 		
-			<button type="button" id="search" class="btn_type ml-6">조회</button>
+			<button type="button" id="search" class="btn_type ml-6"><fmt:message key="statushistory.1.update" /></button>
 			<a href="#;" class="save_btn fr">데이터저장</a>
 		</form>
 	</div>
@@ -1198,7 +1198,7 @@
 	<div class="col-12">
 		<div class="indiv operation_table_wrap">
 			<div class="header-wrapper">
-				<h2 class="fl s_tit">분석 기준 설비 선택</h2>
+				<h2 class="fl s_tit"><fmt:message key="statushistory.2.selectdevice" /></h2>
 <%--				<a href="javascript:void(0);" class="btn_type02 fr">분석 조건 저장</a>--%>
 			</div>
 			<div class="his_chart_top clear">
@@ -1219,24 +1219,24 @@
 						</div>
 						<div class="sa_select pb-10">
 							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown" data-vlue="mean" data-name="평균">평균 <span class="caret"></span></button>
+								<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown" data-vlue="mean" data-name="평균"><fmt:message key="statushistory.2.average" /> <span class="caret"></span></button>
 								<ul class="dropdown-menu rdo_type" role="menu">
 									<li data-value="max">
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="radio" id="rdValue1" name="rdValue" value="max">
-											<label for="rdValue1">최대</label>
+											<label for="rdValue1"><fmt:message key="statushistory.2.max" /></label>
 										</a>
 									</li>
 									<li data-value="min">
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="radio" id="rdValue2" name="rdValue" value="min">
-											<label for="rdValue2">최소</label>
+											<label for="rdValue2"><fmt:message key="statushistory.2.min" /></label>
 										</a>
 									</li>
 									<li data-value="avg">
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="radio" id="rdValue3" name="rdValue" value="mean" checked>
-											<label for="rdValue3">평균</label>
+											<label for="rdValue3"><fmt:message key="statushistory.2.average" /></label>
 										</a>
 									</li>
 								</ul>
@@ -1246,8 +1246,8 @@
 							<div class="dropdown" id="way">
 								<button class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu">
-									<li data-value="l"><a href="javascript:void(0);">y-좌</a></li>
-									<li data-value="r"><a href="javascript:void(0);">y-우</a></li>
+									<li data-value="l"><a href="javascript:void(0);"><fmt:message key="statushistory.2.y_left" /></a></li>
+									<li data-value="r"><a href="javascript:void(0);"><fmt:message key="statushistory.2.y_right" /></a></li>
 								</ul>
 							</div>
 						</div>
@@ -1279,24 +1279,24 @@
 							</div>
 							<div class="sa_select">
 								<div class="dropdown">
-									<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown" data-value="mean" data-name="평균">평균<span class="caret"></span></button>
+									<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown" data-value="mean" data-name="평균"><fmt:message key="statushistory.2.average" /><span class="caret"></span></button>
 									<ul class="dropdown-menu rdo_type " role="menu">
 										<li data-value="max">
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="radio" id="rdValue2_01" name="rdValue2" value="max">
-												<label for="rdValue2_01">최대</label>
+												<label for="rdValue2_01"><fmt:message key="statushistory.2.max" /></label>
 											</a>
 										</li>
 										<li data-value="min">
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="radio" id="rdValue2_02" name="rdValue2" value="min">
-												<label for="rdValue2_02">최소</label>
+												<label for="rdValue2_02"><fmt:message key="statushistory.2.min" /></label>
 											</a>
 										</li>
 										<li data-value="mean">
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="radio" id="rdValue2_03" name="rdValue2" value="mean" checked>
-												<label for="rdValue2_03">평균</label>
+												<label for="rdValue2_03"><fmt:message key="statushistory.2.average" /></label>
 											</a>
 										</li>
 									</ul>
@@ -1330,24 +1330,24 @@
 							</div>
 							<div class="sa_select">
 								<div class="dropdown">
-									<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown" data-value="mean" data-name="평균">평균<span class="caret"></span></button>
+									<button class="btn btn-primary dropdown-toggle w4" type="button" data-toggle="dropdown" data-value="mean" data-name="평균"><fmt:message key="statushistory.2.average" /><span class="caret"></span></button>
 									<ul class="dropdown-menu rdo_type" role="menu">
 										<li data-value="max">
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="radio" id="rdValue3_1" name="rdValue3" value="max">
-												<label for="rdValue3_1">최대</label>
+												<label for="rdValue3_1"><fmt:message key="statushistory.2.max" /></label>
 											</a>
 										</li>
 										<li data-value="min">
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="radio" id="rdValue3_2" name="rdValue3" value="min">
-												<label for="rdValue3_2">최소</label>
+												<label for="rdValue3_2"><fmt:message key="statushistory.2.min" /></label>
 											</a>
 										</li>
 										<li data-value="mean">
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="radio" id="rdValue3_3" name="rdValue3" value="mean" checked>
-												<label for="rdValue3_3">평균</label>
+												<label for="rdValue3_3"><fmt:message key="statushistory.2.average" /></label>
 											</a>
 										</li>
 									</ul>
@@ -1358,8 +1358,8 @@
 
 					<!-- 버튼 -->
 					<div class="fl">
-						<button type="button" class="btn_type" id="chartAdd">그래프 항목 추가</button>
-						<button type="button" class="btn_type" id="chartDraw">그래프 그리기</button>
+						<button type="button" class="btn_type" id="chartAdd"><fmt:message key="statushistory.2.additem" /></button>
+						<button type="button" class="btn_type" id="chartDraw"><fmt:message key="statushistory.2.create" /></button>
 					</div>
 
 					<!-- 우측 항목 -->
@@ -1367,22 +1367,22 @@
 						<div class="rdo_type his_rdo_bx">
 							<span>
 								<input type="radio" id="analyze1" name="analyze" value="시계열 분석" checked>
-								<label for="analyze1">시계열 분석</label>
+								<label for="analyze1"><fmt:message key="statushistory.2.time_series" /></label>
 							</span>
 							<span>
 								<input type="radio" id="analyze2" name="analyze" value="상관 분석">
-								<label for="analyze2">상관 분석</label>
+								<label for="analyze2"><fmt:message key="statushistory.2.correlation" /></label>
 							</span>
 						</div>
 
 						<div class="sa_select">
 							<div class="dropdown" id="summation">
-								<button class="btn btn-primary dropdown-toggle w6" type="button" data-toggle="dropdown" data-value="siteAccrue">선택안함<span class="caret"></span></button>
+								<button class="btn btn-primary dropdown-toggle w6" type="button" data-toggle="dropdown" data-value="siteAccrue"><fmt:message key="statushistory.2.noselect" /><span class="caret"></span></button>
 								<ul class="dropdown-menu rdo_type">
 									<li>
 										<a href="javascript:void(0);" data-value="option1" tabindex="-1">
 											<input type="radio" id="summation1" name="summation" value="siteAccrue">
-											<label for="summation1">사이트별 누적</label>
+											<label for="summation1"><fmt:message key="statushistory.2.plantsum" /></label>
 										</a>
 									</li>
 									<%--											<li>--%>
@@ -1394,7 +1394,7 @@
 									<li>
 										<a href="javascript:void(0);" data-value="option3" tabindex="-1">
 											<input type="radio" id="summation3" name="summation" value="deviceAccrue">
-											<label for="summation3">설비별 누적</label>
+											<label for="summation3"><fmt:message key="statushistory.2.devicesum" /></label>
 										</a>
 									</li>
 									<%--											<li>--%>
@@ -1406,7 +1406,7 @@
 									<li>
 										<a href="javascript:void(0);" data-value="option5" tabindex="-1">
 											<input type="radio" id="summation5" name="summation" value="" checked>
-											<label for="summation5">선택안함</label>
+											<label for="summation5"><fmt:message key="statushistory.2.noselect" /></label>
 										</a>
 									</li>
 								</ul>
@@ -1418,8 +1418,8 @@
 				<br>
 				<!-- 시계열 분석 -->
 				<div class="tag_bx clear" id="analyzeTag1">
-					<div class="fl"><span class="tx_tit">y-좌</span></div>
-					<div class="fl"><span class="tx_tit">y-우</span></div>
+					<div class="fl"><span class="tx_tit"><fmt:message key="statushistory.2.y_left" /></span></div>
+					<div class="fl"><span class="tx_tit"><fmt:message key="statushistory.2.y_right" /></span></div>
 				</div>
 				<!-- 상관 분석 -->
 				<div class="tag_bx clear" id="analyzeTag2">
