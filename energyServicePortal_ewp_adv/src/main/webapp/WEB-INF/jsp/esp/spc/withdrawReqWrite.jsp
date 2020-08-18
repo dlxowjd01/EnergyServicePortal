@@ -466,7 +466,7 @@
 			<div class="sa_select"><!--
 			--><span class="tx_tit">SPC 선택</span><!--
 			--><div class="dropdown"><!--
-				--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button><!--
+				--><button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button><!--
 				--><ul id="spcList" class="dropdown-menu unused center" role="menu"><li id="*spcName*" data-value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul><!--
 				--><small class="hidden warning">SPC를 선택해 주세요.</small>
 				</div>
@@ -474,7 +474,7 @@
 			<div class="sa_select"><!--
 			--><span class="tx_tit">출금 계좌번호</span><!--
 			--><div class="dropdown"><!--
-				--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button>
+				--><button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button>
 					<ul id="withdrawList" class="dropdown-menu unused center" role="menu"><li data-acc-holder="*acc_holder*" data-name="*bank_name*" data-value="*acc_num*"><a href="#" tabindex="-1">*bank_name* *acc_num*</a></li></ul>
 					<small class="hidden warning">출금 요청 계좌를 선택해 주세요.</small>
 				</div>
@@ -527,7 +527,7 @@
 							<td>
 								<div class="sa_select">
 									<div class="dropdown placeholder">
-										<button class="btn btn-primary dropdown-toggle" data-clone="empty" type="button" data-toggle="dropdown" data-name="" data-value="">선택<span class="caret"></span></button>
+										<button class="dropdown-toggle" data-clone="empty" type="button" data-toggle="dropdown" data-name="" data-value="">선택<span class="caret"></span></button>
 										<ul id="purposeList" class="dropdown-menu" role="menu">
 											<li data-value="*purposeValue*"><a href="#" tabindex="-1">*purposeTitle*</a></li>
 										</ul>
@@ -542,7 +542,7 @@
 							<td>
 								<div class="sa_select">
 									<div class="dropdown placeholder">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-clone="empty" data-toggle="dropdown" data-name="">선택<span class="caret"></span></button>
+										<button class="dropdown-toggle" type="button" data-clone="empty" data-toggle="dropdown" data-name="">선택<span class="caret"></span></button>
 										<ul id="receiveList" class="receive-list dropdown-menu" role="menu"><li data-acc-holder="*acc_holder*" data-acc-type="*to_acc_type*" data-name="*to_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_bank_name* *to_account_no* (*acc_holder*)</a></li></ul>
 									</div>
 								</div>

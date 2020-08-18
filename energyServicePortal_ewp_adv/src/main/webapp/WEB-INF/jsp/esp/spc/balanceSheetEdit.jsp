@@ -339,12 +339,12 @@
 </form>
 
 <div class="row">
-	<div class="col-lg-12">
+	<div class="col-12">
 		<h1 class="page-header">SPC 금융관리 수정</h1>
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-12">
+	<div class="col-12">
 		<div class="indiv bal_edit">
 			<div class="spc_bal_post">
 				<table>
@@ -373,7 +373,7 @@
 					<span class="tx_tit">기준</span>
 					<div class="sa_select">
 						<div class="dropdown" id="year">
-							<button class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown">
+							<button class="dropdown-toggle w5" type="button" data-toggle="dropdown">
 <%--								${fn:substring(param.yyyymm, 0, 4)}년--%>
 								<span class="caret"></span>
 							</button>
@@ -384,7 +384,7 @@
 					</div>
 					<div class="sa_select">
 						<div class="dropdown" id="month">
-							<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
+							<button class="dropdown-toggle w8" type="button" data-toggle="dropdown">
 <%--								${fn:substring(param.yyyymm, 4, 6)}월--%>
 								<span class="caret"></span>
 							</button>

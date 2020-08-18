@@ -19,54 +19,71 @@ html.darkmode:root {
 	--ico-sort-down: url("/img/sorting_down.png");
 }
 
-table.dataTable {
+.dataTable {
 	width: 100%;
-	margin: 0;
+	margin: 0 auto;
 	clear: both;
 	border-collapse: separate;
 	border-spacing: 0;
-	table-layout: fixed;
+	/* table-layout: fixed; */
 }
 
-table.dataTable thead th {
+.dataTable thead th {
 	font-size: 13px;
 	font-weight: 500;
 }
 
-table.dataTable tfoot th {
-	font-size: 13px;
-	font-weight: bold;
+.dataTables_scrollHeadInner > .dataTable th.idx.no-sorting {
+	width: 50px;
 }
 
-table.dataTable thead th,
-table.dataTable thead td {
+.dataTables_scrollBody > .dataTable thead th,
+.dataTables_scrollBody > .dataTable thead td {
+	display: none;
+}
+
+.dataTables_scrollHeadInner > .dataTable th,
+.dataTables_scrollHeadInner > .dataTable td {
+	background: var(--box-darker);
 	height: auto;
-	padding: 14px 10px;
-	background: var(--white15);
+	padding: 14px 0;
 	font-size: 13px;
 	white-space: nowrap;
 }
 
-table.dataTable thead th:active,
-table.dataTable thead td:active {
+.dataTable tbody th,
+.dataTable tbody td {
+	height: auto;
+	padding: 14px 0px;
+	font-size: 13px;
+	white-space: nowrap;
+}
+
+.dataTable thead th:active,
+.dataTable thead td:active {
 	outline: none;
 }
 
-table.dataTable tfoot th,
-table.dataTable tfoot td {
+.dataTable tfoot th {
+	font-size: 13px;
+	font-weight: bold;
+}
+
+.dataTable tfoot th,
+.dataTable tfoot td {
 	padding: 10px 18px 6px 18px;
 	border-top: 1px solid var(--white40);
 }
 
-table.dataTable thead .sorting {
+.dataTable thead .sorting {
 	cursor: pointer;
 }
 
-table.dataTable thead .no-sorting {
+.dataTable thead .no-sorting {
 	cursor: default;
 }
 
-table.dataTable thead .sorting_asc:not(.no-sorting):after {
+.dataTable thead .sorting_asc:not(.no-sorting):after {
 	display: inline-block;
 	margin-left: 6px;
 	padding: 0 0 0 20px;
@@ -76,7 +93,7 @@ table.dataTable thead .sorting_asc:not(.no-sorting):after {
 	content: "";
 }
 
-table.dataTable thead .sorting_desc:not(.no-sorting):after {
+.dataTable thead .sorting_desc:not(.no-sorting):after {
 	display: inline-block;
 	margin-left: 6px;
 	padding: 0 0 0 20px;
@@ -85,162 +102,143 @@ table.dataTable thead .sorting_desc:not(.no-sorting):after {
 	background: var(--ico-sort-down) no-repeat 0 1px;
 	content: "";
 }
-
-
-table.dataTable tbody th,
-table.dataTable tbody td {
-	height: auto;
-	padding: 14px 10px;
-	font-size: 13px;
-}
-
-table.dataTable.row-border tbody tr:first-child th,
-table.dataTable.row-border tbody tr:first-child td,
-table.dataTable.display tbody tr:first-child th,
-table.dataTable.display tbody tr:first-child td {
+.dataTable.row-border tbody tr:first-child th,
+.dataTable.row-border tbody tr:first-child td,
+.dataTable.display tbody tr:first-child th,
+.dataTable.display tbody tr:first-child td {
 	border-top: none;
 }
 
-table.dataTable.cell-border tbody tr:first-child th,
-table.dataTable.cell-border tbody tr:first-child td {
+.dataTable.cell-border tbody tr:first-child th,
+.dataTable.cell-border tbody tr:first-child td {
 	border-top: none;
 }
 
-table.dataTable.stripe tbody tr.selected td,
-table.dataTable.stripe tbody td.selected {
+.dataTable tbody tr.selected td,
+.dataTable tbody td.selected {
 	background: var(--vivid-blue) !important;
 }
 
-table.dataTable.stripe tbody tr.even td {
+.dataTable tbody tr.even td {
 	background: var(--box-darker);
 	font-weight: normal;
 }
 
-table.dataTable.stripe tbody tr.selected td,
-table.dataTable.stripe tbody td.selected {
+.dataTable tbody tr.selected td,
+.dataTable tbody td.selected {
 	color: var(--white);
 }
 
-table.dataTable.stripe tbody td,
-table.dataTable.display tbody td {
+.dataTable tbody td,
+.dataTable.display tbody td {
 	color: var(--white60);
+}
+
+.dataTable.nowrap th,
+.dataTable.nowrap td {
 	white-space: nowrap;
 }
 
-table.dataTable.nowrap th,
-table.dataTable.nowrap td {
-	white-space: nowrap;
-}
-
-table.dataTable.compact thead th,
-table.dataTable.compact thead td {
+.dataTable.compact thead th,
+.dataTable.compact thead td {
 	padding: 4px 17px;
 }
 
-table.dataTable.compact tfoot th,
-table.dataTable.compact tfoot td {
+.dataTable.compact tfoot th,
+.dataTable.compact tfoot td {
 	padding: 4px;
 }
 
-table.dataTable.compact tbody th,
-table.dataTable.compact tbody td {
+.dataTable.compact tbody th,
+.dataTable.compact tbody td {
 	padding: 4px;
 }
 
-table.dataTable th.dt-left,
-table.dataTable td.dt-left {
+.dataTable th.dt-left,
+.dataTable td.dt-left {
 	text-align: left;
 }
 
-table.dataTable th.dt-center,
-table.dataTable td.dt-center,
-table.dataTable td.dataTables_empty {
+.dataTable th.dt-center,
+.dataTable td.dt-center,
+.dataTable td.dataTables_empty {
 	text-align: center;
 }
 
-table.dataTable th.dt-right,
-table.dataTable td.dt-right {
+.dataTable th.dt-right,
+.dataTable td.dt-right {
 	text-align: right;
 }
 
-table.dataTable th.dt-justify,
-table.dataTable td.dt-justify {
+.dataTable th.dt-justify,
+.dataTable td.dt-justify {
 	text-align: justify;
 }
 
-table.dataTable th.dt-nowrap,
-table.dataTable td.dt-nowrap {
+.dataTable th.dt-nowrap,
+.dataTable td.dt-nowrap {
 	white-space: nowrap;
 }
 
-table.dataTable thead th.dt-head-left,
-table.dataTable thead td.dt-head-left,
-table.dataTable tfoot th.dt-head-left,
-table.dataTable tfoot td.dt-head-left {
+.dataTable thead th.dt-head-left,
+.dataTable thead td.dt-head-left,
+.dataTable tfoot th.dt-head-left,
+.dataTable tfoot td.dt-head-left {
 	text-align: left;
 }
 
-table.dataTable thead th.dt-head-center,
-table.dataTable thead td.dt-head-center,
-table.dataTable tfoot th.dt-head-center,
-table.dataTable tfoot td.dt-head-center {
+.dataTable thead th.dt-head-center,
+.dataTable thead td.dt-head-center,
+.dataTable tfoot th.dt-head-center,
+.dataTable tfoot td.dt-head-center {
 	text-align: center;
 }
 
-table.dataTable thead th.dt-head-right,
-table.dataTable thead td.dt-head-right,
-table.dataTable tfoot th.dt-head-right,
-table.dataTable tfoot td.dt-head-right {
+.dataTable thead th.dt-head-right,
+.dataTable thead td.dt-head-right,
+.dataTable tfoot th.dt-head-right,
+.dataTable tfoot td.dt-head-right {
 	text-align: right;
 }
 
-table.dataTable thead th.dt-head-justify,
-table.dataTable thead td.dt-head-justify,
-table.dataTable tfoot th.dt-head-justify,
-table.dataTable tfoot td.dt-head-justify {
+.dataTable thead th.dt-head-justify,
+.dataTable thead td.dt-head-justify,
+.dataTable tfoot th.dt-head-justify,
+.dataTable tfoot td.dt-head-justify {
 	text-align: justify;
 }
 
-table.dataTable thead th.dt-head-nowrap,
-table.dataTable thead td.dt-head-nowrap,
-table.dataTable tfoot th.dt-head-nowrap,
-table.dataTable tfoot td.dt-head-nowrap {
+.dataTable thead th.dt-head-nowrap,
+.dataTable thead td.dt-head-nowrap,
+.dataTable tfoot th.dt-head-nowrap,
+.dataTable tfoot td.dt-head-nowrap {
 	white-space: nowrap;
 }
 
-table.dataTable tbody th.dt-body-left,
-table.dataTable tbody td.dt-body-left {
+.dataTable tbody th.dt-body-left,
+.dataTable tbody td.dt-body-left {
 	text-align: left;
 }
 
-table.dataTable tbody th.dt-body-center,
-table.dataTable tbody td.dt-body-center {
+
+.dataTable tbody th.dt-body-center,
+.dataTable tbody td.dt-body-center {
 	text-align: center;
 }
 
-table.dataTable tbody th.dt-body-right,
-table.dataTable tbody td.dt-body-right {
+.dataTable tbody th.dt-body-right,
+.dataTable tbody td.dt-body-right {
 	text-align: right;
 }
 
-table.dataTable tbody th.dt-body-justify,
-table.dataTable tbody td.dt-body-justify {
+.dataTable tbody th.dt-body-justify,
+.dataTable tbody td.dt-body-justify {
 	text-align: justify;
 }
 
-table.dataTable tbody th.dt-body-nowrap,
-table.dataTable tbody td.dt-body-nowrap {
+.dataTable tbody th.dt-body-nowrap,
+.dataTable tbody td.dt-body-nowrap {
 	white-space: nowrap;
-}
-
-table.dataTable:not(.stripe),
-table.dataTable:not(.stripe) th,
-table.dataTable:not(.stripe) td {
-	/* box-sizing: content-box; */
-}
-
-.dataTables_scrollBody thead tr[role="row"] {
-	visibility: collapse !important;
 }
 
 /* Control feature layout */
@@ -386,6 +384,7 @@ table.dataTable:not(.stripe) td {
 
 .dataTables_wrapper .dataTables_scroll {
 	clear: both;
+	overflow: auto;
 }
 
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {
@@ -393,8 +392,12 @@ table.dataTable:not(.stripe) td {
 	-webkit-overflow-scrolling: touch;
 }
 
-.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>thead>tr>th,
-.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>thead>tr>td,
+.dataTables_scrollBody > table > thead > tr {
+    /* visibility: collapse;
+    height: 0px !important; */
+}
+
+
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>tbody>tr>th,
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>tbody>tr>td {
 	vertical-align: middle;
@@ -413,7 +416,7 @@ table.dataTable:not(.stripe) td {
 	padding: 0 !important;
 }
 
-.dataTables_wrapper.no-footer div.dataTables_scrollHead table.dataTable,
+.dataTables_wrapper.no-footer div.dataTables_scrollHead .dataTable,
 .dataTables_wrapper.no-footer div.dataTables_scrollBody>table {
 	border-bottom: none;
 }
@@ -429,24 +432,24 @@ table.dataTable:not(.stripe) td {
 
 /* FIXED HEADER */
 
-table.dataTable.fixedHeader-floating {
+.dataTable.fixedHeader-floating {
 	position: fixed !important;
 }
 
-table.dataTable.fixedHeader-floating thead th {
+.dataTable.fixedHeader-floating thead th {
 	background: var(--emperor);
 }
 
-table.dataTable.fixedHeader-floating.no-footer {
+.dataTable.fixedHeader-floating.no-footer {
 	border-bottom-width: 0;
 }
 
-table.dataTable.fixedHeader-locked {
+.dataTable.fixedHeader-locked {
 	position: absolute !important;
 }
 
 @media print {
-	table.dataTable.fixedHeader-floating {
+	.dataTable.fixedHeader-floating {
 		display: none;
 	}
 }
@@ -504,8 +507,8 @@ input.table-checkbox:checked+label:after {
 
 
 /* 
-table.dataTable tbody td.select-checkbox:after,
-table.dataTable tbody th.select-checkbox:after {
+.dataTable tbody td.select-checkbox:after,
+.dataTable tbody th.select-checkbox:after {
 	display: block;
 	position: absolute;
 	top: 1.2em;
@@ -515,8 +518,8 @@ table.dataTable tbody th.select-checkbox:after {
 	box-sizing: border-box;
 }
 
-table.dataTable tbody th .select-checkbox:before,
-table.dataTable tbody td .select-checkbox:before {
+.dataTable tbody th .select-checkbox:before,
+.dataTable tbody td .select-checkbox:before {
 	content: ' ';
 	width: 18px;
 	height: 18px;
@@ -526,8 +529,8 @@ table.dataTable tbody td .select-checkbox:before {
 	border-radius: 2px;
 }
 
-table.dataTable tr.selected td .select-checkbox:after,
-table.dataTable tr.selected th .select-checkbox:after {
+.dataTable tr.selected td .select-checkbox:after,
+.dataTable tr.selected th .select-checkbox:after {
 	content: '\2714';
 	margin-top: -11px;
 	margin-left: -4px;
@@ -795,27 +798,27 @@ div.dt-button-background {
 }
 
 
-table.dataTable.dtr-inline.collapsed>tbody>tr>td.child,
-table.dataTable.dtr-inline.collapsed>tbody>tr>th.child,
-table.dataTable.dtr-inline.collapsed>tbody>tr>td.dataTables_empty {
+.dataTable.dtr-inline.collapsed>tbody>tr>td.child,
+.dataTable.dtr-inline.collapsed>tbody>tr>th.child,
+.dataTable.dtr-inline.collapsed>tbody>tr>td.dataTables_empty {
 	cursor: default !important;
 }
 
-table.dataTable.dtr-inline.collapsed>tbody>tr>td.child:before,
-table.dataTable.dtr-inline.collapsed>tbody>tr>th.child:before,
-table.dataTable.dtr-inline.collapsed>tbody>tr>td.dataTables_empty:before {
+.dataTable.dtr-inline.collapsed>tbody>tr>td.child:before,
+.dataTable.dtr-inline.collapsed>tbody>tr>th.child:before,
+.dataTable.dtr-inline.collapsed>tbody>tr>td.dataTables_empty:before {
 	display: none !important;
 }
 
-table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td.dtr-control,
-table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th.dtr-control {
+.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td.dtr-control,
+.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th.dtr-control {
 	position: relative;
 	padding-left: 30px;
 	cursor: pointer;
 }
 
-table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td.dtr-control:before,
-table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th.dtr-control:before {
+.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td.dtr-control:before,
+.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th.dtr-control:before {
 	top: 50%;
 	left: 5px;
 	height: 14px;
@@ -833,18 +836,18 @@ table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th.dtr-control:before 
 	content: '+';
 }
 
-table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td.dtr-control:before,
-table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th.dtr-control:before {
+.dataTable.dtr-inline.collapsed>tbody>tr.parent>td.dtr-control:before,
+.dataTable.dtr-inline.collapsed>tbody>tr.parent>th.dtr-control:before {
 	content: '-';
 }
 
-table.dataTable.dtr-inline.collapsed.compact>tbody>tr>td.dtr-control,
-table.dataTable.dtr-inline.collapsed.compact>tbody>tr>th.dtr-control {
+.dataTable.dtr-inline.collapsed.compact>tbody>tr>td.dtr-control,
+.dataTable.dtr-inline.collapsed.compact>tbody>tr>th.dtr-control {
 	padding-left: 27px;
 }
 
-table.dataTable.dtr-inline.collapsed.compact>tbody>tr>td.dtr-control:before,
-table.dataTable.dtr-inline.collapsed.compact>tbody>tr>th.dtr-control:before {
+.dataTable.dtr-inline.collapsed.compact>tbody>tr>td.dtr-control:before,
+.dataTable.dtr-inline.collapsed.compact>tbody>tr>th.dtr-control:before {
 	left: 4px;
 	height: 14px;
 	width: 14px;
@@ -853,14 +856,14 @@ table.dataTable.dtr-inline.collapsed.compact>tbody>tr>th.dtr-control:before {
 	text-indent: 3px;
 }
 
-table.dataTable.dtr-column>tbody>tr>td.control,
-table.dataTable.dtr-column>tbody>tr>th.control {
+.dataTable.dtr-column>tbody>tr>td.control,
+.dataTable.dtr-column>tbody>tr>th.control {
 	position: relative;
 	cursor: pointer;
 }
 
-table.dataTable.dtr-column>tbody>tr>td.control:before,
-table.dataTable.dtr-column>tbody>tr>th.control:before {
+.dataTable.dtr-column>tbody>tr>td.control:before,
+.dataTable.dtr-column>tbody>tr>th.control:before {
 	top: 50%;
 	left: 50%;
 	height: 16px;
@@ -879,39 +882,39 @@ table.dataTable.dtr-column>tbody>tr>th.control:before {
 	content: '+';
 }
 
-table.dataTable.dtr-column>tbody>tr.parent td.control:before,
-table.dataTable.dtr-column>tbody>tr.parent th.control:before {
+.dataTable.dtr-column>tbody>tr.parent td.control:before,
+.dataTable.dtr-column>tbody>tr.parent th.control:before {
 	content: '-';
 }
 
-table.dataTable>tbody>tr.child {
+.dataTable>tbody>tr.child {
 	padding: 0.5em 1em;
 }
 
-table.dataTable>tbody>tr.child:hover {
+.dataTable>tbody>tr.child:hover {
 	background: transparent !important;
 }
 
-table.dataTable>tbody>tr.child ul.dtr-details {
+.dataTable>tbody>tr.child ul.dtr-details {
 	display: inline-block;
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
 }
 
-table.dataTable>tbody>tr.child ul.dtr-details>li {
+.dataTable>tbody>tr.child ul.dtr-details>li {
 	padding: 0.5em 0;
 }
 
-table.dataTable>tbody>tr.child ul.dtr-details>li:first-child {
+.dataTable>tbody>tr.child ul.dtr-details>li:first-child {
 	padding-top: 0;
 }
 
-table.dataTable>tbody>tr.child ul.dtr-details>li:last-child {
+.dataTable>tbody>tr.child ul.dtr-details>li:last-child {
 	border-bottom: none;
 }
 
-table.dataTable>tbody>tr.child span.dtr-title {
+.dataTable>tbody>tr.child span.dtr-title {
 	display: inline-block;
 	min-width: 75px;
 	font-weight: bold;

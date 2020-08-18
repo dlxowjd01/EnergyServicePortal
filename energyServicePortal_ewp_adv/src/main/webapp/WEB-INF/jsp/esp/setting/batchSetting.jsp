@@ -225,7 +225,7 @@
 		<div class="flex_group">
 			<span class="tx_tit">사업소</span>
 			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button"
+				<button class="dropdown-toggle" type="button"
 					data-toggle="dropdown">선택<span class="caret"></span></button>
 				<ul class="dropdown-menu chk_type" role="menu" id="siteList">
 					<li>
@@ -241,7 +241,7 @@
 		<div class="flex_group">
 			<span class="tx_tit">지역</span>
 			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button"
+				<button class="dropdown-toggle" type="button"
 					data-toggle="dropdown">선택<span class="caret"></span></button>
 				<ul class="dropdown-menu chk_type" role="menu">
 					<li><a href="#"></a></li>
@@ -251,7 +251,7 @@
 		<div class="flex_group">
 			<span class="tx_tit">발전 자원</span>
 			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button"
+				<button class="dropdown-toggle" type="button"
 					data-toggle="dropdown">선택<span class="caret"></span></button>
 				<ul class="dropdown-menu">
 					<li data-value="solar" class="on"><a href="#">태양광</a></li>

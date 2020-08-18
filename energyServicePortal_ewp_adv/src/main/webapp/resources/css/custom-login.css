@@ -108,15 +108,10 @@ button:active {
 	transform: none;
 }
 
-.btn-primary:focus,
-.btn-primary:hover,
-.btn-primary:active,
-.btn-primary:active:hover,
-.btn-primary:active:focus,
-.open > .dropdown-toggle.btn-primary,
-.open > .dropdown-toggle.btn-primary:hover,
-.open > .dropdown-toggle.btn-primary:focus,
-.open > .dropdown-toggle.btn-primary.focus {
+.open > .dropdown-toggle,
+.open > .dropdown-toggle:hover,
+.open > .dropdown-toggle:focus,
+.open > .dropdown-toggle.focus {
 	background: var(--white20);
 	border: none;
 	border-radius: 2px;
@@ -125,17 +120,12 @@ button:active {
 	text-align: left;
 }
 
-.btn.focus {
-	color: inherit;
-	border: 0;
-}
-
 .clear-btn {
 	border: none;
 	outline: none;
 	font-size: 0;
 	width: 32px;
-	height: 16px;
+	height: 24px;
 	background: var(--icon-eye) no-repeat center;
 }
 
@@ -188,7 +178,7 @@ button:active {
 	transform: rotate(45deg);
 }
 
-.dropdown.open > .btn .caret {
+.dropdown.open > .dropdown-toggle .caret {
 	top: 11px;
 	transform: rotate(225deg);
 }
@@ -444,6 +434,10 @@ button:active {
 	vertical-align: middle;
 }
 
+.modal-dialog.modal-sm {
+	max-width: 300px;
+}
+
 .modal-content {
 	/* padding: 20px; */
 	padding: 38px 40px;
@@ -453,8 +447,9 @@ button:active {
 }
 
 .modal-body {
-	text-align: center;
+	margin-top: -20px;
 	padding: 0;
+	text-align: center;
 }
 
 .warning {

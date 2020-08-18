@@ -19,7 +19,7 @@
 		$('#addNotice input').val('');
 		$('#addNotice textarea').val('');
 		$('#addNotice div.file_list ul').html('<li class="upload_text"></li>');
-		initDropdownValue($('#addNotice button.btn-primary'));
+		initDropdownValue($('#addNotice .dropdown-toggle'));
 		$('#modi_attachement_info').addClass('hidden');
 		$('#spc_id').parent().addClass('hidden');
 
@@ -390,7 +390,7 @@
 								<div class="input-group inline-flex">
 									<h2 class="input_label">공개 범위</h2>
 									<div class="dropdown w-100" id="level">
-										<button class="btn btn-primary dropdown-toggle w-100" type="button" data-toggle="dropdown" data-name="공개 범위 선택">
+										<button class="dropdown-toggle w-100" type="button" data-toggle="dropdown" data-name="공개 범위 선택">
 											공개 범위 선택<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" id="levelList">
@@ -411,7 +411,7 @@
 								<div class="input-group inline-flex hidden">
 									<h2 class="input_label">SPC 선택</h2>
 									<div class="dropdown w-100" id="spc_id">
-										<button class="btn btn-primary dropdown-toggle w-100" type="button" data-toggle="dropdown" data-name="SPC 선택">
+										<button class="dropdown-toggle w-100" type="button" data-toggle="dropdown" data-name="SPC 선택">
 											SPC 선택<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" id="spcList">

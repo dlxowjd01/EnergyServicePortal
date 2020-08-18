@@ -49,7 +49,7 @@
 						<span class="tx_tit">그래프 옵션</span>
 						<div class="sa_select">
 							<div class="dropdown" id="chartType">
-								<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
+								<button class="dropdown-toggle w8" type="button" data-toggle="dropdown">
 									PR<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu rdo_type" role="menu">
@@ -284,7 +284,7 @@
 						<span class="tx_tit">설비 상태</span>
 						<div class="sa_select">
 							<div class="dropdown" id="statusDevice">
-								<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown" data-name="선택">
+								<button class="dropdown-toggle w8" type="button" data-toggle="dropdown" data-name="선택">
 									전체 <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu chk_type" role="menu">

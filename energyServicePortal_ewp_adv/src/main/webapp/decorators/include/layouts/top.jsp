@@ -111,7 +111,7 @@
 		});
 
 		$(document).ajaxError(function( event, jqxhr, settings, thrownError ) {
-			console.log("에러코드:" + jqxhr.status + "\n" + "메세지: " + jqxhr.responseText +"\n" + "에러: " + thrownError);
+			// console.log("에러코드:" + jqxhr.status + "\n" + "메세지: " + jqxhr.responseText +"\n" + "에러: " + thrownError);
 			$('#loadingCircle').hide();
 			// setTimeout(function(){
 			// 	console.clear();

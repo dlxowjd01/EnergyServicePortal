@@ -331,7 +331,7 @@
 			<div class="flex_start">
 				<label for="operation_select" class="tx_tit">운영 여부</label>
 				<div class="dropdown sa_select mr-16" id="operation_select">
-					<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown" data-name="운영 여부 선택">
+					<button class="dropdown-toggle w7" type="button" data-toggle="dropdown" data-name="운영 여부 선택">
 						운영 여부 선택<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu chk_type" role="menu" id="operationList">
@@ -358,7 +358,7 @@
 
 				<label for="warranty_select" class="tx_tit">보증 방식</label>
 				<div class="dropdown sa_select mr-16" id="warranty_select">
-					<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown" data-name="보증 방식 선택">
+					<button class="dropdown-toggle w7" type="button" data-toggle="dropdown" data-name="보증 방식 선택">
 						보증 방식 선택<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu chk_type" role="menu" id="warrantyList">
@@ -385,7 +385,7 @@
 
 				<label for="contract_select" class="tx_tit">계약 구분</label>
 				<div class="dropdown sa_select mr-24" id="contract_select">
-					<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown" data-name="계약 구분 선택">
+					<button class="dropdown-toggle w7" type="button" data-toggle="dropdown" data-name="계약 구분 선택">
 						계약 구분 선택<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu chk_type" role="menu" id="contractList">

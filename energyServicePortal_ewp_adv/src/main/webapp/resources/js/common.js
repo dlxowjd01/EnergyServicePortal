@@ -250,11 +250,7 @@ $(function () {
                 $(this).parent().find(".upload_text").html(labelText).after(listItem);
             } else {
                 let listItem = `${labelText}<button type='button' class='btn_close icon_btn' onclick='deleteFile($(this))'></button>`;
-                // $(this).prev('label').text(listItem);
                 $(this).parent().find(".upload_text").html(listItem);
-                // if ($(this).parent().find(".btn_close")) {
-                // 	$(this).parent().find(".btn_close").removeClass('hidden')
-                // }
             }
 		}
 	});

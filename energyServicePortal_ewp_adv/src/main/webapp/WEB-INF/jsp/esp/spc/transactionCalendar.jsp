@@ -637,7 +637,7 @@
 		const modalForm = $('#spcAlarmForm');
 		const title = modal.find('h2');
 		const input = modal.find('input');
-		const dropDown = modal.find('button.btn-primary');
+		const dropDown = modal.find('.dropdown-toggle');
 		const repeat_wrapper = $('#repeat_yn').parents('.flex_start3');
 		const repeat_cycle = $('#repeat_yn button');
 		const postScheduleBtn = $('#postScheduleBtn');
@@ -777,7 +777,7 @@
 			}
 		});
 
-		$('#spcAlarmModal button.btn-primary').each(function () {
+		$('#spcAlarmModal .dropdown-toggle').each(function () {
 			if ($.inArray($(this).parent().prop('id'), job_info_Array) > -1) {
 				job_info[$(this).parent().prop('id')] = String($(this).data('value'));
 			} else {
@@ -1061,7 +1061,7 @@
 		<div class="sch_sel_area">
 			<div class="sch_sel_item">
 				<div class="dropdown" id="year">
-					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="caret"></span></button>
+					<button class="dropdown-toggle" type="button" data-toggle="dropdown"><span class="caret"></span></button>
 					<ul class="dropdown-menu">
 						<li><a href="#">2020</a></li>
 						<li><a href="#">2019</a></li>
@@ -1071,7 +1071,7 @@
 			</div>
 			<div class="sch_sel_item">
 				<div class="dropdown" id="month">
-					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="caret"></span></button>
+					<button class="dropdown-toggle" type="button" data-toggle="dropdown"><span class="caret"></span></button>
 					<ul class="dropdown-menu">
 						<li data-value="1"><a href="#">1월</a></li>
 						<li data-value="2"><a href="#">2월</a></li>
@@ -1108,7 +1108,7 @@
 
 							<div class="col-lg-10 col-md-10 col-sm-9 px-0 flex_start">
 								<div id="spc_id" class="dropdown"><!--
-								--><button name="spcName" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button><!--
+								--><button name="spcName" class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button><!--
 								--><ul id="spcList" class="dropdown-menu unused center" role="menu"><li data-name="*spcName*" data-value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul><!--
 								--><small class="hidden warning">SPC를 선택해 주세요.</small>
 								</div>
@@ -1127,7 +1127,7 @@
 							</div>
 							<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 								<div class="dropdown placeholder" id="job_type">
-									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="알림 항목 선택">선택<span class="caret"></span></button>
+									<button class="dropdown-toggle required" type="button" data-toggle="dropdown" data-name="알림 항목 선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li data-value="5"><a href="javascript:void(0);">이자 지급일</a></li>
 										<li data-value="6"><a href="javascript:void(0);">보장발전시간 정산일</a></li>
@@ -1151,7 +1151,7 @@
 							</div>
 							<div class="col-lg-4 col-md-4 col-sm-9 flex_start3 px-0">
 								<div class="dropdown" id="repeat_yn">
-									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="점검 선택">선택<span class="caret"></span></button>
+									<button class="dropdown-toggle required" type="button" data-toggle="dropdown" data-name="점검 선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li data-value="Y"><a href="javascript:void(0);">정기 알림</a></li>
 										<li data-value="N"><a href="javascript:void(0);">일시 알림</a></li>
@@ -1161,7 +1161,7 @@
 									<input type="text" id="repeat_interval" name="repeat_interval" placeholder="입력" onkeydown="onlyNum(event);" maxlength="2" autocomplete="off">
 								</div>
 								<div class="dropdown hidden" id="repeat_unit">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="주기">주기<span class="caret"></span></button>
+									<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="주기">주기<span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li data-value="year"><a href="javascript:void(0);">년</a></li>
 										<li data-value="half_year"><a href="javascript:void(0);">반기</a></li>
@@ -1197,7 +1197,7 @@
 							</div>
 							<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
 								<div class="dropdown placeholder" id="repeat_before_after_holiday">
-									<button class="btn btn-primary dropdown-toggle required" type="button" data-toggle="dropdown" data-name="공휴일 처리 선택"><span class="caret"></span></button>
+									<button class="dropdown-toggle required" type="button" data-toggle="dropdown" data-name="공휴일 처리 선택"><span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li data-value="N"><a href="javascript:void(0);">처리 안함</a></li>
 										<li data-value="B"><a href="javascript:void(0);">공휴일 직전 영업일</a></li>
@@ -1239,7 +1239,7 @@
 							</div>
 							<div class="col-lg-4 col-md-4 col-sm-9 flex_start2 px-0">
 								<div class="dropdown mr-12" id="alarmSetup">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="일시"><span class="caret"></span></button>
+									<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="일시"><span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li data-value="1"><a href="javascript:void(0);">1일 전</a></li>
 										<li data-value="3"><a href="javascript:void(0);">3일 전</a></li>
@@ -1256,7 +1256,7 @@
 							</div>
 							<div class="col-lg-4 col-md-4 col-sm-9 flex_start2 px-0">
 								<div class="dropdown placeholder mr-12" id="alarmTime">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="시간"><span class="caret"></span></button>
+									<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="시간"><span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<c:forEach var="time" begin="0" end="23">
 											<li data-value="${time}"><a href="javascript:void(0);">${time}시</a></li>

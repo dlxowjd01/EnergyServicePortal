@@ -595,7 +595,7 @@
 			<div class="sa_select"><!--
 				--><span class="tx_tit">검토 상태</span><!--
 				--><div id="reqStatus" class="dropdown"><!--
-				--><button class="btn btn-primary dropdown-toggle unused" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button><!--
+				--><button class="dropdown-toggle unused" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button><!--
 				--><ul class="dropdown-menu chk_type" role="menu"><!--
 					--><li data-value="1,2,3" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="all" name="review_status" value="all"><label for="all">전체</label></a></li><!--
 					--><li data-value="2" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="wait" name="review_status" value="2"><label for="wait">검토 중</label></a></li><!--

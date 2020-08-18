@@ -1112,7 +1112,7 @@
 <div class="row">
 	<div id="siteList" class="header_drop_area col-lg-2 col-md-4 col-sm-3">
 		<div class="dropdown" id="selectSiteList">
-			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택해주세요.">
+			<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택해주세요.">
 				선택해주세요.<span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="siteULList">
@@ -1128,19 +1128,19 @@
 	<div class="col-lg-10 col-md-8 col-sm-9">
 		<div class="compare_area">
 			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button">
+				<button class="dropdown-toggle clear-btn" type="button">
 					비교하기<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu search_dropdown unused">
 					<li>
 						<div class="compare_bx">
-							<div class="bx_row aN2">
+							<div class="row align-group2">
 								<div class="bx_align">
 									<p class="comp_tit type">검증 설비</p>
 									<ul class="comp_ul">
 										<li>
 											<div class="dropdown placeholder" id="typeList">
-												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 유형">
+												<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 유형">
 													설비 유형 <span class="caret"></span>
 												</button>
 												<!-- 라디오 타입 -->
@@ -1158,7 +1158,7 @@
 										</li>
 										<li>
 											<div class="dropdown placeholder" id="deviceList">
-												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 명">
+												<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 명">
 													설비 명 <span class="caret"></span>
 												</button>
 												<!-- 체크박스 타입 -->
@@ -1176,7 +1176,7 @@
 										</li>
 										<li>
 											<div class="dropdown placeholder" id="attrList">
-												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 속성">
+												<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 속성">
 													설비 속성 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type" role="menu" id="deviceAttribute">
@@ -1198,7 +1198,7 @@
 									<ul class="comp_ul">
 										<li>
 											<div class="dropdown placeholder" id="compareTypeList">
-												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 유형">
+												<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 유형">
 													설비 유형 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type" role="menu" id="compareTypeULList">
@@ -1215,7 +1215,7 @@
 										</li>
 										<li>
 											<div class="dropdown placeholder" id="compareDeviceList">
-												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 명">
+												<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 명">
 													설비 명 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu chk_type" id="compareDeviceName">
@@ -1232,7 +1232,7 @@
 										</li>
 										<li>
 											<div class="dropdown placeholder" id="compareAttrList">
-												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 속성">
+												<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비 속성">
 													설비 속성 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type" role="menu" id="compareDeviceAttribute">
@@ -1252,12 +1252,12 @@
 							</div>
 
 							<p class="comp_tit type2">제외값</p>
-							<div class="bx_row aN3">
+							<div class="row align-group3">
 								<div class="bx_align">
 									<ul class="comp_ul">
 										<li>
 											<div class="dropdown placeholder">
-												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="기준">
+												<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="기준">
 													기준<span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type">
@@ -1286,7 +1286,7 @@
 									<ul class="comp_ul">
 										<li>
 											<div class="dropdown placeholder">
-												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="단위">
+												<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="단위">
 													단위<span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type">
@@ -1323,12 +1323,12 @@
 							</div>
 
 							<p class="comp_tit type2">비교 방법</p>
-							<div class="bx_row aN2">
+							<div class="row align-group2">
 								<div class="bx_align">
 									<ul class="comp_ul">
 										<li>
 											<div class="dropdown placeholder">
-												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="비교식">
+												<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="비교식">
 													비교식<span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type">
@@ -1357,7 +1357,7 @@
 									<ul class="comp_ul">
 										<li>
 											<div class="dropdown placeholder">
-												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="비교 기준">
+												<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="비교 기준">
 													비교 기준 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu rdo_type">
@@ -1399,7 +1399,7 @@
 									</ul>
 								</div>
 							</div>
-							<div class="bx_row aN2">
+							<div class="row align-group2">
 								<div class="bx_align">
 									<ul class="comp_ul">
 										<li>
@@ -1420,7 +1420,7 @@
 								</div>
 							</div>
 							<p class="comp_tit type2">비교 기간</p>
-							<div class="bx_row aN2 dateField">
+							<div class="row align-group2 dateField">
 								<div class="sel_calendar">
 									<div class="bx_align">
 										<ul class="comp_ul">
@@ -1441,12 +1441,12 @@
 								</div>
 							</div>
 							<p class="comp_tit type2">시간 단위</p>
-							<div class="bx_row aN2">
+							<div class="row align-group2">
 								<div class="bx_align">
 									<ul class="comp_ul">
 										<li>
 											<div class="dropdown placeholder" id="interval">
-												<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-value="hour" data-name="1시간">
+												<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-value="hour" data-name="1시간">
 													1시간 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu">
@@ -1462,7 +1462,7 @@
 							</div>
 						</div>
 						<div class="comp_btn_wrap">
-							<button type="button" class="btn_type" id="renderBtn">확인</button>
+							<button type="button" class="btn_type" id="renderBtn">규칙 등록</button>
 						</div>
 					</li>
 				</ul>

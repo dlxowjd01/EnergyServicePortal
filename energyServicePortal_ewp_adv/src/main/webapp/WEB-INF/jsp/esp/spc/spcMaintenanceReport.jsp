@@ -24,7 +24,7 @@
 				<span class="tx_tit">보고서 구분</span>
 				<div class="sa_select">
 					<div class="dropdown">
-						<button class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown">전체
+						<button class="dropdown-toggle w5" type="button" data-toggle="dropdown">전체
 							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="type">

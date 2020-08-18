@@ -1040,7 +1040,7 @@
 							<td>
 								<div class="sa_select">
 									<div class="dropdown placeholder" id="spc">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">
+										<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">
 											선택 <span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" role="menu"></ul>
@@ -1050,7 +1050,7 @@
 							<td>
 								<div class="sa_select">
 									<div class="dropdown placeholder" id="spcGen">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">
+										<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">
 											선택 <span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu chk_type" role="menu"></ul>
@@ -1203,7 +1203,7 @@
 							<td>
 								<%--								<div class="sa_select">--%>
 								<%--									<div class="dropdown" id="commission_1">--%>
-								<%--										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">--%>
+								<%--										<button class="dropdown-toggle" type="button" data-toggle="dropdown">--%>
 								<%--											선택<span class="caret"></span>--%>
 								<%--										</button>--%>
 								<%--										<ul class="dropdown-menu chk_type" role="menu">--%>
@@ -1273,7 +1273,7 @@
 							<td>
 								<%--								<div class="sa_select">--%>
 								<%--									<div class="dropdown" id="commission_2">--%>
-								<%--										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">--%>
+								<%--										<button class="dropdown-toggle" type="button" data-toggle="dropdown">--%>
 								<%--											선택<span class="caret"></span>--%>
 								<%--										</button>--%>
 								<%--										<ul class="dropdown-menu chk_type" role="menu">--%>
@@ -1396,7 +1396,7 @@
 					<span class="tx_tit">기준</span>
 					<div class="sa_select">
 						<div class="dropdown" id="year">
-							<button class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown">
+							<button class="dropdown-toggle w5" type="button" data-toggle="dropdown">
 								2020년
 								<span class="caret"></span>
 							</button>
@@ -1409,7 +1409,7 @@
 					</div>
 					<div class="sa_select">
 						<div class="dropdown" id="month">
-							<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
+							<button class="dropdown-toggle w8" type="button" data-toggle="dropdown">
 								<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" role="menu">

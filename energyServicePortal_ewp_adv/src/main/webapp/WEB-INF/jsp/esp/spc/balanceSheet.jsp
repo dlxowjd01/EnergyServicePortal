@@ -214,7 +214,7 @@
 			<span class="tx_tit">기준</span>
 			<div class="sa_select">
 				<div class="dropdown" id="year">
-					<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown"
+					<button class="dropdown-toggle w8" type="button" data-toggle="dropdown"
 						data-value="2020">
 						2020년<span class="caret"></span>
 					</button>

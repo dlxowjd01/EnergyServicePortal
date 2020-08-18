@@ -191,7 +191,7 @@
 							<span class="tx_tit"><fmt:message key="gdash.7.status" /></span>
 							<div class="sa_select">
 								<div class="dropdown" id="deviceStatus">
-									<button class="btn btn-primary dropdown-toggle w8" type="button"
+									<button class="dropdown-toggle w8" type="button"
 											data-toggle="dropdown" data-name="설비 상태">
 										전체<span class="caret"></span>
 									</button>

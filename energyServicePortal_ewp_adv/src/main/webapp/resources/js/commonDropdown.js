@@ -21,15 +21,14 @@ $(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown
 			$selector.find(':checkbox').prop('checked', true);
 		}
 	}
-
+	
 	if ($selector.find(':radio').length > 0 || $selector.find(':checkbox').length > 0) {
 		displayDropdown($dropdown);
 	} else {
 		let $displayData = $selector.data();
 		let $displayText = $selector.text();
-
-		$displayButton.eq(0).html($displayText + '<span class="caret"></span>');
-		// $displayButton.eq(0).text().replace(/<[^>]+>/g, $displayText);
+		console.log("displayText===", $displayText)
+		$displayButton.eq(0).html($displayText + '<span class="caret"></span>').data("name", $displayText).addClass("active");
 		//data Setting
 		if (!isEmpty($displayData)) {
 			$.map($displayData, function (val, key) {
@@ -38,7 +37,7 @@ $(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown
 		}
 	}
 
-	if ($displayButton.hasClass('noClose')) {
+	if ($displayButton.hasClass('no-close')) {
 		return false;
 	}
 
@@ -75,7 +74,8 @@ const displayDropdown = ($selector) => {
 			}
 		}
 	}
-	$displayButton.eq(0).html($displayText + '<span class="caret"></span>');
+	console.log("displayText===", $displayText)
+	$displayButton.eq(0).html($displayText + '<span class="caret"></span>').data("name", $displayText).addClass("active");
 	// $displayButton.eq(0).text().replace(/<[^>]+>/g, $displayText);   <== 이 부분 적용시 '외' 의 텍스트가 나오지 않음.
 
 	//data Setting

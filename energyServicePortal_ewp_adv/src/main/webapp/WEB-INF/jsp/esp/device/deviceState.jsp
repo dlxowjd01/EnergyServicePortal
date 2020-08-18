@@ -15,7 +15,7 @@
 	<div class="col-lg-3 col-md-4 col-sm-6">
 		<div class="header_drop_area w-60">
 			<div class="dropdown" id="siteList">
-				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="사업소 선택">
+				<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="사업소 선택">
 					사업소 선택<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu chk_type" role="menu" id="siteULList">
@@ -107,7 +107,7 @@
 							<div class="input-group inline-flex">
 								<label for="addSiteList" class="input_label">사업소</label>
 								<div class="dropdown" id="addSiteList">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="사업소 선택">
+									<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="사업소 선택">
 										사업소 선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" id="addSiteUlList">
@@ -124,7 +124,7 @@
 							<div class="input-group inline-flex">
 								<label for="device_type" class="input_label">장치 타입</label>
 								<div class="dropdown" id="device_type">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="타입 선택">
+									<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="타입 선택">
 										타입 선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" id="device_typeList">
@@ -137,7 +137,7 @@
 							<div class="input-group inline-flex">
 								<label for="metering_type" class="input_label">계량 유형</label>
 								<div class="dropdown" id="metering_type">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="유형 선택">
+									<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="유형 선택">
 										유형 선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu">
@@ -159,7 +159,7 @@
 							<div class="input-group inline-flex">
 								<label for="manufacturer" class="input_label">제조사</label>
 <%--								<div class="dropdown" id="manufacturer">--%>
-<%--									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="제조사 선택">--%>
+<%--									<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="제조사 선택">--%>
 <%--										제조사 선택<span class="caret"></span>--%>
 <%--									</button>--%>
 <%--									<ul class="dropdown-menu" id="manufacturerList">--%>
@@ -181,7 +181,7 @@
 							<div class="input-group inline-flex">
 								<label for="alarm_code" class="input_label">알림 코드</label>
 								<div class="dropdown" id="alarm_code">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="장치 알람 메세지 설정">
+									<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="장치 알람 메세지 설정">
 										장치 알람 메세지 설정<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu chk_type" id="alarm_codeList">
@@ -204,7 +204,7 @@
 							<div class="input-group inline-flex">
 								<label for="rid" class="input_label">RTU명</label>
 								<div id="rid" class="dropdown">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="장치 선택">
+									<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="장치 선택">
 										장치 선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" id="ridList">
@@ -217,7 +217,7 @@
 							<div class="input-group inline-flex">
 								<label for="parent_did" class="input_label">상위 장치</label>
 								<div id="parent_did" class="dropdown">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="장치 선택">
+									<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="장치 선택">
 										장치 선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" id="parent_didList">
@@ -230,7 +230,7 @@
 							<div class="input-group inline-flex">
 								<label for="addDeviceDisplayType" class="input_label">표시 유형</label>
 								<div id="addDeviceDisplayType" class="dropdown">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="유형 선택">
+									<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="유형 선택">
 										유형 선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu chk_type">
@@ -252,7 +252,7 @@
 							<div class="input-group inline-flex">
 								<label for="product_name" class="input_label">제품명</label>
 <%--								<div class="dropdown" id="alarm_set_id">--%>
-<%--									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="제품명 선택">--%>
+<%--									<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="제품명 선택">--%>
 <%--										제품명 선택<span class="caret"></span>--%>
 <%--									</button>--%>
 <%--									<ul class="dropdown-menu" id="alarmSetIdList">--%>
@@ -302,7 +302,7 @@
 							<div class="input-group inline-flex">
 								<label for="deviceType" class="input_label">구분</label>
 								<div id="deviceType" class="dropdown">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li data-value="solar_opt">
 											<a href="javascript:void(0)">태양광</a>
@@ -316,7 +316,7 @@
 							<div class="input-group inline-flex">
 								<label for="timeInterval" class="input_label">입력 단위</label>
 								<div id="timeInterval" class="dropdown">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li data-value="15min"><a href="javascript:void(0)">15분</a></li>
 										<li data-value="hour"><a href="javascript:void(0)">1시간</a></li>
@@ -332,7 +332,7 @@
 									<input type="text" id="start" name="start" class="sel customFromDate" value="" autocomplete="off" readonly>
 								</div>
 <%--								<div class="dropdown hidden" id="startHour">--%>
-<%--									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>--%>
+<%--									<button class="dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>--%>
 <%--									<ul class="dropdown-menu">--%>
 <%--										<li data-value="0"><a href="javascript:void(0);">0시</a></li>--%>
 <%--										<li data-value="1"><a href="javascript:void(0);">1시</a></li>--%>
@@ -361,7 +361,7 @@
 <%--									</ul>--%>
 <%--								</div>--%>
 <%--								<div class="dropdown hidden" id="startMin">--%>
-<%--									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>--%>
+<%--									<button class="dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>--%>
 <%--									<ul class="dropdown-menu">--%>
 <%--										<li data-value="0"><a href="javascript:void(0);">15분</a></li>--%>
 <%--										<li data-value="15"><a href="javascript:void(0);">15분</a></li>--%>
@@ -377,7 +377,7 @@
 									<input type="text" id="end" name="end"class="sel customToDate" value="" autocomplete="off" readonly>
 								</div>
 <%--								<div class="dropdown hidden" id="endHour">--%>
-<%--									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>--%>
+<%--									<button class="dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>--%>
 <%--									<ul class="dropdown-menu">--%>
 <%--										<li data-value="0"><a href="javascript:void(0);">0시</a></li>--%>
 <%--										<li data-value="1"><a href="javascript:void(0);">1시</a></li>--%>
@@ -406,7 +406,7 @@
 <%--									</ul>--%>
 <%--								</div>--%>
 <%--								<div class="dropdown hidden" id="endMin">--%>
-<%--									<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>--%>
+<%--									<button class="dropdown-toggle interval" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>--%>
 <%--									<ul class="dropdown-menu">--%>
 <%--										<li data-value="0"><a href="javascript:void(0);">15분</a></li>--%>
 <%--										<li data-value="15"><a href="javascript:void(0);">15분</a></li>--%>
@@ -1238,7 +1238,7 @@
 
 	const addDeviceForm = (devicetype, did) => {
 		const popup = $('#addDeviceModal'),
-			dropDown = popup.find('button.btn-primary'),
+			dropDown = popup.find('.dropdown-toggle'),
 			textArea = popup.find('textarea'),
 			inputArr = popup.find('input');
 		dropDown.each(function () {

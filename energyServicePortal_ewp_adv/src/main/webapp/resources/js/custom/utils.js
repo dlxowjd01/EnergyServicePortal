@@ -1248,7 +1248,7 @@ function setAreaParamData(areaId, type) {
 	});
 
 	if(type != undefined && type == 'dropdown') {
-		$area.find('button.btn-primary').each(function() {
+		$area.find('.dropdown-toggle').each(function() {
 			var obj = this;
 			if (obj.nextElementSibling.querySelectorAll('input[type="checkbox"]').length > 0) {
 				let array = new Array();

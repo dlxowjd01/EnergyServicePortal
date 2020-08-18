@@ -9,19 +9,19 @@
 <div class="row content-wrapper">
 	<div class="col-lg-2 col-md-4 col-sm-6 header_drop_area">
 		<div class="dropdown" id="siteList">
-			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택해주세요.<span class="caret"></span></button>
+			<button class="dropdown-toggle w-100" type="button" data-toggle="dropdown">선택해주세요.<span class="caret"></span></button>
 			<ul class="dropdown-menu chk_type"></ul>
 		</div>
 	</div>
 </div>
 <div class="row">
-	<div class="col-2">
+	<div class="col-lg-2 col-md-4 col-sm-6">
 		<div class="indiv pv_chart">
 			<h2 class="ntit">발전량 합계</h2>
 			<div class="value_area"></div>
 		</div>
 	</div>
-	<div class="col-10">
+	<div class="col-lg-10 col-md-8 col-sm-6">
 		<div class="indiv pv_chart">
 			<div class="flex_wrapper">
 				<div class="chart_top">
@@ -29,7 +29,7 @@
 						<span class="tx_tit">계량값</span>
 						<div class="sa_select">
 							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">복수 선택<span class="caret"></span></button>
+								<button class="dropdown-toggle w7" type="button" data-toggle="dropdown">복수 선택<span class="caret"></span></button>
 								<div class="dropdown-menu chk_type"><!--
 								--><ul class="dropdown_cov clear selectDevices"></ul><!--
 								 --><div class="li_btn_bx clear">
@@ -47,7 +47,7 @@
 						<span class="tx_tit">기간</span>
 						<div class="sa_select">
 							<div class="dropdown" id="period">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">오늘<span class="caret"></span></button>
+								<button class="dropdown-toggle" type="button" data-toggle="dropdown">오늘<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="today" class="on"><a href="#">오늘</a></li>
 									<li data-value="week"><a href="#">이번 주</a></li>
@@ -69,7 +69,7 @@
 						<span class="tx_tit">단위</span>
 						<div class="sa_select">
 							<div class="dropdown" id="interval">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">
+								<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">
 									선택 <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu">
@@ -86,7 +86,7 @@
 				<div class="end"><span class="tx_tit">그래프</span><!--
 				--><div class="sa_select">
 						<div class="dropdown" id="chartStyle"><!--
-						--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-value="each">개별 막대<span class="caret"></span></button><!--
+						--><button class="dropdown-toggle" type="button" data-toggle="dropdown" data-value="each">개별 막대<span class="caret"></span></button><!--
 						--><ul class="dropdown-menu"><!--
 							--><li data-value="allSum"><a href="#">전체 합산</a></li><!--
 							--><li data-value="siteSum"><a href="#">사이트별 합산</a></li><!--
@@ -96,8 +96,7 @@
 					</div>
 				</div>
 			</div>
-			<!-- 쓰이지 않는듯 해서 주석처리 <p class="tx_time"></p> -->
-			<div class="row">
+			<div class="row hidden">
 				<div class="inchart">
 					<p class="tx_time"></p>
 					<div id="chart2"></div>
@@ -107,7 +106,7 @@
 	</div>
 </div>
 
-<div class="row pv_chart_table" style="display:none;">
+<div class="row pv_chart_table hidden">
 	<div class="col-12">
 		<div class="indiv pv_chart table_box">
 			<div class="tbl_top clear">
@@ -161,6 +160,8 @@
 		</div>
 	</div>
 </div>
+
+
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	let standard = new Array(); //기준일
@@ -244,7 +245,7 @@
 	};
 
 	const device = function () {
-		$('#devices button.btn-primary').text().replace(/<[^>]+>/g, '복수 선택');
+		$('#devices .dropdown-toggle').text().replace(/<[^>]+>/g, '복수 선택');
 		if ($(':checkbox[name="site"]:checked').length > 0) {
 			$('#deviceType .sec_li_bx').remove();
 			$(':checkbox[name="site"]:checked').each(function () {
@@ -1077,7 +1078,7 @@
 
 		//발전량 합계
 		$('.value_area').empty();
-		$('table.pc_use').parents('.pv_chart_table').show();
+		$('table.pc_use').parents('.pv_chart_table').removeClass("hidden");
 		if (seriesData.length > 0) {
 			let totalArr = new Array();
 			$.each(seriesData, function (i, el) {
@@ -1141,6 +1142,7 @@
 
 	const chartDraw = function (standard, seriesData) {
 		let chart = $('#chart2').highcharts();
+		$('#chart2').parents(".row").removeClass("hidden");
 		$(".indiv.pv_chart").addClass("fixed");
 
 		if (chart) {
