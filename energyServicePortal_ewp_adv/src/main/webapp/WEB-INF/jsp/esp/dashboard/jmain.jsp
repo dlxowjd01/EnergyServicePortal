@@ -23,7 +23,7 @@
 	<div class="col-xl-4 col-md-12 col-sm-12">
 		<div class="indiv gmain_chart gmain_chart1">
 			<div class="chart_top clear">
-				<h2 class="ntit">월간</h2>
+				<h2 class="ntit"><fmt:message key="vppdash.1.month" /></h2>
 				<span class="term"></span>
 			</div>
 			<%--					<div class="no-data">--%>
@@ -35,7 +35,7 @@
 		</div>
 		<div class="indiv gmain_chart gmain_chart2">
 			<div class="chart_top clear">
-				<h2 class="ntit">일간</h2>
+				<h2 class="ntit"><fmt:message key="vppdash.2.daily" /></h2>
 				<span class="term"></span>
 			</div>
 			<div class="inchart">
@@ -44,7 +44,7 @@
 		</div>
 		<div class="indiv gmain_chart gmain_chart3">
 			<div class="chart_top clear">
-				<h2 class="ntit">전일</h2>
+				<h2 class="ntit"><fmt:message key="vppdash.3.yesterday" /></h2>
 				<span class="term"></span>
 			</div>
 			<%--					<ul class="gtab_menu">--%>
@@ -63,8 +63,8 @@
 							<thead>
 							<tr>
 								<th></th>
-								<th>전일발전</th>
-								<th>전일예측</th>
+								<th><fmt:message key="vppdash.3.actual" /></th>
+								<th><fmt:message key="vppdash.3.forecast" /></th>
 							</tr>
 							</thead>
 							<tbody id="siteGenTbody">
@@ -80,7 +80,7 @@
 						</div>
 						<div class="type-right">
 							<dl class="sun">
-								<dt><span>태양광</span></dt>
+								<dt><span><fmt:message key="vppdash.4.gen" /></span></dt>
 								<dd>
 									<p><strong>가동설비</strong> <span>13</span><em>기</em></p>
 									<p><strong>용량</strong> <span>13</span><em>MW</em></p>
@@ -97,7 +97,7 @@
 	<div class="col-xl-4 col-md-12 col-sm-12">
 		<div class="indiv gmain_map gmain_chart gmain_chart4 ">
 			<div class="chart_top clear">
-				<h2 class="ntit">현재 출력</h2>
+				<h2 class="ntit"><fmt:message key="vppdash.4.current" /></h2>
 			</div>
 			<div class="chart_box">
 				<div class="chart_info">
@@ -109,13 +109,13 @@
 					</div>
 					<div class="ci_right">
 						<div class="legend_wrap">
-							<span class="bu1">태양광</span>
-							<span class="bu4">미 사용량</span>
+							<span class="bu1"><fmt:message key="vppdash.4.gen" /></span>
+							<span class="bu4"><fmt:message key="vppdash.4.idle" /></span>
 						</div>
 						<ul>
-							<li><strong>금일 누적발전량</strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
-							<li><strong>금일 예측발전량</strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
-							<li><strong>금일 충/방전</strong> <span> - </span><em>&nbsp;&nbsp;Wh</em> /
+							<li><strong><fmt:message key="vppdash.4.today_gen" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
+							<li><strong><fmt:message key="vppdash.4.forecast" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
+							<li><strong><fmt:message key="vppdash.4.today_ess" /></strong> <span> - </span><em>&nbsp;&nbsp;Wh</em> /
 								<span> - </span><em>&nbsp;&nbsp;Wh</em></li>
 						</ul>
 					</div>
@@ -125,11 +125,11 @@
 				<table>
 					<thead>
 					<tr>
-						<th>총 사업소</th>
-						<th>총 설비</th>
-						<th>총 설비용량</th>
-						<th>금일 CO2저감량</th>
-						<th>금일 누적수익</th>
+						<th><fmt:message key="vppdash.4.tot_num" /></th>
+						<th><fmt:message key="vppdash.4.num_device" /></th>
+						<th><fmt:message key="vppdash.4.tot_cap" /></th>
+						<th><fmt:message key="vppdash.4.today_co2" /></th>
+						<th><fmt:message key="vppdash.4.today_revenue" /></th>
 					</tr>
 					</thead>
 					<tbody id="centerTbody">
@@ -146,7 +146,7 @@
 		</div>
 		<div class="indiv gmain_chart jmain_center2">
 			<div class="chart_top clear">
-				<h2 class="ntit">실시간 실적</h2>
+				<h2 class="ntit"><fmt:message key="vppdash.5.realtime_result" /></h2>
 			</div>
 			<div class="realtime clear" style="position:relative;">
 				<div class="realtime_by_site">
@@ -161,7 +161,7 @@
 		</div>
 		<div class="indiv gmain_chart jmain_center3">
 			<div class="chart_top clear">
-				<h2 class="ntit">입찰 현황</h2>
+				<h2 class="ntit"><fmt:message key="vppdash.6.bid_status" /></h2>
 			</div>
 			<div class="realtime_wrap">
 				<div class="inchart">
@@ -173,7 +173,7 @@
 	<div class="col-xl-4 col-md-12 col-sm-12">
 		<div class="indiv jmain_alarm wrap_type">
 			<div class="alarm_stat clear">
-				<div class="a_alert clear"><span>금일 발생 오류</span><em>0</em></div><div class="a_warning clear"><a href="javascript:void(0);" onclick="pageMove('all', 'alarm');" class="btn cancel_btn">상세보기</a></div>
+				<div class="a_alert clear"><span><fmt:message key="vppdash.7.today_alerts" /></span><em>0</em></div><div class="a_warning clear"><a href="javascript:void(0);" onclick="pageMove('all', 'alarm');" class="btn cancel_btn"><fmt:message key="vppdash.7.details" /></a></div>
 			</div>
 			<div class="alarm_notice">
 				<ul id="alarmNotice">
@@ -190,10 +190,10 @@
 			<div class="gtbl_top clear">
 				<div class="input_group1">
 					<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색" onkeyup="if (event.keyCode == 13) searchSiteList();">
-					<button type="button" onclick="searchSite();">적용</button>
+					<button type="button" onclick="searchSite();"><fmt:message key="vppdash.8.apply" /></button>
 				</div>
 				<div class="input_group2">
-					<span class="tx_tit">설비 상태</span>
+					<span class="tx_tit"><fmt:message key="vppdash.8.status" /></span>
 					<div class="sa_select">
 						<div class="dropdown" id="deviceStatus">
 							<button class="btn btn-primary dropdown-toggle w8" type="button"
@@ -210,7 +210,7 @@
 								<li data-value="1">
 									<a href="javascript:void(0);" tabindex="-1">
 										<input type="checkbox" id="deviceStatus2" name="deviceStatus" value="1" checked>
-										<label for="deviceStatus2">정상</label>
+										<label for="deviceStatus2"><fmt:message key="vppdash.8.low" /></label>
 									</a>
 								</li>
 								<li data-value="2">
@@ -231,31 +231,31 @@
 						<thead>
 						<tr>
 							<th>
-								<button class="btn_align">설비상태</button>
+								<button class="btn_align"><fmt:message key="vppdash.8.status" /></button>
 							</th>
 							<th>
-								<button class="btn_align">오류</button>
+								<button class="btn_align"><fmt:message key="vppdash.8.err" /></button>
 							</th>
 							<th>
-								<button class="btn_align">경고</button>
+								<button class="btn_align"><fmt:message key="vppdash.8.warn" /></button>
 							</th>
 							<th>
-								<button class="btn_align">사업소</button>
+								<button class="btn_align"><fmt:message key="vppdash.8.site" /></button>
 							</th>
 							<th>
-								<button class="btn_align">설비용량</button>
+								<button class="btn_align"><fmt:message key="vppdash.8.cap" /></button>
 							</th>
 							<th>
-								<button class="btn_align">금일예측</button>
+								<button class="btn_align"><fmt:message key="vppdash.8.forecast" /></button>
 							</th>
 							<th>
-								<button class="btn_align">금일누적</button>
+								<button class="btn_align"><fmt:message key="vppdash.8.gen" /></button>
 							</th>
 							<th class="ESS">
-								<button class="btn_align">금일충전</button>
+								<button class="btn_align"><fmt:message key="vppdash.8.charge" /></button>
 							</th>
 							<th class="ESS">
-								<button class="btn_align">금일방전</button>
+								<button class="btn_align"><fmt:message key="vppdash.8.discharge" /></button>
 							</th>
 						</tr>
 						</thead>
@@ -284,12 +284,12 @@
 												<span class="ico solar"></span>
 												<div class="tx_area clear">
 													<div class="fl">
-														<span class="tx">일사량</span>
+														<span class="tx"><fmt:message key="vppdash.8.irr" /></span>
 														<span class="tx2">[irradiationPoa] W/㎡</span>
 													</div>
 													<div class="fr">
-														<span class="tx2">온도 [temperature]</span>
-														<span class="tx2">습도 [humidity]</span>
+														<span class="tx2"><fmt:message key="vppdash.8.temp" /> [temperature]</span>
+														<span class="tx2"><fmt:message key="vppdash.8.humid" /> [humidity]</span>
 													</div>
 												</div>
 											</div>
@@ -301,19 +301,19 @@
 														</div>
 														<ul class="di_list">
 															<li>
-																<span class="di_li_tit">설비 출력 (kW)</span>
+																<span class="di_li_tit"><fmt:message key="vppdash.8.production" /> (kW)</span>
 																<span class="di_li_tx">[activePower]</span>
 															</li>
 															<li>
-																<span class="di_li_tit">금일 누적발전 (kWh)</span>
+																<span class="di_li_tit"><fmt:message key="vppdash.8.gen_today" /> (kWh)</span>
 																<span class="di_li_tx">[accumulate]</span>
 															</li>
 															<li>
-																<span class="di_li_tit">금일 예측발전 (kWh)</span>
+																<span class="di_li_tit"><fmt:message key="vppdash.8.gen_forecast" /> (kWh)</span>
 																<span class="di_li_tx">[forecast]</span>
 															</li>
 															<li>
-																<span class="di_li_tit">전일 총발전량 (kWh)</span>
+																<span class="di_li_tit"><fmt:message key="vppdash.8.gen_yesterday" /> (kWh)</span>
 																<span class="di_li_tx">[beforeDay]</span>
 															</li>
 														</ul>
@@ -326,11 +326,11 @@
 														</div>
 														<ul class="di_list">
 															<li>
-																<span class="di_li_tit">총 설비용량 (kW)</span>
+																<span class="di_li_tit"><fmt:message key="vppdash.8.tot_cap" /> (kW)</span>
 																<span class="di_li_tx">[capacity]</span>
 															</li>
 															<li>
-																<span class="di_li_tit">총 인버터수량 (EA)</span>
+																<span class="di_li_tit"><fmt:message key="vppdash.8.num_inv" /> (EA)</span>
 																<span class="di_li_tx">[inverterCount]</span>
 															</li>
 														</ul>
@@ -1285,7 +1285,6 @@
 		}
 	});
 </script>
-
 
 
 
