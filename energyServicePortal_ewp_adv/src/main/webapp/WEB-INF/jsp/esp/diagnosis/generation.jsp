@@ -8,7 +8,7 @@
 	<div class="header_drop_area col-lg-2">
 		<div class="dropdown" id="siteList">
 			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-				선택해주세요.<span class="caret"></span>
+				<fmt:message key="genforecast.1.select" /><span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu chk_type"></ul>
 		</div>
@@ -17,22 +17,22 @@
 <div class="row">
 	<div class="col-lg-3 col-md-4">
 		<div class="indiv diagnosis_chart">
-			<h2 class="ntit">예측 요약</h2>
+			<h2 class="ntit"><fmt:message key="genforecast.2.forecast_summary" /></h2>
 			<div class="value_area">
-				<h3 class="value_tit">측정값</h3>
+				<h3 class="value_tit"><fmt:message key="genforecast.2.actual" /></h3>
 				<p class="value_num"></p>
 			</div>
 			<div class="value_area">
-				<h3 class="value_tit">예측값</h3>
+				<h3 class="value_tit"><fmt:message key="genforecast.2.forecasted" /></h3>
 				<p class="value_num"></p>
 			</div>
 			<div class="value_area">
-				<h3 class="value_tit">예측 오차 평균</h3>
+				<h3 class="value_tit"><fmt:message key="genforecast.2.forecast_err_average" /></h3>
 				<p class="value_num"></p>
 			</div>
 			<div class="toggle_bx">
 				<div class="tb_area clear">
-					<p class="tb_tx fl">예측 오차 계산법</p>
+					<p class="tb_tx fl"><fmt:message key="genforecast.2.forecast_err_method" /></p>
 					<button class="tb_fold_btn fr">펼치기</button>
 				</div>
 				<div class="tb_fold_div">
@@ -56,13 +56,13 @@
 						</button>
 						<ul class="dropdown-menu">
 							<li data-value="" class="on">
-								<a href="javascript:void(0);">모두</a>
+								<a href="javascript:void(0);"><fmt:message key="genforecast.2.all" /></a>
 							</li>
 							<li data-value="capacity">
-								<a href="javascript:void(0);">용량 대비 발전량 % 이상</a>
+								<a href="javascript:void(0);"><fmt:message key="genforecast.2.power_gen_overcapacity" /></a>
 							</li>
 							<li data-value="observation">
-								<a href="javascript:void(0);">발전량 kWh 이상</a>
+								<a href="javascript:void(0);"><fmt:message key="genforecast.2.generation_kwhormore" /></a>
 							</li>
 						</ul>
 					</div>
@@ -77,7 +77,7 @@
 						</div>
 					</div>
 					<button type="button" class="btn_type" id="application">
-						적용
+						<fmt:message key="genforecast.2.apply" />
 					</button>
 				</div>
 			</div>
@@ -87,21 +87,21 @@
 		<div class="indiv diagnosis_chart">
 			<div class="chart_top">
 				<div id="deviceType">
-					<span class="tx_tit">계량값</span>
+					<span class="tx_tit"><fmt:message key="genforecast.3.measured_data" /></span>
 					<div class="sa_select">
 						<div class="dropdown">
 							<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown" data-name="복수 선택">
-								복수 선택<span class="caret"></span>
+								<fmt:message key="genforecast.3.multiple_selection" /><span class="caret"></span>
 							</button>
 							<div class="dropdown-menu chk_type"><!--
 							--><ul class="dropdown_cov clear selectDevices"></ul><!--
 							--><div class="li_btn_bx clear">
 									<div class="fl">
-										<button type="button" class="btn_type03">모두 선택</button>
-										<button type="button" class="btn_type03">모두 해제</button>
+										<button type="button" class="btn_type03"><fmt:message key="genforecast.3.selectall" /></button>
+										<button type="button" class="btn_type03"><fmt:message key="genforecast.3.clearall" /></button>
 									</div>
 									<div class="end">
-										<button type="button" class="btn_type fr">적용</button>
+										<button type="button" class="btn_type fr"><fmt:message key="genforecast.3.apply" /></button>
 									</div>
 								</div>
 							</div>
@@ -114,20 +114,20 @@
 						<div class="sa_select">
 							<div class="dropdown" id="period">
 								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="오늘">
-									오늘<span class="caret"></span>
+									<fmt:message key="genforecast.3.today" /><span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu">
-									<li data-value="today" class="on"><a href="javascript:void(0);">오늘</a></li>
-									<li data-value="week"><a href="javascript:void(0);">이번 주</a></li>
-									<li data-value="month"><a href="javascript:void(0);">이번 달</a></li>
-									<li data-value="setup"><a href="javascript:void(0);">기간 설정</a></li>
+									<li data-value="today" class="on"><a href="javascript:void(0);"><fmt:message key="genforecast.3.today" /></a></li>
+									<li data-value="week"><a href="javascript:void(0);"><fmt:message key="genforecast.3.thisweek" /></a></li>
+									<li data-value="month"><a href="javascript:void(0);"><fmt:message key="genforecast.3.thismonth" /></a></li>
+									<li data-value="setup"><a href="javascript:void(0);"><fmt:message key="genforecast.3.period" /></a></li>
 								</ul>
 							</div>
 						</div>
 					</div>
 
 					<div class="duration" id="dateArea">
-						<span class="tx_tit">기간 설정</span>
+						<span class="tx_tit"><fmt:message key="genforecast.3.period" /></span>
 						<div class="sel_calendar">
 							<input type="text" id="fromDate" class="sel fromDate" value="" autocomplete="off" readonly /></div>
 						<div class="sel_calendar">
@@ -139,18 +139,18 @@
 						<div class="sa_select">
 							<div class="dropdown" id="interval">
 								<button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown">
-									기간<span class="caret"></span>
+									<fmt:message key="genforecast.3.term" /><span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu">
-									<li data-value="15min" class="on"><a href="javascript:void(0);">15분</a></li>
-									<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
-									<li data-value="day"><a href="javascript:void(0);">1일</a></li>
-									<li data-value="month"><a href="javascript:void(0);">1월</a></li>
+									<li data-value="15min" class="on"><a href="javascript:void(0);"><fmt:message key="genforecast.3.15min" /></a></li>
+									<li data-value="hour"><a href="javascript:void(0);"><fmt:message key="genforecast.3.1hr" /></a></li>
+									<li data-value="day"><a href="javascript:void(0);"><fmt:message key="genforecast.3.1day" /></a></li>
+									<li data-value="month"><a href="javascript:void(0);"><fmt:message key="genforecast.3.1month" /></a></li>
 								</ul>
 							</div>
 						</div>
 					</div>
-					<button type="button" class="btn_type" id="renderBtn">조회</button>
+					<button type="button" class="btn_type" id="renderBtn"><fmt:message key="genforecast.3.update" /></button>
 				</div>
 			</div>
 			<a href="javascript:void(0);" class="chart_change_column" id="changeChart">그래프</a>
@@ -167,10 +167,10 @@
 	<div class="col-lg-12">
 		<div class="indiv diagnosis_table">
 			<div class="tbl_save_bx">
-				<a href="javascript:void(0);" class="save_btn">데이터저장</a>
+				<a href="javascript:void(0);" class="save_btn"><fmt:message key="genforecast.4.dataextracts" /></a>
 			</div>
 			<div class="tbl_top clear">
-				<h2 class="ntit fl">예측 결과 도표</h2>
+				<h2 class="ntit fl"><fmt:message key="genforecast.4.datatable" /></h2>
 				<ul class="fr">
 					<li><a href="javascript:void(0);" class="fold_btn">표접기</a></li>
 				</ul>
