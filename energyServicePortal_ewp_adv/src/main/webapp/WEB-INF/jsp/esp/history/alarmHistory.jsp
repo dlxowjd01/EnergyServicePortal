@@ -25,7 +25,7 @@
 	<div class="modal-dialog">
 		<div class="modal-content alarm_modal_content">
 			<div class="modal-header">
-				<h2>조치 상태</h2>
+				<h2><fmt:message key="alertshistory.4.acknowledgement" /></h2>
 			</div>
 			<div class="modal-body">
 				<div class="ly_wrap">
@@ -128,7 +128,7 @@
 				<div id="searchDropdown" class="dropdown-menu search_dropdown">
 					<div class="flex_start3">
 						<div class="sa_select">
-							<h2 class="tx_tit">설비 유형</h2>
+							<h2 class="tx_tit"><fmt:message key="alertshistory.1.devicetype" /></h2>
 							<div id="equipmentList" class="dropdown">
 								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">
 									선택<span class="caret"></span>
@@ -148,7 +148,7 @@
 						<div class="sa_select">
 							<h2 class="tx_tit">알람 종류</h2>
 							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">전체<span class="caret"></span></button>
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택"><fmt:message key="alertshistory.1.all" /><span class="caret"></span></button>
 								<ul class="dropdown-menu chk_type" role="menu">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
@@ -190,7 +190,7 @@
 							</div>
 						</div>
 						<div class="sa_select">
-							<h2 class="tx_tit">알람 상태</h2>
+							<h2 class="tx_tit"><fmt:message key="alertshistory.4.alertstatus" /></h2>
 							<div class="dropdown short" id="alarmstatus">	
 								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">미확인<span class="caret"></span></button>
 								<ul class="dropdown-menu chk_type" role="menu" id="alstatus">
@@ -210,7 +210,7 @@
 							</div>
 						</div>
 						<div class="sa_select">
-							<h2 class="tx_tit">조치 상태</h2>
+							<h2 class="tx_tit"><fmt:message key="alertshistory.4.acknowledgement" /></h2>
 							<div class="dropdown">
 								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">전체<span class="caret"></span></button>
 								<ul class="dropdown-menu chk_type" role="menu" id="status">
@@ -256,7 +256,7 @@
 					</div>
 					<div class="flex_start3">
 						<div class="sa_select">
-							<h2 class="tx_tit">조회 기간</h2>
+							<h2 class="tx_tit"><fmt:message key="alertshistory.1.timeframe" /></h2>
 							<div class="dropdown short">
 								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">1일<span class="caret"></span></button>
 								<ul class="dropdown-menu" role="menu" id="term">
@@ -268,7 +268,7 @@
 							</div>
 						</div>
 						<div class="sa_select">
-							<label class="tx_tit" for="datepicker1">기간 설정</label>
+							<label class="tx_tit" for="datepicker1"><fmt:message key="alertshistory.1.period" /></label>
 							<input type="text" id="datepicker1" name="fromDate" class="sel fromDate" value="" autocomplete="off">
 						</div>
 						<div class="sa_select">
@@ -296,7 +296,7 @@
 				</div>
 
 				<div class="sa_select">
-					<button type="button" id="search" class="btn_type ml-6">조회</button>
+					<button type="button" id="search" class="btn_type ml-6"><fmt:message key="alertshistory.1.update" /></button>
 				</div>
 			</div>
 		</form>			
@@ -308,16 +308,16 @@
 	<div class="col-xl-8 col-lg-9 col-md-6 col-sm-12">
 		<div class="indiv alarm_stat_wrapper">
 			<div class="alarm_header">
-				<h2 class="ntit fl">알람 현황</h2>
+				<h2 class="ntit fl"><fmt:message key="alertshistory.2.alertstatus" /></h2>
 				<div class="his_inp_bx">
 					<div class="rdo_type his_rdo_bx" id="chartType">
 						<span>
 							<input type="radio" id="rdo03_1" name="chartType" value="type" checked>
-							<label for="rdo03_1">설비 타입</label>
+							<label for="rdo03_1"><fmt:message key="alertshistory.2.devicetype" /></label>
 						</span>
 						<span>
 							<input type="radio" id="rdo03_2" name="chartType" value="alarm">
-							<label for="rdo03_2">알람 타입</label>
+							<label for="rdo03_2"><fmt:message key="alertshistory.2.alerttype" /></label>
 						</span>
 					</div>
 				</div>
