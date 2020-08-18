@@ -9,7 +9,7 @@
 <div class="row content-wrapper">
 	<div class="col-lg-2 col-md-4 col-sm-6 header_drop_area">
 		<div class="dropdown" id="siteList">
-			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">선택해주세요.<span class="caret"></span></button>
+			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><fmt:message key="renewablesgen.1.select" /><span class="caret"></span></button>
 			<ul class="dropdown-menu chk_type"></ul>
 		</div>
 	</div>
@@ -17,7 +17,7 @@
 <div class="row">
 	<div class="col-2">
 		<div class="indiv pv_chart">
-			<h2 class="ntit">발전량 합계</h2>
+			<h2 class="ntit"><fmt:message key="renewablesgen.2.solarenergy" /></h2>
 			<div class="value_area"></div>
 		</div>
 	</div>
@@ -26,10 +26,10 @@
 			<div class="flex_wrapper">
 				<div class="chart_top">
 					<div id="deviceType" class="flex_group">
-						<span class="tx_tit">계량값</span>
+						<span class="tx_tit"><fmt:message key="renewablesgen.3.measureddata" /></span>
 						<div class="sa_select">
 							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown">복수 선택<span class="caret"></span></button>
+								<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown"><fmt:message key="renewablesgen.3.multipleselection" /><span class="caret"></span></button>
 								<div class="dropdown-menu chk_type"><!--
 								--><ul class="dropdown_cov clear selectDevices"></ul><!--
 								 --><div class="li_btn_bx clear">
@@ -47,11 +47,11 @@
 						<span class="tx_tit">기간</span>
 						<div class="sa_select">
 							<div class="dropdown" id="period">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">오늘<span class="caret"></span></button>
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><fmt:message key="renewablesgen.3.today" /><span class="caret"></span></button>
 								<ul class="dropdown-menu">
-									<li data-value="today" class="on"><a href="#">오늘</a></li>
-									<li data-value="week"><a href="#">이번 주</a></li>
-									<li data-value="month"><a href="#">이번 달</a></li>
+									<li data-value="today" class="on"><a href="#"><fmt:message key="renewablesgen.3.today" /></a></li>
+									<li data-value="week"><a href="#"><fmt:message key="renewablesgen.3.thisweek" /></a></li>
+									<li data-value="month"><a href="#"><fmt:message key="renewablesgen.3.thismonth" /></a></li>
 									<li data-value="setup"><a href="#">직접 선택</a></li>
 								</ul>
 							</div>
@@ -73,24 +73,24 @@
 									선택 <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu">
-									<li data-value="15min"><a href="#">15분</a></li>
-									<li data-value="hour"><a href="#">1시간</a></li>
-									<li data-value="day"><a href="#">1일</a></li>
-									<li data-value="month"><a href="#">1월</a></li>
+									<li data-value="15min"><a href="#"><fmt:message key="renewablesgen.3.15min" /></a></li>
+									<li data-value="hour"><a href="#"><fmt:message key="renewablesgen.3.1hr" /></a></li>
+									<li data-value="day"><a href="#"><fmt:message key="renewablesgen.3.1day" /></a></li>
+									<li data-value="month"><a href="#"><fmt:message key="renewablesgen.3.1month" /></a></li>
 								</ul>
 							</div>
 						</div>
-						<button type="button" class="btn_type" id="renderBtn">조회</button>
+						<button type="button" class="btn_type" id="renderBtn"><fmt:message key="renewablesgen.3.update" /></button>
 					</div>
 				</div>
 				<div class="end"><span class="tx_tit">그래프</span><!--
 				--><div class="sa_select">
 						<div class="dropdown" id="chartStyle"><!--
-						--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-value="each">개별 막대<span class="caret"></span></button><!--
+						--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-value="each"><fmt:message key="renewablesgen.3.individualbar" /><span class="caret"></span></button><!--
 						--><ul class="dropdown-menu"><!--
-							--><li data-value="allSum"><a href="#">전체 합산</a></li><!--
-							--><li data-value="siteSum"><a href="#">사이트별 합산</a></li><!--
-							--><li data-value="each" class="on"><a href="#">개별 막대</a></li><!--
+							--><li data-value="allSum"><a href="#"><fmt:message key="renewablesgen.3.sumtotal" /></a></li><!--
+							--><li data-value="siteSum"><a href="#"><fmt:message key="renewablesgen.3.sumplant" /></a></li><!--
+							--><li data-value="each" class="on"><a href="#"><fmt:message key="renewablesgen.3.individualbar" /></a></li><!--
 						--></ul>
 						</div>
 					</div>
@@ -111,9 +111,9 @@
 	<div class="col-12">
 		<div class="indiv pv_chart table_box">
 			<div class="tbl_top clear">
-				<h2 class="ntit fl">발전량 도표</h2>
+				<h2 class="ntit fl"><fmt:message key="renewablesgen.4.powergenerationchart" /></h2>
 				<ul class="fr">
-					<li><span class="tbl_save_bx"> <a href="#;" class="save_btn">데이터 저장</a></li>
+					<li><span class="tbl_save_bx"> <a href="#;" class="save_btn"><fmt:message key="renewablesgen.4.dataextracts" /></a></li>
 					<li><a href="#;" class="fold_btn">표접기</a></li>
 				</ul>
 			</div>
