@@ -28,7 +28,7 @@
 				</li>
 			</ul>
 		</div>
-		<a href="javascript:void(0);" class="btn_type02 collect_btn fr" id="excelDown">로그 저장</a>
+		<a href="javascript:void(0);" class="btn_type02 collect_btn fr" id="excelDown"><fmt:message key="datacolleciton.4.savelog" /></a>
 	</div>
 </div>
 
@@ -77,17 +77,17 @@
 	<div class="col-xl-5 col-lg-6 col-md-6 col-sm-12">
 		<div class="indiv collect_box">
 			<div class="tbl_top clear">
-				<h2 class="ntit fl">RTU</h2>
-				<button type="button" class="btn_type fr" id="showRegRtu">등록</button>
+				<h2 class="ntit fl"><fmt:message key="datacolleciton.1.rtu" /></h2>
+				<button type="button" class="btn_type fr" id="showRegRtu"><fmt:message key="datacolleciton.1.add" /></button>
 			</div>
 			<div class="tbl_wrap_type collect_wrap">
 				<table class="his_tbl scroll" id="PV_INVERTER">
 					<thead>
 						<tr>
-							<th>사이트 ID</th>
-							<th>RTU ID</th>
-							<th>RTU 시리얼 번호</th>
-							<th>등록 일자</th>
+							<th><fmt:message key="datacolleciton.1.siteid" /></th>
+							<th><fmt:message key="datacolleciton.1.rtuid" /></th>
+							<th><fmt:message key="datacolleciton.1.rtusn" /></th>
+							<th><fmt:message key="datacolleciton.1.reg.date" /></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -157,11 +157,11 @@
 		<div class="indiv collect_box last_box">
 			<div class="tbl_wrap_type collect_wrap">
 				<div class="tbl_top clear">
-					<h2 class="ntit fl">데이터 수집 로그</h2>
+					<h2 class="ntit fl"><fmt:message key="datacolleciton.3.datacollectionlog" /></h2>
 				</div>
 				<div class="clear inp_align">
 					<div class="fl">
-						<span class="tx_tit">기간 설정</span>
+						<span class="tx_tit"><fmt:message key="datacolleciton.3.timeframe" /></span>
 						<div class="sel_calendar">
 							<input type="text" id="datepicker1" class="sel" value="" autocomplete="off">
 							<em></em>
@@ -173,7 +173,7 @@
 						</div>
 					</div>
 					<div class="fl">
-						<button type="submit" class="btn_type" id="selectLogByDate">검색</button>
+						<button type="submit" class="btn_type" id="selectLogByDate"><fmt:message key="datacolleciton.3.search" /></button>
 					</div>
 				</div>
 				<div id="logTableDiv">
@@ -189,13 +189,13 @@
 						</colgroup>
 						<thead>
 						<tr>
-							<th>사이트 ID</th>
-							<th>수집 타입 ID</th>
-							<th>수집기 ID</th>
-							<th>송신 시간</th>
-							<th>수신 시간</th>
-							<th>상태</th>
-							<th>수신 데이터</th>
+							<th><fmt:message key="datacolleciton.3.siteid" /></th>
+							<th><fmt:message key="datacolleciton.3.collectiontypeid" /></th>
+							<th><fmt:message key="datacolleciton.3.collectorid" /></th>
+							<th><fmt:message key="datacolleciton.3.trans.time" /></th>
+							<th><fmt:message key="datacolleciton.3.receptiontime" /></th>
+							<th><fmt:message key="datacolleciton.3.status" /></th>
+							<th><fmt:message key="datacolleciton.3.received.data" /></th>
 						</tr>
 						</thead>
 						<tbody>
