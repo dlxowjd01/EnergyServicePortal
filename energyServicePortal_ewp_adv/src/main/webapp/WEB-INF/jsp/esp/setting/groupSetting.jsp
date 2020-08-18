@@ -205,12 +205,7 @@
 					}
 				});
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				if(textStatus == "error"){
-					if(jqXHR.statusText == "Unauthorized" || jqXHR.status == 401){
-						$("#oldPwdErr").removeClass("hidden");
-					}
-					console.log("jqXHR==", jqXHR )
-				}
+
 				return false;
 			});
 		}
@@ -229,7 +224,7 @@
 		<div class="flex_group">
 			<span class="tx_tit">그룹 유형</span>
 			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button"
+				<button type="button" class="dropdown-toggle"
 					data-toggle="dropdown">선택<span class="caret"></span></button>
 				<ul class="dropdown-menu chk_type" role="menu" id="siteList">
 					<li>

@@ -1091,7 +1091,7 @@
 							<th>주소</th>
 							<td class="group_type">
 								<div class="dropdown placeholder edit" id="spcCountry">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 										국가 선택<span class="caret"></span>
 									</button>
 									<ul id="spcCountryList" class="dropdown-menu" role="menu">
@@ -1101,7 +1101,7 @@
 									</ul>
 								</div>
 								<div class="dropdown placeholder edit mr-12" id="spcSido">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 										시/도 선택<span class="caret"></span>
 									</button>
 									<ul id="spcSidoList" class="dropdown-menu" role="menu">
@@ -1205,7 +1205,7 @@
 							<td id="addList_registered_seal" class="entity">
 								<div class="group_type">
 									<div class="dropdown placeholder edit" id="spcSeal[index]">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">인감 선택<span class="caret"></span></button>
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown">인감 선택<span class="caret"></span></button>
 										<ul class="dropdown-menu" role="menu">
 											<li data-value="사용_인감">
 												<a href="#">사용 인감</a>
@@ -1223,7 +1223,7 @@
 											<input type="radio" id="SPC_법인_인감_대표[index]" name="SPC_법인_인감_대표" value="[index]">
 											<label for="SPC_법인_인감_대표[index]">대표 인감</label>
 										</span>
-										<button class="btn_close fixed_height hidden mt-0" onclick="$(this).parents().closest('.group_type').remove()"></button>
+										<button type="button" class="btn_close fixed_height hidden mt-0" onclick="$(this).parents().closest('.group_type').remove()"></button>
 									</div>
 								</div>
 							</td>
@@ -1270,7 +1270,7 @@
 						<th>발전소 주소</th>
 						<td class="group_type">
 							<div class="dropdown placeholder edit" id="발전소_국가">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 									국가 선택<span class="caret"></span>
 								</button>
 								<ul id="countryList" class="dropdown-menu" role="menu">
@@ -1280,7 +1280,7 @@
 								</ul>
 							</div>
 							<div class="dropdown placeholder edit mr-12" id="발전소_시도">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 									시/도 선택<span class="caret"></span>
 								</button>
 								<ul id="sidoList" class="dropdown-menu" role="menu">
@@ -1384,7 +1384,7 @@
 						<td class="addList_affiliation entity">
 							<div class="group_type">
 								<div class="dropdown placeholder edit" id="등기이사_소속[index]">
-									<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 										소속 선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu chk_type" role="menu">
@@ -1557,7 +1557,7 @@
 						<th>관리 계약 구분</th>
 						<td>
 							<div class="dropdown placeholder edit mr-12 w300" id="관리_계약_구분">
-								<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 									선택<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu chk_type" role="menu">
@@ -1770,14 +1770,14 @@
 							<td>
 								<div class="fixed_height group_type short">
 									<div class="account-type dropdown placeholder edit" id="입출금_구분[index]"><!--
-										--><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">입출금 구분<span class="caret"></span></button><!--
+										--><button type="button" class="dropdown-toggle" data-toggle="dropdown">입출금 구분<span class="caret"></span></button><!--
 										--><ul class="dropdown-menu" role="menu"><!--
 											--><li data-value="입금"><a href="#">입금</a></li><!--
 											--><li data-value="출금"><a href="#">출금</a></li><!--
 										--></ul><!--
 								--></div>
 									<div class="dropdown placeholder edit" id="계좌구분[index]"><!--
-									--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">계좌구분<span class="caret"></span></button><!--
+									--><button type="button" class="dropdown-toggle" data-toggle="dropdown">계좌구분<span class="caret"></span></button><!--
 									--><ul id="계좌구분리스트[index]" class="dropdown-menu" role="menu"><!--
 										--><li data-default="select" data-value="select"><a href="#">입출금 구분을 선택해 주세요.</a></li><!--
 										--><li data-group="입금" data-value="관리운영비"><a href="#">관리 운영비</a></li><!--
@@ -1811,7 +1811,7 @@
 									--></ul><!--
 								--></div>
 									<div class="dropdown placeholder edit" id="은행_리스트[index]"><!--
-									--><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">은행 리스트<span class="caret"></span></button><!--
+									--><button type="button" class="dropdown-toggle" data-toggle="dropdown">은행 리스트<span class="caret"></span></button><!--
 									--><ul class="dropdown-menu" role="menu"><!--
 										--><li data-id="0020" data-value="우리"><a href="#">우리</a></li><!--
 										--><li data-id="0004" data-value="국민"><a href="#">국민</a></li><!--
@@ -1880,7 +1880,7 @@
 							<td class="addList_certificate_registration entity">
 								<div class="group_type flex_start">
 									<div id="용도[index]" class="dropdown placeholder edit mxw100">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 											용도 선택<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" role="menu">
@@ -1972,7 +1972,7 @@
 								</div>
 								<div class="group_type">
 									<div class="dropdown placeholder edit" id="SMP">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 											선택<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" role="menu">
@@ -1988,7 +1988,7 @@
 								</div>
 								<div class="group_type">
 									<div class="dropdown placeholder edit" id="REC">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 											고정가<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" role="menu">
@@ -2543,7 +2543,7 @@
 						<th>기준 단가</th>
 						<td class="group_type">
 							<div class="dropdown placeholder edit" id="기준_단가">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">기준 단가 선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown">기준 단가 선택<span class="caret"></span></button>
 								<ul class="dropdown-menu" role="menu">
 									<li data-value=""><a href="#">기준 단가 선택</a></li>
 									<li data-value="FIT 단가"><a href="#">FIT 단가</a></li>

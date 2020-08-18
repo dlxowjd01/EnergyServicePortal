@@ -51,7 +51,7 @@
 	<script src="/js/html2canvas.js"></script>
 
 	<!-- 화면 엑셀 다운로드용 -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsjqxhr.full.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
 
 	<!-- timepicker -->
@@ -77,46 +77,11 @@
 		const loginMail = '${sessionScope.userInfo.contact_email}';
 		const contact_phone = '${sessionScope.userInfo.contact_phone}';
 		const apiHost = '${sessionScope.apiHost}';
-
 		const navCount = 10; //한 화면당 네비게이션 갯수
 		let pagePerData = 15; //페이지당 게시글 갯수
 		let page = 1; //현재 페이지
-
-
-		//API 토큰 세팅
-		$.ajaxSetup({
-			headers: {'Authorization': 'Bearer <c:out value="${sessionScope.userInfo.token}" escapeXml="false" />'}
-		});
-
 		var timeOffset = '${timeOffset}';
-		$(document).ready(function () {
-			<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
-				changeFavicon('/resources/favicon_encored.ico');
-			</c:if>
-			
-			$('#loadingCircle').hide();
-
-			$(window).resize(function() {
-				if ($(window).width() > 768) {
-					$('#mask').hide();
-					$('body').removeClass("sidenav-no-scroll");
-					$('#mobileNav').hide();
-				}
-			});
-
-		});
-
-		$(document).ajaxSuccess(function() {
-			$('#loadingCircle').hide();
-		});
-
-		$(document).ajaxError(function( event, jqxhr, settings, thrownError ) {
-			console.log("에러코드:" + jqxhr.status + "\n" + "메세지: " + jqxhr.responseText +"\n" + "에러: " + thrownError);
-			$('#loadingCircle').hide();
-			// setTimeout(function(){
-			// 	console.clear();
-			// }, 1200);
-		});
+		var sessionUser = null;
 
 		const changeFavicon = link => {
 			let $favicon = document.querySelector('link[rel="icon"]') || document.createElement('link');
@@ -130,6 +95,59 @@
 			}
 		};
 
+
+		$(document).ready(function () {
+			<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
+				changeFavicon('/resources/favicon_encored.ico');
+			</c:if>
+
+			$('#loadingCircle').hide();
+
+			$(window).resize(function() {
+				if ($(window).width() > 768) {
+					$('#mask').hide();
+					$('body').removeClass("sidenav-no-scroll");
+					$('#mobileNav').hide();
+				}
+			});
+
+		});
+
+		//API 토큰 세팅
+		$.ajaxSetup({
+			headers: {'Authorization': 'Bearer <c:out value="${sessionScope.userInfo.token}" escapeXml="false" />'},
+			"timeout": 10000
+		});
+
+		$(document).ajaxSuccess(function() {
+			$('#loadingCircle').hide();
+		});
+
+		$(document).ajaxError(function(event, jqxhr, settings, thrownError) {
+			$('#loadingCircle').hide();
+			// test 용 주석 유지 (~ 9월 말까지)
+			// let r = JSON.parse(jqxhr.responseText);
+			// console.log("에러코드:" + jqxhr.status + "\n" + "메세지: " + r);
+		});
+
+		function formatErrorMessage(jqXHR, exception) {
+			if (jqXHR.status === 0) {
+				return ('Not connected.\nPlease verify your network connection.');
+			} else if (jqXHR.status == 404) {
+				return ('The requested page not found. [404]');
+			} else if (jqXHR.status == 500) {
+				return ('Internal Server Error [500].');
+			} else if (exception === 'parsererror') {
+				return ('Requested JSON parse failed.');
+			} else if (exception === 'timeout') {
+				return ('Time out error.');
+			} else if (exception === 'abort') {
+				return ('Ajax request aborted.');
+			} else {
+				return ('Uncaught Error.\n' + jqXHR.responseText);
+			}
+		}
+
 		function sessionRefresh() {
 			$.ajax({
 				url: "/openapi/loginUser.json",
@@ -141,16 +159,27 @@
 				},
 				success: function (result) {
 					if (result == -1) {
-						alert("세션 새로고침에 실패하였습니다.");
+						$("#errMsg").text("세션 새로고침에 실패하였습니다.");
+						$("#errorModal").modal("show");
+						setTimeout(function(){
+							$("#errorModal").modal("hide");
+						}, 2000);
+						// alert("세션 새로고침에 실패하였습니다.");
 					}
 
 				},
 				error: function (request, status, error) {
-//		 			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+					// alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+					let r = JSON.parse(jqxhr.responseText);
+					console.log("에러코드:" + request.status + "\n" + "메세지: " + r);
+					$("#errMsg").text("오류가 발생하였습니다. \n" + r);
+					$("#errorModal").modal("show");
+					setTimeout(function(){
+						$("#errorModal").modal("hide");
+					}, 2000);
 				}
 			});
 		}
-		
 		// 세션 userInfo 조회
 		function getUserInfo(fn) {
 			$.ajax({
@@ -162,12 +191,10 @@
 				}
 			});
 		}
-	 
-		var sessionUser = null;
 		function setSession(result) {
 			sessionUser = result;
 		}
-		
+
 		//날짜포멧 변경
 		Date.prototype.format = function (f) {
 			if (!this.valueOf()) return " ";

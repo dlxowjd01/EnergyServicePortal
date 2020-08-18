@@ -6,7 +6,7 @@
 										<c:when test="${schGbn eq 'alarm' }"><!-- 상황관제 -->
 											<h2 class="ntit fl">알림현황</h2>
 												<div class="dropdown fl">
-												  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selTermBox">1일
+												  <button type="button" class="dropdown-toggle" data-toggle="dropdown" id="selTermBox">1일
 												  <span class="caret"></span></button>
 												  <ul class="dropdown-menu">
 												    <li class="on"><a href="#" onclick="changeSelTerm('30min'); ">30분</a></li>
@@ -31,7 +31,7 @@
 												<c:choose>
 													<c:when test="${schGbn eq 'energy_drResult' }"> <!-- DR 실적 조회 -->
 														<div class="dropdown fl">
-														  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selTermBox">1일(오늘)
+														  <button type="button" class="dropdown-toggle" data-toggle="dropdown" id="selTermBox">1일(오늘)
 														  <span class="caret"></span></button>
 														  <ul class="dropdown-menu">
 														    <li class="on"><a href="#" onclick="changeSelTerm('drday');">1일(오늘)</a></li>
@@ -39,7 +39,7 @@
 														  </ul>
 														</div>
 														<div class="dropdown fl">
-														  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selPeriod">15분
+														  <button type="button" class="dropdown-toggle" data-toggle="dropdown" id="selPeriod">15분
 														  <span class="caret"></span></button>
 														  <ul class="dropdown-menu">
 														    <li class="on" id="sp_15min"><a href="#" onclick="changePeriod('15min');">15분</a></li>
@@ -70,7 +70,7 @@
 														<div class="meter fl">
 															<span class="fl">계량값</span>
 															<div class="dropdown fl">
-																<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">전체
+																<button type="button" class="dropdown-toggle" data-toggle="dropdown">전체
 																<span class="caret"></span></button>
 																<ul class="dropdown-menu">
 																  <li class="on"><a href="#">전체</a></li>
@@ -87,7 +87,7 @@
 														$(window).scroll(function() { if ($(window).scrollTop() == $(document).height() - $(window).height()) { drawData_table(); } });
 														</script>
 														<div class="dropdown fl">
-														  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selTermBox">1일
+														  <button type="button" class="dropdown-toggle" data-toggle="dropdown" id="selTermBox">1일
 														  <span class="caret"></span></button>
 														  <ul class="dropdown-menu">
 														    <li class="on"><a href="#" onclick="changeSelTerm('30min'); ">30분</a></li>
@@ -100,7 +100,7 @@
 														  </ul>
 														</div>
 														<div class="dropdown fl">
-														  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="selPeriod">1시간
+														  <button type="button" class="dropdown-toggle" data-toggle="dropdown" id="selPeriod">1시간
 														  <span class="caret"></span></button>
 														  <ul class="dropdown-menu">
 														    <li class="on" id="sp_15min"><a href="#" onclick="changePeriod('15min');">15분</a></li>
@@ -120,7 +120,7 @@
 														<div class="meter fl">
 															<span class="fl">계량값</span>
 															<div class="dropdown fl">
-																<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">전체
+																<button type="button" class="dropdown-toggle" data-toggle="dropdown">전체
 																<span class="caret"></span></button>
 																<ul class="dropdown-menu">
 																  <li class="on"><a href="#">전체</a></li>

@@ -238,7 +238,7 @@
 			<span class="tx_tit">보고서 구분</span>
 			<div class="sa_select">
 				<div class="dropdown" id="report_type">
-					<button class="btn btn-primary dropdown-toggle w9" type="button" data-toggle="dropdown" data-value="">
+					<button type="button" class="dropdown-toggle w9" data-toggle="dropdown" data-value="">
 						<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu chk_type" role="menu">
@@ -274,7 +274,7 @@
 						<th>발전소</th>
 						<td>
 							<div class="dropdown placeholder edit" id="gen">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-value="">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="">
 									선택 <span class="caret"></span>
 								</button>
 								<ul id="genList" class="dropdown-menu" role="menu">
@@ -354,7 +354,7 @@
 								<div id="fileList01" class="hide-no-data">
 									<p class="tx_file">
 										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
 									</p>
 								</div>
 								<div id="addFileList01">
@@ -396,7 +396,7 @@
 								<div id="fileList02" class="hide-no-data">
 									<p class="tx_file">
 										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button class="btn_type07" onclick="setRemoveFileList('fileList02', [INDEX]);">삭제</button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList02', [INDEX]);">삭제</button>
 									</p>
 								</div>
 								<div id="addFileList02">

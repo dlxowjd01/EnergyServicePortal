@@ -23,7 +23,7 @@
 	<div class="col-xl-4 col-md-12 col-sm-12">
 		<div class="indiv gmain_chart gmain_chart1">
 			<div class="chart_top clear">
-				<h2 class="ntit">월간</h2>
+				<h2 class="ntit"><fmt:message key="gdash.1.month" /></h2>
 				<span class="term"></span>
 			</div>
 			<%--					<div class="no-data">--%>
@@ -36,7 +36,7 @@
 
 		<div class="indiv gmain_chart gmain_chart2">
 			<div class="chart_top clear">
-				<h2 class="ntit">일간</h2>
+				<h2 class="ntit"><fmt:message key="gdash.2.daily" /></h2>
 				<span class="term"></span>
 			</div>
 			<div class="inchart">
@@ -46,7 +46,7 @@
 
 		<div class="indiv gmain_chart gmain_chart3">
 			<div class="chart_top clear">
-				<h2 class="ntit">전일</h2>
+				<h2 class="ntit"><fmt:message key="gdash.3.yesterday" /></h2>
 				<span class="term"></span>
 			</div>
 			<%--					<ul class="gtab_menu">--%>
@@ -65,8 +65,8 @@
 							<thead>
 							<tr>
 								<th></th>
-								<th>전일발전</th>
-								<th>전일예측</th>
+								<th><fmt:message key="gdash.3.actual" /></th>
+								<th><fmt:message key="gdash.3.forecast" /></th>
 							</tr>
 							</thead>
 							<tbody id="siteGenTbody">
@@ -82,7 +82,7 @@
 						</div>
 						<div class="type-right">
 							<dl class="sun">
-								<dt><span>태양광</span></dt>
+								<dt><span><fmt:message key="gdash.4.gen" /></span></dt>
 								<dd>
 									<p><strong>가동설비</strong> <span>13</span><em>기</em></p>
 									<p><strong>용량</strong> <span>13</span><em>MW</em></p>
@@ -114,7 +114,7 @@
 		<div class="gmain_row1">
 			<div class="indiv gmain_map gmain_chart gmain_chart4">
 				<div class="chart_top clear">
-					<h2 class="ntit">현재 출력</h2>
+					<h2 class="ntit"><fmt:message key="gdash.4.current" /></h2>
 				</div>
 				<div class="chart_box">
 					<div class="chart_info">
@@ -125,13 +125,13 @@
 						</div>
 						<div class="ci_right">
 							<div class="legend_wrap">
-								<span class="bu1">태양광</span>
-								<span class="bu4">미 사용량</span>
+								<span class="bu1"><fmt:message key="gdash.4.gen" /></span>
+								<span class="bu4"><fmt:message key="gdash.4.idle" /></span>
 							</div>
 							<ul>
-								<li><strong>금일 누적발전량</strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
-								<li><strong>금일 예측발전량</strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
-								<li><strong>금일 충/방전</strong> <span> - </span><em>&nbsp;&nbsp;Wh</em> /
+								<li><strong><fmt:message key="gdash.4.today_gen" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
+								<li><strong><fmt:message key="gdash.4.forecast" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
+								<li><strong><fmt:message key="gdash.4.today_ess" /></strong> <span> - </span><em>&nbsp;&nbsp;Wh</em> /
 									<span> - </span><em>&nbsp;&nbsp;Wh</em></li>
 							</ul>
 						</div>
@@ -141,11 +141,11 @@
 					<table>
 						<thead>
 						<tr>
-							<th>총 사업소</th>
-							<th>총 설비</th>
-							<th>총 설비용량</th>
-							<th>금일 CO2저감량</th>
-							<th>금일 누적수익</th>
+							<th><fmt:message key="gdash.4.tot_num" /></th>
+							<th><fmt:message key="gdash.4.num_device" /></th>
+							<th><fmt:message key="gdash.4.tot_cap" /></th>
+							<th><fmt:message key="gdash.4.today_co2" /></th>
+							<th><fmt:message key="gdash.4.today_revenue" /></th>
 						</tr>
 						</thead>
 						<tbody id="centerTbody">
@@ -162,7 +162,7 @@
 			</div>
 			<div class="indiv gmain_alarm wrap_type">
 				<div class="alarm_stat">
-					<div class="a_alert"><span>금일 발생 오류</span><em>0</em></div><div class="a_warning"><a href="javascript:void(0);" onclick="pageMove('all', 'alarm');" class="btn cancel_btn">상세보기</a></div>
+					<div class="a_alert"><span><fmt:message key="gdash.6.today_alerts" /></span><em>0</em></div><div class="a_warning"><a href="javascript:void(0);" onclick="pageMove('all', 'alarm');" class="btn cancel_btn"><fmt:message key="gdash.6.details" /></a></div>
 				</div>
 				<div class="alarm_notice">
 					<ul id="alarmNotice">
@@ -185,13 +185,13 @@
 					<div class="gtbl_top clear">
 						<div class="input_group1">
 							<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색" onkeyup="if (event.keyCode == 13) searchSiteList();">
-							<button type="button" onclick="searchSite();">적용</button>
+							<button type="button" onclick="searchSite();"><fmt:message key="gdash.7.apply" /></button>
 						</div>
 						<div class="input_group2">
-							<span class="tx_tit">설비 상태</span>
+							<span class="tx_tit"><fmt:message key="gdash.7.status" /></span>
 							<div class="sa_select">
 								<div class="dropdown" id="deviceStatus">
-									<button class="btn btn-primary dropdown-toggle w8" type="button"
+									<button type="button" class="dropdown-toggle w8"
 											data-toggle="dropdown" data-name="설비 상태">
 										전체<span class="caret"></span>
 									</button>
@@ -226,31 +226,31 @@
 								<thead>
 								<tr>
 									<th>
-										<button class="btn_align">상태</button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.status" /></button>
 									</th>
 									<th>
-										<button class="btn_align">오류</button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.err" /></button>
 									</th>
 									<th>
-										<button class="btn_align">경고</button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.medium" /></button>
 									</th>
 									<th>
-										<button class="btn_align">사업소</button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.site" /></button>
 									</th>
 									<th>
-										<button class="btn_align">설비용량</button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.cap" /></button>
 									</th>
 									<th>
-										<button class="btn_align">예측</button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.forecast" /></button>
 									</th>
 									<th>
-										<button class="btn_align">누적</button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.gen" /></button>
 									</th>
 									<th class="ESS">
-										<button class="btn_align">충전</button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.charge" /></button>
 									</th>
 									<th class="ESS">
-										<button class="btn_align">방전</button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.discharge" /></button>
 									</th>
 								</tr>
 								</thead>
@@ -279,12 +279,12 @@
 														<span class="ico solar"></span>
 														<div class="tx_area clear">
 															<div class="fl">
-																<span class="tx">일사량</span>
+																<span class="tx"><fmt:message key="gdash.7.irr" /></span>
 																<span class="tx2">[irradiationPoa] W/㎡</span>
 															</div>
 															<div class="fr">
-																<span class="tx2">온도 [temperature]</span>
-																<span class="tx2">습도 [humidity]</span>
+																<span class="tx2"><fmt:message key="gdash.7.temp" /> [temperature]</span>
+																<span class="tx2"><fmt:message key="gdash.7.humid" /> [humidity]</span>
 															</div>
 														</div>
 													</div>
@@ -296,19 +296,19 @@
 																</div>
 																<ul class="di_list">
 																	<li>
-																		<span class="di_li_tit">설비 출력 (kW)</span>
+																		<span class="di_li_tit"><fmt:message key="gdash.7.production" /> (kW)</span>
 																		<span class="di_li_tx">[activePower]</span>
 																	</li>
 																	<li>
-																		<span class="di_li_tit">금일 누적발전 (kWh)</span>
+																		<span class="di_li_tit"><fmt:message key="gdash.7.gen_today" /> (kWh)</span>
 																		<span class="di_li_tx">[accumulate]</span>
 																	</li>
 																	<li>
-																		<span class="di_li_tit">금일 예측발전 (kWh)</span>
+																		<span class="di_li_tit"><fmt:message key="gdash.7.gen_forecast" /> (kWh)</span>
 																		<span class="di_li_tx">[forecast]</span>
 																	</li>
 																	<li>
-																		<span class="di_li_tit">전일 총발전량 (kWh)</span>
+																		<span class="di_li_tit"><fmt:message key="gdash.7.gen_yesterday" /> (kWh)</span>
 																		<span class="di_li_tx">[beforeDay]</span>
 																	</li>
 																</ul>
@@ -321,18 +321,18 @@
 																</div>
 																<ul class="di_list">
 																	<li>
-																		<span class="di_li_tit">총 설비용량 (kW)</span>
+																		<span class="di_li_tit"><fmt:message key="gdash.7.tot_cap" /> (kW)</span>
 																		<span class="di_li_tx">[capacity]</span>
 																	</li>
 																	<li>
-																		<span class="di_li_tit">총 인버터수량 (EA)</span>
+																		<span class="di_li_tit"><fmt:message key="gdash.7.num_inv" /> (EA)</span>
 																		<span class="di_li_tx">[inverterCount]</span>
 																	</li>
 																</ul>
 																<div class="di_tx_bx">
 																	<a href="javascript:void(0);"
 																		onclick="pageMove('[sid]', 'alarm')">
-																		<p class="tx">최근 미처리 오류 :
+																		<p class="tx"><fmt:message key="gdash.7.num_no_ack" /> :
 																			<span>[alarmTotal] 건</span></p>
 																	</a>
 																	<%--<p class="tx">2020-02-10 12:00:01 데이터 disconnected</p>--%>
@@ -342,7 +342,7 @@
 														</div>
 													</div>
 													<div class="btn_bx clear">
-														<a href="javascript:void(0);" onclick="pageMove('[sid]', 'siteMain')" class="btn_type02 fr">대시 보드 보기 <span class="ico_arrow"></span></a>
+														<a href="javascript:void(0);" onclick="pageMove('[sid]', 'siteMain')" class="btn_type02 fr"><fmt:message key="gdash.7.go_dashboard" /> <span class="ico_arrow"></span></a>
 													</div>
 												</div>
 											</div>
@@ -390,7 +390,11 @@
 			setInterval(() => fn_cycle_1hour(), 60 * 60 * 1000);
 			setInterval(() => fn_cycle_1min(), 60 * 1000);
 		} else {
-			alert('해당 그룹에 등록 된 사이트가 존재하지 않습니다.');
+			$("#errMsg").text("해당 그룹에 등록 된 사이트가 존재하지 않습니다.");
+			$("#errorModal").modal("show");
+			setTimeout(function(){
+				$("#errorModal").modal("hide");
+			}, 2000);
 			return false;
 		}
 	});

@@ -20,6 +20,21 @@
 			}
 		});
 
+		subMenuLink.on("click", function(event){
+			let current = window.location.pathname;
+			let link = $(this).attr("href");
+
+			if (current == link) {
+				console.log("link same===", link, "cirremt==0", current)
+				$(this).on('click', false);
+				event.preventDefault();
+			} else {
+				console.log("link differmet===", link, "cirremt==0", current)
+				$(this).on('click', true);
+			}
+		});
+
+
 		window.onload = function (e) {
 			let reloading = sessionStorage.getItem("reloading");
 			if (path.includes("dashboard")) {
@@ -59,6 +74,7 @@
 			$('body').removeClass("sidenav-no-scroll");
 			$('#mobileNav').hide();
 		});
+
 		
 		$('#sidebar:after').css('display', 'none') ? menuItemLink.removeClass('on') : null;
 
@@ -167,9 +183,10 @@
 				</ul>
 			</div>
 		</li>
+		</c:if>
+		
 		<li class="smn9"><a href="/spc/notice.do">공지사항</a></li>
 		<li class="smn10"><a href="/logout.do">로그아웃</a></li>
-		</c:if>
 	</ul>
 	</c:if>
 </div>
@@ -277,6 +294,7 @@
 				</ul>
 			</li>
 			</c:if>
+
 			<li class="gmn9"><a href="/spc/notice.do">공지사항</a></li>
 			<li class="gmn10"><a href="/logout.do">로그아웃</a></li>
 		</ul>

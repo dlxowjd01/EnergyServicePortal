@@ -1,27 +1,25 @@
 .wickedpicker {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  box-shadow: 0 0 0 1px rgba(14, 41, 57, 0.12), 0 2px 5px rgba(14, 41, 57, 0.44), inset 0 -1px 2px rgba(14, 41, 57, 0.15);
-  background: #fefefe;
-  margin: 0 auto;
-  border-radius: 0.1px;
-  width: 270px;
-  height: 130px;
-  font-size: 14px;
-  display: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+	background: #363636;
+	margin: 0 auto;
+	border-radius: 2px;
+	width: 270px;
+	height: 130px;
+	font-size: 14px;
+	display: none;
+	margin-top: 5px;
 }
 
 .wickedpicker__title {
-  background-image: -webkit-linear-gradient(top, #ffffff 0%, #f2f2f2 100%);
-  background-image: linear-gradient(to bottom, #ffffff 0%, #f2f2f2 100%);
   position: relative;
-  background: #f2f2f2;
   margin: 0 auto;
-  border-bottom: 1px solid #e5e5e5;
   padding: 12px 11px 10px 15px;
-  color: #4C4C4C;
+  color: #cacaca;
+  background: none;
   font-size: inherit;
 }
 
@@ -34,8 +32,9 @@
   position: absolute;
   top: 25%;
   right: 10px;
-  color: #34495e;
+  color: #;
   cursor: pointer;
+  font-size: 18px;
 }
 
 .wickedpicker__close:before {
@@ -48,7 +47,7 @@
   margin: 0;
 }
 .wickedpicker__controls >* span {
-  color: #000;
+  color: #aeaeae;
 }
 .wickedpicker__controls__control, .wickedpicker__controls__control--separator {
   vertical-align: middle;
@@ -60,7 +59,7 @@
 }
 
 .wickedpicker__controls__control-up, .wickedpicker__controls__control-down {
-  color: #34495e;
+  color: #aeaeae;
   position: relative;
   display: block;
   margin: 3px auto;
@@ -84,10 +83,6 @@
   text-align: center;
 }
 
-.hover-state {
-  color: #3498db;
-}
-
 @font-face {
   font-family: 'fontello';
   src: url("../fonts/fontello.eot?52602240");
@@ -100,6 +95,7 @@
   font-family: 'fontello';
   font-style: normal;
   font-weight: normal;
+  color: #aeaeae;
   speak: none;
   display: inline-block;
   text-decoration: inherit;

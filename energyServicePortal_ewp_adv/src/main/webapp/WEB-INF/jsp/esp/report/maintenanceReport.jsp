@@ -206,7 +206,7 @@
 			<span class="tx_tit">보고서 구분</span>
 			<div class="sa_select">
 				<div class="dropdown">
-					<button id="report_type" class="btn btn-primary dropdown-toggle w5" type="button"
+					<button type="button" id="report_type" class="dropdown-toggle w5"
 						data-toggle="dropdown" data-value="">
 						전체
 						<span class="caret"></span>
@@ -262,22 +262,22 @@
 						<tr>
 							<th>순번</th>
 							<th>
-								<button class="btn_align">보고서 구분</button>
+								<button type="button" class="btn_align">보고서 구분</button>
 							</th>
 							<th>
-								<button class="btn_align">문서번호</button>
+								<button type="button" class="btn_align">문서번호</button>
 							</th>
 							<th>
-								<button class="btn_align">보고서명</button>
+								<button type="button" class="btn_align">보고서명</button>
 							</th>
 							<th>
-								<button class="btn_align">작성자</button>
+								<button type="button" class="btn_align">작성자</button>
 							</th>
 							<th>
-								<button class="btn_align">작성일자</button>
+								<button type="button" class="btn_align">작성일자</button>
 							</th>
 							<th>
-								<button class="btn_align">등록상태</button>
+								<button type="button" class="btn_align">등록상태</button>
 							</th>
 						</tr>
 					</thead>

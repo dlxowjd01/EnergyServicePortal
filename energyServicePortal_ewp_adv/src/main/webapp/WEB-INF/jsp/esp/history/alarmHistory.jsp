@@ -40,7 +40,7 @@
 								autocomplete="off">
 						</div>
 						<div class="type">
-							<button id="fileUpload" type="button" class="btn_type">업로드</button>
+							<button type="button" id="fileUpload" class="btn_type">업로드</button>
 							<input type="file" id="picture" name="filename" class="uploadBtn hidden"/>
 							<span class="upload_text ml-16 hidden"></span>
 						</div>
@@ -56,7 +56,7 @@
 					<div class="flex_wrap">
 						<span class="input_label">조치 여부</span>
 						<div class="dropdown placeholder" id="ticket_status">
-							<button class="btn btn-primary dropdown-toggle required" type="button" placeholder="선택"
+							<button type="button" class="dropdown-toggle required" placeholder="선택"
 								data-toggle="dropdown"><span class="caret"></span></button>
 							<ul class="dropdown-menu">
 								<li data-value="new"><a href="javascript:void(0);">신규</a></li>
@@ -73,7 +73,7 @@
 					<div class="flex_wrap">
 						<span class="input_label">담당자</span>
 						<div class="dropdown placeholder" id="userlist">
-							<button class="btn btn-primary dropdown-toggle required" type="button"
+							<button type="button" class="dropdown-toggle required"
 								data-toggle="dropdown">선택<span class="caret"></span></button>
 							<ul class="dropdown-menu">
 							</ul>
@@ -111,7 +111,7 @@
 		<form id="alarmHistorySearchForm">
 			<div class="sa_select">
 				<div class="dropdown" id="site">
-					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택해주세요.">선택해주세요<span class="caret"></span></button>
+					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택해주세요.">선택해주세요<span class="caret"></span></button>
 					<ul class="dropdown-menu chk_type" role="menu" id="siteList">
 						<li data-value="[sid]">
 							<a href="javascript:void(0);" tabindex="-1">
@@ -124,13 +124,13 @@
 			</div>
 
 			<div id="searchDetail" class="search_expand sa_select">
-				<button type="button" class="btn bgN" data-target="#searchDropdown" data-name="상세 조건" onclick="$('#searchDetail').toggleClass('open')">상세 검색<span class="caret"></span></button>
+				<button type="button" class="btn clear-btn" data-target="#searchDropdown" data-name="상세 조건" onclick="$('#searchDetail').toggleClass('open')">상세 검색<span class="caret"></span></button>
 				<div id="searchDropdown" class="dropdown-menu search_dropdown">
 					<div class="flex_start3">
 						<div class="sa_select">
 							<h2 class="tx_tit">설비 유형</h2>
 							<div id="equipmentList" class="dropdown">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
 									선택<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu chk_type" role="menu" id="device">
@@ -148,7 +148,7 @@
 						<div class="sa_select">
 							<h2 class="tx_tit">알람 종류</h2>
 							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">전체<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">전체<span class="caret"></span></button>
 								<ul class="dropdown-menu chk_type" role="menu">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
@@ -192,7 +192,7 @@
 						<div class="sa_select">
 							<h2 class="tx_tit">알람 상태</h2>
 							<div class="dropdown short" id="alarmstatus">	
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">미확인<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">미확인<span class="caret"></span></button>
 								<ul class="dropdown-menu chk_type" role="menu" id="alstatus">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
@@ -212,7 +212,7 @@
 						<div class="sa_select">
 							<h2 class="tx_tit">조치 상태</h2>
 							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">전체<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">전체<span class="caret"></span></button>
 								<ul class="dropdown-menu chk_type" role="menu" id="status">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
@@ -258,7 +258,7 @@
 						<div class="sa_select">
 							<h2 class="tx_tit">조회 기간</h2>
 							<div class="dropdown short">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">1일<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown">1일<span class="caret"></span></button>
 								<ul class="dropdown-menu" role="menu" id="term">
 									<li data-value="day"><a href="javascript:void(0)">1일</a></li>
 									<li class="on" data-value="week"><a href="javascript:void(0)">1주</a></li>
@@ -278,7 +278,7 @@
 						<div class="sa_select">
 							<h2 class="tx_tit">단위</h2>
 							<div id="cycle" class="dropdown short">
-								<button class="btn btn-primary dropdown-toggle interval" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle interval" data-toggle="dropdown">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu" id="detailterm">
 									<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
 									<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
@@ -704,7 +704,7 @@
 				hCell.innerHTML = '<input type="checkbox" id="alarmConfirmCheck' + deviceType + '" onclick="alarmConfirmCheckAll(\'' + deviceType + '\');"><label for="alarmConfirmCheck' + deviceType + '"></label>';
 				tRow.appendChild(hCell);
 			} else {
-				hCell.innerHTML = '<button class="btn_align">' + colList[i - 1] + '</button>';
+				hCell.innerHTML = '<button type="button" class="btn_align">' + colList[i - 1] + '</button>';
 				tRow.appendChild(hCell);
 			}
 		}

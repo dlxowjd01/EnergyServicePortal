@@ -11549,7 +11549,8 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfoFiltered": "(filtered from _MAX_ total entries)",
+			// "sInfoFiltered": "(filtered from _MAX_ total entries)",
+			"sInfoFiltered": "( 검색 결과 )",
 	
 	
 			/**

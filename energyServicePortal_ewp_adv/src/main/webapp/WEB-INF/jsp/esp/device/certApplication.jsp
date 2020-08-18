@@ -45,7 +45,7 @@
 				<h2 class="tx_tit">업무 구분</h2>
 				<div class="sa_select">
 					<div id="certType" class="dropdown">
-						<button class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown" data-value="">
+						<button type="button" class="dropdown-toggle w5" data-toggle="dropdown" data-value="">
 							기기등록 <span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu" role="menu">
@@ -62,7 +62,7 @@
 					<h2 class="tx_tit">기기인증서 발급 정책</h2>
 					<div class="sa_select">
 						<div class="dropdown">
-							<button class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown" data-value="">
+							<button type="button" class="dropdown-toggle w5" data-toggle="dropdown" data-value="">
 								선택 <span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" role="menu">
@@ -177,7 +177,7 @@
 									<input type="file" id="file1" class="hidden" name="file1" accept=".xls, .xlsx">
 									<label for="file1" class="btn file_upload">파일 선택</label>
 									<span class="upload_text ml-16"></span>
-									<button class="btn_close fixed_height hidden mt-0" onclick="$(this).parents().closest('.group_type').remove()"></button>
+									<button type="button" class="btn_close fixed_height hidden mt-0" onclick="$(this).parents().closest('.group_type').remove()"></button>
 								</td>
 								</tbody>
 							</table>

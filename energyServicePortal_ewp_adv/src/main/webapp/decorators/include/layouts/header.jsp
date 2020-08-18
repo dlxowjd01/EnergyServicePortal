@@ -172,7 +172,8 @@
 					if(jqXHR.status == 401){
 						$("#oldPwdErr").removeClass("hidden");
 					}
-					console.log("jqXHR==", jqXHR )
+					console.log("에러:", formatErrorMessage(jqXHR, errorThrown) )
+					
 				}
 				return false;
 			});
@@ -219,26 +220,31 @@
 				}, 2500);
 
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				alert('처리 중 오류가 발생했습니다.');
-				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
+				let r = formatErrorMessage(jqXHR, errorThrown);
+				$("#errMsg").text("처리 중 오류가 발생했습니다." + r);
+				$("#errorModal").modal("show");
+				setTimeout(function(){
+					$("#errorModal").modal("hide");
+				}, 2000);
+				// alert('처리 중 오류가 발생했습니다.');
+				console.log("에러:", r )
 				return false;
 			});
 		});
 
 		function validateName(name){
 			let re = /\S+@\S+\.\S+/;
-			// let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-
 			return re.test(email);
 		}
 
 		function validateEmail(email){
-			// let re = /\S+@\S+\.\S+/;
 			let re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-			// let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+			// let re = \b[\w.!#$%&’*+\/=?^`{|}~-]+@[\w-]+(?:\.[\w-]+)*\b
 
 			return re.test(email);
 		}
+
+
 
 		function validatePassword() {
 			const rules = [
@@ -296,7 +302,12 @@
 		} else if(type == 'vpp') {
 			$('#dashboardForm').append(inp).attr('action', '/dashboard/jmain.do').submit();
 		} else {
-			alert('아직 정의 되지않은 타입입니다.');
+			$("#errMsg").text("아직 정의 되지않은 타입입니다.");
+			$("#errorModal").modal("show");
+			setTimeout(function(){
+				$("#errorModal").modal("hide");
+			}, 2000);
+			// alert('아직 정의 되지않은 타입입니다.');
 			return;
 		}
 	}
@@ -495,7 +506,6 @@
 	</div>
 	<ul class="nav_right">
 		<li class="member clear">
-			<div class="fl"><img src="../img/m_member_pic.png" alt=""></div>
 			<div class="fr"><button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn_type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button></div>
 		</li>
 		<%--
@@ -519,6 +529,15 @@
 	</ul>
 </nav>
 
+<div class="modal fade" id="errorModal" role="dialog" aria-labelledby="errorModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content collection_modal_content">
+			<div class="modal-body">
+				<h2 id="errMsg" class="warning"></h2>
+			</div>
+		</div>
+	</div>
+</div>
 
 <div class="modal stack" id="closeModal" tabindex="-1" role="dialog" aria-labelledby="closeModal" aria-hidden="true">
 	<div class="modal-dialog modal-sm">

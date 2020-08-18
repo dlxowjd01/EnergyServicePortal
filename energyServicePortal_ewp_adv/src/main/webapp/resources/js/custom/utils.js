@@ -1248,7 +1248,7 @@ function setAreaParamData(areaId, type) {
 	});
 
 	if(type != undefined && type == 'dropdown') {
-		$area.find('button.btn-primary').each(function() {
+		$area.find('.dropdown-toggle').each(function() {
 			var obj = this;
 			if (obj.nextElementSibling.querySelectorAll('input[type="checkbox"]').length > 0) {
 				let array = new Array();
@@ -1517,7 +1517,7 @@ const addRow = function (listId, type, nextIdx) {
 		let trowStr = '';
 		if (listId == 'insuranceInfoToggle' && listLength >= 1) {
 			var section = '<section id="insuranceSection' + listLength + '">';
-			section += '<div class="tbl_top flex_wrapper mt-offset-10"><h2 class="ntit">보험 정보</h2><button class="btn_close" onclick="$(this).parents().closest(\'section\').remove()"></button></div>';
+			section += '<div class="tbl_top flex_wrapper mt-offset-10"><h2 class="ntit">보험 정보</h2><button type="button" class="btn_close" onclick="$(this).parents().closest(\'section\').remove()"></button></div>';
 			section += '<div class="spc_tbl_row st_edit">';
 			section += rowHtml;
 			section += '</div>';

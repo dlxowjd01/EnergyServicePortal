@@ -2,6 +2,7 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 
 <script src="/js/commonDropdown.js"></script>
+
 <script type="text/javascript">
 	$(function () {
 		// let sL = JSON.parse('${siteList}');
@@ -105,7 +106,6 @@
 				$(this).val("");
 			}
 			if(!isEmpty($(this).val())){
-				
 				if($(this).val().length >= 10) {
 					$("#isValidNewMobileNum").addClass("hidden");
 				} else {
@@ -144,6 +144,12 @@
 			updateModal();
 		});
 
+		$("#deleteConfirmModal").on("hide.bs.modal", function() {
+			console.log("deleteConfirmModal===", $(this));
+
+			$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
+			$("#confirmUserId").val("");
+		});
 
 		$("#addUserForm").on("submit", function(e){
 			e.preventDefault();
@@ -152,34 +158,46 @@
 			let optionPwd = {};
 			let userObj = {};
 
+			let newId = $("#newId").val();
+			let newFullName = $("#newFullName").val();
+			let newPwd = $("#newUserPwd").val();
+			let newAccVal = Number($("#newAccLevel").prev().data("value"));
+			let newAccName =$("#newAccLevel").prev().data("name");
+
+			let newPhoneNum = $("#newMobileNum").val();
+			let newAffiliation = $("#newAffiliation").val();
+			let newEmailAddr =$("#newEmailAddr").val();
+			let newTaskList = $("#newTaskList").prev().data("value");
+			let newUseOpt = $("#newUseOpt").prev().data("value");
+			let newUserDesc = $("#newUserDesc").val();
+
 			let siteInfo = $("#selectedSiteList").find("li");
 			let spcInfo = $("#selectedSpcList").find("li");
 
-
+			// 1. ADD a USER
 			if(!$("#addUserModal").hasClass("edit")) {
-				// 1. add form
-				userObj.login_id = $("#newId").val();
-				userObj.name = $("#newFullName").val();
-				userObj.password = $("#newUserPwd").val();
-				userObj.role = Number($("#newAccLevel").prev().data("value"));
+				userObj.login_id = newId;
+				userObj.name = newFullName;
+				userObj.password = newPwd;
+				userObj.role = newAccVal;
 
-				if( !isEmpty( $("#newMobileNum").val() )){
-					userObj.contact_phone = $("#newMobileNum").val();
+				if( !isEmpty(newPhoneNum)){
+					userObj.contact_phone = newPhoneNum;
 				}
-				if( !isEmpty( $("#newAffiliation").val()) ){
-					userObj.team = $("#newAffiliation").val();
+				if( !isEmpty(newAffiliation) ){
+					userObj.team = newAffiliation;
 				}
-				if( !isEmpty( $("#newEmailAddr").val() )){
-					userObj.contact_email = $("#newEmailAddr").val();
+				if( !isEmpty(newEmailAddr)){
+					userObj.contact_email = newEmailAddr;
 				}
-				if( !isEmpty( $("#newTaskList").prev().data("value") )){
-					userObj.task = $("#newTaskList").prev().data("value");
+				if( !isEmpty(newTaskList)){
+					userObj.task = newTaskList;
 				}
-				if( !isEmpty( $("#newUseOpt").prev().data("value") )){
-					userObj.valid_yn = $("#newUseOpt").prev().data("value");
+				if( !isEmpty(newUseOpt)){
+					userObj.valid_yn = newUseOpt;
 				}
-				if( !isEmpty( $("#newUserDesc").val()) ){
-					userObj.description = JSON.stringify( $("#newUserDesc").val() );
+				if( !isEmpty(newUserDesc) ){
+					userObj.description = JSON.stringify(newUserDesc);
 				}
 
 				option = {
@@ -196,7 +214,7 @@
 						$("#addUserModal").modal("hide");
 						$("#resultSuccessMsg").text("사용자가 추가 되었습니다.").removeClass("hidden");
 						$("#resultModal").modal("show");
-						var table = $("#userTable").DataTable();
+						// let table = $("#userTable").DataTable();
 
 						// table.row.add({
 
@@ -215,116 +233,97 @@
 						return false;
 					});
 				} else {
-					let siteOption = {
-						url: apiHost + '/config/user_sites?uid=' + userInfoId,
-						type: 'post',
-						dataType: 'json',
-						contentType: "application/json",
-						async: true
-					}
+					let siteObj = {};
+					let spcObj = {};
 
-					let spcOption = {
-						url: apiHost + '/config/user_spcs?uid=' + userInfoId,
-						type: 'post',
-						dataType: 'json',
-						contentType: "application/json",
-						async: true
-					}
+					$.ajax(option).done(function (json, textStatus, jqXHR) {
+						let newUid = json.uid;
 
-					let promisesSite = [];
-					let promisesSpc = [];
-
-					if( siteInfo.length > 0 && spcInfo.length > 0 ){
-						promisesSite.push(makeAjaxCall(siteOption));
-						promisesSpc.push(makeAjaxCall(spcOption));
-						$.ajax(option).done(function(json, textStatus, jqXHR) {
-							$.each(siteInfo, function(index, element){
-								let siteObj = {
-									sid: $(element).data("sid"),
-									role: Number($(element).data("role"))
-								};
-								siteOption.data = JSON.stringify(siteObj);
-								makeAjaxCall(siteOption);
-							});
-							$.each(siteInfo, function(index, element){
-								let siteObj = {
-									sid: $(element).data("sid"),
-									role: Number($(element).data("role"))
-								};
-								siteOption.data = JSON.stringify(siteObj);
-								makeAjaxCall(siteOption);
-							});
-						});
-
-					} else{
+						let siteOption = {
+							url: apiHost + '/config/user_sites?uid=' + newUid,
+							type: 'post',
+							dataType: 'json',
+							contentType: "application/json",
+							async: true
+						}
+						let spcOption = {
+							url: apiHost + '/config/user_spcs?uid=' + newUid,
+							type: 'post',
+							dataType: 'json',
+							contentType: "application/json",
+							async: true
+						}
 						if(siteInfo.length > 0) {
-							$.ajax(option).done(function(json, textStatus, jqXHR) {
-								$.each(siteInfo, function(index, element){
-									let siteObj = {
-										sid: $(element).data("sid"),
-										role: Number($(element).data("role"))
-									};
-									siteOption.data = JSON.stringify(siteObj);
-									makeAjaxCall(siteOption);
-								});
+							var sitePromises = [];
+							$.each(siteInfo, function(index, element){
+								siteObj.sid = $(element).data("sid");
+								siteObj.role = Number($(element).data("role"));
+								siteOption.data = JSON.stringify(siteObj);
+								sitePromises.push(Promise.resolve(makeAjaxCall(siteOption)));
+							});
+							Promise.all(sitePromises).then(res => {
+								console.log("res---", res);
 							});
 						}
-						// $.ajax(siteOption).done(function (json, textStatus, jqXHR) {
-						// 	console.log("success===", json)
-						// }).fail(function (jqXHR, textStatus, errorThrown) {
-						// 	let errorMsg = "에러코드:" + jqXHR.status + "\n" + "메세지: " + jqXHR.responseText +"\n" + "에러: " + errorThrown;
-						// 	console.log("에러코드:" + jqXHR.status + "\n" + "메세지: " + jqXHR.responseText +"\n" + "에러: " + errorThrown)
-						// 	return false;
-						// });
-
 						if(spcInfo.length > 0 ){
-							$.ajax(option).done(function(json, textStatus, jqXHR) {
-								$.each(spcInfo, function(index, element){
-									let spcObj = {
-										spcid: $(element).data("value"),
-										role: Number($(element).data("role"))
-									};
-									spcOption.data = JSON.stringify(spcObj);
-									makeAjaxCall(spcOption);
-								});
+							var spcPromises = [];
+							$.each(spcInfo, function(index, element){
+								let spcObj = {
+									spcid: $(element).data("value"),
+									role: Number($(element).data("role"))
+								};
+								spcOption.data = JSON.stringify(spcObj);
+								sitePromises.push(Promise.resolve(makeAjaxCall(spcOption)));
+							});
+							Promise.all(spcPromises).then(res => {
+								console.log("res---", res);
 							});
 						}
-					}
+
+					}).fail(function (jqXHR, textStatus, errorThrown) {
+						let r = JSON.parse(jqXHR.responseText);
+						console.log("에러코드:" + jqXHR.status + "\n" + "메세지: " + r);
+						return false;
+					});
 				}
 			} else {
-				// 2. edit form
-				let td = $("#userTable").find("tbody tr.selected td");
-				let uid = td.eq(0).find("input").data("id");
+			// 2. Edit existing user info
+				let tr = $("#userTable").find("tbody tr.selected");
+				let td = tr.find("td");
+
+				let newUid = tr.data("uid");
 				let role = $("#newAccLevel").prev().data("value");
 				let roleTitle = $("#newAccLevel").prev().data("name");
-				let pwd = 'td.eq(7)';
+				let pwd = '';
 
-				console.log("uid---", uid);
+				if( !isEmpty(newFullName) && ( newFullName != td.eq(2).text() ) ) {
+					userObj.name = newFullName;
+				}
+				if( !isEmpty(newAccVal) && ( newAccName != td.eq(6).text() ) ) {
+					userObj.role = newAccVal;
+				}
 
-				if( !isEmpty(role) && ( roleTitle != td.eq(7).text() ) ) {
-					userObj.role = Number($("#newAccLevel").prev().data("value"));
+				if( !isEmpty(newPhoneNum) && ( newPhoneNum != td.eq(3).text() ) ) {
+					userObj.contact_phone = newPhoneNum;
 				}
-				if( !isEmpty( $("#newMobileNum").val() )){
-					userObj.contact_phone = $("#newMobileNum").val();
+				if( !isEmpty(newEmailAddr) && ( newEmailAddr != td.eq(4).text() ) ) {
+					userObj.contact_email = newEmailAddr;
 				}
-				if( !isEmpty( $("#newAffiliation").val()) ){
-					userObj.team = $("#newAffiliation").val();
+				if( !isEmpty(newAffiliation) && ( newAffiliation != td.eq(5).text() ) ) {
+					userObj.team = newAffiliation;
 				}
-				if( !isEmpty( $("#newEmailAddr").val() )){
-					userObj.contact_email = $("#newEmailAddr").val();
+				if( !isEmpty(newTaskList) && ( newTaskList != td.eq(7).text() ) ) {
+					userObj.task = newTaskList;
 				}
-				if( !isEmpty( $("#newTaskList").prev().data("value") )){
-					userObj.task = $("#newTaskList").prev().data("value");
+				if( !isEmpty(newPhoneNum) && ( newPhoneNum != td.eq(8).text() ) ) {
+					userObj.valid_yn = newPhoneNum;
 				}
-				if( !isEmpty( $("#newUseOpt").prev().data("value") )){
-					userObj.valid_yn = $("#newUseOpt").prev().data("value");
-				}
-				if( !isEmpty( $("#newUserDesc").val()) ){
-					userObj.description = JSON.stringify( $("#newUserDesc").val() );
+				if( !isEmpty(newUserDesc)) {
+					userObj.description = JSON.stringify(newUserDesc);
 				}
 
 				option = {
-					url: apiHost + '/config/users/' + uid,
+					url: apiHost + '/config/users/' + newUid,
 					type: 'patch',
 					beforeSend: function (jqXHR, settings) {
 						$("#loadingCircle").show();
@@ -344,26 +343,42 @@
 					}, 5000);
 					return false;
 				} else {
-					// if pws && other val are present
+					// if pwd && other values are present
 					if( !isEmpty($("#newUserPwd").val()) && !isEmpty(userObj) ){
 						pwd = $("#newUserPwd").val();
 						optionPwd = {
-							url: apiHost + '/config/users/' + uid + '/password2',
+							url: apiHost + '/config/users/' + newUid + '/password2',
 							type: 'patch',
 							async: true,
 							data: JSON.stringify(pwd),
 							contentType: 'application/json; charset=UTF-8'
 						}
 						$.when($.ajax(optionPwd),$.ajax(option)).done(function (result1, result2) {
-							console.log("result1===", result1)
-							console.log("result2===", result2)
-							$("#resultSuccessMsg").text("사용자 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
-							$("#resultModal").modal("show");
-							setTimeout(function(){
-								$("#resultModal").modal("hide");
-							}, 1000);
-							// if(!isEmpty(result1[0].data) && !isEmpty(result2[0].data)){
-							// }
+							if(siteInfo.length<=0 && spcInfo<=0){
+								$("#resultSuccessMsg").text("사용자 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
+								$("#resultModal").modal("show");
+								setTimeout(function(){
+									$("#resultModal").modal("hide");
+								}, 1000);
+							}
+							if(siteInfo.length > 0) {
+								$.each(siteInfo, function(index, element){
+									siteObj.sid = $(element).data("sid");
+									siteObj.role = Number($(element).data("role"));
+									siteOption.data = JSON.stringify(siteObj);
+									makeAjaxCall(siteOption);
+								});
+							}
+							if(spcInfo.length > 0 ){
+								$.each(spcInfo, function(index, element){
+									let spcObj = {
+										spcid: $(element).data("value"),
+										role: Number($(element).data("role"))
+									};
+									spcOption.data = JSON.stringify(spcObj);
+									makeAjaxCall(spcOption);
+								});
+							}
 						}).fail(function (jqXHR, textStatus, errorThrown) {
 							console.log("result1===", jqXHR)
 							$("#resultFailureMsg").text("사용자 정보 변경에 실패하였습니다. 다시 시도해 주세요.").removeClass("hidden");
@@ -413,7 +428,7 @@
 						}
 					}
 				}
-			} 
+			}
 		});
 
 
@@ -432,7 +447,6 @@
 
 		$("#addUserForm").on("change", function(e){
 			if(!$("#addUserModal").hasClass("edit")){
-				console.log("add", $(this))
 				if(validateAddForm() == 1) {
 					$("#addUserBtn").prop("disabled", false).removeClass("disabled");
 				} else {
@@ -457,7 +471,7 @@
 		// 		$(this).addClass('selected');
 		// 	}
 		// });
-		
+
 		function selectRow(dataTable) {
 			if ($(this).hasClass("selected")) {
 				$(this).removeClass("selected");
@@ -468,9 +482,9 @@
 		}
 		function makeAjaxCall(option){
 			return $.ajax(option).done(function (json, textStatus, jqXHR) {
-				console.log("json--", json)
+				console.log("makeAjaxCall json--", json)
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.log("jqXHR--", jqXHR)
+				console.log("siteInfo/spcInfo Ajax Error:", jqXHR.responseJSON.error.message)
 				return false;
 			});
 		}
@@ -520,7 +534,6 @@
 		}
 
 		function getUserList(opt) {
-			console.log("getUserList---")
 			$.ajax(opt).done(function (json, textStatus, jqXHR) {
 				let data = json;
 				let newArr = [];
@@ -529,14 +542,8 @@
 				data.map((item, index) => {
 					let obj = {};
 
-					obj.idx = index + 1;
 					obj.user_id = item.login_id;
-
-					if(!isEmpty(item.name)){
-						obj.name = item.name;
-					} else {
-						obj.name = "-";
-					}
+					obj.name = item.name;
 
 					if(!isEmpty(item.contact_phone)){
 						obj.contact_phone = item.contact_phone;
@@ -574,7 +581,7 @@
 					}
 
 					if(!isEmpty(item.createdAt)){
-						let d = new Date(item.createdAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&emsp;&emsp;' + new Date(item.createdAt).toLocaleTimeString();
+						let d = new Date(item.createdAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.createdAt).toLocaleTimeString();
 						obj.created_at = d;
 					} else {
 						obj.created_at = "-";
@@ -584,51 +591,69 @@
 						if(item.valid_yn == "Y"){
 							obj.valid_yn = "사용"
 						} else {
-							obj.valid_yn = "중자"
+							obj.valid_yn = "중지"
 						}
 					} else {
 						obj.valid_yn = "-";
 					}
 
+					if(!isEmpty(item.description)){
+						let desc = "";
+						if(typeof(item.description) === 'string' || item.description === ""){
+							desc = item.description;
+							obj.desc = desc;
+							// console.log("desc===", desc)
+						} else {
+							return Promise.resolve(JSON.parse(item.description)).then(res => {
+								// console.log("res==", res)
+								desc = res;
+							}).catch(function(error) {
+								console.log(error);
+								if(error){
+									return false;
+								}
+							});
+						}
+
+						// obj.desc = JSON.parse(item.description);
+					}
 					obj.uid = item.uid;
 
 					newArr.push(obj);
+					// console.log("uid---", item.uid)
 				});
 
 				var table = $('#userTable').DataTable({
 					"aaData": newArr,
-					// "responsive": true,
-					"bDeferRender": true,
-					"fixedHeader": true,
-					"sScrollX": "100%",
+					// "bDeferRender": true,
+					// "fixedHeader": true,
+					"table-layout": "fixed",
+					// "bStateSave": true,
+					"bSearchable" : true,
+					// "autoWidth": true,
+					"bAutoWidth": true,
+					"sScrollX": "110%",
+					"sScrollY": false,
 					"sScrollXInner": "110%",
 					"bScrollCollapse": true,
-					// "lengthMenu": [[10, 30, 60, -1], [10, 30, 60, "전체"]],
+					// "bFilter": false, disabling this option will prevent table.search()
+					"aaSorting": [[ 0, 'asc' ]],
+					"order": [[ 1, 'asc' ]],
 					"aoColumns": [
-						{
-							"mData": null,
-							"sTitle": "",
-							"mData": "",
-							"mRender": function ( data, type, row )  {
-								return '<input type="checkbox" name="user_row" id="'+row.user_id+'" data-id="'+row.uid+'" class="hidden"><label for="' + row.user_id + '" class="hidden"></label>'
-								// return '<a href="#"><input type="checkbox" name="user_row" id="'+row.user_id+'" data-id="'+row.uid+'" class="table-checkbox"><label for="' + row.user_id + '"></label></a>'
-							},
-
-							// "mData": function (data, type, dataToSet, td) {
-							// 	$('#userTable tbody tr td:eq(' + td.col + ')', td.row).attr("data-id", row.uid);
-							// 	return data.SupplementPredefinedQuantities[0].PredefinedQuantity;
-							// },
-							"className": "select-checkbox w20"
-							// "className": "dt-body-center select-checkbox"
-						},
 						{
 							"sTitle": "순번",
 							"mData": null,
-							"className": "no-sorting"
+							"className": "dt-center idx"
+							// "className": "dt-center idx no-sorting"
 						},
 						{
 							"sTitle": "ID",
-							"mData": "user_id"
+							"mData": null,
+							"mRender": function ( data, type, row )  {
+								return '<span id="'+row.user_id+'" data-id="'+row.uid+'">' + row.user_id + '</span>'
+								// return '<a href="#"><input type="checkbox" name="user_row" id="'+row.user_id+'" data-id="'+row.uid+'" class="table-checkbox"><label for="' + row.user_id + '"></label></a>'
+							},
+							// "mData": "user_id"
 						},
 						{
 							"sTitle": "이름",
@@ -668,64 +693,50 @@
 						{
 							"aTargets": [ 0 ],
 							"bSortable": false,
-						},
-						{
-							"aTargets": [ 1 ],
-							"bSortable": false,
 							"orderable": false
 						},
 					],
-					// "columnDefs": [   ////define column 1
-					// 	{
-					// 		"searchable": false,
-					// 		"orderable": true,
-					// 		"targets": 1
-					// 	},
-					// ],
-					"order": [[ 1, 'asc' ]],
-					// "bFilter": false,
 					"dom": 'tip',
-					// "dom": '<"top"flB>rt<"bottom"ip><"clear">',
-					// "searchPanes": {
-					// },
-					// "search": {
-					// 	"smart": true
-					// },
-					// "searching": true,
-					// "buttons": [
-					// 	{
-					// 		text: '추가',
-					// 		className: "btn_type fr",
-					// 		action: function (e, node, config){
-					// 			updateModal("all");
-					// 		}
-					// 	}
-					// ],
 					"select": {
-						// style: 'os',
 						style: 'single',
-						// selector: 'td:first-child > a',
-						// selector: 'td:first-child > a',
-						// items: 'cell',
 						items: 'row'
 					},
 					initComplete: function(){
 						let str = `
-							<div id="btnGroup" class="right-end">
-								<button type="button" disabled class="btn_type03 disabled" onclick="updateModal('edit')">선택 수정</button>
-								<button type="button" disabled class="btn_type03 disabled" onclick="updateModal('delete')">선택 삭제</button>
-							</div>
+							<div id="btnGroup" class="right-end"><!--
+								--><button type="button" disabled class="btn_type03 disabled" onclick="updateModal('edit')">선택 수정</button><!--
+								--><button type="button" disabled class="btn_type03 disabled" onclick="updateModal('delete')">선택 삭제</button><!--
+						--></div>
 						`
 						$("#userTable_wrapper").append($(str));
-					},
-					createRow: function (row, data, dataIndex){
-						console.log("row===", row);
-						 $(row).attr({
-							'data-name': data.name,
-							'data-role': data.user_role,
-							'data-name': data.name,
+
+						this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+							cell.innerHTML = i+1;
+							$(cell).data("id", i);
 						});
 
+						// this.api().columns().header().each ((el, i) => {
+						// 	if(i === 0 ){
+						// 		$ (el).attr ('style', 'min-width: 160px;');
+						// 	}
+						// });
+					},
+					createdRow: function ( row, data, index ){
+						if(!isEmpty(data.desc)){
+							$(row).attr({
+								'data-desc': data.desc
+							});
+						} else {
+							// console.log("created row data===", data);
+							$(row).attr({
+								'data-uid': data.uid,
+								'data-role': data.user_role,
+								'data-name': data.name,
+							});
+						}
+						// if ( data[5].replace(/[\$,]/g, '') * 1 > 150000 ) {
+						// 	$('td', row).eq(5).addClass('highlight');
+						// }
 					},
 					// every time DataTables performs a draw
 					drawCallback: function () {
@@ -759,7 +770,8 @@
 					// console.log("dt---", table[ type ]( indexes ).nodes())
 				// }).on('change', 'input[type="checkbox"]', function(){
 				// 	console.log("input checkbox===")
-				});
+				}).columns.adjust().draw();
+				// }).columns.adjust().responsive.recalc();
 
 				$("#newAffiliation").autocomplete({
 					source : affiliationList,
@@ -771,14 +783,16 @@
 					delay: 500
 				});
 
-
-				table.on( 'order.dt search.dt', function () {
-					// console.log("this--- order", this)
-					table.column(1, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+				table.on( 'order.dt search.dt', function(){
+					console.log("order===")
+					table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 						cell.innerHTML = i+1;
-						$(cell).data("id", i)
 					});
 				}).draw();
+
+				table.on( 'column-sizing.dt', function ( e, settings ) {
+					$(".dataTables_scrollHeadInner").css( "width", "100%" );
+				});
 
 				$("#searchBox").on( 'keyup search input paste cut', function(){
 					table.search( this.value ).draw();
@@ -786,9 +800,9 @@
 				});
 				$("#userList").find("li").on( 'click', function(){
 					if(!isEmpty($(this).data("value"))){
-						filterColumn("7", $(this).data("value"));
+						filterColumn( "#userTable", "6", $(this).data("value"));
 					} else {
-						filterColumn("7", "");
+						filterColumn("#userTable", "6", "");
 					}
 				});
 				$("#pageLengthList").find("li").on( 'click', function(){ 
@@ -805,8 +819,8 @@
 			});
 		}
 
-		function filterColumn ( idx, val ) {
-			$('#userTable').DataTable().column(idx).search(val).draw();
+		function filterColumn ( id, idx, val ) {
+			$(id).DataTable().column(idx).search(val).draw();
 		}
 
 
@@ -824,7 +838,7 @@
 			});
 
 			let dropdown = $("#addUserForm").find(".dropdown ul");
-			callback(dropdown);
+			// callback(dropdown);
 		}
 	});
 
@@ -862,67 +876,93 @@
 	function addToList(type) {
 		let html = ``;
 		if(type == 'site') {
-			let arr = [];
-			let idx = $("#selectedSiteList").find("li").length + 1;
-
 			let name = $("#siteOptList").prev().data("name");
 			let siteVal = $("#siteOptList").prev().data("value");
-
 			let accLevel = $("#siteAccOpt").prev().data("name");
 			let accVal = $("#siteAccOpt").prev().data("value");
 
+			let selectedList = $("#selectedSiteList").find("li");
+
 			if(isEmpty(name) || isEmpty(accLevel)) {
-				$("#isSiteSelected").removeClass("hidden");
+				$("#isSiteEmpty").removeClass("hidden");
 				setTimeout(function(){
-					$("#isSiteSelected").addClass("hidden");
-				}, 2000);
-				return false;
-			}
-			console.log("list---", arr)
-			if(arr.includes(name)) {
-				$("#isSiteSelected").removeClass("hidden");
+					$("#isSiteEmpty").addClass("hidden");
+				}, 1600);
 				return false;
 			} else {
-				arr.push(name);
+				if(!isEmpty(selectedList)){
+					let arr = [];
+					if(!$("#selectedSiteList").prev().hasClass("hidden")){
+						$("#selectedSiteList").prev().removeClass("hidden");
+					}
+					for(let i = 0, length = selectedList.length; i < length; i++) {
+						let obj = {}
+						obj.siteName = $(selectedList[i]).data("site-name");
+						obj.siteId = $(selectedList[i]).data("sid");
+						obj.role = $(selectedList[i]).data("role");
+						arr.push(obj);
+						if( $(selectedList[i]).data("site-name") == name){
+							$("#isSiteSelected").removeClass("hidden");
+							setTimeout(function(){
+								$("#isSiteSelected").addClass("hidden");
+							}, 1600);
+							return false;
+						}
+					};
+				}
+
 				html = `
 					<li data-sid="${'${siteVal}'}" data-role="${'${accVal}'}" data-site-name="${'${name}'}">
 						${'${name}'}&emsp;&emsp;(&emsp;${'${accLevel}'}&emsp;)
-						<button type="button" class="icon-delete" onclick="$(this).closest('li').remove();">삭제</button>
+						<button type="button" class="icon-delete" onclick="removeList( $(this).closest('li') )">삭제</button>
 					</li>
 				`;
 				$("#selectedSiteList").append(html);
 			}
 		} else {
-			let arr = [];
-			let idx = $("#selectedSpcList").find("li").length + 1;
-
 			let name = $("#spcOptList").prev().data("name");
 			let spcVal = $("#spcOptList").prev().data("value");
-
 			let accLevel = $("#spcAccOpt").prev().data("name");
 			let accVal = $("#spcAccOpt").prev().data("value");
 
-			if(isEmpty(name) || isEmpty(accLevel)) {
-				$("#isSpcSelected").removeClass("hidden");
-				setTimeout(function(){
-					$("#isSpcSelected").addClass("hidden");
-				}, 2000);
-				return false;
-			}
+			let selectedList = $("#selectedSpcList").find("li");
 
-			if(arr.includes(name)) {
-				$("#isSiteSelected").removeClass("hidden");
+			if(isEmpty(name) || isEmpty(accLevel)) {
+				$("#isSpcEmpty").removeClass("hidden");
+				setTimeout(function(){
+					$("#isSpcEmpty").addClass("hidden");
+				}, 1600);
 				return false;
 			} else {
-				arr.push(name);
-				html = `
-					<li data-spc-id="${'${spcVal}'}" data-role="${'${accVal}'}">
-						${'${name}'}&emsp;(&emsp;${'${accLevel}'}&emsp;)
-						<button type="button" class="icon-delete" onclick="$(this).closest('li').remove();">삭제</button>
-					</li>
-				`;
-				$("#selectedSpcList").append(html);
+				if(!isEmpty(selectedList)){
+					let arr = [];
+					if(!$("#selectedSpcList").prev().hasClass("hidden")){
+						$("#selectedSpcList").prev().removeClass("hidden");
+					}
+					for(let i = 0, length = selectedList.length; i < length; i++) {
+						let obj = {}
+						obj.spcName = $(selectedList[i]).data("spc-name");
+						obj.spcId = $(selectedList[i]).data("spc-id");
+						obj.role = $(selectedList[i]).data("role");
+						arr.push(obj);
+						if( $(selectedList[i]).data("spc-name") == name){
+							$("#isSpcSelected").removeClass("hidden");
+							setTimeout(function(){
+								$("#isSpcSelected").addClass("hidden");
+							}, 1600);
+							return false;
+						}
+					};
+				}
 			}
+
+			html = `
+				<li data-spc-id="${'${spcVal}'}" data-role="${'${accVal}'}" data-spc-name="${'${name}'}">
+					${'${name}'}&emsp;(&emsp;${'${accLevel}'}&emsp;)
+					<button type="button" class="icon-delete" onclick="removeList( $(this).closest('li') )">삭제</button>
+				</li>
+			`;
+			$("#selectedSpcList").append(html);
 		}
 	}
 
@@ -946,59 +986,87 @@
 		} else {
 			let titleAdd = $('#titleAdd');
 			let id = $('#newId');
+			let required = $("#addUserForm").find(".asterisk");
 			if(option == "all"){
 				if(id.parent().next().hasClass("hidden")) {
 					id.parent().next().removeClass("hidden");
 					id.parent().addClass("offset-width").removeClass("w-100");
 				}
 				titleAdd.removeClass("hidden").next().addClass("hidden");
+				required.hasClass("no-symbol") ? required.removeClass("no-symbol") : null;
 				$('#newId').prop('disabled', false);
 				$("#addUserModal").removeClass("edit").modal("show");
 			} else {
 				var tr = $("#userTable").find("tbody tr.selected");
 				let td = tr.find("td");
 				if(option == "edit") {
-					let required = $("#addUserForm").find(".asterisk");
 					$("#addUserBtn").prop("disabled", false).removeClass("disabled");
-
-					required.addClass("no-symbol");
 					titleAdd.addClass("hidden").next().removeClass("hidden");
+					required.hasClass("no-symbol") ? null : required.addClass("no-symbol");
 					if(!id.parent().next().hasClass("hidden")) {
 						id.parent().next().addClass("hidden");
 						id.parent().removeClass("offset-width").addClass("w-100");
 					}
-					id.val(td.eq(2).text()).prop('disabled', true).addClass("disabled");
-					$('#newFullName').val(td.eq(3).text())
-					$("#newAccLevel").prev().html(td.eq(7).text() + '<span class="caret">');
-
+					id.val(td.eq(1).text()).prop('disabled', true).addClass("disabled");
+					$('#newFullName').val(td.eq(2).text())
+					$("#newAccLevel").prev().html(td.eq(6).text() + '<span class="caret">');
+					if(!isEmpty(td.eq(3))){
+						$('#newMobileNum').val(td.eq(3).text())
+					}
+					if(!isEmpty(td.eq(4))){
+						$('#newEmailAddr').val(td.eq(4).text())
+					}
+					if(!isEmpty(td.eq(5))){
+						$('#newAffiliation').val(td.eq(5).text())
+					}
+					if(!isEmpty(td.eq(7))){
+						$('#newTaskList').prev().data("value", td.eq(7).text()).html(td.eq(7).text(), '<span class="caret">');
+					}
+					if(!isEmpty(td.eq(9))){
+						$('#newUseOpt').prev().data("value", td.eq(9).text()).html(td.eq(9).text(), '<span class="caret">');
+					}
 					$("#addUserModal").addClass("edit").modal("show");
 				}
 				if(option == "delete") {
-					let id = td.eq(0).find("input").data("id");
+					let tr = $("#userTable").find("tbody tr.selected td");
+					let id = tr.data("uid");
+					let userId = $("#userTable").find("tbody tr.selected td:nth-of-type(1)").text();
+					$("#deleteSuccessMsg span").text(userId);
+					$("#deleteConfirmModal").modal("show");
 
-					console.log("uid---", id)
-					let optDelete = {
-						url: apiHost + "/config/users/" + id,
-						type: 'delete',
-						async: true,
-						beforeSend: function (jqXHR, settings) {
+					$("#confirmUserId").on('input', function() {
+						$(this).val($(this).val().replace(/\s/g, ''));
+					});
 
-						},
-					}
+					$("#confirmUserId").on("keyup", function() {
+						if($(this).val() != userId) {
+							return false
+						} else {
+							$("#warningConfirmBtn").prop("disabled", false).removeClass("disabled");
+							$("#warningConfirmBtn").on("click", function(){
+								let optDelete = {
+									url: apiHost + "/config/users/" + id,
+									type: 'delete',
+									async: true,
+									beforeSend: function (jqXHR, settings) {
 
-					$.ajax(optDelete).done(function (json, textStatus, jqXHR) {
-						var newTable = $('#userTable').DataTable();
+									},
+								}
 
-						$("#resultSuccessMsg").text("사용자가 삭제 되었습니다.").removeClass("hidden");
-						$("#resultModal").modal("show");
-						newTable.rows(tr).remove().draw(false);
+								$.ajax(optDelete).done(function (json, textStatus, jqXHR) {
+									var newTable = $('#userTable').DataTable();
+									console.log("delete success==", json)
+									// $("#deleteSuccessMsg").text("사용자가 삭제 되었습니다.").removeClass("hidden");
+									// newTable.rows(tr).remove().draw();
+									// setTimeout(function(){
+									// 	$("#deleteConfirmModal").modal("hide");
+									// }, 1200);
 
-						setTimeout(function(){
-							$("#resultModal").modal("hide");
-						}, 1000);
-
-					}).fail(function (jqXHR, textStatus, errorThrown) {
-						console.log("fail==", jqXHR)
+								}).fail(function (jqXHR, textStatus, errorThrown) {
+									console.log("fail==", jqXHR)
+								});
+							});
+						}
 					});
 
 				}
@@ -1006,6 +1074,17 @@
 		}
 	}
 
+
+	function removeList(self) {
+		let selectedList = $("#selectedSiteList");
+		let item = selectedList.find("li");
+		console.log("item---", $(item).length);
+
+		if(item.length == 1 ){
+			selectedList.prev().addClass("hidden");
+		}
+		self.remove();
+	}
 
 	// function cloneSpcRow(){
 	// 	let clone = $("#spcRow .flex_start:first-of-type").clone();
@@ -1041,7 +1120,7 @@
 <c:set var="siteList" value="${siteHeaderList}"/> <!-- 사이트 별 -->
 
 
-<div class="modal fade stack" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true">
+<div class="modal fade stack" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -1052,19 +1131,19 @@
 	</div>
 </div>
 
-<div class="modal fade stack" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true">
+<div class="modal fade stack" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h3 id="resultSuccessMsg" class="ntit semi-bold">사용자 삭제를 진행하시려면, 해당 아이디를 아래에 입력해 주세요.</h3>
+				<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
 			</div>
 			<div class="modal-body">
 			<div class="tx_inp_type"><input type="text" id="confirmUserId" name="confirm_user_id" placeholder="사용자 아이디 입력"/></div>
 			</div>
-			<div class="btn_wrap_type02">
-				<button type="button" id="closeBtn" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
-				<button type="submit" id="warningConfirmBtn" class="btn_type">확인</button>
-			</div>
+			<div class="btn_wrap_type05"><!--
+				--><button type="button" class="btn_type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
+				--><button type="submit" id="warningConfirmBtn" class="btn_type w80 ml-12 disabled" disabled>확인</button><!--
+			--></div>
 		</div>
 	</div>
 </div>
@@ -1073,8 +1152,8 @@
 <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-md-lg">
 		<div class="modal-content user-modal-content">
-			<div id="titleAdd" class="modal-header"><h1>사용자 추가<span class="required px-4 fr">*&emsp;필수 입력 항목</span></h1></div>
-			<div id="titleEdit" class="modal-header"><h1>사용자 정보 수정<span class="required-blue px-4 fr">*&emsp;변경하신 정보는 다음 로그인 부터 적용됩니다.</span></h1></div>
+			<div id="titleAdd" class="modal-header"><h1>사용자 추가<span class="required px-4 fr">필수 입력 항목</span></h1></div>
+			<div id="titleEdit" class="modal-header"><h1>사용자 정보 수정</h1></div>
 			<div class="modal-body">
 				<div class="container-fluid">
 					<form id="addUserForm" name="add_user_form">
@@ -1087,9 +1166,9 @@
 									</div>
 									<button type="button" class="btn_type disabled fr" disabled onclick="checkId($('#newId').val())">중복 체크</button>
 								</div>
-								<small class="hidden warning">사용자 ID를 입력해 주세요</small>
-								<small class="hidden warning">5 ~ 15 글자를 입력해 주세요.</small>
-								<small class="hidden warning">한글,특수 문자, 공백은 포함될 수 없습니다.</small>
+								<small class="hidden warning">사용자 아이디를 입력해 주세요</small>
+								<small class="hidden warning">5~15 글자를 입력해 주세요.</small>
+								<small class="hidden warning">한글, 특수 문자는 포함될 수 없습니다.</small>
 								<small id="invalidId" class="hidden warning">동일한 아이디가 존재합니다.</small>
 								<small id="validId" class="text-blue text-sm hidden">사용 가능한 아이디 입니다.</small>
 							</div>
@@ -1114,7 +1193,7 @@
 							<div class="col-lg-2 col-sm-3"><span class="input_label offset asterisk">권한 등급</span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="dropdown">
-									<button class="btn btn-primary dropdown-toggle asterisk" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul id="newAccLevel" class="dropdown-menu">
 										<li data-value="1" data-name="시스템 관리자"><a href="#">시스템 관리자</a></li>
 										<li data-value="2" data-name="일반 사용자"><a href="#">일반 사용자</a></li>
@@ -1126,7 +1205,7 @@
 						<div class="row">
 							<div class="col-lg-2 col-sm-3"><span class="input_label">휴대폰</span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="tx_inp_type"><input type="text" id="newMobileNum" name="new_mobil_num" placeholder="입력"></div>
+								<div class="tx_inp_type"><input type="text" id="newMobileNum" name="new_mobil_num" placeholder="입력" maxlength="13"></div>
 								<small id="isValidNewMobileNum" class=" warning hidden">10자리 이상의 휴대폰 번호를 입력해 주세요.</small>
 							</div>
 							<div class="col-lg-2 col-sm-3"><span class="input_label offset">소속</span></div>
@@ -1145,7 +1224,7 @@
 							<div class="col-lg-2 col-sm-3"><span class="input_label offset">업무 구분</span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="dropdown">
-									<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul id="newTaskList" class="dropdown-menu">
 										<li data-value="0"><a href="#">일반</a></li>
 										<li data-value="1"><a href="#">사무 수탁사</a></li>
@@ -1160,7 +1239,7 @@
 							<div class="col-lg-2 col-sm-3"><span class="input_label">사용 여부</span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="dropdown">
-									<button type="button" class="btn btn-primary dropdown-toggle asterisk" data-toggle="dropdown">선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul id="newUseOpt" class="dropdown-menu">
 										<li data-value="Y"><a href="#">Y</a></li>
 										<li data-value="N"><a href="#">N</a></li>
@@ -1190,7 +1269,7 @@
 									<div class="col-lg-8 col-sm-12">
 										<div class="flex_start">
 											<div class="dropdown w-50">
-												<button type="button" class="btn btn-primary dropdown-toggle asterisk" data-toggle="dropdown">선택<span class="caret"></span></button>
+												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 												<ul id="siteOptList" class="dropdown-menu">
 													<c:if test="${fn:length(siteList) > 1}">
 														<c:forEach var="site" items="${siteList}">
@@ -1202,7 +1281,7 @@
 												</ul>
 											</div>
 											<div class="dropdown ml-16 w-25">
-												<button type="button" class="btn btn-primary dropdown-toggle asterisk" data-toggle="dropdown">선택<span class="caret"></span></button>
+												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 												<ul id="siteAccOpt" class="dropdown-menu">
 													<li data-value="1" data-name="수정/조회"><a href="#">관리 권한</a></li>
 													<li data-value="2" data-name="조회"><a href="#">조회 권한</a></li>
@@ -1210,10 +1289,10 @@
 											</div>
 											<button type="button" class="btn-add ml-16" onclick="addToList('site')">추가</button>
 										</div>
-										<small id="isSiteSelected" class="warning hidden">추가하실 사이트의 옵션을 선택해 주세요.</small>
+										<small id="isSiteEmpty" class="warning hidden">추가하실 사이트의 옵션을 선택해 주세요.</small>
 										<small id="isSiteSelected" class="warning hidden">동일한 사이트가 이미 추가 되었습니다.</small>
 									</div>
-									<div class="col-lg-4 col-sm-12"><h2 class="stit">추가 리스트</h2><ol id="selectedSiteList" class="selected-list"></ol></div>
+									<div class="col-lg-4 col-sm-12 px-0"><h2 class="stit hidden">추가 리스트</h2><ol id="selectedSiteList" class="selected-list"></ol></div>
 								</div>
 							</div>
 							<div id="spcTab" class="tab-pane fade">
@@ -1221,7 +1300,7 @@
 									<div class="col-lg-8 col-sm-12">
 										<div class="flex_start">
 											<div class="dropdown w-50">
-												<button type="button" class="btn btn-primary dropdown-toggle asterisk" data-toggle="dropdown">선택<span class="caret"></span></button>
+												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 												<ul id="spcOptList" class="dropdown-menu">
 													<template>
 														<li data-value="*spcId*" data-name="*spcName*"><a href="#" tabindex="-1">*spcName*</a></li>
@@ -1229,7 +1308,7 @@
 												</ul>
 											</div>
 											<div class="dropdown ml-16 w-25">
-												<button type="button" class="btn btn-primary dropdown-toggle asterisk" data-toggle="dropdown">선택<span class="caret"></span></button>
+												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 												<ul id="spcAccOpt" class="dropdown-menu">
 													<li data-value="1" data-name="수정/조회"><a href="#">수정/조회</a></li>
 													<li data-value="2" data-name="조회"><a href="#">조회</a></li>
@@ -1237,7 +1316,8 @@
 											</div>
 											<button type="button" class="btn-add ml-16" onclick="addToList('spc')">추가</button>
 										</div>
-										<small id="isSpcSelected" class="warning hidden">추가하실 spc 옵션을 선택해 주세요.</small>
+										<small id="isSpcEmpty" class="warning hidden">추가하실 SPC 옵션을 선택해 주세요.</small>
+										<small id="isSpcSelected" class="warning hidden">동일한 SPC가 이미 추가 되었습니다.</small>
 									</div>
 									<div class="col-lg-4 col-sm-12"><h2 class="stit">추가 리스트</h2><ul id="selectedSpcList" class="selected-list"></ul></div>
 
@@ -1273,8 +1353,7 @@
 		<div class="flex_group">
 			<span class="tx_tit">사용자 유형</span>
 			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button"
-					data-toggle="dropdown">선택<span class="caret"></span></button>
+				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 				<ul class="dropdown-menu" id="userList">
 					<li data-value=""><a href="#" tabindex="-1">전체</a></li>
 					<li data-value="관리자"><a href="#" tabindex="-1">시스템 관리자</a></li>
@@ -1295,8 +1374,7 @@
 		<div class="indiv">
 			<div class="flex_group">
 				<div class="dropdown">
-					<button class="btn btn-primary dropdown-toggle" type="button"
-						data-toggle="dropdown">선택<span class="caret"></span></button>
+					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 					<ul class="dropdown-menu" id="pageLengthList">
 						<li data-value=""><a href="#" tabindex="-1">전체</a></li>
 						<li data-value="10"><a href="#" tabindex="-1">10</a></li>
@@ -1307,11 +1385,19 @@
 				<span class="tx_tit pl-16">개 씩 보기&ensp;</span>
 			</div>
 			<button type="button" class="btn_type fr mb-20" onclick="updateModal('all')">추가</button>
-			<!-- <div id="btnGroup">
-				<button type="button" disabled class="btn_type03 disabled" onclick="updateModal('edit')">선택 수정</button>
-				<button type="button" disabled class="btn_type03 disabled" onclick="updateModal('delete')">선택 삭제</button>
-			</div> -->
-			<table id="userTable" class="stripe nowrap">
+			<table id="userTable">
+				<colgroup>
+					<col style="width:6%">
+					<col style="width:10%">
+					<col style="width:16%">
+					<col style="width:9%">
+					<col style="width:15%">
+					<col style="width:9%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:14%">
+					<col style="width:5%">
+				</colgroup>
 				<thead></thead>
 				<tbody></tbody>
 				<!-- <tfoot>
